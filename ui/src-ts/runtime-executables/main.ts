@@ -538,10 +538,13 @@ class NexoWattVis extends HostedAdapter {
   }
   /** Code-Teil: _nwIsHttpServerListening – bestehender Helfer; Aufrufer und State-/API-Verträge bei Änderungen mitprüfen. */
   _nwIsHttpServerListening() {
-    return !!(this._hostedApp && !this._nwShuttingDown);
+    return !!(this._hostedApp
+      && typeof this._bridge.isListening === 'function' && this._bridge.isListening() === true);
   }
   /** Code-Teil: _nwSetInfoConnection – bestehender Helfer; Aufrufer und State-/API-Verträge bei Änderungen mitprüfen. */
   async _nwSetInfoConnection(online, reason = '') {
+    // Only the owner knows whether its single TLS listener actually accepted the bind.
+    if (typeof this._bridge.isListening === 'function') online = this._nwIsHttpServerListening();
     let connectionPlan = null;
     try {
       if (nwMainRuntimeTsHelpers && typeof nwMainRuntimeTsHelpers.buildInfoConnectionStateUpdate === 'function') {
@@ -2279,7 +2282,8 @@ class NexoWattVis extends HostedAdapter {
     }
     // Existing commissioned regulation retains only its last verified grants/limits.
     // HTTP mutations and new activation always use the fresh central view instead.
-    return this._hostedOperational && this._nwLastValidatedLicense ? this._nwLastValidatedLicense : fresh;
+    return this._hostedOperational && this._hostedStartup?.state === 'ready' && this._nwLastValidatedLicense
+      ? this._nwLastValidatedLicense : fresh;
   }
 
   _nwHasCentralLicenseGrant(grant, continuing = false) {
@@ -11459,33 +11463,63 @@ async migrateNativeConfig() {
  * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
  */
 async onReady() {
+    if (this._nwShuttingDown) return;
+    let admitted = false;
+    let admissionFailure = '';
+    const assertStartupAuthority = () => {
+      if (this._nwShuttingDown) throw new Error('EOS_UI_STOPPING');
+      // Optional setup catches may swallow a rejection, but may never erase a
+      // loss already observed during this startup attempt. Restoration requires restart.
+      if (admitted && !admissionFailure) {
+        if (this._bridge.canWrite() !== true) admissionFailure = 'EOS_UI_OWNERSHIP_LOST';
+        else if (!centralLicenseSnapshot(this._bridge).ok) admissionFailure = 'EOS_UI_LICENSE_LOST';
+      }
+      if (admissionFailure) throw new Error(admissionFailure);
+    };
+    const startupStep = async (operation) => {
+      assertStartupAuthority();
+      let result;
+      try {
+        result = await operation();
+      } catch (error) {
+        if (admitted && !admissionFailure && error
+          && ['EOS_UI_OWNERSHIP_LOST', 'EOS_UI_LICENSE_LOST'].includes(error.message)) {
+          admissionFailure = error.message;
+        }
+        assertStartupAuthority();
+        throw error;
+      }
+      assertStartupAuthority();
+      return result;
+    };
     this._hostedStartup = { state: 'starting', error: '' };
     try {
       if (!centralLicenseSnapshot(this._bridge).ok) {
-        await this.startServer();
+        await startupStep(() => this.startServer());
         this._hostedStartup = { state: 'unlicensed', error: 'EOS_LICENSE_REQUIRED' };
         return;
       }
       if (this._bridge.canWrite() !== true) {
-        await this.startServer();
+        await startupStep(() => this.startServer());
         this._hostedStartup = { state: 'blocked', error: 'EOS_UI_OWNERSHIP_REQUIRED' };
         this.log.error('EOS_UI_OWNERSHIP_REQUIRED: Bedienoberfläche verfügbar, Regelung gesperrt.');
         return;
       }
+      admitted = true;
       this._nwRuntimeLicenseSnapshot();
       this._hostedOperational = true;
-      await this.migrateNativeConfig();
-      await this.ensureInfoConnectionState();
-      await this._nwSetInfoConnection(false, 'startup');
-      await this.ensureLicenseStates();
+      await startupStep(() => this.migrateNativeConfig());
+      await startupStep(() => this.ensureInfoConnectionState());
+      await startupStep(() => this._nwSetInfoConnection(false, 'startup'));
+      await startupStep(() => this.ensureLicenseStates());
 
       // License gate must be initialized before we start the web server,
       // because the server middleware relies on this flag.
-      await this._nwInitLicense();
+      await startupStep(() => this._nwInitLicense());
       // start web server
       // Mesh-Rückfall wird vor dem ersten EMS-Zyklus geladen, auch bei ausgeschalteter App.
       this._meshCoordinator = new (require('./lib/mesh-coordinator').MeshCoordinator)(this);
-      await this._meshCoordinator.init();
+      await startupStep(() => this._meshCoordinator.init());
       // Konfigurations-APIs bleiben bis zum abgeschlossenen Laden/Migrieren
       // gesperrt; ein früher HTTP-Save darf nicht vom Startup überschrieben werden.
       const startupMutationToken = this._nwBeginInstallerConfigMutation();
@@ -11496,91 +11530,91 @@ async onReady() {
         // bleibt lokal; es wird dabei kein unverschlüsselter Listener geöffnet.
         let uiServerStarted = false;
         try {
-          await this.startServer();
+          await startupStep(() => this.startServer());
           uiServerStarted = true;
         } catch (error) {
           if (this._nwShuttingDown) return;
           if (!(error instanceof UiTlsConfigurationError)) throw error;
-          await this._nwSetInfoConnection(false, 'ui-tls-config-error');
+          await startupStep(() => this._nwSetInfoConnection(false, 'ui-tls-config-error'));
           this.log.error('UI-HTTPS bleibt gesperrt; die autonome Regelung wird initialisiert. ' + error.code + ': ' + error.message);
         }
         if (this._nwShuttingDown) return;
         if (uiServerStarted) {
-          await this._nwSetInfoConnection(true, 'http-server-listening');
+          await startupStep(() => this._nwSetInfoConnection(true, 'http-server-listening'));
           this._nwStartConnectionHeartbeat();
         }
 
         // create states first, then write config defaults
-        await this.ensureInstallerStates();
+        await startupStep(() => this.ensureInstallerStates());
         // cleanup: remove deprecated 'installer.password' object if present
-        try { await this.delObjectAsync('installer.password'); } catch(_e) { /* ignore */ }
+        try { await startupStep(() => this.delObjectAsync('installer.password')); } catch(_e) { /* ignore */ }
 
-        await this.ensureSettingsStates();
+        await startupStep(() => this.ensureSettingsStates());
 
         // SmartHome: Endkunden-Zeitschaltuhren (persisted in adapter states)
-        try { await this.ensureSmartHomeUserStates(); } catch (_e) {}
+        try { await startupStep(() => this.ensureSmartHomeUserStates()); } catch (_e) {}
 
         // PV Saisonprofil: KI ist immer aktiv.
         // Ältere Installationen könnten den Schalter noch auf false haben – wir setzen ihn beim Startup wieder auf true.
-        try { await this.setStateAsync('settings.tariffPvSeasonAiEnabled', { val: true, ack: true }); } catch (_e) {}
+        try { await startupStep(() => this.setStateAsync('settings.tariffPvSeasonAiEnabled', { val: true, ack: true })); } catch (_e) {}
 
         // Simulation (optional): Admin-startable test mode using nexowatt-sim adapter.
-        try { await this.ensureSimulationStates(); } catch (_e) {}
+        try { await startupStep(() => this.ensureSimulationStates()); } catch (_e) {}
 
         // Weather (Plug&Play)
-        try { await this.ensureWeatherStates(); } catch (_e) {}
+        try { await startupStep(() => this.ensureWeatherStates()); } catch (_e) {}
 
         // Energy totals / KPIs (kWh/CO2)
-        try { await this.ensureEnergyTotalStates(); } catch (_e) {}
+        try { await startupStep(() => this.ensureEnergyTotalStates()); } catch (_e) {}
 
         // Notifications: runtime + debug states
-        try { await this.ensureNotificationStates(); } catch (_e) {}
+        try { await startupStep(() => this.ensureNotificationStates()); } catch (_e) {}
 
         // Load persisted App‑Center configuration (stored in adapter states).
         // This must happen before we sync defaults and start the EMS engine.
-        await this.loadInstallerConfigFromState();
-        await this._meshCoordinator.migrateAppLifecycle();
+        await startupStep(() => this.loadInstallerConfigFromState());
+        await startupStep(() => this._meshCoordinator.migrateAppLifecycle());
       } finally { this._nwEndInstallerConfigMutation(startupMutationToken); }
-      await this._nwStartPartnerRuntime();
-      await this._nwRefreshSystemLanguage('startup');
+      await startupStep(() => this._nwStartPartnerRuntime());
+      await startupStep(() => this._nwRefreshSystemLanguage('startup'));
 
       // Auto-backup installer config to 0_userdata.0 (survives uninstall/reinstall)
       try {
         const p = (this._nwInstallerConfigPatch && typeof this._nwInstallerConfigPatch === 'object') ? this._nwInstallerConfigPatch : {};
         if (p && Object.keys(p).length) {
-          await this.nwWriteUserdataBackup(p, 'startup');
+          await startupStep(() => this.nwWriteUserdataBackup(p, 'startup'));
         }
       } catch (_e) {}
 
-      await this.ensureStorageFarmStates();
-      await this.syncStorageFarmDefaultsToStates();
-      await this.syncStorageFarmConfigFromAdmin();
-      await this.syncInstallerConfigToStates();
-      await this.syncSettingsToStates();
+      await startupStep(() => this.ensureStorageFarmStates());
+      await startupStep(() => this.syncStorageFarmDefaultsToStates());
+      await startupStep(() => this.syncStorageFarmConfigFromAdmin());
+      await startupStep(() => this.syncInstallerConfigToStates());
+      await startupStep(() => this.syncSettingsToStates());
 
       // write settings-config defaults
-      await this.syncSettingsConfigToStates();
+      await startupStep(() => this.syncSettingsConfigToStates());
       // Forecast states are served to the customer UI through stateCache. Subscribe
       // and prime them before the first provider request so no startup update is lost.
-      try { await this.subscribeForecastUiStates(); } catch (e) { this.log.debug('PV forecast UI state subscribe failed: ' + (e && e.message ? e.message : e)); }
+      try { await startupStep(() => this.subscribeForecastUiStates()); } catch (e) { this.log.debug('PV forecast UI state subscribe failed: ' + (e && e.message ? e.message : e)); }
       try { this._openMeteoPvForecastRuntime = startOpenMeteoPvForecastRuntime(this); } catch (e) { this.log.warn('PV forecast runtime failed: ' + (e && e.message ? e.message : e)); }
       // EVCS (multi wallbox) model states
-      await this.ensureEvcsStates();
-      await this.ensureRfidStates();
-      await this.ensureEvcsSessionsStates();
-      await this.loadEvcsSessionsCache();
-      await this.seedEvcsDayBaseCache();
-      await this.subscribeEvcsMappedStates();
+      await startupStep(() => this.ensureEvcsStates());
+      await startupStep(() => this.ensureRfidStates());
+      await startupStep(() => this.ensureEvcsSessionsStates());
+      await startupStep(() => this.loadEvcsSessionsCache());
+      await startupStep(() => this.seedEvcsDayBaseCache());
+      await startupStep(() => this.subscribeEvcsMappedStates());
       try { this.scheduleRfidPolicyApply('startup'); } catch(_e) {}
 
       // finally subscribe and read initial values
-      await this.subscribeConfiguredStates();
+      await startupStep(() => this.subscribeConfiguredStates());
 
       // Weather (Plug&Play) background refresh (no additional adapter required)
       try { this.startWeatherService(); } catch (_e) {}
 
       // Derived / calculated live states (used as fallbacks for UI, optional for mapping)
-      await this.ensureDerivedFlowStates();
+      await startupStep(() => this.ensureDerivedFlowStates());
       // Compute once at startup so UI has immediate values even before the first state change
       this.scheduleDerivedFlowUpdate('startup');
 
@@ -11590,8 +11624,8 @@ async onReady() {
       // Historie (Influx): canonical export states under 'nexowatt-ui.0.historie.*'
       // This avoids double-mapping of device datapoints for dashboards/history.
       try {
-        await this.ensureHistorieExportStates();
-        await this.updateHistorieExportStates('startup');
+        await startupStep(() => this.ensureHistorieExportStates());
+        await startupStep(() => this.updateHistorieExportStates('startup'));
         this.startHistorieExportTimer();
       } catch (e) {
         this.log.debug('Historie export init failed: ' + (e && e.message ? e.message : e));
@@ -11607,7 +11641,7 @@ async onReady() {
         if (this._nwStorageFarmTimer) { try { this._nwClearInterval(this._nwStorageFarmTimer); } catch (_e) {} this._nwStorageFarmTimer = null; }
 
         if (sfEnabled) {
-          await this.updateStorageFarmDerived('startup');
+          await startupStep(() => this.updateStorageFarmDerived('startup'));
           this._nwStorageFarmTimer = this._nwSetInterval(() => {
             this.updateStorageFarmDerived('timer').catch(() => {});
           }, interval);
@@ -11615,34 +11649,35 @@ async onReady() {
       } catch (_eSF) {}
 
       // EMS (Sprint 2): embedded Charging-Management engine
-      try { await this.initEmsEngine(); } catch (e) { this.log.warn('EMS init failed: ' + (e && e.message ? e.message : e)); }
+      if (this._nwShuttingDown) return;
+      try { await startupStep(() => this.initEmsEngine()); } catch (e) { this.log.warn('EMS init failed: ' + (e && e.message ? e.message : e)); }
       // Prime the effective forecast.pv.* states created by the EMS module as well.
       // The method is idempotent and keeps its wildcard subscription active.
-      try { await this.subscribeForecastUiStates(); } catch (e) { this.log.debug('PV forecast UI state re-prime failed: ' + (e && e.message ? e.message : e)); }
+      try { await startupStep(() => this.subscribeForecastUiStates()); } catch (e) { this.log.debug('PV forecast UI state re-prime failed: ' + (e && e.message ? e.message : e)); }
 
       // Direkte EEBUS/CLS-Anbindung erst nach dem zentralen EMS initialisieren.
       // Damit kann ein angenommener LPC-Befehl sofort einen vollständigen
       // Regelzyklus auslösen und wird nicht nur in Diagnose-States abgelegt.
-      try { await this._para14aEebusApi.init(); } catch (e) { this.log.warn('§14a EEBUS direct API init failed: ' + (e && e.message ? e.message : e)); }
+      try { await startupStep(() => this._para14aEebusApi.init()); } catch (e) { this.log.warn('§14a EEBUS direct API init failed: ' + (e && e.message ? e.message : e)); }
       // Prime + subscribe EMS runtime states for the UI (EVCS page mode buttons, boost status, etc.).
       // Without this, the UI might fall back to legacy or show default values after reload.
-      try { await this.subscribeEmsUiStates(); } catch (e) { this.log.debug('EMS UI state subscribe failed: ' + (e && e.message ? e.message : e)); }
-      try { this._adminOverviewPublisher?.stop(); this._adminOverviewPublisher = new AdminOverviewPublisher(this); await this._adminOverviewPublisher.initialize(); }
+      try { await startupStep(() => this.subscribeEmsUiStates()); } catch (e) { this.log.debug('EMS UI state subscribe failed: ' + (e && e.message ? e.message : e)); }
+      try { this._adminOverviewPublisher?.stop(); this._adminOverviewPublisher = new AdminOverviewPublisher(this); await startupStep(() => this._adminOverviewPublisher.initialize()); }
       catch (e) { this._adminOverviewPublisher = null; this.log.warn('EOS Admin EMS overview failed: ' + (e && e.message ? e.message : e)); }
       // Focused 5s live refresh for Energiefluss + charging inputs.
       try {
         this._nwStartLiveCoreRefresh();
-        await this._nwRefreshLiveCoreDatapoints('startup');
+        await startupStep(() => this._nwRefreshLiveCoreDatapoints('startup'));
       } catch (e) {
         this.log.debug('Live core refresh init failed: ' + (e && e.message ? e.message : e));
       }
 
       // Cleanup: remove stale/orphaned dynamic objects no longer configured.
       // This keeps the Objects tree tidy when mappings/counts are reduced.
-      try { await this.cleanupOrphanedObjects(); } catch (_e) {}
+      try { await startupStep(() => this.cleanupOrphanedObjects()); } catch (_e) {}
 
       // Energy totals: if no kWh counters are mapped, derive totals from history/influxdb
-      try { await this.updateEnergyTotalsFromInflux('startup'); } catch (_e) {}
+      try { await startupStep(() => this.updateEnergyTotalsFromInflux('startup')); } catch (_e) {}
       try {
         if (this._nwEnergyTotalsTimer) this._nwClearInterval(this._nwEnergyTotalsTimer);
         this._nwEnergyTotalsTimer = this._nwSetInterval(() => {
@@ -11653,16 +11688,28 @@ async onReady() {
       this.buildSmartHomeDevicesFromConfig();
 
       // SmartHome: Endkunden-Zeitschaltuhren laden + Scheduler starten
-      try { await this.loadSmartHomeTimersFromState(); } catch (_e) {}
+      try { await startupStep(() => this.loadSmartHomeTimersFromState()); } catch (_e) {}
 
       // SmartHome: Logik-Uhren laden + Scheduler starten
-      try { await this.loadSmartHomeLogicClocksFromState(); } catch (_e) {}
+      try { await startupStep(() => this.loadSmartHomeLogicClocksFromState()); } catch (_e) {}
 
       // NexoLogic (node/graph) runtime engine
-      try { await this.initLogicEngine(); } catch (e) { this.log.warn('NexoLogic init failed: ' + (e && e.message ? e.message : e)); }
+      try { await startupStep(() => this.initLogicEngine()); } catch (e) { this.log.warn('NexoLogic init failed: ' + (e && e.message ? e.message : e)); }
+      if (this._nwShuttingDown) return;
+      assertStartupAuthority();
       this._hostedStartup = { state: this.emsEngine ? 'ready' : 'degraded', error: this.emsEngine ? '' : 'EOS_EMS_INIT_FAILED' };
-      this.log.info('NexoWatt EOS ist bereit.');
+      if (this.emsEngine) this.log.info('NexoWatt EOS ist bereit.');
+      else this.log.warn('EOS_EMS_INIT_FAILED: Bedienoberfläche verfügbar, Betriebsstart unvollständig.');
     } catch (e) {
+      if (this._nwShuttingDown) return;
+      if (e && ['EOS_UI_OWNERSHIP_LOST', 'EOS_UI_LICENSE_LOST'].includes(e.message)) {
+        // An incomplete start may not resume after losing its admission. Cleanup only
+        // owns runtime resources; the owner's HTTPS listener and recovery routes stay up.
+        await new Promise(resolve => this.onUnload(resolve));
+        this._hostedStartup = { state: 'degraded', error: e.message };
+        this.log.error(`${e.message}: Betriebsstart abgebrochen; Adapterneustart erforderlich.`);
+        return;
+      }
       this._hostedStartup = { state: 'degraded', error: 'EOS_UI_STARTUP_FAILED' };
       // info.connection describes the adapter web/API connectivity. If the HTTP server
       // is already listening, keep the connection online even when a non-critical
@@ -11670,11 +11717,11 @@ async onReady() {
       // customer frontend/API is reachable and they have to set the state manually.
       try {
         if (this._nwIsHttpServerListening()) {
-          await this._nwSetInfoConnection(true, 'startup-partial-but-server-online');
+          await startupStep(() => this._nwSetInfoConnection(true, 'startup-partial-but-server-online'));
           this._nwStartConnectionHeartbeat();
           this.log.warn(`onReady partial init error after web server start: ${e && e.message ? e.message : e}`);
         } else {
-          await this._nwSetInfoConnection(false, 'startup-failed-before-server');
+          await startupStep(() => this._nwSetInfoConnection(false, 'startup-failed-before-server'));
           this.log.error(`onReady error: ${e && e.message ? e.message : e}`);
         }
       } catch (_eConn) {
@@ -11716,6 +11763,7 @@ async onReady() {
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
   async initEmsEngine(force) {
+    if (this._nwShuttingDown) throw new Error('EOS_UI_STOPPING');
     const doForce = !!force;
 
     if (this.emsEngine && !doForce) return;
@@ -11731,7 +11779,9 @@ async onReady() {
     try {
       if (!this.emsEngine) this.emsEngine = new EmsEngine(this);
       await this.emsEngine.init();
+      if (this._nwShuttingDown) throw new Error('EOS_UI_STOPPING');
       await this._meshCoordinator?.syncAppLifecycle();
+      if (this._nwShuttingDown) throw new Error('EOS_UI_STOPPING');
       this._nwEmsInitError = '';
     } catch (e) {
       this._nwEmsInitError = (e && e.message) ? String(e.message) : String(e);
@@ -11756,6 +11806,7 @@ async onReady() {
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
   async initLogicEngine(force, configOverride) {
+    if (this._nwShuttingDown) throw new Error('EOS_UI_STOPPING');
     if (!this._nwHasCentralLicenseGrant('smartHome', true)) return;
     const doForce = !!force;
     if (this.logicEngine && !doForce && !configOverride) return;
@@ -11773,6 +11824,7 @@ async onReady() {
       const candidate = new NexoLogicEngine(this);
       try {
         await candidate.init(cfg);
+        if (this._nwShuttingDown) throw new Error('EOS_UI_STOPPING');
         this.logicEngine = candidate;
       } catch (error) {
         try { await candidate.stop(); } catch (_stopError) {}
@@ -11998,6 +12050,7 @@ async onReady() {
    */
   async startServer() {
     if (this._nwShuttingDown) throw new Error('UI-Serverstart während Adapterstopp verworfen.');
+    if (this._hostedApp) return;
     const app = express();
     // Nur Darstellungspfade, keine Übernahme einer Identität oder Rolle aus Proxy-Headern.
     const nwSendRuntimeFile = createRuntimeFileSender(__dirname, this.namespace);
@@ -12118,6 +12171,17 @@ async onReady() {
       } catch (_error) {
         return res.status(503).json({ ok: false, error: 'authentication_unavailable' });
       }
+    });
+
+    // Shell availability is separate from initialized configuration and actuator readiness.
+    // Authentication/CSRF above and machine-token checks below retain their own boundaries.
+    app.use((req, res, next) => {
+      if (this._hostedStartup && this._hostedStartup.state !== 'ready'
+        && !['GET', 'HEAD', 'OPTIONS'].includes(req.method)) {
+        sendNoStore(res);
+        return res.status(503).json({ ok: false, error: this._hostedStartup.state === 'degraded' ? 'EOS_UI_STARTUP_FAILED' : 'EOS_UI_STARTING' });
+      }
+      return next();
     });
 
     /** E-Mail-Adresse für öffentliche Diagnose maskieren, ohne sie vollständig preiszugeben. */
@@ -32377,30 +32441,49 @@ return res.json(out);
    * Zusammenhang: Teil von Adapterkern: Lifecycle, Webserver, API, States, EMS-Engine; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
+  /** @param {unknown} resu @returns {Array<{ ts: number; val: number }>} */
   _nwNormalizeHistoryResult(resu) {
+    /** @param {unknown} value @returns {Record<string, unknown> | null} */
+    const asRecord = value =>
+      value !== null && typeof value === 'object' && !Array.isArray(value) ? /** @type {Record<string, unknown>} */ (value) : null;
+    const payload = asRecord(resu);
+    /** @type {unknown[]} */
     let arr = [];
-    if (!resu) return arr;
-
-    // influxdb adapter: { result: [ { data: [...] } ] } or { result: [...] }
-    if (resu && Array.isArray(resu.result)) {
-      if (resu.result.length && Array.isArray(resu.result[0]?.data)) arr = resu.result[0].data;
-      else arr = resu.result;
-    } else if (resu && Array.isArray(resu.series) && resu.series[0]?.values) {
-      arr = resu.series[0].values.map(v => ({ ts: v[0], val: v[1] }));
+    // Retain the supported getHistory/Influx result envelopes.
+    if (Array.isArray(payload?.result)) {
+      const first = asRecord(payload.result[0]);
+      arr = Array.isArray(first?.data) ? first.data : payload.result;
+    } else if (Array.isArray(payload?.series)) {
+      const first = asRecord(payload.series[0]);
+      if (Array.isArray(first?.values)) arr = first.values;
     } else if (Array.isArray(resu)) {
       arr = resu;
-    } else if (resu && Array.isArray(resu.data)) {
-      arr = resu.data;
+    } else if (Array.isArray(payload?.data)) {
+      arr = payload.data;
     }
-    const norm = (arr || []).map(p => {
-      const tRaw = Array.isArray(p) ? p[0] : (p.ts ?? p.time ?? p.t ?? p[0]);
-      const vRaw = Array.isArray(p) ? p[1] : (p.val ?? p.value ?? p[1]);
-      const ts = this._nwNormTsMs(tRaw);
+    const decimal = /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?$/;
+    /** @type {Array<{ ts: number; val: number }>} */
+    const norm = [];
+    for (const point of arr) {
+      const row = asRecord(point);
+      if (!Array.isArray(point) && !row) return [];
+      /** @type {unknown} */
+      const tRaw = Array.isArray(point) ? point[0] : (row.ts ?? row.time ?? row.t ?? row[0]);
+      /** @type {unknown} */
+      const vRaw = Array.isArray(point) ? point[1] :
+        Object.prototype.hasOwnProperty.call(row, 'val') ? row.val : (row.value ?? row[1]);
+      // null, booleans, blank strings and objects are not numeric power samples.
+      if (typeof vRaw !== 'number' && !(typeof vRaw === 'string' && decimal.test(vRaw.trim()))) return [];
       const val = Number(vRaw);
-      if (ts == null || Number.isNaN(val)) return null;
-      return { ts, val };
-    }).filter(Boolean);
-
+      if (!Number.isFinite(val)) return [];
+      if (typeof tRaw !== 'number' && typeof tRaw !== 'string' && !(tRaw instanceof Date)) return [];
+      if (typeof tRaw === 'string' && !tRaw.trim()) return [];
+      const timestamp = typeof tRaw === 'string' && decimal.test(tRaw.trim()) ? Number(tRaw) : tRaw;
+      const ts = this._nwNormTsMs(timestamp);
+      if (!Number.isFinite(ts) || ts < 0) return [];
+      // A malformed partial series cannot be published as a complete new total.
+      norm.push({ ts, val });
+    }
     norm.sort((a, b) => a.ts - b.ts);
     return norm;
   }
@@ -32410,20 +32493,64 @@ return res.json(out);
    * Zusammenhang: Teil von Adapterkern: Lifecycle, Webserver, API, States, EMS-Engine; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
-  _nwGetHistoryAvgSeries(id, startMs, endMs, stepMs) {
-    return new Promise(resolve => {
+  /**
+   * @param {unknown} id
+   * @param {number} startMs
+   * @param {number} endMs
+   * @param {number} stepMs
+   * @param {number} [deadlineMs]
+   * @returns {Promise<Array<{ ts: number; val: number }>>}
+   */
+  _nwGetHistoryAvgSeries(id, startMs, endMs, stepMs, deadlineMs = performance.now() + 5000) {
+    return new Promise((resolve, reject) => {
+      /** @param {string} code */
+      const failure = code => Object.assign(new Error(code), { code });
+      if (this._nwShuttingDown) return reject(failure('EOS_HISTORY_CANCELLED'));
       const inst = this._nwGetHistoryInstance();
       const sid = this._nwTrimId(id);
       if (!sid) return resolve([]);
+      const startedMs = performance.now();
+      const requestDeadlineMs = Math.min(startedMs + 5000, deadlineMs);
+      const remainingMs = requestDeadlineMs - startedMs;
+      if (!Number.isFinite(remainingMs) || remainingMs <= 0) return reject(failure('EOS_HISTORY_TIMEOUT'));
       const options = { start: startMs, end: endMs, step: stepMs, aggregate: 'average', addId: false, ignoreNull: true };
+      let settled = false;
+      /** @type {ReturnType<typeof setTimeout> | null} */
+      let timer = null;
+      /** @param {Error | null} error @param {Array<{ ts: number; val: number }>} [series] */
+      const finish = (error, series = []) => {
+        if (settled) return;
+        settled = true;
+        if (timer) clearTimeout(timer);
+        this._nwPendingHistoryRequests?.delete(cancel);
+        if (error) reject(error);
+        else resolve(series);
+      };
+      const cancel = () => finish(failure('EOS_HISTORY_CANCELLED'));
+      if (!(this._nwPendingHistoryRequests instanceof Set)) this._nwPendingHistoryRequests = /** @type {Set<() => void>} */ (new Set());
+      this._nwPendingHistoryRequests.add(cancel);
+      // Use a raw deadline timer: _nwSetTimeout suppresses callbacks at unload
+      // and would otherwise leave this Promise unresolved. Unload cancels it.
+      timer = setTimeout(() => finish(failure('EOS_HISTORY_TIMEOUT')), remainingMs);
+      timer.unref?.();
       try {
-        this.sendTo(inst, 'getHistory', { id: sid, options }, (resu) => {
-          try { resolve(this._nwNormalizeHistoryResult(resu)); } catch (_e) { resolve([]); }
+        this.sendTo(inst, 'getHistory', { id: sid, options }, /** @param {unknown} resu */ (resu) => {
+          if (settled) return;
+          if (this._nwShuttingDown) return cancel();
+          // A delayed event loop must not accept a callback beyond the budget.
+          if (performance.now() >= requestDeadlineMs) return finish(failure('EOS_HISTORY_TIMEOUT'));
+          try { finish(null, this._nwNormalizeHistoryResult(resu)); } catch (_e) { finish(null); }
         });
       } catch (_e) {
-        resolve([]);
+        finish(null);
       }
     });
+  }
+  /** Cancel pending History reads without accepting late data or retaining timers. */
+  _nwCancelHistoryRequests() {
+    if (!(this._nwPendingHistoryRequests instanceof Set)) return;
+    for (const cancel of this._nwPendingHistoryRequests) cancel();
+    this._nwPendingHistoryRequests.clear();
   }
   /**
    * Code-Teil: _nwGetHistoryAvgSeriesAny
@@ -32431,13 +32558,23 @@ return res.json(out);
    * Zusammenhang: Teil von Adapterkern: Lifecycle, Webserver, API, States, EMS-Engine; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
+  /**
+   * @param {unknown} candidates
+   * @param {number} startMs
+   * @param {number} endMs
+   * @param {number} stepMs
+   * @returns {Promise<Array<{ ts: number; val: number }>>}
+   */
   async _nwGetHistoryAvgSeriesAny(candidates, startMs, endMs, stepMs) {
+    /** @type {unknown[]} */
     const list = Array.isArray(candidates) ? candidates : [candidates];
+    const deadlineMs = performance.now() + 5000;
+    /** @type {Array<{ ts: number; val: number }>} */
     let first = [];
     for (const id of list) {
       const sid = this._nwTrimId(id);
       if (!sid) continue;
-      const series = await this._nwGetHistoryAvgSeries(sid, startMs, endMs, stepMs);
+      const series = await this._nwGetHistoryAvgSeries(sid, startMs, endMs, stepMs, deadlineMs);
       if (!first.length) first = series;
       if (Array.isArray(series) && series.length >= 2) return series;
     }
@@ -33001,6 +33138,17 @@ return res.json(out);
     const LOOKBACK_DAYS = 3650; // "Gesamt" = so weit wie Influx es hergibt (typisch Retention-basiert)
     const startMs = now - LOOKBACK_DAYS * 24 * 3600 * 1000;
     const spanMs = now - startMs;
+    let historyComplete = true;
+    /** @param {unknown} ids @param {number} from @param {number} stepMs @returns {Promise<Array<{ ts: number; val: number }>>} */
+    const currentSeries = async (ids, from, stepMs) => {
+      const series = await this._nwGetHistoryAvgSeriesAny(ids, from, now, stepMs);
+      if (this._nwShuttingDown || !Array.isArray(series) || !series.length ||
+        series.some(point => !point || !Number.isFinite(point.ts) || !Number.isFinite(point.val))) {
+        historyComplete = false;
+        return [];
+      }
+      return series;
+    };
     /**
      * Code-Teil: persistLocal
      * Zweck: Kapselt einen lokalen Verarbeitungsschritt, damit Aufrufer nicht direkt in Detaildaten eingreifen.
@@ -33018,9 +33166,10 @@ return res.json(out);
 
     if (!this._nwHasMappedDatapoint('productionEnergyKwh')) {
       const ids = this._nwGetHistoryDpCandidates('pvPower');
+      if (!ids.length) historyComplete = false;
       if (ids.length) tasks.push((async () => {
         const stepMs = this._nwChooseEnergyIntegrationStepMs(spanMs, 10 * 60 * 1000, 60 * 60 * 1000);
-        const series = await this._nwGetHistoryAvgSeriesAny(ids, startMs, now, stepMs);
+        const series = await currentSeries(ids, startMs, stepMs);
         const kwh = this._nwIntegrateKwh(series, now, stepMs, true);
         if (kwh != null) {
           this.updateValue('productionEnergyKwh', kwh, now);
@@ -33031,9 +33180,10 @@ return res.json(out);
 
     if (!this._nwHasMappedDatapoint('consumptionEnergyKwh')) {
       const ids = this._nwGetHistoryDpCandidates('consumptionTotal');
+      if (!ids.length) historyComplete = false;
       if (ids.length) tasks.push((async () => {
         const stepMs = this._nwChooseEnergyIntegrationStepMs(spanMs, 10 * 60 * 1000, 60 * 60 * 1000);
-        const series = await this._nwGetHistoryAvgSeriesAny(ids, startMs, now, stepMs);
+        const series = await currentSeries(ids, startMs, stepMs);
         const kwh = this._nwIntegrateKwh(series, now, stepMs, true);
         if (kwh != null) {
           this.updateValue('consumptionEnergyKwh', kwh, now);
@@ -33044,9 +33194,10 @@ return res.json(out);
 
     if (!this._nwHasMappedDatapoint('gridEnergyKwh')) {
       const ids = this._nwGetHistoryDpCandidates('gridBuyPower');
+      if (!ids.length) historyComplete = false;
       if (ids.length) tasks.push((async () => {
         const stepMs = this._nwChooseEnergyIntegrationStepMs(spanMs, 10 * 60 * 1000, 60 * 60 * 1000);
-        const series = await this._nwGetHistoryAvgSeriesAny(ids, startMs, now, stepMs);
+        const series = await currentSeries(ids, startMs, stepMs);
         const kwh = this._nwIntegrateKwh(series, now, stepMs, true);
         if (kwh != null) {
           this.updateValue('gridEnergyKwh', kwh, now);
@@ -33060,9 +33211,10 @@ return res.json(out);
     const needCo2Calc = !this._nwHasMappedDatapoint('co2Savings');
     if (needCo2Calc) {
       const ids = this._nwGetHistoryDpCandidates('evcsPower');
+      if (!ids.length) historyComplete = false;
       if (ids.length) tasks.push((async () => {
         const stepMs = this._nwChooseEnergyIntegrationStepMs(spanMs, 10 * 60 * 1000, 60 * 60 * 1000);
-        const series = await this._nwGetHistoryAvgSeriesAny(ids, startMs, now, stepMs);
+        const series = await currentSeries(ids, startMs, stepMs);
         const kwh = this._nwIntegrateKwh(series, now, stepMs, true);
         if (kwh != null) {
           this.updateValue('evEnergyKwh', kwh, now);
@@ -33074,11 +33226,12 @@ return res.json(out);
     // "Letzte Ladung" (EVCS): fallback from history if not mapped
     if (!this._nwHasMappedDatapoint('evcsLastChargeKwh')) {
       const evcsIds = this._nwGetHistoryDpCandidates('evcsPower');
+      if (!evcsIds.length) historyComplete = false;
       if (evcsIds.length) tasks.push((async () => {
         const days = 14;
         const start = now - days * 24 * 3600 * 1000;
         const stepMs = 60 * 1000;
-        const series = await this._nwGetHistoryAvgSeriesAny(evcsIds, start, now, stepMs);
+        const series = await currentSeries(evcsIds, start, stepMs);
 
         const thrW = 200; // ignore noise
         let endIdx = -1;
@@ -33110,16 +33263,33 @@ return res.json(out);
       })());
     }
 
-    try { await Promise.allSettled(tasks); } catch (_e) {}
+    try {
+      const results = await Promise.allSettled(tasks);
+      if (results.some(result => result.status === 'rejected')) historyComplete = false;
+      if (!this._nwShuttingDown && results.some(result =>
+        result.status === 'rejected' && result.reason?.code === 'EOS_HISTORY_TIMEOUT')) {
+        const hintNow = performance.now();
+        if (!Number.isFinite(this._nwHistoryTimeoutHintAt) || hintNow - this._nwHistoryTimeoutHintAt >= 5 * 60 * 1000) {
+          this._nwHistoryTimeoutHintAt = hintNow;
+          try { this.log.warn('[EOS history] EOS_HISTORY_TIMEOUT: Keine History-Antwort innerhalb von 5000 ms; unvollstaendige Gesamtwerte bleiben unveraendert.'); } catch (_eHint) {}
+        }
+      }
+    } catch (_e) { historyComplete = false; }
 
     // CO₂‑Einsparung (t) – wird automatisch berechnet, wenn kein externer DP gemappt ist.
     // Formel (sauber, ohne Doppelzählung):
     //   PV spart Netzstrom ein: PV_kWh * Netz‑Faktor
     //   E‑Mobilität spart gegenüber Verbrenner: EV_kWh * (Verbrenner‑Faktor − Netz‑Faktor)
     // Ergebnis in Tonnen.
-    if (!this._nwHasMappedDatapoint('co2Savings')) {
-      const pvKwh = Number(this.stateCache.productionEnergyKwh?.value);
-      const evKwh = Number(this.stateCache.evEnergyKwh?.value);
+    if (historyComplete && !this._nwShuttingDown && !this._nwHasMappedDatapoint('co2Savings')) {
+      const pvRaw = this.stateCache.productionEnergyKwh?.value;
+      const evRaw = this.stateCache.evEnergyKwh?.value;
+      const pvKwh = Number(pvRaw);
+      const evKwh = Number(evRaw);
+      // Missing history is not a new zero. Retain the previous value and its
+      // timestamp until every requested history branch has current valid data.
+      if (pvRaw == null || evRaw == null || pvRaw === '' || evRaw === '' ||
+        !Number.isFinite(pvKwh) || !Number.isFinite(evKwh)) return;
 
       const cfg = (this.config && this.config.settings) ? this.config.settings : {};
       const gridKgPerKwhRaw = Number(cfg.co2GridKgPerKwh);
@@ -33401,6 +33571,9 @@ return res.json(out);
     // info.connection und noch laufende StateChange-/EMS-Callbacks dürfen beim Shutdown
     // keinen neuen adapter.setTimeout mehr anlegen.
     this._nwShuttingDown = true;
+    this._hostedStartup = { state: 'stopped', error: '' };
+    this._hostedOperational = false;
+    try { this._nwCancelHistoryRequests?.(); } catch (_eHistory) {}
     try { this._partnerRuntime?.stop(); } catch (_ePartner) {}
     try { this._meshCoordinator?.stop(); } catch (_eMesh) {}
     this._nwShutdownStartedAt = Date.now();
@@ -33471,46 +33644,79 @@ return res.json(out);
 
 /** Single owning adapter, one lifecycle and one request router. */
 function createHostedRuntime(owner, bridge) {
-  const runtime = new NexoWattVis({ owner, bridge });
+  let stopping = null;
+  let runtime = null;
+  // Preserve live owner callbacks; only add the local shutdown fence.
+  const guardedBridge = Object.create(bridge);
+  guardedBridge.canWrite = () => !stopping && runtime?._nwShuttingDown !== true && bridge.canWrite() === true;
+  runtime = new NexoWattVis({ owner, bridge: guardedBridge });
   let started = false;
   let startPromise = null;
   let operationalPromise = null;
-  let stopping = null;
+  let operationalArmed = false;
   const startOperational = async () => {
+    if (!started || stopping || runtime._nwShuttingDown) return;
+    if (operationalPromise) return operationalPromise;
     // Auch ein zunächst vorhandener Altregler darf nach bestätigter Übergabe
     // den ruhenden Start freigeben. Lizenz und Ownership werden hier und im
     // eigentlichen onReady erneut geprüft; ein vorbereiteter Grant genügt nie.
-    if (stopping || runtime._hostedOperational || !['unlicensed', 'blocked'].includes(runtime._hostedStartup?.state)
-      || !centralLicenseSnapshot(bridge).ok || bridge.canWrite() !== true) return;
+    if (runtime._hostedOperational || !['idle', 'unlicensed', 'blocked'].includes(runtime._hostedStartup?.state)
+      || !centralLicenseSnapshot(guardedBridge).ok || guardedBridge.canWrite() !== true) return;
     // Verliert die Ownership zwischen beiden Prüfungen ihre Gültigkeit, bleibt
     // onReady gesperrt. Nur der abgeschlossene Versuch wird freigegeben, damit
     // eine spätere bestätigte Übergabe erneut geprüft werden kann. Nach echter
     // Initialisierung verhindert _hostedOperational jeden doppelten Start.
-    if (!operationalPromise) operationalPromise = runtime.onReady().finally(() => { operationalPromise = null; });
+    operationalPromise = Promise.resolve().then(() => {
+      if (stopping || runtime._nwShuttingDown) return;
+      return runtime.onReady();
+    }).catch(error => {
+      if (!stopping) {
+        runtime._hostedStartup = { state: 'degraded', error: 'EOS_UI_STARTUP_FAILED' };
+        runtime.log.error('EOS_UI_STARTUP_FAILED: Bedienoberfläche bleibt verfügbar; Regelungsstart prüfen.');
+      }
+      throw error;
+    }).finally(() => {
+      operationalPromise = null;
+      // A late startup completion cannot revive readiness or leave newly-created resources alive.
+      if (stopping) runtime.onUnload(() => {});
+    });
     await operationalPromise;
   };
   return {
     async start() {
       if (stopping) throw new Error('EOS_UI_STOPPING');
       if (!startPromise) {
-        started = true;
-        startPromise = runtime.onReady().then(() => {
+        startPromise = Promise.resolve().then(() => runtime.startServer()).then(() => {
+          if (stopping || runtime._nwShuttingDown) throw new Error('EOS_UI_STOPPING');
           if (!runtime._hostedApp) throw new Error('EOS_UI_START_FAILED');
+          started = true;
+          runtime._hostedStartup = !centralLicenseSnapshot(guardedBridge).ok
+            ? { state: 'unlicensed', error: 'EOS_LICENSE_REQUIRED' }
+            : guardedBridge.canWrite() !== true
+              ? { state: 'blocked', error: 'EOS_UI_OWNERSHIP_REQUIRED' }
+              : { state: 'idle', error: '' };
+        }).catch(error => {
+          if (!stopping) {
+            startPromise = null;
+            runtime._hostedStartup = { state: 'degraded', error: 'EOS_UI_SHELL_START_FAILED' };
+          }
+          throw error;
         });
       }
       await startPromise;
     },
-    startOperational,
+    startOperational() { operationalArmed = true; return startOperational(); },
     handle(req, res, next) {
       if (!started || stopping || !runtime._hostedApp) return res.status(503).json({ error: 'EOS_UI_UNAVAILABLE' });
-      // Activation of the single central license starts the dormant runtime once.
-      void startOperational().then(() => runtime._hostedApp(req, res, next),
-        () => res.status(503).json({ error: 'EOS_UI_START_FAILED' }));
+      // Activation may start the dormant runtime, but no request waits for device/history work.
+      // Operational failures are recorded by the shared single-flight promise above.
+      if (operationalArmed) void startOperational().catch(() => {});
+      return runtime._hostedApp(req, res, next);
     },
     onStateChange(id, state) { if (runtime._hostedOperational && !stopping) return runtime.onStateChange(id, state); },
     onMessage(message) { return runtime._hostedOperational && !stopping ? runtime.onMessage(message) : false; },
     revokeSessions() { runtime._nwCloseSseClients(); },
-    status() { return { ...(runtime._hostedStartup || { state: 'stopped', error: '' }), active: started && !stopping, emsReady: !!runtime.emsEngine, canWrite: bridge.canWrite() === true }; },
+    status() { return { ...(runtime._hostedStartup || { state: 'stopped', error: '' }), active: started && !stopping, emsReady: !stopping && runtime._hostedStartup?.state === 'ready' && !!runtime.emsEngine, canWrite: guardedBridge.canWrite() === true }; },
     stop() {
       if (!stopping) stopping = new Promise(resolve => runtime.onUnload(resolve));
       return stopping;

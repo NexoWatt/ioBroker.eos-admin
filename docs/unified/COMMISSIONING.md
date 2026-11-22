@@ -1,9 +1,9 @@
 # Prüfplan und Inbetriebnahme
 
-**NexoWatt EOS · 9.0.2 · EOS-MERGE-001**
+**NexoWatt EOS · 9.0.3 · EOS-MERGE-001**
 
 Dieser Plan nennt Sollwerte und Abläufe, keine vorweggenommenen Testergebnisse.
-Softwarebefunde und Rohbelege für 9.0.2 gehören in den neuen Abschlussbericht;
+Softwarebefunde und Rohbelege für 9.0.3 gehören in den neuen Abschlussbericht;
 Ergebnisse früherer Alpha-Versionen werden nicht umetikettiert. Zielsystem-/Gerätetests
 sind offen, solange sie nicht mit konkreter Umgebung dokumentiert wurden.
 
@@ -41,10 +41,22 @@ Prüfung mit begrenztem Anlagenumfang und beobachtbaren Stellbefehlen durchführ
 | EOS-ACCESS-P02 | Frische Instanz vs. vorhandene Instanzkonfiguration; direkte und optionale Proxyzugänge | Neue Defaults: `0.0.0.0:8188`, TLS/Auth aktiv, `defaultPublic`/`defaultPrivate`; externe Origin bleibt für parallele IP-/Namenszugänge auch mit HTTPS-Proxy leer. Gespeicherte Altwerte ausdrücklich prüfen. |
 | EOS-ACCESS-P03 | Lokaler Name `NexoWattEOS` fehlt oder zeigt auf falsche IP; Zertifikat ohne passenden SAN | Kein angeblich automatischer DNS-Erfolg; Name/IP und Zertifikat werden passend eingerichtet. |
 | EOS-ACCESS-P04 | Nicht provisioniertes/fehlendes Kontopasswort | Sicherer Fehler, kein Standardpasswort-/Login-Bypass. Berechtigte interaktive Passwortsetzung gesondert nachweisen. |
+| EOS-WEBSTART-001 / P01 | Gültig lizenzierter Start mit verzögertem beziehungsweise nie abgeschlossenem operativem UI-Start | Tatsächlicher HTTPS-Listener und geschützte Anmeldung werden unabhängig davon bereit; explizite Webbereitschaft statt Ableitung aus Lizenz-/Engine-Logs. Keine Freigabe operativer Zugriffe ohne Lizenz/Ownership. |
+| EOS-WEBSTART-001 / P02 | Operativer Start schlägt fehl; Stop/Neustart während Initialisierung; verspäteter Startabschluss | Verständlicher getrennter Startstatus, keine ungeschützte Ersatzseite, kein nachträgliches Wiederbeleben nach Stop, keine doppelte operative Initialisierung. |
+| EOS-WEBSTART-001 / P03 | Eigene EOS-Instanz-/Übersichtskachel aus `/system/` direkt über 8188 beziehungsweise über HTTPS-Alias/443 öffnen | Standardlink der verbundenen Instanz bleibt auf aktueller HTTPS-Browser-Origin und führt auf `/`. Andere Instanzen und benutzerdefinierte URLs werden nicht überschrieben. |
+| HISTORY-001 | History-Adapter antwortet nicht, antwortet spät/mehrfach oder liefert Fehler/leere Daten; mehrere Fallback-Kandidaten; Shutdown bei offener Anfrage | Höchstens 5 Sekunden je betroffenem Einzelaufruf und ein gemeinsames monotones 5-Sekunden-Budget für alle Kandidaten von `_nwGetHistoryAvgSeriesAny`; keine neue Fallbackrunde nach Fristablauf. Alte gültige CO₂-Werte/Zeiten bleiben bei fehlenden Daten erhalten, echte Nullproben sind zulässig; keine späte Mutation nach Abschluss. |
+| MULTIUSE-001 | Frische Datenbank, MultiUse deaktiviert; Managerinitialisierung und Deaktivierung, danach regulär aktivierter Vergleich | Die vier `multiUse.control`-Objekte active/requestW/budgetW/status existieren vor Statusschreibzugriffen. Keine Gerätekommandos aus deaktivierter Initialisierung, keine Konfigurationsresets; bestehende Lizenz-/Safetygrenzen bleiben wirksam. |
 
 Automatisierte Tests können Teile dieser Fälle mit Mocks abdecken. Im Protokoll
 kenntlich machen, ob reale HTTP-Verbindungen, Controllerkomponenten oder nur isolierte
 Funktionen verwendet wurden. Ein Mock beweist keine Gerätewirkung.
+
+Beim Start drei Beobachtungen getrennt protokollieren: tatsächliche
+HTTPS-Bereitschaft mit Browser-/TLS-Aufruf, operativen EMS-Startzustand und
+Messdatenqualität. `LICENSE_VALID`, ein Engine-Start, PV-Forecast-Informationen oder
+`0` erkannte Ladepunkte beweisen keinen Listener. NVP-`stale`/`split-stale` bleibt
+eine eigenständige Schutzdiagnose; ihre konkrete Messwertursache muss separat
+geprüft werden und wird nicht mit dem Webstartfehler erklärt.
 
 ## Anlagenfunktion und Fehlerfälle
 
@@ -92,7 +104,7 @@ Eine erfolgreiche Hausanlagenprüfung gilt nur für den dokumentierten Umfang.
 Allgemeine Produktionsfreigabe und CRA-Konformitätsbewertung bleiben eigene
 Herstellerentscheidungen auf Grundlage ausreichender Nachweise.
 
-## Zusätzliche Lizenz-Wiederherstellungsabnahme 9.0.2
+## Fortgeführte Lizenz-Wiederherstellungsabnahme seit 9.0.2
 
 | ID | Ablauf | Soll |
 | --- | --- | --- |

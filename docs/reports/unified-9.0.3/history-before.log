@@ -1,0 +1,138 @@
+✖ missing getHistory callback rejects within five seconds and discards late or repeated replies (2.86471ms)
+✖ timely history remains unchanged and clears its deadline timer (0.906013ms)
+✖ candidate fallback shares one monotonic five-second budget instead of multiplying it (0.922658ms)
+✖ shutdown cancels all pending history work, releases timers and rejects new requests (0.933935ms)
+✖ startup energy totals finish after failed history without publishing zeros or refreshing old CO2 (1.130719ms)
+✖ empty or invalid history and missing candidate mappings preserve old measurements (1.624387ms)
+✔ valid zero-power samples remain legitimate measurements and nonzero energy integration remains unchanged (1.851235ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 1
+ℹ fail 6
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 522.144746
+
+✖ failing tests:
+
+test at test/eos-history-deadline.test.cjs:66:1
+✖ missing getHistory callback rejects within five seconds and discards late or repeated replies (2.86471ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/iobroker.eos-admin/test/eos-history-deadline.test.cjs:70:32)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-history-deadline.test.cjs:78:1
+✖ timely history remains unchanged and clears its deadline timer (0.906013ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  2 !== 1
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/iobroker.eos-admin/test/eos-history-deadline.test.cjs:85:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-history-deadline.test.cjs:88:1
+✖ candidate fallback shares one monotonic five-second budget instead of multiplying it (0.922658ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/iobroker.eos-admin/test/eos-history-deadline.test.cjs:94:32)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-history-deadline.test.cjs:99:1
+✖ shutdown cancels all pending history work, releases timers and rejects new requests (0.933935ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'undefined'
+  - 'function'
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/iobroker.eos-admin/test/eos-history-deadline.test.cjs:104:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'undefined',
+    expected: 'function',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-history-deadline.test.cjs:114:1
+✖ startup energy totals finish after failed history without publishing zeros or refreshing old CO2 (1.130719ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/iobroker.eos-admin/test/eos-history-deadline.test.cjs:120:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-history-deadline.test.cjs:126:1
+✖ empty or invalid history and missing candidate mappings preserve old measurements (1.624387ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + [
+  +   {
+  +     key: 'co2Savings',
+  +     stamp: 1795370807512,
+  +     value: 0.011550000000000001
+  +   },
+  +   {
+  +     key: 'co2Savings',
+  +     persisted: true,
+  +     value: 0.011550000000000001
+  +   }
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/iobroker.eos-admin/test/eos-history-deadline.test.cjs:132:16)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ { key: 'co2Savings', value: 0.011550000000000001, stamp: 1795370807512 }, { key: 'co2Savings', value: 0.011550000000000001, persisted: true } ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

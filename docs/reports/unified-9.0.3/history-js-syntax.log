@@ -1,0 +1,2 @@
+PASS: full canonical runtime source accepted as unchanged JavaScript by node --check --input-type=commonjs
+No transpilation, type erasure or generator modification.

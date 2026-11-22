@@ -1,0 +1,7 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/src/tabs/Intro.tsx
+  1918:5  warning  Expected 'this' to be used by class method 'getOverviewRoleConfig'  class-methods-use-this
+
+✖ 1 problem (0 errors, 1 warning)
+

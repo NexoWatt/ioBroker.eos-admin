@@ -41,6 +41,7 @@ import type { HostInfo } from '@iobroker/socket-client';
 import type { InstancesWorker, InstanceEvent } from '@/Workers/InstancesWorker';
 import type { HostsWorker, HostAliveEvent, HostEvent } from '@/Workers/HostsWorker';
 import AdminUtils from '@/helpers/AdminUtils';
+import { currentEosEntryLink } from '@/helpers/eosEntryLink';
 import {
     replaceLink,
     applyReverseProxyToLink,
@@ -1125,6 +1126,19 @@ class Intro extends React.Component<IntroProps, IntroState> {
                 instance.link =
                     applyReverseProxyToLink(instance.link, instance.id, instances, webReverseProxyPath) ||
                     instance.link;
+            }
+
+            const currentEntry = currentEosEntryLink(
+                linkItem.link,
+                common.name,
+                instanceId,
+                this.props.adminInstance,
+                window.location.href,
+            );
+            if (currentEntry) {
+                instance.link = currentEntry;
+                instance.port = undefined;
+                instance.unreachable = false;
             }
 
             // if a link already exists => ignore

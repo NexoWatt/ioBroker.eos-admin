@@ -1,0 +1,53 @@
+{
+  "generatedAt": "2026-11-22T18:04:53.461663+00:00",
+  "cases": [
+    {
+      "command": "node scripts/verify-multiuse-storage-policy-only.js",
+      "cwd": "ui",
+      "exitCode": 0,
+      "log": "verify-multiuse-storage-policy-only.log"
+    },
+    {
+      "command": "node scripts/verify-multiuse-central-budget-c3.js",
+      "cwd": "ui",
+      "exitCode": 0,
+      "log": "verify-multiuse-central-budget-c3.log"
+    },
+    {
+      "command": "node scripts/verify-storage-multiuse-policy-isolation.js",
+      "cwd": "ui",
+      "exitCode": 0,
+      "log": "verify-storage-multiuse-policy-isolation.log"
+    },
+    {
+      "command": "node scripts/verify-module-lifecycle-para14a.js",
+      "cwd": "ui",
+      "exitCode": 0,
+      "log": "verify-module-lifecycle-para14a.log"
+    },
+    {
+      "command": "node scripts/verify-safety-module-deactivate.js",
+      "cwd": "ui",
+      "exitCode": 0,
+      "log": "verify-safety-module-deactivate.log"
+    },
+    {
+      "command": "node scripts/verify-safety-active-load-stop.js",
+      "cwd": "ui",
+      "exitCode": 0,
+      "log": "verify-safety-active-load-stop.log"
+    },
+    {
+      "command": "node scripts/verify-safety-envelope-final-write.js",
+      "cwd": "ui",
+      "exitCode": 0,
+      "log": "verify-safety-envelope-final-write.log"
+    },
+    {
+      "command": "node scripts/verify-stage-a-diagnostics.js",
+      "cwd": "ui",
+      "exitCode": 0,
+      "log": "verify-stage-a-diagnostics.log"
+    }
+  ]
+}

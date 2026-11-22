@@ -1,17 +1,46 @@
 # NexoWatt EOS
 
-**Version 9.0.2 · technisches Paket: `iobroker.eos-admin` · Vertriebskanal: `next`**
+**Version 9.0.3 · technisches Paket: `iobroker.eos-admin` · Vertriebskanal: `next`**
 
 NexoWatt EOS verbindet die Systemverwaltung aus EOS-Admin 8.0.2 mit Dashboard,
 Installer und Energiemanagement aus NexoWatt UI 1.0.38. Eine ioBroker-Instanz betreibt
 die gemeinsamen Module. Die bisherige UI wird im Zielbetrieb nicht zusätzlich gestartet.
 Der technische Paketname bleibt für bestehende Integrationen erhalten.
 
-Version 9.0.2 bleibt ein Integrations-Teststand. Die Versionsnummer ist kein
+Version 9.0.3 bleibt ein Integrations-Teststand. Die Versionsnummer ist kein
 Nachweis einer allgemeinen Produktivfreigabe; für npm ist weiterhin `next`
-vorgesehen. Die Softwareprüfungen stehen im [Prüf- und Lieferbericht 9.0.2](docs/reports/unified-9.0.2/PRUEFBERICHT.md); die endgültigen Artefakte sind über die beigefügten SHA-256-Summen zugeordnet. Der [Alpha-1-Prüfbericht](docs/unified/PRUEFBERICHT.md) bleibt ein historischer
-Nachweis und bestätigt nicht die neuen Zugangsprofile. Die Bereitstellung ist
-keine CRA-Konformitätserklärung.
+vorgesehen. Neue Ergebnisse und Artefakthashes gehören in den versionsgebundenen
+Abschlussbericht. Der [Prüfbericht 9.0.2](docs/reports/unified-9.0.2/PRUEFBERICHT.md)
+und der [Alpha-1-Prüfbericht](docs/unified/PRUEFBERICHT.md) bleiben historische
+Nachweise; ihre Ergebnisse bestätigen nicht die Änderungen in 9.0.3.
+Die Bereitstellung ist keine CRA-Konformitätserklärung.
+
+## Update 9.0.3 und Startbereitschaft
+
+Die vorhandene Instanz und ihre gültige Lizenz bleiben beim Update erhalten;
+Prüfschlüssel müssen dafür nicht erneut importiert werden. Einstieg:
+[START_HIER_9.0.3.md](START_HIER_9.0.3.md).
+
+**EOS-WEBSTART-001:** In 9.0.2 wartete der Webstart auf die vollständige operative
+UI-/EMS-Initialisierung. Ein ausbleibender History-Callback konnte deshalb den
+HTTPS-Listener verhindern, obwohl bereits `LICENSE_VALID` und ein Engine-Start
+protokolliert waren. 9.0.3 trennt die geschützte Weboberfläche vom nachfolgenden
+operativen Start. Lizenz, Rollen und Schreibzuständigkeit bleiben Voraussetzung
+für Gerätezugriffe. Ein Lizenz-/Engine-Log ist kein Nachweis eines offenen Ports.
+Die Meldung `EOS_HTTPS_READY` wird nach erfolgreicher Listenerbindung und
+Einrichtung der gemeinsamen Webauthentisierung ausgegeben. Danach den tatsächlichen
+Browserzugang prüfen; die Meldung bestätigt keine vollständige EMS-/Anlagenbereitschaft.
+
+**HISTORY-001 / MULTIUSE-001:** Die betroffene History-Kandidatenabfrage erhält ein
+gemeinsames Gesamtbudget von 5 Sekunden; fehlende Daten dürfen keine frischen
+CO₂-Nullwerte erzeugen.
+Die vier MultiUse-Steuerobjekte werden auch bei deaktiviertem Modul angelegt,
+bevor dessen Deaktivierung Status schreibt. Das aktiviert weder MultiUse noch
+zusätzliche Gerätebefehle. Details und Abnahmekriterien:
+[Architektur](docs/unified/ARCHITECTURE.md) und
+[Prüfplan](docs/unified/COMMISSIONING.md).
+
+Aktuelle Prüfergebnisse und Grenzen: [Prüfbericht 9.0.3](docs/reports/unified-9.0.3/PRUEFBERICHT.md).
 
 ## Anmeldung und einmalige Aktivierung
 
@@ -72,7 +101,7 @@ ist keine automatische neue EOS-Systemlizenz. Details: [Lizenzbetrieb](docs/unif
 ## Entwicklung und Prüfpaket
 
 Node.js: `>=22.23.4 <23 || >=24.22.1 <25`. Der neue Prüfbericht muss die tatsächliche
-Laufzeit für 9.0.2 benennen; nicht geprüfte Plattformen sind nicht freigegeben.
+Laufzeit für 9.0.3 benennen; nicht geprüfte Plattformen sind nicht freigegeben.
 
 ```sh
 npm ci --ignore-scripts
@@ -126,6 +155,9 @@ erhalten, insbesondere der ioBroker-Admin-Basis. Siehe [Drittanbieterhinweise](T
 Sicherheitsanforderungen, STRIDE-Risiken, CRA-/DSGVO-Bezug und offene Nachweise sind in
 [SECURITY_CRA.md](docs/unified/SECURITY_CRA.md) dokumentiert.
 
-## Nachweise für 9.0.2
+## Einstieg und Nachweise
 
-[Aktualisierung und Lizenzwiederherstellung](START_HIER_9.0.2.md) · [Prüf- und Lieferbericht 9.0.2](docs/reports/unified-9.0.2/PRUEFBERICHT.md). Historische Alpha-Berichte bleiben als solche erhalten.
+[Update und HTTPS-Start 9.0.3](START_HIER_9.0.3.md) ·
+[Lizenzwiederherstellung seit 9.0.2](docs/unified/LICENSE_RECOVERY_9.0.2.md) ·
+[Historischer Prüfbericht 9.0.2](docs/reports/unified-9.0.2/PRUEFBERICHT.md).
+Der neue Abschlussbericht muss den tatsächlich geprüften 9.0.3-Stand ausweisen.

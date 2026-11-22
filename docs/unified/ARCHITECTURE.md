@@ -1,6 +1,6 @@
 # Architektur der Zusammenführung
 
-**NexoWatt EOS · 9.0.2 · EOS-MERGE-001**
+**NexoWatt EOS · 9.0.3 · EOS-MERGE-001**
 
 ## Ein Paket und eine Instanz
 
@@ -30,13 +30,64 @@ flowchart TD
 
 ## Abweichung vom langfristigen Plan
 
-Version 9.0.2 hostet UI/EMS und Verwaltung **im selben Prozess**.
+Version 9.0.3 hostet UI/EMS und Verwaltung **im selben Prozess**.
 Sie führt noch keine getrennte EMS-Worker-Laufzeit ein. Ein Browser-Reload startet
 nicht den Adapter neu; ein Adapterstopp, Absturz oder Controllerneustart kann die
 Regelung unterbrechen. Auch umfangreiche Verwaltungsarbeit kann den gemeinsamen
 Event-Loop belasten. Die Ziele 50 ms für Lastmanagement und 100 ms für weitere
 Regelaufgaben sind zu messende Anforderungen, keine in diesem Stand nachgewiesenen
 Garantien. Last-, Wiederanlauf- und Hardwaretests bleiben erforderlich.
+
+## Webbereitschaft und operativer Start – EOS-WEBSTART-001
+
+Der 9.0.2-Startpfad wartete vor der Listenerbindung auf die vollständige operative
+UI-/EMS-Initialisierung. Ein unbeantworteter History-Callback konnte den Ablauf
+festhalten, obwohl Lizenzprüfung und Teile des EMS bereits gestartet waren.
+`LICENSE_VALID` und `engineStarted` sind deshalb keine Nachweise eines erreichbaren
+HTTPS-Endpunkts.
+
+9.0.3 trennt die Einrichtung der geschützten Weboberfläche vom operativen Start:
+Der HTTPS-Listener wartet nicht auf die vollständige EMS-Initialisierung. Deren
+Startzustand und Fehler werden gesondert behandelt; die Oberfläche darf eine
+teilweise initialisierte Regelung nicht als betriebsbereit ausgeben. Lizenz,
+Benutzerrechte und Schreibzuständigkeit werden dadurch nicht umgangen.
+`EOS_HTTPS_READY` folgt auf erfolgreiche Listenerbindung und Einrichtung der
+gemeinsamen Webauthentisierung. `info.connection` wird an dieser Stelle gesetzt;
+dieser Webstatus ist keine Bestätigung des vollständigen operativen EMS-Starts.
+Ein nachfolgender Startfehler darf den bereits gebundenen Listener nicht durch
+eine ungeschützte Ersatzoberfläche ersetzen. Stop/Restart und verspätete
+Startabschlüsse bleiben Gegenstand gezielter Lifecycleprüfungen.
+
+Die Instanz-/Übersichtskachel der aktuell verbundenen EOS-Instanz übernimmt bei
+ihrem Standardlink die tatsächlich verwendete HTTPS-Browser-Origin und führt auf
+`/`. Eine funktionierende Verbindung über 8188 oder einen 443-Alias wird nicht durch
+alte gespeicherte Bind-/Portwerte ersetzt. Andere Instanzen, Drittadapter und
+benutzerdefinierte URLs bleiben unverändert; dies ist keine automatische
+Netzwerk- oder Proxykonfiguration.
+
+## History und MultiUse beim Start
+
+**HISTORY-001:** `_nwGetHistoryAvgSeries` erhält höchstens 5 Sekunden;
+`_nwGetHistoryAvgSeriesAny` teilt ein einziges monotones 5-Sekunden-Gesamtbudget
+über alle Fallback-Kandidaten. Auch ohne Callback endet der Vorgang mit
+`EOS_HISTORY_TIMEOUT`; nach verbrauchtem Budget startet keine weitere
+Fallbackrunde. Verspätete oder mehrfache Callbacks werden ignoriert, offene
+Anfragen beim Shutdown beendet. Es entsteht kein neuer Retry-/Cachedienst;
+das bestehende Stundenintervall bleibt bestehen.
+
+Die Energieauswertung behält bei leeren, ungültigen oder fehlgeschlagenen
+History-Zweigen bisherige gültige Werte und deren Zeitpunkte bei. Sie erzeugt
+daraus keine frisch datierten CO₂-Werte. Echte gültige Nullleistungsproben bleiben
+zulässig. Konkrete Fehlerfälle sind im [Prüfplan](COMMISSIONING.md) zugeordnet;
+Datenqualität und Webbereitschaft sind getrennte Zustände.
+
+**MULTIUSE-001:** Die lokale Initialisierung legt auch bei `enableMultiUse: false`
+die Objekte `multiUse.control.active`, `multiUse.control.requestW`,
+`multiUse.control.budgetW` und `multiUse.control.status` an. Erst danach darf die
+Deaktivierung diese Zustände schreiben. Das beendet die bisher mögliche Folge
+„Statusschreiben ohne Objekt“; das Modul bleibt deaktiviert, operative Ticks
+bleiben an seine Aktivierung gebunden. Gerätekommandos, Lizenz-/Safetygrenzen und
+bestehende Konfiguration werden dadurch nicht freigegeben oder zurückgesetzt.
 
 ## Integrationsstellen und Webpfade
 
@@ -92,7 +143,7 @@ Abschlussbericht zu entnehmen.
 
 ## Direkter HTTPS-Zugang und optionaler Eingang
 
-Das Standardprofil von 9.0.2 ist **HTTPS auf `0.0.0.0:8188` mit Authentisierung**.
+Das Standardprofil von 9.0.3 ist **HTTPS auf `0.0.0.0:8188` mit Authentisierung**.
 `0.0.0.0` bedeutet Bindung an die IPv4-Schnittstellen; es ist keine vom Browser
 aufzurufende Adresse. Nutzer öffnen `https://<Geräte-IP>:8188/`. Die native
 Konfiguration setzt `secure: true`, `auth: true`, `certPublic: defaultPublic`,

@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "eos-admin",
-    "version": "9.0.2",
+    "version": "9.0.3",
     "titleLang": {
       "en": "NexoWatt EOS",
       "de": "NexoWatt EOS",
@@ -18,6 +18,10 @@
     "connectionType": "local",
     "dataSource": "push",
     "news": {
+      "9.0.3": {
+        "en": "Keep HTTPS access available during licensed EMS startup; bound history replies and create MultiUse diagnostics before writes.",
+        "de": "HTTPS-Zugang beim lizenzierten EMS-Start erhalten; Historienantworten begrenzen und MultiUse-Diagnoseobjekte vor dem Schreiben anlegen."
+      },
       "9.0.2": {
         "en": "Fix license storage for supported ioBroker runtime permissions; add authorized public-key recovery and visible activation diagnostics.",
         "de": "Lizenzspeicherung für ioBroker-Laufzeitrechte korrigiert; autorisierte Prüfschlüssel-Wiederherstellung und sichtbare Aktivierungsdiagnose ergänzt."
@@ -103,11 +107,6 @@
         "de": "Stable 7.9.95 macht den Release-Ordner mergesicher: Die flache Update-ZIP kann direkt über einen bestehenden Arbeitsordner entpackt werden. Vor Paketprüfung und npm-Veröffentlichung werden package.json, io-package.json, beide Lockdateien, die Frontend-Version, Build-Informationen und der aktuelle Repository-Eintrag automatisch auf dieselbe Version gebracht. Dadurch wird insbesondere ein stehen gebliebenes io-package.json aus 7.9.92/7.9.94 automatisch repariert. Die Funktionen aus 7.9.94 bleiben unverändert.",
         "en": "Stable 7.9.95 makes the release folder merge-safe: the flat update ZIP can be extracted directly over an existing working directory. Before package validation and npm publishing, package.json, io-package.json, both lockfiles, the frontend version, build information and the current repository entry are synchronized automatically. In particular, a stale io-package.json from 7.9.92/7.9.94 is repaired automatically. Functional behavior from 7.9.94 remains unchanged.",
         "nl": "Stable 7.9.95 maakt de releasemap merge-veilig: de vlakke update-ZIP kan direct over een bestaande werkmap worden uitgepakt. Vóór pakketcontrole en npm-publicatie worden package.json, io-package.json, beide lockbestanden, de frontendversie, buildinformatie en de actuele repositoryvermelding automatisch op dezelfde versie gezet. Een achtergebleven io-package.json uit 7.9.92/7.9.94 wordt daardoor automatisch hersteld. De functies uit 7.9.94 blijven ongewijzigd."
-      },
-      "7.9.94": {
-        "de": "Stable-Kandidat 7.9.94: Standardkonten installer, guest und user verwenden bei der Ersteinrichtung das Startpasswort nexowatt und müssen nach der ersten erfolgreichen Anmeldung sofort ein persönliches Passwort vergeben. Die passwortlose Aktivierung ist deaktiviert. Die Login-Karte bleibt auch bei Fehlermeldungen vollständig bedienbar. EOS Assist ist für diese Stable-Version vollständig deaktiviert, bis die neue lesende Systemassistenz separat freigegeben ist. Deutsche Sicherheitstexte und sichtbare Herstellerangaben wurden bereinigt.",
-        "en": "Stable candidate 7.9.94: the standard installer, guest and user accounts use the initial password nexowatt during commissioning and must set a personal password immediately after the first successful sign-in. Passwordless activation is disabled. The login card remains fully usable when an error is shown. EOS Assist is completely disabled in this stable version until the redesigned read-only system assistant is released separately. German security texts and visible publisher information were cleaned up.",
-        "nl": "Stable-kandidaat 7.9.94: de standaardaccounts installer, guest en user gebruiken bij de eerste ingebruikname het startwachtwoord nexowatt en moeten na de eerste succesvolle aanmelding direct een persoonlijk wachtwoord instellen. Activering zonder wachtwoord is uitgeschakeld. De aanmeldkaart blijft ook bij foutmeldingen volledig bedienbaar. EOS Assist is in deze stable-versie volledig uitgeschakeld totdat de vernieuwde alleen-lezen systeemassistent apart is vrijgegeven."
       }
     },
     "desc": {
@@ -145,7 +144,7 @@
     "icon": "admin.svg",
     "messagebox": true,
     "enabled": true,
-    "extIcon": "https://unpkg.com/iobroker.eos-admin@9.0.2/admin/admin.svg",
+    "extIcon": "https://unpkg.com/iobroker.eos-admin@9.0.3/admin/admin.svg",
     "keywords": [
       "NexoWatt",
       "EOS",
@@ -156,7 +155,7 @@
       "licensed"
     ],
     "compact": false,
-    "readme": "https://unpkg.com/iobroker.eos-admin@9.0.2/README.md",
+    "readme": "https://unpkg.com/iobroker.eos-admin@9.0.3/README.md",
     "authors": [
       "NexoWatt"
     ],
@@ -168,7 +167,7 @@
     "type": "general",
     "licenseInformation": {
       "type": "paid",
-      "link": "https://unpkg.com/iobroker.eos-admin@9.0.2/LICENSE"
+      "link": "https://unpkg.com/iobroker.eos-admin@9.0.3/LICENSE"
     },
     "logTransporter": true,
     "stopBeforeUpdate": true,

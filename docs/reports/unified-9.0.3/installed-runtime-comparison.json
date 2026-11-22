@@ -1,0 +1,25 @@
+{
+  "version": "9.0.3",
+  "installedController": "7.2.5",
+  "runtimeFilesCompared": 803,
+  "allBytesEqual": true,
+  "roots": [
+    "build",
+    "admin",
+    "adminWww",
+    "public",
+    "packages/eos-license-client",
+    "ui/main.js",
+    "ui/lib",
+    "ui/ems",
+    "ui/backend",
+    "ui/build-ts",
+    "ui/www",
+    "ui/admin"
+  ],
+  "tests": {
+    "passing": 11,
+    "pending": 2,
+    "failed": 0
+  }
+}

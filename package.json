@@ -1,7 +1,7 @@
 {
   "name": "iobroker.eos-admin",
   "description": "NexoWatt EOS: licensed local energy management, dashboard and ioBroker system administration in one adapter.",
-  "version": "9.0.2",
+  "version": "9.0.3",
   "contributors": [
     "bluefox <dogafox@gmail.com>",
     "apollon77",
@@ -149,7 +149,9 @@
     "tools/vendor/webserver-3.4.0-source.provenance.json",
     "tools/eos-sbom-vendored.cjs",
     "START_HIER_9.0.2.md",
-    "docs/reports/unified-9.0.2/"
+    "docs/reports/unified-9.0.2/",
+    "START_HIER_9.0.3.md",
+    "docs/reports/unified-9.0.3/"
   ],
   "scripts": {
     "start": "cd src-admin && npm run start",
@@ -160,7 +162,7 @@
     "build:ui-runtime": "node ui/scripts/build-ts-runtime-executables.js",
     "lint-backend": "eslint -c eslint.config.mjs src",
     "lint": "npm run lint-backend && cd src-admin && npm run lint",
-    "test:unified": "node --test test/eos-unified*.test.cjs test/eos-hosted-boundary-http.test.cjs test/eos-license*.test.cjs ui/test/unified/*.test.cjs test/eos-access-diagnostics.test.cjs test/eos-ingress-renderer.test.cjs test/eos-sbom-vendored.test.cjs test/eos-system-license-ui.test.cjs",
+    "test:unified": "node --test test/eos-unified*.test.cjs test/eos-hosted-boundary-http.test.cjs test/eos-license*.test.cjs ui/test/unified/*.test.cjs test/eos-access-diagnostics.test.cjs test/eos-ingress-renderer.test.cjs test/eos-sbom-vendored.test.cjs test/eos-system-license-ui.test.cjs test/eos-history-deadline.test.cjs",
     "check:unified": "node tools/eos-release-check.cjs",
     "seal:unified": "node tools/eos-release-manifest.cjs --write",
     "prepack": "node tools/eos-release-check.cjs",
@@ -185,7 +187,7 @@
   },
   "nexowattReleasePolicy": {
     "distTag": "next",
-    "purpose": "License persistence and authorized public-key recovery test release; see START_HIER_9.0.2.md and docs/reports/unified-9.0.2/PRUEFBERICHT.md"
+    "purpose": "Licensed startup recovery test release; see START_HIER_9.0.3.md and docs/reports/unified-9.0.3/PRUEFBERICHT.md"
   },
   "publisher": "NexoWatt",
   "nexowattUpstream": {

@@ -1,8 +1,8 @@
 # Sicherheits- und CRA-Register der Zusammenführung
 
-**Stand:** 9.0.2 · 22.11.2026 · **Verantwortung:** NexoWatt / Dominique Manteufel
+**Stand:** 9.0.3 · 22.11.2026 · **Verantwortung:** NexoWatt / Dominique Manteufel
 
-Dieses Register beschreibt den Prüfbedarf für Testversion 9.0.2 (`next`) und
+Dieses Register beschreibt den Prüfbedarf für Testversion 9.0.3 (`next`) und
 ergänzt die vorhandenen Befund- und Entwicklungsunterlagen. Es
 beschreibt Scope, Maßnahmen und zu erbringende Nachweise. Testergebnisse werden im
 abschließenden Release-Prüfbericht geführt. Hier wird keine bestandene Normprüfung,
@@ -35,6 +35,9 @@ rein lokale Lizenzkontrolle verändern; absolute Manipulationssicherheit ist kei
 | EOS-ACCESS-T02 / S,I | LAN-Listener und lokaler Gerätename | IPv4-Bindung an alle Schnittstellen bewusst erfassen; nur TLS/Auth; DNS-Auflösung und SAN/CA prüfen, keine automatischen Host-/Firewallfreigaben. | Reale Zugangsprüfung erforderlich; kein vollautomatisches Geräteimage behauptet. |
 | EOS-LIC-T01 / T,E | Import öffentlicher Prüfschlüssel über die angemeldete Oberfläche | Nur exakt freigegebene Release-Pins oder gültige OS-Autoritäten; kein selbst gewählter Aussteller. Explizite OS-Allowlist bleibt abschließend. Local-Import ist keine neue Autorität. CWE-347/862. | Neue Import-/Widerrufs-/HTTPS-Tests im 9.0.2-Abschlussbericht; private Schlüssel nie auf EOS. |
 | EOS-LIC-T02 / D,T | ioBroker-Gruppenrechte verhindern private Lizenzspeicherung | Explizite Runtime-Grenze aus adapter-core; nur Nichtleaf-Verzeichnisse mit Dienst-UID/primärer GID; Leaf 0700 und Dateien 0600 bleiben privat. Kein rekursives Umsetzen von Hostrechten. CWE-732. | Reproduktion mit 0775/2775 und positive/negative Speicherprüfungen; tatsächliche Zielgeräteprüfung offen. |
+| EOS-WEBSTART-001 / D | Vollständiger operativer Start blockiert HTTPS-Listener; Lizenz-/Engine-Logs vermitteln vorzeitig Bereitschaft | Geschützte Webbereitschaft vom operativen Start trennen; tatsächlichen Bind-/TLS-Erfolg gesondert melden. Authentisierung, Lizenz und Ownership bleiben verbindlich. | Verzögerter/fehlgeschlagener Start, Stop/Restart und realer HTTPS-Aufruf im 9.0.3-Abschlussbericht nachzuweisen. |
+| HISTORY-001 / D,T | Fehlender History-Callback hängt Start oder Kandidatenabfrage auf; fehlende Daten erscheinen als frischer CO₂-Nullwert | Betroffenen Einzelaufruf und sämtliche Fallback-Kandidaten einer `_nwGetHistoryAvgSeriesAny`-Abfrage insgesamt auf 5 Sekunden begrenzen; späte/mehrfache Antworten ignorieren. Bei fehlenden Daten alte gültige Werte/Zeiten erhalten; echte Nullproben bleiben zulässig. | Nichtantwort, Fehler, verspätete Antwort, Shutdown und Datenqualität gezielt prüfen; keine Ergebnisse vorweggenommen. |
+| MULTIUSE-001 / T,D | Deaktivierung schreibt vier Steuerzustände, bevor deren Objekte angelegt sind | Objektinitialisierung auch bei deaktiviertem Modul; operative Ticks bleiben aktivierungsgebunden, keine neuen Gerätekommandos oder Konfigurationsresets. | Frische Datenbank und reales Manager-/Modulverhalten prüfen; Ergebnisse im 9.0.3-Abschlussbericht. |
 
 Die 9.0.2-Prüfschlüsselarchitektur verändert die dokumentierte Autoritätsmenge:
 Standard-OS-Schlüssel und explizit importierte, in diesem Release autorisierte
@@ -50,8 +53,10 @@ Release-Autoritäten. Details und Wiederherstellungsgrenzen:
 Die Gruppe innerhalb der expliziten ioBroker-Installation kann nach der
 ioBroker-Betriebsarchitektur bereits Code und Daten verwalten. Gegen sie wird
 keine neue DRM-Isolation behauptet. Der Adapter erhält weder Rootrechte noch
-einen privilegierten Upload-Helfer. Geräte-/EMS-Regelungen wurden für diese
-Lizenzkorrektur fachlich nicht verändert; LIC-RUNTIME-01 bleibt gesondert offen.
+einen privilegierten Upload-Helfer. Die Lizenzkorrektur aus 9.0.2 verändert keine
+Geräte-/EMS-Regelungsalgorithmen. Die gesonderten Lifecycle-/Datenqualitätsänderungen
+in 9.0.3 sind oben unter ihren eigenen Befund-IDs erfasst;
+LIC-RUNTIME-01 bleibt gesondert offen.
 
 S=Identitätsvortäuschung, T=Manipulation, R=fehlende Nachvollziehbarkeit,
 I=Informationsabfluss, D=Verfügbarkeitsangriff, E=Rechteausweitung. CWE nennt
@@ -95,6 +100,7 @@ Quellen und Recherchegrenzen: [SOURCES.md](SOURCES.md).
 ## Noch erforderliche Freigabenachweise
 
 - Tatsächlicher Controller-/OS-/Node-Stand; Installation/Stop/Restart ohne Root.
+- HTTPS-Bereitschaft trotz verzögertem operativem Start; begrenzte History-Antwortzeit, unverfälschte CO₂-Datenqualität und MultiUse-Objekte bei deaktiviertem Modul nach den drei 9.0.3-Befunden prüfen.
 - Gesamtfluss direktes HTTPS:8188 → OAuth/Erstpasswortwechsel → Aktivierung → Dashboard/Installer/System; optionales HTTPS:443 separat. TOTP-/fehlerhafte Auth-Konfiguration muss sperren; TOTP-Challenge/Passkeys bleiben offen.
 - Globalen Logout mit mehreren Nutzern prüfen; ein Single-Session-Logout ist nicht implementiert.
 - Erhalt des ioBroker-Adminzugangs trotz alter Legacy-Sperrflags; Nachweise nach [ACCESS_RECOVERY_9.0.1.md](ACCESS_RECOVERY_9.0.1.md).

@@ -2,10 +2,10 @@
   "$schema": "http://cyclonedx.org/schema/bom-1.5.schema.json",
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
-  "serialNumber": "urn:uuid:3ddd868f-64c8-4578-a6c1-a6ead448d4fb",
+  "serialNumber": "urn:uuid:fa697d74-6da6-4826-819e-69abdb4a149f",
   "version": 2,
   "metadata": {
-    "timestamp": "2026-11-22T17:02:22.237Z",
+    "timestamp": "2026-11-22T18:05:47.861Z",
     "lifecycles": [
       {
         "phase": "build"
@@ -19,14 +19,14 @@
       }
     ],
     "component": {
-      "bom-ref": "iobroker.eos-admin@9.0.2",
+      "bom-ref": "iobroker.eos-admin@9.0.3",
       "type": "library",
       "name": "iobroker.eos-admin",
-      "version": "9.0.2",
+      "version": "9.0.3",
       "scope": "required",
       "author": "NexoWatt",
       "description": "NexoWatt EOS: licensed local energy management, dashboard and ioBroker system administration in one adapter.",
-      "purl": "pkg:npm/iobroker.eos-admin@9.0.2",
+      "purl": "pkg:npm/iobroker.eos-admin@9.0.3",
       "properties": [],
       "externalReferences": []
     }
@@ -10716,10 +10716,10 @@
       ]
     },
     {
-      "bom-ref": "nexowatt:vendored:webserver@3.4.0+nexowatt.9.0.2",
+      "bom-ref": "nexowatt:vendored:webserver@3.4.0+nexowatt.9.0.3",
       "type": "library",
       "name": "@iobroker/webserver",
-      "version": "3.4.0+nexowatt.9.0.2",
+      "version": "3.4.0+nexowatt.9.0.3",
       "scope": "required",
       "description": "Locally vendored @iobroker/webserver 3.4.0 with two reviewed certificate-material logging replacements; not an unmodified registry release.",
       "licenses": [
@@ -10797,7 +10797,7 @@
   ],
   "dependencies": [
     {
-      "ref": "iobroker.eos-admin@9.0.2",
+      "ref": "iobroker.eos-admin@9.0.3",
       "dependsOn": [
         "@iobroker/adapter-core@3.4.3",
         "@iobroker/plugin-docker@1.2.1",
@@ -10822,7 +10822,7 @@
         "@node-oauth/oauth2-server@5.3.1",
         "semver@7.8.5",
         "ws@8.22.0",
-        "nexowatt:vendored:webserver@3.4.0+nexowatt.9.0.2"
+        "nexowatt:vendored:webserver@3.4.0+nexowatt.9.0.3"
       ]
     },
     {
@@ -12663,7 +12663,7 @@
       "dependsOn": []
     },
     {
-      "ref": "nexowatt:vendored:webserver@3.4.0+nexowatt.9.0.2",
+      "ref": "nexowatt:vendored:webserver@3.4.0+nexowatt.9.0.3",
       "dependsOn": [
         "@node-oauth/oauth2-server@5.3.1",
         "jsonwebtoken@9.0.3",

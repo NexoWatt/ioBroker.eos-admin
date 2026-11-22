@@ -1,20 +1,20 @@
 {
-  "version": "9.0.2",
+  "version": "9.0.3",
   "channel": "next",
   "baseFrontend": "Rebuilt from official Admin 8.3.5 sources plus reviewed EOS integration using React 19 and Vite; see source-bound frontend manifest.",
   "runtimeEntry": "vite-manifest",
-  "releaseType": "unified-license-recovery",
-  "release": "unified-license-recovery",
-  "label": "9.0.2",
+  "releaseType": "unified-licensed-startup-recovery",
+  "release": "unified-licensed-startup-recovery",
+  "label": "9.0.3",
   "notes": [
     "Preserves the existing ioBroker Admin and the combined EOS login/runtime.",
     "One central NWL3 activation, private persistence and authorized public-key recovery.",
     "Manufacturer vault/private keys stay on the issuer computer; live-device acceptance remains required."
   ],
   "changes": [
-    "Support the explicit ioBroker runtime group boundary while keeping the license store private",
-    "Import and restore only release-authorized or OS-trusted Ed25519 public keys",
-    "Show actionable status and activation error codes at the top of the license UI"
+    "Keep the authenticated HTTPS shell independent of slow operational startup",
+    "Bound history callback waits and preserve unavailable data instead of invented zero readings",
+    "Initialize MultiUse diagnostic objects before disabled-module status writes"
   ],
   "brandingCacheVersion": 7109,
   "shellCacheVersion": 7109,
@@ -28,7 +28,7 @@
     "commit": "6f77eedf525813a7a61d79188d1ff05dffd05086"
   },
   "product": "NexoWatt EOS",
-  "status": "9.0.2 license and recovery integration test release; not a production or CRA conformity declaration",
+  "status": "9.0.3 licensed startup recovery integration test release; not a production or CRA conformity declaration",
   "sourceComponents": {
     "admin": "8.0.2",
     "ui": "1.0.38",

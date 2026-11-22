@@ -286,3 +286,234 @@ test('startup abort closes a bound listener and never mutates another adapter', 
     assert.equal(terminated, 1); assert.equal(server.listening, false);
     assert.match(errors.join('\n'), /EOS_TEST_STARTUP_FAILURE/);
 });
+
+// Real HTTPS + production Web mount + production hosted factory/router. Only the
+// controller DB/session identity and the delayed operational dependency are fixtures.
+async function hostedTlsFixture(t, migrate) {
+    const Module = require('node:module');
+    const { createHarness } = require('../ui/test/unified/http-harness.cjs');
+    const harness = await createHarness();
+    await harness.close();
+    const owner = harness.owner;
+    owner.config.secure = true;
+    const logs = [];
+    owner.log = Object.fromEntries(Object.keys(quiet).map(level => [level, value => logs.push(String(value))]));
+    let licensed = true; let writable = true; let runtimeObject; let migrationCalls = 0;
+    const validLicense = harness.bridge.getLicense();
+    owner.eosLicenseService = { statusView: () => licensed ? validLicense : { valid: false, coreEnabled: false } };
+    owner.eosOwnership = { canWrite: () => writable };
+    let foreignWrites = 0;
+    owner.setForeignStateAsync = async () => { foreignWrites++; };
+    const filename = path.resolve(__dirname, '../ui/main.js');
+    const isolated = new Module(filename, module);
+    isolated.filename = filename; isolated.paths = Module._nodeModulePaths(path.dirname(filename));
+    isolated._compile(fs.readFileSync(filename, 'utf8') + '\nmodule.exports.TestRuntime = NexoWattVis;\n', filename);
+    const Runtime = isolated.exports.TestRuntime;
+    const startServer = Runtime.prototype.startServer;
+    Runtime.prototype.startServer = async function () { runtimeObject = this; return startServer.call(this); };
+    Runtime.prototype.migrateNativeConfig = async function () { migrationCalls++; return migrate.call(this); };
+    const app = express();
+    const systemRequests = new WeakSet();
+    app.use((req, _res, next) => { if (req.path.startsWith('/system/')) systemRequests.add(req); next(); });
+    const boundary = new UnifiedSessions(owner, { secure: true, externalOrigin: '' });
+    const status = async req => req.headers.cookie === 'fixture=admin' ? {
+        authenticated: true, authed: true, user: 'system.user.admin', role: 'admin', groups: ['system.group.administrator'],
+        capabilities: ['*'], csrfToken: 'c'.repeat(32), credentialKey: 'credential-fixture', mustChangePassword: false,
+        activationRequired: false,
+    } : { authenticated: false, authed: false, role: 'none', mustChangePassword: false, activationRequired: false };
+    const web = Object.assign(Object.create(Web.prototype), {
+        baseDir: path.resolve(__dirname, '..'), server: { app }, adapter: owner, settings: { secure: true }, systemRequests,
+        unified: { status, requestAllowed: req => boundary.requestAllowed(req), machineRequestAllowed: req => boundary.machineRequestAllowed(req) },
+        isUnifiedRequest: req => !req.path.startsWith('/system/'),
+    });
+    const oldCached = require.cache[filename];
+    require.cache[filename] = isolated;
+    let mountTimer;
+    try {
+        await Promise.race([web.mountUnifiedRuntime(), new Promise((_, reject) => {
+            mountTimer = setTimeout(() => reject(new Error('licensed runtime held HTTPS mount hostage')), 1500);
+        })]);
+    } finally {
+        clearTimeout(mountTimer);
+        if (oldCached) require.cache[filename] = oldCached; else delete require.cache[filename];
+    }
+    app.get('/system/recovery', (_req, res) => res.json({ ok: true }));
+    app.use((_req, res) => res.status(404).end());
+    const cert = certificate();
+    owner.getCertificatesAsync = async () => [cert];
+    owner.config.leCollection = false;
+    const server = await createEosServer(app, owner, { secure: true, acmeChallenge: false });
+    web.server.server = server;
+    await listenEosServer(server, { port: await freePort(), bind: '127.0.0.1' });
+    const runtime = owner.eosHostedRuntime;
+    t.after(async () => { await runtime.stop(); await close(server); });
+    const host = `127.0.0.1:${server.address().port}`;
+    const request = (url, { method = 'GET', auth = true, csrf = true, origin = `https://${host}` } = {}) =>
+        tlsRequest(server, cert.cert, { host, origin, ...(auth ? { cookie: 'fixture=admin' } : {}),
+            ...(csrf ? { 'x-nw-csrf': 'c'.repeat(32) } : {}), 'content-type': 'application/json' }, method, url,
+        method === 'POST' ? { id: 'device.0.control', value: true } : undefined);
+    return { runtime, request, logs, server, owner, instance: () => runtimeObject,
+        migrationCalls: () => migrationCalls, foreignWrites: () => foreignWrites,
+        setLicensed(value) { licensed = value; }, setWritable(value) { writable = value; } };
+}
+function deferred() { let resolve; const promise = new Promise(done => { resolve = done; }); return { promise, resolve }; }
+
+test('valid license and stalled operational startup cannot hold the HTTPS login or recovery console hostage', async t => {
+    const pending = deferred();
+    const h = await hostedTlsFixture(t, function () { return pending.promise; });
+    assert.equal(h.runtime.status().state, 'idle');
+    assert.equal(h.migrationCalls(), 0, 'shell construction must not initialize devices');
+    assert.equal(await h.request('/login.html', { auth: false }), 200);
+    assert.equal(await h.request('/api/auth/status'), 200);
+    assert.equal(h.migrationCalls(), 0, 'a request before the owner readiness signal must not arm operational startup');
+    const starting = h.runtime.startOperational();
+    await new Promise(resolve => setImmediate(resolve));
+    assert.equal(h.migrationCalls(), 1);
+    assert.equal(h.runtime.status().state, 'starting');
+    h.instance().emsEngine = { stop() {} }; // mere allocation is deliberately not readiness
+    assert.equal(h.runtime.status().emsReady, false);
+    assert.equal(await h.request('/login.html', { auth: false }), 200);
+    assert.equal(await h.request('/system/recovery'), 200);
+    assert.equal(await h.request('/system/recovery', { auth: false }), 302);
+    assert.equal(await h.request('/api/smarthome/toggle', { method: 'POST' }), 503);
+    assert.equal(await h.request('/api/smarthome/toggle', { method: 'POST', csrf: false }), 403);
+    assert.equal(await h.request('/api/smarthome/toggle', { method: 'POST', auth: false }), 401);
+    assert.equal(h.foreignWrites(), 0);
+    // Stop is bounded even if the startup dependency has not answered. Its late answer
+    // must not resume the next setup operation or report EMS-ready.
+    let laterSteps = 0;
+    h.instance().ensureInfoConnectionState = async () => { laterSteps++; };
+    await h.runtime.stop();
+    pending.resolve(); await starting;
+    assert.equal(laterSteps, 0);
+    assert.equal(h.runtime.status().state, 'stopped');
+    assert.equal(h.runtime.status().emsReady, false);
+    await h.runtime.startOperational();
+    await assert.rejects(h.runtime.start(), /EOS_UI_STOPPING/);
+    assert.equal(h.migrationCalls(), 1);
+});
+
+test('operational initialization failure leaves HTTPS recovery up and refuses real UI commands', async t => {
+    const h = await hostedTlsFixture(t, async function () { throw new Error('fixture configuration read failed'); });
+    await h.runtime.startOperational();
+    h.instance().emsEngine = { stop() {} };
+    assert.equal(h.runtime.status().state, 'degraded');
+    assert.equal(h.runtime.status().emsReady, false);
+    assert.equal(await h.request('/login.html', { auth: false }), 200);
+    assert.equal(await h.request('/system/recovery'), 200);
+    assert.equal(await h.request('/api/smarthome/toggle', { method: 'POST' }), 503);
+    assert.equal(h.foreignWrites(), 0);
+    await h.runtime.startOperational();
+    assert.equal(h.migrationCalls(), 1, 'failed partial startup must not duplicate configuration/timers on requests');
+    assert.equal(h.server.listening, true);
+});
+
+for (const lost of ['license', 'ownership']) {
+    test(`late startup completion after ${lost} loss cannot revive control`, async t => {
+        const pending = deferred();
+        const h = await hostedTlsFixture(t, function () { return pending.promise; });
+        const starting = h.runtime.startOperational();
+        await new Promise(resolve => setImmediate(resolve));
+        let laterSteps = 0;
+        h.instance().ensureInfoConnectionState = async () => { laterSteps++; };
+        if (lost === 'license') h.setLicensed(false); else h.setWritable(false);
+        pending.resolve(); await starting;
+        assert.equal(laterSteps, 0);
+        assert.equal(h.runtime.status().state, 'degraded');
+        assert.equal(h.runtime.status().emsReady, false);
+        assert.equal(await h.request('/login.html', { auth: false }), 200);
+        assert.equal(await h.request('/system/recovery'), 200);
+        assert.equal(await h.request('/api/smarthome/toggle', { method: 'POST' }), 503);
+        assert.equal(h.foreignWrites(), 0);
+        h.setLicensed(true); h.setWritable(true);
+        await assert.rejects(h.instance().setForeignStateAsync('device.0.control', true), /EOS_UI_OWNERSHIP_LOST/);
+        assert.equal(h.foreignWrites(), 0);
+        await h.runtime.startOperational();
+        assert.equal(h.migrationCalls(), 1, 'lost admission requires operator restart, not an automatic partial retry');
+    });
+}
+
+test('an unexpected operational promise rejection is contained without closing HTTPS', async t => {
+    const h = await hostedTlsFixture(t, async function () {});
+    h.instance().onReady = async () => { throw new Error('fixture unexpected operational rejection'); };
+    await assert.rejects(h.runtime.startOperational(), /fixture unexpected operational rejection/);
+    assert.equal(h.runtime.status().state, 'degraded');
+    assert.equal(h.runtime.status().emsReady, false);
+    assert.equal(await h.request('/login.html', { auth: false }), 200);
+    assert.equal(await h.request('/system/recovery'), 200);
+    assert.equal(await h.request('/api/smarthome/toggle', { method: 'POST' }), 503);
+    assert.equal(h.server.listening, true);
+    assert.ok(h.logs.some(value => value.startsWith('EOS_UI_STARTUP_FAILED:')));
+});
+
+
+for (const [lost, rejectedOperation] of [['license', false], ['ownership', false], ['ownership', true]]) {
+    test(`optional startup catch cannot erase observed ${lost} loss after authority returns${rejectedOperation ? ' (rejected operation)' : ''}`, async t => {
+        const h = await hostedTlsFixture(t, async function () {});
+        const instance = h.instance();
+        for (const method of ['ensureInfoConnectionState', 'ensureLicenseStates', '_nwInitLicense', 'ensureInstallerStates']) {
+            instance[method] = async () => {};
+        }
+        let optionalEntered = false; let deniedReads = 0; let laterSteps = 0;
+        const grant = h.owner.eosLicenseService.statusView();
+        instance.delObjectAsync = async () => {
+            optionalEntered = true;
+            if (rejectedOperation) {
+                deniedReads++;
+                h.setWritable(false);
+                try { await instance.setForeignStateAsync('device.0.control', true); }
+                finally { h.setWritable(true); }
+                return;
+            }
+            // The post-await authority check observes one denial. Every subsequent
+            // read succeeds, modelling restoration before the next startup step.
+            if (lost === 'license') {
+                h.owner.eosLicenseService.statusView = () => ++deniedReads === 1
+                    ? { valid: false, coreEnabled: false } : grant;
+            } else {
+                h.owner.eosOwnership.canWrite = () => ++deniedReads !== 1;
+            }
+        };
+        instance.ensureSettingsStates = async () => {
+            laterSteps++;
+            throw new Error('fixture: revoked startup reached a later non-optional operation');
+        };
+        const Module = require('node:module');
+        const originalLoad = Module._load;
+        Module._load = function (name, ...args) {
+            if (name === '@iobroker/adapter-core') return { getAbsoluteInstanceDataDir: () => '/tmp/nexowatt-startup-admission-test' };
+            return originalLoad.call(this, name, ...args);
+        };
+        try { await h.runtime.startOperational(); }
+        finally { Module._load = originalLoad; }
+        assert.equal(optionalEntered, true, 'fault must occur inside the genuinely caught optional cleanup step');
+        assert.ok(deniedReads >= 1);
+        assert.equal(laterSteps, 0, 'an optional catch may not grant a new admission to the same startup');
+        assert.equal(h.runtime.status().state, 'degraded');
+        assert.equal(h.runtime.status().error, lost === 'license' ? 'EOS_UI_LICENSE_LOST' : 'EOS_UI_OWNERSHIP_LOST');
+        assert.equal(h.runtime.status().emsReady, false);
+        assert.equal(instance._nwShuttingDown, true, 'runtime resources must be cleaned after the latched abort');
+        assert.equal(await h.request('/login.html', { auth: false }), 200);
+        assert.equal(await h.request('/system/recovery'), 200);
+        await assert.rejects(instance.setForeignStateAsync('device.0.control', true), /EOS_UI_OWNERSHIP_LOST/);
+        assert.equal(h.foreignWrites(), 0);
+    });
+}
+
+test('the explicit HTTPS-ready diagnostic requires a live listener and is suppressed after close', async t => {
+    const logs = [];
+    const server = https.createServer(certificate(), (_req, res) => res.end());
+    t.after(() => close(server));
+    const web = Object.assign(Object.create(Web.prototype), {
+        settings: { secure: true }, server: { server }, adapter: { log: { info: value => logs.push(value) } },
+    });
+    const address = { host: '127.0.0.1', port: await freePort() };
+    assert.equal(web.logListenerReady(address), false);
+    assert.equal(logs.length, 0);
+    await listenEosServer(server, { bind: address.host, port: address.port });
+    assert.equal(web.logListenerReady(address), true);
+    assert.deepEqual(logs, [`EOS_HTTPS_READY: https server listening on 127.0.0.1:${address.port}; login and system console available`]);
+    web.closed = true;
+    assert.equal(web.logListenerReady(address), false);
+    assert.equal(logs.length, 1);
+});

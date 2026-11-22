@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/modules/multi-use.ts
- * Quell-Hash: sha256:542c0e8abafb7710bd0bf0ab592b5e40a0f872e42b3a9f8ea09cbd58779eabd2
+ * Quell-Hash: sha256:8d1dc7c838d3e810f9c003e1723a31c56468e3fda2875ec653545fd1b4ba82cc
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -269,7 +269,12 @@ class MultiUseModule extends BaseModule {
   }
 
   async init() {
-    if (!this._isEnabled()) return;
+    // Der Modulmanager initialisiert auch deaktivierte Aktormodule vor ihrem
+    // Safe-Stop. Deshalb müssen deren Diagnoseobjekte und vorhandene Legacy-
+    // Mappings bereits hier entstehen. init() gibt keine Hardware-Sollwerte
+    // aus; der aktive Regelpfad bleibt ausschließlich durch tick() freigegeben.
+    // Ein früher Return bei enableMultiUse=false ließe deactivate() sonst die
+    // control-States ohne zugehörige ioBroker-Objekte veröffentlichen.
     this._loadConsumersFromConfig();
     const legacyConsumersEnabled = this._legacyConsumersEnabled();
     for (const consumer of (legacyConsumersEnabled ? this._consumers : [])) {

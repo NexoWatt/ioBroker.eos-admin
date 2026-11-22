@@ -1,0 +1,21 @@
+✔ missing getHistory callback rejects within five seconds and discards late or repeated replies (4.298511ms)
+✔ timely history remains unchanged and clears its deadline timer (1.237338ms)
+✔ candidate fallback shares one monotonic five-second budget instead of multiplying it (1.773829ms)
+✔ shutdown cancels all pending history work, releases timers and rejects new requests (1.572279ms)
+✔ startup energy totals finish after failed history without publishing zeros or refreshing old CO2 (2.797209ms)
+✔ empty or invalid history and missing candidate mappings preserve old measurements (3.692246ms)
+✔ valid zero-power samples remain legitimate measurements and nonzero energy integration remains unchanged (3.19308ms)
+✔ a reply after a stalled event loop cannot beat the deadline callback or extend the hard cap (2.225024ms)
+✔ a failed history branch preserves its old value and CO2 while other genuine measurements may update (1.809263ms)
+✔ mapped but absent energy values are not converted to freshly published zero CO2 (1.139873ms)
+✔ real normalizer rejects null, boolean, blank and nonfinite values without synthesizing zero measurements (12.103991ms)
+✔ real normalizer rejects malformed rows/timestamps and retains finite Influx samples and timestamps (2.373846ms)
+✔ history timeout diagnostics are constant, once per cycle and throttled for five monotonic minutes (2.870879ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 844.251341

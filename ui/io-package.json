@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "nexowatt-ui",
-    "version": "9.0.2",
+    "version": "9.0.3",
     "news": {
       "1.0.38": {
         "en": "NexoWatt EOS logo and neutral UI branding. Direct HTTPS with explicitly selected certificates, corrected secure login routes and restored PWA startup/update metadata. Existing EMS configuration and independent authentication profiles remain intact. Test release; device acceptance required.",

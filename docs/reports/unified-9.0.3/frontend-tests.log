@@ -1,0 +1,22 @@
+✔ license operations remain on the EOS origin from a nested system route (1.09789ms)
+✔ logout uses one session and CSRF protection, without reading OAuth tokens (4.362136ms)
+✔ missing CSRF or failed status never sends a logout mutation (1.421573ms)
+✔ logout failure is not reported as a successful revocation (0.825203ms)
+✔ already expired session does not require a write (0.353468ms)
+✔ central license status accepts the controller UUID variants supported by the verifier (1.884695ms)
+✔ graph parser distinguishes actual imports from translations and never executes emitted code (14.129176ms)
+✔ receipt permits the real federation asset entry but rejects missing dependencies, changed asset bytes and unsafe paths (5.044856ms)
+✔ Admin8 legacy cleaner preserves unknown files for the hash-bound copy migration and strict seal (3.079841ms)
+✔ prepared release parser works without installed packages and rejects altered vendor bytes before loading them (157.041372ms)
+✔ the current EOS entry uses the working HTTPS origin instead of the saved old port (6.301142ms)
+✔ HTTPS aliases, default 443, IPv6 and proxy access keep the exact current origin (0.390113ms)
+✔ other instances, legacy UI, third-party links and custom pages retain their targets (0.204816ms)
+✔ an invalid or unencrypted browser URL never becomes a new EOS entry authority (1.463256ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 330.902839

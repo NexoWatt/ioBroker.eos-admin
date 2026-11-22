@@ -101,6 +101,7 @@ test('fresh UI snapshot never converts revoked Home to Pro; control retains only
     assert.equal(h.adapter._nwBuildLicenseFeatureInfo().features.energyWalletOperator, false);
     assert.equal(h.adapter._nwBuildLicenseFeatureInfo().features.meshMicrogrid, true);
     h.adapter._nwRuntimeLicenseSnapshot(); h.adapter._hostedOperational = true;
+    h.adapter._hostedStartup = { state: 'ready', error: '' };
     snapshot = { valid: false, coreEnabled: false };
     const info = h.adapter._nwBuildLicenseFeatureInfo();
     assert.equal(info.valid, false); assert.equal(info.edition, 'none'); assert.equal(info.proFullAccess, false);
@@ -189,4 +190,83 @@ test('blocked hosted startup resumes once only after fresh ownership and central
     await runtime.stop();
     await h.close();
   }
+});
+
+function isolatedHostedFactory() {
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const Module = require('node:module');
+  const filename = path.resolve(__dirname, '../../main.js');
+  const isolated = new Module(filename, module);
+  isolated.filename = filename; isolated.paths = Module._nodeModulePaths(path.dirname(filename));
+  isolated._compile(fs.readFileSync(filename, 'utf8') + '\nmodule.exports.TestRuntime = NexoWattVis;\n', filename);
+  return isolated.exports;
+}
+
+test('shell bootstrap failure can retry once without starting operational work', async () => {
+  const f = fixture();
+  const { TestRuntime, createHostedRuntime: createRuntime } = isolatedHostedFactory();
+  const originalStart = TestRuntime.prototype.startServer;
+  let attempts = 0;
+  TestRuntime.prototype.startServer = async function () {
+    if (++attempts === 1) throw new Error('fixture shell construction failed');
+    return originalStart.call(this);
+  };
+  const runtime = createRuntime(f.owner, f.bridge);
+  try {
+    await assert.rejects(runtime.start(), /fixture shell construction failed/);
+    assert.equal(runtime.status().state, 'degraded');
+    assert.equal(runtime.status().emsReady, false);
+    await Promise.all([runtime.start(), runtime.start()]);
+    assert.equal(attempts, 2);
+    assert.equal(runtime.status().state, 'unlicensed');
+    assert.equal(f.writes.length, 0);
+  } finally { await runtime.stop(); }
+});
+
+test('stop during shell bootstrap discards its late completion and cannot reopen the runtime', async () => {
+  const f = fixture();
+  const { TestRuntime, createHostedRuntime: createRuntime } = isolatedHostedFactory();
+  let finish;
+  const pending = new Promise(resolve => { finish = resolve; });
+  TestRuntime.prototype.startServer = async function () {
+    await pending;
+    this._hostedApp = () => assert.fail('stopped router must never execute');
+  };
+  const runtime = createRuntime(f.owner, f.bridge);
+  const started = runtime.start();
+  const rejected = assert.rejects(started, /EOS_UI_STOPPING/);
+  await new Promise(resolve => setImmediate(resolve));
+  await runtime.stop();
+  finish(); await rejected;
+  assert.equal(runtime.status().active, false);
+  assert.equal(runtime.status().state, 'stopped');
+  assert.equal(runtime.status().emsReady, false);
+  const result = { status(value) { this.code = value; return this; }, json(body) { this.body = body; } };
+  runtime.handle({}, result, () => assert.fail('stopped handler must not fall through'));
+  assert.equal(result.code, 503);
+  await assert.rejects(runtime.start(), /EOS_UI_STOPPING/);
+});
+
+
+test('cached license grants cannot keep an incomplete or failed startup alive', async () => {
+  const { createHarness } = require('./http-harness.cjs');
+  const h = await createHarness();
+  try {
+    const valid = h.bridge.getLicense();
+    let licensed = true;
+    h.bridge.getLicense = () => licensed ? valid : { valid: false, coreEnabled: false };
+    h.adapter._nwRuntimeLicenseSnapshot();
+    h.adapter._hostedOperational = true;
+    licensed = false;
+    for (const state of ['idle', 'starting', 'degraded', 'blocked', 'stopped']) {
+      h.adapter._hostedStartup = { state, error: '' };
+      assert.equal(h.adapter._nwRuntimeLicenseSnapshot().ok, false, state);
+      assert.equal(h.adapter._nwHasCentralLicenseGrant('energy', true), false, state);
+    }
+    h.adapter._hostedStartup = { state: 'ready', error: '' };
+    assert.equal(h.adapter._nwRuntimeLicenseSnapshot().ok, true, 'commissioned regulation retains its verified grants');
+    assert.equal(h.adapter._nwHasCentralLicenseGrant('energy', true), true);
+    assert.equal(h.adapter._nwHasCentralLicenseGrant('energy'), false, 'new HTTP mutations still require a fresh grant');
+  } finally { await h.close(); }
 });

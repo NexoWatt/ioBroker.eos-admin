@@ -1,0 +1,220 @@
+TAP version 13
+# Subtest: only a complete configured port is accepted, without a fallback or ephemeral port
+ok 1 - only a complete configured port is accepted, without a fallback or ephemeral port
+  ---
+  duration_ms: 1.172361
+  type: 'test'
+  ...
+# Subtest: configured port is used exactly once and readiness follows successful bind
+ok 2 - configured port is used exactly once and readiness follows successful bind
+  ---
+  duration_ms: 25.276127
+  type: 'test'
+  ...
+# Subtest: occupied port fails once with EADDRINUSE and leaves the existing service intact
+ok 3 - occupied port fails once with EADDRINUSE and leaves the existing service intact
+  ---
+  duration_ms: 5.572655
+  type: 'test'
+  ...
+# Subtest: unavailable local interface fails once with EADDRNOTAVAIL instead of searching ports
+ok 4 - unavailable local interface fails once with EADDRNOTAVAIL instead of searching ports
+  ---
+  duration_ms: 0.73647
+  type: 'test'
+  ...
+# Subtest: TLS configuration cannot silently become a cleartext listener when certificates are absent
+ok 5 - TLS configuration cannot silently become a cleartext listener when certificates are absent
+  ---
+  duration_ms: 0.761378
+  type: 'test'
+  ...
+# Subtest: controller certificate read failures remain diagnosed TLS startup failures
+ok 6 - controller certificate read failures remain diagnosed TLS startup failures
+  ---
+  duration_ms: 0.183214
+  type: 'test'
+  ...
+# Subtest: collection TLS uses configured default for IP without SNI and retains a distinct hostname collection
+ok 7 - collection TLS uses configured default for IP without SNI and retains a distinct hostname collection
+  ---
+  duration_ms: 124.645333
+  type: 'test'
+  ...
+# Subtest: collection IP context sends the configured intermediate chain and accepts only the explicit root CA
+ok 8 - collection IP context sends the configured intermediate chain and accepts only the explicit root CA
+  ---
+  duration_ms: 193.340429
+  type: 'test'
+  ...
+# Subtest: a valid named collection cannot hide the absence of a default certificate for IP access
+ok 9 - a valid named collection cannot hide the absence of a default certificate for IP access
+  ---
+  duration_ms: 35.880668
+  type: 'test'
+  ...
+# Subtest: native TLS without a fixed origin serves IP/8188 and HTTPS/443 alias Host contracts
+ok 10 - native TLS without a fixed origin serves IP/8188 and HTTPS/443 alias Host contracts
+  ---
+  duration_ms: 95.926975
+  type: 'test'
+  ...
+# Subtest: invalid external origin is caught by Web startup and terminates once without controller mutations
+ok 11 - invalid external origin is caught by Web startup and terminates once without controller mutations
+  ---
+  duration_ms: 2.939971
+  type: 'test'
+  ...
+# Subtest: password/setup write guard uses canonical browser Origin and preserves explicit bearer compatibility
+ok 12 - password/setup write guard uses canonical browser Origin and preserves explicit bearer compatibility
+  ---
+  duration_ms: 0.505285
+  type: 'test'
+  ...
+# Subtest: actual TLS activation accepts Host443 normalization and rejects malformed Host before its service
+ok 13 - actual TLS activation accepts Host443 normalization and rejects malformed Host before its service
+  ---
+  duration_ms: 59.058069
+  type: 'test'
+  ...
+# Subtest: startup abort closes a bound listener and never mutates another adapter
+ok 14 - startup abort closes a bound listener and never mutates another adapter
+  ---
+  duration_ms: 0.727336
+  type: 'test'
+  ...
+# Subtest: valid license and stalled operational startup cannot hold the HTTPS login or recovery console hostage
+ok 15 - valid license and stalled operational startup cannot hold the HTTPS login or recovery console hostage
+  ---
+  duration_ms: 224.429741
+  type: 'test'
+  ...
+# Subtest: operational initialization failure leaves HTTPS recovery up and refuses real UI commands
+ok 16 - operational initialization failure leaves HTTPS recovery up and refuses real UI commands
+  ---
+  duration_ms: 83.072643
+  type: 'test'
+  ...
+# Subtest: late startup completion after license loss cannot revive control
+ok 17 - late startup completion after license loss cannot revive control
+  ---
+  duration_ms: 88.256376
+  type: 'test'
+  ...
+# Subtest: late startup completion after ownership loss cannot revive control
+ok 18 - late startup completion after ownership loss cannot revive control
+  ---
+  duration_ms: 87.390572
+  type: 'test'
+  ...
+# Subtest: an unexpected operational promise rejection is contained without closing HTTPS
+ok 19 - an unexpected operational promise rejection is contained without closing HTTPS
+  ---
+  duration_ms: 63.475149
+  type: 'test'
+  ...
+# Subtest: optional startup catch cannot erase observed license loss after authority returns
+ok 20 - optional startup catch cannot erase observed license loss after authority returns
+  ---
+  duration_ms: 90.005859
+  type: 'test'
+  ...
+# Subtest: optional startup catch cannot erase observed ownership loss after authority returns
+ok 21 - optional startup catch cannot erase observed ownership loss after authority returns
+  ---
+  duration_ms: 75.736364
+  type: 'test'
+  ...
+# Subtest: optional startup catch cannot erase observed ownership loss after authority returns (rejected operation)
+ok 22 - optional startup catch cannot erase observed ownership loss after authority returns (rejected operation)
+  ---
+  duration_ms: 68.700845
+  type: 'test'
+  ...
+# Subtest: the explicit HTTPS-ready diagnostic requires a live listener and is suppressed after close
+ok 23 - the explicit HTTPS-ready diagnostic requires a live listener and is suppressed after close
+  ---
+  duration_ms: 105.712583
+  type: 'test'
+  ...
+# Subtest: full hosted onReady initializes EMS with controller-shaped fixture and no device mappings
+ok 24 - full hosted onReady initializes EMS with controller-shaped fixture and no device mappings
+  ---
+  duration_ms: 173.168788
+  type: 'test'
+  ...
+# Subtest: EMS startup failure remains visible as degraded while authenticated shell survives
+ok 25 - EMS startup failure remains visible as degraded while authenticated shell survives
+  ---
+  duration_ms: 93.099351
+  type: 'test'
+  ...
+# Subtest: facade creates no adapter and isolates native.eosUi from host security fields
+ok 26 - facade creates no adapter and isolates native.eosUi from host security fields
+  ---
+  duration_ms: 1.341203
+  type: 'test'
+  ...
+# Subtest: all four foreign state APIs enforce the current owner generation
+ok 27 - all four foreign state APIs enforce the current owner generation
+  ---
+  duration_ms: 0.60245
+  type: 'test'
+  ...
+# Subtest: license requires a valid central core grant and preserves signed limits
+ok 28 - license requires a valid central core grant and preserves signed limits
+  ---
+  duration_ms: 0.159428
+  type: 'test'
+  ...
+# Subtest: central access rejects required password setup and missing credential binding
+ok 29 - central access rejects required password setup and missing credential binding
+  ---
+  duration_ms: 0.736951
+  type: 'test'
+  ...
+# Subtest: hosted shell opens no listener; HTTP authorization remains fail closed
+ok 30 - hosted shell opens no listener; HTTP authorization remains fail closed
+  ---
+  duration_ms: 67.218191
+  type: 'test'
+  ...
+# Subtest: fresh UI snapshot never converts revoked Home to Pro; control retains only verified old limits
+ok 31 - fresh UI snapshot never converts revoked Home to Pro; control retains only verified old limits
+  ---
+  duration_ms: 74.864415
+  type: 'test'
+  ...
+# Subtest: blocked hosted startup resumes once only after fresh ownership and central license confirmation
+ok 32 - blocked hosted startup resumes once only after fresh ownership and central license confirmation
+  ---
+  duration_ms: 130.462449
+  type: 'test'
+  ...
+# Subtest: shell bootstrap failure can retry once without starting operational work
+ok 33 - shell bootstrap failure can retry once without starting operational work
+  ---
+  duration_ms: 24.920776
+  type: 'test'
+  ...
+# Subtest: stop during shell bootstrap discards its late completion and cannot reopen the runtime
+ok 34 - stop during shell bootstrap discards its late completion and cannot reopen the runtime
+  ---
+  duration_ms: 23.236811
+  type: 'test'
+  ...
+# Subtest: cached license grants cannot keep an incomplete or failed startup alive
+ok 35 - cached license grants cannot keep an incomplete or failed startup alive
+  ---
+  duration_ms: 3.799826
+  type: 'test'
+  ...
+1..35
+# tests 35
+# suites 0
+# pass 35
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2323.912068

@@ -14,15 +14,15 @@
       "_loadShare-eager-BpwDZfDr.js"
     ]
   },
-  "_AdapterUpdateDialog-B6TiArSl.js": {
-    "file": "assets/AdapterUpdateDialog-B6TiArSl.js",
+  "_AdapterUpdateDialog-Dogh6wdu.js": {
+    "file": "assets/AdapterUpdateDialog-Dogh6wdu.js",
     "name": "AdapterUpdateDialog",
     "imports": [
       "_loadShare-eager-BpwDZfDr.js",
       "_Book-DrhneQH0.js",
       "src/bootstrap.tsx",
       "_zh-cn-B6dBxOyw.js",
-      "_State-AlQQZUbd.js"
+      "_State-5r2IA-Fg.js"
     ]
   },
   "_AdminUtils-CopxRJZ2.js": {
@@ -91,8 +91,8 @@
       "_loadShare-eager-BpwDZfDr.js"
     ]
   },
-  "_Fields-C1LPn9co.js": {
-    "file": "assets/Fields-C1LPn9co.js",
+  "_Fields-LkLICN-l.js": {
+    "file": "assets/Fields-LkLICN-l.js",
     "name": "Fields",
     "imports": [
       "_loadShare-eager-BpwDZfDr.js",
@@ -162,8 +162,8 @@
       "_loadShare-eager-BpwDZfDr.js"
     ]
   },
-  "_State-AlQQZUbd.js": {
-    "file": "assets/State-AlQQZUbd.js",
+  "_State-5r2IA-Fg.js": {
+    "file": "assets/State-5r2IA-Fg.js",
     "name": "State",
     "imports": [
       "_loadShare-eager-BpwDZfDr.js",
@@ -212,8 +212,8 @@
       "_loadShare-eager-BpwDZfDr.js"
     ]
   },
-  "_UsedResources-DEGajuFw.js": {
-    "file": "assets/UsedResources-DEGajuFw.js",
+  "_UsedResources-BHdlroBZ.js": {
+    "file": "assets/UsedResources-BHdlroBZ.js",
     "name": "UsedResources",
     "imports": [
       "_loadShare-eager-BpwDZfDr.js",
@@ -257,8 +257,8 @@
       "_loadShare-eager-BpwDZfDr.js"
     ]
   },
-  "_classPrivateFieldGet2-CBZxMSQ4.js": {
-    "file": "assets/classPrivateFieldGet2-CBZxMSQ4.js",
+  "_classPrivateFieldGet2-DZ8s9-Td.js": {
+    "file": "assets/classPrivateFieldGet2-DZ8s9-Td.js",
     "name": "classPrivateFieldGet2",
     "imports": [
       "_rolldown-runtime-sJBDdmOt.js"
@@ -279,8 +279,8 @@
       "_loadShare-eager-BpwDZfDr.js"
     ]
   },
-  "_installSVGRenderer-DVofOXHF.js": {
-    "file": "assets/installSVGRenderer-DVofOXHF.js",
+  "_installSVGRenderer-DQJHg-nG.js": {
+    "file": "assets/installSVGRenderer-DQJHg-nG.js",
     "name": "installSVGRenderer",
     "imports": [
       "_rolldown-runtime-sJBDdmOt.js",
@@ -353,7 +353,7 @@
     ]
   },
   "index.html": {
-    "file": "assets/index-s6pZAwFH.js",
+    "file": "assets/index-C2ecwjmo.js",
     "name": "index",
     "src": "index.html",
     "isEntry": true,
@@ -371,7 +371,7 @@
     "isDynamicEntry": true
   },
   "node_modules/@mui/icons-material/index.mjs": {
-    "file": "assets/icons-material-BBVQp5p5.js",
+    "file": "assets/icons-material-CLHL1F9b.js",
     "name": "icons-material",
     "src": "node_modules/@mui/icons-material/index.mjs",
     "isDynamicEntry": true,
@@ -535,7 +535,7 @@
     "src": "src/assets/wizard-welcome.jpg"
   },
   "src/bootstrap.tsx": {
-    "file": "assets/bootstrap-D0tajiEf.js",
+    "file": "assets/bootstrap-zkac9SJE.js",
     "name": "bootstrap",
     "src": "src/bootstrap.tsx",
     "isDynamicEntry": true,
@@ -589,7 +589,7 @@
     "src": "src/fonts/material.woff2"
   },
   "src/tabs/Adapters.tsx": {
-    "file": "assets/Adapters-CZtZODVI.js",
+    "file": "assets/Adapters-BiGohneK.js",
     "name": "Adapters",
     "src": "src/tabs/Adapters.tsx",
     "isDynamicEntry": true,
@@ -603,12 +603,12 @@
       "_AdminUtils-CopxRJZ2.js",
       "src/bootstrap.tsx",
       "_sentry-BFzW-2KQ.js",
-      "_AdapterUpdateDialog-B6TiArSl.js",
+      "_AdapterUpdateDialog-Dogh6wdu.js",
       "_CustomModal-DjI4oCb8.js"
     ]
   },
   "src/tabs/ConfigManager.tsx": {
-    "file": "assets/ConfigManager-Bhb8hXtQ.js",
+    "file": "assets/ConfigManager-IP5yznva.js",
     "name": "ConfigManager",
     "src": "src/tabs/ConfigManager.tsx",
     "isDynamicEntry": true,
@@ -641,7 +641,7 @@
     ]
   },
   "src/tabs/Enums.tsx": {
-    "file": "assets/Enums-DYt8Nbfy.js",
+    "file": "assets/Enums-D0wJWzfP.js",
     "name": "Enums",
     "src": "src/tabs/Enums.tsx",
     "isDynamicEntry": true,
@@ -655,11 +655,11 @@
       "_UnfoldMore-_DDSfPKk.js",
       "_AdminUtils-CopxRJZ2.js",
       "src/bootstrap.tsx",
-      "_Fields-C1LPn9co.js"
+      "_Fields-LkLICN-l.js"
     ]
   },
   "src/tabs/Files.tsx": {
-    "file": "assets/Files-DYHVJsFI.js",
+    "file": "assets/Files-DmbI5fIr.js",
     "name": "Files",
     "src": "src/tabs/Files.tsx",
     "isDynamicEntry": true,
@@ -672,7 +672,7 @@
     ]
   },
   "src/tabs/Hosts.tsx": {
-    "file": "assets/Hosts-CanedfFb.js",
+    "file": "assets/Hosts-C2QiFL0f.js",
     "name": "Hosts",
     "src": "src/tabs/Hosts.tsx",
     "isDynamicEntry": true,
@@ -685,13 +685,13 @@
       "_ViewList-1pB5VinA.js",
       "_AdminUtils-CopxRJZ2.js",
       "src/bootstrap.tsx",
-      "_AdapterUpdateDialog-B6TiArSl.js",
+      "_AdapterUpdateDialog-Dogh6wdu.js",
       "_CustomModal-DjI4oCb8.js",
-      "_UsedResources-DEGajuFw.js"
+      "_UsedResources-BHdlroBZ.js"
     ]
   },
   "src/tabs/Instances.tsx": {
-    "file": "assets/Instances-BTu-l4Tk.js",
+    "file": "assets/Instances-DMZ0Vj_x.js",
     "name": "Instances",
     "src": "src/tabs/Instances.tsx",
     "isDynamicEntry": true,
@@ -707,15 +707,15 @@
       "_AdminUtils-CopxRJZ2.js",
       "src/bootstrap.tsx",
       "_sentry-BFzW-2KQ.js",
-      "_State-AlQQZUbd.js",
+      "_State-5r2IA-Fg.js",
       "_CustomModal-DjI4oCb8.js",
       "_Config-BwTa1LdH.js",
-      "_UsedResources-DEGajuFw.js",
-      "_classPrivateFieldGet2-CBZxMSQ4.js"
+      "_UsedResources-BHdlroBZ.js",
+      "_classPrivateFieldGet2-DZ8s9-Td.js"
     ]
   },
   "src/tabs/Intro.tsx": {
-    "file": "assets/Intro-CO34mU11.js",
+    "file": "assets/Intro-idUfOnMo.js",
     "name": "Intro",
     "src": "src/tabs/Intro.tsx",
     "isDynamicEntry": true,
@@ -730,11 +730,11 @@
       "_Storage-DrC3j-wf.js",
       "_AdminUtils-CopxRJZ2.js",
       "src/bootstrap.tsx",
-      "_classPrivateFieldGet2-CBZxMSQ4.js"
+      "_classPrivateFieldGet2-DZ8s9-Td.js"
     ]
   },
   "src/tabs/Logs.tsx": {
-    "file": "assets/Logs-BTgaxz_4.js",
+    "file": "assets/Logs-YsRLjvJh.js",
     "name": "Logs",
     "src": "src/tabs/Logs.tsx",
     "isDynamicEntry": true,
@@ -747,7 +747,7 @@
     ]
   },
   "src/tabs/Objects.tsx": {
-    "file": "assets/Objects-DhW0NzTF.js",
+    "file": "assets/Objects-Cp0CXAkY.js",
     "name": "Objects",
     "src": "src/tabs/Objects.tsx",
     "isDynamicEntry": true,
@@ -765,14 +765,14 @@
       "src/bootstrap.tsx",
       "_zh-cn-B6dBxOyw.js",
       "_CustomModal-DjI4oCb8.js",
-      "_installSVGRenderer-DVofOXHF.js"
+      "_installSVGRenderer-DQJHg-nG.js"
     ],
     "assets": [
       "assets/echarts-BDq-rBJC.png"
     ]
   },
   "src/tabs/Overview.tsx": {
-    "file": "assets/Overview-ZlTKyJei.js",
+    "file": "assets/Overview-Bdlj-fhA.js",
     "name": "Overview",
     "src": "src/tabs/Overview.tsx",
     "isDynamicEntry": true,
@@ -784,11 +784,11 @@
       "_UnfoldMore-_DDSfPKk.js",
       "_AdminUtils-CopxRJZ2.js",
       "src/bootstrap.tsx",
-      "_installSVGRenderer-DVofOXHF.js"
+      "_installSVGRenderer-DQJHg-nG.js"
     ]
   },
   "src/tabs/Users.tsx": {
-    "file": "assets/Users-BmIMu_yK.js",
+    "file": "assets/Users-BCpxVN63.js",
     "name": "Users",
     "src": "src/tabs/Users.tsx",
     "isDynamicEntry": true,
@@ -799,7 +799,7 @@
       "_VpnKey-o8QeqmnU.js",
       "_AdminUtils-CopxRJZ2.js",
       "src/bootstrap.tsx",
-      "_Fields-C1LPn9co.js"
+      "_Fields-LkLICN-l.js"
     ],
     "assets": [
       "assets/user1-D1GAYfim.svg",
@@ -825,10 +825,10 @@
       "assets/group10-Dp9tRs6I.svg"
     ]
   },
-  "virtual:mf-REMOTE_ENTRY_ID:__mfe_internal__iobroker_admin__remoteEntry-eos-9_0_2_js": {
-    "file": "remoteEntry-eos-9.0.2.js",
+  "virtual:mf-REMOTE_ENTRY_ID:__mfe_internal__iobroker_admin__remoteEntry-eos-9_0_3_js": {
+    "file": "remoteEntry-eos-9.0.3.js",
     "name": "remoteEntry",
-    "src": "virtual:mf-REMOTE_ENTRY_ID:__mfe_internal__iobroker_admin__remoteEntry-eos-9_0_2_js",
+    "src": "virtual:mf-REMOTE_ENTRY_ID:__mfe_internal__iobroker_admin__remoteEntry-eos-9_0_3_js",
     "imports": [
       "_vite-preload-helper-BbbETgeG.js",
       "_loadShare-eager-BpwDZfDr.js",
@@ -849,7 +849,7 @@
     ]
   },
   "virtual:mf:__mfe_internal__iobroker_admin__mf_owner__1__H_A_I__hostAutoInit__H_A_I__.js": {
-    "file": "assets/hostInit-DiEOFnRs.js",
+    "file": "assets/hostInit-D2d-nEX3.js",
     "name": "hostInit",
     "src": "virtual:mf:__mfe_internal__iobroker_admin__mf_owner__1__H_A_I__hostAutoInit__H_A_I__.js",
     "imports": [
@@ -857,7 +857,7 @@
       "_helpers-CDcY0YJ-.js"
     ],
     "dynamicImports": [
-      "virtual:mf-REMOTE_ENTRY_ID:__mfe_internal__iobroker_admin__remoteEntry-eos-9_0_2_js",
+      "virtual:mf-REMOTE_ENTRY_ID:__mfe_internal__iobroker_admin__remoteEntry-eos-9_0_3_js",
       "virtual:mf-localSharedImportMap:__mfe_internal__iobroker_admin__mf_owner__1"
     ]
   },

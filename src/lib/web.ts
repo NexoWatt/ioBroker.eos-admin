@@ -355,6 +355,7 @@ export default class Web {
     private readonly systemRequests = new WeakSet<Request>();
     private unified!: UnifiedSessions;
     private startupFailed = false;
+    private closed = false;
 
     /**
      * Create a new instance of Web
@@ -387,7 +388,7 @@ export default class Web {
     }
 
     private failStartup(error: unknown): void {
-        if (this.startupFailed) {
+        if (this.startupFailed || this.closed) {
             return;
         }
         this.startupFailed = true;
@@ -448,6 +449,7 @@ export default class Web {
     }
 
     close(): void {
+        this.closed = true;
         if (this.checkTimeout) {
             this.adapter.clearTimeout(this.checkTimeout);
             this.checkTimeout = undefined;
@@ -1999,6 +2001,17 @@ export default class Web {
         );
     }
 
+    private logListenerReady(address: { host: string; port: number }): boolean {
+        if (this.closed || this.startupFailed || this.server.server?.listening !== true) {
+            return false;
+        }
+        const prefix = this.settings.secure ? 'EOS_HTTPS_READY: https' : 'EOS_HTTP_READY: http';
+        this.adapter.log.info(
+            `${prefix} server listening on ${address.host}:${address.port}; login and system console available`,
+        );
+        return true;
+    }
+
     private async mountUnifiedRuntime(): Promise<void> {
         const app = this.server.app;
         if (!app) {
@@ -2065,6 +2078,7 @@ export default class Web {
             originAllowed: (req: Request) => this.unified.requestAllowed(req),
             machineRequestAllowed: (req: Request) => this.unified.machineRequestAllowed(req),
             canWrite: () => this.adapter.eosOwnership?.canWrite() === true,
+            isListening: () => !this.closed && !this.startupFailed && this.server.server?.listening === true,
         });
         this.adapter.eosHostedRuntime = runtime;
         await runtime.start();
@@ -3253,7 +3267,14 @@ export default class Web {
                 },
             );
 
+            if (this.closed) {
+                return;
+            }
             const initialized = await createEosServer(this.server.app, this.adapter, this.settings);
+            if (this.closed) {
+                initialized.close(() => undefined);
+                return;
+            }
             this.server.server = Object.assign(initialized, { __server: this.server });
 
             // Node's deadline protects incomplete headers/body in addition to the per-upload deadline.
@@ -3292,7 +3313,7 @@ export default class Web {
             uuid = uuidObj.native.uuid;
         }
 
-        if (this.server.server) {
+        if (this.server.server && !this.closed) {
             // keep a local reference, so the callbacks below do not have to re-check `this.server.server`
             const server = this.server.server;
             if (!this.settings.disableMcp) {
@@ -3309,18 +3330,37 @@ export default class Web {
 
             // No port probing: a proxy and the published address must keep targeting this exact listener.
             await listenEosServer(server, this.settings);
+            if (this.closed) {
+                server.close(() => undefined);
+                return;
+            }
             server.on('error', error => this.adapter.log.error(`EOS web listener error: ${error.message}`));
             // Install socket authentication only after successful bind. A failed callback closes the listener.
             await this.onReady(server, this.store, this.adapter);
+            if (this.closed) {
+                return;
+            }
             await this.adapter.setState('info.connection', true, true);
-            this.adapter.log.info(
-                `http${this.settings.secure ? 's' : ''} server listening on ${listenAddress.host}:${listenAddress.port}`,
-            );
+            if (this.closed) {
+                return;
+            }
+            if (!this.logListenerReady(listenAddress)) {
+                return;
+            }
             this.adapter.log.info(
                 this.unified.origin
                     ? `EOS public address: ${this.unified.origin}`
                     : `EOS configured port: ${listenAddress.port}; use a reachable host address with ${this.settings.secure ? 'HTTPS' : 'local HTTP'}.`,
             );
+            // The authenticated shell is now reachable. Device, history and EMS initialization
+            // must never hold the only HTTPS listener hostage or hide the recovery console.
+            void this.adapter.eosHostedRuntime?.startOperational().catch(() => {
+                if (!this.closed) {
+                    this.adapter.log.error(
+                        'EOS_UI_OPERATIONAL_START_FAILED: HTTPS remains available; inspect the runtime startup status.',
+                    );
+                }
+            });
         }
     }
 }

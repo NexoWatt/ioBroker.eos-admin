@@ -38,6 +38,7 @@ import {
 import type { HostInfo } from '@iobroker/socket-client';
 
 import AdminUtils from '@/helpers/AdminUtils';
+import { currentEosEntryLink } from '@/helpers/eosEntryLink';
 import {
     replaceLink,
     applyReverseProxyToLink,
@@ -610,6 +611,7 @@ class Instances extends Component<InstancesProps, InstancesState> {
             }
 
             const names = links ? Object.keys(links) : [];
+            const currentEosLinks = new Map<InstanceLink, string>();
 
             names.forEach(linkName => {
                 instance.links ||= [];
@@ -638,23 +640,20 @@ class Instances extends Component<InstancesProps, InstancesState> {
                     name = this.t(name);
                 }
 
-                if (urls.length === 1) {
-                    instance.links.push({
-                        name,
-                        link: urls[0].url,
-                        port: urls[0].port,
-                        color: link.color,
-                    });
-                } else if (urls.length > 1) {
-                    urls.forEach(item => {
-                        instance.links.push({
-                            name,
-                            link: item.url,
-                            port: item.port,
-                            color: link.color,
-                        });
-                    });
-                }
+                const currentEntry = currentEosEntryLink(
+                    link.link,
+                    common.name,
+                    instanceId,
+                    this.props.adminInstance,
+                    window.location.href,
+                );
+                urls.forEach(item => {
+                    const entry: InstanceLink = { name, link: item.url, port: item.port, color: link.color };
+                    instance.links.push(entry);
+                    if (currentEntry) {
+                        currentEosLinks.set(entry, currentEntry);
+                    }
+                });
             });
 
             // The admin was opened through the remote access of ioBroker Cloud/Pro: an address inside
@@ -702,6 +701,16 @@ class Instances extends Component<InstancesProps, InstancesState> {
                     });
                 }
             }
+
+            // Apply last: saved reverse-proxy mappings must not undo the working browser origin.
+            instance.links.forEach(link => {
+                const currentEntry = currentEosLinks.get(link);
+                if (currentEntry) {
+                    link.link = currentEntry;
+                    link.port = undefined;
+                    link.unreachable = false;
+                }
+            });
 
             formatted[obj._id] = instance;
         }

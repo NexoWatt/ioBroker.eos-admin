@@ -1,0 +1,106 @@
+✔ missing getHistory callback rejects within five seconds and discards late or repeated replies (3.546257ms)
+✔ timely history remains unchanged and clears its deadline timer (1.183348ms)
+✔ candidate fallback shares one monotonic five-second budget instead of multiplying it (3.368992ms)
+✔ shutdown cancels all pending history work, releases timers and rejects new requests (1.259021ms)
+✔ startup energy totals finish after failed history without publishing zeros or refreshing old CO2 (3.364306ms)
+✔ empty or invalid history and missing candidate mappings preserve old measurements (3.784974ms)
+✔ valid zero-power samples remain legitimate measurements and nonzero energy integration remains unchanged (2.85868ms)
+✔ a reply after a stalled event loop cannot beat the deadline callback or extend the hard cap (2.292394ms)
+✔ a failed history branch preserves its old value and CO2 while other genuine measurements may update (1.68054ms)
+✔ mapped but absent energy values are not converted to freshly published zero CO2 (1.242176ms)
+✖ real normalizer rejects null, boolean, blank and nonfinite values without synthesizing zero measurements (2.73123ms)
+✖ real normalizer rejects malformed rows/timestamps and retains finite Influx samples and timestamps (1.461343ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 10
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 635.613969
+
+✖ failing tests:
+
+test at test/eos-history-deadline.test.cjs:199:1
+✖ real normalizer rejects null, boolean, blank and nonfinite values without synthesizing zero measurements (2.73123ms)
+  AssertionError [ERR_ASSERTION]: invalid value kind: object
+  + actual - expected
+  
+  + [
+  +   {
+  +     key: 'productionEnergyKwh',
+  +     stamp: 1795371079359,
+  +     value: 0
+  +   },
+  +   {
+  +     key: 'productionEnergyKwh',
+  +     persisted: true,
+  +     value: 0
+  +   },
+  +   {
+  +     key: 'consumptionEnergyKwh',
+  +     stamp: 1795371079359,
+  +     value: 0
+  +   },
+  +   {
+  +     key: 'consumptionEnergyKwh',
+  +     persisted: true,
+  +     value: 0
+  +   },
+  +   {
+  +     key: 'gridEnergyKwh',
+  +     stamp: 1795371079359,
+  +     value: 0
+  +   },
+  +   {
+  +     key: 'gridEnergyKwh',
+  +     persisted: true,
+  +     value: 0
+  +   },
+  +   {
+  +     key: 'evEnergyKwh',
+  +     stamp: 1795371079359,
+  +     value: 0
+  +   },
+  +   {
+  +     key: 'evEnergyKwh',
+  +     persisted: true,
+  +     value: 0
+  +   },
+  +   {
+  +     key: 'co2Savings',
+  +     stamp: 1795371079359,
+  +     value: 0
+  +   },
+  +   {
+  +     key: 'co2Savings',
+  +     persisted: true,
+  +     value: 0
+  +   }
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/iobroker.eos-admin/test/eos-history-deadline.test.cjs:208:16)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [ { key: 'productionEnergyKwh', value: 0, stamp: 1795371079359 }, { key: 'productionEnergyKwh', value: 0, persisted: true }, { key: 'consumptionEnergyKwh', value: 0, stamp: 1795371079359 }, { key: 'consumptionEnergyKwh', value: 0, persisted: true }, { key: 'gridEnergyKwh', value: 0, stamp: 1795371079359 }, { key: 'gridEnergyKwh', value: 0, persisted: true }, { key: 'evEnergyKwh', value: 0, stamp: 1795371079359 }, { key: 'evEnergyKwh', value: 0, persisted: true }, { key: 'co2Savings', value: 0, stamp: 1795371079359 }, { key: 'co2Savings', value: 0, persisted: true } ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-history-deadline.test.cjs:213:1
+✖ real normalizer rejects malformed rows/timestamps and retains finite Influx samples and timestamps (1.461343ms)
+  TypeError [Error]: Cannot read properties of null (reading 'ts')
+      at /workspace/scratch/741f792566ea/iobroker.eos-admin/ui/src-ts/runtime-executables/main.ts:39:55
+      at Array.map (<anonymous>)
+      at HistoryMethods._nwNormalizeHistoryResult (/workspace/scratch/741f792566ea/iobroker.eos-admin/ui/src-ts/runtime-executables/main.ts:38:34)
+      at normalize (/workspace/scratch/741f792566ea/iobroker.eos-admin/test/eos-history-deadline.test.cjs:215:69)
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/iobroker.eos-admin/test/eos-history-deadline.test.cjs:219:26)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)

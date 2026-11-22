@@ -253,7 +253,12 @@ class MultiUseModule extends BaseModule {
   }
 
   async init() {
-    if (!this._isEnabled()) return;
+    // Der Modulmanager initialisiert auch deaktivierte Aktormodule vor ihrem
+    // Safe-Stop. Deshalb müssen deren Diagnoseobjekte und vorhandene Legacy-
+    // Mappings bereits hier entstehen. init() gibt keine Hardware-Sollwerte
+    // aus; der aktive Regelpfad bleibt ausschließlich durch tick() freigegeben.
+    // Ein früher Return bei enableMultiUse=false ließe deactivate() sonst die
+    // control-States ohne zugehörige ioBroker-Objekte veröffentlichen.
     this._loadConsumersFromConfig();
     const legacyConsumersEnabled = this._legacyConsumersEnabled();
     for (const consumer of (legacyConsumersEnabled ? this._consumers : [])) {
