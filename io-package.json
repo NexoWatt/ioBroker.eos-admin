@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "eos-admin",
-    "version": "9.0.0-alpha.1",
+    "version": "9.0.1",
     "titleLang": {
       "en": "NexoWatt EOS",
       "de": "NexoWatt EOS",
@@ -18,6 +18,10 @@
     "connectionType": "local",
     "dataSource": "push",
     "news": {
+      "9.0.1": {
+        "en": "Preserve existing ioBroker Admin access, use a fixed authenticated HTTPS listener, and reject TLS downgrade and port hopping.",
+        "de": "Bestehenden ioBroker-Admin erhalten; fester HTTPS-Port mit Anmeldung; kein TLS-Rückfall und kein automatischer Portwechsel."
+      },
       "9.0.0-alpha.1": {
         "en": "First unified EOS preview: shared UI, system administration, login and license authority.",
         "de": "Erste gemeinsame EOS-Vorabversion mit UI, Systemverwaltung, Anmeldung und zentraler Lizenz."
@@ -105,11 +109,6 @@
         "de": "Stable 7.9.90 korrigiert die produktive Rollenoberfläche: Die Übersichtskacheln sind für Installateur und Gast/Endkunde zuverlässig bedienbar. Interner Admin und interne BackItUp-Notfallreserve werden in Dienste auch bei verzögert gerenderten Tabellen ausschließlich für Admin/Service angezeigt. Die Erstanmeldung prüft serverseitig, ob Installer, Guest oder User noch keinen persönlichen Zugang besitzen: Nur dann wird die normale Anmeldeschaltfläche bei leerem Passwort aktiv und öffnet die verpflichtende Passwortvergabe; nach abgeschlossener Aktivierung bleibt sie ohne Passwort gesperrt. NexoWatt Sicherung bleibt für freigegebene Rollen erreichbar, EOS Assist im Header und Standardport 8081 bleiben unverändert.",
         "en": "Stable 7.9.90 fixes the production role interface: overview tiles are reliably clickable for Installer and Guest/End User. The internal admin and internal BackItUp emergency reserve are shown only to Admin/Service, including tables rendered asynchronously. First activation now checks eligibility on the server before enabling empty-password sign-in for Installer, Guest or User. Only an uninitialized/reset account gets an active sign-in button and mandatory password setup; after activation, empty-password sign-in remains disabled. NexoWatt Backup stays available to approved roles, while EOS Assist remains in the header and the default port remains 8081.",
         "nl": "Stable 7.9.90 corrigeert de productie-rolinterface: overzichtstegels zijn betrouwbaar klikbaar voor installateur en gast/eindgebruiker. De interne admin en BackItUp-noodreserve zijn uitsluitend zichtbaar voor Admin/Service, ook in vertraagd gerenderde tabellen. Eerste activering controleert server-side of Installer, Guest of User nog geen persoonlijk wachtwoord heeft. Alleen dan wordt aanmelden met leeg wachtwoord actief en volgt verplichte wachtwoordinstelling; na activering blijft aanmelden zonder wachtwoord geblokkeerd. NexoWatt Backup blijft beschikbaar voor vrijgegeven rollen, EOS Assist blijft in de kop en standaardpoort 8081 blijft behouden."
-      },
-      "7.9.89": {
-        "de": "Stable 7.9.89 finalisiert die rollenbasierte NexoWatt-EOS-Verkaufsoberfläche: Admin/Service behält Vollzugriff und Expertenmodus, Installateure erhalten Inbetriebnahme und Fehlersuche, Gast/Endkunde die freigegebene Smart-Home-Bedienung. Die Erstanmeldung ist direkt in die normale Anmeldung integriert: Installer und Guest wählen ihre Ebene und lassen das Passwort einmalig leer, danach wird zwingend ein persönliches Passwort vergeben. EOS Assist sitzt kollisionsfrei im Kopfbereich; Zugangsverwaltung liegt ausschließlich unter „Zugänge & Rechte“. Die aktuelle Übersicht wurde modernisiert, die Easy-Übersicht wird nicht verwendet. Interner Admin und interne BackItUp-Notfallreserve sind nur für Admin/Service sichtbar; die NexoWatt-Sicherung bleibt für die freigegebenen Rollen nutzbar. Standardport ist 8081.",
-        "en": "Stable 7.9.89 finalizes the role-based NexoWatt EOS sales interface: Admin/Service retains full access and expert mode, installers receive commissioning and troubleshooting functions, and Guest/End User receives the approved smart-home controls. First activation is integrated into the normal sign-in card: Installer and Guest select their level and leave the password empty once, then must create a personal password. EOS Assist is positioned safely in the header; account management exists only under “Access & Rights”. The current overview was modernized and the Easy overview is not used. The internal admin and internal BackItUp emergency reserve are visible only to Admin/Service, while NexoWatt Backup remains available to approved roles. Default port is 8081.",
-        "nl": "Stable 7.9.89 voltooit de rolgebaseerde NexoWatt EOS-verkoopinterface: Admin/Service behoudt volledige toegang en expertmodus, installateurs krijgen inbedrijfstelling en foutdiagnose, en Gast/Eindgebruiker de vrijgegeven smart-homebediening. De eerste activatie is geïntegreerd in de normale aanmelding: Installer en Guest kiezen hun niveau en laten het wachtwoord eenmalig leeg, waarna verplicht een persoonlijk wachtwoord wordt ingesteld. EOS Assist staat zonder overlap in de kop; toegangsbeheer staat uitsluitend onder “Toegangen & rechten”. Het actuele overzicht is gemoderniseerd en Easy wordt niet gebruikt. De interne admin en BackItUp-noodreserve zijn alleen zichtbaar voor Admin/Service; NexoWatt Backup blijft beschikbaar voor vrijgegeven rollen. Standaardpoort is 8081."
       }
     },
     "desc": {
@@ -147,7 +146,7 @@
     "icon": "admin.svg",
     "messagebox": true,
     "enabled": true,
-    "extIcon": "https://unpkg.com/iobroker.eos-admin@9.0.0-alpha.1/admin/admin.svg",
+    "extIcon": "https://unpkg.com/iobroker.eos-admin@9.0.1/admin/admin.svg",
     "keywords": [
       "NexoWatt",
       "EOS",
@@ -158,7 +157,7 @@
       "licensed"
     ],
     "compact": false,
-    "readme": "https://unpkg.com/iobroker.eos-admin@9.0.0-alpha.1/README.md",
+    "readme": "https://unpkg.com/iobroker.eos-admin@9.0.1/README.md",
     "authors": [
       "NexoWatt"
     ],
@@ -170,7 +169,7 @@
     "type": "general",
     "licenseInformation": {
       "type": "paid",
-      "link": "https://unpkg.com/iobroker.eos-admin@9.0.0-alpha.1/LICENSE"
+      "link": "https://unpkg.com/iobroker.eos-admin@9.0.1/LICENSE"
     },
     "logTransporter": true,
     "stopBeforeUpdate": true,
@@ -221,8 +220,8 @@
     "autoUpdate": 24,
     "port": 8188,
     "auth": true,
-    "secure": false,
-    "bind": "127.0.0.1",
+    "secure": true,
+    "bind": "0.0.0.0",
     "cache": false,
     "accessLimit": false,
     "accessApplyRights": false,
@@ -232,8 +231,8 @@
       "node-red": "admin"
     },
     "leCollection": false,
-    "certPublic": "",
-    "certPrivate": "",
+    "certPublic": "defaultPublic",
+    "certPrivate": "defaultPrivate",
     "certChained": "",
     "ttl": 3600,
     "defaultUser": "admin",
@@ -252,7 +251,7 @@
     "doNotCheckPublicIP": false,
     "ssoActive": false,
     "disableMcp": true,
-    "eosLockLegacyAdmin": true,
+    "eosLockLegacyAdmin": false,
     "eosLegacyAdminLockPort": 18081,
     "eosLegacyAdminLockBind": "127.0.0.1",
     "eosProtectAdapterDeletion": true,

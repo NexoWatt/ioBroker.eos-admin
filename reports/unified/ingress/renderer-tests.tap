@@ -1,0 +1,184 @@
+TAP version 13
+# Subtest: default uses verified TLS upstream, explicit SNI and exact unchanged Browser Host
+ok 1 - default uses verified TLS upstream, explicit SNI and exact unchanged Browser Host
+  ---
+  duration_ms: 7.870537
+  type: 'test'
+  ...
+# Subtest: local alias is explicit and HTTP loopback is an explicit incompatible legacy profile
+ok 2 - local alias is explicit and HTTP loopback is an explicit incompatible legacy profile
+  ---
+  duration_ms: 1.173563
+  type: 'test'
+  ...
+# Subtest: TLS requires an explicit CA file and strictly validated DNS certificate identity
+ok 3 - TLS requires an explicit CA file and strictly validated DNS certificate identity
+  ---
+  duration_ms: 1.133423
+  type: 'test'
+  ...
+# Subtest: host and every certificate-path interpolation reject injection and ambiguous paths
+ok 4 - host and every certificate-path interpolation reject injection and ambiguous paths
+  ---
+  duration_ms: 0.275311
+  type: 'test'
+  ...
+# Subtest: files and complete parent chains reject symlinks, insecure permissions and absent inputs
+ok 5 - files and complete parent chains reject symlinks, insecure permissions and absent inputs
+  ---
+  duration_ms: 0.868017
+  type: 'test'
+  ...
+# Subtest: output is private and exclusive, including symlink and parent-directory attacks
+ok 6 - output is private and exclusive, including symlink and parent-directory attacks
+  ---
+  duration_ms: 0.425596
+  type: 'test'
+  ...
+# Subtest: CLI rejects duplicate/unknown parameters and never replaces an existing file
+ok 7 - CLI rejects duplicate/unknown parameters and never replaces an existing file
+  ---
+  duration_ms: 221.209709
+  type: 'test'
+  ...
+# Subtest: nginx -t validates the generated TLS fragment when the binary is available
+ok 8 - nginx -t validates the generated TLS fragment when the binary is available # SKIP nginx not installed; no nginx syntax or real TLS handshake claim
+  ---
+  duration_ms: 2.346656
+  type: 'test'
+  ...
+# Subtest: fresh installation permits exactly the enabled owner after controller inventory
+ok 9 - fresh installation permits exactly the enabled owner after controller inventory
+  ---
+  duration_ms: 2.474697
+  type: 'test'
+  ...
+# Subtest: enabled old writer on another host denies startup even when alive is false
+ok 10 - enabled old writer on another host denies startup even when alive is false
+  ---
+  duration_ms: 0.739675
+  type: 'test'
+  ...
+# Subtest: disabled and confirmed stopped old controller permits handover
+ok 11 - disabled and confirmed stopped old controller permits handover
+  ---
+  duration_ms: 0.577984
+  type: 'test'
+  ...
+# Subtest: live old process fails closed
+ok 12 - live old process fails closed
+  ---
+  duration_ms: 0.9773
+  type: 'test'
+  ...
+# Subtest: missing stop acknowledgement fails closed
+ok 13 - missing stop acknowledgement fails closed
+  ---
+  duration_ms: 0.840376
+  type: 'test'
+  ...
+# Subtest: unacknowledged stop request fails closed
+ok 14 - unacknowledged stop request fails closed
+  ---
+  duration_ms: 0.993113
+  type: 'test'
+  ...
+# Subtest: stop predates disable edit fails closed
+ok 15 - stop predates disable edit fails closed
+  ---
+  duration_ms: 0.242943
+  type: 'test'
+  ...
+# Subtest: offline foreign controller fails closed
+ok 16 - offline foreign controller fails closed
+  ---
+  duration_ms: 0.24109
+  type: 'test'
+  ...
+# Subtest: stale foreign controller fails closed
+ok 17 - stale foreign controller fails closed
+  ---
+  duration_ms: 0.440528
+  type: 'test'
+  ...
+# Subtest: future-dated foreign controller fails closed
+ok 18 - future-dated foreign controller fails closed
+  ---
+  duration_ms: 0.537223
+  type: 'test'
+  ...
+# Subtest: another enabled EOS instance is also a competing writer
+ok 19 - another enabled EOS instance is also a competing writer
+  ---
+  duration_ms: 0.494418
+  type: 'test'
+  ...
+# Subtest: old instance enable event revokes synchronously before next database poll
+ok 20 - old instance enable event revokes synchronously before next database poll
+  ---
+  duration_ms: 0.563622
+  type: 'test'
+  ...
+# Subtest: controller loss and own disable revoke without waiting for async work
+ok 21 - controller loss and own disable revoke without waiting for async work
+  ---
+  duration_ms: 0.755879
+  type: 'test'
+  ...
+# Subtest: an event racing a database snapshot prevents stale permission restoration
+ok 22 - an event racing a database snapshot prevents stale permission restoration
+  ---
+  duration_ms: 0.471664
+  type: 'test'
+  ...
+# Subtest: database failures revoke existing permission and never expose exception content
+ok 23 - database failures revoke existing permission and never expose exception content
+  ---
+  duration_ms: 0.582881
+  type: 'test'
+  ...
+# Subtest: missing owner or invalid controller inventory cannot yield permission
+ok 24 - missing owner or invalid controller inventory cannot yield permission
+  ---
+  duration_ms: 0.344264
+  type: 'test'
+  ...
+# Subtest: subscription failure cannot be bypassed by refresh
+ok 25 - subscription failure cannot be bypassed by refresh
+  ---
+  duration_ms: 0.205247
+  type: 'test'
+  ...
+# Subtest: stop wins over an in-flight inventory refresh
+ok 26 - stop wins over an in-flight inventory refresh
+  ---
+  duration_ms: 0.23439
+  type: 'test'
+  ...
+# Subtest: offline migration preserves mapped values and records external refs without replaying commands or credentials
+ok 27 - offline migration preserves mapped values and records external refs without replaying commands or credentials
+  ---
+  duration_ms: 2.181328
+  type: 'test'
+  ...
+# Subtest: migration refuses conflicting target IDs and malformed configuration JSON
+ok 28 - migration refuses conflicting target IDs and malformed configuration JSON
+  ---
+  duration_ms: 0.566476
+  type: 'test'
+  ...
+# Subtest: migration refuses prototype keys and non-EOS namespace targets
+ok 29 - migration refuses prototype keys and non-EOS namespace targets
+  ---
+  duration_ms: 0.187541
+  type: 'test'
+  ...
+1..29
+# tests 29
+# suites 0
+# pass 28
+# fail 0
+# cancelled 0
+# skipped 1
+# todo 0
+# duration_ms 334.160403

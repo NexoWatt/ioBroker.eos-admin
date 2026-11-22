@@ -19,6 +19,10 @@ function fixture(t) {
     }
     fs.mkdirSync(path.dirname(path.join(root, vendor.PROVENANCE)), { recursive: true });
     fs.copyFileSync(path.join(repository, vendor.PROVENANCE), path.join(root, vendor.PROVENANCE));
+    const provenance = JSON.parse(fs.readFileSync(path.join(root, vendor.PROVENANCE), 'utf8'));
+    for (const patch of provenance.changes.reviewedPatches || []) {
+        fs.copyFileSync(path.join(repository, patch.path), path.join(root, patch.path));
+    }
     const manifest = { name: 'iobroker.eos-admin', version: '8.0.1', dependencies: Object.fromEntries(directNames.map(name => [name, originalLock.packages[''].dependencies[name]])) };
     const lock = { name: manifest.name, version: manifest.version, lockfileVersion: 3, packages: { '': structuredClone(manifest), ...Object.fromEntries(directNames.map(name => [`node_modules/${name}`, structuredClone(originalLock.packages[`node_modules/${name}`])])) } };
     fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify(manifest));
@@ -29,8 +33,18 @@ function fixture(t) {
     fs.writeFileSync(path.join(root, 'src-admin/package-lock.json'), JSON.stringify({ ...frontend, lockfileVersion: 3, packages: { '': frontend } }));
     return { root, manifest, lock, inspect: () => inspect(manifest, lock, root) };
 }
-test('exact upstream source and emitted copies admit without installed dependencies or network repair', async t => {
+test('approved source and emitted copies retain upstream license and admit without network repair', async t => {
     const f = fixture(t); assert.deepEqual(f.inspect(), []);
+    const provenance = JSON.parse(fs.readFileSync(path.join(f.root, vendor.PROVENANCE), 'utf8'));
+    assert.equal(provenance.upstream.license, 'MIT');
+    assert.equal(provenance.changes.upstreamFilesTotal, 39);
+    assert.equal(provenance.changes.upstreamFilesChanged, 1);
+    const changed = provenance.files.filter(file => file.sha256 !== file.upstreamSha256 || file.bytes !== file.upstreamBytes);
+    assert.deepEqual(changed.map(file => file.path), ['build/lib/webServer.js']);
+    const license = provenance.files.find(file => file.path === 'LICENSE');
+    assert.equal(license.sha256, license.upstreamSha256);
+    assert.equal(license.bytes, license.upstreamBytes);
+    assert.match(fs.readFileSync(path.join(f.root, vendor.SOURCE_ROOT, 'LICENSE'), 'utf8'), /Permission is hereby granted/);
     const before = fs.readFileSync(path.join(f.root, 'package-lock.json'));
     const report = await repair({ root: f.root, write: true, fetchMetadata: async () => assert.fail('must not fetch') });
     assert.equal(report.packageMetadataRequests, 0); assert.ok(before.equals(fs.readFileSync(path.join(f.root, 'package-lock.json'))));
@@ -43,7 +57,7 @@ test('modified source cannot be repaired or silently resealed', async t => {
     await assert.rejects(repair({ root: f.root, write: true, fetchMetadata: async () => assert.fail('must not fetch') }), { code: 'LOCK_REQUIRES_MANUAL_REVIEW' });
     assert.ok(bytes.equals(fs.readFileSync(file)));
 });
-test('modified emitted JavaScript fails the upstream byte gate', t => {
+test('modified emitted JavaScript fails the approved-source byte gate', t => {
     const f = fixture(t); const file = path.join(f.root, vendor.RUNTIME_ROOT, 'build/index.js');
     const bytes = fs.readFileSync(file); bytes[5] ^= 1; fs.writeFileSync(file, bytes);
     assert.equal(f.inspect()[0].code, 'VENDORED_SOURCE_BYTES_MISMATCH');
@@ -69,6 +83,15 @@ test('modified provenance cannot bless different source bytes', t => {
     const f = fixture(t); fs.appendFileSync(path.join(f.root, vendor.PROVENANCE), '\n');
     assert.equal(f.inspect()[0].code, 'VENDORED_PROVENANCE_MISMATCH');
 });
+test('modified or missing reviewed patch evidence is rejected', t => {
+    const f = fixture(t);
+    const provenance = JSON.parse(fs.readFileSync(path.join(f.root, vendor.PROVENANCE), 'utf8'));
+    const file = path.join(f.root, provenance.changes.reviewedPatches[0].path);
+    const bytes = fs.readFileSync(file); bytes[5] ^= 1; fs.writeFileSync(file, bytes);
+    assert.equal(f.inspect()[0].code, 'VENDORED_PATCH_MISMATCH');
+    fs.unlinkSync(file);
+    assert.equal(f.inspect()[0].code, 'VENDORED_SOURCE_UNAVAILABLE');
+});
 test('root identity enforces vendoring when alias marker and lock entry are deleted', async t => {
     const f = fixture(t); delete f.manifest.dependencies['oauth2-server']; delete f.lock.packages[''].dependencies['oauth2-server']; delete f.lock.packages['node_modules/oauth2-server'];
     assert.equal(f.inspect()[0].code, 'VENDORED_PACKAGE_METADATA_MISMATCH');
@@ -81,11 +104,13 @@ test('registry package substitution and file dependencies remain forbidden', t =
     f.lock.packages['node_modules/untrusted'] = { version: '1.0.0', resolved: 'file:unexpected.tgz', integrity: originalLock.packages['node_modules/oauth2-server'].integrity };
     assert.ok(f.inspect().some(issue => issue.code === 'REGISTRY_ORIGIN_UNVERIFIED'));
 });
-test('runtime uses local upstream source and declared maintained registry dependencies', () => {
+test('runtime uses approved local source and declared maintained registry dependencies', () => {
     const pkg = require('../package.json');
     assert.equal(pkg.dependencies['@iobroker/webserver'], undefined);
     assert.equal(pkg.dependencies['oauth2-server'], vendor.OAUTH);
     assert.ok(Object.values(pkg.dependencies).every(value => !value.startsWith('file:')));
     for (const relative of [vendor.PROVENANCE, 'tools/nexowatt-vendored-webserver.cjs']) assert.ok(pkg.files.includes(relative));
+    const provenance = JSON.parse(fs.readFileSync(path.join(repository, vendor.PROVENANCE), 'utf8'));
+    for (const patch of provenance.changes.reviewedPatches) assert.ok(pkg.files.includes(patch.path));
     assert.equal(vendor.inspectVendoredWebserver(pkg, originalLock, repository), null);
 });

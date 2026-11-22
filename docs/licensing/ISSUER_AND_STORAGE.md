@@ -2,8 +2,10 @@
 
 Stand: NexoWatt EOS Zusammenführung, 22.11.2026. Vertrag aus dem vorhandenen
 Offline-Key-Generator **1.0.4** übernommen. Die frühere NWL2-Beschreibung wird um
-NWL3 ergänzt; Bestandsrechte werden nicht erweitert. Testbelege liegen unter
-`reports/unified/licensing/`.
+NWL3 ergänzt; Bestandsrechte werden nicht erweitert. Der Transportabschnitt ist
+für **9.0.1** aktualisiert. Die bisherigen Testbelege unter
+`reports/unified/licensing/` stammen aus dem dort benannten Alpha-1-Stand; neue
+9.0.1-Ergebnisse müssen im neuen Abschlussbericht eigens ausgewiesen werden.
 
 ## Eine Aktivierung nach der Erstanmeldung
 
@@ -153,16 +155,38 @@ Das Produkt behauptet hierfür keinen absoluten Kopierschutz.
 
 ## Transport und Nachweise
 
-Lizenzschreiben erfordert zentrale Administratorautorisierung, exakten Origin,
+Lizenzschreiben erfordert zentrale Administratorautorisierung, passenden Origin,
 den Header `X-EOS-License: 1`, begrenzte JSON-Bodies und Ratenbegrenzung.
-Im Ingressprofil ist die externe HTTPS-Origin fest konfiguriert, der lokale
-HTTP-Transport bleibt auf Loopback beschränkt. Forwarded-Header setzen weder
-Benutzeridentität noch TLS-Vertrauen. Fehlende oder gefälschte Origin/Host-Werte
-werden zurückgewiesen. Der Code wird nach dem Absenden aus dem Eingabefeld entfernt.
+Der Standardzugang in **9.0.1** ist HTTPS auf `0.0.0.0:8188` mit
+`secure=true`, `auth=true`, `certPublic=defaultPublic` und
+`certPrivate=defaultPrivate`. `eosExternalOrigin` bleibt leer, auch bei einem
+optionalen 443-Proxy mit geprüftem HTTPS-Upstream. So bleiben die vorgesehenen
+IP-/Namenszugänge parallel möglich.
 
-Die Prüfungen verwenden echte Node-Kryptografie und lokale verschlüsselte Dateien,
-mit simulierter ioBroker-Datenbank/Messagebox. Der originale Keygen 1.0.4 wurde
-zusätzlich gegen diesen Verifizierer und Dienst ausgeführt; Testschlüssel werden
-je Lauf nur im Speicher erzeugt. Browser-/Host-/Hardwareabnahme sowie eine
-unabhängige Sicherheitsprüfung bleiben separate Nachweise. Diese Dokumentation
+Die Origin muss zur kanonisch aus dem validierten `Host` und dem HTTPS-Profil
+gebildeten Origin passen. Ein kanonischer HTTPS-Standardport wird entsprechend
+normalisiert. Ungültige Hostangaben oder eine fehlende/abweichende Origin bei
+Schreibaufrufen werden abgelehnt. Forwarded-Header setzen weder Benutzeridentität
+noch TLS-Vertrauen. Der 443-Proxy verwendet eine feste HTTPS-Gegenstelle sowie
+CA-/Namensprüfung; eine öffentliche Anmeldung beendet die Lizenzprüfung nicht.
+Der Code wird nach dem Absenden aus dem Eingabefeld entfernt.
+
+Nur das ausdrücklich gewählte ältere HTTP-Loopback-Profil verwendet
+`secure=false`, Bindung an `127.0.0.1` und eine exakte externe HTTPS-Origin.
+Es erlaubt keine direkte HTTP-Anmeldung im LAN und ist kein automatischer
+TLS-Fehlerfallback. Konkrete Profile: [Deploymentanleitung](../../deploy/README.md).
+
+### Historische Lizenzprüfungen
+
+Die nachfolgenden Aussagen beschreiben die bisherigen Alpha-1-Nachweise und
+werden nicht als neue 9.0.1-Testergebnisse ausgegeben. Die damaligen Prüfungen
+verwendeten echte Node-Kryptografie und lokale verschlüsselte Dateien mit
+simulierter ioBroker-Datenbank/Messagebox. Der originale Keygen 1.0.4 wurde
+zusätzlich gegen Verifizierer und Dienst ausgeführt; Testschlüssel wurden je Lauf
+nur im Speicher erzeugt. Tabellen und Rohbelege unter `reports/unified/licensing/`
+bleiben unverändert.
+
+Neue direkte HTTPS-/Host-/Originprüfungen und die optionale 443-/Upstreamprüfung
+gehören zum versionsgebundenen 9.0.1-Abschlussbericht. Browser-/Hardwareabnahme und
+eine unabhängige Sicherheitsprüfung bleiben separate Nachweise. Diese Dokumentation
 ist keine CRA-Konformitätserklärung oder allgemeine Produktivfreigabe.

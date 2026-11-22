@@ -1,9 +1,10 @@
 # Prüfplan und Inbetriebnahme
 
-**NexoWatt EOS · 9.0.0-alpha.1 · EOS-MERGE-001**
+**NexoWatt EOS · 9.0.1 · EOS-MERGE-001**
 
 Dieser Plan nennt Sollwerte und Abläufe, keine vorweggenommenen Testergebnisse.
-Softwarebefunde und Rohbelege gehören in den Abschlussbericht. Zielsystem-/Gerätetests
+Softwarebefunde und Rohbelege für 9.0.1 gehören in den neuen Abschlussbericht;
+Ergebnisse früherer Alpha-Versionen werden nicht umetikettiert. Zielsystem-/Gerätetests
 sind offen, solange sie nicht mit konkreter Umgebung dokumentiert wurden.
 
 ## Vorbereitungen
@@ -30,12 +31,16 @@ Prüfung mit begrenztem Anlagenumfang und beobachtbaren Stellbefehlen durchführ
 | EOS-MERGE-P06 | Signatur/UUID/kid/Payload manipulieren, Größenlimit überschreiten | Ablehnung ohne Freigabe, Absturz oder Geheimnisleck; gültiger Bestand nicht beschädigt. |
 | EOS-MERGE-P07 | NWL2-Kompatibilität, falsche Adapterliste, unbekannte Features | Nur vertraglich erlaubte Freigaben/Mengen; kein Format- oder Rechtefallback. |
 | EOS-MERGE-P08 | Benutzer/Installer/Admin, direkte API-/Socketbefehle | Server prüft jeweilige Funktion und Objekt-ACL; Navigation bildet Rechte ab. |
-| EOS-MERGE-P09 | Zwei Nutzer parallel, einer meldet sich zentral ab; außerdem Gruppenentzug/Passwortänderung mit offener PWA/SSE/Socket | Der Alpha-Logout widerruft die globale Sitzungsgeneration: beide Nutzer müssen sich neu anmelden, offene Verbindungen verlieren ihre Rechte. Kein isolierter Einzelsitzungslogout behaupten. |
-| EOS-MERGE-P10 | Fremde Origin/Host/Forwarding-Header, CSRF, direkter Loopback-Aufruf | Kein Origin-/Identitätsbypass; nur konfigurierter HTTPS-Zugang im Betriebsprofil. |
+| EOS-MERGE-P09 | Zwei Nutzer parallel, einer meldet sich zentral ab; außerdem Gruppenentzug/Passwortänderung mit offener PWA/SSE/Socket | Der Logout dieses Teststands widerruft die globale Sitzungsgeneration: beide Nutzer müssen sich neu anmelden, offene Verbindungen verlieren ihre Rechte. Kein isolierter Einzelsitzungslogout behaupten. |
+| EOS-MERGE-P10 | Direkter HTTPS-Zugang auf 8188; fremde Origin/Host/Forwarding-Header und CSRF | TLS und Authentisierung aktiv, gültiges Zertifikat/Vertrauen; kein Origin-/Identitätsbypass und kein HTTP-Login-Fallback. |
 | EOS-MERGE-P11 | Deep Links/Reload in Installer/System, Downloads, Adapterkonfiguration | Keine Pfad-/Routingregression, kein HTML-200-Fallback auf API-Fehler. |
 | EOS-MERGE-P12 | PWA-Offlinecache und Update mit alter PWA | Kein gecachter Auth-/Lizenz-/Admininhalt, keine alte Sitzung; nötige Assets laden. |
-| EOS-MERGE-P13 | TLS-/Proxyfehler, Port belegt, Client disconnect, große Requests | Verständliche Diagnose, begrenzte Ressourcen, keine ungeschützte Ausweichroute. |
+| EOS-MERGE-P13 | TLS-Fehler auf 8188; optionaler 443-Proxy mit falscher Upstream-CA oder falschem Zertifikatsnamen; Port belegt, Disconnect, große Requests | Verständliche Diagnose, begrenzte Ressourcen, kein ungeschützter Ersatz und kein Abschalten der CA-/Namensprüfung. |
 | EOS-MERGE-P14 | Migration abbrechen, alter Regler noch aktiv, Neustart während Übergabe | Keine parallelen Stellbefehle; konsistenter Zustand und kontrollierte Wiederaufnahme. |
+| EOS-ACCESS-P01 | Vorhandenes `admin.0` mit eigenen Einstellungen; EOS-Start, Wiederholung und gespeicherte Legacy-Sperrflags | Bestehender Zugang, `enabled`, Port und Bindung bleiben durch den entfernten Legacy-Sperrpfad unverändert. |
+| EOS-ACCESS-P02 | Frische Instanz vs. vorhandene Instanzkonfiguration; direkte und optionale Proxyzugänge | Neue Defaults: `0.0.0.0:8188`, TLS/Auth aktiv, `defaultPublic`/`defaultPrivate`; externe Origin bleibt für parallele IP-/Namenszugänge auch mit HTTPS-Proxy leer. Gespeicherte Altwerte ausdrücklich prüfen. |
+| EOS-ACCESS-P03 | Lokaler Name `NexoWattEOS` fehlt oder zeigt auf falsche IP; Zertifikat ohne passenden SAN | Kein angeblich automatischer DNS-Erfolg; Name/IP und Zertifikat werden passend eingerichtet. |
+| EOS-ACCESS-P04 | Nicht provisioniertes/fehlendes Kontopasswort | Sicherer Fehler, kein Standardpasswort-/Login-Bypass. Berechtigte interaktive Passwortsetzung gesondert nachweisen. |
 
 Automatisierte Tests können Teile dieser Fälle mit Mocks abdecken. Im Protokoll
 kenntlich machen, ob reale HTTP-Verbindungen, Controllerkomponenten oder nur isolierte

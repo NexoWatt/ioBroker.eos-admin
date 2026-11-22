@@ -1,0 +1,26 @@
+✖ blocked hosted startup resumes once only after fresh ownership and central license confirmation (94.906888ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 417.700208
+
+✖ failing tests:
+
+test at ui/test/unified/hosted-runtime.test.cjs:121:1
+✖ blocked hosted startup resumes once only after fresh ownership and central license confirmation (94.906888ms)
+  AssertionError [ERR_ASSERTION]: onReady must recheck ownership before operational initialization
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/iobroker.eos-admin/ui/test/unified/hosted-runtime.test.cjs:169:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

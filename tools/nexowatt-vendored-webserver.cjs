@@ -1,5 +1,5 @@
 'use strict';
-// Exact-byte admission for the original upstream WebServer source distribution.
+// Exact-byte admission for reviewed WebServer sources and retained upstream provenance.
 // Registry dependencies are declared at EOS root; no nested file: install is used.
 const fs = require('node:fs');
 const path = require('node:path');
@@ -7,7 +7,7 @@ const crypto = require('node:crypto');
 const SOURCE_ROOT = 'src/lib/vendor/webserver';
 const RUNTIME_ROOT = 'build/lib/vendor/webserver';
 const PROVENANCE = 'tools/vendor/webserver-3.4.0-source.provenance.json';
-const PROVENANCE_SHA256 = '75384d81f77481f76c76c143d68ba2a7526f58dbb3dae772243f3708bc92b302';
+const PROVENANCE_SHA256 = '5e1d7d0f4730aeff77356b454398570d84c1e1208558614b0508f7c58c30383b';
 const OAUTH = 'npm:@node-oauth/oauth2-server@5.3.1';
 function required(manifest) {
     return manifest.name === 'iobroker.eos-admin' || manifest.dependencies?.['oauth2-server'] === OAUTH;
@@ -48,6 +48,10 @@ function inspectVendoredWebserver(manifest, lock, root) {
         const bytes = readRegular(root, PROVENANCE, 64 * 1024);
         if (crypto.createHash('sha256').update(bytes).digest('hex') !== PROVENANCE_SHA256) return 'VENDORED_PROVENANCE_MISMATCH';
         const provenance = JSON.parse(bytes);
+        for (const patch of provenance.changes.reviewedPatches || []) {
+            const data = readRegular(root, patch.path, patch.bytes);
+            if (data.length !== patch.bytes || crypto.createHash('sha256').update(data).digest('hex') !== patch.sha256) return 'VENDORED_PATCH_MISMATCH';
+        }
         if (manifest.dependencies?.['@iobroker/webserver'] || Object.keys(lock.packages || {}).some(name => name.endsWith('/@iobroker/webserver'))) return 'VENDORED_PACKAGE_METADATA_MISMATCH';
         for (const [name, expected] of Object.entries(provenance.directDependencies)) {
             const entry = lock.packages?.[`node_modules/${name}`];
@@ -56,6 +60,8 @@ function inspectVendoredWebserver(manifest, lock, root) {
         }
         const expectedNames = provenance.files.map(file => file.path).sort();
         for (const folder of [SOURCE_ROOT, RUNTIME_ROOT]) {
+            // Both copies must match the approved bytes. Original upstream hashes
+            // remain separately recorded; a reviewed patch never weakens this gate.
             // lstat every parent, even when a directory itself is replaced with a symlink.
             for (const file of provenance.files) {
                 const data = readRegular(root, `${folder}/${file.path}`, file.bytes);

@@ -49,11 +49,11 @@ export interface AdminAdapterConfig extends ioBroker.AdapterConfig {
         paths: { path: string; instance: string }[];
     }[];
     disableMcp?: boolean;
-    /** Disable the legacy ioBroker admin.0 instance automatically and keep it on a non-public fallback port. */
+    /** Deprecated legacy flag; ignored since 9.0.0-alpha.2. EOS never performs an automatic Admin cutover. */
     eosLockLegacyAdmin?: boolean;
-    /** Fallback port for disabled legacy admin.0. */
+    /** Deprecated legacy setting; retained only for config compatibility. */
     eosLegacyAdminLockPort?: number;
-    /** Fallback bind address for disabled legacy admin.0. */
+    /** Deprecated legacy setting; retained only for config compatibility. */
     eosLegacyAdminLockBind?: string;
     /** Keep selected adapters protected from deletion while keeping them updateable. */
     eosProtectAdapterDeletion?: boolean;

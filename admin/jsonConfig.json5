@@ -10,7 +10,7 @@
                 bind: {
                     newLine: true,
                     type: 'ip',
-                    listenOnAllPorts: false,
+                    listenOnAllPorts: true,
                     label: 'IP',
                     xs: 12,
                     sm: 12,
@@ -28,8 +28,8 @@
                 },
                 eosExternalOrigin: {
                     type: 'text',
-                    label: 'EOS HTTPS-Adresse (z. B. https://192.168.10.192)',
-                    help: 'Exakte öffentliche HTTPS-Origin des festen Eingangs auf 443. EOS intern: 127.0.0.1:8188. Keine Pfade oder Zugangsdaten.',
+                    label: 'EOS auf eine HTTPS-Adresse beschränken (optional)',
+                    help: 'Bei direktem HTTPS leer lassen, wenn Geräte-IP, Gerätename und unterschiedliche HTTPS-Ports verwendet werden. Ein Eintrag beschränkt den Zugriff auf genau diese Adresse. Keine Pfade oder Zugangsdaten.',
                     xs: 12,
                 },
                 secure: {
@@ -181,38 +181,14 @@
                 _eosSecurityInfo: {
                     type: 'staticText',
                     newLine: true,
-                    text: 'EOS Sicherheit sperrt den internen Legacy-Admin-Zugang, blendet ihn f\u00fcr Installateur- und Endkundenrollen aus und sch\u00fctzt ausgew\u00e4hlte Systemadapter. Updates bleiben m\u00f6glich, weil keine harte nondeletable-Sperre verwendet wird.',
+                    text: 'EOS schützt Zugriffe durch Anmeldung, Rollen und Objektberechtigungen. Bestehende Verwaltungszugänge werden bei der Installation nicht automatisch abgeschaltet.',
                     xs: 12,
                     sm: 12,
                 },
-                eosLockLegacyAdmin: {
-                    newLine: true,
-                    type: 'checkbox',
-                    label: 'Alten Admin-Zugang sperren',
-                    help: 'Hält admin.0 deaktiviert und bindet ihn nur lokal auf den Fallback-Port. Nur Administratoren dürfen diese Sperre für Wartung kurz deaktivieren.',
+                _eosLegacyAdminAccess: {
+                    type: 'staticText',
+                    text: 'Der bestehende ioBroker-Admin bleibt erreichbar. EOS ändert dessen Port, Netzwerkadresse und Betriebszustand nicht für eine automatische Umstellung. Die Wiederherstellungsanleitung beschreibt Port 8081.',
                     xs: 12,
-                    sm: 12,
-                    md: 6,
-                    lg: 4,
-                },
-                eosLegacyAdminLockBind: {
-                    type: 'text',
-                    label: 'Lokale Bind-Adresse des alten Admin',
-                    hidden: '!data.eosLockLegacyAdmin',
-                    xs: 12,
-                    sm: 12,
-                    md: 6,
-                    lg: 3,
-                },
-                eosLegacyAdminLockPort: {
-                    type: 'port',
-                    label: 'Lokaler Fallback-Port des alten Admin',
-                    hidden: '!data.eosLockLegacyAdmin',
-                    min: 1,
-                    xs: 12,
-                    sm: 12,
-                    md: 6,
-                    lg: 3,
                 },
                 eosHideLegacyAdminFromNonAdmins: {
                     newLine: true,

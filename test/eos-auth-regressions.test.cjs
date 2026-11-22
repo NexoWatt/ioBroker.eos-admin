@@ -9,7 +9,10 @@ const {UnifiedSessions}=require('../src/lib/eosUnifiedBoundary');
 const code=fs.readFileSync(path.join(root,'build/lib/web.js'),'utf8');
 const exportsObject={};
 vm.runInNewContext(code,{exports:exportsObject,module:{exports:exportsObject},__dirname:path.join(root,'build/lib'),Buffer,URL,console,process:{env:{}},require:name=>name.startsWith('node:')?require(name):name==='./eosRequestSecurity'?security:{}},{filename:'shipped-build/lib/web.js',timeout:5000});
-const makeWeb=()=>Object.assign(Object.create(exportsObject.default.prototype),{settings:{auth:true,secure:true},unified:new UnifiedSessions({}, {externalOrigin:'',secure:true})});
+const makeWeb=(overrides={})=>{
+ const settings={auth:true,secure:true,...overrides};
+ return Object.assign(Object.create(exportsObject.default.prototype),{settings,unified:new UnifiedSessions({}, {externalOrigin:settings.eosExternalOrigin||'',secure:settings.secure})});
+};
 function response(){return{code:0,body:undefined,locals:{},headers:{},cookies:[],status(code){this.code=code;return this;},json(body){this.body=body;return this;},setHeader(name,value){this.headers[name]=value;},clearCookie(...args){this.cookies.push(args);}};}
 
 test('login redirect rejects remote, protocol-relative, encoded separator, backslash and control origins',()=>{
@@ -23,15 +26,23 @@ test('login redirect rejects remote, protocol-relative, encoded separator, backs
 });
 
 test('production same-origin caller binds HTTPS versus HTTP and rejects forged forwarded origin',()=>{
- const web=makeWeb(),req={headers:{host:'eos.local:8188',origin:'https://eos.local:8188',cookie:'access_token=audit-placeholder'}};
- assert.equal(web.isEosSameOriginWrite(req),true);
- assert.equal(web.isEosSameOriginWrite({headers:{...req.headers,origin:'http://eos.local:8188'}}),false);
- assert.equal(web.isEosSameOriginWrite({headers:{...req.headers,origin:'https://other.invalid','x-forwarded-host':'other.invalid','x-forwarded-proto':'https'}}),false);
- web.settings.secure=false;
- assert.equal(web.isEosSameOriginWrite(req),false);
- assert.equal(web.isEosSameOriginWrite({headers:{...req.headers,origin:'http://eos.local:8188'}}),true);
- assert.equal(web.isEosSameOriginWrite({headers:{host:'eos.local',authorization:'Bearer audit-placeholder'}}),true);
- assert.equal(web.isEosSameOriginWrite({headers:{host:'eos.local',cookie:'access_token=audit-placeholder'}}),false);
+ const tlsWeb=makeWeb(),tlsReq={socket:{remoteAddress:'192.168.10.20'},headers:{host:'eos.local:8188',origin:'https://eos.local:8188',cookie:'access_token=audit-placeholder'}};
+ assert.equal(tlsWeb.isEosSameOriginWrite(tlsReq),true);
+ assert.equal(tlsWeb.isEosSameOriginWrite({...tlsReq,headers:{...tlsReq.headers,origin:'http://eos.local:8188'}}),false);
+ assert.equal(tlsWeb.isEosSameOriginWrite({...tlsReq,headers:{...tlsReq.headers,origin:'https://other.invalid','x-forwarded-host':'other.invalid','x-forwarded-proto':'https'}}),false);
+ // A transport profile is fixed at construction, including its session authority.
+ const httpWeb=makeWeb({secure:false}),httpReq={socket:{remoteAddress:'127.0.0.1'},headers:{host:'localhost:8188',origin:'http://localhost:8188',cookie:'access_token=audit-placeholder'}};
+ assert.equal(httpWeb.isEosSameOriginWrite(httpReq),true);
+ assert.equal(httpWeb.isEosSameOriginWrite({...httpReq,headers:{...httpReq.headers,origin:'https://localhost:8188'}}),false);
+ assert.equal(httpWeb.isEosSameOriginWrite({...httpReq,socket:{remoteAddress:'192.168.10.20'},headers:{...httpReq.headers,'x-forwarded-for':'127.0.0.1','x-forwarded-proto':'https'}}),false);
+ assert.equal(httpWeb.isEosSameOriginWrite({...httpReq,headers:{...httpReq.headers,host:'eos.local:8188',origin:'http://eos.local:8188','x-forwarded-host':'localhost:8188'}}),false);
+ assert.equal(httpWeb.isEosSameOriginWrite({...httpReq,headers:{...httpReq.headers,origin:'http://other.invalid','x-forwarded-host':'other.invalid'}}),false);
+ const bearer={socket:{remoteAddress:'127.0.0.1'},headers:{host:'localhost:8188',authorization:'Bearer audit-placeholder'}};
+ assert.equal(httpWeb.isEosSameOriginWrite(bearer),true);
+ assert.equal(httpWeb.isEosSameOriginWrite({...bearer,headers:{...bearer.headers,cookie:'access_token=audit-placeholder'}}),false);
+ assert.equal(httpWeb.isEosSameOriginWrite({...bearer,headers:{...bearer.headers,authorization:'Basic audit-placeholder'}}),false);
+ assert.equal(httpWeb.isEosSameOriginWrite({...bearer,headers:{...bearer.headers,origin:'http://other.invalid','x-forwarded-host':'other.invalid'}}),false);
+ assert.equal(httpWeb.isEosSameOriginWrite({socket:httpReq.socket,headers:{host:'localhost:8188',cookie:'access_token=audit-placeholder'}}),false);
 });
 
 test('all retired passwordless endpoints deny even legacy-enabled accounts and existing claim cookies',async()=>{

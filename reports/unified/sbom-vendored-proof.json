@@ -1,0 +1,65 @@
+{
+  "schema": "nexowatt-eos-sbom-vendored-proof/v1",
+  "productVersion": "9.0.1",
+  "date": "2026-11-22",
+  "method": "Full npm CycloneDX dependency graph closure from exactly the locked root package production dependencies; add the independently admitted local WebServer variant.",
+  "reason": "npm 11.19.1 sbom --omit=dev excluded dual-used production/development nodes. Runtime inventory is derived from the full graph instead; no missing package records are invented.",
+  "input": {
+    "path": "release-manifests/unified/build-environment.cdx.json",
+    "sha256": "2a110f2a22d77606a395a5cc18a56c689fd882532fd3edfef84eef01c4fe1798",
+    "components": 717
+  },
+  "output": {
+    "path": "release-manifests/unified/runtime.cdx.json",
+    "sha256": "376a1f959a69916a21eaa8ee5c4fe4e4e28ca2cdbe73aa5e8d7a92e03cf0a6ad",
+    "components": 304,
+    "registryRuntimeClosureComponents": 303,
+    "rootProductionDependencies": 23,
+    "rootDependenciesIncludingVendored": 24,
+    "vendoredComponent": "nexowatt:vendored:webserver@3.4.0+nexowatt.9.0.1",
+    "missingDependencyReferences": [],
+    "metadataPreserved": true
+  },
+  "schemaValidation": {
+    "valid": true,
+    "errors": 0,
+    "validator": "python-jsonschema",
+    "validatorVersion": "4.26.0",
+    "schemaVersion": "CycloneDX 1.5",
+    "formatCheckerEnabled": true,
+    "sources": [
+      {
+        "url": "https://github.com/CycloneDX/specification/blob/master/schema/bom-1.5.schema.json",
+        "gitBlobSha": "d9c4d08031d45ecf0c4b2f6fcac8eeb8c9e78a65",
+        "sha256": "2d956c1d05c092695457a91f3b5c57c749793c013ec224a0935807cfc8ae4480"
+      },
+      {
+        "url": "https://github.com/CycloneDX/specification/blob/master/schema/spdx.schema.json",
+        "gitBlobSha": "566c4a32518c60778e55a56ccf71bf781320b279",
+        "sha256": "4b345e2329f209f34e960ae2a8e7cb46a166907e6a45e94978565925dc47b359"
+      },
+      {
+        "url": "https://github.com/CycloneDX/specification/blob/master/schema/jsf-0.82.schema.json",
+        "gitBlobSha": "f46bfb1e52731ad1280123ff3e2bd29bd18d4bc2",
+        "sha256": "8bae002c25e723db7ee1f26afde680ae1a2b1a8f6b4b4b0fd65dc3becb090aae"
+      }
+    ]
+  },
+  "checks": {
+    "focusedNodeTests": {
+      "passed": 6,
+      "failed": 0
+    },
+    "eslint": "passed",
+    "cliCheck": "passed",
+    "secondRunChanged": false,
+    "secondRunBomVersion": 2
+  },
+  "reproduce": [
+    "npm sbom --sbom-format=cyclonedx > release-manifests/unified/build-environment.cdx.json",
+    "node tools/eos-sbom-vendored.cjs",
+    "node tools/eos-sbom-vendored.cjs --check",
+    "node --test test/eos-sbom-vendored.test.cjs"
+  ],
+  "scope": "Runtime npm dependency graph plus the declared vendored WebServer. This is not an operating-system, firmware or device inventory and not a vulnerability or conformity assessment."
+}

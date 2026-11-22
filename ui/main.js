@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/main.ts
- * Quell-Hash: sha256:9e585243da8e7f20f9bb334f5712633b7e7ee1517ca040c7d66f4bd9511df241
+ * Quell-Hash: sha256:628ff12d2fe0e9ce8294edf67d665daecf44f91fcb7bc702b1c846ac17681e37
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -33493,9 +33493,16 @@ function createHostedRuntime(owner, bridge) {
   let operationalPromise = null;
   let stopping = null;
   const startOperational = async () => {
-    if (stopping || runtime._hostedOperational || runtime._hostedStartup?.state !== 'unlicensed'
+    // Auch ein zunächst vorhandener Altregler darf nach bestätigter Übergabe
+    // den ruhenden Start freigeben. Lizenz und Ownership werden hier und im
+    // eigentlichen onReady erneut geprüft; ein vorbereiteter Grant genügt nie.
+    if (stopping || runtime._hostedOperational || !['unlicensed', 'blocked'].includes(runtime._hostedStartup?.state)
       || !centralLicenseSnapshot(bridge).ok || bridge.canWrite() !== true) return;
-    if (!operationalPromise) operationalPromise = runtime.onReady();
+    // Verliert die Ownership zwischen beiden Prüfungen ihre Gültigkeit, bleibt
+    // onReady gesperrt. Nur der abgeschlossene Versuch wird freigegeben, damit
+    // eine spätere bestätigte Übergabe erneut geprüft werden kann. Nach echter
+    // Initialisierung verhindert _hostedOperational jeden doppelten Start.
+    if (!operationalPromise) operationalPromise = runtime.onReady().finally(() => { operationalPromise = null; });
     await operationalPromise;
   };
   return {

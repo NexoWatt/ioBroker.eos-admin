@@ -1,38 +1,60 @@
 # NexoWatt EOS
 
-**Erste zusammengeführte Version: 9.0.0-alpha.1 · technisches Paket: `iobroker.eos-admin`**
+**Version 9.0.1 · technisches Paket: `iobroker.eos-admin` · Vertriebskanal: `next`**
 
 NexoWatt EOS verbindet die Systemverwaltung aus EOS-Admin 8.0.2 mit Dashboard,
 Installer und Energiemanagement aus NexoWatt UI 1.0.38. Eine ioBroker-Instanz betreibt
 die gemeinsamen Module. Die bisherige UI wird im Zielbetrieb nicht zusätzlich gestartet.
 Der technische Paketname bleibt für bestehende Integrationen erhalten.
 
-Dies ist ein Integrations-Teststand. Der genaue Prüfumfang, verbleibende Grenzen und
-ausstehende Anlagenabnahmen stehen im [Prüfbericht](docs/unified/PRUEFBERICHT.md).
-Die Bereitstellung ist keine CRA-Konformitätserklärung oder allgemeine Produktivfreigabe.
+Version 9.0.1 bleibt ein Integrations-Teststand. Die Versionsnummer ist kein
+Nachweis einer allgemeinen Produktivfreigabe; für npm ist weiterhin `next`
+vorgesehen. Die Softwareprüfungen stehen im [Prüf- und Lieferbericht 9.0.1](docs/reports/unified-9.0.1/PRUEFBERICHT.md); die endgültigen Artefakte sind über die beigefügten SHA-256-Summen zugeordnet. Der [Alpha-1-Prüfbericht](docs/unified/PRUEFBERICHT.md) bleibt ein historischer
+Nachweis und bestätigt nicht die neuen Zugangsprofile. Die Bereitstellung ist
+keine CRA-Konformitätserklärung.
 
 ## Anmeldung und einmalige Aktivierung
 
-Der Geräteeinstieg ist `https://<Geräte-IP>/`. Die Anwendung läuft intern auf
-`127.0.0.1:8188`; ein fest eingerichteter HTTPS-Eingang übernimmt Port 443.
-Die Konfiguration `native.eosExternalOrigin` muss genau zur HTTPS-Adresse passen.
-Zertifikat, Geräte-IP und Vertrauen auf den Endgeräten gehören zur Systeminstallation.
-Ein npm-Upload richtet keine Betriebssystemdienste oder Zertifikate ein.
+Nach der ioBroker-Neuinstallation ist der direkte EOS-Einstieg
+`https://<Geräte-IP>:8188/`. Der neue Adapter verwendet standardmäßig TLS und
+Authentisierung (`secure: true`, `auth: true`) auf `0.0.0.0:8188`. Als
+ioBroker-Zertifikatsnamen sind `defaultPublic` und `defaultPrivate` eingetragen;
+die zugehörigen Zertifikats-/Schlüsseldaten müssen auf dem Gerät vorhanden und
+für die verwendete Adresse geeignet sein. Das normale erste ioBroker-Setup erzeugt
+Standardzertifikate; deren SAN deckt nicht automatisch die Geräte-IP oder den Namen
+`NexoWattEOS` ab. `eosExternalOrigin` bleibt im neuen HTTPS-Profil auch mit optionalem
+443-Proxy leer, damit die vorgesehenen IP-/Namenszugänge parallel nutzbar sind.
+Es gibt keinen unverschlüsselten Ersatzlogin. Details zur Zertifikatseinrichtung
+und zum Schutz bestehender Schlüssel stehen in der Installationsanleitung.
+
+Der bestehende ioBroker-Adminzugang, üblicherweise Port 8081, wird durch EOS nicht
+automatisch deaktiviert oder auf einen anderen Port verschoben. Auch gespeicherte
+Legacy-Sperrflags lösen diese frühere Aktion nicht mehr aus. Den vorhandenen
+Administrationszugang für die Einrichtung erhalten.
+
+`https://NexoWattEOS:8188/` funktioniert erst, wenn `NexoWattEOS` im lokalen Netz
+auf die Geräte-IP aufgelöst wird und zum Zertifikat passt. Der Adapter erzeugt
+keinen DNS-Eintrag. Für den Zugriff ohne Portangabe ist optional ein HTTPS-Eingang
+auf 443 einzurichten; dieser verbindet sich ebenfalls per HTTPS und mit
+CA-/Namensprüfung zum EOS-Upstream. Ein npm-Upload konfiguriert weder DNS,
+Betriebssystemdienste noch Firewall oder Rootrechte. Details:
+[Installation](docs/unified/INSTALL_PUBLISH.md) und
+[Zugangserhalt 9.0.1](docs/unified/ACCESS_RECOVERY_9.0.1.md).
 
 1. Mit dem eigenen ioBroker-Konto auf der NexoWatt-Anmeldeseite anmelden.
 2. Einen erforderlichen Erstpasswortwechsel abschließen.
 3. Als Administrator einmal die zentrale EOS-Lizenz aktivieren.
 4. Dashboard, Installer und berechtigte Systemfunktionen über dieselbe Anmeldung nutzen.
 
-**Anmeldegrenze dieser Alpha-Version:** Gemeinsame OAuth-Anmeldung und
+**Anmeldegrenze diesem Teststand:** Gemeinsame OAuth-Anmeldung und
 Erstpasswortwechsel sind implementiert. Ein TOTP-Challenge- oder Passkey-Flow ist
 noch nicht verfügbar. Konten mit gesetztem `common.externalAuthentication.totp`
 (außer `null`/nicht vorhanden) sowie fehlerhaft aufgebautem `externalAuthentication`
 werden sicher gesperrt; sie fallen nicht auf eine reine Passwortanmeldung zurück.
-Für solche Konten ist dieser Alpha-Login nicht nutzbar. Die MFA-Konfiguration darf
+Für solche Konten ist dieser Login nicht nutzbar. Die MFA-Konfiguration darf
 nicht allein zum Umgehen dieser Sperre abgeschaltet werden.
 
-**Abmeldung:** Der zentrale Logout widerruft in dieser Alpha-Version die globale
+**Abmeldung:** Der zentrale Logout widerruft in diesem Teststand die globale
 Sitzungsgeneration. Dadurch werden **alle gleichzeitig angemeldeten Nutzer** erneut
 zur Anmeldung aufgefordert, einschließlich offener Socket-/SSE-Verbindungen.
 Es handelt sich noch nicht um einen auf eine einzelne Sitzung begrenzten Logout.
@@ -47,8 +69,8 @@ ist keine automatische neue EOS-Systemlizenz. Details: [Lizenzbetrieb](docs/unif
 
 ## Entwicklung und Prüfpaket
 
-Node.js: `>=22.23.4 <23 || >=24.22.1 <25`. Die hier ausgeführten Prüfungen benennen
-ihre tatsächliche Laufzeit im Prüfbericht; nicht geprüfte Plattformen sind nicht freigegeben.
+Node.js: `>=22.23.4 <23 || >=24.22.1 <25`. Der neue Prüfbericht muss die tatsächliche
+Laufzeit für 9.0.1 benennen; nicht geprüfte Plattformen sind nicht freigegeben.
 
 ```sh
 npm ci --ignore-scripts
@@ -82,7 +104,8 @@ npm publish --tag next
 ```
 
 Diese Befehle wurden nicht gegen dein npm-Konto ausgeführt. Eigentümerrechte am
-Paket und die Git-Zieladresse müssen in deinem Konto bestehen. Der unscoped Name
+Paket müssen in deinem Konto bestehen. Git-Ziel ist
+[NexoWatt/ioBroker.eos-admin](https://github.com/NexoWatt/ioBroker.eos-admin). Der unscoped Name
 `iobroker.eos-admin` bedeutet bei npm öffentliche Downloadbarkeit; der eigene Code
 bleibt proprietär und lizenzpflichtig. Ein privates Git-Repository ist möglich.
 
@@ -100,3 +123,7 @@ Die Rechte und Copyright-Hinweise der enthaltenen Open-Source-Komponenten bleibe
 erhalten, insbesondere der ioBroker-Admin-Basis. Siehe [Drittanbieterhinweise](THIRD-PARTY-NOTICES.md).
 Sicherheitsanforderungen, STRIDE-Risiken, CRA-/DSGVO-Bezug und offene Nachweise sind in
 [SECURITY_CRA.md](docs/unified/SECURITY_CRA.md) dokumentiert.
+
+## Nachweise für 9.0.1
+
+[Start nach der Neuinstallation](START_HIER_9.0.1.md) · [Prüf- und Lieferbericht 9.0.1](docs/reports/unified-9.0.1/PRUEFBERICHT.md). Historische Alpha-Berichte bleiben als solche erhalten.

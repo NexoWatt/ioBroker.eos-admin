@@ -112,8 +112,6 @@ const CORE_PROTECTED_ADAPTER_NAMES = [
 ];
 const LEGACY_ADMIN_INSTANCE_ID = 'system.adapter.admin.0';
 const LEGACY_BACKUP_ADAPTER_NAME = 'backitup';
-const DEFAULT_LEGACY_ADMIN_LOCK_PORT = 18_081;
-const DEFAULT_LEGACY_ADMIN_LOCK_BIND = '127.0.0.1';
 const DEFAULT_EOS_ADMIN_GROUPS = ['system.group.administrator'];
 const DEFAULT_ADMIN_ONLY_GROUP = DEFAULT_EOS_ADMIN_GROUPS[0];
 const ADMIN_OWNER_USER = 'system.user.admin';
@@ -403,7 +401,7 @@ class Admin extends adapter_core_1.Adapter {
      */
     onStateChange = (id, state) => {
         if (id === `system.adapter.${this.namespace}.plugins.sentry.enabled`) {
-            webServer.resetIndexHtml();
+            webServer?.resetIndexHtml();
         }
         socket?.stateChange(id, state);
         this.eosOwnership?.onStateChange(id, state);
@@ -420,6 +418,7 @@ class Admin extends adapter_core_1.Adapter {
             this.log.warn('EOS security profile requires login; legacy auth=false is overridden at runtime.');
         }
         this.config.auth = true;
+        void this.warnIfLocalAdminPasswordMissing();
         if (this.ciSystem) {
             this.log.info('CI system detected: requests to hosts that are not running will be answered immediately with a timeout error');
         }
@@ -445,7 +444,7 @@ class Admin extends adapter_core_1.Adapter {
                 try {
                     this.secret = (0, node_crypto_1.randomBytes)(32).toString('hex');
                     await this.extendForeignObjectAsync('system.config', { native: { secret: this.secret } });
-                    this.init();
+                    await this.init();
                 }
                 catch {
                     this.log.error('EOS session secret initialization failed; web startup denied');
@@ -453,7 +452,7 @@ class Admin extends adapter_core_1.Adapter {
             }
             else if (typeof systemConfig.native.secret === 'string' && systemConfig.native.secret.length >= 16) {
                 this.secret = systemConfig.native.secret;
-                this.init();
+                await this.init();
             }
             else {
                 this.log.error('EOS session secret is invalid; web startup denied');
@@ -463,6 +462,21 @@ class Admin extends adapter_core_1.Adapter {
             this.log.error('Cannot find object system.config');
         }
     };
+    /** Diagnose a passwordless legacy account without changing it or weakening EOS authentication. */
+    async warnIfLocalAdminPasswordMissing() {
+        try {
+            const account = (await this.getForeignObjectAsync('system.user.admin'));
+            if (account?.type === 'user' &&
+                (typeof account.common.password !== 'string' || !account.common.password.trim())) {
+                this.log.warn('EOS_SETUP_ADMIN_PASSWORD_REQUIRED: The existing ioBroker admin account has no password. ' +
+                    'Use the existing authenticated Admin or the interactive command "iobroker user passwd admin" ' +
+                    'to set an individual password. EOS authentication remains required; existing Admin access is not changed.');
+            }
+        }
+        catch {
+            this.log.warn('EOS_SETUP_ACCOUNT_CHECK_UNAVAILABLE: Could not inspect the existing admin account; no credentials were changed.');
+        }
+    }
     /**
      * Some message was sent to this instance over the message box. Used by email, pushover, text2speech, ...
      * Using this method requires the "common.messagebox" property to be set to true in io-package.json
@@ -494,6 +508,9 @@ class Admin extends adapter_core_1.Adapter {
             return;
         }
         if (obj.command === 'im') {
+            if (!socket || !obj.message || typeof obj.message !== 'object' || Array.isArray(obj.message)) {
+                return;
+            }
             // if not instance message
             socket.publishInstanceMessageAll(obj.from, obj.message.m, obj.message.s, obj.message.d);
         }
@@ -879,53 +896,68 @@ class Admin extends adapter_core_1.Adapter {
      * @param callback Callback after unloading
      */
     onUnload = (callback) => {
-        this.eosOwnership?.stop();
-        this.eosLicenseService?.stop();
-        this.eosSessionSecurity?.stop();
-        this.uiPushSessions.clear();
-        if (this.timerRepo) {
-            clearTimeout(this.timerRepo);
-            this.timerRepo = undefined;
+        let completed = false;
+        let deadline = null;
+        const finish = () => {
+            if (completed) {
+                return;
+            }
+            completed = true;
+            if (deadline) {
+                clearTimeout(deadline);
+                deadline = null;
+            }
+            callback();
+        };
+        const cleanup = (operation) => {
+            try {
+                operation();
+            }
+            catch {
+                this.log.warn('EOS_SHUTDOWN_CLEANUP_FAILED: Continuing remaining cleanup.');
+            }
+        };
+        // A stuck hosted runtime must not leave the controller waiting forever on unload.
+        deadline = setTimeout(finish, 2000);
+        deadline.unref?.();
+        cleanup(() => this.eosOwnership?.stop());
+        cleanup(() => this.eosLicenseService?.stop());
+        cleanup(() => this.eosSessionSecurity?.stop());
+        cleanup(() => this.uiPushSessions.clear());
+        for (const timer of [
+            this.timerRepo,
+            this.timerNews,
+            this.ratingTimeout,
+            this.updaterTimeout,
+            this.eosSecurityDebounce,
+        ]) {
+            if (timer) {
+                clearTimeout(timer);
+            }
         }
-        if (this.timerNews) {
-            clearTimeout(this.timerNews);
-            this.timerNews = undefined;
-        }
-        if (this.ratingTimeout) {
-            clearTimeout(this.ratingTimeout);
-            this.ratingTimeout = undefined;
-        }
-        if (this.updaterTimeout) {
-            clearTimeout(this.updaterTimeout);
-            this.updaterTimeout = undefined;
-        }
-        if (this.eosSecurityDebounce) {
-            clearTimeout(this.eosSecurityDebounce);
-            this.eosSecurityDebounce = null;
-        }
+        this.timerRepo = undefined;
+        this.timerNews = undefined;
+        this.ratingTimeout = undefined;
+        this.updaterTimeout = undefined;
+        this.eosSecurityDebounce = null;
         if (this.eosSecurityTimer) {
             clearInterval(this.eosSecurityTimer);
-            this.eosSecurityTimer = null;
+        }
+        this.eosSecurityTimer = null;
+        cleanup(() => socket?.close());
+        cleanup(() => webServer?.close());
+        if (!this.eosHostedRuntime) {
+            finish();
+            return;
         }
         try {
-            this.log.info(`terminating http${this.config.secure ? 's' : ''} server on port ${this.config.port}`);
-            socket?.close();
-            webServer?.close();
-            if (this.eosHostedRuntime) {
-                void this.eosHostedRuntime.stop().then(callback, callback);
-            }
-            else {
-                callback();
-            }
+            void this.eosHostedRuntime.stop().then(finish, finish);
         }
         catch {
-            callback();
+            finish();
         }
     };
     onLog = (obj) => socket?.sendLog(obj);
-    isLegacyAdminLockEnabled() {
-        return this.config.eosLockLegacyAdmin !== false;
-    }
     shouldHideLegacyAdminFromNonAdmins() {
         const config = this.config;
         return (this.config.eosHideLegacyAdminFromNonAdmins !== false &&
@@ -1636,17 +1668,6 @@ class Admin extends adapter_core_1.Adapter {
             this.log.info(`EOS ACL guard restricted internal ${LEGACY_BACKUP_ADAPTER_NAME} reserve to ${this.getAdminOnlyGroup()}`);
         }
     }
-    getLegacyAdminLockPort() {
-        const configured = Number(this.config.eosLegacyAdminLockPort);
-        if (!Number.isInteger(configured) || configured < 1 || configured > 65_535) {
-            return DEFAULT_LEGACY_ADMIN_LOCK_PORT;
-        }
-        return configured;
-    }
-    getLegacyAdminLockBind() {
-        const configured = typeof this.config.eosLegacyAdminLockBind === 'string' ? this.config.eosLegacyAdminLockBind.trim() : '';
-        return configured || DEFAULT_LEGACY_ADMIN_LOCK_BIND;
-    }
     getProtectedAdapterNames() {
         // v47: delete protection is intentionally limited to the fixed EOS core list.
         // Older installations may have stored additional entries in eosProtectedAdapters;
@@ -1854,40 +1875,11 @@ class Admin extends adapter_core_1.Adapter {
             this.log.debug(`EOS ACL/UI delete guard applied to adapter "${adapter}"`);
         }
     }
-    async ensureLegacyAdminLocked() {
-        if (!this.isLegacyAdminLockEnabled()) {
-            return;
-        }
-        const obj = (await this.getForeignObjectAsync(LEGACY_ADMIN_INSTANCE_ID));
-        if (!obj?.common) {
-            return;
-        }
-        const targetPort = this.getLegacyAdminLockPort();
-        const targetBind = this.getLegacyAdminLockBind();
-        let changed = false;
-        const native = (obj.native ||= {});
-        if (obj.common.enabled !== false) {
-            obj.common.enabled = false;
-            changed = true;
-        }
-        if (native.port !== targetPort) {
-            native.port = targetPort;
-            changed = true;
-        }
-        if (native.bind !== targetBind) {
-            native.bind = targetBind;
-            changed = true;
-        }
-        if (clearLegacyNondeletable(obj.common)) {
-            changed = true;
-        }
-        if (changed) {
-            await this.setForeignObjectAsync(LEGACY_ADMIN_INSTANCE_ID, obj);
-            this.log.warn(`EOS security guard disabled legacy admin.0 and moved it to ${targetBind}:${targetPort}. Disable "Legacy Admin lock" in EOS Admin settings before intentionally starting the old admin.`);
-        }
-    }
     async enforceEosSecurity(reason = 'periodic') {
         if (this.eosSecurityRunning) {
+            if (reason === 'startup') {
+                throw new Error('EOS_SECURITY_STARTUP_BUSY');
+            }
             return;
         }
         this.eosSecurityRunning = true;
@@ -1895,7 +1887,9 @@ class Admin extends adapter_core_1.Adapter {
             await this.ensureEosRoleModel();
             await this.ensureEosSystemObjectAccess();
             await this.ensureEosSmartHomeEnumAccess();
-            await this.ensureLegacyAdminLocked();
+            // Never stop or relocate a pre-existing Admin during an EOS migration.
+            // Stored eosLockLegacyAdmin=true is retired and grants no action. After a
+            // successful external HTTPS/login check, an operator can disable Admin deliberately.
             await this.ensureLegacyAdminVisibleOnlyToAdmins();
             await this.ensureLegacyBackupVisibleOnlyToAdmins();
             if (!this.eosDeleteLockRepairFinished) {
@@ -1910,12 +1904,15 @@ class Admin extends adapter_core_1.Adapter {
         }
         catch (e) {
             this.log.warn(`Cannot apply EOS security guard (${reason}): ${e instanceof Error ? e.message : String(e)}`);
+            if (reason === 'startup') {
+                throw e;
+            }
         }
         finally {
             this.eosSecurityRunning = false;
         }
     }
-    startEosSecurityGuard() {
+    async startEosSecurityGuard() {
         for (const adapter of this.getProtectedAdapterNames()) {
             this.subscribeForeignObjects(`system.adapter.${adapter}`);
             this.subscribeForeignObjects(`system.adapter.${adapter}.*`);
@@ -1929,7 +1926,7 @@ class Admin extends adapter_core_1.Adapter {
         this.subscribeForeignObjects('system.licenses');
         this.subscribeForeignObjects('enum.rooms.*');
         this.subscribeForeignObjects('enum.functions.*');
-        void this.enforceEosSecurity('startup');
+        await this.enforceEosSecurity('startup');
         if (!this.eosSecurityTimer) {
             this.eosSecurityTimer = setInterval(() => {
                 void this.enforceEosSecurity('periodic');
@@ -3169,13 +3166,21 @@ class Admin extends adapter_core_1.Adapter {
     /**
      * Initialize the adapter
      */
-    init() {
+    async init() {
         this.config.defaultUser = this.config.defaultUser || 'admin';
         if (!this.config.defaultUser.match(/^system\.user\./)) {
             this.config.defaultUser = `system.user.${this.config.defaultUser}`;
         }
         (0, objectFixes_1.verifyAdapterCore)(this).catch((e) => this.log.warn(`Cannot check @adapter-core version: ${e?.message}`));
-        this.startEosSecurityGuard();
+        // Initial role/ACL writes can revoke credential proofs. Finish reconciliation before
+        // getData creates Web, so a listening HTTPS endpoint never races this first guard pass.
+        try {
+            await this.startEosSecurityGuard();
+        }
+        catch {
+            this.log.error('EOS_SECURITY_STARTUP_FAILED: Initial role and ACL reconciliation failed; web startup denied.');
+            return;
+        }
         (0, objectFixes_1.checkCommonObjects)(this).catch((e) => this.log.warn(`Cannot check common objects: ${e?.message}`));
         this.getData(adapter => (webServer = new web_1.default(adapter.config, adapter, this.initSocket.bind(this), { systemLanguage })));
         if (this.config.accessApplyRights &&

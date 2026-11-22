@@ -143,7 +143,6 @@ test('stop wins over an in-flight inventory refresh', async () => {
 });
 
 const { createMigrationPlan } = require('../tools/eos-migration-plan.cjs');
-const { render } = require('../deploy/render-ingress.cjs');
 function migrationInput() {
     return {
         objects: {
@@ -198,22 +197,3 @@ test('migration refuses prototype keys and non-EOS namespace targets', () => {
     assert.throws(() => createMigrationPlan(migrationInput(), 'nexowatt-ui.0', 'admin.0'), /NAMESPACE_INVALID/);
 });
 
-test('ingress renderer pins origin/upstream and uses an explicit request header allowlist', () => {
-    const output = render({ ip: '192.168.10.192', certificate: '/etc/nexowatt/device.pem', privateKey: '/etc/nexowatt/device-key.pem' });
-    assert.match(output, /proxy_pass http:\/\/127\.0\.0\.1:8188;/);
-    assert.match(output, /proxy_pass_request_headers off;/);
-    assert.match(output, /proxy_set_header Host "192\.168\.10\.192";/);
-    assert.match(output, /proxy_buffering off;/);
-    assert.equal(output.includes('@@'), false);
-    assert.equal(output.includes('proxy_set_header X-User'), false);
-});
-
-test('ingress renderer rejects host/header injection and ambiguous certificate paths', () => {
-    const value = { ip: '192.168.10.192', certificate: '/etc/nexowatt/device.pem', privateKey: '/etc/nexowatt/device-key.pem' };
-    for (const ip of ['example.com', '127.0.0.1; deny all;', '192.168.1.1\nallow all;', '::1']) {
-        assert.throws(() => render({ ...value, ip }), /DEVICE_IPV4_REQUIRED/);
-    }
-    for (const certificate of ['relative.pem', '/etc/../key.pem', '/etc/key.pem; include /tmp/evil;', '/etc/key.pem\n']) {
-        assert.throws(() => render({ ...value, certificate }), /CERTIFICATE_PATH_INVALID/);
-    }
-});

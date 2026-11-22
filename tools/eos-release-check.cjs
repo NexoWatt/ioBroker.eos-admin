@@ -13,19 +13,28 @@ assert.equal(io.common.title, 'NexoWatt EOS');
 assert.equal(io.common.version, p.version);
 assert.equal(lock.version, p.version);
 assert.equal(lock.packages[''].version, p.version);
+assert.equal(require('../ui/package.json').version, p.version);
+const uiWebManifest = JSON.parse(fs.readFileSync(path.join(root, 'ui/www/manifest.webmanifest'), 'utf8'));
+assert.equal(uiWebManifest.version, p.version);
+assert.equal(uiWebManifest.appVersion, p.version);
 assert.equal(p.license, 'SEE LICENSE IN LICENSE');
 assert.equal(io.common.licenseInformation.type, 'paid');
 assert.equal(io.native.port, 8188);
-assert.equal(io.native.bind, '127.0.0.1');
+assert.equal(io.native.bind, '0.0.0.0');
+assert.equal(io.native.secure, true);
+assert.equal(io.native.eosLockLegacyAdmin, false);
+assert.equal(io.native.certPublic, 'defaultPublic');
+assert.equal(io.native.certPrivate, 'defaultPrivate');
 assert.equal(io.native.auth, true);
 assert.equal(io.common.compact, false);
 assert.equal(p.publishConfig.tag, 'next');
-assert.match(p.version, /-alpha\./);
+assert.match(p.version, /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/);
 assert.ok(!p.dependencies['iobroker.nexowatt-ui'], 'UI must be an internal module');
 for (const rel of [p.main, 'ui/main.js', 'adminWww/index.html', 'ui/www/login.html', 'ui/admin/react/index.html',
     'build/lib/eosUnifiedBoundary.js', 'build/lib/eosLicenseService.js', 'release-manifests/unified/runtime.cdx.json']) {
     assert.ok(fs.statSync(path.join(root, rel)).isFile(), `MISSING_RUNTIME: ${rel}`);
 }
+assert.equal(require('./nexowatt-vendored-webserver.cjs').inspectVendoredWebserver(p, lock, root), null, 'VENDORED_SOURCE_PROVENANCE');
 const manifest = require('./eos-release-manifest.cjs');
 const count = manifest.check();
 const findings = [];

@@ -1,0 +1,5 @@
+{
+  "passed": true,
+  "scope": "Actual CSV export functions in isolated VM; no full browser test",
+  "checks": 9
+}

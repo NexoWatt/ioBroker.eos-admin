@@ -1,5 +1,13 @@
 # Lizenzfreigabe und laufende Anlagenregelung
 
+> Einordnung für 9.0.1: Der nachfolgende Text und seine Testzahlen stammen aus dem
+> benannten Alpha-1-Stand. Sie werden durch das neue HTTPS-/Zugangsprofil nicht zu
+> neuen 9.0.1-Prüfergebnissen. Aktuelle Zugangsvorgaben stehen in
+> [INSTALL_PUBLISH.md](INSTALL_PUBLISH.md) und
+> [ACCESS_RECOVERY_9.0.1.md](ACCESS_RECOVERY_9.0.1.md). Neue versionsgebundene
+> Ergebnisse werden im 9.0.1-Abschlussbericht geführt. Die dokumentierten offenen
+> Laufzeitgrenzen sind bis zu einer gesondert belegten Änderung zu berücksichtigen.
+
 Stand: 22.11.2026 · NexoWatt EOS 9.0.0-alpha.1. Dieses Dokument beschreibt den implementierten Alpha-Vertrag und seine offenen Abnahmegrenzen. Es ist keine Geräte-, Produktions- oder Konformitätsfreigabe.
 
 ## Eine zentrale Lizenzinstanz

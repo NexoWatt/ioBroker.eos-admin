@@ -1,0 +1,5 @@
+{
+  "passed": true,
+  "scope": "Audit service, real snapshot and event functions; no hardware or browser test",
+  "checks": 16
+}

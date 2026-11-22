@@ -1,0 +1,57 @@
+{
+  "createdAt": "2026-11-22T14:03:20.003458+00:00",
+  "targetVersion": "9.0.1",
+  "node": "24.22.3",
+  "files": {
+    "deploy/render-ingress.cjs": "05324885e6121b0dabfcc54dc0884a8749092c72f41feea6c95fd75ec4b82413",
+    "deploy/nginx-eos.conf.template": "2bd30f8f7ed981f2f99526a2aebe3c121d2efa45749524c40a751b5b825a57db",
+    "deploy/README.md": "b22a3d51f58d294e03a8eea963f9aa15df3366730c20b509debcc62981719110",
+    "test/eos-ingress-renderer.test.cjs": "ff583458180f0749f0d0c662482166f1220b12ed6c962c2dc33a69bfccda5aa2",
+    "test/eos-unified-ownership.test.cjs": "8d31ea7276a7c98024ec6ab014b7ec81df4c287542adf7e57874f7974afb6c1c"
+  },
+  "checks": {
+    "rendererTests": {
+      "pass": 7,
+      "fail": 0,
+      "skip": 1,
+      "skipReason": "nginx binary absent",
+      "regression": "Browser Host plus Sec-Fetch-Site/Mode/Dest preserved in the explicit header allowlist"
+    },
+    "ownershipMigrationTests": {
+      "pass": 21,
+      "fail": 0
+    },
+    "strictCheckJs": {
+      "exitCode": 0
+    },
+    "limitedEslint": {
+      "exitCode": 0,
+      "rules": [
+        "no-undef",
+        "no-unused-vars",
+        "no-eval",
+        "no-implied-eval",
+        "no-new-func",
+        "no-unreachable",
+        "no-unsafe-finally"
+      ]
+    },
+    "nginxConfigTest": "not executed"
+  },
+  "sources": [
+    {
+      "url": "https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_ssl_name",
+      "checked": "2026-11-22"
+    },
+    {
+      "url": "https://nginx.org/en/docs/http/server_names.html",
+      "checked": "2026-11-22"
+    }
+  ],
+  "limitations": [
+    "No installed Nginx or TLS-upstream handshake test",
+    "No DNS/mDNS, browser or hardware acceptance",
+    "Metadata/path validation; actual certificate content/SAN/chain checked by Nginx on target",
+    "Limited ESLint policy plus strict JS types, not whole-project static security coverage"
+  ]
+}

@@ -23,6 +23,23 @@ test('transport rejects remote plaintext and spoofed Host/Origin regardless forw
     assert.equal(sameOrigin(req({host:'evil.example','x-forwarded-host':'device.example'}),'https://device.example',false),false);
     assert.equal(sameOrigin(req({'sec-fetch-site':'cross-site'}),'https://device.example',false),false);
 });
+
+test('TLS Host authorities canonicalize default port and DNS case without trusting forwarding headers',()=>{
+ for(const [host,origin] of [['NexoWattEOS','https://nexowatteos'],['nexowatteos:443','https://nexowatteos'],['192.168.10.192:8188','https://192.168.10.192:8188'],['192.168.10.192:443','https://192.168.10.192'],['[::1]:443','https://[::1]']]) {
+  const request=req({host,origin}); request.socket.remoteAddress='192.168.10.20';
+  assert.equal(sameOrigin(request,'',true),true,host);
+  request.headers.origin='https://foreign.invalid';assert.equal(sameOrigin(request,'',true),false,host);
+ }
+ const proxy=req({host:'DEVICE.example:443',origin:'https://device.example','x-forwarded-host':'foreign.invalid'});
+ assert.equal(sameOrigin(proxy,'https://device.example',false),true);
+ proxy.headers.host='foreign.invalid';proxy.headers['x-forwarded-host']='device.example';assert.equal(sameOrigin(proxy,'https://device.example',false),false);
+});
+
+test('TLS rejects missing, malformed and ambiguous Host authorities before serving any page',()=>{
+ for(const host of [undefined,'','https://nexowatteos','user@nexowatteos','nexowatteos/path','nexowatteos?x=1','nexowatteos#x','nexowatteos,foreign.invalid','nexowatteos\\foreign.invalid','nexowatteos:','nexowatteos:65536','nexowatt eos','nexowatteos\t','%6eexowatteos',['nexowatteos']]) {
+  assert.equal(transportAllowed(req({host}),'',true),false,JSON.stringify(host));
+ }
+});
 test('session token parsing rejects duplicate cookies and encoded/unsigned aliases',()=>{
     assert.equal(readAccessToken(req()),TOKEN);
     assert.equal(readAccessToken(req({cookie:`access_token=${TOKEN}; access_token=${TOKEN}`})),null);
@@ -62,6 +79,29 @@ test('login rate map is bounded and fails closed before issuer',()=>{const {auth
 
 test('normal navigation GET/HEAD requires trusted transport but no Origin; writes still require Origin',()=>{
  const {authority}=setup(); const navigation=req();delete navigation.headers.origin;navigation.method='GET';assert.equal(authority.requestAllowed(navigation),true);navigation.method='HEAD';assert.equal(authority.requestAllowed(navigation),true);navigation.method='POST';assert.equal(authority.requestAllowed(navigation),false);navigation.method='GET';navigation.headers.origin='https://evil.example';assert.equal(authority.requestAllowed(navigation),false);
+});
+
+test('cross-site top-level links reach only known entry pages, without granting an Origin write exemption',()=>{
+ const {authority}=setup();
+ for(const path of ['/','/login.html','/system/','/installer/','/nexowatt/license']) {
+  for(const method of ['GET','HEAD']) {
+   const navigation=req({'sec-fetch-site':'cross-site','sec-fetch-mode':'navigate','sec-fetch-dest':'document'});
+   delete navigation.headers.origin; navigation.url=path+'?from=legacy-admin';navigation.method=method;
+   assert.equal(authority.requestAllowed(navigation),true,method+' '+path);
+   assert.equal(authority.originAllowed(navigation),false,'navigation is never a write/WS Origin proof');
+  }
+ }
+});
+
+test('cross-site entry exception never accepts APIs, assets, writes, frames or WebSocket handshakes',()=>{
+ const {authority}=setup();
+ const base=()=>{const value=req({'sec-fetch-site':'cross-site','sec-fetch-mode':'navigate','sec-fetch-dest':'document'});delete value.headers.origin;value.url='/';value.method='GET';return value;};
+ for(const path of ['/api/auth/status','/api/state','/nexowatt/license/status','/static/login.js','/system/assets/app.js','/system/socket.io','/%6cogin.html','/system//']) { const value=base();value.url=path;assert.equal(authority.requestAllowed(value),false,path); }
+ for(const method of ['POST','PUT','PATCH','DELETE','OPTIONS']) {const value=base();value.method=method;assert.equal(authority.requestAllowed(value),false,method);}
+ for(const change of [ {'sec-fetch-mode':'cors'}, {'sec-fetch-dest':'iframe'}, {origin:'https://foreign.example'}, {origin:''}, {upgrade:'websocket'}, {connection:'keep-alive, Upgrade'} ]) {const value=base();Object.assign(value.headers,change);assert.equal(authority.requestAllowed(value),false,JSON.stringify(change));}
+ const noMode=base();delete noMode.headers['sec-fetch-mode'];assert.equal(authority.requestAllowed(noMode),false);
+ const remote=base();remote.socket.remoteAddress='192.168.2.20';assert.equal(authority.requestAllowed(remote),false,'plaintext peer boundary remains closed');
+ const badHost=base();badHost.headers.host='foreign.example';assert.equal(authority.requestAllowed(badHost),false,'configured proxy Host remains pinned');
 });
 
 test('independent machine transport cannot borrow browser cookie or Origin authority',()=>{

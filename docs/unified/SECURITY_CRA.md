@@ -1,8 +1,9 @@
 # Sicherheits- und CRA-Register der Zusammenführung
 
-**Stand:** 9.0.0-alpha.1 · 22.11.2026 · **Verantwortung:** NexoWatt / Dominique Manteufel
+**Stand:** 9.0.1 · 22.11.2026 · **Verantwortung:** NexoWatt / Dominique Manteufel
 
-Dieses Register ergänzt die vorhandenen Befund- und Entwicklungsunterlagen. Es
+Dieses Register beschreibt den Prüfbedarf für Testversion 9.0.1 (`next`) und
+ergänzt die vorhandenen Befund- und Entwicklungsunterlagen. Es
 beschreibt Scope, Maßnahmen und zu erbringende Nachweise. Testergebnisse werden im
 abschließenden Release-Prüfbericht geführt. Hier wird keine bestandene Normprüfung,
 CE-/CRA-Konformität oder Produktionsfreigabe erklärt.
@@ -23,13 +24,15 @@ rein lokale Lizenzkontrolle verändern; absolute Manipulationssicherheit ist kei
 | EOS-MERGE-T01 / S,E | Login, OAuth, MFA; Identitäts- oder Rollenübernahme | Zentrale Benutzerquelle und Erstpasswortwechsel. TOTP/fehlerhafte externe Auth-Konfiguration sperren sicher; kein implementierter TOTP-Challenge-/Passkey-Flow. CWE-287/862. | Negative TOTP-/Sitzungstests im Abschlussbericht; unterstützter MFA-Flow offen. |
 | EOS-MERGE-T02 / S,E | HTTP, Socket, SSE nach Logout/Rechteentzug | Globale Sitzungsgeneration wird beim Logout widerrufen; alle parallelen Nutzer müssen sich neu anmelden. CWE-613. | Negative Tests und realer Browserablauf erforderlich; Einzelsitzungslogout offen. |
 | EOS-MERGE-T03 / T,E | Lizenzpayload/Truststore | Signatur/Schema/UUID prüfen; Truststore getrennt schützen; keine Selbstfreigabe. CWE-347/732. | NWL3-Ausstellervergleich und Negativtests nachweisen. |
-| EOS-MERGE-T04 / T,I | Proxy-Origin, CSRF, Hostheader | Feste öffentliche Origin; fremde Origins ablehnen, sichere Cookies, kein Forwarding-Login. CWE-346/352. | Transporttests und reale 443-Installation erforderlich. |
+| EOS-MERGE-T04 / T,I | Direkter HTTPS-Listener, optionaler Proxy, CSRF/Hostheader | TLS/Auth auf 8188, passende SAN/Vertrauenskette; optionale 443-Upstream-Verbindung per HTTPS mit CA-/Namensprüfung; kein Forwarding-Login. CWE-346/352. | Neue 8188-Transportprüfung; 443 nur bei Nutzung gesondert abnehmen. |
 | EOS-MERGE-T05 / I,T | Downloads, Uploads, Assets, PWA | Pfad-/Größenlimits; keine Secrets oder geschützten API-Antworten im Cache. CWE-22/200. | Paketinhalt, negative Pfade und Browsercache prüfen. |
 | EOS-MERGE-T06 / E,T | Verwaltung/Objekte/Hostbefehle | Funktionsrechte plus Objekt-ACL; keine universelle Shell-/Root-Schnittstelle. CWE-78/862. | Rollenmatrix und Betrieb ohne Root nachweisen. |
 | EOS-MERGE-T07 / T,D | Alte und neue EMS schreiben gleichzeitig | Kontrollierte Migration, eindeutiger Besitzer, bestätigter Stopp des Altreglers; kein Heartbeat als alleinige Übergabe. | Abbruch-/Wiederanlaufprüfung und Anlage offen. |
 | EOS-MERGE-T08 / D | Gemeinsamer Prozess, große Requests, Verwaltungsarbeit | Limits, kontrolliertes Entladen, Event-Loop-/Regellatenz messen. CWE-400. | Workertrennung nicht umgesetzt; Last-/Hardwaretest offen. |
 | EOS-MERGE-T09 / T,D | Messdaten, Protokolle, Tarif/Wetter | Typen/Einheiten/Aktualität prüfen, echte Deadlines, gerätespezifische Fallbacks. | Übernommene Logik plus gezielte Regression; Gerätetests offen. |
 | EOS-MERGE-T10 / T,I,R | Build, npm/ZIP, Logs und Sicherung | Inventar/SBOM, unveränderliche Hashbindung, Secretprüfung, datensparsame Logs und Restore. | Aktuelles Artefakt prüfen; Altberichte gelten nicht automatisch. |
+| EOS-ACCESS-T01 / D | Automatische Sperre des bisherigen Adminzugangs vor nutzbarem EOS-Einstieg | Legacy-Sperrpfad entfernt, alte Sperrflags ohne Wirkung; Bestand nicht durch angenommene Standardwerte überschreiben. | Neue Erhalt-/Recoverytests für 9.0.1 erforderlich; frühere Alpha-Testlücke dokumentiert. |
+| EOS-ACCESS-T02 / S,I | LAN-Listener und lokaler Gerätename | IPv4-Bindung an alle Schnittstellen bewusst erfassen; nur TLS/Auth; DNS-Auflösung und SAN/CA prüfen, keine automatischen Host-/Firewallfreigaben. | Reale Zugangsprüfung erforderlich; kein vollautomatisches Geräteimage behauptet. |
 
 S=Identitätsvortäuschung, T=Manipulation, R=fehlende Nachvollziehbarkeit,
 I=Informationsabfluss, D=Verfügbarkeitsangriff, E=Rechteausweitung. CWE nennt
@@ -73,8 +76,9 @@ Quellen und Recherchegrenzen: [SOURCES.md](SOURCES.md).
 ## Noch erforderliche Freigabenachweise
 
 - Tatsächlicher Controller-/OS-/Node-Stand; Installation/Stop/Restart ohne Root.
-- Gesamtfluss HTTPS → OAuth/Erstpasswortwechsel → Aktivierung → Dashboard/Installer/System. TOTP-/fehlerhafte Auth-Konfiguration muss sperren; TOTP-Challenge/Passkeys bleiben offen.
+- Gesamtfluss direktes HTTPS:8188 → OAuth/Erstpasswortwechsel → Aktivierung → Dashboard/Installer/System; optionales HTTPS:443 separat. TOTP-/fehlerhafte Auth-Konfiguration muss sperren; TOTP-Challenge/Passkeys bleiben offen.
 - Globalen Logout mit mehreren Nutzern prüfen; ein Single-Session-Logout ist nicht implementiert.
+- Erhalt des ioBroker-Adminzugangs trotz alter Legacy-Sperrflags; Nachweise nach [ACCESS_RECOVERY_9.0.1.md](ACCESS_RECOVERY_9.0.1.md).
 - Migration, Eigentumsübergabe, Backup/Restore und Rückfall ohne parallele Stellbefehle.
 - Last-/Regellatenz und reale Geräte-/Fehlerfalltests für den benannten Anlagenumfang.
 - Aktuelle Dependency-/Secret-/Paketprüfung; fachliche Bewertung offener Befunde.
@@ -83,5 +87,5 @@ Quellen und Recherchegrenzen: [SOURCES.md](SOURCES.md).
 - Offene Lizenzfortsetzungsgrenzen [LIC-RUNTIME-01 bis -03](LICENSING_RUNTIME_LIMITS.md) berücksichtigen.
 
 Für jeden offenen Punkt: Verantwortliche Person, Termin, nächster Schritt und Beleg
-im Release-/Befundregister ergänzen. Ein Alpha-Testtag ersetzt keine kritische
+im Release-/Befundregister ergänzen. Ein Testtag ersetzt keine kritische
 Sicherheitsprüfung; noch offene breite Hardwareabnahme ist gesondert auszuweisen.

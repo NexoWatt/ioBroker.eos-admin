@@ -1,0 +1,126 @@
+{
+  "version": "9.0.1",
+  "generatedAt": "2026-11-22T14:03:07.118577+00:00",
+  "cases": [
+    {
+      "command": "node scripts/verify-rc57-ocpp-stability.js",
+      "cwd": "ui",
+      "exitCode": 0,
+      "log": "verify-rc57-ocpp-stability.log"
+    },
+    {
+      "command": "node scripts/verify-rc58-ocpp-compact-mapping.js",
+      "cwd": "ui",
+      "exitCode": 0,
+      "log": "verify-rc58-ocpp-compact-mapping.log"
+    },
+    {
+      "command": "node scripts/verify-rc60-universal-auto-orchestrator.js",
+      "cwd": "ui",
+      "exitCode": 0,
+      "log": "verify-rc60-universal-auto-orchestrator.log"
+    },
+    {
+      "command": "node scripts/verify-rc60-universal-auto-wallbox.js",
+      "cwd": "ui",
+      "exitCode": 0,
+      "log": "verify-rc60-universal-auto-wallbox.log"
+    },
+    {
+      "command": "node scripts/verify-rc61-evcs-hardening.js",
+      "cwd": "ui",
+      "exitCode": 0,
+      "log": "verify-rc61-evcs-hardening.log"
+    },
+    {
+      "command": "node scripts/verify-rc64-storage-grid-charge-policy.js",
+      "cwd": "ui",
+      "exitCode": 0,
+      "log": "verify-rc64-storage-grid-charge-policy.log"
+    },
+    {
+      "command": "node scripts/verify-rc68-para14a-communication-fallback.js",
+      "cwd": "ui",
+      "exitCode": 0,
+      "log": "verify-rc68-para14a-communication-fallback.log"
+    },
+    {
+      "command": "node scripts/verify-auto-cheap-grid-window.cjs",
+      "cwd": "ui",
+      "exitCode": 0,
+      "log": "verify-auto-cheap-grid-window.log"
+    },
+    {
+      "command": "node scripts/verify-evcs-vehicle-status-regressions.cjs",
+      "cwd": "ui",
+      "exitCode": 0,
+      "log": "verify-evcs-vehicle-status-regressions.log"
+    },
+    {
+      "command": "node scripts/verify-charging-audit-start-mode.cjs",
+      "cwd": "ui",
+      "exitCode": 0,
+      "log": "verify-charging-audit-start-mode.log"
+    },
+    {
+      "command": "node scripts/verify-charging-csv-mode-context.cjs",
+      "cwd": "ui",
+      "exitCode": 0,
+      "log": "verify-charging-csv-mode-context.log"
+    },
+    {
+      "command": "node scripts/verify-evcs-mode-write-failure.cjs",
+      "cwd": "ui",
+      "exitCode": 0,
+      "log": "verify-evcs-mode-write-failure.log"
+    },
+    {
+      "command": "node scripts/verify-live-evcs-mode-confirmation.cjs",
+      "cwd": "ui",
+      "exitCode": 0,
+      "log": "verify-live-evcs-mode-confirmation.log"
+    },
+    {
+      "command": "node scripts/verify-zero-export-pv-coordinator.cjs",
+      "cwd": "ui",
+      "exitCode": 0,
+      "log": "verify-zero-export-pv-coordinator.log"
+    },
+    {
+      "command": "node scripts/verify-zero-export-charging.cjs",
+      "cwd": "ui",
+      "exitCode": 0,
+      "log": "verify-zero-export-charging.log"
+    },
+    {
+      "command": "node scripts/verify-heating-rod-central-zero-export.js",
+      "cwd": "ui",
+      "exitCode": 0,
+      "log": "verify-heating-rod-central-zero-export.log"
+    },
+    {
+      "command": "node scripts/verify-zero-export-storage-probe.cjs",
+      "cwd": "ui",
+      "exitCode": 0,
+      "log": "verify-zero-export-storage-probe.log"
+    },
+    {
+      "command": "node scripts/verify-zero-export-appcenter.cjs",
+      "cwd": "ui",
+      "exitCode": 0,
+      "log": "verify-zero-export-appcenter.log"
+    },
+    {
+      "command": "node scripts/verify-zero-export-core.cjs",
+      "cwd": "ui",
+      "exitCode": 0,
+      "log": "verify-zero-export-core.log"
+    },
+    {
+      "command": "node scripts/verify-heating-rod-zero-export-tariff.cjs",
+      "cwd": "ui",
+      "exitCode": 0,
+      "log": "verify-heating-rod-zero-export-tariff.log"
+    }
+  ]
+}

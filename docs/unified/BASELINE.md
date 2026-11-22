@@ -1,12 +1,12 @@
 # Ausgangsstand und Liefergrenze
 
-**Änderung:** EOS-MERGE-001 · **Zielversion:** 9.0.0-alpha.1 · **Datum:** 22.11.2026
+**Änderungen:** EOS-MERGE-001 / EOS-ACCESS-002 · **Zielversion:** 9.0.1 · **Datum:** 22.11.2026
 
 Dieser Stand führt EOS-Admin und NexoWatt UI in einem installierbaren Paket zusammen.
 Der Produktname lautet **NexoWatt EOS**. Paket und Namespace bleiben aus Gründen der
 Bestandskompatibilität `iobroker.eos-admin` und `eos-admin.<Instanz>`. Die neue Hauptversion
 kennzeichnet die Zusammenführung; sie ist kein Updateversprechen für beliebige
-Installationen. Der Stand ist ein Entwicklungskandidat, keine Produktionsfreigabe.
+Installationen. Der Stand bleibt eine Testversion für den Vertriebskanal `next`, keine Produktionsfreigabe.
 
 ## Verwendete Eingänge
 
@@ -36,13 +36,25 @@ realen Geräten. Vorhandene Fehler werden nicht zu neuem Sollverhalten erklärt.
 | Zentraler Lizenzdienst | Einmalige Aktivierung, lokale Prüfung und Erweiterungsrechte | Keine Auslieferung des Keygens oder privater Signierschlüssel. |
 | ioBroker-Controller, Objekt-/State-Datenbank | Externe Plattformvoraussetzung | Nicht in dieses Paket verschmolzen; konkrete Installationsversion erfassen. |
 | Geräte-/Protokolladapter | Optionale externe Komponenten | Unterstützung, Installation und Aktivierung sind getrennt zu dokumentieren. |
-| HTTPS-Eingang auf 443, Zertifikate, Hostrechte | Systemintegration außerhalb npm-Lifecycle | Auf dem Zielgerät einzurichten und gesondert zu prüfen. |
+| Direkter EOS-HTTPS-Dienst | Standard `0.0.0.0:8188`, Authentisierung/TLS aktiv; ioBroker-Zertifikatsnamen `defaultPublic`/`defaultPrivate` | Tatsächliches Zertifikatsmaterial, SAN, Clientvertrauen und HTTPS-Login auf dem Zielgerät prüfen. |
+| Optionaler HTTPS-Eingang auf 443, DNS, Hostrechte | Systemintegration außerhalb npm-Lifecycle; ebenfalls HTTPS zum Upstream mit CA-Prüfung | Nur bei gewünschtem Zugang ohne Port einzurichten; kein automatischer DNS-/Root-/Firewallumbau. |
+
+## Geändertes Zugangsprofil in 9.0.1
+
+Die vorangegangenen Alpha-Profile mit obligatorischem HTTP-Loopback-Upstream auf
+8188 beschreiben nicht die neuen Defaults. Direkter HTTPS-Zugang auf 8188 ist jetzt
+der Einstieg; 443 ist optional. `eosExternalOrigin` bleibt im neuen HTTPS-Profil
+für parallele IP-/Namenszugänge auch mit HTTPS-Proxy leer. Der ioBroker-Adminzugang
+bleibt unverändert und
+Legacy-Sperrflags erteilen keine automatische Abschalt-/Umadressierungsbefugnis.
+Der lokale Name `NexoWattEOS` benötigt eine passende Namensauflösung und Zertifikat-SAN.
+Details: [ACCESS_RECOVERY_9.0.1.md](ACCESS_RECOVERY_9.0.1.md).
 
 ## Prüfaussagen und historische Unterlagen
 
 Der endgültige Prüfbericht nennt Befehle, Umgebung, Ergebnisse, Fehler und offene
 Gates für **diesen** Quellstand. Übernommene Berichte früherer Versionen sind
-historische Nachweise. Sie gelten nicht automatisch für 9.0.0-alpha.1. Das gleiche
+historische Nachweise. Sie gelten nicht automatisch für 9.0.1. Das gleiche
 gilt für alte Dateien mit „ready“, „stable“, „approval“ oder „production“ im Namen.
 
 Die Build-/Paketierung muss TypeScript-Quellen und ausgelieferte JavaScript-/Frontend-

@@ -261,7 +261,7 @@ class WebServer {
             contexts = this.buildSecureContexts(collections);
             this.certManager.subscribeCollections(collectionId === true ? null : collectionId || null, (err, collections) => {
                 if (!err && collections) {
-                    this.adapter.log.silly(`collections update ${JSON.stringify(collections)}`);
+                    this.adapter.log.silly(`Certificate collections updated: ${Object.keys(collections).length}`);
                     contexts = this.buildSecureContexts(collections);
                     if (!Object.keys(contexts).length) {
                         this.adapter.log.warn('Could not find any certificate collections after update');
@@ -413,7 +413,7 @@ class WebServer {
         const defaultPrivate = config.certPrivate || 'defaultPrivate';
         const defaultChain = config.certChained || '';
         const customCertificates = await this.adapter.getCertificatesAsync(defaultPublic, defaultPrivate, defaultChain);
-        this.adapter.log.debug(`Loaded custom certificates: ${JSON.stringify(customCertificates && customCertificates[0])}`);
+        this.adapter.log.debug(`Configured default TLS certificate material: ${customCertificates && customCertificates[0] ? 'available' : 'unavailable'}`);
         if (customCertificates && customCertificates[0]) {
             const certs = customCertificates[0];
             if (certs.key.endsWith('.pem')) {

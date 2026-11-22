@@ -36,9 +36,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.eosListenAddress = eosListenAddress;
+exports.listenEosServer = listenEosServer;
+exports.createEosServer = createEosServer;
 const adapter_core_1 = require("@iobroker/adapter-core");
 const webserver_1 = require("./vendor/webserver");
 const express_1 = __importDefault(require("express"));
+const node_https_1 = require("node:https");
 const node_fs_1 = require("node:fs");
 const node_path_1 = require("node:path");
 const compression_1 = __importDefault(require("compression"));
@@ -175,6 +179,112 @@ function adaptSchemaForTab(schema) {
         }
     }
 }
+/** A published EOS address must never move to a different port during startup. */
+function eosListenAddress(settings) {
+    const raw = settings.port;
+    const port = typeof raw === 'number' ? raw : typeof raw === 'string' && /^\d{1,5}$/.test(raw) ? Number(raw) : NaN;
+    if (!Number.isInteger(port) || port < 1 || port > 65535) {
+        throw new Error('EOS_LISTEN_PORT_INVALID: Configure one TCP port from 1 to 65535');
+    }
+    return { port, host: settings.bind || '0.0.0.0' };
+}
+/** Bind exactly once; collisions and unavailable interfaces are configuration failures. */
+async function listenEosServer(server, settings) {
+    const address = eosListenAddress(settings);
+    await new Promise((resolve, reject) => {
+        function cleanup() {
+            server.off('error', onError);
+            server.off('listening', onListening);
+        }
+        function onError(error) {
+            cleanup();
+            const code = /^[A-Z_]+$/.test(error.code || '') ? error.code : 'FAILED';
+            const reason = code === 'EADDRINUSE'
+                ? 'configured port is already in use'
+                : code === 'EADDRNOTAVAIL'
+                    ? 'configured bind address is not available on this host'
+                    : code === 'EACCES'
+                        ? 'permission denied for configured address'
+                        : 'configured listener could not be started';
+            reject(Object.assign(new Error(`EOS_LISTEN_${code}: ${address.host}:${address.port}: ${reason}`), { code }));
+        }
+        function onListening() {
+            cleanup();
+            resolve();
+        }
+        server.once('error', onError);
+        server.once('listening', onListening);
+        try {
+            server.listen(address);
+        }
+        catch (error) {
+            onError(error);
+        }
+    });
+}
+/** The vendored server may return HTTP when certificates are missing. EOS must not. */
+async function createEosServer(app, adapter, settings) {
+    const webserver = new webserver_1.WebServer({
+        app,
+        adapter,
+        secure: settings.secure,
+        acmeChallenge: settings.acmeChallenge,
+        http2: false,
+    });
+    const defaultCertificates = { value: null };
+    const loadConfiguredCertificates = webserver.getCustomCertificates.bind(webserver);
+    // Capture the same controller-provided tuple the vendor uses for its SNI fallback.
+    // Keep a full certificate chain for clients that do not send a server name (IP access).
+    webserver.getCustomCertificates = async () => {
+        const certificates = await loadConfiguredCertificates();
+        if (!certificates) {
+            return null;
+        }
+        if (typeof certificates.key !== 'string' ||
+            !certificates.key.trim() ||
+            typeof certificates.cert !== 'string' ||
+            !certificates.cert.trim() ||
+            (certificates.ca !== undefined && typeof certificates.ca !== 'string')) {
+            throw new Error('EOS_TLS_DEFAULT_CERTIFICATE_REQUIRED');
+        }
+        const pem = /-----BEGIN CERTIFICATE-----[^-]+-----END CERTIFICATE-----/g;
+        const leaf = certificates.cert.match(pem) || [];
+        const chain = certificates.ca?.match(pem) || [];
+        if (!leaf.length || (certificates.ca?.trim() && !chain.length)) {
+            throw new Error('EOS_TLS_DEFAULT_CERTIFICATE_REQUIRED');
+        }
+        defaultCertificates.value = {
+            key: certificates.key,
+            cert: `${[...new Set([...leaf, ...chain])].join('\n')}\n`,
+            ...(certificates.ca ? { ca: certificates.ca } : {}),
+        };
+        return defaultCertificates.value;
+    };
+    const server = await webserver.init().catch(error => {
+        if (settings.secure === true) {
+            throw new Error('EOS_TLS_INITIALIZATION_FAILED: Configured TLS certificates could not be loaded');
+        }
+        throw error;
+    });
+    if (settings.secure === true && !(server instanceof node_https_1.Server)) {
+        server.close(() => undefined);
+        throw new Error('EOS_TLS_CERTIFICATE_REQUIRED: HTTPS could not be initialized; configure valid TLS certificates');
+    }
+    if (settings.secure === true && server instanceof node_https_1.Server) {
+        try {
+            if (!defaultCertificates.value) {
+                throw new Error('missing default certificate');
+            }
+            // This changes only the default context. Existing collection SNICallbacks remain active.
+            server.setSecureContext({ ...defaultCertificates.value, minVersion: 'TLSv1.2' });
+        }
+        catch {
+            server.close(() => undefined);
+            throw new Error('EOS_TLS_DEFAULT_CERTIFICATE_REQUIRED: Configure a valid default TLS certificate for direct IP access');
+        }
+    }
+    return server;
+}
 /** Webserver class */
 class Web {
     nexowattStableUpdateManager;
@@ -216,6 +326,7 @@ class Web {
     instanceProxy;
     systemRequests = new WeakSet();
     unified;
+    startupFailed = false;
     /**
      * Create a new instance of Web
      *
@@ -231,18 +342,17 @@ class Web {
         this.options = options;
         this.systemLanguage = this.options?.systemLanguage || 'en';
         this.publicPath = '/system/';
-        this.unified = new eosUnifiedBoundary_1.UnifiedSessions(this.adapter, {
-            externalOrigin: settings.eosExternalOrigin,
-            secure: settings.secure === true,
-            resolveAccess: (req) => this.getEosRequestAccess(req),
-            firstLogin: (user, role) => this.getEosFirstLoginPasswordState(user, role),
-            getLicense: () => this.adapter.eosLicenseService?.statusView(),
-        });
         this.instanceProxy = new instanceProxy_1.InstanceProxy(this.adapter, this.publicPath);
-        void this.#init().catch(() => {
-            this.adapter.log.error('EOS unified web initialization failed; startup denied');
-            this.adapter.terminate(adapter_core_1.EXIT_CODES.ADAPTER_REQUESTED_TERMINATION);
-        });
+        void this.#init().catch(error => this.failStartup(error));
+    }
+    failStartup(error) {
+        if (this.startupFailed) {
+            return;
+        }
+        this.startupFailed = true;
+        this.server.server?.close(() => undefined);
+        this.adapter.log.error(`EOS web startup failed: ${error instanceof Error ? error.message : 'initialization failed'}`);
+        this.adapter.terminate(adapter_core_1.EXIT_CODES.ADAPTER_REQUESTED_TERMINATION);
     }
     decorateLogFile(fileName, text) {
         const log = text || (0, node_fs_1.readFileSync)(fileName).toString();
@@ -1434,10 +1544,12 @@ class Web {
         res.status(200).json(await this.getNexoWattStableUpdateManager().setEnabled(req.body.enabled));
     }
     isEosSameOriginWrite(req) {
-        // This profile terminates TLS here; untrusted proxy headers cannot change the scheme.
-        return this.unified.origin
-            ? this.unified.originAllowed(req)
-            : (0, eosRequestSecurity_1.isEosSameOriginRequest)(req.headers, this.settings.secure === true ? 'https:' : 'http:');
+        // Browser writes use the same canonical Host/Origin contract as login and sockets.
+        if (this.unified.origin || req.headers.origin !== undefined) {
+            return this.unified.originAllowed(req);
+        }
+        // Retain the explicit bearer-client contract; it never accepts ambient cookie authority.
+        return (0, eosRequestSecurity_1.isEosSameOriginRequest)(req.headers, this.settings.secure === true ? 'https:' : 'http:');
     }
     async saveEosBasicSettings(req, res) {
         res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
@@ -1761,16 +1873,23 @@ class Web {
      * Initialize the server
      */
     async #init() {
+        // Configuration errors belong to the same controlled startup path as TLS and bind errors.
+        this.unified = new eosUnifiedBoundary_1.UnifiedSessions(this.adapter, {
+            externalOrigin: this.settings.eosExternalOrigin,
+            secure: this.settings.secure === true,
+            resolveAccess: (req) => this.getEosRequestAccess(req),
+            firstLogin: (user, role) => this.getEosFirstLoginPasswordState(user, role),
+            getLicense: () => this.adapter.eosLicenseService?.statusView(),
+        });
         if (!this.adapter.eosSessionSecurity || !this.adapter.eosLicenseService) {
-            this.adapter.log.error('EOS session and license security must be initialized before HTTP startup');
-            this.adapter.terminate(adapter_core_1.EXIT_CODES.ADAPTER_REQUESTED_TERMINATION);
-            return;
+            throw new Error('EOS_AUTH_SERVICES_REQUIRED: Session and license security must be initialized before HTTP startup');
         }
         const bind = (0, eosWebResources_1.safeWebBind)(this.settings);
         if (bind !== this.settings.bind && !this.settings.secure) {
             this.adapter.log.warn('Plain HTTP is restricted to loopback. Configure TLS before network access; use a local console or SSH tunnel for setup.');
         }
         this.settings = { ...this.settings, bind, auth: true };
+        const listenAddress = eosListenAddress(this.settings);
         if (this.settings.port) {
             this.server.app = (0, express_1.default)();
             if (!this.unified.origin) {
@@ -2676,28 +2795,8 @@ class Web {
                     }
                 });
             });
-            try {
-                const webserver = new webserver_1.WebServer({
-                    app: this.server.app,
-                    adapter: this.adapter,
-                    secure: this.settings.secure,
-                    acmeChallenge: this.settings.acmeChallenge,
-                    // The EOS proxy/socket boundary is verified for TLS over HTTP/1.1.
-                    http2: false,
-                });
-                const initialized = await webserver.init();
-                this.server.server = Object.assign(initialized, { __server: this.server });
-            }
-            catch (err) {
-                this.adapter.log.error(`Cannot create web-server: ${err instanceof Error ? err.message : 'unknown error'}`);
-                this.adapter.terminate(adapter_core_1.EXIT_CODES.ADAPTER_REQUESTED_TERMINATION);
-                return;
-            }
-            if (!this.server.server) {
-                this.adapter.log.error(`Cannot create web-server`);
-                this.adapter.terminate(adapter_core_1.EXIT_CODES.ADAPTER_REQUESTED_TERMINATION);
-                return;
-            }
+            const initialized = await createEosServer(this.server.app, this.adapter, this.settings);
+            this.server.server = Object.assign(initialized, { __server: this.server });
             // Node's deadline protects incomplete headers/body in addition to the per-upload deadline.
             this.server.server.headersTimeout = 15000;
             this.server.server.requestTimeout = 60000;
@@ -2720,9 +2819,7 @@ class Web {
             this.instanceProxy.attach(this.server.server);
         }
         else {
-            this.adapter.log.error('port missing');
-            this.adapter.terminate('port missing', adapter_core_1.EXIT_CODES.ADAPTER_REQUESTED_TERMINATION);
-            return;
+            throw new Error('EOS_LISTEN_PORT_INVALID: Configure one TCP port from 1 to 65535');
         }
         const systemConfig = await this.adapter.getForeignObjectAsync('system.config');
         this.systemConfig = systemConfig || {};
@@ -2737,28 +2834,6 @@ class Web {
         if (this.server.server) {
             // keep a local reference, so the callbacks below do not have to re-check `this.server.server`
             const server = this.server.server;
-            let serverListening = false;
-            let serverPort;
-            server.on('error', e => {
-                if (e.toString().includes('EACCES') && serverPort <= 1024) {
-                    this.adapter.log.error(`node.js process has no rights to start server on the port ${serverPort}.\n` +
-                        `Do you know that on linux you need special permissions for ports under 1024?\n` +
-                        `You can call in shell following scrip to allow it for node.js: "iobroker fix"`);
-                }
-                else {
-                    this.adapter.log.error(`Cannot start server on ${this.settings.bind || '0.0.0.0'}:${serverPort}: ${e.toString()}`);
-                }
-                if (!serverListening) {
-                    if (this.adapter.terminate) {
-                        this.adapter.terminate(adapter_core_1.EXIT_CODES.ADAPTER_REQUESTED_TERMINATION);
-                    }
-                    else {
-                        process.exit(adapter_core_1.EXIT_CODES.ADAPTER_REQUESTED_TERMINATION);
-                    }
-                }
-            });
-            this.settings.port = parseInt(String(this.settings.port), 10) || 8081;
-            serverPort = this.settings.port;
             if (!this.settings.disableMcp) {
                 this.adapter.log.warn('External MCP is disabled by the EOS security profile until its authentication and authorization boundary is verified.');
             }
@@ -2767,42 +2842,16 @@ class Web {
             this.server.app?.use((req, res) => {
                 res.status(404).send(this.get404Page('File %s not found', req.url));
             });
-            this.adapter.getPort(this.settings.port, !this.settings.bind || this.settings.bind === '0.0.0.0' ? undefined : this.settings.bind || undefined, port => {
-                serverPort = port;
-                // Start the web server
-                server.listen(port, !this.settings.bind || this.settings.bind === '0.0.0.0'
-                    ? undefined
-                    : this.settings.bind || undefined, () => {
-                    void this.adapter.setState('info.connection', true, true);
-                    serverListening = true;
-                    this.adapter.log.info(`http${this.settings.secure ? 's' : ''} server listening on port ${port}`);
-                    this.adapter.log.info(`Use link "http${this.settings.secure ? 's' : ''}://127.0.0.1:${port}" to configure.`);
-                    if (!this.adapter.config.doNotCheckPublicIP && !this.adapter.config.auth) {
-                        this.checkTimeout = this.adapter.setTimeout(async () => {
-                            this.checkTimeout = undefined;
-                            try {
-                                await (0, webserver_1.checkPublicIP)(this.settings.port, 'ioBroker', '/iobroker_check.html');
-                            }
-                            catch (e) {
-                                // this supported first from js-controller 5.0.
-                                this.adapter.sendToHost(`system.host.${this.adapter.host}`, 'addNotification', {
-                                    scope: 'system',
-                                    category: 'securityIssues',
-                                    message: 'Your admin instance is accessible from the internet without any protection. ' +
-                                        'Please enable authentication or disable the access from the internet.',
-                                    instance: `system.adapter.${this.adapter.namespace}`,
-                                }, ( /* result */) => {
-                                    /* ignore */
-                                });
-                                this.adapter.log.error(e.toString());
-                            }
-                        }, 1000);
-                    }
-                });
-                if (typeof this.onReady === 'function') {
-                    void Promise.resolve(this.onReady(server, this.store, this.adapter)).catch(e => this.adapter.log.error(`Cannot finish EOS webserver startup: ${e instanceof Error ? e.message : 'unknown error'}`));
-                }
-            });
+            // No port probing: a proxy and the published address must keep targeting this exact listener.
+            await listenEosServer(server, this.settings);
+            server.on('error', error => this.adapter.log.error(`EOS web listener error: ${error.message}`));
+            // Install socket authentication only after successful bind. A failed callback closes the listener.
+            await this.onReady(server, this.store, this.adapter);
+            await this.adapter.setState('info.connection', true, true);
+            this.adapter.log.info(`http${this.settings.secure ? 's' : ''} server listening on ${listenAddress.host}:${listenAddress.port}`);
+            this.adapter.log.info(this.unified.origin
+                ? `EOS public address: ${this.unified.origin}`
+                : `EOS configured port: ${listenAddress.port}; use a reachable host address with ${this.settings.secure ? 'HTTPS' : 'local HTTP'}.`);
         }
     }
 }

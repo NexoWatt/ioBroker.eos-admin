@@ -33477,9 +33477,16 @@ function createHostedRuntime(owner, bridge) {
   let operationalPromise = null;
   let stopping = null;
   const startOperational = async () => {
-    if (stopping || runtime._hostedOperational || runtime._hostedStartup?.state !== 'unlicensed'
+    // Auch ein zunächst vorhandener Altregler darf nach bestätigter Übergabe
+    // den ruhenden Start freigeben. Lizenz und Ownership werden hier und im
+    // eigentlichen onReady erneut geprüft; ein vorbereiteter Grant genügt nie.
+    if (stopping || runtime._hostedOperational || !['unlicensed', 'blocked'].includes(runtime._hostedStartup?.state)
       || !centralLicenseSnapshot(bridge).ok || bridge.canWrite() !== true) return;
-    if (!operationalPromise) operationalPromise = runtime.onReady();
+    // Verliert die Ownership zwischen beiden Prüfungen ihre Gültigkeit, bleibt
+    // onReady gesperrt. Nur der abgeschlossene Versuch wird freigegeben, damit
+    // eine spätere bestätigte Übergabe erneut geprüft werden kann. Nach echter
+    // Initialisierung verhindert _hostedOperational jeden doppelten Start.
+    if (!operationalPromise) operationalPromise = runtime.onReady().finally(() => { operationalPromise = null; });
     await operationalPromise;
   };
   return {

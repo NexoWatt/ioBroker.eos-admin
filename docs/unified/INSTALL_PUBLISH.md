@@ -1,9 +1,11 @@
 # Installation, Git und npm
 
-**NexoWatt EOS · `iobroker.eos-admin` · 9.0.0-alpha.1**
+**NexoWatt EOS · `iobroker.eos-admin` · 9.0.1**
 
-Der Lieferstand ist eine erste gemeinsame Entwicklungsversion. Die tatsächlich
-bestandenen Prüfungen und Grenzen stehen im mitgelieferten Abschlussbericht. Vor
+Version 9.0.1 bleibt zur Erprobung bestimmt und wird über `next` bereitgestellt.
+Der neue Abschlussbericht muss geprüfte Version und Artefakthash ausdrücklich nennen.
+Vorherige Alpha-Berichte bleiben historische Belege; ihre Erfolge werden nicht
+auf dieses geänderte HTTPS-/Zugangsprofil übertragen. Vor
 Tests auf einer Anlage [COMMISSIONING.md](COMMISSIONING.md) durcharbeiten. Dieses
 Dokument führt keine Veröffentlichung oder Änderung eines Kundengeräts aus.
 
@@ -30,8 +32,9 @@ Veröffentlichungswege. Quellen: [SOURCES.md](SOURCES.md), NPM-01 bis NPM-03.
 ## Repository vorbereiten
 
 Das ZIP in ein neues leeres Arbeitsverzeichnis entpacken. Alte Quellordner nicht
-ungeprüft darüberkopieren. Für Git den Repositorynamen `ioBroker.eos-admin` verwenden;
-die für den eigenen Account richtige URL vor Upload prüfen. Kein fremdes Repository
+ungeprüft darüberkopieren. Für Git ist
+[NexoWatt/ioBroker.eos-admin](https://github.com/NexoWatt/ioBroker.eos-admin) vorgesehen;
+Zieladresse und Kontorechte vor dem Upload prüfen. Kein fremdes Repository
 überschreiben. Ein privates Git-Repository kann die Entwicklungsquellen begrenzen;
 Git-/npm-Kontozugänge mit der dort unterstützten MFA und minimalen Rechten absichern.
 
@@ -61,7 +64,9 @@ oben bescheinigen keine vollständige System-/Hardwareabnahme.
 
 Vor dem Upload Paketinhalt, Version, Lizenz, Manifest und Prüfergebnisse kontrollieren.
 Im für `iobroker.eos-admin` berechtigten npm-Konto anmelden. Die Testversion mit einem
-expliziten Testtag veröffentlichen, damit sie nicht unbeabsichtigt zum Standard wird:
+expliziten Testtag veröffentlichen, damit sie nicht unbeabsichtigt zum Standard wird.
+`9.0.1` besitzt keinen SemVer-Prerelease-Suffix; die Testverteilung wird bewusst
+über den npm-Tag `next` festgelegt:
 
 ```sh
 npm publish --tag next
@@ -77,56 +82,84 @@ getrennt. Es wird keine erfolgte Adapter-Checker-Abnahme, Aufnahme, vertragliche
 Vereinbarung mit ioBroker oder Serienfreigabe behauptet. Für offizielle Aufnahme
 gelten zusätzliche Regeln einschließlich kommerzieller Bedingungen (IO-01/IO-02).
 
-## Auf einem EOS-Testsystem einrichten
+## Neuinstallation oder Übernahme
 
-1. Vollständige Sicherung einschließlich Objekt-/State-Konfiguration, Benutzer,
-   Lizenzablage und Wiederherstellungsschlüssel prüfen. Den vorhandenen gesicherten
-   Recovery-Zugang erhalten.
-2. Die alte `nexowatt-ui`-Instanz kontrolliert stoppen und automatischen Neustart
-   verhindern, bevor die integrierte Regelung übernommen wird. Den tatsächlichen
-   Prozessstopp und ausbleibende Stellbefehle prüfen. Migrationswerkzeug/-anleitung
-   des Lieferstands verwenden; `native.eosUi` nicht aus einem ungeprüften Backup erraten.
-3. Das geprüfte Paket über den vorgesehenen ioBroker-/EOS-Installationsweg installieren.
-   Erst Konfiguration und Schreibzuständigkeit prüfen, dann die neue Regelung aktivieren.
-4. Den festen HTTPS-Eingang auf 443 mit gerätebezogenem Zertifikat einrichten und die
-   folgenden Werte setzen. Diese Systemeinrichtung ist kein npm-Postinstall-Hook.
+1. ioBroker regulär installieren beziehungsweise den vorhandenen Bestand vollständig
+   sichern. Den bestehenden Adminzugang, üblicherweise auf 8081, für die Einrichtung
+   behalten. EOS schaltet diesen Zugang nicht automatisch ab und verschiebt ihn nicht.
+2. Ein berechtigtes ioBroker-Konto mit persönlichem Passwort einrichten beziehungsweise
+   prüfen. Über einen angeblich allgemeinen Standardpasswortzustand wird keine Annahme
+   getroffen. Ein fehlendes Passwort ist über die berechtigte vorhandene Oberfläche
+   oder den vorgesehenen interaktiven CLI-Weg zu setzen; kein Login-Bypass.
+3. Nur bei Übernahme einer bisherigen Anlage: alte `nexowatt-ui`-Regelinstanz kontrolliert
+   stoppen, deren Prozessende bestätigen und die geprüfte Migration vorbereiten.
+   Eine neue Installation benötigt keine erfundene Altinstanz. Das
+   [Migrationswerkzeug](../../deploy/README.md) erstellt einen Offlineplan und
+   verändert keine laufende Anlage automatisch.
+4. Das geprüfte 9.0.1-Paket über den vorgesehenen ioBroker-/EOS-Weg installieren und
+   die Instanzkonfiguration prüfen. Die Defaults gelten für neue Instanzen; bei
+   übernommenen Instanzen nicht voraussetzen, dass gespeicherte Werte bereits passen.
 
-| Einstellung | EOS-Profil / Beispiel |
+| Einstellung | Direkter Zugang von 9.0.1 |
 | --- | --- |
 | `port` | `8188` |
-| `bind` | `127.0.0.1` |
-| `secure` | `false` ausschließlich für den internen Loopback-Transport hinter TLS |
-| `eosExternalOrigin` | `https://192.168.1.10` mit der tatsächlichen Geräte-IP, ohne Pfad/abschließenden Slash |
-| HTTPS-Eingang | Feste Weiterleitung auf `http://127.0.0.1:8188`, kein beliebiges Ziel |
-| Truststore | Siehe [LICENSING.md](LICENSING.md); öffentliche Ausstellerschlüssel, gegen Adapteränderungen geschützt |
+| `bind` | `0.0.0.0` – IPv4-Schnittstellen des Geräts |
+| `secure` / `auth` | `true` / `true` |
+| `certPublic` / `certPrivate` | `defaultPublic` / `defaultPrivate` – vorhandene ioBroker-Zertifikatsnamen |
+| `eosExternalOrigin` | Leer im neuen HTTPS-Profil, direkt und mit optionalem 443-/HTTPS-Upstream |
+| `eosLockLegacyAdmin` | `false`; alte Legacy-Lock-Flags bleiben ohne automatische Sperrwirkung |
+| Aufruf mit Geräte-IP | `https://<Geräte-IP>:8188/` |
+| Aufruf mit lokalem Namen | `https://NexoWattEOS:8188/` erst nach passender Namensauflösung/Zertifikateinrichtung |
+| Lizenz-Truststore | Öffentliche Ausstellerschlüssel nach [LICENSING.md](LICENSING.md) |
 
-Kein HTTP-Login im LAN freischalten. IPv4- und IPv6-Erreichbarkeit kontrollieren.
-WebSocket-Upgrades und SSE ohne verzögernde Pufferung durchleiten. Der Eingang muss
-fremde Forwarding-/Identitätsheader entfernen oder kontrolliert ersetzen. TLS443
-benötigt begrenzte Systemrechte am Eingangsdienst; dem gemeinsamen Node-Interpreter
-oder ioBroker-Prozess werden dafür keine pauschalen Root-/Port-Capabilities gegeben.
+5. Zertifikat und privaten Schlüssel unter den eingetragenen Namen prüfen. Das normale
+   erste ioBroker-Setup erzeugt `defaultPublic`/`defaultPrivate`. Beim untersuchten
+   Controller 7.2.5 enthält das Standardzertifikat den Betriebssystem-Hostnamen als
+   SAN, nicht automatisch die Geräte-IP oder `NexoWattEOS`. Keine mitgelieferten
+   gemeinsamen Schlüssel erwarten. Das verwendete Zertifikat muss die verwendete
+   IP als IP-SAN oder den verwendeten Gerätenamen als DNS-SAN enthalten. Sein
+   Aussteller muss auf den Bediengeräten vertraut sein. Ein TLS-Fehler wird behoben;
+   weder Authentisierung noch TLS als Umgehung deaktivieren. **`iobroker setup first`
+   nicht als Zertifikatreparatur wiederholen:** Es erzeugt das globale Standard-
+   Schlüsselpaar erneut und kann bestehende Zertifikatsbindungen/Vertrauensstellungen
+   verändern. Benötigtes Zertifikat gezielt und kontrolliert bereitstellen.
+6. `https://<Geräte-IP>:8188/` öffnen. `/login.html` ist die sichtbare Anmeldung.
+   Gemeinsame OAuth-Anmeldung und Erstpasswortwechsel sind unterstützt; TOTP-Challenge
+   und Passkeys noch nicht. Vorhandenes `common.externalAuthentication.totp` außer
+   `null`/nicht vorhanden oder fehlerhaftes `externalAuthentication` sperrt sicher,
+   ohne Passwort-only-Rückfall. Bestehende MFA nicht zur Umgehung abschalten.
+7. Nach erster berechtigter Anmeldung einmal die zentrale EOS-Lizenz aktivieren.
+   Dashboard `/`, Installer `/installer/` und System `/system/` verwenden denselben
+   Login. Es wird keine zusätzliche UI-Lizenz eingegeben. Neustart, Rollenentzug,
+   Offlinebetrieb und Wiederherstellung nach [COMMISSIONING.md](COMMISSIONING.md)
+   prüfen. Der zentrale Logout meldet derzeit alle parallelen Nutzer einschließlich
+   Socket/SSE ab; das ist noch kein Einzelsitzungslogout.
 
-Der mitgelieferte [HTTPS-Eingang und Offline-Migrationsplan](../../deploy/README.md)
-beschreibt die konkreten Werkzeuge und verbleibenden Grenzen. Der Migrationsplan
-übernimmt keine Daten selbst in eine laufende Anlage.
+`NexoWattEOS` wird nicht durch die Adapterinstallation als DNS-Name angelegt. Der
+lokale DNS-/Routereintrag oder ein bewusst verwalteter Hosts-Eintrag muss auf die
+Geräte-IP zeigen. Änderungen von IP oder Name erfordern einen erneut passenden
+Zertifikatsbezug. Ohne diese Einrichtung zuerst die tatsächliche IP verwenden.
 
-5. `https://<Geräte-IP>/` öffnen. Die einzige sichtbare Anmeldung liegt unter
-   `/login.html`. Nach der ersten berechtigten Anmeldung die zentrale Lizenz
-   aktivieren; danach kein erneutes Lizenzieren der UI. Gemeinsame OAuth-Anmeldung
-   und Erstpasswortwechsel sind unterstützt; TOTP-Challenges/Passkeys noch nicht.
-   Ein vorhandenes `common.externalAuthentication.totp` (außer `null`/nicht vorhanden)
-   beziehungsweise fehlerhaftes `externalAuthentication` sperrt den Zugang ohne
-   Passwort-only-Rückfall. Solche Konten können diesen Alpha-Login nicht nutzen.
-   Bestehende MFA nicht allein zum Umgehen dieser Sperre abschalten. Ablauf: [LICENSING.md](LICENSING.md).
-6. Dashboard `/`, Installer `/installer/` und System `/system/` mit den jeweiligen
-   Rollen prüfen. Authentisierung nutzt `/api/auth/status`, `/api/auth/login` und
-   `/api/auth/logout`; zentrale Lizenzrouten liegen unter `/nexowatt/license`.
-7. Neustart, Logout, Rechteentzug, Offlinebetrieb und Wiederherstellung prüfen. Der
-   zentrale Alpha-Logout meldet über eine globale Sitzungsgeneration **alle parallelen
-   Nutzer** einschließlich Socket/SSE ab; er ist kein isolierter Einzelsitzungslogout.
-   Dieses Verhalten mit mindestens zwei gleichzeitig angemeldeten Nutzern prüfen und
-   Befunde protokollieren. Erst dann den freigegebenen Praxistestumfang erweitern.
+## Optional: Zugang ohne Port über 443
 
-Wenn der HTTPS-Eingang fehlt, liefert `https://IP` nicht automatisch Port 8188.
-Ein Portkonflikt oder Zertifikatsfehler wird behoben; kein Ausweichen auf einen
-unbekannten Port oder ungeschützten Login. `/system/` ist kein zweiter offener Admin.
+Für `https://NexoWattEOS/` oder `https://<Geräte-IP>/` wird ein gesonderter
+HTTPS-Eingang benötigt. Die [Deploymentanleitung](../../deploy/README.md) beschreibt
+dessen konkrete Zertifikate und CA-geprüften **HTTPS-Upstream** auf EOS:8188.
+`eosExternalOrigin` bleibt auch hier **leer**, damit direkte IP-/Namenszugänge und
+der optionale 443-Zugang im vorgesehenen HTTPS-Profil parallel möglich bleiben.
+Ein fester Einzel-Origin würde die anderen Zugänge ausschließen. Nur das bewusst
+gewählte ältere HTTP-Loopback-Profil erfordert eine exakte externe HTTPS-Origin;
+seine abweichenden Bedingungen stehen in der Deploymentanleitung. Dieses Altprofil
+nicht mit dem neuen HTTPS-Profil mischen und niemals die Upstream-Zertifikatsprüfung
+als Fehlerumgehung deaktivieren.
+
+Nginx, DNS, Zertifikate und Hostfirewall werden nicht durch npm automatisch
+installiert oder umgestellt. Der gemeinsame Node-/ioBroker-Prozess erhält keine
+Rootrechte und keine pauschale `CAP_NET_BIND_SERVICE` auf der Node-Binärdatei.
+Direkter HTTPS-Zugang und optionaler 443-Proxy sind getrennt zu testen: Zertifikat,
+Origin/Host, Login, WebSocket, SSE, Erreichbarkeit und Fehlerreaktion.
+
+Bei einem verlorenen früheren Adminzugang gelten
+[Zugangserhalt 9.0.1](ACCESS_RECOVERY_9.0.1.md) und die dort verlinkte
+Recovery-Anleitung. Keine alten Bind-/TLS-/Passwortwerte raten. Portkonflikte
+explizit auflösen; kein stilles Ausweichen auf einen anderen Port.

@@ -1,0 +1,54 @@
+[
+  {
+    "label": "runtime",
+    "auditExit": 0,
+    "sbomExit": 0,
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    }
+  },
+  {
+    "label": "frontend",
+    "auditExit": 0,
+    "sbomExit": 0,
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    }
+  },
+  {
+    "label": "installer",
+    "auditExit": 0,
+    "sbomExit": 0,
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    }
+  },
+  {
+    "label": "build-environment",
+    "auditExit": 1,
+    "sbomExit": 0,
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 14,
+      "high": 0,
+      "critical": 0,
+      "total": 14
+    }
+  }
+]

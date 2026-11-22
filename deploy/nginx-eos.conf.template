@@ -1,7 +1,15 @@
-# NexoWatt EOS 9.0.0-alpha.1 — inside nginx's http {} context.
+# NexoWatt EOS — inside nginx's http {} context.
 # Generate with render-ingress.cjs; certificate and key are never shipped.
-# Runtime adapter: native.bind=127.0.0.1, native.port=8188, native.secure=false,
-# native.eosExternalOrigin=https://@@DEVICE_IP@@
+# Default upstream: HTTPS, fixed loopback socket; certificate verification required.
+# Runtime: native.port=8188, native.secure=true, native.bind=0.0.0.0 (or ::),
+# native.eosExternalOrigin="" for the supported direct-IP/name access profile.
+# Explicit legacy HTTP mode instead requires bind=127.0.0.1, secure=false,
+# eosExternalOrigin=https://@@DEVICE_IP@@ and accepts only the canonical IP host.
+
+map $http_host $eos_allowed_host {
+    default 0;
+@@ALLOWED_HOSTS@@
+}
 
 map $http_upgrade $eos_connection_upgrade {
     default upgrade;
@@ -11,10 +19,10 @@ map $http_upgrade $eos_connection_upgrade {
 server {
     listen 443 ssl;
     listen [::]:443 ssl;
-    server_name @@DEVICE_IP@@;
+    server_name @@SERVER_NAMES@@;
 
-    # Pin the origin. Never derive a redirect or upstream host from client data.
-    if ($host != "@@DEVICE_IP@@") { return 421; }
+    # Exact host/port allowlist; no wildcard and no redirect from client input.
+    if ($eos_allowed_host = 0) { return 421; }
 
     ssl_certificate @@CERTIFICATE@@;
     ssl_certificate_key @@PRIVATE_KEY@@;
@@ -31,7 +39,8 @@ server {
     error_log /var/log/nginx/nexowatt-eos-error.log warn;
 
     location / {
-        proxy_pass http://127.0.0.1:8188;
+        proxy_pass @@UPSTREAM_PROTOCOL@@://127.0.0.1:8188;
+        @@UPSTREAM_TLS@@
         proxy_http_version 1.1;
         proxy_connect_timeout 5s;
         proxy_send_timeout 60s;
@@ -43,7 +52,7 @@ server {
         # Explicit allowlist strips client identity and forwarding headers.
         # These headers convey transport/browser inputs, never a trusted role.
         proxy_pass_request_headers off;
-        proxy_set_header Host "@@DEVICE_IP@@";
+        proxy_set_header Host $http_host;
         proxy_set_header X-Forwarded-Proto https;
         proxy_set_header Content-Type $http_content_type;
         proxy_set_header Cookie $http_cookie;
@@ -54,6 +63,7 @@ server {
         proxy_set_header User-Agent $http_user_agent;
         proxy_set_header Sec-Fetch-Site $http_sec_fetch_site;
         proxy_set_header Sec-Fetch-Mode $http_sec_fetch_mode;
+        proxy_set_header Sec-Fetch-Dest $http_sec_fetch_dest;
         proxy_set_header X-Requested-With $http_x_requested_with;
         proxy_set_header X-NW-CSRF $http_x_nw_csrf;
         proxy_set_header X-EOS-License $http_x_eos_license;
@@ -80,6 +90,6 @@ server {
 # server {
 #     listen 80;
 #     listen [::]:80;
-#     server_name @@DEVICE_IP@@;
+#     server_name @@SERVER_NAMES@@;
 #     return 308 https://@@DEVICE_IP@@$request_uri;
 # }

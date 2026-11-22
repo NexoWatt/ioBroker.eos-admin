@@ -117,3 +117,76 @@ test('fresh UI snapshot never converts revoked Home to Pro; control retains only
     assert.equal(ModuleManager.prototype._licenseAllowsApp.call({adapter:h.adapter}, 'storage'), true);
   } finally { await h.close(); }
 });
+
+test('blocked hosted startup resumes once only after fresh ownership and central license confirmation', async () => {
+  const Module = require('node:module');
+  const { createHarness } = require('./http-harness.cjs');
+  const h = await createHarness();
+  const timers = new Set();
+  const fakeTimer = () => { const value = { unref() {}, ref() {} }; timers.add(value); return value; };
+  h.owner.setTimeout = h.owner.setInterval = fakeTimer;
+  h.owner.clearTimeout = h.owner.clearInterval = value => timers.delete(value);
+  h.owner.delObjectAsync = async () => {};
+  h.owner.subscribeForeignStates = h.owner.subscribeForeignObjects = h.owner.unsubscribeForeignStates = () => {};
+  h.owner.unsubscribeForeignStatesAsync = async () => {};
+  h.owner.getObjectListAsync = async () => ({ rows: [] });
+  h.owner.decrypt = h.owner.encrypt = value => value;
+  h.owner.host = 'fixture';
+  let writable = false;
+  let licensed = true;
+  const validLicense = h.bridge.getLicense();
+  h.bridge.canWrite = () => writable;
+  h.bridge.getLicense = () => licensed ? validLicense : { valid: false, coreEnabled: false };
+  let stateWrites = 0;
+  const originalSetState = h.owner.setStateAsync;
+  h.owner.setStateAsync = async (...args) => { stateWrites++; return originalSetState(...args); };
+  const runtime = createHostedRuntime(h.owner, h.bridge);
+  const originalLoad = Module._load;
+  Module._load = function (name, ...args) {
+    if (name === '@iobroker/adapter-core') return { getAbsoluteInstanceDataDir: () => '/tmp/nexowatt-hosted-handover-test' };
+    return originalLoad.call(this, name, ...args);
+  };
+  try {
+    await runtime.start();
+    assert.equal(runtime.status().state, 'blocked');
+    assert.equal(runtime.status().emsReady, false);
+    assert.equal(stateWrites, 0, 'no operational writes while the legacy writer owns control');
+    await runtime.startOperational();
+    assert.equal(runtime.status().state, 'blocked');
+    assert.equal(stateWrites, 0);
+
+    writable = true;
+    licensed = false;
+    await runtime.startOperational();
+    assert.equal(runtime.status().state, 'blocked');
+    assert.equal(runtime.status().emsReady, false);
+    assert.equal(stateWrites, 0, 'ownership alone cannot replace a central core license');
+
+    licensed = true;
+    let ownershipReads = 0;
+    h.bridge.canWrite = () => ++ownershipReads === 1;
+    await runtime.startOperational();
+    assert.ok(ownershipReads >= 2, 'onReady must recheck ownership before operational initialization');
+    assert.equal(runtime.status().state, 'blocked');
+    assert.equal(runtime.status().emsReady, false);
+    assert.equal(stateWrites, 0, 'ownership lost during the retry must remain fail closed');
+
+    h.bridge.canWrite = () => writable;
+    await runtime.startOperational();
+    assert.equal(runtime.status().state, 'ready');
+    assert.equal(runtime.status().emsReady, true);
+    assert.ok(h.states.size > 700);
+    assert.ok(h.objects.size > 2000);
+    assert.ok(timers.size > 0);
+    const readyWrites = stateWrites;
+    const readyTimers = timers.size;
+    await Promise.all([runtime.startOperational(), runtime.startOperational(), runtime.start()]);
+    assert.equal(runtime.status().state, 'ready');
+    assert.equal(stateWrites, readyWrites, 'a successful handover initializes operational control only once');
+    assert.equal(timers.size, readyTimers);
+  } finally {
+    Module._load = originalLoad;
+    await runtime.stop();
+    await h.close();
+  }
+});

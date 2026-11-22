@@ -1,5 +1,6 @@
 'use strict';
 const { safeCode } = require('./eosLicenseService');
+const { hostOrigin } = require('./eosUnifiedBoundary');
 function isLocal(address) {
     return address === '127.0.0.1' || address === '::1' || address === '::ffff:127.0.0.1';
 }
@@ -19,11 +20,12 @@ function publicOriginValue(value) {
 function sameOrigin(req, secure, publicOrigin) {
     // Neither forwarded-host nor forwarded-proto is a trust source here.
     try {
-        const expected = publicOriginValue(publicOrigin) || `${secure ? 'https' : 'http'}://${req.headers.host}`;
-        const origin = new URL(req.headers.origin);
-        return (req.headers.origin === origin.origin &&
-            origin.origin === expected &&
-            (!publicOrigin || req.headers.host === new URL(expected).host) &&
+        const configuredOrigin = publicOriginValue(publicOrigin);
+        const requestOrigin = hostOrigin(req, secure || !!configuredOrigin);
+        const expected = configuredOrigin || requestOrigin;
+        return (!!requestOrigin &&
+            req.headers.origin === expected &&
+            (!configuredOrigin || requestOrigin === configuredOrigin) &&
             req.headers['x-eos-license'] === '1' &&
             (!req.headers['sec-fetch-site'] || req.headers['sec-fetch-site'] === 'same-origin'));
     }

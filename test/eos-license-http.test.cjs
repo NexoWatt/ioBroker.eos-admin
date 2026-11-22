@@ -121,6 +121,34 @@ test('secure admin activation invokes parser after authorization and returns no 
     assert.equal(response.headers['cache-control'], 'no-store');
 });
 
+test('activation canonicalizes TLS Host case and default443 without changing admin/Origin requirements', async () => {
+    for (const host of ['nexowatteos:443', 'NexoWattEOS', 'NexoWattEOS:443']) {
+        const h = harness();
+        const response = await h.dispatch('POST', '/nexowatt/license/activate', {
+            headers: { host, origin: 'https://nexowatteos' }, body: { token: 'NWL3.test.signature' },
+        });
+        assert.equal(response.status, 200, host);
+        assert.deepEqual(h.calls, [['activate', 'NWL3.test.signature']]);
+    }
+    const fixed = harness({ publicOrigin: 'https://nexowatteos' });
+    assert.equal((await fixed.dispatch('POST', '/nexowatt/license/activate', {
+        headers: { host: 'NexoWattEOS:443', origin: 'https://nexowatteos' },
+        socket: { remoteAddress: '127.0.0.1' }, body: { token: 'NWL3.test.signature' },
+    })).status, 200);
+});
+
+test('ambiguous Host authorities cannot activate even when the Origin or forwarding headers look trusted', async () => {
+    for (const host of [undefined, '', 'https://nexowatteos', 'user@nexowatteos', 'nexowatteos/path',
+        'nexowatteos,foreign.invalid', 'nexowatteos:65536', 'nexowatt eos', '%6eexowatteos']) {
+        const h = harness();
+        denied(await h.dispatch('POST', '/nexowatt/license/activate', {
+            headers: { host, origin: 'https://nexowatteos', 'x-forwarded-host': 'nexowatteos' },
+            body: { token: 'SECRET' },
+        }), 'LICENSE_ORIGIN');
+        assert.deepEqual(h.calls, []);
+    }
+});
+
 test('cross-origin, missing origin/header and cross-site writes fail before parser', async () => {
     for (const headers of [
         { origin: 'https://evil.test' }, { origin: undefined }, { origin: 'null' },

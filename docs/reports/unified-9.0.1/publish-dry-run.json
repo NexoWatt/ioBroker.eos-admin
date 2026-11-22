@@ -1,0 +1,4921 @@
+{
+  "iobroker.eos-admin": {
+    "id": "iobroker.eos-admin@9.0.1",
+    "name": "iobroker.eos-admin",
+    "version": "9.0.1",
+    "size": 24497007,
+    "unpackedSize": 65416944,
+    "shasum": "eb9c0a3d881df016c3f5b27aece601f3f86d8a70",
+    "integrity": "sha512-tocAiObpJNmEDFC2PnSFb8dx97TYnkhEblwBTMHkqynE0vGudET/bFJa8XOdwmw7vqz/0C/8ibd8UCGq5waetg==",
+    "filename": "iobroker.eos-admin-9.0.1.tgz",
+    "files": [
+      {
+        "path": "LICENSE",
+        "size": 4422,
+        "mode": 420
+      },
+      {
+        "path": "LICENSE-NEXOWATT.md",
+        "size": 3216,
+        "mode": 420
+      },
+      {
+        "path": "NEXOWATT_EOS_BUILD_INFO.json",
+        "size": 1449,
+        "mode": 420
+      },
+      {
+        "path": "NEXOWATT_PROPRIETARY_LICENSE.md",
+        "size": 3238,
+        "mode": 420
+      },
+      {
+        "path": "README.md",
+        "size": 7232,
+        "mode": 420
+      },
+      {
+        "path": "START_HIER_9.0.1.md",
+        "size": 3653,
+        "mode": 420
+      },
+      {
+        "path": "THIRD_PARTY_NOTICES.md",
+        "size": 4246,
+        "mode": 420
+      },
+      {
+        "path": "THIRD-PARTY-NOTICES.md",
+        "size": 3211,
+        "mode": 420
+      },
+      {
+        "path": "admin/admin.png",
+        "size": 149798,
+        "mode": 420
+      },
+      {
+        "path": "admin/admin.svg",
+        "size": 40087,
+        "mode": 420
+      },
+      {
+        "path": "admin/custom/assets/_virtual_mf___mfe_internal__AdminComponentEasyAccessSet__mf_owner__1__loadShare___mf_0_iobroker_mf_1_gui_mf_2_components__loadShare__.js-wBTkI4zM.js",
+        "size": 6962279,
+        "mode": 420
+      },
+      {
+        "path": "admin/custom/assets/_virtual_mf___mfe_internal__AdminComponentEasyAccessSet__mf_owner__1__loadShare___mf_0_iobroker_mf_1_json_mf_2_config__loadShare__.js-BgmCjhru.js",
+        "size": 1392095,
+        "mode": 420
+      },
+      {
+        "path": "admin/custom/assets/_virtual_mf___mfe_internal__AdminComponentEasyAccessSet__mf_owner__1__loadShare__react_mf_2_dom_mf_1_client__loadShare__.js-DaGIWOY8.js",
+        "size": 181321,
+        "mode": 420
+      },
+      {
+        "path": "admin/custom/assets/_virtual_mf-localSharedImportMap___mfe_internal__AdminComponentEasyAccessSet__mf_owner__1-C-YSgZ8j.js",
+        "size": 5471,
+        "mode": 420
+      },
+      {
+        "path": "admin/custom/assets/Components-I39zZDnw.js",
+        "size": 1967,
+        "mode": 420
+      },
+      {
+        "path": "admin/custom/assets/hostInit-CExI67Q9.js",
+        "size": 2572,
+        "mode": 420
+      },
+      {
+        "path": "admin/custom/assets/index-PfxLVs-2.js",
+        "size": 1354,
+        "mode": 420
+      },
+      {
+        "path": "admin/custom/assets/lib-BR4qb34w.js",
+        "size": 23338,
+        "mode": 420
+      },
+      {
+        "path": "admin/custom/assets/mf-entry-bootstrap-0-5d5a409e.js",
+        "size": 1566,
+        "mode": 420
+      },
+      {
+        "path": "admin/custom/assets/rolldown-runtime-C0FnF6B9.js",
+        "size": 1291,
+        "mode": 420
+      },
+      {
+        "path": "admin/custom/assets/virtual_mf-exposes___mfe_internal__AdminComponentEasyAccessSet__customComponents_js-D15lsoU9.js",
+        "size": 1140,
+        "mode": 420
+      },
+      {
+        "path": "admin/custom/assets/virtual_mf-REMOTE_ENTRY_ID___mfe_internal__AdminComponentEasyAccessSet__customComponents_js-DMGIttnZ.js",
+        "size": 18108,
+        "mode": 420
+      },
+      {
+        "path": "admin/custom/assets/virtualExposes-31pkFC9v.js",
+        "size": 139,
+        "mode": 420
+      },
+      {
+        "path": "admin/custom/assets/vite-preload-helper-B7qeedMF.js",
+        "size": 1243,
+        "mode": 420
+      },
+      {
+        "path": "admin/custom/customComponents.js",
+        "size": 978,
+        "mode": 420
+      },
+      {
+        "path": "admin/custom/i18n/de.json",
+        "size": 111,
+        "mode": 420
+      },
+      {
+        "path": "admin/custom/i18n/en.json",
+        "size": 106,
+        "mode": 420
+      },
+      {
+        "path": "admin/custom/i18n/es.json",
+        "size": 120,
+        "mode": 420
+      },
+      {
+        "path": "admin/custom/i18n/fr.json",
+        "size": 118,
+        "mode": 420
+      },
+      {
+        "path": "admin/custom/i18n/it.json",
+        "size": 105,
+        "mode": 420
+      },
+      {
+        "path": "admin/custom/i18n/nl.json",
+        "size": 113,
+        "mode": 420
+      },
+      {
+        "path": "admin/custom/i18n/pl.json",
+        "size": 115,
+        "mode": 420
+      },
+      {
+        "path": "admin/custom/i18n/pt.json",
+        "size": 116,
+        "mode": 420
+      },
+      {
+        "path": "admin/custom/i18n/ru.json",
+        "size": 162,
+        "mode": 420
+      },
+      {
+        "path": "admin/custom/i18n/zh-cn.json",
+        "size": 107,
+        "mode": 420
+      },
+      {
+        "path": "admin/custom/mf-manifest.json",
+        "size": 4433,
+        "mode": 420
+      },
+      {
+        "path": "admin/favicon.ico",
+        "size": 13608,
+        "mode": 420
+      },
+      {
+        "path": "admin/i18n/de.json",
+        "size": 10135,
+        "mode": 420
+      },
+      {
+        "path": "admin/i18n/en.json",
+        "size": 8547,
+        "mode": 420
+      },
+      {
+        "path": "admin/i18n/es.json",
+        "size": 9209,
+        "mode": 420
+      },
+      {
+        "path": "admin/i18n/fr.json",
+        "size": 9307,
+        "mode": 420
+      },
+      {
+        "path": "admin/i18n/it.json",
+        "size": 9122,
+        "mode": 420
+      },
+      {
+        "path": "admin/i18n/nl.json",
+        "size": 8804,
+        "mode": 420
+      },
+      {
+        "path": "admin/i18n/pl.json",
+        "size": 8895,
+        "mode": 420
+      },
+      {
+        "path": "admin/i18n/pt.json",
+        "size": 9028,
+        "mode": 420
+      },
+      {
+        "path": "admin/i18n/ru.json",
+        "size": 11135,
+        "mode": 420
+      },
+      {
+        "path": "admin/i18n/uk.json",
+        "size": 12120,
+        "mode": 420
+      },
+      {
+        "path": "admin/i18n/zh-cn.json",
+        "size": 8171,
+        "mode": 420
+      },
+      {
+        "path": "admin/img/eos/eos-logo.svg",
+        "size": 40087,
+        "mode": 420
+      },
+      {
+        "path": "admin/img/eos/nexowatt-16.png",
+        "size": 769,
+        "mode": 420
+      },
+      {
+        "path": "admin/img/eos/nexowatt-32.png",
+        "size": 2259,
+        "mode": 420
+      },
+      {
+        "path": "admin/img/eos/nexowatt-48.png",
+        "size": 4245,
+        "mode": 420
+      },
+      {
+        "path": "admin/img/eos/nexowatt-64.png",
+        "size": 6265,
+        "mode": 420
+      },
+      {
+        "path": "admin/img/eos/nexowatt-120.png",
+        "size": 15374,
+        "mode": 420
+      },
+      {
+        "path": "admin/img/eos/nexowatt-128.png",
+        "size": 2942,
+        "mode": 420
+      },
+      {
+        "path": "admin/img/eos/nexowatt-152.png",
+        "size": 21295,
+        "mode": 420
+      },
+      {
+        "path": "admin/img/eos/nexowatt-180.png",
+        "size": 26911,
+        "mode": 420
+      },
+      {
+        "path": "admin/img/eos/nexowatt-192.png",
+        "size": 29884,
+        "mode": 420
+      },
+      {
+        "path": "admin/img/eos/nexowatt-256.png",
+        "size": 45907,
+        "mode": 420
+      },
+      {
+        "path": "admin/img/eos/nexowatt-384.png",
+        "size": 89658,
+        "mode": 420
+      },
+      {
+        "path": "admin/img/eos/nexowatt-512.png",
+        "size": 149798,
+        "mode": 420
+      },
+      {
+        "path": "admin/img/eos/nexowatt-eos-brand-wide.png",
+        "size": 258077,
+        "mode": 420
+      },
+      {
+        "path": "admin/img/eos/nexowatt-logo.png",
+        "size": 1466889,
+        "mode": 420
+      },
+      {
+        "path": "admin/jsonConfig.json5",
+        "size": 26438,
+        "mode": 420
+      },
+      {
+        "path": "admin/LICENSE-NEXOWATT.md",
+        "size": 3238,
+        "mode": 420
+      },
+      {
+        "path": "admin/README.md",
+        "size": 103,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/.vite/manifest.json",
+        "size": 24689,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/admin.svg",
+        "size": 40087,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/_virtual_mf-localSharedImportMap___mfe_internal__iobroker_admin__mf_owner__1-uaKFfE5p.js",
+        "size": 12809,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/AccessTime-5f47qrw7.js",
+        "size": 321,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/AceEditor-CJ-_Ev2E.js",
+        "size": 153339,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/Adapters-CoWFw4Ow.js",
+        "size": 137033,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/AdapterUpdateDialog-D8ulYOHN.js",
+        "size": 49746,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/AdminUtils-CopxRJZ2.js",
+        "size": 16347,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/Apps-BKnx1gzD.js",
+        "size": 221,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/Book-DrhneQH0.js",
+        "size": 205,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/bootstrap-BxGG6BRn.css",
+        "size": 9739,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/bootstrap-C7_zPHc0.js",
+        "size": 2009524,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/Cached-XJmxLN4E.js",
+        "size": 327,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/classPrivateFieldGet2-CBZxMSQ4.js",
+        "size": 528,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/Computer-DDMBRY5r.js",
+        "size": 217,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/Config-BwTa1LdH.js",
+        "size": 13310,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/ConfigManager-5YmtP8y3.js",
+        "size": 2407,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/ctrlEnter-CruFIPb_.js",
+        "size": 175,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/CustomModal-DjI4oCb8.js",
+        "size": 2083,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/CustomTab-_HYUrXsZ.js",
+        "size": 6084,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/date-fns-ukillHs-.js",
+        "size": 32874,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/DeleteForever-Caoe64_y.js",
+        "size": 305,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/EasyMode-CCRqFtQq.js",
+        "size": 4569,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/echarts-BDq-rBJC.png",
+        "size": 5816,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/en-US-BjjaEI6N.js",
+        "size": 7893,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/Enums--DQqIsYk.js",
+        "size": 83442,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/Extension-D-tNJv4S.js",
+        "size": 396,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/Fields-BgPmyEzU.js",
+        "size": 2383,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/Files-DFbOeVNW.js",
+        "size": 44165,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/group1-CmFsZszo.svg",
+        "size": 8788,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/group2-CuvSswwx.svg",
+        "size": 12061,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/group3-CRAMNPrf.svg",
+        "size": 11751,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/group4-D4IM6-jV.svg",
+        "size": 8261,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/group5-T3CGkJFm.svg",
+        "size": 7556,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/group6-CLVorg7G.svg",
+        "size": 11446,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/group7-D-h4KR6w.svg",
+        "size": 10357,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/group8-BXzJmR7Y.svg",
+        "size": 24175,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/group10-Dp9tRs6I.svg",
+        "size": 14688,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/helpers-CDcY0YJ-.js",
+        "size": 99,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/hostInit-DkzaL8wW.js",
+        "size": 6198,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/Hosts-DXJV8G8J.js",
+        "size": 136954,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/iconLibraryData-B5fiyl1C.js",
+        "size": 264143,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/icons-material-HRAGWYGJ.js",
+        "size": 3816290,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/index-CoQoychw.js",
+        "size": 1244,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/InfoOutlined-DIGDQvu6.js",
+        "size": 261,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/installSVGRenderer-CyxJul0p.js",
+        "size": 525236,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/Instances-DSiQ6duQ.js",
+        "size": 199792,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/Intro-Dgi7ifru.js",
+        "size": 57777,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/isSameWeek-WMSJR5Qs.js",
+        "size": 139,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/KeyboardArrowRight-DVPBjTKi.js",
+        "size": 329,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/lib-BZRGBDoe.js",
+        "size": 23205,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/loadShare-eager-BpwDZfDr.js",
+        "size": 4268135,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/locale-DN6Bdkdt.js",
+        "size": 608597,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/logo-vO-KvdxW.svg",
+        "size": 40087,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/Logs-ghAmyEkh.js",
+        "size": 25074,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/material-nACPaH8J.woff",
+        "size": 64000,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/material-peAUziEw.woff2",
+        "size": 60832,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/mf-entry-bootstrap-0-c25dc02e.js",
+        "size": 2162,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/MoreHoriz-BYaCptH0.js",
+        "size": 1043,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/Objects-CP-JSTfm.js",
+        "size": 374550,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/Overview-CyT0Nazg.js",
+        "size": 35024,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/Pageview-DFHddrKX.js",
+        "size": 1161,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/pendingShares-D1Vr_qYv.js",
+        "size": 1559,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/PersonOff-BwYQLD1M.js",
+        "size": 889,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/prod-ChPGnyiA.js",
+        "size": 92192,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/PushPinOutlined-CEBeTmNm.js",
+        "size": 483,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/Remove-BPxvNccW.js",
+        "size": 124,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/rolldown-runtime-sJBDdmOt.js",
+        "size": 1207,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/Schedule-BQlh1nhQ.js",
+        "size": 319,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/sentry-BFzW-2KQ.js",
+        "size": 4088,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/setYear-DhVdgUBF.js",
+        "size": 38819,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/Star-ChMjBwLn.js",
+        "size": 2822,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/State-DNaLbHQw.js",
+        "size": 533,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/Storage-DrC3j-wf.js",
+        "size": 183,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/TextSnippet-BQ4TSmvS.js",
+        "size": 282,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/Timeline-CEyldmz2.js",
+        "size": 651,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/Timer-I0twtyWh.js",
+        "size": 1173,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/UnfoldMore-_DDSfPKk.js",
+        "size": 357,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/Usb-Dwk7qdYu.js",
+        "size": 1034,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/UsedResources-BiMAlgAN.js",
+        "size": 6692,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/user1-D1GAYfim.svg",
+        "size": 9647,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/user2-kVvfO6hI.svg",
+        "size": 4907,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/user3-B1MPu8jB.svg",
+        "size": 5301,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/user4-DmVDIOoi.svg",
+        "size": 5493,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/user5-DwFpzcW1.svg",
+        "size": 4192,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/user6-DHgFm0fc.svg",
+        "size": 7893,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/user7-DkJFgUmb.svg",
+        "size": 5151,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/user8-BZA6Afc4.svg",
+        "size": 6523,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/user9-BLdaSIG0.svg",
+        "size": 6874,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/user10-DvWuZ_uc.svg",
+        "size": 5301,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/user11-Ch5DvO34.svg",
+        "size": 7048,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/user12-DEiNnJWd.svg",
+        "size": 7880,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/Users-Dr8oETZH.js",
+        "size": 29779,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/ViewCompact-BbfomOIi.js",
+        "size": 814,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/ViewList-1pB5VinA.js",
+        "size": 185,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/ViewSidebar-DdedDirX.js",
+        "size": 1304,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/vite-preload-helper-BbbETgeG.js",
+        "size": 1566,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/VpnKey-o8QeqmnU.js",
+        "size": 258,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/WifiTethering-Cp63fmkC.js",
+        "size": 7293,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/wizard-finish-B2y4teLv.jpg",
+        "size": 195745,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/wizard-welcome-BhniCBF1.jpg",
+        "size": 1096897,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/assets/zh-cn-B6dBxOyw.js",
+        "size": 148008,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/css/adapter.css",
+        "size": 33285,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/css/adapter.css.map",
+        "size": 59706,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/css/admin.css",
+        "size": 20918,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/css/admin.css.map",
+        "size": 35597,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/css/app.css",
+        "size": 88716,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/css/app.css.map",
+        "size": 168888,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/css/eos-auto-update.css",
+        "size": 2719,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/css/eos-ems-overview.css",
+        "size": 6195,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/css/images/layers-2x.png",
+        "size": 1259,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/css/images/layers.png",
+        "size": 696,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/css/images/marker-icon-2x.png",
+        "size": 2464,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/css/images/marker-icon.png",
+        "size": 1466,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/css/images/marker-shadow.png",
+        "size": 618,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/css/leaflet.css",
+        "size": 14375,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/css/nexowatt-native-shell.css",
+        "size": 81052,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/eos-object-browser-guards.json",
+        "size": 184,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/favicon.ico",
+        "size": 76285,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/img/admin.png",
+        "size": 14822,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/img/admin.svg",
+        "size": 40087,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/img/browserError.png",
+        "size": 88820,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/img/eos/eos-logo.svg",
+        "size": 40087,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/img/eos/nexowatt-16.png",
+        "size": 769,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/img/eos/nexowatt-32.png",
+        "size": 2259,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/img/eos/nexowatt-48.png",
+        "size": 4245,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/img/eos/nexowatt-64.png",
+        "size": 6265,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/img/eos/nexowatt-120.png",
+        "size": 15374,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/img/eos/nexowatt-128.png",
+        "size": 2942,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/img/eos/nexowatt-152.png",
+        "size": 21295,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/img/eos/nexowatt-180.png",
+        "size": 26911,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/img/eos/nexowatt-192.png",
+        "size": 29884,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/img/eos/nexowatt-256.png",
+        "size": 45907,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/img/eos/nexowatt-384.png",
+        "size": 89658,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/img/eos/nexowatt-512.png",
+        "size": 149798,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/img/eos/nexowatt-eos-brand-wide.png",
+        "size": 258077,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/img/eos/nexowatt-logo.png",
+        "size": 1466889,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/img/le.png",
+        "size": 20168,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/img/logo.svg",
+        "size": 40087,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/img/no-image.svg",
+        "size": 917,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/index.html",
+        "size": 9197,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/js/adapter-settings.js",
+        "size": 117046,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/js/eos-account-management.js",
+        "size": 18359,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/js/eos-assistant.js",
+        "size": 426,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/js/eos-auto-update.js",
+        "size": 7700,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/js/eos-basic-settings.js",
+        "size": 10276,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/js/eos-branding-sanitizer.js",
+        "size": 2882,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/js/eos-ems-overview.js",
+        "size": 19945,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/js/eos-license-link.js",
+        "size": 580,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/js/eos-manual-write-policy.js",
+        "size": 23175,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/js/eos-native-security.js",
+        "size": 1833,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/js/eos-policy-client.js",
+        "size": 8295,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/js/eos-role-bootstrap.js",
+        "size": 44752,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/js/eos-role-ui.js",
+        "size": 41583,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/js/license.js",
+        "size": 7687,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/js/listHeader.js",
+        "size": 7553,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/js/nexowatt-native-shell.js",
+        "size": 13865,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/js/tableEditor.js",
+        "size": 20034,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/js/translate.js",
+        "size": 4130,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/js/treeTable.js",
+        "size": 37464,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/cron/jquery.cron.css",
+        "size": 285,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/fancytree/channel.pdn",
+        "size": 15751,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/fancytree/channel.png",
+        "size": 1290,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/fancytree/device.pdn",
+        "size": 16243,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/fancytree/device.png",
+        "size": 1446,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/fancytree/icons.gif",
+        "size": 5492,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/fancytree/loading.gif",
+        "size": 3234,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/fancytree/state.pdn",
+        "size": 16111,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/fancytree/state.png",
+        "size": 1414,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/fancytree/ui.fancytree.min-win7.css",
+        "size": 14380,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/fancytree/ui.fancytree.min.css",
+        "size": 20395,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/font-awesome.min.css",
+        "size": 30653,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/images/ajax-loader.gif",
+        "size": 7825,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/images/icons-18-black.png",
+        "size": 1968,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/images/icons-18-white.png",
+        "size": 1988,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/images/icons-36-black.png",
+        "size": 3859,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/images/icons-36-white.png",
+        "size": 3861,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/iob/selectID.css",
+        "size": 9888,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/iob/selectID.css.map",
+        "size": 22460,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/jqGrid/ellipsis-xbl.xml",
+        "size": 480,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/jqGrid/ui.jqgrid-4.5.4.css",
+        "size": 12642,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/jquery-ui-timepicker-addon-1.2.2.css",
+        "size": 487,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/jquery.multiselect-1.13.css",
+        "size": 1601,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/jquery.multiselect.filter.css",
+        "size": 326,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/jquery.treetable.theme.css",
+        "size": 15578,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/jquery.treetable.theme.css.map",
+        "size": 20465,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/materialize.css",
+        "size": 131364,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/ol.css",
+        "size": 3729,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/themes/jquery-ui/default/images/ui-bg_glow-ball_100_efefef_600x600.png",
+        "size": 34054,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/themes/jquery-ui/default/images/ui-bg_highlight-hard_50_c5ddfc_1x100.png",
+        "size": 315,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/themes/jquery-ui/default/images/ui-icons_0a82eb_256x240.png",
+        "size": 4549,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/themes/jquery-ui/default/images/ui-icons_5fa5e3_256x240.png",
+        "size": 4549,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/themes/jquery-ui/default/images/ui-icons_6F6F6F_256x240.png",
+        "size": 6997,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/themes/jquery-ui/default/images/ui-icons_2293f7_256x240.png",
+        "size": 4549,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/themes/jquery-ui/default/images/ui-icons_d8d8d8_256x240.png",
+        "size": 6956,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/themes/jquery-ui/default/images/ui-icons_ffffff_256x240.png",
+        "size": 6299,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/themes/jquery-ui/default/jquery-ui.min.css",
+        "size": 29636,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/themes/jquery-ui/default/jquery-ui.structure.min.css",
+        "size": 14764,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/themes/jquery-ui/default/jquery-ui.theme.min.css",
+        "size": 13327,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/themes/jquery-ui/redmond/images/ui-bg_glow-ball_100_efefef_600x600.png",
+        "size": 34054,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/themes/jquery-ui/redmond/images/ui-bg_highlight-hard_50_c5ddfc_1x100.png",
+        "size": 315,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/themes/jquery-ui/redmond/images/ui-icons_0a82eb_256x240.png",
+        "size": 4549,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/themes/jquery-ui/redmond/images/ui-icons_5fa5e3_256x240.png",
+        "size": 4549,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/themes/jquery-ui/redmond/images/ui-icons_6F6F6F_256x240.png",
+        "size": 6997,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/themes/jquery-ui/redmond/images/ui-icons_2293f7_256x240.png",
+        "size": 4549,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/themes/jquery-ui/redmond/images/ui-icons_555555_256x240.png",
+        "size": 6988,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/themes/jquery-ui/redmond/images/ui-icons_777620_256x240.png",
+        "size": 4549,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/themes/jquery-ui/redmond/images/ui-icons_777777_256x240.png",
+        "size": 6999,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/themes/jquery-ui/redmond/images/ui-icons_cc0000_256x240.png",
+        "size": 4549,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/themes/jquery-ui/redmond/images/ui-icons_d8d8d8_256x240.png",
+        "size": 6956,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/themes/jquery-ui/redmond/images/ui-icons_ffffff_256x240.png",
+        "size": 6299,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/themes/jquery-ui/redmond/jquery-ui.min.css",
+        "size": 29557,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/themes/jquery-ui/redmond/jquery-ui.structure.min.css",
+        "size": 14764,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/css/themes/jquery-ui/redmond/jquery-ui.theme.min.css",
+        "size": 13266,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/fonts/fontawesome-webfont.woff",
+        "size": 98024,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/fonts/fontawesome-webfont.woff2",
+        "size": 77160,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/fonts/material.woff",
+        "size": 64000,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/fonts/material.woff2",
+        "size": 48880,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/ace-1.2.0/ace.js",
+        "size": 345827,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/ace-1.2.0/ext-language_tools.js",
+        "size": 34094,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/ace-1.2.0/ext-searchbox.js",
+        "size": 9916,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/ace-1.2.0/mode-javascript.js",
+        "size": 22858,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/ace-1.2.0/mode-json.js",
+        "size": 11586,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/ace-1.2.0/mode-typescript.js",
+        "size": 20301,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/ace-1.2.0/mode-yaml.js",
+        "size": 3938,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/ace-1.2.0/theme-chrome.js",
+        "size": 2708,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/ace-1.2.0/theme-clouds_midnight.js",
+        "size": 2428,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/ace-1.2.0/worker-javascript.js",
+        "size": 158708,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/ace-1.2.0/worker-json.js",
+        "size": 32833,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/ace/ext-searchbox.js",
+        "size": 14164,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/ace/worker-json.js",
+        "size": 123527,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/colResizable-1.5.min.js",
+        "size": 5783,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/colResizable-1.6.min.js",
+        "size": 5781,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/colResizable-1.6.min.js.map",
+        "size": 32113,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/cron/cron2text.js",
+        "size": 18761,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/cron/jquery.cron.js",
+        "size": 20508,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/cron/jquery.cron.locale.js",
+        "size": 9310,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/cron/jquery.cron.words.js",
+        "size": 17360,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/aes.js",
+        "size": 8649,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/blowfish.js",
+        "size": 21076,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/bower.json",
+        "size": 645,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/cipher-core.js",
+        "size": 29875,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/CONTRIBUTING.md",
+        "size": 482,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/core.js",
+        "size": 23629,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/crypto-js.js",
+        "size": 219092,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/docs/QuickStartGuide.wiki",
+        "size": 18085,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/enc-base64.js",
+        "size": 4081,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/enc-base64url.js",
+        "size": 4605,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/enc-hex.js",
+        "size": 359,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/enc-latin1.js",
+        "size": 362,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/enc-utf8.js",
+        "size": 360,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/enc-utf16.js",
+        "size": 4086,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/evpkdf.js",
+        "size": 3993,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/format-hex.js",
+        "size": 1822,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/format-openssl.js",
+        "size": 416,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/hmac-md5.js",
+        "size": 422,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/hmac-ripemd160.js",
+        "size": 440,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/hmac-sha1.js",
+        "size": 425,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/hmac-sha3.js",
+        "size": 462,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/hmac-sha224.js",
+        "size": 464,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/hmac-sha256.js",
+        "size": 431,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/hmac-sha384.js",
+        "size": 501,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/hmac-sha512.js",
+        "size": 468,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/hmac.js",
+        "size": 3984,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/index.js",
+        "size": 1668,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/lib-typedarrays.js",
+        "size": 2228,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/LICENSE",
+        "size": 1169,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/md5.js",
+        "size": 9418,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/mode-cfb.js",
+        "size": 2115,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/mode-ctr-gladman.js",
+        "size": 2335,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/mode-ctr.js",
+        "size": 1467,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/mode-ecb.js",
+        "size": 893,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/mode-ofb.js",
+        "size": 1330,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/package.json",
+        "size": 719,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/pad-ansix923.js",
+        "size": 1265,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/pad-iso10126.js",
+        "size": 1118,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/pad-iso97971.js",
+        "size": 918,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/pad-nopadding.js",
+        "size": 554,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/pad-pkcs7.js",
+        "size": 411,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/pad-zeropadding.js",
+        "size": 1110,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/pbkdf2.js",
+        "size": 4558,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/rabbit-legacy.js",
+        "size": 6714,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/rabbit.js",
+        "size": 6678,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/rc4.js",
+        "size": 3569,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/README.md",
+        "size": 6449,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/ripemd160.js",
+        "size": 9387,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/sha1.js",
+        "size": 4063,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/sha3.js",
+        "size": 10645,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/sha224.js",
+        "size": 1915,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/sha256.js",
+        "size": 5538,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/sha384.js",
+        "size": 2264,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/sha512.js",
+        "size": 13469,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/tripledes.js",
+        "size": 24878,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/crypto-js/x64-core.js",
+        "size": 8888,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/dropzone.js",
+        "size": 27188,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/jqGrid/grid.locale-all.js",
+        "size": 89030,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/jqGrid/jquery.jqGrid-4.5.4.min.js",
+        "size": 269177,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/jquery-1.11.1.min.js",
+        "size": 95789,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/jquery-1.11.1.min.map",
+        "size": 141680,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/jquery-1.11.2.min.js",
+        "size": 95931,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/jquery-1.11.2.min.map",
+        "size": 142010,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/jquery-3.2.1.min.js",
+        "size": 86659,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/jquery-3.2.1.min.map",
+        "size": 131678,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/jquery-migrate-3.0.1.js",
+        "size": 21968,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/jquery-ui-1.10.3.full.min.js",
+        "size": 228138,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/jquery-ui-1.11.4.full.min.js",
+        "size": 240427,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/jquery-ui.min.js",
+        "size": 240422,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/jquery.fancytree-all.min.js",
+        "size": 110572,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/jquery.fancytree-all.min.js.map",
+        "size": 499717,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/jquery.multiselect-1.13.js",
+        "size": 10634,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/jquery.multiselect-1.13.min.js",
+        "size": 10634,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/jquery.multiselect.filter-1.5pre.js",
+        "size": 5467,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/jquery.treetable.js",
+        "size": 16714,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/jquery.ui.touch-punch.min.js",
+        "size": 1291,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/loStorage.js",
+        "size": 2677,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/materialize.js",
+        "size": 138224,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/materialize.js.map",
+        "size": 424946,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/ol.js",
+        "size": 638689,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/selectID.js",
+        "size": 184276,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/semver.min.js",
+        "size": 12985,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/showdown.min.js",
+        "size": 99094,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/socket.io.js",
+        "size": 10720,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/socket.io.js.map",
+        "size": 38322,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/translate.js",
+        "size": 3757,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/vendor.js",
+        "size": 1024313,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/lib/js/vendor.js.map",
+        "size": 2648855,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/LICENSE-NEXOWATT.md",
+        "size": 3238,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/logo192.png",
+        "size": 29884,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/logo512.png",
+        "size": 149798,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/manifest.json",
+        "size": 710,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/mf-manifest.json",
+        "size": 5374,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/mf-stats.json",
+        "size": 17526,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/NEXOWATT_EOS_FRONTEND_MANIFEST.json",
+        "size": 979591,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/remoteEntry-eos-9.0.1.js",
+        "size": 22984,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/remoteEntry.js",
+        "size": 44,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/robots.txt",
+        "size": 67,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/static/js/css.js",
+        "size": 20124,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/static/js/html.js",
+        "size": 19634,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/static/js/javascript.js",
+        "size": 4342,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/static/js/nexowatt-stable-login.js",
+        "size": 2709,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/static/js/nexowatt-stable-v7109.js",
+        "size": 1793,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/static/js/worker-css.js",
+        "size": 196661,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/static/js/worker-html.js",
+        "size": 65665,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/static/js/worker-javascript.js",
+        "size": 411448,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/static/js/worker-json.js",
+        "size": 123527,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/static/js/worker-xml.js",
+        "size": 265860,
+        "mode": 420
+      },
+      {
+        "path": "adminWww/static/js/worker-yaml.js",
+        "size": 121625,
+        "mode": 420
+      },
+      {
+        "path": "build/i18n/de.json",
+        "size": 1836,
+        "mode": 420
+      },
+      {
+        "path": "build/i18n/en.json",
+        "size": 1520,
+        "mode": 420
+      },
+      {
+        "path": "build/i18n/es.json",
+        "size": 1696,
+        "mode": 420
+      },
+      {
+        "path": "build/i18n/fr.json",
+        "size": 1860,
+        "mode": 420
+      },
+      {
+        "path": "build/i18n/it.json",
+        "size": 1630,
+        "mode": 420
+      },
+      {
+        "path": "build/i18n/nl.json",
+        "size": 1623,
+        "mode": 420
+      },
+      {
+        "path": "build/i18n/pl.json",
+        "size": 1607,
+        "mode": 420
+      },
+      {
+        "path": "build/i18n/pt.json",
+        "size": 1576,
+        "mode": 420
+      },
+      {
+        "path": "build/i18n/ru.json",
+        "size": 2298,
+        "mode": 420
+      },
+      {
+        "path": "build/i18n/uk.json",
+        "size": 2151,
+        "mode": 420
+      },
+      {
+        "path": "build/i18n/zh-cn.json",
+        "size": 1432,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/eosAutoUpdate.js",
+        "size": 14542,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/eosAutoUpdate.js.map",
+        "size": 13070,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/eosFileTransferSecurity.js",
+        "size": 9628,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/eosFileTransferSecurity.js.map",
+        "size": 9565,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/eosHttpsClient.js",
+        "size": 5227,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/eosHttpsClient.js.map",
+        "size": 4437,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/eosLicenseCore.js",
+        "size": 19738,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/eosLicenseCore.js.map",
+        "size": 20211,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/eosLicenseHttp.js",
+        "size": 5247,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/eosLicenseHttp.js.map",
+        "size": 5856,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/eosLicensePolicy.js",
+        "size": 1210,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/eosLicensePolicy.js.map",
+        "size": 995,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/eosLicenseService.js",
+        "size": 19917,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/eosLicenseService.js.map",
+        "size": 18562,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/eosNewsSecurity.js",
+        "size": 1724,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/eosNewsSecurity.js.map",
+        "size": 1689,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/eosRequestSecurity.js",
+        "size": 2744,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/eosRequestSecurity.js.map",
+        "size": 2338,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/eosSessionSecurity.js",
+        "size": 14870,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/eosSessionSecurity.js.map",
+        "size": 14905,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/eosUiSessionRegistry.js",
+        "size": 2618,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/eosUiSessionRegistry.js.map",
+        "size": 2520,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/eosUnifiedBoundary.js",
+        "size": 10315,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/eosUnifiedBoundary.js.map",
+        "size": 11007,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/eosUnifiedOwnership.js",
+        "size": 10147,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/eosUnifiedOwnership.js.map",
+        "size": 8648,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/eosUploadGuard.js",
+        "size": 8478,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/eosUploadGuard.js.map",
+        "size": 9058,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/eosWebResources.js",
+        "size": 3716,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/eosWebResources.js.map",
+        "size": 4112,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/instanceProxy.js",
+        "size": 30322,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/instanceProxy.js.map",
+        "size": 30537,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/logSearch.js",
+        "size": 24950,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/logSearch.js.map",
+        "size": 19450,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/objectFixes.js",
+        "size": 11071,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/objectFixes.js.map",
+        "size": 5788,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/translations.js",
+        "size": 2678,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/translations.js.map",
+        "size": 1087,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/utils.js",
+        "size": 34216,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/utils.js.map",
+        "size": 22606,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/index.d.ts",
+        "size": 846,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/index.js",
+        "size": 3945,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/index.js.map",
+        "size": 597,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/acmeChallenge.d.ts",
+        "size": 2917,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/acmeChallenge.js",
+        "size": 5933,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/acmeChallenge.js.map",
+        "size": 2849,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/certificateManager.d.ts",
+        "size": 2348,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/certificateManager.js",
+        "size": 4999,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/certificateManager.js.map",
+        "size": 3403,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/http2Compat.d.ts",
+        "size": 1285,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/http2Compat.js",
+        "size": 5842,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/http2Compat.js.map",
+        "size": 3140,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/oauth2-authcode.d.ts",
+        "size": 6752,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/oauth2-authcode.js",
+        "size": 28279,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/oauth2-authcode.js.map",
+        "size": 17168,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/oauth2-clients.d.ts",
+        "size": 4094,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/oauth2-clients.js",
+        "size": 10772,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/oauth2-clients.js.map",
+        "size": 6721,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/oauth2-model.d.ts",
+        "size": 3464,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/oauth2-model.js",
+        "size": 18232,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/oauth2-model.js.map",
+        "size": 13397,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/oauth2.d.ts",
+        "size": 4141,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/oauth2.js",
+        "size": 29682,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/oauth2.js.map",
+        "size": 18401,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/securityChecker.d.ts",
+        "size": 262,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/securityChecker.js",
+        "size": 3844,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/securityChecker.js.map",
+        "size": 3343,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/usedResources.d.ts",
+        "size": 3012,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/usedResources.js",
+        "size": 10382,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/usedResources.js.map",
+        "size": 4676,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/utils.d.ts",
+        "size": 1481,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/utils.js",
+        "size": 3853,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/utils.js.map",
+        "size": 3043,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/webServer.d.ts",
+        "size": 6980,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/webServer.js",
+        "size": 22240,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/build/lib/webServer.js.map",
+        "size": 13558,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/LICENSE",
+        "size": 1117,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/package.json",
+        "size": 1691,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/vendor/webserver/README.md",
+        "size": 26622,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/web.js",
+        "size": 140886,
+        "mode": 420
+      },
+      {
+        "path": "build/lib/web.js.map",
+        "size": 116586,
+        "mode": 420
+      },
+      {
+        "path": "build/main.js",
+        "size": 147712,
+        "mode": 420
+      },
+      {
+        "path": "build/main.js.map",
+        "size": 109740,
+        "mode": 420
+      },
+      {
+        "path": "deploy/ACCESS_RECOVERY.md",
+        "size": 9343,
+        "mode": 420
+      },
+      {
+        "path": "deploy/nginx-eos.conf.template",
+        "size": 4031,
+        "mode": 420
+      },
+      {
+        "path": "deploy/README.md",
+        "size": 11884,
+        "mode": 420
+      },
+      {
+        "path": "deploy/render-ingress.cjs",
+        "size": 7643,
+        "mode": 420
+      },
+      {
+        "path": "docs/licensing/ISSUER_AND_STORAGE.md",
+        "size": 11167,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.0-alpha.1/frontend-build.log",
+        "size": 17457,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.0-alpha.1/frontend-graph.log",
+        "size": 127,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.0-alpha.1/frontend-lint.log",
+        "size": 840,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.0-alpha.1/frontend-public-assets.log",
+        "size": 75,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.0-alpha.1/frontend-tests.log",
+        "size": 614,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.0-alpha.1/frontend-validation.json",
+        "size": 2740,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.0-alpha.1/FRONTEND.md",
+        "size": 3081,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/audit-build-environment.json",
+        "size": 9426,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/audit-build-environment.stderr",
+        "size": 150,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/audit-frontend.json",
+        "size": 365,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/audit-frontend.stderr",
+        "size": 150,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/audit-installer.json",
+        "size": 364,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/audit-installer.stderr",
+        "size": 150,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/audit-runtime.json",
+        "size": 367,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/audit-runtime.stderr",
+        "size": 150,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/backend-build.log",
+        "size": 276,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/changed-backend-lint.log",
+        "size": 150,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/dependency-results.json",
+        "size": 866,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/ems/ems-regressions.json",
+        "size": 3607,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/ems/nvp-dynamic-grid.tap",
+        "size": 20712,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/ems/ownership-resume-after.tap",
+        "size": 1805,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/ems/ownership-resume-before.tap",
+        "size": 1023,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/ems/ownership-resume-build.log",
+        "size": 112,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/ems/ownership-resume-lint.log",
+        "size": 150,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/ems/README.md",
+        "size": 4871,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/ems/runtime-executables-check.log",
+        "size": 108,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/ems/tested-entrypoints.sha256",
+        "size": 4524,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/ems/verify-auto-cheap-grid-window.log",
+        "size": 1671,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/ems/verify-charging-audit-start-mode.log",
+        "size": 129,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/ems/verify-charging-csv-mode-context.log",
+        "size": 115,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/ems/verify-evcs-mode-write-failure.log",
+        "size": 2300,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/ems/verify-evcs-vehicle-status-regressions.log",
+        "size": 3493,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/ems/verify-heating-rod-central-zero-export.log",
+        "size": 126,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/ems/verify-heating-rod-zero-export-tariff.log",
+        "size": 194,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/ems/verify-live-evcs-mode-confirmation.log",
+        "size": 6131,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/ems/verify-rc57-ocpp-stability.log",
+        "size": 121,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/ems/verify-rc58-ocpp-compact-mapping.log",
+        "size": 112,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/ems/verify-rc60-universal-auto-orchestrator.log",
+        "size": 143,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/ems/verify-rc60-universal-auto-wallbox.log",
+        "size": 177,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/ems/verify-rc61-evcs-hardening.log",
+        "size": 144,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/ems/verify-rc64-storage-grid-charge-policy.log",
+        "size": 171,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/ems/verify-rc68-para14a-communication-fallback.log",
+        "size": 128,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/ems/verify-zero-export-appcenter.log",
+        "size": 169,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/ems/verify-zero-export-charging.log",
+        "size": 171,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/ems/verify-zero-export-core.log",
+        "size": 129,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/ems/verify-zero-export-pv-coordinator.log",
+        "size": 4918,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/ems/verify-zero-export-storage-probe.log",
+        "size": 130,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/frontend-build.log",
+        "size": 17681,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/frontend-final-graph.log",
+        "size": 127,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/frontend-graph.log",
+        "size": 127,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/frontend-receipt-tests.log",
+        "size": 601,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/frontend-tests.log",
+        "size": 614,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/installed-runtime-match.json",
+        "size": 90993,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/installer-build.log",
+        "size": 1167,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/integration-candidate.log",
+        "size": 6590,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/integration-development-1.log",
+        "size": 7192,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/integration-development-2.log",
+        "size": 7130,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/integration-release.log",
+        "size": 6605,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/package-tests.log",
+        "size": 576,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/PRUEFBERICHT.md",
+        "size": 21577,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/sbom-build-environment.stderr",
+        "size": 150,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/sbom-check.log",
+        "size": 165,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/sbom-frontend.stderr",
+        "size": 150,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/sbom-installer.stderr",
+        "size": 150,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/sbom-runtime.stderr",
+        "size": 150,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/typecheck.log",
+        "size": 227,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/ui-final-canonical.log",
+        "size": 108,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/ui-runtime-build.log",
+        "size": 361,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/unified-lint.log",
+        "size": 575,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/unit-tests.log",
+        "size": 25043,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/unified-9.0.1/vendor-tests.log",
+        "size": 1015,
+        "mode": 420
+      },
+      {
+        "path": "docs/unified/ACCESS_RECOVERY_9.0.1.md",
+        "size": 10245,
+        "mode": 420
+      },
+      {
+        "path": "docs/unified/ARCHITECTURE.md",
+        "size": 8614,
+        "mode": 420
+      },
+      {
+        "path": "docs/unified/BASELINE.md",
+        "size": 4685,
+        "mode": 420
+      },
+      {
+        "path": "docs/unified/COMMISSIONING.md",
+        "size": 8744,
+        "mode": 420
+      },
+      {
+        "path": "docs/unified/DEVELOPMENT_FINDINGS.md",
+        "size": 1842,
+        "mode": 420
+      },
+      {
+        "path": "docs/unified/INSTALL_PUBLISH.md",
+        "size": 10098,
+        "mode": 420
+      },
+      {
+        "path": "docs/unified/LICENSING_RUNTIME_LIMITS.md",
+        "size": 11087,
+        "mode": 420
+      },
+      {
+        "path": "docs/unified/LICENSING.md",
+        "size": 6049,
+        "mode": 420
+      },
+      {
+        "path": "docs/unified/PRUEFBERICHT.md",
+        "size": 12263,
+        "mode": 420
+      },
+      {
+        "path": "docs/unified/SECURITY_CRA.md",
+        "size": 9517,
+        "mode": 420
+      },
+      {
+        "path": "docs/unified/SOURCES.md",
+        "size": 2803,
+        "mode": 420
+      },
+      {
+        "path": "docs/unified/upstream-package-scripts.json",
+        "size": 8631,
+        "mode": 420
+      },
+      {
+        "path": "io-package.json",
+        "size": 62614,
+        "mode": 420
+      },
+      {
+        "path": "package.json",
+        "size": 7548,
+        "mode": 420
+      },
+      {
+        "path": "packages/eos-license-client/index.js",
+        "size": 12909,
+        "mode": 420
+      },
+      {
+        "path": "packages/eos-license-client/package.json",
+        "size": 302,
+        "mode": 420
+      },
+      {
+        "path": "public/404.html",
+        "size": 13557,
+        "mode": 420
+      },
+      {
+        "path": "public/logTemplate.html",
+        "size": 2273,
+        "mode": 420
+      },
+      {
+        "path": "public/nexowatt-license.html",
+        "size": 3787,
+        "mode": 420
+      },
+      {
+        "path": "public/nexowatt-license.js",
+        "size": 4826,
+        "mode": 420
+      },
+      {
+        "path": "public/oauthError.html",
+        "size": 1395,
+        "mode": 420
+      },
+      {
+        "path": "public/oauthSuccess.html",
+        "size": 1387,
+        "mode": 420
+      },
+      {
+        "path": "release-manifests/unified/build-environment.cdx.json",
+        "size": 899526,
+        "mode": 420
+      },
+      {
+        "path": "release-manifests/unified/files.json",
+        "size": 359694,
+        "mode": 420
+      },
+      {
+        "path": "release-manifests/unified/frontend.cdx.json",
+        "size": 671232,
+        "mode": 420
+      },
+      {
+        "path": "release-manifests/unified/installer.cdx.json",
+        "size": 100741,
+        "mode": 420
+      },
+      {
+        "path": "release-manifests/unified/runtime.cdx.json",
+        "size": 346141,
+        "mode": 420
+      },
+      {
+        "path": "reports/security/unified-backend-tests.tap",
+        "size": 4222,
+        "mode": 420
+      },
+      {
+        "path": "reports/unified/ingress/evidence.json",
+        "size": 1879,
+        "mode": 420
+      },
+      {
+        "path": "reports/unified/ingress/PRUEFVERMERK.md",
+        "size": 4424,
+        "mode": 420
+      },
+      {
+        "path": "reports/unified/ingress/renderer-eslint.log",
+        "size": 0,
+        "mode": 420
+      },
+      {
+        "path": "reports/unified/ingress/renderer-tests.tap",
+        "size": 6041,
+        "mode": 420
+      },
+      {
+        "path": "reports/unified/ingress/renderer-types.log",
+        "size": 0,
+        "mode": 420
+      },
+      {
+        "path": "reports/unified/licensing/evidence.json",
+        "size": 1726,
+        "mode": 420
+      },
+      {
+        "path": "reports/unified/licensing/feature-grants-evidence.json",
+        "size": 2399,
+        "mode": 420
+      },
+      {
+        "path": "reports/unified/licensing/feature-grants.tap",
+        "size": 772,
+        "mode": 420
+      },
+      {
+        "path": "reports/unified/licensing/license-eslint.log",
+        "size": 150,
+        "mode": 420
+      },
+      {
+        "path": "reports/unified/licensing/license-keygen-interop.tap",
+        "size": 548,
+        "mode": 420
+      },
+      {
+        "path": "reports/unified/licensing/license-tests.tap",
+        "size": 19561,
+        "mode": 420
+      },
+      {
+        "path": "reports/unified/licensing/mesh-license-review.json",
+        "size": 2490,
+        "mode": 420
+      },
+      {
+        "path": "reports/unified/licensing/nexologic-actuator.log",
+        "size": 27,
+        "mode": 420
+      },
+      {
+        "path": "reports/unified/licensing/nexologic-lifecycle.log",
+        "size": 35,
+        "mode": 420
+      },
+      {
+        "path": "reports/unified/licensing/PRUEFVERMERK.md",
+        "size": 3586,
+        "mode": 420
+      },
+      {
+        "path": "reports/unified/licensing/runtime-mirror-sync.log",
+        "size": 0,
+        "mode": 420
+      },
+      {
+        "path": "reports/unified/root/backend-build.log",
+        "size": 284,
+        "mode": 420
+      },
+      {
+        "path": "reports/unified/root/controller-install.log",
+        "size": 895,
+        "mode": 420
+      },
+      {
+        "path": "reports/unified/root/controller-integration.log",
+        "size": 5126,
+        "mode": 420
+      },
+      {
+        "path": "reports/unified/root/lint-unified.log",
+        "size": 496,
+        "mode": 420
+      },
+      {
+        "path": "reports/unified/root/npm-build-audit-final.json",
+        "size": 9433,
+        "mode": 420
+      },
+      {
+        "path": "reports/unified/root/npm-frontend-audit.json",
+        "size": 365,
+        "mode": 420
+      },
+      {
+        "path": "reports/unified/root/npm-installer-audit.json",
+        "size": 364,
+        "mode": 420
+      },
+      {
+        "path": "reports/unified/root/npm-publish-dry-run.log",
+        "size": 119520,
+        "mode": 420
+      },
+      {
+        "path": "reports/unified/root/npm-test.log",
+        "size": 18880,
+        "mode": 420
+      },
+      {
+        "path": "reports/unified/root/npm-unified-audit-patched.json",
+        "size": 367,
+        "mode": 420
+      },
+      {
+        "path": "reports/unified/root/targeted-secret-scan.json",
+        "size": 781,
+        "mode": 420
+      },
+      {
+        "path": "reports/unified/root/typecheck.log",
+        "size": 235,
+        "mode": 420
+      },
+      {
+        "path": "reports/unified/root/ui-runtime-sync.log",
+        "size": 108,
+        "mode": 420
+      },
+      {
+        "path": "reports/unified/sbom-vendored-proof.json",
+        "size": 2801,
+        "mode": 420
+      },
+      {
+        "path": "tools/eos-access-diagnostics.cjs",
+        "size": 15922,
+        "mode": 420
+      },
+      {
+        "path": "tools/eos-migration-plan.cjs",
+        "size": 9075,
+        "mode": 420
+      },
+      {
+        "path": "tools/eos-release-check.cjs",
+        "size": 2907,
+        "mode": 420
+      },
+      {
+        "path": "tools/eos-release-manifest.cjs",
+        "size": 3908,
+        "mode": 420
+      },
+      {
+        "path": "tools/eos-sbom-vendored.cjs",
+        "size": 12131,
+        "mode": 420
+      },
+      {
+        "path": "tools/nexowatt-vendored-webserver.cjs",
+        "size": 4502,
+        "mode": 420
+      },
+      {
+        "path": "tools/vendor/WEBSERVER_PATCH_REVIEW.md",
+        "size": 2318,
+        "mode": 420
+      },
+      {
+        "path": "tools/vendor/webserver-3.4.0-no-private-key-logs.patch",
+        "size": 1489,
+        "mode": 420
+      },
+      {
+        "path": "tools/vendor/webserver-3.4.0-source.provenance.json",
+        "size": 13837,
+        "mode": 420
+      },
+      {
+        "path": "ui/admin/admin_logo_.ico",
+        "size": 4286,
+        "mode": 420
+      },
+      {
+        "path": "ui/admin/admin.png",
+        "size": 1466889,
+        "mode": 420
+      },
+      {
+        "path": "ui/admin/appcenter.html",
+        "size": 2104,
+        "mode": 420
+      },
+      {
+        "path": "ui/admin/jsonConfig.json",
+        "size": 18022,
+        "mode": 420
+      },
+      {
+        "path": "ui/admin/license.html",
+        "size": 2634,
+        "mode": 420
+      },
+      {
+        "path": "ui/admin/operating-strategies/rc55-auto-arbitration.json",
+        "size": 1082,
+        "mode": 420
+      },
+      {
+        "path": "ui/admin/react/assets/index-CuquHlsY.css",
+        "size": 9139,
+        "mode": 420
+      },
+      {
+        "path": "ui/admin/react/assets/index-fCXC5Pli.js",
+        "size": 312677,
+        "mode": 420
+      },
+      {
+        "path": "ui/admin/react/assets/nexowatt-192-43ZwQ44y.png",
+        "size": 29884,
+        "mode": 420
+      },
+      {
+        "path": "ui/admin/react/index.html",
+        "size": 4432,
+        "mode": 420
+      },
+      {
+        "path": "ui/admin/simulation.html",
+        "size": 2099,
+        "mode": 420
+      },
+      {
+        "path": "ui/admin/smarthomecfg.html",
+        "size": 2125,
+        "mode": 420
+      },
+      {
+        "path": "ui/admin/smarthomevis.html",
+        "size": 2113,
+        "mode": 420
+      },
+      {
+        "path": "ui/admin/tab.html",
+        "size": 2070,
+        "mode": 420
+      },
+      {
+        "path": "ui/docs/QUELLCODE_WEGWEISER_DE.md",
+        "size": 9935,
+        "mode": 420
+      },
+      {
+        "path": "ui/docs/README.md",
+        "size": 8850,
+        "mode": 420
+      },
+      {
+        "path": "ui/docs/unified/HOSTED_RUNTIME_DE.md",
+        "size": 4862,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/charging-budget-helpers.js",
+        "size": 19399,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/consumers/evcs.js",
+        "size": 9733,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/consumers/generic-load.js",
+        "size": 6124,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/consumers/generic-setpoint.js",
+        "size": 6661,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/consumers/index.js",
+        "size": 4907,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/consumers/sg-ready.js",
+        "size": 7563,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/datapoints.js",
+        "size": 55802,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/engine.js",
+        "size": 85659,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/evcs-control-mapping.js",
+        "size": 17511,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/module-manager.js",
+        "size": 55811,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/ai-advisor.js",
+        "size": 150353,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/base.js",
+        "size": 8123,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/bhkw-control.js",
+        "size": 2161,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/charge-kiosk.js",
+        "size": 31297,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/charging-management.js",
+        "size": 783010,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/core-limits.js",
+        "size": 205830,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/country-profile.js",
+        "size": 6327,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/dynamic-grid-connection.js",
+        "size": 46677,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/energy-ledger.js",
+        "size": 35951,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/energy-wallet.js",
+        "size": 58558,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/generator-control.js",
+        "size": 2221,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/grid-constraints.js",
+        "size": 194498,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/heating-rod-control.js",
+        "size": 376245,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/mesh-microgrid.js",
+        "size": 180292,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/multi-use.js",
+        "size": 53949,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/netoperator-interface.js",
+        "size": 41813,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/nexologic-budget.js",
+        "size": 16122,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/nl-p1-dsmr.js",
+        "size": 24056,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/nvp-coordinator.js",
+        "size": 54941,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/nvp-topology.js",
+        "size": 14656,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/operating-strategies.js",
+        "size": 72404,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/para14a.js",
+        "size": 98721,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/peak-shaving.js",
+        "size": 134267,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/prime-mover-control.js",
+        "size": 40499,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/pv-forecast.js",
+        "size": 44849,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/stage-a-diagnostics.js",
+        "size": 38637,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/storage-control.js",
+        "size": 656290,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/storage-mapping.js",
+        "size": 41524,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/tarif-vis.js",
+        "size": 107056,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/tariff-provider.js",
+        "size": 18839,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/tariff-status.js",
+        "size": 43569,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/thermal-control.js",
+        "size": 111990,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/modules/threshold-control.js",
+        "size": 49489,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/netoperator/acceptance-tests.json",
+        "size": 2410,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/netoperator/driver.schema.json",
+        "size": 3488,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/netoperator/drivers/bachmann-sppc.json",
+        "size": 5697,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/netoperator/drivers/beckhoff-tf8360.json",
+        "size": 5689,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/netoperator/drivers/energielenker-eza.json",
+        "size": 5672,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/netoperator/drivers/generic-modbus-tcp-template.json",
+        "size": 5683,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/netoperator/drivers/meteocontrol-bluelog-xc.json",
+        "size": 5694,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/netoperator/drivers/phoenix-pcu-41xx.json",
+        "size": 5694,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/netoperator/drivers/siemens-sicam-a8000.json",
+        "size": 5690,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/netoperator/drivers/wago-power-plant-control.json",
+        "size": 5664,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/nexologic-engine.js",
+        "size": 115353,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/rc85-runtime-hardening.js",
+        "size": 26086,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/reasons.js",
+        "size": 10431,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/accepted-power-effects.js",
+        "size": 9811,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/actuator-command-contract.js",
+        "size": 9457,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/actuator-shadow-arbiter.js",
+        "size": 48198,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/admin-overview-publisher.js",
+        "size": 75654,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/arbitrage-control.js",
+        "size": 15610,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/charging-management-audit.js",
+        "size": 33008,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/country-profile-service.js",
+        "size": 5166,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/dynamic-grid-config.js",
+        "size": 31979,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/dynamic-grid-ownership.js",
+        "size": 8295,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/dynamic-grid-pv.js",
+        "size": 36185,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/dynamic-grid-writer.js",
+        "size": 13769,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/energy-origin-accounting.js",
+        "size": 47889,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/energy-origin-ledger-runtime.js",
+        "size": 22324,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/evcs-unit-conversion.js",
+        "size": 2405,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/feature-flags.js",
+        "size": 11256,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/fenecon-hybrid-control.js",
+        "size": 37908,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/fenecon-nvp-shadow-runtime.js",
+        "size": 27906,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/forecast-aware-target-planner.js",
+        "size": 21532,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/forecast-target-runtime-bridge.js",
+        "size": 17366,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/grid-import-limit-policy.js",
+        "size": 9518,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/locale-api-service.js",
+        "size": 2649,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/measurement-freshness.js",
+        "size": 18943,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/netoperator-canonical-model.js",
+        "size": 13858,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/netoperator-driver-registry.js",
+        "size": 16229,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/netoperator-modbus-tcp.js",
+        "size": 18735,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/nexologic-output-controller.js",
+        "size": 32951,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/nvp-budget.js",
+        "size": 29230,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/nvp-grants.js",
+        "size": 12505,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/nvp-group-planner.js",
+        "size": 27465,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/nvp-topology.js",
+        "size": 21265,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/open-meteo-pv-forecast.js",
+        "size": 66013,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/operating-strategy-runtime.js",
+        "size": 17962,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/para14a-eebus-api.js",
+        "size": 51015,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/pv-source-identity.js",
+        "size": 5467,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/pv-surplus-allocation.js",
+        "size": 7287,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/safety-envelope.js",
+        "size": 47546,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/storage-async-feedback-anchor.js",
+        "size": 6381,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/storage-datapoint-config.js",
+        "size": 16654,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/storage-farm-aggregation.js",
+        "size": 9465,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/storage-override-bridge.js",
+        "size": 10495,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/storage-self-consumption-policy.js",
+        "size": 20850,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/storage-zero-write-policy.js",
+        "size": 9951,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/tariff-provider-registry.js",
+        "size": 41987,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/zero-export-pv-coordinator.js",
+        "size": 33685,
+        "mode": 420
+      },
+      {
+        "path": "ui/ems/services/zero-export-storage-credit.js",
+        "size": 7666,
+        "mode": 420
+      },
+      {
+        "path": "ui/io-package.json",
+        "size": 16237,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/charging-diagnostics-api.js",
+        "size": 5552,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/config-boundary-contracts.js",
+        "size": 4930,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/dynamic-grid-config-api.js",
+        "size": 32829,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/energy-origin-api.js",
+        "size": 15324,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/evcs-electrical-limits.js",
+        "size": 8749,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/hosted-adapter.js",
+        "size": 8088,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/http-error-boundary.js",
+        "size": 5090,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/iobroker-user-auth.js",
+        "size": 10025,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/iobroker-user-roles.js",
+        "size": 10630,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/license-bootstrap-access.js",
+        "size": 4900,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/mesh-coordinator-contract.js",
+        "size": 13094,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/mesh-coordinator-protocol.js",
+        "size": 21975,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/mesh-coordinator-writer.js",
+        "size": 3482,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/mesh-coordinator.js",
+        "size": 39278,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/mesh-energy-journal.js",
+        "size": 7789,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/mesh-energy-service.js",
+        "size": 19541,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/mesh-peer-http.js",
+        "size": 14934,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/mesh-transformer-allocation.js",
+        "size": 7954,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/notification-mail.js",
+        "size": 28507,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/notification-policy.js",
+        "size": 9663,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/nvp-config-api.js",
+        "size": 21186,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/partner-config-api.js",
+        "size": 8486,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/partner-contracts.js",
+        "size": 11369,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/partner-runtime.js",
+        "size": 28683,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/partner-service.js",
+        "size": 20609,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/partner-websocket.js",
+        "size": 26560,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/runtime-proxy-html.js",
+        "size": 11961,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/smarthome-contract.js",
+        "size": 36830,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/smarthome-import.js",
+        "size": 20116,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/sse-runtime-guard.js",
+        "size": 20237,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/station-display-presentation.js",
+        "size": 11069,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/adapter/api-set.js",
+        "size": 3080,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/adapter/api-state.js",
+        "size": 2726,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/adapter/connection-state.js",
+        "size": 1058,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/adapter/index.js",
+        "size": 4000,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/adapter/settings-writes.js",
+        "size": 4038,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/adapter/state-cache.js",
+        "size": 7523,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/backend/api-state/api-set-helpers.js",
+        "size": 3283,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/backend/api-state/api-state-envelope.js",
+        "size": 2458,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/backend/connection/connection-state.js",
+        "size": 3275,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/backend/feature-visibility/feature-visibility.js",
+        "size": 3840,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/backend/license/license-key-safety.js",
+        "size": 3344,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/backend/main-helpers/api-state-main.js",
+        "size": 2701,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/backend/main-helpers/info-connection-main.js",
+        "size": 2554,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/backend/main-helpers/license-key-main.js",
+        "size": 3042,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/backend/main-helpers/settings-write-main.js",
+        "size": 4719,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/backend/main-helpers/state-cache-main.js",
+        "size": 3520,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/backend/main-runtime/main-runtime-helpers.js",
+        "size": 14918,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/backend/state-cache/state-cache.js",
+        "size": 5481,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/bridges/feature-visibility-shadow.js",
+        "size": 3905,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/ems/ai-advisor/ai-advisor-payload.js",
+        "size": 6573,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/ems/charging-management/charging-allocation.js",
+        "size": 83660,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/ems/charging-management/charging-budget.js",
+        "size": 10767,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/ems/charging-management/charging-control.js",
+        "size": 13068,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/ems/charging-management/charging-management-runtime.js",
+        "size": 9278,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/ems/charging-management/charging-management.js",
+        "size": 11736,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/ems/charging-management/charging-normal-source.js",
+        "size": 17900,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/ems/charging-management/charging-phase-selection.js",
+        "size": 20829,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/ems/charging-management/charging-write-plan.js",
+        "size": 19641,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/ems/core-limits/core-budget.js",
+        "size": 32599,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/ems/core-limits/core-runtime.js",
+        "size": 55611,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/ems/heating-rod/heating-rod-decision.js",
+        "size": 10701,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/ems/para14a/para14a-constraint.js",
+        "size": 19990,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/energy-flow/resolvers/energy-flow-resolver.js",
+        "size": 10637,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/energy-flow/utils/energy-flow.js",
+        "size": 14110,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/energy-flow/utils/number.js",
+        "size": 5518,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/main/api-set.js",
+        "size": 13331,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/main/api-shadow.js",
+        "size": 6369,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/main/api-state.js",
+        "size": 5903,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/main/index.js",
+        "size": 3563,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/main/info-connection.js",
+        "size": 2439,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/main/license-key.js",
+        "size": 3314,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/main/state-cache.js",
+        "size": 7447,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ts-mirrors/utils/number.js",
+        "size": 5407,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ui-access-policy.js",
+        "size": 22346,
+        "mode": 420
+      },
+      {
+        "path": "ui/lib/ui-server-transport.js",
+        "size": 14919,
+        "mode": 420
+      },
+      {
+        "path": "ui/LICENSE",
+        "size": 2602,
+        "mode": 420
+      },
+      {
+        "path": "ui/main.js",
+        "size": 1743727,
+        "mode": 420
+      },
+      {
+        "path": "ui/NOTICE",
+        "size": 257,
+        "mode": 420
+      },
+      {
+        "path": "ui/package.json",
+        "size": 85933,
+        "mode": 420
+      },
+      {
+        "path": "ui/reports/unified/ems-regressions.json",
+        "size": 3575,
+        "mode": 420
+      },
+      {
+        "path": "ui/reports/unified/full-startup-mock.json",
+        "size": 450,
+        "mode": 420
+      },
+      {
+        "path": "ui/reports/unified/full-startup-mock.log",
+        "size": 0,
+        "mode": 420
+      },
+      {
+        "path": "ui/reports/unified/full-startup-test.log",
+        "size": 325,
+        "mode": 420
+      },
+      {
+        "path": "ui/reports/unified/hosted-runtime.log",
+        "size": 1490,
+        "mode": 420
+      },
+      {
+        "path": "ui/reports/unified/nvp-dynamic-grid.log",
+        "size": 20706,
+        "mode": 420
+      },
+      {
+        "path": "ui/reports/unified/para14a-direct-api.log",
+        "size": 37,
+        "mode": 420
+      },
+      {
+        "path": "ui/reports/unified/para14a-lifecycle.log",
+        "size": 313,
+        "mode": 420
+      },
+      {
+        "path": "ui/reports/unified/runtime-sync.log",
+        "size": 112,
+        "mode": 420
+      },
+      {
+        "path": "ui/reports/unified/script-sync.log",
+        "size": 139,
+        "mode": 420
+      },
+      {
+        "path": "ui/reports/unified/verify-auto-cheap-grid-window.log",
+        "size": 1671,
+        "mode": 420
+      },
+      {
+        "path": "ui/reports/unified/verify-charging-audit-start-mode.log",
+        "size": 129,
+        "mode": 420
+      },
+      {
+        "path": "ui/reports/unified/verify-charging-csv-mode-context.log",
+        "size": 115,
+        "mode": 420
+      },
+      {
+        "path": "ui/reports/unified/verify-evcs-mode-write-failure.log",
+        "size": 2300,
+        "mode": 420
+      },
+      {
+        "path": "ui/reports/unified/verify-evcs-vehicle-status-regressions.log",
+        "size": 3493,
+        "mode": 420
+      },
+      {
+        "path": "ui/reports/unified/verify-heating-rod-central-zero-export.log",
+        "size": 126,
+        "mode": 420
+      },
+      {
+        "path": "ui/reports/unified/verify-heating-rod-zero-export-tariff.log",
+        "size": 194,
+        "mode": 420
+      },
+      {
+        "path": "ui/reports/unified/verify-live-evcs-mode-confirmation.log",
+        "size": 6131,
+        "mode": 420
+      },
+      {
+        "path": "ui/reports/unified/verify-rc57-ocpp-stability.log",
+        "size": 121,
+        "mode": 420
+      },
+      {
+        "path": "ui/reports/unified/verify-rc58-ocpp-compact-mapping.log",
+        "size": 112,
+        "mode": 420
+      },
+      {
+        "path": "ui/reports/unified/verify-rc60-universal-auto-orchestrator.log",
+        "size": 143,
+        "mode": 420
+      },
+      {
+        "path": "ui/reports/unified/verify-rc60-universal-auto-wallbox.log",
+        "size": 177,
+        "mode": 420
+      },
+      {
+        "path": "ui/reports/unified/verify-rc61-evcs-hardening.log",
+        "size": 144,
+        "mode": 420
+      },
+      {
+        "path": "ui/reports/unified/verify-rc64-storage-grid-charge-policy.log",
+        "size": 171,
+        "mode": 420
+      },
+      {
+        "path": "ui/reports/unified/verify-rc68-para14a-communication-fallback.log",
+        "size": 128,
+        "mode": 420
+      },
+      {
+        "path": "ui/reports/unified/verify-zero-export-appcenter.log",
+        "size": 169,
+        "mode": 420
+      },
+      {
+        "path": "ui/reports/unified/verify-zero-export-charging.log",
+        "size": 171,
+        "mode": 420
+      },
+      {
+        "path": "ui/reports/unified/verify-zero-export-core.log",
+        "size": 129,
+        "mode": 420
+      },
+      {
+        "path": "ui/reports/unified/verify-zero-export-pv-coordinator.log",
+        "size": 4918,
+        "mode": 420
+      },
+      {
+        "path": "ui/reports/unified/verify-zero-export-storage-probe.log",
+        "size": 130,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/admin-guard.js",
+        "size": 5018,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/admin.png",
+        "size": 1466889,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/app.js",
+        "size": 539214,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/apple-touch-icon.png",
+        "size": 26911,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/assets/icons/nexowatt-16.png",
+        "size": 769,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/assets/icons/nexowatt-32.png",
+        "size": 2259,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/assets/icons/nexowatt-48.png",
+        "size": 4245,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/assets/icons/nexowatt-64.png",
+        "size": 6265,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/assets/icons/nexowatt-120.png",
+        "size": 15374,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/assets/icons/nexowatt-128.png",
+        "size": 2942,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/assets/icons/nexowatt-152.png",
+        "size": 21295,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/assets/icons/nexowatt-180.png",
+        "size": 26911,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/assets/icons/nexowatt-192-maskable.png",
+        "size": 19651,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/assets/icons/nexowatt-192.png",
+        "size": 29884,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/assets/icons/nexowatt-256.png",
+        "size": 45907,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/assets/icons/nexowatt-384.png",
+        "size": 89658,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/assets/icons/nexowatt-512-maskable.png",
+        "size": 91804,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/assets/icons/nexowatt-512.png",
+        "size": 149798,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/assets/nexowatt-eos-logo-wide.png",
+        "size": 187933,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/assets/noise.png",
+        "size": 140069,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/auth.js",
+        "size": 24297,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/charging-diagnostics-appcenter.js",
+        "size": 22230,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/cockpit-shell.js",
+        "size": 12446,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/dashboard-lp-status.js",
+        "size": 35123,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/dc-station-display.css",
+        "size": 23229,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/dc-station-display.html",
+        "size": 1044,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/dc-station-display.js",
+        "size": 54839,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/ems-apps-nvp-diagnostics.js",
+        "size": 10636,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/ems-apps.html",
+        "size": 155385,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/ems-apps.js",
+        "size": 984749,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/energy-ledger.html",
+        "size": 9149,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/energy-ledger.js",
+        "size": 1794,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/energy-origin-appcenter.js",
+        "size": 18530,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/energy-origin-ledger-view.js",
+        "size": 12656,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/evcs-report.css",
+        "size": 1796,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/evcs-report.html",
+        "size": 5846,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/evcs-report.js",
+        "size": 20937,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/evcs.html",
+        "size": 5514,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/evcs.js",
+        "size": 107595,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/forecast-settings.js",
+        "size": 34666,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/history.html",
+        "size": 19448,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/history.js",
+        "size": 157031,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/i18n/de.json",
+        "size": 1490,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/i18n/en.json",
+        "size": 8188,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/i18n/nl.json",
+        "size": 49554,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/icons/battery.png",
+        "size": 9935,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/icons/building.png",
+        "size": 7904,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/icons/ev.png",
+        "size": 22487,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/icons/grid.png",
+        "size": 9041,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/icons/solar.png",
+        "size": 8865,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/index.html",
+        "size": 49486,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/license.html",
+        "size": 3828,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/license.js",
+        "size": 12163,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/logic.html",
+        "size": 14588,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/logic.js",
+        "size": 225375,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/login.css",
+        "size": 5958,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/login.html",
+        "size": 4795,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/login.js",
+        "size": 17843,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/manifest.webmanifest",
+        "size": 1088,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/mesh-microgrid.html",
+        "size": 12397,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/mesh-microgrid.js",
+        "size": 30520,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/netoperator-appcenter.js",
+        "size": 17060,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/netoperator.html",
+        "size": 5611,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/netoperator.js",
+        "size": 9245,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/nexowatt-eos-logo.png",
+        "size": 374029,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/nexowatt-logo.png",
+        "size": 1466889,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/nw-i18n.js",
+        "size": 21426,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/nw-shell.js",
+        "size": 9122,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/operating-strategies-appcenter.js",
+        "size": 93985,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/operating-strategies-rule-builder.js",
+        "size": 105430,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/para14a-report.html",
+        "size": 6291,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/para14a-report.js",
+        "size": 16837,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/pwa.js",
+        "size": 5021,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/report-common.js",
+        "size": 18455,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/report.css",
+        "size": 4058,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/rfid-report.html",
+        "size": 6437,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/rfid-report.js",
+        "size": 11559,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/runtime-base.js",
+        "size": 5827,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/settings.html",
+        "size": 62345,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/simulation.html",
+        "size": 8617,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/simulation.js",
+        "size": 24110,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/smarthome-config.html",
+        "size": 28756,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/smarthome-config.js",
+        "size": 530456,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/smarthome.html",
+        "size": 5825,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/smarthome.js",
+        "size": 562634,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/static/ts-mirrors/frontend/customer-feature-visibility.mjs",
+        "size": 7279,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/static/ts-mirrors/frontend/display-format-canary.mjs",
+        "size": 5622,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/static/ts-mirrors/frontend/display-format.mjs",
+        "size": 6207,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/static/ts-mirrors/frontend/feature-visibility-diagnostics.mjs",
+        "size": 6807,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/static/ts-mirrors/frontend/feature-visibility-shadow-compare.mjs",
+        "size": 4712,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/static/ts-mirrors/frontend/history-controls.mjs",
+        "size": 2852,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/static/ts-mirrors/frontend/live-dashboard-format.mjs",
+        "size": 5739,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/static/ts-mirrors/frontend/runtime-shadow.mjs",
+        "size": 6563,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/storagefarm.html",
+        "size": 5056,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/storagefarm.js",
+        "size": 19800,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/styles.css",
+        "size": 367264,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/sw.js",
+        "size": 4029,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/tariff-report.html",
+        "size": 6072,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/tariff-report.js",
+        "size": 16118,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/year-report.css",
+        "size": 2907,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/year-report.html",
+        "size": 5489,
+        "mode": 420
+      },
+      {
+        "path": "ui/www/year-report.js",
+        "size": 46373,
+        "mode": 420
+      }
+    ],
+    "entryCount": 981,
+    "bundled": []
+  }
+}

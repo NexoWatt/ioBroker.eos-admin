@@ -1,0 +1,12 @@
+✔ graph parser distinguishes actual imports from translations and never executes emitted code (8.146899ms)
+✔ receipt permits the real federation asset entry but rejects missing dependencies, changed asset bytes and unsafe paths (3.681459ms)
+✔ Admin8 legacy cleaner preserves unknown files for the hash-bound copy migration and strict seal (1.066343ms)
+✔ prepared release parser works without installed packages and rejects altered vendor bytes before loading them (100.596217ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 176.60763

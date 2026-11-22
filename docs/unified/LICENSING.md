@@ -1,12 +1,13 @@
 # Zentrale Aktivierung und Lizenzbetrieb
 
-**NexoWatt EOS · 9.0.0-alpha.1**
+**NexoWatt EOS · 9.0.1**
 
 ## Erstinbetriebnahme
 
-1. Den vorgesehenen HTTPS-Einstieg öffnen und mit einem berechtigten ioBroker-Konto
+1. Den direkten EOS-Zugang `https://<Geräte-IP>:8188/` beziehungsweise den separat
+   eingerichteten HTTPS-Eingang auf 443 öffnen und mit einem berechtigten ioBroker-Konto
    anmelden und einen erforderlichen Erstpasswortwechsel abschließen. TOTP-Challenges
-   und Passkeys werden in diesem Alpha noch nicht unterstützt. Konten mit gesetztem
+   und Passkeys werden in diesem Teststand noch nicht unterstützt. Konten mit gesetztem
    `common.externalAuthentication.totp` (außer `null`/nicht vorhanden) oder fehlerhaftem
    `externalAuthentication` werden gesperrt, ohne Passwort-only-Rückfall. Für solche
    Konten ist zunächst der unterstützte MFA-Anmeldeweg zu entwickeln; die Sperre
@@ -27,7 +28,7 @@
 Der zentrale Logout widerruft derzeit die globale Sitzungsgeneration: Alle parallel
 angemeldeten Nutzer sowie ihre Socket-/SSE-Verbindungen müssen sich erneut anmelden.
 Die persistierte gültige Lizenz bleibt dabei erhalten. Ein isolierter Logout nur
-einer einzelnen Sitzung ist in diesem Alpha noch nicht implementiert.
+einer einzelnen Sitzung ist in diesem Teststand noch nicht implementiert.
 
 „Einmalig“ bezeichnet die normale Eingabe. Defekte Sicherung, Gerätewechsel,
 Ausstellerwechsel oder eine bewusst ersetzte Lizenz benötigen eine geregelte

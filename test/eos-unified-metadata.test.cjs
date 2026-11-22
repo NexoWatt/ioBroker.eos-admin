@@ -14,7 +14,11 @@ test('unified metadata validates against the unchanged upstream schema', () => {
     assert.ok(validate(io), JSON.stringify(validate.errors));
     assert.equal(io.common.version, require('../package.json').version);
     assert.equal(io.native.auth, true);
-    assert.equal(io.native.bind, '127.0.0.1');
+    assert.equal(io.native.bind, '0.0.0.0');
+    assert.equal(io.native.secure, true);
+    assert.equal(io.native.eosLockLegacyAdmin, false);
+    assert.equal(io.native.certPublic, 'defaultPublic');
+    assert.equal(io.native.certPrivate, 'defaultPrivate');
     assert.equal(io.native.port, 8188);
     assert.equal(io.common.licenseInformation.type, 'paid');
     assert.equal(io.common.compact, false);

@@ -3,6 +3,23 @@
 const { createHmac, randomBytes, timingSafeEqual } = require('node:crypto');
 const SYSTEM_REQUEST = Symbol('eosSystemRequest');
 const LOCAL = new Set(['127.0.0.1', '::1', '::ffff:127.0.0.1']);
+const ENTRY_PAGES = new Set(['/', '/login.html', '/system/', '/installer/', '/nexowatt/license']);
+function entryNavigation(req) {
+    const headers = req.headers || {};
+    const path = String(req.originalUrl || req.url || req.path || '').split('?')[0];
+    return (
+        ['GET', 'HEAD'].includes(req.method) &&
+        headers['sec-fetch-mode'] === 'navigate' &&
+        headers['sec-fetch-dest'] === 'document' &&
+        !Object.hasOwn(headers, 'origin') &&
+        !headers.upgrade &&
+        !String(headers.connection || '')
+            .toLowerCase()
+            .split(/\s*,\s*/)
+            .includes('upgrade') &&
+        ENTRY_PAGES.has(path)
+    );
+}
 function publicOrigin(value) {
     if (value === undefined || value === null || value === '') {
         return '';
@@ -16,15 +33,40 @@ function publicOrigin(value) {
     }
     return parsed.origin;
 }
+function hostOrigin(req, secure) {
+    const host = req.headers.host;
+    // Host is only an HTTP authority, never a URL, forwarding assertion or user identity.
+    if (
+        typeof host !== 'string' ||
+        !host ||
+        host.length > 512 ||
+        /[^\x21-\x7e]|[\\/?#@,%]/.test(host) ||
+        host.endsWith(':')
+    ) {
+        return null;
+    }
+    try {
+        const url = new URL(`${secure ? 'https' : 'http'}://${host}`);
+        return url.hostname && url.pathname === '/' && !url.username && !url.password && !url.search && !url.hash
+            ? url.origin
+            : null;
+    } catch {
+        return null;
+    }
+}
 function transportAllowed(req, origin, secure) {
-    if (req.headers['sec-fetch-site'] === 'cross-site') {
+    if (req.headers['sec-fetch-site'] === 'cross-site' && !entryNavigation(req)) {
         return false;
     }
     if (!secure && !LOCAL.has(req.socket?.remoteAddress)) {
         return false;
     }
+    const requestOrigin = hostOrigin(req, secure || !!origin);
+    if (!requestOrigin) {
+        return false;
+    }
     if (origin) {
-        return req.headers.host === new URL(origin).host;
+        return requestOrigin === origin;
     }
     return secure || /^(?:localhost|127\.0\.0\.1|\[::1\])(?::\d{1,5})?$/.test(req.headers.host || '');
 }
@@ -32,7 +74,7 @@ function sameOrigin(req, origin, secure) {
     if (!transportAllowed(req, origin, secure)) {
         return false;
     }
-    const expected = origin || `${secure ? 'https' : 'http'}://${req.headers.host}`;
+    const expected = origin || hostOrigin(req, secure);
     return (
         req.headers.origin === expected &&
         (!req.headers['sec-fetch-site'] || req.headers['sec-fetch-site'] === 'same-origin')
@@ -225,4 +267,12 @@ class UnifiedSessions {
         return res.status(200).json({ ok: true });
     }
 }
-module.exports = { SYSTEM_REQUEST, publicOrigin, transportAllowed, sameOrigin, readAccessToken, UnifiedSessions };
+module.exports = {
+    SYSTEM_REQUEST,
+    publicOrigin,
+    hostOrigin,
+    transportAllowed,
+    sameOrigin,
+    readAccessToken,
+    UnifiedSessions,
+};

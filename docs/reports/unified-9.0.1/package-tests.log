@@ -1,0 +1,16 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> iobroker.eos-admin@9.0.1 test:package
+> node --test test/eos-unified-metadata.test.cjs
+
+✔ unified metadata validates against the unchanged upstream schema (108.312055ms)
+✔ ioBroker JSON configuration remains valid (431.415454ms)
+✔ one installable adapter and a retained Express4 UI runtime (2.83217ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 666.099045

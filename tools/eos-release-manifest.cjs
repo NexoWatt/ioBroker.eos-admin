@@ -6,16 +6,17 @@ const crypto = require('node:crypto');
 const root = path.resolve(__dirname, '..');
 const manifestPath = path.join(root, 'release-manifests/unified/files.json');
 const roots = ['package.json', 'package-lock.json', 'io-package.json', '.npmrc', '.gitignore', '.gitattributes', 'LICENSE', 'LICENSE-NEXOWATT.md',
-    'THIRD-PARTY-NOTICES.md', 'THIRD_PARTY_NOTICES.md', 'NEXOWATT_PROPRIETARY_LICENSE.md', 'README.md', 'NEXOWATT_EOS_BUILD_INFO.json',
+    'START_HIER_9.0.1.md', 'THIRD-PARTY-NOTICES.md', 'THIRD_PARTY_NOTICES.md', 'NEXOWATT_PROPRIETARY_LICENSE.md', 'README.md', 'NEXOWATT_EOS_BUILD_INFO.json',
     'tasks.mts', 'tsconfig.build.json', 'eslint.unified.config.mjs', '.github/workflows/test-and-release.yml',
     'test', 'src', 'build', 'admin', 'adminWww', 'public', 'packages/eos-license-client', 'deploy',
     'ui/main.js', 'ui/lib', 'ui/ems', 'ui/backend', 'ui/build-ts', 'ui/www', 'ui/admin',
     'ui/src-ts', 'ui/src-admin-tab/src', 'ui/src-admin-tab/package.json', 'ui/src-admin-tab/package-lock.json',
     'ui/io-package.json', 'ui/package.json', 'src-admin/src', 'src-admin/public', 'src-admin/package.json',
-    'src-admin/package-lock.json', 'tools/eos-release-manifest.cjs', 'tools/eos-release-check.cjs', 'tools/eos-migration-plan.cjs',
-    'ui/LICENSE', 'ui/NOTICE', 'ui/scripts', 'ui/test/unified', 'ui/docs/unified', 'docs/licensing/ISSUER_AND_STORAGE.md',
+    'src-admin/package-lock.json', 'tools/eos-release-manifest.cjs', 'tools/eos-release-check.cjs', 'tools/eos-migration-plan.cjs', 'tools/eos-access-diagnostics.cjs',
+    'tools/eos-sbom-vendored.cjs', 'tools/nexowatt-vendored-webserver.cjs', 'tools/vendor/webserver-3.4.0-source.provenance.json',
+    'tools/vendor/webserver-3.4.0-no-private-key-logs.patch', 'tools/vendor/WEBSERVER_PATCH_REVIEW.md', 'ui/LICENSE', 'ui/NOTICE', 'ui/scripts', 'ui/test/unified', 'ui/docs/unified', 'docs/licensing/ISSUER_AND_STORAGE.md',
     'docs/unified', 'reports/unified', 'ui/reports/unified', 'reports/security/unified-backend-tests.tap',
-    'docs/reports/unified-9.0.0-alpha.1', 'release-manifests/unified/runtime.cdx.json', 'release-manifests/unified/frontend.cdx.json',
+    'docs/reports/unified-9.0.0-alpha.1', 'docs/reports/unified-9.0.1', 'release-manifests/unified/runtime.cdx.json', 'release-manifests/unified/frontend.cdx.json',
     'release-manifests/unified/installer.cdx.json', 'release-manifests/unified/build-environment.cdx.json'];
 function listFiles() {
     const files = [];

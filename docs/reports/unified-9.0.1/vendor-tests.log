@@ -1,0 +1,19 @@
+✔ approved source and emitted copies retain upstream license and admit without network repair (16.345226ms)
+✔ modified source cannot be repaired or silently resealed (3.156486ms)
+✔ modified emitted JavaScript fails the approved-source byte gate (3.278708ms)
+✔ missing source and additional runtime files fail closed (4.342046ms)
+✔ symlinked source file is rejected even with correct target bytes (1.976743ms)
+✔ symlinked source directory is rejected (1.792427ms)
+✔ modified provenance cannot bless different source bytes (1.760059ms)
+✔ modified or missing reviewed patch evidence is rejected (2.046457ms)
+✔ root identity enforces vendoring when alias marker and lock entry are deleted (1.623705ms)
+✔ registry package substitution and file dependencies remain forbidden (1.934009ms)
+✔ runtime uses approved local source and declared maintained registry dependencies (3.1468ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 107.678378
