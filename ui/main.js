@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/main.ts
- * Quell-Hash: sha256:21d5796140a841c894df06ed1f49fb7847a81609936aa1d7aedbe5900187cabc
+ * Quell-Hash: sha256:61ecac1b37a4eb9ccd8504cbb9b9830d46950277207f1d373f59554a4a63daa4
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -33,6 +33,7 @@
 const { HostedAdapter, centralLicenseSnapshot, centralAccess } = require('./lib/hosted-adapter');
 const express = require('express4');
 const { safeHttpFailure, safeConfigurationFailure, createPublicHttpError } = require('./lib/http-error-boundary');
+const { createHostedHttpHandler } = require('./lib/hosted-http-boundary');
 const { enrichSmartHomeImportSuggestion, reconcileSmartHomeImportSuggestions, normalizeSmartHomeCameraStateUrl } = require('./lib/smarthome-import');
 const { createRuntimeFileSender, runtimeProxyPrefix, rewriteRuntimeProxyHtml, isHttpsRuntimeProxy } = require('./lib/runtime-proxy-html');
 const { parseUiCookies, isPublicUiRequest, isIndependentMachineRequest, uiRequestPath, constantTimeToken } = require('./lib/ui-access-policy');
@@ -17996,11 +17997,27 @@ app.get(['/logic.html','/logic'], async (req, res) => {
     // Abschnitt: History-API. Liefert Zeitreihen/Reports; Werte müssen dieselbe Bedeutung wie im LIVE-Dashboard behalten.
 // API-Kommentar: GET-Route. Zweck: stellt einen Web-/API-Endpunkt bereit. Zusammenhang: Frontend-Dateien in www/* können diesen Endpunkt direkt nutzen. Route/Handler: '/api/history', async (req, res) => {
 app.get('/api/history', async (req, res) => {
-      const start = Number(req.query.from || (Date.now() - 24*3600*1000));
-      const end   = Number(req.query.to   || Date.now());
+      const queryNumber = (name, fallback) => {
+        const value = req.query[name];
+        if (value === undefined) return fallback;
+        if (typeof value !== 'string' && typeof value !== 'number') return NaN;
+        if (typeof value === 'string' && !value.trim()) return NaN;
+        return Number(value);
+      };
+      const start = queryNumber('from', Date.now() - 24*3600*1000);
+      const end = queryNumber('to', Date.now());
       // Historie wird im 10‑Minuten‑Raster nach Influx geschrieben.
       // Default daher ebenfalls 10 Minuten (Frontend kann weiterhin explizit steuern).
-      const stepS = Number(req.query.step || 600);
+      const stepS = queryNumber('step', 600);
+      // Bound allocations before asking the history provider. Normal day/week/
+      // month/year presets use at most 745 buckets. Larger custom selections
+      // must request a coarser step instead of allocating millions of pairs.
+      const maxHistoryPoints = 4096;
+      if (!Number.isSafeInteger(start) || !Number.isSafeInteger(end) || start < 0 || end <= start ||
+          !Number.isFinite(stepS) || stepS <= 0 || !Number.isFinite(stepS * 1000) ||
+          Math.ceil((end - start) / Math.max(60000, stepS * 1000)) + 1 > maxHistoryPoints) {
+        return res.status(400).json({ ok: false, error: 'EOS_HISTORY_RANGE_INVALID' });
+      }
       const historyCfgSig = JSON.stringify({
         h: (this.config && this.config.history) || {},
         d: (this.config && this.config.datapoints) || {},
@@ -18019,6 +18036,14 @@ app.get('/api/history', async (req, res) => {
           if (inflightPayload) return res.json(inflightPayload);
         } catch (_e) {}
       }
+      // Keep identical requests deduplicated and put backpressure on distinct
+      // computations; deleting an in-flight Map entry would not stop its work.
+      if (!(this._nwHistoryApiInflight instanceof Map)) this._nwHistoryApiInflight = new Map();
+      if (this._nwHistoryApiInflight.size >= 4) {
+        return res.status(503).json({ ok: false, error: 'EOS_HISTORY_BUSY' });
+      }
+      const historyDeadlineMs = performance.now() + 5000;
+      const requestCancels = new Set();
       /**
        * Code-Teil: computeHistoryPayload
        * Zweck: Berechnet abgeleitete Werte.
@@ -18028,6 +18053,47 @@ app.get('/api/history', async (req, res) => {
       const computeHistoryPayload = (async () => {
       try {
         const inst = this._nwGetHistoryInstance();
+        // sendTo callbacks run after the surrounding route try/catch has left.
+        // Settle errors inside the callback and share one budget across all
+        // candidate fallbacks, counters and current-state reads.
+        const historyRequest = (dispatch, normalize) => new Promise((resolve, reject) => {
+          const failure = code => Object.assign(new Error(code), { code });
+          if (this._nwShuttingDown) return reject(failure('EOS_HISTORY_CANCELLED'));
+          const remainingMs = historyDeadlineMs - performance.now();
+          if (remainingMs <= 0) return reject(failure('EOS_HISTORY_TIMEOUT'));
+          let settled = false;
+          let timer = null;
+          const finish = (error, value) => {
+            if (settled) return;
+            settled = true;
+            if (timer) clearTimeout(timer);
+            this._nwPendingHistoryRequests?.delete(cancel);
+            requestCancels.delete(cancel);
+            if (error) reject(error);
+            else resolve(value);
+          };
+          const cancel = () => finish(failure('EOS_HISTORY_CANCELLED'));
+          if (!(this._nwPendingHistoryRequests instanceof Set)) this._nwPendingHistoryRequests = new Set();
+          this._nwPendingHistoryRequests.add(cancel);
+          requestCancels.add(cancel);
+          timer = setTimeout(() => finish(failure('EOS_HISTORY_TIMEOUT')), remainingMs);
+          timer.unref?.();
+          const reply = value => {
+            if (settled) return;
+            if (this._nwShuttingDown) return cancel();
+            if (performance.now() >= historyDeadlineMs) return finish(failure('EOS_HISTORY_TIMEOUT'));
+            try { finish(null, normalize(value)); }
+            catch (_e) { finish(failure('EOS_HISTORY_RESPONSE_INVALID')); }
+          };
+          try {
+            // Also observe transports that return a rejecting Promise despite
+            // having a callback signature. No detached rejection may escape.
+            const pending = dispatch(reply);
+            if (pending && typeof pending.then === 'function') {
+              Promise.resolve(pending).catch(() => finish(failure('EOS_HISTORY_UNAVAILABLE')));
+            }
+          } catch (_e) { finish(failure('EOS_HISTORY_UNAVAILABLE')); }
+        });
 
         // For many states we log data sparsely (e.g. only "on change").
         // In that case the aggregated history query only returns values for time-buckets
@@ -18038,7 +18104,7 @@ app.get('/api/history', async (req, res) => {
         // Solution: densify the returned data to an equidistant time-grid ("step") and
         // forward-fill (hold last) values. This yields clean plots and also improves the
         // kWh integration in the frontend.
-        const stepMs = (Number.isFinite(stepS) && stepS > 0) ? (stepS * 1000) : 60_000;
+        const stepMs = Math.max(60_000, stepS * 1000);
         const requestSeriesCache = new Map();
         /**
          * Code-Teil: densifyHoldLast
@@ -18055,6 +18121,7 @@ app.get('/api/history', async (req, res) => {
           }
 
           const n = Math.max(0, Math.floor((rEnd - rStart) / rStep));
+          if (n + 2 > maxHistoryPoints + 1) throw new Error('EOS_HISTORY_RANGE_INVALID');
           const byIdx = new Map();
 
           for (const row of values) {
@@ -18190,54 +18257,14 @@ app.get('/api/history', async (req, res) => {
           const cacheId = sid || String(id || '');
           const cacheKey = `${cacheId}|${queryStart}|${queryEnd}|${queryStepMs}`;
           if (requestSeriesCache.has(cacheKey)) return requestSeriesCache.get(cacheKey);
-          const promise = new Promise(resolve => {
-            if (!sid) return resolve({ id: sid || id, values: [] });
-            const options = { start: queryStart, end: queryEnd, step: queryStepMs, aggregate: 'average', addId: false, ignoreNull: true };
-            let done = false;
-            const timer = setTimeout(() => {
-              if (done) return;
-              done = true;
-              resolve({ id: sid, values: [] });
-            }, 8000);
-            try {
-              this.sendTo(inst, 'getHistory', { id: sid, options }, (resu) => {
-                if (done) return;
-                done = true;
-                clearTimeout(timer);
-                let outArr = [];
-                if (Array.isArray(resu)) outArr = resu;
-                else if (resu && Array.isArray(resu.result)) {
-                  if (resu.result.length && Array.isArray(resu.result[0]?.data)) {
-                    outArr = resu.result[0].data;
-                  } else {
-                    outArr = resu.result;
-                  }
-                } else if (resu && Array.isArray(resu.series) && resu.series[0]?.values) {
-                  outArr = resu.series[0].values.map(v => ({ ts: v[0], val: v[1] }));
-                } else if (resu && Array.isArray(resu.data)) {
-                  outArr = resu.data;
-                }
-                const norm = (outArr || [])
-                  .map(p => {
-                    const tRaw = Array.isArray(p) ? p[0] : (p.ts ?? p.time ?? p.t ?? p[0]);
-                    const vRaw = Array.isArray(p) ? p[1] : (p.val ?? p.value ?? p[1]);
-                    const t = normTsMs(tRaw);
-                    const v = Number(vRaw);
-                    if (t == null || Number.isNaN(v)) return null;
-                    return [t, v];
-                  })
-                  .filter(Boolean)
-                  .sort((a, b) => a[0] - b[0]);
-                resolve({ id: sid, values: densifyHoldLast(norm, queryStart, queryEnd, queryStepMs) });
-              });
-            } catch (e) {
-              if (!done) {
-                done = true;
-                clearTimeout(timer);
-                resolve({ id: sid, values: [] });
-              }
-            }
-          });
+          const options = { start: queryStart, end: queryEnd, step: queryStepMs, aggregate: 'average', addId: false, ignoreNull: true };
+          const promise = !sid ? Promise.resolve({ id: sid || id, values: [] }) : historyRequest(
+            callback => this.sendTo(inst, 'getHistory', { id: sid, options }, callback),
+            result => ({ id: sid, values: densifyHoldLast(
+              this._nwNormalizeHistoryResult(result, 10000).map(point => [point.ts, point.val]),
+              queryStart, queryEnd, queryStepMs,
+            ) }),
+          );
 
           requestSeriesCache.set(cacheKey, promise);
           return promise;
@@ -18297,7 +18324,7 @@ app.get('/api/history', async (req, res) => {
           const out = [];
           const src = Array.isArray(values) ? values : [];
           for (const row of src) {
-            if (!Array.isArray(row) || row.length < 2) continue;
+            if (!Array.isArray(row) || row.length < 2 || row[1] === null || row[1] === undefined) continue;
             const ts = normTsMs(row[0]);
             const val = Number(row[1]);
             if (!Number.isFinite(ts) || !Number.isFinite(val)) continue;
@@ -18313,17 +18340,20 @@ app.get('/api/history', async (req, res) => {
          * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
          */
         const _valueAtHold = (pairs, ts) => {
+          // _normalizeHistoryPairs already returns sorted finite rows. Binary
+          // search preserves last-value semantics (including duplicate times)
+          // without rescanning a year of prices for every chart bucket.
           const src = Array.isArray(pairs) ? pairs : [];
-          let last = null;
-          for (const row of src) {
-            const t = Number(row && row[0]);
-            const v = Number(row && row[1]);
-            if (!Number.isFinite(t) || !Number.isFinite(v)) continue;
-            if (t > ts) break;
-            last = v;
+          let low = 0;
+          let high = src.length;
+          while (low < high) {
+            const mid = low + Math.floor((high - low) / 2);
+            if (src[mid][0] <= ts) low = mid + 1;
+            else high = mid;
           }
-          return last;
+          return low > 0 ? src[low - 1][1] : null;
         };
+
         /**
          * Code-Teil: _buildNormalizedPricingSeries
          * Zweck: Kapselt einen lokalen Verarbeitungsschritt, damit Aufrufer nicht direkt in Detaildaten eingreifen.
@@ -18424,17 +18454,22 @@ app.get('/api/history', async (req, res) => {
             for (let i = 1; i <= count; i++) {
               lpIds.push(`${this.namespace}.historie.evcs.lp${i}.powerW`);
             }
-            const lpSeries = await Promise.all(lpIds.map((id) => ask(id)));
             const sumByTs = new Map();
-            for (const s of lpSeries) {
-              if (!Array.isArray(s?.values)) continue;
-              for (const p of s.values) {
-                if (!Array.isArray(p) || p.length < 2) continue;
-                const ts = Number(p[0]);
-                const v = Number(p[1]);
-                if (!Number.isFinite(ts) || !Number.isFinite(v)) continue;
-                sumByTs.set(ts, (sumByTs.get(ts) || 0) + v);
+            // Avoid keeping up to 200 full charge-point arrays alive together.
+            // Eight parallel reads still share the whole request deadline.
+            for (let offset = 0; offset < lpIds.length; offset += 8) {
+              const batchIds = lpIds.slice(offset, offset + 8);
+              const lpSeries = await Promise.all(batchIds.map(id => ask(id)));
+              for (const series of lpSeries) {
+                for (const point of series.values) {
+                  if (point[1] === null || point[1] === undefined) continue;
+                  const ts = Number(point[0]);
+                  const value = Number(point[1]);
+                  if (!Number.isFinite(ts) || !Number.isFinite(value)) continue;
+                  sumByTs.set(ts, (sumByTs.get(ts) || 0) + value);
+                }
               }
+              for (const id of batchIds) requestSeriesCache.delete(`${id}|${start}|${end}|${Math.max(60000, stepS * 1000)}`);
             }
             const vals = Array.from(sumByTs.entries())
               .sort((a, b) => a[0] - b[0])
@@ -18470,81 +18505,34 @@ const energyEnd = Math.min(end, Date.now());
  * Zusammenhang: Teil von Adapterkern: Lifecycle, Webserver, API, States, EMS-Engine; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
  * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
  */
-const readCounterPoint = (id, newest) => new Promise(resolve => {
-  if (!id) return resolve(null);
+const readCounterPoint = (id, newest) => {
+  if (!id) return Promise.resolve(null);
   const options = {
-    start,
-    end: energyEnd,
-    aggregate: 'none',
-    addId: false,
-    ignoreNull: true,
-    count: 1,
-    returnNewestEntries: !!newest,
-    // For cumulative kWh counters we explicitly want the nearest border values.
-    // Otherwise range deltas can become 0 or too small when the first/last raw sample
-    // is outside the exact query window.
-    removeBorderValues: false,
+    start, end: energyEnd, aggregate: 'none', addId: false, ignoreNull: true,
+    count: 1, returnNewestEntries: !!newest, removeBorderValues: false,
   };
-  let done = false;
-  const timer = setTimeout(() => {
-    if (done) return;
-    done = true;
-    resolve(null);
-  }, 5000);
-  try {
-    this.sendTo(inst, 'getHistory', { id, options }, (resu) => {
-      if (done) return;
-      done = true;
-      clearTimeout(timer);
-      let outArr = [];
-      if (Array.isArray(resu)) outArr = resu;
-      else if (resu && Array.isArray(resu.result)) {
-        if (resu.result.length && Array.isArray(resu.result[0]?.data)) outArr = resu.result[0].data;
-        else outArr = resu.result;
-      } else if (resu && Array.isArray(resu.series) && resu.series[0]?.values) {
-        outArr = resu.series[0].values.map(v => ({ ts: v[0], val: v[1] }));
-      } else if (resu && Array.isArray(resu.data)) {
-        outArr = resu.data;
-      }
-
-      const pts = (outArr || [])
-        .map(p => {
-          const tRaw = Array.isArray(p) ? p[0] : (p.ts ?? p.time ?? p.t ?? p[0]);
-          const vRaw = Array.isArray(p) ? p[1] : (p.val ?? p.value ?? p[1]);
-          const ts = normTsMs(tRaw);
-          const val = Number(vRaw);
-          if (!Number.isFinite(ts) || !Number.isFinite(val)) return null;
-          return { ts, val };
-        })
-        .filter(Boolean)
-        .sort((a,b) => a.ts - b.ts);
-
-      if (!pts.length) return resolve(null);
-      // Ensure consistent pick even if history instance ignores returnNewestEntries.
-      resolve(newest ? pts[pts.length - 1] : pts[0]);
-    });
-  } catch (_e) {
-    clearTimeout(timer);
-    resolve(null);
-  }
-});
+  return historyRequest(
+    callback => this.sendTo(inst, 'getHistory', { id, options }, callback),
+    result => {
+      const points = this._nwNormalizeHistoryResult(result, 10000);
+      return points.length ? (newest ? points[points.length - 1] : points[0]) : null;
+    },
+  );
+};
 /**
  * Code-Teil: readCurrentCounterPoint
  * Zweck: Liest Werte mit Fallbacks aus Cache/State/Config.
  * Zusammenhang: Teil von Adapterkern: Lifecycle, Webserver, API, States, EMS-Engine; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
  * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
  */
-const readCurrentCounterPoint = async (id) => {
-  try {
-    const st = await this.getForeignStateAsync(id);
-    const val = Number(st && st.val);
-    if (!Number.isFinite(val)) return null;
-    const ts = this._nwNormTsMs(st && st.ts) || energyEnd;
-    return { ts, val };
-  } catch (_e) {
-    return null;
-  }
-};
+const readCurrentCounterPoint = (id) => historyRequest(
+  callback => Promise.resolve(this.getForeignStateAsync(id)).then(callback),
+  state => {
+    // Missing/null state values must not become a new zero counter reading.
+    const points = this._nwNormalizeHistoryResult({ result: [state] }, 1);
+    return points[0] || null;
+  },
+);
 /**
  * Code-Teil: counterDelta
  * Zweck: Kapselt einen lokalen Verarbeitungsschritt, damit Aufrufer nicht direkt in Detaildaten eingreifen.
@@ -18556,7 +18544,10 @@ const counterDelta = async (id) => {
   let b = null;
   const endIsNearNow = Math.abs(Date.now() - energyEnd) <= (12 * 60 * 60 * 1000);
   if (endIsNearNow) {
-    b = await readCurrentCounterPoint(id);
+    try { b = await readCurrentCounterPoint(id); }
+    catch (error) {
+      if (error?.code !== 'EOS_HISTORY_UNAVAILABLE') throw error;
+    }
   }
   if (!b) b = await readCounterPoint(id, true);
   if (!a || !b) return null;
@@ -18610,12 +18601,14 @@ const integrateSeriesKwh = (series, defaultEndMs, stepMsForSeries, positiveOnly 
   const vals = Array.isArray(series?.values) ? series.values : [];
   if (!vals.length) return null;
   let kwh = 0;
+  let integrated = false;
   const endTs = Number.isFinite(Number(defaultEndMs)) ? Number(defaultEndMs) : Date.now();
   const fallbackStep = Math.max(60 * 1000, Number(stepMsForSeries) || energyExactStepMs);
   for (let i = 0; i < vals.length; i++) {
     const cur = vals[i];
     if (!Array.isArray(cur) || cur.length < 2) continue;
     const ts = Number(cur[0]);
+    if ((cur[1] === null || cur[1] === undefined) && ts < endTs) return null;
     let v = Number(cur[1]);
     if (!Number.isFinite(ts) || !Number.isFinite(v) || ts >= endTs) continue;
     const nextTs = (i + 1 < vals.length && Array.isArray(vals[i + 1]) && Number.isFinite(Number(vals[i + 1][0])))
@@ -18626,8 +18619,9 @@ const integrateSeriesKwh = (series, defaultEndMs, stepMsForSeries, positiveOnly 
     dt = Math.min(dt, fallbackStep * 2);
     v = positiveOnly ? Math.max(0, v) : Math.abs(v);
     kwh += (v * dt) / 3600000000;
+    integrated = true;
   }
-  return kwh;
+  return integrated ? kwh : null;
 };
 /**
  * Code-Teil: clipSeriesForIntegration
@@ -18644,8 +18638,8 @@ const clipSeriesForIntegration = (series, clipEndMs) => {
   for (const row of vals) {
     if (!Array.isArray(row) || row.length < 2) continue;
     const ts = Number(row[0]);
-    const v = Number(row[1]);
-    if (!Number.isFinite(ts) || !Number.isFinite(v)) continue;
+    const v = row[1] === null || row[1] === undefined ? null : Number(row[1]);
+    if (!Number.isFinite(ts) || (v !== null && !Number.isFinite(v))) continue;
     if (ts > clipEnd) break;
     out.push([ts, v]);
     lastVal = v;
@@ -18674,17 +18668,20 @@ const buildEnergyExact = async () => {
     const count = Number(this.evcsCount || 0);
     if (count > 0) {
       const query = { start, end: energyExactEnd, stepMs: energyExactStepMs };
-      const lpSeries = await Promise.all(Array.from({ length: count }, (_v, idx) => ask(`${this.namespace}.historie.evcs.lp${idx + 1}.powerW`, query)));
       const sumByTs = new Map();
-      for (const s of lpSeries) {
-        if (!Array.isArray(s?.values)) continue;
-        for (const row of s.values) {
-          if (!Array.isArray(row) || row.length < 2) continue;
-          const ts = Number(row[0]);
-          const v = Number(row[1]);
-          if (!Number.isFinite(ts) || !Number.isFinite(v) || ts > energyExactEnd) continue;
-          sumByTs.set(ts, (sumByTs.get(ts) || 0) + v);
+      for (let offset = 0; offset < count; offset += 8) {
+        const ids = Array.from({ length: Math.min(8, count - offset) }, (_value, index) => `${this.namespace}.historie.evcs.lp${offset + index + 1}.powerW`);
+        const lpSeries = await Promise.all(ids.map(id => ask(id, query)));
+        for (const series of lpSeries) {
+          for (const row of series.values) {
+            if (row[1] === null || row[1] === undefined) continue;
+            const ts = Number(row[0]);
+            const value = Number(row[1]);
+            if (!Number.isFinite(ts) || !Number.isFinite(value) || ts > energyExactEnd) continue;
+            sumByTs.set(ts, (sumByTs.get(ts) || 0) + value);
+          }
         }
+        for (const id of ids) requestSeriesCache.delete(`${id}|${start}|${energyExactEnd}|${energyExactStepMs}`);
       }
       const vals = Array.from(sumByTs.entries()).sort((a, b) => a[0] - b[0]).map(([ts, v]) => [ts, v]);
       if (vals.length >= 2) evExact = clipSeriesForIntegration({ id: `${this.namespace}.historie.evcs.sum.powerW`, values: vals }, energyExactEnd);
@@ -18697,19 +18694,20 @@ const buildEnergyExact = async () => {
   energyExact.gridExportKwh = integrateSeriesKwh(sellExact, energyExactEnd, energyExactStepMs, true);
   energyExact.evKwh = integrateSeriesKwh(evExact, energyExactEnd, energyExactStepMs, true);
   const loadDirect = integrateSeriesKwh(loadExact, energyExactEnd, energyExactStepMs, true);
-  const loadBalance = Math.max(0,
-    Number(energyExact.productionKwh || 0)
-    + Number(energyExact.gridImportKwh || 0)
-    + Number(energyExact.storageDischargeKwh || 0)
-    - Number(energyExact.storageChargeKwh || 0)
-    - Number(energyExact.gridExportKwh || 0)
-  );
-  energyExact.consumptionKwh = Number.isFinite(loadDirect) && loadDirect > 0.01 ? loadDirect : loadBalance;
+  const balanceComponents = [energyExact.productionKwh, energyExact.gridImportKwh,
+    energyExact.storageDischargeKwh, energyExact.storageChargeKwh, energyExact.gridExportKwh];
+  const loadBalance = balanceComponents.every(Number.isFinite) ? Math.max(0,
+    energyExact.productionKwh + energyExact.gridImportKwh + energyExact.storageDischargeKwh
+    - energyExact.storageChargeKwh - energyExact.gridExportKwh,
+  ) : null;
+  // A measured zero remains zero. An incomplete balance is not a new zero.
+  energyExact.consumptionKwh = Number.isFinite(loadDirect) ? loadDirect : loadBalance;
   energyExact.__endMs = energyExactEnd;
   energyExact.__stepMs = energyExactStepMs;
   energyExact.__source = 'chartSeriesReuse';
 };
-try { await buildEnergyExact(); } catch (_e) {}
+await buildEnergyExact();
+if (performance.now() >= historyDeadlineMs) throw Object.assign(new Error('EOS_HISTORY_TIMEOUT'), { code: 'EOS_HISTORY_TIMEOUT' });
 
         const out = { pv, load, buy, sell, chg, dchg, soc, evcs };
         const pricing = {
@@ -18721,12 +18719,17 @@ try { await buildEnergyExact(); } catch (_e) {}
         };
         return { ok:true, start, end, step: stepS, series: out, extras: { consumers: extraConsumers, producers: extraProducers }, energy, energyExact, pricing };
       } catch (e) {
-        return { ok:false, error: String(e) };
+        return { ok:false, error: typeof e?.code === 'string' && /^EOS_HISTORY_[A-Z_]+$/.test(e.code) ? e.code : 'EOS_HISTORY_UNAVAILABLE' };
+      } finally {
+        // If one branch fails, release all sibling timers and callback closures
+        // now. Late transport replies are ignored by their settled guards.
+        for (const cancel of requestCancels) cancel();
+        requestCancels.clear();
       }
     })();
 
       if (!(this._nwHistoryApiInflight instanceof Map)) this._nwHistoryApiInflight = new Map();
-      this._nwHistoryApiInflight.set(cacheKey, computeHistoryPayload); if (this._nwHistoryApiInflight.size > 1000) { const __rc85Oldest = this._nwHistoryApiInflight.keys().next().value; if (__rc85Oldest !== undefined) this._nwHistoryApiInflight.delete(__rc85Oldest); } // RC85_BOUNDED_COLLECTION
+      this._nwHistoryApiInflight.set(cacheKey, computeHistoryPayload);
       let payload = null;
       try {
         payload = await computeHistoryPayload;
@@ -25978,6 +25981,7 @@ return res.json(out);
 
     // A router is mounted by the owner; this module never opens a TCP port.
     if (this._nwShuttingDown) throw new Error('EOS_UI_STOPPING');
+    this._hostedHttpHandler = createHostedHttpHandler(app);
     this._hostedApp = app;
   }
 
@@ -26873,8 +26877,8 @@ return res.json(out);
    * Ablauf und Zusammenhang: Übernimmt ioBroker-Ereignisse in die Adapter-Laufzeit und verteilt relevante Änderungen an Anzeige, Einstellungen und Regelung. Bestätigte Messwerte und Bedien-Schreibwünsche dürfen dabei nicht verwechselt werden.
    */
   onStateChange(id, state) {
-    if (this._nwShuttingDown || !state) return;
-    if (state.ack === false && String(id).startsWith(this.namespace + '.')
+    if (this._nwShuttingDown) return;
+    if (state && state.ack === false && String(id).startsWith(this.namespace + '.')
       && !centralLicenseSnapshot(this._bridge).ok) return;
     // Feed EMS datapoint cache (for embedded charging engine)
     try {
@@ -26884,11 +26888,15 @@ return res.json(out);
         // kurzen Debounce unmittelbar den normalen zentralen EMS-Tick aus. Die
         // Engine erkennt die autoritativen NVP-Quellen selbst und ignoriert ihre
         // internen abgeleiteten States, sodass kein StateChange-Loop entstehen kann.
-        if (typeof this.emsEngine.handleExternalStateChange === 'function') {
+        if (state && typeof this.emsEngine.handleExternalStateChange === 'function') {
           this.emsEngine.handleExternalStateChange(id, state);
         }
       }
     } catch (_e) {}
+
+    // Löschereignisse müssen den EMS-Messwertcache invalidieren; die übrigen
+    // UI-/Regel-Handler verarbeiten weiterhin nur vorhandene State-Werte.
+    if (!state) return;
 
     // Feed NexoLogic engine (node/graph)
     try {
@@ -31549,10 +31557,14 @@ return res.json(out);
     try {
       if (!(this._nwHistoryApiCache instanceof Map)) this._nwHistoryApiCache = new Map();
       if (!key || !payload) return;
-      this._nwHistoryApiCache.set(key, { ts: Date.now(), payload }); if (this._nwHistoryApiCache.size > 1000) { const __rc85Oldest = this._nwHistoryApiCache.keys().next().value; if (__rc85Oldest !== undefined) this._nwHistoryApiCache.delete(__rc85Oldest); } // RC85_BOUNDED_COLLECTION
-      if (this._nwHistoryApiCache.size > 24) {
-        const oldestKey = this._nwHistoryApiCache.keys().next().value;
-        if (oldestKey) this._nwHistoryApiCache.delete(oldestKey);
+      const now = Date.now();
+      for (const [entryKey, entry] of this._nwHistoryApiCache) {
+        if (!entry || !Number.isFinite(entry.ts) || now - entry.ts > 5000) this._nwHistoryApiCache.delete(entryKey);
+      }
+      this._nwHistoryApiCache.delete(key);
+      this._nwHistoryApiCache.set(key, { ts: now, payload });
+      while (this._nwHistoryApiCache.size > 4) {
+        this._nwHistoryApiCache.delete(this._nwHistoryApiCache.keys().next().value);
       }
     } catch (_e) {}
   }
@@ -32457,8 +32469,8 @@ return res.json(out);
    * Zusammenhang: Teil von Adapterkern: Lifecycle, Webserver, API, States, EMS-Engine; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
-  /** @param {unknown} resu @returns {Array<{ ts: number; val: number }>} */
-  _nwNormalizeHistoryResult(resu) {
+  /** @param {unknown} resu @param {number} [maxRows] @returns {Array<{ ts: number; val: number }>} */
+  _nwNormalizeHistoryResult(resu, maxRows = Infinity) {
     /** @param {unknown} value @returns {Record<string, unknown> | null} */
     const asRecord = value =>
       value !== null && typeof value === 'object' && !Array.isArray(value) ? /** @type {Record<string, unknown>} */ (value) : null;
@@ -32477,6 +32489,7 @@ return res.json(out);
     } else if (Array.isArray(payload?.data)) {
       arr = payload.data;
     }
+    if (arr.length > maxRows) throw Object.assign(new Error('EOS_HISTORY_RESPONSE_LIMIT'), { code: 'EOS_HISTORY_RESPONSE_LIMIT' });
     const decimal = /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?$/;
     /** @type {Array<{ ts: number; val: number }>} */
     const norm = [];
@@ -33727,7 +33740,7 @@ function createHostedRuntime(owner, bridge) {
       // Activation may start the dormant runtime, but no request waits for device/history work.
       // Operational failures are recorded by the shared single-flight promise above.
       if (operationalArmed) void startOperational().catch(() => {});
-      return runtime._hostedApp(req, res, next);
+      return runtime._hostedHttpHandler(req, res, next);
     },
     onStateChange(id, state) { if (runtime._hostedOperational && !stopping) return runtime.onStateChange(id, state); },
     onMessage(message) { return runtime._hostedOperational && !stopping ? runtime.onMessage(message) : false; },

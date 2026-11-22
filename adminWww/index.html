@@ -40,21 +40,25 @@
         />
         <link
             rel="stylesheet"
-            href="css/leaflet.css?eos-release=9.0.4"
+            href="css/leaflet.css?eos-release=9.0.5"
         />
         <link
             rel="stylesheet"
-            href="css/nexowatt-native-shell.css?v=7109&amp;eos-release=9.0.4"
+            href="css/nexowatt-native-shell.css?v=7109&amp;eos-release=9.0.5"
         />
         <link
             rel="stylesheet"
-            href="css/eos-ems-overview.css?v=7109&amp;eos-release=9.0.4"
+            href="css/eos-boot-loader.css?eos-release=9.0.5"
         />
         <link
             rel="stylesheet"
-            href="./css/eos-auto-update.css?v=7103&amp;eos-release=9.0.4"
+            href="css/eos-ems-overview.css?v=7109&amp;eos-release=9.0.5"
         />
-        <script src="js/eos-manual-write-policy.js?v=7109&amp;eos-release=9.0.4"></script>
+        <link
+            rel="stylesheet"
+            href="./css/eos-auto-update.css?v=7103&amp;eos-release=9.0.5"
+        />
+        <script src="js/eos-manual-write-policy.js?v=7109&amp;eos-release=9.0.5"></script>
         <script>
             const script = document.createElement('script');
 
@@ -77,7 +81,7 @@
                 script.src =
                     window.location.port === '3000'
                         ? `${window.location.protocol}//${window.location.hostname}:8188/lib/js/socket.io.js`
-                        : "./lib/js/socket.io.js?eos-release=9.0.4";
+                        : "./lib/js/socket.io.js?eos-release=9.0.5";
             }, 1000);
 
             document.head.appendChild(script);
@@ -182,62 +186,82 @@
     </head>
     <body>
         <noscript>Für NexoWatt EOS muss JavaScript aktiviert sein.</noscript>
-        <div id="root"></div>
+        <div id="root">
+            <div
+                class="eos-boot-loader"
+                role="status"
+                aria-live="polite"
+                aria-busy="true"
+            >
+                <img
+                    class="eos-boot-loader__logo"
+                    src="img/eos/nexowatt-eos-brand-wide.png"
+                    width="1200"
+                    height="342"
+                    alt="NexoWatt EOS – Energy Operation System"
+                />
+                <span
+                    class="eos-boot-loader__spinner"
+                    aria-hidden="true"
+                ></span>
+                <p class="eos-boot-loader__label">NexoWatt EOS wird geladen …</p>
+            </div>
+        </div>
         <script
             defer
-            src="js/eos-role-bootstrap.js?v=7109&amp;security=20260930&amp;eos-release=9.0.4"
-            data-eos-entry="./assets/mf-entry-bootstrap-0-a294c951.js"
+            src="js/eos-role-bootstrap.js?v=7109&amp;security=20260930&amp;eos-release=9.0.5"
+            data-eos-entry="./assets/mf-entry-bootstrap-0-0aeb7128.js"
         ></script>
         <script
             defer
-            src="js/eos-policy-client.js?v=7109&amp;eos-release=9.0.4"
+            src="js/eos-policy-client.js?v=7109&amp;eos-release=9.0.5"
         ></script>
         <script
             defer
-            src="js/eos-branding-sanitizer.js?v=7109&amp;eos-release=9.0.4"
+            src="js/eos-branding-sanitizer.js?v=7109&amp;eos-release=9.0.5"
         ></script>
         <script
             defer
-            src="js/nexowatt-native-shell.js?v=7109&amp;eos-release=9.0.4"
+            src="js/nexowatt-native-shell.js?v=7109&amp;eos-release=9.0.5"
         ></script>
         <script
             defer
-            src="js/eos-native-security.js?v=7109&amp;eos-release=9.0.4"
+            src="js/eos-native-security.js?v=7109&amp;eos-release=9.0.5"
         ></script>
         <script
             defer
-            src="js/eos-basic-settings.js?v=7109&amp;eos-release=9.0.4"
+            src="js/eos-basic-settings.js?v=7109&amp;eos-release=9.0.5"
         ></script>
         <script
             defer
-            src="js/eos-role-ui.js?v=7109&amp;eos-release=9.0.4"
+            src="js/eos-role-ui.js?v=7109&amp;eos-release=9.0.5"
         ></script>
         <script
             defer
-            src="./js/eos-auto-update.js?v=7103&amp;eos-release=9.0.4"
+            src="./js/eos-auto-update.js?v=7103&amp;eos-release=9.0.5"
         ></script>
         <script
             defer
-            src="js/eos-account-management.js?v=7109&amp;security=20260930&amp;eos-release=9.0.4"
+            src="js/eos-account-management.js?v=7109&amp;security=20260930&amp;eos-release=9.0.5"
         ></script>
         <script
             defer
-            src="js/eos-ems-overview.js?v=7109&amp;eos-release=9.0.4"
+            src="js/eos-ems-overview.js?v=7109&amp;eos-release=9.0.5"
         ></script>
         <script
             defer
-            src="js/eos-assistant.js?v=7109&amp;eos-release=9.0.4"
+            src="js/eos-assistant.js?v=7109&amp;eos-release=9.0.5"
         ></script>
         <script
             defer
-            src="static/js/nexowatt-stable-login.js?v=7109&amp;eos-release=9.0.4"
+            src="static/js/nexowatt-stable-login.js?v=7109&amp;eos-release=9.0.5"
         ></script>
         <script
             defer
-            src="static/js/nexowatt-stable-v7109.js?v=7109&amp;eos-release=9.0.4"
+            src="static/js/nexowatt-stable-v7109.js?v=7109&amp;eos-release=9.0.5"
         ></script>
         <script
             defer
-            src="js/eos-license-link.js?v=7110&amp;eos-release=9.0.4"
+            src="js/eos-license-link.js?v=7110&amp;eos-release=9.0.5"
         ></script></body>
 </html>

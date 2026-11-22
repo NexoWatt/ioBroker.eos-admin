@@ -1,0 +1,12 @@
+{
+  "css/eos-boot-loader.css": {
+    "present": true,
+    "sameAsSource": true,
+    "sha256": "3cd3bd5fb6c798e9d7aae2d5d7abbcb08215151e092a911f6f6d0da553cef2af"
+  },
+  "img/eos/nexowatt-eos-brand-wide.png": {
+    "present": true,
+    "sameAsSource": true,
+    "sha256": "16a27cae565245b9980a98fb73851e1f5d1219fb6bf84c50b794ae26c253a3b4"
+  }
+}

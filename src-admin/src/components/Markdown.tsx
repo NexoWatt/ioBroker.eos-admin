@@ -24,7 +24,8 @@ import { MdClose as IconClose, MdMenu as IconMenu, MdExpandMore as IconExpandMor
 
 import { FaGithub as IconGithub } from 'react-icons/fa';
 
-import { type AdminConnection, type IobTheme, type ThemeName, I18n, Loader, Utils } from '@iobroker/gui-components';
+import { type AdminConnection, type IobTheme, type ThemeName, I18n, Utils } from '@iobroker/gui-components';
+import EosLoader from './EosLoader';
 
 import IconGlobe from '../assets/globe.svg';
 import IconLink from '../assets/link.svg';
@@ -1320,7 +1321,12 @@ class Markdown extends Component<MarkdownProps, MarkdownState> {
         }
 
         if (this.state.loadTimeout && !this.state.parts.length) {
-            return <Loader themeName={this.props.themeName} />;
+            return (
+                <EosLoader
+                    label={I18n.t('Loading...')}
+                    compact
+                />
+            );
         }
 
         const reactElements = this.state.parts.map((part, i) => {

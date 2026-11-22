@@ -1,0 +1,195 @@
+✖ Admin wildcard events do not retain unrelated values or evict configured measurements (21.529311ms)
+✖ alias source, connected flags and heartbeat stay separate from payload retention (0.609811ms)
+✖ shared sources survive remapping until the last reference leaves, and remapping back re-primes (0.250444ms)
+✖ late mappings read the DB and immediate subscription events are retained (0.19391ms)
+✔ deletion invalidates an active measurement and later updates recover normally (0.151456ms)
+✖ unchanged upserts and disabled heartbeat release only obsolete connection payloads (0.456402ms)
+✖ a detached late DB prime cannot block a later remap back to that source (0.338636ms)
+✖ A→B→A remapping rejects an obsolete source DB response (0.329582ms)
+✖ A→B→A remapping rejects an obsolete connection DB response (0.326248ms)
+✖ a live sample wins over an older DB read that completes later (0.346578ms)
+✖ a deletion during DB priming cannot resurrect an old measurement (0.291856ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 1
+ℹ fail 10
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 101.531349
+
+✖ failing tests:
+
+test at ../../../../tmp/eos-9.0.5-memory/datapoint-cache-before.test.cjs:21:1
+✖ Admin wildcard events do not retain unrelated values or evict configured measurements (21.529311ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  20001 !== 1
+  
+      at TestContext.<anonymous> (/tmp/eos-9.0.5-memory/datapoint-cache-before.test.cjs:26:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 20001,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at ../../../../tmp/eos-9.0.5-memory/datapoint-cache-before.test.cjs:31:1
+✖ alias source, connected flags and heartbeat stay separate from payload retention (0.609811ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/tmp/eos-9.0.5-memory/datapoint-cache-before.test.cjs:48:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at ../../../../tmp/eos-9.0.5-memory/datapoint-cache-before.test.cjs:55:1
+✖ shared sources survive remapping until the last reference leaves, and remapping back re-primes (0.250444ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/tmp/eos-9.0.5-memory/datapoint-cache-before.test.cjs:64:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at ../../../../tmp/eos-9.0.5-memory/datapoint-cache-before.test.cjs:74:1
+✖ late mappings read the DB and immediate subscription events are retained (0.19391ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (/tmp/eos-9.0.5-memory/datapoint-cache-before.test.cjs:77:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at ../../../../tmp/eos-9.0.5-memory/datapoint-cache-before.test.cjs:97:1
+✖ unchanged upserts and disabled heartbeat release only obsolete connection payloads (0.456402ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/tmp/eos-9.0.5-memory/datapoint-cache-before.test.cjs:105:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at ../../../../tmp/eos-9.0.5-memory/datapoint-cache-before.test.cjs:116:1
+✖ a detached late DB prime cannot block a later remap back to that source (0.338636ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 2
+  
+      at TestContext.<anonymous> (/tmp/eos-9.0.5-memory/datapoint-cache-before.test.cjs:131:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at ../../../../tmp/eos-9.0.5-memory/datapoint-cache-before.test.cjs:136:3
+✖ A→B→A remapping rejects an obsolete source DB response (0.329582ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 70
+  
+      at TestContext.<anonymous> (/tmp/eos-9.0.5-memory/datapoint-cache-before.test.cjs:160:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 70,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at ../../../../tmp/eos-9.0.5-memory/datapoint-cache-before.test.cjs:136:3
+✖ A→B→A remapping rejects an obsolete connection DB response (0.326248ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (/tmp/eos-9.0.5-memory/datapoint-cache-before.test.cjs:161:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at ../../../../tmp/eos-9.0.5-memory/datapoint-cache-before.test.cjs:165:1
+✖ a live sample wins over an older DB read that completes later (0.346578ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  10 !== 150
+  
+      at TestContext.<anonymous> (/tmp/eos-9.0.5-memory/datapoint-cache-before.test.cjs:175:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 10,
+    expected: 150,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at ../../../../tmp/eos-9.0.5-memory/datapoint-cache-before.test.cjs:179:1
+✖ a deletion during DB priming cannot resurrect an old measurement (0.291856ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  400 !== null
+  
+      at TestContext.<anonymous> (/tmp/eos-9.0.5-memory/datapoint-cache-before.test.cjs:188:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 400,
+    expected: null,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

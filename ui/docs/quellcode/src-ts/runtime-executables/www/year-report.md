@@ -61,8 +61,9 @@ Parameter sind die Namen aus der Signatur, keine geratenen Datenverträge. Die A
 | [`get`](../../../../../src-ts/runtime-executables/www/year-report.ts#L768) | yr | Array.isArray, arr.find |
 | [`get`](../../../../../src-ts/runtime-executables/www/year-report.ts#L775) | yr | getYearVal |
 | [`downloadCsv`](../../../../../src-ts/runtime-executables/www/year-report.ts#L800) | – | URL.createObjectURL, a.click, a.remove, buildCsv, document.body.appendChild, document.createElement, setTimeout, window.NW_RUNTIME?.url |
-| [`load`](../../../../../src-ts/runtime-executables/www/year-report.ts#L819) | – | Promise.all, collectDefs, consumerDefs.some, el, getYearsFromQuery, now.getTime, ok.forEach, renderActiveTab, results.filter, setError, setMeta, setTableLoading, toIsoDate, years.forEach (weitere in der Quelle) |
-| [`init`](../../../../../src-ts/runtime-executables/www/year-report.ts#L869) | – | Array.from, backBtn.addEventListener, document.querySelectorAll, el, exportBtn.addEventListener, getYearsFromQuery, infoBtn.addEventListener, load, now.getTime, printBtn.addEventListener, reloadBtn.addEventListener, setMeta, toIsoDate |
-| [`setupTopbar`](../../../../../src-ts/runtime-executables/www/year-report.ts#L951) | – | document.addEventListener, document.getElementById, menuBtn.addEventListener, menuDropdown.addEventListener |
-| [`close`](../../../../../src-ts/runtime-executables/www/year-report.ts#L972) | – | menuDropdown.classList.add |
-| [`toggle`](../../../../../src-ts/runtime-executables/www/year-report.ts#L979) | – | menuDropdown.classList.toggle |
+| [`load`](../../../../../src-ts/runtime-executables/www/year-report.ts#L819) | – | Promise.all, collectDefs, consumerDefs.some, el, getYearsFromQuery, loadYears, now.getTime, ok.forEach, renderActiveTab, results.filter, setError, setMeta, setTableLoading, toIsoDate (weitere in der Quelle) |
+| [`loadYears`](../../../../../src-ts/runtime-executables/www/year-report.ts#L832) | – | fetchYear |
+| [`init`](../../../../../src-ts/runtime-executables/www/year-report.ts#L878) | – | Array.from, backBtn.addEventListener, document.querySelectorAll, el, exportBtn.addEventListener, getYearsFromQuery, infoBtn.addEventListener, load, now.getTime, printBtn.addEventListener, reloadBtn.addEventListener, setMeta, toIsoDate |
+| [`setupTopbar`](../../../../../src-ts/runtime-executables/www/year-report.ts#L960) | – | document.addEventListener, document.getElementById, menuBtn.addEventListener, menuDropdown.addEventListener |
+| [`close`](../../../../../src-ts/runtime-executables/www/year-report.ts#L981) | – | menuDropdown.classList.add |
+| [`toggle`](../../../../../src-ts/runtime-executables/www/year-report.ts#L988) | – | menuDropdown.classList.toggle |

@@ -1,0 +1,88 @@
+{
+  "version": "9.0.5",
+  "node": "v24.22.3",
+  "sha256": {
+    "package.json": "de6a88f42f5be8b947ff9e9a3fb0a2531a1172eaedede1996e8b96e0a3d4d139",
+    "package-lock.json": "0ad77c2f273352e3eb9f002d678ef813793f419b8a4290d5b10574bcdc8ace98",
+    "ui/src-ts/runtime-executables/main.ts": "61ecac1b37a4eb9ccd8504cbb9b9830d46950277207f1d373f59554a4a63daa4",
+    "ui/main.js": "fde11a2c9b85c3be805b46f63549314aa92daa351fc80d42c3f91888ee495686",
+    "ui/src-ts/runtime-executables/ems/datapoints.ts": "862669409b5b427e3bcd9a53137db81d3008375b8c1e8e555900a84db8d1fef4",
+    "ui/ems/datapoints.js": "63aeba3f3cfc4a58773f8bbdcd5780924994fb270d7e4bf7f3487b18f70d2efb",
+    "ui/src-ts/runtime-executables/lib/hosted-http-boundary.ts": "6659f58ebceb066133aa598f355bcf8dba6c7ad9edadb469b85ad6fc1d7e68fe",
+    "ui/lib/hosted-http-boundary.js": "d61113a73bebf9c4ba7a8f61ddb13f91e2edf481983de098bcaabb4c3dfad72c",
+    "build/lib/eosStateSubscriptions.js": "6ec79e7f863f910475b39b1529c86aa72700dc19a99916da0e4b7cef566be310",
+    "adminWww/index.html": "8df84c791f4ce94705915aec63bb9b9a8630bde031ccf2212a399d9bb0714fdb"
+  },
+  "checks": {
+    "backendBuild": 0,
+    "frontendBuild": 0,
+    "installerBuild": 0,
+    "uiRuntimeBuild": 0,
+    "uiRuntimeFiles": 164,
+    "unifiedTests": {
+      "passed": 364,
+      "failed": 0,
+      "skipped": 2
+    },
+    "retainedTests": {
+      "passed": 48,
+      "failed": 0
+    },
+    "builtRuntimeTests": {
+      "passed": 59,
+      "failed": 0
+    },
+    "frontendTests": {
+      "passed": 14,
+      "failed": 0
+    },
+    "typescriptBoundary": 0,
+    "changedBackendLint": 0,
+    "changedHttpLint": 0,
+    "unifiedLint": 0,
+    "nvpDynamicGrid": {
+      "passed": 208,
+      "failed": 0
+    },
+    "selectedEmsScripts": {
+      "passed": 14,
+      "failed": 0,
+      "obsoleteAssertionsUpdated": 2,
+      "baselineComparison": "datapoint-ems-regressions/baseline-comparison.json"
+    },
+    "uiSourceDocs": {
+      "generated": 275,
+      "indexPages": 276,
+      "checkExit": 0
+    },
+    "runtimeSbom": {
+      "components": 304,
+      "buildComponents": 717
+    },
+    "audit": {
+      "runtime": 0,
+      "frontend": 0,
+      "installer": 0,
+      "buildModerate": 14,
+      "buildHigh": 0,
+      "buildCritical": 0
+    },
+    "controller": {
+      "passed": 12,
+      "failed": 0,
+      "pending": 2,
+      "exit": 0,
+      "controller": "7.2.5",
+      "installedRuntimeFilesCompared": 809,
+      "differences": 0,
+      "networkFixture": "loopback",
+      "licenseImportLimit": "TRUST_PERMISSIONS: root ownership absent on / and /etc"
+    }
+  },
+  "limits": [
+    "No target device run",
+    "No physical EMS timing evidence",
+    "Chromium unavailable: socket EPERM",
+    "nginx and setfacl absent in environment"
+  ]
+}

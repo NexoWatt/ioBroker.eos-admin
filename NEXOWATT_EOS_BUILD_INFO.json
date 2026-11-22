@@ -1,20 +1,21 @@
 {
-  "version": "9.0.4",
+  "version": "9.0.5",
   "channel": "next",
   "baseFrontend": "Rebuilt from official Admin 8.3.5 sources plus reviewed EOS integration using React 19 and Vite; see source-bound frontend manifest.",
   "runtimeEntry": "vite-manifest",
-  "releaseType": "unified-socket-startup-recovery",
-  "release": "unified-socket-startup-recovery",
-  "label": "9.0.4",
+  "releaseType": "unified-history-stability",
+  "release": "unified-history-stability",
+  "label": "9.0.5",
   "notes": [
     "Preserves the existing ioBroker Admin and the combined EOS login/runtime.",
     "One central NWL3 activation, private persistence and authorized public-key recovery.",
     "Manufacturer vault/private keys stay on the issuer computer; live-device acceptance remains required."
   ],
   "changes": [
-    "Prevent the socket event-threshold crash before the first browser state subscription",
-    "Keep browser subscription changes separate from shared EMS measurement subscriptions",
-    "Retain HTTPS startup recovery, bounded history waits and MultiUse initialization from 9.0.3"
+    "Preserve query parameters across the Express 5 administration / Express 4 embedded UI boundary",
+    "Contain asynchronous route errors and bound history processing and response resources",
+    "Use NexoWatt branding while the EOS system administration loads",
+    "Treat late subscription cleanup during shutdown as an idempotent operation"
   ],
   "brandingCacheVersion": 7109,
   "shellCacheVersion": 7109,
@@ -28,7 +29,7 @@
     "commit": "6f77eedf525813a7a61d79188d1ff05dffd05086"
   },
   "product": "NexoWatt EOS",
-  "status": "9.0.4 socket startup recovery integration test release; not a production or CRA conformity declaration",
+  "status": "9.0.5 history stability integration test release; evidence in versioned report, not a production or CRA conformity declaration",
   "sourceComponents": {
     "admin": "8.0.2",
     "ui": "1.0.38",

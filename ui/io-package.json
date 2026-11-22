@@ -1,8 +1,13 @@
 {
   "common": {
     "name": "nexowatt-ui",
-    "version": "9.0.4",
+    "version": "9.0.5",
     "news": {
+      "9.0.5": {
+        "de": "9.0.5 korrigiert den History-Absturz an der Übergabe zwischen Verwaltungsserver und eingebetteter UI. History-Anfragen erhalten begrenzte Ressourcen und kontrollierte Fehlerantworten; die EOS-Systemverwaltung verwendet das NexoWatt-Startlogo. Zentrale Lizenz, HTTPS auf 8188 und vorhandener Adminzugang bleiben erhalten. Teststand für next; tatsächliche Nachweise und offene Zielgeräteprüfung siehe Prüfbericht.",
+        "en": "9.0.5 fixes the History crash at the boundary between the administration server and embedded UI. History requests have bounded resources and controlled error responses; EOS system administration uses the NexoWatt startup logo. The central license, HTTPS on 8188 and existing admin access are preserved. Test release for next; see the report for actual evidence and outstanding target-device acceptance.",
+        "nl": "9.0.5 corrigeert de History-crash bij de overdracht tussen beheerserver en ingebedde UI. History-aanvragen krijgen begrensde bronnen en gecontroleerde foutantwoorden; EOS-systeembeheer gebruikt het NexoWatt-startlogo. Centrale licentie, HTTPS op 8188 en bestaande admintoegang blijven behouden. Testversie voor next; zie het rapport voor bewijs en openstaande apparaatcontrole."
+      },
       "9.0.4": {
         "de": "9.0.4 korrigiert den Socket-Absturz beim Start unter hoher Ereignislast, auch ohne geöffneten Browser. Die Begrenzung der Oberflächenereignisse darf keine Messwert-Abonnements der gemeinsamen EMS-Laufzeit entfernen. HTTPS auf 8188, bestehender Adminzugang und die zentrale Lizenz bleiben erhalten. Teststand für next; Nachweise und Zielgeräteprüfung siehe Prüfbericht.",
         "en": "9.0.4 fixes the socket startup crash under high event load, including before any browser connects. UI event throttling must not remove measurement subscriptions of the shared EMS runtime. HTTPS on 8188, the existing admin access and the central license are preserved. Test release for next; see the report for evidence and target-device acceptance.",

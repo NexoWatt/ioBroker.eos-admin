@@ -13,7 +13,6 @@ import {
     Button,
     CssBaseline,
     Checkbox,
-    CircularProgress,
     Dialog,
     DialogActions,
     DialogContent,
@@ -56,7 +55,6 @@ import {
 } from '@iobroker/socket-client';
 
 import {
-    Loader,
     I18n,
     Router,
     DialogConfirm,
@@ -74,6 +72,7 @@ import {
 } from '@iobroker/gui-components';
 
 import NotificationsDialog from '@/dialogs/NotificationsDialog';
+import EosLoader from './components/EosLoader';
 import type { AdminGuiConfig, CommandFile, CompactAdapterInfo, CompactHost, NotificationsCount } from '@/types';
 import type { InstanceConfig } from '@/tabs/EasyMode';
 
@@ -3914,26 +3913,14 @@ class App extends Router<AppProps, AppState> {
             return (
                 <StyledEngineProvider injectFirst>
                     <ThemeProvider theme={this.state.theme}>
-                        <div
-                            style={{
-                                width: '100%',
-                                height: '100%',
-                                textAlign: 'center',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                backgroundColor: this.state.themeType === 'dark' ? '#1a1a1a' : '#fafafa',
-                                color: this.state.themeType === 'dark' ? '#fafafa' : '#1a1a1a',
-                            }}
-                        >
-                            <div style={{ width: 300, height: 100 }}>
-                                <CircularProgress />
-                                <div style={{ fontSize: 16 }}>
+                        <EosLoader
+                            label={
+                                <>
                                     {I18n.t('Waiting for connection of ioBroker...')}{' '}
                                     <span style={{ fontSize: 18 }}>{this.state.cloudReconnect}</span>
-                                </div>
-                            </div>
-                        </div>
+                                </>
+                            }
+                        />
                         {this.renderAlertSnackbar()}
                     </ThemeProvider>
                 </StyledEngineProvider>
@@ -3959,7 +3946,7 @@ class App extends Router<AppProps, AppState> {
                 <StyledEngineProvider injectFirst>
                     <ThemeProvider theme={this.state.theme}>
                         <CssBaseline />
-                        <Loader themeType={this.state.themeType} />
+                        <EosLoader label={I18n.t('Loading...')} />
                         {this.renderAlertSnackbar()}
                     </ThemeProvider>
                 </StyledEngineProvider>

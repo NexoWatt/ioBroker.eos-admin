@@ -1,0 +1,191 @@
+TAP version 13
+# Subtest: asynchronous malformed History payloads cannot throw out of the callback
+ok 1 - asynchronous malformed History payloads cannot throw out of the callback
+  ---
+  duration_ms: 9.820319
+  type: 'test'
+  ...
+# Subtest: valid numeric zero stays zero, null does not create measured zero, supported envelopes agree
+ok 2 - valid numeric zero stays zero, null does not create measured zero, supported envelopes agree
+  ---
+  duration_ms: 21.890008
+  type: 'test'
+  ...
+# Subtest: one five-second deadline includes fallback rounds and ignores late responses
+ok 3 - one five-second deadline includes fallback rounds and ignores late responses
+  ---
+  duration_ms: 3.024498
+  type: 'test'
+  ...
+# Subtest: shutdown cancels History reads and new reads fail without starting transports
+ok 4 - shutdown cancels History reads and new reads fail without starting transports
+  ---
+  duration_ms: 1.404368
+  type: 'test'
+  ...
+# Subtest: thrown and rejected transports become bounded API errors with sibling cleanup
+ok 5 - thrown and rejected transports become bounded API errors with sibling cleanup
+  ---
+  duration_ms: 2.353205
+  type: 'test'
+  ...
+# Subtest: oversized raw response stops processing and cleans all pending branches
+ok 6 - oversized raw response stops processing and cleans all pending branches
+  ---
+  duration_ms: 1.347623
+  type: 'test'
+  ...
+# Subtest: invalid and allocation-amplifying ranges are rejected before provider work
+ok 7 - invalid and allocation-amplifying ranges are rejected before provider work
+  ---
+  duration_ms: 6.367291
+  type: 'test'
+  ...
+# Subtest: day, week, month, leap-year and six-hour annual-report presets preserve finite output bounds
+ok 8 - day, week, month, leap-year and six-hour annual-report presets preserve finite output bounds
+  ---
+  duration_ms: 12.288215
+  type: 'test'
+  ...
+# Subtest: identical requests share work; a fifth distinct computation gets backpressure
+ok 9 - identical requests share work; a fifth distinct computation gets backpressure
+  ---
+  duration_ms: 2.214307
+  type: 'test'
+  ...
+# Subtest: completed payload cache retains at most four requests and expires old responses
+ok 10 - completed payload cache retains at most four requests and expires old responses
+  ---
+  duration_ms: 23.422058
+  type: 'test'
+  ...
+# Subtest: current counter reads share History deadline instead of leaving request hanging
+ok 11 - current counter reads share History deadline instead of leaving request hanging
+  ---
+  duration_ms: 1.99488
+  type: 'test'
+  ...
+# Subtest: 200-charge-point fallback uses at most eight simultaneous reads and retains correct sums
+ok 12 - 200-charge-point fallback uses at most eight simultaneous reads and retains correct sums
+  ---
+  duration_ms: 19.188894
+  type: 'test'
+  ...
+# Subtest: four maximum-range payloads stay within measured row and serialized-size budgets
+ok 13 - four maximum-range payloads stay within measured row and serialized-size budgets
+  ---
+  duration_ms: 296.27504
+  type: 'test'
+  ...
+# {"profile":"History-only controlled provider; not customer RSS","gcAvailable":true,"cacheEntries":4,"rowsPerPayload":106496,"largestPayloadBytes":1919024,"heapDeltaBytes":32931440}
+# Subtest: leading missing buckets stay unknown in complete-period energy totals; measured zero remains zero
+ok 14 - leading missing buckets stay unknown in complete-period energy totals; measured zero remains zero
+  ---
+  duration_ms: 5.640706
+  type: 'test'
+  ...
+# Subtest: exact-energy EV fallback is also bounded and cannot swallow its timeout as a complete result
+ok 15 - exact-energy EV fallback is also bounded and cannot swallow its timeout as a complete result
+  ---
+  duration_ms: 1.502665
+  type: 'test'
+  ...
+# Subtest: optimized price lookup retains exact last-value and duplicate-timestamp semantics
+ok 16 - optimized price lookup retains exact last-value and duplicate-timestamp semantics
+  ---
+  duration_ms: 28.983245
+  type: 'test'
+  ...
+# Subtest: annual report still requests all ten years with two concurrent requests and original order
+ok 17 - annual report still requests all ten years with two concurrent requests and original order
+  ---
+  duration_ms: 9.142607
+  type: 'test'
+  ...
+# Subtest: missing getHistory callback rejects within five seconds and discards late or repeated replies
+ok 18 - missing getHistory callback rejects within five seconds and discards late or repeated replies
+  ---
+  duration_ms: 3.186611
+  type: 'test'
+  ...
+# Subtest: timely history remains unchanged and clears its deadline timer
+ok 19 - timely history remains unchanged and clears its deadline timer
+  ---
+  duration_ms: 1.272982
+  type: 'test'
+  ...
+# Subtest: candidate fallback shares one monotonic five-second budget instead of multiplying it
+ok 20 - candidate fallback shares one monotonic five-second budget instead of multiplying it
+  ---
+  duration_ms: 1.443185
+  type: 'test'
+  ...
+# Subtest: shutdown cancels all pending history work, releases timers and rejects new requests
+ok 21 - shutdown cancels all pending history work, releases timers and rejects new requests
+  ---
+  duration_ms: 1.247103
+  type: 'test'
+  ...
+# Subtest: startup energy totals finish after failed history without publishing zeros or refreshing old CO2
+ok 22 - startup energy totals finish after failed history without publishing zeros or refreshing old CO2
+  ---
+  duration_ms: 2.63095
+  type: 'test'
+  ...
+# Subtest: empty or invalid history and missing candidate mappings preserve old measurements
+ok 23 - empty or invalid history and missing candidate mappings preserve old measurements
+  ---
+  duration_ms: 4.477048
+  type: 'test'
+  ...
+# Subtest: valid zero-power samples remain legitimate measurements and nonzero energy integration remains unchanged
+ok 24 - valid zero-power samples remain legitimate measurements and nonzero energy integration remains unchanged
+  ---
+  duration_ms: 3.366088
+  type: 'test'
+  ...
+# Subtest: a reply after a stalled event loop cannot beat the deadline callback or extend the hard cap
+ok 25 - a reply after a stalled event loop cannot beat the deadline callback or extend the hard cap
+  ---
+  duration_ms: 2.853252
+  type: 'test'
+  ...
+# Subtest: a failed history branch preserves its old value and CO2 while other genuine measurements may update
+ok 26 - a failed history branch preserves its old value and CO2 while other genuine measurements may update
+  ---
+  duration_ms: 2.114409
+  type: 'test'
+  ...
+# Subtest: mapped but absent energy values are not converted to freshly published zero CO2
+ok 27 - mapped but absent energy values are not converted to freshly published zero CO2
+  ---
+  duration_ms: 1.304238
+  type: 'test'
+  ...
+# Subtest: real normalizer rejects null, boolean, blank and nonfinite values without synthesizing zero measurements
+ok 28 - real normalizer rejects null, boolean, blank and nonfinite values without synthesizing zero measurements
+  ---
+  duration_ms: 13.615689
+  type: 'test'
+  ...
+# Subtest: real normalizer rejects malformed rows/timestamps and retains finite Influx samples and timestamps
+ok 29 - real normalizer rejects malformed rows/timestamps and retains finite Influx samples and timestamps
+  ---
+  duration_ms: 2.679783
+  type: 'test'
+  ...
+# Subtest: history timeout diagnostics are constant, once per cycle and throttled for five monotonic minutes
+ok 30 - history timeout diagnostics are constant, once per cycle and throttled for five monotonic minutes
+  ---
+  duration_ms: 2.943667
+  type: 'test'
+  ...
+1..30
+# tests 30
+# suites 0
+# pass 30
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1600.227972

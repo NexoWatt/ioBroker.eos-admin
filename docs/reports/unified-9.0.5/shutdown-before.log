@@ -1,0 +1,37 @@
+✔ browser threshold unsubscription cannot remove a matching EMS subscription (3.557735ms)
+✔ socket-first and host-first subscribers share the service bus, with no user escalation on other methods (0.288751ms)
+✔ duplicates are idempotent and wildcard removal is exact, not a global unsubscribe (0.346808ms)
+✔ own-state async and callback methods share ownership with absolute socket patterns (0.355962ms)
+✔ subscription failure rolls back and a retry can establish and release the bus (0.488941ms)
+✔ unsubscribe failure retains tracked ownership until a successful retry (0.195061ms)
+✔ concurrent subscribe/unsubscribe operations serialize without stale removal (0.155302ms)
+✖ closing socket scope preserves EMS and blocks late timer and browser activity (0.315331ms)
+✖ late disconnect callbacks after shutdown succeed without touching the controller or logging noise (0.244686ms)
+✔ stop drains a backend subscribe already in flight, then removes it without resurrection (5.561198ms)
+✔ invalid requests do not mutate bus interests and callback failures are handled (1.765238ms)
+✔ real SocketCommands publication still enforces user-specific state denial and ACL revocation on the shared bus (56.164624ms)
+✔ controller-7 absent-object semantics are unchanged: no DB refusal is treated as readable by upstream (0.589901ms)
+✔ controller promisify captures original callback APIs and does not recurse into installed wrappers (217.935973ms)
+✔ controller foreign omitted-pattern defaults and own empty-pattern behavior remain compatible (0.236193ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 13
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 460.82603
+
+✖ failing tests:
+
+test at test/eos-unified-state-subscriptions.test.cjs:122:1
+✖ closing socket scope preserves EMS and blocks late timer and browser activity (0.315331ms)
+  Error: EOS_STATE_SUBSCRIPTIONS_STOPPED
+      at <anonymous> (/workspace/scratch/741f792566ea/iobroker.eos-admin/src/lib/eosStateSubscriptions.ts:76:23)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+test at test/eos-unified-state-subscriptions.test.cjs:139:1
+✖ late disconnect callbacks after shutdown succeed without touching the controller or logging noise (0.244686ms)
+  Error: EOS_STATE_SUBSCRIPTIONS_STOPPED
+      at <anonymous> (/workspace/scratch/741f792566ea/iobroker.eos-admin/src/lib/eosStateSubscriptions.ts:76:23)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)

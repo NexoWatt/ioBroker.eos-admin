@@ -1,0 +1,44 @@
+{
+  "runs": [
+    {
+      "baseline": "9.0.4 full repository ZIP",
+      "command": "node scripts/verify-actuator-safety-arbiter.js",
+      "cwd": "ui",
+      "exitCode": 1,
+      "log": "baseline-9.0.4-verify-actuator-safety-arbiter.log"
+    },
+    {
+      "baseline": "9.0.4 full repository ZIP",
+      "command": "node scripts/verify-rc82-permanent-grid-protection.cjs",
+      "cwd": "ui",
+      "exitCode": 1,
+      "log": "baseline-9.0.4-verify-rc82-permanent-grid-protection.log"
+    }
+  ],
+  "comparison": [
+    {
+      "path": "ui/scripts/verify-actuator-safety-arbiter.js",
+      "identicalTo9.0.4": true,
+      "baselineSha256": "9feffc1437854bc91897298914fe64b39a69a1657accbc2d5fed3509ac5cee6c",
+      "currentSha256": "9feffc1437854bc91897298914fe64b39a69a1657accbc2d5fed3509ac5cee6c"
+    },
+    {
+      "path": "ui/ems/services/actuator-shadow-arbiter.js",
+      "identicalTo9.0.4": true,
+      "baselineSha256": "858e78cf5ef1039cf911204eb2f17cb89e9830ab7972a2377d88dbed39d78b32",
+      "currentSha256": "858e78cf5ef1039cf911204eb2f17cb89e9830ab7972a2377d88dbed39d78b32"
+    },
+    {
+      "path": "ui/scripts/verify-rc82-permanent-grid-protection.cjs",
+      "identicalTo9.0.4": true,
+      "baselineSha256": "c958df0d9addd71d81abc050f8dd95f43ae61170d7adecb85062f63eb8e83b97",
+      "currentSha256": "c958df0d9addd71d81abc050f8dd95f43ae61170d7adecb85062f63eb8e83b97"
+    },
+    {
+      "path": "ui/src-ts/runtime-executables/www/sw.ts",
+      "identicalTo9.0.4": true,
+      "baselineSha256": "77ebebe3eebc7f18635591c82748ef9be8834775f32c80b83c260924196a66b1",
+      "currentSha256": "77ebebe3eebc7f18635591c82748ef9be8834775f32c80b83c260924196a66b1"
+    }
+  ]
+}

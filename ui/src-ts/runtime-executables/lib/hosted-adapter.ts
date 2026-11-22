@@ -4,6 +4,12 @@
  * Use, modification or distribution without express written permission is prohibited.
  */
 // @ts-nocheck
+/**
+ * NexoWatt Quellcode-Erklärung (DE)
+ * Aufgabe: Bindet die eingebettete UI an die einzige EOS-Adapterinstanz und deren zentrale Berechtigungsprüfung.
+ * Daten und Wirkung: Vermittelt Adapteraufrufe und UI-Konfiguration; erzeugt keine zweite Instanz und schützt die vom Host verwalteten Sicherheitswerte.
+ * Bei Änderungen: Konfigurationsgrenze, Lizenz- und Schreibberechtigungen sowie den gemeinsamen Start-/Stoppablauf mit den Hosted-Regressionstests prüfen.
+ */
 'use strict';
 
 /**

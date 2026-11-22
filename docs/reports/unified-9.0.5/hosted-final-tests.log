@@ -1,0 +1,25 @@
+✔ real hosted HTTP accepts normal navigation through the owner origin policy (86.848523ms)
+✔ field regression reproduces missing query with unadapted real Express 5 to 4 dispatch (39.206095ms)
+✔ embedded parser retains duplicate/nested values and sees the rewritten current URL (8.437054ms)
+✔ fallthrough, error return and finish restore host prototypes and own query descriptors (9.112272ms)
+✔ async middleware, route and error-handler rejections stay local and sanitized (14.047143ms)
+✔ late rejection after next does not dispatch twice or alter the following route (4.259663ms)
+✔ per-app containment leaves other apps and framework layer prototypes unchanged (0.374108ms)
+✔ facade creates no adapter and isolates native.eosUi from host security fields (1.886367ms)
+✔ all four foreign state APIs enforce the current owner generation (0.746455ms)
+✔ license requires a valid central core grant and preserves signed limits (0.227781ms)
+✔ central access rejects required password setup and missing credential binding (0.951201ms)
+✔ hosted shell opens no listener; HTTP authorization remains fail closed (66.590512ms)
+✔ fresh UI snapshot never converts revoked Home to Pro; control retains only verified old limits (51.90257ms)
+✔ blocked hosted startup resumes once only after fresh ownership and central license confirmation (135.475691ms)
+✔ shell bootstrap failure can retry once without starting operational work (28.272663ms)
+✔ stop during shell bootstrap discards its late completion and cannot reopen the runtime (24.211007ms)
+✔ cached license grants cannot keep an incomplete or failed startup alive (1.865587ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 559.734933

@@ -134,6 +134,14 @@ class DatapointRegistry {
         /** @type {Map<string, {val:any, ts:number, lc:number, receivedTs:number, ack:boolean}>} */
         this.cacheByObjectId = new Map();
 
+        // Der gemeinsame Admin empfängt auch fremde States ohne EMS-Zuordnung.
+        // Nur tatsächlich konfigurierte Mess-/Alias-/Verbindungs-IDs behalten;
+        // gemeinsame Quellen werden bis zur letzten Zuordnung referenziert.
+        /** @type {Map<string, number>} */
+        this._cacheStateReferences = new Map();
+        /** @type {Map<string, {events: number}>} */
+        this._cacheStateGenerations = new Map();
+
         /** @type {Map<string, {val:any, ts:number}>} */
         this.lastWriteByObjectId = new Map();
 
@@ -513,6 +521,7 @@ class DatapointRegistry {
             return;
         }
 
+        this._updateCacheStateReferences(this.byKey.get(key), normalized);
         this.byKey.set(key, normalized);
         this.keyByObjectId.set(objectId, key);
         if (srcObjectId && srcObjectId !== objectId) this.keyByObjectId.set(srcObjectId, key);
@@ -539,17 +548,7 @@ class DatapointRegistry {
 
         // Prime cache (only once per objectId)
         if (needPrime) {
-            try {
-                const st = await this.adapter.getForeignStateAsync(srcObjectId);
-                // IMPORTANT: prime the cache for the *source* objectId (alias target),
-                // otherwise getAgeMs()/isStale() will treat it as missing until the first stateChange event.
-                if (st) this.handleStateChange(srcObjectId, st, true);
-            } catch (_e) {
-                // ignore (not all foreign states exist immediately)
-            } finally {
-                // Mark as primed even if missing to avoid hammering the states DB.
-                this._primedObjectIds.add(srcObjectId);
-            }
+            await this._primeMappedState(srcObjectId);
         }
 
         // Prime + subscribe connection indicators (best effort, idempotent).
@@ -577,14 +576,7 @@ class DatapointRegistry {
                 // prime
                 const needPrimeConn = (typeof this.adapter.getForeignStateAsync === 'function') && !this._primedObjectIds.has(cid) && !this.cacheByObjectId.has(cid);
                 if (needPrimeConn) {
-                    try {
-                        const st = await this.adapter.getForeignStateAsync(cid);
-                        if (st) this.handleStateChange(cid, st, true);
-                    } catch (_e) {
-                        // ignore
-                    } finally {
-                        this._primedObjectIds.add(cid);
-                    }
+                    await this._primeMappedState(cid);
                 }
             }
         } catch (_e) {
@@ -601,10 +593,59 @@ class DatapointRegistry {
     }
 
     /**
-     * Feed cache from adapter stateChange.
-     * @param {string} id
-     * @param {any | null | undefined} state
+     * Begrenzt den Wertcache auf aktuelle Zuordnungen, ohne aktive Quellen nach
+     * Alter oder Anzahl zu verdrängen. Vor Subscribe/Prime aufrufen, damit auch
+     * sofortige Ereignisse und nachträglich konfigurierte Quellen gelesen werden.
+     * Eine zurückkehrende Zuordnung wird erneut aus der States-DB initialisiert.
      */
+    _updateCacheStateReferences(previous, next) {
+        const ids = entry => new Set(entry
+            ? [entry.objectId, entry.srcObjectId, entry.aliveConnectedId, entry.infoConnectionId].filter(id => typeof id === 'string' && id.length > 0)
+            : []);
+        const previousIds = ids(previous);
+        const nextIds = ids(next);
+        for (const id of previousIds) {
+            if (nextIds.has(id)) continue;
+            const remaining = (this._cacheStateReferences.get(id) || 0) - 1;
+            if (remaining > 0) this._cacheStateReferences.set(id, remaining);
+            else {
+                this._cacheStateReferences.delete(id);
+                this._cacheStateGenerations.delete(id);
+                this.cacheByObjectId.delete(id);
+                this._primedObjectIds.delete(id);
+            }
+        }
+        for (const id of nextIds) {
+            if (!previousIds.has(id)) {
+                if (!this._cacheStateReferences.has(id)) this._cacheStateGenerations.set(id, { events: 0 });
+                this._cacheStateReferences.set(id, (this._cacheStateReferences.get(id) || 0) + 1);
+            }
+        }
+    }
+
+    /**
+     * Initialisiert nur die weiterhin aktive Mapping-Generation aus der DB.
+     * Eine langsame Antwort nach A→B→A darf weder den neuen A-Wert ersetzen noch
+     * dessen erneutes Lesen blockieren. Live-Ereignisse während des DB-Lesens
+     * behalten Vorrang; fehlende Startwerte werden später durch Events ergänzt.
+     */
+    async _primeMappedState(id) {
+        const generation = this._cacheStateGenerations.get(id);
+        if (!generation) return;
+        const events = generation.events;
+        try {
+            const state = await this.adapter.getForeignStateAsync(id);
+            if (state && this._cacheStateGenerations.get(id) === generation && generation.events === events && !this.cacheByObjectId.has(id)) {
+                this.handleStateChange(id, state, true);
+            }
+        } catch (_e) {
+            // Ein noch nicht vorhandener/erreichbarer Fremd-State wird durch
+            // sein abonniertes Ereignis ergänzt; kein synthetischer Messwert.
+        } finally {
+            if (this._cacheStateGenerations.get(id) === generation) this._primedObjectIds.add(id);
+        }
+    }
+
     /**
      * Code-Teil: Methode `handleStateChange`
      * Zweck: behandelt ein Ereignis oder einen API-/UI-Callback.
@@ -616,24 +657,18 @@ class DatapointRegistry {
      * Zweck: Verarbeitet Events oder API-/Benutzeraktionen.
      * Zusammenhang: Teil von EMS-Kern: Engine, Module, Datenpunkte; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
      * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
+     * @param {string} id
+     * @param {any | null | undefined} state
      */
     handleStateChange(id, state, prime = false) {
         if (!id) return;
+        const generation = this._cacheStateGenerations.get(id);
+        if (generation && !prime) generation.events++;
         if (!state) {
             this.cacheByObjectId.delete(id);
             return;
         }
         const receivedTs = Date.now();
-        const stateTs = Number(state.ts);
-        const changeTs = Number(state.lc);
-        this.cacheByObjectId.set(id, {
-            val: state.val,
-            ts: Number.isFinite(stateTs) && stateTs > 0 ? stateTs : receivedTs,
-            lc: Number.isFinite(changeTs) && changeTs > 0 ? changeTs : (Number.isFinite(stateTs) && stateTs > 0 ? stateTs : receivedTs),
-            receivedTs,
-            ack: !!state.ack,
-        });
-
         // Nur echte StateChange-Ereignisse sind ein Kommunikations-Heartbeat.
         // Ein beim Start gelesener Altwert darf die Quelle nicht künstlich frisch
         // machen, sonst würde ein eingefrorener Datenpunkt nach jedem Neustart
@@ -649,6 +684,20 @@ class DatapointRegistry {
         } catch (_e) {
             // ignore
         }
+
+        // Ein Geräte-Heartbeat braucht den Zeitpunkt, nicht den fremden Wert.
+        // Insbesondere Admin-Wildcard-Ereignisse dürfen keinen zweiten Cache
+        // sämtlicher ioBroker-States im EMS erzeugen.
+        if (!this._cacheStateReferences.has(id)) return;
+        const stateTs = Number(state.ts);
+        const changeTs = Number(state.lc);
+        this.cacheByObjectId.set(id, {
+            val: state.val,
+            ts: Number.isFinite(stateTs) && stateTs > 0 ? stateTs : receivedTs,
+            lc: Number.isFinite(changeTs) && changeTs > 0 ? changeTs : (Number.isFinite(stateTs) && stateTs > 0 ? stateTs : receivedTs),
+            receivedTs,
+            ack: !!state.ack,
+        });
     }
 
     /**

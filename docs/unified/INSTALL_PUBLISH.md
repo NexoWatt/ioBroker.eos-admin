@@ -1,11 +1,11 @@
 # Installation, Git und npm
 
-**NexoWatt EOS · `iobroker.eos-admin` · 9.0.4**
+**NexoWatt EOS · `iobroker.eos-admin` · 9.0.5**
 
-Version 9.0.4 bleibt zur Erprobung bestimmt und wird über `next` bereitgestellt.
+Version 9.0.5 bleibt zur Erprobung bestimmt und wird über `next` bereitgestellt.
 Der neue Abschlussbericht muss geprüfte Version und Artefakthash ausdrücklich nennen.
 Vorherige Alpha-Berichte bleiben historische Belege; ihre Erfolge werden nicht
-auf den geänderten Startablauf übertragen. Vor
+auf die geänderten HTTP-/History-Pfade übertragen. Vor
 Tests auf einer Anlage [COMMISSIONING.md](COMMISSIONING.md) durcharbeiten. Dieses
 Dokument führt keine Veröffentlichung oder Änderung eines Kundengeräts aus.
 
@@ -65,7 +65,7 @@ oben bescheinigen keine vollständige System-/Hardwareabnahme.
 Vor dem Upload Paketinhalt, Version, Lizenz, Manifest und Prüfergebnisse kontrollieren.
 Im für `iobroker.eos-admin` berechtigten npm-Konto anmelden. Die Testversion mit einem
 expliziten Testtag veröffentlichen, damit sie nicht unbeabsichtigt zum Standard wird.
-`9.0.4` besitzt keinen SemVer-Prerelease-Suffix; die Testverteilung wird bewusst
+`9.0.5` besitzt keinen SemVer-Prerelease-Suffix; die Testverteilung wird bewusst
 über den npm-Tag `next` festgelegt:
 
 ```sh
@@ -96,11 +96,11 @@ gelten zusätzliche Regeln einschließlich kommerzieller Bedingungen (IO-01/IO-0
    Eine neue Installation benötigt keine erfundene Altinstanz. Das
    [Migrationswerkzeug](../../deploy/README.md) erstellt einen Offlineplan und
    verändert keine laufende Anlage automatisch.
-4. Das geprüfte 9.0.4-Paket über den vorgesehenen ioBroker-/EOS-Weg installieren und
+4. Das geprüfte 9.0.5-Paket über den vorgesehenen ioBroker-/EOS-Weg installieren und
    die Instanzkonfiguration prüfen. Die Defaults gelten für neue Instanzen; bei
    übernommenen Instanzen nicht voraussetzen, dass gespeicherte Werte bereits passen.
 
-| Einstellung | Direkter Zugang von 9.0.4 |
+| Einstellung | Direkter Zugang von 9.0.5 |
 | --- | --- |
 | `port` | `8188` |
 | `bind` | `0.0.0.0` – IPv4-Schnittstellen des Geräts |
@@ -138,13 +138,24 @@ gelten zusätzliche Regeln einschließlich kommerzieller Bedingungen (IO-01/IO-0
    prüfen. Der zentrale Logout meldet derzeit alle parallelen Nutzer einschließlich
    Socket/SSE ab; das ist noch kein Einzelsitzungslogout.
 
-## Update einer bestehenden EOS-Instanz auf 9.0.4
+## Update einer bestehenden EOS-Instanz auf 9.0.5
 
 Die bestehende Instanz `eos-admin.N`, ihre Konfiguration, System-UUID und gültige
 Lizenz beibehalten. Vorher das Instanzdatenverzeichnis einschließlich `licensing/`
 mit `storage.key`, `license.enc`, importierten öffentlichen Schlüsseln sowie einem
 vorhandenen OS-Truststore sichern. Ein normales Paketupdate verlangt weder eine
 neue NWL3-Ausstellung noch erneuten Prüfschlüsselimport.
+
+**EOS-HTTP-QUERY-001:** Der gemeldete History-Abbruch in 9.0.4 entsteht im
+Hosted-HTTP-Pfad beim Zugriff auf `req.query.from`. 9.0.5 erhält Query-Parameter an
+der Express-5/Express-4-Grenze und behandelt asynchrone Routenfehler kontrolliert.
+History mehrfach mit Tages- und Wochenansicht öffnen, anschließend Dashboard,
+Systemverwaltung und Livewerte prüfen. Der Prozess darf dabei weder mit Exitcode 6
+neu starten noch `EOS_UI_UNAVAILABLE` als Folge einer beendeten UI liefern.
+Die zusätzliche History-Validierung sowie Speicher- und Brandingprüfungen sind im
+[aktuellen Prüfplan](COMMISSIONING.md) aufgeführt. NexoWatt muss schon in der ersten
+Startanzeige von `/system/` sichtbar sein; zum einmaligen Gegencheck einen Browseraufruf
+mit leerem Cache verwenden.
 
 **EOS-SOCKET-001:** 9.0.3 konnte nach dem EMS-Start bei hoher Ereignislast mit
 `Cannot convert undefined or null to object` und Exitcode 6 abbrechen. 9.0.4
@@ -162,9 +173,9 @@ reichen nicht. Die seit 9.0.3 enthaltene Korrektur entkoppelt
 die geschützte Weboberfläche vom operativen Start. Messwert-/Historyfehler bleiben
 gesondert zu prüfen; sie werden nicht durch Unterdrücken der Diagnose gelöst.
 
-Kurzer Ablauf: [START_HIER_9.0.4.md](../../START_HIER_9.0.4.md).
+Kurzer Ablauf: [START_HIER_9.0.5.md](../../START_HIER_9.0.5.md).
 Die Zielabnahmen zu **EOS-SOCKET-001**, **HISTORY-001** und **MULTIUSE-001** stehen im
-[Prüfplan](COMMISSIONING.md). Neue Ergebnisse gehören in den 9.0.4-Abschlussbericht.
+[Prüfplan](COMMISSIONING.md). Neue Ergebnisse gehören in den 9.0.5-Abschlussbericht.
 
 `NexoWattEOS` wird nicht durch die Adapterinstallation als DNS-Name angelegt. Der
 lokale DNS-/Routereintrag oder ein bewusst verwalteter Hosts-Eintrag muss auf die

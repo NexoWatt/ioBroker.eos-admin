@@ -1,0 +1,7 @@
+[actuator-safety-arbiter] ERROR: AssertionError [ERR_ASSERTION]: Originaler Hardwarepfad wurde beim Shutdown nicht restauriert
++ actual - expected
+
++ [Function: shadowSetForeignStateAsync]
+- [AsyncFunction: setForeignStateAsync]
+
+    at /workspace/scratch/741f792566ea/baseline-9.0.4-ems/ui/scripts/verify-actuator-safety-arbiter.js:225:12

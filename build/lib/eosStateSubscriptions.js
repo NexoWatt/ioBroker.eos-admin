@@ -57,6 +57,12 @@ function installEosStateSubscriptions(adapter) {
     async function change(scope, pattern, subscribing, cleanup = false) {
         return queue(pattern, async () => {
             if (!cleanup && (stopped || (scope === 'socket' && socketStopped))) {
+                // Socket disconnect callbacks can arrive after closeSocket(). The
+                // owned cleanup already releases this scope; another unsubscribe
+                // is harmless and must not obscure the original shutdown reason.
+                if (!subscribing) {
+                    return;
+                }
                 throw new Error('EOS_STATE_SUBSCRIPTIONS_STOPPED');
             }
             const current = interests.get(pattern) || { host: false, socket: false };

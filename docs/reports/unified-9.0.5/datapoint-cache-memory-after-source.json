@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "node": "v24.22.3",
+  "sourceSha256": "862669409b5b427e3bcd9a53137db81d3008375b8c1e8e555900a84db8d1fef4",
+  "scope": "synthetic DatapointRegistry allocation only; not device RAM or an OOM diagnosis",
+  "fixture": {
+    "mappings": 256,
+    "foreignCount": 50000,
+    "numericPercent": 90,
+    "textPercent": 10,
+    "textBytes": 2048
+  },
+  "retainedEntries": 256,
+  "lastMappedValue": 255,
+  "before": {
+    "rss": 43180032,
+    "heapUsed": 7467264,
+    "heapTotal": 12898304,
+    "external": 3941875,
+    "arrayBuffers": 146579
+  },
+  "after": {
+    "rss": 56197120,
+    "heapUsed": 7506736,
+    "heapTotal": 17616896,
+    "external": 4177399,
+    "arrayBuffers": 146579
+  },
+  "delta": {
+    "rss": 13017088,
+    "heapUsed": 39472,
+    "heapTotal": 4718592,
+    "external": 235524,
+    "arrayBuffers": 0
+  },
+  "elapsedMs": 27.673429
+}

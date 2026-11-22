@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/lib/hosted-adapter.ts
- * Quell-Hash: sha256:0ce5027d9850cc43e4f9c628cfa592f770de3d44dc438a309c4605c14cf0c97f
+ * Quell-Hash: sha256:ce92c649f3f61a75c27b49a20635a9ae7c54749e36cc141bb0dfc876d4818960
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -19,6 +19,12 @@
  * 1. Änderung zuerst in src-ts/runtime-executables/ vornehmen.
  * 2. npm run sync:ts-runtime-executables ausführen.
  * 3. npm run test:runtime-executables prüfen.
+ */
+/**
+ * NexoWatt Quellcode-Erklärung (DE)
+ * Aufgabe: Bindet die eingebettete UI an die einzige EOS-Adapterinstanz und deren zentrale Berechtigungsprüfung.
+ * Daten und Wirkung: Vermittelt Adapteraufrufe und UI-Konfiguration; erzeugt keine zweite Instanz und schützt die vom Host verwalteten Sicherheitswerte.
+ * Bei Änderungen: Konfigurationsgrenze, Lizenz- und Schreibberechtigungen sowie den gemeinsamen Start-/Stoppablauf mit den Hosted-Regressionstests prüfen.
  */
 'use strict';
 

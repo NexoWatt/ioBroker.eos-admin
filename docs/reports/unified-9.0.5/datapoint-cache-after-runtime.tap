@@ -1,0 +1,20 @@
+✔ actual hosted stateChange ingress invalidates deleted EMS sources without calling value-only consumers (21.882108ms)
+✔ Admin wildcard events do not retain unrelated values or evict configured measurements (10.185565ms)
+✔ alias source, connected flags and heartbeat stay separate from payload retention (0.583221ms)
+✔ shared sources survive remapping until the last reference leaves, and remapping back re-primes (0.292026ms)
+✔ late mappings read the DB and immediate subscription events are retained (0.233048ms)
+✔ deletion invalidates an active measurement and later updates recover normally (0.258666ms)
+✔ unchanged upserts and disabled heartbeat release only obsolete connection payloads (0.311064ms)
+✔ a detached late DB prime cannot block a later remap back to that source (0.334109ms)
+✔ A→B→A remapping rejects an obsolete source DB response (0.411785ms)
+✔ A→B→A remapping rejects an obsolete connection DB response (0.238917ms)
+✔ a live sample wins over an older DB read that completes later (0.232998ms)
+✔ a deletion during DB priming cannot resurrect an old measurement (0.136524ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 251.40018

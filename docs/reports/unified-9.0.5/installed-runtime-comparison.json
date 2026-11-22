@@ -1,0 +1,20 @@
+{
+  "version": "9.0.5",
+  "comparedFiles": 809,
+  "differences": [],
+  "runtimeRoots": [
+    "build",
+    "admin",
+    "adminWww",
+    "public",
+    "packages/eos-license-client",
+    "ui/main.js",
+    "ui/lib",
+    "ui/ems",
+    "ui/backend",
+    "ui/build-ts",
+    "ui/www",
+    "ui/admin"
+  ],
+  "installedPackageVersion": "9.0.5"
+}

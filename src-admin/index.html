@@ -48,6 +48,10 @@
         />
         <link
             rel="stylesheet"
+            href="css/eos-boot-loader.css"
+        />
+        <link
+            rel="stylesheet"
             href="css/eos-ems-overview.css?v=7109"
         />
         <link
@@ -199,7 +203,27 @@
     </head>
     <body>
         <noscript>Für NexoWatt EOS muss JavaScript aktiviert sein.</noscript>
-        <div id="root"></div>
+        <div id="root">
+            <div
+                class="eos-boot-loader"
+                role="status"
+                aria-live="polite"
+                aria-busy="true"
+            >
+                <img
+                    class="eos-boot-loader__logo"
+                    src="img/eos/nexowatt-eos-brand-wide.png"
+                    width="1200"
+                    height="342"
+                    alt="NexoWatt EOS – Energy Operation System"
+                />
+                <span
+                    class="eos-boot-loader__spinner"
+                    aria-hidden="true"
+                ></span>
+                <p class="eos-boot-loader__label">NexoWatt EOS wird geladen …</p>
+            </div>
+        </div>
         <script
             defer
             src="js/eos-role-bootstrap.js?v=7109&amp;security=20260930"

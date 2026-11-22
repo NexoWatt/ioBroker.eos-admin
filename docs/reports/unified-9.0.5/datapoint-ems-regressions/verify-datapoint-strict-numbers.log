@@ -1,0 +1,1 @@
+[datapoint-strict-numbers] OK: null, empty strings, booleans, objects, arrays and non-finite values cannot become physical 0 measurements.

@@ -19,7 +19,7 @@ Statisch gefundene Imports/require-Aufrufe. Ein Import belegt eine Code-Verknüp
 
 **Direkt importiert von:**
 
-- [src-ts/runtime-executables/main.ts](../../../../../src-ts/runtime-executables/main.ts)
+Kein direkter Import innerhalb des erfassten Quellbereichs. Mögliche HTML-, Adapter-, Build- oder dynamische Einstiege sind separat zu prüfen.
 
 ## Funktionen und Methoden
 

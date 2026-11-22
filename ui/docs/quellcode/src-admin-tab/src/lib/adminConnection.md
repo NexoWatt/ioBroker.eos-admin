@@ -62,43 +62,43 @@ Parameter sind die Namen aus der Signatur, keine geratenen Datenverträge. Die A
 | [`currentOrigin`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L405) | – | Number |
 | [`getRuntimeProxyBase`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L427) | instance | checkedInstance, checkedPrefix, composeRuntimeProxyBase, declared.includes, getInstance, pathname.indexOf, pathname.slice, rest.indexOf, rest.slice, safeWindowAccess |
 | [`isEmbeddedRuntime`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L467) | – | – |
-| [`buildRuntimeBaseUrl`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L473) | target | Number.isInteger, currentOrigin, getRuntimeProxyBase, isEmbeddedRuntime |
-| [`readAdapterRuntimeTarget`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L492) | instance, conn | Number, Number.isInteger, checkedInstance, getAdapterObjectId, getInstance, getObject, raw.trim, withTimeout |
-| [`resolveRuntimeBaseUrl`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L514) | instance, conn | buildRuntimeBaseUrl, checkedInstance, currentOrigin, getInstance, getRuntimeProxyBase, isEmbeddedRuntime, readAdapterRuntimeTarget |
-| [`safeWindowAccess`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L530) | getter | getter |
-| [`isErrorLike`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L543) | value | Object.prototype.hasOwnProperty.call, isRecord |
-| [`normalizeIoBrokerCallback`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L563) | cb | – |
-| [`pickServConn`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L586) | – | safeWindowAccess |
-| [`pickSocket`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L600) | – | safeWindowAccess |
-| [`ensureSocketIo`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L615) | – | pickSocket, window.__nwSocketLoader |
-| [`wrapServConn`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L636) | servConn | – |
-| [`getObject`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L645) | id, cb | cb, normalizeIoBrokerCallback, servConn.getObject |
-| [`getState`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L664) | id, cb | cb, normalizeIoBrokerCallback, servConn.getState |
-| [`setObject`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L687) | id, obj, cb | cb, servConn.setObject |
-| [`wrapSocket`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L702) | socket | – |
-| [`getObject`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L711) | id, cb | cb, normalizeIoBrokerCallback, socket.emit |
-| [`getState`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L730) | id, cb | cb, normalizeIoBrokerCallback, socket.emit |
-| [`setObject`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L749) | id, obj, cb | cb, socket.emit |
-| [`getAdminConnection`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L779) | – | ensureSocketIo, isAdminSocket, isServConn, isSocketIoClient, pickServConn, pickSocket, window.io.connect, withTimeout, wrapServConn, wrapSocket |
-| [`extractUuid`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L814) | obj | scan |
-| [`scan`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L824) | value, key | Array.isArray, Object.entries, Object.getOwnPropertyDescriptor, Object.prototype.hasOwnProperty.call, isRecord, scan, seen.add, seen.has, uuidRe.test, value.trim |
-| [`getObject`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L859) | id, conn | callbackPromise, getAdminConnection, isIoBrokerObject |
-| [`getState`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L875) | id, conn | callbackPromise, getAdminConnection, isRecord |
-| [`setObject`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L891) | id, obj, conn | callbackPromise, getAdminConnection |
-| [`readAdapterPort`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L905) | instance, conn | Number, Number.isInteger, getAdapterObjectId, getInstance, getObject, value.trim |
-| [`readSystemUuid`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L924) | conn, instance | String, extractUuid, getInstance, getObject, getState |
-| [`fetchJsonWithTimeout`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L969) | url, ms, options | clearTimeout, fetch, readApiResponse, setTimeout |
-| [`postJsonWithTimeout`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L998) | url, payload, ms, options | JSON.stringify, clearTimeout, fetch, readApiResponse, setTimeout |
-| [`requestRuntimeApi`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1029) | path, payload, timeoutMs, instance, conn | Date.now, base.includes, fetchJsonWithTimeout, getInstance, parseRuntimeAuthStatus, postJsonWithTimeout, resolveRuntimeBaseUrl |
-| [`resolveRuntimeLoginUrl`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1055) | instance, conn | getInstance, resolveRuntimeBaseUrl |
-| [`readRuntimeAuthStatus`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1066) | instance, conn | Date.now, checkedInstance, encodeURIComponent, getInstance, parseRuntimeAuthStatus, requestRuntimeApi |
-| [`loginRuntimeAuth`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1071) | instance, user, password, conn | Date.now, String, checkedInstance, encodeURIComponent, getInstance, parseRuntimeAuthStatus, requestRuntimeApi |
-| [`logoutRuntimeAuth`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1077) | instance, conn | Date.now, checkedInstance, encodeURIComponent, getInstance, requestRuntimeApi |
-| [`readRuntimeLicenseInfo`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1083) | instance, conn | Date.now, checkedInstance, encodeURIComponent, getInstance, requestRuntimeApi |
-| [`saveRuntimeLicenseKey`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1088) | instance, licenseKey, conn | Date.now, String, checkedInstance, encodeURIComponent, getInstance, requestRuntimeApi |
-| [`readLicenseStatus`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1099) | instance, conn | Number, Promise.all, String, getAdminConnection, getInstance, getState |
-| [`openExternal`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1158) | url | – |
-| [`notificationMailRequest`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1170) | payload | requestRuntimeApi |
-| [`meshCoordinatorRequest`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1175) | suffix, payload | requestRuntimeApi |
-| [`dynamicGridRequest`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1180) | suffix, payload | requestRuntimeApi |
-| [`partnerIntegrationsRequest`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1186) | suffix, payload | requestRuntimeApi |
+| [`buildRuntimeBaseUrl`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L473) | _target | currentOrigin |
+| [`readAdapterRuntimeTarget`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L478) | instance, conn | Number, Number.isInteger, checkedInstance, getAdapterObjectId, getInstance, getObject, raw.trim, withTimeout |
+| [`resolveRuntimeBaseUrl`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L500) | _instance, _conn | currentOrigin, getInstance |
+| [`safeWindowAccess`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L510) | getter | getter |
+| [`isErrorLike`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L523) | value | Object.prototype.hasOwnProperty.call, isRecord |
+| [`normalizeIoBrokerCallback`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L543) | cb | – |
+| [`pickServConn`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L566) | – | safeWindowAccess |
+| [`pickSocket`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L580) | – | safeWindowAccess |
+| [`ensureSocketIo`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L595) | – | pickSocket, window.__nwSocketLoader |
+| [`wrapServConn`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L616) | servConn | – |
+| [`getObject`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L625) | id, cb | cb, normalizeIoBrokerCallback, servConn.getObject |
+| [`getState`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L644) | id, cb | cb, normalizeIoBrokerCallback, servConn.getState |
+| [`setObject`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L667) | id, obj, cb | cb, servConn.setObject |
+| [`wrapSocket`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L682) | socket | – |
+| [`getObject`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L691) | id, cb | cb, normalizeIoBrokerCallback, socket.emit |
+| [`getState`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L710) | id, cb | cb, normalizeIoBrokerCallback, socket.emit |
+| [`setObject`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L729) | id, obj, cb | cb, socket.emit |
+| [`getAdminConnection`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L759) | – | ensureSocketIo, isAdminSocket, isServConn, isSocketIoClient, pickServConn, pickSocket, window.io.connect, withTimeout, wrapServConn, wrapSocket |
+| [`extractUuid`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L794) | obj | scan |
+| [`scan`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L804) | value, key | Array.isArray, Object.entries, Object.getOwnPropertyDescriptor, Object.prototype.hasOwnProperty.call, isRecord, scan, seen.add, seen.has, uuidRe.test, value.trim |
+| [`getObject`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L839) | id, conn | callbackPromise, getAdminConnection, isIoBrokerObject |
+| [`getState`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L855) | id, conn | callbackPromise, getAdminConnection, isRecord |
+| [`setObject`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L871) | id, obj, conn | callbackPromise, getAdminConnection |
+| [`readAdapterPort`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L885) | instance, conn | Number, Number.isInteger, getAdapterObjectId, getInstance, getObject, value.trim |
+| [`readSystemUuid`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L904) | conn, instance | String, extractUuid, getInstance, getObject, getState |
+| [`fetchJsonWithTimeout`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L949) | url, ms, options | clearTimeout, fetch, readApiResponse, setTimeout |
+| [`postJsonWithTimeout`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L978) | url, payload, ms, options | JSON.stringify, clearTimeout, fetch, readApiResponse, setTimeout |
+| [`requestRuntimeApi`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1009) | path, payload, timeoutMs, instance, conn | Date.now, base.includes, fetchJsonWithTimeout, getInstance, parseRuntimeAuthStatus, postJsonWithTimeout, resolveRuntimeBaseUrl |
+| [`resolveRuntimeLoginUrl`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1035) | instance, conn | getInstance, resolveRuntimeBaseUrl |
+| [`readRuntimeAuthStatus`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1046) | instance, conn | Date.now, checkedInstance, encodeURIComponent, getInstance, parseRuntimeAuthStatus, requestRuntimeApi |
+| [`loginRuntimeAuth`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1051) | instance, user, password, conn | Date.now, String, checkedInstance, encodeURIComponent, getInstance, parseRuntimeAuthStatus, requestRuntimeApi |
+| [`logoutRuntimeAuth`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1057) | instance, conn | Date.now, checkedInstance, encodeURIComponent, getInstance, requestRuntimeApi |
+| [`readRuntimeLicenseInfo`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1063) | instance, conn | Date.now, checkedInstance, encodeURIComponent, getInstance, requestRuntimeApi |
+| [`saveRuntimeLicenseKey`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1068) | instance, licenseKey, conn | Date.now, String, checkedInstance, encodeURIComponent, getInstance, requestRuntimeApi |
+| [`readLicenseStatus`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1079) | instance, conn | Number, Promise.all, String, getAdminConnection, getInstance, getState |
+| [`openExternal`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1138) | url | – |
+| [`notificationMailRequest`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1150) | payload | requestRuntimeApi |
+| [`meshCoordinatorRequest`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1155) | suffix, payload | requestRuntimeApi |
+| [`dynamicGridRequest`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1160) | suffix, payload | requestRuntimeApi |
+| [`partnerIntegrationsRequest`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1166) | suffix, payload | requestRuntimeApi |

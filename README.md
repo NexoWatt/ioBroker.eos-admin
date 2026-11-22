@@ -1,59 +1,51 @@
 # NexoWatt EOS
 
-**Version 9.0.4 · technisches Paket: `iobroker.eos-admin` · Vertriebskanal: `next`**
+**Version 9.0.5 · technisches Paket: `iobroker.eos-admin` · Vertriebskanal: `next`**
 
 NexoWatt EOS verbindet die Systemverwaltung aus EOS-Admin 8.0.2 mit Dashboard,
 Installer und Energiemanagement aus NexoWatt UI 1.0.38. Eine ioBroker-Instanz betreibt
 die gemeinsamen Module. Die bisherige UI wird im Zielbetrieb nicht zusätzlich gestartet.
 Der technische Paketname bleibt für bestehende Integrationen erhalten.
 
-Version 9.0.4 bleibt ein Integrations-Teststand. Die Versionsnummer ist kein
-Nachweis einer allgemeinen Produktivfreigabe; für npm ist weiterhin `next`
-vorgesehen. Neue Ergebnisse und Artefakthashes gehören in den versionsgebundenen
-Abschlussbericht. Der [Prüfbericht 9.0.3](docs/reports/unified-9.0.3/PRUEFBERICHT.md),
-der [Prüfbericht 9.0.2](docs/reports/unified-9.0.2/PRUEFBERICHT.md)
-und der [Alpha-1-Prüfbericht](docs/unified/PRUEFBERICHT.md) bleiben historische
-Nachweise; ihre Ergebnisse bestätigen nicht die Änderungen in 9.0.4.
-Die Bereitstellung ist keine CRA-Konformitätserklärung.
+Version 9.0.5 bleibt ein Integrations-Teststand für `next`. Die Versionsnummer ist
+kein Nachweis einer allgemeinen Produktivfreigabe oder CRA-Konformität. Tatsächliche
+Ergebnisse und Artefakthashes stehen im [Prüfbericht 9.0.5](docs/reports/unified-9.0.5/PRUEFBERICHT.md).
+Die [Berichte zu 9.0.4](docs/reports/unified-9.0.4/PRUEFBERICHT.md),
+[9.0.3](docs/reports/unified-9.0.3/PRUEFBERICHT.md) und früheren Versionen bleiben
+historische Belege; ihre Ergebnisse bestätigen keine späteren Änderungen.
 
-## Update 9.0.4 und Socket-Start
+## Update 9.0.5: History, Startanzeige und Ressourcen
 
-Die vorhandene Instanz und ihre gültige Lizenz bleiben beim Update erhalten;
-Prüfschlüssel müssen dafür nicht erneut importiert werden. Einstieg:
-[START_HIER_9.0.4.md](START_HIER_9.0.4.md).
+Die vorhandene Instanz und ihre gültige zentrale Lizenz werden weiterverwendet.
+Einstieg und Abnahme: [START_HIER_9.0.5.md](START_HIER_9.0.5.md).
 
-**EOS-SOCKET-001:** Der Feldbericht zu 9.0.3 zeigt einen weiteren Startabbruch:
-Bei hoher Ereignislast konnte die Socket-Verwaltung auf eine noch nicht angelegte
-Liste der State-Abonnements zugreifen. Dieser Pfad ist bereits ohne geöffneten
-Browser erreichbar und führt zu `Cannot convert undefined or null to object` sowie
-`UNCAUGHT_EXCEPTION`. Die 9.0.3-Tests hatten diesen Lastfall nicht erfasst.
-9.0.4 behandelt den Socket-Start und die Ereignisbegrenzung so, dass eine leere
-Abonnementliste zulässig bleibt und Browser-Abmeldungen beziehungsweise
-Drosselung keine Messwert-Abonnements der gemeinsamen EMS-Laufzeit entfernen.
-`EOS_UI_STOPPING` nach diesem Absturz war eine Folge des eingeleiteten Stopps.
+**EOS-HTTP-QUERY-001:** Der Feldbericht aus 9.0.4 zeigt den konkreten History-Abbruch:
+`Cannot read properties of undefined (reading 'from')` in `ui/main.js`, gefolgt von
+einer unbehandelten Promise-Ablehnung und Exitcode 6. Die eingebettete Express-4-UI
+übernimmt Requests vom Express-5-Verwaltungsserver. Beim Wechsel des Request-Prototyps
+konnte der geerbte Query-Zugriff verloren gehen. 9.0.5 sichert diese Übergabe und
+behandelt asynchrone Routenfehler als kontrollierte HTTP-Fehler.
+`EOS_UI_UNAVAILABLE` und die späteren Stop-Abmeldemeldungen waren Folgeerscheinungen.
 
-Die früheren Startkorrekturen bleiben Bestandteil des Pakets:
+Zusätzlich werden History-Eingaben, Antwortdaten und Ressourcenverbrauch begrenzt.
+Die EMS-Datenpunktregistry speichert nur benötigte Quell-/Alias-/Verbindungswerte;
+fachfremde Admin-State-Payloads bleiben nicht in einem zweiten EMS-Cache liegen.
+Die Systemverwaltung erhält das NexoWatt-Logo für ihre Startanzeige. Eine ungeprüfte
+Schätzung der RAM-Einsparung wird nicht angegeben: Die gemeldeten rund 750 MB stammen
+vom Zielgerät; Messbedingungen und tatsächlich nachgewiesene Optimierungen stehen im
+versionsgebundenen Bericht.
 
-**EOS-WEBSTART-001:** In 9.0.2 wartete der Webstart auf die vollständige operative
-UI-/EMS-Initialisierung. Ein ausbleibender History-Callback konnte deshalb den
-HTTPS-Listener verhindern, obwohl bereits `LICENSE_VALID` und ein Engine-Start
-protokolliert waren. 9.0.3 trennt die geschützte Weboberfläche vom nachfolgenden
-operativen Start. Lizenz, Rollen und Schreibzuständigkeit bleiben Voraussetzung
-für Gerätezugriffe. Ein Lizenz-/Engine-Log ist kein Nachweis eines offenen Ports.
-Die Meldung `EOS_HTTPS_READY` wird nach erfolgreicher Listenerbindung und
-Einrichtung der gemeinsamen Webauthentisierung ausgegeben. Danach den tatsächlichen
-Browserzugang prüfen; die Meldung bestätigt keine vollständige EMS-/Anlagenbereitschaft.
+Die Korrekturen aus 9.0.3/9.0.4 bleiben erhalten: HTTPS-Bereitschaft unabhängig von
+verzögerter operativer Initialisierung, begrenzte History-Startabfragen, rechtzeitige
+MultiUse-Objektanlage sowie Socket-Ereignisbegrenzung mit getrenntem EMS-Abonnementbedarf.
+Die Meldungen „Unsubscribe from all states …“ und „Subscribe to all states again“
+kennzeichnen den Lastwechsel der Oberfläche; allein beweisen sie keinen Neustart.
+Für einen Absturz sind die erste Fehlerzeile, Stacktrace und Prozess-/Exitmeldung maßgeblich.
 
-**HISTORY-001 / MULTIUSE-001:** Die betroffene History-Kandidatenabfrage erhält ein
-gemeinsames Gesamtbudget von 5 Sekunden; fehlende Daten dürfen keine frischen
-CO₂-Nullwerte erzeugen.
-Die vier MultiUse-Steuerobjekte werden auch bei deaktiviertem Modul angelegt,
-bevor dessen Deaktivierung Status schreibt. Das aktiviert weder MultiUse noch
-zusätzliche Gerätebefehle. Details und Abnahmekriterien:
-[Architektur](docs/unified/ARCHITECTURE.md) und
-[Prüfplan](docs/unified/COMMISSIONING.md).
-
-Aktuelle Prüfergebnisse und Grenzen: [Prüfbericht 9.0.4](docs/reports/unified-9.0.4/PRUEFBERICHT.md).
+Die gemeinsame Laufzeit verwendet weiterhin einen Prozess. Last-, Dauerlauf- und
+Anlagenabnahme bleiben eigene Nachweise. Details: [Architektur](docs/unified/ARCHITECTURE.md),
+[Prüfplan](docs/unified/COMMISSIONING.md) und
+[aktueller Prüfbericht](docs/reports/unified-9.0.5/PRUEFBERICHT.md).
 
 ## Anmeldung und einmalige Aktivierung
 
@@ -113,7 +105,7 @@ ist keine automatische neue EOS-Systemlizenz. Details: [Lizenzbetrieb](docs/unif
 
 ## Entwicklung und Prüfpaket
 
-Node.js: `>=22.23.4 <23 || >=24.22.1 <25`. Der Prüfbericht benennt die tatsächliche Laufzeit für 9.0.4; nicht geprüfte Plattformen sind nicht freigegeben.
+Node.js: `>=22.23.4 <23 || >=24.22.1 <25`. Der Prüfbericht benennt die tatsächliche Laufzeit für 9.0.5; nicht geprüfte Plattformen sind nicht freigegeben.
 
 ```sh
 npm ci --ignore-scripts
@@ -169,7 +161,7 @@ Sicherheitsanforderungen, STRIDE-Risiken, CRA-/DSGVO-Bezug und offene Nachweise 
 
 ## Einstieg und Nachweise
 
-[Update und Socket-Start 9.0.4](START_HIER_9.0.4.md) ·
+[Update und History-Prüfung 9.0.5](START_HIER_9.0.5.md) ·
 [Lizenzwiederherstellung seit 9.0.2](docs/unified/LICENSE_RECOVERY_9.0.2.md) ·
 [Historischer Prüfbericht 9.0.2](docs/reports/unified-9.0.2/PRUEFBERICHT.md).
-Der [Prüfbericht 9.0.4](docs/reports/unified-9.0.4/PRUEFBERICHT.md) dokumentiert den geprüften Stand einschließlich des Vorher-/Nachher-Controllerlaufs.
+Der [Prüfbericht 9.0.5](docs/reports/unified-9.0.5/PRUEFBERICHT.md) ordnet die tatsächlich ausgeführten Prüfungen und offenen Punkte diesem Lieferstand zu.

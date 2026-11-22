@@ -1,9 +1,9 @@
 # Prüfplan und Inbetriebnahme
 
-**NexoWatt EOS · 9.0.4 · EOS-MERGE-001**
+**NexoWatt EOS · 9.0.5 · EOS-MERGE-001**
 
 Dieser Plan nennt Sollwerte und Abläufe, keine vorweggenommenen Testergebnisse.
-Softwarebefunde und Rohbelege für 9.0.4 gehören in den neuen Abschlussbericht;
+Softwarebefunde und Rohbelege für 9.0.5 gehören in den neuen Abschlussbericht;
 Ergebnisse früherer Alpha-Versionen werden nicht umetikettiert. Zielsystem-/Gerätetests
 sind offen, solange sie nicht mit konkreter Umgebung dokumentiert wurden.
 
@@ -49,6 +49,12 @@ Prüfung mit begrenztem Anlagenumfang und beobachtbaren Stellbefehlen durchführ
 | EOS-SOCKET-001 / P01 | Frischer Adapterstart ohne Browser, State-Ereignislast über 200/s über mindestens drei Intervalle; nach Lastende mindestens 70 Sekunden weiter beobachten | Kein `Object.keys`-Fehler, keine unbehandelte Promise-Ablehnung, kein Prozessneustart; HTTPS bleibt nach der Bereitschaftsmeldung erreichbar. Reale Timer, kontrollierte Testuhr und Controllerlauf im Prüfbericht unterscheiden. |
 | EOS-SOCKET-001 / P02 | Browser abonniert Messwerte, meldet sich ab; Ereignisbegrenzung tritt ein und wird wieder aufgehoben | Oberflächenereignisse werden begrenzt und anschließend wieder zugestellt. Benötigte EMS-/Ownership-Abonnements bleiben wirksam, auch bei gleichen oder überlappenden Mustern. |
 | EOS-SOCKET-001 / P03 | Stop während eines ausstehenden Schwellenwertwechsels, anschließender Neustart | Keine nachlaufende Neuabonnierung durch die gestoppte Socket-Instanz; keine doppelten Timer oder dauerhaft fehlenden Abonnements. |
+| EOS-HTTP-QUERY-001 / P01 | History im tatsächlichen Express-5→Express-4-Hosted-Pfad öffnen; mit/ohne Query sowie normalen from/to-Werten | Kein Zugriff auf undefiniertes `req.query`, keine unbehandelte Promise-Ablehnung, kein Prozessneustart; nachfolgender HTTPS-Aufruf bleibt erreichbar. Standalone-Express-4-Tests allein genügen nicht. |
+| EOS-HTTP-QUERY-001 / P02 | Asynchrone Route gezielt mit Fehler ablehnen; unberechtigten Aufruf und Client-Abbruch prüfen | Kontrollierte Antwort beziehungsweise geschlossenes Request; Auth-/Lizenzgrenzen unverändert, keine Stacktraces oder Requestgeheimnisse in Browserantworten. |
+| HISTORY-905-02 / P01 | Ungültige Zeiten/Intervalle, zu große Zeitspanne, parallele Aufrufe, malformed/mehrfache/späte Callbacks und ausbleibende History-Antwort | Begrenzte Laufzeit, Parallelität und Ausgabegröße; sichere Fehlerantwort ohne Absturz, späte Mutation oder erfundene frische Messwerte. Limits: gemeinsames 5.000-ms-Budget, 10.000 Rohzeilen, 4.096 Rasterpunkte, 4 unterschiedliche Berechnungen und 4 Cacheeinträge/5 Sekunden; Jahresbericht mit 2 Workern bis 10 Jahre. |
+| EOS-SHUTDOWN-001 / P01 | Geordneter Stop mit noch offenen Browser-Abonnements und verspätetem Unsubscribe | Aufräumen bleibt wiederholbar; kein erneutes Subscribe nach Stop und keine Fehlerflut durch bereits geschlossene Zuständigkeit. |
+| EOS-BRANDING / P01 | `/system/` bei leerem Browsercache mit verzögertem JS laden, danach erneuter normaler Aufruf | NexoWatt-Startanzeige bereits vor React-Start und während des Ladens; kein ioBroker-Bootlogo innerhalb der EOS-Systemverwaltung. Bestehender eigenständiger Admin und Drittanbieterrechte bleiben erhalten. |
+| EOS-MEMORY / P01 | Gleiche Objekt-/State-Menge vor und nach Änderung, wiederholte History-Navigation, mehrere Tabs; Leerlauf und Last messen | RSS, Heap, externe Puffer und Cachebestände mit gleicher Umgebung dokumentieren; keine nicht gemessene Zielgeräteersparnis behaupten. Konfigurierte Messwerte/Heartbeat/Verbindungen und Mappingänderungen bleiben funktional. |
 
 Automatisierte Tests können Teile dieser Fälle mit Mocks abdecken. Im Protokoll
 kenntlich machen, ob reale HTTP-Verbindungen, Controllerkomponenten oder nur isolierte

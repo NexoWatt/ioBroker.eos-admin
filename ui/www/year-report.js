@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/year-report.ts
- * Quell-Hash: sha256:305481f234458431820a7a112cbd80c9eea2d4548efc1a49af942e49d5cc8a42
+ * Quell-Hash: sha256:20fd015d64caac13bd06bf161429b1072766b93fd9774884c7e0183ef512c074
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -841,8 +841,17 @@
     const endYear = years[years.length - 1];
     setMeta(`${years[0]} – ${endYear} (Stand: ${toIsoDate(now.getTime())})`);
 
-    // Fetch each year in parallel
-    const results = await Promise.all(years.map(y => fetchYear(y)));
+    // Keep the ten-year report available without starting ten expensive
+    // backend computations at once. Results retain the original year order.
+    const results = new Array(years.length);
+    let nextYearIndex = 0;
+    const loadYears = async () => {
+      while (nextYearIndex < years.length) {
+        const index = nextYearIndex++;
+        results[index] = await fetchYear(years[index]);
+      }
+    };
+    await Promise.all([loadYears(), loadYears()]);
     const ok = results.filter(r => r && r.ok);
 
     if (!ok.length){

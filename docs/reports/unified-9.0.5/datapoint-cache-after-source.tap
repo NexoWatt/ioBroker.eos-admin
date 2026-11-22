@@ -1,0 +1,19 @@
+✔ Admin wildcard events do not retain unrelated values or evict configured measurements (29.940075ms)
+✔ alias source, connected flags and heartbeat stay separate from payload retention (0.674398ms)
+✔ shared sources survive remapping until the last reference leaves, and remapping back re-primes (0.394379ms)
+✔ late mappings read the DB and immediate subscription events are retained (0.27475ms)
+✔ deletion invalidates an active measurement and later updates recover normally (0.266488ms)
+✔ unchanged upserts and disabled heartbeat release only obsolete connection payloads (0.386167ms)
+✔ a detached late DB prime cannot block a later remap back to that source (3.637014ms)
+✔ A→B→A remapping rejects an obsolete source DB response (0.533597ms)
+✔ A→B→A remapping rejects an obsolete connection DB response (0.387308ms)
+✔ a live sample wins over an older DB read that completes later (0.317534ms)
+✔ a deletion during DB priming cannot resurrect an old measurement (0.20793ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 296.121642

@@ -18,6 +18,7 @@
 const assert = require('node:assert');
 const fs = require('node:fs');
 const path = require('node:path');
+const vm = require('node:vm');
 
 const root = path.resolve(__dirname, '..');
 const read = (rel) => fs.readFileSync(path.join(root, rel), 'utf8');
@@ -34,7 +35,7 @@ function sliceBetween(source, startMarker, endMarker) {
   return source.slice(start, end);
 }
 
-(() => {
+(async () => {
   const pkg = readJson('package.json');
   const io = readJson('io-package.json');
   // Der RC-Vertrag gilt auch für spätere Patchstände. Entscheidend ist eine
@@ -179,7 +180,37 @@ function sliceBetween(source, startMarker, endMarker) {
   assert(warns[0].includes('Einmalige JS/TS-Diagnoseabweichung'));
 
   // 10) Cache, Paketvertrag und Dokumentation gehören zum RC82-Stand.
-  assert(read('src-ts/runtime-executables/www/sw.ts').match(/const CACHE_NAME = 'nexowatt-cache-v\d+'/));
+  // Im gemeinsamen authentifizierten Origin wird der alte Offline-Worker
+  // gezielt stillgelegt: alte EOS-Caches löschen, keine geschützten Antworten
+  // abfangen und die Registrierung entfernen. Quelle und ausgelieferte Runtime
+  // müssen denselben Vertrag ausführen; ein historischer CACHE_NAME genügt nicht.
+  for (const workerPath of ['src-ts/runtime-executables/www/sw.ts', 'www/sw.js']) {
+    const handlers = new Map();
+    const deleted = [];
+    let skipped = 0, claimed = 0, unregistered = 0;
+    vm.runInNewContext(read(workerPath), {
+      self: {
+        addEventListener(type, handler) { handlers.set(type, handler); },
+        async skipWaiting() { skipped++; },
+        clients: { async claim() { claimed++; } },
+        registration: { async unregister() { unregistered++; return true; } },
+      },
+      caches: {
+        async keys() { return ['nexowatt-cache-v123', 'nexowatt-cache-legacy', 'other-application-cache']; },
+        async delete(key) { deleted.push(key); return true; },
+      },
+    }, { filename: workerPath });
+    assert.strictEqual(handlers.has('fetch'), false, `${workerPath}: geschützte Antworten dürfen nicht offline abgefangen werden`);
+    let pending;
+    handlers.get('install')({ waitUntil(promise) { pending = promise; } });
+    await pending;
+    assert.strictEqual(skipped, 1);
+    handlers.get('activate')({ waitUntil(promise) { pending = promise; } });
+    await pending;
+    assert.deepStrictEqual(deleted.sort(), ['nexowatt-cache-legacy', 'nexowatt-cache-v123']);
+    assert.strictEqual(claimed, 1);
+    assert.strictEqual(unregistered, 1);
+  }
   for (const required of [
     'docs/reports/RC82_FELDTEST_CHECKLISTE_DE.md',
     'docs/reports/RC82_VALIDATION_REPORT.md',
@@ -195,4 +226,7 @@ function sliceBetween(source, startMarker, endMarker) {
   assert(docs.includes('Zuordnung → Allgemein'));
 
   console.log('[RC82] OK: Netzlimits dauerhaft aktiv und nicht abschaltbar; Home/Pro, Single Source, 10-%-Policy und optionale 0-Einspeisung geprüft.');
-})();
+})().catch(error => {
+  console.error('[RC82] ERROR:', error && error.stack ? error.stack : error);
+  process.exitCode = 1;
+});

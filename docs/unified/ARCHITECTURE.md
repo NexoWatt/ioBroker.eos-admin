@@ -1,6 +1,6 @@
 # Architektur der Zusammenführung
 
-**NexoWatt EOS · 9.0.4 · EOS-MERGE-001**
+**NexoWatt EOS · 9.0.5 · EOS-MERGE-001**
 
 ## Ein Paket und eine Instanz
 
@@ -30,7 +30,7 @@ flowchart TD
 
 ## Abweichung vom langfristigen Plan
 
-Version 9.0.4 hostet UI/EMS und Verwaltung **im selben Prozess**.
+Version 9.0.5 hostet UI/EMS und Verwaltung **im selben Prozess**.
 Sie führt noch keine getrennte EMS-Worker-Laufzeit ein. Ein Browser-Reload startet
 nicht den Adapter neu; ein Adapterstopp, Absturz oder Controllerneustart kann die
 Regelung unterbrechen. Auch umfangreiche Verwaltungsarbeit kann den gemeinsamen
@@ -85,6 +85,69 @@ Diese Trennung betrifft Abonnementzuständigkeit im gemeinsamen Prozess. Sie ist
 keine Prozessisolation und kein Nachweis harter Regellatenzen. Vorher-/Nachher-
 Reproduktion, Lastwechsel und Neustart werden im 9.0.4-Prüfbericht getrennt von
 der noch nötigen Geräteabnahme ausgewiesen.
+
+## HTTP-Übergabe an die eingebettete UI – EOS-HTTP-QUERY-001
+
+Der äußere Verwaltungsserver verwendet Express 5; die bestehende operative UI
+verwendet Express 4. Beide bearbeiten im Hosted-Betrieb dasselbe Request-Objekt.
+Express 5 stellt `query` über einen Getter des Request-Prototyps bereit. Die
+Express-4-Initialisierung darf diesen Wert nicht dadurch verlieren, dass sie den
+Prototyp ersetzt. Ein bloßer Test der UI auf ihrem eigenen Express-4-Server deckt
+diesen Übergang nicht ab.
+
+9.0.5 bewahrt Query-Daten an der gemeinsamen Grenze. Die History-Routen müssen
+fehlende, mehrfach angegebene, verschachtelte oder ungültige Parameter kontrolliert
+behandeln. Eine asynchrone Routenexception darf keine unbehandelte Promise-Ablehnung
+und keinen Adapterneustart auslösen. Die Fehlerbehandlung ist lokal zur HTTP-Route;
+sie ist kein globaler `uncaughtException`-Handler, der einen beschädigten Prozess
+weiterlaufen lässt. Authentisierung, Rollen-, Lizenz- und Objektprüfungen gelten
+unverändert vor dem operativen Zugriff.
+
+Der Feldfehler in 9.0.4 endet beim Zugriff auf `req.query.from`, bevor History-Daten
+angefordert werden. Die weitere Validierung von History-Antworten ist deshalb eine
+zusätzliche Stabilitätsmaßnahme und wird getrennt vom ursprünglichen Befund geprüft.
+Späte Abmeldungen nach bereits geschlossenem Abonnementmanager sind beim Stop ein
+idempotenter Aufräumvorgang; neue Anmeldungen dürfen ihn nicht wieder öffnen.
+
+## History-Anfragen und Ressourcen – HISTORY-905-02
+
+History-Antworten sind externe Daten. Ungültige Einträge einschließlich `null`,
+fehlender Zeitstempel und nicht endlicher Werte werden kontrolliert behandelt.
+Die API erhält ein gemeinsames monotones Budget von **5.000 ms** über zugehörige
+Reads und Fallbacks. Abbruch, Shutdown und verspätete/mehrfache Antworten dürfen
+weder eine neue Antwort noch eine nachträgliche Mutation auslösen.
+
+| Grenze | Verhalten |
+| --- | --- |
+| Rohantwort | Höchstens 10.000 Zeilen; ungültige/zu große Antworten kontrolliert ablehnen. |
+| Zeitraster | Höchstens 4.096 Punkte; größere Abfrage als HTTP 400 `EOS_HISTORY_RANGE_INVALID` ablehnen. |
+| Parallele Berechnungen | Höchstens 4 verschiedene Berechnungen; bei Überlast HTTP 503 `EOS_HISTORY_BUSY`. |
+| Antwortcache | Höchstens 4 Payloads, Gültigkeit 5 Sekunden. |
+| Jahresbericht | Höchstens 2 parallele Worker; bestehender Umfang bis 10 Jahre bleibt unterstützt. |
+| Fehler | `EOS_HISTORY_TIMEOUT`, `EOS_HISTORY_CANCELLED`, `EOS_HISTORY_UNAVAILABLE`, `EOS_HISTORY_RESPONSE_INVALID`; keine privaten Transportdetails oder ungeprüften Fehlerobjekte. |
+
+Die Limits ersetzen keine Geräte-/Dauerlastmessung. Die positiven und negativen
+Tests sowie tatsächliche Controller-/Browserabläufe stehen im versionsgebundenen
+Bericht. Ein begrenzter Fehler ist im Frontend als fehlende Auswertung zu behandeln,
+nicht als erfolgreich ermittelter Nullverbrauch.
+
+## Startanzeige und Speicherbedarf
+
+Die EOS-Systemverwaltung unter `/system/` verwendet für Bootstrap- und Ladeanzeige
+NexoWatt-Assets. Die Drittanbieter-Lizenzhinweise und der eigenständige ioBroker-Admin
+auf seinem bisherigen Port werden dadurch nicht geändert. Der erste HTML-Inhalt und
+die spätere React-Ladeanzeige müssen beide im Browser geprüft werden.
+
+Die vom Nutzer beobachteten rund 750 MB sind keine in der Entwicklungsumgebung
+reproduzierte Messung. Speichermessungen müssen RSS, Heap, externe Puffer, aktive
+Anfragen, Datenmenge und Messzeitraum unterscheiden. Ein sinkender synthetischer
+Cacheverbrauch beweist keine entsprechende Gesamtersparnis auf der Anlage.
+Die EMS-Datenpunktregistry hält nur explizit benötigte Quell-, Alias- und
+Verbindungsreferenzen vor. Heartbeat-Verwandtschaft verwendet erforderliche
+Zeitstempel ohne den fremden Payload. Konfigurationswechsel müssen Referenzen und
+entfernte Cachewerte konsistent aktualisieren; das Einschränken dieses Caches darf
+keine benötigten Controller-Abonnements entfernen. Synthetische Vorher-/Nachher-
+Messungen und verbleibende Grenzen stehen im 9.0.5-Prüfbericht.
 
 ## History und MultiUse beim Start
 
@@ -164,7 +227,7 @@ Abschlussbericht zu entnehmen.
 
 ## Direkter HTTPS-Zugang und optionaler Eingang
 
-Das Standardprofil von 9.0.4 ist **HTTPS auf `0.0.0.0:8188` mit Authentisierung**.
+Das Standardprofil von 9.0.5 ist **HTTPS auf `0.0.0.0:8188` mit Authentisierung**.
 `0.0.0.0` bedeutet Bindung an die IPv4-Schnittstellen; es ist keine vom Browser
 aufzurufende Adresse. Nutzer öffnen `https://<Geräte-IP>:8188/`. Die native
 Konfiguration setzt `secure: true`, `auth: true`, `certPublic: defaultPublic`,

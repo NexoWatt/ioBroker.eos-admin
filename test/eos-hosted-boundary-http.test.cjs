@@ -2,6 +2,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const http = require('node:http');
+const express = require('express');
 const { UnifiedSessions } = require('../src/lib/eosUnifiedBoundary');
 const { createHostedRuntime } = require('../ui/main');
 
@@ -17,6 +18,9 @@ test('real hosted HTTP accepts normal navigation through the owner origin policy
         namespace: 'eos-admin.0', instance: 0, config: object.native,
         log: { error() {}, warn() {}, info() {}, debug() {} },
         getForeignObjectAsync: async () => structuredClone(object),
+        getForeignStateAsync: async () => null,
+        sendTo: (_instance, _command, _message, callback) => callback({ result: [] }),
+        setTimeout, clearTimeout,
         eosSessionSecurity: { epoch: 'test-epoch' },
     };
     const license = { valid: true, coreEnabled: true, edition: 'pro', features: [], limits: { chargePoints: 50, batteries: 10 } };
@@ -33,7 +37,12 @@ test('real hosted HTTP accepts normal navigation through the owner origin policy
         resolveAccess: req => authority.status(req), getLicense: () => license,
     });
     await runtime.start();
-    const server = http.createServer((req, res) => runtime.handle(req, res, () => { res.statusCode = 404; res.end(); }));
+    // Production has an Express-5 host and an embedded Express-4 UI. Raw Node
+    // requests alone cannot reproduce the inherited req.query getter regression.
+    const host = express();
+    host.use((req, res, next) => runtime.handle(req, res, next));
+    host.use((_req, res) => { res.status(404).end(); });
+    const server = http.createServer(host);
     await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
     t.after(async () => { await runtime.stop(); await new Promise(resolve => server.close(resolve)); });
     const origin = `http://127.0.0.1:${server.address().port}`;
@@ -53,6 +62,20 @@ test('real hosted HTTP accepts normal navigation through the owner origin policy
         assert.match(response.headers.get('content-type'), /text\/html/);
         await response.arrayBuffer();
     }
+    const history = await request('/api/history?from=1000000&to=1600000&step=600', { cookie: `access_token=${token}` });
+    assert.equal(history.status, 200);
+    const historyBody = await history.json();
+    assert.equal(historyBody.start, 1000000);
+    assert.equal(historyBody.end, 1600000);
+    const duplicateHistory = await request('/api/history?from=1000000&from=2000000&to=2600000', { cookie: `access_token=${token}` });
+    assert.equal(duplicateHistory.status, 400);
+    assert.equal((await duplicateHistory.json()).error, 'EOS_HISTORY_RANGE_INVALID');
+    const anonymousHistory = await request('/api/history?from=1000000&to=1600000&step=600');
+    assert.equal(anonymousHistory.status, 401);
+    await anonymousHistory.arrayBuffer();
+    const noCsrf = await fetch(origin + '/api/history', { method: 'POST', headers: { origin, cookie: `access_token=${token}` } });
+    assert.equal(noCsrf.status, 403);
+    assert.equal((await noCsrf.json()).error, 'csrf_required');
     const denied = await request('/static/login.js', { origin: 'https://foreign.example' });
     assert.equal(denied.status, 403);
     await denied.arrayBuffer();

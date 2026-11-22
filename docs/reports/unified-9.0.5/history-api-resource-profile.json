@@ -1,0 +1,24 @@
+{
+  "profile": "History-only controlled provider; not customer RSS",
+  "gcAvailable": true,
+  "cacheEntries": 4,
+  "rowsPerPayload": 106496,
+  "largestPayloadBytes": 1919024,
+  "heapDeltaBytes": 32931440,
+  "node": "v24.22.3",
+  "command": "node --expose-gc --test --test-reporter=tap test/eos-history-api-stability.test.cjs test/eos-history-deadline.test.cjs",
+  "context": "AST-extracted production route, controlled in-process provider and fake monotonic deadlines; actual allocator and GC; not target device RSS",
+  "maxHistoryPoints": 4096,
+  "maxRawProviderRows": 10000,
+  "maxDistinctComputations": 4,
+  "maxCachedPayloads": 4,
+  "priorLookupObservationMs": 53735.529277,
+  "priorLookupObservationProvenance": "Original unoptimized price lookup measured in the same controlled maximum-payload test; direct tool output before replacement, not a target measurement",
+  "sourceSha256": {
+    "ui/src-ts/runtime-executables/main.ts": "6a96f22b2e06c33d89c9536a9c95a4c384ff3891d8f20e8b977f0fb388239627",
+    "ui/src-ts/runtime-executables/www/year-report.ts": "20fd015d64caac13bd06bf161429b1072766b93fd9774884c7e0183ef512c074",
+    "test/eos-history-api-stability.test.cjs": "01ab114ac7c6e3d54f520e4fe75a67018e3422325c657768952a8afd26010d98",
+    "test/eos-history-deadline.test.cjs": "1ddb66f9a2804d6b5edcf614b9a4789269b092a97457207394595986cc6cac4f"
+  },
+  "fourMaximumPayloadsTestDurationMs": 296.27504
+}

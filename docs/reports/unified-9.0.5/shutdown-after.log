@@ -1,0 +1,23 @@
+✔ browser threshold unsubscription cannot remove a matching EMS subscription (2.325724ms)
+✔ socket-first and host-first subscribers share the service bus, with no user escalation on other methods (0.301661ms)
+✔ duplicates are idempotent and wildcard removal is exact, not a global unsubscribe (0.418074ms)
+✔ own-state async and callback methods share ownership with absolute socket patterns (0.317054ms)
+✔ subscription failure rolls back and a retry can establish and release the bus (0.514048ms)
+✔ unsubscribe failure retains tracked ownership until a successful retry (0.177185ms)
+✔ concurrent subscribe/unsubscribe operations serialize without stale removal (0.262582ms)
+✔ closing socket scope preserves EMS and blocks late timer and browser activity (0.442871ms)
+✔ late disconnect callbacks after shutdown succeed without touching the controller or logging noise (0.347218ms)
+✔ stop drains a backend subscribe already in flight, then removes it without resurrection (3.819376ms)
+✔ invalid requests do not mutate bus interests and callback failures are handled (1.643336ms)
+✔ real SocketCommands publication still enforces user-specific state denial and ACL revocation on the shared bus (29.543826ms)
+✔ controller-7 absent-object semantics are unchanged: no DB refusal is treated as readable by upstream (0.505656ms)
+✔ controller promisify captures original callback APIs and does not recurse into installed wrappers (151.260205ms)
+✔ controller foreign omitted-pattern defaults and own empty-pattern behavior remain compatible (0.278026ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 333.051229

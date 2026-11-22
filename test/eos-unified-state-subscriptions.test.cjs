@@ -127,11 +127,27 @@ test('closing socket scope preserves EMS and blocks late timer and browser activ
     await f.manager.closeSocket();
     assert.deepEqual([...f.active], ['meter.0.power']);
     await assert.rejects(f.socket.subscribeForeignStatesAsync('late.0.*'), /STOPPED/);
-    await assert.rejects(f.socket.unsubscribeForeignStatesAsync('meter.0.power'), /STOPPED/);
+    const callsAfterClose = f.calls.length;
+    await f.socket.unsubscribeForeignStatesAsync('meter.0.power');
+    assert.equal(f.calls.length, callsAfterClose, 'late browser disconnect is an idempotent no-op');
     await f.adapter.subscribeForeignStatesAsync('meter.1.power');
     await f.manager.close();
     assert.equal(f.active.size, 0);
     await assert.rejects(f.adapter.subscribeStatesAsync('*'), /STOPPED/);
+});
+
+test('late disconnect callbacks after shutdown succeed without touching the controller or logging noise', async () => {
+    const f = fixture();
+    await f.adapter.subscribeForeignStatesAsync('meter.0.power');
+    await f.socket.subscribeForeignStatesAsync('meter.0.power');
+    await f.manager.close();
+    const callsAfterClose = f.calls.length;
+    await new Promise((resolve, reject) => f.socket.unsubscribeForeignStates('meter.0.power', error => error ? reject(error) : resolve()));
+    await f.adapter.unsubscribeStatesAsync('*');
+    await assert.rejects(f.socket.subscribeForeignStatesAsync('meter.0.power'), /STOPPED/);
+    assert.equal(f.calls.length, callsAfterClose);
+    assert.equal(f.active.size, 0);
+    assert.deepEqual(f.logs, []);
 });
 
 test('stop drains a backend subscribe already in flight, then removes it without resurrection', async () => {

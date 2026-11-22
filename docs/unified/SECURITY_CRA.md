@@ -1,8 +1,8 @@
 # Sicherheits- und CRA-Register der Zusammenführung
 
-**Stand:** 9.0.4 · 22.11.2026 · **Verantwortung:** NexoWatt / Dominique Manteufel
+**Stand:** 9.0.5 · 22.11.2026 · **Verantwortung:** NexoWatt / Dominique Manteufel
 
-Dieses Register beschreibt den Prüfbedarf für Testversion 9.0.4 (`next`) und
+Dieses Register beschreibt den Prüfbedarf für Testversion 9.0.5 (`next`) und
 ergänzt die vorhandenen Befund- und Entwicklungsunterlagen. Es
 beschreibt Scope, Maßnahmen und zu erbringende Nachweise. Testergebnisse werden im
 abschließenden Release-Prüfbericht geführt. Hier wird keine bestandene Normprüfung,
@@ -39,6 +39,10 @@ rein lokale Lizenzkontrolle verändern; absolute Manipulationssicherheit ist kei
 | HISTORY-001 / D,T | Fehlender History-Callback hängt Start oder Kandidatenabfrage auf; fehlende Daten erscheinen als frischer CO₂-Nullwert | Betroffenen Einzelaufruf und sämtliche Fallback-Kandidaten einer `_nwGetHistoryAvgSeriesAny`-Abfrage insgesamt auf 5 Sekunden begrenzen; späte/mehrfache Antworten ignorieren. Bei fehlenden Daten alte gültige Werte/Zeiten erhalten; echte Nullproben bleiben zulässig. | Nichtantwort, Fehler, verspätete Antwort, Shutdown und Datenqualität gezielt prüfen; keine Ergebnisse vorweggenommen. |
 | MULTIUSE-001 / T,D | Deaktivierung schreibt vier Steuerzustände, bevor deren Objekte angelegt sind | Objektinitialisierung auch bei deaktiviertem Modul; operative Ticks bleiben aktivierungsgebunden, keine neuen Gerätekommandos oder Konfigurationsresets. | Frische Datenbank und reales Manager-/Modulverhalten prüfen; Ergebnisse im 9.0.3-Abschlussbericht. |
 | EOS-SOCKET-001 / D | Start ohne Browser und hohe State-Ereignislast lösen `Object.keys(undefined)` in einem Socket-Timer aus; gemeinsame Abonnements können bei Browser-/Schwellenwertwechseln betroffen sein. CWE-248/400. | Leeren Abonnementbestand und Timer-Lifecycle behandeln; Ereignisbegrenzung erhalten; Socket-Abonnements so abgrenzen, dass EMS-/Ownership-Messwerte weiter eintreffen. Kein globales Verschlucken von Ausnahmen. | Original 9.0.3 reproduziert den Absturz im realen Controller; 9.0.4 besteht den Lastfall, natürliche Wiederaufnahme, HTTPS und Neustart. Abonnement-/ACL-/Stoptests bestanden; Umfang und offene Zielgeräteabnahme im [9.0.4-Prüfbericht](../reports/unified-9.0.4/PRUEFBERICHT.md). |
+| EOS-HTTP-QUERY-001 / D | Express-5→Express-4-Übergang verliert Query-Daten; gewöhnlicher History-Aufruf endet mit unbehandelter Promise-Ablehnung und Adapterstopp. CWE-248. | Query-Vertrag an der Hosted-Grenze erhalten und asynchrone Routenfehler lokal behandeln; Authentisierung und Lizenzprüfung nicht umgehen. | Feldbericht 9.0.4 mit Stacktrace belegt Ausfall. Reproduktion und Regression im realen HTTP-Übergang sowie Controllerprüfung gehören in den [9.0.5-Prüfbericht](../reports/unified-9.0.5/PRUEFBERICHT.md); keine Ergebnisse vorweggenommen. |
+| HISTORY-905-02 / D,T | Ungültige Callback-Daten, übergroße Zeitbereiche, lange/gleichzeitige History-Abfragen belasten den gemeinsamen Prozess. CWE-20/400. | Eingaben und History-Antworten prüfen, Parallelität/Zeit/Ausgabe begrenzen; Timeout und Abbruch ohne Folgefehler behandeln. | Ergänzende Härtung, getrennt vom beobachteten `req.query`-Absturz. Grenzen und tatsächliche Negativtests im 9.0.5-Bericht nachweisen. |
+| EOS-SHUTDOWN-001 / D | Bereits geschlossene Abonnementzuständigkeit führt bei spätem Unsubscribe zu vermeidbaren Aufräumfehlern. | Wiederholtes beziehungsweise spätes Abmelden als No-op zulassen; neue Anmeldungen nach Stop weiter ablehnen. | Reproduzierender und korrigierter Lauf in shutdown-before.log / shutdown-after.log; endgültiger Umfang im 9.0.5-Bericht. |
+| EOS-MEMORY / D | Admin-Wildcard-Ereignisse können fachlich nicht benötigte Werte in einem weiteren EMS-Cache halten; Nutzer meldet rund 750 MB RSS. CWE-400 als Risikozuordnung. | Nur benötigte Registry-Eingaben vorhalten; Konfigurations-/Alias-/Heartbeatverträglichkeit nachweisen, Cacheumfang und RAM getrennt messen. | Isolierter Registry-Vergleich mit 50.000 fachfremden Ereignissen zeigt 50.256 statt 256 zurückgehaltene Einträge im alten/neuen Code. Das erklärt nicht den gesamten Zielgeräte-RAM. Gemessene Bytes, Testumfang und Grenzen im 9.0.5-Bericht; keine pauschale Prozentersparnis. |
 
 Die 9.0.2-Prüfschlüsselarchitektur verändert die dokumentierte Autoritätsmenge:
 Standard-OS-Schlüssel und explizit importierte, in diesem Release autorisierte
@@ -101,6 +105,9 @@ Quellen und Recherchegrenzen: [SOURCES.md](SOURCES.md).
 ## Noch erforderliche Freigabenachweise
 
 - Tatsächlicher Controller-/OS-/Node-Stand; Installation/Stop/Restart ohne Root.
+- EOS-HTTP-QUERY-001: History-Aufruf über die tatsächliche Express-5/Express-4-Übergabe; fehlerhafte asynchrone Route darf den Prozess nicht beenden.
+- History-Ressourcenlimits, ungültige Callback-Daten und Client-Abbruch; Speicherverlauf bei gleicher Datenlast und wiederholter Navigation nachweisen.
+- NexoWatt-Bootanzeige vor und während React-Start im Browser prüfen; eigenständigen ioBroker-Admin und Drittanbieterhinweise erhalten.
 - EOS-SOCKET-001: Start unter Ereignislast ohne Browser, Socket-An-/Abmeldung, Drosselung und Wiederaufnahme bei weiter wirksamen EMS-Abonnements; Stop während ausstehender Timer prüfen.
 - HTTPS-Bereitschaft trotz verzögertem operativem Start; begrenzte History-Antwortzeit, unverfälschte CO₂-Datenqualität und MultiUse-Objekte bei deaktiviertem Modul nach den drei 9.0.3-Befunden prüfen.
 - Gesamtfluss direktes HTTPS:8188 → OAuth/Erstpasswortwechsel → Aktivierung → Dashboard/Installer/System; optionales HTTPS:443 separat. TOTP-/fehlerhafte Auth-Konfiguration muss sperren; TOTP-Challenge/Passkeys bleiben offen.

@@ -64,7 +64,6 @@ function makeAdapter() {
   Date.now = () => now;
   try {
     const adapter = makeAdapter();
-    const originalSet = adapter.setForeignStateAsync;
     const arbiter = installActuatorShadowArbiter(adapter);
 
     // Normale EMS-Regelung bleibt ohne aktive Safety-/Manual-Lease unverändert.
@@ -221,8 +220,41 @@ function makeAdapter() {
     assert(snapshot.preventedConflictCount >= 1, 'Verhinderte Konflikte wurden nicht diagnostiziert');
     assert(snapshot.preemptionsTotal >= 2, 'Prioritätsübernahmen wurden nicht diagnostiziert');
 
+    // Lebenszykluswechsel beendet nur alte gebundene Aufträge. Der schmale
+    // Interceptor bleibt absichtlich erhalten; ungebundene lokale Rückfall-
+    // Aufrufe müssen weiterhin genau einmal zum ursprünglichen Writer gelangen.
+    adapter.config.emsApps = { apps: { dynamicGrid: { installed: true, enabled: true } } };
+    adapter.config.dynamicGridConnection = { storages: [{ command: { signedTarget: { stateId: 'device.0.shutdown.target' } } }] };
+    let resume;
+    const paused = new Promise(resolve => { resume = resolve; });
+    const delayed = [];
+    for (const method of ['setForeignStateAsync', 'setForeignStateChangedAsync']) {
+      for (const kind of ['partner', 'dynamic']) {
+        const context = kind === 'partner'
+          ? { owner: 'storage', partnerControlRequired: true, partnerControlGuard: () => true }
+          : { owner: 'dynamicGridConnection', dynamicGridGuard: () => true };
+        delayed.push({ kind, promise: withActuatorShadowContext(adapter, context, async () => {
+          await paused;
+          return adapter[method]('device.0.shutdown.target', 1000, false);
+        }) });
+      }
+    }
+    const beforeStop = adapter.calls.length;
     arbiter.stop();
-    assert.strictEqual(adapter.setForeignStateAsync, originalSet, 'Originaler Hardwarepfad wurde beim Shutdown nicht restauriert');
+    resume();
+    for (const pending of delayed) {
+      const result = await pending.promise;
+      assert(isActuatorAuthorityBlockedResult(result), 'Alter gebundener Auftrag erreichte nach Stop den Writer');
+      assert.strictEqual(result.reason, pending.kind === 'partner'
+        ? 'partner-control-expired-or-revoked' : 'dynamic-grid-generation-changed');
+    }
+    assert.strictEqual(adapter.calls.length, beforeStop, 'Gestoppte Async-Fortsetzungen dürfen keine Hardware schreiben');
+    assert.strictEqual(await adapter.setForeignStateAsync('device.0.shutdown.target', 0, false), undefined);
+    assert.strictEqual(await adapter.setForeignStateChangedAsync('device.0.shutdown.target', 0, false), true);
+    assert.deepStrictEqual(adapter.calls.slice(beforeStop), [
+      ['set', 'device.0.shutdown.target', 0, false],
+      ['changed', 'device.0.shutdown.target', 0, false],
+    ], 'Ungebundene Rückfallaufrufe müssen genau einmal über die Originalwriter laufen');
     console.log('[actuator-safety-arbiter] OK: Safety/§14a/Peak/Manual-Priorität, Lease, Preemption, Same-Cycle und Hardware-Map-Gate geprüft.');
   } finally {
     Date.now = realNow;

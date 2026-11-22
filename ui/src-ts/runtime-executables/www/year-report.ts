@@ -825,8 +825,17 @@
     const endYear = years[years.length - 1];
     setMeta(`${years[0]} – ${endYear} (Stand: ${toIsoDate(now.getTime())})`);
 
-    // Fetch each year in parallel
-    const results = await Promise.all(years.map(y => fetchYear(y)));
+    // Keep the ten-year report available without starting ten expensive
+    // backend computations at once. Results retain the original year order.
+    const results = new Array(years.length);
+    let nextYearIndex = 0;
+    const loadYears = async () => {
+      while (nextYearIndex < years.length) {
+        const index = nextYearIndex++;
+        results[index] = await fetchYear(years[index]);
+      }
+    };
+    await Promise.all([loadYears(), loadYears()]);
     const ok = results.filter(r => r && r.ok);
 
     if (!ok.length){

@@ -1,0 +1,28 @@
+{
+  "generatedAt": "2026-11-22T20:11:45.842094+00:00",
+  "cases": [
+    {
+      "command": "node ui/scripts/verify-actuator-safety-arbiter.js",
+      "exitCode": 0,
+      "log": "verify-actuator-safety-arbiter-after.log"
+    },
+    {
+      "command": "node ui/scripts/verify-rc82-permanent-grid-protection.cjs",
+      "exitCode": 0,
+      "log": "verify-rc82-permanent-grid-protection-after.log"
+    },
+    {
+      "command": "node node_modules/eslint/bin/eslint.js -c eslint.unified.config.mjs ui/scripts/verify-actuator-safety-arbiter.js ui/scripts/verify-rc82-permanent-grid-protection.cjs",
+      "exitCode": 0,
+      "log": "updated-tests-lint.log"
+    },
+    {
+      "command": "node --check ui/scripts/verify-actuator-safety-arbiter.js",
+      "exitCode": 0
+    },
+    {
+      "command": "node --check ui/scripts/verify-rc82-permanent-grid-protection.cjs",
+      "exitCode": 0
+    }
+  ]
+}

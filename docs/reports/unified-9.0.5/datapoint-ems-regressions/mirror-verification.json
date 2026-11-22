@@ -1,0 +1,7 @@
+{
+  "source": "ui/scripts/verify-actuator-safety-arbiter.js",
+  "mirror": "ui/src-ts/runtime-mirrors/scripts/verify-actuator-safety-arbiter.ts",
+  "sourceSha256": "4b3ba88cb1759310fc5f7d93a88ff04ad2d81c4a9d588b925c74a96280883a42",
+  "sourceHashMatches": true,
+  "syntaxDiagnostics": 0
+}

@@ -1,0 +1,57 @@
+/* Shared by the first HTML paint and the React startup/reconnect screens. */
+.eos-boot-loader {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    width: 100%;
+    min-height: 100vh;
+    padding: 32px 24px;
+    color: #edf8ff;
+    background: #020914;
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    text-align: center;
+}
+
+.eos-boot-loader--compact {
+    min-height: 260px;
+    height: 100%;
+}
+
+.eos-boot-loader__logo {
+    display: block;
+    width: min(460px, 100%);
+    height: auto;
+    object-fit: contain;
+}
+
+.eos-boot-loader__spinner {
+    box-sizing: border-box;
+    width: 28px;
+    height: 28px;
+    border: 3px solid rgba(0, 212, 170, 0.22);
+    border-top-color: #00d4aa;
+    border-radius: 50%;
+    animation: eos-boot-spin 900ms linear infinite;
+}
+
+.eos-boot-loader__label {
+    margin: 0;
+    color: #dceef9;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+@keyframes eos-boot-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .eos-boot-loader__spinner {
+        animation: none;
+    }
+}

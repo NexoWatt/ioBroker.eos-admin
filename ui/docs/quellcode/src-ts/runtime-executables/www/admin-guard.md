@@ -26,5 +26,5 @@ Parameter sind die Namen aus der Signatur, keine geratenen Datenverträge. Die A
 
 | Funktion / Methode | Parameter | Direkt sichtbare Aufrufe (Auszug) |
 | --- | --- | --- |
-| [`adminUrl`](../../../../../src-ts/runtime-executables/www/admin-guard.ts#L67) | – | String, window.NW_RUNTIME.adminBase |
-| [`allowed`](../../../../../src-ts/runtime-executables/www/admin-guard.ts#L83) | – | qs.get, window.sessionStorage.getItem, window.sessionStorage.setItem |
+| [`adminUrl`](../../../../../src-ts/runtime-executables/www/admin-guard.ts#L67) | – | – |
+| [`allowed`](../../../../../src-ts/runtime-executables/www/admin-guard.ts#L74) | – | qs.get, window.sessionStorage.getItem, window.sessionStorage.setItem |

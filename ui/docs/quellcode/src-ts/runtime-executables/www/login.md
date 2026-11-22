@@ -33,8 +33,8 @@ Parameter sind die Namen aus der Signatur, keine geratenen Datenverträge. Die A
 | [`closeForms`](../../../../../src-ts/runtime-executables/www/login.ts#L54) | – | elements.toggle.setAttribute |
 | [`requestStatus`](../../../../../src-ts/runtime-executables/www/login.ts#L62) | – | Array.isArray, JSON.parse, String, bytes.set, controller.abort, data.capabilities.every, fetch, parts.push, reader.read, reader.releaseLock, response.body?.getReader, response.headers.get, window.clearTimeout, window.setTimeout |
 | [`returnTarget`](../../../../../src-ts/runtime-executables/www/login.ts#L94) | status | allowed, canonical.endsWith, canonical.slice, path.endsWith, path.slice, requested.startsWith, rootPath, setup.get, target.pathname.slice, target.pathname.startsWith, userPages.has |
-| [`allowed`](../../../../../src-ts/runtime-executables/www/login.ts#L98) | cap | capabilities.includes |
-| [`centralTarget`](../../../../../src-ts/runtime-executables/www/login.ts#L125) | value | value.startsWith |
-| [`render`](../../../../../src-ts/runtime-executables/www/login.ts#L135) | status | centralTarget, closeForms, elements.userInput.focus, framed, message, returnTarget, secureBrowser, window.location.replace |
-| [`refresh`](../../../../../src-ts/runtime-executables/www/login.ts#L156) | – | closeForms, message, render, requestStatus |
-| [`setBusy`](../../../../../src-ts/runtime-executables/www/login.ts#L170) | active | Date.now, String, elements.form.setAttribute |
+| [`allowed`](../../../../../src-ts/runtime-executables/www/login.ts#L99) | cap | capabilities.includes |
+| [`centralTarget`](../../../../../src-ts/runtime-executables/www/login.ts#L126) | value | value.startsWith |
+| [`render`](../../../../../src-ts/runtime-executables/www/login.ts#L136) | status | centralTarget, closeForms, elements.userInput.focus, framed, message, returnTarget, secureBrowser, window.location.replace |
+| [`refresh`](../../../../../src-ts/runtime-executables/www/login.ts#L157) | – | closeForms, message, render, requestStatus |
+| [`setBusy`](../../../../../src-ts/runtime-executables/www/login.ts#L171) | active | Date.now, String, elements.form.setAttribute |

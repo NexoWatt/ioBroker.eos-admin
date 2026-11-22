@@ -10,6 +10,11 @@
       "de": "Stable 7.9.95 macht den Release-Ordner mergesicher: Die flache Update-ZIP kann direkt über einen bestehenden Arbeitsordner entpackt werden. Vor Paketprüfung und npm-Veröffentlichung werden package.json, io-package.json, beide Lockdateien, die Frontend-Version, Build-Informationen und der aktuelle Repository-Eintrag automatisch auf dieselbe Version gebracht. Dadurch wird insbesondere ein stehen gebliebenes io-package.json aus 7.9.92/7.9.94 automatisch repariert. Die Funktionen aus 7.9.94 bleiben unverändert.",
       "en": "Stable 7.9.95 makes the release folder merge-safe: the flat update ZIP can be extracted directly over an existing working directory. Before package validation and npm publishing, package.json, io-package.json, both lockfiles, the frontend version, build information and the current repository entry are synchronized automatically. In particular, a stale io-package.json from 7.9.92/7.9.94 is repaired automatically. Functional behavior from 7.9.94 remains unchanged.",
       "nl": "Stable 7.9.95 maakt de releasemap merge-veilig: de vlakke update-ZIP kan direct over een bestaande werkmap worden uitgepakt. Vóór pakketcontrole en npm-publicatie worden package.json, io-package.json, beide lockbestanden, de frontendversie, buildinformatie en de actuele repositoryvermelding automatisch op dezelfde versie gezet. Een achtergebleven io-package.json uit 7.9.92/7.9.94 wordt daardoor automatisch hersteld. De functies uit 7.9.94 blijven ongewijzigd."
+    },
+    "7.9.96": {
+      "de": "Native Übersicht für Admin, Installateur und Endkunde, read-only EMS-Live-Diagnose aus dem NexoWatt UI Adapter, größere scrollfreie Anmeldung sowie reparierte verpflichtende persönliche Kennwortvergabe nach der ersten Anmeldung mit nexowatt.",
+      "en": "Native overview for Admin, Installer and End User, read-only EMS live diagnosis from the NexoWatt UI adapter, a larger scroll-free login card, and repaired mandatory personal password setup after first sign-in with nexowatt.",
+      "nl": "Native overzicht voor Admin, Installateur en Eindgebruiker, read-only EMS-live diagnose uit de NexoWatt UI-adapter, een groter aanmeldvenster zonder interne schuifbalken en herstelde verplichte persoonlijke wachtwoordinstelling na de eerste aanmelding met nexowatt."
     }
   },
   "7.9.94": {
