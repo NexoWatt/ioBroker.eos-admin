@@ -1,0 +1,53 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:cra
+> node scripts/verify-cra-auth.cjs && node scripts/verify-cra-network.cjs && node scripts/verify-cra-frontend.cjs && node scripts/verify-cra-tariff.cjs && node scripts/verify-release-approval.cjs --self-test && node scripts/verify-cra-dependency-regressions.cjs && npm run test:stable-1.0.10-security && node scripts/verify-cra-admin-router.cjs && npm run test:sbom && npm run test:license-secret && npm run test:cra-weather && npm run test:cra-credential-state
+
+PASS anonyme Kundenschreibversuche benötigen Sitzung; Kunde bedient eigene Settings
+PASS unknown scope umgeht weder Peak-Shaving-Sperre noch Tarifzwang
+PASS Origin null/fremde Origin werden vor Mutationen gesperrt, eigene Origin funktioniert
+PASS fehlerhaft kodierte Cookies erzeugen keinen Serverfehler
+PASS Login rotiert Browser-Sitzung, Logout widerruft Token
+PASS Kontosperre, Löschung und Passwortwechsel widerrufen vorhandene Sessions
+PASS Gruppen-Demotion wirkt ohne Logout und ohne Wartezeit
+PASS Sessionzahl pro Konto ist auf acht begrenzt
+PASS Prototype-Pollution direkt, per Arrays und HTTP ist vor Merge/Mutation blockiert
+PASS Flow-Sollwertgrenzen werden serverseitig vor jedem Gerätetarget durchgesetzt
+PASS öffentliche States und selbst privilegierter SSE-LIVE-Kanal enthalten keine Stationstokens
+PASS Stationsmodus-Freigabe gilt ebenso für set-mode und mode Alias
+PASS neue oder geänderte kurze Stationstokens werden beim Save und Import abgelehnt
+PASS fehlende oder ungültige Policy fällt sicher auf session zurück
+PASS fehlender Passwort-Rückruf läuft nach fünf Sekunden aus und gibt Login-Kapazität frei
+PASS Installer-Mapping bleibt bei auth=false und all geschützt
+PASS Installer-Mapping bleibt bei auth=false und lan geschützt
+PASS Installer-Mapping bleibt bei auth=false und session geschützt
+PASS parallele Logins reservieren Kapazität vor der Passwortprüfung
+CRA AUTH: 19 checks passed; real local HTTP, mocked ioBroker accounts/states, no hardware.
+CRA network verification 2026-11-11T05:54:51.274Z | v24.22.1 | linux | generated runtime
+SHA256 lib/mesh-coordinator-contract.js 82c9959cd034b96511bfac1e0e19df9750af91d0a1614c2135b80d7a7e21e7e6
+SHA256 lib/mesh-coordinator-protocol.js 356a151f811481b35e3c8e15dd4bc8cd307cdd0e734a614b07d0af541f1f90f1
+SHA256 lib/mesh-coordinator.js ecdb286c30aa91b0ab4a93a925311af6dd1be77030e3bb56a1d5ce8cbc3a66d4
+SHA256 lib/notification-mail.js 63ec344e52b32272e307750b7fffa63a07fe0a8c9fcfedec9ef50d52f897977c
+OK NET-01: v2-Anlauf, signierter Verkehr, Hello-Replay verändert keinen aktiven Regelzustand
+OK NET-02: Reconnect nach gleichem Boot und echter Slave-Neustart erholen sich kontrolliert
+OK NET-03: Master-Neustart, altes Hello und alter Exchange können keine Sitzung vorwegnehmen
+OK NET-04: Abgelaufene, manipulierte und fremde Challenges; vertauschte/alte Antworten abgewiesen
+OK NET-05: V1-Peers werden ausdrücklich abgewiesen; ungültige HMACs erreichen keine Sitzung
+OK NET-06: Tatsächliche IPv4/IPv6-Tailnet-/Loopbackadressen geprüft; Fremdnetze abgewiesen
+OK NET-07: Echter Loopback-HTTP-Kanal; DNS-Rebinding blockiert vor Socket/Datensendung
+OK NET-08: Antwort-/Anfragelimit, Deadline, fremder Endpoint und Protokollfehler
+OK NET-09: HTTPS verlangt explizit TLS >=1.2 und Gegenstellenprüfung (Optionsprüfung)
+OK NET-10: SMTP-Ledger exklusiv/0600/atomar; vorbereiteter alter Temp-Symlink bleibt wirkungslos
+OK NET-11: Fehler vor Rename erhält vorhandenes Ledger und räumt neue Tempdatei auf
+OK NET-12: SMTP erfordert TLS, keine URL-/Dateizugriffe, keine Rohfehler oder Secrets
+PASS 12 network/security groups; no hardware/Tailnet/real SMTP test
+[verify-cra-frontend] FAIL: Expected values to be strictly deep-equal:
++ actual - expected
+
+  [
+    'nexowatt-cache-v520',
+    'nexowatt-cache-v521',
+    'nexowatt-cache-v522',
++   'nexowatt-cache-v523'
+  ]
+

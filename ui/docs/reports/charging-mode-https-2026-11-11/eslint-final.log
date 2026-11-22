@@ -1,0 +1,3 @@
+ESLint: 178 sources; 3075 current findings; 3075 inventoried (2968 historical open, 107 individually reviewed); 0 blocked new/forbidden findings; 92 old findings absent.
+Open scanner hotspots: {"security/detect-object-injection":2359,"security/detect-non-literal-fs-filename":48,"@typescript-eslint/ban-ts-comment":73,"security/detect-unsafe-regex":16,"@typescript-eslint/no-explicit-any":563,"security/detect-possible-timing-attacks":12,"security/detect-non-literal-require":1,"security/detect-non-literal-regexp":3}
+This gate prevents new scanner findings. It does not assert a clean security scan or full ASVS conformity.

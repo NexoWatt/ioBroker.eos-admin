@@ -44,6 +44,7 @@ const node_path_1 = require("node:path");
 const compression_1 = __importDefault(require("compression"));
 const mime_types_1 = require("mime-types");
 const node_crypto_1 = require("node:crypto");
+const node_module_1 = require("node:module");
 const ajv_1 = require("ajv");
 const json5_1 = require("json5");
 const express_fileupload_1 = __importDefault(require("express-fileupload"));
@@ -57,8 +58,8 @@ const eosHttpsClient_1 = require("./eosHttpsClient");
 const eosWebResources_1 = require("./eosWebResources");
 const eosUploadGuard_1 = require("./eosUploadGuard");
 const eosFileTransferSecurity_1 = require("./eosFileTransferSecurity");
-const utils_1 = require("./utils");
 const instanceProxy_1 = require("./instanceProxy");
+const eosUnifiedBoundary_1 = require("./eosUnifiedBoundary");
 let AdapterStore;
 /** Content of a socket-io file */
 let socketIoFile;
@@ -188,7 +189,7 @@ class Web {
     publicPath;
     /** Login URL as the browser must see it. */
     get loginPage() {
-        return `${this.publicPath}index.html?login`;
+        return '/login.html';
     }
     /** URL to the JSON config schema */
     JSON_CONFIG_SCHEMA_URL = 
@@ -213,6 +214,8 @@ class Web {
     oauth2Model = null;
     /** Authenticated, bounded forwarding to the web server of an installed instance. */
     instanceProxy;
+    systemRequests = new WeakSet();
+    unified;
     /**
      * Create a new instance of Web
      *
@@ -227,9 +230,19 @@ class Web {
         this.onReady = onReady;
         this.options = options;
         this.systemLanguage = this.options?.systemLanguage || 'en';
-        this.publicPath = (0, utils_1.getAdminPublicPath)(this.settings.reverseProxy, this.adapter.namespace);
+        this.publicPath = '/system/';
+        this.unified = new eosUnifiedBoundary_1.UnifiedSessions(this.adapter, {
+            externalOrigin: settings.eosExternalOrigin,
+            secure: settings.secure === true,
+            resolveAccess: (req) => this.getEosRequestAccess(req),
+            firstLogin: (user, role) => this.getEosFirstLoginPasswordState(user, role),
+            getLicense: () => this.adapter.eosLicenseService?.statusView(),
+        });
         this.instanceProxy = new instanceProxy_1.InstanceProxy(this.adapter, this.publicPath);
-        void this.#init();
+        void this.#init().catch(() => {
+            this.adapter.log.error('EOS unified web initialization failed; startup denied');
+            this.adapter.terminate(adapter_core_1.EXIT_CODES.ADAPTER_REQUESTED_TERMINATION);
+        });
     }
     decorateLogFile(fileName, text) {
         const log = text || (0, node_fs_1.readFileSync)(fileName).toString();
@@ -302,6 +315,7 @@ class Web {
     }
     invalidateProxySessions() {
         this.instanceProxy.invalidate();
+        this.adapter.eosHostedRuntime?.revokeSessions?.();
     }
     async prepareIndex(index) {
         let template = (0, node_fs_1.readFileSync)((0, node_path_1.join)(this.wwwDir, index)).toString('utf8');
@@ -356,7 +370,7 @@ class Web {
             }
             else if (pattern === 'socketPath') {
                 // Same as web `rootPath`: WS URL only. Empty when admin is at `/`.
-                template = template.replace(/@@socketPath@@/g, this.publicPath === '/' ? '' : this.publicPath);
+                template = template.replace(/@@socketPath@@/g, '');
             }
             else {
                 const value = { ...this.adapter.config }[pattern];
@@ -371,7 +385,7 @@ class Web {
     getInfoJs() {
         const result = [`window.sysLang = "${this.systemLanguage}";`];
         if (this.publicPath && this.publicPath !== '/') {
-            result.push(`window.socketPath = ${JSON.stringify(this.publicPath)};`);
+            result.push('window.socketPath = "";');
         }
         if (uuid?.length === 38) {
             result.push(`window.vendorPrefix = "${uuid.substring(0, 2)}";`);
@@ -659,7 +673,7 @@ class Web {
         if (!user.startsWith('system.user.')) {
             user = `system.user.${user.replace(/^user\./, '')}`;
         }
-        return /^system\.user\.[a-z0-9_.-]+$/i.test(user) ? user : null;
+        return /^system\.user\.[a-z0-9_.@-]{1,128}$/i.test(user) ? user : null;
     }
     normalizeEosAdapterName(value) {
         if (typeof value !== 'string') {
@@ -902,9 +916,7 @@ class Web {
             .trim();
     }
     resolveEosRole(userId, groups, groupNames, adminGroups) {
-        if (userId === 'system.user.admin' ||
-            groups.includes('system.group.administrator') ||
-            groups.some(group => adminGroups.includes(group))) {
+        if (groups.includes('system.group.administrator') || groups.some(group => adminGroups.includes(group))) {
             return 'admin';
         }
         const installerGroups = this.getEosInstallerGroups();
@@ -962,7 +974,7 @@ class Web {
     }
     async getEosFirstLoginPasswordState(userId, role) {
         const minLength = this.getEosFirstLoginPasswordMinLength();
-        if (!this.settings.auth || !userId || role === 'admin') {
+        if (!this.settings.auth || !userId) {
             return { required: false, initialized: true, minLength, version: 1 };
         }
         try {
@@ -976,7 +988,12 @@ class Web {
                 native.nexowattFirstLoginPending === true ||
                 native.eosFirstLoginRequired === true;
             const forced = account.forcePasswordChange === true || stableForced;
-            return { required: forced || !initialized, initialized: initialized && !forced, minLength, version: 1 };
+            return {
+                required: forced || (role !== 'admin' && !initialized),
+                initialized: (initialized || role === 'admin') && !forced,
+                minLength,
+                version: 1,
+            };
         }
         catch (e) {
             this.adapter.log.warn(`Cannot read EOS first-login state for ${userId}: ${e instanceof Error ? e.message : 'unknown error'}`);
@@ -1105,7 +1122,7 @@ class Web {
     async saveEosFirstLoginPassword(req, res) {
         res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
         const access = await this.getEosRequestAccess(req);
-        if (!access.userId || access.role === 'admin') {
+        if (!access.userId) {
             res.status(403).json({ error: 'passwordSetupNotAllowed' });
             return;
         }
@@ -1418,7 +1435,9 @@ class Web {
     }
     isEosSameOriginWrite(req) {
         // This profile terminates TLS here; untrusted proxy headers cannot change the scheme.
-        return (0, eosRequestSecurity_1.isEosSameOriginRequest)(req.headers, this.settings.secure === true ? 'https:' : 'http:');
+        return this.unified.origin
+            ? this.unified.originAllowed(req)
+            : (0, eosRequestSecurity_1.isEosSameOriginRequest)(req.headers, this.settings.secure === true ? 'https:' : 'http:');
     }
     async saveEosBasicSettings(req, res) {
         res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
@@ -1509,7 +1528,7 @@ class Web {
         res.setHeader('Content-Type', 'application/json; charset=utf-8');
         const { userId, groups, groupNames, adminGroups, role } = await this.getEosRequestAccess(req);
         const passwordSetup = await this.getEosFirstLoginPasswordState(userId, role);
-        const isAdministrator = role === 'admin' && (userId === 'system.user.admin' || groups.includes('system.group.administrator'));
+        const isAdministrator = role === 'admin' && groups.includes('system.group.administrator');
         const isEosAdminGroup = role === 'admin';
         const isInstaller = role === 'installer';
         const isEndUser = role === 'enduser';
@@ -1578,7 +1597,7 @@ class Web {
         const user = await this.getSessionUser(req);
         const groups = await this.getGroupsForUser(user);
         const adminOnlyGroups = this.getEosSecurityAdminGroups();
-        const isAdminGroup = user === 'system.user.admin' || adminOnlyGroups.some(group => groups.includes(group));
+        const isAdminGroup = adminOnlyGroups.some(group => groups.includes(group));
         const hideLegacyAdmin = this.adapter.config.eosHideLegacyAdminForNonAdmins !== false && !isAdminGroup;
         return {
             user,
@@ -1632,6 +1651,112 @@ class Web {
     getSafeLoginOrigin(req) {
         return (0, eosRequestSecurity_1.safeEosLoginPrefix)(req.url);
     }
+    /** Root UI and system console share one listener and one revocable identity. */
+    isUnifiedRequest(req) {
+        if (this.systemRequests.has(req)) {
+            return false;
+        }
+        const path = req.path || req.url.split('?')[0];
+        return (!/^\/(?:nexowatt|oauth|oauth2_callbacks|eos|adapter|files|login|proxy)(?:\/|$)/.test(path) &&
+            !['/auth', '/version', '/session', '/logout', '/favicon.ico', '/_socket/info.js'].includes(path));
+    }
+    async mountUnifiedRuntime() {
+        const app = this.server.app;
+        if (!app) {
+            throw new Error('EOS_HTTP_UNAVAILABLE');
+        }
+        app.use((req, res, next) => {
+            if (!this.systemRequests.has(req)) {
+                next();
+                return;
+            }
+            void this.unified.status(req).then(status => {
+                if (!status.authenticated) {
+                    res.redirect('/login.html');
+                    return;
+                }
+                if (!status.mustChangePassword && status.role !== 'admin' && status.role !== 'installer') {
+                    res.status(403).json({ error: 'EOS_TECHNICAL_ROLE_REQUIRED' });
+                    return;
+                }
+                // First-password screen uses the already authenticated restricted HTTP flow.
+                next();
+            }, () => res.status(503).json({ error: 'AUTH_UNAVAILABLE' }));
+        });
+        app.get(['/api/auth/status', '/api/strict-auth/status', '/api/installer/status'], (req, res) => {
+            res.setHeader('Cache-Control', 'no-store');
+            void this.unified.status(req).then(value => res.json(value), () => res.status(503).json({ error: 'AUTH_UNAVAILABLE' }));
+        });
+        app.get('/license.html', (_req, res) => res.redirect('/nexowatt/license'));
+        app.get('/api/license/info', (req, res) => {
+            void this.getEosRequestAccess(req).then(access => {
+                if (!access.userId) {
+                    res.status(401).json({ error: 'authenticationRequired' });
+                    return;
+                }
+                const status = this.adapter.eosLicenseService?.statusView();
+                res.setHeader('Cache-Control', 'no-store');
+                res.json({ ...status, uuid: access.role === 'admin' ? status?.uuid : undefined });
+            }, () => res.status(503).json({ error: 'LICENSE_UNAVAILABLE' }));
+        });
+        app.post('/api/license/save', (_req, res) => {
+            res.status(409).json({ error: 'USE_CENTRAL_ACTIVATION', url: '/nexowatt/license' });
+        });
+        const factory = (0, node_module_1.createRequire)(__filename)((0, node_path_1.join)(this.baseDir, 'ui', 'main.js'));
+        if (typeof factory.createHostedRuntime !== 'function') {
+            throw new Error('EOS_UI_FACTORY_MISSING');
+        }
+        const runtime = factory.createHostedRuntime(this.adapter, {
+            resolveAccess: (req) => this.unified.status(req),
+            getLicense: () => this.adapter.eosLicenseService?.statusView(),
+            originAllowed: (req) => this.unified.requestAllowed(req),
+            machineRequestAllowed: (req) => this.unified.machineRequestAllowed(req),
+            canWrite: () => this.adapter.eosOwnership?.canWrite() === true,
+        });
+        this.adapter.eosHostedRuntime = runtime;
+        await runtime.start();
+        app.use((req, res, next) => {
+            if (!this.isUnifiedRequest(req)) {
+                next();
+                return;
+            }
+            // The UI applies per-route permission/CSRF checks; this prerequisite cannot be bypassed by direct APIs.
+            void this.unified.status(req).then(status => {
+                const path = req.path || req.url.split('?')[0];
+                const bootstrapAsset = [
+                    '/login.html',
+                    '/login.js',
+                    '/login.css',
+                    '/runtime-base.js',
+                    '/nexowatt-eos-logo.png',
+                    '/manifest.webmanifest',
+                    '/apple-touch-icon.png',
+                    '/sw.js',
+                ].includes(path) ||
+                    /^\/(?:fonts|icons|assets\/icons)\//.test(path) ||
+                    /^\/static\/[^?]*\.(?:js|css|png|svg|ico|woff2?|ttf)$/.test(path);
+                if (status.authenticated && status.mustChangePassword && !bootstrapAsset) {
+                    if (path.startsWith('/api/') || path === '/events') {
+                        res.status(403).json({ error: 'PASSWORD_CHANGE_REQUIRED', url: status.nextUrl });
+                    }
+                    else {
+                        res.redirect(status.nextUrl);
+                    }
+                    return;
+                }
+                if (status.authenticated && status.activationRequired && !bootstrapAsset) {
+                    if (status.role === 'admin' && !path.startsWith('/api/') && path !== '/events') {
+                        res.redirect('/nexowatt/license');
+                    }
+                    else {
+                        res.status(402).json({ error: 'LICENSE_REQUIRED', url: '/nexowatt/license' });
+                    }
+                    return;
+                }
+                runtime.handle(req, res, next);
+            }, () => res.status(503).json({ error: 'AUTH_UNAVAILABLE' }));
+        });
+    }
     /**
      * Initialize the server
      */
@@ -1648,7 +1773,20 @@ class Web {
         this.settings = { ...this.settings, bind, auth: true };
         if (this.settings.port) {
             this.server.app = (0, express_1.default)();
-            this.server.app.use((0, eosWebResources_1.loopbackHttpGuard)(this.settings.secure));
+            if (!this.unified.origin) {
+                this.server.app.use((0, eosWebResources_1.loopbackHttpGuard)(this.settings.secure));
+            }
+            this.server.app.use((req, res, next) => {
+                if (!(0, eosUnifiedBoundary_1.transportAllowed)(req, this.unified.origin, this.settings.secure === true)) {
+                    res.status(403).json({ error: 'EOS_ORIGIN_HOST' });
+                    return;
+                }
+                if (req.url === '/system') {
+                    res.redirect(308, '/system/');
+                    return;
+                }
+                next();
+            });
             // Upstream also accepts query credentials. Reject them before any OAuth or body processing.
             this.server.app.use((req, res, next) => {
                 if ((0, eosRequestSecurity_1.hasEosUrlCredentials)(req.query)) {
@@ -1674,6 +1812,9 @@ class Web {
                 // '/admin/' => '/admin'
                 const prefix = this.publicPath.substring(0, this.publicPath.length - 1);
                 this.server.app.use((req, _res, next) => {
+                    if (req.url === prefix || req.url.startsWith(`${prefix}/`) || req.url.startsWith(`${prefix}?`)) {
+                        this.systemRequests.add(req);
+                    }
                     if (req.url === prefix) {
                         req.url = '/';
                     }
@@ -1794,14 +1935,20 @@ class Web {
                 const genericJson = bodyParser.json();
                 const isLicensePath = (req) => /^\/nexowatt\/license(?:\/|$)/i.test(req.path);
                 this.server.app.use((req, res, next) => {
-                    if (isLicensePath(req) || this.instanceProxy.matches(req.url)) {
+                    if (isLicensePath(req) ||
+                        this.instanceProxy.matches(req.url) ||
+                        (this.isUnifiedRequest(req) &&
+                            !/^\/api\/(?:auth|strict-auth|installer)\/(?:login|logout)$/.test(req.path))) {
                         next();
                         return;
                     }
                     genericUrlencoded(req, res, next);
                 });
                 this.server.app.use((req, res, next) => {
-                    if (isLicensePath(req) || this.instanceProxy.matches(req.url)) {
+                    if (isLicensePath(req) ||
+                        this.instanceProxy.matches(req.url) ||
+                        (this.isUnifiedRequest(req) &&
+                            !/^\/api\/(?:auth|strict-auth|installer)\/(?:login|logout)$/.test(req.path))) {
                         next();
                         return;
                     }
@@ -1812,6 +1959,13 @@ class Web {
                 this.server.app.all(['/sso', '/sso-callback', '/sso-token'], (_req, res) => {
                     res.status(403).json({ error: 'ssoUnavailableInLocalSecurityProfile' });
                 });
+                // Reuse the existing OAuth issuer; no browser-readable tokens or duplicate login database.
+                this.server.app.post(['/api/auth/login', '/api/strict-auth/login', '/api/installer/login'], (req, res, next) => this.unified.prepareLogin(req, res, next));
+                this.server.app.post(['/api/auth/logout', '/api/strict-auth/logout', '/api/installer/logout'], (req, res) => {
+                    void this.unified
+                        .logout(req, res)
+                        .catch(() => res.status(503).json({ error: 'AUTH_UNAVAILABLE' }));
+                });
                 // Bind upstream OAuth issuance and reads to the revocable EOS credential snapshot.
                 this.oauth2Model = (0, webserver_1.createOAuth2Server)(this.adapter, {
                     app: this.server.app,
@@ -1820,7 +1974,7 @@ class Web {
                     ssoHandoff: 'code',
                     authorizationCode: false,
                     dynamicClientRegistration: false,
-                    secure: this.settings.secure,
+                    secure: this.settings.secure || !!this.unified.origin,
                     accessLifetime: this.settings.ttl,
                     refreshLifetime: this.settings.refreshTokenTtlDays * 24 * 60 * 60,
                     noBasicAuth: this.settings.noBasicAuth,
@@ -1834,6 +1988,7 @@ class Web {
                     },
                 });
                 this.adapter.eosSessionSecurity.bindOAuthModel(this.oauth2Model);
+                await this.mountUnifiedRuntime();
                 this.server.app.get('/session', (req, res) => {
                     let accessToken = req.headers.cookie
                         ?.split(';')
@@ -2000,7 +2155,8 @@ class Web {
             });
             (0, eosLicenseHttp_1.registerLicenseRoutes)(this.server.app, {
                 service: this.adapter.eosLicenseService,
-                secure: this.settings.secure === true,
+                secure: this.settings.secure === true || !!this.unified.origin,
+                publicOrigin: this.unified.origin,
                 authorize: async (req) => {
                     if (!this.settings.auth) {
                         return false;
@@ -2547,6 +2703,20 @@ class Web {
             this.server.server.requestTimeout = 60000;
             this.server.server.maxHeadersCount = 100;
             this.server.server.__server = this.server;
+            this.server.server.prependListener('upgrade', (req, socket) => {
+                const pathname = String(req.url || '').split('?')[0];
+                const allowedPath = [
+                    '/',
+                    '/system/',
+                    '/system/socket.io',
+                    '/system/socket.io/',
+                    '/socket.io',
+                    '/socket.io/',
+                ].includes(pathname);
+                if (!allowedPath || !(0, eosUnifiedBoundary_1.sameOrigin)(req, this.unified.origin, this.settings.secure === true)) {
+                    socket.destroy();
+                }
+            });
             this.instanceProxy.attach(this.server.server);
         }
         else {

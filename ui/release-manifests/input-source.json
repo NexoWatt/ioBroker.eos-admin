@@ -1,0 +1,17 @@
+{
+  "version": "1.0.35",
+  "filename": "NexoWatt_UI_1.0.35_ADMIN_HTTPS_FIX_FULL_REPOSITORY.zip",
+  "sizeBytes": 22361462,
+  "sha256": "795e301e8616c839105087e6f069d8bcd55444f687f339cc389fa1df63e9f40a",
+  "reviewVersion": "1.0.36",
+  "date": "2026-11-11",
+  "installedVersionConfirmedByOperator": true,
+  "previousReviewSource": {
+    "version": "1.0.21",
+    "filename": "NexoWatt_UI_1.0.21_STABLE_FULL_REPOSITORY (1).zip",
+    "sizeBytes": 16369964,
+    "sha256": "90db619ecd754cab335dae92fdc123a48f62ceffb505a2a2b832e119d885eefe",
+    "reviewVersion": "1.0.22",
+    "date": "2026-09-29"
+  }
+}

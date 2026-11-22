@@ -1,0 +1,61 @@
+{
+  "copyright": "Copyright (c) 2026 NexoWatt. All rights reserved. Confidential and Proprietary. Use, modification or distribution without express written permission is prohibited.",
+  "recordedAtUtc": "2026-10-24T06:08:38.926203+00:00",
+  "node": "v24.19.0",
+  "recordType": "Structured transcription of observed tool output, not an additional test run",
+  "baseline": {
+    "command": "node scripts/verify-runtime-security-updates.cjs --observe-baseline /workspace/scratch/cd7c5428afc1/continuation-1.0.30/work/NexoWatt_UI_1.0.30",
+    "toolChunk": "937191",
+    "parentExitCode": 0,
+    "versions": {
+      "bodyParser": "1.20.8",
+      "nodemailer": "10.0.10"
+    },
+    "http": {
+      "outcome": null,
+      "exitCode": 1,
+      "signal": null,
+      "timedOut": false,
+      "unhandledDecoderError": true
+    },
+    "mail": [
+      {
+        "id": "nested-comment",
+        "parsed": [
+          "other@other.test"
+        ]
+      },
+      {
+        "id": "group-semicolon",
+        "parsed": [
+          "other@other.test"
+        ]
+      },
+      {
+        "id": "quoted-angle",
+        "parsed": [
+          "\"a@other.test"
+        ]
+      }
+    ]
+  },
+  "fixed": {
+    "command": "node scripts/verify-runtime-security-updates.cjs",
+    "toolChunk": "65a643",
+    "exitCode": 0,
+    "httpCasesPassed": 28,
+    "allCasesRecoveryHttpStatus": 200,
+    "parserCasesPassed": 3,
+    "rejectedBeforeTransport": 3,
+    "composedWithoutSmtp": true
+  },
+  "sourceSha256": {
+    "scripts/verify-runtime-security-updates.cjs": "1331ca61a1270895698214e852638d01b3af6d57d5f43cbeaf1d6a5d402ee413",
+    "main.js": "a232aa700e0e8e97f692e6455c1efe00067b9293aadb9c0db59439e76a9320ed",
+    "lib/notification-mail.js": "63ec344e52b32272e307750b7fffa63a07fe0a8c9fcfedec9ef50d52f897977c",
+    "lib/http-error-boundary.js": "66f96405a1e83586d78f767b24cd047acce4ca81612a607f81c0a273e6a8a7e0",
+    "node_modules/body-parser/lib/read.js": "8a23bb191305aedf03694f007fd07db2a4d004054233f4487bf113834adde238",
+    "node_modules/nodemailer/dist/cjs/addressparser/index.js": "a0db3fcb071e4e173e9cd133ea8825d68c9a1845d2d43301db3e72317ae0f94e"
+  },
+  "liveSystemTouched": false
+}

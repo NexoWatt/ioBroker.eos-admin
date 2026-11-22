@@ -1,65 +1,102 @@
-# NexoWatt EOS – Proprietary License Notice
+# NexoWatt EOS
 
-Copyright (c) 2026 NexoWatt. Alle Rechte vorbehalten.
+**Erste zusammengeführte Version: 9.0.0-alpha.1 · technisches Paket: `iobroker.eos-admin`**
 
-Diese NexoWatt EOS Administrationsoberfläche, einschließlich der NexoWatt/EOS-spezifischen Branding-Dateien, Logos, Stylesheets, Layout-Anpassungen, UI-Overlays, Grafiken, Texte und sonstigen NexoWatt-spezifischen Erweiterungen, ist proprietär.
+NexoWatt EOS verbindet die Systemverwaltung aus EOS-Admin 8.0.2 mit Dashboard,
+Installer und Energiemanagement aus NexoWatt UI 1.0.38. Eine ioBroker-Instanz betreibt
+die gemeinsamen Module. Die bisherige UI wird im Zielbetrieb nicht zusätzlich gestartet.
+Der technische Paketname bleibt für bestehende Integrationen erhalten.
 
-Die Nutzung, Installation, Vervielfältigung, Veröffentlichung, Weitergabe, Unterlizenzierung, Vermietung, der Verkauf oder die Bereitstellung an Dritte ist ohne vorherige schriftliche Zustimmung von NexoWatt nicht gestattet.
+Dies ist ein Integrations-Teststand. Der genaue Prüfumfang, verbleibende Grenzen und
+ausstehende Anlagenabnahmen stehen im [Prüfbericht](docs/unified/PRUEFBERICHT.md).
+Die Bereitstellung ist keine CRA-Konformitätserklärung oder allgemeine Produktivfreigabe.
 
-Der Adapter ist ausschließlich für Systeme und Installationen bestimmt, die von NexoWatt betrieben, geliefert, autorisiert oder ausdrücklich lizenziert wurden.
+## Anmeldung und einmalige Aktivierung
 
-Sofern dieser Adapter auf Open-Source-Komponenten basiert oder solche enthält, gelten für diese Bestandteile zusätzlich die jeweiligen Drittanbieter-Lizenzen. Die in diesem Repository enthaltenen Hinweise zu Drittanbieter-Lizenzen bleiben unberührt. Diese proprietäre NexoWatt-Lizenz beschränkt insbesondere die NexoWatt-spezifischen Änderungen, das sichtbare EOS-Design, das Branding und die damit verbundenen Assets.
+Der Geräteeinstieg ist `https://<Geräte-IP>/`. Die Anwendung läuft intern auf
+`127.0.0.1:8188`; ein fest eingerichteter HTTPS-Eingang übernimmt Port 443.
+Die Konfiguration `native.eosExternalOrigin` muss genau zur HTTPS-Adresse passen.
+Zertifikat, Geräte-IP und Vertrauen auf den Endgeräten gehören zur Systeminstallation.
+Ein npm-Upload richtet keine Betriebssystemdienste oder Zertifikate ein.
 
-DIE NEXOWATT-SPEZIFISCHEN BESTANDTEILE WERDEN, SOWEIT GESETZLICH ZULÄSSIG, OHNE AUSDRÜCKLICHE ODER KONKLUDENTE GEWÄHRLEISTUNG BEREITGESTELLT.
+1. Mit dem eigenen ioBroker-Konto auf der NexoWatt-Anmeldeseite anmelden.
+2. Einen erforderlichen Erstpasswortwechsel abschließen.
+3. Als Administrator einmal die zentrale EOS-Lizenz aktivieren.
+4. Dashboard, Installer und berechtigte Systemfunktionen über dieselbe Anmeldung nutzen.
 
-## Hinweis zur öffentlichen npm-Bereitstellung
+**Anmeldegrenze dieser Alpha-Version:** Gemeinsame OAuth-Anmeldung und
+Erstpasswortwechsel sind implementiert. Ein TOTP-Challenge- oder Passkey-Flow ist
+noch nicht verfügbar. Konten mit gesetztem `common.externalAuthentication.totp`
+(außer `null`/nicht vorhanden) sowie fehlerhaft aufgebautem `externalAuthentication`
+werden sicher gesperrt; sie fallen nicht auf eine reine Passwortanmeldung zurück.
+Für solche Konten ist dieser Alpha-Login nicht nutzbar. Die MFA-Konfiguration darf
+nicht allein zum Umgehen dieser Sperre abgeschaltet werden.
 
-Eine öffentliche technische Bereitstellung dieses Pakets in einem npm-Registry, Git-Repository, Download-Archiv oder einem NexoWatt-Repository stellt keine Open-Source-Lizenz und keine allgemeine Nutzungserlaubnis dar. Die Nutzung, Installation und Weitergabe bleibt ausschließlich autorisierten NexoWatt-Systemen und ausdrücklich durch NexoWatt lizenzierten Nutzern vorbehalten.
+**Abmeldung:** Der zentrale Logout widerruft in dieser Alpha-Version die globale
+Sitzungsgeneration. Dadurch werden **alle gleichzeitig angemeldeten Nutzer** erneut
+zur Anmeldung aufgefordert, einschließlich offener Socket-/SSE-Verbindungen.
+Es handelt sich noch nicht um einen auf eine einzelne Sitzung begrenzten Logout.
 
----
+Die signierte NWL3-Lizenz wird lokal geprüft und verschlüsselt gespeichert; normales
+Abmelden oder Neustarten erfordert keine erneute Eingabe. Öffentliche Prüfschlüssel
+werden vom Hersteller passend zum verwendeten Keygen gesichert bereitgestellt.
+Private Signierschlüssel und der Keygen-Tresor sind kein Bestandteil dieses Repositorys.
+NWL2 wird mit seinen signierten Bestandsrechten unterstützt; eine alte UI-Einzellizenz
+ist keine automatische neue EOS-Systemlizenz. Details: [Lizenzbetrieb](docs/unified/LICENSING.md) und
+[Grenzen der laufenden Regelung](docs/unified/LICENSING_RUNTIME_LIMITS.md).
 
-# NexoWatt EOS – Proprietary License Notice
+## Entwicklung und Prüfpaket
 
-Copyright (c) 2026 NexoWatt. All rights reserved.
+Node.js: `>=22.23.4 <23 || >=24.22.1 <25`. Die hier ausgeführten Prüfungen benennen
+ihre tatsächliche Laufzeit im Prüfbericht; nicht geprüfte Plattformen sind nicht freigegeben.
 
-This NexoWatt EOS administration interface, including all NexoWatt/EOS-specific branding files, logos, stylesheets, layout modifications, UI overlays, graphics, texts and other NexoWatt-specific additions, is proprietary.
+```sh
+npm ci --ignore-scripts
+npm --prefix src-admin ci --ignore-scripts
+npm --prefix ui/src-admin-tab ci --ignore-scripts
+npm run build:frontend
+npm run build:installer
+npm run build:unified-backend
+npm run build:ui-runtime
+npm test
+```
 
-Use, installation, copying, publication, redistribution, sublicensing, rental, sale or provision to third parties is not permitted without prior written permission from NexoWatt.
+TypeScript-Quellen bleiben maßgeblich. `ui/src-ts/runtime-executables` wird in die
+ausgelieferten JavaScript-Dateien übersetzt. `src-admin` und `ui/src-admin-tab` enthalten
+die Quellen der beiden eingebundenen React-Bereiche.
 
-This adapter is intended exclusively for systems and installations operated, delivered, authorized or expressly licensed by NexoWatt.
+Nach einer Änderung müssen Build, passende Tests, SBOMs und Prüfbericht neu erstellt
+und geprüft werden. Erst dann wird ausdrücklich mit `npm run seal:unified` versiegelt.
+`npm run check:unified` und die npm-Publish-Hooks prüfen ohne stillen Neubau.
+Ein Hashmanifest schützt gegen unbemerkte Änderungen; es ist keine Herstellersignatur.
 
-Where this adapter is based on or includes open-source components, the respective third-party licenses continue to apply to those components. Third-party license notices contained in this repository remain unaffected. This proprietary NexoWatt notice applies in particular to the NexoWatt-specific modifications, the visible EOS design, branding and related assets.
+## Installation und Veröffentlichung
 
-THE NEXOWATT-SPECIFIC PARTS ARE PROVIDED, TO THE MAXIMUM EXTENT PERMITTED BY LAW, WITHOUT EXPRESS OR IMPLIED WARRANTY.
+[Installation und npm/Git](docs/unified/INSTALL_PUBLISH.md) enthält die vollständigen
+Schritte. Den Teststand bewusst unter dem Kanal `next` veröffentlichen:
 
-## Public npm availability notice
+```sh
+npm run check:unified
+npm pack
+npm publish --tag next
+```
 
-Technical availability of this package through a public npm registry, Git repository, download archive or NexoWatt repository does not constitute an open-source license or a general permission to use. Use, installation and redistribution remain limited to authorized NexoWatt systems and users expressly licensed by NexoWatt.
+Diese Befehle wurden nicht gegen dein npm-Konto ausgeführt. Eigentümerrechte am
+Paket und die Git-Zieladresse müssen in deinem Konto bestehen. Der unscoped Name
+`iobroker.eos-admin` bedeutet bei npm öffentliche Downloadbarkeit; der eigene Code
+bleibt proprietär und lizenzpflichtig. Ein privates Git-Repository ist möglich.
 
----
+Bestehende Anlagen zuerst sichern. Keine parallelen Regelungsinstanzen aktivieren.
+Die neue Laufzeit prüft deaktivierte/gestoppte Altinstanzen und sperrt Gerätewrites bei
+Konflikten. Namespace-/Historienmigration erfordert eine bewusste Übernahme; ein
+Paketupdate allein ist keine bestätigte Anlagenmigration. Siehe
+[Inbetriebnahme](docs/unified/COMMISSIONING.md), [Architektur](docs/unified/ARCHITECTURE.md)
+und [HTTPS-Eingang/Migrationsplanung](deploy/README.md).
 
-# Third-party / upstream notice
+## Sicherheit und Rechte
 
-Portions of this adapter are based on the upstream ioBroker.admin project and remain subject to the following MIT license notice:
-
-The MIT License (MIT)
-
-Copyright (c) 2014-2026 bluefox <dogafox@gmail.com>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
+Eigene NexoWatt-Anteile stehen unter der [proprietären Lizenz](LICENSE-NEXOWATT.md).
+Die Rechte und Copyright-Hinweise der enthaltenen Open-Source-Komponenten bleiben
+erhalten, insbesondere der ioBroker-Admin-Basis. Siehe [Drittanbieterhinweise](THIRD-PARTY-NOTICES.md).
+Sicherheitsanforderungen, STRIDE-Risiken, CRA-/DSGVO-Bezug und offene Nachweise sind in
+[SECURITY_CRA.md](docs/unified/SECURITY_CRA.md) dokumentiert.

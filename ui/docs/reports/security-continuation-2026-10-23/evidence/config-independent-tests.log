@@ -1,0 +1,47 @@
+✔ die drei Konfigurationsquellen erlauben weder explizite unsichere Typen noch abgeschaltete Prüfungen (95.494542ms)
+✔ fehlerhafte Validatorausgaben werden vor einer fachlichen Weiterverwendung abgewiesen (1.07031ms)
+✔ verschachtelte Konfigurationsverträge dürfen keine ungeprüften Messobjekte enthalten (0.506983ms)
+✔ falsche ioBroker-Objektformen liefern feste Auflösungsfehler (0.985533ms)
+✔ gültige getrennte Aliasrichtungen bleiben unverändert nutzbar (0.906343ms)
+✔ ungültige Bestandszeilen verschieben keine Speicher- oder PV-Kennungen (0.880765ms)
+✔ Dictionary-Fallbacks besitzen keinen Prototyp und fremde Schlüssel verschmutzen keine globalen Objekte (0.231238ms)
+✔ alte und fehlerhafte Entwürfe bleiben sichtbar und lesendes CAS verändert die gespeicherten Daten nicht (0.353983ms)
+✔ fremde Speicherfehler bleiben sanitisiert und geben die Speichersperre wieder frei (6.584765ms)
+✔ ein defekter interner Patch-Merge darf keinen neuen Konfigurationsvertrag erzeugen (0.63835ms)
+✔ unvollständiger Entwurf bleibt speicherbar, Aktivierung meldet konkrete fehlende Verträge (6.303833ms)
+✔ freie herstellerunabhängige Speicherzuordnung ist ohne Bestandsinventar aktivierbar (1.564463ms)
+✔ M0 bleibt Allgemein, kW und Vorzeichen kommen aus serverseitiger Quelle (0.918902ms)
+✔ vollständiges Allgemein-Splitpaar wird übernommen; gleiche physische M0/M1-Quelle wird abgewiesen (1.543081ms)
+✔ getrennte Alias-Lese-/Schreibquellen liefern richtige physische Ownership-Kette (1.268678ms)
+✔ zwei Aliasnamen auf demselben Ausgang erzeugen keinen zweiten Writer (1.158001ms)
+✔ falsche Ausgangsrechte, Datentypen und Einheiten verhindern Aktivierung, nicht Entwurf (4.42862ms)
+✔ CAS gilt für eigene App-Saves sowie Allgemein-Änderungen und reine App-Schalter (1.358493ms)
+✔ lesende CAS-Version stimmt für fehlende und ältere Entwürfe mit der Schreibgrenze überein (2.644998ms)
+✔ alte Allgemein-Konfiguration benötigt ohne neue App keinen impliziten Appvertrag (0.367352ms)
+✔ kontrollierte Deaktivierung bleibt bis zur positiven Runtime-Übergabe ausstehend (0.908646ms)
+✔ Status einer früheren Version wird ohne alte Messungen als pending dargestellt (0.213271ms)
+✔ jede neue API-Route besitzt die Installer-Middleware und keinen HTTP-Cache (0.501354ms)
+✔ alter oder zukünftiger aktiver Status wird nicht als aktuelle erfolgreiche Regelung ausgegeben (0.189224ms)
+✔ aktive bestehende PV-Stellstrecke muss vor Übernahme zugeordnet werden (0.89784ms)
+✔ vorhandenes Speicherlizenzlimit zählt freie App-Zuordnungen ohne Inventarabhängigkeit (1.125503ms)
+✔ alte Konfiguration bleibt statisch ohne zusätzliche Objektabfragen (2.552358ms)
+✔ M0 und M1 über verschiedene Aliasnamen auf derselben Quelle werden abgewiesen (1.941179ms)
+✔ Aliaszyklus und fehlender Datenpunkt bleiben sichtbar ungültig (1.022477ms)
+✔ Zuordnung zu fremdem Speicher und fremder AC-Istleistung wird abgewiesen (1.200405ms)
+✔ atomare Änderung erhöht Version einmal; alter Browserstand und offene Freigabe blockieren (2.047789ms)
+✔ native oder importierter aktiver Betrieb kann die technische Sperre nicht umgehen (0.755005ms)
+✔ Persistenzpfad lehnt stille Entfernung und unversionierte Änderung ab (1.096109ms)
+✔ Änderung der Bestandsfarm invalidiert die bisherige NVP-Gerätebindung (0.606062ms)
+✔ jede NVP-Route besitzt die Installer-Middleware und no-store (0.576898ms)
+✔ alte Diagnoseversion wird nach Zuordnungswechsel ohne übernommene Messwerte als ausstehend ausgegeben (0.293862ms)
+✔ ungespeicherte Diagnose ruft nur Vorschau auf und verändert keine Konfiguration (1.171552ms)
+✔ gleichzeitiger Speicherversuch wird abgewiesen; Version und Konfiguration bleiben atomar (1.034606ms)
+✔ hängende Objektprüfung belegt höchstens vier DB-Aufträge und einen Adapter-Slot (6.809499ms)
+ℹ tests 39
+ℹ suites 0
+ℹ pass 39
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 853.042044

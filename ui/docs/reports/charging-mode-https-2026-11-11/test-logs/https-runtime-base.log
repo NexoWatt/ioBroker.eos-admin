@@ -1,0 +1,1 @@
+[runtime-base] PASS 19 groups: strict TS, prefix bounds, navigation, native Request/body/signal, 7 EventSource, 5 service-worker exclusions.

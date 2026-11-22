@@ -5,7 +5,7 @@
     const ROOT_ID = 'eos-nexowatt-auto-update';
     const SYSTEM_DIALOG_SELECTOR = '[role="dialog"][aria-labelledby="system-settings-dialog-title"]';
     const script = document.currentScript;
-    const API = new URL('../nexowatt/updates/', script?.src || document.baseURI).href;
+    const API = new URL('/nexowatt/updates/', window.location.href).href;
 
     let busy = false;
     let lastLoad = 0;

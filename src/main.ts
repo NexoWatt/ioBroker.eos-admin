@@ -39,6 +39,8 @@ import {
 import type { AdminAdapterConfig } from './types';
 import { EosLicenseService } from './lib/eosLicenseService';
 import { EosSessionSecurity } from './lib/eosSessionSecurity';
+import { createOwnershipGuard } from './lib/eosUnifiedOwnership';
+import type { EosHostedRuntime } from './lib/eosUnifiedRuntime';
 import { EosUiSessionRegistry, type EosUiIdentity, type EosUiSession } from './lib/eosUiSessionRegistry';
 import { requestHttpsJson } from './lib/eosHttpsClient';
 import { matchesObjectCount, validateNodeReleaseIndex } from './lib/eosNewsSecurity';
@@ -337,6 +339,8 @@ class Admin extends Adapter {
     declare public config: AdminAdapterConfig;
 
     /** Local license authority; management/recovery is never license-gated. */
+    public eosHostedRuntime: EosHostedRuntime | undefined;
+    public eosOwnership: ReturnType<typeof createOwnershipGuard> | undefined;
     public eosLicenseService: EosLicenseService | undefined;
     /** The host this instance runs on. Optional on `Adapter`, but always set for a started instance. */
     declare public host: string;
@@ -440,6 +444,11 @@ class Admin extends Adapter {
         // Invalidate before forwarding changes or waiting for the debounced role cache.
         this.eosSessionSecurity?.handleObjectChange(id, obj, objects[id]);
         if (/^system\.(?:user|group)\./.test(id)) {
+            this.eosHostedRuntime?.revokeSessions?.();
+        }
+        this.eosOwnership?.onObjectChange(id, obj);
+        this.eosHostedRuntime?.onObjectChange?.(id, obj);
+        if (/^system\.(?:user|group)\./.test(id)) {
             this.uiPushSessions.clear();
             webServer?.invalidateProxySessions();
         }
@@ -502,6 +511,8 @@ class Admin extends Adapter {
         }
 
         socket?.stateChange(id, state);
+        this.eosOwnership?.onStateChange(id, state);
+        this.eosHostedRuntime?.onStateChange?.(id, state);
     };
 
     onFileChange = (id: string, fileName: string, size: number | null): void => {
@@ -536,6 +547,8 @@ class Admin extends Adapter {
                 resolveDirectory: () => join(getAbsoluteInstanceDataDir(this), 'licensing'),
             });
             await this.eosLicenseService.start();
+            this.eosOwnership = createOwnershipGuard(this);
+            await this.eosOwnership.start();
 
             if (!systemConfig.native.secret) {
                 try {
@@ -563,6 +576,9 @@ class Admin extends Adapter {
      * @param obj the message object
      */
     onMessage = (obj: ioBroker.Message): void => {
+        if (this.eosHostedRuntime?.onMessage?.(obj) === true) {
+            return;
+        }
         if (!obj) {
             return;
         }
@@ -1053,6 +1069,7 @@ class Admin extends Adapter {
      * @param callback Callback after unloading
      */
     onUnload = (callback: () => void): void => {
+        this.eosOwnership?.stop();
         this.eosLicenseService?.stop();
         this.eosSessionSecurity?.stop();
         this.uiPushSessions.clear();
@@ -1089,8 +1106,12 @@ class Admin extends Adapter {
         try {
             this.log.info(`terminating http${this.config.secure ? 's' : ''} server on port ${this.config.port}`);
             socket?.close();
-            webServer.close();
-            callback();
+            webServer?.close();
+            if (this.eosHostedRuntime) {
+                void this.eosHostedRuntime.stop().then(callback, callback);
+            } else {
+                callback();
+            }
         } catch {
             callback();
         }
@@ -1454,7 +1475,6 @@ class Admin extends Adapter {
         const nextDisabled = new Set<string>();
         const nextPending = new Set<string>();
         const next = new Map<string, 'admin' | 'installer' | 'enduser'>();
-        next.set('system.user.admin', 'admin');
         const priorities = { enduser: 1, installer: 2, admin: 3 } as const;
         const assign = (userId: string, role: 'admin' | 'installer' | 'enduser'): void => {
             const current = next.get(userId);
@@ -1510,9 +1530,6 @@ class Admin extends Adapter {
     }
 
     private getEosCachedRole(userId?: string): 'admin' | 'installer' | 'enduser' {
-        if (userId === 'system.user.admin') {
-            return 'admin';
-        }
         // Missing or not-yet-resolved identities always fall back to the least privileged role.
         // The underlying socket ACL check still applies afterwards, but this prevents a transient
         // authentication gap from ever selecting the unrestricted EOS policy branch.

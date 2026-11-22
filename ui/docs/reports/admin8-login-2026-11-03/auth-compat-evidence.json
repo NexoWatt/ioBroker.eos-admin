@@ -1,0 +1,98 @@
+{
+  "generatedAt": "2026-11-03T21:23:28.417Z",
+  "node": "v24.22.1",
+  "productVersion": "1.0.32",
+  "scope": "Real local HTTP, synthetic ioBroker accounts and password callbacks; no Admin 8/controller/hardware integration test; no product file changes",
+  "files": [
+    {
+      "file": "src-ts/runtime-executables/main.ts",
+      "sha256": "0f65ee6279b3bbd73012db8561fdd28ead839122c79e6ab1114ce56985546aa8"
+    },
+    {
+      "file": "main.js",
+      "sha256": "10a47a01841bfe029ec2e236438cc13190d7c81fb23046cbaa050d8e062e7d82"
+    },
+    {
+      "file": "scripts/verify-stable-1.0.9-access.cjs",
+      "sha256": "5bef82552faedeb1031d7b6aea9b4d1b6ebdf372d13bc87659ae5e24618216ef"
+    }
+  ],
+  "results": [
+    {
+      "case": "canonical short account ID / callback(true, canonicalUser)",
+      "status": 200,
+      "passwordCalls": 1,
+      "error": null,
+      "role": "admin"
+    },
+    {
+      "case": "prefixed ID",
+      "status": 401,
+      "passwordCalls": 0,
+      "error": "unauthorized",
+      "role": null,
+      "finding": "rejected before controller callback; alias support represented by synthetic controller model"
+    },
+    {
+      "case": "case variant",
+      "status": 401,
+      "passwordCalls": 0,
+      "error": "unauthorized",
+      "role": null,
+      "finding": "rejected before controller callback; alias support represented by synthetic controller model"
+    },
+    {
+      "case": "display name",
+      "status": 401,
+      "passwordCalls": 0,
+      "error": "unauthorized",
+      "role": null,
+      "finding": "rejected before controller callback; alias support represented by synthetic controller model"
+    },
+    {
+      "case": "malformed truthy callback: Error object",
+      "status": 200,
+      "passwordCalls": 1,
+      "error": null,
+      "role": "admin",
+      "finding": "unexpected truthy result accepted as password success"
+    },
+    {
+      "case": "malformed truthy callback: nonempty string",
+      "status": 200,
+      "passwordCalls": 1,
+      "error": null,
+      "role": "admin",
+      "finding": "unexpected truthy result accepted as password success"
+    },
+    {
+      "case": "malformed truthy callback: plain object",
+      "status": 200,
+      "passwordCalls": 1,
+      "error": null,
+      "role": "admin",
+      "finding": "unexpected truthy result accepted as password success"
+    },
+    {
+      "case": "boolean false callback",
+      "status": 401,
+      "passwordCalls": 1,
+      "error": "unauthorized",
+      "role": null
+    },
+    {
+      "case": "synthetic hash migration during valid password check",
+      "status": 401,
+      "passwordCalls": 1,
+      "error": "unauthorized",
+      "role": null
+    },
+    {
+      "case": "repeat after synthetic hash migration",
+      "status": 200,
+      "passwordCalls": 1,
+      "error": null,
+      "role": "admin"
+    }
+  ]
+}

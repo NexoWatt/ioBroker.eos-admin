@@ -1,0 +1,12 @@
+{
+  "command": [
+    "npm",
+    "run",
+    "docs:build"
+  ],
+  "startedAt": "2026-10-08T19:43:37.263012+00:00",
+  "durationSeconds": 3.763,
+  "exitCode": 0,
+  "log": "docs-build.log",
+  "hardware": false
+}

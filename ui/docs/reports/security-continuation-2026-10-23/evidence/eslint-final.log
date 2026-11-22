@@ -1,0 +1,8 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.30 lint:security
+> node scripts/verify-eslint-security.cjs
+
+ESLint: 165 sources; 3019 current findings; 3019 inventoried (2971 historical open, 48 individually reviewed); 0 blocked new/forbidden findings; 89 old findings absent.
+Open scanner hotspots: {"security/detect-object-injection":2319,"security/detect-non-literal-fs-filename":32,"@typescript-eslint/ban-ts-comment":73,"security/detect-unsafe-regex":16,"@typescript-eslint/no-explicit-any":563,"security/detect-possible-timing-attacks":12,"security/detect-non-literal-require":1,"security/detect-non-literal-regexp":3}
+This gate prevents new scanner findings. It does not assert a clean security scan or full ASVS conformity.

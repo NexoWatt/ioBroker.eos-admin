@@ -1,0 +1,20 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.27 admin:build
+> npm --prefix src-admin-tab run build
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> nexowatt-ui-admin-tab@0.8.8 build
+> vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 50 modules transformed.
+rendering chunks...
+computing gzip size...
+../admin/react/index.html                          4.43 kB │ gzip:  1.79 kB
+../admin/react/assets/nexowatt-192-43ZwQ44y.png   29.88 kB
+../admin/react/assets/index-DhaTEWdX.css           7.27 kB │ gzip:  2.27 kB
+../admin/react/assets/index-C2FHbrz4.js          267.22 kB │ gzip: 84.50 kB
+✓ built in 1.08s

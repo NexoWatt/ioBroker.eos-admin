@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:rc61-evcs-hardening
+> node scripts/verify-rc61-evcs-hardening.js
+
+[rc61-evcs-hardening] OK: Alfen/Device-Keepalive, OCPP21-Bestätigung, sicherer 0-W-Vertrag und lokale Startfehler-Isolierung sind abgesichert.

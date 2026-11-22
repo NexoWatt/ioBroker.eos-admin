@@ -1,0 +1,2468 @@
+{
+  "schema": 1,
+  "sources": [
+    {
+      "path": "src-admin-tab/src/App.tsx",
+      "sourceHash": "130004830b352357603184300d09b4308e96773e5e8ba28365b72c56f0c9bbd8",
+      "codeHash": "03fb4393798244927ef4cc1b2e34e826b1acf77fd8f1c5913632aa456a3eb10e"
+    },
+    {
+      "path": "src-admin-tab/src/components/DpField.tsx",
+      "sourceHash": "566c1cbe46ca8d1134afee3c86368c9df02c9d73a3a7f5d47452fbe137428071",
+      "codeHash": "c1672ed1a6050370e97dd5eb216e919b78b1716435080d4279b62c62e49aa1b4"
+    },
+    {
+      "path": "src-admin-tab/src/components/EmbeddedEmsFrame.tsx",
+      "sourceHash": "781ae27e8d1a4e48912f0c8d44df230f587dd4242bc8265da44d13e80bb63158",
+      "codeHash": "85d38ee07f1e8aac28e5d24eafa69d162c959192c67ee51a6d363bbb192eac99"
+    },
+    {
+      "path": "src-admin-tab/src/lib/adminConnection.ts",
+      "sourceHash": "7eb631d0025cdfc9cdf08968d4e5ac93e1aad577c35976114cd9d526dc7fd7ac",
+      "codeHash": "d53e10c54597c2a27082428196dbccfd7dcbbc51755437ba5376b859f8505fca"
+    },
+    {
+      "path": "src-admin-tab/src/lib/adminContracts.ts",
+      "sourceHash": "d4f9599789bf9ac9e6361143fe7320da764df9aa3edc2723a5768f79e2574995",
+      "codeHash": "e3a10c2d131e50e606e52723068f150d9eac00b4e04a41a1a29fbb55350ffdbd"
+    },
+    {
+      "path": "src-admin-tab/src/lib/dataPointPicker.ts",
+      "sourceHash": "e28946e685fffe198314fe4463459a42c2349a2e4481e9ffe39277e187953da1",
+      "codeHash": "2eb23353236fd925f7773e65d3bbe4a654afc93682e2d7f2a63a2ae0214a9cf1"
+    },
+    {
+      "path": "src-admin-tab/src/lib/mesh-types.ts",
+      "sourceHash": "1994cdf4fcf5671089424050bf8b28a100da007838df5e5a17b39194d314d56e",
+      "codeHash": "bec847f2598e655c6a8016bfd70f20846f3a1605f3144f59dfc83d158f8c7c8d"
+    },
+    {
+      "path": "src-admin-tab/src/lib/partnerContracts.ts",
+      "sourceHash": "3af0d83215652ced7374644cda049dea4ca8630b920f77eb99f684cc9e7b7b91",
+      "codeHash": "4f7a2d3b1841fa75da89208c8cb2626f0d81094eab1615788d406be6deb7279e"
+    },
+    {
+      "path": "src-admin-tab/src/main.tsx",
+      "sourceHash": "ee3dd9fc3e93060cf808a783566c27fa80360237b83ad0dfadca5978cc189d2e",
+      "codeHash": "ff12ab820cce0b66e390c10415d9b409d0cef778f35e72780f1c17db28b494f0"
+    },
+    {
+      "path": "src-admin-tab/src/pages/ArbitragePage.tsx",
+      "sourceHash": "333f3720e2a077d466b0d8001f8d422430d5b3a9483b43dc5393661761e6a838",
+      "codeHash": "d62e7fc0ac97b1298280d39f89b2d9fc9534b35724e50ec5fca5cf976028f9c4"
+    },
+    {
+      "path": "src-admin-tab/src/pages/DynamicGridPage.tsx",
+      "sourceHash": "c2ac1f3935c488e780785b0d8b7ea4b3141e7824d56ec0bb6b28b86991668b19",
+      "codeHash": "b45dcb17f680544a57aeeb425368e31509b89b92c809caab82a94cc0a5516ee9"
+    },
+    {
+      "path": "src-admin-tab/src/pages/InstallerPage.tsx",
+      "sourceHash": "01310ba014c5db71c3648b26e5ae84e0099848d20c8d0617fe8ed2ee90441245",
+      "codeHash": "08da3daba457ca504a09a2fd5053699669362378e3cc355f1859788d4a61f250"
+    },
+    {
+      "path": "src-admin-tab/src/pages/LicensePage.tsx",
+      "sourceHash": "6ac6560e0a92275b7451fbb2ee118470463c74f057a9b65a36eec580c7131b65",
+      "codeHash": "6168f1aed44d4c886bf53e1d0c4785aaf14f6e5a058f9c2e4cd436f5f6f6ddb0"
+    },
+    {
+      "path": "src-admin-tab/src/pages/MeshAccountingPanel.tsx",
+      "sourceHash": "d05ed8249ed629554ae69fade6cb64d11fc2118d20f634495df07ecebc45f077",
+      "codeHash": "9e6b80982534b0ac53a209cd9fd22796021ab8270e4c688f1c858532cb9e9268"
+    },
+    {
+      "path": "src-admin-tab/src/pages/MeshCoordinatorPage.tsx",
+      "sourceHash": "ff2b00c7964696fb72d03f16b56909914940b336a26c32b4cb68715122e73e99",
+      "codeHash": "c1b3e565bc760b75ffa1d8eb5d874b3d3b4bbf98e4b99bede76fd004b643bc4c"
+    },
+    {
+      "path": "src-admin-tab/src/pages/NotificationMailPage.tsx",
+      "sourceHash": "6f0a0318eee11109c693ee51e63c970582627b6209cb5b9708758430a286dc62",
+      "codeHash": "c8a0b581d151256f61ca9e847b60895a719ba7981013f294ee2d910bb6a6c286"
+    },
+    {
+      "path": "src-admin-tab/src/pages/PageShell.tsx",
+      "sourceHash": "18f62ed6f43a637bb14067d9aaba65c8ac03ba7e5684a4020b9f6ceca15bd640",
+      "codeHash": "b162308fc36e990fd4b7fea2c86ae4676dc67755e889bd353016ac725bfabdfa"
+    },
+    {
+      "path": "src-admin-tab/src/pages/PartnerIntegrationsPage.tsx",
+      "sourceHash": "2b3f3b954854e43eea6a9a590372957a23dc2bd857c12d48027348516dc65f5e",
+      "codeHash": "7d11454445991fda820d07bee376c62518b48a2d38463e12b8bb558db781c766"
+    },
+    {
+      "path": "src-admin-tab/src/pages/ProtectedRuntimeRoute.tsx",
+      "sourceHash": "02ce28926a735e410616c44520878303cfd4799043cd576afc83a168e77e05e1",
+      "codeHash": "9b101ba94753ae7a8794c988a61fb5d73fe4d205cc6a7c130aa4123c7bfa0803"
+    },
+    {
+      "path": "src-admin-tab/src/pages/RedirectPage.tsx",
+      "sourceHash": "7d47890d30f17f2a820d8f7025e980df11896400eb562dbafe3413df4738f062",
+      "codeHash": "7a795c98175bab9045c4eaad38f7d490acff08e11bfc760e3e8e88807e30d026"
+    },
+    {
+      "path": "src-ts/adapter/api-set.ts",
+      "sourceHash": "d1ec410cdbe6f88747dae8dea5645abaa32b0aa8b3bd211383e0e42c63e69f55",
+      "codeHash": "7339ea063646ed5dbe8d5fa7896e5065e23683c50d1437fd90f61c6a00e90683"
+    },
+    {
+      "path": "src-ts/adapter/api-state.ts",
+      "sourceHash": "ab7eeb82d9ce301a50fa0142712a6cd4cfc7cb2c04025db5d029a7eb0615dc42",
+      "codeHash": "35cd36fe09bd34327d5a49093518a85f68265b0d64ce1d86aaff947a265bea74"
+    },
+    {
+      "path": "src-ts/adapter/connection-state.ts",
+      "sourceHash": "73e377a8334297114892a885f837505078c6876d2ae060aeb0542057a2b7d9c8",
+      "codeHash": "11851732342faa073b65d3c375763300894fae719104466fe8d90d2f7741715b"
+    },
+    {
+      "path": "src-ts/adapter/index.ts",
+      "sourceHash": "4891cfea2c932e0a300877d525468dbf7d312673d6bee3348a205798d77d5f03",
+      "codeHash": "a26e9ba4c4b9969ab3ff8cfef2509291da2f1dff41ea1aa0587a56524978b1ae"
+    },
+    {
+      "path": "src-ts/adapter/settings-writes.ts",
+      "sourceHash": "594619db0a234f7e4a60af7867ca199167150118547958a56948051b0bb403cd",
+      "codeHash": "a61313bc5dc3dc2e43878a57d47e625ea59806218b494110d76c4b062142f152"
+    },
+    {
+      "path": "src-ts/adapter/state-cache.ts",
+      "sourceHash": "c285fab46be0079e94f0babae735414393aa124f64feb00d14bc9b5ab5119126",
+      "codeHash": "920e4408f13811b196d19241b81541cbc0f60827077a597395b609f0513bc045"
+    },
+    {
+      "path": "src-ts/backend/api-state/api-set-helpers.ts",
+      "sourceHash": "0aadc94a47ca1376d0952c4b2d238b74775442d96de34db643baf54045470f86",
+      "codeHash": "d0f39090c856e59269b32cab205ad40b0403ae6daa31fde6b5c40fbb58d4cf0b"
+    },
+    {
+      "path": "src-ts/backend/api-state/api-state-envelope.ts",
+      "sourceHash": "4e5e13db870d822e2ed6e7fb503e3058a58e6a6d34da61cebf7fc78159f60c0b",
+      "codeHash": "66b8b30eda8c4f4253d5cfc9b0ac9de9509b8fe1e7574103fe42788240ebb14b"
+    },
+    {
+      "path": "src-ts/backend/api-state/index.ts",
+      "sourceHash": "bcd30cbcc04831e98b60594aa866cd7c56ff143293eef3ff31cc1e7e062518b5",
+      "codeHash": "99c59f7caea02ea8afab47e48afb90c47c00d392fb1817347b870f83ee265f40"
+    },
+    {
+      "path": "src-ts/backend/connection/connection-state.ts",
+      "sourceHash": "1ca4554814d41d3835ab8f081a7ce2ecd92c16f2eedae2b99a878c43ebae430f",
+      "codeHash": "3d68cff295ab6879987562e41034fe1e347f870b228c19c5d5693ef2dbef30fd"
+    },
+    {
+      "path": "src-ts/backend/connection/index.ts",
+      "sourceHash": "6c0ee1238b2484c44a1ca9df1841c1a8bb07cf6fdfb12121628527b4abbea88f",
+      "codeHash": "30b361de1938117712242891b1814ab854f79a464204697bffe56a65428a33cf"
+    },
+    {
+      "path": "src-ts/backend/feature-visibility/feature-visibility.ts",
+      "sourceHash": "7b7ff2b91279a4331ee5bde8beab49acd366da24a6e70d1064389e6ef5557f2b",
+      "codeHash": "bb3645dc7d9c015d7aab0de81600f154c6452f451c9b7dc8cbd151e6e93489bb"
+    },
+    {
+      "path": "src-ts/backend/feature-visibility/index.ts",
+      "sourceHash": "39d69cf4775c4a23b42c87c204a726c0d16a8a52ed831058916c0069df10a8fc",
+      "codeHash": "93081fd60813f7cf89a92a046cb1e3759a0fa06b2c78cc0cc4940710553fc5d0"
+    },
+    {
+      "path": "src-ts/backend/index.ts",
+      "sourceHash": "840a10739f1a876fb304f78352fdd433fb06a40f55c853bd4b5c29a3f3ec7e9d",
+      "codeHash": "0568bfdffcbb2f1c261253edfca1f65af5d678990f9715e629e2abebfc4c4de0"
+    },
+    {
+      "path": "src-ts/backend/license/index.ts",
+      "sourceHash": "ca7030b5d7b7c91acd6f58e3604e8b746976ace39727066469be3922e698547f",
+      "codeHash": "328d6206ab98f643ce9ac652bd8d888e09262890fb19147b170231fd29a9918e"
+    },
+    {
+      "path": "src-ts/backend/license/license-key-safety.ts",
+      "sourceHash": "fd1352842bd9e3259bcd7fd796e1e4f756b7d870b0b7e9094d05e3e1289eba94",
+      "codeHash": "68b45f25f226f1c2be10a2ca0930ea642764425b2b56e871f5a982ba9512c9f1"
+    },
+    {
+      "path": "src-ts/backend/main-helpers/api-state-main.ts",
+      "sourceHash": "1dffc200ccbfbf8e4d4f75bc769c7869dfdbab76a4c9b0c87cbd0b35a072b998",
+      "codeHash": "f505742e12c51be6f97f86e84b1e0136fe92afa6fca3b75a6b4e64d296267521"
+    },
+    {
+      "path": "src-ts/backend/main-helpers/info-connection-main.ts",
+      "sourceHash": "60395214bb8f7ccc0d9360c785a67d4fb999e1f1b5e2d25e4cefe0914428bdb2",
+      "codeHash": "4569204b093d903bec757e387e8ecb4a891d54da4369bc8f1064d46a53de81fc"
+    },
+    {
+      "path": "src-ts/backend/main-helpers/license-key-main.ts",
+      "sourceHash": "fcb0b1e3ce39fdd8862756826d5369339fdf18f3d6cdf66d13f9fd2fd2ef0360",
+      "codeHash": "de6f7bbac6a1d6b0c7c95703beb0ecbbaefd18292e952ef9c56d64fd2fb87afe"
+    },
+    {
+      "path": "src-ts/backend/main-helpers/settings-write-main.ts",
+      "sourceHash": "daaaef60e8026551526525f891311869a87bfbb212700fee8abe2a33271534c2",
+      "codeHash": "e5a7ab795904bd9bf12ef50a70f6b7ac82f92de1248d78c9506f07412f99a7ae"
+    },
+    {
+      "path": "src-ts/backend/main-helpers/state-cache-main.ts",
+      "sourceHash": "055a31cd9e6e93e406d33a77a0f839dc8e892d50aea593459edfe019bc53ec22",
+      "codeHash": "bb059bc8a652fa187a812a5b7ca50a70e8b98cee6920d6f35284a4c4686d3b9a"
+    },
+    {
+      "path": "src-ts/backend/main-runtime/main-runtime-helpers.ts",
+      "sourceHash": "dc5c3421350006af002f1ca4995a8b0b94e496cda5f262dfa6d2f711b647f52d",
+      "codeHash": "6436393829f87a759e0e03b5aec4eba4de65be2f085e566503301853bb646638"
+    },
+    {
+      "path": "src-ts/backend/state-cache/index.ts",
+      "sourceHash": "05e0d2f5d29924a9f9e5b287dec376f32acbb6d17fee9b1befa96cfcd936b85e",
+      "codeHash": "1edfc5bcf7cd4cb7889ba852e237a7866832581b5d905a04d9de8433a4d78841"
+    },
+    {
+      "path": "src-ts/backend/state-cache/state-cache.ts",
+      "sourceHash": "e612adafd0011acd0c33f3a17c8653e7680343369259106ccbb3de0b3615a6f0",
+      "codeHash": "dec8f563e295f9a51f5f3bedef45f50c21a55d63bb5470bf8d6509d77e66cc34"
+    },
+    {
+      "path": "src-ts/backend/state/api-state-cache.ts",
+      "sourceHash": "b0248e5ab7d59c635cb6bb41a911250412659c2b5280d5b400f68fa5260c009e",
+      "codeHash": "0d4b106ea57c7d745fc3f4d8e4f5224b22468b5758cd0114424e238389660825"
+    },
+    {
+      "path": "src-ts/backend/state/index.ts",
+      "sourceHash": "57390c1fbc8ce971f98875a01c586d365920984438c081b65919a0b641d07365",
+      "codeHash": "14d42ddf6809b5d4d5d435741b2616400c7b51c5ffd55f1634bbad2a153d187b"
+    },
+    {
+      "path": "src-ts/backend/visibility/feature-visibility.ts",
+      "sourceHash": "c3ed134c90bb5f2a0e235d169329648275c88dbb347130e19844a0626c5e1ea0",
+      "codeHash": "cef36ad8705430f90fe4f0a56346f33a090a1a76ab664e513c0f6d89b7758ba1"
+    },
+    {
+      "path": "src-ts/backend/visibility/index.ts",
+      "sourceHash": "f96a0ee812ec0915cab8235c8f3ec562e057795b3159f44444dbd3860052cc8d",
+      "codeHash": "93081fd60813f7cf89a92a046cb1e3759a0fa06b2c78cc0cc4940710553fc5d0"
+    },
+    {
+      "path": "src-ts/bridges/feature-visibility-shadow.ts",
+      "sourceHash": "89cfdbffde21118a7b24cf40b4a48c6b47b1833715a17e664e2cc8903e47675f",
+      "codeHash": "ceae2b965754f09adc4a72e8a0fc9d5c4e641009b4df151f27e958f888acb549"
+    },
+    {
+      "path": "src-ts/contracts/adapter-api.ts",
+      "sourceHash": "83864b01bbc64ba8cacc6ca81a911b2325e40bc1e2045f060b6eb6cea1a253b3",
+      "codeHash": "a84d8e574fe3c754ffc408b316c2b89bbb1e48e83722351555026d07e2ed2b5b"
+    },
+    {
+      "path": "src-ts/contracts/ai-advisor.ts",
+      "sourceHash": "8bc29abc8469f850c6aa4fdd59bbe3b9273f62940e6d30e9853d4dcf1593392c",
+      "codeHash": "b3a8ce1e5bb42e0bc0ac071f35e3c7cb3f72a537358b91cbb02f36b027fd2cc3"
+    },
+    {
+      "path": "src-ts/contracts/api-state.ts",
+      "sourceHash": "4426534de58a071ee1a51251ebe1f80d64411187eb045639fb3bea5f665697cd",
+      "codeHash": "8bbc612b61addccc23e0987d5fff39edb9206df732a77987088e58af2461502d"
+    },
+    {
+      "path": "src-ts/contracts/api.ts",
+      "sourceHash": "7a28175b6f47abe12380a4f55c56d16eec4795d358eb6d03d01a0382609128cb",
+      "codeHash": "086ccbca4c77ace153845eb657d7e56935b620442aee69d09deff8da9c925c39"
+    },
+    {
+      "path": "src-ts/contracts/datapoints.ts",
+      "sourceHash": "668f0cc297d22d2bafae962bfb0b9c5f74b3e7a5a90645a8451e07ffe7effc5d",
+      "codeHash": "b310a377cfd914fddb68e12767ebea6daa006e7b04257addcc1afd3361c21242"
+    },
+    {
+      "path": "src-ts/contracts/ems-budget.ts",
+      "sourceHash": "cf30049f26f12af2366d4c1fef894c488aee9b422d37c1419fee94307ecb1c86",
+      "codeHash": "e42386a1f1af71f289cb863cc377d35bb4d50fce1f4ad43e77539eedeae054bb"
+    },
+    {
+      "path": "src-ts/contracts/energy-flow.ts",
+      "sourceHash": "482282919a2b398cb5cace131ccbdf924725f534090e42c71b704585c8fc2913",
+      "codeHash": "142126ecea1153cbe10ff60366d3eab06d7f373f2eb4a1a3c12ad8e7d5200cac"
+    },
+    {
+      "path": "src-ts/contracts/features.ts",
+      "sourceHash": "a19175b8d7b1f8a20be3cb30df5c128e5413adc30c1d0e8738d22c392d1f0be2",
+      "codeHash": "d6196f05e0659360f5dc630e61036c2a0624ff99574d575a71aa0e6576eda3b1"
+    },
+    {
+      "path": "src-ts/contracts/heating-rod.ts",
+      "sourceHash": "1caac379381032051fe9505f8548945a93746152366ced81603f83ed4e8c4d0b",
+      "codeHash": "392d5ee86795a4dcbff726054394430bee630dc8c30a828e2aede5876bfb8e6a"
+    },
+    {
+      "path": "src-ts/contracts/history.ts",
+      "sourceHash": "757e4148ef53ea8cef10482e3f9853bf1741c35f2b53b36c175b95a24f81cba8",
+      "codeHash": "d1123485fc07d45e131546c0c69aacdaa30962e1d60c4f2cc21ee164172f9710"
+    },
+    {
+      "path": "src-ts/contracts/index.ts",
+      "sourceHash": "761ea219c151e27bfa868bf98b04990bad51886318ffca85bfcf0703f3d521f2",
+      "codeHash": "5e8110715facb89943079a31e45358727fcad3a07a2e4860330753798d9bca1c"
+    },
+    {
+      "path": "src-ts/contracts/iobroker-states.ts",
+      "sourceHash": "31072d452a07caa27c4a48e538256cff93a8df0cce9d51e30c26e4605812988a",
+      "codeHash": "2d23e01deb85c420780b0c75c77e558b9dd0aa69b03966ca80e0ee932bd44630"
+    },
+    {
+      "path": "src-ts/contracts/license.ts",
+      "sourceHash": "2e581f811420dd0c7ce7503bc4858e7cb63fd8e93563bbec4b2df947a7a23182",
+      "codeHash": "636331a79b5248a153aaa6e360c1c41a850f3c2f954095f594ff7c43c6a69782"
+    },
+    {
+      "path": "src-ts/contracts/testing.ts",
+      "sourceHash": "13fe8fdbaed558b2a69c9a587ac1f456252d66cbe7266f83e7d39701fc405044",
+      "codeHash": "8fb3b08c87d1c1a58dba3c9cdd7a071cd8ad67eb3c939578d2d4e9324f3c6a14"
+    },
+    {
+      "path": "src-ts/contracts/units.ts",
+      "sourceHash": "330496abbc653e228be2b569277ed2bfacb9a3e24f5c2f4a533c673d28f278eb",
+      "codeHash": "49e1ec6be09ba6b0189624a514cf85750ca599a96bd69dc0334340624db754e0"
+    },
+    {
+      "path": "src-ts/ems/ai-advisor/ai-advisor-payload.ts",
+      "sourceHash": "5be6aef1cbf7d5007729244b6d2e1061eca27aa55771d66fee87cd3d48e359bd",
+      "codeHash": "133bfd19499b8140ebe1a6e408b4bc771be09371633e360f9b4b61c918edad0d"
+    },
+    {
+      "path": "src-ts/ems/charging-management/charging-allocation.ts",
+      "sourceHash": "94bfde353adf465d984869867772b581ce547ba1f5175035c5691160b4876c02",
+      "codeHash": "a0c54af17dbfdd09b7ac49ebe7e7870d91426f20b0cd8c77c18707d8ed0b4b98"
+    },
+    {
+      "path": "src-ts/ems/charging-management/charging-budget.ts",
+      "sourceHash": "55b73bef1d07419b8bf0e4b09c453cdd9c2fcef541ba0f20c8ad082e4f02001c",
+      "codeHash": "5aec1587c3b5876ef822a09ab5ae733642bcd826eef23e52b3fd69b41609eecb"
+    },
+    {
+      "path": "src-ts/ems/charging-management/charging-control.ts",
+      "sourceHash": "cafc7823661e390bb0fe7097e779d48a72a359c9feb8ad76420f0f279bdd3c17",
+      "codeHash": "ea4884e3c7a61af316694733001390f26d422d83d4e061c1b8b126ba80a616cf"
+    },
+    {
+      "path": "src-ts/ems/charging-management/charging-management-runtime.ts",
+      "sourceHash": "2720a294ad9a19abe337795d11e81a0b19fab72eeaa2fb80c8a9ff6c4280e551",
+      "codeHash": "7ea8e469d3c306272b5f30f1890cddd886d47709d75ab48279527dd1f53ca603"
+    },
+    {
+      "path": "src-ts/ems/charging-management/charging-management.ts",
+      "sourceHash": "005727026d9a076ac3ac1ca5bb2a28ba5cf8673527c215af15acce075c029999",
+      "codeHash": "1316f1e433ff3da7fe762dfd95870f9d42dda85c601c9ee724ab3294c7f5ac5d"
+    },
+    {
+      "path": "src-ts/ems/charging-management/charging-normal-source.ts",
+      "sourceHash": "3e1a9d692d90889288ca99992b1fe4d3e036ea836223766ef344401ece6af3e5",
+      "codeHash": "bdbdd9a2622460620fe5bf61cf202684af5b0d780905f34b6ac979e3d3c66aa8"
+    },
+    {
+      "path": "src-ts/ems/charging-management/charging-phase-selection.ts",
+      "sourceHash": "d296d45e0dfcce07a498226dc19f3ed402f54969dee65dc5aaff069249e90469",
+      "codeHash": "31a4b71ea41f3117f82ff3b58ad865433ab757d162aeed9e22f7098ce621764f"
+    },
+    {
+      "path": "src-ts/ems/charging-management/charging-write-plan.ts",
+      "sourceHash": "f93a1b4f0b4a27b6bd0c8a4333b8f100eea9cefa31dd20400f4f933953ec44f5",
+      "codeHash": "2b41baeb2a1a9a0fbe44497fbf5e0c7d56dd6e0e15eeb5b09b0c3057b3db4941"
+    },
+    {
+      "path": "src-ts/ems/charging-management/index.ts",
+      "sourceHash": "df6e45aae80fc34d34954eb5415bbf3c7bd897dd76ee4faceef81a470062c3aa",
+      "codeHash": "6f91357e54e6382cbdcbc06ba75cae75366d444fd62380cfa03c0e05084e1cc8"
+    },
+    {
+      "path": "src-ts/ems/core-limits/core-budget.ts",
+      "sourceHash": "efc682ed49ea09c3fdb9774e1eda5f897f63dd61985a6c49dfa75b10664a098c",
+      "codeHash": "e750c86aac4be1922fbaaa35705ea1301ac8f92d679b72d57d95a2b63ebd124e"
+    },
+    {
+      "path": "src-ts/ems/core-limits/core-runtime.ts",
+      "sourceHash": "ac50f4d5d3adb9a88451d56a0b554447722d998325dd290996413fe5af53f1dc",
+      "codeHash": "0c414b025b833158a61157d6411af788036954506b598b19b8c27420af9cd711"
+    },
+    {
+      "path": "src-ts/ems/core-limits/index.ts",
+      "sourceHash": "102c695c6bef66a55cdfd3984dd28cf52934905300cf9ac3bdfc35aa2805e53b",
+      "codeHash": "ddcb6fd61a5b27192fbce47e7ef77824dbb5e36f78e645426dd9f04a9db38ae5"
+    },
+    {
+      "path": "src-ts/ems/heating-rod/heating-rod-decision.ts",
+      "sourceHash": "1503b8b06e4340b1275aa130e2f0bcf5a9310e620f941a55377cba5e758ae737",
+      "codeHash": "ce0666fa77189b49f1934382c8c8a76bca85452b348c40b177ca1199c93a341b"
+    },
+    {
+      "path": "src-ts/ems/heating-rod/index.ts",
+      "sourceHash": "cd9a8871656a0ad89c4cafa03d46afb0997c99580a25412791f17326ac88b0f7",
+      "codeHash": "e432e6f1ca97107020cc7ae5ec127adc1d12e1c069dbeb95ddc9dbb4026ae1d2"
+    },
+    {
+      "path": "src-ts/ems/index.ts",
+      "sourceHash": "de9ce9501163ceacd7a3c04c7058c72046e790ade2e13b3d0b4437f3f375668f",
+      "codeHash": "0bb4ff3c2637828974933251e4689d471cc51f11204264bc3de353fd0305d707"
+    },
+    {
+      "path": "src-ts/ems/para14a/para14a-constraint.ts",
+      "sourceHash": "ddb4d65d00c590a7669ca45f40e954f0348aff0e7bd367f2b4b882085470e8d4",
+      "codeHash": "b86b7411ab240d6005b4b215069d75e1ab691c2781744e9f609544a332bc141d"
+    },
+    {
+      "path": "src-ts/frontend/customer-feature-visibility.ts",
+      "sourceHash": "15c68df74123770f30bef8678109c3dc902cc30e205d64ef9f8a100a53a557f6",
+      "codeHash": "a83add3f4894ff267246bcb321b60f23e9dbb9a35f7527eb7016c0550c4f96a6"
+    },
+    {
+      "path": "src-ts/frontend/dashboard-display.ts",
+      "sourceHash": "3c25b4426d417495eec1a549216fc8aca9f09cdd5123a9383e45d100f0581522",
+      "codeHash": "2c9fc7cde4b4c2e11e55c94c9dc540c95777f7bafd00d8215d2c2abf2ae4e921"
+    },
+    {
+      "path": "src-ts/frontend/display-format-canary.ts",
+      "sourceHash": "71246169502f7be9925b0c1a679d35fb90bab77921da016bb5a3a0779748fa06",
+      "codeHash": "0a0e4fca58acda1fc69dca7fb1506b482d94de29c61a33ab64116ba499b274a0"
+    },
+    {
+      "path": "src-ts/frontend/display-format.ts",
+      "sourceHash": "1bdd125e44fa295a4563034b3d567f212857d3a56e6e726e3ef9f42f162a0d22",
+      "codeHash": "3148d32fec17eef34b9603e1b5c486dedb1db38bc98d6a94a8e29292690402c4"
+    },
+    {
+      "path": "src-ts/frontend/display.ts",
+      "sourceHash": "8c7bb450e278fd73e393b39c85cf81898bee136cdaab5981df94a1ef71fdf886",
+      "codeHash": "5442d1400de970fb0abbb8940bddc03c3703d6dfd28a490920df01b01f42faf8"
+    },
+    {
+      "path": "src-ts/frontend/feature-visibility-diagnostics.ts",
+      "sourceHash": "380681cf3e9d6141c057effcf436182e6696bd988dda4852a0d69f0eecfdde30",
+      "codeHash": "970ecc946fc360f84fc423d19007d12d98695f62d2ec444097551133b0c8d2c3"
+    },
+    {
+      "path": "src-ts/frontend/feature-visibility-shadow-compare.ts",
+      "sourceHash": "7b713131adca48170c9dd5b6bf96944f5fb67e3a24dbf8aa90defb0adb9dcded",
+      "codeHash": "e521f99250a6dd8acd53d037076532c63e8941bb36bc5a537868343ad906bc7f"
+    },
+    {
+      "path": "src-ts/frontend/history-controls.ts",
+      "sourceHash": "2b0cd1edd53022ecfef2a56a659932e5a516986b826347ece08c4414f51b19e3",
+      "codeHash": "54b8eafdd474402ad35391d7e374cd49d566f68a5323f9024bdc46c968a7936c"
+    },
+    {
+      "path": "src-ts/frontend/index.ts",
+      "sourceHash": "bb5d7df04a3e9f75aa6647f15e8bf55e679a6419f8bc032e738866ef43857f11",
+      "codeHash": "2b575c12ce1eaa7693c1b1f953b5c62c85c92776df2030550741387e3e1ec347"
+    },
+    {
+      "path": "src-ts/frontend/live-dashboard-format.ts",
+      "sourceHash": "5cda549e8a7f16a99aa36b2f895f3e689c8f02f8d72aa761e9b88d1b6f32ac13",
+      "codeHash": "13845305a89bbc110ac3a2b3602051a1d2be90532db518ddaa9671edda9bf4fa"
+    },
+    {
+      "path": "src-ts/frontend/runtime-shadow.ts",
+      "sourceHash": "f5b6af82845ee2dcfd8bae2acdf11024a4103626c9ccf617ff59404d64410d13",
+      "codeHash": "bbc04d435e22a4c194cb187cef572d1cfc8a5dcc1576e1fe9c43e3eb54b75279"
+    },
+    {
+      "path": "src-ts/index.ts",
+      "sourceHash": "e7544e8ef25061c42a2786da5296a47b6a4b1d037a5685289c628909ad383624",
+      "codeHash": "66d3640aaa05465a83ad01b9bf9fb7e51a8ff9423c4bfe5bc68c6e7bcd8a1a63"
+    },
+    {
+      "path": "src-ts/main/api-set.ts",
+      "sourceHash": "8415822019b956562b6bdcf0190e7faeeaa2887b1065261d369fcd62f144a326",
+      "codeHash": "dcf9ee146fa7aa54ed3305db20fc20f5493d9d44d31ababba3eed3a7d6e73798"
+    },
+    {
+      "path": "src-ts/main/api-shadow.ts",
+      "sourceHash": "8bd257e2db7c9a9344983667bc086073dc5a562a9cd3269b331345d6595c2ff9",
+      "codeHash": "144befdcd1bea704a24561559b7ecd46ea596cfa3c5feb09191c6426024df36b"
+    },
+    {
+      "path": "src-ts/main/api-state.ts",
+      "sourceHash": "9c6cb76bfc0e254578514f352571a6c74bc34bb013a9f706aaea3c36715946c9",
+      "codeHash": "c789a714e792aff752100bf9d69885a0baa56f2e83224fa8eb4ff7f8419e8fb0"
+    },
+    {
+      "path": "src-ts/main/index.ts",
+      "sourceHash": "cc999922b7f9872b1abf70580001f23f5eadafd4b94b72cd8443eec988cff634",
+      "codeHash": "32dff932b075dbdace5192a211de11c1a9cfd20c00172d3a4045a76c1e467944"
+    },
+    {
+      "path": "src-ts/main/info-connection.ts",
+      "sourceHash": "cd781239f1029b312e019b6b4982335f5f7855d9de373e73a3ea551460a4af89",
+      "codeHash": "3ba53e333a6265ad6f9ef612fb98ac8c39367f85ca22b0d1f3eff404a760ea1e"
+    },
+    {
+      "path": "src-ts/main/license-key.ts",
+      "sourceHash": "75de6b9360d3d39cb9053f5501c4e14ba161bc19a82af64b5934ffc91f0ef70a",
+      "codeHash": "7816d0889780a54cdc54e1d84d70c4c3cad1afb1d792cc198dec2277bd8d1300"
+    },
+    {
+      "path": "src-ts/main/state-cache.ts",
+      "sourceHash": "bcf8b8df70d8439a3cc672c1d2c9b24396f88633b0a67e898554c0cb2e803b06",
+      "codeHash": "0fb780a95e6d417e789f8a75d9a77f365db46c66af251abbd4ebbc334ee17f35"
+    },
+    {
+      "path": "src-ts/resolvers/energy-flow-resolver.ts",
+      "sourceHash": "134c0d94b1ef5a03ea50f744e2f8075db80551d6570561c73cf7a29fa105b1fc",
+      "codeHash": "adafcdcbb8bb4192c6d40fb0c6c938f018b13c900ef3026ea9b16a38a63f71a3"
+    },
+    {
+      "path": "src-ts/resolvers/feature-visibility-resolver.ts",
+      "sourceHash": "081c264d17d862463e7972694b12b268e31fa44f430e24cfcf4ca896ef671bee",
+      "codeHash": "9ef7cc9848f4d42d1737a98cdb01ad700e3e76a2503434ac8f38021c75f2730d"
+    },
+    {
+      "path": "src-ts/resolvers/index.ts",
+      "sourceHash": "be7b68fb5a22257fa8639934ae32beacda33675b380c63b95212c3843d3cb26c",
+      "codeHash": "1327ace92de52c375506c149ef4f9c577e0e43a164c583c3132276a6e867af02"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/charging-budget-helpers.ts",
+      "sourceHash": "1cb0298451f4264321eec1c25da11369c5a8e63b7b650354a34885b9f61514eb",
+      "codeHash": "726ea8fc70e592805662500c206f75111958bea057de70a33704316945c625f8"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/consumers/evcs.ts",
+      "sourceHash": "792814bd1c185fdc369afa66880cb63f0df696307495aeb14c01e9ec068d9708",
+      "codeHash": "d87a17b03c7fcfd58f4a65672c59a66fac7deb72cacaf757d45857d6630c5a77"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/consumers/generic-load.ts",
+      "sourceHash": "13f7aff6a36d3e171d0da64a8c3c3b61191e6659689cade80f09781cc7c4f11c",
+      "codeHash": "72c795867346a8cf4b0f2599dd189b947b72348bda01f2a870ae22858b0eaed8"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/consumers/generic-setpoint.ts",
+      "sourceHash": "3f25ffad781a0dbcf0f317b8741aef486848c26643d8c3ec04d96ecc963c27c3",
+      "codeHash": "68a368f85a708f3b1db400ac9f8acd2c37c53f626cce9448aa653085b15af017"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/consumers/index.ts",
+      "sourceHash": "14d152c61c2deae7f2db7d3b64e4ae2b49c92b34ddd6dc85c1de9ae791a54362",
+      "codeHash": "12ab10caf7076bfcf10adb0204e7d8583eda45b61d2008474b1a44b324639fa7"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/consumers/sg-ready.ts",
+      "sourceHash": "571353cb573a81f3d4e62b26478251c9803acc6ca04c09973bb3e505aa859c4b",
+      "codeHash": "281ec310380f7393c2d64e592338561d9b78a5cba2a7d30c6b0a44f7e909c591"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/datapoints.ts",
+      "sourceHash": "d711fe89c9b9717d90270b051ab5368d96a9d887da6eb47caea7e59587af8b40",
+      "codeHash": "df42a32bf7c100d3a52a83f6ca2aa4f8be8de6d06ba73a0ddf6926f28784ce35"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/engine.ts",
+      "sourceHash": "cf0e987dd8364761dfd856ad05884658c0f9697e13970cdbbaa93da1558ec3a6",
+      "codeHash": "1715149f164f897bb7033733e375f6ad357ceb7b44044ca97d61275ae6f9246b"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/evcs-control-mapping.ts",
+      "sourceHash": "be2b3eea9a43c370f4409758cc6eae252b66801277d522ab0db455ff28376933",
+      "codeHash": "79a6bd27297c64a70f6a64a3a36787adb58a75dfebc227150ca4bdd0c255c0a0"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/module-manager.ts",
+      "sourceHash": "f11fde77340b8d99c0f811de35000bd72a5b9407729e2a3e8f56574f022531d4",
+      "codeHash": "962af87894bd3cfcba741b3c7bcf16c8bff8e8d51b542c5ebae2550a977631b3"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/ai-advisor.ts",
+      "sourceHash": "7f11b877d706895c71fbf400edeac8ad441b04c92c0ed2e24d98b362ef6bb78e",
+      "codeHash": "926b94c3df8ce7f55d2fe22d20167f36447aa74bff5d1c3903825c58e4b06777"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/base.ts",
+      "sourceHash": "3a5d33aa52f310a70503dc10c96924b230f3b1cd22b0061e19f5d754632a84fc",
+      "codeHash": "32920092866dcf1c015ff3ae163d7c65a5070612940fdd3a20c83c2b13db67b9"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/bhkw-control.ts",
+      "sourceHash": "b43a1ae44e4f17dd0fda120ed24d014ebed56695039edcf916255aaae9ada7ca",
+      "codeHash": "de92d5baa2e378c8c3009039b6f7ec775200b7c912755193fb3d558dc20c92a3"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/charge-kiosk.ts",
+      "sourceHash": "2341ae69db1c2b8027d3f350d9a6cee2d7c836a555f02e7a80f2b21cee45f399",
+      "codeHash": "d9aa67c9d54e424975986f1e1f012531810d016629fc772571952a2c2c668892"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/charging-management.ts",
+      "sourceHash": "e3a3284d4a0001dec5511a7573ee7afddae55626c42e0c0508ca010cc163652c",
+      "codeHash": "125861a282bdca533691e62cd7b8d29da4138bc0dcf50e4a33fc3ef0cc74b7fc"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/core-limits.ts",
+      "sourceHash": "245a633b0b8591a297e405248b478bc27436d953606cc4fd317aa85b76f27501",
+      "codeHash": "87b48355890f62051a4c4a7554f6d122c93299a6492548db4595fb2a7665649d"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/country-profile.ts",
+      "sourceHash": "c383905ab4e62526b1918272ada0ded41e5cf8faf63399865b8d6f6aeb0d7134",
+      "codeHash": "a4062a605ead0ba8f3684c19d3ef0366ef45e31312128927fe0cd35488c2ae99"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/dynamic-grid-connection.ts",
+      "sourceHash": "d93be3dbcbb7545cf6090a4333031f76187563039fbffb29c28a447721435a17",
+      "codeHash": "72b2d8d34ff9c9156f40cfff5d909c703a1f8801f46a505aaf21142b06940913"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/energy-ledger.ts",
+      "sourceHash": "86868ada9ece1a64358bf353793db3f916397a155d9e3139d8a98711fed5dc37",
+      "codeHash": "1b401f3501ea906659a51b54e001f44c7797171e7a9fa951ebdc9b3dabef4310"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/energy-wallet.ts",
+      "sourceHash": "1629e8483f74a54c179ef86821aaa37e90a2b71ad1a3ad246ad38c4c9241e65e",
+      "codeHash": "0d88ad10f3e8a818056fab742d2fbec43feba092c96572cb704ff416b595babf"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/generator-control.ts",
+      "sourceHash": "7dada8d1f6bc8197e82a359580d09f22351b9b36b66d4ca7c90246b9b056e8b9",
+      "codeHash": "3bc7dd49203aa9e459104a0e3860687b853d25b63817e00a975fb1004806e30d"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/grid-constraints.ts",
+      "sourceHash": "8268ae0c7fe01296b3222691946516202f42b3c87286f39ca5c5bd0d0ec7f008",
+      "codeHash": "d6e4d04f6f6ad4424af0ca575bdcec86bdf20fa4fe395f9c9c7f471dc76fca62"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/heating-rod-control.ts",
+      "sourceHash": "04a0e92561f9cfd0f34b9e69be8cf80bee650b630fd8800251f833a7c386691a",
+      "codeHash": "2997ee2e6e3be5f4ccc80d6d7715f1e08730a2ce4a6b5f78d1ae5335c795f0fa"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/mesh-microgrid.ts",
+      "sourceHash": "563e083f15d9ab5c937779069976819ecc93b20b31977ed117bc85f9cb26799b",
+      "codeHash": "fbe0ee42493426ea51692050ca40f78677b9a7a4d2e2a653581282c67b3c8c19"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/multi-use.ts",
+      "sourceHash": "542c0e8abafb7710bd0bf0ab592b5e40a0f872e42b3a9f8ea09cbd58779eabd2",
+      "codeHash": "c7bba3df1c77925a11d6bd1072d4686d6e82392f8c1bd923d596050f8e77149e"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/netoperator-interface.ts",
+      "sourceHash": "b07ebde6888e9f35d1961d21f80844be771ff3bdcba51a1e23570d1261566955",
+      "codeHash": "812aaffef38b4fa44c63edfb7abc58bb1910af7a9e55eaaf762e853dfd11463c"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/nexologic-budget.ts",
+      "sourceHash": "15ebd9e9ce60e59c5ec628832fe1af65e070a4bf05c6bfdaba23840419b47c56",
+      "codeHash": "e6dd348e5f52cc379380a004c85df729aaeac7c24b911efe09c2a4362f8dbd13"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/nl-p1-dsmr.ts",
+      "sourceHash": "4df2aad9b29348c2c988607e4dcefe6c50fc9cfef3dc34a349384d90cafdea76",
+      "codeHash": "ac3cfa464ea7d9e93fc7c530e8026e0ee4e532b0842ac432332fe69e6dd7b15f"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/nvp-coordinator.ts",
+      "sourceHash": "0645d6286d40d0caf54c94cd13fff3b221c18874072b8506ba41333758843a05",
+      "codeHash": "f53532117e75f3a4994780e1a6371c21cf4a9dfb197e37e43c6f52aa2e4a1068"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/nvp-topology.ts",
+      "sourceHash": "9d4b944d237c515dc70eb6c3168d850cca9aea84cf2b47000598c5f94c5213ed",
+      "codeHash": "9c99cc518c4c0751d17f4f09a351d38e651b2cba84d994515cd90f70490a4041"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/operating-strategies.ts",
+      "sourceHash": "6f20e1eb8258abc68bed39721d20363b8c6ca16ed43c839e2d442e186cf33236",
+      "codeHash": "cd7498b49b0d2fc90dcd525a68d523b0e2d291ccba53882b3f519f3b86cf3d11"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/para14a.ts",
+      "sourceHash": "331cc29ad5328e9145c5b6c73ba2951477ad95abfe360e9ce612d3329e32ae81",
+      "codeHash": "24cb8ea2f3e2675023c87f06415105bf77ade5858abf7ff0f082a643e3115cff"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/peak-shaving.ts",
+      "sourceHash": "257ae314328c65c6d31665c4ff363c0519831ddc67f1440c3a1025bc1d8f791b",
+      "codeHash": "7607eebfc11fe0002caa2c9cf72a080a7e6f47f80bc47f8947a3393621c1f6a0"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/prime-mover-control.ts",
+      "sourceHash": "62ff5e1f7133945ff897ba67fe3cecc23714e8debba9a2daff73f48b067df5c5",
+      "codeHash": "ff7a52ea8551fbb9942c943c00555c71e34691926f6f9094c99d0d44fed7e20d"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/pv-forecast.ts",
+      "sourceHash": "8d059c19e60f1c202a9be300711c8a4617857021487af4cb8638a7445f23c0f4",
+      "codeHash": "bdff992179ca44fba94309c929b2644b2703a54ef4a5fb9cf4272228c696e040"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/stage-a-diagnostics.ts",
+      "sourceHash": "09812af8c7c5edfbda6e5eff4e228be40351d19cf95efb39d2a4b7cc0e1c1ae0",
+      "codeHash": "0ceba187c778af491095d071595e9c7fabbee86693f372d7f1b4259467410d1f"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/storage-control.ts",
+      "sourceHash": "745c76464f1b2731611b140312e5f8af9d30b0eaee751b47e6622f270e229940",
+      "codeHash": "540b0a1676d1e46635cfbb3294fb3de5fd4f8e7f20bbf36066ce435e3666faed"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/storage-mapping.ts",
+      "sourceHash": "e1eca29e7b5c34191f5b8c891168ebc021e52ea623567b39ea8d5a4c42b1a228",
+      "codeHash": "cfbb5b3f6c1744ca717e2235df4722966b18b7e2e6849ed666a2f71c2ab9e530"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/tarif-vis.ts",
+      "sourceHash": "7a0b446a14f63ca7c3f3354f677cf7e86027f0114634e6014c3c6689bdc48110",
+      "codeHash": "809410909a3e545052f60759220ae19bedd1540b0b3059c4fad9f22423afff9c"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/tariff-provider.ts",
+      "sourceHash": "92f133b4fe74d37e283e5bc6b6b683ebe528f29c6bc672f30413b9789d1e1e17",
+      "codeHash": "da6047b80179d6f1a30c05d80fc1a3a4267d6b793f27a62c836aea31b20dcc1e"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/tariff-status.ts",
+      "sourceHash": "f612efc9a680f8dddbc28c42ebd19ce427d9be25e429cc62398b455607b96507",
+      "codeHash": "e4c88a0f52fb7657cd006570ad1c67453bb9dac130f24f08841d638fcf282b54"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/thermal-control.ts",
+      "sourceHash": "899d9d925a26038d8d956627ab100ebb4fc3b358992c1b4ccdb38ad00a37472a",
+      "codeHash": "89815d8c0e2b0c812b1116246089a1a0405d2f1ab14b3d5f3c9cc904be28617a"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/threshold-control.ts",
+      "sourceHash": "b19974f867dcaa24437ddcb27e006612c9bd30993a943b95b5a3fbe64119a781",
+      "codeHash": "87b73d08e782968316b6169243d828ff8038aa56e2b087e0ce26fd6d887903b5"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/nexologic-engine.ts",
+      "sourceHash": "0a114bc8c78961a84a0e515f347272177a940339803a5274be2fd99529901950",
+      "codeHash": "0bd3f9a59fd06f68e88639fd0f88ebe9e08480c7d85ad23a9c2d93f458c57c12"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/rc85-runtime-hardening.ts",
+      "sourceHash": "1024663f2f3964a10e55e50c32df82d823a33c61f07f92c1abdd42a50add0ca3",
+      "codeHash": "48999efb1aeca4c3aa8cd24e88b79a8b0104efdbf0108305c1a2aaacf9eef781"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/reasons.ts",
+      "sourceHash": "681cccdc3a2a50ba6fec957310cb06927222bb7a95ffabffe0d2151679f78da7",
+      "codeHash": "38f4c0fd61e62e4e09bf301881a1df23213c3c5da4a2adcbe492e6ba3ed5fbc0"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/accepted-power-effects.ts",
+      "sourceHash": "9cc3a6c17fe3edf6e7895e0ead60ff20943b3708165809a26fd807698d625b76",
+      "codeHash": "eee7ee78b5cd3d96556316b1eaabcc3006ac1078cb7aba409fe7f4b51c0a4a98"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/actuator-command-contract.ts",
+      "sourceHash": "616688292589e6addc3d2ea33d62a14325823b1af499cde0919fe830ccded64a",
+      "codeHash": "8863fc4bae695247bc05a62c1868162410acc4efbd00ffc9c6238d762909f2ef"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/actuator-shadow-arbiter.ts",
+      "sourceHash": "5db7c58a83b049086f80e9d167691801654ac5e285b97a4cb015606c42f7fe68",
+      "codeHash": "bdbc1ad09cc37fd9d7a8b910735d976b0c31d2f8c993cfbe49dbed438ceb710d"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/admin-overview-publisher.ts",
+      "sourceHash": "357d37b8b985a5c58402839994ebdbeddce3344d6ae8f5ff91a2412593aa9c3a",
+      "codeHash": "519de0b0ad0958fa1655777c2e50a70cdc23f01bf2713a3dc29b928034d0016a"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/arbitrage-control.ts",
+      "sourceHash": "4b2a79c1dd0612d40d28b57727c4cf77c4065579c119b5bbe6977f0dd0091b84",
+      "codeHash": "c22f967bf1e8cac9f05e56c2d020465fd070992cb393af5b7ed5d6c116fa1225"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/charging-management-audit.ts",
+      "sourceHash": "c0ececf63a472d400c9406d181d5484d0c64a8c43a7c65592676d53a9549a714",
+      "codeHash": "d44b6be0d7c0f44febb79e186be85d8341f338457831e4f7443e6dc764243acd"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/country-profile-service.ts",
+      "sourceHash": "9322ec624963db39c34834dbf20c857045f79a58097fdb9fd5d98cab2e724621",
+      "codeHash": "164c4847a289e01cf2b745850bac02feb33dc1606960fe1c18fe17fdca925036"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/dynamic-grid-config.ts",
+      "sourceHash": "5e88c6a9d61b930c816e4f6060225ce25785c6b0eb77601afe8d4dee439ee0c1",
+      "codeHash": "5e2ab227954d82fa1adbeda7bbc5e3b5e5d111a14e59dfe398212ac0845e9a43"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/dynamic-grid-ownership.ts",
+      "sourceHash": "de8ed1ac2352d1bcf19b6c590e3db13a4920c46fd915ca95708616265405cfc7",
+      "codeHash": "e90d4cd0ea2e8158faa95c81156c1e1b9ea08edc0a88db5e34cb3869135cceb6"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/dynamic-grid-pv.ts",
+      "sourceHash": "ca5dc0c7f9ff97c097bce662dc0a65d5d36296c4662880e0da392ec860cf01d2",
+      "codeHash": "5f2fd9c61d5c78efc22800b64cb8441788a2b24ceecae8f2a9877850377e5aa5"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/dynamic-grid-writer.ts",
+      "sourceHash": "d0456440d27f00e0a393e845a0bc9d817d3732b19e775a86095f4d52b45e0ea8",
+      "codeHash": "bb3e0728e5e885d73aa1affbd393aae70ebe8fe4d8d85c9a6749e3ff1075c175"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/energy-origin-accounting.ts",
+      "sourceHash": "200787dd19bfeaabdf307ed69d704ea52b218a1e8a22356551d43ea3a3ec9088",
+      "codeHash": "bc9603b6c362db20ac2e6b4003171672c0ebba3d6d3079acdd9971bb302c1934"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/energy-origin-ledger-runtime.ts",
+      "sourceHash": "74264003023faff00ec893bfcf0ca38162dba293d3566130375e108b3208ea68",
+      "codeHash": "577c606c4eac6b523547cc97dc61d127938940bea9abaeb9039fd5fabb0a54b0"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/evcs-unit-conversion.ts",
+      "sourceHash": "a1d0036ce8b3ab7932710c9761a8f193a220174a516dd248c2423cd5b699d3b0",
+      "codeHash": "836a08e1523e32377ffa190346faa0b2d63331d1264096ae2c1f63643cb0b834"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/feature-flags.ts",
+      "sourceHash": "0b23e3414b5f9fbf60c0e47d9793d6a72033026988f5b674e6696a653eac2a6c",
+      "codeHash": "db429300999b2968f85c8aec27f1b2cd33f083ee09e1c69f610074e6b4766aeb"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/fenecon-hybrid-control.ts",
+      "sourceHash": "c2c34e386f3540e6acacd9cf568c6ea5594bcbf8316d6308431bacbee20db2ca",
+      "codeHash": "79ce818b052cce6d2a5cf95ebbc84f74eec641b821043c7bac80d612488f76d7"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/fenecon-nvp-shadow-runtime.ts",
+      "sourceHash": "8a794910dea3ab056e294aa4c920e7d65894e6ed6721b97a3e80dd124e6190e8",
+      "codeHash": "cfc93154878bdaa5889f65cd6931e3c875c8ee3d60c5bff09ec2a522e6a4ada1"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/forecast-aware-target-planner.ts",
+      "sourceHash": "b4554e95c51e6ce27126e465b3c862db16aca544587f50c47eef2ab21ca5bb42",
+      "codeHash": "b8273d213913e7c61978a1cec8a670b06cbfacd9c855fcb219da9cac0e299468"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/forecast-target-runtime-bridge.ts",
+      "sourceHash": "b3fa680266f755dea6a6618d356da16e711836d7fedf4fb3d8a8636699d4e793",
+      "codeHash": "64d260d98ae030aca53c365fff8e1561b5132d429019edc916847c3fc37efb94"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/grid-import-limit-policy.ts",
+      "sourceHash": "940fdb2cd2b67d30b5f5427eb2cd521fcfebf5f9985899b6059ea8cff440914d",
+      "codeHash": "45ae554fd2c2e93af360eefe1ee218f81c2dee0616ad179ab8f70507df947c2f"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/locale-api-service.ts",
+      "sourceHash": "e700619bb5ccd58092f5bc88365e65ce2420d601407f9c8c09f8060f0f0356ea",
+      "codeHash": "70adf772347d47b8b4d1d4f9e7e6bfb06b98cb5f00c595bc977350f70812e4b4"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/measurement-freshness.ts",
+      "sourceHash": "590430928acf161b2d47c16ed03f191400c392c9761775c3ddb835e714afb0d7",
+      "codeHash": "04fe4bf40ea139e0ea577524f2f4cc31b620317ac3e0f1be590c23d8106925d0"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/netoperator-canonical-model.ts",
+      "sourceHash": "b997490a0fa835d520393361e08a6da0c541e75eca5b6f6a2c55eede0d402aad",
+      "codeHash": "a957c40692c27bcfc47bc6f4d52862696023cdce22a7bfc006bc4833421abf93"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/netoperator-driver-registry.ts",
+      "sourceHash": "e0f1383ab59c440839d7507508d8808179e7ba33cf8e0076081898c2d884e7ae",
+      "codeHash": "0dc6381d3f09a4b9d1d0b3260b32e87a96fa6b0a0722b4eb763221a0c95c3adb"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/netoperator-modbus-tcp.ts",
+      "sourceHash": "0092622132affc9f9a2d664154641b58ee5824e7b6b42f582b72abee9a591395",
+      "codeHash": "b4714ec16f5939058c063e9453b521ced25fd6af514200e37959dcb458d1a52d"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/nexologic-output-controller.ts",
+      "sourceHash": "eba036e4d763cdf8028a3a59ab615ff2611d62485b59cd5dbe501f99c33c0b5c",
+      "codeHash": "8d6df44bf3b853492040bcc0d0567664938c9ad13e1809143668c7d5ab4976e5"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/nvp-budget.ts",
+      "sourceHash": "48948bfa897061d745fbc88ff444106e8fbc791f88973b6c01e1de02358885a8",
+      "codeHash": "33a26a6096d96f8241b3a19729146ac6c608d8336629ca66c5601f8ba4019e34"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/nvp-grants.ts",
+      "sourceHash": "5e73b91c3ef6ca9d73f7743e396e4088dd3db624b3f4cc72193160f98d79ea37",
+      "codeHash": "151a8921d47892513cb64c60047f5e2ea6a3cb80c801194151a840df76c9014e"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/nvp-group-planner.ts",
+      "sourceHash": "63b5fb93c8369b221887f77cf6c850a6d74ee5db8f4a55d8957c6534705f35b5",
+      "codeHash": "01c2a4346c692c7109ce3946c14a04c2e7109b1c591fa10edf370ff3d485cd88"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/nvp-topology.ts",
+      "sourceHash": "ac061b57e15493c11e0cc524a897b2a8fee511129db669d2867d89bfc20afa64",
+      "codeHash": "d982a34da20c03cbc9c18d9b69b544b827b3a91b67fa4b115d065d1d682ec042"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/open-meteo-pv-forecast.ts",
+      "sourceHash": "13d8ef6875210458e6543731a721819178d6f2ffd6eee1549fb824d672fd5492",
+      "codeHash": "79c64be90bbf1cba25224a173a6b0a0dd08c384198cf55e670fea1b228a664d4"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/operating-strategy-runtime.ts",
+      "sourceHash": "23785bfdb13bd4cd6bd871d7601bcc97ed387e0976378a8764414d8c085f01ec",
+      "codeHash": "2944967b5cd6e49737def801794e2926a224690dfe98f6a20ea732c882b336f7"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/para14a-eebus-api.ts",
+      "sourceHash": "8700924d143053df2ee1c6965beb60e76491827cf1b27c00b590980502e7c772",
+      "codeHash": "c6598feb64eac8a681bef0a1396feae3dde96d7070f674d58b29a26ce541bf32"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/pv-source-identity.ts",
+      "sourceHash": "1223bc948436db5cd5b3033bafb3d4558e515dde153b21fdd454fc772f997a5a",
+      "codeHash": "562e125b540d0f316fbb872122a1f677862dfd79521fb69d2294869b5e61ea71"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/pv-surplus-allocation.ts",
+      "sourceHash": "fd67246a23bf9f802da8823229a36925f9a34ccc01dd55cc7799aef2e6e1270f",
+      "codeHash": "1f31009eb0da89705b7886b8247c33096e1f01dc99c1841ea19f73b1879b06f8"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/safety-envelope.ts",
+      "sourceHash": "108b19c32a3282fe9e65264a48263ad8c7296a6ae86eb6d590ad15d481bcbba2",
+      "codeHash": "7fec39e3310f3efd8dd4502e698d685783344103d5f3649c64a7c2c068e58c79"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/storage-async-feedback-anchor.ts",
+      "sourceHash": "f51f6af106108dd542efe992286b687b6f723db5d940e35d033f693da51f0d25",
+      "codeHash": "d98fc4fc8079d67f3f09efdcc2d90205c2529e54302572f36ebb2217986bf535"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/storage-datapoint-config.ts",
+      "sourceHash": "78a8f3ee4ef8b876d0a03877f51c1b8157a6a5d42a0bab37786129a71bf1e4cd",
+      "codeHash": "9d2af23213e683a67b0115f64bcf41a105b40f7160310d3b83444bbd5407422d"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/storage-farm-aggregation.ts",
+      "sourceHash": "8ed9fdf60e02a02914a4f852c6097ff9fb8201e67f9aacc69bbbf2c35ac06e4a",
+      "codeHash": "b67a1786a641b7f6b017b2764223c6b2c4e0500d0c0d0aeeea10b83bbe724b11"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/storage-override-bridge.ts",
+      "sourceHash": "c2b4de6df2dd71070831c38afba1284ebea224f90ed780b2755a6f1520b08ea7",
+      "codeHash": "edf2615b5d5aa09648942d1d7a6f785495e816d02f4566c88e7a581357c604f5"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/storage-self-consumption-policy.ts",
+      "sourceHash": "27941ac8d88b27a36b65386b5236065b5bd14422955aa05e4ef95a8363917983",
+      "codeHash": "d266bc3d587e87487962648eb98c1ea91402a49aa2f7092e8555cedc9801287c"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/storage-zero-write-policy.ts",
+      "sourceHash": "e44cc7043c0a7bbcc90e5b2e591b09a084784472932b9cd6b3d30396084ed347",
+      "codeHash": "2471073af232b05a8ad2e19d20b6d6ee58c2a5eb6d73e31b240a6553ea0e8963"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/tariff-provider-registry.ts",
+      "sourceHash": "e1006662d8d67efbd2ce3e4b5a3cf05951a44e4092bdc38d4f589c96765becc4",
+      "codeHash": "fcbcd10ad1d8c07577bedefcda34ddec58dcf035722f2c0a338ac2fb84ea33f2"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/zero-export-pv-coordinator.ts",
+      "sourceHash": "ae0f5cea86ad6229321fb6c61e33c5b7f85fc08d773fbf9389fc80e2d3b5634a",
+      "codeHash": "560ad84f629a22d040f2508a7318ff6083af9cef283478589c89028ac10bc3d3"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/zero-export-storage-credit.ts",
+      "sourceHash": "42b5ceb1587a5710876af96942d3f61a9499cd337aee76eca8cad8a621f336e0",
+      "codeHash": "a6356ba0d26402ff431234c43df80bbbc63e3ec21f5208fc8139ee6fc2559821"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/charging-diagnostics-api.ts",
+      "sourceHash": "ef4267a45e9d10f512871db48b7f2dd9552a5adb5cde645dd2d631092deb1da1",
+      "codeHash": "3151c93159d30b75c18fbfd544a180b64576604f496ec7c7776aef92e66a168b"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/config-boundary-contracts.ts",
+      "sourceHash": "9f912784cde03899343c91fb0505d7b2740b532d967136d9b8ad6d98129ad68f",
+      "codeHash": "bfec88b8a7d3566bd5f1069c81249cb76ba08f2b91adc787fa9be2e5bed0a1ff"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/dynamic-grid-config-api.ts",
+      "sourceHash": "7161236b3cfd48a4cb98f4ee636001ec1802336105a1ec9454b9ef5fa8f79f7b",
+      "codeHash": "9d1207b5519565fc5280154cf0ce6ec0bfe29b3d4ce6a39c7c1d9dc9899bf164"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/energy-origin-api.ts",
+      "sourceHash": "f6d660b2d2e14339bbce39a351a315a2ddcef5f5355d83bd593dbea15bf10d5d",
+      "codeHash": "cb3018a8ffaf416beaa67cedca8f1a7819c09d9b2c70ceceefb60500174b0a66"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/evcs-electrical-limits.ts",
+      "sourceHash": "f181b72675a2f9119ca84336eb06ed7208f07ac0dbc782b555c12847d18d1d2d",
+      "codeHash": "d632326e49c62c19d285cc2da35952db553a0d9e31b8e207b674c91de5148c31"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/http-error-boundary.ts",
+      "sourceHash": "d44e839cda81fd990eab425b2495b02409e43d85697b18831db24de7c12529ec",
+      "codeHash": "d0c2f62754728426981bcf27b0af8e0df5715bac4be9ff5c3942a568ad26fe9e"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/iobroker-user-auth.ts",
+      "sourceHash": "5a71621dac47cffab6e1afa1db180c70bf729d289b83c22e358c36fd0b888b79",
+      "codeHash": "b8118e1912cabee0cd6c5d8c7126b39a2b3a6dbf79b7c4506df59e36ae2dff9c"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/iobroker-user-roles.ts",
+      "sourceHash": "c835b25eff79526f750fafe864a36f8460173434117243c11bcb96294a906b81",
+      "codeHash": "15e1f7d6f530c7b645fbcc44957b3503c638535fa5dfbce5bcada8ee13ca2064"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/license-bootstrap-access.ts",
+      "sourceHash": "a734238d24f70b4a2a24b1f3a6ccb76b64a0555c83bd7e15903db3846c66722e",
+      "codeHash": "e682b3a0f8416e60e583636f6f3c3438eb9862350e903ec2acf81f5c53ed879d"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/mesh-coordinator-contract.ts",
+      "sourceHash": "ec83a3b1e0944f93dadb26c8f0fe7e8865b6bb67acaa2da7fbc2a5763b0215c3",
+      "codeHash": "12e4851706d5ad5d8aae8a5c515200fa6010ec89057b7571a176e4ae34d1a90c"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/mesh-coordinator-protocol.ts",
+      "sourceHash": "b08036a984a18e71cc149e921ad8b664877e6d20f15d791408ef93ff38e966a6",
+      "codeHash": "3915cd248c0b316ae621346de8d9e391d5784a7548e7cff7e18b234b21e556c1"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/mesh-coordinator-writer.ts",
+      "sourceHash": "e4681b31b3d6b30b4313f2a9c8705fd099f4862cd721edf496a5487611eef045",
+      "codeHash": "508df4793674f5d4f39f12134b065c891abf42c7762a8115e1eae0e794d68cc2"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/mesh-coordinator.ts",
+      "sourceHash": "f017b4e679aff3ffbefe3b60f237f981b255c9c563a97518b6c6dfc3148b652a",
+      "codeHash": "b4be5a807da9f8f255ec7944b47ae1a5a5916222225644e883eabde501cb1433"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/mesh-energy-journal.ts",
+      "sourceHash": "40fe974ff11baff91aa203e568c959aedfe4f52d5ebfef3362e87b0ed3b97992",
+      "codeHash": "2eb2855c5a0d03e55b95029708b70116a0f7888e5974647cd04d3e9046a4d60b"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/mesh-energy-service.ts",
+      "sourceHash": "53f05b850c23b2f5e0bd0e15a8d8cb28f3845a06bb67b92797d61a60b356cde9",
+      "codeHash": "4f69d90ee66f93aa309896288e69f21f8bd5c5bb55ec58ec0b7288a640d2af48"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/mesh-peer-http.ts",
+      "sourceHash": "2645d16ab9dc6a25948c904ace6cfea3131328dd421b8685754120c64c10a7f6",
+      "codeHash": "cd94d59a563663c07418f1e01ca80037dbd5acb58fd15ab6b4731ef12343e7c4"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/mesh-transformer-allocation.ts",
+      "sourceHash": "cd370dcf43da879631bb9d35b70ba8467330c306f2e3d885fd25b8430a5758a0",
+      "codeHash": "8d3919220679319222597da80f58257a6d83ee99f3af2fee4889a080e0f2e24f"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/notification-mail.ts",
+      "sourceHash": "9ea24b5fe45355a52e14f43f3e53ee49fc627cfdba59d1a6ef54ee9375a614b5",
+      "codeHash": "91618c2adeb55e06327c1ca32dc62ad99608dbe299ca4c5d254d01976693ded2"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/notification-policy.ts",
+      "sourceHash": "e414fc723a472e180e17f1f5619f1badb49eb6cfac397eafd29ff0208cf502f9",
+      "codeHash": "183fbbac574c37296e2f755b67e1b6667a7d6a9690cee5c5d818560b28f4fa88"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/nvp-config-api.ts",
+      "sourceHash": "bdecfc284d413d60022fc521bf24c2d6cf96696d322b509fcd885394496da0b7",
+      "codeHash": "b0373329422137bf76a11725a245d79e69ccc5d2b413edcd44c3a3c174da1d6d"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/partner-config-api.ts",
+      "sourceHash": "db7d02ac67193522d9887a8d7dee431296599e39149654f910da30a439dfca9d",
+      "codeHash": "fbf2e47cd7a9152d92d6b8cd206996693d46218bda85a65cd7d26948d4710eb1"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/partner-contracts.ts",
+      "sourceHash": "c1b93bd8414a5100f847c32dac72465dc97953a9b4f3c867be782a8ff3439243",
+      "codeHash": "203aa5937271ccb0879c835fca92b140417243f3da561f7538e895a24fb71cbc"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/partner-runtime.ts",
+      "sourceHash": "83f56a0e2bd4207a70696c6d04436707b3b6e22d08e520e9d1958e1fa21a7162",
+      "codeHash": "92e88f323dae91d154f2c3deb4535099a6506ecf1c9615308fac3d7f4286ae50"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/partner-service.ts",
+      "sourceHash": "5346c4920d4b916b905b07c83736a215e61e2427f4185a6feabb9b255fb0efc9",
+      "codeHash": "68e98947b547b59bfd16762d81f16ebe1efba3e7496362acc98e62cff71b9aa9"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/partner-websocket.ts",
+      "sourceHash": "6739a1cdc961aba4a49f90291b19b5b65cba2c49c0ef4ce26e06c536e4a8b4c6",
+      "codeHash": "820a192da14d6aab728f184176f54bd75ac25c91ccbb89260f9750535286e2fa"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/runtime-proxy-html.ts",
+      "sourceHash": "b32c28ba952ef6f065216cb3d556f42c8ab5332a7f7de042edf5fc37d235b524",
+      "codeHash": "1c00f211c07206fc5e78ac0abf214bd827aeba6c7fce5f14598c38aa4d936a01"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/smarthome-contract.ts",
+      "sourceHash": "4431b17227ce4550291ae02489f1c4884e86e14ec3f1ca0cc82267f2eeb0a087",
+      "codeHash": "a41854258ea68f9432ee8fda272bb1f2e10d8f57c2ed3fb9ef8df9e0f96afd1c"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/smarthome-import.ts",
+      "sourceHash": "9dcb7e2a63b2a3ef52c9bba9b00a0766d823338b7cdb422973e86804e80e0be5",
+      "codeHash": "5b55eff43ed643529251e30c0d1f10afd59c9529e96201f4d1d397e1a3ea0283"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/sse-runtime-guard.ts",
+      "sourceHash": "252a29d61f2ca287fd9d99d907b8e4db837e4b2a032038482d144060a4fe146c",
+      "codeHash": "9192800d189c93892177ef41217038fcd1d4981f3d8befbc8545186ae03ff467"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/station-display-presentation.ts",
+      "sourceHash": "8691067151cae594e5d83efeb0d4d3be08f5e123a3f5d86a75453642f8abb7b0",
+      "codeHash": "7b40d4a3228dbe1212320aa7af760c94ab032a5b15b181b1d40acf1f8f80dd29"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/ui-access-policy.ts",
+      "sourceHash": "1411973bbdef3000e723fcee3ffbce899f4890f3f10ac78897cab0414200f32a",
+      "codeHash": "2fafb4a67bcf207c15692079366f5ba3b991f94a44fec1d1818926e6c6b6a9cc"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/ui-server-transport.ts",
+      "sourceHash": "1c00bce2b740c137b3e8844af114505ff71411fead2f163c544b3bcde64411b0",
+      "codeHash": "701833cbcb5c6861bd145515854951c58c81e8830e47afa6b07e29473c2d661c"
+    },
+    {
+      "path": "src-ts/runtime-executables/main.ts",
+      "sourceHash": "3fc8371335619306eba22118ae3a75fe4a26e4edd8a1edf0232b007ebee3893e",
+      "codeHash": "5fbefa230ec5b15e7cfb556c4a302c4263495650e724172c43c2e21a50da3388"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/admin-guard.ts",
+      "sourceHash": "f2c3895282c008fe3d5e89249fac06a3c1e7e42eba8b96d351ecae966f9125b9",
+      "codeHash": "a5f745991d52e88a43223668a37ccb5c24290f984ff32d14eac1c968870ecffe"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/app.ts",
+      "sourceHash": "1f5b105bd613d8e263458350ebbbf5db4b6420f16ceb0f62c101a0ea2a50fa97",
+      "codeHash": "b4f676b720b7f20a60651ec920ca475fd37801c1cce21b989374b7b1c6403110"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/auth.ts",
+      "sourceHash": "24e1a926914aa75f6362429b2183972e7340c98d083854d301309169a827bfc5",
+      "codeHash": "c8f2ab870cf2edf128c2e41671ece092139bb63b8fce6c17ebcfb7a29daad9cf"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/charging-diagnostics-appcenter.ts",
+      "sourceHash": "f115b43763bc40cb638609fba02a45c9ab2439e2327cfff0a10055ce2a374e60",
+      "codeHash": "a79380931b831ad19c5e6b3ab00473884a56b4dee0e1da58c75b8308ab7713ed"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/cockpit-shell.ts",
+      "sourceHash": "edfbd0f4a1b935815727ec61304525c9d72ac631d169fd57ae78a290968c2c81",
+      "codeHash": "c831dfdfe30a88d9edb5967d111ee2f3268bcdd717256d8ba2cba40bbb14bf00"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/dashboard-lp-status.ts",
+      "sourceHash": "0e130b0d3bcb3fadead101a383a1c59542f94131900508e54f2e0ff0195fa390",
+      "codeHash": "3100b90a0ec3e58a5a24335f6cbae0a5e4424ee58e0445eb6908ad9b04d657db"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/dc-station-display.ts",
+      "sourceHash": "7c9feea8a86d4c9167be68f560a9744027db05c57797a573bafd3db68f4af73a",
+      "codeHash": "74c2308367426b603fa16af9edb9386c38e11fda9bc17c79ac0eb8721f9bb747"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/ems-apps-nvp-diagnostics.ts",
+      "sourceHash": "ace03258291c0dc25af3f45990a29b34f153ce1510cfa8f41a39e4b47150cdb0",
+      "codeHash": "1e3ad7c040f6295466bb3fdf6f481704536cd5021ad614c043be89582c66b75e"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/ems-apps.ts",
+      "sourceHash": "e93cee98eec73f62d7dffb96e55ddc85dd4e624045cdd066ebf27ab8a751cfdc",
+      "codeHash": "01dc0e8b0d5f6234e1f86987b46bb58bd8f325d499e84161d6f3d8d17cb1beaa"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/energy-ledger.ts",
+      "sourceHash": "3e589593d33eb8dcdffea6b770f9ceaf73a374780a95ede87e40cbcc6c514202",
+      "codeHash": "e65f3cca9a4637c34593c5b4dc5698d6368b91ce43f6d26273a70c430a66b71f"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/energy-origin-appcenter.ts",
+      "sourceHash": "9ae4fcdaa0198fd4bb0942ae36ee85add807ba80235e5a0e4c3a27da84cbb8fc",
+      "codeHash": "1b42fe81e0cfc9c338b0537da7ed2578899b15fc8d9a57fb215d4e29aad61979"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/energy-origin-ledger-view.ts",
+      "sourceHash": "716e67991ac446c40ad931a55bfd33edade0a575f5001a4fbfc0b047180f82fb",
+      "codeHash": "6246db2220ab9994f8fc4a6fbf07c60f6de46364d854ae86504e1c5fc9ab4101"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/evcs-report.ts",
+      "sourceHash": "a08401da2d49fede7a5f8df5f2dd47659895643980eeba0ad34b3bebd9b70ec5",
+      "codeHash": "ca5ba7ca23398395087927e15f99a322f9ba34bfac8b9191106df3094b32453d"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/evcs.ts",
+      "sourceHash": "6c458526ce5d327ec5ea0832f7f8c617b23884997157120a71febe1335ff6b00",
+      "codeHash": "649c1265f8718e74a2c052904a0440a0f1c3ea936a735e57ed7e5ded75eb2d13"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/forecast-settings.ts",
+      "sourceHash": "90e93ca2f1e92d2d0def7f12d97dd1603b8cabc0c157fbe634f23263d65fda39",
+      "codeHash": "2120ff82182cda2b35a0ab3e960a1e15268f8e3b0131a939d222ab1a135ce2dd"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/history.ts",
+      "sourceHash": "3a7f1065dbbe6c058d802f25de4c143060a609ea5ffb17a08c084704f1955126",
+      "codeHash": "76edf0763731cd7560dbf64e0d4167ae6bfd4e9fe621956e9f7121641d455d9b"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/license.ts",
+      "sourceHash": "b4f93be24ad83e993368ee0d61eaaaa0d110e6d10463fcbe33c840bd8bdfba8f",
+      "codeHash": "3867c34f997fd0f7d27a6c7a8f748d944cd7c04c928b0e1af575a9bac455b88c"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/logic.ts",
+      "sourceHash": "37569dda308e69998c43aa9594fc96a261ee4b68cb9afacc0b4017f6381ade95",
+      "codeHash": "5fac561fad307d8b5f0b78e24a473c583d76dfa0b95470098c305df2f0337ac9"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/login.ts",
+      "sourceHash": "015765e509623bbdbb7a26c2b2fdaac809cbd94ee1dffbf51c3f233c55ded6fb",
+      "codeHash": "98a0f82599cd9719348841b5fc86bfa2c828372b24c5d75de38ba231d3945c26"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/mesh-microgrid.ts",
+      "sourceHash": "3e8a069469322d8e8502da12fdd04b686b569cf61670a93dbbcad5e87913e101",
+      "codeHash": "d39cfcd495923d4d43166699789e6c31ccbb4e0c88d648f0a387b6889440c419"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/netoperator-appcenter.ts",
+      "sourceHash": "5231413ccf787a9c80a115fd2c4dd8cd824595e63f0c10c66fd093b81fb34574",
+      "codeHash": "a7925c082262f3424bbcc6d71101bc970c21b7de1e7120e9efba94406b1f663a"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/netoperator.ts",
+      "sourceHash": "b71979948d9b76201983a0b157335cb18f7aa905548c457cb47f41250bd09eca",
+      "codeHash": "77835be3490cd6a22cce72f685a63eaee27f96346c44a8b440651826792cb8b6"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/nw-i18n.ts",
+      "sourceHash": "1e63a4ebccb2817eddd9eb4c26b7cd40c9cec08d145ca14c41ca9390730bde6e",
+      "codeHash": "f20f26e814cc2e899d93337a833c87e4fcbd64d55d515e1c44bc730c64cbbb55"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/nw-shell.ts",
+      "sourceHash": "3853a05e43e7885d292409d071841c794309749653bc92603cc4b1992ebc2f3c",
+      "codeHash": "d3e73ea8ca9b4586fd3bfee44f38c0838b45a39310f9e6c12258844795f13f5d"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/operating-strategies-appcenter.ts",
+      "sourceHash": "e158c10f82e689a377d3d49b353d592b845416d78edebb8f934cc0c23e6aa664",
+      "codeHash": "a8a516fb5370a2f1aeedb541b53fdf496fd3c41320fa50f65d222e9a02cfdc27"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/operating-strategies-rule-builder.ts",
+      "sourceHash": "9c00a23d557bf1f0b9db6117531b641674d99e1f64fd1af915470ee50de0bea8",
+      "codeHash": "79ce3ed44434a7cae12d888629ef0fa795210afee6170a5c09c418cdbd209bd3"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/para14a-report.ts",
+      "sourceHash": "9af05ca56a37b47e7e978ddf5cb9e2c6ef1e7066bafaf6151b265395daf11355",
+      "codeHash": "4ac6baebe1dadf73aa99da3ccea4d56ecccf881a1049b9b6551f22a871311c1a"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/pwa.ts",
+      "sourceHash": "cae266c2f9d5010485a639a17b0270111c6c1b1cb6d3eed51a75e6a330af898c",
+      "codeHash": "2e05db757c208039fa38c67bbe9eedc712e824c1bb768bb1b8d29742b169d0d7"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/report-common.ts",
+      "sourceHash": "c39ea39f9e6bf983fef6b5ae23a9425967595903d9e2538c9d42c16f5f57e3eb",
+      "codeHash": "4ea35a585fc2fd5eb777f16ab15b2be1bbfbc87e0937c9b75e858f844f65e290"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/rfid-report.ts",
+      "sourceHash": "89d5a53cd91f3f0b691560dfb5059dacdcc0307e143dc9d660b5875d2e70adc9",
+      "codeHash": "c6da95c07b6b18051f36f0c2d70fbfa001c73b40c296f9ac95280cb199c66e00"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/runtime-base.ts",
+      "sourceHash": "f7f321856fce4f5da11f8cc1784e349058199151cd3777b97cfcfd1c519da1f8",
+      "codeHash": "c8043fe1eed61ada6f42d2e538bef705402cb1ff94f6df4d6a664f53349dc5c3"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/simulation.ts",
+      "sourceHash": "e0e9e3ac14501d6782735c07b0b5429b0676575b244f356888763c0c3ac52c9a",
+      "codeHash": "6df82b95f8e35ba6892f8741f14714308bbee9ce774b3662632cad3747360389"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/smarthome-config.ts",
+      "sourceHash": "03736603e65152cd007989c0a0bdcffb3d86e82490428f6fff08960914028a41",
+      "codeHash": "9feb8ba11b858e9cc0bf57bdadde5fa3405805f1767676aaecab08e2fb1b240d"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/smarthome.ts",
+      "sourceHash": "06c4e110a22de74c35538dae57dec6a70c6dcdf712c2c8d9b7e6b4b830e5e317",
+      "codeHash": "ae23f97778eddeaf76c849b0501ccc8b8f41ac94ec17af86ef3cfb662904ce40"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/storagefarm.ts",
+      "sourceHash": "036f0462e2e6fb2b702c4cce45dcaeb28f72be60f630e7b7322d70fcfde78157",
+      "codeHash": "e467efaeff4777811e1ad9bf01720a1ca357d453cff4eebf63131aa2d07338e1"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/sw.ts",
+      "sourceHash": "50ba9fef41b8e1b7f564ef1355aaefd578cb7eaccfd288be12a4ff4b02d7a15c",
+      "codeHash": "bad0c3e4adc44e2098fc934dcfbd02d07e63a69110fb71bc6d9b4b97cf53eb2c"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/tariff-report.ts",
+      "sourceHash": "81377a66665b5ea9714993d81e0170b655ecb46ce3b5d21dddad7ab0493b7cbf",
+      "codeHash": "d3eeff89553f25cf35c5573b509f831ad2abb70eeb42db07f9f112f7ac041c71"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/year-report.ts",
+      "sourceHash": "305481f234458431820a7a112cbd80c9eea2d4548efc1a49af942e49d5cc8a42",
+      "codeHash": "bc3ee93792a9c346e734401f9a990fafb3a5cf87797079c907869b080792961c"
+    },
+    {
+      "path": "src-ts/scripts/publish-check-rules.ts",
+      "sourceHash": "22122c39becc0ee5eba5b9e6309da485ea7b3728dc2d5427592083979e10a5f5",
+      "codeHash": "08d4bba6b8d9b90dcac65941e8048845e7a488ef0e1043716f8a55847afbc37a"
+    },
+    {
+      "path": "src-ts/scripts/ts-scaffold-rules.ts",
+      "sourceHash": "add5364708f7a0d43cdbaa9d1a82ff422782ad2e2df2a009ce0b3d052179f68a",
+      "codeHash": "ea6ebcd74a5f7364188db8b77a737e5b2ce3a42ffe0fe5798ef5af89b17ac54c"
+    },
+    {
+      "path": "src-ts/shared/index.ts",
+      "sourceHash": "55511ce34fa193fb0fcfda305a2ccdb88fbe87863babb983972ab4b3f14aea4e",
+      "codeHash": "5181039a69eae4da5f6bef72b67c412997511a8617149ab405d03a60dfac35cf"
+    },
+    {
+      "path": "src-ts/utils/clock.ts",
+      "sourceHash": "8e4c57624d53e0adf7baaeb03e4187b474e0ec849fcb5f5f121024350ffe6a1e",
+      "codeHash": "957d6cd65ff05687b09b9c145dab5ecf98442cdfabe51f20c4c00746e423b8c5"
+    },
+    {
+      "path": "src-ts/utils/energy-flow-resolver.ts",
+      "sourceHash": "4627bcf898c1211a9e3908cff780aed4fb6eb5917d9309028cbd7eacf9017cff",
+      "codeHash": "b2ff69281358609996cb4695250a569928b2a54d72ccf961e25901b71a6c6241"
+    },
+    {
+      "path": "src-ts/utils/energy-flow.ts",
+      "sourceHash": "3e902bb5b85997d89a413e95013ebe0d71e9eb666b801ca6d766e2caa74145be",
+      "codeHash": "80ae0640fb5c26a49798fc6c84147f3ee2a383ee6ef8c6518095de135d6e5de3"
+    },
+    {
+      "path": "src-ts/utils/index.ts",
+      "sourceHash": "340c4b09dd3cfdc9974ebc9c244c45a4777ea23edb1009f3276ceac42be370ba",
+      "codeHash": "047dccf9b00dcd481651ea828301e098c0d4b6e8673d382f0cfed9c9b12e3e57"
+    },
+    {
+      "path": "src-ts/utils/number.ts",
+      "sourceHash": "4d115e4860fc04bbce7585456e6848ac60667c63791816a3755b980de7bf3a90",
+      "codeHash": "6d26e1848f31a951c3e3547fbd95cd9fbeb3f12333f1e95826e61cdd524d5089"
+    }
+  ],
+  "documents": [
+    {
+      "path": "docs/quellcode/src-admin-tab/src/App.md",
+      "hash": "117a0f9a2daa0c4199720a4e0a7ecaf459798183ef82d381efc2737f593584c2"
+    },
+    {
+      "path": "docs/quellcode/src-admin-tab/src/components/DpField.md",
+      "hash": "e6aa3eacfcfaa7a9e4dfe18fb6aece67ce437ebe1f617a66b7ca813c17a441a6"
+    },
+    {
+      "path": "docs/quellcode/src-admin-tab/src/components/EmbeddedEmsFrame.md",
+      "hash": "3d83918ba470552b83741df5aafe0fd13407ee03ea7ad2ab4d5ab528cb16946e"
+    },
+    {
+      "path": "docs/quellcode/src-admin-tab/src/lib/adminConnection.md",
+      "hash": "d85564f0f4c453ce546656da65da7e25ba97343a6369f89ea18a24409fe9a5ab"
+    },
+    {
+      "path": "docs/quellcode/src-admin-tab/src/lib/adminContracts.md",
+      "hash": "23f3d9850b8f77ce72e04588848bf8ac27e4f540a4ca38906eae2c87fc28e729"
+    },
+    {
+      "path": "docs/quellcode/src-admin-tab/src/lib/dataPointPicker.md",
+      "hash": "faed817e88539e6458e2514b7d2226f834b47e70fa2200ae81ccf178ce3a53b2"
+    },
+    {
+      "path": "docs/quellcode/src-admin-tab/src/lib/mesh-types.md",
+      "hash": "3c5a285c4a4a2463f7dec931532b302f19ee245089cb19d88d9a6a2a45a03703"
+    },
+    {
+      "path": "docs/quellcode/src-admin-tab/src/lib/partnerContracts.md",
+      "hash": "e56b78af7a0bfaebf3740e8ccffa3f57d3f2dfce19985a1ecd3183b55940d3e2"
+    },
+    {
+      "path": "docs/quellcode/src-admin-tab/src/main.md",
+      "hash": "265ac7efce4c7f9794656ff73b8bbbc8886df7dfb87bb88dc3358487cf471191"
+    },
+    {
+      "path": "docs/quellcode/src-admin-tab/src/pages/ArbitragePage.md",
+      "hash": "af6862f0ff6f26b053b3a235c7985e4cdc81e64d94a54cf37bbe9c89c8aa8938"
+    },
+    {
+      "path": "docs/quellcode/src-admin-tab/src/pages/DynamicGridPage.md",
+      "hash": "dbc30d4471c74077cd1cf62996bb732a6fb6327070469682bc936be01667aa8f"
+    },
+    {
+      "path": "docs/quellcode/src-admin-tab/src/pages/InstallerPage.md",
+      "hash": "af99871a50a13dccd30468d8ab7bbea8ce4bfeccc7278b40878dee32cd14b4e9"
+    },
+    {
+      "path": "docs/quellcode/src-admin-tab/src/pages/LicensePage.md",
+      "hash": "d45ed1a5c4417a580e233213cdd30ebac5541dc38a2cc76cae8ca69b485172c2"
+    },
+    {
+      "path": "docs/quellcode/src-admin-tab/src/pages/MeshAccountingPanel.md",
+      "hash": "3bf64dd53a349b5f7af1745fb58b87a86949eba797f004e1b8e966747c079ab2"
+    },
+    {
+      "path": "docs/quellcode/src-admin-tab/src/pages/MeshCoordinatorPage.md",
+      "hash": "898a31f2a512eaec8bb78e22daca939c8c5959e3ab2769eebaa25caf22b0d5fb"
+    },
+    {
+      "path": "docs/quellcode/src-admin-tab/src/pages/NotificationMailPage.md",
+      "hash": "aff97d7f0423cfb04ddbd626dc02ebe6549f558f31de6a80a36b2e633b657429"
+    },
+    {
+      "path": "docs/quellcode/src-admin-tab/src/pages/PageShell.md",
+      "hash": "aa829b8ab12135936fc1538b7130735f64d26c7b3890f6840c4e4c7e9479b7e7"
+    },
+    {
+      "path": "docs/quellcode/src-admin-tab/src/pages/PartnerIntegrationsPage.md",
+      "hash": "f99d22b78f99571cb2f8c4f25617ec4790d031e080c49dfc9183f8c58e1bfae5"
+    },
+    {
+      "path": "docs/quellcode/src-admin-tab/src/pages/ProtectedRuntimeRoute.md",
+      "hash": "37a46440847a05a0b47b1a9060c43b1faf10b98290dfaf20a5d66f2387490436"
+    },
+    {
+      "path": "docs/quellcode/src-admin-tab/src/pages/RedirectPage.md",
+      "hash": "0440a2a6aa16758082728dc59d6f6a0780f5a981191ff7c0827296bc88bf0773"
+    },
+    {
+      "path": "docs/quellcode/src-ts/adapter/api-set.md",
+      "hash": "c76daf6d6686edf237eb0356957d8c4b02722203b66b9c34a71f4e5d5c93618e"
+    },
+    {
+      "path": "docs/quellcode/src-ts/adapter/api-state.md",
+      "hash": "3a2504b492d912a126a27cf5af9949aca557916009f1a182d8b5578d086a8e7b"
+    },
+    {
+      "path": "docs/quellcode/src-ts/adapter/connection-state.md",
+      "hash": "f3c2269d1a9c5172063003d35385552318d61afb69c688eb5fa76a811d7fca29"
+    },
+    {
+      "path": "docs/quellcode/src-ts/adapter/index.md",
+      "hash": "13c0ceca7c3e80b0269c5b297a816739571b4ea2b283883ba31e055f3dc3f116"
+    },
+    {
+      "path": "docs/quellcode/src-ts/adapter/settings-writes.md",
+      "hash": "97137a9df1e06450c548ed6a8b807af026a2ae6cf1229836fb2726a36d4b1193"
+    },
+    {
+      "path": "docs/quellcode/src-ts/adapter/state-cache.md",
+      "hash": "14e988b7278404ac0ea016d7d648023914336f787882cf001fa4eb0c08a2fc33"
+    },
+    {
+      "path": "docs/quellcode/src-ts/backend/api-state/api-set-helpers.md",
+      "hash": "88630ea9afde81d145f8604b5b24205afd31d18768f327f54503373564bae558"
+    },
+    {
+      "path": "docs/quellcode/src-ts/backend/api-state/api-state-envelope.md",
+      "hash": "327edf7a8fbb3a9e9605c64ec87362b04b3dd3f4de511f357087ff08e0c7bfac"
+    },
+    {
+      "path": "docs/quellcode/src-ts/backend/api-state/index.md",
+      "hash": "9816a0576f7807bf3c5afe2e823ade618e7648df485ea14700b8deefb8e880c2"
+    },
+    {
+      "path": "docs/quellcode/src-ts/backend/connection/connection-state.md",
+      "hash": "f56ca75bb06cf83ef9e5923000013936b82f7aaaab7368cc9a9286065c276361"
+    },
+    {
+      "path": "docs/quellcode/src-ts/backend/connection/index.md",
+      "hash": "601642469dfee508f163856e6da425c94fa95694bdf102764fbb29f1585539a3"
+    },
+    {
+      "path": "docs/quellcode/src-ts/backend/feature-visibility/feature-visibility.md",
+      "hash": "11e0fc3ae7c7f0b87ae5edc213f15a2bb5f063bbf2782b9f21947615bad4875a"
+    },
+    {
+      "path": "docs/quellcode/src-ts/backend/feature-visibility/index.md",
+      "hash": "553622a450621094975044f1bf7b68769e1b835e92f1222e60d31fd4ec372873"
+    },
+    {
+      "path": "docs/quellcode/src-ts/backend/index.md",
+      "hash": "fe8c46d6614c0a6b6230c1d5d53c2ab26ad3c01cb151b9bba9accf5e9c80c59e"
+    },
+    {
+      "path": "docs/quellcode/src-ts/backend/license/index.md",
+      "hash": "3082cb299d651498ba226c139cd32040051bbdaab96f86a711c4bee7f8ee6294"
+    },
+    {
+      "path": "docs/quellcode/src-ts/backend/license/license-key-safety.md",
+      "hash": "78d26d28a18f30f1621dd911a7f542b4a3b8b957a70a2c2f5f0aa4ddf70b2c7f"
+    },
+    {
+      "path": "docs/quellcode/src-ts/backend/main-helpers/api-state-main.md",
+      "hash": "e6b0f6f4c4ce6dae1b4620e5d93d098f89dac0b382e613c6d21eecda209f45db"
+    },
+    {
+      "path": "docs/quellcode/src-ts/backend/main-helpers/info-connection-main.md",
+      "hash": "23e8c5c9aba4815b3ff70d0f7ed315257b259b82f9ef96e3ac693d9ad4460795"
+    },
+    {
+      "path": "docs/quellcode/src-ts/backend/main-helpers/license-key-main.md",
+      "hash": "754cd9f4f58026c76d0da961d9eedfc7d5352a3a99924ed4b4cea262882960bb"
+    },
+    {
+      "path": "docs/quellcode/src-ts/backend/main-helpers/settings-write-main.md",
+      "hash": "39e4870385f9221a2daf031480647f7e409dba6c93c1a51384e249d328617964"
+    },
+    {
+      "path": "docs/quellcode/src-ts/backend/main-helpers/state-cache-main.md",
+      "hash": "206aa1b902648d1f40e0fce7a1a23f29e35e50bbb9e54d103769eaed1e3d9164"
+    },
+    {
+      "path": "docs/quellcode/src-ts/backend/main-runtime/main-runtime-helpers.md",
+      "hash": "e734893338a0b6600780b1e40f52025f031bb150146463e8514b427e26e6cd88"
+    },
+    {
+      "path": "docs/quellcode/src-ts/backend/state-cache/index.md",
+      "hash": "8ce012f66f29020c03d902deeeae326af945dea852776530cb6eb15903c59fa3"
+    },
+    {
+      "path": "docs/quellcode/src-ts/backend/state-cache/state-cache.md",
+      "hash": "c4b5036269f615a4060a08f497729f86356d8cb2e2f007865d2166ab64986e0f"
+    },
+    {
+      "path": "docs/quellcode/src-ts/backend/state/api-state-cache.md",
+      "hash": "9987ab54a41355a95c2b4cbf436276878c772d223432bfb3c2cb7bc31841c662"
+    },
+    {
+      "path": "docs/quellcode/src-ts/backend/state/index.md",
+      "hash": "3af7b74bd0b221b76bfc9ad6750f0de5f4d64cdf2eab2bf4ea70045f68c8e9b9"
+    },
+    {
+      "path": "docs/quellcode/src-ts/backend/visibility/feature-visibility.md",
+      "hash": "cb559446c16ab732643d5e9bcc90e1be5e9a3631b4093b2d4a690b04f27fb9b2"
+    },
+    {
+      "path": "docs/quellcode/src-ts/backend/visibility/index.md",
+      "hash": "80c87d0257e917b54effd0879e4ae3561823019555af9f356d7e1f6229b3cfee"
+    },
+    {
+      "path": "docs/quellcode/src-ts/bridges/feature-visibility-shadow.md",
+      "hash": "ad1b239ef15801a8389638bd9e9acb6dbd47e905142e8d3a4764a0721b43a407"
+    },
+    {
+      "path": "docs/quellcode/src-ts/contracts/adapter-api.md",
+      "hash": "ee4fb24b8253caf1fce5695667e138acdeb2566e885404b4db49c0b088b09fc7"
+    },
+    {
+      "path": "docs/quellcode/src-ts/contracts/ai-advisor.md",
+      "hash": "6ef9717f60f82b31071beb6927fe0826a9eae79be00e4295ed2ff110f33d3ed9"
+    },
+    {
+      "path": "docs/quellcode/src-ts/contracts/api-state.md",
+      "hash": "1310ea6ff2ad10b8fecd708e03469dddcc71857ee6dde75628d4d1f2ad5737dd"
+    },
+    {
+      "path": "docs/quellcode/src-ts/contracts/api.md",
+      "hash": "8f524f87e1664fa4014ba47a81619e6edb17cd61dc42ee05fedc6738be9819a1"
+    },
+    {
+      "path": "docs/quellcode/src-ts/contracts/datapoints.md",
+      "hash": "d61bd6b207b432263b443420d65d78f4e4560c37616bbdf7ca1216b10a93f99c"
+    },
+    {
+      "path": "docs/quellcode/src-ts/contracts/ems-budget.md",
+      "hash": "5b347e5c18737686515a30e39e2bfc3c7ea60a15ce83801533f817421506aefa"
+    },
+    {
+      "path": "docs/quellcode/src-ts/contracts/energy-flow.md",
+      "hash": "91e3351340f092b8a26a04f4f1e47c31770b9579c3db4838805deff23b8b8afa"
+    },
+    {
+      "path": "docs/quellcode/src-ts/contracts/features.md",
+      "hash": "8c0d127b857e299281e755949aa4838c98dd7cb2a66c9819a1564bbeebd6a71e"
+    },
+    {
+      "path": "docs/quellcode/src-ts/contracts/heating-rod.md",
+      "hash": "9093c05b5494fa3b45ee109c6d995ced5755f10428278ff30c5b2a1345ad5fc8"
+    },
+    {
+      "path": "docs/quellcode/src-ts/contracts/history.md",
+      "hash": "a451030fb4951ec301d36d88b27a18845a4c79c86411528697c688d3852faa29"
+    },
+    {
+      "path": "docs/quellcode/src-ts/contracts/index.md",
+      "hash": "de9605ea32f493177946ff0a396c1946c32aef11b6453e355ff7abae0a7b84df"
+    },
+    {
+      "path": "docs/quellcode/src-ts/contracts/iobroker-states.md",
+      "hash": "af5f49e707c1d4e35720d9c6659794e0ec6633a43945a3ae9748f60287ec8e2f"
+    },
+    {
+      "path": "docs/quellcode/src-ts/contracts/license.md",
+      "hash": "6ce4d0564b8f314a5f60e82a6b5a51bcc7e1452216978236031a6b6f0dccd719"
+    },
+    {
+      "path": "docs/quellcode/src-ts/contracts/testing.md",
+      "hash": "d2b70b936b743ef245a6167e94393b38f8634d2947d807c77e6776cc617a8710"
+    },
+    {
+      "path": "docs/quellcode/src-ts/contracts/units.md",
+      "hash": "516c4292217e1ccffc7a60f37aa8f0e5ad92e581801fa581e0c54ea205f12037"
+    },
+    {
+      "path": "docs/quellcode/src-ts/ems/ai-advisor/ai-advisor-payload.md",
+      "hash": "a9046c5c3f0dc9b39e1692970c215214d608c1d85afcb2c21fb8e158dcdd74f2"
+    },
+    {
+      "path": "docs/quellcode/src-ts/ems/charging-management/charging-allocation.md",
+      "hash": "d79d1badfb5fb3a6fbb46915c5afb724226d79dfaa28433b8f86f24bbc4b7e99"
+    },
+    {
+      "path": "docs/quellcode/src-ts/ems/charging-management/charging-budget.md",
+      "hash": "22ea0a7bc41ade251a77555f0d5d8e5ab02259027aafdba0fd4f5f06b7a5159f"
+    },
+    {
+      "path": "docs/quellcode/src-ts/ems/charging-management/charging-control.md",
+      "hash": "491066d86705634144ee12fefb32466eca60f2443e58ba65576b15a71e6edaa0"
+    },
+    {
+      "path": "docs/quellcode/src-ts/ems/charging-management/charging-management-runtime.md",
+      "hash": "36e050063373731e655bdf490e63950a07cf71e365c556caca565844dbcb3dca"
+    },
+    {
+      "path": "docs/quellcode/src-ts/ems/charging-management/charging-management.md",
+      "hash": "6713c741ced983bf3070dbcb9a89f0df9724141c987af2a7b07d3f3c40f83d9f"
+    },
+    {
+      "path": "docs/quellcode/src-ts/ems/charging-management/charging-normal-source.md",
+      "hash": "843951a80a9753a8a9ec2716e4fbeae0c9f6e132f61db4aed72899c374be0228"
+    },
+    {
+      "path": "docs/quellcode/src-ts/ems/charging-management/charging-phase-selection.md",
+      "hash": "e002e3e9fe52503522115bae26d6d3ad3d47bf5aa9fe13bf423519f6a6ae1501"
+    },
+    {
+      "path": "docs/quellcode/src-ts/ems/charging-management/charging-write-plan.md",
+      "hash": "a9a1725afa559a6b5f1da612de0993b15694e89c9bb2adbaa0b5e262e4fb59d5"
+    },
+    {
+      "path": "docs/quellcode/src-ts/ems/charging-management/index.md",
+      "hash": "09fcd8466a6864ef6ca4ae7237e110175234fd1ef8ae00a6765c2f943c3f32be"
+    },
+    {
+      "path": "docs/quellcode/src-ts/ems/core-limits/core-budget.md",
+      "hash": "becca27eed938761448009aee665bdf701dcdecb9aa7fa3f8d1d666cea76e810"
+    },
+    {
+      "path": "docs/quellcode/src-ts/ems/core-limits/core-runtime.md",
+      "hash": "55e6f8107d907b0464c72c08db268dc5cd60a51e3ae91e9b5e6987495a06d447"
+    },
+    {
+      "path": "docs/quellcode/src-ts/ems/core-limits/index.md",
+      "hash": "8285d61f4051651a0f5ca1fba52ddfd1c3bb171fe92eb53415ffe276ab065c2c"
+    },
+    {
+      "path": "docs/quellcode/src-ts/ems/heating-rod/heating-rod-decision.md",
+      "hash": "869f8032b409ab5e564b6db0bc9cc0ac8a60703cd584b42b611fb2b47a56a65b"
+    },
+    {
+      "path": "docs/quellcode/src-ts/ems/heating-rod/index.md",
+      "hash": "01878ca8ec9594502010b4e8eecd70db74ee2f8a9ab10c2652ddac543bdc9ac0"
+    },
+    {
+      "path": "docs/quellcode/src-ts/ems/index.md",
+      "hash": "8e6a08929df81551f1e6458e5fbd984a1f8da52e2142002862f10463791e9ded"
+    },
+    {
+      "path": "docs/quellcode/src-ts/ems/para14a/para14a-constraint.md",
+      "hash": "f871c24a5d02e84c2f35437caba6441c37a07941e8f48090799b43fd6558f186"
+    },
+    {
+      "path": "docs/quellcode/src-ts/frontend/customer-feature-visibility.md",
+      "hash": "51d4c654e4cc974079b0c7eee4c90054b55df3ef3f475b8e7cdd9b59da4b28aa"
+    },
+    {
+      "path": "docs/quellcode/src-ts/frontend/dashboard-display.md",
+      "hash": "af81554db22fbab36e6c7e9963148d813a97e08e0de6fc1a2fe31f5062754e05"
+    },
+    {
+      "path": "docs/quellcode/src-ts/frontend/display-format-canary.md",
+      "hash": "3e7839b4ae66bbd4a6519284dce76992509b27bcea77ae6b92a92a8a8b0fb286"
+    },
+    {
+      "path": "docs/quellcode/src-ts/frontend/display-format.md",
+      "hash": "7488079c2d21073034bfc868d17d756901ffcf35befec890d210bf144b4999cc"
+    },
+    {
+      "path": "docs/quellcode/src-ts/frontend/display.md",
+      "hash": "5744bd144eadfaf577d45c3ec952fe82b29624ea5fdd9e1a3ee1e694e9c5b09c"
+    },
+    {
+      "path": "docs/quellcode/src-ts/frontend/feature-visibility-diagnostics.md",
+      "hash": "093fadcf658a767a4de34f49eae05e9b28a9bd24dc6593bcbb6b48fc97566e82"
+    },
+    {
+      "path": "docs/quellcode/src-ts/frontend/feature-visibility-shadow-compare.md",
+      "hash": "b3dcd5a798f5a1f6f65329d6d7690472de2fd1f2388b1ebb0495265302c608a8"
+    },
+    {
+      "path": "docs/quellcode/src-ts/frontend/history-controls.md",
+      "hash": "f262d992acfc8e8f0d867af8c14cb75e9102944d5d4c2789c1830ad4b6f947a4"
+    },
+    {
+      "path": "docs/quellcode/src-ts/frontend/index.md",
+      "hash": "21f4c6e5bc2b803f7a2764f15a27a8e149e163a0a0fd03dd6a6baa5b2a1fdf40"
+    },
+    {
+      "path": "docs/quellcode/src-ts/frontend/live-dashboard-format.md",
+      "hash": "ef7d749b29e40c0e527791f5ce17b12c34e4a1daa7c0101c0c99096f9f0ad57a"
+    },
+    {
+      "path": "docs/quellcode/src-ts/frontend/runtime-shadow.md",
+      "hash": "bfaa546d31f2c4ea0b321f741017b6378ba024ac023f198bb7e26469927b8899"
+    },
+    {
+      "path": "docs/quellcode/src-ts/index.md",
+      "hash": "dd19434171f54e0774f88c4ad8cd94c6ab5c3c2355208289e7a3b2e1c05a16e6"
+    },
+    {
+      "path": "docs/quellcode/src-ts/main/api-set.md",
+      "hash": "d74521b6f51c9df97c5d5c8e28c8afbcc4b9ea6091803ddb31b0be33746cdf81"
+    },
+    {
+      "path": "docs/quellcode/src-ts/main/api-shadow.md",
+      "hash": "4b001781462ecb9f95fcb5b678a63ea70952c1c786046674cb4bbfa180fd5205"
+    },
+    {
+      "path": "docs/quellcode/src-ts/main/api-state.md",
+      "hash": "e86ccd0ed3e680164018f9914295863f0a61c98b1464a6219d05009ea0c89080"
+    },
+    {
+      "path": "docs/quellcode/src-ts/main/index.md",
+      "hash": "1c2ebf3d1936613d6fdb043f234421816b7c5597d7bde21eab89967a41fc6d1c"
+    },
+    {
+      "path": "docs/quellcode/src-ts/main/info-connection.md",
+      "hash": "0ba13defe74734746a524a9b2166b1a29498eb73439068d09e36acdef43f362a"
+    },
+    {
+      "path": "docs/quellcode/src-ts/main/license-key.md",
+      "hash": "d0d9f381c6a653f620ce222d90edc2c10c7785b152943b8e3cddf3a3144285c5"
+    },
+    {
+      "path": "docs/quellcode/src-ts/main/state-cache.md",
+      "hash": "1dc5905dfb7c2143ed71f9ed3f87cd0acc42739d344f8b6b84980a10ba948966"
+    },
+    {
+      "path": "docs/quellcode/src-ts/resolvers/energy-flow-resolver.md",
+      "hash": "076a2167c593556155ba4cc768fd789a341760e56eee29017a8ca6d0218cd3c3"
+    },
+    {
+      "path": "docs/quellcode/src-ts/resolvers/feature-visibility-resolver.md",
+      "hash": "f14408ddee993e019c98808c50ffbc708cd1e0222459b879f7249ef6ce5f6973"
+    },
+    {
+      "path": "docs/quellcode/src-ts/resolvers/index.md",
+      "hash": "08de795fc2e2315a39f623736e8fc6aae9d5e9793608cb4a40d53177771f1ac3"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/charging-budget-helpers.md",
+      "hash": "d598847d248ba68442f9638b70803f6b3cdf14b58a489b4cc4584fc97fa46493"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/consumers/evcs.md",
+      "hash": "8162e3bb32d0284ef70356fabf09660a2f577cebea5a7fbb5b556734b5893f59"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/consumers/generic-load.md",
+      "hash": "9396b4dae783cf641dd757aef26fab4eec864d7bb8d92db3b6d1b4365edf5906"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/consumers/generic-setpoint.md",
+      "hash": "bc08646242805966f76fbbfb51294d9574d53979785b11be54c9ed1a66e340ef"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/consumers/index.md",
+      "hash": "e89902fec7b541c218d8d2d53720fedd8b25a0dfdd3667e36d39da34b8108f0d"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/consumers/sg-ready.md",
+      "hash": "47634bb8858be1ae4fdfe4961b28e69b047534c3500d300d3189ca42252b0fc4"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/datapoints.md",
+      "hash": "951ac2477b9369aa1faa56958a25fc8c35cc4414c9ad93711d29ab08b27a7c7f"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/engine.md",
+      "hash": "c52318dcd79c3f6582a9fbe4815855c14e5b58214d741b7f4a6afcffd6e90b58"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/evcs-control-mapping.md",
+      "hash": "45fde2665d7302f51124f0870ced1e99ed16839fffc1997cc241a64dfa83f709"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/module-manager.md",
+      "hash": "9292a77f29711b22892b6edcc61213e15f3d1823990128d154ab265220cae603"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/ai-advisor.md",
+      "hash": "32177b7c7ad396c09141fbec5c975763824c96c2d5c23223bbb156bc5884fac0"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/base.md",
+      "hash": "8ec5a7bdadc0bd5f22d67ddfc377acb584df0c0b165dea4bd9403464b5a1e9e1"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/bhkw-control.md",
+      "hash": "52127f1cbde986ba27b605c5894d5480da5071520e4a473ae8e18eacf0f74d5b"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/charge-kiosk.md",
+      "hash": "c73f4be347722b02d8221e9b08edc2b1b5d391876a49c1923254735f6bbb6436"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/charging-management.md",
+      "hash": "a705cbc20e701c4a802616c79876c00aea5a9a87ba6d6138eafcff8bb895f9fc"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/core-limits.md",
+      "hash": "20c18c429148be2f88f76ddf391e437bb988f49df630f2df5e0539d5559bc076"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/country-profile.md",
+      "hash": "792e076df674ea0ac48143296df55508d54a37ce1832db89149ada78766d62ad"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/dynamic-grid-connection.md",
+      "hash": "744e3a3a33472702734cdaa3c1e339a09031476f7bb98cd3d37df39853d824d3"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/energy-ledger.md",
+      "hash": "8cc1cb11ba1f5460c15d11d6613ed6c76cf7ac772f6b83a18a1d469c39bed783"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/energy-wallet.md",
+      "hash": "483a289d0f062e0ec0f44d6e0d75ef59acd84b2fb0888d70a9b4f150a49ad8ce"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/generator-control.md",
+      "hash": "464b4d3405a88882160cf51f04e332b6ef637555108a45e6e4e3827c876fa7c9"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/grid-constraints.md",
+      "hash": "fb754429efba2b71c83b44d6b2b46c8879f1259a0d0e03bab11c5d5d056c7aeb"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/heating-rod-control.md",
+      "hash": "a954381f8d18f38fc46563c6cbc7c953c67e5598cf4846950b8cb0f047cd40e0"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/mesh-microgrid.md",
+      "hash": "8b9346a2ea8bfe805426e5dc76671945df94db0956ce0deb3669c760ecfd37b5"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/multi-use.md",
+      "hash": "5e2c902bd69f0dbf3ea96045643fb9fd177c479cf2f888371c978e2d71abb3f9"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/netoperator-interface.md",
+      "hash": "36957cede5baaf148207d78abf5984e125faa96bc87990238a84bb807d6afae5"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/nexologic-budget.md",
+      "hash": "42d964694bf54ef25a2273f03e74676d56cd7b1c163b66c35528836b23d3632f"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/nl-p1-dsmr.md",
+      "hash": "0ea302b28e90f5cb5e1b46e9f2bbe241a8e470647c678cea3236893616ec8af2"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/nvp-coordinator.md",
+      "hash": "4b1cb7c075265a6285a3035ae4f99f280b41eaa777540816c6a03315338aaa2c"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/nvp-topology.md",
+      "hash": "8487bbd48839e6e632d0424604996f6aacd3abdc7ccff583355f927d95e5967d"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/operating-strategies.md",
+      "hash": "37a3a546420008d102a7f7996c03249a57d9f94f51755b41048f6f76c8d415cc"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/para14a.md",
+      "hash": "7d831f874d3d645ddca1e19cd0eca7a06d9e178b367a4373a3dee6b58d6e76d9"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/peak-shaving.md",
+      "hash": "eda63baf428deb0430cde15816ee65ce117be68ac761ab3f0fec8606d9f4aa96"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/prime-mover-control.md",
+      "hash": "7913210dcd255d9025cc78222ffe00d93fe36530df4accce4f51db9d5a356b71"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/pv-forecast.md",
+      "hash": "9afb62f5b6a55e55030860303bf62adf57e43fcf641595fd76bcc1950545d528"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/stage-a-diagnostics.md",
+      "hash": "45156177c3c88ff66697da1fa7babcb494e0b3d79eeff8c292fd69fe3e6819ee"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/storage-control.md",
+      "hash": "5853cc5f25a14d969fdc8d2d278c2a147e56f76513cb4e584d19d9d5a082c17c"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/storage-mapping.md",
+      "hash": "97010918bbccd0ad5f3e77cb2c70db579303f377b8ea1a6146e1af662baefe29"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/tarif-vis.md",
+      "hash": "0fbf4dd3d9ba19f1c8fbdfe5717db5d603d9dd9663bf7bee21b160d81934d940"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/tariff-provider.md",
+      "hash": "ad175ef43cb4682e33725e118b9b87b7c5ddf06803f287ecf2d657f0818e9eb0"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/tariff-status.md",
+      "hash": "59a75258555a801f443c9c84da3c67e8404cfeb1bf3712b59d3362b40035b479"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/thermal-control.md",
+      "hash": "957abd9845c6722b97026f8f1316ca069018d6885f00cddfee09a1bc9ebfc8be"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/threshold-control.md",
+      "hash": "09cc59fb48cad91774c35645e36b68725a16e0982d1a68bbc8d93be73fed7e13"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/nexologic-engine.md",
+      "hash": "c5f2bf76aa2bb2ddf9788cc510b0df29b2f40ee63d90104e68df39e1c9c658f9"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/rc85-runtime-hardening.md",
+      "hash": "721a870e9c0b6311ca01bddaa133710c4dd08d76f5010012fcbe004e6ffab27a"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/reasons.md",
+      "hash": "ea9e92ac1debd8d92a0e6da59da6f58a43fc0c62f9c96f2036c96c14b5ab568b"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/accepted-power-effects.md",
+      "hash": "216ca49ab22d4b56a812a6f74048e085328c317ee567f387f07cccf980a2e321"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/actuator-command-contract.md",
+      "hash": "522a3fd19c883c49b3dd5fc09ea3470d95dff4e20b17fc0f5b4326143db4d1d2"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/actuator-shadow-arbiter.md",
+      "hash": "cc394ac5c61cd167993a3d9a174200317b9474cead0447acfc8dc6fcde5f34e8"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/admin-overview-publisher.md",
+      "hash": "43c35638fa2bd971f8184be5c5d2e786995f8d87debac6cd73e6157e5656b4d7"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/arbitrage-control.md",
+      "hash": "1b40e4dce3bcf8f0f2453adca3408be40e74d177eed9d6aafe51468e76afb67e"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/charging-management-audit.md",
+      "hash": "745e055176989f43e0868ef37fb391af2207f6bbf04c50d4b86c343ebfc7b032"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/country-profile-service.md",
+      "hash": "6a274a2c1d0505b4be16ef1a403f3d86b0791c4f21c79383fc9ea3d7355f4f31"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/dynamic-grid-config.md",
+      "hash": "5da2eab68ad43a2c19bc06d414d44469b8d6ad5f26c1ca5ca046c23567333c7e"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/dynamic-grid-ownership.md",
+      "hash": "46e5f8fcfbf5221fe5e8859e3d60b322f163ed008f260ff592b318b78362e2a4"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/dynamic-grid-pv.md",
+      "hash": "85a12c34927ee3d804057605ca44db2d024f4150b472631e6412701ce685f1db"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/dynamic-grid-writer.md",
+      "hash": "cc4502cbbf8df3c381052712419e43ee4885726efd30baa42770b8ff66eef10b"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/energy-origin-accounting.md",
+      "hash": "d1861bb033147d34cf722349bbcfe9abacce9363b481ecec4b9d6e3e26165e51"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/energy-origin-ledger-runtime.md",
+      "hash": "d4feaa9053a31fcd2d69eb1e7c672ec94c1c428107e3312ce1df84c4bcb0697c"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/evcs-unit-conversion.md",
+      "hash": "e4eb23890e0d20f463cda00660edcfb109d03c13043321349b356d942857158f"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/feature-flags.md",
+      "hash": "15ff7a652469dbe3accf117e3dc6118c96725f2f096768643205997177107f13"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/fenecon-hybrid-control.md",
+      "hash": "5a2c512e1b36bdf8500c1406456b57a01acaaa158a35ea88bb2f25de811ab909"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/fenecon-nvp-shadow-runtime.md",
+      "hash": "cb6cc7a08044ca35bcbdcc999cf0093bdd6e3ca1cd85f2a06bc2e430164d452c"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/forecast-aware-target-planner.md",
+      "hash": "bfff489d508ef8542de93331832f89a2c5f6bd55528b331d4f49b6adf1464496"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/forecast-target-runtime-bridge.md",
+      "hash": "8760ac9156ddc49e726ecdd875a7d1e026603d1954f4fc473c1f74b1ed4f7223"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/grid-import-limit-policy.md",
+      "hash": "7c3863101d859b3f23748d65b0971ab347030c2ea24d9e029c55356788c8dd14"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/locale-api-service.md",
+      "hash": "234f47a189055a0de8f83552f239c0a06394bb8bf0e39282949bf8297ed97331"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/measurement-freshness.md",
+      "hash": "9972a28743cf22bb3e4dde74f27a9d3e650434797ae206c21af50d5926dcb8ac"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/netoperator-canonical-model.md",
+      "hash": "fc0a270884fb74ff7d8427aa2a4cfdfc07010ad3a8ed6b65d2e1f3a6c9ba5c69"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/netoperator-driver-registry.md",
+      "hash": "94cef1991ee22dc2daf0dead40c2a6f03f7358d352d61b928ad7ba241f77b28b"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/netoperator-modbus-tcp.md",
+      "hash": "2a808cdf8bcca6a8ea68402f96b95c179d49424dfd60c8c8529ab90b4337dca9"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/nexologic-output-controller.md",
+      "hash": "e7be17455d524772b88aa11d8fdbcbfec99995ace082bf375092d7f0f5d8d823"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/nvp-budget.md",
+      "hash": "5c7906da88fd9306d47f3aa68288d68c147ef0271c04bff25d8cf33ffc6bbdc1"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/nvp-grants.md",
+      "hash": "3b5fb721933a310458164bb4671073dadd0b0b91098ded004059776189c9f3cc"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/nvp-group-planner.md",
+      "hash": "6ca24dba281a3a29846d6b255e08fca69cd28e2e9105676ec87f8ef0f28681dd"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/nvp-topology.md",
+      "hash": "5e8157023e25a38f1dbc36131793ffb89ca28ef2b341e997ef33159906d42167"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/open-meteo-pv-forecast.md",
+      "hash": "a99c58ea9715135b46d852cdcd3e3b6f630f1f7136d2629de750d843f509bbd4"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/operating-strategy-runtime.md",
+      "hash": "e738069e5dc863ceedad2c853ec9ed26f88df36ff3039a150ffecf2322715d50"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/para14a-eebus-api.md",
+      "hash": "54539244b7e7212e6b6dde8a1b6cb9dd81fc55a2acc741c6adb65a62c80edcd0"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/pv-source-identity.md",
+      "hash": "109949c7dbf728e4e788cce818804dd50e4cd7a5451800549c773e8876591f25"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/pv-surplus-allocation.md",
+      "hash": "bf4c3b2a32289210b00ba985d47d85ac7b365dc18563f1aaf885cd5669e8b7ac"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/safety-envelope.md",
+      "hash": "d4df21035e457ed48f51783b768acfb858e5dc58f2465dc2a1908c2bdfaa716c"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/storage-async-feedback-anchor.md",
+      "hash": "981833b8fdf62e7f25480774896001fd13c7bfe89f9ec6c5696712750a7fee79"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/storage-datapoint-config.md",
+      "hash": "61f428f7c3fa44041b45eba407716c7afcd0a11670869b6617dc720da6079675"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/storage-farm-aggregation.md",
+      "hash": "402ef7051eedc626f5d23090d58ef364edd4aff0c9cab00ce81379a37d5f6fb9"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/storage-override-bridge.md",
+      "hash": "895b2d3e0b3662d0dde6e9cceaa0afb5ec2b2528c42c4cfebdb1d7a089c6f5ea"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/storage-self-consumption-policy.md",
+      "hash": "16cdd9e78b5979b92ab61faf119b10cdd68100bfd03b96f5e8998fdfd49e0556"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/storage-zero-write-policy.md",
+      "hash": "f23b3701e284318f518a5b1de7230ecd297897f25d6a3c2d3e6c6787b5a9e00e"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/tariff-provider-registry.md",
+      "hash": "d919caceba5511514b1d4eb210daada6cca34c576b2bcba8d9cc2dbf93f38e95"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/zero-export-pv-coordinator.md",
+      "hash": "de89006c75ddfff9646602c21d2dff2811a5ca154b3e53c497acf3efa0b0808f"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/zero-export-storage-credit.md",
+      "hash": "66e971d54f61225e57b5ec0bb423a334df298390c7dc0ed48f2edb8145a5eb5a"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/charging-diagnostics-api.md",
+      "hash": "f23d8d3d45fc9188dddb3c33f7c29e48e0662068abd136e51ca9776178ef0c62"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/config-boundary-contracts.md",
+      "hash": "098ad9856e0bdc48d46601769713d8f88b4b5e7f75814e7e2e2bee1185be6787"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/dynamic-grid-config-api.md",
+      "hash": "abb2aea13388c30ec9afde0bbf5bf9b826bc69f238a47e0104a73956d441d470"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/energy-origin-api.md",
+      "hash": "f1d49d15b0d774c27b45b56a69082c7145aa56b4713838451835cd28a9011cc9"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/evcs-electrical-limits.md",
+      "hash": "7982f30ab8e2501e72ae0cd7337f7764369df48f289cc483181c59b284aa54eb"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/http-error-boundary.md",
+      "hash": "7136f95d1ca50d6fd34889faa7a5091edd2cb34ccd978b5be3ba26a264dbc579"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/iobroker-user-auth.md",
+      "hash": "0eb37d76f0382067ba78428d969501ee17905d557b69396f70dfe85842f6c8d6"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/iobroker-user-roles.md",
+      "hash": "944e1f0f6983e01627d2da0ffb092199d202189a60e3f776f8572ae58cce5925"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/license-bootstrap-access.md",
+      "hash": "20530d7c5164cc828baac136904409c7ba9af89b35ff6be710139d3983aa1116"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/mesh-coordinator-contract.md",
+      "hash": "654e99558a9eaba1eb913acbb3fa5a258e7b2650db8156756ff0b4382382491b"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/mesh-coordinator-protocol.md",
+      "hash": "333db7aba92f3be3a434a4bc033c034a4b128590ac5b1ba8556c83ff016a4a4a"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/mesh-coordinator-writer.md",
+      "hash": "7952eb1b0d0b65c8c8e6a7cd9152b55411e3fc446ad7465e8400832ad9201b52"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/mesh-coordinator.md",
+      "hash": "442d4e1760b1d74d14f8779d0200079910d9b6400aea460705888b47968c1698"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/mesh-energy-journal.md",
+      "hash": "966a6fba78ee524eb6ada2a2cc6fad73b5a4ec26f45a7e26bd8b69aeba832c17"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/mesh-energy-service.md",
+      "hash": "7ad52a82ba1f167b56ab52f51a1f19a2ca44ce10a72cda862a51de0cef3daf5f"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/mesh-peer-http.md",
+      "hash": "257634d958c517b4b629765e28175bea6829b7c6d617aac56980aabbf7c3ed60"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/mesh-transformer-allocation.md",
+      "hash": "20928d957dcb72d0fbbe1c5dca8b006f804c5419286b529f3e530686556cd236"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/notification-mail.md",
+      "hash": "acaf83877c3afaf16509ed6a0427efc5841c84bc809fd6b3eb472eb399523c0d"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/notification-policy.md",
+      "hash": "99ff3e18cbdcd6867533d7c94a4a33e10b5a886ff7663ecda0b8df0b4634d4de"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/nvp-config-api.md",
+      "hash": "ad72678b8375afeaee04a26011537e74b328c7ee88b7751e9c6c414b39d3ff83"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/partner-config-api.md",
+      "hash": "6aed3d7f152236b59fa619393240d78524eb4a26ba95f49d32bafb34e581e330"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/partner-contracts.md",
+      "hash": "c4d6a6a75bcdbd144da49e281b9fc2830022efb572498900e8b2ae4cbf512131"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/partner-runtime.md",
+      "hash": "bf189b808663917d95918c898856a4e066caa430e5807281e4e52dca333e1a1a"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/partner-service.md",
+      "hash": "a54a18851eccc3039817e593da5188b0099b0c91eb01e94f71369b6e5b41a4c0"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/partner-websocket.md",
+      "hash": "a00b2bd29454816b588efe5123842930c4a26d9912c404cbb9fd3505fcdd3e52"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/runtime-proxy-html.md",
+      "hash": "149a53c477acc689eb07660935ad35dc83d2c0d3a0df4a1dd959faa503529e6a"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/smarthome-contract.md",
+      "hash": "11e29c71563cb80f3c353b727c20c71f1f0610f52f9c6720a97e7d765e15131f"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/smarthome-import.md",
+      "hash": "7c138dfc783ea59e5caa61a13c728b27961f794a3b370642a587ae51288b9f7e"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/sse-runtime-guard.md",
+      "hash": "8cbc5f5fb57bc57cb9be8a23f229f6e66e0d98421445ec74d7124ed178d55102"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/station-display-presentation.md",
+      "hash": "60ae13a511862291a44dc17cc1b32052272c4be9a06f5014359886bd9ac7d148"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/ui-access-policy.md",
+      "hash": "7878a022c87ce7358a16c6738ff39241eaefd9147fb4aef09061d3ccdef445fb"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/ui-server-transport.md",
+      "hash": "e7dd97d1a3a543d6caeee14ba26c45976a80e3cebad1d6356e4c7fb51be4c21b"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/main.md",
+      "hash": "fe3000789b8ab85ae4b7371839a1ae414791a57a8ddb6daf29cc2490b084c64e"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/admin-guard.md",
+      "hash": "98f7b8ec24931a33e21a171210eadcd1a5246fec855e93e61b0c9231c3a6420f"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/app.md",
+      "hash": "6a481f6d92710d426d0c996c7ee488817a3d66080d87b213ffe6f832b94e50e2"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/auth.md",
+      "hash": "6cf4e11137d4388e6023785efa2f36cafeee155e7d0ebc4ab2e92ddd443cbdcc"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/charging-diagnostics-appcenter.md",
+      "hash": "e6e8df24a7e7e337f80cbd5e07edfe57d6a3c6510dd17b00c8acd5dc0c5bf302"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/cockpit-shell.md",
+      "hash": "3e1092743c8fac19d74b3f5e07032b6e56e58457a991bd6756897c9ac9492363"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/dashboard-lp-status.md",
+      "hash": "0da9e78e326c6f5765b2f01e63c88bd2690cef13825da891aef9d6ff70e12f5d"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/dc-station-display.md",
+      "hash": "100d24ebcef71a02c242c771093ddddd3479beaedf6c9c37b4547f405dc3afa8"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/ems-apps-nvp-diagnostics.md",
+      "hash": "cd9bf569f7d706e2181367225625f3326923256e60a859f1c535d901c5da07b3"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/ems-apps.md",
+      "hash": "7f75180f0c4a576921fdffb656dfeda1aad8503dc163a96872d917a432753914"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/energy-ledger.md",
+      "hash": "718e3a053c99419c2b76a8c1723490bd34b5318fc6b12ad3204e3636b1fdab23"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/energy-origin-appcenter.md",
+      "hash": "7d633c30c2bb43814f7371fc5a5efea39365d4c2b105ce10d637d38a246f1164"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/energy-origin-ledger-view.md",
+      "hash": "2f994f718fc29f1cc955e06e39bf0dcc658a5f715e4efc3a337f59b5befd9ca4"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/evcs-report.md",
+      "hash": "38f3a8ba16d4e08bd033688a1bbc2e70e2ec8834df63c17effcde29a58d4b7a7"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/evcs.md",
+      "hash": "7b8213fd75154ca3ad45e8513045efa8c55f5cb3eafb59fe6b696b4d47a1fd68"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/forecast-settings.md",
+      "hash": "5ac0025ff1858e48dbb4d2d0b58304310b8ee3a97330c3e865de84aba737a554"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/history.md",
+      "hash": "18e1fa0fb076cf9b380b4e287f9e1b83133846312bddccdefe18b244d012dd65"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/license.md",
+      "hash": "d017b37739632c26ea194e19b512aa056021819497cf2df5d5f12d1a3172a227"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/logic.md",
+      "hash": "b331863891ef97a62d0f8a94af08b2814cc655cd93ed4c5672bae1af84266d51"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/login.md",
+      "hash": "46433ed7e612d27c6b0d52477866ea6ab1900dd68c806fa5cdc3c5c4d90f866f"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/mesh-microgrid.md",
+      "hash": "3b865328755d458b73ae8883af21b91293ffafcc0ae6ee9db9116a81257462ca"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/netoperator-appcenter.md",
+      "hash": "ccfb85327328aa06423769fdd0bbaa03b0ed7cc52e8bca74945bbf2203b6cdf8"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/netoperator.md",
+      "hash": "cdbe88fd13e27d4d466c9f8afc9560c024e13888566af9f0b138d359bec8b562"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/nw-i18n.md",
+      "hash": "d3c77fd9fe00cebbb8f7124692b030b6f7bd60948b50326babeda7abc475cd63"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/nw-shell.md",
+      "hash": "cbd2a3106deb106f1244a21a299f68e20dfc400d8e1e1e6f7026fc37228d7650"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/operating-strategies-appcenter.md",
+      "hash": "f742da5e7d7802d0248af5584412d84ec02855796153fff5eae30890cfc10226"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/operating-strategies-rule-builder.md",
+      "hash": "e4be95aa2c98e02ded4d1d787c89d99c31cef8acf537bda7fa0c085dd299edb9"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/para14a-report.md",
+      "hash": "f99ba1e753ca06801dca5d69a0083d8acbdec17ae3bb9eef1dfa08bc70f713d8"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/pwa.md",
+      "hash": "7742cae38eed6d0fd3bcc18cbf5f1da6d1415f6846474c4192430f34ac47f36d"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/report-common.md",
+      "hash": "c6daf84590797a9c8a7c3b8964e7138fa6c5927e66fbdecfa1429d65cddbad0a"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/rfid-report.md",
+      "hash": "0562512edf95ea9c6761ad2ac6b5e5fde89a0d074e51e0f8c583160aae55deff"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/runtime-base.md",
+      "hash": "8813c4b48b31dab658bb8225060ad05ce06fbd40c44949d97a5cbb6b85efb62b"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/simulation.md",
+      "hash": "05049f8e82a47b70a247d618f7f2b4842e961eb0c959b302a5fd172c620051ec"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/smarthome-config.md",
+      "hash": "867c9c65a18a1baa520abd478d17b89252d2fe135b0ed74e1356dd9669994265"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/smarthome.md",
+      "hash": "98b2e54323fcd87a097328ae2f911d526118964e139ba3762ef83f3ba72d65b1"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/storagefarm.md",
+      "hash": "e8d937b17d2f362c4ce420c125f61c8964c19a26710d27c4fe880da3da913263"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/sw.md",
+      "hash": "dc9850f0c6395ed853c5619c8e6b707b3fed15163d686e9dcd11be1c0099cdfb"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/tariff-report.md",
+      "hash": "d96226a8b4b6eb3bcac82f7441e62f1e527e18944cb66ac85a41b52547ed5987"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/year-report.md",
+      "hash": "5f224931bce45bb5218a32bf0bb0747c427babacff58048b374e7f3356175c5b"
+    },
+    {
+      "path": "docs/quellcode/src-ts/scripts/publish-check-rules.md",
+      "hash": "e02207c5a8b65e1397aca125b701fde045c2464741630003f09e4f8a977ebae8"
+    },
+    {
+      "path": "docs/quellcode/src-ts/scripts/ts-scaffold-rules.md",
+      "hash": "33f63990c117bf6472209fb16c9269c1d64c2669b58a47a40144bfc5f3077d5a"
+    },
+    {
+      "path": "docs/quellcode/src-ts/shared/index.md",
+      "hash": "06ec400ce417fd3a48d577062768ab9a3c8405c34194ca2b7033d8f13a1eac67"
+    },
+    {
+      "path": "docs/quellcode/src-ts/utils/clock.md",
+      "hash": "1848da101b01e4a1d5230d4bcd8cdbc4279876a250b2d35b69aa9be2e3987738"
+    },
+    {
+      "path": "docs/quellcode/src-ts/utils/energy-flow-resolver.md",
+      "hash": "d936380b3968bfd3416c63e5a7748a10b886bb4483a7039f3841b19334a8035a"
+    },
+    {
+      "path": "docs/quellcode/src-ts/utils/energy-flow.md",
+      "hash": "f59440ce02431a15656607e712deb679b63780518e01c6779bade18fa75b2054"
+    },
+    {
+      "path": "docs/quellcode/src-ts/utils/index.md",
+      "hash": "2ff9f11c30b986a4c5dd1dab274e1876a7fc26ced193f246824940e834f8c151"
+    },
+    {
+      "path": "docs/quellcode/src-ts/utils/number.md",
+      "hash": "3d46c47bd63d91dc47c765e5abc5855457ca4c18045553bfac0d5a29090e6da3"
+    },
+    {
+      "path": "docs/QUELLCODE_VERKNUEPFUNGEN_DE.md",
+      "hash": "e993de74592f6a78b439ebe2bb31117f8f8d24de4a8e6f431f65446c550a18bc"
+    }
+  ]
+}

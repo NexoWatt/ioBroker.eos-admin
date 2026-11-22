@@ -1,0 +1,29 @@
+exit_code=0
+✔ strict TS und verbotene Typausnahmen im gesamten neuen Steuermodul (3474.676342ms)
+✔ Standalone Haushalt ohne PV, Bilanz oder dynamische App lädt und entlädt (1.227231ms)
+✔ reiner Speicherhandel ohne Hauslast funktioniert mit eigenen statischen Grenzen (0.264827ms)
+✔ Partnerdienstvertrag wird ohne freie Datenpunkte auf denselben Intent abgebildet (1.229425ms)
+✔ Freigabe, Geräteabnahme und alleiniger Writer sind zwingend (3.309013ms)
+✔ physische Werte sind echte endliche Zahlen, kein null/Boolean/String-Ersatz (1.825692ms)
+✔ SoC-Grenzen und gültige Nullleistungsgrenzen sperren jeweilige Richtung (0.480623ms)
+✔ veraltete, zukünftig datierte oder ungültige Messungen ergeben keinen Sollwert (0.586483ms)
+✔ zeitlich inkohärente, für sich frische Messungen bleiben gesperrt (0.311964ms)
+✔ abgelaufene, zukünftige und zu lange Befehle werden abgewiesen (0.807447ms)
+✔ zentraler Grant begrenzt Leistung und Lebensdauer und fehlt niemals still (0.308063ms)
+✔ abgelaufene oder ungültige Grants können keine alte Freigabe fortsetzen (1.526893ms)
+✔ dynamische Zusatzlimits können nur enger werden und niemals Grundlimits ersetzen (0.32879ms)
+✔ Anschlussberechnung entfernt laufenden Speicher-Istwert genau einmal (0.386553ms)
+✔ Netzladen und Netzeinspeisung benötigen ihre jeweiligen lokalen Freigaben (0.456275ms)
+✔ Grenzen bleiben bei überlastetem Anschluss und strikten Nullwerten wirksam (0.57766ms)
+✔ Messwertablauf begrenzt Entscheidung, Bruchteile werden sicher abgerundet (0.139028ms)
+✔ Nullwunsch ist ein begrenzter Intent und keine Bestätigung einer Gerätewirkung (0.147572ms)
+✔ Getter, Prototypschlüssel und Proxyfehler werden ohne fremde Fehlerdetails isoliert (0.872612ms)
+✔ Eingaben werden nicht mutiert und beliebige Datenpunkt-/Codefelder sind abgewiesen (0.370079ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4129.030669

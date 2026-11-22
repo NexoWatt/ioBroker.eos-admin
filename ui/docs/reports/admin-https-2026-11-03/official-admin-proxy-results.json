@@ -1,0 +1,20 @@
+{
+  "result": "PASS",
+  "checks": 9,
+  "cases": [
+    "HTTPS Admin proxy reaches HTTP EOS status on configured backend port and public subpath",
+    "Own-account password produces canonical EOS admin session and path-isolated HttpOnly cookies",
+    "Same proxy cookie remains valid for status and protected license API",
+    "Wrong EOS password remains JSON 401 and creates no session",
+    "Missing Admin session is separate proxy text 401",
+    "Admin proxy denies non-Administrator independently of EOS login",
+    "Instance without explicit adminTab.proxy opt-in remains inaccessible",
+    "EOS rejects foreign Origin even when request passes authenticated Admin proxy",
+    "EOS role removal revokes session while separate Admin proxy session remains valid"
+  ],
+  "node": "v24.22.1",
+  "officialProxyVersion": "8.3.5",
+  "officialProxySha256": "ccfd3fcab5466e24166e938dca305a67d8741a0bb85eea027a4b328b9f9b35d2",
+  "tls": "TLS certificate verified against explicit ephemeral test CA; no rejectUnauthorized bypass",
+  "scope": "Official InstanceProxy source with synthetic Admin DB/session, actual EOS runtime HTTP routes; no complete Admin installation or customer hardware"
+}

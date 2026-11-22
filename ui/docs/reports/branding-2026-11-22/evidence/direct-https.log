@@ -1,0 +1,40 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> iobroker.nexowatt-ui@1.0.38 test:ui-direct-https
+> tsc -p tsconfig.ui-server-transport.json && node scripts/verify-ui-direct-https.cjs --report
+
+PASS HTTP-Modus bleibt explizit HTTP; HTTPS wird nicht stillschweigend angenommen
+PASS Direktes HTTPS liefert Root-Login, EOS-Logo und alle Anmelde-Assets ohne Sitzung
+PASS PWA-Manifest, Service Worker, Icons und Start-URL funktionieren über verifiziertes HTTPS
+PASS Zertifikatsvertrauen, IP-SAN und Protokolltrennung werden tatsächlich erzwungen
+PASS Root-CA → Intermediate → IP-Leaf wird als Serverkette ausgeliefert
+PASS HTTPS-Sitzung: private APIs, Rollen, Secure-Cookie, CSRF, Origin und Logout
+PASS Ausgelieferter Auth-Wrapper setzt CSRF für echte HTTPS-/api/set-Aufrufe selbst
+PASS HTTPS-Sitzungswiderruf nach Kontenänderung: disabled
+PASS HTTPS-Sitzungswiderruf nach Kontenänderung: password
+PASS HTTPS-Sitzungswiderruf nach Kontenänderung: group
+PASS TLS-Startfehler bleibt geschlossen: fehlender Zertifikatsname
+PASS TLS-Startfehler bleibt geschlossen: fehlender Schlüsselname
+PASS TLS-Startfehler bleibt geschlossen: ungültiger Zertifikatsname
+PASS TLS-Startfehler bleibt geschlossen: ungültiger TLS-Schaltertyp
+PASS TLS-Startfehler bleibt geschlossen: Controller-API fehlt
+PASS TLS-Startfehler bleibt geschlossen: fehlendes Controller-Ergebnis
+PASS TLS-Startfehler bleibt geschlossen: Controller-Lesefehler ohne Detailleck
+PASS TLS-Startfehler bleibt geschlossen: ungültiges Zertifikat
+PASS TLS-Startfehler bleibt geschlossen: ungültiger privater Schlüssel
+PASS TLS-Startfehler bleibt geschlossen: Schlüssel passt nicht zum Zertifikat
+PASS TLS-Startfehler bleibt geschlossen: abgelaufenes Zertifikat
+PASS TLS-Startfehler bleibt geschlossen: falscher Aussteller in der Kette
+PASS TLS-Startfehler bleibt geschlossen: übergroßer privater Schlüssel
+PASS TLS-Startfehler bleibt geschlossen: übergroßes Zertifikat
+PASS TLS-Startfehler bleibt geschlossen: übergroße Zertifikatskette
+PASS TLS-Startfehler bleibt geschlossen: zu viele Zertifikate
+PASS Controller-Zertifikatsabruf: echtes 5-s-Budget und kein verspäteter HTTP-/HTTPS-Start
+PASS onUnload während Zertifikatsabruf verhindert auch einen später erfolgreichen HTTPS-Start
+PASS Tatsächliches onReady führt bei UI-TLS-Konfigfehler EMS- und SmartHome-Initialisierung weiter
+PASS Tatsächliches onReady startet nach Shutdown während TLS-Abruf weder Webserver noch EMS
+PASS onReady behandelt echte Portkonflikte weiterhin als Startfehler und nicht als TLS-Konfigausnahme
+PASS Belegter Port weist HTTPS-Start ab und bleibt beim bisherigen Listener
+PASS Unvollständiger TLS-Handshake endet im echten 5-s-Serverbudget
+PASS Echter Unload schließt HTTPS-SSE und angefangene TLS-Sockets vollständig
+{"result":"PASS","checks":34,"requestCount":66,"node":"v24.22.3","scope":"Shipped main.js startServer/onUnload with real Express, HTTP, HTTPS, TLS certificate validation, authenticated routes and PWA assets; actual onReady control flow with downstream subsystem initialization observed at explicit call-tracing boundaries; controller/certificate retrieval and device writes are local doubles."}

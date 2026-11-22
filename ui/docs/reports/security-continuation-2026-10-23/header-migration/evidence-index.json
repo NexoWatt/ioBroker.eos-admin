@@ -1,0 +1,62 @@
+{
+  "scope": "NexoWatt UI 1.0.30 header migration and build tools",
+  "capturedAfterBulkAndGeneratedMirrorResync": true,
+  "files": [
+    {
+      "file": "ai-advisor-typing.log",
+      "sha256": "10b0019563be66ff686b229bb7985dc0522b3a3344014474715cd91383614b6d"
+    },
+    {
+      "file": "build-ts.log",
+      "sha256": "a3b30ad039b8654fc990811ed7891204b422e0241b1913ac29f9eb0216fba022"
+    },
+    {
+      "file": "bulk-header-proof.json",
+      "sha256": "203cd58fa41afdd3ab460578df01c5c2e4f06762483f82b6b1feeda72d89ede3"
+    },
+    {
+      "file": "core-limits-typing.log",
+      "sha256": "9a6770e0d48886fab6b01b2b7334a0e98115d592291c887931bd214725e94b73"
+    },
+    {
+      "file": "header-policy-tests-final.log",
+      "sha256": "3476772f1cefd3bc16538f39c99637c484b96b53ef0aeb52fb0d0bfacbf19976"
+    },
+    {
+      "file": "headers-final.json",
+      "sha256": "9d81064735f29b7d8a8a697254128736bf91af34823e25446f52bbad25df2b50"
+    },
+    {
+      "file": "heating-rod-typing.log",
+      "sha256": "6f5fcd6c5f64a3c00f2db18a0d024c3923d1fd904efa71ccfb2d6e368b8ba0a7"
+    },
+    {
+      "file": "main-runtime-typing.log",
+      "sha256": "67229ad6cdcfede53c0a9fdc70cd35327b4a329f8684b19f732584c5912a01a8"
+    },
+    {
+      "file": "manual-mirror-proof.json",
+      "sha256": "985b8fb4fd601c470858fcfc07276c38d9f0bcccc0ce5be4d47aa5d2d6b9d2a3"
+    },
+    {
+      "file": "nocheck-reconstruction.json",
+      "sha256": "2a4934cd68af24e58640d3b0f69f4642ac9b7d7e0a6ca27f40ae3806062277db"
+    },
+    {
+      "file": "rc62-stability-audit.log",
+      "sha256": "27de66235e74bf0161006ef9f62275579510d5ebfe78d5cb1c6ebab9fbc43f08"
+    },
+    {
+      "file": "runtime-mirrors-after-doc.log",
+      "sha256": "83127fe302a1f9e3c54f9d4b6f26a2bfd8d2898ce647c4c7fa6d683e7f968daf"
+    },
+    {
+      "file": "runtime-mirrors-final.log",
+      "sha256": "1f6eab4ad083067de90a878363ee891602742a9630d401eef6f6a90ce82990da"
+    },
+    {
+      "file": "runtime-sync.log",
+      "sha256": "2765c5bd60ff479908377c47b3139e2370f30d5800b93325cd0a367435cb1c6e"
+    }
+  ]
+}

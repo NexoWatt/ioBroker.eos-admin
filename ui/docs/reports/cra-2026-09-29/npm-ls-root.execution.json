@@ -1,0 +1,14 @@
+{
+  "command": [
+    "npm",
+    "ls",
+    "--all",
+    "--json"
+  ],
+  "cwd": ".",
+  "startedAt": "2026-09-29T20:00:45.503079+00:00",
+  "finishedAt": "2026-09-29T20:00:46.122134+00:00",
+  "exitCode": 0,
+  "output": "npm-ls-root.json",
+  "stderr": "npm-ls-root.stderr.log"
+}

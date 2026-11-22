@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:stable-1.0.5-storage-protection
+> node scripts/verify-stable-1.0.5-storage-protection-telemetry.cjs
+
+[stable-1.0.5-storage-protection-telemetry] OK: 87 scenario groups + 960 deterministic bound checks; fresh/stale/recovery, modes, OCPP, persisted policy and real charging/storage ticks.

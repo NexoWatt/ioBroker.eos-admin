@@ -1,0 +1,15 @@
+{
+  "integration": "EOS dev9 / NexoWatt UI 1.0.37",
+  "sourceArtifact": "NexoWatt_EOS_dev9_Erststart_PiUpdate_FULL_2026-10-04.zip",
+  "referenceCopiedUnchanged": true,
+  "sourceSha256": "0804f7a98c25bbddb588f84c9408a88be31687211afc84c68d705109d3303548",
+  "files": [
+    "components/admin/src-admin/public/js/eos-role-bootstrap.js",
+    "components/admin/adminWww/js/eos-role-bootstrap.js"
+  ],
+  "reviewPatchInstance": 0,
+  "patchedSha256Instance0": "f73358b909404effab44759dc46b1da454e5808f6e543cf8c0c0f2feb26ee7a6",
+  "patchSha256": "6330adb35c69a579270346b543d77b45d330d94f0c2eec3ab984b29d60c3ac82",
+  "createdAt": "2026-11-19T06:50:10.601277+00:00",
+  "deployed": false
+}

@@ -1,0 +1,33 @@
+PASS Cookie-Parser: Mehrdeutigkeit, Kodierung und Grenzen werden geschlossen behandelt
+PASS Profil und Instanz trennen Cookies; unbekanntes Profil bleibt gesperrt
+PASS HTTPS-Proxyhinweis benötigt tatsächlichen freigegebenen Peer
+PASS CORS und CSRF vergleichen exakte Origins einschließlich Port und Schema
+PASS Neue/unbekannte und kodierte Datenpfade sind standardmäßig geschützt
+PASS Kontobezogener Schutz wirkt trotz wechselnder Quelladressen und parallel
+PASS Echte HTTP-Zugangsschranke auch bei Altpolicy {}
+PASS Echte HTTP-Zugangsschranke auch bei Altpolicy {"authEnabled":false,"policy":"all"}
+PASS Echte HTTP-Zugangsschranke auch bei Altpolicy {"authEnabled":false,"policy":"lan"}
+PASS Kunde bedient zugeordnetes Gerät, technische Bereiche und CSRF bleiben gesperrt
+PASS Nachbar-Port erhält weder Credential-CORS noch CSRF oder Lizenzdaten
+PASS Kontolesefehler hat auch bei bestehender Sitzung ein gemeinsames 5-s-Budget
+PASS Aktivierte ioBroker-TOTP wird nicht durch einen Passwortlogin umgangen
+PASS Sitzung widerrufen bei disabled
+PASS Sitzung widerrufen bei password
+PASS Sitzung widerrufen bei groups
+PASS Sitzung widerrufen bei expired
+PASS Sitzung widerrufen bei mode
+PASS SSE: Vor jedem Frame geprüft, bei Widerruf keine nachfolgenden Daten
+PASS SSE: Logout während laufender Prüfung verhindert verspätete Zustellung
+PASS EOS-Client: echtes zentrales Rollenformat und ausschließlich Access-Cookie
+PASS EOS-Modus: zentrale Sitzung, kein lokaler Passwort- oder Headerfallback
+PASS EOS-Payload: strikter Vertrag authenticated
+PASS EOS-Payload: strikter Vertrag mustChangePassword
+PASS EOS-Payload: strikter Vertrag user
+PASS EOS-Payload: strikter Vertrag role
+PASS EOS-Payload: strikter Vertrag groups
+PASS EOS-Netzwerk: redirect sperrt Zugang ohne Fallback
+PASS EOS-Netzwerk: large sperrt Zugang ohne Fallback
+PASS EOS-Netzwerk: slow sperrt Zugang ohne Fallback
+PASS Standalone ignoriert zentrale EOS-Sitzung vollständig
+PASS EOS-TLS: fremdes Zertifikat abgewiesen, ausdrücklich konfigurierte CA verifiziert
+{"result":"PASS","checks":32,"node":"v24.22.3","scope":"Shipped HTTP runtime, local controller/EOS fixtures, no plant or live EOS Admin commissioning"}

@@ -1,0 +1,31 @@
+{
+  "product": "NexoWatt EOS unified adapter",
+  "date": "2026-11-22",
+  "node": "v24.22.3",
+  "scope": "License verifier, storage, HTTP handler harness and SDK; no physical device test",
+  "sources": {
+    "src/lib/eosLicenseCore.js": "40bee513c3680447ec455b76adccf222d86f9839806e66261187342c6ec15a7b",
+    "src/lib/eosLicensePolicy.js": "3aec98f3f5d74a691d40c8e8d11c53bf18d5e47de72f48a9aac23a663a2c7084",
+    "src/lib/eosLicenseService.js": "e4706480e96a37196d2c6b8bfe03f09ccfa402d770ddd380b1955ea3ec74e4be",
+    "src/lib/eosLicenseHttp.js": "6dae747ec7ceafdba215a82bfc99d1c54ec4db0954874f64d08f096238ea74e4",
+    "public/nexowatt-license.html": "24a71b22ec30005569a31d032516063663007987515157e22182d5267e9cf7c6",
+    "public/nexowatt-license.js": "6d2fd08b493ff6ab1fdbe847780e9fa551a533652ef1820293bf22b83bffc61b",
+    "test/eos-license-nwl3.test.cjs": "94a269f5848327bcc7b55305d54dd79ab3f56863051a28d9ebf7e7a90926996a",
+    "test/eos-license-http.test.cjs": "83ae400c7fc6e0ab04f139944fd638dadf0a654059922cf4394266399c6dea39",
+    "test/eos-license-trust.test.cjs": "bd0ff36fe6655647f0e370d2b225b87535f2ca3593909c5013fddde12a572385"
+  },
+  "contractProvenance": {
+    "NexoWatt_EOS_Keygen_1.0.4/lib/license-contract.js": "4490aa841434b7a45a7c1d20c626002d1190a9c53847bd23398dd797410a6d49",
+    "NexoWatt_EOS_Keygen_1.0.4/lib/license-policy.js": "c973b89be1b3fe0a15185e66b5ba77a7aabc0d96e3236cd2bc8747d559acbd6e",
+    "NexoWatt_EOS_Keygen_1.0.4/lib/issuer.js": "6f7711e2995e5e7167776a20fb0c9250386923ddabc6177e81cd1d1f27d82c7f"
+  },
+  "tests": {
+    "licenseTests": 90,
+    "passed": 90,
+    "failed": 0,
+    "skipped": 0,
+    "originalKeygenInteropTests": 2,
+    "originalKeygenInteropPassed": 2,
+    "lint": "passed"
+  }
+}

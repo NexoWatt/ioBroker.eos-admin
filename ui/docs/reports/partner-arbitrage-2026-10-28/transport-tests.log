@@ -1,0 +1,16 @@
+PASS TypeScript strict without any/nocheck
+PASS Public addresses only; exact VPN exception never opens loopback/metadata
+PASS Exact endpoint profile; no URL credentials/query/fragment or alternate ports
+PASS Pinned target, TLS/quotas, configured identity and immediate send revocation
+PASS Revocation aborts session context; queued messages discarded, delayed reply blocked
+PASS Synchronous stop from status callback prevents later onOpen/timer activation
+PASS Broken lifecycle receiver fails closed
+PASS Handler exception is isolated and redacted
+PASS Binary/oversized messages, control flood and outbound backpressure terminate
+PASS Mixed public/private DNS answers fail closed before connecting
+PASS Monotonic credential expiry survives frozen/backward wall clock
+PASS Five-second total attempt cancels hanging DNS and exposes only fixed error code
+PASS Real TLS+WebSocket handshake: changed actual remote address rejected
+PASS Real TLS rejects untrusted certificate with no insecure fallback
+PASS Real TLS rejects trusted certificate with wrong hostname
+{"ok":true,"checks":15,"scope":"strict build, controlled transport tests, real TLS negative tests; no partner or hardware approval"}

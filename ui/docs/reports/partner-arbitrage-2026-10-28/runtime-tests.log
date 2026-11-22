@@ -1,0 +1,21 @@
+PASS partner runtime: first journal initializes 0700/0600 and durable marker
+PASS partner runtime: missing journal after initialization blocks
+PASS partner runtime: missing entire journal directory with marker blocks
+PASS partner runtime: missing and corrupt marker block
+PASS partner runtime: missing revoke fence blocks restart
+PASS partner runtime: symlink journal and overly broad file permissions block
+PASS partner runtime: symlink parent and group-writable parent block
+PASS partner runtime: persist/load ordering survives hot-refresh overlap
+PASS partner runtime: credential references reject missing, malformed, overlarge and mismatched identity
+PASS partner runtime: numeric telemetry projects only exact fresh resource values
+PASS partner runtime: balance is complete, recent, numeric and strips private metadata
+PASS partner runtime: direct marketing absent measurements stay unavailable; no curtailment claim
+PASS partner runtime: standalone trading-only command accepted and survives only as replay journal
+PASS partner runtime: connection loss clears current request and duplicate never reapplies
+PASS partner runtime: revocation survives failed config commit, refresh and restart
+PASS partner runtime: app loss invalidates commands; toggling without explicit refresh cannot revive
+PASS partner runtime: config change is checked at getter before any refresh
+PASS partner runtime: credential expiry immediately blocks current request
+PASS partner runtime: pending persistence completes before hot refresh reads; old generation cannot acknowledge
+PASS partner runtime: stale socket context cannot send or accept
+PASS partner runtime total: 20; strict TypeScript; temporary filesystem cleaned.

@@ -1,0 +1,18 @@
+{
+  "comparison": "previous delivered 1.0.22 review ZIP vs npm/SBOM correction",
+  "runtimeAndAdminFilesCompared": 398,
+  "changed": [],
+  "result": "unchanged",
+  "dependencyLockfiles": [
+    {
+      "path": "package-lock.json",
+      "sha256": "383db7de2fe2ba1c45e57cdb46ac08f80a5e9b965f0a940098050d28b93e7e08",
+      "unchanged": true
+    },
+    {
+      "path": "src-admin-tab/package-lock.json",
+      "sha256": "2ce40a4838b00f6a4782bd917af76f18b51f98ffe5086113ae1c11b89e64aef7",
+      "unchanged": true
+    }
+  ]
+}

@@ -91,6 +91,7 @@ import Connecting from './components/Connecting';
 import WizardDialog from './dialogs/WizardDialog';
 import SystemSettingsDialog from './components/SystemSettings';
 import Login from './login/Login';
+import { logoutUnifiedSession } from './helpers/eosUnifiedSession';
 import HostSelectors from './components/HostSelectors';
 import ExpertModeDialog from './dialogs/ExpertModeDialog';
 import NewsAdminDialog, { checkMessages, type DbType, type ShowMessage } from './dialogs/NewsAdminDialog';
@@ -1262,7 +1263,12 @@ class App extends Router<AppProps, AppState> {
 
     componentDidMount(): void {
         // check if we are mounted as SSO response
-        void App.checkSsoResponse();
+        if (query.login) {
+            window.location.replace('/login.html');
+            return;
+        }
+        // The shared EOS login keeps tokens exclusively in HttpOnly cookies.
+        Connection.deleteTokensStatic();
         window.addEventListener('vite:preloadError', onPreloadError);
         window.addEventListener('nexowatt-eos-policy', this.onEosPolicyChanged);
 
@@ -1834,7 +1840,7 @@ class App extends Router<AppProps, AppState> {
             }
             this.expireInSecInterval = setTimeout(() => {
                 Connection.deleteTokensStatic();
-                window.location.href = './index.html?login&eosLogout=timeout';
+                window.location.replace('/login.html');
             }, delay);
             resolve(false);
         });
@@ -2392,7 +2398,7 @@ class App extends Router<AppProps, AppState> {
         }
 
         if (!port || port === 3000) {
-            port = 8081;
+            port = 8188;
         }
 
         return port;
@@ -2953,13 +2959,14 @@ class App extends Router<AppProps, AppState> {
     }
 
     static logout(): void {
-        Connection.deleteTokensStatic();
-
-        if (window.location.port === '3000') {
-            window.location.href = `${window.location.protocol}//${window.location.hostname}:8081/logout?dev`;
-        } else {
-            window.location.href = `./logout?origin=${window.location.pathname}`;
-        }
+        void logoutUnifiedSession()
+            .then(() => {
+                Connection.deleteTokensStatic();
+                window.location.replace('/login.html');
+            })
+            .catch(() => {
+                window.alert('Abmeldung konnte nicht bestätigt werden. Bitte erneut versuchen.');
+            });
     }
 
     handleNavigation = (tab: string | undefined, subTab?: string, param?: string): void => {
@@ -3208,7 +3215,7 @@ class App extends Router<AppProps, AppState> {
                                 onClick={() => {
                                     if (window.sidebar && this.state.showRedirect) {
                                         // Firefox
-                                        window.sidebar.addPanel('NexoWatt EOS Admin', this.state.showRedirect, '');
+                                        window.sidebar.addPanel('NexoWatt EOS', this.state.showRedirect, '');
                                     } else if (
                                         window.opera &&
                                         this.state.showRedirect &&
@@ -3218,13 +3225,13 @@ class App extends Router<AppProps, AppState> {
                                         // Opera
                                         const elem = document.createElement('a');
                                         elem.setAttribute('href', this.state.showRedirect);
-                                        elem.setAttribute('title', 'NexoWatt EOS Admin');
+                                        elem.setAttribute('title', 'NexoWatt EOS');
                                         elem.setAttribute('rel', 'sidebar');
                                         elem.click(); // this.title=document.title;
                                     } else if (document.all) {
                                         // ie
                                         // @ts-expect-error ignore
-                                        window.external.AddFavorite(this.state.showRedirect, 'NexoWatt EOS Admin');
+                                        window.external.AddFavorite(this.state.showRedirect, 'NexoWatt EOS');
                                     }
                                 }}
                             >
@@ -3797,7 +3804,7 @@ class App extends Router<AppProps, AppState> {
                 <h1 style={{ color: '#F00' }}>Error in GUI!</h1>
                 Please open the browser console (F12), copy error text from there and create the issue on{' '}
                 <a
-                    href="https://github.com/ioBroker/NexoWatt EOS Admin/issues"
+                    href="https://nexowatt.com"
                     target="_blank"
                     rel="noreferrer"
                 >

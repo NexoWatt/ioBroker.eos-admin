@@ -1,0 +1,35 @@
+{
+  "ems": {
+    "filesCompared": 100,
+    "changedFiles": [],
+    "addedFiles": [],
+    "removedFiles": []
+  },
+  "src-ts/runtime-executables/ems": {
+    "filesCompared": 90,
+    "changedFiles": [],
+    "addedFiles": [],
+    "removedFiles": []
+  },
+  "src-ts/runtime-executables/lib": {
+    "filesCompared": 21,
+    "changedFiles": [],
+    "addedFiles": [],
+    "removedFiles": []
+  },
+  "lib": {
+    "filesCompared": 64,
+    "changedFiles": [],
+    "addedFiles": [],
+    "removedFiles": []
+  },
+  "www": {
+    "filesCompared": 96,
+    "changedFiles": [
+      "www/manifest.webmanifest"
+    ],
+    "addedFiles": [],
+    "removedFiles": []
+  },
+  "io-package.json": "Identical after removing version and news only"
+}

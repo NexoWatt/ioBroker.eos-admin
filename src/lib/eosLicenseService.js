@@ -93,6 +93,27 @@ async function readTrustFile(filename) {
     }
 }
 
+/**
+ * Read the manufacturer-provisioned public trust map. The current EOS image and
+ * the previous standalone Admin used different directories. Only a missing
+ * current file permits the documented legacy path; invalid permissions/content
+ * must never trigger fallback to another authority. An explicit override is
+ * exact and never falls back.
+ */
+async function readProductTrust() {
+    if (process.env.NEXOWATT_LICENSE_TRUST_FILE !== undefined) {
+        return readTrustFile(process.env.NEXOWATT_LICENSE_TRUST_FILE);
+    }
+    try {
+        return await readTrustFile('/etc/nexowatt-eos/license-trust.json');
+    } catch (error) {
+        if (error?.code !== 'ENOENT') {
+            throw error;
+        }
+        return readTrustFile('/etc/nexowatt/license-trust.json');
+    }
+}
+
 class EosLicenseService {
     constructor(adapter, options = {}) {
         this.adapter = adapter;
@@ -191,11 +212,7 @@ class EosLicenseService {
                     throw failure('SERVICE_DIRECTORY');
                 }
                 this.store = new EncryptedLicenseStore({ directory, uuid: this.uuid });
-                this.keys =
-                    this.options.publicKeys ||
-                    (await readTrustFile(
-                        process.env.NEXOWATT_LICENSE_TRUST_FILE || '/etc/nexowatt/license-trust.json',
-                    ));
+                this.keys = this.options.publicKeys || (await readProductTrust());
                 this.ensureRunning();
                 validatePublicKeys(this.keys);
                 this.record = await this.store.load();
@@ -279,6 +296,7 @@ class EosLicenseService {
                 this.lastPersisted = this.highWaterMark;
             }
             this.code = 'LICENSE_VALID';
+            this.checkedMono = this.mono();
         } catch (error) {
             this.claims = null;
             this.code = safeCode(error);
@@ -287,9 +305,34 @@ class EosLicenseService {
     }
 
     statusView() {
+        // Hosted EMS consumers need a synchronous local projection. It cannot
+        // prolong a stale/expired entitlement while an asynchronous database or
+        // storage check stalls. Cryptographic/disk checks remain in evaluate().
+        if (this.claims && !this.stopped) {
+            try {
+                const now = this.clock();
+                const age = this.mono() - this.checkedMono;
+                if (!Number.isFinite(age) || age < 0 || age >= LEASE_MS) {
+                    throw failure('SERVICE_STALE');
+                }
+                if (this.claims.expiresAt !== null && now >= this.claims.expiresAt) {
+                    throw failure('LICENSE_EXPIRED');
+                }
+            } catch (error) {
+                this.claims = null;
+                this.code = safeCode(error);
+            }
+        }
         return {
             v: 1,
             valid: !this.stopped && !!this.claims,
+            tokenVersion: this.claims?.v || null,
+            scope: this.claims?.scope || null,
+            // A NWL2 license for an unrelated extension never enables the EOS core.
+            coreEnabled:
+                !this.stopped &&
+                !!this.claims &&
+                (this.claims.scope === 'system' || this.claims.adapters.includes('nexowatt-ui')),
             code: this.stopped ? 'SERVICE_UNAVAILABLE' : this.code,
             uuid: this.uuid || null,
             edition: this.claims?.edition || null,
@@ -432,7 +475,7 @@ class EosLicenseService {
                 ) {
                     return deny('LICENSE_ADAPTER_DISABLED');
                 }
-                if (!claims.adapters.includes(match[1])) {
+                if (claims.scope !== 'system' && !claims.adapters.includes(match[1])) {
                     return deny('LICENSE_ADAPTER');
                 }
                 if (!claims.features.includes(request.feature)) {
@@ -474,4 +517,4 @@ class EosLicenseService {
     }
 }
 
-module.exports = { EosLicenseService, readTrustFile, safeCode, LEASE_MS, DB_TIMEOUT_MS };
+module.exports = { EosLicenseService, readTrustFile, readProductTrust, safeCode, LEASE_MS, DB_TIMEOUT_MS };

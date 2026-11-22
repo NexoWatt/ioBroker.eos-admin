@@ -1,0 +1,14 @@
+--- app_modal_1.0.34
+
++++ app_modal_1.0.35
+
+@@ -358,7 +358,7 @@
+
+     card.addEventListener('click', ()=>{
+       const c = Number(window.__nwEvcsCount || 0) || 0;
+       if (!nwEvcsFeatureFromConfig()) return;
+-      if (c >= 2) { window.location.href = '/evcs.html'; return; }
++      if (c >= 2) { window.location.href = (window.NW_RUNTIME?.url('/evcs.html') ?? '/evcs.html'); return; }
+       if (modal) modal.classList.remove('hidden');
+     });
+   }

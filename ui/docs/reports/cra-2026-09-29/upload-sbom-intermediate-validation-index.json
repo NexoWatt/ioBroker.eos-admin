@@ -1,0 +1,158 @@
+{
+  "version": "1.0.22",
+  "date": "2026-09-29T21:01:45.642920+00:00",
+  "productionApproved": false,
+  "tests": [
+    {
+      "command": [
+        "npm",
+        "run",
+        "test:all"
+      ],
+      "cwd": "repository root",
+      "startedAt": "2026-09-29T20:57:14.859388+00:00",
+      "finishedAt": "2026-09-29T20:59:48.078976+00:00",
+      "durationSeconds": 153.22,
+      "exitCode": 0,
+      "capturedBytes": 80384,
+      "log": "followup-test-all.log",
+      "logSha256": "f6cdba4ae89f14aaf32e1ad604a61da2aaa1233129774bc9c879abf8df047c3e"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "build:ts"
+      ],
+      "cwd": "repository root",
+      "startedAt": "2026-09-29T20:54:43.786528+00:00",
+      "finishedAt": "2026-09-29T20:54:59.417735+00:00",
+      "durationSeconds": 15.631,
+      "exitCode": 0,
+      "capturedBytes": 8275,
+      "log": "followup-build-ts.log",
+      "logSha256": "9449d6e0fb17c0d511da05b411e3467d5312d85439add56ddccbc1c641c418ba"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "publish:check"
+      ],
+      "cwd": "repository root",
+      "startedAt": "2026-09-29T21:00:39.152989+00:00",
+      "finishedAt": "2026-09-29T21:00:40.105709+00:00",
+      "durationSeconds": 0.953,
+      "exitCode": 0,
+      "capturedBytes": 598,
+      "log": "followup-publish-check.log",
+      "logSha256": "8e0fb14cdd7cc7635eafb301d137a3dad491258fb24c9ccdfcb6e21a6935ef2e"
+    },
+    {
+      "command": [
+        "npm",
+        "pack",
+        "--dry-run",
+        "--json",
+        "--ignore-scripts"
+      ],
+      "cwd": "repository root",
+      "startedAt": "2026-09-29T21:00:40.502834+00:00",
+      "finishedAt": "2026-09-29T21:00:43.501499+00:00",
+      "durationSeconds": 2.999,
+      "exitCode": 0,
+      "capturedBytes": 46497,
+      "log": "followup-pack-dry-run.log",
+      "logSha256": "38b411a588be9624932aff3aacc2ba1ea47008813b4bbdaa5cc184244f0fb9b3"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "docs:check"
+      ],
+      "cwd": "repository root",
+      "startedAt": "2026-09-29T21:00:40.148362+00:00",
+      "finishedAt": "2026-09-29T21:00:40.467694+00:00",
+      "durationSeconds": 0.319,
+      "exitCode": 0,
+      "capturedBytes": 270,
+      "log": "followup-docs-check.log",
+      "logSha256": "c9f7491bb879a579daae3c034dce2956c25c5a6c556f06d0de3794abb8804053"
+    },
+    {
+      "command": [
+        "python3",
+        "/workspace/scratch/eb7acf2936df/verify_packed_sbom.py"
+      ],
+      "cwd": "repository root",
+      "startedAt": "2026-09-29T21:00:34.415361+00:00",
+      "finishedAt": "2026-09-29T21:00:39.114308+00:00",
+      "durationSeconds": 4.699,
+      "exitCode": 0,
+      "capturedBytes": 571,
+      "log": "followup-packed-sbom.log",
+      "logSha256": "de9a6306f41123860e4fc4084432e87d5b1505748223c9ff9c9e6327fb8e496f"
+    }
+  ],
+  "audits": [
+    {
+      "scope": "root",
+      "resultFile": "npm-audit-root-final.json",
+      "executionFile": "npm-audit-root-final.execution.json",
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      }
+    },
+    {
+      "scope": "production",
+      "resultFile": "npm-audit-production-final.json",
+      "executionFile": "npm-audit-production-final.execution.json",
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      }
+    },
+    {
+      "scope": "admin",
+      "resultFile": "npm-audit-admin-final.json",
+      "executionFile": "npm-audit-admin-final.execution.json",
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      }
+    }
+  ],
+  "productionApprovalGate": {
+    "command": [
+      "npm",
+      "run",
+      "release:approval"
+    ],
+    "cwd": "repository root",
+    "startedAt": "2026-09-29T20:51:54.430921+00:00",
+    "finishedAt": "2026-09-29T20:51:54.678362+00:00",
+    "durationSeconds": 0.247,
+    "exitCode": 1,
+    "capturedBytes": 300,
+    "expectedExitCode": 1,
+    "result": "separate production approval rejects undecided status as expected; ordinary npm publication passes"
+  },
+  "historicalInitialReview": "initial-review-validation-index.json",
+  "dependencyChangeInFollowup": false,
+  "publishOverlayProof": "followup-test-all.log",
+  "runtimeSmokeProof": "followup-packed-sbom.log"
+}

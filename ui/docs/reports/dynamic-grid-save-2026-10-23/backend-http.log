@@ -1,0 +1,28 @@
+✔ unvollständiger Entwurf bleibt speicherbar, Aktivierung meldet konkrete fehlende Verträge (10.556287ms)
+✔ freie herstellerunabhängige Speicherzuordnung ist ohne Bestandsinventar aktivierbar (1.414337ms)
+✔ M0 bleibt Allgemein, kW und Vorzeichen kommen aus serverseitiger Quelle (0.928397ms)
+✔ vollständiges Allgemein-Splitpaar wird übernommen; gleiche physische M0/M1-Quelle wird abgewiesen (2.645169ms)
+✔ getrennte Alias-Lese-/Schreibquellen liefern richtige physische Ownership-Kette (1.251693ms)
+✔ zwei Aliasnamen auf demselben Ausgang erzeugen keinen zweiten Writer (1.072483ms)
+✔ falsche Ausgangsrechte, Datentypen und Einheiten verhindern Aktivierung, nicht Entwurf (3.127033ms)
+✔ CAS gilt für eigene App-Saves sowie Allgemein-Änderungen und reine App-Schalter (1.446365ms)
+✔ lesende CAS-Version stimmt für fehlende und ältere Entwürfe mit der Schreibgrenze überein (2.382984ms)
+✔ alte Allgemein-Konfiguration benötigt ohne neue App keinen impliziten Appvertrag (0.253631ms)
+✔ kontrollierte Deaktivierung bleibt bis zur positiven Runtime-Übergabe ausstehend (0.980475ms)
+✔ Status einer früheren Version wird ohne alte Messungen als pending dargestellt (0.4388ms)
+✔ jede neue API-Route besitzt die Installer-Middleware und keinen HTTP-Cache (0.568746ms)
+✔ alter oder zukünftiger aktiver Status wird nicht als aktuelle erfolgreiche Regelung ausgegeben (0.281253ms)
+✔ aktive bestehende PV-Stellstrecke muss vor Übernahme zugeordnet werden (1.006915ms)
+✔ vorhandenes Speicherlizenzlimit zählt freie App-Zuordnungen ohne Inventarabhängigkeit (0.543878ms)
+✔ DynamicGrid HTTP: globaler AppCenter-Save installiert fehlende und ältere Entwürfe mit gelesenem CAS-Token (291.354833ms)
+✔ DynamicGrid HTTP: Rollen, Entwurf, atomare Aktivierung, CAS und M0 aus Allgemein (109.124443ms)
+✔ DynamicGrid HTTP: AppCenter/Import und parallele Gesamtpatch-Writer können CAS nicht umgehen (51.691613ms)
+✔ DynamicGrid HTTP: Backup-Inhaltsversion ersetzt nicht den geladenen Import-CAS-Token (19.174218ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 801.823591

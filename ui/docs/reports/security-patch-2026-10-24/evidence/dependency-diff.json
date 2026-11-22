@@ -1,0 +1,20 @@
+{
+  "baseline": "1.0.30",
+  "current": "1.0.31",
+  "changes": [
+    {
+      "path": "node_modules/body-parser",
+      "oldVersion": "1.20.8",
+      "newVersion": "1.20.9"
+    },
+    {
+      "path": "node_modules/nodemailer",
+      "oldVersion": "10.0.10",
+      "newVersion": "10.1.4"
+    }
+  ],
+  "newPackagePaths": [],
+  "removedPackagePaths": [],
+  "rootRuntimeEntries": 78,
+  "adminLockUnchanged": true
+}

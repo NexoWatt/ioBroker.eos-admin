@@ -1,0 +1,12 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.33 release:generate-manifest
+> npm run sbom:cra:release && node scripts/generate-release-artifact-manifest.js
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.33 sbom:cra:release
+> node scripts/generate-cra-sbom.cjs --release
+
+[cra-sbom] Produkt-SBOM erzeugt und geprüft: iobroker.nexowatt-ui@1.0.33; 483 Paketdateien gebunden.
+[release-manifest] OK: iobroker.nexowatt-ui@1.0.33, 484 Paketdateien.

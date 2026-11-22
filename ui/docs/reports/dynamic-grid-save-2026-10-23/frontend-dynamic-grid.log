@@ -1,0 +1,10 @@
+PASS separate app draft has no manual activation or second M0 mapping
+PASS M0 signed and split sources render read-only with real General link
+PASS clearing a required number never becomes zero or no-limit null
+PASS M1 zero remains an enabled limit while null stays explicitly unconfigured
+PASS generic storage has full own mapping and no brand or Farm dependency
+PASS external limits have independent maxima, applied feedback and device TTL
+PASS live readout never promotes ACK to applied effect and hides stale command
+PASS customer wildcard does not bypass Installer/Admin app guard
+PASS atomic activation conflict is not retried
+{"result":"PASS","checks":9,"limitation":"React renderer and actual handlers; browser interaction is a separate check."}

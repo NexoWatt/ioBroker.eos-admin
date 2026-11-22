@@ -1,0 +1,189 @@
+{
+  "schema": "nexowatt.admin-bundle-components.v1",
+  "generatedAt": "2026-11-22T09:50:19.303Z",
+  "provenance": "Rollup writeBundle module graph; npm modules with renderedLength > 0; hashes of final files",
+  "limitations": "Lists npm packages contributing rendered JavaScript. Not a source code review, OS inventory or vulnerability clearance.",
+  "packageLockSha256": "a3e54a369b8996069bc6fd0aef0f156644a5c14868a12f26c275fda2ad0c7a18",
+  "viteConfigSha256": "f59d3db711ab3bff7de7b2b2e8cbc1066375df69ecbe5b5476ef1c54aabe0986",
+  "entryHtmlSha256": "3bff4f192b50cd550ae0b60e8006e6028cef9b7224d64a84d8e69bac08910d01",
+  "projectModules": [
+    {
+      "path": "src-admin-tab/src/App.tsx",
+      "sha256": "130004830b352357603184300d09b4308e96773e5e8ba28365b72c56f0c9bbd8"
+    },
+    {
+      "path": "src-admin-tab/src/components/DpField.tsx",
+      "sha256": "566c1cbe46ca8d1134afee3c86368c9df02c9d73a3a7f5d47452fbe137428071"
+    },
+    {
+      "path": "src-admin-tab/src/components/EmbeddedEmsFrame.tsx",
+      "sha256": "781ae27e8d1a4e48912f0c8d44df230f587dd4242bc8265da44d13e80bb63158"
+    },
+    {
+      "path": "src-admin-tab/src/lib/adminConnection.ts",
+      "sha256": "9ce44f4d20f8de67e0ceb1d3cae198e1dc18934bdfbe559d4e766613916cc0dc"
+    },
+    {
+      "path": "src-admin-tab/src/lib/adminContracts.ts",
+      "sha256": "d4f9599789bf9ac9e6361143fe7320da764df9aa3edc2723a5768f79e2574995"
+    },
+    {
+      "path": "src-admin-tab/src/lib/dataPointPicker.ts",
+      "sha256": "e28946e685fffe198314fe4463459a42c2349a2e4481e9ffe39277e187953da1"
+    },
+    {
+      "path": "src-admin-tab/src/lib/mesh-types.ts",
+      "sha256": "1994cdf4fcf5671089424050bf8b28a100da007838df5e5a17b39194d314d56e"
+    },
+    {
+      "path": "src-admin-tab/src/lib/partnerContracts.ts",
+      "sha256": "3af0d83215652ced7374644cda049dea4ca8630b920f77eb99f684cc9e7b7b91"
+    },
+    {
+      "path": "src-admin-tab/src/main.tsx",
+      "sha256": "ee3dd9fc3e93060cf808a783566c27fa80360237b83ad0dfadca5978cc189d2e"
+    },
+    {
+      "path": "src-admin-tab/src/pages/ArbitragePage.tsx",
+      "sha256": "333f3720e2a077d466b0d8001f8d422430d5b3a9483b43dc5393661761e6a838"
+    },
+    {
+      "path": "src-admin-tab/src/pages/DynamicGridPage.tsx",
+      "sha256": "c2ac1f3935c488e780785b0d8b7ea4b3141e7824d56ec0bb6b28b86991668b19"
+    },
+    {
+      "path": "src-admin-tab/src/pages/InstallerPage.tsx",
+      "sha256": "976da307f86615e9f2a122778fa0873a7cd064726297c112459da17a3df78499"
+    },
+    {
+      "path": "src-admin-tab/src/pages/LicensePage.tsx",
+      "sha256": "6ac6560e0a92275b7451fbb2ee118470463c74f057a9b65a36eec580c7131b65"
+    },
+    {
+      "path": "src-admin-tab/src/pages/MeshAccountingPanel.tsx",
+      "sha256": "d05ed8249ed629554ae69fade6cb64d11fc2118d20f634495df07ecebc45f077"
+    },
+    {
+      "path": "src-admin-tab/src/pages/MeshCoordinatorPage.tsx",
+      "sha256": "ff2b00c7964696fb72d03f16b56909914940b336a26c32b4cb68715122e73e99"
+    },
+    {
+      "path": "src-admin-tab/src/pages/NotificationMailPage.tsx",
+      "sha256": "6f0a0318eee11109c693ee51e63c970582627b6209cb5b9708758430a286dc62"
+    },
+    {
+      "path": "src-admin-tab/src/pages/PageShell.tsx",
+      "sha256": "18f62ed6f43a637bb14067d9aaba65c8ac03ba7e5684a4020b9f6ceca15bd640"
+    },
+    {
+      "path": "src-admin-tab/src/pages/PartnerIntegrationsPage.tsx",
+      "sha256": "2b3f3b954854e43eea6a9a590372957a23dc2bd857c12d48027348516dc65f5e"
+    },
+    {
+      "path": "src-admin-tab/src/pages/ProtectedRuntimeRoute.tsx",
+      "sha256": "02ce28926a735e410616c44520878303cfd4799043cd576afc83a168e77e05e1"
+    },
+    {
+      "path": "src-admin-tab/src/pages/RedirectPage.tsx",
+      "sha256": "7d47890d30f17f2a820d8f7025e980df11896400eb562dbafe3413df4738f062"
+    }
+  ],
+  "components": [
+    {
+      "name": "react",
+      "version": "18.3.1",
+      "packageJsonSha256": "d4e68a5c96babb20cad1daafea8b78822eae45b341552cf5418d06a5304fa64c",
+      "modules": [
+        {
+          "path": "src-admin-tab/node_modules/react/cjs/react-jsx-runtime.production.min.js",
+          "sha256": "76e3364c46895ed2c4a8d5cc332e5e4ef31d6f732d35b1e56826dc5895245452",
+          "renderedLength": 40
+        },
+        {
+          "path": "src-admin-tab/node_modules/react/cjs/react.production.min.js",
+          "sha256": "4b35e378f469c4f492c7514bb106b5833746dbbae80496bd4aa9acc6e9ac4b42",
+          "renderedLength": 30
+        },
+        {
+          "path": "src-admin-tab/node_modules/react/index.js",
+          "sha256": "a216c390bf956cbb906c66d29fdb2e2ad6999464a5ca83e476533a6f25ad0ef3",
+          "renderedLength": 26
+        },
+        {
+          "path": "src-admin-tab/node_modules/react/jsx-runtime.js",
+          "sha256": "28170e60f2ff0bc045bc7d175f5849e86f68dd02d76d7255369420718b30295a",
+          "renderedLength": 31
+        }
+      ]
+    },
+    {
+      "name": "react-dom",
+      "version": "18.3.1",
+      "packageJsonSha256": "d2f29e31bd48b833e48cd7bbf41f192e8ee4ff8da249fdbe10d4ac4114b8b12e",
+      "modules": [
+        {
+          "path": "src-admin-tab/node_modules/react-dom/cjs/react-dom.production.min.js",
+          "sha256": "cbf7fe6b9726ee65f8bcd5715289cc5161c8dacf74d0b8aaa0d29412516f5f47",
+          "renderedLength": 33
+        },
+        {
+          "path": "src-admin-tab/node_modules/react-dom/client.js",
+          "sha256": "a510041dfc40d69b3aa574e5e111864186c711fbeb3db41aa2f27196b27c429f",
+          "renderedLength": 16
+        },
+        {
+          "path": "src-admin-tab/node_modules/react-dom/index.js",
+          "sha256": "f26fcb81b5d1dc32c6edea34645c75b60d259916293d3208c8be48ac33e882e4",
+          "renderedLength": 29
+        }
+      ]
+    },
+    {
+      "name": "react-router",
+      "version": "7.18.4",
+      "packageJsonSha256": "0323fe65d0b03a170d0ee0c880a28d3499528995ca50bc946a778c6450c275f0",
+      "modules": [
+        {
+          "path": "src-admin-tab/node_modules/react-router/dist/development/chunk-OB3PAWPO.mjs",
+          "sha256": "f6e41335042afcbcb7bcda3c8b1545fa1fb4fe3f40fd1cc08d8a18167afab8ef",
+          "renderedLength": 86341
+        }
+      ]
+    },
+    {
+      "name": "scheduler",
+      "version": "0.23.2",
+      "packageJsonSha256": "0893643a24576d727174e639586b8833a53f2a7b4a2199a719b9cfcebe9bae88",
+      "modules": [
+        {
+          "path": "src-admin-tab/node_modules/scheduler/cjs/scheduler.production.min.js",
+          "sha256": "f6cb8cf42696980c702f6b879417ab8bd489660485eb012b46f67e92e18a78ee",
+          "renderedLength": 34
+        },
+        {
+          "path": "src-admin-tab/node_modules/scheduler/index.js",
+          "sha256": "b413b3aac7bd209fd82cbe2241fda1467558daaef830744f45ed8396fac9185e",
+          "renderedLength": 30
+        }
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "admin/react/assets/index-CuquHlsY.css",
+      "sha256": "b0d51266b2e541f5a26c8319dc45cd44a682b02cbc9d96fd001f3793c8c3e459"
+    },
+    {
+      "path": "admin/react/assets/index-fCXC5Pli.js",
+      "sha256": "6bbc2d0d228ef265aaa40193571206ffc113a5e16de1660673c797c75ab1e96a"
+    },
+    {
+      "path": "admin/react/assets/nexowatt-192-43ZwQ44y.png",
+      "sha256": "7f93d65d9e1d795bf127e1af31d88d7468ccb70b026f98351d0abbc3f3bd4df6"
+    },
+    {
+      "path": "admin/react/index.html",
+      "sha256": "82a86d21f8a1eb9dee5615eef7217b40a26eafaac6c56797157dda6c440d49ff"
+    }
+  ]
+}

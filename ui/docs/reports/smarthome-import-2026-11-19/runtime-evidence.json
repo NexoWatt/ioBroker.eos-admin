@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "suite": "smarthome-import-runtime",
+  "testedAt": "2026-11-19T07:10:02.880Z",
+  "node": "v24.22.3",
+  "detectorVersion": "5.0.10",
+  "checks": [
+    {
+      "name": "Echter Detector: Boolean, Text, Zahl und Herkunft",
+      "passed": true
+    },
+    {
+      "name": "Detector → Vertrag → echte Gerätezustände mit getrennten Datentypen",
+      "passed": true
+    },
+    {
+      "name": "Optionale Indikatoren: unbekannt/ungültig/stale maskiert keine Kernqualität",
+      "passed": true
+    },
+    {
+      "name": "UNREACH und echte Fehlermeldungen; keine Umdeutung gesunder Werte",
+      "passed": true
+    },
+    {
+      "name": "Metadatenvorschläge, lokale Symbole und explizites Anlegen von Zuordnungen",
+      "passed": true
+    },
+    {
+      "name": "Aliaspräferenz, getrennte Read/Write-Ziele und doppelte Draftimporte",
+      "passed": true
+    },
+    {
+      "name": "Ungültige/zyklische Aliasziele sperren Import; keine unendliche Rekursion",
+      "passed": true
+    },
+    {
+      "name": "Gemeinsame Statuspunkte sind keine Geräteidentität",
+      "passed": true
+    },
+    {
+      "name": "Manuelle Zuordnungen unverändert; Konfigurationsänderung invalidiert Erkennungscache",
+      "passed": true
+    },
+    {
+      "name": "Quellenänderungen nur als Vorschlag; explizit ausgewählte Felder atomar im Entwurf",
+      "passed": true
+    },
+    {
+      "name": "Zusatzstatus erzeugt keine Schreib-IDs; Herkunft schließt Prototypfelder aus",
+      "passed": true
+    },
+    {
+      "name": "Dynamische Kamera: aktuelle URL, keine unsichere/stale Fallback-URL; Altbestand bleibt",
+      "passed": true
+    },
+    {
+      "name": "Historischer Blindvertrag, stabile ID/Raum/Favorit und zusätzliche Felder",
+      "passed": true
+    }
+  ],
+  "passed": 13,
+  "failed": 0,
+  "boundaries": [
+    "Kanonische TS-Quellen temporär transpiliert",
+    "Echter Type-Detector, synthetische Objekt-/Stateantworten",
+    "Tatsächliche API-Handler-/Zustands-/Entwurfsfunktionen isoliert ausgeführt",
+    "Keine HTTP/Auth-, Browser-, ioBroker- oder Hardwareintegration"
+  ],
+  "sources": {
+    "src-ts/runtime-executables/lib/smarthome-import.ts": "1dbe186e2200546bf3012ac5d9407dbf9742d73c4aaa6dafcba546ebdaeea595",
+    "src-ts/runtime-executables/lib/smarthome-contract.ts": "4431b17227ce4550291ae02489f1c4884e86e14ec3f1ca0cc82267f2eeb0a087",
+    "src-ts/runtime-executables/main.ts": "307375285bd08b407545132598deda624506c0c1dab35bb5331e2409859658f7",
+    "src-ts/runtime-executables/www/smarthome-config.ts": "03736603e65152cd007989c0a0bdcffb3d86e82490428f6fff08960914028a41",
+    "scripts/verify-smarthome-import-runtime.js": "62546da08d8aabd4ccbeae6a5b8c17a5175912fa1147e21b0faf46e4572a1c87"
+  }
+}

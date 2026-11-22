@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:rc66-station-display-stable
+> node scripts/verify-rc66-station-display-stable.js
+
+[rc66-station-display] OK: modernes Vollbildlayout, NexoWatt-Branding, Mehr-LP-Raster, Status-/Entscheidungsdiagnose, kein CSV-UI und Single-Writer-Vertrag sind abgesichert (1000x303, 187933 Byte).

@@ -1,0 +1,117 @@
+{
+  "tool": "ESLint exact original/current source comparison",
+  "originalArchive": "NexoWatt_UI_1.0.35_ADMIN_HTTPS_FIX_FULL_REPOSITORY.zip",
+  "node": "v24.22.1",
+  "results": [
+    {
+      "file": "src-ts/runtime-executables/www/evcs.ts",
+      "beforeSha256": "14eae561337acc8ac507f592f1a6c737038fd3fce83de62b09d78832eef9c250",
+      "afterSha256": "6c458526ce5d327ec5ea0832f7f8c617b23884997157120a71febe1335ff6b00",
+      "beforeCodeSha256": "846614e9f25d5ba2abab1cd62065a3becdd5b58d6da97495e3df8f2c26f6a573",
+      "afterCodeSha256": "649c1265f8718e74a2c052904a0440a0f1c3ea936a735e57ed7e5ded75eb2d13",
+      "beforeFindings": 25,
+      "afterFindings": 29,
+      "added": [
+        {
+          "file": "src-ts/runtime-executables/www/evcs.ts",
+          "rule": "security/detect-object-injection",
+          "fingerprint": "0e3a59a0818df322a8689f981dcde64fc20530b4cc3962cdf66408015fd2f482",
+          "line": 143,
+          "column": 46,
+          "fatal": false,
+          "severity": 2
+        },
+        {
+          "file": "src-ts/runtime-executables/www/evcs.ts",
+          "rule": "security/detect-object-injection",
+          "fingerprint": "64a7b25eac41d62f9175bff9f40b4fa74f4d58249a1da6b86ea99a545ccd3d64",
+          "line": 143,
+          "column": 59,
+          "fatal": false,
+          "severity": 2
+        },
+        {
+          "file": "src-ts/runtime-executables/www/evcs.ts",
+          "rule": "security/detect-object-injection",
+          "fingerprint": "0e3a59a0818df322a8689f981dcde64fc20530b4cc3962cdf66408015fd2f482",
+          "line": 143,
+          "column": 75,
+          "fatal": false,
+          "severity": 2
+        },
+        {
+          "file": "src-ts/runtime-executables/www/evcs.ts",
+          "rule": "security/detect-object-injection",
+          "fingerprint": "4d5638a030a8bf52bc58c86d4fca79c7cf56d9ea51196a0cddb6e09dd9d235c1",
+          "line": 160,
+          "column": 37,
+          "fatal": false,
+          "severity": 2
+        },
+        {
+          "file": "src-ts/runtime-executables/www/evcs.ts",
+          "rule": "security/detect-object-injection",
+          "fingerprint": "a7cd824fdb5b4b14669384cf7890a9c395ac75777a19bc6cc24336cda95f091b",
+          "line": 1956,
+          "column": 87,
+          "fatal": false,
+          "severity": 2
+        },
+        {
+          "file": "src-ts/runtime-executables/www/evcs.ts",
+          "rule": "security/detect-object-injection",
+          "fingerprint": "a7cd824fdb5b4b14669384cf7890a9c395ac75777a19bc6cc24336cda95f091b",
+          "line": 2006,
+          "column": 87,
+          "fatal": false,
+          "severity": 2
+        }
+      ],
+      "removed": 2
+    },
+    {
+      "file": "src-ts/runtime-executables/www/app.ts",
+      "beforeSha256": "184238f018f2ef92c7e83d5c9ef1c45346702efe4fe70c5c61b873dfac2d8566",
+      "afterSha256": "1f5b105bd613d8e263458350ebbbf5db4b6420f16ceb0f62c101a0ea2a50fa97",
+      "beforeCodeSha256": "17f2453e59d577d72bfb429bee9b3febcadeb3c33e0c218e4b6192d829525a02",
+      "afterCodeSha256": "b4f676b720b7f20a60651ec920ca475fd37801c1cce21b989374b7b1c6403110",
+      "beforeFindings": 81,
+      "afterFindings": 81,
+      "added": [],
+      "removed": 0
+    },
+    {
+      "file": "src-ts/runtime-executables/ems/modules/charging-management.ts",
+      "beforeSha256": "5ac6da4faaef0c84bc641f59e2d9483331b96d906c1f50bb8c0400b5a4e0bfca",
+      "afterSha256": "e3a3284d4a0001dec5511a7573ee7afddae55626c42e0c0508ca010cc163652c",
+      "beforeCodeSha256": "6c9201a6fe2fcbe132e017b519e2f9bdb3786352834f96620c8d26d20d9171f4",
+      "afterCodeSha256": "125861a282bdca533691e62cd7b8d29da4138bc0dcf50e4a33fc3ef0cc74b7fc",
+      "beforeFindings": 39,
+      "afterFindings": 39,
+      "added": [],
+      "removed": 0
+    },
+    {
+      "file": "src-ts/runtime-executables/ems/services/charging-management-audit.ts",
+      "beforeSha256": "ca803d20f2620ffb3891d642039725fd044fffc2297e27701834ce6619fb83a0",
+      "afterSha256": "c0ececf63a472d400c9406d181d5484d0c64a8c43a7c65592676d53a9549a714",
+      "beforeCodeSha256": "a7dbca30201240fe8661fc7c7a6fafd8c51d46011bb582f135741b6073dacf6d",
+      "afterCodeSha256": "d44b6be0d7c0f44febb79e186be85d8341f338457831e4f7443e6dc764243acd",
+      "beforeFindings": 5,
+      "afterFindings": 5,
+      "added": [],
+      "removed": 0
+    },
+    {
+      "file": "src-ts/runtime-executables/www/charging-diagnostics-appcenter.ts",
+      "beforeSha256": "66062de4febaa53513eb0a129a5f0040c7b91bb0425f35e7d4613029bc772996",
+      "afterSha256": "f115b43763bc40cb638609fba02a45c9ab2439e2327cfff0a10055ce2a374e60",
+      "beforeCodeSha256": "3cb2de8adf78d8e97ef747037129d6cf34f985fdc4e65cbdab14416afcc44ca3",
+      "afterCodeSha256": "a79380931b831ad19c5e6b3ab00473884a56b4dee0e1da58c75b8308ab7713ed",
+      "beforeFindings": 6,
+      "afterFindings": 6,
+      "added": [],
+      "removed": 0
+    }
+  ]
+}

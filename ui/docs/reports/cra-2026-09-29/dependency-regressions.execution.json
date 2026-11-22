@@ -1,0 +1,9 @@
+{
+  "command": [
+    "node",
+    "scripts/verify-cra-dependency-regressions.cjs"
+  ],
+  "startedAt": "2026-09-29T20:20:27.184863+00:00",
+  "finishedAt": "2026-09-29T20:20:27.431638+00:00",
+  "exitCode": 0
+}

@@ -1,0 +1,90 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:nvp-topology
+> npm run typecheck:nvp && node --test test/nvp-*.test.cjs
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 typecheck:nvp
+> tsc -p tsconfig.nvp-topology.json
+
+✔ alte Konfiguration bleibt statisch ohne zusätzliche Objektabfragen (2.14233ms)
+✔ M0 und M1 über verschiedene Aliasnamen auf derselben Quelle werden abgewiesen (1.327882ms)
+✔ Aliaszyklus und fehlender Datenpunkt bleiben sichtbar ungültig (0.582818ms)
+✔ Zuordnung zu fremdem Speicher und fremder AC-Istleistung wird abgewiesen (0.73574ms)
+✔ atomare Änderung erhöht Version einmal; alter Browserstand und offene Freigabe blockieren (1.174401ms)
+✔ native oder importierter aktiver Betrieb kann die technische Sperre nicht umgehen (0.698574ms)
+✔ Persistenzpfad lehnt stille Entfernung und unversionierte Änderung ab (0.969242ms)
+✔ Änderung der Bestandsfarm invalidiert die bisherige NVP-Gerätebindung (0.56385ms)
+✔ jede NVP-Route besitzt die Installer-Middleware und no-store (0.54363ms)
+✔ alte Diagnoseversion wird nach Zuordnungswechsel ohne übernommene Messwerte als ausstehend ausgegeben (0.413523ms)
+✔ ungespeicherte Diagnose ruft nur Vorschau auf und verändert keine Konfiguration (1.102813ms)
+✔ gleichzeitiger Speicherversuch wird abgewiesen; Version und Konfiguration bleiben atomar (0.472633ms)
+✔ hängende Objektprüfung belegt höchstens vier DB-Aufträge und einen Adapter-Slot (5.455948ms)
+✔ NVP HTTP: Rollen, atomare Speicherung, Import, Aktivierungssperre und öffentliche Diagnosefilter (174.38102ms)
+✔ NVP HTTP: alle Gesamtpatch-Writer schließen parallele veraltete Speicherungen aus (61.141041ms)
+✔ T01/T02: absent topology stays static; second meter is never discovered or assigned (2.568633ms)
+✔ T03/T28: topology rejects duplicate real/alias sources and corrupt hierarchy (1.454123ms)
+✔ T28: strict numeric values, literal zero limits and explicit absent M1 limits (0.743111ms)
+✔ NVP-03/NVP-10: groups remain homogeneous and physical control cannot cross areas (0.37788ms)
+✔ T23/T29: active external profiles and unsupported electrical limits do not pretend to be verified (0.354625ms)
+✔ T04–T07: only contained actors affect local point; outer storage cannot remove M1 export (0.400484ms)
+✔ T11: all five independent specification examples including forced support (1.317447ms)
+✔ T12: transition never grants the expected 30 kW of support before it exists (0.133491ms)
+✔ T08–T10: allocated independent maxima cannot reuse one site budget (6.853024ms)
+✔ T08/T09: property test every extreme combination against physical summation for 250 deterministic cases (10.485963ms)
+✔ T13–T15: infeasible residual and empty interval never produce usable maximum grants (0.258149ms)
+✔ T31: old external charge right blocks withdrawal of ESS support until effective curtailment (0.435157ms)
+✔ T16/T17/T18: PV uses strictest generation limit; stale EVU and unconverted export limits fail closed (0.242757ms)
+✔ T19/T32: shared AC port and optional external charging never become fictitious generation capacity (0.139971ms)
+✔ T20: measurements retain units/sign and reject stale, skewed, future or malformed values (0.768229ms)
+✔ T21/T22: receive ACK cannot narrow rights; exact fresh application can; duplicate and old sessions fail (0.905575ms)
+✔ T23/T26/T27: timeout and restart preserve possible power; only confirmed fallback can release ownership (0.731333ms)
+✔ unknown hardware profile cannot generate executable grant (0.110276ms)
+✔ reserves are subtracted once and zero is never treated as missing (0.207092ms)
+✔ T04: M1-Eigenverbrauch folgt ausschließlich M1, nicht dem äußeren Handelsfahrpunkt (4.191621ms)
+✔ T05: gemeinsamer lokaler Fehler wird einmal auf zwei Batterien verteilt (0.566044ms)
+✔ T06/T07: äußerer TESVOLT ist keine lokale Senke für M1-Nulleinspeisung (0.442207ms)
+✔ Nulleinspeisung fordert nur tatsächlich benötigte lokale Ladung an (0.334064ms)
+✔ volle Batterie erhält keine fiktive Aufnahmekapazität (0.264769ms)
+✔ fehlende, manipulierte und veraltete SoC-Telemetrie blockiert Leistungsvorschlag (0.587987ms)
+✔ mehrere lokale Regler auf demselben Bilanzfehler werden abgewiesen (0.24523ms)
+✔ Peak-Shaving und Tarif benötigen getrennte echte Planervorgaben (0.279612ms)
+✔ T25: M0-Sättigungsfeedback verhindert Auflaufen des Gruppen-Rampenzustands (0.68335ms)
+✔ Rampen-/Policyzustände bleiben zwischen M0 und M1 getrennt (0.433364ms)
+✔ falsche Konfigurationsversion oder nicht frische Messwerte führen nie zu Null-Ersatzmessung (0.26566ms)
+✔ statischer Bestand bleibt ohne Gruppenplanung (3.395941ms)
+✔ aktive App verwendet eigene Ziele und SoC statt globaler Single-/Farm-Policies (0.426343ms)
+✔ SoC-Grenzen gelten pro Mitglied und vererben sich nicht vom ersten Gruppenspeicher (0.221554ms)
+✔ eigener Peak-Zielwert ist ohne Fremdplan gültig; nur frischer Override ersetzt ihn (0.37143ms)
+✔ externe Arbitrage bleibt ohne Sollwert; EOS benötigt explizite frische Anforderung (0.373293ms)
+✔ Tarif nutzt eigene Ladefähigkeit trotz deaktivierter alter Single-/Farm-Ausgänge (0.375286ms)
+✔ Tarifsperre, Stale, Zukunft, Priorität und fehlendes NT-Fenster fallen auf eigenen EVO zurück (0.733577ms)
+✔ individuelle Rampen vor Verteilung schützen langsame Geräte trotz großer Summenrampe (0.502167ms)
+✔ individuelle Budgetrückführung verhindert unzulässige Umverteilung einer Gruppensumme (0.295406ms)
+✔ erster frischer Messzyklus hält Rampenanker; Folgezyklus darf weiterfahren (0.319682ms)
+✔ fehlende aktive Rampe oder Fähigkeit erzeugt keinen Null-Ersatzauftrag (0.154062ms)
+✔ Tarif-EVO und eigenständige EVO duplizieren keinen lokalen Bilanzfehler (0.122154ms)
+✔ Manager: statischer Beobachter erzeugt keine zusätzlichen Modulstates und wird beendet (9.833849ms)
+✔ alte Konfiguration: weder neue Messleseaufträge noch State-/Gerätewrites (7.450275ms)
+✔ M0 enthält M1 genau einmal; bestehende Konfiguration und globale NVP-Werte unverändert (11.397968ms)
+✔ Vorschau verändert keine Config, Plannerzustände oder Diagnosestates (1.380432ms)
+✔ dynamische Diagnose schreibt nur eigene schreibgeschützte Statusobjekte (3.390543ms)
+✔ alte asynchrone Diagnose wird nach Konfigurationswechsel verworfen (1.83743ms)
+✔ Stop verwirft ausstehende Resultate und entfernt nur eigenen Vorschauhook (1.08803ms)
+✔ fehlende und veraltete Messwerte erzeugen kein Nullwertbudget (0.628297ms)
+✔ Datenbankfehler wird sichtbar ohne unhandled rejection oder Freigabe (0.500255ms)
+✔ maximal ein Datenbankauftrag auch bei gleichzeitigem Vorschauabruf (2.178065ms)
+✔ Rückkehr statisch aktualisiert vorhandene Diagnoseanzeige (1.094831ms)
+✔ manipulierter aktiver Modus eröffnet keinen Gerätewriter (0.368255ms)
+✔ T13/T15: hypothetische Importüberschreitung wird mit Bereich und Betrag sichtbar (1.061501ms)
+✔ T14/T15: lokale Exportüberschreitung bleibt von erlaubter M0-Einspeisung getrennt (0.177227ms)
+✔ veraltete Überlastmessung bleibt Messfehler und wird nicht als aktueller Budgetverstoß ausgegeben (0.19193ms)
+ℹ tests 72
+ℹ suites 0
+ℹ pass 72
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 527.076693

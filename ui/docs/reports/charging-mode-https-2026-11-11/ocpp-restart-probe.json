@@ -1,0 +1,120 @@
+{
+  "scope": "Five original-1.0.35 charging-module mock ticks. No HTTP/HTTPS server, OCPP socket, actual controller restart or hardware. Reconstructed module shows persisted-state behavior only.",
+  "results": [
+    {
+      "label": "Fresh OCPP contact without any browser",
+      "userMode": "auto",
+      "chargingState": "EVConnected",
+      "chargingStateAge": "fresh",
+      "status": "Preparing",
+      "effectiveMode": "normal",
+      "normalized": "ready_to_charge",
+      "eligible": true,
+      "targetW": 4200,
+      "writes": [
+        {
+          "key": "cm.wb.lp1.setW",
+          "value": 4200,
+          "ts": 1794375477629
+        },
+        {
+          "key": "cm.wb.lp1.en",
+          "value": true,
+          "ts": 1794375477632
+        }
+      ]
+    },
+    {
+      "label": "Old OCPP pause alongside fresh Preparing",
+      "userMode": "auto",
+      "chargingState": "SuspendedEV",
+      "chargingStateAge": "24h",
+      "status": "Preparing",
+      "effectiveMode": "normal",
+      "normalized": "paused_by_vehicle",
+      "eligible": false,
+      "targetW": 0,
+      "writes": [
+        {
+          "key": "cm.wb.lp1.setW",
+          "value": 0,
+          "ts": 1794375477664
+        },
+        {
+          "key": "cm.wb.lp1.en",
+          "value": true,
+          "ts": 1794375477664
+        }
+      ]
+    },
+    {
+      "label": "Reconstructed module with same persisted raw states",
+      "userMode": "auto",
+      "chargingState": "SuspendedEV",
+      "chargingStateAge": "24h",
+      "status": "Preparing",
+      "effectiveMode": "normal",
+      "normalized": "paused_by_vehicle",
+      "eligible": false,
+      "targetW": 0,
+      "writes": [
+        {
+          "key": "cm.wb.lp1.setW",
+          "value": 0,
+          "ts": 1794375477677
+        },
+        {
+          "key": "cm.wb.lp1.en",
+          "value": true,
+          "ts": 1794375477677
+        }
+      ]
+    },
+    {
+      "label": "New fresh transaction state resolves ambiguity",
+      "userMode": "auto",
+      "chargingState": "EVConnected",
+      "chargingStateAge": "fresh",
+      "status": "Preparing",
+      "effectiveMode": "normal",
+      "normalized": "ready_to_charge",
+      "eligible": true,
+      "targetW": 4200,
+      "writes": [
+        {
+          "key": "cm.wb.lp1.setW",
+          "value": 4200,
+          "ts": 1794375477685
+        },
+        {
+          "key": "cm.wb.lp1.en",
+          "value": true,
+          "ts": 1794375477685
+        }
+      ]
+    },
+    {
+      "label": "Persisted PV remains PV after reconstruction",
+      "userMode": "pv",
+      "chargingState": "EVConnected",
+      "chargingStateAge": "fresh",
+      "status": "Preparing",
+      "effectiveMode": "pv",
+      "normalized": "ready_to_charge",
+      "eligible": true,
+      "targetW": 0,
+      "writes": [
+        {
+          "key": "cm.wb.lp1.setW",
+          "value": 0,
+          "ts": 1794375477694
+        },
+        {
+          "key": "cm.wb.lp1.en",
+          "value": true,
+          "ts": 1794375477694
+        }
+      ]
+    }
+  ]
+}

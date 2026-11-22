@@ -1,0 +1,7 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 release:check-version-free
+> node scripts/verify-npm-version-free.js
+
+[npm-version-free] ERROR: Registry nicht sicher prüfbar: Connection to establish proxy tunnel timed out after 5000ms
+[npm-version-free] Publish wird fail-closed blockiert; Registry/Netzwerk prüfen und erneut ausführen.

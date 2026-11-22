@@ -43,14 +43,14 @@ export default function EosLicenseDialog(): JSX.Element {
                 'The system UUID changed. Contact support.',
             ),
             LICENSE_SIGNATURE_INVALID: tr('Die Lizenzsignatur ist ungültig.', 'The license signature is invalid.'),
-            LICENSE_FORMAT: tr('Bitte einen gültigen NWL2-Lizenzcode eingeben.', 'Enter a valid NWL2 license code.'),
+            LICENSE_FORMAT: tr('Bitte einen gültigen EOS-Lizenzcode eingeben.', 'Enter a valid EOS license code.'),
             LICENSE_ADMIN_REQUIRED: tr(
                 'Die Lizenzverwaltung erfordert ein Administrator-Konto.',
                 'License management requires an administrator account.',
             ),
             LICENSE_HTTPS_REQUIRED: tr(
-                'Bitte den EOS Admin über HTTPS öffnen, um Lizenzen zu verwalten.',
-                'Open EOS Admin over HTTPS to manage licenses.',
+                'Bitte NexoWatt EOS über HTTPS öffnen, um Lizenzen zu verwalten.',
+                'Open NexoWatt EOS over HTTPS to manage licenses.',
             ),
             LICENSE_CLOCK_ROLLBACK: tr('Bitte Systemdatum und Uhrzeit prüfen.', 'Check the system date and time.'),
             LICENSE_RATE_LIMIT: tr(
@@ -243,8 +243,8 @@ export default function EosLicenseDialog(): JSX.Element {
                         </Typography>
                         <Typography sx={{ mb: 2 }}>
                             {tr(
-                                'Den für diese System-UUID ausgestellten NWL2-Code aus dem NexoWatt Key-Generator eingeben. Die Prüfung und verschlüsselte Speicherung erfolgen auf dem Gerät.',
-                                'Enter the NWL2 code issued for this system UUID by the NexoWatt key generator. Verification and encrypted storage take place on this device.',
+                                'Den für diese System-UUID ausgestellten EOS-Lizenzcode aus dem NexoWatt Key-Generator eingeben. Die Prüfung und verschlüsselte Speicherung erfolgen auf dem Gerät.',
+                                'Enter the EOS license code issued for this system UUID by the NexoWatt key generator. Verification and encrypted storage take place on this device.',
                             )}
                         </Typography>
                         <TextField

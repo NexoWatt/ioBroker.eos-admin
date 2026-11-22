@@ -1,0 +1,128 @@
+[
+  {
+    "step": "build-ts-final",
+    "command": [
+      "npm",
+      "run",
+      "build:ts"
+    ],
+    "exitCode": 0,
+    "seconds": 12.6,
+    "log": "build-ts-final.log"
+  },
+  {
+    "step": "admin-build-final",
+    "command": [
+      "npm",
+      "run",
+      "admin:build"
+    ],
+    "exitCode": 0,
+    "seconds": 8.43,
+    "log": "admin-build-final.log"
+  },
+  {
+    "step": "docs-build-final",
+    "command": [
+      "npm",
+      "run",
+      "docs:build"
+    ],
+    "exitCode": 0,
+    "seconds": 3.26,
+    "log": "docs-build-final.log"
+  },
+  {
+    "step": "release-manifest-before-tests",
+    "command": [
+      "npm",
+      "run",
+      "release:generate-manifest"
+    ],
+    "exitCode": 0,
+    "seconds": 1.51,
+    "log": "release-manifest-before-tests.log",
+    "startedAt": "2026-10-24T06:16:55.498027+00:00",
+    "completedAt": "2026-10-24T06:16:57.012899+00:00"
+  },
+  {
+    "step": "release-prepare-final",
+    "command": [
+      "npm",
+      "run",
+      "release:prepare"
+    ],
+    "exitCode": 0,
+    "seconds": 0.94,
+    "log": "release-prepare-final.log",
+    "startedAt": "2026-10-24T06:16:57.013455+00:00",
+    "completedAt": "2026-10-24T06:16:57.950585+00:00"
+  },
+  {
+    "step": "test-all-complete",
+    "command": [
+      "npm",
+      "run",
+      "test:all"
+    ],
+    "exitCode": 0,
+    "seconds": 200.95,
+    "log": "test-all-complete.log",
+    "startedAt": "2026-10-24T06:21:37.573593+00:00",
+    "completedAt": "2026-10-24T06:24:58.526004+00:00"
+  },
+  {
+    "step": "docs-check-final",
+    "command": [
+      "npm",
+      "run",
+      "docs:check"
+    ],
+    "exitCode": 0,
+    "seconds": 0.24,
+    "log": "docs-check-final.log",
+    "startedAt": "2026-10-24T06:24:58.526536+00:00",
+    "completedAt": "2026-10-24T06:24:58.771025+00:00"
+  },
+  {
+    "step": "publish-check-final",
+    "command": [
+      "npm",
+      "run",
+      "publish:check"
+    ],
+    "exitCode": 0,
+    "seconds": 1.02,
+    "log": "publish-check-final.log",
+    "startedAt": "2026-10-24T06:24:58.771603+00:00",
+    "completedAt": "2026-10-24T06:24:59.789355+00:00"
+  },
+  {
+    "step": "runtime-start-final",
+    "command": [
+      "npm",
+      "run",
+      "test:package-runtime-start-smoke"
+    ],
+    "exitCode": 0,
+    "seconds": 1.02,
+    "log": "runtime-start-final.log",
+    "startedAt": "2026-10-24T06:24:59.789752+00:00",
+    "completedAt": "2026-10-24T06:25:00.810697+00:00"
+  },
+  {
+    "step": "npm-pack-dry-final",
+    "command": [
+      "npm",
+      "pack",
+      "--dry-run",
+      "--json",
+      "--ignore-scripts"
+    ],
+    "exitCode": 0,
+    "seconds": 2.88,
+    "log": "npm-pack-dry-final.log",
+    "startedAt": "2026-10-24T06:25:00.811114+00:00",
+    "completedAt": "2026-10-24T06:25:03.688291+00:00"
+  }
+]

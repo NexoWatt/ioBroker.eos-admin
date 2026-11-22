@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "groups": 14,
+  "baselineRegressionReproduced": true,
+  "source": "canonical-source",
+  "scope": "Kontrollierte Mess-I/O und Zeit, kein Hardwaretest",
+  "checks": [
+    "Frische tatsächliche 9 kW PV und gedeckte 4,5 kW funktionieren ohne Prognose",
+    "Morgenrampe schaltet einzeln und wartet zwischen bestätigten Stufen",
+    "Forecast allein startet bei 0 W Ist-PV keine Stufe, auch nach Neustart",
+    "Forecast-Snapshot und Quelldaten haben begrenztes Alter und strikte Typen",
+    "Zeitlose/alte/future PV-Caches erzeugen keine Auto-Freigabe",
+    "Nachmittags-Peak wird nicht zu momentan verfügbarem PV-Budget",
+    "Speicherresolver erhält strictStale und veraltete Ladeleistung gibt kein Budget",
+    "Fehlende oder bilanzierte Batterie ist kein bestätigter Nullfluss",
+    "Farm-Bruttoentladung sperrt auch bei Netto-Null oder Netto-Ladung",
+    "Verlorene Messung beendet eine laufende Probe ohne fiktiven Erfolg",
+    "PV-Anstieg kann Batterieentladung oder Netzbezug nicht bestätigen",
+    "Relaiszustand/Sollwert allein bestätigt keine Heizleistung",
+    "Reduziertes zentrales Budget überstimmt laufendes Beobachtungsfenster",
+    "Zentralmodus bleibt exklusiv, Diagnose kann alten Forecastpfad nicht aktivieren"
+  ]
+}

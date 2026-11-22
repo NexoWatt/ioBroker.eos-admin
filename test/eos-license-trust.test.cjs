@@ -17,14 +17,20 @@ function fixture(options = {}) {
     let closed = false;
     let opened = false;
     let offset = 0;
+    const openedPaths = [];
     const stat = (directory = false, change = {}) => ({
         uid: 0, mode: directory ? 0o755 : 0o644, nlink: 1, dev: 1, ino: 11,
         size: raw.length, isDirectory: () => directory, isFile: () => !directory,
         isSymbolicLink: () => false, ...change,
     });
     const filesystem = {
-        lstat: async name => { visited.push(name); return stat(name !== filename, options.stats?.[name]); },
-        open: async () => {
+        lstat: async name => {
+            visited.push(name);
+            if (options.missing?.includes(name)) throw Object.assign(new Error('missing'), { code: 'ENOENT' });
+            return stat(name !== filename && !options.trustedPaths?.includes(name), options.stats?.[name]);
+        },
+        open: async name => {
+            openedPaths.push(name);
             opened = true;
             return {
                 stat: async () => stat(false, options.openStat),
@@ -47,10 +53,11 @@ function fixture(options = {}) {
     // sourcePath above still uses the host path API to load the production code.
     const pathApi = options.pathApi || path.posix;
     const context = { module, exports: module.exports, Buffer, JSON, setTimeout, clearTimeout, setInterval, clearInterval,
-        process: { platform: options.platform || 'linux' },
+        process: { platform: options.platform || 'linux', env: options.env || {} },
         require: name => name === 'node:fs/promises' ? filesystem : name === 'node:path' ? pathApi : realRequire(name) };
     vm.runInNewContext(fs.readFileSync(sourcePath, 'utf8'), context, { filename: sourcePath });
-    return { read: module.exports.readTrustFile, visited, closed: () => closed, opened: () => opened };
+    return { read: module.exports.readTrustFile, readProduct: module.exports.readProductTrust,
+        visited, openedPaths, closed: () => closed, opened: () => opened };
 }
 
 test('trusted root-owned complete directory chain accepts bounded public keys', async () => {
@@ -60,6 +67,33 @@ test('trusted root-owned complete directory chain accepts bounded public keys', 
     assert.ok(Object.isFrozen(result));
     assert.deepEqual(f.visited, ['/', '/etc', '/etc/nexowatt', filename]);
     assert.ok(f.closed());
+});
+
+test('EOS trust location is preferred and legacy fallback occurs only for absent current file', async () => {
+    const modern = '/etc/nexowatt-eos/license-trust.json';
+    const current = fixture({ trustedPaths: [modern] });
+    assert.equal((await current.readProduct()).unit, key);
+    assert.deepEqual(current.openedPaths, [modern]);
+    const legacy = fixture({ missing: ['/etc/nexowatt-eos'] });
+    assert.equal((await legacy.readProduct()).unit, key);
+    assert.deepEqual(legacy.openedPaths, [filename]);
+    const unsafe = fixture({ trustedPaths: [modern], stats: { '/etc/nexowatt-eos': { mode: 0o777 } } });
+    await assert.rejects(unsafe.readProduct(), { code: 'TRUST_PERMISSIONS' });
+    assert.equal(unsafe.visited.includes('/etc/nexowatt'), false);
+    const invalid = fixture({ trustedPaths: [modern], raw: Buffer.from('{}') });
+    await assert.rejects(invalid.readProduct(), { code: 'TRUST_INVALID' });
+    assert.deepEqual(invalid.openedPaths, [modern]);
+});
+
+test('explicit manufacturer trust override does not fall back on errors or empty path', async () => {
+    const explicit = '/etc/private-eos/trust.json';
+    const selected = fixture({ env: { NEXOWATT_LICENSE_TRUST_FILE: explicit }, trustedPaths: [explicit] });
+    assert.equal((await selected.readProduct()).unit, key);
+    assert.deepEqual(selected.openedPaths, [explicit]);
+    const missing = fixture({ env: { NEXOWATT_LICENSE_TRUST_FILE: explicit }, missing: ['/etc/private-eos'] });
+    await assert.rejects(missing.readProduct(), { code: 'ENOENT' });
+    assert.equal(missing.visited.includes('/etc/nexowatt'), false);
+    await assert.rejects(fixture({ env: { NEXOWATT_LICENSE_TRUST_FILE: '' } }).readProduct(), { code: 'TRUST_PATH' });
 });
 
 test('writable, foreign-owned or symbolic-link ancestor is denied before file open', async () => {

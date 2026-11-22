@@ -1,0 +1,8 @@
+PASS Backend-Defaults und leerer OFF-Status werden vollständig gelesen
+PASS Diagnose und aktiver Master erhalten Teilnehmer, Nullgrenzen und Timing
+PASS Persistierte Betriebslimits ohne Strategie erfinden keinen fixed-Modus
+PASS Echte Master-Paarung und JSON-Import bewahren den Slavevertrag
+PASS Echte Zählererfassung und Archivexport behalten Hashes und beide Quellenzeiten
+PASS Echte BLOCKED-, PARTIAL_PERIOD- und DRAFT-Abrechnungen sind unverändert darstellbar
+PASS Manipulierte JSON-Strukturen und falsche Zahlen erreichen keine Mesh-Formulare
+{"result":"PASS","checks":7,"node":"v24.19.0","sourceSha256":"b76259745b0bb6728eeffd6cd149ab573b27b75601d197b3b7eb2c92aa7a2c40","limitation":"Echte Backend-/Journalfunktionen mit temporären synthetischen Zählerwerten; keine Feldgeräte oder Liveanlage."}

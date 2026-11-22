@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:app-runtime-typing
+> node scripts/verify-ts-app-runtime-typing.js
+
+[ts-app-runtime-typing] OK: LIVE-App-Spiegel ist gezielt typisiert und der Vertragsbereich ist kompilierbar.

@@ -1,4 +1,7 @@
 export interface AdminAdapterConfig extends ioBroker.AdapterConfig {
+    /** Fixed external HTTPS origin; forwarded headers never establish trust. */
+    eosExternalOrigin?: string;
+    eosUi?: Record<string, unknown>;
     /** Answer ACME HTTP-01 challenges published by the acme adapter. Enabled if not set */
     acmeChallenge: boolean;
     accessAllowedConfigs: string[];

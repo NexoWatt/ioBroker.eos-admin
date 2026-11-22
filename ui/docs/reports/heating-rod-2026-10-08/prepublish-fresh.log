@@ -1,0 +1,45 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.23 prepublishOnly
+> npm run release:check-version-free && npm run release:prepare && npm run publish:check && npm run test:stable-release && node scripts/verify-publish.js && npm run test:package-runtime-start-smoke
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.23 release:check-version-free
+> node scripts/verify-npm-version-free.js
+
+[npm-version-free] OK: iobroker.nexowatt-ui@1.0.23 ist in http://127.0.0.1:43977 noch nicht veröffentlicht.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.23 release:prepare
+> node scripts/prepare-release-assets.cjs
+
+[release-prepare] OK: Keine alten Admin-Bundles; Sicherheitsprüfung erfolgreich.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.23 publish:check
+> node scripts/verify-release-artifact.js
+
+[secret-guard] OK: 2444 files; no findings in the supported rules.
+[release-artifact] Quellcode-Dokumentation aktuell: 234 Dateien.
+[release-artifact] OK: Produkt-SBOM und Quellen-/Artefaktbindung aktuell.
+[release-artifact] OK: iobroker.nexowatt-ui@1.0.23, 406 geprüfte Paketdateien, Produkt-Runtime unverändert.
+[release-artifact] OK: Keine Installation oder Aktualisierung von npm/TypeScript erforderlich.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.23 test:stable-release
+> node scripts/verify-stable-release.cjs
+
+[stable-release] OK: iobroker.nexowatt-ui@1.0.23 Metadaten konsistent (Sicherheits-Prüfstand, NICHT produktiv freigegeben).
+[stable-release] OK: 1.0.20-Speicherquellen/Writer, Heizstab-Tarif, 1.0.5-Speicherschutz, Auto/PV/Phasen und bisherige Home-/Liveness-/Memory-/Regelungsregressionen sind eingebunden.
+[publish-check] Checking package metadata...
+[publish-check] Scanning selected files for conflict markers...
+[publish-check] Checking selected JavaScript syntax...
+[publish-check] JS syntax checked: 19
+[publish-check] OK: JSON, ioBroker metadata, conflict markers and JS syntax look good.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.23 test:package-runtime-start-smoke
+> node scripts/verify-package-runtime-start-smoke.js
+
+[package-runtime-start-smoke] OK: 235 JS/MJS-Dateien syntaktisch geprüft, relative require()-Pfade vollständig und main.js-/EMS-/§14a-Startkette konstruierbar.

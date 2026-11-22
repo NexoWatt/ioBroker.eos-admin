@@ -1,0 +1,18 @@
+[sbom regression] PASS offline generation from clean repository without either node_modules tree
+[sbom regression] PASS release generation never seals the artifact manifest
+[sbom regression] PASS npm automatically included package.json is bound despite absence from files list
+[sbom regression] PASS reference dependencies are not claimed to be an actual live-device inventory
+[sbom regression] PASS repeated publication verification is read-only and needs no npm on PATH
+[sbom regression] PASS changed root package dependency declaration is rejected
+[sbom regression] PASS changed lockfile is rejected by verifier and generator
+[sbom regression] PASS changed Admin asset cannot be silently re-described
+[sbom regression] PASS changed Admin source requires a genuine new build
+[sbom regression] PASS tampered SBOM is rejected
+[sbom regression] PASS missing SBOM is rejected
+[sbom regression] PASS omitted hash record is rejected
+[sbom regression] PASS missing archived Admin evidence blocks generation without rewriting SBOM
+[sbom regression] PASS partial Admin dependency installation is not accepted as the recorded build
+[sbom regression] PASS prepared npm package verifies without source, lockfiles, dependencies or npm
+[sbom regression] PASS partial source repository must not pretend to be a prepared npm package
+[sbom regression] PASS unsafe paths and graph references fail closed
+[sbom regression] OK: 17 Prüfgruppen. Lokal auf linux; kein echter npm-Publish und keine Geräteprüfung.

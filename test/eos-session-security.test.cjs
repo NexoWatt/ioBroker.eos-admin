@@ -275,3 +275,13 @@ test('real five-second watchdog closes a socket after a missed credential object
     assert.equal(closed, true); assert.equal(x.security.isSocketAllowed(client), false);
     x.security.stop();
 });
+
+test('TOTP account contract never falls back to password-only issuance or cached/refresh tokens', async()=>{
+ for(const value of [{totp:{enabled:true}}, {totp:'test-marker'}, {totp:false}, 'malformed', []]) {
+  const x=await setup();const token=await x.issue(); const previous=clone(x.users['system.user.operator']);
+  x.users['system.user.operator'].common.externalAuthentication=value;
+  assert.equal(await x.model.getUser('operator','test-only-passphrase'),null);
+  assert.ok(!await x.model.getAccessToken(token.accessToken));assert.ok(!await x.model.getRefreshToken(token.refreshToken));
+  const epoch=x.security.epoch;x.security.handleObjectChange('system.user.operator',x.users['system.user.operator'],previous);assert.notEqual(x.security.epoch,epoch);x.security.stop();
+ }
+});

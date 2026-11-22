@@ -1,0 +1,36 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:security-standards
+> node scripts/verify-security-standards.cjs && node scripts/verify-runtime-license-header.cjs && node scripts/verify-static-ems-exports.cjs && node scripts/verify-http-error-boundary.cjs && node scripts/verify-simulation-public-errors.cjs && npm run test:security-continuation && npm run test:security-patch
+
+PASS security standards guard self-tests: 17
+PASS strict security boundary scope: src-ts/runtime-executables/lib/http-error-boundary.ts
+COVERAGE: named boundary only; no ESLint/SAST or whole-repository compliance claim.
+✔ bestehender führender Marker transpiliert unverändert (2.951721ms)
+✔ proprietärer Kopf bleibt vor Build-Hinweis, folgender Marker transpiliert (0.422227ms)
+✔ No-Check-Migrationsanker nach Lizenzkopf wird nicht ausgeliefert (0.341414ms)
+✔ Marker in String oder gewöhnlichem Kommentar löst keine Transpilierung aus (0.139991ms)
+✔ Hash- und Wiederholungsprüfung akzeptiert die exakt erzeugten Artefakte (245.800083ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 502.441299
+✔ charging-budget-helpers: statischer Export und proprietärer Header in Originalquelle (0.846686ms)
+✔ charging-budget-helpers: Originalquelle lädt und arbeitet ohne String-Codegenerierung (2.753573ms)
+✔ charging-budget-helpers: erzeugtes Laufzeitartefakt lädt ohne String-Codegenerierung (0.96798ms)
+✔ evcs-control-mapping: statischer Export und proprietärer Header in Originalquelle (0.250047ms)
+✔ evcs-control-mapping: Originalquelle lädt und arbeitet ohne String-Codegenerierung (1.27341ms)
+✔ evcs-control-mapping: erzeugtes Laufzeitartefakt lädt ohne String-Codegenerierung (0.990934ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 14.043347
+HTTP error boundary regression failed (details withheld).

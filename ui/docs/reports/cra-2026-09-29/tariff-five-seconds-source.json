@@ -1,0 +1,13 @@
+{
+  "command": [
+    "node",
+    "scripts/verify-cra-tariff.cjs",
+    "--source"
+  ],
+  "cwd": "repository root",
+  "startedAt": "2026-09-29T21:19:01.409319+00:00",
+  "finishedAt": "2026-09-29T21:19:06.820110+00:00",
+  "durationSeconds": 5.411,
+  "exitCode": 0,
+  "capturedBytes": 1511
+}

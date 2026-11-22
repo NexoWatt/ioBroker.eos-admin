@@ -1,0 +1,24 @@
+[
+  {
+    "command": [
+      "npm",
+      "run",
+      "test:package-runtime-start-smoke"
+    ],
+    "exit": 0,
+    "seconds": 1.225430965423584,
+    "log": "package-runtime-final.log"
+  },
+  {
+    "command": [
+      "npm",
+      "pack",
+      "--dry-run",
+      "--json",
+      "--ignore-scripts"
+    ],
+    "exit": 0,
+    "seconds": 2.887777805328369,
+    "log": "npm-pack-dry-run.log"
+  }
+]

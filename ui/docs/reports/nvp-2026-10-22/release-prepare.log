@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.24 release:prepare
+> node scripts/prepare-release-assets.cjs
+
+[release-prepare] OK: Keine alten Admin-Bundles; Sicherheitsprüfung erfolgreich.

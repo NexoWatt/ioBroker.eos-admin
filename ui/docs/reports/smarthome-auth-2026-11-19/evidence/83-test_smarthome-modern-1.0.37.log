@@ -1,0 +1,22 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:smarthome-modern-1.0.37
+> node --test test/smarthome-modern-ui.test.cjs
+
+✔ Nur Qualitäts-Alterszähler werden aus der Signatur entfernt; Eingaben bleiben unverändert (10.244757ms)
+✔ Gerätetypen, Namen, Favoriten und Qualität bleiben im echten Kachelrenderer erhalten (8.805037ms)
+✔ Batterie-Prozent, LowBattery, fehlende/veraltete Werte und Störungen werden unterschieden (1.912572ms)
+✔ Detaildialog bleibt beim Poll erhalten und bietet Escape, Fokusfang und Rückkehr (11.456904ms)
+✔ Timerentwurf erhält denselben modalen Lebenszyklus und bleibt bei State-Polls bestehen (3.480464ms)
+✔ Konfigurations-/Rechtewechsel schließt einen bestehenden Dialog statt alte Bedienfreigabe zu behalten (1.578739ms)
+✔ Poll aktualisiert Alter ohne Neurender, echte Qualitäts-/Wertwechsel rendern weiter (1.47362ms)
+✔ Schalt-/Szenen-Payloads, Dimmschritt und Klima-Regelgrenzen bleiben erhalten (3.071939ms)
+✔ Favoriten-Schlüssel und lokale Overrides werden unverändert weiterverwendet (1.364586ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 130.381006

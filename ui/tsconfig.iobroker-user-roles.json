@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.security-boundaries.json",
+  "compilerOptions": {
+    "types": ["node"],
+    "moduleResolution": "nodenext",
+    "module": "NodeNext"
+  },
+  "files": ["src-ts/runtime-executables/lib/iobroker-user-roles.ts"],
+  "include": []
+}

@@ -1,0 +1,16 @@
+PASS Klare Kontobeschriftung und keine sensiblen Inhalte vor Anmeldung
+PASS Individuelles Passwort unverändert übergeben; nur Benutzername wird gespeichert
+PASS Statusfehler nach erfolgreicher Passwortprüfung bleibt Netzwerkfehler
+PASS Tatsächlich fehlende Gruppenrolle bleibt als Rollenproblem sichtbar
+PASS EOS401 bleibt Passwortfehler, Proxy401 verlangt dagegen Admin-Anmeldung
+PASS Proxy403 und Rate-Limit erhalten unterschiedliche verständliche Meldungen
+PASS Alte erfolgreiche Statusantwort darf während fehlgeschlagenem Login nicht entsperren
+PASS Alte Netzwerkfehler überschreiben keine neu bestätigte Sitzung
+PASS Während Anmeldung starten weder Polling noch Doppel-Submit weitere Anfragen
+PASS Überlappende Statusabfragen werden nicht parallel gestartet
+PASS Abmeldung sperrt sofort; späte Statusantwort entsperrt nicht erneut
+PASS Fehlgeschlagene Serverabmeldung wird nicht als bestätigt ausgegeben
+PASS Unmount verwirft späte Anmeldung ohne Speicher- oder UI-Schreibwirkung
+PASS Routenwechsel beendet alte Generation und lässt die neue Maske bedienbar
+PASS Deaktivierte Authentifizierung und überbreite Kundenrechte öffnen keine Fachseite
+{"result":"PASS","checks":15,"node":"v24.22.1","sourceSha256":"84cef36d91c103a590ce171e3a5f1d9d938a0c1b59af4b1bdc32e70bbd2407dd","scope":"Original TSX component handlers with deterministic hook/lifecycle host and async API fixtures; no live Admin or browser test"}

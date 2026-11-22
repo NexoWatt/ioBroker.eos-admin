@@ -7,7 +7,6 @@
     const RETRY_MS = 650;
     const CONNECTION_WAIT_MS = 12000;
     const STALE_MS = 20000;
-    const REQUIRED_UI_VERSION = '0.8.198';
     const COLORS = { ok: '#01bc69', info: '#48b9ff', warning: '#ffbd59', error: '#ff5f72' };
     let timer = 0;
     let retryTimer = 0;
@@ -69,7 +68,7 @@
 
     const normalizeInstances = (states, aliveStates) => {
         const prefixes = new Set();
-        Object.keys(states || {}).forEach(id => { const match = id.match(/^(nexowatt-ui\.\d+)\.info\.adminOverview\./); if (match) prefixes.add(match[1]); });
+        Object.keys(states || {}).forEach(id => { const match = id.match(/^(eos-admin\.\d+)\.info\.adminOverview\./); if (match) prefixes.add(match[1]); });
         return Array.from(prefixes).map(instance => {
             const summaryId = `${instance}.info.adminOverview.summaryJson`;
             const summary = parse(stateVal(states, summaryId), {});
@@ -110,35 +109,6 @@
         root.style.setProperty('--eos-ems-status-color', COLORS.info);
         root.innerHTML = `<header class="eos-ems-overview-header"><div><span class="eos-ems-overview-eyebrow">NexoWatt EMS</span><h2>Live-Diagnose nicht verfügbar</h2><p>${esc(message)}</p>${detail ? `<small class="eos-ems-overview-help">${esc(detail)}</small>` : ''}</div><div class="eos-ems-overview-state"><span class="eos-ems-overview-state-dot"></span><strong>Nicht verfügbar</strong><small>read-only</small></div></header><footer class="eos-ems-overview-footer"><span>Die Kachel liest ausschließlich info.adminOverview.*.</span><span>Keine EMS-Regelung wurde verändert.</span></footer>`;
     };
-    const semverAtLeast = (value, minimum) => {
-        const parseVersion = input => String(input || '').split('-')[0].split('.').map(part => Number.parseInt(part, 10) || 0);
-        const current = parseVersion(value); const required = parseVersion(minimum);
-        for (let index = 0; index < Math.max(current.length, required.length); index++) {
-            const left = current[index] || 0; const right = required[index] || 0;
-            if (left !== right) return left > right;
-        }
-        return true;
-    };
-    const readUiAdapterInfo = async socket => {
-        try {
-            if (typeof socket.getAdapterInstances === 'function') {
-                const rows = await socket.getAdapterInstances('nexowatt-ui', true);
-                const instances = Array.isArray(rows) ? rows : [];
-                const selected = instances.find(row => row?.common?.enabled) || instances[0];
-                if (selected) return { installed: true, enabled: selected.common?.enabled !== false, version: text(selected.common?.version, ''), id: text(selected._id, '') };
-            }
-        } catch (_) { /* next fallback */ }
-        try {
-            if (typeof socket.getObjectViewSystem === 'function') {
-                const rows = await socket.getObjectViewSystem('instance', 'system.adapter.nexowatt-ui.', 'system.adapter.nexowatt-ui.香');
-                const values = Array.isArray(rows) ? rows : Object.values(rows || {});
-                const selected = values.find(row => row?.common?.enabled) || values[0];
-                if (selected) return { installed: true, enabled: selected.common?.enabled !== false, version: text(selected.common?.version, ''), id: text(selected._id, '') };
-            }
-        } catch (_) { /* permission or compatibility */ }
-        return { installed: false, version: '', enabled: false, id: '' };
-    };
-
     const fallbackDecisions = summary => {
         const result = []; const charging = summary.charging || {}; const storage = summary.storage || {};
         if (charging.available) result.push({ severity: num(charging.faultCount) > 0 ? 'error' : num(charging.waitingCount) > 0 ? 'info' : 'ok', title: `${num(charging.activeCount)} lädt · ${num(charging.waitingCount)} wartet · ${num(charging.faultCount)} gestört`, reason: text(charging.limiterText || charging.status, 'Lademanagement aktiv'), details: `Ist ${formatPower(charging.actualW)} · Soll ${formatPower(charging.targetW)}` });
@@ -191,29 +161,22 @@
         }
         inFlight = true;
         try {
+            const namespace = await socket.getCurrentInstance();
+            if (!/^eos-admin\.\d+$/.test(namespace)) throw new Error('EOS instance could not be resolved');
             const [states, alive] = await Promise.all([
-                socket.getForeignStates('nexowatt-ui.*.info.adminOverview.*'),
-                socket.getForeignStates('system.adapter.nexowatt-ui.*.alive'),
+                socket.getForeignStates(`${namespace}.info.adminOverview.*`),
+                socket.getForeignStates(`system.adapter.${namespace}.alive`),
             ]);
             const instances = normalizeInstances(states || {}, alive || {});
             if (instances.length) {
                 render(instances[0]);
             } else {
-                const info = await readUiAdapterInfo(socket);
-                if (!info.installed) {
-                    unavailable('NexoWatt UI ist nicht installiert oder für dieses Benutzerkonto nicht sichtbar.', `Für die vollständige Kachel wird iobroker.nexowatt-ui ab ${REQUIRED_UI_VERSION} benötigt.`);
-                } else if (info.version && !semverAtLeast(info.version, REQUIRED_UI_VERSION)) {
-                    unavailable(`NexoWatt UI ${info.version} ist installiert, enthält den Diagnosevertrag aber noch nicht.`, `Bitte NexoWatt UI mindestens auf ${REQUIRED_UI_VERSION} aktualisieren und die Instanz danach neu starten.`);
-                } else if (info.enabled === false) {
-                    unavailable(`NexoWatt UI ${info.version || ''} ist installiert, aber deaktiviert.`, 'Bitte die UI-Instanz starten. Danach aktualisiert sich die Kachel automatisch.');
-                } else {
-                    unavailable(`NexoWatt UI ${info.version || ''} ist aktiv, veröffentlicht aber noch keine info.adminOverview.*-Werte.`, 'Bitte die NexoWatt-UI-Instanz einmal neu starten. Bleibt der Channel aus, ist der AdminOverviewPublisher der installierten UI-Version zu prüfen.');
-                }
+                unavailable('Die integrierte EOS-Laufzeit veröffentlicht noch keine Diagnosewerte.', 'Bitte den Start-, Konfigurations- und Lizenzstatus unter EOS System prüfen.');
             }
         } catch (error) {
             const message = text(error?.message || error, 'unbekannter Fehler');
             const permission = /permission|access|not allowed|denied/i.test(message);
-            unavailable(permission ? 'Dieses Benutzerkonto darf die EMS-Diagnosewerte derzeit nicht lesen.' : `EMS-Diagnose konnte nicht gelesen werden: ${message}`, permission ? 'Die Datenpunkte unter nexowatt-ui.*.info.adminOverview.* benötigen Leserechte für die jeweilige EOS-Rolle.' : 'Die Kachel ist rein lesend; es wurde keine EMS-Regelung verändert.');
+            unavailable(permission ? 'Dieses Benutzerkonto darf die EMS-Diagnosewerte derzeit nicht lesen.' : `EMS-Diagnose konnte nicht gelesen werden: ${message}`, permission ? 'Die Datenpunkte unter eos-admin.*.info.adminOverview.* benötigen Leserechte für die jeweilige EOS-Rolle.' : 'Die Kachel ist rein lesend; es wurde keine EMS-Regelung verändert.');
         } finally { inFlight = false; }
     };
 

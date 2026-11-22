@@ -1,0 +1,48 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.23 test:heating-rod-night-ui
+> node scripts/verify-heating-rod-night-ui.cjs
+
+  PASS src-ts/runtime-executables/www/app.ts: Nachtstatus überlagert den Forecastcode
+  PASS src-ts/runtime-executables/www/app.ts: Morgen gibt die aktuelle Reglerantwort wieder
+  PASS src-ts/runtime-executables/www/app.ts: expliziter Modus manual1 überstimmt alten Nacht-State
+  PASS src-ts/runtime-executables/www/app.ts: expliziter Modus manual2 überstimmt alten Nacht-State
+  PASS src-ts/runtime-executables/www/app.ts: expliziter Modus manual3 überstimmt alten Nacht-State
+  PASS src-ts/runtime-executables/www/app.ts: expliziter Modus off überstimmt alten Nacht-State
+  PASS src-ts/runtime-executables/www/app.ts: Boost bleibt sichtbar
+  PASS src-ts/runtime-executables/www/app.ts: AUS oder nur Nachtfenster ist kein aktiver Automatikblock
+  PASS src-ts/runtime-executables/www/app.ts: ganztägige Sperre verspricht keinen Morgenstart
+  PASS src-ts/runtime-executables/www/app.ts: ungültige Uhrzeit bleibt neutral
+  PASS src-ts/runtime-executables/www/app.ts: laufende Stufen und Fehlerrückmeldung werden nicht als AUS behauptet
+  PASS src-ts/runtime-executables/www/app.ts: Thermik erhält keinen Heizstab-Nachttext
+  PASS src-ts/runtime-mirrors/www/app.ts: Nachtstatus überlagert den Forecastcode
+  PASS src-ts/runtime-mirrors/www/app.ts: Morgen gibt die aktuelle Reglerantwort wieder
+  PASS src-ts/runtime-mirrors/www/app.ts: expliziter Modus manual1 überstimmt alten Nacht-State
+  PASS src-ts/runtime-mirrors/www/app.ts: expliziter Modus manual2 überstimmt alten Nacht-State
+  PASS src-ts/runtime-mirrors/www/app.ts: expliziter Modus manual3 überstimmt alten Nacht-State
+  PASS src-ts/runtime-mirrors/www/app.ts: expliziter Modus off überstimmt alten Nacht-State
+  PASS src-ts/runtime-mirrors/www/app.ts: Boost bleibt sichtbar
+  PASS src-ts/runtime-mirrors/www/app.ts: AUS oder nur Nachtfenster ist kein aktiver Automatikblock
+  PASS src-ts/runtime-mirrors/www/app.ts: ganztägige Sperre verspricht keinen Morgenstart
+  PASS src-ts/runtime-mirrors/www/app.ts: ungültige Uhrzeit bleibt neutral
+  PASS src-ts/runtime-mirrors/www/app.ts: laufende Stufen und Fehlerrückmeldung werden nicht als AUS behauptet
+  PASS src-ts/runtime-mirrors/www/app.ts: Thermik erhält keinen Heizstab-Nachttext
+  PASS www/app.js: Nachtstatus überlagert den Forecastcode
+  PASS www/app.js: Morgen gibt die aktuelle Reglerantwort wieder
+  PASS www/app.js: expliziter Modus manual1 überstimmt alten Nacht-State
+  PASS www/app.js: expliziter Modus manual2 überstimmt alten Nacht-State
+  PASS www/app.js: expliziter Modus manual3 überstimmt alten Nacht-State
+  PASS www/app.js: expliziter Modus off überstimmt alten Nacht-State
+  PASS www/app.js: Boost bleibt sichtbar
+  PASS www/app.js: AUS oder nur Nachtfenster ist kein aktiver Automatikblock
+  PASS www/app.js: ganztägige Sperre verspricht keinen Morgenstart
+  PASS www/app.js: ungültige Uhrzeit bleibt neutral
+  PASS www/app.js: laufende Stufen und Fehlerrückmeldung werden nicht als AUS behauptet
+  PASS www/app.js: Thermik erhält keinen Heizstab-Nachttext
+  PASS src-ts/runtime-executables/main.ts: API liefert typisierte Controller-Nachtwerte
+  PASS src-ts/runtime-executables/main.ts: API verwirft falsche Typen und begrenzt Diagnosen
+  PASS src-ts/runtime-mirrors/main.ts: API liefert typisierte Controller-Nachtwerte
+  PASS src-ts/runtime-mirrors/main.ts: API verwirft falsche Typen und begrenzt Diagnosen
+  PASS main.js: API liefert typisierte Controller-Nachtwerte
+  PASS main.js: API verwirft falsche Typen und begrenzt Diagnosen
+[heating-rod-night-ui] PASS: 42 Prüfgruppen; Quellen/Spiegel/ausgelieferte Runtime, DOM- und API-Fixtures, keine Hardware.

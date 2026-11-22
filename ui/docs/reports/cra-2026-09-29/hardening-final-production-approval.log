@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.22 release:approval
+> node scripts/verify-release-approval.cjs
+
+[release-approval] BLOCKED: release-not-approved. Offene Nachweise in release-manifests/release-status.json.

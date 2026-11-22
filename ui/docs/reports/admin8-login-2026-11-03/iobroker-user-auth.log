@@ -1,0 +1,13 @@
+PASS strikte TypeScript-Prüfung ohne any/nocheck
+PASS Kurz-ID, Großschreibung, Anzeigename und vollständige ID ergeben dieselbe kanonische Identität
+PASS Anzeigenamenkollision admin gehört Kunde; keine Ableitung von Adminrechten aus Rohinput
+PASS offizieller Fallback erhält Unicode und zulässige Sonderzeichen; Punkt/Leerzeichen werden Unterstriche
+PASS fehlender/fehlerhafter Resolver verweigert Kurzname; nur undefined aktiviert Fallback
+PASS Benutzer/Passwort sind echte begrenzte Strings; Passwort bleibt ungetrimmt
+PASS Kontotyp, exakte Objekt-ID, Passwortbestand und Kontosperre werden vor Passwortprüfung geprüft
+PASS nur boolesches true mit identischer vollständiger Callback-ID authentifiziert
+PASS Passwortwechsel, Sperre, Löschung oder ID-Wechsel während Prüfung verhindern Sitzung
+PASS Session-Fingerabdruck bleibt SHA-256 und reagiert auf Änderung/Sperre/Löschung
+PASS Objekt-/Callbackfehler einschließlich async-Ablehnung werden ohne unhandled rejection verweigert
+PASS Resolver-Timeout: spätes Ergebnis/Ablehnung starten weder Objekt- noch Passwortprüfung
+PASS Objekt-Timeout: verspätetes Objekt startet keine Passwortprüfung

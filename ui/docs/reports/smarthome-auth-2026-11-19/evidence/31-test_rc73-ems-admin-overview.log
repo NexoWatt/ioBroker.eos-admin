@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:rc73-ems-admin-overview
+> node scripts/verify-rc73-ems-admin-overview.js
+
+[RC73] OK: read-only EMS overview contract, optional-module fallback and lifecycle verified.

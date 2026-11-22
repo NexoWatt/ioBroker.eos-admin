@@ -1,0 +1,112 @@
+[
+  {
+    "command": [
+      "npm",
+      "run",
+      "build:ts"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 14.86,
+    "log": "final-build.log",
+    "bytes": 8272,
+    "sha256": "f7bb0348745691a9f3026be5ab3d3de9f994d474002fa1687d066b13a3793e1f"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "docs:build"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 4.31,
+    "log": "final-docs.log",
+    "bytes": 258,
+    "sha256": "09b3e9e1a017ea645e75a7fbcdf6b555b9b74184ce71ef5d9184c09177ebd078"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "docs:check"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 0.28,
+    "log": "final-docs-check.log",
+    "bytes": 270,
+    "sha256": "121d37f6c9eb5e5f7515f6f5a82ed6e740179f45224d4080a1f2775cf9124c5f"
+  },
+  {
+    "command": [
+      "node",
+      "scripts/verify-eslint-security.cjs",
+      "--json"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 19.11,
+    "log": "final-lint.log",
+    "bytes": 624,
+    "sha256": "8b452687dfd774a0b76e349d503a9a855756fc52310db7574f07001f64507c18"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "release:generate-manifest"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 1.73,
+    "log": "final-seal.log",
+    "bytes": 605,
+    "sha256": "3ed7a9120542d79d00fffec2a77754b6ec28360d08013adbd4ef654f7b581170"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "test:all"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 236.63,
+    "log": "final-test-all.log",
+    "bytes": 164462,
+    "sha256": "e00d6927c70327310d3f7bb10f8b9e5604f5c0871c6da0708c72ba2605dbf344"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "publish:check"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 1.19,
+    "log": "final-publish-check.log",
+    "bytes": 598,
+    "sha256": "873f76096b4b2a8ff1141902ff31bb5c4af4ff3894d1ae0eed2420f5d58eef66"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "test:package-runtime-start-smoke"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 1.18,
+    "log": "final-runtime-start.log",
+    "bytes": 380,
+    "sha256": "bfc8e1061f56c18577d0b978eac87e4e252a554fe2164ba972af1b60f7357ce1"
+  },
+  {
+    "command": [
+      "npm",
+      "pack",
+      "--dry-run",
+      "--json",
+      "--ignore-scripts"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 3.08,
+    "log": "final-pack-dry.log",
+    "bytes": 56625,
+    "sha256": "80ad86332699eaff430825bd98c9a07f0e9a48b7ae2c31d08a9a8f07484565dc"
+  }
+]

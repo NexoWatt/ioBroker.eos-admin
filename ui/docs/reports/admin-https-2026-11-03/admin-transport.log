@@ -1,0 +1,26 @@
+PASS HTTPS-Admin verwendet seinen eigenen Origin und den offiziellen Instanzproxy
+PASS Admin-Prefix bleibt bei allen geschützten API-Aufrufen und Links erhalten
+PASS Server-Prefix aus übergeordnetem Adminfenster stimmt mit Iframepfad überein
+PASS Bereits proxied React-Seiten bleiben auf demselben Cookie- und Instanzpfad
+PASS Proxy-Fachseiten ohne Instanzquery übernehmen ausschließlich die Pfadinstanz
+PASS Direkter HTTP-Admin verwendet ausschließlich den konfigurierten Instanzport
+PASS Standardport gilt nur für vorhandene Instanz ohne Portfeld, nie bei Lesefehlern
+PASS Fehlende, fremde und ungültige Instanzobjekte erlauben keinen Passworttransport
+PASS Ungültige konfigurierte Ports werden nicht auf 8188 umgedeutet
+PASS Eingebettete direkte HTTP-/HTTPS-Seiten verwenden ihren vorhandenen Origin
+PASS Unbekannter HTTPS-Kontext erhält keinen unverschlüsselten Rückfall
+PASS Instanzkennungen sind kanonische begrenzte Dezimalwerte
+PASS Admin-Prefix erlaubt keine fremden URLs, Traversal oder mehrdeutige Pfade
+PASS Proxy-Prefixgrenzen gelten einschließlich Instanzsuffix und für höchstens 16 öffentliche Segmente
+PASS Verschachtelte Proxy-Namensräume und Proxysegmente im Admin-Prefix bleiben ohne Passwortübertragung gesperrt
+PASS Endpoint-Queryparameter können das aus dem Adminpfad ermittelte Ziel nicht ändern
+PASS Admin-Proxy HTTP 401 bleibt von EOS-Kontofehlern unterscheidbar
+PASS Admin-Proxy HTTP 403 bleibt von EOS-Kontofehlern unterscheidbar
+PASS Admin-Proxy HTTP 404 bleibt von EOS-Kontofehlern unterscheidbar
+PASS Admin-Proxy HTTP 502 bleibt von EOS-Kontofehlern unterscheidbar
+PASS JSON-EOS401 bleibt Passwortablehnung; kein anderer Port oder zweiter Versuch
+PASS Netzwerkfehler geben keine fremden Fehlertexte aus und werden nicht wiederholt
+PASS Status und Login besitzen endliche 6-/12-s-Fristen und brechen echte Fetch-Signale ab
+PASS Timeout umfasst auch einen hängenden Antwortkörper
+PASS Gültiger HTTP-Transport ohne gültigen EOS-Status schaltet keine Sitzung frei
+{"result":"PASS","checks":25,"node":"v24.22.1","sourceSha256":"c23659d808a8e11e98e84aaa5ea6b73492e45c0064381e2056df5b8a47919beb","scope":"Actual TypeScript in VM; synthetic HTTP/proxy contracts, no live Admin8/browser integration."}

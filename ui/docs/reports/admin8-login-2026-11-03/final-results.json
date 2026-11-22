@@ -1,0 +1,100 @@
+[
+  {
+    "command": [
+      "npm",
+      "run",
+      "build:ts"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 14.38,
+    "log": "final-build.log",
+    "bytes": 8272,
+    "sha256": "df1a97b10b815e51b88478309e2dd4d27459d965118e8b036f12ce9d20ac9e05"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "docs:build"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 3.7,
+    "log": "final-docs.log",
+    "bytes": 258,
+    "sha256": "65b20d55c0f98b808638715b4ddf02b01c5bfaa8f7db66b2d82d44d2d6b57feb"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "docs:check"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 0.28,
+    "log": "final-docs-check.log",
+    "bytes": 270,
+    "sha256": "7cf4a4ff74ba06ee119c0c7f3a3992fbeb519d9b492f26db54a6e77fb979a75b"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "release:generate-manifest"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 1.77,
+    "log": "final-seal.log",
+    "bytes": 605,
+    "sha256": "aaf20d1a1d34a601b09ba4a947862a203cf98829620aef1c485403e25f02435d"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "test:all"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 241.44,
+    "log": "final-test-all.log",
+    "bytes": 160146,
+    "sha256": "e50e2248d8105ce1f7bc60a79cadb73e11f756dc1b6c3b22e1911f3088f1fcf4"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "publish:check"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 1.15,
+    "log": "final-publish-check.log",
+    "bytes": 598,
+    "sha256": "aa189db98d039504f860895694ecc83270b8256dfaab2fba75fce5fb5cbbc83f"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "test:package-runtime-start-smoke"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 1.19,
+    "log": "final-runtime-start.log",
+    "bytes": 380,
+    "sha256": "5880184f2e5efb61dbc99827f2554b5bbb4198a49a21fece43490b35c68e95ab"
+  },
+  {
+    "command": [
+      "npm",
+      "pack",
+      "--dry-run",
+      "--json",
+      "--ignore-scripts"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 3.04,
+    "log": "final-pack-dry.log",
+    "bytes": 56284,
+    "sha256": "0113c52f69dd0635bd78e54b5be1a4e8afdaf135445599a1d0c98b68b621e880"
+  }
+]

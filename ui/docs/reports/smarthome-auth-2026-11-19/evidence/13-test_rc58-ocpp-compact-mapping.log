@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:rc58-ocpp-compact-mapping
+> node scripts/verify-rc58-ocpp-compact-mapping.js
+
+[rc58-ocpp-compact-mapping] OK: historical alias/0.3 mappings migrate to the direct native OCPP21 0.4 contract.

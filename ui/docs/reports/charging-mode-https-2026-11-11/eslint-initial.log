@@ -1,0 +1,16 @@
+ESLint: 178 sources; 3083 current findings; 3070 inventoried (2969 historical open, 101 individually reviewed); 13 blocked new/forbidden findings; 91 old findings absent.
+Open scanner hotspots: {"security/detect-object-injection":2367,"security/detect-non-literal-fs-filename":48,"@typescript-eslint/ban-ts-comment":73,"security/detect-unsafe-regex":16,"@typescript-eslint/no-explicit-any":563,"security/detect-possible-timing-attacks":12,"security/detect-non-literal-require":1,"security/detect-non-literal-regexp":3}
+This gate prevents new scanner findings. It does not assert a clean security scan or full ASVS conformity.
+src-ts/runtime-executables/www/evcs.ts:136:46 security/detect-object-injection 0e3a59a0818df322a8689f981dcde64fc20530b4cc3962cdf66408015fd2f482
+src-ts/runtime-executables/www/evcs.ts:136:59 security/detect-object-injection 64a7b25eac41d62f9175bff9f40b4fa74f4d58249a1da6b86ea99a545ccd3d64
+src-ts/runtime-executables/www/evcs.ts:136:75 security/detect-object-injection 0e3a59a0818df322a8689f981dcde64fc20530b4cc3962cdf66408015fd2f482
+src-ts/runtime-executables/www/evcs.ts:153:37 security/detect-object-injection 4d5638a030a8bf52bc58c86d4fca79c7cf56d9ea51196a0cddb6e09dd9d235c1
+src-ts/runtime-executables/www/evcs.ts:1911:11 security/detect-object-injection 6473dee137e71ba896dac6d2afdb887f6c2c10a5b9b0cdb44d3aebeb5bcc8f91
+src-ts/runtime-executables/www/evcs.ts:1924:7 security/detect-object-injection 6c8dff57a73cdbb51ce1cdde69d52407dc3b94809df89f5353b5713704ead2e1
+src-ts/runtime-executables/www/evcs.ts:1925:14 security/detect-object-injection efc173fd9ceb46aae73a8e24227a7023a3c2aa6cd95ee27b7f7f5a91cd4ca610
+src-ts/runtime-executables/www/evcs.ts:1938:9 security/detect-object-injection a3ef59511c883c4035b5e1090ca7764c0a4fc7818794234cbf8db9a0f787625b
+src-ts/runtime-executables/www/evcs.ts:1945:35 security/detect-object-injection 7042ff106c76b0d2597f816d494a5efd43a44c124c0ab80da4896e442addc9d8
+src-ts/runtime-executables/www/evcs.ts:1953:18 security/detect-object-injection efc173fd9ceb46aae73a8e24227a7023a3c2aa6cd95ee27b7f7f5a91cd4ca610
+src-ts/runtime-executables/www/evcs.ts:1955:11 security/detect-object-injection b18ba870fe800f8e4bbd96d2afa23fe0b57268a85507779f3e01dfdf0d727175
+src-ts/runtime-executables/www/evcs.ts:1958:9 security/detect-object-injection a17887747347e32524157473de4adf4ce4753da753167fa333a0b685d0c845c0
+src-ts/runtime-executables/www/evcs.ts:1960:16 security/detect-object-injection 99bd1f7e21d35b98d7315318f6977cde4340b7e4e8f1df833200519b3be94ba8

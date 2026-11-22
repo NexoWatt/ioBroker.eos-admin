@@ -1,0 +1,13 @@
+{
+  "command": [
+    "npm",
+    "audit",
+    "--json"
+  ],
+  "cwd": ".",
+  "startedAt": "2026-09-29T20:00:45.501437+00:00",
+  "finishedAt": "2026-09-29T20:01:02.734737+00:00",
+  "exitCode": 1,
+  "output": "npm-audit-root.json",
+  "stderr": "npm-audit-root.stderr.log"
+}

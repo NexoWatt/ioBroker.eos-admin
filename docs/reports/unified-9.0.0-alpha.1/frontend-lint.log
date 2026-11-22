@@ -1,0 +1,12 @@
+
+/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/src/components/Intro/NexoWattEmsOverview.tsx
+  302:11  warning  The 'summary' logical expression could make the dependencies of useMemo Hook (at line 322) change on every render. To fix this, wrap the initialization of 'summary' in its own useMemo() Hook  react-hooks/exhaustive-deps
+
+/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/src/components/SystemSettings/EosLicenseDialog.tsx
+  127:8  warning  React Hook useEffect has a missing dependency: 'run'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/src/tabs/Intro.tsx
+  1904:5  warning  Expected 'this' to be used by class method 'getOverviewRoleConfig'  class-methods-use-this
+
+✖ 3 problems (0 errors, 3 warnings)
+

@@ -1,0 +1,27 @@
+{
+  "schema": "nexowatt.release-status.v1",
+  "version": "1.0.38",
+  "status": "review",
+  "productionApproved": false,
+  "decisionBy": null,
+  "decisionAt": null,
+  "blockers": [
+    "1.0.38: Gezielte direkte HTTPS-/Web-App-Laufzeitprüfung (34 Gruppen/66 HTTP(S)-Anfragen), PWA-VM (21 Gruppen), Auth-/Proxy-/Build- und Upgradeprüfungen bestanden. npm run test:all stoppt beim realen Chromium-Start von test:rc66-station-display-browser (Socket-EPERM/DevToolsActivePort); keine vollständige Gesamtfreigabe. Reale Browser-/iOS-Homescreen-Abnahme und Zertifikatvertrauen der Zielgeräte offen. Einzelbelege und Grenzen im aktuellen Prüfbericht.",
+    "1.0.37: reale Browser-/Touch-Abnahme (Desktop/Tablet/Telefon), konkrete ioBroker-/EOS-Admin-HTTPS- und Proxyinstallation sowie vorhandene Smarthome-Geräte noch auf Zielanlage zu prüfen.",
+    "1.0.37: Standalone-Passwortanmeldung unterstützt keine eigenen TOTP-/Passkey-Challenges. Konten mit aktiviertem ioBroker-TOTP bleiben in diesem Loginpfad gesperrt; kein Passwort-Bypass. EOS verwendet die zentrale Sitzung.",
+    "Lademodi/OCPP: reale Prüfung der bestätigten UI-Modusänderungen, Nacht-/Zielladung und Wiederanlauf auf der konkreten Wallbox noch offen. NW-EVCS-20261111-05: alter OCPP-Transaktionsstatus kann neue Vorbereitung überstimmen; ohne belegte Sessiongrenze keine automatische Aufhebung echter Fahrzeugpausen.",
+    "Automatisierte Gesamtregression 1.0.37: 77 von 86 Prüfgruppen bestanden; neun Gruppen beim Chromium-Start blockiert (Socket-EPERM bzw. DevToolsActivePort). Kein verbleibender fachlicher FAIL in der fortgesetzten Matrix; npm run test:all wegen Browserblockade nicht vollständig bestanden. Reale Browser-/Proxyabnahme offen; keine Veröffentlichung.",
+    "Admin-HTTPS-Anmeldung und Unterpfadbetrieb: reale Abnahme der konkreten Admin-8.3.5-/Controller-Installation, Zertifikate, Reverse-Proxy und Bind-Adresse noch offen.",
+    "Partnerkanal/Arbitrage: kein produktiver Anbieter-Sandbox- oder Geräteversuch; reale Single-Writer-, Widerruf-, Neustart-, Kommunikationsausfall- und Netzgrenzenabnahme erforderlich. Legacy-Speicherfarm noch nicht für Partnersteuerung freigegeben.",
+    "Dynamischer Netzanschluss: reale M0/M1-Anlagenabnahme mit den projektierten generischen Datenpunktverträgen, Reaktionszeiten und Ausfallreaktionen noch nicht durchgeführt; keine Hersteller-Whitelist erforderlich",
+    "Heizstab-Nachtabschaltung und PV-Stufenregelung: reale Anlagenabnahme mit Rückmeldungen noch offen",
+    "Anlagen- und Hardwareintegration einschließlich Mesh-v2-Sammelupgrade und Wiederherstellung nicht durchgeführt",
+    "Gesamt-EOS-Inventar mit ioBroker/js-controller/Betriebssystem und Drittadaptern fehlt",
+    "Unabhängige Sicherheitsprüfung und Produkt-/Support-/Konformitätsentscheidung offen",
+    "NW-SECRET-01: historischer symmetrischer Lizenzvertrag auf ausdrücklichen Nutzerauftrag für Feldtest-Kompatibilität fortgeführt; bekannte fehlende Vertraulichkeit bleibt dokumentiert, spätere Lizenzarchitektur in eigener EOS-Software",
+    "ASVS-5.0.0-L2-Einzelnachweis, vollständige Strict-/no-any-Migration bleiben im Altbestand offen; eigene JS/TS-Quellen und generierte Spiegel werden auf proprietäre Header geprüft; aktuelle Teilprüfung ist keine Zertifizierung",
+    "CodeQL-Workflow erfordert einen erfolgreichen Remote-Lauf; lokaler AST-Guard ersetzt keinen Datenfluss-SAST",
+    "Bekannte Tarif-/NVP-Anzeigeinkonsistenzen aus Diagnose vom 24.10.2026 separat offen; keine Änderung der Regelstrategien in 1.0.31."
+  ],
+  "evidence": "docs/reports/branding-2026-11-22/PRUEFBERICHT_DE.md"
+}

@@ -1,0 +1,13 @@
+{
+  "command": [
+    "npm",
+    "uninstall",
+    "--save-dev",
+    "--ignore-scripts",
+    "--no-audit",
+    "@iobroker/testing"
+  ],
+  "startedAt": "2026-09-29T20:13:33.545170+00:00",
+  "finishedAt": "2026-09-29T20:13:34.094710+00:00",
+  "exitCode": 0
+}

@@ -1,0 +1,66 @@
+{
+  "date": "2026-11-03",
+  "node": "v24.22.1",
+  "scope": "Independent synthetic group-policy review; no live Admin8/controller or hardware integration",
+  "source": "src-ts/runtime-executables/lib/iobroker-user-roles.ts",
+  "sha256": "c835b25eff79526f750fafe864a36f8460173434117243c11bcb96294a906b81",
+  "passed": 14,
+  "cases": [
+    {
+      "name": "arbitrary canonical usernames inherit actual mapped groups only",
+      "result": "PASS"
+    },
+    {
+      "name": "legacy user lists and protected-looking account names do not elevate",
+      "result": "PASS"
+    },
+    {
+      "name": "custom group full ID works while display name does not",
+      "result": "PASS"
+    },
+    {
+      "name": "membership uses exact canonical user ID and does not fold case or prefixes",
+      "result": "PASS"
+    },
+    {
+      "name": "wrong object identity or type cannot supply membership",
+      "result": "PASS"
+    },
+    {
+      "name": "disabled or removed group revokes role in subsequent lookup",
+      "result": "PASS"
+    },
+    {
+      "name": "multiple groups keep highest authorized role and finite capabilities",
+      "result": "PASS"
+    },
+    {
+      "name": "malformed mapped group fails closed even with valid administrator membership",
+      "result": "PASS"
+    },
+    {
+      "name": "nested groups, mixed member types and forged suffixes do not elevate",
+      "result": "PASS"
+    },
+    {
+      "name": "malformed or oversized mappings invalidate complete policy",
+      "result": "PASS"
+    },
+    {
+      "name": "read rejection gives no role and no partial administrator result",
+      "result": "PASS"
+    },
+    {
+      "name": "timeout ignores late rejection without further reads or unhandled rejection",
+      "result": "PASS"
+    },
+    {
+      "name": "policy and normalized lists cannot mutate after validation",
+      "result": "PASS"
+    },
+    {
+      "name": "group resolver and existing header role capabilities stay identical",
+      "result": "PASS"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:rc88
+> node scripts/verify-rc88-memory-stability.cjs
+
+[RC88/1.0.1] SSE backpressure, healthy-client retention, 10-second critical recovery and ratio-based heap guard passed

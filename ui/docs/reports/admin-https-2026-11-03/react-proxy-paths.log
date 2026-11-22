@@ -1,0 +1,17 @@
+PASS Stylesheet, Ursprung und Lifecycle: direkt HTTP
+PASS originale React-Navigationsziele: direkt HTTP
+PASS Microgrid-Runtime vs. Admin-Tab: direkt HTTP
+PASS Datenpunkt-Popup und Listener-Abbau: direkt HTTP
+PASS Stylesheet, Ursprung und Lifecycle: direkt HTTPS
+PASS originale React-Navigationsziele: direkt HTTPS
+PASS Microgrid-Runtime vs. Admin-Tab: direkt HTTPS
+PASS Datenpunkt-Popup und Listener-Abbau: direkt HTTPS
+PASS Stylesheet, Ursprung und Lifecycle: Adminproxy Instanz 0
+PASS originale React-Navigationsziele: Adminproxy Instanz 0
+PASS Microgrid-Runtime vs. Admin-Tab: Adminproxy Instanz 0
+PASS Datenpunkt-Popup und Listener-Abbau: Adminproxy Instanz 0
+PASS Stylesheet, Ursprung und Lifecycle: Adminproxy Public Path Instanz 7
+PASS originale React-Navigationsziele: Adminproxy Public Path Instanz 7
+PASS Microgrid-Runtime vs. Admin-Tab: Adminproxy Public Path Instanz 7
+PASS Datenpunkt-Popup und Listener-Abbau: Adminproxy Public Path Instanz 7
+[verify-admin-react-proxy-paths] PASS 16 Fallgruppen; originale TS/TSX-Funktionen in kontrolliertem DOM-/Hook-Host, kein Browser-/Live-Anlagentest.

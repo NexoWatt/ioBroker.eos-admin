@@ -1,0 +1,59 @@
+{
+  "schema": "nexowatt.sbom-inventory-index.v1",
+  "generatedAt": "2026-09-29T21:28:04.112Z",
+  "generator": "scripts/generate-cra-sbom.cjs@1.1.0",
+  "generatorSha256": "cc91b3f60f38e21f516e041e5e479c0860ac38e99eb782565218b4a723b7d822",
+  "disclaimer": "These inventories do not assert CRA conformity or a complete shipped-system/bundle SBOM.",
+  "productEvidence": "sbom-product-evidence.json",
+  "inventories": [
+    {
+      "filename": "sbom-root-lockfile.cdx.json",
+      "scope": "root",
+      "kind": "source-lockfile-inventory",
+      "components": 250,
+      "sha256": "cd4e660c682a581870dbb3d35f3e89fc656ec280b1f8b71ef2787443055f8dab"
+    },
+    {
+      "filename": "sbom-root-installed.cdx.json",
+      "scope": "root",
+      "kind": "installed-build-environment-inventory",
+      "components": 225,
+      "sha256": "7cae633eccafe93cd9d2cfbea03d9b86235c23748e234b660be15fde088a6d23"
+    },
+    {
+      "filename": "sbom-root-installed-runtime.cdx.json",
+      "scope": "root",
+      "kind": "installed-production-dependency-inventory",
+      "components": 55,
+      "sha256": "ad1960518f51070d5d9112098c2a391b284da6f56e1d266bb9c2a398b1790b6a"
+    },
+    {
+      "filename": "sbom-admin-lockfile.cdx.json",
+      "scope": "admin",
+      "kind": "source-lockfile-inventory",
+      "components": 120,
+      "sha256": "4ff9bbbc4f33adf1e552090b84b90268aeb73430475d59c7ed676ddfad332fde"
+    },
+    {
+      "filename": "sbom-admin-installed.cdx.json",
+      "scope": "admin",
+      "kind": "installed-build-environment-inventory",
+      "components": 71,
+      "sha256": "0227b73e357339b82d184b03c545b92e5662da7833a9f6cf7b21e4714ed5642f"
+    },
+    {
+      "filename": "sbom-admin-installed-runtime.cdx.json",
+      "scope": "admin",
+      "kind": "installed-production-dependency-inventory",
+      "components": 8,
+      "sha256": "f9f91f81f807480c5cd5c0323c5759743e6690f2a548a0311fce451e50c461b9"
+    },
+    {
+      "filename": "sbom-admin-bundle.cdx.json",
+      "scope": "admin",
+      "kind": "observed-admin-bundle-components",
+      "components": 4,
+      "sha256": "49d21ec087be2d153a2c815f053aa63c36a820823f54e8db01b266312d61fdc1"
+    }
+  ]
+}

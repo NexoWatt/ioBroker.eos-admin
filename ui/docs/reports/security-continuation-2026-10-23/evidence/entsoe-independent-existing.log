@@ -1,0 +1,33 @@
+[tariff-provider-runtime] OK: provider normalization, EUR/kWh model, today/tomorrow curves, stale fail-safe, settings coupling, caching, jitter and exponential backoff verified.
+[tariff-freshness-safety] OK: aktueller Preis ist auf 90 min begrenzt; frische Kurve darf den Slot ersetzen; stale Daten sperren wirtschaftliches Netzladen fail-closed.
+[tariff-storage-status-truth] OK: Tarifabsicht, Resolver, Gate/Write, Farm-Dispatch und frischer Istwert sind getrennt; Laden/Entladen wird nur bei bestätigtem Readback angezeigt.
+ENTSO-E malformed-input bound: {"tag":"Period","bytes":560040,"ms":1.9578339999999983}
+ENTSO-E malformed-input bound: {"tag":"Point","bytes":490040,"ms":1.228837999999996}
+ENTSO-E malformed-input bound: {"tag":"start","bytes":490040,"ms":1.1710199999999986}
+✔ legacy copy-mode source remains directly executable JavaScript (69.416236ms)
+✔ quarter-hour, negative prices and MWh conversion stay correct (2.867442ms)
+✔ multiple periods preserve chronological boundaries (2.286428ms)
+✔ namespace prefixes, XML declaration and quoted attribute delimiters (0.879102ms)
+✔ comments cannot contribute false price or period elements (0.983809ms)
+✔ missing resolution is rejected (1.593206ms)
+✔ self-closing resolution is rejected (0.623337ms)
+✔ missing numeric price is rejected (0.567363ms)
+✔ nonsequential point is rejected (4.925727ms)
+✔ mismatched close is rejected (0.259119ms)
+✔ unclosed last period is rejected (0.375445ms)
+✔ nested same period is rejected (0.245779ms)
+✔ external declaration is rejected (0.094011ms)
+✔ oversized source is rejected (1.742982ms)
+✔ oversized tag is rejected (1.197831ms)
+✔ unclosed quoted attribute is rejected (0.102474ms)
+✔ bounded CPU for 512KiB unclosed Period tags (71.911123ms)
+✔ bounded CPU for 512KiB unclosed Point tags (70.602715ms)
+✔ bounded CPU for 512KiB unclosed start tags (64.782238ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 317.833869

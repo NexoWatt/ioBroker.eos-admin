@@ -1,0 +1,12 @@
+{
+  "command": [
+    "npm",
+    "run",
+    "release:generate-manifest"
+  ],
+  "startedAt": "2026-10-08T19:43:57.614955+00:00",
+  "durationSeconds": 1.56,
+  "exitCode": 0,
+  "log": "sbom-release.log",
+  "hardware": false
+}

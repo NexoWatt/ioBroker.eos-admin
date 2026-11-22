@@ -1,0 +1,42 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:rc78-import-only-grid-budget
+> node scripts/verify-rc78-import-only-grid-budget.cjs && npm run test:charging-grid-cap-safe && npm run test:charging-grid-cap-clamp && npm run test:loadmanagement-grid-cap-sanity && npm run test:core-limits-typed-runtime-phase1 && npm run test:core-limits-typed-runtime-phase2 && npm run test:safety-envelope-final-write
+
+[rc78-import-only-grid-budget] OK: signed NVP, central budget, EVCS cap and final writer treat the connection limit as import-only.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:charging-grid-cap-safe
+> node scripts/verify-charging-grid-cap-safe.js
+
+OK: EVCS grid cap uses signed NVP plus fresh EVCS actual power; export increases import-only headroom and reservations stay excluded.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:charging-grid-cap-clamp
+> node scripts/verify-charging-grid-cap-clamp.js
+
+[charging-grid-cap-clamp] OK: signed NVP import-only cap covers export, import and active shedding.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:loadmanagement-grid-cap-sanity
+> node scripts/verify-loadmanagement-grid-cap-sanity.js
+
+[grid-cap-sanity] OK: NVP-Einspeisung erhöht die Lastfreigabe; die Anschlussgrenze begrenzt ausschließlich Netzbezug.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:core-limits-typed-runtime-phase1
+> node scripts/verify-core-limits-typed-runtime-phase1.js
+
+[core-limits-typed-runtime-phase1] OK: zentraler Core rechnet PV, Grants, Headroom und Snapshots produktiv typisiert mit Legacy-Fallback.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:core-limits-typed-runtime-phase2
+> node scripts/verify-core-limits-typed-runtime-phase2.js
+
+[core-limits-typed-runtime-phase2] OK: Quellenübergabe, Grants, Reservierungen, Restbudgetmutation und State-Publikation laufen typisiert mit Legacy-Fallback.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:safety-envelope-final-write
+> node scripts/verify-safety-envelope-final-write.js
+
+[safety-envelope-final-write] OK: Inbetriebnahme, NVP, Phasen, §14a, Summenreserve, finaler Hardware-Write und Fehlerverriegelung arbeiten fail-closed.

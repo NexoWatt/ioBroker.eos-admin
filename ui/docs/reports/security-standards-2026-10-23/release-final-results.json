@@ -1,0 +1,31 @@
+[
+  {
+    "command": [
+      "npm",
+      "run",
+      "release:generate-manifest"
+    ],
+    "exit": 0,
+    "log": "release-manifest-final.log"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "publish:check"
+    ],
+    "exit": 0,
+    "log": "publish-check-final.log"
+  },
+  {
+    "command": [
+      "npm",
+      "pack",
+      "--dry-run",
+      "--json",
+      "--ignore-scripts"
+    ],
+    "exit": 0,
+    "log": "npm-pack-dry-run.log"
+  }
+]

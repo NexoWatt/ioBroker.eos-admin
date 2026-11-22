@@ -1,0 +1,15 @@
+{
+  "passed": 8,
+  "checks": [
+    "complete fixture ZIP, version upgrade, CRC/hashes/package.files pass",
+    "identical inputs create byte-identical archive on second run",
+    "historical repository manifest replaced with 1.0.29",
+    "CI/hooks retained and exact temporary/dependency output exclusions respected",
+    "path safety rejects 8 traversal/nonportable variants",
+    "non-excluded symlink rejected",
+    "cross-platform case collision rejected",
+    "missing required file fails without replacing existing archive"
+  ],
+  "scope": "synthetic temporary repository only; actual candidate not packaged or modified",
+  "scriptSha256": "00b1a3acfdba6a3e616a065207ed832f75553b8b1751c74a56d50fcf36690127"
+}

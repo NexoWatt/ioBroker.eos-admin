@@ -1,0 +1,87 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.29 test:security-standards
+> node scripts/verify-security-standards.cjs && node scripts/verify-runtime-license-header.cjs && node scripts/verify-static-ems-exports.cjs && node scripts/verify-http-error-boundary.cjs && node scripts/verify-simulation-public-errors.cjs
+
+PASS security standards guard self-tests: 17
+PASS strict security boundary scope: src-ts/runtime-executables/lib/http-error-boundary.ts
+COVERAGE: named boundary only; no ESLint/SAST or whole-repository compliance claim.
+✔ bestehender führender Marker transpiliert unverändert (1.215833ms)
+✔ proprietärer Kopf bleibt vor Build-Hinweis, folgender Marker transpiliert (0.483228ms)
+✔ No-Check-Migrationsanker nach Lizenzkopf wird nicht ausgeliefert (0.286472ms)
+✔ Marker in String oder gewöhnlichem Kommentar löst keine Transpilierung aus (0.146831ms)
+✔ Hash- und Wiederholungsprüfung akzeptiert die exakt erzeugten Artefakte (235.853082ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 503.769733
+✔ charging-budget-helpers: statischer Export und proprietärer Header in Originalquelle (0.949522ms)
+✔ charging-budget-helpers: Originalquelle lädt und arbeitet ohne String-Codegenerierung (2.199146ms)
+✔ charging-budget-helpers: erzeugtes Laufzeitartefakt lädt ohne String-Codegenerierung (0.892686ms)
+✔ evcs-control-mapping: statischer Export und proprietärer Header in Originalquelle (0.206782ms)
+✔ evcs-control-mapping: Originalquelle lädt und arbeitet ohne String-Codegenerierung (0.872875ms)
+✔ evcs-control-mapping: erzeugtes Laufzeitartefakt lädt ohne String-Codegenerierung (0.707726ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 15.90946
+{
+  "suite": "NW-HTTP-ERROR-01",
+  "sourceMode": false,
+  "node": "v24.19.0",
+  "passed": 23,
+  "environment": "real loopback Express HTTP; mocked ioBroker; synthetic errors; no devices",
+  "checks": [
+    "unknown-errors-and-accessors-are-not-inspected",
+    "parser-types-have-finite-public-policies",
+    "only-internal-errors-retain-frozen-public-validation",
+    "unset:anonymous-malformed-json-is-sanitized",
+    "unset:oversized-json-remains-413",
+    "unset:unexpected-simulation-error-is-sanitized",
+    "unset:foreign-installer-errors-and-logs-are-sanitized",
+    "unset:owned-mesh-guidance-remains-public-but-spoofs-do-not",
+    "unset:owned-simulator-preconditions-retain-guidance",
+    "unset:nexologic-validation-has-identity-and-safe-logs",
+    "unset:simulation-status-scrubs-new-and-historical-errors",
+    "unset:propagated-route-error-is-sanitized",
+    "unset:server-and-auth-remain-functional",
+    "production:anonymous-malformed-json-is-sanitized",
+    "production:oversized-json-remains-413",
+    "production:unexpected-simulation-error-is-sanitized",
+    "production:foreign-installer-errors-and-logs-are-sanitized",
+    "production:owned-mesh-guidance-remains-public-but-spoofs-do-not",
+    "production:owned-simulator-preconditions-retain-guidance",
+    "production:nexologic-validation-has-identity-and-safe-logs",
+    "production:simulation-status-scrubs-new-and-historical-errors",
+    "production:propagated-route-error-is-sanitized",
+    "production:server-and-auth-remain-functional"
+  ]
+}
+✔ API-Fehlerauswahl: {"message":"  Erst Simulation deaktivieren.  ","error":"configuration_conflict"} (4.630691ms)
+✔ API-Fehlerauswahl: {"message":"","error":"legacy_error"} (1.486531ms)
+✔ API-Fehlerauswahl: {"message":"  ","error":" legacy_error "} (1.731691ms)
+✔ API-Fehlerauswahl: {"message":{"text":"invalid"},"error":"legacy_error"} (1.569005ms)
+✔ API-Fehlerauswahl: {"message":42,"error":"legacy_error"} (1.005977ms)
+✔ API-Fehlerauswahl: {"message":null,"error":"legacy_error"} (1.424037ms)
+✔ API-Fehlerauswahl: {"message":false,"error":["invalid"]} (1.125286ms)
+✔ API-Fehlerauswahl: {"message":"","error":"   "} (1.10778ms)
+✔ API-Fehlerauswahl: null (0.941379ms)
+✔ Alle Aktionsfehler zeigen Markup unverändert als Text und behalten das Fehler-Badge (10.39466ms)
+✔ Nicht-JSON- und Transportfehler behalten den bisherigen Text-Fallback (1.592561ms)
+✔ Initialer Ladefehler zeigt öffentlichen Hinweis als einfachen Text (0.739104ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 33.432941

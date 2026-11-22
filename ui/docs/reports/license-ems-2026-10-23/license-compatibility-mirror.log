@@ -1,0 +1,1 @@
+[license-compatibility] OK: 6 legacy/private formats, 9 missing/malformed ENV cases, UUID/signature rejection, trial continuation/expiry/rollback, no key output; original 1.0.21 differential: 16 UUIDs × 6 formats.

@@ -1,0 +1,415 @@
+{
+  "checkedAt": "2026-11-03T22:59:50.991Z",
+  "baselineVersion": "1.0.34",
+  "productVersion": "1.0.35",
+  "scope": "Canonical WWW changes; targeted AI source review and actual ESLint findings comparison, no whole-file or ASVS certification",
+  "summary": {
+    "changedFiles": 25,
+    "reviewedRecords": 0,
+    "introduced": 0,
+    "oldFindings": 1043,
+    "newFindings": 1043,
+    "unchangedGuardFunctions": 16,
+    "allGeneratedJavascriptParses": true
+  },
+  "guards": [
+    {
+      "file": "src-ts/runtime-executables/www/auth.ts",
+      "function": "isProtectedPage",
+      "unchangedCommentFreeAst": true,
+      "astSha256": "8e0649866307c718395dea367867b5882f56ba115bd0e5bd10131a89329ce187"
+    },
+    {
+      "file": "src-ts/runtime-executables/www/auth.ts",
+      "function": "setBackgroundLocked",
+      "unchangedCommentFreeAst": true,
+      "astSha256": "00f2043dd43e2bf860ccc713623f359ff0c83381066e698c42581dfb52cde8d0"
+    },
+    {
+      "file": "src-ts/runtime-executables/www/auth.ts",
+      "function": "releaseMandatoryLock",
+      "unchangedCommentFreeAst": true,
+      "astSha256": "2ea37463988a260dca737fc0c9ada74a50a4014858ce7e39dceedf4b0620381e"
+    },
+    {
+      "file": "src-ts/runtime-executables/www/auth.ts",
+      "function": "requiredPageCapability",
+      "unchangedCommentFreeAst": true,
+      "astSha256": "7a8a6ca726418d3624e38a72d6af2f68e809337ef0defc00ae6137ea57cf9313"
+    },
+    {
+      "file": "src-ts/runtime-executables/www/auth.ts",
+      "function": "protectedPageLocked",
+      "unchangedCommentFreeAst": true,
+      "astSha256": "2d8ac8c7d94c51ba80315eeee5499e51755be62f59578bb54c678da344929927"
+    },
+    {
+      "file": "src-ts/runtime-executables/www/auth.ts",
+      "function": "setProtectedPagePending",
+      "unchangedCommentFreeAst": true,
+      "astSha256": "b935ac0b0d00ec971fde95672622ffb65a21a773be14cc75694c62d1dff5a82e"
+    },
+    {
+      "file": "src-ts/runtime-executables/www/auth.ts",
+      "function": "hasCapability",
+      "unchangedCommentFreeAst": true,
+      "astSha256": "869ec216dc298d7eed3f9faaa3ed89d5c0cae27e96350e853f80f89dedf5cd1c"
+    },
+    {
+      "file": "src-ts/runtime-executables/www/auth.ts",
+      "function": "showOverlay",
+      "unchangedCommentFreeAst": true,
+      "astSha256": "d6e2dec9df6f08885773a008e3f191d42356274ba293de27439e658fba94da00"
+    },
+    {
+      "file": "src-ts/runtime-executables/www/auth.ts",
+      "function": "hideOverlay",
+      "unchangedCommentFreeAst": true,
+      "astSha256": "774af99f5973d9e95e3df5ca12fe1fb33f8d50ce68ea2934e90256d19a82bc93"
+    },
+    {
+      "file": "src-ts/runtime-executables/www/auth.ts",
+      "function": "refreshConfigNavigation",
+      "unchangedCommentFreeAst": true,
+      "astSha256": "dab2a874c1eb9d16665ddce3f4cb845b3e9ba4a2671fd27c9887a5fc8a293558"
+    },
+    {
+      "file": "src-ts/runtime-executables/www/auth.ts",
+      "function": "refreshStatus",
+      "unchangedCommentFreeAst": true,
+      "astSha256": "e6ac431b4736a0ac6a3ad88ca50648e50393bba983ccf2ae80e9e6d6d5d55a6c"
+    },
+    {
+      "file": "src-ts/runtime-executables/www/auth.ts",
+      "function": "login",
+      "unchangedCommentFreeAst": true,
+      "astSha256": "53d6bfacb73839a7c4b6f8d7a4916d2763c91b991a25ac0454cd0a197f1d8d12"
+    },
+    {
+      "file": "src-ts/runtime-executables/www/auth.ts",
+      "function": "logout",
+      "unchangedCommentFreeAst": true,
+      "astSha256": "44b1c43adcd3dfa8a58d8f22e07b26c4bfbc93bf71db7a1faab95e747bc985ab"
+    },
+    {
+      "file": "src-ts/runtime-executables/www/auth.ts",
+      "function": "requireCapability",
+      "unchangedCommentFreeAst": true,
+      "astSha256": "571eba5d4e142d24a07687ea45408202c9279dd5bcbb560ac23ff1a16daaf497"
+    },
+    {
+      "file": "src-ts/runtime-executables/www/admin-guard.ts",
+      "function": "allowed",
+      "unchangedCommentFreeAst": true,
+      "astSha256": "73c87353137b518ee77c5e3b21bcebf3c88aa8681a8267d0a682ebc3b2b26c87"
+    },
+    {
+      "file": "src-ts/runtime-executables/www/smarthome.ts",
+      "function": "nwSafeWebUrl",
+      "unchangedCommentFreeAst": true,
+      "astSha256": "4938a25633932eba52d6e68099c5a963936f53aaa8b1ea84302a264de6030c76"
+    }
+  ],
+  "files": [
+    {
+      "file": "src-ts/runtime-executables/www/admin-guard.ts",
+      "oldAstSha256": "d845f717341a470f5b37146172993e92ed642883e22c9cbd260410b4c8acbc88",
+      "newAstSha256": "a5f745991d52e88a43223668a37ccb5c24290f984ff32d14eac1c968870ecffe",
+      "oldRawSha256": "95cb7038ebe96eb6a8f5de184ee2d9e6ac999f2c8155df86e9276c498b2790a4",
+      "newRawSha256": "f2c3895282c008fe3d5e89249fac06a3c1e7e42eba8b96d351ecae966f9125b9",
+      "reviewedRecords": [],
+      "oldFindingCount": 1,
+      "newFindingCount": 1,
+      "introducedOrIncreasedFingerprints": [],
+      "generatedJavascriptParses": true
+    },
+    {
+      "file": "src-ts/runtime-executables/www/app.ts",
+      "oldAstSha256": "ccfd3ace5c99d60d7502407195178127040b0e9ffce0834e32004143e8772490",
+      "newAstSha256": "17f2453e59d577d72bfb429bee9b3febcadeb3c33e0c218e4b6192d829525a02",
+      "oldRawSha256": "1131d0922e644e7c281d6a013a36c1a1e7a992a96746f9720715f9a64b7b90b9",
+      "newRawSha256": "184238f018f2ef92c7e83d5c9ef1c45346702efe4fe70c5c61b873dfac2d8566",
+      "reviewedRecords": [],
+      "oldFindingCount": 81,
+      "newFindingCount": 81,
+      "introducedOrIncreasedFingerprints": [],
+      "generatedJavascriptParses": true
+    },
+    {
+      "file": "src-ts/runtime-executables/www/auth.ts",
+      "oldAstSha256": "476fc490efb32bf16c06346394c5afbfbba7fbe891a112e51c1764a43faaf3bf",
+      "newAstSha256": "5938f7711ed29c996c664b31f35d96c6dbf86034f29db1934f6130497106f916",
+      "oldRawSha256": "93fa5b4e7175c7cf7515f86b0add906b7cf2f35ffb3b9b3484f907c7040c4ec6",
+      "newRawSha256": "cf237655fca8ea6d645ebdaa01f27b2ec7a6a4ce4f21a27c557f0a44446d78fe",
+      "reviewedRecords": [],
+      "oldFindingCount": 1,
+      "newFindingCount": 1,
+      "introducedOrIncreasedFingerprints": [],
+      "generatedJavascriptParses": true
+    },
+    {
+      "file": "src-ts/runtime-executables/www/charging-diagnostics-appcenter.ts",
+      "oldAstSha256": "2e16a64ca056cc06752be60340835d7b5d5060a1785e916f7409d2b8b19cc2ec",
+      "newAstSha256": "3cb2de8adf78d8e97ef747037129d6cf34f985fdc4e65cbdab14416afcc44ca3",
+      "oldRawSha256": "b564da26cac5bd53cae8f0e2a83fb3736b503466781ec3cb43e50a7f2bf79270",
+      "newRawSha256": "66062de4febaa53513eb0a129a5f0040c7b91bb0425f35e7d4613029bc772996",
+      "reviewedRecords": [],
+      "oldFindingCount": 6,
+      "newFindingCount": 6,
+      "introducedOrIncreasedFingerprints": [],
+      "generatedJavascriptParses": true
+    },
+    {
+      "file": "src-ts/runtime-executables/www/cockpit-shell.ts",
+      "oldAstSha256": "4e51bef7bb39319d8e77869f06fb85df13a6e086b24c68a54e4775b4e529fe52",
+      "newAstSha256": "c831dfdfe30a88d9edb5967d111ee2f3268bcdd717256d8ba2cba40bbb14bf00",
+      "oldRawSha256": "887a2a7d0791c3f19e536de7d425c0c204b21fdb102f3e101f6a8fdfebf97f82",
+      "newRawSha256": "edfbd0f4a1b935815727ec61304525c9d72ac631d169fd57ae78a290968c2c81",
+      "reviewedRecords": [],
+      "oldFindingCount": 2,
+      "newFindingCount": 2,
+      "introducedOrIncreasedFingerprints": [],
+      "generatedJavascriptParses": true
+    },
+    {
+      "file": "src-ts/runtime-executables/www/dashboard-lp-status.ts",
+      "oldAstSha256": "a16eecf1c01c2f5fb3b61b4cbb0f3c69ea4a0bdb1c5b83aa5371bafd57446cf1",
+      "newAstSha256": "3100b90a0ec3e58a5a24335f6cbae0a5e4424ee58e0445eb6908ad9b04d657db",
+      "oldRawSha256": "cb147010ab974f7332d64ded6ffff05eb09388441b21c79e560ebe265b2eb52f",
+      "newRawSha256": "0e130b0d3bcb3fadead101a383a1c59542f94131900508e54f2e0ff0195fa390",
+      "reviewedRecords": [],
+      "oldFindingCount": 5,
+      "newFindingCount": 5,
+      "introducedOrIncreasedFingerprints": [],
+      "generatedJavascriptParses": true
+    },
+    {
+      "file": "src-ts/runtime-executables/www/dc-station-display.ts",
+      "oldAstSha256": "e9515699809a9154ea37377f876972feda0e2323039a2a0e77c5b3188fefd6ee",
+      "newAstSha256": "74c2308367426b603fa16af9edb9386c38e11fda9bc17c79ac0eb8721f9bb747",
+      "oldRawSha256": "6e86dc059b7fa5a4f933c3bd81887522b2c8688f8c121197daee5d5c9f13689d",
+      "newRawSha256": "7c9feea8a86d4c9167be68f560a9744027db05c57797a573bafd3db68f4af73a",
+      "reviewedRecords": [],
+      "oldFindingCount": 5,
+      "newFindingCount": 5,
+      "introducedOrIncreasedFingerprints": [],
+      "generatedJavascriptParses": true
+    },
+    {
+      "file": "src-ts/runtime-executables/www/ems-apps.ts",
+      "oldAstSha256": "7383ae88cf2f998e28c7e3f6c5650aea95733b04c69c8d65b1e8226ae7f2d6c6",
+      "newAstSha256": "01dc0e8b0d5f6234e1f86987b46bb58bd8f325d499e84161d6f3d8d17cb1beaa",
+      "oldRawSha256": "ac8918e008fcea2ade1ac87483d5a4f9da8b2050d60f0a09fae4e68773da1429",
+      "newRawSha256": "e93cee98eec73f62d7dffb96e55ddc85dd4e624045cdd066ebf27ab8a751cfdc",
+      "reviewedRecords": [],
+      "oldFindingCount": 287,
+      "newFindingCount": 287,
+      "introducedOrIncreasedFingerprints": [],
+      "generatedJavascriptParses": true
+    },
+    {
+      "file": "src-ts/runtime-executables/www/energy-origin-ledger-view.ts",
+      "oldAstSha256": "ef063217d70d170c9def4d8647c90fb79ba54b24bea603d43dbb207271d1347b",
+      "newAstSha256": "6246db2220ab9994f8fc4a6fbf07c60f6de46364d854ae86504e1c5fc9ab4101",
+      "oldRawSha256": "8701eb347869e147ea87aa832ffda3261d145e821b2dd274fc73e423192e90d3",
+      "newRawSha256": "716e67991ac446c40ad931a55bfd33edade0a575f5001a4fbfc0b047180f82fb",
+      "reviewedRecords": [],
+      "oldFindingCount": 28,
+      "newFindingCount": 28,
+      "introducedOrIncreasedFingerprints": [],
+      "generatedJavascriptParses": true
+    },
+    {
+      "file": "src-ts/runtime-executables/www/evcs-report.ts",
+      "oldAstSha256": "de5e58efbddafe3aa05d5e10a8aaa8bee7ecf8f84d82fa903d6f21736e8a696d",
+      "newAstSha256": "ca5ba7ca23398395087927e15f99a322f9ba34bfac8b9191106df3094b32453d",
+      "oldRawSha256": "4d21b0c86f65c6b91f8cfe0883e7c749c8a82e0c12bb796b8939f25ef7f1b033",
+      "newRawSha256": "a08401da2d49fede7a5f8df5f2dd47659895643980eeba0ad34b3bebd9b70ec5",
+      "reviewedRecords": [],
+      "oldFindingCount": 9,
+      "newFindingCount": 9,
+      "introducedOrIncreasedFingerprints": [],
+      "generatedJavascriptParses": true
+    },
+    {
+      "file": "src-ts/runtime-executables/www/evcs.ts",
+      "oldAstSha256": "fda04dfe5e5cc48bf930ecff03aca5c424c7228f6806a8e389843104d3cbc1a2",
+      "newAstSha256": "846614e9f25d5ba2abab1cd62065a3becdd5b58d6da97495e3df8f2c26f6a573",
+      "oldRawSha256": "f63ee0f78dabcfb919fef5d38fa04a1a0f79b124d8c0339720ac9ce52f176b01",
+      "newRawSha256": "14eae561337acc8ac507f592f1a6c737038fd3fce83de62b09d78832eef9c250",
+      "reviewedRecords": [],
+      "oldFindingCount": 25,
+      "newFindingCount": 25,
+      "introducedOrIncreasedFingerprints": [],
+      "generatedJavascriptParses": true
+    },
+    {
+      "file": "src-ts/runtime-executables/www/history.ts",
+      "oldAstSha256": "c3a75c70ea56496c039968a4e4d0e4e96cb98d93533e1d7803a1a9b5c6752268",
+      "newAstSha256": "76edf0763731cd7560dbf64e0d4167ae6bfd4e9fe621956e9f7121641d455d9b",
+      "oldRawSha256": "ac0499884555c262b9227c9e4aa364fe221fc1cfd542ff6de839fe65ddfef84c",
+      "newRawSha256": "3a7f1065dbbe6c058d802f25de4c143060a609ea5ffb17a08c084704f1955126",
+      "reviewedRecords": [],
+      "oldFindingCount": 84,
+      "newFindingCount": 84,
+      "introducedOrIncreasedFingerprints": [],
+      "generatedJavascriptParses": true
+    },
+    {
+      "file": "src-ts/runtime-executables/www/license.ts",
+      "oldAstSha256": "91224bf8314c6e82acfa39997b989e6fd2371498e0c81d386f0cdfb544044c87",
+      "newAstSha256": "3867c34f997fd0f7d27a6c7a8f748d944cd7c04c928b0e1af575a9bac455b88c",
+      "oldRawSha256": "42f51f2bade2d50a582bccc3b086e7e6f85ceda92389e20120e4599e8c7cdf54",
+      "newRawSha256": "b4f93be24ad83e993368ee0d61eaaaa0d110e6d10463fcbe33c840bd8bdfba8f",
+      "reviewedRecords": [],
+      "oldFindingCount": 0,
+      "newFindingCount": 0,
+      "introducedOrIncreasedFingerprints": [],
+      "generatedJavascriptParses": true
+    },
+    {
+      "file": "src-ts/runtime-executables/www/logic.ts",
+      "oldAstSha256": "5ed14e853016baada839150834d655bca829644f29f0f6818f6da3e4c10b0669",
+      "newAstSha256": "5fac561fad307d8b5f0b78e24a473c583d76dfa0b95470098c305df2f0337ac9",
+      "oldRawSha256": "e8f93ee4e3901ba2350f9b7149bb2523e1f05594573d76efb34bc369e7c315c2",
+      "newRawSha256": "37569dda308e69998c43aa9594fc96a261ee4b68cb9afacc0b4017f6381ade95",
+      "reviewedRecords": [],
+      "oldFindingCount": 34,
+      "newFindingCount": 34,
+      "introducedOrIncreasedFingerprints": [],
+      "generatedJavascriptParses": true
+    },
+    {
+      "file": "src-ts/runtime-executables/www/netoperator-appcenter.ts",
+      "oldAstSha256": "f8444f3ad6533b99915b4455d9b2ac23dac556ff59c9aedca26410d954709377",
+      "newAstSha256": "a7925c082262f3424bbcc6d71101bc970c21b7de1e7120e9efba94406b1f663a",
+      "oldRawSha256": "3eb7d2cb230fbb3eeb574668993b12a82aa010aa936839581c6bdfd950cdb1f3",
+      "newRawSha256": "5231413ccf787a9c80a115fd2c4dd8cd824595e63f0c10c66fd093b81fb34574",
+      "reviewedRecords": [],
+      "oldFindingCount": 6,
+      "newFindingCount": 6,
+      "introducedOrIncreasedFingerprints": [],
+      "generatedJavascriptParses": true
+    },
+    {
+      "file": "src-ts/runtime-executables/www/para14a-report.ts",
+      "oldAstSha256": "a192c07eb1fdd9d5e4b643c22370f8e5980ba48bd0e2c6e9c728db696f2051c6",
+      "newAstSha256": "4ac6baebe1dadf73aa99da3ccea4d56ecccf881a1049b9b6551f22a871311c1a",
+      "oldRawSha256": "ac4ba8256a15edb3c5781de76fce38f9e6743445f794fe426c41863fa0dbe6d3",
+      "newRawSha256": "9af05ca56a37b47e7e978ddf5cb9e2c6ef1e7066bafaf6151b265395daf11355",
+      "reviewedRecords": [],
+      "oldFindingCount": 1,
+      "newFindingCount": 1,
+      "introducedOrIncreasedFingerprints": [],
+      "generatedJavascriptParses": true
+    },
+    {
+      "file": "src-ts/runtime-executables/www/report-common.ts",
+      "oldAstSha256": "a04f1463fb94380bf7e0f850153acf04e5db29ba53310b150bf59c0b43400ebc",
+      "newAstSha256": "4ea35a585fc2fd5eb777f16ab15b2be1bbfbc87e0937c9b75e858f844f65e290",
+      "oldRawSha256": "82b98011e9c705126933f3a0493c62f89e0bd1d39fa7b706150bf537a0965af2",
+      "newRawSha256": "c39ea39f9e6bf983fef6b5ae23a9425967595903d9e2538c9d42c16f5f57e3eb",
+      "reviewedRecords": [],
+      "oldFindingCount": 3,
+      "newFindingCount": 3,
+      "introducedOrIncreasedFingerprints": [],
+      "generatedJavascriptParses": true
+    },
+    {
+      "file": "src-ts/runtime-executables/www/rfid-report.ts",
+      "oldAstSha256": "f86e7d1865ee74c8108d870258760de91527590c144d7f65ac72147f6644aefe",
+      "newAstSha256": "c6da95c07b6b18051f36f0c2d70fbfa001c73b40c296f9ac95280cb199c66e00",
+      "oldRawSha256": "4d7db1daf932b36df9ed87cc6299a0fa41799b39ab4dee61ac512e2fff35cc4e",
+      "newRawSha256": "89d5a53cd91f3f0b691560dfb5059dacdcc0307e143dc9d660b5875d2e70adc9",
+      "reviewedRecords": [],
+      "oldFindingCount": 1,
+      "newFindingCount": 1,
+      "introducedOrIncreasedFingerprints": [],
+      "generatedJavascriptParses": true
+    },
+    {
+      "file": "src-ts/runtime-executables/www/runtime-base.ts",
+      "oldAstSha256": null,
+      "newAstSha256": "c8043fe1eed61ada6f42d2e538bef705402cb1ff94f6df4d6a664f53349dc5c3",
+      "oldRawSha256": null,
+      "newRawSha256": "f7f321856fce4f5da11f8cc1784e349058199151cd3777b97cfcfd1c519da1f8",
+      "reviewedRecords": [],
+      "oldFindingCount": 0,
+      "newFindingCount": 0,
+      "introducedOrIncreasedFingerprints": [],
+      "generatedJavascriptParses": true
+    },
+    {
+      "file": "src-ts/runtime-executables/www/smarthome-config.ts",
+      "oldAstSha256": "f524a6389a23532d18078594d7e1844e8a54d17fb75248a13c23d2f21672c87a",
+      "newAstSha256": "ad59a3807f3d3e683183b47431d558e1e4f90a10f2720b9775fe6852f6c4f286",
+      "oldRawSha256": "236d75f410b5b7e3d25845348567944213e8175ca47f2c886fcf876bf9fa899e",
+      "newRawSha256": "0e01239504d1e0922bfd25baec81599e7c0a7af5ee889fce303d8e6c3c4886f2",
+      "reviewedRecords": [],
+      "oldFindingCount": 397,
+      "newFindingCount": 397,
+      "introducedOrIncreasedFingerprints": [],
+      "generatedJavascriptParses": true
+    },
+    {
+      "file": "src-ts/runtime-executables/www/smarthome.ts",
+      "oldAstSha256": "c3a3df7c448c78ee4b465b4f67e244c6d1f2ac11e8e613f084d82f8c618ff8e4",
+      "newAstSha256": "746aab7a34ec7140322fd34bf9e7f98b56e1b2bc45a3c0205c67fc065d653ac6",
+      "oldRawSha256": "93673944a6a7262456872f4618ac4b2f50fa2c4888a7f195fc6be1f994d395b6",
+      "newRawSha256": "083e6bf6628131e203cd3d02030139ba3c36620543503918d63be3d3d949ec20",
+      "reviewedRecords": [],
+      "oldFindingCount": 46,
+      "newFindingCount": 46,
+      "introducedOrIncreasedFingerprints": [],
+      "generatedJavascriptParses": true
+    },
+    {
+      "file": "src-ts/runtime-executables/www/storagefarm.ts",
+      "oldAstSha256": "a29cc36f602f2b0d02139d0eab71a540f0ae0cc7e33274e359ce357bdcdf6441",
+      "newAstSha256": "e467efaeff4777811e1ad9bf01720a1ca357d453cff4eebf63131aa2d07338e1",
+      "oldRawSha256": "fe3f56b47fa96b1cfe04bcd1c60c45dc7708a91864437d2be4c7a269851742aa",
+      "newRawSha256": "036f0462e2e6fb2b702c4cce45dcaeb28f72be60f630e7b7322d70fcfde78157",
+      "reviewedRecords": [],
+      "oldFindingCount": 3,
+      "newFindingCount": 3,
+      "introducedOrIncreasedFingerprints": [],
+      "generatedJavascriptParses": true
+    },
+    {
+      "file": "src-ts/runtime-executables/www/sw.ts",
+      "oldAstSha256": "ba1e9493c79dd394d6aefea3381938151546fae173b27241eeca1824b6d2a775",
+      "newAstSha256": "dfbd3e2ee72c28f3c335860d5af4c6c8cf174806d481e89bcc769af1662e563b",
+      "oldRawSha256": "c12eebbd3f0d3ab09568b8785d19a699c365f39cc8a9baeb339daccd6ef49b35",
+      "newRawSha256": "4b6f723e6f65c0ceeefae8dcb2b85d90cfdd6319621e97b00e898a90d47fc5cf",
+      "reviewedRecords": [],
+      "oldFindingCount": 1,
+      "newFindingCount": 1,
+      "introducedOrIncreasedFingerprints": [],
+      "generatedJavascriptParses": true
+    },
+    {
+      "file": "src-ts/runtime-executables/www/tariff-report.ts",
+      "oldAstSha256": "844dce94044d30f7a62ab522a642c00a3148cd0c048dbde0247a2d3ce0555288",
+      "newAstSha256": "d3eeff89553f25cf35c5573b509f831ad2abb70eeb42db07f9f112f7ac041c71",
+      "oldRawSha256": "2c972360ed599dec026dde07a95402ebebd87076e547fbad507ef3c4ced1cdf8",
+      "newRawSha256": "81377a66665b5ea9714993d81e0170b655ecb46ce3b5d21dddad7ab0493b7cbf",
+      "reviewedRecords": [],
+      "oldFindingCount": 1,
+      "newFindingCount": 1,
+      "introducedOrIncreasedFingerprints": [],
+      "generatedJavascriptParses": true
+    },
+    {
+      "file": "src-ts/runtime-executables/www/year-report.ts",
+      "oldAstSha256": "78a84716b259c723b94f8aad628a2ce66d4fec65cbde8bbbd4652ef8ec6bbf61",
+      "newAstSha256": "bc3ee93792a9c346e734401f9a990fafb3a5cf87797079c907869b080792961c",
+      "oldRawSha256": "b7836ff2f0c724d9be080b97894224bab96014ed7e5613c89091caf8963e9d81",
+      "newRawSha256": "305481f234458431820a7a112cbd80c9eea2d4548efc1a49af942e49d5cc8a42",
+      "reviewedRecords": [],
+      "oldFindingCount": 16,
+      "newFindingCount": 16,
+      "introducedOrIncreasedFingerprints": [],
+      "generatedJavascriptParses": true
+    }
+  ]
+}

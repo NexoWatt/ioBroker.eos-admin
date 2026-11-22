@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "scripts/verify-heating-rod-night-ramp.cjs"
+  ],
+  "startedAt": "2026-10-08T19:37:47.285104+00:00",
+  "durationSeconds": 0.128,
+  "exitCode": 0,
+  "log": "heating-night-source.log",
+  "hardware": false
+}

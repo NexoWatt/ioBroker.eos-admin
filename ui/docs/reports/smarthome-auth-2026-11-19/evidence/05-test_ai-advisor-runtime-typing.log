@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:ai-advisor-runtime-typing
+> node scripts/verify-ts-ai-advisor-runtime-typing.js
+
+[ts-ai-advisor-runtime-typing] OK: AI-Advisor-Spiegel ist gezielt typisiert und in gelockertem Migrationsmodus kompilierbar.

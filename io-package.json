@@ -1,23 +1,27 @@
 {
   "common": {
     "name": "eos-admin",
-    "version": "8.0.2",
+    "version": "9.0.0-alpha.1",
     "titleLang": {
-      "en": "NexoWatt EOS Admin",
-      "de": "NexoWatt EOS Admin",
-      "ru": "NexoWatt EOS Admin",
-      "pt": "NexoWatt EOS Admin",
-      "pl": "NexoWatt EOS Admin",
-      "fr": "NexoWatt EOS Admin",
-      "nl": "NexoWatt EOS Admin",
-      "it": "NexoWatt EOS Admin",
-      "es": "NexoWatt EOS Admin",
-      "uk": "NexoWatt EOS Admin",
-      "zh-cn": "NexoWatt EOS Admin"
+      "en": "NexoWatt EOS",
+      "de": "NexoWatt EOS",
+      "ru": "NexoWatt EOS",
+      "pt": "NexoWatt EOS",
+      "pl": "NexoWatt EOS",
+      "fr": "NexoWatt EOS",
+      "nl": "NexoWatt EOS",
+      "it": "NexoWatt EOS",
+      "es": "NexoWatt EOS",
+      "uk": "NexoWatt EOS",
+      "zh-cn": "NexoWatt EOS"
     },
     "connectionType": "local",
     "dataSource": "push",
     "news": {
+      "9.0.0-alpha.1": {
+        "en": "First unified EOS preview: shared UI, system administration, login and license authority.",
+        "de": "Erste gemeinsame EOS-Vorabversion mit UI, Systemverwaltung, Anmeldung und zentraler Lizenz."
+      },
       "8.0.2": {
         "en": "Restore visible system settings and expert controls; integrate EOS Home/Pro licensing into system settings and preserve site configuration.",
         "de": "Sichtbare Systemeinstellungen und Expertenmodus wiederhergestellt; EOS Home-/Pro-Lizenzverwaltung in den Systembereich integriert, bestehende Anlagendaten bleiben erhalten."
@@ -106,16 +110,11 @@
         "de": "Stable 7.9.89 finalisiert die rollenbasierte NexoWatt-EOS-Verkaufsoberfläche: Admin/Service behält Vollzugriff und Expertenmodus, Installateure erhalten Inbetriebnahme und Fehlersuche, Gast/Endkunde die freigegebene Smart-Home-Bedienung. Die Erstanmeldung ist direkt in die normale Anmeldung integriert: Installer und Guest wählen ihre Ebene und lassen das Passwort einmalig leer, danach wird zwingend ein persönliches Passwort vergeben. EOS Assist sitzt kollisionsfrei im Kopfbereich; Zugangsverwaltung liegt ausschließlich unter „Zugänge & Rechte“. Die aktuelle Übersicht wurde modernisiert, die Easy-Übersicht wird nicht verwendet. Interner Admin und interne BackItUp-Notfallreserve sind nur für Admin/Service sichtbar; die NexoWatt-Sicherung bleibt für die freigegebenen Rollen nutzbar. Standardport ist 8081.",
         "en": "Stable 7.9.89 finalizes the role-based NexoWatt EOS sales interface: Admin/Service retains full access and expert mode, installers receive commissioning and troubleshooting functions, and Guest/End User receives the approved smart-home controls. First activation is integrated into the normal sign-in card: Installer and Guest select their level and leave the password empty once, then must create a personal password. EOS Assist is positioned safely in the header; account management exists only under “Access & Rights”. The current overview was modernized and the Easy overview is not used. The internal admin and internal BackItUp emergency reserve are visible only to Admin/Service, while NexoWatt Backup remains available to approved roles. Default port is 8081.",
         "nl": "Stable 7.9.89 voltooit de rolgebaseerde NexoWatt EOS-verkoopinterface: Admin/Service behoudt volledige toegang en expertmodus, installateurs krijgen inbedrijfstelling en foutdiagnose, en Gast/Eindgebruiker de vrijgegeven smart-homebediening. De eerste activatie is geïntegreerd in de normale aanmelding: Installer en Guest kiezen hun niveau en laten het wachtwoord eenmalig leeg, waarna verplicht een persoonlijk wachtwoord wordt ingesteld. EOS Assist staat zonder overlap in de kop; toegangsbeheer staat uitsluitend onder “Toegangen & rechten”. Het actuele overzicht is gemoderniseerd en Easy wordt niet gebruikt. De interne admin en BackItUp-noodreserve zijn alleen zichtbaar voor Admin/Service; NexoWatt Backup blijft beschikbaar voor vrijgegeven rollen. Standaardpoort is 8081."
-      },
-      "7.9.87-rc.4": {
-        "en": "RC4 adds passwordless one-time first activation for Installer and Guest/End User accounts, role-controlled password reset, a modern NexoWatt account-management dialog, and a refined product interface. Admin/Service can reset installer and end-user access; installers can reset end-user access only.",
-        "de": "RC4 ergänzt die einmalige Erstanmeldung ohne Passwort für Installateur und Gast/Endkunde, rollenabhängiges Zurücksetzen von Zugängen, eine moderne NexoWatt-Zugangsverwaltung und eine weiter modernisierte Produktoberfläche. Admin/Service kann Installateur- und Endkundenzugänge zurücksetzen; Installateure ausschließlich Endkundenzugänge.",
-        "nl": "RC4 voegt eenmalige eerste activering zonder wachtwoord toe voor installateur en guest/eindgebruiker, rolgebonden reset van toegangen, een moderne NexoWatt-toegangsbeheerder en een verder gemoderniseerde productinterface. Admin/service kan installateur- en eindgebruikerstoegang resetten; installateurs alleen eindgebruikers."
       }
     },
     "desc": {
-      "en": "Standalone NexoWatt EOS administration interface with role-based visibility, legacy admin lock and protected system adapters for Energy Operation System installations.",
-      "de": "Eigenständige NexoWatt EOS Administrationsoberfläche mit rollenbasierter Sichtbarkeit, Legacy-Admin-Sperre und geschützten Systemadaptern für Energy Operation System Installationen."
+      "en": "NexoWatt EOS: licensed local energy management, dashboard and ioBroker system administration in one adapter.",
+      "de": "NexoWatt EOS: lizenzierte lokale Energieverwaltung, Dashboard und ioBroker-Systemverwaltung in einem Adapter."
     },
     "docs": {
       "en": "docs/en/admin.md",
@@ -148,7 +147,7 @@
     "icon": "admin.svg",
     "messagebox": true,
     "enabled": true,
-    "extIcon": "https://unpkg.com/iobroker.eos-admin@8.0.2/admin/admin.svg",
+    "extIcon": "https://unpkg.com/iobroker.eos-admin@9.0.0-alpha.1/admin/admin.svg",
     "keywords": [
       "NexoWatt",
       "EOS",
@@ -158,8 +157,8 @@
       "proprietary",
       "licensed"
     ],
-    "compact": true,
-    "readme": "https://unpkg.com/iobroker.eos-admin@8.0.2/README.md",
+    "compact": false,
+    "readme": "https://unpkg.com/iobroker.eos-admin@9.0.0-alpha.1/README.md",
     "authors": [
       "NexoWatt"
     ],
@@ -170,14 +169,12 @@
     ],
     "type": "general",
     "licenseInformation": {
-      "license": "UNLICENSED",
       "type": "paid",
-      "link": "/adapter/eos-admin/LICENSE-NEXOWATT.md"
+      "link": "https://unpkg.com/iobroker.eos-admin@9.0.0-alpha.1/LICENSE"
     },
     "logTransporter": true,
     "stopBeforeUpdate": true,
     "eraseOnUpload": true,
-    "nogit": true,
     "welcomeScreenPro": [
       {
         "link": "admin/index.html",
@@ -193,17 +190,17 @@
       "_default": {
         "link": "%protocol%://%bind%:%port%",
         "name": {
-          "en": "NexoWatt EOS Admin",
-          "de": "NexoWatt EOS Admin",
-          "ru": "NexoWatt EOS Admin",
-          "pt": "NexoWatt EOS Admin",
-          "pl": "NexoWatt EOS Admin",
-          "fr": "NexoWatt EOS Admin",
-          "nl": "NexoWatt EOS Admin",
-          "it": "NexoWatt EOS Admin",
-          "es": "NexoWatt EOS Admin",
-          "uk": "NexoWatt EOS Admin",
-          "zh-cn": "NexoWatt EOS Admin"
+          "en": "NexoWatt EOS",
+          "de": "NexoWatt EOS",
+          "ru": "NexoWatt EOS",
+          "pt": "NexoWatt EOS",
+          "pl": "NexoWatt EOS",
+          "fr": "NexoWatt EOS",
+          "nl": "NexoWatt EOS",
+          "it": "NexoWatt EOS",
+          "es": "NexoWatt EOS",
+          "uk": "NexoWatt EOS",
+          "zh-cn": "NexoWatt EOS"
         },
         "pro": "eos-admin/index.html",
         "icon": "eos-admin/img/eos/eos-logo.svg",
@@ -212,32 +209,20 @@
         "intro": true
       }
     },
-    "plugins": {
-      "sentry": {
-        "dsn": "https://9d2aaf29332a4999b133c693f43203b9@sentry.iobroker.net/18"
-      }
-    },
     "adminUI": {
       "config": "json"
     },
     "tier": 1,
-    "title": "NexoWatt EOS Admin",
-    "dontDelete": false,
+    "title": "NexoWatt EOS",
     "nondeletable": false,
-    "allowAdapterUpdate": true,
-    "allowAdapterDelete": false,
-    "meta": "https://unpkg.com/iobroker.eos-admin@8.0.2/io-package.json",
-    "npmPackage": "iobroker.eos-admin",
-    "packetName": "iobroker.eos-admin",
-    "publisher": "NexoWatt",
     "declareUsedResources": true
   },
   "native": {
     "autoUpdate": 24,
-    "port": 8081,
+    "port": 8188,
     "auth": true,
     "secure": false,
-    "bind": "0.0.0.0",
+    "bind": "127.0.0.1",
     "cache": false,
     "accessLimit": false,
     "accessApplyRights": false,
@@ -377,7 +362,498 @@
     "oidcScope": "openid profile email",
     "ssoExternalUrl": "",
     "http2": false,
-    "acmeChallenge": false
+    "acmeChallenge": false,
+    "eosExternalOrigin": "",
+    "eosUnifiedEnabled": true,
+    "eosUi": {
+      "units": {
+        "power": "W",
+        "energy": "kWh"
+      },
+      "datapoints": {
+        "autarky": "fenecon.0._sum.Autarchy",
+        "selfConsumption": "fenecon.0._sum.SelfConsumption",
+        "pvPower": "fenecon.0._sum.ProductionAcActivePower",
+        "productionTotal": "0_userdata.0.nexowatt.pv.energy_total",
+        "consumptionTotal": "fenecon.0._sum.ConsumptionAcActivePower",
+        "gridBuyPower": "0_userdata.0.nexowatt.grid.buy.power",
+        "gridSellPower": "0_userdata.0.nexowatt.grid.sell.power",
+        "gridPointPower": "",
+        "storageChargePower": "0_userdata.0.nexowatt.battery.charge.power",
+        "storageDischargePower": "0_userdata.0.nexowatt.battery.discharge.power",
+        "storageSoc": "fenecon.0._sum.EssSoc",
+        "consumptionEvcs": "0_userdata.0.nexowatt.evcs.power",
+        "consumptionOther": "0_userdata.0.nexowatt.house.other.power",
+        "evcsStatus": "",
+        "evcsLastChargeKwh": "",
+        "gridFrequency": "fenecon.0._sum.GridFrequency",
+        "gridVoltage": "0_userdata.0.nexowatt.grid.voltage",
+        "gridBuyEnergy": "0_userdata.0.nexowatt.grid.buy.energy_total",
+        "gridSellEnergy": "0_userdata.0.nexowatt.grid.sell.energy_total",
+        "batteryPower": "0_userdata.0.nexowatt.battery.power",
+        "batterySOC": "0_userdata.0.nexowatt.battery.soc",
+        "batteryEnergyTotal": "0_userdata.0.nexowatt.battery.energy_total",
+        "housePower": "0_userdata.0.nexowatt.house.power",
+        "houseTemp": "0_userdata.0.nexowatt.house.temperature",
+        "inverterTemp": "0_userdata.0.nexowatt.inverter.temperature",
+        "storageCapacityKwh": "",
+        "consumer1Power": "",
+        "consumer2Power": "",
+        "priceCurrent": "",
+        "priceAverage": ""
+      },
+      "sections": {
+        "tabs": [
+          "live",
+          "history",
+          "settings",
+          "smarthome"
+        ]
+      },
+      "smartHome": {
+        "enabled": false,
+        "datapoints": {
+          "heatPumpOn": "",
+          "roomTemp": "",
+          "wallboxLock": "",
+          "gridLimit": "",
+          "pvCurtailment": "",
+          "blindPosition": "",
+          "blindUp": "",
+          "blindDown": "",
+          "blindStop": "",
+          "rtrSetpoint": "",
+          "rtrMode": "",
+          "rtrHumidity": "",
+          "scene1": "",
+          "scene2": "",
+          "scene3": "",
+          "scene4": ""
+        }
+      },
+      "futureOptions": {
+        "theme": "nexowatt-dark",
+        "enableAnimations": true,
+        "showGridVoltage": false
+      },
+      "installerConfig": {},
+      "history": {
+        "instance": "influxdb.0",
+        "datapoints": {
+          "pvPower": "fenecon.0._sum.ProductionAcActivePower",
+          "consumptionTotal": "fenecon.0._sum.ConsumptionAcActivePower",
+          "gridBuyPower": "0_userdata.0.nexowatt.grid.buy.power",
+          "gridSellPower": "0_userdata.0.nexowatt.grid.sell.power",
+          "storageChargePower": "0_userdata.0.nexowatt.battery.charge.power",
+          "storageDischargePower": "0_userdata.0.nexowatt.battery.discharge.power",
+          "storageSoc": "fenecon.0._sum.EssSoc"
+        }
+      },
+      "settings": {
+        "evcsActive": "",
+        "evcsMode": "",
+        "flowSubtractEvFromBuilding": true,
+        "flowInvertBattery": false,
+        "flowInvertGrid": false,
+        "flowInvertPv": false,
+        "flowInvertEv": false,
+        "flowGridShowNet": false,
+        "dynamicTariff": false,
+        "energyWalletEnabled": true,
+        "energyWalletShowPriceSource": false,
+        "energyWalletFixedImportEurPerKwh": 0.35,
+        "energyWalletFeedInEurPerKwh": 0.08,
+        "energyWalletEvcsValueEurPerKwh": 0.35
+      },
+      "logic": {
+        "enabled": true,
+        "tags": [
+          "demo"
+        ],
+        "meta": {
+          "version": 1
+        }
+      },
+      "smartHomeConfig": {
+        "version": 2,
+        "floors": [],
+        "rooms": [],
+        "functions": [],
+        "devices": [],
+        "pages": [],
+        "meta": {}
+      },
+      "peakShaving": {
+        "atypical": {
+          "enabled": false,
+          "mode": "hybrid",
+          "voltageLevel": "MS",
+          "thresholdPercent": 20,
+          "minShiftW": 100000,
+          "annualPeakReferenceW": 0,
+          "targetLimitW": 0,
+          "safetyMarginW": 0,
+          "includeWeekends": false,
+          "excludeChristmasNewYear": true,
+          "highLoadWindows": [],
+          "holidays": [],
+          "bridgeDays": [],
+          "calendarExceptions": []
+        },
+        "strategyMode": "standard",
+        "mode": "static",
+        "reserveW": 0,
+        "safetyMarginW": 0,
+        "hysteresisW": 500,
+        "smoothingSeconds": 10,
+        "activateDelaySeconds": 2,
+        "releaseDelaySeconds": 5,
+        "staleTimeoutSec": 300,
+        "fastTripEnabled": true
+      },
+      "countryProfile": {
+        "country": "DE",
+        "languageMode": "system",
+        "note": "Sprache wird standardmäßig aus der NexoWatt-EOS-Systemeinstellung übernommen."
+      },
+      "energyWallet": {
+        "enabled": true,
+        "showOnLive": true,
+        "gridImportEurPerKwh": 0.35,
+        "feedInEurPerKwh": 0.08,
+        "importPriceEurPerKwh": 0.35,
+        "feedInPriceEurPerKwh": 0.08,
+        "evcsValueEurPerKwh": 0,
+        "recommendationsEnabled": true,
+        "storageValueEurPerKwh": 0
+      },
+      "enableEnergyWallet": true,
+      "enableEnergyLedger": false,
+      "enableChargeKiosk": false,
+      "chargeKiosk": {
+        "enabled": false,
+        "displayBasePath": "/display/station/",
+        "stations": []
+      },
+      "energyLedger": {
+        "enabled": false,
+        "source": "chargeKiosk.lastSessionsByLpJson",
+        "recentEntryLimit": 200,
+        "processedSessionLimit": 2000,
+        "origin": {
+          "enabled": false,
+          "siteId": "site_1",
+          "siteName": "Standort 1",
+          "country": "AUTO",
+          "intervalMinutes": 15,
+          "staleSeconds": 300,
+          "recentIntervalLimit": 672,
+          "allocationMethod": "proportional",
+          "evidenceMode": "operational",
+          "dataPoints": {
+            "gridImportEnergyKwh": "",
+            "gridExportEnergyKwh": "",
+            "pvGenerationEnergyKwh": "",
+            "otherRenewableEnergyKwh": "",
+            "buildingEnergyKwh": "",
+            "storageChargeEnergyKwh": "",
+            "storageDischargeEnergyKwh": ""
+          },
+          "units": {
+            "gridImportEnergyKwh": "kWh",
+            "gridExportEnergyKwh": "kWh",
+            "pvGenerationEnergyKwh": "kWh",
+            "otherRenewableEnergyKwh": "kWh",
+            "buildingEnergyKwh": "kWh",
+            "storageChargeEnergyKwh": "kWh",
+            "storageDischargeEnergyKwh": "kWh"
+          },
+          "storage": {
+            "enabled": true,
+            "chargeEfficiencyPct": 95,
+            "dischargeEfficiencyPct": 95,
+            "exclusiveRenewableChargingDeclared": false,
+            "initialInventoryKwh": 0,
+            "initialPvSharePct": 0,
+            "inventoryMethod": "pro-rata"
+          },
+          "evidence": {
+            "sameGridConnectionDeclared": false,
+            "meteringComplianceDeclared": false,
+            "publicChargingDeclared": false,
+            "sameWozObjectDeclared": false,
+            "directLineDeclared": false,
+            "noOperatingSubsidyDeclared": false,
+            "integratedMidMeterDeclared": false,
+            "operatorType": "business",
+            "nlGridRenewableSharePct": 50.5
+          },
+          "chargePoints": [],
+          "meters": []
+        }
+      },
+      "nlP1": {
+        "enabled": false,
+        "staleTimeoutSec": 300,
+        "returnValueEurPerKwh": 0.08,
+        "returnCostEurPerKwh": 0,
+        "datapoints": {
+          "importPowerW": "",
+          "exportPowerW": "",
+          "netPowerW": "",
+          "importEnergyKwh": "",
+          "exportEnergyKwh": "",
+          "gasM3": "",
+          "activeTariff": ""
+        }
+      },
+      "enableMeshMicrogrid": false,
+      "meshMicrogrid": {
+        "enabled": false,
+        "mode": "diagnostic",
+        "clusterId": "cluster_01",
+        "clusterName": "Lokaler Energieverbund",
+        "gridLimitW": 0,
+        "nodes": [],
+        "controlMode": "diagnostic",
+        "fieldTestApproved": false,
+        "commandStateDp": "",
+        "maxCommandsPerTick": 3,
+        "tailscale": {
+          "enabled": false,
+          "profile": "mesh-microgrid",
+          "localNodeId": "local",
+          "peerUrls": [],
+          "peerToken": "",
+          "timeoutMs": 2500
+        }
+      },
+      "accessControl": {
+        "enabled": true,
+        "adminGroups": "system.group.administrator,system.group.eosAdmin,system.group.nexowattAdmin",
+        "installerGroups": "system.group.installer,system.group.eosInstaller,system.group.nexowattInstaller",
+        "customerGroups": "system.group.user,system.group.eosUser,system.group.nexowattUser",
+        "defaultRole": "none",
+        "trustedHeaderEnabled": false,
+        "customerWritePolicy": "session",
+        "allowedOrigins": ""
+      },
+      "diagnostics": {
+        "actuatorArbiterMode": "enforce-safety",
+        "actuatorArbiterEnforcePriorityFloor": 750,
+        "actuatorArbiterBlockedLogIntervalMs": 60000
+      },
+      "enableNetOperatorInterface": false,
+      "netOperatorInterface": {
+        "enabled": false,
+        "mode": "diagnostic",
+        "profileSource": "builtin",
+        "driverId": "generic-modbus-tcp-template",
+        "customProfileJson": "",
+        "commissioned": false,
+        "installerApproved": false,
+        "writebackEnabled": false,
+        "signalMaxAgeSec": 5,
+        "auditLimit": 500,
+        "failSafePolicy": "project-specific",
+        "transport": {
+          "type": "modbus-tcp",
+          "host": "",
+          "port": 502,
+          "unitId": 1,
+          "timeoutMs": 2000,
+          "pollIntervalMs": 1000
+        }
+      },
+      "enableArbitrage": false
+    },
+    "schemas": {
+      "systemConfig": {
+        "label": "System config",
+        "path": "common",
+        "json": {
+          "type": "panel",
+          "items": {
+            "city": {
+              "newLine": true,
+              "type": "text",
+              "label": "City",
+              "sm": 12,
+              "md": 6,
+              "lg": 3
+            },
+            "country": {
+              "sm": 12,
+              "md": 6,
+              "lg": 3,
+              "type": "text",
+              "label": "Country",
+              "maxLength": 2
+            },
+            "address": {
+              "sm": 12,
+              "md": 6,
+              "lg": 3,
+              "type": "text",
+              "label": "Address"
+            },
+            "longitude": {
+              "newLine": true,
+              "sm": 12,
+              "md": 6,
+              "lg": 3,
+              "type": "number",
+              "label": "Longitude"
+            },
+            "latitude": {
+              "sm": 12,
+              "md": 6,
+              "lg": 3,
+              "type": "number",
+              "label": "Latitude"
+            },
+            "language": {
+              "newLine": true,
+              "sm": 12,
+              "md": 6,
+              "lg": 3,
+              "type": "language",
+              "label": "Language",
+              "system": false
+            },
+            "tempUnit": {
+              "sm": 12,
+              "md": 6,
+              "lg": 3,
+              "type": "select",
+              "noTranslation": true,
+              "options": [
+                {
+                  "label": "°C",
+                  "value": "°C"
+                },
+                {
+                  "label": "°F",
+                  "value": "°F"
+                }
+              ],
+              "label": "Temperature unit"
+            },
+            "currency": {
+              "sm": 12,
+              "md": 6,
+              "lg": 3,
+              "type": "text",
+              "label": "Currency"
+            },
+            "dateFormat": {
+              "sm": 12,
+              "md": 6,
+              "lg": 3,
+              "type": "text",
+              "label": "Date format"
+            },
+            "isFloatComma": {
+              "sm": 12,
+              "md": 6,
+              "lg": 3,
+              "type": "checkbox",
+              "label": "Float divider sign"
+            },
+            "defaultHistory": {
+              "newLine": true,
+              "sm": 12,
+              "md": 6,
+              "lg": 3,
+              "type": "instance",
+              "adapter": "_dataSources",
+              "label": "Default History"
+            },
+            "defaultLogLevel": {
+              "sm": 12,
+              "md": 6,
+              "lg": 3,
+              "type": "select",
+              "noTranslation": true,
+              "options": [
+                {
+                  "label": "silly",
+                  "value": "silly"
+                },
+                {
+                  "label": "debug",
+                  "value": "debug"
+                },
+                {
+                  "label": "info",
+                  "value": "info"
+                },
+                {
+                  "label": "warn",
+                  "value": "warn"
+                },
+                {
+                  "label": "error",
+                  "value": "error"
+                }
+              ],
+              "label": "Default log level"
+            },
+            "diag": {
+              "sm": 12,
+              "md": 6,
+              "lg": 3,
+              "type": "select",
+              "options": [
+                {
+                  "value": "none",
+                  "label": "diag-type-note-none"
+                },
+                {
+                  "value": "normal",
+                  "label": "diag-type-note-normal"
+                },
+                {
+                  "value": "no-city",
+                  "label": "diag-type-note-no-city"
+                },
+                {
+                  "value": "extended",
+                  "label": "diag-type-note-extended"
+                }
+              ],
+              "label": "Diagnostics level"
+            },
+            "firstDayOfWeek": {
+              "sm": 12,
+              "md": 6,
+              "lg": 3,
+              "type": "select",
+              "options": [
+                {
+                  "label": "monday",
+                  "value": "monday"
+                },
+                {
+                  "label": "sunday",
+                  "value": "sunday"
+                }
+              ],
+              "label": "First day of week"
+            },
+            "siteName": {
+              "newLine": true,
+              "sm": 12,
+              "md": 6,
+              "lg": 3,
+              "type": "text",
+              "label": "Site name"
+            }
+          },
+          "i18n": false
+        }
+      }
+    }
   },
   "notifications": [
     {
@@ -827,192 +1303,8 @@
       "native": {}
     }
   ],
-  "schemas": {
-    "systemConfig": {
-      "label": "System config",
-      "path": "common",
-      "json": {
-        "type": "panel",
-        "items": {
-          "city": {
-            "newLine": true,
-            "type": "text",
-            "label": "City",
-            "sm": 12,
-            "md": 6,
-            "lg": 3
-          },
-          "country": {
-            "sm": 12,
-            "md": 6,
-            "lg": 3,
-            "type": "text",
-            "label": "Country",
-            "maxLength": 2
-          },
-          "address": {
-            "sm": 12,
-            "md": 6,
-            "lg": 3,
-            "type": "text",
-            "label": "Address"
-          },
-          "longitude": {
-            "newLine": true,
-            "sm": 12,
-            "md": 6,
-            "lg": 3,
-            "type": "number",
-            "label": "Longitude"
-          },
-          "latitude": {
-            "sm": 12,
-            "md": 6,
-            "lg": 3,
-            "type": "number",
-            "label": "Latitude"
-          },
-          "language": {
-            "newLine": true,
-            "sm": 12,
-            "md": 6,
-            "lg": 3,
-            "type": "language",
-            "label": "Language",
-            "system": false
-          },
-          "tempUnit": {
-            "sm": 12,
-            "md": 6,
-            "lg": 3,
-            "type": "select",
-            "noTranslation": true,
-            "options": [
-              {
-                "label": "°C",
-                "value": "°C"
-              },
-              {
-                "label": "°F",
-                "value": "°F"
-              }
-            ],
-            "label": "Temperature unit"
-          },
-          "currency": {
-            "sm": 12,
-            "md": 6,
-            "lg": 3,
-            "type": "text",
-            "label": "Currency"
-          },
-          "dateFormat": {
-            "sm": 12,
-            "md": 6,
-            "lg": 3,
-            "type": "text",
-            "label": "Date format"
-          },
-          "isFloatComma": {
-            "sm": 12,
-            "md": 6,
-            "lg": 3,
-            "type": "checkbox",
-            "label": "Float divider sign"
-          },
-          "defaultHistory": {
-            "newLine": true,
-            "sm": 12,
-            "md": 6,
-            "lg": 3,
-            "type": "instance",
-            "adapter": "_dataSources",
-            "label": "Default History"
-          },
-          "defaultLogLevel": {
-            "sm": 12,
-            "md": 6,
-            "lg": 3,
-            "type": "select",
-            "noTranslation": true,
-            "options": [
-              {
-                "label": "silly",
-                "value": "silly"
-              },
-              {
-                "label": "debug",
-                "value": "debug"
-              },
-              {
-                "label": "info",
-                "value": "info"
-              },
-              {
-                "label": "warn",
-                "value": "warn"
-              },
-              {
-                "label": "error",
-                "value": "error"
-              }
-            ],
-            "label": "Default log level"
-          },
-          "diag": {
-            "sm": 12,
-            "md": 6,
-            "lg": 3,
-            "type": "select",
-            "options": [
-              {
-                "value": "none",
-                "label": "diag-type-note-none"
-              },
-              {
-                "value": "normal",
-                "label": "diag-type-note-normal"
-              },
-              {
-                "value": "no-city",
-                "label": "diag-type-note-no-city"
-              },
-              {
-                "value": "extended",
-                "label": "diag-type-note-extended"
-              }
-            ],
-            "label": "Diagnostics level"
-          },
-          "firstDayOfWeek": {
-            "sm": 12,
-            "md": 6,
-            "lg": 3,
-            "type": "select",
-            "options": [
-              {
-                "label": "monday",
-                "value": "monday"
-              },
-              {
-                "label": "sunday",
-                "value": "sunday"
-              }
-            ],
-            "label": "First day of week"
-          },
-          "siteName": {
-            "newLine": true,
-            "sm": 12,
-            "md": 6,
-            "lg": 3,
-            "type": "text",
-            "label": "Site name"
-          }
-        },
-        "i18n": false
-      }
-    }
-  },
-  "version": "8.0.2"
+  "protectedNative": [
+    "eosUi",
+    "oidcClientSecret"
+  ]
 }

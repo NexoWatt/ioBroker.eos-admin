@@ -1,0 +1,9 @@
+PASS: separated private license value absent from every actual npm package file.
+Actual npm tarball: iobroker.nexowatt-ui-1.0.22.tgz files: 402 bytes: 8274666
+[secret-guard] OK: 402 files; no findings in the supported rules.
+
+[cra-sbom-check] OK: iobroker.nexowatt-ui@1.0.22; 60 Komponenten, 400 Paketdateien; prepared-npm-runtime-package. Keine Geräteinventar-/CRA-Freigabe.
+
+[package-runtime-start-smoke] OK: 232 JS/MJS-Dateien syntaktisch geprüft, relative require()-Pfade vollständig und main.js-/EMS-/§14a-Startkette konstruierbar.
+
+PASS: actual npm tarball preserves SBOM/package.json/file hashes and runtime entry paths. No external upload.

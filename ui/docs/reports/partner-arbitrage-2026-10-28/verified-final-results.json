@@ -1,0 +1,38 @@
+[
+  {
+    "command": [
+      "npm",
+      "run",
+      "test:all"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 386.89,
+    "log": "verified-final-test-all.log",
+    "bytes": 157218,
+    "sha256": "adf168bcd1de0b40aacd8226eeaab1fcb847759bee3119b23a21d6f249f203fe"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "publish:check"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 2.01,
+    "log": "verified-final-publish-check.log",
+    "bytes": 598,
+    "sha256": "b3c41e869873e84e880146189eda189d8fa9fe8b0bba470a5a6ea08e933777d1"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "test:package-runtime-start-smoke"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 3.92,
+    "log": "verified-final-runtime-start.log",
+    "bytes": 380,
+    "sha256": "b0bd959ec5c8a897aaa758707e6bc0db7ad23c635316a89cf696def6c5216ab7"
+  }
+]

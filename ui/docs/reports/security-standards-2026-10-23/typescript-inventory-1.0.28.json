@@ -1,0 +1,4818 @@
+{
+  "typescript": "5.8.3",
+  "rootVersion": "1.0.28",
+  "files": [
+    {
+      "path": "src-ts/adapter/api-set.ts",
+      "sha256": "f267998f18c4b1bba6fcc808fa5ed05eb35e097cd07bb5452f2ee7465402e848",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/adapter/api-state.ts",
+      "sha256": "297ec576fbb29ecaf0c559f0fad3d0087a97d9b76384f255d96edec61afe141a",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/adapter/connection-state.ts",
+      "sha256": "52fefa4464dd0cfe1b25e2c43226823bf0905239d6edb51be19174def4a2c846",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/adapter/index.ts",
+      "sha256": "0b5f3fa4509b64bc5a5880fd5d415cf5ea4f001f3aa770232134ef593430877e",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/adapter/settings-writes.ts",
+      "sha256": "dbaa4f9ebe9c88160e3cc79b6088f24bd1b4c422bf77a27477fbe043b3141575",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/adapter/state-cache.ts",
+      "sha256": "8a4e03412274f261ed082e3c558b149b89b139958034749fec7817ca807f8b8b",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/backend/api-state/api-set-helpers.ts",
+      "sha256": "8b5ffb0d480c18675de2c65b28719492ab5c54d900c0f441b52444154e9500fa",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/backend/api-state/api-state-envelope.ts",
+      "sha256": "d6a25a0fbe968511a571fee58c19a880f008c646295443e878f3abc00a74ffeb",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/backend/api-state/index.ts",
+      "sha256": "251b33c1271e1fe784956d9349d1872e2bb413a3891102c2f2e3ed0882f161cd",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/backend/connection/connection-state.ts",
+      "sha256": "eb01df8ac56dc5d063e24515ae5fa707d45b899550d26354b12f8a3069b1a0eb",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/backend/connection/index.ts",
+      "sha256": "dad909127f523a53908fff676bd9ae3d05e3068d12c80dce690273f221412b32",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/backend/feature-visibility/feature-visibility.ts",
+      "sha256": "9e686465af5a910435f7ded565b376123b15b502a3b8887bbf1cae69f0552fc3",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/backend/feature-visibility/index.ts",
+      "sha256": "7dd7a1759468ea51fcb5208c1ed91489b3a65b1fa8c18c64fefed81362d8d2c5",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/backend/index.ts",
+      "sha256": "31830b9ad7c2ca64a253ea51606b81c14a31d1a865f14b8957252eb884dcc39d",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/backend/license/index.ts",
+      "sha256": "8a86c3a20f042219a1ec5091f53b7a9510bd2a757dbc11507f9a6fb03bf7cd39",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/backend/license/license-key-safety.ts",
+      "sha256": "88facbd1be3babd07b02dfada246917836b5e25b3b12273c3c2c6e14b618b6fe",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/backend/main-helpers/api-state-main.ts",
+      "sha256": "3a58f9e3f84605fe917277aea4ea9e29beed76572870cccd8ffd161746676804",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/backend/main-helpers/info-connection-main.ts",
+      "sha256": "a3652a90100177bc2ccdcaec59eab3ce70a6bdddd57b9794baeb36246ad601fb",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/backend/main-helpers/license-key-main.ts",
+      "sha256": "1cba973add0e24761a3589b77c0899380f4fc852c94af3541e74ce106886e9c4",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/backend/main-helpers/settings-write-main.ts",
+      "sha256": "b19a0d3348008f86334c374a599afab7147fe739071cdda4566fa64572b96852",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/backend/main-helpers/state-cache-main.ts",
+      "sha256": "d6a843a37de5ad5d79edc3f46b73c9fc28adba232e597a78218b2532b19dca6f",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/backend/main-runtime/main-runtime-helpers.ts",
+      "sha256": "ce05a0108235538aef4d14c6f3dee0314b7f43416c252cbb95f99006b71f0742",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/backend/state/api-state-cache.ts",
+      "sha256": "cb64934bc4a37a355f8a5e5d0baab5b959b4d9b93f8ab3ad13b7617674d6ee12",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/backend/state/index.ts",
+      "sha256": "c7f37a285c2ea9efe87a3a5ccc17c43368d7063b98d5af2b01f53f7cfe5054a3",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/backend/state-cache/index.ts",
+      "sha256": "564176e9dab80dece56e19924d66c318fecdac9a705cc935fae6b8c003dcb888",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/backend/state-cache/state-cache.ts",
+      "sha256": "a20a68a67874b5e67a8f092ed25f8831a72432349c0c428fdaee6f56f7bdd90b",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/backend/visibility/feature-visibility.ts",
+      "sha256": "cc9ca132f2edbf106b82453c53b1290706c750507c0235a1a900541744c74bcc",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/backend/visibility/index.ts",
+      "sha256": "896bf08cff9d51e41fd31898292dc0eb53360fd9045607dc5a48c30305cab8dc",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/bridges/feature-visibility-shadow.ts",
+      "sha256": "7763cd856015921ed81fa9ce6367350490606335cc7af99891d63275b6b4f630",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/contracts/adapter-api.ts",
+      "sha256": "e8d054d419174713ff351365973f194fabda82f5b2a62a9f9c14c5aabf9fe2dd",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/contracts/ai-advisor.ts",
+      "sha256": "fc7015756863c47f55f934ba40c451f00730f78c050eeb1e9bc882b948c76417",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/contracts/api-state.ts",
+      "sha256": "63008acdebf9c932ed33d90f66493b46f755973ac0799c89bf74bbfe0f3e2ae8",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/contracts/api.ts",
+      "sha256": "5acbadf47fbacaa82176012abd3616ac0d9291fb29171a0d097bb9baaa82d112",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/contracts/datapoints.ts",
+      "sha256": "2cf56312a25d3f42f04d526a77357d84542cfb6fc55635d67fa7938ccf476586",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/contracts/ems-budget.ts",
+      "sha256": "088248bd7afa94b5eaf894677c7a213ffd9b240ddc2f34d27c579d6627f6ba24",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/contracts/energy-flow.ts",
+      "sha256": "39f1dab486b3d3d82f0c1ccfddd97443b4f0cfe56aeb27808b08edf3993e5fed",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/contracts/features.ts",
+      "sha256": "0d7c51a69c3ebe042a0e63a4c94d7d883c0f06b691aebcf5b7a5edd61b8a5aa7",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/contracts/heating-rod.ts",
+      "sha256": "4fd80ee1a7771aedc0b58cecb752c4e21d4d84387299074c3062cdf25ec35875",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/contracts/history.ts",
+      "sha256": "169d37b3e1e7ae39ed9b3a978028bf9dbeff1d60ffd8b7e96c3b1455bfb32c53",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/contracts/index.ts",
+      "sha256": "af2cfe83a97bfd163a54ebbc73682e40cd898e884f165b6dcca83b47f940b346",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/contracts/iobroker-states.ts",
+      "sha256": "fec08eb24c5ae6cc89b4f6ee3aa4e68aae95c18c069acd4f85f209c7a06de2e9",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/contracts/license.ts",
+      "sha256": "3479ee29780b70e245aa4977f1ff30ad88f15beee313b63dc02bd4d519b3f739",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/contracts/testing.ts",
+      "sha256": "f0b73ffaaca8b8154091bd67dc96836ec0996cd218cc3a0efb4ce4364c01698d",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/contracts/units.ts",
+      "sha256": "60c41c3cdacdd06e54818271ccddb284351b309b857cd010e6d0c74bfbbbb3e2",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/ems/ai-advisor/ai-advisor-payload.ts",
+      "sha256": "b8437e1fe6c7d1084ef4589baa98530f310997a6adb96a0478daf774cacc6ee3",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/ems/charging-management/charging-allocation.ts",
+      "sha256": "833af6270658dcad8a7d431925757f479c5bd8481fcfdefee041f067692cc4bb",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/ems/charging-management/charging-budget.ts",
+      "sha256": "d169f3c02447dc1428b4fa2e57fd29bda80df2db1e044064961655b39ce8f484",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/ems/charging-management/charging-control.ts",
+      "sha256": "a371663a9dbb6f21fc1646208e952503cd41f57e6d030c11fed0de9bc22e29df",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/ems/charging-management/charging-management-runtime.ts",
+      "sha256": "9075c56342c1d575ac6dd610b1325adfea6f44284fbfae161160e3ae05543c95",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/ems/charging-management/charging-management.ts",
+      "sha256": "82e5fef8fb31c0ee984f733eb0b8707de5154cf69e138f5b2735da30e15a538b",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/ems/charging-management/charging-normal-source.ts",
+      "sha256": "dbeaa589130cf5755d9551b9d169e183988d9e4fb100ff86c30c434845466096",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/ems/charging-management/charging-phase-selection.ts",
+      "sha256": "7b3ba4d3e5bb7c21d4773c64e844f78e49c0c0fb234f6923259dc1f7ad40a7d5",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/ems/charging-management/charging-write-plan.ts",
+      "sha256": "94a6fd0889aec78af0c0e42b2fc1737a99c74ec7f90712c7828474e31742e78c",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/ems/charging-management/index.ts",
+      "sha256": "8b56b24010b4f552bd1171d8d24574f40824f6b1a8313c5b59e05caa2cdf34b3",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/ems/core-limits/core-budget.ts",
+      "sha256": "45ad2b3268c51db48ddbf596f9e6d564f0efb4c7af877a7473ade340b71aa2b5",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/ems/core-limits/core-runtime.ts",
+      "sha256": "b4a2cf86e30eac0209756fec8f337a7222ca6b8c28c11e1afc88767c44155ce2",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/ems/core-limits/index.ts",
+      "sha256": "b5496c223fcdd6e60d9c4de5cf22bea8d4efccd3b0155d81af52fc4d0c17a21a",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/ems/heating-rod/heating-rod-decision.ts",
+      "sha256": "6568eda31208c4e190eda3eb5bc48519a83996c6ad578e9d0a85c35f025ae9d4",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/ems/heating-rod/index.ts",
+      "sha256": "45a5bb6fd0b1df828f880ce03ff1861084d186fbbf4ae7cbdc9a3ae8ae884efb",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/ems/index.ts",
+      "sha256": "3f4fd0174f27eae677660408c8a7cd29281d0268d568f36657a8147e0f4ec541",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/ems/para14a/para14a-constraint.ts",
+      "sha256": "949ee14b445540c6f2c438cb3dfc72455d7a030833bebc0f401ade4143365f23",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/frontend/customer-feature-visibility.ts",
+      "sha256": "617bc0875d03644f7810c6dc02547845f1779922b9df391a99db072edb1726ba",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/frontend/dashboard-display.ts",
+      "sha256": "66ad9895faf3fe1106a7c2b92410d81b27851ff98a718d8c1881c30e6bc72d68",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/frontend/display-format-canary.ts",
+      "sha256": "2cb2373552cbf532430a18f2c9180825240243a9952705a55eddb481bcfb9644",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/frontend/display-format.ts",
+      "sha256": "085d757f788f52c460062c7da2bec3efad7b35344f013161443c1581db8692ce",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/frontend/display.ts",
+      "sha256": "cab9859186e43f98dbb9c11c746d37ec1fb56f1abd1db30accd7b6af109757c0",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/frontend/feature-visibility-diagnostics.ts",
+      "sha256": "6728020049ea8c998e56eaf06b4d4bb60c4e6d15fbfb1088b975b35789a592da",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/frontend/feature-visibility-shadow-compare.ts",
+      "sha256": "e8c960b7ef9ec5932fffe08478682762342baf4e7a16bf335b3582fecaa1cbaf",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/frontend/history-controls.ts",
+      "sha256": "3fce10c423bb24f457be9c9ff002e3e797ee108f011f872f0e10001e5d1e6957",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/frontend/index.ts",
+      "sha256": "19fa71bfb16de5e4f929a2150e679a03df35f5209e23aec6cb3455364346c6ec",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/frontend/live-dashboard-format.ts",
+      "sha256": "b710f428371d485ffd1a246b3da04fabfc4883e28764e7911bc15f18bebda189",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/frontend/runtime-shadow.ts",
+      "sha256": "abf4b732bd89e5877fd9aa472bbf3b7c0a4886e776d845628171af18b8a6dac3",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/index.ts",
+      "sha256": "967d5ac01912d8efc8901c26e15ee6d6c02bb3e4daeef543e423c75dd6076b66",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/main/api-set.ts",
+      "sha256": "751cae19a98ce5cbe00f056b6a4ba4ec3f66f4c5fcdaa6550fc30ca6689c9046",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/main/api-shadow.ts",
+      "sha256": "8957402112a36c66e4ce99ba05b3adac346b04af9fb2e2cfaddb083a0f476677",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/main/api-state.ts",
+      "sha256": "ab94a23ebfacae7fb3ac5552f1c6dd0978d54d57ea400382cd333e8591fe588a",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/main/index.ts",
+      "sha256": "69f32848ea1dc662b5d51b09d70e103632cbb6f4660e11209105babb95335e49",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/main/info-connection.ts",
+      "sha256": "651f6254f35e0d8394d74de35a75be5595ba19a63b00cd15945e323dd91fb109",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/main/license-key.ts",
+      "sha256": "f8ed08d8549df9ab92381822b753348229f0e65e3ff43cc0b1020d88741955e5",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/main/state-cache.ts",
+      "sha256": "920479f4deae97ba4c65c2334e3d9eb7e7c8eabcc7054c2b490bcc1623dbf45d",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/node-shims.d.ts",
+      "sha256": "219a4f64beb2968ca6d8bb30f5ad987022fe45c3bade5481a77fbe4ea520cd15",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/quality/adapter-state-api-cases.ts",
+      "sha256": "97aa1c2c63d176a65a5cee1eb1f4b2352b32ed8ed0f9d5f7367c22c325e8c188",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/quality/api-state-feature-cases.ts",
+      "sha256": "278d64c9106399dbddfa328f231201017d27fbe7f7504dc83e5bf8e7c24289e3",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/quality/backend-api-state-cases.ts",
+      "sha256": "3cbd26a17635b99823968829b4e81cfa368023642f5e624fa21bd813825d9b57",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/quality/customer-feature-visibility-cases.ts",
+      "sha256": "3d944b3bd06f898a0f86b020fdb3e2c3f7b0b4a8ba19c0f6d181e0c301623cd3",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/quality/ems-budget-heating-rod-cases.ts",
+      "sha256": "8fd696897a5b53ed853e45fef29cdd524915cb9be13d63fce33341ac98ed1907",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/quality/energy-flow-regression-cases.ts",
+      "sha256": "de5287d1714389c154fe94bac12601e4dbaac488054f8ed563fe8db82d217ad6",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/quality/feature-visibility-resolver-cases.ts",
+      "sha256": "3322844ea23d3ebfd545fc6a2685d8616d2017be7785a0593cfe8393d0004091",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/quality/feature-visibility-shadow-cases.ts",
+      "sha256": "c1a8433791b316b2bf3c63278ecb2aae921e012ce9f6c66af1d1d35678b6aa6b",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/quality/frontend-display-cases.ts",
+      "sha256": "9e57b9921dd8a390789371a8a7bf5bc2f1c315d7d0438135ec141cb6ef39f697",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/quality/frontend-feature-visibility-cases.ts",
+      "sha256": "92bb3664b8d3261955cd6e5d56091a2af19807200998c3445cd1e0dc6ccb8d2e",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/quality/regression-cases.ts",
+      "sha256": "ce5176cc9cc207b46d23c143626ecc13722a5e1b535b8100bc78492aabb05153",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/resolvers/energy-flow-resolver.ts",
+      "sha256": "18231364bb6164d96096e62a87398f50369d10c16b766bd623a77fc56408d906",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/resolvers/feature-visibility-resolver.ts",
+      "sha256": "8ed113d2d3c5d2d980abb3547c134e6bda47aeb6c87631d5d2eaeabd079dae95",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/resolvers/index.ts",
+      "sha256": "ce631aab76b13df6b119c49eec8b6ffb590b3884b481dc523683bf233e7bb237",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/charging-budget-helpers.ts",
+      "sha256": "5d69dff5f1c1b9b44c78863f3296d9d8a6622d7858367081c8bd1b3b6ba5f271",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/consumers/evcs.ts",
+      "sha256": "05cb794f684653837f9f20045a0c61e26073f6ad81a1199a823f9ed431be3122",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/consumers/generic-load.ts",
+      "sha256": "ff39342f1fbcff8c645bca54e298610f7e2d0c150c2d69f2a5d595d56b967493",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/consumers/generic-setpoint.ts",
+      "sha256": "d1033b8ca5895e0453e8a7a19c30988a230ffd834e0c1fe6932864dabf9fec66",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/consumers/index.ts",
+      "sha256": "c1d90b0a6164465cf0169d28944085f5b7e8e5cb68e204a6d8fe99580611e713",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/consumers/sg-ready.ts",
+      "sha256": "18cf48ec40db5dcd3a2d22ee1184948fef5c26375b4d894d0dc95e221f51db6f",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/datapoints.ts",
+      "sha256": "b1192440fb0e82c63743641760f85bbf932282cc899756049311a9908bf4fec3",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/engine.ts",
+      "sha256": "3924e01d5b015730f7b29024f3ee9fc90ee8b7758cb53814bbcb6438f7b93202",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/evcs-control-mapping.ts",
+      "sha256": "a290402630770ed3f07395061762ecf828b6ab45b71cb04b45a2e4381b68cb84",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/module-manager.ts",
+      "sha256": "b6b40eaa787b9545fe5cdce236f6ffd42ce5628fb241bee0026fb66773d4c205",
+      "explicitAny": 7,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/ai-advisor.ts",
+      "sha256": "82a97558d60edbbb01ce83ca0f17459dc33255c398a34f02e82f58c94fba48b4",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/base.ts",
+      "sha256": "c3bfe6025a9e024360edec1cf52b05b1a2bb1653e36e985b99ea47037b9c0c92",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/bhkw-control.ts",
+      "sha256": "35351d639654dc24a1be74e1f69e9737d676ca81e9ef7f0590c912c797f2b445",
+      "explicitAny": 3,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/charge-kiosk.ts",
+      "sha256": "ea257b3d3c7347eee8a10b60fa75ff4fb3b0d7346bbad7bab4e1566e861d1a17",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/charging-management.ts",
+      "sha256": "a8c98f270d4b8e964c83d7c4848367a8b16fe2db85ad755f532453f824a734ce",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/core-limits.ts",
+      "sha256": "cb7e619c4a14f3fb69ee44c6dc52842b4ce52b65a28030f2ba83023851c5d71f",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/country-profile.ts",
+      "sha256": "ff512e7a3a1591996cd4403bdaf504f8789cb7cf5525737fc64a649203d21776",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/dynamic-grid-connection.ts",
+      "sha256": "7840982f6abfc61e8a826a695389be4eec98d1b5efdea3c1ff96d44ccba345ab",
+      "explicitAny": 13,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/energy-ledger.ts",
+      "sha256": "ac65b749b9f8cb8d3ebc235023fd4c30a8a8b9cdc8a3ab8ff459e3b50d4f4dde",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/energy-wallet.ts",
+      "sha256": "f6ea800c08e539cf0078c8da90ded6f16082910322374e3021c7cff9f555caf8",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/generator-control.ts",
+      "sha256": "ffaf02b7912d3fe55ad28a3ba76e94975d24201a436d6cac13c4a8073b113280",
+      "explicitAny": 3,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/grid-constraints.ts",
+      "sha256": "7dd8b26ee77d17ebf63e3d4306b9c4f7244c467d129ad56ac10f16e4cf34c97d",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/heating-rod-control.ts",
+      "sha256": "43b9f107903da4cb85c136fd25f730cf15e333656c5b3ed72ec50a9097a75b3a",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/mesh-microgrid.ts",
+      "sha256": "ee8b11c093731c70837413a41152b5b48d9fdb7c5bbe3c50578b20ed20aa8585",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/multi-use.ts",
+      "sha256": "3546824e4d7d539d8ccd0872370641d0c0b0ee51962ed8b48d7453ac7b01c7eb",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/netoperator-interface.ts",
+      "sha256": "a6d8285374ea4ce4d2eae93aea2671104a0c47e46b3294ab6ac830d3034d596f",
+      "explicitAny": 7,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/nexologic-budget.ts",
+      "sha256": "3175985202dc871f795bd3212dbcdb4c4d04dc3ae0128f1b01b89f48361837dd",
+      "explicitAny": 2,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/nl-p1-dsmr.ts",
+      "sha256": "4ec772bd2ab03e7fa22b4631358dafd63f84d161814732f48da6e16376b211f0",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/nvp-coordinator.ts",
+      "sha256": "67d16f295b425ff3cfd1924fc3637723ac26f0b4b2deb20b583cc35398b28b88",
+      "explicitAny": 3,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/nvp-topology.ts",
+      "sha256": "0ebc80d33156a3d94e78372702a0a9c484832e7fc9eb9429a10780a66dd7b9b3",
+      "explicitAny": 2,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/operating-strategies.ts",
+      "sha256": "d78b7c1fd23ee84b6e6642c3874235a0326c4df8f164e907ac47c0c04db539a3",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/para14a.ts",
+      "sha256": "fef7d00c5ff21b5d7f879b9def06694db998c1d1256ff1c56c1601ba0766d24f",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/peak-shaving.ts",
+      "sha256": "83511e1c3171b0f74ae7059ae5915c9e06ff0b07a2a8fd056b829ba5aad05a03",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/prime-mover-control.ts",
+      "sha256": "59c2d2bd71832bd791f1bad8d3361219a933ec17c364375fba6a0164a69ddf96",
+      "explicitAny": 2,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/pv-forecast.ts",
+      "sha256": "7ada272a7cc1e06be03fdb4c7330131ece3cbfac12d08c7db750ce4ef19658c1",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/stage-a-diagnostics.ts",
+      "sha256": "6febcc9d9acac5c177ec57ab9b778216fae8c1daacd9cfc0e45f7dfba1144d4b",
+      "explicitAny": 3,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/storage-control.ts",
+      "sha256": "b57e187f3ce525e5d1a2fbd7b3ed77a3c7943f1771d4ebfea380ca9527b82bfc",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/storage-mapping.ts",
+      "sha256": "0e1587bd889b00755be696b4ca5e5dc209df2c7e7eaf7fc71e74e7731c068b60",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/tarif-vis.ts",
+      "sha256": "a5d2c753e9ec80f0778ff19aff64a0fd53ad595b616a39a75ae2a5ef587b627e",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/tariff-provider.ts",
+      "sha256": "b087bcd01fbec683def48ac458fc8c0b55b5b991f35abc612419ddc18de249ba",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/tariff-status.ts",
+      "sha256": "3fccae2654733e1b4baefeb37594a1e45cb2891f1d027d73fa2871fce4609b69",
+      "explicitAny": 3,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/thermal-control.ts",
+      "sha256": "b095439ab1de1c97c7bb68cd1a286732a39e23a339294cf145c22b54e231a5c6",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/threshold-control.ts",
+      "sha256": "1ba231e73dca0d1ddb0ae9b25de3b3b0736a7fd9344f4b298f417272e2945ab5",
+      "explicitAny": 2,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/nexologic-engine.ts",
+      "sha256": "0de96a61b51dd0ef9715c95e5999a2d5ec1395c6c8f82657206aee7e6c3b2606",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/rc85-runtime-hardening.ts",
+      "sha256": "cdd1c7a8580efdb001135715b724b656df3b307a56b18e6b8b8c266d7e4eb4da",
+      "explicitAny": 4,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/reasons.ts",
+      "sha256": "83edae2283d8c93482331e8c5f88ec704313b0b5d8d065139d2338b4558cecf6",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/accepted-power-effects.ts",
+      "sha256": "83a19b73715f348afe81b6516fb8e0b0a0e2eb50b655a38de88872c72787824f",
+      "explicitAny": 1,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/actuator-command-contract.ts",
+      "sha256": "e7a9429dff4c1dda85414eb9f523729711bdc0188c5b6f5924f43e4229685a60",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/actuator-shadow-arbiter.ts",
+      "sha256": "ae1fe6cb9c480a99235c7fb43d581a74c04c1dcdb9b872def07dcf54abbbd847",
+      "explicitAny": 15,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/admin-overview-publisher.ts",
+      "sha256": "2adef843d22b19c510588d86e45ca7e29df743b94d47f31780b5463fae2f0c6f",
+      "explicitAny": 6,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/charging-management-audit.ts",
+      "sha256": "6674e82ead2d3644635adf3a027e032626b6b4b21a8e2ab15d623624f217b4ee",
+      "explicitAny": 3,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/country-profile-service.ts",
+      "sha256": "e29b35a5951d0eb8ea73d2a31816b22f6ab4cc9538602ad5613ab151db09d951",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/dynamic-grid-config.ts",
+      "sha256": "7599f17f622b5a6b3a4a47f87e8e7716935d2dc0db06e3324e8f9379b0be98a6",
+      "explicitAny": 14,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/dynamic-grid-ownership.ts",
+      "sha256": "7d0801d381c6d06f36fdf7d5657a610d052191fc873bebf7c4631b68bbde4e3d",
+      "explicitAny": 1,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/dynamic-grid-pv.ts",
+      "sha256": "a9393f6a504d8fc79d84460f8f970eb0dfb7ae1c01fd05f371c934291b481771",
+      "explicitAny": 14,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/dynamic-grid-writer.ts",
+      "sha256": "efc3b3e4abb7ff1fc4f639ce35f4dc043a06ff03ca0d7e9b6b4433eea352af96",
+      "explicitAny": 10,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/energy-origin-accounting.ts",
+      "sha256": "014d2773a5b091dabd593e015a23873009510f44cf4cabdc577206856daa41ce",
+      "explicitAny": 119,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/energy-origin-ledger-runtime.ts",
+      "sha256": "38f7628f8882e766dd9451189156de2460ef164336d340d600c547cde7bd93d0",
+      "explicitAny": 3,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/evcs-unit-conversion.ts",
+      "sha256": "fdc78695c9cbbceb6a08ef4ff76479cdcfb1b715a4542cc9a0901c93b7031548",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/feature-flags.ts",
+      "sha256": "81af28bf07a8d6742df1373416f3c263ef41c8f9736b95db536065d126abb3aa",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/fenecon-hybrid-control.ts",
+      "sha256": "2944c79cd315d306ff22a86264a9855ebf43e072da979a99e1f6aaf444565617",
+      "explicitAny": 1,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/fenecon-nvp-shadow-runtime.ts",
+      "sha256": "4e753d75bf8f6f545ca3339057910b074d164f1714fd7f474f16cb4bb826ede6",
+      "explicitAny": 2,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/forecast-aware-target-planner.ts",
+      "sha256": "ee4fd5dd67fc68dccfb265b2810f22df3802767dd20f72e084a4c3b5f5ad71ea",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/forecast-target-runtime-bridge.ts",
+      "sha256": "510ff41519a20d0db0851b15f717019bfd8c99199627ae7fe6923432ccd75480",
+      "explicitAny": 2,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/grid-import-limit-policy.ts",
+      "sha256": "7e452f1b365cd3bc2405f27db55869bf955504d6be8d15246d395b96db5463db",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/locale-api-service.ts",
+      "sha256": "62b2157a850b2a003520a14749574a14c80102a13a30c5a648380b3ac328ba88",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/measurement-freshness.ts",
+      "sha256": "b0ace7f829f5f852d33e09e3d484c425a549ecd5630e9c8f5fe8cc556d7f2e68",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/netoperator-canonical-model.ts",
+      "sha256": "7e264e741e8cd79c62158aedbc5372d758f7b8ca3a6425a9c739d3ebfaee0995",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/netoperator-driver-registry.ts",
+      "sha256": "b8baf20736be437c9f97eb3454992ca8a1b2e5381363056e90ad9092465a80cd",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/netoperator-modbus-tcp.ts",
+      "sha256": "41e932d77e2d2f7dbd5a3b608110b94eaebd5f28fb9185eef29b45b4a6330b7e",
+      "explicitAny": 7,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/nexologic-output-controller.ts",
+      "sha256": "1e57ec90f6218c1e66d080f9014da8b89b37be195dbc013c4ac1e7ab0f19b537",
+      "explicitAny": 4,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/nvp-budget.ts",
+      "sha256": "24a6bcd6db5a573081c3c39203450e82e16d3d9e289582fca6eb14dd3a5f55a3",
+      "explicitAny": 6,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/nvp-grants.ts",
+      "sha256": "8172d6535b3a671e1c12fa2ae90789346e72083578b8cb953d030ececb47ea7f",
+      "explicitAny": 6,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/nvp-group-planner.ts",
+      "sha256": "fbad9e3342af87fee7c6d1449df01309fbd20c8a7a4f69d9562e3fa32fdf5741",
+      "explicitAny": 6,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/nvp-topology.ts",
+      "sha256": "4c2528153dcef66a7a1a6a78c341722f239b9d1e5b6dd84a3a04b86a2e2f6d30",
+      "explicitAny": 14,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/open-meteo-pv-forecast.ts",
+      "sha256": "f253af3980f495a5fa2cee733738dc71f18608c5a299dff1cb9026aa762ceae9",
+      "explicitAny": 14,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/operating-strategy-runtime.ts",
+      "sha256": "24e93ff1ec7216cdc517d254b22d4df6ffd4d0b86dc129e4475d1d09a24b158d",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/para14a-eebus-api.ts",
+      "sha256": "c51a4ee3ce006bad9fbae06ef25e5a2ddf268303f00aa00068156f0defa1905c",
+      "explicitAny": 5,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/pv-source-identity.ts",
+      "sha256": "fda71866b598cb4d5a466fd87e128a88fe5128df8574c65a87491f8651c497bf",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/pv-surplus-allocation.ts",
+      "sha256": "859ba823221dd47cdab8032e3ec8e32f740a82fc50ceb717cf232fae8e9b8a13",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/safety-envelope.ts",
+      "sha256": "1b614b39217ffde0e4facc48f12d96c43742d8c09f092d4a2a5b6567265626de",
+      "explicitAny": 1,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/storage-async-feedback-anchor.ts",
+      "sha256": "feea19b2c5cc7fc0f45693e3f9d5da25737ada51b26a1244e5a3733fcc1a3bfd",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/storage-datapoint-config.ts",
+      "sha256": "20842cce7a1a0161dcdadec294ad3ff4438fe3ac696cc4325909b5f872d2a315",
+      "explicitAny": 2,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/storage-farm-aggregation.ts",
+      "sha256": "70253ff3ab99826218316525dde6c062c2874c7e1d8393b6805ffdde00dcf641",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/storage-override-bridge.ts",
+      "sha256": "ebb9ff44f3d31cf980d10f6b5e3aa90d05397a53544daa3007a00832d287bf39",
+      "explicitAny": 2,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/storage-self-consumption-policy.ts",
+      "sha256": "95d517d5041679b3d24603c33a71a1fbf57f112cd90d37dc682e6584b4f3d3e6",
+      "explicitAny": 1,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/storage-zero-write-policy.ts",
+      "sha256": "67ba1db66965f0ddd753c237059667c585e6dcb75dd7cbea2fb03b63956d027f",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/tariff-provider-registry.ts",
+      "sha256": "52b25d1e9aa8a3b4e0b61092e548fc8bf66d9a1b82c617656e8028824897b916",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/zero-export-pv-coordinator.ts",
+      "sha256": "0331432f2b00859184c6bd752a9f98e86d6804b310f65648ba96a5c38607800f",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/zero-export-storage-credit.ts",
+      "sha256": "3ee47f22a4c06a40688934a68bae67ef47cb724a2b9deb309822c4df5bcc89b1",
+      "explicitAny": 1,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/charging-diagnostics-api.ts",
+      "sha256": "491e5cd93b5ab4b315617b3bb4553a439dc2dee8c988b6837bcf3cfd2ef26200",
+      "explicitAny": 8,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/dynamic-grid-config-api.ts",
+      "sha256": "cad8ceb06e94e917e09db439127b9bc6c1cd2669f0289d0c36b78cdf72a6fac6",
+      "explicitAny": 22,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/energy-origin-api.ts",
+      "sha256": "389e15fba1aa65d4e2ea28fc493682a15366012838a5d77faed2c294240ba739",
+      "explicitAny": 29,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/evcs-electrical-limits.ts",
+      "sha256": "a0853ff11e24bd6a0e21a3bb1c871145c7c09d1eab2b3a1d3fb775953e80cc96",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/license-bootstrap-access.ts",
+      "sha256": "fae76edc79d676d7bb557fbdb7d16cbbf7b41b27dab53821cb16df8fc1a0fd48",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/mesh-coordinator-contract.ts",
+      "sha256": "cf6a5cf7faa8c844d6544e2a84143a5ce7b5c7b4f0d3f7846614701d5f86ed7d",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/mesh-coordinator-protocol.ts",
+      "sha256": "af525622d04b618eccd223a42b79ae15814e83ab1d923c952945207c08266cab",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/mesh-coordinator-writer.ts",
+      "sha256": "03ea2ceeab21be94695c78c9fe4017dd0bf3760513e43a215ff0d2aece032099",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/mesh-coordinator.ts",
+      "sha256": "d96d96eb6c658b4b1a8d6ffdd263134b8ffbe4594612d0c3b177a295a5fe5bb2",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/mesh-energy-journal.ts",
+      "sha256": "d1761c5dad8ae0fb539770f6b75440513ce3b0aa9bb838ef95a27c2df595ed70",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/mesh-energy-service.ts",
+      "sha256": "5326033f0f01218213e061a142bfb8c158e5e9ca84c9f2d6b131dfe14a29dd14",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/mesh-transformer-allocation.ts",
+      "sha256": "9715b3b00fae360c9ecb286bef26c75efffc067be6f96aad56b13b3c7328f401",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/notification-mail.ts",
+      "sha256": "eea3d4b9ed91eb9e1c7362a1b2fe17e3135f8d633c9f4976e525bf5499736a92",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/notification-policy.ts",
+      "sha256": "a78533c38f54ccb5aae0f1a2c06bf5ff2c58093224341bddd3bdae12b4e2ce7a",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/nvp-config-api.ts",
+      "sha256": "f6c07d64419da2a6ba1327995c00c1c3faf2dba53b3fa0ab51a71fdccabee2fc",
+      "explicitAny": 16,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/smarthome-contract.ts",
+      "sha256": "9d54fc37c7dca421e1484436a1348b9c4b52576b5335a52a808c9ca9fb4351b1",
+      "explicitAny": 6,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/sse-runtime-guard.ts",
+      "sha256": "3a07654e930145c55aaa9f7ca439bfcf6870abd04211b859e8ca5e97ec286328",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/station-display-presentation.ts",
+      "sha256": "8f2e0c545c0a1c75f1faac67d74dd0719b8854999130e0dd52d20014bcc0b32c",
+      "explicitAny": 1,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/main.ts",
+      "sha256": "4fc06443b826de3e9192fdb93775344768cf8691b52acde7e6677129089f6a7f",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/www/admin-guard.ts",
+      "sha256": "cdd2472ed23f33e2f60b92a9a7aac4a4e54d5b76274bc6f80f0a199113c7273b",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/www/app.ts",
+      "sha256": "ff3b1bb3d59ebb08bc5a0baff3454ea502e5bb66693bdaa2f906cfba01e3d072",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/www/auth.ts",
+      "sha256": "da859b4334bad95027a2c414873604d67c14aa69ca4e46665b18ec5bb9e0bea8",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/www/charging-diagnostics-appcenter.ts",
+      "sha256": "3c8863637ce9f032276df2da9a16484df3a0eb899bc7ea19db8426f90eba565c",
+      "explicitAny": 3,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/www/cockpit-shell.ts",
+      "sha256": "80dadc2a455e5271935cc16ebf13bc8f5a633f9b021e3dd8b7cb316d251d8333",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/www/dashboard-lp-status.ts",
+      "sha256": "7888cabfbb4d5b03e395f586e1b91d6985d5c5c8d3be35df8da1de94a9853f53",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/www/dc-station-display.ts",
+      "sha256": "45ff75619ae7a2d8e58113656a3c73869bacbb99a58028a60c520922175aa212",
+      "explicitAny": 1,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/www/ems-apps-nvp-diagnostics.ts",
+      "sha256": "16e2d49deafccddc74135b4a20e422fd09d44ff0c2dfd00a89fccea9d8b5ff8b",
+      "explicitAny": 1,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/www/ems-apps.ts",
+      "sha256": "d64fb15846ec8f3b1b1cb223ab654115c8116446e989186d5570634e252983ee",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/www/energy-ledger.ts",
+      "sha256": "85e3c8c0f24376737963f4541bf6c923e13f850d7f5462bb9410dfe1d6dd2745",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/www/energy-origin-appcenter.ts",
+      "sha256": "8b0672d45572fc9d2aeac79689e5aadde0e8d2e0bf00bfd7576e3f7171bee550",
+      "explicitAny": 31,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/www/energy-origin-ledger-view.ts",
+      "sha256": "4476a78b30f8c2a1d4280d8c2b5892ca50fd72a90c2cf53df5055e2ef7cf9942",
+      "explicitAny": 26,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/www/evcs-report.ts",
+      "sha256": "2aafe49c01d3e20fb1d93ac53479dea6ed09f44e80bebbbe3c8a31fc9ba20558",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/www/evcs.ts",
+      "sha256": "771c6b562da6780d0dfdf471bd971c720894a932a9b3ea3ddce062791e56a17e",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/www/forecast-settings.ts",
+      "sha256": "45e26e3b4f679d6ac4b4ef8a1a48e18745398583dab002c1a382055b559ef109",
+      "explicitAny": 2,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/www/history.ts",
+      "sha256": "c7ea375775ffcc8c95705bd309f4cb3fbf2fe37b3afb04c115181ccb1b1579f1",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/www/license.ts",
+      "sha256": "1afc7bd8a3ed11aebe035cf130b53b179c03b1a642f8f3258ff67d3004f37ad2",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/www/logic.ts",
+      "sha256": "b92bf4733aada73ad2f8e4fe9e84b8bc23476c42bcd5d667d46d4284e28320b4",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/www/mesh-microgrid.ts",
+      "sha256": "498951a2b3f59c12f5282b8295e5d2ae752b47ea7bcc95f38a8f8ec9de1f8f62",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/www/netoperator-appcenter.ts",
+      "sha256": "fb7dd5be59079b40418d91aa7dc41d5274c4431eca3570fed80bb45ff9324eca",
+      "explicitAny": 6,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/www/netoperator.ts",
+      "sha256": "9ccfed3064aeff23d68c25cc6aaff492c7bcf9188974f9b98ddfa3d145df4c89",
+      "explicitAny": 9,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/www/nw-i18n.ts",
+      "sha256": "b3d80aebea9e6a9f138fc4e6267406747e4a09818d8a3b03d3e4ed3fbee9abdc",
+      "explicitAny": 50,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/www/nw-shell.ts",
+      "sha256": "e563fd994e81448ac3712614b9b34f2d64f4a849fae3b616f68495637c0caab8",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/www/operating-strategies-appcenter.ts",
+      "sha256": "239bb0e76c5a31af1f7d16c615d07b2028df7a340818d7559ba5c7d7e776dc75",
+      "explicitAny": 27,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/www/operating-strategies-rule-builder.ts",
+      "sha256": "f1207e097362ab63be23d75988ccdc3cf18b52fb6d7e68de49eb12f9ebc49b5d",
+      "explicitAny": 49,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/runtime-executables/www/para14a-report.ts",
+      "sha256": "2fabec44c8571e26c28d0998f45e22a3b58ed6b503658595b7a6dfc7b521de25",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/www/report-common.ts",
+      "sha256": "b4e0b63d3889a7e4579e09fcc5741555e6522f76732dcb2dfee4a9dd41c90ae4",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/www/rfid-report.ts",
+      "sha256": "d27c5f4dde891330fcd7e2aaf4c79181fc1d50599f0aa55c2fd295c9ae99f122",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/www/simulation.ts",
+      "sha256": "03621702da50d9d6ef0c72d57ed9572c1d8b4cecfe4bdad0d7491e92af0e96b9",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/www/smarthome-config.ts",
+      "sha256": "d63d282af1c7269c8e2dd04068ccf98499d23eb9b4c64018bbded9c4b2758209",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/www/smarthome.ts",
+      "sha256": "e894bbf9cc5e5d258582a15db360a220900c471021ee55ece785613929498537",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/www/storagefarm.ts",
+      "sha256": "375419afde60b4aac6a7c9b13240c4b5616c74f62198c583d96b55eb8fe046d6",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/www/sw.ts",
+      "sha256": "00d8f4823d91df222cd6bc7a746a43af39f02e049822a92172936d97fa1cb68d",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/www/tariff-report.ts",
+      "sha256": "57b429c550055a8883633759b979e7b60df768ceb094daf1851b1399c2eea8e6",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-executables/www/year-report.ts",
+      "sha256": "614da58753da321555e4a698e92692e31fdc736b6b1835a70f2aea2ef1bbe072",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/charging-budget-helpers.ts",
+      "sha256": "a3fed21612227628973e25f7a3ac1075e6052942c3bc607dcfdbaadacd22c2b4",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/consumers/evcs.ts",
+      "sha256": "f98b8543278e7d61c4a432131bb62ded663382cbdc2cad84f7b6bf91e408deb7",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/consumers/generic-load.ts",
+      "sha256": "f7e654f0da6b44b27370254d2a6e63ab8f2cb318509b7d317f4667e4495ce450",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/consumers/generic-setpoint.ts",
+      "sha256": "84e7b8be542e5e76a651597ecef896f1df279a67851b211aa430fef6cc50d03b",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/consumers/index.ts",
+      "sha256": "61258c8411b5ee02c7de67c64a8fd335c061587648d073b71677ed7891eaac6f",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/consumers/sg-ready.ts",
+      "sha256": "4faf5fe7b389a0a23ba88ccdb499a7c8e36db8dcd03ba595f59a8f43bb738635",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/datapoints.ts",
+      "sha256": "bab904ee265a801c9316bd17ef1e2d4b8b93b3a7bd4f506e5f0e4a8ac71ef21f",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/engine.ts",
+      "sha256": "4fa67f638b29ffb1d3e236a686bc8dbe066dfa41b113b9aadbd332b677c3d512",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/evcs-control-mapping.ts",
+      "sha256": "c3a12716336ab41b0b2fe9fee15ce3c740f968addcaf36e4453eed61189a3498",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/module-manager.ts",
+      "sha256": "9b59724b74de1e5a6ea70ca8abed34a0efc9735369f6904dfc796c1de365a9cb",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/ai-advisor.ts",
+      "sha256": "acb3db958517f349e5232a393f7ceea0cc710a2d0c8588cb396b5a7ff58f4f66",
+      "explicitAny": 28,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/base.ts",
+      "sha256": "066ca2baf1ed144e5153759c74cd35311053843833c785518e23c1ef1f546ed9",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/bhkw-control.ts",
+      "sha256": "46613c217b1f945b654c5453f3fa76bd4502e32bfa60c07a4e2be2b3fc218fba",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/charge-kiosk.ts",
+      "sha256": "346487cb33d5a16f73fdf4248fb985d17b0056a5ab479cd0ed101cc0b4b27361",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/charging-management.ts",
+      "sha256": "e73bc33b13877df65edf299f39841cac28b1989186893767d574bd167fe1e95e",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/core-limits.ts",
+      "sha256": "c3ab2ac3ee49965c2a21c944e5bf35fce0361ae33ab5b46a3134e0e2dd814146",
+      "explicitAny": 9,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/country-profile.ts",
+      "sha256": "d1b14449f8a41c8b8579f8b6ed66f8a5205a5adb28642095bca66e9d440914a3",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/dynamic-grid-connection.ts",
+      "sha256": "9b6ac58629d07b2f328b4e72961eb2640cc76a58a814d5782acbf1fda004db86",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/energy-ledger.ts",
+      "sha256": "edc2a08ccde930d6f7a92c52670f00c07aaf32310a5521e3afeebdade475599e",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/energy-wallet.ts",
+      "sha256": "e5c17960298bb30bc0c77cb4e81faa4ef2e97fffa590420f6ba27597506bf61b",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/generator-control.ts",
+      "sha256": "9e6a0541b5b136b2700d4fec092d35159d5453d73e1408f69601e456a4dca406",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/grid-constraints.ts",
+      "sha256": "5ab1f87b9af4f91fa7d08ea100055496e8ab99e20adc95ace9c6ef62975667ad",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/heating-rod-control.ts",
+      "sha256": "9ec60200b61775a6ae408dc824254088d0b8b706a4e7de8b591aab9cdb0e0dad",
+      "explicitAny": 12,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/mesh-microgrid.ts",
+      "sha256": "95dc0caa612955295cb9b2f4f3a422ef7b4fd5dc8f8c52cd6e37c150e1aa4b45",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/multi-use.ts",
+      "sha256": "5249835e23f00af9ce5e9d39b804c221962fef791623ea1d3d3832c4799f19ac",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/netoperator-interface.ts",
+      "sha256": "98e744f17abb7460b500d41bd2479e3dcf9fd1b6a85d5fcf00e5d5feda68c125",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/nexologic-budget.ts",
+      "sha256": "4acddf30594a571828b1316be3ad19a8ba9dc7ec46dc455e1d49fd62c5389578",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/nl-p1-dsmr.ts",
+      "sha256": "a7cc752ef009932d96223997702180089f4e719fe373ab36dd28164bd4a6b824",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/nvp-coordinator.ts",
+      "sha256": "51bc96f5ec185f915e433e490d76af8be96be0bcf05ed6505259223f6a133623",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/nvp-topology.ts",
+      "sha256": "de4dc3898848fb5f6dd71b4fcf7d8fe4a7ce57e71a03a44b900b23c064795679",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/operating-strategies.ts",
+      "sha256": "a908be02844508404ddc49ac1be60e764a713ee5c2b827b269e015937d1e8a4d",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/para14a.ts",
+      "sha256": "7772ef36a83912c792b77c92b5b5073f1e2e4c68d1650c790a8e4e995f3fc407",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/peak-shaving.ts",
+      "sha256": "b3c4bdb30c41e1dc4dd0bd93013fb46831840c317dc6fb099a8190f7101eab43",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/prime-mover-control.ts",
+      "sha256": "960ec58bfa4d228cdff692eaf406c74e2e5a29a473bea401e5416d508ca50b74",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/pv-forecast.ts",
+      "sha256": "57b1e91a04ae9d19ee7dff53bc80db5c93b147172e93d3349eea916f831dcd39",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/stage-a-diagnostics.ts",
+      "sha256": "707acfdc6753c63001237f91883142abe1887004d994cd9f3bcfe9bc9d072289",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/storage-control.ts",
+      "sha256": "8e4392d142c651d1753b4a50d038ae2444fef1e364874b892d531581567c4dcf",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/storage-mapping.ts",
+      "sha256": "e9804c2c16308a3daa3a5b598046562ae123218e004a3233c72d63c0cf4393c9",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/tarif-vis.ts",
+      "sha256": "b052aea68d38aa6993b4797131110eccbdee314038d51a9fa72081dedd30b1c2",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/tariff-provider.ts",
+      "sha256": "7b2080e9248611b86801c7da62fb69ac1718b17930f4a0d00ad1c4cdf21015ce",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/tariff-status.ts",
+      "sha256": "73a4c2a1b9ab8f6193cbb5c62a8c9663083bba7e2c2e9c90ab4a9d7e70e8a10c",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/thermal-control.ts",
+      "sha256": "e2fcd702639385485946a4e6756c3c4fd0767e7ce41c15cb68a0119888089e06",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/threshold-control.ts",
+      "sha256": "3804fd16c49072bcf1ff36c7c26b623880e4aec6bf9abece6855044d5f62fa9d",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/nexologic-engine.ts",
+      "sha256": "69bf575253806f3aca809bfece5518461c1363e45284f7d715a5e916a54f254a",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/rc85-runtime-hardening.ts",
+      "sha256": "a2234bb5e4db55aa576f42204fd09578f9dd36e40a6b46e629d38d9b98a00bb4",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/reasons.ts",
+      "sha256": "059c11ec05338293846772d2be0b17fb40b2c4fe732010b854ae001c9483cc67",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/accepted-power-effects.ts",
+      "sha256": "1d85ec719a45d6e7a6f4eb03c537849f13eeb07f5dd0084f29c903394bcf665d",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/actuator-command-contract.ts",
+      "sha256": "d31632dfd0cada01a315ac2998659cb5898795e128e16f4f19655ea233bcd475",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/actuator-shadow-arbiter.ts",
+      "sha256": "2fff26b74836636d086382bf7970e1e36e804fd41c7e6c22a2d47fb6223e0461",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/admin-overview-publisher.ts",
+      "sha256": "8ac590b02d708b8b7728ab64c479c275103fc499774afc5b2f129286e82a414f",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/charging-management-audit.ts",
+      "sha256": "4062382fb4bc9f2f8d5c59873be75bbd2c7ff8aee1cb33c939b61ef3276ea72f",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/country-profile-service.ts",
+      "sha256": "6ce95b8636a0d965fb8ccee59a509b3e332b3f88c59df23d9b60904c9ac8ab0e",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/dynamic-grid-config.ts",
+      "sha256": "207bd3ee9561db0269a82b1fdc19373ddcbc00536d5287230a4ede4879030916",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/dynamic-grid-ownership.ts",
+      "sha256": "96690d879e6de0233c6867e8d7d0b8f9644409683129dad74fae1205d02983c4",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/dynamic-grid-pv.ts",
+      "sha256": "7e10291d1a67362f3c96101fe587241632caf620b9355f0e014169432b7fedbe",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/dynamic-grid-writer.ts",
+      "sha256": "856a5a9a84d18bde14e94dc9dadcf70faa73dd3355b71554a1fa8ceba7579693",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/energy-origin-accounting.ts",
+      "sha256": "f0027ae2f23134f5714cc00ba79a1c92166b1eff5f0146222824378d7fdd6a96",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/energy-origin-ledger-runtime.ts",
+      "sha256": "e6656350d4e6cde3c6ac3536679c18e25dcc005677ece271f5527a1c2b054790",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/evcs-unit-conversion.ts",
+      "sha256": "c626d8c32f10b29f2a9d371ab4546ba2758e5bf02f22f4054b20500a70645927",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/feature-flags.ts",
+      "sha256": "5cb1a5284743d5194e51c7e26b16fce5f90561fe42fa81ffe8c8d150b1cdbc5c",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/fenecon-hybrid-control.ts",
+      "sha256": "86b16c542bc43f8ee8b0a0ba080b42565b7580b44f1c703120a037074ec05dc1",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/fenecon-nvp-shadow-runtime.ts",
+      "sha256": "d0532f818de8597e0f17e133831a2585b2239ca3fbe38334bbd529fcd8d7cae4",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/forecast-aware-target-planner.ts",
+      "sha256": "81b97bf5e255f9c758bb4e874f96f9f42518b072348095044ecef157ca08e1a4",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/forecast-target-runtime-bridge.ts",
+      "sha256": "02ef145904ee2563a4656b1b8fe3214a6d61c526a5981ab68a449723f057e247",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/grid-import-limit-policy.ts",
+      "sha256": "963b2408f48d50f75ab2b8fb539843c8882af371f1d1beb2d20518fb7024e58c",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/locale-api-service.ts",
+      "sha256": "df7308f007a2f1328455adb96279eac9aad4c3702f54264aeb5060e045409547",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/measurement-freshness.ts",
+      "sha256": "dc60597deaacf30f2374f3c0a08c9b0ad5158defbbc244a20838e3cbf9511cb7",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/netoperator-canonical-model.ts",
+      "sha256": "a4281a3eec7efc9bec44d49d615284bcc2fdb4b398278bc9df098700a7ee7b3c",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/netoperator-driver-registry.ts",
+      "sha256": "63e8263e2282f7f11c4b9bd787cdda8bbe64cb352dd81c2f225c9e52bc7f2d24",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/netoperator-modbus-tcp.ts",
+      "sha256": "c1e715666ff831abaf8a95d15868194dba1e86742cbed9b8f6fd90b6f8a5b7da",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/nexologic-output-controller.ts",
+      "sha256": "4a9edb6b0179d29b35766129e124469bcae4ec4eb59201e7702c1a8d72d329e3",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/nvp-budget.ts",
+      "sha256": "b7e0203234d6914d21a5e957be012e772b4676b162aba811cda6041f035f6b1e",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/nvp-grants.ts",
+      "sha256": "a90b2fc7cfc3d0af19911eb0c31a95ea34c84d23583b3e5da78a0d99eaf5dbd4",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/nvp-group-planner.ts",
+      "sha256": "d7211fed93e229a670199c28cea58b5d21045306f472c2fc2243110230bb613f",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/nvp-topology.ts",
+      "sha256": "8bf87c751b41da27b74c4d3af089d79e930e15c02dd5d224687b734b3881a14c",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/open-meteo-pv-forecast.ts",
+      "sha256": "b23e2d109470dab2fc2a74cafb5db23fbe8174661b61dc4b9831aa3cda63d2f9",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/operating-strategy-runtime.ts",
+      "sha256": "f654025c421b40298c166fbc3f1768d46a344328cfb4ade56a48280b4ef44935",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/para14a-eebus-api.ts",
+      "sha256": "653b1ead3f01d9a4badf3845c4a8f54400e3efa71f15e3a545da917092a2b219",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/pv-source-identity.ts",
+      "sha256": "78575ee8b7863f3f9e1ff5104735682255389036655b02698946908de6816381",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/pv-surplus-allocation.ts",
+      "sha256": "218a074b5f0ab82180c2178403b2575632d7be7e47f164059958c6cf3c028112",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/safety-envelope.ts",
+      "sha256": "e2e68e76313ebe5e1000301f3b44b4847602b9c1f5df64b6a1730834f077b358",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/storage-async-feedback-anchor.ts",
+      "sha256": "45b0524bccbf645eebe154c85c94cb8974e6109a129e4c1bb499e54b833b411c",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/storage-datapoint-config.ts",
+      "sha256": "88f6e12b27056aab3d87c307f310a2ac0663fd8ef683a141a797d78651df8f9f",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/storage-farm-aggregation.ts",
+      "sha256": "86851a8290a50b6fb603ce8f9716144b90194add247eefce39e4f7fb7d0e895c",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/storage-override-bridge.ts",
+      "sha256": "fd478346c308686f7fbda34e079a5d5d84eb7a05684d7dcb1eb2599c805be671",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/storage-self-consumption-policy.ts",
+      "sha256": "5b97eae03dcb31b773d7d938cb4bb01423fc9967ac34a66b9d90ecd52e950513",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/storage-zero-write-policy.ts",
+      "sha256": "1c6ccabfa41c4850ad6487f39a67a4ea943b62bf849250378c5e68761bb57b28",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/tariff-provider-registry.ts",
+      "sha256": "a898e6a5047152d0c251411d04365d0e4974c0b32739a9d24d9d47f60c584733",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/zero-export-pv-coordinator.ts",
+      "sha256": "c0ff69755203c5609bf95df57db6f2aae45e58771c4b25db37db38d8ce8cb1bc",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/zero-export-storage-credit.ts",
+      "sha256": "f42889656fb55312acd3a7f7820030ac65d43f325c710fc7c18211d5aef13904",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/lib/charging-diagnostics-api.ts",
+      "sha256": "ef20f4f64279fb85468fa9804872e5e8855b6d0b3dee6ce8e5e69f05cc22c3d4",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/lib/dynamic-grid-config-api.ts",
+      "sha256": "4f06b9f2d5cf522ed93f586ef48f8ccdac037dfc7b1d4eb29c6037474f6a2487",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/lib/energy-origin-api.ts",
+      "sha256": "5e1662e7a20c7d5af4a624975e0fec4ccd8c03c9c2e062218cae59eb56b253ec",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/lib/evcs-electrical-limits.ts",
+      "sha256": "a99b13d6b7ac9f06ce77ff0fd245c6dc4219676ccd0b90a5cf94914441caab56",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/lib/license-bootstrap-access.ts",
+      "sha256": "0b869d9c44e52dabab5fd58418797d8199622e3ed8b790384b36a69a4ad6b9f2",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/lib/mesh-coordinator-contract.ts",
+      "sha256": "90e44e9b695cfdc4ccd0cdc8819e424665f0b007ba3ebf557be44de99aee82c4",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/lib/mesh-coordinator-protocol.ts",
+      "sha256": "2dad1b84b023a8e6405f3d610e71610ff1b83257c3de908b9b64ee49ac2839da",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/lib/mesh-coordinator-writer.ts",
+      "sha256": "c5c8f17bba858e2f78dd3f9a14c69aac494d9ccc0609352034db827d728b38e8",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/lib/mesh-coordinator.ts",
+      "sha256": "c21995653c435be1b81d0eefee6f17980bf5b4a99e6107104fd6fcbb679be052",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/lib/mesh-energy-journal.ts",
+      "sha256": "a9e9b4cc627aba710b80926de6b48b7c1a11e8045313b98c881ec0ad5a00e740",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/lib/mesh-energy-service.ts",
+      "sha256": "7e473dd80a3d76fed8a25cfa0acf2e1ffad6831ba7276be42b07c3a755958c2e",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/lib/mesh-transformer-allocation.ts",
+      "sha256": "d8acd029c10a15c597ccbfa6d7268139840ddfd0c4897b1a877b8d953096bbd1",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/lib/notification-mail.ts",
+      "sha256": "11cf02a082c9532e2d08f0b37a0fe174c93cee4b58edcce561f84c2b0a9141d1",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/lib/notification-policy.ts",
+      "sha256": "eb8c71b2923497be2dc306bb1fbcc5240939ee709ba3d5217bfd9d25d7671d14",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/lib/nvp-config-api.ts",
+      "sha256": "bc66395609f6b42395986e1d27785b16e7bb5bb5eb6a569e96a8d648b8ec1a03",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/lib/smarthome-contract.ts",
+      "sha256": "fd222f2564aae588efc689c5e96461e15a297ebc067c97c0b4a055df64d74811",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/lib/sse-runtime-guard.ts",
+      "sha256": "022652a5ddf7ec562c158ad68044fbb028486c6333ee9f3b56990442550ff6b9",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/lib/station-display-presentation.ts",
+      "sha256": "675f26bd6fb56c385eab0756029d6cfc86c43675f58ab0b21f2a6e044aa3877d",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/main.ts",
+      "sha256": "f98be76f7dccf12bcf161be391e5a87498b7e1c7e19b23b00c0d59e0aa1cff73",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/build-ts-adapter-helpers.ts",
+      "sha256": "5f865584cf3e3ae76adc01c39e3349be2a371be47b5b58610c6b8e82f12cbaab",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/build-ts-adapter-mirrors.ts",
+      "sha256": "32717cdd816b1a6154fb4f1d5eec184ddcccd6900b4749f84cf16d72aa7a9511",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/build-ts-backend-mirrors.ts",
+      "sha256": "ab0ebc6fc8e903760967b7317df0ba00cb1d6609d4bca570d9f1a3b4823dcfe0",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/build-ts-ems-mirrors.ts",
+      "sha256": "c19a4da7c6576096f5780fb54784b8c6dd42d7945439323e84c64d3980d0d550",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/build-ts-energy-flow-mirrors.ts",
+      "sha256": "c17bc505c1280107f008da2f591cf6e0a3ccfcc8fa1fd81ea4afc8d0e70d8bb8",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/build-ts-frontend-mirrors.ts",
+      "sha256": "286e9bc8327a6830657c19aea076fdbee31e5cc1c6fcd36b8e59225f85d03428",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/build-ts-main-helpers.ts",
+      "sha256": "9684c7868351c4764fbbd772003436ac550a4c5b098fff663ba7fd1886dae88f",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/build-ts-runtime-executables.ts",
+      "sha256": "edfdd98f6951825073a887f98ef22248863935d12f6f53800518a1c4f41b57c6",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/build-ts-runtime-mirrors.ts",
+      "sha256": "dd2f551a5a946b0e33c3cc935507c68b2ce1f963a0e7b97418ad7dfc0264e0d5",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/build-ts-script-mirrors.ts",
+      "sha256": "d2647d44021ec057968edd71cca91e70efabf3d00495d5a9a8fb60a2b73bddcc",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/build-ts-shadow-bridges.ts",
+      "sha256": "2e35cd5b7497cf2421cbeb84a4911c6100081076832f5987b69f44846c4c537e",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/bump-version.ts",
+      "sha256": "f72623d858a8ae3e4cd2da9aea65775f745c5b226212b392b6795e60fca658f3",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/clean-ts-build.ts",
+      "sha256": "ab36138f56c3e1f7b32db35c1a82a70d21ae29dfe2539fa636abab2ae397bf1b",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/clean-ts-output.ts",
+      "sha256": "10b2017d2bd476dd3f2db53c97d4f833a062c8f8c686673dd64a991d69ef81c4",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/ensure-publish-dev-deps.ts",
+      "sha256": "df37b7f8b1fd6c2e923456c158c146f066dd5ae22cc3800bd01229947afba2f7",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/generate-release-artifact-manifest.ts",
+      "sha256": "44e9b34ca0b5c76ccb35aa03497c409e264e0d2a709523655cd9662e5927ba24",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/install-githooks.ts",
+      "sha256": "4522905d3d09ad87fcff601feb777d166924ff4c1924865796123ea8e63fbd2a",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/secure-loader.ts",
+      "sha256": "f667c4179ed8145975fdfcd6e05684249605d0b76bb243bc04fe5c62b060f740",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/test-rc55-operating-strategy-auto-arbitration.ts",
+      "sha256": "d45d1a831ba8b9ddac422374fbfea1830a84ad62f107689a22572c6af74c4e55",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/ts-doctor.ts",
+      "sha256": "d724ff2e217129e707b4b2c98fd63ef5023e058ae0265d332760f8dc7283a114",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/typescript-invocation.ts",
+      "sha256": "db39d322d084a54c4c65a4d86bbcf9f27bdd8e3d1d8e21c4a7ba04ebd13a7525",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-accepted-power-effects.ts",
+      "sha256": "91c7378b2e69d7840577b9648c4fbcd3dc1145156a34cb30a80adf8098f50264",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-actuator-authority-arbiter.ts",
+      "sha256": "93b1bc2408a3ab02179d5b5e45f9a5aa26fb21bbad87d012dc092635e4124fbd",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-actuator-blocked-write-propagation.ts",
+      "sha256": "86c17a67122e5878382bd7772fe3b5e426706012de719d5b4767ebf10d5e4dd3",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-actuator-c3-nexologic.ts",
+      "sha256": "23b911e88503d12c8513edcbd5b6839d022c350137a188183b587b8c846f6301",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-actuator-c3-prime-movers.ts",
+      "sha256": "a6e033e464a17f585ab8065157fb3f5ce5fcfda34d753163fe6df0c54046bb90",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-actuator-c3-thermal-heating.ts",
+      "sha256": "9a9913fef69f6211ae7cae4962f05da6189a324447467dfc0f7154e0b6c434e2",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-actuator-c3-threshold-relay.ts",
+      "sha256": "3390bd5f7a50ea58d232a5a5567a203d56044b7004bdb62f56dc046d7aef66d4",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-actuator-safety-arbiter.ts",
+      "sha256": "b64db01f5e4a30859235181677b4b3eff4158d39a5e0bf7272d672837abacd87",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-actuator-shadow-arbiter.ts",
+      "sha256": "ab80e0dd4bb3aa34008799f09d7df81fe20793f8951a03ab54db366c58fd4c0d",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-adapter-shutdown-timer-guard.ts",
+      "sha256": "82ba6c50cda02c6151ecf1dfc9684a4ed481bf28f6fffe6976eaae9a83950d92",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-app-center-structure-cleanup.ts",
+      "sha256": "8d7d897f42f1b8f3842bdf04f2c634a63f83d88fd9d4857ac642913e2e458e10",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-appcenter-auth-modal-lock.ts",
+      "sha256": "ed95ee72cc0cf5746f79ab151b3533f051c6ff92a504074bcbb0777a23266495",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-appcenter-auth-smarthome-security.ts",
+      "sha256": "a6fdbf516c2a3291adc4f388a30b589ec3e98b76397773acb090fe3db7c611cc",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-appcenter-tariff-responsive-layout.ts",
+      "sha256": "0e44235664921932888e221fff6eee8974f0c51e0a8f00fc5a7fc15c6b5c7207",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-appcenter-writable-dp-contract.ts",
+      "sha256": "01bba613acab40d0d31a5f15986533709cdfa720ea1d12b7dc30391da07e6a82",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-appcenter-writable-dp-gate-contract.ts",
+      "sha256": "a9fee0ce9c59ad6330ff021007fad81a3fc8ae50b66b4841541efb85e9caf60f",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-burger-menu-guard.ts",
+      "sha256": "27efed74d87a21c800c628f8d6c394f096a4dc3b7d28d6987aeb072baabdcf37",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-central-pv-budget-orchestration.ts",
+      "sha256": "e64d78beb2c62b297ab63c0592b48155f12b91a36f5277fc255f527beb744df2",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-charging-active-demand-reserve.ts",
+      "sha256": "a1ba28f652f7701fd4663be1d8b65f57562e3f2d1f7d902bc62c89c78ed6f36d",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-charging-grid-cap-clamp.ts",
+      "sha256": "bf449004eda70f1a0f7bc13ea7581f0bfadaeb6511b6dd9a05b2d58ddb2e9650",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-charging-grid-cap-safe.ts",
+      "sha256": "07ca99765d68a16e66b4729fa3bf99ae199a7f82f231279a192fb5fa6f5a6e98",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-charging-infrastructure-budget.ts",
+      "sha256": "2c45e4c5810b8a00c6ad02a609c1b10d38e339f9a3c4e309f1727f2513bf0875",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-charging-minpv-base-mode-reaction.ts",
+      "sha256": "cb0ad01eeb7e06cce510beb51e8406a890c1ef2fe5b9453dcb7a147657ec0251",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-charging-minpv-base-reaction.ts",
+      "sha256": "07d6b1fb148e921cbc1ef36ccbb1f3bb1ccb1bf23e3dbf0dd16438aeadbf624e",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-charging-multipoint-station-budget.ts",
+      "sha256": "44be1247b25b416e88dad0b9cc65c497bec941eb1a961e28b9c354e5748e71d5",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-core-budget-publication-object-contract.ts",
+      "sha256": "767a678c2dc19c33698fd7992a6f271e100a5cce859dfb86c9d3ca7acca965e5",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-core-limits-pv-physical-cap.ts",
+      "sha256": "a5d054178b80d840006ea0de173b3c3d8d261aa579e824af2ae8cac8a14eec6c",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-core-limits-shadow-log-fix.ts",
+      "sha256": "b875eb4a6c716bf7225a745decbc72b8b98db917a3208f2606aebd066e1bf07f",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-core-limits-typed-runtime-phase1.ts",
+      "sha256": "c7454ea866dc3cc50d9a4fff3b3eb2a5fe1a9152c5e8e65ae60c3e5c32cbe9e9",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-core-limits-typed-runtime-phase2.ts",
+      "sha256": "2f4394a6e5a4a75347407ee954d7df8e1415c826c23a812dc2b938202d60b842",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-core-limits-typed-runtime-phase3.ts",
+      "sha256": "107c4045bbe3b1e143e204a0777b3f3d60a7583b358f9556478a779a3b0e7e39",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-customer-workspace-access-rc44.ts",
+      "sha256": "ad377b198172e91c3c26eae6ec5b150945216722fce28d476b2c105a9ff3f5b3",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-customer-write-policy.ts",
+      "sha256": "8245f091c0d322f6c11fd2906c849d18771361915fb91cdab8a05e7b7af0269c",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-datapoint-strict-numbers.ts",
+      "sha256": "8ffd28143d366304777011a3d02afc00b97675e3c1420ca7524a054c5396dd14",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-dc-station-display.ts",
+      "sha256": "55293db07198d4c696ecab4c7f64b25619bb72e07788564d0192692552a4ef6f",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-device-auto-mapping.ts",
+      "sha256": "2d6134dcf34d32b840a7e7531c6c3150424d7416be3652d61be6a1bffb80e301",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-dp-picker-current-folder.ts",
+      "sha256": "aa3e262d65bb989febaa2154511d1157dc054dd6c72044c06722d04454a8c4cd",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-energy-flow-deep-debug-scan.ts",
+      "sha256": "297f6933c1e27cc265aad05da792f6055b2c71398110cf4a5bcd7b04f2f9a2b1",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-energy-flow-measurement-authority.ts",
+      "sha256": "60db0931524a20f5a03519cea41e0b67e098de1edbeaf8d6844d9a17ece83f37",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-energy-flow-regression-cases.ts",
+      "sha256": "8db2acec7412d81c3ecbe47d56c4b0fd31f2ab54f1f846351e45ee615253822f",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-energy-ledger-foundation.ts",
+      "sha256": "afd4229b772405c2dc62b7b1dd017fd0f30a4de61612ff388fb99314bd0fb331",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-energy-ledger-operator.ts",
+      "sha256": "ee71256eaec63dfed025e7c5cdcea41282d942133c6449604964e6c3fd5f7bd9",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-energy-origin-ledger-foundation.ts",
+      "sha256": "38103e21c8470cf1dc9e9fdb08e4690a5cfaf5be278c13aa504ce47c8a4b4b4a",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-energy-origin-ledger-runtime.ts",
+      "sha256": "409a3a762822d1d74936de6961bb54a18032466e1d4fecd01a06d318c8accdac",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-energy-wallet-customer-settings.ts",
+      "sha256": "0cedd5f4e0a1d8c0692d6ae1db0e32bd2b75ed9fb86cbe4fc537ff767e8893fb",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-energy-wallet-diagnostics-polish.ts",
+      "sha256": "32d588fdd87b4956a8da45f85d955c22c696b25e2125849e6e7e9898bbd065ea",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-energy-wallet-diagnostics.ts",
+      "sha256": "cd5ed203b6831aaa96e33f56699d0a16d28918cc7bdff546dffaf42d3b58f4a1",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-evcs-confirmed-demand-reservation.ts",
+      "sha256": "6dfa6c861c8b6c92b42020d4870c3bfa4b51d43801b3a9d4233bc5b311289d70",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-evcs-control-alias-mapping.ts",
+      "sha256": "cedf2d4738a203c211dadd1258715b99e2849c0775d09dcaf8843720a9f96512",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-evcs-energy-unit-conversion.ts",
+      "sha256": "e082dc25ec7c4117e93866c2aef8e4a51298ea17b26cf49be5dfa2e1f43b7a2f",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-evcs-global-storage-station-pages.ts",
+      "sha256": "6414d4c85e002f16b402b4f1a57626cb268945376e8fadfaccd15f387cb82905",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-evcs-hover-state.ts",
+      "sha256": "1b7ddabde4483be45dd16138245a31e9b5075d798e89de3bb3e06164d38a848d",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-evcs-input-refresh-hardening.ts",
+      "sha256": "1ab57d7518a4ef865cd4636f4a73a13e0215511af765fc5a37bec6556dd116e2",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-evcs-online-id-depth.ts",
+      "sha256": "379d6c18e8f97a48cf9c98124b2777a98432508d9efda9544764e74c52c5b89b",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-evcs-station-permission.ts",
+      "sha256": "2a2d28f29d0ebdaa5f24594dd30d10973b619857dd06973fe392d02a4cb88a12",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-evcs-status-hardening.ts",
+      "sha256": "da4d8a71ec039e4d0e43f68ec3a3c349b74e250d91cb6c3b9dc1e1221607ebd9",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-evcs-storage-policy-default-self-consumption.ts",
+      "sha256": "b57d81b495b32565222b0705e7092cfb02f9269b8ac6c5c672b52af620f3eb81",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-evcs-storage-policy-mode-scope.ts",
+      "sha256": "2b4f111874c3fbea1580ab38dd060e592bfc370df38588861f1a3e534aa8d779",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-evcs-storage-protection-no-standby-pulse.ts",
+      "sha256": "8c58141910db629307d0d90f61ffc323e4eaf738224782ff68ca9fda73ff9eda",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-evcs-tile-hover.ts",
+      "sha256": "a555360a87f4e7e57d127d652e43d680fff7c4858ab7d5a18cfc57a5850eb18b",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-evcs-universal-demand-normalization.ts",
+      "sha256": "814a8a0d1cf6078e4bd98047ff605810a1a1a0f833641f090f9cfe4ab1e70077",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-evcs-visual-online-state.ts",
+      "sha256": "bea26aae44f46f1506061603bf2e22f75e159115b9340475dd887e1e616f17a1",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-export-guard-stabilization.ts",
+      "sha256": "25e55c7138f57cc569b8e3cf9e1e85ed6d5d2e8a20fdfa2d15fa436b5d5751bd",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-fenecon-authority-runtime.ts",
+      "sha256": "bc78a902edbe96a40a7edbe50cd7c4548e865c87ae48fbcd2e9152602b608a43",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-fenecon-hybrid-controller.ts",
+      "sha256": "e22eb1f727c0d9d3a89feeea555c54538cd4a51c90c6967d34564f61de3cca42",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-fenecon-nvp-shadow-runtime.ts",
+      "sha256": "938a1ecefcee69bdf69f8b47c95f274d90914d8de5b9fd4509ad9a587bf12545",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-fenecon-nvp-shadow.ts",
+      "sha256": "d38eb2209ac150a6d7289618d34558b6d2456b0340b46a31f44f3dd854585f76",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-frontend-controls-no-login.ts",
+      "sha256": "bfbb06d7281b00ef9dd598a2b7a92f607bab10acabaae135cd9acd1b39d5b485",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-frontend-public-controls.ts",
+      "sha256": "27b985ab505fa557236b8e9d8bc4e7bdf3482060c50f43734ade90684cc0838d",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-git-conflict-state.ts",
+      "sha256": "d1a52f637e3bc2ccaf5406d0bff85eb703c9fcc3de5af58aadf1f7f5e6d1ecc6",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-grid-export-guard-diagnostics.ts",
+      "sha256": "099a2b348c84b475156a8abf51105047c6f260eb36626c4714bb00aa1f8c4121",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-grid-export-guard.ts",
+      "sha256": "0eb674d52a0702b16484b5dda8d08c0ae3f6f55123e29f01a4ba714bd759bb36",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-heating-rod-central-zero-export.ts",
+      "sha256": "d1c8665f52eadd34392d93db32688d97405606ec859dd12601a6a7db9492fe4b",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-heating-rod-shadow-calibration-parity.ts",
+      "sha256": "b6c9590009565ce062419fdf9d2da669269f4fc4671d21bf27f1312740623b50",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-heating-rod-ts-shadow-power-model.ts",
+      "sha256": "00e3cada8d4d41ca2ca12dea665e7d420bb83b048609a512ef0dd50ad77a24a8",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-heating-rod-zero-export-budget.ts",
+      "sha256": "63e541ab49ea4102e56eb296f45147810d06c91557f6f70290bcdd5173c14b24",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-installer-back-link.ts",
+      "sha256": "ae0de4106ed273d1cff1314e52576814f7ec71de0a6e7e98b9fdedebd98ced21",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-license-browser-lock-rc45.ts",
+      "sha256": "710ef0842f0cde1b10821320ff5ff8bdddaafc2ecd87d258d7fd835f2e231f90",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-license-editions.ts",
+      "sha256": "be93e45a77ba22841e607a5e21805247650da17019f7cccea6872c7add08cbd6",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-live-energy-flow-5s-cadence.ts",
+      "sha256": "2d2998655e1316295f1dcc6d5073c0c39df276eb298082d2f8208c4627b2e9d1",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-loadmanagement-actual-vs-reserve.ts",
+      "sha256": "5dade9067b30236ebff259a9ed5db722dfe69d1dce85c1a15d38860af692130f",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-loadmanagement-budget-consistency.ts",
+      "sha256": "837264b5ed21d1fcfc68608452e2fe964828ee18a5cc370168fbea30d6f905b3",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-loadmanagement-grid-cap-sanity.ts",
+      "sha256": "af943e7e274fda3358dc34ded06048710b2abfa00cfe761fc9b2c0a4307ac11d",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-loadmanagement-summary-actual.ts",
+      "sha256": "a6168be70948f4ebcdd42c9781c7bb03f59afab1cd6035fb6f99b950279a2983",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-measurement-freshness-stage-b.ts",
+      "sha256": "f0085670b7a64af2362f7562a775d1973eb3d367c3d4d774e9d645d448df4067",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-mesh-ack-gate.ts",
+      "sha256": "5fe0e717e0e5b181eac7276bcb3e92b01f93db18cddddf85b36ed81c8af2a295",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-mesh-active-control.ts",
+      "sha256": "ae2f4be690990734ee49c681e853c2be2bff9a9babe45d97f366acf0be9a673c",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-mesh-bridge-ack.ts",
+      "sha256": "9b16a52f06f33548a34bd56c02e6a02a3b8313c70178967d746e47df1b0e945a",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-mesh-local-bridge.ts",
+      "sha256": "5973b96b7bada625e89fd8dd5872bf7ee5244fc5bd6a411bd36ea095dbd8e401",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-mesh-microgrid-commandguard.ts",
+      "sha256": "85cf7392575ff6efaf0576b0f7fae573428d833578c337568e48408d98426642",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-mesh-microgrid-operator.ts",
+      "sha256": "a817a9e873ae2840344ea57de5e33239395ea5b203c3c23101a9122ea9ffee5b",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-mesh-microgrid-planning.ts",
+      "sha256": "8cbbb9b46f7b37c22513d54ff6db761373e7b4624b05be3646537069e73a706d",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-mesh-microgrid-receiver.ts",
+      "sha256": "b650bfe683e9f7ba973c2494bbbe2fd5e138c68fcd55d5e96aa879ad2cab4481",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-mesh-microgrid.ts",
+      "sha256": "4ad426868aed2333347e1dcd956a032153f1b45f087aa37ae6dbed82c9597d39",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-mesh-node-limits.ts",
+      "sha256": "3413cc532f06c0d872aef4276ecc3a7284384967f7db9f2a0b6d84a1ce85d4bb",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-mesh-peer-fail-closed.ts",
+      "sha256": "8568ddcd97cca88988a595fbd0499bd4e575ae659d79e8b4f013fff2a9b43437",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-mesh-peer-fieldtest.ts",
+      "sha256": "b82fe404f3e4ab74a58f3fdae54ee8849918dca3662613492c1b3e8dfe56eb1c",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-mesh-peer-hardening.ts",
+      "sha256": "9b419ae79ba70d80e0234098a246a74aa684709d25f69e9e520b761d631dafc4",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-mesh-target-fairness.ts",
+      "sha256": "33a46e46b3f48d96669cb58c2d3a87ad7d52dfeb3ab1064708edd57239c2a946",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-mesh-target-groups.ts",
+      "sha256": "182b50b606577b31d43961adf2684e1972333f7375aeabf13685caecc847d0f4",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-mesh-target-release.ts",
+      "sha256": "e24f93e26eb192a0a2de4a3a9875e49153974b0fd8f503cd75f14b90f8d80826",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-mesh-two-instance-fieldtest.ts",
+      "sha256": "aede88476dab1a3cc098924595e1c4b927ea9bedf4afb8ce7477bff5b3f84cc1",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-module-lifecycle-para14a.ts",
+      "sha256": "b22dfcbe53c75849f56f445f08ba319ebdbb2b7e586de26359b3d92a974f4522",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-multiuse-central-budget-c3.ts",
+      "sha256": "0bb2c751d1b644d7e01756ba1e0a0da094933607c27997b8b8a7afdc7e1e41aa",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-multiuse-storage-policy-only.ts",
+      "sha256": "da7629e309ed9e0e7ba665954d9bb422fe07c1f95ff577618f99fc77c2853c2b",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-nexologic-desktop-layout-rc44.ts",
+      "sha256": "66c05ac7ba5110abaf78d073d5060588eaf37c8d0349c3f00b4ebb3867553a73",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-nexologic-editor-browser-rc44.ts",
+      "sha256": "eb76478dc209589fffb35b27781a32c2827c931fa01dc45df00a1ba272f3a4d4",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-nexologic-editor-connection-rc44.ts",
+      "sha256": "c00a9d5d15628e3078a939185bf0b3511465843c750c06fe12c8ad843820ee09",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-nexologic-lifecycle-hardening.ts",
+      "sha256": "528cfbfc7f3e56ae30723fb85c44e9aba4501d54d1e4b8b5c455ab02c6acdfb9",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-nexologic-scrollbars-rc45.ts",
+      "sha256": "98384606115ba8771ff77d10f0ab582d2416cd16617ab1ddbafc6a29061d5cf7",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-nexologic-simulation-coverage-rc46.ts",
+      "sha256": "68ab5ef0c84a759dccfc59ac790c33d2c6e8cf987d4fa5c7094523b25db52a7a",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-nexologic-simulation-layout-rc46.ts",
+      "sha256": "bb63ac32348b359efdb272a67d2f0945237390685a103d432bb9cb1b2b0cede1",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-nexowatt-eos-branding-rc44.ts",
+      "sha256": "3b56228849b4b0bd547f05367bb5e55cc9c746ac2d0bff54916d61f4a5868970",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-nl-p1-dsmr.ts",
+      "sha256": "f1acda6e2c0a697e28dd9a9f1a9f5a4fb467aa8de1bff904b16a497474f3b4df",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-no-release-artifacts.ts",
+      "sha256": "b543dea9e85d9518fcd14b47c6ce4ebc39d9e6de2bc57ad7a891a629e292ccf3",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-npm-registry-version.ts",
+      "sha256": "b27884eae59c8db33399528f027cff174dfd463d50e7e0f88c8845daa1cad214",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-npm-release-guard-static.ts",
+      "sha256": "9698fcdfa38679c243078e8862e9a2e226e2623c8593962044cc5b496819cf8d",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-npm-version-free-guard-static.ts",
+      "sha256": "1c180068043795764a2e114f1786b31ee69e3d162c5cacf889a92354eaaf5865",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-npm-version-free-runtime.ts",
+      "sha256": "313cfff19261ac353d677fc29587f5fededc6f0e890c96c112ae4a35fb527845",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-npm-version-free.ts",
+      "sha256": "38a17ae6b43467184dec33c941e2fd29c41e75742c442e0722445af4d22d73c6",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-nvp-coordinator-diagnostics-ui.ts",
+      "sha256": "15a061e3b7f2165c3694ab041bcc9d08ec813b45998ff26938bb036a06454fdb",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-nvp-coordinator-storage-pv.ts",
+      "sha256": "c7285d1dbccddfc6ff57c30f94d1cd4be23da7cfb84376d747d38309927e5228",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-optional-menu-feature-visibility.ts",
+      "sha256": "b48983757ecaa221c12ec5a690f1a310bfd17b09596f09a24bf1c418d99e2c32",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-package-runtime-start-smoke.ts",
+      "sha256": "7b55d1fdfaa11eacf304d6059dee2d5b63d40182610547ab4f38bc88dcb4eaff",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-para14a-central-constraint.ts",
+      "sha256": "fb4e19479a3eb67d1e72220e38b52c47c68360ccd73c98b46efbf2e490d5e925",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-para14a-eebus-direct-api.ts",
+      "sha256": "3de0dc561606c4943273abc689debd601edcd35424927bfe7242e61b9e4f1252",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-peak-shaving-readback-contract.ts",
+      "sha256": "9c08e794fb18ae76b3cd673cec4b5517c6bcc6831d1663007cc962791f8ad00c",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-privileged-customer-role-split-rc45.ts",
+      "sha256": "77058913b735629c0f077bedfb57a777efe8d18bed3aca43dcc71c5403a28ed6",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-protected-license-rc45.ts",
+      "sha256": "ffcd84591dc453d5f5e02899a93ac1a270415a748483c203c624f52a440bc4d2",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-public-api-security.ts",
+      "sha256": "a08a747cc5c6ae9934e1c5ca1e921e3dd70839f5700a2c88de0e211c7c57997b",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-publish.ts",
+      "sha256": "46cbe86dc42a3e2cc1323ccdece8e20068f19e126086ecc7658bed4056ab28e2",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-pv-source-dedup-cap.ts",
+      "sha256": "fe16d709736b68e0a81a70d3b58a755447ee582a4c31d91941c2c2ede00c5cf2",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-pv-surplus-budget-priority.ts",
+      "sha256": "15d00eba9dc9492e6c3be1c389371a1b5bbf97bcddbe8d455984eae615680583",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-pv-surplus-dynamic-storage-remainder.ts",
+      "sha256": "f2e721c1317ec2fde09ec3ff83cc475231604258946558073cae7d6cfc42f59b",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-pv-unused-evcs-release-to-storage.ts",
+      "sha256": "dd824d6cd7fda0e85658175ed1fa03c777410b4b0757790a6a190d464042cc11",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-rc49-para14a-evcs-start-stability.ts",
+      "sha256": "4864c0ee0cc6261b59105950c2bad29a1e1eb7d5c38d66835274776640d76e76",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-rc50-netoperator-interface-foundation.ts",
+      "sha256": "d7a0913aaa860f09ff7336faf181577c5fdf5cc3608725e6b7caa07b77ae8e53",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-rc51-ocpp-telemetry-normalization.ts",
+      "sha256": "7767b1ca9d12d7f6fa45013c8b1593fd2a0d78c39320bfee96e37fe5f3ec268b",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-rc52-charging-diagnostics-browser.ts",
+      "sha256": "162f09d6d7857d4dd5134d551c4434a859dc052e1ddfcd93f7bfcce4e36c0712",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-rc52-charging-diagnostics-log.ts",
+      "sha256": "d038ad7ffff6c0fbc2dbf27111e93b11f1c909d1b43c760e4f7efe2e5ad943b6",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-rc53-operating-strategies-browser.ts",
+      "sha256": "a3dbe97c594f101858625f0387d154192e06187ddaf02c4b73d74ba6beb7238c",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-rc53-operating-strategies-foundation.ts",
+      "sha256": "1236634013b53ca92fc2bef53d368421e88a17e7a46d9c243a97cbb50922e2d4",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-rc54-operating-strategies-browser.ts",
+      "sha256": "60784d80e8a31964f47e2871126f5d739c9098c7b0923660b68cd2be8c3a2b72",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-rc54-operating-strategies-rule-builder.ts",
+      "sha256": "cc0929f878d833bba71492c12a0530cfb8b6d1301ca3b9587c48b1953be70e29",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-rc54-operating-strategies-rules-simulation.ts",
+      "sha256": "dc5de44ff93ab9703885dfaeaddede9be899e0485c76b5658f8e0e3e20fe20d1",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-rc56-operating-strategies-browser.ts",
+      "sha256": "f2d98bf8b4e364216bf9390ebdeddcf4b719c86849b58ca903f10ff09270ae07",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-rc56-operating-strategies-live.ts",
+      "sha256": "74b3016475cfb84e7364e1a8554cce83c6f1c5b6497ca3fbd10f62e97a9ab5c8",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-rc57-ocpp-stability.ts",
+      "sha256": "8673d86f428aa3f3aeebc6926c23c8c2192a15c9817538672e2d5b90714c1dfa",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-rc58-ocpp-compact-mapping.ts",
+      "sha256": "61c429bb8dfd8d99575563044f53dd318e2c321a2933a1d34ce5f75cacb7bde7",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-rc59-ocpp21-mapping-browser.ts",
+      "sha256": "d6bcace2bd223641a42c69b0cd049aa4e85b5cc92088d975dd825ff41534874e",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-rc59-ocpp21-native-storage-safety.ts",
+      "sha256": "7a5c954fd6c9e159ea9c8ec0b79c9cb60a45cecbcc422d273e38f8d583734ff4",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-rc60-universal-auto-orchestrator.ts",
+      "sha256": "e0e3e0769610d5a31cf00676f345252943e053ec6a3f447f8277e1ad6f4a6696",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-rc60-universal-auto-wallbox.ts",
+      "sha256": "be8f223d0a9d802be77386f27e36a6503602d76b8d59317ed501c8cb89790153",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-rc61-evcs-hardening.ts",
+      "sha256": "9b4905382c7bc8a975e8a16444a99bba910cc1e926a6f4bbb7664c7d27aa28a7",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-rc61-heating-rod-night-manual-release.ts",
+      "sha256": "1054d4eae4e4c0296f88f80ace92cceef67fc4464ee2e45ef94737e1c3592618",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-rc62-app-stability-audit.ts",
+      "sha256": "da192966217a3bbb4edfb7eebff45afca77474133fe599069ce103faa930498a",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-rc63-availability-storage-grid-gate.ts",
+      "sha256": "99afc58f706abed15c8ed0980a4ee31a9379459682f87b492433aeb5c5ab62d2",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-rc64-storage-grid-charge-policy.ts",
+      "sha256": "95657f565ffced6a550e34438f733d6a71c6ae62212293cdf7a580f4759b2c89",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-rc65-nt-price-target-override.ts",
+      "sha256": "650dd9cce69f6144222c8e43c6e2a41a13eca587b50ec5dd9f1eb78418c67df4",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-rc66-station-display-browser.ts",
+      "sha256": "b95a1127dc433a5192d020b5c096ef4a9bf9ff36eb530c118c4ee63265562d5e",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-rc66-station-display-stable.ts",
+      "sha256": "99b35f906d51604f87deaac71203634cb831b8d0232a7c8916a1113f1f09769b",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-rc67-license-bootstrap-access.ts",
+      "sha256": "35642fc08f0a09bdecc5b9f70096c9e031c5cbeac6ddea3e5b4f639c54054074",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-rc68-para14a-communication-fallback.ts",
+      "sha256": "6a52edf74c547dd32422c04415f2892760973fc121b13ba581b0802146c7b166",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-rc69-dashboard-lp-feedback.ts",
+      "sha256": "6b1c0bc85e73c21ddef83683a5ad4305108d264135bf8546cb1e960a2bf07b9b",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-rc70-dashboard-lp-status-polish.ts",
+      "sha256": "d449ebb61501c4765d5525baa3ed58f7d8882638be7b7071918661708040c804",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-rc73-admin-overview-contract.ts",
+      "sha256": "fe687bac8aa7e99006ab043b43a2a6003fc4ef0582f392e7c1acfe16b5026eb2",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-rc91-cross-app-catalog.ts",
+      "sha256": "55065a1d0561e702dccb840cb6e6e6b6f2925ef0ddf38ae690a6687e8bda9bba",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-regression-safety-gate.ts",
+      "sha256": "2ccddfed66ebbf5074fd443656d293073930557f0cf6c0dabb069a46144498fa",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-release-artifact.ts",
+      "sha256": "2e96677f0a7c4d33b3059df500f0c2033280a7775565aafef9581c1d100d750f",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-release-safety-gate.ts",
+      "sha256": "07790dd42eacfaf15b19c6af3770ca9ca3232c0902bff3c70831183410480c33",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-safety-active-load-stop.ts",
+      "sha256": "bbe12dbfb0ceb550e70f4e1a441afa876380bdc9826a7433c38a8875831d31c7",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-safety-envelope-final-write.ts",
+      "sha256": "316cce1920a83d7a53f433536ca68e05205b954b76c17ca0230c956b70958293",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-safety-module-deactivate.ts",
+      "sha256": "7e7a329a08065208b37e6241e29426dc53450e18064ecf8b0929e2be979d0baa",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-shadow-diagnostics-usability.ts",
+      "sha256": "0a2281e7d9189cfdba853147439373d106934d681940926db67448a011088c71",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-smarthome-config-transactional.ts",
+      "sha256": "da924ffa5ba0df6f1da58126b6b719708a7722d38ac7c2e970e79e46274f0d36",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-smarthome-contract-runtime.ts",
+      "sha256": "750a633e2af55c3ef952a55cdd132e878f224fa02e80be1d25defcca08a08559",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-smarthome-customer-dp-mapping.ts",
+      "sha256": "30cb6f7b26a014963c03cf44c337accda7b519056ed410727f8ca11763ac1654",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-smarthome-scene-guard.ts",
+      "sha256": "ce953fcdf2c58f0b315b831c7e8e1cc42eb611c889927101fde6e29844b9a740",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-smarthome-ui-capabilities.ts",
+      "sha256": "b857ecbd68906413f532f6203aca19c76a5e38a927d6e7fdba19275bc97dfde1",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-stage-a-diagnostics.ts",
+      "sha256": "659ec0633442d80a3e284ddc58e95a42748ec813bcb970493ec6aff73fe50423",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-actual-power-nvp-balance.ts",
+      "sha256": "015dcfb23607382dbcc70decbfa09db202af2e3928a0f52fcc9c33bf8ef9566c",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-anti-export-ramp.ts",
+      "sha256": "53f73747ff8192f5f4b1900f933d901fc102c6e7f48ccc6f19688c0937f36b34",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-appcenter-dp-persistence.ts",
+      "sha256": "d947261593d43f755addafebd4aef4793fb9817a60bcf8037b18694f59d58940",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-appcenter-output-modes.ts",
+      "sha256": "19ca67ab8932e01234aadc79cf98dfe0566ddd66485a86d3f634e7aa5c561fd0",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-appcenter-override-precedence.ts",
+      "sha256": "bf7d7b356e0323a1818604c73d2081b631a7a344edd42506d4c0073c42333250",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-async-feedback-all-profiles.ts",
+      "sha256": "e3fa064720418cdd04549426b882c97acf2e5ce720146050577e7e47f22e1358",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-charge-demand-cap.ts",
+      "sha256": "a92b4040be03af77c49edb83fa37eb1fd550162187e3e5363c7ea648c3c36ed5",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-command-family-readback.ts",
+      "sha256": "386f08887b738b4d7c83fb9f6b47b5a7d843e3397e2fbf81639dc917f128210d",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-control-app-separation.ts",
+      "sha256": "1a160f1cae61f4f1ec32950598f2c8d289e1af9a9710425131bc4e008bba7938",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-control-functional-safety.ts",
+      "sha256": "4e0865b2bd773630276cba2dd49d39926ad00ec5a77f2beb65a8cb3d16ba383b",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-control-runtime-scenarios.ts",
+      "sha256": "1dc4d6e34ff80cff4231ae9f394a06cc363e55ce711d13a8ad814c4f25f46372",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-discharge-demand-cap.ts",
+      "sha256": "28ff001cee979b2d4de123fe75abf1adceb8b238574c1bb5d4d6bc666feb9691",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-e3dc-rscp-profile.ts",
+      "sha256": "c42588d434fea529289809c5a48a6ebcdc73df7194a4c70e46a6231a1332c45d",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-evcs-protect-vendor-profiles.ts",
+      "sha256": "fcf711cbad8477ed25db1cfbbf64295d63f9f4b73197cdd1d15531fa824100ad",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-farm-appcenter-restore.ts",
+      "sha256": "866fd37dab4339b643adc749f9d765bdb222cfc101de91e21a96c621f983224c",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-farm-auto-dispatch.ts",
+      "sha256": "9c2281d172ee8dad73b4028ed5560bbf8779d6bf4b572885b73200d5541fe29c",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-farm-config-fallback.ts",
+      "sha256": "b02afacb39c63857c025d8677bf0adb24606bf76c84a1c655e37cd84b03c4299",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-farm-dispatch-recovery.ts",
+      "sha256": "f35a813e67c375519f304bdb58f58e85cd3602c626802ab12b11a3121cf4655d",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-farm-energy-flow-aggregation.ts",
+      "sha256": "0f554b0d2a0666469b4941137c38d2b1c916439aa097803d2fcd54b5667dac3f",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-farm-one-second-cadence.ts",
+      "sha256": "50a113647966e9199f4a40388e39cd297f0c01581c5c5e77cc519ef55db46734",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-fenecon-day-no-write.ts",
+      "sha256": "b3d0a1e3f998b55e3dcb561820ac2c35174690f92c317c2a4542e339bd745c6c",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-license-power-profiles.ts",
+      "sha256": "12967aa56850057fbed76fe294534ae5895f94af15bd7378d08f5435b026ac93",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-manual-dp-routing.ts",
+      "sha256": "cbf4eac2f0518fe609a20d888a5d4f8e799477b9be8f9e0380122a13f9e010b5",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-multiuse-policy-isolation.ts",
+      "sha256": "9c29c35e37f6d9b8b5728cb66d86d2f54b942e65253c57f35483e4e0df3bad9e",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-nvp-fast-controller.ts",
+      "sha256": "4f739ab9ebe4fb233de5b253a509b7df52fddef8e55da1d523e82f2ffec43688",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-nvp-fast-servo.ts",
+      "sha256": "3d3bda32e500647918ba0be9616e474c6231b7196b696c04b3e44cad22917d6f",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-nvp-smoothing-building-load.ts",
+      "sha256": "01873db81c935fa1a0945efa5a3e88576bf62cc0b17a3f7941173511a615fbbc",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-nvp-topology-hysteresis.ts",
+      "sha256": "231192357c718f3b8b8b22d12f434b64f41347f90bfc4b890c9e7bfebb3e67a4",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-policy-baseline.ts",
+      "sha256": "8126946fe1abe8050928406128afea4e15b2a96841b69adb5ffbe5b7704e9a0c",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-policy-core-cleanup.ts",
+      "sha256": "deb5772b4c4684fb1d76c17b17f573ba44df467fbc0943533424e3ef286fda58",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-policy-runtime.ts",
+      "sha256": "79300551c882fc8cceafff666f87ba23a632eabf2a8666612a257a8f7e8b893f",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-pv-load-feedforward-zero-stop.ts",
+      "sha256": "eaa1ef5ede01c8c74b6fdf8bb9873314d36cb755365c62bcb8cb7b33b4cec2f8",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-single-tab-coupling.ts",
+      "sha256": "4c51d23e68057d088251006c817714aadc676837da48ef88037c74ee8fc39562",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-sungrow-diagnostics-split-targets.ts",
+      "sha256": "d740f87e86e5b0a13482027dcef87816d818c510a9e4a0cd9b18f233a608063a",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-sungrow-hybrid-profile.ts",
+      "sha256": "6c1cc2c4f8b6d6fe9c18f09753f06144a07a92404f5a7dd6be2d6d6c0ebf9248",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-topology-authority.ts",
+      "sha256": "03da8caed960918226427711b0a937a9936f4bdf0692f9a26acb425aee06f1ae",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storage-zero-write-firewall-v2.ts",
+      "sha256": "b7e74bf1e23ea890044c23ac446cc96243301f51243162d0598efcfb8d800879",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storagefarm-appcenter-hydration.ts",
+      "sha256": "33dae799f18bbd055821f69b1b4934b49ceb7410c7bfc6c73e4f3b64855abea1",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storagefarm-appcenter-restore.ts",
+      "sha256": "3896a3987c01a8984e0a25e503717269e1100e48bd1054591287a2f9e62914b3",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-storagefarm-menu-appcenter-gate.ts",
+      "sha256": "ae7c9a3c9bca46e32eb6c1bf838c95785fd733e23a6bac9587f9f08cd728a879",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-tariff-freshness-safety.ts",
+      "sha256": "7177514c1a5f67992f98d00da75ddfe0afaa11b3f4fd3bce785fc22aac7a1b48",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-tariff-provider-appcenter.ts",
+      "sha256": "7e0ca6f82855a11a8ec23f1dd58fad189e60800982fe5b139aecb079bfb521d8",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-tariff-provider-responsive-layout.ts",
+      "sha256": "fe9b5b9725b106b2fbae055d20eefde28fbfef5c4592c98803d390350b4207d4",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-tariff-provider-runtime.ts",
+      "sha256": "020c6ec511103fa290e5b48ed37d47b486b812f07ec4e9838d44237f0d9ffa2d",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-tariff-storage-status-truth.ts",
+      "sha256": "7a3fd4b30fe92aa1702842d2f0f22e602a374cec37b5ae863d2bb9e0457ff2f6",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-adapter-helpers.ts",
+      "sha256": "ab32cc3cb8b9d4ef0f0559c29d21ad33f0b8f759d0facffc3560d6157cf6d39a",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-adapter-mirror-runtime.ts",
+      "sha256": "8056b1f60dbd4f812c915414cb71329d7c8a2fd878e3dce791dfc962153620a4",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-adapter-mirrors.ts",
+      "sha256": "606839ac10635285fd45e179498229033e9310db6dc37c075b883cd16ee400d1",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-adapter-state-api.ts",
+      "sha256": "01c6dc2436886cff5c4e281c8ce8824f1eabffe6ea0d1bab5860edda21d87ccf",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-ai-advisor-payload-productive.ts",
+      "sha256": "874f9439780ed22ada9b7d96154cafff08b461b66453fc443562239795447891",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-ai-advisor-runtime-typing.ts",
+      "sha256": "c2b3ab6e2739d5aa3f76a5156285ba7e47e2d26050777a2ffc8ef413233c58a2",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-api-state-feature.ts",
+      "sha256": "c19bfbd70088d0f93d5f83115110d32ab1173342eb218f6c2336ff1e0f6bf75f",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-api-state-set-shadow.ts",
+      "sha256": "0ced3dcd580d95f92dbdf605e599c367f8a99ffb277adf1c9e7cc031b1d390df",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-app-runtime-typing.ts",
+      "sha256": "29ce948314861a7b0aa8828bdb621d60401065c7fe16233465e3ec9f64034492",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-backend-api-state.ts",
+      "sha256": "65f1198331f1146284fbc12784ceff736ed2d27e354ae1aec973c44c525d20f7",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-backend-mirrors.ts",
+      "sha256": "8d413e752384036508d8dc9c058679b684bdd72fceb72575df0af78cac6e1ecf",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-canonical-structure.ts",
+      "sha256": "bea1c6663ded7c06ee3f61dedc97672b88cefd94ba724f065af1e8520779cfc0",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-charging-allocation-productive-prep.ts",
+      "sha256": "bfd2f6e578deb4e1265b52bc4a3ed3c53495e87bdaf095a4bd368c0b45f6b7d8",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-charging-allocation-productive.ts",
+      "sha256": "7201dc3cba6e3d559903b30ce3cc64396546816b61e8bee14972f6f9579d3e9d",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-charging-allocation-shadow.ts",
+      "sha256": "3c0c7de19eee395b80711d448f0d5ff2a7c9638ed2f45484cb9bf50b0c21631e",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-charging-budget-productive.ts",
+      "sha256": "ec5d3d892fc4c0a4eecf5858332a2a5f3a22040aa7345ac95001de1fc286f90d",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-charging-control-productive-prep.ts",
+      "sha256": "3d14bb14ccfc2895ec42187c424be9664e5d6e18ac6b2e185fd3ee4d8505c6d6",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-charging-control-productive.ts",
+      "sha256": "530836056a581cde1adcc0c574bf2cb27780eb6f43bd483f86660b81e9308541",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-charging-final-handover.ts",
+      "sha256": "8cbeb0e1f2d0a3fc918bd3f7de047cfd2a590dad1bc664ab587b96e1169ae5e9",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-charging-js-executor-fallback.ts",
+      "sha256": "d57058dc77e6d22ee5dca2144c24ca46b7afbb2c5829e5ef05d79abbae5c5c7c",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-charging-management-control-shadow.ts",
+      "sha256": "ab6bb937012f56a3c728bd098f6b93b6823fe668b5105e0aba10abcd89be8b96",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-charging-management-shadow.ts",
+      "sha256": "3af930a03107f88e48c55a03e0c6cda45fea00b0b9582643ce33debcf961c299",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-charging-normal-source-lockdown.ts",
+      "sha256": "22e61160d5dd572b813675ac7a53a2aad9a0fe81d3fcb5335634798d5b18527c",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-charging-phase-selection.ts",
+      "sha256": "eacbc57889ec39f29cedba34c38292573e4957aa121424359815e597c2a38acf",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-charging-phase-ui.ts",
+      "sha256": "2282985ec0967a553608136317b981e729e66e5cb6066dd44d472bcfcb4bbfda",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-charging-safety-handover.ts",
+      "sha256": "2c23ff1ef8a1040f697e477d5b612cf7f26c576f4172278cf0a997993ccf48f3",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-charging-storage-assist-policy.ts",
+      "sha256": "c2e9102bfdf8b57905635fd0d7f33358b905a3e01999c4df88692386fc35849d",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-charging-write-plan-productive.ts",
+      "sha256": "74a6616cc3777692d0b9341ddf9782e8d47527d1d4b26eb059f4985db6ccfa93",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-charging-write-plan-shadow.ts",
+      "sha256": "b137d9d92da94c21f351f8d9ff7ee5e1853418c1bb87124b9ab007436d47f9c5",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-contracts.ts",
+      "sha256": "2d7fd2c9c4add9bab7ff06ba2ebc1c51aa1a0bd688953daf21fead9c2d1a521d",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-core-limits-productive.ts",
+      "sha256": "5864990c6ab2d449aa6d126b8df7cbf019017d103e4514bae25504498dd3fae4",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-core-limits-reservations-productive.ts",
+      "sha256": "6ab852d4a2d886dcc0ebc021642860361a0af4543f993b261136d2a32894868b",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-core-limits-reservations.ts",
+      "sha256": "29860606c1b9d1280df66f870abca007501e01366737ee50c0ba4dcf3de769fa",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-core-limits-rest-gates-productive.ts",
+      "sha256": "d304b228dc262c3f680734f7a6e0c2e3aec294f0e706b06fbe466491fba6e116",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-core-limits-rest-gates.ts",
+      "sha256": "b34de793c1d33acb274eca2cb5a9f607ed9af91682320b95ef757bf296835be6",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-core-limits-runtime-typing.ts",
+      "sha256": "ec545772782d12a13f8c0fe618c1ca82faef2e09e36c6e5968242a1c023cb9ca",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-customer-feature-visibility.ts",
+      "sha256": "6e31e159bc1c97c1566c7c8ecd59ed352414e9398af8184ff7bebd6d0f39c531",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-ems-apps-runtime-typing.ts",
+      "sha256": "d15fd68332b25cd802d1dfa90b216b39d4607a31e77d9ecf0f58f9b7afc368c1",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-ems-budget-heating-rod.ts",
+      "sha256": "91d8b4196d19ad58ee2e2994c6b1cda03206fa494fd941119ceb1ed67393cbb5",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-ems-mirrors.ts",
+      "sha256": "f1b6d2fb3b59e241a52aee509ac6e2599ff94ad2f41d138fc043aee3aac01c03",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-ems-shadow-runtime.ts",
+      "sha256": "398a2e43dc6b837609c9dc8e2193d6f4b264cb5d8104ad1e330ed6fb4ef5dcd9",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-energy-flow-active-test.ts",
+      "sha256": "a1bc63a9754a583b7aecf394cc3c5d9e08c3380d6e78603f88f3987a8cb213cd",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-energy-flow-candidate-mode.ts",
+      "sha256": "d037285fef263abeecebc414b29f5b69cb4673975533e0e0d5004782ee42a889",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-energy-flow-fallback-reduction.ts",
+      "sha256": "f6db0c8dcd35bfd0160b0cecd5301d5ae0c9eff40054556c0742278ab8502895",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-energy-flow-fixed-source-prep.ts",
+      "sha256": "bc1a548599395560fecfbcde2aa8c38dd0306acfca2fb77437186a107249adad",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-energy-flow-live-test-states.ts",
+      "sha256": "a5838748a17777f550bc6c9285f64ecdb9654934bf2f9ec2b39fc7916ed5d1ba",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-energy-flow-mirrors.ts",
+      "sha256": "b66516e018c2edb10a4c69f885a1c38ed9835a6ae1871007866b0153da060464",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-energy-flow-mode-ui.ts",
+      "sha256": "69923d4d301a100d888e4e1c55d946fcb0fd5b68680972ef8ae9407e3b783c69",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-energy-flow-normal-source.ts",
+      "sha256": "d09cb993c19e02c4f3b22268906d2c9cd6dcfa9a3f226d9a3a7902b288236b59",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-energy-flow-plant-gate.ts",
+      "sha256": "9648fbd9a63bc32515f3b36d6a9e7926e14c57c4bf02b4f232d28e86e5e89567",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-energy-flow-productive-activation.ts",
+      "sha256": "a4ae0936499519ad588124b493abc6ef80bc5d6f3caee654b7a6071938e009cf",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-energy-flow-productive-active.ts",
+      "sha256": "b1ec48dad65cbf809cb3035b860a815e975cba4f8cc41ef07537152e88b46868",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-energy-flow-productive-default.ts",
+      "sha256": "bc521c85ca9c671e54c16cea88b2f46023f5ed630e7c6f7ab1ca8e799e84d2db",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-energy-flow-regression.ts",
+      "sha256": "e8cc4dd5ef01bd60aa8fa7eb43be102b9e73dfed144761c29aa5a1d0cf997e5a",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-energy-flow-regressions.ts",
+      "sha256": "b4c79fead9af85f9f6f1a2a1d8dd98b65419c24ecf0437b8bb25038496c95f85",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-energy-flow-resolver.ts",
+      "sha256": "b0b35f0388b5fe0ee0b99789a5a11d14378e682fd9457c878fa911271b1b544f",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-energy-flow-runtime-plant-reduction.ts",
+      "sha256": "512732702ac48c107f5a9d864b4d1bb7a6eb151fce00aad9f024217739a2fc04",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-energy-flow-safe-candidate-mode.ts",
+      "sha256": "27a573bc830023b972f0d944dc8a99eb2b4cd3f90ccf2bfaf4515ec464ff2f37",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-energy-flow-shadow-runtime.ts",
+      "sha256": "921cad041a2a9ecc73bf190f122d74752cb9aa774b4e7359306cd8b013fc65d5",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-energy-flow-switch-mode.ts",
+      "sha256": "a9a80e99f54c43a809e8035f60227dcd049f2611f24447b6acd4b621a533150f",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-energy-flow-utils.ts",
+      "sha256": "a6aee2db06a6680b696b92d2401e3e21c85be0674e2f7a19d7e300aab91f1a11",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-feature-visibility-effective-runtime.ts",
+      "sha256": "c68b9ba2de5440cf85db2b593aea40303ba4a59858df2cf3f3762d21739b9d10",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-feature-visibility-preview-runtime.ts",
+      "sha256": "41a4c21efcbf97011fbea6052b909095d4dd079e15287ef142f323558a76fa70",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-feature-visibility-resolver.ts",
+      "sha256": "7b176a6fcbf0d3a5d2013d806a99d3a267646f7e38ae545f9c65467cfb39bd43",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-feature-visibility-shadow-hook.ts",
+      "sha256": "ce0360c362ff7fe6ba4ad4f4eb09356761690490fbdb4a40fdee53124e455040",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-feature-visibility-shadow.ts",
+      "sha256": "46b48a02cf52c8bfd54150830cbdfbf5776b98e9e4174f71c1fd25a39212bd49",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-feature-visibility.ts",
+      "sha256": "97903d304e251b6feb2481d20731e2f7e22091266cf45b74d0a7bfd2b9cd54fd",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-frontend-display.ts",
+      "sha256": "a3e8a2512226b7219be7890aeca617009d9caf0d5de984775cda28cc625807eb",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-frontend-mirror-runtime.ts",
+      "sha256": "d4b2b716ecc8ce07e6963840767a3e205bd86aba0d9dde07b5ee2bcdbc865b34",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-frontend-mirrors.ts",
+      "sha256": "68794bb3c0306961ee09cf6e74c5e2f3772db3867cb3ef107de18afeba96e4a6",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-heating-rod-debug-bridge.ts",
+      "sha256": "522a38df7cdf0187418aaa6537a720d632e732b1fa519676a0b5f2fc7d7ec6f2",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-heating-rod-emergency-fallback.ts",
+      "sha256": "4367e983a9b916a6225fa1931b32df3bcb345106cafa49eaf83be739c71a1ad9",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-heating-rod-hard-fallback-only.ts",
+      "sha256": "c63db1a95fd3f3260670660f15e95b00c70719ae2f6f2cbdb6941d537250dc4b",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-heating-rod-js-fallback-hard-only.ts",
+      "sha256": "f542d198a04e6d5dc969547a3e8fdc73bb458bb59390cc06b7f23e4a421505ad",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-heating-rod-legacy-cleanup.ts",
+      "sha256": "3d8c6682bc593ea014821b9e507a4428924962ddca642283a64f6f7ec52e034b",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-heating-rod-legacy-compact-cleanup.ts",
+      "sha256": "9b419069b952f9c2f0814506cfaa562d8ac3f7647691018a7f332a6a3de65139",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-heating-rod-legacy-final-cleanup.ts",
+      "sha256": "b6251a642b8fbcdc3c624182679c05f3abe21618f71c4b2692da4c111066faf3",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-heating-rod-legacy-pruned-debug.ts",
+      "sha256": "d8be31190071c8a73b5e5bccef3835ba92ce6c3f0354fd69cb88c7240ac03a1a",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-heating-rod-legacy-pruned.ts",
+      "sha256": "43c762c030095af2b0588c59e37700e3bc3cdf42fca5f1eb3910046597acf7a7",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-heating-rod-legacy-removal-candidate.ts",
+      "sha256": "3fa8b7b5fa095520c47bff00007a8a3b39f89dbbb0122fce40ec5511ba1efddb",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-heating-rod-legacy-removal-plan.ts",
+      "sha256": "573e067a750397150db290ff58878d6411a4442a0420459be11713b09cd24397",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-heating-rod-normal-diagnostics-cleanup.ts",
+      "sha256": "84095e33a93f9c635dcafd2b35f40b97cdb31653cce31a75705062271eaef9d7",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-heating-rod-normal-path.ts",
+      "sha256": "d0380a588fc1aaec5fca85d19ed4f0de2dd7b3a30a4dd828c6d5c33c8ae7ce17",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-heating-rod-normal-takeover.ts",
+      "sha256": "04f4de75d6c8a2d88ff0c04d18b199c2699693977f307aee33c6628c7137b277",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-heating-rod-productive.ts",
+      "sha256": "7d058aeb95e063ad994504a0d06435f0d8f58b72d5294c00f72a07546b36c439",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-heating-rod-runtime-evaluation.ts",
+      "sha256": "2289da8da98987f0c218907324df6d8d1ca865fac90f8e42aba1da700894125d",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-heating-rod-runtime-typing.ts",
+      "sha256": "f739c19594acd72a259990fd3fc84208a0737814b2d3941e5ee6b2a36829166a",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-history-runtime-typing.ts",
+      "sha256": "cc51cc288fd6754bab20638dcca93f78c471a274fc7a6409e04bc9400bb9f39b",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-live-dashboard-format-productive.ts",
+      "sha256": "5805ea6d2412195167ddbb2cb606b220ded7490f51a260c50355412dd0c85b8b",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-main-api-productive.ts",
+      "sha256": "645af4fc3aef05e60ac8cb91bc676dd0e982db13237a816ba7451765b4e0923a",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-main-api-shadow.ts",
+      "sha256": "28622227cfebadc78e2c12416499a6b057995d763a91c058061d569c998a4fa7",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-main-helpers-runtime.ts",
+      "sha256": "765cb2cb1c5d8c0703bbf708298da1805f308e14e7898877499f1181c542097d",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-main-helpers.ts",
+      "sha256": "de9532033dafadfa519ddb609e4d9a19f7778fdaca82df3cd27cd5eee25a7622",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-main-runtime-helpers.ts",
+      "sha256": "f7e064c67cd11e974fd974fbc4b038b1e2a45a63b5455109af804697cb891026",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-main-runtime-typing.ts",
+      "sha256": "5037e1c943668e669bb452cdd7225d07039669bddae9054960cf41fe4146c352",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-nocheck-budget.ts",
+      "sha256": "3a9f39946dfd673ea14434c210b848d981f611e921146a39df88adb5aae75f40",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-real-plant-shadow-evaluation.ts",
+      "sha256": "0b0ebab727904be1481f8bb18e00f9fa60c0498dea13a701a84a08fe042eef50",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-runtime-js-cleanup.ts",
+      "sha256": "87f6e65b3635b8aacf76ccebe2ae9abd167e46ce1b134bf124996cf60aa2a6ee",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-runtime-mirrors.ts",
+      "sha256": "ec0c1a1b5a8a4dcdb56e0f689cd8b1058289356900cf5edf74a9d5d8363cb65d",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-scaffold.ts",
+      "sha256": "4a6dae10929a0b17f37e3bcfe1e1429ceaafa00330b1588c7a5225bc4f9867d8",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-script-mirrors.ts",
+      "sha256": "b427fe21dc9c35284104307c14afab207e4d3aedee865b9924d962ae29aca36c",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-shadow-bridges.ts",
+      "sha256": "2d2be12c543002c36b51c3a1b707bf55cb22c9aaea84f2596f6d4d6daf06af7c",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-shadow-diagnostics-ui-stability.ts",
+      "sha256": "b4ea28b2f280036071ec9ae40f68eb2e9cd4741aff527588890dbefab39e6237",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-shadow-diagnostics-ui.ts",
+      "sha256": "b758f2350d797aa2d9ce4165ded05c85214968f1106f8a1de9911ed766642377",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-shadow-json-modal.ts",
+      "sha256": "7c6ba430bbf41553b493c23f43f67ea77effa1ac7c1f3d55738aa7dfd8dac477",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-shadow-readiness.ts",
+      "sha256": "f80a93efaa05182f0cc4b0cb32a7a2b55ade41589188c2c92ba2ccf758b0e95c",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-shadow-real-plant-evaluation.ts",
+      "sha256": "8b71d45cc35ac4e988dfe004c1f7001c44c06991d027b70675ee363101e0973a",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-smarthome-config-runtime-typing.ts",
+      "sha256": "6af2aa801d52f24c315a105c9cc50be3f99faa946b4c6f44c37aa5851c23187b",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-smarthome-runtime-typing.ts",
+      "sha256": "45c7dae69550bebb5a72e5e534b1553cccd37c3653dee3c18c856590d8c61a2f",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-source-integrity.ts",
+      "sha256": "e0d9fe86671029eb57fbca3aefe7732f908f9eea585598edf0a997e40c8b035f",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ts-source-syntax.ts",
+      "sha256": "10f9549402aa93a73448c6ce09513740ba0e94e9b4392a57f2ba561ef999cb83",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-tsconfig-modern.ts",
+      "sha256": "6128a17a90adc2d2166639c9ca57ac13ee1058421b8436d10174f0d6f6003748",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-typescript-scaffold.ts",
+      "sha256": "3fea73d298e48fefaaca5c04c9433522624a3b321bc8f4efee0d9f50c5ddde58",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-ui-fullwidth-smarthome-rc47.ts",
+      "sha256": "6c1e6f25402345fc2ebae6edee23b91ba57cfc46f15772845a03d2205cdbaebf",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-zero-export-commissioning.ts",
+      "sha256": "ec0945e23c206a09707b5a985d9a025a614e2cf7aa9aef7044cad38f4969f85a",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-zero-export-fast-path.ts",
+      "sha256": "e46f6abb521d6f66b68a3a02dc2add722538783b5128650ca4225a046a147c36",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-zero-export-sink-ack-history.ts",
+      "sha256": "ad5ff2e070975f623e2df1a96094e489b5a916f49246409ada54abadfe87bc73",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-zero-export-sink-priority.ts",
+      "sha256": "905c1ac1f751acddb6280d517b214129cedf72c53144ca1ae0ccd273f032c5a6",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/admin-guard.ts",
+      "sha256": "82ccbea5c9b27e6f84aeee839b880ae96e5f261b9c500118a48515dcc86ec3d4",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/app.ts",
+      "sha256": "37f5e008226dec0792c61379449212e632c465ef7d5472fa286ffbf574a6d755",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/auth.ts",
+      "sha256": "cd4a28f48555b2c31cb90edb39cf0ab5dec75b5f801ca628396ae673ad9f4111",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/charging-diagnostics-appcenter.ts",
+      "sha256": "6d9f138e216acb416c232bf76e716c6eccd62a2002145b9f32a7c223ae08c839",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/cockpit-shell.ts",
+      "sha256": "6edd298430639e67dfc505fced58f20221e0033fc2e9beb2fc765ecc6a452a41",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/dashboard-lp-status.ts",
+      "sha256": "57c5f576073e662f13446b5c681fc1b46dd8822804d88f7a8d8529e0d3056303",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/dc-station-display.ts",
+      "sha256": "3404dd8f91f4eb8b94f3be920f24cd46f8ae416fac9a15e115b8879432d65d19",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/ems-apps-nvp-diagnostics.ts",
+      "sha256": "2888a15e503f9ed6d20f32e1453656bd714e4b04a08d52f576fd70177acd2a46",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/ems-apps.ts",
+      "sha256": "e2d08074cfb6c802b15dc0efe92d26942dd76ce9add8e6c97ea6f49d860c0fc9",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/energy-ledger.ts",
+      "sha256": "ddcc52e0273e4caa711b445a19633d0da40eb7b49d80fd5e773c0074e0ded318",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/energy-origin-appcenter.ts",
+      "sha256": "db7caa96dffd1a033eba013d47475abb8c7864b42140b1fbedfbf14bf70187d2",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/energy-origin-ledger-view.ts",
+      "sha256": "29707df1074b3aea6b06def9e1894547120c602e03f8bae8a1519e93c2c4e49b",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/evcs-report.ts",
+      "sha256": "cc946073aa4428131473b66434cae754812a6092274ff3897be27f4045a7235a",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/evcs.ts",
+      "sha256": "d49382876e2ed534325dd215538aae947e7c3551707586436aa966c4dbde4c86",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/forecast-settings.ts",
+      "sha256": "f30d0b2a1789bbd1275837a56026bc78993504d31d9af6d1dd20ddfb55b098a3",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/history.ts",
+      "sha256": "987daf134e9e29c8950c5e2d1a1e795e8c52cb7f5d7104bc89993b90f3308b64",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/license.ts",
+      "sha256": "dc7ad1a6ca688374b0670c063a3a3f23c325eda2dd394f2f74e6977394679dfc",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/logic.ts",
+      "sha256": "bbeb19b8cf1b02a6b607dd617fe83965a6a89b98f0cd88580241c5e15c01d9e1",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/mesh-microgrid.ts",
+      "sha256": "48758840cb3cf022471b0498c7b6eebfef534db9a8f1f2d77e98256c9c6e2a1c",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/netoperator-appcenter.ts",
+      "sha256": "02d97380392e7bd7586dab481fe6313040e351591a590430c24f674d2b37378b",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/netoperator.ts",
+      "sha256": "4a56bfac8e0483303c9a09d5084e7527a4a1b1884230d6ec43bfc41c307ee583",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/nw-i18n.ts",
+      "sha256": "0efc648cf6bbe4377cedd9caa69658c169984eee32c833c29aca5fd180093fda",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/nw-shell.ts",
+      "sha256": "0f079d02db3edf50bb3ca924ecc2eedd83ecda7eb870f854c768d87e53bf784b",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/operating-strategies-appcenter.ts",
+      "sha256": "0eec12bc9ad042cb14f281b5e8442c295d5c42882b1d91ca277d65281297bde5",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/operating-strategies-rule-builder.ts",
+      "sha256": "1a810cc4952bd79622a3fb7cc5a105f8ecc50c222d1efb523ad80da782e6c49b",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/para14a-report.ts",
+      "sha256": "bbc929d134f83778306f276e3d3fe601f0d094b0e7ab6e67ff82a6307e703fb8",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/report-common.ts",
+      "sha256": "54c6d8ccf6c1d4346e55e2e2a86af07a4c6656f4836919b402692a178a6c8ed0",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/rfid-report.ts",
+      "sha256": "323fe9fab921cda3c698c87ba2280d099d6e595a2d1ce62965843f05f97229e7",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/simulation.ts",
+      "sha256": "11178231a3e68cfe48e7bf2454fefcbbfcc1e7255145d62a70790d06d6cfdfc6",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/smarthome-config.ts",
+      "sha256": "7b9b79e3dae8c8d5b635ca8721ed6870a9ee1805c213f5f270fb26967dfbc65e",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/smarthome.ts",
+      "sha256": "d511345a0d7143655f84efc434794e704e0bd69f1709779af3c32b0f19223417",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/storagefarm.ts",
+      "sha256": "3418143fa55bb52862a064fc9b95f096ca6fd4c9efd24dc30b1817e5d41730b5",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/sw.ts",
+      "sha256": "30b6ef7576ca1ffae8c5fb38abaaeb3f71edd7b39e19128d134a607bd4cc3de3",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/tariff-report.ts",
+      "sha256": "22c85587e9566716c3f75ff588a3c4de86989d0cb7fde27ae41af3f866e4afd9",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/year-report.ts",
+      "sha256": "1e1c9ffdaad57fd642c334cc7da7801b6144bd7cb2ff580ec376f5790649a904",
+      "explicitAny": 0,
+      "noCheckDirective": true
+    },
+    {
+      "path": "src-ts/scripts/publish-check-rules.ts",
+      "sha256": "9e4e4a5b11293149f8f3034de29380b32d1a9390bf8d2ad1bcdbf30a26fd8004",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/scripts/ts-scaffold-rules.ts",
+      "sha256": "cd5c2451174c21b00192fe78877c74459e22f53349b06e3317ebc0ef658f83e5",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/shared/index.ts",
+      "sha256": "a90f3eb4c3b7d7bed394007b06a64f7e4c8c40beb7da7e4c22aac70cb3fade35",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/test-fixtures/ai-advisor-contract.examples.ts",
+      "sha256": "2029bf7ca025c117457a6d584e39b30eef435a1430d7db173acaa55caef20555",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/test-fixtures/energy-flow-contract.examples.ts",
+      "sha256": "74859fe0f92a06be2a84adea1612c4ca07a5ee80c796dc7c0c220bdbdee3df78",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/test-fixtures/energy-flow-resolver.cases.ts",
+      "sha256": "7cec641e8a4ecbe2f58fb9d5b551263ede817a0ec50b8dc25d0bbb75a7bf0aac",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/test-fixtures/feature-visibility-contract.examples.ts",
+      "sha256": "494357e630bafb874f7aa1f7d41a274e7fc7f2854a09cdce0b0b51ac47a2dd60",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/test-fixtures/license-contract.examples.ts",
+      "sha256": "f5d0fdf7fc6d491e9815eb87a9f6679ad34aabe01291f30231d2abbb033989c5",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/tests/adapter-state-api-runtime.ts",
+      "sha256": "52cd170fdfe344e8115c2e3f71481827b9fde9d841165f2ec0be6718315d0201",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/tests/adapter-state-api-smoke.ts",
+      "sha256": "90a018298b1047c495d2e2632f8c119af80d6112872caec932cf13d7b86d2349",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/tests/api-state-feature-runtime.ts",
+      "sha256": "5c459addf2a40dfeceba4f1f2fbff641b6447c30a2da8457860097d4d6f58f27",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/tests/api-state-feature-smoke.ts",
+      "sha256": "f2af578b1106d56fe0dc28b09418f9336c9346b667615dba75c2e8317854b59c",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/tests/app-center-install-colors-runtime.ts",
+      "sha256": "607030233d7cb52e68f914060edb8e87d7c3b0b46a5a9aad1500fffb27bd876f",
+      "explicitAny": 1,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/tests/backend-api-state-runtime.ts",
+      "sha256": "d7452bab7efee3f43572083b2bb92c86bdd89955af46a6cab3e25bd6fd196672",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/tests/backend-api-state-smoke.ts",
+      "sha256": "1c9da5f3611833f073741d114187c23cf3ea2ba8ac893d0d6047fd3e4b8f0df1",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/tests/brand-header-cleanup-runtime.ts",
+      "sha256": "856ccb8165cf4ec8d56ba49d865fd8a9cb48cb37e78acf22c3e90ef98002e231",
+      "explicitAny": 1,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/tests/contracts-smoke.ts",
+      "sha256": "c910ae1b59e37a5ab971b2c39e755793cde5fd135f8330ecf7316a54351a5e2f",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/tests/customer-feature-visibility-runtime.ts",
+      "sha256": "f630a85ae9f98b62d6550c5b24dd17d8807d9ead9ac01db47a33554eac3cfbcd",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/tests/ems-budget-heating-rod-runtime.ts",
+      "sha256": "f8276e8c95326ac8207ad4e84eeae39d7769dda4ac630bd9d43ab31b902023e4",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/tests/ems-budget-heating-rod-smoke.ts",
+      "sha256": "655733e769ec07c5b0a10b96488ffdbc0b12456868785bb7d72fe968b6a232a6",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/tests/energy-flow-regression-matrix.ts",
+      "sha256": "4a8c1e1de8e4c5ff11b4dc4fe06f481b7509c31e84dc6522f534bf2bffcef1c3",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/tests/energy-flow-regression-runtime.ts",
+      "sha256": "eebbcd061a868e46d0c757d81f8dc492f42fef89df3b0947dc8a434ed0e7b1cb",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/tests/energy-flow-regression-smoke.ts",
+      "sha256": "9227d35e2d00b28145acc84f191a61d5808c1c2a783f46c7992dfeb9274d4714",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/tests/energy-flow-resolver-regression-smoke.ts",
+      "sha256": "8f9e7caa7c73b8616998c9a547b874c62ae591b63d23dfb6fbbe83818250a586",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/tests/energy-flow-resolver-regression.ts",
+      "sha256": "6647bd5a5396da65b9b97f12df83e463f99322adad678aad7c36a6c088d327cf",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/tests/energy-flow-resolver-smoke.ts",
+      "sha256": "521c96c6ccc09592cc7e5c44b32ed264d25c6e7e5df490ef1a123d75ce7dcc68",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/tests/energy-flow-utils-smoke.ts",
+      "sha256": "d4c3c9eb85296b78f0841c2a6a85740a35008484cc78eec6550e84c5ae5b8a76",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/tests/feature-visibility-resolver-runtime.ts",
+      "sha256": "2987ce81e0af1ccbe35877540a7b789df3668a6bc8f1361e2f02a470f4cecd8b",
+      "explicitAny": 2,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/tests/feature-visibility-shadow-runtime.ts",
+      "sha256": "9d132b71976503751a435405af30c8ff21986690e81c6c3b470fcc9b88fb44ec",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/tests/frontend-display-runtime.ts",
+      "sha256": "63f2acc7ece12177c91220db5c2eeec011e9546280c0cea5b06c7036eaa5b3e4",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/tests/frontend-display-smoke.ts",
+      "sha256": "cc2b0d9100eb2a0ceee718e1d8406dd11c9563beff2dde97d2f0472cc159746a",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/tests/frontend-feature-visibility-runtime.ts",
+      "sha256": "0bd76de2ad7cfad17fb5ad184494d29e744f6e83f65208f8f7387b3d1925391c",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/tests/history-runtime-typing-smoke.ts",
+      "sha256": "00523041c1d66995ceb8c4e66dfec1dff567bd25f677dc2ad74b0a66f32723ce",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/tests/publish-check-rules-smoke.ts",
+      "sha256": "91b2a3cc09ad003891f07ca64251db77141a1648845ff8d9e123c6aa3af5898d",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/tests/ts-scaffold-rules-smoke.ts",
+      "sha256": "50b41a57a8636388d52af416595bece36d6576e378d69235f12d83c53d6764b1",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/utils/clock.ts",
+      "sha256": "ae78bcb4a408deb36961eab2f87295df5dbbb75f704122d3549953f5d466d497",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/utils/energy-flow-resolver.ts",
+      "sha256": "ea9b8a9010e06dce13397fd6cc2a1efa34f1835a7d584ac62d321ff7e475872d",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/utils/energy-flow.ts",
+      "sha256": "27d1a8dd06990ddbb007fb8779153a882106247f6d2a34012eda9fcc042c0b6a",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/utils/index.ts",
+      "sha256": "40d49c0424b15b418b9790aa52d301909abd838ca4b2d2ab0cec5dca05705b3f",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-ts/utils/number.ts",
+      "sha256": "4697ce157c0cc0e0df67dbede599b62474811d0bdad2acf85c630e3b68659422",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-admin-tab/src/App.tsx",
+      "sha256": "988049c1202b421d7347712b7d8255449e0e3d9ece76845aa8efa29c7eeb3f88",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-admin-tab/src/components/DpField.tsx",
+      "sha256": "920628139c43f332cb85f4cf1522396397fd116978f7031cf2ba4fd6bca6a8de",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-admin-tab/src/components/EmbeddedEmsFrame.tsx",
+      "sha256": "78e0d86bdbe9900186515b12b16f6dfb395d20d84829e66436b42af71fb3c8f9",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-admin-tab/src/lib/adminConnection.ts",
+      "sha256": "e18826caf6547c19806c87d5b6552db734cdd84df7d94ed49737416317e1db50",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-admin-tab/src/lib/dataPointPicker.ts",
+      "sha256": "2f241328fd6ca27fecd282f2c7d30c0cb48b338e34c3ca5afc4c98546742dcc5",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-admin-tab/src/main.tsx",
+      "sha256": "9c0e87f9448cb0c1759d6292356c42833b599f4e3e25ecffa57243fe66feb85c",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-admin-tab/src/pages/DynamicGridPage.tsx",
+      "sha256": "9f3f89f9a61f85f31d840bf1fc31748e8355d0b5592cc88f89a1195e4ddadcc9",
+      "explicitAny": 9,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-admin-tab/src/pages/InstallerPage.tsx",
+      "sha256": "b25f5c009a3b8e428f0ea44100a8a1803b662a9863e0735a6be76a0c0b3608f0",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-admin-tab/src/pages/LicensePage.tsx",
+      "sha256": "ae9462bf6e18f777083d5ea43b63fa769e5bb68a481f45fb1c15b3723bfff7f2",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-admin-tab/src/pages/MeshAccountingPanel.tsx",
+      "sha256": "99bf1157eb792cc57b75ca02cafb3b201014e52d051fd3ac335df079773cfb66",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-admin-tab/src/pages/MeshCoordinatorPage.tsx",
+      "sha256": "e5e23932c1352a3e73c19e1c1ad946f08f7af0262299420619103ca20955ce54",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-admin-tab/src/pages/NotificationMailPage.tsx",
+      "sha256": "0cad31ecb3c1364997616af32977f5a17e93d8fd51b29d68dec20ce80858f399",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-admin-tab/src/pages/PageShell.tsx",
+      "sha256": "d4fd48966b9917dd95c840fc43636e4d7b8b9d29edaf5588087af20872f1de71",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-admin-tab/src/pages/ProtectedRuntimeRoute.tsx",
+      "sha256": "7881c8fa714c787e223f0fe69ec6a3e9468d2e0e60d08280ff780b91da0cdda1",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    },
+    {
+      "path": "src-admin-tab/src/pages/RedirectPage.tsx",
+      "sha256": "4a0388ee49295bfbc69fe902b99aee051bded2c6304d217c223d5258790a0390",
+      "explicitAny": 0,
+      "noCheckDirective": false
+    }
+  ]
+}

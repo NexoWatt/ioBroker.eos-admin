@@ -1,0 +1,40 @@
+{
+  "component": "Admin-Gruppenkonfiguration und Betriebsdokumentation",
+  "version": "1.0.34",
+  "checkedAt": "2026-11-03T21:54:21.300943+00:00",
+  "checks": [
+    {
+      "command": "node scripts/verify-customer-write-policy.js",
+      "exitCode": 0,
+      "output": "[customer-write-policy] OK: explicit legacy/all, LAN/VPN and secure session default are wired without trusting forwarded headers."
+    },
+    {
+      "check": "JSON parse; all three text fields have stable accessControl attrs and match io-package native defaults; full system.group.* IDs and documented32-entrylimit",
+      "result": "PASS"
+    }
+  ],
+  "files": [
+    {
+      "path": "admin/jsonConfig.json",
+      "sha256": "bb6ed702371f0294b53f74ef180fb85cec3f6478eefb964e1f5be2e207ae9839"
+    },
+    {
+      "path": "docs/operations/BENUTZER_GRUPPENRECHTE_DE.md",
+      "sha256": "393f2dedc7faf4f563f235d73fd21fcf82988a813e98f2a297502b1b7ea2645e"
+    },
+    {
+      "path": "docs/operations/ADMIN8_EMS_ANMELDUNG_DE.md",
+      "sha256": "bbb1ff99e34e2b4179dc2073b132afd9a20435e80387479ab8d5abe1bf700771"
+    },
+    {
+      "path": "docs/security/auth-review-de.md",
+      "sha256": "a5f717e6e5333d70e06686a4dee22928e275452c6244694f719d69c5d188af82"
+    }
+  ],
+  "notPerformed": [
+    "Live Admin8 rendering",
+    "Real accounts/group migration",
+    "Productive installation"
+  ],
+  "scope": "Only admin/jsonConfig.json plus the three listed docs edited by this agent."
+}

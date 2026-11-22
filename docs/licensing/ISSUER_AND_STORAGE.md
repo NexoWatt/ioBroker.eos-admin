@@ -1,96 +1,168 @@
-# Hersteller, Key-Generator und verschlüsselte Lizenzablage
+# Hersteller, zentrale Aktivierung und verschlüsselte Lizenzablage
 
-Stand: EOS Admin 7.10.11 / Offline-Key-Generator 1.0.0, Integrations-Teststand vom 30.09.2026.
+Stand: NexoWatt EOS Zusammenführung, 22.11.2026. Vertrag aus dem vorhandenen
+Offline-Key-Generator **1.0.4** übernommen. Die frühere NWL2-Beschreibung wird um
+NWL3 ergänzt; Bestandsrechte werden nicht erweitert. Testbelege liegen unter
+`reports/unified/licensing/`.
 
-## Separater Offline-Key-Generator
+## Eine Aktivierung nach der Erstanmeldung
 
-Der neue NexoWatt Offline-Key-Generator 1.0.0 wird als **separates vollständiges Paket** bereitgestellt. Er erzeugt UUID-gebundene Home- und Pro-Lizenzen im unten beschriebenen NWL2-Format. Der Admin enthält den Verifizierer und die zentrale Lizenzverwaltung; das Herstellerwerkzeug wird nicht in den Admin eingebaut. Es werden keine produktiven privaten oder öffentlichen Herstellerschlüssel vorgegeben. Das erste Schlüsselpaar entsteht erst auf dem Herstellerrechner.
+Nach erfolgreicher Anmeldung und einem gegebenenfalls erforderlichen
+Erstpasswortwechsel aktiviert ein berechtigter Administrator die zentrale
+Systemlizenz. Das aktive Ergebnis gilt für das integrierte EOS und über den
+Lizenzclient für passende Erweiterungen. Eine zusätzliche UI-Lizenz ist nicht
+erforderlich. Der Code wird verschlüsselt auf dem Gerät gespeichert und nach
+Neustarts erneut lokal geprüft. Eine erneute Eingabe ist ohne Lizenz-/Gerätewechsel
+oder Verlust des geschützten Speichers nicht erforderlich.
 
-Frühere NW1-/NW1E-/NW1H-Lizenzen und zeitlich begrenzte Altformate werden nicht durch ein eingebautes HMAC-Geheimnis akzeptiert. Der Hersteller muss die Berechtigung prüfen und für dieselbe UUID eine neue NWL2-Lizenz ausstellen. Umbenennen eines alten Codes reicht nicht. Es gibt keine automatische Übernahme aus `nexowatt-ui/native.licenseKey` und keinen Klartext-Fallback. Bereits verteilte gemeinsame Geheimnisse sind für neue Lizenzen nicht weiterzuverwenden.
+Anmeldung, Wiederherstellung, Diagnose und Sicherheitswartung bleiben auch ohne
+kommerzielle Betriebsfreigabe möglich. Eine Lizenz ersetzt keine Benutzerrechte,
+Gerätezulassung, Objekt-ACL oder betriebliche Schutzgrenze. Der private
+Herstellerschlüssel und der Generator werden nicht in das Adapterpaket übernommen.
 
-## Key-Generator verwenden
+## Vorhandenen Key-Generator verwenden
 
-Voraussetzung ist ein vertrauenswürdiger Herstellerrechner mit Node.js 22 oder 24. Der Generator hat keine externen Runtime-Pakete und benötigt zum Ausstellen keine Internetverbindung. Unter Windows `Start-Windows.cmd` öffnen; unter Linux/macOS `sh start-linux-macos.sh` ausführen. Alternativ im entpackten Generatorverzeichnis `node cli.js serve` starten. Den angezeigten privaten Sitzungslink auf **demselben Rechner** öffnen. Die Oberfläche bindet nur an `127.0.0.1`; der zufällige Sitzungszugang gehört nicht in Logs, Screenshots oder Nachrichten. Dieser Lieferlauf verwendet Linux mit Node.js 24; native Windows-/macOS- und Node.js-22-Prüfungen bleiben getrennt nachzuholen.
+1. Auf dem Herstellerrechner den vorhandenen Offline-Key-Generator 1.0.4 öffnen.
+   Der vorhandene verschlüsselte Tresor bleibt bestehen; dieses Adapterupdate
+   erzeugt keine neuen Herstellerschlüssel.
+2. Den öffentlichen Trust-Export erzeugen und dessen Fingerabdruck über den
+   autorisierten Bereitstellungsweg mit dem Geräte-Vertrauensanker vergleichen.
+3. Die tatsächliche System-UUID in der geschützten Lizenzverwaltung ablesen,
+   im Generator die gewünschte Edition Home oder Pro wählen und signieren.
+4. Den vollständigen NWL3-Code einmalig in der EOS-Lizenzverwaltung eingeben.
+   Nach bestätigter Aktivierung führt „Weiter zum EOS-Dashboard“ zu `/`.
+5. Edition, Funktionen und Mengen prüfen. Tresor, Passphrase und privater
+   Signierschlüssel bleiben auf dem Herstellerrechner und dessen geschütztem Backup.
 
-1. Eine neue Schlüsselkennung (`kid`) festlegen und den Herausgebertresor mit einer starken, einmaligen Passphrase von mindestens 16 Zeichen anlegen. Passphrase sicher getrennt sichern; es gibt keine Wiederherstellungs-Hintertür.
-2. Den öffentlichen Vertrauensanker als `license-trust.json` exportieren. Den angezeigten SHA-256-Fingerabdruck des öffentlichen SPKI-Schlüssels über einen getrennten, verlässlichen Übergabeweg prüfen und auf dem Zielsystem protokollieren.
-3. Die tatsächliche System-UUID im EOS Admin ablesen und in den Lizenzauftrag übernehmen. Home oder Pro, erlaubte Adapter, konkrete Ladepunkt-/Speichermengen und Beginn/Ablauf prüfen. Ein leeres Ablaufdatum bedeutet unbefristet; diese Entscheidung vor dem Signieren bewusst prüfen.
-4. Mit der Tresor-Passphrase signieren und die `.nwl`-Datei vertraulich übertragen. Den öffentlichen Vertrauensanker einmalig wie unten beschrieben auf dem Gerät bereitstellen, anschließend den Lizenzcode über die geschützte Admin-Lizenzseite importieren.
-5. Adapterfreigaben und gesperrte Funktionen prüfen. Nach der Arbeit die lokale Sitzung beenden. Herstellertresor und Passphrase gehören weder auf Kundengeräte noch in den Admin, ein Repository, einen Supportupload oder ein unverschlüsseltes Backup.
+NWL3 ist signiert, aber sein Transporttoken ist lesbar. Der Code gehört nicht in
+Browserlogs, öffentliche States, Supportberichte, URLs oder Repositories. Eine
+fehlgeschlagene Aktivierung ersetzt den bisher gültigen Lizenzspeicher nicht.
+Verlorene Herstellerpassphrasen lassen sich durch den Adapter nicht wiederherstellen.
 
-CLI-Alternative; die Passphrase wird jeweils verdeckt abgefragt und darf nicht als Argument oder Umgebungsvariable mitgegeben werden:
+## Signaturvertrag
 
-```bash
-node cli.js init nexowatt-issuer-2026
-node cli.js trust license-trust.json
-node cli.js issue auftrag.json lizenz.nwl
-```
+Beide Formate bestehen aus exakt drei Teilen:
+`NWL2.<payload64>.<signature64>` beziehungsweise `NWL3.<payload64>.<signature64>`.
+Base64url ist kanonisch und ohne Padding. Ed25519 prüft die exakten ASCII-Bytes
+aus Formatpräfix, Punkt und unverändertem `payload64`. Die Signatur ist 64 Bytes
+lang. Der Text darf maximal 16.384 Zeichen enthalten. UTF-8, JSON-Feldmenge,
+Datentypen, UUID, Zeitgrenzen und Edition werden strikt geprüft. Fremde Felder,
+unbekannte Schlüssel-IDs, andere Algorithmen und private Schlüssel im Trust-Export
+werden zurückgewiesen.
 
-Ein Auftrag enthält genau `uuid`, `edition`, `adapters`, `limits`, `notBefore` und `expiresAt`. `notBefore: null` bedeutet den Ausstellungszeitpunkt, `expiresAt: null` eine ausdrücklich unbefristete Lizenz; andere Zeitwerte sind absolute Unix-Millisekunden. Ein vollständiges Auftragsschema und Bedienhinweise liegen im separaten Generatorpaket. Ausgabedateien werden nicht still überschrieben. Mit `--vault /absoluter/pfad` lässt sich ein eigener Tresor außerhalb des Generatorverzeichnisses wählen.
+| NWL3-Claim | Vertrag |
+| --- | --- |
+| `v` | Exakt `3` |
+| `kid` | Vorhandener Ed25519-Vertrauensanker; 1–64 ASCII-Zeichen |
+| `licenseId` | Vom Aussteller erzeugte Kennung; maximal 128 erlaubte ASCII-Zeichen |
+| `uuid` | Normalisierte tatsächliche System-UUID; optional zweibuchstabiges Herstellerpräfix |
+| `edition` | Exakt `home` oder `pro` |
+| `issuedAt` | Ganze UTC-Epochenzeit in Millisekunden |
+| `notBefore` | Identisch mit `issuedAt` |
+| `expiresAt` | Exakt `null`, unbefristet |
+| `scope` | Exakt `system` |
 
-Standardablage: Benutzerverzeichnis `~/.nexowatt-keygen/issuer-1/issuer.nwk`. Der Ed25519-Privatschlüssel wird als PKCS#8-Material mit AES-256-GCM verschlüsselt; der Schlüssel dafür wird aus der Passphrase mit scrypt (`N=131072`, `r=8`, `p=1`) und zufälligem 32-Byte-Salt abgeleitet. Dazu kommen eine frische 12-Byte-Nonce, ein 16-Byte-Tag und authentifizierte Metadaten. Unter POSIX gelten 0700 für das Tresorverzeichnis und 0600 für die Datei. Unter Windows müssen die persönlichen NTFS-ACLs zusätzlich geprüft werden; POSIX-Modi bilden diese Prüfung nicht ab. Passphrasen werden nach der Anfrage aus Formularen entfernt, aber eine vollständige Löschung aller Speicherreste in JavaScript wird nicht zugesichert. Ein kompromittierter Herstellerrechner bleibt außerhalb dieser Schutzgarantie.
+NWL3 akzeptiert keine Adapter-, Mengen- oder Funktions-Claims. Die geprüfte
+Edition wird gegen die versionierte Produktpolitik in `src/lib/eosLicensePolicy.js`
+ausgewertet. Diese Politik stimmt mit Keygen 1.0.4 überein:
 
-## NWL2-Vertrag
+| Berechtigung | Home | Pro |
+| --- | --- | --- |
+| Ladepunkte | 3 | 50 |
+| Batteriesysteme | 2 | 10 |
+| Grundfunktionen | `energy`, `wallet`, `smartHome`, `microgridSlave` | dieselben |
+| Zusätzliche Funktionen | keine | `microgridMaster`, `multisite`, `billing` |
 
-- Verfahren ausschließlich Ed25519; privater Signaturschlüssel bleibt beim Hersteller.
-- Öffentlicher Prüf-Schlüssel: PEM SubjectPublicKeyInfo, BEGIN PUBLIC KEY, Typ Ed25519.
-- Token: `NWL2.<payload64>.<signature64>`.
-- `payload64`: base64url ohne Padding der exakten UTF-8-JSON-Bytes.
-- Signierte Bytes: ASCII `NWL2.` plus exakt `payload64`.
-- Signatur: Ed25519 mit diesen Bytes, danach base64url ohne Padding. Node.js: Algorithmusparameter `null`.
-- Der Empfänger verifiziert die Originalbytes. JSON nach der Signierung niemals umformatieren.
-- Token maximal 16.384 Zeichen; kein Verifizierungsalgorithmus aus dem Token wählbar.
+Ein Produktpolitik-Eintrag ist keine Zusage, dass jede optionale Erweiterung
+bereits installiert, eingebunden oder an allen Geräten abgenommen ist.
 
-Das JSON hat exakt diese Felder (keine geheimen Daten, Kundennamen oder Zahlungsdaten nötig):
+## NWL2-Bestand und ältere Formate
 
-| Feld | Vertrag |
-|---|---|
-| v | Zahl 2 |
-| kid | Kennung des öffentlichen Herstellerschlüssels, 1..64 ASCII-Zeichen |
-| licenseId | Eindeutige Lizenzkennung, 1..128 ASCII-Zeichen |
-| uuid | Die von system.meta.uuid.native.uuid gelesene UUID; trim/lowercase; normale 36-Zeichen-UUID oder ioBroker-Präfix aus 2 Buchstaben direkt davor |
-| edition | Genau `home` oder `pro` |
-| issuedAt | Ganze Unixzeit in Millisekunden |
-| notBefore | Ganze Unixzeit in Millisekunden, mindestens issuedAt |
-| expiresAt | Ganze Unixzeit in Millisekunden größer notBefore oder null für eine vom Hersteller ausdrücklich dauerhaft ausgestellte Lizenz |
-| adapters | Eindeutige Liste erlaubter Adapter-Namen ohne iobroker.-Präfix/Instanz, z. B. nexowatt-ui, nexowatt-devices; kein Sternchen |
-| limits | Objekt mit genau chargePoints und batteries; ganze Zahlen |
+NWL2 behält `v: 2`, dieselben Basisfelder, seine eindeutige `adapters`-Liste
+(1–64 Namen ohne Instanz und ohne Wildcard), `limits.chargePoints` und
+`limits.batteries`. Die Grenzen bleiben Home maximal 3/2 und Pro gemäß signiertem
+Wert maximal 1.000/10. Kleinere signierte Werte werden unverändert durchgesetzt.
+`notBefore >= issuedAt`; `expiresAt` ist `null` oder strikt später als
+`notBefore`. Eine NWL2-Lizenz wird nie als NWL3-Systemfreigabe behandelt.
 
-Home: 1..3 Ladepunkte, 0..2 Speicher. Pro: 1..1000 Ladepunkte als technische Obergrenze des Schemas und 0..10 Speicher. Die tatsächlich verkaufte Zahl steht ausdrücklich signiert in der Lizenz. 1000 ist **keine** zugesicherte Systemleistung oder pauschale Verkaufslizenz. Home bleibt als Dauerlizenz möglich; Pro-Abrechnung und Sicherheits-Support sind getrennte Geschäftsprozesse. Zeitlizenzen verwenden ein absolutes Ablaufdatum, nicht eine durch Neuinstallation neu startende Laufzeit.
+Für die integrierte EMS-/UI-Laufzeit erfordert NWL2 ausdrücklich `nexowatt-ui`
+in der signierten Liste. Ein alter Eintrag `eos-admin` allein oder ausschließlich
+ein Geräteadapter erweitert seine historischen Rechte nicht um das EMS.
+Die öffentliche Statusprojektion meldet dies als `valid: true`, aber
+`coreEnabled: false`. Bei NWL3 ist der gültige Systemumfang die Kernfreigabe.
 
-Beide Editionen: energy, wallet, smartHome, microgridSlave. Pro zusätzlich: microgridMaster, multisite, billing. Feature-Namen stammen aus dem festgelegten Servercode; kein frei eingesetztes Features-Array kann Rechte erhöhen. Die fachliche Zuordnung weiterer Apps muss beim Adapterumbau ergänzt und getestet werden. Diese begrenzte Matrix ist kein Nachweis, dass bestehende Apps bereits umgestellt sind.
+NW1-/NW1T-/andere HMAC-Altformate werden nicht mit einem eingebauten Geheimnis
+übernommen. NexoWatt prüft die Bestandsberechtigung und stellt bei Bedarf eine
+NWL3-Ersatzlizenz für dieselbe tatsächliche UUID aus. Die Migration darf erst
+umschalten, wenn passende Rechte bestätigt sind. Ein bloßes Umbenennen des Präfixes
+ist niemals gültig.
 
-## Vertrauensanker auf dem Gerät
+## Öffentlicher Vertrauensanker
 
-Standardpfad: `/etc/nexowatt/license-trust.json`. Alternativ kann der OS-Serviceadministrator vor Prozessstart `NEXOWATT_LICENSE_TRUST_FILE` auf einen absoluten Pfad setzen. Diese Einstellung wird nicht über die Admin-Weboberfläche angeboten.
+Bevorzugter Gerätepfad: `/etc/nexowatt-eos/license-trust.json`. Nur wenn der
+aktuelle Pfad fehlt (`ENOENT`), wird der bisherige Admin-Pfad
+`/etc/nexowatt/license-trust.json` gelesen. Falsche Rechte, Symlinks, beschädigter
+Inhalt oder ein unzulässiger Schlüssel lösen keinen Fallback aus.
+Ein vor Prozessstart gesetztes `NEXOWATT_LICENSE_TRUST_FILE` bezeichnet genau
+einen absoluten Pfad und fällt bei Fehlern nicht auf andere Dateien zurück.
 
-Dateiinhalt ist ein JSON-Objekt: Schlüsselkennung auf öffentlichen PEM-Text. Es wird absichtlich keine nutzbare Beispiel-Schlüsseldatei mitgeliefert. Der Hersteller exportiert den öffentlichen Teil aus dem neu eingerichteten Generator. Fingerabdruck und Übergabeweg separat prüfen; anschließend den Export durch den OS-Serviceadministrator kontrolliert bereitstellen.
+Der Trust-Export ist ein JSON-Objekt aus Schlüssel-ID und öffentlichem
+Ed25519-SPKI-PEM. Es können maximal 32 öffentliche Schlüssel eingetragen sein.
+Es wird kein produktiver Schlüssel in dieser Lieferung erfunden oder vorgegeben.
+Der Public-Trust-Export des bestehenden Keygen 1.0.4 entspricht diesem Format.
 
-Unter Linux/POSIX müssen **die Datei und alle übergeordneten Verzeichnisse einschließlich der Pfadwurzel root gehören** und dürfen nicht gruppen-/weltbeschreibbar sein, zum Beispiel `root:root` mit Datei 0644 und Verzeichnissen 0755. Eine lediglich root gehörende Datei in einem austauschbaren Benutzerverzeichnis genügt nicht. Symlinks im Pfad und Mehrfach-Hardlinks auf die Datei werden abgelehnt. Ein Export im persönlichen Downloadverzeichnis ist deshalb noch kein gültig bereitgestellter Vertrauensanker. Dateirechte gezielt prüfen; keine pauschalen rekursiven Rechteänderungen auf der Anlage ausführen.
+Unter Linux müssen die Datei und ihre gesamte Verzeichniskette root gehören
+und dürfen nicht gruppen-/weltbeschreibbar sein, beispielsweise Datei 0644 und
+Verzeichnisse 0755. Der Adapter liest nur; er benötigt keine Root-Rechte und
+darf diese Dateien nicht aus der Weboberfläche ersetzen. Symlinks, Hardlinks und
+Dateiwechsel beim Lesen werden geprüft. Windows benötigt eine eigene geprüfte
+ACL-Implementierung und bleibt mit `TRUST_PLATFORM_UNSUPPORTED` gesperrt.
 
-Eine Datei mit privatem Schlüssel wird abgelehnt. Unter Windows sperrt der Admin die Vertrauensankerprüfung ausdrücklich mit `TRUST_PLATFORM_UNSUPPORTED`, bis eine gleichwertige ACL-Prüfung umgesetzt und geprüft wurde. Das ist unabhängig vom separat startbaren Windows-Key-Generator. Fehlender oder ungültiger Vertrauensanker: keine Betriebsfreigabe, Admin bleibt zur Diagnose und Aktivierung erreichbar.
+Ein Schlüsselwechsel braucht privilegierte, nachvollziehbare Bereitstellung der
+öffentlichen Anker und einen Dienstneustart. Mehrere Anker erlauben den geplanten
+Übergang. Das Update ersetzt keinen bestehenden Anker. Ein verlorener privater
+Schlüssel oder Tresor erfordert einen separat autorisierten Wechsel; kein
+Mastercode oder allgemeiner Ersatzschlüssel ist vorgesehen.
 
-Schlüsselrotation: im Generator einen neuen Tresor mit neuer, eindeutiger kid anlegen. Den neuen öffentlichen Schlüssel zusätzlich in die vorhandene Trust-Zuordnung aufnehmen (höchstens 32 Schlüssel), Dienste neu starten, neue Lizenzen ausstellen und testen. Alten kid erst nach abgeschlossener Migration entfernen und erneut starten. Änderungen der Trust-Datei werden in diesem Stand beim Start gelesen; keine sofortige laufende Widerrufssynchronisation. Offline-Sperrung geschieht lokal durch Entfernen der Lizenz bzw. Entfernen des Herstellerschlüssels und Neustart. Ein zentrales sofortiges Offline-Widerrufen auf entfernten Geräten ist nicht möglich.
+## Gerätespeicher und laufende Prüfung
 
-## Ablage und Schutzgrenze
+`EncryptedLicenseStore` schreibt `license.enc` mit AES-256-GCM, frischer
+12-Byte-Nonce, 16-Byte-Authentifizierungstag und UUID-gebundener AAD. Der
+geräteindividuelle 32-Byte-Schlüssel liegt in `storage.key`. Verzeichnis 0700,
+Dateien 0600, Eigentümerprüfung, begrenzte Reads, atomarer Austausch und `fsync`
+schützen den lokalen Speicher. Bestehende NWL2-Dateien bleiben lesbar; das
+Speicherenvelope ändert seine Version nicht. Ein fehlender Speicherschlüssel bei
+vorhandener Lizenz führt zu einer Diagnose und wird nicht still neu erzeugt.
 
-Unter `getAbsoluteInstanceDataDir(adapter)/licensing/` liegen ausschließlich:
+Der Dienst prüft bei jeder Freigabe und spätestens im Fünf-Sekunden-Takt erneut
+UUID, Signatur, Zeitgrenzen und Datei. Der Nachrichtenclient erhält höchstens
+15 Sekunden gültige Freigaben. Die synchrone Kernprojektion prüft zusätzlich
+Ablauf, Zeitrücklauf und maximal 15 Sekunden alte erfolgreiche Auswertung.
+Sie blockiert den Regelpfad nicht mit Dateizugriffen. Ein hängender Datenbankread
+erzeugt keine unbegrenzte Warteschlange oder dauerhaft gültige Kopie.
 
-- `storage.key`: zufälliger lokaler AES-Schlüssel (32 Byte), kein aus der UUID abgeleitetes Geheimnis.
-- `license.enc`: AES-256-GCM-verschlüsselter Lizenzcode einschließlich Zeit-Höchststand; frische 12-Byte-Nonce, 16-Byte-Tag, UUID als authentifizierte Zusatzinformation.
+Die vollständige Signatur, Lizenzkennung und Schlüsselmaterial verlassen den
+Dienst weder über Status/API noch Messagebox. Widerruf durch Entfernen der Lizenz
+oder durch privilegierten Trust-Wechsel bleibt möglich. Ein individueller
+Online-Widerruf unbefristeter NWL3-Codes ist nicht implementiert.
 
-Verzeichnisrechte 0700, Dateien 0600, Eigentümer Laufzeitbenutzer. Keine Symlinks/Hardlinks; unsichere POSIX-Vorfahren werden abgelehnt. Insbesondere gruppenbeschreibbare ioBroker-Datenverzeichnisse müssen vorab geprüft werden. Keine pauschalen rekursiven chmod/chown-Befehle auf der Anlage ausführen. Die Windows-Lizenzfreigabe des Admin ist in diesem Stand durch die nicht unterstützte Vertrauensankerprüfung gesperrt; reine Node-Dateimodi würden eine Windows-ACL-Prüfung nicht ersetzen.
+Die gemeinsame ioBroker-UID und ein Angreifer mit Root-/Dateisystemkontrolle sind
+keine kryptografisch isolierte DRM-Grenze. Vollständige Datenträger-/UUID-Klone
+oder Zurückrollen von Datenträger und Uhr erfordern zusätzliche Hardwareanker.
+Das Produkt behauptet hierfür keinen absoluten Kopierschutz.
 
-Die UUID ist kein Passwort. Sie bindet die Lizenz an die Installation, verhindert aber allein kein Klonen durch einen privilegierten Angreifer. AES schützt eine isoliert abgegriffene Lizenzdatei; wer Laufzeitrechte, root oder den kompletten Datenträger samt storage.key besitzt, kann die Lizenz entschlüsseln oder Software ändern. Höhere Schutzanforderungen benötigen getrennte OS-Benutzer, minimal berechtigte Dienste, Secure Boot/Signatur-Updates und bei Bedarf TPM-gebundene Schlüssel. Keine reine JavaScript-Lösung garantiert Kopierschutz gegen den Geräteeigentümer mit root.
+## Transport und Nachweise
 
-Der Lizenzcode ist selbst ein signiertes, lesbares Transporttoken. Er wird **nach dem Import** verschlüsselt gespeichert. Kein Klartextcode wird von Status/API an Browser oder Adapter zurückgegeben. Import nur über HTTPS oder ausschließlich lokalen Loopback-Zugriff; Browser-LocalStorage wird nicht verwendet. Keine Screenshots/Logs des Codes erstellen. Netzwerkmitschnitt-Tests und reale ioBroker-Integration stehen noch aus.
+Lizenzschreiben erfordert zentrale Administratorautorisierung, exakten Origin,
+den Header `X-EOS-License: 1`, begrenzte JSON-Bodies und Ratenbegrenzung.
+Im Ingressprofil ist die externe HTTPS-Origin fest konfiguriert, der lokale
+HTTP-Transport bleibt auf Loopback beschränkt. Forwarded-Header setzen weder
+Benutzeridentität noch TLS-Vertrauen. Fehlende oder gefälschte Origin/Host-Werte
+werden zurückgewiesen. Der Code wird nach dem Absenden aus dem Eingabefeld entfernt.
 
-## Backup, Uhr und Fehlerfälle
-
-Lizenzdatei und storage.key gemeinsam in einem zusätzlich verschlüsselten, zugriffsgeschützten Gerätebackup sichern. Nur derselben UUID wiederherstellen. Verlust des lokalen Schlüssels bei vorhandenem Ciphertext wird nicht durch automatische Neuerzeugung verschleiert; kontrollierte Neuaktivierung durch den Hersteller erforderlich. Unvollständige oder beschädigte Sicherung bedeutet Sperre.
-
-Davon getrennt den verschlüsselten Herstellertresor `issuer.nwk` sichern und die Passphrase getrennt aufbewahren. Eine Kopie des öffentlichen Vertrauensankers ersetzt den Privatschlüssel nicht. Verlust von Tresor oder Passphrase erfordert ein neues Schlüsselpaar, kontrollierte Verteilung des neuen öffentlichen Schlüssels und Neuausstellung betroffener Lizenzen; niemals einen gemeinsamen Ersatzschlüssel in den Admin einbauen.
-
-Gültigkeitsprüfung erfolgt bei jeder Anfrage, alle fünf Sekunden zusätzlich und nach Import. Der an Verbraucher ausgegebene Zeitraum beträgt höchstens 15 Sekunden. Rückgestellte Uhr wird gegen monotone Laufzeit und verschlüsselten Zeit-Höchststand geprüft; Speicherung mindestens einmal pro Minute bei gültiger Lizenz. Vollständiges Zurückrollen des Datenträgers samt Uhr bleibt ohne Hardwareanker erkennbar unlösbar. Große legitime Zeitkorrekturen können daher einen Service-Neustart/Herstellerprüfung erfordern; kein heimlicher Freischalt-Fallback.
-
-Eine Lizenzentfernung beendet bezahlte Betriebsfreigaben, löscht aber keine Gerätekonfiguration und stoppt nicht ungeprüft alle ioBroker-Prozesse. Der Verbraucheradapter muss Diagnose und gerätespezifische Schutzfunktionen erhalten. Anpassungen der echten Verbraucheradapter sind vor einer Produktfreigabe Pflicht.
+Die Prüfungen verwenden echte Node-Kryptografie und lokale verschlüsselte Dateien,
+mit simulierter ioBroker-Datenbank/Messagebox. Der originale Keygen 1.0.4 wurde
+zusätzlich gegen diesen Verifizierer und Dienst ausgeführt; Testschlüssel werden
+je Lauf nur im Speicher erzeugt. Browser-/Host-/Hardwareabnahme sowie eine
+unabhängige Sicherheitsprüfung bleiben separate Nachweise. Diese Dokumentation
+ist keine CRA-Konformitätserklärung oder allgemeine Produktivfreigabe.

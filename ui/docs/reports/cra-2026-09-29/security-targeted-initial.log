@@ -1,0 +1,74 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.22 test:cra
+> node scripts/verify-cra-auth.cjs && node scripts/verify-cra-network.cjs && node scripts/verify-cra-frontend.cjs && node scripts/verify-cra-tariff.cjs && node scripts/verify-release-approval.cjs --self-test && node scripts/verify-cra-dependency-regressions.cjs && npm run test:stable-1.0.10-security
+
+PASS anonyme Kundenschreibversuche benötigen Sitzung; Kunde bedient eigene Settings
+PASS unknown scope umgeht weder Peak-Shaving-Sperre noch Tarifzwang
+PASS Origin null/fremde Origin werden vor Mutationen gesperrt, eigene Origin funktioniert
+PASS fehlerhaft kodierte Cookies erzeugen keinen Serverfehler
+PASS Login rotiert Browser-Sitzung, Logout widerruft Token
+PASS Kontosperre, Löschung und Passwortwechsel widerrufen vorhandene Sessions
+PASS Gruppen-Demotion wirkt ohne Logout und ohne Wartezeit
+PASS Sessionzahl pro Konto ist auf acht begrenzt
+PASS Prototype-Pollution direkt, per Arrays und HTTP ist vor Merge/Mutation blockiert
+PASS Flow-Sollwertgrenzen werden serverseitig vor jedem Gerätetarget durchgesetzt
+PASS öffentliche States und selbst privilegierter SSE-LIVE-Kanal enthalten keine Stationstokens
+PASS Stationsmodus-Freigabe gilt ebenso für set-mode und mode Alias
+PASS Installer-Mapping bleibt bei auth=false und all geschützt
+PASS Installer-Mapping bleibt bei auth=false und lan geschützt
+PASS Installer-Mapping bleibt bei auth=false und session geschützt
+PASS parallele Logins reservieren Kapazität vor der Passwortprüfung
+CRA AUTH: 16 checks passed; real local HTTP, mocked ioBroker accounts/states, no hardware.
+CRA network verification 2026-09-29T20:08:30.909Z | v24.19.0 | linux | generated runtime
+SHA256 lib/mesh-coordinator-contract.js 9e3a3222761b6f2200cd8a074badbc8a4f75b911b82620c3accacb8edaab519c
+SHA256 lib/mesh-coordinator-protocol.js f03e6f92b29902896b08cc3bbeb8534544ad34bfad6038bb8b9fee229fff4912
+SHA256 lib/mesh-coordinator.js 538f823eff07be6ed59d6692af75427b935517a1e4d75f44cc91e7a66dbf689b
+SHA256 lib/notification-mail.js b5fbf670f944f653dd0a108393f9dec23916b55380af0566ed82e6a863d46269
+OK NET-01: v2-Anlauf, signierter Verkehr, Hello-Replay verändert keinen aktiven Regelzustand
+OK NET-02: Reconnect nach gleichem Boot und echter Slave-Neustart erholen sich kontrolliert
+OK NET-03: Master-Neustart, altes Hello und alter Exchange können keine Sitzung vorwegnehmen
+OK NET-04: Abgelaufene, manipulierte und fremde Challenges; vertauschte/alte Antworten abgewiesen
+OK NET-05: V1-Peers werden ausdrücklich abgewiesen; ungültige HMACs erreichen keine Sitzung
+OK NET-06: Tatsächliche IPv4/IPv6-Tailnet-/Loopbackadressen geprüft; Fremdnetze abgewiesen
+OK NET-07: Echter Loopback-HTTP-Kanal; DNS-Rebinding blockiert vor Socket/Datensendung
+OK NET-08: Antwort-/Anfragelimit, Deadline, fremder Endpoint und Protokollfehler
+OK NET-09: HTTPS verlangt explizit TLS >=1.2 und Gegenstellenprüfung (Optionsprüfung)
+OK NET-10: SMTP-Ledger exklusiv/0600/atomar; vorbereiteter alter Temp-Symlink bleibt wirkungslos
+OK NET-11: Fehler vor Rename erhält vorhandenes Ledger und räumt neue Tempdatei auf
+OK NET-12: SMTP erfordert TLS, keine URL-/Dateizugriffe, keine Rohfehler oder Secrets
+PASS 12 network/security groups; no hardware/Tailnet/real SMTP test
+[verify-cra-frontend] PASS 42 Regressionen (Originalfunktionen; DOM-/Fetch-/Cache-Doubles).
+{
+  "suite": "UI-CRA-NET-04",
+  "source": "ems/services/tariff-provider-registry.js",
+  "node": "v24.19.0",
+  "environment": "loopback HTTP; mocked HTTPS provider responses; no production access",
+  "passed": 11,
+  "checks": [
+    "public-local-http-positive",
+    "redirect-never-reaches-target",
+    "streamed-response-limit",
+    "declared-response-limit",
+    "body-timeout",
+    "provider-error-redacted",
+    "credentials-rejected-before-network",
+    "invalid-url-and-userinfo-rejected",
+    "https-custom-credential-contract-mock",
+    "https-oauth-contract-mock",
+    "request-size-limit-before-network"
+  ]
+}
+[release-approval] Regression OK: unvollständige Freigaben blockiert. Keine reale Freigabe gesetzt.
+PASS: normal JSON request preserved
+PASS: oversized body rejected with HTTP 413
+PASS: malformed JSON rejected with HTTP 400
+PASS: nested query parsing preserved after rejected requests
+PASS: crafted qs constructor/isBuffer round-trip does not throw
+PASS: invalid parser size rejected at construction
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.22 test:stable-1.0.10-security
+> node scripts/verify-stable-1.0.10-secret-guard.cjs
+
+[1.0.10 security] OK: SMTP literals/URLs/env/private keys, runtime files, clean UI fields, obsolete bundles, real staged-index hook, redacted failures and publish gate.

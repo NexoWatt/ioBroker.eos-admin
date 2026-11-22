@@ -1,0 +1,280 @@
+{
+  "$schema": "http://cyclonedx.org/schema/bom-1.5.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:6816a8bf-0c41-4aa6-8da1-f34b8d987791",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-09-29T21:28:03.326Z",
+    "lifecycles": [
+      {
+        "phase": "post-build"
+      }
+    ],
+    "tools": [
+      {
+        "vendor": "npm",
+        "name": "cli",
+        "version": "11.9.0"
+      }
+    ],
+    "component": {
+      "bom-ref": "nexowatt-ui-admin-tab@0.8.8",
+      "type": "library",
+      "name": "nexowatt-ui-admin-tab",
+      "version": "0.8.8",
+      "scope": "required",
+      "purl": "pkg:npm/nexowatt-ui-admin-tab@0.8.8",
+      "properties": [
+        {
+          "name": "cdx:npm:package:private",
+          "value": "true"
+        }
+      ],
+      "externalReferences": [],
+      "description": "Npm packages with rendered JavaScript in the current Admin bundle; evidenced by the Rollup module graph and generated asset hashes."
+    },
+    "properties": [
+      {
+        "name": "nexowatt:scope",
+        "value": "admin"
+      },
+      {
+        "name": "nexowatt:generator-version",
+        "value": "1.1.0"
+      },
+      {
+        "name": "nexowatt:generator-sha256",
+        "value": "cc91b3f60f38e21f516e041e5e479c0860ac38e99eb782565218b4a723b7d822"
+      },
+      {
+        "name": "nexowatt:package-json-path",
+        "value": "src-admin-tab/package.json"
+      },
+      {
+        "name": "nexowatt:package-json-sha256",
+        "value": "1187c0e705ee899d6bbab3ae9f8817cf05a51a2618ab33fd8b4fb6b0e589ebb1"
+      },
+      {
+        "name": "nexowatt:lockfile-path",
+        "value": "src-admin-tab/package-lock.json"
+      },
+      {
+        "name": "nexowatt:lockfile-sha256",
+        "value": "2ce40a4838b00f6a4782bd917af76f18b51f98ffe5086113ae1c11b89e64aef7"
+      },
+      {
+        "name": "nexowatt:lockfile-package-entry-count",
+        "value": "120"
+      },
+      {
+        "name": "nexowatt:node-version",
+        "value": "v24.19.0"
+      },
+      {
+        "name": "nexowatt:host-platform",
+        "value": "linux-x64"
+      },
+      {
+        "name": "nexowatt:inventory-kind",
+        "value": "observed-admin-bundle-components"
+      },
+      {
+        "name": "nexowatt:bundle-evidence-sha256",
+        "value": "725af47306d732fcff69aafaf59c519fab4a01be6be48edab30d7499fc961323"
+      },
+      {
+        "name": "nexowatt:limitations",
+        "value": "Npm JavaScript packages contributing rendered code, not OS, fonts, images, unbundled external scripts or a security certification. Tarball checksums identify source package distributions, not a standalone vendored tarball in the bundle."
+      }
+    ]
+  },
+  "components": [
+    {
+      "bom-ref": "react@18.3.1",
+      "type": "library",
+      "name": "react",
+      "version": "18.3.1",
+      "scope": "required",
+      "description": "React is a JavaScript library for building user interfaces.",
+      "purl": "pkg:npm/react@18.3.1",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/react/-/react-18.3.1.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/facebook/react.git"
+        },
+        {
+          "type": "website",
+          "url": "https://reactjs.org/"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "c12fa1020252851d0a844bcf240adfb8f54dd7e1f3d6dd18ea7e632eb1906e46f8bab80f13fd11bdefb590c075bffa16807826e1621c57e8bb176a53563fb689"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "react-dom@18.3.1",
+      "type": "library",
+      "name": "react-dom",
+      "version": "18.3.1",
+      "scope": "required",
+      "description": "React package for working with the DOM.",
+      "purl": "pkg:npm/react-dom@18.3.1",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/react-dom/-/react-dom-18.3.1.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/facebook/react.git"
+        },
+        {
+          "type": "website",
+          "url": "https://reactjs.org/"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/facebook/react/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "e66e2740aa7ead945bd3d2cd1f9f463380714e1f76e75ff295b2886e97bb4e91b17c9fbd92fe812e42c15c88e3b296e06e720136a948db7b519d3593d2c9d423"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "react-router@7.18.4",
+      "type": "library",
+      "name": "react-router",
+      "version": "7.18.4",
+      "scope": "required",
+      "author": "Remix Software <hello@remix.run>",
+      "description": "Declarative routing for React",
+      "purl": "pkg:npm/react-router@7.18.4",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/react-router/-/react-router-7.18.4.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/remix-run/react-router"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "3d43d070c84c19102c94b72fb653f3fe49b304458f84b7602c5acbee92cd7a904be9d5f49568f8583d9c518560602b93de3c6f82160583cd5c0d38f8e0385eb5"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "scheduler@0.23.2",
+      "type": "library",
+      "name": "scheduler",
+      "version": "0.23.2",
+      "scope": "required",
+      "description": "Cooperative scheduler for the browser environment.",
+      "purl": "pkg:npm/scheduler@0.23.2",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/scheduler/-/scheduler-0.23.2.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/facebook/react.git"
+        },
+        {
+          "type": "website",
+          "url": "https://reactjs.org/"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/facebook/react/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "50e4a1b0fc33ecdacc52a851eadd215a315dbaf3b36edbfbb680c7d7f848adf44d2030679c159dd02c094c6bd3a67815966c0609d3fdfd997fb55ac3a9cb98cd"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "nexowatt-ui-admin-tab@0.8.8",
+      "dependsOn": [
+        "react@18.3.1",
+        "react-dom@18.3.1",
+        "react-router@7.18.4",
+        "scheduler@0.23.2"
+      ]
+    },
+    {
+      "ref": "react@18.3.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "react-dom@18.3.1",
+      "dependsOn": [
+        "react@18.3.1",
+        "scheduler@0.23.2"
+      ]
+    },
+    {
+      "ref": "react-router@7.18.4",
+      "dependsOn": [
+        "react@18.3.1",
+        "react-dom@18.3.1"
+      ]
+    },
+    {
+      "ref": "scheduler@0.23.2",
+      "dependsOn": []
+    }
+  ]
+}

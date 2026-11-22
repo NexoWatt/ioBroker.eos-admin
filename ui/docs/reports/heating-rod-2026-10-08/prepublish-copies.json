@@ -1,0 +1,34 @@
+{
+  "timestamp": "2026-10-08T19:46:54.672Z",
+  "registry": "isolated local HTTP fixture returning 404",
+  "publicationPerformed": false,
+  "realNpmVersionAvailabilityChecked": false,
+  "results": [
+    {
+      "mode": "fresh",
+      "command": [
+        "npm",
+        "run",
+        "prepublishOnly"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 4.404,
+      "sealedFilesPreserved": true,
+      "oldAssetRemoved": null,
+      "log": "prepublish-fresh.log"
+    },
+    {
+      "mode": "overlay",
+      "command": [
+        "npm",
+        "run",
+        "prepublishOnly"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 4.401,
+      "sealedFilesPreserved": true,
+      "oldAssetRemoved": true,
+      "log": "prepublish-overlay.log"
+    }
+  ]
+}

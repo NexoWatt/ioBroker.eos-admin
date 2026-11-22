@@ -1,0 +1,129 @@
+{
+  "date": "2026-11-03",
+  "baselineVersion": "1.0.34",
+  "targetVersion": "1.0.35",
+  "scope": "Actual targeted ESLint rerun and source fingerprint/AST comparison; no whole-project certification",
+  "files": [
+    {
+      "file": "src-ts/runtime-executables/main.ts",
+      "currentCodeSha256": "6a92fb07db6891ff618d147c04007c38c2c2bbfe2b0f8203a6a16a07301e11be",
+      "baselineCodeSha256": "1236a46a163b7cca76e9084388ac23b944c3e2e2633608d1c8814c8216709d1a",
+      "currentFindingCount": 500,
+      "baselineFindingCount": 500,
+      "newFindings": [],
+      "reviewedSites": [
+        {
+          "fingerprint": "52846315efe5cb1fd687f2d6436c4999102da11954b430f4bfad65a823670f5c",
+          "rule": "security/detect-object-injection",
+          "current": true,
+          "baseline": true,
+          "currentLine": 23082
+        },
+        {
+          "fingerprint": "284be3fe77000b1f5d8a5d7296f2772e4d14ee972e7415eab59412f88b64f8b8",
+          "rule": "security/detect-object-injection",
+          "current": true,
+          "baseline": true,
+          "currentLine": 4993
+        },
+        {
+          "fingerprint": "48c91c7b19c3c39dd9f70b1244e95342cf66ab86a8ed71a4196272e0bbe5f2cc",
+          "rule": "security/detect-object-injection",
+          "current": true,
+          "baseline": true,
+          "currentLine": 5007
+        },
+        {
+          "fingerprint": "012aeb1f3bb1907433fb0cc309a9c0a283544112b34658a997940c62b549cfbd",
+          "rule": "security/detect-object-injection",
+          "current": true,
+          "baseline": true,
+          "currentLine": 5012
+        },
+        {
+          "fingerprint": "a0f055d4076a53efda1a6208fcda4930beaee6122331ab7c796c33238cc6c3e3",
+          "rule": "security/detect-object-injection",
+          "current": true,
+          "baseline": true,
+          "currentLine": 5013
+        }
+      ]
+    },
+    {
+      "file": "src-admin-tab/src/lib/adminConnection.ts",
+      "currentCodeSha256": "4dde6948a1f8559aa8b170921cac33bb1c0cade1dae5f7fe14795be90e00c432",
+      "baselineCodeSha256": "494c0d537d94293b7d0fcb1c003783623ea341e69a14e5cce9b0cedf97478d90",
+      "currentFindingCount": 1,
+      "baselineFindingCount": 1,
+      "newFindings": [],
+      "reviewedSites": [
+        {
+          "fingerprint": "59450ebe6a325b04febc0607640f2d4bdfba3f3cac204d14e709a7818272fa34",
+          "rule": "security/detect-object-injection",
+          "current": true,
+          "baseline": true,
+          "currentLine": 167
+        }
+      ],
+      "copyJsonValue": {
+        "byteIdentical": true,
+        "sha256": "1a23055f189d42f9d397147f6f461759a79c41b6c08c5fa39d02f7d981e95004"
+      }
+    },
+    {
+      "file": "src-ts/runtime-executables/lib/runtime-proxy-html.ts",
+      "currentCodeSha256": "1c00f211c07206fc5e78ac0abf214bd827aeba6c7fce5f14598c38aa4d936a01",
+      "baselineCodeSha256": null,
+      "currentFindingCount": 5,
+      "baselineFindingCount": 0,
+      "newFindings": [
+        {
+          "file": "src-ts/runtime-executables/lib/runtime-proxy-html.ts",
+          "rule": "security/detect-non-literal-fs-filename",
+          "fingerprint": "dedcb8d5c1368fcac7afc98161551c5b1ad26e1c08d1a8d5eed174d2cd71f6cc",
+          "line": 136,
+          "column": 32,
+          "fatal": false,
+          "severity": 2
+        },
+        {
+          "file": "src-ts/runtime-executables/lib/runtime-proxy-html.ts",
+          "rule": "security/detect-non-literal-fs-filename",
+          "fingerprint": "c72fdca97706f6411caa8fe3c9a32e457d3c46baf78931df2c643dda04b39a6a",
+          "line": 137,
+          "column": 31,
+          "fatal": false,
+          "severity": 2
+        },
+        {
+          "file": "src-ts/runtime-executables/lib/runtime-proxy-html.ts",
+          "rule": "security/detect-non-literal-fs-filename",
+          "fingerprint": "fce5ad36178449298727f2be3b1a6ec5f77deacdbf9856b9f34107bed778fa89",
+          "line": 138,
+          "column": 33,
+          "fatal": false,
+          "severity": 2
+        },
+        {
+          "file": "src-ts/runtime-executables/lib/runtime-proxy-html.ts",
+          "rule": "security/detect-non-literal-fs-filename",
+          "fingerprint": "582e06c6c6343b3b24b89ea25e85ccd7abe8ea60f46bd60014f527eb8ef29d8d",
+          "line": 140,
+          "column": 21,
+          "fatal": false,
+          "severity": 2
+        },
+        {
+          "file": "src-ts/runtime-executables/lib/runtime-proxy-html.ts",
+          "rule": "security/detect-non-literal-fs-filename",
+          "fingerprint": "3498a4197a24fd7108a21db425b6dc7850bc6c96eed4157c355ad7baa0152fbb",
+          "line": 143,
+          "column": 28,
+          "fatal": false,
+          "severity": 2
+        }
+      ],
+      "reviewedSites": []
+    }
+  ]
+}

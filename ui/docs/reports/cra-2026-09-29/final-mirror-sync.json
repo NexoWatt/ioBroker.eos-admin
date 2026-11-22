@@ -1,0 +1,12 @@
+{
+  "command": [
+    "npm",
+    "run",
+    "sync:ts-runtime-mirrors"
+  ],
+  "cwd": "repository root",
+  "startedAt": "2026-09-29T20:19:59.784097+00:00",
+  "finishedAt": "2026-09-29T20:20:00.448276+00:00",
+  "durationSeconds": 0.664,
+  "exitCode": 0
+}

@@ -1,0 +1,88 @@
+[
+  {
+    "step": "docs-build-delivery",
+    "command": [
+      "npm",
+      "run",
+      "docs:build"
+    ],
+    "startedAt": "2026-10-24T06:25:25.736583+00:00",
+    "exitCode": 0,
+    "seconds": 3.38,
+    "log": "docs-build-delivery.log"
+  },
+  {
+    "step": "docs-check-delivery",
+    "command": [
+      "npm",
+      "run",
+      "docs:check"
+    ],
+    "startedAt": "2026-10-24T06:25:29.119266+00:00",
+    "exitCode": 0,
+    "seconds": 0.24,
+    "log": "docs-check-delivery.log"
+  },
+  {
+    "step": "release-manifest-delivery",
+    "command": [
+      "npm",
+      "run",
+      "release:generate-manifest"
+    ],
+    "startedAt": "2026-10-24T06:25:29.364291+00:00",
+    "exitCode": 0,
+    "seconds": 1.43,
+    "log": "release-manifest-delivery.log"
+  },
+  {
+    "step": "release-prepare-delivery",
+    "command": [
+      "npm",
+      "run",
+      "release:prepare"
+    ],
+    "startedAt": "2026-10-24T06:25:30.793202+00:00",
+    "exitCode": 0,
+    "seconds": 0.94,
+    "log": "release-prepare-delivery.log"
+  },
+  {
+    "step": "publish-check-delivery",
+    "command": [
+      "npm",
+      "run",
+      "publish:check"
+    ],
+    "startedAt": "2026-10-24T06:25:31.736572+00:00",
+    "exitCode": 0,
+    "seconds": 1.04,
+    "log": "publish-check-delivery.log"
+  },
+  {
+    "step": "stable-release-delivery",
+    "command": [
+      "npm",
+      "run",
+      "test:stable-release"
+    ],
+    "startedAt": "2026-10-24T06:25:32.781379+00:00",
+    "exitCode": 0,
+    "seconds": 0.19,
+    "log": "stable-release-delivery.log"
+  },
+  {
+    "step": "npm-pack-dry-delivery",
+    "command": [
+      "npm",
+      "pack",
+      "--dry-run",
+      "--json",
+      "--ignore-scripts"
+    ],
+    "startedAt": "2026-10-24T06:25:32.976541+00:00",
+    "exitCode": 0,
+    "seconds": 2.75,
+    "log": "npm-pack-dry-delivery.log"
+  }
+]

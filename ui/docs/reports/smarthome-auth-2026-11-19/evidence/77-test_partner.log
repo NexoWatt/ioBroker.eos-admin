@@ -1,0 +1,95 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:partner
+> npm run typecheck:partner && node scripts/test-partner-integrations.cjs && node scripts/verify-partner-websocket.cjs && node scripts/verify-partner-runtime.cjs && node scripts/verify-partner-ui.cjs && node scripts/verify-partner-main-integration.cjs && npm run test:arbitrage-control-integration && npm run test:license-editions
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 typecheck:partner
+> tsc -p tsconfig.partner-integration.json --noEmit
+
+✔ Standardprofil bleibt ausgeschaltet; Handelsprofil benötigt keine PV/NVP-Konfiguration (2.140177ms)
+✔ Unbekannte Felder, Geheimnisse, freie State-IDs und unverschlüsselte Endpunkte werden verworfen (0.723681ms)
+✔ Bilanz kann kein Schreibrecht erhalten; Rechte sind nach App und Ressource getrennt (0.270729ms)
+✔ Grenzen schließen unbekannte Ressourcen, >60s, NaN und ungültigen SoC aus (0.301335ms)
+✔ Partnerbindung, lokale Appfreigabe, Inbetriebnahme und zentraler Writer sind unabhängige Pflichten (2.084063ms)
+✔ Journal wird vor Annahme gespeichert; Quittung behauptet keine Gerätebestätigung (2.597246ms)
+✔ Identische Wiederholung wirkt nicht erneut; widersprechende Wiederverwendung wird abgewiesen (0.598172ms)
+✔ Ältere neue Kennung darf neueren Wunsch nicht ersetzen, auch nach Neustart (0.751183ms)
+✔ Journalfehler sperren Verbindung und alle Wünsche ohne Geräteschreiben (0.859256ms)
+✔ Widerruf während Journal-Commit kann keinen Wunsch nachträglich aktivieren (0.628357ms)
+✔ Lease endet bei Ablauf und auch nach rückwärts springender Wanduhr monoton (0.33167ms)
+✔ Abgelaufene, zu lange, zukünftige, übergroße und rohe Schreibaufträge wirken nicht (0.477229ms)
+✔ Verbindungsverlust, lokale Appabschaltung und Konfigurationswechsel löschen aktuelle Wünsche (0.576309ms)
+✔ Cancel ist ressourcenbezogen und Wiederholung reaktiviert den Auftrag nicht (0.543199ms)
+✔ Bilanz- und Telemetrieprojektionen enthalten niemals Konfiguration, Inventar oder Rohwerte (0.358781ms)
+✔ Datenfreigabe wird nach asynchroner Abfrage erneut geprüft (1.578911ms)
+✔ Leserecht ist an die freigegebene App und Ressource gebunden (0.569749ms)
+✔ Hängende Datenabfrage endet nach fünf Sekunden und abortiert den Provider (5065.428957ms)
+✔ Größen- und Nachrichtenquoten begrenzen untrusted Eingaben (20.790522ms)
+✔ Echte Installer-/Adminrolle erforderlich trotz alter Customer-Wildcard (3.245574ms)
+✔ Config CAS erhöht genau einmal und alte Browserrevision erhält Konflikt (1.159298ms)
+✔ Vorschau persistiert nichts; globale Sperre widerruft alle Freigaben (0.376347ms)
+✔ Generische Persistenzgrenze erkennt Manipulation ohne korrekte Folgeversion (1.66464ms)
+✔ Vor Verbindungswechsel eingereihter Auftrag bleibt nach Reconnect widerrufen (1.401733ms)
+✔ CAS-Commit wartet auf dauerhafte Widerrufsgrenze und bleibt bei deren Fehler aus (0.655418ms)
+✔ Nur registrierte interne Fehler behalten ihren öffentlichen HTTP-Status (1.999125ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5126.624788
+PASS TypeScript strict without any/nocheck
+PASS Public addresses only; exact VPN exception never opens loopback/metadata
+PASS Exact endpoint profile; no URL credentials/query/fragment or alternate ports
+PASS Pinned target, TLS/quotas, configured identity and immediate send revocation
+PASS Revocation aborts session context; queued messages discarded, delayed reply blocked
+PASS Synchronous stop from status callback prevents later onOpen/timer activation
+PASS Broken lifecycle receiver fails closed
+PASS Handler exception is isolated and redacted
+PASS Binary/oversized messages, control flood and outbound backpressure terminate
+PASS Mixed public/private DNS answers fail closed before connecting
+PASS Monotonic credential expiry survives frozen/backward wall clock
+PASS Five-second total attempt cancels hanging DNS and exposes only fixed error code
+PASS Real TLS+WebSocket handshake: changed actual remote address rejected
+PASS Real TLS rejects untrusted certificate with no insecure fallback
+PASS Real TLS rejects trusted certificate with wrong hostname
+{"ok":true,"checks":15,"scope":"strict build, controlled transport tests, real TLS negative tests; no partner or hardware approval"}
+PASS partner runtime: first journal initializes 0700/0600 and durable marker
+PASS partner runtime: missing journal after initialization blocks
+PASS partner runtime: missing entire journal directory with marker blocks
+PASS partner runtime: missing and corrupt marker block
+PASS partner runtime: missing revoke fence blocks restart
+PASS partner runtime: symlink journal and overly broad file permissions block
+PASS partner runtime: symlink parent and group-writable parent block
+PASS partner runtime: persist/load ordering survives hot-refresh overlap
+PASS partner runtime: credential references reject missing, malformed, overlarge and mismatched identity
+PASS partner runtime: numeric telemetry projects only exact fresh resource values
+PASS partner runtime: balance is complete, recent, numeric and strips private metadata
+PASS partner runtime: direct marketing absent measurements stay unavailable; no curtailment claim
+PASS partner runtime: standalone trading-only command accepted and survives only as replay journal
+PASS partner runtime: connection loss clears current request and duplicate never reapplies
+PASS partner runtime: revocation survives failed config commit, refresh and restart
+PASS partner runtime: app loss invalidates commands; toggling without explicit refresh cannot revive
+PASS partner runtime: config change is checked at getter before any refresh
+PASS partner runtime: credential expiry immediately blocks current request
+PASS partner runtime: pending persistence completes before hot refresh reads; old generation cannot acknowledge
+PASS partner runtime: stale socket context cannot send or accept
+PASS partner runtime total: 20; strict TypeScript; temporary filesystem cleaned.
+PASS Realer gesperrter Backend-Standard bleibt ohne zusätzliche App editierbar
+PASS Alle Netz-/Speichergrenzen und getrennte Bilanzrechte bleiben unverändert
+PASS Falsche Datentypen, leere Leistungen, unendliche Zahlen und TTL>60 scheitern
+PASS Ungeprüfte Bereitschaft und beschädigte API-Antworten können nicht freischalten
+PASS Ungültige Vorschau zeigt Prüfhinweise ohne erfundene Konfiguration
+PASS Partner- und Authaufrufe bleiben am tatsächlichen HTTPS-Runtime-Port
+AssertionError [ERR_ASSERTION]: The validation function is expected to return "true". Received false
+
+Caught error:
+
+ReferenceError: URL is not defined
+    at async /workspace/scratch/016e1c77b6f1/implementation/NexoWatt_UI_1.0.37/scripts/verify-partner-ui.cjs:92:7
+    at async check (/workspace/scratch/016e1c77b6f1/implementation/NexoWatt_UI_1.0.37/scripts/verify-partner-ui.cjs:37:35)
+    at async /workspace/scratch/016e1c77b6f1/implementation/NexoWatt_UI_1.0.37/scripts/verify-partner-ui.cjs:88:3

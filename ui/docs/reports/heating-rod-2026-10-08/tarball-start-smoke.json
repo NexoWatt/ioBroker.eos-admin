@@ -1,0 +1,13 @@
+{
+  "command": [
+    "node",
+    "scripts/verify-package-runtime-start-smoke.js",
+    "--root",
+    "/workspace/scratch/eb7acf2936df/heater-package-check/extracted/package"
+  ],
+  "startedAt": "2026-10-08T19:48:01.718749+00:00",
+  "durationSeconds": 0.977,
+  "exitCode": 0,
+  "log": "tarball-start-smoke.log",
+  "hardware": false
+}

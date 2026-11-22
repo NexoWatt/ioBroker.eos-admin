@@ -1,0 +1,122 @@
+[
+  {
+    "command": "node scripts/verify-rc57-ocpp-stability.js",
+    "exitCode": 0,
+    "log": "reports/unified/verify-rc57-ocpp-stability.log",
+    "tail": ""
+  },
+  {
+    "command": "node scripts/verify-rc58-ocpp-compact-mapping.js",
+    "exitCode": 0,
+    "log": "reports/unified/verify-rc58-ocpp-compact-mapping.log",
+    "tail": ""
+  },
+  {
+    "command": "node scripts/verify-rc60-universal-auto-orchestrator.js",
+    "exitCode": 0,
+    "log": "reports/unified/verify-rc60-universal-auto-orchestrator.log",
+    "tail": ""
+  },
+  {
+    "command": "node scripts/verify-rc60-universal-auto-wallbox.js",
+    "exitCode": 0,
+    "log": "reports/unified/verify-rc60-universal-auto-wallbox.log",
+    "tail": ""
+  },
+  {
+    "command": "node scripts/verify-rc61-evcs-hardening.js",
+    "exitCode": 0,
+    "log": "reports/unified/verify-rc61-evcs-hardening.log",
+    "tail": ""
+  },
+  {
+    "command": "node scripts/verify-rc64-storage-grid-charge-policy.js",
+    "exitCode": 0,
+    "log": "reports/unified/verify-rc64-storage-grid-charge-policy.log",
+    "tail": ""
+  },
+  {
+    "command": "node scripts/verify-rc68-para14a-communication-fallback.js",
+    "exitCode": 0,
+    "log": "reports/unified/verify-rc68-para14a-communication-fallback.log",
+    "tail": ""
+  },
+  {
+    "command": "node scripts/verify-auto-cheap-grid-window.cjs",
+    "exitCode": 0,
+    "log": "reports/unified/verify-auto-cheap-grid-window.log",
+    "tail": ""
+  },
+  {
+    "command": "node scripts/verify-evcs-vehicle-status-regressions.cjs",
+    "exitCode": 0,
+    "log": "reports/unified/verify-evcs-vehicle-status-regressions.log",
+    "tail": ""
+  },
+  {
+    "command": "node scripts/verify-charging-audit-start-mode.cjs",
+    "exitCode": 0,
+    "log": "reports/unified/verify-charging-audit-start-mode.log",
+    "tail": ""
+  },
+  {
+    "command": "node scripts/verify-charging-csv-mode-context.cjs",
+    "exitCode": 0,
+    "log": "reports/unified/verify-charging-csv-mode-context.log",
+    "tail": ""
+  },
+  {
+    "command": "node scripts/verify-evcs-mode-write-failure.cjs",
+    "exitCode": 0,
+    "log": "reports/unified/verify-evcs-mode-write-failure.log",
+    "tail": ""
+  },
+  {
+    "command": "node scripts/verify-live-evcs-mode-confirmation.cjs",
+    "exitCode": 0,
+    "log": "reports/unified/verify-live-evcs-mode-confirmation.log",
+    "tail": ""
+  },
+  {
+    "command": "node scripts/verify-zero-export-pv-coordinator.cjs",
+    "exitCode": 0,
+    "log": "reports/unified/verify-zero-export-pv-coordinator.log",
+    "tail": ""
+  },
+  {
+    "command": "node scripts/verify-zero-export-charging.cjs",
+    "exitCode": 0,
+    "log": "reports/unified/verify-zero-export-charging.log",
+    "tail": ""
+  },
+  {
+    "command": "node scripts/verify-heating-rod-central-zero-export.js",
+    "exitCode": 0,
+    "log": "reports/unified/verify-heating-rod-central-zero-export.log",
+    "tail": ""
+  },
+  {
+    "command": "node scripts/verify-zero-export-storage-probe.cjs",
+    "exitCode": 0,
+    "log": "reports/unified/verify-zero-export-storage-probe.log",
+    "tail": ""
+  },
+  {
+    "command": "node scripts/verify-zero-export-appcenter.cjs",
+    "exitCode": 0,
+    "log": "reports/unified/verify-zero-export-appcenter.log",
+    "tail": ""
+  },
+  {
+    "command": "node scripts/verify-zero-export-core.cjs",
+    "exitCode": 0,
+    "log": "reports/unified/verify-zero-export-core.log",
+    "tail": ""
+  },
+  {
+    "command": "node scripts/verify-heating-rod-zero-export-tariff.cjs",
+    "exitCode": 0,
+    "log": "reports/unified/verify-heating-rod-zero-export-tariff.log",
+    "tail": ""
+  }
+]

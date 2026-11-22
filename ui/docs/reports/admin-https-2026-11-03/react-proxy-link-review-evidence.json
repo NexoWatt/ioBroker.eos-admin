@@ -1,0 +1,263 @@
+{
+  "checkedAt": "2026-11-03T23:05:08.530Z",
+  "baseline": "1.0.34",
+  "product": "1.0.35",
+  "scope": "Separate targeted AI source review; not full-file security certification",
+  "summary": {
+    "files": 6,
+    "reviewedRecords": 25,
+    "introducedOrIncreasedFingerprints": 0,
+    "onlyDeclaredUrlDeltaForAllFiles": true
+  },
+  "files": [
+    {
+      "file": "src-admin-tab/src/pages/DynamicGridPage.tsx",
+      "oldAstSha256": "bc68abf463077f450969571d99ff2eea85a683d85f02a998eeed62e84f36d2f2",
+      "newAstSha256": "fb861b918aba1153ad482c27288f7967cd8dcf82e30acf73d055523da0f7d3db",
+      "oldRawSha256": "79a033b7690a29a68bae798db8d92bc49f5dcf578b96e1d4762b7686c38612eb",
+      "newRawSha256": "0c8404bac5c47701b14fbcee3e830ca0f253a548fefea72c96772489164aea02",
+      "onlyReviewedTransportDelta": true,
+      "existingReviewedRecords": [
+        {
+          "rule": "security/detect-object-injection",
+          "fingerprint": "a57dba13bc234083d229e1b569afbd5c4a464603b8c92a7ebba20eae9762fde7",
+          "count": 2,
+          "oldSourceCodeSha256": "bc68abf463077f450969571d99ff2eea85a683d85f02a998eeed62e84f36d2f2",
+          "verifiedUnchangedFingerprintAndCount": true
+        },
+        {
+          "rule": "security/detect-object-injection",
+          "fingerprint": "0ad4318d610cc96431d24f095a70aa9e907a5d73418b25e72df1681d05e5c080",
+          "count": 1,
+          "oldSourceCodeSha256": "bc68abf463077f450969571d99ff2eea85a683d85f02a998eeed62e84f36d2f2",
+          "verifiedUnchangedFingerprintAndCount": true
+        },
+        {
+          "rule": "security/detect-object-injection",
+          "fingerprint": "ad3db96094d62478a5df08b5401a72be5a1917a249690cce6379585b644e02a1",
+          "count": 1,
+          "oldSourceCodeSha256": "bc68abf463077f450969571d99ff2eea85a683d85f02a998eeed62e84f36d2f2",
+          "verifiedUnchangedFingerprintAndCount": true
+        },
+        {
+          "rule": "security/detect-object-injection",
+          "fingerprint": "7b7cd39c43a4b9b2cca5d5bf276c07e125fcb26a50a720394d17a7bfb79885af",
+          "count": 1,
+          "oldSourceCodeSha256": "bc68abf463077f450969571d99ff2eea85a683d85f02a998eeed62e84f36d2f2",
+          "verifiedUnchangedFingerprintAndCount": true
+        },
+        {
+          "rule": "security/detect-object-injection",
+          "fingerprint": "33a74c97c3091880acf8b44897aeafb92ff0ef9bea8ccac8b30a513ae3c4692b",
+          "count": 1,
+          "oldSourceCodeSha256": "bc68abf463077f450969571d99ff2eea85a683d85f02a998eeed62e84f36d2f2",
+          "verifiedUnchangedFingerprintAndCount": true
+        },
+        {
+          "rule": "security/detect-object-injection",
+          "fingerprint": "fe7f20bc2bf9ddc66d9b7d038d7a5a923314dfecd84549e1a121d2e80a8db837",
+          "count": 1,
+          "oldSourceCodeSha256": "bc68abf463077f450969571d99ff2eea85a683d85f02a998eeed62e84f36d2f2",
+          "verifiedUnchangedFingerprintAndCount": true
+        }
+      ],
+      "oldLintCount": 20,
+      "newLintCount": 20,
+      "introducedOrIncreasedFingerprints": []
+    },
+    {
+      "file": "src-admin-tab/src/pages/MeshCoordinatorPage.tsx",
+      "oldAstSha256": "ee04a5fd3d5a009f343a0b19abc6a2aa4e6f31b6cf62434b9053d6157797da1b",
+      "newAstSha256": "c1b3e565bc760b75ffa1d8eb5d874b3d3b4bbf98e4b99bede76fd004b643bc4c",
+      "oldRawSha256": "fbf48ce26aacfc0f0fb019914e9a6ec82a3f3e28152eb3c0d30c434cba136d34",
+      "newRawSha256": "ff2b00c7964696fb72d03f16b56909914940b336a26c32b4cb68715122e73e99",
+      "onlyReviewedTransportDelta": true,
+      "existingReviewedRecords": [
+        {
+          "rule": "security/detect-object-injection",
+          "fingerprint": "66efd2e157593609b3bb09ef79bb929f55c0de8fbedb237a03d3aa5797edda40",
+          "count": 1,
+          "oldSourceCodeSha256": "ee04a5fd3d5a009f343a0b19abc6a2aa4e6f31b6cf62434b9053d6157797da1b",
+          "verifiedUnchangedFingerprintAndCount": true
+        },
+        {
+          "rule": "security/detect-object-injection",
+          "fingerprint": "8d05cc1a0373c81ee7a7374996443dd8e9614064546506b74e71d0e4f98c5f79",
+          "count": 1,
+          "oldSourceCodeSha256": "ee04a5fd3d5a009f343a0b19abc6a2aa4e6f31b6cf62434b9053d6157797da1b",
+          "verifiedUnchangedFingerprintAndCount": true
+        },
+        {
+          "rule": "security/detect-object-injection",
+          "fingerprint": "33dfdc4c4351cf2428195c5c0d5df0c7857410d84907b7203948fba86a3903d4",
+          "count": 1,
+          "oldSourceCodeSha256": "ee04a5fd3d5a009f343a0b19abc6a2aa4e6f31b6cf62434b9053d6157797da1b",
+          "verifiedUnchangedFingerprintAndCount": true
+        },
+        {
+          "rule": "security/detect-object-injection",
+          "fingerprint": "a9dad109b53f4042292c396c1642d8267add1e6be9d6f4201e53cc6057b8e194",
+          "count": 1,
+          "oldSourceCodeSha256": "ee04a5fd3d5a009f343a0b19abc6a2aa4e6f31b6cf62434b9053d6157797da1b",
+          "verifiedUnchangedFingerprintAndCount": true
+        },
+        {
+          "rule": "security/detect-object-injection",
+          "fingerprint": "8a5cbe04567a232144da790ba766b12166acf0e845481351d0f1a7339b96db12",
+          "count": 1,
+          "oldSourceCodeSha256": "ee04a5fd3d5a009f343a0b19abc6a2aa4e6f31b6cf62434b9053d6157797da1b",
+          "verifiedUnchangedFingerprintAndCount": true
+        },
+        {
+          "rule": "security/detect-object-injection",
+          "fingerprint": "005d83502270b1956c976420b49cb55f4620a0c78b2eb9a69cc8c9cefbba3a90",
+          "count": 1,
+          "oldSourceCodeSha256": "ee04a5fd3d5a009f343a0b19abc6a2aa4e6f31b6cf62434b9053d6157797da1b",
+          "verifiedUnchangedFingerprintAndCount": true
+        },
+        {
+          "rule": "security/detect-object-injection",
+          "fingerprint": "460ac06007f530b281151a1c840f85ba0c8dc7a3751a0734921a430a60f1072e",
+          "count": 1,
+          "oldSourceCodeSha256": "ee04a5fd3d5a009f343a0b19abc6a2aa4e6f31b6cf62434b9053d6157797da1b",
+          "verifiedUnchangedFingerprintAndCount": true
+        },
+        {
+          "rule": "security/detect-object-injection",
+          "fingerprint": "2b591b229a054bc4a510498d1fbb3cad661647298b543dcf05540e76d90a1021",
+          "count": 1,
+          "oldSourceCodeSha256": "ee04a5fd3d5a009f343a0b19abc6a2aa4e6f31b6cf62434b9053d6157797da1b",
+          "verifiedUnchangedFingerprintAndCount": true
+        },
+        {
+          "rule": "security/detect-object-injection",
+          "fingerprint": "f56b3e6578f6f6cc4a630565eb2ba41a655de9e9e8cfff7304064ae095446d0d",
+          "count": 1,
+          "oldSourceCodeSha256": "ee04a5fd3d5a009f343a0b19abc6a2aa4e6f31b6cf62434b9053d6157797da1b",
+          "verifiedUnchangedFingerprintAndCount": true
+        },
+        {
+          "rule": "security/detect-object-injection",
+          "fingerprint": "6fbab3314bcb2837ef5ec012a579fff64a2c4907fa106d3b8058d8ce754a4d79",
+          "count": 1,
+          "oldSourceCodeSha256": "ee04a5fd3d5a009f343a0b19abc6a2aa4e6f31b6cf62434b9053d6157797da1b",
+          "verifiedUnchangedFingerprintAndCount": true
+        },
+        {
+          "rule": "security/detect-object-injection",
+          "fingerprint": "548362aec8b858aba75684d9d22adb5333ba2d0e327c9aea76315ab3a42f92de",
+          "count": 1,
+          "oldSourceCodeSha256": "ee04a5fd3d5a009f343a0b19abc6a2aa4e6f31b6cf62434b9053d6157797da1b",
+          "verifiedUnchangedFingerprintAndCount": true
+        },
+        {
+          "rule": "security/detect-object-injection",
+          "fingerprint": "baf6d5c68bb923d85285e8bea9b15d1dae26d3970dd9659300ee48a634462916",
+          "count": 1,
+          "oldSourceCodeSha256": "ee04a5fd3d5a009f343a0b19abc6a2aa4e6f31b6cf62434b9053d6157797da1b",
+          "verifiedUnchangedFingerprintAndCount": true
+        },
+        {
+          "rule": "security/detect-object-injection",
+          "fingerprint": "b088cf1a1c932c89dd620efdcbbb92fa9e924e0c50974a557820b8959c244f2d",
+          "count": 1,
+          "oldSourceCodeSha256": "ee04a5fd3d5a009f343a0b19abc6a2aa4e6f31b6cf62434b9053d6157797da1b",
+          "verifiedUnchangedFingerprintAndCount": true
+        },
+        {
+          "rule": "security/detect-object-injection",
+          "fingerprint": "a4207d54306d491e2e5f69c2e5f25fab7246edaf9bdf7c9394e7e5ce73e1c4a1",
+          "count": 1,
+          "oldSourceCodeSha256": "ee04a5fd3d5a009f343a0b19abc6a2aa4e6f31b6cf62434b9053d6157797da1b",
+          "verifiedUnchangedFingerprintAndCount": true
+        },
+        {
+          "rule": "security/detect-object-injection",
+          "fingerprint": "373c3f94e0bdd3398c7ec6d6fe97bf81d191ce7edc9cab3c8bec6bb4d4f7faae",
+          "count": 1,
+          "oldSourceCodeSha256": "ee04a5fd3d5a009f343a0b19abc6a2aa4e6f31b6cf62434b9053d6157797da1b",
+          "verifiedUnchangedFingerprintAndCount": true
+        },
+        {
+          "rule": "security/detect-object-injection",
+          "fingerprint": "00fe5a2d8f7161cb44899f12c37868e0e846da516554557f36889e805a10cb80",
+          "count": 1,
+          "oldSourceCodeSha256": "ee04a5fd3d5a009f343a0b19abc6a2aa4e6f31b6cf62434b9053d6157797da1b",
+          "verifiedUnchangedFingerprintAndCount": true
+        },
+        {
+          "rule": "security/detect-object-injection",
+          "fingerprint": "37a33899dfa8d5c6d6896353cced39e7502d5fe75d82e7f96bd089ee5cf0e969",
+          "count": 1,
+          "oldSourceCodeSha256": "ee04a5fd3d5a009f343a0b19abc6a2aa4e6f31b6cf62434b9053d6157797da1b",
+          "verifiedUnchangedFingerprintAndCount": true
+        },
+        {
+          "rule": "security/detect-object-injection",
+          "fingerprint": "7d70048b2ec336376ba9408431d9f65cb2bfbd4bf7d561685c92eb1188748e12",
+          "count": 1,
+          "oldSourceCodeSha256": "ee04a5fd3d5a009f343a0b19abc6a2aa4e6f31b6cf62434b9053d6157797da1b",
+          "verifiedUnchangedFingerprintAndCount": true
+        },
+        {
+          "rule": "security/detect-object-injection",
+          "fingerprint": "8187a29151ecab6f0e81be7f22f2707f39f1168899d0a50ecc0e7639caeefbed",
+          "count": 1,
+          "oldSourceCodeSha256": "ee04a5fd3d5a009f343a0b19abc6a2aa4e6f31b6cf62434b9053d6157797da1b",
+          "verifiedUnchangedFingerprintAndCount": true
+        }
+      ],
+      "oldLintCount": 21,
+      "newLintCount": 21,
+      "introducedOrIncreasedFingerprints": []
+    },
+    {
+      "file": "src-admin-tab/src/components/EmbeddedEmsFrame.tsx",
+      "oldAstSha256": "61ac29b26957b6d288f3404799fc05913d00d68354873276268966dc7c8ff636",
+      "newAstSha256": "85d38ee07f1e8aac28e5d24eafa69d162c959192c67ee51a6d363bbb192eac99",
+      "oldRawSha256": "77fdd8212e9090e2f641450124c9598f6c4686d6584ec14cc9769d126114e789",
+      "newRawSha256": "781ae27e8d1a4e48912f0c8d44df230f587dd4242bc8265da44d13e80bb63158",
+      "onlyReviewedTransportDelta": true,
+      "existingReviewedRecords": [],
+      "oldLintCount": 0,
+      "newLintCount": 0,
+      "introducedOrIncreasedFingerprints": []
+    },
+    {
+      "file": "src-admin-tab/src/pages/NotificationMailPage.tsx",
+      "oldAstSha256": "ee04c4813a89133f921092aa2a56523c7cbbf0741ca42434a03d1e4634c6fccc",
+      "newAstSha256": "c8a0b581d151256f61ca9e847b60895a719ba7981013f294ee2d910bb6a6c286",
+      "oldRawSha256": "fc144064f1e1636518410739dcd471d58f4c31ca49c697bada3d2efe6b9b2db1",
+      "newRawSha256": "6f0a0318eee11109c693ee51e63c970582627b6209cb5b9708758430a286dc62",
+      "onlyReviewedTransportDelta": true,
+      "existingReviewedRecords": [],
+      "oldLintCount": 0,
+      "newLintCount": 0,
+      "introducedOrIncreasedFingerprints": []
+    },
+    {
+      "file": "src-admin-tab/src/lib/dataPointPicker.ts",
+      "oldAstSha256": "9a4a55816fe582d2e1212a6ca9390b9edc4eeb6335b02c157ff23200c3c316b8",
+      "newAstSha256": "2eb23353236fd925f7773e65d3bbe4a654afc93682e2d7f2a63a2ae0214a9cf1",
+      "oldRawSha256": "a868b8d429e0ea0f920d9407da16170547760913282d99cb7e7cdc23419b63a4",
+      "newRawSha256": "e28946e685fffe198314fe4463459a42c2349a2e4481e9ffe39277e187953da1",
+      "onlyReviewedTransportDelta": true,
+      "existingReviewedRecords": [],
+      "oldLintCount": 0,
+      "newLintCount": 0,
+      "introducedOrIncreasedFingerprints": []
+    },
+    {
+      "file": "src-admin-tab/src/App.tsx",
+      "oldAstSha256": "20bb82ad82dace65c9f25cfa939986e6e888198805f91eac7d28d3fae5b453c3",
+      "newAstSha256": "03fb4393798244927ef4cc1b2e34e826b1acf77fd8f1c5913632aa456a3eb10e",
+      "oldRawSha256": "a11dc57e8288956295bc2fe75c99330796c206f2d773ea1c6edd0a8b13dd94db",
+      "newRawSha256": "130004830b352357603184300d09b4308e96773e5e8ba28365b72c56f0c9bbd8",
+      "onlyReviewedTransportDelta": true,
+      "existingReviewedRecords": [],
+      "oldLintCount": 0,
+      "newLintCount": 0,
+      "introducedOrIncreasedFingerprints": []
+    }
+  ]
+}

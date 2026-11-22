@@ -1,0 +1,6 @@
+{
+  "review": "independent generated-runtime comparison to ZIP 1.0.29",
+  "cases": 44,
+  "changedUnexpectedResults": 0,
+  "hardware": false
+}

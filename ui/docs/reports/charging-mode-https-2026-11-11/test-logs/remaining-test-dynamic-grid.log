@@ -1,0 +1,171 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:dynamic-grid
+> npm run typecheck:nvp && node --test test/dynamic-grid-*.test.cjs && npm run test:dynamic-grid-ui
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 typecheck:nvp
+> tsc -p tsconfig.nvp-topology.json
+
+✔ unvollständiger Entwurf bleibt speicherbar, Aktivierung meldet konkrete fehlende Verträge (22.579193ms)
+✔ freie herstellerunabhängige Speicherzuordnung ist ohne Bestandsinventar aktivierbar (10.234274ms)
+✔ M0 bleibt Allgemein, kW und Vorzeichen kommen aus serverseitiger Quelle (2.163288ms)
+✔ vollständiges Allgemein-Splitpaar wird übernommen; gleiche physische M0/M1-Quelle wird abgewiesen (7.704479ms)
+✔ getrennte Alias-Lese-/Schreibquellen liefern richtige physische Ownership-Kette (8.007794ms)
+✔ zwei Aliasnamen auf demselben Ausgang erzeugen keinen zweiten Writer (30.310146ms)
+✔ falsche Ausgangsrechte, Datentypen und Einheiten verhindern Aktivierung, nicht Entwurf (16.219277ms)
+✔ CAS gilt für eigene App-Saves sowie Allgemein-Änderungen und reine App-Schalter (2.668429ms)
+✔ lesende CAS-Version stimmt für fehlende und ältere Entwürfe mit der Schreibgrenze überein (5.37179ms)
+✔ alte Allgemein-Konfiguration benötigt ohne neue App keinen impliziten Appvertrag (0.404414ms)
+✔ kontrollierte Deaktivierung bleibt bis zur positiven Runtime-Übergabe ausstehend (2.953751ms)
+✔ Status einer früheren Version wird ohne alte Messungen als pending dargestellt (5.341643ms)
+✔ jede neue API-Route besitzt die Installer-Middleware und keinen HTTP-Cache (2.070047ms)
+✔ alter oder zukünftiger aktiver Status wird nicht als aktuelle erfolgreiche Regelung ausgegeben (0.457287ms)
+✔ aktive bestehende PV-Stellstrecke muss vor Übernahme zugeordnet werden (7.837055ms)
+✔ vorhandenes Speicherlizenzlimit zählt freie App-Zuordnungen ohne Inventarabhängigkeit (9.46248ms)
+✔ DynamicGrid HTTP: globaler AppCenter-Save installiert fehlende und ältere Entwürfe mit gelesenem CAS-Token (862.9825ms)
+✔ DynamicGrid HTTP: Rollen, Entwurf, atomare Aktivierung, CAS und M0 aus Allgemein (138.525291ms)
+✔ DynamicGrid HTTP: AppCenter/Import und parallele Gesamtpatch-Writer können CAS nicht umgehen (85.812921ms)
+✔ DynamicGrid HTTP: Backup-Inhaltsversion ersetzt nicht den geladenen Import-CAS-Token (26.035919ms)
+✔ eigene App: Entwürfe speicherbar, Aktivierung vollständig, kein Farm-/Herstellerzwang (10.982743ms)
+✔ M0 nur Allgemein; gleiche physische Quellen und Alias-Ausgänge abgewiesen (0.645534ms)
+✔ M0 Split benötigt beide frischen Quellen, kohärente Zeitpunkte und bekannte Einheit (3.898857ms)
+✔ SoC/Verfügbarkeit strikt: string/null/stale erzeugen keine fiktive Kapazität (1.409325ms)
+✔ externe Limits benötigen angewandte Grenzen und geräteseitigen Ablauf, keine Markenliste (0.730037ms)
+✔ T13: verpflichtende Entladung wird aktiv als nicht verschlechternde Recovery berechnet (3.035552ms)
+✔ T13 Gegenrichtung: notwendige Ladung; Null ist bei bestehender Stützung nicht sicher (0.755091ms)
+✔ T15: zu wenig Stützleistung bleibt sichtbar und nutzt nur bestmögliche Entlastung (0.359667ms)
+✔ T08/T09: unabhängige externe Maxima verbrauchen gemeinsames Restbudget nur einmal (11.611946ms)
+✔ T12: 135→165 kW erst nach bestätigter EOS-Stützleistung, keine optimistischen Endpunkte (0.617002ms)
+✔ PV-Ausfallreserve begrenzt Ladung auch bei momentan hoher PV-Erzeugung (0.249899ms)
+✔ lokale Grenzen bleiben über Recovery und jede ungleichzeitige Leistungskombination wirksam (0.389755ms)
+✔ 250 deterministische Szenarien prüfen sämtliche Alt/Neu-Endpunktkombinationen (34.416535ms)
+✔ fehlerhafte Reservierung und rein positive externe Maximalfreigabe sind niemals ausführbar (0.751222ms)
+✔ Neustart EOS: Null-Ist mit alter Vollreservierung erhält bestätigbaren Handshake (0.303446ms)
+✔ Neustart extern: engere Rechte sind sendbar, aber Altfreigabe erst nach Anwendung frei (1.024865ms)
+✔ mehrere externe Anfangsverträge werden gemeinsam monotone verkleinert, niemals erweitert (1.061271ms)
+✔ leere neue Speicherzuordnung bleibt nur als Entwurf gültig (0.65608ms)
+✔ M1 bewusst unbegrenzt ist null, leere eingeschaltete Grenze bleibt unvollständiger Entwurf (0.322081ms)
+✔ Leistung und SoC derselben Batterie dürfen weder direkt noch über Alias dieselbe Messquelle verwenden (0.541478ms)
+✔ externe Grenzrückmeldung benötigt echte Bestätigung und nichtnegative Werte (0.801617ms)
+✔ src-ts/runtime-executables/www/ems-apps.ts: gebundene Stateauswahl und unveränderter manueller AppCenter-Pfad (575.332443ms)
+✔ src-ts/runtime-executables/www/ems-apps.ts: alte Tree-/Searchantworten, Rowcallbacks, Cancel und Mutationssperre (214.079884ms)
+✔ src-ts/runtime-mirrors/www/ems-apps.ts: gebundene Stateauswahl und unveränderter manueller AppCenter-Pfad (175.203195ms)
+✔ src-ts/runtime-mirrors/www/ems-apps.ts: alte Tree-/Searchantworten, Rowcallbacks, Cancel und Mutationssperre (153.128935ms)
+✔ React-Picker verwirft fremde Origin/Source/Request und spätes Ergebnis nach Abort (118.532243ms)
+✔ React-Picker übernimmt gültiges Ergebnis, Popup-Schließen und Timeout räumen auf (97.100298ms)
+✔ E2E: Erststart schreibt echte M1-Korrektur; ACK bleibt getrennt, Messantwort ermöglicht Folgetakt und M0-Gerät (67.106735ms)
+✔ E2E: M0-Ausgleich ersetzt niemals die reale Aufnahme bei lokalem M1-Export (8.446874ms)
+✔ E2E: Altregler und freier Alias schreiben weder vor Ersttick noch nach aktiver Übernahme (8.411422ms)
+✔ E2E: Konfigurationsgeneration während erstem Hardwarewrite verhindert alle Folgeausgänge (5.227023ms)
+✔ E2E: §14a begrenzt zwei Tarifgruppen gemeinsam vor realer Geräteausgabe (6.355385ms)
+✔ E2E: zwischen Gerätewrites ungültiges §14a-Signal sperrt weiteren Ladebefehl (4.218802ms)
+✔ E2E: API-Übergabe vor Ersttick wartet auf gemessene Nullleistung und gibt alte Hoheit erst danach frei (13.074975ms)
+✔ E2E: Home-Lizenz begrenzt die reale Summe zweier frei zugeordneter Speicher auf 50 kW (5.331401ms)
+✔ E2E: Mesh-Ladekategorie wird gemeinsam eingehalten, nachträgliche Absenkung stoppt Folgewrite (9.225729ms)
+✔ aktive Konfiguration beansprucht Ausgänge vor Runtime und vor erster Lease (2.530005ms)
+✔ Shadow, gleiche Werte, Keepalive und manuelle API umgehen konfigurierte Hoheit nicht (17.63818ms)
+✔ freier Alias auf physisches Ziel wird vor Schreibausführung aufgelöst und gesperrt (2.173172ms)
+✔ unaufgelöster Alias wird blockiert, fremder bekannter Aktor bleibt nutzbar (2.064414ms)
+✔ Deaktivierung behält alte Ziele bis Runtime die bestätigte Übergabe freigibt (0.378716ms)
+✔ inaktive App ändert alte Writes nicht und fragt keine Objekte ab (0.612128ms)
+✔ expliziter Hardware-Notstopp bleibt möglich, allgemeine Safetybezeichnung reicht nicht (0.583832ms)
+✔ Bestands-Speicherregler übergibt Tick, direkten Write und Deaktivierung ohne Nullbefehl (424.915899ms)
+✔ verzögerter App-Write prüft seine Generation direkt vor Geräteausgabe erneut (1.715019ms)
+✔ Appwriter ohne eigenen gültigen Vertrag darf keine fremden Aktoren beschreiben (1.109603ms)
+✔ unbekannte eigene Alias-Schreibseite sperrt Fremdschreiber schon vor Startupvalidierung (1.175971ms)
+✔ Partnerwiderruf blockiert reale Writes, Changed-Writes und Keepalive auch ohne Autoritätslease (0.848959ms)
+✔ Partnerwiderruf während Alias-await verhindert Geräteausgabe (0.805923ms)
+✔ Partnerfortsetzung nach Stop bleibt gesperrt (0.446161ms)
+✔ Partnerfortsetzung nach Stop und Reinstall bleibt gesperrt (0.202861ms)
+✔ fehlender oder abgemeldeter Arbiter führt Partner-Callback niemals aus (1.002468ms)
+✔ gültiger Partnerauftrag verwendet genau bestehenden Writer, lokaler Rückfall bleibt nach Stop möglich (0.503236ms)
+✔ Herstellerfreie freie DP-Zuordnung akzeptiert W/% und getrennte Istleistung (2.137358ms)
+✔ Fehlerhafte Zahlen, Exportlimit-Einheit und doppelte physische Schreibaliasse gesperrt (0.891974ms)
+✔ Inaktive Entwürfe trennen fehlende Felder von ungültigen Werten (0.249058ms)
+✔ Legacy-Übernahme verlangt nur wirklich aktive Zero-Export-Ausgänge; EVU allein bleibt frei (1.595221ms)
+✔ Alle Diagnosealiasse und deren Vorrang entsprechen dem bisherigen Export-Guard (0.332822ms)
+✔ Legacy-Sammelausgang übernimmt nur aufgelösten Modus; aktive WR-Gruppe übernimmt alle tatsächlichen Ausgänge (0.30273ms)
+✔ Aktive Legacy-PV muss physisch vollständig in der eigenen App zugeordnet sein (4.680851ms)
+✔ Ein bisheriger Exportlimit-Ausgang wird bei Übernahme nicht als Generation-DP umgedeutet (0.186455ms)
+✔ Lokale Nulleinspeisung reduziert nur M1-PV; M0 darf weiter exportieren (23.199623ms)
+✔ M0 gemeinsame Exportgrenze begrenzt beide Erzeuger und erhält die lokale strengere Grenze (1.00436ms)
+✔ Mesh-PV-Grenze wird einmal auf alle App-Wechselrichter verteilt (0.539799ms)
+✔ Mesh-Exportgrenze verschärft M0 unabhängig vom PV-Kategoriebudget und ersetzt keine lokale Grenze (0.463962ms)
+✔ Handover hält bekannte Caps und eröffnet ohne bekannte Cap höchstens gemessene Generation (1.026279ms)
+✔ Live-Mesh-Absenkung zwischen zwei Writes verwirft den inzwischen unzulässigen Folgeauftrag (8.39663ms)
+✔ Äußere Speicher-Ladung erzeugt keine lokale M1-Aufnahme und erlaubte Ladung zählt nicht als Senke (1.084499ms)
+✔ Neue unbestätigte Speicherentladung bleibt im PV-Exportbudget reserviert (0.652663ms)
+✔ PV-Ausfall wird als Importkonflikt ausgewiesen, nie als garantierte Mindestgeneration (0.737827ms)
+✔ EVU 60/30/0 wird ausschließlich zugeordneten Erzeugern zugeordnet und mit NVP-Minimum vereinigt (5.191442ms)
+✔ Veraltetes EVU-Relais hält letzte strengere Cap und fällt nicht auf 100 Prozent zurück (0.942764ms)
+✔ Negative, fehlende, veraltete und zeitversetzte PV-Werte erteilen keine Freigabe (0.656452ms)
+✔ Fehlendes Speicherintervall wird nicht durch angenommenes 0-W-Fahren ersetzt (0.44404ms)
+✔ Finalslot schreibt genau einmal je Erzeuger; ACK wird nicht als physische Wirkung ausgegeben (4.045654ms)
+✔ Konfigurationswechsel während Lesen verwirft sämtliche PV-Befehle (0.45536ms)
+✔ Konfigurationswechsel nach erster Ausgabe verhindert weitere Teilbefehle (1.207042ms)
+✔ EVU-Konfigurationswechsel unmittelbar vor Ausgabe verwirft die Freigabe (1.010806ms)
+✔ Frische EVU-Nullstufe wirkt auch bei fehlender Netz-/PV-Messung ohne Freigabeerhöhung (0.828408ms)
+✔ Lesefehler hält Caps und stellt Fehlerstatus sichtbar (26.343579ms)
+✔ Timeout lässt EMS frei und verhindert weitere IO-Aufträge bis zum tatsächlichen Abschluss (70.09656ms)
+✔ PV-Schreibabsicht bleibt bei Timeout vor dem await für Speicherbudget reserviert (9.519669ms)
+✔ Explizite angewandte Cap-Rückmeldung kann alte PV-Freigabe freigeben; bloßes ACK genügt nicht (0.542093ms)
+✔ M0 Split-Messung verwendet den gemeinsamen strengen Collector (59.313949ms)
+✔ Akzeptierte Lastreduktion bleibt konservativ im PV-Budget; zusätzliche Last ist keine garantierte Senke (0.49065ms)
+✔ Eigene App besitzt Finalslot vor erstem Snapshot; ausgeschalteter Bestand bleibt frei (364.062476ms)
+✔ Legacy-PV-Schreibwege einschließlich Fehler-Nullwert respektieren App-Zielbesitz (174.176892ms)
+✔ app activation has exactly installed && enabled authority (3.259888ms)
+✔ generic signed DP converts W/raw and sign exactly once; ACK is not applied power (11.935958ms)
+✔ unconfirmed split-neutralization stops before opposite direction and flags (1.325797ms)
+✔ confirmed split writes inactive zero, target, then enable/run (1.802719ms)
+✔ mapping generation change during first accepted write stops all subsequent writes (1.840326ms)
+✔ readonly output never receives a command (0.540152ms)
+✔ PV final generation limit uses percent without reinterpreting it as export (1.211348ms)
+✔ external corridor writes contraction before expansion and watchdog last (2.431483ms)
+✔ pending commands remain in M0/M1 budgets and M1 is not added onto M0 (1.918187ms)
+✔ local failure holds M1 while valid outer actuator retains own M0 context (0.649371ms)
+✔ PV disappearance is reserved before storage charging; stale SoC cannot allocate (0.91915ms)
+✔ external startup reserves full capability without applied limit feedback (0.579428ms)
+✔ EOS command confirmation alone never clears the previous pending interval (0.620285ms)
+✔ coherent solver permits active mandatory support but labels recovery until measured (1.376855ms)
+✔ delayed ACK is confirmed on the next cycle without resetting the issued timestamp (1.163577ms)
+✔ startup also reserves latent EOS commands, including unavailable excluded devices (0.430772ms)
+✔ previously issued PV cap reserves possible generation growth in storage export budget (0.315089ms)
+✔ active runtime issues a real bounded generic command and retains uncertainty (10.986099ms)
+✔ restart-active configuration cannot be deactivated before real handover verification (29.628767ms)
+✔ hard discharge cap is applied before solver and actual hardware write (1.843651ms)
+✔ zero charge cap survives planning and physical write even with local export (1.654794ms)
+✔ configuration changes while DP metadata is pending prohibit the later hardware write (0.225387ms)
+✔ timed out hardware remains tracked and blocks handover/new physical calls until settled (50.864697ms)
+✔ live licence loss between split commands prevents the active direction from being released (2.778756ms)
+✔ zero storage power cannot release ownership while a previous PV increase remains unsafe (1.591877ms)
+✔ Dynamic Partnerauftrag nutzt gemeinsamen Writer; Capability und Telemetrie entstehen vor Lease (4.771948ms)
+✔ Dynamic abgelaufene Partnerlease hält keinen alten Rampenauftrag aktiv (3.274542ms)
+✔ Dynamic Widerruf während Writer-Metadatenawait sperrt alte Geräteausgabe (0.985947ms)
+✔ Dynamic fehlender Partnerauftrag ermöglicht Capability und liefert lokalen Rückfallwunsch (1.233639ms)
+ℹ tests 136
+ℹ suites 0
+ℹ pass 136
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3072.943602
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:dynamic-grid-ui
+> node test/frontend-nvp-topology.cjs
+
+PASS real data point field keeps manual input and picker under the same context lock
+PASS separate app draft has no manual activation or second M0 mapping
+PASS M0 signed and split sources render read-only with real General link
+PASS clearing a required number never becomes zero or no-limit null
+PASS M1 zero remains an enabled limit while null stays explicitly unconfigured
+PASS generic storage has full own mapping and no brand or Farm dependency
+PASS external limits have independent maxima, applied feedback and device TTL
+PASS live readout never promotes ACK to applied effect and hides stale command
+PASS unknown status labels never resolve inherited prototype members
+PASS customer wildcard does not bypass Installer/Admin app guard
+PASS atomic activation conflict is not retried
+{"result":"PASS","checks":11,"limitation":"React renderer and actual handlers; browser interaction is a separate check."}

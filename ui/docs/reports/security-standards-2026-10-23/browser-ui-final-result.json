@@ -1,0 +1,6 @@
+{
+  "command": "npm run test:dynamic-grid-ui-browser",
+  "exit": 0,
+  "seconds": 18.53482675552368,
+  "log": "browser-ui.log"
+}

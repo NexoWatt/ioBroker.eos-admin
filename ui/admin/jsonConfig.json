@@ -1,0 +1,408 @@
+{
+  "type": "tabs",
+  "items": {
+    "allgemein": {
+      "type": "panel",
+      "label": "Allgemein",
+      "title": "Allgemein",
+      "items": {
+        "__appcenterInfo": {
+          "type": "staticText",
+          "text": "Hinweis: Die EMS-Konfiguration (Energiefluss / Datenpunkt-Mapping / Tarife / Speicherfarm / Ladepunkte) erfolgt ausschließlich im App-Center.\n\nApp-Center öffnen: Im Adapter-Reiter „Tab“ auf „EMS Apps öffnen“ klicken. Oder direkt aus dem Admin: /adapter/nexowatt-ui/appcenter.html?instance=<INSTANZ>. Bei aktiviertem direktem HTTPS: https://<HOST>:<PORT>/ems-apps.html.",
+          "xs": 12,
+          "sm": 12,
+          "md": 12
+        },
+        "port": {
+          "type": "number",
+          "label": "Web-Port",
+          "min": 1,
+          "max": 65535,
+          "attr": "port",
+          "xs": 12,
+          "sm": 12,
+          "md": 6
+        },
+        "ip": {
+          "type": "text",
+          "label": "IP-Adresse / Bind-Adresse",
+          "attr": "ip",
+          "xs": 12,
+          "sm": 12,
+          "md": 6,
+          "help": "NexoWatt-EOS-kompatible IP-Adresse für den eingebauten Webserver. Legacy native.bind wird weiterhin als Fallback gelesen.",
+          "default": "0.0.0.0"
+        },
+        "secure": {
+          "type": "checkbox",
+          "label": "Direktes HTTPS für die Web-App aktivieren",
+          "default": false,
+          "help": "Verschlüsselt den eingestellten Web-Port. Öffentliches Zertifikat und zugehörigen privaten Schlüssel ausdrücklich auswählen. Der Browser muss dem Zertifikat vertrauen; es muss für den verwendeten Hostnamen oder die IP-Adresse gelten. Nach dem Speichern startet die Instanz neu. Bei Zertifikatsfehlern öffnet die UI keinen unverschlüsselten Ersatzport. Bestehende HTTPS-Proxyzugänge können weiter den bisherigen internen HTTP-Port verwenden.",
+          "xs": 12,
+          "sm": 12,
+          "md": 12
+        },
+        "certPublic": {
+          "type": "certificate",
+          "label": "Öffentliches Serverzertifikat",
+          "certType": "public",
+          "default": "",
+          "hidden": "!data.secure",
+          "xs": 12,
+          "sm": 12,
+          "md": 6
+        },
+        "certPrivate": {
+          "type": "certificate",
+          "label": "Zugehöriger privater Schlüssel",
+          "certType": "private",
+          "default": "",
+          "hidden": "!data.secure",
+          "xs": 12,
+          "sm": 12,
+          "md": 6
+        },
+        "certChained": {
+          "type": "certificate",
+          "label": "Zertifikatskette (optional)",
+          "certType": "chained",
+          "default": "",
+          "hidden": "!data.secure",
+          "xs": 12,
+          "sm": 12,
+          "md": 6
+        },
+        "__httpsPwaInfo": {
+          "type": "staticText",
+          "text": "Web-App: Für den Start vom Homescreen und automatische Aktualisierungen einen dauerhaft vertrauenswürdigen HTTPS-Zugang verwenden. Bei direktem HTTPS lauten Browser- und App-Adresse https://<HOST>:<PORT>/. Beim Wechsel von Host, Port oder Protokoll die vorhandene Homescreen-Verknüpfung auf die neue Adresse umstellen. Logo, Bedienoberfläche und bestehende Zuordnungen bleiben erhalten.",
+          "hidden": "!data.secure",
+          "xs": 12,
+          "sm": 12,
+          "md": 12
+        }
+      }
+    },
+    "sicherheit": {
+      "type": "panel",
+      "label": "Sicherheit",
+      "title": "Sicherheit",
+      "items": {
+        "__securityInfo": {
+          "type": "staticText",
+          "text": "Die Web-Oberfläche benötigt immer eine bestätigte Anmeldung. Benutzer erhalten die freigegebene Bedienoberfläche; Installateure und Administratoren zusätzlich ihre freigegebenen Einrichtungen. Das Anmeldeprofil wird ausdrücklich gewählt und bei Fehlern nicht gewechselt.",
+          "xs": 12,
+          "sm": 12,
+          "md": 12
+        },
+        "auth.mode": {
+          "type": "select",
+          "label": "Anmeldeprofil",
+          "attr": "auth.mode",
+          "default": "iobroker",
+          "options": [
+            {
+              "label": "Eigenständige NexoWatt UI / Apple Premium Service",
+              "value": "iobroker"
+            },
+            {
+              "label": "EOS – zentrale EOS-Admin-Anmeldung",
+              "value": "eos"
+            }
+          ],
+          "help": "Die eigenständige UI nutzt ein vorhandenes Benutzerkonto der Systemverwaltung mit eigener UI-Sitzung und benötigt keinen EOS-Admin. EOS übernimmt ausschließlich eine serverseitig bestätigte zentrale Sitzung. Ein Ausfall oder eine Fehlkonfiguration öffnet keinen lokalen Ersatzlogin.",
+          "xs": 12,
+          "sm": 12,
+          "md": 12
+        },
+        "__authStandalone": {
+          "type": "staticText",
+          "text": "Eigenständige UI: Benutzer, Passwörter und Gruppen in der Systemverwaltung verwalten. Keine neuen Standardkonten oder automatisch geänderten Passwörter. Der Zugang zur UI benötigt HTTPS; HTTP ist ausschließlich für lokale Loopback-Zugriffe vorgesehen.",
+          "hidden": "data.auth.mode !== 'iobroker'",
+          "xs": 12,
+          "sm": 12,
+          "md": 12
+        },
+        "__authEos": {
+          "type": "staticText",
+          "text": "EOS-Profil: Zentrale Anmeldung und UI müssen über einen abgestimmten Host-/Proxyzugang erreichbar sein. Der UI-Server prüft die EOS-Sitzung an /nexowatt/security/session. Eine bloße Benutzer- oder Rollenangabe vom Browser reicht nicht. Unterschiedliche Ports trennen Cookies nicht.",
+          "hidden": "data.auth.mode !== 'eos'",
+          "xs": 12,
+          "sm": 12,
+          "md": 12
+        },
+        "auth.eosSessionUrl": {
+          "type": "text",
+          "label": "EOS-Sitzungsprüfung (vollständige URL)",
+          "default": "",
+          "help": "Pflicht im EOS-Profil: fest konfigurierte URL des vorhandenen EOS-Admin-Endpunkts /nexowatt/security/session. HTTPS mit gültiger Gegenstellenprüfung verwenden. HTTP ist nur mit einer wörtlichen Loopback-IP für eine lokale Prozessverbindung zulässig. Keine Zugangsdaten oder Token in die URL aufnehmen.",
+          "xs": 12,
+          "sm": 12,
+          "md": 12,
+          "hidden": "data.auth.mode !== 'eos'",
+          "attr": "auth.eosSessionUrl"
+        },
+        "auth.eosLoginUrl": {
+          "type": "text",
+          "label": "Zentrale EOS-Anmeldeseite",
+          "default": "",
+          "help": "Pflicht im EOS-Profil: relativer Pfad am gemeinsamen Ursprung oder vollständige HTTPS-URL. Beim vorhandenen EOS-Admin führt /index.html?login zur Anmeldung. Den tatsächlichen öffentlichen Proxy-Pfad verwenden; keine Token oder Passwörter eintragen.",
+          "xs": 12,
+          "sm": 12,
+          "md": 12,
+          "hidden": "data.auth.mode !== 'eos'",
+          "attr": "auth.eosLoginUrl"
+        },
+        "auth.eosLogoutUrl": {
+          "type": "text",
+          "label": "Zentrale EOS-Abmeldeseite",
+          "default": "",
+          "help": "Ziel für die zentrale Abmeldung, z. B. der zum eigenen Zugang passende /logout-Pfad. Relativer Pfad oder HTTPS-URL; die lokale Ansicht allein beendet keine zentrale Sitzung.",
+          "xs": 12,
+          "sm": 12,
+          "md": 12,
+          "hidden": "data.auth.mode !== 'eos'",
+          "attr": "auth.eosLogoutUrl"
+        },
+        "auth.eosCaFile": {
+          "type": "text",
+          "label": "Optionale CA-Datei für die EOS-Sitzungsprüfung",
+          "default": "",
+          "help": "Nur bei eigener Zertifizierungsstelle: absoluter Pfad zu einer lesbaren PEM-CA-Datei auf dem UI-Server. Leer verwendet den System-Vertrauensspeicher. Die Zertifikats-/Hostnamenprüfung bleibt aktiv; hier weder privaten Schlüssel noch Zertifikatsinhalt eintragen.",
+          "xs": 12,
+          "sm": 12,
+          "md": 12,
+          "hidden": "data.auth.mode !== 'eos'",
+          "attr": "auth.eosCaFile"
+        },
+        "auth.trustedProxyIps": {
+          "type": "text",
+          "label": "Vertrauenswürdige HTTPS-Proxy-IP-Adressen",
+          "default": "",
+          "help": "Optional: konkrete tatsächliche Peer-IP-Adressen vertrauenswürdiger Reverse-Proxys, durch Komma getrennt. Kein gesamtes LAN freigeben. Loopback wird für die lokale Proxyverbindung berücksichtigt. HTTPS-Weiterleitungsheader von anderen Absendern gelten nicht als geschützter Transport.",
+          "xs": 12,
+          "sm": 12,
+          "md": 12,
+          "attr": "auth.trustedProxyIps"
+        },
+        "__authMigration": {
+          "type": "staticText",
+          "text": "Ab 1.0.37 kann die Anmeldung nicht über auth.enabled=false oder die früheren Regeln „alle Netze“/„LAN“ umgangen werden. Vor dem Update Gruppen und HTTPS-Zugang prüfen. Nach einem Profilwechsel Adapter neu starten und über den vorgesehenen Zugang erneut anmelden.",
+          "xs": 12,
+          "sm": 12,
+          "md": 12
+        },
+        "__groupRolesInfo": {
+          "type": "staticText",
+          "text": "Im eigenständigen Profil kommen Rechte aus den tatsächlichen Gruppenmitgliedschaften der Systemverwaltung. Im EOS-Profil ist die bestätigte Rolle des zentralen EOS-Admin maßgeblich. Installateurrechte in NexoWatt erfordern keine pauschale Mitgliedschaft in der Administratorgruppe der Systemverwaltung.",
+          "xs": 12,
+          "sm": 12,
+          "md": 12
+        },
+        "accessControl.adminGroups": {
+          "type": "text",
+          "label": "Systemgruppen für EOS-Administratoren",
+          "attr": "accessControl.adminGroups",
+          "default": "system.group.administrator,system.group.eosAdmin,system.group.nexowattAdmin",
+          "help": "Vollzugriff einschließlich Lizenz- und Benachrichtigungsverwaltung. Nur vertrauenswürdige Administratorgruppen zuordnen. Bis zu 32 vollständige Gruppen-IDs durch Komma trennen, z. B. system.group.service_team. Die eingebauten Standardgruppen bleiben zusätzlich gültig.",
+          "xs": 12,
+          "sm": 12,
+          "md": 12
+        },
+        "accessControl.installerGroups": {
+          "type": "text",
+          "label": "Systemgruppen für EOS-Installateure",
+          "attr": "accessControl.installerGroups",
+          "default": "system.group.installer,system.group.eosInstaller,system.group.nexowattInstaller",
+          "help": "Anlageneinrichtung und technische Konfiguration; keine Lizenz- oder Benachrichtigungsverwaltung. Bis zu 32 vollständige Gruppen-IDs durch Komma trennen, z. B. system.group.service_team. Die eingebauten Standardgruppen bleiben zusätzlich gültig.",
+          "xs": 12,
+          "sm": 12,
+          "md": 12
+        },
+        "accessControl.customerGroups": {
+          "type": "text",
+          "label": "Systemgruppen für EOS-Kunden",
+          "attr": "accessControl.customerGroups",
+          "default": "system.group.user,system.group.eosUser,system.group.nexowattUser",
+          "help": "Freigegebene Kundenbedienung; keine technischen Zuordnungen oder EMS-Einrichtung. Keine reine Leseberechtigung. Bis zu 32 vollständige Gruppen-IDs durch Komma trennen, z. B. system.group.service_team. Die eingebauten Standardgruppen bleiben zusätzlich gültig.",
+          "xs": 12,
+          "sm": 12,
+          "md": 12
+        },
+        "__groupRolesMigration": {
+          "type": "staticText",
+          "text": "Vor dem Update die Gruppenmitgliedschaften prüfen: Benutzernamen wie admin oder installer und frühere Benutzer-Rollenlisten vergeben ab 1.0.34 keine Rechte mehr. Ein Konto ohne zugeordnete Gruppe erhält keinen EOS-Zugriff. Gruppen in der Systemverwaltung verwalten; Änderungen an dieser Zuordnung speichern und den UI-Adapter neu starten.",
+          "xs": 12,
+          "sm": 12,
+          "md": 12
+        },
+        "accessControl.allowedOrigins": {
+          "type": "text",
+          "label": "Zusätzlich erlaubte Browser-Origins",
+          "attr": "accessControl.allowedOrigins",
+          "default": "",
+          "help": "Optional, durch Komma oder Zeilenumbruch getrennt, z. B. https://ems.example.de. Leer lassen, wenn kein abgesicherter Reverse-Proxy verwendet wird.",
+          "xs": 12,
+          "sm": 12,
+          "md": 6
+        },
+        "__securityNetworkWarning": {
+          "type": "staticText",
+          "text": "Port 8188 nicht direkt ins Internet weiterleiten. Für den Browser einen abgesicherten HTTPS-Zugang einrichten. VPN ersetzt weder Anmeldung noch Rollenprüfung.",
+          "xs": 12,
+          "sm": 12,
+          "md": 12
+        }
+      }
+    },
+    "diagnose": {
+      "type": "panel",
+      "label": "Diagnose",
+      "title": "Diagnose",
+      "items": {
+        "__diagInfo": {
+          "type": "staticText",
+          "text": "Diagnose- und Schutzoptionen für Support und Feldbetrieb. Der Aktor-Arbiter kann ausschließlich sicherheitskritische Konflikte zwischen bereits vorhandenen Steuerpfaden blockieren; normale EMS-Regelparameter werden hier nicht verändert.",
+          "xs": 12,
+          "sm": 12,
+          "md": 12
+        },
+        "diagnostics.actuatorArbiterMode": {
+          "type": "select",
+          "label": "Aktor-Arbiter",
+          "attr": "diagnostics.actuatorArbiterMode",
+          "xs": 12,
+          "sm": 6,
+          "md": 6,
+          "options": [
+            {
+              "label": "Sicherheitsprioritäten verbindlich (empfohlen)",
+              "value": "enforce-safety"
+            },
+            {
+              "label": "Nur beobachten / Shadow",
+              "value": "shadow"
+            }
+          ],
+          "default": "enforce-safety"
+        },
+        "__arbiterInfo": {
+          "type": "staticText",
+          "text": "Der Sicherheits-Arbiter setzt ausschließlich Not-/Netzbetreiber-, Peak-/Anschlusslimit- und befristete manuelle Prioritäten durch. Normale EMS- und Komfortmodule untereinander bleiben zunächst unverändert.",
+          "xs": 12,
+          "sm": 12,
+          "md": 12
+        },
+        "diagnostics.enabled": {
+          "type": "checkbox",
+          "label": "Diagnose aktiv",
+          "default": false,
+          "attr": "diagnostics.enabled",
+          "xs": 12,
+          "sm": 6,
+          "md": 6
+        },
+        "diagnostics.writeStates": {
+          "type": "checkbox",
+          "label": "Diagnose-States schreiben",
+          "default": true,
+          "attr": "diagnostics.writeStates",
+          "xs": 12,
+          "sm": 6,
+          "md": 6
+        },
+        "diagnostics.logLevel": {
+          "type": "select",
+          "label": "Diagnose Log-Level",
+          "attr": "diagnostics.logLevel",
+          "xs": 12,
+          "sm": 6,
+          "md": 6,
+          "options": [
+            {
+              "label": "debug",
+              "value": "debug"
+            },
+            {
+              "label": "info",
+              "value": "info"
+            }
+          ],
+          "default": "debug"
+        },
+        "diagnostics.logIntervalSec": {
+          "type": "number",
+          "label": "Diagnose Log-Intervall (s)",
+          "min": 0,
+          "max": 3600,
+          "step": 1,
+          "default": 10,
+          "attr": "diagnostics.logIntervalSec",
+          "xs": 12,
+          "sm": 6,
+          "md": 6
+        },
+        "diagnostics.stateIntervalSec": {
+          "type": "number",
+          "label": "Diagnose State-Intervall (s)",
+          "min": 0,
+          "max": 3600,
+          "step": 1,
+          "default": 10,
+          "attr": "diagnostics.stateIntervalSec",
+          "xs": 12,
+          "sm": 6,
+          "md": 6
+        },
+        "diagnostics.maxJsonLen": {
+          "type": "number",
+          "label": "Diagnose max JSON Länge",
+          "min": 1000,
+          "max": 500000,
+          "step": 1000,
+          "default": 20000,
+          "attr": "diagnostics.maxJsonLen",
+          "xs": 12,
+          "sm": 6,
+          "md": 6
+        }
+      }
+    },
+    "simulation": {
+      "type": "panel",
+      "label": "Simulation",
+      "title": "Simulation",
+      "items": {
+        "__simInfo": {
+          "type": "staticText",
+          "text": "Simulation/Testbetrieb: Startet den nexowatt-sim Adapter und ordnet automatisch alle relevanten Datenpunkte im App-Center zu (Grid/PV/Speicher/Tarif/EVCS). Damit lassen sich alle EMS-Logiken ohne reale Hardware testen.\n\nSimulation öffnen: /adapter/nexowatt-ui/simulation.html?instance=<INSTANZ>\nAlternativ direkt per Port: http://<HOST>:<PORT>/simulation.html\n\nHinweis: Beim Aktivieren wird die aktuelle App-Center Konfiguration als Backup gespeichert und bei 'Deaktivieren' wiederhergestellt.",
+          "xs": 12,
+          "sm": 12,
+          "md": 12
+        }
+      }
+    },
+    "smarthome": {
+      "type": "panel",
+      "label": "SmartHome",
+      "title": "SmartHome",
+      "items": {
+        "__smarthomeInfo": {
+          "type": "staticText",
+          "text": "SmartHome: Aktiviert die SmartHome-Ansicht in der VIS (Header-Reiter + Menülink).\nDie Konfiguration (Räume/Funktionen/Geräte + Datenpunkt-Zuordnung) erfolgt in der SmartHome-Config Seite.\n\nSmartHome Config öffnen:\n• Im Adapter-Reiter \"Tab\" auf \"SmartHome Config\" klicken.\n• Oder direkt aus dem Admin: /adapter/nexowatt-ui/smarthomecfg.html?instance=<INSTANZ>\n• Alternativ direkt per Port: http://<HOST>:<PORT>/smarthome-config.html\n\nSmartHome VIS öffnen:\n• Im Adapter-Reiter \"Tab\" auf \"SmartHome VIS\" klicken.\n• Oder direkt aus dem Admin: /adapter/nexowatt-ui/smarthomevis.html?instance=<INSTANZ>\n• Alternativ direkt per Port: http://<HOST>:<PORT>/smarthome.html\n\nHinweis: Änderungen an den Adapter-Einstellungen werden von NexoWatt EOS mit einem Adapter-Neustart übernommen.",
+          "xs": 12,
+          "sm": 12,
+          "md": 12
+        },
+        "smartHome.enabled": {
+          "type": "checkbox",
+          "label": "SmartHome aktivieren",
+          "default": false,
+          "attr": "smartHome.enabled",
+          "xs": 12,
+          "sm": 6,
+          "md": 6
+        }
+      }
+    }
+  }
+}

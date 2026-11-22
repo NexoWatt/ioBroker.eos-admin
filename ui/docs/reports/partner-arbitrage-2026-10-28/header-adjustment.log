@@ -1,0 +1,14 @@
+{
+  "ok": true,
+  "sourceCount": 789,
+  "generatedCount": 715,
+  "missing": [],
+  "changed": [
+    "scripts/verify-partner-ui-browser.cjs",
+    "scripts/verify-partner-ui.cjs",
+    "src-admin-tab/src/lib/partnerContracts.ts",
+    "src-admin-tab/src/pages/ArbitragePage.tsx",
+    "src-admin-tab/src/pages/PartnerIntegrationsPage.tsx"
+  ],
+  "blocked": []
+}

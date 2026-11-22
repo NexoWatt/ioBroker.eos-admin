@@ -1,0 +1,22 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "noCheck": false,
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "useUnknownInCatchVariables": true,
+    "allowJs": false,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "types": [],
+    "skipLibCheck": false,
+    "module": "NodeNext",
+    "moduleResolution": "nodenext"
+  },
+  "files": [
+    "src-ts/runtime-executables/lib/http-error-boundary.ts"
+  ],
+  "include": []
+}

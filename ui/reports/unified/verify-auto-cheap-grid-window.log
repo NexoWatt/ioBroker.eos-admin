@@ -1,0 +1,87 @@
+{
+  "suite": "auto-cheap-grid-window",
+  "source": "runtime-js",
+  "cases": 16,
+  "results": [
+    {
+      "name": "positive cheap tariff",
+      "mode": "normal",
+      "targetW": 4140
+    },
+    {
+      "name": "cheap tariff inside NT",
+      "mode": "normal",
+      "targetW": 4140
+    },
+    {
+      "name": "negative tariff",
+      "mode": "normal",
+      "targetW": 4140
+    },
+    {
+      "name": "EVCS tariff priority denies grid",
+      "mode": "pv",
+      "targetW": 0
+    },
+    {
+      "name": "HT denies positive cheap tariff",
+      "mode": "pv",
+      "targetW": 0
+    },
+    {
+      "name": "neutral tariff",
+      "mode": "pv",
+      "targetW": 0
+    },
+    {
+      "name": "expensive tariff",
+      "mode": "pv",
+      "targetW": 0
+    },
+    {
+      "name": "stale tariff",
+      "mode": "pv",
+      "targetW": 0
+    },
+    {
+      "name": "current price not fresh",
+      "mode": "pv",
+      "targetW": 0
+    },
+    {
+      "name": "disabled tariff with old cheap state",
+      "mode": "pv",
+      "targetW": 0
+    },
+    {
+      "name": "permission hold pending",
+      "mode": "pv",
+      "targetW": 0
+    },
+    {
+      "name": "PV-only strategy retains source limit",
+      "mode": "pv",
+      "targetW": 0
+    },
+    {
+      "name": "strategy pause remains blocked",
+      "mode": "normal",
+      "targetW": 0
+    },
+    {
+      "name": "hard budget below minimum remains blocked",
+      "mode": "normal",
+      "targetW": 0
+    },
+    {
+      "name": "explicit PV remains selected",
+      "mode": "pv",
+      "targetW": 0
+    },
+    {
+      "name": "explicit boost remains independent",
+      "mode": "boost",
+      "targetW": 10971
+    }
+  ]
+}

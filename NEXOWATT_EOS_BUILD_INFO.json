@@ -1,5 +1,5 @@
 {
-  "version": "8.0.2",
+  "version": "9.0.0-alpha.1",
   "channel": "stable",
   "baseFrontend": "Rebuilt from official Admin 8.3.5 sources plus reviewed EOS integration using React 19 and Vite; see source-bound frontend manifest.",
   "runtimeEntry": "vite-manifest",
@@ -30,5 +30,12 @@
     "project": "ioBroker/ioBroker.admin",
     "version": "8.3.5",
     "commit": "6f77eedf525813a7a61d79188d1ff05dffd05086"
+  },
+  "product": "NexoWatt EOS",
+  "status": "alpha integration test build",
+  "sourceComponents": {
+    "admin": "8.0.2",
+    "ui": "1.0.38",
+    "licenseContract": "Keygen 1.0.4 NWL3"
   }
 }

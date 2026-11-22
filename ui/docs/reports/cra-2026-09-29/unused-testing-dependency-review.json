@@ -1,0 +1,9 @@
+{
+  "checkedAt": "2026-09-29T20:12:35.609023+00:00",
+  "scope": "Project code/config excluding dependencies, generated build directories, reports and package metadata",
+  "filesScanned": 1464,
+  "codeHits": [],
+  "scriptHits": [],
+  "testRunner": "Repository scripts and test/rc90-sse-resync.test.cjs use node directly with node:assert; tsconfig types restricted to node",
+  "assessment": "No actual direct or implicit Mocha/ioBroker-testing usage found in provided source and declared npm commands; package removable subject to full regression tests"
+}

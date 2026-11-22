@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:rc64-storage-grid-charge-policy
+> node scripts/verify-rc64-storage-grid-charge-policy.js
+
+[rc64-storage-grid-charge-policy] OK: storage grid charging requires a fresh cheap dynamic tariff; active variable net fee additionally requires the configured NT window.

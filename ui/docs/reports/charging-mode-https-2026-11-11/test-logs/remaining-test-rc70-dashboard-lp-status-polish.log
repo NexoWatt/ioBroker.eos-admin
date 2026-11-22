@@ -1,0 +1,8 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:rc70-dashboard-lp-status-polish
+> node scripts/verify-rc70-dashboard-lp-status-polish.js
+
+[rc70-dashboard-lp-status-polish] ERROR: Error: Timeout bei Chromium Debug-Port: null
+    at waitFor (/workspace/scratch/7dbfb2c0423e/source-review/NexoWatt_UI_1.0.35/scripts/verify-rc70-dashboard-lp-status-polish.js:47:9)
+    at async /workspace/scratch/7dbfb2c0423e/source-review/NexoWatt_UI_1.0.35/scripts/verify-rc70-dashboard-lp-status-polish.js:146:5

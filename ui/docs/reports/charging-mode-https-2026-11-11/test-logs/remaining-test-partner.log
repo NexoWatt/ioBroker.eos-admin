@@ -1,0 +1,182 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:partner
+> npm run typecheck:partner && node scripts/test-partner-integrations.cjs && node scripts/verify-partner-websocket.cjs && node scripts/verify-partner-runtime.cjs && node scripts/verify-partner-ui.cjs && node scripts/verify-partner-main-integration.cjs && npm run test:arbitrage-control-integration && npm run test:license-editions
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 typecheck:partner
+> tsc -p tsconfig.partner-integration.json --noEmit
+
+✔ Standardprofil bleibt ausgeschaltet; Handelsprofil benötigt keine PV/NVP-Konfiguration (2.610808ms)
+✔ Unbekannte Felder, Geheimnisse, freie State-IDs und unverschlüsselte Endpunkte werden verworfen (0.952308ms)
+✔ Bilanz kann kein Schreibrecht erhalten; Rechte sind nach App und Ressource getrennt (0.398929ms)
+✔ Grenzen schließen unbekannte Ressourcen, >60s, NaN und ungültigen SoC aus (0.843057ms)
+✔ Partnerbindung, lokale Appfreigabe, Inbetriebnahme und zentraler Writer sind unabhängige Pflichten (3.226176ms)
+✔ Journal wird vor Annahme gespeichert; Quittung behauptet keine Gerätebestätigung (5.328636ms)
+✔ Identische Wiederholung wirkt nicht erneut; widersprechende Wiederverwendung wird abgewiesen (1.104048ms)
+✔ Ältere neue Kennung darf neueren Wunsch nicht ersetzen, auch nach Neustart (1.455949ms)
+✔ Journalfehler sperren Verbindung und alle Wünsche ohne Geräteschreiben (1.206501ms)
+✔ Widerruf während Journal-Commit kann keinen Wunsch nachträglich aktivieren (0.795797ms)
+✔ Lease endet bei Ablauf und auch nach rückwärts springender Wanduhr monoton (0.542075ms)
+✔ Abgelaufene, zu lange, zukünftige, übergroße und rohe Schreibaufträge wirken nicht (0.623148ms)
+✔ Verbindungsverlust, lokale Appabschaltung und Konfigurationswechsel löschen aktuelle Wünsche (1.083564ms)
+✔ Cancel ist ressourcenbezogen und Wiederholung reaktiviert den Auftrag nicht (0.877597ms)
+✔ Bilanz- und Telemetrieprojektionen enthalten niemals Konfiguration, Inventar oder Rohwerte (0.571247ms)
+✔ Datenfreigabe wird nach asynchroner Abfrage erneut geprüft (2.085654ms)
+✔ Leserecht ist an die freigegebene App und Ressource gebunden (0.509491ms)
+✔ Hängende Datenabfrage endet nach fünf Sekunden und abortiert den Provider (5014.407706ms)
+✔ Größen- und Nachrichtenquoten begrenzen untrusted Eingaben (1.932738ms)
+✔ Echte Installer-/Adminrolle erforderlich trotz alter Customer-Wildcard (1.5075ms)
+✔ Config CAS erhöht genau einmal und alte Browserrevision erhält Konflikt (1.017303ms)
+✔ Vorschau persistiert nichts; globale Sperre widerruft alle Freigaben (0.455805ms)
+✔ Generische Persistenzgrenze erkennt Manipulation ohne korrekte Folgeversion (1.218135ms)
+✔ Vor Verbindungswechsel eingereihter Auftrag bleibt nach Reconnect widerrufen (0.680349ms)
+✔ CAS-Commit wartet auf dauerhafte Widerrufsgrenze und bleibt bei deren Fehler aus (0.586636ms)
+✔ Nur registrierte interne Fehler behalten ihren öffentlichen HTTP-Status (0.976591ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5057.469351
+PASS TypeScript strict without any/nocheck
+PASS Public addresses only; exact VPN exception never opens loopback/metadata
+PASS Exact endpoint profile; no URL credentials/query/fragment or alternate ports
+PASS Pinned target, TLS/quotas, configured identity and immediate send revocation
+PASS Revocation aborts session context; queued messages discarded, delayed reply blocked
+PASS Synchronous stop from status callback prevents later onOpen/timer activation
+PASS Broken lifecycle receiver fails closed
+PASS Handler exception is isolated and redacted
+PASS Binary/oversized messages, control flood and outbound backpressure terminate
+PASS Mixed public/private DNS answers fail closed before connecting
+PASS Monotonic credential expiry survives frozen/backward wall clock
+PASS Five-second total attempt cancels hanging DNS and exposes only fixed error code
+PASS Real TLS+WebSocket handshake: changed actual remote address rejected
+PASS Real TLS rejects untrusted certificate with no insecure fallback
+PASS Real TLS rejects trusted certificate with wrong hostname
+{"ok":true,"checks":15,"scope":"strict build, controlled transport tests, real TLS negative tests; no partner or hardware approval"}
+PASS partner runtime: first journal initializes 0700/0600 and durable marker
+PASS partner runtime: missing journal after initialization blocks
+PASS partner runtime: missing entire journal directory with marker blocks
+PASS partner runtime: missing and corrupt marker block
+PASS partner runtime: missing revoke fence blocks restart
+PASS partner runtime: symlink journal and overly broad file permissions block
+PASS partner runtime: symlink parent and group-writable parent block
+PASS partner runtime: persist/load ordering survives hot-refresh overlap
+PASS partner runtime: credential references reject missing, malformed, overlarge and mismatched identity
+PASS partner runtime: numeric telemetry projects only exact fresh resource values
+PASS partner runtime: balance is complete, recent, numeric and strips private metadata
+PASS partner runtime: direct marketing absent measurements stay unavailable; no curtailment claim
+PASS partner runtime: standalone trading-only command accepted and survives only as replay journal
+PASS partner runtime: connection loss clears current request and duplicate never reapplies
+PASS partner runtime: revocation survives failed config commit, refresh and restart
+PASS partner runtime: app loss invalidates commands; toggling without explicit refresh cannot revive
+PASS partner runtime: config change is checked at getter before any refresh
+PASS partner runtime: credential expiry immediately blocks current request
+PASS partner runtime: pending persistence completes before hot refresh reads; old generation cannot acknowledge
+PASS partner runtime: stale socket context cannot send or accept
+PASS partner runtime total: 20; strict TypeScript; temporary filesystem cleaned.
+PASS Realer gesperrter Backend-Standard bleibt ohne zusätzliche App editierbar
+PASS Alle Netz-/Speichergrenzen und getrennte Bilanzrechte bleiben unverändert
+PASS Falsche Datentypen, leere Leistungen, unendliche Zahlen und TTL>60 scheitern
+PASS Ungeprüfte Bereitschaft und beschädigte API-Antworten können nicht freischalten
+PASS Ungültige Vorschau zeigt Prüfhinweise ohne erfundene Konfiguration
+PASS Partner- und Authaufrufe bleiben am tatsächlichen HTTPS-Runtime-Port
+PASS CAS409 und HTTP403 werden genau einmal angefragt, nie erneut geschrieben
+PASS Transportfehler nach Mutation erzeugt keine automatische Wiederholung
+PASS Das Gesamtbudget bricht auch einen hängenden Antwortkörper ab
+{"result":"PASS","checks":9,"node":"v24.22.1","limitation":"Echter TypeScript-Code mit lokalen Vertrags-/Transporttests. Keine Hardware-, Händler- oder Browserabnahme."}
+{"result":"PASS","checks":16,"scope":"Actual adapter methods with isolated ioBroker I/O; no hardware or network"}
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:arbitrage-control-integration
+> node --test test/arbitrage-control.test.cjs test/arbitrage-writer-integration.test.cjs test/dynamic-grid-ownership.test.cjs test/dynamic-grid-runtime.test.cjs
+
+✔ strict TS und verbotene Typausnahmen im gesamten neuen Steuermodul (1993.604525ms)
+✔ Standalone Haushalt ohne PV, Bilanz oder dynamische App lädt und entlädt (3.866501ms)
+✔ reiner Speicherhandel ohne Hauslast funktioniert mit eigenen statischen Grenzen (1.533488ms)
+✔ Partnerdienstvertrag wird ohne freie Datenpunkte auf denselben Intent abgebildet (0.601316ms)
+✔ Freigabe, Geräteabnahme und alleiniger Writer sind zwingend (0.582865ms)
+✔ physische Werte sind echte endliche Zahlen, kein null/Boolean/String-Ersatz (0.98199ms)
+✔ SoC-Grenzen und gültige Nullleistungsgrenzen sperren jeweilige Richtung (0.767832ms)
+✔ veraltete, zukünftig datierte oder ungültige Messungen ergeben keinen Sollwert (0.789752ms)
+✔ zeitlich inkohärente, für sich frische Messungen bleiben gesperrt (0.208329ms)
+✔ abgelaufene, zukünftige und zu lange Befehle werden abgewiesen (0.242897ms)
+✔ zentraler Grant begrenzt Leistung und Lebensdauer und fehlt niemals still (0.534472ms)
+✔ abgelaufene oder ungültige Grants können keine alte Freigabe fortsetzen (0.217243ms)
+✔ dynamische Zusatzlimits können nur enger werden und niemals Grundlimits ersetzen (0.188807ms)
+✔ Anschlussberechnung entfernt laufenden Speicher-Istwert genau einmal (0.162496ms)
+✔ Netzladen und Netzeinspeisung benötigen ihre jeweiligen lokalen Freigaben (0.227042ms)
+✔ Grenzen bleiben bei überlastetem Anschluss und strikten Nullwerten wirksam (0.291494ms)
+✔ Messwertablauf begrenzt Entscheidung, Bruchteile werden sicher abgerundet (0.137109ms)
+✔ Nullwunsch ist ein begrenzter Intent und keine Bestätigung einer Gerätewirkung (0.163863ms)
+✔ Getter, Prototypschlüssel und Proxyfehler werden ohne fremde Fehlerdetails isoliert (0.429036ms)
+✔ Eingaben werden nicht mutiert und beliebige Datenpunkt-/Codefelder sind abgewiesen (0.288564ms)
+✔ standalone Partnerladung erreicht genau bestehenden Speicher-Writer ohne DynamicGrid/PV/Bilanz (45.5633ms)
+✔ abgelaufener Auftrag fällt im nächsten produktiven Tick auf Haushaltsregelung zurück (12.887761ms)
+✔ Handelsprofil fällt nach Disconnect auf lokalen Nullwunsch zurück (9.233127ms)
+✔ Widerruf während produktivem Write-await verhindert den alten Partnerbefehl (4.510639ms)
+✔ zwischen Planung und Write verschärfte lokale Leistungssperre bleibt wirksam (4.64843ms)
+✔ aktive Konfiguration beansprucht Ausgänge vor Runtime und vor erster Lease (1.812666ms)
+✔ Shadow, gleiche Werte, Keepalive und manuelle API umgehen konfigurierte Hoheit nicht (10.524921ms)
+✔ freier Alias auf physisches Ziel wird vor Schreibausführung aufgelöst und gesperrt (26.050784ms)
+✔ unaufgelöster Alias wird blockiert, fremder bekannter Aktor bleibt nutzbar (2.584224ms)
+✔ Deaktivierung behält alte Ziele bis Runtime die bestätigte Übergabe freigibt (0.700913ms)
+✔ inaktive App ändert alte Writes nicht und fragt keine Objekte ab (0.751881ms)
+✔ expliziter Hardware-Notstopp bleibt möglich, allgemeine Safetybezeichnung reicht nicht (0.787055ms)
+✔ Bestands-Speicherregler übergibt Tick, direkten Write und Deaktivierung ohne Nullbefehl (361.504703ms)
+✔ verzögerter App-Write prüft seine Generation direkt vor Geräteausgabe erneut (1.342443ms)
+✔ Appwriter ohne eigenen gültigen Vertrag darf keine fremden Aktoren beschreiben (0.760383ms)
+✔ unbekannte eigene Alias-Schreibseite sperrt Fremdschreiber schon vor Startupvalidierung (0.646071ms)
+✔ Partnerwiderruf blockiert reale Writes, Changed-Writes und Keepalive auch ohne Autoritätslease (1.191151ms)
+✔ Partnerwiderruf während Alias-await verhindert Geräteausgabe (0.67946ms)
+✔ Partnerfortsetzung nach Stop bleibt gesperrt (0.739573ms)
+✔ Partnerfortsetzung nach Stop und Reinstall bleibt gesperrt (0.261549ms)
+✔ fehlender oder abgemeldeter Arbiter führt Partner-Callback niemals aus (0.997509ms)
+✔ gültiger Partnerauftrag verwendet genau bestehenden Writer, lokaler Rückfall bleibt nach Stop möglich (1.263784ms)
+✔ app activation has exactly installed && enabled authority (1.686976ms)
+✔ generic signed DP converts W/raw and sign exactly once; ACK is not applied power (5.608908ms)
+✔ unconfirmed split-neutralization stops before opposite direction and flags (1.080265ms)
+✔ confirmed split writes inactive zero, target, then enable/run (2.10328ms)
+✔ mapping generation change during first accepted write stops all subsequent writes (0.739152ms)
+✔ readonly output never receives a command (0.443609ms)
+✔ PV final generation limit uses percent without reinterpreting it as export (0.61402ms)
+✔ external corridor writes contraction before expansion and watchdog last (1.829792ms)
+✔ pending commands remain in M0/M1 budgets and M1 is not added onto M0 (1.383333ms)
+✔ local failure holds M1 while valid outer actuator retains own M0 context (1.479995ms)
+✔ PV disappearance is reserved before storage charging; stale SoC cannot allocate (0.552447ms)
+✔ external startup reserves full capability without applied limit feedback (0.381336ms)
+✔ EOS command confirmation alone never clears the previous pending interval (2.37731ms)
+✔ coherent solver permits active mandatory support but labels recovery until measured (2.471989ms)
+✔ delayed ACK is confirmed on the next cycle without resetting the issued timestamp (1.162759ms)
+✔ startup also reserves latent EOS commands, including unavailable excluded devices (0.39285ms)
+✔ previously issued PV cap reserves possible generation growth in storage export budget (0.423696ms)
+✔ active runtime issues a real bounded generic command and retains uncertainty (10.606069ms)
+✔ restart-active configuration cannot be deactivated before real handover verification (21.515833ms)
+✔ hard discharge cap is applied before solver and actual hardware write (2.075113ms)
+✔ zero charge cap survives planning and physical write even with local export (3.320618ms)
+✔ configuration changes while DP metadata is pending prohibit the later hardware write (0.357503ms)
+✔ timed out hardware remains tracked and blocks handover/new physical calls until settled (51.937118ms)
+✔ live licence loss between split commands prevents the active direction from being released (1.928767ms)
+✔ zero storage power cannot release ownership while a previous PV increase remains unsafe (3.287324ms)
+✔ Dynamic Partnerauftrag nutzt gemeinsamen Writer; Capability und Telemetrie entstehen vor Lease (8.74353ms)
+✔ Dynamic abgelaufene Partnerlease hält keinen alten Rampenauftrag aktiv (7.032132ms)
+✔ Dynamic Widerruf während Writer-Metadatenawait sperrt alte Geräteausgabe (1.848929ms)
+✔ Dynamic fehlender Partnerauftrag ermöglicht Capability und liefert lokalen Rückfallwunsch (1.956405ms)
+ℹ tests 71
+ℹ suites 0
+ℹ pass 71
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2881.852251
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:license-editions
+> node scripts/verify-license-editions.js
+
+[license-editions] OK: Home/Pro-Lizenzmodell (intern HEMS/EOS) und Speicherleistungsprofile sind verdrahtet.

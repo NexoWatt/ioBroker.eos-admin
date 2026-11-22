@@ -1,0 +1,7 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:heating-rod-night-ramp
+> node scripts/verify-heating-rod-night-ramp.cjs && node scripts/verify-heating-rod-night-ramp.cjs --runtime
+
+[heating-rod-night-ramp:source] PASS: 11 echte Tick-/Verlaufsgruppen; Nacht, OFF-Fehler, Restart, fehlendes/widersprüchliches Readback, Manual/Boost, Regelung AUS, Morgenrampe, Defizit/Batterie, asynchrone Nachtgrenze.
+[heating-rod-night-ramp:runtime] PASS: 11 echte Tick-/Verlaufsgruppen; Nacht, OFF-Fehler, Restart, fehlendes/widersprüchliches Readback, Manual/Boost, Regelung AUS, Morgenrampe, Defizit/Batterie, asynchrone Nachtgrenze.

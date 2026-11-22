@@ -1,0 +1,20 @@
+{
+  "suite": "UI-CRA-NET-04",
+  "source": "src-ts/runtime-executables/ems/services/tariff-provider-registry.ts",
+  "node": "v24.19.0",
+  "environment": "loopback HTTP; mocked HTTPS provider responses; no production access",
+  "passed": 11,
+  "checks": [
+    "public-local-http-positive",
+    "redirect-never-reaches-target",
+    "streamed-response-limit",
+    "declared-response-limit",
+    "body-timeout",
+    "provider-error-redacted",
+    "credentials-rejected-before-network",
+    "invalid-url-and-userinfo-rejected",
+    "https-custom-credential-contract-mock",
+    "https-oauth-contract-mock",
+    "request-size-limit-before-network"
+  ]
+}

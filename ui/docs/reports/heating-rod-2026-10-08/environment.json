@@ -1,0 +1,15 @@
+{
+  "sourceArchive": "NexoWatt_UI_1.0.22_CRA_SECURITY_REVIEW_FULL_REPOSITORY.zip",
+  "sourceSha256": "4bf8fcfc1af1aeb7f6bca71329249dc74d4df7a387213a25d4950e6edaf63b53",
+  "baseVersion": "1.0.22",
+  "targetVersion": "1.0.23",
+  "date": "2026-10-08",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.39",
+  "node": "v24.19.0",
+  "npm": "11.9.0",
+  "scope": "Lokale Software- und Browserprüfungen mit simuliertem Adapter-I/O. Keine reale Heizstab-/Wechselrichter-/Batterieanlage verbunden.",
+  "dependencyInstallation": "npm ci --ignore-scripts; keine Änderung des bestehenden Abhängigkeitsbaums",
+  "adminDependencyInstallation": "npm ci --ignore-scripts im src-admin-tab; 71 Pakete aus unveränderter Lockdatei für die Gesamtregression",
+  "heatingRodSourceSha256": "43b9f107903da4cb85c136fd25f730cf15e333656c5b3ed72ec50a9097a75b3a",
+  "heatingRodRuntimeSha256": "8b647cf76322dd93f3ef82e39e4b88f226929fb2194c955e9a396b4f75ace9a7"
+}

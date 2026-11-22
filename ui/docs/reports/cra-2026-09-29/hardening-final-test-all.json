@@ -1,0 +1,13 @@
+{
+  "command": [
+    "npm",
+    "run",
+    "test:all"
+  ],
+  "cwd": "repository root",
+  "startedAt": "2026-09-29T21:28:13.990943+00:00",
+  "finishedAt": "2026-09-29T21:30:51.765154+00:00",
+  "durationSeconds": 157.774,
+  "exitCode": 0,
+  "capturedBytes": 84086
+}

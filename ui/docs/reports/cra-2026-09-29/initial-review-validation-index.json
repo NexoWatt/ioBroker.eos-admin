@@ -1,0 +1,184 @@
+{
+  "version": "1.0.22",
+  "date": "2026-09-29T20:29:40.671408+00:00",
+  "productionApproved": false,
+  "tests": [
+    {
+      "command": [
+        "npm",
+        "run",
+        "test:all"
+      ],
+      "cwd": "repository root",
+      "startedAt": "2026-09-29T20:25:18.655291+00:00",
+      "finishedAt": "2026-09-29T20:27:47.587703+00:00",
+      "durationSeconds": 148.932,
+      "exitCode": 0,
+      "capturedBytes": 78630,
+      "log": "test-all-complete.log",
+      "logSha256": "a970e4a6ea535d67bcccb27d8a19440a3d6a284e78e8058b642efb0d267d4f0a"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "build:ts"
+      ],
+      "cwd": "repository root",
+      "startedAt": "2026-09-29T20:27:47.627808+00:00",
+      "finishedAt": "2026-09-29T20:28:02.475955+00:00",
+      "durationSeconds": 14.848,
+      "exitCode": 0,
+      "capturedBytes": 8275,
+      "log": "build-ts-complete.log",
+      "logSha256": "9449d6e0fb17c0d511da05b411e3467d5312d85439add56ddccbc1c641c418ba"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "publish:check"
+      ],
+      "cwd": "repository root",
+      "startedAt": "2026-09-29T20:28:02.514493+00:00",
+      "finishedAt": "2026-09-29T20:28:03.433379+00:00",
+      "durationSeconds": 0.919,
+      "exitCode": 0,
+      "capturedBytes": 524,
+      "log": "publish-artifact-complete.log",
+      "logSha256": "d499393a0bb77f025e2606565394c19c94bf8cb3a0e8d4faf2a4b3cef28e76da"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "test:package-runtime-start-smoke"
+      ],
+      "cwd": "repository root",
+      "startedAt": "2026-09-29T20:28:03.469669+00:00",
+      "finishedAt": "2026-09-29T20:28:04.834038+00:00",
+      "durationSeconds": 1.364,
+      "exitCode": 0,
+      "capturedBytes": 380,
+      "log": "package-runtime-smoke.log",
+      "logSha256": "5cdf5b33095cc02d211a25bd9a095300c6ec834d0c6ceda3202bf13812964ed9"
+    },
+    {
+      "command": [
+        "npm",
+        "pack",
+        "--dry-run",
+        "--json",
+        "--ignore-scripts"
+      ],
+      "cwd": "repository root",
+      "startedAt": "2026-09-29T20:28:04.868788+00:00",
+      "finishedAt": "2026-09-29T20:28:07.863092+00:00",
+      "durationSeconds": 2.994,
+      "exitCode": 0,
+      "capturedBytes": 46023,
+      "log": "npm-pack-dry-run.log",
+      "logSha256": "ffdb72aa64cb66c47c9c2e2e7222d9abb8086194354fe3bd75c9ac47e8e5a949"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/verify-docs-layout.cjs"
+      ],
+      "cwd": "repository root",
+      "startedAt": "2026-09-29T20:24:43.394203+00:00",
+      "finishedAt": "2026-09-29T20:24:43.573339+00:00",
+      "durationSeconds": 0.179,
+      "exitCode": 0,
+      "capturedBytes": 86,
+      "log": "docs-layout-final.log",
+      "logSha256": "611792ed0760f9acea21b137a22c6d3cf7ac3e35f9bbc1ac695c5e730f0a6e5b"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "test:stable-1.0.12-publish"
+      ],
+      "cwd": "repository root",
+      "startedAt": "2026-09-29T20:24:52.689276+00:00",
+      "finishedAt": "2026-09-29T20:25:04.310693+00:00",
+      "durationSeconds": 11.621,
+      "exitCode": 0,
+      "capturedBytes": 1764,
+      "log": "publish-upgrade-final.log",
+      "logSha256": "4666d01a95324fedbd9ead4d05e4d2a2ac7925896e53c70807582e8fbe27c6b1"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "test:stable-release"
+      ],
+      "cwd": "repository root",
+      "startedAt": "2026-09-29T20:25:04.348285+00:00",
+      "finishedAt": "2026-09-29T20:25:04.626658+00:00",
+      "durationSeconds": 0.278,
+      "exitCode": 0,
+      "capturedBytes": 500,
+      "log": "stable-metadata-final.log",
+      "logSha256": "8c04274af626bb36e39fd3e09e819c1d3a6bbe1e1df54ba62fd2374614d53bd5"
+    }
+  ],
+  "audits": [
+    {
+      "scope": "root",
+      "resultFile": "npm-audit-root-final.json",
+      "executionFile": "npm-audit-root-final.execution.json",
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      }
+    },
+    {
+      "scope": "production",
+      "resultFile": "npm-audit-production-final.json",
+      "executionFile": "npm-audit-production-final.execution.json",
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      }
+    },
+    {
+      "scope": "admin",
+      "resultFile": "npm-audit-admin-final.json",
+      "executionFile": "npm-audit-admin-final.execution.json",
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      }
+    }
+  ],
+  "releaseGate": {
+    "command": [
+      "npm",
+      "run",
+      "release:approval"
+    ],
+    "cwd": "repository root",
+    "startedAt": "2026-09-29T20:29:25.022172+00:00",
+    "finishedAt": "2026-09-29T20:29:25.265395+00:00",
+    "durationSeconds": 0.243,
+    "exitCode": 1,
+    "capturedBytes": 300,
+    "expectedExitCode": 1,
+    "result": "expected publish block confirmed"
+  }
+}

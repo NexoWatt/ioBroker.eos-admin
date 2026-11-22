@@ -1,0 +1,69 @@
+<!doctype html>
+<!-- Copyright (c) 2026 NexoWatt. All rights reserved. Confidential and Proprietary. -->
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#020814">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Anmelden · NexoWatt EOS</title>
+  <meta name="application-name" content="NexoWatt EOS">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="NexoWatt EOS">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/nexowatt-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/icons/nexowatt-192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="stylesheet" href="/static/login.css">
+  <script src="/static/runtime-base.js"></script>
+  <script src="/static/pwa.js" defer></script>
+  <script src="/static/login.js" defer></script>
+</head>
+<body>
+  <main class="nw-login">
+    <section class="nw-login-story" aria-label="NexoWatt EOS">
+      <a class="nw-login-brand" href="#anmeldung" aria-label="NexoWatt EOS – zur Anmeldung">
+        <img class="nw-login-logo" src="/static/nexowatt-eos-logo.png" alt="NexoWatt EOS" width="1672" height="941" decoding="async">
+      </a>
+      <div class="nw-login-intro">
+        <p class="nw-login-eyebrow">DEIN ZUHAUSE. DEINE ENERGIE.</p>
+        <h1>Alles verbunden.<br><span>Alles im Blick.</span></h1>
+        <p>Energie, Räume und Geräte.<br>Ein vertrauter Ort für deine Steuerung.</p>
+        <div class="nw-login-orbit" aria-hidden="true">
+          <div class="nw-login-orbit-ring"></div><div class="nw-login-orbit-core"><svg viewBox="0 0 48 48" fill="none"><path d="M9 23 24 10l15 13v17H29V29H19v11H9V23Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div>
+          <span class="nw-login-orbit-dot nw-login-orbit-dot--one"></span><span class="nw-login-orbit-dot nw-login-orbit-dot--two"></span><span class="nw-login-orbit-dot nw-login-orbit-dot--three"></span>
+        </div>
+      </div>
+      <p class="nw-login-story-footer">Ein Zugang zu deiner NexoWatt-Oberfläche.</p>
+    </section>
+
+    <section class="nw-login-panel" id="anmeldung" aria-labelledby="loginTitle">
+      <div class="nw-login-card">
+        <h2 id="loginTitle">Willkommen zurück.</h2>
+        <p class="nw-login-description" id="loginDescription">Dein Anmeldezugang wird geprüft.</p>
+        <div class="nw-login-status" id="loginStatus" role="status" aria-live="polite">Verbindung wird hergestellt …</div>
+
+        <form id="loginForm" hidden>
+          <label for="loginUser">Benutzername</label>
+          <input id="loginUser" name="username" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="512" required>
+          <label for="loginPassword">Passwort</label>
+          <div class="nw-login-password">
+            <input id="loginPassword" name="password" type="password" autocomplete="current-password" maxlength="4096" required>
+            <button id="loginPasswordToggle" type="button" aria-controls="loginPassword" aria-label="Passwort anzeigen" aria-pressed="false">Anzeigen</button>
+          </div>
+          <button class="nw-login-button nw-login-button--primary" id="loginSubmit" type="submit">Anmelden <span aria-hidden="true">↗</span></button>
+          <p class="nw-login-help">Verwende deinen persönlichen NexoWatt-Zugang. Benutzer und Passwörter verwaltet dein Administrator.</p>
+        </form>
+
+        <a class="nw-login-button nw-login-button--primary" id="centralLogin" hidden>Zentral anmelden <span aria-hidden="true">↗</span></a>
+        <a class="nw-login-button nw-login-button--primary" id="frameLogin" target="_blank" rel="noopener noreferrer" hidden>Anmeldung öffnen <span aria-hidden="true">↗</span></a>
+        <button class="nw-login-button nw-login-button--secondary" id="loginRetry" type="button" hidden>Verbindung erneut prüfen</button>
+        <noscript><p class="nw-login-status nw-login-status--error">Für die Anmeldung ist JavaScript erforderlich. Ohne bestätigte Sitzung bleibt die Oberfläche gesperrt.</p></noscript>
+        <div class="nw-login-footer"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="4" y="9" width="12" height="8" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M6.5 9V6a3.5 3.5 0 0 1 7 0v3" stroke="currentColor" stroke-width="1.4"/></svg><span>Dein Konto bestimmt deinen Zugang.</span></div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

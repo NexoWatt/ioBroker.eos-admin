@@ -1,0 +1,8 @@
+Original ZIP 1.0.21 reproductions | 2026-09-29T20:08:35.769Z | v24.19.0 | synthetic fixtures only
+SHA256 original lib/mesh-coordinator-contract.js 7aec7794af66a20aeee9edaacdf9104cc9c90da894e1ce57292e04818f5fb788
+SHA256 original lib/mesh-coordinator-protocol.js 0246ad970de4d260a2753a3632c2e163f8777312924744302a328dfdbad4f102
+SHA256 original lib/notification-mail.js 732162b5258cc6879ad16fc49b17a01872e0f9e561602e057d150e1e92c010d7
+BEFORE same signed Hello replay: master=NORMAL sequence=20 confirmed=true
+AFTER identical Hello replay: master=SYNCING sequence=0 confirmed=false
+Original accepts HTTP DNS origin: http://master.test.ts.net
+SMTP old predictable temp symlink changed unrelated fixture: true

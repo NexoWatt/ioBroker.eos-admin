@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:rc65-nt-price-target-override
+> node scripts/verify-rc65-nt-price-target-override.js
+
+[rc65-nt-price-target-override] OK: storage requires fresh cheap tariff plus active NT when configured; urgent EVCS Auto time-target override remains active.

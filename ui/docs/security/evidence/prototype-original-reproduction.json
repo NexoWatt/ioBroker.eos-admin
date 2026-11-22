@@ -1,0 +1,11 @@
+{
+  "finding": "UI-CRA-API-04",
+  "sourceArchive": "NexoWatt_UI_1.0.21_STABLE_FULL_REPOSITORY (1).zip",
+  "sourcePath": "NexoWatt-ui-1.0.21-STABLE/src-ts/runtime-executables/main.ts",
+  "sourceSha256": "83d9c4ad4223858fdd78c4ed6bbec8f2f12489000f13e35cb67a4820fb367c9f",
+  "test": "Isolated vm execution of unchanged original nwDeepMerge; no adapter or devices",
+  "before": null,
+  "after": "isolated-review-fixture",
+  "reproduced": true,
+  "hostPrototypeUnchanged": true
+}

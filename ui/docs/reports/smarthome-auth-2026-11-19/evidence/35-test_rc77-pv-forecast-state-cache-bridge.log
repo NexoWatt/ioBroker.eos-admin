@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:rc77-pv-forecast-state-cache-bridge
+> node scripts/verify-rc77-pv-forecast-state-cache-bridge.cjs
+
+[rc77-pv-forecast-state-cache-bridge] OK: Provider-/EMS-Statecache, dynamische Subscription, Fehlerdiagnose, Restart-Fallback, Ablaufgrenzen, Kompatibilitätswerte und Browser-Cache geprüft.

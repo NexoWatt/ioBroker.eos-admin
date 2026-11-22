@@ -1,0 +1,221 @@
+{
+  "schemaVersion": 1,
+  "result": "PASS",
+  "version": "1.0.38",
+  "checkedAt": "2026-11-22T08:15:41.266Z",
+  "node": "v24.22.3",
+  "checks": 34,
+  "requestCount": 66,
+  "cases": [
+    {
+      "name": "HTTP-Modus bleibt explizit HTTP; HTTPS wird nicht stillschweigend angenommen",
+      "result": "PASS",
+      "durationMs": 48
+    },
+    {
+      "name": "Direktes HTTPS liefert Root-Login, EOS-Logo und alle Anmelde-Assets ohne Sitzung",
+      "result": "PASS",
+      "durationMs": 32
+    },
+    {
+      "name": "PWA-Manifest, Service Worker, Icons und Start-URL funktionieren über verifiziertes HTTPS",
+      "result": "PASS",
+      "durationMs": 54
+    },
+    {
+      "name": "Zertifikatsvertrauen, IP-SAN und Protokolltrennung werden tatsächlich erzwungen",
+      "result": "PASS",
+      "durationMs": 11
+    },
+    {
+      "name": "Root-CA → Intermediate → IP-Leaf wird als Serverkette ausgeliefert",
+      "result": "PASS",
+      "durationMs": 8
+    },
+    {
+      "name": "HTTPS-Sitzung: private APIs, Rollen, Secure-Cookie, CSRF, Origin und Logout",
+      "result": "PASS",
+      "durationMs": 42
+    },
+    {
+      "name": "Ausgelieferter Auth-Wrapper setzt CSRF für echte HTTPS-/api/set-Aufrufe selbst",
+      "result": "PASS",
+      "durationMs": 32
+    },
+    {
+      "name": "HTTPS-Sitzungswiderruf nach Kontenänderung: disabled",
+      "result": "PASS",
+      "durationMs": 7
+    },
+    {
+      "name": "HTTPS-Sitzungswiderruf nach Kontenänderung: password",
+      "result": "PASS",
+      "durationMs": 7
+    },
+    {
+      "name": "HTTPS-Sitzungswiderruf nach Kontenänderung: group",
+      "result": "PASS",
+      "durationMs": 6
+    },
+    {
+      "name": "TLS-Startfehler bleibt geschlossen: fehlender Zertifikatsname",
+      "result": "PASS",
+      "durationMs": 1
+    },
+    {
+      "name": "TLS-Startfehler bleibt geschlossen: fehlender Schlüsselname",
+      "result": "PASS",
+      "durationMs": 1
+    },
+    {
+      "name": "TLS-Startfehler bleibt geschlossen: ungültiger Zertifikatsname",
+      "result": "PASS",
+      "durationMs": 1
+    },
+    {
+      "name": "TLS-Startfehler bleibt geschlossen: ungültiger TLS-Schaltertyp",
+      "result": "PASS",
+      "durationMs": 1
+    },
+    {
+      "name": "TLS-Startfehler bleibt geschlossen: Controller-API fehlt",
+      "result": "PASS",
+      "durationMs": 1
+    },
+    {
+      "name": "TLS-Startfehler bleibt geschlossen: fehlendes Controller-Ergebnis",
+      "result": "PASS",
+      "durationMs": 1
+    },
+    {
+      "name": "TLS-Startfehler bleibt geschlossen: Controller-Lesefehler ohne Detailleck",
+      "result": "PASS",
+      "durationMs": 1
+    },
+    {
+      "name": "TLS-Startfehler bleibt geschlossen: ungültiges Zertifikat",
+      "result": "PASS",
+      "durationMs": 1
+    },
+    {
+      "name": "TLS-Startfehler bleibt geschlossen: ungültiger privater Schlüssel",
+      "result": "PASS",
+      "durationMs": 4
+    },
+    {
+      "name": "TLS-Startfehler bleibt geschlossen: Schlüssel passt nicht zum Zertifikat",
+      "result": "PASS",
+      "durationMs": 1
+    },
+    {
+      "name": "TLS-Startfehler bleibt geschlossen: abgelaufenes Zertifikat",
+      "result": "PASS",
+      "durationMs": 1
+    },
+    {
+      "name": "TLS-Startfehler bleibt geschlossen: falscher Aussteller in der Kette",
+      "result": "PASS",
+      "durationMs": 1
+    },
+    {
+      "name": "TLS-Startfehler bleibt geschlossen: übergroßer privater Schlüssel",
+      "result": "PASS",
+      "durationMs": 1
+    },
+    {
+      "name": "TLS-Startfehler bleibt geschlossen: übergroßes Zertifikat",
+      "result": "PASS",
+      "durationMs": 1
+    },
+    {
+      "name": "TLS-Startfehler bleibt geschlossen: übergroße Zertifikatskette",
+      "result": "PASS",
+      "durationMs": 1
+    },
+    {
+      "name": "TLS-Startfehler bleibt geschlossen: zu viele Zertifikate",
+      "result": "PASS",
+      "durationMs": 1
+    },
+    {
+      "name": "Controller-Zertifikatsabruf: echtes 5-s-Budget und kein verspäteter HTTP-/HTTPS-Start",
+      "result": "PASS",
+      "durationMs": 5008
+    },
+    {
+      "name": "onUnload während Zertifikatsabruf verhindert auch einen später erfolgreichen HTTPS-Start",
+      "result": "PASS",
+      "durationMs": 3
+    },
+    {
+      "name": "Tatsächliches onReady führt bei UI-TLS-Konfigfehler EMS- und SmartHome-Initialisierung weiter",
+      "result": "PASS",
+      "durationMs": 13
+    },
+    {
+      "name": "Tatsächliches onReady startet nach Shutdown während TLS-Abruf weder Webserver noch EMS",
+      "result": "PASS",
+      "durationMs": 3
+    },
+    {
+      "name": "onReady behandelt echte Portkonflikte weiterhin als Startfehler und nicht als TLS-Konfigausnahme",
+      "result": "PASS",
+      "durationMs": 13
+    },
+    {
+      "name": "Belegter Port weist HTTPS-Start ab und bleibt beim bisherigen Listener",
+      "result": "PASS",
+      "durationMs": 4
+    },
+    {
+      "name": "Unvollständiger TLS-Handshake endet im echten 5-s-Serverbudget",
+      "result": "PASS",
+      "durationMs": 5024
+    },
+    {
+      "name": "Echter Unload schließt HTTPS-SSE und angefangene TLS-Sockets vollständig",
+      "result": "PASS",
+      "durationMs": 36
+    }
+  ],
+  "sourceHashes": {
+    "main.js": "806d7ebb463de3f072f040e00d94089f01a2885da75b45a3793d03fdf4a61a89",
+    "src-ts/runtime-executables/main.ts": "3fc8371335619306eba22118ae3a75fe4a26e4edd8a1edf0232b007ebee3893e",
+    "lib/ui-server-transport.js": "95e380f0af6dc93de004dae7aee441b76c7abad301faf5760737f25757ee8530",
+    "src-ts/runtime-executables/lib/ui-server-transport.ts": "1c00bce2b740c137b3e8844af114505ff71411fead2f163c544b3bcde64411b0",
+    "lib/ui-access-policy.js": "e843e73b32b8538e55a75c3a84f858d317a5d3977c186067c51109b887a1edb7",
+    "www/index.html": "42890c306435a8731e06a7bd1c9e128316c75fa89b4627816d9a60a1b955433e",
+    "www/runtime-base.js": "ac01baa2ebe16b4de13e8cef59e8c39b7ddc6dfea38d8dfdeca1a6205ca711cd",
+    "www/auth.js": "0230fdc73be83a260209030ecc8f89771959ac2de4a87817e0c64ef1cd38d3e8",
+    "www/login.html": "f8b86f21e5d632129b93739fbd3349b7e566144be93ef98a5703c399c4b29dad",
+    "www/login.js": "e26b8318466350ba04eb35183b7be85d2040bfdcf3dda6dc9aa1d66e3d3ea710",
+    "www/login.css": "39230eaa8d092ffc1de11b4400c5ba1086b01b0f634736c5a08c88cede3c8862",
+    "www/pwa.js": "ad32a03ec7a5ba356589dc9b80c0795cf6250cfbdec52080817d5e674b2c9c54",
+    "www/manifest.webmanifest": "93782156de993bff9bafd01bf0955ad3f42770453886b8aadc422689ade0e9d6",
+    "www/sw.js": "8995c689944b13867b9b0e3619235547a382d582ca0cbc0d725a4c8db3377cd2",
+    "www/nexowatt-eos-logo.png": "1ccf55be6d457b4e1891dd7f37adff64a386ed8c633e522e86b9adce055f1d95",
+    "www/apple-touch-icon.png": "083e11ab28ec00b37d3d47776946c5fad4d79277fdc440cdbb20181a7f064f76",
+    "scripts/verify-ui-direct-https.cjs": "70bbc0861fcdfae8f6cc10501fa0e93ac897734c24efd6c5bdc180811a7435e7",
+    "www/assets/icons/nexowatt-120.png": "bef3d1327f497c333b4cee980d12664440a7c4cb193bfa44669909f4e4c4a829",
+    "www/assets/icons/nexowatt-128.png": "fa6d5f9e2916b0683e11b83879f07caf390b090fbde0e307a3bc5c71215a4715",
+    "www/assets/icons/nexowatt-152.png": "d0511c198af23ca0dad9a0f9fb96a374c64d352ffec60c0cb240a88cd5c30bb0",
+    "www/assets/icons/nexowatt-16.png": "e42a0323e3829ff0ee5a4d73830cfff0e44f40846795e0447694969ad2536cc7",
+    "www/assets/icons/nexowatt-180.png": "083e11ab28ec00b37d3d47776946c5fad4d79277fdc440cdbb20181a7f064f76",
+    "www/assets/icons/nexowatt-192-maskable.png": "d2b3962a02689238a3687c02d680fe233144c0251ccd359d15e2a38d92be27d0",
+    "www/assets/icons/nexowatt-192.png": "7f93d65d9e1d795bf127e1af31d88d7468ccb70b026f98351d0abbc3f3bd4df6",
+    "www/assets/icons/nexowatt-256.png": "bbc49706e59a126c8a2ca58b27fbfbe9b9f5207bdc62a94ce4e6ec8f43fa6032",
+    "www/assets/icons/nexowatt-32.png": "6d6c40b3d4b80adc2da0274d02bd1663235de072b53ba1b55a41ef151526b8a3",
+    "www/assets/icons/nexowatt-384.png": "6b4957e27f75a1d6c38905e52dad9d26f3b89fefd47cc7db4cd92417dbbf7c07",
+    "www/assets/icons/nexowatt-48.png": "380633e15cb30af559d9dc8327e7f7a17a2bc46603d2d4a7a4b104b76c921ea3",
+    "www/assets/icons/nexowatt-512-maskable.png": "4c66852e53790f04f8b06ae0ade57b78940a816461d4c127398706055efcb3a4",
+    "www/assets/icons/nexowatt-512.png": "a7e6375e6f4e1f5e09f167af81eca69626e4baf4762a07e41b838bc4786f0519",
+    "www/assets/icons/nexowatt-64.png": "af232cff4ca7a37b0c0564f4e8901d0631db6d00f07f5ac04d6a1d65aa25ab49"
+  },
+  "scope": "Shipped main.js startServer/onUnload with real Express, HTTP, HTTPS, TLS certificate validation, authenticated routes and PWA assets; actual onReady control flow with downstream subsystem initialization observed at explicit call-tracing boundaries; controller/certificate retrieval and device writes are local doubles.",
+  "limitations": [
+    "No browser rendering or installed-PWA acceptance test.",
+    "No real controller certificate store, customer credentials, deployment or hardware.",
+    "The onReady checks prove initialization reachability and shutdown ordering, not EMS or hardware control cycles.",
+    "Temporary generated CA and private keys were deleted and are never included in this report."
+  ]
+}

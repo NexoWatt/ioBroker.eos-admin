@@ -1,0 +1,12 @@
+{
+  "command": [
+    "npm",
+    "run",
+    "test:runtime-mirrors"
+  ],
+  "cwd": "repository root",
+  "startedAt": "2026-09-29T20:14:45.929738+00:00",
+  "finishedAt": "2026-09-29T20:14:46.487370+00:00",
+  "durationSeconds": 0.558,
+  "exitCode": 1
+}

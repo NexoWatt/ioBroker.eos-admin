@@ -1,0 +1,12 @@
+{
+  "command": [
+    "npm",
+    "run",
+    "release:generate-manifest"
+  ],
+  "cwd": "repository root",
+  "startedAt": "2026-09-29T20:10:56.916032+00:00",
+  "finishedAt": "2026-09-29T20:10:57.190156+00:00",
+  "durationSeconds": 0.274,
+  "exitCode": 0
+}

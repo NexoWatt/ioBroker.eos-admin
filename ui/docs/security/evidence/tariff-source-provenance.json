@@ -1,0 +1,9 @@
+{
+  "checkedAt": "2026-09-29T20:08:06.424Z",
+  "node": "v24.19.0",
+  "platform": "linux",
+  "source": "src-ts/runtime-executables/ems/services/tariff-provider-registry.ts",
+  "sha256": "e710a5a5f9df3a5a7b23ed0d0744a24e10a92fc71b4bb1bc887a8f8322561776",
+  "command": "node scripts/verify-cra-tariff.cjs --source",
+  "result": "11 test groups passed"
+}

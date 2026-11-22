@@ -1,0 +1,55 @@
+Teilprüfung TypeScript / CI / proprietäre Kennzeichnung — 23.10.2026
+Scope: exakt entpacktes NexoWatt_UI_1.0.28_EMS_LAYOUT_DP_FULL_REPOSITORY.zip; keine Produktdatei geändert.
+ZIP SHA-256: c807a69f3602225afe653e7c87c72c5523ab0d61a8c2b1b1d5f0e176612fe7e1
+Root: /workspace/scratch/cd7c5428afc1/audit-1.0.28/NexoWatt_UI_1.0.28
+
+1. TS-01 / hoch für zugesagten Coding-Standard: strict nur teilweise wirksam
+- tsconfig.base.json:6 setzt strict:true; zusätzlich noImplicitOverride, noImplicitReturns, noFallthroughCasesInSwitch, noUncheckedIndexedAccess, exactOptionalPropertyTypes (Zeilen 7–11).
+- tsconfig.runtime-executables.json:21 setzt noCheck:true. Dieser transpiliert 144 produktive Quelldateien ohne semantische Typprüfung. Der zusätzliche Root-Typecheck verwendet zwar strict:true ohne noCheck, aber Datei-Direktiven bleiben wirksam.
+- TypeScript 5.8.3 Parser (SourceFile.checkJsDirective.enabled===false) bestätigt aktive @ts-nocheck-Direktiven in 73/144 src-ts/runtime-executables Dateien sowie in sämtlichen 508 src-ts/runtime-mirrors Dateien. Zusammen 581/787 src-ts-Dateien. Reine Textsuche ergab 583 Dateien; die Differenz sind bloße Erwähnungen, deshalb ausschließlich Parserzahl berichten.
+- Direktbeleg: src-ts/runtime-executables/main.ts:1 // @ts-nocheck.
+- tsconfig.frontend-js.json:6 und tsconfig.backend-js.json:6 setzen checkJs:false.
+- tsconfig.json:24 schließt src-admin-tab aus. Dort keine eigene tsconfig, build-Script ist nur vite build (src-admin-tab/package.json:8); kein separater tsc-Check im Admin-Paket oder CI gefunden. Vite-Transpilation nicht als TS-Prüfung werten.
+- Positiv: tsconfig.nvp-topology.json strict:true/noCheck nicht gesetzt; umfasst 12 NVP-/Dynamic-Grid-Dateien. Separate typisierte Backend-/EMS-/Vertragshelfer ohne any/nocheck vorhanden.
+- Ausgeführter read-only Typecheck: node <vorhandene typescript/bin/tsc> -p tsconfig.json --noEmit --typeRoots <vorhandene node_modules/@types>; exit 0. Log: audit-1.0.28/typecheck-audit.log (leer = keine Diagnosen). Abhängigkeiten wurden über vorhandenen Buildbaum geliefert, nicht frisch installiert. Dies beweist nur den aktiv geprüften Teil, keine vollständige Typsicherheit.
+
+2. TS-02 / mittel: ausdrückliches any-Verbot nicht erfüllt
+TypeScript AST SyntaxKind.AnyKeyword zählt echte Typsyntax, keine Kommentare/Strings/Variablennamen:
+- src-ts insgesamt: 654 any-Knoten in 62 von 787 TS/TSX-Dateien.
+- src-ts/runtime-executables: 601 any-Knoten in 56 von 144 Dateien.
+- src-ts/runtime-mirrors: 49 in 3 von 508 Dateien; Testquellen: weitere 4 in 3 Dateien.
+- src-admin-tab/src zusätzlich: 9 any-Knoten in 1 von 15 Dateien.
+- Belege: src-ts/runtime-executables/lib/dynamic-grid-config-api.ts:14 require=>any, :16 Record<string, any>, :21–23 any-Eingaben; ems/services/dynamic-grid-config.ts:12–19; ems/modules/dynamic-grid-connection.ts:12–30. Letztere Pfade relativ zu src-ts/runtime-executables.
+- Wichtig: strict/noImplicitAny verbietet bewusst geschriebenes any nicht. Keine ESLint no-explicit-any-Regel vorhanden. any allein ist ein Coding-Defizit, kein Ausnutzbarkeitsbeweis.
+
+3. CI-01 / mittel: verlangte Lint- und SAST-Stufe fehlt
+- Weder ESLint-Konfigurationsdatei noch @typescript-eslint/eslint-plugin oder eslint-plugin-security in Root/Admin direkten DevDependencies; kein lint-Script.
+- Nur .github/workflows/security.yml vorhanden; weder CodeQL noch SonarQube/Snyk-SAST-Schritt oder vergleichbarer genereller Datenfluss-Scanner gefunden.
+- Vorhandene spezifische Quell-/Regressionschecks sind nützlich, ersetzen jedoch keinen vollständigen SAST-/ASVS-Nachweis.
+- GitHub-serverseitige Default-CodeQL-Einstellungen, tatsächlich ausgeführte CI-Läufe und Branchschutz aus dem ZIP NICHT nachweisbar; fehlende Workflowdatei daher nicht als Beweis für deaktivierte Accountfunktion formulieren.
+
+4. CI-02 / positiv mit Grenze: SCA und CI vorbereitet
+- package.json:509 ci:security = check:secrets + test:cra + npm audit --audit-level=moderate (Root) + Admin-Audit.
+- .github/workflows/security.yml:28–35 npm ci --ignore-scripts, Sicherheits-/Regressionstests, Build, Doku-/Artifactcheck, Installationssmoke, npm dry-run.
+- .github/dependabot.yml:3–14 wöchentliche npm-Updates für Root/Admin und GitHub Actions.
+- CI hat contents:read (:6–7), offizielle Actions an vollständige SHA gebunden (:21/:24), checkout persist-credentials:false (:23), Node 22/24 (:18), 45-min-Timeout (:14), keine Publish/Deploy-Schritte.
+- SHA-Kommentar behauptet frühere Verifizierung; Herkunft der SHA in dieser Teilprüfung nicht remote erneut verifiziert.
+- Aktueller npm-audit-Onlineabruf hier NICHT ausgeführt. Historische Audit-JSONs im Paket nicht als aktueller Status ausgeben.
+
+5. ARCH-01 / direkt gegen neue Nutzervorgabe: keine npm-Abhängigkeiten nicht erfüllt
+- package.json:530–534 enthält vier Runtime-Direktabhängigkeiten: @iobroker/adapter-core, @iobroker/type-detector, express, nodemailer.
+- src-admin-tab/package.json:11–18 zusätzlich React, React-DOM, React-Router sowie Vite-Entwicklungswerkzeuge. Root enthält TypeScript/Node-Typen/adapter-dev als DevDependencies.
+- Ein Entfernen aller Pakete wäre kein kleiner Sicherheitsfix. Laufzeit, ioBroker-Integration, HTTP-Dienst, Mailtransport und Frontend-Build müssen neu entworfen werden. native Node-Bibliotheken sind nicht automatisch sicherer als gepflegte Bibliotheken.
+
+6. LIC-01 / Vorgabenabweichung: zentrale proprietäre Lizenz vorhanden, Dateiheader fehlen
+- LICENSE:1–26 nennt NexoWatt Proprietary License v1.0, Copyright 2025, All rights reserved, ausdrückliche Nutzung/Kopier-/Änderungs-/Verbreitungsbeschränkungen.
+- package.json:6 license:UNLICENSED.
+- Inventar der ersten 20 Zeilen: 0/144 Runtime-TS-Dateien und 0/15 Admin-TS/TSX-Dateien enthalten copyright oder proprietary. Beispiele main.ts:1 und src-admin-tab/src/App.tsx:1–25 beginnen mit Prüf-/Dokukommentaren.
+- Der geforderte Header am Anfang jeder eigenen Quelldatei ist somit nicht umgesetzt. Rechtliche Durchsetzbarkeit wurde nicht begutachtet; Drittanbieter-Lizenzen dürfen durch eigene Header nicht überschrieben werden.
+
+7. ASVS-Nachweisstatus
+- docs/cra/ANFORDERUNGEN_NACHWEISE_DE.md:16–23 bezeichnet ASVS 5.0.0 L2 explizit nur als Zielprofil; vollständiger Einzelanforderungsnachweis fehlt und L3-Auswahl ist offen.
+- Kapitelmatrix REQ-01–25 mit Teilnachweisen ist vorhanden, nicht als vollständiges Klauselaudit ausgewiesen.
+- NW-SECRET-01 bleibt gemäß Nutzerentscheidung offen, Alt-Lizenzen dürfen nicht stillschweigend gesperrt/migriert werden (docs/cra/ANFORDERUNGEN_NACHWEISE_DE.md:62; docs/ENTWICKLUNGSLEITLINIE_SICHERHEIT_DE.md Abschnitt Geheimnisse).
+
+Prüfgrenze: keine Geräte-/Produktivprüfung, kein Penetrationstest, keine unabhängige Zertifizierung. Kein Beleg für vollständige OWASP-/ASVS-/CRA-Konformität. Typ-/CI-Defizite priorisiert nach Standardabweichung; konkrete Angriffe dadurch nicht automatisch nachgewiesen.

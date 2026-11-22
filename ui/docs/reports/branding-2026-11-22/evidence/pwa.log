@@ -1,0 +1,27 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> iobroker.nexowatt-ui@1.0.38 test:ui-pwa
+> node scripts/verify-ui-pwa.cjs
+
+[ui-pwa] PASS Actual direct HTTPS login registers immediately before authentication
+[ui-pwa] PASS Root, static login and foreign base/query cannot select another worker or scope
+[ui-pwa] PASS Actual runtime proxy detection blocks root and nested Admin origins
+[ui-pwa] PASS Frames and inaccessible top context never register
+[ui-pwa] PASS Remote HTTP and insecure contexts are blocked despite supported APIs
+[ui-pwa] PASS Loopback HTTP is limited to exact local hosts and a real secure context
+[ui-pwa] PASS Missing runtime confirmation or Worker support leaves UI untouched
+[ui-pwa] PASS Duplicate script execution does not duplicate registration or listeners
+[ui-pwa] PASS Reopening the existing page updates its registration without replacing identity
+[ui-pwa] PASS Visible resume updates, hidden pages cancel scheduled work
+[ui-pwa] PASS Offline events do not start requests and online recovery updates once
+[ui-pwa] PASS An initially offline or hidden login can register on its later resume
+[ui-pwa] PASS Event bursts create only one bounded follow-up timer
+[ui-pwa] PASS Pending registration cannot create parallel requests or timer growth
+[ui-pwa] PASS Rejected registration does not block login and a later event can retry
+[ui-pwa] PASS Synchronous browser API errors are caught without DOM or auth mutation
+[ui-pwa] PASS Rejected update preserves registration and retries only on a later event
+[ui-pwa] PASS Unresolved update remains a single browser operation across repeated resumes
+[ui-pwa] PASS Page hide cancels only scheduled work and later pageshow remains functional
+[ui-pwa] PASS Six actual HTML entries load the common bootstrap after the runtime boundary
+[ui-pwa] PASS Installed app identity retains start URL, scope and actual PNG icon assets
+[ui-pwa] PASS 21 groups: strict TS, actual bootstrap VM behavior, bounds, failure isolation and installed-app identity. Browser/device installation is not claimed.

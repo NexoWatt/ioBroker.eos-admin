@@ -1,0 +1,9 @@
+ESLint: 178 sources; 3075 current findings; 3069 inventoried (2968 historical open, 101 individually reviewed); 6 blocked new/forbidden findings; 92 old findings absent.
+Open scanner hotspots: {"security/detect-object-injection":2359,"security/detect-non-literal-fs-filename":48,"@typescript-eslint/ban-ts-comment":73,"security/detect-unsafe-regex":16,"@typescript-eslint/no-explicit-any":563,"security/detect-possible-timing-attacks":12,"security/detect-non-literal-require":1,"security/detect-non-literal-regexp":3}
+This gate prevents new scanner findings. It does not assert a clean security scan or full ASVS conformity.
+src-ts/runtime-executables/www/evcs.ts:143:46 security/detect-object-injection 0e3a59a0818df322a8689f981dcde64fc20530b4cc3962cdf66408015fd2f482
+src-ts/runtime-executables/www/evcs.ts:143:59 security/detect-object-injection 64a7b25eac41d62f9175bff9f40b4fa74f4d58249a1da6b86ea99a545ccd3d64
+src-ts/runtime-executables/www/evcs.ts:143:75 security/detect-object-injection 0e3a59a0818df322a8689f981dcde64fc20530b4cc3962cdf66408015fd2f482
+src-ts/runtime-executables/www/evcs.ts:160:37 security/detect-object-injection 4d5638a030a8bf52bc58c86d4fca79c7cf56d9ea51196a0cddb6e09dd9d235c1
+src-ts/runtime-executables/www/evcs.ts:1956:87 security/detect-object-injection a7cd824fdb5b4b14669384cf7890a9c395ac75777a19bc6cc24336cda95f091b
+src-ts/runtime-executables/www/evcs.ts:2006:87 security/detect-object-injection a7cd824fdb5b4b14669384cf7890a9c395ac75777a19bc6cc24336cda95f091b

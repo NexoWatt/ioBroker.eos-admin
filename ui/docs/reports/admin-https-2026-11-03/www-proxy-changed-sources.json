@@ -1,0 +1,172 @@
+[
+  {
+    "file": "src-ts/runtime-executables/www/dashboard-lp-status.ts",
+    "sha256": "0e130b0d3bcb3fadead101a383a1c59542f94131900508e54f2e0ff0195fa390",
+    "beforeSha256": "cb147010ab974f7332d64ded6ffff05eb09388441b21c79e560ebe265b2eb52f"
+  },
+  {
+    "file": "src-ts/runtime-executables/www/logic.ts",
+    "sha256": "37569dda308e69998c43aa9594fc96a261ee4b68cb9afacc0b4017f6381ade95",
+    "beforeSha256": "e8f93ee4e3901ba2350f9b7149bb2523e1f05594573d76efb34bc369e7c315c2"
+  },
+  {
+    "file": "src-ts/runtime-executables/www/tariff-report.ts",
+    "sha256": "81377a66665b5ea9714993d81e0170b655ecb46ce3b5d21dddad7ab0493b7cbf",
+    "beforeSha256": "2c972360ed599dec026dde07a95402ebebd87076e547fbad507ef3c4ced1cdf8"
+  },
+  {
+    "file": "src-ts/runtime-executables/www/cockpit-shell.ts",
+    "sha256": "edfbd0f4a1b935815727ec61304525c9d72ac631d169fd57ae78a290968c2c81",
+    "beforeSha256": "887a2a7d0791c3f19e536de7d425c0c204b21fdb102f3e101f6a8fdfebf97f82"
+  },
+  {
+    "file": "src-ts/runtime-executables/www/para14a-report.ts",
+    "sha256": "9af05ca56a37b47e7e978ddf5cb9e2c6ef1e7066bafaf6151b265395daf11355",
+    "beforeSha256": "ac4ba8256a15edb3c5781de76fce38f9e6743445f794fe426c41863fa0dbe6d3"
+  },
+  {
+    "file": "src-ts/runtime-executables/www/dc-station-display.ts",
+    "sha256": "7c9feea8a86d4c9167be68f560a9744027db05c57797a573bafd3db68f4af73a",
+    "beforeSha256": "6e86dc059b7fa5a4f933c3bd81887522b2c8688f8c121197daee5d5c9f13689d"
+  },
+  {
+    "file": "src-ts/runtime-executables/www/app.ts",
+    "sha256": "184238f018f2ef92c7e83d5c9ef1c45346702efe4fe70c5c61b873dfac2d8566",
+    "beforeSha256": "1131d0922e644e7c281d6a013a36c1a1e7a992a96746f9720715f9a64b7b90b9"
+  },
+  {
+    "file": "src-ts/runtime-executables/www/runtime-base.ts",
+    "sha256": "f7f321856fce4f5da11f8cc1784e349058199151cd3777b97cfcfd1c519da1f8",
+    "beforeSha256": null
+  },
+  {
+    "file": "src-ts/runtime-executables/www/energy-origin-ledger-view.ts",
+    "sha256": "716e67991ac446c40ad931a55bfd33edade0a575f5001a4fbfc0b047180f82fb",
+    "beforeSha256": "8701eb347869e147ea87aa832ffda3261d145e821b2dd274fc73e423192e90d3"
+  },
+  {
+    "file": "src-ts/runtime-executables/www/netoperator-appcenter.ts",
+    "sha256": "5231413ccf787a9c80a115fd2c4dd8cd824595e63f0c10c66fd093b81fb34574",
+    "beforeSha256": "3eb7d2cb230fbb3eeb574668993b12a82aa010aa936839581c6bdfd950cdb1f3"
+  },
+  {
+    "file": "src-ts/runtime-executables/www/evcs-report.ts",
+    "sha256": "a08401da2d49fede7a5f8df5f2dd47659895643980eeba0ad34b3bebd9b70ec5",
+    "beforeSha256": "4d21b0c86f65c6b91f8cfe0883e7c749c8a82e0c12bb796b8939f25ef7f1b033"
+  },
+  {
+    "file": "src-ts/runtime-executables/www/admin-guard.ts",
+    "sha256": "f2c3895282c008fe3d5e89249fac06a3c1e7e42eba8b96d351ecae966f9125b9",
+    "beforeSha256": "95cb7038ebe96eb6a8f5de184ee2d9e6ac999f2c8155df86e9276c498b2790a4"
+  },
+  {
+    "file": "src-ts/runtime-executables/www/year-report.ts",
+    "sha256": "305481f234458431820a7a112cbd80c9eea2d4548efc1a49af942e49d5cc8a42",
+    "beforeSha256": "b7836ff2f0c724d9be080b97894224bab96014ed7e5613c89091caf8963e9d81"
+  },
+  {
+    "file": "src-ts/runtime-executables/www/charging-diagnostics-appcenter.ts",
+    "sha256": "66062de4febaa53513eb0a129a5f0040c7b91bb0425f35e7d4613029bc772996",
+    "beforeSha256": "b564da26cac5bd53cae8f0e2a83fb3736b503466781ec3cb43e50a7f2bf79270"
+  },
+  {
+    "file": "src-ts/runtime-executables/www/report-common.ts",
+    "sha256": "c39ea39f9e6bf983fef6b5ae23a9425967595903d9e2538c9d42c16f5f57e3eb",
+    "beforeSha256": "82b98011e9c705126933f3a0493c62f89e0bd1d39fa7b706150bf537a0965af2"
+  },
+  {
+    "file": "src-ts/runtime-executables/www/rfid-report.ts",
+    "sha256": "89d5a53cd91f3f0b691560dfb5059dacdcc0307e143dc9d660b5875d2e70adc9",
+    "beforeSha256": "4d7db1daf932b36df9ed87cc6299a0fa41799b39ab4dee61ac512e2fff35cc4e"
+  },
+  {
+    "file": "src-ts/runtime-executables/www/storagefarm.ts",
+    "sha256": "036f0462e2e6fb2b702c4cce45dcaeb28f72be60f630e7b7322d70fcfde78157",
+    "beforeSha256": "fe3f56b47fa96b1cfe04bcd1c60c45dc7708a91864437d2be4c7a269851742aa"
+  },
+  {
+    "file": "src-ts/runtime-executables/www/ems-apps.ts",
+    "sha256": "e93cee98eec73f62d7dffb96e55ddc85dd4e624045cdd066ebf27ab8a751cfdc",
+    "beforeSha256": "ac8918e008fcea2ade1ac87483d5a4f9da8b2050d60f0a09fae4e68773da1429"
+  },
+  {
+    "file": "src-ts/runtime-executables/www/evcs.ts",
+    "sha256": "14eae561337acc8ac507f592f1a6c737038fd3fce83de62b09d78832eef9c250",
+    "beforeSha256": "f63ee0f78dabcfb919fef5d38fa04a1a0f79b124d8c0339720ac9ce52f176b01"
+  },
+  {
+    "file": "src-ts/runtime-executables/www/license.ts",
+    "sha256": "b4f93be24ad83e993368ee0d61eaaaa0d110e6d10463fcbe33c840bd8bdfba8f",
+    "beforeSha256": "42f51f2bade2d50a582bccc3b086e7e6f85ceda92389e20120e4599e8c7cdf54"
+  },
+  {
+    "file": "src-ts/runtime-executables/www/history.ts",
+    "sha256": "3a7f1065dbbe6c058d802f25de4c143060a609ea5ffb17a08c084704f1955126",
+    "beforeSha256": "ac0499884555c262b9227c9e4aa364fe221fc1cfd542ff6de839fe65ddfef84c"
+  },
+  {
+    "file": "src-ts/runtime-executables/www/smarthome.ts",
+    "sha256": "083e6bf6628131e203cd3d02030139ba3c36620543503918d63be3d3d949ec20",
+    "beforeSha256": "93673944a6a7262456872f4618ac4b2f50fa2c4888a7f195fc6be1f994d395b6"
+  },
+  {
+    "file": "src-ts/runtime-executables/www/smarthome-config.ts",
+    "sha256": "0e01239504d1e0922bfd25baec81599e7c0a7af5ee889fce303d8e6c3c4886f2",
+    "beforeSha256": "236d75f410b5b7e3d25845348567944213e8175ca47f2c886fcf876bf9fa899e"
+  },
+  {
+    "file": "src-ts/runtime-executables/www/auth.ts",
+    "sha256": "cf237655fca8ea6d645ebdaa01f27b2ec7a6a4ce4f21a27c557f0a44446d78fe",
+    "beforeSha256": "93fa5b4e7175c7cf7515f86b0add906b7cf2f35ffb3b9b3484f907c7040c4ec6"
+  },
+  {
+    "file": "www/evcs-report.html",
+    "sha256": "53078d90f25ae4c35be29f9ff0ef1cc0541bbf2c38e8cbee2ef385356d467c7c",
+    "beforeSha256": "7e9115417d9e3f333dadbc07861194b986de6d7b9c7c85d1678583ee305a546a"
+  },
+  {
+    "file": "www/energy-ledger.html",
+    "sha256": "2941bf2c3c6757698cf473e5744b5e6a268eee77fcd47e4f2841c283a10e7eca",
+    "beforeSha256": "d51afcc7418f1eba61245f9048e29432ab8d16fc53e8b3658aee2848123098a3"
+  },
+  {
+    "file": "www/index.html",
+    "sha256": "91a19b0c6cb6cfa1565f3ece6cd48d84b3589485985a2edd36963ecbbe5981b8",
+    "beforeSha256": "436dcd134b8c94525b6f7f25254c9e5105ca938f90e0da9f7d5d2f357d674c0f"
+  },
+  {
+    "file": "www/storagefarm.html",
+    "sha256": "b2e8a1a119458ba07d2155e4e7efc6f23c8db7c20d3674a960f8710918cbe3d4",
+    "beforeSha256": "17c322fc4d47aea98b4a96e4e83874e3ebd6585650c71a93a7c3364f4d9327d8"
+  },
+  {
+    "file": "www/history.html",
+    "sha256": "54f0cea61824d2496d084fe1cca31f02489dcbd5eab76f7e03557a26c96a48ac",
+    "beforeSha256": "9ed5637e08fe380800d79b203ca20de0b66956cdd062e2e97f692f30cb342bd9"
+  },
+  {
+    "file": "www/settings.html",
+    "sha256": "15351619b63c91837711f909e0f2fb2038b8b3d45509afb8cd302296d2d8c0e6",
+    "beforeSha256": "70bebe1890e5dfe1590db1e92ddd88f477cba1327e2b01ec14c89beb1a4947b6"
+  },
+  {
+    "file": "www/para14a-report.html",
+    "sha256": "125aae41d976d0c3693851bf7ce3ceb9d45080fda2cbbcfcf6ebec1db8c2bca1",
+    "beforeSha256": "24bae54bd4baa0835e92ea366ee1bdc4e377049714cc1ea7fa375747eaa1da64"
+  },
+  {
+    "file": "www/tariff-report.html",
+    "sha256": "78fcc04a81ffa7b6b7b8dec0f787b3d61b0c686c161b2294e64d98e6939600ba",
+    "beforeSha256": "fcc51e65f9fecc9e38e4ead0e0141a1457260858db853c8c0d5ec5a12494caae"
+  },
+  {
+    "file": "www/year-report.html",
+    "sha256": "dc762629054fbe1dc56cf2d0fd7d646b6325aec2071040f2ff63a8abf3472fa8",
+    "beforeSha256": "f916a76e3f9e1725ce5b0c8b4c992b5ce8502cba1347a2da7c9ce22291046dbe"
+  },
+  {
+    "file": "www/styles.css",
+    "sha256": "c9dcb359192f86fd25abd6bc6f835b6d1e7ac6fd70a4cdf86ba8a08cfc33b955",
+    "beforeSha256": "d1053aae3ea07d4bd6c9b9bef13f5b462b26e3ff48a321d786ad0623a4d96e5b"
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "command": [
+      "npm",
+      "run",
+      "test:stable-release"
+    ],
+    "exit": 0,
+    "seconds": 0.23281121253967285,
+    "log": "release-title-recheck.log"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "test:mesh-coordinator"
+    ],
+    "exit": 0,
+    "seconds": 4.773709058761597,
+    "log": "mesh-recheck.log"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "test:security-standards"
+    ],
+    "exit": 0,
+    "seconds": 1.9216232299804688,
+    "log": "security-standards-final.log"
+  }
+]

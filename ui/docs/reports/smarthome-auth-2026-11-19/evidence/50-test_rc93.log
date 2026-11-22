@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:rc93
+> node scripts/verify-rc93-certified-export-authority.cjs
+
+[rc93-certified-export-authority] OK: EZA-/Parkregler-Priorität, alleiniger Export-Guard-Writer, lokale Obergrenze, TTL/Fail-Safe, Senkenfolge und Hash-Audit geprüft.

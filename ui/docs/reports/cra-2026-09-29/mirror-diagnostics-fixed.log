@@ -1,0 +1,11 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.22 test:runtime-mirrors
+> npm run test:ts-runtime-mirrors
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.22 test:ts-runtime-mirrors
+> node scripts/verify-ts-runtime-mirrors.js && npm run check:ts-runtime-mirrors
+
+[ts-runtime-mirrors] ERROR: src-ts/runtime-mirrors/scripts/build-ts-runtime-mirrors.ts: Hash passt nicht zur JS-Quelle scripts/build-ts-runtime-mirrors.js. Bitte sync:ts-runtime-mirrors ausführen.

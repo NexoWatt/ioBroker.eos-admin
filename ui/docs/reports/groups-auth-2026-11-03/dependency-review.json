@@ -1,0 +1,16 @@
+{
+  "rootAudit": {
+    "info": 0,
+    "low": 0,
+    "moderate": 13,
+    "high": 0,
+    "critical": 0,
+    "total": 13
+  },
+  "allAffectedNodesDevelopmentOnly": true,
+  "changedLockEntries": [
+    ""
+  ],
+  "runtimeDependencyChanges": false,
+  "lockChange": "root version only 1.0.33 to 1.0.34"
+}

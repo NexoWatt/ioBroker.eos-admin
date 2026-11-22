@@ -1,0 +1,21 @@
+PASS strikte TypeScript-Prüfung ohne any/nocheck und unveränderliche validierte Policy
+PASS beliebiger Kontoname erhält Adminrechte ausschließlich aus Administratorgruppe
+PASS Benutzernamen admin/installer/kunde/user/customer vergeben ohne Gruppen keine Rolle
+PASS gleiche Namen behalten ausschließlich ihre tatsächlichen Gruppenrechte
+PASS alle bisherigen Standard- und Aliasgruppen bleiben wirksam
+PASS individuelle Gruppen als CSV/Array einschließlich Unicode und Großschreibung
+PASS bestehende Gruppenfelder werden ergänzt; Legacy-Benutzerlisten werden ignoriert
+PASS Rollenpriorität bei mehreren Mitgliedschaften und doppelter Gruppenzuordnung
+PASS unzugeordnete und ähnlich benannte Fremdgruppen verleihen keine Rechte
+PASS falsche Konfiguration sperrt sämtliche Rollen ohne Gruppenlesen
+PASS Gesamtgruppengrenze und leere Konfigurationsfelder bleiben begrenzt
+PASS kanonische Konto-ID wird weder getrimmt noch umgedeutet
+PASS exakte Objekt-ID und Gruppentyp sind Pflicht; Gruppenanzeigenamen sind bedeutungslos
+PASS Mitglieder sind begrenzte Arrays direkter vollständiger Konto-IDs
+PASS Entfernen, Löschen und Deaktivieren wirken beim nächsten Zugriff
+PASS vorhandenes enabled muss Boolean sein; keine Umdeutung von Strings oder Zahlen
+PASS fehlerhafte spätere Gruppe verwirft auch bereits gelesene Adminmitgliedschaft
+PASS synchrone und asynchrone Leseausfälle erlauben keinen Teilzugriff
+PASS gemeinsames Zeitbudget; verspätete Ergebnisse starten keine weiteren Leseaufrufe
+PASS späte Promise-Ablehnung nach Zeitablauf bleibt behandelt
+IOBROKER USER ROLES: 20 checks passed; Node v24.22.1; strict TypeScript and synthetic group objects, no live Admin/controller test.

@@ -1,0 +1,18 @@
+{
+  "rootRuntimeDeclarationsUnchanged": true,
+  "adminRuntimeDeclarationsUnchanged": true,
+  "productionLockNodesBefore": 78,
+  "productionLockNodesAfter": 78,
+  "productionLockAdded": {},
+  "productionLockRemoved": {},
+  "productionLockChanged": {},
+  "newRuntimeFilesListed": {
+    "lib/config-boundary-contracts.js": true,
+    "lib/mesh-peer-http.js": true
+  },
+  "missingListedFiles": [
+    "admin/react/assets/index-DPu0nhp3.js"
+  ],
+  "productionLockFullEntriesUnchanged": true,
+  "productionLockFullMetadataChanged": []
+}

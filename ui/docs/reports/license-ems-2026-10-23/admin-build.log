@@ -1,0 +1,18 @@
+Nachweisvermerk zum Admin-Build vom 23.10.2026 — kein vollständiger Rohlog
+
+Der aktuelle Aufruf `npm run admin:build` für iobroker.nexowatt-ui@1.0.26
+wurde während der Navigationsprüfung ausgeführt und ausschließlich in der
+Werkzeugausgabe erfasst. Ein separat gespeicherter Rohlog dieses Aufrufs liegt
+nicht vor. Der vorhandene Scratch-Log betrifft noch 1.0.25 und wurde deshalb
+nicht als aktueller Nachweis übernommen.
+
+Beobachtetes Ergebnis des bereits abgeschlossenen Aufrufs: Exit-Code 0.
+Vite 7.3.6: 50 Module transformiert, Build in 1,20 Sekunden abgeschlossen.
+Ausgegebene aktuelle Dateien:
+- admin/react/index.html
+- admin/react/assets/nexowatt-192-43ZwQ44y.png
+- admin/react/assets/index-DhaTEWdX.css
+- admin/react/assets/index-IO0DGu6L.js
+
+Die anschließenden Browserprüfungen verwendeten diesen gebauten Stand.
+Für diesen Nachweisvermerk wurde kein erneuter Build ausgeführt.

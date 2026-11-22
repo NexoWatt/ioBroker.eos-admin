@@ -1,0 +1,26 @@
+✔ Kopf steht vor Migration-/Transpiliermarker, Wiederholung verändert nichts (3.770374ms)
+✔ Typfehler bleibt hinter Lizenzkopf erkennbar, No-Check wird für Teilprüfungen entfernt (27.018152ms)
+✔ Shebang und Strict-Modus bleiben wirksam, CRLF und BOM bleiben erhalten (1.195539ms)
+✔ Fremde/unklare Lizenzen werden abgewiesen, Fixture-Strings nicht umgedeutet (0.580954ms)
+✔ Eigener Scope schließt Drittbundles, Notices, HTML/CSS/JSON und Binärdateien aus (3.384132ms)
+✔ Preflight verweigert Fremdlizenzen vor erstem Schreibzugriff (1.746518ms)
+✔ Symbolische Links werden weder gelesen noch überschrieben (0.446291ms)
+✔ Check verlangt erzeugte Runtime, Write verändert manuelle Spiegel nur um den Kopf (1.496543ms)
+✔ No-Check-Budget zählt vorhandene und neue Direktiven auch hinter Lizenzkopf (141.31456ms)
+✔ Gesamter eigener Quellscope bleibt beim Einfügen nach dem Prolog bytegleich (75.699758ms)
+ℹ Lesend geprüfte eigene Quelldateien: 769
+✔ Original-Runtime-Spiegelgenerator setzt Kopf vor No-Check und ist idempotent (138.539756ms)
+✔ Original-Scriptgenerator hält Lizenz zuerst und Strict-/Exports-Semantik (1768.454202ms)
+✔ bestehender führender Marker transpiliert unverändert (1.1965ms)
+✔ proprietärer Kopf bleibt vor Build-Hinweis, folgender Marker transpiliert (0.408805ms)
+✔ No-Check-Migrationsanker nach Lizenzkopf wird nicht ausgeliefert (0.389856ms)
+✔ Marker in String oder gewöhnlichem Kommentar löst keine Transpilierung aus (0.144568ms)
+✔ Hash- und Wiederholungsprüfung akzeptiert die exakt erzeugten Artefakte (253.215321ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2435.566312

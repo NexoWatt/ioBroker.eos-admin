@@ -1,0 +1,16 @@
+# Copyright (c) 2026 NexoWatt. All rights reserved. Confidential and Proprietary.
+# Use, modification or distribution without express permission is prohibited.
+name: NexoWatt authoritative sources
+queries:
+  - uses: security-extended
+paths:
+  - src-ts
+  - src-admin-tab/src
+  - src-admin-tab/vite.config.ts
+paths-ignore:
+  - src-ts/runtime-mirrors
+  - src-ts/scripts
+  - src-ts/tests
+  - src-ts/test-fixtures
+  - '**/node_modules/**'
+  - '**/*.d.ts'

@@ -1,0 +1,24 @@
+{
+  "date": "2026-09-29T21:29:28.879331+00:00",
+  "reviewType": "independent static followup; no additional execution or hardware tests",
+  "reviewedWeatherSource": "src-ts/runtime-executables/ems/services/open-meteo-pv-forecast.ts",
+  "reviewedWeatherSha256": "f253af3980f495a5fa2cee733738dc71f18608c5a299dff1cb9026aa762ceae9",
+  "findings": [
+    {
+      "subject": "PV multi-array coverage",
+      "status": "closed",
+      "evidence": "Merged curve requires every contributor and complete current requested horizon before valid:true; final deadline check follows."
+    },
+    {
+      "subject": "Tariff stale/future cache and error rewrites",
+      "status": "closed",
+      "evidence": "Current interval required before cache replacement; unchanged failed refresh does not refresh unchanged price timestamps."
+    },
+    {
+      "subject": "Simulation credential backup",
+      "status": "closed",
+      "evidence": "Protected backup state ACL verified before credentials are written; failure prevents simulation patch activation."
+    }
+  ],
+  "scopeResult": "No further concrete open finding in these reviewed changes; system certification and operational acceptance remain outside this static review."
+}

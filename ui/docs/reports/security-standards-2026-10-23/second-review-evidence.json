@@ -1,0 +1,173 @@
+{
+  "reviewType": "separate KI review, not external certification",
+  "capturedAt": "2026-10-23T20:12:31.295Z",
+  "node": "v24.19.0",
+  "environment": "Linux, real loopback Express, mocked ioBroker, no devices or publication",
+  "probeScriptSha256": "ac9f011766274538f54d7721f00bfc8afe435866b08f03b5af54ee10a84c5196",
+  "testedFiles": [
+    {
+      "file": "main.js",
+      "sha256": "699d3b865fbe9bf573aab99cfb05e8acc31626d34282898202523d005b6871e8"
+    },
+    {
+      "file": "lib/http-error-boundary.js",
+      "sha256": "66f96405a1e83586d78f767b24cd047acce4ca81612a607f81c0a273e6a8a7e0"
+    },
+    {
+      "file": "lib/mesh-coordinator.js",
+      "sha256": "ecdb286c30aa91b0ab4a93a925311af6dd1be77030e3bb56a1d5ce8cbc3a66d4"
+    },
+    {
+      "file": "lib/mesh-coordinator-contract.js",
+      "sha256": "82c9959cd034b96511bfac1e0e19df9750af91d0a1614c2135b80d7a7e21e7e6"
+    },
+    {
+      "file": "lib/mesh-energy-service.js",
+      "sha256": "a4a38742257fb09fe3f2ef6b1a68dd7ce58e44eb0e9a3ad4a0c9028aa93ae2cd"
+    },
+    {
+      "file": "ems/nexologic-engine.js",
+      "sha256": "085637072ee99aeb9dd6d8070b087079b338bf46a156a2df37bcab6aba14f923"
+    },
+    {
+      "file": "www/simulation.js",
+      "sha256": "df5992391c8a6523a5c8ea5bc77add04a880c052c0109c9a0ad3ea52c61dc644"
+    },
+    {
+      "file": "src-ts/runtime-executables/main.ts",
+      "sha256": "ef37cef6eecda52001d2f0db22eed6c76ab67d92e344d065fc8b17ba794e44a0"
+    },
+    {
+      "file": "src-ts/runtime-executables/lib/http-error-boundary.ts",
+      "sha256": "d44e839cda81fd990eab425b2495b02409e43d85697b18831db24de7c12529ec"
+    },
+    {
+      "file": "src-ts/runtime-executables/lib/mesh-coordinator.ts",
+      "sha256": "f017b4e679aff3ffbefe3b60f237f981b255c9c563a97518b6c6dfc3148b652a"
+    },
+    {
+      "file": "src-ts/runtime-executables/lib/mesh-coordinator-contract.ts",
+      "sha256": "ec83a3b1e0944f93dadb26c8f0fe7e8865b6bb67acaa2da7fbc2a5763b0215c3"
+    },
+    {
+      "file": "src-ts/runtime-executables/lib/mesh-energy-service.ts",
+      "sha256": "53f05b850c23b2f5e0bd0e15a8d8cb28f3845a06bb67b92797d61a60b356cde9"
+    },
+    {
+      "file": "src-ts/runtime-executables/ems/nexologic-engine.ts",
+      "sha256": "0a114bc8c78961a84a0e515f347272177a940339803a5274be2fd99529901950"
+    },
+    {
+      "file": "src-ts/runtime-executables/www/simulation.ts",
+      "sha256": "e0e9e3ac14501d6782735c07b0b5429b0676575b244f356888763c0c3ac52c9a"
+    },
+    {
+      "file": "scripts/build-ts-runtime-executables.js",
+      "sha256": "440ab5f6fb6f63ed3204253b895aa7b3b9c7479a9eaba1bea5de6555f4721407"
+    },
+    {
+      "file": "scripts/verify-security-standards.cjs",
+      "sha256": "818b5566f68736ceede6a3346e9064b8f21ba0caa989a7bad237a10b6bfdf6b0"
+    },
+    {
+      "file": ".github/workflows/codeql.yml",
+      "sha256": "8615372ea072638e293d46cddb247ae2f8059dbdea474d603629c9f7a69e1e4e"
+    },
+    {
+      "file": ".github/codeql/codeql-config.yml",
+      "sha256": "c6c5c0fe1c9e3eb97a9e3b9c379587d09b8327c07d6f8b9a0c7317def08d939c"
+    }
+  ],
+  "passed": 9,
+  "probes": [
+    {
+      "name": "spoofed status/code on installer persistence failure",
+      "status": 500,
+      "leaked": false,
+      "passed": true
+    },
+    {
+      "name": "historical simulation.lastError is sanitized on read",
+      "status": 200,
+      "leaked": false,
+      "passed": true
+    },
+    {
+      "name": "simulation failure sanitized immediately, in stored state and followup read",
+      "status": 500,
+      "statusRead": 200,
+      "leaked": false,
+      "passed": true
+    },
+    {
+      "name": "malformed anonymous JSON with NODE_ENV unset",
+      "status": 400,
+      "leaked": false,
+      "passed": true
+    },
+    {
+      "name": "partial request aborted by actual HTTP client then auth status",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "name": "synthetic in-memory route throws after headers; no second response or leak",
+      "status": 200,
+      "body": "partial",
+      "leaked": false,
+      "passed": true
+    },
+    {
+      "name": "internally created conflict retains immutable safe response",
+      "status": 409,
+      "leaked": false,
+      "passed": true
+    },
+    {
+      "name": "Mesh owned Stillsetzung guidance survives and foreign lookalike fails opaque",
+      "responses": [
+        {
+          "route": "/api/installer/config",
+          "kind": "owned",
+          "status": 409
+        },
+        {
+          "route": "/api/installer/backup/import",
+          "kind": "owned",
+          "status": 409
+        },
+        {
+          "route": "/api/installer/config",
+          "kind": "foreign",
+          "status": 500
+        },
+        {
+          "route": "/api/installer/backup/import",
+          "kind": "foreign",
+          "status": 500
+        },
+        {
+          "route": "/api/mesh/coordinator/config",
+          "kind": "owned",
+          "status": 422
+        },
+        {
+          "route": "/api/mesh/coordinator/config",
+          "kind": "foreign",
+          "status": 500
+        }
+      ],
+      "persistedOnRefusal": false,
+      "leaked": false,
+      "passed": true
+    },
+    {
+      "name": "NexoLogic owned issues retained but forged code and arbitrary issues are opaque",
+      "ownedStatus": 400,
+      "foreignStatus": 500,
+      "publicIssueCode": "node-type-unknown",
+      "leaked": false,
+      "passed": true
+    }
+  ]
+}

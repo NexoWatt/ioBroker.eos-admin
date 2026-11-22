@@ -1,0 +1,13 @@
+PASS real inactive snapshot with null budget and missing M0 mappings remains editable
+PASS incomplete stored drafts retain empty and null numeric values
+PASS backend-compatible legacy drafts and valid point order remain editable
+PASS extra legitimate configuration fields remain intact
+PASS real normalized draft and split M0 measurement pass guards
+PASS real stale runtime response keeps null telemetry as unavailable
+PASS preview contract permits a response without configuration while load/save do not
+PASS malformed nested configuration cannot replace the current draft
+PASS poison keys, getters, cycles, non-finite numbers and oversized nesting fail closed
+PASS validation messages keep paths but cannot carry arbitrary objects into React
+PASS mail API fields and real TLS choices are validated before state updates
+PASS Admin build requires actual strict checking and sources contain no any/suppression
+PASS Admin-Typgrenzen: 12 Prüfgruppen

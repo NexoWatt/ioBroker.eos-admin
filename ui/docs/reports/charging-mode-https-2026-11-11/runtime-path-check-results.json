@@ -1,0 +1,43 @@
+{
+  "status": "PASS",
+  "checks": 12,
+  "node": "v24.22.1",
+  "executedAt": "2026-11-11T05:42:07.915Z",
+  "sourcePath": "/workspace/scratch/7dbfb2c0423e/source-review/NexoWatt_UI_1.0.35/www/runtime-base.js",
+  "sourceSha256": "ac01baa2ebe16b4de13e8cef59e8c39b7ddc6dfea38d8dfdeca1a6205ca711cd",
+  "scope": "Actual shipped runtime-base.js in isolated VM with native Request/Response/URL; no browser, TLS, ioBroker or hardware integration",
+  "scenarios": [
+    {
+      "origin": "https://eos.example:8081",
+      "prefix": "/proxy/nexowatt-ui.0",
+      "post": "/proxy/nexowatt-ui.0/api/set",
+      "state": "/proxy/nexowatt-ui.0/api/state",
+      "events": "/proxy/nexowatt-ui.0/events",
+      "bodyAndOptionsPreserved": true
+    },
+    {
+      "origin": "https://eos.example:8081",
+      "prefix": "/admin/proxy/nexowatt-ui.0",
+      "post": "/admin/proxy/nexowatt-ui.0/api/set",
+      "state": "/admin/proxy/nexowatt-ui.0/api/state",
+      "events": "/admin/proxy/nexowatt-ui.0/events",
+      "bodyAndOptionsPreserved": true
+    },
+    {
+      "origin": "https://eos.example",
+      "prefix": "",
+      "post": "/api/set",
+      "state": "/api/state",
+      "events": "/events",
+      "bodyAndOptionsPreserved": true
+    },
+    {
+      "origin": "http://eos.example:8188",
+      "prefix": "",
+      "post": "/api/set",
+      "state": "/api/state",
+      "events": "/events",
+      "bodyAndOptionsPreserved": true
+    }
+  ]
+}

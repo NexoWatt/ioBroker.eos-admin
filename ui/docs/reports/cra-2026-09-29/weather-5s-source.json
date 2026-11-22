@@ -1,0 +1,13 @@
+{
+  "command": [
+    "node",
+    "scripts/verify-cra-weather.cjs",
+    "--source"
+  ],
+  "cwd": "repository root",
+  "startedAt": "2026-09-29T21:22:56.857037+00:00",
+  "finishedAt": "2026-09-29T21:22:57.795179+00:00",
+  "durationSeconds": 0.938,
+  "exitCode": 0,
+  "capturedBytes": 1293
+}

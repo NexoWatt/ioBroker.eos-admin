@@ -1,0 +1,23 @@
+✔ alte Konfiguration bleibt statisch ohne zusätzliche Objektabfragen (2.717996ms)
+✔ M0 und M1 über verschiedene Aliasnamen auf derselben Quelle werden abgewiesen (1.50674ms)
+✔ Aliaszyklus und fehlender Datenpunkt bleiben sichtbar ungültig (0.562444ms)
+✔ Zuordnung zu fremdem Speicher und fremder AC-Istleistung wird abgewiesen (1.236715ms)
+✔ atomare Änderung erhöht Version einmal; alter Browserstand und offene Freigabe blockieren (1.431837ms)
+✔ native oder importierter aktiver Betrieb kann die technische Sperre nicht umgehen (0.742593ms)
+✔ Persistenzpfad lehnt stille Entfernung und unversionierte Änderung ab (1.045498ms)
+✔ Änderung der Bestandsfarm invalidiert die bisherige NVP-Gerätebindung (0.529193ms)
+✔ jede NVP-Route besitzt die Installer-Middleware und no-store (1.072734ms)
+✔ alte Diagnoseversion wird nach Zuordnungswechsel ohne übernommene Messwerte als ausstehend ausgegeben (0.345979ms)
+✔ ungespeicherte Diagnose ruft nur Vorschau auf und verändert keine Konfiguration (1.281101ms)
+✔ gleichzeitiger Speicherversuch wird abgewiesen; Version und Konfiguration bleiben atomar (0.624947ms)
+✔ hängende Objektprüfung belegt höchstens vier DB-Aufträge und einen Adapter-Slot (5.552607ms)
+✔ NVP HTTP: Rollen, atomare Speicherung, Import, Aktivierungssperre und öffentliche Diagnosefilter (176.413502ms)
+✔ NVP HTTP: alle Gesamtpatch-Writer schließen parallele veraltete Speicherungen aus (104.85587ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 569.328768

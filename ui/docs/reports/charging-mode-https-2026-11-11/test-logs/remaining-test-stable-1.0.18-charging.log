@@ -1,0 +1,7 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:stable-1.0.18-charging
+> node scripts/verify-stable-1.0.18-charging.cjs
+
+[1.0.18] OK: begrenzte Überbrückung, Auszeit, Mess-/Schutzgrenzen, gemeinsames Budget, Boost AC/DC und Phasenwahl
+[1.0.18] OK: echte Regelticks/Writer für Boost 1p/3p, Wolke45s, Wiederanlaufsperre180s und Erholung

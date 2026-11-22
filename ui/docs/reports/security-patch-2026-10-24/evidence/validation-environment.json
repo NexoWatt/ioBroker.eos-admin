@@ -1,0 +1,33 @@
+{
+  "recordedAt": "2026-10-24T06:16:32.655423+00:00",
+  "date": "2026-10-24",
+  "reportTimezone": "Europe/Berlin",
+  "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+  "node": "v24.19.0",
+  "npm": "11.9.0",
+  "typescript": "5.8.3",
+  "productVersion": "1.0.31",
+  "sourceHashes": {
+    "src-ts/runtime-executables/main.ts": "a300987130caeebcdb1d6aca97bd99750ccb9613bb63bafa07706dcd2c28799d",
+    "src-admin-tab/src/lib/adminConnection.ts": "6f7d387e01d9d5b640cc16d2adbc0ce63adda15c4198f57189062df08909d28e",
+    "scripts/verify-runtime-security-updates.cjs": "8193d621d901fd8a8599db203b791a82912d303f2d71515515a8213111ec192e",
+    "scripts/verify-admin-response-limits.cjs": "d3d400e5786327fa9f0e2c77d0ff2114270c2405027658d6cc8637811f41c1b7"
+  },
+  "auditCommands": [
+    {
+      "cwd": ".",
+      "exitCode": 0,
+      "log": "npm-audit-root-final.json",
+      "capturedAt": "2026-10-24T06:06:02.686775+00:00",
+      "reproductionCommand": "npm audit --ignore-scripts --json"
+    },
+    {
+      "cwd": "src-admin-tab",
+      "exitCode": 0,
+      "log": "npm-audit-admin-final.json",
+      "capturedAt": "2026-10-24T06:06:03.798796+00:00",
+      "reproductionCommand": "npm audit --ignore-scripts --json"
+    }
+  ],
+  "limits": "Local software/browser/loopback tests only; no live hardware, no external email, no deployment or publication."
+}

@@ -1,0 +1,92 @@
+[
+  {
+    "step": "release-manifest-pre-test",
+    "command": [
+      "npm",
+      "run",
+      "release:generate-manifest"
+    ],
+    "exitCode": 0,
+    "seconds": 1.59,
+    "log": "release-manifest-pre-test.log"
+  },
+  {
+    "step": "release-prepare",
+    "command": [
+      "npm",
+      "run",
+      "release:prepare"
+    ],
+    "exitCode": 0,
+    "seconds": 0.91,
+    "log": "release-prepare.log"
+  },
+  {
+    "step": "runtime-smoke-preflight",
+    "command": [
+      "npm",
+      "run",
+      "test:package-runtime-start-smoke"
+    ],
+    "exitCode": 0,
+    "seconds": 1.16,
+    "log": "runtime-smoke-preflight.log"
+  },
+  {
+    "step": "test-all-complete",
+    "command": [
+      "npm",
+      "run",
+      "test:all"
+    ],
+    "exitCode": 0,
+    "seconds": 202.98,
+    "log": "test-all-complete.log"
+  },
+  {
+    "step": "docs-check",
+    "command": [
+      "npm",
+      "run",
+      "docs:check"
+    ],
+    "exitCode": 0,
+    "seconds": 0.25,
+    "log": "docs-check.log"
+  },
+  {
+    "step": "publish-check",
+    "command": [
+      "npm",
+      "run",
+      "publish:check"
+    ],
+    "exitCode": 0,
+    "seconds": 1.12,
+    "log": "publish-check.log"
+  },
+  {
+    "step": "runtime-start-smoke",
+    "command": [
+      "npm",
+      "run",
+      "test:package-runtime-start-smoke"
+    ],
+    "exitCode": 0,
+    "seconds": 1.35,
+    "log": "runtime-start-smoke.log"
+  },
+  {
+    "step": "npm-pack-dry",
+    "command": [
+      "npm",
+      "pack",
+      "--dry-run",
+      "--json",
+      "--ignore-scripts"
+    ],
+    "exitCode": 0,
+    "seconds": 2.88,
+    "log": "npm-pack-dry.log"
+  }
+]

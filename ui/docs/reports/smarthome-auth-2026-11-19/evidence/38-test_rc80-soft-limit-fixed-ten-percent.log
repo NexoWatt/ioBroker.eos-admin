@@ -1,0 +1,12 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:rc80-soft-limit-fixed-ten-percent
+> node scripts/verify-rc80-soft-limit-fixed-ten-percent.cjs && npm run test:safety-envelope-final-write
+
+[RC80] OK: Soft-Reserve immer exakt 10 %, Soft-Limit immer 90 %, keine Mindest-/Maximalgrenze und keine Legacy-Uebersteuerung.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:safety-envelope-final-write
+> node scripts/verify-safety-envelope-final-write.js
+
+[safety-envelope-final-write] OK: Inbetriebnahme, NVP, Phasen, §14a, Summenreserve, finaler Hardware-Write und Fehlerverriegelung arbeiten fail-closed.

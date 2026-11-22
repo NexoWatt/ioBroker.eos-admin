@@ -1,0 +1,36 @@
+{
+  "suite": "UI-CRA-NET-04 / NW-HTTPS-5S",
+  "source": "ems/services/tariff-provider-registry.js",
+  "node": "v24.19.0",
+  "environment": "real loopback HTTP stream behind simulated HTTPS URL; mocked HTTPS providers/DNS; no production or real TLS access",
+  "passed": 23,
+  "timings": {
+    "oauthSharedBudgetMs": 130,
+    "maximumConfiguredBudgetMs": 5003
+  },
+  "checks": [
+    "bounded-stream-positive-via-simulated-https",
+    "redirect-never-reaches-target",
+    "streamed-response-limit",
+    "declared-response-limit",
+    "body-total-timeout",
+    "provider-error-redacted",
+    "all-http-rejected-before-network",
+    "invalid-url-and-userinfo-rejected",
+    "https-custom-credential-contract-mock",
+    "https-oauth-one-signal-positive",
+    "oauth-chain-shares-one-short-budget",
+    "five-second-cap-includes-oauth-and-noncooperative-dns-mock",
+    "offline-error-redacted",
+    "request-size-limit-before-network",
+    "json-types-completeness-bounds-atomic-rejection",
+    "negative-prices-and-epoch-types-positive",
+    "interval-count-and-overlap-rejected",
+    "tibber-and-energyzero-complete-envelope-check",
+    "entsoe-explicit-xml-decimal-positive-and-malformed-rejection",
+    "invalid-provider-response-does-not-refresh-states-or-timestamps",
+    "expired-and-future-only-responses-keep-good-cache-and-success-time",
+    "valid-current-provider-result-commits-new-price-and-success",
+    "unchanged-ticks-preserve-data-timestamps-and-expiry-clears-once"
+  ]
+}

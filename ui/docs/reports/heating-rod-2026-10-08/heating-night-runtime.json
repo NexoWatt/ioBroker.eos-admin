@@ -1,0 +1,12 @@
+{
+  "command": [
+    "npm",
+    "run",
+    "test:heating-rod-night-ramp"
+  ],
+  "startedAt": "2026-10-08T19:43:38.584537+00:00",
+  "durationSeconds": 0.455,
+  "exitCode": 0,
+  "log": "heating-night-runtime.log",
+  "hardware": false
+}

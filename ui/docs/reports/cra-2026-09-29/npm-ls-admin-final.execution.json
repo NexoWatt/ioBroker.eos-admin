@@ -1,0 +1,12 @@
+{
+  "command": [
+    "npm",
+    "ls",
+    "--all",
+    "--json"
+  ],
+  "cwd": "src-admin-tab",
+  "startedAt": "2026-09-29T20:19:50.767017+00:00",
+  "finishedAt": "2026-09-29T20:19:51.156264+00:00",
+  "exitCode": 0
+}

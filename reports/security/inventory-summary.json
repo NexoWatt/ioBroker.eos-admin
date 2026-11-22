@@ -1,9 +1,9 @@
 {
   "tool": "nexowatt-security-inventory@1.0.0",
-  "timestamp": "2026-11-05T12:10:00.281Z",
+  "timestamp": "2026-11-05T11:39:14.102Z",
   "environment": {
     "node": "v24.22.1",
-    "platform": "win32",
+    "platform": "linux",
     "arch": "x64"
   },
   "limitations": "Lockfile reference inventory only; no installed tree, bundle composition, CVE assessment, or deployed-device attestation.",
@@ -377,7 +377,7 @@
       "rootEngines": {}
     }
   ],
-  "runtimeFileCount": 499,
+  "runtimeFileCount": 519,
   "sourceFileCount": 72,
   "vendoredPackageManifests": [
     {

@@ -1,0 +1,63 @@
+{
+  "time": "2026-11-19T06:54:31.930Z",
+  "node": "v24.22.3",
+  "result": "PASS",
+  "scope": "Isolierte Quell-, Dateisystem- und HTTP-Double-Prüfung; kein Browser, kein EOS-Server, kein Nginx, keine Anlage",
+  "checks": [
+    {
+      "name": "Referenzhash, Instanzgrenzen und Syntax des tatsächlichen Patch-Ergebnisses",
+      "result": "PASS"
+    },
+    {
+      "name": "Prüfmodus schreibt nichts; beide Originale und Symlinkfreiheit erforderlich",
+      "result": "PASS"
+    },
+    {
+      "name": "Anwendung sichert beide Originale, bindet Manifest-Hashes und verweigert Wiederholung",
+      "result": "PASS"
+    },
+    {
+      "name": "Änderung zwischen Prüfung und Anwendung bricht ohne Überschreiben ab",
+      "result": "PASS"
+    },
+    {
+      "name": "Proxy-Vorabprüfung fordert HTTPS, anonymen EOS-Status, begrenzte JSON-Antwort",
+      "result": "PASS"
+    },
+    {
+      "name": "Kundenziel nutzt den gemeinsamen HTTPS-Ursprung, Präfix und gewählte Instanz",
+      "result": "PASS"
+    },
+    {
+      "name": "Erstpasswort und eigener Passwortwechsel bleiben vor jeder Kundenweiterleitung",
+      "result": "PASS"
+    },
+    {
+      "name": "Installateur behält Portal; Administrator behält Admin und UI-/Passwortlinks",
+      "result": "PASS"
+    }
+  ],
+  "sourceHashes": [
+    {
+      "file": "integrations/eos-admin-dev9/reference/eos-role-bootstrap.dev9.txt",
+      "sha256": "0804f7a98c25bbddb588f84c9408a88be31687211afc84c68d705109d3303548"
+    },
+    {
+      "file": "integrations/eos-admin-dev9/apply-ui-login.cjs",
+      "sha256": "3cc57c4320e2a96739d40452a2a74e7723ad713ad69cd923d8f9c33d1ec9198a"
+    },
+    {
+      "file": "integrations/eos-admin-dev9/ui-login-instance-0.patch",
+      "sha256": "6330adb35c69a579270346b543d77b45d330d94f0c2eec3ab984b29d60c3ac82"
+    },
+    {
+      "file": "integrations/eos-admin-dev9/nginx-ui-location.conf.example",
+      "sha256": "e1c5eeb71a313db8a0475bb060e337c4a53899bce2a7a8fd9e6a6cf56ff23814"
+    },
+    {
+      "file": "scripts/verify-eos-dev9-ui-integration.cjs",
+      "sha256": "82b3283772db76ae9f20b42f7a56b9bca659af41c26fdca04cc9a999fc77f226"
+    }
+  ],
+  "deployed": false
+}

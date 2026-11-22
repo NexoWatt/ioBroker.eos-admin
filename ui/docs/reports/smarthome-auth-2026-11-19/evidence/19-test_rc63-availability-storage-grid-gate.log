@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:rc63-availability-storage-grid-gate
+> node scripts/verify-rc63-availability-storage-grid-gate.js
+
+[rc63-availability-storage-grid-gate] OK: availability only customer/RFID; storage grid charge only with fresh cheap dynamic tariff and, when enabled, active NT; PV charging unaffected.

@@ -1,0 +1,120 @@
+{
+  "timestamp": "2026-11-22T09:51:20.279306+00:00",
+  "node": "v24.22.3",
+  "checks": [
+    {
+      "name": "frontend-tests",
+      "command": [
+        "node",
+        "--test",
+        "src-admin/test/eos-unified-navigation.test.mjs"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "frontend-lint",
+      "command": [
+        "node",
+        "node_modules/eslint/bin/eslint.js",
+        "-c",
+        "src-admin/eslint.config.mjs",
+        "src-admin/src/helpers/eosUnifiedSession.ts",
+        "src-admin/src/App.tsx",
+        "src-admin/src/components/Drawer.tsx",
+        "src-admin/src/components/Intro/NexoWattEmsOverview.tsx",
+        "src-admin/src/components/SystemSettings/eosLicenseApi.ts",
+        "src-admin/src/components/SystemSettings/EosLicenseDialog.tsx",
+        "src-admin/src/tabs/Intro.tsx"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "syntax eos-role-bootstrap.js",
+      "command": [
+        "node",
+        "--check",
+        "src-admin/public/js/eos-role-bootstrap.js"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "syntax eos-policy-client.js",
+      "command": [
+        "node",
+        "--check",
+        "src-admin/public/js/eos-policy-client.js"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "syntax eos-account-management.js",
+      "command": [
+        "node",
+        "--check",
+        "src-admin/public/js/eos-account-management.js"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "syntax eos-basic-settings.js",
+      "command": [
+        "node",
+        "--check",
+        "src-admin/public/js/eos-basic-settings.js"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "syntax eos-auto-update.js",
+      "command": [
+        "node",
+        "--check",
+        "src-admin/public/js/eos-auto-update.js"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "syntax eos-role-ui.js",
+      "command": [
+        "node",
+        "--check",
+        "src-admin/public/js/eos-role-ui.js"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "syntax eos-ems-overview.js",
+      "command": [
+        "node",
+        "--check",
+        "src-admin/public/js/eos-ems-overview.js"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "syntax eos-branding-sanitizer.js",
+      "command": [
+        "node",
+        "--check",
+        "src-admin/public/js/eos-branding-sanitizer.js"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "frontend-graph",
+      "command": [
+        "node",
+        "tools/nexowatt-frontend-graph-check.cjs"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "frontend-public-assets",
+      "command": [
+        "node",
+        "tools/nexowatt-admin8-public-assets-selftest.mjs"
+      ],
+      "exitCode": 0
+    }
+  ]
+}

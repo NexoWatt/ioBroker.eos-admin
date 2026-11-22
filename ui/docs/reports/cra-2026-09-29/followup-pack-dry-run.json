@@ -1,0 +1,15 @@
+{
+  "command": [
+    "npm",
+    "pack",
+    "--dry-run",
+    "--json",
+    "--ignore-scripts"
+  ],
+  "cwd": "repository root",
+  "startedAt": "2026-09-29T21:00:40.502834+00:00",
+  "finishedAt": "2026-09-29T21:00:43.501499+00:00",
+  "durationSeconds": 2.999,
+  "exitCode": 0,
+  "capturedBytes": 46497
+}

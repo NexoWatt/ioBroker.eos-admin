@@ -40,7 +40,7 @@
 
     const roleFromPolicy = policy => {
         const raw = normalize(policy?.role || policy?.eosRole || policy?.accessRole || '');
-        if (policy?.user === 'system.user.admin' || policy?.userId === 'system.user.admin' || policy?.isAdmin || policy?.isEosAdminGroup || policy?.isAdministrator || /^(?:admin|administrator)$/.test(raw)) return 'admin';
+        if (policy?.isAdmin || policy?.isEosAdminGroup || policy?.isAdministrator || /^(?:admin|administrator)$/.test(raw)) return 'admin';
         if (/nexowatt service|eos service|service admin|service administrator/.test(raw)) return 'admin';
         if (policy?.isInstaller || /installateur|installer|installation|inbetriebnahme|techniker|technician|integrator|partner/.test(raw)) return 'installer';
         return 'enduser';
@@ -221,30 +221,6 @@
     });
 
     const appPaper = () => document.getElementById('app-paper');
-    const routeForPattern = pattern => navEntries().find(entry => pattern.test(entry.tab) && isRouteAllowed(state.role, entry.tab, entry.label))?.tab || '';
-    const actionDefinitions = role => {
-        const uiTab = routeForPattern(/^tab-(?:nexowatt-ui|nexowatt-eos|eos-cockpit)(?:-|$)/) || 'tab-nexowatt-ui';
-        const backupTab = routeForPattern(/^tab-(?:nexowatt-backup|eos-backup|nexowatt-sicherung)(?:-|$)/);
-        if (role === 'installer') {
-            return [
-                ['Dienste', 'Instanzen starten, stoppen und diagnostizieren', 'tab-instances', 'services'],
-                ['Module', 'Module installieren, aktualisieren und konfigurieren', 'tab-adapters', 'modules'],
-                ['Datenpunkte', 'Messwerte prüfen und freigegebene Werte schreiben', 'tab-objects', 'datapoints'],
-                ['Geräte', 'Geräteintegration und Inbetriebnahme öffnen', 'tab-devicemanager', 'devices'],
-                ['Basis-Einstellungen', 'Standort, Sprache und Anlagenparameter', 'basic-settings', 'settings'],
-                ...(backupTab ? [['NexoWatt Sicherung', 'Sicherung und Wiederherstellung des EOS-Systems', backupTab, 'backup']] : []),
-                ['EOS Cockpit', 'Energie-, Lade- und Gebäudesteuerung öffnen', uiTab, 'eos'],
-            ];
-        }
-        return [
-            ['EOS Cockpit', 'Energie, Laden und Gebäude bedienen', uiTab, 'eos'],
-            ['Datenpunkte', 'Messwerte und Zustände ausschließlich lesen', 'tab-objects', 'datapoints'],
-            ...(backupTab ? [['NexoWatt Sicherung', 'Eigene Sicherungen ausführen und wiederherstellen', backupTab, 'backup']] : []),
-        ];
-    };
-    const iconFor = icon => ({
-        services: '↻', modules: '◫', datapoints: '⌁', structure: '⌂', devices: '⌘', rights: '♙', settings: '⚙', backup: '⇩', eos: '⚡',
-    }[icon] || '•');
     const removeSafeOverview = () => {
         document.getElementById('eos-role-safe-overview')?.remove();
         document.documentElement.classList.remove('eos-safe-overview-active');

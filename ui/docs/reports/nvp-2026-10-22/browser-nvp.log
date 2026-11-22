@@ -1,0 +1,17 @@
+{
+  "result": "PASS",
+  "scenarios": [
+    "static-default-save",
+    "explicit-device-area",
+    "zero-versus-unknown-limit",
+    "empty-limit-stays-required",
+    "optional-identity-omitted",
+    "authority-not-transferred",
+    "diagnostic-preview",
+    "activation-disabled",
+    "version-conflict-no-retry",
+    "mobile-no-overflow",
+    "customer-deep-link-denied"
+  ],
+  "screenshots": "/workspace/scratch/cd7c5428afc1/nvp-ui-qa"
+}

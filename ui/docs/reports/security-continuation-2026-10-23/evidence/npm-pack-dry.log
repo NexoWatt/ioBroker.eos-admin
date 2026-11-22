@@ -1,0 +1,2342 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+[
+  {
+    "id": "iobroker.nexowatt-ui@1.0.30",
+    "name": "iobroker.nexowatt-ui",
+    "version": "1.0.30",
+    "size": 8629710,
+    "unpackedSize": 21035928,
+    "shasum": "125fb96b6fc5ededdc07b9f643326358e2da98fa",
+    "integrity": "sha512-6k1GRi2O5bZ37vL9hXuloRvIuvjPyx1aHbaMqUKBeyNGKOquQ7W3Q+tAPliKSV5Ao4AiZ8o4KVEWa63rw89Kig==",
+    "filename": "iobroker.nexowatt-ui-1.0.30.tgz",
+    "files": [
+      {
+        "path": "LICENSE",
+        "size": 2602,
+        "mode": 420
+      },
+      {
+        "path": "admin/admin_logo_.ico",
+        "size": 4286,
+        "mode": 420
+      },
+      {
+        "path": "admin/admin.png",
+        "size": 1466889,
+        "mode": 420
+      },
+      {
+        "path": "admin/appcenter.html",
+        "size": 2104,
+        "mode": 420
+      },
+      {
+        "path": "admin/jsonConfig.json",
+        "size": 8915,
+        "mode": 420
+      },
+      {
+        "path": "admin/license.html",
+        "size": 3028,
+        "mode": 420
+      },
+      {
+        "path": "admin/react/assets/index-BlCFdkWP.js",
+        "size": 286160,
+        "mode": 420
+      },
+      {
+        "path": "admin/react/assets/index-CtlHz4Eh.css",
+        "size": 8796,
+        "mode": 420
+      },
+      {
+        "path": "admin/react/assets/nexowatt-192-43ZwQ44y.png",
+        "size": 29884,
+        "mode": 420
+      },
+      {
+        "path": "admin/react/index.html",
+        "size": 4432,
+        "mode": 420
+      },
+      {
+        "path": "admin/simulation.html",
+        "size": 2099,
+        "mode": 420
+      },
+      {
+        "path": "admin/smarthomecfg.html",
+        "size": 2125,
+        "mode": 420
+      },
+      {
+        "path": "admin/smarthomevis.html",
+        "size": 2113,
+        "mode": 420
+      },
+      {
+        "path": "admin/tab.html",
+        "size": 2070,
+        "mode": 420
+      },
+      {
+        "path": "docs/CHANGELOG.md",
+        "size": 506241,
+        "mode": 420
+      },
+      {
+        "path": "docs/dev/DYNAMIC_GRID_BACKEND.md",
+        "size": 9982,
+        "mode": 420
+      },
+      {
+        "path": "docs/dev/DYNAMIC_GRID_CONTRACT.md",
+        "size": 6529,
+        "mode": 420
+      },
+      {
+        "path": "docs/dev/DYNAMIC_GRID_PV.md",
+        "size": 8154,
+        "mode": 420
+      },
+      {
+        "path": "docs/DOKUMENTATIONSSTANDARD_DE.md",
+        "size": 5016,
+        "mode": 420
+      },
+      {
+        "path": "docs/DYNAMISCHER_NETZANSCHLUSS_DE.md",
+        "size": 8174,
+        "mode": 420
+      },
+      {
+        "path": "docs/MICROGRID_MASTER_SLAVE_DE.md",
+        "size": 19966,
+        "mode": 420
+      },
+      {
+        "path": "docs/modules/NETOPERATOR_README.md",
+        "size": 2616,
+        "mode": 420
+      },
+      {
+        "path": "docs/NULL_EINSPEISUNG_EINRICHTUNG_DE.md",
+        "size": 8505,
+        "mode": 420
+      },
+      {
+        "path": "docs/NULL_EINSPEISUNG_PV_STRATEGIE_DE.md",
+        "size": 14225,
+        "mode": 420
+      },
+      {
+        "path": "docs/NVP_TOPOLOGIE_DIAGNOSE_DE.md",
+        "size": 16032,
+        "mode": 420
+      },
+      {
+        "path": "docs/operations/EMS_APPS_LIZENZ_KOMPATIBILITAET_DE.md",
+        "size": 6262,
+        "mode": 420
+      },
+      {
+        "path": "docs/operations/HEIZSTAB_NACHT_PV_TEST_DE.md",
+        "size": 8283,
+        "mode": 420
+      },
+      {
+        "path": "docs/QUELLCODE_WEGWEISER_DE.md",
+        "size": 9935,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC38_STABILITAET_DE.md",
+        "size": 8546,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC39_SAFETY_ENVELOPE_DE.md",
+        "size": 1594,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC40_NPM_PUBLISH_STABILITAET_DE.md",
+        "size": 2075,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC40_TYPE_SAFETY_DE.md",
+        "size": 2832,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC41_HEATING_STABILITY_DE.md",
+        "size": 2648,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC42_FENECON_NVP_SHADOW_DE.md",
+        "size": 5125,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC43_SMARTHOME_NEXOLOGIC_STABILITY_DE.md",
+        "size": 2646,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC44_NEXOLOGIC_CUSTOMER_WORKSPACE_DE.md",
+        "size": 3158,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC45_ACCESS_SCROLL_STABILITY_DE.md",
+        "size": 3257,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC46_NEXOLOGIC_SIMULATION_LAYOUT_DE.md",
+        "size": 2509,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC47_UI_WORKSPACE_SMARTHOME_POLISH_DE.md",
+        "size": 2755,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC49_PARA14A_EVCS_START_STABILITY_DE.md",
+        "size": 1993,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC50_NETOPERATOR_INTERFACE_FOUNDATION_DE.md",
+        "size": 6037,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC51_OCPP_TELEMETRIE_NORMALISIERUNG_DE.md",
+        "size": 3914,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC52_CHARGING_DIAGNOSTICS_LOG_DE.md",
+        "size": 3879,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC53_OPERATING_STRATEGIES_FOUNDATION_DE.md",
+        "size": 5019,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC54_OPERATING_STRATEGIES_RULE_BUILDER_SIMULATION_DE.md",
+        "size": 8385,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC56_OPERATING_STRATEGIES_FIELDTEST_DE.md",
+        "size": 10232,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC57_OCPP_LADESTABILITAET_DE.md",
+        "size": 5396,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC58_OCPP_0_4_COMPACT_MAPPING_DE.md",
+        "size": 5722,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC59_OCPP21_NATIVE_STORAGE_RECOVERY_DE.md",
+        "size": 4963,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC60_UNIVERSAL_AUTO_ORCHESTRATOR_DE.md",
+        "size": 9453,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC61_FELDTEST_CHECKLISTE_DE.md",
+        "size": 2546,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC61_SITE_TEST_HARDENING_DE.md",
+        "size": 5597,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC63_EVCS_AVAILABILITY_STORAGE_GRID_GATE_DE.md",
+        "size": 3701,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC64_STORAGE_GRID_CHARGE_POLICY_DE.md",
+        "size": 3259,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC65_NT_TARIFF_TARGET_OVERRIDE_DE.md",
+        "size": 3767,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC66_STATION_DISPLAY_STABLE_UI_DE.md",
+        "size": 3092,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC67_LICENSE_BOOTSTRAP_ACCESS_DE.md",
+        "size": 1600,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC68_PARA14A_COMMUNICATION_FALLBACK_DE.md",
+        "size": 3138,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC69_DASHBOARD_LADEPUNKT_FEEDBACK_DE.md",
+        "size": 3111,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC70_DASHBOARD_LP_STATUS_POLISH_DE.md",
+        "size": 1520,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC72_WEATHER_PV_FORECAST_AUTO_PLANNER_DE.md",
+        "size": 5474,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC73_EOS_ADMIN_EMS_OVERVIEW_DE.md",
+        "size": 2241,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC74_PV_FORECAST_CUSTOMER_UI_DE.md",
+        "size": 2640,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC75_PV_FORECAST_ADMIN_LOCATION_DE.md",
+        "size": 2886,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC76_OPEN_METEO_PV_FORECAST_HARDENING_DE.md",
+        "size": 2731,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC77_PV_FORECAST_STATE_CACHE_BRIDGE_DE.md",
+        "size": 3215,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC78_GRID_IMPORT_ONLY_NVP_BUDGET_DE.md",
+        "size": 3897,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC79_IMPORT_SOFT_HARD_ZERO_EXPORT_DE.md",
+        "size": 7186,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC80_SOFT_LIMIT_FIXED_TEN_PERCENT_DE.md",
+        "size": 1729,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC81_NVP_ASSIGNMENT_SINGLE_SOURCE_DE.md",
+        "size": 1920,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC82_PERMANENT_GRID_PROTECTION_DE.md",
+        "size": 3852,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC83_STORAGE_CHEAP_ONLY_LOG_SPAM_FIX_DE.md",
+        "size": 4641,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC86_GATE_A_HARD_LIMIT_DEMAND_BINDING_DE.md",
+        "size": 2013,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC88_SSE_BACKPRESSURE_MEMORY_STABILITY_DE.md",
+        "size": 6535,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC89_ADMIN_OVERVIEW_HEALTH_RECOVERY_DE.md",
+        "size": 3939,
+        "mode": 420
+      },
+      {
+        "path": "docs/RC93_CERTIFIED_EXPORT_AUTHORITY_DE.md",
+        "size": 5587,
+        "mode": 420
+      },
+      {
+        "path": "docs/README.md",
+        "size": 7772,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/dynamic-grid-2026-10-23/PRUEFVERMERK_DE.md",
+        "size": 6425,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/dynamic-grid-save-2026-10-23/PRUEFVERMERK_DE.md",
+        "size": 6808,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/dynamic-grid-ui-2026-10-23/PRUEFVERMERK_DE.md",
+        "size": 7836,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/license-ems-2026-10-23/PRUEFVERMERK_DE.md",
+        "size": 5489,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/RC82_FELDTEST_CHECKLISTE_DE.md",
+        "size": 2187,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/RC82_VALIDATION_REPORT.md",
+        "size": 5021,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/RC83_FELDTEST_CHECKLISTE_DE.md",
+        "size": 2864,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/RC83_VALIDATION_REPORT.md",
+        "size": 3735,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/RC86_FELDTEST_CHECKLISTE_DE.md",
+        "size": 2315,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/RC86_VALIDATION_REPORT.md",
+        "size": 5304,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/security-continuation-2026-10-23/ESLINT_PRUEFNACHWEIS_DE.md",
+        "size": 8792,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/security-continuation-2026-10-23/INDEPENDENT_RUNTIME_REVIEW_DE.md",
+        "size": 3892,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/security-continuation-2026-10-23/MESH_PEER_DE.md",
+        "size": 6569,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/security-continuation-2026-10-23/PRUEFBERICHT_DE.md",
+        "size": 9401,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/security-standards-2026-10-23/PRUEFBERICHT_DE.md",
+        "size": 16984,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/STABLE_1_0_14_VALIDATION_DE.md",
+        "size": 3100,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/STABLE_1_0_15_VALIDATION_DE.md",
+        "size": 4273,
+        "mode": 420
+      },
+      {
+        "path": "docs/reports/STABLE_1_0_16_VALIDATION_DE.md",
+        "size": 4559,
+        "mode": 420
+      },
+      {
+        "path": "docs/security/ESLINT_SECURITY_DE.md",
+        "size": 7357,
+        "mode": 420
+      },
+      {
+        "path": "docs/security/eslint-legacy-baseline.json",
+        "size": 757386,
+        "mode": 420
+      },
+      {
+        "path": "docs/security/eslint-reviewed-findings.json",
+        "size": 38493,
+        "mode": 420
+      },
+      {
+        "path": "docs/security/PROPRIETAERE_QUELLHEADER_DE.md",
+        "size": 7871,
+        "mode": 420
+      },
+      {
+        "path": "docs/STABLE_1_0_0_RELEASE_DE.md",
+        "size": 3001,
+        "mode": 420
+      },
+      {
+        "path": "docs/STABLE_1_0_1_RELEASE_DE.md",
+        "size": 3528,
+        "mode": 420
+      },
+      {
+        "path": "docs/STABLE_1_0_2_RELEASE_DE.md",
+        "size": 4521,
+        "mode": 420
+      },
+      {
+        "path": "docs/STABLE_1_0_3_RELEASE_DE.md",
+        "size": 4829,
+        "mode": 420
+      },
+      {
+        "path": "docs/STABLE_1_0_4_RELEASE_DE.md",
+        "size": 5417,
+        "mode": 420
+      },
+      {
+        "path": "docs/STABLE_1_0_5_RELEASE_DE.md",
+        "size": 6293,
+        "mode": 420
+      },
+      {
+        "path": "docs/STABLE_1_0_6_RELEASE_DE.md",
+        "size": 3692,
+        "mode": 420
+      },
+      {
+        "path": "docs/STABLE_1_0_7_RELEASE_DE.md",
+        "size": 6640,
+        "mode": 420
+      },
+      {
+        "path": "docs/STABLE_1_0_8_RELEASE_DE.md",
+        "size": 3185,
+        "mode": 420
+      },
+      {
+        "path": "docs/STABLE_1_0_9_RELEASE_DE.md",
+        "size": 2677,
+        "mode": 420
+      },
+      {
+        "path": "docs/STABLE_1_0_10_RELEASE_DE.md",
+        "size": 6061,
+        "mode": 420
+      },
+      {
+        "path": "docs/STABLE_1_0_11_RELEASE_DE.md",
+        "size": 2770,
+        "mode": 420
+      },
+      {
+        "path": "docs/STABLE_1_0_12_RELEASE_DE.md",
+        "size": 3478,
+        "mode": 420
+      },
+      {
+        "path": "docs/STABLE_1_0_13_RELEASE_DE.md",
+        "size": 2026,
+        "mode": 420
+      },
+      {
+        "path": "docs/STABLE_1_0_14_RELEASE_DE.md",
+        "size": 3221,
+        "mode": 420
+      },
+      {
+        "path": "docs/STABLE_1_0_15_RELEASE_DE.md",
+        "size": 6476,
+        "mode": 420
+      },
+      {
+        "path": "docs/STABLE_1_0_16_RELEASE_DE.md",
+        "size": 1889,
+        "mode": 420
+      },
+      {
+        "path": "docs/STABLE_1_0_17_RELEASE_DE.md",
+        "size": 3118,
+        "mode": 420
+      },
+      {
+        "path": "docs/STABLE_1_0_18_RELEASE_DE.md",
+        "size": 5001,
+        "mode": 420
+      },
+      {
+        "path": "docs/STABLE_1_0_19_RELEASE_DE.md",
+        "size": 6571,
+        "mode": 420
+      },
+      {
+        "path": "docs/STABLE_1_0_20_RELEASE_DE.md",
+        "size": 7179,
+        "mode": 420
+      },
+      {
+        "path": "docs/STABLE_1_0_21_RELEASE_DE.md",
+        "size": 3583,
+        "mode": 420
+      },
+      {
+        "path": "docs/STABLE_1_0_22_RELEASE_DE.md",
+        "size": 5998,
+        "mode": 420
+      },
+      {
+        "path": "docs/STABLE_1_0_23_RELEASE_DE.md",
+        "size": 3153,
+        "mode": 420
+      },
+      {
+        "path": "docs/STABLE_1_0_24_RELEASE_DE.md",
+        "size": 1487,
+        "mode": 420
+      },
+      {
+        "path": "docs/STABLE_1_0_25_RELEASE_DE.md",
+        "size": 1630,
+        "mode": 420
+      },
+      {
+        "path": "docs/STABLE_1_0_26_RELEASE_DE.md",
+        "size": 1635,
+        "mode": 420
+      },
+      {
+        "path": "docs/STABLE_1_0_27_RELEASE_DE.md",
+        "size": 1947,
+        "mode": 420
+      },
+      {
+        "path": "docs/STABLE_1_0_28_RELEASE_DE.md",
+        "size": 1656,
+        "mode": 420
+      },
+      {
+        "path": "docs/STABLE_1_0_29_RELEASE_DE.md",
+        "size": 2156,
+        "mode": 420
+      },
+      {
+        "path": "docs/STABLE_1_0_30_RELEASE_DE.md",
+        "size": 2321,
+        "mode": 420
+      },
+      {
+        "path": "ems/charging-budget-helpers.js",
+        "size": 19399,
+        "mode": 420
+      },
+      {
+        "path": "ems/consumers/evcs.js",
+        "size": 9733,
+        "mode": 420
+      },
+      {
+        "path": "ems/consumers/generic-load.js",
+        "size": 6124,
+        "mode": 420
+      },
+      {
+        "path": "ems/consumers/generic-setpoint.js",
+        "size": 6661,
+        "mode": 420
+      },
+      {
+        "path": "ems/consumers/index.js",
+        "size": 4907,
+        "mode": 420
+      },
+      {
+        "path": "ems/consumers/sg-ready.js",
+        "size": 7563,
+        "mode": 420
+      },
+      {
+        "path": "ems/datapoints.js",
+        "size": 55802,
+        "mode": 420
+      },
+      {
+        "path": "ems/engine.js",
+        "size": 85659,
+        "mode": 420
+      },
+      {
+        "path": "ems/evcs-control-mapping.js",
+        "size": 17511,
+        "mode": 420
+      },
+      {
+        "path": "ems/module-manager.js",
+        "size": 55493,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/ai-advisor.js",
+        "size": 150353,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/base.js",
+        "size": 8123,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/bhkw-control.js",
+        "size": 2161,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/charge-kiosk.js",
+        "size": 31297,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/charging-management.js",
+        "size": 782334,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/core-limits.js",
+        "size": 205830,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/country-profile.js",
+        "size": 6327,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/dynamic-grid-connection.js",
+        "size": 38782,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/energy-ledger.js",
+        "size": 35951,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/energy-wallet.js",
+        "size": 58558,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/generator-control.js",
+        "size": 2221,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/grid-constraints.js",
+        "size": 194498,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/heating-rod-control.js",
+        "size": 376245,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/mesh-microgrid.js",
+        "size": 180292,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/multi-use.js",
+        "size": 53949,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/netoperator-interface.js",
+        "size": 41813,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/nexologic-budget.js",
+        "size": 16122,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/nl-p1-dsmr.js",
+        "size": 24056,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/nvp-coordinator.js",
+        "size": 54941,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/nvp-topology.js",
+        "size": 14656,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/operating-strategies.js",
+        "size": 72404,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/para14a.js",
+        "size": 98721,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/peak-shaving.js",
+        "size": 134267,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/prime-mover-control.js",
+        "size": 40499,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/pv-forecast.js",
+        "size": 44849,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/stage-a-diagnostics.js",
+        "size": 38637,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/storage-control.js",
+        "size": 643098,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/storage-mapping.js",
+        "size": 41524,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/tarif-vis.js",
+        "size": 107056,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/tariff-provider.js",
+        "size": 18839,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/tariff-status.js",
+        "size": 43569,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/thermal-control.js",
+        "size": 111990,
+        "mode": 420
+      },
+      {
+        "path": "ems/modules/threshold-control.js",
+        "size": 49489,
+        "mode": 420
+      },
+      {
+        "path": "ems/netoperator/acceptance-tests.json",
+        "size": 2410,
+        "mode": 420
+      },
+      {
+        "path": "ems/netoperator/driver.schema.json",
+        "size": 3488,
+        "mode": 420
+      },
+      {
+        "path": "ems/netoperator/drivers/bachmann-sppc.json",
+        "size": 5697,
+        "mode": 420
+      },
+      {
+        "path": "ems/netoperator/drivers/beckhoff-tf8360.json",
+        "size": 5689,
+        "mode": 420
+      },
+      {
+        "path": "ems/netoperator/drivers/energielenker-eza.json",
+        "size": 5672,
+        "mode": 420
+      },
+      {
+        "path": "ems/netoperator/drivers/generic-modbus-tcp-template.json",
+        "size": 5683,
+        "mode": 420
+      },
+      {
+        "path": "ems/netoperator/drivers/meteocontrol-bluelog-xc.json",
+        "size": 5694,
+        "mode": 420
+      },
+      {
+        "path": "ems/netoperator/drivers/phoenix-pcu-41xx.json",
+        "size": 5694,
+        "mode": 420
+      },
+      {
+        "path": "ems/netoperator/drivers/siemens-sicam-a8000.json",
+        "size": 5690,
+        "mode": 420
+      },
+      {
+        "path": "ems/netoperator/drivers/wago-power-plant-control.json",
+        "size": 5664,
+        "mode": 420
+      },
+      {
+        "path": "ems/nexologic-engine.js",
+        "size": 114760,
+        "mode": 420
+      },
+      {
+        "path": "ems/rc85-runtime-hardening.js",
+        "size": 26086,
+        "mode": 420
+      },
+      {
+        "path": "ems/reasons.js",
+        "size": 10431,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/accepted-power-effects.js",
+        "size": 9811,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/actuator-command-contract.js",
+        "size": 9457,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/actuator-shadow-arbiter.js",
+        "size": 45855,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/admin-overview-publisher.js",
+        "size": 75654,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/charging-management-audit.js",
+        "size": 32368,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/country-profile-service.js",
+        "size": 5166,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/dynamic-grid-config.js",
+        "size": 31979,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/dynamic-grid-ownership.js",
+        "size": 8295,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/dynamic-grid-pv.js",
+        "size": 36185,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/dynamic-grid-writer.js",
+        "size": 13769,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/energy-origin-accounting.js",
+        "size": 47889,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/energy-origin-ledger-runtime.js",
+        "size": 22324,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/evcs-unit-conversion.js",
+        "size": 2405,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/feature-flags.js",
+        "size": 11210,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/fenecon-hybrid-control.js",
+        "size": 37908,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/fenecon-nvp-shadow-runtime.js",
+        "size": 27906,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/forecast-aware-target-planner.js",
+        "size": 21532,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/forecast-target-runtime-bridge.js",
+        "size": 17366,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/grid-import-limit-policy.js",
+        "size": 9518,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/locale-api-service.js",
+        "size": 2649,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/measurement-freshness.js",
+        "size": 18943,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/netoperator-canonical-model.js",
+        "size": 13858,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/netoperator-driver-registry.js",
+        "size": 16229,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/netoperator-modbus-tcp.js",
+        "size": 18735,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/nexologic-output-controller.js",
+        "size": 32951,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/nvp-budget.js",
+        "size": 29230,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/nvp-grants.js",
+        "size": 12505,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/nvp-group-planner.js",
+        "size": 26432,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/nvp-topology.js",
+        "size": 21265,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/open-meteo-pv-forecast.js",
+        "size": 66013,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/operating-strategy-runtime.js",
+        "size": 17962,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/para14a-eebus-api.js",
+        "size": 50830,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/pv-source-identity.js",
+        "size": 5467,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/pv-surplus-allocation.js",
+        "size": 7287,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/safety-envelope.js",
+        "size": 47546,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/storage-async-feedback-anchor.js",
+        "size": 6381,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/storage-datapoint-config.js",
+        "size": 16654,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/storage-farm-aggregation.js",
+        "size": 9465,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/storage-override-bridge.js",
+        "size": 10495,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/storage-self-consumption-policy.js",
+        "size": 20850,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/storage-zero-write-policy.js",
+        "size": 9951,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/tariff-provider-registry.js",
+        "size": 41987,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/zero-export-pv-coordinator.js",
+        "size": 33685,
+        "mode": 420
+      },
+      {
+        "path": "ems/services/zero-export-storage-credit.js",
+        "size": 7666,
+        "mode": 420
+      },
+      {
+        "path": "eslint.config.cjs",
+        "size": 2077,
+        "mode": 420
+      },
+      {
+        "path": "io-package.json",
+        "size": 15022,
+        "mode": 420
+      },
+      {
+        "path": "lib/charging-diagnostics-api.js",
+        "size": 5552,
+        "mode": 420
+      },
+      {
+        "path": "lib/config-boundary-contracts.js",
+        "size": 4930,
+        "mode": 420
+      },
+      {
+        "path": "lib/dynamic-grid-config-api.js",
+        "size": 32829,
+        "mode": 420
+      },
+      {
+        "path": "lib/energy-origin-api.js",
+        "size": 15324,
+        "mode": 420
+      },
+      {
+        "path": "lib/evcs-electrical-limits.js",
+        "size": 8749,
+        "mode": 420
+      },
+      {
+        "path": "lib/http-error-boundary.js",
+        "size": 5090,
+        "mode": 420
+      },
+      {
+        "path": "lib/license-bootstrap-access.js",
+        "size": 4355,
+        "mode": 420
+      },
+      {
+        "path": "lib/mesh-coordinator-contract.js",
+        "size": 13094,
+        "mode": 420
+      },
+      {
+        "path": "lib/mesh-coordinator-protocol.js",
+        "size": 21975,
+        "mode": 420
+      },
+      {
+        "path": "lib/mesh-coordinator-writer.js",
+        "size": 3482,
+        "mode": 420
+      },
+      {
+        "path": "lib/mesh-coordinator.js",
+        "size": 38202,
+        "mode": 420
+      },
+      {
+        "path": "lib/mesh-energy-journal.js",
+        "size": 7789,
+        "mode": 420
+      },
+      {
+        "path": "lib/mesh-energy-service.js",
+        "size": 19541,
+        "mode": 420
+      },
+      {
+        "path": "lib/mesh-peer-http.js",
+        "size": 14934,
+        "mode": 420
+      },
+      {
+        "path": "lib/mesh-transformer-allocation.js",
+        "size": 7954,
+        "mode": 420
+      },
+      {
+        "path": "lib/notification-mail.js",
+        "size": 28507,
+        "mode": 420
+      },
+      {
+        "path": "lib/notification-policy.js",
+        "size": 9663,
+        "mode": 420
+      },
+      {
+        "path": "lib/nvp-config-api.js",
+        "size": 21186,
+        "mode": 420
+      },
+      {
+        "path": "lib/smarthome-contract.js",
+        "size": 35312,
+        "mode": 420
+      },
+      {
+        "path": "lib/sse-runtime-guard.js",
+        "size": 18073,
+        "mode": 420
+      },
+      {
+        "path": "lib/station-display-presentation.js",
+        "size": 11069,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/adapter/api-set.js",
+        "size": 3080,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/adapter/api-state.js",
+        "size": 2726,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/adapter/connection-state.js",
+        "size": 1058,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/adapter/index.js",
+        "size": 4000,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/adapter/settings-writes.js",
+        "size": 4038,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/adapter/state-cache.js",
+        "size": 7523,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/backend/api-state/api-set-helpers.js",
+        "size": 3283,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/backend/api-state/api-state-envelope.js",
+        "size": 2458,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/backend/connection/connection-state.js",
+        "size": 3275,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/backend/feature-visibility/feature-visibility.js",
+        "size": 3840,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/backend/license/license-key-safety.js",
+        "size": 3344,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/backend/main-helpers/api-state-main.js",
+        "size": 2701,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/backend/main-helpers/info-connection-main.js",
+        "size": 2554,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/backend/main-helpers/license-key-main.js",
+        "size": 3042,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/backend/main-helpers/settings-write-main.js",
+        "size": 4719,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/backend/main-helpers/state-cache-main.js",
+        "size": 3520,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/backend/main-runtime/main-runtime-helpers.js",
+        "size": 14918,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/backend/state-cache/state-cache.js",
+        "size": 5481,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/bridges/feature-visibility-shadow.js",
+        "size": 3905,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/ems/ai-advisor/ai-advisor-payload.js",
+        "size": 6573,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/ems/charging-management/charging-allocation.js",
+        "size": 83660,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/ems/charging-management/charging-budget.js",
+        "size": 10767,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/ems/charging-management/charging-control.js",
+        "size": 13068,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/ems/charging-management/charging-management-runtime.js",
+        "size": 9278,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/ems/charging-management/charging-management.js",
+        "size": 11736,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/ems/charging-management/charging-normal-source.js",
+        "size": 17900,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/ems/charging-management/charging-phase-selection.js",
+        "size": 20829,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/ems/charging-management/charging-write-plan.js",
+        "size": 19641,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/ems/core-limits/core-budget.js",
+        "size": 32599,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/ems/core-limits/core-runtime.js",
+        "size": 55611,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/ems/heating-rod/heating-rod-decision.js",
+        "size": 10701,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/ems/para14a/para14a-constraint.js",
+        "size": 19990,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/energy-flow/resolvers/energy-flow-resolver.js",
+        "size": 10637,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/energy-flow/utils/energy-flow.js",
+        "size": 14110,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/energy-flow/utils/number.js",
+        "size": 5518,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/main/api-set.js",
+        "size": 13331,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/main/api-shadow.js",
+        "size": 6369,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/main/api-state.js",
+        "size": 5903,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/main/index.js",
+        "size": 3563,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/main/info-connection.js",
+        "size": 2439,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/main/license-key.js",
+        "size": 3314,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/main/state-cache.js",
+        "size": 7447,
+        "mode": 420
+      },
+      {
+        "path": "lib/ts-mirrors/utils/number.js",
+        "size": 5407,
+        "mode": 420
+      },
+      {
+        "path": "main.js",
+        "size": 1781273,
+        "mode": 420
+      },
+      {
+        "path": "package.json",
+        "size": 80162,
+        "mode": 420
+      },
+      {
+        "path": "release-manifests/admin-bundle-components.json",
+        "size": 6848,
+        "mode": 420
+      },
+      {
+        "path": "release-manifests/release-status.json",
+        "size": 1500,
+        "mode": 420
+      },
+      {
+        "path": "release-manifests/sbom-product-evidence.json",
+        "size": 82841,
+        "mode": 420
+      },
+      {
+        "path": "release-manifests/sbom-product.cdx.json",
+        "size": 66126,
+        "mode": 420
+      },
+      {
+        "path": "scripts/check-javascript-syntax.cjs",
+        "size": 1154,
+        "mode": 420
+      },
+      {
+        "path": "scripts/check-repository-secrets.cjs",
+        "size": 11252,
+        "mode": 420
+      },
+      {
+        "path": "scripts/code-documentation-model.cjs",
+        "size": 1762,
+        "mode": 420
+      },
+      {
+        "path": "scripts/prepare-release-assets.cjs",
+        "size": 8006,
+        "mode": 420
+      },
+      {
+        "path": "scripts/proprietary-header-policy.cjs",
+        "size": 5531,
+        "mode": 420
+      },
+      {
+        "path": "scripts/sync-proprietary-headers.cjs",
+        "size": 6660,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-admin-connection-boundaries.cjs",
+        "size": 9908,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-admin-mesh-boundaries.cjs",
+        "size": 11282,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-admin-type-boundaries.cjs",
+        "size": 9424,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-code-documentation.cjs",
+        "size": 2285,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-cra-sbom.cjs",
+        "size": 8530,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-docs-layout.cjs",
+        "size": 1757,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-entsoe-linear-parser.cjs",
+        "size": 5708,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-eslint-security-test.cjs",
+        "size": 4553,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-eslint-security.cjs",
+        "size": 10582,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-heating-rod-central-zero-export.js",
+        "size": 12516,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-heating-rod-night-ramp.cjs",
+        "size": 17466,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-heating-rod-night-ui.cjs",
+        "size": 9366,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-heating-rod-pv-freshness.cjs",
+        "size": 13055,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-heating-rod-zero-export-tariff.cjs",
+        "size": 10048,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-http-error-boundary.cjs",
+        "size": 18855,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-mesh-app-lifecycle.cjs",
+        "size": 6175,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-mesh-coordinator-access.cjs",
+        "size": 11595,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-mesh-coordinator.cjs",
+        "size": 15955,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-mesh-peer-http.cjs",
+        "size": 12166,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-mesh-transformer-accounting.cjs",
+        "size": 15637,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-proprietary-headers.cjs",
+        "size": 13067,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-publish-overlay.cjs",
+        "size": 6363,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-rc60-universal-auto-wallbox.js",
+        "size": 34961,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-rc81-nvp-assignment-single-source.cjs",
+        "size": 7594,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-rc82-permanent-grid-protection.cjs",
+        "size": 10983,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-rc83-storage-cheap-only-log-object.cjs",
+        "size": 13690,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-rc86-gate-a-demand-binding.cjs",
+        "size": 7428,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-rc87-monitoring-display-only.cjs",
+        "size": 10283,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-rc88-memory-stability.cjs",
+        "size": 15871,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-rc89-admin-overview-health.cjs",
+        "size": 9275,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-rc92-history-mobile.cjs",
+        "size": 16047,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-rc93-certified-export-authority.cjs",
+        "size": 22172,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-release-approval.cjs",
+        "size": 2873,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-runtime-license-header.cjs",
+        "size": 3825,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-security-standards.cjs",
+        "size": 9102,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-simulation-public-errors.cjs",
+        "size": 6270,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-stable-1.0.2-health-heartbeat.cjs",
+        "size": 12303,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-stable-1.0.3-home-appcenter-access.cjs",
+        "size": 18131,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-stable-1.0.4-auto-pv-phases.cjs",
+        "size": 16295,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-stable-1.0.5-storage-protection-telemetry.cjs",
+        "size": 17503,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-stable-1.0.6-dc-control.cjs",
+        "size": 10510,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-stable-1.0.7-notifications.cjs",
+        "size": 18654,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-stable-1.0.8-storage-licenses.cjs",
+        "size": 11439,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-stable-1.0.9-access.cjs",
+        "size": 15842,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-stable-1.0.10-secret-guard.cjs",
+        "size": 13976,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-stable-1.0.11-documentation.cjs",
+        "size": 2975,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-stable-1.0.12-publish-upgrade.cjs",
+        "size": 9637,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-stable-1.0.18-charging.cjs",
+        "size": 17722,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-stable-1.0.19-grid-share.cjs",
+        "size": 12891,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-stable-1.0.20-storage-allocation.cjs",
+        "size": 7532,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-stable-1.0.20-storage-grid-share.cjs",
+        "size": 23430,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-stable-release.cjs",
+        "size": 16662,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-static-ems-exports.cjs",
+        "size": 4573,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-strict-boundary-configs.cjs",
+        "size": 7007,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-zero-export-appcenter.cjs",
+        "size": 12552,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-zero-export-charging.cjs",
+        "size": 16002,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-zero-export-core.cjs",
+        "size": 11914,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-zero-export-inverter-mapping.cjs",
+        "size": 11277,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-zero-export-pv-coordinator.cjs",
+        "size": 28449,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-zero-export-storage-credit.cjs",
+        "size": 5941,
+        "mode": 420
+      },
+      {
+        "path": "scripts/verify-zero-export-storage-probe.cjs",
+        "size": 7969,
+        "mode": 420
+      },
+      {
+        "path": "www/admin-guard.js",
+        "size": 5191,
+        "mode": 420
+      },
+      {
+        "path": "www/admin.png",
+        "size": 1466889,
+        "mode": 420
+      },
+      {
+        "path": "www/app.js",
+        "size": 532864,
+        "mode": 420
+      },
+      {
+        "path": "www/apple-touch-icon.png",
+        "size": 26911,
+        "mode": 420
+      },
+      {
+        "path": "www/assets/icons/nexowatt-16.png",
+        "size": 769,
+        "mode": 420
+      },
+      {
+        "path": "www/assets/icons/nexowatt-32.png",
+        "size": 2259,
+        "mode": 420
+      },
+      {
+        "path": "www/assets/icons/nexowatt-48.png",
+        "size": 4245,
+        "mode": 420
+      },
+      {
+        "path": "www/assets/icons/nexowatt-64.png",
+        "size": 6265,
+        "mode": 420
+      },
+      {
+        "path": "www/assets/icons/nexowatt-120.png",
+        "size": 15374,
+        "mode": 420
+      },
+      {
+        "path": "www/assets/icons/nexowatt-128.png",
+        "size": 2942,
+        "mode": 420
+      },
+      {
+        "path": "www/assets/icons/nexowatt-152.png",
+        "size": 21295,
+        "mode": 420
+      },
+      {
+        "path": "www/assets/icons/nexowatt-180.png",
+        "size": 26911,
+        "mode": 420
+      },
+      {
+        "path": "www/assets/icons/nexowatt-192-maskable.png",
+        "size": 19651,
+        "mode": 420
+      },
+      {
+        "path": "www/assets/icons/nexowatt-192.png",
+        "size": 29884,
+        "mode": 420
+      },
+      {
+        "path": "www/assets/icons/nexowatt-256.png",
+        "size": 45907,
+        "mode": 420
+      },
+      {
+        "path": "www/assets/icons/nexowatt-384.png",
+        "size": 89658,
+        "mode": 420
+      },
+      {
+        "path": "www/assets/icons/nexowatt-512-maskable.png",
+        "size": 91804,
+        "mode": 420
+      },
+      {
+        "path": "www/assets/icons/nexowatt-512.png",
+        "size": 149798,
+        "mode": 420
+      },
+      {
+        "path": "www/assets/nexowatt-eos-logo-wide.png",
+        "size": 187933,
+        "mode": 420
+      },
+      {
+        "path": "www/assets/noise.png",
+        "size": 140069,
+        "mode": 420
+      },
+      {
+        "path": "www/auth.js",
+        "size": 36611,
+        "mode": 420
+      },
+      {
+        "path": "www/charging-diagnostics-appcenter.js",
+        "size": 21960,
+        "mode": 420
+      },
+      {
+        "path": "www/cockpit-shell.js",
+        "size": 12259,
+        "mode": 420
+      },
+      {
+        "path": "www/dashboard-lp-status.js",
+        "size": 35068,
+        "mode": 420
+      },
+      {
+        "path": "www/dc-station-display.css",
+        "size": 23229,
+        "mode": 420
+      },
+      {
+        "path": "www/dc-station-display.html",
+        "size": 1044,
+        "mode": 420
+      },
+      {
+        "path": "www/dc-station-display.js",
+        "size": 54638,
+        "mode": 420
+      },
+      {
+        "path": "www/ems-apps-nvp-diagnostics.js",
+        "size": 10636,
+        "mode": 420
+      },
+      {
+        "path": "www/ems-apps.html",
+        "size": 153910,
+        "mode": 420
+      },
+      {
+        "path": "www/ems-apps.js",
+        "size": 980379,
+        "mode": 420
+      },
+      {
+        "path": "www/energy-ledger.html",
+        "size": 8847,
+        "mode": 420
+      },
+      {
+        "path": "www/energy-ledger.js",
+        "size": 1794,
+        "mode": 420
+      },
+      {
+        "path": "www/energy-origin-appcenter.js",
+        "size": 18516,
+        "mode": 420
+      },
+      {
+        "path": "www/energy-origin-ledger-view.js",
+        "size": 12367,
+        "mode": 420
+      },
+      {
+        "path": "www/evcs-report.css",
+        "size": 1796,
+        "mode": 420
+      },
+      {
+        "path": "www/evcs-report.html",
+        "size": 5466,
+        "mode": 420
+      },
+      {
+        "path": "www/evcs-report.js",
+        "size": 20792,
+        "mode": 420
+      },
+      {
+        "path": "www/evcs.html",
+        "size": 5335,
+        "mode": 420
+      },
+      {
+        "path": "www/evcs.js",
+        "size": 100872,
+        "mode": 420
+      },
+      {
+        "path": "www/forecast-settings.js",
+        "size": 34666,
+        "mode": 420
+      },
+      {
+        "path": "www/history.html",
+        "size": 19405,
+        "mode": 420
+      },
+      {
+        "path": "www/history.js",
+        "size": 156815,
+        "mode": 420
+      },
+      {
+        "path": "www/i18n/de.json",
+        "size": 1490,
+        "mode": 420
+      },
+      {
+        "path": "www/i18n/en.json",
+        "size": 8188,
+        "mode": 420
+      },
+      {
+        "path": "www/i18n/nl.json",
+        "size": 49554,
+        "mode": 420
+      },
+      {
+        "path": "www/icons/battery.png",
+        "size": 9935,
+        "mode": 420
+      },
+      {
+        "path": "www/icons/building.png",
+        "size": 7904,
+        "mode": 420
+      },
+      {
+        "path": "www/icons/ev.png",
+        "size": 22487,
+        "mode": 420
+      },
+      {
+        "path": "www/icons/grid.png",
+        "size": 9041,
+        "mode": 420
+      },
+      {
+        "path": "www/icons/solar.png",
+        "size": 8865,
+        "mode": 420
+      },
+      {
+        "path": "www/index.html",
+        "size": 49356,
+        "mode": 420
+      },
+      {
+        "path": "www/license.html",
+        "size": 3691,
+        "mode": 420
+      },
+      {
+        "path": "www/license.js",
+        "size": 11957,
+        "mode": 420
+      },
+      {
+        "path": "www/logic.html",
+        "size": 14451,
+        "mode": 420
+      },
+      {
+        "path": "www/logic.js",
+        "size": 225167,
+        "mode": 420
+      },
+      {
+        "path": "www/manifest.webmanifest",
+        "size": 1090,
+        "mode": 420
+      },
+      {
+        "path": "www/mesh-microgrid.html",
+        "size": 12218,
+        "mode": 420
+      },
+      {
+        "path": "www/mesh-microgrid.js",
+        "size": 30520,
+        "mode": 420
+      },
+      {
+        "path": "www/netoperator-appcenter.js",
+        "size": 16999,
+        "mode": 420
+      },
+      {
+        "path": "www/netoperator.html",
+        "size": 5432,
+        "mode": 420
+      },
+      {
+        "path": "www/netoperator.js",
+        "size": 9231,
+        "mode": 420
+      },
+      {
+        "path": "www/nexowatt-logo.png",
+        "size": 1466889,
+        "mode": 420
+      },
+      {
+        "path": "www/nw-i18n.js",
+        "size": 21426,
+        "mode": 420
+      },
+      {
+        "path": "www/nw-shell.js",
+        "size": 9122,
+        "mode": 420
+      },
+      {
+        "path": "www/operating-strategies-appcenter.js",
+        "size": 93971,
+        "mode": 420
+      },
+      {
+        "path": "www/operating-strategies-rule-builder.js",
+        "size": 105416,
+        "mode": 420
+      },
+      {
+        "path": "www/para14a-report.html",
+        "size": 5911,
+        "mode": 420
+      },
+      {
+        "path": "www/para14a-report.js",
+        "size": 16796,
+        "mode": 420
+      },
+      {
+        "path": "www/report-common.js",
+        "size": 18383,
+        "mode": 420
+      },
+      {
+        "path": "www/report.css",
+        "size": 4058,
+        "mode": 420
+      },
+      {
+        "path": "www/rfid-report.html",
+        "size": 6258,
+        "mode": 420
+      },
+      {
+        "path": "www/rfid-report.js",
+        "size": 11493,
+        "mode": 420
+      },
+      {
+        "path": "www/settings.html",
+        "size": 62325,
+        "mode": 420
+      },
+      {
+        "path": "www/simulation.html",
+        "size": 8648,
+        "mode": 420
+      },
+      {
+        "path": "www/simulation.js",
+        "size": 24110,
+        "mode": 420
+      },
+      {
+        "path": "www/smarthome-config.html",
+        "size": 28409,
+        "mode": 420
+      },
+      {
+        "path": "www/smarthome-config.js",
+        "size": 517763,
+        "mode": 420
+      },
+      {
+        "path": "www/smarthome.html",
+        "size": 5696,
+        "mode": 420
+      },
+      {
+        "path": "www/smarthome.js",
+        "size": 550472,
+        "mode": 420
+      },
+      {
+        "path": "www/static/ts-mirrors/frontend/customer-feature-visibility.mjs",
+        "size": 7279,
+        "mode": 420
+      },
+      {
+        "path": "www/static/ts-mirrors/frontend/display-format-canary.mjs",
+        "size": 5622,
+        "mode": 420
+      },
+      {
+        "path": "www/static/ts-mirrors/frontend/display-format.mjs",
+        "size": 6207,
+        "mode": 420
+      },
+      {
+        "path": "www/static/ts-mirrors/frontend/feature-visibility-diagnostics.mjs",
+        "size": 6807,
+        "mode": 420
+      },
+      {
+        "path": "www/static/ts-mirrors/frontend/feature-visibility-shadow-compare.mjs",
+        "size": 4712,
+        "mode": 420
+      },
+      {
+        "path": "www/static/ts-mirrors/frontend/history-controls.mjs",
+        "size": 2852,
+        "mode": 420
+      },
+      {
+        "path": "www/static/ts-mirrors/frontend/live-dashboard-format.mjs",
+        "size": 5739,
+        "mode": 420
+      },
+      {
+        "path": "www/static/ts-mirrors/frontend/runtime-shadow.mjs",
+        "size": 6563,
+        "mode": 420
+      },
+      {
+        "path": "www/storagefarm.html",
+        "size": 5012,
+        "mode": 420
+      },
+      {
+        "path": "www/storagefarm.js",
+        "size": 19727,
+        "mode": 420
+      },
+      {
+        "path": "www/styles.css",
+        "size": 351185,
+        "mode": 420
+      },
+      {
+        "path": "www/sw.js",
+        "size": 7353,
+        "mode": 420
+      },
+      {
+        "path": "www/tariff-report.html",
+        "size": 5692,
+        "mode": 420
+      },
+      {
+        "path": "www/tariff-report.js",
+        "size": 16078,
+        "mode": 420
+      },
+      {
+        "path": "www/year-report.css",
+        "size": 2907,
+        "mode": 420
+      },
+      {
+        "path": "www/year-report.html",
+        "size": 5109,
+        "mode": 420
+      },
+      {
+        "path": "www/year-report.js",
+        "size": 46261,
+        "mode": 420
+      }
+    ],
+    "entryCount": 465,
+    "bundled": []
+  }
+]

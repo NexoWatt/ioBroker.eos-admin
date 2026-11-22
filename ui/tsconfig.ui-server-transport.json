@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "noCheck": false,
+    "allowJs": false,
+    "strict": true,
+    "noImplicitAny": true,
+    "module": "NodeNext",
+    "moduleResolution": "nodenext"
+  },
+  "files": [
+    "src-ts/runtime-executables/lib/ui-server-transport.ts"
+  ],
+  "include": []
+}

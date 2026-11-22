@@ -1,0 +1,49 @@
+✔ login redirect rejects remote, protocol-relative, encoded separator, backslash and control origins (1.113373ms)
+✔ production same-origin caller binds HTTPS versus HTTP and rejects forged forwarded origin (0.246638ms)
+✔ all retired passwordless endpoints deny even legacy-enabled accounts and existing claim cookies (0.28813ms)
+✔ HTTP credential query guard rejects bearer/password forms and preserves normal OAuth code/state (0.622039ms)
+✔ EOS token readers no longer accept query credentials but preserve cookie and Authorization (0.599656ms)
+✔ file identity guard rejects anonymous and pending-password users and passes normalized caller (3.532326ms)
+✔ SSO remains denied before OAuth and DB file routes have their own identity guard (1.094045ms)
+✔ OAuth callback messages are HTML text, replacement metacharacters cannot restore markup (0.998201ms)
+✔ forced administrator completes first-password flow with current credential before activation (1.276016ms)
+(node:42) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ pinned upstream password login, token pair and refresh work with security binding (7.124552ms)
+✔ real controller group view accepts string and translated display keys using canonical object IDs (5.320547ms)
+✔ group display names, metadata and row order do not change credential proofs (1.943082ms)
+✔ missing, foreign, empty and duplicate canonical group IDs fail closed despite valid view keys (5.600355ms)
+✔ canonical group identity and ACL mutations revoke established capabilities (2.919291ms)
+✔ all devices access and refresh tokens reject changed password without waiting for object event (1.27812ms)
+✔ disable, deletion and changed group ACL independently invalidate both token classes (3.79549ms)
+✔ observed disable then re-enable cannot resurrect old token after snapshot returns to original (1.229617ms)
+✔ legacy and unbound external tokens are rejected and direct internal minting is denied (1.2251ms)
+✔ proof cannot be forged by passing a user-shaped object or copied authenticated identity (0.983219ms)
+✔ password mutation during credential verification and before token save fails closed (0.960515ms)
+✔ refresh credential cannot cross revocation between lookup and save (1.373372ms)
+✔ restart generation does not accept previously saved capabilities (0.922488ms)
+✔ session database failures and bounded stalled reads fail closed without unbounded backlog (78.61519ms)
+✔ socket revocation synchronously blocks commands, clears subscriptions and closes every connection (1.264098ms)
+✔ metadata-only account updates do not revoke established capabilities (0.996959ms)
+✔ expired access and refresh capabilities fail closed in the common session reader (0.828939ms)
+✔ late socket authentication cannot reopen a connection after revocation (0.689775ms)
+✔ real five-second watchdog closes a socket after a missed credential object event (5251.464615ms)
+✔ TOTP account contract never falls back to password-only issuance or cached/refresh tokens (6.322379ms)
+✔ explicit external origin is HTTPS-only, canonical and rejects userinfo/path (1.121816ms)
+✔ transport rejects remote plaintext and spoofed Host/Origin regardless forwarding headers (0.262262ms)
+✔ session token parsing rejects duplicate cookies and encoded/unsigned aliases (0.255222ms)
+✔ status maps roles and persists activation only when core entitlement is granted (1.190328ms)
+✔ CSRF token is session- and epoch-bound; logout revokes stored pair and open streams (1.411538ms)
+✔ bad CSRF does not revoke another login (0.251536ms)
+✔ real HTTP login delegates to existing OAuth route and returns only opaque-cookie success (36.833089ms)
+✔ login rate map is bounded and fails closed before issuer (0.301821ms)
+✔ normal navigation GET/HEAD requires trusted transport but no Origin; writes still require Origin (0.198196ms)
+✔ independent machine transport cannot borrow browser cookie or Origin authority (0.252157ms)
+ℹ tests 39
+ℹ suites 0
+ℹ pass 39
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5499.775641

@@ -1,0 +1,13 @@
+{
+  "command": [
+    "npm",
+    "run",
+    "docs:check"
+  ],
+  "cwd": "repository root",
+  "startedAt": "2026-09-29T21:29:42.681397+00:00",
+  "finishedAt": "2026-09-29T21:29:43.028658+00:00",
+  "durationSeconds": 0.347,
+  "exitCode": 0,
+  "capturedBytes": 270
+}

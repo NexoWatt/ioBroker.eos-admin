@@ -16,7 +16,7 @@
 
     const roleFromPolicy = policy => {
         const raw = normalize(policy?.role || policy?.eosRole || policy?.accessRole || '');
-        if (policy?.user === 'system.user.admin' || policy?.userId === 'system.user.admin' || policy?.isAdmin || policy?.isEosAdminGroup || policy?.isAdministrator || /^(?:admin|administrator)$/.test(raw)) return 'admin';
+        if (policy?.isAdmin || policy?.isEosAdminGroup || policy?.isAdministrator || /^(?:admin|administrator)$/.test(raw)) return 'admin';
         if (/nexowatt service|eos service|service admin|service administrator/.test(raw)) return 'admin';
         if (policy?.isInstaller || /installateur|installer|installation|inbetriebnahme|techniker|technician|integrator|partner/.test(raw)) return 'installer';
         return 'enduser';
@@ -219,7 +219,7 @@
         const t = translations[language()];
         const minLength = Number(claim?.minLength || 10);
         const endpoint = new URL('nexowatt/account/passwordless-password', base).href;
-        const loginUrl = new URL('index.html?login', base).href;
+        const loginUrl = new URL('/login.html', base).href;
         document.querySelector('.eos-passwordless-claim-overlay')?.remove();
         const overlay = document.createElement('main');
         overlay.className = 'eos-first-login-overlay eos-passwordless-claim-overlay';
@@ -625,10 +625,10 @@
         console.warn(`EOS access verification is unavailable; interface remains locked: ${error?.message || error}`);
     };
 
-    const base = new URL('../', script?.src || window.location.href);
+    const base = new URL('/', window.location.href);
     const isLoginRequest = /(?:^|[?&])login(?:[=&]|$)/i.test(window.location.search || '');
     if (isLoginRequest) {
-        launch();
+        window.location.replace('/login.html');
         return;
     }
 
@@ -644,7 +644,7 @@
             if (policy?.authenticated === false) {
                 // The normal NexoWatt EOS login component must be allowed to render. No role or
                 // first-login decision is made until an authenticated session exists.
-                launch();
+                window.location.replace('/login.html');
                 return Object.freeze({ ...policy, role: 'unknown' });
             }
             const role = roleFromPolicy(policy);

@@ -1,0 +1,9 @@
+{
+  "time": "2026-09-29T20:08:40.443Z",
+  "node": "v24.19.0",
+  "platform": "linux",
+  "arch": "x64",
+  "browserRunAt": "2026-09-29T20:20:06.348Z",
+  "browserVersion": "Chromium 153.0.8010.0",
+  "browserMode": "isolierter headless Testbrowser, originale Renderer-Ausgaben in echtem DOM"
+}

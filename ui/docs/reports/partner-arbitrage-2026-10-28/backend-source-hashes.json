@@ -1,0 +1,15 @@
+{
+  "scope": "partner-backend",
+  "baseVersion": "1.0.31",
+  "targetVersion": "1.0.32",
+  "testedAtUtc": "2026-10-28T05:40:51.329871+00:00",
+  "files": {
+    "src-ts/runtime-executables/lib/partner-contracts.ts": "c1b93bd8414a5100f847c32dac72465dc97953a9b4f3c867be782a8ff3439243",
+    "src-ts/runtime-executables/lib/partner-service.ts": "5346c4920d4b916b905b07c83736a215e61e2427f4185a6feabb9b255fb0efc9",
+    "src-ts/runtime-executables/lib/partner-config-api.ts": "db7d02ac67193522d9887a8d7dee431296599e39149654f910da30a439dfca9d",
+    "tsconfig.partner-integration.json": "0de0743c8f56564415e905058350a3074dab9526a77535c71f4f2570c720bda5",
+    "scripts/test-partner-integrations.cjs": "929618764a4f020add1fe4e7e3d28d375074f9b9d4395883a8ac82f808cea99c",
+    "docs/PARTNER_INTEGRATION_PROTOCOL_V1_DE.md": "27ca0ba3cb958e58381400d0c61733d328dc294b2ca209f9175bcc11a58f772e",
+    "src-ts/runtime-executables/lib/http-error-boundary.ts": "d44e839cda81fd990eab425b2495b02409e43d85697b18831db24de7c12529ec"
+  }
+}

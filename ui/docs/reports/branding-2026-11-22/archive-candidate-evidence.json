@@ -1,0 +1,24 @@
+{
+  "version": "1.0.38",
+  "result": "PASS",
+  "archive": "NexoWatt_UI_1.0.38_LOGO_HTTPS_WEBAPP_FULL_REPOSITORY.zip",
+  "bytes": 23902054,
+  "sha256": "5873cfc4bb0f48b2e81f814682a4215e827df3115bd1f10b8f716c699605cbc9",
+  "files": 3495,
+  "fresh": {
+    "result": "PASS",
+    "backupCreated": false
+  },
+  "overlay": {
+    "result": "PASS",
+    "baselineArchiveSha256": "ddb1932159d37a5781e2d5fc62abff3b1424e955b5109657107927a59476b0fd",
+    "oldBundlesBackedUp": [
+      "admin/react/assets/index-DdSlaTb5.js"
+    ],
+    "backupHashesVerified": true,
+    "secondPrepareMoved": []
+  },
+  "allSealedFilesMatch": 546,
+  "scope": "Actual full ZIP extraction and real 1.0.37 ZIP overlay; read-only artifact guard and existing preparation. No deployment or hardware test.",
+  "stage": "candidate-before-summary-and-evidence-copy"
+}

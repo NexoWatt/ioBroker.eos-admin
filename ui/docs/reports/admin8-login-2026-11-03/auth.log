@@ -1,0 +1,38 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.33 test:admin8-auth
+> node scripts/verify-iobroker-user-auth.cjs && node scripts/verify-admin8-login.cjs
+
+PASS strikte TypeScript-Prüfung ohne any/nocheck
+PASS Kurz-ID, Großschreibung, Anzeigename und vollständige ID ergeben dieselbe kanonische Identität
+PASS Anzeigenamenkollision admin gehört Kunde; keine Ableitung von Adminrechten aus Rohinput
+PASS offizieller Fallback erhält Unicode und zulässige Sonderzeichen; Punkt/Leerzeichen werden Unterstriche
+PASS fehlender/fehlerhafter Resolver verweigert Kurzname; nur undefined aktiviert Fallback
+PASS Benutzer/Passwort sind echte begrenzte Strings; Passwort bleibt ungetrimmt
+PASS Kontotyp, exakte Objekt-ID, Passwortbestand und Kontosperre werden vor Passwortprüfung geprüft
+PASS nur boolesches true mit identischer vollständiger Callback-ID authentifiziert
+PASS Passwortwechsel, Sperre, Löschung oder ID-Wechsel während Prüfung verhindern Sitzung
+PASS Session-Fingerabdruck bleibt SHA-256 und reagiert auf Änderung/Sperre/Löschung
+PASS Objekt-/Callbackfehler einschließlich async-Ablehnung werden ohne unhandled rejection verweigert
+PASS Resolver-Timeout: spätes Ergebnis/Ablehnung starten weder Objekt- noch Passwortprüfung
+PASS Objekt-Timeout: verspätetes Objekt startet keine Passwortprüfung
+PASS Passwort-Timeout: fehlender/später Callback authentifiziert nicht und startet keinen zweiten Objektzugriff
+PASS gemeinsames Budget umfasst Auflösung, ersten Objektzugriff und Passwortprüfung
+PASS Zeitablauf während zweiter Kontolesung verweigert verspäteten Erfolg
+IOBROKER USER AUTH: 16 checks passed; Node v24.22.1; strict TypeScript + synthetic controller APIs, no Admin 8 integration or hardware test.
+PASS Controller-kompatible Admin-Kennung: admin
+PASS Controller-kompatible Admin-Kennung: Admin
+PASS Controller-kompatible Admin-Kennung: ADMIN
+PASS Controller-kompatible Admin-Kennung: system.user.admin
+PASS Anzeigename wird vor Passwort und Sitzung auf die interne ID aufgelöst
+PASS Anzeigename admin eines Kunden erzeugt keine Adminrechte
+PASS Anzeigename installer erhält nur die Rechte des tatsächlichen Kontos
+PASS Ungültiger Erfolgswert erzeugt keine Sitzung: string
+PASS Ungültiger Erfolgswert erzeugt keine Sitzung: object
+PASS Ungültiger Erfolgswert erzeugt keine Sitzung: Error
+PASS Abweichende Callback-Identität wird vor Rollenauflösung abgewiesen
+PASS Fehlende Callback-Identität ist keine bestätigte Anmeldung
+PASS Nichttextliche Zugangsdaten werden nicht in gültige Strings umgedeutet
+PASS Sitzung bleibt an Passwortwechsel und Kontosperre gebunden
+PASS Falsches Passwort bleibt abgewiesen und nennt keine Kontodetails
+{"result":"PASS","checks":15,"environment":"v24.22.1","scope":"Actual shipped local HTTP routes with controller-contract fixtures; no live Admin8 or customer installation"}

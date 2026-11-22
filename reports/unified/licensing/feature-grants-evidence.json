@@ -1,0 +1,47 @@
+{
+  "createdAt": "2026-11-22T10:09:41.059442+00:00",
+  "productVersion": "9.0.0-alpha.1",
+  "node": "24.22.3",
+  "scope": "Server-side signed feature subsets, SmartHome/NexoLogic dispatch and runtime initialization; no real device test",
+  "checks": [
+    {
+      "command": "node --test --test-reporter=tap ui/test/unified/feature-grants.test.cjs",
+      "status": "passed",
+      "tests": 3,
+      "evidence": "feature-grants.tap"
+    },
+    {
+      "command": "node ui/scripts/verify-nexologic-lifecycle-hardening.js",
+      "status": "passed",
+      "evidence": "nexologic-lifecycle.log"
+    },
+    {
+      "command": "node ui/scripts/verify-actuator-c3-nexologic.js",
+      "status": "passed",
+      "evidence": "nexologic-actuator.log"
+    },
+    {
+      "command": "node ui/scripts/build-ts-runtime-mirrors.js",
+      "status": "failed",
+      "exitCode": 1,
+      "error": "Manuellen Spiegel fachlich abgleichen: main.js",
+      "scope": "Historical non-executable manually typed migration mirrors; no forced success or product runtime claim"
+    },
+    {
+      "check": "Comment-free TypeScript transpilation comparison for the two changed script mirrors against original JS",
+      "status": "passed",
+      "action": "Both actual code changes present, then source hashes updated"
+    }
+  ],
+  "files": {
+    "ui/src-ts/runtime-executables/main.ts": "9e585243da8e7f20f9bb334f5712633b7e7ee1517ca040c7d66f4bd9511df241",
+    "ui/src-ts/runtime-executables/ems/nexologic-engine.ts": "fa6153a8ab26acf7336c9e09ab19f4900934f2cd289cc871d8cdeafd3d2b926e",
+    "ui/main.js": "99cb963b26a6ed326e8468f8a7e78d88074de1930397993cf7c477cfd1c61327",
+    "ui/ems/nexologic-engine.js": "353825d01e0c6b6e0a9dfb93f7b754111b0969d2af8671c3fc46f8493e12bc03",
+    "ui/test/unified/feature-grants.test.cjs": "d9ced540cc165ebeb9de5fa6df25fa799a14ef0bc636aea7450aa0fd7fdba0a8",
+    "ui/scripts/verify-nexologic-lifecycle-hardening.js": "69af8bbd7e52ca4523907885c1c437f872022c01f81afd24d3e2deb15868444c",
+    "ui/scripts/verify-actuator-c3-nexologic.js": "b158f5e6f9e55a95a889e4fbae602d9c61f1a9b8c950c9d5397bfca335e2b1f1",
+    "ui/src-ts/runtime-mirrors/scripts/verify-nexologic-lifecycle-hardening.ts": "4739b8c94028b95803766d7436d28fddac6dce447d888a0666883eb893c1a3c7",
+    "ui/src-ts/runtime-mirrors/scripts/verify-actuator-c3-nexologic.ts": "085391da7b61b5d4d134356600fc02fded6707bbd3b4c2b51a23c0c5a0ed7f9f"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "command": [
+    "npm",
+    "run",
+    "sbom:cra",
+    "--",
+    "--require-installed"
+  ],
+  "cwd": "repository root",
+  "startedAt": "2026-09-29T21:27:59.592297+00:00",
+  "finishedAt": "2026-09-29T21:28:04.126971+00:00",
+  "durationSeconds": 4.535,
+  "exitCode": 0,
+  "capturedBytes": 1081
+}

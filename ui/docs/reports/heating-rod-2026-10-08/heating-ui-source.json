@@ -1,0 +1,12 @@
+{
+  "command": [
+    "node",
+    "scripts/verify-heating-rod-night-ui.cjs",
+    "--source-only"
+  ],
+  "startedAt": "2026-10-08T19:32:20.710419+00:00",
+  "durationSeconds": 0.536,
+  "exitCode": 0,
+  "log": "heating-ui-source.log",
+  "hardware": false
+}

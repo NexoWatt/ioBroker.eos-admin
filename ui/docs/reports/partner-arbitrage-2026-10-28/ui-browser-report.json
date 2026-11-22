@@ -1,0 +1,108 @@
+{
+  "result": "PASS",
+  "date": "2026-10-28T05:43:30.218Z",
+  "node": "v24.22.1",
+  "chromium": "153.0.8010.0",
+  "checks": [
+    {
+      "name": "Arbitrage Desktop / gesperrter Standard",
+      "result": "PASS",
+      "viewport": "1440x1000",
+      "overflow": {
+        "scroll": 1440,
+        "client": 1440
+      }
+    },
+    {
+      "name": "Arbitrage Mobil / kein horizontaler Überlauf",
+      "result": "PASS",
+      "viewport": "390x844",
+      "overflow": {
+        "scroll": 390,
+        "client": 390
+      }
+    },
+    {
+      "name": "Ungültige Vorschau mit config:null zeigt Validierung",
+      "result": "PASS"
+    },
+    {
+      "name": "HTTP409: Entwurf erhalten, weitere Speicherung gesperrt, ein Request",
+      "result": "PASS"
+    },
+    {
+      "name": "Abgebrochene Mutation: ein JavaScript-Aufruf, Freigabe unbestätigt, Reload erforderlich",
+      "result": "PASS",
+      "mutationFetchCalls": 1,
+      "observedBrowserTransportRequests": 3,
+      "note": "Chromium kann bei Socket-Abbruch vor HTTP-Headern auf Transportebene wiederholen. Serverseitiges CAS bleibt erforderlich."
+    },
+    {
+      "name": "Bilanz getrennt: nur Datenrecht, kein Arbitrage-Appschalter",
+      "result": "PASS",
+      "overflow": {
+        "scroll": 390,
+        "client": 390
+      }
+    },
+    {
+      "name": "Direktvermarktung getrennt: Begrenzungsrecht, keine Speicherrechte",
+      "result": "PASS",
+      "overflow": {
+        "scroll": 390,
+        "client": 390
+      }
+    },
+    {
+      "name": "HTTP403 zeigt Fehler ohne beschreibbares Formular",
+      "result": "PASS"
+    },
+    {
+      "name": "Eingebettete EMS-Oberfläche lädt im lokalen Rahmen",
+      "result": "PASS",
+      "overflow": {
+        "scroll": 366,
+        "client": 366
+      }
+    },
+    {
+      "name": "Keine JavaScript-Seitenfehler",
+      "result": "PASS"
+    }
+  ],
+  "assets": [
+    {
+      "path": "admin/react/assets/index-CuquHlsY.css",
+      "sha256": "b0d51266b2e541f5a26c8319dc45cd44a682b02cbc9d96fd001f3793c8c3e459"
+    },
+    {
+      "path": "admin/react/assets/index-DkKzACe4.js",
+      "sha256": "0d7797392e600cb8951d1e3befcd0933f37ca0656b2d3cfe981fdd0b5256ec22"
+    },
+    {
+      "path": "www/styles.css",
+      "sha256": "d1053aae3ea07d4bd6c9b9bef13f5b462b26e3ff48a321d786ad0623a4d96e5b"
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "arbitrage-desktop.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "ccda24cf61dab9d32b807f70e6055853400c60e44928dbe275b10e0e42a2c6a0"
+    },
+    {
+      "path": "arbitrage-mobil.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "c83e94b9f844047392ce78ef7482d35f55a83a11903c17901df3365eca1b8247"
+    },
+    {
+      "path": "arbitrage-einrichtung-mobil.png",
+      "width": 390,
+      "height": 844,
+      "sha256": "2e91e7db001364ee2b8709dc6d720d20403a3d7a1eee6eec8578b194e71a3041"
+    }
+  ],
+  "limitation": "Lokaler Chromium mit Mock-API; keine reale Händlerverbindung, Gerätewirkung oder Anlagenabnahme."
+}

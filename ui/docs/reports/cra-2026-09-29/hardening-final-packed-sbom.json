@@ -1,0 +1,12 @@
+{
+  "command": [
+    "python3",
+    "/workspace/scratch/eb7acf2936df/verify_packed_sbom.py"
+  ],
+  "cwd": "repository root",
+  "startedAt": "2026-09-29T21:28:13.990578+00:00",
+  "finishedAt": "2026-09-29T21:28:19.061948+00:00",
+  "durationSeconds": 5.071,
+  "exitCode": 0,
+  "capturedBytes": 652
+}

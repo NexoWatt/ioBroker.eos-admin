@@ -176,7 +176,7 @@ function normalizeInstances(
 ): LoadedOverview[] {
     const prefixes = new Set<string>();
     for (const id of Object.keys(states || {})) {
-        const match = id.match(/^(nexowatt-ui\.\d+)\.info\.adminOverview\./);
+        const match = id.match(/^(eos-admin\.\d+)\.info\.adminOverview\./);
         if (match?.[1]) {
             prefixes.add(match[1]);
         }
@@ -263,9 +263,13 @@ export default function NexoWattEmsOverview({ socket }: Props): JSX.Element {
             return;
         }
         try {
+            const namespace = await socket.getCurrentInstance();
+            if (!/^eos-admin\.\d+$/.test(namespace)) {
+                throw new Error('EOS-Instanz konnte nicht eindeutig ermittelt werden');
+            }
             const [states, aliveStates] = await Promise.all([
-                socket.getForeignStates('nexowatt-ui.*.info.adminOverview.*'),
-                socket.getForeignStates('system.adapter.nexowatt-ui.*.alive'),
+                socket.getForeignStates(`${namespace}.info.adminOverview.*`),
+                socket.getForeignStates(`system.adapter.${namespace}.alive`),
             ]);
             const instances = normalizeInstances(states || {}, aliveStates || {});
             setData(instances[0] || null);
@@ -358,7 +362,7 @@ export default function NexoWattEmsOverview({ socket }: Props): JSX.Element {
                         <h2>Live-Diagnose</h2>
                         <p>
                             {loadError ||
-                                'NexoWatt UI ist nicht installiert, offline oder der Diagnosevertrag info.adminOverview.* fehlt.'}
+                                'Die integrierte EMS-Laufzeit startet oder die Diagnosewerte sind derzeit nicht verfügbar.'}
                         </p>
                     </div>
                     <div className="eos-ems-overview-state">
@@ -401,7 +405,7 @@ export default function NexoWattEmsOverview({ socket }: Props): JSX.Element {
                     <span className="eos-ems-overview-state-dot" />
                     <strong>{stale ? 'Offline / veraltet' : STATUS_LABELS[effectiveStatus]}</strong>
                     <small>
-                        {data?.instance || 'nexowatt-ui'} · {formatAge(data?.updatedAt)}
+                        {data?.instance || 'eos-admin'} · {formatAge(data?.updatedAt)}
                     </small>
                 </div>
             </header>

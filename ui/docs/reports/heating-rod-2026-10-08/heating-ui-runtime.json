@@ -1,0 +1,12 @@
+{
+  "command": [
+    "npm",
+    "run",
+    "test:heating-rod-night-ui"
+  ],
+  "startedAt": "2026-10-08T19:43:40.038559+00:00",
+  "durationSeconds": 0.88,
+  "exitCode": 0,
+  "log": "heating-ui-runtime.log",
+  "hardware": false
+}

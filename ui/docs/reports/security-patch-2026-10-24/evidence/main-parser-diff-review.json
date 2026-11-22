@@ -1,0 +1,15 @@
+{
+  "src-ts/runtime-executables/main.ts": {
+    "baselineSha256": "641581699de1fa8ee58a78d32195b3a34096452bef1a2d778818446d1395161c",
+    "currentSha256": "a300987130caeebcdb1d6aca97bd99750ccb9613bb63bafa07706dcd2c28799d",
+    "onlyExpectedParserAndCommentChanges": true
+  },
+  "src-ts/runtime-mirrors/main.ts": {
+    "baselineSha256": "f7e84eb593c962ced2cab8ce420c64cc29565308c2b4c78dd790abd681667a5e",
+    "currentSha256": "f50acf17a3367d23e7acc2e0acae649a538fbd2a4941da06458314ee076dca78",
+    "onlyExpectedParserAndCommentChanges": true,
+    "beforeOriginalHashHeaderUpdateSha256": "f7dd997c00c40d0b45463749e161e29c3f7fff50bfaae2d7bac9a8faffba493b"
+  },
+  "generatedMainSha256": "a232aa700e0e8e97f692e6455c1efe00067b9293aadb9c0db59439e76a9320ed",
+  "manualMirrorHashUpdatedAfterExactDiffReview": true
+}

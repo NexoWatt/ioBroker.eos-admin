@@ -1,0 +1,68 @@
+{
+  "date": "2026-11-03",
+  "node": "v24.22.1",
+  "comparison": "1.0.33 to 1.0.34; five existing reviewed main hotspots, six occurrences, nearest enclosing function printed without comments",
+  "baselineRawSha256": "4161d78db2566b2f785ec46adab7eec6e9ec1b2f88cc831ee9ad460a8ef2872e",
+  "currentRawSha256": "ee0432dd6ff8514556f9d734a63b34141622baf2b7df29e46f0c150bfe6bc882",
+  "currentASTCodeSha256": "1236a46a163b7cca76e9084388ac23b944c3e2e2633608d1c8814c8216709d1a",
+  "checked": [
+    {
+      "site": "this.config?.emsApps?.apps?.[localId]",
+      "count": 1,
+      "unchangedFunctionHash": "f317c6ba1da974aaea9785bb9e533b673b57b1a9ed210b49eea368615b06c591",
+      "oldLines": [
+        4991
+      ],
+      "newLines": [
+        4992
+      ]
+    },
+    {
+      "site": "this._nwPartnerResourceAvailability?.[resourceId]",
+      "count": 1,
+      "unchangedFunctionHash": "22f5411d0a33366dbd4ea202b2417e2282cef8009c36435dc2bec1be1d9ecd2e",
+      "oldLines": [
+        5005
+      ],
+      "newLines": [
+        5006
+      ]
+    },
+    {
+      "site": "this.stateCache?.[id]",
+      "count": 1,
+      "unchangedFunctionHash": "47739d2d4159b923ba7cb4dfa2a7c77a23abe70971d6cacd612314b3b2da918c",
+      "oldLines": [
+        5010
+      ],
+      "newLines": [
+        5011
+      ]
+    },
+    {
+      "site": "this._nwPartnerStorageTelemetry?.[resourceId]",
+      "count": 1,
+      "unchangedFunctionHash": "4237b6ecd29c5a5c68008fda72bdea590f927bd25fcc0b5468ad0461c46536d1",
+      "oldLines": [
+        5011
+      ],
+      "newLines": [
+        5012
+      ]
+    },
+    {
+      "site": "acc[k]",
+      "count": 2,
+      "unchangedFunctionHash": "b89bf5d2ebbb97a27b530d559fe55c2091a03cfeb004ec98e503241cbbb13696",
+      "oldLines": [
+        23109,
+        23109
+      ],
+      "newLines": [
+        23061,
+        23061
+      ]
+    }
+  ],
+  "scope": "Targeted comparison only; not whole-file security certification"
+}

@@ -1,0 +1,2558 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:all
+> npm run publish:check && npm run test:types && npm run check:ts-source-syntax && npm run test:ems-shadow-runtime && npm run test:ai-advisor-runtime-typing && npm run test:history-runtime-typing && npm run test:smarthome-runtime-typing && npm run test:smarthome-config-runtime-typing && npm run test:ems-apps-runtime-typing && npm run test:app-runtime-typing && npm run test:main-runtime-typing && npm run test:rc57-ocpp-stability && npm run test:rc58-ocpp-compact-mapping && npm run test:rc59-ocpp21-native-storage-safety && npm run test:rc60-universal-auto-orchestrator && npm run test:rc60-universal-auto-wallbox && npm run test:rc61-heating-night-lock && npm run test:rc61-evcs-hardening && npm run test:rc63-availability-storage-grid-gate && npm run test:rc64-storage-grid-charge-policy && npm run test:rc65-nt-price-target-override && npm run test:dc-station-display && npm run test:rc66-station-display-stable && npm run test:rc66-station-display-browser && npm run test:rc67-license-bootstrap-access && npm run test:rc68-para14a-communication-fallback && npm run test:dashboard-lp-status-typing && npm run test:rc69-dashboard-lp-feedback && npm run test:rc70-dashboard-lp-status-polish && npm run test:rc72-weather-pv-forecast-auto && npm run test:rc73-ems-admin-overview && npm run test:rc74-pv-forecast-customer-ui && npm run test:rc75-pv-forecast-admin-location && npm run test:rc76-pv-forecast-runtime-hardening && npm run test:rc77-pv-forecast-state-cache-bridge && npm run test:rc78-import-only-grid-budget && npm run test:rc79-import-soft-hard-zero-export && npm run test:rc80-soft-limit-fixed-ten-percent && npm run test:rc81-nvp-assignment-single-source && npm run test:rc82-permanent-grid-protection && npm run test:rc83-storage-cheap-only-log-object && npm run test:rc85 && npm run test:rc86 && npm run test:rc87 && npm run test:rc88 && npm run test:rc89 && npm run test:rc90 && npm run test:rc91 && npm run test:rc92 && npm run test:rc93 && npm run test:stable-1.0.2-health && npm run test:stable-1.0.3-home-appcenter && npm run test:stable-1.0.4-auto-pv && npm run test:stable-1.0.5-storage-protection && npm run test:stable-1.0.6-dc && npm run test:stable-1.0.7-notifications && npm run test:stable-1.0.8-storage-licenses && npm run test:stable-1.0.9-access && npm run test:stable-1.0.10-security && npm run test:stable-1.0.11-documentation && npm run test:stable-1.0.12-publish && npm run test:stable-release && npm run test:mesh-coordinator && npm run test:zero-export-pv && npm run test:stable-1.0.18-charging && npm run test:stable-1.0.19-grid-share && npm run test:stable-1.0.20-storage && npm run test:zero-export-inverter-mapping && npm run test:cra && npm run test:heating-rod-night-ramp && npm run test:heating-rod-pv-freshness && npm run test:heating-rod-night-ui && npm run test:nvp-topology && npm run test:dynamic-grid && npm run test:ems-navigation && npm run test:security-standards && npm run test:partner
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 publish:check
+> node scripts/verify-release-artifact.js
+
+[secret-guard] OK: 3041 files; no findings in the supported rules.
+[release-artifact] Quellcode-Dokumentation aktuell: 264 Dateien.
+[release-artifact] OK: Produkt-SBOM und Quellen-/Artefaktbindung aktuell.
+[release-artifact] OK: iobroker.nexowatt-ui@1.0.32, 481 geprüfte Paketdateien, Produkt-Runtime unverändert.
+[release-artifact] OK: Keine Installation oder Aktualisierung von npm/TypeScript erforderlich.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:types
+> npm run check:tsconfig-modern && npm run check:ts-source-syntax && npm run check:ts-source-integrity && npm run check:ts-canonical && npm run verify:ts-scaffold && npm run test:ts-script-mirrors && npm run test:ts-frontend-mirrors && npm run test:ts-backend-mirrors && npm run test:ts-adapter-mirrors && npm run test:frontend-mirror-runtime && npm run test:api-state-feature && npm run test:api-state-feature-runtime && npm run test:backend-api-state && npm run test:energy-flow-utils && npm run test:energy-flow-resolver && npm run test:energy-flow-mirrors && npm run test:energy-flow-regression && npm run test:energy-flow-regression-runtime && npm run test:ems-budget-heating-rod && npm run test:ems-budget-heating-rod-runtime && npm run test:ems-mirrors && npm run test:core-limits-reservations && npm run test:adapter-state-api && npm run test:adapter-state-api-runtime && npm run test:adapter-mirrors && npm run test:backend-api-state && npm run test:backend-api-state-runtime && npm run test:feature-visibility-resolver && npm run test:feature-visibility-resolver-runtime && npm run test:feature-visibility-shadow && npm run test:feature-visibility-shadow-runtime && npm run test:frontend-display && npm run test:feature-visibility-resolver && npm run test:feature-visibility-resolver-runtime && npm run test:feature-visibility-shadow && npm run test:feature-visibility-shadow-runtime && npm run test:frontend-display-runtime && npm run test:customer-feature-visibility && npm run test:customer-feature-visibility-runtime && npm run test:main-helpers && npm run typecheck && npm run typecheck:runtime-mirrors && npm run test:runtime-mirrors && npm run test:core-limits-runtime-typing && npm run test:heating-rod-runtime-typing && npm run test:shadow-bridges && npm run test:contracts && npm run test:feature-visibility-effective-runtime && npm run test:ai-advisor-runtime-typing && npm run test:history-runtime-typing && npm run test:smarthome-runtime-typing && npm run test:smarthome-config-runtime-typing && npm run test:ems-apps-runtime-typing && npm run test:app-runtime-typing && npm run test:main-runtime-typing && npm run test:adapter-helpers-mirrors && npm run test:main-runtime-helpers && npm run test:api-state-set-shadow && npm run test:live-dashboard-format-productive && npm run test:heating-rod-legacy-removal-candidate
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 check:tsconfig-modern
+> node scripts/verify-tsconfig-modern.js
+
+[tsconfig-modern] OK: TypeScript-Resolver sind NodeNext/Bundler-kompatibel und ohne Deprecation-Unterdrückung.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 check:ts-source-syntax
+> node scripts/verify-ts-source-syntax.js
+
+[ts-source-syntax] OK: 808 TypeScript-Quelldateien syntaktisch gültig.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 check:ts-source-integrity
+> node scripts/verify-ts-source-integrity.js
+
+[ts-source-integrity] OK: TypeScript-Quellen wirken vollständig und konfliktfrei.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 check:ts-canonical
+> node scripts/verify-ts-canonical-structure.js
+
+[ts-canonical] OK: TS-Quellstruktur ist kanonisch, ohne JS-Artefakte in src-ts und ohne doppelte Feature-Sichtbarkeitslogik.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 verify:ts-scaffold
+> node scripts/verify-ts-scaffold.js
+
+[ts-scaffold-check] OK: 808 TypeScript files checked; 21 required scaffold files present.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:ts-script-mirrors
+> node scripts/verify-ts-script-mirrors.js && npm run check:ts-scripts
+
+[verify-ts-script-mirrors] OK: TS->JS-Spiegelstrategie für Wartungsskripte ist synchron.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 check:ts-scripts
+> node scripts/build-ts-script-mirrors.js --check
+
+[build-ts-script-mirrors] OK: JS-Spiegel ist synchron.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:ts-frontend-mirrors
+> node scripts/verify-ts-frontend-mirrors.js && npm run check:ts-frontend-mirrors
+
+[verify-ts-frontend-mirrors] OK: Frontend-TS->MJS-Spiegel sind synchron und importierbar.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 check:ts-frontend-mirrors
+> node scripts/build-ts-frontend-mirrors.js --check
+
+[build-ts-frontend-mirrors] OK: Frontend-MJS-Spiegel sind synchron.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:ts-backend-mirrors
+> node scripts/verify-ts-backend-mirrors.js && npm run check:ts-backend-mirrors
+
+[verify-ts-backend-mirrors] OK: Backend-TS->JS-Spiegel sind synchron und lauffähig.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 check:ts-backend-mirrors
+> node scripts/build-ts-backend-mirrors.js --check
+
+[build-ts-backend-mirrors] OK: Backend-CJS-Spiegel sind synchron.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:ts-adapter-mirrors
+> node scripts/verify-ts-adapter-mirrors.js && node scripts/verify-ts-adapter-mirror-runtime.js
+
+[verify-ts-adapter-mirrors] OK: Adapter-CJS-Spiegel sind vorhanden, kommentiert und synchron.
+[verify-ts-adapter-mirror-runtime] OK: Adapter-CJS-Spiegel sind importierbar und zentrale 0/false-Regeln stimmen.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:frontend-mirror-runtime
+> node scripts/verify-ts-frontend-mirror-runtime.js
+
+[verify-ts-frontend-mirror-runtime] OK: Frontend-MJS-Spiegel liefern erwartete Runtime-Ergebnisse.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:api-state-feature
+> node scripts/verify-ts-api-state-feature.js
+
+[ts-api-state-feature] OK: API-State- und Feature-Sichtbarkeits-TS-Struktur vorhanden.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:api-state-feature-runtime
+> npm run clean:ts && tsc -p tsconfig.api-state-feature.json && node build-ts/api-state-feature/tests/api-state-feature-runtime.js
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 clean:ts
+> node scripts/clean-ts-build.js
+
+[clean-ts-build] removed build-ts
+[clean-ts-build] removed build-types
+[clean-ts-build] removed build/types
+[ts-api-state-feature] OK: 3 API-State-Fälle und 6 Feature-Sichtbarkeitsfälle bestanden.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:backend-api-state
+> node scripts/verify-ts-backend-api-state.js
+
+[ts-backend-api-state] OK: Backend-API-/StateCache-Struktur und Kommentare vorhanden.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:energy-flow-utils
+> node scripts/verify-ts-energy-flow-utils.js
+
+[ts-energy-flow-utils] OK: TypeScript-Energiefluss-Helfer und Kommentare vorhanden.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:energy-flow-resolver
+> node scripts/verify-ts-energy-flow-resolver.js
+
+[ts-energy-flow-resolver] OK
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:energy-flow-mirrors
+> npm run test:ts-energy-flow-mirrors
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:ts-energy-flow-mirrors
+> node scripts/verify-ts-energy-flow-mirrors.js && npm run check:ts-energy-flow-mirrors
+
+[verify-ts-energy-flow-mirrors] OK: Energiefluss-TS->JS-Spiegel sind synchron und fachlich lauffähig.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 check:ts-energy-flow-mirrors
+> node scripts/build-ts-energy-flow-mirrors.js --check
+
+[build-ts-energy-flow-mirrors] OK: Energiefluss-CJS-Spiegel sind synchron.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:energy-flow-regression
+> node scripts/verify-ts-energy-flow-regression.js
+
+[energy-flow-regression-check] OK: TypeScript energy-flow regression cases are present and documented.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:energy-flow-regression-runtime
+> npm run clean:ts && tsc -p tsconfig.energy-flow-regression.json && node build-ts/energy-flow-regression/tests/energy-flow-regression-runtime.js
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 clean:ts
+> node scripts/clean-ts-build.js
+
+[clean-ts-build] removed build-ts
+[clean-ts-build] removed build-types
+[clean-ts-build] removed build/types
+[ts-energy-flow-regression] OK: 8 produktionsnahe Energieflussfälle bestanden.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:ems-budget-heating-rod
+> node scripts/verify-ts-ems-budget-heating-rod.js
+
+[ts-ems-budget-heating-rod] OK: TypeScript EMS-Budget-/Heizstabstruktur und Kommentare vorhanden.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:ems-budget-heating-rod-runtime
+> npm run clean:ts && tsc -p tsconfig.ems-budget-heating-rod.json && node build-ts/ems-budget-heating-rod/tests/ems-budget-heating-rod-runtime.js
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 clean:ts
+> node scripts/clean-ts-build.js
+
+[clean-ts-build] removed build-ts
+[clean-ts-build] removed build-types
+[clean-ts-build] removed build/types
+[ts-ems-budget-heating-rod] OK: 6 Core-Limits-/Heizstabfälle bestanden.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:ems-mirrors
+> npm run test:ts-ems-mirrors
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:ts-ems-mirrors
+> node scripts/verify-ts-ems-mirrors.js && npm run check:ts-ems-mirrors
+
+[verify-ts-ems-mirrors] OK: EMS-TS->JS-Spiegel sind synchron und lauffähig.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 check:ts-ems-mirrors
+> node scripts/build-ts-ems-mirrors.js --check
+
+[build-ts-ems-mirrors] OK: EMS-CJS-Spiegel sind synchron.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:core-limits-reservations
+> node scripts/verify-ts-core-limits-reservations.js
+
+[ts-core-limits-reservations] OK: Core-Limits Consumer-Reservierungen laufen produktiv über die typisierte Phase-2-Core-Runtime.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:adapter-state-api
+> node scripts/verify-ts-adapter-state-api.js
+
+[ts-adapter-state-api-check] OK: Adapter-State-/API-TypeScript-Vorbereitung vorhanden.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:adapter-state-api-runtime
+> npm run clean:ts && tsc -p tsconfig.adapter-state-api.json && node build-ts/adapter-state-api/tests/adapter-state-api-runtime.js
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 clean:ts
+> node scripts/clean-ts-build.js
+
+[clean-ts-build] removed build-ts
+[clean-ts-build] removed build-types
+[clean-ts-build] removed build/types
+[ts-adapter-state-api] OK: 7 Adapter-State-/API-Fälle bestanden.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:adapter-mirrors
+> npm run test:ts-adapter-mirrors
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:ts-adapter-mirrors
+> node scripts/verify-ts-adapter-mirrors.js && node scripts/verify-ts-adapter-mirror-runtime.js
+
+[verify-ts-adapter-mirrors] OK: Adapter-CJS-Spiegel sind vorhanden, kommentiert und synchron.
+[verify-ts-adapter-mirror-runtime] OK: Adapter-CJS-Spiegel sind importierbar und zentrale 0/false-Regeln stimmen.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:backend-api-state
+> node scripts/verify-ts-backend-api-state.js
+
+[ts-backend-api-state] OK: Backend-API-/StateCache-Struktur und Kommentare vorhanden.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:backend-api-state-runtime
+> npm run clean:ts && tsc -p tsconfig.backend-api-state.json && node build-ts/backend-api-state/tests/backend-api-state-runtime.js
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 clean:ts
+> node scripts/clean-ts-build.js
+
+[clean-ts-build] removed build-ts
+[clean-ts-build] removed build-types
+[clean-ts-build] removed build/types
+[ts-backend-api-state-runtime] OK: Backend-API-/StateCache-Fälle bestanden.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:feature-visibility-resolver
+> node scripts/verify-ts-feature-visibility-resolver.js
+
+[ts-feature-visibility-resolver] OK: Feature-Sichtbarkeitsresolver und Regressionen vorhanden.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:feature-visibility-resolver-runtime
+> npm run clean:ts && tsc -p tsconfig.feature-visibility-resolver.json && node build-ts/feature-visibility-resolver/tests/feature-visibility-resolver-runtime.js
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 clean:ts
+> node scripts/clean-ts-build.js
+
+[clean-ts-build] removed build-ts
+[clean-ts-build] removed build-types
+[clean-ts-build] removed build/types
+[ts-feature-visibility-resolver] OK: 8 Sichtbarkeitsfälle bestanden.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:feature-visibility-shadow
+> node scripts/verify-ts-feature-visibility-shadow.js
+
+[verify-ts-feature-visibility-shadow] OK: Feature-Visibility-Shadow-Schicht ist vorhanden.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:feature-visibility-shadow-runtime
+> npm run clean:ts && tsc -p tsconfig.feature-visibility-shadow.json && node build-ts/feature-visibility-shadow/tests/feature-visibility-shadow-runtime.js
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 clean:ts
+> node scripts/clean-ts-build.js
+
+[clean-ts-build] removed build-ts
+[clean-ts-build] removed build-types
+[clean-ts-build] removed build/types
+[feature-visibility-shadow-runtime] OK: Feature-Sichtbarkeits-Shadowfälle bestanden.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:frontend-display
+> node scripts/verify-ts-frontend-display.js
+
+[ts-frontend-display-check] OK: Frontend-TS-Helfer und Kommentare vorhanden.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:feature-visibility-resolver
+> node scripts/verify-ts-feature-visibility-resolver.js
+
+[ts-feature-visibility-resolver] OK: Feature-Sichtbarkeitsresolver und Regressionen vorhanden.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:feature-visibility-resolver-runtime
+> npm run clean:ts && tsc -p tsconfig.feature-visibility-resolver.json && node build-ts/feature-visibility-resolver/tests/feature-visibility-resolver-runtime.js
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 clean:ts
+> node scripts/clean-ts-build.js
+
+[clean-ts-build] removed build-ts
+[clean-ts-build] removed build-types
+[clean-ts-build] removed build/types
+[ts-feature-visibility-resolver] OK: 8 Sichtbarkeitsfälle bestanden.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:feature-visibility-shadow
+> node scripts/verify-ts-feature-visibility-shadow.js
+
+[verify-ts-feature-visibility-shadow] OK: Feature-Visibility-Shadow-Schicht ist vorhanden.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:feature-visibility-shadow-runtime
+> npm run clean:ts && tsc -p tsconfig.feature-visibility-shadow.json && node build-ts/feature-visibility-shadow/tests/feature-visibility-shadow-runtime.js
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 clean:ts
+> node scripts/clean-ts-build.js
+
+[clean-ts-build] removed build-ts
+[clean-ts-build] removed build-types
+[clean-ts-build] removed build/types
+[feature-visibility-shadow-runtime] OK: Feature-Sichtbarkeits-Shadowfälle bestanden.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:frontend-display-runtime
+> npm run clean:ts && tsc -p tsconfig.frontend-display.json && node build-ts/frontend-display/tests/frontend-display-runtime.js
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 clean:ts
+> node scripts/clean-ts-build.js
+
+[clean-ts-build] removed build-ts
+[clean-ts-build] removed build-types
+[clean-ts-build] removed build/types
+[ts-frontend-display] OK: Frontend-Display-Helfer bestanden.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:customer-feature-visibility
+> node scripts/verify-ts-customer-feature-visibility.js
+
+[ts-customer-feature-visibility-check] OK: Feature-Visibility-Vorbereitung vorhanden.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:customer-feature-visibility-runtime
+> npm run clean:ts && tsc -p tsconfig.customer-feature-visibility.json && node build-ts/customer-feature-visibility/tests/customer-feature-visibility-runtime.js
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 clean:ts
+> node scripts/clean-ts-build.js
+
+[clean-ts-build] removed build-ts
+[clean-ts-build] removed build-types
+[clean-ts-build] removed build/types
+[ts-customer-feature-visibility] OK: 10 Sichtbarkeitsfälle bestanden.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:main-helpers
+> node scripts/verify-ts-main-helpers.js && npm run check:ts-main-helpers
+
+[verify-ts-main-helpers] OK: Main-TS-Helfer sind synchron und fachlich plausibel.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 check:ts-main-helpers
+> node scripts/build-ts-main-helpers.js --check
+
+[build-ts-main-helpers] OK: Main-Helfer-Spiegel sind synchron.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 typecheck
+> tsc -p tsconfig.json --noEmit
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 typecheck:runtime-mirrors
+> tsc -p tsconfig.runtime-mirrors.json --noEmit
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:runtime-mirrors
+> npm run test:ts-runtime-mirrors
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:ts-runtime-mirrors
+> node scripts/verify-ts-runtime-mirrors.js && npm run check:ts-runtime-mirrors
+
+[ts-runtime-mirrors] OK: 520 Runtime-TS-/TSX-Parallelspiegel geprüft.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 check:ts-runtime-mirrors
+> node scripts/build-ts-runtime-mirrors.js --check
+
+[ts-runtime-mirrors] OK: 520 JS-/JSX-Dateien als TS-/TSX-Parallelspiegel geprüft.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:core-limits-runtime-typing
+> node scripts/verify-ts-core-limits-runtime-typing.js
+
+[ts-core-limits-runtime-typing] OK: Core-Limits-Spiegel ist gezielt typisiert und in gelockertem Migrationsmodus kompilierbar.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:heating-rod-runtime-typing
+> node scripts/verify-ts-heating-rod-runtime-typing.js
+
+[ts-heating-rod-runtime-typing] OK: Heizstab-Spiegel ist gezielt typisiert und in gelockertem Migrationsmodus kompilierbar.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:shadow-bridges
+> node scripts/verify-ts-shadow-bridges.js && npm run check:ts-shadow-bridges
+
+[verify-ts-shadow-bridges] OK: Shadow-Bridge-Spiegel ist synchron und lauffähig.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 check:ts-shadow-bridges
+> node scripts/build-ts-shadow-bridges.js --check
+
+[build-ts-shadow-bridges] OK: Shadow-Bridge-Spiegel sind synchron.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:contracts
+> node scripts/verify-ts-contracts.js
+
+[ts-contracts] OK: TypeScript-Vertragsdateien vorhanden.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:feature-visibility-effective-runtime
+> node scripts/verify-ts-feature-visibility-effective-runtime.js
+
+[ts-feature-visibility-effective] OK: authoritative feature visibility runtime wiring looks valid.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:ai-advisor-runtime-typing
+> node scripts/verify-ts-ai-advisor-runtime-typing.js
+
+[ts-ai-advisor-runtime-typing] OK: AI-Advisor-Spiegel ist gezielt typisiert und in gelockertem Migrationsmodus kompilierbar.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:history-runtime-typing
+> node scripts/verify-ts-history-runtime-typing.js
+
+[ts-history-runtime-typing] OK: History-Spiegel ist gezielt typisiert und in gelockertem Migrationsmodus kompilierbar.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:smarthome-runtime-typing
+> node scripts/verify-ts-smarthome-runtime-typing.js
+
+[ts-smarthome-runtime-typing] OK: SmartHome-Spiegel ist gezielt typisiert und der Vertragsbereich ist kompilierbar.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:smarthome-config-runtime-typing
+> node scripts/verify-ts-smarthome-config-runtime-typing.js
+
+[ts-smarthome-config-runtime-typing] OK: SmartHome-Config-Spiegel ist gezielt typisiert und der Vertragsbereich ist kompilierbar.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:ems-apps-runtime-typing
+> node scripts/verify-ts-ems-apps-runtime-typing.js
+
+[ts-ems-apps-runtime-typing] OK: App-Center-Spiegel ist gezielt typisiert und der Vertragsbereich ist kompilierbar.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:app-runtime-typing
+> node scripts/verify-ts-app-runtime-typing.js
+
+[ts-app-runtime-typing] OK: LIVE-App-Spiegel ist gezielt typisiert und der Vertragsbereich ist kompilierbar.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:main-runtime-typing
+> node scripts/verify-ts-main-runtime-typing.js
+
+[ts-main-runtime-typing] OK: Main-Spiegel ist gezielt typisiert und der Vertragsbereich ist kompilierbar.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:adapter-helpers-mirrors
+> node scripts/verify-ts-adapter-helpers.js && npm run check:ts-adapter-helpers
+
+[verify-ts-adapter-helpers] OK: Adapter-Helfer-Spiegel sind synchron und fachlich plausibel.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 check:ts-adapter-helpers
+> node scripts/build-ts-adapter-helpers.js --check
+
+[build-ts-adapter-helpers] OK: Adapter-Helfer-Spiegel sind synchron.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:main-runtime-helpers
+> node scripts/verify-ts-main-runtime-helpers.js
+
+[verify-ts-main-runtime-helpers] OK: main.js nutzt den ersten TS-Helfer kontrolliert mit Fallback.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:api-state-set-shadow
+> node scripts/verify-ts-api-state-set-shadow.js
+
+[verify-ts-api-state-set-shadow] OK: /api/state nutzt TS-Builder mit redigierter Kundenantwort und vollständiger Installerdiagnose; /api/set-Shadow bleibt kompatibel.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:live-dashboard-format-productive
+> node scripts/verify-ts-live-dashboard-format-productive.js
+
+[ts-live-dashboard-format-productive] OK: LIVE-Dashboard nutzt TS-Formatter produktiv mit JS-Fallback.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:heating-rod-legacy-removal-candidate
+> node scripts/verify-ts-heating-rod-legacy-removal-candidate.js
+
+[heating-rod-legacy-removal-candidate] OK: alter JS-Heizstabpfad ist als Entfernungs-Kandidat markiert.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 check:ts-source-syntax
+> node scripts/verify-ts-source-syntax.js
+
+[ts-source-syntax] OK: 808 TypeScript-Quelldateien syntaktisch gültig.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:ems-shadow-runtime
+> node scripts/verify-ts-ems-shadow-runtime.js
+
+[ts-ems-shadow] OK: Core-Limits-/Heizstab-Shadow-Runtime geprüft.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:ai-advisor-runtime-typing
+> node scripts/verify-ts-ai-advisor-runtime-typing.js
+
+[ts-ai-advisor-runtime-typing] OK: AI-Advisor-Spiegel ist gezielt typisiert und in gelockertem Migrationsmodus kompilierbar.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:history-runtime-typing
+> node scripts/verify-ts-history-runtime-typing.js
+
+[ts-history-runtime-typing] OK: History-Spiegel ist gezielt typisiert und in gelockertem Migrationsmodus kompilierbar.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:smarthome-runtime-typing
+> node scripts/verify-ts-smarthome-runtime-typing.js
+
+[ts-smarthome-runtime-typing] OK: SmartHome-Spiegel ist gezielt typisiert und der Vertragsbereich ist kompilierbar.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:smarthome-config-runtime-typing
+> node scripts/verify-ts-smarthome-config-runtime-typing.js
+
+[ts-smarthome-config-runtime-typing] OK: SmartHome-Config-Spiegel ist gezielt typisiert und der Vertragsbereich ist kompilierbar.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:ems-apps-runtime-typing
+> node scripts/verify-ts-ems-apps-runtime-typing.js
+
+[ts-ems-apps-runtime-typing] OK: App-Center-Spiegel ist gezielt typisiert und der Vertragsbereich ist kompilierbar.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:app-runtime-typing
+> node scripts/verify-ts-app-runtime-typing.js
+
+[ts-app-runtime-typing] OK: LIVE-App-Spiegel ist gezielt typisiert und der Vertragsbereich ist kompilierbar.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:main-runtime-typing
+> node scripts/verify-ts-main-runtime-typing.js
+
+[ts-main-runtime-typing] OK: Main-Spiegel ist gezielt typisiert und der Vertragsbereich ist kompilierbar.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc57-ocpp-stability
+> node scripts/verify-rc57-ocpp-stability.js
+
+[rc57-ocpp-stability] OK: socketConnected, telemetry freshness, OCPP event order and start latency are safely separated.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc58-ocpp-compact-mapping
+> node scripts/verify-rc58-ocpp-compact-mapping.js
+
+[rc58-ocpp-compact-mapping] OK: historical alias/0.3 mappings migrate to the direct native OCPP21 0.4 contract.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc59-ocpp21-native-storage-safety
+> node scripts/verify-rc59-ocpp21-native-storage-safety.js
+
+[rc59-ocpp21-native-storage-safety] OK: direct OCPP21 mapping, charging tick diagnostics and storage-farm safety recovery are consistent.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc60-universal-auto-orchestrator
+> node scripts/verify-rc60-universal-auto-orchestrator.js
+
+[rc60-universal-auto-orchestrator] OK: Auto/PV/Min+PV/Zeit-Ziel/Tarif funktionieren mit Alfen Mode 3, OCPP21 und generischen EVCS-Zuordnungen.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc60-universal-auto-wallbox
+> node scripts/verify-rc60-universal-auto-wallbox.js
+
+[rc60-universal-auto-wallbox] OK: nexowatt-devices/Alfen, OCPP21, freie Hersteller, AC/DC, Auto, PV, Min+PV, Zeit-Ziel und Tarif nutzen einen gemeinsamen sicheren Startvertrag.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc61-heating-night-lock
+> node scripts/verify-rc61-heating-rod-night-manual-release.js
+
+[rc61-heating-rod-night-manual-release] OK: PV-Auto ist nachts gesperrt; explizite Manual/Boost-Freigaben bleiben zulässig, Restlast umgeht den Nachtblock nicht.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc61-evcs-hardening
+> node scripts/verify-rc61-evcs-hardening.js
+
+[rc61-evcs-hardening] OK: Alfen/Device-Keepalive, OCPP21-Bestätigung, sicherer 0-W-Vertrag und lokale Startfehler-Isolierung sind abgesichert.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc63-availability-storage-grid-gate
+> node scripts/verify-rc63-availability-storage-grid-gate.js
+
+[rc63-availability-storage-grid-gate] OK: availability only customer/RFID; storage grid charge only with fresh cheap dynamic tariff and, when enabled, active NT; PV charging unaffected.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc64-storage-grid-charge-policy
+> node scripts/verify-rc64-storage-grid-charge-policy.js
+
+[rc64-storage-grid-charge-policy] OK: storage grid charging requires a fresh cheap dynamic tariff; active variable net fee additionally requires the configured NT window.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc65-nt-price-target-override
+> node scripts/verify-rc65-nt-price-target-override.js
+
+[rc65-nt-price-target-override] OK: storage requires fresh cheap tariff plus active NT when configured; urgent EVCS Auto time-target override remains active.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:dc-station-display
+> node scripts/verify-dc-station-display.js
+
+[dc-station-display] OK: Display-API, Watchdog, Layout, Wartungsmodus und Session-/Betreiberbasis und herstelleroffene Steuerbrücke sind abgesichert.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc66-station-display-stable
+> node scripts/verify-rc66-station-display-stable.js
+
+[rc66-station-display] OK: modernes Vollbildlayout, NexoWatt-Branding, Mehr-LP-Raster, Status-/Entscheidungsdiagnose, kein CSV-UI und Single-Writer-Vertrag sind abgesichert (1000x303, 187933 Byte).
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc66-station-display-browser
+> node scripts/verify-rc66-station-display-browser.js
+
+[rc66-station-display-browser] OK: 4/5/6/8 LP, 1920×1080/1600×900/1366×768, kein Scrollen, Logo, Diagnose und Single-Writer-Bedienintent in Chromium verifiziert.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc67-license-bootstrap-access
+> node scripts/verify-rc67-license-bootstrap-access.js
+
+[rc67-license-bootstrap-access] OK: Neue Systeme erreichen ausschließlich den strikt authentifizierten Lizenz-Bootstrap; alle übrigen EOS-Bereiche bleiben bis zur gültigen Lizenz gesperrt.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc68-para14a-communication-fallback
+> node scripts/verify-rc68-para14a-communication-fallback.js
+
+[rc68-para14a-communication-fallback] OK: Pmin-Fallback, GZF-Verteilung, Grid-Safety und lokaler PV-Zuschlag arbeiten zusammen.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:dashboard-lp-status-typing
+> tsc -p tsconfig.dashboard-lp-status.json --noEmit
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc69-dashboard-lp-feedback
+> node scripts/verify-rc69-dashboard-lp-feedback.js
+
+[rc69-dashboard-lp-feedback] OK: Safety-, §14a-Fallback-, Lade-, PV- und Inaktiv-Status werden kundenverständlich dargestellt.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc70-dashboard-lp-status-polish
+> node scripts/verify-rc70-dashboard-lp-status-polish.js
+
+[rc70-dashboard-lp-status-polish] OK: Einzel-LP-Link und Anzeige von Benutzer-/Auto-Untermodus sind korrekt getrennt.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc72-weather-pv-forecast-auto
+> node scripts/verify-rc72-weather-pv-forecast-auto.cjs
+
+[rc72-weather-pv-forecast-auto] OK: Einstellungen, Open-Meteo, AppCenter-Fallback, Multi-LP-Planer und Browseranzeige geprüft.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc73-ems-admin-overview
+> node scripts/verify-rc73-ems-admin-overview.js
+
+[RC73] OK: read-only EMS overview contract, optional-module fallback and lifecycle verified.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc74-pv-forecast-customer-ui
+> node scripts/verify-rc74-pv-forecast-customer-ui.cjs
+
+[rc74-pv-forecast-customer-ui] OK: Scriptpfad, PV-Flächentabelle, Richtungswahl, Standortauflösung, Open-Meteo-Werte und Statusdiagnose geprüft.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc75-pv-forecast-admin-location
+> node scripts/verify-rc75-pv-forecast-admin-location.cjs
+
+[rc75-pv-forecast-admin-location] OK: EOS-Admin-Standort, direkte GTI-Abfragen, sichtbare PV-Flächentabelle, Prognosewerte und zentrale EMS-Verknüpfung geprüft.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc76-pv-forecast-runtime-hardening
+> node scripts/verify-rc76-pv-forecast-runtime-hardening.cjs
+
+[rc76-pv-forecast-runtime-hardening] OK: GTI-Fallbackkette, Nachtprognose, Standortname, Fehlerdiagnose und überlappungsfreie PV-Flächenansicht geprüft.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc77-pv-forecast-state-cache-bridge
+> node scripts/verify-rc77-pv-forecast-state-cache-bridge.cjs
+
+[rc77-pv-forecast-state-cache-bridge] OK: Provider-/EMS-Statecache, dynamische Subscription, Fehlerdiagnose, Restart-Fallback, Ablaufgrenzen, Kompatibilitätswerte und Browser-Cache geprüft.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc78-import-only-grid-budget
+> node scripts/verify-rc78-import-only-grid-budget.cjs && npm run test:charging-grid-cap-safe && npm run test:charging-grid-cap-clamp && npm run test:loadmanagement-grid-cap-sanity && npm run test:core-limits-typed-runtime-phase1 && npm run test:core-limits-typed-runtime-phase2 && npm run test:safety-envelope-final-write
+
+[rc78-import-only-grid-budget] OK: signed NVP, central budget, EVCS cap and final writer treat the connection limit as import-only.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:charging-grid-cap-safe
+> node scripts/verify-charging-grid-cap-safe.js
+
+OK: EVCS grid cap uses signed NVP plus fresh EVCS actual power; export increases import-only headroom and reservations stay excluded.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:charging-grid-cap-clamp
+> node scripts/verify-charging-grid-cap-clamp.js
+
+[charging-grid-cap-clamp] OK: signed NVP import-only cap covers export, import and active shedding.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:loadmanagement-grid-cap-sanity
+> node scripts/verify-loadmanagement-grid-cap-sanity.js
+
+[grid-cap-sanity] OK: NVP-Einspeisung erhöht die Lastfreigabe; die Anschlussgrenze begrenzt ausschließlich Netzbezug.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:core-limits-typed-runtime-phase1
+> node scripts/verify-core-limits-typed-runtime-phase1.js
+
+[core-limits-typed-runtime-phase1] OK: zentraler Core rechnet PV, Grants, Headroom und Snapshots produktiv typisiert mit Legacy-Fallback.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:core-limits-typed-runtime-phase2
+> node scripts/verify-core-limits-typed-runtime-phase2.js
+
+[core-limits-typed-runtime-phase2] OK: Quellenübergabe, Grants, Reservierungen, Restbudgetmutation und State-Publikation laufen typisiert mit Legacy-Fallback.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:safety-envelope-final-write
+> node scripts/verify-safety-envelope-final-write.js
+
+[safety-envelope-final-write] OK: Inbetriebnahme, NVP, Phasen, §14a, Summenreserve, finaler Hardware-Write und Fehlerverriegelung arbeiten fail-closed.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc79-import-soft-hard-zero-export
+> node scripts/verify-rc79-import-soft-hard-zero-export-feedforward.cjs && npm run test:safety-module-deactivate && npm run test:zero-export-sink-priority && npm run test:zero-export-commissioning && npm run test:zero-export-fast-path && npm run test:zero-export-sink-ack-history && npm run test:safety-envelope-final-write
+
+[RC79] OK: Import Soft-/Hard-Limit, signierter NVP, 0-Einspeise-PV-Feed-forward, Speicher-Konfliktschutz, AppCenter-Platzierung und Cold-Start-Objektinitialisierung geprueft.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:safety-module-deactivate
+> node scripts/verify-safety-module-deactivate.js
+
+[safety-module-deactivate] OK: Cold-Start/App-AUS stoppt EVCS, Speicher, Thermik, Heizstab, MultiUse, NexoLogic und Threshold physisch; States werden vor dem Safe-Stop initialisiert und Fehler bleiben kritisch verriegelt.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:zero-export-sink-priority
+> node scripts/verify-zero-export-sink-priority.js
+
+OK: 0-Einspeise Senkenreihenfolge ist Verbrauch → freigegebene Ladepunkte → flexible Verbraucher → Speicher → Mesh/Microgrid → WR-Abregelung und baut keine zweite Regelung.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:zero-export-commissioning
+> node scripts/verify-zero-export-commissioning.js
+
+OK: 0-Einspeise Inbetriebnahme-Assistent ist diagnostisch, nicht doppelt geregelt und app-center-konform vorbereitet.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:zero-export-fast-path
+> node scripts/verify-zero-export-fast-path.js
+
+OK: 0-Einspeise Fast-Path nutzt gespeicherte Freigaben/ACKs und keinen Schreibtest pro Regel-Tick.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:zero-export-sink-ack-history
+> node scripts/verify-zero-export-sink-ack-history.js
+
+OK: 0-Einspeise Senken-ACK-Verlauf/Feldprotokoll ist vorhanden und ohne Schreibtest pro Regel-Tick abgesichert.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:safety-envelope-final-write
+> node scripts/verify-safety-envelope-final-write.js
+
+[safety-envelope-final-write] OK: Inbetriebnahme, NVP, Phasen, §14a, Summenreserve, finaler Hardware-Write und Fehlerverriegelung arbeiten fail-closed.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc80-soft-limit-fixed-ten-percent
+> node scripts/verify-rc80-soft-limit-fixed-ten-percent.cjs && npm run test:safety-envelope-final-write
+
+[RC80] OK: Soft-Reserve immer exakt 10 %, Soft-Limit immer 90 %, keine Mindest-/Maximalgrenze und keine Legacy-Uebersteuerung.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:safety-envelope-final-write
+> node scripts/verify-safety-envelope-final-write.js
+
+[safety-envelope-final-write] OK: Inbetriebnahme, NVP, Phasen, §14a, Summenreserve, finaler Hardware-Write und Fehlerverriegelung arbeiten fail-closed.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc81-nvp-assignment-single-source
+> node scripts/verify-rc81-nvp-assignment-single-source.cjs && npm run test:safety-envelope-final-write
+
+[RC81] OK: Zuordnung ist alleinige Quelle fuer Anschlussleistung und NVP; Legacy-Overrides ignoriert; RLM nur absenkend.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:safety-envelope-final-write
+> node scripts/verify-safety-envelope-final-write.js
+
+[safety-envelope-final-write] OK: Inbetriebnahme, NVP, Phasen, §14a, Summenreserve, finaler Hardware-Write und Fehlerverriegelung arbeiten fail-closed.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc82-permanent-grid-protection
+> node scripts/verify-rc82-permanent-grid-protection.cjs && npm run test:nvp-coordinator-storage-pv && npm run test:safety-envelope-final-write
+
+[RC82] OK: Netzlimits dauerhaft aktiv und nicht abschaltbar; Home/Pro, Single Source, 10-%-Policy und optionale 0-Einspeisung geprüft.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:nvp-coordinator-storage-pv
+> node scripts/verify-nvp-coordinator-storage-pv.js
+
+[nvp-coordinator-storage-pv] OK: Speicher/Farm regelt zuerst; PV erhält nur den belastbaren Rest-NVP, ohne Doppelwriter oder 0-W-Richtungswechselrunde.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:safety-envelope-final-write
+> node scripts/verify-safety-envelope-final-write.js
+
+[safety-envelope-final-write] OK: Inbetriebnahme, NVP, Phasen, §14a, Summenreserve, finaler Hardware-Write und Fehlerverriegelung arbeiten fail-closed.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc83-storage-cheap-only-log-object
+> node scripts/verify-rc83-storage-cheap-only-log-object.cjs
+
+[rc83-storage-cheap-only-log-object] OK: Netzladen nur bei frischem günstigen Tarif; außerhalb günstig wird jeder Ladepfad physikalisch auf lokalen PV-Überschuss begrenzt; sinkFieldProtocolJson wird vor dem ersten Write angelegt.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc85
+> node scripts/verify-rc85-stability-contract.cjs
+
+[RC85] stability contract passed
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc86
+> node scripts/verify-rc86-gate-a-demand-binding.cjs
+
+[RC86] Gate A demand binding, signed hard headroom and partial-offline isolation passed
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc87
+> node scripts/verify-rc87-monitoring-display-only.cjs
+
+[RC87] Monitoring-only NVP/no-demand display and real soft/hard/export limit states passed
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc88
+> node scripts/verify-rc88-memory-stability.cjs
+
+[RC88/1.0.1] SSE backpressure, healthy-client retention, 10-second critical recovery and ratio-based heap guard passed
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc89
+> node scripts/verify-rc89-admin-overview-health.cjs
+
+[RC89] Adapter-, EMS-Tick- und Diagnose-Publisher-Status getrennt; I/O-Timeouts und Heartbeat-Recovery bestanden.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc90
+> node test/rc90-sse-resync.test.cjs
+
+[RC90 SSE resync] OK (1 runtime callback(s))
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc91
+> node scripts/verify-rc91-cross-app-catalog.js
+
+[rc91-cross-app-catalog] OK: 22 sichtbare Apps und 23 Backend-Apps bleiben über Start, Save und Backup konsistent.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc92
+> node scripts/verify-rc92-history-mobile.cjs
+
+[rc92-history-mobile] OK: natives Scrollen, mobile Leistungs-/Energiewerte und Tages-Zoom funktionieren gemeinsam.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:rc93
+> node scripts/verify-rc93-certified-export-authority.cjs
+
+[rc93-certified-export-authority] OK: EZA-/Parkregler-Priorität, alleiniger Export-Guard-Writer, lokale Obergrenze, TTL/Fail-Safe, Senkenfolge und Hash-Audit geprüft.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:stable-1.0.2-health
+> node scripts/verify-stable-1.0.2-health-heartbeat.cjs
+
+[Stable 1.0.2 baseline on 1.0.32] OK: 25-s field cycle remains online; scheduler stall and genuine offline state stay distinguishable.
+[Stable 1.0.2 baseline on 1.0.32] OK: independent 4-s adapter, scheduler and overview heartbeat lifecycle verified.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:stable-1.0.3-home-appcenter
+> node scripts/verify-stable-1.0.3-home-appcenter-access.cjs
+
+[Stable 1.0.3] OK: Home admin remains in AppCenter; stale Pro flags trigger no Pro API call.
+[Stable 1.0.3] OK: license/business 403 stays component-local; genuine session loss still locks fail-closed.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:stable-1.0.4-auto-pv
+> node scripts/verify-stable-1.0.4-auto-pv-phases.cjs
+
+[stable-1.0.4-auto-pv-phases] OK: 37 scenario groups, including real full ticks and phase executor; Auto PV share, storage remainder and phase minimums verified.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:stable-1.0.5-storage-protection
+> node scripts/verify-stable-1.0.5-storage-protection-telemetry.cjs
+
+[stable-1.0.5-storage-protection-telemetry] OK: 87 scenario groups + 960 deterministic bound checks; fresh/stale/recovery, modes, OCPP, persisted policy and real charging/storage ticks.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:stable-1.0.6-dc
+> node scripts/verify-stable-1.0.6-dc-control.cjs
+
+[stable-1.0.6-dc-control] OK: explicit limits, configuration bridge, AC/DC Min+PV, current domains, voltage freshness, final phase guard and alias writes.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:stable-1.0.7-notifications
+> node scripts/verify-stable-1.0.7-notifications.cjs
+
+[1.0.7 notifications] OK: immediate/30min/daily, escalation, durable dedup, recovery, categories, real loopback SMTP, rejection/backoff, encryption, TLS options, module/AC/DC fault monitoring.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:stable-1.0.8-storage-licenses
+> node scripts/verify-stable-1.0.8-storage-licenses.cjs
+
+[1.0.8 storage licenses] OK: Home 2 / Pro 10, API save/import, signed/split, pool/groups, stale status, downgrade, no license and migration.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:stable-1.0.9-access
+> node scripts/verify-stable-1.0.9-access.cjs && node scripts/verify-docs-layout.cjs
+
+[1.0.9 access] OK: real HTTP server, Admin/Installer/customer roles, direct URLs, legacy/expired sessions, auth-disabled, unlicensed activation, Installer/Admin save/reload, customer layout/device control, SmartHome-only setup navigation, encoded static path guards, setup/DP/logic denial and feature limits.
+[docs-layout] OK: 670 Markdown files under docs, local links and package paths valid.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:stable-1.0.10-security
+> node scripts/verify-stable-1.0.10-secret-guard.cjs
+
+[1.0.10 security] OK: SMTP/HMAC literals, URLs/env/private keys and token formats, runtime files, clean UI fields, obsolete bundles, real staged-index hook, redacted failures and publish gate.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:stable-1.0.11-documentation
+> npm run docs:check && node scripts/verify-stable-1.0.11-documentation.cjs
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 docs:check
+> node scripts/verify-code-documentation.cjs
+
+[code-docs] OK: 264 deutsche Modulbeschreibungen und Quellverknüpfungen synchron.
+[stable-1.0.11] Dokumentationsprüfung: gültiger Stand sowie sechs Fehlerfälle bestanden.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:stable-1.0.12-publish
+> node scripts/verify-stable-1.0.12-publish-upgrade.cjs && npm run test:npm-version-free-guard && npm run test:npm-version-free-runtime && npm run test:publish-overlay
+
+[stable-1.0.12] OK: 15 Upgrade-/Sicherheitsfälle, Sicherungen, indirekte Chunks, Wiederholung, echter Artefakt-Guard und Publish-Vertrag.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:npm-version-free-guard
+> node scripts/verify-npm-version-free-guard-static.js
+
+[npm-version-free-guard] OK: version guard runs first; publish verifies the immutable artifact without npm/TypeScript setup.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:npm-version-free-runtime
+> node scripts/verify-npm-version-free-runtime.js
+
+[npm-version-free-runtime] OK: HTTP 404 releases the version; existing and ambiguous registry responses fail closed.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:publish-overlay
+> node scripts/verify-publish-overlay.cjs
+
+[publish-overlay] Frische Repository-Kopie: vollständige Publish-Prüfkette erfolgreich ohne Entwicklungsabhängigkeiten; Produktivfreigabe bleibt getrennt.
+[publish-overlay] ZIP-Überkopieren: alte JS/CSS gesichert, aktuelle Assets bytegleich, vollständige Publish-Prüfkette erfolgreich.
+[publish-overlay] Echter Secret-Testfund blockiert unverändert, ohne Ausgabe des Werts. Keine externe Veröffentlichung.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:stable-release
+> node scripts/verify-stable-release.cjs
+
+[stable-release] OK: iobroker.nexowatt-ui@1.0.32 Metadaten konsistent (Sicherheits-Prüfstand, NICHT produktiv freigegeben).
+[stable-release] OK: 1.0.20-Speicherquellen/Writer, Heizstab-Tarif, 1.0.5-Speicherschutz, Auto/PV/Phasen und bisherige Home-/Liveness-/Memory-/Regelungsregressionen sind eingebunden.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:mesh-coordinator
+> node scripts/verify-mesh-coordinator.cjs && node scripts/verify-mesh-coordinator-access.cjs && node scripts/verify-mesh-transformer-accounting.cjs && node scripts/verify-mesh-app-lifecycle.cjs
+
+OK 99 Slaves; 100., doppelte ID und unsichere Rückfallsumme abgewiesen
+OK HTTP nur im Tailnet/Loopback; HMAC erkennt Manipulation
+OK Wiederanlauf erst nach bestätigtem Rückfall; 99 Teilnehmer innerhalb Budget
+OK Ein fehlender Slave: übrige Teilnehmer erhalten Rückfall, Altbudget bleibt reserviert
+OK Wiederverbindung mit begrenztem Wiederanlauf
+OK Hauptzähler-Ausfall setzt Wiederanlauf zurück; keine sofortige Freigabe
+OK Replay, fremder Boot, alte Revision und verspätete Antwort verlängern keine Lease
+OK Master-Neustart reserviert Maxima und verlangt neue Synchronisation
+OK Strangreserve und Phasen begrenzen zusätzlich; Null bleibt Null
+OK Finale Sicherheitsprüfung begrenzt Boost und addierte Ladepunkte; Ablauf erzwingt Null
+OK Finaler PV-/Speicher-Writer prüft aktuelle Nullgrenzen und Exportbudget
+OK Speicher-Freigabe nutzt kanonisches storage.controlMode und sperrt Farm/Sondermodi
+OK Schnelle Publish-Syntaxprüfung führt Code nicht aus und erkennt Fehler
+OK Microgrid-Meldung: Diagnose still, Anlauf normal, Betriebsausfall kritisch, ein Ereignis
+OK echte parallele HTTP-Kommunikation: 99 Slaves, Handshake + Freigabe in 232 ms (Loopback, kein Feldnachweis)
+OK 99 warme HTTP-Kanäle im 250-ms-Takt mit Archiv-fsync: 792 Antworten, P95 56 ms, Maximum 59 ms (Loopback)
+OK unerreichbarer Slave-Kanal blockiert andere 98 Kanäle nicht
+OK verschlüsselte Konfiguration und Neustart
+OK fehlende aktive Konfiguration bleibt durch Marker verriegelt
+OK beschädigte persistierte Konfiguration verriegelt
+Mesh coordinator: 20 Prüfgruppen bestanden.
+OK Express: Mesh-Rechte, alte Kunden-Wildcards, individuelle Paarung, Schlüssel-Redaktion, HMAC, 64-KiB-Limit; Auth=true
+OK Express: Mesh-Rechte, alte Kunden-Wildcards, individuelle Paarung, Schlüssel-Redaktion, HMAC, 64-KiB-Limit; Auth=false
+OK 250-ms-Profil strikt validiert; Freigabe und Messwertalter passen zusammen
+OK Schnelle EMS-Ticks verschieben nicht die Messwertbestätigung desselben Befehls
+OK Bedarfsverteilung: freie Häuser lokal, belastete Häuser nutzen freie Anteile
+OK Wartende AC/DC-Lader melden Bedarf vor Verbrauch; knappe Leistung wird nicht unter Mindestwerte zerteilt
+OK Trafo-Hysterese, Export, Phase und Strang begrenzen unabhängig
+OK 99 Slaves: kurze Takte, 750-ms-Anwendung, keine Befehlsjagd; Ausfall bleibt reserviert
+OK Offline-Zähleroriginal persistiert; getrennte kumulative Register und Quellenzeiten
+OK Nachlieferung: ACK nach dauerhafter Speicherung; Kopie bleibt lokal; Neustartabgleich
+OK Dubletten idempotent; geänderte Dublette, Lücke, falsches Haus und fremdes ACK abgewiesen
+OK Zählerrücksprung über Lücke und Neustart gesperrt; neue Epoche startet getrennt
+OK Archivfehler stoppt ACK, nicht die unabhängige Regelfunktion
+OK Abrechnung: genaue Randstände, Centrechnung, Teilzeitraum, keine überbrückten Zählerwechsel
+OK Gerissene Datei wird erkannt und nicht automatisch repariert oder bestätigt
+OK Betriebsvorgaben persistieren ohne Protokollneustart; technisch unzulässige Werte gesperrt
+Mesh transformer/accounting: 14 Prüfgruppen bestanden.
+OK Nicht installiert: keine Timer, Kommunikation, Aufzeichnung oder Konfiguration
+OK Installiert/inaktiv: Einrichtung möglich; Aktivieren/Aus/Reaktivieren folgen dem AppCenter
+OK Versionsumstieg: bestehende aktive Anlage sichtbar, Paarung/Grenzen/Protokoll erhalten, einmalige Migration
+OK Manipuliertes Aus-Flag: Rückfall bleibt wirksam; keine weitere Netz-/Archivkommunikation
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:zero-export-pv
+> node scripts/verify-zero-export-pv-coordinator.cjs && node scripts/verify-zero-export-charging.cjs && node scripts/verify-heating-rod-central-zero-export.js && node scripts/verify-zero-export-storage-probe.cjs && node scripts/verify-zero-export-appcenter.cjs && node scripts/verify-zero-export-core.cjs && node scripts/verify-heating-rod-zero-export-tariff.cjs
+
+[zero-export-pv] PASS Nulleinspeisung tagsüber: EV erhält seine echte einphasige Mindestlast
+[zero-export-pv] PASS PV-Reaktion allein reicht nicht: erst das physikalische Budget übernimmt
+[zero-export-pv] PASS Zufällige Nullbilanz ohne PV-Anstieg bestätigt keine neue Solarleistung
+[zero-export-pv] PASS PV wird gemeinsames Budget: vorherige Prüflast erhält keinen doppelten Leistungsanspruch
+[zero-export-pv] PASS Netzbezug: kein dauerhafter PV-Versuch und gemeinsamer Wiederholschutz
+[zero-export-pv] PASS Batterieentladung bei 0 W NVP: kein dauerhafter PV-Versuch und gemeinsamer Wiederholschutz
+[zero-export-pv] PASS Bereits vorhandener Netzbezug oder Batterieentladung verhindert einen Start
+[zero-export-pv] PASS Ein Versuch gleichzeitig: EV und Heizstab addieren ihre Prüflasten nicht
+[zero-export-pv] PASS Priorität: bereits physikalisch versorgte Last blockiert keinen zulässigen Heizstab
+[zero-export-pv] PASS Priorität: DC-Mindestleistung oberhalb Prüflastgrenze blockiert keinen zulässigen Heizstab
+[zero-export-pv] PASS Priorität: lokales Leistungslimit unter Mindestlast blockiert keinen zulässigen Heizstab
+[zero-export-pv] PASS DC: definierte Mindestleistung wird gewährt, niemals durch AC-6-A-Werte ersetzt
+[zero-export-pv] PASS DC: Mindestleistung, Gesamtlimit und Zusatzleistungsgrenze gelten gleichzeitig
+[zero-export-pv] PASS Geänderte technische Mindestleistung entzieht eine inzwischen unzulässige Lease
+[zero-export-pv] PASS NVP veraltet: aktive Lease wird sofort aufgehoben
+[zero-export-pv] PASS PV veraltet: aktive Lease wird sofort aufgehoben
+[zero-export-pv] PASS Nacht: aktive Lease wird sofort aufgehoben
+[zero-export-pv] PASS Batteriemessung fehlt: aktive Lease wird sofort aufgehoben
+[zero-export-pv] PASS Schutzhülle sperrt: aktive Lease wird sofort aufgehoben
+[zero-export-pv] PASS externe Autorität sperrt: aktive Lease wird sofort aufgehoben
+[zero-export-pv] PASS Tarifabregelung: aktive Lease wird sofort aufgehoben
+[zero-export-pv] PASS Veralteter Core-Snapshot und fehlende Verbraucherrückmeldung geben keine Leistung frei
+[zero-export-pv] PASS Wiederholte Anforderungen verlängern keine Lease
+[zero-export-pv] PASS Keine Reaktion des Fahrzeugs: begrenzter Versuch statt Dauerfreigabe
+[zero-export-pv] PASS Phasenumschaltung: STOP-/Schaltwartezeit gilt nicht als neue PV-Last
+[zero-export-pv] PASS Phasenumschaltung verliert bei veraltetem Lastwert sofort ihre Prüffreigabe
+[zero-export-pv] PASS Phasenumschaltung hängt: auch laufende Rückmeldungen verlängern 90 s Wartezeit nicht
+[zero-export-pv] PASS Auch während Phasen-STOP werden 20 Wh Fremdenergie begrenzt
+[zero-export-pv] PASS Uhr-Rücksprung hebt aktive Prüflast auf und verhindert sofortige Neufreigabe
+[zero-export-pv] PASS 80 W Importbias: bestätigte 1.380-W-Mindestlast bleibt bei 1.300 W PV stabil
+[zero-export-pv] PASS Importbias wird erst nach Übergabe an den nächsten Core-Zyklus separat gehalten
+[zero-export-pv] PASS Importbias hält nur bestätigte Leistung; größerer Sollwert benötigt eigenen Prüfschritt
+[zero-export-pv] PASS Importbias ist kein Batterieanteil und übersteht weder Laststopp noch veraltete Messung
+[zero-export-pv] PASS Importbias: eine gehaltene EV-Mindestlast blockiert keine spätere Heizstab-Prüfung
+[zero-export-pv] PASS Importbias wird beim Halten nicht über die konfigurierte Summe ausgedehnt
+[zero-export-pv] PASS Importbias: zwei bestätigte Verbraucher bekommen zusammen höchstens 80 W
+[zero-export-pv] PASS Importbias hebt geänderte technische Mindestleistung nicht auf
+[zero-export-pv] PASS Uhr-Rücksprung entzieht auch den zuvor bestätigten Import-Halteanteil
+[zero-export-pv] PASS Diagnose und ausgeschaltete Strategie bleiben auch bei guten Messungen passiv
+[zero-export-pv] PASS Abschalten zwischen Core-Ticks entzieht beim Writer die bestehende Freigabe
+[zero-export-pv] PASS Quellenprüfung: echte PV und NVP genügen bei Anlage ohne Speicher
+[zero-export-pv] PASS Quellenprüfung: Forecast oder neu veröffentlichte Bilanz macht alte PV nicht frisch
+[zero-export-pv] PASS Quellenprüfung: frische 0-W-PV bleibt 0 W; fehlender Wert wird nicht als frisch behandelt
+[zero-export-pv] PASS Quellenprüfung: NVP-Alter addiert Originalmessung und Snapshot-Verzögerung
+[zero-export-pv] PASS Quellenprüfung: aktive Batterie verlangt echten gerichteten Leistungsnachweis
+[zero-export-pv] PASS Quellenprüfung: ein einzelner Lade-Kanal schließt Batterieentladung nicht aus
+[zero-export-pv] PASS Quellenprüfung: Speicherfarm-Netto-Laden darf Entladung eines zweiten Speichers nicht verbergen
+[zero-export-pv] PASS Quellenprüfung: ausstehende oder überholte externe Netzvorgabe sperrt Prüflast
+[zero-export-pv] PASS Unbestätigte Prüflast bleibt von einem zweiten PV-Budget ausgeschlossen
+[zero-export-pv] PASS Teilweise zugewiesene laufende Last reserviert den gesamten erworbenen Prüflastanteil
+[zero-export-pv] 50 passed, 0 failed
+[zero-export-charging] OK: AC/DC minima, exclusive lease, PV accounting, limits, expiry and safe phase transitions
+[zero-export-charging] real runtime ticks and writes OK
+[heating-rod-central-zero-export] OK: zentrale Freigabe, reale Stufen, Frische, Grenzen, Rücknahme und finaler Writer-Guard.
+[zero-export-storage] OK: Schutzvoraussetzungen, echter Split-Writer, getrennte Budgetreservierung, Total-Cap und Lease-Widerruf.
+[zero-export-appcenter] OK: Alias-/Save-Vertrag, komplette Kartenbreite, WR-Zuordnung/Neuzeichnen, Messwerte, Defaults und aufklappbare Diagnose in Quelle/Typed Mirror.
+[zero-export-core] OK: Core-Reserve, echte Wärmemessung, Null/0, Prüflast, 120 Netz/PV-Rückkopplungszyklen und Batterieabzug.
+[heating-rod-zero-export-tariff] OK: 5 echte Tarif-Ticks ohne PV/Strategie; explizite Strategiegrenzen, Gesamtgrenzen, PV-only, Aus/Diagnose, Grant-Frische, NVP und Batterie bleiben geschützt.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:stable-1.0.18-charging
+> node scripts/verify-stable-1.0.18-charging.cjs
+
+[1.0.18] OK: begrenzte Überbrückung, Auszeit, Mess-/Schutzgrenzen, gemeinsames Budget, Boost AC/DC und Phasenwahl
+[1.0.18] OK: echte Regelticks/Writer für Boost 1p/3p, Wolke45s, Wiederanlaufsperre180s und Erholung
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:stable-1.0.19-grid-share
+> node scripts/verify-stable-1.0.19-grid-share.cjs
+
+[1.0.19] OK: Netzanteil+PV, 120 Mehr-LP-Fälle, Istreservierung, Phasen und Zielplanung
+[1.0.19] OK: reale Writer Auto/Boost/PV-Verlust, 1p/3p und unveränderte Bestandsanlage
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:stable-1.0.20-storage
+> node scripts/verify-zero-export-storage-credit.cjs && node scripts/verify-stable-1.0.20-storage-allocation.cjs && node scripts/verify-stable-1.0.20-storage-grid-share.cjs
+
+[zero-export-storage-credit] OK: frischer Nettoanteil, Hausvorrang, Reserven, Akzeptanz und Farm/Split-Frische
+[1.0.20] OK: getrennte Quellen, 240 Mehr-LP-Fälle, Schutz, Istreservierung, Min+PV und konservative Phasenwahl
+[1.0.20-storage-grid-share] OK: 42 reale Regler-/Writer-Szenarien, Netzbezug, Speicherfreigabe/-schutz, Mindestladen und Widerruf.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:zero-export-inverter-mapping
+> node scripts/verify-zero-export-inverter-mapping.cjs
+
+[zero-export-inverter-mapping] OK: 33 Konfigurations-, Konflikt-, Alias-, Totband- und Writer-Fälle bestanden.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:cra
+> node scripts/verify-cra-auth.cjs && node scripts/verify-cra-network.cjs && node scripts/verify-cra-frontend.cjs && node scripts/verify-cra-tariff.cjs && node scripts/verify-release-approval.cjs --self-test && node scripts/verify-cra-dependency-regressions.cjs && npm run test:stable-1.0.10-security && node scripts/verify-cra-admin-router.cjs && npm run test:sbom && npm run test:license-secret && npm run test:cra-weather && npm run test:cra-credential-state
+
+PASS anonyme Kundenschreibversuche benötigen Sitzung; Kunde bedient eigene Settings
+PASS unknown scope umgeht weder Peak-Shaving-Sperre noch Tarifzwang
+PASS Origin null/fremde Origin werden vor Mutationen gesperrt, eigene Origin funktioniert
+PASS fehlerhaft kodierte Cookies erzeugen keinen Serverfehler
+PASS Login rotiert Browser-Sitzung, Logout widerruft Token
+PASS Kontosperre, Löschung und Passwortwechsel widerrufen vorhandene Sessions
+PASS Gruppen-Demotion wirkt ohne Logout und ohne Wartezeit
+PASS Sessionzahl pro Konto ist auf acht begrenzt
+PASS Prototype-Pollution direkt, per Arrays und HTTP ist vor Merge/Mutation blockiert
+PASS Flow-Sollwertgrenzen werden serverseitig vor jedem Gerätetarget durchgesetzt
+PASS öffentliche States und selbst privilegierter SSE-LIVE-Kanal enthalten keine Stationstokens
+PASS Stationsmodus-Freigabe gilt ebenso für set-mode und mode Alias
+PASS neue oder geänderte kurze Stationstokens werden beim Save und Import abgelehnt
+PASS fehlende oder ungültige Policy fällt sicher auf session zurück
+PASS fehlender Passwort-Rückruf läuft nach fünf Sekunden aus und gibt Login-Kapazität frei
+PASS Installer-Mapping bleibt bei auth=false und all geschützt
+PASS Installer-Mapping bleibt bei auth=false und lan geschützt
+PASS Installer-Mapping bleibt bei auth=false und session geschützt
+PASS parallele Logins reservieren Kapazität vor der Passwortprüfung
+CRA AUTH: 19 checks passed; real local HTTP, mocked ioBroker accounts/states, no hardware.
+CRA network verification 2026-10-28T06:43:16.900Z | v24.22.1 | linux | generated runtime
+SHA256 lib/mesh-coordinator-contract.js 82c9959cd034b96511bfac1e0e19df9750af91d0a1614c2135b80d7a7e21e7e6
+SHA256 lib/mesh-coordinator-protocol.js 356a151f811481b35e3c8e15dd4bc8cd307cdd0e734a614b07d0af541f1f90f1
+SHA256 lib/mesh-coordinator.js ecdb286c30aa91b0ab4a93a925311af6dd1be77030e3bb56a1d5ce8cbc3a66d4
+SHA256 lib/notification-mail.js 63ec344e52b32272e307750b7fffa63a07fe0a8c9fcfedec9ef50d52f897977c
+OK NET-01: v2-Anlauf, signierter Verkehr, Hello-Replay verändert keinen aktiven Regelzustand
+OK NET-02: Reconnect nach gleichem Boot und echter Slave-Neustart erholen sich kontrolliert
+OK NET-03: Master-Neustart, altes Hello und alter Exchange können keine Sitzung vorwegnehmen
+OK NET-04: Abgelaufene, manipulierte und fremde Challenges; vertauschte/alte Antworten abgewiesen
+OK NET-05: V1-Peers werden ausdrücklich abgewiesen; ungültige HMACs erreichen keine Sitzung
+OK NET-06: Tatsächliche IPv4/IPv6-Tailnet-/Loopbackadressen geprüft; Fremdnetze abgewiesen
+OK NET-07: Echter Loopback-HTTP-Kanal; DNS-Rebinding blockiert vor Socket/Datensendung
+OK NET-08: Antwort-/Anfragelimit, Deadline, fremder Endpoint und Protokollfehler
+OK NET-09: HTTPS verlangt explizit TLS >=1.2 und Gegenstellenprüfung (Optionsprüfung)
+OK NET-10: SMTP-Ledger exklusiv/0600/atomar; vorbereiteter alter Temp-Symlink bleibt wirkungslos
+OK NET-11: Fehler vor Rename erhält vorhandenes Ledger und räumt neue Tempdatei auf
+OK NET-12: SMTP erfordert TLS, keine URL-/Dateizugriffe, keine Rohfehler oder Secrets
+PASS 12 network/security groups; no hardware/Tailnet/real SMTP test
+[verify-cra-frontend] PASS 46 Regressionen (Originalfunktionen; DOM-/Fetch-/Cache-Doubles).
+{
+  "suite": "UI-CRA-NET-04 / NW-HTTPS-5S",
+  "source": "ems/services/tariff-provider-registry.js",
+  "node": "v24.22.1",
+  "environment": "real loopback HTTP stream behind simulated HTTPS URL; mocked HTTPS providers/DNS; no production or real TLS access",
+  "passed": 23,
+  "timings": {
+    "oauthSharedBudgetMs": 130,
+    "maximumConfiguredBudgetMs": 5003
+  },
+  "checks": [
+    "bounded-stream-positive-via-simulated-https",
+    "redirect-never-reaches-target",
+    "streamed-response-limit",
+    "declared-response-limit",
+    "body-total-timeout",
+    "provider-error-redacted",
+    "all-http-rejected-before-network",
+    "invalid-url-and-userinfo-rejected",
+    "https-custom-credential-contract-mock",
+    "https-oauth-one-signal-positive",
+    "oauth-chain-shares-one-short-budget",
+    "five-second-cap-includes-oauth-and-noncooperative-dns-mock",
+    "offline-error-redacted",
+    "request-size-limit-before-network",
+    "json-types-completeness-bounds-atomic-rejection",
+    "negative-prices-and-epoch-types-positive",
+    "interval-count-and-overlap-rejected",
+    "tibber-and-energyzero-complete-envelope-check",
+    "entsoe-explicit-xml-decimal-positive-and-malformed-rejection",
+    "invalid-provider-response-does-not-refresh-states-or-timestamps",
+    "expired-and-future-only-responses-keep-good-cache-and-success-time",
+    "valid-current-provider-result-commits-new-price-and-success",
+    "unchanged-ticks-preserve-data-timestamps-and-expiry-clears-once"
+  ]
+}
+[release-approval] Regression OK: unvollständige Freigaben blockiert. Keine reale Freigabe gesetzt.
+PASS: normal JSON request preserved
+PASS: oversized body rejected with HTTP 413
+PASS: malformed JSON rejected with HTTP 400
+PASS: nested query parsing preserved after rejected requests
+PASS: crafted qs constructor/isBuffer round-trip does not throw
+PASS: invalid parser size rejected at construction
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:stable-1.0.10-security
+> node scripts/verify-stable-1.0.10-secret-guard.cjs
+
+[1.0.10 security] OK: SMTP/HMAC literals, URLs/env/private keys and token formats, runtime files, clean UI fields, obsolete bundles, real staged-index hook, redacted failures and publish gate.
+[verify-cra-admin-router] PASS 44 Fälle; react-router-dom 7.18.4, echte HashRouter-/Route-Komponenten, Node-Render und kontrollierte Auth-Hookzustände; kein echter Browserlebenszyklus.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:sbom
+> node scripts/verify-cra-sbom-regressions.cjs
+
+[sbom regression] PASS offline generation from clean repository without either node_modules tree
+[sbom regression] PASS release generation never seals the artifact manifest
+[sbom regression] PASS npm automatically included package.json is bound despite absence from files list
+[sbom regression] PASS reference dependencies are not claimed to be an actual live-device inventory
+[sbom regression] PASS repeated publication verification is read-only and needs no npm on PATH
+[sbom regression] PASS changed root package dependency declaration is rejected
+[sbom regression] PASS changed lockfile is rejected by verifier and generator
+[sbom regression] PASS changed Admin asset cannot be silently re-described
+[sbom regression] PASS changed Admin source requires a genuine new build
+[sbom regression] PASS tampered SBOM is rejected
+[sbom regression] PASS missing SBOM is rejected
+[sbom regression] PASS omitted hash record is rejected
+[sbom regression] PASS missing archived Admin evidence blocks generation without rewriting SBOM
+[sbom regression] PASS partial Admin dependency installation is not accepted as the recorded build
+[sbom regression] PASS prepared npm package verifies without source, lockfiles, dependencies or npm
+[sbom regression] PASS partial source repository must not pretend to be a prepared npm package
+[sbom regression] PASS unsafe paths and graph references fail closed
+[sbom regression] OK: 17 Prüfgruppen. Lokal auf linux; kein echter npm-Publish und keine Geräteprüfung.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:license-secret
+> node scripts/verify-license-secret-externalization.cjs && node --test test/license-compatibility-negative.test.cjs
+
+[license-compatibility] OK: 6 legacy/private formats, 9 missing/malformed ENV cases, UUID/signature rejection, trial continuation/expiry/rollback, no key output.
+✔ 44 negative Lizenzproben: Edition, Trialdauer und Trial-zu-Voll bleiben signaturgebunden (907.117792ms)
+✔ 18 Guard-Proben: Ausnahme nur für exakten Altvertrag; andere Fundstellen bleiben blockiert (301.077736ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1614.496287
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:cra-weather
+> node scripts/verify-cra-weather.cjs
+
+{
+  "suite": "UI-CRA-NET-05",
+  "source": "ems/services/open-meteo-pv-forecast.js",
+  "node": "v24.22.1",
+  "environment": "isolated HTTPS/adapter fixtures; real short deadline timers; no Pi5/provider/TLS-certificate integration",
+  "passed": 16,
+  "checks": [
+    "https-positive-and-max-5000-ms-even-if-caller-requests-longer",
+    "reject-http-userinfo-unknown-host-before-network",
+    "dns-connect-stall-aborted-by-independent-real-timer",
+    "trickling-body-cannot-reset-overall-timeout",
+    "connection-error-never-exposes-url-or-token",
+    "redirect-and-http-error-body-never-exposed",
+    "declared-and-streamed-response-size-limits",
+    "json-content-type-encoding-and-truncated-body",
+    "weather-full-schema-rejects-missing-null-string-nan-and-ranges",
+    "weather-invalid-response-never-partially-writes-provider-values",
+    "pv-strict-series-rejects-malformed-values-and-partial-lengths",
+    "valid-night-zero-production-is-distinct-from-invalid-response",
+    "pv-incomplete-plane-and-mixed-time-grid-cannot-be-published-as-full-forecast",
+    "failed-refresh-keeps-last-good-timestamp-and-explicit-stale-status",
+    "provider-fallbacks-share-one-monotone-deadline-with-no-reset",
+    "credential-source-priority-without-hardcoded-key"
+  ]
+}
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:cra-credential-state
+> node scripts/verify-cra-credential-state.cjs
+
+{
+  "suite": "UI-CRA-SECRET-06",
+  "source": "main.js",
+  "node": "v24.22.1",
+  "environment": "isolated adapter object/state fixtures; no real ioBroker ACL authorization integration",
+  "passed": 9,
+  "checks": [
+    "startup-migrates-existing-config-and-both-backup-acls",
+    "first-creation-is-restricted-and-respects-instance-namespace",
+    "persist-verifies-acl-before-writing-and-retains-config",
+    "partner-cas-and-dedicated-save-guards-remain-real-before-credential-write",
+    "acl-failure-blocks-config-write-with-sanitized-error",
+    "unconfirmed-acl-update-blocks-write",
+    "backup-rotation-checks-both-targets-and-preserves-values",
+    "failed-protection-prevents-all-backup-credential-writes",
+    "simulation-config-backup-is-protected-and-fails-closed"
+  ]
+}
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:heating-rod-night-ramp
+> node scripts/verify-heating-rod-night-ramp.cjs && node scripts/verify-heating-rod-night-ramp.cjs --runtime
+
+[heating-rod-night-ramp:source] PASS: 11 echte Tick-/Verlaufsgruppen; Nacht, OFF-Fehler, Restart, fehlendes/widersprüchliches Readback, Manual/Boost, Regelung AUS, Morgenrampe, Defizit/Batterie, asynchrone Nachtgrenze.
+[heating-rod-night-ramp:runtime] PASS: 11 echte Tick-/Verlaufsgruppen; Nacht, OFF-Fehler, Restart, fehlendes/widersprüchliches Readback, Manual/Boost, Regelung AUS, Morgenrampe, Defizit/Batterie, asynchrone Nachtgrenze.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:heating-rod-pv-freshness
+> node scripts/verify-heating-rod-pv-freshness.cjs && node scripts/verify-heating-rod-pv-freshness.cjs --runtime
+
+{
+  "status": "PASS",
+  "groups": 15,
+  "baselineRegressionReproduced": false,
+  "source": "canonical-source",
+  "scope": "Kontrollierte Mess-I/O und Zeit, kein Hardwaretest",
+  "checks": [
+    "Frische tatsächliche 9 kW PV und gedeckte 4,5 kW funktionieren ohne Prognose",
+    "Morgenrampe schaltet einzeln und wartet zwischen bestätigten Stufen",
+    "Forecast allein startet bei 0 W Ist-PV keine Stufe, auch nach Neustart",
+    "Forecast-Snapshot und Quelldaten haben begrenztes Alter und strikte Typen",
+    "Zeitlose/alte/future PV-Caches erzeugen keine Auto-Freigabe",
+    "Nachmittags-Peak wird nicht zu momentan verfügbarem PV-Budget",
+    "Speicherresolver erhält strictStale und veraltete Ladeleistung gibt kein Budget",
+    "Fehlende oder bilanzierte Batterie ist kein bestätigter Nullfluss",
+    "Farm-Bruttoentladung sperrt auch bei Netto-Null oder Netto-Ladung",
+    "Verlorene Messung beendet eine laufende Probe ohne fiktiven Erfolg",
+    "PV-Anstieg kann Batterieentladung oder Netzbezug nicht bestätigen",
+    "Bestätigte Stufen reduzieren nachhaltige 100/250-W-Batterieversorgung nach höchstens 3 s",
+    "Relaiszustand/Sollwert allein bestätigt keine Heizleistung",
+    "Reduziertes zentrales Budget überstimmt laufendes Beobachtungsfenster",
+    "Zentralmodus bleibt exklusiv, Diagnose kann alten Forecastpfad nicht aktivieren"
+  ]
+}
+{
+  "status": "PASS",
+  "groups": 15,
+  "baselineRegressionReproduced": false,
+  "source": "generated-runtime",
+  "scope": "Kontrollierte Mess-I/O und Zeit, kein Hardwaretest",
+  "checks": [
+    "Frische tatsächliche 9 kW PV und gedeckte 4,5 kW funktionieren ohne Prognose",
+    "Morgenrampe schaltet einzeln und wartet zwischen bestätigten Stufen",
+    "Forecast allein startet bei 0 W Ist-PV keine Stufe, auch nach Neustart",
+    "Forecast-Snapshot und Quelldaten haben begrenztes Alter und strikte Typen",
+    "Zeitlose/alte/future PV-Caches erzeugen keine Auto-Freigabe",
+    "Nachmittags-Peak wird nicht zu momentan verfügbarem PV-Budget",
+    "Speicherresolver erhält strictStale und veraltete Ladeleistung gibt kein Budget",
+    "Fehlende oder bilanzierte Batterie ist kein bestätigter Nullfluss",
+    "Farm-Bruttoentladung sperrt auch bei Netto-Null oder Netto-Ladung",
+    "Verlorene Messung beendet eine laufende Probe ohne fiktiven Erfolg",
+    "PV-Anstieg kann Batterieentladung oder Netzbezug nicht bestätigen",
+    "Bestätigte Stufen reduzieren nachhaltige 100/250-W-Batterieversorgung nach höchstens 3 s",
+    "Relaiszustand/Sollwert allein bestätigt keine Heizleistung",
+    "Reduziertes zentrales Budget überstimmt laufendes Beobachtungsfenster",
+    "Zentralmodus bleibt exklusiv, Diagnose kann alten Forecastpfad nicht aktivieren"
+  ]
+}
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:heating-rod-night-ui
+> node scripts/verify-heating-rod-night-ui.cjs
+
+  PASS src-ts/runtime-executables/www/app.ts: Nachtstatus überlagert den Forecastcode
+  PASS src-ts/runtime-executables/www/app.ts: Morgen gibt die aktuelle Reglerantwort wieder
+  PASS src-ts/runtime-executables/www/app.ts: expliziter Modus manual1 überstimmt alten Nacht-State
+  PASS src-ts/runtime-executables/www/app.ts: expliziter Modus manual2 überstimmt alten Nacht-State
+  PASS src-ts/runtime-executables/www/app.ts: expliziter Modus manual3 überstimmt alten Nacht-State
+  PASS src-ts/runtime-executables/www/app.ts: expliziter Modus off überstimmt alten Nacht-State
+  PASS src-ts/runtime-executables/www/app.ts: Boost bleibt sichtbar
+  PASS src-ts/runtime-executables/www/app.ts: AUS oder nur Nachtfenster ist kein aktiver Automatikblock
+  PASS src-ts/runtime-executables/www/app.ts: ganztägige Sperre verspricht keinen Morgenstart
+  PASS src-ts/runtime-executables/www/app.ts: ungültige Uhrzeit bleibt neutral
+  PASS src-ts/runtime-executables/www/app.ts: laufende Stufen und Fehlerrückmeldung werden nicht als AUS behauptet
+  PASS src-ts/runtime-executables/www/app.ts: Thermik erhält keinen Heizstab-Nachttext
+  PASS src-ts/runtime-mirrors/www/app.ts: Nachtstatus überlagert den Forecastcode
+  PASS src-ts/runtime-mirrors/www/app.ts: Morgen gibt die aktuelle Reglerantwort wieder
+  PASS src-ts/runtime-mirrors/www/app.ts: expliziter Modus manual1 überstimmt alten Nacht-State
+  PASS src-ts/runtime-mirrors/www/app.ts: expliziter Modus manual2 überstimmt alten Nacht-State
+  PASS src-ts/runtime-mirrors/www/app.ts: expliziter Modus manual3 überstimmt alten Nacht-State
+  PASS src-ts/runtime-mirrors/www/app.ts: expliziter Modus off überstimmt alten Nacht-State
+  PASS src-ts/runtime-mirrors/www/app.ts: Boost bleibt sichtbar
+  PASS src-ts/runtime-mirrors/www/app.ts: AUS oder nur Nachtfenster ist kein aktiver Automatikblock
+  PASS src-ts/runtime-mirrors/www/app.ts: ganztägige Sperre verspricht keinen Morgenstart
+  PASS src-ts/runtime-mirrors/www/app.ts: ungültige Uhrzeit bleibt neutral
+  PASS src-ts/runtime-mirrors/www/app.ts: laufende Stufen und Fehlerrückmeldung werden nicht als AUS behauptet
+  PASS src-ts/runtime-mirrors/www/app.ts: Thermik erhält keinen Heizstab-Nachttext
+  PASS www/app.js: Nachtstatus überlagert den Forecastcode
+  PASS www/app.js: Morgen gibt die aktuelle Reglerantwort wieder
+  PASS www/app.js: expliziter Modus manual1 überstimmt alten Nacht-State
+  PASS www/app.js: expliziter Modus manual2 überstimmt alten Nacht-State
+  PASS www/app.js: expliziter Modus manual3 überstimmt alten Nacht-State
+  PASS www/app.js: expliziter Modus off überstimmt alten Nacht-State
+  PASS www/app.js: Boost bleibt sichtbar
+  PASS www/app.js: AUS oder nur Nachtfenster ist kein aktiver Automatikblock
+  PASS www/app.js: ganztägige Sperre verspricht keinen Morgenstart
+  PASS www/app.js: ungültige Uhrzeit bleibt neutral
+  PASS www/app.js: laufende Stufen und Fehlerrückmeldung werden nicht als AUS behauptet
+  PASS www/app.js: Thermik erhält keinen Heizstab-Nachttext
+  PASS src-ts/runtime-executables/main.ts: API liefert typisierte Controller-Nachtwerte
+  PASS src-ts/runtime-executables/main.ts: API verwirft falsche Typen und begrenzt Diagnosen
+  PASS src-ts/runtime-mirrors/main.ts: API liefert typisierte Controller-Nachtwerte
+  PASS src-ts/runtime-mirrors/main.ts: API verwirft falsche Typen und begrenzt Diagnosen
+  PASS main.js: API liefert typisierte Controller-Nachtwerte
+  PASS main.js: API verwirft falsche Typen und begrenzt Diagnosen
+[heating-rod-night-ui] PASS: 42 Prüfgruppen; Quellen/Spiegel/ausgelieferte Runtime, DOM- und API-Fixtures, keine Hardware.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:nvp-topology
+> npm run typecheck:nvp && node --test test/nvp-*.test.cjs
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 typecheck:nvp
+> tsc -p tsconfig.nvp-topology.json
+
+✔ alte Konfiguration bleibt statisch ohne zusätzliche Objektabfragen (2.592567ms)
+✔ M0 und M1 über verschiedene Aliasnamen auf derselben Quelle werden abgewiesen (14.773967ms)
+✔ Aliaszyklus und fehlender Datenpunkt bleiben sichtbar ungültig (4.402471ms)
+✔ Zuordnung zu fremdem Speicher und fremder AC-Istleistung wird abgewiesen (5.551521ms)
+✔ atomare Änderung erhöht Version einmal; alter Browserstand und offene Freigabe blockieren (7.087338ms)
+✔ native oder importierter aktiver Betrieb kann die technische Sperre nicht umgehen (4.283857ms)
+✔ Persistenzpfad lehnt stille Entfernung und unversionierte Änderung ab (7.145802ms)
+✔ Änderung der Bestandsfarm invalidiert die bisherige NVP-Gerätebindung (4.403837ms)
+✔ jede NVP-Route besitzt die Installer-Middleware und no-store (1.795977ms)
+✔ alte Diagnoseversion wird nach Zuordnungswechsel ohne übernommene Messwerte als ausstehend ausgegeben (2.476472ms)
+✔ ungespeicherte Diagnose ruft nur Vorschau auf und verändert keine Konfiguration (9.27364ms)
+✔ gleichzeitiger Speicherversuch wird abgewiesen; Version und Konfiguration bleiben atomar (1.984888ms)
+✔ hängende Objektprüfung belegt höchstens vier DB-Aufträge und einen Adapter-Slot (19.823816ms)
+✔ NVP HTTP: Rollen, atomare Speicherung, Import, Aktivierungssperre und öffentliche Diagnosefilter (239.359047ms)
+✔ NVP HTTP: alle Gesamtpatch-Writer schließen parallele veraltete Speicherungen aus (105.161654ms)
+✔ T01/T02: absent topology stays static; second meter is never discovered or assigned (5.252611ms)
+✔ T03/T28: topology rejects duplicate real/alias sources and corrupt hierarchy (3.279016ms)
+✔ T28: strict numeric values, literal zero limits and explicit absent M1 limits (1.471305ms)
+✔ NVP-03/NVP-10: groups remain homogeneous and physical control cannot cross areas (0.528501ms)
+✔ T23/T29: active external profiles and unsupported electrical limits do not pretend to be verified (0.584975ms)
+✔ T04–T07: only contained actors affect local point; outer storage cannot remove M1 export (0.998554ms)
+✔ T11: all five independent specification examples including forced support (0.820081ms)
+✔ T12: transition never grants the expected 30 kW of support before it exists (0.193324ms)
+✔ T08–T10: allocated independent maxima cannot reuse one site budget (11.800618ms)
+✔ T08/T09: property test every extreme combination against physical summation for 250 deterministic cases (16.655014ms)
+✔ T13–T15: infeasible residual and empty interval never produce usable maximum grants (0.903805ms)
+✔ T31: old external charge right blocks withdrawal of ESS support until effective curtailment (0.784282ms)
+✔ T16/T17/T18: PV uses strictest generation limit; stale EVU and unconverted export limits fail closed (0.858988ms)
+✔ T19/T32: shared AC port and optional external charging never become fictitious generation capacity (0.500891ms)
+✔ T20: measurements retain units/sign and reject stale, skewed, future or malformed values (2.858471ms)
+✔ T21/T22: receive ACK cannot narrow rights; exact fresh application can; duplicate and old sessions fail (2.476432ms)
+✔ T23/T26/T27: timeout and restart preserve possible power; only confirmed fallback can release ownership (1.480729ms)
+✔ unknown hardware profile cannot generate executable grant (0.484416ms)
+✔ reserves are subtracted once and zero is never treated as missing (0.504473ms)
+✔ T04: M1-Eigenverbrauch folgt ausschließlich M1, nicht dem äußeren Handelsfahrpunkt (7.017446ms)
+✔ T05: gemeinsamer lokaler Fehler wird einmal auf zwei Batterien verteilt (0.773056ms)
+✔ T06/T07: äußerer TESVOLT ist keine lokale Senke für M1-Nulleinspeisung (1.110402ms)
+✔ Nulleinspeisung fordert nur tatsächlich benötigte lokale Ladung an (0.551916ms)
+✔ volle Batterie erhält keine fiktive Aufnahmekapazität (0.414673ms)
+✔ fehlende, manipulierte und veraltete SoC-Telemetrie blockiert Leistungsvorschlag (0.744887ms)
+✔ mehrere lokale Regler auf demselben Bilanzfehler werden abgewiesen (0.229983ms)
+✔ Peak-Shaving und Tarif benötigen getrennte echte Planervorgaben (4.021373ms)
+✔ T25: M0-Sättigungsfeedback verhindert Auflaufen des Gruppen-Rampenzustands (0.578453ms)
+✔ Rampen-/Policyzustände bleiben zwischen M0 und M1 getrennt (0.764848ms)
+✔ falsche Konfigurationsversion oder nicht frische Messwerte führen nie zu Null-Ersatzmessung (1.189984ms)
+✔ statischer Bestand bleibt ohne Gruppenplanung (0.433317ms)
+✔ aktive App verwendet eigene Ziele und SoC statt globaler Single-/Farm-Policies (0.644559ms)
+✔ SoC-Grenzen gelten pro Mitglied und vererben sich nicht vom ersten Gruppenspeicher (0.462278ms)
+✔ eigener Peak-Zielwert ist ohne Fremdplan gültig; nur frischer Override ersetzt ihn (2.556641ms)
+✔ externe Arbitrage bleibt ohne Sollwert; EOS benötigt explizite frische Anforderung (1.086207ms)
+✔ Tarif nutzt eigene Ladefähigkeit trotz deaktivierter alter Single-/Farm-Ausgänge (4.843471ms)
+✔ Tarifsperre, Stale, Zukunft, Priorität und fehlendes NT-Fenster fallen auf eigenen EVO zurück (2.47414ms)
+✔ individuelle Rampen vor Verteilung schützen langsame Geräte trotz großer Summenrampe (0.584052ms)
+✔ individuelle Budgetrückführung verhindert unzulässige Umverteilung einer Gruppensumme (0.781453ms)
+✔ erster frischer Messzyklus hält Rampenanker; Folgezyklus darf weiterfahren (0.833403ms)
+✔ fehlende aktive Rampe oder Fähigkeit erzeugt keinen Null-Ersatzauftrag (0.71773ms)
+✔ Tarif-EVO und eigenständige EVO duplizieren keinen lokalen Bilanzfehler (0.208497ms)
+✔ Manager: statischer Beobachter erzeugt keine zusätzlichen Modulstates und wird beendet (13.906947ms)
+✔ alte Konfiguration: weder neue Messleseaufträge noch State-/Gerätewrites (14.628131ms)
+✔ M0 enthält M1 genau einmal; bestehende Konfiguration und globale NVP-Werte unverändert (20.950508ms)
+✔ Vorschau verändert keine Config, Plannerzustände oder Diagnosestates (4.211626ms)
+✔ dynamische Diagnose schreibt nur eigene schreibgeschützte Statusobjekte (7.614706ms)
+✔ alte asynchrone Diagnose wird nach Konfigurationswechsel verworfen (1.963424ms)
+✔ Stop verwirft ausstehende Resultate und entfernt nur eigenen Vorschauhook (1.449582ms)
+✔ fehlende und veraltete Messwerte erzeugen kein Nullwertbudget (1.131297ms)
+✔ Datenbankfehler wird sichtbar ohne unhandled rejection oder Freigabe (0.759366ms)
+✔ maximal ein Datenbankauftrag auch bei gleichzeitigem Vorschauabruf (5.058969ms)
+✔ Rückkehr statisch aktualisiert vorhandene Diagnoseanzeige (1.947748ms)
+✔ manipulierter aktiver Modus eröffnet keinen Gerätewriter (0.71945ms)
+✔ T13/T15: hypothetische Importüberschreitung wird mit Bereich und Betrag sichtbar (2.821693ms)
+✔ T14/T15: lokale Exportüberschreitung bleibt von erlaubter M0-Einspeisung getrennt (0.359067ms)
+✔ veraltete Überlastmessung bleibt Messfehler und wird nicht als aktueller Budgetverstoß ausgegeben (0.168653ms)
+ℹ tests 72
+ℹ suites 0
+ℹ pass 72
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1445.20434
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:dynamic-grid
+> npm run typecheck:nvp && node --test test/dynamic-grid-*.test.cjs && npm run test:dynamic-grid-ui
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 typecheck:nvp
+> tsc -p tsconfig.nvp-topology.json
+
+✔ unvollständiger Entwurf bleibt speicherbar, Aktivierung meldet konkrete fehlende Verträge (9.468044ms)
+✔ freie herstellerunabhängige Speicherzuordnung ist ohne Bestandsinventar aktivierbar (2.514424ms)
+✔ M0 bleibt Allgemein, kW und Vorzeichen kommen aus serverseitiger Quelle (1.544654ms)
+✔ vollständiges Allgemein-Splitpaar wird übernommen; gleiche physische M0/M1-Quelle wird abgewiesen (3.11749ms)
+✔ getrennte Alias-Lese-/Schreibquellen liefern richtige physische Ownership-Kette (1.778473ms)
+✔ zwei Aliasnamen auf demselben Ausgang erzeugen keinen zweiten Writer (1.623867ms)
+✔ falsche Ausgangsrechte, Datentypen und Einheiten verhindern Aktivierung, nicht Entwurf (7.15232ms)
+✔ CAS gilt für eigene App-Saves sowie Allgemein-Änderungen und reine App-Schalter (3.821367ms)
+✔ lesende CAS-Version stimmt für fehlende und ältere Entwürfe mit der Schreibgrenze überein (7.974216ms)
+✔ alte Allgemein-Konfiguration benötigt ohne neue App keinen impliziten Appvertrag (0.50044ms)
+✔ kontrollierte Deaktivierung bleibt bis zur positiven Runtime-Übergabe ausstehend (2.038212ms)
+✔ Status einer früheren Version wird ohne alte Messungen als pending dargestellt (0.700581ms)
+✔ jede neue API-Route besitzt die Installer-Middleware und keinen HTTP-Cache (3.939631ms)
+✔ alter oder zukünftiger aktiver Status wird nicht als aktuelle erfolgreiche Regelung ausgegeben (1.947628ms)
+✔ aktive bestehende PV-Stellstrecke muss vor Übernahme zugeordnet werden (2.381029ms)
+✔ vorhandenes Speicherlizenzlimit zählt freie App-Zuordnungen ohne Inventarabhängigkeit (1.539382ms)
+✔ DynamicGrid HTTP: globaler AppCenter-Save installiert fehlende und ältere Entwürfe mit gelesenem CAS-Token (720.714827ms)
+✔ DynamicGrid HTTP: Rollen, Entwurf, atomare Aktivierung, CAS und M0 aus Allgemein (103.941127ms)
+✔ DynamicGrid HTTP: AppCenter/Import und parallele Gesamtpatch-Writer können CAS nicht umgehen (74.194774ms)
+✔ DynamicGrid HTTP: Backup-Inhaltsversion ersetzt nicht den geladenen Import-CAS-Token (47.910164ms)
+✔ eigene App: Entwürfe speicherbar, Aktivierung vollständig, kein Farm-/Herstellerzwang (23.480382ms)
+✔ M0 nur Allgemein; gleiche physische Quellen und Alias-Ausgänge abgewiesen (1.28247ms)
+✔ M0 Split benötigt beide frischen Quellen, kohärente Zeitpunkte und bekannte Einheit (3.414839ms)
+✔ SoC/Verfügbarkeit strikt: string/null/stale erzeugen keine fiktive Kapazität (1.871277ms)
+✔ externe Limits benötigen angewandte Grenzen und geräteseitigen Ablauf, keine Markenliste (2.069478ms)
+✔ T13: verpflichtende Entladung wird aktiv als nicht verschlechternde Recovery berechnet (9.096819ms)
+✔ T13 Gegenrichtung: notwendige Ladung; Null ist bei bestehender Stützung nicht sicher (0.648359ms)
+✔ T15: zu wenig Stützleistung bleibt sichtbar und nutzt nur bestmögliche Entlastung (0.735641ms)
+✔ T08/T09: unabhängige externe Maxima verbrauchen gemeinsames Restbudget nur einmal (22.819066ms)
+✔ T12: 135→165 kW erst nach bestätigter EOS-Stützleistung, keine optimistischen Endpunkte (0.861457ms)
+✔ PV-Ausfallreserve begrenzt Ladung auch bei momentan hoher PV-Erzeugung (2.483055ms)
+✔ lokale Grenzen bleiben über Recovery und jede ungleichzeitige Leistungskombination wirksam (0.490384ms)
+✔ 250 deterministische Szenarien prüfen sämtliche Alt/Neu-Endpunktkombinationen (111.634819ms)
+✔ fehlerhafte Reservierung und rein positive externe Maximalfreigabe sind niemals ausführbar (1.150274ms)
+✔ Neustart EOS: Null-Ist mit alter Vollreservierung erhält bestätigbaren Handshake (0.729159ms)
+✔ Neustart extern: engere Rechte sind sendbar, aber Altfreigabe erst nach Anwendung frei (1.192901ms)
+✔ mehrere externe Anfangsverträge werden gemeinsam monotone verkleinert, niemals erweitert (0.56685ms)
+✔ leere neue Speicherzuordnung bleibt nur als Entwurf gültig (1.183716ms)
+✔ M1 bewusst unbegrenzt ist null, leere eingeschaltete Grenze bleibt unvollständiger Entwurf (17.324645ms)
+✔ Leistung und SoC derselben Batterie dürfen weder direkt noch über Alias dieselbe Messquelle verwenden (0.674854ms)
+✔ externe Grenzrückmeldung benötigt echte Bestätigung und nichtnegative Werte (0.762951ms)
+✔ src-ts/runtime-executables/www/ems-apps.ts: gebundene Stateauswahl und unveränderter manueller AppCenter-Pfad (1147.379845ms)
+✔ src-ts/runtime-executables/www/ems-apps.ts: alte Tree-/Searchantworten, Rowcallbacks, Cancel und Mutationssperre (973.286028ms)
+✔ src-ts/runtime-mirrors/www/ems-apps.ts: gebundene Stateauswahl und unveränderter manueller AppCenter-Pfad (412.63567ms)
+✔ src-ts/runtime-mirrors/www/ems-apps.ts: alte Tree-/Searchantworten, Rowcallbacks, Cancel und Mutationssperre (309.620638ms)
+✔ React-Picker verwirft fremde Origin/Source/Request und spätes Ergebnis nach Abort (263.698286ms)
+✔ React-Picker übernimmt gültiges Ergebnis, Popup-Schließen und Timeout räumen auf (199.956361ms)
+✔ E2E: Erststart schreibt echte M1-Korrektur; ACK bleibt getrennt, Messantwort ermöglicht Folgetakt und M0-Gerät (67.285174ms)
+✔ E2E: M0-Ausgleich ersetzt niemals die reale Aufnahme bei lokalem M1-Export (5.30682ms)
+✔ E2E: Altregler und freier Alias schreiben weder vor Ersttick noch nach aktiver Übernahme (8.087741ms)
+✔ E2E: Konfigurationsgeneration während erstem Hardwarewrite verhindert alle Folgeausgänge (6.934777ms)
+✔ E2E: §14a begrenzt zwei Tarifgruppen gemeinsam vor realer Geräteausgabe (7.732746ms)
+✔ E2E: zwischen Gerätewrites ungültiges §14a-Signal sperrt weiteren Ladebefehl (3.73663ms)
+✔ E2E: API-Übergabe vor Ersttick wartet auf gemessene Nullleistung und gibt alte Hoheit erst danach frei (14.333216ms)
+✔ E2E: Home-Lizenz begrenzt die reale Summe zweier frei zugeordneter Speicher auf 50 kW (5.994389ms)
+✔ E2E: Mesh-Ladekategorie wird gemeinsam eingehalten, nachträgliche Absenkung stoppt Folgewrite (18.122187ms)
+✔ aktive Konfiguration beansprucht Ausgänge vor Runtime und vor erster Lease (8.946742ms)
+✔ Shadow, gleiche Werte, Keepalive und manuelle API umgehen konfigurierte Hoheit nicht (8.234194ms)
+✔ freier Alias auf physisches Ziel wird vor Schreibausführung aufgelöst und gesperrt (1.444024ms)
+✔ unaufgelöster Alias wird blockiert, fremder bekannter Aktor bleibt nutzbar (8.504426ms)
+✔ Deaktivierung behält alte Ziele bis Runtime die bestätigte Übergabe freigibt (1.300804ms)
+✔ inaktive App ändert alte Writes nicht und fragt keine Objekte ab (0.38364ms)
+✔ expliziter Hardware-Notstopp bleibt möglich, allgemeine Safetybezeichnung reicht nicht (0.886286ms)
+✔ Bestands-Speicherregler übergibt Tick, direkten Write und Deaktivierung ohne Nullbefehl (913.616395ms)
+✔ verzögerter App-Write prüft seine Generation direkt vor Geräteausgabe erneut (2.836612ms)
+✔ Appwriter ohne eigenen gültigen Vertrag darf keine fremden Aktoren beschreiben (3.753868ms)
+✔ unbekannte eigene Alias-Schreibseite sperrt Fremdschreiber schon vor Startupvalidierung (1.125951ms)
+✔ Partnerwiderruf blockiert reale Writes, Changed-Writes und Keepalive auch ohne Autoritätslease (1.144602ms)
+✔ Partnerwiderruf während Alias-await verhindert Geräteausgabe (0.855688ms)
+✔ Partnerfortsetzung nach Stop bleibt gesperrt (0.777458ms)
+✔ Partnerfortsetzung nach Stop und Reinstall bleibt gesperrt (0.230296ms)
+✔ fehlender oder abgemeldeter Arbiter führt Partner-Callback niemals aus (1.743932ms)
+✔ gültiger Partnerauftrag verwendet genau bestehenden Writer, lokaler Rückfall bleibt nach Stop möglich (0.477016ms)
+✔ Herstellerfreie freie DP-Zuordnung akzeptiert W/% und getrennte Istleistung (17.347514ms)
+✔ Fehlerhafte Zahlen, Exportlimit-Einheit und doppelte physische Schreibaliasse gesperrt (69.36797ms)
+✔ Inaktive Entwürfe trennen fehlende Felder von ungültigen Werten (0.499086ms)
+✔ Legacy-Übernahme verlangt nur wirklich aktive Zero-Export-Ausgänge; EVU allein bleibt frei (2.849442ms)
+✔ Alle Diagnosealiasse und deren Vorrang entsprechen dem bisherigen Export-Guard (0.558392ms)
+✔ Legacy-Sammelausgang übernimmt nur aufgelösten Modus; aktive WR-Gruppe übernimmt alle tatsächlichen Ausgänge (4.880024ms)
+✔ Aktive Legacy-PV muss physisch vollständig in der eigenen App zugeordnet sein (0.915209ms)
+✔ Ein bisheriger Exportlimit-Ausgang wird bei Übernahme nicht als Generation-DP umgedeutet (0.266417ms)
+✔ Lokale Nulleinspeisung reduziert nur M1-PV; M0 darf weiter exportieren (4.520471ms)
+✔ M0 gemeinsame Exportgrenze begrenzt beide Erzeuger und erhält die lokale strengere Grenze (4.086122ms)
+✔ Mesh-PV-Grenze wird einmal auf alle App-Wechselrichter verteilt (1.043658ms)
+✔ Mesh-Exportgrenze verschärft M0 unabhängig vom PV-Kategoriebudget und ersetzt keine lokale Grenze (2.867802ms)
+✔ Handover hält bekannte Caps und eröffnet ohne bekannte Cap höchstens gemessene Generation (0.993224ms)
+✔ Live-Mesh-Absenkung zwischen zwei Writes verwirft den inzwischen unzulässigen Folgeauftrag (3.483246ms)
+✔ Äußere Speicher-Ladung erzeugt keine lokale M1-Aufnahme und erlaubte Ladung zählt nicht als Senke (3.952545ms)
+✔ Neue unbestätigte Speicherentladung bleibt im PV-Exportbudget reserviert (0.617417ms)
+✔ PV-Ausfall wird als Importkonflikt ausgewiesen, nie als garantierte Mindestgeneration (0.440723ms)
+✔ EVU 60/30/0 wird ausschließlich zugeordneten Erzeugern zugeordnet und mit NVP-Minimum vereinigt (0.785627ms)
+✔ Veraltetes EVU-Relais hält letzte strengere Cap und fällt nicht auf 100 Prozent zurück (0.455672ms)
+✔ Negative, fehlende, veraltete und zeitversetzte PV-Werte erteilen keine Freigabe (0.454713ms)
+✔ Fehlendes Speicherintervall wird nicht durch angenommenes 0-W-Fahren ersetzt (0.224708ms)
+✔ Finalslot schreibt genau einmal je Erzeuger; ACK wird nicht als physische Wirkung ausgegeben (2.108807ms)
+✔ Konfigurationswechsel während Lesen verwirft sämtliche PV-Befehle (0.632402ms)
+✔ Konfigurationswechsel nach erster Ausgabe verhindert weitere Teilbefehle (1.111632ms)
+✔ EVU-Konfigurationswechsel unmittelbar vor Ausgabe verwirft die Freigabe (0.861286ms)
+✔ Frische EVU-Nullstufe wirkt auch bei fehlender Netz-/PV-Messung ohne Freigabeerhöhung (1.076272ms)
+✔ Lesefehler hält Caps und stellt Fehlerstatus sichtbar (1.344343ms)
+✔ Timeout lässt EMS frei und verhindert weitere IO-Aufträge bis zum tatsächlichen Abschluss (64.003951ms)
+✔ PV-Schreibabsicht bleibt bei Timeout vor dem await für Speicherbudget reserviert (6.640143ms)
+✔ Explizite angewandte Cap-Rückmeldung kann alte PV-Freigabe freigeben; bloßes ACK genügt nicht (1.021068ms)
+✔ M0 Split-Messung verwendet den gemeinsamen strengen Collector (673.213429ms)
+✔ Akzeptierte Lastreduktion bleibt konservativ im PV-Budget; zusätzliche Last ist keine garantierte Senke (0.560073ms)
+✔ Eigene App besitzt Finalslot vor erstem Snapshot; ausgeschalteter Bestand bleibt frei (748.724958ms)
+✔ Legacy-PV-Schreibwege einschließlich Fehler-Nullwert respektieren App-Zielbesitz (227.117273ms)
+✔ app activation has exactly installed && enabled authority (3.011762ms)
+✔ generic signed DP converts W/raw and sign exactly once; ACK is not applied power (5.192665ms)
+✔ unconfirmed split-neutralization stops before opposite direction and flags (1.914922ms)
+✔ confirmed split writes inactive zero, target, then enable/run (10.729562ms)
+✔ mapping generation change during first accepted write stops all subsequent writes (0.841146ms)
+✔ readonly output never receives a command (0.281738ms)
+✔ PV final generation limit uses percent without reinterpreting it as export (0.760278ms)
+✔ external corridor writes contraction before expansion and watchdog last (1.673113ms)
+✔ pending commands remain in M0/M1 budgets and M1 is not added onto M0 (2.04892ms)
+✔ local failure holds M1 while valid outer actuator retains own M0 context (0.840637ms)
+✔ PV disappearance is reserved before storage charging; stale SoC cannot allocate (0.40893ms)
+✔ external startup reserves full capability without applied limit feedback (0.228115ms)
+✔ EOS command confirmation alone never clears the previous pending interval (0.358026ms)
+✔ coherent solver permits active mandatory support but labels recovery until measured (1.742452ms)
+✔ delayed ACK is confirmed on the next cycle without resetting the issued timestamp (1.177784ms)
+✔ startup also reserves latent EOS commands, including unavailable excluded devices (0.5372ms)
+✔ previously issued PV cap reserves possible generation growth in storage export budget (0.228808ms)
+✔ active runtime issues a real bounded generic command and retains uncertainty (24.410457ms)
+✔ restart-active configuration cannot be deactivated before real handover verification (119.373852ms)
+✔ hard discharge cap is applied before solver and actual hardware write (3.704175ms)
+✔ zero charge cap survives planning and physical write even with local export (2.587851ms)
+✔ configuration changes while DP metadata is pending prohibit the later hardware write (0.314764ms)
+✔ timed out hardware remains tracked and blocks handover/new physical calls until settled (54.894536ms)
+✔ live licence loss between split commands prevents the active direction from being released (1.573025ms)
+✔ zero storage power cannot release ownership while a previous PV increase remains unsafe (3.877961ms)
+✔ Dynamic Partnerauftrag nutzt gemeinsamen Writer; Capability und Telemetrie entstehen vor Lease (8.622362ms)
+✔ Dynamic abgelaufene Partnerlease hält keinen alten Rampenauftrag aktiv (9.5994ms)
+✔ Dynamic Widerruf während Writer-Metadatenawait sperrt alte Geräteausgabe (1.759354ms)
+✔ Dynamic fehlender Partnerauftrag ermöglicht Capability und liefert lokalen Rückfallwunsch (4.060687ms)
+ℹ tests 136
+ℹ suites 0
+ℹ pass 136
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4361.596881
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:dynamic-grid-ui
+> node test/frontend-nvp-topology.cjs
+
+PASS real data point field keeps manual input and picker under the same context lock
+PASS separate app draft has no manual activation or second M0 mapping
+PASS M0 signed and split sources render read-only with real General link
+PASS clearing a required number never becomes zero or no-limit null
+PASS M1 zero remains an enabled limit while null stays explicitly unconfigured
+PASS generic storage has full own mapping and no brand or Farm dependency
+PASS external limits have independent maxima, applied feedback and device TTL
+PASS live readout never promotes ACK to applied effect and hides stale command
+PASS unknown status labels never resolve inherited prototype members
+PASS customer wildcard does not bypass Installer/Admin app guard
+PASS atomic activation conflict is not retried
+{"result":"PASS","checks":11,"limitation":"React renderer and actual handlers; browser interaction is a separate check."}
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:ems-navigation
+> node test/frontend-ems-navigation.cjs && node test/frontend-dynamic-grid-version.cjs
+
+PASS installer: Installer rendert nur Bereiche und erlaubte Verwaltungsaktionen
+PASS admin: Installer rendert nur Bereiche und erlaubte Verwaltungsaktionen
+PASS M0 → Allgemein öffnet dieselbe eigenständige Ansicht
+PASS M0 → Allgemein öffnet den übergeordneten AppCenter-Rahmen
+PASS PageShell eingebettet ohne zweiten Seitenkopf
+PASS PageShell eigenständig mit Seitenkopf und Navigation
+{"result":"PASS","checks":6,"limitation":"React-Serverrenderer und echte Handler; Browsernavigation und Backend-Rechte werden separat geprüft."}
+PASS Canonical: Version akzeptiert ausschließlich positive sichere Ganzzahlen
+PASS Canonical: Gesamtstand 2 liefert Save-Token 2 und informiert das bestehende iframe
+PASS Canonical: fremder Ursprung, anderes Fenster und unzulässige Nachricht werden ignoriert
+PASS Canonical: Child 3 sperrt Token 2 bis zum vollständigen Laden von Stand 3
+PASS Canonical: Child-Meldung vor dem ersten geladenen Gesamtstand bleibt wirksam
+PASS Canonical: Partnerrevision benachrichtigt das konkrete iframe und bleibt vom Dynamic-Token getrennt
+PASS Canonical: neue Partnerrevision sperrt echte Gesamt-Save-/Importwege und alte Antworten
+PASS Canonical: Gesamtstandübernahme bricht den echten offenen DP-Dialog ab
+PASS Canonical: echter globaler Save sendet den geladenen CAS-Token
+PASS Canonical: veralteter globaler Save scheitert vor Formularübernahme und Netzwerk
+PASS Canonical: Backupimport nutzt aktuellen Basis-Token statt historischer Backupversion
+PASS Canonical: saveConfig bricht offene DP-Auswahl ab, sperrt parallele Mutationen und gibt nach Fehler wieder frei
+PASS Canonical: backupDoImportFromObj bricht offene DP-Auswahl ab, sperrt parallele Mutationen und gibt nach Fehler wieder frei
+PASS Mirror: Version akzeptiert ausschließlich positive sichere Ganzzahlen
+PASS Mirror: Gesamtstand 2 liefert Save-Token 2 und informiert das bestehende iframe
+PASS Mirror: fremder Ursprung, anderes Fenster und unzulässige Nachricht werden ignoriert
+PASS Mirror: Child 3 sperrt Token 2 bis zum vollständigen Laden von Stand 3
+PASS Mirror: Child-Meldung vor dem ersten geladenen Gesamtstand bleibt wirksam
+PASS Mirror: Partnerrevision benachrichtigt das konkrete iframe und bleibt vom Dynamic-Token getrennt
+PASS Mirror: neue Partnerrevision sperrt echte Gesamt-Save-/Importwege und alte Antworten
+PASS Mirror: Gesamtstandübernahme bricht den echten offenen DP-Dialog ab
+PASS Mirror: echter globaler Save sendet den geladenen CAS-Token
+PASS Mirror: veralteter globaler Save scheitert vor Formularübernahme und Netzwerk
+PASS Mirror: Backupimport nutzt aktuellen Basis-Token statt historischer Backupversion
+PASS Mirror: saveConfig bricht offene DP-Auswahl ab, sperrt parallele Mutationen und gibt nach Fehler wieder frei
+PASS Mirror: backupDoImportFromObj bricht offene DP-Auswahl ab, sperrt parallele Mutationen und gibt nach Fehler wieder frei
+PASS React: verspäteter Poll 2 verändert erfolgreichen aktiven Save 3 nicht
+PASS React: verspäteter Reload 2 verändert erfolgreichen aktiven Save 3 nicht
+PASS React: beobachtete Fremdversion sperrt den alten Entwurf ohne automatische Tokenübernahme
+{"result":"PASS","checks":29,"limitation":"Originale AST-extrahierte Frontend-Helfer und Save-Handler; Backend-CAS und Browserinteraktion separat prüfen."}
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:security-standards
+> node scripts/verify-security-standards.cjs && node scripts/verify-runtime-license-header.cjs && node scripts/verify-static-ems-exports.cjs && node scripts/verify-http-error-boundary.cjs && node scripts/verify-simulation-public-errors.cjs && npm run test:security-continuation && npm run test:security-patch
+
+PASS security standards guard self-tests: 17
+PASS strict security boundary scope: src-ts/runtime-executables/lib/http-error-boundary.ts
+COVERAGE: named boundary only; no ESLint/SAST or whole-repository compliance claim.
+✔ bestehender führender Marker transpiliert unverändert (10.438557ms)
+✔ proprietärer Kopf bleibt vor Build-Hinweis, folgender Marker transpiliert (3.166413ms)
+✔ No-Check-Migrationsanker nach Lizenzkopf wird nicht ausgeliefert (1.565099ms)
+✔ Marker in String oder gewöhnlichem Kommentar löst keine Transpilierung aus (1.6087ms)
+✔ Hash- und Wiederholungsprüfung akzeptiert die exakt erzeugten Artefakte (433.871777ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 998.089154
+✔ charging-budget-helpers: statischer Export und proprietärer Header in Originalquelle (1.837692ms)
+✔ charging-budget-helpers: Originalquelle lädt und arbeitet ohne String-Codegenerierung (4.866967ms)
+✔ charging-budget-helpers: erzeugtes Laufzeitartefakt lädt ohne String-Codegenerierung (1.568326ms)
+✔ evcs-control-mapping: statischer Export und proprietärer Header in Originalquelle (0.659935ms)
+✔ evcs-control-mapping: Originalquelle lädt und arbeitet ohne String-Codegenerierung (2.082637ms)
+✔ evcs-control-mapping: erzeugtes Laufzeitartefakt lädt ohne String-Codegenerierung (1.694317ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 25.250996
+{
+  "suite": "NW-HTTP-ERROR-01",
+  "sourceMode": false,
+  "node": "v24.22.1",
+  "passed": 23,
+  "environment": "real loopback Express HTTP; mocked ioBroker; synthetic errors; no devices",
+  "checks": [
+    "unknown-errors-and-accessors-are-not-inspected",
+    "parser-types-have-finite-public-policies",
+    "only-internal-errors-retain-frozen-public-validation",
+    "unset:anonymous-malformed-json-is-sanitized",
+    "unset:oversized-json-remains-413",
+    "unset:unexpected-simulation-error-is-sanitized",
+    "unset:foreign-installer-errors-and-logs-are-sanitized",
+    "unset:owned-mesh-guidance-remains-public-but-spoofs-do-not",
+    "unset:owned-simulator-preconditions-retain-guidance",
+    "unset:nexologic-validation-has-identity-and-safe-logs",
+    "unset:simulation-status-scrubs-new-and-historical-errors",
+    "unset:propagated-route-error-is-sanitized",
+    "unset:server-and-auth-remain-functional",
+    "production:anonymous-malformed-json-is-sanitized",
+    "production:oversized-json-remains-413",
+    "production:unexpected-simulation-error-is-sanitized",
+    "production:foreign-installer-errors-and-logs-are-sanitized",
+    "production:owned-mesh-guidance-remains-public-but-spoofs-do-not",
+    "production:owned-simulator-preconditions-retain-guidance",
+    "production:nexologic-validation-has-identity-and-safe-logs",
+    "production:simulation-status-scrubs-new-and-historical-errors",
+    "production:propagated-route-error-is-sanitized",
+    "production:server-and-auth-remain-functional"
+  ]
+}
+✔ API-Fehlerauswahl: {"message":"  Erst Simulation deaktivieren.  ","error":"configuration_conflict"} (8.142035ms)
+✔ API-Fehlerauswahl: {"message":"","error":"legacy_error"} (2.53482ms)
+✔ API-Fehlerauswahl: {"message":"  ","error":" legacy_error "} (1.407394ms)
+✔ API-Fehlerauswahl: {"message":{"text":"invalid"},"error":"legacy_error"} (1.518108ms)
+✔ API-Fehlerauswahl: {"message":42,"error":"legacy_error"} (1.817888ms)
+✔ API-Fehlerauswahl: {"message":null,"error":"legacy_error"} (1.422509ms)
+✔ API-Fehlerauswahl: {"message":false,"error":["invalid"]} (2.387521ms)
+✔ API-Fehlerauswahl: {"message":"","error":"   "} (2.34757ms)
+✔ API-Fehlerauswahl: null (6.89298ms)
+✔ Alle Aktionsfehler zeigen Markup unverändert als Text und behalten das Fehler-Badge (23.808624ms)
+✔ Nicht-JSON- und Transportfehler behalten den bisherigen Text-Fallback (3.387933ms)
+✔ Initialer Ladefehler zeigt öffentlichen Hinweis als einfachen Text (1.314382ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 66.646843
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:security-continuation
+> npm run test:strict-boundary-configs && npm run typecheck:admin && npm run typecheck:config-boundaries && npm run typecheck:mesh-peer-http && npm run test:admin-boundaries && npm run test:config-boundaries && npm run test:mesh-peer-http && npm run test:proprietary-headers && npm run check:proprietary-headers && npm run test:lint-security && npm run lint:security && npm run test:entsoe-parser
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:strict-boundary-configs
+> node scripts/verify-strict-boundary-configs.cjs
+
+PASS strict scope: tsconfig.config-boundaries.json (4 exact source files)
+PASS strict scope: tsconfig.mesh-peer-http.json (1 exact source files)
+PASS strict scope: src-admin-tab/tsconfig.json (20 exact source files)
+PASS strict scope: src-admin-tab/tsconfig.build-tools.json (1 exact source files)
+PASS strict configuration guard: 23 native positive/negative fixtures; four resolved scopes.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 typecheck:admin
+> npm --prefix src-admin-tab run typecheck
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> nexowatt-ui-admin-tab@0.8.8 typecheck
+> tsc -p tsconfig.json && tsc -p tsconfig.build-tools.json
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 typecheck:config-boundaries
+> tsc -p tsconfig.config-boundaries.json
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 typecheck:mesh-peer-http
+> tsc -p tsconfig.mesh-peer-http.json
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:admin-boundaries
+> node scripts/verify-admin-type-boundaries.cjs && node scripts/verify-admin-connection-boundaries.cjs && node scripts/verify-admin-mesh-boundaries.cjs
+
+PASS real inactive snapshot with null budget and missing M0 mappings remains editable
+PASS incomplete stored drafts retain empty and null numeric values
+PASS backend-compatible legacy drafts and valid point order remain editable
+PASS extra legitimate configuration fields remain intact
+PASS real normalized draft and split M0 measurement pass guards
+PASS real stale runtime response keeps null telemetry as unavailable
+PASS preview contract permits a response without configuration while load/save do not
+PASS malformed nested configuration cannot replace the current draft
+PASS poison keys, getters, cycles, non-finite numbers and oversized nesting fail closed
+PASS validation messages keep paths but cannot carry arbitrary objects into React
+PASS mail API fields and real TLS choices are validated before state updates
+PASS Admin build requires actual strict checking and sources contain no any/suppression
+PASS Admin-Typgrenzen: 12 Prüfgruppen
+PASS ServConn erhält beide Callbackformen, native/common und Schreibfehler
+PASS Socket und callable socket.io factory behalten den ioBroker-Vertrag
+PASS UUID-Fallback und gültige alte Textports bleiben erhalten, ungültige Ports nicht
+PASS Authvalidierung behält Erweiterungen und verweigert falsche Datentypen
+PASS Poison Keys, Zyklen und unbeschränkte Verschachtelung scheitern vollständig
+PASS Status/Login verwenden die validierten Authfelder und bewahren Credentials-Option
+PASS Auch defekte HTTP403-Antworten behalten Status und unterbinden Port-Fallbacks
+PASS Vollständige JSON-Erweiterungen bleiben erhalten; falsches Top-Level wird verworfen
+PASS Timeout bricht auch das Lesen des Antwortkörpers tatsächlich ab
+{"result":"PASS","checks":9,"node":"v24.22.1","sourceSha256":"eb219e54f91f6f2556aca6077c07cd5d7049f161ccf338b4b12f0fdd72e07662","limitation":"Originaler TypeScript-Verbindungscode mit VM/Transport-Fixtures; installierte ioBroker-Instanz und Browser separat prüfen."}
+PASS Backend-Defaults und leerer OFF-Status werden vollständig gelesen
+PASS Diagnose und aktiver Master erhalten Teilnehmer, Nullgrenzen und Timing
+PASS Persistierte Betriebslimits ohne Strategie erfinden keinen fixed-Modus
+PASS Echte Master-Paarung und JSON-Import bewahren den Slavevertrag
+PASS Echte Zählererfassung und Archivexport behalten Hashes und beide Quellenzeiten
+PASS Echte BLOCKED-, PARTIAL_PERIOD- und DRAFT-Abrechnungen sind unverändert darstellbar
+PASS Manipulierte JSON-Strukturen und falsche Zahlen erreichen keine Mesh-Formulare
+{"result":"PASS","checks":7,"node":"v24.22.1","sourceSha256":"1994cdf4fcf5671089424050bf8b28a100da007838df5e5a17b39194d314d56e","limitation":"Echte Backend-/Journalfunktionen mit temporären synthetischen Zählerwerten; keine Feldgeräte oder Liveanlage."}
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:config-boundaries
+> node --test test/config-boundaries.test.cjs
+
+✔ die drei Konfigurationsquellen erlauben weder explizite unsichere Typen noch abgeschaltete Prüfungen (87.726516ms)
+✔ fehlerhafte Validatorausgaben werden vor einer fachlichen Weiterverwendung abgewiesen (1.161766ms)
+✔ verschachtelte Konfigurationsverträge dürfen keine ungeprüften Messobjekte enthalten (0.579716ms)
+✔ falsche ioBroker-Objektformen liefern feste Auflösungsfehler (0.83888ms)
+✔ gültige getrennte Aliasrichtungen bleiben unverändert nutzbar (0.877501ms)
+✔ ungültige Bestandszeilen verschieben keine Speicher- oder PV-Kennungen (0.975911ms)
+✔ Dictionary-Fallbacks besitzen keinen Prototyp und fremde Schlüssel verschmutzen keine globalen Objekte (0.244188ms)
+✔ alte und fehlerhafte Entwürfe bleiben sichtbar und lesendes CAS verändert die gespeicherten Daten nicht (0.549223ms)
+✔ fremde Speicherfehler bleiben sanitisiert und geben die Speichersperre wieder frei (8.094901ms)
+✔ ein defekter interner Patch-Merge darf keinen neuen Konfigurationsvertrag erzeugen (1.005846ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 558.660575
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:mesh-peer-http
+> node scripts/verify-mesh-peer-http.cjs
+
+[mesh-peer-http] OK: 28 native Transport-/HTTP-Prüfgruppen; Redirect, Größen-/Strukturlimits, DNS-/Body-/Gesamtbudget, TLS-Prüfung, Rollen, neutrale Probe, Mehrpeer und Wiederaufnahme.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:proprietary-headers
+> node scripts/verify-proprietary-headers.cjs
+
+✔ Kopf steht vor Migration-/Transpiliermarker, Wiederholung verändert nichts (4.593859ms)
+✔ Typfehler bleibt hinter Lizenzkopf erkennbar, No-Check wird für Teilprüfungen entfernt (50.428021ms)
+✔ Pragma-Erkennung berücksichtigt Runtime-Marker, Blockkommentare und Compiler-Priorität (6.938318ms)
+✔ Shebang und Strict-Modus bleiben wirksam, CRLF und BOM bleiben erhalten (3.826952ms)
+✔ Fremde/unklare Lizenzen werden abgewiesen, Fixture-Strings nicht umgedeutet (1.540127ms)
+✔ Eigener Scope schließt Drittbundles, Notices, HTML/CSS/JSON und Binärdateien aus (6.333538ms)
+✔ Preflight verweigert Fremdlizenzen vor erstem Schreibzugriff (0.974197ms)
+✔ Symbolische Links werden weder gelesen noch überschrieben (0.633748ms)
+✔ Check verlangt erzeugte Runtime, Write verändert manuelle Spiegel nur um den Kopf (2.627969ms)
+✔ No-Check-Budget zählt vorhandene und neue Direktiven auch hinter Lizenzkopf (206.601239ms)
+✔ Gesamter eigener Quellscope bleibt beim Einfügen nach dem Prolog bytegleich (2642.493836ms)
+ℹ Lesend geprüfte eigene Quelldateien: 789
+✔ Original-Runtime-Spiegelgenerator setzt Kopf vor No-Check und ist idempotent (202.793597ms)
+✔ Original-Scriptgenerator hält Lizenz zuerst und Strict-/Exports-Semantik (3129.805506ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6300.019088
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 check:proprietary-headers
+> node scripts/sync-proprietary-headers.cjs --check
+
+{
+  "ok": true,
+  "sourceCount": 789,
+  "generatedCount": 716,
+  "missing": [],
+  "changed": [],
+  "blocked": []
+}
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:lint-security
+> node scripts/verify-eslint-security-test.cjs
+
+ESLint security gate: 25 meaningful policy/negative checks passed.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 lint:security
+> node scripts/verify-eslint-security.cjs
+
+ESLint: 174 sources; 3067 current findings; 3067 inventoried (2971 historical open, 96 individually reviewed); 0 blocked new/forbidden findings; 89 old findings absent.
+Open scanner hotspots: {"security/detect-object-injection":2356,"security/detect-non-literal-fs-filename":43,"@typescript-eslint/ban-ts-comment":73,"security/detect-unsafe-regex":16,"@typescript-eslint/no-explicit-any":563,"security/detect-possible-timing-attacks":12,"security/detect-non-literal-require":1,"security/detect-non-literal-regexp":3}
+This gate prevents new scanner findings. It does not assert a clean security scan or full ASVS conformity.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:entsoe-parser
+> node --test scripts/verify-entsoe-linear-parser.cjs
+
+ENTSO-E malformed-input bound: {"tag":"Period","bytes":560040,"ms":2.8045919999999995}
+ENTSO-E malformed-input bound: {"tag":"Point","bytes":490040,"ms":2.546401000000003}
+ENTSO-E malformed-input bound: {"tag":"start","bytes":490040,"ms":3.0771060000000006}
+✔ legacy copy-mode source remains directly executable JavaScript (109.547414ms)
+✔ quarter-hour, negative prices and MWh conversion stay correct (3.581644ms)
+✔ multiple periods preserve chronological boundaries (2.875549ms)
+✔ namespace prefixes, XML declaration and quoted attribute delimiters (1.054811ms)
+✔ comments cannot contribute false price or period elements (0.884067ms)
+✔ missing resolution is rejected (1.050944ms)
+✔ self-closing resolution is rejected (0.86946ms)
+✔ missing numeric price is rejected (0.719327ms)
+✔ nonsequential point is rejected (1.171159ms)
+✔ mismatched close is rejected (0.428086ms)
+✔ unclosed last period is rejected (0.242857ms)
+✔ nested same period is rejected (1.02841ms)
+✔ external declaration is rejected (0.072483ms)
+✔ oversized source is rejected (2.867814ms)
+✔ oversized tag is rejected (1.886721ms)
+✔ unclosed quoted attribute is rejected (0.64438ms)
+✔ bounded CPU for 512KiB unclosed Period tags (128.990857ms)
+✔ bounded CPU for 512KiB unclosed Point tags (102.250599ms)
+✔ bounded CPU for 512KiB unclosed start tags (102.71696ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1087.099039
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:security-patch
+> npm run test:runtime-security-updates && npm run test:admin-response-limits
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:runtime-security-updates
+> node scripts/verify-runtime-security-updates.cjs
+
+{
+  "ok": true,
+  "node": "v24.22.1",
+  "httpCases": 28,
+  "mail": {
+    "parserCases": 3,
+    "rejectedBeforeTransport": 3,
+    "composedWithoutSmtp": true
+  },
+  "results": [
+    {
+      "scenario": "plain",
+      "parserIndex": 0,
+      "options": {
+        "limit": "5mb",
+        "inflate": false
+      },
+      "status": 200,
+      "survived": true
+    },
+    {
+      "scenario": "malformed",
+      "parserIndex": 0,
+      "options": {
+        "limit": "5mb",
+        "inflate": false
+      },
+      "status": 400,
+      "survived": true
+    },
+    {
+      "scenario": "over-limit",
+      "parserIndex": 0,
+      "options": {
+        "limit": "5mb",
+        "inflate": false
+      },
+      "status": 413,
+      "survived": true
+    },
+    {
+      "scenario": "gzip",
+      "parserIndex": 0,
+      "options": {
+        "limit": "5mb",
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "deflate",
+      "parserIndex": 0,
+      "options": {
+        "limit": "5mb",
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "gzip-trailing",
+      "parserIndex": 0,
+      "options": {
+        "limit": "5mb",
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "deflate-trailing",
+      "parserIndex": 0,
+      "options": {
+        "limit": "5mb",
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "plain",
+      "parserIndex": 1,
+      "options": {
+        "limit": "64kb",
+        "inflate": false
+      },
+      "status": 200,
+      "survived": true
+    },
+    {
+      "scenario": "malformed",
+      "parserIndex": 1,
+      "options": {
+        "limit": "64kb",
+        "inflate": false
+      },
+      "status": 400,
+      "survived": true
+    },
+    {
+      "scenario": "over-limit",
+      "parserIndex": 1,
+      "options": {
+        "limit": "64kb",
+        "inflate": false
+      },
+      "status": 413,
+      "survived": true
+    },
+    {
+      "scenario": "gzip",
+      "parserIndex": 1,
+      "options": {
+        "limit": "64kb",
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "deflate",
+      "parserIndex": 1,
+      "options": {
+        "limit": "64kb",
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "gzip-trailing",
+      "parserIndex": 1,
+      "options": {
+        "limit": "64kb",
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "deflate-trailing",
+      "parserIndex": 1,
+      "options": {
+        "limit": "64kb",
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "plain",
+      "parserIndex": 2,
+      "options": {
+        "limit": "64kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 200,
+      "survived": true
+    },
+    {
+      "scenario": "malformed",
+      "parserIndex": 2,
+      "options": {
+        "limit": "64kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 400,
+      "survived": true
+    },
+    {
+      "scenario": "over-limit",
+      "parserIndex": 2,
+      "options": {
+        "limit": "64kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 413,
+      "survived": true
+    },
+    {
+      "scenario": "gzip",
+      "parserIndex": 2,
+      "options": {
+        "limit": "64kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "deflate",
+      "parserIndex": 2,
+      "options": {
+        "limit": "64kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "gzip-trailing",
+      "parserIndex": 2,
+      "options": {
+        "limit": "64kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "deflate-trailing",
+      "parserIndex": 2,
+      "options": {
+        "limit": "64kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "plain",
+      "parserIndex": 3,
+      "options": {
+        "limit": "160kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 200,
+      "survived": true
+    },
+    {
+      "scenario": "malformed",
+      "parserIndex": 3,
+      "options": {
+        "limit": "160kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 400,
+      "survived": true
+    },
+    {
+      "scenario": "over-limit",
+      "parserIndex": 3,
+      "options": {
+        "limit": "160kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 413,
+      "survived": true
+    },
+    {
+      "scenario": "gzip",
+      "parserIndex": 3,
+      "options": {
+        "limit": "160kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "deflate",
+      "parserIndex": 3,
+      "options": {
+        "limit": "160kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "gzip-trailing",
+      "parserIndex": 3,
+      "options": {
+        "limit": "160kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "deflate-trailing",
+      "parserIndex": 3,
+      "options": {
+        "limit": "160kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    }
+  ]
+}
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:admin-response-limits
+> node scripts/verify-admin-response-limits.cjs
+
+PASS UTF-8 über Chunkgrenzen und normale Daten werden vollständig gelesen
+PASS Genau 16 MiB bleiben zulässig; ein zusätzliches Byte scheitert vor JSON
+PASS Deklarierte Übergröße bricht vor dem ersten Bodyread ab
+PASS Fehlende oder falsche kleine Content-Length umgehen das Bytebudget nicht
+PASS Ungültige Längenangaben werden kontrolliert ohne Bodyread verworfen
+PASS Content-Length wird bei komprimierten Antworten nicht mit Klartextlänge verwechselt
+PASS Ungültiges UTF-8 und defektes JSON werden abgewiesen und abgebrochen
+PASS Bereits abgebrochene Signale lesen keine Daten
+PASS Ein hängender Stream endet beim tatsächlichen Fetch-Abbruch
+PASS Fehler beim Cancel werden isoliert; ursprünglicher Größenfehler bleibt erhalten
+PASS Echte API-Pfade behalten Null-Prototyp- und Poison-Key-Validierung
+PASS HTTP403 bleibt auch bei Übergröße erhalten und wird nicht erneut gesendet
+PASS Übergröße auf erfolgreichem HTTP zeigt nur eine statische Grenzmeldung
+PASS Fehlender Body hat keinen unbeschränkten json()-Fallback
+PASS Bestehendes 10-s-Budget bleibt für lokale Mesh-/Mail-Aufrufe erhalten
+PASS Native HTTP-Gzip-Antworten werden nach Dekompression begrenzt
+{"result":"PASS","checks":16,"maxDecodedBytes":16777216,"node":"v24.22.1","sourceSha256":"eb219e54f91f6f2556aca6077c07cd5d7049f161ccf338b4b12f0fdd72e07662","limitation":"Native VM/Fetch/Streams und lokales HTTP; kein Feldgeräte- oder Kundenanlagentest."}
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:partner
+> npm run typecheck:partner && node scripts/test-partner-integrations.cjs && node scripts/verify-partner-websocket.cjs && node scripts/verify-partner-runtime.cjs && node scripts/verify-partner-ui.cjs && node scripts/verify-partner-main-integration.cjs && npm run test:arbitrage-control-integration && npm run test:license-editions
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 typecheck:partner
+> tsc -p tsconfig.partner-integration.json --noEmit
+
+✔ Standardprofil bleibt ausgeschaltet; Handelsprofil benötigt keine PV/NVP-Konfiguration (6.624328ms)
+✔ Unbekannte Felder, Geheimnisse, freie State-IDs und unverschlüsselte Endpunkte werden verworfen (2.985511ms)
+✔ Bilanz kann kein Schreibrecht erhalten; Rechte sind nach App und Ressource getrennt (0.384843ms)
+✔ Grenzen schließen unbekannte Ressourcen, >60s, NaN und ungültigen SoC aus (0.35451ms)
+✔ Partnerbindung, lokale Appfreigabe, Inbetriebnahme und zentraler Writer sind unabhängige Pflichten (4.454882ms)
+✔ Journal wird vor Annahme gespeichert; Quittung behauptet keine Gerätebestätigung (4.745173ms)
+✔ Identische Wiederholung wirkt nicht erneut; widersprechende Wiederverwendung wird abgewiesen (1.553713ms)
+✔ Ältere neue Kennung darf neueren Wunsch nicht ersetzen, auch nach Neustart (1.201394ms)
+✔ Journalfehler sperren Verbindung und alle Wünsche ohne Geräteschreiben (1.128027ms)
+✔ Widerruf während Journal-Commit kann keinen Wunsch nachträglich aktivieren (0.824593ms)
+✔ Lease endet bei Ablauf und auch nach rückwärts springender Wanduhr monoton (0.714394ms)
+✔ Abgelaufene, zu lange, zukünftige, übergroße und rohe Schreibaufträge wirken nicht (0.449633ms)
+✔ Verbindungsverlust, lokale Appabschaltung und Konfigurationswechsel löschen aktuelle Wünsche (0.906369ms)
+✔ Cancel ist ressourcenbezogen und Wiederholung reaktiviert den Auftrag nicht (1.391958ms)
+✔ Bilanz- und Telemetrieprojektionen enthalten niemals Konfiguration, Inventar oder Rohwerte (0.375131ms)
+✔ Datenfreigabe wird nach asynchroner Abfrage erneut geprüft (2.655162ms)
+✔ Leserecht ist an die freigegebene App und Ressource gebunden (0.946662ms)
+✔ Hängende Datenabfrage endet nach fünf Sekunden und abortiert den Provider (5068.434791ms)
+✔ Größen- und Nachrichtenquoten begrenzen untrusted Eingaben (1.545598ms)
+✔ Echte Installer-/Adminrolle erforderlich trotz alter Customer-Wildcard (1.804071ms)
+✔ Config CAS erhöht genau einmal und alte Browserrevision erhält Konflikt (0.711715ms)
+✔ Vorschau persistiert nichts; globale Sperre widerruft alle Freigaben (0.377714ms)
+✔ Generische Persistenzgrenze erkennt Manipulation ohne korrekte Folgeversion (1.478993ms)
+✔ Vor Verbindungswechsel eingereihter Auftrag bleibt nach Reconnect widerrufen (0.738477ms)
+✔ CAS-Commit wartet auf dauerhafte Widerrufsgrenze und bleibt bei deren Fehler aus (0.662955ms)
+✔ Nur registrierte interne Fehler behalten ihren öffentlichen HTTP-Status (1.281794ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5126.712729
+PASS TypeScript strict without any/nocheck
+PASS Public addresses only; exact VPN exception never opens loopback/metadata
+PASS Exact endpoint profile; no URL credentials/query/fragment or alternate ports
+PASS Pinned target, TLS/quotas, configured identity and immediate send revocation
+PASS Revocation aborts session context; queued messages discarded, delayed reply blocked
+PASS Synchronous stop from status callback prevents later onOpen/timer activation
+PASS Broken lifecycle receiver fails closed
+PASS Handler exception is isolated and redacted
+PASS Binary/oversized messages, control flood and outbound backpressure terminate
+PASS Mixed public/private DNS answers fail closed before connecting
+PASS Monotonic credential expiry survives frozen/backward wall clock
+PASS Five-second total attempt cancels hanging DNS and exposes only fixed error code
+PASS Real TLS+WebSocket handshake: changed actual remote address rejected
+PASS Real TLS rejects untrusted certificate with no insecure fallback
+PASS Real TLS rejects trusted certificate with wrong hostname
+{"ok":true,"checks":15,"scope":"strict build, controlled transport tests, real TLS negative tests; no partner or hardware approval"}
+PASS partner runtime: first journal initializes 0700/0600 and durable marker
+PASS partner runtime: missing journal after initialization blocks
+PASS partner runtime: missing entire journal directory with marker blocks
+PASS partner runtime: missing and corrupt marker block
+PASS partner runtime: missing revoke fence blocks restart
+PASS partner runtime: symlink journal and overly broad file permissions block
+PASS partner runtime: symlink parent and group-writable parent block
+PASS partner runtime: persist/load ordering survives hot-refresh overlap
+PASS partner runtime: credential references reject missing, malformed, overlarge and mismatched identity
+PASS partner runtime: numeric telemetry projects only exact fresh resource values
+PASS partner runtime: balance is complete, recent, numeric and strips private metadata
+PASS partner runtime: direct marketing absent measurements stay unavailable; no curtailment claim
+PASS partner runtime: standalone trading-only command accepted and survives only as replay journal
+PASS partner runtime: connection loss clears current request and duplicate never reapplies
+PASS partner runtime: revocation survives failed config commit, refresh and restart
+PASS partner runtime: app loss invalidates commands; toggling without explicit refresh cannot revive
+PASS partner runtime: config change is checked at getter before any refresh
+PASS partner runtime: credential expiry immediately blocks current request
+PASS partner runtime: pending persistence completes before hot refresh reads; old generation cannot acknowledge
+PASS partner runtime: stale socket context cannot send or accept
+PASS partner runtime total: 20; strict TypeScript; temporary filesystem cleaned.
+PASS Realer gesperrter Backend-Standard bleibt ohne zusätzliche App editierbar
+PASS Alle Netz-/Speichergrenzen und getrennte Bilanzrechte bleiben unverändert
+PASS Falsche Datentypen, leere Leistungen, unendliche Zahlen und TTL>60 scheitern
+PASS Ungeprüfte Bereitschaft und beschädigte API-Antworten können nicht freischalten
+PASS Ungültige Vorschau zeigt Prüfhinweise ohne erfundene Konfiguration
+PASS Partner- und Authaufrufe bleiben am tatsächlichen HTTPS-Runtime-Port
+PASS CAS409 und HTTP403 werden genau einmal angefragt, nie erneut geschrieben
+PASS Transportfehler nach Mutation erzeugt keine automatische Wiederholung
+PASS Das Gesamtbudget bricht auch einen hängenden Antwortkörper ab
+{"result":"PASS","checks":9,"node":"v24.22.1","limitation":"Echter TypeScript-Code mit lokalen Vertrags-/Transporttests. Keine Hardware-, Händler- oder Browserabnahme."}
+{"result":"PASS","checks":16,"scope":"Actual adapter methods with isolated ioBroker I/O; no hardware or network"}
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:arbitrage-control-integration
+> node --test test/arbitrage-control.test.cjs test/arbitrage-writer-integration.test.cjs test/dynamic-grid-ownership.test.cjs test/dynamic-grid-runtime.test.cjs
+
+✔ strict TS und verbotene Typausnahmen im gesamten neuen Steuermodul (1721.186178ms)
+✔ Standalone Haushalt ohne PV, Bilanz oder dynamische App lädt und entlädt (1.405662ms)
+✔ reiner Speicherhandel ohne Hauslast funktioniert mit eigenen statischen Grenzen (0.333115ms)
+✔ Partnerdienstvertrag wird ohne freie Datenpunkte auf denselben Intent abgebildet (0.614316ms)
+✔ Freigabe, Geräteabnahme und alleiniger Writer sind zwingend (0.391194ms)
+✔ physische Werte sind echte endliche Zahlen, kein null/Boolean/String-Ersatz (0.926994ms)
+✔ SoC-Grenzen und gültige Nullleistungsgrenzen sperren jeweilige Richtung (0.607905ms)
+✔ veraltete, zukünftig datierte oder ungültige Messungen ergeben keinen Sollwert (0.281546ms)
+✔ zeitlich inkohärente, für sich frische Messungen bleiben gesperrt (0.247157ms)
+✔ abgelaufene, zukünftige und zu lange Befehle werden abgewiesen (0.281839ms)
+✔ zentraler Grant begrenzt Leistung und Lebensdauer und fehlt niemals still (0.238322ms)
+✔ abgelaufene oder ungültige Grants können keine alte Freigabe fortsetzen (0.168584ms)
+✔ dynamische Zusatzlimits können nur enger werden und niemals Grundlimits ersetzen (0.443248ms)
+✔ Anschlussberechnung entfernt laufenden Speicher-Istwert genau einmal (0.137634ms)
+✔ Netzladen und Netzeinspeisung benötigen ihre jeweiligen lokalen Freigaben (0.198158ms)
+✔ Grenzen bleiben bei überlastetem Anschluss und strikten Nullwerten wirksam (0.622555ms)
+✔ Messwertablauf begrenzt Entscheidung, Bruchteile werden sicher abgerundet (0.1432ms)
+✔ Nullwunsch ist ein begrenzter Intent und keine Bestätigung einer Gerätewirkung (0.135654ms)
+✔ Getter, Prototypschlüssel und Proxyfehler werden ohne fremde Fehlerdetails isoliert (0.71749ms)
+✔ Eingaben werden nicht mutiert und beliebige Datenpunkt-/Codefelder sind abgewiesen (0.363387ms)
+✔ standalone Partnerladung erreicht genau bestehenden Speicher-Writer ohne DynamicGrid/PV/Bilanz (62.825749ms)
+✔ abgelaufener Auftrag fällt im nächsten produktiven Tick auf Haushaltsregelung zurück (15.139903ms)
+✔ Handelsprofil fällt nach Disconnect auf lokalen Nullwunsch zurück (11.625076ms)
+✔ Widerruf während produktivem Write-await verhindert den alten Partnerbefehl (6.788258ms)
+✔ zwischen Planung und Write verschärfte lokale Leistungssperre bleibt wirksam (14.533807ms)
+✔ aktive Konfiguration beansprucht Ausgänge vor Runtime und vor erster Lease (5.386429ms)
+✔ Shadow, gleiche Werte, Keepalive und manuelle API umgehen konfigurierte Hoheit nicht (11.463159ms)
+✔ freier Alias auf physisches Ziel wird vor Schreibausführung aufgelöst und gesperrt (1.953856ms)
+✔ unaufgelöster Alias wird blockiert, fremder bekannter Aktor bleibt nutzbar (10.383733ms)
+✔ Deaktivierung behält alte Ziele bis Runtime die bestätigte Übergabe freigibt (3.915183ms)
+✔ inaktive App ändert alte Writes nicht und fragt keine Objekte ab (2.967831ms)
+✔ expliziter Hardware-Notstopp bleibt möglich, allgemeine Safetybezeichnung reicht nicht (2.029102ms)
+✔ Bestands-Speicherregler übergibt Tick, direkten Write und Deaktivierung ohne Nullbefehl (298.828133ms)
+✔ verzögerter App-Write prüft seine Generation direkt vor Geräteausgabe erneut (1.275448ms)
+✔ Appwriter ohne eigenen gültigen Vertrag darf keine fremden Aktoren beschreiben (2.539997ms)
+✔ unbekannte eigene Alias-Schreibseite sperrt Fremdschreiber schon vor Startupvalidierung (1.409727ms)
+✔ Partnerwiderruf blockiert reale Writes, Changed-Writes und Keepalive auch ohne Autoritätslease (3.684454ms)
+✔ Partnerwiderruf während Alias-await verhindert Geräteausgabe (0.960597ms)
+✔ Partnerfortsetzung nach Stop bleibt gesperrt (0.692955ms)
+✔ Partnerfortsetzung nach Stop und Reinstall bleibt gesperrt (0.211037ms)
+✔ fehlender oder abgemeldeter Arbiter führt Partner-Callback niemals aus (0.502256ms)
+✔ gültiger Partnerauftrag verwendet genau bestehenden Writer, lokaler Rückfall bleibt nach Stop möglich (0.429008ms)
+✔ app activation has exactly installed && enabled authority (5.425263ms)
+✔ generic signed DP converts W/raw and sign exactly once; ACK is not applied power (9.738157ms)
+✔ unconfirmed split-neutralization stops before opposite direction and flags (1.023296ms)
+✔ confirmed split writes inactive zero, target, then enable/run (2.523314ms)
+✔ mapping generation change during first accepted write stops all subsequent writes (1.064547ms)
+✔ readonly output never receives a command (1.196224ms)
+✔ PV final generation limit uses percent without reinterpreting it as export (1.378401ms)
+✔ external corridor writes contraction before expansion and watchdog last (2.248642ms)
+✔ pending commands remain in M0/M1 budgets and M1 is not added onto M0 (1.775267ms)
+✔ local failure holds M1 while valid outer actuator retains own M0 context (0.937612ms)
+✔ PV disappearance is reserved before storage charging; stale SoC cannot allocate (0.770045ms)
+✔ external startup reserves full capability without applied limit feedback (0.379438ms)
+✔ EOS command confirmation alone never clears the previous pending interval (1.269932ms)
+✔ coherent solver permits active mandatory support but labels recovery until measured (3.615999ms)
+✔ delayed ACK is confirmed on the next cycle without resetting the issued timestamp (1.119152ms)
+✔ startup also reserves latent EOS commands, including unavailable excluded devices (0.568324ms)
+✔ previously issued PV cap reserves possible generation growth in storage export budget (0.315417ms)
+✔ active runtime issues a real bounded generic command and retains uncertainty (11.918791ms)
+✔ restart-active configuration cannot be deactivated before real handover verification (19.743457ms)
+✔ hard discharge cap is applied before solver and actual hardware write (2.821412ms)
+✔ zero charge cap survives planning and physical write even with local export (2.503515ms)
+✔ configuration changes while DP metadata is pending prohibit the later hardware write (0.455005ms)
+✔ timed out hardware remains tracked and blocks handover/new physical calls until settled (51.099021ms)
+✔ live licence loss between split commands prevents the active direction from being released (2.328809ms)
+✔ zero storage power cannot release ownership while a previous PV increase remains unsafe (2.454959ms)
+✔ Dynamic Partnerauftrag nutzt gemeinsamen Writer; Capability und Telemetrie entstehen vor Lease (11.078857ms)
+✔ Dynamic abgelaufene Partnerlease hält keinen alten Rampenauftrag aktiv (4.334986ms)
+✔ Dynamic Widerruf während Writer-Metadatenawait sperrt alte Geräteausgabe (2.229993ms)
+✔ Dynamic fehlender Partnerauftrag ermöglicht Capability und liefert lokalen Rückfallwunsch (2.408598ms)
+ℹ tests 71
+ℹ suites 0
+ℹ pass 71
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2319.434864
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:license-editions
+> node scripts/verify-license-editions.js
+
+[license-editions] OK: Home/Pro-Lizenzmodell (intern HEMS/EOS) und Speicherleistungsprofile sind verdrahtet.

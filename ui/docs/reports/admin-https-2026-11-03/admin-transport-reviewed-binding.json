@@ -1,0 +1,8 @@
+{
+  "file": "src-admin-tab/src/lib/adminConnection.ts",
+  "reviewedFunction": "copyJsonValue",
+  "unchangedCommentFreeAst": true,
+  "sourceCodeSha256": "4dde6948a1f8559aa8b170921cac33bb1c0cade1dae5f7fe14795be90e00c432",
+  "sourceRawSha256": "c23659d808a8e11e98e84aaa5ea6b73492e45c0064381e2056df5b8a47919beb",
+  "scope": "Existing null-prototype bounded index retained; not whole-file security certification"
+}

@@ -1,0 +1,12 @@
+{
+  "command": [
+    "npm",
+    "run",
+    "build:ts"
+  ],
+  "cwd": "repository root",
+  "startedAt": "2026-09-29T20:10:37.419431+00:00",
+  "finishedAt": "2026-09-29T20:10:52.982098+00:00",
+  "durationSeconds": 15.563,
+  "exitCode": 0
+}

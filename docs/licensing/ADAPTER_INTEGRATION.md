@@ -1,11 +1,9 @@
 # Zentrale Lizenzfreigabe für NexoWatt EOS-Adapter
 
-Stand: EOS Admin 7.10.11 / Client 1.0.1 · 30.09.2026 · Protokoll v1 · Clientmodul `packages/eos-license-client/`.
+Stand: NexoWatt EOS Zusammenführung · 22.11.2026 · Nachrichtenprotokoll v1 · Clientmodul `packages/eos-license-client/`.
 
 Diese Datei beschreibt die verbindliche Einbindung der zentralen Lizenzprüfung in
-weitere EOS-Adapter. In diesem Repository sind der Admin-Dienst und der gemeinsame
-Client enthalten. Die anderen Adapter wurden mit diesem Lieferstand **noch nicht
-umgebaut oder am Gerät geprüft**. Ihre vorhandenen lokalen Lizenzprüfungen werden
+weitere EOS-Adapter. In diesem Repository sind der gemeinsame EOS-Dienst, die integrierte UI und der Lizenzclient enthalten. Separate Erweiterungsadapter wurden mit diesem Lieferstand **noch nicht umgebaut oder am Gerät geprüft**. Ihre vorhandenen lokalen Lizenzprüfungen werden
 erst mit der jeweiligen Integration abgelöst.
 
 ## Grundregel und Vertrauensgrenze
@@ -161,15 +159,16 @@ Schutzfunktionen erforderlich.
 
 ## Home und Pro
 
-Nicht nur die Edition als Boolean prüfen. Entscheidend sind die ausdrücklich
-freigegebene Funktion, Adapterliste und Mengen in der signierten Lizenz.
+Nicht nur die Edition als Boolean prüfen. Entscheidend sind die verifizierte Funktion und Mengen sowie der Lizenzumfang. NWL3 lizenziert das System; NWL2 behält seine signierte Adapterliste und gegebenenfalls engeren Mengen unverändert.
 
 | Eigenschaft | Home | Pro |
 | --- | --- | --- |
-| Ladepunkte | maximal 3, tatsächlicher lizenzierter Wert kann kleiner sein | expliziter signierter Wert; technisches Schema höchstens 1.000 |
+| Ladepunkte NWL3 | 3 | 50 |
+| Ladepunkte NWL2 | signierter Wert, maximal 3 | signierter Wert, technisches Schema maximal 1.000 |
 | Batteriesysteme | maximal 2 | maximal 10 |
 | Unterstützte Funktionsnamen | `energy`, `wallet`, `smartHome`, `microgridSlave` | zusätzlich `microgridMaster`, `multisite`, `billing` |
-| Freigegebene Adapter | jeweiliger Adaptername muss in der signierten Liste enthalten sein | ebenso |
+| Umfang NWL3 | Systemedition; Instanzidentität und Geräte-/Funktionsfreigaben bleiben erforderlich | ebenso |
+| Umfang NWL2 | jeweiliger Adaptername muss in der signierten Liste enthalten sein | ebenso |
 
 Ein Funktionsname im Schema bedeutet nicht, dass er automatisch in jeder Lizenz
 enthalten ist. Bei einer Pro-Funktion muss der Adapter diese konkrete Funktion
@@ -197,12 +196,16 @@ dürfen höhere Mengen nicht still übernehmen. Eigentlicher Anlagenumfang und
 lizenzierter Umfang dürfen nicht aus frei beschreibbaren Anzeige-States abgeleitet
 werden.
 
+## Integrierter EOS-Kern
+
+Der integrierte Kern liest denselben Lizenzdienst prozessintern. `statusView()` liefert zusätzlich `tokenVersion`, `scope` und `coreEnabled`; die Rohsignatur und der Lizenzcode bleiben privat. `coreEnabled` ist nur bei gültiger NWL3-Systemlizenz oder einer bestehenden NWL2-Lizenz mit ausdrücklich signiertem `nexowatt-ui` wahr. Eine NWL2-Lizenz für `eos-admin` allein oder einen Geräteadapter erteilt keine zusätzliche EMS-Freigabe. Die administrative Wiederherstellung und Sicherheitswartung bleiben möglich. Die synchrone Projektion verweigert abgelaufene Lizenzen, erkannten Zeitrücklauf und länger als 15 Sekunden ungeprüfte Freigaben. Sie ersetzt keine gerätespezifischen Schutzfunktionen.
+
 ## Nachrichtenvertrag v1
 
 Ziel ist eine explizite Instanz, standardmäßig `eos-admin.0`. Befehl:
 `eos.license.check`. Der Client nutzt `adapter.sendTo`; der Admin prüft zusätzlich
 den vom ioBroker-Nachrichtenbus gelieferten Absender `system.adapter.NAME.N`,
-die aktivierte Instanz, den Instanznamen und die signierte Adapterfreigabe.
+die aktivierte Instanz und den Instanznamen. Bei NWL2 muss zusätzlich die signierte Adapterliste den Namen enthalten; bei NWL3 gilt der verifizierte Systemumfang. Das ist keine Zulassung unbekannter Adapter oder Aufhebung ihrer eigenen Lizenzbedingungen.
 
 ```javascript
 // Anfrage: nonce ist pro Request kryptografisch zufällig, 32 kleine Hex-Zeichen.

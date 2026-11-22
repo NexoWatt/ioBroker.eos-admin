@@ -1,0 +1,19 @@
+{
+  "review": "independent actual generated ENTSOe runtime vs original1.0.29",
+  "validMultiPeriodComparisons": 18,
+  "intervalsPerPeriod": [
+    96,
+    48,
+    24
+  ],
+  "periods": [
+    1,
+    2,
+    4
+  ],
+  "negativePrices": true,
+  "unchangedResults": true,
+  "malformedBytes": 560000,
+  "malformedMs": 1.095928000000015,
+  "network": false
+}

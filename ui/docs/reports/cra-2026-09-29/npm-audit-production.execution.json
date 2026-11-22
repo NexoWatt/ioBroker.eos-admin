@@ -1,0 +1,11 @@
+{
+  "command": [
+    "npm",
+    "audit",
+    "--omit=dev",
+    "--json"
+  ],
+  "startedAt": "2026-09-29T20:04:33.482719+00:00",
+  "finishedAt": "2026-09-29T20:04:42.952053+00:00",
+  "exitCode": 0
+}

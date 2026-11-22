@@ -1,0 +1,17 @@
+PASS UTF-8 über Chunkgrenzen und normale Daten werden vollständig gelesen
+PASS Genau 16 MiB bleiben zulässig; ein zusätzliches Byte scheitert vor JSON
+PASS Deklarierte Übergröße bricht vor dem ersten Bodyread ab
+PASS Fehlende oder falsche kleine Content-Length umgehen das Bytebudget nicht
+PASS Ungültige Längenangaben werden kontrolliert ohne Bodyread verworfen
+PASS Content-Length wird bei komprimierten Antworten nicht mit Klartextlänge verwechselt
+PASS Ungültiges UTF-8 und defektes JSON werden abgewiesen und abgebrochen
+PASS Bereits abgebrochene Signale lesen keine Daten
+PASS Ein hängender Stream endet beim tatsächlichen Fetch-Abbruch
+PASS Fehler beim Cancel werden isoliert; ursprünglicher Größenfehler bleibt erhalten
+PASS Echte API-Pfade behalten Null-Prototyp- und Poison-Key-Validierung
+PASS HTTP403 bleibt auch bei Übergröße erhalten und wird nicht erneut gesendet
+PASS Übergröße auf erfolgreichem HTTP zeigt nur eine statische Grenzmeldung
+PASS Fehlender Body hat keinen unbeschränkten json()-Fallback
+PASS Bestehendes 10-s-Budget bleibt für lokale Mesh-/Mail-Aufrufe erhalten
+PASS Native HTTP-Gzip-Antworten werden nach Dekompression begrenzt
+{"result":"PASS","checks":16,"maxDecodedBytes":16777216,"node":"v24.19.0","sourceSha256":"6f7d387e01d9d5b640cc16d2adbc0ce63adda15c4198f57189062df08909d28e","limitation":"Native VM/Fetch/Streams und lokales HTTP; kein Feldgeräte- oder Kundenanlagentest."}

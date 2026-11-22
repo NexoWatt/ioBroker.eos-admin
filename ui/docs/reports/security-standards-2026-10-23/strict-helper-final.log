@@ -1,0 +1,3 @@
+PASS security standards guard self-tests: 17
+PASS strict security boundary scope: src-ts/runtime-executables/lib/http-error-boundary.ts
+COVERAGE: named boundary only; no ESLint/SAST or whole-repository compliance claim.

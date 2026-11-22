@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-03",
+  "scope": "React-Runtime-Pfade im Admin-HTTPS-Proxy",
+  "checks": [
+    {
+      "command": "node scripts/verify-admin-react-proxy-paths.cjs",
+      "exitCode": 0,
+      "groups": 16,
+      "log": "react-proxy-paths.log"
+    },
+    {
+      "command": "./node_modules/.bin/tsc -p src-admin-tab/tsconfig.json",
+      "exitCode": 0,
+      "output": "keine Compilerdiagnosen"
+    },
+    {
+      "command": "node scripts/verify-cra-admin-router.cjs",
+      "exitCode": 0,
+      "cases": 44
+    },
+    {
+      "command": "eslint der sechs ge\u00e4nderten React-Quellen",
+      "exitCode": 1,
+      "errors": 41,
+      "rule": "security/detect-object-injection",
+      "log": "react-proxy-paths-eslint.json"
+    }
+  ],
+  "sha256": {
+    "src-admin-tab/src/App.tsx": "130004830b352357603184300d09b4308e96773e5e8ba28365b72c56f0c9bbd8",
+    "src-admin-tab/src/components/EmbeddedEmsFrame.tsx": "781ae27e8d1a4e48912f0c8d44df230f587dd4242bc8265da44d13e80bb63158",
+    "src-admin-tab/src/lib/dataPointPicker.ts": "e28946e685fffe198314fe4463459a42c2349a2e4481e9ffe39277e187953da1",
+    "src-admin-tab/src/pages/NotificationMailPage.tsx": "6f0a0318eee11109c693ee51e63c970582627b6209cb5b9708758430a286dc62",
+    "src-admin-tab/src/pages/MeshCoordinatorPage.tsx": "ff2b00c7964696fb72d03f16b56909914940b336a26c32b4cb68715122e73e99",
+    "src-admin-tab/src/pages/DynamicGridPage.tsx": "0c8404bac5c47701b14fbcee3e830ca0f253a548fefea72c96772489164aea02",
+    "scripts/verify-cra-admin-router.cjs": "80cd2ade60eefb0b345829bc6e164a03291165b98ec2bab5ee72f1dcf4567082",
+    "scripts/verify-admin-react-proxy-paths.cjs": "7493950a8415e4b95abd9e77e79c88717674d565524a3024650cfaa15e6212bf"
+  }
+}

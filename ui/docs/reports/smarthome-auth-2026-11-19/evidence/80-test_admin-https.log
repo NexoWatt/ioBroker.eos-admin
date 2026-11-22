@@ -1,0 +1,11 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:admin-https
+> tsc -p tsconfig.runtime-proxy-html.json && node scripts/verify-admin-runtime-transport.cjs && node scripts/verify-protected-runtime-route.cjs && node scripts/verify-runtime-base.cjs && node scripts/verify-proxy-html.cjs && node scripts/verify-admin-react-proxy-paths.cjs
+
+Error: Ungültiger EOS-Anmeldestatus.
+    at parseRuntimeAuthStatus (/workspace/scratch/016e1c77b6f1/implementation/NexoWatt_UI_1.0.37/src-admin-tab/src/lib/adminConnection.ts:158:15)
+    at Object.readRuntimeAuthStatus (/workspace/scratch/016e1c77b6f1/implementation/NexoWatt_UI_1.0.37/src-admin-tab/src/lib/adminConnection.ts:1031:12)
+    at async /workspace/scratch/016e1c77b6f1/implementation/NexoWatt_UI_1.0.37/scripts/verify-admin-runtime-transport.cjs:49:19
+    at async check (/workspace/scratch/016e1c77b6f1/implementation/NexoWatt_UI_1.0.37/scripts/verify-admin-runtime-transport.cjs:42:35)
+    at async /workspace/scratch/016e1c77b6f1/implementation/NexoWatt_UI_1.0.37/scripts/verify-admin-runtime-transport.cjs:47:3

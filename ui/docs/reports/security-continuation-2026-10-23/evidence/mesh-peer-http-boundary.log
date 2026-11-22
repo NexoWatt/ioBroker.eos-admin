@@ -1,0 +1,32 @@
+{
+  "suite": "NW-HTTP-ERROR-01",
+  "sourceMode": false,
+  "node": "v24.19.0",
+  "passed": 23,
+  "environment": "real loopback Express HTTP; mocked ioBroker; synthetic errors; no devices",
+  "checks": [
+    "unknown-errors-and-accessors-are-not-inspected",
+    "parser-types-have-finite-public-policies",
+    "only-internal-errors-retain-frozen-public-validation",
+    "unset:anonymous-malformed-json-is-sanitized",
+    "unset:oversized-json-remains-413",
+    "unset:unexpected-simulation-error-is-sanitized",
+    "unset:foreign-installer-errors-and-logs-are-sanitized",
+    "unset:owned-mesh-guidance-remains-public-but-spoofs-do-not",
+    "unset:owned-simulator-preconditions-retain-guidance",
+    "unset:nexologic-validation-has-identity-and-safe-logs",
+    "unset:simulation-status-scrubs-new-and-historical-errors",
+    "unset:propagated-route-error-is-sanitized",
+    "unset:server-and-auth-remain-functional",
+    "production:anonymous-malformed-json-is-sanitized",
+    "production:oversized-json-remains-413",
+    "production:unexpected-simulation-error-is-sanitized",
+    "production:foreign-installer-errors-and-logs-are-sanitized",
+    "production:owned-mesh-guidance-remains-public-but-spoofs-do-not",
+    "production:owned-simulator-preconditions-retain-guidance",
+    "production:nexologic-validation-has-identity-and-safe-logs",
+    "production:simulation-status-scrubs-new-and-historical-errors",
+    "production:propagated-route-error-is-sanitized",
+    "production:server-and-auth-remain-functional"
+  ]
+}

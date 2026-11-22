@@ -1,0 +1,57 @@
+{
+  "sourceCodeSha256": "1c00f211c07206fc5e78ac0abf214bd827aeba6c7fce5f14598c38aa4d936a01",
+  "findings": [
+    {
+      "file": "src-ts/runtime-executables/lib/runtime-proxy-html.ts",
+      "rule": "security/detect-non-literal-fs-filename",
+      "fingerprint": "dedcb8d5c1368fcac7afc98161551c5b1ad26e1c08d1a8d5eed174d2cd71f6cc",
+      "line": 136,
+      "column": 32,
+      "fatal": false,
+      "severity": 2
+    },
+    {
+      "file": "src-ts/runtime-executables/lib/runtime-proxy-html.ts",
+      "rule": "security/detect-non-literal-fs-filename",
+      "fingerprint": "c72fdca97706f6411caa8fe3c9a32e457d3c46baf78931df2c643dda04b39a6a",
+      "line": 137,
+      "column": 31,
+      "fatal": false,
+      "severity": 2
+    },
+    {
+      "file": "src-ts/runtime-executables/lib/runtime-proxy-html.ts",
+      "rule": "security/detect-non-literal-fs-filename",
+      "fingerprint": "fce5ad36178449298727f2be3b1a6ec5f77deacdbf9856b9f34107bed778fa89",
+      "line": 138,
+      "column": 33,
+      "fatal": false,
+      "severity": 2
+    },
+    {
+      "file": "src-ts/runtime-executables/lib/runtime-proxy-html.ts",
+      "rule": "security/detect-non-literal-fs-filename",
+      "fingerprint": "582e06c6c6343b3b24b89ea25e85ccd7abe8ea60f46bd60014f527eb8ef29d8d",
+      "line": 140,
+      "column": 21,
+      "fatal": false,
+      "severity": 2
+    },
+    {
+      "file": "src-ts/runtime-executables/lib/runtime-proxy-html.ts",
+      "rule": "security/detect-non-literal-fs-filename",
+      "fingerprint": "3498a4197a24fd7108a21db425b6dc7850bc6c96eed4157c355ad7baa0152fbb",
+      "line": 143,
+      "column": 28,
+      "fatal": false,
+      "severity": 2
+    }
+  ],
+  "messages": [
+    "Found realpath from package \"node:fs/promises\" with non literal argument at index 0",
+    "Found realpath from package \"node:fs/promises\" with non literal argument at index 0",
+    "Found realpath from package \"node:fs/promises\" with non literal argument at index 0",
+    "Found lstat from package \"node:fs/promises\" with non literal argument at index 0",
+    "Found open from package \"node:fs/promises\" with non literal argument at index 0"
+  ]
+}

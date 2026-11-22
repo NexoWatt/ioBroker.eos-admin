@@ -1,0 +1,614 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:security-standards
+> node scripts/verify-security-standards.cjs && node scripts/verify-runtime-license-header.cjs && node scripts/verify-static-ems-exports.cjs && node scripts/verify-http-error-boundary.cjs && node scripts/verify-simulation-public-errors.cjs && npm run test:security-continuation && npm run test:security-patch
+
+PASS security standards guard self-tests: 17
+PASS strict security boundary scope: src-ts/runtime-executables/lib/http-error-boundary.ts
+COVERAGE: named boundary only; no ESLint/SAST or whole-repository compliance claim.
+✔ bestehender führender Marker transpiliert unverändert (1.453739ms)
+✔ proprietärer Kopf bleibt vor Build-Hinweis, folgender Marker transpiliert (0.603261ms)
+✔ No-Check-Migrationsanker nach Lizenzkopf wird nicht ausgeliefert (0.493196ms)
+✔ Marker in String oder gewöhnlichem Kommentar löst keine Transpilierung aus (0.183198ms)
+✔ Hash- und Wiederholungsprüfung akzeptiert die exakt erzeugten Artefakte (428.217299ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 844.09956
+✔ charging-budget-helpers: statischer Export und proprietärer Header in Originalquelle (1.305893ms)
+✔ charging-budget-helpers: Originalquelle lädt und arbeitet ohne String-Codegenerierung (4.416027ms)
+✔ charging-budget-helpers: erzeugtes Laufzeitartefakt lädt ohne String-Codegenerierung (1.432255ms)
+✔ evcs-control-mapping: statischer Export und proprietärer Header in Originalquelle (0.293765ms)
+✔ evcs-control-mapping: Originalquelle lädt und arbeitet ohne String-Codegenerierung (1.223754ms)
+✔ evcs-control-mapping: erzeugtes Laufzeitartefakt lädt ohne String-Codegenerierung (1.099411ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 19.413963
+{
+  "suite": "NW-HTTP-ERROR-01",
+  "sourceMode": false,
+  "node": "v24.22.1",
+  "passed": 23,
+  "environment": "real loopback Express HTTP; mocked ioBroker; synthetic errors; no devices",
+  "checks": [
+    "unknown-errors-and-accessors-are-not-inspected",
+    "parser-types-have-finite-public-policies",
+    "only-internal-errors-retain-frozen-public-validation",
+    "unset:anonymous-malformed-json-is-sanitized",
+    "unset:oversized-json-remains-413",
+    "unset:unexpected-simulation-error-is-sanitized",
+    "unset:foreign-installer-errors-and-logs-are-sanitized",
+    "unset:owned-mesh-guidance-remains-public-but-spoofs-do-not",
+    "unset:owned-simulator-preconditions-retain-guidance",
+    "unset:nexologic-validation-has-identity-and-safe-logs",
+    "unset:simulation-status-scrubs-new-and-historical-errors",
+    "unset:propagated-route-error-is-sanitized",
+    "unset:server-and-auth-remain-functional",
+    "production:anonymous-malformed-json-is-sanitized",
+    "production:oversized-json-remains-413",
+    "production:unexpected-simulation-error-is-sanitized",
+    "production:foreign-installer-errors-and-logs-are-sanitized",
+    "production:owned-mesh-guidance-remains-public-but-spoofs-do-not",
+    "production:owned-simulator-preconditions-retain-guidance",
+    "production:nexologic-validation-has-identity-and-safe-logs",
+    "production:simulation-status-scrubs-new-and-historical-errors",
+    "production:propagated-route-error-is-sanitized",
+    "production:server-and-auth-remain-functional"
+  ]
+}
+✔ API-Fehlerauswahl: {"message":"  Erst Simulation deaktivieren.  ","error":"configuration_conflict"} (6.292299ms)
+✔ API-Fehlerauswahl: {"message":"","error":"legacy_error"} (2.553847ms)
+✔ API-Fehlerauswahl: {"message":"  ","error":" legacy_error "} (1.385612ms)
+✔ API-Fehlerauswahl: {"message":{"text":"invalid"},"error":"legacy_error"} (1.868082ms)
+✔ API-Fehlerauswahl: {"message":42,"error":"legacy_error"} (1.522555ms)
+✔ API-Fehlerauswahl: {"message":null,"error":"legacy_error"} (1.320456ms)
+✔ API-Fehlerauswahl: {"message":false,"error":["invalid"]} (1.604164ms)
+✔ API-Fehlerauswahl: {"message":"","error":"   "} (2.149211ms)
+✔ API-Fehlerauswahl: null (1.400231ms)
+✔ Alle Aktionsfehler zeigen Markup unverändert als Text und behalten das Fehler-Badge (10.638952ms)
+✔ Nicht-JSON- und Transportfehler behalten den bisherigen Text-Fallback (2.460038ms)
+✔ Initialer Ladefehler zeigt öffentlichen Hinweis als einfachen Text (1.197493ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 43.937074
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:security-continuation
+> npm run test:strict-boundary-configs && npm run typecheck:admin && npm run typecheck:config-boundaries && npm run typecheck:mesh-peer-http && npm run test:admin-boundaries && npm run test:config-boundaries && npm run test:mesh-peer-http && npm run test:proprietary-headers && npm run check:proprietary-headers && npm run test:lint-security && npm run lint:security && npm run test:entsoe-parser
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:strict-boundary-configs
+> node scripts/verify-strict-boundary-configs.cjs
+
+PASS strict scope: tsconfig.config-boundaries.json (4 exact source files)
+PASS strict scope: tsconfig.mesh-peer-http.json (1 exact source files)
+PASS strict scope: src-admin-tab/tsconfig.json (20 exact source files)
+PASS strict scope: src-admin-tab/tsconfig.build-tools.json (1 exact source files)
+PASS strict configuration guard: 23 native positive/negative fixtures; four resolved scopes.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 typecheck:admin
+> npm --prefix src-admin-tab run typecheck
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> nexowatt-ui-admin-tab@0.8.8 typecheck
+> tsc -p tsconfig.json && tsc -p tsconfig.build-tools.json
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 typecheck:config-boundaries
+> tsc -p tsconfig.config-boundaries.json
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 typecheck:mesh-peer-http
+> tsc -p tsconfig.mesh-peer-http.json
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:admin-boundaries
+> node scripts/verify-admin-type-boundaries.cjs && node scripts/verify-admin-connection-boundaries.cjs && node scripts/verify-admin-mesh-boundaries.cjs
+
+PASS real inactive snapshot with null budget and missing M0 mappings remains editable
+PASS incomplete stored drafts retain empty and null numeric values
+PASS backend-compatible legacy drafts and valid point order remain editable
+PASS extra legitimate configuration fields remain intact
+PASS real normalized draft and split M0 measurement pass guards
+PASS real stale runtime response keeps null telemetry as unavailable
+PASS preview contract permits a response without configuration while load/save do not
+PASS malformed nested configuration cannot replace the current draft
+PASS poison keys, getters, cycles, non-finite numbers and oversized nesting fail closed
+PASS validation messages keep paths but cannot carry arbitrary objects into React
+PASS mail API fields and real TLS choices are validated before state updates
+PASS Admin build requires actual strict checking and sources contain no any/suppression
+PASS Admin-Typgrenzen: 12 Prüfgruppen
+PASS ServConn erhält beide Callbackformen, native/common und Schreibfehler
+PASS Socket und callable socket.io factory behalten den ioBroker-Vertrag
+PASS UUID-Fallback und gültige alte Textports bleiben erhalten, ungültige Ports nicht
+PASS Authvalidierung behält Erweiterungen und verweigert falsche Datentypen
+PASS Poison Keys, Zyklen und unbeschränkte Verschachtelung scheitern vollständig
+PASS Status/Login verwenden die validierten Authfelder und bewahren Credentials-Option
+PASS Auch defekte HTTP403-Antworten behalten Status und unterbinden Port-Fallbacks
+PASS Vollständige JSON-Erweiterungen bleiben erhalten; falsches Top-Level wird verworfen
+PASS Timeout bricht auch das Lesen des Antwortkörpers tatsächlich ab
+{"result":"PASS","checks":9,"node":"v24.22.1","sourceSha256":"c23659d808a8e11e98e84aaa5ea6b73492e45c0064381e2056df5b8a47919beb","limitation":"Originaler TypeScript-Verbindungscode mit VM/Transport-Fixtures; installierte ioBroker-Instanz und Browser separat prüfen."}
+PASS Backend-Defaults und leerer OFF-Status werden vollständig gelesen
+PASS Diagnose und aktiver Master erhalten Teilnehmer, Nullgrenzen und Timing
+PASS Persistierte Betriebslimits ohne Strategie erfinden keinen fixed-Modus
+PASS Echte Master-Paarung und JSON-Import bewahren den Slavevertrag
+PASS Echte Zählererfassung und Archivexport behalten Hashes und beide Quellenzeiten
+PASS Echte BLOCKED-, PARTIAL_PERIOD- und DRAFT-Abrechnungen sind unverändert darstellbar
+PASS Manipulierte JSON-Strukturen und falsche Zahlen erreichen keine Mesh-Formulare
+{"result":"PASS","checks":7,"node":"v24.22.1","sourceSha256":"1994cdf4fcf5671089424050bf8b28a100da007838df5e5a17b39194d314d56e","limitation":"Echte Backend-/Journalfunktionen mit temporären synthetischen Zählerwerten; keine Feldgeräte oder Liveanlage."}
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:config-boundaries
+> node --test test/config-boundaries.test.cjs
+
+✔ die drei Konfigurationsquellen erlauben weder explizite unsichere Typen noch abgeschaltete Prüfungen (83.959706ms)
+✔ fehlerhafte Validatorausgaben werden vor einer fachlichen Weiterverwendung abgewiesen (0.956188ms)
+✔ verschachtelte Konfigurationsverträge dürfen keine ungeprüften Messobjekte enthalten (0.55206ms)
+✔ falsche ioBroker-Objektformen liefern feste Auflösungsfehler (0.969098ms)
+✔ gültige getrennte Aliasrichtungen bleiben unverändert nutzbar (0.951835ms)
+✔ ungültige Bestandszeilen verschieben keine Speicher- oder PV-Kennungen (0.55943ms)
+✔ Dictionary-Fallbacks besitzen keinen Prototyp und fremde Schlüssel verschmutzen keine globalen Objekte (0.217719ms)
+✔ alte und fehlerhafte Entwürfe bleiben sichtbar und lesendes CAS verändert die gespeicherten Daten nicht (0.561884ms)
+✔ fremde Speicherfehler bleiben sanitisiert und geben die Speichersperre wieder frei (8.572554ms)
+✔ ein defekter interner Patch-Merge darf keinen neuen Konfigurationsvertrag erzeugen (2.531662ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 466.417837
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:mesh-peer-http
+> node scripts/verify-mesh-peer-http.cjs
+
+[mesh-peer-http] OK: 28 native Transport-/HTTP-Prüfgruppen; Redirect, Größen-/Strukturlimits, DNS-/Body-/Gesamtbudget, TLS-Prüfung, Rollen, neutrale Probe, Mehrpeer und Wiederaufnahme.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:proprietary-headers
+> node scripts/verify-proprietary-headers.cjs
+
+✔ Kopf steht vor Migration-/Transpiliermarker, Wiederholung verändert nichts (4.235782ms)
+✔ Typfehler bleibt hinter Lizenzkopf erkennbar, No-Check wird für Teilprüfungen entfernt (34.574314ms)
+✔ Pragma-Erkennung berücksichtigt Runtime-Marker, Blockkommentare und Compiler-Priorität (5.222693ms)
+✔ Shebang und Strict-Modus bleiben wirksam, CRLF und BOM bleiben erhalten (1.30384ms)
+✔ Fremde/unklare Lizenzen werden abgewiesen, Fixture-Strings nicht umgedeutet (1.210628ms)
+✔ Eigener Scope schließt Drittbundles, Notices, HTML/CSS/JSON und Binärdateien aus (7.723098ms)
+✔ Preflight verweigert Fremdlizenzen vor erstem Schreibzugriff (0.862206ms)
+✔ Symbolische Links werden weder gelesen noch überschrieben (0.396192ms)
+✔ Check verlangt erzeugte Runtime, Write verändert manuelle Spiegel nur um den Kopf (1.377596ms)
+✔ No-Check-Budget zählt vorhandene und neue Direktiven auch hinter Lizenzkopf (210.885097ms)
+✔ Gesamter eigener Quellscope bleibt beim Einfügen nach dem Prolog bytegleich (2511.616573ms)
+ℹ Lesend geprüfte eigene Quelldateien: 809
+✔ Original-Runtime-Spiegelgenerator setzt Kopf vor No-Check und ist idempotent (227.580451ms)
+✔ Original-Scriptgenerator hält Lizenz zuerst und Strict-/Exports-Semantik (3166.108272ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6201.013828
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 check:proprietary-headers
+> node scripts/sync-proprietary-headers.cjs --check
+
+{
+  "ok": true,
+  "sourceCount": 809,
+  "generatedCount": 721,
+  "missing": [],
+  "changed": [],
+  "blocked": []
+}
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:lint-security
+> node scripts/verify-eslint-security-test.cjs
+
+ESLint security gate: 25 meaningful policy/negative checks passed.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 lint:security
+> node scripts/verify-eslint-security.cjs
+
+ESLint: 178 sources; 3075 current findings; 3075 inventoried (2968 historical open, 107 individually reviewed); 0 blocked new/forbidden findings; 92 old findings absent.
+Open scanner hotspots: {"security/detect-object-injection":2359,"security/detect-non-literal-fs-filename":48,"@typescript-eslint/ban-ts-comment":73,"security/detect-unsafe-regex":16,"@typescript-eslint/no-explicit-any":563,"security/detect-possible-timing-attacks":12,"security/detect-non-literal-require":1,"security/detect-non-literal-regexp":3}
+This gate prevents new scanner findings. It does not assert a clean security scan or full ASVS conformity.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:entsoe-parser
+> node --test scripts/verify-entsoe-linear-parser.cjs
+
+ENTSO-E malformed-input bound: {"tag":"Period","bytes":560040,"ms":4.830193000000008}
+ENTSO-E malformed-input bound: {"tag":"Point","bytes":490040,"ms":2.746762000000004}
+ENTSO-E malformed-input bound: {"tag":"start","bytes":490040,"ms":2.1242639999999966}
+✔ legacy copy-mode source remains directly executable JavaScript (91.648257ms)
+✔ quarter-hour, negative prices and MWh conversion stay correct (2.674369ms)
+✔ multiple periods preserve chronological boundaries (1.789344ms)
+✔ namespace prefixes, XML declaration and quoted attribute delimiters (0.821653ms)
+✔ comments cannot contribute false price or period elements (0.785987ms)
+✔ missing resolution is rejected (0.962529ms)
+✔ self-closing resolution is rejected (0.429893ms)
+✔ missing numeric price is rejected (0.357296ms)
+✔ nonsequential point is rejected (0.427839ms)
+✔ mismatched close is rejected (0.199703ms)
+✔ unclosed last period is rejected (0.273562ms)
+✔ nested same period is rejected (0.185991ms)
+✔ external declaration is rejected (0.066746ms)
+✔ oversized source is rejected (2.815195ms)
+✔ oversized tag is rejected (1.522359ms)
+✔ unclosed quoted attribute is rejected (0.126507ms)
+✔ bounded CPU for 512KiB unclosed Period tags (81.401403ms)
+✔ bounded CPU for 512KiB unclosed Point tags (79.847848ms)
+✔ bounded CPU for 512KiB unclosed start tags (94.34137ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1037.742179
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:security-patch
+> npm run test:runtime-security-updates && npm run test:admin-response-limits
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:runtime-security-updates
+> node scripts/verify-runtime-security-updates.cjs
+
+{
+  "ok": true,
+  "node": "v24.22.1",
+  "httpCases": 28,
+  "mail": {
+    "parserCases": 3,
+    "rejectedBeforeTransport": 3,
+    "composedWithoutSmtp": true
+  },
+  "results": [
+    {
+      "scenario": "plain",
+      "parserIndex": 0,
+      "options": {
+        "limit": "5mb",
+        "inflate": false
+      },
+      "status": 200,
+      "survived": true
+    },
+    {
+      "scenario": "malformed",
+      "parserIndex": 0,
+      "options": {
+        "limit": "5mb",
+        "inflate": false
+      },
+      "status": 400,
+      "survived": true
+    },
+    {
+      "scenario": "over-limit",
+      "parserIndex": 0,
+      "options": {
+        "limit": "5mb",
+        "inflate": false
+      },
+      "status": 413,
+      "survived": true
+    },
+    {
+      "scenario": "gzip",
+      "parserIndex": 0,
+      "options": {
+        "limit": "5mb",
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "deflate",
+      "parserIndex": 0,
+      "options": {
+        "limit": "5mb",
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "gzip-trailing",
+      "parserIndex": 0,
+      "options": {
+        "limit": "5mb",
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "deflate-trailing",
+      "parserIndex": 0,
+      "options": {
+        "limit": "5mb",
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "plain",
+      "parserIndex": 1,
+      "options": {
+        "limit": "64kb",
+        "inflate": false
+      },
+      "status": 200,
+      "survived": true
+    },
+    {
+      "scenario": "malformed",
+      "parserIndex": 1,
+      "options": {
+        "limit": "64kb",
+        "inflate": false
+      },
+      "status": 400,
+      "survived": true
+    },
+    {
+      "scenario": "over-limit",
+      "parserIndex": 1,
+      "options": {
+        "limit": "64kb",
+        "inflate": false
+      },
+      "status": 413,
+      "survived": true
+    },
+    {
+      "scenario": "gzip",
+      "parserIndex": 1,
+      "options": {
+        "limit": "64kb",
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "deflate",
+      "parserIndex": 1,
+      "options": {
+        "limit": "64kb",
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "gzip-trailing",
+      "parserIndex": 1,
+      "options": {
+        "limit": "64kb",
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "deflate-trailing",
+      "parserIndex": 1,
+      "options": {
+        "limit": "64kb",
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "plain",
+      "parserIndex": 2,
+      "options": {
+        "limit": "64kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 200,
+      "survived": true
+    },
+    {
+      "scenario": "malformed",
+      "parserIndex": 2,
+      "options": {
+        "limit": "64kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 400,
+      "survived": true
+    },
+    {
+      "scenario": "over-limit",
+      "parserIndex": 2,
+      "options": {
+        "limit": "64kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 413,
+      "survived": true
+    },
+    {
+      "scenario": "gzip",
+      "parserIndex": 2,
+      "options": {
+        "limit": "64kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "deflate",
+      "parserIndex": 2,
+      "options": {
+        "limit": "64kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "gzip-trailing",
+      "parserIndex": 2,
+      "options": {
+        "limit": "64kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "deflate-trailing",
+      "parserIndex": 2,
+      "options": {
+        "limit": "64kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "plain",
+      "parserIndex": 3,
+      "options": {
+        "limit": "160kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 200,
+      "survived": true
+    },
+    {
+      "scenario": "malformed",
+      "parserIndex": 3,
+      "options": {
+        "limit": "160kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 400,
+      "survived": true
+    },
+    {
+      "scenario": "over-limit",
+      "parserIndex": 3,
+      "options": {
+        "limit": "160kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 413,
+      "survived": true
+    },
+    {
+      "scenario": "gzip",
+      "parserIndex": 3,
+      "options": {
+        "limit": "160kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "deflate",
+      "parserIndex": 3,
+      "options": {
+        "limit": "160kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "gzip-trailing",
+      "parserIndex": 3,
+      "options": {
+        "limit": "160kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "deflate-trailing",
+      "parserIndex": 3,
+      "options": {
+        "limit": "160kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    }
+  ]
+}
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:admin-response-limits
+> node scripts/verify-admin-response-limits.cjs
+
+PASS UTF-8 über Chunkgrenzen und normale Daten werden vollständig gelesen
+PASS Genau 16 MiB bleiben zulässig; ein zusätzliches Byte scheitert vor JSON
+PASS Deklarierte Übergröße bricht vor dem ersten Bodyread ab
+PASS Fehlende oder falsche kleine Content-Length umgehen das Bytebudget nicht
+PASS Ungültige Längenangaben werden kontrolliert ohne Bodyread verworfen
+PASS Content-Length wird bei komprimierten Antworten nicht mit Klartextlänge verwechselt
+PASS Ungültiges UTF-8 und defektes JSON werden abgewiesen und abgebrochen
+PASS Bereits abgebrochene Signale lesen keine Daten
+PASS Ein hängender Stream endet beim tatsächlichen Fetch-Abbruch
+PASS Fehler beim Cancel werden isoliert; ursprünglicher Größenfehler bleibt erhalten
+PASS Echte API-Pfade behalten Null-Prototyp- und Poison-Key-Validierung
+PASS HTTP403 bleibt auch bei Übergröße erhalten und wird nicht erneut gesendet
+PASS Übergröße auf erfolgreichem HTTP zeigt nur eine statische Grenzmeldung
+PASS Fehlender Body hat keinen unbeschränkten json()-Fallback
+PASS Bestehendes 10-s-Budget bleibt für lokale Mesh-/Mail-Aufrufe erhalten
+PASS Native HTTP-Gzip-Antworten werden nach Dekompression begrenzt
+{"result":"PASS","checks":16,"maxDecodedBytes":16777216,"node":"v24.22.1","sourceSha256":"c23659d808a8e11e98e84aaa5ea6b73492e45c0064381e2056df5b8a47919beb","limitation":"Native VM/Fetch/Streams und lokales HTTP; kein Feldgeräte- oder Kundenanlagentest."}

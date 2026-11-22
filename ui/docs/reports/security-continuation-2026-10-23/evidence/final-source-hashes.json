@@ -1,0 +1,17 @@
+{
+  "version": "1.0.30",
+  "note": "Finale Quellbindung nach Kommentaren, Headern und Reviewkorrekturen; frühere Agent-Snapshots sind Zwischenstände.",
+  "sha256": {
+    "src-ts/runtime-executables/main.ts": "641581699de1fa8ee58a78d32195b3a34096452bef1a2d778818446d1395161c",
+    "src-ts/runtime-mirrors/main.ts": "f7e84eb593c962ced2cab8ce420c64cc29565308c2b4c78dd790abd681667a5e",
+    "src-ts/runtime-executables/lib/mesh-peer-http.ts": "2645d16ab9dc6a25948c904ace6cfea3131328dd421b8685754120c64c10a7f6",
+    "lib/mesh-peer-http.js": "a631c7087db5947368454eee2186f0e95d2759bbfabc7f9af201310051144a15",
+    "src-ts/runtime-executables/lib/config-boundary-contracts.ts": "9f912784cde03899343c91fb0505d7b2740b532d967136d9b8ad6d98129ad68f",
+    "src-ts/runtime-executables/lib/nvp-config-api.ts": "bdecfc284d413d60022fc521bf24c2d6cf96696d322b509fcd885394496da0b7",
+    "src-ts/runtime-executables/lib/dynamic-grid-config-api.ts": "7161236b3cfd48a4cb98f4ee636001ec1802336105a1ec9454b9ef5fa8f79f7b",
+    "src-admin-tab/src/lib/adminContracts.ts": "d4f9599789bf9ac9e6361143fe7320da764df9aa3edc2723a5768f79e2574995",
+    "src-admin-tab/src/lib/mesh-types.ts": "1994cdf4fcf5671089424050bf8b28a100da007838df5e5a17b39194d314d56e",
+    "src-admin-tab/src/lib/adminConnection.ts": "768772fefb843d5f96ecd7cfb51b3bab094b123ec6da32178489556bfc2fc696",
+    "admin/react/assets/index-BlCFdkWP.js": "37c60f42da7ec4b0e65668bd64ac319d9c4c65f7c87157268e936bb5f186fa3b"
+  }
+}

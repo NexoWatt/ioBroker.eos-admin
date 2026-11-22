@@ -1,0 +1,18 @@
+CRA network verification 2026-09-29T20:10:02.153Z | v24.19.0 | linux | canonical source
+SHA256 src-ts/runtime-executables/lib/mesh-coordinator-contract.ts cf6a5cf7faa8c844d6544e2a84143a5ce7b5c7b4f0d3f7846614701d5f86ed7d
+SHA256 src-ts/runtime-executables/lib/mesh-coordinator-protocol.ts af525622d04b618eccd223a42b79ae15814e83ab1d923c952945207c08266cab
+SHA256 src-ts/runtime-executables/lib/mesh-coordinator.ts d96d96eb6c658b4b1a8d6ffdd263134b8ffbe4594612d0c3b177a295a5fe5bb2
+SHA256 src-ts/runtime-executables/lib/notification-mail.ts eea3d4b9ed91eb9e1c7362a1b2fe17e3135f8d633c9f4976e525bf5499736a92
+OK NET-01: v2-Anlauf, signierter Verkehr, Hello-Replay verändert keinen aktiven Regelzustand
+OK NET-02: Reconnect nach gleichem Boot und echter Slave-Neustart erholen sich kontrolliert
+OK NET-03: Master-Neustart, altes Hello und alter Exchange können keine Sitzung vorwegnehmen
+OK NET-04: Abgelaufene, manipulierte und fremde Challenges; vertauschte/alte Antworten abgewiesen
+OK NET-05: V1-Peers werden ausdrücklich abgewiesen; ungültige HMACs erreichen keine Sitzung
+OK NET-06: Tatsächliche IPv4/IPv6-Tailnet-/Loopbackadressen geprüft; Fremdnetze abgewiesen
+OK NET-07: Echter Loopback-HTTP-Kanal; DNS-Rebinding blockiert vor Socket/Datensendung
+OK NET-08: Antwort-/Anfragelimit, Deadline, fremder Endpoint und Protokollfehler
+OK NET-09: HTTPS verlangt explizit TLS >=1.2 und Gegenstellenprüfung (Optionsprüfung)
+OK NET-10: SMTP-Ledger exklusiv/0600/atomar; vorbereiteter alter Temp-Symlink bleibt wirkungslos
+OK NET-11: Fehler vor Rename erhält vorhandenes Ledger und räumt neue Tempdatei auf
+OK NET-12: SMTP erfordert TLS, keine URL-/Dateizugriffe, keine Rohfehler oder Secrets
+PASS 12 network/security groups; no hardware/Tailnet/real SMTP test

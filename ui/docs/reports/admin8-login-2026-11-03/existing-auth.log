@@ -1,0 +1,20 @@
+PASS anonyme Kundenschreibversuche benötigen Sitzung; Kunde bedient eigene Settings
+PASS unknown scope umgeht weder Peak-Shaving-Sperre noch Tarifzwang
+PASS Origin null/fremde Origin werden vor Mutationen gesperrt, eigene Origin funktioniert
+PASS fehlerhaft kodierte Cookies erzeugen keinen Serverfehler
+PASS Login rotiert Browser-Sitzung, Logout widerruft Token
+PASS Kontosperre, Löschung und Passwortwechsel widerrufen vorhandene Sessions
+PASS Gruppen-Demotion wirkt ohne Logout und ohne Wartezeit
+PASS Sessionzahl pro Konto ist auf acht begrenzt
+PASS Prototype-Pollution direkt, per Arrays und HTTP ist vor Merge/Mutation blockiert
+PASS Flow-Sollwertgrenzen werden serverseitig vor jedem Gerätetarget durchgesetzt
+PASS öffentliche States und selbst privilegierter SSE-LIVE-Kanal enthalten keine Stationstokens
+PASS Stationsmodus-Freigabe gilt ebenso für set-mode und mode Alias
+PASS neue oder geänderte kurze Stationstokens werden beim Save und Import abgelehnt
+PASS fehlende oder ungültige Policy fällt sicher auf session zurück
+PASS fehlender Passwort-Rückruf läuft nach fünf Sekunden aus und gibt Login-Kapazität frei
+PASS Installer-Mapping bleibt bei auth=false und all geschützt
+PASS Installer-Mapping bleibt bei auth=false und lan geschützt
+PASS Installer-Mapping bleibt bei auth=false und session geschützt
+PASS parallele Logins reservieren Kapazität vor der Passwortprüfung
+CRA AUTH: 19 checks passed; real local HTTP, mocked ioBroker accounts/states, no hardware.

@@ -18,7 +18,7 @@
   <script defer src="/nexowatt/license/app.js"></script>
 </head>
 <body><main>
-  <header><div><small>NEXOWATT EOS</small><h1>Lizenzverwaltung</h1></div><a href="/">Zurück zum Admin</a></header>
+  <header><div><small>NEXOWATT EOS</small><h1>Lizenzverwaltung</h1></div><a href="/">Zum EOS-Dashboard</a></header>
   <p>Home und Pro zentral für dieses EOS-System verwalten. Nur freigegebene Adapter mit eingebauter Lizenzprüfung erhalten eine Betriebsfreigabe.</p>
   <section class="card" aria-labelledby="statusTitle"><h2 id="statusTitle">Aktueller Status</h2>
     <p id="status" class="status" aria-live="polite">Wird geprüft …</p>
@@ -26,10 +26,11 @@
     <button id="refresh" class="secondary">Status aktualisieren</button>
   </section>
   <section class="card"><h2>Lizenz aktivieren</h2><p>Den für diese UUID ausgestellten Lizenzcode aus dem NexoWatt Key-Generator einfügen. Die Lizenz wird geprüft und verschlüsselt auf dem Gerät gespeichert.</p>
-    <p class="note">Dieser Teststand erwartet das signierte Format NWL2. Der bisherige Key-Generator muss dafür noch angebunden und gemeinsam geprüft werden. Alte NW1-Schlüssel werden nicht automatisch übernommen.</p>
-    <label for="token">Neuer Lizenzcode</label><textarea id="token" spellcheck="false" autocomplete="off" placeholder="NWL2.…" maxlength="16384"></textarea>
+    <p class="note">Die gemeinsame EOS-Systemlizenz im Format NWL3 wird nach der Erstanmeldung einmalig aktiviert. Nach Neustarts bleibt sie gespeichert. Bestehende NWL2-Lizenzen behalten ihren ursprünglich signierten Umfang; alte NW1-Schlüssel benötigen eine passende Ersatzlizenz.</p>
+    <label for="token">Neuer Lizenzcode</label><textarea id="token" spellcheck="false" autocomplete="off" placeholder="NWL3.…" maxlength="16384"></textarea>
     <button id="activate">Prüfen und aktivieren</button><button id="remove" class="secondary">Lizenz entfernen</button>
     <p id="message" role="status" aria-live="polite"></p>
+    <p><a id="continue" href="/" hidden>Weiter zum EOS-Dashboard</a></p>
     <small>Der gespeicherte Code wird nicht zurück angezeigt. Ein ungültiger Import ersetzt keine gültige Lizenz.</small>
   </section>
   <p>Ohne gültige Lizenz bleiben Lizenzverwaltung, Diagnose und Sicherheitswartung erreichbar. Die Betriebsfreigabe der angebundenen Adapter endet spätestens nach 15 Sekunden. Schutzfunktionen benötigen den im jeweiligen Adapter festgelegten sicheren Zustand.</p>

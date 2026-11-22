@@ -1,0 +1,45 @@
+{
+  "timestamp": "2026-11-19T07:05:40.297Z",
+  "node": "v24.22.3",
+  "kind": "VM/DOM/HTTP-Vertragstest, kein Browser",
+  "sources": {
+    "scripts/verify-auth-profiles-ui.cjs": "d74f7e91f141857e88c381b9a06fc155bba82aa4448c2894eefe3157e19eb910",
+    "src-ts/runtime-executables/www/auth.ts": "24e1a926914aa75f6362429b2183972e7340c98d083854d301309169a827bfc5",
+    "src-ts/runtime-executables/www/login.ts": "afa26a7a4a540387945d6b7f62a4b97f78f2e1c31e71238c557c59bc247c7a76",
+    "src-ts/runtime-executables/www/runtime-base.ts": "f7f321856fce4f5da11f8cc1784e349058199151cd3777b97cfcfd1c519da1f8"
+  },
+  "results": [
+    {
+      "name": "Statusprofil/CSRF erforderlich; fehlender Status sperrt die UI",
+      "result": "PASS"
+    },
+    {
+      "name": "Eigene Mutationen mit CSRF, fremde Kamera unverändert, kein Replay",
+      "result": "PASS"
+    },
+    {
+      "name": "Fachlicher 403 erhält bestätigten Zugang; echter Sitzungsverlust sperrt",
+      "result": "PASS"
+    },
+    {
+      "name": "Offline und BFCache sperren vor erneuter Bestätigung",
+      "result": "PASS"
+    },
+    {
+      "name": "EOS-Logout trägt CSRF und öffnet das zentrale Ziel",
+      "result": "PASS"
+    },
+    {
+      "name": "EOS/Frame/HTTP/Fehlkonfiguration ohne Passwortmaske",
+      "result": "PASS"
+    },
+    {
+      "name": "Passwort exakt einmal gesendet und Formular danach geleert",
+      "result": "PASS"
+    },
+    {
+      "name": "Sichere Rücksprünge und rollenabhängiger Einstieg",
+      "result": "PASS"
+    }
+  ]
+}

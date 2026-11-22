@@ -59,6 +59,7 @@ const plugin_docker_1 = require("@iobroker/plugin-docker");
 const objectFixes_1 = require("./lib/objectFixes");
 const eosLicenseService_1 = require("./lib/eosLicenseService");
 const eosSessionSecurity_1 = require("./lib/eosSessionSecurity");
+const eosUnifiedOwnership_1 = require("./lib/eosUnifiedOwnership");
 const eosUiSessionRegistry_1 = require("./lib/eosUiSessionRegistry");
 const eosHttpsClient_1 = require("./lib/eosHttpsClient");
 const eosNewsSecurity_1 = require("./lib/eosNewsSecurity");
@@ -265,6 +266,8 @@ async function ensureEosStableInitialAccounts(adapter) {
 }
 class Admin extends adapter_core_1.Adapter {
     /** Local license authority; management/recovery is never license-gated. */
+    eosHostedRuntime;
+    eosOwnership;
     eosLicenseService;
     /** secret used for the socket connection */
     secret = '';
@@ -342,6 +345,11 @@ class Admin extends adapter_core_1.Adapter {
         // Invalidate before forwarding changes or waiting for the debounced role cache.
         this.eosSessionSecurity?.handleObjectChange(id, obj, objects[id]);
         if (/^system\.(?:user|group)\./.test(id)) {
+            this.eosHostedRuntime?.revokeSessions?.();
+        }
+        this.eosOwnership?.onObjectChange(id, obj);
+        this.eosHostedRuntime?.onObjectChange?.(id, obj);
+        if (/^system\.(?:user|group)\./.test(id)) {
             this.uiPushSessions.clear();
             webServer?.invalidateProxySessions();
         }
@@ -398,6 +406,8 @@ class Admin extends adapter_core_1.Adapter {
             webServer.resetIndexHtml();
         }
         socket?.stateChange(id, state);
+        this.eosOwnership?.onStateChange(id, state);
+        this.eosHostedRuntime?.onStateChange?.(id, state);
     };
     onFileChange = (id, fileName, size) => {
         socket?.fileChange(id, fileName, size);
@@ -429,6 +439,8 @@ class Admin extends adapter_core_1.Adapter {
                 resolveDirectory: () => (0, node_path_1.join)((0, adapter_core_1.getAbsoluteInstanceDataDir)(this), 'licensing'),
             });
             await this.eosLicenseService.start();
+            this.eosOwnership = (0, eosUnifiedOwnership_1.createOwnershipGuard)(this);
+            await this.eosOwnership.start();
             if (!systemConfig.native.secret) {
                 try {
                     this.secret = (0, node_crypto_1.randomBytes)(32).toString('hex');
@@ -458,6 +470,9 @@ class Admin extends adapter_core_1.Adapter {
      * @param obj the message object
      */
     onMessage = (obj) => {
+        if (this.eosHostedRuntime?.onMessage?.(obj) === true) {
+            return;
+        }
         if (!obj) {
             return;
         }
@@ -864,6 +879,7 @@ class Admin extends adapter_core_1.Adapter {
      * @param callback Callback after unloading
      */
     onUnload = (callback) => {
+        this.eosOwnership?.stop();
         this.eosLicenseService?.stop();
         this.eosSessionSecurity?.stop();
         this.uiPushSessions.clear();
@@ -894,8 +910,13 @@ class Admin extends adapter_core_1.Adapter {
         try {
             this.log.info(`terminating http${this.config.secure ? 's' : ''} server on port ${this.config.port}`);
             socket?.close();
-            webServer.close();
-            callback();
+            webServer?.close();
+            if (this.eosHostedRuntime) {
+                void this.eosHostedRuntime.stop().then(callback, callback);
+            }
+            else {
+                callback();
+            }
         }
         catch {
             callback();
@@ -1221,7 +1242,6 @@ class Admin extends adapter_core_1.Adapter {
         const nextDisabled = new Set();
         const nextPending = new Set();
         const next = new Map();
-        next.set('system.user.admin', 'admin');
         const priorities = { enduser: 1, installer: 2, admin: 3 };
         const assign = (userId, role) => {
             const current = next.get(userId);
@@ -1274,9 +1294,6 @@ class Admin extends adapter_core_1.Adapter {
         this.eosRoleCacheHealthy = true;
     }
     getEosCachedRole(userId) {
-        if (userId === 'system.user.admin') {
-            return 'admin';
-        }
         // Missing or not-yet-resolved identities always fall back to the least privileged role.
         // The underlying socket ACL check still applies afterwards, but this prevents a transient
         // authentication gap from ever selecting the unrestricted EOS policy branch.

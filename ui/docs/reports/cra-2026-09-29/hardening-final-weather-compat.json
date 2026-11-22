@@ -1,0 +1,13 @@
+{
+  "command": [
+    "bash",
+    "-c",
+    "npm run test:rc72-weather-pv-forecast-auto && npm run test:rc74-pv-forecast-customer-ui && npm run test:rc75-pv-forecast-admin-location && npm run test:rc76-pv-forecast-runtime-hardening && npm run test:rc77-pv-forecast-state-cache-bridge && npm run test:cra-weather && npm run test:cra-credential-state && npm run test:license-secret"
+  ],
+  "cwd": "repository root",
+  "startedAt": "2026-09-29T21:24:20.715392+00:00",
+  "finishedAt": "2026-09-29T21:24:33.831067+00:00",
+  "durationSeconds": 13.116,
+  "exitCode": 0,
+  "capturedBytes": 4615
+}

@@ -1,0 +1,23 @@
+✔ signed feature subset blocks direct SmartHome, NexoLogic and ledger APIs (51.555779ms)
+✔ never-granted SmartHome cannot dispatch timer, scene or initialize NexoLogic (3.246189ms)
+✔ NexoLogic rechecks actual SmartHome grant before a later output dispatch (4.425611ms)
+✔ full hosted onReady initializes EMS with controller-shaped fixture and no device mappings (99.433175ms)
+✔ EMS startup failure remains visible as degraded while authenticated shell survives (57.189134ms)
+✔ facade creates no adapter and isolates native.eosUi from host security fields (1.725137ms)
+✔ all four foreign state APIs enforce the current owner generation (0.715419ms)
+✔ license requires a valid central core grant and preserves signed limits (0.175162ms)
+✔ central access rejects required password setup and missing credential binding (0.840545ms)
+✔ hosted shell opens no listener; HTTP authorization remains fail closed (54.588125ms)
+✔ fresh UI snapshot never converts revoked Home to Pro; control retains only verified old limits (30.5779ms)
+✔ Home slave entitlement cannot configure or pair a Microgrid master (2.790528ms)
+✔ explicit central Master grant permits configuration (0.630511ms)
+✔ existing Master regulation can retain its validated grant; new configuration and pairing cannot (0.310854ms)
+✔ missing central grant authority fails closed (0.157355ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 389.647538

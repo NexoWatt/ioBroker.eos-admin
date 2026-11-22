@@ -33,6 +33,7 @@ function securityProjection(id, object) {
         return [
             object.type,
             object.common?.password,
+            object.common?.externalAuthentication ?? null,
             object.common?.enabled !== false,
             object.acl,
             native.nexowattEosAccount?.forcePasswordChange === true,
@@ -143,6 +144,16 @@ class EosSessionSecurity {
             result.rows.length > 1024 ||
             epoch !== this.epoch ||
             this.stopped) {
+            throw failure();
+        }
+        // The inherited UI account contract recognizes ioBroker TOTP here. The bundled
+        // OAuth model has no second-factor challenge: never downgrade that account to password-only.
+        const external = user.common.externalAuthentication;
+        if (external !== undefined &&
+            external !== null &&
+            (typeof external !== 'object' ||
+                Array.isArray(external) ||
+                (external.totp !== undefined && external.totp !== null))) {
             throw failure();
         }
         const groupIds = new Set();

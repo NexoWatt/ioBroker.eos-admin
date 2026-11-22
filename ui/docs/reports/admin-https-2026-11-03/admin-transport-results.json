@@ -1,0 +1,34 @@
+[
+  {
+    "command": [
+      "node",
+      "scripts/verify-admin-runtime-transport.cjs"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 0.478,
+    "log": "admin-transport.log",
+    "sha256": "e2666b0585e82815ed792fc9f2b21a372004e403cdc6cd67044326edeedef3ea"
+  },
+  {
+    "command": [
+      "node",
+      "scripts/verify-admin-connection-boundaries.cjs"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 0.486,
+    "log": "admin-boundaries.log",
+    "sha256": "e0815c859aadad42c8a5427cd6e3769b56bb7f6624d56a631184fa90406383ba"
+  },
+  {
+    "command": [
+      "./node_modules/.bin/tsc",
+      "-p",
+      "src-admin-tab/tsconfig.json",
+      "--noEmit"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 3.335,
+    "log": "admin-strict.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

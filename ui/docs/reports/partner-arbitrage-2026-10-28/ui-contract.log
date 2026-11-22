@@ -1,0 +1,10 @@
+PASS Realer gesperrter Backend-Standard bleibt ohne zusätzliche App editierbar
+PASS Alle Netz-/Speichergrenzen und getrennte Bilanzrechte bleiben unverändert
+PASS Falsche Datentypen, leere Leistungen, unendliche Zahlen und TTL>60 scheitern
+PASS Ungeprüfte Bereitschaft und beschädigte API-Antworten können nicht freischalten
+PASS Ungültige Vorschau zeigt Prüfhinweise ohne erfundene Konfiguration
+PASS Partner- und Authaufrufe bleiben am tatsächlichen HTTPS-Runtime-Port
+PASS CAS409 und HTTP403 werden genau einmal angefragt, nie erneut geschrieben
+PASS Transportfehler nach Mutation erzeugt keine automatische Wiederholung
+PASS Das Gesamtbudget bricht auch einen hängenden Antwortkörper ab
+{"result":"PASS","checks":9,"node":"v24.22.1","limitation":"Echter TypeScript-Code mit lokalen Vertrags-/Transporttests. Keine Hardware-, Händler- oder Browserabnahme."}

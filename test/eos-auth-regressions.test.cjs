@@ -5,10 +5,11 @@ const test=require('node:test'),assert=require('node:assert/strict');
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
 const root=path.resolve(__dirname,'..');
 const security=require('../build/lib/eosRequestSecurity');
+const {UnifiedSessions}=require('../src/lib/eosUnifiedBoundary');
 const code=fs.readFileSync(path.join(root,'build/lib/web.js'),'utf8');
 const exportsObject={};
 vm.runInNewContext(code,{exports:exportsObject,module:{exports:exportsObject},__dirname:path.join(root,'build/lib'),Buffer,URL,console,process:{env:{}},require:name=>name.startsWith('node:')?require(name):name==='./eosRequestSecurity'?security:{}},{filename:'shipped-build/lib/web.js',timeout:5000});
-const makeWeb=()=>Object.assign(Object.create(exportsObject.default.prototype),{settings:{auth:true,secure:true}});
+const makeWeb=()=>Object.assign(Object.create(exportsObject.default.prototype),{settings:{auth:true,secure:true},unified:new UnifiedSessions({}, {externalOrigin:'',secure:true})});
 function response(){return{code:0,body:undefined,locals:{},headers:{},cookies:[],status(code){this.code=code;return this;},json(body){this.body=body;return this;},setHeader(name,value){this.headers[name]=value;},clearCookie(...args){this.cookies.push(args);}};}
 
 test('login redirect rejects remote, protocol-relative, encoded separator, backslash and control origins',()=>{
@@ -98,4 +99,18 @@ test('OAuth callback messages are HTML text, replacement metacharacters cannot r
  const rendered=vm.runInNewContext(`let text='<div>%MESSAGE%</div>';${expression[0]};text`,{escapeHtml:escape,_result:{result:payload}});
  assert.ok(!rendered.includes('<img'));assert.ok(rendered.includes('&lt;img'));assert.ok(rendered.includes('$&'));
  assert.ok(code.includes("script-src 'none'"));
+});
+
+test('forced administrator completes first-password flow with current credential before activation', async()=>{
+ const web=makeWeb();const account={type:'user',common:{enabled:true,password:'hash'},native:{nexowattPasswordChangeRequired:true}};
+ let current='TemporaryOne!42',writes=0,revoked=0;const destroyed=[];
+ web.instanceProxy={invalidate(){}};web.getEosRequestAccess=async()=>({userId:'system.user.operator',role:'admin'});
+ web.adapter={eosSessionSecurity:{revoke(){revoked++;}},log:{info(){},debug(){}},
+  async getForeignObjectAsync(){return account;},async checkPasswordAsync(user,password){assert.equal(user,'operator');return password===current;},
+  async setPasswordAsync(user,password){assert.equal(user,'operator');current=password;writes++;},async extendForeignObjectAsync(id,change){Object.assign(account,change);},async destroySession(id){destroyed.push(id);}};
+ assert.equal((await web.getEosFirstLoginPasswordState('system.user.operator','admin')).required,true);
+ const request={headers:{host:'eos.local',origin:'https://eos.local','x-nexowatt-eos-first-login':'1',cookie:'access_token=test-session-first-password'},body:{currentPassword:current,password:'DifferentLong!73',passwordRepeat:'DifferentLong!73'}};
+ const res=response();await web.saveEosFirstLoginPassword(request,res);assert.equal(res.code,200);assert.equal(res.body.logoutRequired,true);assert.equal(writes,1);assert.equal(revoked,1);assert.ok(destroyed.length>0);
+ assert.equal((await web.getEosFirstLoginPasswordState('system.user.operator','admin')).required,false);
+ const noChange=response();await web.saveEosFirstLoginPassword(request,noChange);assert.equal(noChange.body.alreadyInitialized,true);assert.equal(writes,1);
 });

@@ -3,7 +3,7 @@
 
     const VERSION = 'v98-account-management-real-password-write';
     const script = document.currentScript || document.querySelector('script[src*="eos-account-management.js"]');
-    const base = new URL('../', script?.src || window.location.href);
+    const base = new URL('/', window.location.href);
     const abort = new AbortController();
     const state = { role: 'unknown', policy: null, overlay: null, entry: null, unsubscribe: null, observer: null };
 

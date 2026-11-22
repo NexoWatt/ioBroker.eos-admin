@@ -3,11 +3,27 @@ const { safeCode } = require('./eosLicenseService');
 function isLocal(address) {
     return address === '127.0.0.1' || address === '::1' || address === '::ffff:127.0.0.1';
 }
-function sameOrigin(req, secure) {
+function publicOriginValue(value) {
+    if (value === undefined || value === '') {
+        return null;
+    }
+    if (typeof value !== 'string' || value.length > 2048) {
+        throw new TypeError('LICENSE_PUBLIC_ORIGIN_INVALID');
+    }
+    const url = new URL(value);
+    if (url.protocol !== 'https:' || url.username || url.password || url.pathname !== '/' || url.search || url.hash) {
+        throw new TypeError('LICENSE_PUBLIC_ORIGIN_INVALID');
+    }
+    return url.origin;
+}
+function sameOrigin(req, secure, publicOrigin) {
     // Neither forwarded-host nor forwarded-proto is a trust source here.
     try {
+        const expected = publicOriginValue(publicOrigin) || `${secure ? 'https' : 'http'}://${req.headers.host}`;
         const origin = new URL(req.headers.origin);
-        return (origin.origin === `${secure ? 'https' : 'http'}://${req.headers.host}` &&
+        return (req.headers.origin === origin.origin &&
+            origin.origin === expected &&
+            (!publicOrigin || req.headers.host === new URL(expected).host) &&
             req.headers['x-eos-license'] === '1' &&
             (!req.headers['sec-fetch-site'] || req.headers['sec-fetch-site'] === 'same-origin'));
     }
@@ -15,7 +31,8 @@ function sameOrigin(req, secure) {
         return false;
     }
 }
-function registerLicenseRoutes(app, { service, authorize, secure, jsonParser, pagePath, scriptPath }) {
+function registerLicenseRoutes(app, { service, authorize, secure, publicOrigin, jsonParser, pagePath, scriptPath }) {
+    const configuredOrigin = publicOriginValue(publicOrigin);
     const rates = new Map();
     const guard = (write = false) => async (req, res, next) => {
         res.setHeader('Cache-Control', 'no-store');
@@ -26,10 +43,10 @@ function registerLicenseRoutes(app, { service, authorize, secure, jsonParser, pa
                 return res.status(403).json({ error: 'LICENSE_ADMIN_REQUIRED' });
             }
             // UUIDs and activation tokens must not travel over plaintext LAN.
-            if (!secure && !isLocal(req.socket?.remoteAddress)) {
+            if ((!secure || configuredOrigin) && !req.socket?.encrypted && !isLocal(req.socket?.remoteAddress)) {
                 return res.status(403).json({ error: 'LICENSE_HTTPS_REQUIRED' });
             }
-            if (write && !sameOrigin(req, secure)) {
+            if (write && !sameOrigin(req, secure, configuredOrigin || undefined)) {
                 return res.status(403).json({ error: 'LICENSE_ORIGIN' });
             }
             const now = Date.now();
@@ -91,5 +108,5 @@ function registerLicenseRoutes(app, { service, authorize, secure, jsonParser, pa
         res.status(error?.type === 'entity.too.large' ? 413 : 400).json({ error: 'LICENSE_REQUEST' });
     });
 }
-module.exports = { registerLicenseRoutes, sameOrigin, isLocal };
+module.exports = { registerLicenseRoutes, sameOrigin, isLocal, publicOriginValue };
 //# sourceMappingURL=eosLicenseHttp.js.map

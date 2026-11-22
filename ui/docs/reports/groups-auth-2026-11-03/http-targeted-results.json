@@ -1,0 +1,46 @@
+[
+  {
+    "command": [
+      "node",
+      "scripts/verify-iobroker-group-access.cjs"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 0.56,
+    "log": "http-groups.log",
+    "bytes": 2349,
+    "sha256": "c3990e7e30043d6c8a0aa7a1217e02e710cc71914b924cdd6dd1494444f2b222"
+  },
+  {
+    "command": [
+      "node",
+      "scripts/verify-admin8-login.cjs"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 0.36,
+    "log": "http-admin8.log",
+    "bytes": 1119,
+    "sha256": "6612a7ae4cdf79345def846bd8f58b53651b49aebcbf4803b5e15bffb7b5ac11"
+  },
+  {
+    "command": [
+      "node",
+      "scripts/verify-cra-auth.cjs"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 5.55,
+    "log": "http-cra.log",
+    "bytes": 1494,
+    "sha256": "a09bd68483625033b3723468dcb8e15d7039365099bb3d836bd41e5322682dab"
+  },
+  {
+    "command": [
+      "node",
+      "scripts/verify-stable-1.0.9-access.cjs"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 0.83,
+    "log": "http-access.log",
+    "bytes": 309,
+    "sha256": "045a39e8ff9e5badaca5906f5fe62b90438e507259a868d0a9e2b7c649770bae"
+  }
+]

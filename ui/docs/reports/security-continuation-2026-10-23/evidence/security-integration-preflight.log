@@ -1,0 +1,276 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.30 test:security-standards
+> node scripts/verify-security-standards.cjs && node scripts/verify-runtime-license-header.cjs && node scripts/verify-static-ems-exports.cjs && node scripts/verify-http-error-boundary.cjs && node scripts/verify-simulation-public-errors.cjs && npm run test:security-continuation
+
+PASS security standards guard self-tests: 17
+PASS strict security boundary scope: src-ts/runtime-executables/lib/http-error-boundary.ts
+COVERAGE: named boundary only; no ESLint/SAST or whole-repository compliance claim.
+✔ bestehender führender Marker transpiliert unverändert (2.210247ms)
+✔ proprietärer Kopf bleibt vor Build-Hinweis, folgender Marker transpiliert (0.501385ms)
+✔ No-Check-Migrationsanker nach Lizenzkopf wird nicht ausgeliefert (0.35916ms)
+✔ Marker in String oder gewöhnlichem Kommentar löst keine Transpilierung aus (0.236366ms)
+✔ Hash- und Wiederholungsprüfung akzeptiert die exakt erzeugten Artefakte (287.296189ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 574.385387
+✔ charging-budget-helpers: statischer Export und proprietärer Header in Originalquelle (0.928998ms)
+✔ charging-budget-helpers: Originalquelle lädt und arbeitet ohne String-Codegenerierung (3.266236ms)
+✔ charging-budget-helpers: erzeugtes Laufzeitartefakt lädt ohne String-Codegenerierung (0.998623ms)
+✔ evcs-control-mapping: statischer Export und proprietärer Header in Originalquelle (0.19925ms)
+✔ evcs-control-mapping: Originalquelle lädt und arbeitet ohne String-Codegenerierung (1.23535ms)
+✔ evcs-control-mapping: erzeugtes Laufzeitartefakt lädt ohne String-Codegenerierung (0.858212ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 16.433396
+{
+  "suite": "NW-HTTP-ERROR-01",
+  "sourceMode": false,
+  "node": "v24.19.0",
+  "passed": 23,
+  "environment": "real loopback Express HTTP; mocked ioBroker; synthetic errors; no devices",
+  "checks": [
+    "unknown-errors-and-accessors-are-not-inspected",
+    "parser-types-have-finite-public-policies",
+    "only-internal-errors-retain-frozen-public-validation",
+    "unset:anonymous-malformed-json-is-sanitized",
+    "unset:oversized-json-remains-413",
+    "unset:unexpected-simulation-error-is-sanitized",
+    "unset:foreign-installer-errors-and-logs-are-sanitized",
+    "unset:owned-mesh-guidance-remains-public-but-spoofs-do-not",
+    "unset:owned-simulator-preconditions-retain-guidance",
+    "unset:nexologic-validation-has-identity-and-safe-logs",
+    "unset:simulation-status-scrubs-new-and-historical-errors",
+    "unset:propagated-route-error-is-sanitized",
+    "unset:server-and-auth-remain-functional",
+    "production:anonymous-malformed-json-is-sanitized",
+    "production:oversized-json-remains-413",
+    "production:unexpected-simulation-error-is-sanitized",
+    "production:foreign-installer-errors-and-logs-are-sanitized",
+    "production:owned-mesh-guidance-remains-public-but-spoofs-do-not",
+    "production:owned-simulator-preconditions-retain-guidance",
+    "production:nexologic-validation-has-identity-and-safe-logs",
+    "production:simulation-status-scrubs-new-and-historical-errors",
+    "production:propagated-route-error-is-sanitized",
+    "production:server-and-auth-remain-functional"
+  ]
+}
+✔ API-Fehlerauswahl: {"message":"  Erst Simulation deaktivieren.  ","error":"configuration_conflict"} (5.216913ms)
+✔ API-Fehlerauswahl: {"message":"","error":"legacy_error"} (1.267949ms)
+✔ API-Fehlerauswahl: {"message":"  ","error":" legacy_error "} (1.738276ms)
+✔ API-Fehlerauswahl: {"message":{"text":"invalid"},"error":"legacy_error"} (1.185926ms)
+✔ API-Fehlerauswahl: {"message":42,"error":"legacy_error"} (0.965083ms)
+✔ API-Fehlerauswahl: {"message":null,"error":"legacy_error"} (0.968228ms)
+✔ API-Fehlerauswahl: {"message":false,"error":["invalid"]} (0.984552ms)
+✔ API-Fehlerauswahl: {"message":"","error":"   "} (1.00315ms)
+✔ API-Fehlerauswahl: null (1.161298ms)
+✔ Alle Aktionsfehler zeigen Markup unverändert als Text und behalten das Fehler-Badge (6.986967ms)
+✔ Nicht-JSON- und Transportfehler behalten den bisherigen Text-Fallback (1.983606ms)
+✔ Initialer Ladefehler zeigt öffentlichen Hinweis als einfachen Text (0.835317ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 30.987685
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.30 test:security-continuation
+> npm run test:strict-boundary-configs && npm run typecheck:admin && npm run typecheck:config-boundaries && npm run typecheck:mesh-peer-http && npm run test:admin-boundaries && npm run test:config-boundaries && npm run test:mesh-peer-http && npm run test:proprietary-headers && npm run check:proprietary-headers && npm run test:lint-security && npm run lint:security && npm run test:entsoe-parser
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.30 test:strict-boundary-configs
+> node scripts/verify-strict-boundary-configs.cjs
+
+PASS strict scope: tsconfig.config-boundaries.json (4 exact source files)
+PASS strict scope: tsconfig.mesh-peer-http.json (1 exact source files)
+PASS strict scope: src-admin-tab/tsconfig.json (17 exact source files)
+PASS strict scope: src-admin-tab/tsconfig.build-tools.json (1 exact source files)
+PASS strict configuration guard: 23 native positive/negative fixtures; four resolved scopes.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.30 typecheck:admin
+> npm --prefix src-admin-tab run typecheck
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> nexowatt-ui-admin-tab@0.8.8 typecheck
+> tsc -p tsconfig.json && tsc -p tsconfig.build-tools.json
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.30 typecheck:config-boundaries
+> tsc -p tsconfig.config-boundaries.json
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.30 typecheck:mesh-peer-http
+> tsc -p tsconfig.mesh-peer-http.json
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.30 test:admin-boundaries
+> node scripts/verify-admin-type-boundaries.cjs && node scripts/verify-admin-connection-boundaries.cjs && node scripts/verify-admin-mesh-boundaries.cjs
+
+PASS real inactive snapshot with null budget and missing M0 mappings remains editable
+PASS incomplete stored drafts retain empty and null numeric values
+PASS backend-compatible legacy drafts and valid point order remain editable
+PASS extra legitimate configuration fields remain intact
+PASS real normalized draft and split M0 measurement pass guards
+PASS real stale runtime response keeps null telemetry as unavailable
+PASS preview contract permits a response without configuration while load/save do not
+PASS malformed nested configuration cannot replace the current draft
+PASS poison keys, getters, cycles, non-finite numbers and oversized nesting fail closed
+PASS validation messages keep paths but cannot carry arbitrary objects into React
+PASS mail API fields and real TLS choices are validated before state updates
+PASS Admin build requires actual strict checking and sources contain no any/suppression
+PASS Admin-Typgrenzen: 12 Prüfgruppen
+PASS ServConn erhält beide Callbackformen, native/common und Schreibfehler
+PASS Socket und callable socket.io factory behalten den ioBroker-Vertrag
+PASS UUID-Fallback und gültige alte Textports bleiben erhalten, ungültige Ports nicht
+PASS Authvalidierung behält Erweiterungen und verweigert falsche Datentypen
+PASS Poison Keys, Zyklen und unbeschränkte Verschachtelung scheitern vollständig
+PASS Status/Login verwenden die validierten Authfelder und bewahren Credentials-Option
+PASS Auch defekte HTTP403-Antworten behalten Status und unterbinden Port-Fallbacks
+PASS Vollständige JSON-Erweiterungen bleiben erhalten; falsches Top-Level wird verworfen
+PASS Timeout bricht auch das Lesen des Antwortkörpers tatsächlich ab
+{"result":"PASS","checks":9,"node":"v24.19.0","sourceSha256":"768772fefb843d5f96ecd7cfb51b3bab094b123ec6da32178489556bfc2fc696","limitation":"Originaler TypeScript-Verbindungscode mit VM/Transport-Fixtures; installierte ioBroker-Instanz und Browser separat prüfen."}
+PASS Backend-Defaults und leerer OFF-Status werden vollständig gelesen
+PASS Diagnose und aktiver Master erhalten Teilnehmer, Nullgrenzen und Timing
+PASS Persistierte Betriebslimits ohne Strategie erfinden keinen fixed-Modus
+PASS Echte Master-Paarung und JSON-Import bewahren den Slavevertrag
+PASS Echte Zählererfassung und Archivexport behalten Hashes und beide Quellenzeiten
+PASS Echte BLOCKED-, PARTIAL_PERIOD- und DRAFT-Abrechnungen sind unverändert darstellbar
+PASS Manipulierte JSON-Strukturen und falsche Zahlen erreichen keine Mesh-Formulare
+{"result":"PASS","checks":7,"node":"v24.19.0","sourceSha256":"1994cdf4fcf5671089424050bf8b28a100da007838df5e5a17b39194d314d56e","limitation":"Echte Backend-/Journalfunktionen mit temporären synthetischen Zählerwerten; keine Feldgeräte oder Liveanlage."}
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.30 test:config-boundaries
+> node --test test/config-boundaries.test.cjs
+
+✔ die drei Konfigurationsquellen erlauben weder explizite unsichere Typen noch abgeschaltete Prüfungen (52.885541ms)
+✔ fehlerhafte Validatorausgaben werden vor einer fachlichen Weiterverwendung abgewiesen (0.768968ms)
+✔ verschachtelte Konfigurationsverträge dürfen keine ungeprüften Messobjekte enthalten (0.403077ms)
+✔ falsche ioBroker-Objektformen liefern feste Auflösungsfehler (0.673544ms)
+✔ gültige getrennte Aliasrichtungen bleiben unverändert nutzbar (0.646193ms)
+✔ ungültige Bestandszeilen verschieben keine Speicher- oder PV-Kennungen (0.579633ms)
+✔ Dictionary-Fallbacks besitzen keinen Prototyp und fremde Schlüssel verschmutzen keine globalen Objekte (0.164067ms)
+✔ alte und fehlerhafte Entwürfe bleiben sichtbar und lesendes CAS verändert die gespeicherten Daten nicht (0.313001ms)
+✔ fremde Speicherfehler bleiben sanitisiert und geben die Speichersperre wieder frei (4.516342ms)
+✔ ein defekter interner Patch-Merge darf keinen neuen Konfigurationsvertrag erzeugen (0.393784ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 311.183802
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.30 test:mesh-peer-http
+> node scripts/verify-mesh-peer-http.cjs
+
+[mesh-peer-http] OK: 28 native Transport-/HTTP-Prüfgruppen; Redirect, Größen-/Strukturlimits, DNS-/Body-/Gesamtbudget, TLS-Prüfung, Rollen, neutrale Probe, Mehrpeer und Wiederaufnahme.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.30 test:proprietary-headers
+> node scripts/verify-proprietary-headers.cjs
+
+✔ Kopf steht vor Migration-/Transpiliermarker, Wiederholung verändert nichts (3.156109ms)
+✔ Typfehler bleibt hinter Lizenzkopf erkennbar, No-Check wird für Teilprüfungen entfernt (25.694776ms)
+✔ Pragma-Erkennung berücksichtigt Runtime-Marker, Blockkommentare und Compiler-Priorität (3.477763ms)
+✔ Shebang und Strict-Modus bleiben wirksam, CRLF und BOM bleiben erhalten (1.267527ms)
+✔ Fremde/unklare Lizenzen werden abgewiesen, Fixture-Strings nicht umgedeutet (0.579312ms)
+✔ Eigener Scope schließt Drittbundles, Notices, HTML/CSS/JSON und Binärdateien aus (6.979163ms)
+✔ Preflight verweigert Fremdlizenzen vor erstem Schreibzugriff (1.144843ms)
+✔ Symbolische Links werden weder gelesen noch überschrieben (0.77798ms)
+✔ Check verlangt erzeugte Runtime, Write verändert manuelle Spiegel nur um den Kopf (2.241434ms)
+✔ No-Check-Budget zählt vorhandene und neue Direktiven auch hinter Lizenzkopf (129.017967ms)
+✔ Gesamter eigener Quellscope bleibt beim Einfügen nach dem Prolog bytegleich (1915.534825ms)
+ℹ Lesend geprüfte eigene Quelldateien: 772
+✔ Original-Runtime-Spiegelgenerator setzt Kopf vor No-Check und ist idempotent (115.912728ms)
+✔ Original-Scriptgenerator hält Lizenz zuerst und Strict-/Exports-Semantik (1723.300487ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3938.252552
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.30 check:proprietary-headers
+> node scripts/sync-proprietary-headers.cjs --check
+
+{
+  "ok": true,
+  "sourceCount": 772,
+  "generatedCount": 701,
+  "missing": [],
+  "changed": [],
+  "blocked": []
+}
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.30 test:lint-security
+> node scripts/verify-eslint-security-test.cjs
+
+ESLint security gate: 25 meaningful policy/negative checks passed.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.30 lint:security
+> node scripts/verify-eslint-security.cjs
+
+ESLint: 165 sources; 3019 current findings; 3019 inventoried (2971 historical open, 48 individually reviewed); 0 blocked new/forbidden findings; 89 old findings absent.
+Open scanner hotspots: {"security/detect-object-injection":2319,"security/detect-non-literal-fs-filename":32,"@typescript-eslint/ban-ts-comment":73,"security/detect-unsafe-regex":16,"@typescript-eslint/no-explicit-any":563,"security/detect-possible-timing-attacks":12,"security/detect-non-literal-require":1,"security/detect-non-literal-regexp":3}
+This gate prevents new scanner findings. It does not assert a clean security scan or full ASVS conformity.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.30 test:entsoe-parser
+> node --test scripts/verify-entsoe-linear-parser.cjs
+
+ENTSO-E malformed-input bound: {"tag":"Period","bytes":560040,"ms":1.3013289999999955}
+ENTSO-E malformed-input bound: {"tag":"Point","bytes":490040,"ms":1.1785539999999983}
+ENTSO-E malformed-input bound: {"tag":"start","bytes":490040,"ms":1.1201459999999983}
+✔ legacy copy-mode source remains directly executable JavaScript (58.16536ms)
+✔ quarter-hour, negative prices and MWh conversion stay correct (2.029234ms)
+✔ multiple periods preserve chronological boundaries (1.549903ms)
+✔ namespace prefixes, XML declaration and quoted attribute delimiters (0.533243ms)
+✔ comments cannot contribute false price or period elements (0.461044ms)
+✔ missing resolution is rejected (0.616858ms)
+✔ self-closing resolution is rejected (0.436888ms)
+✔ missing numeric price is rejected (0.548216ms)
+✔ nonsequential point is rejected (0.371829ms)
+✔ mismatched close is rejected (0.200973ms)
+✔ unclosed last period is rejected (0.242084ms)
+✔ nested same period is rejected (0.190407ms)
+✔ external declaration is rejected (0.06012ms)
+✔ oversized source is rejected (1.02938ms)
+✔ oversized tag is rejected (1.525296ms)
+✔ unclosed quoted attribute is rejected (0.239671ms)
+✔ bounded CPU for 512KiB unclosed Period tags (65.910282ms)
+✔ bounded CPU for 512KiB unclosed Point tags (62.790511ms)
+✔ bounded CPU for 512KiB unclosed start tags (52.895827ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 601.654961

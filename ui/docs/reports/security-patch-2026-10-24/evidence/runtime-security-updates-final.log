@@ -1,0 +1,306 @@
+{
+  "ok": true,
+  "node": "v24.19.0",
+  "httpCases": 28,
+  "mail": {
+    "parserCases": 3,
+    "rejectedBeforeTransport": 3,
+    "composedWithoutSmtp": true
+  },
+  "results": [
+    {
+      "scenario": "plain",
+      "parserIndex": 0,
+      "options": {
+        "limit": "5mb",
+        "inflate": false
+      },
+      "status": 200,
+      "survived": true
+    },
+    {
+      "scenario": "malformed",
+      "parserIndex": 0,
+      "options": {
+        "limit": "5mb",
+        "inflate": false
+      },
+      "status": 400,
+      "survived": true
+    },
+    {
+      "scenario": "over-limit",
+      "parserIndex": 0,
+      "options": {
+        "limit": "5mb",
+        "inflate": false
+      },
+      "status": 413,
+      "survived": true
+    },
+    {
+      "scenario": "gzip",
+      "parserIndex": 0,
+      "options": {
+        "limit": "5mb",
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "deflate",
+      "parserIndex": 0,
+      "options": {
+        "limit": "5mb",
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "gzip-trailing",
+      "parserIndex": 0,
+      "options": {
+        "limit": "5mb",
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "deflate-trailing",
+      "parserIndex": 0,
+      "options": {
+        "limit": "5mb",
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "plain",
+      "parserIndex": 1,
+      "options": {
+        "limit": "64kb",
+        "inflate": false
+      },
+      "status": 200,
+      "survived": true
+    },
+    {
+      "scenario": "malformed",
+      "parserIndex": 1,
+      "options": {
+        "limit": "64kb",
+        "inflate": false
+      },
+      "status": 400,
+      "survived": true
+    },
+    {
+      "scenario": "over-limit",
+      "parserIndex": 1,
+      "options": {
+        "limit": "64kb",
+        "inflate": false
+      },
+      "status": 413,
+      "survived": true
+    },
+    {
+      "scenario": "gzip",
+      "parserIndex": 1,
+      "options": {
+        "limit": "64kb",
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "deflate",
+      "parserIndex": 1,
+      "options": {
+        "limit": "64kb",
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "gzip-trailing",
+      "parserIndex": 1,
+      "options": {
+        "limit": "64kb",
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "deflate-trailing",
+      "parserIndex": 1,
+      "options": {
+        "limit": "64kb",
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "plain",
+      "parserIndex": 2,
+      "options": {
+        "limit": "64kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 200,
+      "survived": true
+    },
+    {
+      "scenario": "malformed",
+      "parserIndex": 2,
+      "options": {
+        "limit": "64kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 400,
+      "survived": true
+    },
+    {
+      "scenario": "over-limit",
+      "parserIndex": 2,
+      "options": {
+        "limit": "64kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 413,
+      "survived": true
+    },
+    {
+      "scenario": "gzip",
+      "parserIndex": 2,
+      "options": {
+        "limit": "64kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "deflate",
+      "parserIndex": 2,
+      "options": {
+        "limit": "64kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "gzip-trailing",
+      "parserIndex": 2,
+      "options": {
+        "limit": "64kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "deflate-trailing",
+      "parserIndex": 2,
+      "options": {
+        "limit": "64kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "plain",
+      "parserIndex": 3,
+      "options": {
+        "limit": "160kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 200,
+      "survived": true
+    },
+    {
+      "scenario": "malformed",
+      "parserIndex": 3,
+      "options": {
+        "limit": "160kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 400,
+      "survived": true
+    },
+    {
+      "scenario": "over-limit",
+      "parserIndex": 3,
+      "options": {
+        "limit": "160kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 413,
+      "survived": true
+    },
+    {
+      "scenario": "gzip",
+      "parserIndex": 3,
+      "options": {
+        "limit": "160kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "deflate",
+      "parserIndex": 3,
+      "options": {
+        "limit": "160kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "gzip-trailing",
+      "parserIndex": 3,
+      "options": {
+        "limit": "160kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    },
+    {
+      "scenario": "deflate-trailing",
+      "parserIndex": 3,
+      "options": {
+        "limit": "160kb",
+        "strict": true,
+        "inflate": false
+      },
+      "status": 415,
+      "survived": true
+    }
+  ]
+}

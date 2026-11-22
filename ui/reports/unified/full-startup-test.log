@@ -1,0 +1,10 @@
+✔ full hosted onReady initializes EMS with controller-shaped fixture and no device mappings (123.445529ms)
+✔ EMS startup failure remains visible as degraded while authenticated shell survives (68.297749ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 519.710054

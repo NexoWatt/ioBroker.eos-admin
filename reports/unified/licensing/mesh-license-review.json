@@ -1,0 +1,66 @@
+{
+  "createdAt": "2026-11-22T10:07:36.696598+00:00",
+  "productVersion": "9.0.0-alpha.1",
+  "node": "24.22.3",
+  "evidenceType": "Executed test summary; observed raw console output in task execution",
+  "checks": [
+    {
+      "command": "node --test ui/test/unified/mesh-license.test.cjs",
+      "status": "passed",
+      "testOrGroupCount": 4,
+      "exitCode": 0
+    },
+    {
+      "command": "node ui/scripts/verify-mesh-coordinator.cjs",
+      "status": "passed",
+      "testOrGroupCount": 20,
+      "exitCode": 0
+    },
+    {
+      "command": "node ui/scripts/verify-mesh-app-lifecycle.cjs",
+      "status": "passed",
+      "testOrGroupCount": 4,
+      "exitCode": 0
+    },
+    {
+      "command": "node ui/scripts/verify-mesh-transformer-accounting.cjs",
+      "status": "passed",
+      "testOrGroupCount": 14,
+      "exitCode": 0
+    },
+    {
+      "command": "node ui/scripts/verify-admin-mesh-boundaries.cjs",
+      "status": "passed",
+      "testOrGroupCount": 7,
+      "exitCode": 0
+    },
+    {
+      "command": "node ui/scripts/verify-cra-network.cjs",
+      "status": "passed",
+      "testOrGroupCount": 12,
+      "exitCode": 0
+    }
+  ],
+  "files": {
+    "ui/src-ts/runtime-executables/lib/mesh-coordinator.ts": "0f222233847873d4e1bb11eafbbed29cedb120414ea83824abb201c7f4128a92",
+    "ui/test/unified/mesh-license.test.cjs": "bd75dabca124923de664f8871c551743ce73e1fac5081546cdcd793beb786709",
+    "ui/scripts/verify-mesh-coordinator.cjs": "5a9a8e114cee54c1c7a82d195009888b9610f574022b524e6150558ecd22402b",
+    "ui/scripts/verify-mesh-app-lifecycle.cjs": "aa4601e8942f6256eefb95dd18a681933e1c63a07ceb2e36300b097be8c0d460",
+    "ui/scripts/verify-mesh-transformer-accounting.cjs": "61f59cc30f8ca5fbecc4320ceb228eae977a22cb4d4f3c773a0f18266fe94c00",
+    "ui/scripts/verify-admin-mesh-boundaries.cjs": "3baf777a96e0e9eab6daca96d3f8b4534a9b14761c1d605cfb93bc24a433013f",
+    "ui/scripts/verify-cra-network.cjs": "4486e60a74f09023ca64670d0039a7e6cf08d71b6af18084a262c8a92493599e"
+  },
+  "limitations": [
+    "Synthetic ioBroker/device fixtures and local HTTP; no field hardware, Tailnet or real SMTP.",
+    "License-specific role changes reviewed and fixed by same agent; not independent external certification."
+  ],
+  "legacySecretScan": {
+    "filesScanned": 6330,
+    "ignoredDirectories": [
+      "node_modules",
+      ".git"
+    ],
+    "exactOriginalNW1SecretMatches": 0,
+    "limitation": "Exact known legacy literal scan; not a guarantee of absence of all secrets."
+  }
+}

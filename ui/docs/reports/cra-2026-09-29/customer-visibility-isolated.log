@@ -1,0 +1,14 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.22 test:customer-feature-visibility-runtime
+> npm run clean:ts && tsc -p tsconfig.customer-feature-visibility.json && node build-ts/customer-feature-visibility/tests/customer-feature-visibility-runtime.js
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.22 clean:ts
+> node scripts/clean-ts-build.js
+
+[clean-ts-build] removed build-ts
+[clean-ts-build] removed build-types
+[clean-ts-build] removed build/types
+[ts-customer-feature-visibility] OK: 10 Sichtbarkeitsfälle bestanden.

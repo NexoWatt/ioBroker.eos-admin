@@ -1,0 +1,13 @@
+{
+  "command": [
+    "npm",
+    "run",
+    "test:stable-1.0.8-storage-licenses"
+  ],
+  "cwd": "repository root",
+  "startedAt": "2026-09-29T20:22:25.502981+00:00",
+  "finishedAt": "2026-09-29T20:22:26.539226+00:00",
+  "durationSeconds": 1.036,
+  "exitCode": 1,
+  "capturedBytes": 778
+}

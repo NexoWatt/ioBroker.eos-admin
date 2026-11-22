@@ -1,0 +1,12 @@
+{
+  "command": [
+    "npm",
+    "run",
+    "test:all"
+  ],
+  "startedAt": "2026-10-08T19:46:43.891948+00:00",
+  "durationSeconds": 128.161,
+  "exitCode": 1,
+  "log": "test-all.log",
+  "hardware": false
+}

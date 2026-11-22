@@ -20,6 +20,7 @@ function harness(options = {}) {
     };
     registerLicenseRoutes(app, {
         secure: options.secure ?? true,
+        publicOrigin: options.publicOrigin,
         authorize: async req => {
             order.push('authorize');
             if (options.authorize) return options.authorize(req);
@@ -228,4 +229,28 @@ test('origin matching uses scheme, hostname and port exactly', () => {
     for (const origin of ['http://eos.test:8081', 'https://eos.test:8082', 'https://evil.test:8081', 'https://eos.test.evil.test:8081']) {
         assert.equal(sameOrigin({ headers: { ...req.headers, origin } }, true), false);
     }
+});
+
+test('configured HTTPS ingress works over local HTTP without trusting forwarded headers', async () => {
+    const h = harness({ secure: false, publicOrigin: 'https://eos.test' });
+    const request = { socket: { remoteAddress: '127.0.0.1' },
+        headers: { host: 'eos.test', origin: 'https://eos.test', 'x-forwarded-proto': 'http', 'x-forwarded-host': 'evil.test' },
+        body: { token: 'NWL3.test.test' } };
+    assert.equal((await h.dispatch('POST', '/nexowatt/license/activate', request)).status, 200);
+    denied(await h.dispatch('POST', '/nexowatt/license/activate', { ...request,
+        headers: { ...request.headers, host: 'evil.test' } }), 'LICENSE_ORIGIN');
+    denied(await h.dispatch('POST', '/nexowatt/license/activate', { ...request,
+        headers: { ...request.headers, origin: 'http://eos.test' } }), 'LICENSE_ORIGIN');
+    denied(await h.dispatch('POST', '/nexowatt/license/activate', { ...request,
+        socket: { remoteAddress: '192.0.2.40' } }), 'LICENSE_HTTPS_REQUIRED');
+});
+
+test('proxy secure flag cannot admit plaintext LAN and invalid public origins fail startup', async () => {
+    const h = harness({ secure: true, publicOrigin: 'https://eos.test' });
+    denied(await h.dispatch('GET', '/nexowatt/license/status'), 'LICENSE_HTTPS_REQUIRED');
+    for (const publicOrigin of ['http://eos.test', 'https://name:password@eos.test',
+        'https://eos.test/path', 'https://eos.test?query=1', 'https://eos.test#fragment', 'not-a-url']) {
+        assert.throws(() => harness({ publicOrigin }));
+    }
+    assert.equal(sameOrigin({ headers: { host: 'eos.test', origin: 'https://eos.test/path', 'x-eos-license': '1' } }, true), false);
 });

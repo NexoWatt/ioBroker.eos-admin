@@ -1,0 +1,21 @@
+{
+  "result": "PASS",
+  "scenarios": [
+    "separate-app-route",
+    "M0-general-readonly",
+    "activation-available",
+    "invalid-activation-atomic",
+    "incomplete-free-draft",
+    "zero-versus-empty-and-unknown",
+    "generic-storage-five-purposes",
+    "explicit-area-and-authority",
+    "domain-preview",
+    "atomic-save-and-activate",
+    "requested-target-confirmed-measured-distinct",
+    "CAS-no-retry-draft-preserved",
+    "deactivate-retains-unsaved-draft",
+    "mobile-no-overflow",
+    "customer-wildcard-denied"
+  ],
+  "screenshots": "/workspace/scratch/cd7c5428afc1/continuation-1.0.30/browser-nvp-proof"
+}

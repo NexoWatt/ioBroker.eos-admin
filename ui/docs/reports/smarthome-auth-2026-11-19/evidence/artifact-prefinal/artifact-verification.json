@@ -1,0 +1,93 @@
+{
+  "schema": "nexowatt.repository-delivery-verification.v1",
+  "version": "1.0.37",
+  "testedAt": "2026-11-19T07:21:13.430799+00:00",
+  "archive": "prefinal-1.0.37.zip",
+  "archiveSha256": "2fbcf811613c61a008983debcbc57d5c17493d06b7a9234222b31626e8d1dc61",
+  "archiveBytes": 23246421,
+  "fileCount": 3341,
+  "excludedDirectoryNames": [
+    ".cache",
+    ".git",
+    "build",
+    "build-ts",
+    "build-types",
+    "coverage",
+    "dist",
+    "node_modules"
+  ],
+  "fresh": [
+    {
+      "command": [
+        "node",
+        "scripts/verify-release-artifact.js"
+      ],
+      "exitCode": 0,
+      "log": "fresh-artifact.log",
+      "logSha256": "159d67acd0cf7140112b78436d44e7befc3abd279e5ab0e1b503e60e29d8f909"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/verify-stable-release.cjs"
+      ],
+      "exitCode": 0,
+      "log": "fresh-stable.log",
+      "logSha256": "f1737093647cfea2d0aceda9b53c36296087c81e254fdc2a10277f155fc240dd"
+    }
+  ],
+  "overlay": {
+    "baselineArchive": "NexoWatt_UI_1.0.36_LADEMODI_HTTPS_TEST_FULL_REPOSITORY.zip",
+    "baselineSha256": "122361f103d5d27dd0957d383811f629939d31b05de1e62c4a62e1b3f465abf2",
+    "expectedObsoleteAssets": {
+      "admin/react/assets/index-_GY1J6JZ.js": "1231f413f59dc54082a41f7e70b0ffd3ba1279eda75f9c6e06141f2a1c32d48c"
+    },
+    "checks": [
+      {
+        "command": [
+          "node",
+          "-e",
+          "const fs=require('node:fs');const m=require('./scripts/prepare-release-assets.cjs');const r=m.prepare(process.cwd(),{backupBase:process.argv[1]});fs.writeFileSync(process.argv[2],JSON.stringify(r,null,2)+'\\n');console.log(JSON.stringify(r));",
+          "/workspace/scratch/016e1c77b6f1/artifact-check-prefinal-1.0.37/backups",
+          "/workspace/scratch/016e1c77b6f1/artifact-check-prefinal-1.0.37/overlay-preparation.json"
+        ],
+        "exitCode": 0,
+        "log": "overlay-prepare.log",
+        "logSha256": "d14ad20f7dca6829bb124886f1857ab749150895b28017106d0500e39543a69d"
+      },
+      {
+        "command": [
+          "node",
+          "scripts/verify-release-artifact.js"
+        ],
+        "exitCode": 0,
+        "log": "overlay-artifact.log",
+        "logSha256": "159d67acd0cf7140112b78436d44e7befc3abd279e5ab0e1b503e60e29d8f909"
+      },
+      {
+        "command": [
+          "node",
+          "scripts/verify-stable-release.cjs"
+        ],
+        "exitCode": 0,
+        "log": "overlay-stable.log",
+        "logSha256": "f1737093647cfea2d0aceda9b53c36296087c81e254fdc2a10277f155fc240dd"
+      },
+      {
+        "command": [
+          "node",
+          "-e",
+          "const fs=require('node:fs');const m=require('./scripts/prepare-release-assets.cjs');const r=m.prepare(process.cwd(),{backupBase:process.argv[1]});fs.writeFileSync(process.argv[2],JSON.stringify(r,null,2)+'\\n');console.log(JSON.stringify(r));",
+          "/workspace/scratch/016e1c77b6f1/artifact-check-prefinal-1.0.37/backups",
+          "/workspace/scratch/016e1c77b6f1/artifact-check-prefinal-1.0.37/overlay-second-preparation.json"
+        ],
+        "exitCode": 0,
+        "log": "overlay-prepare-second.log",
+        "logSha256": "4f285941d7d33f10d109e76e7fd6c9087e9c471e5d4b7e8af19b11fca6fa3640"
+      }
+    ],
+    "backupsVerified": true,
+    "idempotent": true
+  },
+  "result": "PASS"
+}

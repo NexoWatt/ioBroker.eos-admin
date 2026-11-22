@@ -1,0 +1,59 @@
+# NexoWatt EOS – Proprietary License Notice
+
+Copyright (c) 2025–2026 NexoWatt. All rights reserved.
+
+## Deutsch
+
+Die von NexoWatt geschaffenen und urheberrechtlich geschützten Bestandteile von
+NexoWatt EOS sind proprietär. Dazu gehören die NexoWatt-spezifischen Erweiterungen,
+die Energieanwendung, das EOS-Design sowie Marken, Logos und eigene Assets.
+
+Die Nutzung ist ausschließlich im Umfang eines gültigen Lizenzvertrags oder einer
+anderen ausdrücklichen schriftlichen Erlaubnis von NexoWatt gestattet. Der jeweilige
+Vertrag bestimmt die berechtigten Systeme, Funktionen, Mengen, Laufzeit und weitere
+Nutzungsrechte. Diese Datei setzt keine Preise oder neuen Vertragslaufzeiten fest.
+Eine technische Aktivierung ersetzt den zugrunde liegenden Vertrag nicht.
+
+Ohne entsprechende Erlaubnis werden keine Rechte an den proprietären Bestandteilen
+zur Nutzung, Änderung, Weitergabe, Unterlizenzierung oder Bereitstellung für Dritte
+eingeräumt. Gesetzlich zwingende Rechte bleiben unberührt. NexoWatt darf seine
+Bestandteile selbst entwickeln, prüfen, vertreiben und durch berechtigte Personen
+bearbeiten lassen.
+
+Die öffentliche technische Abrufbarkeit eines Repositorys oder npm-Pakets erteilt
+keine allgemeine Nutzungslizenz für die proprietären Bestandteile. Private
+Lizenz-Signierschlüssel und kundenspezifische Aktivierungsdaten gehören nicht zum
+Quell- oder npm-Lieferumfang.
+
+Drittanbieterkomponenten behalten uneingeschränkt ihre jeweiligen Lizenzbedingungen,
+Urhebervermerke und die darunter gewährten Rechte. Dieses Dokument hebt insbesondere
+die MIT-Lizenz der übernommenen ioBroker.admin-Bestandteile nicht auf. Siehe den
+nachstehenden Hinweis und THIRD-PARTY-NOTICES.md. Vertragsrechte und zwingendes
+Recht haben Vorrang vor pauschalen Einschränkungen dieses Hinweises.
+
+## English
+
+The copyright-protected components created by NexoWatt are proprietary, including
+NexoWatt-specific extensions, the energy application, EOS design, trademarks,
+logos and original assets.
+
+Use is permitted only within a valid NexoWatt licence agreement or other express
+written permission. That agreement determines the authorised systems, features,
+quantities, term and other rights. This notice sets no prices or new contract terms.
+Technical activation does not replace the applicable licence agreement.
+
+No general right to use, modify, redistribute, sublicense or provide the proprietary
+components to third parties is granted. Mandatory statutory rights are unaffected.
+NexoWatt may develop, test and distribute its own components and authorise others
+to work on its behalf.
+
+Public availability of a repository or npm package does not grant a general licence
+to the proprietary components. Private signing keys and customer activation data
+are not part of the distributed source or npm package.
+
+Third-party components retain their respective licences, copyright notices and
+rights. In particular, this notice does not revoke the MIT licence applicable to
+upstream ioBroker.admin components. See below and THIRD-PARTY-NOTICES.md. Applicable
+contractual rights and mandatory law prevail over general restrictions in this notice.
+
+See [LICENSE](LICENSE) for the preserved upstream MIT notice.

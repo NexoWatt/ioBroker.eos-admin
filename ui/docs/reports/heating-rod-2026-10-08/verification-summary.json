@@ -1,0 +1,166 @@
+{
+  "status": "PASS",
+  "version": "1.0.23",
+  "sourceBaseline": "1.0.22 CRA review (2026-09-29)",
+  "completedAt": "2026-10-08T19:52:50.019838+00:00",
+  "sourceHashes": {
+    "src-ts/runtime-executables/ems/modules/heating-rod-control.ts": "43b9f107903da4cb85c136fd25f730cf15e333656c5b3ed72ec50a9097a75b3a",
+    "ems/modules/heating-rod-control.js": "8b647cf76322dd93f3ef82e39e4b88f226929fb2194c955e9a396b4f75ace9a7",
+    "src-ts/runtime-executables/main.ts": "bcc92044b47c01346275f256d061b1e58457ec4f99f861d39ec996511fe6438c",
+    "main.js": "c9e4dd0ad1d636444fbc56e0479262bc9592cc68128b192ac0d865e80e01fd7c",
+    "src-ts/runtime-executables/www/app.ts": "ff3b1bb3d59ebb08bc5a0baff3454ea502e5bb66693bdaa2f906cfba01e3d072",
+    "www/app.js": "dbe0bd59b0ca0ae39eb4ae583def68433ac0cba95450fa094f776bc8f8bc6b7b",
+    "package.json": "508675495d14c7144603af1e7a5152b60ab3684117ff85cd21b1007fc9461fe1",
+    "package-lock.json": "e7f76f5fd1f9e3428e5370055edd3ba5477d4c62fe09f3b729105cf90bb6b26d",
+    "scripts/release-artifact-manifest.json": "29fe311b07ff2aad96d02580bf542b2aa6a78eceeabc65a184b0accb4ca81eb0"
+  },
+  "checks": {
+    "build-ts-verified": {
+      "command": [
+        "npm",
+        "run",
+        "build:ts"
+      ],
+      "startedAt": "2026-10-08T19:45:55.796142+00:00",
+      "durationSeconds": 12.412,
+      "exitCode": 0,
+      "log": "build-ts-verified.log",
+      "hardware": false
+    },
+    "docs-build-verified": {
+      "command": [
+        "npm",
+        "run",
+        "docs:build"
+      ],
+      "startedAt": "2026-10-08T19:46:08.544896+00:00",
+      "durationSeconds": 3.373,
+      "exitCode": 0,
+      "log": "docs-build-verified.log",
+      "hardware": false
+    },
+    "heating-night-verified": {
+      "command": [
+        "npm",
+        "run",
+        "test:heating-rod-night-ramp"
+      ],
+      "startedAt": "2026-10-08T19:46:10.084131+00:00",
+      "durationSeconds": 0.559,
+      "exitCode": 0,
+      "log": "heating-night-verified.log",
+      "hardware": false
+    },
+    "heating-pv-verified": {
+      "command": [
+        "npm",
+        "run",
+        "test:heating-rod-pv-freshness"
+      ],
+      "startedAt": "2026-10-08T19:46:10.091710+00:00",
+      "durationSeconds": 0.389,
+      "exitCode": 0,
+      "log": "heating-pv-verified.log",
+      "hardware": false
+    },
+    "heating-ui-runtime": {
+      "command": [
+        "npm",
+        "run",
+        "test:heating-rod-night-ui"
+      ],
+      "startedAt": "2026-10-08T19:43:40.038559+00:00",
+      "durationSeconds": 0.88,
+      "exitCode": 0,
+      "log": "heating-ui-runtime.log",
+      "hardware": false
+    },
+    "sbom-seal-verified": {
+      "command": [
+        "npm",
+        "run",
+        "release:generate-manifest"
+      ],
+      "startedAt": "2026-10-08T19:46:28.760675+00:00",
+      "durationSeconds": 1.399,
+      "exitCode": 0,
+      "log": "sbom-seal-verified.log",
+      "hardware": false
+    },
+    "test-all-verified": {
+      "command": [
+        "npm",
+        "run",
+        "test:all"
+      ],
+      "startedAt": "2026-10-08T19:50:05.338884+00:00",
+      "durationSeconds": 134.164,
+      "exitCode": 0,
+      "log": "test-all-verified.log",
+      "hardware": false
+    },
+    "pack-dry-run": {
+      "command": [
+        "npm",
+        "pack",
+        "--dry-run",
+        "--json",
+        "--ignore-scripts"
+      ],
+      "startedAt": "2026-10-08T19:47:09.221817+00:00",
+      "durationSeconds": 2.716,
+      "exitCode": 0,
+      "log": "pack-dry-run.log",
+      "hardware": false
+    },
+    "tarball-start-smoke": {
+      "command": [
+        "node",
+        "scripts/verify-package-runtime-start-smoke.js",
+        "--root",
+        "/workspace/scratch/eb7acf2936df/heater-package-check/extracted/package"
+      ],
+      "startedAt": "2026-10-08T19:48:01.718749+00:00",
+      "durationSeconds": 0.977,
+      "exitCode": 0,
+      "log": "tarball-start-smoke.log",
+      "hardware": false
+    },
+    "tarball-secrets": {
+      "command": [
+        "node",
+        "-e",
+        "const guard=require('./scripts/check-repository-secrets.cjs'); const result=guard.checkRepository('/workspace/scratch/eb7acf2936df/heater-package-check/extracted/package'); process.exitCode=guard.report(result)?0:1"
+      ],
+      "startedAt": "2026-10-08T19:49:17.756492+00:00",
+      "durationSeconds": 0.248,
+      "exitCode": 0,
+      "log": "tarball-secrets.log",
+      "hardware": false
+    },
+    "secret-scan-verified": {
+      "command": [
+        "npm",
+        "run",
+        "check:secrets"
+      ],
+      "startedAt": "2026-10-08T19:50:06.658686+00:00",
+      "durationSeconds": 0.866,
+      "exitCode": 0,
+      "log": "secret-scan-verified.log",
+      "hardware": false
+    }
+  },
+  "review": "independent-review.json",
+  "browser": "browser-quick-control.json",
+  "freshAndOverlay": "prepublish-copies.json",
+  "scope": "Software, simuliertes Adapter-I/O, Originaldialog im Chromium mit lokalen API-Fixtures. Keine reale Anlage verbunden.",
+  "hardwareVerified": false,
+  "publishedToNpm": false,
+  "productionApproved": false,
+  "previousFailedRuns": [
+    "build-ts.json: noch nicht abgeglichener Spiegel, danach behoben",
+    "test-all.json: fehlende lokale React-Testabhängigkeit; npm ci --ignore-scripts im Admin-Paket, dann vollständiger Wiederholungslauf bestanden"
+  ],
+  "compatibility": "Bestehende geschützte Lizenzumgebung aus 1.0.22 bleibt erforderlich; keine neue Offline-Lizenzarchitektur enthalten."
+}

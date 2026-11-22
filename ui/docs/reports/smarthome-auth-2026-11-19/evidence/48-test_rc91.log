@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:rc91
+> node scripts/verify-rc91-cross-app-catalog.js
+
+[rc91-cross-app-catalog] OK: 22 sichtbare Apps und 23 Backend-Apps bleiben über Start, Save und Backup konsistent.

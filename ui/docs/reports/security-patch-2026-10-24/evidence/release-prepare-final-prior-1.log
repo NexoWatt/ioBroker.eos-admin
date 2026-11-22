@@ -1,0 +1,7 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.31 release:prepare
+> node scripts/prepare-release-assets.cjs
+
+[secret-guard] BLOCKED "scripts/verify-runtime-security-updates.cjs":214 (literal-smtp-password); value redacted
+[release-prepare] BLOCKED: Sicherheitsprüfung blockiert. Keine alten Bundles entfernt; Zugangsdatenfund zuerst beheben.

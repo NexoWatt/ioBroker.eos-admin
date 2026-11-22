@@ -1,0 +1,43 @@
+{
+  "node": "v24.19.0",
+  "scope": "Original regex only, not whole adapter; isolated subprocess timeout",
+  "results": [
+    {
+      "count": 1000,
+      "bytes": 8000,
+      "status": 0,
+      "timedOut": false,
+      "measurement": {
+        "bytes": 8000,
+        "ms": 1.5834620000000044
+      }
+    },
+    {
+      "count": 4000,
+      "bytes": 32000,
+      "status": 0,
+      "timedOut": false,
+      "measurement": {
+        "bytes": 32000,
+        "ms": 20.011602999999994
+      }
+    },
+    {
+      "count": 16000,
+      "bytes": 128000,
+      "status": 0,
+      "timedOut": false,
+      "measurement": {
+        "bytes": 128000,
+        "ms": 289.207745
+      }
+    },
+    {
+      "count": 64000,
+      "bytes": 512000,
+      "status": null,
+      "timedOut": true,
+      "measurement": null
+    }
+  ]
+}

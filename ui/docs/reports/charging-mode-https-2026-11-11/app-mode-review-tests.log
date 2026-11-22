@@ -1,0 +1,204 @@
+(node:5) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{
+  "target": "/workspace/scratch/7dbfb2c0423e/source-review/NexoWatt_UI_1.0.35/src-ts/runtime-executables/www/app.ts",
+  "sha256": "1f5b105bd613d8e263458350ebbbf5db4b6420f16ceb0f62c101a0ea2a50fa97",
+  "runtimeSha256": "ac01baa2ebe16b4de13e8cef59e8c39b7ddc6dfea38d8dfdeca1a6205ca711cd",
+  "environment": "Node VM, actual modal and runtime-base.js, synthetic DOM/HTTP; no hardware/network",
+  "passed": 48,
+  "failed": 0,
+  "results": [
+    {
+      "name": "direct HTTP: rejected Auto (HTTP 401) retains confirmed PV and shows failure",
+      "passed": true
+    },
+    {
+      "name": "direct HTTP: rejected Auto (HTTP 403) retains confirmed PV and shows failure",
+      "passed": true
+    },
+    {
+      "name": "direct HTTP: rejected Auto (HTTP 500) retains confirmed PV and shows failure",
+      "passed": true
+    },
+    {
+      "name": "direct HTTP: rejected Auto (JSON ok=false) retains confirmed PV and shows failure",
+      "passed": true
+    },
+    {
+      "name": "direct HTTP: rejected Auto (invalid JSON) retains confirmed PV and shows failure",
+      "passed": true
+    },
+    {
+      "name": "direct HTTP: rejected Auto (302 followed by login HTML) retains confirmed PV and shows failure",
+      "passed": true
+    },
+    {
+      "name": "direct HTTP: rejected Auto (network error) retains confirmed PV and shows failure",
+      "passed": true
+    },
+    {
+      "name": "direct HTTP: auto waits for server readback",
+      "passed": true
+    },
+    {
+      "name": "direct HTTP: boost waits for server readback",
+      "passed": true
+    },
+    {
+      "name": "direct HTTP: minpv waits for server readback",
+      "passed": true
+    },
+    {
+      "name": "direct HTTP: pv waits for server readback",
+      "passed": true
+    },
+    {
+      "name": "HTTPS Admin proxy: rejected Auto (HTTP 401) retains confirmed PV and shows failure",
+      "passed": true
+    },
+    {
+      "name": "HTTPS Admin proxy: rejected Auto (HTTP 403) retains confirmed PV and shows failure",
+      "passed": true
+    },
+    {
+      "name": "HTTPS Admin proxy: rejected Auto (HTTP 500) retains confirmed PV and shows failure",
+      "passed": true
+    },
+    {
+      "name": "HTTPS Admin proxy: rejected Auto (JSON ok=false) retains confirmed PV and shows failure",
+      "passed": true
+    },
+    {
+      "name": "HTTPS Admin proxy: rejected Auto (invalid JSON) retains confirmed PV and shows failure",
+      "passed": true
+    },
+    {
+      "name": "HTTPS Admin proxy: rejected Auto (302 followed by login HTML) retains confirmed PV and shows failure",
+      "passed": true
+    },
+    {
+      "name": "HTTPS Admin proxy: rejected Auto (network error) retains confirmed PV and shows failure",
+      "passed": true
+    },
+    {
+      "name": "HTTPS Admin proxy: auto waits for server readback",
+      "passed": true
+    },
+    {
+      "name": "HTTPS Admin proxy: boost waits for server readback",
+      "passed": true
+    },
+    {
+      "name": "HTTPS Admin proxy: minpv waits for server readback",
+      "passed": true
+    },
+    {
+      "name": "HTTPS Admin proxy: pv waits for server readback",
+      "passed": true
+    },
+    {
+      "name": "In-flight Auto keeps PV selected and blocks duplicate click and SSE re-enable",
+      "passed": true
+    },
+    {
+      "name": "Boost cancellation requests confirmed Auto",
+      "passed": true
+    },
+    {
+      "name": "Legacy per-box: confirmed numeric mode uses its own API/state path",
+      "passed": true
+    },
+    {
+      "name": "Legacy per-box: failed write retains numeric PV",
+      "passed": true
+    },
+    {
+      "name": "Legacy settings: confirmed numeric mode uses its own API/state path",
+      "passed": true
+    },
+    {
+      "name": "Legacy settings: failed write retains numeric PV",
+      "passed": true
+    },
+    {
+      "name": "Network loss after applied write is reconciled by readback without retry",
+      "passed": true
+    },
+    {
+      "name": "Newer SSE mode wins over delayed older Auto readback and old full snapshot",
+      "passed": true
+    },
+    {
+      "name": "Write acceptance with different readback never selects desired Auto",
+      "passed": true
+    },
+    {
+      "name": "Invalid readback missing cannot confirm Auto",
+      "passed": true
+    },
+    {
+      "name": "Invalid readback {\"value\":\"unknown\",\"ts\":2} cannot confirm Auto",
+      "passed": true
+    },
+    {
+      "name": "Invalid readback {\"value\":true,\"ts\":2} cannot confirm Auto",
+      "passed": true
+    },
+    {
+      "name": "Invalid readback {\"value\":\"auto\",\"ts\":\"bad\"} cannot confirm Auto",
+      "passed": true
+    },
+    {
+      "name": "Initial missing EMS mode does not invent confirmed Auto and cannot write",
+      "passed": true
+    },
+    {
+      "name": "Regulation disabled blocks synthetic mode click",
+      "passed": true
+    },
+    {
+      "name": "POST fetch timeout aborts real request signal, clears timers and releases controls",
+      "passed": true
+    },
+    {
+      "name": "GET fetch timeout aborts real request signal, clears timers and releases controls",
+      "passed": true
+    },
+    {
+      "name": "GET body timeout aborts real request signal, clears timers and releases controls",
+      "passed": true
+    },
+    {
+      "name": "HTTPS proxy readback login HTML after accepted write remains unconfirmed",
+      "passed": true
+    },
+    {
+      "name": "Readback 401 after accepted write retains last confirmed PV",
+      "passed": true
+    },
+    {
+      "name": "Readback 403 after accepted write retains last confirmed PV",
+      "passed": true
+    },
+    {
+      "name": "Readback 500 after accepted write retains last confirmed PV",
+      "passed": true
+    },
+    {
+      "name": "Readback invalid JSON after accepted write retains last confirmed PV",
+      "passed": true
+    },
+    {
+      "name": "Readback network after accepted write retains last confirmed PV",
+      "passed": true
+    },
+    {
+      "name": "Mode source changed during request rejects readback from previous source",
+      "passed": true
+    },
+    {
+      "name": "Newer server mode after successful readback replaces earlier confirmation",
+      "passed": true
+    }
+  ]
+}

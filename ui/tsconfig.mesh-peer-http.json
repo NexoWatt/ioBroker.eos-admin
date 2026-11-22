@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.security-boundaries.json",
+  "compilerOptions": {
+    "types": [
+      "node"
+    ],
+    "moduleResolution": "nodenext",
+    "module": "NodeNext"
+  },
+  "files": [
+    "src-ts/runtime-executables/lib/mesh-peer-http.ts"
+  ],
+  "include": []
+}

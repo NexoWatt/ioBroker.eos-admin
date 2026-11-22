@@ -1,0 +1,8 @@
+PASS strict scope: tsconfig.config-boundaries.json (4 exact source files)
+PASS strict scope: tsconfig.mesh-peer-http.json (1 exact source files)
+PASS strict scope: src-admin-tab/tsconfig.json (20 exact source files)
+PASS strict scope: src-admin-tab/tsconfig.build-tools.json (1 exact source files)
+PASS strict scope: tsconfig.ui-access-policy.json (1 exact source files)
+PASS strict scope: tsconfig.smarthome-import.json (1 exact source files)
+PASS strict scope: tsconfig.ui-auth-frontend.json (3 exact source files)
+PASS strict configuration guard: 23 native positive/negative fixtures; 7 resolved scopes.

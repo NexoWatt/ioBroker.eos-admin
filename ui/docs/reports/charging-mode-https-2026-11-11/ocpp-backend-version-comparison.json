@@ -1,0 +1,50 @@
+[
+  {
+    "path": "src-ts/runtime-executables/ems/modules/charging-management.ts",
+    "identical": true,
+    "sha256_1_0_34": "5ac6da4faaef0c84bc641f59e2d9483331b96d906c1f50bb8c0400b5a4e0bfca",
+    "sha256_1_0_35": "5ac6da4faaef0c84bc641f59e2d9483331b96d906c1f50bb8c0400b5a4e0bfca"
+  },
+  {
+    "path": "src-ts/runtime-executables/ems/engine.ts",
+    "identical": true,
+    "sha256_1_0_34": "cf0e987dd8364761dfd856ad05884658c0f9697e13970cdbbaa93da1558ec3a6",
+    "sha256_1_0_35": "cf0e987dd8364761dfd856ad05884658c0f9697e13970cdbbaa93da1558ec3a6"
+  },
+  {
+    "path": "src-ts/runtime-executables/ems/datapoints.ts",
+    "identical": true,
+    "sha256_1_0_34": "d711fe89c9b9717d90270b051ab5368d96a9d887da6eb47caea7e59587af8b40",
+    "sha256_1_0_35": "d711fe89c9b9717d90270b051ab5368d96a9d887da6eb47caea7e59587af8b40"
+  },
+  {
+    "path": "src-ts/runtime-executables/ems/consumers/evcs.ts",
+    "identical": true,
+    "sha256_1_0_34": "792814bd1c185fdc369afa66880cb63f0df696307495aeb14c01e9ec068d9708",
+    "sha256_1_0_35": "792814bd1c185fdc369afa66880cb63f0df696307495aeb14c01e9ec068d9708"
+  },
+  {
+    "path": "src-ts/runtime-executables/ems/evcs-control-mapping.ts",
+    "identical": true,
+    "sha256_1_0_34": "be2b3eea9a43c370f4409758cc6eae252b66801277d522ab0db455ff28376933",
+    "sha256_1_0_35": "be2b3eea9a43c370f4409758cc6eae252b66801277d522ab0db455ff28376933"
+  },
+  {
+    "path": "ems/modules/charging-management.js",
+    "identical": true,
+    "sha256_1_0_34": "3ce5eceec2470fcbf5eb751a30bc2bb9b083348a4b6bc0691ef4dfb10313f7af",
+    "sha256_1_0_35": "3ce5eceec2470fcbf5eb751a30bc2bb9b083348a4b6bc0691ef4dfb10313f7af"
+  },
+  {
+    "path": "src-ts/runtime-executables/main.ts",
+    "identical": false,
+    "sha256_1_0_34": "ee0432dd6ff8514556f9d734a63b34141622baf2b7df29e46f0c150bfe6bc882",
+    "sha256_1_0_35": "9282410b366e1536c7d65d29e301c36aa82e55f0147687fcf8e4d9255ba020b5"
+  },
+  {
+    "path": "www/evcs.js",
+    "identical": false,
+    "sha256_1_0_34": "78f0b2c4e146e850026f05cb2b7a767a1533c0cb8d868b739137e9339551bce2",
+    "sha256_1_0_35": "27003935020fd5fbe9790c723c462a92c2b3ffe43366e1c7e36df9d2c8c400b6"
+  }
+]

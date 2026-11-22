@@ -1,0 +1,685 @@
+{
+  "baselineVersion": "1.0.21",
+  "reviewVersion": "1.0.22",
+  "excludes": "new security/CRA evidence collections and manifests (covered by complete payload hashes)",
+  "changes": [
+    {
+      "path": ".github/dependabot.yml",
+      "status": "added",
+      "oldSha256": null,
+      "newSha256": "4f898a467d4202df1f639d36b0691792a7b57d469681abda5039b3c4106fb2c4"
+    },
+    {
+      "path": ".github/workflows/security.yml",
+      "status": "added",
+      "oldSha256": null,
+      "newSha256": "e939a464c8bdcfe9117cf313accb887df30dd0dec1684c68f876c7046f095718"
+    },
+    {
+      "path": ".gitignore",
+      "status": "modified",
+      "oldSha256": "74dc67f3380800d81a61993e980752142fda5e017ff08de292efe1d32bc14818",
+      "newSha256": "cb1adbee6b5ee7428f3f462b4c83515020d7f86572f2ec8581395ab0ee665fcd"
+    },
+    {
+      "path": ".npmignore",
+      "status": "modified",
+      "oldSha256": "8eab6768288faadc80037898c288a08b35bca58b494e04f176308fdcbc2f859e",
+      "newSha256": "7723a1d5a60089ba07f1341d943173a1c3b36bb4015dd8541ece987e38c09a54"
+    },
+    {
+      "path": "PUBLISH_NOW.txt",
+      "status": "modified",
+      "oldSha256": "556c8fe47347ca72c81578dada4f53fedcdd1733d5034e34653746f06f1b14ad",
+      "newSha256": "c29981e03cae1f9a576b2b39e1fd9ae4db56fd11a0e10afd09dcf50577bc11ca"
+    },
+    {
+      "path": "PUBLISH_NPM.cmd",
+      "status": "modified",
+      "oldSha256": "48f26165834af9de97f8244a8fa78afe021023f7e463a89800f077a84ef3b3c5",
+      "newSha256": "d28c0845f4834cf1f75ae32fa07a39e51e2c5e843f9fe1f1101712a56399bcc0"
+    },
+    {
+      "path": "admin/jsonConfig.json",
+      "status": "modified",
+      "oldSha256": "741a1cd7f913f08033c8352486c5a1e25a48253e4e091c8bc967cb13f22d08af",
+      "newSha256": "563813a16cf978afec3fdacc298618fa72aca3af973bdcfa685dabf17e551e02"
+    },
+    {
+      "path": "admin/react/assets/index-At9r9fB1.js",
+      "status": "removed",
+      "oldSha256": "576ad8c29e6448ae6d54a9da6388e88b8115cc6bae18a724d8e45b7fbf5b4ed2",
+      "newSha256": null
+    },
+    {
+      "path": "admin/react/assets/index-B57EouZG.js",
+      "status": "added",
+      "oldSha256": null,
+      "newSha256": "89811e9b9e131dc2c3b9e89642b1c797fce15408afba80fbc78a2ce17a3ef043"
+    },
+    {
+      "path": "admin/react/index.html",
+      "status": "modified",
+      "oldSha256": "50284513ccfc1f64f7f389e641b4543aeef1ad35158a56653e3ef3be50b6f9c0",
+      "newSha256": "db5f879501275c562ccb853aad8f5d86b15e2e8eb5aaa77998c2d23eb6f6627d"
+    },
+    {
+      "path": "docs/AGENTS.md",
+      "status": "modified",
+      "oldSha256": "8023565f2dba74aad7b4c6e6375a1e0050d1f5a985b07673c9f2679017a02b32",
+      "newSha256": "92e01655d008f683e0b8fb07de3e067e05f34b6bab248782ab912dd6da050669"
+    },
+    {
+      "path": "docs/CHANGELOG.md",
+      "status": "modified",
+      "oldSha256": "4c96d7915cd3a34b2c54af06ab8f1f39e792caa751a4eebec5b931ddcd1d0200",
+      "newSha256": "9d72351297a491a98d9cf3e42d26ea8176a0c4964fe2d348c2f3a89a2dbbb572"
+    },
+    {
+      "path": "docs/ENTWICKLUNGSLEITLINIE_SICHERHEIT_DE.md",
+      "status": "added",
+      "oldSha256": null,
+      "newSha256": "a1d1ed90fbdec959e47ee6feb2d8a0ec636c37194768e07b1c1dba58dc06c49c"
+    },
+    {
+      "path": "docs/MICROGRID_MASTER_SLAVE_DE.md",
+      "status": "modified",
+      "oldSha256": "434d497eaa3a409068838b18f0d1a6cede326c53d33278c843469c975a5944d1",
+      "newSha256": "155bee4c6e3d83c3694108af7e70215053eb2715ab87a84a172c916935966474"
+    },
+    {
+      "path": "docs/QUELLCODE_VERKNUEPFUNGEN_DE.md",
+      "status": "modified",
+      "oldSha256": "b1f75553c926c77a4b3f11879559fdd21295577e65624af3876d676cfe3b71ee",
+      "newSha256": "a4bc7837149604f82fae3b3e8668a53cd96c1267bfd02dbc94d11773cb453549"
+    },
+    {
+      "path": "docs/README.md",
+      "status": "modified",
+      "oldSha256": "1d34eef36bcf1cb76a388df8c69103c158c7a3714fe98ef0e3a33e0425dfb102",
+      "newSha256": "87ef9a3f27d6ffa75e0719bd7513a6efeb73525ccfc6d9e1d3d23f3b9512bb53"
+    },
+    {
+      "path": "docs/STABLE_1_0_22_RELEASE_DE.md",
+      "status": "added",
+      "oldSha256": null,
+      "newSha256": "acd843041926605ac3f14e180aa7bcf938450e6fe53ae49c34cc7c72b2497470"
+    },
+    {
+      "path": "docs/code-documentation-manifest.json",
+      "status": "modified",
+      "oldSha256": "a9fd04e24ea367149154c6640578bf8d32077f470aec0a217b798db993afb88d",
+      "newSha256": "9b65902947ddad075455f79236b74889cf6fa78cbd5fc800506989b4a164bbc7"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/tariff-provider.md",
+      "status": "modified",
+      "oldSha256": "d937921021bc6c650524107f6a815da86baee78b01182c293ca647f690cf6cfd",
+      "newSha256": "f61e689597059383c24f58d1040951438dfb87ab8f7398acc1fc0ccdefc0a4a9"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/open-meteo-pv-forecast.md",
+      "status": "modified",
+      "oldSha256": "e1f95b88d8fbf083a1f33cae2fe20e7878e883fdf8bc3a8e8c2ae35011b5df40",
+      "newSha256": "98b3d9c0f7dbefdcac8c5c14574756700921b382faacd919d59313d7d5c1b25c"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/ems/services/tariff-provider-registry.md",
+      "status": "modified",
+      "oldSha256": "35bd30f9b5e2e37caa7f2b61553d96869bc2787678ac7e4f513385aae9148993",
+      "newSha256": "508b2e14469de3322492d9bb7012cb7043dee8f43e29b6f833c3ac5533084ab9"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/mesh-coordinator-contract.md",
+      "status": "modified",
+      "oldSha256": "04c0fa1ee47b4a97025320ca9f658a717f6ca834f272d635cfb8e49ddae41ec4",
+      "newSha256": "1903152e548e13b19dc893f4f340921628799123e366932c8092f112e7feba09"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/mesh-coordinator-protocol.md",
+      "status": "modified",
+      "oldSha256": "90a5821270b214ff9da2d228bc128d5174e6aef0e4aea9d70ec280ef7b173d0c",
+      "newSha256": "c15af22f62c3d779533c8b2c7be63ee0112b16a1e90b978bfe9f6acca8b56b13"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/mesh-coordinator.md",
+      "status": "modified",
+      "oldSha256": "dd393a2de94396f9dedb41e7bec8ee95b09fb36f0e081a6d46824c025217e4e7",
+      "newSha256": "cd75eb307157697c015bbc5e1953a7cba95be42f412a7c523569e7c0a4d47ac7"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/notification-mail.md",
+      "status": "modified",
+      "oldSha256": "fb0f6a7f1dca68bb3850ef316e75af5d4a6a814c7008c65f773b85e2d1d59322",
+      "newSha256": "cc9862315bd110c0aed571a9691007ae1cacfbee696a4f4801e13bc3ad61d303"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/main.md",
+      "status": "modified",
+      "oldSha256": "d319faa6b6ef726dd3509b5f9bbc5dac3ba2417e3af5f09f118916be1ed6c695",
+      "newSha256": "9f874c59e7b923b2fade39e0a017e32c55cb65042e58b614a430e2a754f581a8"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/ems-apps.md",
+      "status": "modified",
+      "oldSha256": "6bdf19945eab079c78abeb819dd587a9586a557c2d8fd2bd48ebeb5d75ec65c0",
+      "newSha256": "1347b5d04633908ad4e868d95b84df7e6a1de717c2decfcb7c2e244ce7bfa4bc"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/history.md",
+      "status": "modified",
+      "oldSha256": "00bb15bd4926412d090bedc2fd956966e77f7b818121a60a392f0ec4ca1a959e",
+      "newSha256": "f6979849755227a60f96563242a033234e07ef1694eee58e0605ac1a95798f14"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/logic.md",
+      "status": "modified",
+      "oldSha256": "32dacbdac900ce4490bf4f2c947245f2516f37391cb8088c2a60d4a822fd8105",
+      "newSha256": "8d69ccda397db79608ce1c589de73f74b8ebdef0b4ef353185cb60d6d51cb0c0"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/smarthome-config.md",
+      "status": "modified",
+      "oldSha256": "4966163da158b816055be012186e85b3affa2db3e72f43e5cdfbf4e9cfc986c7",
+      "newSha256": "a89260afa3ea9e2e136ea396a7e400c2d08bd3e7eeebb9d65c59fc4934249508"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/smarthome.md",
+      "status": "modified",
+      "oldSha256": "dd0218b4a057fe8bcb8645a0424259e76b1c3001434d29f932e62b65b947754b",
+      "newSha256": "b2c8e0ede566aeec934e281b085ced0dccb06d3693645c0690bfbff353f4f727"
+    },
+    {
+      "path": "ems/modules/tariff-provider.js",
+      "status": "modified",
+      "oldSha256": "f63080f6b7832ec676aa5f3cbbecd2d59f80a94d6e26b5c07e9435b1f8638f65",
+      "newSha256": "f7ca683b1b9d63137e1654f85ec932c7defb4870acad2c9f5969a929954885b2"
+    },
+    {
+      "path": "ems/services/open-meteo-pv-forecast.js",
+      "status": "modified",
+      "oldSha256": "1d06976d22f637f15d22813b3a38b5039885d497572759d267a618b702a03f30",
+      "newSha256": "2ce74440fe0eaddea24ed7b424b48fb4a08b5e634cf8f048200af707ed287ad9"
+    },
+    {
+      "path": "ems/services/tariff-provider-registry.js",
+      "status": "modified",
+      "oldSha256": "13ad81ca5d580a8325adcd640a2891ec035d58e91cf319237761e52275f68cef",
+      "newSha256": "45280b6b9607e5fbb61946a5fd6d8373d2c1b6709aedae4900c74252aaef23a4"
+    },
+    {
+      "path": "io-package.json",
+      "status": "modified",
+      "oldSha256": "4c898a905f24276048e20cde187ae37e43fb52558d2c63fddd1093aff34244e7",
+      "newSha256": "1263d7f17acb4c67e639a4aa8ccce645e90d5e7688e70eaf15a836caa96bccfb"
+    },
+    {
+      "path": "lib/mesh-coordinator-contract.js",
+      "status": "modified",
+      "oldSha256": "7aec7794af66a20aeee9edaacdf9104cc9c90da894e1ce57292e04818f5fb788",
+      "newSha256": "9e3a3222761b6f2200cd8a074badbc8a4f75b911b82620c3accacb8edaab519c"
+    },
+    {
+      "path": "lib/mesh-coordinator-protocol.js",
+      "status": "modified",
+      "oldSha256": "0246ad970de4d260a2753a3632c2e163f8777312924744302a328dfdbad4f102",
+      "newSha256": "8c49c2217f6a226d09059e0b05faab821ab99ba330de376138ba2055efbe0133"
+    },
+    {
+      "path": "lib/mesh-coordinator.js",
+      "status": "modified",
+      "oldSha256": "7d895cbb1599f709dc4f31444988dd62aa39992f7b57ca36300d8278e70ef47b",
+      "newSha256": "f8681b59066dbe20521164eed7433f34be5359015879c88d71e600338f9e88d5"
+    },
+    {
+      "path": "lib/notification-mail.js",
+      "status": "modified",
+      "oldSha256": "732162b5258cc6879ad16fc49b17a01872e0f9e561602e057d150e1e92c010d7",
+      "newSha256": "b5fbf670f944f653dd0a108393f9dec23916b55380af0566ed82e6a863d46269"
+    },
+    {
+      "path": "main.js",
+      "status": "modified",
+      "oldSha256": "67d3ef9b866ea9903cf932109ea37ba8c63f5f1ea51130f682981e25c66c241b",
+      "newSha256": "061d2d83f162f188836ab6661f505f9367b0ba1b1fff312befa026c925b88563"
+    },
+    {
+      "path": "package-lock.json",
+      "status": "modified",
+      "oldSha256": "871ebe85b0e2f0b220be65b06de039500e2bf44ddcea41f9df377afdb86b5e01",
+      "newSha256": "383db7de2fe2ba1c45e57cdb46ac08f80a5e9b965f0a940098050d28b93e7e08"
+    },
+    {
+      "path": "package.json",
+      "status": "modified",
+      "oldSha256": "2bab6f053f1e031d0cbd47b0cfee4eed838608ac869c3f9c5af099df457fbbc1",
+      "newSha256": "5dc69eebadecc1231ea06cb9e942bfd34f1769f71e1a889a18bafb74c27b1faa"
+    },
+    {
+      "path": "scripts/build-ts-runtime-mirrors.js",
+      "status": "modified",
+      "oldSha256": "5a04097f84c4bddc97c31f3295a26a334875d120260ceb90aa00e8fe25d948b6",
+      "newSha256": "6ea5703d816038030c2a70e3a0d11aab5b2f39a6262eafc4cb0730a3eb262ca2"
+    },
+    {
+      "path": "scripts/check-repository-secrets.cjs",
+      "status": "modified",
+      "oldSha256": "46931a1de81ccd8921e616143db775c34eeccddad1ea5bf025a1297db36fce6a",
+      "newSha256": "31884bbe8a51dad1b227ff0a6f9353460b48d3c63fb955760d0ad5446d295c06"
+    },
+    {
+      "path": "scripts/generate-cra-sbom.cjs",
+      "status": "added",
+      "oldSha256": null,
+      "newSha256": "cc91b3f60f38e21f516e041e5e479c0860ac38e99eb782565218b4a723b7d822"
+    },
+    {
+      "path": "scripts/release-artifact-manifest.json",
+      "status": "modified",
+      "oldSha256": "3b01618d882085137d363eb788f408580d9cba9fd03beb9d62e08bf46be7afab",
+      "newSha256": "69dc81c984648650f3e182a7286d43f02003e1a0b21667444e34e08068edfd38"
+    },
+    {
+      "path": "scripts/verify-cra-admin-router.cjs",
+      "status": "added",
+      "oldSha256": null,
+      "newSha256": "a3025fc6f9dde7a0d70a68f5bd4410b795fe8af3dcea15cce1b2cf005f73101b"
+    },
+    {
+      "path": "scripts/verify-cra-auth.cjs",
+      "status": "added",
+      "oldSha256": null,
+      "newSha256": "7539ab4d4ea90f6a1014974c0d73891ff93f0a043425c020f6429ca43a0f8354"
+    },
+    {
+      "path": "scripts/verify-cra-credential-state.cjs",
+      "status": "added",
+      "oldSha256": null,
+      "newSha256": "4f509c30e6f514ea234505e5337df003bfb96ff5a5e2edc6187a5c569a89d8cd"
+    },
+    {
+      "path": "scripts/verify-cra-dependency-regressions.cjs",
+      "status": "added",
+      "oldSha256": null,
+      "newSha256": "fedbe754b96733e333476140afdd32d58e385a430642df4b7626030f46fe13ee"
+    },
+    {
+      "path": "scripts/verify-cra-frontend.cjs",
+      "status": "added",
+      "oldSha256": null,
+      "newSha256": "81068d43b60c2216f83438c91301a64baceedb788141b64c1e11c60da6ce0ffe"
+    },
+    {
+      "path": "scripts/verify-cra-network.cjs",
+      "status": "added",
+      "oldSha256": null,
+      "newSha256": "da310da661e8eb68ddd9a3e19f4ecc7054b242a4e7ab2f3641ca6d50cd6a7007"
+    },
+    {
+      "path": "scripts/verify-cra-sbom-regressions.cjs",
+      "status": "added",
+      "oldSha256": null,
+      "newSha256": "76eafa2781147a38e2a68f99b67aea5c1064e0c8f598c20595b4bd2a3220de32"
+    },
+    {
+      "path": "scripts/verify-cra-sbom.cjs",
+      "status": "added",
+      "oldSha256": null,
+      "newSha256": "35c2f98be5873eff7676d03dc1329ae358b67082f6a5367cda36fd4ea067c994"
+    },
+    {
+      "path": "scripts/verify-cra-tariff.cjs",
+      "status": "added",
+      "oldSha256": null,
+      "newSha256": "33e02d1e7d5190e0afb35469ef9ea197b4ffbe1ce34b86d1885bc1e6932fe728"
+    },
+    {
+      "path": "scripts/verify-cra-weather.cjs",
+      "status": "added",
+      "oldSha256": null,
+      "newSha256": "ff3c1ad9737a25cc952e41367da07ea5b2b7c9ffd6263ff2f06e1c76404a934a"
+    },
+    {
+      "path": "scripts/verify-customer-write-policy.js",
+      "status": "modified",
+      "oldSha256": "f2db4fa41b8e3844f8b35e444a36b0bf4975ba5232b06d37b9c4ec9110ca408b",
+      "newSha256": "5f5688a2dd6226e8c0557b355460d72335a8e1e2801fac40e0ff7bd26b42c0a4"
+    },
+    {
+      "path": "scripts/verify-license-secret-externalization.cjs",
+      "status": "added",
+      "oldSha256": null,
+      "newSha256": "2a07c7431310bc6bc9eb14d687394ef1b8c3d0c42b7adc847c1ca81bee75fb21"
+    },
+    {
+      "path": "scripts/verify-mesh-coordinator-access.cjs",
+      "status": "modified",
+      "oldSha256": "4cf6e5332b94dff1ba41773c734fbc9dde98ad4f1aa50ffe92ebaac7f3968afc",
+      "newSha256": "032b6d89907c08333424b9bd12ea7f392a5e96a9d9d12146742239a21f31ab3d"
+    },
+    {
+      "path": "scripts/verify-npm-version-free-guard-static.js",
+      "status": "modified",
+      "oldSha256": "7e13d758fe091986479b517d39ebdfa1c257c4926546ac9bde677c8adfaf6e18",
+      "newSha256": "8c449a700d59f8f7304ab28dc6648078e9f827f582dc4c7d6fd03377cec624bb"
+    },
+    {
+      "path": "scripts/verify-publish-overlay.cjs",
+      "status": "modified",
+      "oldSha256": "3e496910ab31601ebb7701b792fc497383e1bcf628e2396da8ddaa5912a1307a",
+      "newSha256": "b0ff139b572aaee8c88d8cc97de8251f6b611e1647dafb3a3ab1781f773ea4b6"
+    },
+    {
+      "path": "scripts/verify-rc76-pv-forecast-runtime-hardening.cjs",
+      "status": "modified",
+      "oldSha256": "dacfb8c44f70a66f43df8b24b26360d88ce53acb2f8102e9ed534c6f650db6c3",
+      "newSha256": "0e71184181e9b02ab403a44677d2a11b4a914c64a9fa297ea165e790bb6914ea"
+    },
+    {
+      "path": "scripts/verify-rc77-pv-forecast-state-cache-bridge.cjs",
+      "status": "modified",
+      "oldSha256": "e30ccd51fa0d25482cf434707c0c6557d20802d60fd7c814fcc0ef850341dc53",
+      "newSha256": "fa6ccaa3aac8d34a274b9babdb785ee7b7e3acb8e5d7ce3e54e0239a65bbef59"
+    },
+    {
+      "path": "scripts/verify-release-approval.cjs",
+      "status": "added",
+      "oldSha256": null,
+      "newSha256": "3619abce62bfbf7f14ffc6ddf3647d34abd891f3a63b0df4bc5dbb4d420846ce"
+    },
+    {
+      "path": "scripts/verify-release-artifact.js",
+      "status": "modified",
+      "oldSha256": "acd7d8947f477244b41b13dd6123c7a30eb8bfbbb83662b8e505d3b9aa16feaf",
+      "newSha256": "4cd1239b9f12655719ed908e60f739f51dfaa64c1e371b4ac9b991bbaa729134"
+    },
+    {
+      "path": "scripts/verify-stable-1.0.10-secret-guard.cjs",
+      "status": "modified",
+      "oldSha256": "406a63b3812224a79934c08c205cb437809ef925a81753495808f640bed45581",
+      "newSha256": "92ab4249059e774698b46310ba4296f04a4ed31adb2c1d013934735ceb286b1f"
+    },
+    {
+      "path": "scripts/verify-stable-1.0.12-publish-upgrade.cjs",
+      "status": "modified",
+      "oldSha256": "6706ccb8f8796f81309b392ff1d7af4243bd63b63dddca4c63b533d0d1e09be2",
+      "newSha256": "fdaec97efeb0b26c6e8177ed08859431ce213d5b0f6317a92253c73ae4a9cff1"
+    },
+    {
+      "path": "scripts/verify-stable-1.0.8-storage-licenses.cjs",
+      "status": "modified",
+      "oldSha256": "dd4c8c545521061a3e6ac37d2d57459315ea85dac7b76e906602c4ef21caf385",
+      "newSha256": "eb5012659a27a0c3a71a5ec109e071731a67ad9d9049a85bcdfbfbc463d85b52"
+    },
+    {
+      "path": "scripts/verify-stable-1.0.9-access.cjs",
+      "status": "modified",
+      "oldSha256": "923ecb51b18913086069e35e4e3e56bc0e9e469b8b96dc899d73ee2a834b08a2",
+      "newSha256": "7f6b69e3e08e2bfb9a55c2621f3873ee6cf5cd94f0b9cacc8e5ebd36e6480dcd"
+    },
+    {
+      "path": "scripts/verify-stable-release.cjs",
+      "status": "modified",
+      "oldSha256": "bfd740dbb73c54c2b9e444ee59e2a925eaf1ce905ae47353ea5295526fda7074",
+      "newSha256": "3a374cdff1713cdae44642e720662ffaeeb45e67265d10836ce05a57af64a3a0"
+    },
+    {
+      "path": "src-admin-tab/index.html",
+      "status": "modified",
+      "oldSha256": "9c9feff30b477ad4b80eef035840fb895b5438a237d6b3ff160005b6a7124ed2",
+      "newSha256": "3bff4f192b50cd550ae0b60e8006e6028cef9b7224d64a84d8e69bac08910d01"
+    },
+    {
+      "path": "src-admin-tab/package-lock.json",
+      "status": "modified",
+      "oldSha256": "12b3c5f208d9dd609999fa9a964e6c0062dcf585808b38494e59604a11b6532d",
+      "newSha256": "2ce40a4838b00f6a4782bd917af76f18b51f98ffe5086113ae1c11b89e64aef7"
+    },
+    {
+      "path": "src-admin-tab/package.json",
+      "status": "modified",
+      "oldSha256": "e75d089bdae6767b7a21619f4b03aabd3ed03f572c049a0fa8d1746bb58857b3",
+      "newSha256": "1187c0e705ee899d6bbab3ae9f8817cf05a51a2618ab33fd8b4fb6b0e589ebb1"
+    },
+    {
+      "path": "src-admin-tab/vite.config.ts",
+      "status": "modified",
+      "oldSha256": "4faa38134a689077027061ca1278f9849bb68fcfb967e2ed91b4b0775d1aa11e",
+      "newSha256": "52a2af490549e33f223bef2c37aef93ab76e247346cff244137518a244bbd4df"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/tariff-provider.ts",
+      "status": "modified",
+      "oldSha256": "7e2eff0dbb3039403a5fa2415ede971c78ac4025ed75d156f9272851ffe8bae1",
+      "newSha256": "b087bcd01fbec683def48ac458fc8c0b55b5b991f35abc612419ddc18de249ba"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/open-meteo-pv-forecast.ts",
+      "status": "modified",
+      "oldSha256": "00df79157acf843abc9003ba42e5e82edfca5a57af1955c2779ab0011adb3865",
+      "newSha256": "f253af3980f495a5fa2cee733738dc71f18608c5a299dff1cb9026aa762ceae9"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/services/tariff-provider-registry.ts",
+      "status": "modified",
+      "oldSha256": "fec5b147bb20409508deb645ecc7a795315287586849f840a463dcd969d7d548",
+      "newSha256": "52b25d1e9aa8a3b4e0b61092e548fc8bf66d9a1b82c617656e8028824897b916"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/mesh-coordinator-contract.ts",
+      "status": "modified",
+      "oldSha256": "cac90a49108af09dc82e493c3df2ae5c921f5100ad91a79aca703df139af3deb",
+      "newSha256": "cf6a5cf7faa8c844d6544e2a84143a5ce7b5c7b4f0d3f7846614701d5f86ed7d"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/mesh-coordinator-protocol.ts",
+      "status": "modified",
+      "oldSha256": "1ba54d7ad63c92582d65643b3b40d19bda0d0031681b682007f3483ae480f6cd",
+      "newSha256": "af525622d04b618eccd223a42b79ae15814e83ab1d923c952945207c08266cab"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/mesh-coordinator.ts",
+      "status": "modified",
+      "oldSha256": "401e731783d09924958637c839a1b745ae1d88be1386031ea69fdb638f26637d",
+      "newSha256": "d96d96eb6c658b4b1a8d6ffdd263134b8ffbe4594612d0c3b177a295a5fe5bb2"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/notification-mail.ts",
+      "status": "modified",
+      "oldSha256": "8a452b9faa6855c12cd4e9447de4ae21e8501524093d2519923d1efe37fcf661",
+      "newSha256": "eea3d4b9ed91eb9e1c7362a1b2fe17e3135f8d633c9f4976e525bf5499736a92"
+    },
+    {
+      "path": "src-ts/runtime-executables/main.ts",
+      "status": "modified",
+      "oldSha256": "83d9c4ad4223858fdd78c4ed6bbec8f2f12489000f13e35cb67a4820fb367c9f",
+      "newSha256": "4fd96771ac39b0dc8de6d6d623ea949f8a79e1678570934a3e7089cdb1025cf7"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/ems-apps.ts",
+      "status": "modified",
+      "oldSha256": "cf0bbc8aa507b5c788a4a00c5f309f43b19f57df36c6037e78d8b11c834712ae",
+      "newSha256": "2f8c3d94ca7b79da033f1232b034930767e23ba1fb6805588b661a593bbe790e"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/history.ts",
+      "status": "modified",
+      "oldSha256": "e4867666cd11683ac1febeec4a6bd54b02b30cd1a1bbd5d3dd7799bff31a7500",
+      "newSha256": "c7ea375775ffcc8c95705bd309f4cb3fbf2fe37b3afb04c115181ccb1b1579f1"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/logic.ts",
+      "status": "modified",
+      "oldSha256": "3e81ce23d904390f502d2e85cc8613b64d54c9fc390de1dca632c4bec2178466",
+      "newSha256": "b92bf4733aada73ad2f8e4fe9e84b8bc23476c42bcd5d667d46d4284e28320b4"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/smarthome-config.ts",
+      "status": "modified",
+      "oldSha256": "f47ceb1807bed50ae25712727b13bfc48330133b3af00b9203705bbd1ce85fd0",
+      "newSha256": "d63d282af1c7269c8e2dd04068ccf98499d23eb9b4c64018bbded9c4b2758209"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/smarthome.ts",
+      "status": "modified",
+      "oldSha256": "9311d9dd72af14c758e7fa52e7cbdecf06c6e6df02ba19a09598b969c0690a8c",
+      "newSha256": "e894bbf9cc5e5d258582a15db360a220900c471021ee55ece785613929498537"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/sw.ts",
+      "status": "modified",
+      "oldSha256": "1a28915d29070356605fa336906ffbea01d9bbd3aa6656eb2105505207e3648f",
+      "newSha256": "5b52c8ea5dae7ed951cbb7ed86866112019707995b5ebe1b258ccba3eca47b4c"
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/modules/tariff-provider.ts",
+      "status": "modified",
+      "oldSha256": "6731a82f151ec79d9f90d1760258119af4bdd8290c31df3e0b3371a8392c1f67",
+      "newSha256": "7b2080e9248611b86801c7da62fb69ac1718b17930f4a0d00ad1c4cdf21015ce"
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/open-meteo-pv-forecast.ts",
+      "status": "modified",
+      "oldSha256": "5d06cc99d39c0e42212d2aeefd8df74ece2dc84562c66fb0e127582c9d198832",
+      "newSha256": "b23e2d109470dab2fc2a74cafb5db23fbe8174661b61dc4b9831aa3cda63d2f9"
+    },
+    {
+      "path": "src-ts/runtime-mirrors/ems/services/tariff-provider-registry.ts",
+      "status": "modified",
+      "oldSha256": "28e6cbf3a21de78d6374e1d657ae91a57ee9b73b98730c2fe250978ff18e880c",
+      "newSha256": "a898e6a5047152d0c251411d04365d0e4974c0b32739a9d24d9d47f60c584733"
+    },
+    {
+      "path": "src-ts/runtime-mirrors/lib/mesh-coordinator-contract.ts",
+      "status": "modified",
+      "oldSha256": "ca0c92add468d2e0e14505c3e6295d5d100b69cb7967154cd290b3e9b3732e94",
+      "newSha256": "90e44e9b695cfdc4ccd0cdc8819e424665f0b007ba3ebf557be44de99aee82c4"
+    },
+    {
+      "path": "src-ts/runtime-mirrors/lib/mesh-coordinator-protocol.ts",
+      "status": "modified",
+      "oldSha256": "30720fba2b16d7b193df180838ca1f2e485a541fee4b3bf8f0aafb247a426f61",
+      "newSha256": "2dad1b84b023a8e6405f3d610e71610ff1b83257c3de908b9b64ee49ac2839da"
+    },
+    {
+      "path": "src-ts/runtime-mirrors/lib/mesh-coordinator.ts",
+      "status": "modified",
+      "oldSha256": "82e2badd044e32014d4d7df6b582dd876530aa14ffec06673c1547162ee860f2",
+      "newSha256": "c21995653c435be1b81d0eefee6f17980bf5b4a99e6107104fd6fcbb679be052"
+    },
+    {
+      "path": "src-ts/runtime-mirrors/lib/notification-mail.ts",
+      "status": "modified",
+      "oldSha256": "ceb80d8776eedd280d244548b2de69edde61dc3487f8def7e85352154fe7d5bf",
+      "newSha256": "11cf02a082c9532e2d08f0b37a0fe174c93cee4b58edcce561f84c2b0a9141d1"
+    },
+    {
+      "path": "src-ts/runtime-mirrors/main.ts",
+      "status": "modified",
+      "oldSha256": "a122da9ad79e36f99fa650113ecf5dc673558bde315bf08bbec43011fdd1d289",
+      "newSha256": "4b12f97c23db7e5b190e66f2839575b1254cd269afcc1041bcc8ea3cfb57047f"
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/build-ts-runtime-mirrors.ts",
+      "status": "modified",
+      "oldSha256": "ae2858adf6394499ba7492445a5812924687ffb0f18de9022edd1545e481f1fe",
+      "newSha256": "dd2f551a5a946b0e33c3cc935507c68b2ce1f963a0e7b97418ad7dfc0264e0d5"
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-customer-write-policy.ts",
+      "status": "modified",
+      "oldSha256": "fb1a10493f70aca3446304e8e6f4691305903fdf193059703f8238051ada6f2c",
+      "newSha256": "8245f091c0d322f6c11fd2906c849d18771361915fb91cdab8a05e7b7af0269c"
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-npm-version-free-guard-static.ts",
+      "status": "modified",
+      "oldSha256": "41886a41a07c42b0eed4b944f4239bc6f54703a11061c90d1a77662106b74a21",
+      "newSha256": "1c180068043795764a2e114f1786b31ee69e3d162c5cacf889a92354eaaf5865"
+    },
+    {
+      "path": "src-ts/runtime-mirrors/scripts/verify-release-artifact.ts",
+      "status": "modified",
+      "oldSha256": "1e62642cf52d20f5b990b33ba7b31d573d686072b3c022b056837faebeea68db",
+      "newSha256": "2e96677f0a7c4d33b3059df500f0c2033280a7775565aafef9581c1d100d750f"
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/ems-apps.ts",
+      "status": "modified",
+      "oldSha256": "b89d46efcc0a736ff1ada1aee770743bd6afe6d66edfe235176b70b55f598307",
+      "newSha256": "a10b5179dc2dff5c6a8a22513a0c93789ccc1f646907ad6233524e05a4dda472"
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/history.ts",
+      "status": "modified",
+      "oldSha256": "b3d985634c55fe9c2a747fb84326d6697ac5cdd23c5f5a2a7e45d15d8105eb3c",
+      "newSha256": "987daf134e9e29c8950c5e2d1a1e795e8c52cb7f5d7104bc89993b90f3308b64"
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/logic.ts",
+      "status": "modified",
+      "oldSha256": "cb8bf388d5ed9592ca36d6bdbd319177f3fefa3f2c3a6a052e3686fc945bb65f",
+      "newSha256": "bbeb19b8cf1b02a6b607dd617fe83965a6a89b98f0cd88580241c5e15c01d9e1"
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/smarthome-config.ts",
+      "status": "modified",
+      "oldSha256": "dde21e49db7e5b14785537cce4c8197637975012c03fd25aa30b021e3e928bda",
+      "newSha256": "7b9b79e3dae8c8d5b635ca8721ed6870a9ee1805c213f5f270fb26967dfbc65e"
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/smarthome.ts",
+      "status": "modified",
+      "oldSha256": "02f9c365d5f58299f49492e1bcc8444b77d09b65123a6a523aaa597c8a42fb50",
+      "newSha256": "d511345a0d7143655f84efc434794e704e0bd69f1709779af3c32b0f19223417"
+    },
+    {
+      "path": "src-ts/runtime-mirrors/www/sw.ts",
+      "status": "modified",
+      "oldSha256": "54b283a465502dd0d06e5aef89dec1f0aae16316f7ef5ebb94d2da9bb1d2986a",
+      "newSha256": "410e44625cd3dadfe238657621903fc0e54d05cccee07c96001d64fab81f3859"
+    },
+    {
+      "path": "www/ems-apps.js",
+      "status": "modified",
+      "oldSha256": "65b4d61ebc1a24f7ce8ace3d7aeee3df0189a7b52fbd9bc9a59a80343ae4b7e7",
+      "newSha256": "be94bca3ee2156cfec42df94de119ef08a9b9891621730d55ff68b1069b23dd4"
+    },
+    {
+      "path": "www/history.js",
+      "status": "modified",
+      "oldSha256": "b1bd525398296cdf7274f2c9f214c5de0803d6f60486d3e543ea4b7729df69e6",
+      "newSha256": "809474a32c5e05516220f140b9565b250b5520656c45e5b5303c145fd0da78c0"
+    },
+    {
+      "path": "www/logic.js",
+      "status": "modified",
+      "oldSha256": "1ead02bb1d5bff87fd54465ab96806d7de0768c83e11cafa85cbbdb77224a45b",
+      "newSha256": "1a3a6233e20a9567ebee55b1a1535baf50a9bf0e83536e1c280f7bdedae9554a"
+    },
+    {
+      "path": "www/manifest.webmanifest",
+      "status": "modified",
+      "oldSha256": "1977cb8be356202f7577457af987d52d677d594bb569443f9177d37d80be6a5d",
+      "newSha256": "39bcf54e8cf4369e5c2b80b12b0c324c1c75c641e51ede3524a8a40bb610140b"
+    },
+    {
+      "path": "www/smarthome-config.js",
+      "status": "modified",
+      "oldSha256": "2842775efbab74448c822ebb2ed55bdaef312c8392209e8e9f9a849f98b5b125",
+      "newSha256": "aa1936d0a4ceb6328055c122748184eeea68a6909f7d67dc71516d5d459ce1ed"
+    },
+    {
+      "path": "www/smarthome.js",
+      "status": "modified",
+      "oldSha256": "2a0a62bf2d7d31230bcc93fed7636cedfa5fa3fa1d9ee91d17e1a274dbc63702",
+      "newSha256": "75d98c8d6ceedad1c1303c98e1059317735f704a438e7fe2e903e91ced06d242"
+    },
+    {
+      "path": "www/sw.js",
+      "status": "modified",
+      "oldSha256": "b94677af084b594d85505fe601518b461a2faf6ab2b822db1523d9710e3b12c7",
+      "newSha256": "85c2ff780f347dbdb86664fc3eeda2d18eb97b1580d1aa9a6ec3c90988dfba2a"
+    }
+  ]
+}

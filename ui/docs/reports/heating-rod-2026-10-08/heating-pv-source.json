@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "scripts/verify-heating-rod-pv-freshness.cjs"
+  ],
+  "startedAt": "2026-10-08T19:37:47.739671+00:00",
+  "durationSeconds": 0.074,
+  "exitCode": 0,
+  "log": "heating-pv-source.log",
+  "hardware": false
+}

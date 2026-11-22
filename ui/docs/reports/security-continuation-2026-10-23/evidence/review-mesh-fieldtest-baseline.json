@@ -1,0 +1,12 @@
+{
+  "baselineVersion": "1.0.29",
+  "actualRuntime": true,
+  "route": "/api/mesh/peer/fieldtest",
+  "authentication": "admin session",
+  "network": "loopback only, synthetic secret, no hardware",
+  "crossOriginCustomTokenForwarded": true,
+  "crossOriginRequests": 2,
+  "responseBytesAcceptedPerRead": 2097183,
+  "invalidJsonIncorrectlyAccepted": true,
+  "externalAccess": false
+}

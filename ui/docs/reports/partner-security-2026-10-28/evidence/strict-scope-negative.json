@@ -1,0 +1,13 @@
+{
+  "ok": true,
+  "checks": 12,
+  "assertion": "Every added source blocks any and type suppression even when matching inventory exists",
+  "files": [
+    "src-ts/runtime-executables/lib/partner-contracts.ts",
+    "src-ts/runtime-executables/lib/partner-config-api.ts",
+    "src-ts/runtime-executables/lib/partner-service.ts",
+    "src-ts/runtime-executables/lib/partner-runtime.ts",
+    "src-ts/runtime-executables/lib/partner-websocket.ts",
+    "src-ts/runtime-executables/ems/services/arbitrage-control.ts"
+  ]
+}

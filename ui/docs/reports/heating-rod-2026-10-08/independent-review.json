@@ -1,0 +1,168 @@
+{
+  "reviewedAt": "2026-10-08T19:46:10.583685+00:00",
+  "source": "src-ts/runtime-executables/ems/modules/heating-rod-control.ts",
+  "scope": "Independent source review and executed canonical-code regression tests, controlled time and mocked adapter/hardware I/O. No physical commissioning or certification.",
+  "findings": [
+    {
+      "id": "HR-REVIEW-01",
+      "severity": "high",
+      "title": "Unconfirmed night OFF loses ownership and bypasses subsequent night stop",
+      "evidence": "tick: externalManual branch precedes night branch; night branch unconditionally calls _markAutoOwnership false; manual_release_required matches restart manual evidence",
+      "verification": "source review",
+      "status": "closed-in-reviewed-source",
+      "reverification": "Canonical source suite and independent focused supplementary checks passed."
+    },
+    {
+      "id": "HR-REVIEW-02",
+      "severity": "high",
+      "title": "Obsolete forecast and missing live PV can permit probe",
+      "input": {
+        "forecastAgeMs": 86400000,
+        "forecastValid": true,
+        "forecastPeakW": 9000,
+        "pvNowW": 0
+      },
+      "observed": {
+        "canProbe": true,
+        "reason": "ready"
+      },
+      "verification": "executed canonical source method",
+      "status": "closed-in-reviewed-source",
+      "reverification": "Canonical source suite and independent focused supplementary checks passed."
+    },
+    {
+      "id": "HR-REVIEW-03",
+      "severity": "medium",
+      "title": "Real available PV is rejected because forecast is unavailable",
+      "input": {
+        "pvNowW": 9000,
+        "liveAvailableW": 4500,
+        "forecastValid": false
+      },
+      "observed": {
+        "canProbe": false,
+        "reason": "forecast_not_ok"
+      },
+      "verification": "executed canonical source method",
+      "status": "closed-in-reviewed-source",
+      "reverification": "Canonical source suite and independent focused supplementary checks passed."
+    },
+    {
+      "id": "HR-REVIEW-04",
+      "severity": "high",
+      "title": "Unregistered old PV cache value bypasses freshness requirement",
+      "input": {
+        "cacheValueW": 9000,
+        "cacheAgeMs": 86400000,
+        "maximumAgeMs": 15000
+      },
+      "observed": {
+        "pvNowW": 9000
+      },
+      "verification": "executed canonical source method",
+      "status": "closed-in-reviewed-source",
+      "reverification": "Canonical source suite and independent focused supplementary checks passed."
+    },
+    {
+      "id": "HR-REVIEW-05",
+      "severity": "high",
+      "title": "Unknown battery measurement represented as valid zero flow",
+      "input": {
+        "flowSource": "mapped-missing",
+        "flowAgeMs": 86400000,
+        "storageConfigured": true
+      },
+      "observed": {
+        "chargeW": 0,
+        "dischargeW": 0,
+        "freshnessUnknownFlag": false
+      },
+      "verification": "executed canonical source method with injected core flow result",
+      "status": "closed-in-reviewed-source",
+      "reverification": "Canonical source suite and independent focused supplementary checks passed."
+    },
+    {
+      "id": "HR-REVIEW-06",
+      "severity": "medium",
+      "title": "Automatic writer does not recheck night boundary after async waits",
+      "evidence": "tick resolves night once; final _applyStageState checks central lease per actuator, but no refreshed time lock",
+      "verification": "source review",
+      "status": "closed-in-reviewed-source",
+      "reverification": "Canonical source suite and independent focused supplementary checks passed."
+    }
+  ],
+  "originalReviewSourceSha256": "069461b3b1d07ee9a85c283a76953d3ba03297671309995fda5e09f122e4c992",
+  "sourceSha256": "43b9f107903da4cb85c136fd25f730cf15e333656c5b3ed72ec50a9097a75b3a",
+  "followUpFindings": [
+    {
+      "id": "HR-REVIEW-06A",
+      "title": "Night boundary with delayed FALSE readback skipped physical OFF",
+      "reproduced": "One ON command remained with target=0 and autoStopPending=false",
+      "fix": "Forced OFF command and post-command measurement time required",
+      "status": "closed-in-reviewed-source"
+    },
+    {
+      "id": "HR-REVIEW-07",
+      "title": "Failed persistence was cached and lost pending OFF across restart",
+      "reproduced": "One failed pending persistence followed by failed actuator writes and morning restart caused external_manual_knx_observed",
+      "fix": "Cache only after successful persistence; physical OFF continues despite diagnostic persistence failure",
+      "status": "closed-in-reviewed-source"
+    },
+    {
+      "id": "HR-REVIEW-08",
+      "title": "Confirmed stage retained persistent 250 W battery supply",
+      "reproduced": "Confirmed 1500 W stage held for four simulated minutes with 250 W battery discharge and valid forecast",
+      "fix": "Confirmed stages use at most 50 W tolerance and at most 3 s observation, followed by a physical downward step",
+      "status": "closed-in-reviewed-source"
+    },
+    {
+      "id": "HR-REVIEW-09",
+      "title": "Failed OFF and pre-command FALSE measurement with identical millisecond timestamp prematurely confirms OFF",
+      "reproduced": "All three setForeignStateAsync calls reject, but pending=false and status=night_pv_auto_blocked_confirmed_write-failed-retry when readback timestamp equals command timestamp",
+      "status": "closed-in-reviewed-source",
+      "identifiedBy": "Parent review and separate reproduction",
+      "fix": "Rejected OFF cannot confirm in that attempt; measurements require a strictly later timestamp; restored pending without local command-time evidence requires a new physical OFF attempt."
+    }
+  ],
+  "tests": [
+    {
+      "name": "night-ramp",
+      "command": [
+        "node",
+        "scripts/verify-heating-rod-night-ramp.cjs"
+      ],
+      "exitCode": 0,
+      "log": "docs/reports/heating-rod-2026-10-08/independent-night-ramp.log",
+      "output": "[heating-rod-night-ramp:source] PASS: 11 echte Tick-/Verlaufsgruppen; Nacht, OFF-Fehler, Restart, fehlendes/widersprüchliches Readback, Manual/Boost, Regelung AUS, Morgenrampe, Defizit/Batterie, asynchrone Nachtgrenze."
+    },
+    {
+      "name": "pv-freshness",
+      "command": [
+        "node",
+        "scripts/verify-heating-rod-pv-freshness.cjs"
+      ],
+      "exitCode": 0,
+      "log": "docs/reports/heating-rod-2026-10-08/independent-pv-freshness.log",
+      "output": "{\n  \"status\": \"PASS\",\n  \"groups\": 15,\n  \"baselineRegressionReproduced\": false,\n  \"source\": \"canonical-source\",\n  \"scope\": \"Kontrollierte Mess-I/O und Zeit, kein Hardwaretest\",\n  \"checks\": [\n    \"Frische tatsächliche 9 kW PV und gedeckte 4,5 kW funktionieren ohne Prognose\",\n    \"Morgenrampe schaltet einzeln und wartet zwischen bestätigten Stufen\",\n    \"Forecast allein startet bei 0 W Ist-PV keine Stufe, auch nach Neustart\",\n    \"Forecast-Snapshot und Quelldaten haben begrenztes Alter und strikte Typen\",\n    \"Zeitlose/alte/future PV-Caches erzeugen keine Auto-Freigabe\",\n    \"Nachmittags-Peak wird nicht zu momentan verfügbarem PV-Budget\",\n    \"Speicherresolver erhält strictStale und veraltete Ladeleistung gibt kein Budget\",\n    \"Fehlende oder bilanzierte Batterie ist kein bestätigter Nullfluss\",\n    \"Farm-Bruttoentladung sperrt auch bei Netto-Null oder Netto-Ladung\",\n    \"Verlorene Messung beendet eine laufende Probe ohne fiktiven Erfolg\",\n    \"PV-Anstieg kann Batterieentladung oder Netzbezug nicht bestätigen\",\n    \"Bestätigte Stufen reduzieren nachhaltige 100/250-W-Batterieversorgung nach höchstens 3 s\",\n    \"Relaiszustand/Sollwert allein bestätigt keine Heizleistung\",\n    \"Reduziertes zentrales Budget überstimmt laufendes Beobachtungsfenster\",\n    \"Zentralmodus bleibt exklusiv, Diagnose kann alten Forecastpfad nicht aktivieren\"\n  ]\n}"
+    },
+    {
+      "name": "independent-extra",
+      "command": [
+        "node",
+        "docs/reports/heating-rod-2026-10-08/independent-review-extra.cjs"
+      ],
+      "exitCode": 0,
+      "log": "docs/reports/heating-rod-2026-10-08/independent-independent-extra.log",
+      "output": "{\n  \"status\": \"PASS\",\n  \"groups\": 4,\n  \"sourceSha256\": \"43b9f107903da4cb85c136fd25f730cf15e333656c5b3ed72ec50a9097a75b3a\",\n  \"checks\": [\n    \"Asynchrone Nachtgrenze nach EIN mit verzögertem FALSE-Readback erzwingt echte AUS-Befehle\",\n    \"Einmaliger Persistenzfehler wird wiederholt und offener AUS-Auftrag überlebt Restart nach Nachtende\",\n    \"Gleichzeitstempel vor zurückgewiesenem AUS und verlorene In-Memory-Korrelation nach Restart bestätigen kein AUS\",\n    \"Bestätigte Stufen mit dauerhaft 100/250W Batterieentladung regeln nach begrenzter Frist ab\"\n  ],\n  \"scope\": \"Unabhängige Zusatzfälle mit produktivem Regelcode und kontrollierter Geräte-I/O, kein Hardwaretest\"\n}"
+    }
+  ],
+  "result": "PASS",
+  "reviewer": "Separate collaborating review agent; not external certification",
+  "limits": [
+    "No live ioBroker installation or relay, KNX, inverter or battery hardware test performed.",
+    "No proof of real-time maximum response on target device; configured intervals and I/O latency determine observed physical delay.",
+    "Actual valid and fresh PV, grid, battery and heater power mappings must be verified during device commissioning.",
+    "Full release, integrity, SBOM, package and broader regression gates are coordinated separately by the parent agent.",
+    "New zero-export probes require original PV/grid/battery and heater power measurements no older than 5 seconds; actual update cadence must be verified on the installation."
+  ]
+}

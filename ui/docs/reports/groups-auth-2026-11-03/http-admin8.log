@@ -1,0 +1,16 @@
+PASS Controller-kompatible Admin-Kennung: admin
+PASS Controller-kompatible Admin-Kennung: Admin
+PASS Controller-kompatible Admin-Kennung: ADMIN
+PASS Controller-kompatible Admin-Kennung: system.user.admin
+PASS Anzeigename wird vor Passwort und Sitzung auf die interne ID aufgelöst
+PASS Anzeigename admin eines Kunden erzeugt keine Adminrechte
+PASS Anzeigename installer erhält nur die Rechte des tatsächlichen Kontos
+PASS Ungültiger Erfolgswert erzeugt keine Sitzung: string
+PASS Ungültiger Erfolgswert erzeugt keine Sitzung: object
+PASS Ungültiger Erfolgswert erzeugt keine Sitzung: Error
+PASS Abweichende Callback-Identität wird vor Rollenauflösung abgewiesen
+PASS Fehlende Callback-Identität ist keine bestätigte Anmeldung
+PASS Nichttextliche Zugangsdaten werden nicht in gültige Strings umgedeutet
+PASS Sitzung bleibt an Passwortwechsel und Kontosperre gebunden
+PASS Falsches Passwort bleibt abgewiesen und nennt keine Kontodetails
+{"result":"PASS","checks":15,"environment":"v24.22.1","scope":"Actual shipped local HTTP routes with controller-contract fixtures; no live Admin8 or customer installation"}

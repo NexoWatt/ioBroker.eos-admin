@@ -1,0 +1,33 @@
+✔ Standardprofil bleibt ausgeschaltet; Handelsprofil benötigt keine PV/NVP-Konfiguration (3.472116ms)
+✔ Unbekannte Felder, Geheimnisse, freie State-IDs und unverschlüsselte Endpunkte werden verworfen (0.864402ms)
+✔ Bilanz kann kein Schreibrecht erhalten; Rechte sind nach App und Ressource getrennt (0.370346ms)
+✔ Grenzen schließen unbekannte Ressourcen, >60s, NaN und ungültigen SoC aus (0.314947ms)
+✔ Partnerbindung, lokale Appfreigabe, Inbetriebnahme und zentraler Writer sind unabhängige Pflichten (3.435219ms)
+✔ Journal wird vor Annahme gespeichert; Quittung behauptet keine Gerätebestätigung (4.820096ms)
+✔ Identische Wiederholung wirkt nicht erneut; widersprechende Wiederverwendung wird abgewiesen (0.863602ms)
+✔ Ältere neue Kennung darf neueren Wunsch nicht ersetzen, auch nach Neustart (1.35899ms)
+✔ Journalfehler sperren Verbindung und alle Wünsche ohne Geräteschreiben (0.991676ms)
+✔ Widerruf während Journal-Commit kann keinen Wunsch nachträglich aktivieren (4.348733ms)
+✔ Lease endet bei Ablauf und auch nach rückwärts springender Wanduhr monoton (0.566206ms)
+✔ Abgelaufene, zu lange, zukünftige, übergroße und rohe Schreibaufträge wirken nicht (0.58743ms)
+✔ Verbindungsverlust, lokale Appabschaltung und Konfigurationswechsel löschen aktuelle Wünsche (0.647828ms)
+✔ Cancel ist ressourcenbezogen und Wiederholung reaktiviert den Auftrag nicht (1.019237ms)
+✔ Bilanz- und Telemetrieprojektionen enthalten niemals Konfiguration, Inventar oder Rohwerte (0.556735ms)
+✔ Datenfreigabe wird nach asynchroner Abfrage erneut geprüft (2.933906ms)
+✔ Leserecht ist an die freigegebene App und Ressource gebunden (1.664536ms)
+✔ Hängende Datenabfrage endet nach fünf Sekunden und abortiert den Provider (5001.193158ms)
+✔ Größen- und Nachrichtenquoten begrenzen untrusted Eingaben (1.072707ms)
+✔ Echte Installer-/Adminrolle erforderlich trotz alter Customer-Wildcard (1.167077ms)
+✔ Config CAS erhöht genau einmal und alte Browserrevision erhält Konflikt (0.84249ms)
+✔ Vorschau persistiert nichts; globale Sperre widerruft alle Freigaben (0.42775ms)
+✔ Generische Persistenzgrenze erkennt Manipulation ohne korrekte Folgeversion (1.085236ms)
+✔ Vor Verbindungswechsel eingereihter Auftrag bleibt nach Reconnect widerrufen (0.773647ms)
+✔ CAS-Commit wartet auf dauerhafte Widerrufsgrenze und bleibt bei deren Fehler aus (1.141994ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5046.722739

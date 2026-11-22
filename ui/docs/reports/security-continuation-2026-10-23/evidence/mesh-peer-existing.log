@@ -1,0 +1,6 @@
+[mesh-two-instance-fieldtest] OK
+OK: Mesh/Microgrid Zwei-Instanzen-Feldtest statisch geprüft.
+OK: Mesh/Microgrid Peer-Härtung mit Fehlerklassen, Roundtrip-Ampel, Allowlist und Remote-Node-Matrix ist vorhanden.
+[mesh-peer-fail-closed] OK: receiver requires header token and operator endpoints require installer access.
+OK Express: Mesh-Rechte, alte Kunden-Wildcards, individuelle Paarung, Schlüssel-Redaktion, HMAC, 64-KiB-Limit; Auth=true
+OK Express: Mesh-Rechte, alte Kunden-Wildcards, individuelle Paarung, Schlüssel-Redaktion, HMAC, 64-KiB-Limit; Auth=false

@@ -1,0 +1,40 @@
+# Copyright (c) 2026 NexoWatt. All rights reserved. Confidential and Proprietary.
+# Use, modification or distribution without express written permission is prohibited.
+name: EOS security and regression
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: eos-security-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        # ESLint 10 needs >=22.13.0; latest 22/24 patch is selected.
+        node: ['22', '24']
+    steps:
+      # Official tag SHAs verified with git ls-remote on 2026-09-29.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ matrix.node }}
+          package-manager-cache: false
+      - run: npm ci --ignore-scripts --no-audit
+      - run: npm --prefix src-admin-tab ci --ignore-scripts --no-audit
+      - name: Security lint, native checks and dependency audit
+        run: npm run ci:security
+      - run: npm run test:all
+      - run: npm run build:ts
+      - run: npm run docs:check && npm run publish:check
+      - run: npm run test:package-runtime-start-smoke
+      - run: npm pack --dry-run --json --ignore-scripts
+      # No publish, deployment, secrets or self-hosted production runner.

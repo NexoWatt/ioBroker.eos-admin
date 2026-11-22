@@ -1030,25 +1030,47 @@ class Drawer extends Component<DrawerProps, DrawerState> {
 
     /** Fixed entry points stay before the independently scrolling adapter tab strip. */
     renderSystemNavigation(): JSX.Element | null {
-        if (!['admin', 'service'].includes(this.props.eosAccessRole)) {
+        const role = this.props.eosAccessRole;
+        if (!['admin', 'service', 'installer', 'enduser'].includes(role)) {
             return null;
         }
+        const administrator = ['admin', 'service'].includes(role);
         return (
             <Box className="eos-system-navigation">
-                <IsVisible
-                    name="admin.appBar.systemSettings"
-                    config={this.props.adminGuiConfig}
-                >
+                <DrawerItem
+                    theme={this.props.theme}
+                    compact={false}
+                    onClick={() => window.location.assign('/')}
+                    text="EOS Dashboard"
+                    icon={<DashboardIcon />}
+                />
+                {['admin', 'service', 'installer'].includes(role) ? (
                     <DrawerItem
                         theme={this.props.theme}
                         compact={false}
-                        tabName="tab-system"
-                        onClick={this.props.onSystemSettings}
-                        text={this.props.t('System')}
-                        icon={<SystemSettingsIcon />}
+                        onClick={() => window.location.assign('/installer/')}
+                        text="EOS Installer"
+                        icon={<DeviceManagerIcon />}
                     />
-                </IsVisible>
-                {this.props.expertModeControl}
+                ) : null}
+                {administrator ? (
+                    <>
+                        <IsVisible
+                            name="admin.appBar.systemSettings"
+                            config={this.props.adminGuiConfig}
+                        >
+                            <DrawerItem
+                                theme={this.props.theme}
+                                compact={false}
+                                tabName="tab-system"
+                                onClick={this.props.onSystemSettings}
+                                text={this.props.t('System')}
+                                icon={<SystemSettingsIcon />}
+                            />
+                        </IsVisible>
+                        {this.props.expertModeControl}
+                    </>
+                ) : null}
             </Box>
         );
     }

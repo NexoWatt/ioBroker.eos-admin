@@ -1,0 +1,13 @@
+{
+  "command": [
+    "npm",
+    "run",
+    "test:package-runtime-start-smoke"
+  ],
+  "cwd": "repository root",
+  "startedAt": "2026-09-29T20:28:03.469669+00:00",
+  "finishedAt": "2026-09-29T20:28:04.834038+00:00",
+  "durationSeconds": 1.364,
+  "exitCode": 0,
+  "capturedBytes": 380
+}

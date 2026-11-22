@@ -1,0 +1,14 @@
+✔ license operations remain on the EOS origin from a nested system route (0.80345ms)
+✔ logout uses one session and CSRF protection, without reading OAuth tokens (2.774054ms)
+✔ missing CSRF or failed status never sends a logout mutation (1.102938ms)
+✔ logout failure is not reported as a successful revocation (0.579365ms)
+✔ already expired session does not require a write (0.319667ms)
+✔ central license status accepts the controller UUID variants supported by the verifier (0.587257ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 194.474235

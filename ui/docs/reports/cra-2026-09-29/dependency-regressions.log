@@ -1,0 +1,6 @@
+PASS: normal JSON request preserved
+PASS: oversized body rejected with HTTP 413
+PASS: malformed JSON rejected with HTTP 400
+PASS: nested query parsing preserved after rejected requests
+PASS: crafted qs constructor/isBuffer round-trip does not throw
+PASS: invalid parser size rejected at construction

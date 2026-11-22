@@ -1,0 +1,14 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.22 sbom:cra
+> node scripts/generate-cra-sbom.cjs --require-installed
+
+[cra-sbom] Produkt-SBOM erzeugt und geprüft: iobroker.nexowatt-ui@1.0.22; 400 Paketdateien gebunden.
+[cra-sbom] sbom-root-lockfile.cdx.json: 250 Komponenten (source-lockfile-inventory).
+[cra-sbom] sbom-root-lockfile-runtime.cdx.json: 55 Komponenten (release-production-reference-dependencies).
+[cra-sbom] sbom-root-installed.cdx.json: 225 Komponenten (installed-build-environment-inventory).
+[cra-sbom] sbom-root-installed-runtime.cdx.json: 55 Komponenten (installed-production-dependency-inventory).
+[cra-sbom] sbom-admin-lockfile.cdx.json: 120 Komponenten (source-lockfile-inventory).
+[cra-sbom] sbom-admin-installed.cdx.json: 71 Komponenten (installed-build-environment-inventory).
+[cra-sbom] sbom-admin-installed-runtime.cdx.json: 8 Komponenten (installed-production-dependency-inventory).
+[cra-sbom] sbom-admin-bundle.cdx.json: 4 Komponenten (observed-admin-bundle-components).

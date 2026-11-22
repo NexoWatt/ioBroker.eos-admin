@@ -1,0 +1,8 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.24 test:publish-overlay
+> node scripts/verify-publish-overlay.cjs
+
+[publish-overlay] Frische Repository-Kopie: vollständige Publish-Prüfkette erfolgreich ohne Entwicklungsabhängigkeiten; Produktivfreigabe bleibt getrennt.
+[publish-overlay] ZIP-Überkopieren: alte JS/CSS gesichert, aktuelle Assets bytegleich, vollständige Publish-Prüfkette erfolgreich.
+[publish-overlay] Echter Secret-Testfund blockiert unverändert, ohne Ausgabe des Werts. Keine externe Veröffentlichung.

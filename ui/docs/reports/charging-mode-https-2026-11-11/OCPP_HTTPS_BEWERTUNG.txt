@@ -1,0 +1,75 @@
+NexoWatt UI 1.0.35 – HTTPS und OCPP, Prüfung 11.11.2026
+
+Ausgangslage: Nutzer bestätigt installierte UI1.0.35 und OCPP-Wallbox. Modell,
+OCPP-Adapterversion, tatsächliche OCPP-Backend-URL und Zeitpunkt der Umstellung
+sind nicht belegt. Keine Anlage verbunden, keine produktiven Befehle versendet.
+
+Ergebnis:
+1. Die reine Browserumstellung auf HTTPS ändert die OCPP-Verbindung zur Wallbox
+   im geprüften UI-Code nicht. UI1.0.35 startet weiterhin einen Express-HTTP-Server
+   mit app.listen (main.ts:26783–26812); der HTTPS-Zugang liegt im Adminproxy davor.
+   Es gibt im Ladepfad keinen eigenen WebSocket-Client/-Server und keinen Umbau
+   einer OCPP-URL von ws auf wss.
+2. Die EMS-Regelung läuft im Backend ohne geöffnete Browserseite. engine.ts:1310–1339
+   initialisiert Module und Intervalltick. charging-management.ts:4505 reicht
+   freigegebene Sollwerte an applySetpoint weiter; consumers/evcs.ts:151–168
+   schreibt dp.writeNumber/writeBoolean; datapoints.ts:1061/1106 schreibt den
+   zugeordneten Fremd-Datenpunkt via ioBroker setForeignStateAsync. Der getrennte
+   OCPP-Adapter übernimmt die eigentliche Gerätekommunikation.
+3. Ein indirekter Zusammenhang über Browserbefehle ist plausibel: eine ungültige
+   Admin-/EOS-Sitzung oder ein falscher Proxy-API-Pfad kann den Moduswechsel
+   verhindern. Der bereits separat reproduzierte UI-Fehler stellt Auto trotzdem
+   optimistisch dar. Das muss korrigiert werden. Ein erfolgreicher Seitenaufruf
+   oder eine angezeigte aktive Modustaste beweist keinen angenommenen Moduswrite.
+
+Harter Versionsvergleich:
+Die beiden vollständigen ORIGINALarchive 1.0.34 und 1.0.35 wurden direkt gelesen.
+Alle 91 Dateien unter src-ts/runtime-executables/ems/ sind byte-identisch.
+Auch das produktive ems/modules/charging-management.js ist byte-identisch.
+Die Main-Änderungen betreffen Proxy-HTML-Auslieferung und das Secure-Attribut
+des EOS-Cookies, nicht OCPP oder Regelticks. Belege:
+- ems-full-version-comparison.json
+- ocpp-backend-version-comparison.json (Einzel-SHA-256)
+- main-1.0.34-1.0.35.diff
+Damit ist kein neuer Backend-OCPP-Regelungsfehler durch den Quellwechsel
+1.0.34 auf 1.0.35 belegt. Ein bereits vorhandener Randfall kann durch geänderte
+Sitzungs-/Bedien-/Neustartbedingungen auftreten. Änderungen an einem separaten
+OCPP-Adapter oder an einer Wallbox-Backend-URL sind durch den Vergleich nicht geprüft.
+
+Neustart / Persistenz / Wiederanlauf:
+charging-management.ts:6369–6390 liest userMode aus dem persistierten eigenen State.
+Nur ein leerer/fehlender State wird einmalig aus userModeDefault initialisiert.
+Die Regelticks setzen den Modus nicht wegen HTTP/HTTPS auf PV. Auto kann aufgrund
+seiner Teilstrategie dennoch als effectiveMode=pv erscheinen.
+
+Ein alter OCPP transactions.chargingState kann durch Liveness weiterhin frisch
+gelten (chargingStateFresh um Zeile 7465) und bei Zusammenführung über frischem
+Preparing dominieren. Das war bereits in 1.0.34 vorhanden. Ohne Sitzungsbeleg
+ist ein solcher Zustand nicht pauschal als aufgehobene echte Fahrzeugpause
+interpretierbar. Dies bleibt ein offener, protokoll-/adapterabhängiger Befund.
+
+Vertiefte Reproduktion:
+node https-review/ocpp-restart-probe.cjs
+Node v24.22.1, ORIGINAL-1.0.35-Lademodul in isoliertem bestehenden RC60-Harness.
+Fünf echte Modul-Regelticks mit gemockten States/Writes bestanden:
+- Frisches EVConnected + Preparing, Auto, Netzfreigabe: Start 4200 W ohne Browser.
+- 24h altes SuspendedEV + frisches Preparing: paused_by_vehicle, 0 W.
+- Neues Modul mit denselben gespeicherten Rohzuständen: weiter paused_by_vehicle,
+  0 W; gespeicherter userMode bleibt Auto.
+- Frisches EVConnected statt alter Pause: wieder 4200 W.
+- Gespeicherter PV-Modus im neu erzeugten Modul bleibt PV/0 W.
+Rohbeleg: ocpp-restart-probe.json.
+
+Grenzen: Das ist kein echter ioBroker-Neustart, kein OCPP-Verkehrstest, keine
+HTTPS-Browserprüfung und kein Hardwaretest. Der Test prüft Persistenz-/Regelpfade,
+nicht Zertifikate oder tatsächliche Sessiongrenzen. Keine Hardwarefreigabe.
+
+Konkrete weitere Diagnose:
+- Prüfen, ob nur der Browser/Admin-Zugang geändert wurde oder auch die in der
+  Wallbox eingetragene Backend-URL/Port bzw. der OCPP-Adapter.
+- Bei der nächsten misslungenen Moduswahl HTTP-Ergebnis und zurückgelesenen
+  chargingManagement.wallboxes.lp1.userMode gegenüber effectiveMode vergleichen.
+- Für OCPP getrennt socketConnected, status, transactions.chargingState,
+  transactionActive, Session-/Transaktions-ID, Zeitstempel, angefordertes/angewandtes
+  Ladelimit und letzte Kommandoantwort erfassen. Keine Zugangsdaten erforderlich.
+- HTTPS nicht pauschal deaktivieren und keine TLS-Zertifikatsprüfung umgehen.

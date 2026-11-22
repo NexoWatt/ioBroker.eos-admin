@@ -1,0 +1,128 @@
+{
+  "node": "v24.19.0",
+  "npm": "11.9.0",
+  "commands": [
+    {
+      "command": "npm update @grpc/grpc-js follow-redirects proxy-addr --package-lock-only --ignore-scripts --no-audit --fetch-retries=0 --fetch-timeout=15000",
+      "exit": 0
+    },
+    {
+      "command": "npm update source-map-js vite --package-lock-only --ignore-scripts --no-audit --fetch-retries=0 --fetch-timeout=15000 (src-admin-tab)",
+      "exit": 0
+    },
+    {
+      "command": "npm ci --ignore-scripts --no-audit --fetch-retries=0 --fetch-timeout=15000 (root and src-admin-tab)",
+      "exit": 0
+    },
+    {
+      "command": "npm audit --json --ignore-scripts --fetch-retries=0 --fetch-timeout=15000 (root and src-admin-tab)",
+      "exit": 0,
+      "result": "Both final reports 0 known vulnerabilities"
+    },
+    {
+      "command": "node scripts/verify-cra-dependency-regressions.cjs",
+      "exit": 0,
+      "groups": 6,
+      "result": "normal JSON, body limit, malformed JSON, nested query parsing after errors, crafted constructor/isBuffer qs round-trip, invalid parser size"
+    },
+    {
+      "command": "node inline proxy-addr assertions (reproduction given in LIEFERKETTE_DE.md)",
+      "exit": 0,
+      "result": "Old 2.0.7 reproduces 2 permissive trust conditions; patched 2.0.8 rejects both; mapped /104 and ordinary IPv4 /8 positive and negative cases pass"
+    }
+  ],
+  "audit_reports": [
+    {
+      "file": "npm-audit-root.json",
+      "sha256": "a5c58e4cc03f0252343c5b933d5a7beef066597e82477ed2717e67c5c57fac03",
+      "capturedAtUTC": "2026-10-23T19:39:10.873344+00:00",
+      "metadata": {
+        "vulnerabilities": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 2,
+          "critical": 1,
+          "total": 3
+        },
+        "dependencies": {
+          "prod": 78,
+          "dev": 195,
+          "optional": 27,
+          "peer": 1,
+          "peerOptional": 0,
+          "total": 273
+        }
+      }
+    },
+    {
+      "file": "npm-audit-admin.json",
+      "sha256": "fd6a4e184cb31e91b16258562c53957abb055139f88450faaf18dfca0295095a",
+      "capturedAtUTC": "2026-10-23T19:39:10.843238+00:00",
+      "metadata": {
+        "vulnerabilities": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 2,
+          "critical": 0,
+          "total": 2
+        },
+        "dependencies": {
+          "prod": 10,
+          "dev": 111,
+          "optional": 53,
+          "peer": 0,
+          "peerOptional": 0,
+          "total": 120
+        }
+      }
+    },
+    {
+      "file": "npm-audit-1.0.29-root.json",
+      "sha256": "dbe6250d7f910f4e96b76b76ae8d361e1db742da24f2d5cd0adcde0430223030",
+      "capturedAtUTC": "2026-10-23T19:41:44.837124+00:00",
+      "metadata": {
+        "vulnerabilities": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 0,
+          "critical": 0,
+          "total": 0
+        },
+        "dependencies": {
+          "prod": 78,
+          "dev": 195,
+          "optional": 27,
+          "peer": 1,
+          "peerOptional": 0,
+          "total": 273
+        }
+      }
+    },
+    {
+      "file": "npm-audit-1.0.29-admin.json",
+      "sha256": "b6d73b00669732c1fbe1dae2b2b2c0bffe6265a5cbae71cd6cb13ff99ed7e929",
+      "capturedAtUTC": "2026-10-23T19:41:44.849850+00:00",
+      "metadata": {
+        "vulnerabilities": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 0,
+          "critical": 0,
+          "total": 0
+        },
+        "dependencies": {
+          "prod": 10,
+          "dev": 111,
+          "optional": 53,
+          "peer": 0,
+          "peerOptional": 0,
+          "total": 120
+        }
+      }
+    }
+  ]
+}

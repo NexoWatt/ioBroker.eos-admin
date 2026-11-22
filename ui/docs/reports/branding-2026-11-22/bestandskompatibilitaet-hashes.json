@@ -1,0 +1,1595 @@
+{
+  "schemaVersion": 1,
+  "reviewDate": "2026-11-22",
+  "baselineVersion": "1.0.37",
+  "candidateVersion": "1.0.38",
+  "method": "Read-only file inventories, direct byte comparison and SHA-256; parsed JSON values and exact TypeScript source spans. No adapter install or hardware test.",
+  "groups": [
+    {
+      "scope": "src-ts/runtime-executables/ems",
+      "previousCount": 91,
+      "currentCount": 91,
+      "changedCount": 0,
+      "inventorySha256": "064ced02aa8a808a6b985b40395ef061a73fba3d9f9f06d65098a126a93594cf",
+      "files": [
+        {
+          "file": "src-ts/runtime-executables/ems/charging-budget-helpers.ts",
+          "previousSha256": "1cb0298451f4264321eec1c25da11369c5a8e63b7b650354a34885b9f61514eb",
+          "currentSha256": "1cb0298451f4264321eec1c25da11369c5a8e63b7b650354a34885b9f61514eb",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/consumers/evcs.ts",
+          "previousSha256": "792814bd1c185fdc369afa66880cb63f0df696307495aeb14c01e9ec068d9708",
+          "currentSha256": "792814bd1c185fdc369afa66880cb63f0df696307495aeb14c01e9ec068d9708",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/consumers/generic-load.ts",
+          "previousSha256": "13f7aff6a36d3e171d0da64a8c3c3b61191e6659689cade80f09781cc7c4f11c",
+          "currentSha256": "13f7aff6a36d3e171d0da64a8c3c3b61191e6659689cade80f09781cc7c4f11c",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/consumers/generic-setpoint.ts",
+          "previousSha256": "3f25ffad781a0dbcf0f317b8741aef486848c26643d8c3ec04d96ecc963c27c3",
+          "currentSha256": "3f25ffad781a0dbcf0f317b8741aef486848c26643d8c3ec04d96ecc963c27c3",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/consumers/index.ts",
+          "previousSha256": "14d152c61c2deae7f2db7d3b64e4ae2b49c92b34ddd6dc85c1de9ae791a54362",
+          "currentSha256": "14d152c61c2deae7f2db7d3b64e4ae2b49c92b34ddd6dc85c1de9ae791a54362",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/consumers/sg-ready.ts",
+          "previousSha256": "571353cb573a81f3d4e62b26478251c9803acc6ca04c09973bb3e505aa859c4b",
+          "currentSha256": "571353cb573a81f3d4e62b26478251c9803acc6ca04c09973bb3e505aa859c4b",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/datapoints.ts",
+          "previousSha256": "d711fe89c9b9717d90270b051ab5368d96a9d887da6eb47caea7e59587af8b40",
+          "currentSha256": "d711fe89c9b9717d90270b051ab5368d96a9d887da6eb47caea7e59587af8b40",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/engine.ts",
+          "previousSha256": "cf0e987dd8364761dfd856ad05884658c0f9697e13970cdbbaa93da1558ec3a6",
+          "currentSha256": "cf0e987dd8364761dfd856ad05884658c0f9697e13970cdbbaa93da1558ec3a6",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/evcs-control-mapping.ts",
+          "previousSha256": "be2b3eea9a43c370f4409758cc6eae252b66801277d522ab0db455ff28376933",
+          "currentSha256": "be2b3eea9a43c370f4409758cc6eae252b66801277d522ab0db455ff28376933",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/module-manager.ts",
+          "previousSha256": "f11fde77340b8d99c0f811de35000bd72a5b9407729e2a3e8f56574f022531d4",
+          "currentSha256": "f11fde77340b8d99c0f811de35000bd72a5b9407729e2a3e8f56574f022531d4",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/ai-advisor.ts",
+          "previousSha256": "7f11b877d706895c71fbf400edeac8ad441b04c92c0ed2e24d98b362ef6bb78e",
+          "currentSha256": "7f11b877d706895c71fbf400edeac8ad441b04c92c0ed2e24d98b362ef6bb78e",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/base.ts",
+          "previousSha256": "3a5d33aa52f310a70503dc10c96924b230f3b1cd22b0061e19f5d754632a84fc",
+          "currentSha256": "3a5d33aa52f310a70503dc10c96924b230f3b1cd22b0061e19f5d754632a84fc",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/bhkw-control.ts",
+          "previousSha256": "b43a1ae44e4f17dd0fda120ed24d014ebed56695039edcf916255aaae9ada7ca",
+          "currentSha256": "b43a1ae44e4f17dd0fda120ed24d014ebed56695039edcf916255aaae9ada7ca",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/charge-kiosk.ts",
+          "previousSha256": "2341ae69db1c2b8027d3f350d9a6cee2d7c836a555f02e7a80f2b21cee45f399",
+          "currentSha256": "2341ae69db1c2b8027d3f350d9a6cee2d7c836a555f02e7a80f2b21cee45f399",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/charging-management.ts",
+          "previousSha256": "e3a3284d4a0001dec5511a7573ee7afddae55626c42e0c0508ca010cc163652c",
+          "currentSha256": "e3a3284d4a0001dec5511a7573ee7afddae55626c42e0c0508ca010cc163652c",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/core-limits.ts",
+          "previousSha256": "245a633b0b8591a297e405248b478bc27436d953606cc4fd317aa85b76f27501",
+          "currentSha256": "245a633b0b8591a297e405248b478bc27436d953606cc4fd317aa85b76f27501",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/country-profile.ts",
+          "previousSha256": "c383905ab4e62526b1918272ada0ded41e5cf8faf63399865b8d6f6aeb0d7134",
+          "currentSha256": "c383905ab4e62526b1918272ada0ded41e5cf8faf63399865b8d6f6aeb0d7134",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/dynamic-grid-connection.ts",
+          "previousSha256": "d93be3dbcbb7545cf6090a4333031f76187563039fbffb29c28a447721435a17",
+          "currentSha256": "d93be3dbcbb7545cf6090a4333031f76187563039fbffb29c28a447721435a17",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/energy-ledger.ts",
+          "previousSha256": "86868ada9ece1a64358bf353793db3f916397a155d9e3139d8a98711fed5dc37",
+          "currentSha256": "86868ada9ece1a64358bf353793db3f916397a155d9e3139d8a98711fed5dc37",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/energy-wallet.ts",
+          "previousSha256": "1629e8483f74a54c179ef86821aaa37e90a2b71ad1a3ad246ad38c4c9241e65e",
+          "currentSha256": "1629e8483f74a54c179ef86821aaa37e90a2b71ad1a3ad246ad38c4c9241e65e",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/generator-control.ts",
+          "previousSha256": "7dada8d1f6bc8197e82a359580d09f22351b9b36b66d4ca7c90246b9b056e8b9",
+          "currentSha256": "7dada8d1f6bc8197e82a359580d09f22351b9b36b66d4ca7c90246b9b056e8b9",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/grid-constraints.ts",
+          "previousSha256": "8268ae0c7fe01296b3222691946516202f42b3c87286f39ca5c5bd0d0ec7f008",
+          "currentSha256": "8268ae0c7fe01296b3222691946516202f42b3c87286f39ca5c5bd0d0ec7f008",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/heating-rod-control.ts",
+          "previousSha256": "04a0e92561f9cfd0f34b9e69be8cf80bee650b630fd8800251f833a7c386691a",
+          "currentSha256": "04a0e92561f9cfd0f34b9e69be8cf80bee650b630fd8800251f833a7c386691a",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/mesh-microgrid.ts",
+          "previousSha256": "563e083f15d9ab5c937779069976819ecc93b20b31977ed117bc85f9cb26799b",
+          "currentSha256": "563e083f15d9ab5c937779069976819ecc93b20b31977ed117bc85f9cb26799b",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/multi-use.ts",
+          "previousSha256": "542c0e8abafb7710bd0bf0ab592b5e40a0f872e42b3a9f8ea09cbd58779eabd2",
+          "currentSha256": "542c0e8abafb7710bd0bf0ab592b5e40a0f872e42b3a9f8ea09cbd58779eabd2",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/netoperator-interface.ts",
+          "previousSha256": "b07ebde6888e9f35d1961d21f80844be771ff3bdcba51a1e23570d1261566955",
+          "currentSha256": "b07ebde6888e9f35d1961d21f80844be771ff3bdcba51a1e23570d1261566955",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/nexologic-budget.ts",
+          "previousSha256": "15ebd9e9ce60e59c5ec628832fe1af65e070a4bf05c6bfdaba23840419b47c56",
+          "currentSha256": "15ebd9e9ce60e59c5ec628832fe1af65e070a4bf05c6bfdaba23840419b47c56",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/nl-p1-dsmr.ts",
+          "previousSha256": "4df2aad9b29348c2c988607e4dcefe6c50fc9cfef3dc34a349384d90cafdea76",
+          "currentSha256": "4df2aad9b29348c2c988607e4dcefe6c50fc9cfef3dc34a349384d90cafdea76",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/nvp-coordinator.ts",
+          "previousSha256": "0645d6286d40d0caf54c94cd13fff3b221c18874072b8506ba41333758843a05",
+          "currentSha256": "0645d6286d40d0caf54c94cd13fff3b221c18874072b8506ba41333758843a05",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/nvp-topology.ts",
+          "previousSha256": "9d4b944d237c515dc70eb6c3168d850cca9aea84cf2b47000598c5f94c5213ed",
+          "currentSha256": "9d4b944d237c515dc70eb6c3168d850cca9aea84cf2b47000598c5f94c5213ed",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/operating-strategies.ts",
+          "previousSha256": "6f20e1eb8258abc68bed39721d20363b8c6ca16ed43c839e2d442e186cf33236",
+          "currentSha256": "6f20e1eb8258abc68bed39721d20363b8c6ca16ed43c839e2d442e186cf33236",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/para14a.ts",
+          "previousSha256": "331cc29ad5328e9145c5b6c73ba2951477ad95abfe360e9ce612d3329e32ae81",
+          "currentSha256": "331cc29ad5328e9145c5b6c73ba2951477ad95abfe360e9ce612d3329e32ae81",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/peak-shaving.ts",
+          "previousSha256": "257ae314328c65c6d31665c4ff363c0519831ddc67f1440c3a1025bc1d8f791b",
+          "currentSha256": "257ae314328c65c6d31665c4ff363c0519831ddc67f1440c3a1025bc1d8f791b",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/prime-mover-control.ts",
+          "previousSha256": "62ff5e1f7133945ff897ba67fe3cecc23714e8debba9a2daff73f48b067df5c5",
+          "currentSha256": "62ff5e1f7133945ff897ba67fe3cecc23714e8debba9a2daff73f48b067df5c5",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/pv-forecast.ts",
+          "previousSha256": "8d059c19e60f1c202a9be300711c8a4617857021487af4cb8638a7445f23c0f4",
+          "currentSha256": "8d059c19e60f1c202a9be300711c8a4617857021487af4cb8638a7445f23c0f4",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/stage-a-diagnostics.ts",
+          "previousSha256": "09812af8c7c5edfbda6e5eff4e228be40351d19cf95efb39d2a4b7cc0e1c1ae0",
+          "currentSha256": "09812af8c7c5edfbda6e5eff4e228be40351d19cf95efb39d2a4b7cc0e1c1ae0",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/storage-control.ts",
+          "previousSha256": "745c76464f1b2731611b140312e5f8af9d30b0eaee751b47e6622f270e229940",
+          "currentSha256": "745c76464f1b2731611b140312e5f8af9d30b0eaee751b47e6622f270e229940",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/storage-mapping.ts",
+          "previousSha256": "e1eca29e7b5c34191f5b8c891168ebc021e52ea623567b39ea8d5a4c42b1a228",
+          "currentSha256": "e1eca29e7b5c34191f5b8c891168ebc021e52ea623567b39ea8d5a4c42b1a228",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/tarif-vis.ts",
+          "previousSha256": "7a0b446a14f63ca7c3f3354f677cf7e86027f0114634e6014c3c6689bdc48110",
+          "currentSha256": "7a0b446a14f63ca7c3f3354f677cf7e86027f0114634e6014c3c6689bdc48110",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/tariff-provider.ts",
+          "previousSha256": "92f133b4fe74d37e283e5bc6b6b683ebe528f29c6bc672f30413b9789d1e1e17",
+          "currentSha256": "92f133b4fe74d37e283e5bc6b6b683ebe528f29c6bc672f30413b9789d1e1e17",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/tariff-status.ts",
+          "previousSha256": "f612efc9a680f8dddbc28c42ebd19ce427d9be25e429cc62398b455607b96507",
+          "currentSha256": "f612efc9a680f8dddbc28c42ebd19ce427d9be25e429cc62398b455607b96507",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/thermal-control.ts",
+          "previousSha256": "899d9d925a26038d8d956627ab100ebb4fc3b358992c1b4ccdb38ad00a37472a",
+          "currentSha256": "899d9d925a26038d8d956627ab100ebb4fc3b358992c1b4ccdb38ad00a37472a",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/modules/threshold-control.ts",
+          "previousSha256": "b19974f867dcaa24437ddcb27e006612c9bd30993a943b95b5a3fbe64119a781",
+          "currentSha256": "b19974f867dcaa24437ddcb27e006612c9bd30993a943b95b5a3fbe64119a781",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/nexologic-engine.ts",
+          "previousSha256": "0a114bc8c78961a84a0e515f347272177a940339803a5274be2fd99529901950",
+          "currentSha256": "0a114bc8c78961a84a0e515f347272177a940339803a5274be2fd99529901950",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/rc85-runtime-hardening.ts",
+          "previousSha256": "1024663f2f3964a10e55e50c32df82d823a33c61f07f92c1abdd42a50add0ca3",
+          "currentSha256": "1024663f2f3964a10e55e50c32df82d823a33c61f07f92c1abdd42a50add0ca3",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/reasons.ts",
+          "previousSha256": "681cccdc3a2a50ba6fec957310cb06927222bb7a95ffabffe0d2151679f78da7",
+          "currentSha256": "681cccdc3a2a50ba6fec957310cb06927222bb7a95ffabffe0d2151679f78da7",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/accepted-power-effects.ts",
+          "previousSha256": "9cc3a6c17fe3edf6e7895e0ead60ff20943b3708165809a26fd807698d625b76",
+          "currentSha256": "9cc3a6c17fe3edf6e7895e0ead60ff20943b3708165809a26fd807698d625b76",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/actuator-command-contract.ts",
+          "previousSha256": "616688292589e6addc3d2ea33d62a14325823b1af499cde0919fe830ccded64a",
+          "currentSha256": "616688292589e6addc3d2ea33d62a14325823b1af499cde0919fe830ccded64a",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/actuator-shadow-arbiter.ts",
+          "previousSha256": "5db7c58a83b049086f80e9d167691801654ac5e285b97a4cb015606c42f7fe68",
+          "currentSha256": "5db7c58a83b049086f80e9d167691801654ac5e285b97a4cb015606c42f7fe68",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/admin-overview-publisher.ts",
+          "previousSha256": "357d37b8b985a5c58402839994ebdbeddce3344d6ae8f5ff91a2412593aa9c3a",
+          "currentSha256": "357d37b8b985a5c58402839994ebdbeddce3344d6ae8f5ff91a2412593aa9c3a",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/arbitrage-control.ts",
+          "previousSha256": "4b2a79c1dd0612d40d28b57727c4cf77c4065579c119b5bbe6977f0dd0091b84",
+          "currentSha256": "4b2a79c1dd0612d40d28b57727c4cf77c4065579c119b5bbe6977f0dd0091b84",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/charging-management-audit.ts",
+          "previousSha256": "c0ececf63a472d400c9406d181d5484d0c64a8c43a7c65592676d53a9549a714",
+          "currentSha256": "c0ececf63a472d400c9406d181d5484d0c64a8c43a7c65592676d53a9549a714",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/country-profile-service.ts",
+          "previousSha256": "9322ec624963db39c34834dbf20c857045f79a58097fdb9fd5d98cab2e724621",
+          "currentSha256": "9322ec624963db39c34834dbf20c857045f79a58097fdb9fd5d98cab2e724621",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/dynamic-grid-config.ts",
+          "previousSha256": "5e88c6a9d61b930c816e4f6060225ce25785c6b0eb77601afe8d4dee439ee0c1",
+          "currentSha256": "5e88c6a9d61b930c816e4f6060225ce25785c6b0eb77601afe8d4dee439ee0c1",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/dynamic-grid-ownership.ts",
+          "previousSha256": "de8ed1ac2352d1bcf19b6c590e3db13a4920c46fd915ca95708616265405cfc7",
+          "currentSha256": "de8ed1ac2352d1bcf19b6c590e3db13a4920c46fd915ca95708616265405cfc7",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/dynamic-grid-pv.ts",
+          "previousSha256": "ca5dc0c7f9ff97c097bce662dc0a65d5d36296c4662880e0da392ec860cf01d2",
+          "currentSha256": "ca5dc0c7f9ff97c097bce662dc0a65d5d36296c4662880e0da392ec860cf01d2",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/dynamic-grid-writer.ts",
+          "previousSha256": "d0456440d27f00e0a393e845a0bc9d817d3732b19e775a86095f4d52b45e0ea8",
+          "currentSha256": "d0456440d27f00e0a393e845a0bc9d817d3732b19e775a86095f4d52b45e0ea8",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/energy-origin-accounting.ts",
+          "previousSha256": "200787dd19bfeaabdf307ed69d704ea52b218a1e8a22356551d43ea3a3ec9088",
+          "currentSha256": "200787dd19bfeaabdf307ed69d704ea52b218a1e8a22356551d43ea3a3ec9088",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/energy-origin-ledger-runtime.ts",
+          "previousSha256": "74264003023faff00ec893bfcf0ca38162dba293d3566130375e108b3208ea68",
+          "currentSha256": "74264003023faff00ec893bfcf0ca38162dba293d3566130375e108b3208ea68",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/evcs-unit-conversion.ts",
+          "previousSha256": "a1d0036ce8b3ab7932710c9761a8f193a220174a516dd248c2423cd5b699d3b0",
+          "currentSha256": "a1d0036ce8b3ab7932710c9761a8f193a220174a516dd248c2423cd5b699d3b0",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/feature-flags.ts",
+          "previousSha256": "0b23e3414b5f9fbf60c0e47d9793d6a72033026988f5b674e6696a653eac2a6c",
+          "currentSha256": "0b23e3414b5f9fbf60c0e47d9793d6a72033026988f5b674e6696a653eac2a6c",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/fenecon-hybrid-control.ts",
+          "previousSha256": "c2c34e386f3540e6acacd9cf568c6ea5594bcbf8316d6308431bacbee20db2ca",
+          "currentSha256": "c2c34e386f3540e6acacd9cf568c6ea5594bcbf8316d6308431bacbee20db2ca",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/fenecon-nvp-shadow-runtime.ts",
+          "previousSha256": "8a794910dea3ab056e294aa4c920e7d65894e6ed6721b97a3e80dd124e6190e8",
+          "currentSha256": "8a794910dea3ab056e294aa4c920e7d65894e6ed6721b97a3e80dd124e6190e8",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/forecast-aware-target-planner.ts",
+          "previousSha256": "b4554e95c51e6ce27126e465b3c862db16aca544587f50c47eef2ab21ca5bb42",
+          "currentSha256": "b4554e95c51e6ce27126e465b3c862db16aca544587f50c47eef2ab21ca5bb42",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/forecast-target-runtime-bridge.ts",
+          "previousSha256": "b3fa680266f755dea6a6618d356da16e711836d7fedf4fb3d8a8636699d4e793",
+          "currentSha256": "b3fa680266f755dea6a6618d356da16e711836d7fedf4fb3d8a8636699d4e793",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/grid-import-limit-policy.ts",
+          "previousSha256": "940fdb2cd2b67d30b5f5427eb2cd521fcfebf5f9985899b6059ea8cff440914d",
+          "currentSha256": "940fdb2cd2b67d30b5f5427eb2cd521fcfebf5f9985899b6059ea8cff440914d",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/locale-api-service.ts",
+          "previousSha256": "e700619bb5ccd58092f5bc88365e65ce2420d601407f9c8c09f8060f0f0356ea",
+          "currentSha256": "e700619bb5ccd58092f5bc88365e65ce2420d601407f9c8c09f8060f0f0356ea",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/measurement-freshness.ts",
+          "previousSha256": "590430928acf161b2d47c16ed03f191400c392c9761775c3ddb835e714afb0d7",
+          "currentSha256": "590430928acf161b2d47c16ed03f191400c392c9761775c3ddb835e714afb0d7",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/netoperator-canonical-model.ts",
+          "previousSha256": "b997490a0fa835d520393361e08a6da0c541e75eca5b6f6a2c55eede0d402aad",
+          "currentSha256": "b997490a0fa835d520393361e08a6da0c541e75eca5b6f6a2c55eede0d402aad",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/netoperator-driver-registry.ts",
+          "previousSha256": "e0f1383ab59c440839d7507508d8808179e7ba33cf8e0076081898c2d884e7ae",
+          "currentSha256": "e0f1383ab59c440839d7507508d8808179e7ba33cf8e0076081898c2d884e7ae",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/netoperator-modbus-tcp.ts",
+          "previousSha256": "0092622132affc9f9a2d664154641b58ee5824e7b6b42f582b72abee9a591395",
+          "currentSha256": "0092622132affc9f9a2d664154641b58ee5824e7b6b42f582b72abee9a591395",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/nexologic-output-controller.ts",
+          "previousSha256": "eba036e4d763cdf8028a3a59ab615ff2611d62485b59cd5dbe501f99c33c0b5c",
+          "currentSha256": "eba036e4d763cdf8028a3a59ab615ff2611d62485b59cd5dbe501f99c33c0b5c",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/nvp-budget.ts",
+          "previousSha256": "48948bfa897061d745fbc88ff444106e8fbc791f88973b6c01e1de02358885a8",
+          "currentSha256": "48948bfa897061d745fbc88ff444106e8fbc791f88973b6c01e1de02358885a8",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/nvp-grants.ts",
+          "previousSha256": "5e73b91c3ef6ca9d73f7743e396e4088dd3db624b3f4cc72193160f98d79ea37",
+          "currentSha256": "5e73b91c3ef6ca9d73f7743e396e4088dd3db624b3f4cc72193160f98d79ea37",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/nvp-group-planner.ts",
+          "previousSha256": "63b5fb93c8369b221887f77cf6c850a6d74ee5db8f4a55d8957c6534705f35b5",
+          "currentSha256": "63b5fb93c8369b221887f77cf6c850a6d74ee5db8f4a55d8957c6534705f35b5",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/nvp-topology.ts",
+          "previousSha256": "ac061b57e15493c11e0cc524a897b2a8fee511129db669d2867d89bfc20afa64",
+          "currentSha256": "ac061b57e15493c11e0cc524a897b2a8fee511129db669d2867d89bfc20afa64",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/open-meteo-pv-forecast.ts",
+          "previousSha256": "13d8ef6875210458e6543731a721819178d6f2ffd6eee1549fb824d672fd5492",
+          "currentSha256": "13d8ef6875210458e6543731a721819178d6f2ffd6eee1549fb824d672fd5492",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/operating-strategy-runtime.ts",
+          "previousSha256": "23785bfdb13bd4cd6bd871d7601bcc97ed387e0976378a8764414d8c085f01ec",
+          "currentSha256": "23785bfdb13bd4cd6bd871d7601bcc97ed387e0976378a8764414d8c085f01ec",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/para14a-eebus-api.ts",
+          "previousSha256": "8700924d143053df2ee1c6965beb60e76491827cf1b27c00b590980502e7c772",
+          "currentSha256": "8700924d143053df2ee1c6965beb60e76491827cf1b27c00b590980502e7c772",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/pv-source-identity.ts",
+          "previousSha256": "1223bc948436db5cd5b3033bafb3d4558e515dde153b21fdd454fc772f997a5a",
+          "currentSha256": "1223bc948436db5cd5b3033bafb3d4558e515dde153b21fdd454fc772f997a5a",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/pv-surplus-allocation.ts",
+          "previousSha256": "fd67246a23bf9f802da8823229a36925f9a34ccc01dd55cc7799aef2e6e1270f",
+          "currentSha256": "fd67246a23bf9f802da8823229a36925f9a34ccc01dd55cc7799aef2e6e1270f",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/safety-envelope.ts",
+          "previousSha256": "108b19c32a3282fe9e65264a48263ad8c7296a6ae86eb6d590ad15d481bcbba2",
+          "currentSha256": "108b19c32a3282fe9e65264a48263ad8c7296a6ae86eb6d590ad15d481bcbba2",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/storage-async-feedback-anchor.ts",
+          "previousSha256": "f51f6af106108dd542efe992286b687b6f723db5d940e35d033f693da51f0d25",
+          "currentSha256": "f51f6af106108dd542efe992286b687b6f723db5d940e35d033f693da51f0d25",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/storage-datapoint-config.ts",
+          "previousSha256": "78a8f3ee4ef8b876d0a03877f51c1b8157a6a5d42a0bab37786129a71bf1e4cd",
+          "currentSha256": "78a8f3ee4ef8b876d0a03877f51c1b8157a6a5d42a0bab37786129a71bf1e4cd",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/storage-farm-aggregation.ts",
+          "previousSha256": "8ed9fdf60e02a02914a4f852c6097ff9fb8201e67f9aacc69bbbf2c35ac06e4a",
+          "currentSha256": "8ed9fdf60e02a02914a4f852c6097ff9fb8201e67f9aacc69bbbf2c35ac06e4a",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/storage-override-bridge.ts",
+          "previousSha256": "c2b4de6df2dd71070831c38afba1284ebea224f90ed780b2755a6f1520b08ea7",
+          "currentSha256": "c2b4de6df2dd71070831c38afba1284ebea224f90ed780b2755a6f1520b08ea7",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/storage-self-consumption-policy.ts",
+          "previousSha256": "27941ac8d88b27a36b65386b5236065b5bd14422955aa05e4ef95a8363917983",
+          "currentSha256": "27941ac8d88b27a36b65386b5236065b5bd14422955aa05e4ef95a8363917983",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/storage-zero-write-policy.ts",
+          "previousSha256": "e44cc7043c0a7bbcc90e5b2e591b09a084784472932b9cd6b3d30396084ed347",
+          "currentSha256": "e44cc7043c0a7bbcc90e5b2e591b09a084784472932b9cd6b3d30396084ed347",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/tariff-provider-registry.ts",
+          "previousSha256": "e1006662d8d67efbd2ce3e4b5a3cf05951a44e4092bdc38d4f589c96765becc4",
+          "currentSha256": "e1006662d8d67efbd2ce3e4b5a3cf05951a44e4092bdc38d4f589c96765becc4",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/zero-export-pv-coordinator.ts",
+          "previousSha256": "ae0f5cea86ad6229321fb6c61e33c5b7f85fc08d773fbf9389fc80e2d3b5634a",
+          "currentSha256": "ae0f5cea86ad6229321fb6c61e33c5b7f85fc08d773fbf9389fc80e2d3b5634a",
+          "byteIdentical": true
+        },
+        {
+          "file": "src-ts/runtime-executables/ems/services/zero-export-storage-credit.ts",
+          "previousSha256": "42b5ceb1587a5710876af96942d3f61a9499cd337aee76eca8cad8a621f336e0",
+          "currentSha256": "42b5ceb1587a5710876af96942d3f61a9499cd337aee76eca8cad8a621f336e0",
+          "byteIdentical": true
+        }
+      ]
+    },
+    {
+      "scope": "ems",
+      "previousCount": 101,
+      "currentCount": 101,
+      "changedCount": 0,
+      "inventorySha256": "f120ad4323955b549334f96e8368418fa02a1e69262ceaf220c141984275b79d",
+      "files": [
+        {
+          "file": "ems/charging-budget-helpers.js",
+          "previousSha256": "bb24ee3a58f163b19e61f2d6f56c396d636b844a8b309928d031990240a404b4",
+          "currentSha256": "bb24ee3a58f163b19e61f2d6f56c396d636b844a8b309928d031990240a404b4",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/consumers/evcs.js",
+          "previousSha256": "72ac6e653fdc3763515929ce7e5e0e5d552e66537a1badea690f4b1b262eab19",
+          "currentSha256": "72ac6e653fdc3763515929ce7e5e0e5d552e66537a1badea690f4b1b262eab19",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/consumers/generic-load.js",
+          "previousSha256": "947896d5e053756c73d2721a9cb7a5c2ac73c15580ecf914af55fd8c59097a93",
+          "currentSha256": "947896d5e053756c73d2721a9cb7a5c2ac73c15580ecf914af55fd8c59097a93",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/consumers/generic-setpoint.js",
+          "previousSha256": "04a87270d35da58f8a8eb00971c5f33098002dd8f28c102515febb20e6fb1bce",
+          "currentSha256": "04a87270d35da58f8a8eb00971c5f33098002dd8f28c102515febb20e6fb1bce",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/consumers/index.js",
+          "previousSha256": "1fa09e075ddda161f2c00c2f7826f39df334ecc9c6ef306829d7586b2fea440e",
+          "currentSha256": "1fa09e075ddda161f2c00c2f7826f39df334ecc9c6ef306829d7586b2fea440e",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/consumers/sg-ready.js",
+          "previousSha256": "07a6b05462990fe2daf198b55c5623f4998efe1fb6a17bfcea74c9bfa630ae3d",
+          "currentSha256": "07a6b05462990fe2daf198b55c5623f4998efe1fb6a17bfcea74c9bfa630ae3d",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/datapoints.js",
+          "previousSha256": "ccdeeae49ca9f35b4103f868e82dc24bd3413f2a43532f7a84679587e7eac211",
+          "currentSha256": "ccdeeae49ca9f35b4103f868e82dc24bd3413f2a43532f7a84679587e7eac211",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/engine.js",
+          "previousSha256": "7d2ae7dece842cd113adbd703b440b99b68643634759b3059416fc595d294d02",
+          "currentSha256": "7d2ae7dece842cd113adbd703b440b99b68643634759b3059416fc595d294d02",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/evcs-control-mapping.js",
+          "previousSha256": "8aa560a14bbae3c2d4926fc71a4cd3f843cd4ef6af4d74e1cb90267d94dd978c",
+          "currentSha256": "8aa560a14bbae3c2d4926fc71a4cd3f843cd4ef6af4d74e1cb90267d94dd978c",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/module-manager.js",
+          "previousSha256": "43011ec203b41d0f581b7e22782f029dcb3248985c67bbced51370d679a3cc12",
+          "currentSha256": "43011ec203b41d0f581b7e22782f029dcb3248985c67bbced51370d679a3cc12",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/ai-advisor.js",
+          "previousSha256": "ed7a57f7afa2b25de650bb3db16ffcb11fddd0a6806f1323470d0cfcfaac9c34",
+          "currentSha256": "ed7a57f7afa2b25de650bb3db16ffcb11fddd0a6806f1323470d0cfcfaac9c34",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/base.js",
+          "previousSha256": "c157f2477d4f511b767defedcba2d04ac680d063d02400aaca35cae1d24ae054",
+          "currentSha256": "c157f2477d4f511b767defedcba2d04ac680d063d02400aaca35cae1d24ae054",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/bhkw-control.js",
+          "previousSha256": "414059e14e9fbd0f6c2023f99750bcf2cda878c69f138ba8c07f785c9210cd41",
+          "currentSha256": "414059e14e9fbd0f6c2023f99750bcf2cda878c69f138ba8c07f785c9210cd41",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/charge-kiosk.js",
+          "previousSha256": "eab2aca8c93817f8077acf6ea2fb0f8e172cea9ca4220dee4b928948181d0d8c",
+          "currentSha256": "eab2aca8c93817f8077acf6ea2fb0f8e172cea9ca4220dee4b928948181d0d8c",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/charging-management.js",
+          "previousSha256": "778c48e45b61971cb1a4d43cbf75b81ad9e990494932e408cc201741a7d6270b",
+          "currentSha256": "778c48e45b61971cb1a4d43cbf75b81ad9e990494932e408cc201741a7d6270b",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/core-limits.js",
+          "previousSha256": "9d788995415a67b2c62dda5a05c77da636722dcf269c324bd34e676d1eb5d108",
+          "currentSha256": "9d788995415a67b2c62dda5a05c77da636722dcf269c324bd34e676d1eb5d108",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/country-profile.js",
+          "previousSha256": "2b855b6341e3f77311423741120f663bb02923257914f692d4227bf55667b6bb",
+          "currentSha256": "2b855b6341e3f77311423741120f663bb02923257914f692d4227bf55667b6bb",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/dynamic-grid-connection.js",
+          "previousSha256": "290f6c36eaade18b40bcbcf762e7d1026a13adfd1ed7de07e62d096ca4e78819",
+          "currentSha256": "290f6c36eaade18b40bcbcf762e7d1026a13adfd1ed7de07e62d096ca4e78819",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/energy-ledger.js",
+          "previousSha256": "8afd6be26e517d22142889e1732fcdb673e5624be4895de78d848c365a6e6947",
+          "currentSha256": "8afd6be26e517d22142889e1732fcdb673e5624be4895de78d848c365a6e6947",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/energy-wallet.js",
+          "previousSha256": "ba0e07998a63399236caba111116cd8e4bf46f21a28058887ac9481eaf97d437",
+          "currentSha256": "ba0e07998a63399236caba111116cd8e4bf46f21a28058887ac9481eaf97d437",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/generator-control.js",
+          "previousSha256": "ba14dfd4ca4a0ddd18566386dc1ae7bb859c63458d706e927da0daa925068158",
+          "currentSha256": "ba14dfd4ca4a0ddd18566386dc1ae7bb859c63458d706e927da0daa925068158",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/grid-constraints.js",
+          "previousSha256": "f4016a83c5c86664f0e4cf94c46f8eb2d99e73eac15149df5b0f380cfa739341",
+          "currentSha256": "f4016a83c5c86664f0e4cf94c46f8eb2d99e73eac15149df5b0f380cfa739341",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/heating-rod-control.js",
+          "previousSha256": "419a7d80425c60f9b883c5668216d7917c4e63af92b01fe9eafa6f7c013c540e",
+          "currentSha256": "419a7d80425c60f9b883c5668216d7917c4e63af92b01fe9eafa6f7c013c540e",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/mesh-microgrid.js",
+          "previousSha256": "7d93dd2de9d34ce491bbc87fb379087d9d2ed75f8a0dd3ed76513a0e2ccf27ea",
+          "currentSha256": "7d93dd2de9d34ce491bbc87fb379087d9d2ed75f8a0dd3ed76513a0e2ccf27ea",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/multi-use.js",
+          "previousSha256": "1822c89b59205b5a2018f71d74dc7dc9addc3c93db9c81ff8e8656c28fab89e5",
+          "currentSha256": "1822c89b59205b5a2018f71d74dc7dc9addc3c93db9c81ff8e8656c28fab89e5",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/netoperator-interface.js",
+          "previousSha256": "34625810daf6a5ba88a1963e3af934821de1067f92f18a1d587acd4134eea96c",
+          "currentSha256": "34625810daf6a5ba88a1963e3af934821de1067f92f18a1d587acd4134eea96c",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/nexologic-budget.js",
+          "previousSha256": "dec3e929f233c5e81dc7be871b54dc55444bae7343f177d5fefa16b408d89282",
+          "currentSha256": "dec3e929f233c5e81dc7be871b54dc55444bae7343f177d5fefa16b408d89282",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/nl-p1-dsmr.js",
+          "previousSha256": "0134e87aed6785aa7fe1723a67688b054b96214e0572021c9f644b42f495b6cf",
+          "currentSha256": "0134e87aed6785aa7fe1723a67688b054b96214e0572021c9f644b42f495b6cf",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/nvp-coordinator.js",
+          "previousSha256": "04477b295b0933e053240e10cf17fdd6706d598abfcc9aecc33fe30ada9946e7",
+          "currentSha256": "04477b295b0933e053240e10cf17fdd6706d598abfcc9aecc33fe30ada9946e7",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/nvp-topology.js",
+          "previousSha256": "a0ad978d895c9a28a4a811969c571dc5ef5285ee9fb98c036af1205f89c90485",
+          "currentSha256": "a0ad978d895c9a28a4a811969c571dc5ef5285ee9fb98c036af1205f89c90485",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/operating-strategies.js",
+          "previousSha256": "75967a6a711e2eead74cef946a43b49e42abbc29e1109dbd657aa4f772c28405",
+          "currentSha256": "75967a6a711e2eead74cef946a43b49e42abbc29e1109dbd657aa4f772c28405",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/para14a.js",
+          "previousSha256": "1210531fa9fc3eeeb12059baa49a630eab2e7a07f01407665f8ab6551c7c04d1",
+          "currentSha256": "1210531fa9fc3eeeb12059baa49a630eab2e7a07f01407665f8ab6551c7c04d1",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/peak-shaving.js",
+          "previousSha256": "67711b7b0d5213513f04213e84c606f6b041956894448f0088332e8719bb685f",
+          "currentSha256": "67711b7b0d5213513f04213e84c606f6b041956894448f0088332e8719bb685f",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/prime-mover-control.js",
+          "previousSha256": "98339231447c911ef5c73cec77a2a0b65354febe427af15d630a983f4b1230b8",
+          "currentSha256": "98339231447c911ef5c73cec77a2a0b65354febe427af15d630a983f4b1230b8",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/pv-forecast.js",
+          "previousSha256": "7a05ff7ec1fe3b3b6dcf42d08d53a0bf169981aee202dfaca0bea8462942472b",
+          "currentSha256": "7a05ff7ec1fe3b3b6dcf42d08d53a0bf169981aee202dfaca0bea8462942472b",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/stage-a-diagnostics.js",
+          "previousSha256": "26aaa8e6eaa7c2d36a4008d6ceb3647c58cef35b7c3f19977958300535ec4f79",
+          "currentSha256": "26aaa8e6eaa7c2d36a4008d6ceb3647c58cef35b7c3f19977958300535ec4f79",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/storage-control.js",
+          "previousSha256": "a9dc72070a0ee636f4da475e548880b9b5789426d63d6d475c88e926eb824e49",
+          "currentSha256": "a9dc72070a0ee636f4da475e548880b9b5789426d63d6d475c88e926eb824e49",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/storage-mapping.js",
+          "previousSha256": "9352af2b7be915f8bd06f8df877b06163297550935df76ec442050e7a9989ae7",
+          "currentSha256": "9352af2b7be915f8bd06f8df877b06163297550935df76ec442050e7a9989ae7",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/tarif-vis.js",
+          "previousSha256": "7a750ae5c3ac6ddc520efa68bbd86aaace8315a7c90e4209a2714cba04198217",
+          "currentSha256": "7a750ae5c3ac6ddc520efa68bbd86aaace8315a7c90e4209a2714cba04198217",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/tariff-provider.js",
+          "previousSha256": "a6579574df66c72f2a3f72e881d11780ed5c1cb14136f9042e6bf2f3d076c849",
+          "currentSha256": "a6579574df66c72f2a3f72e881d11780ed5c1cb14136f9042e6bf2f3d076c849",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/tariff-status.js",
+          "previousSha256": "54323d600123ee30ad61c7833d69f32db99ed5140e6445e4988adce83a035f61",
+          "currentSha256": "54323d600123ee30ad61c7833d69f32db99ed5140e6445e4988adce83a035f61",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/thermal-control.js",
+          "previousSha256": "b5fe84cf77b4d0425b1ef3795e7328675526b817113bba688b4ad6153b4181f4",
+          "currentSha256": "b5fe84cf77b4d0425b1ef3795e7328675526b817113bba688b4ad6153b4181f4",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/modules/threshold-control.js",
+          "previousSha256": "2f3b869b05d4b64040fc1639870d48d131e1cfc25dcb46592b908507e31a7594",
+          "currentSha256": "2f3b869b05d4b64040fc1639870d48d131e1cfc25dcb46592b908507e31a7594",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/netoperator/acceptance-tests.json",
+          "previousSha256": "4c22fb2b9657978fbdda7f2cfa4f9b1701f3291e03c00bc2459222e5b5c21014",
+          "currentSha256": "4c22fb2b9657978fbdda7f2cfa4f9b1701f3291e03c00bc2459222e5b5c21014",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/netoperator/driver.schema.json",
+          "previousSha256": "4dd8708bf37d3d3a62fd7d5e1dd4f053d0f8dd7a94a7b38c8946e139bda783f4",
+          "currentSha256": "4dd8708bf37d3d3a62fd7d5e1dd4f053d0f8dd7a94a7b38c8946e139bda783f4",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/netoperator/drivers/bachmann-sppc.json",
+          "previousSha256": "89c35bda23ccce8b0acd30ef1dbf0cf3ca4427248b46746ec2af7146870cbc3b",
+          "currentSha256": "89c35bda23ccce8b0acd30ef1dbf0cf3ca4427248b46746ec2af7146870cbc3b",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/netoperator/drivers/beckhoff-tf8360.json",
+          "previousSha256": "42dad4d56815ff7ca4d002307f2591fc2519fb37f9a1d620e9da2c3a6021eb84",
+          "currentSha256": "42dad4d56815ff7ca4d002307f2591fc2519fb37f9a1d620e9da2c3a6021eb84",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/netoperator/drivers/energielenker-eza.json",
+          "previousSha256": "f626708f831ceae23861bca2d9d9b0b218ffc1e1aff8fbc51af5fbd7853bd07f",
+          "currentSha256": "f626708f831ceae23861bca2d9d9b0b218ffc1e1aff8fbc51af5fbd7853bd07f",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/netoperator/drivers/generic-modbus-tcp-template.json",
+          "previousSha256": "f0b991b944a15840538e3844ba756614163a8850acbb8f5baf08d992b85fc2fc",
+          "currentSha256": "f0b991b944a15840538e3844ba756614163a8850acbb8f5baf08d992b85fc2fc",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/netoperator/drivers/meteocontrol-bluelog-xc.json",
+          "previousSha256": "37d9d224a970c83fdb8c25ecd50f104d62f561462b3302ded0f92e12acb1d457",
+          "currentSha256": "37d9d224a970c83fdb8c25ecd50f104d62f561462b3302ded0f92e12acb1d457",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/netoperator/drivers/phoenix-pcu-41xx.json",
+          "previousSha256": "1e3b20009e4b9a6bed83d366d7b77807a430da69f099eb9813fe97461f9d7729",
+          "currentSha256": "1e3b20009e4b9a6bed83d366d7b77807a430da69f099eb9813fe97461f9d7729",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/netoperator/drivers/siemens-sicam-a8000.json",
+          "previousSha256": "539557bb8fc0b4ca38b7d4b9a1e0f033d99c269ba11b18e43e5079ae01b223ed",
+          "currentSha256": "539557bb8fc0b4ca38b7d4b9a1e0f033d99c269ba11b18e43e5079ae01b223ed",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/netoperator/drivers/wago-power-plant-control.json",
+          "previousSha256": "c5285daa0b59a5a82929373289ff4a447d1bfa144d754bea628dbec92f6cf7c6",
+          "currentSha256": "c5285daa0b59a5a82929373289ff4a447d1bfa144d754bea628dbec92f6cf7c6",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/nexologic-engine.js",
+          "previousSha256": "085637072ee99aeb9dd6d8070b087079b338bf46a156a2df37bcab6aba14f923",
+          "currentSha256": "085637072ee99aeb9dd6d8070b087079b338bf46a156a2df37bcab6aba14f923",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/rc85-runtime-hardening.js",
+          "previousSha256": "9aeaa46bcfdecdbe7614f5f28efb0fd3d1c8cec8f7bb2a0434ea9feb39429516",
+          "currentSha256": "9aeaa46bcfdecdbe7614f5f28efb0fd3d1c8cec8f7bb2a0434ea9feb39429516",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/reasons.js",
+          "previousSha256": "cc74d721949b8466a6ab0fd5ff3dc628ef2a11f39c296c3469d21bac21a444a2",
+          "currentSha256": "cc74d721949b8466a6ab0fd5ff3dc628ef2a11f39c296c3469d21bac21a444a2",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/accepted-power-effects.js",
+          "previousSha256": "54ec8c4825b55efe73370cd57a96395efec482c3263b1a8fd62b580e285b2a5e",
+          "currentSha256": "54ec8c4825b55efe73370cd57a96395efec482c3263b1a8fd62b580e285b2a5e",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/actuator-command-contract.js",
+          "previousSha256": "db9c7c6d4626dcbcdf98dc911105fb43569b6ba2728a56e0d51ad6aaa8366edc",
+          "currentSha256": "db9c7c6d4626dcbcdf98dc911105fb43569b6ba2728a56e0d51ad6aaa8366edc",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/actuator-shadow-arbiter.js",
+          "previousSha256": "858e78cf5ef1039cf911204eb2f17cb89e9830ab7972a2377d88dbed39d78b32",
+          "currentSha256": "858e78cf5ef1039cf911204eb2f17cb89e9830ab7972a2377d88dbed39d78b32",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/admin-overview-publisher.js",
+          "previousSha256": "01506ba4f2b9b1afa90f4ed68ea381f2c8d3a1a542769984bc177ffae848ddfd",
+          "currentSha256": "01506ba4f2b9b1afa90f4ed68ea381f2c8d3a1a542769984bc177ffae848ddfd",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/arbitrage-control.js",
+          "previousSha256": "aaac5a8b06c1c6d557c9e6849f021f2e58c8421e114eef0b8efbc9e40ee451a5",
+          "currentSha256": "aaac5a8b06c1c6d557c9e6849f021f2e58c8421e114eef0b8efbc9e40ee451a5",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/charging-management-audit.js",
+          "previousSha256": "fd4b5682d27b49a45d2d23c8ca4016e49a546240a1b7ef93f8b63beacae29f15",
+          "currentSha256": "fd4b5682d27b49a45d2d23c8ca4016e49a546240a1b7ef93f8b63beacae29f15",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/country-profile-service.js",
+          "previousSha256": "d1ddfcfb0bd78c315c8718075c2e52d37ad0e9a002e3df7a8ec4d427161deb63",
+          "currentSha256": "d1ddfcfb0bd78c315c8718075c2e52d37ad0e9a002e3df7a8ec4d427161deb63",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/dynamic-grid-config.js",
+          "previousSha256": "ade895a60ff4bd8ca8bb189e164c1392e41b13c0cbeb78ff4432d4e3a38f6e20",
+          "currentSha256": "ade895a60ff4bd8ca8bb189e164c1392e41b13c0cbeb78ff4432d4e3a38f6e20",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/dynamic-grid-ownership.js",
+          "previousSha256": "97aa00280194c47d52d0a2c7b56168c16291f666a9725357830f50fb504753a2",
+          "currentSha256": "97aa00280194c47d52d0a2c7b56168c16291f666a9725357830f50fb504753a2",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/dynamic-grid-pv.js",
+          "previousSha256": "1fc63e7e1e845e478dd0b0ae7837b7f7b7995604c9bde95abde451e236195db7",
+          "currentSha256": "1fc63e7e1e845e478dd0b0ae7837b7f7b7995604c9bde95abde451e236195db7",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/dynamic-grid-writer.js",
+          "previousSha256": "20d7fca5090a5e50842d157d5e455e98b11ac5aafc1c049e51f2f12208c16a4d",
+          "currentSha256": "20d7fca5090a5e50842d157d5e455e98b11ac5aafc1c049e51f2f12208c16a4d",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/energy-origin-accounting.js",
+          "previousSha256": "81faf69ce6b99205b24e5a5f1b28a56d014081c07de2db3339317207c217b394",
+          "currentSha256": "81faf69ce6b99205b24e5a5f1b28a56d014081c07de2db3339317207c217b394",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/energy-origin-ledger-runtime.js",
+          "previousSha256": "5f4a84023fb93575274efdd67d44bce9ff3012dfee3e460a6a9cac1ed7f58a7e",
+          "currentSha256": "5f4a84023fb93575274efdd67d44bce9ff3012dfee3e460a6a9cac1ed7f58a7e",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/evcs-unit-conversion.js",
+          "previousSha256": "f9378aa0a06568f84b65de2df008a0c7d95507a25c1cccbab9b5bcf9cebbc982",
+          "currentSha256": "f9378aa0a06568f84b65de2df008a0c7d95507a25c1cccbab9b5bcf9cebbc982",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/feature-flags.js",
+          "previousSha256": "39288588b252c4dcc0968e1899d14182a49dd068b28ad043f0b1831a5e97d038",
+          "currentSha256": "39288588b252c4dcc0968e1899d14182a49dd068b28ad043f0b1831a5e97d038",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/fenecon-hybrid-control.js",
+          "previousSha256": "cd55645c5a8a75bae9cf441ef86ba5e81d7c78d12a139d434331b4edb2058a4f",
+          "currentSha256": "cd55645c5a8a75bae9cf441ef86ba5e81d7c78d12a139d434331b4edb2058a4f",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/fenecon-nvp-shadow-runtime.js",
+          "previousSha256": "4de0151e421394c3c5d631738d0906954331d61bd29c67f6736c2f6501b5f469",
+          "currentSha256": "4de0151e421394c3c5d631738d0906954331d61bd29c67f6736c2f6501b5f469",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/forecast-aware-target-planner.js",
+          "previousSha256": "a4e0d9d7f456952830bf5790c5298397d56fa9d25d035508a8eae5de46451487",
+          "currentSha256": "a4e0d9d7f456952830bf5790c5298397d56fa9d25d035508a8eae5de46451487",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/forecast-target-runtime-bridge.js",
+          "previousSha256": "e2b992c3dce559e9b5bcc85d573d24ef0d61d28ab75d1e735f8895921675ab15",
+          "currentSha256": "e2b992c3dce559e9b5bcc85d573d24ef0d61d28ab75d1e735f8895921675ab15",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/grid-import-limit-policy.js",
+          "previousSha256": "24f7c923128f31b909d8af303e6c155ecffe8af6ea4e9abd3a724876c89cd994",
+          "currentSha256": "24f7c923128f31b909d8af303e6c155ecffe8af6ea4e9abd3a724876c89cd994",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/locale-api-service.js",
+          "previousSha256": "26a116cbd04ff6429031a66808e70aabb10956d9922faf87bd00c903b5ff4046",
+          "currentSha256": "26a116cbd04ff6429031a66808e70aabb10956d9922faf87bd00c903b5ff4046",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/measurement-freshness.js",
+          "previousSha256": "557fb3d6fe4d578a1686173c8ec8990611772e5608fdc58b2bbabb576422538b",
+          "currentSha256": "557fb3d6fe4d578a1686173c8ec8990611772e5608fdc58b2bbabb576422538b",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/netoperator-canonical-model.js",
+          "previousSha256": "7382347a4d1b874b5197daf7285df0887aa639219192ca1863628beecbd3d635",
+          "currentSha256": "7382347a4d1b874b5197daf7285df0887aa639219192ca1863628beecbd3d635",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/netoperator-driver-registry.js",
+          "previousSha256": "d42f9f354e6c7885eab8b859c5e972b273674d63efd2f6c79620e8a7108aab18",
+          "currentSha256": "d42f9f354e6c7885eab8b859c5e972b273674d63efd2f6c79620e8a7108aab18",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/netoperator-modbus-tcp.js",
+          "previousSha256": "dff6bde33f16cfa7391e33c85d9b41c320df4feb4ecf92ab5a89623f82054b2c",
+          "currentSha256": "dff6bde33f16cfa7391e33c85d9b41c320df4feb4ecf92ab5a89623f82054b2c",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/nexologic-output-controller.js",
+          "previousSha256": "1cd2d7aad90bbbb3630aa8863bcdea698700d0fab1c3d2d663487870dd5283d4",
+          "currentSha256": "1cd2d7aad90bbbb3630aa8863bcdea698700d0fab1c3d2d663487870dd5283d4",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/nvp-budget.js",
+          "previousSha256": "40b4d5477139baf63278509099bb27f41e146c6daa5ac79e480e6b3540be0bf1",
+          "currentSha256": "40b4d5477139baf63278509099bb27f41e146c6daa5ac79e480e6b3540be0bf1",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/nvp-grants.js",
+          "previousSha256": "1801f3872540cd12f4750c8967caecc1371212ca23eb68ed2c94accc688e00e4",
+          "currentSha256": "1801f3872540cd12f4750c8967caecc1371212ca23eb68ed2c94accc688e00e4",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/nvp-group-planner.js",
+          "previousSha256": "ebfbd47dbd1a9bd230f386c2a34a279a549f1ee4bcc92ea599f070ecfaa18735",
+          "currentSha256": "ebfbd47dbd1a9bd230f386c2a34a279a549f1ee4bcc92ea599f070ecfaa18735",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/nvp-topology.js",
+          "previousSha256": "f4971090892d160d7a0af976d6c7ea8bad55775f8fbcfb3705aaa1a8ea4ea81c",
+          "currentSha256": "f4971090892d160d7a0af976d6c7ea8bad55775f8fbcfb3705aaa1a8ea4ea81c",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/open-meteo-pv-forecast.js",
+          "previousSha256": "9c6f604a5043c3215176e5b0b209a0d1f90c2e36cf875c12912e5c3ac8e60818",
+          "currentSha256": "9c6f604a5043c3215176e5b0b209a0d1f90c2e36cf875c12912e5c3ac8e60818",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/operating-strategy-runtime.js",
+          "previousSha256": "812cfd256e2e7489335ef31978801259a346409dcc469d80c1cc07941a671261",
+          "currentSha256": "812cfd256e2e7489335ef31978801259a346409dcc469d80c1cc07941a671261",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/para14a-eebus-api.js",
+          "previousSha256": "f54cfc414996723f98ba0640237a982f6446a578e223ebf4244eb95ad4494d43",
+          "currentSha256": "f54cfc414996723f98ba0640237a982f6446a578e223ebf4244eb95ad4494d43",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/pv-source-identity.js",
+          "previousSha256": "03446f70923afa4f569e0dc1bf00fc91096a329c8cba7a0197a9f5f042ce610b",
+          "currentSha256": "03446f70923afa4f569e0dc1bf00fc91096a329c8cba7a0197a9f5f042ce610b",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/pv-surplus-allocation.js",
+          "previousSha256": "f7a41dd8ca632ceb05dff1d2453e2a6df68e76cb539c336b6091da1a9da464e1",
+          "currentSha256": "f7a41dd8ca632ceb05dff1d2453e2a6df68e76cb539c336b6091da1a9da464e1",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/safety-envelope.js",
+          "previousSha256": "a0820b8782a6554d3aaf90832dca1808dce7916d04cea32bed6fbda79584d995",
+          "currentSha256": "a0820b8782a6554d3aaf90832dca1808dce7916d04cea32bed6fbda79584d995",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/storage-async-feedback-anchor.js",
+          "previousSha256": "9dbbbcc6ac6c4805aface4eb0339096c7cd6fcbdc405231d1e92cdfb2fe88bd3",
+          "currentSha256": "9dbbbcc6ac6c4805aface4eb0339096c7cd6fcbdc405231d1e92cdfb2fe88bd3",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/storage-datapoint-config.js",
+          "previousSha256": "61138ef3ddabd8edb284b1d9975944e06f8a3c949ce28ecd16ac947e353a962d",
+          "currentSha256": "61138ef3ddabd8edb284b1d9975944e06f8a3c949ce28ecd16ac947e353a962d",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/storage-farm-aggregation.js",
+          "previousSha256": "ba151194e214ba2a8815d7f0f5e9cad0112c8c897ff53f5aeed2c3e6c9c58046",
+          "currentSha256": "ba151194e214ba2a8815d7f0f5e9cad0112c8c897ff53f5aeed2c3e6c9c58046",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/storage-override-bridge.js",
+          "previousSha256": "b0fccd0cbddb0ca61290b221688010b15c3b85462867f229eb7d549d05e689ca",
+          "currentSha256": "b0fccd0cbddb0ca61290b221688010b15c3b85462867f229eb7d549d05e689ca",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/storage-self-consumption-policy.js",
+          "previousSha256": "d861195916dd2ff703c346e499423aae9332e164d0cb9cce9ee142c818a4e61e",
+          "currentSha256": "d861195916dd2ff703c346e499423aae9332e164d0cb9cce9ee142c818a4e61e",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/storage-zero-write-policy.js",
+          "previousSha256": "7b19d97e0ee09282e3d994cbfc0fd244b653cab1580fa1f28f102fde6311716c",
+          "currentSha256": "7b19d97e0ee09282e3d994cbfc0fd244b653cab1580fa1f28f102fde6311716c",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/tariff-provider-registry.js",
+          "previousSha256": "87d6467fc864c0d63c74c65e08531896d7e2efc25e28b7faa15bd6c183dbb83a",
+          "currentSha256": "87d6467fc864c0d63c74c65e08531896d7e2efc25e28b7faa15bd6c183dbb83a",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/zero-export-pv-coordinator.js",
+          "previousSha256": "ecc0aed0090566101a32fc9a975103d81710ff8580f5f4e78919a3802445624f",
+          "currentSha256": "ecc0aed0090566101a32fc9a975103d81710ff8580f5f4e78919a3802445624f",
+          "byteIdentical": true
+        },
+        {
+          "file": "ems/services/zero-export-storage-credit.js",
+          "previousSha256": "f82aa821040384c20bd73cd7f5c8361cec029124e7d1479816f776e0f4e67c5c",
+          "currentSha256": "f82aa821040384c20bd73cd7f5c8361cec029124e7d1479816f776e0f4e67c5c",
+          "byteIdentical": true
+        }
+      ]
+    },
+    {
+      "scope": "www/assets/icons",
+      "previousCount": 14,
+      "currentCount": 14,
+      "changedCount": 0,
+      "inventorySha256": "326e419e214e3a5b46cb67ff21c1d8c7d6d53589f1d3b6de0b149fcbed4f370e",
+      "files": [
+        {
+          "file": "www/assets/icons/nexowatt-120.png",
+          "previousSha256": "bef3d1327f497c333b4cee980d12664440a7c4cb193bfa44669909f4e4c4a829",
+          "currentSha256": "bef3d1327f497c333b4cee980d12664440a7c4cb193bfa44669909f4e4c4a829",
+          "byteIdentical": true
+        },
+        {
+          "file": "www/assets/icons/nexowatt-128.png",
+          "previousSha256": "fa6d5f9e2916b0683e11b83879f07caf390b090fbde0e307a3bc5c71215a4715",
+          "currentSha256": "fa6d5f9e2916b0683e11b83879f07caf390b090fbde0e307a3bc5c71215a4715",
+          "byteIdentical": true
+        },
+        {
+          "file": "www/assets/icons/nexowatt-152.png",
+          "previousSha256": "d0511c198af23ca0dad9a0f9fb96a374c64d352ffec60c0cb240a88cd5c30bb0",
+          "currentSha256": "d0511c198af23ca0dad9a0f9fb96a374c64d352ffec60c0cb240a88cd5c30bb0",
+          "byteIdentical": true
+        },
+        {
+          "file": "www/assets/icons/nexowatt-16.png",
+          "previousSha256": "e42a0323e3829ff0ee5a4d73830cfff0e44f40846795e0447694969ad2536cc7",
+          "currentSha256": "e42a0323e3829ff0ee5a4d73830cfff0e44f40846795e0447694969ad2536cc7",
+          "byteIdentical": true
+        },
+        {
+          "file": "www/assets/icons/nexowatt-180.png",
+          "previousSha256": "083e11ab28ec00b37d3d47776946c5fad4d79277fdc440cdbb20181a7f064f76",
+          "currentSha256": "083e11ab28ec00b37d3d47776946c5fad4d79277fdc440cdbb20181a7f064f76",
+          "byteIdentical": true
+        },
+        {
+          "file": "www/assets/icons/nexowatt-192-maskable.png",
+          "previousSha256": "d2b3962a02689238a3687c02d680fe233144c0251ccd359d15e2a38d92be27d0",
+          "currentSha256": "d2b3962a02689238a3687c02d680fe233144c0251ccd359d15e2a38d92be27d0",
+          "byteIdentical": true
+        },
+        {
+          "file": "www/assets/icons/nexowatt-192.png",
+          "previousSha256": "7f93d65d9e1d795bf127e1af31d88d7468ccb70b026f98351d0abbc3f3bd4df6",
+          "currentSha256": "7f93d65d9e1d795bf127e1af31d88d7468ccb70b026f98351d0abbc3f3bd4df6",
+          "byteIdentical": true
+        },
+        {
+          "file": "www/assets/icons/nexowatt-256.png",
+          "previousSha256": "bbc49706e59a126c8a2ca58b27fbfbe9b9f5207bdc62a94ce4e6ec8f43fa6032",
+          "currentSha256": "bbc49706e59a126c8a2ca58b27fbfbe9b9f5207bdc62a94ce4e6ec8f43fa6032",
+          "byteIdentical": true
+        },
+        {
+          "file": "www/assets/icons/nexowatt-32.png",
+          "previousSha256": "6d6c40b3d4b80adc2da0274d02bd1663235de072b53ba1b55a41ef151526b8a3",
+          "currentSha256": "6d6c40b3d4b80adc2da0274d02bd1663235de072b53ba1b55a41ef151526b8a3",
+          "byteIdentical": true
+        },
+        {
+          "file": "www/assets/icons/nexowatt-384.png",
+          "previousSha256": "6b4957e27f75a1d6c38905e52dad9d26f3b89fefd47cc7db4cd92417dbbf7c07",
+          "currentSha256": "6b4957e27f75a1d6c38905e52dad9d26f3b89fefd47cc7db4cd92417dbbf7c07",
+          "byteIdentical": true
+        },
+        {
+          "file": "www/assets/icons/nexowatt-48.png",
+          "previousSha256": "380633e15cb30af559d9dc8327e7f7a17a2bc46603d2d4a7a4b104b76c921ea3",
+          "currentSha256": "380633e15cb30af559d9dc8327e7f7a17a2bc46603d2d4a7a4b104b76c921ea3",
+          "byteIdentical": true
+        },
+        {
+          "file": "www/assets/icons/nexowatt-512-maskable.png",
+          "previousSha256": "4c66852e53790f04f8b06ae0ade57b78940a816461d4c127398706055efcb3a4",
+          "currentSha256": "4c66852e53790f04f8b06ae0ade57b78940a816461d4c127398706055efcb3a4",
+          "byteIdentical": true
+        },
+        {
+          "file": "www/assets/icons/nexowatt-512.png",
+          "previousSha256": "a7e6375e6f4e1f5e09f167af81eca69626e4baf4762a07e41b838bc4786f0519",
+          "currentSha256": "a7e6375e6f4e1f5e09f167af81eca69626e4baf4762a07e41b838bc4786f0519",
+          "byteIdentical": true
+        },
+        {
+          "file": "www/assets/icons/nexowatt-64.png",
+          "previousSha256": "af232cff4ca7a37b0c0564f4e8901d0631db6d00f07f5ac04d6a1d65aa25ab49",
+          "currentSha256": "af232cff4ca7a37b0c0564f4e8901d0631db6d00f07f5ac04d6a1d65aa25ab49",
+          "byteIdentical": true
+        }
+      ]
+    },
+    {
+      "scope": "www/icons",
+      "previousCount": 5,
+      "currentCount": 5,
+      "changedCount": 0,
+      "inventorySha256": "d03cb5ec96f42b1f65fa1af7f0d605ab4f748020c037374947d49f88ac7e4002",
+      "files": [
+        {
+          "file": "www/icons/battery.png",
+          "previousSha256": "77207f35dfa3e3add1ce8da5997e6012e93367999e3193a4994a17f182a4b764",
+          "currentSha256": "77207f35dfa3e3add1ce8da5997e6012e93367999e3193a4994a17f182a4b764",
+          "byteIdentical": true
+        },
+        {
+          "file": "www/icons/building.png",
+          "previousSha256": "89525c23891157598bdc8d46b92d118d86eb862d72d45183c51ed0ce1c5cb6f0",
+          "currentSha256": "89525c23891157598bdc8d46b92d118d86eb862d72d45183c51ed0ce1c5cb6f0",
+          "byteIdentical": true
+        },
+        {
+          "file": "www/icons/ev.png",
+          "previousSha256": "3b047094efa46c9f62dee43e2f3e381ec5a741f432e1f452cdba4a6d565fe8e9",
+          "currentSha256": "3b047094efa46c9f62dee43e2f3e381ec5a741f432e1f452cdba4a6d565fe8e9",
+          "byteIdentical": true
+        },
+        {
+          "file": "www/icons/grid.png",
+          "previousSha256": "e0a2d192d69121a1c44eeb33cb260cf5b3127d6a62345c4188cfa628dc5220bf",
+          "currentSha256": "e0a2d192d69121a1c44eeb33cb260cf5b3127d6a62345c4188cfa628dc5220bf",
+          "byteIdentical": true
+        },
+        {
+          "file": "www/icons/solar.png",
+          "previousSha256": "4e984c55c30c86f40f9b9a2ac93f1d12854feeeca61c28db9df92c5306ba8942",
+          "currentSha256": "4e984c55c30c86f40f9b9a2ac93f1d12854feeeca61c28db9df92c5306ba8942",
+          "byteIdentical": true
+        }
+      ]
+    }
+  ],
+  "native": {
+    "previousTopLevelKeys": 32,
+    "currentTopLevelKeys": 36,
+    "allExistingValuesDeepEqual": true,
+    "previousSerializedSha256": "63e68e8b5c52ef773b97d1c4e48118fbcd4fb0aab9c67d5552169e912140dda9",
+    "currentExistingProjectionSha256": "63e68e8b5c52ef773b97d1c4e48118fbcd4fb0aab9c67d5552169e912140dda9",
+    "additions": {
+      "secure": false,
+      "certPublic": "",
+      "certPrivate": "",
+      "certChained": ""
+    }
+  },
+  "manifest": {
+    "allExistingIdentityFieldsEqual": true,
+    "identity": {
+      "name": "NexoWatt EOS",
+      "short_name": "NexoWatt EOS",
+      "start_url": ".",
+      "scope": "./",
+      "display": "standalone",
+      "background_color": "#0c0f12",
+      "theme_color": "#0c0f12",
+      "icons": [
+        {
+          "src": "assets/icons/nexowatt-192.png",
+          "sizes": "192x192",
+          "type": "image/png",
+          "purpose": "any"
+        },
+        {
+          "src": "assets/icons/nexowatt-192-maskable.png",
+          "sizes": "192x192",
+          "type": "image/png",
+          "purpose": "maskable"
+        },
+        {
+          "src": "assets/icons/nexowatt-256.png",
+          "sizes": "256x256",
+          "type": "image/png",
+          "purpose": "any"
+        },
+        {
+          "src": "assets/icons/nexowatt-384.png",
+          "sizes": "384x384",
+          "type": "image/png",
+          "purpose": "any"
+        },
+        {
+          "src": "assets/icons/nexowatt-512.png",
+          "sizes": "512x512",
+          "type": "image/png",
+          "purpose": "any"
+        },
+        {
+          "src": "assets/icons/nexowatt-512-maskable.png",
+          "sizes": "512x512",
+          "type": "image/png",
+          "purpose": "maskable"
+        }
+      ]
+    },
+    "onlyChangedFields": [
+      "version",
+      "appVersion"
+    ],
+    "previousVersion": "1.0.37",
+    "currentVersion": "1.0.38"
+  },
+  "protectedFiles": [
+    {
+      "file": "src-ts/runtime-executables/lib/ui-access-policy.ts",
+      "previousSha256": "1411973bbdef3000e723fcee3ffbce899f4890f3f10ac78897cab0414200f32a",
+      "currentSha256": "1411973bbdef3000e723fcee3ffbce899f4890f3f10ac78897cab0414200f32a",
+      "byteIdentical": true
+    },
+    {
+      "file": "lib/ui-access-policy.js",
+      "previousSha256": "e843e73b32b8538e55a75c3a84f858d317a5d3977c186067c51109b887a1edb7",
+      "currentSha256": "e843e73b32b8538e55a75c3a84f858d317a5d3977c186067c51109b887a1edb7",
+      "byteIdentical": true
+    },
+    {
+      "file": "src-ts/runtime-executables/lib/iobroker-user-auth.ts",
+      "previousSha256": "5a71621dac47cffab6e1afa1db180c70bf729d289b83c22e358c36fd0b888b79",
+      "currentSha256": "5a71621dac47cffab6e1afa1db180c70bf729d289b83c22e358c36fd0b888b79",
+      "byteIdentical": true
+    },
+    {
+      "file": "lib/iobroker-user-auth.js",
+      "previousSha256": "960cdd3365e1affb1800a19957d20da4e70f3b31fa8b4a309b31d8e34a8ce5e5",
+      "currentSha256": "960cdd3365e1affb1800a19957d20da4e70f3b31fa8b4a309b31d8e34a8ce5e5",
+      "byteIdentical": true
+    },
+    {
+      "file": "src-ts/runtime-executables/lib/iobroker-user-roles.ts",
+      "previousSha256": "c835b25eff79526f750fafe864a36f8460173434117243c11bcb96294a906b81",
+      "currentSha256": "c835b25eff79526f750fafe864a36f8460173434117243c11bcb96294a906b81",
+      "byteIdentical": true
+    },
+    {
+      "file": "lib/iobroker-user-roles.js",
+      "previousSha256": "e8025bef0be913cf51628923d85f4fd11b868f845f3e74b2e782af803e689788",
+      "currentSha256": "e8025bef0be913cf51628923d85f4fd11b868f845f3e74b2e782af803e689788",
+      "byteIdentical": true
+    },
+    {
+      "file": "src-ts/runtime-executables/www/auth.ts",
+      "previousSha256": "24e1a926914aa75f6362429b2183972e7340c98d083854d301309169a827bfc5",
+      "currentSha256": "24e1a926914aa75f6362429b2183972e7340c98d083854d301309169a827bfc5",
+      "byteIdentical": true
+    },
+    {
+      "file": "www/auth.js",
+      "previousSha256": "0230fdc73be83a260209030ecc8f89771959ac2de4a87817e0c64ef1cd38d3e8",
+      "currentSha256": "0230fdc73be83a260209030ecc8f89771959ac2de4a87817e0c64ef1cd38d3e8",
+      "byteIdentical": true
+    },
+    {
+      "file": "src-ts/runtime-executables/lib/smarthome-contract.ts",
+      "previousSha256": "4431b17227ce4550291ae02489f1c4884e86e14ec3f1ca0cc82267f2eeb0a087",
+      "currentSha256": "4431b17227ce4550291ae02489f1c4884e86e14ec3f1ca0cc82267f2eeb0a087",
+      "byteIdentical": true
+    },
+    {
+      "file": "lib/smarthome-contract.js",
+      "previousSha256": "8a1a9b9e90cfeb3ed46e2d3b62ddc1e2577853c0f26ee8dced5f149e79c2c966",
+      "currentSha256": "8a1a9b9e90cfeb3ed46e2d3b62ddc1e2577853c0f26ee8dced5f149e79c2c966",
+      "byteIdentical": true
+    },
+    {
+      "file": "src-ts/runtime-executables/www/smarthome-config.ts",
+      "previousSha256": "03736603e65152cd007989c0a0bdcffb3d86e82490428f6fff08960914028a41",
+      "currentSha256": "03736603e65152cd007989c0a0bdcffb3d86e82490428f6fff08960914028a41",
+      "byteIdentical": true
+    },
+    {
+      "file": "www/smarthome-config.js",
+      "previousSha256": "605d7a9e034e3d986d6241c37f85b9f87d7aea1c423f2c8b7f8c690a91e7f17c",
+      "currentSha256": "605d7a9e034e3d986d6241c37f85b9f87d7aea1c423f2c8b7f8c690a91e7f17c",
+      "byteIdentical": true
+    },
+    {
+      "file": "src-ts/runtime-executables/www/smarthome.ts",
+      "previousSha256": "06c4e110a22de74c35538dae57dec6a70c6dcdf712c2c8d9b7e6b4b830e5e317",
+      "currentSha256": "06c4e110a22de74c35538dae57dec6a70c6dcdf712c2c8d9b7e6b4b830e5e317",
+      "byteIdentical": true
+    },
+    {
+      "file": "www/smarthome.js",
+      "previousSha256": "caa080b4df468c33f2f82ce53bb088c72cbb6c3d86f75f3b7c29f266936053a5",
+      "currentSha256": "caa080b4df468c33f2f82ce53bb088c72cbb6c3d86f75f3b7c29f266936053a5",
+      "byteIdentical": true
+    },
+    {
+      "file": "www/apple-touch-icon.png",
+      "previousSha256": "083e11ab28ec00b37d3d47776946c5fad4d79277fdc440cdbb20181a7f064f76",
+      "currentSha256": "083e11ab28ec00b37d3d47776946c5fad4d79277fdc440cdbb20181a7f064f76",
+      "byteIdentical": true
+    },
+    {
+      "file": "www/nexowatt-logo.png",
+      "previousSha256": "e1620f78bd502b3837db2b3e351d68ab88198f16e06052618d62d6e33d1ae402",
+      "currentSha256": "e1620f78bd502b3837db2b3e351d68ab88198f16e06052618d62d6e33d1ae402",
+      "byteIdentical": true
+    },
+    {
+      "file": "www/assets/nexowatt-eos-logo-wide.png",
+      "previousSha256": "d17c3519fa1555ecbe03b2dbbfda96ae3f1725a0f3a2917444a49f78daf47cd1",
+      "currentSha256": "d17c3519fa1555ecbe03b2dbbfda96ae3f1725a0f3a2917444a49f78daf47cd1",
+      "byteIdentical": true
+    },
+    {
+      "file": "admin/admin_logo_.ico",
+      "previousSha256": "595311ae09d73f39eb1d97373d88d5543f1b7021074ea968cc6f5f32f32acc52",
+      "currentSha256": "595311ae09d73f39eb1d97373d88d5543f1b7021074ea968cc6f5f32f32acc52",
+      "byteIdentical": true
+    }
+  ],
+  "identicalMainFunctions": [
+    {
+      "file": "src-ts/runtime-executables/main.ts",
+      "name": "migrateNativeConfig",
+      "byteIdenticalSourceSpan": true,
+      "sourceSpanSha256": "7710631136aa24d1d957fe3ccd091c06ecc965c1b951f0b98f1746d1fb215c0f"
+    },
+    {
+      "file": "src-ts/runtime-executables/main.ts",
+      "name": "parseCookies",
+      "byteIdenticalSourceSpan": true,
+      "sourceSpanSha256": "e1fd24fac99c0f34e37bafaf10b7d336cdb030beedb317057e4ea1f42c9bf78d"
+    },
+    {
+      "file": "src-ts/runtime-executables/main.ts",
+      "name": "getStoredSession",
+      "byteIdenticalSourceSpan": true,
+      "sourceSpanSha256": "be113c623cd837bd55536073f0a984f175c4f393e16542ce498d52e244f61c0c"
+    },
+    {
+      "file": "src-ts/runtime-executables/main.ts",
+      "name": "doAuthLogin",
+      "byteIdenticalSourceSpan": true,
+      "sourceSpanSha256": "d7ed9abc0646e70a7aa32139003c0e8ded11e1c1888ec91fc39730ea7adfeefb"
+    },
+    {
+      "file": "src-ts/runtime-executables/main.ts",
+      "name": "doAuthLogout",
+      "byteIdenticalSourceSpan": true,
+      "sourceSpanSha256": "fe552f1be68e30f597300d4b40f8e74eb32ab5772f7c41ca0e66893d2f4dbfb1"
+    },
+    {
+      "file": "src-ts/runtime-executables/main.ts",
+      "name": "resolveStrictAccess",
+      "byteIdenticalSourceSpan": true,
+      "sourceSpanSha256": "edb29360118886d9ff44f5e3f9061b0749bf04e158a7ba93ca5887b20b10d244"
+    },
+    {
+      "file": "src-ts/runtime-executables/main.ts",
+      "name": "loginTransportAllowed",
+      "byteIdenticalSourceSpan": true,
+      "sourceSpanSha256": "376f2a1fd09ed87de0dcf2159fc7e94a74051e86ae2a39a48955e642b3ac830a"
+    }
+  ],
+  "reviewedNonIdenticalFiles": [
+    {
+      "file": "src-ts/runtime-executables/www/login.ts",
+      "previousSha256": "afa26a7a4a540387945d6b7f62a4b97f78f2e1c31e71238c557c59bc247c7a76",
+      "currentSha256": "015765e509623bbdbb7a26c2b2fdaac809cbd94ee1dffbf51c3f233c55ded6fb",
+      "byteIdentical": false
+    },
+    {
+      "file": "www/login.js",
+      "previousSha256": "dfe86ec54db5c8cd3d86a008b0f0764a2f4700bcbc6a8ac7180b074edb0a0b89",
+      "currentSha256": "e26b8318466350ba04eb35183b7be85d2040bfdcf3dda6dc9aa1d66e3d3ea710",
+      "byteIdentical": false
+    },
+    {
+      "file": "src-ts/runtime-executables/www/sw.ts",
+      "previousSha256": "1b31a0b4669d4fd6c7c1b8567ea3d7e4124f86e47942ae422094c8f93487a747",
+      "currentSha256": "50ba9fef41b8e1b7f564ef1355aaefd578cb7eaccfd288be12a4ff4b02d7a15c",
+      "byteIdentical": false
+    },
+    {
+      "file": "www/sw.js",
+      "previousSha256": "4ecc18602dea28b01ccf2c15af72b8ba2fafef5db45462d84d60cc4d7c6f1b7d",
+      "currentSha256": "8995c689944b13867b9b0e3619235547a382d582ca0cbc0d725a4c8db3377cd2",
+      "byteIdentical": false
+    },
+    {
+      "file": "src-ts/runtime-executables/lib/smarthome-import.ts",
+      "previousSha256": "1dbe186e2200546bf3012ac5d9407dbf9742d73c4aaa6dafcba546ebdaeea595",
+      "currentSha256": "9dcb7e2a63b2a3ef52c9bba9b00a0766d823338b7cdb422973e86804e80e0be5",
+      "byteIdentical": false
+    },
+    {
+      "file": "lib/smarthome-import.js",
+      "previousSha256": "5d50ed34597d5e6897b9b74d83b71e750acfc1d49a72622c7a11b7a94b2aa902",
+      "currentSha256": "175277746c0c82b375031b2635982448d7401c2d53f180de9a3c0d56c08f3686",
+      "byteIdentical": false
+    },
+    {
+      "file": "src-ts/runtime-executables/main.ts",
+      "previousSha256": "307375285bd08b407545132598deda624506c0c1dab35bb5331e2409859658f7",
+      "currentSha256": "3fc8371335619306eba22118ae3a75fe4a26e4edd8a1edf0232b007ebee3893e",
+      "byteIdentical": false
+    },
+    {
+      "file": "main.js",
+      "previousSha256": "3cd0cd735185af9260a7e59a7ca71c97ab5ea3f61c62ec2a7a80c3d9ce571801",
+      "currentSha256": "806d7ebb463de3f072f040e00d94089f01a2885da75b45a3793d03fdf4a61a89",
+      "byteIdentical": false
+    }
+  ],
+  "additiveLogo": {
+    "file": "www/nexowatt-eos-logo.png",
+    "previousSha256": null,
+    "currentSha256": "1ccf55be6d457b4e1891dd7f37adff64a386ed8c633e522e86b9adce055f1d95",
+    "byteIdentical": false
+  },
+  "limitations": [
+    "No reading or modification of an installed customer instance.",
+    "No hardware or field commissioning; no guarantee for every external device.",
+    "Activating HTTPS or changing host/port changes the browser origin; existing HTTP shortcuts are not automatically migrated."
+  ]
+}

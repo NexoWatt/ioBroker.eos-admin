@@ -1,0 +1,17 @@
+{
+  "version": "1.0.22",
+  "files": [
+    {
+      "path": "src-ts/runtime-executables/ems/services/tariff-provider-registry.ts",
+      "sha256": "52b25d1e9aa8a3b4e0b61092e548fc8bf66d9a1b82c617656e8028824897b916"
+    },
+    {
+      "path": "src-ts/runtime-executables/ems/modules/tariff-provider.ts",
+      "sha256": "b087bcd01fbec683def48ac458fc8c0b55b5b991f35abc612419ddc18de249ba"
+    },
+    {
+      "path": "scripts/verify-cra-tariff.cjs",
+      "sha256": "33e02d1e7d5190e0afb35469ef9ea197b4ffbe1ce34b86d1885bc1e6932fe728"
+    }
+  ]
+}

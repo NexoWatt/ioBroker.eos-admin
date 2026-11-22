@@ -1,0 +1,19 @@
+{
+  "status": {
+    "state": "ready",
+    "error": ""
+  },
+  "emsReady": true,
+  "warnings": [
+    "[Stufe A] ERROR · NVP stale/missing · 0 Aktorkonflikt(e) · Speicher automatic/fallback"
+  ],
+  "states": 837,
+  "objects": 2244,
+  "timers": 11,
+  "foreignStates": [
+    "0_userdata.0.nexowattVis.backupJson",
+    "0_userdata.0.nexowattVis.backupTs",
+    "0_userdata.0.nexowattVis.backupJsonPrev",
+    "0_userdata.0.nexowattVis.backupTsPrev"
+  ]
+}

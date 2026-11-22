@@ -1,0 +1,14 @@
+{
+  "command": [
+    "node",
+    "scripts/verify-cra-sbom-regressions.cjs"
+  ],
+  "startedAt": "2026-09-29T20:56:34.754218+00:00",
+  "finishedAt": "2026-09-29T20:56:39.866812+00:00",
+  "exitCode": 0,
+  "environment": {
+    "platform": "linux",
+    "node": "v24.19.0"
+  },
+  "scope": "Synthetic offline fixture repositories; no package publication or production system access"
+}

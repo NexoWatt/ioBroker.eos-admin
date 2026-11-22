@@ -1,0 +1,5 @@
+
+> nexowatt-ui-admin-tab@0.8.8 typecheck
+> tsc -p tsconfig.json && tsc -p tsconfig.build-tools.json
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.

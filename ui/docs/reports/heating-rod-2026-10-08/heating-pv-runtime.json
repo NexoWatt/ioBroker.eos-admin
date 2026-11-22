@@ -1,0 +1,12 @@
+{
+  "command": [
+    "npm",
+    "run",
+    "test:heating-rod-pv-freshness"
+  ],
+  "startedAt": "2026-10-08T19:43:39.386550+00:00",
+  "durationSeconds": 0.316,
+  "exitCode": 0,
+  "log": "heating-pv-runtime.log",
+  "hardware": false
+}

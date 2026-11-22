@@ -1,0 +1,37 @@
+[
+  {
+    "command": [
+      "node",
+      "scripts/verify-protected-runtime-route.cjs"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 0.41,
+    "log": "loginform.log",
+    "sha256": "13f8ad620f76ceb3e232ca1da77eab4db6710ced961504e973542b41699ba50b"
+  },
+  {
+    "command": [
+      "node",
+      "scripts/verify-cra-admin-router.cjs"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 1.62,
+    "log": "loginform-router.log",
+    "sha256": "1eb01330ea9ee871f4aa37ea26538e9602af4bf1b5cda2d008a9fe8faf1ebebc"
+  },
+  {
+    "command": [
+      "./node_modules/.bin/tsc",
+      "-p",
+      "src-admin-tab/tsconfig.json"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 3.82,
+    "log": "loginform-types.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "src-admin-tab/src/pages/ProtectedRuntimeRoute.tsx",
+    "sourceSha256": "84cef36d91c103a590ce171e3a5f1d9d938a0c1b59af4b1bdc32e70bbd2407dd"
+  }
+]

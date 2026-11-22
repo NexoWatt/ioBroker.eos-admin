@@ -1,0 +1,48 @@
+<!--
+  Fester Einstieg zur geschützten Installer-Navigation.
+  Diese Admin-Datei enthält und lädt selbst keinerlei Lizenzdaten.
+-->
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NexoWatt EOS – Lizenz</title>
+  <style>
+    html,body{height:100%;margin:0;background:#020814;color:#edf6ff;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+    body{display:grid;place-items:center}.box{width:min(620px,calc(100% - 32px));padding:24px;border:1px solid rgba(95,144,190,.28);border-radius:18px;background:rgba(5,20,36,.88);box-shadow:0 22px 70px rgba(0,0,0,.4)}
+    .muted{color:#9fb1c4;line-height:1.55}.status{margin-top:14px;padding:12px 14px;border:1px solid rgba(0,230,118,.28);border-radius:12px;background:rgba(0,230,118,.08)}
+    [hidden]{display:none!important}.entry{display:inline-flex;align-items:center;min-height:44px;margin-top:18px;padding:10px 16px;border-radius:9px;background:#00e676;color:#03130e;font-weight:600;text-decoration:none}.entry:focus-visible{outline:3px solid #22b8ff;outline-offset:4px}
+  </style>
+</head>
+<body>
+  <main class="box">
+    <h1>Geschützter Zugang zur Lizenzverwaltung</h1>
+    <p class="muted">Öffne den Installer und wähle dort „Lizenz“. Lizenzdaten werden erst nach bestätigter Anmeldung als Administrator geladen.</p>
+    <div id="status" class="status" role="status">Der Einstieg wird vorbereitet …</div>
+    <a class="entry" id="installerLink" hidden>Geschützten Installer öffnen</a>
+    <noscript><p class="muted">Für diesen Einstieg ist JavaScript erforderlich.</p></noscript>
+  </main>
+  <script>
+    (function () {
+      'use strict';
+      var qs = new URLSearchParams(window.location.search || '');
+      var instance = qs.get('instance');
+      if (instance === null) instance = '0';
+      var status = document.getElementById('status');
+      var link = document.getElementById('installerLink');
+      if (!/^(?:0|[1-9][0-9]{0,5})$/.test(instance)) {
+        if (status) status.textContent = 'Die Adapterinstanz ist ungültig. Bitte den vorgesehenen Admin-Einstieg öffnen.';
+        return;
+      }
+      // Derselbe Ursprung und Admin-Prefix; keine Portannahme oder übernommene
+      // Ziel-URL. #/license würde vom frühen Admin-Deep-Link zurückgeführt.
+      if (link) {
+        link.href = 'react/index.html?instance=' + encodeURIComponent(instance) + '#/installer';
+        link.hidden = false;
+      }
+      if (status) status.textContent = 'Im Installer anschließend „Lizenz“ wählen.';
+    })();
+  </script>
+</body>
+</html>

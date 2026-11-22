@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-24T06:11:14.446024+00:00",
+  "node": "v24.19.0",
+  "sourceSha256": "6f7d387e01d9d5b640cc16d2adbc0ce63adda15c4198f57189062df08909d28e",
+  "results": [
+    {
+      "name": "admin-response-limits",
+      "command": [
+        "node",
+        "scripts/verify-admin-response-limits.cjs"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "admin-connection-regression",
+      "command": [
+        "node",
+        "scripts/verify-admin-connection-boundaries.cjs"
+      ],
+      "exitCode": 0
+    },
+    {
+      "name": "admin-strict-typecheck",
+      "command": [
+        "npm",
+        "--prefix",
+        "src-admin-tab",
+        "run",
+        "typecheck"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "scope": "native Streams/VM/Loopback HTTP and strict compilation, no customer hardware"
+}

@@ -1,0 +1,10 @@
+PASS ServConn erhält beide Callbackformen, native/common und Schreibfehler
+PASS Socket und callable socket.io factory behalten den ioBroker-Vertrag
+PASS UUID-Fallback und gültige alte Textports bleiben erhalten, ungültige Ports nicht
+PASS Authvalidierung behält Erweiterungen und verweigert falsche Datentypen
+PASS Poison Keys, Zyklen und unbeschränkte Verschachtelung scheitern vollständig
+PASS Status/Login verwenden die validierten Authfelder und bewahren Credentials-Option
+PASS Auch defekte HTTP403-Antworten behalten Status und unterbinden Port-Fallbacks
+PASS Vollständige JSON-Erweiterungen bleiben erhalten; falsches Top-Level wird verworfen
+PASS Timeout bricht auch das Lesen des Antwortkörpers tatsächlich ab
+{"result":"PASS","checks":9,"node":"v24.19.0","sourceSha256":"110b3adae69f929023d05758490156679048df6866e61da805c0fced1ed6b751","limitation":"Originaler TypeScript-Verbindungscode mit VM/Transport-Fixtures; installierte ioBroker-Instanz und Browser separat prüfen."}

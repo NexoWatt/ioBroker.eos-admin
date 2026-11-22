@@ -1,0 +1,13 @@
+{
+  "command": [
+    "npm",
+    "run",
+    "release:approval"
+  ],
+  "cwd": "repository root",
+  "startedAt": "2026-09-29T20:51:54.430921+00:00",
+  "finishedAt": "2026-09-29T20:51:54.678362+00:00",
+  "durationSeconds": 0.247,
+  "exitCode": 1,
+  "capturedBytes": 300
+}

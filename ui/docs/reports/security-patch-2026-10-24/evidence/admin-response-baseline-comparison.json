@@ -1,0 +1,25 @@
+{
+  "test": "Oversized JSON before parsing, actual Admin API path",
+  "date": "2026-10-24T06:09:36.059Z",
+  "node": "v24.19.0",
+  "scope": "Synthetic native Response, no external communication or live installation",
+  "results": [
+    {
+      "version": "1.0.30",
+      "sourceSha256": "768772fefb843d5f96ecd7cfb51b3bab094b123ec6da32178489556bfc2fc696",
+      "responseBytes": 16777237,
+      "aborted": false,
+      "accepted": true,
+      "dataLength": 16777216
+    },
+    {
+      "version": "1.0.31",
+      "sourceSha256": "6f7d387e01d9d5b640cc16d2adbc0ce63adda15c4198f57189062df08909d28e",
+      "responseBytes": 16777237,
+      "aborted": true,
+      "accepted": false,
+      "message": "API-Antwort ist zu groß (maximal 16 MiB).",
+      "status": 200
+    }
+  ]
+}

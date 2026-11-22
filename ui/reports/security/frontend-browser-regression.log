@@ -1,0 +1,2 @@
+[verify-cra-frontend] Chromium: reale HTML-Sinks ohne eingeschleuste Elemente/Handler bestanden.
+[verify-cra-frontend] PASS 42 Regressionen (Originalfunktionen; DOM-/Fetch-/Cache-Doubles).

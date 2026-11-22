@@ -1,0 +1,70 @@
+TAP version 13
+# Subtest: die drei Konfigurationsquellen erlauben weder explizite unsichere Typen noch abgeschaltete Prüfungen
+ok 1 - die drei Konfigurationsquellen erlauben weder explizite unsichere Typen noch abgeschaltete Prüfungen
+  ---
+  duration_ms: 30.783629
+  type: 'test'
+  ...
+# Subtest: fehlerhafte Validatorausgaben werden vor einer fachlichen Weiterverwendung abgewiesen
+ok 2 - fehlerhafte Validatorausgaben werden vor einer fachlichen Weiterverwendung abgewiesen
+  ---
+  duration_ms: 0.834466
+  type: 'test'
+  ...
+# Subtest: verschachtelte Konfigurationsverträge dürfen keine ungeprüften Messobjekte enthalten
+ok 3 - verschachtelte Konfigurationsverträge dürfen keine ungeprüften Messobjekte enthalten
+  ---
+  duration_ms: 0.459902
+  type: 'test'
+  ...
+# Subtest: falsche ioBroker-Objektformen liefern feste Auflösungsfehler
+ok 4 - falsche ioBroker-Objektformen liefern feste Auflösungsfehler
+  ---
+  duration_ms: 0.826444
+  type: 'test'
+  ...
+# Subtest: gültige getrennte Aliasrichtungen bleiben unverändert nutzbar
+ok 5 - gültige getrennte Aliasrichtungen bleiben unverändert nutzbar
+  ---
+  duration_ms: 0.78436
+  type: 'test'
+  ...
+# Subtest: ungültige Bestandszeilen verschieben keine Speicher- oder PV-Kennungen
+ok 6 - ungültige Bestandszeilen verschieben keine Speicher- oder PV-Kennungen
+  ---
+  duration_ms: 0.382205
+  type: 'test'
+  ...
+# Subtest: Dictionary-Fallbacks besitzen keinen Prototyp und fremde Schlüssel verschmutzen keine globalen Objekte
+ok 7 - Dictionary-Fallbacks besitzen keinen Prototyp und fremde Schlüssel verschmutzen keine globalen Objekte
+  ---
+  duration_ms: 0.156145
+  type: 'test'
+  ...
+# Subtest: alte und fehlerhafte Entwürfe bleiben sichtbar und lesendes CAS verändert die gespeicherten Daten nicht
+ok 8 - alte und fehlerhafte Entwürfe bleiben sichtbar und lesendes CAS verändert die gespeicherten Daten nicht
+  ---
+  duration_ms: 0.261093
+  type: 'test'
+  ...
+# Subtest: fremde Speicherfehler bleiben sanitisiert und geben die Speichersperre wieder frei
+ok 9 - fremde Speicherfehler bleiben sanitisiert und geben die Speichersperre wieder frei
+  ---
+  duration_ms: 4.769438
+  type: 'test'
+  ...
+# Subtest: ein defekter interner Patch-Merge darf keinen neuen Konfigurationsvertrag erzeugen
+ok 10 - ein defekter interner Patch-Merge darf keinen neuen Konfigurationsvertrag erzeugen
+  ---
+  duration_ms: 0.492691
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 499.711523

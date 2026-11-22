@@ -1,0 +1,38 @@
+PASS Rejected Auto (HTTP 401) retains confirmed PV
+PASS Rejected Auto (HTTP 403) retains confirmed PV
+PASS Rejected Auto (HTTP 500) retains confirmed PV
+PASS Rejected Auto (JSON ok=false) retains confirmed PV
+PASS Rejected Auto (invalid JSON) retains confirmed PV
+PASS Rejected Auto (network error) retains confirmed PV
+PASS Confirmed auto follows API/state
+PASS Confirmed boost follows API/state
+PASS Confirmed minpv follows API/state
+PASS Confirmed pv follows API/state
+PASS Pending request does not display requested Auto; duplicate click is serialized
+PASS Boost cancellation still requests Auto
+PASS Legacy min+pv button alias still writes minpv
+PASS Different charge points are independent
+PASS Older readback cannot overwrite newer authoritative SSE mode
+PASS Failed request may already be applied; readback is authoritative
+PASS Full snapshot removes missing non-mode keys while retaining a newer included mode
+PASS Full snapshot does not resurrect a missing mode for a removed charge point
+PASS Missing or failed state readback keeps last confirmed mode with warning
+PASS Timeout aborts pending request and allows subsequent retry
+PASS Disabled and invalid controls do not write
+PASS Rejected Auto source (HTTP 401) retains confirmed Standard
+PASS Rejected Auto source (HTTP 403) retains confirmed Standard
+PASS Rejected Auto source (HTTP 500) retains confirmed Standard
+PASS Rejected Auto source (JSON ok=false) retains confirmed Standard
+PASS Rejected Auto source (invalid JSON) retains confirmed Standard
+PASS Rejected Auto source (network error) retains confirmed Standard
+PASS Confirmed Auto source standard follows API/state
+PASS Confirmed Auto source strategy follows API/state
+PASS Mode and Auto source serialize per charge point in both directions
+PASS Auto source writes on different charge points remain independent
+PASS Older source readback and full snapshots cannot overwrite newer SSE source
+PASS Lost Auto source write response can be confirmed by readback
+PASS Invalid or failed Auto source readback retains confirmed value with warning
+PASS Auto source timeout aborts and permits retry
+PASS Disabled or invalid Auto source controls do not write
+PASS Full snapshots and SSE maps treat prototype keys as data
+{"source":"www/evcs.js","node":"v24.22.3","passed":37,"failed":0}

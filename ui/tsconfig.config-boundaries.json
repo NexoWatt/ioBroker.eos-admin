@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "noCheck": false,
+    "moduleDetection": "force",
+    "noImplicitAny": true,
+    "useUnknownInCatchVariables": true,
+    "moduleResolution": "nodenext",
+    "module": "NodeNext"
+  },
+  "include": [
+    "src-ts/runtime-executables/lib/config-boundary-contracts.ts",
+    "src-ts/runtime-executables/lib/http-error-boundary.ts",
+    "src-ts/runtime-executables/lib/nvp-config-api.ts",
+    "src-ts/runtime-executables/lib/dynamic-grid-config-api.ts"
+  ]
+}

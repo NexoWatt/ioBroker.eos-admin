@@ -1,0 +1,22 @@
+Security hardening 1.0.29 — static exports and proprietary header support
+
+Changed sources (under security-hardening/NexoWatt_UI_1.0.29):
+1. src-ts/runtime-executables/ems/charging-budget-helpers.ts
+2. src-ts/runtime-executables/ems/evcs-control-mapping.ts
+   Both replace the constant-string eval('module') with direct module.exports; same API and business logic. Proprietary NexoWatt header added. This removes unnecessary string evaluation; previous fixed expression is not by itself a demonstrated attacker-controlled RCE.
+3. scripts/build-ts-runtime-executables.js
+   Exact own proprietary header may precede the runtime-transpile marker. The header is preserved at the beginning of generated output (after shebang if any). Existing @ts-nocheck stripping remains effective after that header. Markers in strings or arbitrary comments never opt into transpilation. Existing unlicensed outputs retain their previous generation behavior.
+4. scripts/verify-static-ems-exports.cjs
+   Native Node-only regression. New child process disables string-code generation via --disallow-code-generation-from-strings. Checks exact export names, representative AC limits/control mapping, source without eval calls, and (default after build) emitted files. --source-only runs before output sync.
+5. scripts/verify-runtime-license-header.cjs
+   Native test harness invokes real generator in temporary fixture repository using the pre-existing TypeScript build compiler. Tests leading marker, exact license+marker, removal of temporary nocheck, false markers, repeat/hash check.
+
+Performed: 4 static source tests PASS; 5 generator fixture tests PASS; node node_modules/typescript/bin/tsc -p tsconfig.json --noEmit PASS. Existing behavioral scripts executed with only these two unchanged JavaScript-compatible TS sources substituted through require cache into original imports; see logs/static-export-tests. Actual generated runtime/mirrors intentionally not synchronized by this agent; root owns final sync and artifact validation.
+
+Recommended gate for NEW modules: parse AST with already installed TypeScript build compiler, count SyntaxKind.AnyKeyword, reject effective @ts-nocheck/checkJsDirective.enabled=false, effective noCheck=true and strict!=true, limit scope to explicit newly secured modules. Do not confuse this scoped gate with eliminating the known legacy 654 any nodes / 581 nocheck files. An external runtime dependency is not needed. Keep AST checks as build tooling and protect gate scope from silently dropping new secured modules.
+
+
+Follow-up: old partial-AST fixture — 1.0.29 full-suite correction
+Changed ONLY scripts/verify-stable-1.0.8-storage-licenses.cjs: imported the actual safeConfigurationFailure from ../lib/http-error-boundary and supplied it to the vm context that executes actual installer save/backup import handler bodies. Added proprietary header. No assertion, expected license cap or capability policy was changed.
+AST scan of main.ts associates new helpers only with startServer and nwSimEnable/nwSimDisable. Other method-extraction fixtures do not extract these affected bodies; license fixture extracts their relevant POST handler slices and was the only missing import. The credential-state fixture extracts persistInstallerConfigToState, which does not reference createPublicHttpError; no redundant import/edit was introduced there.
+Executed checks after fixture correction: node scripts/verify-stable-1.0.8-storage-licenses.cjs PASS (Home 2 / Pro 10, API save/import, signed/split, pool/groups, stale status, downgrade, no license, migration); node scripts/verify-cra-credential-state.cjs PASS 8 checks (actual generated main.js with simulated ioBroker state/object I/O).

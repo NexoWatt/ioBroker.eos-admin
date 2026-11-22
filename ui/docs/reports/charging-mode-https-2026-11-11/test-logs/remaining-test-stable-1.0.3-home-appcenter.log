@@ -1,0 +1,15 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:stable-1.0.3-home-appcenter
+> node scripts/verify-stable-1.0.3-home-appcenter-access.cjs
+
+/usr/bin/chromium: 9: [: 5225709568: unexpected operator
+[1099:1099:1111/065336.980048:FATAL:chrome/browser/process_singleton_posix.cc:297] Check failed: . socket() failed: Operation not permitted (1)
+[1111/065336.980340:ERROR:third_party/crashpad/crashpad/util/linux/scoped_ptrace_attach.cc:27] ptrace: Operation not permitted (1)
+[1117:1117:0100/000000.019275:ERROR:content/zygote/zygote_linux.cc:662] write: Broken pipe (32)
+[1119:1119:0100/000000.026278:ERROR:content/zygote/zygote_linux.cc:662] write: Broken pipe (32)
+
+Error: Timeout bei DevToolsActivePort: false
+    at waitFor (/workspace/scratch/7dbfb2c0423e/source-review/NexoWatt_UI_1.0.35/scripts/verify-stable-1.0.3-home-appcenter-access.cjs:49:9)
+    at async runBrowserRegression (/workspace/scratch/7dbfb2c0423e/source-review/NexoWatt_UI_1.0.35/scripts/verify-stable-1.0.3-home-appcenter-access.cjs:285:5)
+    at async /workspace/scratch/7dbfb2c0423e/source-review/NexoWatt_UI_1.0.35/scripts/verify-stable-1.0.3-home-appcenter-access.cjs:389:3

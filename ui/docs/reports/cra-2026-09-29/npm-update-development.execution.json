@@ -1,0 +1,19 @@
+{
+  "command": [
+    "npm",
+    "update",
+    "axios",
+    "brace-expansion",
+    "form-data",
+    "js-yaml",
+    "protobufjs",
+    "deepl-node",
+    "@iobroker/testing",
+    "--ignore-scripts",
+    "--no-audit"
+  ],
+  "startedAt": "2026-09-29T20:04:59.829002+00:00",
+  "finishedAt": "2026-09-29T20:05:20.384040+00:00",
+  "exitCode": 0,
+  "log": "npm-update-development.log"
+}

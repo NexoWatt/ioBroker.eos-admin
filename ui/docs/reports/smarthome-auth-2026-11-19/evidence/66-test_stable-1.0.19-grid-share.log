@@ -1,0 +1,7 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:stable-1.0.19-grid-share
+> node scripts/verify-stable-1.0.19-grid-share.cjs
+
+[1.0.19] OK: Netzanteil+PV, 120 Mehr-LP-Fälle, Istreservierung, Phasen und Zielplanung
+[1.0.19] OK: reale Writer Auto/Boost/PV-Verlust, 1p/3p und unveränderte Bestandsanlage

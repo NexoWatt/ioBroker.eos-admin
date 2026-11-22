@@ -1,0 +1,488 @@
+{
+  "schema": "nexowatt.lockfile-change-evidence.v1",
+  "baselineArchiveSha256": "90db619ecd754cab335dae92fdc123a48f62ceffb505a2a2b832e119d885eefe",
+  "baselineLockfileSha256": "871ebe85b0e2f0b220be65b06de039500e2bf44ddcea41f9df377afdb86b5e01",
+  "currentLockfileSha256": "383db7de2fe2ba1c45e57cdb46ac08f80a5e9b965f0a940098050d28b93e7e08",
+  "changes": [
+    {
+      "path": "",
+      "before": "1.0.21",
+      "after": "1.0.22",
+      "development": false
+    },
+    {
+      "path": "node_modules/@alcalzone/esbuild-register",
+      "before": "2.5.1-1",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/@alcalzone/esbuild-register/node_modules/esbuild",
+      "before": "0.11.23",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/@iobroker/testing",
+      "before": "5.2.2",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/@protobufjs/inquire",
+      "before": "1.1.2",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/@sinonjs/commons",
+      "before": "3.0.1",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/@sinonjs/commons/node_modules/type-detect",
+      "before": "4.0.8",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/@sinonjs/fake-timers",
+      "before": "15.4.0",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/@sinonjs/samsam",
+      "before": "10.0.2",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/@types/chai",
+      "before": "4.3.20",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/@types/chai-as-promised",
+      "before": "7.1.8",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/@types/mocha",
+      "before": "10.0.10",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/@types/sinon",
+      "before": "17.0.4",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/@types/sinon-chai",
+      "before": "3.2.12",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/@types/sinonjs__fake-timers",
+      "before": "15.0.1",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/adm-zip",
+      "before": "0.5.17",
+      "after": "0.6.1",
+      "development": true
+    },
+    {
+      "path": "node_modules/alcalzone-shared",
+      "before": "5.0.0",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/argparse",
+      "before": "2.0.1",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/assertion-error",
+      "before": "1.1.0",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/axios",
+      "before": "1.17.0",
+      "after": "1.20.0",
+      "development": true
+    },
+    {
+      "path": "node_modules/body-parser",
+      "before": "1.20.5",
+      "after": "1.20.8",
+      "development": false
+    },
+    {
+      "path": "node_modules/brace-expansion",
+      "before": "2.1.1",
+      "after": "2.1.7",
+      "development": true
+    },
+    {
+      "path": "node_modules/browser-stdout",
+      "before": "1.3.1",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/camelcase",
+      "before": "6.3.0",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/chai",
+      "before": "4.5.0",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/chai-as-promised",
+      "before": "7.1.2",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/chalk",
+      "before": "4.1.2",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/chalk/node_modules/supports-color",
+      "before": "7.2.0",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/check-error",
+      "before": "1.0.3",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/chokidar",
+      "before": "4.0.3",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/decamelize",
+      "before": "4.0.0",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/deep-eql",
+      "before": "4.1.4",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/deepl-node",
+      "before": "1.27.0",
+      "after": "1.28.0",
+      "development": true
+    },
+    {
+      "path": "node_modules/deepl-node/node_modules/form-data",
+      "before": "3.0.4",
+      "after": "3.0.5",
+      "development": true
+    },
+    {
+      "path": "node_modules/diff",
+      "before": "7.0.0",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/escape-string-regexp",
+      "before": "4.0.0",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/express",
+      "before": "4.22.2",
+      "after": "4.22.3",
+      "development": false
+    },
+    {
+      "path": "node_modules/find-up",
+      "before": "5.0.0",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/flat",
+      "before": "5.0.2",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/form-data",
+      "before": "4.0.5",
+      "after": "4.0.6",
+      "development": true
+    },
+    {
+      "path": "node_modules/fs-extra",
+      "before": "11.3.5",
+      "after": "11.4.1",
+      "development": true
+    },
+    {
+      "path": "node_modules/get-func-name",
+      "before": "2.0.2",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/has-flag",
+      "before": "4.0.0",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/he",
+      "before": "1.2.0",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/is-path-inside",
+      "before": "3.0.3",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/is-plain-obj",
+      "before": "2.1.0",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/is-unicode-supported",
+      "before": "0.1.0",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/js-yaml",
+      "before": "4.2.0",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/json5",
+      "before": "2.2.3",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/jsonc-parser",
+      "before": "3.3.1",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/locate-path",
+      "before": "6.0.0",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/log-symbols",
+      "before": "4.1.0",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/loupe",
+      "before": "2.3.7",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/mocha",
+      "before": "11.7.6",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/mocha/node_modules/ansi-regex",
+      "before": "5.0.1",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/mocha/node_modules/cliui",
+      "before": "8.0.1",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/mocha/node_modules/emoji-regex",
+      "before": "8.0.0",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/mocha/node_modules/string-width",
+      "before": "4.2.3",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/mocha/node_modules/strip-ansi",
+      "before": "6.0.1",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/mocha/node_modules/wrap-ansi",
+      "before": "7.0.0",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/mocha/node_modules/yargs",
+      "before": "17.7.2",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/p-limit",
+      "before": "3.1.0",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/p-locate",
+      "before": "5.0.0",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/path-exists",
+      "before": "4.0.0",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/pathval",
+      "before": "1.1.1",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/picocolors",
+      "before": "1.1.1",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/protobufjs",
+      "before": "7.6.3",
+      "after": "7.6.6",
+      "development": true
+    },
+    {
+      "path": "node_modules/qs",
+      "before": "6.15.2",
+      "after": "6.16.0",
+      "development": false
+    },
+    {
+      "path": "node_modules/randombytes",
+      "before": "2.1.0",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/readdirp",
+      "before": "4.1.2",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/serialize-javascript",
+      "before": "6.0.2",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/sinon",
+      "before": "21.1.2",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/sinon-chai",
+      "before": "3.7.0",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/sinon/node_modules/diff",
+      "before": "8.0.4",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/strip-json-comments",
+      "before": "3.1.1",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/supports-color",
+      "before": "8.1.1",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/type-detect",
+      "before": "4.1.0",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/workerpool",
+      "before": "9.3.4",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/yargs-unparser",
+      "before": "2.0.0",
+      "after": null,
+      "development": true
+    },
+    {
+      "path": "node_modules/yocto-queue",
+      "before": "0.1.0",
+      "after": null,
+      "development": true
+    }
+  ]
+}

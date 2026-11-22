@@ -1,0 +1,88 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.22 test:rc72-weather-pv-forecast-auto
+> node scripts/verify-rc72-weather-pv-forecast-auto.cjs
+
+[rc72-weather-pv-forecast-auto] OK: Einstellungen, Open-Meteo, AppCenter-Fallback, Multi-LP-Planer und Browseranzeige geprüft.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.22 test:rc74-pv-forecast-customer-ui
+> node scripts/verify-rc74-pv-forecast-customer-ui.cjs
+
+[rc74-pv-forecast-customer-ui] OK: Scriptpfad, PV-Flächentabelle, Richtungswahl, Standortauflösung, Open-Meteo-Werte und Statusdiagnose geprüft.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.22 test:rc75-pv-forecast-admin-location
+> node scripts/verify-rc75-pv-forecast-admin-location.cjs
+
+[rc75-pv-forecast-admin-location] OK: EOS-Admin-Standort, direkte GTI-Abfragen, sichtbare PV-Flächentabelle, Prognosewerte und zentrale EMS-Verknüpfung geprüft.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.22 test:rc76-pv-forecast-runtime-hardening
+> node scripts/verify-rc76-pv-forecast-runtime-hardening.cjs
+
+[rc76-pv-forecast-runtime-hardening] OK: GTI-Fallbackkette, Nachtprognose, Standortname, Fehlerdiagnose und überlappungsfreie PV-Flächenansicht geprüft.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.22 test:rc77-pv-forecast-state-cache-bridge
+> node scripts/verify-rc77-pv-forecast-state-cache-bridge.cjs
+
+[rc77-pv-forecast-state-cache-bridge] OK: Provider-/EMS-Statecache, dynamische Subscription, Fehlerdiagnose, Restart-Fallback, Ablaufgrenzen, Kompatibilitätswerte und Browser-Cache geprüft.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.22 test:cra-weather
+> node scripts/verify-cra-weather.cjs
+
+{
+  "suite": "UI-CRA-NET-05",
+  "source": "ems/services/open-meteo-pv-forecast.js",
+  "node": "v24.19.0",
+  "environment": "isolated HTTPS/adapter fixtures; real short deadline timers; no Pi5/provider/TLS-certificate integration",
+  "passed": 16,
+  "checks": [
+    "https-positive-and-max-5000-ms-even-if-caller-requests-longer",
+    "reject-http-userinfo-unknown-host-before-network",
+    "dns-connect-stall-aborted-by-independent-real-timer",
+    "trickling-body-cannot-reset-overall-timeout",
+    "connection-error-never-exposes-url-or-token",
+    "redirect-and-http-error-body-never-exposed",
+    "declared-and-streamed-response-size-limits",
+    "json-content-type-encoding-and-truncated-body",
+    "weather-full-schema-rejects-missing-null-string-nan-and-ranges",
+    "weather-invalid-response-never-partially-writes-provider-values",
+    "pv-strict-series-rejects-malformed-values-and-partial-lengths",
+    "valid-night-zero-production-is-distinct-from-invalid-response",
+    "pv-incomplete-plane-and-mixed-time-grid-cannot-be-published-as-full-forecast",
+    "failed-refresh-keeps-last-good-timestamp-and-explicit-stale-status",
+    "provider-fallbacks-share-one-monotone-deadline-with-no-reset",
+    "credential-source-priority-without-hardcoded-key"
+  ]
+}
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.22 test:cra-credential-state
+> node scripts/verify-cra-credential-state.cjs
+
+{
+  "suite": "UI-CRA-SECRET-06",
+  "source": "main.js",
+  "node": "v24.19.0",
+  "environment": "isolated adapter object/state fixtures; no real ioBroker ACL authorization integration",
+  "passed": 8,
+  "checks": [
+    "startup-migrates-existing-config-and-both-backup-acls",
+    "first-creation-is-restricted-and-respects-instance-namespace",
+    "persist-verifies-acl-before-writing-and-retains-config",
+    "acl-failure-blocks-config-write-with-sanitized-error",
+    "unconfirmed-acl-update-blocks-write",
+    "backup-rotation-checks-both-targets-and-preserves-values",
+    "failed-protection-prevents-all-backup-credential-writes",
+    "simulation-config-backup-is-protected-and-fails-closed"
+  ]
+}
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.22 test:license-secret
+> node scripts/verify-license-secret-externalization.cjs
+
+[license-secret] OK: 6 license formats, 9 invalid/missing environments, no fallback HMAC or state writes, key change/recovery.

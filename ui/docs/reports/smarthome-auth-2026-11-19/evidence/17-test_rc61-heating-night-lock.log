@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:rc61-heating-night-lock
+> node scripts/verify-rc61-heating-rod-night-manual-release.js
+
+[rc61-heating-rod-night-manual-release] OK: PV-Auto ist nachts gesperrt; explizite Manual/Boost-Freigaben bleiben zulässig, Restlast umgeht den Nachtblock nicht.

@@ -1,0 +1,222 @@
+{
+  "version": "1.0.22",
+  "date": "2026-09-29T21:31:58.542815+00:00",
+  "productionApproved": false,
+  "tests": [
+    {
+      "command": [
+        "npm",
+        "run",
+        "test:all"
+      ],
+      "cwd": "repository root",
+      "startedAt": "2026-09-29T21:28:13.990943+00:00",
+      "finishedAt": "2026-09-29T21:30:51.765154+00:00",
+      "durationSeconds": 157.774,
+      "exitCode": 0,
+      "capturedBytes": 84086,
+      "log": "hardening-final-test-all.log",
+      "logSha256": "89d89402e422f1456ba585f3f0e9dbb79dd0c24a6e84e5878d6c7506e35786e5"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "build:ts"
+      ],
+      "cwd": "repository root",
+      "startedAt": "2026-09-29T21:24:01.658414+00:00",
+      "finishedAt": "2026-09-29T21:24:16.818953+00:00",
+      "durationSeconds": 15.161,
+      "exitCode": 0,
+      "capturedBytes": 8272,
+      "log": "hardening-final-build-ts.log",
+      "logSha256": "fde8c0737ec6c3830e12e188e3927cfb02fdc5a6dac7e925f78495f39d3da2f5"
+    },
+    {
+      "command": [
+        "bash",
+        "-c",
+        "npm run test:rc72-weather-pv-forecast-auto && npm run test:rc74-pv-forecast-customer-ui && npm run test:rc75-pv-forecast-admin-location && npm run test:rc76-pv-forecast-runtime-hardening && npm run test:rc77-pv-forecast-state-cache-bridge && npm run test:cra-weather && npm run test:cra-credential-state && npm run test:license-secret"
+      ],
+      "cwd": "repository root",
+      "startedAt": "2026-09-29T21:24:20.715392+00:00",
+      "finishedAt": "2026-09-29T21:24:33.831067+00:00",
+      "durationSeconds": 13.116,
+      "exitCode": 0,
+      "capturedBytes": 4615,
+      "log": "hardening-final-weather-compat.log",
+      "logSha256": "e908cd8227818a7593762360dfbabc65598967d16c38ef131732fb2bcd3448cc"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "sbom:cra",
+        "--",
+        "--require-installed"
+      ],
+      "cwd": "repository root",
+      "startedAt": "2026-09-29T21:27:59.592297+00:00",
+      "finishedAt": "2026-09-29T21:28:04.126971+00:00",
+      "durationSeconds": 4.535,
+      "exitCode": 0,
+      "capturedBytes": 1081,
+      "log": "hardening-final-sbom.log",
+      "logSha256": "c1c7d4d55c28d2ccef750ebc87a3437abe35742f0f0fc5340778d814d525fc7c"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "release:generate-manifest"
+      ],
+      "cwd": "repository root",
+      "startedAt": "2026-09-29T21:28:04.164415+00:00",
+      "finishedAt": "2026-09-29T21:28:05.813468+00:00",
+      "durationSeconds": 1.649,
+      "exitCode": 0,
+      "capturedBytes": 605,
+      "log": "hardening-final-seal.log",
+      "logSha256": "2020e89ea08f49490b783ce52ac8a00c8ab785037b799a6bd02bb6c8fdd2198a"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "publish:check"
+      ],
+      "cwd": "repository root",
+      "startedAt": "2026-09-29T21:29:38.165672+00:00",
+      "finishedAt": "2026-09-29T21:29:39.461012+00:00",
+      "durationSeconds": 1.295,
+      "exitCode": 0,
+      "capturedBytes": 598,
+      "log": "hardening-final-publish-check.log",
+      "logSha256": "bb478c1e32cc8f057c2a58697c9c37de9363663eaa6b82983e52446559c44d1c"
+    },
+    {
+      "command": [
+        "npm",
+        "pack",
+        "--dry-run",
+        "--json"
+      ],
+      "cwd": "repository root",
+      "startedAt": "2026-09-29T21:29:39.498477+00:00",
+      "finishedAt": "2026-09-29T21:29:42.643340+00:00",
+      "durationSeconds": 3.145,
+      "exitCode": 0,
+      "capturedBytes": 46498,
+      "log": "hardening-final-pack-dry-run.log",
+      "logSha256": "78c32c4f22afb22e3e0be0b82983d3a1a1f47f9dd744c411d25d1cd448be81b0"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "docs:check"
+      ],
+      "cwd": "repository root",
+      "startedAt": "2026-09-29T21:29:42.681397+00:00",
+      "finishedAt": "2026-09-29T21:29:43.028658+00:00",
+      "durationSeconds": 0.347,
+      "exitCode": 0,
+      "capturedBytes": 270,
+      "log": "hardening-final-docs-check.log",
+      "logSha256": "c9f7491bb879a579daae3c034dce2956c25c5a6c556f06d0de3794abb8804053"
+    },
+    {
+      "command": [
+        "python3",
+        "/workspace/scratch/eb7acf2936df/verify_packed_sbom.py"
+      ],
+      "cwd": "repository root",
+      "startedAt": "2026-09-29T21:28:13.990578+00:00",
+      "finishedAt": "2026-09-29T21:28:19.061948+00:00",
+      "durationSeconds": 5.071,
+      "exitCode": 0,
+      "capturedBytes": 652,
+      "log": "hardening-final-packed-sbom.log",
+      "logSha256": "c465608e346bf481e6a1b334fd73d7f4bca70b6e231a2f785994f97b1d3adc07"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/check-repository-secrets.cjs"
+      ],
+      "cwd": "repository root",
+      "startedAt": "2026-09-29T21:31:57.573612+00:00",
+      "finishedAt": "2026-09-29T21:31:58.499536+00:00",
+      "durationSeconds": 0.926,
+      "exitCode": 0,
+      "capturedBytes": 67,
+      "log": "hardening-final-secrets.log",
+      "logSha256": "aa4aa1a77d7fd178a677cc26b18697d2590c99ffcae2938498f9bccc4283e023"
+    }
+  ],
+  "audits": [
+    {
+      "scope": "root",
+      "resultFile": "npm-audit-root-final.json",
+      "executionFile": "npm-audit-root-final.execution.json",
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      }
+    },
+    {
+      "scope": "production",
+      "resultFile": "npm-audit-production-final.json",
+      "executionFile": "npm-audit-production-final.execution.json",
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      }
+    },
+    {
+      "scope": "admin",
+      "resultFile": "npm-audit-admin-final.json",
+      "executionFile": "npm-audit-admin-final.execution.json",
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      }
+    }
+  ],
+  "productionApprovalGate": {
+    "command": [
+      "npm",
+      "run",
+      "release:approval"
+    ],
+    "cwd": "repository root",
+    "startedAt": "2026-09-29T21:28:39.718062+00:00",
+    "finishedAt": "2026-09-29T21:28:39.948086+00:00",
+    "durationSeconds": 0.23,
+    "exitCode": 1,
+    "capturedBytes": 300,
+    "log": "hardening-final-production-approval.log",
+    "logSha256": "73c82e7b7884df42066775d423e5faa8992d849b66a15d69eb85cdfb37474f38",
+    "expectedExitCode": 1,
+    "result": "separate production approval rejects undecided status as expected; ordinary npm publication passes"
+  },
+  "historicalInitialReview": "initial-review-validation-index.json",
+  "dependencyChangeInFollowup": false,
+  "publishOverlayProof": "hardening-final-test-all.log",
+  "runtimeSmokeProof": "hardening-final-packed-sbom.log",
+  "uploadSbomIntermediate": "upload-sbom-intermediate-validation-index.json",
+  "privateProvisioning": "separate PRIVATE_SERVER_SETUP archive, never part of public payload"
+}

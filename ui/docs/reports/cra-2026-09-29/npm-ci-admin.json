@@ -1,0 +1,19 @@
+{
+  "command": [
+    "npm",
+    "ci",
+    "--ignore-scripts",
+    "--no-audit"
+  ],
+  "cwd": "src-admin-tab",
+  "startedAt": "2026-09-29T19:59:51.543353+00:00",
+  "finishedAt": "2026-09-29T20:00:07.107818+00:00",
+  "exitCode": 0,
+  "environment": {
+    "node": "v24.19.0",
+    "npm": "11.9.0",
+    "fetchTimeoutMs": 20000,
+    "fetchRetries": 0
+  },
+  "log": "npm-ci-admin.log"
+}

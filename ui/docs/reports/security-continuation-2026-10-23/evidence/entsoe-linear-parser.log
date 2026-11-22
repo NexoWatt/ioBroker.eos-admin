@@ -1,0 +1,30 @@
+ENTSO-E malformed-input bound: {"tag":"Period","bytes":560040,"ms":1.5489400000000018}
+ENTSO-E malformed-input bound: {"tag":"Point","bytes":490040,"ms":1.6490310000000008}
+ENTSO-E malformed-input bound: {"tag":"start","bytes":490040,"ms":1.1852730000000022}
+✔ legacy copy-mode source remains directly executable JavaScript (83.41038ms)
+✔ quarter-hour, negative prices and MWh conversion stay correct (2.626121ms)
+✔ multiple periods preserve chronological boundaries (1.799226ms)
+✔ namespace prefixes, XML declaration and quoted attribute delimiters (0.545461ms)
+✔ comments cannot contribute false price or period elements (0.66471ms)
+✔ missing resolution is rejected (0.884401ms)
+✔ self-closing resolution is rejected (0.335475ms)
+✔ missing numeric price is rejected (0.675386ms)
+✔ nonsequential point is rejected (0.283126ms)
+✔ mismatched close is rejected (0.269335ms)
+✔ unclosed last period is rejected (0.139981ms)
+✔ nested same period is rejected (0.350948ms)
+✔ external declaration is rejected (0.074592ms)
+✔ oversized source is rejected (1.349721ms)
+✔ oversized tag is rejected (1.07033ms)
+✔ unclosed quoted attribute is rejected (0.10657ms)
+✔ bounded CPU for 512KiB unclosed Period tags (72.819669ms)
+✔ bounded CPU for 512KiB unclosed Point tags (64.912705ms)
+✔ bounded CPU for 512KiB unclosed start tags (59.693281ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 756.478306

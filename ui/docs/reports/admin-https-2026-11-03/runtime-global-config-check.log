@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.35 check:tsconfig-modern
+> node scripts/verify-tsconfig-modern.js
+
+[tsconfig-modern] OK: TypeScript-Resolver sind NodeNext/Bundler-kompatibel und ohne Deprecation-Unterdrückung.

@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:history-runtime-typing
+> node scripts/verify-ts-history-runtime-typing.js
+
+[ts-history-runtime-typing] OK: History-Spiegel ist gezielt typisiert und in gelockertem Migrationsmodus kompilierbar.

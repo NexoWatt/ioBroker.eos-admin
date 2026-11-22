@@ -10,7 +10,7 @@
                 bind: {
                     newLine: true,
                     type: 'ip',
-                    listenOnAllPorts: true,
+                    listenOnAllPorts: false,
                     label: 'IP',
                     xs: 12,
                     sm: 12,
@@ -25,6 +25,12 @@
                     sm: 12,
                     md: 4,
                     lg: 3,
+                },
+                eosExternalOrigin: {
+                    type: 'text',
+                    label: 'EOS HTTPS-Adresse (z. B. https://192.168.10.192)',
+                    help: 'Exakte öffentliche HTTPS-Origin des festen Eingangs auf 443. EOS intern: 127.0.0.1:8188. Keine Pfade oder Zugangsdaten.',
+                    xs: 12,
                 },
                 secure: {
                     newLine: true,

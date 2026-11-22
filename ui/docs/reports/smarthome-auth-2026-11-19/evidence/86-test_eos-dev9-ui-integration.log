@@ -1,0 +1,14 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:eos-dev9-ui-integration
+> node scripts/verify-eos-dev9-ui-integration.cjs
+
+PASS Referenzhash, Instanzgrenzen und Syntax des tatsächlichen Patch-Ergebnisses
+PASS Prüfmodus schreibt nichts; beide Originale und Symlinkfreiheit erforderlich
+PASS Anwendung sichert beide Originale, bindet Manifest-Hashes und verweigert Wiederholung
+PASS Änderung zwischen Prüfung und Anwendung bricht ohne Überschreiben ab
+PASS Proxy-Vorabprüfung fordert HTTPS, anonymen EOS-Status, begrenzte JSON-Antwort
+PASS Kundenziel nutzt den gemeinsamen HTTPS-Ursprung, Präfix und gewählte Instanz
+PASS Erstpasswort und eigener Passwortwechsel bleiben vor jeder Kundenweiterleitung
+PASS Installateur behält Portal; Administrator behält Admin und UI-/Passwortlinks
+8 Integrations-Prüfgruppen PASS (keine Live-Anwendung).

@@ -1,0 +1,30 @@
+PASS Beliebige Kennung übernimmt ausschließlich ihre Gruppe: admin
+PASS Beliebige Kennung übernimmt ausschließlich ihre Gruppe: installer
+PASS Beliebige Kennung übernimmt ausschließlich ihre Gruppe: customer
+PASS Eigene Passwörter für mehrere Konten, keine Adminpasswort-Übernahme: /api/auth/login
+PASS Eigene Passwörter für mehrere Konten, keine Adminpasswort-Übernahme: /api/strict-auth/login
+PASS Kunden haben getrennte Passwörter und keine technische Rolle
+PASS Reservierter Kontoname ohne Gruppe verleiht keine Rolle: admin
+PASS Reservierter Kontoname ohne Gruppe verleiht keine Rolle: installer
+PASS Reservierter Kontoname ohne Gruppe verleiht keine Rolle: kunde
+PASS Reservierter Kontoname ohne Gruppe verleiht keine Rolle: user
+PASS Reservierter Kontoname ohne Gruppe verleiht keine Rolle: customer
+PASS Konto admin in Kundengruppe erhält ausschließlich Kundenrechte
+PASS Explizit zugeordnete Fremdanbietergruppe: admin
+PASS Explizit zugeordnete Fremdanbietergruppe: installer
+PASS Explizit zugeordnete Fremdanbietergruppe: customer
+PASS Bestehende auth.installerGroups-Zuordnung bleibt als echte Gruppenfreigabe erhalten
+PASS Unzugeordnete Gruppe mit Anzeigename administrator gibt keinen Zugriff
+PASS Alte Benutzerlisten verleihen ohne Gruppenzuordnung keine Rechte
+PASS Mehrere echte Mitgliedschaften verwenden Admin vor Installer vor Kunde
+PASS Gruppenabstufung wirkt auf vorhandene Sitzung beim nächsten HTTP-Zugriff
+PASS Gruppenlöschung widerruft bestehende Adminsitzung ohne Kontonamensfallback
+PASS Deaktivierte Gruppe gewährt keine Rolle und widerruft bestehende Sitzung
+PASS Ungültiges Gruppenobjekt wird abgewiesen: abweichende Objekt-ID
+PASS Ungültiges Gruppenobjekt wird abgewiesen: falscher Objekttyp
+PASS Ungültiges Gruppenobjekt wird abgewiesen: fehlerhafte Mitgliedsliste
+PASS Ungültiges Gruppenobjekt wird abgewiesen: nichtkanonisches Mitglied
+PASS Gruppenlesefehler sperrt eine vorhandene Sitzung und erzeugt keine neue
+PASS Fehlerhafte Gruppen-Konfiguration fällt ohne Benutzer-Ausnahme sicher zu
+PASS Fehlerhafte Gruppen-Konfiguration fällt ohne Benutzer-Ausnahme sicher zu
+{"result":"PASS","checks":29,"environment":"v24.22.1","scope":"Actual shipped local HTTP login, authorization and session routes; synthetic ioBroker groups and account-specific passwords; no live Admin8 or hardware test"}

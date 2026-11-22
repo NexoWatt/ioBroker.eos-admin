@@ -1,0 +1,14 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:ui-auth-frontend-1.0.37
+> tsc -p tsconfig.ui-auth-frontend.json && node scripts/verify-auth-profiles-ui.cjs
+
+PASS Statusprofil/CSRF erforderlich; fehlender Status sperrt die UI
+PASS Eigene Mutationen mit CSRF, fremde Kamera unverändert, kein Replay
+PASS Fachlicher 403 erhält bestätigten Zugang; echter Sitzungsverlust sperrt
+PASS Offline und BFCache sperren vor erneuter Bestätigung
+PASS EOS-Logout trägt CSRF und öffnet das zentrale Ziel
+PASS EOS/Frame/HTTP/Fehlkonfiguration ohne Passwortmaske
+PASS Passwort exakt einmal gesendet und Formular danach geleert
+PASS Sichere Rücksprünge und rollenabhängiger Einstieg
+[auth-profiles-ui] 8 Prüfgruppen bestanden; kein Browser-/Anlagenversuch.

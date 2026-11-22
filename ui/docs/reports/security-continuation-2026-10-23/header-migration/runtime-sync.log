@@ -1,0 +1,5 @@
+
+> iobroker.nexowatt-ui@1.0.30 sync:ts-runtime-executables
+> node scripts/build-ts-runtime-executables.js
+
+[ts-runtime-executables] OK: 147 produktive Runtime-Dateien aktualisiert; TS ist die kanonische Runtime-Quelle.

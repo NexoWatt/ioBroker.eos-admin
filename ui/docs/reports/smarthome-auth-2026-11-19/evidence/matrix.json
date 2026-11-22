@@ -1,0 +1,791 @@
+{
+  "schema": "nexowatt.validation-matrix.v1",
+  "version": "1.0.37",
+  "startedAt": "2026-11-19T06:58:43.380885+00:00",
+  "packageSha256": "a3fb74aa5c0454c6f197197675f0510762c4651da200746f66f9f03fc8033e0d",
+  "command": "All ordered top-level commands declared in npm run test:all; continued after failures without removing any gate",
+  "node": "v24.22.3",
+  "results": [
+    {
+      "index": 1,
+      "command": "npm run publish:check",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 1.518,
+      "log": "01-publish_check.log",
+      "logSha256": "10684744b89ed8a0c8d49a90aec0954e5174528fc43bd58bd00f586c2132817c"
+    },
+    {
+      "index": 2,
+      "command": "npm run test:types",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 53.45,
+      "log": "02-test_types.log",
+      "logSha256": "451dca1474322e43268dc6f600ba604caf765523bc44c642a83ba05fce613ccf"
+    },
+    {
+      "index": 3,
+      "command": "npm run check:ts-source-syntax",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 3.239,
+      "log": "03-check_ts-source-syntax.log",
+      "logSha256": "6277df9c4beddb17e6b236ac8bcde8f4d517687f45805d447a19745cee4522a4"
+    },
+    {
+      "index": 4,
+      "command": "npm run test:ems-shadow-runtime",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.474,
+      "log": "04-test_ems-shadow-runtime.log",
+      "logSha256": "d1f5cf48d8f62895452c421377dcfb6b004c8ee4cddebcb331b6746e5c3b6657"
+    },
+    {
+      "index": 5,
+      "command": "npm run test:ai-advisor-runtime-typing",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.817,
+      "log": "05-test_ai-advisor-runtime-typing.log",
+      "logSha256": "f400a3e3453f928ba55adc595a426a95852f4974fd17f332f9d43d059f327fd1"
+    },
+    {
+      "index": 6,
+      "command": "npm run test:history-runtime-typing",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.616,
+      "log": "06-test_history-runtime-typing.log",
+      "logSha256": "4d3ee4e9753af780c9eeccf37b14f503e97a7bd3c54e391cdd1d1dc73da7c428"
+    },
+    {
+      "index": 7,
+      "command": "npm run test:smarthome-runtime-typing",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.719,
+      "log": "07-test_smarthome-runtime-typing.log",
+      "logSha256": "1347bfea1a7bebd241a37cdae2b32a4c259a4f793b8768b3a4152c6b1676c1a2"
+    },
+    {
+      "index": 8,
+      "command": "npm run test:smarthome-config-runtime-typing",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.62,
+      "log": "08-test_smarthome-config-runtime-typing.log",
+      "logSha256": "c6d23a17a0c3bb423a3c9fc077b20037e58a810704e57a3e3b0cc734dc99cc7e"
+    },
+    {
+      "index": 9,
+      "command": "npm run test:ems-apps-runtime-typing",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.57,
+      "log": "09-test_ems-apps-runtime-typing.log",
+      "logSha256": "cce0ada063ba83a72bf1e3130aa70504e3d878231694cbb7f4b9022721f94512"
+    },
+    {
+      "index": 10,
+      "command": "npm run test:app-runtime-typing",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.626,
+      "log": "10-test_app-runtime-typing.log",
+      "logSha256": "2ea8f78df908f86e6d1fd89a3cf3b7f7c4f7a89cdcbd66e5164d4abc1580d36d"
+    },
+    {
+      "index": 11,
+      "command": "npm run test:main-runtime-typing",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.469,
+      "log": "11-test_main-runtime-typing.log",
+      "logSha256": "3a19d95f029fb341c3fe9766668d4363bc280e13246bcf3653775cfb900da21e"
+    },
+    {
+      "index": 12,
+      "command": "npm run test:rc57-ocpp-stability",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.265,
+      "log": "12-test_rc57-ocpp-stability.log",
+      "logSha256": "09459ae505ff086f0505277dfd08221c33179907589cba7113980951baadafcf"
+    },
+    {
+      "index": 13,
+      "command": "npm run test:rc58-ocpp-compact-mapping",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.215,
+      "log": "13-test_rc58-ocpp-compact-mapping.log",
+      "logSha256": "5b16dafd6b80337b6422c45918d48f13e512e1316dd09d5b2848d72e3aae97b0"
+    },
+    {
+      "index": 14,
+      "command": "npm run test:rc59-ocpp21-native-storage-safety",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.265,
+      "log": "14-test_rc59-ocpp21-native-storage-safety.log",
+      "logSha256": "b93f5834bcc44bc4efcd2b6485e9ddef1bedfce1dd591ed90d65dab0d88500d7"
+    },
+    {
+      "index": 15,
+      "command": "npm run test:rc60-universal-auto-orchestrator",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.315,
+      "log": "15-test_rc60-universal-auto-orchestrator.log",
+      "logSha256": "d59f84413ef6fc9df68bd9bf56ad9b12f8fd0263ffb71dee73817f5cdf5eefd9"
+    },
+    {
+      "index": 16,
+      "command": "npm run test:rc60-universal-auto-wallbox",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.315,
+      "log": "16-test_rc60-universal-auto-wallbox.log",
+      "logSha256": "60509c0106bb7b2c87fb160348954423b20bad9d2684e76c19b72253eb3cc6ee"
+    },
+    {
+      "index": 17,
+      "command": "npm run test:rc61-heating-night-lock",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.372,
+      "log": "17-test_rc61-heating-night-lock.log",
+      "logSha256": "603bdc2ebddcaf8e88044ff80354e63e79a68bd1bc8ccb237f7843c08bbc98cc"
+    },
+    {
+      "index": 18,
+      "command": "npm run test:rc61-evcs-hardening",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.215,
+      "log": "18-test_rc61-evcs-hardening.log",
+      "logSha256": "8c3acfbb4d3494ce1fa45c3ad1a300e5b8ee1cb1df576fa0158c4f9d904579a7"
+    },
+    {
+      "index": 19,
+      "command": "npm run test:rc63-availability-storage-grid-gate",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.315,
+      "log": "19-test_rc63-availability-storage-grid-gate.log",
+      "logSha256": "abd8467a0aa6c588cac66c23ca9a18ec42e35972fcd3193d3b4307a93c02e379"
+    },
+    {
+      "index": 20,
+      "command": "npm run test:rc64-storage-grid-charge-policy",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.215,
+      "log": "20-test_rc64-storage-grid-charge-policy.log",
+      "logSha256": "b813cf962b188beaa00e79346fac921e6a8e7889d419067d9a246a91e0ad83d0"
+    },
+    {
+      "index": 21,
+      "command": "npm run test:rc65-nt-price-target-override",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.415,
+      "log": "21-test_rc65-nt-price-target-override.log",
+      "logSha256": "fc1c1ae3b9fbce59e3873ec485f31cb6e915bdec42009fcdbca196c1c9fae958"
+    },
+    {
+      "index": 22,
+      "command": "npm run test:dc-station-display",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.315,
+      "log": "22-test_dc-station-display.log",
+      "logSha256": "ba05dc77b7492b30249845c59e65016975911fcacdbec486b857628263866480"
+    },
+    {
+      "index": 23,
+      "command": "npm run test:rc66-station-display-stable",
+      "exitCode": 1,
+      "result": "FAIL",
+      "durationSec": 0.215,
+      "log": "23-test_rc66-station-display-stable.log",
+      "logSha256": "d5eade0f31ac0b7239b775382b6e92d07606a5778bcb18097124bf80c9db6876"
+    },
+    {
+      "index": 24,
+      "command": "npm run test:rc66-station-display-browser",
+      "exitCode": 1,
+      "result": "BLOCKED_ENVIRONMENT",
+      "durationSec": 15.564,
+      "log": "24-test_rc66-station-display-browser.log",
+      "logSha256": "38a71e0b287ed157bfa6eb79a13d4c227ddc95713298b6c4bf4fb6888f60cd50"
+    },
+    {
+      "index": 25,
+      "command": "npm run test:rc67-license-bootstrap-access",
+      "exitCode": 1,
+      "result": "FAIL",
+      "durationSec": 0.215,
+      "log": "25-test_rc67-license-bootstrap-access.log",
+      "logSha256": "52fa7ddd41440898864c0f295a9438357a80ad35b187b22c535de85f96662f08"
+    },
+    {
+      "index": 26,
+      "command": "npm run test:rc68-para14a-communication-fallback",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.265,
+      "log": "26-test_rc68-para14a-communication-fallback.log",
+      "logSha256": "8cbcce35c70b9f8b86f168602771a1ae1a8994669729532f1f1e2439eef20f80"
+    },
+    {
+      "index": 27,
+      "command": "npm run test:dashboard-lp-status-typing",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.766,
+      "log": "27-test_dashboard-lp-status-typing.log",
+      "logSha256": "56a4385d96eb727c36914145899f8c87fff320448ae9cd1cb207bf9db30d0db8"
+    },
+    {
+      "index": 28,
+      "command": "npm run test:rc69-dashboard-lp-feedback",
+      "exitCode": 1,
+      "result": "FAIL",
+      "durationSec": 8.719,
+      "log": "28-test_rc69-dashboard-lp-feedback.log",
+      "logSha256": "649ec0fb968a5de32afc66edd1cf567dbb83b0a3b955a6d5450058228aded537"
+    },
+    {
+      "index": 29,
+      "command": "npm run test:rc70-dashboard-lp-status-polish",
+      "exitCode": 1,
+      "result": "FAIL",
+      "durationSec": 8.561,
+      "log": "29-test_rc70-dashboard-lp-status-polish.log",
+      "logSha256": "8df0f8541347d1e96417086057b6af5e19d395ccc868166fd4fc3dd5cba100c0"
+    },
+    {
+      "index": 30,
+      "command": "npm run test:rc72-weather-pv-forecast-auto",
+      "exitCode": 1,
+      "result": "FAIL",
+      "durationSec": 8.503,
+      "log": "30-test_rc72-weather-pv-forecast-auto.log",
+      "logSha256": "d7393067acc39b354101083a3f2f2a66d66955df263aa8002484cd69326d208a"
+    },
+    {
+      "index": 31,
+      "command": "npm run test:rc73-ems-admin-overview",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.316,
+      "log": "31-test_rc73-ems-admin-overview.log",
+      "logSha256": "fd5dd33b1d016891fbf7778747cae28917b7d3ddb41890c4e2c25efed530f103"
+    },
+    {
+      "index": 32,
+      "command": "npm run test:rc74-pv-forecast-customer-ui",
+      "exitCode": 1,
+      "result": "FAIL",
+      "durationSec": 8.512,
+      "log": "32-test_rc74-pv-forecast-customer-ui.log",
+      "logSha256": "02bb612bc67370533d33bcbf83b36e5c042d575c32f830aed8159bbe04a364c3"
+    },
+    {
+      "index": 33,
+      "command": "npm run test:rc75-pv-forecast-admin-location",
+      "exitCode": 1,
+      "result": "FAIL",
+      "durationSec": 8.466,
+      "log": "33-test_rc75-pv-forecast-admin-location.log",
+      "logSha256": "0e701b071540cdbc6c15456ffae3b66ac7e2fa5363965f6f9e14cba7891adbcc"
+    },
+    {
+      "index": 34,
+      "command": "npm run test:rc76-pv-forecast-runtime-hardening",
+      "exitCode": 1,
+      "result": "FAIL",
+      "durationSec": 8.544,
+      "log": "34-test_rc76-pv-forecast-runtime-hardening.log",
+      "logSha256": "5ccd06a229fd6446afeca72a74028bf1d14991562cd7183f9a452e52aaed6e89"
+    },
+    {
+      "index": 35,
+      "command": "npm run test:rc77-pv-forecast-state-cache-bridge",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.466,
+      "log": "35-test_rc77-pv-forecast-state-cache-bridge.log",
+      "logSha256": "01488d9a1a25bfbf101561946f8b6097879f2b36496a5afaa77b3309367182a0"
+    },
+    {
+      "index": 36,
+      "command": "npm run test:rc78-import-only-grid-budget",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 1.927,
+      "log": "36-test_rc78-import-only-grid-budget.log",
+      "logSha256": "b1721af4e46587fb50943448b0fde672301389b66e9d88a83f381ecc16a11e78"
+    },
+    {
+      "index": 37,
+      "command": "npm run test:rc79-import-soft-hard-zero-export",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 1.573,
+      "log": "37-test_rc79-import-soft-hard-zero-export.log",
+      "logSha256": "47f0b9fb10b8b4e6d41fa1157db5a667f3a96a3ba3b45e3f04499f766d55c216"
+    },
+    {
+      "index": 38,
+      "command": "npm run test:rc80-soft-limit-fixed-ten-percent",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.566,
+      "log": "38-test_rc80-soft-limit-fixed-ten-percent.log",
+      "logSha256": "eb10102c7dc8fc490f29f2e344cc6fa97f3bbbae01fb17d6f4a6dfd83ce63aeb"
+    },
+    {
+      "index": 39,
+      "command": "npm run test:rc81-nvp-assignment-single-source",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.466,
+      "log": "39-test_rc81-nvp-assignment-single-source.log",
+      "logSha256": "19ffb59b70cdab045f6d1134768ecb21e72c91aee03210feb9c42a32a3b93ec1"
+    },
+    {
+      "index": 40,
+      "command": "npm run test:rc82-permanent-grid-protection",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.716,
+      "log": "40-test_rc82-permanent-grid-protection.log",
+      "logSha256": "5034f5dd043f686ed9049370cc660d66d67c450f2d22fef4357ade0d12d33bd6"
+    },
+    {
+      "index": 41,
+      "command": "npm run test:rc83-storage-cheap-only-log-object",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.267,
+      "log": "41-test_rc83-storage-cheap-only-log-object.log",
+      "logSha256": "5897dcedbe10cbe4491303df8b971c6dc0b7d8712a9b11b5dcd2461c28452e15"
+    },
+    {
+      "index": 42,
+      "command": "npm run test:rc85",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.766,
+      "log": "42-test_rc85.log",
+      "logSha256": "d0fd01661d691d26c88c8f2fd2e36176a57901c3cd0880fbd92b14838ad52d39"
+    },
+    {
+      "index": 43,
+      "command": "npm run test:rc86",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.215,
+      "log": "43-test_rc86.log",
+      "logSha256": "fdfa2d55168b56d132f6d944671d0dd5ec46b9efd484cbfc05f3b4d27bb1fd6d"
+    },
+    {
+      "index": 44,
+      "command": "npm run test:rc87",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.215,
+      "log": "44-test_rc87.log",
+      "logSha256": "601400e194adbe41c8354a9deeeafca6b404edad159e8ac518563ce8c913afe9"
+    },
+    {
+      "index": 45,
+      "command": "npm run test:rc88",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.566,
+      "log": "45-test_rc88.log",
+      "logSha256": "11bdd2513898a38132f5d4a121f4e0898785cccb0d5806c02dc156312b08298c"
+    },
+    {
+      "index": 46,
+      "command": "npm run test:rc89",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.569,
+      "log": "46-test_rc89.log",
+      "logSha256": "92075eaa70452c2f5e132c99b96230b1e77a31004a71aca5c52516c568122d94"
+    },
+    {
+      "index": 47,
+      "command": "npm run test:rc90",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.265,
+      "log": "47-test_rc90.log",
+      "logSha256": "4247308804446516e0196f78197b49d69963bbc8d4f77b275b5a01bc02e336f3"
+    },
+    {
+      "index": 48,
+      "command": "npm run test:rc91",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.315,
+      "log": "48-test_rc91.log",
+      "logSha256": "60c145f52f36ae4da12c0efd500aa0268592ba8496ca45edf7774508a574671e"
+    },
+    {
+      "index": 49,
+      "command": "npm run test:rc92",
+      "exitCode": 1,
+      "result": "FAIL",
+      "durationSec": 8.51,
+      "log": "49-test_rc92.log",
+      "logSha256": "70dfa340e7025e83985baa575ca08795c622b03e70ce91b244645b91e8b5d092"
+    },
+    {
+      "index": 50,
+      "command": "npm run test:rc93",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.265,
+      "log": "50-test_rc93.log",
+      "logSha256": "bc3897cc0aae570196224f1e1528a6dfce6855d2d2656d4d5d5b1f872bbecef9"
+    },
+    {
+      "index": 51,
+      "command": "npm run test:stable-1.0.2-health",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.316,
+      "log": "51-test_stable-1.0.2-health.log",
+      "logSha256": "10a645abd67e68a67d921ec38b7bce6145a6d2b1bde0d77db17e7ddc8a31b05d"
+    },
+    {
+      "index": 52,
+      "command": "npm run test:stable-1.0.3-home-appcenter",
+      "exitCode": 1,
+      "result": "FAIL",
+      "durationSec": 0.319,
+      "log": "52-test_stable-1.0.3-home-appcenter.log",
+      "logSha256": "659685c9790c02917c9ecdc9ef46cf9e2d193ee7d2a2dc2657c30f012be43dce"
+    },
+    {
+      "index": 53,
+      "command": "npm run test:stable-1.0.4-auto-pv",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.315,
+      "log": "53-test_stable-1.0.4-auto-pv.log",
+      "logSha256": "fc449ffd56c3f5960521a83dc144f7fd780544c90bb4d5732f6d5f618f9df986"
+    },
+    {
+      "index": 54,
+      "command": "npm run test:stable-1.0.5-storage-protection",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.416,
+      "log": "54-test_stable-1.0.5-storage-protection.log",
+      "logSha256": "2776ef33240951de93fbef8a895b58191987c8a40e325a3892bef208b4cccf33"
+    },
+    {
+      "index": 55,
+      "command": "npm run test:stable-1.0.6-dc",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.415,
+      "log": "55-test_stable-1.0.6-dc.log",
+      "logSha256": "2a15ef2b1b56ea8e0ccb391bb872ca5e98417324a9e7838801f4f0ad78f482f1"
+    },
+    {
+      "index": 56,
+      "command": "npm run test:stable-1.0.7-notifications",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.365,
+      "log": "56-test_stable-1.0.7-notifications.log",
+      "logSha256": "d4df5a0ab7e9de3eb7e3346fb3add4354c3999017dbe925dfa2ba686108ca99c"
+    },
+    {
+      "index": 57,
+      "command": "npm run test:stable-1.0.8-storage-licenses",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 1.178,
+      "log": "57-test_stable-1.0.8-storage-licenses.log",
+      "logSha256": "377142fa470a803584ec9b091624d58dda10b3039a54ad546229e0d1fea53994"
+    },
+    {
+      "index": 58,
+      "command": "npm run test:stable-1.0.9-access",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 1.671,
+      "log": "58-test_stable-1.0.9-access.log",
+      "logSha256": "15b6b0129cf0925116f2fe5e52aad09e984319b2592977fd77c43cfe15fbb3e0"
+    },
+    {
+      "index": 59,
+      "command": "npm run test:stable-1.0.10-security",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 2.031,
+      "log": "59-test_stable-1.0.10-security.log",
+      "logSha256": "3bd80749b9f3de519a87a7789a41a0038c4dee62994d00820a8d0a2f506870d2"
+    },
+    {
+      "index": 60,
+      "command": "npm run test:stable-1.0.11-documentation",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.416,
+      "log": "60-test_stable-1.0.11-documentation.log",
+      "logSha256": "0e6e1a92402918fbff7b3c0d3681fadc8495b1c9e83eaeb5f6fc2b09c41d257f"
+    },
+    {
+      "index": 61,
+      "command": "npm run test:stable-1.0.12-publish",
+      "exitCode": 1,
+      "result": "FAIL",
+      "durationSec": 5.799,
+      "log": "61-test_stable-1.0.12-publish.log",
+      "logSha256": "c138c6f6cffaaa43ef7bfb1d1651031774bea6e52ce68e2caf47e8cb11094195"
+    },
+    {
+      "index": 62,
+      "command": "npm run test:stable-release",
+      "exitCode": 1,
+      "result": "FAIL",
+      "durationSec": 0.215,
+      "log": "62-test_stable-release.log",
+      "logSha256": "ab01557fbd761d43b97589a9aadaab4893c388f1d36e2bb091145daf342be19c"
+    },
+    {
+      "index": 63,
+      "command": "npm run test:mesh-coordinator",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 4.499,
+      "log": "63-test_mesh-coordinator.log",
+      "logSha256": "022390f9209177e6e8adf3371d69d74b28731002b4f236effac7bb315f05edd5"
+    },
+    {
+      "index": 64,
+      "command": "npm run test:zero-export-pv",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 2.676,
+      "log": "64-test_zero-export-pv.log",
+      "logSha256": "6187b7d8be25440a6ceb5aa46530cfb84df8b9af87f01a6e4a34707904129d84"
+    },
+    {
+      "index": 65,
+      "command": "npm run test:stable-1.0.18-charging",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 2.789,
+      "log": "65-test_stable-1.0.18-charging.log",
+      "logSha256": "ecdef26b558ebae56711d34b42b5b2a4051bebc23e64565bbcda6eb6ef10155b"
+    },
+    {
+      "index": 66,
+      "command": "npm run test:stable-1.0.19-grid-share",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 2.778,
+      "log": "66-test_stable-1.0.19-grid-share.log",
+      "logSha256": "903c12858f51b9561dc8044938528365e2daaec9c1fdc92f25f402f3917dc86a"
+    },
+    {
+      "index": 67,
+      "command": "npm run test:stable-1.0.20-storage",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 4.996,
+      "log": "67-test_stable-1.0.20-storage.log",
+      "logSha256": "dcefb688aae7519de190ef699ceb35cee3e55148991c2046132930aa177e972f"
+    },
+    {
+      "index": 68,
+      "command": "npm run test:zero-export-inverter-mapping",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.267,
+      "log": "68-test_zero-export-inverter-mapping.log",
+      "logSha256": "c5b0cc2c937f680a37efa9766f2ddd18d6fdf9ca73df037b91583b20286bb808"
+    },
+    {
+      "index": 69,
+      "command": "npm run test:cra",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 32.092,
+      "log": "69-test_cra.log",
+      "logSha256": "fd1ffb0445183c9f38b0205f50f8293c0686c249f33fa6bc106798ff9e577193"
+    },
+    {
+      "index": 70,
+      "command": "npm run test:heating-rod-night-ramp",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.466,
+      "log": "70-test_heating-rod-night-ramp.log",
+      "logSha256": "a699b551a5612017f6eead46a4fbdfcb029249e2c7cd6c5bfccd699eb57abbcd"
+    },
+    {
+      "index": 71,
+      "command": "npm run test:heating-rod-pv-freshness",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.315,
+      "log": "71-test_heating-rod-pv-freshness.log",
+      "logSha256": "38372b59b3e40fb99dc4c27a806a7255c6579a05be47895baa8d0152815da460"
+    },
+    {
+      "index": 72,
+      "command": "npm run test:heating-rod-night-ui",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.771,
+      "log": "72-test_heating-rod-night-ui.log",
+      "logSha256": "6c67bf6dbd10a43a9593503e2dc1c79efd8003b5da32dc6a7ac5f9790a5b8277"
+    },
+    {
+      "index": 73,
+      "command": "npm run test:nvp-topology",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 2.283,
+      "log": "73-test_nvp-topology.log",
+      "logSha256": "b91f8f273c9f074a7e733523186bc1af85b755ad75bc4e2974cf0f45d3b1b554"
+    },
+    {
+      "index": 74,
+      "command": "npm run test:dynamic-grid",
+      "exitCode": 1,
+      "result": "FAIL",
+      "durationSec": 4.343,
+      "log": "74-test_dynamic-grid.log",
+      "logSha256": "76d0734e35370b175ee854783b222efed8df1ce6ecfa63fc958a6f480c7b8d78"
+    },
+    {
+      "index": 75,
+      "command": "npm run test:ems-navigation",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 1.62,
+      "log": "75-test_ems-navigation.log",
+      "logSha256": "9faac08a574867ac87dadb524b6895fc1be63e2b795c4c6c58bd0b79cb778994"
+    },
+    {
+      "index": 76,
+      "command": "npm run test:security-standards",
+      "exitCode": 1,
+      "result": "FAIL",
+      "durationSec": 1.828,
+      "log": "76-test_security-standards.log",
+      "logSha256": "57e86b9b80cba21031eccab9df404c1cca09c5fd6f9de6bf407299dd7122209b"
+    },
+    {
+      "index": 77,
+      "command": "npm run test:partner",
+      "exitCode": 1,
+      "result": "FAIL",
+      "durationSec": 15.08,
+      "log": "77-test_partner.log",
+      "logSha256": "43b5667f1221a4fa2b0a48e8f98889137b6cc0982d10b5ab35f30537b865e7e6"
+    },
+    {
+      "index": 78,
+      "command": "npm run test:admin8-auth",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 3.138,
+      "log": "78-test_admin8-auth.log",
+      "logSha256": "2cd3392035ac99525089e761a1fa4095079aaf672001ce9745ceafafa454a89f"
+    },
+    {
+      "index": 79,
+      "command": "npm run test:group-access",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 2.986,
+      "log": "79-test_group-access.log",
+      "logSha256": "174e7ac4f293918881a8f05ef13f7e04ca1730ec468be0b47568b2b33e01b99a"
+    },
+    {
+      "index": 80,
+      "command": "npm run test:admin-https",
+      "exitCode": 1,
+      "result": "FAIL",
+      "durationSec": 1.88,
+      "log": "80-test_admin-https.log",
+      "logSha256": "f857c9ea0e3c421c0664d2c7e82682f2a25622d5bdf25ed9501396bc86d4ee7e"
+    },
+    {
+      "index": 81,
+      "command": "npm run test:charging-mode-recovery",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.826,
+      "log": "81-test_charging-mode-recovery.log",
+      "logSha256": "8e4f8d99a5f2c363f928aa8fb4636935761f0103f1433168d71a90382b49c65d"
+    },
+    {
+      "index": 82,
+      "command": "npm run test:ui-access-1.0.37",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 11.345,
+      "log": "82-test_ui-access-1.0.37.log",
+      "logSha256": "cbcef6bd2ffcc4c13c395cbc745bcc41fc15d155ad7e718531529e539be6460c"
+    },
+    {
+      "index": 83,
+      "command": "npm run test:smarthome-modern-1.0.37",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.366,
+      "log": "83-test_smarthome-modern-1.0.37.log",
+      "logSha256": "b22cb35fdd671936bac1091ee1d35c72505c8308c8fe1732258bf8ba3f2cddf4"
+    },
+    {
+      "index": 84,
+      "command": "npm run test:smarthome-import-1.0.37",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 4.793,
+      "log": "84-test_smarthome-import-1.0.37.log",
+      "logSha256": "db8d5accf763c056a6c686b0b3a555c54b28879733c4f4d07f951b819e1313ae"
+    },
+    {
+      "index": 85,
+      "command": "npm run test:ui-auth-frontend-1.0.37",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 1.47,
+      "log": "85-test_ui-auth-frontend-1.0.37.log",
+      "logSha256": "16f78d66f99c5c0afc4ed837edb4778527219e213e479e34897d8991a8c5e45f"
+    },
+    {
+      "index": 86,
+      "command": "npm run test:eos-dev9-ui-integration",
+      "exitCode": 0,
+      "result": "PASS",
+      "durationSec": 0.724,
+      "log": "86-test_eos-dev9-ui-integration.log",
+      "logSha256": "918c1ae415bdb7edc172cbf97f4b0b4adb8c706dfdbfed2d26cd8e012674eef5"
+    }
+  ],
+  "finishedThrough": 86,
+  "counts": {
+    "PASS": 69,
+    "BLOCKED_ENVIRONMENT": 1,
+    "FAIL": 16
+  },
+  "finishedAt": "2026-11-19T07:03:13.889347+00:00"
+}

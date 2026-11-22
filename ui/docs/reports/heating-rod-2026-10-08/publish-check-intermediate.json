@@ -1,0 +1,12 @@
+{
+  "command": [
+    "npm",
+    "run",
+    "publish:check"
+  ],
+  "startedAt": "2026-10-08T19:44:54.209043+00:00",
+  "durationSeconds": 1.003,
+  "exitCode": 0,
+  "log": "publish-check-intermediate.log",
+  "hardware": false
+}

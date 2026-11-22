@@ -1,0 +1,152 @@
+--- a/components/admin/src-admin/public/js/eos-role-bootstrap.js
++++ b/components/admin/src-admin/public/js/eos-role-bootstrap.js
+@@ -1,7 +1,7 @@
+ (() => {
+     'use strict';
+ 
+-    const VERSION = 'v20261001-scoped-role-portal';
++    const VERSION = 'v20261119-ui-1.0.37-role-entry';
+     const script = document.currentScript || document.querySelector('script[src*="eos-role-bootstrap.js"]');
+     const entry = script?.dataset?.eosEntry || '';
+     let launched = false;
+@@ -221,6 +221,16 @@
+     // objects may contain credentials and are intentionally unavailable to the
+     // other roles. Keep their product navigation on the scoped HTTP contracts;
+     // showing/hiding these controls never replaces the server's authorization.
++    // NexoWatt UI 1.0.37: ein HTTPS-Ursprung und die ausdrücklich gewählte Instanz.
++    // Kein fester Zusatzport, fremder Host oder ungeprüfter Browser-Rücksprung.
++    const eosUiTarget = base => {
++        const target = new URL('proxy/nexowatt-ui.0/', base);
++        if (target.origin !== window.location.origin || target.protocol !== 'https:') {
++            throw new Error('Der gemeinsame HTTPS-Zugang zur NexoWatt UI ist erforderlich.');
++        }
++        return target;
++    };
++
+     const showProductPortal = (policy, base) => {
+         const installer = policy.role === 'installer';
+         document.documentElement.classList.add('eos-product-portal-active');
+@@ -246,8 +256,7 @@
+             </section>`;
+         portal.querySelector('h1').textContent = installer ? 'Installateur' : 'Benutzer';
+         portal.querySelector('#eos-portal-account').textContent = String(policy.user || policy.userId || '').replace(/^system\.user\./, '');
+-        const cockpit = new URL(window.location.href);
+-        cockpit.protocol = 'https:'; cockpit.port = '8188'; cockpit.pathname = '/'; cockpit.search = ''; cockpit.hash = '';
++        const cockpit = eosUiTarget(base);
+         portal.querySelector('#eos-portal-cockpit').href = cockpit.href;
+         portal.querySelector('#eos-portal-password').href = new URL('index.html?eosPassword=1', base).href;
+         portal.querySelector('#eos-portal-logout').href = new URL('logout', base).href;
+@@ -277,7 +286,15 @@
+     const installOwnPasswordLink = base => {
+         const apply = () => {
+             const toolbar = document.querySelector('.MuiAppBar-root .MuiToolbar-root');
+-            if (!toolbar || document.getElementById('eos-service-own-password')) return;
++            if (!toolbar) return;
++            if (!document.getElementById('eos-service-ui')) {
++                const ui = document.createElement('a');
++                ui.id = 'eos-service-ui'; ui.className = 'eos-service-own-password';
++                ui.href = eosUiTarget(base).href; ui.textContent = 'NexoWatt UI';
++                ui.target = '_blank'; ui.rel = 'noopener noreferrer';
++                toolbar.appendChild(ui);
++            }
++            if (document.getElementById('eos-service-own-password')) return;
+             const link = document.createElement('a');
+             link.id = 'eos-service-own-password'; link.className = 'eos-service-own-password';
+             link.href = new URL('index.html?eosPassword=1', base).href;
+@@ -736,7 +753,19 @@
+                 return resolved;
+             }
+             lockExpertMode(role);
+-            if (role === 'installer' || role === 'enduser') {
++            if (role === 'enduser') {
++                // Erst eine explizit bestätigte zentrale Endkundensitzung darf
++                // weiterleiten; der Erstpasswortdialog wurde oben abgeschlossen.
++                if (policy.authenticated !== true || policy.role !== 'enduser'
++                    || policy.mustChangePassword !== false || typeof policy.user !== 'string'
++                    || !policy.user.startsWith('system.user.') || policy.user.length <= 12
++                    || policy.user.length > 512) {
++                    throw new Error('Die zentrale Endkundensitzung ist nicht bestätigt.');
++                }
++                window.location.replace(eosUiTarget(base).href);
++                return resolved;
++            }
++            if (role === 'installer') {
+                 showProductPortal(resolved, base);
+                 return resolved;
+             }
+--- a/components/admin/adminWww/js/eos-role-bootstrap.js
++++ b/components/admin/adminWww/js/eos-role-bootstrap.js
+@@ -1,7 +1,7 @@
+ (() => {
+     'use strict';
+ 
+-    const VERSION = 'v20261001-scoped-role-portal';
++    const VERSION = 'v20261119-ui-1.0.37-role-entry';
+     const script = document.currentScript || document.querySelector('script[src*="eos-role-bootstrap.js"]');
+     const entry = script?.dataset?.eosEntry || '';
+     let launched = false;
+@@ -221,6 +221,16 @@
+     // objects may contain credentials and are intentionally unavailable to the
+     // other roles. Keep their product navigation on the scoped HTTP contracts;
+     // showing/hiding these controls never replaces the server's authorization.
++    // NexoWatt UI 1.0.37: ein HTTPS-Ursprung und die ausdrücklich gewählte Instanz.
++    // Kein fester Zusatzport, fremder Host oder ungeprüfter Browser-Rücksprung.
++    const eosUiTarget = base => {
++        const target = new URL('proxy/nexowatt-ui.0/', base);
++        if (target.origin !== window.location.origin || target.protocol !== 'https:') {
++            throw new Error('Der gemeinsame HTTPS-Zugang zur NexoWatt UI ist erforderlich.');
++        }
++        return target;
++    };
++
+     const showProductPortal = (policy, base) => {
+         const installer = policy.role === 'installer';
+         document.documentElement.classList.add('eos-product-portal-active');
+@@ -246,8 +256,7 @@
+             </section>`;
+         portal.querySelector('h1').textContent = installer ? 'Installateur' : 'Benutzer';
+         portal.querySelector('#eos-portal-account').textContent = String(policy.user || policy.userId || '').replace(/^system\.user\./, '');
+-        const cockpit = new URL(window.location.href);
+-        cockpit.protocol = 'https:'; cockpit.port = '8188'; cockpit.pathname = '/'; cockpit.search = ''; cockpit.hash = '';
++        const cockpit = eosUiTarget(base);
+         portal.querySelector('#eos-portal-cockpit').href = cockpit.href;
+         portal.querySelector('#eos-portal-password').href = new URL('index.html?eosPassword=1', base).href;
+         portal.querySelector('#eos-portal-logout').href = new URL('logout', base).href;
+@@ -277,7 +286,15 @@
+     const installOwnPasswordLink = base => {
+         const apply = () => {
+             const toolbar = document.querySelector('.MuiAppBar-root .MuiToolbar-root');
+-            if (!toolbar || document.getElementById('eos-service-own-password')) return;
++            if (!toolbar) return;
++            if (!document.getElementById('eos-service-ui')) {
++                const ui = document.createElement('a');
++                ui.id = 'eos-service-ui'; ui.className = 'eos-service-own-password';
++                ui.href = eosUiTarget(base).href; ui.textContent = 'NexoWatt UI';
++                ui.target = '_blank'; ui.rel = 'noopener noreferrer';
++                toolbar.appendChild(ui);
++            }
++            if (document.getElementById('eos-service-own-password')) return;
+             const link = document.createElement('a');
+             link.id = 'eos-service-own-password'; link.className = 'eos-service-own-password';
+             link.href = new URL('index.html?eosPassword=1', base).href;
+@@ -736,7 +753,19 @@
+                 return resolved;
+             }
+             lockExpertMode(role);
+-            if (role === 'installer' || role === 'enduser') {
++            if (role === 'enduser') {
++                // Erst eine explizit bestätigte zentrale Endkundensitzung darf
++                // weiterleiten; der Erstpasswortdialog wurde oben abgeschlossen.
++                if (policy.authenticated !== true || policy.role !== 'enduser'
++                    || policy.mustChangePassword !== false || typeof policy.user !== 'string'
++                    || !policy.user.startsWith('system.user.') || policy.user.length <= 12
++                    || policy.user.length > 512) {
++                    throw new Error('Die zentrale Endkundensitzung ist nicht bestätigt.');
++                }
++                window.location.replace(eosUiTarget(base).href);
++                return resolved;
++            }
++            if (role === 'installer') {
+                 showProductPortal(resolved, base);
+                 return resolved;
+             }

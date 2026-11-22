@@ -1,0 +1,438 @@
+{
+  "$schema": "http://cyclonedx.org/schema/bom-1.5.schema.json",
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:ac7a6535-4e43-45e2-a724-e761497f7c77",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-09-29T21:28:03.991Z",
+    "lifecycles": [
+      {
+        "phase": "build"
+      }
+    ],
+    "tools": [
+      {
+        "vendor": "npm",
+        "name": "cli",
+        "version": "11.9.0"
+      }
+    ],
+    "component": {
+      "bom-ref": "nexowatt-ui-admin-tab@0.8.8",
+      "type": "library",
+      "name": "nexowatt-ui-admin-tab",
+      "version": "0.8.8",
+      "scope": "required",
+      "purl": "pkg:npm/nexowatt-ui-admin-tab@0.8.8",
+      "properties": [
+        {
+          "name": "cdx:npm:package:private",
+          "value": "true"
+        }
+      ],
+      "externalReferences": [],
+      "description": "nexowatt-ui-admin-tab. Observed installed dependency tree in the review/build environment. Not proof of the delivered device, OS, ioBroker controller or browser bundle contents. Installation scripts were not run by this generator."
+    },
+    "properties": [
+      {
+        "name": "nexowatt:inventory-kind",
+        "value": "installed-production-dependency-inventory"
+      },
+      {
+        "name": "nexowatt:scope",
+        "value": "admin"
+      },
+      {
+        "name": "nexowatt:generator-version",
+        "value": "1.1.0"
+      },
+      {
+        "name": "nexowatt:generator-sha256",
+        "value": "cc91b3f60f38e21f516e041e5e479c0860ac38e99eb782565218b4a723b7d822"
+      },
+      {
+        "name": "nexowatt:package-json-path",
+        "value": "src-admin-tab/package.json"
+      },
+      {
+        "name": "nexowatt:package-json-sha256",
+        "value": "1187c0e705ee899d6bbab3ae9f8817cf05a51a2618ab33fd8b4fb6b0e589ebb1"
+      },
+      {
+        "name": "nexowatt:lockfile-path",
+        "value": "src-admin-tab/package-lock.json"
+      },
+      {
+        "name": "nexowatt:lockfile-sha256",
+        "value": "2ce40a4838b00f6a4782bd917af76f18b51f98ffe5086113ae1c11b89e64aef7"
+      },
+      {
+        "name": "nexowatt:lockfile-package-entry-count",
+        "value": "120"
+      },
+      {
+        "name": "nexowatt:node-version",
+        "value": "v24.19.0"
+      },
+      {
+        "name": "nexowatt:host-platform",
+        "value": "linux-x64"
+      },
+      {
+        "name": "nexowatt:limitations",
+        "value": "Observed installed dependency tree in the review/build environment. Not proof of the delivered device, OS, ioBroker controller or browser bundle contents. Installation scripts were not run by this generator."
+      }
+    ]
+  },
+  "components": [
+    {
+      "bom-ref": "cookie@1.1.1",
+      "type": "library",
+      "name": "cookie",
+      "version": "1.1.1",
+      "scope": "required",
+      "author": "Roman Shtylman <shtylman@gmail.com>",
+      "description": "HTTP server cookie parsing and serialization",
+      "purl": "pkg:npm/cookie@1.1.1",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/cookie/-/cookie-1.1.1.tgz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "7a2f00a2cee36b4c1e469173267100f541c9ffb5d09aa8256d1c277f60138dc07d5aaf3be15287f647e38e2acce94854dbf1397c561a77297284595d72a4a275"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "loose-envify@1.4.0",
+      "type": "library",
+      "name": "loose-envify",
+      "version": "1.4.0",
+      "scope": "required",
+      "author": "Andres Suarez <zertosh@gmail.com>",
+      "description": "Fast (and loose) selective `process.env` replacer using js-tokens instead of an AST",
+      "purl": "pkg:npm/loose-envify@1.4.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/loose-envify/-/loose-envify-1.4.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/zertosh/loose-envify.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/zertosh/loose-envify"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "972bb13c6aff59f86b95e9b608bfd472751cd7372a280226043cee918ed8e45ff242235d928ebe7d12debe5c351e03324b0edfeb5d54218e34f04b71452a0add"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "react@18.3.1",
+      "type": "library",
+      "name": "react",
+      "version": "18.3.1",
+      "scope": "required",
+      "description": "React is a JavaScript library for building user interfaces.",
+      "purl": "pkg:npm/react@18.3.1",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/react/-/react-18.3.1.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/facebook/react.git"
+        },
+        {
+          "type": "website",
+          "url": "https://reactjs.org/"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "c12fa1020252851d0a844bcf240adfb8f54dd7e1f3d6dd18ea7e632eb1906e46f8bab80f13fd11bdefb590c075bffa16807826e1621c57e8bb176a53563fb689"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "react-dom@18.3.1",
+      "type": "library",
+      "name": "react-dom",
+      "version": "18.3.1",
+      "scope": "required",
+      "description": "React package for working with the DOM.",
+      "purl": "pkg:npm/react-dom@18.3.1",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/react-dom/-/react-dom-18.3.1.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/facebook/react.git"
+        },
+        {
+          "type": "website",
+          "url": "https://reactjs.org/"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/facebook/react/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "e66e2740aa7ead945bd3d2cd1f9f463380714e1f76e75ff295b2886e97bb4e91b17c9fbd92fe812e42c15c88e3b296e06e720136a948db7b519d3593d2c9d423"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "react-router@7.18.4",
+      "type": "library",
+      "name": "react-router",
+      "version": "7.18.4",
+      "scope": "required",
+      "author": "Remix Software <hello@remix.run>",
+      "description": "Declarative routing for React",
+      "purl": "pkg:npm/react-router@7.18.4",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/react-router/-/react-router-7.18.4.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/remix-run/react-router"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "3d43d070c84c19102c94b72fb653f3fe49b304458f84b7602c5acbee92cd7a904be9d5f49568f8583d9c518560602b93de3c6f82160583cd5c0d38f8e0385eb5"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "react-router-dom@7.18.4",
+      "type": "library",
+      "name": "react-router-dom",
+      "version": "7.18.4",
+      "scope": "required",
+      "author": "Remix Software <hello@remix.run>",
+      "description": "Declarative routing for React web applications",
+      "purl": "pkg:npm/react-router-dom@7.18.4",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/react-router-dom/-/react-router-dom-7.18.4.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/remix-run/react-router"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "cab7e62472290c6eed682a6a2a34f51b907aab73b62be44df3f7e035fd254e30b088f6d0d1e8babd75fd663411fbb95df13afb679c66c8c9d9f1826ba6159053"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "scheduler@0.23.2",
+      "type": "library",
+      "name": "scheduler",
+      "version": "0.23.2",
+      "scope": "required",
+      "description": "Cooperative scheduler for the browser environment.",
+      "purl": "pkg:npm/scheduler@0.23.2",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/scheduler/-/scheduler-0.23.2.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/facebook/react.git"
+        },
+        {
+          "type": "website",
+          "url": "https://reactjs.org/"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/facebook/react/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "50e4a1b0fc33ecdacc52a851eadd215a315dbaf3b36edbfbb680c7d7f848adf44d2030679c159dd02c094c6bd3a67815966c0609d3fdfd997fb55ac3a9cb98cd"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "set-cookie-parser@2.7.2",
+      "type": "library",
+      "name": "set-cookie-parser",
+      "version": "2.7.2",
+      "scope": "required",
+      "author": "Nathan Friedly",
+      "description": "Parses set-cookie headers into objects",
+      "purl": "pkg:npm/set-cookie-parser@2.7.2",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/set-cookie-parser/-/set-cookie-parser-2.7.2.tgz"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/nfriedly/set-cookie-parser"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "a1e33596953f52f853c70fa0ddc21fc571f225173fba275ddf22b53f6e368331ddb34b9d401633b37cbc8f8802096f9927b69dd3272d95df1160ef9b76eae5bf"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "nexowatt-ui-admin-tab@0.8.8",
+      "dependsOn": [
+        "react@18.3.1",
+        "react-dom@18.3.1",
+        "react-router-dom@7.18.4"
+      ]
+    },
+    {
+      "ref": "cookie@1.1.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "loose-envify@1.4.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "react@18.3.1",
+      "dependsOn": [
+        "loose-envify@1.4.0"
+      ]
+    },
+    {
+      "ref": "react-dom@18.3.1",
+      "dependsOn": [
+        "react@18.3.1",
+        "loose-envify@1.4.0",
+        "scheduler@0.23.2"
+      ]
+    },
+    {
+      "ref": "react-router@7.18.4",
+      "dependsOn": [
+        "react@18.3.1",
+        "react-dom@18.3.1",
+        "cookie@1.1.1",
+        "set-cookie-parser@2.7.2"
+      ]
+    },
+    {
+      "ref": "react-router-dom@7.18.4",
+      "dependsOn": [
+        "react@18.3.1",
+        "react-dom@18.3.1",
+        "react-router@7.18.4"
+      ]
+    },
+    {
+      "ref": "scheduler@0.23.2",
+      "dependsOn": [
+        "loose-envify@1.4.0"
+      ]
+    },
+    {
+      "ref": "set-cookie-parser@2.7.2",
+      "dependsOn": []
+    }
+  ]
+}

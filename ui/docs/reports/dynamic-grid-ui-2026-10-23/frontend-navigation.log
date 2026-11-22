@@ -1,0 +1,7 @@
+PASS installer: Installer rendert nur Bereiche und erlaubte Verwaltungsaktionen
+PASS admin: Installer rendert nur Bereiche und erlaubte Verwaltungsaktionen
+PASS M0 → Allgemein öffnet dieselbe eigenständige Ansicht
+PASS M0 → Allgemein öffnet den übergeordneten AppCenter-Rahmen
+PASS PageShell eingebettet ohne zweiten Seitenkopf
+PASS PageShell eigenständig mit Seitenkopf und Navigation
+{"result":"PASS","checks":6,"limitation":"React-Serverrenderer und echte Handler; Browsernavigation und Backend-Rechte werden separat geprüft."}

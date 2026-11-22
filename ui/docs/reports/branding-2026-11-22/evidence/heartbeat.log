@@ -1,0 +1,7 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> iobroker.nexowatt-ui@1.0.38 test:stable-1.0.2-health
+> node scripts/verify-stable-1.0.2-health-heartbeat.cjs
+
+[Stable 1.0.2 baseline on 1.0.38] OK: 25-s field cycle remains online; scheduler stall and genuine offline state stay distinguishable.
+[Stable 1.0.2 baseline on 1.0.38] OK: independent 4-s adapter, scheduler and overview heartbeat lifecycle verified.

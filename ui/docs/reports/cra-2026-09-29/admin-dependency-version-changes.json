@@ -1,0 +1,38 @@
+{
+  "schema": "nexowatt.lockfile-change-evidence.v1",
+  "baselineArchiveSha256": "90db619ecd754cab335dae92fdc123a48f62ceffb505a2a2b832e119d885eefe",
+  "baselineLockfileSha256": "12b3c5f208d9dd609999fa9a964e6c0062dcf585808b38494e59604a11b6532d",
+  "currentLockfileSha256": "2ce40a4838b00f6a4782bd917af76f18b51f98ffe5086113ae1c11b89e64aef7",
+  "changes": [
+    {
+      "path": "node_modules/@remix-run/router",
+      "before": "1.23.4",
+      "after": null,
+      "development": false
+    },
+    {
+      "path": "node_modules/cookie",
+      "before": null,
+      "after": "1.1.1",
+      "development": false
+    },
+    {
+      "path": "node_modules/react-router",
+      "before": "6.30.6",
+      "after": "7.18.4",
+      "development": false
+    },
+    {
+      "path": "node_modules/react-router-dom",
+      "before": "6.30.6",
+      "after": "7.18.4",
+      "development": false
+    },
+    {
+      "path": "node_modules/set-cookie-parser",
+      "before": null,
+      "after": "2.7.2",
+      "development": false
+    }
+  ]
+}

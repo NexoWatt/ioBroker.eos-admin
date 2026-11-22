@@ -1,0 +1,38 @@
+[
+  {
+    "command": [
+      "node",
+      "scripts/build-ts-runtime-mirrors.js",
+      "--check"
+    ],
+    "exitCode": 0,
+    "output": "[ts-runtime-mirrors] OK: 517 JS-/JSX-Dateien als TS-/TSX-Parallelspiegel gepr\u00fcft.\n"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "docs:check"
+    ],
+    "exitCode": 0,
+    "output": "npm warn Unknown env config \"http-proxy\". This will stop working in the next major version of npm.\n\n> iobroker.nexowatt-ui@1.0.32 docs:check\n> node scripts/verify-code-documentation.cjs\n\n[code-docs] OK: 264 deutsche Modulbeschreibungen und Quellverkn\u00fcpfungen synchron.\n"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "check:proprietary-headers"
+    ],
+    "exitCode": 0,
+    "output": "npm warn Unknown env config \"http-proxy\". This will stop working in the next major version of npm.\n\n> iobroker.nexowatt-ui@1.0.32 check:proprietary-headers\n> node scripts/sync-proprietary-headers.cjs --check\n\n{\n  \"ok\": true,\n  \"sourceCount\": 789,\n  \"generatedCount\": 713,\n  \"missing\": [],\n  \"changed\": [],\n  \"blocked\": []\n}\n"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "publish:check"
+    ],
+    "exitCode": 0,
+    "output": "npm warn Unknown env config \"http-proxy\". This will stop working in the next major version of npm.\n\n> iobroker.nexowatt-ui@1.0.32 publish:check\n> node scripts/verify-release-artifact.js\n\n[secret-guard] OK: 3040 files; no findings in the supported rules.\n[release-artifact] Quellcode-Dokumentation aktuell: 264 Dateien.\n[release-artifact] OK: Produkt-SBOM und Quellen-/Artefaktbindung aktuell.\n[release-artifact] OK: iobroker.nexowatt-ui@1.0.32, 481 gepr\u00fcfte Paketdateien, Produkt-Runtime unver\u00e4ndert.\n[release-artifact] OK: Keine Installation oder Aktualisierung von npm/TypeScript erforderlich.\n"
+  }
+]

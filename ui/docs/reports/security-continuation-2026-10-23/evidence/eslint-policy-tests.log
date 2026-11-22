@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.30 test:lint-security
+> node scripts/verify-eslint-security-test.cjs
+
+ESLint security gate: 25 meaningful policy/negative checks passed.

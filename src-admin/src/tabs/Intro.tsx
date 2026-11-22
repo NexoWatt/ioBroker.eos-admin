@@ -688,9 +688,8 @@ class Intro extends React.Component<IntroProps, IntroState> {
             if (!isAdministrator && /^(?:admin|xterm)(?:\.|$)/i.test(instance.id)) {
                 return null;
             }
-            // The NexoWatt UI card carries the operational EOS entry point. A card hidden earlier by
-            // an Admin intro preference must therefore remain visible for Installer and End User.
-            const forceVisibleRoleCard = !isAdministrator && /^nexowatt-ui(?:\.|$)/i.test(instance.id);
+            // Dashboard and Installer have fixed same-origin navigation in the shared EOS shell.
+            const forceVisibleRoleCard = false;
             const forceVisibleAdminCard = isAdministrator && /^(?:admin|xterm)(?:\.|$)/i.test(instance.id);
             const enabled = forceVisibleAdminCard || forceVisibleRoleCard || !this.state.deactivated?.includes(cardKey);
             if (enabled || this.state.edit) {

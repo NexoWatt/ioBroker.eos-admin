@@ -1,0 +1,14 @@
+{
+  "command": [
+    "npm",
+    "pack",
+    "--dry-run",
+    "--json",
+    "--ignore-scripts"
+  ],
+  "startedAt": "2026-10-08T19:47:09.221817+00:00",
+  "durationSeconds": 2.716,
+  "exitCode": 0,
+  "log": "pack-dry-run.log",
+  "hardware": false
+}

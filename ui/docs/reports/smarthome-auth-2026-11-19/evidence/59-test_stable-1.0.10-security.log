@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:stable-1.0.10-security
+> node scripts/verify-stable-1.0.10-secret-guard.cjs
+
+[1.0.10 security] OK: SMTP/HMAC literals, URLs/env/private keys and token formats, runtime files, clean UI fields, obsolete bundles, real staged-index hook, redacted failures and publish gate.

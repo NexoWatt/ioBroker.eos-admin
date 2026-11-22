@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.32 test:package-runtime-start-smoke
+> node scripts/verify-package-runtime-start-smoke.js
+
+[package-runtime-start-smoke] OK: 275 JS/MJS-Dateien syntaktisch geprüft, relative require()-Pfade vollständig und main.js-/EMS-/§14a-Startkette konstruierbar.

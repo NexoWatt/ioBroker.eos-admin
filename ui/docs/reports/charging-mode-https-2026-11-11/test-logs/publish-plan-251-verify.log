@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:publish-check-runner
+> node scripts/publish-check-runner.js --verify
+
+[publish-check-runner] OK: 251 geordnete Schritte validiert; npm publish nutzt den read-only Artefaktcheck, Volltest-Aufruf 36 Zeichen; längster Einzelbefehl 64 Zeichen; keine Shell-Gesamtkette.

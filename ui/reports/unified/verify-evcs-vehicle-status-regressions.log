@@ -1,0 +1,149 @@
+{
+  "scope": "Parser and evidence-precedence regressions. No full-tick or hardware test.",
+  "source": "generated-runtime",
+  "passed": 27,
+  "results": [
+    {
+      "status": "No EV connected",
+      "state": "disconnected",
+      "startEligible": false
+    },
+    {
+      "status": "noEVConnected",
+      "state": "disconnected",
+      "startEligible": false
+    },
+    {
+      "status": "No vehicle",
+      "state": "disconnected",
+      "startEligible": false
+    },
+    {
+      "status": "No EV connected, charging disabled",
+      "state": "disconnected",
+      "startEligible": false
+    },
+    {
+      "status": "No EV connected - preparing",
+      "state": "disconnected",
+      "startEligible": false
+    },
+    {
+      "status": "No vehicle, waiting for current",
+      "state": "disconnected",
+      "startEligible": false
+    },
+    {
+      "status": "Kein Fahrzeug, charging disabled",
+      "state": "disconnected",
+      "startEligible": false
+    },
+    {
+      "status": "Geen auto verbonden, preparing",
+      "state": "disconnected",
+      "startEligible": false
+    },
+    {
+      "status": "EVConnected",
+      "state": "connected",
+      "startEligible": true
+    },
+    {
+      "status": "B1 EV connected",
+      "state": "connected",
+      "startEligible": true
+    },
+    {
+      "status": "B2 EV has the permission to charge",
+      "state": "ready_to_charge",
+      "startEligible": true
+    },
+    {
+      "status": "Preparing",
+      "state": "ready_to_charge",
+      "startEligible": true
+    },
+    {
+      "status": "Charging",
+      "state": "charging",
+      "startEligible": true
+    },
+    {
+      "status": "SuspendedEV",
+      "state": "paused_by_vehicle",
+      "startEligible": false
+    },
+    {
+      "status": "SuspendedEVSE",
+      "state": "paused_by_evse",
+      "startEligible": true
+    },
+    {
+      "status": "Faulted - No EV connected",
+      "state": "faulted",
+      "startEligible": false
+    },
+    {
+      "status": "Offline - No EV connected",
+      "state": "offline",
+      "startEligible": false
+    },
+    {
+      "status": "Unavailable - No EV connected",
+      "state": "unavailable",
+      "startEligible": false
+    },
+    {
+      "status": "Finishing",
+      "state": "finishing",
+      "startEligible": false
+    },
+    {
+      "status": "Reserved",
+      "state": "reserved",
+      "startEligible": false
+    },
+    {
+      "status": "C2 No EV connected",
+      "state": "charging",
+      "startEligible": true
+    },
+    {
+      "status": "No EV connected",
+      "state": "disconnected",
+      "startEligible": false
+    },
+    {
+      "status": "SuspendedEV with Occupied",
+      "state": "paused_by_vehicle",
+      "startEligible": false
+    },
+    {
+      "status": "Finishing with Occupied",
+      "state": "finishing",
+      "startEligible": false
+    },
+    {
+      "status": "Faulted with Occupied",
+      "state": "faulted",
+      "startEligible": false
+    },
+    {
+      "status": "Unavailable with Occupied",
+      "state": "unavailable",
+      "startEligible": false
+    },
+    {
+      "status": "Offline with Occupied",
+      "state": "offline",
+      "startEligible": false
+    }
+  ],
+  "openSessionAmbiguity": {
+    "status": "OPEN",
+    "oldPauseFresh": true,
+    "normalizedState": "paused_by_vehicle",
+    "startEligible": false,
+    "reason": "Old transaction state can dominate current Preparing; session boundary and actual device semantics are unproven. No automatic pause override applied."
+  }
+}

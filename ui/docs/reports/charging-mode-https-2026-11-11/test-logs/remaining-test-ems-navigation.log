@@ -1,0 +1,42 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:ems-navigation
+> node test/frontend-ems-navigation.cjs && node test/frontend-dynamic-grid-version.cjs
+
+PASS installer: Installer rendert nur Bereiche und erlaubte Verwaltungsaktionen
+PASS admin: Installer rendert nur Bereiche und erlaubte Verwaltungsaktionen
+PASS M0 → Allgemein öffnet dieselbe eigenständige Ansicht
+PASS M0 → Allgemein öffnet den übergeordneten AppCenter-Rahmen
+PASS PageShell eingebettet ohne zweiten Seitenkopf
+PASS PageShell eigenständig mit Seitenkopf und Navigation
+{"result":"PASS","checks":6,"limitation":"React-Serverrenderer und echte Handler; Browsernavigation und Backend-Rechte werden separat geprüft."}
+PASS Canonical: Version akzeptiert ausschließlich positive sichere Ganzzahlen
+PASS Canonical: Gesamtstand 2 liefert Save-Token 2 und informiert das bestehende iframe
+PASS Canonical: fremder Ursprung, anderes Fenster und unzulässige Nachricht werden ignoriert
+PASS Canonical: Child 3 sperrt Token 2 bis zum vollständigen Laden von Stand 3
+PASS Canonical: Child-Meldung vor dem ersten geladenen Gesamtstand bleibt wirksam
+PASS Canonical: Partnerrevision benachrichtigt das konkrete iframe und bleibt vom Dynamic-Token getrennt
+PASS Canonical: neue Partnerrevision sperrt echte Gesamt-Save-/Importwege und alte Antworten
+PASS Canonical: Gesamtstandübernahme bricht den echten offenen DP-Dialog ab
+PASS Canonical: echter globaler Save sendet den geladenen CAS-Token
+PASS Canonical: veralteter globaler Save scheitert vor Formularübernahme und Netzwerk
+PASS Canonical: Backupimport nutzt aktuellen Basis-Token statt historischer Backupversion
+PASS Canonical: saveConfig bricht offene DP-Auswahl ab, sperrt parallele Mutationen und gibt nach Fehler wieder frei
+PASS Canonical: backupDoImportFromObj bricht offene DP-Auswahl ab, sperrt parallele Mutationen und gibt nach Fehler wieder frei
+PASS Mirror: Version akzeptiert ausschließlich positive sichere Ganzzahlen
+PASS Mirror: Gesamtstand 2 liefert Save-Token 2 und informiert das bestehende iframe
+PASS Mirror: fremder Ursprung, anderes Fenster und unzulässige Nachricht werden ignoriert
+PASS Mirror: Child 3 sperrt Token 2 bis zum vollständigen Laden von Stand 3
+PASS Mirror: Child-Meldung vor dem ersten geladenen Gesamtstand bleibt wirksam
+PASS Mirror: Partnerrevision benachrichtigt das konkrete iframe und bleibt vom Dynamic-Token getrennt
+PASS Mirror: neue Partnerrevision sperrt echte Gesamt-Save-/Importwege und alte Antworten
+PASS Mirror: Gesamtstandübernahme bricht den echten offenen DP-Dialog ab
+PASS Mirror: echter globaler Save sendet den geladenen CAS-Token
+PASS Mirror: veralteter globaler Save scheitert vor Formularübernahme und Netzwerk
+PASS Mirror: Backupimport nutzt aktuellen Basis-Token statt historischer Backupversion
+PASS Mirror: saveConfig bricht offene DP-Auswahl ab, sperrt parallele Mutationen und gibt nach Fehler wieder frei
+PASS Mirror: backupDoImportFromObj bricht offene DP-Auswahl ab, sperrt parallele Mutationen und gibt nach Fehler wieder frei
+PASS React: verspäteter Poll 2 verändert erfolgreichen aktiven Save 3 nicht
+PASS React: verspäteter Reload 2 verändert erfolgreichen aktiven Save 3 nicht
+PASS React: beobachtete Fremdversion sperrt den alten Entwurf ohne automatische Tokenübernahme
+{"result":"PASS","checks":29,"limitation":"Originale AST-extrahierte Frontend-Helfer und Save-Handler; Backend-CAS und Browserinteraktion separat prüfen."}

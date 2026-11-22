@@ -1,0 +1,61 @@
+src-admin-tab/src/components/EmbeddedEmsFrame.tsx:31:    css.rel = 'stylesheet'; css.href = `${getRuntimeProxyBase() ?? ''}/static/styles.css`;
+src-admin-tab/src/components/EmbeddedEmsFrame.tsx:44:        window.parent.postMessage({ type: 'nw:dynamic-grid-height', height }, window.location.origin);
+src-admin-tab/src/main.tsx:13: * Verknüpfungen: docs/quellcode/src-admin-tab/src/main.md
+src-admin-tab/src/main.tsx:17: * Datei: src-admin-tab/src/main.tsx
+src-admin-tab/src/pages/ArbitragePage.tsx:12: * Verknüpfungen: docs/quellcode/src-admin-tab/src/pages/ArbitragePage.md
+src-admin-tab/src/App.tsx:11: * Verknüpfungen: docs/quellcode/src-admin-tab/src/App.md
+src-admin-tab/src/App.tsx:15: * Datei: src-admin-tab/src/App.tsx
+src-admin-tab/src/App.tsx:49:  const pathname = window.location.pathname;
+src-admin-tab/src/pages/NotificationMailPage.tsx:13: * Verknüpfungen: docs/quellcode/src-admin-tab/src/pages/NotificationMailPage.md
+src-admin-tab/src/pages/NotificationMailPage.tsx:84:      <a className="nw-button" href={`${getRuntimeProxyBase() ?? ''}/settings.html`}>Kunden-Benachrichtigungen öffnen</a>
+src-admin-tab/src/pages/NotificationMailPage.tsx:85:      <a className="nw-button" href={`${getRuntimeProxyBase() ?? ''}/ems-apps.html`}>Zurück zum App-Center</a>
+src-admin-tab/src/pages/LicensePage.tsx:11: * Verknüpfungen: docs/quellcode/src-admin-tab/src/pages/LicensePage.md
+src-admin-tab/src/pages/LicensePage.tsx:15: * Datei: src-admin-tab/src/pages/LicensePage.tsx
+src-admin-tab/src/pages/InstallerPage.tsx:11: * Verknüpfungen: docs/quellcode/src-admin-tab/src/pages/InstallerPage.md
+src-admin-tab/src/pages/InstallerPage.tsx:23: * Datei: src-admin-tab/src/pages/InstallerPage.tsx
+src-admin-tab/src/pages/InstallerPage.tsx:84:    const adminPort = window.location.port || '8081';
+src-admin-tab/src/pages/PartnerIntegrationsPage.tsx:12: * Verknüpfungen: docs/quellcode/src-admin-tab/src/pages/PartnerIntegrationsPage.md
+src-admin-tab/src/pages/PartnerIntegrationsPage.tsx:82:  const embedded = window.parent !== window && new URLSearchParams(window.location.search).get('embedded') === '1';
+src-admin-tab/src/pages/PartnerIntegrationsPage.tsx:114:      if (event.origin !== window.location.origin || event.source !== window.parent || !event.data || typeof event.data !== 'object' || !('type' in event.data) || event.data.type !== 'nw:partner-integrations-parent-changed' || !('configVersion' in event.data)) return;
+src-admin-tab/src/pages/PartnerIntegrationsPage.tsx:144:        if (embedded) window.parent.postMessage({ type: 'nw:partner-integrations-saved', configVersion: next.config.configVersion }, window.location.origin);
+src-admin-tab/src/pages/DynamicGridPage.tsx:17: * Verknüpfungen: docs/dev/DYNAMIC_GRID_CONTRACT.md; docs/quellcode/src-admin-tab/src/pages/DynamicGridPage.md
+src-admin-tab/src/pages/DynamicGridPage.tsx:90:    <a className="nw-link-button nw-config-btn" href={`${getRuntimeProxyBase() ?? ''}/ems-apps.html?nwAdmin=1&tab=mapping`} target={typeof window !== 'undefined' && window.parent !== window ? '_parent' : '_self'}>Zuordnung → Allgemein öffnen</a>
+src-admin-tab/src/pages/DynamicGridPage.tsx:342:      if (window.parent === window || event.source !== window.parent || event.origin !== window.location.origin || !isSafeJson(event.data) || !isRecord(event.data) || event.data.type !== 'nw:dynamic-grid-parent-changed') return;
+src-admin-tab/src/pages/DynamicGridPage.tsx:351:    if (window.parent !== window && data.config && Number.isSafeInteger(data.config.configVersion)) window.parent.postMessage({ type: 'nw:dynamic-grid-saved', configVersion: data.config.configVersion }, window.location.origin);
+src-admin-tab/src/pages/DynamicGridPage.tsx:413:  const embedded = window.parent !== window && new URLSearchParams(window.location.search).get('embedded') === '1';
+src-admin-tab/src/pages/DynamicGridPage.tsx:414:  return <DpFieldContext.Provider value={dpFieldContext}><PageShell embedded={embedded} title="Dynamischer Netzanschluss" subtitle="M0 und M1 gemeinsam begrenzen. Speicher und PV vollständig in dieser App zuordnen und betreiben." showBack={false} actions={<a className="nw-link-button nw-config-btn" href={`${getRuntimeProxyBase() ?? ''}/ems-apps.html?nwAdmin=1`} target={embedded ? '_parent' : '_self'}>Zu EMS Apps</a>}>
+src-admin-tab/src/pages/MeshCoordinatorPage.tsx:11: * Verknüpfungen: docs/quellcode/src-admin-tab/src/pages/MeshCoordinatorPage.md
+src-admin-tab/src/pages/MeshCoordinatorPage.tsx:58:  return <PageShell title="Microgrid · Master / Slave" subtitle="EMS-App · Ein Trafo-Master · bis zu 99 Haus-Slaves" showBack={false} compact={new URLSearchParams(window.location.search).has('embedded')} actions={<a className="nw-link-button" href={`${getRuntimeProxyBase() ?? ''}/ems-apps.html?nwAdmin=1`} target={window.parent !== window ? '_parent' : '_self'}>Zum EMS-AppCenter</a>}>
+src-admin-tab/src/pages/MeshCoordinatorPage.tsx:82:        <section className="nw-card"><h2>Trafo-Regelung</h2><label className="nw-field-label">Verteilung<select className="nw-input" value={config.allocation?.strategy || 'fixed'} onChange={e => update('allocation', { ...(config.allocation || { headroomW: 1000, headroomA: 3, engagePct: 90, releasePct: 80 }), strategy: e.target.value === 'transformer' ? 'transformer' : 'fixed' })}><option value="fixed">Feste Anteile (bisheriges Verhalten)</option><option value="transformer">Bedarfsabhängig · Master am Trafo, Slaves an Häusern</option></select></label><p>Die Häuser optimieren lokal innerhalb sicherer NVP-Korridore. Bei knapper Kapazität verteilt der Master die Gesamtfreigabe bedarfsgerecht. Haus- und Stranggrenzen gelten in jedem Betriebszustand.</p>{config.allocation?.strategy === 'transformer' && <>{([['headroomW','Zusätzlicher Spielraum je Haus W'],['headroomA','Zusätzlicher Spielraum je Phase A'],['engagePct','Eingriff ab Trafoauslastung %'],['releasePct','Wiederfreigabe unter Trafoauslastung %']] as const).map(([k,label]) => <NumberField key={k} label={label} value={config.allocation[k]} onChange={n => update('allocation', { ...config.allocation, [k]: n })} />)}<button className="nw-button" type="button" onClick={() => setConfig(p => p ? ({ ...p, intervalMs: 250, requestTimeoutMs: 200, leaseMs: 1500, staleMs: 1000 }) : p)}>Schnellen Takt übernehmen: 250 ms / 200 ms Timeout</button><p>Nur bei entsprechend schnellen NVP-Messwerten und stabiler Verbindung verwenden. Messung, Netzwerk und Stellgeräte bestimmen zusammen die tatsächliche Reaktionszeit.</p></>}</section>
+src-admin-tab/src/pages/RedirectPage.tsx:13: * Verknüpfungen: docs/quellcode/src-admin-tab/src/pages/RedirectPage.md
+src-admin-tab/src/pages/RedirectPage.tsx:25: * Datei: src-admin-tab/src/pages/RedirectPage.tsx
+src-admin-tab/src/pages/RedirectPage.tsx:87:  const adminPort = window.location.port || '8081';
+src-admin-tab/src/pages/ProtectedRuntimeRoute.tsx:13: * Verknüpfungen: docs/quellcode/src-admin-tab/src/pages/ProtectedRuntimeRoute.md
+src-admin-tab/src/pages/ProtectedRuntimeRoute.tsx:67:  const embeddedInEms = embedded && window.parent !== window && new URLSearchParams(window.location.search).get('embedded') === '1';
+src-admin-tab/src/pages/MeshAccountingPanel.tsx:23:  const url = URL.createObjectURL(new Blob([text], { type: `${mime};charset=utf-8` })); const a = document.createElement('a'); a.href = url; a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+src-admin-tab/src/pages/MeshAccountingPanel.tsx:32:  useEffect(() => { if (!limits && meshConfig?.role === 'master') setLimits(status?.master?.operatorLimits || { importW: meshConfig.site.limit.importW, exportW: meshConfig.site.limit.exportW, strategy: meshConfig.allocation.strategy }); }, [meshConfig, status, limits]);
+src-admin-tab/src/pages/MeshAccountingPanel.tsx:56:        <label className="nw-field-label">Verteilung im Betrieb<select className="nw-input" value={limits.strategy || meshConfig.allocation?.strategy || 'fixed'} onChange={e => setLimits({ ...limits, strategy: e.target.value === 'transformer' ? 'transformer' : 'fixed' })}><option value="fixed">Feste Anteile</option><option value="transformer">Bedarfsabhängig · Trafo / Häuser</option></select></label>
+src-admin-tab/src/pages/PageShell.tsx:13: * Verknüpfungen: docs/quellcode/src-admin-tab/src/pages/PageShell.md
+src-admin-tab/src/pages/PageShell.tsx:17: * Datei: src-admin-tab/src/pages/PageShell.tsx
+src-admin-tab/src/pages/PageShell.tsx:67:            <img className="nw-brand__logo" src={nexowattLogo} alt="NexoWatt EOS" width={52} height={52} />
+src-admin-tab/src/lib/partnerContracts.ts:12: * Verknüpfungen: docs/quellcode/src-admin-tab/src/lib/partnerContracts.md
+src-admin-tab/src/lib/dataPointPicker.ts:27:    const origin = window.location.origin;
+src-admin-tab/src/lib/dataPointPicker.ts:28:    const embedded = window.parent !== window && new URLSearchParams(window.location.search).get('embedded') === '1';
+src-admin-tab/src/lib/dataPointPicker.ts:73:      try { popup = window.open(url.toString(), `nw-dp-picker-${requestId}`, 'popup,width=1050,height=760'); }
+src-admin-tab/src/lib/mesh-types.ts:73:const allocation = shape({ strategy: choice('fixed', 'transformer'), headroomW: number, headroomA: number, engagePct: number, releasePct: number });
+src-admin-tab/src/lib/mesh-types.ts:80:  allocation, masterUrl: text, localParticipates: bool, nodes: list(node, 99), branches: list(shape({ id: text, ...groupSchema }), 100),
+src-admin-tab/src/lib/adminConnection.ts:15: * Verknüpfungen: docs/quellcode/src-admin-tab/src/lib/adminConnection.md
+src-admin-tab/src/lib/adminConnection.ts:27: * Datei: src-admin-tab/src/lib/adminConnection.ts
+src-admin-tab/src/lib/adminConnection.ts:333:  const query = new URLSearchParams(window.location.search || '').get('instance');
+src-admin-tab/src/lib/adminConnection.ts:337:  const pathname = window.location.pathname || '/';
+src-admin-tab/src/lib/adminConnection.ts:385:  const protocol = window.location.protocol;
+src-admin-tab/src/lib/adminConnection.ts:389:  const host = window.location.hostname;
+src-admin-tab/src/lib/adminConnection.ts:393:  const port = window.location.port;
+src-admin-tab/src/lib/adminConnection.ts:408:  const pathname = window.location.pathname || '/';
+src-admin-tab/src/lib/adminConnection.ts:424:  if (window.location.protocol !== 'https:') return null;
+src-admin-tab/src/lib/adminConnection.ts:447:  const pathname = window.location.pathname || '/';
+src-admin-tab/src/lib/adminConnection.ts:456:  if (window.location.protocol === 'https:') {
+src-admin-tab/src/lib/adminConnection.ts:463:  return `http://${window.location.hostname}:${port}`;
+src-admin-tab/src/lib/adminConnection.ts:472:  if (window.location.protocol !== 'http:') {
+src-admin-tab/src/lib/adminConnection.ts:1097:    (window.top || window).location.href = url;
+src-admin-tab/src/lib/adminConnection.ts:1099:    window.location.href = url;

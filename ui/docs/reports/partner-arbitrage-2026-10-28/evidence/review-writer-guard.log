@@ -1,0 +1,10 @@
+Scope: canonical actuator-shadow-arbiter.ts transpiled using TypeScript; no-dynamic-grid ownership mock; in-memory physical writer call counter.
+Node: v24.22.1
+Before correction: partnerControlRequired=true, partnerControlGuard=()=>false; result=true; physicalWriteCalls=1; lastDecision.action=block; lastDecision.reason=partner-control-expired-or-revoked.
+After correction, independently executed:
+PASS false guard blocks physical writer with authority:null
+PASS stop/uninstall blocks held old partner context
+PASS reinstall cannot reactivate held old partner context
+PASS missing arbiter rejects before callback
+{"ok":true,"checks":4,"physicalWriteCalls":0,"scope":"isolated canonical TS with no-dynamic-grid mock; no hardware"}
+No hardware writes or partner traffic executed.

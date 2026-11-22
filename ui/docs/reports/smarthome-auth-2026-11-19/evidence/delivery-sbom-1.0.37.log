@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 sbom:check
+> node scripts/verify-cra-sbom.cjs
+
+[cra-sbom-check] OK: iobroker.nexowatt-ui@1.0.37; 61 Komponenten, 533 Paketdateien; source-repository. Keine Geräteinventar-/CRA-Freigabe.

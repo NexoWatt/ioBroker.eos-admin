@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:rc89
+> node scripts/verify-rc89-admin-overview-health.cjs
+
+[RC89] Adapter-, EMS-Tick- und Diagnose-Publisher-Status getrennt; I/O-Timeouts und Heartbeat-Recovery bestanden.

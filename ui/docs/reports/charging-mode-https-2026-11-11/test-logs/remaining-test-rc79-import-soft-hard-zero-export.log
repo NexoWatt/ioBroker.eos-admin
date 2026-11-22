@@ -1,0 +1,42 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:rc79-import-soft-hard-zero-export
+> node scripts/verify-rc79-import-soft-hard-zero-export-feedforward.cjs && npm run test:safety-module-deactivate && npm run test:zero-export-sink-priority && npm run test:zero-export-commissioning && npm run test:zero-export-fast-path && npm run test:zero-export-sink-ack-history && npm run test:safety-envelope-final-write
+
+[RC79] OK: Import Soft-/Hard-Limit, signierter NVP, 0-Einspeise-PV-Feed-forward, Speicher-Konfliktschutz, AppCenter-Platzierung und Cold-Start-Objektinitialisierung geprueft.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:safety-module-deactivate
+> node scripts/verify-safety-module-deactivate.js
+
+[safety-module-deactivate] OK: Cold-Start/App-AUS stoppt EVCS, Speicher, Thermik, Heizstab, MultiUse, NexoLogic und Threshold physisch; States werden vor dem Safe-Stop initialisiert und Fehler bleiben kritisch verriegelt.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:zero-export-sink-priority
+> node scripts/verify-zero-export-sink-priority.js
+
+OK: 0-Einspeise Senkenreihenfolge ist Verbrauch → freigegebene Ladepunkte → flexible Verbraucher → Speicher → Mesh/Microgrid → WR-Abregelung und baut keine zweite Regelung.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:zero-export-commissioning
+> node scripts/verify-zero-export-commissioning.js
+
+OK: 0-Einspeise Inbetriebnahme-Assistent ist diagnostisch, nicht doppelt geregelt und app-center-konform vorbereitet.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:zero-export-fast-path
+> node scripts/verify-zero-export-fast-path.js
+
+OK: 0-Einspeise Fast-Path nutzt gespeicherte Freigaben/ACKs und keinen Schreibtest pro Regel-Tick.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:zero-export-sink-ack-history
+> node scripts/verify-zero-export-sink-ack-history.js
+
+OK: 0-Einspeise Senken-ACK-Verlauf/Feldprotokoll ist vorhanden und ohne Schreibtest pro Regel-Tick abgesichert.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:safety-envelope-final-write
+> node scripts/verify-safety-envelope-final-write.js
+
+[safety-envelope-final-write] OK: Inbetriebnahme, NVP, Phasen, §14a, Summenreserve, finaler Hardware-Write und Fehlerverriegelung arbeiten fail-closed.

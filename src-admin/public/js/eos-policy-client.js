@@ -7,7 +7,7 @@
     existing?.destroy?.();
 
     const script = document.currentScript?.src || document.querySelector('script[src*="eos-policy-client.js"]')?.src || window.location.href;
-    const base = new URL('../', script).href;
+    const base = new URL('/', window.location.href).href;
     const urls = [new URL('nexowatt/security/context', base).href];
 
     let policy = window.NEXOWATT_EOS_BOOTSTRAP_POLICY || null;

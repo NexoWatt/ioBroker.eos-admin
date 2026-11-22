@@ -1,0 +1,3 @@
+Command: node scripts/verify-partner-main-integration.cjs
+exit_code=0
+{"result":"PASS","checks":16,"scope":"Actual adapter methods with isolated ioBroker I/O; no hardware or network"}

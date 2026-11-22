@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:rc60-universal-auto-orchestrator
+> node scripts/verify-rc60-universal-auto-orchestrator.js
+
+[rc60-universal-auto-orchestrator] OK: Auto/PV/Min+PV/Zeit-Ziel/Tarif funktionieren mit Alfen Mode 3, OCPP21 und generischen EVCS-Zuordnungen.

@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-09-29T20:21:22.393580+00:00",
+  "result": "PASS",
+  "scope": "All generated inventory checksums and package/lockfile provenance SHA-256 match current files; graph references validated by generator; not a full external CycloneDX schema validation",
+  "inventories": [
+    "sbom-root-lockfile.cdx.json",
+    "sbom-root-installed.cdx.json",
+    "sbom-root-installed-runtime.cdx.json",
+    "sbom-admin-lockfile.cdx.json",
+    "sbom-admin-installed.cdx.json",
+    "sbom-admin-installed-runtime.cdx.json",
+    "sbom-admin-bundle.cdx.json"
+  ]
+}

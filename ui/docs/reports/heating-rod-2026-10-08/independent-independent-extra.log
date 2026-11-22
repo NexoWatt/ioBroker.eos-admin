@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "groups": 4,
+  "sourceSha256": "43b9f107903da4cb85c136fd25f730cf15e333656c5b3ed72ec50a9097a75b3a",
+  "checks": [
+    "Asynchrone Nachtgrenze nach EIN mit verzögertem FALSE-Readback erzwingt echte AUS-Befehle",
+    "Einmaliger Persistenzfehler wird wiederholt und offener AUS-Auftrag überlebt Restart nach Nachtende",
+    "Gleichzeitstempel vor zurückgewiesenem AUS und verlorene In-Memory-Korrelation nach Restart bestätigen kein AUS",
+    "Bestätigte Stufen mit dauerhaft 100/250W Batterieentladung regeln nach begrenzter Frist ab"
+  ],
+  "scope": "Unabhängige Zusatzfälle mit produktivem Regelcode und kontrollierter Geräte-I/O, kein Hardwaretest"
+}

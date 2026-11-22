@@ -1,0 +1,29 @@
+{
+  "version": "1.0.34",
+  "date": "2026-11-03",
+  "node": "v24.22.1",
+  "command": [
+    "node",
+    "scripts/verify-iobroker-user-roles.cjs"
+  ],
+  "exitCode": 0,
+  "durationSeconds": 2.1,
+  "checks": 20,
+  "scope": "Strict TypeScript and synthetic ioBroker group objects; no live controller/Admin/hardware integration",
+  "log": "iobroker-user-roles.log",
+  "logSha256": "0fc1862b21bf2edbedef3c0b04106d5e93437369ac9cc569d5849935846f5b8b",
+  "files": [
+    {
+      "path": "src-ts/runtime-executables/lib/iobroker-user-roles.ts",
+      "sha256": "c835b25eff79526f750fafe864a36f8460173434117243c11bcb96294a906b81"
+    },
+    {
+      "path": "tsconfig.iobroker-user-roles.json",
+      "sha256": "03da5873649adb11a55b0b5f2b98ca676cff87f992526448dd641799dfe92acb"
+    },
+    {
+      "path": "scripts/verify-iobroker-user-roles.cjs",
+      "sha256": "2424893f4210a127a069a59c213b08c21acd4d8b69d66e92191daad85edd93ea"
+    }
+  ]
+}

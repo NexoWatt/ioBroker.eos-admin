@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "noCheck": false,
+    "moduleDetection": "force",
+    "noImplicitAny": true,
+    "useUnknownInCatchVariables": true,
+    "module": "NodeNext",
+    "moduleResolution": "nodenext"
+  },
+  "include": [
+    "src-ts/runtime-executables/lib/partner-contracts.ts",
+    "src-ts/runtime-executables/lib/partner-service.ts",
+    "src-ts/runtime-executables/lib/partner-config-api.ts"
+  ]
+}

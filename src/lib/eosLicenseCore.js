@@ -7,6 +7,7 @@ const fs = require('node:fs');
 const fsp = require('node:fs/promises');
 const path = require('node:path');
 const { TextDecoder } = require('node:util');
+const { editionPolicy } = require('./eosLicensePolicy');
 
 const MAX_TOKEN_BYTES = 16384;
 const MAX_STORE_BYTES = 32768;
@@ -128,11 +129,11 @@ function verifyLicense(token, options = {}) {
     if (!validTime(now)) {
         fail('LICENSE_TIME_INVALID');
     }
-    if (typeof token !== 'string' || token.length > MAX_TOKEN_BYTES || !token.startsWith('NWL2.')) {
+    if (typeof token !== 'string' || token.length > MAX_TOKEN_BYTES || !/^NWL[23]\./.test(token)) {
         fail('LICENSE_FORMAT_INVALID');
     }
     const parts = token.split('.');
-    if (parts.length !== 3 || parts[0] !== 'NWL2') {
+    if (parts.length !== 3 || !['NWL2', 'NWL3'].includes(parts[0])) {
         fail('LICENSE_FORMAT_INVALID');
     }
     const payloadBytes = decode64(parts[1], 'LICENSE_FORMAT_INVALID', 10000);
@@ -150,46 +151,50 @@ function verifyLicense(token, options = {}) {
     }
     let authentic = false;
     try {
-        authentic = crypto.verify(null, Buffer.from(`NWL2.${parts[1]}`, 'ascii'), publicKeys[payload.kid], signature);
+        authentic = crypto.verify(
+            null,
+            Buffer.from(`${parts[0]}.${parts[1]}`, 'ascii'),
+            publicKeys[payload.kid],
+            signature,
+        );
     } catch {
         fail('LICENSE_SIGNATURE_INVALID');
     }
     if (!authentic) {
         fail('LICENSE_SIGNATURE_INVALID');
     }
+    const system = parts[0] === 'NWL3';
+    const fields = ['v', 'kid', 'licenseId', 'uuid', 'edition', 'issuedAt', 'notBefore', 'expiresAt'];
     if (
-        !exactKeys(payload, [
-            'v',
-            'kid',
-            'licenseId',
-            'uuid',
-            'edition',
-            'issuedAt',
-            'notBefore',
-            'expiresAt',
-            'adapters',
-            'limits',
-        ]) ||
-        payload.v !== 2 ||
+        !exactKeys(payload, [...fields, ...(system ? ['scope'] : ['adapters', 'limits'])]) ||
+        payload.v !== (system ? 3 : 2) ||
         typeof payload.licenseId !== 'string' ||
         !/^[A-Za-z0-9][A-Za-z0-9_-]{0,127}$/.test(payload.licenseId) ||
         !['home', 'pro'].includes(payload.edition) ||
         !validTime(payload.issuedAt) ||
         !validTime(payload.notBefore) ||
         payload.notBefore < payload.issuedAt ||
-        !(payload.expiresAt === null || (validTime(payload.expiresAt) && payload.expiresAt > payload.notBefore)) ||
-        !Array.isArray(payload.adapters) ||
-        payload.adapters.length < 1 ||
-        payload.adapters.length > 64 ||
-        !payload.adapters.every(name => typeof name === 'string' && ADAPTER_RE.test(name)) ||
-        new Set(payload.adapters).size !== payload.adapters.length ||
-        !exactKeys(payload.limits, ['chargePoints', 'batteries']) ||
-        !Number.isSafeInteger(payload.limits.chargePoints) ||
-        payload.limits.chargePoints < 1 ||
-        payload.limits.chargePoints > (payload.edition === 'home' ? 3 : 1000) ||
-        !Number.isSafeInteger(payload.limits.batteries) ||
-        payload.limits.batteries < 0 ||
-        payload.limits.batteries > (payload.edition === 'home' ? 2 : 10)
+        !(payload.expiresAt === null || (validTime(payload.expiresAt) && payload.expiresAt > payload.notBefore))
+    ) {
+        fail('LICENSE_CLAIMS_INVALID');
+    }
+    // The new system contract cannot carry adapter names, quotas or features.
+    // Existing NWL2 signatures keep their original, possibly narrower limits.
+    if (
+        system
+            ? payload.scope !== 'system' || payload.notBefore !== payload.issuedAt || payload.expiresAt !== null
+            : !Array.isArray(payload.adapters) ||
+              payload.adapters.length < 1 ||
+              payload.adapters.length > 64 ||
+              !payload.adapters.every(name => typeof name === 'string' && ADAPTER_RE.test(name)) ||
+              new Set(payload.adapters).size !== payload.adapters.length ||
+              !exactKeys(payload.limits, ['chargePoints', 'batteries']) ||
+              !Number.isSafeInteger(payload.limits.chargePoints) ||
+              payload.limits.chargePoints < 1 ||
+              payload.limits.chargePoints > (payload.edition === 'home' ? 3 : 1000) ||
+              !Number.isSafeInteger(payload.limits.batteries) ||
+              payload.limits.batteries < 0 ||
+              payload.limits.batteries > (payload.edition === 'home' ? 2 : 10)
     ) {
         fail('LICENSE_CLAIMS_INVALID');
     }
@@ -202,13 +207,14 @@ function verifyLicense(token, options = {}) {
     if (payload.expiresAt !== null && now >= payload.expiresAt) {
         fail('LICENSE_EXPIRED');
     }
-    const features = ['energy', 'wallet', 'smartHome', 'microgridSlave'];
-    if (payload.edition === 'pro') {
-        features.push('microgridMaster', 'multisite', 'billing');
+    const policy = editionPolicy(payload.edition);
+    if (!policy) {
+        fail('LICENSE_CLAIMS_INVALID');
     }
     // A fresh immutable result prevents consumer mutation from escalating rights.
     return Object.freeze({
-        v: 2,
+        v: payload.v,
+        scope: system ? 'system' : 'adapters',
         kid: payload.kid,
         licenseId: payload.licenseId,
         uuid,
@@ -216,9 +222,9 @@ function verifyLicense(token, options = {}) {
         issuedAt: payload.issuedAt,
         notBefore: payload.notBefore,
         expiresAt: payload.expiresAt,
-        adapters: Object.freeze([...payload.adapters]),
-        limits: Object.freeze({ ...payload.limits }),
-        features: Object.freeze(features),
+        adapters: Object.freeze(system ? [] : [...payload.adapters]),
+        limits: Object.freeze({ ...(system ? policy.limits : payload.limits) }),
+        features: Object.freeze([...policy.features]),
     });
 }
 
@@ -424,7 +430,7 @@ class EncryptedLicenseStore {
         if (
             !exactKeys(data, ['token', 'highWaterMark']) ||
             typeof data.token !== 'string' ||
-            !data.token.startsWith('NWL2.') ||
+            !/^NWL[23]\./.test(data.token) ||
             data.token.length > MAX_TOKEN_BYTES ||
             !validTime(data.highWaterMark)
         ) {

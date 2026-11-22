@@ -1,0 +1,220 @@
+TAP version 13
+# Subtest: unvollständiger Entwurf bleibt speicherbar, Aktivierung meldet konkrete fehlende Verträge
+ok 1 - unvollständiger Entwurf bleibt speicherbar, Aktivierung meldet konkrete fehlende Verträge
+  ---
+  duration_ms: 9.401169
+  type: 'test'
+  ...
+# Subtest: freie herstellerunabhängige Speicherzuordnung ist ohne Bestandsinventar aktivierbar
+ok 2 - freie herstellerunabhängige Speicherzuordnung ist ohne Bestandsinventar aktivierbar
+  ---
+  duration_ms: 1.543916
+  type: 'test'
+  ...
+# Subtest: M0 bleibt Allgemein, kW und Vorzeichen kommen aus serverseitiger Quelle
+ok 3 - M0 bleibt Allgemein, kW und Vorzeichen kommen aus serverseitiger Quelle
+  ---
+  duration_ms: 1.952383
+  type: 'test'
+  ...
+# Subtest: vollständiges Allgemein-Splitpaar wird übernommen; gleiche physische M0/M1-Quelle wird abgewiesen
+ok 4 - vollständiges Allgemein-Splitpaar wird übernommen; gleiche physische M0/M1-Quelle wird abgewiesen
+  ---
+  duration_ms: 7.194183
+  type: 'test'
+  ...
+# Subtest: getrennte Alias-Lese-/Schreibquellen liefern richtige physische Ownership-Kette
+ok 5 - getrennte Alias-Lese-/Schreibquellen liefern richtige physische Ownership-Kette
+  ---
+  duration_ms: 1.957019
+  type: 'test'
+  ...
+# Subtest: zwei Aliasnamen auf demselben Ausgang erzeugen keinen zweiten Writer
+ok 6 - zwei Aliasnamen auf demselben Ausgang erzeugen keinen zweiten Writer
+  ---
+  duration_ms: 4.50559
+  type: 'test'
+  ...
+# Subtest: falsche Ausgangsrechte, Datentypen und Einheiten verhindern Aktivierung, nicht Entwurf
+ok 7 - falsche Ausgangsrechte, Datentypen und Einheiten verhindern Aktivierung, nicht Entwurf
+  ---
+  duration_ms: 3.508458
+  type: 'test'
+  ...
+# Subtest: CAS gilt für eigene App-Saves sowie Allgemein-Änderungen und reine App-Schalter
+ok 8 - CAS gilt für eigene App-Saves sowie Allgemein-Änderungen und reine App-Schalter
+  ---
+  duration_ms: 1.471587
+  type: 'test'
+  ...
+# Subtest: lesende CAS-Version stimmt für fehlende und ältere Entwürfe mit der Schreibgrenze überein
+ok 9 - lesende CAS-Version stimmt für fehlende und ältere Entwürfe mit der Schreibgrenze überein
+  ---
+  duration_ms: 2.768422
+  type: 'test'
+  ...
+# Subtest: alte Allgemein-Konfiguration benötigt ohne neue App keinen impliziten Appvertrag
+ok 10 - alte Allgemein-Konfiguration benötigt ohne neue App keinen impliziten Appvertrag
+  ---
+  duration_ms: 0.270248
+  type: 'test'
+  ...
+# Subtest: kontrollierte Deaktivierung bleibt bis zur positiven Runtime-Übergabe ausstehend
+ok 11 - kontrollierte Deaktivierung bleibt bis zur positiven Runtime-Übergabe ausstehend
+  ---
+  duration_ms: 0.860857
+  type: 'test'
+  ...
+# Subtest: Status einer früheren Version wird ohne alte Messungen als pending dargestellt
+ok 12 - Status einer früheren Version wird ohne alte Messungen als pending dargestellt
+  ---
+  duration_ms: 0.217468
+  type: 'test'
+  ...
+# Subtest: jede neue API-Route besitzt die Installer-Middleware und keinen HTTP-Cache
+ok 13 - jede neue API-Route besitzt die Installer-Middleware und keinen HTTP-Cache
+  ---
+  duration_ms: 0.606795
+  type: 'test'
+  ...
+# Subtest: alter oder zukünftiger aktiver Status wird nicht als aktuelle erfolgreiche Regelung ausgegeben
+ok 14 - alter oder zukünftiger aktiver Status wird nicht als aktuelle erfolgreiche Regelung ausgegeben
+  ---
+  duration_ms: 0.184548
+  type: 'test'
+  ...
+# Subtest: aktive bestehende PV-Stellstrecke muss vor Übernahme zugeordnet werden
+ok 15 - aktive bestehende PV-Stellstrecke muss vor Übernahme zugeordnet werden
+  ---
+  duration_ms: 0.900217
+  type: 'test'
+  ...
+# Subtest: vorhandenes Speicherlizenzlimit zählt freie App-Zuordnungen ohne Inventarabhängigkeit
+ok 16 - vorhandenes Speicherlizenzlimit zählt freie App-Zuordnungen ohne Inventarabhängigkeit
+  ---
+  duration_ms: 0.498161
+  type: 'test'
+  ...
+# Subtest: DynamicGrid HTTP: globaler AppCenter-Save installiert fehlende und ältere Entwürfe mit gelesenem CAS-Token
+ok 17 - DynamicGrid HTTP: globaler AppCenter-Save installiert fehlende und ältere Entwürfe mit gelesenem CAS-Token
+  ---
+  duration_ms: 266.565949
+  type: 'test'
+  ...
+# Subtest: DynamicGrid HTTP: Rollen, Entwurf, atomare Aktivierung, CAS und M0 aus Allgemein
+ok 18 - DynamicGrid HTTP: Rollen, Entwurf, atomare Aktivierung, CAS und M0 aus Allgemein
+  ---
+  duration_ms: 81.047639
+  type: 'test'
+  ...
+# Subtest: DynamicGrid HTTP: AppCenter/Import und parallele Gesamtpatch-Writer können CAS nicht umgehen
+ok 19 - DynamicGrid HTTP: AppCenter/Import und parallele Gesamtpatch-Writer können CAS nicht umgehen
+  ---
+  duration_ms: 38.554656
+  type: 'test'
+  ...
+# Subtest: DynamicGrid HTTP: Backup-Inhaltsversion ersetzt nicht den geladenen Import-CAS-Token
+ok 20 - DynamicGrid HTTP: Backup-Inhaltsversion ersetzt nicht den geladenen Import-CAS-Token
+  ---
+  duration_ms: 17.810188
+  type: 'test'
+  ...
+# Subtest: alte Konfiguration bleibt statisch ohne zusätzliche Objektabfragen
+ok 21 - alte Konfiguration bleibt statisch ohne zusätzliche Objektabfragen
+  ---
+  duration_ms: 3.079171
+  type: 'test'
+  ...
+# Subtest: M0 und M1 über verschiedene Aliasnamen auf derselben Quelle werden abgewiesen
+ok 22 - M0 und M1 über verschiedene Aliasnamen auf derselben Quelle werden abgewiesen
+  ---
+  duration_ms: 1.928557
+  type: 'test'
+  ...
+# Subtest: Aliaszyklus und fehlender Datenpunkt bleiben sichtbar ungültig
+ok 23 - Aliaszyklus und fehlender Datenpunkt bleiben sichtbar ungültig
+  ---
+  duration_ms: 0.940096
+  type: 'test'
+  ...
+# Subtest: Zuordnung zu fremdem Speicher und fremder AC-Istleistung wird abgewiesen
+ok 24 - Zuordnung zu fremdem Speicher und fremder AC-Istleistung wird abgewiesen
+  ---
+  duration_ms: 0.859536
+  type: 'test'
+  ...
+# Subtest: atomare Änderung erhöht Version einmal; alter Browserstand und offene Freigabe blockieren
+ok 25 - atomare Änderung erhöht Version einmal; alter Browserstand und offene Freigabe blockieren
+  ---
+  duration_ms: 1.099427
+  type: 'test'
+  ...
+# Subtest: native oder importierter aktiver Betrieb kann die technische Sperre nicht umgehen
+ok 26 - native oder importierter aktiver Betrieb kann die technische Sperre nicht umgehen
+  ---
+  duration_ms: 1.395423
+  type: 'test'
+  ...
+# Subtest: Persistenzpfad lehnt stille Entfernung und unversionierte Änderung ab
+ok 27 - Persistenzpfad lehnt stille Entfernung und unversionierte Änderung ab
+  ---
+  duration_ms: 1.334251
+  type: 'test'
+  ...
+# Subtest: Änderung der Bestandsfarm invalidiert die bisherige NVP-Gerätebindung
+ok 28 - Änderung der Bestandsfarm invalidiert die bisherige NVP-Gerätebindung
+  ---
+  duration_ms: 0.869761
+  type: 'test'
+  ...
+# Subtest: jede NVP-Route besitzt die Installer-Middleware und no-store
+ok 29 - jede NVP-Route besitzt die Installer-Middleware und no-store
+  ---
+  duration_ms: 1.683592
+  type: 'test'
+  ...
+# Subtest: alte Diagnoseversion wird nach Zuordnungswechsel ohne übernommene Messwerte als ausstehend ausgegeben
+ok 30 - alte Diagnoseversion wird nach Zuordnungswechsel ohne übernommene Messwerte als ausstehend ausgegeben
+  ---
+  duration_ms: 0.476919
+  type: 'test'
+  ...
+# Subtest: ungespeicherte Diagnose ruft nur Vorschau auf und verändert keine Konfiguration
+ok 31 - ungespeicherte Diagnose ruft nur Vorschau auf und verändert keine Konfiguration
+  ---
+  duration_ms: 1.555574
+  type: 'test'
+  ...
+# Subtest: gleichzeitiger Speicherversuch wird abgewiesen; Version und Konfiguration bleiben atomar
+ok 32 - gleichzeitiger Speicherversuch wird abgewiesen; Version und Konfiguration bleiben atomar
+  ---
+  duration_ms: 0.647596
+  type: 'test'
+  ...
+# Subtest: hängende Objektprüfung belegt höchstens vier DB-Aufträge und einen Adapter-Slot
+ok 33 - hängende Objektprüfung belegt höchstens vier DB-Aufträge und einen Adapter-Slot
+  ---
+  duration_ms: 9.167186
+  type: 'test'
+  ...
+# Subtest: NVP HTTP: Rollen, atomare Speicherung, Import, Aktivierungssperre und öffentliche Diagnosefilter
+ok 34 - NVP HTTP: Rollen, atomare Speicherung, Import, Aktivierungssperre und öffentliche Diagnosefilter
+  ---
+  duration_ms: 161.310375
+  type: 'test'
+  ...
+# Subtest: NVP HTTP: alle Gesamtpatch-Writer schließen parallele veraltete Speicherungen aus
+ok 35 - NVP HTTP: alle Gesamtpatch-Writer schließen parallele veraltete Speicherungen aus
+  ---
+  duration_ms: 84.2171
+  type: 'test'
+  ...
+1..35
+# tests 35
+# suites 0
+# pass 35
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1165.479717

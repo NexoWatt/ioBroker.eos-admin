@@ -1,0 +1,94 @@
+NexoWatt UI 1.0.38 – SECURITY REVIEW - TEST PACKAGE
+
+DYNAMISCHER NETZANSCHLUSS: Eigene App mit aktiver, herstellerunabhängiger M0/M1-Regelung.
+Dieser Sicherheits-Prüfstand ist nicht für den Produktivbetrieb freigegeben.
+Die Versionsnummer bezeichnet den Quellstand, keine Konformität oder Zertifizierung.
+Offene Freigabehindernisse: release-manifests/release-status.json
+Prüfbericht: docs/reports/branding-2026-11-22/PRUEFBERICHT_DE.md
+Änderungen/Upgrade: docs/STABLE_1_0_38_RELEASE_DE.md
+HTTPS/Web-App-Anleitung: docs/operations/TESTANLEITUNG_1_0_38_DE.md
+1.0.38: Original-EOS-Logo, direkter HTTPS-Port mit eigener Zertifikatauswahl,
+korrekter Login-/CSRF-Bootstrap für vorhandene Bedienseiten und PWA-Update v526.
+Bestehende EMS-Regelung, Anlagenkonfiguration und App-Icons bleiben erhalten.
+
+Vollständiges Repository einschließlich Quellcode, Builddateien und Nachweisen.
+Bestehende Installationen zuerst sichern; eine getrennte Testinstanz wird empfohlen.
+Der Nutzer hat Tests auf seinem eigenen Livesystem ausdrücklich vorgesehen.
+Dieser Eigentest wird durch die offene allgemeine Produktivfreigabe nicht technisch gesperrt.
+Keine automatische Veröffentlichung oder Veränderung einer Feldanlage.
+Prüfungen: npm ci --ignore-scripts; npm run test:all; npm run build:ts; npm run publish:check.
+Für den Test-Upload npm publish --tag test oder unter Windows PUBLISH_NPM.cmd verwenden.
+Die normale Publish-Kette prüft unveränderte Artefakte und enthält kein release:approval.
+Technische Paket- und Geheimnisfehler blockieren den Upload weiterhin.
+Gesonderte Produktivfreigabeprüfung: npm run release:production-check.
+Dieser Befehl führt release:approval und danach release:check aus; bei der weiterhin
+fehlenden Produktivfreigabe (productionApproved: false) liefert er Exit 1.
+Kein Neubau oder Neuversiegeln während npm publish.
+SBOM-Nachweise werden vor der Artefaktversiegelung automatisch erzeugt;
+beim Publish werden sie ausschließlich lesend geprüft.
+Korrektur gegenüber dem ursprünglichen Prüfstand vom 29.09.2026:
+docs/reports/cra-2026-09-29/NPM_UPLOAD_SBOM_KORREKTUR_DE.md
+
+BESTANDSLIZENZEN AB 1.0.26:
+Bisherige NW1-/Home-/Pro-/Testlizenzen werden wieder ohne Dienstmigration geprüft.
+Keine zusätzliche NEXOWATT_LICENSE_HMAC_SECRET-Variable für Bestandskeys nötig.
+Bereits privat eingerichtete Signaturbasen bleiben zusätzlich unterstützt.
+Keine Kundenschlüssel oder private ENV-Dateien mit npm oder Repository hochladen.
+Die spätere Lizenzarchitektur wird in der eigenen EOS-Software umgesetzt.
+Anleitung: docs/operations/EMS_APPS_LIZENZ_KOMPATIBILITAET_DE.md
+
+Heizstab-Anlagentest: docs/operations/HEIZSTAB_NACHT_PV_TEST_DE.md
+Basis dieses Nachtrags: vollständig ausgelieferter 1.0.37-Stand einschließlich bisheriger Speicherfixes und Bestandslizenz-Kompatibilität.
+Die Einrichtung des dynamischen Netzanschlusses ist ausschließlich unter EMS Apps.
+
+SPEICHERKORREKTUR 1.0.27:
+App-Center übermittelt die geladene Konfigurationsversion auch bei Erstinstallation.
+Nach dem Update die EMS-Apps-Seite vollständig neu laden, dann Installation speichern.
+Echte parallele Änderungen bleiben vor Überschreiben geschützt.
+
+BEDIENUNGSKORREKTUR 1.0.28:
+Volle Breite innerhalb der EMS-App-Kachel; gemeinsame Formulare und Datenpunktauswahl.
+Nach dem Update die EMS-Apps-Seite vollständig neu laden.
+
+SICHERHEITSFORTSETZUNG 1.0.30:
+Mesh-Peer-Feldtest gegen Tokenweiterleitung und unbegrenzte Antworten gehaertet.
+Adminquelle und Konfigurations-APIs echt strict; native Validierung, Sicherheitslint und Headerpruefung.
+Keine neue Runtimeabhaengigkeit; NW1-Feldtestlizenzen/ioBroker unveraendert.
+Pruefbericht: docs/reports/security-continuation-2026-10-23/PRUEFBERICHT_DE.md
+Keine Liveanlagenabnahme und keine Produktivfreigabe.
+
+SICHERHEITSPATCH 1.0.31:
+body-parser 1.20.9, nodemailer 10.1.4; komprimierte API-Requestbodys werden mit415 abgewiesen.
+Admin JSON-Streams begrenzt; bestehende Endpunktfristen bleiben wirksam.
+Keine neue Laufzeitbibliothek, keine Änderung von Tarif-/NVP-/Speicherstrategien oder Bestandslizenzen.
+
+PARTNER / ARBITRAGE 1.0.32:
+Eigenstaendige Arbitrage-App, getrennte Datenrechte und ausgehender WSS-Kanal.
+Standardmaessig deaktiviert; ein Partnerprofil; keine aktive PV-Abregelung oder Legacyfarm-Freigabe.
+Generische Single-Vertraege und optionale Dynamic-Gruppen nutzen vorhandene Writer.
+Protokoll: docs/PARTNER_INTEGRATION_PROTOCOL_V1_DE.md
+Bereitstellung: docs/PARTNER_RUNTIME_PROVISIONIERUNG_DE.md
+
+EMS-ANMELDUNG 1.0.33:
+Kanonische ioBroker-Kontoidentitaet fuer Anzeigenamen, Passwortpruefung, Rollen und Sitzung.
+Strikte Callbackwerte und Widerrufsgrenzen; Anleitung: docs/operations/ADMIN8_EMS_ANMELDUNG_DE.md
+
+GRUPPENRECHTE 1.0.34:
+Jedes lokale ioBroker-Konto verwendet sein eigenes Passwort. Rechte folgen den tatsächlichen Gruppen.
+Benutzernamen und alte Benutzerlisten vergeben keine Rolle mehr; vor Update Mitgliedschaften prüfen.
+Eigene Gruppen unter Adapterkonfiguration > Sicherheit zuordnen.
+Anleitung: docs/operations/BENUTZER_GRUPPENRECHTE_DE.md
+
+HTTPS-ADMIN 1.0.35:
+Der Admin-Instanzproxy ab Admin 8.3 hält EOS-Anmeldung und Seiten unter demselben HTTPS-Origin.
+Normales Adapterupgrade übernimmt common.adminTab.proxy in die Instanzobjekte; anschließend Adapter neu starten und Admin vollständig neu laden.
+Der Proxy verlangt die ioBroker-Administratorgruppe; EOS prüft zusätzlich eigenes Kontopasswort und Gruppen.
+Anleitung und Grenzen: docs/operations/ADMIN_HTTPS_PROXY_DE.md
+
+LADEMODI / HTTPS-BEDIENUNG 1.0.36:
+Modusauswahl wird nur aus bestaetigten Serverwerten angezeigt. Schreibfehler werden sichtbar.
+Guenstige positive Tarife im cheap-grid-Auto-Pfad und negierte Fahrzeugstatus-Texte korrigiert.
+Diagnose fuehrt Benutzermodus, effektiven Modus und Fahrzeug-/Bedarfszustand getrennt mit.
+OCPP-Verbindung wird durch Browser-HTTPS nicht von WS auf WSS umgestellt.
+Alte OCPP-Pausen ohne belegten Sitzungswechsel werden nicht automatisch aufgehoben.
+Konkrete Wallbox-/Adapterabnahme und die dokumentierten Releasepruefungen bleiben erforderlich.

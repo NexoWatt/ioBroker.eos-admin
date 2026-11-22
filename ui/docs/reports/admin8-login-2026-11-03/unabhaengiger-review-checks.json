@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-11-03T21:35:03.040Z",
+  "node": "v24.22.1",
+  "typescript": "5.8.3",
+  "scope": "Separate AI-assisted review; synthetic ioBroker API fixtures; no live system and no external certification",
+  "command": "node docs/reports/admin8-login-2026-11-03/unabhaengiger-review-checks.cjs",
+  "passed": 16,
+  "failed": 0,
+  "unhandledRejections": 0,
+  "results": [
+    {
+      "id": "IR-01",
+      "name": "Alias admin ergibt kanonisches Kundenkonto",
+      "result": "passed"
+    },
+    {
+      "id": "IR-02",
+      "name": "Kurze ID wird im offiziellen Fallback kleingeschrieben",
+      "result": "passed"
+    },
+    {
+      "id": "IR-03",
+      "name": "Vollständige ID bleibt unverändert und umgeht Resolver",
+      "result": "passed"
+    },
+    {
+      "id": "IR-04",
+      "name": "Rand-Leerzeichen in kanonischer ID vor Kontolesung abgewiesen",
+      "result": "passed"
+    },
+    {
+      "id": "IR-05",
+      "name": "Nur Boolean true plus identische Callback-ID",
+      "result": "passed"
+    },
+    {
+      "id": "IR-06",
+      "name": "Fehlende Callback-ID abgewiesen",
+      "result": "passed"
+    },
+    {
+      "id": "IR-07",
+      "name": "Passwort-Fingerabdruckwechsel während Prüfung abgewiesen",
+      "result": "passed"
+    },
+    {
+      "id": "IR-08",
+      "name": "Kontosperre während Prüfung abgewiesen",
+      "result": "passed"
+    },
+    {
+      "id": "IR-09",
+      "name": "Abweichende Objekt-ID abgewiesen",
+      "result": "passed"
+    },
+    {
+      "id": "IR-10",
+      "name": "Resolver-Ablehnung sperrt statt Kontofallback",
+      "result": "passed"
+    },
+    {
+      "id": "IR-11",
+      "name": "Synchroner API-Fehler abgewiesen",
+      "result": "passed"
+    },
+    {
+      "id": "IR-12",
+      "name": "Promise-Ablehnung ohne Callback abgefangen",
+      "result": "passed"
+    },
+    {
+      "id": "IR-13",
+      "name": "Resolver-Timeout verhindert nachfolgende Kontolesung",
+      "result": "passed"
+    },
+    {
+      "id": "IR-14",
+      "name": "Kontolesung-Timeout verweigert Zugriff",
+      "result": "passed"
+    },
+    {
+      "id": "IR-15",
+      "name": "Später erfolgreicher Callback ändert Ablehnung nicht",
+      "result": "passed"
+    },
+    {
+      "id": "IR-16",
+      "name": "Späte Promise-Ablehnung nach gültigem Callback bleibt behandelt",
+      "result": "passed"
+    }
+  ],
+  "sourceSha256": {
+    "src-ts/runtime-executables/lib/iobroker-user-auth.ts": "ecaac7903afe58886b31b245aa5366ac0a5e5d95b62da0878ed3f01fd21b2530",
+    "src-ts/runtime-executables/main.ts": "4161d78db2566b2f785ec46adab7eec6e9ec1b2f88cc831ee9ad460a8ef2872e",
+    "main.js": "515039e4d9d63fc1ac710bc674d2226b86d95a8e4749369fcdf4d9f300b1b11b",
+    "lib/iobroker-user-auth.js": "0738e98ab78f6b81fccb9c42de8b16fa3dc30cdfe560fac2705ea4bb27f5c64b",
+    "scripts/verify-iobroker-user-auth.cjs": "69e0a6f556b08642707fd3e876717eb64c36d5c8a905a0730a73f71a15a0aafb",
+    "tsconfig.iobroker-user-auth.json": "20072c772a99c3cdf0d5cf79bbe6d01acc3ff44c615ae70ffd6354baf84aa2e1"
+  },
+  "evidenceScriptSha256": "fb3cd0540c4b510510f0a63d3c89055de63f773285a68726e6bc2d23062910c4",
+  "redaction": "Only test identifiers, status, tool versions and source digests emitted; no passwords, stored password fields, error payloads or personal accounts."
+}

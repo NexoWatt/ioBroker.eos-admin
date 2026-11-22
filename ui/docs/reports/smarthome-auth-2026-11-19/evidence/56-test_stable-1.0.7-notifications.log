@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:stable-1.0.7-notifications
+> node scripts/verify-stable-1.0.7-notifications.cjs
+
+[1.0.7 notifications] OK: immediate/30min/daily, escalation, durable dedup, recovery, categories, real loopback SMTP, rejection/backoff, encryption, TLS options, module/AC/DC fault monitoring.

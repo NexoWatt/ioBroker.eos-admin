@@ -1,0 +1,1 @@
+[verify-cra-admin-router] PASS 44 Fälle; react-router-dom 7.18.4, echte HashRouter-/Route-Komponenten, Node-Render und kontrollierte Auth-Hookzustände; kein echter Browserlebenszyklus.

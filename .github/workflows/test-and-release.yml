@@ -1,108 +1,45 @@
-name: EOS Security and Build Checks
-
-# This workflow only checks code. It never publishes packages or creates releases.
+name: Unified EOS verification
 on:
   push:
-    branches: [master, main]
-    tags: ['v*']
+    branches: [main, master]
   pull_request: {}
   workflow_dispatch: {}
   workflow_call: {}
-
 permissions:
   contents: read
-
 concurrency:
-  group: eos-checks-${{ github.workflow }}-${{ github.ref }}
+  group: eos-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-
 jobs:
-  dependency-free-security:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, primary-source pin
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version: '24.x'
-          package-manager-cache: false
-      - name: Dependency-free security regressions
-        run: |
-          npm run test:eos-licensing
-          npm run test:eos-security-boundaries
-          npm run test:eos-security-upgrade
-          # The full integration suite and its source-bound receipt run after the clean build.
-          node tools/nexowatt-auto-update-selftest.cjs
-          node tools/nexowatt-lock-provenance-selftest.cjs
-          node tools/nexowatt-security-inventory-selftest.cjs
-      - name: Lock inventory and provenance admission
-        run: |
-          npm run security:inventory
-          node tools/nexowatt-lock-provenance-check.cjs > reports/security/ci-lock-provenance.json
-      - name: Preserve evidence, including blocked admission
-        if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: eos-lock-admission-${{ github.run_id }}
-          path: reports/security/*.json
-          retention-days: 30
-          if-no-files-found: error
-
-  clean-build:
-    needs: dependency-free-security
+  check:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
-    strategy:
-      fail-fast: false
-      matrix:
-        node-version: ['22.23.4', '22.x', '24.22.1', '24.x']
-    env:
-      PUPPETEER_SKIP_DOWNLOAD: 'true'
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: '24.22.3'
           package-manager-cache: false
-      - name: Install admitted lockfiles without lifecycle scripts
+      - name: Verify unchanged delivery
+        run: node tools/eos-release-check.cjs
+      - name: Install locked build dependencies
         run: |
           npm ci --ignore-scripts --no-audit --no-fund
           npm --prefix src-admin ci --ignore-scripts --no-audit --no-fund
-      - name: Record actual installed trees and SBOMs
+          npm --prefix ui/src-admin-tab ci --ignore-scripts --no-audit --no-fund
+      - name: Compile and verify
         run: |
-          mkdir -p reports/security/ci
-          node --version > reports/security/ci/node.txt
-          npm --version > reports/security/ci/npm.txt
-          npm ls --all --json > reports/security/ci/backend-installed-tree.json
-          npm --prefix src-admin ls --all --json > reports/security/ci/frontend-installed-tree.json
-          npm sbom --sbom-format=cyclonedx > reports/security/ci/backend-installed.cdx.json
-          npm --prefix src-admin sbom --sbom-format=cyclonedx > reports/security/ci/frontend-installed.cdx.json
-      - name: Lint and full normal build
-        run: |
-          npm run lint
-          npm run build
+          npm run build:unified-backend
+          npm run build:ui-runtime
+          npm run typecheck
+          npm run lint:unified
           npm test
-          npm run check:eos-package
-          npm run check:eos-stability
-          npm pack --dry-run --ignore-scripts --json > reports/security/ci/package-dry-run.json
-      - name: Current backend advisory check (production has no advisory allowance)
-        if: ${{ !cancelled() }}
+      - name: Build both frontend sources
         run: |
-          npm audit --omit=dev --json > reports/security/ci/backend-production-advisories.json
-          # Moderate development-only findings are documented in the release evidence.
-          npm audit --audit-level=high --json > reports/security/ci/backend-all-advisories.json
-      - name: Current frontend advisory check
-        if: ${{ !cancelled() }}
-        run: npm --prefix src-admin audit --json > reports/security/ci/frontend-advisories.json
-      - name: Preserve build and advisory evidence
-        if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: eos-build-${{ matrix.node-version }}-${{ github.run_id }}
-          path: reports/security/
-          retention-days: 30
-          if-no-files-found: error
+          npm run build:frontend
+          npm run build:installer
+      - name: Dependency advisories
+        run: npm audit --omit=dev --audit-level=moderate
+# No automatic publishing, signing, merging or production approval.

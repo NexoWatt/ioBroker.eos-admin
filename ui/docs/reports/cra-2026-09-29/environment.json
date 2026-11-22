@@ -1,0 +1,22 @@
+{
+  "date": "2026-09-29T20:15:48.704208+00:00",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.39",
+  "python": "3.12.14",
+  "node": "v24.19.0",
+  "npm": "11.9.0",
+  "hardware": "isolated Linux execution environment; no EOS controllers, actuators or field accounts",
+  "source": "uploaded 1.0.21 ZIP; locally revised 1.0.22",
+  "tests": "loopback HTTP, ioBroker/SMTP/device doubles, Node/TypeScript suites; no production devices",
+  "browser": {
+    "name": "Chromium",
+    "version": "153.0.8010.0",
+    "source": "separate @sparticuz/chromium 153.0.0 test package",
+    "productDependency": false,
+    "flags": [
+      "--no-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-gpu"
+    ],
+    "scope": "isolated local security/regression tests; not a deployment recommendation"
+  }
+}

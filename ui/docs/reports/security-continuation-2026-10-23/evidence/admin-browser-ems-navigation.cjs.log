@@ -1,0 +1,16 @@
+{
+  "result": "PASS",
+  "checks": [
+    "installer-start-only-EMS-hub-and-preserved-tools",
+    "admin-start-only-EMS-hub-and-preserved-tools",
+    "pending-install-cannot-open-frame-before-successful-save",
+    "catalog-opens-internal-tab-and-keeps-form-during-unrelated-toggle",
+    "embedded-mobile-no-horizontal-overflow",
+    "M0-General-link-escapes-iframe-to-existing-mapping",
+    "host-tabs-provide-navigation-without-duplicate-child-header",
+    "existing-direct-route-remains-reachable",
+    "customer-even-with-wildcard-cannot-open-detail"
+  ],
+  "artifacts": "/workspace/scratch/cd7c5428afc1/continuation-1.0.30/browser-navigation-proof",
+  "limitation": "Actual built React and actual AppCenter source; local API fixtures, no hardware validation."
+}

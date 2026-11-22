@@ -1,0 +1,29 @@
+Security CI / native strict boundary guard – 2026-10-23
+Worktree: security-hardening/NexoWatt_UI_1.0.29
+
+Changed/added files:
+- scripts/verify-security-standards.cjs
+- tsconfig.security-boundaries.json
+- .github/workflows/codeql.yml
+- .github/codeql/codeql-config.yml
+
+The guard covers exactly src-ts/runtime-executables/lib/http-error-boundary.ts.
+It inspects real TypeScript AST nodes (explicit AnyKeyword, unsafe code execution syntax, dynamic/static imports in this dependency-free boundary), effective suppression pragmas and first proprietary header. The effective compiler options explicitly require strict, noImplicitAny, strictNullChecks, useUnknownInCatchVariables, noUncheckedIndexedAccess, exactOptionalPropertyTypes, noEmit and reject noCheck/allowJs. A real TypeScript createProgram run checks the whole declared boundary.
+The guard does not claim to be ESLint, SAST, data-flow validation or a whole-repository no-any migration. Existing TypeScript is reused only as already installed development tooling; no npm dependency was added.
+
+Executed: node scripts/verify-security-standards.cjs
+Result: exit 0, 17 positive/negative guard tests plus real strict boundary typecheck passed.
+Executed: Python YAML parse/structural assertions (PyYAML BaseLoader for GitHub on key), immutable action SHA lengths, least permissions, paths existence, build-mode none, security-extended suite.
+Result: exit 0, config valid locally. No GitHub CodeQL run, no SARIF findings, no branch protection configuration performed.
+
+CodeQL is prepared for JS/TS authoritative sources (src-ts plus admin source); generated runtime mirrors and source test/script fixtures excluded. It runs on push/pull_request/workflow_dispatch, not pull_request_target; GitHub-hosted runner only; contents read and security-events write only; no npm install, project build or product code execution, no production secrets. Ordinary CodeQL tooling still executes on the CI runner.
+
+Official pin verification:
+git ls-remote https://github.com/github/codeql-action.git refs/tags/v4.39.1*
+8498dc4c2b27cdd99baf0f87955b29ebbf30c78d refs/tags/v4.39.1
+9b3254085494b55a0f7c4c2b3d2d52cc712ce370 refs/tags/v4.39.1^{}
+init/action.yml and analyze/action.yml fetched successfully from raw.githubusercontent.com/github/codeql-action/9b3254085494b55a0f7c4c2b3d2d52cc712ce370; both declare node24.
+Official release page https://github.com/github/codeql-action/releases/tag/v4.39.1 shows release 21 October and 9b32540.
+Reference https://docs.github.com/en/code-security/reference/code-scanning/workflow-configuration-options describes paths/paths-ignore for JS/TS and no-build scanning.
+
+Root integration required: package script test:security-standards = node scripts/verify-security-standards.cjs, and include in ci:security/test:all. Root owns package metadata and generated build output.

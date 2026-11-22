@@ -1,0 +1,9 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:rc74-pv-forecast-customer-ui
+> node scripts/verify-rc74-pv-forecast-customer-ui.cjs
+
+Error: Timeout bei Chromium-Port: null
+    at waitFor (/workspace/scratch/016e1c77b6f1/implementation/NexoWatt_UI_1.0.37/scripts/verify-rc74-pv-forecast-customer-ui.cjs:153:9)
+    at async verifyBrowser (/workspace/scratch/016e1c77b6f1/implementation/NexoWatt_UI_1.0.37/scripts/verify-rc74-pv-forecast-customer-ui.cjs:202:5)
+    at async /workspace/scratch/016e1c77b6f1/implementation/NexoWatt_UI_1.0.37/scripts/verify-rc74-pv-forecast-customer-ui.cjs:312:3

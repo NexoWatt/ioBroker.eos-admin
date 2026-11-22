@@ -7,7 +7,7 @@
     existing?.destroy?.();
 
     const script = document.currentScript || document.querySelector('script[src*="eos-basic-settings.js"]');
-    const base = new URL('../', script?.src || window.location.href);
+    const base = new URL('/', window.location.href);
     const endpoint = new URL('nexowatt/role-settings/basic', base).href;
     const abort = new AbortController();
     let overlay = null;

@@ -1,0 +1,11 @@
+{
+  "command": [
+    "npm",
+    "audit",
+    "--json"
+  ],
+  "cwd": "src-admin-tab",
+  "startedAt": "2026-09-29T20:06:17.825820+00:00",
+  "finishedAt": "2026-09-29T20:06:24.682581+00:00",
+  "exitCode": 1
+}

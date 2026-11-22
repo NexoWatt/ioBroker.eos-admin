@@ -1,0 +1,9 @@
+{
+  "src-ts/runtime-executables/lib/mesh-peer-http.ts": "86eb25292734702fb5a2dc2b7884ea21f2b8ff7576121afdc2475556d1766896",
+  "src-ts/runtime-executables/main.ts": "641581699de1fa8ee58a78d32195b3a34096452bef1a2d778818446d1395161c",
+  "src-ts/runtime-mirrors/main.ts": "d5eea9d545d076554759be4d5c49bb45da6ac6773b95befd393e7921ab00bbd8",
+  "lib/mesh-peer-http.js": "348062215fc7a11d9180c30adbe89596d6600074b17f60c50bb2c8035ebcc9f5",
+  "main.js": "258a097bd071f7dee14b1227bfae97a673695fd1e8b335e04ee623ea060ec82d",
+  "scripts/verify-mesh-peer-http.cjs": "cfe1cb7391c1a41ab41f60ace0d10b0bbe35ee8081a9051a10e67d7416d47493",
+  "tsconfig.mesh-peer-http.json": "5108df181480703b631fa60a76a017137302906a9ee38d01bdca32355cf4886a"
+}

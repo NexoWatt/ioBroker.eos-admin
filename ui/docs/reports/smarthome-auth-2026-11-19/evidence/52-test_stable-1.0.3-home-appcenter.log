@@ -1,0 +1,194 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:stable-1.0.3-home-appcenter
+> node scripts/verify-stable-1.0.3-home-appcenter-access.cjs
+
+AssertionError [ERR_ASSERTION]: The input did not match the regular expression /const mustPromptForAuthentication = authStatusUnavailable \|\| sessionMissing \|\| pageCapabilityMissing/. Input:
+
+'/**\n' +
+  ' * Copyright (c) 2026 NexoWatt. All rights reserved.\n' +
+  ' * Confidential and Proprietary.\n' +
+  ' * Use, modification or distribution without express written permission is prohibited.\n' +
+  ' */\n' +
+  '// @runtime-transpile\n' +
+  '/**\n' +
+  ' * NexoWatt Quellcode-Erklärung (DE)\n' +
+  ' * Aufgabe: Sperrt jede Runtime-Oberfläche bis zur serverseitig bestätigten\n' +
+  ' * Sitzung; übernimmt das explizite ioBroker-/EOS-Anmeldeprofil unverändert.\n' +
+  ' * Daten und Wirkung: Liest nur den Status der eigenen Instanz, setzt CSRF-Header\n' +
+  ' * für eigene mutierende API-Aufrufe und führt zur separaten Anmeldeseite.\n' +
+  ' * Passwörter werden hier weder abgefragt noch gespeichert. Rollen/Capabilities\n' +
+  ' * dienen der Anzeige; der Server autorisiert jeden Daten- und Schreibzugriff.\n' +
+  ' * Bei Änderungen: Statusfehler, Offline-/BFCache-Rückkehr, Instanzproxy,\n' +
+  ' * fehlende CSRF-Token, Rollenentzug und fachliche HTTP-403-Antworten mitprüfen.\n' +
+  ' * Verknüpfungen: docs/operations/ANMELDEPROFILE_1_0_37_DE.md\n' +
+  ' */\n' +
+  '(function () {\n' +
+  "  'use strict';\n" +
+  '\n' +
+  "  type Role = 'none' | 'customer' | 'installer' | 'admin';\n" +
+  "  type Mode = 'iobroker' | 'eos';\n" +
+  '  interface AuthState {\n' +
+  '    enabled: boolean; protectWrites: boolean; authed: boolean; authenticated: boolean;\n' +
+  '    mode: Mode | null; user: string | null; role: Role; capabilities: string[];\n' +
+  '    isAdmin: boolean; isInstaller: boolean; isCustomer: boolean;\n' +
+  '    loginUrl: string; logoutUrl: string; _loaded: boolean; statusError: boolean;\n' +
+  '  }\n' +
+  '  interface AuthOptions { pageName?: string; requiredRole?: string; mandatory?: boolean; reason?: string }\n' +
+  '  interface AuthApi {\n' +
+  '    getState(): AuthState;\n' +
+  '    refreshStatus(): Promise<AuthState>;\n' +
+  '    requireCapability(capability: string, options?: AuthOptions): Promise<boolean>;\n' +
+  '    hasCapability(capability: string): boolean;\n' +
+  '    showLogin(message?: string, options?: AuthOptions): void;\n' +
+  '    logout(): Promise<void>;\n' +
+  '  }\n' +
+  '\n' +
+  '  const hostWindow = window as Window & { NW_AUTH?: AuthApi };\n' +
+  "  const originalFetch = typeof window.fetch === 'function' ? window.fetch.bind(window) : null;\n" +
+  '  const state: AuthState = {\n' +
+  '    enabled: true, protectWrites: true, authed: false, authenticated: false,\n' +
+  "    mode: null, user: null, role: 'none', capabilities: [], isAdmin: false,\n" +
+  "    isInstaller: false, isCustomer: false, loginUrl: '', logoutUrl: '',\n" +
+  '    _loaded: false, statusError: false,\n' +
+  '  };\n' +
+  "  let csrfToken = '';\n" +
+  '  let statusPromise: Promise<AuthState> | null = null;\n' +
+  '  let generation = 0;\n' +
+  '  let lastCheck = 0;\n' +
+  '  let redirecting = false;\n' +
+  '  let loggingOut = false;\n' +
+  '  const background = new Map<HTMLElement, { inert: boolean; ariaHidden: string | null }>();\n' +
+  '  const snapshot = (): AuthState => ({ ...state, capabilities: state.capabilities.slice() });\n' +
+  '  const runtimeUrl = (path: string): string => window.NW_RUNTIME?.url(path) ?? path;\n' +
+  "  const runtimeRoot = (): string => new URL(runtimeUrl('/'), window.location.href).pathname.replace(/\\/?$/, '/');\n" +
+  '  const currentPath = (): string => window.NW_RUNTIME?.pathname() ?? window.location.pathname;\n' +
+  '\n' +
+  '  /** Gleiche Rolle wie der Server; eine Capability hebt keine Fachrollengrenze auf. */\n' +
+  '  function hasCapability(capability: string): boolean {\n' +
+  '    if (!state.authed || state.statusError) return false;\n' +
+  "    if (['license.manage', 'notifications.manage'].includes(capability) && state.role !== 'admin') return false;\n" +
+  "    if (['appcenter.open', 'simulation.open', 'mapping.edit', 'chargepoints.configure',\n" +
+  "      'mesh.configure', 'exportGuard.configure', 'smarthome.configure', 'nexologic.configure',\n" +
+  "      'diagnostics.open'].includes(capability) && !['admin', 'installer'].includes(state.role)) return false;\n" +
+  "    return state.capabilities.includes('*') || state.capabilities.includes(capability);\n" +
+  '  }\n' +
+  '\n' +
+  '  function requiredPageCapability(): string {\n' +
+  "    const declared = document.body?.getAttribute('data-nw-required-capability');\n" +
+  '    if (declared) return declared;\n' +
+  "    const path = currentPath().replace(/\\/+$/, '');\n" +
+  '    const pages = new Map([\n' +
+  "      ['/ems-apps.html', 'appcenter.open'], ['/simulation.html', 'simulation.open'],\n" +
+  "      ['/license.html', 'license.manage'], ['/smarthome-config.html', 'smarthome.configure'],\n" +
+  "      ['/logic.html', 'nexologic.configure'], ['/mail-setup', 'notifications.manage'],\n" +
+  "      ['/mesh-setup', 'mesh.configure'],\n" +
+  '    ]);\n' +
+  "    return pages.get(path) || '';\n" +
+  '  }\n' +
+  '\n' +
+  '  function ensureStyles(): void {\n' +
+  "    if (document.getElementById('nw-auth-styles')) return;\n" +
+  "    const style = document.createElement('style');\n" +
+  "    style.id = 'nw-auth-styles';\n" +
+  '    style.textContent = `\n' +
+  '      html.nw-auth-capability-pending body>*:not(#nwAuthGate){visibility:hidden!important;pointer-events:none!important}\n' +
+  '      html.nw-auth-capability-pending body{overflow:hidden!important}\n' +
+  '      #nwAuthGate{position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;padding:24px;background:#020814;color:#edf6ff;font:16px/1.6 system-ui,sans-serif;visibility:visible!important}\n' +
+  '      #nwAuthGate[hidden]{display:none!important}\n' +
+  '      #nwAuthGate section{max-width:480px;padding:32px;border:1px solid #173a53;border-radius:20px;background:#07192b;box-shadow:0 16px 48px #0005}\n' +
+  '      #nwAuthGate h2{margin:0 0 12px;font-size:24px;letter-spacing:-.03em}\n' +
+  '      #nwAuthGate p{color:#8ea2b7;margin:0 0 24px}\n' +
+  '      #nwAuthGate .nw-auth-actions{display:flex;gap:12px;flex-wrap:wrap}\n' +
+  '      #nwAuthGate button,#nwAuthGate a{border:1px solid #00e676;border-radius:10px;padding:10px 16px;background:#00e676;color:#03130e;font:600 14px/1.5 system-ui,sans-serif;cursor:pointer;text-decoration:none}\n' +
+  '      #nwAuthGate button:focus-visible,#nwAuthGate a:focus-visible{outline:3px solid #22b8ff;outline-offset:4px}\n' +
+  '      .nw-auth-header{display:flex;align-items:center;gap:8px;margin-left:auto}\n' +
+  '      .nw-auth-user{max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}\n' +
+  '    `;\n' +
+  '    (document.head || document.documentElement).appendChild(style);\n' +
+  '  }\n' +
+  '\n' +
+  '  /** Verbirgt bereits gerenderte Daten bei Offline-Rückkehr oder verlorener Sitzung. */\n' +
+  "  function lockPage(message = 'Anmeldung wird geprüft …'): void {\n" +
+  '    ensureStyles();\n' +
+  "    document.documentElement.classList.add('nw-auth-capability-pending');\n" +
+  "    document.documentElement.classList.remove('nw-auth-capability-granted');\n" +
+  '    if (!document.body) return;\n' +
+  '    for (const node of Array.from(document.body.children)) {\n' +
+  "      if (!(node instanceof HTMLElement) || node.id === 'nwAuthGate' || ['SCRIPT', 'STYLE'].includes(node.tagName)) continue;\n" +
+  "      if (!background.has(node)) background.set(node, { inert: node.inert, ariaHidden: node.getAttribute('aria-hidden') });\n" +
+  "      node.inert = true; node.setAttribute('aria-hidden', 'true');\n" +
+  '    }\n' +
+  "    let gate = document.getElementById('nwAuthGate');\n" +
+  '    if (!gate) {\n' +
+  "      gate = document.createElement('div'); gate.id = 'nwAuthGate';\n" +
+  `      gate.innerHTML = '<section role="status" aria-live="polite"><h2>Zugriff geschützt</h2><p></p><div class="nw-auth-actions"></div></section>';\n` +
+  '      document.body.appendChild(gate);\n' +
+  '    }\n' +
+  '    gate.hidden = false;\n' +
+  "    const description = gate.querySelector('p');\n" +
+  '    if (description) description.textContent = message;\n' +
+  "    const actions = gate.querySelector('.nw-auth-actions');\n" +
+  '    if (!actions) return;\n' +
+  '    actions.replaceChildren();\n' +
+  "    const retry = document.createElement('button'); retry.type = 'button'; retry.textContent = 'Erneut prüfen';\n" +
+  "    retry.addEventListener('click', () => { loggingOut = false; void refreshStatus(); });\n" +
+  '    actions.appendChild(retry);\n' +
+  '    if (state._loaded && !state.statusError && state.authed) {\n' +
+  "      const home = document.createElement('a'); home.href = runtimeUrl('/'); home.textContent = 'Zur Bedienoberfläche'; actions.appendChild(home);\n" +
+  "      const signOut = document.createElement('button'); signOut.type = 'button'; signOut.textContent = 'Abmelden';\n" +
+  "      signOut.addEventListener('click', () => { void logout(); }); actions.appendChild(signOut);\n" +
+  '    }\n' +
+  '  }\n' +
+  '\n' +
+  '  function unlockPage(): void {\n' +
+  "    document.documentElement.classList.remove('nw-auth-capability-pending');\n" +
+  "    document.documentElement.classList.add('nw-auth-capability-granted');\n" +
+  '    for (const [node, previous] of background) {\n' +
+  '      node.inert = previous.inert;\n' +
+  "      if (previous.ariaHidden === null) node.removeAttribute('aria-hidden'); else node.setAttribute('aria-hidden', previous.ariaHidden);\n" +
+  '    }\n' +
+  '    background.clear();\n' +
+  "    const gate = document.getElementById('nwAuthGate'); if (gate) gate.hidden = true;\n" +
+  '  }\n' +
+  '\n' +
+  '  function resetStatus(error: boolean): void {\n' +
+  "    Object.assign(state, { authed: false, authenticated: false, role: 'none', user: null,\n" +
+  '      capabilities: [], isAdmin: false, isInstaller: false, isCustomer: false, _loaded: true, statusError: error });\n' +
+  "    csrfToken = ''; updateNavigation();\n" +
+  '  }\n' +
+  '\n' +
+  '  /** Maximal 64 KiB Auth-JSON; dieselbe Deadline umfasst Antwortkörper und Netzwerk. */\n' +
+  '  async function readStatus(response: Response, controller: AbortController): Promise<unknown> {\n' +
+  "    if (!response.ok || !/^application\\/json(?:\\s*;|$)/i.test(response.headers.get('content-type') || '')) throw new Error('auth_status_invalid');\n" +
+  "    const reader = response.body?.getReader(); if (!reader) throw new Error('auth_status_body_missing');\n" +
+  '    const chunks: Uint8Array[] = []; let length = 0;\n' +
+  '    try {\n' +
+  '      while (true) {\n' +
+  '        const part = await reader.read(); if (part.done) break;\n' +
+  '        length += part.value.byteLength;\n' +
+  "        if (length > 65536) { controller.abort(); throw new Error('auth_status_too_large'); }\n" +
+  '        chunks.push(part.value);\n' +
+  '      }\n' +
+  '      const bytes = new Uint8Array(length); let offset = 0;\n' +
+  '      for (const part of chunks) { bytes.set(part, offset); offset += part.byteLength; }\n' +
+  "      return JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes)) as unknown;\n" +
+  '    } finally { reader.releaseLock(); }\n' +
+  '  }\n' +
+  '\n' +
+  '  /** Kein Profil-Fallback: unvollständige/alte Statusantworten bleiben gesperrt. */\n' +
+  '  function applyStatus(value: unknown): void {\n' +
+  "    if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('auth_status_invalid');\n" +
+  '    const data = value as Record<string, unknown>;\n' +
+  "    if (!['iobroker', 'eos']"... 11928 more characters
+
+    at staticContracts (/workspace/scratch/016e1c77b6f1/implementation/NexoWatt_UI_1.0.37/scripts/verify-stable-1.0.3-home-appcenter-access.cjs:255:10)
+    at /workspace/scratch/016e1c77b6f1/implementation/NexoWatt_UI_1.0.37/scripts/verify-stable-1.0.3-home-appcenter-access.cjs:388:3
+    at Object.<anonymous> (/workspace/scratch/016e1c77b6f1/implementation/NexoWatt_UI_1.0.37/scripts/verify-stable-1.0.3-home-appcenter-access.cjs:392:3)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14)
+    at Object..js (node:internal/modules/cjs/loader:2060:10)
+    at Module.load (node:internal/modules/cjs/loader:1651:32)
+    at Module._load (node:internal/modules/cjs/loader:1443:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47

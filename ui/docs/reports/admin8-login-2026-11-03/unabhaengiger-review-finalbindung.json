@@ -1,0 +1,220 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-11-03T21:37:22.849Z",
+  "purpose": "Final artifact binding after comment-only regeneration; canonical auth sources unchanged since independent test run",
+  "files": {
+    "src-ts/runtime-executables/lib/iobroker-user-auth.ts": "ecaac7903afe58886b31b245aa5366ac0a5e5d95b62da0878ed3f01fd21b2530",
+    "src-ts/runtime-executables/main.ts": "4161d78db2566b2f785ec46adab7eec6e9ec1b2f88cc831ee9ad460a8ef2872e",
+    "main.js": "515039e4d9d63fc1ac710bc674d2226b86d95a8e4749369fcdf4d9f300b1b11b",
+    "lib/iobroker-user-auth.js": "2867554a8747196388487e1523fe0ff510a8f81f52b78ef4b807aa16402b9983",
+    "package.json": "4771325c108e1d8490ef2ed778e9829c73d8d26327205ea0cc200acc621d5cb4",
+    "package-lock.json": "65227d7515bb2fd511bc3ab6f72be4d33b17722dd2cd6d0c6904ce002138cdbf"
+  },
+  "audits": {
+    "npm-audit-root.json": {
+      "sha256": "a94b73a798018abdd3ff02ee7567a74bdb875ee592a11ecafdbcae439edbbdc7",
+      "counts": {
+        "info": 0,
+        "low": 0,
+        "moderate": 13,
+        "high": 1,
+        "critical": 0,
+        "total": 14
+      }
+    },
+    "npm-audit-root-final.json": {
+      "sha256": "d57ed47124f5194f95e45ad9a75bcb37de179582257f14687824c57c750244f2",
+      "counts": {
+        "info": 0,
+        "low": 0,
+        "moderate": 13,
+        "high": 0,
+        "critical": 0,
+        "total": 13
+      }
+    },
+    "npm-audit-production.json": {
+      "sha256": "35785e539c5ed11c79d6cd9eba93d1cb0e50ad9f0ad1fb7724060a93293c8e10",
+      "counts": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      }
+    },
+    "npm-audit-admin.json": {
+      "sha256": "b80ad31f867286cc37d26ba1b0cd4cc06567c87a508473739f06dc5f7346f8a0",
+      "counts": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      }
+    }
+  },
+  "remainingAuditPackages": [
+    {
+      "name": "@eslint-community/eslint-utils",
+      "severity": "moderate",
+      "nodes": [
+        {
+          "path": "node_modules/@eslint-community/eslint-utils",
+          "version": "4.10.1",
+          "dev": true
+        }
+      ]
+    },
+    {
+      "name": "@eslint/config-array",
+      "severity": "moderate",
+      "nodes": [
+        {
+          "path": "node_modules/@eslint/config-array",
+          "version": "0.23.5",
+          "dev": true
+        }
+      ]
+    },
+    {
+      "name": "@iobroker/adapter-dev",
+      "severity": "moderate",
+      "nodes": [
+        {
+          "path": "node_modules/@iobroker/adapter-dev",
+          "version": "1.5.0",
+          "dev": true
+        }
+      ]
+    },
+    {
+      "name": "@typescript-eslint/eslint-plugin",
+      "severity": "moderate",
+      "nodes": [
+        {
+          "path": "node_modules/@typescript-eslint/eslint-plugin",
+          "version": "8.72.0",
+          "dev": true
+        }
+      ]
+    },
+    {
+      "name": "@typescript-eslint/parser",
+      "severity": "moderate",
+      "nodes": [
+        {
+          "path": "node_modules/@typescript-eslint/parser",
+          "version": "8.72.0",
+          "dev": true
+        }
+      ]
+    },
+    {
+      "name": "@typescript-eslint/type-utils",
+      "severity": "moderate",
+      "nodes": [
+        {
+          "path": "node_modules/@typescript-eslint/type-utils",
+          "version": "8.72.0",
+          "dev": true
+        }
+      ]
+    },
+    {
+      "name": "@typescript-eslint/typescript-estree",
+      "severity": "moderate",
+      "nodes": [
+        {
+          "path": "node_modules/@typescript-eslint/typescript-estree",
+          "version": "8.72.0",
+          "dev": true
+        }
+      ]
+    },
+    {
+      "name": "@typescript-eslint/utils",
+      "severity": "moderate",
+      "nodes": [
+        {
+          "path": "node_modules/@typescript-eslint/utils",
+          "version": "8.72.0",
+          "dev": true
+        }
+      ]
+    },
+    {
+      "name": "eslint",
+      "severity": "moderate",
+      "nodes": [
+        {
+          "path": "node_modules/eslint",
+          "version": "10.13.0",
+          "dev": true
+        }
+      ]
+    },
+    {
+      "name": "glob",
+      "severity": "moderate",
+      "nodes": [
+        {
+          "path": "node_modules/glob",
+          "version": "10.5.0",
+          "dev": true
+        }
+      ]
+    },
+    {
+      "name": "google-gax",
+      "severity": "moderate",
+      "nodes": [
+        {
+          "path": "node_modules/google-gax",
+          "version": "5.0.7",
+          "dev": true
+        }
+      ]
+    },
+    {
+      "name": "minimatch",
+      "severity": "moderate",
+      "nodes": [
+        {
+          "path": "node_modules/@eslint/config-array/node_modules/minimatch",
+          "version": "10.2.6",
+          "dev": true
+        },
+        {
+          "path": "node_modules/@typescript-eslint/typescript-estree/node_modules/minimatch",
+          "version": "10.2.6",
+          "dev": true
+        },
+        {
+          "path": "node_modules/eslint/node_modules/minimatch",
+          "version": "10.2.6",
+          "dev": true
+        },
+        {
+          "path": "node_modules/minimatch",
+          "version": "9.0.9",
+          "dev": true
+        }
+      ]
+    },
+    {
+      "name": "rimraf",
+      "severity": "moderate",
+      "nodes": [
+        {
+          "path": "node_modules/rimraf",
+          "version": "5.0.10",
+          "dev": true
+        }
+      ]
+    }
+  ],
+  "allRemainingAuditNodesDevelopmentOnly": true
+}

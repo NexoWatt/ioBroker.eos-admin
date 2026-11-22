@@ -1,0 +1,66 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:admin-https
+> tsc -p tsconfig.runtime-proxy-html.json && node scripts/verify-admin-runtime-transport.cjs && node scripts/verify-protected-runtime-route.cjs && node scripts/verify-runtime-base.cjs && node scripts/verify-proxy-html.cjs && node scripts/verify-admin-react-proxy-paths.cjs
+
+PASS HTTPS-Admin verwendet seinen eigenen Origin und den offiziellen Instanzproxy
+PASS Admin-Prefix bleibt bei allen geschützten API-Aufrufen und Links erhalten
+PASS Server-Prefix aus übergeordnetem Adminfenster stimmt mit Iframepfad überein
+PASS Bereits proxied React-Seiten bleiben auf demselben Cookie- und Instanzpfad
+PASS Proxy-Fachseiten ohne Instanzquery übernehmen ausschließlich die Pfadinstanz
+PASS Direkter HTTP-Admin verwendet ausschließlich den konfigurierten Instanzport
+PASS Standardport gilt nur für vorhandene Instanz ohne Portfeld, nie bei Lesefehlern
+PASS Fehlende, fremde und ungültige Instanzobjekte erlauben keinen Passworttransport
+PASS Ungültige konfigurierte Ports werden nicht auf 8188 umgedeutet
+PASS Eingebettete direkte HTTP-/HTTPS-Seiten verwenden ihren vorhandenen Origin
+PASS Unbekannter HTTPS-Kontext erhält keinen unverschlüsselten Rückfall
+PASS Instanzkennungen sind kanonische begrenzte Dezimalwerte
+PASS Admin-Prefix erlaubt keine fremden URLs, Traversal oder mehrdeutige Pfade
+PASS Proxy-Prefixgrenzen gelten einschließlich Instanzsuffix und für höchstens 16 öffentliche Segmente
+PASS Verschachtelte Proxy-Namensräume und Proxysegmente im Admin-Prefix bleiben ohne Passwortübertragung gesperrt
+PASS Endpoint-Queryparameter können das aus dem Adminpfad ermittelte Ziel nicht ändern
+PASS Admin-Proxy HTTP 401 bleibt von EOS-Kontofehlern unterscheidbar
+PASS Admin-Proxy HTTP 403 bleibt von EOS-Kontofehlern unterscheidbar
+PASS Admin-Proxy HTTP 404 bleibt von EOS-Kontofehlern unterscheidbar
+PASS Admin-Proxy HTTP 502 bleibt von EOS-Kontofehlern unterscheidbar
+PASS JSON-EOS401 bleibt Passwortablehnung; kein anderer Port oder zweiter Versuch
+PASS Netzwerkfehler geben keine fremden Fehlertexte aus und werden nicht wiederholt
+PASS Status und Login besitzen endliche 6-/12-s-Fristen und brechen echte Fetch-Signale ab
+PASS Timeout umfasst auch einen hängenden Antwortkörper
+PASS Gültiger HTTP-Transport ohne gültigen EOS-Status schaltet keine Sitzung frei
+{"result":"PASS","checks":25,"node":"v24.22.1","sourceSha256":"c23659d808a8e11e98e84aaa5ea6b73492e45c0064381e2056df5b8a47919beb","scope":"Actual TypeScript in VM; synthetic HTTP/proxy contracts, no live Admin8/browser integration."}
+PASS Klare Kontobeschriftung und keine sensiblen Inhalte vor Anmeldung
+PASS Individuelles Passwort unverändert übergeben; nur Benutzername wird gespeichert
+PASS Statusfehler nach erfolgreicher Passwortprüfung bleibt Netzwerkfehler
+PASS Tatsächlich fehlende Gruppenrolle bleibt als Rollenproblem sichtbar
+PASS EOS401 bleibt Passwortfehler, Proxy401 verlangt dagegen Admin-Anmeldung
+PASS Proxy403 und Rate-Limit erhalten unterschiedliche verständliche Meldungen
+PASS Alte erfolgreiche Statusantwort darf während fehlgeschlagenem Login nicht entsperren
+PASS Alte Netzwerkfehler überschreiben keine neu bestätigte Sitzung
+PASS Während Anmeldung starten weder Polling noch Doppel-Submit weitere Anfragen
+PASS Überlappende Statusabfragen werden nicht parallel gestartet
+PASS Abmeldung sperrt sofort; späte Statusantwort entsperrt nicht erneut
+PASS Fehlgeschlagene Serverabmeldung wird nicht als bestätigt ausgegeben
+PASS Unmount verwirft späte Anmeldung ohne Speicher- oder UI-Schreibwirkung
+PASS Routenwechsel beendet alte Generation und lässt die neue Maske bedienbar
+PASS Deaktivierte Authentifizierung und überbreite Kundenrechte öffnen keine Fachseite
+{"result":"PASS","checks":15,"node":"v24.22.1","sourceSha256":"84cef36d91c103a590ce171e3a5f1d9d938a0c1b59af4b1bdc32e70bbd2407dd","scope":"Original TSX component handlers with deterministic hook/lifecycle host and async API fixtures; no live Admin or browser test"}
+[runtime-base] PASS 19 groups: strict TS, prefix bounds, navigation, native Request/body/signal, 7 EventSource, 5 service-worker exclusions.
+[proxy HTML] PASS 7 groups: strict instance-bound prefix and HTTPS presentation-only hint; attribute-only rewriting, raw script/style/comment preservation, first bootstrap, WWW-only base; bounded actual file reads, canonical path containment, symlink/directory rejection, concurrency cap and direct delivery; real HTTP protected WWW and React pages stay locked without EOS session; proxied HTTPS adds Secure/HttpOnly; direct HTTP preserved; forwarded identity grants nothing; authorized WWW/React rendering, direct route regression, canonical slash and protected static redirect; unlicensed setup loads only public path bootstrap and still denies license data
+PASS Stylesheet, Ursprung und Lifecycle: direkt HTTP
+PASS originale React-Navigationsziele: direkt HTTP
+PASS Microgrid-Runtime vs. Admin-Tab: direkt HTTP
+PASS Datenpunkt-Popup und Listener-Abbau: direkt HTTP
+PASS Stylesheet, Ursprung und Lifecycle: direkt HTTPS
+PASS originale React-Navigationsziele: direkt HTTPS
+PASS Microgrid-Runtime vs. Admin-Tab: direkt HTTPS
+PASS Datenpunkt-Popup und Listener-Abbau: direkt HTTPS
+PASS Stylesheet, Ursprung und Lifecycle: Adminproxy Instanz 0
+PASS originale React-Navigationsziele: Adminproxy Instanz 0
+PASS Microgrid-Runtime vs. Admin-Tab: Adminproxy Instanz 0
+PASS Datenpunkt-Popup und Listener-Abbau: Adminproxy Instanz 0
+PASS Stylesheet, Ursprung und Lifecycle: Adminproxy Public Path Instanz 7
+PASS originale React-Navigationsziele: Adminproxy Public Path Instanz 7
+PASS Microgrid-Runtime vs. Admin-Tab: Adminproxy Public Path Instanz 7
+PASS Datenpunkt-Popup und Listener-Abbau: Adminproxy Public Path Instanz 7
+[verify-admin-react-proxy-paths] PASS 16 Fallgruppen; originale TS/TSX-Funktionen in kontrolliertem DOM-/Hook-Host, kein Browser-/Live-Anlagentest.

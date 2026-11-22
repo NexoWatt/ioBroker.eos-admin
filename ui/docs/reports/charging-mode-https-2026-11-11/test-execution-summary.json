@@ -1,0 +1,473 @@
+{
+  "scope": "81 top-level groups from test:all, first fail-closed run plus separately executed remaining groups; no test gate bypassed",
+  "totalGroups": 81,
+  "passed": 72,
+  "browserBlocked": 9,
+  "completeTestAllPassed": false,
+  "newRuntimeRegressionCases": 153,
+  "hardwareTested": false,
+  "results": [
+    {
+      "test": "publish:check",
+      "status": "PASS",
+      "log": "test-all-1.0.36.log"
+    },
+    {
+      "test": "test:types",
+      "status": "PASS",
+      "log": "test-all-1.0.36.log"
+    },
+    {
+      "test": "check:ts-source-syntax",
+      "status": "PASS",
+      "log": "test-all-1.0.36.log"
+    },
+    {
+      "test": "test:ems-shadow-runtime",
+      "status": "PASS",
+      "log": "test-all-1.0.36.log"
+    },
+    {
+      "test": "test:ai-advisor-runtime-typing",
+      "status": "PASS",
+      "log": "test-all-1.0.36.log"
+    },
+    {
+      "test": "test:history-runtime-typing",
+      "status": "PASS",
+      "log": "test-all-1.0.36.log"
+    },
+    {
+      "test": "test:smarthome-runtime-typing",
+      "status": "PASS",
+      "log": "test-all-1.0.36.log"
+    },
+    {
+      "test": "test:smarthome-config-runtime-typing",
+      "status": "PASS",
+      "log": "test-all-1.0.36.log"
+    },
+    {
+      "test": "test:ems-apps-runtime-typing",
+      "status": "PASS",
+      "log": "test-all-1.0.36.log"
+    },
+    {
+      "test": "test:app-runtime-typing",
+      "status": "PASS",
+      "log": "test-all-1.0.36.log"
+    },
+    {
+      "test": "test:main-runtime-typing",
+      "status": "PASS",
+      "log": "test-all-1.0.36.log"
+    },
+    {
+      "test": "test:rc57-ocpp-stability",
+      "status": "PASS",
+      "log": "test-all-1.0.36.log"
+    },
+    {
+      "test": "test:rc58-ocpp-compact-mapping",
+      "status": "PASS",
+      "log": "test-all-1.0.36.log"
+    },
+    {
+      "test": "test:rc59-ocpp21-native-storage-safety",
+      "status": "PASS",
+      "log": "test-all-1.0.36.log"
+    },
+    {
+      "test": "test:rc60-universal-auto-orchestrator",
+      "status": "PASS",
+      "log": "test-all-1.0.36.log"
+    },
+    {
+      "test": "test:rc60-universal-auto-wallbox",
+      "status": "PASS",
+      "log": "test-all-1.0.36.log"
+    },
+    {
+      "test": "test:rc61-heating-night-lock",
+      "status": "PASS",
+      "log": "test-all-1.0.36.log"
+    },
+    {
+      "test": "test:rc61-evcs-hardening",
+      "status": "PASS",
+      "log": "test-all-1.0.36.log"
+    },
+    {
+      "test": "test:rc63-availability-storage-grid-gate",
+      "status": "PASS",
+      "log": "test-all-1.0.36.log"
+    },
+    {
+      "test": "test:rc64-storage-grid-charge-policy",
+      "status": "PASS",
+      "log": "test-all-1.0.36.log"
+    },
+    {
+      "test": "test:rc65-nt-price-target-override",
+      "status": "PASS",
+      "log": "test-all-1.0.36.log"
+    },
+    {
+      "test": "test:dc-station-display",
+      "status": "PASS",
+      "log": "test-all-1.0.36.log"
+    },
+    {
+      "test": "test:rc66-station-display-stable",
+      "status": "PASS",
+      "log": "test-all-1.0.36.log"
+    },
+    {
+      "test": "test:rc66-station-display-browser",
+      "status": "BLOCKED_BROWSER_ENVIRONMENT",
+      "log": "test-all-1.0.36.log"
+    },
+    {
+      "test": "test:rc67-license-bootstrap-access",
+      "status": "PASS",
+      "log": "remaining-test-rc67-license-bootstrap-access.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:rc68-para14a-communication-fallback",
+      "status": "PASS",
+      "log": "remaining-test-rc68-para14a-communication-fallback.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:dashboard-lp-status-typing",
+      "status": "PASS",
+      "log": "remaining-test-dashboard-lp-status-typing.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:rc69-dashboard-lp-feedback",
+      "status": "BLOCKED_BROWSER_ENVIRONMENT",
+      "log": "remaining-test-rc69-dashboard-lp-feedback.log",
+      "firstExitCode": 1
+    },
+    {
+      "test": "test:rc70-dashboard-lp-status-polish",
+      "status": "BLOCKED_BROWSER_ENVIRONMENT",
+      "log": "remaining-test-rc70-dashboard-lp-status-polish.log",
+      "firstExitCode": 1
+    },
+    {
+      "test": "test:rc72-weather-pv-forecast-auto",
+      "status": "BLOCKED_BROWSER_ENVIRONMENT",
+      "log": "remaining-test-rc72-weather-pv-forecast-auto.log",
+      "firstExitCode": 1
+    },
+    {
+      "test": "test:rc73-ems-admin-overview",
+      "status": "PASS",
+      "log": "remaining-test-rc73-ems-admin-overview.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:rc74-pv-forecast-customer-ui",
+      "status": "BLOCKED_BROWSER_ENVIRONMENT",
+      "log": "remaining-test-rc74-pv-forecast-customer-ui.log",
+      "firstExitCode": 1
+    },
+    {
+      "test": "test:rc75-pv-forecast-admin-location",
+      "status": "BLOCKED_BROWSER_ENVIRONMENT",
+      "log": "remaining-test-rc75-pv-forecast-admin-location.log",
+      "firstExitCode": 1
+    },
+    {
+      "test": "test:rc76-pv-forecast-runtime-hardening",
+      "status": "BLOCKED_BROWSER_ENVIRONMENT",
+      "log": "remaining-test-rc76-pv-forecast-runtime-hardening.log",
+      "firstExitCode": 1
+    },
+    {
+      "test": "test:rc77-pv-forecast-state-cache-bridge",
+      "status": "PASS",
+      "log": "remaining-test-rc77-pv-forecast-state-cache-bridge.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:rc78-import-only-grid-budget",
+      "status": "PASS",
+      "log": "remaining-test-rc78-import-only-grid-budget.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:rc79-import-soft-hard-zero-export",
+      "status": "PASS",
+      "log": "remaining-test-rc79-import-soft-hard-zero-export.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:rc80-soft-limit-fixed-ten-percent",
+      "status": "PASS",
+      "log": "remaining-test-rc80-soft-limit-fixed-ten-percent.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:rc81-nvp-assignment-single-source",
+      "status": "PASS",
+      "log": "remaining-test-rc81-nvp-assignment-single-source.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:rc82-permanent-grid-protection",
+      "status": "PASS",
+      "log": "remaining-test-rc82-permanent-grid-protection.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:rc83-storage-cheap-only-log-object",
+      "status": "PASS",
+      "log": "remaining-test-rc83-storage-cheap-only-log-object.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:rc85",
+      "status": "PASS",
+      "log": "remaining-test-rc85.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:rc86",
+      "status": "PASS",
+      "log": "remaining-test-rc86.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:rc87",
+      "status": "PASS",
+      "log": "remaining-test-rc87.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:rc88",
+      "status": "PASS",
+      "log": "remaining-test-rc88.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:rc89",
+      "status": "PASS",
+      "log": "remaining-test-rc89.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:rc90",
+      "status": "PASS",
+      "log": "remaining-test-rc90.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:rc91",
+      "status": "PASS",
+      "log": "remaining-test-rc91.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:rc92",
+      "status": "BLOCKED_BROWSER_ENVIRONMENT",
+      "log": "remaining-test-rc92.log",
+      "firstExitCode": 1
+    },
+    {
+      "test": "test:rc93",
+      "status": "PASS",
+      "log": "remaining-test-rc93.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:stable-1.0.2-health",
+      "status": "PASS",
+      "log": "remaining-test-stable-1.0.2-health.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:stable-1.0.3-home-appcenter",
+      "status": "BLOCKED_BROWSER_ENVIRONMENT",
+      "log": "remaining-test-stable-1.0.3-home-appcenter.log",
+      "firstExitCode": 1
+    },
+    {
+      "test": "test:stable-1.0.4-auto-pv",
+      "status": "PASS",
+      "log": "remaining-test-stable-1.0.4-auto-pv.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:stable-1.0.5-storage-protection",
+      "status": "PASS",
+      "log": "remaining-test-stable-1.0.5-storage-protection.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:stable-1.0.6-dc",
+      "status": "PASS",
+      "log": "remaining-test-stable-1.0.6-dc.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:stable-1.0.7-notifications",
+      "status": "PASS",
+      "log": "remaining-test-stable-1.0.7-notifications.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:stable-1.0.8-storage-licenses",
+      "status": "PASS",
+      "log": "remaining-test-stable-1.0.8-storage-licenses.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:stable-1.0.9-access",
+      "status": "PASS",
+      "log": "remaining-test-stable-1.0.9-access.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:stable-1.0.10-security",
+      "status": "PASS",
+      "log": "remaining-test-stable-1.0.10-security.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:stable-1.0.11-documentation",
+      "status": "PASS",
+      "log": "remaining-test-stable-1.0.11-documentation.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:stable-1.0.12-publish",
+      "status": "PASS",
+      "log": "remaining-test-stable-1.0.12-publish.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:stable-release",
+      "status": "PASS",
+      "log": "remaining-test-stable-release.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:mesh-coordinator",
+      "status": "PASS",
+      "log": "remaining-test-mesh-coordinator.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:zero-export-pv",
+      "status": "PASS",
+      "log": "remaining-test-zero-export-pv.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:stable-1.0.18-charging",
+      "status": "PASS",
+      "log": "remaining-test-stable-1.0.18-charging.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:stable-1.0.19-grid-share",
+      "status": "PASS",
+      "log": "remaining-test-stable-1.0.19-grid-share.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:stable-1.0.20-storage",
+      "status": "PASS",
+      "log": "remaining-test-stable-1.0.20-storage.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:zero-export-inverter-mapping",
+      "status": "PASS",
+      "log": "remaining-test-zero-export-inverter-mapping.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:cra",
+      "status": "PASS_AFTER_FIXTURE_CORRECTION",
+      "log": "cra-rerun-1.0.36.log",
+      "firstExitCode": 1
+    },
+    {
+      "test": "test:heating-rod-night-ramp",
+      "status": "PASS",
+      "log": "remaining-test-heating-rod-night-ramp.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:heating-rod-pv-freshness",
+      "status": "PASS",
+      "log": "remaining-test-heating-rod-pv-freshness.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:heating-rod-night-ui",
+      "status": "PASS",
+      "log": "remaining-test-heating-rod-night-ui.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:nvp-topology",
+      "status": "PASS",
+      "log": "remaining-test-nvp-topology.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:dynamic-grid",
+      "status": "PASS",
+      "log": "remaining-test-dynamic-grid.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:ems-navigation",
+      "status": "PASS",
+      "log": "remaining-test-ems-navigation.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:security-standards",
+      "status": "PASS",
+      "log": "remaining-test-security-standards.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:partner",
+      "status": "PASS",
+      "log": "remaining-test-partner.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:admin8-auth",
+      "status": "PASS",
+      "log": "remaining-test-admin8-auth.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:group-access",
+      "status": "PASS",
+      "log": "remaining-test-group-access.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:admin-https",
+      "status": "PASS",
+      "log": "remaining-test-admin-https.log",
+      "firstExitCode": 0
+    },
+    {
+      "test": "test:charging-mode-recovery",
+      "status": "PASS",
+      "log": "remaining-test-charging-mode-recovery.log",
+      "firstExitCode": 0
+    }
+  ]
+}

@@ -1,0 +1,186 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:cra
+> node scripts/verify-cra-auth.cjs && node scripts/verify-cra-network.cjs && node scripts/verify-cra-frontend.cjs && node scripts/verify-cra-tariff.cjs && node scripts/verify-release-approval.cjs --self-test && node scripts/verify-cra-dependency-regressions.cjs && npm run test:stable-1.0.10-security && node scripts/verify-cra-admin-router.cjs && npm run test:sbom && npm run test:license-secret && npm run test:cra-weather && npm run test:cra-credential-state
+
+PASS anonyme Kundenschreibversuche benötigen Sitzung; Kunde bedient eigene Settings
+PASS unknown scope umgeht weder Peak-Shaving-Sperre noch Tarifzwang
+PASS Origin null/fremde Origin werden vor Mutationen gesperrt, eigene Origin funktioniert
+PASS fehlerhaft kodierte Cookies erzeugen keinen Serverfehler
+PASS Login rotiert Browser-Sitzung, Logout widerruft Token
+PASS Kontosperre, Löschung und Passwortwechsel widerrufen vorhandene Sessions
+PASS Gruppen-Demotion wirkt ohne Logout und ohne Wartezeit
+PASS Sessionzahl pro Konto ist auf acht begrenzt
+PASS Prototype-Pollution direkt, per Arrays und HTTP ist vor Merge/Mutation blockiert
+PASS Flow-Sollwertgrenzen werden serverseitig vor jedem Gerätetarget durchgesetzt
+PASS öffentliche States und selbst privilegierter SSE-LIVE-Kanal enthalten keine Stationstokens
+PASS Stationsmodus-Freigabe gilt ebenso für set-mode und mode Alias
+PASS neue oder geänderte kurze Stationstokens werden beim Save und Import abgelehnt
+PASS fehlende oder ungültige Policy fällt sicher auf session zurück
+PASS fehlender Passwort-Rückruf läuft nach fünf Sekunden aus und gibt Login-Kapazität frei
+PASS Installer-Mapping bleibt bei auth=false und all geschützt
+PASS Installer-Mapping bleibt bei auth=false und lan geschützt
+PASS Installer-Mapping bleibt bei auth=false und session geschützt
+PASS parallele Logins reservieren Kapazität vor der Passwortprüfung
+CRA AUTH: 19 checks passed; real local HTTP, mocked ioBroker accounts/states, no hardware.
+CRA network verification 2026-11-11T05:57:00.244Z | v24.22.1 | linux | generated runtime
+SHA256 lib/mesh-coordinator-contract.js 82c9959cd034b96511bfac1e0e19df9750af91d0a1614c2135b80d7a7e21e7e6
+SHA256 lib/mesh-coordinator-protocol.js 356a151f811481b35e3c8e15dd4bc8cd307cdd0e734a614b07d0af541f1f90f1
+SHA256 lib/mesh-coordinator.js ecdb286c30aa91b0ab4a93a925311af6dd1be77030e3bb56a1d5ce8cbc3a66d4
+SHA256 lib/notification-mail.js 63ec344e52b32272e307750b7fffa63a07fe0a8c9fcfedec9ef50d52f897977c
+OK NET-01: v2-Anlauf, signierter Verkehr, Hello-Replay verändert keinen aktiven Regelzustand
+OK NET-02: Reconnect nach gleichem Boot und echter Slave-Neustart erholen sich kontrolliert
+OK NET-03: Master-Neustart, altes Hello und alter Exchange können keine Sitzung vorwegnehmen
+OK NET-04: Abgelaufene, manipulierte und fremde Challenges; vertauschte/alte Antworten abgewiesen
+OK NET-05: V1-Peers werden ausdrücklich abgewiesen; ungültige HMACs erreichen keine Sitzung
+OK NET-06: Tatsächliche IPv4/IPv6-Tailnet-/Loopbackadressen geprüft; Fremdnetze abgewiesen
+OK NET-07: Echter Loopback-HTTP-Kanal; DNS-Rebinding blockiert vor Socket/Datensendung
+OK NET-08: Antwort-/Anfragelimit, Deadline, fremder Endpoint und Protokollfehler
+OK NET-09: HTTPS verlangt explizit TLS >=1.2 und Gegenstellenprüfung (Optionsprüfung)
+OK NET-10: SMTP-Ledger exklusiv/0600/atomar; vorbereiteter alter Temp-Symlink bleibt wirkungslos
+OK NET-11: Fehler vor Rename erhält vorhandenes Ledger und räumt neue Tempdatei auf
+OK NET-12: SMTP erfordert TLS, keine URL-/Dateizugriffe, keine Rohfehler oder Secrets
+PASS 12 network/security groups; no hardware/Tailnet/real SMTP test
+[verify-cra-frontend] PASS 46 Regressionen (Originalfunktionen; DOM-/Fetch-/Cache-Doubles).
+{
+  "suite": "UI-CRA-NET-04 / NW-HTTPS-5S",
+  "source": "ems/services/tariff-provider-registry.js",
+  "node": "v24.22.1",
+  "environment": "real loopback HTTP stream behind simulated HTTPS URL; mocked HTTPS providers/DNS; no production or real TLS access",
+  "passed": 23,
+  "timings": {
+    "oauthSharedBudgetMs": 131,
+    "maximumConfiguredBudgetMs": 5012
+  },
+  "checks": [
+    "bounded-stream-positive-via-simulated-https",
+    "redirect-never-reaches-target",
+    "streamed-response-limit",
+    "declared-response-limit",
+    "body-total-timeout",
+    "provider-error-redacted",
+    "all-http-rejected-before-network",
+    "invalid-url-and-userinfo-rejected",
+    "https-custom-credential-contract-mock",
+    "https-oauth-one-signal-positive",
+    "oauth-chain-shares-one-short-budget",
+    "five-second-cap-includes-oauth-and-noncooperative-dns-mock",
+    "offline-error-redacted",
+    "request-size-limit-before-network",
+    "json-types-completeness-bounds-atomic-rejection",
+    "negative-prices-and-epoch-types-positive",
+    "interval-count-and-overlap-rejected",
+    "tibber-and-energyzero-complete-envelope-check",
+    "entsoe-explicit-xml-decimal-positive-and-malformed-rejection",
+    "invalid-provider-response-does-not-refresh-states-or-timestamps",
+    "expired-and-future-only-responses-keep-good-cache-and-success-time",
+    "valid-current-provider-result-commits-new-price-and-success",
+    "unchanged-ticks-preserve-data-timestamps-and-expiry-clears-once"
+  ]
+}
+[release-approval] Regression OK: unvollständige Freigaben blockiert. Keine reale Freigabe gesetzt.
+PASS: normal JSON request preserved
+PASS: oversized body rejected with HTTP 413
+PASS: malformed JSON rejected with HTTP 400
+PASS: nested query parsing preserved after rejected requests
+PASS: crafted qs constructor/isBuffer round-trip does not throw
+PASS: invalid parser size rejected at construction
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:stable-1.0.10-security
+> node scripts/verify-stable-1.0.10-secret-guard.cjs
+
+[1.0.10 security] OK: SMTP/HMAC literals, URLs/env/private keys and token formats, runtime files, clean UI fields, obsolete bundles, real staged-index hook, redacted failures and publish gate.
+[verify-cra-admin-router] PASS 44 Fälle; react-router-dom 7.18.4, echte HashRouter-/Route-Komponenten, Node-Render und kontrollierte Auth-Hookzustände; kein echter Browserlebenszyklus.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:sbom
+> node scripts/verify-cra-sbom-regressions.cjs
+
+[sbom regression] PASS offline generation from clean repository without either node_modules tree
+[sbom regression] PASS release generation never seals the artifact manifest
+[sbom regression] PASS npm automatically included package.json is bound despite absence from files list
+[sbom regression] PASS reference dependencies are not claimed to be an actual live-device inventory
+[sbom regression] PASS repeated publication verification is read-only and needs no npm on PATH
+[sbom regression] PASS changed root package dependency declaration is rejected
+[sbom regression] PASS changed lockfile is rejected by verifier and generator
+[sbom regression] PASS changed Admin asset cannot be silently re-described
+[sbom regression] PASS changed Admin source requires a genuine new build
+[sbom regression] PASS tampered SBOM is rejected
+[sbom regression] PASS missing SBOM is rejected
+[sbom regression] PASS omitted hash record is rejected
+[sbom regression] PASS missing archived Admin evidence blocks generation without rewriting SBOM
+[sbom regression] PASS partial Admin dependency installation is not accepted as the recorded build
+[sbom regression] PASS prepared npm package verifies without source, lockfiles, dependencies or npm
+[sbom regression] PASS partial source repository must not pretend to be a prepared npm package
+[sbom regression] PASS unsafe paths and graph references fail closed
+[sbom regression] OK: 17 Prüfgruppen. Lokal auf linux; kein echter npm-Publish und keine Geräteprüfung.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:license-secret
+> node scripts/verify-license-secret-externalization.cjs && node --test test/license-compatibility-negative.test.cjs
+
+[license-compatibility] OK: 6 legacy/private formats, 9 missing/malformed ENV cases, UUID/signature rejection, trial continuation/expiry/rollback, no key output.
+✔ 44 negative Lizenzproben: Edition, Trialdauer und Trial-zu-Voll bleiben signaturgebunden (989.651148ms)
+✔ 18 Guard-Proben: Ausnahme nur für exakten Altvertrag; andere Fundstellen bleiben blockiert (262.797034ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1588.757477
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:cra-weather
+> node scripts/verify-cra-weather.cjs
+
+{
+  "suite": "UI-CRA-NET-05",
+  "source": "ems/services/open-meteo-pv-forecast.js",
+  "node": "v24.22.1",
+  "environment": "isolated HTTPS/adapter fixtures; real short deadline timers; no Pi5/provider/TLS-certificate integration",
+  "passed": 16,
+  "checks": [
+    "https-positive-and-max-5000-ms-even-if-caller-requests-longer",
+    "reject-http-userinfo-unknown-host-before-network",
+    "dns-connect-stall-aborted-by-independent-real-timer",
+    "trickling-body-cannot-reset-overall-timeout",
+    "connection-error-never-exposes-url-or-token",
+    "redirect-and-http-error-body-never-exposed",
+    "declared-and-streamed-response-size-limits",
+    "json-content-type-encoding-and-truncated-body",
+    "weather-full-schema-rejects-missing-null-string-nan-and-ranges",
+    "weather-invalid-response-never-partially-writes-provider-values",
+    "pv-strict-series-rejects-malformed-values-and-partial-lengths",
+    "valid-night-zero-production-is-distinct-from-invalid-response",
+    "pv-incomplete-plane-and-mixed-time-grid-cannot-be-published-as-full-forecast",
+    "failed-refresh-keeps-last-good-timestamp-and-explicit-stale-status",
+    "provider-fallbacks-share-one-monotone-deadline-with-no-reset",
+    "credential-source-priority-without-hardcoded-key"
+  ]
+}
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.36 test:cra-credential-state
+> node scripts/verify-cra-credential-state.cjs
+
+{
+  "suite": "UI-CRA-SECRET-06",
+  "source": "main.js",
+  "node": "v24.22.1",
+  "environment": "isolated adapter object/state fixtures; no real ioBroker ACL authorization integration",
+  "passed": 9,
+  "checks": [
+    "startup-migrates-existing-config-and-both-backup-acls",
+    "first-creation-is-restricted-and-respects-instance-namespace",
+    "persist-verifies-acl-before-writing-and-retains-config",
+    "partner-cas-and-dedicated-save-guards-remain-real-before-credential-write",
+    "acl-failure-blocks-config-write-with-sanitized-error",
+    "unconfirmed-acl-update-blocks-write",
+    "backup-rotation-checks-both-targets-and-preserves-values",
+    "failed-protection-prevents-all-backup-credential-writes",
+    "simulation-config-backup-is-protected-and-fails-closed"
+  ]
+}

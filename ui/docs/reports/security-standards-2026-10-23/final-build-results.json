@@ -1,0 +1,52 @@
+[
+  {
+    "command": [
+      "npm",
+      "run",
+      "sync:ts-runtime-executables"
+    ],
+    "exit": 0,
+    "seconds": 1.951,
+    "log": "runtime-sync-final.log"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "build:ts"
+    ],
+    "exit": 0,
+    "seconds": 12.734,
+    "log": "build-ts-final.log"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "docs:build"
+    ],
+    "exit": 0,
+    "seconds": 3.677,
+    "log": "docs-build-final.log"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "docs:check"
+    ],
+    "exit": 0,
+    "seconds": 0.266,
+    "log": "docs-check-final.log"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "release:generate-manifest"
+    ],
+    "exit": 0,
+    "seconds": 1.798,
+    "log": "release-manifest-final-build.log"
+  }
+]

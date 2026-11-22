@@ -1,0 +1,9 @@
+PASS default static form contains no fabricated M0/M1 measurements
+PASS clearing a required number never becomes zero or no-limit null
+PASS M1 true zero remains an enabled limit; null remains explicitly unconfigured
+PASS clearing optional physical identity removes it rather than sending invalid empty ID
+PASS selecting a storage takes only the existing measurement, never its physical area or control point
+PASS diagnostic readout is hypothetical, escapes names, and hides outdated corridor
+PASS NVP role guard denies broad capability on ordinary customer account
+PASS mutation error is not retried
+{"result":"PASS","checks":8,"limitation":"React renderer and actual handlers; real Chromium layout/browser interaction not executed."}

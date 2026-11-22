@@ -1,0 +1,8 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:rc92
+> node scripts/verify-rc92-history-mobile.cjs
+
+[rc92-history-mobile] ERROR: Error: Timeout bei Chromium Debug-Port: null
+    at waitFor (/workspace/scratch/016e1c77b6f1/implementation/NexoWatt_UI_1.0.37/scripts/verify-rc92-history-mobile.cjs:75:9)
+    at async /workspace/scratch/016e1c77b6f1/implementation/NexoWatt_UI_1.0.37/scripts/verify-rc92-history-mobile.cjs:217:5

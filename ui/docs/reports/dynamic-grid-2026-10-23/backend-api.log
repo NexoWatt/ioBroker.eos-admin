@@ -1,0 +1,40 @@
+✔ unvollständiger Entwurf bleibt speicherbar, Aktivierung meldet konkrete fehlende Verträge (7.741097ms)
+✔ freie herstellerunabhängige Speicherzuordnung ist ohne Bestandsinventar aktivierbar (1.284531ms)
+✔ M0 bleibt Allgemein, kW und Vorzeichen kommen aus serverseitiger Quelle (0.909096ms)
+✔ vollständiges Allgemein-Splitpaar wird übernommen; gleiche physische M0/M1-Quelle wird abgewiesen (1.365112ms)
+✔ getrennte Alias-Lese-/Schreibquellen liefern richtige physische Ownership-Kette (0.904169ms)
+✔ zwei Aliasnamen auf demselben Ausgang erzeugen keinen zweiten Writer (0.720443ms)
+✔ falsche Ausgangsrechte, Datentypen und Einheiten verhindern Aktivierung, nicht Entwurf (2.678606ms)
+✔ CAS gilt für eigene App-Saves sowie Allgemein-Änderungen und reine App-Schalter (1.404661ms)
+✔ alte Allgemein-Konfiguration benötigt ohne neue App keinen impliziten Appvertrag (0.183235ms)
+✔ kontrollierte Deaktivierung bleibt bis zur positiven Runtime-Übergabe ausstehend (0.791741ms)
+✔ Status einer früheren Version wird ohne alte Messungen als pending dargestellt (0.241644ms)
+✔ jede neue API-Route besitzt die Installer-Middleware und keinen HTTP-Cache (0.494273ms)
+✔ alter oder zukünftiger aktiver Status wird nicht als aktuelle erfolgreiche Regelung ausgegeben (0.209205ms)
+✔ aktive bestehende PV-Stellstrecke muss vor Übernahme zugeordnet werden (0.852822ms)
+✔ vorhandenes Speicherlizenzlimit zählt freie App-Zuordnungen ohne Inventarabhängigkeit (0.513141ms)
+✔ DynamicGrid HTTP: Rollen, Entwurf, atomare Aktivierung, CAS und M0 aus Allgemein (257.783666ms)
+✔ DynamicGrid HTTP: AppCenter/Import und parallele Gesamtpatch-Writer können CAS nicht umgehen (70.213989ms)
+✔ alte Konfiguration bleibt statisch ohne zusätzliche Objektabfragen (2.188309ms)
+✔ M0 und M1 über verschiedene Aliasnamen auf derselben Quelle werden abgewiesen (1.5962ms)
+✔ Aliaszyklus und fehlender Datenpunkt bleiben sichtbar ungültig (0.564469ms)
+✔ Zuordnung zu fremdem Speicher und fremder AC-Istleistung wird abgewiesen (0.814835ms)
+✔ atomare Änderung erhöht Version einmal; alter Browserstand und offene Freigabe blockieren (4.619655ms)
+✔ native oder importierter aktiver Betrieb kann die technische Sperre nicht umgehen (0.973834ms)
+✔ Persistenzpfad lehnt stille Entfernung und unversionierte Änderung ab (1.354196ms)
+✔ Änderung der Bestandsfarm invalidiert die bisherige NVP-Gerätebindung (0.653803ms)
+✔ jede NVP-Route besitzt die Installer-Middleware und no-store (0.653903ms)
+✔ alte Diagnoseversion wird nach Zuordnungswechsel ohne übernommene Messwerte als ausstehend ausgegeben (0.411178ms)
+✔ ungespeicherte Diagnose ruft nur Vorschau auf und verändert keine Konfiguration (1.196939ms)
+✔ gleichzeitiger Speicherversuch wird abgewiesen; Version und Konfiguration bleiben atomar (0.645631ms)
+✔ hängende Objektprüfung belegt höchstens vier DB-Aufträge und einen Adapter-Slot (7.041014ms)
+✔ NVP HTTP: Rollen, atomare Speicherung, Import, Aktivierungssperre und öffentliche Diagnosefilter (232.418871ms)
+✔ NVP HTTP: alle Gesamtpatch-Writer schließen parallele veraltete Speicherungen aus (101.929766ms)
+ℹ tests 32
+ℹ suites 0
+ℹ pass 32
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 692.659184

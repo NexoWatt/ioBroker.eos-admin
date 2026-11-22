@@ -1,0 +1,1 @@
+[build-ts-script-mirrors] ERROR: TypeScript-Build für Script-Spiegel fehlgeschlagen. Falls tsc fehlt: npm install oder npm ci ausführen.

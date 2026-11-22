@@ -1,0 +1,16 @@
+<!-- Copyright (c) 2026 NexoWatt. All rights reserved. Confidential and Proprietary. -->
+# NexoWatt EOS 1.0.32 – Partneranbindungen und eigenständige Arbitrage
+
+Dieser Sicherheits-Prüfstand ist **nicht für den Produktivbetrieb freigegeben**. Er baut ausschließlich auf dem vollständigen, geprüften Lieferstand 1.0.31 vom 24.10.2026 auf. Die vorhandenen Sicherheitskorrekturen und die ausdrücklich erhaltene NW1-Kompatibilität bleiben bestehen.
+
+Die neue Arbitrage-App im EMS-AppCenter nimmt kurzlebige Lade-/Entladewünsche eines freigegebenen Partners entgegen. Haushaltsbetrieb und reiner Speicherhandel sind unabhängig von PV, Wallbox, Bilanz und dynamischem Netzanschluss möglich. Die bestehende lokale Speicherregelung übernimmt weiterhin allein den Hardwarezugriff. Unterstützt werden im neuen Partnerpfad generische Single-Zielwertverträge sowie geprüfte EOS-Arbitragegruppen des optionalen dynamischen Netzanschlusses. Legacyfarm und die herstellerspezifischen Standalone-Pfade FENECON, Sungrow und E3DC bleiben für Partnersteuerung gesperrt.
+
+Bilanz und Direktvermarktung besitzen eigene Freigabeansichten. Bilanz liefert das letzte vollständige Intervall als begrenzte Datenprojektion; Direktvermarktung liefert aktuelle Leistungswerte. Aktive PV-Abregelung ist noch nicht angebunden und wird ausdrücklich abgewiesen. Die erste Protokollversion verwaltet ein gemeinsames Partnerprofil mit getrennten Rechten pro App und Ressource. Anbieteradapter, Fahrpläne und mehrere gleichzeitige Partner sind nicht Bestandteil dieses Schritts.
+
+Die Verbindung wird ausschließlich ausgehend über WSS aufgebaut. Es gibt keinen zusätzlichen eingehenden Internetport. Geschützte Zugangsdaten binden Partneridentität, Ziel und Ablaufzeit. TLS-Prüfung, DNS-Pinning, begrenzte Nachrichten, Wiederholungsschutz, Konfigurationsversionen, Widerrufsrevision und erneute Prüfung unmittelbar vor Gerätezugriffen begrenzen den Kanal. Annahmequittungen sind keine Bestätigung einer Gerätewirkung. Ohne aktuelle Freigabe greift die lokale Rückfallregelung; deren tatsächliche Wirkung und Gerätezeiten müssen an der Anlage gemessen werden.
+
+Neue Laufzeitabhängigkeit: ws 8.22.0. Der am 28.10.2026 erkannte qs-Befund GHSA-6pq8-jhm2-2vcw wird durch die exakte Auflösung auf qs 6.16.1 korrigiert. Der PWA-Cache wechselt auf v522, damit die neuen AppCenter-Dateien nach dem Update geladen werden.
+
+Vor dem Update Konfiguration und Zustand sichern. Die neue Verbindung und sämtliche Steuerfreigaben sind standardmäßig aus. Bestehende Partnerfreigaben dürfen nur in der geschützten Partneransicht geändert werden; generische Importe übernehmen keine abweichenden Freigaben. Für einen späteren Rückfall zuerst den Partnerzugriff widerrufen und den lokalen Gerätebetrieb prüfen; ein bloßes Zurückkopieren der alten Software bestätigt keinen sicheren Gerätezustand.
+
+Einrichtung und technische Grenzen: [Architektur und CRA-Nachweise](PARTNER_ARBITRAGE_1_0_32_DE.md), [Protokoll v1](PARTNER_INTEGRATION_PROTOCOL_V1_DE.md), [geschützte Bereitstellung](PARTNER_RUNTIME_PROVISIONIERUNG_DE.md). Tatsächlich ausgeführte Prüfungen und offene Punkte stehen im [Prüfbericht](reports/partner-arbitrage-2026-10-28/PRUEFBERICHT_DE.md). Es wurde keine Kundenanlage verändert und kein Paket extern veröffentlicht.

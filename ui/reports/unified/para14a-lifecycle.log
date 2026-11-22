@@ -1,0 +1,10 @@
+✔ uninitialized §14a stop cleans resources without creating undefined diagnostic states (2.901645ms)
+✔ initialized §14a stop publishes one final status only after its objects exist (0.89684ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 59.351515

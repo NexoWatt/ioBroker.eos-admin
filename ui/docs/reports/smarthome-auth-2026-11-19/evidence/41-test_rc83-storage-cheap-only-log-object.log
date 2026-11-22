@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:rc83-storage-cheap-only-log-object
+> node scripts/verify-rc83-storage-cheap-only-log-object.cjs
+
+[rc83-storage-cheap-only-log-object] OK: Netzladen nur bei frischem günstigen Tarif; außerhalb günstig wird jeder Ladepfad physikalisch auf lokalen PV-Überschuss begrenzt; sinkFieldProtocolJson wird vor dem ersten Write angelegt.

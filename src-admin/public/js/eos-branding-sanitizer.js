@@ -8,8 +8,8 @@
     let unsubscribe = null;
     const skip = new Set(['SCRIPT','STYLE','CODE','PRE','TEXTAREA','NOSCRIPT']);
     const rewrite = value => String(value || '')
-        .replace(/ioBroker\.admin/gi, 'NexoWatt EOS Admin')
-        .replace(/ioBroker\s*Admin/gi, 'NexoWatt EOS Admin')
+        .replace(/ioBroker\.admin/gi, 'NexoWatt EOS')
+        .replace(/ioBroker\s*Admin/gi, 'NexoWatt EOS')
         .replace(/ioBroker/gi, 'NexoWatt EOS');
     const rewriteElement = root => {
         if (!root) return;

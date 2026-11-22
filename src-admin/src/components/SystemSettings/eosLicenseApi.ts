@@ -25,7 +25,7 @@ export function parseLicenseStatus(value: unknown): EosLicenseStatus {
         !(
             value.uuid === null ||
             (typeof value.uuid === 'string' &&
-                /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value.uuid))
+                /^(?:[a-z]{2})?[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value.uuid))
         ) ||
         ![null, 'home', 'pro'].includes(value.edition as string | null) ||
         !(
@@ -99,7 +99,7 @@ async function readJson(response: Response): Promise<unknown> {
 }
 
 export function licenseEndpoint(action: 'status' | 'activate' | 'remove', pageUrl?: string): string {
-    const path = `nexowatt/license/${action}`;
+    const path = `/nexowatt/license/${action}`;
     return pageUrl ? new URL(path, pageUrl).href : path;
 }
 

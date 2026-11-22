@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "noCheck": false,
+    "moduleDetection": "force",
+    "noImplicitAny": true,
+    "useUnknownInCatchVariables": true,
+    "rootDir": "src-ts/runtime-executables",
+    "module": "NodeNext",
+    "moduleResolution": "nodenext"
+  },
+  "include": [
+    "src-ts/runtime-executables/lib/partner-runtime.ts"
+  ]
+}

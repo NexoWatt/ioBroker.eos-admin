@@ -1,0 +1,56 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> iobroker.nexowatt-ui@1.0.37 test:group-access
+> node scripts/verify-iobroker-user-roles.cjs && node scripts/verify-iobroker-group-access.cjs
+
+PASS strikte TypeScript-Prüfung ohne any/nocheck und unveränderliche validierte Policy
+PASS beliebiger Kontoname erhält Adminrechte ausschließlich aus Administratorgruppe
+PASS Benutzernamen admin/installer/kunde/user/customer vergeben ohne Gruppen keine Rolle
+PASS gleiche Namen behalten ausschließlich ihre tatsächlichen Gruppenrechte
+PASS alle bisherigen Standard- und Aliasgruppen bleiben wirksam
+PASS individuelle Gruppen als CSV/Array einschließlich Unicode und Großschreibung
+PASS bestehende Gruppenfelder werden ergänzt; Legacy-Benutzerlisten werden ignoriert
+PASS Rollenpriorität bei mehreren Mitgliedschaften und doppelter Gruppenzuordnung
+PASS unzugeordnete und ähnlich benannte Fremdgruppen verleihen keine Rechte
+PASS falsche Konfiguration sperrt sämtliche Rollen ohne Gruppenlesen
+PASS Gesamtgruppengrenze und leere Konfigurationsfelder bleiben begrenzt
+PASS kanonische Konto-ID wird weder getrimmt noch umgedeutet
+PASS exakte Objekt-ID und Gruppentyp sind Pflicht; Gruppenanzeigenamen sind bedeutungslos
+PASS Mitglieder sind begrenzte Arrays direkter vollständiger Konto-IDs
+PASS Entfernen, Löschen und Deaktivieren wirken beim nächsten Zugriff
+PASS vorhandenes enabled muss Boolean sein; keine Umdeutung von Strings oder Zahlen
+PASS fehlerhafte spätere Gruppe verwirft auch bereits gelesene Adminmitgliedschaft
+PASS synchrone und asynchrone Leseausfälle erlauben keinen Teilzugriff
+PASS gemeinsames Zeitbudget; verspätete Ergebnisse starten keine weiteren Leseaufrufe
+PASS späte Promise-Ablehnung nach Zeitablauf bleibt behandelt
+IOBROKER USER ROLES: 20 checks passed; Node v24.22.3; strict TypeScript and synthetic group objects, no live Admin/controller test.
+PASS Beliebige Kennung übernimmt ausschließlich ihre Gruppe: admin
+PASS Beliebige Kennung übernimmt ausschließlich ihre Gruppe: installer
+PASS Beliebige Kennung übernimmt ausschließlich ihre Gruppe: customer
+PASS Eigene Passwörter für mehrere Konten, keine Adminpasswort-Übernahme: /api/auth/login
+PASS Eigene Passwörter für mehrere Konten, keine Adminpasswort-Übernahme: /api/strict-auth/login
+PASS Kunden haben getrennte Passwörter und keine technische Rolle
+PASS Reservierter Kontoname ohne Gruppe verleiht keine Rolle: admin
+PASS Reservierter Kontoname ohne Gruppe verleiht keine Rolle: installer
+PASS Reservierter Kontoname ohne Gruppe verleiht keine Rolle: kunde
+PASS Reservierter Kontoname ohne Gruppe verleiht keine Rolle: user
+PASS Reservierter Kontoname ohne Gruppe verleiht keine Rolle: customer
+PASS Konto admin in Kundengruppe erhält ausschließlich Kundenrechte
+PASS Explizit zugeordnete Fremdanbietergruppe: admin
+PASS Explizit zugeordnete Fremdanbietergruppe: installer
+PASS Explizit zugeordnete Fremdanbietergruppe: customer
+PASS Bestehende auth.installerGroups-Zuordnung bleibt als echte Gruppenfreigabe erhalten
+PASS Unzugeordnete Gruppe mit Anzeigename administrator gibt keinen Zugriff
+PASS Alte Benutzerlisten verleihen ohne Gruppenzuordnung keine Rechte
+PASS Mehrere echte Mitgliedschaften verwenden Admin vor Installer vor Kunde
+PASS Jede Gruppenabstufung widerruft die Sitzung; Neuanmeldung erhält nur aktuelle Rechte
+PASS Gruppenlöschung widerruft bestehende Adminsitzung ohne Kontonamensfallback
+PASS Deaktivierte Gruppe gewährt keine Rolle und widerruft bestehende Sitzung
+PASS Ungültiges Gruppenobjekt wird abgewiesen: abweichende Objekt-ID
+PASS Ungültiges Gruppenobjekt wird abgewiesen: falscher Objekttyp
+PASS Ungültiges Gruppenobjekt wird abgewiesen: fehlerhafte Mitgliedsliste
+PASS Ungültiges Gruppenobjekt wird abgewiesen: nichtkanonisches Mitglied
+PASS Gruppenlesefehler sperrt eine vorhandene Sitzung und erzeugt keine neue
+PASS Fehlerhafte Gruppen-Konfiguration fällt ohne Benutzer-Ausnahme sicher zu
+PASS Fehlerhafte Gruppen-Konfiguration fällt ohne Benutzer-Ausnahme sicher zu
+{"result":"PASS","checks":29,"environment":"v24.22.3","scope":"Actual shipped local HTTP login, authorization and session routes; synthetic ioBroker groups and account-specific passwords; no live Admin8 or hardware test"}
