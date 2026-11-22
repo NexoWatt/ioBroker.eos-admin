@@ -16,6 +16,7 @@ const ADAPTER_RE = /^[a-z][a-z0-9-]{0,63}$/;
 const POSIX = process.platform !== 'win32';
 const NOFOLLOW = fs.constants.O_NOFOLLOW || 0;
 const OWN_UID = typeof process.getuid === 'function' ? process.getuid() : null;
+const OWN_GID = typeof process.getgid === 'function' ? process.getgid() : null;
 class LicenseError extends Error {
     constructor(code) {
         // Deliberately avoid token, plaintext, path and cryptographic details.
@@ -224,9 +225,12 @@ async function statIfExists(filename) {
  * POSIX: private directory/files, current owner, no symlinks/hard-linked files.
  * Windows additionally requires an installer-provisioned private account ACL.
  * Same-UID/root attackers and full-disk rollback require an external trust root.
+ * An explicitly supplied ioBroker runtime root also trusts its service group:
+ * its members can already change runtime code. This is filesystem compatibility,
+ * not a DRM boundary against that group. Private leaf/file permissions stay strict.
  */
 class EncryptedLicenseStore {
-    constructor({ directory, uuid } = {}) {
+    constructor({ directory, uuid, trustedRuntimeRoot } = {}) {
         if (typeof directory !== 'string' || !path.isAbsolute(directory) || directory.includes('\0')) {
             fail('STORAGE_DIRECTORY_INVALID');
         }
@@ -234,9 +238,20 @@ class EncryptedLicenseStore {
         if (this.directory === path.parse(this.directory).root) {
             fail('STORAGE_DIRECTORY_INVALID');
         }
+        if (trustedRuntimeRoot !== undefined &&
+            (typeof trustedRuntimeRoot !== 'string' ||
+                !path.isAbsolute(trustedRuntimeRoot) ||
+                trustedRuntimeRoot.includes('\0') ||
+                path.resolve(trustedRuntimeRoot) !== trustedRuntimeRoot ||
+                trustedRuntimeRoot === path.parse(trustedRuntimeRoot).root)) {
+            fail('STORAGE_RUNTIME_ROOT_INVALID');
+        }
+        // Supplied only by trusted runtime integration, never by an HTTP/UI setting.
+        this.trustedRuntimeRoot = trustedRuntimeRoot || null;
         this.uuid = normalizeUuid(uuid);
         this.keyPath = path.join(this.directory, 'storage.key');
         this.licensePath = path.join(this.directory, 'license.enc');
+        this.importedTrustPath = path.join(this.directory, 'imported-public-keys.json');
         this.aad = Buffer.from(JSON.stringify(['NexoWatt EOS license store', 1, this.uuid]), 'utf8');
         this._tail = Promise.resolve();
     }
@@ -281,9 +296,19 @@ class EncryptedLicenseStore {
             if (POSIX && stat.uid !== OWN_UID && stat.uid !== 0) {
                 fail('STORAGE_UNSAFE_PATH');
             }
-            // Shared temporary roots are allowed only with the sticky bit. The
-            // private final directory must still be owned by this service UID.
-            if (POSIX && stat.mode & 0o022 && !(stat.mode & 0o1000)) {
+            // ioBroker's installer grants its service group access to the runtime tree.
+            // Do not extend that exception to parents of the explicit runtime root,
+            // similarly named siblings, other groups, world writers, or the private leaf.
+            const trustedGroupAncestor = index !== segments.length - 1 &&
+                this.trustedRuntimeRoot !== null &&
+                (current === this.trustedRuntimeRoot || current.startsWith(`${this.trustedRuntimeRoot}${path.sep}`)) &&
+                OWN_UID !== null &&
+                OWN_GID !== null &&
+                stat.uid === OWN_UID &&
+                stat.gid === OWN_GID &&
+                !(stat.mode & 0o002);
+            // Keep the existing sticky temporary-root allowance; leaf checks below stay strict.
+            if (POSIX && stat.mode & 0o022 && !(stat.mode & 0o1000) && !trustedGroupAncestor) {
                 fail('STORAGE_UNSAFE_PATH');
             }
             if (index === segments.length - 1) {
@@ -414,7 +439,8 @@ class EncryptedLicenseStore {
             await handle.close();
         }
     }
-    async _atomicWrite(content) {
+    async _atomicWrite(content, importedTrust = false) {
+        const filename = importedTrust ? this.importedTrustPath : this.licensePath;
         const temporary = path.join(this.directory, `.license-${crypto.randomBytes(12).toString('hex')}.tmp`);
         let handle;
         const failures = [];
@@ -424,11 +450,11 @@ class EncryptedLicenseStore {
             await handle.sync();
             await handle.close();
             handle = null;
-            const existing = await statIfExists(this.licensePath);
+            const existing = await statIfExists(filename);
             if (existing) {
                 protectedStat(existing);
             }
-            await fsp.rename(temporary, this.licensePath);
+            await fsp.rename(temporary, filename);
             await this._syncDirectory();
         }
         catch (error) {
@@ -472,6 +498,21 @@ class EncryptedLicenseStore {
             finally {
                 key.fill(0);
             }
+        });
+    }
+    async readImportedTrust() {
+        // Public-key schema, import permission and precedence belong to the trust service.
+        return this._run(() => this._read(this.importedTrustPath, MAX_STORE_BYTES));
+    }
+    async writeImportedTrust(bytes) {
+        if (!Buffer.isBuffer(bytes) || bytes.length < 2 || bytes.length > MAX_STORE_BYTES) {
+            fail('STORAGE_TRUST_DATA_INVALID');
+        }
+        const snapshot = Buffer.from(bytes);
+        return this._run(async () => {
+            // Refuse unsafe or oversized existing files before any replacement is attempted.
+            await this._read(this.importedTrustPath, MAX_STORE_BYTES);
+            await this._atomicWrite(snapshot, true);
         });
     }
     async save(data) {

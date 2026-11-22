@@ -436,6 +436,9 @@ class Admin extends adapter_core_1.Adapter {
             this.eosSessionSecurity = new eosSessionSecurity_1.EosSessionSecurity(this);
             this.eosLicenseService = new eosLicenseService_1.EosLicenseService(this, {
                 resolveDirectory: () => (0, node_path_1.join)((0, adapter_core_1.getAbsoluteInstanceDataDir)(this), 'licensing'),
+                // ioBroker's runtime group already administers code and data in this
+                // installation tree. The private license directory remains 0700.
+                trustedRuntimeRoot: (0, node_path_1.join)(adapter_core_1.controllerDir, '..', '..'),
             });
             await this.eosLicenseService.start();
             this.eosOwnership = (0, eosUnifiedOwnership_1.createOwnershipGuard)(this);

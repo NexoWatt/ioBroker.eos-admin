@@ -1,8 +1,8 @@
 # Sicherheits- und CRA-Register der Zusammenführung
 
-**Stand:** 9.0.1 · 22.11.2026 · **Verantwortung:** NexoWatt / Dominique Manteufel
+**Stand:** 9.0.2 · 22.11.2026 · **Verantwortung:** NexoWatt / Dominique Manteufel
 
-Dieses Register beschreibt den Prüfbedarf für Testversion 9.0.1 (`next`) und
+Dieses Register beschreibt den Prüfbedarf für Testversion 9.0.2 (`next`) und
 ergänzt die vorhandenen Befund- und Entwicklungsunterlagen. Es
 beschreibt Scope, Maßnahmen und zu erbringende Nachweise. Testergebnisse werden im
 abschließenden Release-Prüfbericht geführt. Hier wird keine bestandene Normprüfung,
@@ -31,8 +31,27 @@ rein lokale Lizenzkontrolle verändern; absolute Manipulationssicherheit ist kei
 | EOS-MERGE-T08 / D | Gemeinsamer Prozess, große Requests, Verwaltungsarbeit | Limits, kontrolliertes Entladen, Event-Loop-/Regellatenz messen. CWE-400. | Workertrennung nicht umgesetzt; Last-/Hardwaretest offen. |
 | EOS-MERGE-T09 / T,D | Messdaten, Protokolle, Tarif/Wetter | Typen/Einheiten/Aktualität prüfen, echte Deadlines, gerätespezifische Fallbacks. | Übernommene Logik plus gezielte Regression; Gerätetests offen. |
 | EOS-MERGE-T10 / T,I,R | Build, npm/ZIP, Logs und Sicherung | Inventar/SBOM, unveränderliche Hashbindung, Secretprüfung, datensparsame Logs und Restore. | Aktuelles Artefakt prüfen; Altberichte gelten nicht automatisch. |
-| EOS-ACCESS-T01 / D | Automatische Sperre des bisherigen Adminzugangs vor nutzbarem EOS-Einstieg | Legacy-Sperrpfad entfernt, alte Sperrflags ohne Wirkung; Bestand nicht durch angenommene Standardwerte überschreiben. | Neue Erhalt-/Recoverytests für 9.0.1 erforderlich; frühere Alpha-Testlücke dokumentiert. |
+| EOS-ACCESS-T01 / D | Automatische Sperre des bisherigen Adminzugangs vor nutzbarem EOS-Einstieg | Legacy-Sperrpfad entfernt, alte Sperrflags ohne Wirkung; Bestand nicht durch angenommene Standardwerte überschreiben. | Erhalt-/Recoverytests in 9.0.1 und 9.0.2 bestanden; Reichweite siehe versionsgebundene Prüfberichte. |
 | EOS-ACCESS-T02 / S,I | LAN-Listener und lokaler Gerätename | IPv4-Bindung an alle Schnittstellen bewusst erfassen; nur TLS/Auth; DNS-Auflösung und SAN/CA prüfen, keine automatischen Host-/Firewallfreigaben. | Reale Zugangsprüfung erforderlich; kein vollautomatisches Geräteimage behauptet. |
+| EOS-LIC-T01 / T,E | Import öffentlicher Prüfschlüssel über die angemeldete Oberfläche | Nur exakt freigegebene Release-Pins oder gültige OS-Autoritäten; kein selbst gewählter Aussteller. Explizite OS-Allowlist bleibt abschließend. Local-Import ist keine neue Autorität. CWE-347/862. | Neue Import-/Widerrufs-/HTTPS-Tests im 9.0.2-Abschlussbericht; private Schlüssel nie auf EOS. |
+| EOS-LIC-T02 / D,T | ioBroker-Gruppenrechte verhindern private Lizenzspeicherung | Explizite Runtime-Grenze aus adapter-core; nur Nichtleaf-Verzeichnisse mit Dienst-UID/primärer GID; Leaf 0700 und Dateien 0600 bleiben privat. Kein rekursives Umsetzen von Hostrechten. CWE-732. | Reproduktion mit 0775/2775 und positive/negative Speicherprüfungen; tatsächliche Zielgeräteprüfung offen. |
+
+Die 9.0.2-Prüfschlüsselarchitektur verändert die dokumentierte Autoritätsmenge:
+Standard-OS-Schlüssel und explizit importierte, in diesem Release autorisierte
+Hersteller-Pins sind unabhängige Freigaben. Einen OS-only-Schlüssel zu entfernen
+widerruft dessen Autorität; einen zugleich im Release autorisierten Schlüssel
+widerruft dies allein nicht. Dafür ist ein Release ohne diesen Pin oder eine
+explizite OS-Allowlist über `NEXOWATT_LICENSE_TRUST_FILE` nötig. Beschädigte oder
+unsichere vorhandene OS-Dateien werden nicht durch Importdaten umgangen.
+Löschen der gesamten OS-Datei ist kein verlässliches Verfahren zum Widerruf aller
+Release-Autoritäten. Details und Wiederherstellungsgrenzen:
+[Prüfschlüssel-Wiederherstellung](LICENSE_RECOVERY_9.0.2.md).
+
+Die Gruppe innerhalb der expliziten ioBroker-Installation kann nach der
+ioBroker-Betriebsarchitektur bereits Code und Daten verwalten. Gegen sie wird
+keine neue DRM-Isolation behauptet. Der Adapter erhält weder Rootrechte noch
+einen privilegierten Upload-Helfer. Geräte-/EMS-Regelungen wurden für diese
+Lizenzkorrektur fachlich nicht verändert; LIC-RUNTIME-01 bleibt gesondert offen.
 
 S=Identitätsvortäuschung, T=Manipulation, R=fehlende Nachvollziehbarkeit,
 I=Informationsabfluss, D=Verfügbarkeitsangriff, E=Rechteausweitung. CWE nennt

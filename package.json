@@ -1,7 +1,7 @@
 {
   "name": "iobroker.eos-admin",
   "description": "NexoWatt EOS: licensed local energy management, dashboard and ioBroker system administration in one adapter.",
-  "version": "9.0.1",
+  "version": "9.0.2",
   "contributors": [
     "bluefox <dogafox@gmail.com>",
     "apollon77",
@@ -147,7 +147,9 @@
     "tools/vendor/WEBSERVER_PATCH_REVIEW.md",
     "tools/nexowatt-vendored-webserver.cjs",
     "tools/vendor/webserver-3.4.0-source.provenance.json",
-    "tools/eos-sbom-vendored.cjs"
+    "tools/eos-sbom-vendored.cjs",
+    "START_HIER_9.0.2.md",
+    "docs/reports/unified-9.0.2/"
   ],
   "scripts": {
     "start": "cd src-admin && npm run start",
@@ -158,7 +160,7 @@
     "build:ui-runtime": "node ui/scripts/build-ts-runtime-executables.js",
     "lint-backend": "eslint -c eslint.config.mjs src",
     "lint": "npm run lint-backend && cd src-admin && npm run lint",
-    "test:unified": "node --test test/eos-unified*.test.cjs test/eos-hosted-boundary-http.test.cjs test/eos-license*.test.cjs ui/test/unified/*.test.cjs test/eos-access-diagnostics.test.cjs test/eos-ingress-renderer.test.cjs test/eos-sbom-vendored.test.cjs",
+    "test:unified": "node --test test/eos-unified*.test.cjs test/eos-hosted-boundary-http.test.cjs test/eos-license*.test.cjs ui/test/unified/*.test.cjs test/eos-access-diagnostics.test.cjs test/eos-ingress-renderer.test.cjs test/eos-sbom-vendored.test.cjs test/eos-system-license-ui.test.cjs",
     "check:unified": "node tools/eos-release-check.cjs",
     "seal:unified": "node tools/eos-release-manifest.cjs --write",
     "prepack": "node tools/eos-release-check.cjs",
@@ -171,7 +173,7 @@
     "typecheck": "tsc -p tsconfig.build.json --noEmit",
     "build:installer": "npm --prefix ui/src-admin-tab run build",
     "sbom": "npm sbom --sbom-format=cyclonedx > release-manifests/unified/build-environment.cdx.json && node tools/eos-sbom-vendored.cjs",
-    "lint:unified": "eslint -c eslint.unified.config.mjs src/lib/eosUnifiedBoundary.js src/lib/eosUnifiedOwnership.js src/lib/eosLicenseCore.js src/lib/eosLicensePolicy.js src/lib/eosLicenseService.js src/lib/eosLicenseHttp.js tools/eos-release-check.cjs tools/eos-release-manifest.cjs tools/eos-migration-plan.cjs tools/eos-access-diagnostics.cjs deploy/render-ingress.cjs tools/eos-sbom-vendored.cjs"
+    "lint:unified": "eslint -c eslint.unified.config.mjs src/lib/eosUnifiedBoundary.js src/lib/eosUnifiedOwnership.js src/lib/eosLicenseCore.js src/lib/eosLicensePolicy.js src/lib/eosLicenseService.js src/lib/eosLicenseTrust.js src/lib/eosLicenseHttp.js tools/eos-release-check.cjs tools/eos-release-manifest.cjs tools/eos-migration-plan.cjs tools/eos-access-diagnostics.cjs deploy/render-ingress.cjs tools/eos-sbom-vendored.cjs"
   },
   "author": "NexoWatt",
   "private": false,
@@ -183,7 +185,7 @@
   },
   "nexowattReleasePolicy": {
     "distTag": "next",
-    "purpose": "Access recovery and fresh-install test release: preserved ioBroker Admin, fixed HTTPS listener and explicit ingress setup; see docs/unified/ACCESS_RECOVERY_9.0.1.md and docs/reports/unified-9.0.1/PRUEFBERICHT.md"
+    "purpose": "License persistence and authorized public-key recovery test release; see START_HIER_9.0.2.md and docs/reports/unified-9.0.2/PRUEFBERICHT.md"
   },
   "publisher": "NexoWatt",
   "nexowattUpstream": {

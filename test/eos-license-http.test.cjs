@@ -31,10 +31,19 @@ function harness(options = {}) {
             if (req.parserError) next(req.parserError);
             else next();
         },
+        trustJsonParser(req, _res, next) {
+            order.push('trust-parse');
+            if (req.parserError) next(req.parserError);
+            else next();
+        },
         service: options.service || {
             async status() { calls.push(['status']); return publicStatus; },
             async activate(token) { calls.push(['activate', token]); return publicStatus; },
             async remove() { calls.push(['remove']); return { ...publicStatus, valid: false }; },
+            async trustStatus() { calls.push(['trustStatus']); return { v: 1, ready: true }; },
+            async importTrust(keys) { calls.push(['importTrust', keys]); return { v: 1, ready: true }; },
+            async recheckTrust() { calls.push(['recheckTrust']); return { v: 1, ready: true }; },
+            async exportTrust() { calls.push(['exportTrust']); return { manufacturer: 'PUBLIC_PEM' }; },
         },
         pagePath: '/test/license-page.html',
         scriptPath: '/test/license-app.js',
@@ -103,10 +112,12 @@ test('license endpoints authorize before body parser, service calls and static f
     for (const [method, url] of [
         ['GET', '/nexowatt/license'], ['GET', '/nexowatt/license/app.js'], ['GET', '/nexowatt/license/status'],
         ['POST', '/nexowatt/license/activate'], ['POST', '/nexowatt/license/remove'],
+        ['GET', '/nexowatt/license/trust/status'], ['GET', '/nexowatt/license/trust/export'],
+        ['POST', '/nexowatt/license/trust/import'], ['POST', '/nexowatt/license/trust/recheck'],
     ]) {
         denied(await h.dispatch(method, url, { authorized: false, parserError: Error('SECRET_BODY') }), 'LICENSE_ADMIN_REQUIRED');
     }
-    assert.deepEqual(h.order, Array(5).fill('authorize'));
+    assert.deepEqual(h.order, Array(9).fill('authorize'));
     assert.deepEqual(h.calls, []);
 });
 
@@ -221,7 +232,7 @@ test('authorization and asynchronous service failures return sanitized bounded e
     const auth = harness({ authorize: async () => { throw Error('SECRET_SESSION'); } });
     denied(await auth.dispatch('GET', '/nexowatt/license/status'), 'SERVICE_UNAVAILABLE', 503);
     const unknown = harness({ service: { status: async () => { throw Error('SECRET_STORAGE'); } } });
-    denied(await unknown.dispatch('GET', '/nexowatt/license/status'), 'SERVICE_UNAVAILABLE', 400);
+    denied(await unknown.dispatch('GET', '/nexowatt/license/status'), 'SERVICE_UNAVAILABLE', 503);
     const known = harness({ service: { activate: async () => { throw Object.assign(Error('SECRET_TOKEN'), { code: 'LICENSE_SIGNATURE_INVALID' }); } } });
     denied(await known.dispatch('POST', '/nexowatt/license/activate', { body: { token: 'NWL2.test.test' } }), 'LICENSE_SIGNATURE_INVALID', 400);
 });
@@ -281,4 +292,72 @@ test('proxy secure flag cannot admit plaintext LAN and invalid public origins fa
         assert.throws(() => harness({ publicOrigin }));
     }
     assert.equal(sameOrigin({ headers: { host: 'eos.test', origin: 'https://eos.test/path', 'x-eos-license': '1' } }, true), false);
+});
+
+test('trust routes share admin, TLS, Origin and write rate boundaries before their parsers', async () => {
+    for (const route of ['import', 'recheck']) {
+        const h = harness();
+        denied(await h.dispatch('POST', `/nexowatt/license/trust/${route}`, {
+            headers: { origin: 'https://foreign.invalid' }, body: { keys: { vendor: 'PUBLIC' } },
+        }), 'LICENSE_ORIGIN');
+        assert.deepEqual(h.order, ['authorize']);
+        assert.deepEqual(h.calls, []);
+    }
+    const plain = harness({ secure: false });
+    for (const route of ['status', 'export']) {
+        denied(await plain.dispatch('GET', `/nexowatt/license/trust/${route}`), 'LICENSE_HTTPS_REQUIRED');
+    }
+    const limited = harness();
+    for (let count = 0; count < 10; count++) {
+        assert.equal((await limited.dispatch('POST', '/nexowatt/license/trust/recheck')).status, 200);
+    }
+    denied(await limited.dispatch('POST', '/nexowatt/license/trust/import', {
+        body: { keys: { vendor: 'PUBLIC' } },
+    }), 'LICENSE_RATE_LIMIT', 429);
+    assert.equal(limited.order.includes('trust-parse'), false);
+});
+
+test('trust import has a dedicated parser and accepts only a bounded exact keys wrapper', async () => {
+    const h = harness();
+    const keys = { vendor: 'PUBLIC_PEM' };
+    assert.equal((await h.dispatch('POST', '/nexowatt/license/trust/import', { body: { keys } })).status, 200);
+    assert.deepEqual(h.order, ['authorize', 'trust-parse']);
+    assert.deepEqual(h.calls, [['importTrust', keys]]);
+    for (const body of [undefined, null, [], 'text', {}, { publicKeys: keys }, { keys, path: '/etc/trust' },
+        { keys: null }, { keys: [] }, { keys: {} }, { keys: 'text' }, { keys: { vendor: 123 } },
+        { keys: Object.fromEntries(Array.from({ length: 33 }, (_, i) => [`key${i}`, 'PUBLIC'])) },
+        { keys: { vendor: 'ü'.repeat(16384) } }]) {
+        const invalid = harness();
+        denied(await invalid.dispatch('POST', '/nexowatt/license/trust/import', { body }), 'TRUST_FORMAT', 400);
+        assert.deepEqual(invalid.calls, []);
+    }
+    const oversized = harness();
+    denied(await oversized.dispatch('POST', '/nexowatt/license/trust/import', {
+        parserError: Object.assign(Error('PRIVATE_BODY'), { type: 'entity.too.large' }),
+    }), 'LICENSE_REQUEST', 413);
+});
+
+test('trust recheck requires an empty object and export is a public JSON attachment', async () => {
+    for (const body of [undefined, null, [], 'text', { keys: {} }, { path: '/etc/trust' }]) {
+        const h = harness();
+        denied(await h.dispatch('POST', '/nexowatt/license/trust/recheck', { body }), 'TRUST_FORMAT', 400);
+        assert.deepEqual(h.calls, []);
+    }
+    const h = harness();
+    assert.equal((await h.dispatch('GET', '/nexowatt/license/trust/status')).body.ready, true);
+    const exported = await h.dispatch('GET', '/nexowatt/license/trust/export');
+    assert.deepEqual(exported.body, { manufacturer: 'PUBLIC_PEM' });
+    assert.equal(exported.headers['content-disposition'], 'attachment; filename="nexowatt-license-public-trust.json"');
+    assert.equal(exported.headers['cache-control'], 'no-store');
+    assert.deepEqual(h.calls, [['trustStatus'], ['exportTrust']]);
+});
+
+test('trust and activation persistence errors return sanitized 503 without attachment', async () => {
+    for (const code of ['STORAGE_PERMISSIONS', 'SERVICE_UNAVAILABLE', 'TRUST_MISSING', 'TRUST_READ_DENIED', 'TRUST_PERMISSIONS', 'TRUST_PATH', 'TRUST_PLATFORM_UNSUPPORTED']) {
+        const h = harness({ service: { exportTrust: async () => { throw Object.assign(Error('SECRET_PATH'), { code }); } } });
+        const response = await h.dispatch('GET', '/nexowatt/license/trust/export');
+        denied(response, code, 503);
+        assert.equal(response.headers['content-disposition'], undefined);
+        assert.ok(!JSON.stringify(response).includes('SECRET_PATH'));
+    }
 });

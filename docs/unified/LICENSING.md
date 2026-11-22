@@ -1,6 +1,6 @@
 # Zentrale Aktivierung und Lizenzbetrieb
 
-**NexoWatt EOS · 9.0.1**
+**NexoWatt EOS · 9.0.2**
 
 ## Erstinbetriebnahme
 
@@ -57,6 +57,18 @@ Format darf nicht allein durch Umbenennen in NWL3 umgedeutet werden. Eine frühe
 separate UI-Lizenz gilt nicht automatisch als neue gemeinsame Systemlizenz.
 
 ## Vertrauensanker und Ablage
+
+Seit 9.0.2 kann der Administrator im Reiter **„Öffentliche Prüfschlüssel &
+Wiederherstellung“** öffentliche JSON-Dateien importieren, exportieren und erneut
+prüfen. Importierbar sind ausschließlich bereits durch Release-Metadaten oder
+gültigen OS-Trust autorisierte Schlüssel. Ein öffentlicher Export ersetzt keinen
+privaten Keygen-Tresor. Die genauen Regeln, der freigegebene Fingerprint und das
+Verfahren stehen in [LICENSE_RECOVERY_9.0.2.md](LICENSE_RECOVERY_9.0.2.md).
+
+Die importierte Auswahl liegt privat unter `licensing/imported-public-keys.json`
+und ist selbst keine Autorität. Bei jeder Prüfung gelten erneut die aktuellen
+Release-/OS-Regeln. Ein expliziter OS-Override begrenzt die gesamte erlaubte Menge;
+ein unsicherer vorhandener OS-Trust sperrt auch den Importweg.
 
 Der lokale Vertrauensanker enthält ausschließlich öffentliche Ausstellerschlüssel
 als `kid` → SPKI-Zuordnung. Der bevorzugte Pfad ist

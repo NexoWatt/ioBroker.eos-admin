@@ -1,0 +1,40 @@
+TAP version 13
+# Subtest: real HTTPS rejects unauthorized/cross-origin trust requests and applies separate body bounds
+ok 1 - real HTTPS rejects unauthorized/cross-origin trust requests and applies separate body bounds
+  ---
+  duration_ms: 173.392221
+  type: 'test'
+  ...
+# Subtest: real public import rejects unknown, conflicting and private keys while preserving trusted files
+ok 2 - real public import rejects unknown, conflicting and private keys while preserving trusted files
+  ---
+  duration_ms: 127.245227
+  type: 'test'
+  ...
+# Subtest: invalid OS policy fails closed and explicit OS policy is the sole upload authority
+ok 3 - invalid OS policy fails closed and explicit OS policy is the sole upload authority
+  ---
+  duration_ms: 161.208706
+  type: 'test'
+  ...
+# Subtest: unsafe imported-trust permissions produce a bounded storage error without overwriting the file
+ok 4 - unsafe imported-trust permissions produce a bounded storage error without overwriting the file
+  ---
+  duration_ms: 75.964254
+  type: 'test'
+  ...
+# Subtest: Keygen 1.0.4 → HTTPS import → activation → encrypted persistence → restart works under service-owned 2775 runtime
+ok 5 - Keygen 1.0.4 → HTTPS import → activation → encrypted persistence → restart works under service-owned 2775 runtime
+  ---
+  duration_ms: 743.017568
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1439.547864

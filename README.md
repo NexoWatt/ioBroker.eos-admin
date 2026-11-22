@@ -1,15 +1,15 @@
 # NexoWatt EOS
 
-**Version 9.0.1 · technisches Paket: `iobroker.eos-admin` · Vertriebskanal: `next`**
+**Version 9.0.2 · technisches Paket: `iobroker.eos-admin` · Vertriebskanal: `next`**
 
 NexoWatt EOS verbindet die Systemverwaltung aus EOS-Admin 8.0.2 mit Dashboard,
 Installer und Energiemanagement aus NexoWatt UI 1.0.38. Eine ioBroker-Instanz betreibt
 die gemeinsamen Module. Die bisherige UI wird im Zielbetrieb nicht zusätzlich gestartet.
 Der technische Paketname bleibt für bestehende Integrationen erhalten.
 
-Version 9.0.1 bleibt ein Integrations-Teststand. Die Versionsnummer ist kein
+Version 9.0.2 bleibt ein Integrations-Teststand. Die Versionsnummer ist kein
 Nachweis einer allgemeinen Produktivfreigabe; für npm ist weiterhin `next`
-vorgesehen. Die Softwareprüfungen stehen im [Prüf- und Lieferbericht 9.0.1](docs/reports/unified-9.0.1/PRUEFBERICHT.md); die endgültigen Artefakte sind über die beigefügten SHA-256-Summen zugeordnet. Der [Alpha-1-Prüfbericht](docs/unified/PRUEFBERICHT.md) bleibt ein historischer
+vorgesehen. Die Softwareprüfungen stehen im [Prüf- und Lieferbericht 9.0.2](docs/reports/unified-9.0.2/PRUEFBERICHT.md); die endgültigen Artefakte sind über die beigefügten SHA-256-Summen zugeordnet. Der [Alpha-1-Prüfbericht](docs/unified/PRUEFBERICHT.md) bleibt ein historischer
 Nachweis und bestätigt nicht die neuen Zugangsprofile. Die Bereitstellung ist
 keine CRA-Konformitätserklärung.
 
@@ -43,8 +43,9 @@ Betriebssystemdienste noch Firewall oder Rootrechte. Details:
 
 1. Mit dem eigenen ioBroker-Konto auf der NexoWatt-Anmeldeseite anmelden.
 2. Einen erforderlichen Erstpasswortwechsel abschließen.
-3. Als Administrator einmal die zentrale EOS-Lizenz aktivieren.
-4. Dashboard, Installer und berechtigte Systemfunktionen über dieselbe Anmeldung nutzen.
+3. Bei fehlendem Prüfschlüssel im Reiter „Prüfschlüssel & Wiederherstellung“ die öffentliche Keygen-Datei `license-trust.json` prüfen und übernehmen. Nur bereits autorisierte Hersteller- oder OS-Schlüssel sind zulässig.
+4. Als Administrator einmal die zentrale EOS-Lizenz aktivieren.
+5. Dashboard, Installer und berechtigte Systemfunktionen über dieselbe Anmeldung nutzen.
 
 **Anmeldegrenze diesem Teststand:** Gemeinsame OAuth-Anmeldung und
 Erstpasswortwechsel sind implementiert. Ein TOTP-Challenge- oder Passkey-Flow ist
@@ -63,6 +64,7 @@ Die signierte NWL3-Lizenz wird lokal geprüft und verschlüsselt gespeichert; no
 Abmelden oder Neustarten erfordert keine erneute Eingabe. Öffentliche Prüfschlüssel
 werden vom Hersteller passend zum verwendeten Keygen gesichert bereitgestellt.
 Private Signierschlüssel und der Keygen-Tresor sind kein Bestandteil dieses Repositorys.
+Der neue [Wiederherstellungsablauf](docs/unified/LICENSE_RECOVERY_9.0.2.md) beschreibt öffentlichen Import/Export, die Vertrauensrangfolge sowie den Unterschied zwischen Generator-PC- und EOS-Gerätewechsel.
 NWL2 wird mit seinen signierten Bestandsrechten unterstützt; eine alte UI-Einzellizenz
 ist keine automatische neue EOS-Systemlizenz. Details: [Lizenzbetrieb](docs/unified/LICENSING.md) und
 [Grenzen der laufenden Regelung](docs/unified/LICENSING_RUNTIME_LIMITS.md).
@@ -70,7 +72,7 @@ ist keine automatische neue EOS-Systemlizenz. Details: [Lizenzbetrieb](docs/unif
 ## Entwicklung und Prüfpaket
 
 Node.js: `>=22.23.4 <23 || >=24.22.1 <25`. Der neue Prüfbericht muss die tatsächliche
-Laufzeit für 9.0.1 benennen; nicht geprüfte Plattformen sind nicht freigegeben.
+Laufzeit für 9.0.2 benennen; nicht geprüfte Plattformen sind nicht freigegeben.
 
 ```sh
 npm ci --ignore-scripts
@@ -124,6 +126,6 @@ erhalten, insbesondere der ioBroker-Admin-Basis. Siehe [Drittanbieterhinweise](T
 Sicherheitsanforderungen, STRIDE-Risiken, CRA-/DSGVO-Bezug und offene Nachweise sind in
 [SECURITY_CRA.md](docs/unified/SECURITY_CRA.md) dokumentiert.
 
-## Nachweise für 9.0.1
+## Nachweise für 9.0.2
 
-[Start nach der Neuinstallation](START_HIER_9.0.1.md) · [Prüf- und Lieferbericht 9.0.1](docs/reports/unified-9.0.1/PRUEFBERICHT.md). Historische Alpha-Berichte bleiben als solche erhalten.
+[Aktualisierung und Lizenzwiederherstellung](START_HIER_9.0.2.md) · [Prüf- und Lieferbericht 9.0.2](docs/reports/unified-9.0.2/PRUEFBERICHT.md). Historische Alpha-Berichte bleiben als solche erhalten.

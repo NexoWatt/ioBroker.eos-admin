@@ -1,9 +1,9 @@
 # Prüfplan und Inbetriebnahme
 
-**NexoWatt EOS · 9.0.1 · EOS-MERGE-001**
+**NexoWatt EOS · 9.0.2 · EOS-MERGE-001**
 
 Dieser Plan nennt Sollwerte und Abläufe, keine vorweggenommenen Testergebnisse.
-Softwarebefunde und Rohbelege für 9.0.1 gehören in den neuen Abschlussbericht;
+Softwarebefunde und Rohbelege für 9.0.2 gehören in den neuen Abschlussbericht;
 Ergebnisse früherer Alpha-Versionen werden nicht umetikettiert. Zielsystem-/Gerätetests
 sind offen, solange sie nicht mit konkreter Umgebung dokumentiert wurden.
 
@@ -91,3 +91,13 @@ Die gemeinsame Prozessarchitektur ist dabei besonders zu berücksichtigen.
 Eine erfolgreiche Hausanlagenprüfung gilt nur für den dokumentierten Umfang.
 Allgemeine Produktionsfreigabe und CRA-Konformitätsbewertung bleiben eigene
 Herstellerentscheidungen auf Grundlage ausreichender Nachweise.
+
+## Zusätzliche Lizenz-Wiederherstellungsabnahme 9.0.2
+
+| ID | Ablauf | Soll |
+| --- | --- | --- |
+| EOS-LIC-P01 | Hersteller-JSON nach Erstlogin importieren; gleiche Datei erneut importieren | Nur autorisierter öffentlicher Schlüssel, gleiche ID/Fingerprint, idempotente Wirkung. |
+| EOS-LIC-P02 | Unbekannter/privater Schlüssel, falsche Origin, Benutzerrolle, fehlender CSRF | Sichere Ablehnung ohne Veränderung gültiger Lizenz-/Trustdaten. |
+| EOS-LIC-P03 | NWL3 aus Keygen 1.0.4 aktivieren und Gerät neu starten | UUID-/Signaturprüfung bestanden; eine gespeicherte zentrale Freigabe für System und UI. |
+| EOS-LIC-P04 | Zielsystem mit tatsächlichen ioBroker-Gruppen-ACLs prüfen | Runtime kompatibel, privater Lizenzordner 0700, Dateien 0600, keine unbeabsichtigten geerbten Rechte. |
+| EOS-LIC-P05 | Browser-Reiter, Dateiimport/-export, ungültiger Bestand und erneute Prüfung | Verständliche Fehler oben sichtbar; keine veraltete Freigabe, keine private Tresordatei im Export. |

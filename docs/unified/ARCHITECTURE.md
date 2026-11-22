@@ -1,6 +1,6 @@
 # Architektur der Zusammenführung
 
-**NexoWatt EOS · 9.0.1 · EOS-MERGE-001**
+**NexoWatt EOS · 9.0.2 · EOS-MERGE-001**
 
 ## Ein Paket und eine Instanz
 
@@ -30,7 +30,7 @@ flowchart TD
 
 ## Abweichung vom langfristigen Plan
 
-Version 9.0.1 hostet UI/EMS und Verwaltung **im selben Prozess**.
+Version 9.0.2 hostet UI/EMS und Verwaltung **im selben Prozess**.
 Sie führt noch keine getrennte EMS-Worker-Laufzeit ein. Ein Browser-Reload startet
 nicht den Adapter neu; ein Adapterstopp, Absturz oder Controllerneustart kann die
 Regelung unterbrechen. Auch umfangreiche Verwaltungsarbeit kann den gemeinsamen
@@ -43,7 +43,7 @@ Garantien. Last-, Wiederanlauf- und Hardwaretests bleiben erforderlich.
 `src/lib/eosUnifiedBoundary.js` bildet die gemeinsame Web-/Transportgrenze;
 `src/lib/eosUnifiedOwnership.js` begrenzt die Schreibzuständigkeit. Der zentrale
 Lizenzdienst liegt weiterhin in `src/lib/eosLicenseCore.js`,
-`eosLicensePolicy.js`, `eosLicenseService.js` und `eosLicenseHttp.js`.
+`eosLicensePolicy.js`, `eosLicenseService.js`, `eosLicenseTrust.js` und `eosLicenseHttp.js`.
 Diese Dateien sind Integrationsbezüge, kein eigener Nachweis ihres fehlerfreien Betriebs.
 
 | Pfad | Zweck |
@@ -92,7 +92,7 @@ Abschlussbericht zu entnehmen.
 
 ## Direkter HTTPS-Zugang und optionaler Eingang
 
-Das Standardprofil von 9.0.1 ist **HTTPS auf `0.0.0.0:8188` mit Authentisierung**.
+Das Standardprofil von 9.0.2 ist **HTTPS auf `0.0.0.0:8188` mit Authentisierung**.
 `0.0.0.0` bedeutet Bindung an die IPv4-Schnittstellen; es ist keine vom Browser
 aufzurufende Adresse. Nutzer öffnen `https://<Geräte-IP>:8188/`. Die native
 Konfiguration setzt `secure: true`, `auth: true`, `certPublic: defaultPublic`,

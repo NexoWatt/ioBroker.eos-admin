@@ -7,6 +7,7 @@ const path = require('node:path');
 const { performance } = require('node:perf_hooks');
 const { TextDecoder } = require('node:util');
 const { EncryptedLicenseStore, verifyLicense, validatePublicKeys, normalizeUuid } = require('./eosLicenseCore');
+const { EosLicenseTrust, trustErrorCode } = require('./eosLicenseTrust');
 const LEASE_MS = 15000;
 const CLOCK_TOLERANCE_MS = 2000;
 const DB_TIMEOUT_MS = 2000;
@@ -191,24 +192,7 @@ class EosLicenseService {
     async start() {
         return this.run(async () => {
             try {
-                const object = await this.readObject('system.meta.uuid');
-                this.uuid = normalizeUuid(object?.native?.uuid);
-                const directory = this.options.directory || this.options.resolveDirectory?.();
-                if (!directory) {
-                    throw failure('SERVICE_DIRECTORY');
-                }
-                this.store = new EncryptedLicenseStore({ directory, uuid: this.uuid });
-                this.keys = this.options.publicKeys || (await readProductTrust());
-                this.ensureRunning();
-                validatePublicKeys(this.keys);
-                this.record = await this.store.load();
-                this.ensureRunning();
-                this.highWaterMark = this.record?.highWaterMark || 0;
-                this.lastPersisted = this.highWaterMark;
-                this.lastWall = this.wall();
-                this.lastMono = this.mono();
-                this.clockWallAnchor = this.lastWall;
-                this.clockMonoAnchor = this.lastMono;
+                await this.initializeStorage();
                 await this.evaluate();
             }
             catch (error) {
@@ -222,6 +206,130 @@ class EosLicenseService {
             }, 5000);
             this.timer.unref?.();
             return this.statusView();
+        });
+    }
+    async readOsTrust() {
+        if (this.options.publicKeys !== undefined) {
+            return { keys: validatePublicKeys(this.options.publicKeys), explicit: false };
+        }
+        const explicit = process.env.NEXOWATT_LICENSE_TRUST_FILE !== undefined;
+        try {
+            return { keys: await readProductTrust(), explicit };
+        }
+        catch (error) {
+            if (!explicit && error?.code === 'ENOENT') {
+                return { keys: null, explicit: false };
+            }
+            throw failure(trustErrorCode(error));
+        }
+    }
+    async initializeStorage() {
+        const object = await this.readObject('system.meta.uuid');
+        const uuid = normalizeUuid(object?.native?.uuid);
+        if (this.uuid && this.uuid !== uuid) {
+            throw failure('LICENSE_UUID_CHANGED');
+        }
+        this.uuid = uuid;
+        if (!this.store) {
+            const directory = this.options.directory || this.options.resolveDirectory?.();
+            if (!directory) {
+                throw failure('SERVICE_DIRECTORY');
+            }
+            const trustedRuntimeRoot = this.options.trustedRuntimeRoot || this.options.resolveTrustedRuntimeRoot?.();
+            this.store = new EncryptedLicenseStore({ directory, uuid, trustedRuntimeRoot });
+        }
+        if (!this.trust) {
+            this.trust = new EosLicenseTrust({
+                store: this.store,
+                readOsTrust: () => this.readOsTrust(),
+                // Constructor dependency for isolated tests only. Main never
+                // obtains manufacturer authorities from config, env or states.
+                manufacturerKeys: this.options.manufacturerKeys,
+            });
+        }
+        // Complete initialization even after a failed first start. In-process
+        // recovery cannot erase the clock fault latch or lower its high-water.
+        this.record = await this.store.load();
+        this.ensureRunning();
+        this.highWaterMark = Math.max(this.highWaterMark, this.record?.highWaterMark || 0);
+        this.lastPersisted = Math.max(this.lastPersisted, this.record?.highWaterMark || 0);
+        if (this.clockWallAnchor === undefined) {
+            this.lastWall = this.wall();
+            this.lastMono = this.mono();
+            this.clockWallAnchor = this.lastWall;
+            this.clockMonoAnchor = this.lastMono;
+        }
+        this.clock();
+    }
+    async refreshTrust() {
+        try {
+            await this.initializeStorage();
+            await this.evaluate();
+            this.trustRefreshFailed = false;
+            return true;
+        }
+        catch (error) {
+            this.claims = null;
+            this.keys = null;
+            this.code = safeCode(error);
+            this.trustRefreshFailed = true;
+            return false;
+        }
+    }
+    trustStatusView() {
+        const view = this.trust?.statusView();
+        if (view && !this.trustRefreshFailed && view.code !== 'TRUST_STARTING') {
+            return view;
+        }
+        return {
+            v: 1,
+            ready: false,
+            code: this.code,
+            canImport: false,
+            source: 'none',
+            keys: [],
+            allowedKeys: [],
+        };
+    }
+    trustStatus() {
+        return this.run(async () => {
+            await this.refreshTrust();
+            return this.trustStatusView();
+        });
+    }
+    recheckTrust() {
+        return this.run(async () => {
+            await this.refreshTrust();
+            return { ...this.trustStatusView(), licenseStatus: this.statusView() };
+        });
+    }
+    importTrust(publicKeys) {
+        return this.run(async () => {
+            try {
+                await this.initializeStorage();
+                this.keys = await this.trust.importKeys(publicKeys);
+                this.ensureRunning();
+                await this.evaluate();
+                this.trustRefreshFailed = false;
+                this.adapter.log.info('[EOS licensing] TRUST_IMPORTED');
+                return { ...this.trustStatusView(), licenseStatus: this.statusView() };
+            }
+            catch (error) {
+                // An invalid upload preserves a genuinely valid old license.
+                // A separately observed authority/storage failure must instead
+                // invalidate cached grants immediately, without waiting a timer.
+                await this.refreshTrust();
+                throw error;
+            }
+        });
+    }
+    exportTrust() {
+        return this.run(async () => {
+            const refreshed = await this.refreshTrust();
+            if (!refreshed || !this.trust) {
+                throw failure(this.code);
+            }
+            return this.trust.exportKeys();
         });
     }
     clock() {
@@ -252,9 +360,14 @@ class EosLicenseService {
     async evaluate() {
         try {
             this.ensureRunning();
-            if (!this.keys || !this.store || !this.uuid) {
+            if (!this.trust || !this.store || !this.uuid) {
                 throw failure(this.code || 'SERVICE_UNAVAILABLE');
             }
+            // Reauthorize both OS and restored public keys on every check.
+            // Removed OS-only authorities and withdrawn release pins cannot
+            // remain trusted through a writable cache or indefinitely in RAM.
+            this.keys = await this.trust.load();
+            this.ensureRunning();
             this.clock();
             const object = await this.readObject('system.meta.uuid');
             if (normalizeUuid(object?.native?.uuid) !== this.uuid) {
@@ -285,6 +398,7 @@ class EosLicenseService {
         }
         catch (error) {
             this.claims = null;
+            this.keys = null;
             this.code = safeCode(error);
         }
         return this.claims;
@@ -335,8 +449,18 @@ class EosLicenseService {
     }
     activate(token) {
         return this.run(async () => {
-            if (!this.keys || !this.store || !this.uuid) {
-                throw failure(this.code);
+            try {
+                await this.initializeStorage();
+                this.keys = await this.trust.load();
+                this.ensureRunning();
+                this.trustRefreshFailed = false;
+            }
+            catch (error) {
+                this.claims = null;
+                this.keys = null;
+                this.code = safeCode(error);
+                this.trustRefreshFailed = true;
+                throw error;
             }
             this.clock();
             const object = await this.readObject('system.meta.uuid');

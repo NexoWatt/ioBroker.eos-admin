@@ -1,6 +1,6 @@
 # Ausgangsstand und Liefergrenze
 
-**Änderungen:** EOS-MERGE-001 / EOS-ACCESS-002 · **Zielversion:** 9.0.1 · **Datum:** 22.11.2026
+**Änderungen:** EOS-MERGE-001 / EOS-ACCESS-002 · **Zielversion:** 9.0.2 · **Datum:** 22.11.2026
 
 Dieser Stand führt EOS-Admin und NexoWatt UI in einem installierbaren Paket zusammen.
 Der Produktname lautet **NexoWatt EOS**. Paket und Namespace bleiben aus Gründen der
@@ -54,10 +54,18 @@ Details: [ACCESS_RECOVERY_9.0.1.md](ACCESS_RECOVERY_9.0.1.md).
 
 Der endgültige Prüfbericht nennt Befehle, Umgebung, Ergebnisse, Fehler und offene
 Gates für **diesen** Quellstand. Übernommene Berichte früherer Versionen sind
-historische Nachweise. Sie gelten nicht automatisch für 9.0.1. Das gleiche
+historische Nachweise. Sie gelten nicht automatisch für 9.0.2. Das gleiche
 gilt für alte Dateien mit „ready“, „stable“, „approval“ oder „production“ im Namen.
 
 Die Build-/Paketierung muss TypeScript-Quellen und ausgelieferte JavaScript-/Frontend-
 Artefakte konsistent halten. Im integrierten UI-Bestand bleiben
 `ui/src-ts/runtime-executables/**` die maßgeblichen Laufzeitquellen. Reine Änderungen
 an generierten Dateien ersetzen die Quelländerung nicht.
+
+## Lizenzkorrektur 9.0.2
+
+Dieser Stand führt das Zugangsprofil von 9.0.1 fort und ergänzt die private
+Speicherkompatibilität, autorisierten öffentlichen Dateiimport und sichtbare
+Fehlerdiagnosen. Neue Belege stehen in
+[Prüfbericht 9.0.2](../reports/unified-9.0.2/PRUEFBERICHT.md); frühere Belege
+werden nicht als erneut ausgeführte Prüfungen ausgegeben.

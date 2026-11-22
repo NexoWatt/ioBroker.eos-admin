@@ -51,7 +51,7 @@ test('already expired session does not require a write', async () => {
 });
 
 test('central license status accepts the controller UUID variants supported by the verifier', () => {
-    const status = { v: 1, valid: true, code: 'LICENSE_VALID', uuid: 'de12345678-1234-1234-1234-123456789abc', edition: 'home', expiresAt: null, limits: { chargePoints: 3, batteries: 2 }, features: ['energy'] };
+    const status = { v: 1, valid: true, tokenVersion: 3, scope: 'system', coreEnabled: true, code: 'LICENSE_VALID', uuid: 'de12345678-1234-1234-1234-123456789abc', edition: 'home', expiresAt: null, limits: { chargePoints: 3, batteries: 2 }, features: ['energy'] };
     assert.equal(parseLicenseStatus(status).uuid, status.uuid);
     assert.throws(() => parseLicenseStatus({ ...status, uuid: 'invalid-device' }), /LICENSE_RESPONSE/);
 });

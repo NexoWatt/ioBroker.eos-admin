@@ -2286,6 +2286,7 @@ class Web {
                         !(await this.getEosFirstLoginPasswordState(access.userId, access.role)).required);
                 },
                 jsonParser: bodyParser.json({ limit: '20kb', strict: true }),
+                trustJsonParser: bodyParser.json({ limit: '40kb', strict: true }),
                 pagePath: (0, node_path_1.join)(__dirname, '../../public/nexowatt-license.html'),
                 scriptPath: (0, node_path_1.join)(__dirname, '../../public/nexowatt-license.js'),
             });

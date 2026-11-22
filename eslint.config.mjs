@@ -15,6 +15,10 @@ export default [
         },
     },
     {
+        files: ['src/lib/eosLicenseTrust.js'],
+        rules: { 'jsdoc/check-tag-names': ['warn', { definedTags: ['typedef', 'type'] }] },
+    },
+    {
         // disable temporary the rule 'jsdoc/require-param' and enable 'jsdoc/require-jsdoc'
         rules: {
             'jsdoc/require-jsdoc': 'off',

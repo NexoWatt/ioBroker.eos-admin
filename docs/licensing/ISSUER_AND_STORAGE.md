@@ -2,10 +2,11 @@
 
 Stand: NexoWatt EOS Zusammenführung, 22.11.2026. Vertrag aus dem vorhandenen
 Offline-Key-Generator **1.0.4** übernommen. Die frühere NWL2-Beschreibung wird um
-NWL3 ergänzt; Bestandsrechte werden nicht erweitert. Der Transportabschnitt ist
-für **9.0.1** aktualisiert. Die bisherigen Testbelege unter
+NWL3 ergänzt; Bestandsrechte werden nicht erweitert. Vertrauensanker und
+Wiederherstellung sind für **9.0.2** beschrieben. Die bisherigen Testbelege unter
 `reports/unified/licensing/` stammen aus dem dort benannten Alpha-1-Stand; neue
-9.0.1-Ergebnisse müssen im neuen Abschlussbericht eigens ausgewiesen werden.
+versionsgebundene Ergebnisse müssen im jeweiligen Abschlussbericht eigens
+ausgewiesen werden. Dieser Vermerk enthält keine neue Testfreigabe.
 
 ## Eine Aktivierung nach der Erstanmeldung
 
@@ -27,8 +28,9 @@ Herstellerschlüssel und der Generator werden nicht in das Adapterpaket übernom
 1. Auf dem Herstellerrechner den vorhandenen Offline-Key-Generator 1.0.4 öffnen.
    Der vorhandene verschlüsselte Tresor bleibt bestehen; dieses Adapterupdate
    erzeugt keine neuen Herstellerschlüssel.
-2. Den öffentlichen Trust-Export erzeugen und dessen Fingerabdruck über den
-   autorisierten Bereitstellungsweg mit dem Geräte-Vertrauensanker vergleichen.
+2. Den öffentlichen Trust-Export erzeugen. Im EOS-Lizenzreiter die öffentliche
+   JSON-Datei importieren und Schlüssel-ID/Fingerabdruck prüfen. Der Import
+   akzeptiert ausschließlich die nachfolgend beschriebenen autorisierten Schlüssel.
 3. Die tatsächliche System-UUID in der geschützten Lizenzverwaltung ablesen,
    im Generator die gewünschte Edition Home oder Pro wählen und signieren.
 4. Den vollständigen NWL3-Code einmalig in der EOS-Lizenzverwaltung eingeben.
@@ -40,6 +42,13 @@ NWL3 ist signiert, aber sein Transporttoken ist lesbar. Der Code gehört nicht i
 Browserlogs, öffentliche States, Supportberichte, URLs oder Repositories. Eine
 fehlgeschlagene Aktivierung ersetzt den bisher gültigen Lizenzspeicher nicht.
 Verlorene Herstellerpassphrasen lassen sich durch den Adapter nicht wiederherstellen.
+Ein Wechsel des Generatorrechners mit demselben verschlüsselten Tresor und der
+zugehörigen Passphrase erhält den Aussteller und verlangt keine neue Kundenlizenz.
+Ein neues EOS-Gerät mit neuer System-UUID benötigt dagegen eine Lizenz für diese
+UUID. Bei verlorenem Tresorzugang erfordert ein neuer Aussteller einen autorisierten
+Release-Pin oder eine privilegierte OS-Provisionierung; der Adapter bietet keinen
+Mastercode. Bereits ausgestellte gültige Lizenzen verlieren durch den bloßen
+Verlust des Tresorzugangs nicht automatisch ihre Gültigkeit.
 
 ## Signaturvertrag
 
@@ -101,30 +110,54 @@ ist niemals gültig.
 
 ## Öffentlicher Vertrauensanker
 
-Bevorzugter Gerätepfad: `/etc/nexowatt-eos/license-trust.json`. Nur wenn der
-aktuelle Pfad fehlt (`ENOENT`), wird der bisherige Admin-Pfad
-`/etc/nexowatt/license-trust.json` gelesen. Falsche Rechte, Symlinks, beschädigter
-Inhalt oder ein unzulässiger Schlüssel lösen keinen Fallback aus.
-Ein vor Prozessstart gesetztes `NEXOWATT_LICENSE_TRUST_FILE` bezeichnet genau
-einen absoluten Pfad und fällt bei Fehlern nicht auf andere Dateien zurück.
-
 Der Trust-Export ist ein JSON-Objekt aus Schlüssel-ID und öffentlichem
 Ed25519-SPKI-PEM. Es können maximal 32 öffentliche Schlüssel eingetragen sein.
-Es wird kein produktiver Schlüssel in dieser Lieferung erfunden oder vorgegeben.
-Der Public-Trust-Export des bestehenden Keygen 1.0.4 entspricht diesem Format.
+Der Public-Trust-Export des bestehenden Keygen 1.0.4 entspricht diesem Format;
+der Dateiname, etwa `license-trust (1).json`, begründet keine Vertrauensstellung.
+Private Schlüssel, fremde Algorithmen und beliebige selbst erzeugte Aussteller
+werden beim Import abgewiesen.
 
-Unter Linux müssen die Datei und ihre gesamte Verzeichniskette root gehören
+**Autorisierter Hersteller-Pin für 9.0.2:**
+
+- Schlüssel-ID: `nexowattEOS-3cb665e3fc6f4085a04b8db3e692cac5`
+- SHA-256 über kanonisches SPKI-DER:
+  `a485fd6e28195a0a0e458b304e95025c0bd516d97f3cb1443beb78ed9cfe4856`
+
+Diese öffentlichen Metadaten stammen aus dem freigegebenen Herstellerexport.
+Sie sind kein privater Signierschlüssel und keine Aktivierung. Der UI-Import
+vergleicht **Schlüssel-ID und tatsächlichen Schlüssel** mit einer bereits
+autorisierten Quelle; ein vom Upload selbst angegebener Fingerabdruck reicht nicht.
+
+| Quelle / Zustand | Verbindliches Verhalten |
+| --- | --- |
+| Standard-OS-Trust | Bevorzugt `/etc/nexowatt-eos/license-trust.json`, nur bei `ENOENT` der bisherige Pfad `/etc/nexowatt/license-trust.json`. Gültige OS-Schlüssel sind direkt wirksam. |
+| Explizit importierter Release-Pin | Der bereits im Release autorisierte Schlüssel darf im Lizenzreiter importiert und lokal aktiviert werden. Er ist neben gültigen Standard-OS-Schlüsseln eine unabhängige Autorität. Ein vorhandener Pin allein ersetzt den ausdrücklichen Import nicht. |
+| `NEXOWATT_LICENSE_TRUST_FILE` | Dieser vor Start gesetzte absolute Pfad legt die **abschließende erlaubte Schlüsselmenge** fest. Release-Pins erweitern sie nicht; fehlende oder ungültige Daten führen nicht zu einem Fallback. |
+| Vorhandener unsicherer Standard-OS-Trust | Falsche Rechte, Symlinks, beschädigter Inhalt oder unzulässige Schlüssel sperren auch den lokalen Importpfad. Kein Umgehen durch einen gültigen Release-Pin. |
+| Gleiche ID, anderer Schlüssel | Konflikte zwischen OS- und Release-Identität werden abgewiesen, nicht durch Rangfolge aufgelöst. |
+
+Die lokale Datei `imported-public-keys.json` im privaten `licensing/`-Verzeichnis
+ist nur eine gespeicherte Auswahl, **keine eigene Autorität**. Bei laufender Prüfung,
+erneuter Prüfung und Neustart wird sie gegen die aktuell erlaubten Quellen
+validiert. Eine lokale Kopie darf entfernte, allein durch OS-Trust autorisierte
+Schlüssel nicht wieder freigeben. Fehlerhafte Imports ersetzen weder den bisherigen
+Importbestand noch die verschlüsselte Lizenz.
+
+Für den OS-Trust müssen unter Linux Datei und gesamte Verzeichniskette root gehören
 und dürfen nicht gruppen-/weltbeschreibbar sein, beispielsweise Datei 0644 und
 Verzeichnisse 0755. Der Adapter liest nur; er benötigt keine Root-Rechte und
 darf diese Dateien nicht aus der Weboberfläche ersetzen. Symlinks, Hardlinks und
 Dateiwechsel beim Lesen werden geprüft. Windows benötigt eine eigene geprüfte
 ACL-Implementierung und bleibt mit `TRUST_PLATFORM_UNSUPPORTED` gesperrt.
 
-Ein Schlüsselwechsel braucht privilegierte, nachvollziehbare Bereitstellung der
-öffentlichen Anker und einen Dienstneustart. Mehrere Anker erlauben den geplanten
-Übergang. Das Update ersetzt keinen bestehenden Anker. Ein verlorener privater
-Schlüssel oder Tresor erfordert einen separat autorisierten Wechsel; kein
-Mastercode oder allgemeiner Ersatzschlüssel ist vorgesehen.
+Das Entfernen eines **nur durch OS-Trust** erlaubten Schlüssels entzieht dessen
+Autorität. Ein unabhängig importierter Release-Pin wird dadurch nicht widerrufen:
+Dafür braucht es ein entsprechendes Release-Pin-Update oder eine explizite
+OS-Allowlist über `NEXOWATT_LICENSE_TRUST_FILE`. Das bloße Löschen einer
+Standard-OS-Datei ist deshalb **kein vollständiger Schlüsselwiderruf**.
+Ein Schlüsselwechsel wird bewusst autorisiert; der Upload einer neuen beliebigen
+öffentlichen Datei reicht nicht. Mehrere autorisierte Anker erlauben einen
+geplanten Übergang. Details und Bedienung: [Lizenzwiederherstellung 9.0.2](../unified/LICENSE_RECOVERY_9.0.2.md).
 
 ## Gerätespeicher und laufende Prüfung
 
@@ -136,6 +169,21 @@ schützen den lokalen Speicher. Bestehende NWL2-Dateien bleiben lesbar; das
 Speicherenvelope ändert seine Version nicht. Ein fehlender Speicherschlüssel bei
 vorhandener Lizenz führt zu einer Diagnose und wird nicht still neu erzeugt.
 
+Die 9.0.2-Speicherprüfung berücksichtigt ausschließlich den aus dem tatsächlichen
+Controllerverzeichnis abgeleiteten vertrauenswürdigen Laufzeitpfad. Innerhalb
+dieser Grenze dürfen übergeordnete Verzeichnisse gruppenbeschreibbar sein, wenn
+Eigentümer und Gruppe der Prozess-UID und primären Prozess-GID entsprechen;
+Weltbeschreibbarkeit wird nicht freigegeben. Das eigentliche `licensing/`-Verzeichnis
+bleibt 0700, seine Dateien 0600. Webeingaben und Instanzkonfiguration bestimmen
+diese Vertrauensgrenze nicht. Der Adapter führt dafür kein `chmod` oder `chown`
+an bestehenden Hostverzeichnissen aus und benötigt keinen neuen Root-Helfer.
+
+Eine erneute Trustprüfung kann die beim Start fehlende Initialisierung nachholen,
+ohne eine vorhandene Lizenz zu löschen. Sie darf weder den gespeicherten
+Zeit-Höchststand noch einen bereits festgestellten Zeitrücklauf zurücksetzen.
+Initialisierung, Import und Freigabe werden weiterhin serialisiert; erneutes
+Prüfen startet keinen zweiten Lizenzdienst.
+
 Der Dienst prüft bei jeder Freigabe und spätestens im Fünf-Sekunden-Takt erneut
 UUID, Signatur, Zeitgrenzen und Datei. Der Nachrichtenclient erhält höchstens
 15 Sekunden gültige Freigaben. Die synchrone Kernprojektion prüft zusätzlich
@@ -143,10 +191,13 @@ Ablauf, Zeitrücklauf und maximal 15 Sekunden alte erfolgreiche Auswertung.
 Sie blockiert den Regelpfad nicht mit Dateizugriffen. Ein hängender Datenbankread
 erzeugt keine unbegrenzte Warteschlange oder dauerhaft gültige Kopie.
 
-Die vollständige Signatur, Lizenzkennung und Schlüsselmaterial verlassen den
-Dienst weder über Status/API noch Messagebox. Widerruf durch Entfernen der Lizenz
-oder durch privilegierten Trust-Wechsel bleibt möglich. Ein individueller
-Online-Widerruf unbefristeter NWL3-Codes ist nicht implementiert.
+Die vollständige Signatur, Lizenzkennung und geheimes Schlüsselmaterial verlassen
+den Dienst weder über Status/API noch Messagebox. Der geschützte Truststatus zeigt
+öffentliche Schlüssel-IDs, Fingerabdrücke, Herkunft und Importmöglichkeit.
+Widerruf durch Entfernen der Lizenz oder autorisierten Trust-Wechsel folgt den
+oben beschriebenen Autoritäten. Ein individueller Online-Widerruf unbefristeter
+NWL3-Codes ist nicht implementiert. Die Fortführung bereits konfigurierter Automatik
+bleibt gesondert unter [LIC-RUNTIME-01](../unified/LICENSING_RUNTIME_LIMITS.md) beschrieben.
 
 Die gemeinsame ioBroker-UID und ein Angreifer mit Root-/Dateisystemkontrolle sind
 keine kryptografisch isolierte DRM-Grenze. Vollständige Datenträger-/UUID-Klone
@@ -155,9 +206,10 @@ Das Produkt behauptet hierfür keinen absoluten Kopierschutz.
 
 ## Transport und Nachweise
 
-Lizenzschreiben erfordert zentrale Administratorautorisierung, passenden Origin,
-den Header `X-EOS-License: 1`, begrenzte JSON-Bodies und Ratenbegrenzung.
-Der Standardzugang in **9.0.1** ist HTTPS auf `0.0.0.0:8188` mit
+Lizenzschreiben, Trustimport und erneute Trustprüfung erfordern zentrale
+Administratorautorisierung, passenden Origin, den Header `X-EOS-License: 1`,
+begrenzte JSON-Bodies und Ratenbegrenzung. Auch Statusrouten sind geschützt.
+Der Standardzugang in **9.0.2** ist HTTPS auf `0.0.0.0:8188` mit
 `secure=true`, `auth=true`, `certPublic=defaultPublic` und
 `certPrivate=defaultPrivate`. `eosExternalOrigin` bleibt leer, auch bei einem
 optionalen 443-Proxy mit geprüftem HTTPS-Upstream. So bleiben die vorgesehenen
@@ -179,14 +231,15 @@ TLS-Fehlerfallback. Konkrete Profile: [Deploymentanleitung](../../deploy/README.
 ### Historische Lizenzprüfungen
 
 Die nachfolgenden Aussagen beschreiben die bisherigen Alpha-1-Nachweise und
-werden nicht als neue 9.0.1-Testergebnisse ausgegeben. Die damaligen Prüfungen
+werden nicht als neue 9.0.2-Testergebnisse ausgegeben. Die damaligen Prüfungen
 verwendeten echte Node-Kryptografie und lokale verschlüsselte Dateien mit
 simulierter ioBroker-Datenbank/Messagebox. Der originale Keygen 1.0.4 wurde
 zusätzlich gegen Verifizierer und Dienst ausgeführt; Testschlüssel wurden je Lauf
 nur im Speicher erzeugt. Tabellen und Rohbelege unter `reports/unified/licensing/`
 bleiben unverändert.
 
-Neue direkte HTTPS-/Host-/Originprüfungen und die optionale 443-/Upstreamprüfung
-gehören zum versionsgebundenen 9.0.1-Abschlussbericht. Browser-/Hardwareabnahme und
+Neue Trust-/Recovery-, HTTPS-/Host-/Originprüfungen und die optionale
+443-/Upstreamprüfung gehören in den jeweiligen versionsgebundenen Abschlussbericht.
+Browser-/Hardwareabnahme und
 eine unabhängige Sicherheitsprüfung bleiben separate Nachweise. Diese Dokumentation
 ist keine CRA-Konformitätserklärung oder allgemeine Produktivfreigabe.

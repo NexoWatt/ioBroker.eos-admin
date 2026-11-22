@@ -10,7 +10,8 @@ const https = require('node:https');
 const assert = require('node:assert/strict');
 const { stripVTControlCharacters } = require('node:util');
 const { execFileSync, spawn } = require('node:child_process');
-const { randomBytes, X509Certificate, createPrivateKey } = require('node:crypto');
+const { randomBytes, X509Certificate, createPrivateKey, generateKeyPairSync } = require('node:crypto');
+const { MANUFACTURER_KEYS, MANUFACTURER_FINGERPRINTS } = require('../src/lib/eosLicenseTrust');
 const { tests } = require('@iobroker/testing');
 const { password } = require(
     path.join(path.dirname(require.resolve('@iobroker/js-controller-common-db')), 'lib/common/password.js'),
@@ -135,6 +136,11 @@ tests.integration(path.resolve(__dirname, '..'), {
             let certificate;
             let certificateDirectory;
             let expectedAdminSettings;
+            const runtimeRoot = path.join(os.tmpdir(), 'test-iobroker.eos-admin');
+            const licenseDirectory = path.join(runtimeRoot, 'iobroker-data', 'eos-admin.0', 'licensing');
+            let originalRuntimeMode;
+            let importedManufacturerKeys;
+            let missingOsRootOwnership = [];
             let firstProcessConfirmedStopped = false;
             let restartedChild;
             let restartClosed;
@@ -199,6 +205,24 @@ tests.integration(path.resolve(__dirname, '..'), {
             before(async function () {
                 this.timeout(90000);
                 harness = getHarness();
+                // Some managed containers remap / or /etc to an unprivileged
+                // UID. This cannot model the production root-owned trust path.
+                // Detect only that exact limitation; every other import failure
+                // still fails the test and the production check is unchanged.
+                missingOsRootOwnership =
+                    process.platform === 'win32'
+                        ? []
+                        : ['/', '/etc'].filter(directory => {
+                              const stat = fs.lstatSync(directory);
+                              return stat.isDirectory() && !stat.isSymbolicLink() && stat.uid !== 0;
+                          });
+                // The real installer grants the runtime's service group write access.
+                // This is the harness-owned runtime only; no OS trust policy is changed.
+                const runtimeStat = fs.lstatSync(runtimeRoot);
+                assert.ok(runtimeStat.isDirectory() && !runtimeStat.isSymbolicLink());
+                assert.equal(runtimeStat.uid, process.getuid());
+                originalRuntimeMode = runtimeStat.mode & 0o7777;
+                fs.chmodSync(runtimeRoot, 0o2775);
                 certificateDirectory = fs.mkdtempSync(path.join(os.tmpdir(), 'eos-unified-tls-'));
                 fs.chmodSync(certificateDirectory, 0o700);
                 const keyPath = path.join(certificateDirectory, 'ephemeral-key.pem');
@@ -308,6 +332,7 @@ tests.integration(path.resolve(__dirname, '..'), {
                 try {
                     await stopRestartedChild();
                 } finally {
+                    if (originalRuntimeMode !== undefined) fs.chmodSync(runtimeRoot, originalRuntimeMode);
                     if (certificateDirectory) {
                         fs.rmSync(certificateDirectory, { recursive: true, force: true });
                     }
@@ -443,6 +468,71 @@ tests.integration(path.resolve(__dirname, '..'), {
                 assert.equal((await request('/nexowatt/license', { headers: { cookie } })).status, 200);
                 assert.equal((await request('/system/', { headers: { cookie } })).status, 200);
                 await assertAdminPreserved();
+            });
+            it('imports the release-pinned manufacturer public key through the real authenticated HTTPS route', async function () {
+                const before = await request('/nexowatt/license/trust/status', { headers: { cookie } });
+                assert.equal(before.status, 200);
+                const trustBefore = await before.json();
+                if (missingOsRootOwnership.length) {
+                    assert.equal(trustBefore.ready, false);
+                    assert.equal(trustBefore.canImport, false);
+                    assert.equal(trustBefore.code, 'TRUST_PERMISSIONS');
+                    assert.deepEqual(trustBefore.keys, []);
+                    this.test.title += ` [environment skip: ${missingOsRootOwnership.join(', ')} lack POSIX root ownership; TRUST_PERMISSIONS verified]`;
+                    this.skip();
+                }
+                assert.equal(trustBefore.canImport, true);
+                for (const [kid, fingerprint] of Object.entries(MANUFACTURER_FINGERPRINTS)) {
+                    assert.ok(trustBefore.allowedKeys.some(key => key.kid === kid && key.fingerprint === fingerprint));
+                }
+                const response = await request('/nexowatt/license/trust/import', {
+                    method: 'POST',
+                    headers: { cookie, origin: base, 'x-eos-license': '1', 'content-type': 'application/json' },
+                    body: JSON.stringify({ keys: MANUFACTURER_KEYS }),
+                });
+                assert.equal(
+                    response.status,
+                    200,
+                    `Public trust import failed; error=${await responseErrorCode(response)}`,
+                );
+                const imported = await response.json();
+                assert.equal(imported.ready, true);
+                assert.equal(imported.licenseStatus.valid, false, 'A public key is not a license');
+                assert.equal(imported.licenseStatus.coreEnabled, false);
+                importedManufacturerKeys = imported.keys;
+                for (const [kid, fingerprint] of Object.entries(MANUFACTURER_FINGERPRINTS)) {
+                    assert.ok(imported.keys.some(key => key.kid === kid && key.fingerprint === fingerprint));
+                }
+                const exported = await request('/nexowatt/license/trust/export', { headers: { cookie } });
+                assert.equal(exported.status, 200);
+                const exportedKeys = await exported.json();
+                for (const [kid, pem] of Object.entries(MANUFACTURER_KEYS)) assert.equal(exportedKeys[kid], pem);
+                assert.equal(fs.statSync(runtimeRoot).mode & 0o7777, 0o2775);
+                assert.equal(fs.statSync(licenseDirectory).mode & 0o777, 0o700);
+                assert.equal(fs.statSync(path.join(licenseDirectory, 'imported-public-keys.json')).mode & 0o777, 0o600);
+                await assertAdminPreserved();
+            });
+            it('rejects an unapproved public key and preserves the previously imported manufacturer authority', async function () {
+                if (missingOsRootOwnership.length) {
+                    this.test.title += ` [environment skip: ${missingOsRootOwnership.join(', ')} lack POSIX root ownership; no manufacturer import possible]`;
+                    this.skip();
+                }
+                const filename = path.join(licenseDirectory, 'imported-public-keys.json');
+                const before = fs.readFileSync(filename);
+                const unapproved = generateKeyPairSync('ed25519')
+                    .publicKey.export({ type: 'spki', format: 'pem' })
+                    .toString();
+                const response = await request('/nexowatt/license/trust/import', {
+                    method: 'POST',
+                    headers: { cookie, origin: base, 'x-eos-license': '1', 'content-type': 'application/json' },
+                    body: JSON.stringify({ keys: { 'unapproved-controller-fixture': unapproved } }),
+                });
+                assert.equal(response.status, 400);
+                assert.equal(await responseErrorCode(response), 'TRUST_IMPORT_UNKNOWN_KEY');
+                assert.deepEqual(fs.readFileSync(filename), before);
+                const status = await (await request('/nexowatt/license/trust/status', { headers: { cookie } })).json();
+                assert.equal(status.ready, true);
+                assert.deepEqual(status.keys, importedManufacturerKeys);
             });
             it('requires CSRF for logout and revokes the authenticated session', async () => {
                 const headers = { cookie, origin: base };
@@ -588,6 +678,51 @@ tests.integration(path.resolve(__dirname, '..'), {
                     assert.equal(status.role, 'admin');
                     assert.equal(status.activationRequired, true);
                     assert.equal(status.nextUrl, '/nexowatt/license');
+                    const recoveredTrust = await (
+                        await request('/nexowatt/license/trust/status', {
+                            headers: { cookie: newCookie },
+                        })
+                    ).json();
+                    if (importedManufacturerKeys) {
+                        assert.equal(recoveredTrust.ready, true);
+                        assert.deepEqual(recoveredTrust.keys, importedManufacturerKeys);
+                    } else {
+                        assert.ok(
+                            missingOsRootOwnership.length,
+                            'Only the detected OS ownership limitation may skip import',
+                        );
+                        assert.equal(recoveredTrust.ready, false);
+                        assert.equal(recoveredTrust.canImport, false);
+                        assert.equal(recoveredTrust.code, 'TRUST_PERMISSIONS');
+                        assert.deepEqual(recoveredTrust.keys, []);
+                    }
+                    const recheck = await request('/nexowatt/license/trust/recheck', {
+                        method: 'POST',
+                        headers: {
+                            cookie: newCookie,
+                            origin: base,
+                            'x-eos-license': '1',
+                            'content-type': 'application/json',
+                        },
+                        body: '{}',
+                    });
+                    assert.equal(recheck.status, 200);
+                    const checkedTrust = await recheck.json();
+                    if (importedManufacturerKeys) {
+                        assert.equal(checkedTrust.ready, true);
+                        assert.deepEqual(checkedTrust.keys, importedManufacturerKeys);
+                    } else {
+                        assert.equal(checkedTrust.ready, false);
+                        assert.equal(checkedTrust.canImport, false);
+                        assert.equal(checkedTrust.code, 'TRUST_PERMISSIONS');
+                        assert.deepEqual(checkedTrust.keys, []);
+                    }
+                    assert.equal(
+                        checkedTrust.licenseStatus.valid,
+                        false,
+                        'Trust recovery cannot grant an unsigned license',
+                    );
+                    assert.equal(checkedTrust.licenseStatus.coreEnabled, false);
                     await assertAdminPreserved();
                     const config = await harness.getAdapterConfig('eos-admin');
                     assert.equal(config.native.port, 8188);

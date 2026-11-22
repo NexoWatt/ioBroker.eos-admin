@@ -1,0 +1,13 @@
+✔ real HTTPS rejects unauthorized/cross-origin trust requests and applies separate body bounds (168.306982ms)
+✔ real public import rejects unknown, conflicting and private keys while preserving trusted files (93.989912ms)
+✔ invalid OS policy fails closed and explicit OS policy is the sole upload authority (155.428664ms)
+✔ unsafe imported-trust permissions produce a bounded storage error without overwriting the file (106.578399ms)
+✔ Keygen 1.0.4 → HTTPS import → activation → encrypted persistence → restart works under service-owned 2775 runtime (1003.110458ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1741.23697

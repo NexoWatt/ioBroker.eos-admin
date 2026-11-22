@@ -2608,6 +2608,7 @@ export default class Web {
                     );
                 },
                 jsonParser: bodyParser.json({ limit: '20kb', strict: true }),
+                trustJsonParser: bodyParser.json({ limit: '40kb', strict: true }),
                 pagePath: join(__dirname, '../../public/nexowatt-license.html'),
                 scriptPath: join(__dirname, '../../public/nexowatt-license.js'),
             });

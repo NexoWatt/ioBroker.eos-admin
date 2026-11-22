@@ -12,7 +12,8 @@
     dl{display:grid;grid-template-columns:160px 1fr;gap:12px}dt{color:#9bb4a8}dd{margin:0;overflow-wrap:anywhere}
     label{display:block;font-weight:bold;margin:16px 0 10px}textarea{box-sizing:border-box;resize:vertical;width:100%;min-height:120px;padding:12px;border:1px solid #5f7f70;border-radius:6px;background:#0e1b16;color:#fff;font:14px monospace}
     button{padding:12px 18px;border:0;border-radius:6px;background:#98e7a9;color:#0e2718;font-weight:700;cursor:pointer;margin:12px 10px 0 0}button.secondary{background:#304b3e;color:white}button:disabled{opacity:.5;cursor:wait}
-    small{color:#a3b9ae}#message{min-height:24px;white-space:pre-wrap}code{font-size:13px}.note{border-left:3px solid #8cdda3;padding-left:14px}
+    small{color:#a3b9ae}#message,#activationError{white-space:pre-wrap}code{font-size:13px;overflow-wrap:anywhere}.note{border-left:3px solid #8cdda3;padding-left:14px}
+    [hidden]{display:none!important}.tabs{display:flex;gap:8px;flex-wrap:wrap}.tabs button[aria-selected=true]{outline:2px solid #c5ffd4;outline-offset:3px}.key{padding:12px 0;border-bottom:1px solid #365047;overflow-wrap:anywhere}.key strong,.key code{display:block;margin-bottom:6px}input[type=file]{max-width:100%;margin:8px 0}button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #c5ffd4;outline-offset:3px}
     @media(max-width:600px){header{display:block}dl{grid-template-columns:1fr;gap:6px}dd{margin-bottom:10px}.card{padding:18px}}
   </style>
   <script defer src="/nexowatt/license/app.js"></script>
@@ -22,16 +23,29 @@
   <p>Home und Pro zentral für dieses EOS-System verwalten. Nur freigegebene Adapter mit eingebauter Lizenzprüfung erhalten eine Betriebsfreigabe.</p>
   <section class="card" aria-labelledby="statusTitle"><h2 id="statusTitle">Aktueller Status</h2>
     <p id="status" class="status" aria-live="polite">Wird geprüft …</p>
-    <dl><dt>System-UUID</dt><dd id="uuid">–</dd><dt>Edition</dt><dd id="edition">–</dd><dt>Gültig bis</dt><dd id="expiry">–</dd><dt>Ladepunkte / Speicher</dt><dd id="limits">–</dd><dt>Funktionen</dt><dd id="features">–</dd></dl>
-    <button id="refresh" class="secondary">Status aktualisieren</button>
-  </section>
-  <section class="card"><h2>Lizenz aktivieren</h2><p>Den für diese UUID ausgestellten Lizenzcode aus dem NexoWatt Key-Generator einfügen. Die Lizenz wird geprüft und verschlüsselt auf dem Gerät gespeichert.</p>
-    <p class="note">Die gemeinsame EOS-Systemlizenz im Format NWL3 wird nach der Erstanmeldung einmalig aktiviert. Nach Neustarts bleibt sie gespeichert. Bestehende NWL2-Lizenzen behalten ihren ursprünglich signierten Umfang; alte NW1-Schlüssel benötigen eine passende Ersatzlizenz.</p>
-    <label for="token">Neuer Lizenzcode</label><textarea id="token" spellcheck="false" autocomplete="off" placeholder="NWL3.…" maxlength="16384"></textarea>
-    <button id="activate">Prüfen und aktivieren</button><button id="remove" class="secondary">Lizenz entfernen</button>
     <p id="message" role="status" aria-live="polite"></p>
+    <dl><dt>Statuscode</dt><dd><code id="statusCode">–</code></dd><dt>System-UUID</dt><dd id="uuid">–</dd><dt>Edition</dt><dd id="edition">–</dd><dt>EOS-Kern</dt><dd id="core">–</dd><dt>Gültig bis</dt><dd id="expiry">–</dd><dt>Ladepunkte / Speicher</dt><dd id="limits">–</dd><dt>Funktionen</dt><dd id="features">–</dd></dl>
+    <button id="refresh" class="secondary">Status aktualisieren</button>
     <p><a id="continue" href="/" hidden>Weiter zum EOS-Dashboard</a></p>
+  </section>
+  <div class="tabs" role="tablist" aria-label="Lizenzverwaltung"><button id="licenseTab" role="tab" aria-selected="true" aria-controls="licensePanel">Lizenz</button><button id="trustTab" class="secondary" role="tab" aria-selected="false" aria-controls="trustPanel" tabindex="-1">Öffentliche Prüfschlüssel &amp; Wiederherstellung</button></div>
+  <section id="licensePanel" role="tabpanel" aria-labelledby="licenseTab" class="card"><h2>Lizenz aktivieren</h2><p>Den für diese UUID ausgestellten Lizenzcode aus dem NexoWatt Key-Generator einfügen. Die Lizenz wird geprüft und verschlüsselt auf dem Gerät gespeichert.</p>
+    <p class="note">Die gemeinsame EOS-Systemlizenz im Format NWL3 wird nach der Erstanmeldung einmalig aktiviert. Nach Neustarts bleibt sie gespeichert. Bestehende NWL2-Lizenzen behalten ihren ursprünglich signierten Umfang; alte NW1-Schlüssel benötigen eine passende Ersatzlizenz.</p>
+    <label for="token">Neuer Lizenzcode</label><textarea id="token" spellcheck="false" autocomplete="off" placeholder="NWL3.…" maxlength="16384" aria-describedby="activationError"></textarea>
+    <p id="activationError" class="error" role="alert" hidden></p>
+    <button id="activate">Prüfen und aktivieren</button><button id="remove" class="secondary">Lizenz entfernen</button>
     <small>Der gespeicherte Code wird nicht zurück angezeigt. Ein ungültiger Import ersetzt keine gültige Lizenz.</small>
+  </section>
+  <section id="trustPanel" role="tabpanel" aria-labelledby="trustTab" class="card" hidden><h2>Öffentliche Prüfschlüssel &amp; Wiederherstellung</h2>
+    <p>Hier werden die öffentlichen Schlüssel zur Lizenzprüfung verwaltet. Ein Import ergänzt ausschließlich bereits vom Hersteller freigegebene oder über die geschützte OS-Vertrauensdatei bestätigte Schlüssel. Er aktiviert keine zweite Lizenz.</p>
+    <p id="trustStatus" aria-live="polite">Noch nicht geprüft.</p><p><code id="trustCode">–</code></p>
+    <h3>Aktive Prüfschlüssel</h3><div id="trustKeys"></div>
+    <h3>Für einen Import zugelassene Schlüssel</h3><p>Eine Herstellerfreigabe allein aktiviert einen Schlüssel noch nicht. Ohne OS-Einrichtung ist der ausdrückliche Import erforderlich.</p><div id="allowedKeys"></div>
+    <label for="trustFile">Öffentliche Schlüsseldatei (JSON, höchstens 32 KiB)</label><input id="trustFile" type="file" accept="application/json,.json" aria-describedby="trustFileHelp">
+    <p id="trustFileHelp">Erwartet wird eine flache Zuordnung von Schlüssel-ID zu PUBLIC KEY im PEM-Format. Der Dateiname ist beliebig. Private Schlüssel, Tresor-Backups und gemischte Dateien werden vollständig abgewiesen.</p>
+    <button id="importTrust" disabled>Öffentliche Schlüssel prüfen und importieren</button><button id="recheckTrust" class="secondary">Vertrauen und Lizenz erneut prüfen</button><button id="exportTrust" class="secondary" disabled>Öffentliche Schlüssel exportieren</button>
+    <p class="note">Eine lokal wiederhergestellte Kopie ersetzt keine unabhängige Vertrauensfreigabe. Neue, unbekannte Aussteller benötigen eine autorisierte OS-Einrichtung oder eine neue Herstellerfreigabe.</p>
+    <h3>Key-Generator auf einem neuen PC</h3><p>Zum Wiederherstellen des privaten Signierschlüssels benötigen Sie das verschlüsselte Tresor-Backup und dessen Passphrase im Key-Generator. Beides gehört niemals in EOS. Eine öffentliche Schlüsseldatei kann den privaten Schlüssel nicht wiederherstellen.</p>
   </section>
   <p>Ohne gültige Lizenz bleiben Lizenzverwaltung, Diagnose und Sicherheitswartung erreichbar. Die Betriebsfreigabe der angebundenen Adapter endet spätestens nach 15 Sekunden. Schutzfunktionen benötigen den im jeweiligen Adapter festgelegten sicheren Zustand.</p>
 </main></body></html>

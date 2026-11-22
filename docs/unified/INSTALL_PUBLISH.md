@@ -1,8 +1,8 @@
 # Installation, Git und npm
 
-**NexoWatt EOS · `iobroker.eos-admin` · 9.0.1**
+**NexoWatt EOS · `iobroker.eos-admin` · 9.0.2**
 
-Version 9.0.1 bleibt zur Erprobung bestimmt und wird über `next` bereitgestellt.
+Version 9.0.2 bleibt zur Erprobung bestimmt und wird über `next` bereitgestellt.
 Der neue Abschlussbericht muss geprüfte Version und Artefakthash ausdrücklich nennen.
 Vorherige Alpha-Berichte bleiben historische Belege; ihre Erfolge werden nicht
 auf dieses geänderte HTTPS-/Zugangsprofil übertragen. Vor
@@ -65,7 +65,7 @@ oben bescheinigen keine vollständige System-/Hardwareabnahme.
 Vor dem Upload Paketinhalt, Version, Lizenz, Manifest und Prüfergebnisse kontrollieren.
 Im für `iobroker.eos-admin` berechtigten npm-Konto anmelden. Die Testversion mit einem
 expliziten Testtag veröffentlichen, damit sie nicht unbeabsichtigt zum Standard wird.
-`9.0.1` besitzt keinen SemVer-Prerelease-Suffix; die Testverteilung wird bewusst
+`9.0.2` besitzt keinen SemVer-Prerelease-Suffix; die Testverteilung wird bewusst
 über den npm-Tag `next` festgelegt:
 
 ```sh
@@ -96,11 +96,11 @@ gelten zusätzliche Regeln einschließlich kommerzieller Bedingungen (IO-01/IO-0
    Eine neue Installation benötigt keine erfundene Altinstanz. Das
    [Migrationswerkzeug](../../deploy/README.md) erstellt einen Offlineplan und
    verändert keine laufende Anlage automatisch.
-4. Das geprüfte 9.0.1-Paket über den vorgesehenen ioBroker-/EOS-Weg installieren und
+4. Das geprüfte 9.0.2-Paket über den vorgesehenen ioBroker-/EOS-Weg installieren und
    die Instanzkonfiguration prüfen. Die Defaults gelten für neue Instanzen; bei
    übernommenen Instanzen nicht voraussetzen, dass gespeicherte Werte bereits passen.
 
-| Einstellung | Direkter Zugang von 9.0.1 |
+| Einstellung | Direkter Zugang von 9.0.2 |
 | --- | --- |
 | `port` | `8188` |
 | `bind` | `0.0.0.0` – IPv4-Schnittstellen des Geräts |
@@ -128,7 +128,10 @@ gelten zusätzliche Regeln einschließlich kommerzieller Bedingungen (IO-01/IO-0
    und Passkeys noch nicht. Vorhandenes `common.externalAuthentication.totp` außer
    `null`/nicht vorhanden oder fehlerhaftes `externalAuthentication` sperrt sicher,
    ohne Passwort-only-Rückfall. Bestehende MFA nicht zur Umgehung abschalten.
-7. Nach erster berechtigter Anmeldung einmal die zentrale EOS-Lizenz aktivieren.
+7. Nach erster berechtigter Anmeldung bei fehlendem Prüfschlüssel zuerst den Reiter
+   **„Öffentliche Prüfschlüssel & Wiederherstellung“** verwenden; siehe
+   [Lizenzwiederherstellung 9.0.2](LICENSE_RECOVERY_9.0.2.md). Danach einmal die
+   zentrale EOS-Lizenz aktivieren.
    Dashboard `/`, Installer `/installer/` und System `/system/` verwenden denselben
    Login. Es wird keine zusätzliche UI-Lizenz eingegeben. Neustart, Rollenentzug,
    Offlinebetrieb und Wiederherstellung nach [COMMISSIONING.md](COMMISSIONING.md)

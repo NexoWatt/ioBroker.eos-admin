@@ -1,0 +1,3 @@
+2026-11-22: Chromium-Start fuer Puppeteer-UI-Pruefung versucht.
+Ergebnis: NICHT AUSGEFUEHRT. Der Browserstart scheitert in dieser Umgebung an socket() EPERM (process_singleton_posix.cc).
+Es wurden keine Browser-Screenshots oder Browser-Pruefergebnisse erzeugt. DOM-/API-Tests werden separat ausgewiesen.
