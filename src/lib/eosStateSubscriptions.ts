@@ -1,0 +1,205 @@
+/** Copyright (c) 2026 NexoWatt. Proprietary; see LICENSE. */
+
+type Scope = 'host' | 'socket';
+type Callback = (error?: Error | null) => void;
+type Interest = { host: boolean; socket: boolean };
+
+export interface EosStateSubscriptionManager {
+    socketAdapter: ioBroker.Adapter;
+    closeSocket(): Promise<void>;
+    close(): Promise<void>;
+}
+
+/**
+ * One controller connection serves two consumers: EMS/host and browser sockets.
+ * Controller subscriptions are sets, not reference counts. A browser unsubscribe
+ * must therefore release only its own interest, never an EMS subscription.
+ *
+ * The shared input bus uses the adapter's service identity. Browser access remains
+ * checked by SocketCommands for each command AND each published object/state;
+ * sharing the input bus does not grant a client permission to receive its events.
+ */
+export function installEosStateSubscriptions(adapter: ioBroker.Adapter): EosStateSubscriptionManager {
+    const subscribeRaw = adapter.subscribeForeignStatesAsync.bind(adapter);
+    const unsubscribeRaw = adapter.unsubscribeForeignStatesAsync.bind(adapter);
+    const interests = new Map<string, Interest>();
+    const queues = new Map<string, Promise<void>>();
+    let stopped = false;
+    let socketStopped = false;
+    let closing: Promise<void> | undefined;
+    let closingSocket: Promise<void> | undefined;
+
+    function patterns(value: unknown, own: boolean): string[] {
+        // Match the controller's foreign subscribe/unsubscribe default. Own arrays
+        // already contain absolute IDs in controller 7; only own strings are fixed.
+        const input = !own && !value ? '*' : value;
+        const values: unknown[] = Array.isArray(input) ? input : [input];
+        if (values.some(item => typeof item !== 'string' || (!item && (!own || Array.isArray(input))))) {
+            throw new Error('EOS_STATE_SUBSCRIPTION_PATTERN_INVALID');
+        }
+        return [
+            ...new Set(
+                values.map(item => {
+                    const text = String(item);
+                    return own &&
+                        !Array.isArray(input) &&
+                        text !== adapter.namespace &&
+                        !text.startsWith(`${adapter.namespace}.`)
+                        ? `${adapter.namespace}.${text}`
+                        : text;
+                }),
+            ),
+        ];
+    }
+
+    function queue(pattern: string, operation: () => Promise<void>): Promise<void> {
+        const previous = queues.get(pattern) || Promise.resolve();
+        // Every caller retains its own rejection. A failed call must not poison
+        // later retries or cleanup for this pattern.
+        const result = previous.then(operation, operation);
+        const settled = result.then(
+            () => undefined,
+            () => undefined,
+        );
+        queues.set(pattern, settled);
+        void settled.then(() => {
+            if (queues.get(pattern) === settled) {
+                queues.delete(pattern);
+            }
+        });
+        return result;
+    }
+
+    async function change(scope: Scope, pattern: string, subscribing: boolean, cleanup = false): Promise<void> {
+        return queue(pattern, async () => {
+            if (!cleanup && (stopped || (scope === 'socket' && socketStopped))) {
+                throw new Error('EOS_STATE_SUBSCRIPTIONS_STOPPED');
+            }
+            const current = interests.get(pattern) || { host: false, socket: false };
+            if (current[scope] === subscribing) {
+                return;
+            }
+            const next = { ...current, [scope]: subscribing };
+            if (!current.host && !current.socket && (next.host || next.socket)) {
+                await subscribeRaw(pattern);
+            } else if ((current.host || current.socket) && !next.host && !next.socket) {
+                await unsubscribeRaw(pattern);
+            }
+            // Commit only after IO succeeds: failed subscribe can be retried,
+            // failed unsubscribe retains a tracked active backend interest.
+            if (next.host || next.socket) {
+                interests.set(pattern, next);
+            } else {
+                interests.delete(pattern);
+            }
+        });
+    }
+
+    async function changeAll(
+        scope: Scope,
+        own: boolean,
+        subscribing: boolean,
+        pattern: unknown,
+        options?: unknown,
+    ): Promise<void> {
+        if (options !== undefined && options !== null && (typeof options !== 'object' || Array.isArray(options))) {
+            throw new Error('EOS_STATE_SUBSCRIPTION_OPTIONS_INVALID');
+        }
+        const entries = patterns(pattern, own);
+        for (const entry of entries) {
+            await change(scope, entry, subscribing);
+        }
+    }
+
+    function methods(scope: Scope): Record<string, unknown> {
+        const replacements: Record<string, unknown> = {};
+        for (const own of [false, true]) {
+            for (const subscribing of [true, false]) {
+                const name = `${subscribing ? 'subscribe' : 'unsubscribe'}${own ? '' : 'Foreign'}States`;
+                replacements[`${name}Async`] = (pattern: unknown, options?: unknown): Promise<void> =>
+                    changeAll(scope, own, subscribing, pattern, options);
+                replacements[name] = (pattern: unknown, options?: unknown, callback?: unknown): void => {
+                    const cb = typeof options === 'function' ? options : callback;
+                    const opts = typeof options === 'function' ? undefined : options;
+                    if (cb !== undefined && cb !== null && typeof cb !== 'function') {
+                        throw new Error('EOS_STATE_SUBSCRIPTION_CALLBACK_INVALID');
+                    }
+                    const done = typeof cb === 'function' ? (cb as Callback) : undefined;
+                    void changeAll(scope, own, subscribing, pattern, opts)
+                        .then(
+                            () => done?.(null),
+                            error => {
+                                if (done) {
+                                    done(error instanceof Error ? error : new Error('EOS_STATE_SUBSCRIPTION_FAILED'));
+                                } else {
+                                    adapter.log.error(
+                                        'EOS_STATE_SUBSCRIPTION_FAILED: State subscription operation failed.',
+                                    );
+                                }
+                            },
+                        )
+                        .catch(() =>
+                            adapter.log.error('EOS_STATE_SUBSCRIPTION_CALLBACK_FAILED: Subscription callback failed.'),
+                        );
+                };
+            }
+        }
+        return replacements;
+    }
+
+    const hostMethods = methods('host');
+    for (const [name, method] of Object.entries(hostMethods)) {
+        Object.defineProperty(adapter, name, { value: method, writable: true, configurable: true });
+    }
+    const socketMethods = methods('socket');
+    const bound = new Map<PropertyKey, unknown>();
+    const socketAdapter = new Proxy(adapter, {
+        get(target, key) {
+            if (typeof key === 'string' && Object.prototype.hasOwnProperty.call(socketMethods, key)) {
+                return socketMethods[key];
+            }
+            const value: unknown = Reflect.get(target, key, target);
+            if (typeof value !== 'function') {
+                return value;
+            }
+            if (!bound.has(key)) {
+                bound.set(key, value.bind(target));
+            }
+            return bound.get(key);
+        },
+    });
+
+    async function release(scope: Scope): Promise<void> {
+        // Include operations already running at the point of stop. New requests
+        // are blocked first, so the drain cannot perpetually replenish itself.
+        await Promise.all([...queues.values()]);
+        const results = await Promise.allSettled(
+            [...interests.keys()].map(pattern => change(scope, pattern, false, true)),
+        );
+        if (results.some(result => result.status === 'rejected')) {
+            throw new Error('EOS_STATE_SUBSCRIPTION_CLEANUP_FAILED');
+        }
+    }
+
+    return {
+        socketAdapter,
+        closeSocket(): Promise<void> {
+            socketStopped = true;
+            closingSocket ||= release('socket');
+            return closingSocket;
+        },
+        close(): Promise<void> {
+            stopped = true;
+            socketStopped = true;
+            closing ||= (async () => {
+                // Cleanup retries failed socket releases and still attempts host
+                // cleanup if a socket release failed.
+                const results = await Promise.allSettled([release('socket'), release('host')]);
+                if (results.some(result => result.status === 'rejected')) {
+                    throw new Error('EOS_STATE_SUBSCRIPTION_CLEANUP_FAILED');
+                }
+            })();
+            return closing;
+        },
+    };
+}

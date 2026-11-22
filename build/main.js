@@ -51,7 +51,6 @@ const node_os_1 = require("node:os");
 const node_path_1 = require("node:path");
 const node_crypto_1 = require("node:crypto");
 const adapter_core_1 = require("@iobroker/adapter-core");
-const socket_classes_1 = require("@iobroker/socket-classes");
 const ws_server_1 = require("@iobroker/ws-server");
 const translations_1 = require("./lib/translations");
 const web_1 = __importDefault(require("./lib/web"));
@@ -62,6 +61,8 @@ const eosSessionSecurity_1 = require("./lib/eosSessionSecurity");
 const eosUnifiedOwnership_1 = require("./lib/eosUnifiedOwnership");
 const eosUiSessionRegistry_1 = require("./lib/eosUiSessionRegistry");
 const eosHttpsClient_1 = require("./lib/eosHttpsClient");
+const eosSocketAdmin_1 = require("./lib/eosSocketAdmin");
+const eosStateSubscriptions_1 = require("./lib/eosStateSubscriptions");
 const eosNewsSecurity_1 = require("./lib/eosNewsSecurity");
 const logSearch_1 = require("./lib/logSearch");
 const adapterName = JSON.parse((0, node_fs_1.readFileSync)((0, node_path_1.join)(__dirname, '..', 'package.json'), { encoding: 'utf-8' }))
@@ -263,6 +264,7 @@ async function ensureEosStableInitialAccounts(adapter) {
     }
 }
 class Admin extends adapter_core_1.Adapter {
+    eosStateSubscriptions;
     /** Local license authority; management/recovery is never license-gated. */
     eosHostedRuntime;
     eosOwnership;
@@ -325,6 +327,7 @@ class Admin extends adapter_core_1.Adapter {
             uiClientUnsubscribe: (info) => this.onUiClientUnsubscribe(info),
         };
         super(options);
+        this.eosStateSubscriptions = (0, eosStateSubscriptions_1.installEosStateSubscriptions)(this);
         this.on('objectChange', this.onObjectChange);
         this.on('stateChange', this.onStateChange);
         this.on('ready', this.onReady);
@@ -403,9 +406,9 @@ class Admin extends adapter_core_1.Adapter {
         if (id === `system.adapter.${this.namespace}.plugins.sentry.enabled`) {
             webServer?.resetIndexHtml();
         }
-        socket?.stateChange(id, state);
         this.eosOwnership?.onStateChange(id, state);
         this.eosHostedRuntime?.onStateChange?.(id, state);
+        socket?.stateChange(id, state);
     };
     onFileChange = (id, fileName, size) => {
         socket?.fileChange(id, fileName, size);
@@ -948,16 +951,25 @@ class Admin extends adapter_core_1.Adapter {
         }
         this.eosSecurityTimer = null;
         cleanup(() => socket?.close());
+        void this.eosStateSubscriptions.closeSocket().catch(() => {
+            this.log.warn('EOS_SOCKET_SUBSCRIPTION_CLEANUP_FAILED: Continuing shutdown.');
+        });
         cleanup(() => webServer?.close());
+        const finishSubscriptions = () => {
+            void this.eosStateSubscriptions.close().then(finish, () => {
+                this.log.warn('EOS_STATE_SUBSCRIPTION_CLEANUP_FAILED: Continuing shutdown.');
+                finish();
+            });
+        };
         if (!this.eosHostedRuntime) {
-            finish();
+            finishSubscriptions();
             return;
         }
         try {
-            void this.eosHostedRuntime.stop().then(finish, finish);
+            void this.eosHostedRuntime.stop().then(finishSubscriptions, finishSubscriptions);
         }
         catch {
-            finish();
+            finishSubscriptions();
         }
     };
     onLog = (obj) => socket?.sendLog(obj);
@@ -2245,7 +2257,7 @@ class Admin extends adapter_core_1.Adapter {
         catch (e) {
             this.log.warn(`Cannot prepare EOS role cache before socket start: ${e instanceof Error ? e.message : String(e)}`);
         }
-        socket = new socket_classes_1.SocketAdmin(settings, this, objects);
+        socket = new eosSocketAdmin_1.EosSocketAdmin(settings, this.eosStateSubscriptions.socketAdapter, objects);
         if (!this.eosSessionSecurity || !isSocketSessionStore(store)) {
             throw new Error('EOS authentication services are unavailable');
         }

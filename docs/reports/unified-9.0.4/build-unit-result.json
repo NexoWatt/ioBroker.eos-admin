@@ -1,0 +1,14 @@
+[
+  {
+    "step": "backend-build",
+    "exit": 0
+  },
+  {
+    "step": "unit-tests",
+    "exit": 0
+  },
+  {
+    "step": "changed-backend-lint",
+    "exit": 0
+  }
+]

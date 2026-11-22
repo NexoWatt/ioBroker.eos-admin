@@ -1,25 +1,38 @@
 # NexoWatt EOS
 
-**Version 9.0.3 · technisches Paket: `iobroker.eos-admin` · Vertriebskanal: `next`**
+**Version 9.0.4 · technisches Paket: `iobroker.eos-admin` · Vertriebskanal: `next`**
 
 NexoWatt EOS verbindet die Systemverwaltung aus EOS-Admin 8.0.2 mit Dashboard,
 Installer und Energiemanagement aus NexoWatt UI 1.0.38. Eine ioBroker-Instanz betreibt
 die gemeinsamen Module. Die bisherige UI wird im Zielbetrieb nicht zusätzlich gestartet.
 Der technische Paketname bleibt für bestehende Integrationen erhalten.
 
-Version 9.0.3 bleibt ein Integrations-Teststand. Die Versionsnummer ist kein
+Version 9.0.4 bleibt ein Integrations-Teststand. Die Versionsnummer ist kein
 Nachweis einer allgemeinen Produktivfreigabe; für npm ist weiterhin `next`
 vorgesehen. Neue Ergebnisse und Artefakthashes gehören in den versionsgebundenen
-Abschlussbericht. Der [Prüfbericht 9.0.2](docs/reports/unified-9.0.2/PRUEFBERICHT.md)
+Abschlussbericht. Der [Prüfbericht 9.0.3](docs/reports/unified-9.0.3/PRUEFBERICHT.md),
+der [Prüfbericht 9.0.2](docs/reports/unified-9.0.2/PRUEFBERICHT.md)
 und der [Alpha-1-Prüfbericht](docs/unified/PRUEFBERICHT.md) bleiben historische
-Nachweise; ihre Ergebnisse bestätigen nicht die Änderungen in 9.0.3.
+Nachweise; ihre Ergebnisse bestätigen nicht die Änderungen in 9.0.4.
 Die Bereitstellung ist keine CRA-Konformitätserklärung.
 
-## Update 9.0.3 und Startbereitschaft
+## Update 9.0.4 und Socket-Start
 
 Die vorhandene Instanz und ihre gültige Lizenz bleiben beim Update erhalten;
 Prüfschlüssel müssen dafür nicht erneut importiert werden. Einstieg:
-[START_HIER_9.0.3.md](START_HIER_9.0.3.md).
+[START_HIER_9.0.4.md](START_HIER_9.0.4.md).
+
+**EOS-SOCKET-001:** Der Feldbericht zu 9.0.3 zeigt einen weiteren Startabbruch:
+Bei hoher Ereignislast konnte die Socket-Verwaltung auf eine noch nicht angelegte
+Liste der State-Abonnements zugreifen. Dieser Pfad ist bereits ohne geöffneten
+Browser erreichbar und führt zu `Cannot convert undefined or null to object` sowie
+`UNCAUGHT_EXCEPTION`. Die 9.0.3-Tests hatten diesen Lastfall nicht erfasst.
+9.0.4 behandelt den Socket-Start und die Ereignisbegrenzung so, dass eine leere
+Abonnementliste zulässig bleibt und Browser-Abmeldungen beziehungsweise
+Drosselung keine Messwert-Abonnements der gemeinsamen EMS-Laufzeit entfernen.
+`EOS_UI_STOPPING` nach diesem Absturz war eine Folge des eingeleiteten Stopps.
+
+Die früheren Startkorrekturen bleiben Bestandteil des Pakets:
 
 **EOS-WEBSTART-001:** In 9.0.2 wartete der Webstart auf die vollständige operative
 UI-/EMS-Initialisierung. Ein ausbleibender History-Callback konnte deshalb den
@@ -40,7 +53,7 @@ zusätzliche Gerätebefehle. Details und Abnahmekriterien:
 [Architektur](docs/unified/ARCHITECTURE.md) und
 [Prüfplan](docs/unified/COMMISSIONING.md).
 
-Aktuelle Prüfergebnisse und Grenzen: [Prüfbericht 9.0.3](docs/reports/unified-9.0.3/PRUEFBERICHT.md).
+Aktuelle Prüfergebnisse und Grenzen: [Prüfbericht 9.0.4](docs/reports/unified-9.0.4/PRUEFBERICHT.md).
 
 ## Anmeldung und einmalige Aktivierung
 
@@ -100,8 +113,7 @@ ist keine automatische neue EOS-Systemlizenz. Details: [Lizenzbetrieb](docs/unif
 
 ## Entwicklung und Prüfpaket
 
-Node.js: `>=22.23.4 <23 || >=24.22.1 <25`. Der neue Prüfbericht muss die tatsächliche
-Laufzeit für 9.0.3 benennen; nicht geprüfte Plattformen sind nicht freigegeben.
+Node.js: `>=22.23.4 <23 || >=24.22.1 <25`. Der Prüfbericht benennt die tatsächliche Laufzeit für 9.0.4; nicht geprüfte Plattformen sind nicht freigegeben.
 
 ```sh
 npm ci --ignore-scripts
@@ -157,7 +169,7 @@ Sicherheitsanforderungen, STRIDE-Risiken, CRA-/DSGVO-Bezug und offene Nachweise 
 
 ## Einstieg und Nachweise
 
-[Update und HTTPS-Start 9.0.3](START_HIER_9.0.3.md) ·
+[Update und Socket-Start 9.0.4](START_HIER_9.0.4.md) ·
 [Lizenzwiederherstellung seit 9.0.2](docs/unified/LICENSE_RECOVERY_9.0.2.md) ·
 [Historischer Prüfbericht 9.0.2](docs/reports/unified-9.0.2/PRUEFBERICHT.md).
-Der neue Abschlussbericht muss den tatsächlich geprüften 9.0.3-Stand ausweisen.
+Der [Prüfbericht 9.0.4](docs/reports/unified-9.0.4/PRUEFBERICHT.md) dokumentiert den geprüften Stand einschließlich des Vorher-/Nachher-Controllerlaufs.

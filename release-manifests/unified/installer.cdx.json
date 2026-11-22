@@ -2,10 +2,10 @@
   "$schema": "http://cyclonedx.org/schema/bom-1.5.schema.json",
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
-  "serialNumber": "urn:uuid:c54a1838-decf-445d-9b74-714b3a5ad086",
+  "serialNumber": "urn:uuid:8367c5ff-3888-4998-aeaa-5d002ab47fb0",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-11-22T18:06:29.118Z",
+    "timestamp": "2026-11-22T19:26:03.676Z",
     "lifecycles": [
       {
         "phase": "build"
@@ -19,12 +19,12 @@
       }
     ],
     "component": {
-      "bom-ref": "nexowatt-ui-admin-tab@9.0.3",
+      "bom-ref": "nexowatt-ui-admin-tab@9.0.4",
       "type": "library",
       "name": "src-admin-tab",
-      "version": "9.0.3",
+      "version": "9.0.4",
       "scope": "required",
-      "purl": "pkg:npm/nexowatt-ui-admin-tab@9.0.3",
+      "purl": "pkg:npm/nexowatt-ui-admin-tab@9.0.4",
       "properties": [
         {
           "name": "cdx:npm:package:private",
@@ -3198,7 +3198,7 @@
   ],
   "dependencies": [
     {
-      "ref": "nexowatt-ui-admin-tab@9.0.3",
+      "ref": "nexowatt-ui-admin-tab@9.0.4",
       "dependsOn": [
         "react@18.3.1",
         "react-dom@18.3.1",

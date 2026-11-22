@@ -112,7 +112,12 @@ function fixture(
     const writes = [];
     const warnings = [];
     const errors = [];
+    const subscriptionCleanup = [];
     Object.assign(target, {
+        eosStateSubscriptions: {
+            async closeSocket() { subscriptionCleanup.push('socket'); },
+            async close() { subscriptionCleanup.push('all'); },
+        },
         config: {
             eosLockLegacyAdmin: flag,
             eosLegacyAdminLockPort: 18081,
@@ -166,7 +171,7 @@ function fixture(
         async updateNews() {},
         getData() {},
     });
-    return { target, clock, writes, warnings, errors, instance, original, context };
+    return { target, clock, writes, warnings, errors, instance, original, context, subscriptionCleanup };
 }
 const settled = () => new Promise(resolve => setImmediate(resolve));
 
@@ -347,6 +352,7 @@ test('unload continues and completes once when a service stop throws', async () 
     await settled();
     assert.equal(called, 1);
     assert.deepEqual(stopped, ['ownership', 'license', 'session', 'runtime']);
+    assert.deepEqual(x.subscriptionCleanup, ['socket', 'all']);
 });
 test('unload deadline bounds a stuck UI stop and ignores late duplicate completion', async () => {
     const x = fixture(true);
@@ -361,11 +367,39 @@ test('unload deadline bounds a stuck UI stop and ignores late duplicate completi
     };
     x.target.onUnload(() => called++);
     assert.equal(called, 0);
+    assert.deepEqual(x.subscriptionCleanup, ['socket']);
     x.clock.fire(2000);
     assert.equal(called, 1);
     finish();
     await settled();
     assert.equal(called, 1);
+    assert.deepEqual(x.subscriptionCleanup, ['socket', 'all']);
+});
+
+test('unload diagnoses rejected subscription cleanup and still completes once', async () => {
+    const x = fixture(true);
+    let called = 0;
+    x.target.eosStateSubscriptions = {
+        async closeSocket() { throw new Error('fixture socket cleanup'); },
+        async close() { throw new Error('fixture owner cleanup'); },
+    };
+    x.target.onUnload(() => called++);
+    await settled();
+    assert.equal(called, 1);
+    assert.ok(x.warnings.some(line => line.startsWith('EOS_SOCKET_SUBSCRIPTION_CLEANUP_FAILED')));
+    assert.ok(x.warnings.some(line => line.startsWith('EOS_STATE_SUBSCRIPTION_CLEANUP_FAILED')));
+    x.clock.fire(2000);
+    assert.equal(called, 1);
+});
+
+test('ownership and EMS receive state changes before browser publication', () => {
+    const x = fixture(true);
+    const order = [];
+    x.target.eosOwnership = { onStateChange: () => order.push('ownership') };
+    x.target.eosHostedRuntime = { onStateChange: () => order.push('ems') };
+    x.context.socket = { stateChange: () => order.push('browser') };
+    x.target.onStateChange('meter.0.power', { val: 123, ack: true });
+    assert.deepEqual(order, ['ownership', 'ems', 'browser']);
 });
 
 test('passwordless legacy admin gets a bounded diagnostic, never a credential or access mutation', async () => {

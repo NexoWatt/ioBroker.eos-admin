@@ -338,6 +338,76 @@ tests.integration(path.resolve(__dirname, '..'), {
                     }
                 }
             });
+            it('survives a real state burst before any socket client connects and recovers its threshold', async function () {
+                this.timeout(90000);
+                // This synthetic heartbeat belongs to no configured host or adapter. It is
+                // already covered by the ownership monitor's real DB subscription, yet a
+                // true heartbeat does not grant ownership or alter a physical device.
+                const trafficId = 'system.host.eos-socket-integration.alive';
+                const processAtStart = harness.adapterProcess;
+                const logStart = harness.getLogs().length;
+                const logSinceStart = pattern => harness.getLogs().slice(logStart).some(log => pattern.test(log.message));
+                const assertSameProcess = () => {
+                    assert.equal(harness.didAdapterStop(), false, 'The state burst must not terminate the adapter');
+                    assert.equal(harness.adapterProcess, processAtStart, 'No replacement process may hide a crash');
+                    assert.equal(processAtStart.exitCode, null, 'The original EOS process must still be alive');
+                };
+                assert.ok(processAtStart?.pid, 'The test must own a running EOS adapter process');
+                assert.equal(await harness.objects.getObjectAsync(trafficId), null);
+                assert.equal(await harness.states.getStateAsync(trafficId), null);
+                await harness.objects.setObjectAsync(trafficId, {
+                    _id: trafficId,
+                    type: 'state',
+                    common: { name: 'Isolated EOS socket burst fixture', type: 'boolean', role: 'indicator', read: true, write: false },
+                    native: {},
+                });
+                try {
+                    // 50 writes every 100 ms for up to 12 seconds. The actual production
+                    // 200-event/second, three-consecutive-second threshold is unchanged.
+                    // No socket client has connected, so no client state subscription exists.
+                    const burstDeadline = Date.now() + 12000;
+                    let writes = 0;
+                    while (Date.now() < burstDeadline && !logSinceStart(/Unsubscribe from all states, except system's/)) {
+                        assertSameProcess();
+                        await Promise.all(Array.from({ length: 50 }, () => harness.states.setStateAsync(trafficId, {
+                            val: true,
+                            ack: true,
+                            ts: Date.now(),
+                            c: `EOS isolated burst ${writes++}`,
+                        })));
+                        await wait(100);
+                    }
+                    assert.ok(logSinceStart(/Unsubscribe from all states, except system's/), 'The real threshold must activate');
+                    // The old fault occurs after the activation log, in its asynchronous
+                    // callback. Give that callback time to complete before checking TLS.
+                    await wait(300);
+                    assert.equal(
+                        logSinceStart(/Cannot convert undefined or null to object|unhandled promise rejection/i),
+                        false,
+                        'Threshold activation must not trigger the reported unhandled rejection',
+                    );
+                    assertSameProcess();
+                    assert.equal((await request('/api/auth/status')).status, 200);
+                    await assertAdminPreserved();
+
+                    // Exercise the unmodified automatic recovery deadline, without using
+                    // a private API, modifying production clocks or adding a test hook.
+                    const recoveryDeadline = Date.now() + 65000;
+                    while (Date.now() < recoveryDeadline && !logSinceStart(/Subscribe to all states again/)) {
+                        assertSameProcess();
+                        await wait(250);
+                    }
+                    assert.ok(logSinceStart(/Subscribe to all states again/), 'The real threshold must recover automatically');
+                    await wait(150); // recovery performs its own asynchronous subscription work
+                    assertSameProcess();
+                    assert.equal((await request('/api/auth/status')).status, 200);
+                    assert.equal(logSinceStart(/Cannot convert undefined or null to object|unhandled promise rejection/i), false);
+                    await assertAdminPreserved();
+                } finally {
+                    await harness.states.delState(trafficId);
+                    await harness.objects.delObjectAsync(trafficId);
+                }
+            });
             it('requires a trusted certificate and verifies the requested hostname', async () => {
                 await assert.rejects(requestTls(null, '/login.html'), error =>
                     /SELF_SIGNED|UNABLE_TO_VERIFY|CERT_UNTRUSTED/.test(error.code || ''),

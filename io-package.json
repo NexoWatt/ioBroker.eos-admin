@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "eos-admin",
-    "version": "9.0.3",
+    "version": "9.0.4",
     "titleLang": {
       "en": "NexoWatt EOS",
       "de": "NexoWatt EOS",
@@ -18,6 +18,11 @@
     "connectionType": "local",
     "dataSource": "push",
     "news": {
+      "9.0.4": {
+        "de": "9.0.4 korrigiert den Socket-Absturz beim Start unter hoher Ereignislast, auch ohne geöffneten Browser. Die Begrenzung der Oberflächenereignisse darf keine Messwert-Abonnements der gemeinsamen EMS-Laufzeit entfernen. HTTPS auf 8188, bestehender Adminzugang und die zentrale Lizenz bleiben erhalten. Teststand für next; Nachweise und Zielgeräteprüfung siehe Prüfbericht.",
+        "en": "9.0.4 fixes the socket startup crash under high event load, including before any browser connects. UI event throttling must not remove measurement subscriptions of the shared EMS runtime. HTTPS on 8188, the existing admin access and the central license are preserved. Test release for next; see the report for evidence and target-device acceptance.",
+        "nl": "9.0.4 corrigeert de socketcrash tijdens het opstarten bij veel gebeurtenissen, ook zonder geopende browser. Begrenzing van interfacegebeurtenissen mag geen meetwaarde-abonnementen van de gedeelde EMS-runtime verwijderen. HTTPS op 8188, bestaande admintoegang en centrale licentie blijven behouden. Testversie voor next; zie het rapport voor bewijs en controle op het doelapparaat."
+      },
       "9.0.3": {
         "en": "Keep HTTPS access available during licensed EMS startup; bound history replies and create MultiUse diagnostics before writes.",
         "de": "HTTPS-Zugang beim lizenzierten EMS-Start erhalten; Historienantworten begrenzen und MultiUse-Diagnoseobjekte vor dem Schreiben anlegen."
@@ -102,11 +107,6 @@
         "de": "Native Übersicht für Admin, Installateur und Endkunde, read-only EMS-Live-Diagnose aus dem NexoWatt UI Adapter, größere scrollfreie Anmeldung sowie reparierte verpflichtende persönliche Kennwortvergabe nach der ersten Anmeldung mit nexowatt.",
         "en": "Native overview for Admin, Installer and End User, read-only EMS live diagnosis from the NexoWatt UI adapter, a larger scroll-free login card, and repaired mandatory personal password setup after first sign-in with nexowatt.",
         "nl": "Native overzicht voor Admin, Installateur en Eindgebruiker, read-only EMS-live diagnose uit de NexoWatt UI-adapter, een groter aanmeldvenster zonder interne schuifbalken en herstelde verplichte persoonlijke wachtwoordinstelling na de eerste aanmelding met nexowatt."
-      },
-      "7.9.95": {
-        "de": "Stable 7.9.95 macht den Release-Ordner mergesicher: Die flache Update-ZIP kann direkt über einen bestehenden Arbeitsordner entpackt werden. Vor Paketprüfung und npm-Veröffentlichung werden package.json, io-package.json, beide Lockdateien, die Frontend-Version, Build-Informationen und der aktuelle Repository-Eintrag automatisch auf dieselbe Version gebracht. Dadurch wird insbesondere ein stehen gebliebenes io-package.json aus 7.9.92/7.9.94 automatisch repariert. Die Funktionen aus 7.9.94 bleiben unverändert.",
-        "en": "Stable 7.9.95 makes the release folder merge-safe: the flat update ZIP can be extracted directly over an existing working directory. Before package validation and npm publishing, package.json, io-package.json, both lockfiles, the frontend version, build information and the current repository entry are synchronized automatically. In particular, a stale io-package.json from 7.9.92/7.9.94 is repaired automatically. Functional behavior from 7.9.94 remains unchanged.",
-        "nl": "Stable 7.9.95 maakt de releasemap merge-veilig: de vlakke update-ZIP kan direct over een bestaande werkmap worden uitgepakt. Vóór pakketcontrole en npm-publicatie worden package.json, io-package.json, beide lockbestanden, de frontendversie, buildinformatie en de actuele repositoryvermelding automatisch op dezelfde versie gezet. Een achtergebleven io-package.json uit 7.9.92/7.9.94 wordt daardoor automatisch hersteld. De functies uit 7.9.94 blijven ongewijzigd."
       }
     },
     "desc": {
@@ -144,7 +144,7 @@
     "icon": "admin.svg",
     "messagebox": true,
     "enabled": true,
-    "extIcon": "https://unpkg.com/iobroker.eos-admin@9.0.3/admin/admin.svg",
+    "extIcon": "https://unpkg.com/iobroker.eos-admin@9.0.4/admin/admin.svg",
     "keywords": [
       "NexoWatt",
       "EOS",
@@ -155,7 +155,7 @@
       "licensed"
     ],
     "compact": false,
-    "readme": "https://unpkg.com/iobroker.eos-admin@9.0.3/README.md",
+    "readme": "https://unpkg.com/iobroker.eos-admin@9.0.4/README.md",
     "authors": [
       "NexoWatt"
     ],
@@ -167,7 +167,7 @@
     "type": "general",
     "licenseInformation": {
       "type": "paid",
-      "link": "https://unpkg.com/iobroker.eos-admin@9.0.3/LICENSE"
+      "link": "https://unpkg.com/iobroker.eos-admin@9.0.4/LICENSE"
     },
     "logTransporter": true,
     "stopBeforeUpdate": true,

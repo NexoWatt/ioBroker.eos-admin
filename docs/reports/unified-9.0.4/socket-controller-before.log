@@ -1,0 +1,71 @@
+
+Running tests in <isolated-controller-tmp>/test-iobroker.eos-admin
+
+
+
+  Adapter integration tests
+
+up to date in 253ms
+
+up to date in 282ms
+
+added 176 packages in 5s
+    User-defined tests
+      Unified real HTTPS onboarding and existing Admin preservation
+2026-11-22 20:26:24.006  - info: eos-admin.0 (571) starting. Version 9.0.3 in <isolated-controller-tmp>/test-iobroker.eos-admin/node_modules/iobroker.eos-admin, node: v24.22.3, js-controller: 7.2.5
+2026-11-22 20:26:24.078  - warn: eos-admin.0 (571) EOS account installer disabled: unique credential provisioning by Admin required
+2026-11-22 20:26:24.090  - warn: eos-admin.0 (571) EOS account guest disabled: unique credential provisioning by Admin required
+2026-11-22 20:26:24.101  - warn: eos-admin.0 (571) EOS account user disabled: unique credential provisioning by Admin required
+2026-11-22 20:26:24.105  - info: eos-admin.0 (571) [EOS licensing] TRUST_PERMISSIONS
+2026-11-22 20:26:24.163  - info: eos-admin.0 (571) EOS ACL guard restricted legacy admin visibility to system.group.administrator
+2026-11-22 20:26:24.184  - info: eos-admin.0 (571) requesting all objects
+2026-11-22 20:26:24.192  - info: eos-admin.0 (571) Operating-system password testing and changes are disabled in EOS; use authorized OS maintenance.
+2026-11-22 20:26:24.194  - warn: eos-admin.0 (571) Cannot check Node.js versions; bounded request or local update failed
+2026-11-22 20:26:24.198  - info: eos-admin.0 (571) received all objects
+2026-11-22 20:26:24.313  - info: eos-admin.0 (571) Request actual repository...
+2026-11-22 20:26:24.315  - warn: eos-admin.0 (571) Cannot update news; bounded request or local update failed
+2026-11-22 20:26:24.320  - error: eos-admin.0 (571) Host is not alive
+2026-11-22 20:26:24.343  - info: eos-admin.0 (571) [NexoWatt stable updates] Unattended installation blocked; managed policies quarantined (startup-security-migration)
+2026-11-22 20:26:24.388  - warn: eos-admin.0 (571) Repository cannot be read: Active repo - stable
+2026-11-22 20:26:24.390  - info: eos-admin.0 (571) Secure socket.io server listening on port 8188
+2026-11-22 20:26:24.440  - info: eos-admin.0 (571) EOS_HTTPS_READY: https server listening on 0.0.0.0:8188; login and system console available
+2026-11-22 20:26:24.441  - info: eos-admin.0 (571) EOS configured port: 8188; use a reachable host address with HTTPS.
+2026-11-22 20:26:24.480  - warn: eos-admin.0 (571) Active repository "stable" cannot be read
+2026-11-22 20:26:27.491  - info: eos-admin.0 (571) Unsubscribe from all states, except system's, because over 3 seconds the number of events is over 200 (in last second 0)
+2026-11-22 20:26:27.492  - error: eos-admin.0 (571) Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch().
+2026-11-22 20:26:27.493  - error: eos-admin.0 (571) unhandled promise rejection: Cannot convert undefined or null to object
+2026-11-22 20:26:27.493  - error: eos-admin.0 (571) TypeError: Cannot convert undefined or null to object
+    at Object.keys (<anonymous>)
+    at Timeout._onTimeout (<isolated-controller-tmp>/test-iobroker.eos-admin/node_modules/@iobroker/socket-classes/build/lib/socketCommandsAdmin.js:777:46)
+    at listOnTimeout (node:internal/timers:685:17)
+    at process.processTimers (node:internal/timers:618:7)
+2026-11-22 20:26:27.493  - error: eos-admin.0 (571) Cannot convert undefined or null to object
+2026-11-22 20:26:27.496  - info: eos-admin.0 (571) terminating
+2026-11-22 20:26:27.496  - warn: eos-admin.0 (571) Terminated (UNCAUGHT_EXCEPTION): Without reason
+        1) survives a real state burst before any socket client connects and recovers its threshold
+2026-11-22 20:26:27.832  - info: eos-admin.0 (571) Got terminate signal TERMINATE_YOURSELF
+2026-11-22 20:26:28.003  - info: eos-admin.0 (571) terminating
+2026-11-22 20:26:28.009  - info: eos-admin.0 (571) terminating
+
+
+  0 passing (30s)
+  1 failing
+
+  1) Adapter integration tests
+       User-defined tests
+         Unified real HTTPS onboarding and existing Admin preservation
+           survives a real state burst before any socket client connects and recovers its threshold:
+
+      AssertionError [ERR_ASSERTION]: Threshold activation must not trigger the reported unhandled rejection
+
+true !== false
+
+      + expected - actual
+
+      -true
+      +false
+      
+      at Context.<anonymous> (test/integration-unified.cjs:384:28)
+
+
+

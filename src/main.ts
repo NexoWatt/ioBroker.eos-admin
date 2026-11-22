@@ -23,7 +23,7 @@ import {
     getAbsoluteInstanceDataDir,
     I18n,
 } from '@iobroker/adapter-core';
-import { SocketAdmin, type Server, type Store as SocketStore, type SocketSettings } from '@iobroker/socket-classes';
+import type { SocketAdmin, Server, Store as SocketStore, SocketSettings } from '@iobroker/socket-classes';
 import type { Store } from 'express-session';
 import { SocketIO, type Socket as WebSocketClient } from '@iobroker/ws-server';
 import { getAdapterUpdateText } from './lib/translations';
@@ -43,6 +43,8 @@ import { createOwnershipGuard } from './lib/eosUnifiedOwnership';
 import type { EosHostedRuntime } from './lib/eosUnifiedRuntime';
 import { EosUiSessionRegistry, type EosUiIdentity, type EosUiSession } from './lib/eosUiSessionRegistry';
 import { requestHttpsJson } from './lib/eosHttpsClient';
+import { EosSocketAdmin } from './lib/eosSocketAdmin';
+import { installEosStateSubscriptions, type EosStateSubscriptionManager } from './lib/eosStateSubscriptions';
 import { matchesObjectCount, validateNodeReleaseIndex } from './lib/eosNewsSecurity';
 import {
     createLocalLogFiles,
@@ -335,6 +337,7 @@ async function ensureEosStableInitialAccounts(adapter: ioBroker.Adapter): Promis
 
 class Admin extends Adapter {
     declare public config: AdminAdapterConfig;
+    private readonly eosStateSubscriptions: EosStateSubscriptionManager;
 
     /** Local license authority; management/recovery is never license-gated. */
     public eosHostedRuntime: EosHostedRuntime | undefined;
@@ -422,6 +425,7 @@ class Admin extends Adapter {
         };
 
         super(options as AdapterOptions);
+        this.eosStateSubscriptions = installEosStateSubscriptions(this);
 
         this.on('objectChange', this.onObjectChange);
         this.on('stateChange', this.onStateChange);
@@ -508,9 +512,9 @@ class Admin extends Adapter {
             webServer?.resetIndexHtml();
         }
 
-        socket?.stateChange(id, state);
         this.eosOwnership?.onStateChange(id, state);
         this.eosHostedRuntime?.onStateChange?.(id, state);
+        socket?.stateChange(id, state);
     };
 
     onFileChange = (id: string, fileName: string, size: number | null): void => {
@@ -1144,15 +1148,24 @@ class Admin extends Adapter {
         }
         this.eosSecurityTimer = null;
         cleanup(() => socket?.close());
+        void this.eosStateSubscriptions.closeSocket().catch(() => {
+            this.log.warn('EOS_SOCKET_SUBSCRIPTION_CLEANUP_FAILED: Continuing shutdown.');
+        });
         cleanup(() => webServer?.close());
+        const finishSubscriptions = (): void => {
+            void this.eosStateSubscriptions.close().then(finish, () => {
+                this.log.warn('EOS_STATE_SUBSCRIPTION_CLEANUP_FAILED: Continuing shutdown.');
+                finish();
+            });
+        };
         if (!this.eosHostedRuntime) {
-            finish();
+            finishSubscriptions();
             return;
         }
         try {
-            void this.eosHostedRuntime.stop().then(finish, finish);
+            void this.eosHostedRuntime.stop().then(finishSubscriptions, finishSubscriptions);
         } catch {
-            finish();
+            finishSubscriptions();
         }
     };
 
@@ -2630,7 +2643,7 @@ class Admin extends Adapter {
             );
         }
 
-        socket = new SocketAdmin(settings, this, objects);
+        socket = new EosSocketAdmin(settings, this.eosStateSubscriptions.socketAdapter, objects);
         if (!this.eosSessionSecurity || !isSocketSessionStore(store)) {
             throw new Error('EOS authentication services are unavailable');
         }

@@ -1,7 +1,7 @@
 {
   "name": "iobroker.eos-admin",
   "description": "NexoWatt EOS: licensed local energy management, dashboard and ioBroker system administration in one adapter.",
-  "version": "9.0.3",
+  "version": "9.0.4",
   "contributors": [
     "bluefox <dogafox@gmail.com>",
     "apollon77",
@@ -29,7 +29,7 @@
   "dependencies": {
     "@iobroker/adapter-core": "^3.4.3",
     "@iobroker/plugin-docker": "^1.2.1",
-    "@iobroker/socket-classes": "^2.10.0",
+    "@iobroker/socket-classes": "2.10.0",
     "@iobroker/type-detector": "5.0.10",
     "@iobroker/ws-server": "^4.5.2",
     "@tsconfig/node22": "^22.0.6",
@@ -151,7 +151,9 @@
     "START_HIER_9.0.2.md",
     "docs/reports/unified-9.0.2/",
     "START_HIER_9.0.3.md",
-    "docs/reports/unified-9.0.3/"
+    "docs/reports/unified-9.0.3/",
+    "START_HIER_9.0.4.md",
+    "docs/reports/unified-9.0.4/"
   ],
   "scripts": {
     "start": "cd src-admin && npm run start",
@@ -162,7 +164,7 @@
     "build:ui-runtime": "node ui/scripts/build-ts-runtime-executables.js",
     "lint-backend": "eslint -c eslint.config.mjs src",
     "lint": "npm run lint-backend && cd src-admin && npm run lint",
-    "test:unified": "node --test test/eos-unified*.test.cjs test/eos-hosted-boundary-http.test.cjs test/eos-license*.test.cjs ui/test/unified/*.test.cjs test/eos-access-diagnostics.test.cjs test/eos-ingress-renderer.test.cjs test/eos-sbom-vendored.test.cjs test/eos-system-license-ui.test.cjs test/eos-history-deadline.test.cjs",
+    "test:unified": "node --test test/eos-unified*.test.cjs test/eos-hosted-boundary-http.test.cjs test/eos-license*.test.cjs ui/test/unified/*.test.cjs test/eos-access-diagnostics.test.cjs test/eos-ingress-renderer.test.cjs test/eos-sbom-vendored.test.cjs test/eos-system-license-ui.test.cjs test/eos-history-deadline.test.cjs test/eos-socket-threshold.test.cjs",
     "check:unified": "node tools/eos-release-check.cjs",
     "seal:unified": "node tools/eos-release-manifest.cjs --write",
     "prepack": "node tools/eos-release-check.cjs",
@@ -187,7 +189,7 @@
   },
   "nexowattReleasePolicy": {
     "distTag": "next",
-    "purpose": "Licensed startup recovery test release; see START_HIER_9.0.3.md and docs/reports/unified-9.0.3/PRUEFBERICHT.md"
+    "purpose": "Socket startup and shared-subscription recovery test release; see START_HIER_9.0.4.md and docs/reports/unified-9.0.4/PRUEFBERICHT.md"
   },
   "publisher": "NexoWatt",
   "nexowattUpstream": {

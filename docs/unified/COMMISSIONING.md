@@ -1,9 +1,9 @@
 # Prüfplan und Inbetriebnahme
 
-**NexoWatt EOS · 9.0.3 · EOS-MERGE-001**
+**NexoWatt EOS · 9.0.4 · EOS-MERGE-001**
 
 Dieser Plan nennt Sollwerte und Abläufe, keine vorweggenommenen Testergebnisse.
-Softwarebefunde und Rohbelege für 9.0.3 gehören in den neuen Abschlussbericht;
+Softwarebefunde und Rohbelege für 9.0.4 gehören in den neuen Abschlussbericht;
 Ergebnisse früherer Alpha-Versionen werden nicht umetikettiert. Zielsystem-/Gerätetests
 sind offen, solange sie nicht mit konkreter Umgebung dokumentiert wurden.
 
@@ -46,6 +46,9 @@ Prüfung mit begrenztem Anlagenumfang und beobachtbaren Stellbefehlen durchführ
 | EOS-WEBSTART-001 / P03 | Eigene EOS-Instanz-/Übersichtskachel aus `/system/` direkt über 8188 beziehungsweise über HTTPS-Alias/443 öffnen | Standardlink der verbundenen Instanz bleibt auf aktueller HTTPS-Browser-Origin und führt auf `/`. Andere Instanzen und benutzerdefinierte URLs werden nicht überschrieben. |
 | HISTORY-001 | History-Adapter antwortet nicht, antwortet spät/mehrfach oder liefert Fehler/leere Daten; mehrere Fallback-Kandidaten; Shutdown bei offener Anfrage | Höchstens 5 Sekunden je betroffenem Einzelaufruf und ein gemeinsames monotones 5-Sekunden-Budget für alle Kandidaten von `_nwGetHistoryAvgSeriesAny`; keine neue Fallbackrunde nach Fristablauf. Alte gültige CO₂-Werte/Zeiten bleiben bei fehlenden Daten erhalten, echte Nullproben sind zulässig; keine späte Mutation nach Abschluss. |
 | MULTIUSE-001 | Frische Datenbank, MultiUse deaktiviert; Managerinitialisierung und Deaktivierung, danach regulär aktivierter Vergleich | Die vier `multiUse.control`-Objekte active/requestW/budgetW/status existieren vor Statusschreibzugriffen. Keine Gerätekommandos aus deaktivierter Initialisierung, keine Konfigurationsresets; bestehende Lizenz-/Safetygrenzen bleiben wirksam. |
+| EOS-SOCKET-001 / P01 | Frischer Adapterstart ohne Browser, State-Ereignislast über 200/s über mindestens drei Intervalle; nach Lastende mindestens 70 Sekunden weiter beobachten | Kein `Object.keys`-Fehler, keine unbehandelte Promise-Ablehnung, kein Prozessneustart; HTTPS bleibt nach der Bereitschaftsmeldung erreichbar. Reale Timer, kontrollierte Testuhr und Controllerlauf im Prüfbericht unterscheiden. |
+| EOS-SOCKET-001 / P02 | Browser abonniert Messwerte, meldet sich ab; Ereignisbegrenzung tritt ein und wird wieder aufgehoben | Oberflächenereignisse werden begrenzt und anschließend wieder zugestellt. Benötigte EMS-/Ownership-Abonnements bleiben wirksam, auch bei gleichen oder überlappenden Mustern. |
+| EOS-SOCKET-001 / P03 | Stop während eines ausstehenden Schwellenwertwechsels, anschließender Neustart | Keine nachlaufende Neuabonnierung durch die gestoppte Socket-Instanz; keine doppelten Timer oder dauerhaft fehlenden Abonnements. |
 
 Automatisierte Tests können Teile dieser Fälle mit Mocks abdecken. Im Protokoll
 kenntlich machen, ob reale HTTP-Verbindungen, Controllerkomponenten oder nur isolierte

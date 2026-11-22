@@ -1,0 +1,5 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> iobroker.eos-admin@9.0.4 lint:unified
+> eslint -c eslint.unified.config.mjs src/lib/eosUnifiedBoundary.js src/lib/eosUnifiedOwnership.js src/lib/eosLicenseCore.js src/lib/eosLicensePolicy.js src/lib/eosLicenseService.js src/lib/eosLicenseTrust.js src/lib/eosLicenseHttp.js tools/eos-release-check.cjs tools/eos-release-manifest.cjs tools/eos-migration-plan.cjs tools/eos-access-diagnostics.cjs deploy/render-ingress.cjs tools/eos-sbom-vendored.cjs
+

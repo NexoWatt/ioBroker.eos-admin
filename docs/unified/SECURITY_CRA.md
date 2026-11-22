@@ -1,8 +1,8 @@
 # Sicherheits- und CRA-Register der Zusammenführung
 
-**Stand:** 9.0.3 · 22.11.2026 · **Verantwortung:** NexoWatt / Dominique Manteufel
+**Stand:** 9.0.4 · 22.11.2026 · **Verantwortung:** NexoWatt / Dominique Manteufel
 
-Dieses Register beschreibt den Prüfbedarf für Testversion 9.0.3 (`next`) und
+Dieses Register beschreibt den Prüfbedarf für Testversion 9.0.4 (`next`) und
 ergänzt die vorhandenen Befund- und Entwicklungsunterlagen. Es
 beschreibt Scope, Maßnahmen und zu erbringende Nachweise. Testergebnisse werden im
 abschließenden Release-Prüfbericht geführt. Hier wird keine bestandene Normprüfung,
@@ -38,6 +38,7 @@ rein lokale Lizenzkontrolle verändern; absolute Manipulationssicherheit ist kei
 | EOS-WEBSTART-001 / D | Vollständiger operativer Start blockiert HTTPS-Listener; Lizenz-/Engine-Logs vermitteln vorzeitig Bereitschaft | Geschützte Webbereitschaft vom operativen Start trennen; tatsächlichen Bind-/TLS-Erfolg gesondert melden. Authentisierung, Lizenz und Ownership bleiben verbindlich. | Verzögerter/fehlgeschlagener Start, Stop/Restart und realer HTTPS-Aufruf im 9.0.3-Abschlussbericht nachzuweisen. |
 | HISTORY-001 / D,T | Fehlender History-Callback hängt Start oder Kandidatenabfrage auf; fehlende Daten erscheinen als frischer CO₂-Nullwert | Betroffenen Einzelaufruf und sämtliche Fallback-Kandidaten einer `_nwGetHistoryAvgSeriesAny`-Abfrage insgesamt auf 5 Sekunden begrenzen; späte/mehrfache Antworten ignorieren. Bei fehlenden Daten alte gültige Werte/Zeiten erhalten; echte Nullproben bleiben zulässig. | Nichtantwort, Fehler, verspätete Antwort, Shutdown und Datenqualität gezielt prüfen; keine Ergebnisse vorweggenommen. |
 | MULTIUSE-001 / T,D | Deaktivierung schreibt vier Steuerzustände, bevor deren Objekte angelegt sind | Objektinitialisierung auch bei deaktiviertem Modul; operative Ticks bleiben aktivierungsgebunden, keine neuen Gerätekommandos oder Konfigurationsresets. | Frische Datenbank und reales Manager-/Modulverhalten prüfen; Ergebnisse im 9.0.3-Abschlussbericht. |
+| EOS-SOCKET-001 / D | Start ohne Browser und hohe State-Ereignislast lösen `Object.keys(undefined)` in einem Socket-Timer aus; gemeinsame Abonnements können bei Browser-/Schwellenwertwechseln betroffen sein. CWE-248/400. | Leeren Abonnementbestand und Timer-Lifecycle behandeln; Ereignisbegrenzung erhalten; Socket-Abonnements so abgrenzen, dass EMS-/Ownership-Messwerte weiter eintreffen. Kein globales Verschlucken von Ausnahmen. | Original 9.0.3 reproduziert den Absturz im realen Controller; 9.0.4 besteht den Lastfall, natürliche Wiederaufnahme, HTTPS und Neustart. Abonnement-/ACL-/Stoptests bestanden; Umfang und offene Zielgeräteabnahme im [9.0.4-Prüfbericht](../reports/unified-9.0.4/PRUEFBERICHT.md). |
 
 Die 9.0.2-Prüfschlüsselarchitektur verändert die dokumentierte Autoritätsmenge:
 Standard-OS-Schlüssel und explizit importierte, in diesem Release autorisierte
@@ -100,6 +101,7 @@ Quellen und Recherchegrenzen: [SOURCES.md](SOURCES.md).
 ## Noch erforderliche Freigabenachweise
 
 - Tatsächlicher Controller-/OS-/Node-Stand; Installation/Stop/Restart ohne Root.
+- EOS-SOCKET-001: Start unter Ereignislast ohne Browser, Socket-An-/Abmeldung, Drosselung und Wiederaufnahme bei weiter wirksamen EMS-Abonnements; Stop während ausstehender Timer prüfen.
 - HTTPS-Bereitschaft trotz verzögertem operativem Start; begrenzte History-Antwortzeit, unverfälschte CO₂-Datenqualität und MultiUse-Objekte bei deaktiviertem Modul nach den drei 9.0.3-Befunden prüfen.
 - Gesamtfluss direktes HTTPS:8188 → OAuth/Erstpasswortwechsel → Aktivierung → Dashboard/Installer/System; optionales HTTPS:443 separat. TOTP-/fehlerhafte Auth-Konfiguration muss sperren; TOTP-Challenge/Passkeys bleiben offen.
 - Globalen Logout mit mehreren Nutzern prüfen; ein Single-Session-Logout ist nicht implementiert.

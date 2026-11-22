@@ -1,8 +1,13 @@
 {
   "common": {
     "name": "nexowatt-ui",
-    "version": "9.0.3",
+    "version": "9.0.4",
     "news": {
+      "9.0.4": {
+        "de": "9.0.4 korrigiert den Socket-Absturz beim Start unter hoher Ereignislast, auch ohne geöffneten Browser. Die Begrenzung der Oberflächenereignisse darf keine Messwert-Abonnements der gemeinsamen EMS-Laufzeit entfernen. HTTPS auf 8188, bestehender Adminzugang und die zentrale Lizenz bleiben erhalten. Teststand für next; Nachweise und Zielgeräteprüfung siehe Prüfbericht.",
+        "en": "9.0.4 fixes the socket startup crash under high event load, including before any browser connects. UI event throttling must not remove measurement subscriptions of the shared EMS runtime. HTTPS on 8188, the existing admin access and the central license are preserved. Test release for next; see the report for evidence and target-device acceptance.",
+        "nl": "9.0.4 corrigeert de socketcrash tijdens het opstarten bij veel gebeurtenissen, ook zonder geopende browser. Begrenzing van interfacegebeurtenissen mag geen meetwaarde-abonnementen van de gedeelde EMS-runtime verwijderen. HTTPS op 8188, bestaande admintoegang en centrale licentie blijven behouden. Testversie voor next; zie het rapport voor bewijs en controle op het doelapparaat."
+      },
       "1.0.38": {
         "en": "NexoWatt EOS logo and neutral UI branding. Direct HTTPS with explicitly selected certificates, corrected secure login routes and restored PWA startup/update metadata. Existing EMS configuration and independent authentication profiles remain intact. Test release; device acceptance required.",
         "de": "NexoWatt-EOS-Logo und neutrale UI-Texte. Direktes HTTPS mit ausdrücklich gewählten Zertifikaten, korrigierte sichere Login-Wege und wiederhergestellte PWA-Start-/Update-Metadaten. Bestehende EMS-Konfiguration und getrennte Anmeldeprofile bleiben erhalten. Teststand; Geräteabnahme erforderlich.",

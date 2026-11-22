@@ -1,6 +1,6 @@
 # Architektur der Zusammenführung
 
-**NexoWatt EOS · 9.0.3 · EOS-MERGE-001**
+**NexoWatt EOS · 9.0.4 · EOS-MERGE-001**
 
 ## Ein Paket und eine Instanz
 
@@ -30,7 +30,7 @@ flowchart TD
 
 ## Abweichung vom langfristigen Plan
 
-Version 9.0.3 hostet UI/EMS und Verwaltung **im selben Prozess**.
+Version 9.0.4 hostet UI/EMS und Verwaltung **im selben Prozess**.
 Sie führt noch keine getrennte EMS-Worker-Laufzeit ein. Ein Browser-Reload startet
 nicht den Adapter neu; ein Adapterstopp, Absturz oder Controllerneustart kann die
 Regelung unterbrechen. Auch umfangreiche Verwaltungsarbeit kann den gemeinsamen
@@ -64,6 +64,27 @@ ihrem Standardlink die tatsächlich verwendete HTTPS-Browser-Origin und führt a
 alte gespeicherte Bind-/Portwerte ersetzt. Andere Instanzen, Drittadapter und
 benutzerdefinierte URLs bleiben unverändert; dies ist keine automatische
 Netzwerk- oder Proxykonfiguration.
+
+## Socket-Ereignislast und gemeinsame Abonnements – EOS-SOCKET-001
+
+9.0.3 konnte beim Start ohne Browser abstürzen: Die zentrale Laufzeit leitete
+State-Ereignisse auch an die Socket-Verwaltung weiter. Nach drei Intervallen
+oberhalb der Ereignisgrenze griff deren asynchroner Umschalttimer auf
+`subscribes.stateChange` zu, obwohl noch kein Browser diese Liste angelegt hatte.
+Der erste Zugriff auf `Object.keys(undefined)` beendete den gemeinsamen Prozess.
+
+Für 9.0.4 gelten folgende Grenzen: Ein leerer Browser-Abonnementbestand ist ein
+regulärer Zustand. Die Begrenzung ausgehender Oberflächenereignisse bleibt aktiv.
+Browser-Abmeldung, Wechsel in die Begrenzung und anschließende Wiederaufnahme
+verwalten nur den Bedarf der Socket-Oberfläche; sie dürfen keine von der
+EMS-Laufzeit benötigten Messwert-Abonnements entfernen. Timer und nachlaufende
+Aufträge müssen beim Entladen beendet werden. Authentisierung, Rollen und
+Objektberechtigungen bleiben für Socket-Befehle verbindlich.
+
+Diese Trennung betrifft Abonnementzuständigkeit im gemeinsamen Prozess. Sie ist
+keine Prozessisolation und kein Nachweis harter Regellatenzen. Vorher-/Nachher-
+Reproduktion, Lastwechsel und Neustart werden im 9.0.4-Prüfbericht getrennt von
+der noch nötigen Geräteabnahme ausgewiesen.
 
 ## History und MultiUse beim Start
 
@@ -143,7 +164,7 @@ Abschlussbericht zu entnehmen.
 
 ## Direkter HTTPS-Zugang und optionaler Eingang
 
-Das Standardprofil von 9.0.3 ist **HTTPS auf `0.0.0.0:8188` mit Authentisierung**.
+Das Standardprofil von 9.0.4 ist **HTTPS auf `0.0.0.0:8188` mit Authentisierung**.
 `0.0.0.0` bedeutet Bindung an die IPv4-Schnittstellen; es ist keine vom Browser
 aufzurufende Adresse. Nutzer öffnen `https://<Geräte-IP>:8188/`. Die native
 Konfiguration setzt `secure: true`, `auth: true`, `certPublic: defaultPublic`,

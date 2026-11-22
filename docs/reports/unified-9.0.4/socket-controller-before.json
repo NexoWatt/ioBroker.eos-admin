@@ -1,0 +1,44 @@
+{
+  "finding": "EOS-SOCKET-001",
+  "kind": "real installed ioBroker controller regression before fix",
+  "adapterVersion": "9.0.3",
+  "controllerVersion": "7.2.5",
+  "nodeVersion": "24.22.3",
+  "packageSha256": "0c3983d39fa1b1ee0eca4ad09a41e5c3ac2600abec0e4aeb9c35b31b2a5f18a6",
+  "sourceArchiveSha256": "07a8791452445c26e0217a56c24d2cd5d608b720bde4b16756ad58f33d5fa488",
+  "testSha256": "e10afac752ab37e09355b85fe309b65247b0d79a6ff4f5c9830dfa57bbfea44a",
+  "sourceArchiveFilesCompared": 6261,
+  "sourceChangedFiles": [
+    "test/integration-unified.cjs",
+    "release-manifests/unified/files.json"
+  ],
+  "installedPackageFilesCompared": 1068,
+  "installedMissingFiles": [],
+  "installedDifferentFiles": [
+    "release-manifests/unified/files.json"
+  ],
+  "productRuntimeUnchanged": true,
+  "testCommand": "TMPDIR=<isolated-temp> EOS_TEST_NETWORK_FIXTURE=loopback NODE_OPTIONS=--require=<source>/test/fixtures/loopback-network.cjs node node_modules/mocha/bin/mocha.js test/integration-unified.cjs --exit --grep 'survives a real state burst'",
+  "result": {
+    "exitCode": 1,
+    "passing": 0,
+    "failing": 1,
+    "durationSeconds": 30,
+    "expectedRed": true,
+    "failure": "Threshold activation must not trigger the reported unhandled rejection",
+    "observedStack": "@iobroker/socket-classes/build/lib/socketCommandsAdmin.js:777:46",
+    "observedException": "Cannot convert undefined or null to object"
+  },
+  "scope": [
+    "Real objects/state databases and installed adapter process",
+    "Actual production 200-event/second, three-consecutive-second threshold",
+    "No socket/browser client connected before the burst",
+    "Synthetic host heartbeat belongs to no configured device, adapter or real host",
+    "Only network interface enumeration uses the explicit loopback fixture; TCP/TLS and DB calls remain real"
+  ],
+  "limits": [
+    "Unlicensed integration instance (OS trust path ownership unsupported in this environment); licensing/EMS startup was not required to trigger the socket crash",
+    "No user hardware accessed",
+    "Source resealed only for this isolated test; original deliverables unchanged"
+  ]
+}

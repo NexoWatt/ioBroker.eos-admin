@@ -14,6 +14,12 @@ assert.equal(io.common.version, p.version);
 assert.equal(lock.version, p.version);
 assert.equal(lock.packages[''].version, p.version);
 assert.equal(require('../ui/package.json').version, p.version);
+assert.equal(require('../ui/package-lock.json').version, p.version);
+assert.equal(require('../ui/package-lock.json').packages[''].version, p.version);
+// EOS owns a narrow threshold lifecycle around this reviewed socket API.
+assert.equal(p.dependencies['@iobroker/socket-classes'], '2.10.0');
+assert.equal(lock.packages[''].dependencies['@iobroker/socket-classes'], '2.10.0');
+assert.equal(lock.packages['node_modules/@iobroker/socket-classes'].version, '2.10.0');
 const uiWebManifest = JSON.parse(fs.readFileSync(path.join(root, 'ui/www/manifest.webmanifest'), 'utf8'));
 assert.equal(uiWebManifest.version, p.version);
 assert.equal(uiWebManifest.appVersion, p.version);
@@ -31,7 +37,8 @@ assert.equal(p.publishConfig.tag, 'next');
 assert.match(p.version, /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/);
 assert.ok(!p.dependencies['iobroker.nexowatt-ui'], 'UI must be an internal module');
 for (const rel of [p.main, 'ui/main.js', 'adminWww/index.html', 'ui/www/login.html', 'ui/admin/react/index.html',
-    'build/lib/eosUnifiedBoundary.js', 'build/lib/eosLicenseService.js', 'release-manifests/unified/runtime.cdx.json']) {
+    'build/lib/eosUnifiedBoundary.js', 'build/lib/eosLicenseService.js',
+    'build/lib/eosSocketAdmin.js', 'build/lib/eosStateSubscriptions.js', 'release-manifests/unified/runtime.cdx.json']) {
     assert.ok(fs.statSync(path.join(root, rel)).isFile(), `MISSING_RUNTIME: ${rel}`);
 }
 assert.equal(require('./nexowatt-vendored-webserver.cjs').inspectVendoredWebserver(p, lock, root), null, 'VENDORED_SOURCE_PROVENANCE');

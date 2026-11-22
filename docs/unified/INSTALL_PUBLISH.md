@@ -1,8 +1,8 @@
 # Installation, Git und npm
 
-**NexoWatt EOS · `iobroker.eos-admin` · 9.0.3**
+**NexoWatt EOS · `iobroker.eos-admin` · 9.0.4**
 
-Version 9.0.3 bleibt zur Erprobung bestimmt und wird über `next` bereitgestellt.
+Version 9.0.4 bleibt zur Erprobung bestimmt und wird über `next` bereitgestellt.
 Der neue Abschlussbericht muss geprüfte Version und Artefakthash ausdrücklich nennen.
 Vorherige Alpha-Berichte bleiben historische Belege; ihre Erfolge werden nicht
 auf den geänderten Startablauf übertragen. Vor
@@ -65,7 +65,7 @@ oben bescheinigen keine vollständige System-/Hardwareabnahme.
 Vor dem Upload Paketinhalt, Version, Lizenz, Manifest und Prüfergebnisse kontrollieren.
 Im für `iobroker.eos-admin` berechtigten npm-Konto anmelden. Die Testversion mit einem
 expliziten Testtag veröffentlichen, damit sie nicht unbeabsichtigt zum Standard wird.
-`9.0.3` besitzt keinen SemVer-Prerelease-Suffix; die Testverteilung wird bewusst
+`9.0.4` besitzt keinen SemVer-Prerelease-Suffix; die Testverteilung wird bewusst
 über den npm-Tag `next` festgelegt:
 
 ```sh
@@ -96,11 +96,11 @@ gelten zusätzliche Regeln einschließlich kommerzieller Bedingungen (IO-01/IO-0
    Eine neue Installation benötigt keine erfundene Altinstanz. Das
    [Migrationswerkzeug](../../deploy/README.md) erstellt einen Offlineplan und
    verändert keine laufende Anlage automatisch.
-4. Das geprüfte 9.0.3-Paket über den vorgesehenen ioBroker-/EOS-Weg installieren und
+4. Das geprüfte 9.0.4-Paket über den vorgesehenen ioBroker-/EOS-Weg installieren und
    die Instanzkonfiguration prüfen. Die Defaults gelten für neue Instanzen; bei
    übernommenen Instanzen nicht voraussetzen, dass gespeicherte Werte bereits passen.
 
-| Einstellung | Direkter Zugang von 9.0.3 |
+| Einstellung | Direkter Zugang von 9.0.4 |
 | --- | --- |
 | `port` | `8188` |
 | `bind` | `0.0.0.0` – IPv4-Schnittstellen des Geräts |
@@ -138,7 +138,7 @@ gelten zusätzliche Regeln einschließlich kommerzieller Bedingungen (IO-01/IO-0
    prüfen. Der zentrale Logout meldet derzeit alle parallelen Nutzer einschließlich
    Socket/SSE ab; das ist noch kein Einzelsitzungslogout.
 
-## Update einer bestehenden EOS-Instanz auf 9.0.3
+## Update einer bestehenden EOS-Instanz auf 9.0.4
 
 Die bestehende Instanz `eos-admin.N`, ihre Konfiguration, System-UUID und gültige
 Lizenz beibehalten. Vorher das Instanzdatenverzeichnis einschließlich `licensing/`
@@ -146,17 +146,25 @@ mit `storage.key`, `license.enc`, importierten öffentlichen Schlüsseln sowie e
 vorhandenen OS-Truststore sichern. Ein normales Paketupdate verlangt weder eine
 neue NWL3-Ausstellung noch erneuten Prüfschlüsselimport.
 
+**EOS-SOCKET-001:** 9.0.3 konnte nach dem EMS-Start bei hoher Ereignislast mit
+`Cannot convert undefined or null to object` und Exitcode 6 abbrechen. 9.0.4
+korrigiert die Socket-Initialisierung und die Zuständigkeit für State-Abonnements.
+Nach dem Update nicht nur die erste Bereitschaftsmeldung prüfen: Anmeldung und
+Livewerte auch nach mindestens 70 Sekunden sowie nach einem regulären Neustart
+kontrollieren. Die Ereignisbegrenzung darf den gemeinsamen Adapter nicht beenden
+und keine benötigten EMS-Messwert-Abonnements entfernen.
+
 **EOS-WEBSTART-001:** In 9.0.2 konnte der vollständige operative Start vor der
 Listenerbindung auf einen History-Callback warten. Daher beim Update die
 tatsächliche HTTPS-Bereitschaft mit `EOS_HTTPS_READY` und den Aufruf von
 `https://<Geräte-IP>:8188/` prüfen; `LICENSE_VALID` oder ein Engine-Start allein
-reichen nicht. 9.0.3 entkoppelt
+reichen nicht. Die seit 9.0.3 enthaltene Korrektur entkoppelt
 die geschützte Weboberfläche vom operativen Start. Messwert-/Historyfehler bleiben
 gesondert zu prüfen; sie werden nicht durch Unterdrücken der Diagnose gelöst.
 
-Kurzer Ablauf: [START_HIER_9.0.3.md](../../START_HIER_9.0.3.md).
-Die Zielabnahmen zu **HISTORY-001** und **MULTIUSE-001** stehen im
-[Prüfplan](COMMISSIONING.md). Neue Ergebnisse gehören in den 9.0.3-Abschlussbericht.
+Kurzer Ablauf: [START_HIER_9.0.4.md](../../START_HIER_9.0.4.md).
+Die Zielabnahmen zu **EOS-SOCKET-001**, **HISTORY-001** und **MULTIUSE-001** stehen im
+[Prüfplan](COMMISSIONING.md). Neue Ergebnisse gehören in den 9.0.4-Abschlussbericht.
 
 `NexoWattEOS` wird nicht durch die Adapterinstallation als DNS-Name angelegt. Der
 lokale DNS-/Routereintrag oder ein bewusst verwalteter Hosts-Eintrag muss auf die
