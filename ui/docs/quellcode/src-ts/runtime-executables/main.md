@@ -455,457 +455,459 @@ Parameter sind die Namen aus der Signatur, keine geratenen Datenverträge. Die A
 | [`nwShcfgTdCollectConfiguredDpIds`](../../../../src-ts/runtime-executables/main.ts#L14016) | cfg | Array.isArray, devices.forEach |
 | [`visit`](../../../../src-ts/runtime-executables/main.ts#L14024) | value, keyName | Array.isArray, Object.entries, String, nwShcfgTdIsPlainObject, out.add, value.forEach, value.trim |
 | [`nwShcfgTdGetObjectsCache`](../../../../src-ts/runtime-executables/main.ts#L14049) | force | this._nwTypeDetectorObjectsCache.get |
-| [`nwShcfgTdCollectCandidateRoots`](../../../../src-ts/runtime-executables/main.ts#L14066) | objects | Object.keys, out.sort |
-| [`skip`](../../../../src-ts/runtime-executables/main.ts#L14075) | id | String, sid.startsWith |
-| [`nwShcfgTdBestSourceId`](../../../../src-ts/runtime-executables/main.ts#L14111) | objects, rootId, control | Array.isArray, String, nwShcfgTdParentId |
-| [`nwShcfgTdSuggestionScore`](../../../../src-ts/runtime-executables/main.ts#L14134) | item | Number |
-| [`nwShcfgTdMergeSuggestion`](../../../../src-ts/runtime-executables/main.ts#L14146) | current, next | Array.from, Array.isArray, nwShcfgTdSuggestionScore, other.configuredOverlap.forEach, other.notes.forEach |
-| [`nwShcfgTdBuildSuggestion`](../../../../src-ts/runtime-executables/main.ts#L14170) | { control, rootId, objects, configuredIds, config } | Array.from, Array.isArray, String, enrichSmartHomeImportSuggestion, extendSuggestion, notes.push, numberOr, nwShcfgTdBestSourceId, nwShcfgTdHash, nwShcfgTdNormName, pick, rawEntries.forEach, sourceId.split, stateMap.values (weitere in der Quelle) |
-| [`getMeta`](../../../../src-ts/runtime-executables/main.ts#L14198) | state | nwShcfgTdStateEntry |
-| [`pick`](../../../../src-ts/runtime-executables/main.ts#L14205) | names, predicate | getMeta, nwShcfgTdFindState |
-| [`numberOr`](../../../../src-ts/runtime-executables/main.ts#L14212) | value, fallback | Number, Number.isFinite |
-| [`pretty`](../../../../src-ts/runtime-executables/main.ts#L14598) | s | String |
-| [`isPlain`](../../../../src-ts/runtime-executables/main.ts#L14644) | o | this._nwIsPlainObject |
-| [`safeStr`](../../../../src-ts/runtime-executables/main.ts#L14651) | v, maxLen | String, s.slice |
-| [`makeNode`](../../../../src-ts/runtime-executables/main.ts#L14861) | – | Object.create |
-| [`pushItem`](../../../../src-ts/runtime-executables/main.ts#L14901) | it | results.push, seen.add, seen.has |
-| [`_nwDeepMerge`](../../../../src-ts/runtime-executables/main.ts#L15026) | target, patch | this.nwDeepMerge |
-| [`_nwNormalizeEmsApps`](../../../../src-ts/runtime-executables/main.ts#L15065) | nativeObj | this._nwApplyLicenseLimitsToEmsApps |
-| [`_nwApplyEmsAppsToLegacyFlags`](../../../../src-ts/runtime-executables/main.ts#L15134) | nativeObj | _nwNormalizeEmsApps, this._nwLicenseAllowsAppId |
-| [`_nwPickInstallerConfig`](../../../../src-ts/runtime-executables/main.ts#L15181) | nativeObj | _nwNormalizeEmsApps, currentDynamicGridConfig, currentNvpConfig, currentPartnerConfig, this._nwBuildLicenseFeatureInfo, this._nwDeepClone, this._nwLicenseAllowsAppId, this.nwNormalizeOperatingStrategies |
-| [`_nwPickPersistedInstallerConfig`](../../../../src-ts/runtime-executables/main.ts#L15271) | – | Object.assign, Object.keys, Object.prototype.hasOwnProperty.call, _nwNormalizeEmsApps, _nwPickInstallerConfig, clone, currentDynamicGridConfig, currentPartnerConfig, runtimeOnly.has |
-| [`clone`](../../../../src-ts/runtime-executables/main.ts#L15278) | value | JSON.parse, JSON.stringify, this._nwDeepClone |
-| [`_nwHydrateStorageFarmConfigFromRuntimeStates`](../../../../src-ts/runtime-executables/main.ts#L15310) | cfgOut | Array.from, Array.isArray, Math.max, Math.min, Math.round, Number, String, asList, fromStatusRows, parseJson, parsedGroups.filter, sf.storages.some, this._nwNormalizeStorageFarmRows, this.getStateAsync (weitere in der Quelle) |
-| [`parseJson`](../../../../src-ts/runtime-executables/main.ts#L15318) | raw, fallback | JSON.parse, String |
-| [`asList`](../../../../src-ts/runtime-executables/main.ts#L15324) | parsed | Array.isArray |
-| [`fromStatusRows`](../../../../src-ts/runtime-executables/main.ts#L15330) | rows | Array.isArray |
-| [`_nwProtectStorageFarmPatchFromEmptySubmit`](../../../../src-ts/runtime-executables/main.ts#L15408) | patchObj | Array.isArray, _nwHydrateStorageFarmConfigFromRuntimeStates, this.log.warn |
-| [`_nwRegressionSafetyListInfo`](../../../../src-ts/runtime-executables/main.ts#L15459) | obj, pathText | Array.isArray, String |
-| [`_nwRegressionSafetySetPath`](../../../../src-ts/runtime-executables/main.ts#L15469) | obj, pathText, value | Array.isArray, String, value.slice |
-| [`_nwBuildRegressionSafetyReport`](../../../../src-ts/runtime-executables/main.ts#L15480) | patchObj, baseObj | Date.now, _nwRegressionSafetyListInfo, checks.filter, checks.push |
-| [`_nwApplyInstallerRegressionSafetyGate`](../../../../src-ts/runtime-executables/main.ts#L15520) | patchObj, baseObj | _nwBuildRegressionSafetyReport, _nwRegressionSafetyListInfo, _nwRegressionSafetySetPath, this.log.warn |
-| [`_nwRestartEms`](../../../../src-ts/runtime-executables/main.ts#L15547) | – | this.initEmsEngine, this.log.warn |
-| [`_nwMaskTariffProviderForUi`](../../../../src-ts/runtime-executables/main.ts#L15559) | cfg | Object.keys, String, _nwTariffSecretKeys.has, this._nwDeepClone |
-| [`_nwMergeTariffProviderSecrets`](../../../../src-ts/runtime-executables/main.ts#L15569) | incoming, existing | this._nwDeepClone |
-| [`nwValidateStationTokenChanges`](../../../../src-ts/runtime-executables/main.ts#L15589) | patch | Array.isArray, String, existing.find, used.add, used.has |
-| [`identity`](../../../../src-ts/runtime-executables/main.ts#L15593) | row, index | String |
-| [`read`](../../../../src-ts/runtime-executables/main.ts#L16193) | relId, fallback | this.getForeignStateAsync |
-| [`compactHas`](../../../../src-ts/runtime-executables/main.ts#L16352) | id | – |
-| [`compactPick`](../../../../src-ts/runtime-executables/main.ts#L16353) | ids | ids.flat |
-| [`nativeId`](../../../../src-ts/runtime-executables/main.ts#L16357) | suffix | – |
-| [`deriveStationKey`](../../../../src-ts/runtime-executables/main.ts#L16474) | parts | String, clean.push, ignoreSeg.has, s.toLowerCase |
-| [`parseConnector`](../../../../src-ts/runtime-executables/main.ts#L16499) | id | Number, String, deriveStationKey, low.match, parts.slice, seg.toLowerCase, sid.split |
-| [`scoreState`](../../../../src-ts/runtime-executables/main.ts#L16587) | it, kind | String, id.toLowerCase, idLower.endsWith, idLower.includes, role.includes |
-| [`pickBestId`](../../../../src-ts/runtime-executables/main.ts#L16677) | states, kind | String, scoreState |
-| [`normName`](../../../../src-ts/runtime-executables/main.ts#L16875) | value | Object.values, first.trim, value.trim |
-| [`parseManifest`](../../../../src-ts/runtime-executables/main.ts#L16883) | baseId | JSON.parse, raw.trim |
-| [`fallbackDeviceClass`](../../../../src-ts/runtime-executables/main.ts#L16892) | category | String |
-| [`readAlias`](../../../../src-ts/runtime-executables/main.ts#L16956) | keys | keys.map |
-| [`writeAlias`](../../../../src-ts/runtime-executables/main.ts#L16957) | keys | – |
-| [`addId`](../../../../src-ts/runtime-executables/main.ts#L17192) | id | String |
-| [`getOwn`](../../../../src-ts/runtime-executables/main.ts#L17253) | id | this.getStateAsync |
-| [`mkCheck`](../../../../src-ts/runtime-executables/main.ts#L17354) | id | – |
-| [`toSafeIdPart`](../../../../src-ts/runtime-executables/main.ts#L17379) | x | String |
-| [`readNum`](../../../../src-ts/runtime-executables/main.ts#L17416) | id | Number, Number.isFinite, this.getStateAsync |
-| [`readBool`](../../../../src-ts/runtime-executables/main.ts#L17431) | id | this.getStateAsync |
-| [`readStr`](../../../../src-ts/runtime-executables/main.ts#L17445) | id | String, this.getStateAsync |
-| [`makeNode`](../../../../src-ts/runtime-executables/main.ts#L17800) | – | Object.create |
-| [`resolveRoomName`](../../../../src-ts/runtime-executables/main.ts#L17921) | roomId | rooms.find |
-| [`resolveFunctionName`](../../../../src-ts/runtime-executables/main.ts#L17932) | fnId | funcs.find |
-| [`addSceneBlock`](../../../../src-ts/runtime-executables/main.ts#L17978) | dpId, id, alias | blocks.push |
-| [`queryNumber`](../../../../src-ts/runtime-executables/main.ts#L18132) | name, fallback | Number, value.trim |
-| [`historyRequest`](../../../../src-ts/runtime-executables/main.ts#L18191) | dispatch, normalize | – |
-| [`failure`](../../../../src-ts/runtime-executables/main.ts#L18192) | code | Object.assign |
-| [`finish`](../../../../src-ts/runtime-executables/main.ts#L18198) | error, value | clearTimeout, reject, requestCancels.delete, resolve, this._nwPendingHistoryRequests?.delete |
-| [`cancel`](../../../../src-ts/runtime-executables/main.ts#L18207) | – | failure, finish |
-| [`reply`](../../../../src-ts/runtime-executables/main.ts#L18213) | value | cancel, failure, finish, normalize, performance.now |
-| [`densifyHoldLast`](../../../../src-ts/runtime-executables/main.ts#L18247) | values, rangeStart, rangeEnd, rangeStepMs | Array.isArray, Math.floor, Math.max, Math.round, Number, Number.isFinite, byIdx.get, byIdx.has, byIdx.set, normTsMs, out.push |
-| [`normTsMs`](../../../../src-ts/runtime-executables/main.ts#L18349) | ts | Date.parse, Math.round, Number, Number.isFinite, Number.isNaN, ts.getTime, ts.trim |
-| [`ask`](../../../../src-ts/runtime-executables/main.ts#L18384) | id, query | Math.max, Number, Number.isFinite, Promise.resolve, String, historyRequest, requestSeriesCache.get, requestSeriesCache.has, requestSeriesCache.set, this._nwTrimId |
-| [`askCandidates`](../../../../src-ts/runtime-executables/main.ts#L18411) | candidates, query | Array.isArray, ask, this._nwTrimId |
-| [`_normalizeHistoryPairs`](../../../../src-ts/runtime-executables/main.ts#L18455) | values | Array.isArray, Number, Number.isFinite, normTsMs, out.push, out.sort |
-| [`_valueAtHold`](../../../../src-ts/runtime-executables/main.ts#L18474) | pairs, ts | Array.isArray, Math.floor |
-| [`_buildNormalizedPricingSeries`](../../../../src-ts/runtime-executables/main.ts#L18495) | { startTs, endTs, grossSeries, baseSeries, totalSeries, netFeeSeries, manualGrossPrice, dynamicTariffActive } | Array.from, Math.max, Number.isFinite, _normalizeHistoryPairs, _valueAtHold, baseOut.push, totalOut.push |
-| [`evcsHasData`](../../../../src-ts/runtime-executables/main.ts#L18570) | s | Array.isArray |
-| [`readCounterPoint`](../../../../src-ts/runtime-executables/main.ts#L18640) | id, newest | Promise.resolve, historyRequest |
-| [`readCurrentCounterPoint`](../../../../src-ts/runtime-executables/main.ts#L18660) | id | historyRequest |
-| [`counterDelta`](../../../../src-ts/runtime-executables/main.ts#L18674) | id | Date.now, Math.abs, Number, Number.isFinite, readCounterPoint, readCurrentCounterPoint |
-| [`integrateSeriesKwh`](../../../../src-ts/runtime-executables/main.ts#L18732) | series, defaultEndMs, stepMsForSeries, positiveOnly | Array.isArray, Date.now, Math.abs, Math.max, Math.min, Number, Number.isFinite |
-| [`clipSeriesForIntegration`](../../../../src-ts/runtime-executables/main.ts#L18764) | series, clipEndMs | Array.isArray, Number, Number.isFinite, out.push |
-| [`buildEnergyExact`](../../../../src-ts/runtime-executables/main.ts#L18791) | – | Array.from, Array.isArray, Math.max, Math.min, Number, Number.isFinite, Promise.all, balanceComponents.every, clipSeriesForIntegration, ids.map, integrateSeriesKwh, requestSeriesCache.delete, sumByTs.entries, sumByTs.get (weitere in der Quelle) |
-| [`parseTs`](../../../../src-ts/runtime-executables/main.ts#L18887) | raw, { endOfDay = false } | Date.parse, Number, Number.isFinite, Number.isNaN, String, dt.getTime, dt.setHours, s.split |
-| [`alignDown`](../../../../src-ts/runtime-executables/main.ts#L18912) | ts | Math.floor, Number |
-| [`alignUp`](../../../../src-ts/runtime-executables/main.ts#L18919) | ts | Math.ceil, Number |
-| [`densifyHoldLast`](../../../../src-ts/runtime-executables/main.ts#L18938) | series | Array.isArray, Math.ceil, Math.max, Math.round, Number, Number.isFinite, byIdx.get, byIdx.has, byIdx.set, out.push, this._nwNormTsMs |
-| [`seriesFor`](../../../../src-ts/runtime-executables/main.ts#L18980) | name | Math.max, densifyHoldLast, this._nwGetHistoryAvgSeriesAny, this._nwGetHistoryDpCandidates |
-| [`seriesForIds`](../../../../src-ts/runtime-executables/main.ts#L18987) | ids | Math.max, densifyHoldLast, this._nwGetHistoryAvgSeriesAny |
-| [`parseTs`](../../../../src-ts/runtime-executables/main.ts#L19090) | raw, { endOfDay = false } | Date.parse, Number, Number.isFinite, Number.isNaN, String, dt.getTime, dt.setHours, s.split |
-| [`getRawHistory`](../../../../src-ts/runtime-executables/main.ts#L19122) | id | – |
-| [`nwBuildEvcsReport`](../../../../src-ts/runtime-executables/main.ts#L19251) | query | Array.isArray, Date.now, Math.abs, Math.max, Math.min, Math.round, Number, Number.isFinite, Object.keys, buckets.forEach, buckets.map, buckets.push, chooseStepMs, d.getDate (weitere in der Quelle) |
-| [`parseTs`](../../../../src-ts/runtime-executables/main.ts#L19261) | raw, { endOfDay = false } | Date.parse, Number, Number.isFinite, Number.isNaN, String, dt.getTime, dt.setHours, s.split |
-| [`dayKeyOf`](../../../../src-ts/runtime-executables/main.ts#L19311) | ts | String, d.getDate, d.getFullYear, d.getMonth |
-| [`calcCount`](../../../../src-ts/runtime-executables/main.ts#L19335) | startMs, endMs, stepMs | Math.ceil, Math.max, Math.min, Number, Number.isFinite |
-| [`chooseStepMs`](../../../../src-ts/runtime-executables/main.ts#L19350) | spanMs, baseStepMs | Math.ceil, Math.max, Number |
-| [`normTsMs`](../../../../src-ts/runtime-executables/main.ts#L19366) | ts | Number, Number.isFinite, parseTs |
-| [`getHist`](../../../../src-ts/runtime-executables/main.ts#L19380) | id, startMs, endMs, aggregate, step | – |
-| [`nwWbLabel`](../../../../src-ts/runtime-executables/main.ts#L19601) | wb | String |
-| [`nwCsvEscape`](../../../../src-ts/runtime-executables/main.ts#L19612) | v | String, s.replace |
-| [`nwFormatDe`](../../../../src-ts/runtime-executables/main.ts#L19628) | num, digits | Number, Number.isFinite, n.toFixed |
-| [`nwEvcsReportToCsv`](../../../../src-ts/runtime-executables/main.ts#L19646) | report | Array.isArray, Math.max, Number, Number.isFinite, String, header.map, header.push, lines.join, lines.push, nwFormatDe, nwWbLabel, row.map, row.push, totalRow.map (weitere in der Quelle) |
-| [`nwPad2`](../../../../src-ts/runtime-executables/main.ts#L19731) | n | Number, String |
-| [`nwDayKey`](../../../../src-ts/runtime-executables/main.ts#L19738) | tsMs | Number, d.getDate, d.getFullYear, d.getMonth, nwPad2 |
-| [`nwTimeHhMm`](../../../../src-ts/runtime-executables/main.ts#L19748) | tsMs | Number, d.getHours, d.getMinutes, nwPad2 |
-| [`nwParseTsLoose`](../../../../src-ts/runtime-executables/main.ts#L19758) | raw, { endOfDay = false } | Date.parse, Number, Number.isFinite, Number.isNaN, String, dt.getTime, dt.setHours, s.split |
-| [`nwEvcsSessionsToCsv`](../../../../src-ts/runtime-executables/main.ts#L19792) | sessions | Math.round, Number, Number.isFinite, String, header.map, lines.join, lines.push, nwDayKey, nwFormatDe, nwTimeHhMm, row.map |
-| [`nwNormalizeRfid`](../../../../src-ts/runtime-executables/main.ts#L19926) | ctx, raw | String, ctx.normalizeRfidCode, s.trim |
-| [`nwLoadEvcsSessions`](../../../../src-ts/runtime-executables/main.ts#L19942) | ctx | Array.isArray, JSON.parse, ctx._evcsSessionsBuf.slice, ctx.getStateAsync, st.val.trim |
-| [`nwGetRfidNameFromWhitelist`](../../../../src-ts/runtime-executables/main.ts#L19965) | ctx, rfidNorm | Array.isArray, JSON.parse, String, ctx.getStateAsync, nwNormalizeRfid, st.val.trim |
-| [`nwStartOfLocalDay`](../../../../src-ts/runtime-executables/main.ts#L19994) | ms | Number, d.getTime, d.setHours |
-| [`nwEndOfLocalDay`](../../../../src-ts/runtime-executables/main.ts#L20005) | ms | Number, d.getTime, d.setHours |
-| [`nwBuildRfidDailyReport`](../../../../src-ts/runtime-executables/main.ts#L20016) | ctx, query | Array.isArray, Date.now, Math.max, Math.round, Number, Number.isFinite, d.getDate, d.getTime, d.setDate, days.push, nwDayKey, nwEndOfLocalDay, nwGetRfidNameFromWhitelist, nwLoadEvcsSessions (weitere in der Quelle) |
-| [`nwRfidReportToCsv`](../../../../src-ts/runtime-executables/main.ts#L20110) | report | Array.isArray, Math.max, Math.round, Number, Number.isFinite, String, header.map, lines.join, lines.push, nwFormatDe, row.map, totalRow.map |
-| [`_nwDisplaySafeId`](../../../../src-ts/runtime-executables/main.ts#L20184) | input | String |
-| [`_nwDisplayNormalizeLpKey`](../../../../src-ts/runtime-executables/main.ts#L20185) | input | Math.max, Math.round, Number, String, _nwDisplaySafeId, s.match |
-| [`_nwDisplayNormalizeModes`](../../../../src-ts/runtime-executables/main.ts#L20191) | raw | Array.isArray, String, out.includes, out.push |
-| [`_nwDisplayClamp`](../../../../src-ts/runtime-executables/main.ts#L20204) | value, min, max, fallback | Math.max, Math.min, Number, Number.isFinite |
-| [`_nwDisplayLayoutMode`](../../../../src-ts/runtime-executables/main.ts#L20209) | raw, connectorCount | Math.max, Math.round, Number, String |
-| [`_nwActiveEvcsControlRows`](../../../../src-ts/runtime-executables/main.ts#L20217) | – | Array.isArray |
-| [`_nwDisplayGlobalStorageAssistControlEnabled`](../../../../src-ts/runtime-executables/main.ts#L20226) | – | _nwActiveEvcsControlRows |
-| [`_nwDisplayStationConfig`](../../../../src-ts/runtime-executables/main.ts#L20232) | – | Array.isArray, Math.max, Math.round, Number, String, _nwDisplayNormalizeLpKey, ports.sort, portsByStation.get, portsByStation.has, portsByStation.set, portsByStation.values, rows.map |
-| [`_nwDisplayFindStation`](../../../../src-ts/runtime-executables/main.ts#L20307) | token | String, _nwDisplayStationConfig |
-| [`_nwDisplayIsLicensed`](../../../../src-ts/runtime-executables/main.ts#L20312) | – | this._nwLicenseAllowsAppId |
-| [`_nwDisplayStateVal`](../../../../src-ts/runtime-executables/main.ts#L20315) | id, fallback | Object.prototype.hasOwnProperty.call |
-| [`_nwDisplayStationStateVal`](../../../../src-ts/runtime-executables/main.ts#L20322) | stationId, suffix, fallback | Object.prototype.hasOwnProperty.call, _nwDisplaySafeId |
-| [`_nwDisplayNum`](../../../../src-ts/runtime-executables/main.ts#L20330) | v, fallback | Number, Number.isFinite |
-| [`_nwDisplayFindWallbox`](../../../../src-ts/runtime-executables/main.ts#L20334) | lpKey | Array.isArray, Math.max, Math.round, Number, String, _nwDisplayNormalizeLpKey, list.find |
-| [`_nwDisplayBool`](../../../../src-ts/runtime-executables/main.ts#L20344) | v, fallback | String |
-| [`_nwDisplayRound`](../../../../src-ts/runtime-executables/main.ts#L20352) | value, digits | Math.max, Math.min, Math.pow, Math.round, Number, Number.isFinite |
-| [`_nwDisplayParseJson`](../../../../src-ts/runtime-executables/main.ts#L20358) | raw, fallback | JSON.parse, String |
-| [`_nwDisplayNormalizeControlProfile`](../../../../src-ts/runtime-executables/main.ts#L20368) | raw | String |
-| [`_nwDisplayResolveCommandStateId`](../../../../src-ts/runtime-executables/main.ts#L20378) | station, lp | String |
-| [`_nwDisplayReadStationRuntime`](../../../../src-ts/runtime-executables/main.ts#L20387) | station, now | Array.isArray, Date.now, Math.max, Math.round, _nwDisplayClamp, _nwDisplayNum, _nwDisplayStationStateVal |
-| [`_nwDisplayActiveSession`](../../../../src-ts/runtime-executables/main.ts#L20414) | idx | Date.now, Math.max, Math.round, Number, Number.isFinite, String |
-| [`_nwDisplaySessionId`](../../../../src-ts/runtime-executables/main.ts#L20444) | stationId, lpKey, session | Number, String, _nwDisplayNormalizeLpKey, _nwDisplaySafeId |
-| [`_nwDisplayLastCompletedSession`](../../../../src-ts/runtime-executables/main.ts#L20450) | idx | Array.isArray, Math.max, Math.round, Number, String |
-| [`_nwDisplayNormalizeSessionRecord`](../../../../src-ts/runtime-executables/main.ts#L20481) | station, lpKey, row, fallbackPrice | Math.max, Math.min, Math.round, Number, Number.isFinite, String, _nwDisplayNormalizeLpKey, _nwDisplayNum, _nwDisplayRound |
-| [`_nwDisplayNewestSession`](../../../../src-ts/runtime-executables/main.ts#L20520) | buffered, persisted | Number |
-| [`_nwDisplaySessionCostBreakdown`](../../../../src-ts/runtime-executables/main.ts#L20533) | energyKwh, solarSharePct, solarPrice, gridPrice, fallbackPrice, showSolarShare | Math.max, Math.min, Math.round, Number, _nwDisplayNum, _nwDisplayRound |
-| [`_nwDisplayStartOfLocalDay`](../../../../src-ts/runtime-executables/main.ts#L20550) | ms | Date.now, Number, d.getTime, d.setHours |
-| [`_nwDisplayLocalDayKey`](../../../../src-ts/runtime-executables/main.ts#L20556) | ms | Date.now, Number, String, d.getDate, d.getFullYear, d.getMonth |
-| [`_nwDisplayReadStationJsonState`](../../../../src-ts/runtime-executables/main.ts#L20564) | stationId, suffix, fallback | JSON.parse, _nwDisplayStationStateVal |
-| [`_nwDisplayCsvEscape`](../../../../src-ts/runtime-executables/main.ts#L20575) | value | String, s.replace |
-| [`_nwDisplayStationOperatorCsv`](../../../../src-ts/runtime-executables/main.ts#L20580) | payload | Array.isArray, Date.now, Math.round, Number, String, _nwDisplayNormalizeSessionRecord, lines.join, lines.push |
-| [`_nwDisplayBuildOperatorSummary`](../../../../src-ts/runtime-executables/main.ts#L20642) | station, connectors, now | Array.isArray, Date.now, Math.max, Math.round, Number, Object.entries, Object.fromEntries, Object.keys, String, _nwDisplayLocalDayKey, _nwDisplayNormalizeLpKey, _nwDisplayNormalizeSessionRecord, _nwDisplayNum, _nwDisplayReadStationJsonState (weitere in der Quelle) |
-| [`_nwDisplayWriteStationState`](../../../../src-ts/runtime-executables/main.ts#L20746) | stationId, suffix, value, ack | Date.now, _nwDisplaySafeId, this.setStateAsync, this.updateValue |
-| [`_nwDisplayBuildPayload`](../../../../src-ts/runtime-executables/main.ts#L20753) | station | Array.isArray, Date.now, Math.max, Math.round, Number, Number.isFinite, String, _nwDisplayBool, _nwDisplayBuildOperatorSummary, _nwDisplayClamp, _nwDisplayGlobalStorageAssistControlEnabled, _nwDisplayLayoutMode, _nwDisplayNormalizeControlProfile, _nwDisplayNormalizeLpKey (weitere in der Quelle) |
-| [`_nwDisplaySetWallboxControl`](../../../../src-ts/runtime-executables/main.ts#L21072) | lpKey, prop, value | Date.now, String, _nwDisplayNormalizeLpKey, this.setStateAsync, this.updateValue |
-| [`_nwDisplaySetWallboxMode`](../../../../src-ts/runtime-executables/main.ts#L21086) | lpKey, mode, enabled | Date.now, Math.max, Math.round, Number, String, _nwDisplayNormalizeLpKey, this.setStateAsync, this.updateValue |
-| [`_nwDisplayBuildCommandIntent`](../../../../src-ts/runtime-executables/main.ts#L21107) | station, lpKey, action, mode, userMode | Date.now, String, _nwDisplayNormalizeLpKey |
-| [`_nwDisplayWriteCommandState`](../../../../src-ts/runtime-executables/main.ts#L21122) | station, lpKey, intent | Date.now, JSON.stringify, _nwDisplayBool, _nwDisplayResolveCommandStateId, isActuatorAuthorityBlockedResult, this.setForeignStateAsync, this.setStateAsync, this.updateValue |
-| [`_nwDisplayPersistSessionOperatorStates`](../../../../src-ts/runtime-executables/main.ts#L21144) | station, payload | Date.now, JSON.stringify, Number, Object.keys, String, _nwDisplayLocalDayKey, _nwDisplayReadStationJsonState, _nwDisplayStationStateVal, _nwDisplayWriteStationState, connectors.filter, connectors.slice, encodeURIComponent |
-| [`_nwDisplayExecuteStationCommand`](../../../../src-ts/runtime-executables/main.ts#L21233) | station, lpKey, action, mode, extra | JSON.stringify, Object.prototype.hasOwnProperty.call, String, _nwDisplayBool, _nwDisplayBuildCommandIntent, _nwDisplayClamp, _nwDisplayFindWallbox, _nwDisplayGlobalStorageAssistControlEnabled, _nwDisplayNormalizeControlProfile, _nwDisplayNormalizeLpKey, _nwDisplayResolveCommandStateId, _nwDisplaySetWallboxControl, _nwDisplaySetWallboxMode, _nwDisplayStateVal (weitere in der Quelle) |
-| [`_nwEnergyLedgerIsLicensed`](../../../../src-ts/runtime-executables/main.ts#L21398) | – | this._nwLicenseAllowsAppId |
-| [`_nwEnergyOriginAppEnabled`](../../../../src-ts/runtime-executables/main.ts#L21406) | – | _nwEnergyLedgerIsLicensed |
-| [`_nwEnergyLedgerJson`](../../../../src-ts/runtime-executables/main.ts#L21422) | id, fallback | JSON.parse, String, _nwDisplayStateVal |
-| [`_nwEnergyLedgerPeriod`](../../../../src-ts/runtime-executables/main.ts#L21433) | input | String |
-| [`_nwEnergyLedgerFilterEntries`](../../../../src-ts/runtime-executables/main.ts#L21437) | entries, period, summary | Array.isArray, _nwEnergyLedgerPeriod, list.filter, list.slice |
-| [`_nwEnergyLedgerSourceLabel`](../../../../src-ts/runtime-executables/main.ts#L21449) | entry | Array.isArray, String, labels.join, parts.filter |
-| [`_nwEnergyLedgerBuildPayload`](../../../../src-ts/runtime-executables/main.ts#L21461) | period | Array.isArray, Date.now, _nwEnergyLedgerFilterEntries, _nwEnergyLedgerJson, _nwEnergyLedgerPeriod |
-| [`_nwEnergyLedgerCsv`](../../../../src-ts/runtime-executables/main.ts#L21490) | payload | Array.isArray, Date.now, Math.round, Number, String, _nwEnergyLedgerSourceLabel, rows.join, rows.push |
-| [`_nwNetOperatorLicensed`](../../../../src-ts/runtime-executables/main.ts#L21564) | – | this._nwLicenseAllowsAppId |
-| [`_nwNetOperatorEnabled`](../../../../src-ts/runtime-executables/main.ts#L21567) | – | _nwNetOperatorLicensed |
-| [`_nwNetOperatorActivation`](../../../../src-ts/runtime-executables/main.ts#L21574) | – | String, _nwNetOperatorLicensed |
-| [`_nwMeshMicrogridIsLicensed`](../../../../src-ts/runtime-executables/main.ts#L21692) | – | this._nwLicenseAllowsAppId |
-| [`_nwMeshMicrogridCfg`](../../../../src-ts/runtime-executables/main.ts#L21696) | – | – |
-| [`_nwMeshSafeId`](../../../../src-ts/runtime-executables/main.ts#L21700) | value, fallback | String |
-| [`_nwMeshReceiverCfg`](../../../../src-ts/runtime-executables/main.ts#L21701) | – | Array.isArray, Math.max, Math.min, Math.round, Number, String, _nwMeshMicrogridCfg, allowedPeerText.split, r.allowedPeerNodeIds.join |
-| [`_nwMeshTailscaleCfg`](../../../../src-ts/runtime-executables/main.ts#L21717) | – | Array.isArray, Math.max, Math.min, Math.round, Number, String, _nwMeshMicrogridCfg, _nwMeshSafeId, peerUrlText.split, t.peerUrls.join |
-| [`_nwMeshPeerTokenFromReq`](../../../../src-ts/runtime-executables/main.ts#L21731) | req | String |
-| [`_nwMeshPeerTokenOk`](../../../../src-ts/runtime-executables/main.ts#L21732) | req | Buffer.from, String, _nwMeshPeerTokenFromReq, _nwMeshReceiverCfg, crypto.timingSafeEqual |
-| [`_nwMeshWriteState`](../../../../src-ts/runtime-executables/main.ts#L21744) | id, value, ack | this.setStateAsync |
-| [`_nwMeshStateJson`](../../../../src-ts/runtime-executables/main.ts#L21747) | id, fallback | _nwEnergyLedgerJson |
-| [`_nwMeshNow`](../../../../src-ts/runtime-executables/main.ts#L21748) | – | Date.now |
-| [`_nwMeshCommandIds`](../../../../src-ts/runtime-executables/main.ts#L21749) | body | Array.isArray, list.map |
-| [`_nwMeshPeerErrorClass`](../../../../src-ts/runtime-executables/main.ts#L21761) | peer | Array.isArray, p.errors.map, text.includes |
-| [`_nwMeshRoundtripStatus`](../../../../src-ts/runtime-executables/main.ts#L21777) | ms | Number, Number.isFinite |
-| [`_nwMeshRemoteNodeMatrix`](../../../../src-ts/runtime-executables/main.ts#L21784) | peers | Array.isArray, Number, _nwMeshPeerErrorClass, _nwMeshRoundtripStatus, rows.push |
-| [`_nwMeshBuildHandshakePayload`](../../../../src-ts/runtime-executables/main.ts#L21811) | – | Date.now, _nwMeshMicrogridBuildPayload, _nwMeshMicrogridCfg, _nwMeshReceiverCfg, _nwMeshSafeId |
-| [`_nwMeshMicrogridBuildPayload`](../../../../src-ts/runtime-executables/main.ts#L21840) | – | Array.isArray, Date.now, Number, String, _nwDisplayStateVal, _nwEnergyLedgerJson |
-| [`_nwMeshMicrogridCsv`](../../../../src-ts/runtime-executables/main.ts#L21988) | payload | Array.isArray, Date.now, JSON.stringify, Math.round, Number, String, rows.join, rows.push |
-| [`_nwMeshClassifyPeerError`](../../../../src-ts/runtime-executables/main.ts#L22167) | parts | Array.isArray, text.includes, text.trim |
-| [`_nwMeshRoundtripLevel`](../../../../src-ts/runtime-executables/main.ts#L22178) | ms, ok | Number, Number.isFinite |
-| [`reject`](../../../../src-ts/runtime-executables/main.ts#L22196) | status, error, message, extra | JSON.stringify, Number, _nwDisplayStateVal, _nwMeshSafeId, _nwMeshWriteState, res.status |
-| [`boolOr`](../../../../src-ts/runtime-executables/main.ts#L22614) | val, def | – |
-| [`parseJsonArraySafe`](../../../../src-ts/runtime-executables/main.ts#L22641) | raw | Array.isArray, JSON.parse, String |
-| [`storageFarmRowHasRealDatapoint`](../../../../src-ts/runtime-executables/main.ts#L22656) | row | this._nwStorageFarmRowHasRealDatapoint |
-| [`inferChargingEnabled`](../../../../src-ts/runtime-executables/main.ts#L22822) | – | – |
-| [`getArr`](../../../../src-ts/runtime-executables/main.ts#L22890) | k | Array.isArray |
-| [`defName`](../../../../src-ts/runtime-executables/main.ts#L22897) | kind, idx | – |
-| [`pickName`](../../../../src-ts/runtime-executables/main.ts#L22907) | arr, idx, kind | String, defName |
-| [`pickIcon`](../../../../src-ts/runtime-executables/main.ts#L22918) | arr, idx | String |
-| [`pickQuick`](../../../../src-ts/runtime-executables/main.ts#L22929) | arr, idx, kind | Array.isArray, Math.max, Math.round, Number, String, hlist.find, normalizeConsumerType, numOrNull, tlist.find |
-| [`resolveHeatingRodDev`](../../../../src-ts/runtime-executables/main.ts#L22944) | – | Array.isArray, Math.round, Number, hlist.find |
-| [`normalizeConsumerType`](../../../../src-ts/runtime-executables/main.ts#L22978) | raw | String |
-| [`numOrNull`](../../../../src-ts/runtime-executables/main.ts#L22996) | v | Number, Number.isFinite |
-| [`buildSlots`](../../../../src-ts/runtime-executables/main.ts#L23087) | kind | String, getArr, out.push, pickIcon, pickName, pickQuick, this._nwGetFlowSlotInfo |
-| [`nwPsAtCsvEscape`](../../../../src-ts/runtime-executables/main.ts#L23382) | v | String, s.replace |
-| [`nwPsAtFmtNum`](../../../../src-ts/runtime-executables/main.ts#L23392) | v, digits | Math.max, Math.min, Math.round, Number, Number.isFinite, n.toFixed |
-| [`nwPsAtPad2`](../../../../src-ts/runtime-executables/main.ts#L23404) | n | Number, String |
-| [`nwPsAtIsoLocal`](../../../../src-ts/runtime-executables/main.ts#L23411) | ts | Date.now, Number, d.getDate, d.getFullYear, d.getHours, d.getMinutes, d.getMonth, d.getSeconds, nwPsAtPad2 |
-| [`nwPsAtYmd`](../../../../src-ts/runtime-executables/main.ts#L23421) | ts | Date.now, Number, d.getDate, d.getFullYear, d.getMonth, nwPsAtPad2 |
-| [`nwPsAtParseTs`](../../../../src-ts/runtime-executables/main.ts#L23431) | raw, { endOfDay = false } | Date.parse, Number, Number.isFinite, Number.isNaN, String, dt.getTime, dt.setHours, s.split |
-| [`nwPsAtStateVal`](../../../../src-ts/runtime-executables/main.ts#L23456) | localId, fallback | this.getStateAsync |
-| [`nwPsAtStateNum`](../../../../src-ts/runtime-executables/main.ts#L23473) | localId, fallback | Number, Number.isFinite, nwPsAtStateVal |
-| [`nwPsAtStateBool`](../../../../src-ts/runtime-executables/main.ts#L23484) | localId, fallback | String, nwPsAtStateVal |
-| [`nwPsAtStateStr`](../../../../src-ts/runtime-executables/main.ts#L23499) | localId, fallback | String, nwPsAtStateVal |
-| [`nwPsAtSafeFile`](../../../../src-ts/runtime-executables/main.ts#L23510) | s | String |
-| [`nwPsAtBuildReport`](../../../../src-ts/runtime-executables/main.ts#L23521) | query | Array.from, Array.isArray, Date.now, Math.max, Math.min, Math.round, Number, Number.isFinite, Promise.all, nwPsAtParseTs, nwPsAtStateBool, nwPsAtStateNum, nwPsAtStateStr, seriesDefs.map (weitere in der Quelle) |
-| [`nwPsAtReportToCsv`](../../../../src-ts/runtime-executables/main.ts#L23675) | report | Number, header.map, lines.join, lines.push, nwPsAtFmtNum, nwPsAtIsoLocal, pushMeta |
-| [`pushMeta`](../../../../src-ts/runtime-executables/main.ts#L23683) | k, v | String, lines.push |
-| [`nwPsAtPdfAscii`](../../../../src-ts/runtime-executables/main.ts#L23742) | value | String |
-| [`nwPsAtPdfEscape`](../../../../src-ts/runtime-executables/main.ts#L23754) | value | nwPsAtPdfAscii |
-| [`nwPsAtWrap`](../../../../src-ts/runtime-executables/main.ts#L23761) | line, max | nwPsAtPdfAscii, out.push, s.split |
-| [`nwPsAtBuildPdf`](../../../../src-ts/runtime-executables/main.ts#L23784) | title, lines | Buffer.byteLength, Buffer.from, Math.max, Object.keys, String, addObj, chunks.forEach, chunks.push, nwPsAtWrap, pageIds.map, wrapped.push, wrapped.slice |
-| [`addObj`](../../../../src-ts/runtime-executables/main.ts#L23811) | id, body | – |
-| [`nwPsAtReportToPdf`](../../../../src-ts/runtime-executables/main.ts#L23855) | report | Array.isArray, cfg.highLoadWindows.slice, lines.push, nwPsAtBuildPdf, nwPsAtFmtNum, nwPsAtIsoLocal, windows.forEach |
-| [`valueOf`](../../../../src-ts/runtime-executables/main.ts#L23956) | key, fallback | Object.prototype.hasOwnProperty.call |
-| [`writeRelayValue`](../../../../src-ts/runtime-executables/main.ts#L24686) | rawValue, valueKind | withActuatorShadowContext |
-| [`normalizeConsumerType`](../../../../src-ts/runtime-executables/main.ts#L24870) | raw | String |
-| [`resolveThermalDev`](../../../../src-ts/runtime-executables/main.ts#L24885) | – | Array.isArray, Math.round, Number, tlist.find |
-| [`resolveHeatingRodDev`](../../../../src-ts/runtime-executables/main.ts#L24902) | – | Array.isArray, Math.round, Number, hlist.find |
-| [`syncHeatingRodUserState`](../../../../src-ts/runtime-executables/main.ts#L24919) | localId, val | Date.now, emsDp.handleStateChange, this.updateValue |
-| [`normalizeHeatingRodQuickMode`](../../../../src-ts/runtime-executables/main.ts#L24935) | raw | String |
-| [`getHeatingRodStoredUserMode`](../../../../src-ts/runtime-executables/main.ts#L24951) | – | normalizeHeatingRodQuickMode, this.getStateAsync |
-| [`heatingRodManualStageForMode`](../../../../src-ts/runtime-executables/main.ts#L24965) | dev, rawMode | Array.isArray, Math.ceil, Math.max, Math.min, Math.round, Number, normalizeHeatingRodQuickMode |
-| [`writeHeatingRodStagesOnce`](../../../../src-ts/runtime-executables/main.ts#L24982) | dev, rawTargetStage | Array.isArray, Date.now, Math.max, Math.min, Math.round, Number, String, addWrite, blocked.push, emsDp.handleStateChange, emsDp.lastWriteByObjectId.set, grouped.entries, isActuatorAuthorityBlockedResult, this.setForeignStateAsync (weitere in der Quelle) |
-| [`addWrite`](../../../../src-ts/runtime-executables/main.ts#L24997) | stageIndex, rawId, physicalOn | String, emsDp.getEntry, grouped.get, grouped.set |
-| [`clearBoost`](../../../../src-ts/runtime-executables/main.ts#L25116) | – | this.setStateAsync |
-| [`clearOverrides`](../../../../src-ts/runtime-executables/main.ts#L25198) | – | this.setStateAsync |
-| [`finiteLimit`](../../../../src-ts/runtime-executables/main.ts#L25268) | raw | Number, Number.isFinite |
-| [`normalizeConsumerType`](../../../../src-ts/runtime-executables/main.ts#L25436) | raw | String |
-| [`resolveThermalDev`](../../../../src-ts/runtime-executables/main.ts#L25451) | – | Array.isArray, Math.round, Number, tlist.find |
-| [`resolveHeatingRodDev`](../../../../src-ts/runtime-executables/main.ts#L25471) | – | Array.isArray, Math.round, Number, hlist.find |
-| [`normalizeHeatingRodAutoModeLocal`](../../../../src-ts/runtime-executables/main.ts#L25534) | raw | String |
-| [`normMode`](../../../../src-ts/runtime-executables/main.ts#L25564) | m | String |
-| [`readNumState`](../../../../src-ts/runtime-executables/main.ts#L25582) | id, fallback | Number, Number.isFinite, this.getStateAsync |
-| [`normMode`](../../../../src-ts/runtime-executables/main.ts#L25730) | m | String |
-| [`authorize`](../../../../src-ts/runtime-executables/main.ts#L26069) | – | hasCapability, resolveStrictAccess |
-| [`NexoWattVis._nwNormalizeFlowSlotKind`](../../../../src-ts/runtime-executables/main.ts#L26106) | kind | String, k.startsWith |
-| [`NexoWattVis._nwFlowSlotCount`](../../../../src-ts/runtime-executables/main.ts#L26116) | kind | this._nwNormalizeFlowSlotKind |
-| [`NexoWattVis._nwFlowSlotKey`](../../../../src-ts/runtime-executables/main.ts#L26125) | kind, index | Math.max, Math.round, Number, this._nwNormalizeFlowSlotKind |
-| [`NexoWattVis._nwGetFlowSlotsRoot`](../../../../src-ts/runtime-executables/main.ts#L26136) | – | – |
-| [`NexoWattVis._nwFlowSlotPowerIdFromSlot`](../../../../src-ts/runtime-executables/main.ts#L26151) | slot | String |
-| [`NexoWattVis._nwGetFlowSlotInfo`](../../../../src-ts/runtime-executables/main.ts#L26181) | kind, index | Array.isArray, Math.max, Math.min, Math.round, Number, String, this._nwFlowSlotCount, this._nwFlowSlotKey, this._nwFlowSlotPowerIdFromSlot, this._nwGetFlowSlotsRoot, this._nwNormalizeFlowSlotKind |
-| [`NexoWattVis.prepareFlowSlots`](../../../../src-ts/runtime-executables/main.ts#L26224) | flowSlotsCfg | Array.isArray, Object.keys, String, add, this._nwFlowSlotKey, this._nwFlowSlotPowerIdFromSlot, this._nwGetFlowSlotInfo |
-| [`add`](../../../../src-ts/runtime-executables/main.ts#L26235) | objectId, stateKey | String, id.startsWith, out.push, seen.add, seen.has |
-| [`NexoWattVis._nwNormalizeUnit`](../../../../src-ts/runtime-executables/main.ts#L26282) | unit | String |
-| [`NexoWattVis._nwPowerScaleToWFromUnit`](../../../../src-ts/runtime-executables/main.ts#L26291) | unit | this._nwNormalizeUnit |
-| [`NexoWattVis._nwIsMappedPowerKey`](../../../../src-ts/runtime-executables/main.ts#L26305) | key | key.endsWith, key.startsWith |
-| [`NexoWattVis._nwScaleMappedValue`](../../../../src-ts/runtime-executables/main.ts#L26336) | key, objectId, val | Array.isArray, Math.max, Math.round, Number, Number.isFinite, Object.prototype.hasOwnProperty.call, String, normalizeEvcsEnergyTotalKwh, this._nwForeignPowerScaleCache.get, this._nwIsMappedPowerKey, this.evcsList.find |
-| [`NexoWattVis._nwPrimeForeignPowerScale`](../../../../src-ts/runtime-executables/main.ts#L26384) | objectId | this._nwForeignPowerScaleCache.delete, this._nwForeignPowerScaleCache.keys, this._nwForeignPowerScaleCache.set, this._nwForeignUnitCache.delete, this._nwForeignUnitCache.has, this._nwForeignUnitCache.keys, this._nwForeignUnitCache.set, this._nwNormalizeUnit, this._nwPowerScaleToWFromUnit, this.getForeignObjectAsync |
-| [`NexoWattVis._nwIsOwnStateId`](../../../../src-ts/runtime-executables/main.ts#L26414) | id | id.trim, sid.startsWith |
-| [`NexoWattVis._nwBuildLiveCoreRefreshPlan`](../../../../src-ts/runtime-executables/main.ts#L26425) | – | Array.from, Array.isArray, add, addEvcsBinding, byId.values, configured.values, this._nwEvcsInputSpecsForWallbox, this.prepareFlowSlots |
-| [`add`](../../../../src-ts/runtime-executables/main.ts#L26434) | id, key | byId.get, byId.set, entry.keys.add, id.trim, key.trim, this._nwIsOwnStateId |
-| [`addEvcsBinding`](../../../../src-ts/runtime-executables/main.ts#L26449) | binding | String, byId.get, byId.set, entry.evcsBindings.set, this._nwIsOwnStateId |
-| [`NexoWattVis._nwRefreshLiveCoreDatapoints`](../../../../src-ts/runtime-executables/main.ts#L26540) | reason | Array.isArray, Date.now, Promise.all, plan.slice, slice.map, this._nwBuildLiveCoreRefreshPlan |
-| [`applyState`](../../../../src-ts/runtime-executables/main.ts#L26561) | entry | Array.isArray, Number.isFinite, Object.is, emsDp.cacheByObjectId.get, emsDp.handleStateChange, handledEvcsKeys.add, handledEvcsKeys.has, this._nwPublishEvcsInputBinding, this._nwScaleMappedValue, this.getForeignStateAsync, this.updateValue |
-| [`NexoWattVis._nwStopLiveCoreRefresh`](../../../../src-ts/runtime-executables/main.ts#L26622) | – | this._nwClearInterval |
-| [`NexoWattVis._nwStartLiveCoreRefresh`](../../../../src-ts/runtime-executables/main.ts#L26635) | – | Array.isArray, Math.max, Number, this._nwBuildLiveCoreRefreshPlan, this._nwSetInterval, this._nwStopLiveCoreRefresh |
-| [`NexoWattVis.subscribeForecastUiStates`](../../../../src-ts/runtime-executables/main.ts#L26654) | – | Date.now, Number, Object.entries, Object.is, effectiveKeys.map, id.slice, id.startsWith, primedKeys.add, primedKeys.has, providerKeys.map, this.getForeignStatesAsync, this.getStateAsync, this.log.debug, this.subscribeForeignStatesAsync (weitere in der Quelle) |
-| [`NexoWattVis.subscribeConfiguredStates`](../../../../src-ts/runtime-executables/main.ts#L26741) | – | Object.keys, id.trim, key.slice, key.startsWith, localUiKeys.includes, settingsLocalKeys.map, slot.objectId.trim, storageFarmLocalKeys.map, this._nwForeignPowerScaleCache.clear, this._nwForeignUnitCache.clear, this._nwPrimeForeignPowerScale, this._nwRefreshLiveCoreDatapoints, this._nwScaleMappedValue, this._nwStartLiveCoreRefresh (weitere in der Quelle) |
-| [`NexoWattVis._nwRequestImmediateEmsTick`](../../../../src-ts/runtime-executables/main.ts#L26933) | reason, delayMs | Math.max, Number, Number.isFinite, String, engine.requestImmediateTick |
-| [`NexoWattVis.onMessage`](../../../../src-ts/runtime-executables/main.ts#L26954) | obj | this._para14aEebusApi.handleMessage, this.log.warn, this.sendTo |
-| [`NexoWattVis._nwGetPara14aEebusIngress`](../../../../src-ts/runtime-executables/main.ts#L26969) | – | this._para14aEebusApi.getIngress |
-| [`NexoWattVis._nwFlushPara14aEebusImplementationFeedback`](../../../../src-ts/runtime-executables/main.ts#L26977) | context | this._para14aEebusApi.flushImplementationFeedback |
-| [`NexoWattVis.onStateChange`](../../../../src-ts/runtime-executables/main.ts#L26991) | id, state | Date.now, Number, String, centralLicenseSnapshot, evcsHandledKeys.has, key.match, key.startsWith, pvAuto.cache.set, pvAuto.ids.has, this._notifyGetSettingBool, this._notifyParseBool, this._nwApplyEvcsInputSourceState, this._nwIsOwnStateId, this._nwIsReadOnlyEvcsMirrorKey (weitere in der Quelle) |
-| [`NexoWattVis.keyFromId`](../../../../src-ts/runtime-executables/main.ts#L27124) | id | Object.entries, id.slice, id.startsWith, rest.includes, this._nwRootUiKeys.has |
-| [`NexoWattVis.normalizeRfidCandidate`](../../../../src-ts/runtime-executables/main.ts#L27179) | val | String, hexMatches.sort, s.match, s.replace |
-| [`NexoWattVis.maybeCaptureRfidLearning`](../../../../src-ts/runtime-executables/main.ts#L27205) | sourceId, rawVal, ts | Date.now, Number, this.evcsRfidReadIds.has, this.log.info, this.normalizeRfidCandidate, this.setStateAsync, this.updateValue |
-| [`NexoWattVis.parseRfidWhitelist`](../../../../src-ts/runtime-executables/main.ts#L27238) | jsonStr | Array.isArray, JSON.parse, JSON.stringify, String, this.normalizeRfidCandidate |
-| [`NexoWattVis.refreshRfidWhitelistFromCache`](../../../../src-ts/runtime-executables/main.ts#L27264) | – | JSON.stringify, this.parseRfidWhitelist |
-| [`NexoWattVis.isRfidEnabled`](../../../../src-ts/runtime-executables/main.ts#L27277) | – | – |
-| [`NexoWattVis.setLocalStateWithCache`](../../../../src-ts/runtime-executables/main.ts#L27286) | id, val, ts | Date.now, Number, this.setStateAsync, this.updateValue |
-| [`NexoWattVis.startNotificationMonitor`](../../../../src-ts/runtime-executables/main.ts#L27299) | – | this._nwClearInterval, this._nwSetInterval, this._nwSetTimeout |
-| [`tick`](../../../../src-ts/runtime-executables/main.ts#L27314) | – | this.notificationTick |
-| [`NexoWattVis.stopNotificationMonitor`](../../../../src-ts/runtime-executables/main.ts#L27331) | – | this._notificationMail?.close, this._nwClearInterval |
-| [`NexoWattVis._notifyParseBool`](../../../../src-ts/runtime-executables/main.ts#L27347) | val, def | String |
-| [`NexoWattVis._notifyGetCached`](../../../../src-ts/runtime-executables/main.ts#L27363) | key, def | – |
-| [`NexoWattVis._notifyGetSettingBool`](../../../../src-ts/runtime-executables/main.ts#L27376) | key, def | this._notifyGetCached, this._notifyParseBool |
-| [`NexoWattVis._notifyGetSettingString`](../../../../src-ts/runtime-executables/main.ts#L27386) | key, def | String, this._notifyGetCached |
-| [`NexoWattVis._notifyGetSettingNumber`](../../../../src-ts/runtime-executables/main.ts#L27397) | key, def | Number, Number.isFinite, this._notifyGetCached |
-| [`NexoWattVis._notifySetDebugState`](../../../../src-ts/runtime-executables/main.ts#L27408) | key, val | Date.now, this.setStateAsync, this.updateValue |
-| [`NexoWattVis._getNotificationMail`](../../../../src-ts/runtime-executables/main.ts#L27424) | – | – |
-| [`NexoWattVis._notifySendEmail`](../../../../src-ts/runtime-executables/main.ts#L27431) | to, subject, text | String, this._getNotificationMail |
-| [`NexoWattVis._notifyCollectObjectIdsFromConfig`](../../../../src-ts/runtime-executables/main.ts#L27445) | – | Array.from, walk |
-| [`walk`](../../../../src-ts/runtime-executables/main.ts#L27454) | v | Array.isArray, Object.values, ids.add, re.test, v.trim, walk |
-| [`NexoWattVis._notifyRefreshWatchedInstances`](../../../../src-ts/runtime-executables/main.ts#L27486) | force | Array.from, Date.now, String, ids.includes, ids.push, inst.add, this._notifyCollectObjectIdsFromConfig, this.getForeignObjectAsync, valid.push |
-| [`NexoWattVis._notifyRefreshNwDevicesCache`](../../../../src-ts/runtime-executables/main.ts#L27543) | force | Date.now, Object.entries, String, cid.split, configuredIds.some, getAlias, hasState, pv.push, this._notifyCollectObjectIdsFromConfig, this._notifyRefreshWatchedInstances, this.getForeignObjectsAsync |
-| [`hasState`](../../../../src-ts/runtime-executables/main.ts#L27558) | baseId, suffix | – |
-| [`getAlias`](../../../../src-ts/runtime-executables/main.ts#L27568) | obj, key | – |
-| [`NexoWattVis._notifyFormatDuration`](../../../../src-ts/runtime-executables/main.ts#L27607) | ms | Math.floor, Math.max, Number |
-| [`NexoWattVis.notificationTick`](../../../../src-ts/runtime-executables/main.ts#L27623) | – | this._getNotificationMail |
-| [`NexoWattVis.startHistorieExportTimer`](../../../../src-ts/runtime-executables/main.ts#L27634) | – | Date.now, Math.ceil, Math.max, Math.min, Math.round, Number, Number.isFinite, this._nwClearInterval, this._nwClearTimeout, this._nwSetTimeout |
-| [`tick`](../../../../src-ts/runtime-executables/main.ts#L27660) | – | this.updateHistorieExportStates |
-| [`NexoWattVis.ensureHistorieExportStates`](../../../../src-ts/runtime-executables/main.ts#L27684) | – | Number, Number.isFinite, String, ensureChannel, ensureState, this._nwDetectInfluxInstance, this._nwEnsureInfluxCustom, this._nwGetFlowSlotInfo, this._nwGetHistoryInstance, this.log.debug |
-| [`ensureChannel`](../../../../src-ts/runtime-executables/main.ts#L27694) | id, name | this.extendObjectAsync, this.setObjectNotExistsAsync |
-| [`ensureState`](../../../../src-ts/runtime-executables/main.ts#L27705) | id, name, role, unit, type, influxOpts | this._nwEnsureInfluxCustom, this.extendObjectAsync, this.setObjectNotExistsAsync |
-| [`NexoWattVis._nwEnsureInfluxCustom`](../../../../src-ts/runtime-executables/main.ts#L27883) | localId, inst, opts | Object.assign, String, this.extendObjectAsync, this.getObjectAsync |
-| [`NexoWattVis._nwGetNumberFromCache`](../../../../src-ts/runtime-executables/main.ts#L27913) | key | Number, Number.isFinite |
-| [`NexoWattVis._nwGetCacheAgeMs`](../../../../src-ts/runtime-executables/main.ts#L27930) | key, now | Date.now, Math.max, Number, Number.isFinite |
-| [`NexoWattVis._nwGetNumberFromCacheFresh`](../../../../src-ts/runtime-executables/main.ts#L27948) | key, maxAgeMs, fallback, now | Date.now, Number, Number.isFinite, this._nwGetCacheAgeMs |
-| [`NexoWattVis._nwGetRawNumberFromCache`](../../../../src-ts/runtime-executables/main.ts#L27971) | key, maxAgeMs, fallback, now | Date.now, Math.max, Number, Number.isFinite |
-| [`NexoWattVis._nwLiveInputMaxAgeMs`](../../../../src-ts/runtime-executables/main.ts#L27993) | – | Math.max, Math.round, Number, Number.isFinite |
-| [`NexoWattVis._nwIsBatterySignInverted`](../../../../src-ts/runtime-executables/main.ts#L28009) | – | this._notifyGetSettingBool |
-| [`NexoWattVis._nwStorageFarmIsActiveFromCache`](../../../../src-ts/runtime-executables/main.ts#L28027) | – | Number, this._nwGetStorageFarmRuntimeInfo |
-| [`NexoWattVis._nwResolveStorageFarmMetricsFromCache`](../../../../src-ts/runtime-executables/main.ts#L28045) | opts | Array.isArray, Date.now, JSON.parse, Math.abs, Math.max, Math.round, Number, Number.isFinite, parsed.filter, read, this._nwGetCacheAgeMs, this._nwStorageFarmIsActiveFromCache |
-| [`read`](../../../../src-ts/runtime-executables/main.ts#L28048) | key | Number, Number.isFinite, this._nwGetNumberFromCache |
-| [`NexoWattVis._nwConfiguredPvCapacityW`](../../../../src-ts/runtime-executables/main.ts#L28109) | – | Array.from, collect, unique.values |
-| [`collect`](../../../../src-ts/runtime-executables/main.ts#L28115) | rows | Array.isArray, Math.max, Number, Number.isFinite, String, nwPhysicalPvSourceKey, row.kwp.replace, unique.get, unique.set |
-| [`NexoWattVis._nwMergeStorageFarmPvWithBase`](../../../../src-ts/runtime-executables/main.ts#L28139) | baseAcW, opts | Array.isArray, Math.abs, Math.max, Math.min, Math.round, Number, Number.isFinite, String, addBaseSource, baseSourceIds.has, nwApplyPvCapacityPlausibility, nwCombineStorageFarmPv, nwPhysicalPvSourceKey, this._nwConfiguredPvCapacityW (weitere in der Quelle) |
-| [`addBaseSource`](../../../../src-ts/runtime-executables/main.ts#L28158) | sourceId | String, baseSourceIds.add, normalizedId.toLowerCase, nwPhysicalPvSourceKey |
-| [`NexoWattVis._nwResolveBatteryFlowFromCache`](../../../../src-ts/runtime-executables/main.ts#L28223) | opts | Date.now, Math.abs, Math.max, Math.round, Number, Number.isFinite, String, ageInfo, fromBalance, fromSigned, idOf, readMapped, this._nwGetCacheAgeMs, this._nwGetStorageControlAuthority (weitere in der Quelle) |
-| [`idOf`](../../../../src-ts/runtime-executables/main.ts#L28236) | key | String |
-| [`readMapped`](../../../../src-ts/runtime-executables/main.ts#L28259) | key, onlyIfMapped, raw | idOf, this._nwGetNumberFromCacheFresh, this._nwGetRawNumberFromCache |
-| [`ageInfo`](../../../../src-ts/runtime-executables/main.ts#L28271) | – | this._nwGetCacheAgeMs |
-| [`fromSigned`](../../../../src-ts/runtime-executables/main.ts#L28283) | signedRaw, src, opts2 | Math.abs, Math.round, Number, Number.isFinite, ageInfo |
-| [`fromBalance`](../../../../src-ts/runtime-executables/main.ts#L28308) | – | Math.abs, Math.max, Math.round, Number, Number.isFinite, Object.assign, ageInfo, this._nwGetNumberFromCache, this._nwHasMappedDatapoint, this._nwResolveGridImportExportFromCache |
-| [`NexoWattVis._nwNormalizeEnergyFlowTsMode`](../../../../src-ts/runtime-executables/main.ts#L28503) | value | String |
-| [`NexoWattVis._nwGetEnergyFlowTsMode`](../../../../src-ts/runtime-executables/main.ts#L28526) | – | this._nwNormalizeEnergyFlowTsMode |
-| [`NexoWattVis._nwBuildEnergyFlowTsEffectivePlan`](../../../../src-ts/runtime-executables/main.ts#L28551) | mode, runtimeValues, tsValues, shadowResult | Array.isArray, blockedReasons.push, this._nwEvaluateEnergyFlowPlantGate, this._nwGetEnergyFlowTsFixedSourceState, this._nwGetEnergyFlowTsSwitchConfig, this._nwIsEnergyFlowPlantGateWarmupOnly, this._nwNormalizeEnergyFlowTsMode, this._nwValidateEnergyFlowTsCandidate |
-| [`NexoWattVis._nwValidateEnergyFlowTsCandidate`](../../../../src-ts/runtime-executables/main.ts#L28618) | tsShadow | Array.isArray, Math.abs, Math.max, Math.round, Number, Number.isFinite, String, blockers.push, farmRows.reduce, nwFeatureFlagsService.storagePerformanceProfile, this._nwCurrentLicenseEdition, warnings.push |
-| [`NexoWattVis._nwGetEnergyFlowTsMirrorResolver`](../../../../src-ts/runtime-executables/main.ts#L28704) | – | path.join, require, this.log.debug |
-| [`NexoWattVis._nwBuildEnergyFlowTsShadowInput`](../../../../src-ts/runtime-executables/main.ts#L28738) | ctx | Date.now, Number, Number.isFinite, String, idOf, storageSrc.indexOf, this._nwGetNumberFromCache, this._nwGetRawNumberFromCache, this._nwIsBatterySignInverted |
-| [`idOf`](../../../../src-ts/runtime-executables/main.ts#L28740) | key | String |
-| [`NexoWattVis._nwRunEnergyFlowTsShadowComparison`](../../../../src-ts/runtime-executables/main.ts#L28804) | ctx | Date.now, Math.max, Math.round, Number, Number.isFinite, String, compare, mismatches.join, resolver.buildEnergyFlowSnapshot, this._nwBuildEnergyFlowTsEffectivePlan, this._nwBuildEnergyFlowTsShadowInput, this._nwGetEnergyFlowTsMirrorResolver, this._nwGetEnergyFlowTsMode, this._nwNormalizeEnergyFlowTsMode (weitere in der Quelle) |
-| [`compare`](../../../../src-ts/runtime-executables/main.ts#L28848) | key, label, tol | Math.abs, Number, Number.isFinite, mismatches.push |
-| [`NexoWattVis._nwGetEnergyFlowTsSwitchConfig`](../../../../src-ts/runtime-executables/main.ts#L28912) | – | Math.max, Math.min, Math.round, Number, Number.isFinite, String |
-| [`NexoWattVis._nwBuildEnergyFlowTsRuntimePlantSample`](../../../../src-ts/runtime-executables/main.ts#L28950) | tsShadow | Array.isArray, Date.now, String, blockers.push, mismatches.slice |
-| [`NexoWattVis._nwSummarizeEnergyFlowTsRuntimePlantSamples`](../../../../src-ts/runtime-executables/main.ts#L28984) | samples | Array.isArray, Date.now, Math.round, list.filter, list.reduce, list.slice, samples.filter |
-| [`NexoWattVis._nwUpdateEnergyFlowTsRuntimePlantEvaluation`](../../../../src-ts/runtime-executables/main.ts#L29026) | tsShadow | Array.isArray, Date.now, current.concat, this._nwBuildEnergyFlowTsRuntimePlantSample, this._nwSummarizeEnergyFlowTsRuntimePlantSamples |
-| [`NexoWattVis._nwEvaluateEnergyFlowPlantGate`](../../../../src-ts/runtime-executables/main.ts#L29068) | cfg | Array.isArray, Math.max, Math.min, Math.round, Number, blockers.push, this._nwSummarizeTsShadowPlantSamples |
-| [`NexoWattVis._nwIsEnergyFlowPlantGateWarmupOnly`](../../../../src-ts/runtime-executables/main.ts#L29119) | plantGate | Array.isArray, Number, blockers.every, plantGate.blockers.map |
-| [`NexoWattVis._nwIsEnergyFlowHardFallbackReason`](../../../../src-ts/runtime-executables/main.ts#L29148) | reason | String, text.includes |
-| [`NexoWattVis._nwBuildEnergyFlowFixedSourceInput`](../../../../src-ts/runtime-executables/main.ts#L29164) | switchState | Date.now, Number, String |
-| [`NexoWattVis._nwUpdateEnergyFlowTsFixedSourceState`](../../../../src-ts/runtime-executables/main.ts#L29191) | switchState | Date.now, Math.max, Math.min, Math.round, Number, this._nwBuildEnergyFlowFixedSourceInput, this._nwGetEnergyFlowTsSwitchConfig, this._nwIsEnergyFlowHardFallbackReason |
-| [`NexoWattVis._nwGetEnergyFlowTsFixedSourceState`](../../../../src-ts/runtime-executables/main.ts#L29248) | – | – |
-| [`NexoWattVis._nwEvaluateEnergyFlowTsSwitch`](../../../../src-ts/runtime-executables/main.ts#L29281) | tsShadow | Array.isArray, Date.now, Math.max, Math.min, Math.round, Number, this._nwEvaluateEnergyFlowPlantGate, this._nwGetEnergyFlowTsFixedSourceState, this._nwGetEnergyFlowTsSwitchConfig, this._nwIsEnergyFlowPlantGateWarmupOnly, this._nwUpdateEnergyFlowTsRuntimePlantEvaluation, this._nwValidateEnergyFlowTsCandidate |
-| [`NexoWattVis._nwBuildEffectiveEnergyFlowValues`](../../../../src-ts/runtime-executables/main.ts#L29400) | runtimeValues, tsShadow | this._nwBuildEnergyFlowTsCandidateAudit, this._nwEvaluateEnergyFlowTsSwitch, this._nwRecordEnergyFlowTsActiveTestSample, this._nwUpdateEnergyFlowTsFixedSourceState, valueOf |
-| [`valueOf`](../../../../src-ts/runtime-executables/main.ts#L29407) | key, fallbackKey | Math.round, Number, Number.isFinite |
-| [`NexoWattVis._nwRecordEnergyFlowTsActiveTestSample`](../../../../src-ts/runtime-executables/main.ts#L29451) | effective, runtimeValues, tsValues | Array.from, Array.isArray, Date.now, JSON.stringify, Math.round, Number, Number.isFinite, String, blockers.filter, blockers.push, candidate.blockers.map, sample.blockers.join, samples.push, samples.shift (weitere in der Quelle) |
-| [`NexoWattVis._nwSummarizeEnergyFlowTsActiveTestSamples`](../../../../src-ts/runtime-executables/main.ts#L29517) | – | Array.isArray, Date.now, Math.round, samples.filter, samples.reduce, samples.slice, this._energyFlowTsActiveTestSamples.slice |
-| [`NexoWattVis._nwBuildEnergyFlowTsCandidateAudit`](../../../../src-ts/runtime-executables/main.ts#L29584) | runtimeValues, tsValues, switchState, tsShadow | Array.isArray, Number, String, keys.map |
-| [`NexoWattVis._nwEnergyFlowTsLiveTestStateFromSwitch`](../../../../src-ts/runtime-executables/main.ts#L29642) | switchState | String, reason.includes, source.includes |
-| [`NexoWattVis._nwParseTsShadowJson`](../../../../src-ts/runtime-executables/main.ts#L29677) | raw, fallback | JSON.parse, String, text.slice |
-| [`NexoWattVis._nwCollectTsShadowMismatches`](../../../../src-ts/runtime-executables/main.ts#L29702) | shadow | Array.isArray, Object.keys, String, add, shadow.diffs.forEach, shadow.mismatches.forEach |
-| [`add`](../../../../src-ts/runtime-executables/main.ts#L29705) | entry, idx, prefix | String, out.push |
-| [`NexoWattVis._nwEvaluateTsShadowBlock`](../../../../src-ts/runtime-executables/main.ts#L29746) | id, label, shadow, options | Math.max, Number, Number.isFinite, String, blockers.push, mismatches.slice, this._nwCollectTsShadowMismatches, warnings.push |
-| [`NexoWattVis._nwBuildTsShadowPlantSample`](../../../../src-ts/runtime-executables/main.ts#L29790) | readiness | Array.isArray, Date.now, String, blockers.slice, readiness.blockers.map, readiness.warnings.map, safeBlock, warnings.slice |
-| [`safeBlock`](../../../../src-ts/runtime-executables/main.ts#L29791) | block | Math.max, Math.round, Number, String |
-| [`NexoWattVis._nwSummarizeTsShadowPlantSamples`](../../../../src-ts/runtime-executables/main.ts#L29834) | samples | Array.isArray, Date.now, Math.round, list.filter, list.reduce, list.slice, samples.filter |
-| [`NexoWattVis._nwUpdateTsShadowPlantEvaluation`](../../../../src-ts/runtime-executables/main.ts#L29889) | _control, readiness | Array.isArray, Date.now, current.concat, this._nwBuildTsShadowPlantSample, this._nwSummarizeTsShadowPlantSamples |
-| [`NexoWattVis._nwEvaluateEnergyFlowSwitchReadinessFromControl`](../../../../src-ts/runtime-executables/main.ts#L29933) | control | Date.now, blocks.every, blocks.flatMap, this._nwEvaluateTsShadowBlock, this._nwGetEnergyFlowTsMode, this._nwNormalizeEnergyFlowTsMode, this._nwParseTsShadowJson |
-| [`NexoWattVis._nwRecordAndSummarizeTsShadowEvaluation`](../../../../src-ts/runtime-executables/main.ts#L29991) | control, readiness | Array.isArray, Date.now, JSON.stringify, Math.max, Math.round, Number, String, blockSummary, lastBlockers.slice, lastSample.coreLimits.blockers.map, lastSample.energyFlow.blockers.map, lastSample.heatingRod.blockers.map, list.filter, list.reduce (weitere in der Quelle) |
-| [`blockSummary`](../../../../src-ts/runtime-executables/main.ts#L29993) | block, id | Array.isArray, Number, Number.isFinite, String, b.blockers.map, b.warnings.map |
-| [`NexoWattVis._nwBuildTsShadowRealPlantEvaluation`](../../../../src-ts/runtime-executables/main.ts#L30117) | control | Array.isArray, Date.now, readiness.blockers.slice, readiness.warnings.slice, section, sections.every, sections.filter, this._nwEvaluateEnergyFlowSwitchReadinessFromControl, waiting.join, warnings.push |
-| [`section`](../../../../src-ts/runtime-executables/main.ts#L30122) | id, label, ready, detail | Array.isArray, Number, Number.isFinite, String |
-| [`NexoWattVis._nwResolveGridImportExportFromCache`](../../../../src-ts/runtime-executables/main.ts#L30198) | – | Date.now, Math.max, readFresh, resolveNvpDisplay, this._nwGetCacheAgeMs, this._nwGetNumberFromCacheFresh, this._nwHasMappedDatapoint, this._nwLiveInputMaxAgeMs |
-| [`readFresh`](../../../../src-ts/runtime-executables/main.ts#L30207) | key, mapped | this._nwGetNumberFromCacheFresh |
-| [`NexoWattVis._nwSetHistorieValue`](../../../../src-ts/runtime-executables/main.ts#L30233) | localId, val, ts, tolAbs | Math.abs, Math.max, Number, Number.isFinite, this.setLocalStateWithCache |
-| [`NexoWattVis.ensureDerivedFlowStates`](../../../../src-ts/runtime-executables/main.ts#L30251) | – | this.setObjectNotExistsAsync |
-| [`NexoWattVis.updateHistorieExportStates`](../../../../src-ts/runtime-executables/main.ts#L30503) | reason | Date.now, JSON.stringify, Math.abs, Math.max, Math.min, Math.round, Number, Number.isFinite, String, _boolOr, _computeNetFeeModeNow, _numOr, _strOr, parseJsonSafe (weitere in der Quelle) |
-| [`_rawCacheValue`](../../../../src-ts/runtime-executables/main.ts#L30631) | key | – |
-| [`_numOr`](../../../../src-ts/runtime-executables/main.ts#L30645) | key, fallback | Number, Number.isFinite, _rawCacheValue |
-| [`_boolOr`](../../../../src-ts/runtime-executables/main.ts#L30659) | key, fallback | String, _rawCacheValue |
-| [`_strOr`](../../../../src-ts/runtime-executables/main.ts#L30674) | key, fallback | String, _rawCacheValue |
-| [`_parseTimeMinutes`](../../../../src-ts/runtime-executables/main.ts#L30685) | raw, defMinutes | Math.max, Math.min, Number, Number.isFinite, String, s.match |
-| [`_isInWindow`](../../../../src-ts/runtime-executables/main.ts#L30700) | nowMin, startMin, endMin | Number.isFinite |
-| [`_quarterOf`](../../../../src-ts/runtime-executables/main.ts#L30712) | tsMs | Date.now, Math.floor, Math.max, Math.min, Number, d.getMonth |
-| [`_nowMinutesLocal`](../../../../src-ts/runtime-executables/main.ts#L30726) | tsMs | Date.now, Number, d.getHours, d.getMinutes |
-| [`_computeNetFeeModeNow`](../../../../src-ts/runtime-executables/main.ts#L30740) | – | Math.round, Number, _boolOr, _isInWindow, _nowMinutesLocal, _numOr, _parseTimeMinutes, _quarterOf, _strOr, cachedMode.toLowerCase |
-| [`parseJsonSafe`](../../../../src-ts/runtime-executables/main.ts#L30856) | raw | JSON.parse, String |
-| [`NexoWattVis.scheduleRfidPolicyApply`](../../../../src-ts/runtime-executables/main.ts#L30956) | reason, onlyIndex | Number, this._nwSetTimeout |
-| [`NexoWattVis.applyRfidPolicyAll`](../../../../src-ts/runtime-executables/main.ts#L30983) | reason | Array.isArray, this.applyRfidPolicyForIndex, this.isRfidEnabled, this.refreshRfidWhitelistFromCache |
-| [`NexoWattVis.applyRfidPolicyForIndex`](../../../../src-ts/runtime-executables/main.ts#L30999) | index, reason, enabledOverride | Array.isArray, Date.now, Number, String, isActuatorAuthorityBlockedResult, this.evcsList.find, this.getStateAsync, this.isRfidEnabled, this.log.debug, this.normalizeRfidCandidate, this.refreshRfidWhitelistFromCache, this.setLocalStateWithCache, withActuatorShadowContext |
-| [`NexoWattVis._nwTrimId`](../../../../src-ts/runtime-executables/main.ts#L31172) | v | v.trim |
-| [`NexoWattVis._nwDetectInfluxInstance`](../../../../src-ts/runtime-executables/main.ts#L31183) | – | this._nwTrimId, this.getForeignObjectAsync |
-| [`NexoWattVis._nwGetHistoryInstance`](../../../../src-ts/runtime-executables/main.ts#L31205) | – | this._nwTrimId |
-| [`NexoWattVis._nwGetPara14aInfluxTargetDays`](../../../../src-ts/runtime-executables/main.ts#L31216) | – | – |
-| [`NexoWattVis._nwGetPara14aInfluxTargetRetentionSeconds`](../../../../src-ts/runtime-executables/main.ts#L31225) | – | this._nwGetPara14aInfluxTargetDays |
-| [`NexoWattVis._nwGetPara14aInfluxDbName`](../../../../src-ts/runtime-executables/main.ts#L31234) | – | Math.max, Math.round, Number, Number.isFinite |
-| [`NexoWattVis._nwGetOwnHostName`](../../../../src-ts/runtime-executables/main.ts#L31244) | – | os.hostname, this._nwTrimId, this.getForeignObjectAsync |
-| [`NexoWattVis._nwListAdapterInstances`](../../../../src-ts/runtime-executables/main.ts#L31269) | adapterName | Number, Number.isInteger, Object.entries, String, inst.slice, inst.startsWith, out.push, out.sort, this._nwTrimId, this.getForeignObjectsAsync |
-| [`NexoWattVis._nwPickFreeAdapterInstanceNumber`](../../../../src-ts/runtime-executables/main.ts#L31295) | existingNums, preferred | Array.isArray, Math.round, Number, Number.isInteger, used.has |
-| [`NexoWattVis._nwBuildPara14aInfluxNative`](../../../../src-ts/runtime-executables/main.ts#L31314) | baseNative, meta | Date.now, JSON.parse, JSON.stringify, Object.assign, this._nwGetPara14aInfluxDbName, this._nwGetPara14aInfluxTargetDays, this._nwGetPara14aInfluxTargetRetentionSeconds, this._nwTrimId |
-| [`NexoWattVis._nwBuildPara14aInfluxCommon`](../../../../src-ts/runtime-executables/main.ts#L31337) | baseCommon, host | JSON.parse, JSON.stringify, Object.assign, this._nwTrimId |
-| [`NexoWattVis._nwEnsurePara14aInfluxInstance`](../../../../src-ts/runtime-executables/main.ts#L31358) | force | Date.now, Number, String, configured.startsWith, disableManagedDedicatedInstances, finish, pickSharedInfluxInstance, this._nwListAdapterInstances, this._nwTrimId, this.getForeignObjectAsync |
-| [`finish`](../../../../src-ts/runtime-executables/main.ts#L31371) | partial | Date.now, Object.assign, this._nwTrimId |
-| [`isManagedPara14aInstance`](../../../../src-ts/runtime-executables/main.ts#L31391) | it | String |
-| [`pickSharedInfluxInstance`](../../../../src-ts/runtime-executables/main.ts#L31403) | instances | Array.isArray, arr.filter, arr.find, enabled.find, instances.filter |
-| [`disableManagedDedicatedInstances`](../../../../src-ts/runtime-executables/main.ts#L31422) | instances, keepInstanceId | Array.isArray, String, isManagedPara14aInstance, this._nwTrimId, this.log.debug, this.log.info, this.nwSimSetInstanceEnabled |
-| [`NexoWattVis._nwGetCanonicalHistorieId`](../../../../src-ts/runtime-executables/main.ts#L31490) | legacyKey | String, k.match |
-| [`NexoWattVis._nwGetHistoryDpCandidates`](../../../../src-ts/runtime-executables/main.ts#L31521) | name | Object.assign, String, add, raw.slice, raw.startsWith, this._nwGetCanonicalHistorieId, this._nwTrimId |
-| [`add`](../../../../src-ts/runtime-executables/main.ts#L31563) | id | out.includes, out.push, this._nwTrimId |
-| [`NexoWattVis._nwGetHistoryDpId`](../../../../src-ts/runtime-executables/main.ts#L31634) | name | this._nwGetHistoryDpCandidates |
-| [`NexoWattVis._nwGetHistoryApiCached`](../../../../src-ts/runtime-executables/main.ts#L31644) | key, maxAgeMs | Date.now, Math.max, Number, Number.isFinite, cache.delete, cache.entries, cache.get |
-| [`NexoWattVis._nwSetHistoryApiCached`](../../../../src-ts/runtime-executables/main.ts#L31668) | key, payload | Date.now, Number.isFinite, this._nwHistoryApiCache.delete, this._nwHistoryApiCache.keys, this._nwHistoryApiCache.set |
-| [`NexoWattVis._derivedRefreshPvInvertersCache`](../../../../src-ts/runtime-executables/main.ts#L31689) | force | Date.now, Object.entries, String, addCfg, cache.cache.delete, cache.cache.set, collect, ids.join, ids.sort, list.map, list.push, newIds.add, newIds.has, oldIds.has (weitere in der Quelle) |
-| [`collect`](../../../../src-ts/runtime-executables/main.ts#L31704) | arr | Array.isArray, ids.push, this._nwTrimId |
-| [`addCfg`](../../../../src-ts/runtime-executables/main.ts#L31764) | arr, tag | Array.isArray, String, list.push, nwPhysicalPvSourceKey, pid.toLowerCase, seenPower.add, seenPower.has, this._nwTrimId |
-| [`NexoWattVis.scheduleDerivedFlowUpdate`](../../../../src-ts/runtime-executables/main.ts#L31822) | reason | Date.now, this._nwSetTimeout |
-| [`NexoWattVis.updateDerivedFlowStates`](../../../../src-ts/runtime-executables/main.ts#L31850) | reason | Date.now, JSON.stringify, Math.abs, Math.max, Math.min, Math.round, Number, Number.isFinite, String, nwApplyPvCapacityPlausibility, pushTs, pvAuto?.cache?.get, pvBaseSourceIds.includes, pvBaseSourceIds.push (weitere in der Quelle) |
-| [`pushTs`](../../../../src-ts/runtime-executables/main.ts#L32091) | k | Number.isFinite, tsList.push |
-| [`updateLocal`](../../../../src-ts/runtime-executables/main.ts#L32485) | k, v | Number, Number.isFinite, this.updateValue |
-| [`NexoWattVis._nwHasMappedDatapoint`](../../../../src-ts/runtime-executables/main.ts#L32523) | key | this._nwTrimId |
-| [`NexoWattVis._nwNormTsMs`](../../../../src-ts/runtime-executables/main.ts#L32533) | tRaw | Date.parse, Number, Number.isFinite, Number.isNaN, tRaw.getTime |
-| [`NexoWattVis._nwChooseStepMs`](../../../../src-ts/runtime-executables/main.ts#L32550) | spanMs, targetPoints, minStepMs | Math.ceil, Math.max, Number |
-| [`NexoWattVis._nwChooseEnergyIntegrationStepMs`](../../../../src-ts/runtime-executables/main.ts#L32573) | spanMs, minStepMs, maxStepMs | Math.max, Math.min, Number, this._nwChooseStepMs |
-| [`NexoWattVis._nwNormalizeHistoryResult`](../../../../src-ts/runtime-executables/main.ts#L32585) | resu, maxRows | Array.isArray, Number, Number.isFinite, Object.assign, Object.prototype.hasOwnProperty.call, asRecord, decimal.test, norm.push, norm.sort, tRaw.trim, this._nwNormTsMs, vRaw.trim |
-| [`asRecord`](../../../../src-ts/runtime-executables/main.ts#L32587) | value | Array.isArray |
-| [`NexoWattVis._nwGetHistoryAvgSeries`](../../../../src-ts/runtime-executables/main.ts#L32645) | id, startMs, endMs, stepMs, deadlineMs | performance.now |
-| [`failure`](../../../../src-ts/runtime-executables/main.ts#L32648) | code | Object.assign |
-| [`finish`](../../../../src-ts/runtime-executables/main.ts#L32662) | error, series | clearTimeout, reject, resolve, this._nwPendingHistoryRequests?.delete |
-| [`cancel`](../../../../src-ts/runtime-executables/main.ts#L32670) | – | failure, finish |
-| [`NexoWattVis._nwCancelHistoryRequests`](../../../../src-ts/runtime-executables/main.ts#L32691) | – | cancel, this._nwPendingHistoryRequests.clear |
-| [`NexoWattVis._nwGetHistoryAvgSeriesAny`](../../../../src-ts/runtime-executables/main.ts#L32709) | candidates, startMs, endMs, stepMs | Array.isArray, performance.now, this._nwGetHistoryAvgSeries, this._nwTrimId |
-| [`NexoWattVis._nwAtypicalReviewParseTs`](../../../../src-ts/runtime-executables/main.ts#L32730) | raw, fallback, endOfDay | Date.parse, Math.round, Number, Number.isFinite, Number.isNaN, String, dt.getTime, dt.setHours, s.split |
-| [`NexoWattVis._nwAtypicalReviewDateTime`](../../../../src-ts/runtime-executables/main.ts#L32754) | ts | Date.now, Number, d.getDate, d.getFullYear, d.getHours, d.getMinutes, d.getMonth, pad |
-| [`pad`](../../../../src-ts/runtime-executables/main.ts#L32763) | n | String |
-| [`NexoWattVis._nwAtypicalReviewCsvCell`](../../../../src-ts/runtime-executables/main.ts#L32775) | v | String |
-| [`NexoWattVis._nwAtypicalReviewNumber`](../../../../src-ts/runtime-executables/main.ts#L32786) | v, digits | Math.round, Number, Number.isFinite, String, n.toFixed |
-| [`NexoWattVis._nwAtypicalReviewReadState`](../../../../src-ts/runtime-executables/main.ts#L32797) | localId, fallback | Object.prototype.hasOwnProperty.call, String, this.getStateAsync, this.namespace.replace |
-| [`NexoWattVis._nwAtypicalReviewReadNumber`](../../../../src-ts/runtime-executables/main.ts#L32817) | localId, fallback | Number, Number.isFinite, this._nwAtypicalReviewReadState |
-| [`NexoWattVis._nwAtypicalReviewReadBool`](../../../../src-ts/runtime-executables/main.ts#L32828) | localId, fallback | String, this._nwAtypicalReviewReadState |
-| [`NexoWattVis._nwAtypicalReviewReadString`](../../../../src-ts/runtime-executables/main.ts#L32843) | localId, fallback | String, this._nwAtypicalReviewReadState |
-| [`NexoWattVis._nwBuildAtypicalReviewExportPayload`](../../../../src-ts/runtime-executables/main.ts#L32848) | query | Array.from, Array.isArray, Date.now, JSON.parse, Math.max, Math.min, Math.round, Number, Number.isFinite, Object.assign, Object.entries, Object.values, Promise.all, String (weitere in der Quelle) |
-| [`NexoWattVis._nwAtypicalReviewPayloadToCsv`](../../../../src-ts/runtime-executables/main.ts#L33010) | payload | Array.isArray, Date.now, add, rows.join, this._nwAtypicalReviewDateTime, this._nwAtypicalReviewNumber |
-| [`add`](../../../../src-ts/runtime-executables/main.ts#L33021) | cols | rows.push |
-| [`NexoWattVis._nwAtypicalReviewAscii`](../../../../src-ts/runtime-executables/main.ts#L33078) | text | String |
-| [`NexoWattVis._nwAtypicalReviewPdfEscape`](../../../../src-ts/runtime-executables/main.ts#L33096) | text | this._nwAtypicalReviewAscii |
-| [`NexoWattVis._nwAtypicalReviewWrap`](../../../../src-ts/runtime-executables/main.ts#L33105) | text, maxLen | out.push, s.split, this._nwAtypicalReviewAscii |
-| [`NexoWattVis._nwAtypicalReviewPayloadToPdf`](../../../../src-ts/runtime-executables/main.ts#L33124) | payload | Array.isArray, Buffer.concat, Buffer.from, Date.now, String, addObj, chunks.push, lines.push, p.seriesRows.slice, page.push, pageRefs.join, pages.forEach, pages.push, this._nwAtypicalReviewDateTime (weitere in der Quelle) |
-| [`yesNo`](../../../../src-ts/runtime-executables/main.ts#L33135) | v | – |
-| [`addObj`](../../../../src-ts/runtime-executables/main.ts#L33197) | body | Buffer.from, Buffer.isBuffer, String, objects.push |
-| [`NexoWattVis._nwIntegrateKwh`](../../../../src-ts/runtime-executables/main.ts#L33247) | series, endMs, defaultStepMs, positiveOnly | Array.isArray, Date.now, Math.abs, Math.max, Math.min, Number, Number.isFinite |
-| [`NexoWattVis.updateEnergyTotalsFromInflux`](../../../../src-ts/runtime-executables/main.ts#L33277) | reason | Date.now, Math.max, Number, Number.isFinite, Promise.allSettled, performance.now, persistLocal, results.some, tasks.push, this._nwGetHistoryDpCandidates, this._nwHasMappedDatapoint, this.log.warn, this.updateValue |
-| [`currentSeries`](../../../../src-ts/runtime-executables/main.ts#L33284) | ids, from, stepMs | Array.isArray, series.some, this._nwGetHistoryAvgSeriesAny |
-| [`persistLocal`](../../../../src-ts/runtime-executables/main.ts#L33299) | key, val | this.setStateAsync |
-| [`NexoWattVis.updateValue`](../../../../src-ts/runtime-executables/main.ts#L33454) | key, value, ts, opts | Date.now, Math.abs, Math.max, Math.round, Number, Number.isFinite, Object.assign, String, d.getDate, d.getFullYear, d.getMonth, isNaN, key.match, key.startsWith (weitere in der Quelle) |
-| [`NexoWattVis._nwClearTimer`](../../../../src-ts/runtime-executables/main.ts#L33589) | refName | this._nwClearInterval, this._nwClearTimeout |
-| [`NexoWattVis._nwCloseSseClients`](../../../../src-ts/runtime-executables/main.ts#L33603) | – | Array.from, client.res.end, this._nwClearTimer, this._nwSseGuard.closeAll, this.sseClients.clear |
-| [`NexoWattVis._nwCloseServer`](../../../../src-ts/runtime-executables/main.ts#L33623) | callback | done, finish, server.close, setTimeout, this._nwCloseSseClients |
-| [`clearTimers`](../../../../src-ts/runtime-executables/main.ts#L33660) | – | clearTimeout |
-| [`finish`](../../../../src-ts/runtime-executables/main.ts#L33672) | – | clearTimers, done, this._serverSockets.clear |
-| [`NexoWattVis.onUnload`](../../../../src-ts/runtime-executables/main.ts#L33710) | callback | Date.now, cleanup.capture, clearTimeout, createHostedCleanup, done, this._nwCloseServer, this._nwSetInfoConnection, this._nwSmartHomePulseTimers.clear, this._nwSmartHomePulseTimers.entries, this.setForeignStateAsync |
-| [`createHostedRuntime`](../../../../src-ts/runtime-executables/main.ts#L33795) | owner, bridge | Object.create, runtime._para14aEebusApi.attachHostedBridge |
-| [`canOperate`](../../../../src-ts/runtime-executables/main.ts#L33808) | – | centralLicenseSnapshot, guardedBridge.canWrite |
-| [`sendFeedback`](../../../../src-ts/runtime-executables/main.ts#L33809) | message | bridge.hostedModuleFeedback |
-| [`startOperational`](../../../../src-ts/runtime-executables/main.ts#L33816) | – | Promise.resolve, centralLicenseSnapshot, guardedBridge.canWrite |
-| [`start`](../../../../src-ts/runtime-executables/main.ts#L33844) | – | Promise.resolve |
-| [`startOperational`](../../../../src-ts/runtime-executables/main.ts#L33869) | – | startOperational |
-| [`handle`](../../../../src-ts/runtime-executables/main.ts#L33870) | req, res, next | res.status, runtime._hostedHttpHandler, startOperational |
-| [`onStateChange`](../../../../src-ts/runtime-executables/main.ts#L33877) | id, state | runtime.onStateChange |
-| [`onMessage`](../../../../src-ts/runtime-executables/main.ts#L33878) | message | runtime.onMessage |
-| [`onHostedEebusMessage`](../../../../src-ts/runtime-executables/main.ts#L33879) | message | Promise.resolve, runtime._para14aEebusApi.handleHostedMessage |
-| [`revokeSessions`](../../../../src-ts/runtime-executables/main.ts#L33883) | – | runtime._nwCloseSseClients |
-| [`status`](../../../../src-ts/runtime-executables/main.ts#L33884) | – | guardedBridge.canWrite |
-| [`stop`](../../../../src-ts/runtime-executables/main.ts#L33887) | – | runtime.stopStateWrites, stopHostedRuntime |
+| [`nwShcfgTdCollectCandidateRoots`](../../../../src-ts/runtime-executables/main.ts#L14071) | objects | Object.keys, out.sort |
+| [`skip`](../../../../src-ts/runtime-executables/main.ts#L14080) | id | String, sid.startsWith |
+| [`nwShcfgTdBestSourceId`](../../../../src-ts/runtime-executables/main.ts#L14116) | objects, rootId, control | Array.isArray, String, nwShcfgTdParentId |
+| [`nwShcfgTdSuggestionScore`](../../../../src-ts/runtime-executables/main.ts#L14139) | item | Number |
+| [`nwShcfgTdMergeSuggestion`](../../../../src-ts/runtime-executables/main.ts#L14151) | current, next | Array.from, Array.isArray, nwShcfgTdSuggestionScore, other.configuredOverlap.forEach, other.notes.forEach |
+| [`nwShcfgTdBuildSuggestion`](../../../../src-ts/runtime-executables/main.ts#L14175) | { control, rootId, objects, configuredIds, config } | Array.from, Array.isArray, String, enrichSmartHomeImportSuggestion, extendSuggestion, notes.push, numberOr, nwShcfgTdBestSourceId, nwShcfgTdHash, nwShcfgTdNormName, pick, rawEntries.forEach, sourceId.split, stateMap.values (weitere in der Quelle) |
+| [`getMeta`](../../../../src-ts/runtime-executables/main.ts#L14203) | state | nwShcfgTdStateEntry |
+| [`pick`](../../../../src-ts/runtime-executables/main.ts#L14210) | names, predicate | getMeta, nwShcfgTdFindState |
+| [`numberOr`](../../../../src-ts/runtime-executables/main.ts#L14217) | value, fallback | Number, Number.isFinite |
+| [`onAborted`](../../../../src-ts/runtime-executables/main.ts#L14424) | – | abort.abort |
+| [`stopping`](../../../../src-ts/runtime-executables/main.ts#L14432) | – | – |
+| [`pretty`](../../../../src-ts/runtime-executables/main.ts#L14644) | s | String |
+| [`isPlain`](../../../../src-ts/runtime-executables/main.ts#L14690) | o | this._nwIsPlainObject |
+| [`safeStr`](../../../../src-ts/runtime-executables/main.ts#L14697) | v, maxLen | String, s.slice |
+| [`makeNode`](../../../../src-ts/runtime-executables/main.ts#L14907) | – | Object.create |
+| [`pushItem`](../../../../src-ts/runtime-executables/main.ts#L14947) | it | results.push, seen.add, seen.has |
+| [`_nwDeepMerge`](../../../../src-ts/runtime-executables/main.ts#L15072) | target, patch | this.nwDeepMerge |
+| [`_nwNormalizeEmsApps`](../../../../src-ts/runtime-executables/main.ts#L15111) | nativeObj | this._nwApplyLicenseLimitsToEmsApps |
+| [`_nwApplyEmsAppsToLegacyFlags`](../../../../src-ts/runtime-executables/main.ts#L15180) | nativeObj | _nwNormalizeEmsApps, this._nwLicenseAllowsAppId |
+| [`_nwPickInstallerConfig`](../../../../src-ts/runtime-executables/main.ts#L15227) | nativeObj | _nwNormalizeEmsApps, currentDynamicGridConfig, currentNvpConfig, currentPartnerConfig, this._nwBuildLicenseFeatureInfo, this._nwDeepClone, this._nwLicenseAllowsAppId, this.nwNormalizeOperatingStrategies |
+| [`_nwPickPersistedInstallerConfig`](../../../../src-ts/runtime-executables/main.ts#L15317) | – | Object.assign, Object.keys, Object.prototype.hasOwnProperty.call, _nwNormalizeEmsApps, _nwPickInstallerConfig, clone, currentDynamicGridConfig, currentPartnerConfig, runtimeOnly.has |
+| [`clone`](../../../../src-ts/runtime-executables/main.ts#L15324) | value | JSON.parse, JSON.stringify, this._nwDeepClone |
+| [`_nwHydrateStorageFarmConfigFromRuntimeStates`](../../../../src-ts/runtime-executables/main.ts#L15356) | cfgOut | Array.from, Array.isArray, Math.max, Math.min, Math.round, Number, String, asList, fromStatusRows, parseJson, parsedGroups.filter, sf.storages.some, this._nwNormalizeStorageFarmRows, this.getStateAsync (weitere in der Quelle) |
+| [`parseJson`](../../../../src-ts/runtime-executables/main.ts#L15364) | raw, fallback | JSON.parse, String |
+| [`asList`](../../../../src-ts/runtime-executables/main.ts#L15370) | parsed | Array.isArray |
+| [`fromStatusRows`](../../../../src-ts/runtime-executables/main.ts#L15376) | rows | Array.isArray |
+| [`_nwProtectStorageFarmPatchFromEmptySubmit`](../../../../src-ts/runtime-executables/main.ts#L15454) | patchObj | Array.isArray, _nwHydrateStorageFarmConfigFromRuntimeStates, this.log.warn |
+| [`_nwRegressionSafetyListInfo`](../../../../src-ts/runtime-executables/main.ts#L15505) | obj, pathText | Array.isArray, String |
+| [`_nwRegressionSafetySetPath`](../../../../src-ts/runtime-executables/main.ts#L15515) | obj, pathText, value | Array.isArray, String, value.slice |
+| [`_nwBuildRegressionSafetyReport`](../../../../src-ts/runtime-executables/main.ts#L15526) | patchObj, baseObj | Date.now, _nwRegressionSafetyListInfo, checks.filter, checks.push |
+| [`_nwApplyInstallerRegressionSafetyGate`](../../../../src-ts/runtime-executables/main.ts#L15566) | patchObj, baseObj | _nwBuildRegressionSafetyReport, _nwRegressionSafetyListInfo, _nwRegressionSafetySetPath, this.log.warn |
+| [`_nwRestartEms`](../../../../src-ts/runtime-executables/main.ts#L15593) | – | this.initEmsEngine, this.log.warn |
+| [`_nwMaskTariffProviderForUi`](../../../../src-ts/runtime-executables/main.ts#L15605) | cfg | Object.keys, String, _nwTariffSecretKeys.has, this._nwDeepClone |
+| [`_nwMergeTariffProviderSecrets`](../../../../src-ts/runtime-executables/main.ts#L15615) | incoming, existing | this._nwDeepClone |
+| [`nwValidateStationTokenChanges`](../../../../src-ts/runtime-executables/main.ts#L15635) | patch | Array.isArray, String, existing.find, used.add, used.has |
+| [`identity`](../../../../src-ts/runtime-executables/main.ts#L15639) | row, index | String |
+| [`read`](../../../../src-ts/runtime-executables/main.ts#L16239) | relId, fallback | this.getForeignStateAsync |
+| [`compactHas`](../../../../src-ts/runtime-executables/main.ts#L16398) | id | – |
+| [`compactPick`](../../../../src-ts/runtime-executables/main.ts#L16399) | ids | ids.flat |
+| [`nativeId`](../../../../src-ts/runtime-executables/main.ts#L16403) | suffix | – |
+| [`deriveStationKey`](../../../../src-ts/runtime-executables/main.ts#L16520) | parts | String, clean.push, ignoreSeg.has, s.toLowerCase |
+| [`parseConnector`](../../../../src-ts/runtime-executables/main.ts#L16545) | id | Number, String, deriveStationKey, low.match, parts.slice, seg.toLowerCase, sid.split |
+| [`scoreState`](../../../../src-ts/runtime-executables/main.ts#L16633) | it, kind | String, id.toLowerCase, idLower.endsWith, idLower.includes, role.includes |
+| [`pickBestId`](../../../../src-ts/runtime-executables/main.ts#L16723) | states, kind | String, scoreState |
+| [`normName`](../../../../src-ts/runtime-executables/main.ts#L16921) | value | Object.values, first.trim, value.trim |
+| [`parseManifest`](../../../../src-ts/runtime-executables/main.ts#L16929) | baseId | JSON.parse, raw.trim |
+| [`fallbackDeviceClass`](../../../../src-ts/runtime-executables/main.ts#L16938) | category | String |
+| [`readAlias`](../../../../src-ts/runtime-executables/main.ts#L17002) | keys | keys.map |
+| [`writeAlias`](../../../../src-ts/runtime-executables/main.ts#L17003) | keys | – |
+| [`addId`](../../../../src-ts/runtime-executables/main.ts#L17238) | id | String |
+| [`getOwn`](../../../../src-ts/runtime-executables/main.ts#L17299) | id | this.getStateAsync |
+| [`mkCheck`](../../../../src-ts/runtime-executables/main.ts#L17400) | id | – |
+| [`toSafeIdPart`](../../../../src-ts/runtime-executables/main.ts#L17425) | x | String |
+| [`readNum`](../../../../src-ts/runtime-executables/main.ts#L17462) | id | Number, Number.isFinite, this.getStateAsync |
+| [`readBool`](../../../../src-ts/runtime-executables/main.ts#L17477) | id | this.getStateAsync |
+| [`readStr`](../../../../src-ts/runtime-executables/main.ts#L17491) | id | String, this.getStateAsync |
+| [`makeNode`](../../../../src-ts/runtime-executables/main.ts#L17846) | – | Object.create |
+| [`resolveRoomName`](../../../../src-ts/runtime-executables/main.ts#L17967) | roomId | rooms.find |
+| [`resolveFunctionName`](../../../../src-ts/runtime-executables/main.ts#L17978) | fnId | funcs.find |
+| [`addSceneBlock`](../../../../src-ts/runtime-executables/main.ts#L18024) | dpId, id, alias | blocks.push |
+| [`queryNumber`](../../../../src-ts/runtime-executables/main.ts#L18178) | name, fallback | Number, value.trim |
+| [`historyRequest`](../../../../src-ts/runtime-executables/main.ts#L18237) | dispatch, normalize | – |
+| [`failure`](../../../../src-ts/runtime-executables/main.ts#L18238) | code | Object.assign |
+| [`finish`](../../../../src-ts/runtime-executables/main.ts#L18244) | error, value | clearTimeout, reject, requestCancels.delete, resolve, this._nwPendingHistoryRequests?.delete |
+| [`cancel`](../../../../src-ts/runtime-executables/main.ts#L18253) | – | failure, finish |
+| [`reply`](../../../../src-ts/runtime-executables/main.ts#L18259) | value | cancel, failure, finish, normalize, performance.now |
+| [`densifyHoldLast`](../../../../src-ts/runtime-executables/main.ts#L18293) | values, rangeStart, rangeEnd, rangeStepMs | Array.isArray, Math.floor, Math.max, Math.round, Number, Number.isFinite, byIdx.get, byIdx.has, byIdx.set, normTsMs, out.push |
+| [`normTsMs`](../../../../src-ts/runtime-executables/main.ts#L18395) | ts | Date.parse, Math.round, Number, Number.isFinite, Number.isNaN, ts.getTime, ts.trim |
+| [`ask`](../../../../src-ts/runtime-executables/main.ts#L18430) | id, query | Math.max, Number, Number.isFinite, Promise.resolve, String, historyRequest, requestSeriesCache.get, requestSeriesCache.has, requestSeriesCache.set, this._nwTrimId |
+| [`askCandidates`](../../../../src-ts/runtime-executables/main.ts#L18457) | candidates, query | Array.isArray, ask, this._nwTrimId |
+| [`_normalizeHistoryPairs`](../../../../src-ts/runtime-executables/main.ts#L18501) | values | Array.isArray, Number, Number.isFinite, normTsMs, out.push, out.sort |
+| [`_valueAtHold`](../../../../src-ts/runtime-executables/main.ts#L18520) | pairs, ts | Array.isArray, Math.floor |
+| [`_buildNormalizedPricingSeries`](../../../../src-ts/runtime-executables/main.ts#L18541) | { startTs, endTs, grossSeries, baseSeries, totalSeries, netFeeSeries, manualGrossPrice, dynamicTariffActive } | Array.from, Math.max, Number.isFinite, _normalizeHistoryPairs, _valueAtHold, baseOut.push, totalOut.push |
+| [`evcsHasData`](../../../../src-ts/runtime-executables/main.ts#L18616) | s | Array.isArray |
+| [`readCounterPoint`](../../../../src-ts/runtime-executables/main.ts#L18686) | id, newest | Promise.resolve, historyRequest |
+| [`readCurrentCounterPoint`](../../../../src-ts/runtime-executables/main.ts#L18706) | id | historyRequest |
+| [`counterDelta`](../../../../src-ts/runtime-executables/main.ts#L18720) | id | Date.now, Math.abs, Number, Number.isFinite, readCounterPoint, readCurrentCounterPoint |
+| [`integrateSeriesKwh`](../../../../src-ts/runtime-executables/main.ts#L18778) | series, defaultEndMs, stepMsForSeries, positiveOnly | Array.isArray, Date.now, Math.abs, Math.max, Math.min, Number, Number.isFinite |
+| [`clipSeriesForIntegration`](../../../../src-ts/runtime-executables/main.ts#L18810) | series, clipEndMs | Array.isArray, Number, Number.isFinite, out.push |
+| [`buildEnergyExact`](../../../../src-ts/runtime-executables/main.ts#L18837) | – | Array.from, Array.isArray, Math.max, Math.min, Number, Number.isFinite, Promise.all, balanceComponents.every, clipSeriesForIntegration, ids.map, integrateSeriesKwh, requestSeriesCache.delete, sumByTs.entries, sumByTs.get (weitere in der Quelle) |
+| [`parseTs`](../../../../src-ts/runtime-executables/main.ts#L18933) | raw, { endOfDay = false } | Date.parse, Number, Number.isFinite, Number.isNaN, String, dt.getTime, dt.setHours, s.split |
+| [`alignDown`](../../../../src-ts/runtime-executables/main.ts#L18958) | ts | Math.floor, Number |
+| [`alignUp`](../../../../src-ts/runtime-executables/main.ts#L18965) | ts | Math.ceil, Number |
+| [`densifyHoldLast`](../../../../src-ts/runtime-executables/main.ts#L18984) | series | Array.isArray, Math.ceil, Math.max, Math.round, Number, Number.isFinite, byIdx.get, byIdx.has, byIdx.set, out.push, this._nwNormTsMs |
+| [`seriesFor`](../../../../src-ts/runtime-executables/main.ts#L19026) | name | Math.max, densifyHoldLast, this._nwGetHistoryAvgSeriesAny, this._nwGetHistoryDpCandidates |
+| [`seriesForIds`](../../../../src-ts/runtime-executables/main.ts#L19033) | ids | Math.max, densifyHoldLast, this._nwGetHistoryAvgSeriesAny |
+| [`parseTs`](../../../../src-ts/runtime-executables/main.ts#L19136) | raw, { endOfDay = false } | Date.parse, Number, Number.isFinite, Number.isNaN, String, dt.getTime, dt.setHours, s.split |
+| [`getRawHistory`](../../../../src-ts/runtime-executables/main.ts#L19168) | id | – |
+| [`nwBuildEvcsReport`](../../../../src-ts/runtime-executables/main.ts#L19297) | query | Array.isArray, Date.now, Math.abs, Math.max, Math.min, Math.round, Number, Number.isFinite, Object.keys, buckets.forEach, buckets.map, buckets.push, chooseStepMs, d.getDate (weitere in der Quelle) |
+| [`parseTs`](../../../../src-ts/runtime-executables/main.ts#L19307) | raw, { endOfDay = false } | Date.parse, Number, Number.isFinite, Number.isNaN, String, dt.getTime, dt.setHours, s.split |
+| [`dayKeyOf`](../../../../src-ts/runtime-executables/main.ts#L19357) | ts | String, d.getDate, d.getFullYear, d.getMonth |
+| [`calcCount`](../../../../src-ts/runtime-executables/main.ts#L19381) | startMs, endMs, stepMs | Math.ceil, Math.max, Math.min, Number, Number.isFinite |
+| [`chooseStepMs`](../../../../src-ts/runtime-executables/main.ts#L19396) | spanMs, baseStepMs | Math.ceil, Math.max, Number |
+| [`normTsMs`](../../../../src-ts/runtime-executables/main.ts#L19412) | ts | Number, Number.isFinite, parseTs |
+| [`getHist`](../../../../src-ts/runtime-executables/main.ts#L19426) | id, startMs, endMs, aggregate, step | – |
+| [`nwWbLabel`](../../../../src-ts/runtime-executables/main.ts#L19647) | wb | String |
+| [`nwCsvEscape`](../../../../src-ts/runtime-executables/main.ts#L19658) | v | String, s.replace |
+| [`nwFormatDe`](../../../../src-ts/runtime-executables/main.ts#L19674) | num, digits | Number, Number.isFinite, n.toFixed |
+| [`nwEvcsReportToCsv`](../../../../src-ts/runtime-executables/main.ts#L19692) | report | Array.isArray, Math.max, Number, Number.isFinite, String, header.map, header.push, lines.join, lines.push, nwFormatDe, nwWbLabel, row.map, row.push, totalRow.map (weitere in der Quelle) |
+| [`nwPad2`](../../../../src-ts/runtime-executables/main.ts#L19777) | n | Number, String |
+| [`nwDayKey`](../../../../src-ts/runtime-executables/main.ts#L19784) | tsMs | Number, d.getDate, d.getFullYear, d.getMonth, nwPad2 |
+| [`nwTimeHhMm`](../../../../src-ts/runtime-executables/main.ts#L19794) | tsMs | Number, d.getHours, d.getMinutes, nwPad2 |
+| [`nwParseTsLoose`](../../../../src-ts/runtime-executables/main.ts#L19804) | raw, { endOfDay = false } | Date.parse, Number, Number.isFinite, Number.isNaN, String, dt.getTime, dt.setHours, s.split |
+| [`nwEvcsSessionsToCsv`](../../../../src-ts/runtime-executables/main.ts#L19838) | sessions | Math.round, Number, Number.isFinite, String, header.map, lines.join, lines.push, nwDayKey, nwFormatDe, nwTimeHhMm, row.map |
+| [`nwNormalizeRfid`](../../../../src-ts/runtime-executables/main.ts#L19972) | ctx, raw | String, ctx.normalizeRfidCode, s.trim |
+| [`nwLoadEvcsSessions`](../../../../src-ts/runtime-executables/main.ts#L19988) | ctx | Array.isArray, JSON.parse, ctx._evcsSessionsBuf.slice, ctx.getStateAsync, st.val.trim |
+| [`nwGetRfidNameFromWhitelist`](../../../../src-ts/runtime-executables/main.ts#L20011) | ctx, rfidNorm | Array.isArray, JSON.parse, String, ctx.getStateAsync, nwNormalizeRfid, st.val.trim |
+| [`nwStartOfLocalDay`](../../../../src-ts/runtime-executables/main.ts#L20040) | ms | Number, d.getTime, d.setHours |
+| [`nwEndOfLocalDay`](../../../../src-ts/runtime-executables/main.ts#L20051) | ms | Number, d.getTime, d.setHours |
+| [`nwBuildRfidDailyReport`](../../../../src-ts/runtime-executables/main.ts#L20062) | ctx, query | Array.isArray, Date.now, Math.max, Math.round, Number, Number.isFinite, d.getDate, d.getTime, d.setDate, days.push, nwDayKey, nwEndOfLocalDay, nwGetRfidNameFromWhitelist, nwLoadEvcsSessions (weitere in der Quelle) |
+| [`nwRfidReportToCsv`](../../../../src-ts/runtime-executables/main.ts#L20156) | report | Array.isArray, Math.max, Math.round, Number, Number.isFinite, String, header.map, lines.join, lines.push, nwFormatDe, row.map, totalRow.map |
+| [`_nwDisplaySafeId`](../../../../src-ts/runtime-executables/main.ts#L20230) | input | String |
+| [`_nwDisplayNormalizeLpKey`](../../../../src-ts/runtime-executables/main.ts#L20231) | input | Math.max, Math.round, Number, String, _nwDisplaySafeId, s.match |
+| [`_nwDisplayNormalizeModes`](../../../../src-ts/runtime-executables/main.ts#L20237) | raw | Array.isArray, String, out.includes, out.push |
+| [`_nwDisplayClamp`](../../../../src-ts/runtime-executables/main.ts#L20250) | value, min, max, fallback | Math.max, Math.min, Number, Number.isFinite |
+| [`_nwDisplayLayoutMode`](../../../../src-ts/runtime-executables/main.ts#L20255) | raw, connectorCount | Math.max, Math.round, Number, String |
+| [`_nwActiveEvcsControlRows`](../../../../src-ts/runtime-executables/main.ts#L20263) | – | Array.isArray |
+| [`_nwDisplayGlobalStorageAssistControlEnabled`](../../../../src-ts/runtime-executables/main.ts#L20272) | – | _nwActiveEvcsControlRows |
+| [`_nwDisplayStationConfig`](../../../../src-ts/runtime-executables/main.ts#L20278) | – | Array.isArray, Math.max, Math.round, Number, String, _nwDisplayNormalizeLpKey, ports.sort, portsByStation.get, portsByStation.has, portsByStation.set, portsByStation.values, rows.map |
+| [`_nwDisplayFindStation`](../../../../src-ts/runtime-executables/main.ts#L20353) | token | String, _nwDisplayStationConfig |
+| [`_nwDisplayIsLicensed`](../../../../src-ts/runtime-executables/main.ts#L20358) | – | this._nwLicenseAllowsAppId |
+| [`_nwDisplayStateVal`](../../../../src-ts/runtime-executables/main.ts#L20361) | id, fallback | Object.prototype.hasOwnProperty.call |
+| [`_nwDisplayStationStateVal`](../../../../src-ts/runtime-executables/main.ts#L20368) | stationId, suffix, fallback | Object.prototype.hasOwnProperty.call, _nwDisplaySafeId |
+| [`_nwDisplayNum`](../../../../src-ts/runtime-executables/main.ts#L20376) | v, fallback | Number, Number.isFinite |
+| [`_nwDisplayFindWallbox`](../../../../src-ts/runtime-executables/main.ts#L20380) | lpKey | Array.isArray, Math.max, Math.round, Number, String, _nwDisplayNormalizeLpKey, list.find |
+| [`_nwDisplayBool`](../../../../src-ts/runtime-executables/main.ts#L20390) | v, fallback | String |
+| [`_nwDisplayRound`](../../../../src-ts/runtime-executables/main.ts#L20398) | value, digits | Math.max, Math.min, Math.pow, Math.round, Number, Number.isFinite |
+| [`_nwDisplayParseJson`](../../../../src-ts/runtime-executables/main.ts#L20404) | raw, fallback | JSON.parse, String |
+| [`_nwDisplayNormalizeControlProfile`](../../../../src-ts/runtime-executables/main.ts#L20414) | raw | String |
+| [`_nwDisplayResolveCommandStateId`](../../../../src-ts/runtime-executables/main.ts#L20424) | station, lp | String |
+| [`_nwDisplayReadStationRuntime`](../../../../src-ts/runtime-executables/main.ts#L20433) | station, now | Array.isArray, Date.now, Math.max, Math.round, _nwDisplayClamp, _nwDisplayNum, _nwDisplayStationStateVal |
+| [`_nwDisplayActiveSession`](../../../../src-ts/runtime-executables/main.ts#L20460) | idx | Date.now, Math.max, Math.round, Number, Number.isFinite, String |
+| [`_nwDisplaySessionId`](../../../../src-ts/runtime-executables/main.ts#L20490) | stationId, lpKey, session | Number, String, _nwDisplayNormalizeLpKey, _nwDisplaySafeId |
+| [`_nwDisplayLastCompletedSession`](../../../../src-ts/runtime-executables/main.ts#L20496) | idx | Array.isArray, Math.max, Math.round, Number, String |
+| [`_nwDisplayNormalizeSessionRecord`](../../../../src-ts/runtime-executables/main.ts#L20527) | station, lpKey, row, fallbackPrice | Math.max, Math.min, Math.round, Number, Number.isFinite, String, _nwDisplayNormalizeLpKey, _nwDisplayNum, _nwDisplayRound |
+| [`_nwDisplayNewestSession`](../../../../src-ts/runtime-executables/main.ts#L20566) | buffered, persisted | Number |
+| [`_nwDisplaySessionCostBreakdown`](../../../../src-ts/runtime-executables/main.ts#L20579) | energyKwh, solarSharePct, solarPrice, gridPrice, fallbackPrice, showSolarShare | Math.max, Math.min, Math.round, Number, _nwDisplayNum, _nwDisplayRound |
+| [`_nwDisplayStartOfLocalDay`](../../../../src-ts/runtime-executables/main.ts#L20596) | ms | Date.now, Number, d.getTime, d.setHours |
+| [`_nwDisplayLocalDayKey`](../../../../src-ts/runtime-executables/main.ts#L20602) | ms | Date.now, Number, String, d.getDate, d.getFullYear, d.getMonth |
+| [`_nwDisplayReadStationJsonState`](../../../../src-ts/runtime-executables/main.ts#L20610) | stationId, suffix, fallback | JSON.parse, _nwDisplayStationStateVal |
+| [`_nwDisplayCsvEscape`](../../../../src-ts/runtime-executables/main.ts#L20621) | value | String, s.replace |
+| [`_nwDisplayStationOperatorCsv`](../../../../src-ts/runtime-executables/main.ts#L20626) | payload | Array.isArray, Date.now, Math.round, Number, String, _nwDisplayNormalizeSessionRecord, lines.join, lines.push |
+| [`_nwDisplayBuildOperatorSummary`](../../../../src-ts/runtime-executables/main.ts#L20688) | station, connectors, now | Array.isArray, Date.now, Math.max, Math.round, Number, Object.entries, Object.fromEntries, Object.keys, String, _nwDisplayLocalDayKey, _nwDisplayNormalizeLpKey, _nwDisplayNormalizeSessionRecord, _nwDisplayNum, _nwDisplayReadStationJsonState (weitere in der Quelle) |
+| [`_nwDisplayWriteStationState`](../../../../src-ts/runtime-executables/main.ts#L20792) | stationId, suffix, value, ack | Date.now, _nwDisplaySafeId, this.setStateAsync, this.updateValue |
+| [`_nwDisplayBuildPayload`](../../../../src-ts/runtime-executables/main.ts#L20799) | station | Array.isArray, Date.now, Math.max, Math.round, Number, Number.isFinite, String, _nwDisplayBool, _nwDisplayBuildOperatorSummary, _nwDisplayClamp, _nwDisplayGlobalStorageAssistControlEnabled, _nwDisplayLayoutMode, _nwDisplayNormalizeControlProfile, _nwDisplayNormalizeLpKey (weitere in der Quelle) |
+| [`_nwDisplaySetWallboxControl`](../../../../src-ts/runtime-executables/main.ts#L21118) | lpKey, prop, value | Date.now, String, _nwDisplayNormalizeLpKey, this.setStateAsync, this.updateValue |
+| [`_nwDisplaySetWallboxMode`](../../../../src-ts/runtime-executables/main.ts#L21132) | lpKey, mode, enabled | Date.now, Math.max, Math.round, Number, String, _nwDisplayNormalizeLpKey, this.setStateAsync, this.updateValue |
+| [`_nwDisplayBuildCommandIntent`](../../../../src-ts/runtime-executables/main.ts#L21153) | station, lpKey, action, mode, userMode | Date.now, String, _nwDisplayNormalizeLpKey |
+| [`_nwDisplayWriteCommandState`](../../../../src-ts/runtime-executables/main.ts#L21168) | station, lpKey, intent | Date.now, JSON.stringify, _nwDisplayBool, _nwDisplayResolveCommandStateId, isActuatorAuthorityBlockedResult, this.setForeignStateAsync, this.setStateAsync, this.updateValue |
+| [`_nwDisplayPersistSessionOperatorStates`](../../../../src-ts/runtime-executables/main.ts#L21190) | station, payload | Date.now, JSON.stringify, Number, Object.keys, String, _nwDisplayLocalDayKey, _nwDisplayReadStationJsonState, _nwDisplayStationStateVal, _nwDisplayWriteStationState, connectors.filter, connectors.slice, encodeURIComponent |
+| [`_nwDisplayExecuteStationCommand`](../../../../src-ts/runtime-executables/main.ts#L21279) | station, lpKey, action, mode, extra | JSON.stringify, Object.prototype.hasOwnProperty.call, String, _nwDisplayBool, _nwDisplayBuildCommandIntent, _nwDisplayClamp, _nwDisplayFindWallbox, _nwDisplayGlobalStorageAssistControlEnabled, _nwDisplayNormalizeControlProfile, _nwDisplayNormalizeLpKey, _nwDisplayResolveCommandStateId, _nwDisplaySetWallboxControl, _nwDisplaySetWallboxMode, _nwDisplayStateVal (weitere in der Quelle) |
+| [`_nwEnergyLedgerIsLicensed`](../../../../src-ts/runtime-executables/main.ts#L21444) | – | this._nwLicenseAllowsAppId |
+| [`_nwEnergyOriginAppEnabled`](../../../../src-ts/runtime-executables/main.ts#L21452) | – | _nwEnergyLedgerIsLicensed |
+| [`_nwEnergyLedgerJson`](../../../../src-ts/runtime-executables/main.ts#L21468) | id, fallback | JSON.parse, String, _nwDisplayStateVal |
+| [`_nwEnergyLedgerPeriod`](../../../../src-ts/runtime-executables/main.ts#L21479) | input | String |
+| [`_nwEnergyLedgerFilterEntries`](../../../../src-ts/runtime-executables/main.ts#L21483) | entries, period, summary | Array.isArray, _nwEnergyLedgerPeriod, list.filter, list.slice |
+| [`_nwEnergyLedgerSourceLabel`](../../../../src-ts/runtime-executables/main.ts#L21495) | entry | Array.isArray, String, labels.join, parts.filter |
+| [`_nwEnergyLedgerBuildPayload`](../../../../src-ts/runtime-executables/main.ts#L21507) | period | Array.isArray, Date.now, _nwEnergyLedgerFilterEntries, _nwEnergyLedgerJson, _nwEnergyLedgerPeriod |
+| [`_nwEnergyLedgerCsv`](../../../../src-ts/runtime-executables/main.ts#L21536) | payload | Array.isArray, Date.now, Math.round, Number, String, _nwEnergyLedgerSourceLabel, rows.join, rows.push |
+| [`_nwNetOperatorLicensed`](../../../../src-ts/runtime-executables/main.ts#L21610) | – | this._nwLicenseAllowsAppId |
+| [`_nwNetOperatorEnabled`](../../../../src-ts/runtime-executables/main.ts#L21613) | – | _nwNetOperatorLicensed |
+| [`_nwNetOperatorActivation`](../../../../src-ts/runtime-executables/main.ts#L21620) | – | String, _nwNetOperatorLicensed |
+| [`_nwMeshMicrogridIsLicensed`](../../../../src-ts/runtime-executables/main.ts#L21738) | – | this._nwLicenseAllowsAppId |
+| [`_nwMeshMicrogridCfg`](../../../../src-ts/runtime-executables/main.ts#L21742) | – | – |
+| [`_nwMeshSafeId`](../../../../src-ts/runtime-executables/main.ts#L21746) | value, fallback | String |
+| [`_nwMeshReceiverCfg`](../../../../src-ts/runtime-executables/main.ts#L21747) | – | Array.isArray, Math.max, Math.min, Math.round, Number, String, _nwMeshMicrogridCfg, allowedPeerText.split, r.allowedPeerNodeIds.join |
+| [`_nwMeshTailscaleCfg`](../../../../src-ts/runtime-executables/main.ts#L21763) | – | Array.isArray, Math.max, Math.min, Math.round, Number, String, _nwMeshMicrogridCfg, _nwMeshSafeId, peerUrlText.split, t.peerUrls.join |
+| [`_nwMeshPeerTokenFromReq`](../../../../src-ts/runtime-executables/main.ts#L21777) | req | String |
+| [`_nwMeshPeerTokenOk`](../../../../src-ts/runtime-executables/main.ts#L21778) | req | Buffer.from, String, _nwMeshPeerTokenFromReq, _nwMeshReceiverCfg, crypto.timingSafeEqual |
+| [`_nwMeshWriteState`](../../../../src-ts/runtime-executables/main.ts#L21790) | id, value, ack | this.setStateAsync |
+| [`_nwMeshStateJson`](../../../../src-ts/runtime-executables/main.ts#L21793) | id, fallback | _nwEnergyLedgerJson |
+| [`_nwMeshNow`](../../../../src-ts/runtime-executables/main.ts#L21794) | – | Date.now |
+| [`_nwMeshCommandIds`](../../../../src-ts/runtime-executables/main.ts#L21795) | body | Array.isArray, list.map |
+| [`_nwMeshPeerErrorClass`](../../../../src-ts/runtime-executables/main.ts#L21807) | peer | Array.isArray, p.errors.map, text.includes |
+| [`_nwMeshRoundtripStatus`](../../../../src-ts/runtime-executables/main.ts#L21823) | ms | Number, Number.isFinite |
+| [`_nwMeshRemoteNodeMatrix`](../../../../src-ts/runtime-executables/main.ts#L21830) | peers | Array.isArray, Number, _nwMeshPeerErrorClass, _nwMeshRoundtripStatus, rows.push |
+| [`_nwMeshBuildHandshakePayload`](../../../../src-ts/runtime-executables/main.ts#L21857) | – | Date.now, _nwMeshMicrogridBuildPayload, _nwMeshMicrogridCfg, _nwMeshReceiverCfg, _nwMeshSafeId |
+| [`_nwMeshMicrogridBuildPayload`](../../../../src-ts/runtime-executables/main.ts#L21886) | – | Array.isArray, Date.now, Number, String, _nwDisplayStateVal, _nwEnergyLedgerJson |
+| [`_nwMeshMicrogridCsv`](../../../../src-ts/runtime-executables/main.ts#L22034) | payload | Array.isArray, Date.now, JSON.stringify, Math.round, Number, String, rows.join, rows.push |
+| [`_nwMeshClassifyPeerError`](../../../../src-ts/runtime-executables/main.ts#L22213) | parts | Array.isArray, text.includes, text.trim |
+| [`_nwMeshRoundtripLevel`](../../../../src-ts/runtime-executables/main.ts#L22224) | ms, ok | Number, Number.isFinite |
+| [`reject`](../../../../src-ts/runtime-executables/main.ts#L22242) | status, error, message, extra | JSON.stringify, Number, _nwDisplayStateVal, _nwMeshSafeId, _nwMeshWriteState, res.status |
+| [`boolOr`](../../../../src-ts/runtime-executables/main.ts#L22660) | val, def | – |
+| [`parseJsonArraySafe`](../../../../src-ts/runtime-executables/main.ts#L22687) | raw | Array.isArray, JSON.parse, String |
+| [`storageFarmRowHasRealDatapoint`](../../../../src-ts/runtime-executables/main.ts#L22702) | row | this._nwStorageFarmRowHasRealDatapoint |
+| [`inferChargingEnabled`](../../../../src-ts/runtime-executables/main.ts#L22868) | – | – |
+| [`getArr`](../../../../src-ts/runtime-executables/main.ts#L22936) | k | Array.isArray |
+| [`defName`](../../../../src-ts/runtime-executables/main.ts#L22943) | kind, idx | – |
+| [`pickName`](../../../../src-ts/runtime-executables/main.ts#L22953) | arr, idx, kind | String, defName |
+| [`pickIcon`](../../../../src-ts/runtime-executables/main.ts#L22964) | arr, idx | String |
+| [`pickQuick`](../../../../src-ts/runtime-executables/main.ts#L22975) | arr, idx, kind | Array.isArray, Math.max, Math.round, Number, String, hlist.find, normalizeConsumerType, numOrNull, tlist.find |
+| [`resolveHeatingRodDev`](../../../../src-ts/runtime-executables/main.ts#L22990) | – | Array.isArray, Math.round, Number, hlist.find |
+| [`normalizeConsumerType`](../../../../src-ts/runtime-executables/main.ts#L23024) | raw | String |
+| [`numOrNull`](../../../../src-ts/runtime-executables/main.ts#L23042) | v | Number, Number.isFinite |
+| [`buildSlots`](../../../../src-ts/runtime-executables/main.ts#L23133) | kind | String, getArr, out.push, pickIcon, pickName, pickQuick, this._nwGetFlowSlotInfo |
+| [`nwPsAtCsvEscape`](../../../../src-ts/runtime-executables/main.ts#L23428) | v | String, s.replace |
+| [`nwPsAtFmtNum`](../../../../src-ts/runtime-executables/main.ts#L23438) | v, digits | Math.max, Math.min, Math.round, Number, Number.isFinite, n.toFixed |
+| [`nwPsAtPad2`](../../../../src-ts/runtime-executables/main.ts#L23450) | n | Number, String |
+| [`nwPsAtIsoLocal`](../../../../src-ts/runtime-executables/main.ts#L23457) | ts | Date.now, Number, d.getDate, d.getFullYear, d.getHours, d.getMinutes, d.getMonth, d.getSeconds, nwPsAtPad2 |
+| [`nwPsAtYmd`](../../../../src-ts/runtime-executables/main.ts#L23467) | ts | Date.now, Number, d.getDate, d.getFullYear, d.getMonth, nwPsAtPad2 |
+| [`nwPsAtParseTs`](../../../../src-ts/runtime-executables/main.ts#L23477) | raw, { endOfDay = false } | Date.parse, Number, Number.isFinite, Number.isNaN, String, dt.getTime, dt.setHours, s.split |
+| [`nwPsAtStateVal`](../../../../src-ts/runtime-executables/main.ts#L23502) | localId, fallback | this.getStateAsync |
+| [`nwPsAtStateNum`](../../../../src-ts/runtime-executables/main.ts#L23519) | localId, fallback | Number, Number.isFinite, nwPsAtStateVal |
+| [`nwPsAtStateBool`](../../../../src-ts/runtime-executables/main.ts#L23530) | localId, fallback | String, nwPsAtStateVal |
+| [`nwPsAtStateStr`](../../../../src-ts/runtime-executables/main.ts#L23545) | localId, fallback | String, nwPsAtStateVal |
+| [`nwPsAtSafeFile`](../../../../src-ts/runtime-executables/main.ts#L23556) | s | String |
+| [`nwPsAtBuildReport`](../../../../src-ts/runtime-executables/main.ts#L23567) | query | Array.from, Array.isArray, Date.now, Math.max, Math.min, Math.round, Number, Number.isFinite, Promise.all, nwPsAtParseTs, nwPsAtStateBool, nwPsAtStateNum, nwPsAtStateStr, seriesDefs.map (weitere in der Quelle) |
+| [`nwPsAtReportToCsv`](../../../../src-ts/runtime-executables/main.ts#L23721) | report | Number, header.map, lines.join, lines.push, nwPsAtFmtNum, nwPsAtIsoLocal, pushMeta |
+| [`pushMeta`](../../../../src-ts/runtime-executables/main.ts#L23729) | k, v | String, lines.push |
+| [`nwPsAtPdfAscii`](../../../../src-ts/runtime-executables/main.ts#L23788) | value | String |
+| [`nwPsAtPdfEscape`](../../../../src-ts/runtime-executables/main.ts#L23800) | value | nwPsAtPdfAscii |
+| [`nwPsAtWrap`](../../../../src-ts/runtime-executables/main.ts#L23807) | line, max | nwPsAtPdfAscii, out.push, s.split |
+| [`nwPsAtBuildPdf`](../../../../src-ts/runtime-executables/main.ts#L23830) | title, lines | Buffer.byteLength, Buffer.from, Math.max, Object.keys, String, addObj, chunks.forEach, chunks.push, nwPsAtWrap, pageIds.map, wrapped.push, wrapped.slice |
+| [`addObj`](../../../../src-ts/runtime-executables/main.ts#L23857) | id, body | – |
+| [`nwPsAtReportToPdf`](../../../../src-ts/runtime-executables/main.ts#L23901) | report | Array.isArray, cfg.highLoadWindows.slice, lines.push, nwPsAtBuildPdf, nwPsAtFmtNum, nwPsAtIsoLocal, windows.forEach |
+| [`valueOf`](../../../../src-ts/runtime-executables/main.ts#L24002) | key, fallback | Object.prototype.hasOwnProperty.call |
+| [`writeRelayValue`](../../../../src-ts/runtime-executables/main.ts#L24732) | rawValue, valueKind | withActuatorShadowContext |
+| [`normalizeConsumerType`](../../../../src-ts/runtime-executables/main.ts#L24916) | raw | String |
+| [`resolveThermalDev`](../../../../src-ts/runtime-executables/main.ts#L24931) | – | Array.isArray, Math.round, Number, tlist.find |
+| [`resolveHeatingRodDev`](../../../../src-ts/runtime-executables/main.ts#L24948) | – | Array.isArray, Math.round, Number, hlist.find |
+| [`syncHeatingRodUserState`](../../../../src-ts/runtime-executables/main.ts#L24965) | localId, val | Date.now, emsDp.handleStateChange, this.updateValue |
+| [`normalizeHeatingRodQuickMode`](../../../../src-ts/runtime-executables/main.ts#L24981) | raw | String |
+| [`getHeatingRodStoredUserMode`](../../../../src-ts/runtime-executables/main.ts#L24997) | – | normalizeHeatingRodQuickMode, this.getStateAsync |
+| [`heatingRodManualStageForMode`](../../../../src-ts/runtime-executables/main.ts#L25011) | dev, rawMode | Array.isArray, Math.ceil, Math.max, Math.min, Math.round, Number, normalizeHeatingRodQuickMode |
+| [`writeHeatingRodStagesOnce`](../../../../src-ts/runtime-executables/main.ts#L25028) | dev, rawTargetStage | Array.isArray, Date.now, Math.max, Math.min, Math.round, Number, String, addWrite, blocked.push, emsDp.handleStateChange, emsDp.lastWriteByObjectId.set, grouped.entries, isActuatorAuthorityBlockedResult, this.setForeignStateAsync (weitere in der Quelle) |
+| [`addWrite`](../../../../src-ts/runtime-executables/main.ts#L25043) | stageIndex, rawId, physicalOn | String, emsDp.getEntry, grouped.get, grouped.set |
+| [`clearBoost`](../../../../src-ts/runtime-executables/main.ts#L25162) | – | this.setStateAsync |
+| [`clearOverrides`](../../../../src-ts/runtime-executables/main.ts#L25244) | – | this.setStateAsync |
+| [`finiteLimit`](../../../../src-ts/runtime-executables/main.ts#L25314) | raw | Number, Number.isFinite |
+| [`normalizeConsumerType`](../../../../src-ts/runtime-executables/main.ts#L25482) | raw | String |
+| [`resolveThermalDev`](../../../../src-ts/runtime-executables/main.ts#L25497) | – | Array.isArray, Math.round, Number, tlist.find |
+| [`resolveHeatingRodDev`](../../../../src-ts/runtime-executables/main.ts#L25517) | – | Array.isArray, Math.round, Number, hlist.find |
+| [`normalizeHeatingRodAutoModeLocal`](../../../../src-ts/runtime-executables/main.ts#L25580) | raw | String |
+| [`normMode`](../../../../src-ts/runtime-executables/main.ts#L25610) | m | String |
+| [`readNumState`](../../../../src-ts/runtime-executables/main.ts#L25628) | id, fallback | Number, Number.isFinite, this.getStateAsync |
+| [`normMode`](../../../../src-ts/runtime-executables/main.ts#L25776) | m | String |
+| [`authorize`](../../../../src-ts/runtime-executables/main.ts#L26115) | – | hasCapability, resolveStrictAccess |
+| [`NexoWattVis._nwNormalizeFlowSlotKind`](../../../../src-ts/runtime-executables/main.ts#L26152) | kind | String, k.startsWith |
+| [`NexoWattVis._nwFlowSlotCount`](../../../../src-ts/runtime-executables/main.ts#L26162) | kind | this._nwNormalizeFlowSlotKind |
+| [`NexoWattVis._nwFlowSlotKey`](../../../../src-ts/runtime-executables/main.ts#L26171) | kind, index | Math.max, Math.round, Number, this._nwNormalizeFlowSlotKind |
+| [`NexoWattVis._nwGetFlowSlotsRoot`](../../../../src-ts/runtime-executables/main.ts#L26182) | – | – |
+| [`NexoWattVis._nwFlowSlotPowerIdFromSlot`](../../../../src-ts/runtime-executables/main.ts#L26197) | slot | String |
+| [`NexoWattVis._nwGetFlowSlotInfo`](../../../../src-ts/runtime-executables/main.ts#L26227) | kind, index | Array.isArray, Math.max, Math.min, Math.round, Number, String, this._nwFlowSlotCount, this._nwFlowSlotKey, this._nwFlowSlotPowerIdFromSlot, this._nwGetFlowSlotsRoot, this._nwNormalizeFlowSlotKind |
+| [`NexoWattVis.prepareFlowSlots`](../../../../src-ts/runtime-executables/main.ts#L26270) | flowSlotsCfg | Array.isArray, Object.keys, String, add, this._nwFlowSlotKey, this._nwFlowSlotPowerIdFromSlot, this._nwGetFlowSlotInfo |
+| [`add`](../../../../src-ts/runtime-executables/main.ts#L26281) | objectId, stateKey | String, id.startsWith, out.push, seen.add, seen.has |
+| [`NexoWattVis._nwNormalizeUnit`](../../../../src-ts/runtime-executables/main.ts#L26328) | unit | String |
+| [`NexoWattVis._nwPowerScaleToWFromUnit`](../../../../src-ts/runtime-executables/main.ts#L26337) | unit | this._nwNormalizeUnit |
+| [`NexoWattVis._nwIsMappedPowerKey`](../../../../src-ts/runtime-executables/main.ts#L26351) | key | key.endsWith, key.startsWith |
+| [`NexoWattVis._nwScaleMappedValue`](../../../../src-ts/runtime-executables/main.ts#L26382) | key, objectId, val | Array.isArray, Math.max, Math.round, Number, Number.isFinite, Object.prototype.hasOwnProperty.call, String, normalizeEvcsEnergyTotalKwh, this._nwForeignPowerScaleCache.get, this._nwIsMappedPowerKey, this.evcsList.find |
+| [`NexoWattVis._nwPrimeForeignPowerScale`](../../../../src-ts/runtime-executables/main.ts#L26430) | objectId | this._nwForeignPowerScaleCache.delete, this._nwForeignPowerScaleCache.keys, this._nwForeignPowerScaleCache.set, this._nwForeignUnitCache.delete, this._nwForeignUnitCache.has, this._nwForeignUnitCache.keys, this._nwForeignUnitCache.set, this._nwNormalizeUnit, this._nwPowerScaleToWFromUnit, this.getForeignObjectAsync |
+| [`NexoWattVis._nwIsOwnStateId`](../../../../src-ts/runtime-executables/main.ts#L26460) | id | id.trim, sid.startsWith |
+| [`NexoWattVis._nwBuildLiveCoreRefreshPlan`](../../../../src-ts/runtime-executables/main.ts#L26471) | – | Array.from, Array.isArray, add, addEvcsBinding, byId.values, configured.values, this._nwEvcsInputSpecsForWallbox, this.prepareFlowSlots |
+| [`add`](../../../../src-ts/runtime-executables/main.ts#L26480) | id, key | byId.get, byId.set, entry.keys.add, id.trim, key.trim, this._nwIsOwnStateId |
+| [`addEvcsBinding`](../../../../src-ts/runtime-executables/main.ts#L26495) | binding | String, byId.get, byId.set, entry.evcsBindings.set, this._nwIsOwnStateId |
+| [`NexoWattVis._nwRefreshLiveCoreDatapoints`](../../../../src-ts/runtime-executables/main.ts#L26586) | reason | Array.isArray, Date.now, Promise.all, plan.slice, slice.map, this._nwBuildLiveCoreRefreshPlan |
+| [`applyState`](../../../../src-ts/runtime-executables/main.ts#L26607) | entry | Array.isArray, Number.isFinite, Object.is, emsDp.cacheByObjectId.get, emsDp.handleStateChange, handledEvcsKeys.add, handledEvcsKeys.has, this._nwPublishEvcsInputBinding, this._nwScaleMappedValue, this.getForeignStateAsync, this.updateValue |
+| [`NexoWattVis._nwStopLiveCoreRefresh`](../../../../src-ts/runtime-executables/main.ts#L26668) | – | this._nwClearInterval |
+| [`NexoWattVis._nwStartLiveCoreRefresh`](../../../../src-ts/runtime-executables/main.ts#L26681) | – | Array.isArray, Math.max, Number, this._nwBuildLiveCoreRefreshPlan, this._nwSetInterval, this._nwStopLiveCoreRefresh |
+| [`NexoWattVis.subscribeForecastUiStates`](../../../../src-ts/runtime-executables/main.ts#L26700) | – | Date.now, Number, Object.entries, Object.is, effectiveKeys.map, id.slice, id.startsWith, primedKeys.add, primedKeys.has, providerKeys.map, this.getForeignStatesAsync, this.getStateAsync, this.log.debug, this.subscribeForeignStatesAsync (weitere in der Quelle) |
+| [`NexoWattVis.subscribeConfiguredStates`](../../../../src-ts/runtime-executables/main.ts#L26787) | – | Object.keys, id.trim, key.slice, key.startsWith, localUiKeys.includes, settingsLocalKeys.map, slot.objectId.trim, storageFarmLocalKeys.map, this._nwForeignPowerScaleCache.clear, this._nwForeignUnitCache.clear, this._nwPrimeForeignPowerScale, this._nwRefreshLiveCoreDatapoints, this._nwScaleMappedValue, this._nwStartLiveCoreRefresh (weitere in der Quelle) |
+| [`NexoWattVis._nwRequestImmediateEmsTick`](../../../../src-ts/runtime-executables/main.ts#L26979) | reason, delayMs | Math.max, Number, Number.isFinite, String, engine.requestImmediateTick |
+| [`NexoWattVis.onMessage`](../../../../src-ts/runtime-executables/main.ts#L27000) | obj | this._para14aEebusApi.handleMessage, this.log.warn, this.sendTo |
+| [`NexoWattVis._nwGetPara14aEebusIngress`](../../../../src-ts/runtime-executables/main.ts#L27015) | – | this._para14aEebusApi.getIngress |
+| [`NexoWattVis._nwFlushPara14aEebusImplementationFeedback`](../../../../src-ts/runtime-executables/main.ts#L27023) | context | this._para14aEebusApi.flushImplementationFeedback |
+| [`NexoWattVis.onStateChange`](../../../../src-ts/runtime-executables/main.ts#L27037) | id, state | Date.now, Number, String, centralLicenseSnapshot, evcsHandledKeys.has, key.match, key.startsWith, pvAuto.cache.set, pvAuto.ids.has, this._notifyGetSettingBool, this._notifyParseBool, this._nwApplyEvcsInputSourceState, this._nwIsOwnStateId, this._nwIsReadOnlyEvcsMirrorKey (weitere in der Quelle) |
+| [`NexoWattVis.keyFromId`](../../../../src-ts/runtime-executables/main.ts#L27170) | id | Object.entries, id.slice, id.startsWith, rest.includes, this._nwRootUiKeys.has |
+| [`NexoWattVis.normalizeRfidCandidate`](../../../../src-ts/runtime-executables/main.ts#L27225) | val | String, hexMatches.sort, s.match, s.replace |
+| [`NexoWattVis.maybeCaptureRfidLearning`](../../../../src-ts/runtime-executables/main.ts#L27251) | sourceId, rawVal, ts | Date.now, Number, this.evcsRfidReadIds.has, this.log.info, this.normalizeRfidCandidate, this.setStateAsync, this.updateValue |
+| [`NexoWattVis.parseRfidWhitelist`](../../../../src-ts/runtime-executables/main.ts#L27284) | jsonStr | Array.isArray, JSON.parse, JSON.stringify, String, this.normalizeRfidCandidate |
+| [`NexoWattVis.refreshRfidWhitelistFromCache`](../../../../src-ts/runtime-executables/main.ts#L27310) | – | JSON.stringify, this.parseRfidWhitelist |
+| [`NexoWattVis.isRfidEnabled`](../../../../src-ts/runtime-executables/main.ts#L27323) | – | – |
+| [`NexoWattVis.setLocalStateWithCache`](../../../../src-ts/runtime-executables/main.ts#L27332) | id, val, ts | Date.now, Number, this.setStateAsync, this.updateValue |
+| [`NexoWattVis.startNotificationMonitor`](../../../../src-ts/runtime-executables/main.ts#L27345) | – | this._nwClearInterval, this._nwSetInterval, this._nwSetTimeout |
+| [`tick`](../../../../src-ts/runtime-executables/main.ts#L27360) | – | this.notificationTick |
+| [`NexoWattVis.stopNotificationMonitor`](../../../../src-ts/runtime-executables/main.ts#L27377) | – | this._notificationMail?.close, this._nwClearInterval |
+| [`NexoWattVis._notifyParseBool`](../../../../src-ts/runtime-executables/main.ts#L27393) | val, def | String |
+| [`NexoWattVis._notifyGetCached`](../../../../src-ts/runtime-executables/main.ts#L27409) | key, def | – |
+| [`NexoWattVis._notifyGetSettingBool`](../../../../src-ts/runtime-executables/main.ts#L27422) | key, def | this._notifyGetCached, this._notifyParseBool |
+| [`NexoWattVis._notifyGetSettingString`](../../../../src-ts/runtime-executables/main.ts#L27432) | key, def | String, this._notifyGetCached |
+| [`NexoWattVis._notifyGetSettingNumber`](../../../../src-ts/runtime-executables/main.ts#L27443) | key, def | Number, Number.isFinite, this._notifyGetCached |
+| [`NexoWattVis._notifySetDebugState`](../../../../src-ts/runtime-executables/main.ts#L27454) | key, val | Date.now, this.setStateAsync, this.updateValue |
+| [`NexoWattVis._getNotificationMail`](../../../../src-ts/runtime-executables/main.ts#L27470) | – | – |
+| [`NexoWattVis._notifySendEmail`](../../../../src-ts/runtime-executables/main.ts#L27477) | to, subject, text | String, this._getNotificationMail |
+| [`NexoWattVis._notifyCollectObjectIdsFromConfig`](../../../../src-ts/runtime-executables/main.ts#L27491) | – | Array.from, walk |
+| [`walk`](../../../../src-ts/runtime-executables/main.ts#L27500) | v | Array.isArray, Object.values, ids.add, re.test, v.trim, walk |
+| [`NexoWattVis._notifyRefreshWatchedInstances`](../../../../src-ts/runtime-executables/main.ts#L27532) | force | Array.from, Date.now, String, ids.includes, ids.push, inst.add, this._notifyCollectObjectIdsFromConfig, this.getForeignObjectAsync, valid.push |
+| [`NexoWattVis._notifyRefreshNwDevicesCache`](../../../../src-ts/runtime-executables/main.ts#L27589) | force | Date.now, Object.entries, String, cid.split, configuredIds.some, getAlias, hasState, pv.push, this._notifyCollectObjectIdsFromConfig, this._notifyRefreshWatchedInstances, this.getForeignObjectsAsync |
+| [`hasState`](../../../../src-ts/runtime-executables/main.ts#L27604) | baseId, suffix | – |
+| [`getAlias`](../../../../src-ts/runtime-executables/main.ts#L27614) | obj, key | – |
+| [`NexoWattVis._notifyFormatDuration`](../../../../src-ts/runtime-executables/main.ts#L27653) | ms | Math.floor, Math.max, Number |
+| [`NexoWattVis.notificationTick`](../../../../src-ts/runtime-executables/main.ts#L27669) | – | this._getNotificationMail |
+| [`NexoWattVis.startHistorieExportTimer`](../../../../src-ts/runtime-executables/main.ts#L27680) | – | Date.now, Math.ceil, Math.max, Math.min, Math.round, Number, Number.isFinite, this._nwClearInterval, this._nwClearTimeout, this._nwSetTimeout |
+| [`tick`](../../../../src-ts/runtime-executables/main.ts#L27706) | – | this.updateHistorieExportStates |
+| [`NexoWattVis.ensureHistorieExportStates`](../../../../src-ts/runtime-executables/main.ts#L27730) | – | Number, Number.isFinite, String, ensureChannel, ensureState, this._nwDetectInfluxInstance, this._nwEnsureInfluxCustom, this._nwGetFlowSlotInfo, this._nwGetHistoryInstance, this.log.debug |
+| [`ensureChannel`](../../../../src-ts/runtime-executables/main.ts#L27740) | id, name | this.extendObjectAsync, this.setObjectNotExistsAsync |
+| [`ensureState`](../../../../src-ts/runtime-executables/main.ts#L27751) | id, name, role, unit, type, influxOpts | this._nwEnsureInfluxCustom, this.extendObjectAsync, this.setObjectNotExistsAsync |
+| [`NexoWattVis._nwEnsureInfluxCustom`](../../../../src-ts/runtime-executables/main.ts#L27929) | localId, inst, opts | Object.assign, String, this.extendObjectAsync, this.getObjectAsync |
+| [`NexoWattVis._nwGetNumberFromCache`](../../../../src-ts/runtime-executables/main.ts#L27959) | key | Number, Number.isFinite |
+| [`NexoWattVis._nwGetCacheAgeMs`](../../../../src-ts/runtime-executables/main.ts#L27976) | key, now | Date.now, Math.max, Number, Number.isFinite |
+| [`NexoWattVis._nwGetNumberFromCacheFresh`](../../../../src-ts/runtime-executables/main.ts#L27994) | key, maxAgeMs, fallback, now | Date.now, Number, Number.isFinite, this._nwGetCacheAgeMs |
+| [`NexoWattVis._nwGetRawNumberFromCache`](../../../../src-ts/runtime-executables/main.ts#L28017) | key, maxAgeMs, fallback, now | Date.now, Math.max, Number, Number.isFinite |
+| [`NexoWattVis._nwLiveInputMaxAgeMs`](../../../../src-ts/runtime-executables/main.ts#L28039) | – | Math.max, Math.round, Number, Number.isFinite |
+| [`NexoWattVis._nwIsBatterySignInverted`](../../../../src-ts/runtime-executables/main.ts#L28055) | – | this._notifyGetSettingBool |
+| [`NexoWattVis._nwStorageFarmIsActiveFromCache`](../../../../src-ts/runtime-executables/main.ts#L28073) | – | Number, this._nwGetStorageFarmRuntimeInfo |
+| [`NexoWattVis._nwResolveStorageFarmMetricsFromCache`](../../../../src-ts/runtime-executables/main.ts#L28091) | opts | Array.isArray, Date.now, JSON.parse, Math.abs, Math.max, Math.round, Number, Number.isFinite, parsed.filter, read, this._nwGetCacheAgeMs, this._nwStorageFarmIsActiveFromCache |
+| [`read`](../../../../src-ts/runtime-executables/main.ts#L28094) | key | Number, Number.isFinite, this._nwGetNumberFromCache |
+| [`NexoWattVis._nwConfiguredPvCapacityW`](../../../../src-ts/runtime-executables/main.ts#L28155) | – | Array.from, collect, unique.values |
+| [`collect`](../../../../src-ts/runtime-executables/main.ts#L28161) | rows | Array.isArray, Math.max, Number, Number.isFinite, String, nwPhysicalPvSourceKey, row.kwp.replace, unique.get, unique.set |
+| [`NexoWattVis._nwMergeStorageFarmPvWithBase`](../../../../src-ts/runtime-executables/main.ts#L28185) | baseAcW, opts | Array.isArray, Math.abs, Math.max, Math.min, Math.round, Number, Number.isFinite, String, addBaseSource, baseSourceIds.has, nwApplyPvCapacityPlausibility, nwCombineStorageFarmPv, nwPhysicalPvSourceKey, this._nwConfiguredPvCapacityW (weitere in der Quelle) |
+| [`addBaseSource`](../../../../src-ts/runtime-executables/main.ts#L28204) | sourceId | String, baseSourceIds.add, normalizedId.toLowerCase, nwPhysicalPvSourceKey |
+| [`NexoWattVis._nwResolveBatteryFlowFromCache`](../../../../src-ts/runtime-executables/main.ts#L28269) | opts | Date.now, Math.abs, Math.max, Math.round, Number, Number.isFinite, String, ageInfo, fromBalance, fromSigned, idOf, readMapped, this._nwGetCacheAgeMs, this._nwGetStorageControlAuthority (weitere in der Quelle) |
+| [`idOf`](../../../../src-ts/runtime-executables/main.ts#L28282) | key | String |
+| [`readMapped`](../../../../src-ts/runtime-executables/main.ts#L28305) | key, onlyIfMapped, raw | idOf, this._nwGetNumberFromCacheFresh, this._nwGetRawNumberFromCache |
+| [`ageInfo`](../../../../src-ts/runtime-executables/main.ts#L28317) | – | this._nwGetCacheAgeMs |
+| [`fromSigned`](../../../../src-ts/runtime-executables/main.ts#L28329) | signedRaw, src, opts2 | Math.abs, Math.round, Number, Number.isFinite, ageInfo |
+| [`fromBalance`](../../../../src-ts/runtime-executables/main.ts#L28354) | – | Math.abs, Math.max, Math.round, Number, Number.isFinite, Object.assign, ageInfo, this._nwGetNumberFromCache, this._nwHasMappedDatapoint, this._nwResolveGridImportExportFromCache |
+| [`NexoWattVis._nwNormalizeEnergyFlowTsMode`](../../../../src-ts/runtime-executables/main.ts#L28549) | value | String |
+| [`NexoWattVis._nwGetEnergyFlowTsMode`](../../../../src-ts/runtime-executables/main.ts#L28572) | – | this._nwNormalizeEnergyFlowTsMode |
+| [`NexoWattVis._nwBuildEnergyFlowTsEffectivePlan`](../../../../src-ts/runtime-executables/main.ts#L28597) | mode, runtimeValues, tsValues, shadowResult | Array.isArray, blockedReasons.push, this._nwEvaluateEnergyFlowPlantGate, this._nwGetEnergyFlowTsFixedSourceState, this._nwGetEnergyFlowTsSwitchConfig, this._nwIsEnergyFlowPlantGateWarmupOnly, this._nwNormalizeEnergyFlowTsMode, this._nwValidateEnergyFlowTsCandidate |
+| [`NexoWattVis._nwValidateEnergyFlowTsCandidate`](../../../../src-ts/runtime-executables/main.ts#L28664) | tsShadow | Array.isArray, Math.abs, Math.max, Math.round, Number, Number.isFinite, String, blockers.push, farmRows.reduce, nwFeatureFlagsService.storagePerformanceProfile, this._nwCurrentLicenseEdition, warnings.push |
+| [`NexoWattVis._nwGetEnergyFlowTsMirrorResolver`](../../../../src-ts/runtime-executables/main.ts#L28750) | – | path.join, require, this.log.debug |
+| [`NexoWattVis._nwBuildEnergyFlowTsShadowInput`](../../../../src-ts/runtime-executables/main.ts#L28784) | ctx | Date.now, Number, Number.isFinite, String, idOf, storageSrc.indexOf, this._nwGetNumberFromCache, this._nwGetRawNumberFromCache, this._nwIsBatterySignInverted |
+| [`idOf`](../../../../src-ts/runtime-executables/main.ts#L28786) | key | String |
+| [`NexoWattVis._nwRunEnergyFlowTsShadowComparison`](../../../../src-ts/runtime-executables/main.ts#L28850) | ctx | Date.now, Math.max, Math.round, Number, Number.isFinite, String, compare, mismatches.join, resolver.buildEnergyFlowSnapshot, this._nwBuildEnergyFlowTsEffectivePlan, this._nwBuildEnergyFlowTsShadowInput, this._nwGetEnergyFlowTsMirrorResolver, this._nwGetEnergyFlowTsMode, this._nwNormalizeEnergyFlowTsMode (weitere in der Quelle) |
+| [`compare`](../../../../src-ts/runtime-executables/main.ts#L28894) | key, label, tol | Math.abs, Number, Number.isFinite, mismatches.push |
+| [`NexoWattVis._nwGetEnergyFlowTsSwitchConfig`](../../../../src-ts/runtime-executables/main.ts#L28958) | – | Math.max, Math.min, Math.round, Number, Number.isFinite, String |
+| [`NexoWattVis._nwBuildEnergyFlowTsRuntimePlantSample`](../../../../src-ts/runtime-executables/main.ts#L28996) | tsShadow | Array.isArray, Date.now, String, blockers.push, mismatches.slice |
+| [`NexoWattVis._nwSummarizeEnergyFlowTsRuntimePlantSamples`](../../../../src-ts/runtime-executables/main.ts#L29030) | samples | Array.isArray, Date.now, Math.round, list.filter, list.reduce, list.slice, samples.filter |
+| [`NexoWattVis._nwUpdateEnergyFlowTsRuntimePlantEvaluation`](../../../../src-ts/runtime-executables/main.ts#L29072) | tsShadow | Array.isArray, Date.now, current.concat, this._nwBuildEnergyFlowTsRuntimePlantSample, this._nwSummarizeEnergyFlowTsRuntimePlantSamples |
+| [`NexoWattVis._nwEvaluateEnergyFlowPlantGate`](../../../../src-ts/runtime-executables/main.ts#L29114) | cfg | Array.isArray, Math.max, Math.min, Math.round, Number, blockers.push, this._nwSummarizeTsShadowPlantSamples |
+| [`NexoWattVis._nwIsEnergyFlowPlantGateWarmupOnly`](../../../../src-ts/runtime-executables/main.ts#L29165) | plantGate | Array.isArray, Number, blockers.every, plantGate.blockers.map |
+| [`NexoWattVis._nwIsEnergyFlowHardFallbackReason`](../../../../src-ts/runtime-executables/main.ts#L29194) | reason | String, text.includes |
+| [`NexoWattVis._nwBuildEnergyFlowFixedSourceInput`](../../../../src-ts/runtime-executables/main.ts#L29210) | switchState | Date.now, Number, String |
+| [`NexoWattVis._nwUpdateEnergyFlowTsFixedSourceState`](../../../../src-ts/runtime-executables/main.ts#L29237) | switchState | Date.now, Math.max, Math.min, Math.round, Number, this._nwBuildEnergyFlowFixedSourceInput, this._nwGetEnergyFlowTsSwitchConfig, this._nwIsEnergyFlowHardFallbackReason |
+| [`NexoWattVis._nwGetEnergyFlowTsFixedSourceState`](../../../../src-ts/runtime-executables/main.ts#L29294) | – | – |
+| [`NexoWattVis._nwEvaluateEnergyFlowTsSwitch`](../../../../src-ts/runtime-executables/main.ts#L29327) | tsShadow | Array.isArray, Date.now, Math.max, Math.min, Math.round, Number, this._nwEvaluateEnergyFlowPlantGate, this._nwGetEnergyFlowTsFixedSourceState, this._nwGetEnergyFlowTsSwitchConfig, this._nwIsEnergyFlowPlantGateWarmupOnly, this._nwUpdateEnergyFlowTsRuntimePlantEvaluation, this._nwValidateEnergyFlowTsCandidate |
+| [`NexoWattVis._nwBuildEffectiveEnergyFlowValues`](../../../../src-ts/runtime-executables/main.ts#L29446) | runtimeValues, tsShadow | this._nwBuildEnergyFlowTsCandidateAudit, this._nwEvaluateEnergyFlowTsSwitch, this._nwRecordEnergyFlowTsActiveTestSample, this._nwUpdateEnergyFlowTsFixedSourceState, valueOf |
+| [`valueOf`](../../../../src-ts/runtime-executables/main.ts#L29453) | key, fallbackKey | Math.round, Number, Number.isFinite |
+| [`NexoWattVis._nwRecordEnergyFlowTsActiveTestSample`](../../../../src-ts/runtime-executables/main.ts#L29497) | effective, runtimeValues, tsValues | Array.from, Array.isArray, Date.now, JSON.stringify, Math.round, Number, Number.isFinite, String, blockers.filter, blockers.push, candidate.blockers.map, sample.blockers.join, samples.push, samples.shift (weitere in der Quelle) |
+| [`NexoWattVis._nwSummarizeEnergyFlowTsActiveTestSamples`](../../../../src-ts/runtime-executables/main.ts#L29563) | – | Array.isArray, Date.now, Math.round, samples.filter, samples.reduce, samples.slice, this._energyFlowTsActiveTestSamples.slice |
+| [`NexoWattVis._nwBuildEnergyFlowTsCandidateAudit`](../../../../src-ts/runtime-executables/main.ts#L29630) | runtimeValues, tsValues, switchState, tsShadow | Array.isArray, Number, String, keys.map |
+| [`NexoWattVis._nwEnergyFlowTsLiveTestStateFromSwitch`](../../../../src-ts/runtime-executables/main.ts#L29688) | switchState | String, reason.includes, source.includes |
+| [`NexoWattVis._nwParseTsShadowJson`](../../../../src-ts/runtime-executables/main.ts#L29723) | raw, fallback | JSON.parse, String, text.slice |
+| [`NexoWattVis._nwCollectTsShadowMismatches`](../../../../src-ts/runtime-executables/main.ts#L29748) | shadow | Array.isArray, Object.keys, String, add, shadow.diffs.forEach, shadow.mismatches.forEach |
+| [`add`](../../../../src-ts/runtime-executables/main.ts#L29751) | entry, idx, prefix | String, out.push |
+| [`NexoWattVis._nwEvaluateTsShadowBlock`](../../../../src-ts/runtime-executables/main.ts#L29792) | id, label, shadow, options | Math.max, Number, Number.isFinite, String, blockers.push, mismatches.slice, this._nwCollectTsShadowMismatches, warnings.push |
+| [`NexoWattVis._nwBuildTsShadowPlantSample`](../../../../src-ts/runtime-executables/main.ts#L29836) | readiness | Array.isArray, Date.now, String, blockers.slice, readiness.blockers.map, readiness.warnings.map, safeBlock, warnings.slice |
+| [`safeBlock`](../../../../src-ts/runtime-executables/main.ts#L29837) | block | Math.max, Math.round, Number, String |
+| [`NexoWattVis._nwSummarizeTsShadowPlantSamples`](../../../../src-ts/runtime-executables/main.ts#L29880) | samples | Array.isArray, Date.now, Math.round, list.filter, list.reduce, list.slice, samples.filter |
+| [`NexoWattVis._nwUpdateTsShadowPlantEvaluation`](../../../../src-ts/runtime-executables/main.ts#L29935) | _control, readiness | Array.isArray, Date.now, current.concat, this._nwBuildTsShadowPlantSample, this._nwSummarizeTsShadowPlantSamples |
+| [`NexoWattVis._nwEvaluateEnergyFlowSwitchReadinessFromControl`](../../../../src-ts/runtime-executables/main.ts#L29979) | control | Date.now, blocks.every, blocks.flatMap, this._nwEvaluateTsShadowBlock, this._nwGetEnergyFlowTsMode, this._nwNormalizeEnergyFlowTsMode, this._nwParseTsShadowJson |
+| [`NexoWattVis._nwRecordAndSummarizeTsShadowEvaluation`](../../../../src-ts/runtime-executables/main.ts#L30037) | control, readiness | Array.isArray, Date.now, JSON.stringify, Math.max, Math.round, Number, String, blockSummary, lastBlockers.slice, lastSample.coreLimits.blockers.map, lastSample.energyFlow.blockers.map, lastSample.heatingRod.blockers.map, list.filter, list.reduce (weitere in der Quelle) |
+| [`blockSummary`](../../../../src-ts/runtime-executables/main.ts#L30039) | block, id | Array.isArray, Number, Number.isFinite, String, b.blockers.map, b.warnings.map |
+| [`NexoWattVis._nwBuildTsShadowRealPlantEvaluation`](../../../../src-ts/runtime-executables/main.ts#L30163) | control | Array.isArray, Date.now, readiness.blockers.slice, readiness.warnings.slice, section, sections.every, sections.filter, this._nwEvaluateEnergyFlowSwitchReadinessFromControl, waiting.join, warnings.push |
+| [`section`](../../../../src-ts/runtime-executables/main.ts#L30168) | id, label, ready, detail | Array.isArray, Number, Number.isFinite, String |
+| [`NexoWattVis._nwResolveGridImportExportFromCache`](../../../../src-ts/runtime-executables/main.ts#L30244) | – | Date.now, Math.max, readFresh, resolveNvpDisplay, this._nwGetCacheAgeMs, this._nwGetNumberFromCacheFresh, this._nwHasMappedDatapoint, this._nwLiveInputMaxAgeMs |
+| [`readFresh`](../../../../src-ts/runtime-executables/main.ts#L30253) | key, mapped | this._nwGetNumberFromCacheFresh |
+| [`NexoWattVis._nwSetHistorieValue`](../../../../src-ts/runtime-executables/main.ts#L30279) | localId, val, ts, tolAbs | Math.abs, Math.max, Number, Number.isFinite, this.setLocalStateWithCache |
+| [`NexoWattVis.ensureDerivedFlowStates`](../../../../src-ts/runtime-executables/main.ts#L30297) | – | this.setObjectNotExistsAsync |
+| [`NexoWattVis.updateHistorieExportStates`](../../../../src-ts/runtime-executables/main.ts#L30549) | reason | Date.now, JSON.stringify, Math.abs, Math.max, Math.min, Math.round, Number, Number.isFinite, String, _boolOr, _computeNetFeeModeNow, _numOr, _strOr, parseJsonSafe (weitere in der Quelle) |
+| [`_rawCacheValue`](../../../../src-ts/runtime-executables/main.ts#L30677) | key | – |
+| [`_numOr`](../../../../src-ts/runtime-executables/main.ts#L30691) | key, fallback | Number, Number.isFinite, _rawCacheValue |
+| [`_boolOr`](../../../../src-ts/runtime-executables/main.ts#L30705) | key, fallback | String, _rawCacheValue |
+| [`_strOr`](../../../../src-ts/runtime-executables/main.ts#L30720) | key, fallback | String, _rawCacheValue |
+| [`_parseTimeMinutes`](../../../../src-ts/runtime-executables/main.ts#L30731) | raw, defMinutes | Math.max, Math.min, Number, Number.isFinite, String, s.match |
+| [`_isInWindow`](../../../../src-ts/runtime-executables/main.ts#L30746) | nowMin, startMin, endMin | Number.isFinite |
+| [`_quarterOf`](../../../../src-ts/runtime-executables/main.ts#L30758) | tsMs | Date.now, Math.floor, Math.max, Math.min, Number, d.getMonth |
+| [`_nowMinutesLocal`](../../../../src-ts/runtime-executables/main.ts#L30772) | tsMs | Date.now, Number, d.getHours, d.getMinutes |
+| [`_computeNetFeeModeNow`](../../../../src-ts/runtime-executables/main.ts#L30786) | – | Math.round, Number, _boolOr, _isInWindow, _nowMinutesLocal, _numOr, _parseTimeMinutes, _quarterOf, _strOr, cachedMode.toLowerCase |
+| [`parseJsonSafe`](../../../../src-ts/runtime-executables/main.ts#L30902) | raw | JSON.parse, String |
+| [`NexoWattVis.scheduleRfidPolicyApply`](../../../../src-ts/runtime-executables/main.ts#L31002) | reason, onlyIndex | Number, this._nwSetTimeout |
+| [`NexoWattVis.applyRfidPolicyAll`](../../../../src-ts/runtime-executables/main.ts#L31029) | reason | Array.isArray, this.applyRfidPolicyForIndex, this.isRfidEnabled, this.refreshRfidWhitelistFromCache |
+| [`NexoWattVis.applyRfidPolicyForIndex`](../../../../src-ts/runtime-executables/main.ts#L31045) | index, reason, enabledOverride | Array.isArray, Date.now, Number, String, isActuatorAuthorityBlockedResult, this.evcsList.find, this.getStateAsync, this.isRfidEnabled, this.log.debug, this.normalizeRfidCandidate, this.refreshRfidWhitelistFromCache, this.setLocalStateWithCache, withActuatorShadowContext |
+| [`NexoWattVis._nwTrimId`](../../../../src-ts/runtime-executables/main.ts#L31218) | v | v.trim |
+| [`NexoWattVis._nwDetectInfluxInstance`](../../../../src-ts/runtime-executables/main.ts#L31229) | – | this._nwTrimId, this.getForeignObjectAsync |
+| [`NexoWattVis._nwGetHistoryInstance`](../../../../src-ts/runtime-executables/main.ts#L31251) | – | this._nwTrimId |
+| [`NexoWattVis._nwGetPara14aInfluxTargetDays`](../../../../src-ts/runtime-executables/main.ts#L31262) | – | – |
+| [`NexoWattVis._nwGetPara14aInfluxTargetRetentionSeconds`](../../../../src-ts/runtime-executables/main.ts#L31271) | – | this._nwGetPara14aInfluxTargetDays |
+| [`NexoWattVis._nwGetPara14aInfluxDbName`](../../../../src-ts/runtime-executables/main.ts#L31280) | – | Math.max, Math.round, Number, Number.isFinite |
+| [`NexoWattVis._nwGetOwnHostName`](../../../../src-ts/runtime-executables/main.ts#L31290) | – | os.hostname, this._nwTrimId, this.getForeignObjectAsync |
+| [`NexoWattVis._nwListAdapterInstances`](../../../../src-ts/runtime-executables/main.ts#L31315) | adapterName | Number, Number.isInteger, Object.entries, String, inst.slice, inst.startsWith, out.push, out.sort, this._nwTrimId, this.getForeignObjectsAsync |
+| [`NexoWattVis._nwPickFreeAdapterInstanceNumber`](../../../../src-ts/runtime-executables/main.ts#L31341) | existingNums, preferred | Array.isArray, Math.round, Number, Number.isInteger, used.has |
+| [`NexoWattVis._nwBuildPara14aInfluxNative`](../../../../src-ts/runtime-executables/main.ts#L31360) | baseNative, meta | Date.now, JSON.parse, JSON.stringify, Object.assign, this._nwGetPara14aInfluxDbName, this._nwGetPara14aInfluxTargetDays, this._nwGetPara14aInfluxTargetRetentionSeconds, this._nwTrimId |
+| [`NexoWattVis._nwBuildPara14aInfluxCommon`](../../../../src-ts/runtime-executables/main.ts#L31383) | baseCommon, host | JSON.parse, JSON.stringify, Object.assign, this._nwTrimId |
+| [`NexoWattVis._nwEnsurePara14aInfluxInstance`](../../../../src-ts/runtime-executables/main.ts#L31404) | force | Date.now, Number, String, configured.startsWith, disableManagedDedicatedInstances, finish, pickSharedInfluxInstance, this._nwListAdapterInstances, this._nwTrimId, this.getForeignObjectAsync |
+| [`finish`](../../../../src-ts/runtime-executables/main.ts#L31417) | partial | Date.now, Object.assign, this._nwTrimId |
+| [`isManagedPara14aInstance`](../../../../src-ts/runtime-executables/main.ts#L31437) | it | String |
+| [`pickSharedInfluxInstance`](../../../../src-ts/runtime-executables/main.ts#L31449) | instances | Array.isArray, arr.filter, arr.find, enabled.find, instances.filter |
+| [`disableManagedDedicatedInstances`](../../../../src-ts/runtime-executables/main.ts#L31468) | instances, keepInstanceId | Array.isArray, String, isManagedPara14aInstance, this._nwTrimId, this.log.debug, this.log.info, this.nwSimSetInstanceEnabled |
+| [`NexoWattVis._nwGetCanonicalHistorieId`](../../../../src-ts/runtime-executables/main.ts#L31536) | legacyKey | String, k.match |
+| [`NexoWattVis._nwGetHistoryDpCandidates`](../../../../src-ts/runtime-executables/main.ts#L31567) | name | Object.assign, String, add, raw.slice, raw.startsWith, this._nwGetCanonicalHistorieId, this._nwTrimId |
+| [`add`](../../../../src-ts/runtime-executables/main.ts#L31609) | id | out.includes, out.push, this._nwTrimId |
+| [`NexoWattVis._nwGetHistoryDpId`](../../../../src-ts/runtime-executables/main.ts#L31680) | name | this._nwGetHistoryDpCandidates |
+| [`NexoWattVis._nwGetHistoryApiCached`](../../../../src-ts/runtime-executables/main.ts#L31690) | key, maxAgeMs | Date.now, Math.max, Number, Number.isFinite, cache.delete, cache.entries, cache.get |
+| [`NexoWattVis._nwSetHistoryApiCached`](../../../../src-ts/runtime-executables/main.ts#L31714) | key, payload | Date.now, Number.isFinite, this._nwHistoryApiCache.delete, this._nwHistoryApiCache.keys, this._nwHistoryApiCache.set |
+| [`NexoWattVis._derivedRefreshPvInvertersCache`](../../../../src-ts/runtime-executables/main.ts#L31735) | force | Date.now, Object.entries, String, addCfg, cache.cache.delete, cache.cache.set, collect, ids.join, ids.sort, list.map, list.push, newIds.add, newIds.has, oldIds.has (weitere in der Quelle) |
+| [`collect`](../../../../src-ts/runtime-executables/main.ts#L31750) | arr | Array.isArray, ids.push, this._nwTrimId |
+| [`addCfg`](../../../../src-ts/runtime-executables/main.ts#L31810) | arr, tag | Array.isArray, String, list.push, nwPhysicalPvSourceKey, pid.toLowerCase, seenPower.add, seenPower.has, this._nwTrimId |
+| [`NexoWattVis.scheduleDerivedFlowUpdate`](../../../../src-ts/runtime-executables/main.ts#L31868) | reason | Date.now, this._nwSetTimeout |
+| [`NexoWattVis.updateDerivedFlowStates`](../../../../src-ts/runtime-executables/main.ts#L31896) | reason | Date.now, JSON.stringify, Math.abs, Math.max, Math.min, Math.round, Number, Number.isFinite, String, nwApplyPvCapacityPlausibility, pushTs, pvAuto?.cache?.get, pvBaseSourceIds.includes, pvBaseSourceIds.push (weitere in der Quelle) |
+| [`pushTs`](../../../../src-ts/runtime-executables/main.ts#L32137) | k | Number.isFinite, tsList.push |
+| [`updateLocal`](../../../../src-ts/runtime-executables/main.ts#L32531) | k, v | Number, Number.isFinite, this.updateValue |
+| [`NexoWattVis._nwHasMappedDatapoint`](../../../../src-ts/runtime-executables/main.ts#L32569) | key | this._nwTrimId |
+| [`NexoWattVis._nwNormTsMs`](../../../../src-ts/runtime-executables/main.ts#L32579) | tRaw | Date.parse, Number, Number.isFinite, Number.isNaN, tRaw.getTime |
+| [`NexoWattVis._nwChooseStepMs`](../../../../src-ts/runtime-executables/main.ts#L32596) | spanMs, targetPoints, minStepMs | Math.ceil, Math.max, Number |
+| [`NexoWattVis._nwChooseEnergyIntegrationStepMs`](../../../../src-ts/runtime-executables/main.ts#L32619) | spanMs, minStepMs, maxStepMs | Math.max, Math.min, Number, this._nwChooseStepMs |
+| [`NexoWattVis._nwNormalizeHistoryResult`](../../../../src-ts/runtime-executables/main.ts#L32631) | resu, maxRows | Array.isArray, Number, Number.isFinite, Object.assign, Object.prototype.hasOwnProperty.call, asRecord, decimal.test, norm.push, norm.sort, tRaw.trim, this._nwNormTsMs, vRaw.trim |
+| [`asRecord`](../../../../src-ts/runtime-executables/main.ts#L32633) | value | Array.isArray |
+| [`NexoWattVis._nwGetHistoryAvgSeries`](../../../../src-ts/runtime-executables/main.ts#L32691) | id, startMs, endMs, stepMs, deadlineMs | performance.now |
+| [`failure`](../../../../src-ts/runtime-executables/main.ts#L32694) | code | Object.assign |
+| [`finish`](../../../../src-ts/runtime-executables/main.ts#L32708) | error, series | clearTimeout, reject, resolve, this._nwPendingHistoryRequests?.delete |
+| [`cancel`](../../../../src-ts/runtime-executables/main.ts#L32716) | – | failure, finish |
+| [`NexoWattVis._nwCancelHistoryRequests`](../../../../src-ts/runtime-executables/main.ts#L32737) | – | cancel, this._nwPendingHistoryRequests.clear |
+| [`NexoWattVis._nwGetHistoryAvgSeriesAny`](../../../../src-ts/runtime-executables/main.ts#L32755) | candidates, startMs, endMs, stepMs | Array.isArray, performance.now, this._nwGetHistoryAvgSeries, this._nwTrimId |
+| [`NexoWattVis._nwAtypicalReviewParseTs`](../../../../src-ts/runtime-executables/main.ts#L32776) | raw, fallback, endOfDay | Date.parse, Math.round, Number, Number.isFinite, Number.isNaN, String, dt.getTime, dt.setHours, s.split |
+| [`NexoWattVis._nwAtypicalReviewDateTime`](../../../../src-ts/runtime-executables/main.ts#L32800) | ts | Date.now, Number, d.getDate, d.getFullYear, d.getHours, d.getMinutes, d.getMonth, pad |
+| [`pad`](../../../../src-ts/runtime-executables/main.ts#L32809) | n | String |
+| [`NexoWattVis._nwAtypicalReviewCsvCell`](../../../../src-ts/runtime-executables/main.ts#L32821) | v | String |
+| [`NexoWattVis._nwAtypicalReviewNumber`](../../../../src-ts/runtime-executables/main.ts#L32832) | v, digits | Math.round, Number, Number.isFinite, String, n.toFixed |
+| [`NexoWattVis._nwAtypicalReviewReadState`](../../../../src-ts/runtime-executables/main.ts#L32843) | localId, fallback | Object.prototype.hasOwnProperty.call, String, this.getStateAsync, this.namespace.replace |
+| [`NexoWattVis._nwAtypicalReviewReadNumber`](../../../../src-ts/runtime-executables/main.ts#L32863) | localId, fallback | Number, Number.isFinite, this._nwAtypicalReviewReadState |
+| [`NexoWattVis._nwAtypicalReviewReadBool`](../../../../src-ts/runtime-executables/main.ts#L32874) | localId, fallback | String, this._nwAtypicalReviewReadState |
+| [`NexoWattVis._nwAtypicalReviewReadString`](../../../../src-ts/runtime-executables/main.ts#L32889) | localId, fallback | String, this._nwAtypicalReviewReadState |
+| [`NexoWattVis._nwBuildAtypicalReviewExportPayload`](../../../../src-ts/runtime-executables/main.ts#L32894) | query | Array.from, Array.isArray, Date.now, JSON.parse, Math.max, Math.min, Math.round, Number, Number.isFinite, Object.assign, Object.entries, Object.values, Promise.all, String (weitere in der Quelle) |
+| [`NexoWattVis._nwAtypicalReviewPayloadToCsv`](../../../../src-ts/runtime-executables/main.ts#L33056) | payload | Array.isArray, Date.now, add, rows.join, this._nwAtypicalReviewDateTime, this._nwAtypicalReviewNumber |
+| [`add`](../../../../src-ts/runtime-executables/main.ts#L33067) | cols | rows.push |
+| [`NexoWattVis._nwAtypicalReviewAscii`](../../../../src-ts/runtime-executables/main.ts#L33124) | text | String |
+| [`NexoWattVis._nwAtypicalReviewPdfEscape`](../../../../src-ts/runtime-executables/main.ts#L33142) | text | this._nwAtypicalReviewAscii |
+| [`NexoWattVis._nwAtypicalReviewWrap`](../../../../src-ts/runtime-executables/main.ts#L33151) | text, maxLen | out.push, s.split, this._nwAtypicalReviewAscii |
+| [`NexoWattVis._nwAtypicalReviewPayloadToPdf`](../../../../src-ts/runtime-executables/main.ts#L33170) | payload | Array.isArray, Buffer.concat, Buffer.from, Date.now, String, addObj, chunks.push, lines.push, p.seriesRows.slice, page.push, pageRefs.join, pages.forEach, pages.push, this._nwAtypicalReviewDateTime (weitere in der Quelle) |
+| [`yesNo`](../../../../src-ts/runtime-executables/main.ts#L33181) | v | – |
+| [`addObj`](../../../../src-ts/runtime-executables/main.ts#L33243) | body | Buffer.from, Buffer.isBuffer, String, objects.push |
+| [`NexoWattVis._nwIntegrateKwh`](../../../../src-ts/runtime-executables/main.ts#L33293) | series, endMs, defaultStepMs, positiveOnly | Array.isArray, Date.now, Math.abs, Math.max, Math.min, Number, Number.isFinite |
+| [`NexoWattVis.updateEnergyTotalsFromInflux`](../../../../src-ts/runtime-executables/main.ts#L33323) | reason | Date.now, Math.max, Number, Number.isFinite, Promise.allSettled, performance.now, persistLocal, results.some, tasks.push, this._nwGetHistoryDpCandidates, this._nwHasMappedDatapoint, this.log.warn, this.updateValue |
+| [`currentSeries`](../../../../src-ts/runtime-executables/main.ts#L33330) | ids, from, stepMs | Array.isArray, series.some, this._nwGetHistoryAvgSeriesAny |
+| [`persistLocal`](../../../../src-ts/runtime-executables/main.ts#L33345) | key, val | this.setStateAsync |
+| [`NexoWattVis.updateValue`](../../../../src-ts/runtime-executables/main.ts#L33500) | key, value, ts, opts | Date.now, Math.abs, Math.max, Math.round, Number, Number.isFinite, Object.assign, String, d.getDate, d.getFullYear, d.getMonth, isNaN, key.match, key.startsWith (weitere in der Quelle) |
+| [`NexoWattVis._nwClearTimer`](../../../../src-ts/runtime-executables/main.ts#L33635) | refName | this._nwClearInterval, this._nwClearTimeout |
+| [`NexoWattVis._nwCloseSseClients`](../../../../src-ts/runtime-executables/main.ts#L33649) | – | Array.from, client.res.end, this._nwClearTimer, this._nwSseGuard.closeAll, this.sseClients.clear |
+| [`NexoWattVis._nwCloseServer`](../../../../src-ts/runtime-executables/main.ts#L33669) | callback | done, finish, server.close, setTimeout, this._nwCloseSseClients |
+| [`clearTimers`](../../../../src-ts/runtime-executables/main.ts#L33706) | – | clearTimeout |
+| [`finish`](../../../../src-ts/runtime-executables/main.ts#L33718) | – | clearTimers, done, this._serverSockets.clear |
+| [`NexoWattVis.onUnload`](../../../../src-ts/runtime-executables/main.ts#L33756) | callback | Date.now, cleanup.capture, clearTimeout, createHostedCleanup, done, this._nwCloseServer, this._nwSetInfoConnection, this._nwSmartHomePulseTimers.clear, this._nwSmartHomePulseTimers.entries, this.setForeignStateAsync |
+| [`createHostedRuntime`](../../../../src-ts/runtime-executables/main.ts#L33841) | owner, bridge | Object.create, runtime._para14aEebusApi.attachHostedBridge |
+| [`canOperate`](../../../../src-ts/runtime-executables/main.ts#L33854) | – | centralLicenseSnapshot, guardedBridge.canWrite |
+| [`sendFeedback`](../../../../src-ts/runtime-executables/main.ts#L33855) | message | bridge.hostedModuleFeedback |
+| [`startOperational`](../../../../src-ts/runtime-executables/main.ts#L33862) | – | Promise.resolve, centralLicenseSnapshot, guardedBridge.canWrite |
+| [`start`](../../../../src-ts/runtime-executables/main.ts#L33890) | – | Promise.resolve |
+| [`startOperational`](../../../../src-ts/runtime-executables/main.ts#L33915) | – | startOperational |
+| [`handle`](../../../../src-ts/runtime-executables/main.ts#L33916) | req, res, next | res.status, runtime._hostedHttpHandler, startOperational |
+| [`onStateChange`](../../../../src-ts/runtime-executables/main.ts#L33923) | id, state | runtime.onStateChange |
+| [`onMessage`](../../../../src-ts/runtime-executables/main.ts#L33924) | message | runtime.onMessage |
+| [`onHostedEebusMessage`](../../../../src-ts/runtime-executables/main.ts#L33925) | message | Promise.resolve, runtime._para14aEebusApi.handleHostedMessage |
+| [`revokeSessions`](../../../../src-ts/runtime-executables/main.ts#L33929) | – | runtime._nwCloseSseClients |
+| [`status`](../../../../src-ts/runtime-executables/main.ts#L33930) | – | guardedBridge.canWrite |
+| [`stop`](../../../../src-ts/runtime-executables/main.ts#L33933) | – | runtime.stopStateWrites, stopHostedRuntime |

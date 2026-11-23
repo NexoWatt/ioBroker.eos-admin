@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/main.ts
- * Quell-Hash: sha256:cd098e757ba30517a1d6986f3474f6665816607d61d43797c74dcab030bb053c
+ * Quell-Hash: sha256:eb8c0a32e8467f11249fc43ebab0ca5878ea0afbc4451eb0b79a5cc3f9c6d576
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -40,7 +40,7 @@ const { executeLegacyDeviceWrite } = require('./lib/smarthome-device-legacy');
 const { normalizeCustomView } = require('./lib/smarthome-custom-contract');
 const { normalizeDeviceControls, getControlProfiles } = require('./lib/smarthome-device-controls');
 const { registerSmartHomeDeviceApi, createDeviceSnapshotReader, buildDeviceControls } = require('./lib/smarthome-device-api');
-const { cleanControls, extendSuggestion } = require('./lib/smarthome-device-detection');
+const { cleanControls, extendSuggestion, DetectionError, DetectionScan, DETECTION_LIMITS, detectionNow, detectionSnapshot } = require('./lib/smarthome-device-detection');
 const { smartHomeEnabled, registerSmartHomeActivationApi } = require('./lib/smarthome-activation');
 const { readPreservedUiStates } = require('./lib/preserved-ui-config');
 const { createRuntimeFileSender, runtimeProxyPrefix, rewriteRuntimeProxyHtml, isHttpsRuntimeProxy } = require('./lib/runtime-proxy-html');
@@ -14066,9 +14066,14 @@ const nwShcfgTdGetObjectsCache = async (force = false) => {
   if (this._nwShuttingDown) throw new Error('EOS_UI_STOPPING');
   if (!this._nwTypeDetectorObjectsCache) {
     this._nwTypeDetectorObjectsCache = new ExpiringSnapshot(async () => {
+      const started = detectionNow();
+      const generation = this._nwTypeDetectorReadGeneration || 0;
       const objects = await this.getForeignObjectsAsync('*');
-      const keys = Object.keys(objects || {}).sort((a, b) => a.localeCompare(b));
-      return { ts: Date.now(), objects: objects || {}, keys };
+      // Retain single-flight while ioBroker IO is outstanding, but never cache
+      // an expired/aborted response when that uncancellable read eventually ends.
+      if (generation !== (this._nwTypeDetectorReadGeneration || 0)) throw new DetectionError('EOS_DETECTION_ABORTED');
+      if (detectionNow() - started >= DETECTION_LIMITS.readTimeoutMs) throw new DetectionError('EOS_DETECTION_TIMEOUT');
+      return { ts: Date.now(), ...detectionSnapshot(objects) };
     }, 30000);
   }
   return this._nwTypeDetectorObjectsCache.get(force);
@@ -14431,7 +14436,19 @@ const nwShcfgTdBuildSuggestion = async ({ control, rootId, objects, configuredId
 app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
   if (this._nwShcfgDetectionRunning) return res.status(409).json({ ok: false, error: 'EOS_DETECTION_BUSY' });
   this._nwShcfgDetectionRunning = true;
+  const abort = new AbortController();
+  const onAborted = () => {
+    if (!abort.signal.aborted) {
+      abort.abort();
+      this._nwTypeDetectorReadGeneration = (this._nwTypeDetectorReadGeneration || 0) + 1;
+    }
+  };
+  req.once?.('aborted', onAborted);
+  res.once?.('close', onAborted);
+  const scan = new DetectionScan({ signal: abort.signal, stopping: () => !!this._nwShuttingDown });
   try {
+    if (req.aborted || res.destroyed) onAborted();
+    scan.check();
     if (!NwChannelDetector || typeof NwChannelDetector !== 'function') {
       return res.status(503).json({ ok: false, error: 'Die automatische Geräteerkennung ist aktuell nicht verfügbar.' });
     }
@@ -14450,8 +14467,10 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
     if (cachedDetection) return res.json(cachedDetection);
 
     const configuredIds = nwShcfgTdCollectConfiguredDpIds(cfg);
-    const { objects, keys } = await nwShcfgTdGetObjectsCache(force);
+    const { objects, keys } = await scan.read(nwShcfgTdGetObjectsCache(force));
+    scan.check();
     const roots = nwShcfgTdCollectCandidateRoots(objects);
+    scan.check('roots', roots.length);
     const detector = new NwChannelDetector();
     const suggestionsBySignature = new Map();
     let matchedRoots = 0;
@@ -14459,7 +14478,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
     let scanIndex = 0;
     for (const rootId of roots) {
       if (++scanIndex % 25 === 0) await new Promise(resolve => setImmediate(resolve));
-      if (this._nwShuttingDown) return res.status(503).json({ ok: false, error: 'EOS_UI_STOPPING' });
+      scan.check();
       let detected = null;
       try {
         detected = detector.detect({
@@ -14471,8 +14490,11 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
           allowedTypes: Object.keys(NW_SHCFG_TD_TYPE_MAP),
         });
       } catch (_e) {
-        detected = null;
+        // A detector failure is not evidence that this root contains no device.
+        // Discard the incomplete scan; never let a partial scan look complete.
+        throw new DetectionError('EOS_DETECTION_FAILED');
       }
+      scan.check();
       if (!Array.isArray(detected) || !detected.length) continue;
       const controls = cleanControls(detected, objects).filter(control => NW_SHCFG_TD_TYPE_MAP[control.type]);
       if (!controls.length) continue;
@@ -14483,6 +14505,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
         const signature = suggestion.controlId || suggestion.signature || suggestion.id;
         const merged = nwShcfgTdMergeSuggestion(suggestionsBySignature.get(signature), suggestion);
         suggestionsBySignature.set(signature, merged);
+        scan.check('suggestions', suggestionsBySignature.size);
       }
     }
 
@@ -14502,6 +14525,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
         return String(a.displayName || '').localeCompare(String(b.displayName || ''), 'de', { sensitivity: 'base', numeric: true });
       });
 
+    scan.check();
     const payload = {
       ok: true,
       scannedAt: now,
@@ -14512,15 +14536,37 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
         scannedRoots: roots.length,
         matchedRoots,
       },
+      diagnostics: {
+        complete: true,
+        objectCount: keys.length,
+        elapsedMs: Math.round(scan.elapsedMs),
+        ...(suggestions.length ? {} : { emptyReason: roots.length ? 'NO_MATCHES' : 'NO_CANDIDATES' }),
+      },
       suggestions,
     };
 
     if (!this._nwShuttingDown) this._nwShcfgDetectCache.set(configKey, payload);
     res.json(payload);
   } catch (e) {
-    try { this.log.warn('SmartHomeConfig type-detect API failed.'); } catch (_e2) {}
-    res.status(500).json({ ok: false, error: 'EOS_DETECTION_FAILED' });
-  } finally { this._nwShcfgDetectionRunning = false; }
+    const code = e instanceof DetectionError ? e.code : 'EOS_DETECTION_FAILED';
+    if (this._nwTypeDetectorObjectsCache?.loading) this._nwTypeDetectorReadGeneration = (this._nwTypeDetectorReadGeneration || 0) + 1;
+    const errors = {
+      EOS_DETECTION_TIMEOUT: [504, 'Die Geräteerkennung hat zu lange gedauert. Bitte erneut versuchen oder die Datenpunktzuordnung manuell öffnen.'],
+      EOS_DETECTION_LIMIT: [413, 'Die Objektmenge überschreitet die Grenze der automatischen Erkennung. Bitte die Datenpunktzuordnung manuell öffnen.'],
+      EOS_DETECTION_ABORTED: [499, 'Die Geräteerkennung wurde abgebrochen. Es wurden keine Einstellungen geändert.'],
+      EOS_UI_STOPPING: [503, 'EOS wird beendet. Bitte nach dem Neustart erneut versuchen.'],
+      EOS_DETECTION_FAILED: [500, 'Die Geräteerkennung konnte nicht vollständig abgeschlossen werden. Es wurden keine Einstellungen geändert.'],
+    };
+    const [status, message] = Object.hasOwn(errors, code) ? errors[code] : errors.EOS_DETECTION_FAILED;
+    if (code !== 'EOS_DETECTION_ABORTED' && code !== 'EOS_UI_STOPPING') {
+      try { this.log.warn(`SmartHomeConfig type-detect API: ${code}`); } catch (_e2) {}
+    }
+    if (!res.destroyed && !res.headersSent) res.status(status).json({ ok: false, error: code, message });
+  } finally {
+    req.removeListener?.('aborted', onAborted);
+    res.removeListener?.('close', onAborted);
+    this._nwShcfgDetectionRunning = false;
+  }
 });
 
 // Kundenansicht erhält nur die Navigation, keine Gerätezuordnungen oder Logik.

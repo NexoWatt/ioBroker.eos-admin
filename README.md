@@ -1,3 +1,5 @@
+> **9.0.12:** SmartHome-Einrichtung mit Dropdowns, Dialogen und kompakter Geräteerkennung. Anleitung: [START_HIER_9.0.12.md](START_HIER_9.0.12.md). Prüfstand: [Bericht](docs/reports/unified-9.0.12/PRUEFBERICHT.md).
+
 > **9.0.11 – abgesicherte Übernahme und Veröffentlichung:**
 > [Update / npm unter Windows](START_HIER_9.0.11.md) · [Prüfbericht](docs/reports/unified-9.0.11/PRUEFBERICHT.md).
 
@@ -10,16 +12,16 @@
 
 # NexoWatt EOS
 
-**Version 9.0.11 · technisches Paket: `iobroker.eos-admin` · Vertriebskanal: `next`**
+**Version 9.0.12 · technisches Paket: `iobroker.eos-admin` · Vertriebskanal: `next`**
 
 NexoWatt EOS verbindet die Systemverwaltung aus EOS-Admin 8.0.2 mit Dashboard,
 Installer und Energiemanagement aus NexoWatt UI 1.0.38. Eine ioBroker-Instanz betreibt
 die gemeinsamen Module. Die bisherige UI wird im Zielbetrieb nicht zusätzlich gestartet.
 Der technische Paketname bleibt für bestehende Integrationen erhalten.
 
-Version 9.0.11 bleibt ein Integrations-Teststand für `next`. Die Versionsnummer ist
+Version 9.0.12 bleibt ein Integrations-Teststand für `next`. Die Versionsnummer ist
 kein Nachweis einer allgemeinen Produktivfreigabe oder CRA-Konformität. Tatsächliche
-Ergebnisse und Artefakthashes stehen im [Prüfbericht 9.0.11](docs/reports/unified-9.0.11/PRUEFBERICHT.md).
+Ergebnisse und Artefakthashes stehen im [Prüfbericht 9.0.12](docs/reports/unified-9.0.12/PRUEFBERICHT.md).
 Die [Berichte zu 9.0.4](docs/reports/unified-9.0.4/PRUEFBERICHT.md),
 [9.0.3](docs/reports/unified-9.0.3/PRUEFBERICHT.md) und früheren Versionen bleiben
 historische Belege; ihre Ergebnisse bestätigen keine späteren Änderungen.

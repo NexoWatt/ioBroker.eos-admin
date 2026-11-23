@@ -1,0 +1,45 @@
+✔ actual detector route finds uppercase and lowercase channel IDs without locale loss (327.856739ms)
+✔ invalid object response and detector exception cannot masquerade as complete empty discovery (36.097027ms)
+✔ a genuine empty scan explains why without mutating customer configuration (36.60246ms)
+✔ object and candidate budgets fail explicitly before any detector call (1094.70257ms)
+✔ HTTP abort releases the route and late IO cannot populate its snapshot (53.386794ms)
+✔ expired IO remains single-flight across retries and its late completion is discarded (2.762294ms)
+✔ monotonic deadline, result limits and shutdown are explicit and separate from empty results (27.073016ms)
+✔ read wait expires after its actual timer budget without requiring IO to finish (1.417756ms)
+✔ a read that already exceeded its monotonic load deadline never enters the snapshot (15.676253ms)
+✔ simultaneous discovery returns busy and a cancelled wait observes late rejection (18.236951ms)
+✔ every existing template can be prepared without adding a device or changing customer settings (1797.834452ms)
+✔ single detected import preserves configured bindings, room and device types; repeated import is a no-op (740.61719ms)
+✔ aliases failure with partial created objects leaves both device and proposed room drafts unchanged (814.862149ms)
+✔ late alias success after replacing the draft cannot import into either customer configuration (777.121947ms)
+✔ detector request failures preserve the customer draft and previous results with explicit error state (739.76488ms)
+✔ failed save preserves unsaved customer fields and reports the server failure without retry (673.707536ms)
+✔ late successful save cannot replace a newer unsaved edit or clear its dirty state (631.959935ms)
+✔ real editor cancel restores exact customer object, preexisting dirty state, selection and focus (848.65587ms)
+✔ new floor, room and device dialogs leave no records after Cancel or Escape (2052.877353ms)
+✔ actual form Apply changes only draft; global Save/Reload/Import remain blocked during editing (330.503013ms)
+✔ invalid room Apply keeps the dialog open with visible feedback; cancel remains possible (316.464401ms)
+✔ batch imports only distinct new devices into chosen room and preserves their exact bindings (323.495514ms)
+✔ batch decline, stale target and alias partial failure cannot create a partial configuration (894.144242ms)
+✔ batch alias success cannot overwrite concurrent edits in the same configuration object (171.136325ms)
+✔ existing datapoint picker stays reachable inside editing and late selection after Cancel is ignored (201.674042ms)
+✔ pending Apply cannot be cancelled or stacked and exposes failure before allowing another attempt (98.541537ms)
+✔ setup dropdown filters preserve every customer record and use actual room/floor relationships (217.390901ms)
+✔ cancel invalidates old profile-editor callbacks so they cannot dirty the restored customer draft (117.207448ms)
+✔ pending Reload excludes new editors and a late response cannot replace a concurrently changed draft (101.269351ms)
+✔ pending file read excludes editors and late imported JSON cannot replace a newer local draft (102.001522ms)
+✔ active backup import excludes file import, Reload, Save and a new editor without reading or writing (86.897796ms)
+✔ late detection results cannot replace suggestions after a customer draft change or while an editor is open (278.458485ms)
+✔ simple field changes keep the real form controls; explicit refresh retains body scroll and focus position (188.095005ms)
+✔ setup preserves long existing customer IDs and does not silently hide records after the detection limit (258.090584ms)
+✔ large detection lists render at most 100 rows and retain selection across pages and filtering (199.305118ms)
+✔ focus trap includes closed-details summary but ignores hidden ancestors and returns focus after close (622.332796ms)
+✔ configuration HTML and scoped responsive CSS make setup and dialogs available without fixed right properties (29.466973ms)
+ℹ tests 37
+ℹ suites 0
+ℹ pass 37
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 15191.037198

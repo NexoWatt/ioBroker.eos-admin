@@ -87,10 +87,12 @@
       <div class="nw-smarthome-header__right">
         <div class="nw-smarthome-header__actions">
           <button id="nw-config-save-btn" class="nw-config-btn nw-config-btn--primary" type="button">Speichern</button>
+          <details class="nw-setup-project-actions"><summary>Projektdatei</summary><div>
           <button id="nw-config-reload-btn" class="nw-config-btn nw-config-btn--ghost" type="button">Neu laden</button>
           <button id="nw-config-export-btn" class="nw-config-btn nw-config-btn--ghost" type="button">Export</button>
           <button id="nw-config-import-btn" class="nw-config-btn nw-config-btn--ghost" type="button">Import</button>
           <input id="nw-config-import-file" type="file" accept="application/json,.json" style="display:none;"/>
+          </div></details>
           <a class="nw-config-btn nw-config-btn--ghost" href="/smarthome.html">SmartHome öffnen</a>
 	          <a class="nw-config-btn nw-config-btn--ghost" href="/logic.html">Logik öffnen</a>
 
@@ -100,11 +102,11 @@
     </div>
 
     <nav class="nw-shcfg-steps" aria-label="SmartHome-Einrichtung">
-      <button id="nw-shcfg-step-building" type="button"><span>01</span> Gebäude &amp; Räume</button>
-      <button id="nw-shcfg-step-devices" type="button"><span>02</span> Geräte &amp; Datenpunkte</button>
-      <button id="nw-shcfg-step-layout" type="button"><span>03</span> Darstellung &amp; Anordnung</button>
+      <button id="nw-shcfg-step-building" type="button"><span>01</span> Einrichten</button>
+      <button id="nw-shcfg-step-detect" type="button"><span>02</span> Geräte erkennen</button>
+      <button id="nw-shcfg-step-layout" type="button"><span>03</span> Kacheln anordnen</button>
       <details class="nw-shcfg-more"><summary>Weitere Funktionen</summary><div>
-        <button id="nw-shcfg-step-detect" type="button">Auto-Erkennung</button>
+        <button id="nw-shcfg-step-builder" type="button">Expertenansicht mit Drag &amp; Drop</button>
         <button id="nw-shcfg-step-scenes" type="button">Szenen</button>
         <button id="nw-shcfg-step-timers" type="button">Zeitschaltuhren</button>
         <button id="nw-shcfg-step-classic" type="button">Alle Einstellungen</button>
@@ -128,6 +130,8 @@
     </section>
 
     </details>
+
+    <section id="nw-shcfg-setup" class="nw-config-section nw-setup-workspace" aria-label="SmartHome einrichten"><div id="nw-shcfg-setup-root"></div></section>
 
     <section id="nw-shcfg-devices-workspace" class="nw-config-section nw-shcfg-workspace" style="display:none;" aria-labelledby="nw-shcfg-devices-title">
       <div class="nw-shcfg-workspace__head">
@@ -208,12 +212,12 @@
   <div class="nw-shcfg-container">
     <section class="nw-config-section">
       <div class="nw-config-section__head">
-        <h2 class="nw-config-section__title">Gerätevorschläge aus NexoWatt EOS</h2>
+        <h2 class="nw-config-section__title">Erkannte Geräte auswählen</h2>
       </div>
       <div class="nw-config-hint">
         Erkennt Geräte und Aliase aus der lokalen Datenpunktstruktur. Raum, Funktion und verfügbare Statuswerte werden vorgeschlagen.
-        Neue Räume werden erst beim bewussten Übernehmen angelegt. Bei importierten Geräten lassen sich spätere Änderungen einzeln prüfen;
-        manuelle Einstellungen bleiben ohne Auswahl erhalten. Erst „Speichern“ übernimmt den Entwurf dauerhaft.
+        Geräte auswählen, Zielraum festlegen und gemeinsam übernehmen. „Details prüfen“ zeigt die Datenpunkte und Herkunft.
+        Bestehende Zuordnungen bleiben erhalten. Erst „Speichern“ aktiviert den Entwurf dauerhaft.
       </div>
       <div id="nw-shcfg-detect-status" class="nw-config-status" style="margin-top:8px;"></div>
       <div id="nw-shcfg-detect-root" style="margin-top:12px;"></div>
@@ -585,6 +589,7 @@
 <script src="/static/smarthome-device-config.js?v=9.0.10"></script>
 <script src="/static/smarthome-alias-config.js?v=9.0.10"></script>
 <script src="/static/smarthome-layout-editor.js?v=9.0.10"></script>
+<script src="/static/smarthome-setup.js?v=9.0.12"></script>
 <script src="/static/smarthome-config.js?v=9.0.10"></script>
 
 

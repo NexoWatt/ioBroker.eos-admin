@@ -177,12 +177,12 @@ function byId(id) {
 function nwEnsureShcfgUiState() {
   if (!nwShcState.ui) {
     // Default always to the new home screen. Migrate older stored values.
-    let mode = 'home';
+    let mode = 'setup';
     try {
       const stored = localStorage.getItem('nw-shcfg-ui-mode');
 
       // Never force users back into legacy UI
-      if (stored === 'home' || stored === 'builder' || stored === 'backup' || stored === 'timers' || stored === 'scenes' || stored === 'detect' || stored === 'devices' || stored === 'layout') {
+      if (stored === 'setup' || stored === 'timers' || stored === 'scenes' || stored === 'layout') {
         mode = stored;
       }
     } catch (_) {}
@@ -1691,7 +1691,7 @@ function nwMarkDirty(dirty) {
   nwShcState.dirty = !!dirty;
   const saveBtn = document.getElementById('nw-config-save-btn');
   if (saveBtn) {
-    saveBtn.disabled = !dirty;
+    saveBtn.disabled = !dirty || !!nwShcState.ui?.editorTransaction || !!nwShcState.saving;
   }
   if (dirty) {
     nwSetStatus('Nicht gespeicherte Änderungen', 'dirty');
@@ -2646,7 +2646,9 @@ async function nwBackupExport() {
  * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
  */
 async function nwBackupImport(file, mode) {
-  if (!file) return;
+  if (!file || nwShcState.ui?.editorTransaction || nwShcState.saving || nwShcState.reloading || nwShcState.fileImporting || nwShcState.backupImporting) return;
+  nwShcState.backupImporting = true;
+  try {
   nwSetBackupStatus('Importiere Backup …', null);
   const txt = await file.text();
   const payload = JSON.parse(txt);
@@ -2659,6 +2661,7 @@ async function nwBackupImport(file, mode) {
   const data = await res.json();
   if (!data || !data.ok) throw new Error((data && data.error) ? data.error : 'Backup import fehlgeschlagen');
   nwSetBackupStatus('Backup importiert ✅ (bitte Seite neu laden)', 'ok');
+  } finally { nwShcState.backupImporting = false; }
 }
 /**
  * Code-Teil: nwBackupRestoreFromUserdata
@@ -2667,7 +2670,10 @@ async function nwBackupImport(file, mode) {
  * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
  */
 async function nwBackupRestoreFromUserdata() {
+  if (nwShcState.ui?.editorTransaction || nwShcState.saving || nwShcState.reloading || nwShcState.fileImporting || nwShcState.backupImporting) return;
   if (!confirm('Wirklich Restore aus 0_userdata durchführen? (überschreibt die aktuelle Konfiguration)')) return;
+  nwShcState.backupImporting = true;
+  try {
   nwSetBackupStatus('Lade Backup aus 0_userdata …', null);
   const res = await fetch('/api/installer/backup/userdata', { cache: 'no-store' });
   const data = await res.json();
@@ -2682,6 +2688,7 @@ async function nwBackupRestoreFromUserdata() {
   const data2 = await res2.json();
   if (!data2 || !data2.ok) throw new Error((data2 && data2.error) ? data2.error : 'Restore import fehlgeschlagen');
   nwSetBackupStatus('Restore durchgeführt ✅ (bitte Seite neu laden)', 'ok');
+  } finally { nwShcState.backupImporting = false; }
 }
 /**
  * Code-Teil: nwExportSmartHomeConfig
@@ -2712,9 +2719,11 @@ function nwExportSmartHomeConfig() {
  * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
  */
 async function nwImportSmartHomeConfigFromFile(file) {
-  if (!file) return;
+  if (!file || nwShcState.saving || nwShcState.reloading || nwShcState.fileImporting || nwShcState.backupImporting || nwShcState.ui?.editorTransaction || nwShcState.detector?.importing) return;
+  const base = nwShcState.config; const snapshot = JSON.stringify(base); nwShcState.fileImporting = true;
   try {
     const text = await file.text();
+    if (nwShcState.config !== base || JSON.stringify(base) !== snapshot || nwShcState.ui?.editorTransaction) { nwSetStatus('Import nicht übernommen: Der Entwurf wurde geändert.', 'warn'); return; }
     if (!text || !text.trim()) {
       nwSetStatus('Import fehlgeschlagen: Datei ist leer.', 'error');
       return;
@@ -2762,12 +2771,13 @@ async function nwImportSmartHomeConfigFromFile(file) {
     // Optional: offer immediate save for fast rollout
     const saveNow = confirm('Jetzt direkt speichern und anwenden?');
     if (saveNow) {
+      nwShcState.fileImporting = false;
       await nwSaveSmartHomeConfig();
     }
   } catch (e) {
     console.error('Import error:', e);
     nwSetStatus('Import fehlgeschlagen: Ausnahme.', 'error');
-  }
+  } finally { nwShcState.fileImporting = false; }
 }
 /**
  * Code-Teil: nwSaveSmartHomeConfig
@@ -2776,7 +2786,7 @@ async function nwImportSmartHomeConfigFromFile(file) {
  * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
  */
 async function nwSaveSmartHomeConfig() {
-  if (!nwShcState.config) return;
+  if (!nwShcState.config || nwShcState.saving || nwShcState.reloading || nwShcState.fileImporting || nwShcState.backupImporting || nwShcState.ui?.editorTransaction || nwShcState.detector?.importing) return;
   // Neue Profil-/Ansichtseingaben dürfen nicht per allgemeiner Warnungsbestätigung
   // umgangen werden: ungültige Eingaben würden sonst alte Werte unbemerkt speichern.
   for (const dev of nwShcState.config.devices || []) {
@@ -2812,7 +2822,9 @@ async function nwSaveSmartHomeConfig() {
     }
   }
   try {
-    const payload = { config: nwShcState.config };
+    nwShcState.saving = true;
+    const sentConfig = nwShcState.config; const sentJson = JSON.stringify(sentConfig); const sentPages = nwShcState.pagesJsonText;
+    const payload = { config: sentConfig };
     const res = await fetch('/api/smarthome/config', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -2828,6 +2840,10 @@ async function nwSaveSmartHomeConfig() {
       console.error('SmartHomeConfig save payload invalid', data);
       nwSetStatus('Speichern fehlgeschlagen (Antwort ungültig)', 'error');
       return;
+    }
+    if (nwShcState.config !== sentConfig || JSON.stringify(nwShcState.config) !== sentJson || nwShcState.pagesJsonText !== sentPages) {
+      nwShcState.originalJson = JSON.stringify(data.config); nwMarkDirty(true);
+      nwSetStatus('Abgesendeter Stand gespeichert. Neuere lokale Änderungen bleiben erhalten – bitte erneut speichern.', 'dirty'); return;
     }
     nwShcState.config = data.config;
     nwShcState.originalJson = JSON.stringify(data.config);
@@ -2848,6 +2864,10 @@ async function nwSaveSmartHomeConfig() {
   } catch (e) {
     console.error('SmartHomeConfig save error:', e);
     nwSetStatus('Ausnahme beim Speichern', 'error');
+  } finally {
+    nwShcState.saving = false;
+    const saveButton = document.getElementById('nw-config-save-btn');
+    if (saveButton) saveButton.disabled = !nwShcState.dirty || !!nwShcState.ui?.editorTransaction;
   }
 }
 /**
@@ -2857,9 +2877,13 @@ async function nwSaveSmartHomeConfig() {
  * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
  */
 async function nwReloadSmartHomeConfig() {
+  if (nwShcState.saving || nwShcState.reloading || nwShcState.fileImporting || nwShcState.backupImporting || nwShcState.ui?.editorTransaction || nwShcState.detector?.importing) return;
+  const base = nwShcState.config; const snapshot = JSON.stringify(base); nwShcState.reloading = true;
   nwSetStatus('Lade Konfiguration …', null);
-  const cfg = await nwFetchSmartHomeConfig();
+  let cfg;
+  try { cfg = await nwFetchSmartHomeConfig(); } finally { nwShcState.reloading = false; }
   if (!cfg) return;
+  if (nwShcState.config !== base || JSON.stringify(base) !== snapshot || nwShcState.ui?.editorTransaction) { nwSetStatus('Neuere lokale Änderungen wurden beibehalten. Laden wurde nicht übernommen.', 'warn'); return; }
   nwShcState.config = {
     // version 2 adds optional "pages" for SmartHome VIS sidebar
     version: typeof cfg.version === 'number' ? cfg.version : 2,
@@ -2918,13 +2942,14 @@ function nwRenderAll() {
  */
 function nwShcfgSetMode(mode, opts = {}) {
   nwEnsureShcfgUiState();
-  const allowed = ['home', 'builder', 'devices', 'layout', 'timers', 'scenes', 'detect', 'classic'];
-  if (!allowed.includes(mode)) return;
+  if (mode === 'devices') mode = 'setup';
+  const allowed = ['setup', 'home', 'builder', 'devices', 'layout', 'timers', 'scenes', 'detect', 'classic'];
+  if (!allowed.includes(mode) || nwShcState.ui.editorTransaction) return;
 
   nwShcState.ui.mode = mode;
   // Persist only the modern modes. Classic is intentionally not persisted.
   try {
-    if (mode === 'home' || mode === 'builder' || mode === 'timers' || mode === 'scenes' || mode === 'detect' || mode === 'devices' || mode === 'layout') {
+    if (mode === 'setup' || mode === 'home' || mode === 'builder' || mode === 'timers' || mode === 'scenes' || mode === 'detect' || mode === 'devices' || mode === 'layout') {
       localStorage.setItem('nw-shcfg-ui-mode', mode);
     }
   } catch (_) {}
@@ -2990,7 +3015,7 @@ function nwInitShcfgShellUi() {
   const btnBackup = document.getElementById('nw-shcfg-tile-backup');
   const btnClassic = document.getElementById('nw-shcfg-tile-classic');
 
-  if (btnBuilding) btnBuilding.addEventListener('click', () => nwShcfgEnterBuilder({ view: 'rooms', tab: 'building' }));
+  if (btnBuilding) btnBuilding.addEventListener('click', () => nwShcfgSetMode('setup'));
   if (btnDetect) btnDetect.addEventListener('click', async () => {
     nwShcfgSetMode('detect');
     if (!nwShcState.detector.loaded && !nwShcState.detector.loading) {
@@ -3007,20 +3032,20 @@ function nwInitShcfgShellUi() {
   const builderBack = document.getElementById('nw-shcfg-builder-back');
   const builderSave = document.getElementById('nw-shcfg-builder-save');
   const builderOpenClassic = document.getElementById('nw-shcfg-builder-open-classic');
-  if (builderBack) builderBack.addEventListener('click', () => nwShcfgSetMode('home'));
+  if (builderBack) builderBack.addEventListener('click', () => nwShcfgSetMode('setup'));
   if (builderOpenClassic) builderOpenClassic.addEventListener('click', () => nwShcfgSetMode('classic'));
   if (builderSave) builderSave.addEventListener('click', () => nwSaveSmartHomeConfig());
 
   const backupBack = document.getElementById('nw-shcfg-backup-back');
   const backupOpenClassic = document.getElementById('nw-shcfg-backup-open-classic');
-  if (backupBack) backupBack.addEventListener('click', () => nwShcfgSetMode('home'));
+  if (backupBack) backupBack.addEventListener('click', () => nwShcfgSetMode('setup'));
   if (backupOpenClassic) backupOpenClassic.addEventListener('click', () => nwShcfgSetMode('classic'));
 
   const detectBack = document.getElementById('nw-shcfg-detect-back');
   const detectReload = document.getElementById('nw-shcfg-detect-reload');
   const detectSave = document.getElementById('nw-shcfg-detect-save');
   const detectOpenClassic = document.getElementById('nw-shcfg-detect-open-classic');
-  if (detectBack) detectBack.addEventListener('click', () => nwShcfgSetMode('home'));
+  if (detectBack) detectBack.addEventListener('click', () => nwShcfgSetMode('setup'));
   if (detectOpenClassic) detectOpenClassic.addEventListener('click', () => nwShcfgSetMode('classic'));
   if (detectReload) detectReload.addEventListener('click', async () => {
     await nwLoadTypeDetectorSuggestions(true);
@@ -3035,7 +3060,7 @@ function nwInitShcfgShellUi() {
   const timersOpenLogic = document.getElementById('nw-shcfg-timers-open-logic');
   const timersReload = document.getElementById('nw-shcfg-timers-reload');
   const timersSave = document.getElementById('nw-shcfg-timers-save');
-  if (timersBack) timersBack.addEventListener('click', () => nwShcfgSetMode('home'));
+  if (timersBack) timersBack.addEventListener('click', () => nwShcfgSetMode('setup'));
   if (timersOpenLogic) timersOpenLogic.addEventListener('click', () => window.location.href = (window.NW_RUNTIME?.url('/logic.html') ?? '/logic.html'));
   if (timersReload) timersReload.addEventListener('click', async () => {
     await nwLoadTimersModule(true);
@@ -3058,7 +3083,7 @@ function nwInitShcfgShellUi() {
   const scenesOpenLogic = document.getElementById('nw-shcfg-scenes-open-logic');
   const scenesAdd = document.getElementById('nw-shcfg-scenes-add');
   const scenesSave = document.getElementById('nw-shcfg-scenes-save');
-  if (scenesBack) scenesBack.addEventListener('click', () => nwShcfgSetMode('home'));
+  if (scenesBack) scenesBack.addEventListener('click', () => nwShcfgSetMode('setup'));
   if (scenesOpenLogic) scenesOpenLogic.addEventListener('click', () => window.location.href = (window.NW_RUNTIME?.url('/logic.html') ?? '/logic.html'));
   if (scenesAdd) scenesAdd.addEventListener('click', () => {
     nwAddScene();
@@ -3084,9 +3109,11 @@ function nwInitShcfgShellUi() {
     const button = document.getElementById(id);
     if (button) button.addEventListener('click', () => { const menu = button.closest('.nw-shcfg-more'); if (menu) menu.open = false; action(); });
   };
-  bindStep('nw-shcfg-step-building', () => nwShcfgEnterBuilder({ view: 'rooms', tab: 'building' }));
+  bindStep('nw-shcfg-step-building', () => nwShcfgSetMode('setup'));
+  bindStep('nw-shcfg-step-builder', () => nwShcfgEnterBuilder({ view: 'rooms', tab: 'building' }));
   for (const mode of ['devices', 'layout', 'scenes', 'timers', 'classic', 'home']) bindStep('nw-shcfg-step-' + mode, () => nwShcfgSetMode(mode));
   bindStep('nw-shcfg-step-detect', () => nwShcfgSetMode('detect'));
+  bindStep('nw-shcfg-primary-detect', () => nwShcfgSetMode('detect'));
   bindStep('nw-shcfg-tile-devices', () => nwShcfgSetMode('devices'));
   bindStep('nw-shcfg-tile-layout', () => nwShcfgSetMode('layout'));
   bindStep('nw-shcfg-devices-detect', () => nwShcfgSetMode('detect'));
@@ -3094,11 +3121,11 @@ function nwInitShcfgShellUi() {
   bindStep('nw-shcfg-layout-edit', () => {
     const selected = nwShcState.ui.layout && nwShcState.ui.layout.selectedId;
     if (selected) nwShcState.ui.builder.selected = { kind: 'device', id: selected };
-    nwShcfgSetMode('devices');
+    nwShcfgSetMode('setup');
+    if (selected) nwOpenSetupEditor('device', selected);
   });
   bindStep('nw-shcfg-devices-add', () => {
-    const dev = nwAddDeviceFromTemplate('device', { silent: true });
-    if (dev) { nwShcState.ui.builder.selected = { kind: 'device', id: dev.id }; nwShcfgSetMode('devices'); }
+    nwOpenSetupEditor('device');
   });
   // Initial visibility
   nwRenderShcfgShell();
@@ -3133,35 +3160,171 @@ function nwShcfgApplyBuilderSizing() {
  * Zusammenhang: Teil von SmartHome: Räume, Geräte, Kacheln, Popover; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
  * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
  */
-/** Arbeitet mit derselben bestehenden Geräteauswahl, rendert aber nur ein Formular. */
-function nwRenderShcfgDeviceWorkspace() {
-  const browser = document.getElementById('nw-shcfg-device-browser');
-  const props = document.getElementById('nw-shcfg-device-properties');
-  const helper = window.NW_SH_LAYOUT_EDITOR;
-  if (!browser || !props || !helper) return;
-  const cfg = nwShcState.config || {};
-  const devices = Array.isArray(cfg.devices) ? cfg.devices : [];
-  const ui = nwShcState.ui;
-  ui.deviceBrowser = ui.deviceBrowser || {};
-  const selected = ui.builder.selected;
-  if (!selected || selected.kind !== 'device' || !devices.some(dev => dev.id === selected.id)) {
-    ui.builder.selected = devices.length ? { kind: 'device', id: devices[0].id } : null;
+/** Isolierter Formularentwurf: Anwenden ändert nur den Hauptentwurf, Abbrechen
+ * restauriert exakt die vorherige Konfiguration einschließlich Dirty-Zustand. */
+function nwOpenSetupEditor(kind, entityId = '', templateId = 'device') {
+  nwEnsureShcfgUiState();
+  const helper = window.NW_SH_SETUP;
+  if (!helper || helper.hasDialog() || nwShcState.ui.editorTransaction || nwShcState.saving || nwShcState.reloading || nwShcState.fileImporting || nwShcState.backupImporting || nwShcState.detector.importing) return false;
+  if (!['floor', 'room', 'device'].includes(kind)) return false;
+  const baseConfig = nwShcState.config; const baseDirty = nwShcState.dirty; const baseSelection = nwShcState.ui.builder.selected;
+  let draft;
+  try { draft = helper.cloneConfig(baseConfig); } catch (error) { nwSetStatus(error.message || 'Entwurf konnte nicht geöffnet werden.', 'error'); return false; }
+  const collection = kind === 'floor' ? 'floors' : kind === 'room' ? 'rooms' : 'devices';
+  const selection = nwShcState.ui.setup || {};
+  const tx = { baseConfig, draftConfig: draft, baseDirty, baseSelection, kind, id: entityId, isNew: !entityId, handle: null, templateId, active: true };
+  nwShcState.ui.editorTransaction = tx; nwShcState.config = draft;
+  try {
+    if (!entityId) {
+      let created;
+      if (kind === 'device') {
+        created = nwAddDeviceFromTemplate(templateId, { draftOnly: true, roomId: selection.roomId && selection.roomId !== '__none__' ? selection.roomId : '', floorId: selection.floorId && selection.floorId !== '__none__' ? selection.floorId : null });
+        if (!created) throw new Error('Geräteentwurf konnte nicht erstellt werden.');
+      } else {
+        const list = draft[collection] || (draft[collection] = []);
+        created = { id: nwEnsureUniqueId(list, kind === 'floor' ? 'geschoss' : 'raum', null), name: kind === 'floor' ? 'Neues Geschoss' : 'Neuer Raum', order: list.length + 1 };
+        if (kind === 'room') created.floorId = selection.floorId && selection.floorId !== '__none__' ? selection.floorId : null;
+      }
+      if (!Array.isArray(draft[collection])) draft[collection] = [];
+      draft[collection].push(created); tx.id = created.id;
+    }
+    if (!(draft[collection] || []).some(row => row && row.id === tx.id)) throw new Error('Ausgewählter Eintrag ist nicht mehr vorhanden.');
+    nwShcState.ui.builder.selected = { kind, id: tx.id };
+    const cancel = () => {
+      if (!tx.active) return;
+      tx.active = false; nwCloseDatapointDialog();
+      if (nwShcState.config === draft) nwShcState.config = baseConfig;
+      nwShcState.ui.editorTransaction = null; nwShcState.ui.builder.selected = baseSelection;
+      nwMarkDirty(baseDirty); nwRenderAll();
+    };
+    tx.handle = helper.openDialog({
+      title: (tx.isNew ? (kind === 'floor' ? 'Geschoss anlegen' : kind === 'room' ? 'Raum anlegen' : 'Gerät anlegen') : (kind === 'floor' ? 'Geschoss bearbeiten' : kind === 'room' ? 'Raum bearbeiten' : 'Gerät bearbeiten')),
+      description: 'Änderungen werden erst mit „In Entwurf übernehmen“ übernommen. Anschließend oben „Speichern“ wählen. Abbrechen verwirft nur dieses Fenster.',
+      render: body => nwRenderSetupEditorBody(body, tx),
+      onCancel: cancel,
+      onApply: () => {
+        if (!tx.active || nwShcState.config !== draft) { tx.handle?.setError('Der Entwurf wurde geändert. Fenster schließen und erneut öffnen.'); return false; }
+        const entity = (draft[collection] || []).find(row => row && row.id === tx.id);
+        if (entity && kind !== 'device' && !String(entity.name || '').trim()) { tx.handle?.setError('Bitte einen Namen eingeben.'); return false; }
+        if (entity && kind === 'device') {
+          const error = nwShcfgControlEditorError(entity);
+          if (error) { tx.handle?.setError(error); return false; }
+        }
+        nwCloseDatapointDialog(); tx.active = false; nwShcState.ui.editorTransaction = null;
+        nwShcState.ui.builder.selected = entity ? { kind, id: tx.id } : null;
+        const changed = JSON.stringify(draft) !== JSON.stringify(baseConfig);
+        if (!changed) nwShcState.config = baseConfig;
+        nwMarkDirty(baseDirty || changed); nwRenderAll(); return true;
+      },
+    });
+    if (!tx.handle) { cancel(); return false; }
+    nwMarkDirty(baseDirty); return true;
+  } catch (error) {
+    tx.active = false; nwShcState.ui.editorTransaction = null; nwShcState.config = baseConfig; nwShcState.ui.builder.selected = baseSelection;
+    nwMarkDirty(baseDirty); nwSetStatus(error.message || 'Fenster konnte nicht geöffnet werden.', 'error'); return false;
   }
-  ui.deviceBrowser.selectedId = ui.builder.selected && ui.builder.selected.kind === 'device' ? ui.builder.selected.id : '';
-  const showProperties = () => {
-    if (!ui.builder.selected || ui.builder.selected.kind !== 'device') { props.textContent = 'Gerät auswählen oder über „+ Gerät“ anlegen.'; return; }
-    nwRenderShcfgBuilderProps(props); nwCompactDeviceProperties(props);
-  };
-  helper.mount(browser, { devices, rooms: cfg.rooms || [], floors: cfg.floors || [], mode: 'devices', preferences: ui.deviceBrowser,
-    onChange: () => false,
-    onEdit: id => {
-      ui.builder.selected = { kind: 'device', id }; ui.deviceBrowser.selectedId = id;
-      showProperties(); props.setAttribute('tabindex', '-1'); props.focus({ preventScroll: true });
-      if (window.matchMedia && window.matchMedia('(max-width: 1100px)').matches) props.scrollIntoView({ block: 'start' });
-    },
-  });
-  showProperties();
 }
+function nwRenderSetupEditorBody(body, tx) {
+  if (!tx.active || nwShcState.ui.editorTransaction !== tx) return;
+  body.replaceChildren();
+  const collection = tx.kind === 'floor' ? 'floors' : tx.kind === 'room' ? 'rooms' : 'devices';
+  if (!(tx.draftConfig[collection] || []).some(row => row && row.id === tx.id)) {
+    const note = document.createElement('p'); note.textContent = 'Zum Löschen „In Entwurf übernehmen“ wählen. „Abbrechen“ behält den Eintrag.'; body.appendChild(note); return;
+  }
+  if (tx.kind === 'device' && tx.isNew) {
+    const options = [{ value: 'device', label: 'Gerät mit vollständigem Bedienprofil' }];
+    for (const template of NW_SHCFG_BUILDER_DEVICE_TEMPLATES) if (!options.some(row => row.value === template.id)) options.push({ value: template.id, label: template.name || template.id });
+    body.appendChild(nwCreateFieldRow('Gerätevorlage', nwShcfgCreateSelect(options, tx.templateId, value => {
+      if (value === tx.templateId) return;
+      if (!window.confirm('Andere Vorlage verwenden? Eingaben dieses neuen Geräts werden durch die Vorlage ersetzt. Raum und Geräte-ID bleiben erhalten.')) { tx.handle?.refresh(); return; }
+      const list = tx.draftConfig.devices; const index = list.findIndex(row => row.id === tx.id); if (index < 0) return;
+      const old = list[index]; const next = nwAddDeviceFromTemplate(value, { draftOnly: true, roomId: old.roomId || '', floorId: old.floorId || null, functionId: old.functionId || '' });
+      if (!next) return; next.id = old.id; next.order = old.order; list[index] = next; tx.templateId = value; tx.handle?.refresh();
+    })));
+  }
+  const fields = document.createElement('div'); fields.className = 'nw-setup-editor-fields';
+  nwShcState.ui.builder.selected = { kind: tx.kind, id: tx.id };
+  nwRenderShcfgBuilderProps(fields); nwCompactDeviceProperties(fields); body.appendChild(fields);
+}
+function nwRenderSetupWorkspace() {
+  const container = document.getElementById('nw-shcfg-setup-root'); const helper = window.NW_SH_SETUP;
+  if (!container || !helper || !nwShcState.config) return;
+  const preferences = nwShcState.ui.setup || (nwShcState.ui.setup = {});
+  helper.mountSetup(container, { config: nwShcState.config, preferences,
+    onEdit: (kind, id) => nwOpenSetupEditor(kind, id), onAdd: kind => nwOpenSetupEditor(kind), onDetect: () => nwShcfgSetMode('detect') });
+}
+function nwOpenDetectedDetails(suggestionId) {
+  const helper = window.NW_SH_SETUP;
+  if (!helper || helper.hasDialog() || nwShcState.saving || nwShcState.detector.importing || nwShcState.detector.loading) return;
+  const suggestion = (nwShcState.detector.results || []).find(row => row && row.id === suggestionId); if (!suggestion) return;
+  nwShcState.ui.detectorDialog = helper.openDialog({ title: 'Erkanntes Gerät prüfen', description: 'Quellgerät, Lese-/Schreibdatenpunkte und vorhandene Zuordnung prüfen. Übernahmeaktionen ändern zunächst nur den Entwurf.',
+    render: body => nwRenderShcfgDetectorDetails(body, suggestionId), beforeClose: () => !nwShcState.detector.importing, onCancel: () => { nwShcState.ui.detectorDialog = null; } });
+}
+function nwRenderShcfgDetector() {
+  const root = byId('nw-shcfg-detect-root'); const helper = window.NW_SH_SETUP;
+  if (!root || !helper) return;
+  const det = nwShcState.detector; const prefs = det.compact || (det.compact = {});
+  if (!prefs.roomId && nwShcState.ui?.setup?.roomId && nwShcState.ui.setup.roomId !== '__none__') prefs.roomId = nwShcState.ui.setup.roomId;
+  if (det.useAliases !== undefined) prefs.useAliases = det.useAliases;
+  const alias = window.NW_SH_ALIAS_CONFIG;
+  helper.mountDetection(root, { suggestions: det.results || [], rooms: nwShcState.config.rooms || [], preferences: prefs,
+    busy: !!det.importing || !!det.loading, canAlias: !!(alias && alias.canCreate()), onDetails: nwOpenDetectedDetails,
+    onImport: (ids, roomId) => { det.useAliases = prefs.useAliases; void nwImportTypeDetectedBatch(ids, roomId); } });
+}
+/** Ein ausgewählter Stapel wird vorab vollständig geprüft. Eine optionale Alias-
+ * Anlage ist die einzige Hostmutation; der SmartHome-Entwurf wird atomar übernommen. */
+async function nwImportTypeDetectedBatch(selectedIds, targetRoomId) {
+  const det = nwShcState.detector; const helper = window.NW_SH_SETUP;
+  if (det.importing || det.loading || nwShcState.saving || nwShcState.reloading || nwShcState.fileImporting || nwShcState.backupImporting || nwShcState.ui?.editorTransaction || (helper && helper.hasDialog())) return false;
+  if (!Array.isArray(selectedIds) || !selectedIds.length || selectedIds.length > 100 || new Set(selectedIds).size !== selectedIds.length) { nwSetDetectorStatus('Bitte 1 bis 100 unterschiedliche Geräte auswählen.', 'error'); return false; }
+  const config = nwShcState.config; const snapshot = JSON.stringify(config); const roomId = targetRoomId === '__none__' ? '' : targetRoomId;
+  if (!targetRoomId || (roomId && !(config.rooms || []).some(room => room.id === roomId))) { nwSetDetectorStatus('Bitte einen vorhandenen Zielraum auswählen.', 'error'); return false; }
+  const results = det.results || []; const suggestions = []; const devices = []; const reserved = new Set((config.devices || []).map(device => device.id)); let skipped = 0;
+  const preparedSemantics = new Set(); const preparedControls = new Set();
+  for (const suggestionId of selectedIds) {
+    const suggestion = results.find(row => row && row.id === suggestionId);
+    if (!suggestion || !suggestion.importable || !suggestion.proposal || !suggestion.proposal.type) { nwSetDetectorStatus('Ein ausgewählter Vorschlag ist nicht mehr übernehmbar. Bitte neu prüfen.', 'error'); return false; }
+    if (suggestion.imported || suggestion.alreadyConfigured || nwShcfgDraftContainsSuggestion(suggestion)) { skipped++; continue; }
+    const semantics = Array.isArray(suggestion.semanticIds) ? suggestion.semanticIds.filter(id => typeof id === 'string') : [];
+    const control = String(suggestion.sourceId || '') + '#' + String(suggestion.provenance?.controlId || suggestion.proposal?.importProvenance?.controlId || '');
+    if ((suggestion.sourceId && preparedControls.has(control)) || semantics.some(id => preparedSemantics.has(id))) { skipped++; continue; }
+    const proposal = nwShcfgCloneJson(suggestion.proposal, {});
+    const dev = nwAddDeviceFromTemplate(proposal.type, { draftOnly: true, roomId, functionId: '' }); if (!dev) return false;
+    const baseId = dev.id; let suffix = 2; while (reserved.has(dev.id)) dev.id = baseId + '-' + suffix++; reserved.add(dev.id);
+    dev.alias = proposal.alias || suggestion.displayName || dev.alias; dev.roomId = roomId || null; dev.functionId = null;
+    for (const key of ['icon', 'io', 'customView', 'stations', 'playlists', 'importProvenance']) if (proposal[key] !== undefined) dev[key] = nwShcfgCloneJson(proposal[key], proposal[key]);
+    for (const key of ['behavior', 'ui']) if (proposal[key] && typeof proposal[key] === 'object') dev[key] = Object.assign({}, dev[key] || {}, proposal[key]);
+    suggestions.push(suggestion); devices.push(dev); preparedControls.add(control); semantics.forEach(id => preparedSemantics.add(id));
+  }
+  if (!devices.length) { nwSetDetectorStatus('Die ausgewählten Geräte sind bereits im Entwurf vorhanden.', 'warn'); return false; }
+  if ((config.devices || []).length + devices.length > 2000) { nwSetDetectorStatus('Maximal 2000 Geräte je Projekt. Bitte Auswahl reduzieren.', 'error'); return false; }
+  try { helper.cloneConfig(Object.assign({}, config, { devices: [...(config.devices || []), ...devices] })); } catch (error) { nwSetDetectorStatus(error.message || 'Geräteentwurf ist ungültig.', 'error'); return false; }
+  const proposalSnapshot = JSON.stringify(suggestions);
+  const slots = devices.reduce((sum, device) => sum + (Array.isArray(device.io?.deviceControls?.fields) ? device.io.deviceControls.fields.length : 0), 0);
+  if (slots > 2000) { nwSetDetectorStatus('Die Auswahl umfasst mehr als 2000 Bedienfunktionen. Bitte in kleineren Gruppen übernehmen.', 'error'); return false; }
+  const alias = window.NW_SH_ALIAS_CONFIG; const canAlias = !!(alias && alias.canCreate()); const useAliases = det.useAliases === true || (det.useAliases === undefined && canAlias);
+  if (useAliases && !canAlias) { nwSetDetectorStatus('Für die Alias-Anlage fehlt die Berechtigung zur Gerätezuordnung.', 'error'); return false; }
+  const roomName = roomId ? ((config.rooms || []).find(room => room.id === roomId).name || roomId) : 'Ohne Raum';
+  if (!window.confirm(devices.length + ' Gerät(e) nach „' + roomName + '“ in den Entwurf übernehmen?' + (useAliases ? '\nPassende Aliase werden verwendet oder einmalig angelegt.' : '') + '\nDauerhafte Aktivierung erst nach „Speichern“.')) return false;
+  if (nwShcState.config !== config || JSON.stringify(config) !== snapshot) { nwSetDetectorStatus('Der Entwurf hat sich geändert. Bitte Auswahl erneut prüfen.', 'warn'); return false; }
+  det.importing = true; nwRenderShcfgDetector(); let aliasResult = null;
+  try {
+    const finalDevices = useAliases ? (aliasResult = await alias.create(devices)).devices : devices;
+    if (nwShcState.config !== config || JSON.stringify(config) !== snapshot || det.results !== results || JSON.stringify(suggestions) !== proposalSnapshot || suggestions.some(suggestion => !results.includes(suggestion) || suggestion.imported || suggestion.alreadyConfigured || nwShcfgDraftContainsSuggestion(suggestion))) {
+      nwSetDetectorStatus('Der Entwurf oder die Erkennung wurde geändert. Keine Geräte übernommen.' + (aliasResult ? ' Bereits angelegte Aliase bleiben erhalten.' : ''), 'warn'); return false;
+    }
+    config.devices = [...(config.devices || []), ...finalDevices];
+    suggestions.forEach(suggestion => { suggestion.imported = true; suggestion.alreadyConfigured = true; });
+    if (det.compact) det.compact.selected = [];
+    nwNormalizeDeviceOrder(); nwMarkDirty(true); nwRenderAll();
+    nwSetDetectorStatus(finalDevices.length + ' Gerät(e) übernommen – bitte speichern.' + (skipped ? ' ' + skipped + ' bereits vorhandene Vorschläge ausgelassen.' : '') + (aliasResult ? ' Aliase: ' + aliasResult.created.length + ' angelegt, ' + aliasResult.reused.length + ' wiederverwendet.' : ''), 'ok'); return true;
+  } catch (error) {
+    nwSetDetectorStatus((error && error.message ? error.message : 'Übernahme fehlgeschlagen.') + ' Der Entwurf bleibt unverändert.' + (useAliases ? ' Eventuell bereits angelegte Aliase bleiben erhalten; kein automatischer Wiederholungsversuch.' : ''), 'error'); return false;
+  } finally { det.importing = false; nwRenderShcfgDetector(); }
+}
+
+/** Arbeitet mit derselben bestehenden Geräteauswahl, rendert aber nur ein Formular. */
+function nwRenderShcfgDeviceWorkspace() { nwRenderSetupWorkspace(); }
 /** Nur order-Werte übernehmen; keine Objektkopie überschreibt Kundenwerte oder Bindungen. */
 function nwRenderShcfgLayoutWorkspace() {
   const root = document.getElementById('nw-shcfg-layout-editor');
@@ -3217,7 +3380,12 @@ function nwRenderShcfgShell() {
 
   if (!home || !builder || !backup || !detect || !timers || !scenes || !classic) return;
 
+  const editor = nwShcState.ui.editorTransaction;
+  if (editor && editor.active) { editor.handle?.refresh(); return; }
   const mode = nwShcState.ui.mode;
+  const setup = document.getElementById('nw-shcfg-setup');
+  if (setup) setup.style.display = mode === 'setup' || mode === 'devices' ? '' : 'none';
+  if (mode === 'setup' || mode === 'devices') nwRenderSetupWorkspace();
   home.style.display = (mode === 'home') ? '' : 'none';
   builder.style.display = (mode === 'builder') ? '' : 'none';
   backup.style.display = (mode === 'backup') ? '' : 'none';
@@ -3227,14 +3395,14 @@ function nwRenderShcfgShell() {
   classic.style.display = (mode === 'classic') ? '' : 'none';
   const deviceWorkspace = document.getElementById('nw-shcfg-devices-workspace');
   const layoutWorkspace = document.getElementById('nw-shcfg-layout-workspace');
-  if (deviceWorkspace) deviceWorkspace.style.display = mode === 'devices' ? '' : 'none';
+  if (deviceWorkspace) deviceWorkspace.style.display = 'none';
   if (layoutWorkspace) layoutWorkspace.style.display = mode === 'layout' ? '' : 'none';
-  const activeStep = mode === 'builder' ? 'building' : mode;
-  for (const step of ['building', 'devices', 'layout']) {
+  const activeStep = mode === 'setup' || mode === 'devices' ? 'building' : mode;
+  for (const step of ['building', 'detect', 'layout']) {
     const button = document.getElementById('nw-shcfg-step-' + step);
     if (button) { if (step === activeStep) button.setAttribute('aria-current', 'page'); else button.removeAttribute('aria-current'); }
   }
-  if (mode === 'devices') nwRenderShcfgDeviceWorkspace();
+
   if (mode === 'layout') nwRenderShcfgLayoutWorkspace();
   if (mode === 'classic') {
     const cfg = nwShcState.config || {};
@@ -3288,6 +3456,7 @@ function nwSetDetectorStatus(text, kind) {
   if (kind === 'ok') el.classList.add('nw-config-status--ok');
   if (kind === 'warn') el.classList.add('nw-config-status--warn');
   if (kind === 'error') el.classList.add('nw-config-status--error');
+  if (nwShcState.ui?.detectorDialog?.isOpen()) nwShcState.ui.detectorDialog.refresh();
 }
 /**
  * Code-Teil: nwLoadTypeDetectorSuggestions
@@ -3297,15 +3466,18 @@ function nwSetDetectorStatus(text, kind) {
  */
 async function nwLoadTypeDetectorSuggestions(force = false) {
   const det = nwShcState.detector || (nwShcState.detector = {});
+  if (det.loading || det.importing || nwShcState.ui?.editorTransaction) return det.results || [];
+  const requestId = (det.requestId || 0) + 1; det.requestId = requestId;
+  const scanConfig = nwShcState.config; const scanSnapshot = JSON.stringify(scanConfig);
   det.loading = true;
   det.error = '';
   nwSetDetectorStatus('Gerätevorschläge werden gelesen…', null);
   try {
-    const url = '/api/smarthome/type-detect' + (force ? '?force=1' : '');
-    const res = await fetch(url, { cache: 'no-store' });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok || !data || data.ok !== true) {
-      throw new Error((data && data.error) ? data.error : ('HTTP ' + res.status));
+    const data = await window.NW_SH_SETUP.readDetection(force);
+    if (det.requestId !== requestId) return det.results || [];
+    if (nwShcState.config !== scanConfig || JSON.stringify(scanConfig) !== scanSnapshot || nwShcState.ui?.editorTransaction) {
+      det.loading = false; det.loaded = true; det.error = 'Entwurf während der Erkennung geändert.';
+      nwSetDetectorStatus('Erkennung nicht übernommen: Der Entwurf wurde geändert. Bitte neu scannen.', 'warn'); return det.results || [];
     }
     det.results = Array.isArray(data.suggestions) ? data.suggestions : [];
     det.stats = (data && data.stats && typeof data.stats === 'object') ? data.stats : null;
@@ -3320,6 +3492,7 @@ async function nwLoadTypeDetectorSuggestions(force = false) {
     }
     return det.results;
   } catch (e) {
+    if (det.requestId !== requestId) return det.results || [];
     det.loading = false;
     det.loaded = true;
     det.error = (e && e.message) ? e.message : String(e);
@@ -3436,7 +3609,7 @@ function nwShcfgDraftContainsSuggestion(suggestion) {
 
 async function nwImportTypeDetectedSuggestion(suggestionId) {
   const det = nwShcState.detector || {};
-  if (det.importing) return;
+  if (det.importing || det.loading || nwShcState.saving || nwShcState.reloading || nwShcState.fileImporting || nwShcState.backupImporting || nwShcState.ui?.editorTransaction) return;
   const suggestion = Array.isArray(det.results) ? det.results.find(x => x && x.id === suggestionId) : null;
   if (!suggestion) return;
   if (suggestion.imported || suggestion.alreadyConfigured || nwShcfgDraftContainsSuggestion(suggestion)) {
@@ -3627,17 +3800,20 @@ async function nwApplyTypeDetectedUpdateWithAliases(suggestionId, selectedPaths)
  * Zusammenhang: Teil von SmartHome: Räume, Geräte, Kacheln, Popover; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
  * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
  */
-function nwRenderShcfgDetector() {
-  const root = byId('nw-shcfg-detect-root');
+function nwRenderShcfgDetectorDetails(root, suggestionId) {
   if (!root) return;
 
   const det = nwShcState.detector || (nwShcState.detector = {});
   const cfg = nwShcState.config || {};
   const rooms = (Array.isArray(cfg.rooms) ? cfg.rooms.slice() : []).sort(nwSortByOrder);
   const functions = (Array.isArray(cfg.functions) ? cfg.functions.slice() : []).sort(nwSortByOrder);
-  const results = Array.isArray(det.results) ? det.results.slice() : [];
+  const results = Array.isArray(det.results) ? det.results.filter(row => row && row.id === suggestionId) : [];
 
   root.innerHTML = '';
+  const currentStatus = byId('nw-shcfg-detect-status');
+  if (currentStatus && currentStatus.textContent) {
+    const live = document.createElement('p'); live.className = currentStatus.className; live.setAttribute('role', 'status'); live.textContent = currentStatus.textContent; root.appendChild(live);
+  }
 
   const toolbar = document.createElement('div');
   toolbar.className = 'nw-shcfg-detect__toolbar';
@@ -3680,7 +3856,7 @@ function nwRenderShcfgDetector() {
   const aliasText = document.createElement('span');
   aliasText.textContent = 'Alias-Datenpunkte verwenden/anlegen' + (canAlias ? ' (bestehende Aliase wiederverwenden)' : ' (Berechtigung mapping.edit erforderlich)');
   aliases.appendChild(aliasCheck); aliases.appendChild(aliasText); toolbar.appendChild(aliases);
-  root.appendChild(toolbar);
+  // Compact overview owns the shared filter and alias choice.
 
   const summary = document.createElement('div');
   summary.className = 'nw-shcfg-detect__summary';
@@ -3690,8 +3866,7 @@ function nwRenderShcfgDetector() {
   const configured = Number.isFinite(Number(stats.configured)) ? Number(stats.configured) : results.filter((r) => r && r.alreadyConfigured).length;
   const filteredResults = results.filter((r) => {
     if (!r) return false;
-    if (!det.showConfigured && (r.imported || (r.alreadyConfigured && !(r.update && r.update.sourceChanged)))) return false;
-    return nwShcfgDetectorMatchesFilter(r, det.filterText || '');
+    return true;
   });
 
   /**
@@ -3845,6 +4020,8 @@ function nwRenderShcfgDetector() {
         if (st.role) bits.push(String(st.role));
         if (st.type) bits.push(String(st.type));
         if (st.unit) bits.push('[' + String(st.unit) + ']');
+        bits.push(st.read === true ? 'Lesen' : st.read === false ? 'Nicht lesbar' : 'Leserichtung: siehe Profil');
+        bits.push(st.write === true ? 'Schreiben' : st.write === false ? 'Nicht schreibbar' : 'Schreibrichtung: siehe Profil');
         smeta.textContent = bits.join(' • ');
         cell.appendChild(smeta);
 
@@ -6573,7 +6750,7 @@ function nwRenderShcfgBuilderProps(container) {
         if (floor._virtual) return;
         floor.name = v;
         nwMarkDirty(true);
-        nwRenderAll();
+        if (!nwShcState.ui?.editorTransaction) nwRenderAll();
       }, { placeholder: 'z.B. Erdgeschoss' }))
     );
 
@@ -6588,7 +6765,7 @@ function nwRenderShcfgBuilderProps(container) {
         if (floor._virtual) return;
         floor.icon = v;
         nwMarkDirty(true);
-        nwRenderAll();
+        if (!nwShcState.ui?.editorTransaction) nwRenderAll();
       }, { showLabel: false }))
     );
 
@@ -6637,7 +6814,7 @@ function nwRenderShcfgBuilderProps(container) {
       nwCreateFieldRow('Name', nwShcfgCreateTextInput(room.name, (v) => {
         room.name = v;
         nwMarkDirty(true);
-        nwRenderShcfgShell();
+        if (!nwShcState.ui?.editorTransaction) nwRenderShcfgShell();
       }))
     );
 
@@ -6646,7 +6823,7 @@ function nwRenderShcfgBuilderProps(container) {
       nwCreateFieldRow('Icon', nwShcfgRenderIconPickerRow(room.icon || '', (v) => {
         room.icon = v;
         nwMarkDirty(true);
-        nwRenderAll();
+        if (!nwShcState.ui?.editorTransaction) nwRenderAll();
       }, { showLabel: false }))
     );
 
@@ -6738,7 +6915,7 @@ function nwRenderShcfgBuilderProps(container) {
       nwCreateFieldRow('Name', nwShcfgCreateTextInput(dev.alias || '', (v) => {
         dev.alias = v;
         nwMarkDirty(true);
-        nwRenderShcfgShell();
+        if (!nwShcState.ui?.editorTransaction) nwRenderShcfgShell();
       }, { placeholder: 'z.B. Deckenlicht' }))
     );
 
@@ -6747,7 +6924,7 @@ function nwRenderShcfgBuilderProps(container) {
       nwCreateFieldRow('Icon', nwShcfgRenderIconPickerRow(dev.icon || '', (v) => {
         dev.icon = v;
         nwMarkDirty(true);
-        nwRenderAll();
+        if (!nwShcState.ui?.editorTransaction) nwRenderAll();
       }, { showLabel: false }))
     );
 
@@ -8011,6 +8188,11 @@ async function nwCreateDeviceDraftAliases(dev, status, button) {
   } finally { button.disabled = !helper.canCreate(); }
 }
 function nwMountAliasTools(container, dev) {
+  if (nwShcState.ui?.editorTransaction) {
+    const note = document.createElement('p'); note.className = 'nw-config-hint';
+    note.textContent = 'Alias-Anlage erfolgt bei der Auto-Erkennung. Manuelle Alias-Verknüpfungen können nach Übernehmen unter Weitere Funktionen → Alle Einstellungen angelegt werden.';
+    container.appendChild(note); return;
+  }
   const wrapper = document.createElement('details'); wrapper.className = 'nw-sh-alias-tools nw-shcfg-advanced';
   const summary = document.createElement('summary'); summary.textContent = 'Alias-Verknüpfungen'; wrapper.appendChild(summary);
   const button = document.createElement('button'); button.type = 'button'; button.className = 'nw-config-btn';
@@ -8025,6 +8207,8 @@ function nwMountAliasTools(container, dev) {
   wrapper.appendChild(button); wrapper.appendChild(status); container.appendChild(wrapper);
 }
 function nwMountDeviceControlProfile(container, dev, expanded = false) {
+  const editorAtMount = nwShcState.ui?.editorTransaction;
+  const currentEditor = () => !editorAtMount || (editorAtMount.active && nwShcState.ui?.editorTransaction === editorAtMount && nwShcState.config === editorAtMount.draftConfig);
   nwMountAliasTools(container, dev);
   const custom = window.NW_SH_CUSTOM_CONFIG;
   if (custom && typeof custom.mount === 'function') {
@@ -8032,6 +8216,7 @@ function nwMountDeviceControlProfile(container, dev, expanded = false) {
       expanded,
       getControls: () => dev.io && dev.io.deviceControls,
       onChange: (view, mapping, rebuild) => {
+        if (!currentEditor()) return;
         if (view) dev.customView = view; else delete dev.customView;
         if (mapping !== undefined) {
           dev.io = dev.io || {};
@@ -8057,6 +8242,7 @@ function nwMountDeviceControlProfile(container, dev, expanded = false) {
     fixedProfile: dev.customView && dev.customView.kind ? 'custom_' + dev.customView.kind : undefined,
     createDpInput: (label, value, onChange) => nwCreateDpInput(label, value, onChange, { allowWriteTest: false }),
     onChange: mapping => {
+      if (!currentEditor()) return;
       dev.io = dev.io || {};
       if (mapping) dev.io.deviceControls = mapping;
       else delete dev.io.deviceControls;
@@ -8066,6 +8252,8 @@ function nwMountDeviceControlProfile(container, dev, expanded = false) {
 }
 
 function nwCreateDpInput(labelText, value, onChange, options = {}) {
+  const editorAtMount = nwShcState.ui?.editorTransaction;
+  const currentEditor = () => !editorAtMount || (editorAtMount.active && nwShcState.ui?.editorTransaction === editorAtMount && nwShcState.config === editorAtMount.draftConfig);
   const wrapper = document.createElement('div');
   wrapper.className = 'nw-config-dp-input-wrapper';
 
@@ -8075,10 +8263,11 @@ function nwCreateDpInput(labelText, value, onChange, options = {}) {
   input.value = value || '';
   // Ereignis-Kommentar: Bindet das UI-Ereignis 'change' an input. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
   input.addEventListener('change', () => {
-    onChange(input.value.trim());
+    if (currentEditor()) onChange(input.value.trim());
   });
   // Ereignis-Kommentar: Bindet das UI-Ereignis 'input' an input. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
   input.addEventListener('input', () => {
+    if (!currentEditor()) return;
     onChange(input.value.trim());
     nwMarkDirty(true);
   });
@@ -8090,10 +8279,12 @@ function nwCreateDpInput(labelText, value, onChange, options = {}) {
   btnPick.title = 'Datenpunkt auswählen';
   // Ereignis-Kommentar: Bindet das UI-Ereignis 'click' an btnPick. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
   btnPick.addEventListener('click', () => {
+    if (!currentEditor()) return;
     nwOpenDatapointDialog({
       title: labelText,
       initial: input.value,
       onSelect: (id) => {
+        if (!currentEditor()) return;
         input.value = id || '';
         onChange(input.value.trim());
         nwMarkDirty(true);

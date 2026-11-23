@@ -1,0 +1,32 @@
+[smarthome-config-transactional] OK: SmartHome-Konfiguration wird vor Aktivierung vollständig validiert und bei Aktivierungs-/Persistenzfehlern zurückgerollt.
+[smarthome-import] OK Echter Detector: Boolean, Text, Zahl und Herkunft
+[smarthome-import] OK Detector → Vertrag → echte Gerätezustände mit getrennten Datentypen
+[smarthome-import] OK Optionale Indikatoren: unbekannt/ungültig/stale maskiert keine Kernqualität
+[smarthome-import] OK UNREACH und echte Fehlermeldungen; keine Umdeutung gesunder Werte
+[smarthome-import] OK Metadatenvorschläge, lokale Symbole und explizites Anlegen von Zuordnungen
+[smarthome-import] OK Aliaspräferenz, getrennte Read/Write-Ziele und doppelte Draftimporte
+[smarthome-import] OK Ungültige/zyklische Aliasziele sperren Import; keine unendliche Rekursion
+[smarthome-import] OK Gemeinsame Statuspunkte sind keine Geräteidentität
+[smarthome-import] OK Manuelle Zuordnungen unverändert; Konfigurationsänderung invalidiert Erkennungscache
+[smarthome-import] OK Quellenänderungen nur als Vorschlag; explizit ausgewählte Felder atomar im Entwurf
+[smarthome-import] OK Zusatzstatus erzeugt keine Schreib-IDs; Herkunft schließt Prototypfelder aus
+[smarthome-import] OK Dynamische Kamera: aktuelle URL, keine unsichere/stale Fallback-URL; Altbestand bleibt
+[smarthome-import] OK Historischer Blindvertrag, stabile ID/Raum/Favorit und zusätzliche Felder
+[smarthome-import-runtime] 13 Prüfgruppen bestanden; kein Hardware-/Integrationstest.
+✔ Nur Qualitäts-Alterszähler werden aus der Signatur entfernt; Eingaben bleiben unverändert (39.515284ms)
+✔ Gerätetypen, Namen, Favoriten und Qualität bleiben im echten Kachelrenderer erhalten (63.992436ms)
+✔ Batterie-Prozent, LowBattery, fehlende/veraltete Werte und Störungen werden unterschieden (18.183471ms)
+✔ Detaildialog bleibt beim Poll erhalten und bietet Escape, Fokusfang und Rückkehr (33.995234ms)
+✔ Timerentwurf erhält denselben modalen Lebenszyklus und bleibt bei State-Polls bestehen (24.183989ms)
+✔ Konfigurations-/Rechtewechsel schließt einen bestehenden Dialog statt alte Bedienfreigabe zu behalten (10.669458ms)
+✔ Poll aktualisiert Alter ohne Neurender, echte Qualitäts-/Wertwechsel rendern weiter (9.441149ms)
+✔ Schalt-/Szenen-Payloads, Dimmerregler ohne Schritttasten und Klima-Regelgrenzen bleiben erhalten (37.564585ms)
+✔ Favoriten-Schlüssel und lokale Overrides werden unverändert weiterverwendet (21.216539ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 730.745645

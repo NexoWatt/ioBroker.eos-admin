@@ -6,6 +6,7 @@ const path = require('node:path');
 const vm = require('node:vm');
 const { EphemeralMap, ExpiringSnapshot } = require('./fixtures/load-ephemeral-cache.cjs');
 const { createHostedCleanup } = require('../ui/lib/hosted-runtime-stop');
+const { detectionNow, DetectionError, DETECTION_LIMITS, detectionSnapshot } = require('../ui/lib/smarthome-device-detection');
 function clock() {
     let now = 0;
     const tasks = new Map();
@@ -72,7 +73,7 @@ test('canonical discovery wrapper preserves complete objects and ordering while 
     let reads = 0;
     const objects = { 'device.z': { native: { retained: true } }, 'device.a': { common: { custom: { history: true } } } };
     const runtime = { getForeignObjectsAsync: async pattern => { assert.equal(pattern, '*'); reads++; return objects; } };
-    const get = vm.runInNewContext(`(function() { ${body}; return nwShcfgTdGetObjectsCache; })`, { ExpiringSnapshot }).call(runtime);
+    const get = vm.runInNewContext(`(function() { ${body}; return nwShcfgTdGetObjectsCache; })`, { ExpiringSnapshot, detectionNow, DetectionError, DETECTION_LIMITS, detectionSnapshot }).call(runtime);
     const [a, b] = await Promise.all([get(), get()]);
     assert.strictEqual(a, b); assert.strictEqual(a.objects, objects); assert.equal(reads, 1);
     assert.deepEqual(Array.from(a.keys), ['device.a', 'device.z']);

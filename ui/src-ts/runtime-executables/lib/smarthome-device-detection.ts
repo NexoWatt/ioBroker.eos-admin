@@ -16,12 +16,74 @@
  * Verknüpfungen: smarthome-device-controls.ts, smarthome-import.ts.
  */
 import { createHash } from 'node:crypto';
+import { performance } from 'node:perf_hooks';
 import { getControlProfiles, normalizeDeviceControls } from './smarthome-device-controls';
 
 type Row = Record<string, unknown>;
 type Objects = Record<string, unknown>;
 export type CleanDetectedControl = Row & { type: string; states: Row[] };
 type ControlField = { key: string; readId?: string; writeId?: string };
+/** Operational limits apply to discovery only, never to saved customer devices.
+ * A synchronous detector call is cooperatively checked before/after the call;
+ * this budget is deliberately not a hard event-loop execution guarantee. */
+export const DETECTION_LIMITS = Object.freeze({ objects: 100000, roots: 20000, suggestions: 10000, timeoutMs: 30000, readTimeoutMs: 5000 });
+export type DetectionErrorCode = 'EOS_DETECTION_ABORTED' | 'EOS_DETECTION_TIMEOUT' | 'EOS_DETECTION_LIMIT' | 'EOS_DETECTION_FAILED' | 'EOS_UI_STOPPING';
+export class DetectionError extends Error {
+    constructor(readonly code: DetectionErrorCode) { super(code); this.name = 'DetectionError'; }
+}
+export function detectionNow(): number { return performance.now(); }
+
+/** TypeDetector uses binary search with JS string comparison, not locale order.
+ * Passing localeCompare-sorted IDs with _keysOptionalSorted drops valid devices. */
+export function detectionSnapshot(input: unknown): { objects: Objects; keys: string[] } {
+    if (!input || typeof input !== 'object' || Array.isArray(input)) throw new DetectionError('EOS_DETECTION_FAILED');
+    const objects = input as Objects;
+    const keys = Object.keys(objects);
+    if (keys.length > DETECTION_LIMITS.objects) throw new DetectionError('EOS_DETECTION_LIMIT');
+    keys.sort();
+    return { objects, keys };
+}
+
+/** No writes/retries: bound waiting for the shared object snapshot and stop
+ * scanning when HTTP disconnects or the hosted runtime shuts down. Underlying
+ * ioBroker object IO has no cancellation API; its loader must discard late IO. */
+export class DetectionScan {
+    private readonly started: number;
+    constructor(private readonly options: { signal?: AbortSignal; stopping?: () => boolean; now?: () => number } = {}) {
+        this.started = this.now();
+    }
+    private now(): number { return this.options.now ? this.options.now() : detectionNow(); }
+    get elapsedMs(): number { return Math.max(0, this.now() - this.started); }
+    check(kind?: 'roots' | 'suggestions', count = 0): void {
+        if (this.options.stopping?.()) throw new DetectionError('EOS_UI_STOPPING');
+        if (this.options.signal?.aborted) throw new DetectionError('EOS_DETECTION_ABORTED');
+        if (this.elapsedMs >= DETECTION_LIMITS.timeoutMs) throw new DetectionError('EOS_DETECTION_TIMEOUT');
+        if (kind && count > DETECTION_LIMITS[kind]) throw new DetectionError('EOS_DETECTION_LIMIT');
+    }
+    async read<T>(pending: Promise<T>): Promise<T> {
+        try { this.check(); } catch (error) {
+            // Even an already-cancelled caller must observe the shared IO's
+            // eventual rejection; cancellation does not cancel ioBroker IO.
+            void pending.catch(() => undefined);
+            throw error;
+        }
+        return new Promise<T>((resolve, reject) => {
+            const signal = this.options.signal;
+            const failed = (error: unknown): void => {
+                cleanup(); reject(error instanceof Error ? error : new DetectionError('EOS_DETECTION_FAILED'));
+            };
+            const aborted = (): void => failed(new DetectionError('EOS_DETECTION_ABORTED'));
+            const timer = setTimeout(() => failed(new DetectionError('EOS_DETECTION_TIMEOUT')),
+                Math.max(1, Math.min(DETECTION_LIMITS.readTimeoutMs, DETECTION_LIMITS.timeoutMs - this.elapsedMs)));
+            const cleanup = (): void => { clearTimeout(timer); signal?.removeEventListener('abort', aborted); };
+            signal?.addEventListener('abort', aborted, { once: true });
+            if (signal?.aborted) aborted();
+            void pending.then(value => {
+                try { this.check(); cleanup(); resolve(value); } catch (error) { failed(error); }
+            }, failed);
+        });
+    }
+}
 const LEGACY_TYPES = new Set(['switch', 'dimmer', 'color', 'blind', 'rtr', 'scene', 'sensor', 'player', 'camera', 'widget']);
 const SAFE_KEY = /^[A-Z][A-Z0-9_]{0,63}$/;
 const DIAGNOSTIC_KEYS = new Set(['BATTERY', 'RSSI', 'LOWBAT', 'UNREACH', 'UNREACH_STICKY', 'MAINTAIN', 'ERROR', 'CONNECTED', 'WORKING', 'DIRECTION', 'DIRECTION_ENUM']);

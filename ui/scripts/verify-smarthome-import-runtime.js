@@ -140,7 +140,7 @@ function detectorHarness(objects, values, initialConfig = {}) {
   const end = mainSource.indexOf('// Kundenansicht erhält nur die Navigation', start);
   assert.ok(start >= 0 && end > start);
   const context = {
-    crypto, setImmediate, NwChannelDetector: Detector, ...helper, ...controlHelpers, ...detectionHelpers, ...cacheHelpers, adapter,
+    crypto, setImmediate, AbortController, NwChannelDetector: Detector, ...helper, ...controlHelpers, ...detectionHelpers, ...cacheHelpers, adapter,
     requireDpDiscovery: () => {},
     app: { get: (url, ...handlers) => routes.set(url, handlers.at(-1)) },
   };
@@ -177,10 +177,10 @@ function frontendHarness(config, suggestions) {
   let dirty = 0;
   const context = vm.createContext({
     nwShcState: stateContainer, nwMarkDirty: () => { dirty += 1; },
-    nwSetDetectorStatus: () => {}, nwRenderAll: () => {}, nwNormalizeDeviceOrder: () => {},
+    nwSetDetectorStatus: () => {}, nwRenderAll: () => {}, nwRenderShcfgDetector: () => {}, nwNormalizeDeviceOrder: () => {}, window: {},
     nwAddDeviceFromTemplate: (type, assignment) => {
       const device = { id: `new_device_${stateContainer.config.devices.length}`, type, ...assignment, io: {}, ui: {}, behavior: {} };
-      stateContainer.config.devices.push(device); return device;
+      if (!assignment.draftOnly) stateContainer.config.devices.push(device); return device;
     },
   });
   for (const name of ['nwShcfgGetDetectorAssignment', 'nwShcfgCloneJson', 'nwShcfgAcceptDetectedAssignment',
@@ -258,20 +258,20 @@ async function run() {
     assert.equal(devices[0].quality.status, 'offline'); assert.equal(devices[0].state.unreachable, true);
   });
 
-  await check('Metadatenvorschläge, lokale Symbole und explizites Anlegen von Zuordnungen', () => {
+  await check('Metadatenvorschläge, lokale Symbole und explizites Anlegen von Zuordnungen', async () => {
     assert.equal(motion.suggestedAssignment.roomId, 'existing_terrace');
     assert.equal(motion.metadata.rooms[0].create, false);
     assert.equal(motion.metadata.functions[0].create, true);
     assert.equal(motion.proposal.icon, 'motion');
     const ui = frontendHarness(cfg, [motion]);
     assert.equal(ui.state.config.functions.length, 0);
-    ui.context.nwImportTypeDetectedSuggestion(motion.id);
+    await ui.context.nwImportTypeDetectedSuggestion(motion.id);
     assert.equal(ui.state.config.functions.length, 1);
     assert.equal(ui.state.config.rooms.length, 1);
     assert.equal(ui.state.config.devices[0].roomId, 'existing_terrace');
     assert.equal(ui.state.config.devices[0].io.sensor.valueType, 'boolean');
     assert.equal(ui.state.config.devices[0].importProvenance.sourceId, motion.sourceId);
-    ui.context.nwImportTypeDetectedSuggestion(motion.id);
+    await ui.context.nwImportTypeDetectedSuggestion(motion.id);
     assert.equal(ui.state.config.devices.length, 1); assert.equal(ui.dirty(), 1);
     const remote = clone(data.objects); remote['fixture.0.motion'].common.icon = 'https://example.invalid/untrusted.svg';
     remote['fixture.0.motion'].common.color = 'url(https://example.invalid/style)';
@@ -298,8 +298,8 @@ async function run() {
     assert.equal(helper.resolveSmartHomeAliasIdentity(aliasObjects, 'alias.0.split', 'read').id, 'fixture.0.motion.actual');
     assert.equal(helper.resolveSmartHomeAliasIdentity(aliasObjects, 'alias.0.split', 'write').id, 'fixture.0.command');
     const ui = frontendHarness(cfg, [suggestions[0], motion]);
-    ui.context.nwImportTypeDetectedSuggestion(suggestions[0].id);
-    ui.context.nwImportTypeDetectedSuggestion(motion.id);
+    await ui.context.nwImportTypeDetectedSuggestion(suggestions[0].id);
+    await ui.context.nwImportTypeDetectedSuggestion(motion.id);
     assert.equal(ui.state.config.devices.length, 1);
   });
 

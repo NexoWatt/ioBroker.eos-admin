@@ -171,8 +171,10 @@ test('configuration HTML and scoped CSS retain all module hooks and full-width r
   const html = fs.readFileSync(path.join(root, 'www/smarthome-config.html'), 'utf8');
   const css = fs.readFileSync(path.join(root, 'www/smarthome-config-workspace.css'), 'utf8');
   const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]); assert.equal(new Set(ids).size, ids.length, 'DOM IDs remain unique');
-  for (const id of ['nw-shcfg-step-building', 'nw-shcfg-step-devices', 'nw-shcfg-step-layout', 'nw-shcfg-device-browser', 'nw-shcfg-device-properties', 'nw-shcfg-layout-editor', 'nw-shcfg-classic']) assert.ok(ids.includes(id), id);
-  for (const file of ['smarthome-alias-config', 'smarthome-custom-config', 'smarthome-device-config', 'smarthome-layout-editor']) assert.match(html, new RegExp(file + '\\.js'));
+  for (const id of ['nw-shcfg-step-building', 'nw-shcfg-step-detect', 'nw-shcfg-step-layout', 'nw-shcfg-step-builder', 'nw-shcfg-setup-root', 'nw-shcfg-device-browser', 'nw-shcfg-device-properties', 'nw-shcfg-layout-editor', 'nw-shcfg-classic']) assert.ok(ids.includes(id), id);
+  for (const file of ['smarthome-alias-config', 'smarthome-custom-config', 'smarthome-device-config', 'smarthome-layout-editor', 'smarthome-setup']) assert.match(html, new RegExp(file + '\\.js'));
+  assert.match(html, /nw-shcfg-step-builder[^>]+>Expertenansicht/);
+  assert.ok(html.indexOf('smarthome-setup.js') < html.indexOf('/static/smarthome-config.js'));
   assert.ok(html.indexOf('smarthome-layout-editor.js') < html.indexOf('/static/smarthome-config.js'));
   assert.match(css, /nw-page-smarthome-config > main[^}]+max-width: none !important/s);
   assert.match(css, /grid-template-columns: 250px minmax\(0, 1fr\) 320px !important/);

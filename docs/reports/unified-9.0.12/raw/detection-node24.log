@@ -1,0 +1,34 @@
+✔ actual detector route finds uppercase and lowercase channel IDs without locale loss (109.902853ms)
+✔ invalid object response and detector exception cannot masquerade as complete empty discovery (6.277828ms)
+✔ a genuine empty scan explains why without mutating customer configuration (7.499024ms)
+✔ object and candidate budgets fail explicitly before any detector call (198.1415ms)
+✔ HTTP abort releases the route and late IO cannot populate its snapshot (5.985787ms)
+✔ expired IO remains single-flight across retries and its late completion is discarded (2.434522ms)
+✔ monotonic deadline, result limits and shutdown are explicit and separate from empty results (1.635346ms)
+✔ read wait expires after its actual timer budget without requiring IO to finish (0.979441ms)
+✔ a read that already exceeded its monotonic load deadline never enters the snapshot (3.409136ms)
+✔ simultaneous discovery returns busy and a cancelled wait observes late rejection (2.825387ms)
+✔ catalog follows installed 6.2 dependency and every builtin external pattern (5.454426ms)
+✔ real detection retains secondary values and readonly/actual unit metadata (22.65759ms)
+✔ real media and fan patterns produce complete external profiles (3.954388ms)
+✔ foreign optional alias siblings and duplicate values are removed without mutation (0.419417ms)
+✔ siblings with shared diagnostics have separate stable identity and room assignment (2.156684ms)
+✔ stable slot provenance retains manual changes when field order and source mappings change (1.870963ms)
+✔ explicit object directions never invent read/write permissions and alias cycles block import (1.307104ms)
+✔ alias preference keeps the alias and distinguishes its read and write targets (0.896609ms)
+✔ legacy provenance upgrades without changing the existing legacy type or manual room (0.95137ms)
+✔ repeated primary slots become independent controls and forecast day slots stay typed (1.02665ms)
+✔ profile-enabled legacy groups never turn readonly feedback into write mappings (81.325284ms)
+✔ existing cover protections remain part of strict profiles and conflicting sources are rejected (1.509751ms)
+✔ managed aliases retain canonical import identity while preserving alias bindings and display (3.430428ms)
+✔ different user alias conversions are not collapsed merely because physical targets match (0.730385ms)
+✔ actual alias creation followed by TypeDetector6.2 rediscovery preserves canonical identity and existing customer configuration (46.446633ms)
+✔ manual fallback slots do not invent detector mappings or broaden readonly media STATE commands (1.268146ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1486.481878

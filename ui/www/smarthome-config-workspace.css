@@ -168,3 +168,80 @@ body.nw-page-smarthome-config :is(.nw-layout-editor, .nw-shcfg-steps, .nw-shcfg-
   body.nw-page-smarthome-config .nw-shcfg-steps { border-color: CanvasText; }
   body.nw-page-smarthome-config .nw-layout-editor__tile[data-selected="true"] { outline: 2px solid Highlight; }
 }
+/* 9.0.12: Standard-Einrichtung ohne festes Seitenpanel. Formulare öffnen im selben Tab. */
+body.nw-page-smarthome-config .nw-setup-workspace { padding: 22px !important; }
+body.nw-page-smarthome-config .nw-setup-heading { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 22px; color: #b9d2dc; }
+body.nw-page-smarthome-config .nw-setup-selectors { display: grid; grid-template-columns: minmax(180px, .8fr) minmax(0, 1.2fr) minmax(0, 1.2fr); gap: 18px; align-items: start; }
+body.nw-page-smarthome-config .nw-setup-field { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; min-width: 0; max-width: 100%; font-size: 13px; color: #b8d6db; }
+body.nw-page-smarthome-config .nw-setup-selection-row { display: flex; gap: 8px; flex-wrap: wrap; min-width: 0; }
+body.nw-page-smarthome-config .nw-setup-selection-row > label { flex: 1 1 100%; }
+body.nw-page-smarthome-config .nw-setup-project-note { color: #92adb9; font-size: 12px; margin: 14px 0 24px; }
+body.nw-page-smarthome-config .nw-setup-list-toolbar { display: flex; flex-wrap: wrap; gap: 12px; margin: 18px 0 10px; }
+body.nw-page-smarthome-config .nw-setup-list-toolbar input { flex: 1 1 260px; min-width: 0; width: auto; }
+body.nw-page-smarthome-config .nw-setup-device-list,
+body.nw-page-smarthome-config .nw-setup-detection-list { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
+body.nw-page-smarthome-config .nw-setup-device-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px; align-items: center; padding: 14px 16px; background: #0b2230; border: 1px solid #244958; border-radius: 12px; }
+body.nw-page-smarthome-config .nw-setup-device-info { display: grid; gap: 5px; min-width: 0; overflow-wrap: anywhere; }
+body.nw-page-smarthome-config .nw-setup-device-info > strong { color: #e2f3f4; font-size: 15px; }
+body.nw-page-smarthome-config .nw-setup-device-info > span { color: #a9c6ce; font-size: 13px; }
+body.nw-page-smarthome-config .nw-setup-device-info > small { color: #90abb9; font-size: 12px; }
+body.nw-page-smarthome-config .nw-setup-count { margin: 4px 0 10px; color: #9fbfc8; font-size: 13px; }
+body.nw-page-smarthome-config .nw-setup-detection-toolbar { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 1fr); gap: 14px; align-items: end; }
+body.nw-page-smarthome-config .nw-setup-check { display: flex; gap: 10px; align-items: center; min-height: 44px; min-width: 0; font-size: 13px; }
+body.nw-page-smarthome-config .nw-setup-check input { flex: 0 0 22px; width: 22px; height: 22px; }
+body.nw-page-smarthome-config .nw-setup-batch-actions,
+body.nw-page-smarthome-config .nw-setup-pagination { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 18px 0; }
+body.nw-page-smarthome-config .nw-setup-batch-actions > span { margin-right: auto; color: #b7d3d9; }
+body.nw-page-smarthome-config .nw-setup-pagination { justify-content: flex-end; }
+body.nw-page-smarthome-config .nw-setup-detection-row { display: grid; grid-template-columns: 32px minmax(0, 1fr) minmax(110px, 180px) auto; gap: 14px; align-items: center; padding: 14px; background: #0a202e; border: 1px solid #244958; border-radius: 12px; }
+body.nw-page-smarthome-config .nw-setup-detection-row > input { width: 22px; height: 22px; cursor: pointer; }
+body.nw-page-smarthome-config .nw-setup-detection-state { color: #a6d9cd; font-size: 12px; overflow-wrap: anywhere; }
+body.nw-page-smarthome-config .nw-setup-status { color: #efcb9c; font-size: 13px; }
+body.nw-page-smarthome-config .nw-setup-project-actions { position: relative; }
+body.nw-page-smarthome-config .nw-setup-project-actions > summary { padding: 12px 16px; min-height: 44px; box-sizing: border-box; border: 1px solid #315062; border-radius: 10px; cursor: pointer; }
+body.nw-page-smarthome-config .nw-setup-project-actions > div { position: absolute; right: 0; top: 100%; min-width: 220px; display: grid; gap: 8px; padding: 12px; background: #0b2230; border: 1px solid #315062; border-radius: 12px; z-index: 35; }
+body.nw-page-smarthome-config .nw-setup-dialog-backdrop { position: fixed; inset: 0; z-index: 2200; display: grid; place-items: center; padding: 24px; background: rgba(1, 9, 18, .82); box-sizing: border-box; }
+body.nw-page-smarthome-config .nw-setup-dialog { width: min(1120px, 100%); max-width: 100%; max-height: calc(100dvh - 48px); min-width: 0; display: flex; flex-direction: column; margin: 0; padding: 0; color: #d5eaf0; background: #081b28; border: 1px solid #315b69; border-radius: 18px; box-shadow: 0 24px 80px #000a; overflow: hidden; }
+body.nw-page-smarthome-config .nw-setup-dialog-header { flex: 0 0 auto; padding: 20px 24px 10px; }
+body.nw-page-smarthome-config .nw-setup-dialog-header h2 { margin: 0; font-size: 24px; color: #e4f8f3; }
+body.nw-page-smarthome-config .nw-setup-dialog-description { flex: 0 0 auto; margin: 0; padding: 0 24px 18px; color: #a5c3ce; font-size: 13px; line-height: 1.5; }
+body.nw-page-smarthome-config .nw-setup-dialog-body { flex: 1 1 auto; overflow-y: auto; overflow-x: hidden; min-height: 0; min-width: 0; padding: 10px 24px 22px; overscroll-behavior: contain; }
+body.nw-page-smarthome-config .nw-setup-dialog-footer { flex: 0 0 auto; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 12px; padding: 16px 24px; border-top: 1px solid #244958; background: #0a202d; }
+body.nw-page-smarthome-config .nw-setup-dialog-status { margin: 0; padding: 0 24px; color: #ffb695; font-size: 13px; }
+body.nw-page-smarthome-config .nw-setup-dialog-status:empty { display: none; }
+body.nw-page-smarthome-config .nw-setup-dialog .nw-config-field-row { display: grid; grid-template-columns: minmax(130px, .25fr) minmax(0, 1fr); min-width: 0; gap: 14px; align-items: start; margin: 14px 0; }
+body.nw-page-smarthome-config .nw-setup-dialog .nw-config-field-label { max-width: 100%; width: 100%; padding-top: 10px; }
+body.nw-page-smarthome-config .nw-setup-dialog .nw-config-field-control { min-width: 0; max-width: 100%; }
+body.nw-page-smarthome-config .nw-setup-dialog .nw-config-input,
+body.nw-page-smarthome-config .nw-setup-dialog .nw-config-select,
+body.nw-page-smarthome-config .nw-setup-dialog .nw-select,
+body.nw-page-smarthome-config .nw-setup-dialog .nw-input { min-width: 0; max-width: 100%; box-sizing: border-box; }
+body.nw-page-smarthome-config .nw-setup-dialog .nw-config-card__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+body.nw-page-smarthome-config .nw-setup-dialog .nw-config-card__title { min-width: 0; overflow-wrap: anywhere; }
+body.nw-page-smarthome-config .nw-setup-dialog .nw-shcfg-detect__list { display: block; }
+body.nw-page-smarthome-config .nw-setup-dialog .nw-shcfg-detect-card { width: 100%; min-width: 0; box-sizing: border-box; }
+body.nw-page-smarthome-config .nw-setup-dialog .nw-shcfg-detect-card__states { grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
+body.nw-page-smarthome-config .nw-setup-dialog :focus-visible,
+body.nw-page-smarthome-config .nw-setup-workspace :focus-visible { outline: 2px solid #62efcc; outline-offset: 3px; }
+/* The existing DP picker stays above the setup overlay and remains keyboard reachable. */
+body.nw-page-smarthome-config .nw-dp-dialog-backdrop { z-index: 2300 !important; }
+@media (max-width: 900px) {
+  body.nw-page-smarthome-config .nw-setup-selectors { grid-template-columns: minmax(0, 1fr); }
+  body.nw-page-smarthome-config .nw-setup-detection-toolbar { grid-template-columns: minmax(0, 1fr); }
+  body.nw-page-smarthome-config .nw-setup-detection-row { grid-template-columns: 30px minmax(0, 1fr) auto; }
+  body.nw-page-smarthome-config .nw-setup-detection-state { grid-column: 2; }
+  body.nw-page-smarthome-config .nw-setup-detection-row > button { grid-column: 3; grid-row: 1 / span 2; }
+}
+@media (max-width: 600px) {
+  body.nw-page-smarthome-config .nw-setup-workspace { padding: 12px !important; }
+  body.nw-page-smarthome-config .nw-setup-dialog-backdrop { padding: 8px; }
+  body.nw-page-smarthome-config .nw-setup-dialog { max-height: calc(100dvh - 16px); border-radius: 12px; }
+  body.nw-page-smarthome-config .nw-setup-dialog-body { padding: 8px 14px 18px; }
+  body.nw-page-smarthome-config .nw-setup-dialog-header,
+  body.nw-page-smarthome-config .nw-setup-dialog-footer { padding: 14px; }
+  body.nw-page-smarthome-config .nw-setup-dialog-description { padding: 0 14px 12px; }
+  body.nw-page-smarthome-config .nw-setup-dialog .nw-config-field-row { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  body.nw-page-smarthome-config .nw-setup-dialog .nw-config-field-label { padding-top: 0; }
+  body.nw-page-smarthome-config .nw-setup-detection-row { grid-template-columns: 30px minmax(0, 1fr); }
+  body.nw-page-smarthome-config .nw-setup-detection-row > button { grid-column: 2; grid-row: auto; justify-self: start; }
+}

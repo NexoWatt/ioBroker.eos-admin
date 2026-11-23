@@ -1163,8 +1163,8 @@
     },
     {
       "path": "src-ts/runtime-executables/lib/smarthome-device-detection.ts",
-      "sourceHash": "b171608600be5612f6a79e312070d2a19eb5876992a019440e7d20fd53fb4265",
-      "codeHash": "fc49b82c3a07a92bebb8d0c003d7117ca11b061c51d4b2da4522fa5f4a641fe9"
+      "sourceHash": "7e40e5d6393e3f570dbe4f7ca457ea3bd9b77d0aceff209b19fe206fa36d2463",
+      "codeHash": "3ed584e1ab381d1039b95db596c41c5de7bf384c71a2ce96f1bd0454f3829ba3"
     },
     {
       "path": "src-ts/runtime-executables/lib/smarthome-device-legacy.ts",
@@ -1198,8 +1198,8 @@
     },
     {
       "path": "src-ts/runtime-executables/main.ts",
-      "sourceHash": "cd098e757ba30517a1d6986f3474f6665816607d61d43797c74dcab030bb053c",
-      "codeHash": "383a60cbe1225107bc29f9b60a44ae03f57b9ccee0e0065c675674bc3e2bed46"
+      "sourceHash": "eb8c0a32e8467f11249fc43ebab0ca5878ea0afbc4451eb0b79a5cc3f9c6d576",
+      "codeHash": "c0d3481dd4451fbb497f434246b8b61d53f6c4fe58b6b4c3f9bcee1d602c8379"
     },
     {
       "path": "src-ts/runtime-executables/www/admin-guard.ts",
@@ -1373,8 +1373,8 @@
     },
     {
       "path": "src-ts/runtime-executables/www/smarthome-config.ts",
-      "sourceHash": "f0509a612aaa791e0cbe5620c6d9e0b0ff6640522930e25748b72694ed6cc9f0",
-      "codeHash": "f8fe6c9d222b72858c8dd45543973d076ca6cd59aa45d1d1b6ee7c906749652c"
+      "sourceHash": "5e9ea20bd2affc82f62ae55a5b812c58dc37cb446ebebea3ae949cefcf8f3562",
+      "codeHash": "71e32fe4082cde496c6323c54e7d3e5e11e8092b03d075421260f21476ea9ff9"
     },
     {
       "path": "src-ts/runtime-executables/www/smarthome-custom-config.ts",
@@ -1415,6 +1415,11 @@
       "path": "src-ts/runtime-executables/www/smarthome-presentation.ts",
       "sourceHash": "5a52d575109fb6d97d703fac2c81d6723dc28ec3532f0b2d66e5a6e921543421",
       "codeHash": "84a5606847fb997dbd89f5605a6cceb2a58be6894596f84f161d18ade4306be4"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/smarthome-setup.ts",
+      "sourceHash": "9513f3b63d66f64a4bb1c949207dd979359a1db8d208a9d02848225c44c423b4",
+      "codeHash": "bbc11bb5f624328debcac56fad3be088908e01771e7e0f1518575265bbda90c7"
     },
     {
       "path": "src-ts/runtime-executables/www/smarthome-touch.ts",
@@ -2418,7 +2423,7 @@
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/lib/smarthome-device-detection.md",
-      "hash": "101cfc5b99fa2e605aaa5f5d8b42162dbe5fc8f4dc022d1ad66ad129f27a2bb3"
+      "hash": "59142b6e600212a2606a03e1f87d87f5c3edc4dadf129e546b5f4de8df568f79"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/lib/smarthome-device-legacy.md",
@@ -2446,7 +2451,7 @@
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/main.md",
-      "hash": "0c674709dded1c6f4e59e2e4cd051160744cb1222b41e1a85956c05b658f8b20"
+      "hash": "3fbd5959ca3d0dc4684b48f1a2e1c2656cefd8a5b1524cc831ce00af108bacc8"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/admin-guard.md",
@@ -2586,7 +2591,7 @@
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/smarthome-config.md",
-      "hash": "dafe4727e6af7bbbe4c8c6b7c63a74ef3d64f6ba4058db77bb7b27562f7ae9b9"
+      "hash": "a73b298cdb8b1fec0863cd558e916e317df496d6bcc40d4996832f9a734dcca0"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/smarthome-custom-config.md",
@@ -2619,6 +2624,10 @@
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/smarthome-presentation.md",
       "hash": "e125d6a0739d50983622976ea36ced0bdc8d0d33f9f1f01fd3f75d78628d0de1"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/smarthome-setup.md",
+      "hash": "b96dbfd6242993c6a44113838a3ce5e935a96679c58d08fba7bebf8697d7d77a"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/smarthome-touch.md",
@@ -2678,7 +2687,7 @@
     },
     {
       "path": "docs/QUELLCODE_VERKNUEPFUNGEN_DE.md",
-      "hash": "43cdcac0d914396b93d57084bbea2e3e187eda41b17667f3d759b5bd2b3ce15f"
+      "hash": "8b0b375254026772f7361e96f6506f533acf0091b5bbf4bc829dd2a137f46c0c"
     }
   ]
 }

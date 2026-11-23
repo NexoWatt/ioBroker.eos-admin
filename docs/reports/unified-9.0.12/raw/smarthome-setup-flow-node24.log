@@ -1,0 +1,35 @@
+✔ every existing template can be prepared without adding a device or changing customer settings (1556.890891ms)
+✔ single detected import preserves configured bindings, room and device types; repeated import is a no-op (777.938618ms)
+✔ aliases failure with partial created objects leaves both device and proposed room drafts unchanged (568.264368ms)
+✔ late alias success after replacing the draft cannot import into either customer configuration (568.409828ms)
+✔ detector request failures preserve the customer draft and previous results with explicit error state (728.269277ms)
+✔ failed save preserves unsaved customer fields and reports the server failure without retry (558.766603ms)
+✔ late successful save cannot replace a newer unsaved edit or clear its dirty state (414.581512ms)
+✔ real editor cancel restores exact customer object, preexisting dirty state, selection and focus (551.160572ms)
+✔ new floor, room and device dialogs leave no records after Cancel or Escape (1238.582224ms)
+✔ actual form Apply changes only draft; global Save/Reload/Import remain blocked during editing (467.45438ms)
+✔ invalid room Apply keeps the dialog open with visible feedback; cancel remains possible (451.442483ms)
+✔ batch imports only distinct new devices into chosen room and preserves their exact bindings (341.163313ms)
+✔ batch decline, stale target and alias partial failure cannot create a partial configuration (411.779816ms)
+✔ batch alias success cannot overwrite concurrent edits in the same configuration object (666.376049ms)
+✔ existing datapoint picker stays reachable inside editing and late selection after Cancel is ignored (745.505506ms)
+✔ pending Apply cannot be cancelled or stacked and exposes failure before allowing another attempt (704.832368ms)
+✔ setup dropdown filters preserve every customer record and use actual room/floor relationships (588.659201ms)
+✔ cancel invalidates old profile-editor callbacks so they cannot dirty the restored customer draft (626.622317ms)
+✔ pending Reload excludes new editors and a late response cannot replace a concurrently changed draft (518.200404ms)
+✔ pending file read excludes editors and late imported JSON cannot replace a newer local draft (464.877305ms)
+✔ active backup import excludes file import, Reload, Save and a new editor without reading or writing (357.808756ms)
+✔ late detection results cannot replace suggestions after a customer draft change or while an editor is open (795.101116ms)
+✔ simple field changes keep the real form controls; explicit refresh retains body scroll and focus position (636.53318ms)
+✔ setup preserves long existing customer IDs and does not silently hide records after the detection limit (1168.515491ms)
+✔ large detection lists render at most 100 rows and retain selection across pages and filtering (850.590124ms)
+✔ focus trap includes closed-details summary but ignores hidden ancestors and returns focus after close (518.136893ms)
+✔ configuration HTML and scoped responsive CSS make setup and dialogs available without fixed right properties (93.524123ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 18535.679739

@@ -1,21 +1,21 @@
 {
-  "version": "9.0.11",
+  "version": "9.0.12",
   "channel": "next",
   "baseFrontend": "Rebuilt from official Admin 8.3.5 sources plus reviewed EOS integration using React 19 and Vite; see source-bound frontend manifest.",
   "runtimeEntry": "vite-manifest",
-  "releaseType": "unified-migration-startup-recovery",
-  "release": "unified-migration-startup-recovery",
-  "label": "9.0.11",
+  "releaseType": "smarthome-setup-dialogs",
+  "release": "smarthome-setup-dialogs",
+  "label": "9.0.12",
   "notes": [
     "Preserves the existing ioBroker Admin and the combined EOS login/runtime.",
     "One central NWL3 activation, private persistence and authorized public-key recovery.",
     "Manufacturer vault/private keys stay on the issuer computer; live-device acceptance remains required."
   ],
   "changes": [
-    "Migration startup monitor independent of HTTPS readiness",
-    "Confirmed bounded shutdown before restoring previous runtime owners",
-    "Late operational starts blocked after failed handover",
-    "Verified tarball publication workflow; sealed repository integrity remains enforced"
+    "Dropdown-based SmartHome setup and separate device dialogs",
+    "Compact discovery selection and explicit room assignment",
+    "Verified ioBroker type detector object ordering",
+    "Preserved central licensing, configuration transactions and 9.0.11 migration safeguards"
   ],
   "brandingCacheVersion": 7110,
   "shellCacheVersion": 7110,
@@ -29,7 +29,7 @@
     "commit": "6f77eedf525813a7a61d79188d1ff05dffd05086"
   },
   "product": "NexoWatt EOS",
-  "status": "9.0.11 integration test release; target commissioning remains required",
+  "status": "9.0.12 integration test release; target commissioning remains required",
   "sourceComponents": {
     "admin": "8.0.2",
     "ui": "1.0.38",
