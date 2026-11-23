@@ -1,0 +1,230 @@
+(node:52) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:59) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: private embedded EEBus bridge accepts handshake and dispatches central controller without bus roundtrip
+ok 1 - private embedded EEBus bridge accepts handshake and dispatches central controller without bus roundtrip
+  ---
+  duration_ms: 6.684983
+  type: 'test'
+  ...
+# Subtest: serialized bus message cannot impersonate embedded source or acquire private proof
+ok 2 - serialized bus message cannot impersonate embedded source or acquire private proof
+  ---
+  duration_ms: 2.12832
+  type: 'test'
+  ...
+# Subtest: fresh ownership/license denial blocks commands and implementation feedback
+ok 3 - fresh ownership/license denial blocks commands and implementation feedback
+  ---
+  duration_ms: 1.589387
+  type: 'test'
+  ...
+# Subtest: embedded identity, command allowlist, handshake and stopped lifecycle are enforced
+ok 4 - embedded identity, command allowlist, handshake and stopped lifecycle are enforced
+  ---
+  duration_ms: 2.127008
+  type: 'test'
+  ...
+# (node:60) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: one central entitlement starts the integrated module without a second adapter or license
+ok 5 - one central entitlement starts the integrated module without a second adapter or license
+  ---
+  duration_ms: 8.547222
+  type: 'test'
+  ...
+# Subtest: disabled and unlicensed modules create no runtime; metadata remains available
+ok 6 - disabled and unlicensed modules create no runtime; metadata remains available
+  ---
+  duration_ms: 3.777776
+  type: 'test'
+  ...
+# Subtest: license loss denies existing operation closures synchronously and stops transports
+ok 7 - license loss denies existing operation closures synchronously and stops transports
+  ---
+  duration_ms: 3.879196
+  type: 'test'
+  ...
+# Subtest: normal host heartbeat preserves a running module and generation
+ok 8 - normal host heartbeat preserves a running module and generation
+  ---
+  duration_ms: 4.843844
+  type: 'test'
+  ...
+# Subtest: legacy enable revokes immediately; confirmed stop creates a new valid generation
+ok 9 - legacy enable revokes immediately; confirmed stop creates a new valid generation
+  ---
+  duration_ms: 6.726063
+  type: 'test'
+  ...
+# Subtest: a race during legacy inventory cannot renew an invalidated operation lease
+ok 10 - a race during legacy inventory cannot renew an invalidated operation lease
+  ---
+  duration_ms: 2.030596
+  type: 'test'
+  ...
+# Subtest: facade constrains namespaces and suppresses stale telemetry after lifecycle end
+ok 11 - facade constrains namespaces and suppresses stale telemetry after lifecycle end
+  ---
+  duration_ms: 2.081111
+  type: 'test'
+  ...
+# Subtest: secret masking and restoration follow device IDs when rows move
+ok 12 - secret masking and restoration follow device IDs when rows move
+  ---
+  duration_ms: 1.105706
+  type: 'test'
+  ...
+# Subtest: saved configurations are encrypted and API views never return device credentials
+ok 13 - saved configurations are encrypted and API views never return device credentials
+  ---
+  duration_ms: 4.022456
+  type: 'test'
+  ...
+# Subtest: configuration cannot reopen a runtime after failed transport shutdown
+ok 14 - configuration cannot reopen a runtime after failed transport shutdown
+  ---
+  duration_ms: 4.048254
+  type: 'test'
+  ...
+# Subtest: config rejects prototype keys and excessive depth before persistence
+ok 15 - config rejects prototype keys and excessive depth before persistence
+  ---
+  duration_ms: 0.408751
+  type: 'test'
+  ...
+# Subtest: integrated licenses preserve NWL2 adapter scope and fail closed on expired core entitlement
+ok 16 - integrated licenses preserve NWL2 adapter scope and fail closed on expired core entitlement
+  ---
+  duration_ms: 3.159628
+  type: 'test'
+  ...
+# Subtest: concurrent HTTP-close and adapter-unload share transport cleanup, and late startup never installs a timer
+ok 17 - concurrent HTTP-close and adapter-unload share transport cleanup, and late startup never installs a timer
+  ---
+  duration_ms: 15.670198
+  type: 'test'
+  ...
+# Subtest: preserved legacy EEBus namespace keeps state IDs while private bridge remains tied to EOS owner
+ok 18 - preserved legacy EEBus namespace keeps state IDs while private bridge remains tied to EOS owner
+  ---
+  duration_ms: 2.689466
+  type: 'test'
+  ...
+# Subtest: backup secret fields stay redacted and restored by unique endpoint rather than row index
+ok 19 - backup secret fields stay redacted and restored by unique endpoint rather than row index
+  ---
+  duration_ms: 0.423673
+  type: 'test'
+  ...
+# Subtest: backup notifications use only configured validated target and lose authority on revocation
+ok 20 - backup notifications use only configured validated target and lose authority on revocation
+  ---
+  duration_ms: 1.501509
+  type: 'test'
+  ...
+# Subtest: backup downloads clean late file streams after timeout or stop and bound concurrent opens
+ok 21 - backup downloads clean late file streams after timeout or stop and bound concurrent opens
+  ---
+  duration_ms: 23.38259
+  type: 'test'
+  ...
+# Subtest: backup data-folder inventory exposes only bounded paths and rejects revoked or malformed reads
+ok 22 - backup data-folder inventory exposes only bounded paths and rejects revoked or malformed reads
+  ---
+  duration_ms: 1.343847
+  type: 'test'
+  ...
+# (node:61) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual hosted EEBus runtime starts with scoped objects/subscriptions and preserves identity over module restart
+ok 23 - actual hosted EEBus runtime starts with scoped objects/subscriptions and preserves identity over module restart
+  ---
+  duration_ms: 113.324997
+  type: 'test'
+  ...
+# Subtest: actual Devices catalogue remains configurable while module is disabled and no device runtime is started
+ok 24 - actual Devices catalogue remains configurable while module is disabled and no device runtime is started
+  ---
+  duration_ms: 86.932278
+  type: 'test'
+  ...
+# Subtest: legacy EEBus settings import remains disabled, reports changed boundaries and retains the original instance
+ok 25 - legacy EEBus settings import remains disabled, reports changed boundaries and retains the original instance
+  ---
+  duration_ms: 23.675652
+  type: 'test'
+  ...
+# (node:67) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: module presence does not report active until its original start promise succeeds
+ok 26 - module presence does not report active until its original start promise succeeds
+  ---
+  duration_ms: 13.251871
+  type: 'test'
+  ...
+# Subtest: concurrent stop waits for late startup and closes newly opened transports before resolving
+ok 27 - concurrent stop waits for late startup and closes newly opened transports before resolving
+  ---
+  duration_ms: 5.648463
+  type: 'test'
+  ...
+# Subtest: a rejected pending startup still receives final cleanup before stop confirmation
+ok 28 - a rejected pending startup still receives final cleanup before stop confirmation
+  ---
+  duration_ms: 3.54207
+  type: 'test'
+  ...
+# Subtest: timeout is sticky unconfirmed shutdown; late startup cleanup cannot authorize a rollback
+ok 29 - timeout is sticky unconfirmed shutdown; late startup cleanup cannot authorize a rollback
+  ---
+  duration_ms: 25.838082
+  type: 'test'
+  ...
+# Subtest: a failing final cleanup remains unconfirmed even when the first cleanup succeeded
+ok 30 - a failing final cleanup remains unconfirmed even when the first cleanup succeeded
+  ---
+  duration_ms: 1.526105
+  type: 'test'
+  ...
+# Subtest: a failed running transport shutdown cannot be hidden by host stop or reconfiguration
+ok 31 - a failed running transport shutdown cannot be hidden by host stop or reconfiguration
+  ---
+  duration_ms: 0.995043
+  type: 'test'
+  ...
+# Subtest: shutdown during configuration read cannot create a delayed module or subscription
+ok 32 - shutdown during configuration read cannot create a delayed module or subscription
+  ---
+  duration_ms: 1.109742
+  type: 'test'
+  ...
+# Subtest: a late facade subscription is immediately removed after its generation was revoked
+ok 33 - a late facade subscription is immediately removed after its generation was revoked
+  ---
+  duration_ms: 1.539043
+  type: 'test'
+  ...
+# Subtest: confirmed stop waits for every accepted state/create/extend mutation to settle
+ok 34 - confirmed stop waits for every accepted state/create/extend mutation to settle
+  ---
+  duration_ms: 3.673463
+  type: 'test'
+  ...
+# Subtest: pending mutation timeout stays unconfirmed; bounded capacity and revoked calls never forward or retry
+ok 35 - pending mutation timeout stays unconfirmed; bounded capacity and revoked calls never forward or retry
+  ---
+  duration_ms: 76.124724
+  type: 'test'
+  ...
+1..35
+# tests 35
+# suites 0
+# pass 35
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 353.975334

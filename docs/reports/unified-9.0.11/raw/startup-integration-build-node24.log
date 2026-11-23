@@ -1,0 +1,46 @@
+✔ only a complete configured port is accepted, without a fallback or ephemeral port (3.186278ms)
+✔ configured port is used exactly once and readiness follows successful bind (85.754566ms)
+✔ occupied port fails once with EADDRINUSE and leaves the existing service intact (31.776088ms)
+✔ unavailable local interface fails once with EADDRNOTAVAIL instead of searching ports (3.635148ms)
+✔ TLS configuration cannot silently become a cleartext listener when certificates are absent (1.904431ms)
+✔ controller certificate read failures remain diagnosed TLS startup failures (0.50329ms)
+✔ collection TLS uses configured default for IP without SNI and retains a distinct hostname collection (430.041879ms)
+✔ collection IP context sends the configured intermediate chain and accepts only the explicit root CA (308.398504ms)
+✔ a valid named collection cannot hide the absence of a default certificate for IP access (63.54271ms)
+✔ native TLS without a fixed origin serves IP/8188 and HTTPS/443 alias Host contracts (109.748644ms)
+✔ invalid external origin is caught by Web startup and terminates once without controller mutations (2.549631ms)
+✔ password/setup write guard uses canonical browser Origin and preserves explicit bearer compatibility (0.479606ms)
+✔ actual TLS activation accepts Host443 normalization and rejects malformed Host before its service (131.876529ms)
+✔ startup abort closes a bound listener and never mutates another adapter (1.382394ms)
+✔ startup failure closes admission immediately and awaits migration recovery before terminating once (1.478425ms)
+✔ startup recovery rejection fences migration before termination and does not leak its promise (0.453186ms)
+✔ already closed Web cannot initiate another migration recovery or terminate again (0.159805ms)
+✔ migration startup fence keeps login and authenticated recovery reachable without operational startup (586.746061ms)
+✔ verified nexowatt TLS authority opens login for anonymous/expired sessions and dashboard for an active session (213.615993ms)
+✔ module host crosses the actual private hosted UI bridge and returns implementation feedback (164.786302ms)
+✔ valid license and stalled operational startup cannot hold the HTTPS login or recovery console hostage (265.554101ms)
+✔ operational initialization failure leaves HTTPS recovery up and refuses real UI commands (153.282218ms)
+✔ late startup completion after license loss cannot revive control (105.241264ms)
+✔ late startup completion after ownership loss cannot revive control (100.536583ms)
+✔ an unexpected operational promise rejection is contained without closing HTTPS (97.701612ms)
+✔ optional startup catch cannot erase observed license loss after authority returns (202.622275ms)
+✔ optional startup catch cannot erase observed ownership loss after authority returns (155.259692ms)
+✔ optional startup catch cannot erase observed ownership loss after authority returns (rejected operation) (233.299638ms)
+✔ the explicit HTTPS-ready diagnostic requires a live listener and is suppressed after close (112.672495ms)
+✔ actual onReady starts migration monitoring before ownership and initialization (49.204517ms)
+✔ actual onReady awaits migration recovery after ownership failure (8.152363ms)
+✔ actual onReady awaits migration recovery after secret persistence failure (4.798249ms)
+✔ actual onReady awaits migration recovery after invalid existing secret (2.988808ms)
+✔ actual onReady awaits migration recovery after initialization failure (5.390651ms)
+✔ actual onReady awaits migration recovery after initialization failure after first secret creation (4.114313ms)
+✔ actual onReady awaits migration recovery after initial security reconciliation failure (5.101875ms)
+✔ unexpected recovery rejection blocks migration and is contained by actual onReady (3.664251ms)
+✔ unexpected detached monitor rejection requests fail-closed recovery without an unhandled rejection (6.695189ms)
+ℹ tests 38
+ℹ suites 0
+ℹ pass 38
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4303.074526

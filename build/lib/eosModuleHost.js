@@ -109,7 +109,7 @@ class EosModuleHost {
         this.stopPromise = null;
         for (const id of Object.keys(MODULES)) {
             this.entries.set(id, { id, module: null, config: { enabled: false }, reason: 'DISABLED', lease: 0,
-                generation: 0, blockers: [], loading: false, failed: false, timers: new Set(), subscriptions: new Set(), downloads: new Set() });
+                generation: 0, blockers: [], loading: false, failed: false, started: false, startup: null, stopEntryPromise: null, pendingWrites: new Set(), timers: new Set(), subscriptions: new Set(), downloads: new Set() });
         }
     }
     factory(id) {
@@ -188,31 +188,62 @@ class EosModuleHost {
         entry.reason = reason;
     }
     async stopEntry(entry) {
+        if (entry.stopEntryPromise)
+            return entry.stopEntryPromise;
         const module = entry.module;
+        const startup = entry.startup;
+        const wasStarting = startup?.module === module && startup.settled !== true;
         entry.module = null;
+        entry.started = false;
         entry.generation++;
-        for (const download of entry.downloads) {
-            download.accept = false;
-            download.stream?.destroy();
-        }
-        entry.downloads.clear();
-        for (const timer of entry.timers) {
-            clearTimeout(timer);
-            clearInterval(timer);
-        }
-        entry.timers.clear();
-        if (module) {
-            try {
-                await bounded(module.stop(), 1500);
+        const markUnconfirmed = () => {
+            entry.failed = true;
+            entry.stopFailed = true;
+            entry.reason = 'STOP_FAILED_RESTART_REQUIRED';
+        };
+        const clearResources = () => {
+            for (const download of entry.downloads) {
+                download.accept = false;
+                download.stream?.destroy();
             }
-            catch {
-                entry.failed = true;
-                entry.stopFailed = true;
-                entry.reason = 'STOP_FAILED_RESTART_REQUIRED';
+            entry.downloads.clear();
+            for (const timer of entry.timers) {
+                clearTimeout(timer);
+                clearInterval(timer);
             }
-        }
-        await Promise.allSettled([...entry.subscriptions].map(pattern => bounded(Promise.resolve().then(() => this.owner.unsubscribeForeignStatesAsync(pattern)), 1000)));
-        entry.subscriptions.clear();
+            entry.timers.clear();
+        };
+        clearResources();
+        // A module can finish opening a transport after its first stop call. Keep
+        // the original start promise (not only its timeout wrapper), wait for its
+        // settlement, then close again. The public deadline never means stopped.
+        const cleanup = Promise.resolve().then(async () => {
+            if (module && wasStarting) {
+                await Promise.all([
+                    Promise.resolve().then(() => module.stop()).catch(markUnconfirmed),
+                    startup.promise.catch(() => undefined),
+                ]);
+                await module.stop();
+            }
+            else if (module) {
+                await module.stop();
+            }
+            clearResources();
+            // Controller API completion is distinct from physical device feedback.
+            // Do not restore the old owner while an accepted mutation may still
+            // settle into the retained namespace. Never retry an uncertain write.
+            await Promise.allSettled([...entry.pendingWrites]);
+            const subscriptions = [...entry.subscriptions];
+            await Promise.all(subscriptions.map(pattern => bounded(Promise.resolve().then(() => this.owner.unsubscribeForeignStatesAsync(pattern)), 1000)));
+            for (const pattern of subscriptions)
+                entry.subscriptions.delete(pattern);
+        });
+        // Keep late cleanup alive after timeout, but never restore its authority
+        // or turn an uncertain stop into permission to reactivate the old owner.
+        const configured = this.options.stopTimeoutMs;
+        const deadline = Number.isFinite(configured) && configured > 0 ? Math.min(configured, 3500) : 3500;
+        entry.stopEntryPromise = bounded(cleanup, deadline).catch(markUnconfirmed);
+        return entry.stopEntryPromise;
     }
     facade(entry, generation) {
         const owner = this.owner;
@@ -230,7 +261,7 @@ class EosModuleHost {
             return `${namespace}.${local}`;
         };
         const timer = (repeat, callback, ms, ...args) => {
-            if (entry.timers.size >= 256 || typeof callback !== 'function' || !Number.isFinite(ms) || ms < (repeat ? 1 : 0)) {
+            if (this.stopped || entry.generation !== generation || entry.timers.size >= 256 || typeof callback !== 'function' || !Number.isFinite(ms) || ms < (repeat ? 1 : 0)) {
                 throw fail('EOS_MODULE_TIMER');
             }
             let pending = false;
@@ -251,16 +282,38 @@ class EosModuleHost {
             entry.timers.add(handle);
             return handle;
         };
+        const mutate = operation => {
+            if (this.stopped || entry.generation !== generation)
+                return Promise.reject(fail('EOS_MODULE_STOPPED'));
+            if (entry.pendingWrites.size >= 4096)
+                return Promise.reject(fail('EOS_MODULE_WRITE_LIMIT'));
+            const pending = Promise.resolve().then(() => {
+                if (this.stopped || entry.generation !== generation)
+                    throw fail('EOS_MODULE_STOPPED');
+                return operation();
+            });
+            entry.pendingWrites.add(pending);
+            void pending.then(() => entry.pendingWrites.delete(pending), () => entry.pendingWrites.delete(pending));
+            return pending;
+        };
         return {
             namespace, hostNamespace: owner.namespace,
             eosTargetNamespace: owner.config.eosUiMigration?.preserveNamespace ? owner.config.eosUiMigration.source : owner.namespace,
             instance: /^\w[\w-]*\.\d+$/.test(namespace) ? Number(namespace.split('.').at(-1)) : owner.instance, config: entry.config, log: owner.log,
             getObjectAsync: id => owner.getForeignObjectAsync(resolve(id)),
             getStateAsync: id => owner.getForeignStateAsync(resolve(id)),
-            setObjectNotExistsAsync: (id, object) => entry.generation === generation
-                ? owner.setForeignObjectNotExistsAsync(resolve(id), object) : Promise.reject(fail('EOS_MODULE_STOPPED')),
-            extendObjectAsync: (id, object) => entry.generation === generation
-                ? owner.extendForeignObjectAsync(resolve(id), object) : Promise.reject(fail('EOS_MODULE_STOPPED')),
+            setObjectNotExistsAsync: (id, object) => {
+                if (entry.generation !== generation)
+                    return Promise.reject(fail('EOS_MODULE_STOPPED'));
+                const full = resolve(id);
+                return mutate(() => owner.setForeignObjectNotExistsAsync(full, object));
+            },
+            extendObjectAsync: (id, object) => {
+                if (entry.generation !== generation)
+                    return Promise.reject(fail('EOS_MODULE_STOPPED'));
+                const full = resolve(id);
+                return mutate(() => owner.extendForeignObjectAsync(full, object));
+            },
             setStateAsync: (id, value, ack) => {
                 if (entry.generation !== generation) {
                     // Cleanup telemetry is discarded rather than overwriting a newer runtime.
@@ -269,13 +322,18 @@ class EosModuleHost {
                         return Promise.resolve();
                     return Promise.reject(fail('EOS_MODULE_STOPPED'));
                 }
-                return owner.setForeignStateAsync(resolve(id), value, ack);
+                const full = resolve(id);
+                return mutate(() => owner.setForeignStateAsync(full, value, ack));
             },
             subscribeStatesAsync: async (pattern) => {
                 const full = resolve(pattern);
                 if (entry.generation !== generation || entry.subscriptions.size >= 32)
                     throw fail('EOS_MODULE_SUBSCRIPTION');
                 await owner.subscribeForeignStatesAsync(full);
+                if (this.stopped || entry.generation !== generation) {
+                    await owner.unsubscribeForeignStatesAsync(full);
+                    throw fail('EOS_MODULE_SUBSCRIPTION');
+                }
                 entry.subscriptions.add(full);
             },
             unsubscribeStatesAsync: async (pattern) => {
@@ -383,7 +441,7 @@ class EosModuleHost {
                         if (this.running && !this.stopped && generation === entry.generation) {
                             if (allowed) {
                                 entry.lease = performance.now() + LEASE_MS;
-                                entry.reason = 'READY';
+                                entry.reason = entry.module && entry.started ? 'RUNNING' : 'READY';
                             }
                             else
                                 this.revoke(entry, 'LEGACY_CONFLICT');
@@ -418,14 +476,22 @@ class EosModuleHost {
                     });
                     entry.module = module;
                     entry.moduleGeneration = generation;
-                    await bounded(module.start(), 10000);
+                    entry.started = false;
+                    entry.stopEntryPromise = null;
+                    const startup = { module, settled: false, promise: Promise.resolve().then(() => module.start()) };
+                    entry.startup = startup;
+                    void startup.promise.then(() => { startup.settled = true; }, () => { startup.settled = true; });
+                    await bounded(startup.promise, 10000);
                     if (!this.canOperate(entry.id, generation))
                         await this.stopEntry(entry);
-                    else
+                    else {
+                        entry.started = true;
                         entry.reason = 'RUNNING';
+                    }
                 }
                 catch {
-                    this.revoke(entry, 'START_FAILED_RESTART_REQUIRED');
+                    if (!entry.stopFailed)
+                        this.revoke(entry, 'START_FAILED_RESTART_REQUIRED');
                     entry.failed = true;
                     await this.stopEntry(entry);
                     this.owner.log.warn(`EOS_MODULE_START_FAILED: ${entry.id}; HTTPS remains available`);
@@ -443,6 +509,8 @@ class EosModuleHost {
                 return;
             try {
                 const envelope = await bounded(this.configStore.load(entry.id));
+                if (this.stopped)
+                    return;
                 if (envelope)
                     this.owner.config.eosModules = { ...this.owner.config.eosModules, [entry.id]: envelope };
                 entry.config = this.readConfig(entry.id);
@@ -503,7 +571,7 @@ class EosModuleHost {
         catch {
             details = { statusUnavailable: true };
         }
-        return { id, enabled: entry.config.enabled === true, active: !!entry.module && entry.moduleGeneration === entry.generation && this.canOperate(id, entry.generation),
+        return { id, enabled: entry.config.enabled === true, active: !!entry.module && entry.started === true && entry.moduleGeneration === entry.generation && this.canOperate(id, entry.generation),
             reason: entry.reason, blockers: entry.blockers, details: redact(assertJson(details)),
             namespace: id === 'devices' ? `${this.namespace(id)}.devices` : this.namespace(id) };
     }
@@ -676,8 +744,12 @@ class EosModuleHost {
         clearInterval(this.timer);
         this.timer = null;
         for (const entry of this.entries.values())
-            this.revoke(entry, 'STOPPED');
-        this.stopPromise = Promise.allSettled([...this.entries.values()].map(entry => this.stopEntry(entry)));
+            this.revoke(entry, entry.stopFailed ? 'STOP_FAILED_RESTART_REQUIRED' : 'STOPPED');
+        this.stopPromise = Promise.allSettled([...this.entries.values()].map(entry => this.stopEntry(entry))).then(results => {
+            if (results.some(result => result.status === 'rejected') || [...this.entries.values()].some(entry => entry.stopFailed)) {
+                throw fail('EOS_MODULE_STOP_UNCONFIRMED');
+            }
+        });
         await this.stopPromise;
     }
 }

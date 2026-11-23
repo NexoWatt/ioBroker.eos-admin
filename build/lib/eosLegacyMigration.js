@@ -3,6 +3,7 @@
 const { createHash } = require('node:crypto');
 const { join } = require('node:path');
 const { setTimeout: delay } = require('node:timers/promises');
+const { performance } = require('node:perf_hooks');
 const { isDeepStrictEqual } = require('node:util');
 const { EosModuleConfigStore } = require('./eosModuleConfigStore');
 const SOURCES = Object.freeze({ ui: 'nexowatt-ui', devices: 'nexowatt-devices', eebus: 'eebus', backup: 'nexowatt-backup' });
@@ -78,6 +79,9 @@ class EosLegacyMigration {
         this.phase = 'IDLE';
         this.stopped = false;
         this.monitor = null;
+        this.startupBlocked = false;
+        this.recovery = null;
+        this.commitPromise = null;
     }
     read(operation) {
         let timer;
@@ -85,7 +89,11 @@ class EosLegacyMigration {
                 timer = setTimeout(() => reject(fail('EOS_MIGRATION_DATABASE_TIMEOUT')), Math.min(this.options.readTimeoutMs || 5000, 5000));
             })]).finally(() => clearTimeout(timer));
     }
-    allowsWrites() { return !['PREPARED', 'STOPPING', 'ROLLING_BACK', 'ROLLBACK_REQUIRED'].includes(this.phase); }
+    allowsStartup() {
+        return !this.stopped && !this.startupBlocked &&
+            !['PREPARED', 'STOPPING', 'BLOCKED', 'ROLLING_BACK', 'ROLLBACK_REQUIRED', 'ROLLED_BACK'].includes(this.phase);
+    }
+    allowsWrites() { return this.allowsStartup(); }
     block(code) { this.phase = 'ROLLBACK_REQUIRED'; this.journal = { ...this.journal, code: code || this.journal?.code || 'EOS_MIGRATION_RECOVERY_REQUIRED' }; }
     envelope(value, migration) {
         const text = JSON.stringify(copy(value));
@@ -232,8 +240,10 @@ class EosLegacyMigration {
             host: object.common.host, sourceVersion: object.common.version, envelope: this.envelope(prepared.config, migration),
             prepareFiles: prepared.prepareFiles };
     }
-    async rollback(code) {
-        this.journal = { ...this.journal, code };
+    async rollback(code, stopConfirmed = false) {
+        if (stopConfirmed !== true)
+            throw fail('EOS_MIGRATION_STOP_UNCONFIRMED');
+        this.journal = { ...this.journal, code, runtimeStopConfirmed: true };
         await this.persist('ROLLING_BACK');
         // Called before any new runtime exists or after confirmed complete shutdown.
         for (const row of this.journal.sources || []) {
@@ -245,6 +255,13 @@ class EosLegacyMigration {
         }
         for (const row of this.journal.sources || []) {
             const current = await this.reader.getForeignObjectAsync(`system.adapter.${row.source}`);
+            // Recheck the exact source immediately before each re-enable. The
+            // controller API is not a compare-and-swap transaction; never reuse
+            // a previous loop's source/version/host decision.
+            if (!this.matchesSource(current, row)) {
+                await this.persist('ROLLBACK_REQUIRED');
+                throw fail('EOS_MIGRATION_SOURCE_CHANGED');
+            }
             if (row.enabled && current.common.enabled !== true)
                 await this.owner.extendForeignObjectAsync(`system.adapter.${row.source}`, { common: { enabled: true } });
         }
@@ -314,15 +331,27 @@ class EosLegacyMigration {
         const prior = await this.read(this.store.load('migration'));
         if (prior) {
             const journal = this.decode(prior);
-            if (journal.v !== 1 || journal.owner !== this.owner.namespace || !['PREPARED', 'STOPPING', 'TRANSFERRED', 'COMMITTED', 'ROLLING_BACK', 'ROLLBACK_REQUIRED', 'ROLLED_BACK'].includes(journal.phase) || !Array.isArray(journal.sources) || journal.sources.length > 4 || new Set(journal.sources.map(row => row.id)).size !== journal.sources.length || journal.sources.some(row => !SOURCES[row.id] || !new RegExp(`^${SOURCES[row.id]}\\.\\d+$`).test(row.source) || !/^[a-f0-9]{64}$/.test(row.nativeHash) || typeof row.enabled !== 'boolean' || typeof row.host !== 'string' || !row.host || row.host.length > 255 || !VERSIONS[row.id].includes(row.sourceVersion)))
+            if (journal.v !== 1 || journal.owner !== this.owner.namespace || !['PREPARED', 'STOPPING', 'TRANSFERRED', 'COMMITTED', 'ROLLING_BACK', 'ROLLBACK_REQUIRED', 'ROLLED_BACK'].includes(journal.phase) ||
+                (journal.runtimeStopConfirmed !== undefined && typeof journal.runtimeStopConfirmed !== 'boolean') ||
+                !Array.isArray(journal.sources) || journal.sources.length > 4 || new Set(journal.sources.map(row => row.id)).size !== journal.sources.length || journal.sources.some(row => !SOURCES[row.id] || !new RegExp(`^${SOURCES[row.id]}\\.\\d+$`).test(row.source) || !/^[a-f0-9]{64}$/.test(row.nativeHash) || typeof row.enabled !== 'boolean' || typeof row.host !== 'string' || !row.host || row.host.length > 255 || !VERSIONS[row.id].includes(row.sourceVersion)))
                 throw fail('EOS_MIGRATION_JOURNAL_INVALID');
             this.journal = journal;
             this.phase = journal.phase;
             if (['TRANSFERRED', 'COMMITTED'].includes(this.phase))
                 await this.verifyDestinations();
-            if (['PREPARED', 'STOPPING', 'ROLLING_BACK', 'ROLLBACK_REQUIRED'].includes(this.phase))
-                await this.rollback('EOS_MIGRATION_INTERRUPTED');
-            // ROLLED_BACK is deliberately sticky: no retry loop interrupts a plant.
+            // PREPARED/STOPPING precede any new runtime construction. Recovery
+            // after a started runtime needs an explicitly persisted stop proof;
+            // a process restart alone cannot prove a child transport has ended.
+            if (['PREPARED', 'STOPPING'].includes(this.phase) ||
+                (this.phase === 'ROLLING_BACK' && journal.runtimeStopConfirmed === true)) {
+                await this.rollback('EOS_MIGRATION_INTERRUPTED', true);
+            }
+            else if (this.phase === 'ROLLING_BACK') {
+                this.journal = { ...this.journal, code: 'EOS_MIGRATION_STOP_UNCONFIRMED' };
+                await this.persist('ROLLBACK_REQUIRED');
+            }
+            // ROLLED_BACK and ROLLBACK_REQUIRED are deliberately sticky. A
+            // restart must not retry a cutover or bypass an unconfirmed stop.
             await this.publish();
             return;
         }
@@ -411,44 +440,129 @@ class EosLegacyMigration {
             this.owner.log.info('EOS_MIGRATION_TRANSFERRED: existing namespaces and settings retained; startup verification pending');
         }
         catch (error) {
-            await this.rollback(safeCode(error));
+            // prepare() has not allowed the caller to construct/start any new
+            // runtime yet; only configuration transfer has been attempted.
+            await this.rollback(safeCode(error), true);
         }
     }
+    /**
+     * Recover before the adapter is terminated for a TLS/listener/initialization
+     * failure. Fence synchronously, then stop all new runtimes before restoring
+     * old writers. A timed-out stop is not proof of stopped physical transports.
+     */
+    failStartup(code = 'EOS_MIGRATION_NEW_STARTUP_FAILED') {
+        if (this.recovery)
+            return this.recovery;
+        if (this.stopped || (this.phase !== 'TRANSFERRED' && !this.commitPromise))
+            return Promise.resolve();
+        this.startupBlocked = true;
+        const committing = this.commitPromise;
+        this.recovery = (async () => {
+            // Never let a late journal commit overwrite a recovery decision.
+            if (committing)
+                await committing.catch(() => undefined);
+            this.journal = { ...this.journal, code: safeCode({ code }), runtimeStopConfirmed: false };
+            await this.persist('ROLLING_BACK');
+            let timer;
+            try {
+                const stopping = Promise.all([
+                    this.owner.eosHostedRuntime, this.owner.eosModuleHost,
+                ].filter(Boolean).map(runtime => Promise.resolve().then(() => {
+                    if (typeof runtime.stop !== 'function')
+                        throw fail('EOS_MIGRATION_STOP_UNCONFIRMED');
+                    return runtime.stop();
+                })));
+                await Promise.race([stopping, new Promise((_, reject) => {
+                        timer = setTimeout(() => reject(fail('EOS_MIGRATION_STOP_UNCONFIRMED')), Math.min(this.options.runtimeStopTimeoutMs || 5000, 5000));
+                    })]);
+            }
+            finally {
+                clearTimeout(timer);
+            }
+            if ([...(this.owner.eosModuleHost?.entries?.values() || [])].some(entry => entry.stopFailed)) {
+                throw fail('EOS_MIGRATION_STOP_UNCONFIRMED');
+            }
+            await this.rollback(safeCode({ code }), true);
+        })().catch(async (error) => {
+            this.journal = { ...this.journal, code: safeCode(error) };
+            this.phase = 'ROLLBACK_REQUIRED';
+            try {
+                await this.persist('ROLLBACK_REQUIRED');
+            }
+            catch {
+                await this.publish();
+            }
+            this.owner.log.error(`EOS_MIGRATION_RECOVERY_REQUIRED: ${safeCode(error)}`);
+        });
+        return this.recovery;
+    }
+    async startupRead(operation, deadline) {
+        let timer;
+        try {
+            return await Promise.race([operation, new Promise((_, reject) => {
+                    timer = setTimeout(() => reject(fail('EOS_MIGRATION_NEW_RUNTIME_TIMEOUT')), Math.max(1, Math.min(5000, deadline - performance.now())));
+                })]);
+        }
+        finally {
+            clearTimeout(timer);
+        }
+    }
+    async readiness(rows, deadline) {
+        const modules = await this.startupRead(Promise.all(rows.filter(row => row.id !== 'ui' && row.enabled)
+            .map(row => this.owner.eosModuleHost?.status(row.id))), deadline);
+        // Read these live values only after the asynchronous module snapshot.
+        const ui = this.owner.eosHostedRuntime?.status?.();
+        const license = this.owner.eosLicenseService?.statusView?.();
+        return {
+            ready: this.owner.eosOwnership?.canWrite() === true && license?.valid === true && license.coreEnabled === true &&
+                (!rows.some(row => row.id === 'ui' && row.enabled) || (ui?.emsReady === true && ui.canWrite === true)) &&
+                modules.every(row => row?.active === true && row.reason === 'RUNNING'),
+            failed: ui?.state === 'degraded' || modules.some(row => /FAILED|INVALID/.test(row?.reason || '')),
+        };
+    }
+    /** Start this monitor immediately after transfer, before any web startup. */
     async verifyRuntime() {
-        if (this.phase !== 'TRANSFERRED' || this.monitor)
+        if (this.monitor)
+            return this.monitor;
+        if (this.phase !== 'TRANSFERRED' || this.stopped || this.startupBlocked)
             return;
         this.monitor = (async () => {
-            const deadline = Date.now() + (this.options.startTimeoutMs || 45000);
-            while (!this.stopped && Date.now() < deadline) {
+            const deadline = performance.now() + (this.options.startTimeoutMs || 45000);
+            while (!this.stopped && !this.startupBlocked && performance.now() < deadline) {
                 const rows = this.journal.sources;
-                const ui = this.owner.eosHostedRuntime?.status?.();
-                const modules = await Promise.all(rows.filter(row => row.id !== 'ui' && row.enabled).map(row => this.owner.eosModuleHost?.status(row.id)));
-                if ((!rows.some(row => row.id === 'ui' && row.enabled) || (ui?.emsReady === true && ui.canWrite === true)) && modules.every(row => row?.active === true)) {
-                    if ((await Promise.all(rows.map(row => this.stoppedSource(row.source)))).every(Boolean)) {
-                        await this.persist('COMMITTED');
+                const readiness = await this.readiness(rows, deadline);
+                if (this.stopped || this.startupBlocked || this.phase !== 'TRANSFERRED')
+                    return this.recovery;
+                if (readiness.ready) {
+                    const stopped = await this.startupRead(Promise.all(rows.map(row => this.stoppedSource(row.source))), deadline);
+                    const latest = await this.readiness(rows, deadline);
+                    if (stopped.every(Boolean) && latest.ready && !this.stopped && !this.startupBlocked && this.phase === 'TRANSFERRED' && performance.now() < deadline) {
+                        this.commitPromise = this.persist('COMMITTED');
+                        try {
+                            await this.commitPromise;
+                        }
+                        catch (error) {
+                            this.phase = 'TRANSFERRED';
+                            this.startupBlocked = true;
+                            throw error;
+                        }
+                        finally {
+                            this.commitPromise = null;
+                        }
+                        if (this.startupBlocked)
+                            return this.recovery;
                         this.owner.log.info('EOS_MIGRATION_COMMITTED: configuration and startup verified; original adapters retained disabled');
                         return;
                     }
                 }
-                if (ui?.state === 'degraded' || modules.some(row => /FAILED|INVALID/.test(row?.reason || '')))
+                if (readiness.failed)
                     break;
-                await delay(250);
+                await delay(Math.max(1, Math.min(250, deadline - performance.now())));
             }
             if (this.stopped)
                 return;
-            await this.persist('ROLLING_BACK');
-            // Stop first; never re-enable old actuators after a timed-out/uncertain stop.
-            await Promise.all([this.owner.eosHostedRuntime?.stop(), this.owner.eosModuleHost?.stop()]);
-            if ([...(this.owner.eosModuleHost?.entries?.values() || [])].some(entry => entry.stopFailed)) {
-                await this.persist('ROLLBACK_REQUIRED');
-                return;
-            }
-            await this.rollback('EOS_MIGRATION_NEW_RUNTIME_FAILED');
-        })().catch(async (error) => {
-            this.phase = 'ROLLBACK_REQUIRED';
-            this.owner.log.error(`EOS_MIGRATION_RECOVERY_REQUIRED: ${safeCode(error)}`);
-            await this.publish();
-        });
+            await this.failStartup('EOS_MIGRATION_NEW_RUNTIME_FAILED');
+        })().catch(error => this.failStartup(safeCode(error)));
         return this.monitor;
     }
     stop() { this.stopped = true; }

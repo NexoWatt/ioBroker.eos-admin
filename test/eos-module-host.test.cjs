@@ -117,7 +117,7 @@ test('saved configurations are encrypted and API views never return device crede
 });
 
 test('configuration cannot reopen a runtime after failed transport shutdown', async t => {
-    const x = setup(); t.after(() => x.host.stop()); await x.host.start();
+    const x = setup(); t.after(() => assert.rejects(x.host.stop(), /EOS_MODULE_STOP_UNCONFIRMED/)); await x.host.start();
     x.instances[0].stop = async () => { throw new Error('transport did not stop'); };
     await x.host.save('devices', { enabled: true }); await x.host.reconcile();
     await x.host.save('devices', { enabled: true }); await x.host.reconcile();

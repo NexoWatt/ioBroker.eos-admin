@@ -25,6 +25,7 @@ const selected = new Set([
     'onStateChange',
     'onMessage',
     'init',
+    'recoverEosMigrationStartup',
 ]);
 const constants = new Set([
     'LEGACY_ADMIN_INSTANCE_ID',

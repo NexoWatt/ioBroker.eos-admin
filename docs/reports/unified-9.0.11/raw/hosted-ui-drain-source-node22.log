@@ -1,0 +1,136 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: all four local write aliases are tracked with correct IDs (same namespace)
+ok 1 - all four local write aliases are tracked with correct IDs (same namespace)
+  ---
+  duration_ms: 8.707506
+  type: 'test'
+  ...
+# Subtest: all four local write aliases are tracked with correct IDs (migrated namespace)
+ok 2 - all four local write aliases are tracked with correct IDs (migrated namespace)
+  ---
+  duration_ms: 2.146136
+  type: 'test'
+  ...
+# Subtest: both foreign async methods preserve original promise and wait fulfilled/rejected completion
+ok 3 - both foreign async methods preserve original promise and wait fulfilled/rejected completion
+  ---
+  duration_ms: 2.131144
+  type: 'test'
+  ...
+# Subtest: callback API preserves synchronous return, callback context, errors and extra callback values
+ok 4 - callback API preserves synchronous return, callback context, errors and extra callback values
+  ---
+  duration_ms: 0.597249
+  type: 'test'
+  ...
+# Subtest: callback API can be observed without caller callback and preserves returned Promise completion
+ok 5 - callback API can be observed without caller callback and preserves returned Promise completion
+  ---
+  duration_ms: 2.16913
+  type: 'test'
+  ...
+# Subtest: a callback-method returned promise alone cannot confirm a still pending callback
+ok 6 - a callback-method returned promise alone cannot confirm a still pending callback
+  ---
+  duration_ms: 1.443203
+  type: 'test'
+  ...
+# Subtest: pending capacity rejects without queueing or sending and frees completed slots
+ok 7 - pending capacity rejects without queueing or sending and frees completed slots
+  ---
+  duration_ms: 19.388554
+  type: 'test'
+  ...
+# Subtest: unknown completion or synchronous owner failure cannot become confirmed shutdown
+ok 8 - unknown completion or synchronous owner failure cannot become confirmed shutdown
+  ---
+  duration_ms: 65.435387
+  type: 'test'
+  ...
+# Subtest: closing admission remains permanent even if external ownership later returns
+ok 9 - closing admission remains permanent even if external ownership later returns
+  ---
+  duration_ms: 1.406909
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: stop coordinator waits every pending startup and final cleanup before confirming quiescence
+ok 10 - stop coordinator waits every pending startup and final cleanup before confirming quiescence
+  ---
+  duration_ms: 8.546659
+  type: 'test'
+  ...
+# Subtest: failed startup is drained and cleaned rather than reported as failed shutdown
+ok 11 - failed startup is drained and cleaned rather than reported as failed shutdown
+  ---
+  duration_ms: 0.472815
+  type: 'test'
+  ...
+# Subtest: timeout is unconfirmed and late startup still gets final cleanup without changing its rejected result
+ok 12 - timeout is unconfirmed and late startup still gets final cleanup without changing its rejected result
+  ---
+  duration_ms: 21.566406
+  type: 'test'
+  ...
+# Subtest: cleanup throws, rejects or never confirms never produce a successful stop
+ok 13 - cleanup throws, rejects or never confirms never produce a successful stop
+  ---
+  duration_ms: 21.753923
+  type: 'test'
+  ...
+# Subtest: shell scheduled in a microtask cannot start after stop has already fenced the runtime
+ok 14 - shell scheduled in a microtask cannot start after stop has already fenced the runtime
+  ---
+  duration_ms: 2125.198328
+  type: 'test'
+  ...
+# Subtest: operational start cannot outlive a successful stop or revive writes/readiness
+ok 15 - operational start cannot outlive a successful stop or revive writes/readiness
+  ---
+  duration_ms: 1239.941747
+  type: 'test'
+  ...
+# Subtest: active shell bootstrap is joined and its late resource receives final cleanup
+ok 16 - active shell bootstrap is joined and its late resource receives final cleanup
+  ---
+  duration_ms: 1093.740651
+  type: 'test'
+  ...
+# Subtest: actual hosted stop rejects a hung startup and keeps rejection/status after late cleanup
+ok 17 - actual hosted stop rejects a hung startup and keeps rejection/status after late cleanup
+  ---
+  duration_ms: 1141.839312
+  type: 'test'
+  ...
+# Subtest: actual runtime stop joins accepted host writes before confirming shutdown
+ok 18 - actual runtime stop joins accepted host writes before confirming shutdown
+  ---
+  duration_ms: 1326.796849
+  type: 'test'
+  ...
+# Subtest: real onUnload waits returned service-stop promises and propagates stop failure
+ok 19 - real onUnload waits returned service-stop promises and propagates stop failure
+  ---
+  duration_ms: 2202.017208
+  type: 'test'
+  ...
+# Subtest: hung actual service stop and hung host write both keep shutdown unconfirmed
+ok 20 - hung actual service stop and hung host write both keep shutdown unconfirmed
+  ---
+  duration_ms: 2016.609804
+  type: 'test'
+  ...
+1..20
+# tests 20
+# suites 0
+# pass 20
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 12307.604251

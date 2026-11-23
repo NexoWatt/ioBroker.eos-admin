@@ -1,0 +1,38 @@
+✔ all four local write aliases are tracked with correct IDs (same namespace) (23.160481ms)
+✔ all four local write aliases are tracked with correct IDs (migrated namespace) (14.711151ms)
+✔ both foreign async methods preserve original promise and wait fulfilled/rejected completion (2.69187ms)
+✔ callback API preserves synchronous return, callback context, errors and extra callback values (0.743224ms)
+✔ callback API can be observed without caller callback and preserves returned Promise completion (1.803363ms)
+✔ a callback-method returned promise alone cannot confirm a still pending callback (1.670447ms)
+✔ pending capacity rejects without queueing or sending and frees completed slots (19.823392ms)
+✔ unknown completion or synchronous owner failure cannot become confirmed shutdown (68.422767ms)
+✔ closing admission remains permanent even if external ownership later returns (3.301246ms)
+✔ stop coordinator waits every pending startup and final cleanup before confirming quiescence (8.525672ms)
+✔ failed startup is drained and cleaned rather than reported as failed shutdown (1.06691ms)
+✔ timeout is unconfirmed and late startup still gets final cleanup without changing its rejected result (21.529521ms)
+✔ cleanup throws, rejects or never confirms never produce a successful stop (24.339241ms)
+✔ shell scheduled in a microtask cannot start after stop has already fenced the runtime (2350.04578ms)
+✔ operational start cannot outlive a successful stop or revive writes/readiness (1336.984466ms)
+✔ active shell bootstrap is joined and its late resource receives final cleanup (1596.83233ms)
+✔ actual hosted stop rejects a hung startup and keeps rejection/status after late cleanup (1512.588745ms)
+✔ actual runtime stop joins accepted host writes before confirming shutdown (996.122178ms)
+✔ real onUnload waits returned service-stop promises and propagates stop failure (2474.647202ms)
+✔ hung actual service stop and hung host write both keep shutdown unconfirmed (2310.160455ms)
+✔ facade creates no adapter and isolates native.eosUi from host security fields (4.399211ms)
+✔ all four foreign state APIs enforce the current owner generation (1.99167ms)
+✔ license requires a valid central core grant and preserves signed limits (0.685007ms)
+✔ central access rejects required password setup and missing credential binding (1.945322ms)
+✔ hosted shell opens no listener; HTTP authorization remains fail closed (7212.834053ms)
+✔ fresh UI snapshot never converts revoked Home to Pro; control retains only verified old limits (70.725355ms)
+✔ blocked hosted startup resumes once only after fresh ownership and central license confirmation (191.628013ms)
+✔ shell bootstrap failure can retry once without starting operational work (15.572609ms)
+✔ stop during shell bootstrap discards its late completion and cannot reopen the runtime (23.781525ms)
+✔ cached license grants cannot keep an incomplete or failed startup alive (4.115634ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 30
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 14479.318204

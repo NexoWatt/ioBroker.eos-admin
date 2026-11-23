@@ -1,11 +1,12 @@
 {
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "strict": true,
     "noEmit": true,
     "target": "ES2022",
-    "module": "commonjs",
     "skipLibCheck": true,
     "types": ["node"]
   },
-  "files": ["src-ts/runtime-executables/lib/hosted-adapter.ts"]
+  "files": ["src-ts/runtime-executables/lib/hosted-adapter.ts"],
+  "include": []
 }

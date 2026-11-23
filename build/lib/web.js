@@ -375,14 +375,24 @@ class Web {
         this.instanceProxy = new instanceProxy_1.InstanceProxy(this.adapter, this.publicPath);
         void this.#init().catch(error => this.failStartup(error));
     }
-    failStartup(error) {
+    async failStartup(error) {
         if (this.startupFailed || this.closed) {
             return;
         }
         this.startupFailed = true;
         this.server.server?.close(() => undefined);
         this.adapter.log.error(`EOS web startup failed: ${error instanceof Error ? error.message : 'initialization failed'}`);
-        this.adapter.terminate(adapter_core_1.EXIT_CODES.ADAPTER_REQUESTED_TERMINATION);
+        try {
+            // A TLS/bind failure must not strand already stopped legacy owners.
+            await this.adapter.eosMigration?.failStartup('EOS_MIGRATION_WEB_START_FAILED');
+        }
+        catch {
+            this.adapter.eosMigration?.block('EOS_MIGRATION_RECOVERY_REQUIRED');
+            this.adapter.log.error('EOS_MIGRATION_RECOVERY_REQUIRED: Startup recovery remains unconfirmed.');
+        }
+        finally {
+            this.adapter.terminate(adapter_core_1.EXIT_CODES.ADAPTER_REQUESTED_TERMINATION);
+        }
     }
     decorateLogFile(fileName, text) {
         const log = text || (0, node_fs_1.readFileSync)(fileName).toString();
@@ -1872,6 +1882,9 @@ class Web {
         app.post('/api/license/save', (_req, res) => {
             res.status(409).json({ error: 'USE_CENTRAL_ACTIVATION', url: '/nexowatt/license' });
         });
+        // Build the authenticated recovery shell even after a failed handover.
+        // Operational starts are separately fenced after listener setup; runtime.start()
+        // only mounts the shell and cannot arm hardware operation by itself.
         const moduleHost = new eosModuleHost_1.EosModuleHost(this.adapter, {
             baseDir: this.baseDir,
             dataDir: (0, node_path_1.join)((0, adapter_core_1.getAbsoluteInstanceDataDir)(this.adapter), 'modules'),
@@ -2963,6 +2976,10 @@ class Web {
             });
             this.discovery = this.adapter.eosDiscovery;
             this.adapter.eosDiscovery.start();
+            if (this.adapter.eosMigration?.allowsStartup() === false) {
+                this.adapter.log.warn('EOS_MIGRATION_OPERATIONAL_START_BLOCKED: Inspect migration status.');
+                return;
+            }
             void this.adapter.eosModuleHost?.start().catch(() => {
                 this.adapter.log.warn('EOS_MODULE_START_UNAVAILABLE: HTTPS remains available.');
             });

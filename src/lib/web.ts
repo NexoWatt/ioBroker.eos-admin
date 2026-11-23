@@ -423,7 +423,7 @@ export default class Web {
         void this.#init().catch(error => this.failStartup(error));
     }
 
-    private failStartup(error: unknown): void {
+    private async failStartup(error: unknown): Promise<void> {
         if (this.startupFailed || this.closed) {
             return;
         }
@@ -432,7 +432,15 @@ export default class Web {
         this.adapter.log.error(
             `EOS web startup failed: ${error instanceof Error ? error.message : 'initialization failed'}`,
         );
-        this.adapter.terminate(EXIT_CODES.ADAPTER_REQUESTED_TERMINATION);
+        try {
+            // A TLS/bind failure must not strand already stopped legacy owners.
+            await this.adapter.eosMigration?.failStartup('EOS_MIGRATION_WEB_START_FAILED');
+        } catch {
+            this.adapter.eosMigration?.block('EOS_MIGRATION_RECOVERY_REQUIRED');
+            this.adapter.log.error('EOS_MIGRATION_RECOVERY_REQUIRED: Startup recovery remains unconfirmed.');
+        } finally {
+            this.adapter.terminate(EXIT_CODES.ADAPTER_REQUESTED_TERMINATION);
+        }
     }
 
     decorateLogFile(fileName: string, text?: string): string {
@@ -2125,6 +2133,9 @@ export default class Web {
         app.post('/api/license/save', (_req: Request, res: Response): void => {
             res.status(409).json({ error: 'USE_CENTRAL_ACTIVATION', url: '/nexowatt/license' });
         });
+        // Build the authenticated recovery shell even after a failed handover.
+        // Operational starts are separately fenced after listener setup; runtime.start()
+        // only mounts the shell and cannot arm hardware operation by itself.
         const moduleHost = new EosModuleHost(this.adapter, {
             baseDir: this.baseDir,
             dataDir: join(getAbsoluteInstanceDataDir(this.adapter), 'modules'),
@@ -3447,6 +3458,10 @@ export default class Web {
             });
             this.discovery = this.adapter.eosDiscovery;
             this.adapter.eosDiscovery.start();
+            if (this.adapter.eosMigration?.allowsStartup() === false) {
+                this.adapter.log.warn('EOS_MIGRATION_OPERATIONAL_START_BLOCKED: Inspect migration status.');
+                return;
+            }
             void this.adapter.eosModuleHost?.start().catch(() => {
                 this.adapter.log.warn('EOS_MODULE_START_UNAVAILABLE: HTTPS remains available.');
             });

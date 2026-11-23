@@ -1008,13 +1008,18 @@
     },
     {
       "path": "src-ts/runtime-executables/lib/hosted-adapter.ts",
-      "sourceHash": "ffc2a60a52f77a38edc0a6466467c005e6c642a457710ccbd53e90b7ecf8a647",
-      "codeHash": "87158cf20a1694464083999d16b023358f66cc9281eb9ea72a6acc72240e9ddf"
+      "sourceHash": "db9b5032a256b1e664cdcf2093b592908b9bcd0dab348ad9f21b480618a7d440",
+      "codeHash": "a162a2017cc72cbd62b5fe36751a4ee9acc1d3d0ca0369a64318778ad004746f"
     },
     {
       "path": "src-ts/runtime-executables/lib/hosted-http-boundary.ts",
       "sourceHash": "6659f58ebceb066133aa598f355bcf8dba6c7ad9edadb469b85ad6fc1d7e68fe",
       "codeHash": "ecb7573177d53c88017f5864ae48a2d02e8063e0ddd666844a5fbef43c4303fb"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/hosted-runtime-stop.ts",
+      "sourceHash": "2cf60c02b437d75b38cbde776a02891af4aa37410c90b3c9e7961609632ca67a",
+      "codeHash": "96b2f9e40224a817d65f2e9fb5ee493eb8c6f656de25521e7b8c62ea3d20e483"
     },
     {
       "path": "src-ts/runtime-executables/lib/http-error-boundary.ts",
@@ -1193,8 +1198,8 @@
     },
     {
       "path": "src-ts/runtime-executables/main.ts",
-      "sourceHash": "ff6013a420d663d1034bf45e2b4ba094d7c4724c9e680ae2306c76a3f350602f",
-      "codeHash": "6833bf89fbfe1adbc7ead0f1054ce154b370d8b83e994f2d12b1d87e9ea36f8f"
+      "sourceHash": "cd098e757ba30517a1d6986f3474f6665816607d61d43797c74dcab030bb053c",
+      "codeHash": "383a60cbe1225107bc29f9b60a44ae03f57b9ccee0e0065c675674bc3e2bed46"
     },
     {
       "path": "src-ts/runtime-executables/www/admin-guard.ts",
@@ -2289,11 +2294,15 @@
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/lib/hosted-adapter.md",
-      "hash": "95cd4bbbc98781863f785aa7e8bb42426c768924f3486a5be5971f529c0aebd5"
+      "hash": "0bc6bfa850ca2457529a10aa8cb76c08b15158a99b0fe671b602b1d56af27eca"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/lib/hosted-http-boundary.md",
       "hash": "5993138c639e85937e0ba5a34550b7700056fb4f1c8a551cf6170173c45e78cb"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/hosted-runtime-stop.md",
+      "hash": "58b23a6c1c169beef84af3dbc77e919cb486973ab818201bca47776775dd85f3"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/lib/http-error-boundary.md",
@@ -2437,7 +2446,7 @@
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/main.md",
-      "hash": "d3a6891cf26c2441263d0e0f8d31d66a663cef14342cb5ea6dcfb362c39fcc0d"
+      "hash": "0c674709dded1c6f4e59e2e4cd051160744cb1222b41e1a85956c05b658f8b20"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/admin-guard.md",
@@ -2669,7 +2678,7 @@
     },
     {
       "path": "docs/QUELLCODE_VERKNUEPFUNGEN_DE.md",
-      "hash": "09279a6bb6f3dfb4da1617706c7ceb7b161fac4f4afc5a1f3f0705f914ff3f64"
+      "hash": "43cdcac0d914396b93d57084bbea2e3e187eda41b17667f3d759b5bd2b3ce15f"
     }
   ]
 }

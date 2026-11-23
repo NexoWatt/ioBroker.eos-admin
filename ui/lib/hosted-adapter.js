@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/lib/hosted-adapter.ts
- * Quell-Hash: sha256:ffc2a60a52f77a38edc0a6466467c005e6c642a457710ccbd53e90b7ecf8a647
+ * Quell-Hash: sha256:db9b5032a256b1e664cdcf2093b592908b9bcd0dab348ad9f21b480618a7d440
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -23,12 +23,16 @@
 /**
  * NexoWatt Quellcode-Erklärung (DE)
  * Aufgabe: Bindet die eingebettete UI an EOS und bewahrt bei bestätigter Migration den alten Datenpunkt-Namespace.
- * Daten und Wirkung: Eine Adapterinstanz, unveränderte History-/Alias-IDs, zentraler Lizenz-/Schreibschutz und verschlüsselte Konfiguration.
+ * Daten und Wirkung: Eine Adapterinstanz, unveränderte History-/Alias-IDs, zentraler Lizenz-/Schreibschutz, begrenzt erfasste Host-Schreibaufträge und verschlüsselte Konfiguration.
  * Bei Änderungen: Namespace-, Credential-, Lizenz- und Schreibschutz sowie die Migrations- und HTTP-Regressionsprüfungen erhalten.
  * Grenze: Namespaces kommen ausschließlich aus der geschützten Migrationsablage; Browserwerte erweitern keine Rechte.
  */
 'use strict';
-const defaults = require('../io-package.json').native;
+Object.defineProperty(exports, "__esModule", { value: true });
+const node_module_1 = require("node:module");
+const runtimeRequire = (0, node_module_1.createRequire)(__filename);
+const packagedDefaults = runtimeRequire('../io-package.json');
+const defaults = record(packagedDefaults) ? packagedDefaults.native : undefined;
 const FORBIDDEN_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
 function record(value) { return value !== null && typeof value === 'object' && !Array.isArray(value); }
 function clone(value) { return JSON.parse(JSON.stringify(value)); }
@@ -67,8 +71,15 @@ const LOCAL_METHODS = new Map([
     ['unsubscribeObjects', 'unsubscribeForeignObjects'], ['unsubscribeObjectsAsync', 'unsubscribeForeignObjectsAsync'],
 ]);
 const GUARDED_WRITES = new Set(['setForeignState', 'setForeignStateAsync', 'setForeignStateChanged', 'setForeignStateChangedAsync']);
+const MAX_PENDING_HOST_WRITES = 1024;
+function thenable(value) {
+    return (typeof value === 'object' && value !== null || typeof value === 'function')
+        && typeof Reflect.get(value, 'then') === 'function';
+}
 class HostedAdapter {
     constructor({ owner, bridge }) {
+        this.pendingHostWrites = new Set();
+        this.hostWritesStopped = false;
         if (!owner || !/^eos-admin\.\d+$/.test(owner.namespace || '') || !bridge
             || typeof bridge.resolveAccess !== 'function' || typeof bridge.getLicense !== 'function'
             || typeof bridge.canWrite !== 'function' || typeof bridge.originAllowed !== 'function')
@@ -89,7 +100,7 @@ class HostedAdapter {
                 if (Reflect.has(target, key))
                     return Reflect.get(target, key, receiver);
                 const foreign = typeof key === 'string' ? LOCAL_METHODS.get(key) : undefined;
-                if (target.namespace !== owner.namespace && foreign) {
+                if (foreign && (target.namespace !== owner.namespace || GUARDED_WRITES.has(foreign))) {
                     if (!bound.has(key)) {
                         const method = Reflect.get(GUARDED_WRITES.has(foreign) ? target : owner, foreign);
                         const context = GUARDED_WRITES.has(foreign) ? target : owner;
@@ -99,7 +110,8 @@ class HostedAdapter {
                             if (typeof id !== 'string' || !id || id.length > 512)
                                 throw new Error('EOS_UI_STATE_ID');
                             const full = id.startsWith(`${target.namespace}.`) ? id : `${target.namespace}.${id}`;
-                            return Reflect.apply(method, context, [full, ...args]);
+                            const result = Reflect.apply(method, context, [full, ...args]);
+                            return result;
                         });
                     }
                     return bound.get(key);
@@ -107,11 +119,106 @@ class HostedAdapter {
                 const value = Reflect.get(owner, key);
                 if (typeof value !== 'function')
                     return value;
-                if (!bound.has(key))
-                    bound.set(key, value.bind(owner));
+                if (!bound.has(key)) {
+                    const boundMethod = value.bind(owner);
+                    bound.set(key, boundMethod);
+                }
                 return bound.get(key);
             },
         });
+    }
+    /** Aufgabe: Schließt die Schreibannahme und bestätigt alle bereits an den Controller übergebenen Aufträge.
+     * Wirkung: Kein Timeout-Erfolg; die äußere Stop-Deadline bewertet ausbleibende Promise-/Callback-Bestätigungen als unklar. */
+    stopStateWrites() {
+        this.hostWritesStopped = true;
+        return Promise.all([...this.pendingHostWrites]).then(() => { });
+    }
+    /** Aufgabe: Erfasst einen Auftrag ohne Warteschlange oder Wiederholung.
+     * Zusammenhang: Die Menge ist begrenzt; nur bestätigte Controller-Abschlüsse entfernen einen Auftrag. */
+    beginHostWrite() {
+        if (this.hostWritesStopped || this._bridge.canWrite() !== true)
+            throw new Error('EOS_UI_OWNERSHIP_LOST');
+        if (this.pendingHostWrites.size >= MAX_PENDING_HOST_WRITES)
+            throw new Error('EOS_UI_WRITES_BUSY');
+        let complete = () => { };
+        const pending = new Promise(resolve => { complete = resolve; });
+        this.pendingHostWrites.add(pending);
+        let finished = false;
+        return () => {
+            if (finished)
+                return;
+            finished = true;
+            this.pendingHostWrites.delete(pending);
+            complete();
+        };
+    }
+    /** Aufgabe: Behält die originale Async-Rückgabe und beobachtet deren vollständigen Abschluss. */
+    writeAsync(method, id, args) {
+        let complete;
+        try {
+            complete = this.beginHostWrite();
+        }
+        catch (error) {
+            return Promise.reject(error instanceof Error ? error : new Error('EOS_UI_WRITE_FAILED'));
+        }
+        try {
+            const returned = this._owner[method](id, ...args);
+            if (!thenable(returned))
+                return Promise.reject(new Error('EOS_UI_WRITE_COMPLETION_UNKNOWN'));
+            void returned.then(complete, complete);
+            return returned;
+        }
+        catch (error) {
+            return Promise.reject(error instanceof Error ? error : new Error('EOS_UI_WRITE_COMPLETION_UNKNOWN'));
+        }
+    }
+    /** Aufgabe: Beobachtet Callback-Abschluss oder eine tatsächliche Promise-Rückgabe ohne das Controller-API zu ersetzen.
+     * Wirkung: Rückgabewert, Callback-Argumente und Callback-Kontext bleiben erhalten; fehlende Bestätigung bleibt offen. */
+    writeCallback(method, id, args) {
+        let complete;
+        try {
+            complete = this.beginHostWrite();
+        }
+        catch (error) {
+            return deniedWrite(args, error);
+        }
+        const forwarded = [...args];
+        const originalCallback = typeof forwarded.at(-1) === 'function' ? forwarded.pop() : undefined;
+        // Explizit ausgelassene optionale Argumente dürfen den angehängten Callback nicht aus seinem Overload schieben.
+        while (forwarded.length && forwarded.at(-1) === undefined)
+            forwarded.pop();
+        let callbackCompleted = false;
+        let returnedKnown = false;
+        let waitsForPromise = false;
+        let returnSettled = false;
+        const confirm = () => {
+            if (returnedKnown && callbackCompleted && (!waitsForPromise || returnSettled))
+                complete();
+        };
+        forwarded.push(function completedCallback(...result) {
+            callbackCompleted = true;
+            confirm();
+            const callbackResult = typeof originalCallback === 'function' ? Reflect.apply(originalCallback, this, result) : undefined;
+            return callbackResult;
+        });
+        try {
+            const returned = this._owner[method](id, ...forwarded);
+            waitsForPromise = thenable(returned);
+            returnedKnown = true;
+            if (waitsForPromise) {
+                const returnedDone = () => { returnSettled = true; confirm(); };
+                void Promise.resolve(returned).then(returnedDone, returnedDone);
+            }
+            else
+                confirm();
+            return returned;
+        }
+        catch (error) {
+            // Eine Ausnahme nach möglicher Übergabe ist ohne Completion-Callback kein Stop-Nachweis.
+            if (callbackCompleted)
+                complete();
+            throw error;
+        }
     }
     ownsLocalNamespace() { return this.namespace === retainedNamespace(this._owner); }
     async getForeignObjectAsync(id, ...args) {
@@ -139,35 +246,28 @@ class HostedAdapter {
         else
             await this._owner.setForeignObjectAsync(id, { ...actual, native: { ...actual.native, eosUi: next } }, ...args);
         this._owner.config.eosUi = clone(next);
+        return undefined;
     }
     setForeignStateAsync(id, ...args) {
-        if (this._bridge.canWrite() !== true)
-            return Promise.reject(new Error('EOS_UI_OWNERSHIP_LOST'));
-        return this._owner.setForeignStateAsync(id, ...args);
+        return this.writeAsync('setForeignStateAsync', id, args);
     }
     setForeignStateChangedAsync(id, ...args) {
-        if (this._bridge.canWrite() !== true)
-            return Promise.reject(new Error('EOS_UI_OWNERSHIP_LOST'));
-        return this._owner.setForeignStateChangedAsync(id, ...args);
+        return this.writeAsync('setForeignStateChangedAsync', id, args);
     }
     setForeignStateChanged(id, ...args) {
-        if (this._bridge.canWrite() !== true)
-            return deniedWrite(args);
-        return this._owner.setForeignStateChanged(id, ...args);
+        return this.writeCallback('setForeignStateChanged', id, args);
     }
     setForeignState(id, ...args) {
-        if (this._bridge.canWrite() !== true)
-            return deniedWrite(args);
-        return this._owner.setForeignState(id, ...args);
+        return this.writeCallback('setForeignState', id, args);
     }
 }
-function deniedWrite(args) {
+function deniedWrite(args, error) {
     const callback = args.at(-1);
     if (typeof callback === 'function') {
-        callback(new Error('EOS_UI_OWNERSHIP_LOST'));
+        Reflect.apply(callback, undefined, [error]);
         return;
     }
-    throw new Error('EOS_UI_OWNERSHIP_LOST');
+    throw error;
 }
 /** Public snapshot only; editions/limits never originate from UI config/states. */
 function centralLicenseSnapshot(bridge) {

@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": { "noEmit": true, "noCheck": false, "allowJs": false },
+  "files": ["src-ts/runtime-executables/lib/hosted-runtime-stop.ts"],
+  "include": []
+}

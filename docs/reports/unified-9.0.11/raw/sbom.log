@@ -1,0 +1,7 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> iobroker.eos-admin@9.0.11 sbom
+> npm sbom --sbom-format=cyclonedx > release-manifests/unified/build-environment.cdx.json && node tools/eos-sbom-vendored.cjs
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+{"changed":true,"component":"nexowatt:vendored:webserver@3.4.0+nexowatt.9.0.11","fullComponents":821,"runtimeDirectDependencies":33,"components":412,"bomVersion":2}

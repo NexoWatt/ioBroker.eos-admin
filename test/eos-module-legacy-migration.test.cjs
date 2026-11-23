@@ -281,3 +281,208 @@ test('committed UI accepts legitimate later configuration edits on a fresh proce
     assert.equal(x.owner.config.eosUi.siteName, 'after');
     assert.deepEqual(x.owner.config.eosUi.installerConfig, { meter: 'meter.0.power' });
 });
+
+test('TLS or listener failure before any hosted runtime exists restores old sources and fences late startup', async () => {
+    const x = fixture(); await x.migration.start();
+    assert.equal(x.migration.phase, 'TRANSFERRED');
+    await x.migration.failStartup('EOS_MIGRATION_WEB_STARTUP_FAILED');
+    assert.equal(x.migration.phase, 'ROLLED_BACK');
+    assert.equal(x.objects.get('system.adapter.nexowatt-devices.0').common.enabled, true);
+    assert.equal(x.migration.allowsStartup(), false);
+    assert.equal(x.migration.allowsWrites(), false);
+    const starts = x.mutations.filter(row => row.patch?.common?.enabled === true).length;
+    await x.migration.failStartup('EOS_MIGRATION_WEB_STARTUP_FAILED');
+    assert.equal(x.mutations.filter(row => row.patch?.common?.enabled === true).length, starts);
+});
+
+test('early verification times out even when the web constructor is never reached', async () => {
+    const x = fixture(); await x.migration.start(); x.migration.options.startTimeoutMs = 1;
+    await x.migration.verifyRuntime();
+    assert.equal(x.migration.phase, 'ROLLED_BACK');
+    assert.equal(x.objects.get('system.adapter.nexowatt-devices.0').common.enabled, true);
+    assert.equal(x.migration.allowsStartup(), false);
+});
+
+test('active module with a pending start cannot commit until RUNNING is confirmed', async () => {
+    const x = fixture(); await x.migration.start(); let ready = false;
+    x.owner.eosModuleHost = { status: async () => ({ active: true, reason: ready ? 'RUNNING' : 'READY' }), async stop() {} };
+    x.migration.options.startTimeoutMs = 1000;
+    const monitoring = x.migration.verifyRuntime();
+    await new Promise(resolve => setImmediate(resolve));
+    assert.equal(x.migration.phase, 'TRANSFERRED');
+    ready = true; await monitoring;
+    assert.equal(x.migration.phase, 'COMMITTED');
+});
+
+test('concurrent startup failure has one recovery and never restores old writers before all stop promises settle', async () => {
+    const x = fixture(); await x.migration.start(); let release; let uiStops = 0; let moduleStops = 0;
+    x.owner.eosHostedRuntime = { stop: () => { uiStops++; return new Promise(resolve => { release = resolve; }); } };
+    x.owner.eosModuleHost = { async stop() { moduleStops++; } };
+    const a = x.migration.failStartup('EOS_MIGRATION_WEB_STARTUP_FAILED');
+    const b = x.migration.failStartup('EOS_MIGRATION_NEW_RUNTIME_FAILED');
+    assert.equal(a, b); assert.equal(x.migration.allowsWrites(), false); assert.equal(x.migration.allowsStartup(), false);
+    await new Promise(resolve => setImmediate(resolve));
+    assert.equal(x.objects.get('system.adapter.nexowatt-devices.0').common.enabled, false);
+    release(); await Promise.all([a, b]);
+    assert.equal(uiStops, 1); assert.equal(moduleStops, 1);
+    assert.equal(x.migration.phase, 'ROLLED_BACK');
+    assert.equal(x.mutations.filter(row => row.patch?.common?.enabled === true).length, 1);
+});
+
+test('a pending stop timeout remains fenced even if that stop settles later', async () => {
+    const x = fixture(); await x.migration.start(); let release;
+    x.migration.options.runtimeStopTimeoutMs = 10;
+    x.owner.eosHostedRuntime = { stop: () => new Promise(resolve => { release = resolve; }) };
+    await x.migration.failStartup('EOS_MIGRATION_WEB_STARTUP_FAILED');
+    assert.equal(x.migration.phase, 'ROLLBACK_REQUIRED');
+    assert.equal(x.objects.get('system.adapter.nexowatt-devices.0').common.enabled, false);
+    release(); await new Promise(resolve => setImmediate(resolve));
+    await x.migration.failStartup('EOS_MIGRATION_WEB_STARTUP_FAILED');
+    assert.equal(x.migration.phase, 'ROLLBACK_REQUIRED');
+    assert.equal(x.migration.allowsWrites(), false);
+    assert.equal(x.mutations.some(row => row.patch?.common?.enabled === true), false);
+});
+
+test('rejected runtime stop and sticky module stop failure never reactivate old sources', async () => {
+    for (const sticky of [false, true]) {
+        const x = fixture(); await x.migration.start();
+        x.owner.eosModuleHost = sticky
+            ? { entries: new Map([['devices', { stopFailed: true }]]), async stop() {} }
+            : { async stop() { throw new Error('transport still opening'); } };
+        await x.migration.failStartup('EOS_MIGRATION_WEB_STARTUP_FAILED');
+        assert.equal(x.migration.phase, 'ROLLBACK_REQUIRED');
+        assert.equal(x.migration.allowsStartup(), false);
+        assert.equal(x.objects.get('system.adapter.nexowatt-devices.0').common.enabled, false);
+    }
+});
+
+test('source identity is checked again immediately before rollback re-enable', async () => {
+    const x = fixture(); await x.migration.start(); const original = x.owner.getForeignObjectAsync; let reads = 0;
+    x.owner.getForeignObjectAsync = async id => {
+        if (id === 'system.adapter.nexowatt-devices.0' && ++reads === 2) {
+            x.objects.get(id).common.version = '99.0.0';
+        }
+        return original(id);
+    };
+    await x.migration.failStartup('EOS_MIGRATION_WEB_STARTUP_FAILED');
+    assert.equal(x.migration.phase, 'ROLLBACK_REQUIRED');
+    assert.equal(x.migration.status().code, 'EOS_MIGRATION_SOURCE_CHANGED');
+    assert.equal(x.mutations.some(row => row.patch?.common?.enabled === true), false);
+});
+
+test('rejected commit persistence recovers without leaving a false COMMITTED state', async () => {
+    const x = fixture(); await x.migration.start(); const save = x.migration.store.save.bind(x.migration.store);
+    x.owner.eosModuleHost = { status: async () => ({ active: true, reason: 'RUNNING' }), async stop() {} };
+    x.migration.store.save = async (id, envelope) => {
+        if (id === 'migration' && x.migration.decode(envelope).phase === 'COMMITTED') throw new Error('commit refused');
+        return save(id, envelope);
+    };
+    await x.migration.verifyRuntime();
+    assert.equal(x.migration.phase, 'ROLLED_BACK');
+    assert.equal(x.objects.get('system.adapter.nexowatt-devices.0').common.enabled, true);
+    assert.equal(x.migration.allowsWrites(), false);
+});
+
+test('concurrent commit persistence cannot overwrite a later startup recovery decision', async () => {
+    const x = fixture(); await x.migration.start(); const save = x.migration.store.save.bind(x.migration.store);
+    let releaseCommit; let enteredCommit;
+    const entered = new Promise(resolve => { enteredCommit = resolve; });
+    x.owner.eosModuleHost = { status: async () => ({ active: true, reason: 'RUNNING' }), async stop() {} };
+    x.migration.store.save = async (id, envelope) => {
+        if (id === 'migration' && x.migration.decode(envelope).phase === 'COMMITTED') {
+            enteredCommit(); await new Promise(resolve => { releaseCommit = resolve; });
+        }
+        return save(id, envelope);
+    };
+    const monitor = x.migration.verifyRuntime(); await entered;
+    const recovery = x.migration.failStartup('EOS_MIGRATION_WEB_STARTUP_FAILED');
+    assert.equal(x.migration.allowsWrites(), false);
+    releaseCommit(); await Promise.all([monitor, recovery]);
+    assert.equal(x.migration.phase, 'ROLLED_BACK');
+    assert.equal(x.migration.decode(await x.migration.store.load('migration')).phase, 'ROLLED_BACK');
+    assert.equal(x.logs.some(message => message.startsWith('EOS_MIGRATION_COMMITTED:')), false);
+});
+
+test('intentional shutdown fences monitoring; the transferred journal is verified on next startup', async () => {
+    const x = fixture(); await x.migration.start();
+    const monitoring = x.migration.verifyRuntime(); x.migration.stop(); await monitoring;
+    assert.equal(x.migration.phase, 'TRANSFERRED');
+    assert.equal(x.migration.allowsStartup(), false); assert.equal(x.migration.allowsWrites(), false);
+    assert.equal(x.objects.get('system.adapter.nexowatt-devices.0').common.enabled, false);
+    const resumed = new EosLegacyMigration(x.owner, { ...x.migration.options, startTimeoutMs: 1 });
+    x.owner.eosMigration = resumed; await resumed.start();
+    assert.equal(resumed.phase, 'TRANSFERRED'); await resumed.verifyRuntime();
+    assert.equal(resumed.phase, 'ROLLED_BACK');
+    assert.equal(x.objects.get('system.adapter.nexowatt-devices.0').common.enabled, true);
+});
+
+test('preflight BLOCKED prevents operational starts while the original disabled UI remains unchanged', async () => {
+    const x = fixture([{ id: 'ui', source: 'nexowatt-ui.0', version: '1.0.38', native: {}, enabled: false }]);
+    await x.migration.start();
+    assert.equal(x.migration.phase, 'BLOCKED');
+    assert.equal(x.migration.allowsStartup(), false); assert.equal(x.migration.allowsWrites(), false);
+    assert.equal(x.mutations.some(row => row.id.startsWith('system.adapter.')), false);
+});
+
+test('uncertain stop remains ROLLBACK_REQUIRED across restart without automatically re-enabling sources', async () => {
+    const x = fixture(); await x.migration.start();
+    x.owner.eosModuleHost = { async stop() { throw new Error('child remains unconfirmed'); } };
+    await x.migration.failStartup('EOS_MIGRATION_WEB_STARTUP_FAILED');
+    assert.equal(x.migration.phase, 'ROLLBACK_REQUIRED');
+    const resumed = new EosLegacyMigration(x.owner, x.migration.options);
+    x.owner.eosMigration = resumed; await resumed.start();
+    assert.equal(resumed.phase, 'ROLLBACK_REQUIRED'); assert.equal(resumed.allowsWrites(), false);
+    assert.equal(x.objects.get('system.adapter.nexowatt-devices.0').common.enabled, false);
+    assert.equal(x.mutations.some(row => row.patch?.common?.enabled === true), false);
+});
+
+test('interrupted ROLLING_BACK needs persisted completed-stop proof; absent or false proof stays fenced', async () => {
+    for (const proof of [undefined, false, true]) {
+        const x = fixture(); await x.migration.start();
+        if (proof !== undefined) x.migration.journal.runtimeStopConfirmed = proof;
+        await x.migration.persist('ROLLING_BACK');
+        const resumed = new EosLegacyMigration(x.owner, x.migration.options);
+        x.owner.eosMigration = resumed; await resumed.start();
+        assert.equal(resumed.phase, proof === true ? 'ROLLED_BACK' : 'ROLLBACK_REQUIRED');
+        assert.equal(x.objects.get('system.adapter.nexowatt-devices.0').common.enabled, proof === true);
+        assert.equal(resumed.allowsStartup(), false);
+    }
+});
+
+test('revoked license, ownership or runtime readiness during source verification cannot commit', async () => {
+    for (const revoked of ['license', 'ownership', 'runtime']) {
+        const x = fixture(); await x.migration.start(); x.migration.options.startTimeoutMs = 20; let ready = true;
+        x.owner.eosModuleHost = { status: async () => ({ active: ready, reason: ready ? 'RUNNING' : 'STOPPING' }), async stop() {} };
+        x.migration.stoppedSource = async () => {
+            if (revoked === 'license') x.owner.eosLicenseService.statusView = () => ({ valid: false, coreEnabled: false });
+            else if (revoked === 'ownership') x.owner.eosOwnership.canWrite = () => false;
+            else ready = false;
+            return true;
+        };
+        await x.migration.verifyRuntime();
+        assert.equal(x.migration.phase, 'ROLLED_BACK');
+        assert.equal(x.logs.some(message => message.startsWith('EOS_MIGRATION_COMMITTED:')), false);
+        assert.equal(x.objects.get('system.adapter.nexowatt-devices.0').common.enabled, true);
+    }
+});
+
+test('the early monitor deadline also covers an unresolved asynchronous readiness observation', async () => {
+    const x = fixture(); await x.migration.start(); x.migration.options.startTimeoutMs = 10;
+    x.owner.eosModuleHost = { status: () => new Promise(() => {}), async stop() {} };
+    await x.migration.verifyRuntime();
+    assert.equal(x.migration.phase, 'ROLLED_BACK');
+    assert.equal(x.migration.status().code, 'EOS_MIGRATION_NEW_RUNTIME_TIMEOUT');
+    assert.equal(x.objects.get('system.adapter.nexowatt-devices.0').common.enabled, true);
+});
+
+test('a late readiness rejection after intentional shutdown does not begin rollback or re-enable old writers', async () => {
+    const x = fixture(); await x.migration.start(); let rejectRead;
+    x.owner.eosModuleHost = { status: () => new Promise((_resolve, reject) => { rejectRead = reject; }), async stop() {} };
+    const monitoring = x.migration.verifyRuntime();
+    await new Promise(resolve => setImmediate(resolve));
+    x.migration.stop(); rejectRead(new Error('late status failure')); await monitoring;
+    assert.equal(x.migration.phase, 'TRANSFERRED');
+    assert.equal(x.migration.allowsWrites(), false);
+    assert.equal(x.objects.get('system.adapter.nexowatt-devices.0').common.enabled, false);
+    assert.equal(x.mutations.some(row => row.patch?.common?.enabled === true), false);
+});

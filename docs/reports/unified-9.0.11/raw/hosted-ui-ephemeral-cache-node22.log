@@ -1,0 +1,68 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: history response data is unchanged while fresh and released during idle, without another request
+ok 1 - history response data is unchanged while fresh and released during idle, without another request
+  ---
+  duration_ms: 1.940905
+  type: 'test'
+  ...
+# Subtest: entry replacement cancels old expiry and the response count remains bounded
+ok 2 - entry replacement cancels old expiry and the response count remains bounded
+  ---
+  duration_ms: 1.294895
+  type: 'test'
+  ...
+# Subtest: delayed timer delivery cannot make an expired response appear fresh
+ok 3 - delayed timer delivery cannot make an expired response appear fresh
+  ---
+  duration_ms: 0.221966
+  type: 'test'
+  ...
+# Subtest: parallel discovery requests share one database snapshot, force refreshes once, and idle evicts it
+ok 4 - parallel discovery requests share one database snapshot, force refreshes once, and idle evicts it
+  ---
+  duration_ms: 1.038618
+  type: 'test'
+  ...
+# Subtest: failed discovery can retry and late IO after shutdown cannot repopulate retained data
+ok 5 - failed discovery can retry and late IO after shutdown cannot repopulate retained data
+  ---
+  duration_ms: 1.133257
+  type: 'test'
+  ...
+# Subtest: canonical discovery wrapper preserves complete objects and ordering while deduplicating database reads
+ok 6 - canonical discovery wrapper preserves complete objects and ordering while deduplicating database reads
+  ---
+  duration_ms: 34.682613
+  type: 'test'
+  ...
+# Subtest: real idle timer is unreferenced and releases memory without synthetic clock advancement
+ok 7 - real idle timer is unreferenced and releases memory without synthetic clock advancement
+  ---
+  duration_ms: 36.908133
+  type: 'test'
+  ...
+# Subtest: idle eviction only removes cache ownership; an active discovery retains its complete snapshot
+ok 8 - idle eviction only removes cache ownership; an active discovery retains its complete snapshot
+  ---
+  duration_ms: 0.590388
+  type: 'test'
+  ...
+# Subtest: canonical unload drops idle caches and stops pending snapshot retention
+ok 9 - canonical unload drops idle caches and stops pending snapshot retention
+  ---
+  duration_ms: 754.814811
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1499.43764

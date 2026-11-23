@@ -286,29 +286,87 @@ test('startup abort closes a bound listener and never mutates another adapter', 
             setForeignObjectAsync() { assert.fail('startup abort must not change legacy adapter objects'); },
         },
     });
-    web.failStartup(new Error('EOS_TEST_STARTUP_FAILURE'));
-    web.failStartup(new Error('duplicate failure'));
+    await Promise.all([web.failStartup(new Error('EOS_TEST_STARTUP_FAILURE')),
+        web.failStartup(new Error('duplicate failure'))]);
     assert.equal(terminated, 1); assert.equal(server.listening, false);
     assert.match(errors.join('\n'), /EOS_TEST_STARTUP_FAILURE/);
 });
 
+test('startup failure closes admission immediately and awaits migration recovery before terminating once', async t => {
+    const server = http.createServer(); t.after(() => close(server));
+    await listenEosServer(server, { port: await freePort(), bind: '127.0.0.1' });
+    const recovery = deferred(); const events = [];
+    const web = Object.assign(Object.create(Web.prototype), {
+        startupFailed: false, server: { server }, adapter: {
+            log: quiet,
+            eosMigration: {
+                failStartup(code) { events.push(code); return recovery.promise.then(() => events.push('recovery-confirmed')); },
+                block() { assert.fail('confirmed recovery must not become blocked'); },
+            },
+            terminate(code) { events.push(`terminate:${code}`); },
+            setForeignObjectAsync() { assert.fail('Web must delegate recovery, not directly revive old owners'); },
+        },
+    });
+    let settled = false;
+    const first = web.failStartup(new Error('fixture bind failed')).then(() => { settled = true; });
+    await web.failStartup(new Error('simultaneous failure'));
+    assert.equal(web.startupFailed, true); assert.equal(server.listening, false);
+    assert.equal(settled, false);
+    assert.deepEqual(events, ['EOS_MIGRATION_WEB_START_FAILED']);
+    recovery.resolve(); await first;
+    await web.failStartup(new Error('late duplicate failure'));
+    assert.deepEqual(events, ['EOS_MIGRATION_WEB_START_FAILED', 'recovery-confirmed', 'terminate:11']);
+});
+
+test('startup recovery rejection fences migration before termination and does not leak its promise', async () => {
+    const events = []; const errors = [];
+    const web = Object.assign(Object.create(Web.prototype), {
+        startupFailed: false, server: {}, adapter: {
+            log: { ...quiet, error(value) { errors.push(String(value)); } },
+            eosMigration: {
+                async failStartup(code) { events.push(code); throw new Error('fixture database unavailable'); },
+                block(code) { events.push(code); },
+            },
+            terminate(code) { events.push(`terminate:${code}`); },
+        },
+    });
+    await assert.doesNotReject(web.failStartup(new Error('fixture TLS failure')));
+    await web.failStartup(new Error('duplicate failure'));
+    assert.deepEqual(events, ['EOS_MIGRATION_WEB_START_FAILED', 'EOS_MIGRATION_RECOVERY_REQUIRED', 'terminate:11']);
+    assert.match(errors.join('\n'), /Startup recovery remains unconfirmed/);
+    assert.doesNotMatch(errors.join('\n'), /fixture database unavailable/);
+});
+
+test('already closed Web cannot initiate another migration recovery or terminate again', async () => {
+    const web = Object.assign(Object.create(Web.prototype), {
+        closed: true, startupFailed: false, server: {}, adapter: {
+            log: quiet,
+            eosMigration: { failStartup() { assert.fail('closed Web cannot request recovery'); } },
+            terminate() { assert.fail('closed Web cannot terminate again'); },
+        },
+    });
+    await web.failStartup(new Error('late shutdown error'));
+    assert.equal(web.startupFailed, false);
+});
+
 // Real HTTPS + production Web mount + production hosted factory/router. Only the
 // controller DB/session identity and the delayed operational dependency are fixtures.
-async function hostedTlsFixture(t, migrate) {
+async function hostedTlsFixture(t, migrate, options = {}) {
     const Module = require('node:module');
     const { createHarness } = require('../ui/test/unified/http-harness.cjs');
     const harness = await createHarness();
     await harness.close();
     const owner = harness.owner;
     owner.config.secure = true;
+    if (options.migration) owner.eosMigration = options.migration;
     const logs = [];
     owner.log = Object.fromEntries(Object.keys(quiet).map(level => [level, value => logs.push(String(value))]));
-    let licensed = true; let writable = true; let runtimeObject; let migrationCalls = 0;
+    let licensed = true; let writable = options.writable !== false; let runtimeObject; let migrationCalls = 0;
     const validLicense = harness.bridge.getLicense();
     owner.eosLicenseService = { statusView: () => licensed ? validLicense : { valid: false, coreEnabled: false } };
     owner.eosOwnership = { canWrite: () => writable };
-    let foreignWrites = 0;
-    owner.setForeignStateAsync = async () => { foreignWrites++; };
+    const foreignWriteCalls = [];
+    owner.setForeignStateAsync = async (...args) => { foreignWriteCalls.push(args); };
     const filename = path.resolve(__dirname, '../ui/main.js');
     const isolated = new Module(filename, module);
     isolated.filename = filename; isolated.paths = Module._nodeModulePaths(path.dirname(filename));
@@ -352,18 +410,38 @@ async function hostedTlsFixture(t, migrate) {
     web.server.server = server;
     await listenEosServer(server, { port: await freePort(), bind: '127.0.0.1' });
     const runtime = owner.eosHostedRuntime;
-    t.after(async () => { await runtime.stop(); await close(server); });
+    t.after(async () => { try { await runtime?.stop(); } finally { await close(server); } });
     const host = `127.0.0.1:${server.address().port}`;
     const request = (url, { method = 'GET', auth = true, csrf = true, origin = `https://${host}` } = {}) =>
         tlsRequest(server, cert.cert, { host, origin, ...(auth ? { cookie: 'fixture=admin' } : {}),
             ...(csrf ? { 'x-nw-csrf': 'c'.repeat(32) } : {}), 'content-type': 'application/json' }, method, url,
         method === 'POST' ? { id: 'device.0.control', value: true } : undefined);
     return { runtime, request, logs, server, owner, cert: cert.cert, instance: () => runtimeObject,
-        migrationCalls: () => migrationCalls, foreignWrites: () => foreignWrites,
+        migrationCalls: () => migrationCalls, foreignWrites: () => foreignWriteCalls.length, foreignWriteCalls: () => foreignWriteCalls,
         setSessionActive(value) { sessionActive = value; }, setSessionRole(value) { sessionRole = value; },
         setLicensed(value) { licensed = value; }, setWritable(value) { writable = value; } };
 }
 function deferred() { let resolve; const promise = new Promise(done => { resolve = done; }); return { promise, resolve }; }
+
+test('migration startup fence keeps login and authenticated recovery reachable without operational startup', async t => {
+    const h = await hostedTlsFixture(t, async () => assert.fail('blocked migration must not initialize devices'), {
+        migration: { allowsStartup: () => false, allowsWrites: () => false }, writable: false,
+    });
+    assert.equal(h.runtime.status().state, 'blocked');
+    assert.equal(h.runtime.status().emsReady, false);
+    assert.equal(h.owner.eosModuleHost.running, false);
+    assert.equal(h.migrationCalls(), 0); assert.equal(h.foreignWrites(), 0, JSON.stringify(h.foreignWriteCalls()));
+    assert.equal(await h.request('/login.html', { auth: false }), 200);
+    assert.equal(await h.request('/system/recovery'), 200);
+    assert.equal(await h.request('/system/recovery', { auth: false }), 302);
+    assert.notEqual(await h.request('/api/smarthome/toggle', { method: 'POST' }), 200);
+    // Even a late explicit attempt cannot override the coordinator's revoked ownership.
+    await h.runtime.startOperational();
+    assert.equal(h.runtime.status().state, 'blocked');
+    assert.equal(h.migrationCalls(), 0); assert.equal(h.foreignWrites(), 0, JSON.stringify(h.foreignWriteCalls()));
+    assert.equal(h.owner.eosModuleHost.running, false);
+});
+
 
 test('verified nexowatt TLS authority opens login for anonymous/expired sessions and dashboard for an active session', async t => {
     const h = await hostedTlsFixture(t, async () => {});
@@ -441,13 +519,18 @@ test('valid license and stalled operational startup cannot hold the HTTPS login 
     assert.equal(await h.request('/api/smarthome/toggle', { method: 'POST' }), 503);
     assert.equal(await h.request('/api/smarthome/toggle', { method: 'POST', csrf: false }), 403);
     assert.equal(await h.request('/api/smarthome/toggle', { method: 'POST', auth: false }), 401);
-    assert.equal(h.foreignWrites(), 0);
-    // Stop is bounded even if the startup dependency has not answered. Its late answer
-    // must not resume the next setup operation or report EMS-ready.
+    assert.equal(h.foreignWrites(), 0, JSON.stringify(h.foreignWriteCalls()));
+    // Stop fences immediately and may confirm only after the startup dependency settles.
+    // Its late answer must not resume the next setup operation or report EMS-ready.
     let laterSteps = 0;
     h.instance().ensureInfoConnectionState = async () => { laterSteps++; };
-    await h.runtime.stop();
-    pending.resolve(); await starting;
+    let stopSettled = false;
+    const stopping = h.runtime.stop().then(() => { stopSettled = true; });
+    await new Promise(resolve => setImmediate(resolve));
+    assert.equal(stopSettled, false);
+    assert.equal(h.runtime.status().state, 'stopping');
+    assert.equal(h.runtime.status().canWrite, false);
+    pending.resolve(); await Promise.all([starting, stopping]);
     assert.equal(laterSteps, 0);
     assert.equal(h.runtime.status().state, 'stopped');
     assert.equal(h.runtime.status().emsReady, false);
@@ -465,7 +548,9 @@ test('operational initialization failure leaves HTTPS recovery up and refuses re
     assert.equal(await h.request('/login.html', { auth: false }), 200);
     assert.equal(await h.request('/system/recovery'), 200);
     assert.equal(await h.request('/api/smarthome/toggle', { method: 'POST' }), 503);
-    assert.equal(h.foreignWrites(), 0);
+    // Local status now uses the same namespace-qualified write guard as actuator writes.
+    // Permit only the exact pre-abort connection report; no physical/control target escaped.
+    assert.deepEqual(h.foreignWriteCalls(), [['eos-admin.0.info.connection', { val: true, ack: true }]]);
     await h.runtime.startOperational();
     assert.equal(h.migrationCalls(), 1, 'failed partial startup must not duplicate configuration/timers on requests');
     assert.equal(h.server.listening, true);
@@ -487,10 +572,10 @@ for (const lost of ['license', 'ownership']) {
         assert.equal(await h.request('/login.html', { auth: false }), 200);
         assert.equal(await h.request('/system/recovery'), 200);
         assert.equal(await h.request('/api/smarthome/toggle', { method: 'POST' }), 503);
-        assert.equal(h.foreignWrites(), 0);
+        assert.equal(h.foreignWrites(), 0, JSON.stringify(h.foreignWriteCalls()));
         h.setLicensed(true); h.setWritable(true);
         await assert.rejects(h.instance().setForeignStateAsync('device.0.control', true), /EOS_UI_OWNERSHIP_LOST/);
-        assert.equal(h.foreignWrites(), 0);
+        assert.equal(h.foreignWrites(), 0, JSON.stringify(h.foreignWriteCalls()));
         await h.runtime.startOperational();
         assert.equal(h.migrationCalls(), 1, 'lost admission requires operator restart, not an automatic partial retry');
     });
@@ -559,7 +644,12 @@ for (const [lost, rejectedOperation] of [['license', false], ['ownership', false
         assert.equal(await h.request('/login.html', { auth: false }), 200);
         assert.equal(await h.request('/system/recovery'), 200);
         await assert.rejects(instance.setForeignStateAsync('device.0.control', true), /EOS_UI_OWNERSHIP_LOST/);
-        assert.equal(h.foreignWrites(), 0);
+        // Initial shell/start heartbeat reports are local, acknowledged telemetry.
+        // Compare all dispatched writes exactly so control targets or ack:false cannot hide.
+        assert.deepEqual(h.foreignWriteCalls(), [
+            ['eos-admin.0.info.connection', { val: true, ack: true }],
+            ['eos-admin.0.info.connection', { val: true, ack: true }],
+        ]);
     });
 }
 

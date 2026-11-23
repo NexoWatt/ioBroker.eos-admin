@@ -10,6 +10,8 @@ export class EosLegacyMigration {
     start(): Promise<void>;
     saveUi(config: unknown): Promise<void>;
     verifyRuntime(): Promise<void>;
+    failStartup(code?: string): Promise<void>;
+    allowsStartup(): boolean;
     allowsWrites(): boolean;
     block(code?: string): void;
     status(): LegacyMigrationStatus;

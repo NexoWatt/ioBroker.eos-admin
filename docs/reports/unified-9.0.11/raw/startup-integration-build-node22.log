@@ -1,0 +1,244 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: only a complete configured port is accepted, without a fallback or ephemeral port
+ok 1 - only a complete configured port is accepted, without a fallback or ephemeral port
+  ---
+  duration_ms: 1.767901
+  type: 'test'
+  ...
+# Subtest: configured port is used exactly once and readiness follows successful bind
+ok 2 - configured port is used exactly once and readiness follows successful bind
+  ---
+  duration_ms: 63.222018
+  type: 'test'
+  ...
+# Subtest: occupied port fails once with EADDRINUSE and leaves the existing service intact
+ok 3 - occupied port fails once with EADDRINUSE and leaves the existing service intact
+  ---
+  duration_ms: 9.168809
+  type: 'test'
+  ...
+# Subtest: unavailable local interface fails once with EADDRNOTAVAIL instead of searching ports
+ok 4 - unavailable local interface fails once with EADDRNOTAVAIL instead of searching ports
+  ---
+  duration_ms: 1.99156
+  type: 'test'
+  ...
+# Subtest: TLS configuration cannot silently become a cleartext listener when certificates are absent
+ok 5 - TLS configuration cannot silently become a cleartext listener when certificates are absent
+  ---
+  duration_ms: 3.501582
+  type: 'test'
+  ...
+# Subtest: controller certificate read failures remain diagnosed TLS startup failures
+ok 6 - controller certificate read failures remain diagnosed TLS startup failures
+  ---
+  duration_ms: 0.725998
+  type: 'test'
+  ...
+# Subtest: collection TLS uses configured default for IP without SNI and retains a distinct hostname collection
+ok 7 - collection TLS uses configured default for IP without SNI and retains a distinct hostname collection
+  ---
+  duration_ms: 457.08738
+  type: 'test'
+  ...
+# Subtest: collection IP context sends the configured intermediate chain and accepts only the explicit root CA
+ok 8 - collection IP context sends the configured intermediate chain and accepts only the explicit root CA
+  ---
+  duration_ms: 323.212869
+  type: 'test'
+  ...
+# Subtest: a valid named collection cannot hide the absence of a default certificate for IP access
+ok 9 - a valid named collection cannot hide the absence of a default certificate for IP access
+  ---
+  duration_ms: 64.334835
+  type: 'test'
+  ...
+# Subtest: native TLS without a fixed origin serves IP/8188 and HTTPS/443 alias Host contracts
+ok 10 - native TLS without a fixed origin serves IP/8188 and HTTPS/443 alias Host contracts
+  ---
+  duration_ms: 171.665564
+  type: 'test'
+  ...
+# Subtest: invalid external origin is caught by Web startup and terminates once without controller mutations
+ok 11 - invalid external origin is caught by Web startup and terminates once without controller mutations
+  ---
+  duration_ms: 2.599575
+  type: 'test'
+  ...
+# Subtest: password/setup write guard uses canonical browser Origin and preserves explicit bearer compatibility
+ok 12 - password/setup write guard uses canonical browser Origin and preserves explicit bearer compatibility
+  ---
+  duration_ms: 0.555687
+  type: 'test'
+  ...
+# Subtest: actual TLS activation accepts Host443 normalization and rejects malformed Host before its service
+ok 13 - actual TLS activation accepts Host443 normalization and rejects malformed Host before its service
+  ---
+  duration_ms: 139.585808
+  type: 'test'
+  ...
+# Subtest: startup abort closes a bound listener and never mutates another adapter
+ok 14 - startup abort closes a bound listener and never mutates another adapter
+  ---
+  duration_ms: 1.975236
+  type: 'test'
+  ...
+# Subtest: startup failure closes admission immediately and awaits migration recovery before terminating once
+ok 15 - startup failure closes admission immediately and awaits migration recovery before terminating once
+  ---
+  duration_ms: 1.609468
+  type: 'test'
+  ...
+# Subtest: startup recovery rejection fences migration before termination and does not leak its promise
+ok 16 - startup recovery rejection fences migration before termination and does not leak its promise
+  ---
+  duration_ms: 0.586824
+  type: 'test'
+  ...
+# Subtest: already closed Web cannot initiate another migration recovery or terminate again
+ok 17 - already closed Web cannot initiate another migration recovery or terminate again
+  ---
+  duration_ms: 0.205553
+  type: 'test'
+  ...
+# Subtest: migration startup fence keeps login and authenticated recovery reachable without operational startup
+ok 18 - migration startup fence keeps login and authenticated recovery reachable without operational startup
+  ---
+  duration_ms: 653.601074
+  type: 'test'
+  ...
+# Subtest: verified nexowatt TLS authority opens login for anonymous/expired sessions and dashboard for an active session
+ok 19 - verified nexowatt TLS authority opens login for anonymous/expired sessions and dashboard for an active session
+  ---
+  duration_ms: 95.227452
+  type: 'test'
+  ...
+# Subtest: module host crosses the actual private hosted UI bridge and returns implementation feedback
+ok 20 - module host crosses the actual private hosted UI bridge and returns implementation feedback
+  ---
+  duration_ms: 126.39622
+  type: 'test'
+  ...
+# Subtest: valid license and stalled operational startup cannot hold the HTTPS login or recovery console hostage
+ok 21 - valid license and stalled operational startup cannot hold the HTTPS login or recovery console hostage
+  ---
+  duration_ms: 158.417428
+  type: 'test'
+  ...
+# Subtest: operational initialization failure leaves HTTPS recovery up and refuses real UI commands
+ok 22 - operational initialization failure leaves HTTPS recovery up and refuses real UI commands
+  ---
+  duration_ms: 183.387973
+  type: 'test'
+  ...
+# Subtest: late startup completion after license loss cannot revive control
+ok 23 - late startup completion after license loss cannot revive control
+  ---
+  duration_ms: 98.442873
+  type: 'test'
+  ...
+# Subtest: late startup completion after ownership loss cannot revive control
+ok 24 - late startup completion after ownership loss cannot revive control
+  ---
+  duration_ms: 152.751859
+  type: 'test'
+  ...
+# Subtest: an unexpected operational promise rejection is contained without closing HTTPS
+ok 25 - an unexpected operational promise rejection is contained without closing HTTPS
+  ---
+  duration_ms: 147.488786
+  type: 'test'
+  ...
+# Subtest: optional startup catch cannot erase observed license loss after authority returns
+ok 26 - optional startup catch cannot erase observed license loss after authority returns
+  ---
+  duration_ms: 149.218891
+  type: 'test'
+  ...
+# Subtest: optional startup catch cannot erase observed ownership loss after authority returns
+ok 27 - optional startup catch cannot erase observed ownership loss after authority returns
+  ---
+  duration_ms: 157.560332
+  type: 'test'
+  ...
+# Subtest: optional startup catch cannot erase observed ownership loss after authority returns (rejected operation)
+ok 28 - optional startup catch cannot erase observed ownership loss after authority returns (rejected operation)
+  ---
+  duration_ms: 157.084737
+  type: 'test'
+  ...
+# Subtest: the explicit HTTPS-ready diagnostic requires a live listener and is suppressed after close
+ok 29 - the explicit HTTPS-ready diagnostic requires a live listener and is suppressed after close
+  ---
+  duration_ms: 154.973702
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual onReady starts migration monitoring before ownership and initialization
+ok 30 - actual onReady starts migration monitoring before ownership and initialization
+  ---
+  duration_ms: 64.355981
+  type: 'test'
+  ...
+# Subtest: actual onReady awaits migration recovery after ownership failure
+ok 31 - actual onReady awaits migration recovery after ownership failure
+  ---
+  duration_ms: 21.045466
+  type: 'test'
+  ...
+# Subtest: actual onReady awaits migration recovery after secret persistence failure
+ok 32 - actual onReady awaits migration recovery after secret persistence failure
+  ---
+  duration_ms: 7.761428
+  type: 'test'
+  ...
+# Subtest: actual onReady awaits migration recovery after invalid existing secret
+ok 33 - actual onReady awaits migration recovery after invalid existing secret
+  ---
+  duration_ms: 5.116547
+  type: 'test'
+  ...
+# Subtest: actual onReady awaits migration recovery after initialization failure
+ok 34 - actual onReady awaits migration recovery after initialization failure
+  ---
+  duration_ms: 5.669691
+  type: 'test'
+  ...
+# Subtest: actual onReady awaits migration recovery after initialization failure after first secret creation
+ok 35 - actual onReady awaits migration recovery after initialization failure after first secret creation
+  ---
+  duration_ms: 11.794392
+  type: 'test'
+  ...
+# Subtest: actual onReady awaits migration recovery after initial security reconciliation failure
+ok 36 - actual onReady awaits migration recovery after initial security reconciliation failure
+  ---
+  duration_ms: 6.356671
+  type: 'test'
+  ...
+# Subtest: unexpected recovery rejection blocks migration and is contained by actual onReady
+ok 37 - unexpected recovery rejection blocks migration and is contained by actual onReady
+  ---
+  duration_ms: 4.8802
+  type: 'test'
+  ...
+# Subtest: unexpected detached monitor rejection requests fail-closed recovery without an unhandled rejection
+ok 38 - unexpected detached monitor rejection requests fail-closed recovery without an unhandled rejection
+  ---
+  duration_ms: 4.551145
+  type: 'test'
+  ...
+1..38
+# tests 38
+# suites 0
+# pass 38
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4154.180431

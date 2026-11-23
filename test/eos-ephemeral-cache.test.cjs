@@ -5,6 +5,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 const { EphemeralMap, ExpiringSnapshot } = require('./fixtures/load-ephemeral-cache.cjs');
+const { createHostedCleanup } = require('../ui/lib/hosted-runtime-stop');
 function clock() {
     let now = 0;
     const tasks = new Map();
@@ -98,14 +99,17 @@ test('canonical unload drops idle caches and stops pending snapshot retention', 
     const parsed = ts.createSourceFile(filename, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
     const definition = parsed.statements.find(node => ts.isClassDeclaration(node) && node.name?.text === 'NexoWattVis');
     const methods = definition.members.filter(node => ['onUnload', '_nwGetMemoryDiagnostics', '_nwSetHistoryApiCached'].includes(node.name?.getText(parsed))).map(node => node.getText(parsed));
-    const Runtime = vm.runInNewContext(`(class Runtime { ${methods.join('\n')} })`, { Map, Date, clearTimeout, EphemeralMap });
+    const Runtime = vm.runInNewContext(`(class Runtime { ${methods.join('\n')} })`, { Map, Date, clearTimeout, EphemeralMap, createHostedCleanup });
     const runtime = new Runtime(); const time = clock();
     runtime._nwHistoryApiCache = new EphemeralMap(5000, 4, time); runtime._nwHistoryApiCache.set('a', { large: 'history' });
     runtime._nwShcfgDetectCache = new EphemeralMap(30000, 1, time); runtime._nwShcfgDetectCache.set('a', { large: 'result' });
     runtime._nwTypeDetectorObjectsCache = new ExpiringSnapshot(async () => ({ large: 'objects' }), 30000, time);
     await runtime._nwTypeDetectorObjectsCache.get();
     runtime._nwClearTimer = () => {}; runtime._nwCloseServer = done => done();
-    let closed = 0; runtime.onUnload(() => closed++);
+    runtime._nwStopConnectionHeartbeat = runtime.stopNotificationMonitor = runtime._nwStopLiveCoreRefresh = runtime._nwCloseSseClients = () => {};
+    runtime.log = { error() {} };
+    let closed = 0;
+    await new Promise((resolve, reject) => runtime.onUnload(error => { if (error) reject(error); else { closed++; resolve(); } }));
     assert.equal(closed, 1); assert.equal(time.timers, 0);
     const diagnostics = runtime._nwGetMemoryDiagnostics();
     assert.equal(diagnostics.historyCachedResponses, 0); assert.equal(diagnostics.discoveryCachedResponses, 0);

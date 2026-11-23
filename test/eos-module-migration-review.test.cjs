@@ -18,6 +18,7 @@ function fixture() {
         encrypt: text => `test-cipher:${Buffer.from(text).toString('base64')}`,
         decrypt: text => Buffer.from(text.slice('test-cipher:'.length), 'base64').toString(),
         eosLicenseService: { statusView: () => ({ valid: true, coreEnabled: true }), allowsEmbeddedModule: () => true },
+        eosOwnership: { canWrite: () => true },
         async getObjectViewAsync(_design, _view, range) {
             return { rows: [...objects.values()].filter(object => object._id >= range.startkey && object._id <= range.endkey).map(value => ({ value: clone(value) })) };
         },

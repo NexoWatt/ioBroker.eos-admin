@@ -61,7 +61,7 @@ function codeSha256(file, source) {
   const parsed = ts.createSourceFile(file, source, ts.ScriptTarget.Latest, true, file.endsWith('.tsx') ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
   return sha256(ts.createPrinter({ removeComments: true }).printFile(parsed));
 }
-function strictTypes(file) { return file.startsWith('src-admin-tab/') || STRICT_TYPES.has(file)
+function strictTypes(file) { return file === 'src-ts/runtime-executables/lib/hosted-adapter.ts' || file === 'src-ts/runtime-executables/lib/hosted-runtime-stop.ts' || file.startsWith('src-admin-tab/') || STRICT_TYPES.has(file)
   || /^src-ts\/runtime-executables\/(?:lib|www)\/smarthome-(?:device-|custom-|alias-|layout-)/.test(file); }
 function filesUnder(dir) {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry => {

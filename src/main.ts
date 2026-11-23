@@ -572,8 +572,18 @@ class Admin extends Adapter {
                 this.eosMigration.block();
                 this.log.error('EOS_MIGRATION_UNAVAILABLE: automatic handover denied; inspect migration status.');
             }
+            // A transferred plant must be observed even if init, TLS or the listener never starts.
+            void this.eosMigration.verifyRuntime().catch(() =>
+                this.recoverEosMigrationStartup('EOS_MIGRATION_MONITOR_FAILED'),
+            );
             this.eosOwnership = createOwnershipGuard(this);
-            await this.eosOwnership.start();
+            try {
+                await this.eosOwnership.start();
+            } catch {
+                await this.recoverEosMigrationStartup('EOS_MIGRATION_OWNERSHIP_START_FAILED');
+                this.log.error('EOS_OWNERSHIP_START_FAILED: Startup denied; inspect migration status.');
+                return;
+            }
 
             if (!systemConfig.native.secret) {
                 try {
@@ -582,17 +592,34 @@ class Admin extends Adapter {
                     await this.init();
                 } catch {
                     this.log.error('EOS session secret initialization failed; web startup denied');
+                    await this.recoverEosMigrationStartup('EOS_MIGRATION_SESSION_START_FAILED');
                 }
             } else if (typeof systemConfig.native.secret === 'string' && systemConfig.native.secret.length >= 16) {
                 this.secret = systemConfig.native.secret;
-                await this.init();
+                try {
+                    await this.init();
+                } catch {
+                    this.log.error('EOS_INIT_FAILED: Startup denied; inspect migration status.');
+                    await this.recoverEosMigrationStartup('EOS_MIGRATION_INIT_FAILED');
+                }
             } else {
                 this.log.error('EOS session secret is invalid; web startup denied');
+                await this.recoverEosMigrationStartup('EOS_MIGRATION_SESSION_START_FAILED');
             }
         } else {
             this.log.error('Cannot find object system.config');
         }
     };
+
+    /** Stop uncertain new runtimes before requesting restoration of the previous owners. */
+    private async recoverEosMigrationStartup(code: string): Promise<void> {
+        try {
+            await this.eosMigration?.failStartup(code);
+        } catch {
+            this.eosMigration?.block('EOS_MIGRATION_RECOVERY_REQUIRED');
+            this.log.error('EOS_MIGRATION_RECOVERY_REQUIRED: Automatic recovery could not be confirmed.');
+        }
+    }
 
     /** Diagnose a passwordless legacy account without changing it or weakening EOS authentication. */
     private async warnIfLocalAdminPasswordMissing(): Promise<void> {
@@ -3709,6 +3736,7 @@ class Admin extends Adapter {
             this.log.error(
                 'EOS_SECURITY_STARTUP_FAILED: Initial role and ACL reconciliation failed; web startup denied.',
             );
+            await this.recoverEosMigrationStartup('EOS_MIGRATION_SECURITY_START_FAILED');
             return;
         }
 

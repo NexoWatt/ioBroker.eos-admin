@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/main.ts
- * Quell-Hash: sha256:ff6013a420d663d1034bf45e2b4ba094d7c4724c9e680ae2306c76a3f350602f
+ * Quell-Hash: sha256:cd098e757ba30517a1d6986f3474f6665816607d61d43797c74dcab030bb053c
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -31,6 +31,7 @@
 // Canonical main.js runtime source; generate with `npm run sync:ts-runtime-executables`.
 'use strict';
 const { HostedAdapter, centralLicenseSnapshot, centralAccess } = require('./lib/hosted-adapter');
+const { stopHostedRuntime, createHostedCleanup } = require('./lib/hosted-runtime-stop');
 const express = require('express4');
 const { safeHttpFailure, safeConfigurationFailure, createPublicHttpError } = require('./lib/http-error-boundary');
 const { createHostedHttpHandler } = require('./lib/hosted-http-boundary');
@@ -33723,6 +33724,7 @@ return res.json(out);
    * Ablauf und Zusammenhang: Fährt Server, Streams, Benachrichtigungen und Regelung kontrolliert herunter und meldet danach den Abschluss an ioBroker. Timer und offene Verbindungen gehören zum selben Abschaltpfad.
    */
   onUnload(callback) {
+    const cleanup = createHostedCleanup();
     // Der Guard muss vor jedem asynchronen State-/Timer-Aufruf gesetzt werden. Besonders
     // info.connection und noch laufende StateChange-/EMS-Callbacks dürfen beim Shutdown
     // keinen neuen adapter.setTimeout mehr anlegen.
@@ -33731,17 +33733,17 @@ return res.json(out);
     this._hostedOperational = false;
     this._nwSmartHomeHydrating = false;
     this._nwPreservedUiStates = null;
-    try { this._nwCancelHistoryRequests?.(); } catch (_eHistory) {}
-    this._nwHistoryApiCache?.clear();
-    this._nwShcfgDetectCache?.clear();
-    this._nwTypeDetectorObjectsCache?.close();
-    try { this._partnerRuntime?.stop(); } catch (_ePartner) {}
-    try { this._meshCoordinator?.stop(); } catch (_eMesh) {}
+    cleanup.capture(() => this._nwCancelHistoryRequests?.());
+    cleanup.capture(() => this._nwHistoryApiCache?.clear());
+    cleanup.capture(() => this._nwShcfgDetectCache?.clear());
+    cleanup.capture(() => this._nwTypeDetectorObjectsCache?.close());
+    cleanup.capture(() => this._partnerRuntime?.stop());
+    cleanup.capture(() => this._meshCoordinator?.stop());
     this._nwShutdownStartedAt = Date.now();
-    try { if (this._openMeteoPvForecastRuntime) this._openMeteoPvForecastRuntime.stop(); } catch (_eForecast) {}
+    cleanup.capture(() => this._openMeteoPvForecastRuntime?.stop());
     this._openMeteoPvForecastRuntime = null;
-    try { this._adminOverviewPublisher?.stop(); } catch (_eAdminOverview) {}
-    try { this._nwStopConnectionHeartbeat(); } catch (_eBeat) {}
+    cleanup.capture(() => this._adminOverviewPublisher?.stop());
+    cleanup.capture(() => this._nwStopConnectionHeartbeat());
     try { this._nwSetInfoConnection(false, 'unload').catch(() => {}); } catch (_eConn) {}
     /**
      * Code-Teil: done
@@ -33751,10 +33753,12 @@ return res.json(out);
      */
     const done = (() => {
       let called = false;
-      return () => {
+      return error => {
         if (called) return;
         called = true;
-        try { callback(); } catch (_e0) {}
+        void cleanup.finish().then(() => callback(error), failure => callback(failure)).catch(() => {
+          this.log.error('EOS_UI_STOP_UNCONFIRMED: Abschluss der Oberflächen-Bereinigung nicht bestätigt.');
+        });
       };
     })();
 
@@ -33772,14 +33776,14 @@ return res.json(out);
         '_rfidApplyTimer',
         '_sseFlushTimer',
       ]) {
-        this._nwClearTimer(refName);
+        cleanup.capture(() => this._nwClearTimer(refName));
       }
 
-      try { this.stopNotificationMonitor(); } catch (_e1) {}
-      try { this._nwStopLiveCoreRefresh(); } catch (_e2) {}
-      try { if (this._para14aEebusApi && typeof this._para14aEebusApi.stop === 'function') this._para14aEebusApi.stop(); } catch (_eApi) {}
-      try { if (this.emsEngine && typeof this.emsEngine.stop === 'function') this.emsEngine.stop(); } catch (_e3) {}
-      try { if (this.logicEngine && typeof this.logicEngine.stop === 'function') this.logicEngine.stop(); } catch (_e4) {}
+      cleanup.capture(() => this.stopNotificationMonitor());
+      cleanup.capture(() => this._nwStopLiveCoreRefresh());
+      cleanup.capture(() => this._para14aEebusApi?.stop?.());
+      cleanup.capture(() => this.emsEngine?.stop?.());
+      cleanup.capture(() => this.logicEngine?.stop?.());
       try {
         if (this._nwSmartHomePulseTimers && typeof this._nwSmartHomePulseTimers.entries === 'function') {
           for (const [timer, entry] of this._nwSmartHomePulseTimers.entries()) {
@@ -33794,11 +33798,11 @@ return res.json(out);
         if (this._derivedFlow) this._derivedFlow.pending = false;
         this._ssePendingPayload = {};
       } catch (_ePending) {}
-      try { this._nwCloseSseClients(); } catch (_e5) {}
+      cleanup.capture(() => this._nwCloseSseClients());
 
       this._nwCloseServer(done);
     } catch (_e6) {
-      done();
+      done(_e6);
     }
   }
 }
@@ -33806,10 +33810,13 @@ return res.json(out);
 /** Single owning adapter, one lifecycle and one request router. */
 function createHostedRuntime(owner, bridge) {
   let stopping = null;
+  let stopRequested = false;
+  let stopConfirmed = false;
+  let stopUnconfirmed = false;
   let runtime = null;
   // Preserve live owner callbacks; only add the local shutdown fence.
   const guardedBridge = Object.create(bridge);
-  guardedBridge.canWrite = () => !stopping && runtime?._nwShuttingDown !== true && bridge.canWrite() === true;
+  guardedBridge.canWrite = () => !stopRequested && runtime?._nwShuttingDown !== true && bridge.canWrite() === true;
   runtime = new NexoWattVis({ owner, bridge: guardedBridge });
   if (typeof bridge.hostedModuleFeedback === 'function') {
     runtime._para14aEebusApi.attachHostedBridge({
@@ -33823,7 +33830,7 @@ function createHostedRuntime(owner, bridge) {
   let operationalPromise = null;
   let operationalArmed = false;
   const startOperational = async () => {
-    if (!started || stopping || runtime._nwShuttingDown) return;
+    if (!started || stopRequested || runtime._nwShuttingDown) return;
     if (operationalPromise) return operationalPromise;
     // Auch ein zunächst vorhandener Altregler darf nach bestätigter Übergabe
     // den ruhenden Start freigeben. Lizenz und Ownership werden hier und im
@@ -33835,27 +33842,29 @@ function createHostedRuntime(owner, bridge) {
     // eine spätere bestätigte Übergabe erneut geprüft werden kann. Nach echter
     // Initialisierung verhindert _hostedOperational jeden doppelten Start.
     operationalPromise = Promise.resolve().then(() => {
-      if (stopping || runtime._nwShuttingDown) return;
+      if (stopRequested || runtime._nwShuttingDown) return;
       return runtime.onReady();
     }).catch(error => {
-      if (!stopping) {
+      if (!stopRequested) {
         runtime._hostedStartup = { state: 'degraded', error: 'EOS_UI_STARTUP_FAILED' };
         runtime.log.error('EOS_UI_STARTUP_FAILED: Bedienoberfläche bleibt verfügbar; Regelungsstart prüfen.');
       }
       throw error;
     }).finally(() => {
       operationalPromise = null;
-      // A late startup completion cannot revive readiness or leave newly-created resources alive.
-      if (stopping) runtime.onUnload(() => {});
+      // Der Stop-Koordinator wartet diesen Versuch ab und bestätigt erst danach das finale Cleanup.
     });
     await operationalPromise;
   };
   return {
     async start() {
-      if (stopping) throw new Error('EOS_UI_STOPPING');
+      if (stopRequested) throw new Error('EOS_UI_STOPPING');
       if (!startPromise) {
-        startPromise = Promise.resolve().then(() => runtime.startServer()).then(() => {
-          if (stopping || runtime._nwShuttingDown) throw new Error('EOS_UI_STOPPING');
+        startPromise = Promise.resolve().then(() => {
+          if (stopRequested || runtime._nwShuttingDown) throw new Error('EOS_UI_STOPPING');
+          return runtime.startServer();
+        }).then(() => {
+          if (stopRequested || runtime._nwShuttingDown) throw new Error('EOS_UI_STOPPING');
           if (!runtime._hostedApp) throw new Error('EOS_UI_START_FAILED');
           started = true;
           runtime._hostedStartup = !centralLicenseSnapshot(guardedBridge).ok
@@ -33864,7 +33873,7 @@ function createHostedRuntime(owner, bridge) {
               ? { state: 'blocked', error: 'EOS_UI_OWNERSHIP_REQUIRED' }
               : { state: 'idle', error: '' };
         }).catch(error => {
-          if (!stopping) {
+          if (!stopRequested) {
             startPromise = null;
             runtime._hostedStartup = { state: 'degraded', error: 'EOS_UI_SHELL_START_FAILED' };
           }
@@ -33873,24 +33882,35 @@ function createHostedRuntime(owner, bridge) {
       }
       await startPromise;
     },
-    startOperational() { operationalArmed = true; return startOperational(); },
+    startOperational() { if (!stopRequested) operationalArmed = true; return startOperational(); },
     handle(req, res, next) {
-      if (!started || stopping || !runtime._hostedApp) return res.status(503).json({ error: 'EOS_UI_UNAVAILABLE' });
+      if (!started || stopRequested || !runtime._hostedApp) return res.status(503).json({ error: 'EOS_UI_UNAVAILABLE' });
       // Activation may start the dormant runtime, but no request waits for device/history work.
       // Operational failures are recorded by the shared single-flight promise above.
       if (operationalArmed) void startOperational().catch(() => {});
       return runtime._hostedHttpHandler(req, res, next);
     },
-    onStateChange(id, state) { if (runtime._hostedOperational && !stopping) return runtime.onStateChange(id, state); },
-    onMessage(message) { return runtime._hostedOperational && !stopping ? runtime.onMessage(message) : false; },
+    onStateChange(id, state) { if (runtime._hostedOperational && !stopRequested) return runtime.onStateChange(id, state); },
+    onMessage(message) { return runtime._hostedOperational && !stopRequested ? runtime.onMessage(message) : false; },
     onHostedEebusMessage(message) {
-      if (!runtime._hostedOperational || stopping) return Promise.resolve({ accepted: false, error: 'EOS_UI_UNAVAILABLE' });
+      if (!runtime._hostedOperational || stopRequested) return Promise.resolve({ accepted: false, error: 'EOS_UI_UNAVAILABLE' });
       return runtime._para14aEebusApi.handleHostedMessage(message);
     },
     revokeSessions() { runtime._nwCloseSseClients(); },
-    status() { return { ...(runtime._hostedStartup || { state: 'stopped', error: '' }), active: started && !stopping, emsReady: !stopping && runtime._hostedStartup?.state === 'ready' && !!runtime.emsEngine, canWrite: guardedBridge.canWrite() === true }; },
+    status() { return { ...(stopUnconfirmed ? { state: 'stop-unconfirmed', error: 'EOS_UI_STOP_UNCONFIRMED' }
+      : stopRequested ? { state: stopConfirmed ? 'stopped' : 'stopping', error: '' } : runtime._hostedStartup || { state: 'stopped', error: '' }),
+      active: started && !stopRequested, emsReady: !stopRequested && runtime._hostedStartup?.state === 'ready' && !!runtime.emsEngine, canWrite: guardedBridge.canWrite() === true }; },
     stop() {
-      if (!stopping) stopping = new Promise(resolve => runtime.onUnload(resolve));
+      if (!stopping) {
+        // Sofortige, dauerhafte Sperre vor jedem await und jedem Cleanup-Callback.
+        stopRequested = true;
+        operationalArmed = false;
+        runtime._nwShuttingDown = true;
+        const pendingStarts = [startPromise, operationalPromise, runtime.stopStateWrites()].filter(Boolean);
+        stopping = stopHostedRuntime(pendingStarts, () => new Promise((resolve, reject) => runtime.onUnload(error => error ? reject(error) : resolve())))
+          .then(() => { stopConfirmed = true; })
+          .catch(error => { stopUnconfirmed = true; throw error; });
+      }
       return stopping;
     },
   };

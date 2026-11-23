@@ -1,0 +1,43 @@
+✔ private embedded EEBus bridge accepts handshake and dispatches central controller without bus roundtrip (11.426098ms)
+✔ serialized bus message cannot impersonate embedded source or acquire private proof (4.674186ms)
+✔ fresh ownership/license denial blocks commands and implementation feedback (1.445977ms)
+✔ embedded identity, command allowlist, handshake and stopped lifecycle are enforced (2.166136ms)
+✔ one central entitlement starts the integrated module without a second adapter or license (12.227688ms)
+✔ disabled and unlicensed modules create no runtime; metadata remains available (5.337542ms)
+✔ license loss denies existing operation closures synchronously and stops transports (3.588258ms)
+✔ normal host heartbeat preserves a running module and generation (3.574608ms)
+✔ legacy enable revokes immediately; confirmed stop creates a new valid generation (4.204615ms)
+✔ a race during legacy inventory cannot renew an invalidated operation lease (2.901498ms)
+✔ facade constrains namespaces and suppresses stale telemetry after lifecycle end (4.801163ms)
+✔ secret masking and restoration follow device IDs when rows move (0.541927ms)
+✔ saved configurations are encrypted and API views never return device credentials (1.888227ms)
+✔ configuration cannot reopen a runtime after failed transport shutdown (1.515079ms)
+✔ config rejects prototype keys and excessive depth before persistence (0.222187ms)
+✔ integrated licenses preserve NWL2 adapter scope and fail closed on expired core entitlement (2.461521ms)
+✔ concurrent HTTP-close and adapter-unload share transport cleanup, and late startup never installs a timer (14.452955ms)
+✔ preserved legacy EEBus namespace keeps state IDs while private bridge remains tied to EOS owner (2.655817ms)
+✔ backup secret fields stay redacted and restored by unique endpoint rather than row index (0.398306ms)
+✔ backup notifications use only configured validated target and lose authority on revocation (1.294464ms)
+✔ backup downloads clean late file streams after timeout or stop and bound concurrent opens (24.451049ms)
+✔ backup data-folder inventory exposes only bounded paths and rejects revoked or malformed reads (1.588938ms)
+✔ actual hosted EEBus runtime starts with scoped objects/subscriptions and preserves identity over module restart (124.157471ms)
+✔ actual Devices catalogue remains configurable while module is disabled and no device runtime is started (100.325717ms)
+✔ legacy EEBus settings import remains disabled, reports changed boundaries and retains the original instance (38.148548ms)
+✔ module presence does not report active until its original start promise succeeds (14.657882ms)
+✔ concurrent stop waits for late startup and closes newly opened transports before resolving (4.806961ms)
+✔ a rejected pending startup still receives final cleanup before stop confirmation (3.788092ms)
+✔ timeout is sticky unconfirmed shutdown; late startup cleanup cannot authorize a rollback (22.965718ms)
+✔ a failing final cleanup remains unconfirmed even when the first cleanup succeeded (1.642296ms)
+✔ a failed running transport shutdown cannot be hidden by host stop or reconfiguration (0.950829ms)
+✔ shutdown during configuration read cannot create a delayed module or subscription (1.035953ms)
+✔ a late facade subscription is immediately removed after its generation was revoked (0.844873ms)
+✔ confirmed stop waits for every accepted state/create/extend mutation to settle (1.59054ms)
+✔ pending mutation timeout stays unconfirmed; bounded capacity and revoked calls never forward or retry (84.480359ms)
+ℹ tests 35
+ℹ suites 0
+ℹ pass 35
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 436.621578

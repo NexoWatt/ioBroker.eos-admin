@@ -1,0 +1,28 @@
+✔ all four local write aliases are tracked with correct IDs (same namespace) (11.220992ms)
+✔ all four local write aliases are tracked with correct IDs (migrated namespace) (2.796102ms)
+✔ both foreign async methods preserve original promise and wait fulfilled/rejected completion (2.011027ms)
+✔ callback API preserves synchronous return, callback context, errors and extra callback values (1.043484ms)
+✔ callback API can be observed without caller callback and preserves returned Promise completion (2.166436ms)
+✔ a callback-method returned promise alone cannot confirm a still pending callback (2.097995ms)
+✔ pending capacity rejects without queueing or sending and frees completed slots (26.766975ms)
+✔ unknown completion or synchronous owner failure cannot become confirmed shutdown (68.492663ms)
+✔ closing admission remains permanent even if external ownership later returns (1.147357ms)
+✔ stop coordinator waits every pending startup and final cleanup before confirming quiescence (8.026534ms)
+✔ failed startup is drained and cleaned rather than reported as failed shutdown (2.317608ms)
+✔ timeout is unconfirmed and late startup still gets final cleanup without changing its rejected result (21.281707ms)
+✔ cleanup throws, rejects or never confirms never produce a successful stop (22.608179ms)
+✔ shell scheduled in a microtask cannot start after stop has already fenced the runtime (2307.996812ms)
+✔ operational start cannot outlive a successful stop or revive writes/readiness (1118.5859ms)
+✔ active shell bootstrap is joined and its late resource receives final cleanup (1159.114465ms)
+✔ actual hosted stop rejects a hung startup and keeps rejection/status after late cleanup (876.794423ms)
+✔ actual runtime stop joins accepted host writes before confirming shutdown (1236.432365ms)
+✔ real onUnload waits returned service-stop promises and propagates stop failure (2067.100649ms)
+✔ hung actual service stop and hung host write both keep shutdown unconfirmed (1848.183085ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11622.030648

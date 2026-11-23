@@ -1,0 +1,38 @@
+✔ module presence does not report active until its original start promise succeeds (27.136108ms)
+✔ concurrent stop waits for late startup and closes newly opened transports before resolving (36.310603ms)
+✔ a rejected pending startup still receives final cleanup before stop confirmation (1.859615ms)
+✔ timeout is sticky unconfirmed shutdown; late startup cleanup cannot authorize a rollback (36.574612ms)
+✔ a failing final cleanup remains unconfirmed even when the first cleanup succeeded (1.385979ms)
+✔ a failed running transport shutdown cannot be hidden by host stop or reconfiguration (0.791023ms)
+✔ shutdown during configuration read cannot create a delayed module or subscription (8.106295ms)
+✔ a late facade subscription is immediately removed after its generation was revoked (3.965744ms)
+✔ confirmed stop waits for every accepted state/create/extend mutation to settle (21.59761ms)
+✔ pending mutation timeout stays unconfirmed; bounded capacity and revoked calls never forward or retry (204.971919ms)
+✔ all four local write aliases are tracked with correct IDs (same namespace) (31.634224ms)
+✔ all four local write aliases are tracked with correct IDs (migrated namespace) (1.170872ms)
+✔ both foreign async methods preserve original promise and wait fulfilled/rejected completion (0.769432ms)
+✔ callback API preserves synchronous return, callback context, errors and extra callback values (4.738992ms)
+✔ callback API can be observed without caller callback and preserves returned Promise completion (1.046239ms)
+✔ a callback-method returned promise alone cannot confirm a still pending callback (0.768851ms)
+✔ pending capacity rejects without queueing or sending and frees completed slots (16.084671ms)
+✔ unknown completion or synchronous owner failure cannot become confirmed shutdown (84.795096ms)
+✔ closing admission remains permanent even if external ownership later returns (0.916459ms)
+✔ stop coordinator waits every pending startup and final cleanup before confirming quiescence (31.70241ms)
+✔ failed startup is drained and cleaned rather than reported as failed shutdown (7.108787ms)
+✔ timeout is unconfirmed and late startup still gets final cleanup without changing its rejected result (24.012042ms)
+✔ cleanup throws, rejects or never confirms never produce a successful stop (32.527309ms)
+✔ shell scheduled in a microtask cannot start after stop has already fenced the runtime (2976.642553ms)
+✔ operational start cannot outlive a successful stop or revive writes/readiness (1915.00803ms)
+✔ active shell bootstrap is joined and its late resource receives final cleanup (1236.107778ms)
+✔ actual hosted stop rejects a hung startup and keeps rejection/status after late cleanup (1555.261013ms)
+✔ actual runtime stop joins accepted host writes before confirming shutdown (1116.668647ms)
+✔ real onUnload waits returned service-stop promises and propagates stop failure (2620.656388ms)
+✔ hung actual service stop and hung host write both keep shutdown unconfirmed (3009.848951ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 30
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 16586.079005

@@ -2,7 +2,7 @@
 
 Automatisch aus den Originalquellen erzeugter Wegweiser. Einstieg und fachliche Abläufe: [Quellcode verstehen](QUELLCODE_WEGWEISER_DE.md). Pflege: [Dokumentationsstandard](DOKUMENTATIONSSTANDARD_DE.md).
 
-Erfasst: 296 selbst gepflegte TS-/TSX-Dateien, 6968 benannte Funktionen/Methoden. Generierte Spiegel, Testdateien, externe Pakete und Build-Artefakte sind ausgeschlossen.
+Erfasst: 297 selbst gepflegte TS-/TSX-Dateien, 6983 benannte Funktionen/Methoden. Generierte Spiegel, Testdateien, externe Pakete und Build-Artefakte sind ausgeschlossen.
 
 Die Funktionslinks zeigen auf die Originalquelle. Statische Imports und dynamische Kommunikation sind verschieden; Backend-API, ioBroker-States und HTML-/Browser-Globals werden im fachlichen Wegweiser erklärt.
 
@@ -211,6 +211,7 @@ Die Funktionslinks zeigen auf die Originalquelle. Statische Imports und dynamisc
 | [src-ts/runtime-executables/lib/evcs-electrical-limits.ts](../src-ts/runtime-executables/lib/evcs-electrical-limits.ts) | Prüft explizite Strom-/Leistungsgrenzen je Ladepunkt und trennt DC-Ausgangsstrom von AC-Netzstrom. | [Verknüpfungen und Funktionen](quellcode/src-ts/runtime-executables/lib/evcs-electrical-limits.md) |
 | [src-ts/runtime-executables/lib/hosted-adapter.ts](../src-ts/runtime-executables/lib/hosted-adapter.ts) | Bindet die eingebettete UI an EOS und bewahrt bei bestätigter Migration den alten Datenpunkt-Namespace. | [Verknüpfungen und Funktionen](quellcode/src-ts/runtime-executables/lib/hosted-adapter.md) |
 | [src-ts/runtime-executables/lib/hosted-http-boundary.ts](../src-ts/runtime-executables/lib/hosted-http-boundary.ts) | Übergabe vom Express-5-Verwaltungsserver an die eingebettete Express-4-UI. | [Verknüpfungen und Funktionen](quellcode/src-ts/runtime-executables/lib/hosted-http-boundary.md) |
+| [src-ts/runtime-executables/lib/hosted-runtime-stop.ts](../src-ts/runtime-executables/lib/hosted-runtime-stop.ts) | Bestätigt den Stopp der eingebetteten Oberfläche erst nach dem Ende bereits begonnener Initialisierungen. | [Verknüpfungen und Funktionen](quellcode/src-ts/runtime-executables/lib/hosted-runtime-stop.md) |
 | [src-ts/runtime-executables/lib/http-error-boundary.ts](../src-ts/runtime-executables/lib/http-error-boundary.ts) | Ordnet Parserfehler festen Antworten zu und bewahrt die interne Herkunft fachlicher Konfigurationsfehler. | [Verknüpfungen und Funktionen](quellcode/src-ts/runtime-executables/lib/http-error-boundary.md) |
 | [src-ts/runtime-executables/lib/iobroker-user-auth.ts](../src-ts/runtime-executables/lib/iobroker-user-auth.ts) | Bindet Anmeldung und Sitzungswiderruf an die kanonische ioBroker-Konto-ID. | [Verknüpfungen und Funktionen](quellcode/src-ts/runtime-executables/lib/iobroker-user-auth.md) |
 | [src-ts/runtime-executables/lib/iobroker-user-roles.ts](../src-ts/runtime-executables/lib/iobroker-user-roles.ts) | Ordnet kanonische ioBroker-Konten ausschließlich anhand ihrer Gruppen | [Verknüpfungen und Funktionen](quellcode/src-ts/runtime-executables/lib/iobroker-user-roles.md) |

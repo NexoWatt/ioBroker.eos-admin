@@ -1,0 +1,198 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: all four local write aliases are tracked with correct IDs (same namespace)
+ok 1 - all four local write aliases are tracked with correct IDs (same namespace)
+  ---
+  duration_ms: 22.328438
+  type: 'test'
+  ...
+# Subtest: all four local write aliases are tracked with correct IDs (migrated namespace)
+ok 2 - all four local write aliases are tracked with correct IDs (migrated namespace)
+  ---
+  duration_ms: 7.081978
+  type: 'test'
+  ...
+# Subtest: both foreign async methods preserve original promise and wait fulfilled/rejected completion
+ok 3 - both foreign async methods preserve original promise and wait fulfilled/rejected completion
+  ---
+  duration_ms: 15.590805
+  type: 'test'
+  ...
+# Subtest: callback API preserves synchronous return, callback context, errors and extra callback values
+ok 4 - callback API preserves synchronous return, callback context, errors and extra callback values
+  ---
+  duration_ms: 1.122401
+  type: 'test'
+  ...
+# Subtest: callback API can be observed without caller callback and preserves returned Promise completion
+ok 5 - callback API can be observed without caller callback and preserves returned Promise completion
+  ---
+  duration_ms: 13.131297
+  type: 'test'
+  ...
+# Subtest: a callback-method returned promise alone cannot confirm a still pending callback
+ok 6 - a callback-method returned promise alone cannot confirm a still pending callback
+  ---
+  duration_ms: 1.621415
+  type: 'test'
+  ...
+# Subtest: pending capacity rejects without queueing or sending and frees completed slots
+ok 7 - pending capacity rejects without queueing or sending and frees completed slots
+  ---
+  duration_ms: 14.643872
+  type: 'test'
+  ...
+# Subtest: unknown completion or synchronous owner failure cannot become confirmed shutdown
+ok 8 - unknown completion or synchronous owner failure cannot become confirmed shutdown
+  ---
+  duration_ms: 65.065968
+  type: 'test'
+  ...
+# Subtest: closing admission remains permanent even if external ownership later returns
+ok 9 - closing admission remains permanent even if external ownership later returns
+  ---
+  duration_ms: 1.336736
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: stop coordinator waits every pending startup and final cleanup before confirming quiescence
+ok 10 - stop coordinator waits every pending startup and final cleanup before confirming quiescence
+  ---
+  duration_ms: 16.283785
+  type: 'test'
+  ...
+# Subtest: failed startup is drained and cleaned rather than reported as failed shutdown
+ok 11 - failed startup is drained and cleaned rather than reported as failed shutdown
+  ---
+  duration_ms: 0.567805
+  type: 'test'
+  ...
+# Subtest: timeout is unconfirmed and late startup still gets final cleanup without changing its rejected result
+ok 12 - timeout is unconfirmed and late startup still gets final cleanup without changing its rejected result
+  ---
+  duration_ms: 39.527568
+  type: 'test'
+  ...
+# Subtest: cleanup throws, rejects or never confirms never produce a successful stop
+ok 13 - cleanup throws, rejects or never confirms never produce a successful stop
+  ---
+  duration_ms: 24.094085
+  type: 'test'
+  ...
+# Subtest: shell scheduled in a microtask cannot start after stop has already fenced the runtime
+ok 14 - shell scheduled in a microtask cannot start after stop has already fenced the runtime
+  ---
+  duration_ms: 2471.461088
+  type: 'test'
+  ...
+# Subtest: operational start cannot outlive a successful stop or revive writes/readiness
+ok 15 - operational start cannot outlive a successful stop or revive writes/readiness
+  ---
+  duration_ms: 1488.723448
+  type: 'test'
+  ...
+# Subtest: active shell bootstrap is joined and its late resource receives final cleanup
+ok 16 - active shell bootstrap is joined and its late resource receives final cleanup
+  ---
+  duration_ms: 1708.402455
+  type: 'test'
+  ...
+# Subtest: actual hosted stop rejects a hung startup and keeps rejection/status after late cleanup
+ok 17 - actual hosted stop rejects a hung startup and keeps rejection/status after late cleanup
+  ---
+  duration_ms: 1529.269593
+  type: 'test'
+  ...
+# Subtest: actual runtime stop joins accepted host writes before confirming shutdown
+ok 18 - actual runtime stop joins accepted host writes before confirming shutdown
+  ---
+  duration_ms: 1081.123867
+  type: 'test'
+  ...
+# Subtest: real onUnload waits returned service-stop promises and propagates stop failure
+ok 19 - real onUnload waits returned service-stop promises and propagates stop failure
+  ---
+  duration_ms: 2441.656868
+  type: 'test'
+  ...
+# Subtest: hung actual service stop and hung host write both keep shutdown unconfirmed
+ok 20 - hung actual service stop and hung host write both keep shutdown unconfirmed
+  ---
+  duration_ms: 2299.944689
+  type: 'test'
+  ...
+# (node:15) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: facade creates no adapter and isolates native.eosUi from host security fields
+ok 21 - facade creates no adapter and isolates native.eosUi from host security fields
+  ---
+  duration_ms: 10.296347
+  type: 'test'
+  ...
+# Subtest: all four foreign state APIs enforce the current owner generation
+ok 22 - all four foreign state APIs enforce the current owner generation
+  ---
+  duration_ms: 7.031434
+  type: 'test'
+  ...
+# Subtest: license requires a valid central core grant and preserves signed limits
+ok 23 - license requires a valid central core grant and preserves signed limits
+  ---
+  duration_ms: 0.532103
+  type: 'test'
+  ...
+# Subtest: central access rejects required password setup and missing credential binding
+ok 24 - central access rejects required password setup and missing credential binding
+  ---
+  duration_ms: 1.687733
+  type: 'test'
+  ...
+# Subtest: hosted shell opens no listener; HTTP authorization remains fail closed
+ok 25 - hosted shell opens no listener; HTTP authorization remains fail closed
+  ---
+  duration_ms: 6308.416517
+  type: 'test'
+  ...
+# Subtest: fresh UI snapshot never converts revoked Home to Pro; control retains only verified old limits
+ok 26 - fresh UI snapshot never converts revoked Home to Pro; control retains only verified old limits
+  ---
+  duration_ms: 79.638488
+  type: 'test'
+  ...
+# Subtest: blocked hosted startup resumes once only after fresh ownership and central license confirmation
+ok 27 - blocked hosted startup resumes once only after fresh ownership and central license confirmation
+  ---
+  duration_ms: 467.789844
+  type: 'test'
+  ...
+# Subtest: shell bootstrap failure can retry once without starting operational work
+ok 28 - shell bootstrap failure can retry once without starting operational work
+  ---
+  duration_ms: 18.383665
+  type: 'test'
+  ...
+# Subtest: stop during shell bootstrap discards its late completion and cannot reopen the runtime
+ok 29 - stop during shell bootstrap discards its late completion and cannot reopen the runtime
+  ---
+  duration_ms: 28.508519
+  type: 'test'
+  ...
+# Subtest: cached license grants cannot keep an incomplete or failed startup alive
+ok 30 - cached license grants cannot keep an incomplete or failed startup alive
+  ---
+  duration_ms: 4.097529
+  type: 'test'
+  ...
+1..30
+# tests 30
+# suites 0
+# pass 30
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 14907.912249

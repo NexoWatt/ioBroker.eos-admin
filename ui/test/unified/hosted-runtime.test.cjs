@@ -237,8 +237,12 @@ test('stop during shell bootstrap discards its late completion and cannot reopen
   const started = runtime.start();
   const rejected = assert.rejects(started, /EOS_UI_STOPPING/);
   await new Promise(resolve => setImmediate(resolve));
-  await runtime.stop();
-  finish(); await rejected;
+  const stopping = runtime.stop();
+  let stopped = false;
+  void stopping.then(() => { stopped = true; });
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(stopped, false, 'shutdown must not confirm completion while shell startup is still pending');
+  finish(); await rejected; await stopping;
   assert.equal(runtime.status().active, false);
   assert.equal(runtime.status().state, 'stopped');
   assert.equal(runtime.status().emsReady, false);

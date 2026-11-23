@@ -1,0 +1,47 @@
+✔ automatic handover preserves namespace, custom/history objects and settings including credentials (39.189493ms)
+✔ preflight ambiguity, unknown version, remote host, missing license and existing destination never stop a source (4.110284ms)
+✔ failed target persistence restores confirmed legacy runtime; journal prevents repeated interruption (4.549977ms)
+✔ crash while stopping is rolled back before new runtime gains write ownership (1.98886ms)
+✔ failed new runtime with uncertain transport stop never re-enables legacy writer (3.503781ms)
+✔ encrypted native credentials decrypt exactly once; missing protected fields block all source changes (6.70084ms)
+✔ UI native settings move to protected config; two successive saves read current values and preserve old source (12.677953ms)
+✔ SmartHome migration preserves explicit enabled setting and existing customer configuration states (9.604386ms)
+✔ SmartHome migration preserves explicit disabled setting and existing customer configuration states (8.860952ms)
+✔ UI preflight blocks corrupt or unreadable existing customer states before stopping the old writer (9.704434ms)
+✔ UI state lost between preflight and stopped cutover causes rollback instead of default activation (8.62219ms)
+✔ known old-instance RPC consumers block cutover while full datapoint references stay valid (8.254368ms)
+✔ changed source host/version during preflight never resumes an unreviewed original adapter (4.751759ms)
+✔ a bounded database read cannot hold startup or stop legacy writers indefinitely (21.148244ms)
+✔ another active EOS instance blocks automatic takeover before disabling old sources (2.282892ms)
+✔ transferred module destination must persist with its original namespace binding on restart (7.819558ms)
+✔ committed UI accepts legitimate later configuration edits on a fresh process restart (3.937891ms)
+✔ TLS or listener failure before any hosted runtime exists restores old sources and fences late startup (2.146672ms)
+✔ early verification times out even when the web constructor is never reached (9.078663ms)
+✔ active module with a pending start cannot commit until RUNNING is confirmed (252.908888ms)
+✔ concurrent startup failure has one recovery and never restores old writers before all stop promises settle (3.494627ms)
+✔ a pending stop timeout remains fenced even if that stop settles later (13.242205ms)
+✔ rejected runtime stop and sticky module stop failure never reactivate old sources (5.215231ms)
+✔ source identity is checked again immediately before rollback re-enable (3.075289ms)
+✔ rejected commit persistence recovers without leaving a false COMMITTED state (2.297614ms)
+✔ concurrent commit persistence cannot overwrite a later startup recovery decision (3.671698ms)
+✔ intentional shutdown fences monitoring; the transferred journal is verified on next startup (4.489122ms)
+✔ preflight BLOCKED prevents operational starts while the original disabled UI remains unchanged (0.552464ms)
+✔ uncertain stop remains ROLLBACK_REQUIRED across restart without automatically re-enabling sources (2.512892ms)
+✔ interrupted ROLLING_BACK needs persisted completed-stop proof; absent or false proof stays fenced (8.123304ms)
+✔ revoked license, ownership or runtime readiness during source verification cannot commit (70.509143ms)
+✔ the early monitor deadline also covers an unresolved asynchronous readiness observation (13.240522ms)
+✔ a late readiness rejection after intentional shutdown does not begin rollback or re-enable old writers (2.653923ms)
+✔ protected fields hidden by getForeignObject block every source before any earlier adapter is disabled (17.146776ms)
+✔ invalid encrypted migration journal fences ownership rather than continuing from IDLE (2.875485ms)
+✔ unreadable UI destination before journal recovery keeps migration write authority fenced (1.290731ms)
+✔ committed migration cannot resume with a missing or foreign-namespace UI destination (16.306419ms)
+✔ ready UI with revoked ownership cannot commit the legacy handover (14.942629ms)
+✔ a deliberately disabled legacy UI is not automatically transferred into an enabled EMS (0.98454ms)
+ℹ tests 39
+ℹ suites 0
+ℹ pass 39
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 733.629786
