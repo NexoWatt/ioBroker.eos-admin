@@ -1,0 +1,22 @@
+✔ Settings Admin link uses normal same-tab navigation without a popup click handler (1.374442ms)
+✔ Settings migration entry is initially hidden, explicitly admin-only and opens in the same tab (0.40108ms)
+✔ Admin and migration URLs remain on the TLS origin and outside the UI proxy for direct and proxied settings (10.598383ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 596.344279
+PASS Statusprofil/CSRF erforderlich; fehlender Status sperrt die UI
+PASS Eigene Mutationen mit CSRF, fremde Kamera unverändert, kein Replay
+PASS Fachlicher 403 erhält bestätigten Zugang; echter Sitzungsverlust sperrt
+PASS Bestandsübernahme erscheint nur für bestätigte Admins und verschwindet nach Rollenentzug, Statusfehler oder Abmeldung
+PASS Offline und BFCache sperren vor erneuter Bestätigung
+PASS EOS-Logout trägt CSRF und öffnet das zentrale Ziel
+PASS EOS/Frame/HTTP/Fehlkonfiguration ohne Passwortmaske
+PASS Passwort exakt einmal gesendet und Formular danach geleert
+PASS Sichere Rücksprünge und rollenabhängiger Einstieg
+PASS Alle geschützten HTML-Einstiege laden Runtime und Auth vor ihrer Bedienlogik
+[auth-profiles-ui] 10 Prüfgruppen bestanden; kein Browser-/Anlagenversuch.

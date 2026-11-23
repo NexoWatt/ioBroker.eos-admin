@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/auth.ts
- * Quell-Hash: sha256:24e1a926914aa75f6362429b2183972e7340c98d083854d301309169a827bfc5
+ * Quell-Hash: sha256:3d3c196cb55ebe6a52535cb2c16909a0b58058fa46826605716710551963df0b
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -234,6 +234,14 @@
     function updateNavigation() {
         for (const node of Array.from(document.querySelectorAll('[data-nw-config-link]'))) {
             const allowed = ['admin', 'installer'].includes(state.role) && hasCapability(node.getAttribute('data-nw-config-link') || '');
+            node.hidden = !allowed;
+            if (allowed)
+                node.style.removeProperty('display');
+            else
+                node.style.display = 'none';
+        }
+        for (const node of Array.from(document.querySelectorAll('[data-nw-admin-link]'))) {
+            const allowed = state.authed && !state.statusError && !loggingOut && state.role === 'admin';
             node.hidden = !allowed;
             if (allowed)
                 node.style.removeProperty('display');

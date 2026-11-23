@@ -24,18 +24,31 @@ test('Settings Admin link uses normal same-tab navigation without a popup click 
     'unrelated external documentation still opens separately');
 });
 
-test('Admin URL remains on the TLS origin and outside the UI proxy for direct and proxied settings', () => {
-  const origins = ['https://nexowatt', 'https://192.168.10.153:8188'];
+test('Settings migration entry is initially hidden, explicitly admin-only and opens in the same tab', () => {
+  const link = /<a\b[^>]*\bid="openMigrationBtn"[^>]*>Bestandsübernahme<\/a>/.exec(html)?.[0];
+  assert.ok(link, 'Bestandsübernahme entry must exist beside Admin öffnen');
+  assert.match(link, /\bhref="\/migration\/"/);
+  assert.match(link, /\btarget="_self"/);
+  assert.match(link, /\sdata-nw-admin-link(?:\s|>)/);
+  assert.match(link, /\shidden(?:\s|>)/);
+  assert.match(link, /\bstyle="display:none"/);
+  assert.doesNotMatch(link, /\bonclick\s*=/);
+});
+
+test('Admin and migration URLs remain on the TLS origin and outside the UI proxy for direct and proxied settings', () => {
+  const origins = ['https://nexowatt', 'https://192.168.10.153:8188', 'https://192.168.10.153:8081'];
   for (const origin of origins) {
     for (const pathname of ['/settings.html', '/system/proxy/nexowatt-ui.0/settings.html']) {
       const location = { origin, pathname, href: origin + pathname };
       const window = { location };
       vm.runInNewContext(runtime, { window, document: { baseURI: location.href }, URL });
-      const mapped = window.NW_RUNTIME.url('/system/');
-      const destination = new URL(mapped, location.href);
-      assert.equal(destination.origin, origin);
-      assert.equal(destination.pathname, '/system/');
-      assert.equal(destination.search, '', 'no session token or query credentials in link');
+      for (const entry of ['/system/', '/migration/']) {
+        const mapped = window.NW_RUNTIME.url(entry);
+        const destination = new URL(mapped, location.href);
+        assert.equal(destination.origin, origin);
+        assert.equal(destination.pathname, entry);
+        assert.equal(destination.search, '', 'no session token or query credentials in link');
+      }
     }
   }
 });

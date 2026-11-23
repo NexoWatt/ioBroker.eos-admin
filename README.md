@@ -1,3 +1,5 @@
+> **9.0.15:** Gemeinsames Smartphone-App-Symbol mit dem NexoWatt-Logo und klar benannter Zugang zur Bestandsübernahme. [Anleitung](START_HIER_9.0.15.md) · [Prüfbericht](docs/reports/unified-9.0.15/PRUEFBERICHT.md).
+
 > **9.0.14:** Bestandsübernahme nach später Lizenzaktivierung und altes Geräteformat korrigiert; EMS-Startblockaden werden konkret angezeigt. [Anleitung](START_HIER_9.0.14.md) · [Prüfbericht](docs/reports/unified-9.0.14/PRUEFBERICHT.md).
 
 > **9.0.13:** Wieder direkt aus dem Repo mit `npm publish` veröffentlichen. Bekannte alte Frontend-Dateien werden gesichert bereinigt. SmartHome-Dropdown korrigiert. [Anleitung](START_HIER_9.0.13.md) · [Prüfbericht](docs/reports/unified-9.0.13/PRUEFBERICHT.md).
@@ -16,7 +18,7 @@
 
 # NexoWatt EOS
 
-**Version 9.0.13 · technisches Paket: `iobroker.eos-admin` · Vertriebskanal: `next`**
+**Version 9.0.15 · technisches Paket: `iobroker.eos-admin` · Vertriebskanal: `next`**
 
 NexoWatt EOS verbindet die Systemverwaltung aus EOS-Admin 8.0.2 mit Dashboard,
 Installer und Energiemanagement aus NexoWatt UI 1.0.38. Eine ioBroker-Instanz betreibt

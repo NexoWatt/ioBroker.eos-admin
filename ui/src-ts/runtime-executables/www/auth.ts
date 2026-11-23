@@ -197,6 +197,11 @@
       node.hidden = !allowed;
       if (allowed) node.style.removeProperty('display'); else node.style.display = 'none';
     }
+    for (const node of Array.from(document.querySelectorAll<HTMLElement>('[data-nw-admin-link]'))) {
+      const allowed = state.authed && !state.statusError && !loggingOut && state.role === 'admin';
+      node.hidden = !allowed;
+      if (allowed) node.style.removeProperty('display'); else node.style.display = 'none';
+    }
     const header = document.querySelector('header.topbar'); if (!header) return;
     let box = document.getElementById('nwAuthHeader');
     if (!box) { box = document.createElement('div'); box.id = 'nwAuthHeader'; box.className = 'nw-auth-header'; header.appendChild(box); }

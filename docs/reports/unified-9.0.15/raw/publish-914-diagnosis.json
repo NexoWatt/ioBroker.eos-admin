@@ -1,0 +1,85 @@
+{
+  "published": false,
+  "archive": "NexoWatt_EOS_9.0.14_FULL_REPOSITORY.zip",
+  "archiveSha256": "d44d923e35900a40495bf4eed7cf3d5576b6dcbea7b2a1354a3cc4e7ebd69677",
+  "passed": true,
+  "successfulPackageBytesIdentical": true,
+  "results": [
+    {
+      "scenario": "fresh-node24",
+      "mode": "fresh",
+      "version": "9.0.14",
+      "node": "v24.22.3",
+      "npm": "11.19.1",
+      "command": "npm publish --dry-run --json --ignore-scripts=false --registry=http://127.0.0.1:9",
+      "exitCode": 0,
+      "nodeModulesPresent": false,
+      "sealUnchanged": true,
+      "archiveSha256": "d44d923e35900a40495bf4eed7cf3d5576b6dcbea7b2a1354a3cc4e7ebd69677",
+      "published": false,
+      "injectedAssets": {},
+      "limits": [
+        "Linux execution; no native Windows, authenticated registry or live customer system"
+      ],
+      "package": {
+        "name": "iobroker.eos-admin",
+        "version": "9.0.14",
+        "size": 28383757,
+        "unpackedSize": 93482508,
+        "entryCount": 1840,
+        "integrity": "sha512-8fmxK8SiwNtUybMrtjmneabuVkmj7Xso6De0y5PqrLSm4FKXqM/v5SNqm2ERCxskW93hmixk6GuMzB234haUig==",
+        "shasum": "3bdef6fb3a24b9e2428bde2984fa6ae9f15beaa1"
+      },
+      "backups": [],
+      "passed": true,
+      "errors": []
+    },
+    {
+      "scenario": "overlay-9.0.13-node24",
+      "mode": "overlay-9.0.13",
+      "version": "9.0.14",
+      "node": "v24.22.3",
+      "npm": "11.19.1",
+      "command": "npm publish --dry-run --json --ignore-scripts=false --registry=http://127.0.0.1:9",
+      "exitCode": 0,
+      "nodeModulesPresent": false,
+      "sealUnchanged": true,
+      "archiveSha256": "d44d923e35900a40495bf4eed7cf3d5576b6dcbea7b2a1354a3cc4e7ebd69677",
+      "published": false,
+      "injectedAssets": {
+        "adminWww/remoteEntry-eos-9.0.13.js": {
+          "sha256": "54508a5564dcf905ee9eb5ad80616bfa048fd54575bf08b841cec99f687b584e",
+          "source": "NexoWatt_EOS_9.0.13_FULL_REPOSITORY.zip"
+        },
+        "adminWww/assets/mf-entry-bootstrap-0-e602cb12.js": {
+          "sha256": "e602cb12ede1b660551ad1713316b2bb3512477f0f9d830b156b73aea63fe08d",
+          "source": "NexoWatt_EOS_9.0.13_FULL_REPOSITORY.zip"
+        },
+        "adminWww/assets/hostInit-xPtPcdV8.js": {
+          "sha256": "a891730f4cd3d06b16c6a1caa1bea1380198b27b3e5ab9f32e7367114d6bc7a8",
+          "source": "NexoWatt_EOS_9.0.13_FULL_REPOSITORY.zip"
+        }
+      },
+      "limits": [
+        "Linux execution; no native Windows, authenticated registry or live customer system"
+      ],
+      "package": {
+        "name": "iobroker.eos-admin",
+        "version": "9.0.14",
+        "size": 28383757,
+        "unpackedSize": 93482508,
+        "entryCount": 1840,
+        "integrity": "sha512-8fmxK8SiwNtUybMrtjmneabuVkmj7Xso6De0y5PqrLSm4FKXqM/v5SNqm2ERCxskW93hmixk6GuMzB234haUig==",
+        "shasum": "3bdef6fb3a24b9e2428bde2984fa6ae9f15beaa1"
+      },
+      "backups": [
+        {
+          "state": "complete",
+          "count": 3
+        }
+      ],
+      "passed": true,
+      "errors": []
+    }
+  ]
+}

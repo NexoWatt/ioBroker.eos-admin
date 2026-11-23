@@ -16,10 +16,21 @@
 -->
 <html lang="de">
 <head>
+  <meta charset="utf-8">
+  <!-- Gemeinsame EOS-Webapp: ein Ursprung, ein App-Symbol und der bestehende Login. -->
+  <meta name="application-name" content="NexoWatt EOS">
+  <meta name="theme-color" content="#0c0f12">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="NexoWatt EOS">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/nexowatt-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/icons/nexowatt-192.png">
+  <link rel="apple-touch-icon" sizes="1024x1024" href="/apple-touch-icon.png?v=952ceb9cef3f">
   <!-- Gemeinsamer direkter/Proxy-Bootstrap: Sitzung und CSRF vor der Bedienlogik. -->
   <script src="/static/runtime-base.js"></script>
   <script src="/static/auth.js"></script>
-  <meta charset="UTF-8" />
+  
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>NexoWatt EOS – NexoLogic</title>
   <link rel="stylesheet" href="/static/styles.css" />

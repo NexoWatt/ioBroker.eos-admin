@@ -1,0 +1,10 @@
+✔ one root app identity and the exact uploaded icon are shared by dashboard, login and system console (13.675329ms)
+✔ actual owner mount serves install metadata publicly while root launch retains session, password and license gates (1432.970634ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1843.89787

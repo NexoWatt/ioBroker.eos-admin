@@ -39,12 +39,12 @@ Parameter sind die Namen aus der Signatur, keine geratenen Datenverträge. Die A
 | [`readStatus`](../../../../../src-ts/runtime-executables/www/auth.ts#L155) | response, controller | JSON.parse, bytes.set, chunks.push, controller.abort, reader.read, reader.releaseLock, response.body?.getReader, response.headers.get |
 | [`applyStatus`](../../../../../src-ts/runtime-executables/www/auth.ts#L173) | value | Array.isArray, String, data.capabilities.every |
 | [`updateNavigation`](../../../../../src-ts/runtime-executables/www/auth.ts#L194) | – | Array.from, box.append, box.replaceChildren, button.addEventListener, document.createElement, document.getElementById, document.querySelector, document.querySelectorAll, hasCapability, header.appendChild, node.getAttribute, node.style.removeProperty |
-| [`showLogin`](../../../../../src-ts/runtime-executables/www/auth.ts#L211) | message, _options | document.createElement, document.querySelector, lockPage, runtimeRoot, target.searchParams.set, window.location.replace |
-| [`applyPageAccess`](../../../../../src-ts/runtime-executables/www/auth.ts#L224) | – | hasCapability, lockPage, requiredPageCapability, showLogin, unlockPage, updateNavigation |
-| [`refreshStatus`](../../../../../src-ts/runtime-executables/www/auth.ts#L235) | – | request.finally |
-| [`centralUrl`](../../../../../src-ts/runtime-executables/www/auth.ts#L256) | value | value.startsWith |
-| [`logout`](../../../../../src-ts/runtime-executables/www/auth.ts#L267) | – | centralUrl, document.createElement, document.querySelector, lockPage, navigator.serviceWorker?.controller?.postMessage, originalFetch, refreshStatus, resetStatus, showLogin, snapshot, window.clearTimeout, window.dispatchEvent, window.location.replace, window.setTimeout |
-| [`ownDataPath`](../../../../../src-ts/runtime-executables/www/auth.ts#L293) | input | path.slice, path.startsWith, runtimeRoot |
-| [`requireCapability`](../../../../../src-ts/runtime-executables/www/auth.ts#L324) | capability, options | hasCapability, lockPage, refreshStatus, showLogin |
-| [`start`](../../../../../src-ts/runtime-executables/www/auth.ts#L333) | – | lockPage, refreshStatus |
-| [`resume`](../../../../../src-ts/runtime-executables/www/auth.ts#L334) | – | lockPage, refreshStatus, resetStatus |
+| [`showLogin`](../../../../../src-ts/runtime-executables/www/auth.ts#L216) | message, _options | document.createElement, document.querySelector, lockPage, runtimeRoot, target.searchParams.set, window.location.replace |
+| [`applyPageAccess`](../../../../../src-ts/runtime-executables/www/auth.ts#L229) | – | hasCapability, lockPage, requiredPageCapability, showLogin, unlockPage, updateNavigation |
+| [`refreshStatus`](../../../../../src-ts/runtime-executables/www/auth.ts#L240) | – | request.finally |
+| [`centralUrl`](../../../../../src-ts/runtime-executables/www/auth.ts#L261) | value | value.startsWith |
+| [`logout`](../../../../../src-ts/runtime-executables/www/auth.ts#L272) | – | centralUrl, document.createElement, document.querySelector, lockPage, navigator.serviceWorker?.controller?.postMessage, originalFetch, refreshStatus, resetStatus, showLogin, snapshot, window.clearTimeout, window.dispatchEvent, window.location.replace, window.setTimeout |
+| [`ownDataPath`](../../../../../src-ts/runtime-executables/www/auth.ts#L298) | input | path.slice, path.startsWith, runtimeRoot |
+| [`requireCapability`](../../../../../src-ts/runtime-executables/www/auth.ts#L329) | capability, options | hasCapability, lockPage, refreshStatus, showLogin |
+| [`start`](../../../../../src-ts/runtime-executables/www/auth.ts#L338) | – | lockPage, refreshStatus |
+| [`resume`](../../../../../src-ts/runtime-executables/www/auth.ts#L339) | – | lockPage, refreshStatus, resetStatus |

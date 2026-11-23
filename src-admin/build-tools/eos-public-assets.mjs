@@ -27,3 +27,22 @@ export function versionPublicAssetUrls(html, release) {
         JSON.stringify(`./lib/js/socket.io.js?eos-release=${encodeURIComponent(release)}`),
     );
 }
+
+/**
+ * The console bundles stay relative to /system/, but installation metadata belongs
+ * to the shared EOS origin. Vite's relative base rewrites public HTML links too;
+ * restore only these explicit webapp assets after bundling, without rebasing scripts.
+ */
+export function rootWebappAssetUrls(html) {
+    return html.replace(/<link\b[^>]*>/gi, tag => {
+        const rel = tag.match(/\brel="([^"]+)"/i)?.[1];
+        if (!['manifest', 'icon', 'apple-touch-icon'].includes(rel)) return tag;
+        return tag.replace(/\bhref="([^"]+)"/i, (attribute, value) => {
+            const local = value.replace(/^(?:\.\/|\/)/, '');
+            if (!/^(?:manifest\.webmanifest|apple-touch-icon\.png|assets\/icons\/nexowatt-(?:32|192)\.png)(?:\?[^"#]*)?$/.test(local)) {
+                return attribute;
+            }
+            return `href="/${local}"`;
+        });
+    });
+}

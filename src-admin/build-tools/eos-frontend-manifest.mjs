@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { versionPublicAssetUrls } from './eos-public-assets.mjs';
+import { rootWebappAssetUrls, versionPublicAssetUrls } from './eos-public-assets.mjs';
 import { readFileSync, readdirSync } from 'node:fs';
 import { resolve, relative, posix } from 'node:path';
 
@@ -52,7 +52,7 @@ export default function eosFrontendManifest() {
                 if (!html.source.includes(`data-eos-entry="${entries[0]}"`))
                     this.error('EOS role bootstrap entry is missing');
                 const productVersion = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8')).version;
-                html.source = versionPublicAssetUrls(html.source, productVersion);
+                html.source = versionPublicAssetUrls(rootWebappAssetUrls(html.source), productVersion);
                 const sources = {};
                 function visit(dir) {
                     for (const item of readdirSync(dir, { withFileTypes: true }).sort((a, b) =>

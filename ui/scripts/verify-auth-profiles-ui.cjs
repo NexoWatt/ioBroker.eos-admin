@@ -29,7 +29,7 @@ function fixture(name, initialStatus, options = {}) {
     constructor(tag = 'div') {
       this.tagName = tag.toUpperCase(); this.children = []; this.attributes = new Map(); this.handlers = new Map();
       this.hidden = false; this.inert = false; this.value = ''; this.type = ''; this.disabled = false;
-      this.style = { display: '', removeProperty() {} }; this.classes = new Set();
+      this.style = { display: '', removeProperty(name) { this[name] = ''; } }; this.classes = new Set();
       this.classList = { add: value => this.classes.add(value), remove: value => this.classes.delete(value),
         contains: value => this.classes.has(value), toggle: (value, active) => active ? this.classes.add(value) : this.classes.delete(value) };
     }
@@ -51,10 +51,14 @@ function fixture(name, initialStatus, options = {}) {
   }
   const body = new Element('body'); const header = new Element('header'); const content = new Element('main');
   body.append(header, content);
+  const adminLink = new Element('a'); adminLink.id = 'openMigrationBtn';
+  adminLink.setAttribute('data-nw-admin-link', ''); adminLink.hidden = true; adminLink.style.display = 'none';
+  content.appendChild(adminLink);
   const document = { body, head: new Element('head'), documentElement: new Element('html'), hidden: false, readyState: 'complete',
     getElementById: id => nodes.get(id) || null, createElement: tag => new Element(tag),
     querySelector: selector => selector === 'header.topbar' ? header : selector === '#nwAuthGate .nw-auth-actions' ? nodes.get('nwAuthGate')?.actions : null,
-    querySelectorAll: () => [], addEventListener: (type, fn) => events.set('document:' + type, fn) };
+    querySelectorAll: selector => selector === '[data-nw-admin-link]' ? [adminLink] : [],
+    addEventListener: (type, fn) => events.set('document:' + type, fn) };
   for (const id of ['loginForm', 'loginUser', 'loginPassword', 'loginSubmit', 'loginPasswordToggle', 'loginStatus', 'loginDescription', 'centralLogin', 'frameLogin', 'loginRetry']) {
     const element = new Element(); element.id = id; if (['loginForm', 'centralLogin', 'frameLogin', 'loginRetry'].includes(id)) element.hidden = true;
   }
@@ -101,6 +105,27 @@ async function main() {
     await f.window.fetch('/api/licensed-feature'); assert.equal(f.content.inert, false);
     f.env.status = signedOut(); await f.window.NW_AUTH.refreshStatus(); assert.equal(f.content.inert, true);
     assert.ok(f.redirects[0].includes('/login.html?returnTo='));
+  });
+  await check('Bestandsübernahme erscheint nur für bestätigte Admins und verschwindet nach Rollenentzug, Statusfehler oder Abmeldung', async () => {
+    for (const status of [signedOut(), signedIn('customer'), signedIn('installer')]) {
+      const f = fixture('auth', status, { url: 'https://nexowatt.test/settings.html' });
+      assert.equal(f.nodes.get('openMigrationBtn').hidden, true, 'before the server response');
+      await f.settle();
+      assert.equal(f.nodes.get('openMigrationBtn').hidden, true);
+      assert.equal(f.nodes.get('openMigrationBtn').style.display, 'none');
+    }
+    const f = fixture('auth', signedIn('admin'), { url: 'https://nexowatt.test/settings.html' });
+    const link = f.nodes.get('openMigrationBtn'); assert.equal(link.hidden, true);
+    await f.settle(); assert.equal(link.hidden, false); assert.equal(link.style.display, '');
+    f.env.status = signedIn('installer'); await f.window.NW_AUTH.refreshStatus();
+    assert.equal(link.hidden, true, 'wildcard capability does not grant the admin role');
+    f.env.status = signedIn('admin'); await f.window.NW_AUTH.refreshStatus(); assert.equal(link.hidden, false);
+    f.env.fail = true; await f.window.NW_AUTH.refreshStatus(); assert.equal(link.hidden, true);
+    f.env.fail = false; await f.window.NW_AUTH.refreshStatus(); assert.equal(link.hidden, false);
+    await f.window.NW_AUTH.logout();
+    assert.equal(link.hidden, true); assert.equal(link.style.display, 'none');
+    assert.equal(f.window.NW_AUTH.getState().authed, false);
+    assert.equal(f.calls.filter(call => call.path === '/api/auth/logout').length, 1);
   });
   await check('Offline und BFCache sperren vor erneuter Bestätigung', async () => {
     const f = fixture('auth', signedIn('customer')); await f.settle();

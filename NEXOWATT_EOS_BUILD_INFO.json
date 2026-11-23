@@ -1,21 +1,22 @@
 {
-  "version": "9.0.14",
+  "version": "9.0.15",
   "channel": "next",
   "baseFrontend": "Rebuilt from official Admin 8.3.5 sources plus reviewed EOS integration using React 19 and Vite; see source-bound frontend manifest.",
   "runtimeEntry": "vite-manifest",
-  "releaseType": "migration-and-startup-recovery",
-  "release": "migration-and-startup-recovery",
-  "label": "9.0.14",
+  "releaseType": "unified-smartphone-icon-and-migration-navigation",
+  "release": "unified-smartphone-icon-and-migration-navigation",
+  "label": "9.0.15",
   "notes": [
     "Preserves the existing ioBroker Admin and the combined EOS login/runtime.",
     "One central NWL3 activation, private persistence and authorized public-key recovery.",
     "Manufacturer vault/private keys stay on the issuer computer; live-device acceptance remains required."
   ],
   "changes": [
-    "Recheck legacy migration on a full adapter restart after late license activation; prevent default-config operational startup before that check",
-    "Preserve devicesJson legacy device lists without changing normal empty-list save semantics",
-    "Serialize manual device import and protect already migrated namespaces",
-    "Expose exact read-only migration and ownership blockers in EMS and restore diagnostics"
+    "Use the supplied original PNG as the Apple home-screen icon and 1024px manifest icon",
+    "Unify manifest discovery and app identity across the EOS dashboard, login and system console",
+    "Remove duplicate icon references and retain existing Android-sized and maskable icons",
+    "Preserve existing authentication, license, migration, EMS and network-only behavior",
+    "Expose clearly named administrator-only legacy migration entry in console and settings"
   ],
   "brandingCacheVersion": 7110,
   "shellCacheVersion": 7110,
@@ -29,7 +30,7 @@
     "commit": "6f77eedf525813a7a61d79188d1ff05dffd05086"
   },
   "product": "NexoWatt EOS",
-  "status": "9.0.14 integration test release; target commissioning remains required",
+  "status": "9.0.15 integration test release; physical smartphone acceptance remains required",
   "sourceComponents": {
     "admin": "8.0.2",
     "ui": "1.0.38",

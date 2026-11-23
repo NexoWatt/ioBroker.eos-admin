@@ -1,7 +1,7 @@
 {
   "name": "iobroker.eos-admin",
   "description": "NexoWatt EOS: licensed local energy management, dashboard and ioBroker system administration in one adapter.",
-  "version": "9.0.14",
+  "version": "9.0.15",
   "contributors": [
     "bluefox <dogafox@gmail.com>",
     "apollon77",
@@ -190,7 +190,9 @@
     "START_HIER_9.0.13.md",
     "docs/reports/unified-9.0.13/",
     "START_HIER_9.0.14.md",
-    "docs/reports/unified-9.0.14/"
+    "docs/reports/unified-9.0.14/",
+    "START_HIER_9.0.15.md",
+    "docs/reports/unified-9.0.15/"
   ],
   "scripts": {
     "start": "cd src-admin && npm run start",
@@ -228,7 +230,7 @@
   },
   "nexowattReleasePolicy": {
     "distTag": "next",
-    "purpose": "Direct verified repository publishing and SmartHome menu correction; see START_HIER_9.0.13.md."
+    "purpose": "Unified smartphone app identity and visible legacy migration navigation; see START_HIER_9.0.15.md."
   },
   "publisher": "NexoWatt",
   "nexowattUpstream": {
@@ -239,6 +241,6 @@
     "purpose": "Admin 8 migration baseline; EOS modifications and security backports are tracked separately."
   },
   "nexowattRelease": {
-    "purpose": "Direct verified repository publishing and SmartHome menu correction; see START_HIER_9.0.13.md."
+    "purpose": "Unified smartphone app identity and visible legacy migration navigation; see START_HIER_9.0.15.md."
   }
 }

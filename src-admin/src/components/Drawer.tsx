@@ -1091,7 +1091,7 @@ class Drawer extends Component<DrawerProps, DrawerState> {
                             theme={this.props.theme}
                             compact={false}
                             onClick={() => window.location.assign('/migration/')}
-                            text="Übernahme"
+                            text="Bestandsübernahme"
                             icon={<MigrationIcon />}
                         />
                     </>

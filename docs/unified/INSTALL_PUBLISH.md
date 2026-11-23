@@ -205,3 +205,7 @@ Bei einem verlorenen früheren Adminzugang gelten
 [Zugangserhalt 9.0.1](ACCESS_RECOVERY_9.0.1.md) und die dort verlinkte
 Recovery-Anleitung. Keine alten Bind-/TLS-/Passwortwerte raten. Portkonflikte
 explizit auflösen; kein stilles Ausweichen auf einen anderen Port.
+
+## Smartphone-Webapp ab 9.0.15
+
+Anmeldung, Dashboard und Systemverwaltung verweisen auf dieselbe Root-Webapp mit dem NexoWatt-Logo. Nach dem Update die EOS-Adresse im Smartphone-Browser zum Home-Bildschirm hinzufügen; die Installation benötigt Nutzerinteraktion und passend vertrauenswürdiges HTTPS. [Einrichtung und bestehende App-Symbole](../../START_HIER_9.0.15.md).
