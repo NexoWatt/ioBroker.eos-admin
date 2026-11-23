@@ -91,7 +91,7 @@ class EosLegacyMigration {
     }
     allowsStartup() {
         return !this.stopped && !this.startupBlocked &&
-            !['PREPARED', 'STOPPING', 'BLOCKED', 'ROLLING_BACK', 'ROLLBACK_REQUIRED', 'ROLLED_BACK'].includes(this.phase);
+            !['LICENSE_REQUIRED', 'PREPARED', 'STOPPING', 'BLOCKED', 'ROLLING_BACK', 'ROLLBACK_REQUIRED', 'ROLLED_BACK'].includes(this.phase);
     }
     allowsWrites() { return this.allowsStartup(); }
     block(code) { this.phase = 'ROLLBACK_REQUIRED'; this.journal = { ...this.journal, code: code || this.journal?.code || 'EOS_MIGRATION_RECOVERY_REQUIRED' }; }
@@ -129,7 +129,17 @@ class EosLegacyMigration {
         }
     }
     status() {
-        return { phase: this.phase, code: this.journal?.code || '', sources: (this.journal?.sources || []).map(row => ({ id: row.id, source: row.source, namespacePreserved: ['TRANSFERRED', 'COMMITTED'].includes(this.phase) })), updatedAt: this.journal?.updatedAt || null };
+        let code = this.journal?.code || '';
+        if (this.phase === 'LICENSE_REQUIRED') {
+            code = 'EOS_MIGRATION_LICENSE_REQUIRED';
+            try {
+                const license = this.owner.eosLicenseService?.statusView?.();
+                if (license?.valid === true && license.coreEnabled === true)
+                    code = 'EOS_MIGRATION_RESTART_REQUIRED';
+            }
+            catch { /* Diagnostic reads never grant permission or expose license internals. */ }
+        }
+        return { phase: this.phase, code, sources: (this.journal?.sources || []).map(row => ({ id: row.id, source: row.source, namespacePreserved: ['TRANSFERRED', 'COMMITTED'].includes(this.phase) })), updatedAt: this.journal?.updatedAt || null };
     }
     async loadDestinations() {
         for (const id of Object.keys(SOURCES)) {
@@ -361,7 +371,12 @@ class EosLegacyMigration {
         }
         const license = this.owner.eosLicenseService?.statusView?.();
         if (license?.valid !== true || license.coreEnabled !== true) {
+            // A later activation is not proof that the legacy inventory was
+            // checked. Keep new writers fenced until startup runs the preflight
+            // with a valid license and binds the runtime to that configuration.
             this.phase = 'LICENSE_REQUIRED';
+            this.journal = { sources: [], code: 'EOS_MIGRATION_LICENSE_REQUIRED' };
+            await this.publish();
             return;
         }
         const candidates = [];

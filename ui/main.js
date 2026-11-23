@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/main.ts
- * Quell-Hash: sha256:eb8c0a32e8467f11249fc43ebab0ca5878ea0afbc4451eb0b79a5cc3f9c6d576
+ * Quell-Hash: sha256:9a76045d2ce0039dc549c17d221ac2ac2a2b662cd352acd00a97307b4f212f0d
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -32,6 +32,7 @@
 'use strict';
 const { HostedAdapter, centralLicenseSnapshot, centralAccess } = require('./lib/hosted-adapter');
 const { stopHostedRuntime, createHostedCleanup } = require('./lib/hosted-runtime-stop');
+const { readHostedStartup } = require('./lib/hosted-startup-status');
 const express = require('express4');
 const { safeHttpFailure, safeConfigurationFailure, createPublicHttpError } = require('./lib/http-error-boundary');
 const { createHostedHttpHandler } = require('./lib/hosted-http-boundary');
@@ -11588,6 +11589,7 @@ async onReady() {
         return;
       }
       admitted = true;
+      this._hostedStartupPhase = 'configuration';
       this._nwRuntimeLicenseSnapshot();
       this._hostedOperational = true;
       // Bestands-Uhren erst nach vollständiger Hydration editierbar machen:
@@ -11635,6 +11637,7 @@ async onReady() {
           this._nwPreservedUiStates = await startupStep(() => readPreservedUiStates(this, this.namespace, this._owner.config.eosUiMigration?.requiredStates));
         }
         // create states first, then write config defaults
+        this._hostedStartupPhase = 'states';
         await startupStep(() => this.ensureInstallerStates());
         // cleanup: remove deprecated 'installer.password' object if present
         try { await startupStep(() => this.delObjectAsync('installer.password')); } catch(_e) { /* ignore */ }
@@ -11662,9 +11665,11 @@ async onReady() {
 
         // Load persisted App‑Center configuration (stored in adapter states).
         // This must happen before we sync defaults and start the EMS engine.
+        this._hostedStartupPhase = 'configuration';
         await startupStep(() => this.loadInstallerConfigFromState());
         await startupStep(() => this._meshCoordinator.migrateAppLifecycle());
       } finally { this._nwEndInstallerConfigMutation(startupMutationToken); }
+      this._hostedStartupPhase = 'services';
       await startupStep(() => this._nwStartPartnerRuntime());
       await startupStep(() => this._nwRefreshSystemLanguage('startup'));
 
@@ -11689,6 +11694,7 @@ async onReady() {
       try { await startupStep(() => this.subscribeForecastUiStates()); } catch (e) { this.log.debug('PV forecast UI state subscribe failed: ' + (e && e.message ? e.message : e)); }
       try { this._openMeteoPvForecastRuntime = startOpenMeteoPvForecastRuntime(this); } catch (e) { this.log.warn('PV forecast runtime failed: ' + (e && e.message ? e.message : e)); }
       // EVCS (multi wallbox) model states
+      this._hostedStartupPhase = 'datapoints';
       await startupStep(() => this.ensureEvcsStates());
       await startupStep(() => this.ensureRfidStates());
       await startupStep(() => this.ensureEvcsSessionsStates());
@@ -11740,7 +11746,9 @@ async onReady() {
 
       // EMS (Sprint 2): embedded Charging-Management engine
       if (this._nwShuttingDown) return;
+      this._hostedStartupPhase = 'ems';
       try { await startupStep(() => this.initEmsEngine()); } catch (e) { this.log.warn('EMS init failed: ' + (e && e.message ? e.message : e)); }
+      this._hostedStartupPhase = 'services';
       // Prime the effective forecast.pv.* states created by the EMS module as well.
       // The method is idempotent and keeps its wildcard subscription active.
       try { await startupStep(() => this.subscribeForecastUiStates()); } catch (e) { this.log.debug('PV forecast UI state re-prime failed: ' + (e && e.message ? e.message : e)); }
@@ -11767,6 +11775,7 @@ async onReady() {
       try { await startupStep(() => this.cleanupOrphanedObjects()); } catch (_e) {}
 
       // Energy totals: if no kWh counters are mapped, derive totals from history/influxdb
+      this._hostedStartupPhase = 'history';
       try { await startupStep(() => this.updateEnergyTotalsFromInflux('startup')); } catch (_e) {}
       try {
         if (this._nwEnergyTotalsTimer) this._nwClearInterval(this._nwEnergyTotalsTimer);
@@ -11775,6 +11784,7 @@ async onReady() {
         }, 60 * 60 * 1000);
       } catch (_e2) {}
 
+      this._hostedStartupPhase = 'smarthome';
       this.buildSmartHomeDevicesFromConfig();
 
       // SmartHome: Endkunden-Zeitschaltuhren laden + Scheduler starten
@@ -12281,7 +12291,10 @@ async onReady() {
       if (this._hostedStartup && this._hostedStartup.state !== 'ready'
         && !['GET', 'HEAD', 'OPTIONS'].includes(req.method)) {
         sendNoStore(res);
-        return res.status(503).json({ ok: false, error: this._hostedStartup.state === 'degraded' ? 'EOS_UI_STARTUP_FAILED' : 'EOS_UI_STARTING' });
+        const startup = readHostedStartup(this._hostedStartup, this._bridge, this._hostedStartupPhase);
+        if (!hasCapability(req.nwSession, 'diagnostics.open')) return res.status(503).json({ ok: false, error: startup.code });
+        if (!hasCapability(req.nwSession, 'license.manage')) startup.recoveryPath = '';
+        return res.status(503).json({ ok: false, error: startup.code, message: startup.message, startup });
       }
       return next();
     });
@@ -17121,9 +17134,12 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
         const tariffStatus = this._tariffStatus && typeof this._tariffStatus === 'object'
           ? this._tariffStatus
           : null;
+        const startup = readHostedStartup(this._hostedStartup, this._bridge, this._hostedStartupPhase);
+        if (!hasCapability(req.nwSession, 'license.manage')) startup.recoveryPath = '';
 
         res.json({
           ok: true,
+          startup,
           engine: {
             running,
             intervalMs,

@@ -1,0 +1,44 @@
+✔ full hosted onReady initializes EMS with controller-shaped fixture and no device mappings (286.516899ms)
+✔ EMS startup failure remains visible as degraded while authenticated shell survives (156.500896ms)
+✔ stop coordinator waits every pending startup and final cleanup before confirming quiescence (8.420338ms)
+✔ failed startup is drained and cleaned rather than reported as failed shutdown (1.054291ms)
+✔ timeout is unconfirmed and late startup still gets final cleanup without changing its rejected result (21.927059ms)
+✔ cleanup throws, rejects or never confirms never produce a successful stop (21.820933ms)
+✔ shell scheduled in a microtask cannot start after stop has already fenced the runtime (1752.676902ms)
+✔ operational start cannot outlive a successful stop or revive writes/readiness (1293.383231ms)
+✔ active shell bootstrap is joined and its late resource receives final cleanup (956.575772ms)
+✔ actual hosted stop rejects a hung startup and keeps rejection/status after late cleanup (1014.41444ms)
+✔ actual runtime stop joins accepted host writes before confirming shutdown (843.992528ms)
+✔ real onUnload waits returned service-stop promises and propagates stop failure (1825.206574ms)
+✔ hung actual service stop and hung host write both keep shutdown unconfirmed (1889.879241ms)
+✔ facade creates no adapter and isolates native.eosUi from host security fields (4.823236ms)
+✔ all four foreign state APIs enforce the current owner generation (1.764105ms)
+✔ license requires a valid central core grant and preserves signed limits (0.501588ms)
+✔ central access rejects required password setup and missing credential binding (1.707783ms)
+✔ hosted shell opens no listener; HTTP authorization remains fail closed (127.289611ms)
+✔ fresh UI snapshot never converts revoked Home to Pro; control retains only verified old limits (92.82471ms)
+✔ blocked hosted startup resumes once only after fresh ownership and central license confirmation (295.223843ms)
+✔ shell bootstrap failure can retry once without starting operational work (11.63608ms)
+✔ stop during shell bootstrap discards its late completion and cannot reopen the runtime (25.449201ms)
+✔ cached license grants cannot keep an incomplete or failed startup alive (7.825794ms)
+✔ startup status distinguishes waiting, unlicensed, blocked, failure and commissioned runtime (4.653005ms)
+✔ host-blocked migration and writer diagnostics stay distinct from ordinary startup (6.065965ms)
+✔ failed startup cannot be relabelled as a harmless pending migration or stale grant (0.254514ms)
+✔ unknown metadata, secrets and unbounded blockers are never copied into status (0.436392ms)
+✔ readiness provider failure has no writes or change to the existing lifecycle snapshot (0.423613ms)
+✔ authenticated EMS status shows the actual migration blocker without starting or writing anything (94.472355ms)
+✔ EMS frontend displays blocked startup and its safe same-tab recovery link without claiming a running engine (22.766935ms)
+✔ EMS frontend keeps diagnostic text inert and omits unauthorized or external recovery links (25.051987ms)
+✔ restore frontend reports the specific startup reason and preserves other API error behavior (25.550219ms)
+✔ restore requests remain blocked for every incomplete start state, with accurate reason and preserved configuration (36.868362ms)
+✔ preserved-state corruption fails closed in full startup during TRANSFERRED; recovery listener survives (168.198947ms)
+✔ preserved-state corruption fails closed in full startup during COMMITTED; recovery listener survives (29.21373ms)
+✔ timer and logic-clock saves wait for complete preserved startup hydration instead of losing a confirmed edit (280.602116ms)
+ℹ tests 36
+ℹ suites 0
+ℹ pass 36
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10339.266676

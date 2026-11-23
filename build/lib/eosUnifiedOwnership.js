@@ -19,6 +19,8 @@ const LEASE_MS = 15000;
 const REFRESH_MS = 5000;
 const HOST_FRESH_MS = 60000;
 const STATE_ID = 'info.eosOwnership';
+const MIGRATION_PHASES = new Set(['IDLE', 'DISABLED', 'LICENSE_REQUIRED', 'NOT_NEEDED', 'BLOCKED', 'PREPARED',
+    'STOPPING', 'TRANSFERRED', 'COMMITTED', 'ROLLING_BACK', 'ROLLED_BACK', 'ROLLBACK_REQUIRED']);
 function instanceId(row) {
     return row && row.value && typeof row.value._id === 'string' ? row.value._id : '';
 }
@@ -42,14 +44,32 @@ function createOwnershipGuard(owner) {
         return running && allowed && performance.now() < validUntil && owner.eosMigration?.allowsWrites() !== false;
     }
     function status() {
+        const currentAllowed = canWrite();
+        const migrationBlocked = running && owner.eosMigration?.allowsWrites() === false;
+        let migration;
+        if (migrationBlocked) {
+            // Only fixed diagnostic fields cross this boundary. Never forward
+            // the encrypted journal, source configuration or exception text.
+            try {
+                const value = owner.eosMigration?.status?.();
+                migration = {
+                    phase: typeof value?.phase === 'string' && MIGRATION_PHASES.has(value.phase) ? value.phase : 'NOT_AVAILABLE',
+                    code: typeof value?.code === 'string' && /^[A-Z][A-Z0-9_]{0,79}$/.test(value.code) ? value.code : '',
+                };
+            }
+            catch {
+                migration = { phase: 'NOT_AVAILABLE', code: 'EOS_MIGRATION_STATUS_UNAVAILABLE' };
+            }
+        }
         return {
             schema: 1,
             owner: owner.namespace,
-            allowed: canWrite(),
-            reason: allowed && !canWrite() ? 'EVIDENCE_EXPIRED' : reason,
+            allowed: currentAllowed,
+            reason: allowed && !currentAllowed ? (migrationBlocked ? 'MIGRATION_BLOCKED' : 'EVIDENCE_EXPIRED') : reason,
             generation: epoch,
             lastCheckedAt,
             blockers: blockers.map(row => ({ ...row })),
+            ...(migration ? { migration } : {}),
         };
     }
     function publish() {

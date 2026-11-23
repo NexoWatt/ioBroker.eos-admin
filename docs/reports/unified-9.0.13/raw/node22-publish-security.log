@@ -1,0 +1,128 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: control fixture preserves current bytes and backs up a verified obsolete asset outside the package
+ok 1 - control fixture preserves current bytes and backs up a verified obsolete asset outside the package
+  ---
+  duration_ms: 25.214245
+  type: 'test'
+  ...
+# Subtest: modified current bytes block cleanup of simultaneously present known old assets
+ok 2 - modified current bytes block cleanup of simultaneously present known old assets
+  ---
+  duration_ms: 4.049658
+  type: 'test'
+  ...
+# Subtest: missing current file blocks cleanup before a backup is created
+ok 3 - missing current file blocks cleanup before a backup is created
+  ---
+  duration_ms: 5.235672
+  type: 'test'
+  ...
+# Subtest: a known obsolete filename with unknown bytes remains untouched and blocks preparation
+ok 4 - a known obsolete filename with unknown bytes remains untouched and blocks preparation
+  ---
+  duration_ms: 6.862977
+  type: 'test'
+  ...
+# Subtest: unknown extra files are not silently removed along with known old assets
+ok 5 - unknown extra files are not silently removed along with known old assets
+  ---
+  duration_ms: 7.365656
+  type: 'test'
+  ...
+# Subtest: edited obsolete inventory does not become an authorization to move arbitrary files
+ok 6 - edited obsolete inventory does not become an authorization to move arbitrary files
+  ---
+  duration_ms: 6.764376
+  type: 'test'
+  ...
+# Subtest: invalid inventory path fails closed without changing anything: ../outside.js
+ok 7 - invalid inventory path fails closed without changing anything: ../outside.js
+  ---
+  duration_ms: 10.573336
+  type: 'test'
+  ...
+# Subtest: invalid inventory path fails closed without changing anything: /absolute.js
+ok 8 - invalid inventory path fails closed without changing anything: /absolute.js
+  ---
+  duration_ms: 6.523617
+  type: 'test'
+  ...
+# Subtest: invalid inventory path fails closed without changing anything: adminWww/assets/../outside.js
+ok 9 - invalid inventory path fails closed without changing anything: adminWww/assets/../outside.js
+  ---
+  duration_ms: 9.035012
+  type: 'test'
+  ...
+# Subtest: invalid inventory path fails closed without changing anything: adminWww/assets/a\\b.js
+ok 10 - invalid inventory path fails closed without changing anything: adminWww/assets/a\\b.js
+  ---
+  duration_ms: 6.709751
+  type: 'test'
+  ...
+# Subtest: invalid inventory path fails closed without changing anything: adminWww/assets/a.js:stream
+ok 11 - invalid inventory path fails closed without changing anything: adminWww/assets/a.js:stream
+  ---
+  duration_ms: 9.991289
+  type: 'test'
+  ...
+# Subtest: invalid inventory path fails closed without changing anything: adminWww/assets/CON.js
+ok 12 - invalid inventory path fails closed without changing anything: adminWww/assets/CON.js
+  ---
+  duration_ms: 6.883678
+  type: 'test'
+  ...
+# Subtest: dangling obsolete symlink is rejected instead of becoming an invisible extra
+ok 13 - dangling obsolete symlink is rejected instead of becoming an invisible extra
+  ---
+  duration_ms: 4.945867
+  type: 'test'
+  ...
+# Subtest: a symlinked assets directory cannot redirect preparation outside the package
+ok 14 - a symlinked assets directory cannot redirect preparation outside the package
+  ---
+  duration_ms: 3.544354
+  type: 'test'
+  ...
+# Subtest: hardlinked obsolete files are rejected while the external link remains unchanged
+ok 15 - hardlinked obsolete files are rejected while the external link remains unchanged
+  ---
+  duration_ms: 3.172787
+  type: 'test'
+  ...
+# Subtest: casefold collision with a current sealed asset is never treated as removable old data
+ok 16 - casefold collision with a current sealed asset is never treated as removable old data
+  ---
+  duration_ms: 4.605116
+  type: 'test'
+  ...
+# Subtest: current page references prevent removing an otherwise known obsolete asset
+ok 17 - current page references prevent removing an otherwise known obsolete asset
+  ---
+  duration_ms: 5.998685
+  type: 'test'
+  ...
+# Subtest: failure after the first unlink restores original files and retains a recoverable backup
+ok 18 - failure after the first unlink restores original files and retains a recoverable backup
+  ---
+  duration_ms: 8.389854
+  type: 'test'
+  ...
+# Subtest: rollback never overwrites a file created after the original was removed
+ok 19 - rollback never overwrites a file created after the original was removed
+  ---
+  duration_ms: 6.797721
+  type: 'test'
+  ...
+1..19
+# tests 19
+# suites 0
+# pass 19
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 249.887147

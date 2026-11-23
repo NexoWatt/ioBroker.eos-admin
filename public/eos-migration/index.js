@@ -16,6 +16,8 @@
         NOT_AVAILABLE: ['Status nicht verfügbar', 'Der Übernahmestatus steht zurzeit nicht zur Verfügung.'],
     };
     const reasons = {
+        EOS_MIGRATION_LICENSE_REQUIRED: 'Die Bestandsübernahme wurde ohne gültige Systemfreigabe noch nicht geprüft. Zuerst die zentrale EOS-Lizenz aktivieren; anschließend EOS neu starten, damit die vollständige Übernahmeprüfung vor dem Betrieb ausgeführt wird.',
+        EOS_MIGRATION_RESTART_REQUIRED: 'Die Systemfreigabe ist jetzt gültig. Bitte die EOS-Adapterinstanz neu starten, damit die Bestandsübernahme vollständig geprüft wird. Bisherige Adapter nicht löschen und keine leeren Einstellungen über den Bestand speichern.',
         EOS_MIGRATION_PROTECTED_FIELDS_UNAVAILABLE: 'ioBroker gibt geschützte Zugangsdaten oder Schlüssel eines Altadapters nicht frei. Für eine vollständige Übernahme ist eine freigegebene Übergabe dieser Daten erforderlich; leere Ersatzwerte werden nicht eingesetzt.',
         EOS_MIGRATION_SOURCE_VERSION: 'Mindestens eine Altadapter-Version ist für die automatische Übernahme noch nicht geprüft.',
         EOS_MIGRATION_DESTINATION_MISSING: 'Ein bereits übernommener Einstellungsbestand fehlt. Vor dem Start muss die vollständige Sicherung der gemeinsamen Konfiguration wiederhergestellt werden.',
@@ -56,10 +58,12 @@
     let busy = false;
     function render(value) {
         const phase = typeof value?.phase === 'string' && Object.hasOwn(phases, value.phase) ? value.phase : 'NOT_AVAILABLE';
-        const [heading, description] = phases[phase];
+        const code = typeof value?.code === 'string' && /^[A-Z][A-Z0-9_]{0,79}$/.test(value.code) ? value.code : '';
+        const [heading, description] = phase === 'LICENSE_REQUIRED' && code === 'EOS_MIGRATION_RESTART_REQUIRED'
+            ? ['Übernahmeprüfung nach Neustart erforderlich', 'Die zentrale Systemfreigabe ist gültig. Die Bestandsprüfung wurde in diesem Adapterlauf noch nicht ausgeführt.']
+            : phases[phase];
         element('status-heading').textContent = heading;
         element('phase-description').textContent = description;
-        const code = typeof value?.code === 'string' && /^[A-Z][A-Z0-9_]{0,79}$/.test(value.code) ? value.code : '';
         element('status-code').textContent = code || 'Keine zusätzliche Meldung';
         element('reason-description').textContent = code ? (reasons[code] || 'Die Übernahmeprüfung meldet den oben angegebenen Grund. Bitte diese Meldung bei der Prüfung der Anlage berücksichtigen.') : '';
         const time = Number.isSafeInteger(value?.updatedAt) && value.updatedAt > 0 && value.updatedAt <= 8640000000000000 ? value.updatedAt : null;

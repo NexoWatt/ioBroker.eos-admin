@@ -49,6 +49,7 @@ for (const rel of [p.main, 'ui/main.js', 'adminWww/index.html', 'ui/www/login.ht
 assert.equal(require('./nexowatt-vendored-webserver.cjs').inspectVendoredWebserver(p, lock, root), null, 'VENDORED_SOURCE_PROVENANCE');
 const manifest = require('./eos-release-manifest.cjs');
 const count = manifest.check();
+require('./eos-release-evidence.cjs').check();
 const findings = [];
 for (const rel of manifest.listFiles()) {
     if (!/\.(?:js|cjs|mjs|ts|tsx|json|json5|html|md|txt|conf|yml|yaml)$/.test(rel)) continue;

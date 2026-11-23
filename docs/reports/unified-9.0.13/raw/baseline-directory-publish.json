@@ -1,0 +1,16 @@
+{
+  "version": "9.0.12",
+  "npm": "11.19.1",
+  "node": "v24.22.3",
+  "command": "npm publish --dry-run --json --ignore-scripts=false --registry=http://127.0.0.1:9",
+  "cwdShape": "fresh ZIP in directory containing spaces",
+  "nodeModulesPresent": false,
+  "exitCode": 1,
+  "integrityPassed": true,
+  "cause": "prepublishOnly requires full npm test with absent development/runtime dependencies",
+  "published": false,
+  "archiveSha256": "7b066525c9281acb12899f69f74c0cedbcd1ebebbce3d0cf01b840b7974a54a4",
+  "limits": [
+    "Linux execution; no native Windows or authenticated registry operation"
+  ]
+}

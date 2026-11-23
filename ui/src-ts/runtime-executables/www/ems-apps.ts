@@ -1731,6 +1731,9 @@ function _collectFlowPowerDpIsWFromUI() {
     const data = await res.json().catch(() => null);
     if (!res.ok || !data || data.ok === false) {
       const err = (data && data.error) ? data.error : ('HTTP ' + res.status);
+      if (data && data.startup && typeof data.message === 'string' && /^EOS_[A-Z0-9_]{1,91}$/.test(String(err))) {
+        throw new Error(data.message.slice(0, 512) + ' (' + String(err) + ')');
+      }
       throw new Error(err === 'DYNAMIC_GRID_VERSION_CONFLICT' ? dynamicGridReloadNotice : err);
     }
 
@@ -14492,6 +14495,21 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
     );
 
     const initError = (engine && engine.initError) ? String(engine.initError) : '';
+    const startup = payload && payload.startup;
+    if (startup && typeof startup.message === 'string' && startup.state !== 'ready') {
+      const details = [startup.message.slice(0, 512)];
+      if (typeof startup.code === 'string' && /^EOS_[A-Z0-9_]{1,91}$/.test(startup.code)) details.push(startup.code);
+      if (typeof startup.phaseLabel === 'string') details.push(startup.phaseLabel.slice(0, 80));
+      if (typeof startup.migrationPhase === 'string' && /^[A-Z_]{1,64}$/.test(startup.migrationPhase)) details.push('Übernahme: ' + startup.migrationPhase);
+      if (typeof startup.ownershipReason === 'string' && /^[A-Z_]{1,64}$/.test(startup.ownershipReason)) details.push('Steuerungsfreigabe: ' + startup.ownershipReason);
+      els.emsStatus.appendChild(mkItem('Betriebsstart', details.filter(Boolean).join(' · '), '', 'error'));
+      if (startup.recoveryPath === '/migration/') {
+        const link = document.createElement('a');
+        link.href = '/migration/';
+        link.textContent = 'Status der Bestandsübernahme öffnen';
+        els.emsStatus.appendChild(link);
+      }
+    }
     if (initError) {
       els.emsStatus.appendChild(mkItem('Engine-Fehler', initError, '', 'error'));
     }

@@ -1,0 +1,74 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: startup status distinguishes waiting, unlicensed, blocked, failure and commissioned runtime
+ok 1 - startup status distinguishes waiting, unlicensed, blocked, failure and commissioned runtime
+  ---
+  duration_ms: 1.480378
+  type: 'test'
+  ...
+# Subtest: host-blocked migration and writer diagnostics stay distinct from ordinary startup
+ok 2 - host-blocked migration and writer diagnostics stay distinct from ordinary startup
+  ---
+  duration_ms: 1.058878
+  type: 'test'
+  ...
+# Subtest: failed startup cannot be relabelled as a harmless pending migration or stale grant
+ok 3 - failed startup cannot be relabelled as a harmless pending migration or stale grant
+  ---
+  duration_ms: 0.170531
+  type: 'test'
+  ...
+# Subtest: unknown metadata, secrets and unbounded blockers are never copied into status
+ok 4 - unknown metadata, secrets and unbounded blockers are never copied into status
+  ---
+  duration_ms: 0.357546
+  type: 'test'
+  ...
+# Subtest: readiness provider failure has no writes or change to the existing lifecycle snapshot
+ok 5 - readiness provider failure has no writes or change to the existing lifecycle snapshot
+  ---
+  duration_ms: 0.309485
+  type: 'test'
+  ...
+# Subtest: authenticated EMS status shows the actual migration blocker without starting or writing anything
+ok 6 - authenticated EMS status shows the actual migration blocker without starting or writing anything
+  ---
+  duration_ms: 65.705495
+  type: 'test'
+  ...
+# Subtest: EMS frontend displays blocked startup and its safe same-tab recovery link without claiming a running engine
+ok 7 - EMS frontend displays blocked startup and its safe same-tab recovery link without claiming a running engine
+  ---
+  duration_ms: 29.728005
+  type: 'test'
+  ...
+# Subtest: EMS frontend keeps diagnostic text inert and omits unauthorized or external recovery links
+ok 8 - EMS frontend keeps diagnostic text inert and omits unauthorized or external recovery links
+  ---
+  duration_ms: 27.999994
+  type: 'test'
+  ...
+# Subtest: restore frontend reports the specific startup reason and preserves other API error behavior
+ok 9 - restore frontend reports the specific startup reason and preserves other API error behavior
+  ---
+  duration_ms: 27.34552
+  type: 'test'
+  ...
+# Subtest: restore requests remain blocked for every incomplete start state, with accurate reason and preserved configuration
+ok 10 - restore requests remain blocked for every incomplete start state, with accurate reason and preserved configuration
+  ---
+  duration_ms: 44.001765
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 912.514319

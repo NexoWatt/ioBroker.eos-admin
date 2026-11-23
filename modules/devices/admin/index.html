@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="style.css">
   <script defer src="vendor/jquery.js"></script>
   <script defer src="vendor/materialize.js"></script>
-  <script defer src="host-bridge.js"></script>
+  <script defer src="host-bridge.js?v=9.0.14"></script>
   <script defer src="words.js"></script>
   <script defer src="index_m.js"></script>
 </head>
@@ -39,8 +39,9 @@
     <p id="eosModuleStatus" role="status" aria-live="polite">Konfiguration wird geladen …</p>
     <details class="eos-host-import"><summary>Bestehenden Geräteadapter übernehmen</summary>
       <p>EOS prüft die automatische Bestandsübernahme beim Start. Dabei bleiben vorhandene Datenpunkt-IDs erhalten. <a href="/migration/">Status der Bestandsübernahme ansehen</a>. Der folgende manuelle Import ist eine separate Konfigurationsübernahme: alte Instanz vollständig stoppen; die neuen Datenpunkt-Pfade prüfen und EMS-Zuordnungen vor der Aktivierung anpassen. Nach erfolgreicher automatischer Übernahme nicht erneut importieren.</p>
+      <p id="eosImportHint" role="status" aria-live="polite">Voraussetzungen für die Übernahme werden geprüft …</p>
       <label for="eosLegacyInstance">Bisherige Instanz</label><input id="eosLegacyInstance" value="nexowatt-devices.0" autocomplete="off">
-      <button type="button" class="btn-flat" id="eosModuleImport">Konfiguration übernehmen</button>
+      <button type="button" class="btn-flat" id="eosModuleImport" disabled>Konfiguration übernehmen</button>
       <pre id="eosImportMapping"></pre>
     </details>
   </section>

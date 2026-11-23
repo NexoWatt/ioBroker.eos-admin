@@ -40,6 +40,54 @@ function fixture(sources = [{ id: 'devices', source: 'nexowatt-devices.0', versi
     return { owner, migration, objects, states, mutations, factories, logs };
 }
 
+test('late license activation cannot start defaults before a new complete legacy preflight', async () => {
+    const x = fixture([{ id: 'ui', source: 'nexowatt-ui.0', version: '1.0.37', native: { siteName: 'retained-live-site', installerConfig: { meter: 'meter.0.power' } } }]);
+    const original = structuredClone(x.objects.get('system.adapter.nexowatt-ui.0'));
+    let licensed = false;
+    x.owner.eosLicenseService.statusView = () => ({ valid: licensed, coreEnabled: licensed });
+    await x.migration.start();
+    assert.equal(x.migration.phase, 'LICENSE_REQUIRED');
+    assert.equal(x.migration.allowsStartup(), false);
+    assert.equal(x.migration.allowsWrites(), false);
+    assert.equal(x.migration.status().code, 'EOS_MIGRATION_LICENSE_REQUIRED');
+    assert.deepEqual(x.objects.get(original._id), original);
+    assert.equal(x.mutations.length, 0);
+    licensed = true;
+    assert.equal(x.migration.status().code, 'EOS_MIGRATION_RESTART_REQUIRED');
+    assert.equal(x.migration.allowsStartup(), false, 'activation is not a completed inventory');
+    assert.equal(x.migration.allowsWrites(), false, 'new writers stay fenced even if ownership becomes available');
+    assert.equal(x.owner.config.eosUi.siteName, defaults.siteName, 'old settings are not silently treated as imported');
+    const restarted = new EosLegacyMigration(x.owner, x.migration.options);
+    x.owner.eosMigration = restarted;
+    await restarted.start();
+    assert.equal(restarted.phase, 'TRANSFERRED');
+    assert.equal(restarted.allowsStartup(), true);
+    assert.equal(x.owner.config.eosUi.siteName, 'retained-live-site');
+    assert.deepEqual(x.owner.config.eosUi.installerConfig, original.native.installerConfig);
+    assert.equal(x.objects.get(original._id).common.enabled, false);
+    assert.equal(x.states.get(`${original._id}.alive`).val, false);
+    assert.equal(x.owner.config.eosUiMigration.source, 'nexowatt-ui.0');
+    assert.equal(x.owner.config.eosUiMigration.preserveNamespace, true);
+});
+
+test('unlicensed fresh installation remains fenced until licensed startup checks an empty inventory', async () => {
+    const x = fixture([]);
+    x.owner.eosLicenseService.statusView = () => ({ valid: false, coreEnabled: false });
+    await x.migration.start();
+    assert.equal(x.migration.allowsStartup(), false);
+    assert.equal(x.migration.allowsWrites(), false);
+    x.owner.eosLicenseService.statusView = () => { throw new Error('private license detail'); };
+    assert.equal(x.migration.status().code, 'EOS_MIGRATION_LICENSE_REQUIRED');
+    assert.equal(JSON.stringify(x.migration.status()).includes('private license detail'), false);
+    x.owner.eosLicenseService.statusView = () => ({ valid: true, coreEnabled: true });
+    const restarted = new EosLegacyMigration(x.owner, x.migration.options);
+    await restarted.start();
+    assert.equal(restarted.phase, 'NOT_NEEDED');
+    assert.equal(restarted.allowsStartup(), true);
+    assert.equal(restarted.allowsWrites(), true);
+    assert.equal(x.mutations.length, 0);
+});
+
 test('automatic handover preserves namespace, custom/history objects and settings including credentials', async t => {
     const x = fixture(); const source = x.objects.get('system.adapter.nexowatt-devices.0');
     source.native.devices = [{ id: 'ess1', password: 'synthetic-test-secret' }];

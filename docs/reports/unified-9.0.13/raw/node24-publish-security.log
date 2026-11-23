@@ -1,0 +1,27 @@
+✔ control fixture preserves current bytes and backs up a verified obsolete asset outside the package (31.187513ms)
+✔ modified current bytes block cleanup of simultaneously present known old assets (4.794253ms)
+✔ missing current file blocks cleanup before a backup is created (5.02327ms)
+✔ a known obsolete filename with unknown bytes remains untouched and blocks preparation (8.124463ms)
+✔ unknown extra files are not silently removed along with known old assets (7.807056ms)
+✔ edited obsolete inventory does not become an authorization to move arbitrary files (5.554291ms)
+✔ invalid inventory path fails closed without changing anything: ../outside.js (6.140144ms)
+✔ invalid inventory path fails closed without changing anything: /absolute.js (7.949786ms)
+✔ invalid inventory path fails closed without changing anything: adminWww/assets/../outside.js (5.90007ms)
+✔ invalid inventory path fails closed without changing anything: adminWww/assets/a\b.js (7.042471ms)
+✔ invalid inventory path fails closed without changing anything: adminWww/assets/a.js:stream (5.578998ms)
+✔ invalid inventory path fails closed without changing anything: adminWww/assets/CON.js (5.931106ms)
+✔ dangling obsolete symlink is rejected instead of becoming an invisible extra (4.267849ms)
+✔ a symlinked assets directory cannot redirect preparation outside the package (3.532037ms)
+✔ hardlinked obsolete files are rejected while the external link remains unchanged (5.232919ms)
+✔ casefold collision with a current sealed asset is never treated as removable old data (5.364112ms)
+✔ current page references prevent removing an otherwise known obsolete asset (7.521075ms)
+✔ failure after the first unlink restores original files and retains a recoverable backup (11.097447ms)
+✔ rollback never overwrites a file created after the original was removed (7.622884ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 292.021154

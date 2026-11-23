@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/smarthome-setup.ts
- * Quell-Hash: sha256:9513f3b63d66f64a4bb1c949207dd979359a1db8d208a9d02848225c44c423b4
+ * Quell-Hash: sha256:c64c4ff4763149b355aeef9b5e155b7598b2bb25fcc884296bd6b9b09b102108
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -25,6 +25,51 @@
     const host = window;
     if (host.NW_SH_SETUP)
         return;
+    /**
+     * Koordiniert ausschließlich die zwei statischen Aktionsmenüs der Einrichtung.
+     * Native Details-/Summary-Bedienung bleibt erhalten; Wechsel, Außenklick,
+     * Fokuswechsel und Escape schließen offene Menüs ohne Konfiguration oder API.
+     * Ein Dialog erhält Escape weiterhin selbst, sobald der Fokus außerhalb liegt.
+     */
+    function bindActionMenus() {
+        const menus = Array.from(document.querySelectorAll('.nw-setup-project-actions, .nw-shcfg-more'));
+        if (menus.length === 0)
+            return;
+        const closeOthers = (keep) => { for (const menu of menus)
+            if (menu !== keep)
+                menu.open = false; };
+        for (const menu of menus)
+            menu.addEventListener('toggle', () => { if (menu.open)
+                closeOthers(menu); });
+        document.addEventListener('click', event => {
+            const target = event.target;
+            if (!(target instanceof Node))
+                return;
+            const menu = menus.find(item => item.contains(target));
+            if (!menu) {
+                closeOthers();
+                return;
+            }
+            closeOthers(menu);
+            if (target instanceof Element && target.closest('button,a[href]') && !target.closest('summary'))
+                menu.open = false;
+        });
+        document.addEventListener('focusin', event => {
+            const target = event.target;
+            if (target instanceof Node)
+                closeOthers(menus.find(menu => menu.contains(target)));
+        });
+        document.addEventListener('keydown', event => {
+            if (event.key !== 'Escape')
+                return;
+            const menu = menus.find(item => item.open && item.contains(document.activeElement));
+            closeOthers();
+            if (!menu)
+                return;
+            event.preventDefault();
+            menu.querySelector('summary')?.focus({ preventScroll: true });
+        });
+    }
     const record = (value) => !!value && typeof value === 'object' && !Array.isArray(value);
     const text = (value, fallback = '') => typeof value === 'string' ? value.slice(0, 300) : fallback;
     const rows = (value) => Array.isArray(value) ? value.filter(record) : [];
@@ -471,4 +516,5 @@
         }
     }
     host.NW_SH_SETUP = Object.freeze({ mountSetup, mountDetection, openDialog, cloneConfig, readDetection, hasDialog: () => active !== null });
+    bindActionMenus();
 })();

@@ -98,6 +98,8 @@ class EosModuleHost {
         this.options = options;
         this.configStore = new EosModuleConfigStore(owner);
         this.running = false;
+        this.initialized = false;
+        this.startPromise = null;
         this.entries = new Map();
         this.pending = null;
         this.mutation = false;
@@ -108,7 +110,7 @@ class EosModuleHost {
         this.stopped = false;
         this.stopPromise = null;
         for (const id of Object.keys(MODULES)) {
-            this.entries.set(id, { id, module: null, config: { enabled: false }, reason: 'DISABLED', lease: 0,
+            this.entries.set(id, { id, module: null, config: { enabled: false }, configLoaded: false, reason: 'DISABLED', lease: 0,
                 generation: 0, blockers: [], loading: false, failed: false, started: false, startup: null, stopEntryPromise: null, pendingWrites: new Set(), timers: new Set(), subscriptions: new Set(), downloads: new Set() });
         }
     }
@@ -146,7 +148,7 @@ class EosModuleHost {
     }
     canOperate(id, generation) {
         const entry = this.entries.get(id);
-        return this.running && !this.stopped && !!entry && entry.config.enabled === true && !entry.failed &&
+        return this.running && this.initialized && !this.stopped && !!entry && entry.config.enabled === true && !entry.failed &&
             entry.generation === generation && entry.lease > performance.now() && this.licensed(id) &&
             this.owner.eosOwnership?.canWrite() === true;
     }
@@ -417,7 +419,7 @@ class EosModuleHost {
         };
     }
     async reconcile() {
-        if (!this.running || this.stopped)
+        if (!this.running || !this.initialized || this.stopped)
             return;
         if (this.pending)
             return this.pending;
@@ -501,35 +503,52 @@ class EosModuleHost {
         return this.pending;
     }
     async start() {
-        if (this.running || this.stopped)
-            return;
-        this.running = true;
-        for (const entry of this.entries.values()) {
-            if (this.stopped)
-                return;
-            try {
-                const envelope = await bounded(this.configStore.load(entry.id));
-                if (this.stopped)
-                    return;
-                if (envelope)
-                    this.owner.config.eosModules = { ...this.owner.config.eosModules, [entry.id]: envelope };
-                entry.config = this.readConfig(entry.id);
-            }
-            catch {
-                entry.failed = true;
-                entry.reason = 'CONFIG_INVALID';
-            }
-            const name = MODULES[entry.id];
-            await bounded(this.owner.subscribeForeignObjectsAsync(`system.adapter.${name}.*`));
-            if (this.stopped)
-                return;
-            await bounded(this.owner.subscribeForeignStatesAsync(`system.adapter.${name}.*.alive`));
-        }
+        if (this.startPromise)
+            return this.startPromise;
         if (this.stopped)
             return;
-        this.timer = setInterval(() => { void this.reconcile(); }, 1000);
-        this.timer.unref?.();
-        await this.reconcile();
+        if (this.mutation)
+            throw fail('EOS_MODULE_BUSY');
+        this.mutation = true;
+        this.running = true;
+        this.startPromise = (async () => {
+            try {
+                for (const entry of this.entries.values()) {
+                    if (this.stopped)
+                        return;
+                    try {
+                        const envelope = await bounded(this.configStore.load(entry.id));
+                        if (this.stopped)
+                            return;
+                        if (envelope)
+                            this.owner.config.eosModules = { ...this.owner.config.eosModules, [entry.id]: envelope };
+                        entry.config = this.readConfig(entry.id);
+                        entry.configLoaded = true;
+                    }
+                    catch {
+                        entry.failed = true;
+                        entry.reason = 'CONFIG_INVALID';
+                    }
+                    const name = MODULES[entry.id];
+                    await bounded(this.owner.subscribeForeignObjectsAsync(`system.adapter.${name}.*`));
+                    if (this.stopped)
+                        return;
+                    await bounded(this.owner.subscribeForeignStatesAsync(`system.adapter.${name}.*.alive`));
+                }
+                if (this.stopped)
+                    return;
+                this.initialized = true;
+            }
+            finally {
+                this.mutation = false;
+            }
+            if (this.stopped)
+                return;
+            this.timer = setInterval(() => { void this.reconcile(); }, 1000);
+            this.timer.unref?.();
+            await this.reconcile();
+        })();
+        return this.startPromise;
     }
     onObjectChange(id) {
         for (const entry of this.entries.values()) {
@@ -579,83 +598,127 @@ class EosModuleHost {
         const entry = this.entries.get(id);
         if (!entry)
             throw fail('EOS_MODULE_UNKNOWN');
-        return { id, config: redact(entry.config), status: await this.status(id),
-            migration: this.owner.config.eosModules?.[id]?.migration || null };
+        return { id, config: redact(entry.config), configurationReady: this.initialized && entry.configLoaded && !this.stopped, status: await this.status(id),
+            manualImport: this.manualImportStatus(id), migration: this.owner.config.eosModules?.[id]?.migration || null };
+    }
+    manualImportStatus(id) {
+        const entry = this.entries.get(id);
+        if (!entry)
+            throw fail('EOS_MODULE_UNKNOWN');
+        const migration = this.owner.config.eosModules?.[id]?.migration;
+        const reason = this.stopped ? 'EOS_MODULE_BUSY'
+            : !this.initialized || !entry.configLoaded ? 'EOS_MODULE_NOT_READY'
+                : migration?.preserveNamespace === true ? 'EOS_MODULE_IMPORT_ALREADY_MIGRATED'
+                    : entry.stopFailed ? 'EOS_MODULE_STOP_UNCONFIRMED'
+                        : entry.config.enabled || entry.module ? 'EOS_MODULE_IMPORT_REQUIRES_DISABLED' : '';
+        return { allowed: !reason, reason };
     }
     async save(id, config, migration) {
+        if (!this.initialized && !this.stopped)
+            throw fail('EOS_MODULE_NOT_READY');
         if (this.mutation || this.stopped)
             throw fail('EOS_MODULE_BUSY');
+        const entry = this.entries.get(id);
+        if (!entry)
+            throw fail('EOS_MODULE_UNKNOWN');
+        if (!entry.configLoaded)
+            throw fail('EOS_MODULE_NOT_READY');
         this.mutation = true;
         try {
-            const entry = this.entries.get(id);
-            if (!entry)
-                throw fail('EOS_MODULE_UNKNOWN');
-            const normalized = this.factory(id).validateConfig(restoreSecrets(assertJson(config), entry.config));
-            const encrypted = this.owner.encrypt(JSON.stringify(normalized));
-            if (typeof encrypted !== 'string' || encrypted === JSON.stringify(normalized))
-                throw fail('EOS_MODULE_ENCRYPTION');
-            const envelope = { v: 1, encrypted,
-                migration: migration || this.owner.config.eosModules?.[id]?.migration || null };
-            // Commit before interrupting the old runtime. Failed/conflicting writes
-            // leave its validated settings and transport generation untouched.
-            await bounded(this.configStore.save(id, envelope));
-            this.revoke(entry, 'CONFIG_CHANGED');
-            await this.stopEntry(entry);
-            this.owner.config.eosModules = { ...this.owner.config.eosModules, [id]: envelope };
-            entry.config = normalized;
-            if (!entry.stopFailed) {
-                entry.failed = false;
-                entry.reason = normalized.enabled ? 'STARTING' : 'DISABLED';
-            }
-            else {
-                entry.failed = true;
-                entry.reason = 'STOP_FAILED_RESTART_REQUIRED';
-            }
-            this.nextOwnershipCheck = 0;
-            void this.reconcile();
-            return this.view(id);
+            return await this.persistConfig(id, config, migration);
         }
         finally {
             this.mutation = false;
         }
     }
-    async importLegacy(id, instance) {
-        if (!Object.hasOwn(MODULES, id) || typeof instance !== 'string' ||
-            !new RegExp(`^${MODULES[id]}\\.\\d+$`).test(instance))
-            throw fail('EOS_MODULE_IMPORT_INSTANCE');
+    /** Internal commit shared by save/import; the entire caller operation owns the mutation lock. */
+    async persistConfig(id, config, migration) {
+        if (!this.mutation || this.stopped)
+            throw fail('EOS_MODULE_BUSY');
         const entry = this.entries.get(id);
-        if (entry.config.enabled || entry.module)
-            throw fail('EOS_MODULE_IMPORT_REQUIRES_DISABLED');
-        if (!(await bounded(this.inspectOwnership(entry))))
-            throw fail('EOS_MODULE_LEGACY_RUNNING');
-        const object = await bounded(this.owner.getForeignObjectAsync(`system.adapter.${instance}`));
-        if (!object?.native || object.common?.enabled !== false)
-            throw fail('EOS_MODULE_IMPORT_UNAVAILABLE');
-        let config = id === 'eebus' ? assertJson(object.native) : require('./eosLegacyMigration').decryptNative(this.owner, object);
-        // Existing private keys are never copied out of legacy native storage.
-        delete config.privateKey;
-        delete config.certificate;
-        delete config.cert;
-        if (id === 'eebus') {
-            // Legacy EEBus encryptedNative values are ciphertext in the object DB.
-            // Pairing identity/PIN require deliberate fresh pairing after import.
-            delete config.pairingPin;
-            delete config.shipPairingPin;
+        if (!entry)
+            throw fail('EOS_MODULE_UNKNOWN');
+        const normalized = this.factory(id).validateConfig(restoreSecrets(assertJson(config), entry.config));
+        const encrypted = this.owner.encrypt(JSON.stringify(normalized));
+        if (typeof encrypted !== 'string' || encrypted === JSON.stringify(normalized))
+            throw fail('EOS_MODULE_ENCRYPTION');
+        const envelope = { v: 1, encrypted,
+            migration: migration || this.owner.config.eosModules?.[id]?.migration || null };
+        // Commit before interrupting the old runtime. Failed/conflicting writes
+        // leave its validated settings and transport generation untouched.
+        await bounded(this.configStore.save(id, envelope));
+        this.revoke(entry, 'CONFIG_CHANGED');
+        await this.stopEntry(entry);
+        this.owner.config.eosModules = { ...this.owner.config.eosModules, [id]: envelope };
+        entry.config = normalized;
+        if (!entry.stopFailed) {
+            entry.failed = false;
+            entry.reason = normalized.enabled ? 'STARTING' : 'DISABLED';
         }
-        const migration = await this.factory(id).migrateLegacyConfig?.(config, {
-            owner: this.owner, source: instance, sourceVersion: object.common.version, sourceEnabled: false,
-            installationDir: this.options.installationDir, eosDataDir: this.options.eosDataDir,
-            dataDir: join(this.options.dataDir, id),
-        });
-        if (migration)
-            config = migration.config;
-        config.enabled = false;
-        const report = { source: instance, importedAt: new Date().toISOString(),
-            oldPrefix: `${instance}.`, newPrefix: id === 'devices' ? `${this.owner.namespace}.` : `${this.owner.namespace}.eebus.`,
-            statesCopied: false, mappingsRewritten: false, identityImported: false,
-            omittedFields: migration?.omittedFields || [], requiresPairing: id === 'eebus' };
-        const result = await this.save(id, config, report);
-        return { ...result, migration: report };
+        else {
+            entry.failed = true;
+            entry.reason = 'STOP_FAILED_RESTART_REQUIRED';
+        }
+        this.nextOwnershipCheck = 0;
+        void this.reconcile();
+        return this.view(id);
+    }
+    async importLegacy(id, instance) {
+        if (!this.initialized && !this.stopped)
+            throw fail('EOS_MODULE_NOT_READY');
+        if (this.mutation || this.stopped)
+            throw fail('EOS_MODULE_BUSY');
+        this.mutation = true;
+        try {
+            if (!Object.hasOwn(MODULES, id) || typeof instance !== 'string' ||
+                !new RegExp(`^${MODULES[id]}\\.\\d+$`).test(instance))
+                throw fail('EOS_MODULE_IMPORT_INSTANCE');
+            const entry = this.entries.get(id);
+            const eligibility = this.manualImportStatus(id);
+            if (!eligibility.allowed)
+                throw fail(eligibility.reason);
+            if (!(await bounded(this.inspectOwnership(entry))))
+                throw fail('EOS_MODULE_LEGACY_RUNNING');
+            const object = await bounded(this.owner.getForeignObjectAsync(`system.adapter.${instance}`));
+            if (!object?.native || object.common?.enabled !== false)
+                throw fail('EOS_MODULE_IMPORT_UNAVAILABLE');
+            let config = id === 'eebus' ? assertJson(object.native) : require('./eosLegacyMigration').decryptNative(this.owner, object);
+            // Existing private keys are never copied out of legacy native storage.
+            delete config.privateKey;
+            delete config.certificate;
+            delete config.cert;
+            if (id === 'eebus') {
+                // Legacy EEBus encryptedNative values are ciphertext in the object DB.
+                // Pairing identity/PIN require deliberate fresh pairing after import.
+                delete config.pairingPin;
+                delete config.shipPairingPin;
+            }
+            const migration = await bounded(this.factory(id).migrateLegacyConfig?.(config, {
+                owner: this.owner, source: instance, sourceVersion: object.common.version, sourceEnabled: false,
+                installationDir: this.options.installationDir, eosDataDir: this.options.eosDataDir,
+                dataDir: join(this.options.dataDir, id),
+            }));
+            if (migration)
+                config = migration.config;
+            config.enabled = false;
+            const report = { source: instance, importedAt: new Date().toISOString(),
+                oldPrefix: `${instance}.`, newPrefix: id === 'devices' ? `${this.owner.namespace}.` : `${this.owner.namespace}.${id}.`,
+                statesCopied: false, mappingsRewritten: false, identityImported: false,
+                omittedFields: migration?.omittedFields || [], requiresPairing: id === 'eebus' };
+            // Recheck ownership after asynchronous conversion; imports never start a source or target.
+            if (this.stopped)
+                throw fail('EOS_MODULE_BUSY');
+            if (!(await bounded(this.inspectOwnership(entry))))
+                throw fail('EOS_MODULE_LEGACY_RUNNING');
+            const currentEligibility = this.manualImportStatus(id);
+            if (!currentEligibility.allowed)
+                throw fail(currentEligibility.reason);
+            const result = await this.persistConfig(id, config, report);
+            return { ...result, migration: report };
+        }
+        finally {
+            this.mutation = false;
+        }
     }
     async command(id, command, payload) {
         const entry = this.entries.get(id);

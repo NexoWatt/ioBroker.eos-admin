@@ -26,28 +26,28 @@ Parameter sind die Namen aus der Signatur, keine geratenen Datenverträge. Die A
 
 | Funktion / Methode | Parameter | Direkt sichtbare Aufrufe (Auszug) |
 | --- | --- | --- |
-| [`record`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L40) | value | Array.isArray |
-| [`clone`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L41) | value | JSON.parse, JSON.stringify |
-| [`merge`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L42) | base, overlay | FORBIDDEN_KEYS.has, Object.entries, Reflect.get, Reflect.set, clone, merge, record |
-| [`retainedNamespace`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L53) | owner | record |
-| [`thenable`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L75) | value | Reflect.get |
-| [`HostedAdapter.constructor`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L89) | { owner, bridge } | Number, Object.defineProperties, merge, namespace.split, retainedNamespace |
-| [`get`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L105) | target, key, receiver | GUARDED_WRITES.has, LOCAL_METHODS.get, Reflect.get, Reflect.has, bound.get, bound.has, bound.set, value.bind |
-| [`HostedAdapter.stopStateWrites`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L134) | – | Promise.all |
-| [`HostedAdapter.beginHostWrite`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L140) | – | this._bridge.canWrite, this.pendingHostWrites.add |
-| [`complete`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L143) | – | – |
-| [`HostedAdapter.writeAsync`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L155) | method, id, args | Promise.reject, returned.then, thenable, this.beginHostWrite |
-| [`HostedAdapter.writeCallback`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L168) | method, id, args | Promise.resolve, complete, confirm, deniedWrite, forwarded.at, forwarded.pop, forwarded.push, thenable, this.beginHostWrite |
-| [`confirm`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L180) | – | complete |
-| [`completedCallback`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L183) | this, result | Reflect.apply, confirm |
-| [`returnedDone`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L194) | – | confirm |
-| [`HostedAdapter.ownsLocalNamespace`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L204) | – | retainedNamespace |
-| [`HostedAdapter.getForeignObjectAsync`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L205) | id, args | merge, this._owner.getForeignObjectAsync |
-| [`HostedAdapter.setForeignObjectAsync`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L211) | id, object, args | clone, merge, record, this._owner.eosMigration.saveUi, this._owner.getForeignObjectAsync, this._owner.setForeignObjectAsync |
-| [`HostedAdapter.setForeignStateAsync`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L223) | id, args | this.writeAsync |
-| [`HostedAdapter.setForeignStateChangedAsync`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L226) | id, args | this.writeAsync |
-| [`HostedAdapter.setForeignStateChanged`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L229) | id, args | this.writeCallback |
-| [`HostedAdapter.setForeignState`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L232) | id, args | this.writeCallback |
-| [`deniedWrite`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L236) | args, error | Reflect.apply, args.at |
-| [`centralLicenseSnapshot`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L242) | bridge | Array.isArray, Number.isInteger, bridge.getLicense, record, state.features.filter |
-| [`centralAccess`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L268) | bridge, req | Array.isArray, ROLE_CAPABILITIES.get, ROLE_CAPABILITIES.has, bridge.resolveAccess, record, requested.filter |
+| [`record`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L41) | value | Array.isArray |
+| [`clone`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L42) | value | JSON.parse, JSON.stringify |
+| [`merge`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L43) | base, overlay | FORBIDDEN_KEYS.has, Object.entries, Reflect.get, Reflect.set, clone, merge, record |
+| [`retainedNamespace`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L54) | owner | record |
+| [`thenable`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L76) | value | Reflect.get |
+| [`HostedAdapter.constructor`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L90) | { owner, bridge } | Number, Object.defineProperties, merge, namespace.split, retainedNamespace |
+| [`get`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L106) | target, key, receiver | GUARDED_WRITES.has, LOCAL_METHODS.get, Reflect.get, Reflect.has, bound.get, bound.has, bound.set, value.bind |
+| [`HostedAdapter.stopStateWrites`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L135) | – | Promise.all |
+| [`HostedAdapter.beginHostWrite`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L141) | – | this._bridge.canWrite, this.pendingHostWrites.add |
+| [`complete`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L144) | – | – |
+| [`HostedAdapter.writeAsync`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L156) | method, id, args | Promise.reject, returned.then, thenable, this.beginHostWrite |
+| [`HostedAdapter.writeCallback`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L169) | method, id, args | Promise.resolve, complete, confirm, deniedWrite, forwarded.at, forwarded.pop, forwarded.push, thenable, this.beginHostWrite |
+| [`confirm`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L181) | – | complete |
+| [`completedCallback`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L184) | this, result | Reflect.apply, confirm |
+| [`returnedDone`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L195) | – | confirm |
+| [`HostedAdapter.ownsLocalNamespace`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L205) | – | retainedNamespace |
+| [`HostedAdapter.getForeignObjectAsync`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L206) | id, args | merge, this._owner.getForeignObjectAsync |
+| [`HostedAdapter.setForeignObjectAsync`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L212) | id, object, args | clone, merge, record, this._owner.eosMigration.saveUi, this._owner.getForeignObjectAsync, this._owner.setForeignObjectAsync |
+| [`HostedAdapter.setForeignStateAsync`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L224) | id, args | this.writeAsync |
+| [`HostedAdapter.setForeignStateChangedAsync`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L227) | id, args | this.writeAsync |
+| [`HostedAdapter.setForeignStateChanged`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L230) | id, args | this.writeCallback |
+| [`HostedAdapter.setForeignState`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L233) | id, args | this.writeCallback |
+| [`deniedWrite`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L237) | args, error | Reflect.apply, args.at |
+| [`centralLicenseSnapshot`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L243) | bridge | Array.isArray, Number.isInteger, bridge.getLicense, record, state.features.filter |
+| [`centralAccess`](../../../../../src-ts/runtime-executables/lib/hosted-adapter.ts#L269) | bridge, req | Array.isArray, ROLE_CAPABILITIES.get, ROLE_CAPABILITIES.has, bridge.resolveAccess, record, requested.filter |

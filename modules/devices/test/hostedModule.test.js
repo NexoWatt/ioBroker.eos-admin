@@ -1,7 +1,7 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { createHostedModule, validateConfig, command } = require('../index');
+const { createHostedModule, validateConfig, preflightLegacyConfig, migrateLegacyConfig, command } = require('../index');
 const { guardDriver } = require('../operation-guard');
 const templateId = 'battery.bmw.BatteryBmwImpl';
 const device = { id: 'battery1', templateId, protocol: 'modbusTcp', connection: { host: '127.0.0.1', port: 502 } };
@@ -122,4 +122,46 @@ test('state cleanup failure still closes the captured driver; a failed close rem
         else await h.module.stop();
         assert.equal(closed, 1);
     }
+});
+
+
+test('legacy preflight preserves 0.5.176 devicesJson when the native array is only its empty default', async () => {
+    const previous = { ...device, id: 'old.device-01', enabled: true, connection: { host: '192.0.2.1', port: 502, password: 'fixture-device-password', clientId: 'retained-client' } };
+    const original = { enabled: false, devices: [], devicesJson: JSON.stringify([previous]), pollIntervalMs: 1234, customSetting: 'retained' };
+    const before = structuredClone(original);
+    for (const migrate of [preflightLegacyConfig, migrateLegacyConfig]) {
+        const migrated = await migrate(original);
+        assert.deepEqual(migrated.config.devices, [previous]);
+        assert.equal(migrated.config.pollIntervalMs, 1234);
+        assert.equal(migrated.config.customSetting, 'retained');
+        assert.equal(migrated.config.enabled, false);
+        assert.equal(migrated.config.devicesJson, undefined);
+        assert.deepEqual(original, before, 'source object remains untouched');
+    }
+});
+
+test('two filled legacy sources must agree and neither conflicting source is silently selected', async () => {
+    const original = { devices: [device], devicesJson: JSON.stringify([{ ...device, connection: { ...device.connection, host: '192.0.2.2' } }]) };
+    const before = structuredClone(original);
+    await assert.rejects(preflightLegacyConfig(original), /EOS_DEVICES_LEGACY_CONFIG_CONFLICT/);
+    assert.deepEqual(original, before);
+    const same = await preflightLegacyConfig({ devices: [device], devicesJson: JSON.stringify([device]) });
+    assert.deepEqual(same.config.devices, [device]);
+    const modern = await preflightLegacyConfig({ devices: [device], devicesJson: '[]' });
+    assert.deepEqual(modern.config.devices, [device]);
+});
+
+test('normal explicit empty-device save never resurrects a leftover legacy JSON list', () => {
+    const saved = validateConfig({ devices: [], devicesJson: JSON.stringify([device]) });
+    assert.deepEqual(saved.devices, []);
+    assert.equal(saved.devicesJson, undefined);
+});
+
+test('legacy preflight rejects malformed, unsafe and unknown JSON devices before any hosted runtime', async () => {
+    for (const raw of ['{broken', '{}', '[{"id":"valid","templateId":"a","protocol":"http","connection":{"constructor":{}}}]']) {
+        await assert.rejects(preflightLegacyConfig({ devices: [], devicesJson: raw }), /EOS_DEVICES_CONFIG_/);
+    }
+    await assert.rejects(preflightLegacyConfig({ devices: [], devicesJson: JSON.stringify([{ ...device, templateId: 'missing-template' }]) }), /EOS_DEVICES_UNKNOWN_TEMPLATE/);
+    const empty = await preflightLegacyConfig({ devices: [], devicesJson: '[]' });
+    assert.deepEqual(empty.config.devices, []);
 });

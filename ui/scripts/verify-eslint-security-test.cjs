@@ -52,6 +52,10 @@ async function main() {
   assert.equal(evaluate([], baseline).absent, legacy.length); checks += 1;
   const strictAny = await lint('let value: any;', 'src-admin-tab/src/lint-self-test-fixture.ts');
   assert(evaluate(strictAny, inventory(strictAny)).introduced.length > 0); checks += 1;
+  for (const source of ['let value: any;', '// @ts-nocheck\nconst value = 1;']) {
+    const statusTypes = await lint(source, 'src-ts/runtime-executables/lib/hosted-startup-status.ts');
+    assert(evaluate(statusTypes, inventory(statusTypes)).introduced.length > 0); checks += 1;
+  }
   const ignored = await lint('// eslint-disable-next-line\nlet value: any;');
   assert(ignored.some(item => item.rule === '@typescript-eslint/no-explicit-any')); checks += 1;
   assert(ignored.some(item => item.rule === '<parser-or-inline-directive>')); checks += 1;

@@ -65,3 +65,13 @@ Ein Abbruch während der Vorbereitung wird beim nächsten Start anhand des Journ
 Vor Kundenupdates eine vollständige, rücksicherbare Sicherung mit Konfigurationsdaten, Zertifikaten, Lizenzspeicher, UI-/Moduldaten, Historie und passenden Originalpaketen vorhalten. Die Umschaltung benötigt einen tatsächlichen Prozesswechsel und kann Geräteverbindungen kurz unterbrechen. Nach dem Update Port 8081, EOS-Anmeldung, gespeicherte Zuordnungen, frische Messwerte, Regeltakte, aktive Grenzen, Gerätetelegramme, Historie, Backup und Neustart der Zielanlage prüfen. Bei Rückfall zuerst die integrierten Regler und Transporte sicher stoppen, dann die gesicherten Originalinstanzen wieder in Betrieb nehmen. Ein bloßer Paket-Downgrade auf 9.0.6 liest die neue separate Konfigurationsablage nicht und ist deshalb kein vollständiger Daten-Rollback.
 
 Die vorhandenen manuellen Geräte-/EEBus-Importknöpfe bleiben separate Konfigurationsimporte mit den früheren neuen Zielpfaden. Sie sind keine zweite Stufe der automatischen Übernahme und dürfen nach erfolgreicher automatischer Übernahme nicht zusätzlich ausgeführt werden.
+
+## Ergänzung 9.0.14: Lizenzwechsel und Geräte-Altformat
+
+Wird die Lizenz erst nach dem Start aktiviert, bleibt die noch nicht ausgeführte Übernahme gesperrt. Der Status nennt dann `EOS_MIGRATION_RESTART_REQUIRED`. Ein vollständiger EOS-Adapterneustart prüft vor dem Aufbau der neuen Laufzeiten alle Quellen neu. Ein Hot-Retry in einer bereits an einen Namespace gebundenen Laufzeit findet nicht statt. Solange die Vorprüfung nicht erfolgreich ist, werden keine Defaults als Ersatz für den Bestand freigegeben.
+
+Die Altübernahme von Devices 0.5.176 berücksichtigt `devicesJson`, wenn `devices` fehlt oder leer ist. Zwei gefüllte, widersprüchliche Listen sperren den Import. Das absichtliche Leeren einer heutigen Geräteliste bleibt eine echte Löschung der Konfiguration und reaktiviert keine alte JSON-Liste. Bereits übernommene Original-Namespaces werden durch einen weiteren manuellen Import nicht ersetzt.
+
+Im gemeldeten Livefall startete 9.0.12 ohne Vertrauensanker; die Lizenz wurde später aktiviert. Die Statusseite bestätigt `LICENSE_REQUIRED`, beide Altadapter sind noch eingeschaltet. Vor der korrigierten automatischen Übernahme bleiben die Quellen erhalten und aktiv. Die konkrete erfolgreiche Übergabe muss auf dem Zielgerät mit `COMMITTED`, unveränderten IDs, übernommenen Einstellungen und frischen Gerätewerten nachgewiesen werden. Ein lesbares App-Center-Backup ist kein Nachweis, dass die vollständige Übernahme schon stattgefunden hat.
+
+[9.0.14-Anleitung](../../START_HIER_9.0.14.md) und [Prüfbericht](../reports/unified-9.0.14/PRUEFBERICHT.md).

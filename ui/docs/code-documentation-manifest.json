@@ -1008,8 +1008,8 @@
     },
     {
       "path": "src-ts/runtime-executables/lib/hosted-adapter.ts",
-      "sourceHash": "db9b5032a256b1e664cdcf2093b592908b9bcd0dab348ad9f21b480618a7d440",
-      "codeHash": "a162a2017cc72cbd62b5fe36751a4ee9acc1d3d0ca0369a64318778ad004746f"
+      "sourceHash": "6f988d70be6131e68e6990fdbbbdce0c05006cdf00901e08203ad0cb1f7a541e",
+      "codeHash": "6dfe2fe782420b85394d254070e00cd27833cd335c8b051d489eb027393072fe"
     },
     {
       "path": "src-ts/runtime-executables/lib/hosted-http-boundary.ts",
@@ -1020,6 +1020,11 @@
       "path": "src-ts/runtime-executables/lib/hosted-runtime-stop.ts",
       "sourceHash": "2cf60c02b437d75b38cbde776a02891af4aa37410c90b3c9e7961609632ca67a",
       "codeHash": "96b2f9e40224a817d65f2e9fb5ee493eb8c6f656de25521e7b8c62ea3d20e483"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/hosted-startup-status.ts",
+      "sourceHash": "ea2649805a3f45fe30bf1a5fd775039df588ff5626728d96fc932de76b337cc5",
+      "codeHash": "2b0b6242b9afae2948713e0f24d78e17dc875d3cf7894e32d7ee722d0be4dc6e"
     },
     {
       "path": "src-ts/runtime-executables/lib/http-error-boundary.ts",
@@ -1198,8 +1203,8 @@
     },
     {
       "path": "src-ts/runtime-executables/main.ts",
-      "sourceHash": "eb8c0a32e8467f11249fc43ebab0ca5878ea0afbc4451eb0b79a5cc3f9c6d576",
-      "codeHash": "c0d3481dd4451fbb497f434246b8b61d53f6c4fe58b6b4c3f9bcee1d602c8379"
+      "sourceHash": "9a76045d2ce0039dc549c17d221ac2ac2a2b662cd352acd00a97307b4f212f0d",
+      "codeHash": "c8d3f7338328715e3964322b7e8a41f4709a01e8967a400ae141798d347e43d8"
     },
     {
       "path": "src-ts/runtime-executables/www/admin-guard.ts",
@@ -1243,8 +1248,8 @@
     },
     {
       "path": "src-ts/runtime-executables/www/ems-apps.ts",
-      "sourceHash": "acf337b0548eb70062b48b47ae74fceba3eb212cdff057b7d6c2f5d0d5f86e13",
-      "codeHash": "ede6fe64960844c88e0aab8d5d326c567e7d6c4303b3e300fd0a7d3bd9584f4a"
+      "sourceHash": "74c581a2b025e8ab8d3a24b3da5ed91082daf524c67a27e866aebcbd9928d2b8",
+      "codeHash": "522af594631455e566f7c6dd9e5b79c9b82c752eacf4cfea81c29dfd93d791b7"
     },
     {
       "path": "src-ts/runtime-executables/www/energy-ledger.ts",
@@ -1418,8 +1423,8 @@
     },
     {
       "path": "src-ts/runtime-executables/www/smarthome-setup.ts",
-      "sourceHash": "9513f3b63d66f64a4bb1c949207dd979359a1db8d208a9d02848225c44c423b4",
-      "codeHash": "bbc11bb5f624328debcac56fad3be088908e01771e7e0f1518575265bbda90c7"
+      "sourceHash": "c64c4ff4763149b355aeef9b5e155b7598b2bb25fcc884296bd6b9b09b102108",
+      "codeHash": "9cfb59b0b02578ff675abcd866c5f1720d666991a8cecb2cce64ebbe2e39e1b3"
     },
     {
       "path": "src-ts/runtime-executables/www/smarthome-touch.ts",
@@ -2299,7 +2304,7 @@
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/lib/hosted-adapter.md",
-      "hash": "0bc6bfa850ca2457529a10aa8cb76c08b15158a99b0fe671b602b1d56af27eca"
+      "hash": "138d17e4f0b031e4535eb23ea411d2662674cf4067a26a9dee3bf53de6612259"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/lib/hosted-http-boundary.md",
@@ -2308,6 +2313,10 @@
     {
       "path": "docs/quellcode/src-ts/runtime-executables/lib/hosted-runtime-stop.md",
       "hash": "58b23a6c1c169beef84af3dbc77e919cb486973ab818201bca47776775dd85f3"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/hosted-startup-status.md",
+      "hash": "9137ee7a11237c540e9804073bd83e4b6bf90e3a64875c187e95e35d6928c89f"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/lib/http-error-boundary.md",
@@ -2451,7 +2460,7 @@
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/main.md",
-      "hash": "3fbd5959ca3d0dc4684b48f1a2e1c2656cefd8a5b1524cc831ce00af108bacc8"
+      "hash": "98be9437be94d72641dfc5c6d252eb1e9f0773b08f70c48cbfa008dcc16cb08e"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/admin-guard.md",
@@ -2487,7 +2496,7 @@
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/ems-apps.md",
-      "hash": "09b775feed9a6d162a21bc1a8d2c9e04c6bd43d44b4e5aa2eed9c4bc51a094b4"
+      "hash": "dc05909119288e4b18cfe5eeed0868c8b9f30498d33742d47b0b14a04298acab"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/energy-ledger.md",
@@ -2627,7 +2636,7 @@
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/smarthome-setup.md",
-      "hash": "b96dbfd6242993c6a44113838a3ce5e935a96679c58d08fba7bebf8697d7d77a"
+      "hash": "2149c7368d529e091e9b401d69ea5c340299793e2810abc28a79f246476463f5"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/smarthome-touch.md",
@@ -2687,7 +2696,7 @@
     },
     {
       "path": "docs/QUELLCODE_VERKNUEPFUNGEN_DE.md",
-      "hash": "8b0b375254026772f7361e96f6506f533acf0091b5bbf4bc829dd2a137f46c0c"
+      "hash": "2ac14ccdaf422c08f48fb41a1b6faeee2336d302c2e981fccb73343462dc26df"
     }
   ]
 }

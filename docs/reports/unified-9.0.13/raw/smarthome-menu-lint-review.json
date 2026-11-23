@@ -1,0 +1,26 @@
+{
+  "file": "src-ts/runtime-executables/www/smarthome-setup.ts",
+  "sourceCodeSha256": "9cfb59b0b02578ff675abcd866c5f1720d666991a8cecb2cce64ebbe2e39e1b3",
+  "findings": [
+    {
+      "file": "src-ts/runtime-executables/www/smarthome-setup.ts",
+      "rule": "security/detect-object-injection",
+      "fingerprint": "5b387ff0d9799bf9d16e84bb2b8517a61ced46a3135070c4f0c9686bfb29df74",
+      "line": 105,
+      "column": 108,
+      "fatal": false,
+      "severity": 2,
+      "count": 1
+    },
+    {
+      "file": "src-ts/runtime-executables/www/smarthome-setup.ts",
+      "rule": "security/detect-object-injection",
+      "fingerprint": "51b4edb56178c8f6950d3c1312230385342bd72eb32f05de2056a78dffa198d6",
+      "line": 238,
+      "column": 504,
+      "fatal": false,
+      "severity": 2,
+      "count": 1
+    }
+  ]
+}

@@ -12,10 +12,10 @@ async function flushUntil(predicate) {
     assert.fail('editor operation did not settle');
 }
 
-async function fixture() {
+async function fixture(settings = {}) {
     const nodes = new Map(); const domEvents = new Map(); const requests = [];
     let token = 'initial-csrf'; let authenticated = true; let loads = 0; let denyPut = false;
-    let stored = { enabled: false, devices: [{ id: 'ess1', name: 'Existing ESS', connection: { password: '__EOS_SECRET_UNCHANGED__' } }] };
+    let stored = { enabled: settings.enabled === true, devices: [{ id: 'ess1', name: 'Existing ESS', connection: { password: '__EOS_SECRET_UNCHANGED__' } }] };
     let edited = structuredClone(stored);
     const node = id => {
         if (!nodes.has(id)) nodes.set(id, { textContent: '', dataset: {}, events: {}, children: [], checked: false,
@@ -29,17 +29,20 @@ async function fixture() {
     async fetch(url, options) {
         const method = options.method || 'GET'; requests.push({ url, ...options, method });
         if (!authenticated) return { status: 401, ok: false };
+        if (method === 'POST' && settings.importError) return { status: 400, ok: false, json: async () => ({ error: settings.importError }) };
         if (method === 'PUT') {
             if (denyPut) return { status: 403, ok: false };
             assert.equal(options.headers['x-nw-csrf'], token);
             stored = JSON.parse(options.body).config;
         }
-        return { status: 200, ok: true, json: async () => ({ config: structuredClone(stored), csrfToken: token, status: { active: false, reason: 'DISABLED' } }) };
+        return { status: 200, ok: true, json: async () => ({ config: structuredClone(stored), configurationReady: settings.configurationReady !== false,
+            manualImport: settings.manualImport, csrfToken: token, migration: settings.migration || null, status: { active: false, reason: settings.reason || 'DISABLED' } }) };
     } };
     vm.runInNewContext(source, context, { filename: 'host-bridge.js' }); domEvents.get('DOMContentLoaded')();
     await flushUntil(() => node('eosModuleStatus').textContent.startsWith('Gerätemodul:'));
     return { node, requests, draft: () => edited, stored: () => stored, loads: () => loads,
         authenticate(value, nextToken = token) { authenticated = value; token = nextToken; }, denyPut(value) { denyPut = value; },
+        async import() { node('eosLegacyInstance').value = 'nexowatt-devices.0'; node('eosModuleImport').events.click(); await flushUntil(() => node('eosModuleReload').disabled === false); },
         async save() { node('eosModuleSave').events.click(); await flushUntil(() => node('eosModuleReload').disabled === false); },
     };
 }
@@ -71,4 +74,56 @@ test('forbidden mutation is never replayed and preserves its draft for correctio
     assert.equal(f.requests.filter(request => request.method === 'PUT').length, 1);
     assert.equal(f.loads(), 1); assert.equal(f.draft().devices[0].name, 'Do not lose');
     assert.equal(f.node('eosModuleStatus').dataset.error, 'true');
+});
+
+
+test('enabled stored module exposes the exact import prerequisite and never posts a manual import', async () => {
+    const f = await fixture({ enabled: true });
+    assert.equal(f.node('eosModuleImport').disabled, true);
+    assert.match(f.node('eosImportHint').textContent, /gespeicherte Gerätemodul deaktiviert/);
+    f.node('eosModuleEnabled').checked = false;
+    await f.import();
+    assert.equal(f.requests.some(request => request.url.endsWith('/import')), false, 'unsaved checkbox alone cannot unlock import');
+    assert.equal(f.stored().enabled, true);
+    await f.save();
+    assert.equal(f.stored().enabled, false);
+    assert.equal(f.node('eosModuleImport').disabled, false);
+});
+
+test('preserved automatic migration cannot be replaced by a manual import from the editor', async () => {
+    const f = await fixture({ migration: { preserveNamespace: true, source: 'nexowatt-devices.0' } });
+    assert.equal(f.node('eosModuleImport').disabled, true);
+    assert.match(f.node('eosImportHint').textContent, /ursprünglichen Datenpunkt-IDs/);
+    await f.import();
+    assert.equal(f.requests.some(request => request.url.endsWith('/import')), false);
+    assert.equal(f.loads(), 1);
+});
+
+test('manual import explains a newly blocked server state without losing the draft or replaying writes', async () => {
+    const f = await fixture({ importError: 'EOS_MODULE_IMPORT_REQUIRES_DISABLED' });
+    f.draft().devices[0].name = 'Unsaved customer setting';
+    await f.import();
+    assert.equal(f.requests.filter(request => request.url.endsWith('/import')).length, 1);
+    assert.match(f.node('eosModuleStatus').textContent, /Speichern und übernehmen/);
+    assert.doesNotMatch(f.node('eosModuleStatus').textContent, /^EOS_MODULE_/);
+    assert.equal(f.draft().devices[0].name, 'Unsaved customer setting');
+    assert.equal(f.loads(), 1);
+});
+
+test('unconfirmed module stop blocks the editor import without instructing an unsafe retry', async () => {
+    const f = await fixture({ reason: 'STOP_FAILED_RESTART_REQUIRED' });
+    assert.equal(f.node('eosModuleImport').disabled, true);
+    assert.match(f.node('eosImportHint').textContent, /Stopp des Gerätemoduls ist nicht bestätigt/);
+    await f.import();
+    assert.equal(f.requests.some(request => request.url.endsWith('/import')), false);
+});
+
+test('uninitialized module configuration stays readable but cannot be saved or manually imported', async () => {
+    const f = await fixture({ configurationReady: false, manualImport: { allowed: false, reason: 'EOS_MODULE_NOT_READY' } });
+    assert.equal(f.node('eosModuleImport').disabled, true);
+    assert.equal(f.node('eosModuleSave').disabled, true);
+    assert.equal(f.node('eosModuleReload').disabled, false);
+    assert.match(f.node('eosImportHint').textContent, /kontrollierter EOS-Neustart/);
+    await f.import();
+    assert.equal(f.requests.some(request => request.method === 'POST'), false);
 });

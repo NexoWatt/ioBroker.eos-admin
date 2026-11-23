@@ -1,0 +1,238 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: full hosted onReady initializes EMS with controller-shaped fixture and no device mappings
+ok 1 - full hosted onReady initializes EMS with controller-shaped fixture and no device mappings
+  ---
+  duration_ms: 256.444223
+  type: 'test'
+  ...
+# Subtest: EMS startup failure remains visible as degraded while authenticated shell survives
+ok 2 - EMS startup failure remains visible as degraded while authenticated shell survives
+  ---
+  duration_ms: 192.082656
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: stop coordinator waits every pending startup and final cleanup before confirming quiescence
+ok 3 - stop coordinator waits every pending startup and final cleanup before confirming quiescence
+  ---
+  duration_ms: 7.357204
+  type: 'test'
+  ...
+# Subtest: failed startup is drained and cleaned rather than reported as failed shutdown
+ok 4 - failed startup is drained and cleaned rather than reported as failed shutdown
+  ---
+  duration_ms: 0.390304
+  type: 'test'
+  ...
+# Subtest: timeout is unconfirmed and late startup still gets final cleanup without changing its rejected result
+ok 5 - timeout is unconfirmed and late startup still gets final cleanup without changing its rejected result
+  ---
+  duration_ms: 26.03948
+  type: 'test'
+  ...
+# Subtest: cleanup throws, rejects or never confirms never produce a successful stop
+ok 6 - cleanup throws, rejects or never confirms never produce a successful stop
+  ---
+  duration_ms: 21.452486
+  type: 'test'
+  ...
+# Subtest: shell scheduled in a microtask cannot start after stop has already fenced the runtime
+ok 7 - shell scheduled in a microtask cannot start after stop has already fenced the runtime
+  ---
+  duration_ms: 1576.10183
+  type: 'test'
+  ...
+# Subtest: operational start cannot outlive a successful stop or revive writes/readiness
+ok 8 - operational start cannot outlive a successful stop or revive writes/readiness
+  ---
+  duration_ms: 1005.447465
+  type: 'test'
+  ...
+# Subtest: active shell bootstrap is joined and its late resource receives final cleanup
+ok 9 - active shell bootstrap is joined and its late resource receives final cleanup
+  ---
+  duration_ms: 826.291932
+  type: 'test'
+  ...
+# Subtest: actual hosted stop rejects a hung startup and keeps rejection/status after late cleanup
+ok 10 - actual hosted stop rejects a hung startup and keeps rejection/status after late cleanup
+  ---
+  duration_ms: 910.693821
+  type: 'test'
+  ...
+# Subtest: actual runtime stop joins accepted host writes before confirming shutdown
+ok 11 - actual runtime stop joins accepted host writes before confirming shutdown
+  ---
+  duration_ms: 967.959613
+  type: 'test'
+  ...
+# Subtest: real onUnload waits returned service-stop promises and propagates stop failure
+ok 12 - real onUnload waits returned service-stop promises and propagates stop failure
+  ---
+  duration_ms: 2184.398854
+  type: 'test'
+  ...
+# Subtest: hung actual service stop and hung host write both keep shutdown unconfirmed
+ok 13 - hung actual service stop and hung host write both keep shutdown unconfirmed
+  ---
+  duration_ms: 2129.993908
+  type: 'test'
+  ...
+# (node:14) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: facade creates no adapter and isolates native.eosUi from host security fields
+ok 14 - facade creates no adapter and isolates native.eosUi from host security fields
+  ---
+  duration_ms: 3.310661
+  type: 'test'
+  ...
+# Subtest: all four foreign state APIs enforce the current owner generation
+ok 15 - all four foreign state APIs enforce the current owner generation
+  ---
+  duration_ms: 1.18276
+  type: 'test'
+  ...
+# Subtest: license requires a valid central core grant and preserves signed limits
+ok 16 - license requires a valid central core grant and preserves signed limits
+  ---
+  duration_ms: 0.411365
+  type: 'test'
+  ...
+# Subtest: central access rejects required password setup and missing credential binding
+ok 17 - central access rejects required password setup and missing credential binding
+  ---
+  duration_ms: 1.33904
+  type: 'test'
+  ...
+# Subtest: hosted shell opens no listener; HTTP authorization remains fail closed
+ok 18 - hosted shell opens no listener; HTTP authorization remains fail closed
+  ---
+  duration_ms: 118.479585
+  type: 'test'
+  ...
+# Subtest: fresh UI snapshot never converts revoked Home to Pro; control retains only verified old limits
+ok 19 - fresh UI snapshot never converts revoked Home to Pro; control retains only verified old limits
+  ---
+  duration_ms: 52.293575
+  type: 'test'
+  ...
+# Subtest: blocked hosted startup resumes once only after fresh ownership and central license confirmation
+ok 20 - blocked hosted startup resumes once only after fresh ownership and central license confirmation
+  ---
+  duration_ms: 177.882355
+  type: 'test'
+  ...
+# Subtest: shell bootstrap failure can retry once without starting operational work
+ok 21 - shell bootstrap failure can retry once without starting operational work
+  ---
+  duration_ms: 11.852487
+  type: 'test'
+  ...
+# Subtest: stop during shell bootstrap discards its late completion and cannot reopen the runtime
+ok 22 - stop during shell bootstrap discards its late completion and cannot reopen the runtime
+  ---
+  duration_ms: 35.186823
+  type: 'test'
+  ...
+# Subtest: cached license grants cannot keep an incomplete or failed startup alive
+ok 23 - cached license grants cannot keep an incomplete or failed startup alive
+  ---
+  duration_ms: 2.918604
+  type: 'test'
+  ...
+# (node:20) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: startup status distinguishes waiting, unlicensed, blocked, failure and commissioned runtime
+ok 24 - startup status distinguishes waiting, unlicensed, blocked, failure and commissioned runtime
+  ---
+  duration_ms: 1.187717
+  type: 'test'
+  ...
+# Subtest: host-blocked migration and writer diagnostics stay distinct from ordinary startup
+ok 25 - host-blocked migration and writer diagnostics stay distinct from ordinary startup
+  ---
+  duration_ms: 0.846295
+  type: 'test'
+  ...
+# Subtest: failed startup cannot be relabelled as a harmless pending migration or stale grant
+ok 26 - failed startup cannot be relabelled as a harmless pending migration or stale grant
+  ---
+  duration_ms: 0.119886
+  type: 'test'
+  ...
+# Subtest: unknown metadata, secrets and unbounded blockers are never copied into status
+ok 27 - unknown metadata, secrets and unbounded blockers are never copied into status
+  ---
+  duration_ms: 0.464423
+  type: 'test'
+  ...
+# Subtest: readiness provider failure has no writes or change to the existing lifecycle snapshot
+ok 28 - readiness provider failure has no writes or change to the existing lifecycle snapshot
+  ---
+  duration_ms: 0.327723
+  type: 'test'
+  ...
+# Subtest: authenticated EMS status shows the actual migration blocker without starting or writing anything
+ok 29 - authenticated EMS status shows the actual migration blocker without starting or writing anything
+  ---
+  duration_ms: 57.389773
+  type: 'test'
+  ...
+# Subtest: EMS frontend displays blocked startup and its safe same-tab recovery link without claiming a running engine
+ok 30 - EMS frontend displays blocked startup and its safe same-tab recovery link without claiming a running engine
+  ---
+  duration_ms: 21.030731
+  type: 'test'
+  ...
+# Subtest: EMS frontend keeps diagnostic text inert and omits unauthorized or external recovery links
+ok 31 - EMS frontend keeps diagnostic text inert and omits unauthorized or external recovery links
+  ---
+  duration_ms: 18.9644
+  type: 'test'
+  ...
+# Subtest: restore frontend reports the specific startup reason and preserves other API error behavior
+ok 32 - restore frontend reports the specific startup reason and preserves other API error behavior
+  ---
+  duration_ms: 22.146082
+  type: 'test'
+  ...
+# Subtest: restore requests remain blocked for every incomplete start state, with accurate reason and preserved configuration
+ok 33 - restore requests remain blocked for every incomplete start state, with accurate reason and preserved configuration
+  ---
+  duration_ms: 41.54293
+  type: 'test'
+  ...
+# (node:21) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: preserved-state corruption fails closed in full startup during TRANSFERRED; recovery listener survives
+ok 34 - preserved-state corruption fails closed in full startup during TRANSFERRED; recovery listener survives
+  ---
+  duration_ms: 152.736134
+  type: 'test'
+  ...
+# Subtest: preserved-state corruption fails closed in full startup during COMMITTED; recovery listener survives
+ok 35 - preserved-state corruption fails closed in full startup during COMMITTED; recovery listener survives
+  ---
+  duration_ms: 48.200424
+  type: 'test'
+  ...
+# Subtest: timer and logic-clock saves wait for complete preserved startup hydration instead of losing a confirmed edit
+ok 36 - timer and logic-clock saves wait for complete preserved startup hydration instead of losing a confirmed edit
+  ---
+  duration_ms: 317.819008
+  type: 'test'
+  ...
+1..36
+# tests 36
+# suites 0
+# pass 36
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 10262.523555

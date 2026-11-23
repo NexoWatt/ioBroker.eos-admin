@@ -6,10 +6,10 @@
 // @runtime-transpile
 /**
  * NexoWatt Quellcode-Erklärung (DE)
- * Aufgabe: Lokale Auswahl, kompakte Listen und transaktionale Formularfenster.
+ * Aufgabe: Lokale Auswahl, kompakte Listen, Aktionsmenüs und transaktionale Formularfenster.
  * Daten und Wirkung: Textbasierte Darstellung sowie begrenztes Lesen der Erkennung.
  * Host besitzt Entwurf, Validierung, Aliasfreigabe und dauerhaftes Speichern.
- * Bei Änderungen: Fokus, Abbruch, Entwurfsgrenzen, Antwortlimits und Pagination prüfen. */
+ * Bei Änderungen: Menüebenen, Fokus, Abbruch, Entwurfsgrenzen, Antwortlimits und Pagination prüfen. */
 interface NwSetupPreferences { floorId?: string; roomId?: string; query?: string }
 interface NwSetupOptions {
   config: unknown; preferences: NwSetupPreferences;
@@ -39,6 +39,38 @@ interface NwSetupApi {
   'use strict';
   const host: Window & { NW_SH_SETUP?: NwSetupApi } = window;
   if (host.NW_SH_SETUP) return;
+  /**
+   * Koordiniert ausschließlich die zwei statischen Aktionsmenüs der Einrichtung.
+   * Native Details-/Summary-Bedienung bleibt erhalten; Wechsel, Außenklick,
+   * Fokuswechsel und Escape schließen offene Menüs ohne Konfiguration oder API.
+   * Ein Dialog erhält Escape weiterhin selbst, sobald der Fokus außerhalb liegt.
+   */
+  function bindActionMenus(): void {
+    const menus = Array.from(document.querySelectorAll<HTMLDetailsElement>('.nw-setup-project-actions, .nw-shcfg-more'));
+    if (menus.length === 0) return;
+    const closeOthers = (keep?: HTMLDetailsElement): void => { for (const menu of menus) if (menu !== keep) menu.open = false; };
+    for (const menu of menus) menu.addEventListener('toggle', () => { if (menu.open) closeOthers(menu); });
+    document.addEventListener('click', event => {
+      const target = event.target;
+      if (!(target instanceof Node)) return;
+      const menu = menus.find(item => item.contains(target));
+      if (!menu) { closeOthers(); return; }
+      closeOthers(menu);
+      if (target instanceof Element && target.closest('button,a[href]') && !target.closest('summary')) menu.open = false;
+    });
+    document.addEventListener('focusin', event => {
+      const target = event.target;
+      if (target instanceof Node) closeOthers(menus.find(menu => menu.contains(target)));
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key !== 'Escape') return;
+      const menu = menus.find(item => item.open && item.contains(document.activeElement));
+      closeOthers();
+      if (!menu) return;
+      event.preventDefault();
+      menu.querySelector<HTMLElement>('summary')?.focus({ preventScroll: true });
+    });
+  }
   const record = (value: unknown): value is Record<string, unknown> => !!value && typeof value === 'object' && !Array.isArray(value);
   const text = (value: unknown, fallback = ''): string => typeof value === 'string' ? value.slice(0, 300) : fallback;
   const rows = (value: unknown): Record<string, unknown>[] => Array.isArray(value) ? value.filter(record) : [];
@@ -227,4 +259,5 @@ interface NwSetupApi {
     finally { clearTimeout(timer); controller.abort(); }
   }
   host.NW_SH_SETUP = Object.freeze({ mountSetup, mountDetection, openDialog, cloneConfig, readDetection, hasDialog: () => active !== null });
+  bindActionMenus();
 })();

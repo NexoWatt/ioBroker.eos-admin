@@ -1,0 +1,1847 @@
+EOS 9.0.12: package, defaults, 3853 sealed files and targeted secret rules passed.
+✔ CLI accepts only explicit directory and numeric instance options (5.37703ms)
+✔ controller lookup verifies exact package identity and fixed CLI path (3.145929ms)
+✔ all diagnostic controller commands are fixed allowlisted reads (0.797373ms)
+✔ password presence output never contains the stored value (2.556361ms)
+✔ CLI reader rejects writes, appended arguments and decoder swaps without spawning (1.149291ms)
+✔ certificate inventory emits names/presence only, never PEMs, keys or unexpected names (0.514357ms)
+✔ direct all-interface HTTPS is reported without claiming a live listener or valid certificate (4.215191ms)
+✔ missing, unknown and malformed password statuses are distinguished (0.492214ms)
+✔ private or malformed values in allowlisted fields are not printed (11.693223ms)
+✔ child CLI uses Node, fixed argv, no shell, strict bounds and sanitized error handling (0.720671ms)
+✔ partial failures report only field/error codes and diagnose alpha access pattern (0.640042ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'typescript'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/test/fixtures/load-ephemeral-cache.cjs
+- <temporary>/repo with spaces/iobroker.eos-admin/test/eos-ephemeral-cache.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/test/fixtures/load-ephemeral-cache.cjs:8:12)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/test/fixtures/load-ephemeral-cache.cjs',
+    '<temporary>/repo with spaces/iobroker.eos-admin/test/eos-ephemeral-cache.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ test/eos-ephemeral-cache.test.cjs (53.258512ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'typescript'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/test/eos-history-api-stability.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/test/eos-history-api-stability.test.cjs:9:12)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/test/eos-history-api-stability.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ test/eos-history-api-stability.test.cjs (69.737165ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'typescript'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/test/eos-history-deadline.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/test/eos-history-deadline.test.cjs:9:12)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/test/eos-history-deadline.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ test/eos-history-deadline.test.cjs (70.259273ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'express'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/test/eos-hosted-boundary-http.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/test/eos-hosted-boundary-http.test.cjs:5:17)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/test/eos-hosted-boundary-http.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ test/eos-hosted-boundary-http.test.cjs (51.083101ms)
+✔ default uses verified TLS upstream, explicit SNI and exact unchanged Browser Host (14.698705ms)
+✔ local alias is explicit and HTTP loopback is an explicit incompatible legacy profile (1.586985ms)
+✔ nexowatt is an explicit exact public host while upstream identity and existing defaults stay separate (2.038499ms)
+✔ public host validation rejects unsafe authorities and does not silently repair them (1.937911ms)
+✔ TLS requires an explicit CA file and strictly validated DNS certificate identity (0.609216ms)
+✔ host and every certificate-path interpolation reject injection and ambiguous paths (1.981736ms)
+✔ files and complete parent chains reject symlinks, insecure permissions and absent inputs (6.14484ms)
+✔ output is private and exclusive, including symlink and parent-directory attacks (1.239994ms)
+✔ CLI rejects duplicate/unknown parameters and never replaces an existing file (540.009258ms)
+﹣ nginx -t validates the generated TLS fragment when the binary is available (3.734304ms) # nginx not installed; no nginx syntax or real TLS handshake claim
+✔ starts denied, permits signed-service decision and sends no license key (6.39016ms)
+✔ a new request uses a new nonce and rejects replay from an older request (3.50101ms)
+✔ Home and Pro quantity limits and features are checked independently (4.26823ms)
+✔ malformed, stale, future, oversized and missing entitlements fail closed (5.039544ms)
+✔ timeout invalidates an existing lease; late and duplicate callbacks cannot reopen it (21.718371ms)
+✔ throws and rejected transport promises settle denied without an unhandled rejection (1.06018ms)
+✔ lease expires autonomously, onLost is once per denial episode, then recovery is possible (36.942689ms)
+✔ wall clock rollback does not extend monotonic lease and a forward jump immediately denies (39.706735ms)
+✔ stop cancels in-flight request and prevents late callback activation (0.717836ms)
+✔ concurrent callers coalesce safely and status mutation cannot change entitlement (0.595436ms)
+✔ failed safe-state callback latches denial and sanitizes logs (6.799674ms)
+✔ asynchronous safe-state transition must finish before a fresh grant is accepted (2.392079ms)
+✔ invalid configuration cannot create a permissive guard (0.651068ms)
+✔ one shared lease gates each Home/Pro feature without extra messages or rights after loss (3.548781ms)
+✔ UUID normalizes case/space while preserving canonical and direct vendor-prefix identity (5.830889ms)
+✔ Home license authenticates UUID, explicit adapters, limits and immutable derived features (2.503453ms)
+✔ Pro license enables Pro features only from signed edition and caps 10 batteries (5.321649ms)
+✔ expiry and notBefore use exact millisecond boundaries without coercion or grace (2.568729ms)
+✔ forged or edited signature, foreign signing key, unknown kid and legacy format fail closed (1.861689ms)
+✔ trust accepts only bounded explicit Ed25519 public SPKI keys (40.979448ms)
+✔ schema rejects wildcard adapters, duplicate adapters, unsafe limits and unknown signed fields (10.016636ms)
+✔ malformed/oversized tokens and noncanonical base64 cannot reach successful verification (0.790823ms)
+✔ encrypted storage roundtrips across restart with fresh nonce and no plaintext on disk (50.533904ms)
+✔ GCM binds UUID and fails after ciphertext/tag/nonce corruption (42.877975ms)
+✔ missing/wrong/short storage key never silently regenerates existing encrypted license (18.218643ms)
+✔ storage high water mark cannot decrease; serialized operations preserve monotonic value (25.883298ms)
+✔ clear removes only license, keeps device encryption key and permits fresh install (15.465392ms)
+✔ storage rejects symlink files, symlink directory/ancestor and hard linked secrets (25.680601ms)
+✔ storage rejects permissive POSIX modes and unsafe directory roots (8.279736ms)
+✔ storage bounds files and rejects malformed data/envelopes without destructive overwrite (8.190901ms)
+✔ license endpoints authorize before body parser, service calls and static files (3.864886ms)
+✔ secure admin activation invokes parser after authorization and returns no submitted token (0.996827ms)
+✔ activation canonicalizes TLS Host case and default443 without changing admin/Origin requirements (0.913624ms)
+✔ ambiguous Host authorities cannot activate even when the Origin or forwarding headers look trusted (1.068592ms)
+✔ cross-origin, missing origin/header and cross-site writes fail before parser (1.61127ms)
+✔ forwarded host/proto headers do not establish origin or TLS trust (0.388952ms)
+✔ plaintext LAN is denied for every route; explicit socket loopback can perform setup (0.465194ms)
+✔ malformed activation/removal bodies are rejected without reaching service (2.038589ms)
+✔ parser size/syntax errors are sanitized and cannot reach activation (0.845704ms)
+✔ authorization and asynchronous service failures return sanitized bounded errors (0.904951ms)
+✔ per-address write and read rate budgets deny excess operations (3.882522ms)
+✔ license page has restrictive CSP and safe no-cache headers (0.474568ms)
+✔ origin matching uses scheme, hostname and port exactly (0.199653ms)
+✔ configured HTTPS ingress works over local HTTP without trusting forwarded headers (0.332259ms)
+✔ proxy secure flag cannot admit plaintext LAN and invalid public origins fail startup (0.508949ms)
+✔ trust routes share admin, TLS, Origin and write rate boundaries before their parsers (0.676506ms)
+✔ trust import has a dedicated parser and accepts only a bounded exact keys wrapper (1.398167ms)
+✔ trust recheck requires an empty object and export is a public JSON attachment (0.920814ms)
+✔ trust and activation persistence errors return sanitized 503 without attachment (0.559093ms)
+✔ NWL3 Home/Pro derive exact system policy from verified edition (7.600833ms)
+✔ NWL3 cannot carry entitlements, adapter names, configurable expiry or delayed start (5.599257ms)
+✔ NWL3 rejects tampering, foreign UUID/key, unknown issuer and prefix substitution (4.371842ms)
+✔ one NWL3 activation persists encrypted across service restart; failed imports preserve it (66.869301ms)
+✔ central system license reaches enabled extension via real SDK with feature/quantity checks (51.053238ms)
+✔ NWL2 does not gain system scope or core access from unrelated extension activation (47.482455ms)
+✔ synchronous hosted snapshot cannot retain expired or stale grants (34.777913ms)
+✔ central page has keyboard-operable recovery tabs and distinguishes public export from the generator vault (74.51892ms)
+✔ pending and rejected activation clear all old entitlements and the continue link; specific error survives near the code (6.502957ms)
+✔ NWL2 adapter-only status is explicit and cannot grant the merged core in the browser (6.202725ms)
+✔ strictly public import uses the central authenticated route, updates trust and rechecks the existing license without reactivation (9.404817ms)
+✔ private keys, encrypted vaults, invalid UTF-8, mixed maps and malformed public JSON never leave the browser (23.751362ms)
+✔ oversized files are rejected before reading and exact size is checked after reading (5.153851ms)
+✔ unknown issuer rejection is actionable and leaves no stale UI authorization (5.967739ms)
+✔ untrusted response fields never become key rows or text; malformed status fails closed (18.221838ms)
+✔ recheck and export use the same central trust source and export only validated public key JSON (6.67486ms)
+✔ oversized streamed responses are cancelled and cannot preserve an old entitlement (6.133643ms)
+✔ deadline aborts the request and reports unconfirmed status rather than an invalid or missing license (20.161802ms)
+✔ registry can show 64 allowed authorities while effective keys stay capped at 32 (9.16944ms)
+✔ trust revocation racing a status read cannot leave the earlier entitlement visible (9.758446ms)
+✔ a malformed public PEM or a non-Ed25519 public key is rejected before import (8.166784ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'express'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/test/eos-license-recovery-http.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/test/eos-license-recovery-http.test.cjs:14:17)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/test/eos-license-recovery-http.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ test/eos-license-recovery-http.test.cjs (81.499719ms)
+✔ startup without provisioned trust denies and creates no license (21.814803ms)
+✔ startup with empty trust configuration denies (3.4322ms)
+✔ trusted service without stored license denies (8.367271ms)
+✔ Home allows licensed adapter and published Home limits with bounded lease (30.405802ms)
+✔ Home rejects Pro feature and over-limit resource counts (39.400725ms)
+✔ Pro grants its feature set only to listed adapter and within signed limits (55.67358ms)
+✔ licensed second adapter receives grants only when enabled (22.362228ms)
+✔ missing, disabled, renamed or non-instance senders cannot obtain grants (32.383697ms)
+✔ sender mismatch, unknown feature, extra keys and invalid quota types reject (38.874039ms)
+✔ malformed or untrusted import preserves existing encrypted license (21.925967ms)
+✔ explicit license removal denies checks and remains removed after restart (11.177964ms)
+✔ external license deletion invalidates previously cached grant eligibility (9.685289ms)
+✔ tampered authenticated ciphertext invalidates cached license (8.810713ms)
+✔ encrypted license and edition persist over clean service restart (18.952332ms)
+✔ changed system UUID denies while running (9.348011ms)
+✔ lease is capped at expiry and license expires at exact boundary (18.754371ms)
+✔ expiry is rechecked after delayed adapter object lookup (9.440048ms)
+✔ wall clock rollback relative to monotonic time fails closed until restart (14.855315ms)
+✔ frequent sub-tolerance checks cannot keep a frozen wall clock licensed (11.63035ms)
+✔ small cumulative backward steps cannot reset the monotonic clock anchor (16.040388ms)
+✔ persisted high-water mark detects ordinary rollback across restart (7.871661ms)
+✔ sender rate cap denies excess requests and renews after window (127.666133ms)
+✔ queue cap rejects excess work without preventing earlier jobs completing (4.058266ms)
+✔ new checks and mutations after stop are denied (16.821879ms)
+✔ check queued before stop cannot grant or restore cached validity after stop (14.303423ms)
+✔ check already in adapter lookup cannot grant after stop (11.186847ms)
+✔ database timeout clears validity, bounds outstanding reads and ignores late results (39.836285ms)
+✔ timeout during adapter identity lookup clears a previously valid license view (46.714655ms)
+✔ serialized deletion ahead of a check prevents an intervening grant (37.046612ms)
+✔ status rechecks expiry after delayed UUID lookup (20.323228ms)
+✔ import expiring during UUID lookup preserves the previous valid license (84.851686ms)
+✔ production directory resolver works without an assumed adapter instance method (15.038804ms)
+✔ directory resolver failure is contained and keeps authority denied (1.18969ms)
+✔ explicit runtime scope accepts normal 0775/2775 parents and preserves private storage across restart (54.503764ms)
+✔ omitting the explicit root retains strict group-write rejection without creating a leaf (4.900961ms)
+✔ trusted runtime root must be absolute, canonical and narrower than the filesystem root (5.065973ms)
+✔ parents above the trusted runtime and unrelated or prefix-sibling trees remain strict (4.530384ms)
+✔ group-writable runtime ancestors require the service UID and exact primary GID (19.919656ms)
+✔ trusted runtime scope does not admit non-sticky world-writable ancestors (4.019213ms)
+✔ existing sticky temporary ancestors remain compatible without broadening the private leaf (11.336007ms)
+✔ runtime root, intermediate and leaf symlinks are rejected without touching their targets (6.705155ms)
+✔ the compatibility option never relaxes leaf, storage-key or encrypted-file modes (16.047618ms)
+﹣ inherited ioBroker group ACLs keep newly created license leaf and files private (3.198205ms) # setfacl is not installed; inherited POSIX ACL check requires the official installer ACL tool
+✔ fixed public trust storage is bounded, private, serialized and survives restart independently of a license (19.454505ms)
+✔ public trust writes accept only a bounded Buffer and never mutate an existing record on invalid input (37.597722ms)
+✔ public trust rejects unsafe modes, symlinks, hardlinks and oversized existing records (19.953134ms)
+✔ a failed atomic public trust replacement preserves the old record and removes its private temporary file (8.726238ms)
+✔ release public metadata alone never activates trust; exact manufacturer import persists canonically (27.446938ms)
+✔ unknown issuer, wrong key under known ID, malformed and private input preserve valid imported trust (4.387776ms)
+✔ valid OS trust combines additively; explicit OS override is the sole allowed authority (9.004588ms)
+✔ invalid present OS authority or conflicting manufacturer ID fails closed without file changes (3.591143ms)
+✔ OS-only revocation and release-pin withdrawal invalidate restored keys on every reload (5.604295ms)
+✔ authoritative override applied after a release import revokes the no-longer-allowed local authority (2.884403ms)
+✔ withdrawing the final release pin leaves valid OS authority available (1.640844ms)
+✔ 32 existing OS keys remain valid beside unused release pins; effective map still caps at 32 (17.467117ms)
+✔ malformed local cache, size limits and write failure deny without silently replacing existing data (11.369596ms)
+✔ service recovers failed first trust initialization, activates once and persists across restart (130.078457ms)
+✔ trust recheck repairs a failed OS startup without resetting the license or clock latch (20.11981ms)
+✔ fresh service status observes OS-only authority removal instead of retaining cached grants (89.300406ms)
+✔ failed storage refresh clears public readiness and prevents export of a stale authority (36.791165ms)
+✔ authority failure observed during import or activation immediately clears the synchronous license view (38.98573ms)
+✔ trusted root-owned complete directory chain accepts bounded public keys (13.511338ms)
+✔ EOS trust location is preferred and legacy fallback occurs only for absent current file (7.09692ms)
+✔ explicit manufacturer trust override does not fall back on errors or empty path (3.504496ms)
+✔ writable, foreign-owned or symbolic-link ancestor is denied before file open (5.082066ms)
+✔ unsafe trust file and inode swap fail closed (15.883567ms)
+✔ read remains bounded after growth and rejects malformed contents with close (10.237651ms)
+✔ Windows and noncanonical paths require explicit supported provisioning (12.165377ms)
+✔ enrichment preserves original metadata/components/dependency edges and records real ancestry (3.200639ms)
+✔ second enrichment is identical and does not increment the BOM version again (0.772316ms)
+✔ wrong BOM scope, missing dependencies and conflicting owned records are rejected (2.224873ms)
+✔ runtime graph closure retains dual-use production/development nodes and removes dev-only roots (0.76856ms)
+✔ missing locked roots or missing transitive graph nodes fail closed (0.434509ms)
+✔ npm alias components are linked through their upstream identity without inventing a registry release (0.436882ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module '@iobroker/adapter-core'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/test/fixtures/socket-library-bootstrap.cjs
+- <temporary>/repo with spaces/iobroker.eos-admin/test/eos-socket-threshold.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at require.resolve (node:internal/modules/helpers:175:31)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/test/fixtures/socket-library-bootstrap.cjs:5:26)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14)
+    at Object..js (node:internal/modules/cjs/loader:2060:10)
+    at Module.load (node:internal/modules/cjs/loader:1651:32)
+    at Module._load (node:internal/modules/cjs/loader:1443:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/test/fixtures/socket-library-bootstrap.cjs',
+    '<temporary>/repo with spaces/iobroker.eos-admin/test/eos-socket-threshold.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ test/eos-socket-threshold.test.cjs (67.520154ms)
+✔ public status projection preserves Home/Pro and rejects hidden activation-code fields (2.966825ms)
+✔ license URL always uses the shared root authority from system and prefixed pages (0.329204ms)
+✔ invalid or inconsistent status never becomes a valid license (0.875097ms)
+✔ activation and removal use existing same-origin authenticated routes and exact CSRF bodies (29.757848ms)
+✔ bad codes and invalid route names are rejected before any request (0.759928ms)
+✔ denied or unavailable API produces a safe error and never a false no-license status (2.094231ms)
+✔ oversized and malformed response bodies are rejected and stream cancelled (1.97806ms)
+✔ one total five-second deadline aborts the live response stream (5069.708448ms)
+✔ closing the panel cancels the live response without waiting for the deadline (117.039124ms)
+✔ activation never reports success for a response without a valid entitlement (1.295967ms)
+✔ removal never reports success when the server still confirms an active license (0.334472ms)
+✔ NWL2 extension-only scope remains distinct from the shared system authorization (0.264309ms)
+✔ trust projection exposes only bounded fingerprints and distinguishes release approval from active restoration (0.770063ms)
+✔ public JSON import accepts arbitrary filenames and rejects private, vault, mixed and malformed inputs before fetch (2.299192ms)
+✔ public file bounds precede reading and reject invalid UTF8, inconsistent sizes and non-Ed25519 SPKI (35.541807ms)
+✔ trust requests use one central authority, exact import envelope and authenticated same-origin controls (1.446828ms)
+✔ unknown issuer and store errors retain actionable codes while arbitrary response text is never reflected (0.894976ms)
+✔ trust update cannot acknowledge an inconsistent license or a private-key export (0.478193ms)
+✔ offline issuer limits the same file descriptor and rejects symlinks and insecure secrets (14.98153ms)
+✔ offline issuer refuses public CSR growth after metadata validation without an unbounded read (5.844889ms)
+✔ offline issuer detects a truncated CSR instead of signing partial input (9.524898ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'express'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/test/eos-tls-management.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/test/eos-tls-management.test.cjs:15:17)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/test/eos-tls-management.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ test/eos-tls-management.test.cjs (58.257507ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'typescript'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/test/eos-unified-access-recovery.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/test/eos-unified-access-recovery.test.cjs:9:12)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/test/eos-unified-access-recovery.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ test/eos-unified-access-recovery.test.cjs (56.281499ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'express'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/test/eos-unified-boundary.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/test/eos-unified-boundary.test.cjs:4:17)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/test/eos-unified-boundary.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ test/eos-unified-boundary.test.cjs (80.788143ms)
+✔ the current EOS entry uses the working HTTPS origin instead of the saved old port (3.810607ms)
+✔ HTTPS aliases, default 443, IPv6 and proxy access keep the exact current origin (0.38696ms)
+✔ other instances, legacy UI, third-party links and custom pages retain their targets (0.407149ms)
+✔ an invalid or unencrypted browser URL never becomes a new EOS entry authority (0.289526ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'express'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/test/eos-unified-http-router.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/test/eos-unified-http-router.test.cjs:10:18)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/test/eos-unified-http-router.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ test/eos-unified-http-router.test.cjs (58.094627ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'express'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/test/eos-unified-listen.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/test/eos-unified-listen.test.cjs:14:17)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/test/eos-unified-listen.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ test/eos-unified-listen.test.cjs (92.166372ms)
+✔ egress fixture scopes exactly to installed EOS entrypoint, not npm/setup or test runner (1.29828ms)
+✔ rating URL and proxy absolute targets are blocked before any HTTP dispatch (10.728994ms)
+✔ nonloopback raw socket, TLS, DNS and fetch fail without transport or identifier exposure (2.192897ms)
+✔ loopback options remain available and literal server bind addresses require no DNS egress (0.4752ms)
+✔ fixture permits an actual wildcard listener and HTTP exchange on loopback in an isolated child (116.784759ms)
+✖ NODE_OPTIONS preload automatically blocks installed adapter but leaves npm role unmodified (57.378864ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'ajv'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/test/eos-unified-metadata.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/test/eos-unified-metadata.test.cjs:6:13)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/test/eos-unified-metadata.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ test/eos-unified-metadata.test.cjs (70.460699ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'typescript'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/test/eos-unified-migration-startup.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/test/eos-unified-migration-startup.test.cjs:13:32)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/test/eos-unified-migration-startup.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ test/eos-unified-migration-startup.test.cjs (84.150139ms)
+✔ fresh installation permits exactly the enabled owner after controller inventory (6.754857ms)
+✔ enabled old writer on another host denies startup even when alive is false (0.657447ms)
+✔ disabled and confirmed stopped old controller permits handover (0.519194ms)
+✔ live old process fails closed (0.730155ms)
+✔ missing stop acknowledgement fails closed (0.874978ms)
+✔ unacknowledged stop request fails closed (0.444984ms)
+✔ stop predates disable edit fails closed (0.260714ms)
+✔ offline foreign controller fails closed (0.260173ms)
+✔ stale foreign controller fails closed (0.426477ms)
+✔ future-dated foreign controller fails closed (0.508398ms)
+✔ another enabled EOS instance is also a competing writer (0.589077ms)
+✔ old instance enable event revokes synchronously before next database poll (0.879354ms)
+✔ controller loss and own disable revoke without waiting for async work (1.329807ms)
+✔ an event racing a database snapshot prevents stale permission restoration (0.775802ms)
+✔ database failures revoke existing permission and never expose exception content (0.926513ms)
+✔ missing owner or invalid controller inventory cannot yield permission (0.403113ms)
+✔ subscription failure cannot be bypassed by refresh (0.358347ms)
+✔ stop wins over an in-flight inventory refresh (0.417124ms)
+✔ offline migration preserves mapped values and records external refs without replaying commands or credentials (2.758388ms)
+✔ migration refuses conflicting target IDs and malformed configuration JSON (0.787499ms)
+✔ migration refuses prototype keys and non-EOS namespace targets (0.310467ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'typescript'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/test/eos-unified-ratings-privacy.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/test/eos-unified-ratings-privacy.test.cjs:9:12)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/test/eos-unified-ratings-privacy.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ test/eos-unified-ratings-privacy.test.cjs (64.393423ms)
+✔ read-only release diagnosis accepts a clean extraction and preserves its manifest bytes (137.985915ms)
+✔ overlaid old assets, changed build bytes and missing files remain blocked and are distinguished (199.54958ms)
+✔ version changes stay blocked instead of silently regenerating release evidence (173.287234ms)
+✖ misplaced TypeScript marker fails before replacing a runtime artifact (2.956199ms)
+✖ explicitly marked TypeScript builds executable JavaScript without running it (0.758115ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module '@iobroker/adapter-core'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/test/fixtures/socket-library-bootstrap.cjs
+- <temporary>/repo with spaces/iobroker.eos-admin/test/eos-unified-state-subscriptions.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at require.resolve (node:internal/modules/helpers:175:31)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/test/fixtures/socket-library-bootstrap.cjs:5:26)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14)
+    at Object..js (node:internal/modules/cjs/loader:2060:10)
+    at Module.load (node:internal/modules/cjs/loader:1651:32)
+    at Module._load (node:internal/modules/cjs/loader:1443:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/test/fixtures/socket-library-bootstrap.cjs',
+    '<temporary>/repo with spaces/iobroker.eos-admin/test/eos-unified-state-subscriptions.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ test/eos-unified-state-subscriptions.test.cjs (45.325602ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'express4'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/main.js
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/http-harness.cjs
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/datapoint-cache-ingress.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/main.js:35:17)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/main.js',
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/http-harness.cjs',
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/datapoint-cache-ingress.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/datapoint-cache-ingress.test.cjs (98.044595ms)
+✔ Admin wildcard events do not retain unrelated values or evict configured measurements (15.951156ms)
+✔ alias source, connected flags and heartbeat stay separate from payload retention (0.969055ms)
+✔ shared sources survive remapping until the last reference leaves, and remapping back re-primes (0.519545ms)
+✔ late mappings read the DB and immediate subscription events are retained (0.720781ms)
+✔ deletion invalidates an active measurement and later updates recover normally (0.405366ms)
+✔ unchanged upserts and disabled heartbeat release only obsolete connection payloads (0.610598ms)
+✔ a detached late DB prime cannot block a later remap back to that source (0.463522ms)
+✔ A→B→A remapping rejects an obsolete source DB response (0.614644ms)
+✔ A→B→A remapping rejects an obsolete connection DB response (0.421881ms)
+✔ a live sample wins over an older DB read that completes later (0.391986ms)
+✔ a deletion during DB priming cannot resurrect an old measurement (0.341843ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'express4'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/main.js
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/http-harness.cjs
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/feature-grants.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/main.js:35:17)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/main.js',
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/http-harness.cjs',
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/feature-grants.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/feature-grants.test.cjs (130.987554ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'express4'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/main.js
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/http-harness.cjs
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/full-startup.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/main.js:35:17)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/main.js',
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/http-harness.cjs',
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/full-startup.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/full-startup.test.cjs (111.1293ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'typescript'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/hosted-adapter-drain.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/hosted-adapter-drain.test.cjs:8:12)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/hosted-adapter-drain.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/hosted-adapter-drain.test.cjs (56.150056ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'typescript'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/hosted-runtime-stop.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/hosted-runtime-stop.test.cjs:8:12)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/hosted-runtime-stop.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/hosted-runtime-stop.test.cjs (59.760894ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'express4'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/main.js
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/hosted-runtime.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/main.js:35:17)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/main.js',
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/hosted-runtime.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/hosted-runtime.test.cjs (89.08604ms)
+✔ Home slave entitlement cannot configure or pair a Microgrid master (6.114856ms)
+✔ explicit central Master grant permits configuration (1.045068ms)
+✔ existing Master regulation can retain its validated grant; new configuration and pairing cannot (0.564481ms)
+✔ missing central grant authority fails closed (0.191562ms)
+✔ migrated UI keeps original name/instance0 and state IDs; revoked localwrites cannot bypass shared ownership (42.031486ms)
+✖ migrated UI protects original credential states without widening its exact ID allowlist (39.20734ms)
+✖ migrated SmartHome hydrates current building, assignments, scenes, timers and logic without changing native enabled (8.355302ms)
+✖ migrated SmartHome hydrates current building, assignments, scenes, timers and logic without changing native disabled (7.304896ms)
+✔ migrated UI accepts only its owner private EEBus capability, never a foreign owner source (3.339754ms)
+✔ disabled MultiUse cold start defines control states before the safe-stop diagnostics (8.459425ms)
+✔ disabled MultiUse initialization preserves legacy targets and can later activate the existing policy (6.933241ms)
+✔ failed MultiUse object creation cannot be acknowledged as a successful disabled lifecycle (1.460018ms)
+✔ uninitialized §14a stop cleans resources without creating undefined diagnostic states (5.357022ms)
+✔ initialized §14a stop publishes one final status only after its objects exist (3.957962ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'express4'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/main.js
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/http-harness.cjs
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/preserved-ui-config.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/main.js:35:17)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/main.js',
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/http-harness.cjs',
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/preserved-ui-config.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/preserved-ui-config.test.cjs (159.161537ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'express4'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/main.js
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/http-harness.cjs
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/preserved-ui-startup.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/main.js:35:17)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/main.js',
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/http-harness.cjs',
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/preserved-ui-startup.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/preserved-ui-startup.test.cjs (105.43663ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'typescript'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/settings-admin-navigation.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/settings-admin-navigation.test.cjs:8:12)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/settings-admin-navigation.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/settings-admin-navigation.test.cjs (54.306814ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'typescript'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-activation-browser.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-activation-browser.test.cjs:8:12)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-activation-browser.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/smarthome-activation-browser.test.cjs (63.845467ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'express4'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/main.js
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/http-harness.cjs
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-activation.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/main.js:35:17)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/main.js',
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/http-harness.cjs',
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-activation.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/smarthome-activation.test.cjs (92.949549ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'typescript'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-alias-api.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-alias-api.test.cjs:8:12)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-alias-api.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/smarthome-alias-api.test.cjs (52.125606ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'typescript'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-alias-config.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-alias-config.test.cjs:4:109)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-alias-config.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/smarthome-alias-config.test.cjs (61.5663ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'typescript'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-controls-integration.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-controls-integration.test.cjs:18:12)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-controls-integration.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/smarthome-controls-integration.test.cjs (51.871376ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'typescript'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-custom-config.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-custom-config.test.cjs:9:12)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-custom-config.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/smarthome-custom-config.test.cjs (52.047756ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'typescript'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-custom-contract.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-custom-contract.test.cjs:8:12)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-custom-contract.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/smarthome-custom-contract.test.cjs (55.323741ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'typescript'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-custom-views.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-custom-views.test.cjs:9:12)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-custom-views.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/smarthome-custom-views.test.cjs (56.288434ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'typescript'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-detection-route.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-detection-route.test.cjs:13:12)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-detection-route.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/smarthome-detection-route.test.cjs (69.527537ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'typescript'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-device-aliases.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-device-aliases.test.cjs:8:12)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-device-aliases.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/smarthome-device-aliases.test.cjs (68.847366ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'typescript'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-device-api.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-device-api.test.cjs:10:12)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-device-api.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/smarthome-device-api.test.cjs (68.195857ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'typescript'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-device-categories.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-device-categories.test.cjs:3:173)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-device-categories.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/smarthome-device-categories.test.cjs (97.617347ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'typescript'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-device-config.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-device-config.test.cjs:7:12)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-device-config.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/smarthome-device-config.test.cjs (72.716513ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'typescript'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-device-controls-browser.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-device-controls-browser.test.cjs:9:12)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-device-controls-browser.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/smarthome-device-controls-browser.test.cjs (59.100697ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'typescript'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-device-controls.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-device-controls.test.cjs:8:12)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-device-controls.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/smarthome-device-controls.test.cjs (50.00145ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'typescript'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-device-detection.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-device-detection.test.cjs:8:12)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-device-detection.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/smarthome-device-detection.test.cjs (54.326644ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'typescript'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-device-integration.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-device-integration.test.cjs:18:12)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-device-integration.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/smarthome-device-integration.test.cjs (47.987177ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'typescript'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-device-legacy.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-device-legacy.test.cjs:9:12)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-device-legacy.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/smarthome-device-legacy.test.cjs (58.604378ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'typescript'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-device-parity.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-device-parity.test.cjs:8:12)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-device-parity.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/smarthome-device-parity.test.cjs (47.852529ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'typescript'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-feedback.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-feedback.test.cjs:9:12)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-feedback.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/smarthome-feedback.test.cjs (47.749117ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'typescript'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-layout-editor.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-layout-editor.test.cjs:8:12)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-layout-editor.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/smarthome-layout-editor.test.cjs (45.724799ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'typescript'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-presentation.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-presentation.test.cjs:8:12)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-presentation.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/smarthome-presentation.test.cjs (46.531386ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'typescript'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-setup-flow.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-setup-flow.test.cjs:10:12)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-setup-flow.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/smarthome-setup-flow.test.cjs (66.597416ms)
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module 'typescript'
+Require stack:
+- <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-touch.test.cjs
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.require (node:internal/modules/cjs/loader:1674:12)
+    at require (node:internal/modules/helpers:157:16)
+    at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-touch.test.cjs:8:12)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/smarthome-touch.test.cjs'
+  ]
+}
+
+Node.js v24.22.3
+✖ ui/test/unified/smarthome-touch.test.cjs (44.332891ms)
+ℹ tests 295
+ℹ suites 0
+ℹ pass 239
+ℹ fail 54
+ℹ cancelled 0
+ℹ skipped 2
+ℹ todo 0
+ℹ duration_ms 5937.936073
+
+✖ failing tests:
+
+test at test/eos-ephemeral-cache.test.cjs:1:1
+✖ test/eos-ephemeral-cache.test.cjs (53.258512ms)
+  'test failed'
+
+test at test/eos-history-api-stability.test.cjs:1:1
+✖ test/eos-history-api-stability.test.cjs (69.737165ms)
+  'test failed'
+
+test at test/eos-history-deadline.test.cjs:1:1
+✖ test/eos-history-deadline.test.cjs (70.259273ms)
+  'test failed'
+
+test at test/eos-hosted-boundary-http.test.cjs:1:1
+✖ test/eos-hosted-boundary-http.test.cjs (51.083101ms)
+  'test failed'
+
+test at test/eos-license-recovery-http.test.cjs:1:1
+✖ test/eos-license-recovery-http.test.cjs (81.499719ms)
+  'test failed'
+
+test at test/eos-socket-threshold.test.cjs:1:1
+✖ test/eos-socket-threshold.test.cjs (67.520154ms)
+  'test failed'
+
+test at test/eos-tls-management.test.cjs:1:1
+✖ test/eos-tls-management.test.cjs (58.257507ms)
+  'test failed'
+
+test at test/eos-unified-access-recovery.test.cjs:1:1
+✖ test/eos-unified-access-recovery.test.cjs (56.281499ms)
+  'test failed'
+
+test at test/eos-unified-boundary.test.cjs:1:1
+✖ test/eos-unified-boundary.test.cjs (80.788143ms)
+  'test failed'
+
+test at test/eos-unified-http-router.test.cjs:1:1
+✖ test/eos-unified-http-router.test.cjs (58.094627ms)
+  'test failed'
+
+test at test/eos-unified-listen.test.cjs:1:1
+✖ test/eos-unified-listen.test.cjs (92.166372ms)
+  'test failed'
+
+test at test/eos-unified-loopback-fixture.test.cjs:99:1
+✖ NODE_OPTIONS preload automatically blocks installed adapter but leaves npm role unmodified (57.378864ms)
+  AssertionError [ERR_ASSERTION]: node:internal/modules/cjs/loader:1568
+    throw err;
+    ^
+  
+  Error: Cannot find module '<temporary>/repo'
+  Require stack:
+  - internal/preload
+      at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+      at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+      at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+      at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+      at Module._load (node:internal/modules/cjs/loader:1341:5)
+      at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+      at Module.require (node:internal/modules/cjs/loader:1674:12)
+      at node:internal/modules/cjs/loader:2221:12
+      at loadPreloadModules (node:internal/process/pre_execution:737:5)
+      at initializeModuleLoaders (node:internal/process/pre_execution:244:5) {
+    code: 'MODULE_NOT_FOUND',
+    requireStack: [ 'internal/preload' ]
+  }
+  
+  Node.js v24.22.3
+  
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/test/eos-unified-loopback-fixture.test.cjs:123:16)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-unified-metadata.test.cjs:1:1
+✖ test/eos-unified-metadata.test.cjs (70.460699ms)
+  'test failed'
+
+test at test/eos-unified-migration-startup.test.cjs:1:1
+✖ test/eos-unified-migration-startup.test.cjs (84.150139ms)
+  'test failed'
+
+test at test/eos-unified-ratings-privacy.test.cjs:1:1
+✖ test/eos-unified-ratings-privacy.test.cjs (64.393423ms)
+  'test failed'
+
+test at test/eos-unified-runtime-build-syntax.test.cjs:25:1
+✖ misplaced TypeScript marker fails before replacing a runtime artifact (2.956199ms)
+  Error: Cannot find module 'typescript/package.json'
+  Require stack:
+  - <temporary>/repo with spaces/iobroker.eos-admin/test/eos-unified-runtime-build-syntax.test.cjs
+      at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+      at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+      at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+      at require.resolve (node:internal/modules/helpers:175:31)
+      at fixture (<temporary>/repo with spaces/iobroker.eos-admin/test/eos-unified-runtime-build-syntax.test.cjs:20:77)
+      at TestContext.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/test/eos-unified-runtime-build-syntax.test.cjs:26:15)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    code: 'MODULE_NOT_FOUND',
+    requireStack: [ '<temporary>/repo with spaces/iobroker.eos-admin/test/eos-unified-runtime-build-syntax.test.cjs' ]
+  }
+
+test at test/eos-unified-runtime-build-syntax.test.cjs:32:1
+✖ explicitly marked TypeScript builds executable JavaScript without running it (0.758115ms)
+  Error: Cannot find module 'typescript/package.json'
+  Require stack:
+  - <temporary>/repo with spaces/iobroker.eos-admin/test/eos-unified-runtime-build-syntax.test.cjs
+      at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+      at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+      at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+      at require.resolve (node:internal/modules/helpers:175:31)
+      at fixture (<temporary>/repo with spaces/iobroker.eos-admin/test/eos-unified-runtime-build-syntax.test.cjs:20:77)
+      at TestContext.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/test/eos-unified-runtime-build-syntax.test.cjs:33:15)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19) {
+    code: 'MODULE_NOT_FOUND',
+    requireStack: [ '<temporary>/repo with spaces/iobroker.eos-admin/test/eos-unified-runtime-build-syntax.test.cjs' ]
+  }
+
+test at test/eos-unified-state-subscriptions.test.cjs:1:1
+✖ test/eos-unified-state-subscriptions.test.cjs (45.325602ms)
+  'test failed'
+
+test at ui/test/unified/datapoint-cache-ingress.test.cjs:1:1
+✖ ui/test/unified/datapoint-cache-ingress.test.cjs (98.044595ms)
+  'test failed'
+
+test at ui/test/unified/feature-grants.test.cjs:1:1
+✖ ui/test/unified/feature-grants.test.cjs (130.987554ms)
+  'test failed'
+
+test at ui/test/unified/full-startup.test.cjs:1:1
+✖ ui/test/unified/full-startup.test.cjs (111.1293ms)
+  'test failed'
+
+test at ui/test/unified/hosted-adapter-drain.test.cjs:1:1
+✖ ui/test/unified/hosted-adapter-drain.test.cjs (56.150056ms)
+  'test failed'
+
+test at ui/test/unified/hosted-runtime-stop.test.cjs:1:1
+✖ ui/test/unified/hosted-runtime-stop.test.cjs (59.760894ms)
+  'test failed'
+
+test at ui/test/unified/hosted-runtime.test.cjs:1:1
+✖ ui/test/unified/hosted-runtime.test.cjs (89.08604ms)
+  'test failed'
+
+test at ui/test/unified/migrated-runtime.test.cjs:37:1
+✖ migrated UI protects original credential states without widening its exact ID allowlist (39.20734ms)
+  Error: Cannot find module 'express4'
+  Require stack:
+  - <temporary>/repo with spaces/iobroker.eos-admin/ui/main.js
+  - <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/http-harness.cjs
+  - <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/migrated-runtime.test.cjs
+      at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+      at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+      at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+      at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+      at Module._load (node:internal/modules/cjs/loader:1341:5)
+      at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+      at Module.require (node:internal/modules/cjs/loader:1674:12)
+      at require (node:internal/modules/helpers:157:16)
+      at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/main.js:35:17)
+      at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+    code: 'MODULE_NOT_FOUND',
+    requireStack: [ '<temporary>/repo with spaces/iobroker.eos-admin/ui/main.js', '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/http-harness.cjs', '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/migrated-runtime.test.cjs' ]
+  }
+
+test at ui/test/unified/migrated-runtime.test.cjs:49:3
+✖ migrated SmartHome hydrates current building, assignments, scenes, timers and logic without changing native enabled (8.355302ms)
+  Error: Cannot find module 'express4'
+  Require stack:
+  - <temporary>/repo with spaces/iobroker.eos-admin/ui/main.js
+  - <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/http-harness.cjs
+  - <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/migrated-runtime.test.cjs
+      at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+      at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+      at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+      at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+      at Module._load (node:internal/modules/cjs/loader:1341:5)
+      at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+      at Module.require (node:internal/modules/cjs/loader:1674:12)
+      at require (node:internal/modules/helpers:157:16)
+      at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/main.js:35:17)
+      at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+    code: 'MODULE_NOT_FOUND',
+    requireStack: [ '<temporary>/repo with spaces/iobroker.eos-admin/ui/main.js', '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/http-harness.cjs', '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/migrated-runtime.test.cjs' ]
+  }
+
+test at ui/test/unified/migrated-runtime.test.cjs:49:3
+✖ migrated SmartHome hydrates current building, assignments, scenes, timers and logic without changing native disabled (7.304896ms)
+  Error: Cannot find module 'express4'
+  Require stack:
+  - <temporary>/repo with spaces/iobroker.eos-admin/ui/main.js
+  - <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/http-harness.cjs
+  - <temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/migrated-runtime.test.cjs
+      at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+      at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+      at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+      at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+      at Module._load (node:internal/modules/cjs/loader:1341:5)
+      at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+      at Module.require (node:internal/modules/cjs/loader:1674:12)
+      at require (node:internal/modules/helpers:157:16)
+      at Object.<anonymous> (<temporary>/repo with spaces/iobroker.eos-admin/ui/main.js:35:17)
+      at Module._compile (node:internal/modules/cjs/loader:1929:14) {
+    code: 'MODULE_NOT_FOUND',
+    requireStack: [ '<temporary>/repo with spaces/iobroker.eos-admin/ui/main.js', '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/http-harness.cjs', '<temporary>/repo with spaces/iobroker.eos-admin/ui/test/unified/migrated-runtime.test.cjs' ]
+  }
+
+test at ui/test/unified/preserved-ui-config.test.cjs:1:1
+✖ ui/test/unified/preserved-ui-config.test.cjs (159.161537ms)
+  'test failed'
+
+test at ui/test/unified/preserved-ui-startup.test.cjs:1:1
+✖ ui/test/unified/preserved-ui-startup.test.cjs (105.43663ms)
+  'test failed'
+
+test at ui/test/unified/settings-admin-navigation.test.cjs:1:1
+✖ ui/test/unified/settings-admin-navigation.test.cjs (54.306814ms)
+  'test failed'
+
+test at ui/test/unified/smarthome-activation-browser.test.cjs:1:1
+✖ ui/test/unified/smarthome-activation-browser.test.cjs (63.845467ms)
+  'test failed'
+
+test at ui/test/unified/smarthome-activation.test.cjs:1:1
+✖ ui/test/unified/smarthome-activation.test.cjs (92.949549ms)
+  'test failed'
+
+test at ui/test/unified/smarthome-alias-api.test.cjs:1:1
+✖ ui/test/unified/smarthome-alias-api.test.cjs (52.125606ms)
+  'test failed'
+
+test at ui/test/unified/smarthome-alias-config.test.cjs:1:1
+✖ ui/test/unified/smarthome-alias-config.test.cjs (61.5663ms)
+  'test failed'
+
+test at ui/test/unified/smarthome-controls-integration.test.cjs:1:1
+✖ ui/test/unified/smarthome-controls-integration.test.cjs (51.871376ms)
+  'test failed'
+
+test at ui/test/unified/smarthome-custom-config.test.cjs:1:1
+✖ ui/test/unified/smarthome-custom-config.test.cjs (52.047756ms)
+  'test failed'
+
+test at ui/test/unified/smarthome-custom-contract.test.cjs:1:1
+✖ ui/test/unified/smarthome-custom-contract.test.cjs (55.323741ms)
+  'test failed'
+
+test at ui/test/unified/smarthome-custom-views.test.cjs:1:1
+✖ ui/test/unified/smarthome-custom-views.test.cjs (56.288434ms)
+  'test failed'
+
+test at ui/test/unified/smarthome-detection-route.test.cjs:1:1
+✖ ui/test/unified/smarthome-detection-route.test.cjs (69.527537ms)
+  'test failed'
+
+test at ui/test/unified/smarthome-device-aliases.test.cjs:1:1
+✖ ui/test/unified/smarthome-device-aliases.test.cjs (68.847366ms)
+  'test failed'
+
+test at ui/test/unified/smarthome-device-api.test.cjs:1:1
+✖ ui/test/unified/smarthome-device-api.test.cjs (68.195857ms)
+  'test failed'
+
+test at ui/test/unified/smarthome-device-categories.test.cjs:1:1
+✖ ui/test/unified/smarthome-device-categories.test.cjs (97.617347ms)
+  'test failed'
+
+test at ui/test/unified/smarthome-device-config.test.cjs:1:1
+✖ ui/test/unified/smarthome-device-config.test.cjs (72.716513ms)
+  'test failed'
+
+test at ui/test/unified/smarthome-device-controls-browser.test.cjs:1:1
+✖ ui/test/unified/smarthome-device-controls-browser.test.cjs (59.100697ms)
+  'test failed'
+
+test at ui/test/unified/smarthome-device-controls.test.cjs:1:1
+✖ ui/test/unified/smarthome-device-controls.test.cjs (50.00145ms)
+  'test failed'
+
+test at ui/test/unified/smarthome-device-detection.test.cjs:1:1
+✖ ui/test/unified/smarthome-device-detection.test.cjs (54.326644ms)
+  'test failed'
+
+test at ui/test/unified/smarthome-device-integration.test.cjs:1:1
+✖ ui/test/unified/smarthome-device-integration.test.cjs (47.987177ms)
+  'test failed'
+
+test at ui/test/unified/smarthome-device-legacy.test.cjs:1:1
+✖ ui/test/unified/smarthome-device-legacy.test.cjs (58.604378ms)
+  'test failed'
+
+test at ui/test/unified/smarthome-device-parity.test.cjs:1:1
+✖ ui/test/unified/smarthome-device-parity.test.cjs (47.852529ms)
+  'test failed'
+
+test at ui/test/unified/smarthome-feedback.test.cjs:1:1
+✖ ui/test/unified/smarthome-feedback.test.cjs (47.749117ms)
+  'test failed'
+
+test at ui/test/unified/smarthome-layout-editor.test.cjs:1:1
+✖ ui/test/unified/smarthome-layout-editor.test.cjs (45.724799ms)
+  'test failed'
+
+test at ui/test/unified/smarthome-presentation.test.cjs:1:1
+✖ ui/test/unified/smarthome-presentation.test.cjs (46.531386ms)
+  'test failed'
+
+test at ui/test/unified/smarthome-setup-flow.test.cjs:1:1
+✖ ui/test/unified/smarthome-setup-flow.test.cjs (66.597416ms)
+  'test failed'
+
+test at ui/test/unified/smarthome-touch.test.cjs:1:1
+✖ ui/test/unified/smarthome-touch.test.cjs (44.332891ms)
+  'test failed'
+{
+  "error": {
+    "code": 1,
+    "summary": "",
+    "detail": ""
+  }
+}
+{
+  "error": {
+    "code": 1,
+    "summary": "",
+    "detail": ""
+  }
+}
+{
+  "error": {
+    "code": 1,
+    "summary": "command failed",
+    "detail": "sh -c node tools/eos-release-check.cjs && npm test"
+  }
+}

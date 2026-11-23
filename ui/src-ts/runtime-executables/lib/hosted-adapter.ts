@@ -20,6 +20,7 @@ interface Bridge {
   getLicense(): unknown;
   canWrite(): boolean;
   originAllowed(request: unknown): boolean;
+  getRuntimeReadiness?(): unknown;
 }
 interface Owner {
   namespace: string;

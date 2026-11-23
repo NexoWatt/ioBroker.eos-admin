@@ -13,7 +13,7 @@ const plain = value => JSON.parse(JSON.stringify(value));
 const turn = () => new Promise(resolve => setImmediate(resolve));
 function deferred() { let resolve; const promise = new Promise(done => { resolve = done; }); return { promise, resolve }; }
 
-function environment() {
+function environment(withActionMenus = false) {
   let document;
   class Element {
     constructor(tag) {
@@ -102,6 +102,15 @@ function environment() {
   const actualRenderAll = context.nwRenderAll;
   // Rendering not involved in data-flow assertions; dialog integration may restore its own real render path below.
   context.nwRenderAll = context.nwRenderPagesEditor = context.nwRenderShcfgDetector = context.nwRenderValidationPanel = context.nwApplyValidationToDom = context.nwScheduleValidation = () => {};
+  if (withActionMenus) {
+    for (const [className, labels] of [['nw-setup-project-actions', ['Projektdatei', 'Neu laden', 'Export', 'Import']], ['nw-shcfg-more', ['Weitere Funktionen', 'Szenen', 'Alle Einstellungen']]]) {
+      const menu = document.createElement('details'); menu.className = className;
+      const summary = document.createElement('summary'); summary.textContent = labels[0]; menu.appendChild(summary);
+      const panel = document.createElement('div');
+      for (const label of labels.slice(1)) { const button = document.createElement('button'); button.textContent = label; panel.appendChild(button); }
+      menu.appendChild(panel); document.body.appendChild(menu);
+    }
+  }
   const load = name => vm.runInContext(ts.transpileModule(fs.readFileSync(path.join(root, 'src-ts/runtime-executables/www/' + name + '.ts'), 'utf8'),
     { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.None } }).outputText, context);
   load('smarthome-alias-config'); load('smarthome-device-config'); load('smarthome-setup');
@@ -445,4 +454,77 @@ test('configuration HTML and scoped responsive CSS make setup and dialogs availa
   const dpZ = Number(css.match(/\.nw-dp-dialog-backdrop\s*\{[^}]*z-index:\s*(\d+)\s*!important/s)?.[1]);
   assert.ok(dpZ > setupZ, 'existing datapoint picker must stay above the setup overlay');
   const parsed = require(require.resolve('postcss', { paths: [path.resolve(root, '../src-admin')] })).parse(css); parsed.walkRules(rule => { if (rule.selector.includes('.nw-setup-')) for (const selector of rule.selectors) assert.match(selector, /body\.nw-page-smarthome-config/, selector); });
+});
+
+test('action menus are mutually exclusive and retain the exact unsaved customer draft', () => {
+  const f = environment(true); f.state.dirty = true; const before = plain(f.state.config);
+  const project = f.document.querySelector('.nw-setup-project-actions'); const more = f.document.querySelector('.nw-shcfg-more');
+  project.open = true; project.fire('toggle'); assert.equal(project.open, true); assert.equal(more.open, false);
+  more.open = true; more.fire('toggle'); assert.equal(project.open, false); assert.equal(more.open, true);
+  project.open = true; project.fire('toggle'); assert.equal(project.open, true); assert.equal(more.open, false);
+  assert.deepEqual(plain(f.state.config), before); assert.equal(f.state.dirty, true); assert.equal(f.calls.length, 0);
+});
+
+test('project actions still run once and their nested click closes only the menu without cancelling the action', () => {
+  const f = environment(true); const project = f.document.querySelector('.nw-setup-project-actions'); let called = 0;
+  const button = nodeByText(project, 'button', 'Export'); const icon = f.document.createElement('span'); button.appendChild(icon);
+  button.addEventListener('click', () => { called++; }); project.open = true;
+  button.fire('click', { target: icon }); const event = f.document.fire('click', { target: icon });
+  assert.equal(called, 1); assert.equal(project.open, false); assert.equal(event.defaultPrevented, false); assert.equal(f.calls.length, 0);
+});
+
+test('summary and menu body keep native operation while outside click or focus closes open actions', () => {
+  const f = environment(true); const project = f.document.querySelector('.nw-setup-project-actions');
+  project.open = true; const summary = project.querySelector('summary');
+  const event = f.document.fire('click', { target: summary }); assert.equal(project.open, true); assert.equal(event.defaultPrevented, false);
+  f.document.fire('click', { target: project.querySelector('div') }); assert.equal(project.open, true);
+  f.document.fire('focusin', { target: project.querySelector('button') }); assert.equal(project.open, true);
+  f.document.fire('click', { target: f.document.body }); assert.equal(project.open, false);
+  project.open = true; f.document.fire('focusin', { target: f.document.getElementById('nw-config-save-btn') }); assert.equal(project.open, false);
+});
+
+test('Escape returns action-menu focus to its summary and does not consume Escape outside the menu', () => {
+  const f = environment(true); const project = f.document.querySelector('.nw-setup-project-actions');
+  project.open = true; project.querySelector('button').focus();
+  const inside = f.document.fire('keydown', { key: 'Escape' }); assert.equal(project.open, false);
+  assert.equal(inside.defaultPrevented, true); assert.equal(f.document.activeElement, project.querySelector('summary'));
+  const outside = f.document.getElementById('nw-config-save-btn'); outside.focus(); project.open = true;
+  const event = f.document.fire('keydown', { key: 'Escape' }); assert.equal(project.open, false);
+  assert.equal(event.defaultPrevented, false); assert.equal(f.document.activeElement, outside);
+});
+
+test('repeated setup loading does not duplicate document/menu listeners or intercept dialog Escape', () => {
+  const f = environment(true); const before = [...f.document.handlers].map(([key, handlers]) => [key, handlers.size]);
+  f.load('smarthome-setup'); assert.deepEqual([...f.document.handlers].map(([key, handlers]) => [key, handlers.size]), before);
+  const trigger = f.document.getElementById('nw-config-save-btn'); trigger.focus();
+  const handle = f.window.NW_SH_SETUP.openDialog({ title: 'Unveränderte Dialogbedienung', render() {} });
+  f.document.fire('keydown', { key: 'Escape' }); assert.equal(handle.isOpen(), false); assert.equal(f.document.activeElement, trigger);
+  assert.equal(f.calls.length, 0);
+});
+
+test('action menu CSS removes the clipping ancestor and provides desktop layers plus in-flow mobile panels', () => {
+  // Static CSS contracts reproduce the clipping cause; they do not measure browser geometry.
+  const css = fs.readFileSync(path.join(root, 'www/smarthome-config-workspace.css'), 'utf8');
+  const postcss = require(require.resolve('postcss', { paths: [path.resolve(root, '../src-admin')] }));
+  const parsed = postcss.parse(css);
+  function declarations(selector, media = '') {
+    const result = {};
+    parsed.walkRules(rule => {
+      if (!rule.selectors.includes(selector)) return;
+      const scope = rule.parent.type === 'atrule' ? rule.parent.params : '';
+      if (scope !== media) return;
+      rule.walkDecls(decl => { result[decl.prop] = { value: decl.value, important: decl.important || false }; });
+    });
+    return result;
+  }
+  const prefix = 'body.nw-page-smarthome-config ';
+  const header = declarations(prefix + '.nw-smarthome-header'); const steps = declarations(prefix + '.nw-shcfg-steps');
+  assert.deepEqual(header.overflow, { value: 'visible', important: true }); assert.equal(steps.overflow.value, 'visible');
+  assert.ok(Number(header['z-index'].value) > Number(steps['z-index'].value)); assert.ok(Number(steps['z-index'].value) > 0);
+  for (const selector of ['.nw-setup-project-actions > div', '.nw-shcfg-more > div']) {
+    const desktop = declarations(prefix + selector); const mobile = declarations(prefix + selector, '(max-width: 600px)');
+    assert.equal(desktop.position.value, 'absolute'); assert.equal(desktop['box-sizing'].value, 'border-box');
+    assert.match(desktop['max-width'].value, /100vw/); assert.equal(desktop['overflow-y'].value, 'auto'); assert.match(desktop['max-height'].value, /dvh/);
+    assert.equal(mobile.position.value, 'static'); assert.equal(mobile.width.value, '100%'); assert.equal(mobile['max-width'].value, '100%');
+  }
 });

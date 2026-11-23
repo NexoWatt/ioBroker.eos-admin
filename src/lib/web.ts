@@ -2162,6 +2162,19 @@ export default class Web {
         const runtime = factory.createHostedRuntime(this.adapter, {
             resolveAccess: (req: Request) => this.unified.status(req),
             getLicense: () => this.adapter.eosLicenseService?.statusView(),
+            // Read-only readiness evidence: a blocked handover is not an endlessly
+            // starting UI. The hosted API validates and role-filters this snapshot.
+            getRuntimeReadiness: () => {
+                const migration = this.adapter.eosMigration?.status();
+                return {
+                    migration: {
+                        phase: migration?.phase || 'NOT_AVAILABLE',
+                        code: migration?.code || '',
+                        allowsStartup: this.adapter.eosMigration?.allowsStartup() === true,
+                    },
+                    ownership: this.adapter.eosOwnership?.status(),
+                };
+            },
             originAllowed: (req: Request) => this.unified.requestAllowed(req),
             machineRequestAllowed: (req: Request) => this.unified.machineRequestAllowed(req),
             canWrite: () => this.adapter.eosOwnership?.canWrite() === true,

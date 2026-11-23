@@ -1,0 +1,18 @@
+✔ startup status distinguishes waiting, unlicensed, blocked, failure and commissioned runtime (1.894136ms)
+✔ host-blocked migration and writer diagnostics stay distinct from ordinary startup (1.14159ms)
+✔ failed startup cannot be relabelled as a harmless pending migration or stale grant (0.193344ms)
+✔ unknown metadata, secrets and unbounded blockers are never copied into status (0.393098ms)
+✔ readiness provider failure has no writes or change to the existing lifecycle snapshot (0.562167ms)
+✔ authenticated EMS status shows the actual migration blocker without starting or writing anything (123.034091ms)
+✔ EMS frontend displays blocked startup and its safe same-tab recovery link without claiming a running engine (30.43827ms)
+✔ EMS frontend keeps diagnostic text inert and omits unauthorized or external recovery links (23.532081ms)
+✔ restore frontend reports the specific startup reason and preserves other API error behavior (19.525506ms)
+✔ restore requests remain blocked for every incomplete start state, with accurate reason and preserved configuration (39.543285ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1269.744351

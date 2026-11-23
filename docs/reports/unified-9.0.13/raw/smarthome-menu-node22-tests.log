@@ -1,0 +1,212 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: every existing template can be prepared without adding a device or changing customer settings
+ok 1 - every existing template can be prepared without adding a device or changing customer settings
+  ---
+  duration_ms: 637.308713
+  type: 'test'
+  ...
+# Subtest: single detected import preserves configured bindings, room and device types; repeated import is a no-op
+ok 2 - single detected import preserves configured bindings, room and device types; repeated import is a no-op
+  ---
+  duration_ms: 395.475479
+  type: 'test'
+  ...
+# Subtest: aliases failure with partial created objects leaves both device and proposed room drafts unchanged
+ok 3 - aliases failure with partial created objects leaves both device and proposed room drafts unchanged
+  ---
+  duration_ms: 289.200399
+  type: 'test'
+  ...
+# Subtest: late alias success after replacing the draft cannot import into either customer configuration
+ok 4 - late alias success after replacing the draft cannot import into either customer configuration
+  ---
+  duration_ms: 252.656
+  type: 'test'
+  ...
+# Subtest: detector request failures preserve the customer draft and previous results with explicit error state
+ok 5 - detector request failures preserve the customer draft and previous results with explicit error state
+  ---
+  duration_ms: 413.630959
+  type: 'test'
+  ...
+# Subtest: failed save preserves unsaved customer fields and reports the server failure without retry
+ok 6 - failed save preserves unsaved customer fields and reports the server failure without retry
+  ---
+  duration_ms: 345.433744
+  type: 'test'
+  ...
+# Subtest: late successful save cannot replace a newer unsaved edit or clear its dirty state
+ok 7 - late successful save cannot replace a newer unsaved edit or clear its dirty state
+  ---
+  duration_ms: 428.9593
+  type: 'test'
+  ...
+# Subtest: real editor cancel restores exact customer object, preexisting dirty state, selection and focus
+ok 8 - real editor cancel restores exact customer object, preexisting dirty state, selection and focus
+  ---
+  duration_ms: 283.03398
+  type: 'test'
+  ...
+# Subtest: new floor, room and device dialogs leave no records after Cancel or Escape
+ok 9 - new floor, room and device dialogs leave no records after Cancel or Escape
+  ---
+  duration_ms: 886.849716
+  type: 'test'
+  ...
+# Subtest: actual form Apply changes only draft; global Save/Reload/Import remain blocked during editing
+ok 10 - actual form Apply changes only draft; global Save/Reload/Import remain blocked during editing
+  ---
+  duration_ms: 174.31393
+  type: 'test'
+  ...
+# Subtest: invalid room Apply keeps the dialog open with visible feedback; cancel remains possible
+ok 11 - invalid room Apply keeps the dialog open with visible feedback; cancel remains possible
+  ---
+  duration_ms: 196.45324
+  type: 'test'
+  ...
+# Subtest: batch imports only distinct new devices into chosen room and preserves their exact bindings
+ok 12 - batch imports only distinct new devices into chosen room and preserves their exact bindings
+  ---
+  duration_ms: 254.500062
+  type: 'test'
+  ...
+# Subtest: batch decline, stale target and alias partial failure cannot create a partial configuration
+ok 13 - batch decline, stale target and alias partial failure cannot create a partial configuration
+  ---
+  duration_ms: 269.82694
+  type: 'test'
+  ...
+# Subtest: batch alias success cannot overwrite concurrent edits in the same configuration object
+ok 14 - batch alias success cannot overwrite concurrent edits in the same configuration object
+  ---
+  duration_ms: 204.830709
+  type: 'test'
+  ...
+# Subtest: existing datapoint picker stays reachable inside editing and late selection after Cancel is ignored
+ok 15 - existing datapoint picker stays reachable inside editing and late selection after Cancel is ignored
+  ---
+  duration_ms: 197.763592
+  type: 'test'
+  ...
+# Subtest: pending Apply cannot be cancelled or stacked and exposes failure before allowing another attempt
+ok 16 - pending Apply cannot be cancelled or stacked and exposes failure before allowing another attempt
+  ---
+  duration_ms: 161.482318
+  type: 'test'
+  ...
+# Subtest: setup dropdown filters preserve every customer record and use actual room/floor relationships
+ok 17 - setup dropdown filters preserve every customer record and use actual room/floor relationships
+  ---
+  duration_ms: 150.131379
+  type: 'test'
+  ...
+# Subtest: cancel invalidates old profile-editor callbacks so they cannot dirty the restored customer draft
+ok 18 - cancel invalidates old profile-editor callbacks so they cannot dirty the restored customer draft
+  ---
+  duration_ms: 182.458376
+  type: 'test'
+  ...
+# Subtest: pending Reload excludes new editors and a late response cannot replace a concurrently changed draft
+ok 19 - pending Reload excludes new editors and a late response cannot replace a concurrently changed draft
+  ---
+  duration_ms: 150.688326
+  type: 'test'
+  ...
+# Subtest: pending file read excludes editors and late imported JSON cannot replace a newer local draft
+ok 20 - pending file read excludes editors and late imported JSON cannot replace a newer local draft
+  ---
+  duration_ms: 142.454154
+  type: 'test'
+  ...
+# Subtest: active backup import excludes file import, Reload, Save and a new editor without reading or writing
+ok 21 - active backup import excludes file import, Reload, Save and a new editor without reading or writing
+  ---
+  duration_ms: 150.041721
+  type: 'test'
+  ...
+# Subtest: late detection results cannot replace suggestions after a customer draft change or while an editor is open
+ok 22 - late detection results cannot replace suggestions after a customer draft change or while an editor is open
+  ---
+  duration_ms: 275.610454
+  type: 'test'
+  ...
+# Subtest: simple field changes keep the real form controls; explicit refresh retains body scroll and focus position
+ok 23 - simple field changes keep the real form controls; explicit refresh retains body scroll and focus position
+  ---
+  duration_ms: 186.427135
+  type: 'test'
+  ...
+# Subtest: setup preserves long existing customer IDs and does not silently hide records after the detection limit
+ok 24 - setup preserves long existing customer IDs and does not silently hide records after the detection limit
+  ---
+  duration_ms: 325.944658
+  type: 'test'
+  ...
+# Subtest: large detection lists render at most 100 rows and retain selection across pages and filtering
+ok 25 - large detection lists render at most 100 rows and retain selection across pages and filtering
+  ---
+  duration_ms: 449.620119
+  type: 'test'
+  ...
+# Subtest: focus trap includes closed-details summary but ignores hidden ancestors and returns focus after close
+ok 26 - focus trap includes closed-details summary but ignores hidden ancestors and returns focus after close
+  ---
+  duration_ms: 148.267744
+  type: 'test'
+  ...
+# Subtest: configuration HTML and scoped responsive CSS make setup and dialogs available without fixed right properties
+ok 27 - configuration HTML and scoped responsive CSS make setup and dialogs available without fixed right properties
+  ---
+  duration_ms: 45.545126
+  type: 'test'
+  ...
+# Subtest: action menus are mutually exclusive and retain the exact unsaved customer draft
+ok 28 - action menus are mutually exclusive and retain the exact unsaved customer draft
+  ---
+  duration_ms: 141.64453
+  type: 'test'
+  ...
+# Subtest: project actions still run once and their nested click closes only the menu without cancelling the action
+ok 29 - project actions still run once and their nested click closes only the menu without cancelling the action
+  ---
+  duration_ms: 149.13531
+  type: 'test'
+  ...
+# Subtest: summary and menu body keep native operation while outside click or focus closes open actions
+ok 30 - summary and menu body keep native operation while outside click or focus closes open actions
+  ---
+  duration_ms: 165.738347
+  type: 'test'
+  ...
+# Subtest: Escape returns action-menu focus to its summary and does not consume Escape outside the menu
+ok 31 - Escape returns action-menu focus to its summary and does not consume Escape outside the menu
+  ---
+  duration_ms: 150.7246
+  type: 'test'
+  ...
+# Subtest: repeated setup loading does not duplicate document/menu listeners or intercept dialog Escape
+ok 32 - repeated setup loading does not duplicate document/menu listeners or intercept dialog Escape
+  ---
+  duration_ms: 150.432413
+  type: 'test'
+  ...
+# Subtest: action menu CSS removes the clipping ancestor and provides desktop layers plus in-flow mobile panels
+ok 33 - action menu CSS removes the clipping ancestor and provides desktop layers plus in-flow mobile panels
+  ---
+  duration_ms: 12.855974
+  type: 'test'
+  ...
+1..33
+# tests 33
+# suites 0
+# pass 33
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 8880.282128

@@ -123,3 +123,11 @@ Quellen und Recherchegrenzen: [SOURCES.md](SOURCES.md).
 Für jeden offenen Punkt: Verantwortliche Person, Termin, nächster Schritt und Beleg
 im Release-/Befundregister ergänzen. Ein Testtag ersetzt keine kritische
 Sicherheitsprüfung; noch offene breite Hardwareabnahme ist gesondert auszuweisen.
+
+## Änderungsbezug 9.0.14 – Übernahme und Betriebsstart
+
+EOS-MERGE-T07 bleibt die maßgebliche Vertrauensgrenze: genau ein Regler-/Transportbesitzer. Der belegte Fehler `EOS-MIG-014-01` ließ die Phase `LICENSE_REQUIRED` bisher ohne vollständige Bestandsprüfung als startfähig gelten. Nachträgliche Aktivierung erteilt jetzt keine Standardkonfigurations-Freigabe; ein vollständiger Neustart muss die Migration prüfen. Diagnosewerte sind validiert, begrenzt und enthalten keine Kundeneinstellungen.
+
+`EOS-MIG-014-02` betrifft Datenverlust durch eine ignorierte alte `devicesJson`-Liste. Die Korrektur ist auf den Legacy-Import begrenzt; widersprüchliche Quellen werden abgelehnt. `EOS-MIG-014-03` betrifft konkurrierende manuelle Import-/Konfigurationsoperationen und die Erhaltung bereits gebundener Namespaces. Die endgültigen Prüfergebnisse und die Grenzen des Laufzeitmodells stehen im [9.0.14-Prüfbericht](../reports/unified-9.0.14/PRUEFBERICHT.md).
+
+Die Wiederherstellung wird nicht durch Umgehen des Start-, Lizenz- oder Eigentumsgates ermöglicht. Bei geschützten Fremdadapter-Credentials bleibt die Controllergrenze erhalten. Die Prüfung ist ein Software- und Regressionstestnachweis; physische Übergabe, tatsächliche Kundeneinstellungen und Reaktionszeiten sind auf der Anlage zu prüfen. Keine zusätzliche Aussage zur CRA-Konformität oder Serienfreigabe entsteht daraus.

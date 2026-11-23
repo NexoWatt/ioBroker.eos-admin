@@ -32,6 +32,7 @@ const REQUIRED_RULES = Object.freeze([
   'no-unsafe-finally', 'no-unsafe-negation', 'no-unsafe-optional-chaining',
 ]);
 const STRICT_TYPES = new Set([
+  'src-ts/runtime-executables/lib/hosted-startup-status.ts',
   'src-ts/runtime-executables/www/smarthome-setup.ts',
   'src-ts/runtime-executables/lib/ui-access-policy.ts',
   'src-ts/runtime-executables/lib/ui-server-transport.ts',

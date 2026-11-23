@@ -43,6 +43,51 @@ test('fresh installation permits exactly the enabled owner after controller inve
     assert.equal(x.guard.status().reason, 'CONTROLLER_HANDOVER_CONFIRMED');
 });
 
+test('fresh controller evidence reports the actual migration fence without granting writes', async t => {
+    const x = setup(); t.after(() => x.guard.stop());
+    let blocked = true;
+    x.owner.eosMigration = {
+        allowsWrites: () => !blocked,
+        status: () => ({ phase: 'LICENSE_REQUIRED', code: 'EOS_MIGRATION_RESTART_REQUIRED', encrypted: 'private-journal', sources: [{ config: 'private-config' }] }),
+    };
+    assert.equal(await x.guard.start(), true, 'the controller inventory itself is valid');
+    assert.equal(x.guard.canWrite(), false);
+    const status = x.guard.status();
+    assert.equal(status.reason, 'MIGRATION_BLOCKED');
+    assert.deepEqual(status.migration, { phase: 'LICENSE_REQUIRED', code: 'EOS_MIGRATION_RESTART_REQUIRED' });
+    assert.equal(status.allowed, false);
+    assert.equal(JSON.stringify(status).includes('private-'), false);
+    assert.equal(JSON.stringify(x.writes).includes('private-'), false);
+    blocked = false;
+    assert.equal(x.guard.canWrite(), true);
+    assert.equal(x.guard.status().reason, 'CONTROLLER_HANDOVER_CONFIRMED');
+    assert.equal(Object.hasOwn(x.guard.status(), 'migration'), false);
+});
+
+test('migration diagnostics reject untrusted fields and failed reads without changing ownership', async t => {
+    const x = setup(); t.after(() => x.guard.stop());
+    x.owner.eosMigration = { allowsWrites: () => false, status: () => ({ phase: '<private>', code: 'private detail / secret' }) };
+    await x.guard.start();
+    assert.deepEqual(x.guard.status().migration, { phase: 'NOT_AVAILABLE', code: '' });
+    x.owner.eosMigration.status = () => { throw new Error('private diagnostic exception'); };
+    const status = x.guard.status();
+    assert.deepEqual(status.migration, { phase: 'NOT_AVAILABLE', code: 'EOS_MIGRATION_STATUS_UNAVAILABLE' });
+    assert.equal(status.reason, 'MIGRATION_BLOCKED');
+    assert.equal(status.allowed, false);
+    assert.equal(JSON.stringify(status).includes('private'), false);
+});
+
+test('a competing writer keeps its controller reason while a migration fence is also visible', async t => {
+    const x = setup(); t.after(() => x.guard.stop()); x.addOld();
+    x.objects.get(oldId).common.enabled = true;
+    x.owner.eosMigration = { allowsWrites: () => false, status: () => ({ phase: 'BLOCKED', code: 'EOS_MIGRATION_DISABLED_UI_REVIEW' }) };
+    assert.equal(await x.guard.start(), false);
+    assert.equal(x.guard.status().reason, 'LEGACY_OR_PARALLEL_WRITER');
+    assert.equal(x.guard.status().blockers[0].reason, 'INSTANCE_ENABLED');
+    assert.equal(x.guard.status().migration.phase, 'BLOCKED');
+    assert.equal(x.guard.canWrite(), false);
+});
+
 test('enabled old writer on another host denies startup even when alive is false', async t => {
     const x = setup(); t.after(() => x.guard.stop()); x.addOld();
     x.objects.get(oldId).common.enabled = true;

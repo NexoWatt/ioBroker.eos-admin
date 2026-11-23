@@ -51,3 +51,14 @@ test('migration page rejects markup-shaped data and renders authentication failu
     assert.match(f.get('request-message').textContent, /erneut bei EOS anmelden/);
     assert.equal(f.get('request-message').className, 'eos-message is-error');
 });
+
+test('late license activation explains the pending restart without claiming a missing license or completed migration', async () => {
+    const f = await fixture({ phase: 'LICENSE_REQUIRED', code: 'EOS_MIGRATION_LICENSE_REQUIRED', updatedAt: null });
+    assert.match(f.get('phase-description').textContent, /fehlt eine gültige/);
+    await f.refresh({ phase: 'LICENSE_REQUIRED', code: 'EOS_MIGRATION_RESTART_REQUIRED', updatedAt: null });
+    assert.match(f.get('status-heading').textContent, /Neustart erforderlich/);
+    assert.match(f.get('phase-description').textContent, /Systemfreigabe ist gültig/);
+    assert.match(f.get('reason-description').textContent, /EOS-Adapterinstanz neu starten/);
+    assert.equal(f.get('updated-at').textContent, 'Noch nicht gespeichert');
+    assert.ok(f.calls.every(call => call.options.method === undefined && call.options.body === undefined));
+});

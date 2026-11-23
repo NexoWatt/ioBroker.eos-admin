@@ -12,6 +12,7 @@
  */
 const fs = require('node:fs/promises');
 const path = require('node:path');
+const { isDeepStrictEqual } = require('node:util');
 const { guardDriver } = require('./operation-guard');
 const SOURCE_VERSION = '0.5.176';
 const MAX_DEVICES = 128;
@@ -135,9 +136,32 @@ async function getCatalog() {
     const { templates } = await registry();
     return { sourceVersion: SOURCE_VERSION, protocols: [...PROTOCOLS], templates: templates.map(template => ({ id: template.id, category: template.category, manufacturer: template.manufacturer, label: [template.manufacturer, template.model, template.name].filter(Boolean).join(' ') || template.id, protocols: template.protocols || [] })) };
 }
-/** @param {unknown} input */
+/**
+ * Alte 0.5.176-Instanzen können neben dem leeren devices-Standard ihre Geräte
+ * ausschließlich in devicesJson speichern. Nur die Übernahme löst diese zwei
+ * Quellen auf; normales Speichern eines bewusst geleerten Arrays bleibt leer.
+ * Widersprüchliche gefüllte Quellen werden vor jeder Übernahme abgelehnt.
+ * @param {unknown} input
+ */
 async function preflightLegacyConfig(input) {
-    const config = validateConfig(input);
+    if (!record(input)) throw failure('EOS_DEVICES_CONFIG_OBJECT');
+    assertJson(input);
+    /** @type {Record<string, unknown>} */
+    const legacy = JSON.parse(JSON.stringify(input));
+    if (legacy.devicesJson !== undefined && legacy.devicesJson !== '') {
+        if (typeof legacy.devicesJson !== 'string') throw failure('EOS_DEVICES_CONFIG_JSON');
+        /** @type {unknown} */
+        let parsed;
+        try { parsed = JSON.parse(legacy.devicesJson); } catch { throw failure('EOS_DEVICES_CONFIG_JSON'); }
+        if (!Array.isArray(parsed)) throw failure('EOS_DEVICES_CONFIG_DEVICES');
+        assertJson(parsed);
+        if (parsed.length) {
+            if (legacy.devices === undefined || (Array.isArray(legacy.devices) && legacy.devices.length === 0)) legacy.devices = parsed;
+            else if (!Array.isArray(legacy.devices) || !isDeepStrictEqual(legacy.devices, parsed)) throw failure('EOS_DEVICES_LEGACY_CONFIG_CONFLICT');
+        }
+    }
+    delete legacy.devicesJson;
+    const config = validateConfig(legacy);
     const catalog = await registry();
     for (const device of config.devices) {
         const template = catalog.byId.get(device.templateId);
@@ -302,4 +326,4 @@ function createHostedModule({ adapter, canOperate, config = {}, runtimeFactory }
     function getStatus() { return { state, sourceVersion: SOURCE_VERSION, configured: settings.devices.length, running: runtimes.size, connected: lastConnection === true, lastError }; }
     return { start, stop, onStateChange, getStatus, getCatalog, command };
 }
-module.exports = { createHostedModule, validateConfig, preflightLegacyConfig, normalizeConfig: validateConfig, DEFAULTS, SOURCE_VERSION, command, getCatalog };
+module.exports = { createHostedModule, validateConfig, preflightLegacyConfig, migrateLegacyConfig: preflightLegacyConfig, normalizeConfig: validateConfig, DEFAULTS, SOURCE_VERSION, command, getCatalog };
