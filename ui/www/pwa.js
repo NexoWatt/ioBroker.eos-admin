@@ -20,7 +20,6 @@
  * 2. npm run sync:ts-runtime-executables ausführen.
  * 3. npm run test:runtime-executables prüfen.
  */
-"use strict";
 /**
  * NexoWatt Quellcode-Erklärung (DE)
  * Aufgabe: Registriert den eigenen App-Worker bereits auf der Anmeldeseite und

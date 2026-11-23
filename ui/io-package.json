@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "nexowatt-ui",
-    "version": "9.0.6",
+    "version": "9.0.7",
     "news": {
+      "9.0.7": {
+        "de": "Gerätekonfiguration ohne Sitzungsabbruch, geprüfte Bestandsübernahme, integrierte Sicherung und lokale Zertifikatsverwaltung. Einheitliche Moduloberflächen und begrenzte Caches. Umfang und Abnahmegrenzen siehe Prüfbericht.",
+        "en": "Device configuration without session interruption, guarded legacy migration, integrated backup and local certificate management. Consistent module interfaces and bounded caches. See the report for scope and acceptance limitations."
+      },
       "9.0.6": {
         "de": "Integrierte Geräte- und EEBus-Module mit zentraler EOS-Lizenz, geschützter Übergabe bestehender Instanzen, Installer-Rückweg und mehrzeiliger Admin-Navigation. Lokale Geräteankündigung und vorbereiteter HTTPS-Zugang ohne Port. Prüfumfang und offene Hardware-Abnahme siehe Prüfbericht.",
         "en": "Integrated Devices and EEBus modules with the central EOS license, guarded legacy handover, installer return navigation and wrapping admin navigation. Local discovery and prepared portless HTTPS access. See the report for validation scope and remaining hardware acceptance.",

@@ -1,0 +1,18 @@
+✔ real module pages and vendor assets are available through the guarded same-origin routes (111.965105ms)
+✔ backup download uses authenticated bounded binary streaming and refuses untrusted names (9.977866ms)
+✔ slow backup downloads have bounded admission and release their stream after client disconnect (13.124712ms)
+✔ backup byte-count mismatches abort the response without exposing an unbounded stream (7.42994ms)
+✔ read-only migration page and status require fresh administrator authentication and expose no private journal fields (15.701992ms)
+✔ fresh admin role, same origin and session-bound CSRF are required for every module mutation (12.674062ms)
+✔ first-login password requirement and invalid expired sessions do not expose configuration (7.358664ms)
+✔ invalid and oversized module JSON and internal exceptions are contained without leaking bodies (14.073442ms)
+✔ migration page explains blocked protected fields and shows existing instances without mutation requests (25.588242ms)
+✔ migration page rejects markup-shaped data and renders authentication failure as text (3.043182ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 409.072281

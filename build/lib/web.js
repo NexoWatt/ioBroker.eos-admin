@@ -67,6 +67,8 @@ const eosUnifiedBoundary_1 = require("./eosUnifiedBoundary");
 const eosModuleHost_1 = require("./eosModuleHost");
 const eosModuleHttp_1 = require("./eosModuleHttp");
 const eosDiscovery_1 = require("./eosDiscovery");
+const eosTlsManager_1 = require("./eosTlsManager");
+const eosTlsHttp_1 = require("./eosTlsHttp");
 let AdapterStore;
 /** Content of a socket-io file */
 let socketIoFile;
@@ -226,7 +228,28 @@ async function listenEosServer(server, settings) {
     });
 }
 /** The vendored server may return HTTP when certificates are missing. EOS must not. */
-async function createEosServer(app, adapter, settings) {
+async function createEosServer(app, adapter, settings, managedTls) {
+    const managedMaterial = settings.secure === true ? managedTls?.material() : null;
+    if (managedMaterial && managedTls) {
+        // Opt-in per-device identity. A dynamic SNI callback and the default IP
+        // context use the same identity, including after an authenticated renewal.
+        const managed = new node_https_1.Server({
+            ...managedMaterial,
+            minVersion: 'TLSv1.2',
+            SNICallback: (_name, callback) => {
+                const context = managedTls.secureContext();
+                if (context) {
+                    callback(null, context);
+                }
+                else {
+                    callback(new Error('EOS_TLS_CONTEXT_UNAVAILABLE'));
+                }
+            },
+        }, app);
+        managedTls.attachManagedServer(managed);
+        managed.once('close', () => managedTls.detach());
+        return managed;
+    }
     const webserver = new webserver_1.WebServer({
         app,
         adapter,
@@ -333,6 +356,7 @@ class Web {
     closed = false;
     moduleHost;
     discovery;
+    tlsManager;
     /**
      * Create a new instance of Web
      *
@@ -1794,6 +1818,23 @@ class Web {
         if (!app) {
             throw new Error('EOS_HTTP_UNAVAILABLE');
         }
+        const tlsManager = new eosTlsManager_1.EosTlsManager((0, node_path_1.join)((0, adapter_core_1.getAbsoluteInstanceDataDir)(this.adapter), 'tls'), this.settings.eosMdnsHostname || 'nexowatt');
+        this.tlsManager = tlsManager;
+        try {
+            await tlsManager.initialize();
+        }
+        catch {
+            tlsManager.markUnavailable();
+            this.adapter.log.warn('EOS_TLS_STORAGE_UNAVAILABLE: Existing HTTPS configuration is retained; check private certificate storage.');
+        }
+        (0, eosTlsHttp_1.registerEosTlsRoutes)({
+            app,
+            manager: tlsManager,
+            baseDir: this.baseDir,
+            authorize: (req) => this.unified.status(req),
+            csrfAllowed: (req) => this.unified.csrfAllowed(req),
+            requestAllowed: (req) => this.unified.requestAllowed(req),
+        });
         app.use((req, res, next) => {
             if (!this.systemRequests.has(req)) {
                 next();
@@ -1834,6 +1875,8 @@ class Web {
         const moduleHost = new eosModuleHost_1.EosModuleHost(this.adapter, {
             baseDir: this.baseDir,
             dataDir: (0, node_path_1.join)((0, adapter_core_1.getAbsoluteInstanceDataDir)(this.adapter), 'modules'),
+            eosDataDir: (0, adapter_core_1.getAbsoluteInstanceDataDir)(this.adapter),
+            installationDir: (0, node_path_1.join)(adapter_core_1.controllerDir, '..', '..'),
         });
         this.adapter.eosModuleHost = moduleHost;
         this.moduleHost = moduleHost;
@@ -2836,7 +2879,7 @@ class Web {
             if (this.closed) {
                 return;
             }
-            const initialized = await createEosServer(this.server.app, this.adapter, this.settings);
+            const initialized = await createEosServer(this.server.app, this.adapter, this.settings, this.tlsManager);
             if (this.closed) {
                 initialized.close(() => undefined);
                 return;
@@ -2929,6 +2972,11 @@ class Web {
                 if (!this.closed) {
                     this.adapter.log.error('EOS_UI_OPERATIONAL_START_FAILED: HTTPS remains available; inspect the runtime startup status.');
                 }
+            });
+            // The coordinator observes readiness with its own bounded deadline;
+            // listener availability does not depend on background initialization.
+            void this.adapter.eosMigration?.verifyRuntime().catch(() => {
+                this.adapter.log.warn('EOS_MIGRATION_VERIFY_UNAVAILABLE: Inspect migration status; HTTPS remains available.');
             });
         }
     }

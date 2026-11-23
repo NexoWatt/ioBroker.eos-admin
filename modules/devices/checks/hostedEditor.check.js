@@ -18,6 +18,8 @@ test('full hosted device editor loads profiles, edits and saves through the auth
         '/modules/devices/vendor/materialize.css': 'adminWww/lib/css/materialize.css',
         '/modules/devices/vendor/adapter.css': 'adminWww/css/adapter.css',
         '/modules/devices/templates.json': 'modules/devices/lib/templates.json',
+        '/modules/shared/eos-module.css': 'modules/shared/eos-module.css',
+        '/system/img/eos/nexowatt-eos-brand-wide.png': 'adminWww/img/eos/nexowatt-eos-brand-wide.png',
     };
     for (const file of ['host-bridge.js', 'index_m.js', 'style.css', 'words.js']) assets[`/modules/devices/${file}`] = `modules/devices/admin/${file}`;
     const server = http.createServer(async (req, res) => {
@@ -35,7 +37,7 @@ test('full hosted device editor loads profiles, edits and saves through the auth
             const asset = assets[url.pathname];
             if (!asset) { res.writeHead(404).end(); return; }
             const extension = path.extname(asset);
-            res.setHeader('Content-Type', ({ '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json' })[extension]);
+            res.setHeader('Content-Type', ({ '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.png': 'image/png' })[extension]);
             res.end(await fs.readFile(path.join(root, asset)));
         } catch (error) { errors.push(String(error)); res.writeHead(500).end(); }
     });

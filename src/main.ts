@@ -42,6 +42,7 @@ import { EosSessionSecurity } from './lib/eosSessionSecurity';
 import { createOwnershipGuard } from './lib/eosUnifiedOwnership';
 import type { EosHostedRuntime } from './lib/eosUnifiedRuntime';
 import type { EosModuleHost } from './lib/eosModuleHost';
+import { EosLegacyMigration } from './lib/eosLegacyMigration';
 import type { EosDiscovery } from './lib/eosDiscovery';
 import { EosUiSessionRegistry, type EosUiIdentity, type EosUiSession } from './lib/eosUiSessionRegistry';
 import { requestHttpsJson } from './lib/eosHttpsClient';
@@ -344,6 +345,7 @@ class Admin extends Adapter {
     /** Local license authority; management/recovery is never license-gated. */
     public eosHostedRuntime: EosHostedRuntime | undefined;
     public eosModuleHost: EosModuleHost | undefined;
+    public eosMigration: EosLegacyMigration | undefined;
     public eosDiscovery: EosDiscovery | undefined;
     public eosOwnership: ReturnType<typeof createOwnershipGuard> | undefined;
     public eosLicenseService: EosLicenseService | undefined;
@@ -559,6 +561,17 @@ class Admin extends Adapter {
                 trustedRuntimeRoot: join(controllerDir, '..', '..'),
             });
             await this.eosLicenseService.start();
+            this.eosMigration = new EosLegacyMigration(this, {
+                baseDir: join(__dirname, '..'),
+                dataDir: getAbsoluteInstanceDataDir(this),
+                installationDir: join(controllerDir, '..', '..'),
+            });
+            try {
+                await this.eosMigration.start();
+            } catch {
+                this.eosMigration.block();
+                this.log.error('EOS_MIGRATION_UNAVAILABLE: automatic handover denied; inspect migration status.');
+            }
             this.eosOwnership = createOwnershipGuard(this);
             await this.eosOwnership.start();
 
@@ -1130,6 +1143,7 @@ class Admin extends Adapter {
         deadline = setTimeout(finish, 2000);
         deadline.unref?.();
         cleanup(() => this.eosOwnership?.stop());
+        cleanup(() => this.eosMigration?.stop());
         cleanup(() => this.eosDiscovery?.stop());
         const modulesStopped = this.eosModuleHost?.stop() || Promise.resolve();
         cleanup(() => this.eosLicenseService?.stop());

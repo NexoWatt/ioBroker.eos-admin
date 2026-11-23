@@ -520,3 +520,130 @@ code {
 .eos-host-import input { max-width: 280px; }
 #eosImportMapping { overflow: auto; max-height: 220px; white-space: pre-wrap; }
 @media (max-width: 720px) { .eos-host-toolbar { position: static; padding: 14px; } .eos-host-actions { align-items: flex-start; flex-direction: column; } }
+
+/* EOS 9.0.7: scope above the legacy .m framework so its white defaults cannot
+ * override the shared EOS palette. Existing editor IDs and event hooks remain. */
+:root {
+  --nexo-bg: var(--eos-bg);
+  --nexo-surface: var(--eos-panel);
+  --nexo-surface-2: var(--eos-panel-raised);
+  --nexo-border: var(--eos-border);
+  --nexo-border-strong: #527180;
+  --nexo-text: var(--eos-text);
+  --nexo-text-muted: var(--eos-muted);
+  --nexo-text-dim: #adc5d2;
+  --nexo-accent: var(--eos-accent);
+  --nexo-accent-hover: var(--eos-accent-hover);
+  --nexo-danger: #652b39;
+  --nexo-danger-hover: #7c3545;
+}
+body.eos-module-page {
+  background: radial-gradient(ellipse at 0 0, #06443766, transparent 45%), linear-gradient(135deg, #020914, #061526 60%, #031019);
+  font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+}
+.m.adapter-container.eos-module-main { background: transparent !important; font: inherit; padding: 24px clamp(16px, 3vw, 40px) 48px; }
+.m.eos-module-main .row { margin-bottom: 16px; }
+.m.eos-module-main > .row { margin-left: -12px; margin-right: -12px; }
+.m.eos-module-main p { line-height: 1.6; }
+.m .eos-module-nav { height: auto; line-height: 1.5; width: 100%; box-shadow: none; background: #061825; }
+.m .eos-module-nav a { color: #c9dfe9; font-size: 13px; }
+.m .eos-module-nav a[aria-current="page"] { color: #baffdf; }
+.m .eos-module-hero h1 { font-size: clamp(28px, 3.5vw, 42px); line-height: 1.15; margin: 8px 0 12px; }
+.m .eos-module-hero p { margin: 0; }
+.m .eos-host-toolbar { position: relative; top: auto; z-index: auto; padding: 20px 24px; margin-bottom: 20px; background: #091f2d; border: 1px solid #244b54; border-radius: 16px; box-shadow: none; }
+.m .eos-host-actions { display: flex; flex-direction: row; align-items: center; gap: 12px; }
+.m .eos-host-actions > label { display: inline-flex; gap: 10px; align-items: center; margin-right: auto; color: #e0f2ee; font-size: 14px; }
+.m .eos-host-actions input[type="checkbox"] { appearance: auto; -webkit-appearance: checkbox; opacity: 1; pointer-events: auto; position: static; width: 20px; height: 20px; margin: 0; }
+.m .eos-host-actions input[type="checkbox"] + span { padding-left: 0; line-height: 1.5; height: auto; }
+.m .eos-host-actions input[type="checkbox"] + span::before, .m .eos-host-actions input[type="checkbox"] + span::after { display: none; }
+.m #eosModuleStatus { margin: 14px 0 0; color: #b7d9cd; font-size: 14px; }
+.m #eosModuleStatus[data-error="true"] { color: #ffadb8; }
+.m #eosModuleStatus a { display: inline-block; margin-left: 8px; text-decoration: underline; color: #baffdf; }
+.m .eos-host-import { border-top: 1px solid var(--eos-border); margin-top: 16px; padding-top: 14px; }
+.m .eos-host-import p { color: var(--eos-muted); font-size: 14px; max-width: 1000px; }
+.m .eos-host-import label { display: block; margin: 12px 0 4px; }
+.m .eos-host-import input { margin-right: 12px; }
+.m .card { border-radius: 16px; margin: 0; box-shadow: none; }
+.m .card .card-content { padding: 24px; }
+.m .card .card-title { font-size: 21px; line-height: 1.35; font-weight: 700; margin: 0 0 16px; }
+.m .nexo-header .card-content { padding: 20px 24px; }
+.m .nexo-header-row { align-items: baseline; flex-wrap: wrap; }
+.m .nexo-header-row .card-title { margin-bottom: 10px; }
+.m .nexo-badge { padding: 5px 10px; font-size: 11px; color: #bdd5e0; border-color: #3b6470; }
+.m .nexo-header p { font-size: 13px; color: var(--eos-muted); }
+.m .nexo-header .nexo-meta { margin: 12px 0; }
+.m .nexo-hint { padding: 10px 13px; background: #0a2934; }
+.m .tabs.nexo-tabs { background: #091f2d !important; border: 1px solid var(--eos-border); border-radius: 12px; display: flex; height: auto; padding: 6px; gap: 6px; overflow: visible; width: auto; margin: 0; }
+.m .tabs.nexo-tabs .tab { flex: 0 1 auto; height: auto; line-height: normal; letter-spacing: 0; }
+.m .tabs.nexo-tabs .tab a { padding: 11px 22px; display: block; border-radius: 8px; color: #c4dbe7 !important; text-transform: none; font: 650 14px/1.4 Inter, "Segoe UI", Roboto, Arial, sans-serif; }
+.m .tabs.nexo-tabs .tab a:hover, .m .tabs.nexo-tabs .tab a.active { background: #0b3d34 !important; color: #baffdf !important; }
+.m .tabs.nexo-tabs .tab a:focus { background: #0b3d34; }
+.m .tabs.nexo-tabs .indicator { display: none; }
+.m .btn, .m .btn-small, .m .btn-flat {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-height: 42px; height: auto; line-height: 1.4; padding: 10px 15px; font-family: inherit;
+  font-size: 13px; font-weight: 650; text-transform: none; letter-spacing: 0;
+  border: 1px solid #337369; border-radius: 9px; box-shadow: none; white-space: normal;
+}
+.m .btn, .m .btn-small { color: #002b21 !important; background: var(--eos-accent) !important; border-color: var(--eos-accent); }
+.m .btn:hover, .m .btn-small:hover { background: var(--eos-accent-hover) !important; box-shadow: none; }
+.m .btn-flat, .m .btn.nexo-outline { background: #0c2b32 !important; color: #d9eee7 !important; border-color: #42696e; }
+.m .btn-flat:hover, .m .btn.nexo-outline:hover { background: #153d40 !important; border-color: #68b5a4; }
+.m .btn:disabled, .m .btn:disabled:hover, .m .btn-small:disabled, .m .btn-flat:disabled { color: #a4b9c5 !important; background: #192e38 !important; border-color: #35505c; }
+.m .actions .btn-small.red { background: #652b39 !important; color: #ffe2e7 !important; border-color: #ac5c6c; }
+.m .actions .btn-small.red:hover { background: #7c3545 !important; }
+.m .nexo-table-scroll { overflow-x: auto; }
+.m .nexo-table-scroll:focus-visible { outline: 3px solid var(--eos-accent); outline-offset: 3px; border-radius: 8px; }
+.m .nexo-table { min-width: 960px; font-size: 13px; }
+.m .nexo-table th { color: #b1ccd9; font-size: 12px; font-weight: 650; }
+.m .nexo-table td, .m .nexo-table th { padding: 16px 10px; border-bottom: 1px solid var(--eos-border); }
+.m .nexo-table td.actions { min-width: 245px; }
+.m .nexo-table td { overflow-wrap: anywhere; max-width: 260px; }
+.m table.highlight > tbody > tr:hover { background: #12333b !important; }
+.m table.striped > tbody > tr:nth-child(odd) { background: #0f2937 !important; }
+.m .input-field { margin-top: 14px; margin-bottom: 12px; display: flex; flex-direction: column; }
+.m .input-field > label { position: static !important; transform: none !important; order: -1; font-size: 13px !important; color: #c3d8e3 !important; line-height: 1.5; width: auto; margin-bottom: 7px; pointer-events: auto; }
+.m .input-field > label.active { color: #c3d8e3 !important; }
+.m input[type="text"]:not(.browser-default), .m input[type="password"]:not(.browser-default), .m input[type="number"]:not(.browser-default), .m textarea.materialize-textarea {
+  background: #041421; color: var(--eos-text) !important; border: 1px solid #527180 !important; border-radius: 8px;
+  height: auto; min-height: 44px; padding: 10px 12px; box-sizing: border-box; margin: 0;
+  font-family: inherit; font-size: 14px; line-height: 1.5; box-shadow: none;
+}
+.m input[type="text"]:focus:not(.browser-default), .m input[type="password"]:focus:not(.browser-default), .m input[type="number"]:focus:not(.browser-default), .m textarea.materialize-textarea:focus { border-color: var(--eos-accent) !important; box-shadow: 0 0 0 1px var(--eos-accent) !important; }
+.m select.browser-default { background: #041421; color: var(--eos-text); border: 1px solid #527180; min-height: 44px; height: auto; padding: 10px 12px; border-radius: 8px; font-family: inherit; font-size: 14px; }
+.m select.browser-default option { background: #041421; color: var(--eos-text); }
+.m .dropdown-content { background: #092330; border: 1px solid #527180; border-radius: 8px; }
+.m .dropdown-content li > span, .m .dropdown-content li > a { color: #dbf5ea; }
+.m .dropdown-content li:hover, .m .dropdown-content li.selected { background: #17463e; }
+.m .select-wrapper .caret { fill: #adc5d2; }
+.m .nexo-modal { width: min(1200px, 94%); max-height: 88vh; height: 88vh; border-radius: 16px; border: 1px solid #3d6770; }
+.m .nexo-modal .modal-content { padding: 28px; }
+.m .nexo-modal .modal-content h5 { margin: 0 0 24px; font-size: 26px; font-weight: 700; }
+.m .nexo-modal .modal-content h6 { margin: 22px 0 18px; font-size: 18px; font-weight: 650; }
+.m .nexo-modal .modal-footer { display: flex; justify-content: flex-end; align-items: center; gap: 12px; height: 78px; padding: 14px 24px; }
+.m .nexo-modal.modal-fixed-footer .modal-content { height: calc(100% - 78px); }
+.m .nexo-modal .nexo-conn-block { border-top: 1px solid var(--eos-border); margin-top: 20px; }
+.m .nexo-modal .card-panel { padding: 20px; }
+.m .nexo-modal .card-panel input[type="checkbox"]:focus-visible { outline-color: var(--eos-accent); }
+.m .switch label { color: #c5dce4; }
+.m .switch label input[type="checkbox"]:checked + .lever { background: #248765; }
+.m .switch label input[type="checkbox"]:checked + .lever::after { background: #50f1b4; }
+.m .nexo-json-preview { background: #041421; }
+@media (max-width: 992px) {
+  .m .nexo-table.responsive-table { display: table; }
+  .m .nexo-table.responsive-table thead { display: table-header-group; float: none; border-right: none; }
+  .m .nexo-table.responsive-table tbody { display: table-row-group; white-space: normal; overflow: visible; }
+  .m .nexo-table.responsive-table tr { display: table-row; }
+  .m .nexo-table.responsive-table th, .m .nexo-table.responsive-table td { display: table-cell; }
+}
+@media (max-width: 720px) {
+  .m.adapter-container.eos-module-main { padding: 16px 14px 32px; }
+  .m .eos-host-toolbar { padding: 18px; }
+  .m .eos-host-actions > label { width: 100%; margin-bottom: 4px; }
+  .m .eos-host-actions .btn { flex: 1; }
+  .m .card .card-content { padding: 18px; }
+  .m .nexo-devices-actions { justify-content: flex-start; }
+  .m .nexo-modal .modal-content { padding: 20px 16px; }
+  .m .nexo-modal .modal-footer { padding: 12px 16px; }
+  .m .nexo-modal .card-panel { padding: 16px; }
+}

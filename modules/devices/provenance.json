@@ -13,7 +13,7 @@
   },
   "integration": {
     "host": "iobroker.eos-admin",
-    "release": "9.0.6",
+    "release": "9.0.7",
     "singleProcess": true,
     "licenseAuthority": "EOS central NWL3",
     "changes": [
@@ -23,7 +23,9 @@
       "Serial reconnect queue deadlock fix",
       "Stop cleanup after rejected final MQTT safe publish",
       "Bounded verified HTTPS, public trusted CA import and stop abort",
-      "Explicit disabled legacy configuration import; state ID mapping requires review"
+      "Encrypted module configuration outside the adapter-instance object; saves retain the EOS process and authenticated session",
+      "Conservative automatic legacy handover with preserved datapoint namespaces, preflight catalog validation and rollback journal; explicit manual import remains available",
+      "Restored secret placeholders keyed by stable device identity; full editor authentication and error feedback"
     ],
     "limitations": [
       "No physical-device/serial-hardware acceptance test",

@@ -1,16 +1,18 @@
-# NexoWatt Devices in EOS 9.0.6
+# NexoWatt Devices in EOS 9.0.7
 
 Das Gerätemodul enthält die bestehenden Geräteprofile und Protokolltreiber aus NexoWatt Devices **0.5.176**. Es startet im EOS-Prozess unter der gemeinsamen EOS-Systemlizenz. Es gibt keine zweite Adapterinstanz und keine zusätzliche Lizenzaktivierung. Die vollständige Geräteverwaltung ist unter `/modules/devices/` über die angemeldete EOS-Administration erreichbar.
 
 ## Einrichtung und bestehende Anlagen
 
-1. Den bisherigen Adapter `nexowatt-devices.<Instanz>` in ioBroker deaktivieren. Sein Prozess muss beendet sein. Ein deaktivierter Schalter allein ist kein Nachweis für den Stillstand.
-2. In EOS → Geräteverwaltung → **Bestehenden Geräteadapter übernehmen** die Instanz auswählen. Der Import übernimmt die Gerätekonfiguration zunächst deaktiviert. Er ersetzt keine Geräte und löscht keine alten Datenpunkte.
-3. Die ausgegebene Pfadzuordnung prüfen. Aus `nexowatt-devices.0.devices.<Gerät>…` wird `eos-admin.0.devices.<Gerät>…` (bei einer anderen EOS-Instanz entsprechend). Geräte-IDs, Profile, Register, Einheiten und relative Alias-Pfade bleiben erhalten. Bestehende EMS-, Skript-, History- und Visualisierungszuordnungen müssen auf die neuen absoluten Pfade umgestellt werden. Die alten Namen werden nicht durch fremde Schreibzugriffe vorgetäuscht.
-4. Verbindungen, Gerätepasswörter, Pollingintervalle und Schreibfreigaben prüfen. HTTP-Geräte müssen gültige TLS-Zertifikate verwenden. Für eine private Geräte-CA kann das **öffentliche CA-Zertifikat im PEM-Format** hinterlegt werden. Frühere TLS-Prüfungs-Ausnahmen werden nicht übernommen; Gerät bearbeiten, CA hinterlegen und speichern.
-5. Erst anschließend **Gerätemodul aktivieren** und **Speichern und übernehmen** wählen. Die alte Instanz bleibt deaktiviert. Mit einem einzelnen Gerät zunächst Messwert, Vorzeichen, Einheit, Aktualität und eine betrieblich freigegebene kleine Stellgrößenänderung prüfen.
+Beim Start prüft EOS eine vorhandene eindeutige Instanz von Devices 0.5.176 auf demselben Host. Ist der Zielbereich noch nicht konfiguriert, die zentrale Lizenz gültig und jede Vorprüfung erfolgreich, übernimmt EOS die Einstellungen automatisch. Der alte Prozess wird erst nach vollständiger Vorprüfung gestoppt. Sein bestätigter Stillstand wird abgewartet; ein verschlüsseltes Journal schützt den Ablauf gegen Unterbrechungen. Die Originalinstanz bleibt für einen Rückfall erhalten.
 
-Die Aktivierung prüft serverseitig die EOS-Lizenz und konkurrierende Altinstanzen. Das Modul ist bei der ersten Installation deaktiviert. Geheimnisse bleiben in der vom Host verschlüsselten Konfiguration; die Webansicht erhält Platzhalter und erhält bestehende Werte anhand stabiler Geräte-IDs. Nach dem Bearbeiten eines Geräts sind die Änderungen zusätzlich oben zu übernehmen.
+Bei dieser automatischen Übernahme bleibt beispielsweise `nexowatt-devices.0.devices.ess1.power` exakt bestehen. Das integrierte Modul verwendet diese IDs weiter; Aliase, History-Einstellungen und vollständige Datenpunktverweise werden weder kopiert noch umgeschrieben. Gerätepasswörter bleiben in der verschlüsselten Konfiguration. Einstellungen und Credentials aus `protectedNative`, die der Controller nicht bereitstellt, dürfen nicht durch leere Werte ersetzt werden: die Übernahme bleibt dann blockiert, die Altadapter laufen weiter.
+
+Der Status steht unter **Bestandsübernahme** (`/migration/`) und im State `eos-admin.N.info.legacyMigration`. Mehrdeutige Instanzen, andere Hosts/Versionen, unbekannte Profile, TLS-Ausnahmen, vorhandene Zielkonfigurationen und erkannte externe `sendTo`-Verweise blockieren den automatischen Wechsel. Dynamische externe RPC-Aufrufer sind zusätzlich zu prüfen. Dieser konservative Ablauf ist keine Garantie für jede beliebige Bestandsanlage; Details und Rückfallgrenzen stehen in `docs/unified/BESTANDSUEBERNAHME_9_0_7.md`.
+
+Der ausdrücklich gewählte **manuelle Konfigurationsimport** im Geräteeditor bleibt eine Alternative für vorbereitete Anlagen: alte Instanz vollständig stoppen, Konfiguration zunächst deaktiviert importieren und die angezeigten neuen Pfade prüfen. Dieser manuelle Import behält das Verhalten aus 9.0.6 und wechselt auf `eos-admin.N.devices.*`; er führt keine automatische Umstellung von EMS-/Skript-/History-Verweisen durch. Nicht zusätzlich importieren, wenn die automatische Übernahme bereits abgeschlossen ist.
+
+Nach dem Bearbeiten eines Geräts zuerst im Gerätefenster speichern und anschließend oben **Speichern und übernehmen** wählen. Die Konfiguration liegt ab 9.0.7 außerhalb des laufenden Adapter-Instanzobjekts, damit das Speichern keinen EOS-Neustart auslöst. Die Oberfläche erhält ausschließlich Passwortplatzhalter; Werte werden anhand stabiler Geräte-IDs erhalten. Bei einer tatsächlich abgelaufenen Sitzung bleibt der Entwurf sichtbar, eine erneute Anmeldung ersetzt keine ungeprüfte automatische Wiederholung eines Schreibauftrags.
 
 ## Protokolle und Grenzen
 

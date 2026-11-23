@@ -1,6 +1,6 @@
 {
   "component": "NexoWatt EOS embedded EEBus",
-  "integrationVersion": "9.0.6",
+  "integrationVersion": "9.0.7",
   "upstream": {
     "name": "iobroker.eebus",
     "version": "0.3.0",
@@ -12,12 +12,14 @@
   },
   "changes": [
     "Hosted module factory, single EOS NWL3 license and same-process para14a bridge; no second adapter-core instance",
-    "Explicit inactive configuration migration to eos-admin.N.eebus states, new device pairing, legacy configuration retained",
     "SHIP TLS certificate identity and fingerprint pinning, explicit pairing, handshake ordering and live revocation",
     "Bounded sessions, frames, discovery, queues and shutdown; caught asynchronous callbacks and coalesced periodic tasks",
     "Local 0600 SHIP identity storage, validated key pair and fail-closed corrupt identity recovery",
     "Dry-run covers incoming CLS and outgoing controls, no untrusted bypass, capability checks at message dispatch",
-    "Functional module configuration, discovery, pairing and admin navigation UI"
+    "Functional module configuration, discovery, pairing and admin navigation UI",
+    "Automatic eligible legacy handover retains eebus.N datapoint IDs, validated SHIP identity and existing verified certificate pins; unavailable protected fields or unpinned peers block before cutover",
+    "Private in-process bridge retains EOS authority while routing preserved legacy EEBus/UI namespaces",
+    "Manual configuration-only import remains disabled and requires fresh pairing"
   ],
   "excludedUpstreamFiles": [
     "node_modules",

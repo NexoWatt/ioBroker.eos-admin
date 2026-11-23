@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="de">
+    <head>
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1"
+        />
+        <title>NexoWatt EOS · Sicherung</title>
+        <link
+            rel="stylesheet"
+            href="/modules/shared/eos-module.css"
+        />
+        <link
+            rel="stylesheet"
+            href="style.css"
+        />
+    </head>
+    <body class="eos-module-page">
+        <header class="eos-page-header">
+            <a
+                class="eos-brand"
+                href="/"
+                ><img
+                    src="/system/img/eos/nexowatt-eos-brand-wide.png"
+                    width="190"
+                    height="52"
+                    alt="NexoWatt EOS"
+            /></a>
+            <nav
+                class="eos-module-nav"
+                aria-label="EOS"
+            >
+                <a href="/system/">Administration</a><a href="/installer/">Installer</a><a href="/">Dashboard</a
+                ><a href="/modules/devices/">Geräte</a><a href="/modules/eebus/">EEBus</a
+                ><a
+                    href="/modules/backup/"
+                    aria-current="page"
+                    >Sicherung</a
+                ><a href="/security/tls/">Zertifikate</a>
+            </nav>
+        </header>
+        <main class="eos-module-main">
+            <section class="eos-module-hero">
+                <div>
+                    <p class="eos-eyebrow">NEXOWATT EOS</p>
+                    <h1>Sicherung & Wiederherstellung</h1>
+                    <p>
+                        System, Einstellungen und Geräteidentitäten gemeinsam sichern. Freigabe über die zentrale
+                        EOS-Lizenz.
+                    </p>
+                </div>
+                <span class="eos-module-badge">Backup · 1.0.10 integriert</span>
+            </section>
+            <p
+                id="message"
+                role="status"
+                aria-live="polite"
+            ></p>
+            <section class="eos-panel">
+                <h2>Backup verwalten</h2>
+                <p id="status">Status wird geladen …</p>
+                <div class="actions">
+                    <button
+                        id="start"
+                        class="eos-primary"
+                    >
+                        Jetzt sichern</button
+                    ><button id="startCcu">CCU sichern</button><button id="refresh">Status aktualisieren</button
+                    ><button id="cancel">Lauf abbrechen</button>
+                </div>
+                <p>
+                    Archive sind verschlüsselt. Lade den Wiederherstellungsschlüssel herunter und bewahre ihn getrennt
+                    vom EOS-Gerät auf. Bei einem Gerätetausch wird er zum Öffnen der Sicherungen benötigt.
+                </p>
+                <button id="key">Wiederherstellungsschlüssel herunterladen</button>
+            </section>
+            <section class="eos-panel">
+                <h2>Zeitplan & Speicherziel</h2>
+                <form id="settings">
+                    <div class="fields">
+                        <label
+                            ><input
+                                id="enabled"
+                                type="checkbox"
+                            />
+                            Backupmodul aktivieren</label
+                        ><label
+                            ><input
+                                id="minimalEnabled"
+                                type="checkbox"
+                            />
+                            Automatische Systemsicherung</label
+                        ><label
+                            >Uhrzeit<input
+                                id="minimalTime"
+                                type="time" /></label
+                        ><label
+                            >Alle … Tage<input
+                                id="minimalEveryXDays"
+                                type="number"
+                                min="1"
+                                max="365" /></label
+                        ><label
+                            >Aufbewahrung je Sicherungstyp (Anzahl, 0 = unbegrenzt)<input
+                                id="minimalDeleteAfter"
+                                type="number"
+                                min="0"
+                                max="3650" /></label
+                        ><label
+                            >Maximale Laufzeit (Minuten)<input
+                                id="jobTimeoutMinutes"
+                                type="number"
+                                min="1"
+                                max="120" /></label
+                        ><label
+                            ><input
+                                id="cifsEnabled"
+                                type="checkbox"
+                            />
+                            Zusätzliches lokales Ziel / SD-Karte</label
+                        ><label
+                            >Art des Ziels<select id="connectType">
+                                <option value="Copy">Eingebundener Ordner / NAS</option>
+                                <option value="SDCard">Eingebundene SD-Karte</option>
+                                <option value="CIFS">Vorab eingebundenes CIFS</option>
+                                <option value="NFS">Vorab eingebundenes NFS</option>
+                            </select></label
+                        ><label
+                            >Zielordner<input
+                                id="mountedBackupPath"
+                                type="text"
+                                placeholder="/mnt/eos-backup" /></label
+                        ><label
+                            >SD-Karte: Einhängepunkt<input
+                                id="sdCardMountPath"
+                                type="text"
+                                list="sdTargets"
+                                placeholder="/media/eos-backup"
+                            /><datalist id="sdTargets"></datalist
+                            ><button
+                                id="scanSd"
+                                type="button"
+                            >
+                                SD-Karten suchen
+                            </button></label
+                        ><label
+                            >SD-Karte: Unterordner<input
+                                id="sdCardBackupSubDir"
+                                type="text"
+                        /></label>
+                    </div>
+                    <button
+                        class="eos-primary"
+                        type="submit"
+                    >
+                        Speichern und übernehmen
+                    </button>
+                </form>
+                <p>
+                    EOS nutzt bereits eingebundene Datenträger. Einbinden und Rechtevergabe erfolgen bei der
+                    Geräteeinrichtung.
+                </p>
+                <details>
+                    <summary>Weitere übernommene Einstellungen</summary>
+                    <p>
+                        Die vollständige Konfiguration bleibt erhalten. Nicht freigegebene Betriebsarten werden vor der
+                        Übernahme mit einer konkreten Meldung angehalten.
+                    </p>
+                    <div
+                        id="advanced"
+                        class="fields"
+                    ></div>
+                    <button id="saveAdvanced">Alle Einstellungen speichern</button>
+                </details>
+            </section>
+            <section class="eos-panel">
+                <h2>Vorhandene Sicherungen</h2>
+                <p>
+                    Bestehende Archive werden beim Übernehmen kopiert und verschlüsselt. Die Originaldateien bleiben
+                    erhalten.
+                </p>
+                <div class="actions">
+                    <select
+                        id="remoteProvider"
+                        aria-label="Sicherungsquelle"
+                    >
+                        <option value="legacy">Bisherige lokale Sicherungen</option>
+                        <option value="cifs">NAS / SD-Karte</option>
+                        <option value="ftp">FTPS</option>
+                        <option value="webdav">WebDAV</option>
+                        <option value="dropbox">Dropbox</option>
+                        <option value="googledrive">Google Drive</option>
+                        <option value="onedrive">OneDrive</option></select
+                    ><select
+                        id="remoteKind"
+                        aria-label="Sicherungstyp"
+                    >
+                        <option value="iobroker">EOS / ioBroker</option>
+                        <option value="ccu">CCU</option></select
+                    ><button id="remoteList">Sicherungen suchen</button>
+                </div>
+                <div id="remoteEntries"></div>
+            </section>
+            <section class="eos-panel">
+                <h2>Sicherungsläufe</h2>
+                <div id="jobs"></div>
+            </section>
+            <section class="eos-panel">
+                <h2>Wiederherstellen</h2>
+                <p>
+                    Bei einer vollständigen Wiederherstellung muss der ioBroker-Controller kontrolliert gestoppt sein.
+                    EOS bereitet die Schritte vor; die laufende Anlage wird beim Öffnen dieses Bereichs nicht verändert.
+                </p>
+                <p>
+                    Die Entschlüsselung wird mit dem mitgelieferten Werkzeug
+                    <code>modules/backup/build/restore-cli.js</code> und deinem separat gespeicherten
+                    Wiederherstellungsschlüssel ausgeführt. Anschließend Controller-Archiv und EOS-Geräteidentitäten
+                    gemeinsam zurückspielen. Anleitung: <code>modules/backup/README.md</code>.
+                </p>
+                <pre id="restorePlan"></pre>
+            </section>
+        </main>
+        <script src="index.js"></script>
+    </body>
+</html>

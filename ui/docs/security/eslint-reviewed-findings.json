@@ -14,8 +14,8 @@
       "count": 1,
       "reason": "copyJsonValue schreibt ausschließlich nach Sperre von __proto__/prototype/constructor in ein neu erzeugtes Object.create(null)-Dictionary; Rekursion und Knotenbudget sind begrenzt.",
       "evidence": "docs/reports/admin-https-2026-11-03/PROXY_HTML_REVIEW_DE.md",
-      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): copyJsonValue inhaltlich unverändert: Null-Prototypziel, Prototypschlüsselsperre, Tiefen- und Knotenbudget. Der neue RuntimeTarget liest Port und Boolean-secure aus exakt der bestätigten Instanz; er ändert diesen Dictionaryzugriff nicht. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md",
-      "sourceCodeSha256": "d53e10c54597c2a27082428196dbccfd7dcbbc51755437ba5376b859f8505fca"
+      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): copyJsonValue inhaltlich unverändert: Null-Prototypziel, Prototypschlüsselsperre, Tiefen- und Knotenbudget. Der neue RuntimeTarget liest Port und Boolean-secure aus exakt der bestätigten Instanz; er ändert diesen Dictionaryzugriff nicht. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md.",
+      "sourceCodeSha256": "94bd0f3fb3c1ab9bd9188690c3471737d53f3b6f84091921d18a821781950f40"
     },
     {
       "file": "src-admin-tab/src/lib/adminContracts.ts",
@@ -602,8 +602,8 @@
       "count": 2,
       "reason": "Der Diagnosezähler wird mit Object.create(null) initialisiert; dynamische Fehlerklassen können dadurch keine Prototyp-Setter verändern. Der neue Peerclient liefert nur eigene feste Fehlercodes.",
       "evidence": "docs/reports/admin-https-2026-11-03/PROXY_HTML_REVIEW_DE.md",
-      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): Beide Diagnosezählerzugriffe bleiben in Object.create(null); die vorgeschaltete Fehlerklassifikation liefert feste Labels. Listener-/TLS-Ergänzung am Ende von startServer verändert weder Schlüsselherkunft noch Akkumulator. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Abschließender Lifecycle-Diff zusätzlich geprüft: ausschließlich UiTlsConfigurationError wird in onReady lokal behandelt; EMS-Initialisierung bleibt erhalten, der Mutationstoken wird via finally freigegeben, Shutdown wird vor und nach der Zertifikatsauflösung geprüft. Keine Änderung dieser Fundstelle oder ihrer Datenherkunft.",
-      "sourceCodeSha256": "5fbefa230ec5b15e7cfb556c4a302c4263495650e724172c43c2e21a50da3388"
+      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): Beide Diagnosezählerzugriffe bleiben in Object.create(null); die vorgeschaltete Fehlerklassifikation liefert feste Labels. Listener-/TLS-Ergänzung am Ende von startServer verändert weder Schlüsselherkunft noch Akkumulator. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Abschließender Lifecycle-Diff zusätzlich geprüft: ausschließlich UiTlsConfigurationError wird in onReady lokal behandelt; EMS-Initialisierung bleibt erhalten, der Mutationstoken wird via finally freigegeben, Shutdown wird vor und nach der Zertifikatsauflösung geprüft. Keine Änderung dieser Fundstelle oder ihrer Datenherkunft. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md.",
+      "sourceCodeSha256": "fa9cee15e00b7a7f36d3ff6cc4dac5382ed20478392d91dbdd48bcdb27895166"
     },
     {
       "file": "src-admin-tab/src/pages/DynamicGridPage.tsx",
@@ -1092,8 +1092,8 @@
       "count": 1,
       "reason": "localId wird ausschließlich aus validierten Partner-App-IDs gebildet; directMarketing ist explizit grid. Lokaler Lesezugriff mit zusätzlicher installed/enabled-/Lizenzprüfung, kein fremder Prototyp-Schlüssel.",
       "evidence": "docs/reports/admin-https-2026-11-03/PROXY_HTML_REVIEW_DE.md",
-      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): Partner-App-Lesezugriff unverändert: vorgelagerte PartnerAppId-Positivliste, explizite directMarketing→grid-Zuordnung und aktive Lizenz-/Installationsprüfung. Keine neuen Aufrufer durch TLS. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Abschließender Lifecycle-Diff zusätzlich geprüft: ausschließlich UiTlsConfigurationError wird in onReady lokal behandelt; EMS-Initialisierung bleibt erhalten, der Mutationstoken wird via finally freigegeben, Shutdown wird vor und nach der Zertifikatsauflösung geprüft. Keine Änderung dieser Fundstelle oder ihrer Datenherkunft.",
-      "sourceCodeSha256": "5fbefa230ec5b15e7cfb556c4a302c4263495650e724172c43c2e21a50da3388"
+      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): Partner-App-Lesezugriff unverändert: vorgelagerte PartnerAppId-Positivliste, explizite directMarketing→grid-Zuordnung und aktive Lizenz-/Installationsprüfung. Keine neuen Aufrufer durch TLS. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Abschließender Lifecycle-Diff zusätzlich geprüft: ausschließlich UiTlsConfigurationError wird in onReady lokal behandelt; EMS-Initialisierung bleibt erhalten, der Mutationstoken wird via finally freigegeben, Shutdown wird vor und nach der Zertifikatsauflösung geprüft. Keine Änderung dieser Fundstelle oder ihrer Datenherkunft. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md.",
+      "sourceCodeSha256": "fa9cee15e00b7a7f36d3ff6cc4dac5382ed20478392d91dbdd48bcdb27895166"
     },
     {
       "file": "src-ts/runtime-executables/main.ts",
@@ -1106,8 +1106,8 @@
       "count": 1,
       "reason": "Lokale Availability-Map wird durch die Regelung mit Object.create(null) geführt. Bereits freigegebene Ressource wird nur gelesen; tatsächlicher Boolean und frischer Zeitstempel erforderlich.",
       "evidence": "docs/reports/admin-https-2026-11-03/PROXY_HTML_REVIEW_DE.md",
-      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): Availability-Lesezugriff und Datenherkunft nachgeprüft: lokale Null-Prototyp-Map, Ressource aus Partnerfreigabe, Boolean- und 15-s-Frischeprüfung. Gegen 1.0.37 unverändert. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Abschließender Lifecycle-Diff zusätzlich geprüft: ausschließlich UiTlsConfigurationError wird in onReady lokal behandelt; EMS-Initialisierung bleibt erhalten, der Mutationstoken wird via finally freigegeben, Shutdown wird vor und nach der Zertifikatsauflösung geprüft. Keine Änderung dieser Fundstelle oder ihrer Datenherkunft.",
-      "sourceCodeSha256": "5fbefa230ec5b15e7cfb556c4a302c4263495650e724172c43c2e21a50da3388"
+      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): Availability-Lesezugriff und Datenherkunft nachgeprüft: lokale Null-Prototyp-Map, Ressource aus Partnerfreigabe, Boolean- und 15-s-Frischeprüfung. Gegen 1.0.37 unverändert. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Abschließender Lifecycle-Diff zusätzlich geprüft: ausschließlich UiTlsConfigurationError wird in onReady lokal behandelt; EMS-Initialisierung bleibt erhalten, der Mutationstoken wird via finally freigegeben, Shutdown wird vor und nach der Zertifikatsauflösung geprüft. Keine Änderung dieser Fundstelle oder ihrer Datenherkunft. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md.",
+      "sourceCodeSha256": "fa9cee15e00b7a7f36d3ff6cc4dac5382ed20478392d91dbdd48bcdb27895166"
     },
     {
       "file": "src-ts/runtime-executables/main.ts",
@@ -1120,8 +1120,8 @@
       "count": 1,
       "reason": "readState-Callback wird vom PartnerRuntime nur mit fest codierten Bilanz-/PV-/Netzleistungs-State-IDs aufgerufen. Kein Partnertext kann beliebige id-Pfade an diesen Cache-Lesezugriff liefern.",
       "evidence": "docs/reports/admin-https-2026-11-03/PROXY_HTML_REVIEW_DE.md",
-      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): Cache-Lesezugriff unverändert; PartnerRuntime/readPartnerProjection erzeugt die Bilanz-/PV-/Netz-Statekennungen aus festen internen Projektionen. Kein frei übergebener Partnerpfad. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Abschließender Lifecycle-Diff zusätzlich geprüft: ausschließlich UiTlsConfigurationError wird in onReady lokal behandelt; EMS-Initialisierung bleibt erhalten, der Mutationstoken wird via finally freigegeben, Shutdown wird vor und nach der Zertifikatsauflösung geprüft. Keine Änderung dieser Fundstelle oder ihrer Datenherkunft.",
-      "sourceCodeSha256": "5fbefa230ec5b15e7cfb556c4a302c4263495650e724172c43c2e21a50da3388"
+      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): Cache-Lesezugriff unverändert; PartnerRuntime/readPartnerProjection erzeugt die Bilanz-/PV-/Netz-Statekennungen aus festen internen Projektionen. Kein frei übergebener Partnerpfad. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Abschließender Lifecycle-Diff zusätzlich geprüft: ausschließlich UiTlsConfigurationError wird in onReady lokal behandelt; EMS-Initialisierung bleibt erhalten, der Mutationstoken wird via finally freigegeben, Shutdown wird vor und nach der Zertifikatsauflösung geprüft. Keine Änderung dieser Fundstelle oder ihrer Datenherkunft. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md.",
+      "sourceCodeSha256": "fa9cee15e00b7a7f36d3ff6cc4dac5382ed20478392d91dbdd48bcdb27895166"
     },
     {
       "file": "src-ts/runtime-executables/main.ts",
@@ -1134,8 +1134,8 @@
       "count": 1,
       "reason": "Lokale Telemetry-Map wird von der Regelung mit Object.create(null) geführt. Die zuvor an die Partnerfreigabe gebundene Ressource wird ausschließlich gelesen und anschließend fachlich projiziert.",
       "evidence": "docs/reports/admin-https-2026-11-03/PROXY_HTML_REVIEW_DE.md",
-      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): Telemetry-Lesezugriff unverändert; bestehende Regler erzeugen die Null-Prototyp-Map, Partnerprojektion prüft Ressource und Messdaten. TLS-Start ergänzt keine Telemetrieschreibstelle. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Abschließender Lifecycle-Diff zusätzlich geprüft: ausschließlich UiTlsConfigurationError wird in onReady lokal behandelt; EMS-Initialisierung bleibt erhalten, der Mutationstoken wird via finally freigegeben, Shutdown wird vor und nach der Zertifikatsauflösung geprüft. Keine Änderung dieser Fundstelle oder ihrer Datenherkunft.",
-      "sourceCodeSha256": "5fbefa230ec5b15e7cfb556c4a302c4263495650e724172c43c2e21a50da3388"
+      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): Telemetry-Lesezugriff unverändert; bestehende Regler erzeugen die Null-Prototyp-Map, Partnerprojektion prüft Ressource und Messdaten. TLS-Start ergänzt keine Telemetrieschreibstelle. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Abschließender Lifecycle-Diff zusätzlich geprüft: ausschließlich UiTlsConfigurationError wird in onReady lokal behandelt; EMS-Initialisierung bleibt erhalten, der Mutationstoken wird via finally freigegeben, Shutdown wird vor und nach der Zertifikatsauflösung geprüft. Keine Änderung dieser Fundstelle oder ihrer Datenherkunft. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md.",
+      "sourceCodeSha256": "fa9cee15e00b7a7f36d3ff6cc4dac5382ed20478392d91dbdd48bcdb27895166"
     },
     {
       "file": "src-ts/runtime-executables/ems/modules/dynamic-grid-connection.ts",
@@ -1456,8 +1456,8 @@
       "count": 1,
       "reason": "getStoredSession liest ausschließlich den intern aus Profil/Instanz/Port erzeugten COOKIE_NAME. parseUiCookies liefert eine Null-Prototyp-Map mit begrenzten Stringwerten und Dublettenabwehr. Der Wert ist nur Schlüssel zur serverseitigen Session-Map; Konto-/Rollen-/Ablaufprüfung folgt vor Freigabe.",
       "evidence": "docs/reports/smarthome-auth-2026-11-19/PRUEFBERICHT_DE.md",
-      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): getStoredSession liest weiterhin den intern abgeleiteten COOKIE_NAME aus parseUiCookies mit Null-Prototyp, Größenlimit und Dublettenabwehr; serverseitige Bindungs-, Konten- und Ablaufprüfungen unverändert. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Abschließender Lifecycle-Diff zusätzlich geprüft: ausschließlich UiTlsConfigurationError wird in onReady lokal behandelt; EMS-Initialisierung bleibt erhalten, der Mutationstoken wird via finally freigegeben, Shutdown wird vor und nach der Zertifikatsauflösung geprüft. Keine Änderung dieser Fundstelle oder ihrer Datenherkunft.",
-      "sourceCodeSha256": "5fbefa230ec5b15e7cfb556c4a302c4263495650e724172c43c2e21a50da3388"
+      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): getStoredSession liest weiterhin den intern abgeleiteten COOKIE_NAME aus parseUiCookies mit Null-Prototyp, Größenlimit und Dublettenabwehr; serverseitige Bindungs-, Konten- und Ablaufprüfungen unverändert. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Abschließender Lifecycle-Diff zusätzlich geprüft: ausschließlich UiTlsConfigurationError wird in onReady lokal behandelt; EMS-Initialisierung bleibt erhalten, der Mutationstoken wird via finally freigegeben, Shutdown wird vor und nach der Zertifikatsauflösung geprüft. Keine Änderung dieser Fundstelle oder ihrer Datenherkunft. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md.",
+      "sourceCodeSha256": "fa9cee15e00b7a7f36d3ff6cc4dac5382ed20478392d91dbdd48bcdb27895166"
     },
     {
       "file": "src-ts/runtime-executables/main.ts",
@@ -1470,8 +1470,8 @@
       "count": 1,
       "reason": "doAuthLogout liest nur den intern berechneten COOKIE_NAME aus dem begrenzten Null-Prototyp-Cookiedictionary. Kein Request wählt einen Propertynamen. Der Wert kann ausschließlich diese Server-Session aus der Map entfernen; angemeldete Zugriffe erfordern zuvor den CSRF-Vergleich.",
       "evidence": "docs/reports/smarthome-auth-2026-11-19/PRUEFBERICHT_DE.md",
-      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): doAuthLogout bleibt auf den intern gebundenen Cookie-Namen und dieselbe serverseitige Sitzungsmap begrenzt; vorgelagerter konstanter CSRF-Vergleich unverändert. Kein TLS-bedingter Auth-Bypass. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Abschließender Lifecycle-Diff zusätzlich geprüft: ausschließlich UiTlsConfigurationError wird in onReady lokal behandelt; EMS-Initialisierung bleibt erhalten, der Mutationstoken wird via finally freigegeben, Shutdown wird vor und nach der Zertifikatsauflösung geprüft. Keine Änderung dieser Fundstelle oder ihrer Datenherkunft.",
-      "sourceCodeSha256": "5fbefa230ec5b15e7cfb556c4a302c4263495650e724172c43c2e21a50da3388"
+      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): doAuthLogout bleibt auf den intern gebundenen Cookie-Namen und dieselbe serverseitige Sitzungsmap begrenzt; vorgelagerter konstanter CSRF-Vergleich unverändert. Kein TLS-bedingter Auth-Bypass. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Abschließender Lifecycle-Diff zusätzlich geprüft: ausschließlich UiTlsConfigurationError wird in onReady lokal behandelt; EMS-Initialisierung bleibt erhalten, der Mutationstoken wird via finally freigegeben, Shutdown wird vor und nach der Zertifikatsauflösung geprüft. Keine Änderung dieser Fundstelle oder ihrer Datenherkunft. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md.",
+      "sourceCodeSha256": "fa9cee15e00b7a7f36d3ff6cc4dac5382ed20478392d91dbdd48bcdb27895166"
     },
     {
       "file": "src-ts/runtime-executables/main.ts",
@@ -1484,8 +1484,8 @@
       "count": 1,
       "reason": "Logout liest pro registriertem SSE-Client ausschließlich denselben intern berechneten COOKIE_NAME. Null-Prototyp-Parser und Stringvergleich dienen nur der Zuordnung und Schließung derselben Sitzung, ohne fremde Objektmutation oder Rechtevergabe.",
       "evidence": "docs/reports/smarthome-auth-2026-11-19/PRUEFBERICHT_DE.md",
-      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): SSE-Logoutzuordnung liest denselben internen Cookie-Namen aus dem begrenzten Null-Prototyp-Parser und schließt nur passende Sitzungen; keine geänderte Rechte- oder Objektmutation. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Abschließender Lifecycle-Diff zusätzlich geprüft: ausschließlich UiTlsConfigurationError wird in onReady lokal behandelt; EMS-Initialisierung bleibt erhalten, der Mutationstoken wird via finally freigegeben, Shutdown wird vor und nach der Zertifikatsauflösung geprüft. Keine Änderung dieser Fundstelle oder ihrer Datenherkunft.",
-      "sourceCodeSha256": "5fbefa230ec5b15e7cfb556c4a302c4263495650e724172c43c2e21a50da3388"
+      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): SSE-Logoutzuordnung liest denselben internen Cookie-Namen aus dem begrenzten Null-Prototyp-Parser und schließt nur passende Sitzungen; keine geänderte Rechte- oder Objektmutation. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Abschließender Lifecycle-Diff zusätzlich geprüft: ausschließlich UiTlsConfigurationError wird in onReady lokal behandelt; EMS-Initialisierung bleibt erhalten, der Mutationstoken wird via finally freigegeben, Shutdown wird vor und nach der Zertifikatsauflösung geprüft. Keine Änderung dieser Fundstelle oder ihrer Datenherkunft. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md.",
+      "sourceCodeSha256": "fa9cee15e00b7a7f36d3ff6cc4dac5382ed20478392d91dbdd48bcdb27895166"
     },
     {
       "file": "src-ts/runtime-executables/www/smarthome-config.ts",
@@ -1682,6 +1682,76 @@
       "evidence": "test/smarthome-modern-ui.test.cjs",
       "review": "2026-11-19 site-specific source/dataflow review for 1.0.37; scanner remains enabled, no general exception",
       "sourceCodeSha256": "ae23f97778eddeaf76c849b0501ccc8b8f41ac94ec17af86ef3cfb662904ce40"
+    },
+    {
+      "file": "src-ts/runtime-executables/main.ts",
+      "rule": "security/detect-object-injection",
+      "fingerprint": "f966fa825d8a063b62bc5ba98284ecfc6143e5e505d236e32b0d64f8cef0cd74",
+      "line": 17989,
+      "column": 23,
+      "fatal": false,
+      "severity": 2,
+      "count": 1,
+      "reason": "queryNumber liest nur die intern fest kodierten Namen from/to/step. Zahlen und Zeitraster werden anschließend begrenzt validiert; kein dynamischer Schreibschlüssel.",
+      "evidence": "EOS repository: docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md",
+      "review": "23.11.2026 Einzelreview des tatsächlichen Quellblocks und bestehender ausführbarer History-Regression; keine pauschale Baseline-Erweiterung. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md.",
+      "sourceCodeSha256": "fa9cee15e00b7a7f36d3ff6cc4dac5382ed20478392d91dbdd48bcdb27895166"
+    },
+    {
+      "file": "src-ts/runtime-executables/main.ts",
+      "rule": "security/detect-object-injection",
+      "fingerprint": "3b107b890285ab2c4f9e903614d6d34763f4a729659d8e0524d65d18317319fe",
+      "line": 18339,
+      "column": 17,
+      "fatal": false,
+      "severity": 2,
+      "count": 1,
+      "reason": "Der binäre Suchindex ist ganzzahlig und vor dem Zugriff durch die Länge der normalisierten Zahlenpaare begrenzt. Ausschließlich lesender Arrayzugriff.",
+      "evidence": "EOS repository: docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md",
+      "review": "23.11.2026 Einzelreview des tatsächlichen Quellblocks und bestehender ausführbarer History-Regression; keine pauschale Baseline-Erweiterung. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md.",
+      "sourceCodeSha256": "fa9cee15e00b7a7f36d3ff6cc4dac5382ed20478392d91dbdd48bcdb27895166"
+    },
+    {
+      "file": "src-ts/runtime-executables/main.ts",
+      "rule": "security/detect-unsafe-regex",
+      "fingerprint": "27297a9d7c7c8eb7e9f5a89509e1698c9e57f876d603aa37ce4c6b296f00a41f",
+      "line": 32481,
+      "column": 21,
+      "fatal": false,
+      "severity": 2,
+      "count": 1,
+      "reason": "Verankerte Dezimalgrammatik mit disjunkten Ziffern-/Punkt-/Exponentsegmenten; keine überlappende wiederholte Alternative. Nicht endliche Ergebnisse werden abgewiesen.",
+      "evidence": "EOS repository: docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md",
+      "review": "23.11.2026 Einzelreview des tatsächlichen Quellblocks und bestehender ausführbarer History-Regression; keine pauschale Baseline-Erweiterung. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md.",
+      "sourceCodeSha256": "fa9cee15e00b7a7f36d3ff6cc4dac5382ed20478392d91dbdd48bcdb27895166"
+    },
+    {
+      "file": "src-ts/runtime-executables/www/year-report.ts",
+      "rule": "security/detect-object-injection",
+      "fingerprint": "24b5fe525c5a7000151c545e4bb4c06c6269dc090e9657737f4e160ff291f1a1",
+      "line": 835,
+      "column": 9,
+      "fatal": false,
+      "severity": 2,
+      "count": 1,
+      "reason": "Ganzzahliger Index vor await inkrementiert und auf die höchstens zehn Jahre begrenzt. Ergebnis wird in ein neu angelegtes Array geschrieben; kein fremder Propertyname.",
+      "evidence": "EOS repository: docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md",
+      "review": "23.11.2026 Einzelreview des tatsächlichen Quellblocks und bestehender ausführbarer History-Regression; keine pauschale Baseline-Erweiterung. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md.",
+      "sourceCodeSha256": "997bec130c294b8730dc35dc56d08d9a36a3bd6922590d28aa4d08a5ebcdfab5"
+    },
+    {
+      "file": "src-ts/runtime-executables/www/year-report.ts",
+      "rule": "security/detect-object-injection",
+      "fingerprint": "f0997a274cda4a16b07c27b4c50735a4f49e35c1662b1d2d9ddfd4bf78c83f1e",
+      "line": 835,
+      "column": 42,
+      "fatal": false,
+      "severity": 2,
+      "count": 1,
+      "reason": "Ganzzahliger Index innerhalb der auf zehn Jahre begrenzten Jahresliste; ausschließlich lesender Zugriff auf validierte Jahreswerte.",
+      "evidence": "EOS repository: docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md",
+      "review": "23.11.2026 Einzelreview des tatsächlichen Quellblocks und bestehender ausführbarer History-Regression; keine pauschale Baseline-Erweiterung. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md.",
+      "sourceCodeSha256": "997bec130c294b8730dc35dc56d08d9a36a3bd6922590d28aa4d08a5ebcdfab5"
     }
   ]
 }

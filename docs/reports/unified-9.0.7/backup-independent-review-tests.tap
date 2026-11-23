@@ -1,0 +1,179 @@
+TAP version 13
+# Subtest: Grafana preserves datasource, folder mapping and manual/automatic dashboards using bounded authenticated requests
+ok 1 - Grafana preserves datasource, folder mapping and manual/automatic dashboards using bounded authenticated requests
+  ---
+  duration_ms: 55.307248
+  type: 'test'
+  ...
+# Subtest: Grafana failures and repeated pagination do not publish a partial archive or retain private staging
+ok 2 - Grafana failures and repeated pagination do not publish a partial archive or retain private staging
+  ---
+  duration_ms: 6.230181
+  type: 'test'
+  ...
+# Subtest: remote preflight refuses credentials in host, wildcard topics, unverified TLS and unsupported types
+ok 3 - remote preflight refuses credentials in host, wildcard topics, unverified TLS and unsupported types
+  ---
+  duration_ms: 0.865164
+  type: 'test'
+  ...
+# Subtest: MQTT frame bound rejects oversized length before body buffering and handles fragmented valid frames
+ok 4 - MQTT frame bound rejects oversized length before body buffering and handles fragmented valid frames
+  ---
+  duration_ms: 4.118106
+  type: 'test'
+  ...
+# Subtest: actual local MQTT exchange authenticates, subscribes before request, ignores stale/retained response, preserves ZIP and closes socket
+ok 5 - actual local MQTT exchange authenticates, subscribes before request, ignores stale/retained response, preserves ZIP and closes socket
+  ---
+  duration_ms: 290.148786
+  type: 'test'
+  ...
+# Subtest: all eight notification channels preserve recipient/silent settings and validate only their configured fixed command
+ok 6 - all eight notification channels preserve recipient/silent settings and validate only their configured fixed command
+  ---
+  duration_ms: 3.402663
+  type: 'test'
+  ...
+# Subtest: notification queue cancels on stop, reports failed scoped dispatch and never performs live messaging
+ok 7 - notification queue cancels on stop, reports failed scoped dispatch and never performs live messaging
+  ---
+  duration_ms: 61.975801
+  type: 'test'
+  ...
+# Subtest: MQTT response deadline is total, unrelated messages cannot extend it and client is closed
+ok 8 - MQTT response deadline is total, unrelated messages cannot extend it and client is closed
+  ---
+  duration_ms: 2.737345
+  type: 'test'
+  ...
+# Subtest: actual Grafana HTTP client refuses redirect and does not leak authentication into errors
+ok 9 - actual Grafana HTTP client refuses redirect and does not leak authentication into errors
+  ---
+  duration_ms: 115.890582
+  type: 'test'
+  ...
+# Subtest: encrypted backup roundtrips, authentication failure removes only newly created plaintext
+ok 10 - encrypted backup roundtrips, authentication failure removes only newly created plaintext
+  ---
+  duration_ms: 46.821717
+  type: 'test'
+  ...
+# Subtest: empty encrypted file authenticates, duplicate publication and symlink sources preserve originals
+ok 11 - empty encrypted file authenticates, duplicate publication and symlink sources preserve originals
+  ---
+  duration_ms: 10.24268
+  type: 'test'
+  ...
+# Subtest: private copy closes the source after destination-open failure and preserves previous content
+ok 12 - private copy closes the source after destination-open failure and preserves previous content
+  ---
+  duration_ms: 15.449243
+  type: 'test'
+  ...
+# Subtest: directory archive preserves allowed files and excludes backup recursion; symlinks are rejected
+ok 13 - directory archive preserves allowed files and excludes backup recursion; symlinks are rejected
+  ---
+  duration_ms: 27.504524
+  type: 'test'
+  ...
+# Subtest: 64 MiB encryption/decryption streams with bounded JavaScript heap and exact restored bytes
+ok 14 - 64 MiB encryption/decryption streams with bounded JavaScript heap and exact restored bytes
+  ---
+  duration_ms: 912.044444
+  type: 'test'
+  ...
+# {"sourceBytes":67108864,"maximumHeapDelta":1385608,"maximumRssDelta":55312384,"scope":"isolated backup stream test; not customer RSS"}
+# Subtest: commands handle spawn errors/nonzero exit/output limit/timeout without leaking partial output
+ok 15 - commands handle spawn errors/nonzero exit/output limit/timeout without leaking partial output
+  ---
+  duration_ms: 180.775933
+  type: 'test'
+  ...
+# Subtest: output-open failure cannot start the command; successful output closes and remains private
+ok 16 - output-open failure cannot start the command; successful output closes and remains private
+  ---
+  duration_ms: 31.550343
+  type: 'test'
+  ...
+# Subtest: real child worker creates encrypted controller and private EOS profile, API status has no recovery key
+ok 17 - real child worker creates encrypted controller and private EOS profile, API status has no recovery key
+  ---
+  duration_ms: 296.71375
+  type: 'test'
+  ...
+# Subtest: download rejects traversal and symlinks; export requires explicit command confirmation
+ok 18 - download rejects traversal and symlinks; export requires explicit command confirmation
+  ---
+  duration_ms: 8.220838
+  type: 'test'
+  ...
+# Subtest: configuration refuses unsafe executable, insecure FTPS and automatic mount before migration
+ok 19 - configuration refuses unsafe executable, insecure FTPS and automatic mount before migration
+  ---
+  duration_ms: 1.500568
+  type: 'test'
+  ...
+# Subtest: legacy config keeps custom fields and decrypts documented XOR event passwords only
+ok 20 - legacy config keeps custom fields and decrypts documented XOR event passwords only
+  ---
+  duration_ms: 0.624958
+  type: 'test'
+  ...
+# Subtest: legacy archive import keeps original and publishes authenticated encrypted copy
+ok 21 - legacy archive import keeps original and publishes authenticated encrypted copy
+  ---
+  duration_ms: 196.857125
+  type: 'test'
+  ...
+# Subtest: migration leaves inactive unsupported settings intact and refuses active missing installation
+ok 22 - migration leaves inactive unsupported settings intact and refuses active missing installation
+  ---
+  duration_ms: 5.435942
+  type: 'test'
+  ...
+# Subtest: offline restore authenticates and preserves an existing output directory
+ok 23 - offline restore authenticates and preserves an existing output directory
+  ---
+  duration_ms: 33.859192
+  type: 'test'
+  ...
+# Subtest: OAuth refresh cache is encrypted, survives jobs and invalidates after deliberate config change
+ok 24 - OAuth refresh cache is encrypted, survives jobs and invalidates after deliberate config change
+  ---
+  duration_ms: 16.069023
+  type: 'test'
+  ...
+# Subtest: stop kills worker plus inherited command process group and clears private job files
+ok 25 - stop kills worker plus inherited command process group and clears private job files
+  ---
+  duration_ms: 222.303258
+  type: 'test'
+  ...
+# Subtest: stop during delayed startup fences late readiness, subscriptions, key and timers
+ok 26 - stop during delayed startup fences late readiness, subscriptions, key and timers
+  ---
+  duration_ms: 31.38642
+  type: 'test'
+  ...
+# Subtest: synchronous worker creation error clears running state and allows controlled retry
+ok 27 - synchronous worker creation error clears running state and allows controlled retry
+  ---
+  duration_ms: 3.950356
+  type: 'test'
+  ...
+# Subtest: oversized private job history is rejected before reading into the parent heap
+ok 28 - oversized private job history is rejected before reading into the parent heap
+  ---
+  duration_ms: 15.411432
+  type: 'test'
+  ...
+1..28
+# tests 28
+# suites 0
+# pass 28
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1414.462947

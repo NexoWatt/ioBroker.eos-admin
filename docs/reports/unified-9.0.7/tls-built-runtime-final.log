@@ -1,0 +1,20 @@
+✔ offline issuer limits the same file descriptor and rejects symlinks and insecure secrets (17.148311ms)
+✔ offline issuer refuses public CSR growth after metadata validation without an unbounded read (3.29409ms)
+✔ offline issuer detects a truncated CSR instead of signing partial input (10.377849ms)
+✔ issuer creates encrypted offline CA; device CSR and public downloads never reveal either private key (406.864077ms)
+✔ actual EOS HTTPS startup, SNI and IP use trusted identity; renewal preserves listener and survives restart (699.524688ms)
+✔ wrong SAN, root fingerprint, request ID, key, expiry and CA are refused without changing active certificate (483.644521ms)
+✔ failed atomic activation and failed live context retain the previous identity and pending request (337.570696ms)
+✔ concurrent requests are bounded; pending requests require explicit replacement and consumed requests cannot replay (221.70773ms)
+✔ committed certificate reports cleanup and directory-sync warnings without claiming a failed activation (200.613314ms)
+✔ chain status and renewal warning include an intermediate that expires before the leaf (142.715969ms)
+✔ invalid names and unsafe storage are rejected, not used as command/config fragments (113.447609ms)
+✔ HTTP routes enforce real unified session, role, CSRF and same-origin for certificate actions (325.759546ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3158.903752

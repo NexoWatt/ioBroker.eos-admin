@@ -1,0 +1,16 @@
+✔ encrypted backup roundtrips, authentication failure removes only newly created plaintext (31.765272ms)
+✔ empty encrypted file authenticates, duplicate publication and symlink sources preserve originals (14.069648ms)
+✔ private copy closes the source after destination-open failure and preserves previous content (31.586977ms)
+✔ directory archive preserves allowed files and excludes backup recursion; symlinks are rejected (42.204897ms)
+✔ 64 MiB encryption/decryption streams with bounded JavaScript heap and exact restored bytes (756.64364ms)
+ℹ {"sourceBytes":67108864,"maximumHeapDelta":1551152,"maximumRssDelta":54857728,"scope":"isolated backup stream test; not customer RSS"}
+✔ commands handle spawn errors/nonzero exit/output limit/timeout without leaking partial output (173.811745ms)
+✔ output-open failure cannot start the command; successful output closes and remains private (30.31332ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1173.376999

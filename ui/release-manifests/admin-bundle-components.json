@@ -1,9 +1,9 @@
 {
   "schema": "nexowatt.admin-bundle-components.v1",
-  "generatedAt": "2026-11-23T05:19:22.618Z",
+  "generatedAt": "2026-11-23T06:50:36.657Z",
   "provenance": "Rollup writeBundle module graph; npm modules with renderedLength > 0; hashes of final files",
   "limitations": "Lists npm packages contributing rendered JavaScript. Not a source code review, OS inventory or vulnerability clearance.",
-  "packageLockSha256": "63adb3fd9bdc0836dca2e1ece3d841075e535cc1adf9597bcd0e7e150eab74bf",
+  "packageLockSha256": "fabedc6b9571679340eb3851e1d6473633e34fb550ab89e46beb031a8403e561",
   "viteConfigSha256": "f59d3db711ab3bff7de7b2b2e8cbc1066375df69ecbe5b5476ef1c54aabe0986",
   "entryHtmlSha256": "3bff4f192b50cd550ae0b60e8006e6028cef9b7224d64a84d8e69bac08910d01",
   "projectModules": [
@@ -33,7 +33,7 @@
     },
     {
       "path": "src-admin-tab/src/lib/installerNavigation.ts",
-      "sha256": "d3cb3403e313fd56e1058cab3e6e53444924402db81ea4716799f956db886d92"
+      "sha256": "cbbd56ac1d52333e373e9f09b14181d6ed17d827e0234f7ac564831b5ed07bea"
     },
     {
       "path": "src-admin-tab/src/lib/mesh-types.ts",
@@ -174,8 +174,8 @@
   ],
   "artifacts": [
     {
-      "path": "admin/react/assets/index-Bm4__n5R.js",
-      "sha256": "9cd5d39ab4a92133e19c87399b0b22c8f575346df227b693cdcd659520202fe7"
+      "path": "admin/react/assets/index-Bq5IupDw.js",
+      "sha256": "f73211150e035e301009925e379ae7746e50c666ee96148f1ba7f5660d0e8baa"
     },
     {
       "path": "admin/react/assets/index-CuquHlsY.css",
@@ -187,7 +187,7 @@
     },
     {
       "path": "admin/react/index.html",
-      "sha256": "057154d492bb386632d76f08d41e9c0d3eba0e8b431f87091320cd9aeba85853"
+      "sha256": "e5c3444627eeffffd8f911c26aa08ac3b49826fa0f55c4ecb225f42ce91660f0"
     }
   ]
 }

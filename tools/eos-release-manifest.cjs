@@ -6,17 +6,17 @@ const crypto = require('node:crypto');
 const root = path.resolve(__dirname, '..');
 const manifestPath = path.join(root, 'release-manifests/unified/files.json');
 const roots = ['package.json', 'package-lock.json', 'io-package.json', '.npmrc', '.gitignore', '.gitattributes', 'LICENSE', 'LICENSE-NEXOWATT.md',
-    'START_HIER_9.0.1.md', 'START_HIER_9.0.2.md', 'START_HIER_9.0.3.md', 'START_HIER_9.0.4.md', 'START_HIER_9.0.5.md', 'START_HIER_9.0.6.md', 'THIRD-PARTY-NOTICES.md', 'THIRD_PARTY_NOTICES.md', 'NEXOWATT_PROPRIETARY_LICENSE.md', 'README.md', 'NEXOWATT_EOS_BUILD_INFO.json',
+    'START_HIER_9.0.1.md', 'START_HIER_9.0.2.md', 'START_HIER_9.0.3.md', 'START_HIER_9.0.4.md', 'START_HIER_9.0.5.md', 'START_HIER_9.0.6.md', 'START_HIER_9.0.7.md', 'THIRD-PARTY-NOTICES.md', 'THIRD_PARTY_NOTICES.md', 'NEXOWATT_PROPRIETARY_LICENSE.md', 'README.md', 'NEXOWATT_EOS_BUILD_INFO.json',
     'tasks.mts', 'tsconfig.build.json', 'eslint.config.mjs', 'eslint.unified.config.mjs', '.github/workflows/test-and-release.yml',
     'AGENTS.md', 'modules', 'test', 'src-admin/test', 'src', 'build', 'admin', 'adminWww', 'public', 'packages/eos-license-client', 'deploy',
     'ui/main.js', 'ui/lib', 'ui/ems', 'ui/backend', 'ui/build-ts', 'ui/www', 'ui/admin',
     'ui/src-ts', 'ui/src-admin-tab/src', 'ui/src-admin-tab/package.json', 'ui/src-admin-tab/package-lock.json',
     'ui/io-package.json', 'ui/package.json', 'src-admin/src', 'src-admin/public', 'src-admin/package.json',
     'src-admin/package-lock.json', 'tools/eos-release-manifest.cjs', 'tools/eos-release-check.cjs', 'tools/eos-migration-plan.cjs', 'tools/eos-access-diagnostics.cjs',
-    'tools/eos-sbom-vendored.cjs', 'tools/nexowatt-vendored-webserver.cjs', 'tools/vendor/webserver-3.4.0-source.provenance.json',
+    'tools/eos-sbom-vendored.cjs', 'tools/eos-tls-issuer.cjs', 'tools/eos-memory-cache-benchmark.cjs', 'ui/tsconfig.ephemeral-cache.json', 'ui/tsconfig.hosted-adapter.json', 'tools/nexowatt-vendored-webserver.cjs', 'tools/vendor/webserver-3.4.0-source.provenance.json',
     'tools/vendor/webserver-3.4.0-no-private-key-logs.patch', 'tools/vendor/WEBSERVER_PATCH_REVIEW.md', 'ui/LICENSE', 'ui/NOTICE', 'ui/scripts', 'ui/test/unified', 'ui/docs/unified', 'docs/licensing/ISSUER_AND_STORAGE.md',
     'docs/unified', 'reports/unified', 'ui/reports/unified', 'reports/security/unified-backend-tests.tap',
-    'docs/reports/unified-9.0.0-alpha.1', 'docs/reports/unified-9.0.1', 'docs/reports/unified-9.0.2', 'docs/reports/unified-9.0.3', 'docs/reports/unified-9.0.4', 'docs/reports/unified-9.0.5', 'docs/reports/unified-9.0.6', 'release-manifests/unified/runtime.cdx.json', 'release-manifests/unified/frontend.cdx.json',
+    'docs/reports/unified-9.0.0-alpha.1', 'docs/reports/unified-9.0.1', 'docs/reports/unified-9.0.2', 'docs/reports/unified-9.0.3', 'docs/reports/unified-9.0.4', 'docs/reports/unified-9.0.5', 'docs/reports/unified-9.0.6', 'docs/reports/unified-9.0.7', 'release-manifests/unified/runtime.cdx.json', 'release-manifests/unified/frontend.cdx.json',
     'release-manifests/unified/installer.cdx.json', 'release-manifests/unified/build-environment.cdx.json'];
 function listFiles() {
     const files = [];

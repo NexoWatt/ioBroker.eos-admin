@@ -543,7 +543,7 @@ tests.integration(path.resolve(__dirname, '..'), {
                 await assertAdminPreserved();
             });
             it('serves integrated module editors and protects their APIs before activation', async () => {
-                for (const id of ['devices', 'eebus']) {
+                for (const id of ['devices', 'eebus', 'backup']) {
                     assert.equal((await request(`/api/eos/modules/${id}`)).status, 401);
                     assert.equal((await request(`/modules/${id}/`)).status, 302);
                     const page = await request(`/modules/${id}/`, { headers: { cookie } });
@@ -561,6 +561,60 @@ tests.integration(path.resolve(__dirname, '..'), {
                 }
                 assert.equal((await request('/modules/devices/vendor/jquery.js', { headers: { cookie } })).status, 200);
                 assert.equal((await request('/modules/eebus/index.js', { headers: { cookie } })).status, 200);
+                await assertAdminPreserved();
+            });
+            it('persists device settings without restarting EOS or invalidating the active login', async function () {
+                this.timeout(10000);
+                const before = await harness.objects.getObjectAsync('system.adapter.eos-admin.0');
+                const view = await (await request('/api/eos/modules/devices', { headers: { cookie } })).json();
+                const configuration = { ...view.config, enabled: false, devices: [] };
+                const saved = await request('/api/eos/modules/devices', {
+                    method: 'PUT',
+                    headers: { cookie, origin: base, 'content-type': 'application/json', 'x-nw-csrf': view.csrfToken },
+                    body: JSON.stringify({ config: configuration }),
+                });
+                assert.equal(saved.status, 200, `Configuration save failed; error=${await responseErrorCode(saved)}`);
+                // Controller7.2.5 schedules an instance restart after2500ms on instance-object changes.
+                // Checking beyond that boundary catches the original customer regression.
+                await wait(3500);
+                const status = await (await request('/api/auth/status', { headers: { cookie } })).json();
+                assert.equal(status.authenticated, true, 'ordinary device saves must preserve the existing session');
+                const after = await harness.objects.getObjectAsync('system.adapter.eos-admin.0');
+                assert.deepEqual(after.native, before.native, 'module settings must not trigger instance object changes');
+                const persisted = await (await request('/api/eos/modules/devices', { headers: { cookie } })).json();
+                assert.equal(persisted.config.enabled, false);
+                assert.deepEqual(persisted.config.devices, []);
+                await assertAdminPreserved();
+            });
+            it('protects the installed migration and certificate pages and creates a private device CSR', async () => {
+                for (const endpoint of ['/api/eos/migration', '/api/eos/tls']) {
+                    assert.equal((await request(endpoint)).status, 401);
+                    assert.equal((await request(endpoint, { headers: { cookie } })).status, 200);
+                }
+                for (const endpoint of ['/migration/', '/security/tls/', '/modules/shared/eos-module.css']) {
+                    assert.equal((await request(endpoint, { headers: { cookie } })).status, 200);
+                }
+                const before = await (await request('/api/eos/tls', { headers: { cookie } })).json();
+                assert.equal(before.mode, 'existing-iobroker-certificate');
+                const denied = await request('/api/eos/tls/request', {
+                    method: 'POST', headers: { cookie, origin: base, 'content-type': 'application/json' },
+                    body: JSON.stringify({ names: ['nexowatt', 'nexowatt.local', '127.0.0.1'] }),
+                });
+                assert.equal(denied.status, 403);
+                const created = await request('/api/eos/tls/request', {
+                    method: 'POST',
+                    headers: { cookie, origin: base, 'content-type': 'application/json', 'x-nw-csrf': before.csrfToken },
+                    body: JSON.stringify({ names: ['nexowatt', 'nexowatt.local', '127.0.0.1'] }),
+                });
+                assert.equal(created.status, 200, `CSR creation failed; error=${await responseErrorCode(created)}`);
+                const status = await created.json();
+                assert.ok(status.pending.requestId);
+                assert.equal(status.restartRequired, false, 'a CSR alone must not change the active TLS identity');
+                assert.doesNotMatch(JSON.stringify(status), /PRIVATE KEY|"key"\s*:/);
+                const publicRequest = await request('/api/eos/tls/request.pem', { headers: { cookie } });
+                assert.equal(publicRequest.status, 200);
+                assert.match(await publicRequest.text(), /BEGIN CERTIFICATE REQUEST/);
+                assert.equal((await request('/api/eos/tls/root.cer', { headers: { cookie } })).status, 404);
                 await assertAdminPreserved();
             });
             it('imports the release-pinned manufacturer public key through the real authenticated HTTPS route', async function () {

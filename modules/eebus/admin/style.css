@@ -1,3 +1,34 @@
-:root{color-scheme:dark;font-family:system-ui,sans-serif;background:#07141d;color:#e4f2f6}body{margin:0}main{max-width:1150px;margin:auto;padding:28px 20px}header{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}small{color:#00e7b0;font-weight:800;letter-spacing:.13em}h1{margin:.4em 0}nav{display:flex;gap:16px;flex-wrap:wrap}a{color:#65edc9}section{background:#0b2331;border:1px solid #245165;border-radius:16px;padding:22px;margin:18px 0}p{line-height:1.6}.notice{border-left:3px solid #ebc16d;padding-left:16px;color:#eadcc1}#message{min-height:1.6em;color:#7bedcf}.error{color:#ffa9a9!important}button{border:1px solid #268479;border-radius:8px;background:#164f4b;color:#e6ffff;padding:10px 15px;cursor:pointer;margin:8px 8px 0 0;font-weight:650}button:disabled{opacity:.5;cursor:wait}input,textarea{box-sizing:border-box;color:#eef8ff;background:#061720;border:1px solid #356073;border-radius:8px;padding:12px;max-width:100%}textarea{display:block;width:100%;font:14px/1.5 ui-monospace,monospace;margin-top:8px}label{display:block;margin:10px 0}dl{display:grid;grid-template-columns:minmax(160px,1fr) 3fr;gap:10px}dt{color:#9fbcc9}dd{margin:0;overflow-wrap:anywhere}.device{border-top:1px solid #28505c;padding:15px 0}.device h3{margin-top:4px}.device p{font-size:14px;overflow-wrap:anywhere;margin:6px 0}code{overflow-wrap:anywhere}@media(max-width:650px){dl{grid-template-columns:1fr}dd{margin-bottom:12px}main{padding:20px 12px}section{padding:16px}}
-
-.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 24px}.fields label{display:flex;flex-direction:column;gap:8px}.fields .checkbox-field{flex-direction:row-reverse;justify-content:flex-end;align-items:center}.checkbox-field input{width:22px;height:22px;accent-color:#00d6ae}details{margin:20px 0}summary{cursor:pointer;color:#7bedcf;font-weight:700}@media(max-width:650px){.fields{grid-template-columns:1fr}}
+/* EEBus configuration uses the shared NexoWatt EOS module shell. */
+.eos-eebus-overview { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 20px; }
+.eos-eebus-overview .eos-panel { margin-top: 0; margin-bottom: 0; }
+.eos-panel .eos-eyebrow { margin-bottom: 8px; }
+#message { color: #a8f9d9; min-height: 26px; padding: 12px 16px; border: 1px solid #276357; border-radius: 10px; background: #07332b80; margin: 18px 0; }
+#message.error { border-color: #984d5b; background: #40232b80; }
+.eos-panel button { margin: 8px 8px 0 0; }
+.eos-panel dl { display: grid; grid-template-columns: minmax(120px, 1fr) minmax(0, 2fr); gap: 12px 18px; margin: 20px 0; }
+.eos-panel dt { color: var(--eos-muted); font-size: 13px; }
+.eos-panel dd { margin: 0; overflow-wrap: anywhere; font-size: 14px; }
+.device { border: 1px solid var(--eos-border); border-radius: 12px; background: #041622; padding: 18px; margin-top: 16px; }
+.device h3 { margin: 0 0 12px; font-size: 17px; color: var(--eos-text); }
+.device p { font-size: 13px; overflow-wrap: anywhere; margin: 7px 0; color: var(--eos-muted); }
+#devices { color: var(--eos-muted); }
+.fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 24px; margin: 22px 0; }
+.fields label { display: flex; flex-direction: column; gap: 9px; font-size: 14px; }
+.fields input { width: 100%; }
+.fields .checkbox-field { flex-direction: row-reverse; justify-content: flex-end; align-items: center; gap: 12px; background: #0b2633; border: 1px solid var(--eos-border); border-radius: 10px; padding: 14px; }
+.fields .checkbox-field input { margin: 0; }
+.fields .checkbox-field span { flex: 1; }
+.eos-panel details { border-top: 1px solid var(--eos-border); padding-top: 18px; margin: 24px 0 0; }
+.eos-form-actions { border-top: 1px solid var(--eos-border); margin-top: 20px; padding-top: 12px; display: flex; justify-content: flex-end; }
+.eos-form-actions button { margin-right: 0; }
+.eos-import-fields { display: flex; gap: 16px; align-items: flex-end; flex-wrap: wrap; }
+.eos-import-fields label { display: block; font-size: 13px; margin-bottom: 6px; }
+.eos-import-fields button { margin: 0; }
+@media (max-width: 1000px) { .eos-eebus-overview { grid-template-columns: 1fr; } }
+@media (max-width: 650px) {
+  .fields, .eos-panel dl { grid-template-columns: 1fr; }
+  .eos-panel dl { gap: 5px; }
+  .eos-panel dd { margin-bottom: 12px; }
+  .eos-form-actions button { width: 100%; }
+  .eos-import-fields, .eos-import-fields > div, .eos-import-fields input, .eos-import-fields button { width: 100%; }
+}

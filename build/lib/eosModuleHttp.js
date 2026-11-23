@@ -1,7 +1,32 @@
 /* Copyright (c) 2026 NexoWatt. Confidential and proprietary. */
 'use strict';
 const { join } = require('node:path');
+const { Transform } = require('node:stream');
 const { bounded } = require('./eosModuleHost');
+const MIGRATION_PHASES = new Set(['IDLE', 'DISABLED', 'LICENSE_REQUIRED', 'NOT_NEEDED', 'BLOCKED', 'PREPARED',
+    'STOPPING', 'TRANSFERRED', 'COMMITTED', 'ROLLING_BACK', 'ROLLED_BACK', 'ROLLBACK_REQUIRED', 'NOT_AVAILABLE']);
+const MIGRATION_SOURCES = Object.freeze({ ui: 'nexowatt-ui', devices: 'nexowatt-devices', eebus: 'eebus', backup: 'nexowatt-backup' });
+/** Never expose a journal/config object through the public migration status API. */
+function publicMigrationStatus(value) {
+    const phase = MIGRATION_PHASES.has(value?.phase) ? value.phase : 'NOT_AVAILABLE';
+    const sources = [];
+    const seen = new Set();
+    for (const row of (Array.isArray(value?.sources) ? value.sources.slice(0, 256) : [])) {
+        if (!row || typeof row.id !== 'string' || !Object.hasOwn(MIGRATION_SOURCES, row.id) || typeof row.source !== 'string' ||
+            !new RegExp(`^${MIGRATION_SOURCES[row.id]}\\.\\d{1,8}$`).test(row.source) || seen.has(row.source))
+            continue;
+        seen.add(row.source);
+        sources.push({ id: row.id, source: row.source,
+            namespacePreserved: row.namespacePreserved === true && ['TRANSFERRED', 'COMMITTED'].includes(phase) });
+    }
+    return {
+        phase,
+        code: typeof value?.code === 'string' && /^[A-Z][A-Z0-9_]{0,79}$/.test(value.code) ? value.code : '',
+        sources,
+        updatedAt: Number.isSafeInteger(value?.updatedAt) && value.updatedAt > 0 && value.updatedAt <= 8640000000000000 ? value.updatedAt : null,
+        existingAdaptersUnchanged: ['BLOCKED', 'DISABLED', 'LICENSE_REQUIRED', 'NOT_NEEDED'].includes(phase),
+    };
+}
 /** Fixed same-origin module routes; no arbitrary file or ioBroker-command proxy. */
 function registerEosModuleRoutes({ app, host, baseDir, jsonParser, authorize, csrfAllowed, requestAllowed }) {
     const guard = (write = false, page = false) => (req, res, next) => {
@@ -56,7 +81,24 @@ function registerEosModuleRoutes({ app, host, baseDir, jsonParser, authorize, cs
         'jquery.js': 'lib/js/jquery-3.2.1.min.js', 'materialize.js': 'lib/js/materialize.js',
         'materialize.css': 'lib/css/materialize.css', 'adapter.css': 'css/adapter.css',
     };
-    for (const id of ['devices', 'eebus']) {
+    app.get('/api/eos/migration', guard(), (_req, res) => {
+        void bounded(Promise.resolve().then(() => host.migrationStatus())).then(value => res.json(publicMigrationStatus(value)), () => res.status(503).json({ error: 'EOS_MIGRATION_STATUS_UNAVAILABLE' }));
+    });
+    app.all('/api/eos/migration', guard(), (_req, res) => res.setHeader('Allow', 'GET').status(405).json({ error: 'METHOD_NOT_ALLOWED' }));
+    app.get('/migration', guard(false, true), (req, res, next) => {
+        if (req.path.endsWith('/')) {
+            next();
+            return;
+        }
+        res.redirect(308, '/migration/');
+    });
+    app.get('/migration/', guard(false, true), (req, res) => {
+        res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; object-src 'none'; frame-ancestors 'self'");
+        res.setHeader('X-Content-Type-Options', 'nosniff');
+        sendFile(join(baseDir, 'public', 'eos-migration', 'index.html'))(req, res);
+    });
+    app.get('/migration/index.js', guard(false, true), sendFile(join(baseDir, 'public', 'eos-migration', 'index.js')));
+    for (const id of ['devices', 'eebus', 'backup']) {
         const api = `/api/eos/modules/${id}`;
         app.get(api, guard(), (req, res) => {
             void host.view(id).then(value => res.json({ ...value, csrfToken: res.locals.eosModuleCsrf }), () => res.status(503).json({ error: 'EOS_MODULE_STATUS_UNAVAILABLE' }));
@@ -78,9 +120,90 @@ function registerEosModuleRoutes({ app, host, baseDir, jsonParser, authorize, cs
             app.get(`/modules/${id}/${asset}`, guard(false, true), sendFile(join(baseDir, 'modules', id, 'admin', asset)));
         }
     }
+    let activeDownloads = 0;
+    app.get('/api/eos/modules/backup/download/:name', guard(), (req, res) => {
+        // Archive bytes never pass through JSON or a whole-file memory buffer.
+        // Admission is bounded before opening an archive, including slow clients.
+        if (activeDownloads >= 2) {
+            res.status(429).json({ error: 'EOS_BACKUP_DOWNLOAD_BUSY' });
+            return;
+        }
+        activeDownloads++;
+        let source;
+        let limiter;
+        let finished = false;
+        const destroySource = () => {
+            try {
+                if (typeof source?.destroy === 'function')
+                    source.destroy();
+            }
+            catch { /* response still closes */ }
+        };
+        const finish = () => {
+            if (finished)
+                return;
+            finished = true;
+            activeDownloads--;
+            clearTimeout(timer);
+            destroySource();
+            limiter?.destroy();
+        };
+        const timer = setTimeout(() => {
+            finish();
+            res.destroy();
+        }, 30 * 60 * 1000);
+        timer.unref?.();
+        res.once('close', finish);
+        res.once('finish', finish);
+        req.once('aborted', finish);
+        void Promise.resolve().then(() => host.download('backup', req.params.name)).then(archive => {
+            source = archive?.stream;
+            if (finished) {
+                destroySource();
+                return;
+            }
+            if (!source || typeof source.pipe !== 'function' || typeof source.destroy !== 'function' ||
+                typeof archive.filename !== 'string' || !/^eos-backup-[A-Za-z0-9._-]{1,140}\.nwb$/.test(archive.filename) ||
+                archive.contentType !== 'application/octet-stream' || !Number.isSafeInteger(archive.size) || archive.size <= 0) {
+                finish();
+                res.status(503).json({ error: 'EOS_BACKUP_DOWNLOAD_INVALID' });
+                return;
+            }
+            res.setHeader('Content-Type', 'application/octet-stream');
+            res.setHeader('X-Content-Type-Options', 'nosniff');
+            res.setHeader('Content-Disposition', `attachment; filename="${archive.filename}"`);
+            res.setHeader('Content-Length', String(archive.size));
+            if (req.method === 'HEAD') {
+                finish();
+                res.end();
+                return;
+            }
+            let transferred = 0;
+            limiter = new Transform({
+                transform(chunk, _encoding, callback) {
+                    transferred += chunk.length;
+                    callback(transferred > archive.size ? new Error('EOS_BACKUP_DOWNLOAD_SIZE') : null, chunk);
+                },
+                flush(callback) { callback(transferred === archive.size ? null : new Error('EOS_BACKUP_DOWNLOAD_SIZE')); },
+            });
+            const failed = () => { finish(); res.destroy(); };
+            source.once('error', failed);
+            limiter.once('error', failed);
+            source.pipe(limiter).pipe(res);
+        }).catch(() => {
+            if (finished)
+                return;
+            finish();
+            if (!res.headersSent)
+                res.status(404).json({ error: 'EOS_BACKUP_ARCHIVE_UNAVAILABLE' });
+            else
+                res.destroy();
+        });
+    });
     for (const [name, file] of Object.entries(vendor)) {
         app.get(`/modules/devices/vendor/${name}`, guard(false, true), sendFile(join(baseDir, 'adminWww', file)));
     }
+    app.get('/modules/shared/eos-module.css', guard(false, true), sendFile(join(baseDir, 'modules', 'shared', 'eos-module.css')));
     app.get('/modules/devices/templates.json', guard(false, true), sendFile(join(baseDir, 'modules', 'devices', 'lib', 'templates.json')));
     app.use('/api/eos/modules', (error, _req, res, next) => {
         if (res.headersSent) {

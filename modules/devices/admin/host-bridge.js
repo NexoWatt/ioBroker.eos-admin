@@ -19,9 +19,17 @@ function translateAll() {
     let ready = false;
     let busy = false;
     const element = id => document.getElementById(id);
-    function status(message, error = false) {
+    function status(message, error = false, reauthenticate = false) {
         element('eosModuleStatus').textContent = message;
         element('eosModuleStatus').dataset.error = String(error);
+        if (reauthenticate) {
+            const link = document.createElement('a');
+            link.href = '/login.html';
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            link.textContent = ' EOS-Anmeldung öffnen';
+            element('eosModuleStatus').append(link);
+        }
     }
     function changed() {
         if (ready && !busy) {
@@ -30,13 +38,21 @@ function translateAll() {
         }
     }
     async function request(suffix = '', options = {}) {
+        // A login in another tab can legitimately rotate the HttpOnly session
+        // cookie. Obtain its current CSRF proof without replacing edited rows.
+        // Never repeat a mutation after an ambiguous response or authentication error.
+        if (options.method && !['GET', 'HEAD'].includes(options.method)) {
+            const session = await request();
+            if (typeof session.csrfToken !== 'string' || !session.csrfToken) throw new Error('EOS_DEVICES_INVALID_RESPONSE');
+            csrfToken = session.csrfToken;
+        }
         const response = await fetch(endpoint + suffix, {
             credentials: 'same-origin',
             signal: AbortSignal.timeout(15000),
             ...options,
             headers: { 'Content-Type': 'application/json', ...(csrfToken ? { 'x-nw-csrf': csrfToken } : {}), ...options.headers },
         });
-        if (response.status === 401) throw new Error('Sitzung abgelaufen. Bitte erneut bei EOS anmelden.');
+        if (response.status === 401) throw Object.assign(new Error('Sitzung abgelaufen. Die Änderungen bleiben im Formular. Bitte EOS in einem neuen Tab anmelden und danach erneut speichern.'), { reauthenticate: true });
         if (response.status === 403) throw new Error('Diese Funktion benötigt eine angemeldete EOS-Administration. Seite neu laden und erneut versuchen.');
         const result = await response.json();
         if (!response.ok || result.error) throw new Error(String(result.error || `HTTP ${response.status}`));
@@ -62,7 +78,7 @@ function translateAll() {
         busy = true;
         for (const id of ['eosModuleSave', 'eosModuleReload', 'eosModuleImport']) element(id).disabled = true;
         try { await callback(); }
-        catch (error) { status(error instanceof Error ? error.message : 'EOS_DEVICES_REQUEST_FAILED', true); }
+        catch (error) { status(error instanceof Error ? error.message : 'EOS_DEVICES_REQUEST_FAILED', true, error?.reauthenticate === true); }
         finally {
             busy = false;
             element('eosModuleReload').disabled = false;

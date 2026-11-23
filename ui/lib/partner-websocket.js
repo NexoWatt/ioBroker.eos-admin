@@ -21,9 +21,6 @@
  * 3. npm run test:runtime-executables prüfen.
  */
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PartnerWebSocketClient = exports.PARTNER_WS_LIMITS = void 0;
 exports.isPartnerAddressAllowed = isPartnerAddressAllowed;
@@ -38,7 +35,7 @@ exports.validatePartnerEndpoint = validatePartnerEndpoint;
  * prüfen; die fachliche Befehlslaufzeit ist unabhängig vom Socket-Heartbeat.
  * Verknüpfungen: docs/QUELLCODE_VERKNUEPFUNGEN_DE.md; partner-runtime als Aufrufer.
  */
-const ws_1 = __importDefault(require("ws"));
+const ws_1 = require("ws");
 const promises_1 = require("node:dns/promises");
 const node_net_1 = require("node:net");
 const node_tls_1 = require("node:tls");

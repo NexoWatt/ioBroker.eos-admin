@@ -49,3 +49,9 @@ Die tatsächliche Zusammensetzung von `@iobroker/admin-component-easy-access`3.0
 NexoWatt Devices 0.5.176 and NexoWatt EEBus 0.3.0 are integrated, modified NexoWatt proprietary source components. Their provenance and retained original license texts are in `modules/devices/` and `modules/eebus/`. The common EOS system license is checked by the owning adapter; these modules are not separate public/free licenses. Existing third-party license grants remain unaffected.
 
 The locked protocol dependencies include modbus-serial (ISC), MQTT.js (MIT), serialport (MIT), bonjour-service (MIT), multicast-dns (MIT), axios (MIT) and ws (MIT). The runtime CycloneDX SBOM records their resolved dependency closure and the integrated module trees. The classic Devices editor reuses the already bundled jQuery/Materialize assets and their original notices.
+
+## Integrated NexoWatt Backup (9.0.7)
+
+The original NexoWatt EOS Backup 1.0.10 archive contains MIT-licensed material derived from ioBroker.backitup, Copyright 2018–2026 simatec and 2026 NexoWatt. Its exact original LICENSE and NOTICE are retained under `modules/backup/upstream/`; the inherited NOTICE still refers to 1.0.9 and is intentionally not rewritten. Archive and retained-file hashes are recorded in `modules/backup/provenance.json`. The proprietary EOS notice does not withdraw these existing MIT rights.
+
+The integrated backup uses locked tar-fs (MIT), node-schedule (MIT), cron-parser (MIT), ftp (MIT), Dropbox SDK (MIT), fast-xml-parser (MIT), axios (MIT), and MQTT.js (MIT). Their resolved runtime dependency closure is in the CycloneDX SBOM. Installed dependency packages retain their own license texts. No third-party CA certificate, private manufacturer key, cloud credential, or customer archive is included.

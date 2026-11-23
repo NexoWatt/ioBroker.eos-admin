@@ -154,7 +154,7 @@ function enrichModules(bom, pkg, root = ROOT) {
     const result = structuredClone(bom);
     const rootRow = result.dependencies.find(row => row.ref === result.metadata.component['bom-ref']);
     if (!rootRow) throw new Error('SBOM_MODULE_ROOT_MISSING');
-    for (const id of ['devices', 'eebus']) {
+    for (const id of ['devices', 'eebus', 'backup']) {
         const directory = `modules/${id}`;
         const file = path.join(root, directory, 'provenance.json');
         const bytes = fs.readFileSync(file);
@@ -177,15 +177,18 @@ function enrichModules(bom, pkg, root = ROOT) {
         const component = { type: 'library', 'bom-ref': ref, name: `NexoWatt EOS integrated ${id}`, version: pkg.version,
             scope: 'required', licenses: [{ license: { name: 'NexoWatt Proprietary License' } }],
             hashes: [{ alg: 'SHA-256', content: HASH(JSON.stringify(hashes)) }],
-            pedigree: { ancestors: [{ type: 'library', name: origin.name, version: origin.version }],
-                notes: 'Modified integrated source; physical-device interoperability requires separate commissioning.' },
+            pedigree: { ancestors: [{ type: 'library', name: origin.name, version: origin.version,
+                ...(origin.upstream?.license === 'MIT' ? { licenses: [{ license: { id: 'MIT' } }] } : {}) }],
+                notes: 'Modified integrated source; upstream license notices remain applicable. Target-device commissioning and backup recovery acceptance are separate from software tests.' },
             properties: [{ name: 'nexowatt:source-root', value: directory },
                 { name: 'nexowatt:provenance:sha256', value: HASH(bytes) },
                 { name: 'nexowatt:tree-hash-format', value: 'SHA-256 of sorted relative path / SHA-256 JSON pairs' }] };
         if (result.components.some(row => row['bom-ref'] === ref)) throw new Error('SBOM_MODULE_DUPLICATE');
         result.components.push(component);
         rootRow.dependsOn.push(ref);
-        const names = id === 'devices' ? ['axios', 'modbus-serial', 'mqtt', 'serialport'] : ['ws', 'bonjour-service'];
+        const names = id === 'devices' ? ['axios', 'modbus-serial', 'mqtt', 'serialport']
+            : id === 'eebus' ? ['ws', 'bonjour-service']
+                : ['tar-fs', 'node-schedule', 'cron-parser', 'ftp', 'dropbox', 'fast-xml-parser', 'axios', 'mqtt'];
         const dependsOn = names.map(name => {
             const item = result.components.find(row => row.name === name && row.version === require(path.join(root, 'package-lock.json')).packages[`node_modules/${name}`].version);
             if (!item) throw new Error('SBOM_MODULE_DEPENDENCY_MISSING');

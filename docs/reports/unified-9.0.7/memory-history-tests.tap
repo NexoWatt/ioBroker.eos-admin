@@ -1,0 +1,35 @@
+✔ history response data is unchanged while fresh and released during idle, without another request (1.745202ms)
+✔ entry replacement cancels old expiry and the response count remains bounded (1.254243ms)
+✔ delayed timer delivery cannot make an expired response appear fresh (0.207288ms)
+✔ parallel discovery requests share one database snapshot, force refreshes once, and idle evicts it (1.18548ms)
+✔ failed discovery can retry and late IO after shutdown cannot repopulate retained data (1.041898ms)
+✔ canonical discovery wrapper preserves complete objects and ordering while deduplicating database reads (26.046568ms)
+✔ real idle timer is unreferenced and releases memory without synthetic clock advancement (35.153424ms)
+✔ idle eviction only removes cache ownership; an active discovery retains its complete snapshot (0.476077ms)
+✔ canonical unload drops idle caches and stops pending snapshot retention (656.634437ms)
+✔ asynchronous malformed History payloads cannot throw out of the callback (18.484145ms)
+✔ valid numeric zero stays zero, null does not create measured zero, supported envelopes agree (49.048713ms)
+✔ one five-second deadline includes fallback rounds and ignores late responses (4.195542ms)
+✔ shutdown cancels History reads and new reads fail without starting transports (1.468752ms)
+✔ thrown and rejected transports become bounded API errors with sibling cleanup (1.889567ms)
+✔ oversized raw response stops processing and cleans all pending branches (1.231149ms)
+✔ invalid and allocation-amplifying ranges are rejected before provider work (4.458633ms)
+✔ day, week, month, leap-year and six-hour annual-report presets preserve finite output bounds (15.089062ms)
+✔ identical requests share work; a fifth distinct computation gets backpressure (2.891064ms)
+✔ completed payload cache retains at most four requests and expires old responses (47.833659ms)
+✔ current counter reads share History deadline instead of leaving request hanging (3.694948ms)
+✔ 200-charge-point fallback uses at most eight simultaneous reads and retains correct sums (41.523766ms)
+✔ four maximum-range payloads stay within measured row and serialized-size budgets (414.020565ms)
+ℹ {"profile":"History-only controlled provider; not customer RSS","gcAvailable":false,"cacheEntries":4,"rowsPerPayload":106496,"largestPayloadBytes":1919024,"heapDeltaBytes":7627600}
+✔ leading missing buckets stay unknown in complete-period energy totals; measured zero remains zero (9.044304ms)
+✔ exact-energy EV fallback is also bounded and cannot swallow its timeout as a complete result (2.268279ms)
+✔ optimized price lookup retains exact last-value and duplicate-timestamp semantics (41.244131ms)
+✔ annual report still requests all ten years with two concurrent requests and original order (10.354189ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1961.575191

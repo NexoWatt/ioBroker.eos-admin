@@ -1,0 +1,14 @@
+✔ HTTPS connection failure closes a pending upload and request (3.643923ms)
+✔ early HTTPS rejection closes an unfinished upload and request after preserving response status (3.128226ms)
+✔ HTTPS response abort and oversized response close pending upload streams (1.053686ms)
+✔ synchronous HTTPS request validation failure closes an upload without exposing values (0.563247ms)
+✔ successful HTTPS response closes the consumed source and keeps a completed request reusable (1.554269ms)
+✔ HTTPS upload deadline destroys a stalled body and request (11.159856ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 162.55455

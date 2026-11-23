@@ -2,9 +2,10 @@
 'use strict';
 const { join } = require('node:path');
 const { performance } = require('node:perf_hooks');
+const { EosModuleConfigStore } = require('./eosModuleConfigStore');
 const SECRET_MARKER = '__EOS_SECRET_UNCHANGED__';
-const MODULES = Object.freeze({ devices: 'nexowatt-devices', eebus: 'eebus' });
-const SECRET_KEY = /password|passwd|secret|token|privatekey|pairingpin|apikey|credential|authorization|cookie/i;
+const MODULES = Object.freeze({ devices: 'nexowatt-devices', eebus: 'eebus', backup: 'nexowatt-backup' });
+const SECRET_KEY = /password|passwd|^pass$|accessjson|expertmount|secret|token|privatekey|pairingpin|apikey|credential|authorization|cookie/i;
 const MAX_CONFIG_BYTES = 512 * 1024;
 const MAX_LEGACY_INSTANCES = 64;
 const LEASE_MS = 12000;
@@ -68,8 +69,8 @@ function restoreSecrets(value, previous, key = '') {
     }
     if (Array.isArray(value)) {
         return value.map(item => {
-            const id = isRecord(item) && typeof item.id === 'string' ? item.id : null;
-            const matches = id && Array.isArray(previous) ? previous.filter(old => isRecord(old) && old.id === id) : [];
+            const identity = secretRowIdentity(item);
+            const matches = identity && Array.isArray(previous) ? previous.filter(old => secretRowIdentity(old) === identity) : [];
             return restoreSecrets(item, matches.length === 1 ? matches[0] : undefined);
         });
     }
@@ -79,10 +80,23 @@ function restoreSecrets(value, previous, key = '') {
     }
     return value;
 }
+function secretRowIdentity(item) {
+    if (!isRecord(item))
+        return null;
+    if (typeof item.id === 'string' && item.id)
+        return `id:${item.id}`;
+    // Legacy backup database/CCU lists have no id. Match their endpoint identity,
+    // never a mutable row position; duplicate or edited identities need a password.
+    const fields = ['host', 'port', 'dbName', 'nameSuffix'];
+    if (!fields.some(key => typeof item[key] === 'string' && item[key] !== ''))
+        return null;
+    return `endpoint:${JSON.stringify(fields.map(key => item[key] ?? null))}`;
+}
 class EosModuleHost {
     constructor(owner, options) {
         this.owner = owner;
         this.options = options;
+        this.configStore = new EosModuleConfigStore(owner);
         this.running = false;
         this.entries = new Map();
         this.pending = null;
@@ -95,7 +109,7 @@ class EosModuleHost {
         this.stopPromise = null;
         for (const id of Object.keys(MODULES)) {
             this.entries.set(id, { id, module: null, config: { enabled: false }, reason: 'DISABLED', lease: 0,
-                generation: 0, blockers: [], loading: false, failed: false, timers: new Set(), subscriptions: new Set() });
+                generation: 0, blockers: [], loading: false, failed: false, timers: new Set(), subscriptions: new Set(), downloads: new Set() });
         }
     }
     factory(id) {
@@ -112,6 +126,14 @@ class EosModuleHost {
         }
         const config = assertJson(JSON.parse(this.owner.decrypt(envelope.encrypted)));
         return this.factory(id).validateConfig(config);
+    }
+    namespace(id) {
+        const migrated = this.owner.config.eosModules?.[id]?.migration;
+        if (migrated?.preserveNamespace === true &&
+            typeof migrated.source === 'string' && new RegExp(`^${MODULES[id]}\\.\\d+$`).test(migrated.source)) {
+            return migrated.source;
+        }
+        return id === 'devices' ? this.owner.namespace : `${this.owner.namespace}.${id}`;
     }
     licensed(id) {
         try {
@@ -169,6 +191,11 @@ class EosModuleHost {
         const module = entry.module;
         entry.module = null;
         entry.generation++;
+        for (const download of entry.downloads) {
+            download.accept = false;
+            download.stream?.destroy();
+        }
+        entry.downloads.clear();
         for (const timer of entry.timers) {
             clearTimeout(timer);
             clearInterval(timer);
@@ -189,14 +216,15 @@ class EosModuleHost {
     }
     facade(entry, generation) {
         const owner = this.owner;
-        const namespace = entry.id === 'eebus' ? `${owner.namespace}.eebus` : owner.namespace;
+        const namespace = this.namespace(entry.id);
         const resolve = id => {
             if (typeof id !== 'string' || id.length > 512)
                 throw fail('EOS_MODULE_STATE_ID');
             const local = id.startsWith(`${namespace}.`) ? id.slice(namespace.length + 1) : id;
             const valid = entry.id === 'devices'
                 ? /^(?:devices(?:\.|$)|modules\.devices(?:\.|$))/.test(local)
-                : /^(?:devices|info|identity|bridge|discovery|pairing|cls)(?:\.|$)/.test(local);
+                : entry.id === 'backup' ? /^(?:info|backup|history|restore|schedule|oneClick|historyJSON)(?:\.|$)/.test(local)
+                    : /^(?:devices|info|identity|bridge|discovery|pairing|cls)(?:\.|$)/.test(local);
             if (!valid || [...local].some(character => character.charCodeAt(0) < 32))
                 throw fail('EOS_MODULE_STATE_SCOPE');
             return `${namespace}.${local}`;
@@ -224,7 +252,9 @@ class EosModuleHost {
             return handle;
         };
         return {
-            namespace, instance: owner.instance, config: entry.config, log: owner.log,
+            namespace, hostNamespace: owner.namespace,
+            eosTargetNamespace: owner.config.eosUiMigration?.preserveNamespace ? owner.config.eosUiMigration.source : owner.namespace,
+            instance: /^\w[\w-]*\.\d+$/.test(namespace) ? Number(namespace.split('.').at(-1)) : owner.instance, config: entry.config, log: owner.log,
             getObjectAsync: id => owner.getForeignObjectAsync(resolve(id)),
             getStateAsync: id => owner.getForeignStateAsync(resolve(id)),
             setObjectNotExistsAsync: (id, object) => entry.generation === generation
@@ -257,15 +287,72 @@ class EosModuleHost {
             setInterval: (callback, ms, ...args) => timer(true, callback, ms, ...args),
             clearTimeout: handle => { clearTimeout(handle); entry.timers.delete(handle); },
             clearInterval: handle => { clearInterval(handle); entry.timers.delete(handle); },
+            getBackupDataFolders: async () => {
+                if (entry.id !== 'backup' || !this.canOperate(entry.id, generation))
+                    throw fail('EOS_MODULE_INACTIVE');
+                const result = await bounded(owner.getObjectViewAsync('system', 'instance', {
+                    startkey: 'system.adapter.', endkey: 'system.adapter.\u9999',
+                }));
+                if (!Array.isArray(result?.rows) || result.rows.length > 20000)
+                    throw fail('EOS_BACKUP_DATA_FOLDER_INVENTORY');
+                const folders = [];
+                let bytes = 0;
+                for (const row of result.rows) {
+                    const object = row.value;
+                    if (object?.type !== 'instance' || !/^system\.adapter\.[a-z0-9_-]+\.\d+$/.test(object._id || ''))
+                        throw fail('EOS_BACKUP_DATA_FOLDER_INVENTORY');
+                    const folder = object.common?.dataFolder;
+                    if (folder == null || folder === '')
+                        continue;
+                    if (typeof folder !== 'string' || folder.length > 4096 || folder.includes('\0'))
+                        throw fail('EOS_BACKUP_DATA_FOLDER_INVENTORY');
+                    bytes += Buffer.byteLength(folder);
+                    if (bytes > 1024 * 1024)
+                        throw fail('EOS_BACKUP_DATA_FOLDER_INVENTORY');
+                    folders.push(folder);
+                }
+                if (!this.canOperate(entry.id, generation))
+                    throw fail('EOS_MODULE_INACTIVE');
+                return folders;
+            },
+            sendBackupNotification: async (plan) => {
+                if (entry.id !== 'backup' || !this.canOperate(entry.id, generation))
+                    throw fail('EOS_MODULE_INACTIVE');
+                const safe = assertJson(plan);
+                if (Buffer.byteLength(JSON.stringify(safe)) > 8192 || this.factory('backup').validateNotificationPlan?.(entry.config, safe) !== true) {
+                    throw fail('EOS_BACKUP_NOTIFICATION_SCOPE');
+                }
+                const now = performance.now();
+                if (!entry.notificationWindow || now - entry.notificationWindow > 60000) {
+                    entry.notificationWindow = now;
+                    entry.notifications = 0;
+                }
+                if (++entry.notifications > 20)
+                    throw fail('EOS_BACKUP_NOTIFICATION_RATE');
+                if (!this.canOperate(entry.id, generation))
+                    throw fail('EOS_MODULE_INACTIVE');
+                await bounded(new Promise((resolve, reject) => {
+                    owner.sendTo(safe.target, safe.command, safe.message, reply => {
+                        if (reply?.error)
+                            reject(fail('EOS_BACKUP_NOTIFICATION_FAILED'));
+                        else
+                            resolve();
+                    });
+                }), 5000);
+            },
             sendTo: (target, command, message, callback) => {
-                if (entry.id !== 'eebus' || target !== owner.namespace ||
+                const uiNamespace = owner.config.eosUiMigration?.preserveNamespace ? owner.config.eosUiMigration.source : owner.namespace;
+                if (entry.id !== 'eebus' || target !== uiNamespace ||
                     !['nexowatt.para14a.hello.v1', 'nexowatt.para14a.command.v1'].includes(command) ||
                     !this.canOperate(entry.id, generation) || !this.bridgeHandler) {
                     if (typeof callback === 'function')
                         queueMicrotask(() => callback({ accepted: false, error: 'EOS_MODULE_BRIDGE_UNAVAILABLE' }));
                     return;
                 }
-                void bounded(this.bridgeHandler({ from: namespace, command, message: assertJson(message) }), 3000).then(result => { if (typeof callback === 'function')
+                const payload = assertJson(message);
+                if (payload.sourceInstance === namespace)
+                    payload.sourceInstance = `${owner.namespace}.eebus`;
+                void bounded(this.bridgeHandler({ from: `${owner.namespace}.eebus`, command, message: payload }), 3000).then(result => { if (typeof callback === 'function')
                     callback(result); }, () => { if (typeof callback === 'function')
                     callback({ accepted: false, error: 'EOS_MODULE_BRIDGE_UNAVAILABLE' }); }).catch(() => owner.log.warn('EOS_MODULE_BRIDGE_CALLBACK_FAILED'));
             },
@@ -322,6 +409,12 @@ class EosModuleHost {
                         adapter: this.facade(entry, generation), config: entry.config,
                         canOperate: () => this.canOperate(entry.id, generation),
                         dataDir: join(this.options.dataDir, entry.id),
+                        ...(entry.id === 'backup' ? {
+                            installationDir: this.options.installationDir, eosDataDir: this.options.eosDataDir,
+                            preservedUiNamespace: this.owner.config.eosUiMigration?.preserveNamespace === true &&
+                                /^nexowatt-ui\.\d+$/.test(this.owner.config.eosUiMigration.source || '')
+                                ? this.owner.config.eosUiMigration.source : undefined,
+                        } : {}),
                     });
                     entry.module = module;
                     entry.moduleGeneration = generation;
@@ -349,6 +442,9 @@ class EosModuleHost {
             if (this.stopped)
                 return;
             try {
+                const envelope = await bounded(this.configStore.load(entry.id));
+                if (envelope)
+                    this.owner.config.eosModules = { ...this.owner.config.eosModules, [entry.id]: envelope };
                 entry.config = this.readConfig(entry.id);
             }
             catch {
@@ -385,7 +481,7 @@ class EosModuleHost {
                 entry.generation++;
                 this.nextOwnershipCheck = 0;
             }
-            const prefix = entry.id === 'devices' ? `${this.owner.namespace}.devices.` : `${this.owner.namespace}.eebus.`;
+            const prefix = entry.id === 'devices' ? `${this.namespace(entry.id)}.devices.` : `${this.namespace(entry.id)}.`;
             if (entry.module && id.startsWith(prefix)) {
                 try {
                     Promise.resolve(entry.module.onStateChange?.(id, state)).catch(() => this.owner.log.warn(`EOS_MODULE_EVENT_FAILED: ${entry.id}`));
@@ -409,7 +505,7 @@ class EosModuleHost {
         }
         return { id, enabled: entry.config.enabled === true, active: !!entry.module && entry.moduleGeneration === entry.generation && this.canOperate(id, entry.generation),
             reason: entry.reason, blockers: entry.blockers, details: redact(assertJson(details)),
-            namespace: id === 'devices' ? `${this.owner.namespace}.devices` : `${this.owner.namespace}.eebus` };
+            namespace: id === 'devices' ? `${this.namespace(id)}.devices` : this.namespace(id) };
     }
     async view(id) {
         const entry = this.entries.get(id);
@@ -430,15 +526,14 @@ class EosModuleHost {
             const encrypted = this.owner.encrypt(JSON.stringify(normalized));
             if (typeof encrypted !== 'string' || encrypted === JSON.stringify(normalized))
                 throw fail('EOS_MODULE_ENCRYPTION');
-            const own = await bounded(this.owner.getForeignObjectAsync(`system.adapter.${this.owner.namespace}`));
-            if (!own?.native)
-                throw fail('EOS_MODULE_CONFIG_UNAVAILABLE');
-            const eosModules = { ...(own.native.eosModules || {}), [id]: { v: 1, encrypted,
-                    migration: migration || own.native.eosModules?.[id]?.migration || null } };
+            const envelope = { v: 1, encrypted,
+                migration: migration || this.owner.config.eosModules?.[id]?.migration || null };
+            // Commit before interrupting the old runtime. Failed/conflicting writes
+            // leave its validated settings and transport generation untouched.
+            await bounded(this.configStore.save(id, envelope));
             this.revoke(entry, 'CONFIG_CHANGED');
             await this.stopEntry(entry);
-            await bounded(this.owner.extendForeignObjectAsync(`system.adapter.${this.owner.namespace}`, { native: { eosModules } }));
-            this.owner.config.eosModules = eosModules;
+            this.owner.config.eosModules = { ...this.owner.config.eosModules, [id]: envelope };
             entry.config = normalized;
             if (!entry.stopFailed) {
                 entry.failed = false;
@@ -468,7 +563,7 @@ class EosModuleHost {
         const object = await bounded(this.owner.getForeignObjectAsync(`system.adapter.${instance}`));
         if (!object?.native || object.common?.enabled !== false)
             throw fail('EOS_MODULE_IMPORT_UNAVAILABLE');
-        let config = assertJson(object.native);
+        let config = id === 'eebus' ? assertJson(object.native) : require('./eosLegacyMigration').decryptNative(this.owner, object);
         // Existing private keys are never copied out of legacy native storage.
         delete config.privateKey;
         delete config.certificate;
@@ -479,7 +574,11 @@ class EosModuleHost {
             delete config.pairingPin;
             delete config.shipPairingPin;
         }
-        const migration = this.factory(id).migrateLegacyConfig?.(config);
+        const migration = await this.factory(id).migrateLegacyConfig?.(config, {
+            owner: this.owner, source: instance, sourceVersion: object.common.version, sourceEnabled: false,
+            installationDir: this.options.installationDir, eosDataDir: this.options.eosDataDir,
+            dataDir: join(this.options.dataDir, id),
+        });
         if (migration)
             config = migration.config;
         config.enabled = false;
@@ -514,12 +613,54 @@ class EosModuleHost {
         return bounded(entry.module.command(command, safePayload));
     }
     bindBridge(handler) { this.bridgeHandler = handler; }
+    migrationStatus() {
+        return this.owner.eosMigration?.status() || { phase: 'NOT_AVAILABLE', code: '', sources: [], updatedAt: null };
+    }
+    async download(id, name) {
+        const entry = this.entries.get(id);
+        if (id !== 'backup' || !entry?.module || !this.canOperate(id, entry.generation) ||
+            typeof entry.module.getDownload !== 'function')
+            throw fail('EOS_MODULE_INACTIVE');
+        if (entry.downloads.size >= 4)
+            throw fail('EOS_MODULE_RATE_LIMIT');
+        const generation = entry.generation;
+        const module = entry.module;
+        const download = { accept: true, stream: null };
+        entry.downloads.add(download);
+        // File opening can finish after the HTTP deadline. Retain cleanup authority
+        // over that late result instead of losing its file descriptor in Promise.race.
+        const pending = Promise.resolve().then(() => module.getDownload(name)).then(result => {
+            if (!result?.stream || typeof result.stream.destroy !== 'function' || typeof result.stream.once !== 'function') {
+                throw fail('EOS_MODULE_DOWNLOAD_INVALID');
+            }
+            download.stream = result.stream;
+            result.stream.once('close', () => entry.downloads.delete(download));
+            if (!download.accept || !this.canOperate(id, generation)) {
+                result.stream.destroy();
+                throw fail('EOS_MODULE_INACTIVE');
+            }
+            return result;
+        });
+        try {
+            return await bounded(pending, Math.min(this.options.downloadTimeoutMs || 5000, 5000));
+        }
+        catch (error) {
+            download.accept = false;
+            download.stream?.destroy();
+            entry.downloads.delete(download);
+            throw error;
+        }
+    }
     receiveBridge(message) {
         const entry = this.entries.get('eebus');
         if (!entry.module || !this.canOperate('eebus', entry.generation) || message?.command !== 'nexowatt.para14a.implementation.v1')
             return false;
         try {
-            Promise.resolve(entry.module.onMessage?.({ ...message, from: this.owner.namespace })).catch(() => this.owner.log.warn('EOS_MODULE_BRIDGE_EVENT_FAILED'));
+            const payload = assertJson(message.message);
+            if (payload.targetInstance === `${this.owner.namespace}.eebus`)
+                payload.targetInstance = this.namespace('eebus');
+            const uiNamespace = this.owner.config.eosUiMigration?.preserveNamespace ? this.owner.config.eosUiMigration.source : this.owner.namespace;
+            Promise.resolve(entry.module.onMessage?.({ ...message, message: payload, from: uiNamespace })).catch(() => this.owner.log.warn('EOS_MODULE_BRIDGE_EVENT_FAILED'));
         }
         catch {
             this.owner.log.warn('EOS_MODULE_BRIDGE_EVENT_FAILED');

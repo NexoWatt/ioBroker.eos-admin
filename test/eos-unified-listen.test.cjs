@@ -29,6 +29,7 @@ vm.runInNewContext(compiled, {
     require: name => {
         if (name === '@iobroker/adapter-core') return {
             EXIT_CODES: { ADAPTER_REQUESTED_TERMINATION: 11 }, I18n: {},
+            controllerDir: path.resolve(__dirname, '..', 'node_modules', 'iobroker.js-controller'),
             getAbsoluteInstanceDataDir: () => path.join(require('node:os').tmpdir(), 'eos-listen-module-fixture'),
         };
         if (!emitted && name.startsWith('.') && fs.existsSync(path.resolve(path.dirname(webFile), `${name}.ts`))) {

@@ -1,0 +1,64 @@
+TAP version 13
+# Subtest: Grafana preserves datasource, folder mapping and manual/automatic dashboards using bounded authenticated requests
+ok 1 - Grafana preserves datasource, folder mapping and manual/automatic dashboards using bounded authenticated requests
+  ---
+  duration_ms: 53.460256
+  type: 'test'
+  ...
+# Subtest: Grafana failures and repeated pagination do not publish a partial archive or retain private staging
+ok 2 - Grafana failures and repeated pagination do not publish a partial archive or retain private staging
+  ---
+  duration_ms: 7.698582
+  type: 'test'
+  ...
+# Subtest: remote preflight refuses credentials in host, wildcard topics, unverified TLS and unsupported types
+ok 3 - remote preflight refuses credentials in host, wildcard topics, unverified TLS and unsupported types
+  ---
+  duration_ms: 0.728883
+  type: 'test'
+  ...
+# Subtest: MQTT frame bound rejects oversized length before body buffering and handles fragmented valid frames
+ok 4 - MQTT frame bound rejects oversized length before body buffering and handles fragmented valid frames
+  ---
+  duration_ms: 4.355768
+  type: 'test'
+  ...
+# Subtest: actual local MQTT exchange authenticates, subscribes before request, ignores stale/retained response, preserves ZIP and closes socket
+ok 5 - actual local MQTT exchange authenticates, subscribes before request, ignores stale/retained response, preserves ZIP and closes socket
+  ---
+  duration_ms: 250.938711
+  type: 'test'
+  ...
+# Subtest: all eight notification channels preserve recipient/silent settings and validate only their configured fixed command
+ok 6 - all eight notification channels preserve recipient/silent settings and validate only their configured fixed command
+  ---
+  duration_ms: 4.916417
+  type: 'test'
+  ...
+# Subtest: notification queue cancels on stop, reports failed scoped dispatch and never performs live messaging
+ok 7 - notification queue cancels on stop, reports failed scoped dispatch and never performs live messaging
+  ---
+  duration_ms: 62.687509
+  type: 'test'
+  ...
+# Subtest: MQTT response deadline is total, unrelated messages cannot extend it and client is closed
+ok 8 - MQTT response deadline is total, unrelated messages cannot extend it and client is closed
+  ---
+  duration_ms: 4.801937
+  type: 'test'
+  ...
+# Subtest: actual Grafana HTTP client refuses redirect and does not leak authentication into errors
+ok 9 - actual Grafana HTTP client refuses redirect and does not leak authentication into errors
+  ---
+  duration_ms: 110.595688
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 615.656141

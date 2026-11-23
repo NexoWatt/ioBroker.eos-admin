@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/main.ts
- * Quell-Hash: sha256:dd562d89d820b51f4a69fd64ad5bfcc7eb933597adaea42d8450707e9b125a24
+ * Quell-Hash: sha256:7111862ae6cbd392ed7e984915b0d51a13143e489d13dc74a1c08a85c3dacec6
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -56,6 +56,7 @@ const { currentPartnerConfig, defaultPartnerConfig } = require('./lib/partner-co
 const { registerPartnerIntegrationApi, assertPartnerPersistence } = require('./lib/partner-config-api');
 const { PartnerRuntime } = require('./lib/partner-runtime');
 const { SseRuntimeGuard } = require('./lib/sse-runtime-guard');
+const { EphemeralMap, ExpiringSnapshot } = require('./lib/ephemeral-cache');
 const { buildStationDisplayPresentation } = require('./lib/station-display-presentation'), { isUnlicensedLicenseBootstrapRequest } = require('./lib/license-bootstrap-access');
 const tariffProviderRegistry = require('./ems/services/tariff-provider-registry');
 const { normalizeEvcsEnergyTotalKwh } = require('./ems/services/evcs-unit-conversion');
@@ -374,8 +375,10 @@ class NexoWattVis extends HostedAdapter {
     // The history page can trigger multiple near-identical loads during first paint
     // (boot/pageshow/re-render bursts). Reusing the same backend result keeps the UI
     // responsive and avoids unnecessary InfluxDB round-trips.
-    this._nwHistoryApiCache = new Map();
+    this._nwHistoryApiCache = new EphemeralMap(5000, 4);
     this._nwHistoryApiInflight = new Map();
+    this._nwShcfgDetectCache = new EphemeralMap(30000, 1);
+    this._nwTypeDetectorObjectsCache = null;
 
     // Derived / calculated live values (e.g. energy flow helper KPIs)
     this._derivedFlow = {
@@ -499,6 +502,10 @@ class NexoWattVis extends HostedAdapter {
       stateCacheKeys: this.stateCache && typeof this.stateCache === 'object' ? Object.keys(this.stateCache).length : 0,
       rawCacheKeys: this._nwRawValueCache && typeof this._nwRawValueCache === 'object' ? Object.keys(this._nwRawValueCache).length : 0,
       serverSockets: this._serverSockets && typeof this._serverSockets.size === 'number' ? this._serverSockets.size : 0,
+      historyCachedResponses: this._nwHistoryApiCache?.size || 0,
+      discoverySnapshotRetained: this._nwTypeDetectorObjectsCache?.retained === true,
+      discoverySnapshotLoading: this._nwTypeDetectorObjectsCache?.loading === true,
+      discoveryCachedResponses: this._nwShcfgDetectCache?.size || 0,
       shuttingDown: this._nwShuttingDown === true,
     };
   }
@@ -774,7 +781,7 @@ class NexoWattVis extends HostedAdapter {
   async _nwProtectCredentialState(id, foreign = false) {
     const localIds = new Set(['installer.configJson', 'simulation.backupConfigJson']);
     const foreignIds = new Set(['0_userdata.0.nexowattVis.backupJson', '0_userdata.0.nexowattVis.backupJsonPrev']);
-    if ((foreign && !foreignIds.has(id)) || (!foreign && (!localIds.has(id) || this.namespace !== this._owner.namespace))) {
+    if ((foreign && !foreignIds.has(id)) || (!foreign && (!localIds.has(id) || this.ownsLocalNamespace() !== true))) {
       throw new Error('credential-state-protection-failed');
     }
     const fullId = foreign ? id : `${this.namespace}.${id}`;
@@ -2372,7 +2379,8 @@ class NexoWattVis extends HostedAdapter {
     const name = String(feature || '');
     // Generic setup is available to slaves; the coordinator checks the exact role.
     if (['mesh', 'microgrid', 'meshMicrogrid'].includes(name)) return snapshot.grants.includes('microgridSlave') || snapshot.grants.includes('microgridMaster');
-    if (!this._nwLicenseFeaturesForEdition(snapshot.edition)[name]) return false;
+    const editionFeatures = this._nwLicenseFeaturesForEdition(snapshot.edition);
+    if (!Object.hasOwn(editionFeatures, name) || Reflect.get(editionFeatures, name) !== true) return false;
     if (name === 'smartHome') return snapshot.grants.includes('smartHome');
     if (name === 'multiSiteWallet') return snapshot.grants.includes('wallet') && snapshot.grants.includes('multisite');
     if (name === 'energyWalletOperator') return snapshot.grants.includes('wallet') && snapshot.grants.includes('billing');
@@ -2425,10 +2433,8 @@ class NexoWattVis extends HostedAdapter {
     this._nwLicenseOk = info.ok;
     const valid = info.ok;
     const edition = info.edition;
-    const features = {};
-    for (const feature of Object.keys(this._nwLicenseFeaturesForEdition(edition))) {
-      features[feature] = this._nwFeatureInSnapshot(info, feature);
-    }
+    const features = Object.fromEntries(Object.keys(this._nwLicenseFeaturesForEdition(edition))
+      .map(feature => [feature, this._nwFeatureInSnapshot(info, feature)]));
     const editionLabel = (nwFeatureFlagsService && typeof nwFeatureFlagsService.editionLabel === 'function') ? nwFeatureFlagsService.editionLabel(edition) : (edition === 'eos' ? 'Pro' : (edition === 'hems' ? 'Home' : 'Keine Lizenz'));
     const storagePowerProfile = (nwFeatureFlagsService && typeof nwFeatureFlagsService.storagePerformanceProfile === 'function')
       ? nwFeatureFlagsService.storagePerformanceProfile(edition, 0)
@@ -4653,7 +4659,7 @@ class NexoWattVis extends HostedAdapter {
         const now = Date.now();
         return resourceId !== 'farm' && availability?.available === true && typeof availability.ts === 'number' && Number.isFinite(availability.ts) && availability.ts <= now && now - availability.ts <= 15000;
       },
-      dataDirectory: require('@iobroker/adapter-core').getAbsoluteInstanceDataDir(this._owner),
+      dataDirectory: require('@iobroker/adapter-core').getAbsoluteInstanceDataDir(this),
       readState: (id) => this.stateCache?.[id] || null,
       readTelemetry: (resourceId) => this._nwPartnerStorageTelemetry?.[resourceId] || null,
     });
@@ -13923,15 +13929,15 @@ const nwShcfgTdCollectConfiguredDpIds = (cfg) => {
  * Wartung/TypeScript: Änderungen können Adapterstart, APIs, States und Webserver beeinflussen; unload/connection immer mittesten. Beim TS-Umbau Parameter, Rückgabe und genutzte State-/Config-Objekte explizit typisieren.
  */
 const nwShcfgTdGetObjectsCache = async (force = false) => {
-  const ttlMs = 30000;
-  const now = Date.now();
-  if (!force && this._nwTypeDetectorObjectsCache && this._nwTypeDetectorObjectsCache.ts && (now - this._nwTypeDetectorObjectsCache.ts) < ttlMs) {
-    return this._nwTypeDetectorObjectsCache;
+  if (this._nwShuttingDown) throw new Error('EOS_UI_STOPPING');
+  if (!this._nwTypeDetectorObjectsCache) {
+    this._nwTypeDetectorObjectsCache = new ExpiringSnapshot(async () => {
+      const objects = await this.getForeignObjectsAsync('*');
+      const keys = Object.keys(objects || {}).sort((a, b) => a.localeCompare(b));
+      return { ts: Date.now(), objects: objects || {}, keys };
+    }, 30000);
   }
-  const objects = await this.getForeignObjectsAsync('*');
-  const keys = Object.keys(objects || {}).sort((a, b) => a.localeCompare(b));
-  this._nwTypeDetectorObjectsCache = { ts: now, objects: objects || {}, keys };
-  return this._nwTypeDetectorObjectsCache;
+  return this._nwTypeDetectorObjectsCache.get(force);
 };
 /**
  * Code-Teil: nwShcfgTdCollectCandidateRoots
@@ -14298,15 +14304,13 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
 
     const forceRaw = (req.query && (req.query.force ?? req.query.reload)) || '';
     const force = String(forceRaw || '').trim() === '1' || String(forceRaw || '').trim().toLowerCase() === 'true';
-    const ttlMs = 30000;
     const now = Date.now();
     const cfg = this.getSmartHomeConfig ? this.getSmartHomeConfig() : ((this.config && this.config.smartHomeConfig) || {});
     // Ein gespeicherter Import/Manuelleingriff muss den Abgleich sofort erneuern;
     // die Objektliste darf unabhängig davon kurz zwischengespeichert bleiben.
     const configKey = crypto.createHash('sha256').update(JSON.stringify(cfg)).digest('hex');
-    if (!force && this._nwShcfgDetectCache && this._nwShcfgDetectCache.configKey === configKey && this._nwShcfgDetectCache.ts && (now - this._nwShcfgDetectCache.ts) < ttlMs) {
-      return res.json(this._nwShcfgDetectCache.payload);
-    }
+    const cachedDetection = !force && this._nwShcfgDetectCache.get(configKey);
+    if (cachedDetection) return res.json(cachedDetection);
 
     const configuredIds = nwShcfgTdCollectConfiguredDpIds(cfg);
     const { objects, keys } = await nwShcfgTdGetObjectsCache(force);
@@ -14370,7 +14374,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
       suggestions,
     };
 
-    this._nwShcfgDetectCache = { ts: now, configKey, payload };
+    if (!this._nwShuttingDown) this._nwShcfgDetectCache.set(configKey, payload);
     res.json(payload);
   } catch (e) {
     try { this.log.warn('SmartHomeConfig type-detect API error: ' + (e && e.message ? e.message : e)); } catch (_e2) {}
@@ -14613,7 +14617,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
         // bleibt der zuvor funktionierende Stand aktiv.
         this.config = this.config || {};
         this.config.smartHomeConfig = normalizedOut;
-        this._nwShcfgDetectCache = null;
+        this._nwShcfgDetectCache.clear();
         try {
           if (typeof this.buildSmartHomeDevicesFromConfig === 'function') this.buildSmartHomeDevicesFromConfig();
         } catch (e) {
@@ -31555,8 +31559,8 @@ return res.json(out);
    */
   _nwSetHistoryApiCached(key, payload) {
     try {
-      if (!(this._nwHistoryApiCache instanceof Map)) this._nwHistoryApiCache = new Map();
-      if (!key || !payload) return;
+      if (!(this._nwHistoryApiCache instanceof Map)) this._nwHistoryApiCache = new EphemeralMap(5000, 4);
+      if (this._nwShuttingDown || !key || !payload) return;
       const now = Date.now();
       for (const [entryKey, entry] of this._nwHistoryApiCache) {
         if (!entry || !Number.isFinite(entry.ts) || now - entry.ts > 5000) this._nwHistoryApiCache.delete(entryKey);
@@ -33603,6 +33607,9 @@ return res.json(out);
     this._hostedStartup = { state: 'stopped', error: '' };
     this._hostedOperational = false;
     try { this._nwCancelHistoryRequests?.(); } catch (_eHistory) {}
+    this._nwHistoryApiCache?.clear();
+    this._nwShcfgDetectCache?.clear();
+    this._nwTypeDetectorObjectsCache?.close();
     try { this._partnerRuntime?.stop(); } catch (_ePartner) {}
     try { this._meshCoordinator?.stop(); } catch (_eMesh) {}
     this._nwShutdownStartedAt = Date.now();

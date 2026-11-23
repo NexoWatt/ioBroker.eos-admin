@@ -9,6 +9,16 @@ function license(features) {
     return { valid: true, coreEnabled: true, edition: 'pro', limits: { chargePoints: 4, batteries: 1 }, features };
 }
 
+test('only explicit boolean edition features can receive a central feature grant', async t => {
+    const h = await createHarness(); t.after(() => h.close());
+    h.bridge.getLicense = () => license(['energy', 'wallet', 'smartHome']);
+    for (const feature of ['__proto__', 'constructor', 'toString', 'valueOf', 'hasOwnProperty', 'unlisted-feature']) {
+        assert.equal(h.adapter._nwIsFeatureLicensed(feature), false, feature);
+    }
+    assert.equal(h.adapter._nwIsFeatureLicensed('smartHome'), true);
+    assert.equal(h.adapter._nwBuildLicenseFeatureInfo().features.smartHome, true);
+});
+
 test('signed feature subset blocks direct SmartHome, NexoLogic and ledger APIs', async t => {
     const h = await createHarness(); t.after(() => h.close());
     h.bridge.getLicense = () => license(['energy']);

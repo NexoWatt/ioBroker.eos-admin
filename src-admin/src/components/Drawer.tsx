@@ -25,6 +25,9 @@ import {
     Devices as DeviceManagerIcon,
     Settings as SystemSettingsIcon,
     Hub as EebusIcon,
+    Backup as BackupIcon,
+    Https as HttpsIcon,
+    MoveToInbox as MigrationIcon,
     PersonOutlined as UserIcon,
 } from '@mui/icons-material';
 
@@ -1069,6 +1072,27 @@ class Drawer extends Component<DrawerProps, DrawerState> {
                             onClick={() => window.location.assign('/modules/eebus/')}
                             text="EEBus"
                             icon={<EebusIcon />}
+                        />
+                        <DrawerItem
+                            theme={this.props.theme}
+                            compact={false}
+                            onClick={() => window.location.assign('/modules/backup/')}
+                            text="Sicherung"
+                            icon={<BackupIcon />}
+                        />
+                        <DrawerItem
+                            theme={this.props.theme}
+                            compact={false}
+                            onClick={() => window.location.assign('/security/tls/')}
+                            text="Zertifikate"
+                            icon={<HttpsIcon />}
+                        />
+                        <DrawerItem
+                            theme={this.props.theme}
+                            compact={false}
+                            onClick={() => window.location.assign('/migration/')}
+                            text="Übernahme"
+                            icon={<MigrationIcon />}
                         />
                     </>
                 ) : null}

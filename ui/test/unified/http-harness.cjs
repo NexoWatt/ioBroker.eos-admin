@@ -9,7 +9,7 @@ const compiled = new Module(filename, module);
 compiled.filename = filename; compiled.paths = Module._nodeModulePaths(path.dirname(filename));
 compiled._compile(fs.readFileSync(filename, 'utf8') + '\nmodule.exports.TestRuntime = NexoWattVis;\n', filename);
 const Runtime = compiled.exports.TestRuntime;
-async function createHarness() {
+async function createHarness(options = {}) {
   const states = new Map(), objects = new Map(), sessions = new Map(), saved = [];
   const namespace = 'eos-admin.0';
   const qualified = id => id.startsWith(namespace + '.') ? id : namespace + '.' + id;
@@ -17,7 +17,8 @@ async function createHarness() {
     const value = state && typeof state === 'object' && Object.hasOwn(state, 'val') ? state : { val: state, ack: !!ack };
     states.set(id, { ...value, ts: Date.now(), lc: Date.now() });
   };
-  const owner = { namespace, instance: 0, config: { port: 8188, eosUi: {} },
+  const owner = { namespace, instance: 0, config: { port: 8188, eosUi: {},
+    ...(options.legacyNamespace ? { eosUiMigration: { preserveNamespace: true, source: options.legacyNamespace } } : {}) },
     log: { info() {}, warn() {}, error() {}, debug() {} },
     getStateAsync: async id => states.get(qualified(id)) || null,
     setStateAsync: async (id, value, ack) => write(qualified(id), value, ack),

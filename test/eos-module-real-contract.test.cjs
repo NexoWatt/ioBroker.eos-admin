@@ -34,6 +34,10 @@ async function setup(t) {
         },
         async getForeignObjectAsync(id) { return id === `system.adapter.${owner.namespace}` ? { native: structuredClone(owner.config) } : objects.get(id); },
         async getForeignStateAsync(id) { return states.get(id) || null; },
+        async setForeignObjectAsync(id, object) {
+            assert.notEqual(id, `system.adapter.${owner.namespace}`, 'module saves must not restart their owning adapter');
+            objects.set(id, { ...structuredClone(object), _id: id });
+        },
         async extendForeignObjectAsync(id, object) {
             if (id === `system.adapter.${owner.namespace}`) Object.assign(owner.config, object.native);
             else objects.set(id, { ...objects.get(id), ...structuredClone(object), _id: id });

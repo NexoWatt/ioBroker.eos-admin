@@ -90,7 +90,7 @@ test('unconfirmed and non-admin sessions do not receive module/admin links', () 
         assert.deepEqual(installerModuleLinks({ authed: true, role }), []);
     }
     assert.deepEqual(installerModuleLinks({ authed: true, role: 'admin' }).map(link => link.path),
-        ['/modules/devices/', '/modules/eebus/']);
+        ['/modules/devices/', '/modules/eebus/', '/modules/backup/', '/security/tls/', '/migration/']);
 });
 
 test('wrapped navigation updates content offset only when its measured height changes', () => {

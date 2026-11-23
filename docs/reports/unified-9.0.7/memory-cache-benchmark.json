@@ -1,0 +1,77 @@
+{
+  "scope": "Synthetic 25,000-object UI discovery snapshot; not device RSS or complete adapter",
+  "node": "v24.22.3",
+  "platform": "linux",
+  "arch": "x64",
+  "baseline": {
+    "loadedHeapBytes": 49179296,
+    "idleHeapBytes": 49189632,
+    "loadMs": 313.84010199999994,
+    "cachedReadMs": 0.0012166670000000295,
+    "reads": 1
+  },
+  "candidate": {
+    "loadedHeapBytes": 49188712,
+    "idleHeapBytes": 41992,
+    "loadMs": 308.93135000000007,
+    "cachedReadMs": 0.001725253000000066,
+    "reads": 1
+  },
+  "idleRetainedHeapReductionBytes": 49147640,
+  "samples": [
+    {
+      "attempt": 1,
+      "mode": "baseline",
+      "loadedHeapBytes": 49181056,
+      "idleHeapBytes": 49189632,
+      "loadMs": 437.92198299999995,
+      "cachedReadMs": 0.0011134029999999484,
+      "reads": 1
+    },
+    {
+      "attempt": 1,
+      "mode": "candidate",
+      "loadedHeapBytes": 49188712,
+      "idleHeapBytes": 32152,
+      "loadMs": 450.004202,
+      "cachedReadMs": 0.001539166000000023,
+      "reads": 1
+    },
+    {
+      "attempt": 2,
+      "mode": "baseline",
+      "loadedHeapBytes": 49179296,
+      "idleHeapBytes": 49189632,
+      "loadMs": 313.518569,
+      "cachedReadMs": 0.0012316389999999728,
+      "reads": 1
+    },
+    {
+      "attempt": 2,
+      "mode": "candidate",
+      "loadedHeapBytes": 49188712,
+      "idleHeapBytes": 42064,
+      "loadMs": 308.93135000000007,
+      "cachedReadMs": 0.001754256000000055,
+      "reads": 1
+    },
+    {
+      "attempt": 3,
+      "mode": "baseline",
+      "loadedHeapBytes": 49179296,
+      "idleHeapBytes": 49189632,
+      "loadMs": 313.84010199999994,
+      "cachedReadMs": 0.0012166670000000295,
+      "reads": 1
+    },
+    {
+      "attempt": 3,
+      "mode": "candidate",
+      "loadedHeapBytes": 49188712,
+      "idleHeapBytes": 41992,
+      "loadMs": 297.86586500000004,
+      "cachedReadMs": 0.001725253000000066,
+      "reads": 1
+    }
+  ]
+}

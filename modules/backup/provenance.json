@@ -1,0 +1,29 @@
+{
+  "name": "iobroker.nexowatt-backup",
+  "version": "1.0.10",
+  "sourceArchive": "NexoWatt-EOS-Backup-1.0.10-SD-RECHTE-FIX-FULL-REPOSITORY.zip",
+  "sourceSha256": "ece60a7b46a75c837f0e00d3ff134f08f7b99ac2cff055c1177a8d426066f590",
+  "upstream": {
+    "license": "MIT",
+    "repository": "https://github.com/NexoWatt/nexowatt.backitup"
+  },
+  "adaptation": "Hosted worker orchestration, encrypted archives, bounded streams and shell-free database commands; SD recognition and configuration schema retained from original1.0.10.",
+  "runtimeDependencies": {
+    "tar-fs": "3.1.3",
+    "node-schedule": "2.1.1",
+    "cron-parser": "5.7.0",
+    "ftp": "0.3.10",
+    "dropbox": "10.66.0",
+    "axios": "1.20.0",
+    "mqtt": "5.16.1",
+    "fast-xml-parser": "5.12.1"
+  },
+  "files": {
+    "LICENSE": "74ec97639172f1d098b83e712a9364c95c71f74591091c25bbe5eb8ddbdd2167",
+    "NOTICE.md": "970aa0871d3b12d5e1bd520c9d8c368ae0a3f5dc06bce2188af186c8ac9782d3",
+    "package.json": "5c3f20c1c996ccce082cceeb405d23d5673d1115643a579cc8c4b31a29193a0c",
+    "io-package.json": "6d65db31ddf7599ae92ecadb1252343620fc54639658162819034636a2f80241",
+    "src/lib/sdCard.ts": "efe992166653a3670c4508d75fa5589bd9623c1bb12d2d18848d118681685c35",
+    "build/lib/sdCard.js": "1701698d9ebf11c729b2435850fe4bb85609be53c2899cf15ce682561d560e3d"
+  }
+}

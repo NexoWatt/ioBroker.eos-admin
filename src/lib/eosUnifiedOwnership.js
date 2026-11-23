@@ -44,7 +44,7 @@ function createOwnershipGuard(owner) {
     let lastPublished = '';
 
     function canWrite() {
-        return running && allowed && performance.now() < validUntil;
+        return running && allowed && performance.now() < validUntil && owner.eosMigration?.allowsWrites() !== false;
     }
 
     function status() {

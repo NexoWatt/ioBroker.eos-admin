@@ -32,12 +32,17 @@ assert.equal(io.native.eosLockLegacyAdmin, false);
 assert.equal(io.native.certPublic, 'defaultPublic');
 assert.equal(io.native.certPrivate, 'defaultPrivate');
 assert.equal(io.native.auth, true);
+assert.equal(io.native.eosAutoMigrate, true);
 assert.equal(io.common.compact, false);
 assert.equal(p.publishConfig.tag, 'next');
 assert.match(p.version, /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/);
 assert.ok(!p.dependencies['iobroker.nexowatt-ui'], 'UI must be an internal module');
 for (const rel of [p.main, 'ui/main.js', 'adminWww/index.html', 'ui/www/login.html', 'ui/admin/react/index.html',
-    'build/lib/eosUnifiedBoundary.js', 'build/lib/eosLicenseService.js',
+    'build/lib/eosUnifiedBoundary.js', 'build/lib/eosLicenseService.js', 'build/lib/eosModuleConfigStore.js',
+    'build/lib/eosLegacyMigration.js', 'build/lib/eosTlsManager.js', 'build/lib/eosTlsHttp.js',
+    'modules/backup/index.js', 'modules/backup/build/index.js', 'modules/backup/build/worker.js',
+    'modules/backup/build/restore-cli.js', 'modules/backup/admin/index.html', 'modules/shared/eos-module.css',
+    'public/eos-tls/index.html', 'public/eos-migration/index.html',
     'build/lib/eosSocketAdmin.js', 'build/lib/eosStateSubscriptions.js', 'build/lib/eosModuleHost.js', 'build/lib/eosModuleHttp.js', 'build/lib/eosDiscovery.js', 'modules/devices/index.js', 'modules/devices/admin/index.html', 'modules/eebus/index.js', 'modules/eebus/build/lib/eebusRuntime.js', 'modules/eebus/admin/index.html', 'release-manifests/unified/runtime.cdx.json']) {
     assert.ok(fs.statSync(path.join(root, rel)).isFile(), `MISSING_RUNTIME: ${rel}`);
 }

@@ -1,4 +1,6 @@
 import type { Adapter } from '@iobroker/adapter-core';
+import type { Readable } from 'node:stream';
+import type { LegacyMigrationStatus } from './eosLegacyMigration';
 
 export interface ModuleBridgeMessage {
     from: string;
@@ -11,7 +13,10 @@ export interface ModuleView {
     status: Record<string, unknown>;
 }
 export class EosModuleHost {
-    constructor(owner: Adapter, options: { baseDir: string; dataDir: string });
+    constructor(
+        owner: Adapter,
+        options: { baseDir: string; dataDir: string; installationDir?: string; eosDataDir?: string },
+    );
     start(): Promise<void>;
     stop(): Promise<void>;
     onObjectChange(id: string, object?: unknown): void;
@@ -21,6 +26,11 @@ export class EosModuleHost {
     save(id: string, config: unknown): Promise<ModuleView>;
     importLegacy(id: string, instance: unknown): Promise<ModuleView & { migration: Record<string, unknown> }>;
     command(id: string, command: unknown, payload: unknown): Promise<unknown>;
+    download(
+        id: string,
+        name: string,
+    ): Promise<{ stream: Readable; filename: string; contentType?: string; size?: number }>;
+    migrationStatus(): LegacyMigrationStatus;
     bindBridge(handler: (message: ModuleBridgeMessage) => Promise<unknown>): void;
     receiveBridge(message: { command: string; message?: unknown }): boolean;
 }

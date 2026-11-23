@@ -1,7 +1,7 @@
 {
   "name": "iobroker.eos-admin",
   "description": "NexoWatt EOS: licensed local energy management, dashboard and ioBroker system administration in one adapter.",
-  "version": "9.0.6",
+  "version": "9.0.7",
   "contributors": [
     "bluefox <dogafox@gmail.com>",
     "apollon77",
@@ -39,10 +39,14 @@
     "bonjour-service": "1.4.4",
     "compression": "^1.8.2",
     "cookie-parser": "^1.4.7",
+    "cron-parser": "5.7.0",
+    "dropbox": "10.66.0",
     "express": "^5.3.0",
     "express-fileupload": "^1.5.2",
     "express-session": "^1.19.0",
     "express4": "npm:express@4.22.3",
+    "fast-xml-parser": "5.12.1",
+    "ftp": "0.3.10",
     "json5": "^2.2.3",
     "jsonwebtoken": "9.0.3",
     "jwks-rsa": "4.1.0",
@@ -50,10 +54,12 @@
     "modbus-serial": "8.0.25",
     "mqtt": "5.16.1",
     "multicast-dns": "7.2.5",
+    "node-schedule": "2.1.1",
     "nodemailer": "10.1.4",
     "oauth2-server": "npm:@node-oauth/oauth2-server@5.3.1",
     "semver": "^7.8.5",
     "serialport": "12.0.0",
+    "tar-fs": "3.1.3",
     "ws": "8.22.0"
   },
   "devDependencies": {
@@ -163,7 +169,11 @@
     "docs/reports/unified-9.0.5/",
     "modules/",
     "START_HIER_9.0.6.md",
-    "docs/reports/unified-9.0.6/"
+    "docs/reports/unified-9.0.6/",
+    "START_HIER_9.0.7.md",
+    "docs/reports/unified-9.0.7/",
+    "tools/eos-tls-issuer.cjs",
+    "tools/eos-memory-cache-benchmark.cjs"
   ],
   "scripts": {
     "start": "cd src-admin && npm run start",
@@ -174,7 +184,7 @@
     "build:ui-runtime": "node ui/scripts/build-ts-runtime-executables.js",
     "lint-backend": "eslint -c eslint.config.mjs src && npm run lint:unified",
     "lint": "npm run lint-backend && cd src-admin && npm run lint",
-    "test:unified": "node --test test/eos-unified*.test.cjs test/eos-hosted-boundary-http.test.cjs test/eos-license*.test.cjs ui/test/unified/*.test.cjs test/eos-access-diagnostics.test.cjs test/eos-ingress-renderer.test.cjs test/eos-sbom-vendored.test.cjs test/eos-system-license-ui.test.cjs test/eos-history-deadline.test.cjs test/eos-socket-threshold.test.cjs test/eos-history-api-stability.test.cjs",
+    "test:unified": "node --test test/eos-unified*.test.cjs test/eos-hosted-boundary-http.test.cjs test/eos-license*.test.cjs ui/test/unified/*.test.cjs test/eos-access-diagnostics.test.cjs test/eos-ingress-renderer.test.cjs test/eos-sbom-vendored.test.cjs test/eos-system-license-ui.test.cjs test/eos-history-deadline.test.cjs test/eos-socket-threshold.test.cjs test/eos-history-api-stability.test.cjs test/eos-ephemeral-cache.test.cjs test/eos-tls-management.test.cjs test/eos-tls-issuer-files.test.cjs",
     "check:unified": "node tools/eos-release-check.cjs",
     "seal:unified": "node tools/eos-release-manifest.cjs --write",
     "prepack": "node tools/eos-release-check.cjs",
@@ -184,12 +194,12 @@
     "test:retained": "node --test test/eos-session-security.test.cjs test/eos-web-resources.test.cjs test/eos-auth-regressions.test.cjs",
     "test:package": "node --test test/eos-unified-metadata.test.cjs",
     "test:integration": "mocha test/integration-unified.cjs --exit",
-    "typecheck": "tsc -p tsconfig.build.json --noEmit",
+    "typecheck": "tsc -p tsconfig.build.json --noEmit && tsc -p ui/tsconfig.ephemeral-cache.json && tsc -p ui/tsconfig.hosted-adapter.json && tsc -p modules/eebus/tsconfig.json --noEmit && tsc -p modules/backup/tsconfig.json --noEmit",
     "build:installer": "npm --prefix ui/src-admin-tab run build",
     "sbom": "npm sbom --sbom-format=cyclonedx > release-manifests/unified/build-environment.cdx.json && node tools/eos-sbom-vendored.cjs",
-    "lint:unified": "eslint -c eslint.unified.config.mjs src/lib/eosUnifiedBoundary.js src/lib/eosUnifiedOwnership.js src/lib/eosLicenseCore.js src/lib/eosLicensePolicy.js src/lib/eosLicenseService.js src/lib/eosLicenseTrust.js src/lib/eosLicenseHttp.js tools/eos-release-check.cjs tools/eos-release-manifest.cjs tools/eos-migration-plan.cjs tools/eos-access-diagnostics.cjs deploy/render-ingress.cjs tools/eos-sbom-vendored.cjs src/lib/eosModuleHost.js src/lib/eosModuleHttp.js",
-    "test:modules": "node --test test/eos-hosted-eebus-bridge.test.cjs test/eos-module*.test.cjs test/eos-discovery.test.cjs modules/devices/test/*.test.* modules/eebus/test/*.test.* && node --test modules/eebus/test/config.js modules/eebus/test/cls-control-parser.js modules/eebus/test/nexowatt-bridge.js modules/eebus/test/implementation-result-order.js",
-    "build:modules": "tsc -p modules/eebus/tsconfig.json"
+    "lint:unified": "eslint -c eslint.unified.config.mjs src/lib/eosUnifiedBoundary.js src/lib/eosUnifiedOwnership.js src/lib/eosLicenseCore.js src/lib/eosLicensePolicy.js src/lib/eosLicenseService.js src/lib/eosLicenseTrust.js src/lib/eosLicenseHttp.js tools/eos-release-check.cjs tools/eos-release-manifest.cjs tools/eos-migration-plan.cjs tools/eos-access-diagnostics.cjs deploy/render-ingress.cjs tools/eos-sbom-vendored.cjs src/lib/eosModuleHost.js src/lib/eosModuleHttp.js src/lib/eosModuleConfigStore.js src/lib/eosLegacyMigration.js tools/eos-tls-issuer.cjs && eslint -c modules/backup/eslint.config.mjs modules/backup/src",
+    "test:modules": "node --test test/eos-hosted-eebus-bridge.test.cjs test/eos-module*.test.cjs test/eos-discovery.test.cjs modules/devices/test/*.test.* modules/eebus/test/*.test.* && node --test modules/eebus/test/config.js modules/eebus/test/cls-control-parser.js modules/eebus/test/nexowatt-bridge.js modules/eebus/test/implementation-result-order.js && node --test modules/backup/test/*.test.cjs",
+    "build:modules": "tsc -p modules/eebus/tsconfig.json && tsc -p modules/backup/tsconfig.json"
   },
   "author": "NexoWatt",
   "private": false,
@@ -201,7 +211,7 @@
   },
   "nexowattReleasePolicy": {
     "distTag": "next",
-    "purpose": "Integrated Devices/EEBus, local discovery and navigation test release; see START_HIER_9.0.6.md and docs/reports/unified-9.0.6/PRUEFBERICHT.md"
+    "purpose": "Configuration persistence, legacy migration, backup, local certificates and resource improvements; see START_HIER_9.0.7.md and versioned evidence."
   },
   "publisher": "NexoWatt",
   "nexowattUpstream": {

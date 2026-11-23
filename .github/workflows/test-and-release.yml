@@ -33,6 +33,7 @@ jobs:
         run: |
           npm run build:unified-backend
           npm run build:ui-runtime
+          npm run build:modules
           npm run typecheck
           npm run lint:unified
           npm test

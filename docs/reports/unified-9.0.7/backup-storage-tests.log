@@ -1,0 +1,27 @@
+✔ HTTPS connection failure closes a pending upload and request (2.287398ms)
+✔ early HTTPS rejection closes an unfinished upload and request after preserving response status (2.28258ms)
+✔ HTTPS response abort and oversized response close pending upload streams (0.729234ms)
+✔ synchronous HTTPS request validation failure closes an upload without exposing values (0.326174ms)
+✔ successful HTTPS response closes the consumed source and keeps a completed request reusable (1.289164ms)
+✔ HTTPS upload deadline destroys a stalled body and request (11.351819ms)
+✔ retention preserves count per type, multi-DB factor, current run, unknown legacy archives and manual runs (3.256457ms)
+✔ WebDAV listing rejects XML entities, malformed known metadata and path escapes, while legacy entries stay visible (3.390966ms)
+✔ WebDAV creates only configured child collections and verifies a pre-existing collection (6.938895ms)
+✔ mounted target retention deletes only older configured new archives after all uploads (30.426891ms)
+✔ shared-folder retention is isolated by encrypted ownership and target; collisions preserve existing archives (21.342017ms)
+✔ Copy mode keeps separate original per-kind directories (6.932916ms)
+✔ remote archive fetch is private, verifies local-key NWB, refuses overwrite and encrypts legacy copy without deleting source (15.675021ms)
+✔ a downloaded archive with another recovery key is not reported as authenticated (7.566988ms)
+✔ FTPS creates the configured directory, uses verified TLS and rejects a data-channel error promptly (1.234523ms)
+✔ cloud folder creation preserves explicit paths and rejects a conflicting file (0.556166ms)
+✔ streaming remote transfer aborts oversize/truncated data and never overwrites a destination (4.240308ms)
+✔ Google, Dropbox and OneDrive token rotations are persisted encrypted and retain omitted refresh tokens (19.681371ms)
+✔ Google and Dropbox inventories paginate, OneDrive rejects external nextLink and never exposes signed links (2.242911ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 241.874709

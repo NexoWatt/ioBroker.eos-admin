@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/services/para14a-eebus-api.ts
- * Quell-Hash: sha256:bdc78dd463f49e14003f4255f399da7d9198ca38eed12a5437b510338105bd67
+ * Quell-Hash: sha256:f4d4881dc3d63837b32c1658ff7c626c05eb2f425755424bb8d7cd04516817ea
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -125,7 +125,7 @@ class Para14aEebusDirectApi {
         this.localFailsafeSignature = '';
     }
     attachHostedBridge(bridge) {
-        if (hostedBridges.has(this) || bridge.sourceInstance !== `${this.adapter.namespace}.eebus`
+        if (hostedBridges.has(this) || bridge.sourceInstance !== `${this.adapter.hostNamespace || this.adapter.namespace}.eebus`
             || !/^eos-admin\.\d+\.eebus$/.test(bridge.sourceInstance)
             || typeof bridge.canOperate !== 'function' || typeof bridge.sendFeedback !== 'function') {
             throw new Error('EOS_EEBUS_BRIDGE_INVALID');

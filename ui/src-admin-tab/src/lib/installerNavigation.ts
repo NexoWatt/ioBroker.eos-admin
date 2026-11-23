@@ -28,5 +28,8 @@ export function installerModuleLinks(access: InstallerAccess | null): readonly {
   return [
     { label: 'Devices', path: '/modules/devices/' },
     { label: 'EEBus', path: '/modules/eebus/' },
+    { label: 'Sicherung', path: '/modules/backup/' },
+    { label: 'Zertifikate', path: '/security/tls/' },
+    { label: 'Bestandsübernahme', path: '/migration/' },
   ];
 }

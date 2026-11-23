@@ -3,9 +3,11 @@ import { EebusRuntime } from './lib/eebusRuntime';
 import { IdentityManager } from './lib/identityManager';
 import { ObjectFactory } from './lib/objectFactory';
 import { EebusIdentity } from './lib/eebusTypes';
+import { prepareLegacyEebus } from './lib/legacyMigration';
 
 interface HostedAdapter {
     namespace: string;
+    eosTargetNamespace?: string;
     log: { info(message: string): void; warn(message: string): void; error(message: string): void; debug(message: string): void };
     getStateAsync(id: string): Promise<ioBroker.State | null | undefined>;
     setStateAsync(id: string, state: { val: ioBroker.StateValue; ack: boolean }): Promise<unknown>;
@@ -62,13 +64,17 @@ export function migrateLegacyConfig(input: unknown): { config: Record<string, un
     return { config, omittedFields: Object.keys(original).filter(key => !allowed.has(key) || key === 'pairingPin'), requiresPairing: true };
 }
 
+export function preflightLegacyConfig(input: unknown, context: Parameters<typeof prepareLegacyEebus>[1]) {
+    return prepareLegacyEebus(input, context, validateConfig);
+}
+
 export function createHostedModule(options: Options) {
     if (!options || typeof options.canOperate !== 'function' || !options.dataDir) throw new Error('EEBUS_HOST_CONTRACT');
     const selected = validateConfig(options.config || {});
     const config: EebusConfig = getConfig({ ...selected, autoAcceptNewDevices: false, allowCommandsToUntrustedDevices: false,
-        debugRawMessages: false, nexowattUiInstance: options.adapter.namespace.replace(/\.eebus$/, '') });
+        debugRawMessages: false, nexowattUiInstance: options.adapter.eosTargetNamespace || options.adapter.namespace.replace(/\.eebus$/, '') });
     // A hosted bridge targets only this adapter's embedded EMS, never an automatically selected legacy controller.
-    config.nexowattUiInstance = options.adapter.namespace.replace(/\.eebus$/, '');
+    config.nexowattUiInstance = options.adapter.eosTargetNamespace || options.adapter.namespace.replace(/\.eebus$/, '');
     const adapter = Object.create(options.adapter) as HostedAdapter;
     adapter.canOperate = options.canOperate;
     let runtime: EebusRuntime | undefined;

@@ -1,0 +1,26 @@
+✔ module persistence never writes the controller restart-triggering instance object (4.204557ms)
+✔ 9.0.6 native config is retained as fallback only until a dedicated saved config exists (0.985554ms)
+✔ malformed or permissive persisted objects cannot silently restore stale native configuration (2.712681ms)
+✔ stale config writer detects changed revision and keeps the newer stored envelope (0.860318ms)
+✔ concurrent writes through the same running owner are bounded and never interleave (0.88213ms)
+✔ failed persistence and missing writeback never report successful save (0.863454ms)
+✔ module names, prototype keys and envelope sizes are validated before storage (12.334668ms)
+✔ device save refreshes rotated session CSRF without discarding the edited device (9.665452ms)
+✔ expired session preserves the unsaved form and allows explicit retry after a separate login (6.172322ms)
+✔ forbidden mutation is never replayed and preserves its draft for correction (3.052015ms)
+✔ real module pages and vendor assets are available through the guarded same-origin routes (115.421416ms)
+✔ backup download uses authenticated bounded binary streaming and refuses untrusted names (9.209725ms)
+✔ slow backup downloads have bounded admission and release their stream after client disconnect (13.40598ms)
+✔ backup byte-count mismatches abort the response without exposing an unbounded stream (7.130826ms)
+✔ read-only migration page and status require fresh administrator authentication and expose no private journal fields (13.333948ms)
+✔ fresh admin role, same origin and session-bound CSRF are required for every module mutation (11.88508ms)
+✔ first-login password requirement and invalid expired sessions do not expose configuration (6.946261ms)
+✔ invalid and oversized module JSON and internal exceptions are contained without leaking bodies (18.000377ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 412.714011

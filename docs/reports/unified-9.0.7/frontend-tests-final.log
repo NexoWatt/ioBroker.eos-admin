@@ -1,0 +1,18 @@
+✔ installer return links retain current hostname, TLS and port for IP and short-host entry (1.667087ms)
+✔ unconfirmed and non-admin sessions do not receive module/admin links (0.835301ms)
+✔ wrapped navigation updates content offset only when its measured height changes (3.474692ms)
+✔ drawer replacement, logout and shell destroy release observer and stale offset (1.580698ms)
+✔ license operations remain on the EOS origin from a nested system route (1.451256ms)
+✔ logout uses one session and CSRF protection, without reading OAuth tokens (5.629424ms)
+✔ missing CSRF or failed status never sends a logout mutation (1.870839ms)
+✔ logout failure is not reported as a successful revocation (1.113705ms)
+✔ already expired session does not require a write (2.144607ms)
+✔ central license status accepts the controller UUID variants supported by the verifier (0.973767ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 206.723491

@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="de">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,6 +7,7 @@
 
   <link rel="stylesheet" href="vendor/materialize.css">
   <link rel="stylesheet" href="vendor/adapter.css">
+  <link rel="stylesheet" href="/modules/shared/eos-module.css">
   <link rel="stylesheet" href="style.css">
   <script defer src="vendor/jquery.js"></script>
   <script defer src="vendor/materialize.js"></script>
@@ -15,10 +16,21 @@
   <script defer src="index_m.js"></script>
 </head>
 
-<body>
-<div class="m adapter-container">
-  <header class="eos-host-toolbar">
-    <div class="eos-host-links"><a href="/system/">EOS Administration</a><a href="/installer/">Installer</a><a href="/">EOS Dashboard</a></div>
+<body class="eos-module-page">
+<main class="m adapter-container eos-module-main">
+  <header class="eos-page-header">
+    <a class="eos-brand" href="/" aria-label="NexoWatt EOS Dashboard"><img src="/system/img/eos/nexowatt-eos-brand-wide.png" width="190" height="52" alt="NexoWatt EOS"></a>
+    <nav class="eos-module-nav" aria-label="EOS Navigation">
+      <a href="/">EOS Dashboard</a><a href="/installer/">Installer</a><a href="/system/">EOS Administration</a>
+      <a href="/modules/devices/" aria-current="page">Geräte</a><a href="/modules/eebus/">EEBus</a><a href="/modules/backup/">Sicherung</a><a href="/security/tls/">Zertifikate</a>
+    </nav>
+  </header>
+  <section class="eos-module-hero" aria-labelledby="page-title">
+    <div><small>NexoWatt EOS · Anlagenkonfiguration</small><h1 id="page-title">Geräte</h1>
+    <p>Geräte verbinden, Protokolle konfigurieren und Messwerte für dein Energiesystem bereitstellen.</p></div>
+    <span class="eos-module-badge">Gemeinsame EOS-Systemlizenz</span>
+  </section>
+  <section class="eos-host-toolbar" aria-label="Gerätekonfiguration speichern">
     <div class="eos-host-actions">
       <label><input type="checkbox" id="eosModuleEnabled"><span>Gerätemodul aktivieren</span></label>
       <button type="button" class="btn" id="eosModuleSave" disabled>Speichern und übernehmen</button>
@@ -26,12 +38,12 @@
     </div>
     <p id="eosModuleStatus" role="status" aria-live="polite">Konfiguration wird geladen …</p>
     <details class="eos-host-import"><summary>Bestehenden Geräteadapter übernehmen</summary>
-      <p>Die bisherige Instanz zuerst in ioBroker deaktivieren und ihren Stillstand abwarten. Importiert wird zunächst deaktiviert. Prüfe anschließend die ausgegebenen neuen Datenpunkt-Pfade und passe die EMS-Zuordnung an, bevor du das Modul aktivierst.</p>
+      <p>EOS prüft die automatische Bestandsübernahme beim Start. Dabei bleiben vorhandene Datenpunkt-IDs erhalten. <a href="/migration/">Status der Bestandsübernahme ansehen</a>. Der folgende manuelle Import ist eine separate Konfigurationsübernahme: alte Instanz vollständig stoppen; die neuen Datenpunkt-Pfade prüfen und EMS-Zuordnungen vor der Aktivierung anpassen. Nach erfolgreicher automatischer Übernahme nicht erneut importieren.</p>
       <label for="eosLegacyInstance">Bisherige Instanz</label><input id="eosLegacyInstance" value="nexowatt-devices.0" autocomplete="off">
       <button type="button" class="btn-flat" id="eosModuleImport">Konfiguration übernehmen</button>
       <pre id="eosImportMapping"></pre>
     </details>
-  </header>
+  </section>
 
   <!-- Header -->
   <div class="row">
@@ -39,10 +51,10 @@
       <div class="card nexo-header">
         <div class="card-content">
           <div class="nexo-header-row">
-            <span class="card-title nexo-title">NexoWatt EOS · Geräte</span>
-            <span class="nexo-badge">EOS · Devices 0.5.176</span>
+            <h2 class="card-title nexo-title">Geräteverwaltung</h2>
+            <span class="nexo-badge">Modul Devices</span>
           </div>
-          <p class="nexo-subtitle translate">Integrierte NexoWatt Geräteverwaltung mit Protokollen und Gerätevorlagen. Freischaltung über die gemeinsame EOS-Systemlizenz.</p>
+          <p class="nexo-subtitle">Alle Geräte an einem Ort – mit den passenden Herstellerprofilen und Verbindungsparametern.</p>
           <p class="nexo-meta">
             <span class="translate">Treiber geladen:</span>
             <span id="tplCount">…</span>
@@ -73,7 +85,7 @@
     <div class="col s12">
       <div class="card">
         <div class="card-content">
-          <span class="card-title translate">Globale Einstellungen</span>
+          <h2 class="card-title translate">Globale Einstellungen</h2>
 
           <div class="row">
             <div class="input-field col s12 m4">
@@ -117,7 +129,7 @@
         <div class="card-content">
           
           <div class="nexo-devices-header">
-            <span class="card-title translate">Geräteliste</span>
+            <h2 class="card-title translate">Geräteliste</h2>
             <div class="nexo-devices-actions">
               <a class="waves-effect waves-light btn" id="btnAddDevice" href="#!">
                 <span class="nexo-icon">+</span>
@@ -135,7 +147,7 @@
 
           <div class="row">
 
-            <div class="col s12">
+            <div class="col s12 nexo-table-scroll" tabindex="0" role="region" aria-label="Geräteliste – bei Bedarf seitlich blättern">
               <table class="highlight responsive-table nexo-table" id="devicesTable">
                 <thead>
                   <tr>
@@ -167,7 +179,7 @@
   <div id="nexoBackdrop" class="nexo-backdrop" style="display:none;"></div>
 
   <!-- Modal: Add/Edit device -->
-  <div id="modalDevice" class="modal modal-fixed-footer nexo-modal">
+  <div id="modalDevice" class="modal modal-fixed-footer nexo-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal-content">
       <h5 id="modalTitle" class="translate">Gerät</h5>
 
@@ -897,6 +909,6 @@
     </div>
   </div>
 
-</div>
+</main>
 </body>
 </html>

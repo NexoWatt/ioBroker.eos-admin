@@ -7,6 +7,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 const ts = require('typescript');
+const { EphemeralMap } = require('./fixtures/load-ephemeral-cache.cjs');
 const filename = path.resolve(__dirname, '../ui/src-ts/runtime-executables/main.ts');
 const source = fs.readFileSync(filename, 'utf8');
 const parsed = ts.createSourceFile(filename, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
@@ -28,7 +29,8 @@ function fixture() {
     let time = 0;
     let wall = from + 86400000;
     const timers = new Map();
-    const context = { module: { exports: {} }, performance: { now: () => time },
+    // Cache expiry owns separate unreferenced timers; timers below track history IO deadlines.
+    const context = { module: { exports: {} }, Map, EphemeralMap, performance: { now: () => time },
         Date: class extends Date { static now() { return wall; } },
         setTimeout(fn, delay) { const timer = { unref() {} }; timers.set(timer, { at: time + delay, fn }); return timer; },
         clearTimeout(timer) { timers.delete(timer); },

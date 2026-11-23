@@ -135,6 +135,17 @@ async function getCatalog() {
     const { templates } = await registry();
     return { sourceVersion: SOURCE_VERSION, protocols: [...PROTOCOLS], templates: templates.map(template => ({ id: template.id, category: template.category, manufacturer: template.manufacturer, label: [template.manufacturer, template.model, template.name].filter(Boolean).join(' ') || template.id, protocols: template.protocols || [] })) };
 }
+/** @param {unknown} input */
+async function preflightLegacyConfig(input) {
+    const config = validateConfig(input);
+    const catalog = await registry();
+    for (const device of config.devices) {
+        const template = catalog.byId.get(device.templateId);
+        if (!template) throw failure('EOS_DEVICES_UNKNOWN_TEMPLATE');
+        if (Array.isArray(template.protocols) && !template.protocols.includes(device.protocol)) throw failure('EOS_DEVICES_TEMPLATE_PROTOCOL');
+    }
+    return { config, omittedFields: [] };
+}
 /** @param {string} name @param {Record<string, unknown>} [payload] */
 async function command(name, payload = {}) {
     if (!record(payload)) throw failure('EOS_DEVICES_COMMAND_PAYLOAD');
@@ -291,4 +302,4 @@ function createHostedModule({ adapter, canOperate, config = {}, runtimeFactory }
     function getStatus() { return { state, sourceVersion: SOURCE_VERSION, configured: settings.devices.length, running: runtimes.size, connected: lastConnection === true, lastError }; }
     return { start, stop, onStateChange, getStatus, getCatalog, command };
 }
-module.exports = { createHostedModule, validateConfig, normalizeConfig: validateConfig, DEFAULTS, SOURCE_VERSION, command, getCatalog };
+module.exports = { createHostedModule, validateConfig, preflightLegacyConfig, normalizeConfig: validateConfig, DEFAULTS, SOURCE_VERSION, command, getCatalog };

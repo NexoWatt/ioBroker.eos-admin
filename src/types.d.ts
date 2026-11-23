@@ -7,6 +7,8 @@ export interface AdminAdapterConfig extends ioBroker.AdapterConfig {
     /** Local multicast discovery is optional; it does not establish DNS or TLS trust. */
     eosMdnsEnabled?: boolean;
     eosMdnsHostname?: string;
+    /** Migrate only compatible, unambiguous legacy instances after preflight. */
+    eosAutoMigrate?: boolean;
     /** Answer ACME HTTP-01 challenges published by the acme adapter. Enabled if not set */
     acmeChallenge: boolean;
     accessAllowedConfigs: string[];

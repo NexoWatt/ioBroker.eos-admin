@@ -38,6 +38,12 @@
                     help: 'Meldet den laufenden HTTPS-Dienst unter nexowatt.local. https://nexowatt ohne Port benötigt zusätzlich lokale DNS-Auflösung und eine HTTPS-Einrichtung auf Port 443.',
                     xs: 12,
                 },
+                eosAutoMigrate: {
+                    type: 'checkbox',
+                    label: 'Kompatible NexoWatt-Altadapter automatisch übernehmen',
+                    help: 'Übernimmt eindeutig zugeordnete, geprüfte Altinstanzen beim Start. Bei nicht sicher übernehmbaren Einstellungen bleibt die Altinstanz erhalten. Ergebnis und Sperrgründe stehen in EOS unter Übernahme.',
+                    xs: 12,
+                },
                 eosMdnsHostname: {
                     type: 'text',
                     label: 'Lokaler EOS-Name (ohne .local)',

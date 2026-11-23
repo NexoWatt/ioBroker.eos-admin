@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "eos-admin",
-    "version": "9.0.6",
+    "version": "9.0.7",
     "titleLang": {
       "en": "NexoWatt EOS",
       "de": "NexoWatt EOS",
@@ -18,6 +18,10 @@
     "connectionType": "local",
     "dataSource": "push",
     "news": {
+      "9.0.7": {
+        "de": "Gerätekonfiguration ohne Sitzungsabbruch, geprüfte Bestandsübernahme, integrierte Sicherung und lokale Zertifikatsverwaltung. Einheitliche Moduloberflächen und begrenzte Caches. Umfang und Abnahmegrenzen siehe Prüfbericht.",
+        "en": "Device configuration without session interruption, guarded legacy migration, integrated backup and local certificate management. Consistent module interfaces and bounded caches. See the report for scope and acceptance limitations."
+      },
       "9.0.6": {
         "de": "Integrierte Geräte- und EEBus-Module mit zentraler EOS-Lizenz, geschützter Übergabe bestehender Instanzen, Installer-Rückweg und mehrzeiliger Admin-Navigation. Lokale Geräteankündigung und vorbereiteter HTTPS-Zugang ohne Port. Prüfumfang und offene Hardware-Abnahme siehe Prüfbericht.",
         "en": "Integrated Devices and EEBus modules with the central EOS license, guarded legacy handover, installer return navigation and wrapping admin navigation. Local discovery and prepared portless HTTPS access. See the report for validation scope and remaining hardware acceptance.",
@@ -102,11 +106,6 @@
         "de": "Stable-Kandidat 7.10.1 basiert wieder auf 7.9.98: native Passwortverwaltung ohne erzwungene Erstpasswortseite, dauerhafter Cockpit-Scrollbereich, Stift im unteren Kartenbereich und abschaltbare NexoWatt-Stable-Updates.",
         "en": "Stable candidate 7.10.1 returns to the 7.9.98 baseline: native password management without forced first-password page, persistent cockpit scrolling, in-grid edit control and optional NexoWatt stable updates.",
         "nl": "Stable-kandidaat 7.10.1 keert terug naar de 7.9.98-basis: native wachtwoordbeheer zonder verplichte eerste-wachtwoordpagina, blijvend cockpit-scrollen, bewerken in het onderste kaartgebied en uitschakelbare NexoWatt-stabiele updates."
-      },
-      "7.9.98": {
-        "de": "Stable-Kandidat 7.9.98 ergänzt den vertikalen Cockpit-Scrollbereich, bereinigt die Login-Felder und korrigiert Passwort-Reset sowie persönliche Erstpasswortvergabe über die echte ioBroker-Passwort-API.",
-        "en": "Stable candidate 7.9.98 adds vertical cockpit scrolling, cleans up login fields and fixes password reset plus first personal password setup through the real ioBroker password API.",
-        "nl": "Stable-kandidaat 7.9.98 voegt verticaal scrollen in het cockpit toe, herstelt de loginvelden en corrigeert wachtwoordreset en het eerste persoonlijke wachtwoord via de echte ioBroker-wachtwoord-API."
       }
     },
     "desc": {
@@ -362,6 +361,7 @@
     "acmeChallenge": false,
     "eosExternalOrigin": "",
     "eosModules": {},
+    "eosAutoMigrate": true,
     "eosMdnsEnabled": true,
     "eosMdnsHostname": "nexowatt",
     "eosUnifiedEnabled": true,

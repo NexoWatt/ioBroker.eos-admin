@@ -1,6 +1,6 @@
 # Third-party notices – NexoWatt EOS
 
-Release context: `iobroker.eos-admin` 9.0.0-alpha.1. This is a notice index,
+Release context: `iobroker.eos-admin` 9.0.7. This is a notice index,
 not a claim that every dependency has been legally cleared or security-tested.
 
 The proprietary NexoWatt notice applies only to NexoWatt-owned protected material.
@@ -15,6 +15,8 @@ corresponding notices from source, compiled assets or distributed packages.
 | Earlier bundled/admin build components | `docs/ea/third-party/` | Historical evidence; not by itself a current runtime inventory. |
 | Vendored acorn | `src-admin/src/vendor/acorn/LICENSE` | Preserve with the embedded component. |
 | Integrated NexoWatt UI 1.0.38 | Original source archive identified in `docs/unified/BASELINE.md` | NexoWatt proprietary source; separate dependencies retain their own terms. |
+| Integrated NexoWatt Devices 0.5.176 and EEBus 0.3.0 | `modules/devices/`, `modules/eebus/` | Original proprietary notices and dependency licenses retained. |
+| NexoWatt EOS Backup 1.0.10, derived from ioBroker.backitup | `modules/backup/upstream/LICENSE`, `modules/backup/upstream/NOTICE.md`, `modules/backup/provenance.json` | MIT grant to original code remains applicable; new EOS integration does not revoke it. |
 
 The current release SBOM and package manifest determine what is actually delivered.
 Historical folders do not establish the version installed on a customer system.

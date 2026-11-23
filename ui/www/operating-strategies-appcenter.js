@@ -20,7 +20,6 @@
  * 2. npm run sync:ts-runtime-executables ausführen.
  * 3. npm run test:runtime-executables prüfen.
  */
-"use strict";
 /**
  * NexoWatt Quellcode-Erklärung (DE)
  * Aufgabe: Verbindet die App-Center-Einrichtung von Betriebsstrategien mit den Backend-Daten.

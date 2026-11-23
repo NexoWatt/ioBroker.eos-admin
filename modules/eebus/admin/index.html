@@ -1,12 +1,31 @@
 <!doctype html>
 <html lang="de">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NexoWatt EOS · EEBus</title><link rel="stylesheet" href="/modules/eebus/style.css"><script defer src="/modules/eebus/index.js"></script></head>
-<body><main><header><div><small>NEXOWATT EOS</small><h1>EEBus</h1></div><nav><a href="/system/">Zur Systemverwaltung</a><a href="/">Zum Dashboard</a></nav></header>
-<p>SHIP-Geräte entdecken, ausdrücklich koppeln und SPINE-Daten in EOS nutzen. Die gemeinsame EOS-Systemlizenz gilt auch für dieses Modul.</p>
-<p class="notice">Der integrierte SHIP/SPINE-Kern ist ein Teststand. Freigabe und Schreibfunktionen erst nach Prüfung des konkreten Geräts aktivieren. Ein öffentlicher Lizenz-Prüfschlüssel ist keine EEBus-Geräteidentität.</p>
-<p id="message" role="status" aria-live="polite">Status wird geladen …</p>
-<section><h2>Betriebsstatus</h2><dl id="status"></dl><button id="refresh" type="button">Status aktualisieren</button></section>
-<section><h2>Geräte und Kopplung</h2><p>Den SKI und Zertifikat-Fingerabdruck an der Gegenstelle vergleichen. Ein Zertifikatwechsel erfordert eine erneute ausdrückliche Kopplung.</p><div id="devices"></div></section>
-<section><h2>Konfiguration</h2><p>Das Modul ist zunächst deaktiviert. „Modul aktivieren“ startet EEBus nach dem Speichern. Der Testmodus verhindert Steuerbefehle. Für aktive CLS-Vorgaben müssen deren Übernahme freigegeben und der Testmodus deaktiviert sein. Änderungen starten nur das EEBus-Modul neu.</p><form id="config-form"><div id="basic-fields" class="fields"></div><details><summary>Erweiterte EEBus-Einstellungen</summary><div id="expert-fields" class="fields"></div></details></form><button id="save" type="button">Konfiguration speichern</button></section>
-<section><h2>Bestehende EEBus-Konfiguration übernehmen</h2><p>Die alte Instanz muss deaktiviert und vollständig gestoppt sein. Der Import aktiviert das Modul nicht und übernimmt keine privaten Schlüssel oder Kopplungsfreigaben. Bestehende Datenpunkte bleiben erhalten; neue liegen unter <code>eos-admin.&lt;Instanz&gt;.eebus</code>. Geräte anschließend neu koppeln.</p><label for="legacy">Alte Instanz</label><input id="legacy" value="eebus.0" pattern="eebus\.[0-9]+" maxlength="32"><button id="import" type="button">Konfiguration übernehmen</button></section>
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>NexoWatt EOS · EEBus</title>
+  <link rel="stylesheet" href="/modules/shared/eos-module.css">
+  <link rel="stylesheet" href="/modules/eebus/style.css">
+  <script defer src="/modules/eebus/index.js"></script>
+</head>
+<body class="eos-module-page"><main class="eos-module-main">
+  <header class="eos-page-header">
+    <a class="eos-brand" href="/" aria-label="NexoWatt EOS Dashboard"><img src="/system/img/eos/nexowatt-eos-brand-wide.png" width="190" height="52" alt="NexoWatt EOS"></a>
+    <nav class="eos-module-nav" aria-label="EOS Navigation">
+      <a href="/">EOS Dashboard</a><a href="/installer/">Installer</a><a href="/system/">EOS Administration</a>
+      <a href="/modules/devices/">Geräte</a><a href="/modules/eebus/" aria-current="page">EEBus</a><a href="/modules/backup/">Sicherung</a><a href="/security/tls/">Zertifikate</a>
+    </nav>
+  </header>
+  <section class="eos-module-hero" aria-labelledby="page-title">
+    <div><small>NexoWatt EOS · Gerätekommunikation</small><h1 id="page-title">EEBus</h1>
+    <p>Geräte im lokalen Netz entdecken, sicher koppeln und mit deinem Energiesystem verbinden.</p></div>
+    <span class="eos-module-badge">Gemeinsame EOS-Systemlizenz</span>
+  </section>
+  <p class="notice">Der integrierte SHIP/SPINE-Kern ist ein Teststand. Freigabe und Schreibfunktionen erst nach Prüfung des konkreten Geräts aktivieren. Ein öffentlicher Lizenz-Prüfschlüssel ist keine EEBus-Geräteidentität.</p>
+  <p id="message" role="status" aria-live="polite">Status wird geladen …</p>
+  <div class="eos-eebus-overview">
+    <section class="eos-panel"><small class="eos-eyebrow">Verbindung</small><h2>Betriebsstatus</h2><dl id="status"></dl><button id="refresh" type="button">Status aktualisieren</button></section>
+    <section class="eos-panel"><small class="eos-eyebrow">Lokales Netzwerk</small><h2>Geräte und Kopplung</h2><p>Den SKI und Zertifikat-Fingerabdruck an der Gegenstelle vergleichen. Ein Zertifikatwechsel erfordert eine erneute ausdrückliche Kopplung.</p><div id="devices"></div></section>
+  </div>
+  <section class="eos-panel"><small class="eos-eyebrow">Modul einrichten</small><h2>Konfiguration</h2><p>Das Modul ist zunächst deaktiviert. „Modul aktivieren“ startet EEBus nach dem Speichern. Der Testmodus verhindert Steuerbefehle. Für aktive CLS-Vorgaben müssen deren Übernahme freigegeben und der Testmodus deaktiviert sein. Änderungen starten nur das EEBus-Modul neu.</p><form id="config-form"><div id="basic-fields" class="fields"></div><details><summary>Erweiterte EEBus-Einstellungen</summary><div id="expert-fields" class="fields"></div></details></form><div class="eos-form-actions"><button id="save" type="button" class="eos-primary">Konfiguration speichern</button></div></section>
+  <section class="eos-panel"><small class="eos-eyebrow">Bestandsanlage</small><h2>Bestehende EEBus-Konfiguration übernehmen</h2><p>Die automatische Bestandsübernahme erhält bei erfolgreicher Vorprüfung die bisherigen Datenpunkt-IDs und die geprüfte SHIP-Identität. Fehlende geschützte Werte oder ungeprüfte Gegenstellen-Fingerabdrücke blockieren den Wechsel. <a href="/migration/">Übernahmestatus ansehen</a>. Der folgende manuelle Import übernimmt nur Konfiguration: alte Instanz vollständig stoppen, neue Datenpunkte unter <code>eos-admin.&lt;Instanz&gt;.eebus</code> prüfen und Geräte neu koppeln. Nach erfolgreicher automatischer Übernahme nicht erneut importieren.</p><div class="eos-import-fields"><div><label for="legacy">Alte Instanz</label><input id="legacy" value="eebus.0" pattern="eebus\.[0-9]+" maxlength="32"></div><button id="import" type="button">Konfiguration übernehmen</button></div></section>
 </main></body></html>

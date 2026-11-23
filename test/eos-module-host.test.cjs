@@ -15,6 +15,7 @@ function setup(configs = { devices: { enabled: true }, eebus: { enabled: false }
         async getForeignObjectAsync(id) { return id === 'system.adapter.eos-admin.0' ? { native: { ...owner.config } } : objects.get(id); },
         async getForeignStateAsync(id) { return states.get(id); },
         async extendForeignObjectAsync(id, object) { writes.push({ type: 'object', id, object }); },
+        async setForeignObjectAsync(id, object) { objects.set(id, structuredClone(object)); writes.push({ type: 'object', id, object }); },
         async setForeignObjectNotExistsAsync(id, object) { writes.push({ type: 'object', id, object }); },
         async setForeignStateAsync(id, value, ack) { writes.push({ type: 'state', id, value, ack }); },
         async subscribeForeignObjectsAsync() {}, async subscribeForeignStatesAsync() {}, async unsubscribeForeignStatesAsync() {},
@@ -110,7 +111,7 @@ test('saved configurations are encrypted and API views never return device crede
     const x = setup({ devices: { enabled: false }, eebus: { enabled: false } }); t.after(() => x.host.stop()); await x.host.start();
     const view = await x.host.save('devices', { enabled: false, devices: [{ id: 'one', connection: { password: 'sensitive-config' } }] });
     assert.equal(JSON.stringify(view).includes('sensitive-config'), false);
-    const stored = x.writes.find(write => write.id === 'system.adapter.eos-admin.0').object.native;
+    const stored = x.writes.find(write => write.id === 'eos-admin.0.modules.devices.configuration').object.native;
     assert.equal(JSON.stringify(stored).includes('sensitive-config'), false);
     assert.equal(x.host.readConfig('devices').devices[0].connection.password, 'sensitive-config');
 });
@@ -134,9 +135,12 @@ test('integrated licenses preserve NWL2 adapter scope and fail closed on expired
     const allows = EosLicenseService.prototype.allowsEmbeddedModule;
     const service = { statusView: () => ({ valid: true, coreEnabled: true }), claims: { scope: 'system', adapters: [] } };
     assert.equal(allows.call(service, 'devices'), true); assert.equal(allows.call(service, 'eebus'), true);
+    assert.equal(allows.call(service, 'backup'), true);
     assert.equal(allows.call(service, 'constructor'), false);
     service.claims = { scope: 'adapters', adapters: ['nexowatt-ui'] };
     assert.equal(allows.call(service, 'devices'), false); assert.equal(allows.call(service, 'eebus'), false);
+    assert.equal(allows.call(service, 'backup'), false);
+    service.claims.adapters.push('nexowatt-backup'); assert.equal(allows.call(service, 'backup'), true);
     service.claims.adapters.push('nexowatt-devices'); assert.equal(allows.call(service, 'devices'), true);
     service.statusView = () => ({ valid: false, coreEnabled: false });
     assert.equal(allows.call(service, 'devices'), false);
@@ -147,6 +151,105 @@ test('concurrent HTTP-close and adapter-unload share transport cleanup, and late
     await Promise.all([x.host.stop(), x.host.stop()]); assert.equal(x.instances[0].stops, 1);
     const y = setup(); let release;
     y.owner.subscribeForeignObjectsAsync = () => new Promise(resolve => { release = resolve; });
-    const starting = y.host.start(); await y.host.stop(); release(); await starting;
+    const starting = y.host.start();
+    while (!release) await new Promise(resolve => setImmediate(resolve));
+    await y.host.stop(); release(); await starting;
     assert.equal(y.host.timer, null); assert.equal(y.instances.length, 0);
+});
+
+test('preserved legacy EEBus namespace keeps state IDs while private bridge remains tied to EOS owner', async t => {
+    const x = setup({ devices: { enabled: false }, eebus: { enabled: true } }); t.after(() => x.host.stop());
+    x.owner.config.eosModules.eebus.migration = { preserveNamespace: true, source: 'eebus.0' };
+    x.owner.config.eosUiMigration = { preserveNamespace: true, source: 'nexowatt-ui.0' };
+    let received, feedback;
+    const create = x.factory.createHostedModule;
+    x.factory.createHostedModule = options => { const module = create(options); module.onMessage = value => { feedback = value; }; return module; };
+    x.host.bindBridge(async packet => { received = packet; return { accepted: true }; });
+    await x.host.start();
+    const facade = x.instances[0].options.adapter;
+    assert.equal(facade.namespace, 'eebus.0'); assert.equal(facade.eosTargetNamespace, 'nexowatt-ui.0');
+    await facade.setStateAsync('devices.peer.power', { val: 42, ack: true });
+    assert.equal(x.writes.at(-1).id, 'eebus.0.devices.peer.power');
+    const answer = await new Promise(resolve => facade.sendTo('nexowatt-ui.0', 'nexowatt.para14a.hello.v1', { sourceInstance: 'eebus.0' }, resolve));
+    assert.equal(answer.accepted, true); assert.equal(received.from, 'eos-admin.0.eebus');
+    assert.equal(received.message.sourceInstance, 'eos-admin.0.eebus');
+    assert.equal(x.host.receiveBridge({ command: 'nexowatt.para14a.implementation.v1', message: { sourceInstance: 'nexowatt-ui.0', targetInstance: 'eos-admin.0.eebus' } }), true);
+    await new Promise(resolve => setImmediate(resolve));
+    assert.equal(feedback.from, 'nexowatt-ui.0'); assert.equal(feedback.message.targetInstance, 'eebus.0');
+});
+
+test('backup secret fields stay redacted and restored by unique endpoint rather than row index', () => {
+    const original = { mySqlEvents: [{ host: 'db-a', port: 3306, dbName: 'one', pass: 'first' }, { host: 'db-b', port: 3306, dbName: 'two', pass: 'second' }],
+        onedriveAccessJson: 'opaque-oauth', expertMount: 'opaque-mount' };
+    const masked = redact(original); masked.mySqlEvents.reverse();
+    assert.equal(JSON.stringify(masked).includes('first'), false); assert.equal(JSON.stringify(masked).includes('opaque-'), false);
+    const restored = restoreSecrets(masked, original);
+    assert.equal(restored.mySqlEvents[0].pass, 'second'); assert.equal(restored.mySqlEvents[1].pass, 'first');
+    masked.mySqlEvents[0].host = 'new-host'; assert.throws(() => restoreSecrets(masked, original), /SECRET_MISSING/);
+});
+
+test('backup notifications use only configured validated target and lose authority on revocation', async t => {
+    const x = setup({ devices: { enabled: false }, eebus: { enabled: false }, backup: { enabled: true } });
+    x.host.options.factories.backup = x.factory;
+    x.factory.validateNotificationPlan = (_config, plan) => plan.target === 'email.0' && plan.command === 'send' && typeof plan.message.text === 'string';
+    const sent = []; x.owner.sendTo = (...args) => { sent.push(args.slice(0, 3)); args[3]({}); };
+    await x.host.start(); t.after(() => x.host.stop());
+    const adapter = x.instances[0].options.adapter;
+    const plan = { target: 'email.0', command: 'send', message: { text: 'Synthetic backup test' }, delayMs: 0 };
+    await adapter.sendBackupNotification(plan); assert.equal(sent.length, 1);
+    await assert.rejects(adapter.sendBackupNotification({ ...plan, target: 'other.0' }), /SCOPE/);
+    x.owner.licensed = false; await assert.rejects(adapter.sendBackupNotification(plan), /INACTIVE/);
+    assert.equal(sent.length, 1);
+});
+
+test('backup downloads clean late file streams after timeout or stop and bound concurrent opens', async t => {
+    const { PassThrough } = require('node:stream');
+    const x = setup({ devices: { enabled: false }, eebus: { enabled: false }, backup: { enabled: true } });
+    x.host.options.factories.backup = x.factory;
+    x.host.options.downloadTimeoutMs = 20;
+    x.owner.config.eosUiMigration = { preserveNamespace: true, source: 'nexowatt-ui.0' };
+    await x.host.start(); t.after(() => x.host.stop());
+    assert.equal(x.instances[0].options.preservedUiNamespace, 'nexowatt-ui.0');
+    const module = x.instances[0];
+    let release;
+    module.getDownload = () => new Promise(resolve => { release = resolve; });
+    const timedOut = x.host.download('backup', 'test.nwb');
+    await assert.rejects(timedOut, /TIMEOUT/);
+    const late = new PassThrough(); release({ stream: late, filename: 'test.nwb' });
+    await new Promise(resolve => setImmediate(resolve));
+    assert.equal(late.destroyed, true);
+    assert.equal(x.host.entries.get('backup').downloads.size, 0);
+    x.host.options.downloadTimeoutMs = 1000;
+    const streams = Array.from({ length: 4 }, () => new PassThrough());
+    let opened = 0;
+    module.getDownload = async () => ({ stream: streams[opened++], filename: 'test.nwb' });
+    await Promise.all(streams.map(() => x.host.download('backup', 'test.nwb')));
+    await assert.rejects(x.host.download('backup', 'test.nwb'), /RATE_LIMIT/);
+    assert.equal(opened, 4);
+    streams[0].destroy(); await new Promise(resolve => setImmediate(resolve));
+    module.getDownload = () => new Promise(resolve => { release = resolve; });
+    const stopped = x.host.download('backup', 'test.nwb');
+    const rejected = assert.rejects(stopped, /INACTIVE/);
+    await new Promise(resolve => setImmediate(resolve));
+    await x.host.stop();
+    const lateStopped = new PassThrough(); release({ stream: lateStopped, filename: 'test.nwb' });
+    await rejected;
+    assert.equal(lateStopped.destroyed, true);
+    assert.ok(streams.every(stream => stream.destroyed));
+});
+
+test('backup data-folder inventory exposes only bounded paths and rejects revoked or malformed reads', async t => {
+    const x = setup({ devices: { enabled: false }, eebus: { enabled: false }, backup: { enabled: true } });
+    x.host.options.factories.backup = x.factory;
+    await x.host.start(); t.after(() => x.host.stop());
+    const adapter = x.instances[0].options.adapter;
+    x.objects.set('system.adapter.sample.0', { _id: 'system.adapter.sample.0', type: 'instance',
+        common: { dataFolder: 'sample.0' }, native: { password: 'must-not-cross-capability' } });
+    assert.deepEqual(await adapter.getBackupDataFolders(), ['sample.0']);
+    x.objects.get('system.adapter.sample.0').common.dataFolder = 'a'.repeat(4097);
+    await assert.rejects(adapter.getBackupDataFolders(), /DATA_FOLDER_INVENTORY/);
+    x.objects.get('system.adapter.sample.0').common.dataFolder = 'sample.0';
+    const get = x.owner.getObjectViewAsync;
+    x.owner.getObjectViewAsync = async (...args) => { const result = await get(...args); x.owner.owned = false; return result; };
+    await assert.rejects(adapter.getBackupDataFolders(), /INACTIVE/);
 });

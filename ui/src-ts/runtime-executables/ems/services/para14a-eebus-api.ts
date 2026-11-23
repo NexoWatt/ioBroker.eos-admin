@@ -195,7 +195,7 @@ class Para14aEebusDirectApi {
   }
 
   attachHostedBridge(bridge: HostedBridge): void {
-    if (hostedBridges.has(this) || bridge.sourceInstance !== `${this.adapter.namespace}.eebus`
+    if (hostedBridges.has(this) || bridge.sourceInstance !== `${this.adapter.hostNamespace || this.adapter.namespace}.eebus`
       || !/^eos-admin\.\d+\.eebus$/.test(bridge.sourceInstance)
       || typeof bridge.canOperate !== 'function' || typeof bridge.sendFeedback !== 'function') {
       throw new Error('EOS_EEBUS_BRIDGE_INVALID');
