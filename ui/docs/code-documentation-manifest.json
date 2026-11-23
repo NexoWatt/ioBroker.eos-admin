@@ -1133,13 +1133,43 @@
     },
     {
       "path": "src-ts/runtime-executables/lib/smarthome-contract.ts",
-      "sourceHash": "4431b17227ce4550291ae02489f1c4884e86e14ec3f1ca0cc82267f2eeb0a087",
-      "codeHash": "a41854258ea68f9432ee8fda272bb1f2e10d8f57c2ed3fb9ef8df9e0f96afd1c"
+      "sourceHash": "cdf6b19257b869422abe09dd28b89471c37d335c6377c5df12b7367678bd4716",
+      "codeHash": "e836fa6ab55de76745adfeac90e0feb2fd8526381da76b0cfe43650a32a44913"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/smarthome-custom-contract.ts",
+      "sourceHash": "b7e56a8abc4a27815f3b962b0f360af1b9f1edd38f02885999751b92a51b27b6",
+      "codeHash": "680d8869ba6c8490923a97549724ffa7c7ea31ab9ac1bf850d564400f8a7bd43"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/smarthome-device-aliases.ts",
+      "sourceHash": "b79b8d18d65eecedf5b84203ddf181adfdfeab1fbca2aebbdf373edf60dc08e5",
+      "codeHash": "d16675d7ce3cdc6c9d5637205606c44ec97eccbc84385621baad6f2aefe26a0a"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/smarthome-device-api.ts",
+      "sourceHash": "9f73e71fc18b1af544aa5c8e29a3ff87b62aa0e6ae26bb573381d2cba20c4816",
+      "codeHash": "b367aebe29085fe843fdf5f75b9b6ba8baafcd9bae853ec2412b3c7d2e176f9b"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/smarthome-device-controls.ts",
+      "sourceHash": "e3e9cc8bdca359aca7821754aa5085333de61b99c598fdd55fafba4b2fb20cb9",
+      "codeHash": "07ea3d9b37100d93a1b287ada97446c29ea3a50171b1ca9eeeace2262f9668a3"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/smarthome-device-detection.ts",
+      "sourceHash": "b171608600be5612f6a79e312070d2a19eb5876992a019440e7d20fd53fb4265",
+      "codeHash": "fc49b82c3a07a92bebb8d0c003d7117ca11b061c51d4b2da4522fa5f4a641fe9"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/smarthome-device-legacy.ts",
+      "sourceHash": "0173ef9dc3c60c8b68da419700d1b11dc2c7cf9e88951d73150aa9bff3218202",
+      "codeHash": "ded5163bad55f42ab150a52730f1ad03ac88f9c43db310390c3d218191de569b"
     },
     {
       "path": "src-ts/runtime-executables/lib/smarthome-import.ts",
-      "sourceHash": "9dcb7e2a63b2a3ef52c9bba9b00a0766d823338b7cdb422973e86804e80e0be5",
-      "codeHash": "5b55eff43ed643529251e30c0d1f10afd59c9529e96201f4d1d397e1a3ea0283"
+      "sourceHash": "d942656ed1a59174ba5f3169e69e93e7bd282c6de9f68e4d03a98f2619b17cdf",
+      "codeHash": "fc47a06639d1ee5e3cb1e85fe944780849ceeee7f757d7ad8ea12f48aadf4bd8"
     },
     {
       "path": "src-ts/runtime-executables/lib/sse-runtime-guard.ts",
@@ -1163,8 +1193,8 @@
     },
     {
       "path": "src-ts/runtime-executables/main.ts",
-      "sourceHash": "ea90c6f81715b29638454810a6744e4d7bca5fadc88671e3c7e09cdc76260b81",
-      "codeHash": "2d76b764db272c6a7b64cd210d06d88af86d8ea5fa99d1a262679cd7c9bbab61"
+      "sourceHash": "ff6013a420d663d1034bf45e2b4ba094d7c4724c9e680ae2306c76a3f350602f",
+      "codeHash": "6833bf89fbfe1adbc7ead0f1054ce154b370d8b83e994f2d12b1d87e9ea36f8f"
     },
     {
       "path": "src-ts/runtime-executables/www/admin-guard.ts",
@@ -1332,14 +1362,49 @@
       "codeHash": "fbf4e3217509155f4e3ac5a9860cf3814810b89be7b036351c57e3b76a8ef621"
     },
     {
+      "path": "src-ts/runtime-executables/www/smarthome-alias-config.ts",
+      "sourceHash": "c6c5a42108349e9a2803c10c27cde0016cc7abc44bcfaa03280adb83215c0675",
+      "codeHash": "bd29d5bcfb4372e92ee579e25de8c12f023f14b9d5c30eabe7cc36e028b1a543"
+    },
+    {
       "path": "src-ts/runtime-executables/www/smarthome-config.ts",
-      "sourceHash": "11341ea442395aa9e23ed8dfbf22cea27cee11d64c6123f2190af4ff22bef95e",
-      "codeHash": "4cc8f1edf4530f29ada5c2221f93a525ed65323eaf47843b0215ed5d01cb1af9"
+      "sourceHash": "f0509a612aaa791e0cbe5620c6d9e0b0ff6640522930e25748b72694ed6cc9f0",
+      "codeHash": "f8fe6c9d222b72858c8dd45543973d076ca6cd59aa45d1d1b6ee7c906749652c"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/smarthome-custom-config.ts",
+      "sourceHash": "0ac2a997fe11eb39cbb5de252d1d04f0e1d9f466652755139798dc9ea8be34aa",
+      "codeHash": "a4c7e27e36d10d6ff56c2298276a1ad00d73ffb012122fb68b8ced96103a0ee9"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/smarthome-custom-views.ts",
+      "sourceHash": "0a4d1d9c16cafb84094ebcc140a8154841156a1df8ba81f136a47d59c0cfacc6",
+      "codeHash": "3d96eb9e296b65c24939731323364b9c0accf287bc7fc74dd548bc5a6beb781b"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/smarthome-device-categories.ts",
+      "sourceHash": "08041f0f46d0b49282f19e5117427dfa4622f91f72196328b74ef02b2a80db09",
+      "codeHash": "d0a140bef1448ab090445b26a4159d69e83b62b56fe92f6d1f95e1353882cf6b"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/smarthome-device-config.ts",
+      "sourceHash": "b9b97a207cc86abb3b2226246dbc5299a1bbc7de0207554608737b748c5447e8",
+      "codeHash": "70c24c8841f67ed96a4013aa23d5d448fd73e9bb7782e77f76e8e22ae94d10e0"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/smarthome-device-controls.ts",
+      "sourceHash": "827865b7ebb9dd0d6208491cb5829939fcef55d3ce1d535555aedd9e965a3eac",
+      "codeHash": "ae31065aeeb832abb3b87b005ad4d0fd9c5068a9294e4693e6df26ba9e3d5a2f"
     },
     {
       "path": "src-ts/runtime-executables/www/smarthome-feedback.ts",
-      "sourceHash": "c006e534e130a9da08a35245fc40f9662497148187aa046b738540ca2b0924ea",
-      "codeHash": "6378c5510ca899e720ae894cd9d1564a8908ed18389b5a8ba573cbebdb034d43"
+      "sourceHash": "523f87bfc12a4cea5ec9c86c3c798ffb68fd774686fd146e69a9ca3a11d25c16",
+      "codeHash": "d2d4bc79d631016ba6d6168970ae469a8b83f5f5f0bed79779c036e02fffd46c"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/smarthome-layout-editor.ts",
+      "sourceHash": "4012c7f9aa0b6619304fd35bc20b4a1d45eb93f099b178f6dce684253903eb4a",
+      "codeHash": "08f5c123748f76569136bf94110b888489d595b562f367400d93d252b923ab05"
     },
     {
       "path": "src-ts/runtime-executables/www/smarthome-presentation.ts",
@@ -1353,8 +1418,8 @@
     },
     {
       "path": "src-ts/runtime-executables/www/smarthome.ts",
-      "sourceHash": "60acd56e451dd37da76072584c4ba4cf5a70a209fb6e0ac08500711224aca963",
-      "codeHash": "14336c29c22c31941b9c95fbe6957e65a78aef6bfd519e031fb29b52edd26b0e"
+      "sourceHash": "948a256d3377aca135c38f4d818955e5b01c0fb86b327f1e6b2f372c774f1f90",
+      "codeHash": "ea77916d65c41b24213baab332cd4fd023da977980cf1d1490a823e9c8eec03d"
     },
     {
       "path": "src-ts/runtime-executables/www/storagefarm.ts",
@@ -2324,11 +2389,35 @@
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/lib/smarthome-contract.md",
-      "hash": "11e29c71563cb80f3c353b727c20c71f1f0610f52f9c6720a97e7d765e15131f"
+      "hash": "61684ad6cbfdea3bb3b8e489cd0d07300b46c7a901a2c383a99760a432d58787"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/smarthome-custom-contract.md",
+      "hash": "027515ba8401d932105fe08bff51fd6186a3f723f114eb2f327ed5370abeb999"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/smarthome-device-aliases.md",
+      "hash": "d99ab2d7fc8064e9fdc05d10547db9e61ed973e554ab1e2879a8201d58386ccf"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/smarthome-device-api.md",
+      "hash": "8c50997f12d34bb79e99f8a6572e50fc7f843e8b8b677e5500ade4ace1f67a1a"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/smarthome-device-controls.md",
+      "hash": "10538b148d53a2b7d5814febf5aba7e5ff703651e6b13f4e851a2d1c1d6fae9e"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/smarthome-device-detection.md",
+      "hash": "101cfc5b99fa2e605aaa5f5d8b42162dbe5fc8f4dc022d1ad66ad129f27a2bb3"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/smarthome-device-legacy.md",
+      "hash": "0dbc45cdadda613761bdef3014ed260a71fb73be09c47e8063366cf155f37cb3"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/lib/smarthome-import.md",
-      "hash": "7c138dfc783ea59e5caa61a13c728b27961f794a3b370642a587ae51288b9f7e"
+      "hash": "9feca966061bed4db1bc4fe468479595d0c5ff1161829f9b607044775f317b37"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/lib/sse-runtime-guard.md",
@@ -2348,7 +2437,7 @@
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/main.md",
-      "hash": "e6c249d5f1b56bca64ac05f88e156a3f298390d1cea86ff4ff537ffd3ed8bc9d"
+      "hash": "d3a6891cf26c2441263d0e0f8d31d66a663cef14342cb5ea6dcfb362c39fcc0d"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/admin-guard.md",
@@ -2483,12 +2572,40 @@
       "hash": "8c98a760bab1421a3e8eb3157c1a4ed976ba9c9b84a27016b11980ae88c11d3c"
     },
     {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/smarthome-alias-config.md",
+      "hash": "2e921fc02227709781d704e7df2e702d40e0b9456cacb637941b43b510854891"
+    },
+    {
       "path": "docs/quellcode/src-ts/runtime-executables/www/smarthome-config.md",
-      "hash": "8c52bb4c61b5e145e0881b00d137e35c18fd7278703d73876220ed5947def4d9"
+      "hash": "dafe4727e6af7bbbe4c8c6b7c63a74ef3d64f6ba4058db77bb7b27562f7ae9b9"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/smarthome-custom-config.md",
+      "hash": "7a03c9e84de99e3a7beb830644804259fcb3fb148c1cc263ebee1499ff36ab11"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/smarthome-custom-views.md",
+      "hash": "989911f2d7ab9e386a82f2035914952553e430cde497063c070c8fee4a2c7ac4"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/smarthome-device-categories.md",
+      "hash": "5ec590281b9e83b50c54693008611f7b487ecc2cc93d5189c92a0a32d3ddc77d"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/smarthome-device-config.md",
+      "hash": "4c83efddba35ece591ba43d61191e753c15fb84e9cea281c6ac3125e4d4995dd"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/smarthome-device-controls.md",
+      "hash": "53cfd08c8056d83b4cfb6cddf21690b9f653594e9aede28d04af95344bd90d61"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/smarthome-feedback.md",
-      "hash": "11bcb516340694488830712b77d075b6ae875ccc0813d7d38b2d2b3ca0f6a94a"
+      "hash": "b80cc690314a459b8894fb2d8ac107dc39785209a59979301aaa1ea0ce7c5aac"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/smarthome-layout-editor.md",
+      "hash": "c3e4057380602855facfbecb184863168c85b89be1077136fdb6a9d83fcbf888"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/smarthome-presentation.md",
@@ -2500,7 +2617,7 @@
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/smarthome.md",
-      "hash": "eac528bf00897cf8a6a2cc635db4d6e4383dcf50284d99af95c49472dc0209b5"
+      "hash": "a7c644d7c81489eefce8949bbfed03068c0ea5e6ccf7c76851e45e48fbf1c35e"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/storagefarm.md",
@@ -2552,7 +2669,7 @@
     },
     {
       "path": "docs/QUELLCODE_VERKNUEPFUNGEN_DE.md",
-      "hash": "ce7f95e0ada9ba4acc06d8fc3d7a62c64299b01d30b298a990376db2172f3f94"
+      "hash": "09279a6bb6f3dfb4da1617706c7ceb7b161fac4f4afc5a1f3f0705f914ff3f64"
     }
   ]
 }

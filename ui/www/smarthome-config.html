@@ -31,6 +31,9 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="NexoWatt EOS">
   <script src="/static/nw-i18n.js" defer></script>
+<link href="/static/smarthome-device-config.css?v=9.0.10" rel="stylesheet"/>
+<link href="/static/smarthome-custom-config.css?v=9.0.10" rel="stylesheet"/>
+<link href="/static/smarthome-config-workspace.css?v=9.0.10" rel="stylesheet"/>
 </head>
 <body data-nw-required-capability="smarthome.configure" data-nw-required-role="Installer oder Admin" data-nw-page-name="SmartHome-Einrichtung" class="nw-cockpit-page nw-cockpit-skin nw-page-smarthome-config">
 <!-- Abschnitt: Kopfbereich/Navigation. Wird durch CSS und teils durch JS-Menülogik gesteuert. -->
@@ -68,16 +71,7 @@
   </div>
 </header>
 
-  <section class="nw-page-hero" aria-label="Seitenübersicht">
-    <div>
-      <div class="nw-page-hero__eyebrow">Setup</div>
-      <div class="nw-page-hero__title">SmartHome Konfiguration</div>
-      <div class="nw-page-hero__subtitle">Gebäude, Räume, Geräte und Auto-Erkennung im einheitlichen Cockpit-Stil.</div>
-    </div>
-    <div class="nw-page-hero__right">
-      <span class="nw-page-hero__pill">Kundenbereich</span>
-    </div>
-  </section>
+
 
 
 <!-- Abschnitt: Hauptinhalt der Seite. DOM-IDs in diesem Bereich werden durch zugehörige JS-Dateien befüllt. -->
@@ -105,7 +99,22 @@
       </div>
     </div>
 
-    <section class="nw-config-section" aria-labelledby="nw-smarthome-activation-title">
+    <nav class="nw-shcfg-steps" aria-label="SmartHome-Einrichtung">
+      <button id="nw-shcfg-step-building" type="button"><span>01</span> Gebäude &amp; Räume</button>
+      <button id="nw-shcfg-step-devices" type="button"><span>02</span> Geräte &amp; Datenpunkte</button>
+      <button id="nw-shcfg-step-layout" type="button"><span>03</span> Darstellung &amp; Anordnung</button>
+      <details class="nw-shcfg-more"><summary>Weitere Funktionen</summary><div>
+        <button id="nw-shcfg-step-detect" type="button">Auto-Erkennung</button>
+        <button id="nw-shcfg-step-scenes" type="button">Szenen</button>
+        <button id="nw-shcfg-step-timers" type="button">Zeitschaltuhren</button>
+        <button id="nw-shcfg-step-classic" type="button">Alle Einstellungen</button>
+        <button id="nw-shcfg-step-home" type="button">Projektübersicht</button>
+      </div></details>
+    </nav>
+
+    <details id="nw-shcfg-activation-panel" class="nw-shcfg-activation-panel">
+      <summary>SmartHome-Aktivierung</summary>
+      <section class="nw-config-section" aria-labelledby="nw-smarthome-activation-title">
       <div class="nw-config-section__head">
         <h2 id="nw-smarthome-activation-title" class="nw-config-section__title">SmartHome-Aktivierung</h2>
       </div>
@@ -118,6 +127,31 @@
       <div id="nw-smarthome-activation-status" class="nw-config-status" role="status" aria-live="polite">SmartHome-Status wird geladen …</div>
     </section>
 
+    </details>
+
+    <section id="nw-shcfg-devices-workspace" class="nw-config-section nw-shcfg-workspace" style="display:none;" aria-labelledby="nw-shcfg-devices-title">
+      <div class="nw-shcfg-workspace__head">
+        <div><h2 id="nw-shcfg-devices-title">Geräte &amp; Datenpunkte</h2><p>Gerät auswählen, zuordnen und die benötigten Einstellungen aufklappen.</p></div>
+        <div class="nw-shcfg-workspace__actions">
+          <button id="nw-shcfg-devices-add" class="nw-config-btn" type="button">+ Gerät</button>
+          <button id="nw-shcfg-devices-detect" class="nw-config-btn" type="button">Automatisch erkennen</button>
+          <button id="nw-shcfg-devices-templates" class="nw-config-btn" type="button">Vorlagen öffnen</button>
+        </div>
+      </div>
+      <div class="nw-shcfg-device-workspace__layout">
+        <div id="nw-shcfg-device-browser"></div>
+        <aside id="nw-shcfg-device-properties" class="nw-shcfg-device-properties" aria-label="Einstellungen des ausgewählten Geräts"></aside>
+      </div>
+    </section>
+
+    <section id="nw-shcfg-layout-workspace" class="nw-config-section nw-shcfg-workspace" style="display:none;" aria-labelledby="nw-shcfg-layout-title">
+      <div class="nw-shcfg-workspace__head">
+        <div><h2 id="nw-shcfg-layout-title">Darstellung &amp; Anordnung</h2><p>Kachelpositionen innerhalb eines Raums verschieben oder direkt tauschen.</p></div>
+        <button id="nw-shcfg-layout-edit" class="nw-config-btn" type="button">Geräteeinstellungen öffnen</button>
+      </div>
+      <div id="nw-shcfg-layout-editor"></div>
+    </section>
+
     <!-- Home / Module tiles -->
     <section id="nw-shcfg-home" class="nw-config-section nw-shcfg-home">
       <div class="nw-config-section__head">
@@ -126,9 +160,11 @@
       <div class="nw-shcfg-home__grid">
         <button class="nw-shcfg-tile" id="nw-shcfg-tile-building" type="button">
           <div class="nw-shcfg-tile__icon">🏠</div>
-          <div class="nw-shcfg-tile__title">Gebäude &amp; Geräte</div>
-          <div class="nw-shcfg-tile__desc">Räume &amp; Geräte per Drag &amp; Drop konfigurieren.</div>
+          <div class="nw-shcfg-tile__title">Gebäude &amp; Räume</div>
+          <div class="nw-shcfg-tile__desc">Geschosse und Räume übersichtlich anlegen.</div>
         </button>
+        <button class="nw-shcfg-tile" id="nw-shcfg-tile-devices" type="button"><div class="nw-shcfg-tile__icon">⚙</div><div class="nw-shcfg-tile__title">Geräte &amp; Datenpunkte</div><div class="nw-shcfg-tile__desc">Geräte suchen, zuordnen und einzeln bearbeiten.</div></button>
+        <button class="nw-shcfg-tile" id="nw-shcfg-tile-layout" type="button"><div class="nw-shcfg-tile__icon">▦</div><div class="nw-shcfg-tile__title">Darstellung &amp; Anordnung</div><div class="nw-shcfg-tile__desc">Kacheln verschieben und Positionen tauschen.</div></button>
         <button class="nw-shcfg-tile" id="nw-shcfg-tile-detect" type="button">
           <div class="nw-shcfg-tile__icon">🪄</div>
           <div class="nw-shcfg-tile__title">Auto‑Erkennung</div>
@@ -151,7 +187,7 @@
         </button>
       </div>
       <div class="nw-shcfg-home__hint">
-        Tipp: Starte mit <b>Gebäude &amp; Geräte</b> und richte zuerst Räume und Geräte ein. Danach kannst du im Frontend direkt bedienen ✨
+        Starte mit <b>Gebäude &amp; Räume</b>, ordne anschließend die Geräte zu und lege zuletzt ihre Kachelpositionen fest.
       </div>
     </section>
 
@@ -304,7 +340,7 @@
       <div class="nw-shcfg-builder__topbar">
         <button class="nw-config-btn nw-config-btn--ghost" id="nw-shcfg-builder-back" type="button">← Übersicht</button>
         <div class="nw-shcfg-builder__title">
-          Gebäude &amp; Geräte (Drag &amp; Drop)
+          Gebäude &amp; Räume
         </div>
         <div class="nw-shcfg-builder__actions">
           <button class="nw-config-btn nw-config-btn--ghost" id="nw-shcfg-builder-open-classic" type="button">Expertenmodus</button>
@@ -518,6 +554,7 @@
         <div class="nw-config-row__actions">
           <select id="nw-config-template-select" class="nw-config-select" style="max-width:260px;">
 	            <option value="">Vorlage…</option>
+            <option value="device">Gerät mit vollständiger Bedienung</option>
             <option value="switch">Schalter</option>
             <option value="dimmer">Dimmer</option>
             <option value="color">Farb‑Licht (RGB)</option>
@@ -544,7 +581,11 @@
 
 <script src="/static/nw-shell.js"></script>
 <script src="/static/smarthome-activation.js"></script>
-<script src="/static/smarthome-config.js"></script>
+<script src="/static/smarthome-custom-config.js?v=9.0.10"></script>
+<script src="/static/smarthome-device-config.js?v=9.0.10"></script>
+<script src="/static/smarthome-alias-config.js?v=9.0.10"></script>
+<script src="/static/smarthome-layout-editor.js?v=9.0.10"></script>
+<script src="/static/smarthome-config.js?v=9.0.10"></script>
 
 
 

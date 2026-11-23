@@ -1,0 +1,19 @@
+✔ move and swap return order patches only, preserving room slots and original mappings (4.27829ms)
+✔ invalid IDs, duplicate IDs and room boundaries fail before any ordering change (1.425686ms)
+✔ keyboard and visible buttons operate within the complete room order while filters remain active (9.22973ms)
+✔ ordinary tile activation restores focus to the rebuilt layout button without changing order (1.44868ms)
+✔ target selector swaps explicit positions, rejected transactions preserve the visible order (1.711687ms)
+✔ drag/drop uses only this editor internal selection and cannot move across rooms (1.443382ms)
+✔ device workspace search/filter and malicious stored type names stay text-only (1.460597ms)
+✔ saved device.order survives normalization and JSON reload; classic numeric moves use final positions (398.455716ms)
+✔ real config transaction applies only order and rejects stale room/config changes atomically (72.146609ms)
+✔ technical icon names use SVG fallbacks and cannot expose prototype members as markup (102.913538ms)
+✔ configuration HTML and scoped CSS retain all module hooks and full-width responsive floor layout (26.177202ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 999.088602

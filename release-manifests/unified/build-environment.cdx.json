@@ -2,10 +2,10 @@
   "$schema": "http://cyclonedx.org/schema/bom-1.5.schema.json",
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
-  "serialNumber": "urn:uuid:39a28539-935e-415d-9258-10305a236c4e",
+  "serialNumber": "urn:uuid:529374a6-0986-45e0-92dc-5884b59e4f3f",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-11-23T13:01:27.822Z",
+    "timestamp": "2026-11-23T14:06:59.793Z",
     "lifecycles": [
       {
         "phase": "build"
@@ -19,14 +19,14 @@
       }
     ],
     "component": {
-      "bom-ref": "iobroker.eos-admin@9.0.9",
+      "bom-ref": "iobroker.eos-admin@9.0.10",
       "type": "library",
       "name": "iobroker.eos-admin",
-      "version": "9.0.9",
+      "version": "9.0.10",
       "scope": "required",
       "author": "NexoWatt",
       "description": "NexoWatt EOS: licensed local energy management, dashboard and ioBroker system administration in one adapter.",
-      "purl": "pkg:npm/iobroker.eos-admin@9.0.9",
+      "purl": "pkg:npm/iobroker.eos-admin@9.0.10",
       "properties": [],
       "externalReferences": []
     }
@@ -3102,19 +3102,19 @@
       ]
     },
     {
-      "bom-ref": "@iobroker/type-detector@5.0.10",
+      "bom-ref": "@iobroker/type-detector@6.2.0",
       "type": "library",
       "name": "@iobroker/type-detector",
-      "version": "5.0.10",
+      "version": "6.2.0",
       "scope": "required",
       "author": "bluefox",
       "description": "Detects devices in ioBroker for Material, Google home, Homekit, ...",
-      "purl": "pkg:npm/%40iobroker/type-detector@5.0.10",
+      "purl": "pkg:npm/%40iobroker/type-detector@6.2.0",
       "properties": [],
       "externalReferences": [
         {
           "type": "distribution",
-          "url": "https://registry.npmjs.org/@iobroker/type-detector/-/type-detector-5.0.10.tgz"
+          "url": "https://registry.npmjs.org/@iobroker/type-detector/-/type-detector-6.2.0.tgz"
         },
         {
           "type": "vcs",
@@ -3132,7 +3132,7 @@
       "hashes": [
         {
           "alg": "SHA-512",
-          "content": "e70b99e32d6d3a2b8501201806d5d7c116a1422c25208b92699136f1add37ea71d32d7969bbbefd07f7bc5d8c1c20828ea5a2f9d5fb4559d315165f1bd58c3b4"
+          "content": "70487eeedb2a491d6431ab588cd69bd800ad6a1e7fdd378480f95fb52edc292cd9aabe660def4e3a342039a12021be440a2ab666f632a887ef59a7d00e12a9ce"
         }
       ],
       "licenses": [
@@ -31852,12 +31852,12 @@
   ],
   "dependencies": [
     {
-      "ref": "iobroker.eos-admin@9.0.9",
+      "ref": "iobroker.eos-admin@9.0.10",
       "dependsOn": [
         "@iobroker/adapter-core@3.4.3",
         "@iobroker/plugin-docker@1.2.1",
         "@iobroker/socket-classes@2.10.0",
-        "@iobroker/type-detector@5.0.10",
+        "@iobroker/type-detector@6.2.0",
         "@iobroker/ws-server@4.5.2",
         "@tsconfig/node22@22.0.6",
         "ajv@8.20.0",
@@ -32487,7 +32487,7 @@
       ]
     },
     {
-      "ref": "@iobroker/type-detector@5.0.10",
+      "ref": "@iobroker/type-detector@6.2.0",
       "dependsOn": []
     },
     {

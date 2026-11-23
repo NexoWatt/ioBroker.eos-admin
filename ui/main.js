@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/main.ts
- * Quell-Hash: sha256:ea90c6f81715b29638454810a6744e4d7bca5fadc88671e3c7e09cdc76260b81
+ * Quell-Hash: sha256:ff6013a420d663d1034bf45e2b4ba094d7c4724c9e680ae2306c76a3f350602f
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -35,6 +35,11 @@ const express = require('express4');
 const { safeHttpFailure, safeConfigurationFailure, createPublicHttpError } = require('./lib/http-error-boundary');
 const { createHostedHttpHandler } = require('./lib/hosted-http-boundary');
 const { enrichSmartHomeImportSuggestion, reconcileSmartHomeImportSuggestions, normalizeSmartHomeCameraStateUrl } = require('./lib/smarthome-import');
+const { executeLegacyDeviceWrite } = require('./lib/smarthome-device-legacy');
+const { normalizeCustomView } = require('./lib/smarthome-custom-contract');
+const { normalizeDeviceControls, getControlProfiles } = require('./lib/smarthome-device-controls');
+const { registerSmartHomeDeviceApi, createDeviceSnapshotReader, buildDeviceControls } = require('./lib/smarthome-device-api');
+const { cleanControls, extendSuggestion } = require('./lib/smarthome-device-detection');
 const { smartHomeEnabled, registerSmartHomeActivationApi } = require('./lib/smarthome-activation');
 const { readPreservedUiStates } = require('./lib/preserved-ui-config');
 const { createRuntimeFileSender, runtimeProxyPrefix, rewriteRuntimeProxyHtml, isHttpsRuntimeProxy } = require('./lib/runtime-proxy-html');
@@ -144,6 +149,7 @@ const {
 // NexoLogic (node/graph) runtime engine
 const { NexoLogicEngine, validateNexoLogicConfig } = require('./ems/nexologic-engine');
 const {
+  retainDeclaredLegacyWrites: nwRetainDeclaredLegacyWrites,
   normalizeSmartHomeDevice: nwNormalizeSmartHomeDeviceContract,
   normalizeSmartHomeConfig: nwNormalizeSmartHomeConfigContract,
   validateSmartHomeConfig: nwValidateSmartHomeConfigContract,
@@ -1814,17 +1820,35 @@ class NexoWattVis extends HostedAdapter {
     return { ok: errors.length === 0, sceneId: id, executed, errors };
   }
 
-  async _nwWriteSmartHomeSceneState(dpId, value) {
+  async _nwWriteProfiledSmartHomeState(dev, dpId, value, sessionCheck) {
+    if (!dev || !dev.io || !dev.io.deviceControls) return this.setForeignStateAsync(dpId, value, false);
+    return executeLegacyDeviceWrite(dev, dpId, value, {
+      device: id => (this.smartHomeDevices && this.smartHomeDevices.length ? this.smartHomeDevices : this.buildSmartHomeDevicesFromConfig()).find(device => device.id === id),
+      readObject: id => this.getForeignObjectAsync(id), readState: id => this.getForeignStateAsync(id),
+      writeState: (id, target) => this.setForeignStateAsync(id, target, false),
+      authorize: async () => {
+        if (this._nwShuttingDown || this._bridge.canWrite() !== true || !centralLicenseSnapshot(this._bridge).ok
+          || !this._nwHasCentralLicenseGrant('smartHome', true) || !smartHomeEnabled(this.config, this._nwNativeConfigBase)) return false;
+        return sessionCheck ? await sessionCheck() : true;
+      },
+    });
+  }
+
+  async _nwWriteSmartHomeSceneState(dpId, value, dev) {
     if (!this._nwHasCentralLicenseGrant('smartHome', true)) throw new Error('EOS_FEATURE_LICENSE_REQUIRED');
     if (this._nwShuttingDown) throw new Error('adapter shutting down');
     if (!dpId) throw new Error('missing datapoint');
-    await this.setForeignStateAsync(dpId, value, false);
+    await this._nwWriteProfiledSmartHomeState(dev, dpId, value);
     return true;
   }
 
-  async _nwPulseSmartHomeSceneDatapoint(dpId, pulseMs) {
+  async _nwPulseSmartHomeSceneDatapoint(dpId, pulseMs, dev, sessionCheck) {
     if (!dpId) return false;
-    await this._nwWriteSmartHomeSceneState(dpId, true);
+    if (dev?.io?.deviceControls) {
+      await this._nwWriteProfiledSmartHomeState(dev, dpId, true, sessionCheck);
+      return true;
+    }
+    await this._nwWriteSmartHomeSceneState(dpId, true, dev);
     const delay = Math.max(50, Math.min(60000, Number(pulseMs) || 250));
     if (!this._nwSmartHomePulseTimers) this._nwSmartHomePulseTimers = new Map();
     const timer = setTimeout(() => {
@@ -1888,9 +1912,9 @@ class NexoWattVis extends HostedAdapter {
       if (typeof target !== 'boolean') throw new Error('invalid switch value');
       if (sw.invert || (dev.behavior && dev.behavior.invert)) target = !target;
       if (dev.behavior && dev.behavior.commandMode === 'momentary' && target) {
-        return this._nwPulseSmartHomeSceneDatapoint(dpId, dev.behavior.pulseMs);
+        return this._nwPulseSmartHomeSceneDatapoint(dpId, dev.behavior.pulseMs, dev);
       }
-      await this._nwWriteSmartHomeSceneState(dpId, target);
+      await this._nwWriteSmartHomeSceneState(dpId, target, dev);
       return true;
     }
 
@@ -1908,7 +1932,7 @@ class NexoWattVis extends HostedAdapter {
         const safety = await this._nwCheckSmartHomeCoverSafety(dev);
         if (!safety.ok) throw new Error(safety.message || safety.error);
       }
-      await this._nwWriteSmartHomeSceneState(cfg.writeId, target);
+      await this._nwWriteSmartHomeSceneState(cfg.writeId, target, dev);
       return true;
     }
 
@@ -1920,7 +1944,7 @@ class NexoWattVis extends HostedAdapter {
         const dpId = cover.tiltWriteId;
         const raw = Number(String(value).replace(',', '.'));
         if (!dpId || !Number.isFinite(raw)) return false;
-        await this._nwWriteSmartHomeSceneState(dpId, Math.max(0, Math.min(100, raw)));
+        await this._nwWriteSmartHomeSceneState(dpId, Math.max(0, Math.min(100, raw)), dev);
         return true;
       }
       const action = typeof value === 'string' ? value.trim().toLowerCase() : value;
@@ -1942,8 +1966,9 @@ class NexoWattVis extends HostedAdapter {
           payload = cover.actionMap && Object.prototype.hasOwnProperty.call(cover.actionMap, 'stop') ? cover.actionMap.stop : true;
         }
         if (!dpId) return false;
+        if (io.deviceControls && ((action === 'up' && cover.upId) || (action === 'down' && cover.downId))) payload = true;
         payload = await this._nwCoerceSmartHomeSceneValueForDatapoint(dpId, payload);
-        await this._nwWriteSmartHomeSceneState(dpId, payload);
+        await this._nwWriteSmartHomeSceneState(dpId, payload, dev);
         return true;
       }
       const cfg = io.level || {};
@@ -1951,7 +1976,7 @@ class NexoWattVis extends HostedAdapter {
       if (!cfg.writeId || !Number.isFinite(raw)) return false;
       const safety = await this._nwCheckSmartHomeCoverSafety(dev);
       if (!safety.ok) throw new Error(safety.message || safety.error);
-      await this._nwWriteSmartHomeSceneState(cfg.writeId, Math.max(0, Math.min(100, raw)));
+      await this._nwWriteSmartHomeSceneState(cfg.writeId, Math.max(0, Math.min(100, raw)), dev);
       return true;
     }
 
@@ -1969,7 +1994,7 @@ class NexoWattVis extends HostedAdapter {
       const target = format === 'rgb'
         ? `${red},${green},${blue}`
         : ((format === 'int' || format === 'integer' || format === 'number') ? ((red << 16) + (green << 8) + blue) : `#${text.toLowerCase()}`);
-      await this._nwWriteSmartHomeSceneState(cfg.writeId, target);
+      await this._nwWriteSmartHomeSceneState(cfg.writeId, target, dev);
       return true;
     }
 
@@ -1983,7 +2008,7 @@ class NexoWattVis extends HostedAdapter {
       const step = typeof cfg.step === 'number' && cfg.step > 0 ? cfg.step : (normalized === 'white' ? 1 : 100);
       const clamped = Math.max(min, Math.min(max, raw));
       const target = Math.round((clamped - min) / step) * step + min;
-      await this._nwWriteSmartHomeSceneState(cfg.writeId, target);
+      await this._nwWriteSmartHomeSceneState(cfg.writeId, target, dev);
       return true;
     }
 
@@ -2003,7 +2028,7 @@ class NexoWattVis extends HostedAdapter {
         const step = typeof climate.step === 'number' && climate.step > 0 ? climate.step : 0.5;
         const clamped = Math.max(min, Math.min(max, raw));
         const target = Math.round((clamped - min) / step) * step + min;
-        await this._nwWriteSmartHomeSceneState(climate.setpointId, target);
+        await this._nwWriteSmartHomeSceneState(climate.setpointId, target, dev);
         return true;
       }
       const dpId = normalized === 'climatepower'
@@ -2015,7 +2040,7 @@ class NexoWattVis extends HostedAdapter {
         target = this._nwParseSmartHomeBoolean(value);
         if (typeof target !== 'boolean') throw new Error('invalid climate power value');
       } else target = await this._nwCoerceSmartHomeSceneValueForDatapoint(dpId, value);
-      await this._nwWriteSmartHomeSceneState(dpId, target);
+      await this._nwWriteSmartHomeSceneState(dpId, target, dev);
       return true;
     }
 
@@ -2025,18 +2050,18 @@ class NexoWattVis extends HostedAdapter {
       const pulseMs = dev.behavior && dev.behavior.pulseMs;
       if (action === 'play' || action === 'pause') {
         const explicitId = action === 'play' ? player.playId : player.pauseId;
-        if (explicitId) return this._nwPulseSmartHomeSceneDatapoint(explicitId, pulseMs);
+        if (explicitId) return this._nwPulseSmartHomeSceneDatapoint(explicitId, pulseMs, dev);
         if (!player.toggleId || !player.playingId) return false;
         const state = await this.getForeignStateAsync(player.playingId);
         const current = this._nwParseSmartHomeBoolean(state && state.val);
         if (typeof current !== 'boolean') throw new Error('player state unknown');
         const wanted = action === 'play';
         if (current === wanted) return true;
-        return this._nwPulseSmartHomeSceneDatapoint(player.toggleId, pulseMs);
+        return this._nwPulseSmartHomeSceneDatapoint(player.toggleId, pulseMs, dev);
       }
-      if (action === 'stop') return this._nwPulseSmartHomeSceneDatapoint(player.stopId, pulseMs);
-      if (action === 'next') return this._nwPulseSmartHomeSceneDatapoint(player.nextId, pulseMs);
-      if (action === 'prev' || action === 'previous') return this._nwPulseSmartHomeSceneDatapoint(player.prevId, pulseMs);
+      if (action === 'stop') return this._nwPulseSmartHomeSceneDatapoint(player.stopId, pulseMs, dev);
+      if (action === 'next') return this._nwPulseSmartHomeSceneDatapoint(player.nextId, pulseMs, dev);
+      if (action === 'prev' || action === 'previous') return this._nwPulseSmartHomeSceneDatapoint(player.prevId, pulseMs, dev);
       return false;
     }
 
@@ -2045,7 +2070,7 @@ class NexoWattVis extends HostedAdapter {
       if (normalized === 'playertts') {
         const text = String(value ?? '').trim();
         if (!player.ttsWriteId || !text || text.length > 1000) return false;
-        await this._nwWriteSmartHomeSceneState(player.ttsWriteId, text);
+        await this._nwWriteSmartHomeSceneState(player.ttsWriteId, text, dev);
         return true;
       }
       let dpId = '';
@@ -2079,7 +2104,7 @@ class NexoWattVis extends HostedAdapter {
         if (!dpId) return false;
         target = await this._nwCoerceSmartHomeSceneValueForDatapoint(dpId, value);
       }
-      await this._nwWriteSmartHomeSceneState(dpId, target);
+      await this._nwWriteSmartHomeSceneState(dpId, target, dev);
       return true;
     }
 
@@ -2104,7 +2129,7 @@ class NexoWattVis extends HostedAdapter {
         target = Math.round((clamped - min) / step) * step + min;
         if (valueType === 'integer') target = Math.round(target);
       }
-      await this._nwWriteSmartHomeSceneState(sensor.writeId, target);
+      await this._nwWriteSmartHomeSceneState(sensor.writeId, target, dev);
       return true;
     }
 
@@ -10422,6 +10447,11 @@ buildSmartHomeDevicesFromConfig() {
       }
 
       if (this._nwIsPlainObject(ioCfg.indicators)) dev.io.indicators = { ...ioCfg.indicators };
+      if (ioCfg.deviceControls) {
+        dev.io.deviceControls = normalizeDeviceControls(ioCfg.deviceControls);
+        nwRetainDeclaredLegacyWrites(ioCfg, dev.io);
+      }
+      if (cfgDev.customView) dev.customView = normalizeCustomView(cfgDev.customView);
       devices.push(dev);
     });
 
@@ -10986,6 +11016,10 @@ async getSmartHomeDevicesWithState() {
   };
 
   const result = [];
+  const deviceSnapshotReader = createDeviceSnapshotReader({
+    readObject: id => this.getForeignObjectAsync(id),
+    readState: id => this.getForeignStateAsync(id),
+  });
   for (const dev of devices) {
     const copy = JSON.parse(JSON.stringify(dev));
     copy.state = {};
@@ -11223,6 +11257,13 @@ async getSmartHomeDevicesWithState() {
       }
     } catch (_error) {}
 
+    if (dev.io && dev.io.deviceControls) {
+      try {
+        copy.deviceControls = await buildDeviceControls(dev.io.deviceControls, deviceSnapshotReader, behavior.readOnly === true, { staleAfterMs });
+      } catch (_deviceControlsError) {
+        copy.deviceControls = { profile: dev.io.deviceControls.profile, fields: [], error: 'EOS_CONTROL_SNAPSHOT_UNAVAILABLE' };
+      }
+    }
     result.push(copy);
   }
   return result;
@@ -12957,6 +12998,38 @@ app.get('/api/smarthome/devices', async (_req, res) => {
       }
     });
 
+// Vollständige Gerätefunktionen nutzen gespeicherte Profile und dieselbe EOS-Sitzung.
+registerSmartHomeDeviceApi(app, {
+  device: id => (this.smartHomeDevices && this.smartHomeDevices.length ? this.smartHomeDevices : this.buildSmartHomeDevicesFromConfig()).find(device => device.id === id),
+  readObject: id => this.getForeignObjectAsync(id),
+  readState: id => this.getForeignStateAsync(id),
+  writeState: (id, value) => this.setForeignStateAsync(id, { val: value, ack: false }),
+  canOperate: () => !this._nwShuttingDown && !this._nwMeshAppSaveInProgress && !this._meshCoordinator?.saving
+    && this._bridge.canWrite() === true && centralLicenseSnapshot(this._bridge).ok
+    && this._nwHasCentralLicenseGrant('smartHome', true) && smartHomeEnabled(this.config, this._nwNativeConfigBase),
+  authorize: async req => {
+    const access = await resolveStrictAccess(req);
+    return !!access && access.role !== 'none' && hasCapability(access, 'frontend.open');
+  },
+  createObjectIfAbsent: (id, object) => this.setForeignObjectNotExistsAsync(id, object),
+  authorizeMapping: async req => {
+    if (this._nwShuttingDown || this._nwMeshAppSaveInProgress || this._bridge.canWrite() !== true
+      || !centralLicenseSnapshot(this._bridge).ok || !this._nwHasCentralLicenseGrant('smartHome', true)) return false;
+    const access = await resolveStrictAccess(req);
+    return !!access && access.role !== 'none' && hasCapability(access, 'mapping.edit');
+  },
+  history: (id, options) => new Promise(resolve => {
+    const instance = String(this._nwGetHistoryInstance() || '').trim();
+    if (!instance) return resolve({ error: 'HISTORY_NOT_CONFIGURED' });
+    this.sendTo(instance, 'getHistory', { id, options: { ...options, addId: false, ignoreNull: true, limit: 1000 } }, resolve);
+  }),
+}, requireAuth, requireDpDiscovery);
+
+const nwWriteSmartHomeState = (req, dev, dpId, value) => this._nwWriteProfiledSmartHomeState(dev, dpId, value, async () => {
+  const access = await resolveStrictAccess(req);
+  return !!access && access.role !== 'none' && hasCapability(access, 'frontend.open');
+});
+
 // API-Kommentar: POST-Route. Zweck: stellt einen Web-/API-Endpunkt bereit. Zusammenhang: Frontend-Dateien in www/* können diesen Endpunkt direkt nutzen. Route/Handler: '/api/smarthome/toggle', requireAuth, async (req, res) => {
 app.post('/api/smarthome/toggle', requireAuth, async (req, res) => {
   try {
@@ -12982,7 +13055,10 @@ app.post('/api/smarthome/toggle', requireAuth, async (req, res) => {
       }
       return undefined;
     };
-    const writePulse = async (dpId, pulseMs) => this._nwPulseSmartHomeSceneDatapoint(dpId, pulseMs);
+    const writePulse = async (dpId, pulseMs) => {
+      if (dev.io.deviceControls) return nwWriteSmartHomeState(req, dev, dpId, true);
+      return this._nwPulseSmartHomeSceneDatapoint(dpId, pulseMs, dev);
+    };
 
     // Virtuelle Szene: Aktionen werden vollständig vorgeprüft, serialisiert und
     // gegen Rekursion geschützt. Ein fehlerhafter Lauf wird nicht als Erfolg
@@ -13029,7 +13105,7 @@ app.post('/api/smarthome/toggle', requireAuth, async (req, res) => {
         requested = current <= min;
       }
       const target = requested ? max : min;
-      await this.setForeignStateAsync(dpId, target, false);
+      await nwWriteSmartHomeState(req, dev, dpId, target, false);
       return res.json({ ok: true, state: { level: target, on: requested } });
     }
 
@@ -13054,7 +13130,7 @@ app.post('/api/smarthome/toggle', requireAuth, async (req, res) => {
       requested = !logical;
     }
     const rawTarget = dev.behavior && dev.behavior.invert ? !requested : requested;
-    await this.setForeignStateAsync(dpId, rawTarget, false);
+    await nwWriteSmartHomeState(req, dev, dpId, rawTarget, false);
     return res.json({ ok: true, state: { on: requested } });
   } catch (e) {
     this.log.warn('SmartHome toggle API error: ' + e.message);
@@ -13136,7 +13212,7 @@ app.post('/api/smarthome/level', requireAuth, async (req, res) => {
     const target = Math.round((clamped - min) / step) * step + min;
 
     const dpId = levelCfg.writeId || levelCfg.readId;
-    await this.setForeignStateAsync(dpId, target);
+    await nwWriteSmartHomeState(req, dev, dpId, target);
 
     const state = { level: target, on: target > min };
     if (dev.type === 'blind') state.position = target;
@@ -13185,7 +13261,7 @@ app.post('/api/smarthome/color', requireAuth, async (req, res) => {
       const value = format === 'rgb'
         ? `${red},${green},${blue}`
         : ((format === 'int' || format === 'integer' || format === 'number') ? ((red << 16) + (green << 8) + blue) : ('#' + text.toLowerCase()));
-      await this.setForeignStateAsync(dpId, value, false);
+      await nwWriteSmartHomeState(req, dev, dpId, value, false);
       state.color = '#' + text.toLowerCase();
     }
 
@@ -13200,7 +13276,7 @@ app.post('/api/smarthome/color', requireAuth, async (req, res) => {
       const step = typeof cfg.step === 'number' && cfg.step > 0 ? cfg.step : 1;
       const clamped = Math.max(min, Math.min(max, raw));
       const value = Math.round((clamped - min) / step) * step + min;
-      await this.setForeignStateAsync(dpId, value, false);
+      await nwWriteSmartHomeState(req, dev, dpId, value, false);
       state.level = value;
       state.on = value > min;
     }
@@ -13216,7 +13292,7 @@ app.post('/api/smarthome/color', requireAuth, async (req, res) => {
       const step = typeof cfg.step === 'number' && cfg.step > 0 ? cfg.step : 1;
       const clamped = Math.max(min, Math.min(max, raw));
       const value = Math.round((clamped - min) / step) * step + min;
-      await this.setForeignStateAsync(dpId, value, false);
+      await nwWriteSmartHomeState(req, dev, dpId, value, false);
       state.white = value;
     }
 
@@ -13231,7 +13307,7 @@ app.post('/api/smarthome/color', requireAuth, async (req, res) => {
       const step = typeof cfg.step === 'number' && cfg.step > 0 ? cfg.step : 100;
       const clamped = Math.max(min, Math.min(max, raw));
       const value = Math.round((clamped - min) / step) * step + min;
-      await this.setForeignStateAsync(dpId, value, false);
+      await nwWriteSmartHomeState(req, dev, dpId, value, false);
       state.colorTemperature = value;
     }
 
@@ -13287,7 +13363,7 @@ app.post('/api/smarthome/cover', requireAuth, async (req, res) => {
       if (!dpId) return res.status(404).json({ ok: false, error: 'no tilt datapoint' });
       if (!Number.isFinite(raw)) return res.status(400).json({ ok: false, error: 'invalid tilt value' });
       const target = Math.max(0, Math.min(100, raw));
-      await this.setForeignStateAsync(dpId, target, false);
+      await nwWriteSmartHomeState(req, dev, dpId, target, false);
       return res.json({ ok: true, state: { tilt: target } });
     }
 
@@ -13307,6 +13383,7 @@ app.post('/api/smarthome/cover', requireAuth, async (req, res) => {
     }
     if (!dpId) return res.status(404).json({ ok: false, error: 'no datapoint for action' });
 
+    if (dev.io.deviceControls && ((action === 'up' && cover.upId) || (action === 'down' && cover.downId))) rawPayload = true;
     let payload = rawPayload;
     if (action === 'up' || action === 'down') {
       try {
@@ -13316,7 +13393,7 @@ app.post('/api/smarthome/cover', requireAuth, async (req, res) => {
         else if (type === 'string') payload = String(rawPayload);
       } catch (_error) {}
     }
-    await this.setForeignStateAsync(dpId, payload, false);
+    await nwWriteSmartHomeState(req, dev, dpId, payload, false);
     return res.json({ ok: true, state: { action, value: rawPayload } });
   } catch (e) {
     this.log.warn('SmartHome cover API error: ' + e.message);
@@ -13343,9 +13420,10 @@ app.post('/api/smarthome/player', requireAuth, async (req, res) => {
     const player = dev.io.player;
     const pulse = async (dpId) => {
       if (!dpId) return false;
-      await this.setForeignStateAsync(dpId, true, false);
+      await nwWriteSmartHomeState(req, dev, dpId, true, false);
+      if (dev.io.deviceControls) return true;
       const delay = Math.max(50, Math.min(60000, Number(dev.behavior && dev.behavior.pulseMs) || 250));
-      const timer = setTimeout(() => this.setForeignStateAsync(dpId, false, false).catch(() => {}), delay);
+      const timer = setTimeout(() => nwWriteSmartHomeState(req, dev, dpId, false, false).catch(() => {}), delay);
       if (timer && typeof timer.unref === 'function') timer.unref();
       return true;
     };
@@ -13370,7 +13448,7 @@ app.post('/api/smarthome/player', requireAuth, async (req, res) => {
         if (typeof current !== 'boolean') return { ok: false, status: 409, error: 'stateUnknown' };
         target = !current;
       }
-      await this.setForeignStateAsync(targetId, target, false);
+      await nwWriteSmartHomeState(req, dev, targetId, target, false);
       return { ok: true, target };
     };
 
@@ -13405,12 +13483,12 @@ app.post('/api/smarthome/player', requireAuth, async (req, res) => {
       const target = Math.max(min, Math.min(max, raw));
       const dpId = player.volumeWriteId || player.volumeReadId;
       if (!dpId) return res.status(404).json({ ok: false, error: 'no datapoint for action' });
-      await this.setForeignStateAsync(dpId, target, false);
+      await nwWriteSmartHomeState(req, dev, dpId, target, false);
       stateUpdate = { volume: target };
     } else if (action === 'station' || action === 'playlist') {
       const dpId = action === 'station' ? player.stationId : player.playlistId;
       if (!dpId) return res.status(404).json({ ok: false, error: 'no datapoint for action' });
-      await this.setForeignStateAsync(dpId, value, false);
+      await nwWriteSmartHomeState(req, dev, dpId, value, false);
     } else if (action === 'mute' || action === 'power') {
       const readId = action === 'mute' ? player.muteReadId : player.powerReadId;
       const writeId = action === 'mute' ? player.muteWriteId : player.powerWriteId;
@@ -13427,7 +13505,7 @@ app.post('/api/smarthome/player', requireAuth, async (req, res) => {
       const step = typeof player.seekStep === 'number' && player.seekStep > 0 ? player.seekStep : 1;
       const clamped = Math.max(min, Math.min(max, raw));
       const target = Math.round((clamped - min) / step) * step + min;
-      await this.setForeignStateAsync(dpId, target, false);
+      await nwWriteSmartHomeState(req, dev, dpId, target, false);
       stateUpdate = { seek: target };
     } else if (action === 'shuffle' || action === 'repeat') {
       const dpId = action === 'shuffle' ? player.shuffleId : player.repeatId;
@@ -13451,14 +13529,14 @@ app.post('/api/smarthome/player', requireAuth, async (req, res) => {
           target = String(value);
         }
       } catch (_error) {}
-      await this.setForeignStateAsync(dpId, target, false);
+      await nwWriteSmartHomeState(req, dev, dpId, target, false);
       stateUpdate[action] = target;
     } else if (action === 'tts') {
       const text = String(value ?? '').trim();
       if (!player.ttsWriteId) return res.status(404).json({ ok: false, error: 'no TTS datapoint' });
       if (!text) return res.status(400).json({ ok: false, error: 'empty TTS text' });
       if (text.length > 1000) return res.status(400).json({ ok: false, error: 'TTS text too long' });
-      await this.setForeignStateAsync(player.ttsWriteId, text, false);
+      await nwWriteSmartHomeState(req, dev, player.ttsWriteId, text, false);
       stateUpdate = { ttsQueued: true };
     } else {
       return res.status(400).json({ ok: false, error: 'invalid action' });
@@ -13557,7 +13635,7 @@ app.post('/api/smarthome/rtrSetpoint', requireAuth, async (req, res) => {
     const max = typeof cl.maxSetpoint === 'number' ? cl.maxSetpoint : 30;
     const target = Math.max(min, Math.min(max, setpoint));
 
-    await this.setForeignStateAsync(cl.setpointId, target);
+    await nwWriteSmartHomeState(req, dev, cl.setpointId, target);
     return res.json({ ok: true, state: { setpoint: target } });
   } catch (e) {
     this.log.warn('SmartHome RTR setpoint API error: ' + e.message);
@@ -13602,7 +13680,7 @@ app.post('/api/smarthome/climate', requireAuth, async (req, res) => {
       }
     }
 
-    await this.setForeignStateAsync(dpId, normalizedValue, false);
+    await nwWriteSmartHomeState(req, dev, dpId, normalizedValue, false);
     const field = action === 'fan' ? 'fanSpeed' : action;
     return res.json({ ok: true, state: { [field]: normalizedValue } });
   } catch (e) {
@@ -13645,7 +13723,7 @@ app.post('/api/smarthome/value', requireAuth, async (req, res) => {
       value = Math.round((clamped - min) / step) * step + min;
       if (valueType === 'integer') value = Math.round(value);
     }
-    await this.setForeignStateAsync(dpId, value, false);
+    await nwWriteSmartHomeState(req, dev, dpId, value, false);
     return res.json({ ok: true, state: { value } });
   } catch (e) {
     this.log.warn('SmartHome value API error: ' + e.message);
@@ -13815,6 +13893,7 @@ app.post('/api/smarthome/logic-clocks', requireNexoLogicConfig, async (req, res)
 });
 
 const NW_SHCFG_TD_TYPE_MAP = Object.freeze({
+  ...Object.fromEntries(getControlProfiles().filter(profile => !profile.id.startsWith('custom_') && profile.id !== 'universal' && profile.id !== 'chart').map(profile => [profile.id, 'device'])),
   light: 'switch',
   socket: 'switch',
   buttonSensor: 'sensor',
@@ -13824,10 +13903,11 @@ const NW_SHCFG_TD_TYPE_MAP = Object.freeze({
   blind: 'blind',
   blinds: 'blind',
   blindButtons: 'blind',
-  gate: 'blind',
+  gate: 'device',
   thermostat: 'rtr',
   airCondition: 'rtr',
   mediaPlayer: 'player',
+  media: 'player',
   camera: 'camera',
   temperature: 'sensor',
   humidity: 'sensor',
@@ -14012,7 +14092,8 @@ const nwShcfgTdCollectCandidateRoots = (objects) => {
     if (!sid) return true;
     if (sid.startsWith('system.')) return true;
     if (sid.startsWith('admin.')) return true;
-    if (ownPrefix && sid.startsWith(ownPrefix)) return true;
+    if (ownPrefix && sid.startsWith(ownPrefix)
+      && !sid.startsWith(`${ownPrefix}devices.`) && !sid.startsWith(`${ownPrefix}eebus.`)) return true;
     return false;
   };
 
@@ -14069,7 +14150,7 @@ const nwShcfgTdSuggestionScore = (item) => {
   const typeWeight = item && item.sourceType === 'device' ? 3 : (item && item.sourceType === 'channel' ? 2 : 1);
   const importableWeight = item && item.importable ? 8 : 0;
   const configuredPenalty = item && item.alreadyConfigured ? -3 : 0;
-  return (typeWeight * 1000) + (Number(item && item.matchCount || 0) * 10) + importableWeight + configuredPenalty;
+  return (item && item.managedAlias ? 100000 : 0) + (typeWeight * 1000) + (Number(item && item.matchCount || 0) * 10) + importableWeight + configuredPenalty;
 };
 /**
  * Code-Teil: nwShcfgTdMergeSuggestion
@@ -14310,7 +14391,7 @@ const nwShcfgTdBuildSuggestion = async ({ control, rootId, objects, configuredId
     importable = !!readId;
     const secondary = pick('SECOND');
     if (secondary && secondary.id && secondary.id !== readId) {
-      notes.push('Zusätzlicher SECOND-Wert erkannt; der Vorschlag übernimmt nur den primären Anzeige-DP.');
+      notes.push('Zusätzlicher SECOND-Wert wird im vollständigen Geräteprofil übernommen.');
     }
   }
 
@@ -14325,7 +14406,7 @@ const nwShcfgTdBuildSuggestion = async ({ control, rootId, objects, configuredId
   const confidence = states.length >= 3 ? 'high' : (states.length >= 2 ? 'medium' : 'base');
   const signature = `${targetType}|${states.map((entry) => entry.id).sort().join('|')}`;
 
-  return enrichSmartHomeImportSuggestion({
+  return enrichSmartHomeImportSuggestion(extendSuggestion({
     id: `td_${nwShcfgTdHash(`${sourceId}|${signature}`)}`,
     signature,
     displayName: sourceName || sourceId || 'Vorschlag',
@@ -14342,11 +14423,13 @@ const nwShcfgTdBuildSuggestion = async ({ control, rootId, objects, configuredId
     configuredOverlap,
     importable: !!importable,
     proposal,
-  }, objects, config);
+  }, control, objects), objects, config);
 };
 
 // Technische Datenpunktauswahl: Installer/Admin liest mögliche Zuordnungen. Kunden erhalten keinen freien DP-Zugriff.
 app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
+  if (this._nwShcfgDetectionRunning) return res.status(409).json({ ok: false, error: 'EOS_DETECTION_BUSY' });
+  this._nwShcfgDetectionRunning = true;
   try {
     if (!NwChannelDetector || typeof NwChannelDetector !== 'function') {
       return res.status(503).json({ ok: false, error: 'Die automatische Geräteerkennung ist aktuell nicht verfügbar.' });
@@ -14372,7 +14455,10 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
     const suggestionsBySignature = new Map();
     let matchedRoots = 0;
 
+    let scanIndex = 0;
     for (const rootId of roots) {
+      if (++scanIndex % 25 === 0) await new Promise(resolve => setImmediate(resolve));
+      if (this._nwShuttingDown) return res.status(503).json({ ok: false, error: 'EOS_UI_STOPPING' });
       let detected = null;
       try {
         detected = detector.detect({
@@ -14387,15 +14473,16 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
         detected = null;
       }
       if (!Array.isArray(detected) || !detected.length) continue;
-      const control = detected.find((entry) => entry && entry.type && NW_SHCFG_TD_TYPE_MAP[String(entry.type || '').trim()]);
-      if (!control) continue;
+      const controls = cleanControls(detected, objects).filter(control => NW_SHCFG_TD_TYPE_MAP[control.type]);
+      if (!controls.length) continue;
       matchedRoots += 1;
-
-      const suggestion = await nwShcfgTdBuildSuggestion({ control, rootId, objects, configuredIds, config: cfg });
-      if (!suggestion) continue;
-      const signature = suggestion.signature || suggestion.id;
-      const merged = nwShcfgTdMergeSuggestion(suggestionsBySignature.get(signature), suggestion);
-      suggestionsBySignature.set(signature, merged);
+      for (const control of controls) {
+        const suggestion = await nwShcfgTdBuildSuggestion({ control, rootId, objects, configuredIds, config: cfg });
+        if (!suggestion) continue;
+        const signature = suggestion.controlId || suggestion.signature || suggestion.id;
+        const merged = nwShcfgTdMergeSuggestion(suggestionsBySignature.get(signature), suggestion);
+        suggestionsBySignature.set(signature, merged);
+      }
     }
 
     const suggestions = reconcileSmartHomeImportSuggestions(Array.from(suggestionsBySignature.values()), objects, cfg)
@@ -14430,9 +14517,9 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
     if (!this._nwShuttingDown) this._nwShcfgDetectCache.set(configKey, payload);
     res.json(payload);
   } catch (e) {
-    try { this.log.warn('SmartHomeConfig type-detect API error: ' + (e && e.message ? e.message : e)); } catch (_e2) {}
-    res.status(500).json({ ok: false, error: 'internal error' });
-  }
+    try { this.log.warn('SmartHomeConfig type-detect API failed.'); } catch (_e2) {}
+    res.status(500).json({ ok: false, error: 'EOS_DETECTION_FAILED' });
+  } finally { this._nwShcfgDetectionRunning = false; }
 });
 
 // Kundenansicht erhält nur die Navigation, keine Gerätezuordnungen oder Logik.

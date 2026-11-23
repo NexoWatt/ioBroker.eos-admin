@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "eos-admin",
-    "version": "9.0.9",
+    "version": "9.0.10",
     "titleLang": {
       "en": "NexoWatt EOS",
       "de": "NexoWatt EOS",
@@ -18,6 +18,10 @@
     "connectionType": "local",
     "dataSource": "push",
     "news": {
+      "9.0.10": {
+        "en": "Device profiles, linked aliases and TypeDetector 6.2 with preserved mappings; full-width SmartHome configuration, sortable tiles and colorful category controls.",
+        "de": "Geräteprofile, verknüpfte Aliase und TypeDetector 6.2 mit Erhalt bestehender Zuordnungen; SmartHome-Konfiguration über die volle Breite, sortierbare Kacheln und farbige Kategoriebedienung."
+      },
       "9.0.9": {
         "en": "SmartHome controls redesigned in NexoWatt style with touch-safe sliders and visible command feedback. Existing device mappings and central licensing retained.",
         "de": "SmartHome-Bedienkacheln im NexoWatt-Design, berührungssichere Regler und sichtbare Befehlsrückmeldung. Bestehende Gerätezuordnungen und zentrale Lizenz bleiben erhalten."
@@ -99,11 +103,6 @@
         "de": "Stable 7.10.5 stellt die vollständigen Administratorrechte wieder her und trennt die Rollen verbindlich über den authentifizierten Backend-Kontext. Admin darf Datenpunkte schreiben, den Expertenmodus in beide Richtungen schalten und sieht Admin-/XTerm-Kacheln. Endkunden sehen Datenpunkte ausschließlich lesend; App-Center, Lizenz, Simulation, Benutzerverwaltung, ioBroker Admin, XTerm und Expertenmodus bleiben für Installateur und Endkunde gesperrt. Navigationsänderungen werden neustartsicher im Adapter-State gespeichert; Sicherung erscheint nur bei aktiver Backup-Instanz.",
         "en": "Stable 7.10.5 restores full administrator authority and binds roles exclusively to the authenticated backend context. Admin can write datapoints, toggle expert mode in both directions and sees the Admin/XTerm cards. End users can view datapoints read-only; App Center, License, Simulation, account management, ioBroker Admin, XTerm and expert mode remain blocked for Installer and End User. Navigation changes are stored restart-safely in an adapter state, and Backup is shown only for an enabled backup instance.",
         "nl": "Stable 7.10.5 herstelt de volledige beheerdersrechten en bepaalt rollen uitsluitend via de geauthenticeerde backendcontext. Admin kan datapunten schrijven, de expertmodus in beide richtingen schakelen en ziet de Admin-/XTerm-kaarten. Eindgebruikers kunnen datapunten alleen lezen; App Center, Licentie, Simulatie, accountbeheer, ioBroker Admin, XTerm en expertmodus blijven geblokkeerd voor Installateur en Eindgebruiker. Navigatiewijzigingen worden herstartveilig in een adapterstatus opgeslagen en Back-up verschijnt alleen bij een ingeschakelde back-upinstantie."
-      },
-      "7.10.4": {
-        "de": "Stable 7.10.4 verschiebt die Einstellung für automatische NexoWatt-Adapter-Updates vollständig in die Systemeinstellungen hinter dem Schraubenschlüssel. Auf Übersicht, Module und allen anderen Hauptseiten wird die Update-Karte nicht mehr eingeblendet. Die stabile Update-Logik und die Absturzkorrekturen aus 7.10.2 bleiben unverändert.",
-        "en": "Stable 7.10.4 moves the automatic NexoWatt adapter update control entirely into System Settings behind the wrench button. The update card is no longer shown on Overview, Modules or any other main page. Stable update behavior and the 7.10.2 crash fixes remain unchanged.",
-        "nl": "Stable 7.10.4 verplaatst de instelling voor automatische NexoWatt-adapterupdates volledig naar de systeeminstellingen achter de moersleutelknop. De updatekaart wordt niet meer weergegeven op Overzicht, Modules of andere hoofdpagina’s. De stabiele updatelogica en crashfixes uit 7.10.2 blijven ongewijzigd."
       }
     },
     "desc": {

@@ -33,7 +33,7 @@ interface NwSmartHomeFeedback {
   interface Pending { promise: Promise<Record<string, unknown> | null>; controller: AbortController }
   interface Press { target: HTMLElement; pointerId: number | null; x: number; y: number }
   const routes = new Set([
-    '/api/smarthome/toggle', '/api/smarthome/level', '/api/smarthome/color',
+    '/api/smarthome/control', '/api/smarthome/toggle', '/api/smarthome/level', '/api/smarthome/color',
     '/api/smarthome/cover', '/api/smarthome/player', '/api/smarthome/rtrSetpoint',
     '/api/smarthome/climate', '/api/smarthome/value', '/api/smarthome/timers',
   ]);
@@ -152,7 +152,8 @@ interface NwSmartHomeFeedback {
     // Jeder bewusst erneut ausgelöste Stopp erreicht den Server. Insbesondere
     // STOPP → AB → STOPP darf den letzten Stopp nicht mit einem noch laufenden
     // ersten HTTP-Auftrag zusammenlegen. Andere gleiche Befehle bleiben dedupliziert.
-    const stop = endpoint === '/api/smarthome/cover' && record(payload) && payload.action === 'stop';
+    const stop = record(payload) && ((endpoint === '/api/smarthome/cover' && payload.action === 'stop')
+      || (endpoint === '/api/smarthome/control' && (payload.key === 'STOP' || payload.key === 'TILT_STOP')));
     const key = id + '\n' + endpoint + '\n' + body + (stop ? '\nstop:' + requestSequence : '');
     const existing = pending.get(key);
     if (existing) return existing.promise;

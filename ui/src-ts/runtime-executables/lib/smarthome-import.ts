@@ -18,6 +18,8 @@
  * Einstieg: docs/QUELLCODE_WEGWEISER_DE.md
  */
 import { createHash } from 'node:crypto';
+import { version as detectorVersion } from '@iobroker/type-detector/package.json';
+import { getControlProfiles } from './smarthome-device-controls';
 
 type Row = Record<string, unknown>;
 type Objects = Record<string, unknown>;
@@ -29,6 +31,7 @@ export type ImportChange = { path: string; current: Scalar; proposed: Scalar; ma
 export type SmartHomeImportProvenance = {
   provider: 'iobroker.type-detector';
   sourceId: string;
+  controlId?: string;
   detectorType: string;
   detectorVersion: string;
   mappingVersion: number;
@@ -38,8 +41,11 @@ export type SmartHomeImportProvenance = {
   sourceValues: SourceValues;
 };
 
-export const SMART_HOME_DETECTOR_VERSION = '5.0.10';
-export const SMART_HOME_IMPORT_VERSION = 1;
+export const SMART_HOME_DETECTOR_VERSION: string = detectorVersion;
+export const SMART_HOME_IMPORT_VERSION = 2;
+const MAX_SOURCE_FIELDS = 512;
+const DIAGNOSTIC_KEYS = new Set(['BATTERY', 'RSSI', 'LOWBAT', 'UNREACH', 'UNREACH_STICKY', 'MAINTAIN', 'ERROR', 'CONNECTED', 'WORKING', 'DIRECTION', 'DIRECTION_ENUM']);
+const PROFILE_FIELDS = new Map(getControlProfiles().map(profile => [profile.id, profile.fields]));
 const BLOCKED_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
 const ICON_NAMES = new Set(['toggle', 'bulb', 'plug', 'blinds', 'thermostat', 'thermometer', 'speaker', 'tv', 'camera', 'sensor', 'door', 'window', 'motion', 'alarm', 'smoke', 'water', 'fan', 'meter', 'scene', 'solar', 'battery', 'charger', 'car', 'grid', 'house', 'globe', 'fire', 'lock']);
 
@@ -91,7 +97,7 @@ export function normalizeSmartHomeCameraStateUrl(value: unknown): string | undef
     const parsed = new URL(value.trim());
     if (!['http:', 'https:'].includes(parsed.protocol) || parsed.username || parsed.password) return undefined;
     return parsed.href;
-  } catch (_error) { return undefined; }
+  } catch { return undefined; }
 }
 
 /** IO-Pfade sind feste, begrenzte Felder; Herkunft enthält keine freien Objekt-
@@ -101,18 +107,29 @@ export function isSmartHomeImportField(path: unknown): path is string {
   const keys = path.split('.');
   if (keys.some(k => BLOCKED_KEYS.has(k))) return false;
   return ['alias', 'icon', 'ui.unit', 'ui.color', 'ui.precision'].includes(path)
+    || path === 'io.deviceControls.profile'
+    || /^io\.deviceControls\.fields\.[A-Z][A-Z0-9_]{0,63}\.(readId|writeId)$/.test(path)
     || /^io\.(switch|level|color|white|colorTemperature|cover|climate|player|sensor|camera|indicators)\.[A-Za-z][A-Za-z0-9]{0,60}$/.test(path);
 }
 function sourceValues(proposal: Row): SourceValues {
-  const out: SourceValues = Object.create(null);
+  const out = Object.create(null) as SourceValues;
   const add = (path: string, value: unknown): void => {
     const val = scalar(value);
-    if (isSmartHomeImportField(path) && val !== undefined && Object.keys(out).length < 180) out[path] = val;
+    if (isSmartHomeImportField(path) && val !== undefined && Object.keys(out).length < MAX_SOURCE_FIELDS) out[path] = val;
   };
   add('alias', proposal.alias); add('icon', proposal.icon);
   for (const [key, value] of Object.entries(row(proposal.ui))) add(`ui.${key}`, value);
   for (const [group, fields] of Object.entries(row(proposal.io))) {
     if (!record(fields)) continue;
+    if (group === 'deviceControls') {
+      add('io.deviceControls.profile', fields.profile);
+      for (const field of list(fields.fields).map(row)) {
+        const key = text(field.key, 64);
+        add(`io.deviceControls.fields.${key}.readId`, field.readId ?? null);
+        add(`io.deviceControls.fields.${key}.writeId`, field.writeId ?? null);
+      }
+      continue;
+    }
     for (const [key, value] of Object.entries(fields)) add(`io.${group}.${key}`, value);
   }
   return out;
@@ -123,13 +140,14 @@ function sourceValues(proposal: Row): SourceValues {
 export function normalizeSmartHomeImportProvenance(value: unknown): SmartHomeImportProvenance | undefined {
   const raw = row(value);
   if (raw.provider !== 'iobroker.type-detector' || !text(raw.sourceId) || typeof raw.signature !== 'string' || !/^[a-f\d]{64}$/.test(raw.signature)) return undefined;
-  const values: SourceValues = Object.create(null);
-  for (const [path, value] of Object.entries(row(raw.sourceValues)).slice(0, 180)) {
+  const values = Object.create(null) as SourceValues;
+  for (const [path, value] of Object.entries(row(raw.sourceValues)).slice(0, MAX_SOURCE_FIELDS)) {
     const val = scalar(value);
     if (isSmartHomeImportField(path) && val !== undefined) values[path] = val;
   }
   return {
     provider: 'iobroker.type-detector', sourceId: text(raw.sourceId), detectorType: text(raw.detectorType, 64),
+    ...(/^[a-f\d]{64}$/.test(text(raw.controlId)) ? { controlId: text(raw.controlId) } : {}),
     detectorVersion: text(raw.detectorVersion, 32), mappingVersion: Number.isSafeInteger(raw.mappingVersion) && Number(raw.mappingVersion) > 0 ? Number(raw.mappingVersion) : 1,
     signature: text(raw.signature, 64), sourceStateIds: [...new Set(list(raw.sourceStateIds).map(v => text(v)).filter(Boolean))].slice(0, 128),
     semanticStateIds: [...new Set(list(raw.semanticStateIds).map(v => text(v)).filter(Boolean))].slice(0, 128),
@@ -165,20 +183,46 @@ function bindingIds(device: Row): string[] {
   const ids = new Set<string>();
   for (const [group, fields] of Object.entries(row(device.io))) {
     if (group === 'indicators' || !record(fields)) continue;
+    if (group === 'deviceControls') {
+      const definitions = PROFILE_FIELDS.get(text(fields.profile)) || [];
+      for (const field of list(fields.fields).map(row)) {
+        const definition = definitions.find(item => item.key === field.key);
+        if (definition?.indicator === true || DIAGNOSTIC_KEYS.has(text(field.key))) continue;
+        if (text(field.readId)) ids.add(text(field.readId));
+        if (text(field.writeId)) ids.add(text(field.writeId));
+      }
+      continue;
+    }
     for (const [key, value] of Object.entries(fields)) if (/Id$/.test(key) && text(value)) ids.add(text(value));
   }
   return [...ids].sort();
 }
 function semanticIdentity(device: Row, objects: Objects): { ids: string[]; alias: boolean; valid: boolean } {
   const ids = new Set<string>(); let alias = false; let valid = true;
+  const controls = list(row(row(device.io).deviceControls).fields).map(row);
   for (const id of bindingIds(device)) {
     for (const direction of ['read', 'write'] as const) {
+      const controlMapping = controls.some(field => field.readId === id || field.writeId === id);
+      if (controlMapping && !controls.some(field => field[`${direction}Id`] === id)) continue;
       const resolved = resolveSmartHomeAliasIdentity(objects, id, direction);
       ids.add(resolved.valid ? resolved.id : `unresolved:${id}`);
       alias ||= resolved.alias || id.startsWith('alias.'); valid &&= resolved.valid;
     }
   }
   return { ids: [...ids].sort(), alias, valid };
+}
+
+/** Zwei vorhandene Benutzer-Aliase dürfen unterschiedliche Umrechnungen oder
+ * Einheiten abbilden. Gleiche physische Ziele allein machen sie nicht gleich. */
+function aliasSemantics(device: Row, objects: Objects): string {
+  const aliases = bindingIds(device).filter(id => !!common(objects, id).alias).map(id => {
+    const meta = common(objects, id); const definition = row(meta.alias);
+    return { read: resolveSmartHomeAliasIdentity(objects, id, 'read').id, write: resolveSmartHomeAliasIdentity(objects, id, 'write').id,
+      readConversion: text(definition.read, 4096), writeConversion: text(definition.write, 4096),
+      type: text(meta.type), role: text(meta.role), unit: text(meta.unit), min: scalar(meta.min), max: scalar(meta.max),
+      states: record(meta.states) ? Object.entries(meta.states).sort(([a], [b]) => a.localeCompare(b)) : text(meta.states, 4096) };
+  });
+  return digest(aliases.sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b))));
 }
 
 function memberships(objects: Objects, ids: string[], prefix: 'rooms' | 'functions'): { enumId: string; name: string }[] {
@@ -219,7 +263,7 @@ export function enrichSmartHomeImportSuggestion(input: unknown, objects: Objects
     id: text(s.id), key: text(s.key).toUpperCase(), type: text(s.type), role: text(s.role), unit: text(s.unit, 32), read: s.read !== false, write: s.write === true,
   }));
   const notes = list(original.notes).filter((v): v is string => typeof v === 'string').slice();
-  const sourceId = text(original.sourceId); const source = common(objects, sourceId);
+  const sourceId = text(original.sourceId); const source = common(objects, text(original.displaySourceId) || sourceId);
   if (name(source.name)) proposal.alias = name(source.name);
   const icon = safeIcon(source.icon);
   if (icon) proposal.icon = icon;
@@ -247,7 +291,7 @@ export function enrichSmartHomeImportSuggestion(input: unknown, objects: Objects
   if (Object.keys(indicators).length) io.indicators = indicators;
 
   const core = semanticIdentity(proposal, objects);
-  const memberIds = [sourceId, ...bindingIds(proposal), ...core.ids];
+  const memberIds = [sourceId, text(original.displaySourceId), ...bindingIds(proposal), ...core.ids].filter(Boolean);
   const rooms = assignments(memberships(objects, memberIds, 'rooms'), list(cfg.rooms), 'room');
   const functions = assignments(memberships(objects, memberIds, 'functions'), list(cfg.functions), 'function');
   const values = sourceValues(proposal);
@@ -256,16 +300,24 @@ export function enrichSmartHomeImportSuggestion(input: unknown, objects: Objects
     states, rooms: rooms.map(v => ({ enumId: v.enumId, name: v.name })), functions: functions.map(v => ({ enumId: v.enumId, name: v.name })) });
   const provenance: SmartHomeImportProvenance = {
     provider: 'iobroker.type-detector', sourceId, detectorType: text(original.detectorType, 64),
+    ...(/^[a-f\d]{64}$/.test(text(original.controlId)) ? { controlId: text(original.controlId) } : {}),
     detectorVersion: SMART_HOME_DETECTOR_VERSION, mappingVersion: SMART_HOME_IMPORT_VERSION, signature, sourceStateIds, semanticStateIds: core.ids, sourceValues: values,
   };
   proposal.importProvenance = provenance;
   if (!core.valid) notes.push('Alias-Ziel ist zyklisch oder ungültig. Vor einer Übernahme die Datenpunktzuordnung prüfen.');
   return { ...original, proposal, notes, importable: original.importable === true && core.valid, metadata: { rooms, functions, color, icon: text(source.icon, 160) },
-    semanticIds: core.ids, usesAlias: core.alias, provenance,
+    semanticIds: core.ids, usesAlias: core.alias, aliasSemantics: aliasSemantics(proposal, objects), provenance,
     suggestedAssignment: { roomId: rooms.length === 1 ? rooms[0]!.id : '', functionId: functions.length === 1 ? functions[0]!.id : '' } };
 }
 
-function valueAt(source: Row, path: string): Scalar {
+export function smartHomeImportFieldValue(source: unknown, path: string): Scalar {
+  if (!isSmartHomeImportField(path)) return null;
+  const match = /^io\.deviceControls\.fields\.([A-Z][A-Z0-9_]{0,63})\.(readId|writeId)$/.exec(path);
+  if (match) {
+    const controls = row(row(row(source).io).deviceControls);
+    const field = list(controls.fields).map(row).find(item => item.key === match[1]);
+    return scalar(row(field)[match[2]!]) ?? null;
+  }
   let value: unknown = source;
   for (const key of path.split('.')) value = row(value)[key];
   return scalar(value) ?? null;
@@ -276,12 +328,15 @@ function valueAt(source: Row, path: string): Scalar {
  * Geräteidentität. Bestehende Geräte werden nie mutiert oder automatisch ersetzt. */
 export function reconcileSmartHomeImportSuggestions(inputs: unknown[], objects: Objects, config: unknown): Row[] {
   const cfg = row(config); const devices = list(cfg.devices).map(row);
-  const ordered = inputs.map(row).slice().sort((a, b) => Number(b.usesAlias === true) - Number(a.usesAlias === true)
+  const ordered = inputs.map(row).slice().sort((a, b) => Number(b.managedAlias === true) - Number(a.managedAlias === true)
+    || Number(b.usesAlias === true) - Number(a.usesAlias === true)
     || Number(b.matchCount || 0) - Number(a.matchCount || 0) || text(a.sourceId).localeCompare(text(b.sourceId)));
   const preferred: Row[] = [];
   for (const suggestion of ordered) {
     const ids = list(suggestion.semanticIds).filter((v): v is string => typeof v === 'string');
-    const duplicate = preferred.find(other => other.targetType === suggestion.targetType && other.usesAlias === true
+    const duplicate = preferred.find(other => other.targetType === suggestion.targetType && other.detectorType === suggestion.detectorType && other.usesAlias === true
+      && (suggestion.usesAlias !== true || other.aliasSemantics === suggestion.aliasSemantics
+        || (other.managedAlias === true && other.controlId === suggestion.controlId && other.sourceId === suggestion.sourceId))
       && ids.length > 0 && list(other.semanticIds).length > 0
       && (ids.every(id => list(other.semanticIds).includes(id)) || list(other.semanticIds).every(id => ids.includes(String(id)))));
     if (duplicate) {
@@ -292,11 +347,22 @@ export function reconcileSmartHomeImportSuggestions(inputs: unknown[], objects: 
   const existing = devices.map(device => ({ device, ids: semanticIdentity(device, objects).ids }));
   return preferred.map(suggestion => {
     const ids = list(suggestion.semanticIds);
+    const canonicalType = (value: unknown): string => {
+      const type = text(value);
+      const aliases = new Map([['mediaPlayer', 'media'], ['blinds', 'blind'], ['brightness', 'illuminance']]);
+      return aliases.get(type) || type;
+    };
+    const sameSource = preferred.filter(other => other.sourceId === suggestion.sourceId && canonicalType(other.detectorType) === canonicalType(suggestion.detectorType));
     const matches = existing.filter(item => item.ids.some(id => ids.includes(id))
-      || (row(item.device.importProvenance).sourceId === suggestion.sourceId && !!suggestion.sourceId));
+      || (row(item.device.importProvenance).sourceId === suggestion.sourceId && !!suggestion.sourceId
+        && canonicalType(row(item.device.importProvenance).detectorType) === canonicalType(suggestion.detectorType)
+        && (row(item.device.importProvenance).controlId === suggestion.controlId
+          || (!row(item.device.importProvenance).controlId && sameSource.length === 1))));
     const exact = matches.filter(item => {
       const p = normalizeSmartHomeImportProvenance(item.device.importProvenance);
-      return p && p.sourceId === suggestion.sourceId && p.detectorType === suggestion.detectorType && item.device.type === suggestion.targetType;
+      return p && p.sourceId === suggestion.sourceId && canonicalType(p.detectorType) === canonicalType(suggestion.detectorType) && item.device.type === suggestion.targetType
+        && (p.controlId === suggestion.controlId || (!p.controlId && sameSource.length === 1)
+          || (sameSource.length === 1 && item.ids.some(id => ids.includes(id))));
     });
     let update: Row | null = null;
     if (exact.length === 1 && matches.length === 1) {
@@ -308,8 +374,8 @@ export function reconcileSmartHomeImportSuggestions(inputs: unknown[], objects: 
         for (const path of [...new Set([...Object.keys(previous.sourceValues), ...Object.keys(next.sourceValues)])].sort()) {
           if (!isSmartHomeImportField(path)) continue;
           const before = previous.sourceValues[path] ?? null; const after = next.sourceValues[path] ?? null;
-          if (before === after || valueAt(device, path) === after) continue;
-          const current = valueAt(device, path);
+          if (before === after || smartHomeImportFieldValue(device, path) === after) continue;
+          const current = smartHomeImportFieldValue(device, path);
           changes.push({ path, current, proposed: after, manualOverride: current !== before });
         }
       }

@@ -1,7 +1,7 @@
 {
   "name": "iobroker.eos-admin",
   "description": "NexoWatt EOS: licensed local energy management, dashboard and ioBroker system administration in one adapter.",
-  "version": "9.0.9",
+  "version": "9.0.10",
   "contributors": [
     "bluefox <dogafox@gmail.com>",
     "apollon77",
@@ -30,7 +30,7 @@
     "@iobroker/adapter-core": "^3.4.3",
     "@iobroker/plugin-docker": "^1.2.1",
     "@iobroker/socket-classes": "2.10.0",
-    "@iobroker/type-detector": "5.0.10",
+    "@iobroker/type-detector": "6.2.0",
     "@iobroker/ws-server": "^4.5.2",
     "@tsconfig/node22": "^22.0.6",
     "ajv": "^8.20.0",
@@ -176,7 +176,11 @@
     "START_HIER_9.0.8.md",
     "docs/reports/unified-9.0.8/",
     "START_HIER_9.0.9.md",
-    "docs/reports/unified-9.0.9/"
+    "docs/reports/unified-9.0.9/",
+    "START_HIER_9.0.10.md",
+    "docs/reports/unified-9.0.10/",
+    "ui/docs/security/eslint-reviewed-findings.json",
+    "ui/docs/security/eslint-legacy-baseline.json"
   ],
   "scripts": {
     "start": "cd src-admin && npm run start",
@@ -184,7 +188,7 @@
     "build:backend": "tsc -p tsconfig.build.json && node --import tsx tasks.mts --backend-i18n",
     "build:frontend": "node --import tsx tasks.mts",
     "build:unified-backend": "tsc -p tsconfig.build.json && node --import tsx tasks.mts --backend-i18n",
-    "build:ui-runtime": "node ui/scripts/build-ts-runtime-executables.js",
+    "build:ui-runtime": "node ui/scripts/build-smarthome-markdown.cjs && node ui/scripts/build-ts-runtime-executables.js",
     "lint-backend": "eslint -c eslint.config.mjs src && npm run lint:unified",
     "lint": "npm run lint-backend && cd src-admin && npm run lint",
     "test:unified": "node --test test/eos-unified*.test.cjs test/eos-hosted-boundary-http.test.cjs test/eos-license*.test.cjs ui/test/unified/*.test.cjs test/eos-access-diagnostics.test.cjs test/eos-ingress-renderer.test.cjs test/eos-sbom-vendored.test.cjs test/eos-system-license-ui.test.cjs test/eos-history-deadline.test.cjs test/eos-socket-threshold.test.cjs test/eos-history-api-stability.test.cjs test/eos-ephemeral-cache.test.cjs test/eos-tls-management.test.cjs test/eos-tls-issuer-files.test.cjs",
@@ -197,10 +201,10 @@
     "test:retained": "node --test test/eos-session-security.test.cjs test/eos-web-resources.test.cjs test/eos-auth-regressions.test.cjs",
     "test:package": "node --test test/eos-unified-metadata.test.cjs",
     "test:integration": "mocha test/integration-unified.cjs --exit",
-    "typecheck": "tsc -p tsconfig.build.json --noEmit && tsc -p ui/tsconfig.ephemeral-cache.json && tsc -p ui/tsconfig.hosted-adapter.json && tsc -p modules/eebus/tsconfig.json --noEmit && tsc -p modules/backup/tsconfig.json --noEmit && tsc -p ui/tsconfig.smarthome-activation.json && tsc -p ui/tsconfig.ui-auth-frontend.json && tsc -p ui/tsconfig.preserved-ui-config.json && tsc -p ui/tsconfig.smarthome-feedback.json && tsc -p ui/tsconfig.smarthome-touch.json && tsc -p ui/tsconfig.smarthome-presentation.json",
+    "typecheck": "tsc -p tsconfig.build.json --noEmit && tsc -p ui/tsconfig.ephemeral-cache.json && tsc -p ui/tsconfig.hosted-adapter.json && tsc -p modules/eebus/tsconfig.json --noEmit && tsc -p modules/backup/tsconfig.json --noEmit && tsc -p ui/tsconfig.smarthome-activation.json && tsc -p ui/tsconfig.ui-auth-frontend.json && tsc -p ui/tsconfig.preserved-ui-config.json && tsc -p ui/tsconfig.smarthome-feedback.json && tsc -p ui/tsconfig.smarthome-touch.json && tsc -p ui/tsconfig.smarthome-presentation.json && tsc -p ui/tsconfig.smarthome-device-controls.json && tsc -p ui/tsconfig.smarthome-device-api.json && tsc -p ui/tsconfig.smarthome-device-detection.json && tsc -p ui/tsconfig.smarthome-device-config.json && tsc -p ui/tsconfig.smarthome-device-controls-browser.json && tsc -p ui/tsconfig.smarthome-custom-views.json && tsc -p ui/tsconfig.smarthome-custom-contract.json && tsc -p ui/tsconfig.smarthome-custom-config.json && tsc -p ui/tsconfig.smarthome-device-legacy.json && tsc -p ui/tsconfig.smarthome-device-aliases.json && tsc -p ui/tsconfig.smarthome-alias-config.json && tsc -p ui/tsconfig.smarthome-device-categories.json && tsc -p ui/tsconfig.smarthome-layout-editor.json",
     "build:installer": "npm --prefix ui/src-admin-tab run build",
     "sbom": "npm sbom --sbom-format=cyclonedx > release-manifests/unified/build-environment.cdx.json && node tools/eos-sbom-vendored.cjs",
-    "lint:unified": "eslint -c eslint.unified.config.mjs src/lib/eosUnifiedBoundary.js src/lib/eosUnifiedOwnership.js src/lib/eosLicenseCore.js src/lib/eosLicensePolicy.js src/lib/eosLicenseService.js src/lib/eosLicenseTrust.js src/lib/eosLicenseHttp.js tools/eos-release-check.cjs tools/eos-release-manifest.cjs tools/eos-migration-plan.cjs tools/eos-access-diagnostics.cjs deploy/render-ingress.cjs tools/eos-sbom-vendored.cjs src/lib/eosModuleHost.js src/lib/eosModuleHttp.js src/lib/eosModuleConfigStore.js src/lib/eosLegacyMigration.js tools/eos-tls-issuer.cjs && eslint -c modules/backup/eslint.config.mjs modules/backup/src && eslint -c ui/eslint.smarthome-activation.config.mjs ui/src-ts/runtime-executables/lib/smarthome-activation.ts && eslint -c ui/eslint.preserved-ui-config.config.mjs ui/src-ts/runtime-executables/lib/preserved-ui-config.ts && eslint -c ui/eslint.smarthome-feedback.config.mjs ui/src-ts/runtime-executables/www/smarthome-feedback.ts && eslint -c ui/eslint.smarthome-touch.config.mjs ui/src-ts/runtime-executables/www/smarthome-touch.ts && eslint -c ui/eslint.smarthome-presentation.config.mjs ui/src-ts/runtime-executables/www/smarthome-presentation.ts",
+    "lint:unified": "eslint -c eslint.unified.config.mjs src/lib/eosUnifiedBoundary.js src/lib/eosUnifiedOwnership.js src/lib/eosLicenseCore.js src/lib/eosLicensePolicy.js src/lib/eosLicenseService.js src/lib/eosLicenseTrust.js src/lib/eosLicenseHttp.js tools/eos-release-check.cjs tools/eos-release-manifest.cjs tools/eos-migration-plan.cjs tools/eos-access-diagnostics.cjs deploy/render-ingress.cjs tools/eos-sbom-vendored.cjs src/lib/eosModuleHost.js src/lib/eosModuleHttp.js src/lib/eosModuleConfigStore.js src/lib/eosLegacyMigration.js tools/eos-tls-issuer.cjs && eslint -c modules/backup/eslint.config.mjs modules/backup/src && eslint -c ui/eslint.smarthome-activation.config.mjs ui/src-ts/runtime-executables/lib/smarthome-activation.ts && eslint -c ui/eslint.preserved-ui-config.config.mjs ui/src-ts/runtime-executables/lib/preserved-ui-config.ts && eslint -c ui/eslint.smarthome-feedback.config.mjs ui/src-ts/runtime-executables/www/smarthome-feedback.ts && eslint -c ui/eslint.smarthome-touch.config.mjs ui/src-ts/runtime-executables/www/smarthome-touch.ts && eslint -c ui/eslint.smarthome-presentation.config.mjs ui/src-ts/runtime-executables/www/smarthome-presentation.ts && eslint -c ui/eslint.smarthome-device-controls.config.mjs ui/src-ts/runtime-executables/lib/smarthome-device-controls.ts && eslint -c ui/eslint.smarthome-device-api.config.mjs ui/src-ts/runtime-executables/lib/smarthome-device-api.ts && eslint -c ui/eslint.smarthome-device-detection.config.mjs ui/src-ts/runtime-executables/lib/smarthome-device-detection.ts && eslint -c ui/eslint.smarthome-device-config.config.mjs ui/src-ts/runtime-executables/www/smarthome-device-config.ts && eslint -c ui/eslint.smarthome-device-controls-browser.config.mjs ui/src-ts/runtime-executables/www/smarthome-device-controls.ts && eslint -c ui/eslint.smarthome-custom-views.config.mjs ui/src-ts/runtime-executables/www/smarthome-custom-views.ts && eslint -c ui/eslint.smarthome-custom-contract.config.mjs ui/src-ts/runtime-executables/lib/smarthome-custom-contract.ts && eslint -c ui/eslint.smarthome-custom-config.config.mjs ui/src-ts/runtime-executables/www/smarthome-custom-config.ts && eslint -c ui/eslint.smarthome-device-legacy.config.mjs ui/src-ts/runtime-executables/lib/smarthome-device-legacy.ts && eslint -c ui/eslint.smarthome-device-aliases.config.mjs ui/src-ts/runtime-executables/lib/smarthome-device-aliases.ts && eslint -c ui/eslint.smarthome-alias-config.config.mjs ui/src-ts/runtime-executables/www/smarthome-alias-config.ts && eslint -c ui/eslint.smarthome-device-categories.config.mjs ui/src-ts/runtime-executables/www/smarthome-device-categories.ts && eslint -c ui/eslint.smarthome-layout-editor.config.mjs ui/src-ts/runtime-executables/www/smarthome-layout-editor.ts",
     "test:modules": "node --test test/eos-hosted-eebus-bridge.test.cjs test/eos-module*.test.cjs test/eos-discovery.test.cjs modules/devices/test/*.test.* modules/eebus/test/*.test.* && node --test modules/eebus/test/config.js modules/eebus/test/cls-control-parser.js modules/eebus/test/nexowatt-bridge.js modules/eebus/test/implementation-result-order.js && node --test modules/backup/test/*.test.cjs",
     "build:modules": "tsc -p modules/eebus/tsconfig.json && tsc -p modules/backup/tsconfig.json"
   },

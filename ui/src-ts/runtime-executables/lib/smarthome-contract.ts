@@ -16,6 +16,8 @@
  * Einstieg: docs/QUELLCODE_WEGWEISER_DE.md; Pflege: docs/DOKUMENTATIONSSTANDARD_DE.md
  */
 'use strict';
+import { normalizeCustomView, assertCustomViewBindings } from './smarthome-custom-contract';
+import { normalizeDeviceControls } from './smarthome-device-controls';
 
 const { normalizeSmartHomeImportProvenance, normalizeSmartHomeImportColor } = require('./smarthome-import');
 
@@ -94,7 +96,7 @@ type TemplateContract = {
 };
 
 const SUPPORTED_TYPES: Set<string> = new Set([
-  'switch', 'dimmer', 'color', 'blind', 'rtr', 'scene', 'sensor', 'player', 'camera', 'widget',
+  'switch', 'dimmer', 'color', 'blind', 'rtr', 'scene', 'sensor', 'player', 'camera', 'widget', 'device',
 ]);
 
 const SUPPORTED_SCENE_ACTIONS: Set<string> = new Set([
@@ -142,6 +144,41 @@ function cleanIoPair(source: unknown, fallbackRead?: unknown, fallbackWrite?: un
   const readId = nullableId(row.readId || fallbackRead || row.writeId || fallbackWrite);
   const writeId = nullableId(row.writeId || fallbackWrite || row.readId || fallbackRead);
   return { readId, writeId };
+}
+
+/** Beim zusätzlichen Geräteprofil bleiben alte ausdrücklich konfigurierte
+ * Schreib-/Aktionsfelder erhalten. Ein reiner Rückmelde-DP erhält jedoch keinen
+ * Legacy-Schreibpfad. Historische kombinierte Felder (z. B. volumeId/rgbId) sind
+ * bestehende Schreibverträge; ihre tatsächliche Schreibbarkeit prüft die API. */
+function retainDeclaredLegacyWrites(rawIo: Record<string, unknown>, normalizedIo: Record<string, unknown>): void {
+  const paths: Record<string, string[]> = {
+    'switch.writeId': ['switch.writeId', 'scene.triggerId'],
+    'level.writeId': ['level.writeId', 'dimmer.writeId', 'dimmer.levelId', 'cover.positionWriteId', 'cover.writeId', 'blind.posWriteId'],
+    'color.writeId': ['color.writeId', 'color.rgbId'],
+    'white.writeId': ['white.writeId', 'color.whiteWriteId', 'color.wwId'],
+    'colorTemperature.writeId': ['colorTemperature.writeId', 'color.temperatureWriteId', 'color.colorTemperatureId', 'dimmer.colorTemperatureId'],
+    'cover.positionWriteId': ['cover.positionWriteId', 'cover.writeId', 'blind.posWriteId', 'level.writeId', 'dimmer.writeId', 'dimmer.levelId'],
+    'cover.tiltWriteId': ['cover.tiltWriteId', 'cover.slatsWriteId', 'blind.tiltId'],
+    'player.volumeWriteId': ['player.volumeWriteId', 'player.volumeId'],
+    'player.muteWriteId': ['player.muteWriteId', 'player.muteId'],
+    'player.powerWriteId': ['player.powerWriteId', 'player.powerId'],
+    'player.seekWriteId': ['player.seekWriteId', 'player.seekId'],
+    'player.ttsWriteId': ['player.ttsWriteId', 'player.ttsId'],
+    'sensor.writeId': ['sensor.writeId'],
+  };
+  const object = (value: unknown): Record<string, unknown> => value !== null && typeof value === 'object' && !Array.isArray(value)
+    ? value as Record<string, unknown> : {};
+  for (const [target, candidates] of Object.entries(paths)) {
+    const [group, key] = target.split('.') as [string, string];
+    if (!normalizedIo[group]) continue;
+    let declared: string | null = null;
+    for (const source of candidates) {
+      const [sourceGroup, sourceKey] = source.split('.') as [string, string];
+      declared = nullableId(object(rawIo[sourceGroup])[sourceKey]);
+      if (declared) break;
+    }
+    object(normalizedIo[group])[key] = declared;
+  }
 }
 
 function normalizeTemplateContract(templateId: unknown, type: string, behavior: AnyRecord, capabilities: AnyRecord, io: AnyRecord, ui: AnyRecord): TemplateContract {
@@ -450,20 +487,43 @@ function normalizeSmartHomeDevice(input: unknown, index = 0): SmartHomeDevice {
     };
   }
 
+  const customView = normalizeCustomView(raw.customView);
+  let deviceControls = normalizeDeviceControls(rawIo.deviceControls);
+  if (deviceControls && ['blind', 'blindButtons', 'gate'].includes(deviceControls.profile)) {
+    const protectiveMappings = [
+      ['LOCKED', 'lockId'], ['WIND_ALARM', 'windAlarmId'], ['RAIN_ALARM', 'rainAlarmId'], ['FROST_ALARM', 'frostAlarmId'],
+    ] as const;
+    for (const [key, legacyKey] of protectiveMappings) {
+      const readId = nullableId(coverRaw[legacyKey]);
+      if (!readId) continue;
+      const existing = deviceControls.fields.find(field => field.key === key);
+      // Kein Austausch einer bestehenden Schutzquelle durch einen anderen
+      // Bedienpfad. Ein widersprüchlicher Entwurf benötigt eine klare Zuordnung.
+      if (existing && existing.readId !== readId) throw new Error('EOS_CONTROL_SAFETY_MAPPING_CONFLICT');
+      if (!existing) deviceControls.fields.push({ key, readId });
+    }
+    deviceControls = normalizeDeviceControls(deviceControls);
+  }
+  if (customView) assertCustomViewBindings(customView, deviceControls);
+  if (deviceControls) io.deviceControls = deviceControls;
+  const hasDeviceControlWrite = deviceControls?.fields.some(field => !!field.writeId) === true;
   const contract = normalizeTemplateContract(templateId, type, behavior, capabilities, io, ui);
   type = contract.type;
+  if (deviceControls) retainDeclaredLegacyWrites(rawIo, contract.io);
 
-  if (type === 'camera' || type === 'widget') contract.behavior.readOnly = true;
+  if ((type === 'camera' || type === 'widget') && !hasDeviceControlWrite) contract.behavior.readOnly = true;
   if (type === 'scene' && contract.behavior.commandMode === 'toggle') contract.behavior.commandMode = 'momentary';
-  if (type === 'sensor' && !(contract.io.sensor && contract.io.sensor.writeId)) {
+  if (type === 'sensor' && !hasDeviceControlWrite && !(contract.io.sensor && contract.io.sensor.writeId)) {
     contract.behavior.readOnly = true;
   }
 
   const importProvenance = normalizeSmartHomeImportProvenance(raw.importProvenance);
   const preserved = { ...raw };
   delete preserved.importProvenance;
+  delete preserved.customView;
   return {
     ...preserved,
+    ...(customView ? { customView } : {}),
     id,
     alias: str(raw.alias || raw.name || id, 160) || id,
     type,
@@ -625,7 +685,7 @@ function validateSmartHomeConfig(input: unknown): { ok: boolean; config: SmartHo
     if (beh.commandMode === 'momentary' && !(io.switch && io.switch.writeId)) {
       push(warnings, 'MOMENTARY_WRITE_MISSING', 'Taster/Trigger hat noch keinen Schreib-Datenpunkt.', `${base}.io.switch.writeId`, dev.id);
     }
-    if (dev.type === 'sensor' && !beh.readOnly && !(io.sensor && io.sensor.writeId)) {
+    if (dev.type === 'sensor' && !beh.readOnly && !normalizeDeviceControls(io.deviceControls)?.fields.some(field => !!field.writeId) && !(io.sensor && io.sensor.writeId)) {
       push(errors, 'VALUE_WRITE_MISSING', 'Beschreibbarer Wertgeber benötigt einen Write-Datenpunkt.', `${base}.io.sensor.writeId`, dev.id);
     }
     if ((dev.type === 'dimmer' || dev.type === 'blind') && io.level && io.level.max <= io.level.min) {
@@ -760,6 +820,7 @@ module.exports = {
   SUPPORTED_SMARTHOME_TYPES: Array.from(SUPPORTED_TYPES),
   WRITABLE_VALUE_TEMPLATES,
   normalizeSmartHomeDevice,
+  retainDeclaredLegacyWrites,
   normalizeSmartHomeConfig,
   validateSmartHomeConfig,
   normalizeSceneActionKind,

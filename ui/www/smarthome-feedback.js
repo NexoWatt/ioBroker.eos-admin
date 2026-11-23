@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/smarthome-feedback.ts
- * Quell-Hash: sha256:c006e534e130a9da08a35245fc40f9662497148187aa046b738540ca2b0924ea
+ * Quell-Hash: sha256:523f87bfc12a4cea5ec9c86c3c798ffb68fd774686fd146e69a9ca3a11d25c16
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -26,7 +26,7 @@
     if (host.NW_SH_FEEDBACK)
         return;
     const routes = new Set([
-        '/api/smarthome/toggle', '/api/smarthome/level', '/api/smarthome/color',
+        '/api/smarthome/control', '/api/smarthome/toggle', '/api/smarthome/level', '/api/smarthome/color',
         '/api/smarthome/cover', '/api/smarthome/player', '/api/smarthome/rtrSetpoint',
         '/api/smarthome/climate', '/api/smarthome/value', '/api/smarthome/timers',
     ]);
@@ -163,7 +163,8 @@
         // Jeder bewusst erneut ausgelöste Stopp erreicht den Server. Insbesondere
         // STOPP → AB → STOPP darf den letzten Stopp nicht mit einem noch laufenden
         // ersten HTTP-Auftrag zusammenlegen. Andere gleiche Befehle bleiben dedupliziert.
-        const stop = endpoint === '/api/smarthome/cover' && record(payload) && payload.action === 'stop';
+        const stop = record(payload) && ((endpoint === '/api/smarthome/cover' && payload.action === 'stop')
+            || (endpoint === '/api/smarthome/control' && (payload.key === 'STOP' || payload.key === 'TILT_STOP')));
         const key = id + '\n' + endpoint + '\n' + body + (stop ? '\nstop:' + requestSequence : '');
         const existing = pending.get(key);
         if (existing)

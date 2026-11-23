@@ -1,0 +1,646 @@
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: aliases HTTP requires installer guard plus current mapping role, license and ownership; malformed bodies cannot mutate objects or values
+ok 1 - aliases HTTP requires installer guard plus current mapping role, license and ownership; malformed bodies cannot mutate objects or values
+  ---
+  duration_ms: 77.627246
+  type: 'test'
+  ...
+# Subtest: successful aliases HTTP creates only objects, preserves room/ID, returns no-store and safely reuses a repeated explicit request
+ok 2 - successful aliases HTTP creates only objects, preserves room/ID, returns no-store and safely reuses a repeated explicit request
+  ---
+  duration_ms: 24.294193
+  type: 'test'
+  ...
+# Subtest: rights or license revoked during metadata inspection are checked again before the first object creation
+ok 3 - rights or license revoked during metadata inspection are checked again before the first object creation
+  ---
+  duration_ms: 22.604479
+  type: 'test'
+  ...
+# Subtest: permission revocation between alias objects stops immediately and returns the partial object inventory without state writes
+ok 4 - permission revocation between alias objects stops immediately and returns the partial object inventory without state writes
+  ---
+  duration_ms: 6.521419
+  type: 'test'
+  ...
+# Subtest: final authorization denial after all alias objects exist still reports created IDs for recovery
+ok 5 - final authorization denial after all alias objects exist still reports created IDs for recovery
+  ---
+  duration_ms: 9.179378
+  type: 'test'
+  ...
+# Subtest: object creation failure and a forbidden alias source produce safe partial responses without leaking backend errors or writing actuator states
+ok 6 - object creation failure and a forbidden alias source produce safe partial responses without leaking backend errors or writing actuator states
+  ---
+  duration_ms: 29.688569
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:13) ExperimentalWarning: The MockTimers API is an experimental feature and might change at any time
+# Subtest: explicit alias creation preserves customer data, metadata and source provenance, creates only objects and rewrites matching legacy paths
+ok 7 - explicit alias creation preserves customer data, metadata and source provenance, creates only objects and rewrites matching legacy paths
+  ---
+  duration_ms: 6.338119
+  type: 'test'
+  ...
+# Subtest: retry of original or returned draft is idempotent and existing user aliases retain conversion expressions untouched
+ok 8 - retry of original or returned draft is idempotent and existing user aliases retain conversion expressions untouched
+  ---
+  duration_ms: 3.652351
+  type: 'test'
+  ...
+# Subtest: same-shaped separate targets produce paired alias IDs; differing types/ranges use distinct READ and WRITE aliases without fallback
+ok 9 - same-shaped separate targets produce paired alias IDs; differing types/ranges use distinct READ and WRITE aliases without fallback
+  ---
+  duration_ms: 2.726419
+  type: 'test'
+  ...
+# Subtest: foreign root or deterministic state collision is never overwritten and preflight creates no partial objects
+ok 10 - foreign root or deterministic state collision is never overwritten and preflight creates no partial objects
+  ---
+  duration_ms: 2.680302
+  type: 'test'
+  ...
+# Subtest: partial object failure reports created and uncertain IDs, retains draft and permits deliberate safe retry
+ok 11 - partial object failure reports created and uncertain IDs, retains draft and permits deliberate safe retry
+  ---
+  duration_ms: 1.658398
+  type: 'test'
+  ...
+# Subtest: invalid permissions, secret aliases, forbidden IDs and unknown profile slots fail before any alias mutation
+ok 12 - invalid permissions, secret aliases, forbidden IDs and unknown profile slots fail before any alias mutation
+  ---
+  duration_ms: 0.917409
+  type: 'test'
+  ...
+# Subtest: input bounds/getters and ambiguous generated suffix collisions fail without invoking state writes
+ok 13 - input bounds/getters and ambiguous generated suffix collisions fail without invoking state writes
+  ---
+  duration_ms: 13.014957
+  type: 'test'
+  ...
+# Subtest: concurrent explicit requests are rejected rather than queued; readback races retain foreign objects
+ok 14 - concurrent explicit requests are rejected rather than queued; readback races retain foreign objects
+  ---
+  duration_ms: 2.194136
+  type: 'test'
+  ...
+# Subtest: expired reads never create late alias objects, and later completed requests are not retried automatically
+ok 15 - expired reads never create late alias objects, and later completed requests are not retried automatically
+  ---
+  duration_ms: 2.163932
+  type: 'test'
+  ...
+# (node:14) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: catalog covers every TypeDetector6.2 external profile and every field including indicators; copies do not mutate authority
+ok 16 - catalog covers every TypeDetector6.2 external profile and every field including indicators; copies do not mutate authority
+  ---
+  duration_ms: 50.203816
+  type: 'test'
+  ...
+# Subtest: all catalog field scalar types can be read without converting null, strings, or numeric enums
+ok 17 - all catalog field scalar types can be read without converting null, strings, or numeric enums
+  ---
+  duration_ms: 456.384977
+  type: 'test'
+  ...
+# Subtest: normalization retains exact maps, expands registered weather slots and rejects unknown keys/IDs/prototypes/overlimits
+ok 18 - normalization retains exact maps, expands registered weather slots and rejects unknown keys/IDs/prototypes/overlimits
+  ---
+  duration_ms: 1.176029
+  type: 'test'
+  ...
+# Subtest: writes require persisted write mapping and actual state permissions/type; client IDs and dangerous object roles never gain authority
+ok 19 - writes require persisted write mapping and actual state permissions/type; client IDs and dangerous object roles never gain authority
+  ---
+  duration_ms: 4.138886
+  type: 'test'
+  ...
+# Subtest: numeric bounds, steps and actual typed enums are validated; catalog enum defaults do not override device-specific actual values
+ok 20 - numeric bounds, steps and actual typed enums are validated; catalog enum defaults do not override device-specific actual values
+  ---
+  duration_ms: 1.552583
+  type: 'test'
+  ...
+# Subtest: unknown and bad-quality readings remain invalid without blocking explicit writes; state timestamps and acknowledgements are exposed honestly
+ok 21 - unknown and bad-quality readings remain invalid without blocking explicit writes; state timestamps and acknowledgements are exposed honestly
+  ---
+  duration_ms: 1.09475
+  type: 'test'
+  ...
+# Subtest: locks require deliberate unlock/open confirmation and gate SET remains boolean; momentary STOP only accepts true
+ok 22 - locks require deliberate unlock/open confirmation and gate SET remains boolean; momentary STOP only accepts true
+  ---
+  duration_ms: 1.031277
+  type: 'test'
+  ...
+# Subtest: mapped cover protections block uncertain or active movement but independent STOP bypasses movement interlocks
+ok 23 - mapped cover protections block uncertain or active movement but independent STOP bypasses movement interlocks
+  ---
+  duration_ms: 2.181498
+  type: 'test'
+  ...
+# (node:14) ExperimentalWarning: The MockTimers API is an experimental feature and might change at any time
+# Subtest: read snapshots share ID caches and cap host concurrency at eight for128 mapped fields
+ok 24 - read snapshots share ID caches and cap host concurrency at eight for128 mapped fields
+  ---
+  duration_ms: 42.585178
+  type: 'test'
+  ...
+# Subtest: five-second read deadline never produces late writes; write timeout is uncertain with no retry
+ok 25 - five-second read deadline never produces late writes; write timeout is uncertain with no retry
+  ---
+  duration_ms: 2.242508
+  type: 'test'
+  ...
+# Subtest: catalog enums support string/boolean/numeric options without coercion and malformed metadata fails closed
+ok 26 - catalog enums support string/boolean/numeric options without coercion and malformed metadata fails closed
+  ---
+  duration_ms: 0.990316
+  type: 'test'
+  ...
+# Subtest: legacy ioBroker enum strings and arrays retain exact option types; boolean momentary alias controls cannot write false
+ok 27 - legacy ioBroker enum strings and arrays retain exact option types; boolean momentary alias controls cannot write false
+  ---
+  duration_ms: 1.338007
+  type: 'test'
+  ...
+# Subtest: dual climate setpoints enforce heat<=cool, reject unknown counterpart and refuse concurrent rather than queued mutations
+ok 28 - dual climate setpoints enforce heat<=cool, reject unknown counterpart and refuse concurrent rather than queued mutations
+  ---
+  duration_ms: 1.113147
+  type: 'test'
+  ...
+# Subtest: bounded color batch prevalidates all mappings/values, rejects duplicates and noncolor controls, then writes each channel once
+ok 29 - bounded color batch prevalidates all mappings/values, rejects duplicates and noncolor controls, then writes each channel once
+  ---
+  duration_ms: 0.878311
+  type: 'test'
+  ...
+# Subtest: color batch stops after a failed channel and never invents retries or rollback writes
+ok 30 - color batch stops after a failed channel and never invents retries or rollback writes
+  ---
+  duration_ms: 0.989265
+  type: 'test'
+  ...
+# Subtest: all alias hops enforce permissions and secrets; cycles/depth fail while controller conversions keep the mapped alias write target
+ok 31 - all alias hops enforce permissions and secrets; cycles/depth fail while controller conversions keep the mapped alias write target
+  ---
+  duration_ms: 1.827457
+  type: 'test'
+  ...
+# Subtest: configured stale readings are invalid and cover safety requires fresh timestamp with60s default while STOP remains available
+ok 32 - configured stale readings are invalid and cover safety requires fresh timestamp with60s default while STOP remains available
+  ---
+  duration_ms: 1.031717
+  type: 'test'
+  ...
+# Subtest: normal string values and total serialized snapshot stay bounded with explicit unavailable errors, never silent truncation
+ok 33 - normal string values and total serialized snapshot stay bounded with explicit unavailable errors, never silent truncation
+  ---
+  duration_ms: 44.625559
+  type: 'test'
+  ...
+# Subtest: legacy numeric and string cover contacts preserve known clear/alarm semantics without coercing unknown data or weakening STOP
+ok 34 - legacy numeric and string cover contacts preserve known clear/alarm semantics without coercing unknown data or weakening STOP
+  ---
+  duration_ms: 6.314084
+  type: 'test'
+  ...
+# (node:17) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: catalog follows installed 6.2 dependency and every builtin external pattern
+ok 35 - catalog follows installed 6.2 dependency and every builtin external pattern
+  ---
+  duration_ms: 9.33738
+  type: 'test'
+  ...
+# Subtest: real detection retains secondary values and readonly/actual unit metadata
+ok 36 - real detection retains secondary values and readonly/actual unit metadata
+  ---
+  duration_ms: 37.720465
+  type: 'test'
+  ...
+# Subtest: real media and fan patterns produce complete external profiles
+ok 37 - real media and fan patterns produce complete external profiles
+  ---
+  duration_ms: 4.007903
+  type: 'test'
+  ...
+# Subtest: foreign optional alias siblings and duplicate values are removed without mutation
+ok 38 - foreign optional alias siblings and duplicate values are removed without mutation
+  ---
+  duration_ms: 0.475439
+  type: 'test'
+  ...
+# Subtest: siblings with shared diagnostics have separate stable identity and room assignment
+ok 39 - siblings with shared diagnostics have separate stable identity and room assignment
+  ---
+  duration_ms: 2.354692
+  type: 'test'
+  ...
+# Subtest: stable slot provenance retains manual changes when field order and source mappings change
+ok 40 - stable slot provenance retains manual changes when field order and source mappings change
+  ---
+  duration_ms: 2.55077
+  type: 'test'
+  ...
+# Subtest: explicit object directions never invent read/write permissions and alias cycles block import
+ok 41 - explicit object directions never invent read/write permissions and alias cycles block import
+  ---
+  duration_ms: 1.226233
+  type: 'test'
+  ...
+# Subtest: alias preference keeps the alias and distinguishes its read and write targets
+ok 42 - alias preference keeps the alias and distinguishes its read and write targets
+  ---
+  duration_ms: 0.808318
+  type: 'test'
+  ...
+# Subtest: legacy provenance upgrades without changing the existing legacy type or manual room
+ok 43 - legacy provenance upgrades without changing the existing legacy type or manual room
+  ---
+  duration_ms: 1.198933
+  type: 'test'
+  ...
+# Subtest: repeated primary slots become independent controls and forecast day slots stay typed
+ok 44 - repeated primary slots become independent controls and forecast day slots stay typed
+  ---
+  duration_ms: 1.140728
+  type: 'test'
+  ...
+# Subtest: profile-enabled legacy groups never turn readonly feedback into write mappings
+ok 45 - profile-enabled legacy groups never turn readonly feedback into write mappings
+  ---
+  duration_ms: 69.452796
+  type: 'test'
+  ...
+# Subtest: existing cover protections remain part of strict profiles and conflicting sources are rejected
+ok 46 - existing cover protections remain part of strict profiles and conflicting sources are rejected
+  ---
+  duration_ms: 1.757184
+  type: 'test'
+  ...
+# Subtest: managed aliases retain canonical import identity while preserving alias bindings and display
+ok 47 - managed aliases retain canonical import identity while preserving alias bindings and display
+  ---
+  duration_ms: 1.80199
+  type: 'test'
+  ...
+# Subtest: different user alias conversions are not collapsed merely because physical targets match
+ok 48 - different user alias conversions are not collapsed merely because physical targets match
+  ---
+  duration_ms: 0.744865
+  type: 'test'
+  ...
+# Subtest: actual alias creation followed by TypeDetector6.2 rediscovery preserves canonical identity and existing customer configuration
+ok 49 - actual alias creation followed by TypeDetector6.2 rediscovery preserves canonical identity and existing customer configuration
+  ---
+  duration_ms: 60.593639
+  type: 'test'
+  ...
+# Subtest: manual fallback slots do not invent detector mappings or broaden readonly media STATE commands
+ok 50 - manual fallback slots do not invent detector mappings or broaden readonly media STATE commands
+  ---
+  duration_ms: 1.76132
+  type: 'test'
+  ...
+# (node:26) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: every independent reference category and read/write slot is available, including manual fallbacks and numbered forecast fields
+ok 51 - every independent reference category and read/write slot is available, including manual fallbacks and numbered forecast fields
+  ---
+  duration_ms: 67.820626
+  type: 'test'
+  ...
+# Subtest: socket: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 52 - socket: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 31.097516
+  type: 'test'
+  ...
+# Subtest: light: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 53 - light: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 1.354181
+  type: 'test'
+  ...
+# Subtest: dimmer: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 54 - dimmer: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 20.456099
+  type: 'test'
+  ...
+# Subtest: temperature: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 55 - temperature: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 1.926302
+  type: 'test'
+  ...
+# Subtest: motion: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 56 - motion: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 1.062302
+  type: 'test'
+  ...
+# Subtest: window: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 57 - window: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 1.058887
+  type: 'test'
+  ...
+# Subtest: windowTilt: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 58 - windowTilt: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 22.5349
+  type: 'test'
+  ...
+# Subtest: gate: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 59 - gate: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 5.829983
+  type: 'test'
+  ...
+# Subtest: blind: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 60 - blind: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 1.316817
+  type: 'test'
+  ...
+# Subtest: blindButtons: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 61 - blindButtons: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.862989
+  type: 'test'
+  ...
+# Subtest: button: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 62 - button: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.815449
+  type: 'test'
+  ...
+# Subtest: buttonSensor: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 63 - buttonSensor: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 4.959251
+  type: 'test'
+  ...
+# Subtest: camera: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 64 - camera: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.545061
+  type: 'test'
+  ...
+# Subtest: vacuumCleaner: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 65 - vacuumCleaner: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.43465
+  type: 'test'
+  ...
+# Subtest: contact: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 66 - contact: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 9.447683
+  type: 'test'
+  ...
+# Subtest: coAlarm: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 67 - coAlarm: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 7.158836
+  type: 'test'
+  ...
+# Subtest: pressure: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 68 - pressure: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.977217
+  type: 'test'
+  ...
+# Subtest: flow: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 69 - flow: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 15.332906
+  type: 'test'
+  ...
+# Subtest: electricity: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 70 - electricity: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 9.560898
+  type: 'test'
+  ...
+# Subtest: airQuality: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 71 - airQuality: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 8.323489
+  type: 'test'
+  ...
+# Subtest: lock: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 72 - lock: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.757514
+  type: 'test'
+  ...
+# Subtest: door: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 73 - door: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.943117
+  type: 'test'
+  ...
+# Subtest: floodAlarm: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 74 - floodAlarm: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 4.939644
+  type: 'test'
+  ...
+# Subtest: fireAlarm: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 75 - fireAlarm: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 8.012241
+  type: 'test'
+  ...
+# Subtest: humidity: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 76 - humidity: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.496711
+  type: 'test'
+  ...
+# Subtest: illuminance: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 77 - illuminance: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.412306
+  type: 'test'
+  ...
+# Subtest: thermostat: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 78 - thermostat: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.667722
+  type: 'test'
+  ...
+# Subtest: airCondition: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 79 - airCondition: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.306822
+  type: 'test'
+  ...
+# Subtest: fan: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 80 - fan: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.304588
+  type: 'test'
+  ...
+# Subtest: airPurifier: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 81 - airPurifier: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 14.695869
+  type: 'test'
+  ...
+# Subtest: pump: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 82 - pump: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 36.613247
+  type: 'test'
+  ...
+# Subtest: warning: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 83 - warning: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.570729
+  type: 'test'
+  ...
+# Subtest: volume: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 84 - volume: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.510281
+  type: 'test'
+  ...
+# Subtest: volumeGroup: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 85 - volumeGroup: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 25.901486
+  type: 'test'
+  ...
+# Subtest: media: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 86 - media: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 1.018668
+  type: 'test'
+  ...
+# Subtest: tv: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 87 - tv: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.638869
+  type: 'test'
+  ...
+# Subtest: fillLevel: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 88 - fillLevel: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.477662
+  type: 'test'
+  ...
+# Subtest: slider: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 89 - slider: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.592852
+  type: 'test'
+  ...
+# Subtest: percentage: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 90 - percentage: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 5.93717
+  type: 'test'
+  ...
+# Subtest: info: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 91 - info: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 1.073038
+  type: 'test'
+  ...
+# Subtest: image: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 92 - image: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 8.795223
+  type: 'test'
+  ...
+# Subtest: location: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 93 - location: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.658137
+  type: 'test'
+  ...
+# Subtest: locationOne: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 94 - locationOne: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 15.861683
+  type: 'test'
+  ...
+# Subtest: weatherCurrent: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 95 - weatherCurrent: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.46943
+  type: 'test'
+  ...
+# Subtest: weatherForecast: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 96 - weatherForecast: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 8.542251
+  type: 'test'
+  ...
+# Subtest: rgbSingle: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 97 - rgbSingle: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.450732
+  type: 'test'
+  ...
+# Subtest: rgbwSingle: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 98 - rgbwSingle: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.336115
+  type: 'test'
+  ...
+# Subtest: rgb: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 99 - rgb: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.51719
+  type: 'test'
+  ...
+# Subtest: hue: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 100 - hue: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.694191
+  type: 'test'
+  ...
+# Subtest: cie: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 101 - cie: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 6.070036
+  type: 'test'
+  ...
+# Subtest: ct: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 102 - ct: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.571951
+  type: 'test'
+  ...
+# Subtest: every independently inventoried write slot accepts its correctly typed authorized command exactly once and rejects missing write authority
+ok 103 - every independently inventoried write slot accepts its correctly typed authorized command exactly once and rejects missing write authority
+  ---
+  duration_ms: 103.486224
+  type: 'test'
+  ...
+# Subtest: manual media state/volume and percentage/color power retain explicit type semantics instead of guessed boolean/numeric coercion
+ok 104 - manual media state/volume and percentage/color power retain explicit type semantics instead of guessed boolean/numeric coercion
+  ---
+  duration_ms: 4.043817
+  type: 'test'
+  ...
+1..104
+# tests 104
+# suites 0
+# pass 104
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2568.206722

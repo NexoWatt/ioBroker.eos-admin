@@ -277,15 +277,16 @@ test('Poll aktualisiert Alter ohne Neurender, echte Qualitäts-/Wertwechsel rend
   await h.context.nwReloadDevices({ force: true }); assert.equal(renders, 3);
 });
 
-test('Schalt-/Szenen-Payloads, Dimmschritt und Klima-Regelgrenzen bleiben erhalten', async () => {
+test('Schalt-/Szenen-Payloads, Dimmerregler ohne Schritttasten und Klima-Regelgrenzen bleiben erhalten', async () => {
   const h = harness(); h.context.nwReloadDevices = async () => {};
   const switchTile = h.context.nwCreateTile(device('switch'));
   await switchTile.querySelector('.nw-sh-mini-toggle').fire('click');
   assert.deepEqual(h.apiCalls.at(-1).body, { id: 'fixture-device', value: false });
   const dimmer = h.context.nwCreateTile(device());
-  const minus = dimmer.querySelectorAll('.nw-sh-mini-btn').find((button) => button.textContent === '−');
-  await minus.fire('click');
-  assert.deepEqual(h.apiCalls.at(-1).body, { id: 'fixture-device', level: 37 });
+  assert.equal(dimmer.querySelectorAll('button').some(button => ['−', '+'].includes(button.textContent)), false);
+  const dimmerSlider = dimmer.querySelector('input[type="range"]');
+  dimmerSlider.value = '35'; await dimmerSlider.fire('change');
+  assert.deepEqual(h.apiCalls.at(-1).body, { id: 'fixture-device', level: 35 });
   const scene = h.context.nwCreateTile(device('scene', { behavior: { commandMode: 'momentary' } }));
   await scene.querySelector('.nw-sh-mini-btn').fire('click');
   assert.deepEqual(h.apiCalls.at(-1).body, { id: 'fixture-device' });

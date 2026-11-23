@@ -1,0 +1,96 @@
+/* Copyright (c) 2026 NexoWatt. All rights reserved. Confidential and Proprietary.
+ * Bedienprofil-Konfiguration: lokaler Entwurf, getrennte Lese-/Schreibzuordnung. */
+body.nw-page-smarthome-config .nw-sh-profile {
+  --nw-profile-border: rgba(61, 176, 164, .25);
+  display: block;
+  min-width: 0;
+  margin: 18px 0;
+  padding: 16px;
+  color: #e6f5f7;
+  background: #0c202b;
+  border: 1px solid var(--nw-profile-border);
+  border-radius: 16px;
+}
+body.nw-page-smarthome-config .nw-sh-profile__heading {
+  min-height: 44px;
+  padding: 10px 4px;
+  font-size: 16px;
+  font-weight: 750;
+  line-height: 1.4;
+  cursor: pointer;
+  color: #c8fff0;
+}
+body.nw-page-smarthome-config .nw-sh-profile__intro,
+body.nw-page-smarthome-config .nw-sh-profile__hint,
+body.nw-page-smarthome-config .nw-sh-profile__field-meta {
+  margin: 8px 0 12px;
+  color: #a8c1cc;
+  line-height: 1.6;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+body.nw-page-smarthome-config .nw-sh-profile__status,
+body.nw-page-smarthome-config .nw-sh-profile__change-note,
+body.nw-page-smarthome-config .nw-sh-profile__warning {
+  margin: 12px 0;
+  padding: 10px 12px;
+  background: rgba(28, 165, 134, .09);
+  border-left: 3px solid #24cda1;
+  border-radius: 4px;
+  color: #c5eade;
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+body.nw-page-smarthome-config .nw-sh-profile__status[data-state="error"],
+body.nw-page-smarthome-config .nw-sh-profile__warning {
+  border-left-color: #f2b454;
+  background: rgba(242, 180, 84, .09);
+  color: #f4d5a4;
+}
+body.nw-page-smarthome-config .nw-sh-profile__selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: stretch;
+  margin: 14px 0 10px;
+}
+body.nw-page-smarthome-config .nw-sh-profile__select { flex: 1 1 220px; width: auto; min-width: 0; }
+body.nw-page-smarthome-config .nw-sh-profile__search { display: block; width: 100%; margin: 14px 0 8px; }
+body.nw-page-smarthome-config .nw-sh-profile .nw-config-select,
+body.nw-page-smarthome-config .nw-sh-profile .nw-config-input,
+body.nw-page-smarthome-config .nw-sh-profile button {
+  min-height: 44px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+body.nw-page-smarthome-config .nw-sh-profile__button { white-space: normal; line-height: 1.4; }
+body.nw-page-smarthome-config .nw-sh-profile__fields { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); }
+body.nw-page-smarthome-config .nw-sh-profile__field {
+  padding: 14px;
+  min-width: 0;
+  background: #0a1923;
+  border: 1px solid var(--nw-profile-border);
+  border-radius: 12px;
+}
+body.nw-page-smarthome-config .nw-sh-profile__field-title { margin: 0; color: #e6f5f7; font-size: 15px; line-height: 1.5; overflow-wrap: anywhere; }
+body.nw-page-smarthome-config .nw-sh-profile__field .nw-config-row { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; }
+body.nw-page-smarthome-config .nw-sh-profile__field .nw-config-row__label { font-size: 12px; color: #b2cbd4; }
+body.nw-page-smarthome-config .nw-sh-profile__field .nw-config-row__ctrl { min-width: 0; width: 100%; }
+body.nw-page-smarthome-config .nw-sh-profile__field .nw-config-dp-input-wrapper { display: flex; flex-wrap: wrap; gap: 6px; }
+body.nw-page-smarthome-config .nw-sh-profile__field .nw-config-dp-input { width: 100%; min-width: 100%; flex: 1 0 100%; }
+body.nw-page-smarthome-config .nw-sh-profile :focus-visible { outline: 2px solid #64f4ce; outline-offset: 3px; }
+body.nw-page-smarthome-config .nw-sh-profile button:disabled { opacity: .55; cursor: default; }
+body.nw-page-smarthome-config .nw-sh-profile [hidden] { display: none !important; }
+body.nw-page-smarthome-config .nw-sh-alias-tools { margin: 16px 0; padding: 12px; border: 1px solid rgba(61, 176, 164, .25); border-radius: 12px; background: #0a1923; }
+body.nw-page-smarthome-config .nw-sh-alias-tools button { min-height: 44px; white-space: normal; }
+body.nw-page-smarthome-config .nw-sh-alias-tools__status { margin: 8px 0 0; color: #aec8d1; line-height: 1.6; font-size: 13px; overflow-wrap: anywhere; }
+@media (max-width: 560px) {
+  body.nw-page-smarthome-config .nw-sh-profile { padding: 12px; }
+  body.nw-page-smarthome-config .nw-sh-profile__selector > * { flex: 1 1 100%; }
+}
+@media (forced-colors: active) {
+  body.nw-page-smarthome-config .nw-sh-profile,
+  body.nw-page-smarthome-config .nw-sh-profile__field { border-color: CanvasText; }
+  body.nw-page-smarthome-config .nw-sh-profile :focus-visible { outline-color: Highlight; }
+}

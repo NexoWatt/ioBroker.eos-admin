@@ -1,0 +1,8 @@
+PASS Unbestätigter Start sperrt Hintergrund und lädt kein Passwortformular
+PASS Statusfehler und Kunden-Wildcards öffnen das AppCenter nicht
+PASS Nur bestätigte Fachrolle entsperrt und stellt vorherigen inert-Zustand wieder her
+PASS Außenklick, Escape und erneutes Prüfen besitzen keinen Entsperrpfad
+PASS Sitzungsverlust oder verborgenes Dokument sperrt bereits freigegebene Inhalte erneut
+PASS Ein Frame bietet ausschließlich einen sicheren separaten Loginlink
+[appcenter-auth-modal-lock] PASS 6 original gate-function groups; separate login, role denial and inert/hidden restoration. DOM simulation only, no browser focus/layout claim.
+[appcenter-auth-smarthome-security] OK: AppCenter and SmartHome setup are fail-closed; DP discovery/assignment requires Installer/Admin.

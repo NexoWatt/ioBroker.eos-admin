@@ -35,7 +35,7 @@ Parameter sind die Namen aus der Signatur, keine geratenen Datenverträge. Die A
 | [`attachStatus`](../../../../../src-ts/runtime-executables/www/smarthome-feedback.ts#L99) | root, id | Array.from, document.createElement, node.setAttribute, renderStatus, root.appendChild, validId |
 | [`readResponse`](../../../../../src-ts/runtime-executables/www/smarthome-feedback.ts#L112) | response, limit | JSON.parse, decoder.decode, reader.cancel, reader.read, reader.releaseLock, response.body?.getReader, response.text |
 | [`post`](../../../../../src-ts/runtime-executables/www/smarthome-feedback.ts#L139) | endpoint, payload, id | JSON.stringify, Promise.resolve, pending.get, pending.set, record, routes.has, show, validId |
-| [`actionTarget`](../../../../../src-ts/runtime-executables/www/smarthome-feedback.ts#L213) | target | element.closest, element.matches, target.closest |
-| [`clearPress`](../../../../../src-ts/runtime-executables/www/smarthome-feedback.ts#L221) | cancelled | Date.now |
-| [`markPress`](../../../../../src-ts/runtime-executables/www/smarthome-feedback.ts#L226) | target, pointerId, x, y | clearPress |
-| [`install`](../../../../../src-ts/runtime-executables/www/smarthome-feedback.ts#L231) | – | document.addEventListener, window.addEventListener |
+| [`actionTarget`](../../../../../src-ts/runtime-executables/www/smarthome-feedback.ts#L214) | target | element.closest, element.matches, target.closest |
+| [`clearPress`](../../../../../src-ts/runtime-executables/www/smarthome-feedback.ts#L222) | cancelled | Date.now |
+| [`markPress`](../../../../../src-ts/runtime-executables/www/smarthome-feedback.ts#L227) | target, pointerId, x, y | clearPress |
+| [`install`](../../../../../src-ts/runtime-executables/www/smarthome-feedback.ts#L232) | – | document.addEventListener, window.addEventListener |

@@ -8,5 +8,10 @@
     "de": "Stable-Hotfix 7.10.2 beseitigt die EOS-Admin-Startschleife: Stable-Update-Status wird nicht mehr in die laufende Instanzkonfiguration geschrieben, der erste Abgleich startet verzögert und das Release prüft die vollständige Backend-Modulkette einschließlich eosRequestSecurity.",
     "en": "Stable hotfix 7.10.2 removes the EOS Admin restart loop: stable-update status is no longer written to the running instance configuration, first reconciliation is delayed, and the release validates the complete backend module chain including eosRequestSecurity.",
     "nl": "Stable-hotfix 7.10.2 verhelpt de EOS Admin-herstartlus: de status van stabiele updates wordt niet meer naar de configuratie van de actieve instantie geschreven, de eerste synchronisatie start vertraagd en de release controleert de volledige backendmoduleketen inclusief eosRequestSecurity."
+  },
+  "7.10.4": {
+    "de": "Stable 7.10.4 verschiebt die Einstellung für automatische NexoWatt-Adapter-Updates vollständig in die Systemeinstellungen hinter dem Schraubenschlüssel. Auf Übersicht, Module und allen anderen Hauptseiten wird die Update-Karte nicht mehr eingeblendet. Die stabile Update-Logik und die Absturzkorrekturen aus 7.10.2 bleiben unverändert.",
+    "en": "Stable 7.10.4 moves the automatic NexoWatt adapter update control entirely into System Settings behind the wrench button. The update card is no longer shown on Overview, Modules or any other main page. Stable update behavior and the 7.10.2 crash fixes remain unchanged.",
+    "nl": "Stable 7.10.4 verplaatst de instelling voor automatische NexoWatt-adapterupdates volledig naar de systeeminstellingen achter de moersleutelknop. De updatekaart wordt niet meer weergegeven op Overzicht, Modules of andere hoofdpagina’s. De stabiele updatelogica en crashfixes uit 7.10.2 blijven ongewijzigd."
   }
 }

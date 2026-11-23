@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "nexowatt-ui",
-    "version": "9.0.9",
+    "version": "9.0.10",
     "news": {
       "9.0.8": {
         "en": "Explicit SmartHome activation, protected legacy configuration loading, same-tab administration and maintained backup scheduling. Node.js 22 and 24 supported; test channel with documented migration limits.",
@@ -55,6 +55,10 @@
       "1.0.32": {
         "de": "Eigenständige Arbitrage-App und geschützte ausgehende WSS-Partneranbindung mit getrennten Datenrechten, kurzlebigen Speicheranforderungen und Widerruf. Aufbau auf 1.0.31; Anlagenabnahme bleibt erforderlich.",
         "en": "Independent arbitrage app and secured outbound WSS partner integration with scoped data access, short-lived storage requests and revocation. Based on 1.0.31; site commissioning remains required."
+      },
+      "9.0.10": {
+        "en": "Device profiles, linked aliases and TypeDetector 6.2 with preserved mappings; full-width SmartHome configuration, sortable tiles and colorful category controls.",
+        "de": "Geräteprofile, verknüpfte Aliase und TypeDetector 6.2 mit Erhalt bestehender Zuordnungen; SmartHome-Konfiguration über die volle Breite, sortierbare Kacheln und farbige Kategoriebedienung."
       }
     },
     "title": "NexoWatt EOS",

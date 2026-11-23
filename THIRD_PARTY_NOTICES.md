@@ -61,3 +61,17 @@ The integrated backup uses locked tar-fs (MIT), cron-parser (MIT), ftp (MIT), Dr
 The user-supplied `ioBroker.devices-master.zip` identifies `iobroker.devices` 4.4.0, Copyright (c) 2019–2026 bluefox, under the MIT license. Its archive SHA-256 is `a0166efec63ae7e5dc5ce3d25d41e60a321f7f58444c127c2cc4c9535a46ba2f`. The exact supplied license is retained conservatively in `ui/www/licenses/iobroker-devices-MIT.txt`; the proprietary NexoWatt notices do not withdraw rights granted under that license.
 
 The SmartHome changes reimplement selected operating and touch-interaction patterns within the existing EOS frontend. This is not an import of the complete ioBroker.devices adapter, its React/MUI application, device/alias detection, backend, plugin services or external widget loaders. Scope, reference paths and provenance limits are recorded in `docs/reports/unified-9.0.9/DEVICE_UI_REFERENCE.md`.
+
+## Local SmartHome GFM Markdown parser (EOS 9.0.10)
+
+The local `ui/www/smarthome-markdown-parser.js` bundle reuses the existing Admin build dependencies `mdast-util-from-markdown`, `micromark-extension-gfm` and `mdast-util-gfm`, including their bundled transitive components. No additional network loader or package installation is introduced. Complete component names, exact installed versions and license identifiers are preserved in `ui/www/licenses/smarthome-markdown-components.json`; their unchanged license texts are retained in `ui/www/licenses/smarthome-markdown-LICENSES.txt`. Rebuild with `node ui/scripts/build-smarthome-markdown.cjs`. These third-party rights remain unaffected by the proprietary NexoWatt license.
+
+## SmartHome category controls (EOS 9.0.10)
+
+The built-in operating profiles follow the supplied ioBroker.devices 4.4.0 reference.
+Color-conversion functions in `ui/src-ts/runtime-executables/www/smarthome-device-controls.ts`
+are adapted from the reference `src-admin/src/WidgetsManager/Widgets/colorUtils.ts`;
+the source attribution is retained in the code comments.
+The supplied MIT license remains in `ui/www/licenses/iobroker-devices-MIT.txt`.
+The current function scope and independent EOS backend are described in the 9.0.10
+change report. This extends the historical 9.0.9 scope above.

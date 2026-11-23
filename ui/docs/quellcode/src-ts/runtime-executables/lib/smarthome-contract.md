@@ -14,6 +14,8 @@ Statisch gefundene Imports/require-Aufrufe. Ein Import belegt eine Code-Verknüp
 
 | Import | Aufgelöste Datei |
 | --- | --- |
+| `./smarthome-custom-contract` | [src-ts/runtime-executables/lib/smarthome-custom-contract.ts](../../../../../src-ts/runtime-executables/lib/smarthome-custom-contract.ts) |
+| `./smarthome-device-controls` | [src-ts/runtime-executables/lib/smarthome-device-controls.ts](../../../../../src-ts/runtime-executables/lib/smarthome-device-controls.ts) |
 | `./smarthome-import` | [src-ts/runtime-executables/lib/smarthome-import.ts](../../../../../src-ts/runtime-executables/lib/smarthome-import.ts) |
 
 **Direkt importiert von:**
@@ -26,19 +28,21 @@ Parameter sind die Namen aus der Signatur, keine geratenen Datenverträge. Die A
 
 | Funktion / Methode | Parameter | Direkt sichtbare Aufrufe (Auszug) |
 | --- | --- | --- |
-| [`isPlain`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L117) | value | Array.isArray |
-| [`str`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L121) | value, max | String, out.slice |
-| [`finite`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L127) | value, fallback, min, max | Math.max, Math.min, Number, Number.isFinite |
-| [`nullableId`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L135) | value | str |
-| [`cleanIoPair`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L140) | source, fallbackRead, fallbackWrite | isPlain, nullableId |
-| [`normalizeTemplateContract`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L147) | templateId, type, behavior, capabilities, io, ui | Object.prototype.hasOwnProperty.call, finite, isPlain, str |
-| [`normalizeSmartHomeDevice`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L195) | input, index | Array.isArray, Number, Number.isFinite, Object.keys, Object.prototype.hasOwnProperty.call, SUPPORTED_TYPES.has, cleanIoPair, finite, isPlain, normalizeSmartHomeImportColor, normalizeSmartHomeImportProvenance, normalizeTemplateContract, nullableId, str (weitere in der Quelle) |
-| [`normalizeSceneActionKind`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L489) | value | str |
-| [`normalizeSmartHomeScene`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L514) | input, index | Array.isArray, Number, Number.isFinite, isPlain, nullableId, str |
-| [`sceneActionTargetAvailable`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L545) | dev, kind, value | normalizeSceneActionKind, str, value.trim |
-| [`normalizeSmartHomeConfig`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L592) | input | Array.isArray, Number, Number.isFinite, isPlain |
-| [`validateSmartHomeConfig`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L607) | input | Array.from, Array.isArray, config.devices.forEach, config.devices.map, config.scenes.forEach, normalizeSceneActionKind, normalizeSmartHomeConfig, sceneAdjacency.get, sceneAdjacency.has, sceneAdjacency.keys, sceneById.keys, str, visitScene |
-| [`push`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L612) | target, code, message, path, deviceId | target.push |
-| [`visitScene`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L709) | id | cycle.join, push, sceneAdjacency.get, sceneStack.indexOf, sceneStack.pop, sceneStack.push, sceneStack.slice, sceneVisited.add, sceneVisited.has, sceneVisiting.add, sceneVisiting.delete, sceneVisiting.has, visitScene |
-| [`collectIds`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L729) | io, mode | Array.from, visit |
-| [`visit`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L742) | value, key | Object.entries, String, childValue.trim, lower.includes, out.push, readableKeys.has, visit, writableKeys.has |
+| [`isPlain`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L119) | value | Array.isArray |
+| [`str`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L123) | value, max | String, out.slice |
+| [`finite`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L129) | value, fallback, min, max | Math.max, Math.min, Number, Number.isFinite |
+| [`nullableId`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L137) | value | str |
+| [`cleanIoPair`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L142) | source, fallbackRead, fallbackWrite | isPlain, nullableId |
+| [`retainDeclaredLegacyWrites`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L153) | rawIo, normalizedIo | Object.entries, nullableId, object, source.split, target.split |
+| [`object`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L169) | value | Array.isArray |
+| [`normalizeTemplateContract`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L184) | templateId, type, behavior, capabilities, io, ui | Object.prototype.hasOwnProperty.call, finite, isPlain, str |
+| [`normalizeSmartHomeDevice`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L232) | input, index | Array.isArray, Number, Number.isFinite, Object.keys, Object.prototype.hasOwnProperty.call, SUPPORTED_TYPES.has, assertCustomViewBindings, cleanIoPair, deviceControls.fields.find, deviceControls.fields.push, deviceControls?.fields.some, finite, isPlain, normalizeCustomView (weitere in der Quelle) |
+| [`normalizeSceneActionKind`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L549) | value | str |
+| [`normalizeSmartHomeScene`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L574) | input, index | Array.isArray, Number, Number.isFinite, isPlain, nullableId, str |
+| [`sceneActionTargetAvailable`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L605) | dev, kind, value | normalizeSceneActionKind, str, value.trim |
+| [`normalizeSmartHomeConfig`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L652) | input | Array.isArray, Number, Number.isFinite, isPlain |
+| [`validateSmartHomeConfig`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L667) | input | Array.from, Array.isArray, config.devices.forEach, config.devices.map, config.scenes.forEach, normalizeSceneActionKind, normalizeSmartHomeConfig, sceneAdjacency.get, sceneAdjacency.has, sceneAdjacency.keys, sceneById.keys, str, visitScene |
+| [`push`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L672) | target, code, message, path, deviceId | target.push |
+| [`visitScene`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L769) | id | cycle.join, push, sceneAdjacency.get, sceneStack.indexOf, sceneStack.pop, sceneStack.push, sceneStack.slice, sceneVisited.add, sceneVisited.has, sceneVisiting.add, sceneVisiting.delete, sceneVisiting.has, visitScene |
+| [`collectIds`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L789) | io, mode | Array.from, visit |
+| [`visit`](../../../../../src-ts/runtime-executables/lib/smarthome-contract.ts#L802) | value, key | Object.entries, String, childValue.trim, lower.includes, out.push, readableKeys.has, visit, writableKeys.has |

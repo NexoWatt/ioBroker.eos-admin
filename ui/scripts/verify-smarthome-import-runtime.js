@@ -21,6 +21,7 @@ const os = require('node:os');
 const path = require('node:path');
 const vm = require('node:vm');
 const crypto = require('node:crypto');
+const Module = require('node:module');
 const ts = require('typescript');
 const Detector = require('@iobroker/type-detector').default;
 
@@ -29,6 +30,8 @@ const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'nw-smarthome-import-'))
 const checks = [];
 const sourcePaths = [
   'src-ts/runtime-executables/lib/smarthome-import.ts',
+  'src-ts/runtime-executables/lib/smarthome-device-controls.ts',
+  'src-ts/runtime-executables/lib/smarthome-device-detection.ts',
   'src-ts/runtime-executables/lib/smarthome-contract.ts',
   'src-ts/runtime-executables/main.ts',
   'src-ts/runtime-executables/www/smarthome-config.ts',
@@ -43,11 +46,28 @@ const compile = source => ts.transpileModule(source, {
 
 // Keine JS-Spiegel im Produkt verändern: getestete Module kommen aus dem
 // aktuellen kanonischen Quellstand und lösen relative Imports im Tempordner auf.
-for (const name of ['smarthome-import', 'smarthome-contract']) {
-  fs.writeFileSync(path.join(temporary, `${name}.js`), compile(read(`src-ts/runtime-executables/lib/${name}.ts`)));
+const sourceModules = new Map();
+function loadSourceModule(name) {
+  if (sourceModules.has(name)) return sourceModules.get(name).exports;
+  const file = path.join(temporary, `${name}.js`);
+  const compiled = compile(read(`src-ts/runtime-executables/lib/${name}.ts`));
+  fs.writeFileSync(file, compiled);
+  const selected = new Module(file, module); selected.filename = file;
+  selected.paths = Module._nodeModulePaths(root);
+  sourceModules.set(name, selected);
+  const nativeRequire = selected.require.bind(selected);
+  selected.require = id => id.startsWith('./') && fs.existsSync(path.join(root, `src-ts/runtime-executables/lib/${id.slice(2)}.ts`))
+    ? loadSourceModule(id.slice(2)) : nativeRequire(id);
+  selected._compile(compiled, file);
+  return selected.exports;
 }
-const helper = require(path.join(temporary, 'smarthome-import.js'));
-const contract = require(path.join(temporary, 'smarthome-contract.js'));
+const helper = loadSourceModule('smarthome-import');
+const controlHelpers = loadSourceModule('smarthome-device-controls');
+const detectionHelpers = loadSourceModule('smarthome-device-detection');
+const cacheHelpers = loadSourceModule('ephemeral-cache');
+const activationHelpers = loadSourceModule('smarthome-activation');
+const deviceApiHelpers = loadSourceModule('smarthome-device-api');
+const contract = loadSourceModule('smarthome-contract');
 const mainSource = read('src-ts/runtime-executables/main.ts');
 const configSource = read('src-ts/runtime-executables/www/smarthome-config.ts');
 
@@ -66,7 +86,8 @@ function findNode(source, name, predicate) {
 function actualMethod(name) {
   const method = findNode(mainSource, name, ts.isMethodDeclaration);
   return vm.runInNewContext(compile(`const selected = ({ ${method} })[${JSON.stringify(name)}];`) + '\nselected', {
-    normalizeSmartHomeCameraStateUrl: helper.normalizeSmartHomeCameraStateUrl,
+    normalizeSmartHomeCameraStateUrl: helper.normalizeSmartHomeCameraStateUrl, ...controlHelpers, ...activationHelpers, ...deviceApiHelpers,
+    nwRetainDeclaredLegacyWrites: contract.retainDeclaredLegacyWrites,
   });
 }
 const buildDevices = actualMethod('buildSmartHomeDevicesFromConfig');
@@ -108,6 +129,7 @@ function detectorHarness(objects, values, initialConfig = {}) {
   const routes = new Map();
   const adapter = {
     namespace: 'nexowatt-ui.0', config: {},
+    _nwShcfgDetectCache: new cacheHelpers.EphemeralMap(30000, 1),
     getSmartHomeConfig: () => config,
     getForeignObjectsAsync: async () => objects,
     getForeignStateAsync: async id => values[id] || null,
@@ -118,7 +140,7 @@ function detectorHarness(objects, values, initialConfig = {}) {
   const end = mainSource.indexOf('// Kundenansicht erhält nur die Navigation', start);
   assert.ok(start >= 0 && end > start);
   const context = {
-    crypto, NwChannelDetector: Detector, ...helper, adapter,
+    crypto, setImmediate, NwChannelDetector: Detector, ...helper, ...controlHelpers, ...detectionHelpers, ...cacheHelpers, adapter,
     requireDpDiscovery: () => {},
     app: { get: (url, ...handlers) => routes.set(url, handlers.at(-1)) },
   };
@@ -175,7 +197,7 @@ async function check(name, body) {
 }
 
 async function run() {
-  assert.equal(require('@iobroker/type-detector/package.json').version, '5.0.10');
+  assert.match(require('@iobroker/type-detector/package.json').version, /^6\.2\./);
   const data = fixture();
   const cfg = { rooms: [{ id: 'existing_terrace', name: 'Terrasse', floorId: 'ground' }], functions: [], devices: [], scenes: [] };
   const harness = detectorHarness(data.objects, data.values, cfg);
@@ -189,7 +211,7 @@ async function run() {
     assert.equal(motion.proposal.io.sensor.valueType, 'boolean');
     assert.equal(message.proposal.io.sensor.valueType, 'string');
     assert.equal(temperature.proposal.io.sensor.valueType, 'number');
-    assert.equal(motion.proposal.importProvenance.detectorVersion, '5.0.10');
+    assert.equal(motion.proposal.importProvenance.detectorVersion, require('@iobroker/type-detector/package.json').version);
     assert.match(motion.provenance.signature, /^[a-f0-9]{64}$/);
     assert.equal(motion.proposal.io.indicators.batteryUnit, 'low');
     assert.equal(temperature.proposal.io.indicators.batteryUnit, '%');

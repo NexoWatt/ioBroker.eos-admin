@@ -1,0 +1,3444 @@
+{
+  "schemaVersion": 1,
+  "documentPurpose": "Reference function inventory and EOS9.0.9 gap baseline; NOT implementation or release acceptance",
+  "generatedAt": "2026-11-23",
+  "reference": {
+    "project": "ioBroker.devices",
+    "version": "4.4.0",
+    "archive": "ioBroker.devices-master.zip",
+    "archiveSha256": "a0166efec63ae7e5dc5ce3d25d41e60a321f7f58444c127c2cc4c9535a46ba2f",
+    "license": "MIT",
+    "typeDetectorDeclared": "^6.2.0",
+    "detectorPatternSourcesIncluded": false,
+    "dispatchSource": "src-admin/src/WidgetsManager/Category.tsx",
+    "customRegistrationSource": "src-admin/src/WidgetsManager/CustomWidgetConfigs.tsx"
+  },
+  "eosBaseline": {
+    "version": "9.0.9",
+    "typeDetector": "5.0.10",
+    "renderTypes": [
+      "switch",
+      "dimmer",
+      "color",
+      "blind",
+      "rtr",
+      "scene",
+      "sensor",
+      "player",
+      "camera",
+      "widget"
+    ],
+    "automaticTypeMap": {
+      "light": "switch",
+      "socket": "switch",
+      "buttonSensor": "sensor",
+      "dimmer": "dimmer",
+      "rgbSingle": "color",
+      "rgbwSingle": "color",
+      "blind": "blind",
+      "blinds": "blind",
+      "blindButtons": "blind",
+      "gate": "blind",
+      "thermostat": "rtr",
+      "airCondition": "rtr",
+      "mediaPlayer": "player",
+      "camera": "camera",
+      "temperature": "sensor",
+      "humidity": "sensor",
+      "illuminance": "sensor",
+      "brightness": "sensor",
+      "motion": "sensor",
+      "door": "sensor",
+      "window": "sensor",
+      "windowTilt": "sensor",
+      "fireAlarm": "sensor",
+      "floodAlarm": "sensor",
+      "info": "sensor",
+      "warning": "sensor"
+    },
+    "sourceHashes": {
+      "ui/src-ts/runtime-executables/lib/smarthome-contract.ts": "4431b17227ce4550291ae02489f1c4884e86e14ec3f1ca0cc82267f2eeb0a087",
+      "ui/src-ts/runtime-executables/lib/smarthome-import.ts": "8411c89c057abc048b89753da26fe8156e270a160993790b5b76b96150d3ffdb",
+      "ui/src-ts/runtime-executables/www/smarthome.ts": "60acd56e451dd37da76072584c4ba4cf5a70a209fb6e0ac08500711224aca963",
+      "ui/src-ts/runtime-executables/www/smarthome-config.ts": "11341ea442395aa9e23ed8dfbf22cea27cee11d64c6123f2190af4ff22bef95e",
+      "ui/src-ts/runtime-executables/main.ts": "ea90c6f81715b29638454810a6744e4d7bca5fadc88671e3c7e09cdc76260b81"
+    }
+  },
+  "coverage": {
+    "detectedBuiltinTypes": 51,
+    "builtinCustomTypes": 10,
+    "extensionTypesExcluded": 2,
+    "allCategoryDetectedTypesEnumerated": true,
+    "allCustomWidgetConfigTypesEnumerated": true,
+    "verification": "Exact set equality against Category.getWidgetComponent (51 unique types) and CustomWidgetConfigs (12 keys:10 builtin+2external); each reference source path exists."
+  },
+  "deviceTypes": [
+    {
+      "type": "socket",
+      "scope": "detected_builtin",
+      "widget": "Switch",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Switch.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "ACTUAL",
+        "ON_ACTUAL",
+        "SET"
+      ],
+      "writeSlots": [
+        {
+          "slot": "SET",
+          "semantics": "Boolean inverse of actual/onActual/set feedback; separate explicit switch and tile action",
+          "onlyIfMappedAndAuthorized": true
+        }
+      ],
+      "operatingFunctions": [
+        "Ein/Aus, getrennte Rückmeldung"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "switch: getrennte readId/writeId und Boolean-Bedienung"
+        ],
+        "missing": [
+          "Socket-Profil und alle gemeinsamen Zusatzfunktionen vollständig zuordnen"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": "switch",
+          "status": "limited_fields"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P2",
+      "notes": []
+    },
+    {
+      "type": "light",
+      "scope": "detected_builtin",
+      "widget": "Light",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Light.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx",
+        "src-admin/src/WidgetsManager/Widgets/Switch.tsx"
+      ],
+      "readSlots": [
+        "ACTUAL",
+        "ON_ACTUAL",
+        "SET"
+      ],
+      "writeSlots": [
+        {
+          "slot": "SET",
+          "semantics": "Boolean inverse; inherited Switch behavior",
+          "onlyIfMappedAndAuthorized": true
+        }
+      ],
+      "operatingFunctions": [
+        "Licht Ein/Aus, aktive Lichtdarstellung"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "switch mit Lichtsymbol"
+        ],
+        "missing": [
+          "Licht-Profil und gemeinsame Zusatzfunktionen"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": "switch",
+          "status": "limited_fields"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P2",
+      "notes": [
+        "Inherits Switch.tsx."
+      ]
+    },
+    {
+      "type": "dimmer",
+      "scope": "detected_builtin",
+      "widget": "Dimmer",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Dimmer.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "ACTUAL",
+        "SET",
+        "ON_ACTUAL",
+        "ON_SET",
+        "EFFECT",
+        "TRANSITION_TIME"
+      ],
+      "writeSlots": [
+        {
+          "slot": "SET",
+          "semantics": "Display percentage scales into actual common.min/max; metadata step",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "ON_SET",
+          "semantics": "Optional separate Boolean power",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "EFFECT",
+          "semantics": "Selected numeric/string enum value",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "TRANSITION_TIME",
+          "semantics": "Numeric transition duration",
+          "onlyIfMappedAndAuthorized": true
+        }
+      ],
+      "operatingFunctions": [
+        "Helligkeit, Ein/Aus, Presets, Feinregelung, Effektwahl, Übergangszeit"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "dimmer: Helligkeit, Power, Presets, +/-; manuelle Wertebereiche"
+        ],
+        "missing": [
+          "EFFECT/TRANSITION_TIME, enum metadata; On-Wert/Skalierung im Profil prüfen"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": "dimmer",
+          "status": "limited_fields"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P1",
+      "notes": []
+    },
+    {
+      "type": "temperature",
+      "scope": "detected_builtin",
+      "widget": "Temperature",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Temperature.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "ACTUAL",
+        "SECOND"
+      ],
+      "writeSlots": [],
+      "operatingFunctions": [
+        "Temperatur + optionale Feuchte, Komfortanzeige, Verlauf beider Werte"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "sensor: primärer Messwert"
+        ],
+        "missing": [
+          "SECOND und beide Einheiten/Verläufe"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": "sensor",
+          "status": "limited_fields"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P1",
+      "notes": []
+    },
+    {
+      "type": "motion",
+      "scope": "detected_builtin",
+      "widget": "Motion",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Motion.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "ACTUAL",
+        "SECOND"
+      ],
+      "writeSlots": [],
+      "operatingFunctions": [
+        "Bewegung + Helligkeit, letzte Zustandsänderung"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "sensor: primärer Status"
+        ],
+        "missing": [
+          "SECOND und Ereignisalter"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": "sensor",
+          "status": "limited_fields"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P1",
+      "notes": []
+    },
+    {
+      "type": "window",
+      "scope": "detected_builtin",
+      "widget": "Window",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Window.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "ACTUAL"
+      ],
+      "writeSlots": [],
+      "operatingFunctions": [
+        "Boolean offen/zu oder 0=zu,1=gekippt,2=offen; unbekannt; Änderungsalter"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "sensor: Rohwert/Status"
+        ],
+        "missing": [
+          "Dreistufige Semantik und Änderungsalter"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": "sensor",
+          "status": "limited_fields"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P1",
+      "notes": []
+    },
+    {
+      "type": "windowTilt",
+      "scope": "detected_builtin",
+      "widget": "Window",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Window.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "ACTUAL"
+      ],
+      "writeSlots": [],
+      "operatingFunctions": [
+        "Boolean offen/zu oder 0=zu,1=gekippt,2=offen; unbekannt; Änderungsalter"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "sensor: Rohwert/Status"
+        ],
+        "missing": [
+          "Dreistufige Semantik und Änderungsalter"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": "sensor",
+          "status": "limited_fields"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P1",
+      "notes": []
+    },
+    {
+      "type": "gate",
+      "scope": "detected_builtin",
+      "widget": "Gate",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Gate.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "ACTUAL",
+        "SET",
+        "OPENED",
+        "CLOSED"
+      ],
+      "writeSlots": [
+        {
+          "slot": "SET",
+          "semantics": "Boolean switch.gate: true=open, false=close; numeric ACTUAL is feedback only",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "STOP",
+          "semantics": "Boolean true",
+          "onlyIfMappedAndAuthorized": true
+        }
+      ],
+      "operatingFunctions": [
+        "Tor Auf/Zu/Stopp, Position/Endkontakte"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "blind deckt einzelne Bewegungsbefehle ab"
+        ],
+        "missing": [
+          "Boolean-Torvertrag; keine numerischen Level-Writes auf SET; Endkontakte"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": "blind",
+          "status": "limited_fields"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P0",
+      "notes": []
+    },
+    {
+      "type": "blind",
+      "scope": "detected_builtin",
+      "widget": "Blind",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Blind.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "ACTUAL",
+        "SET",
+        "TILT_ACTUAL",
+        "TILT_SET"
+      ],
+      "writeSlots": [
+        {
+          "slot": "SET",
+          "semantics": "Numeric raw position with metadata range; reference display 100%=open, optional invertPosition",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "OPEN/CLOSE/STOP",
+          "semantics": "Boolean true command; OPEN/CLOSE can fall back to scaled SET endpoints",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "TILT_SET",
+          "semantics": "Numeric tilt with metadata range",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "TILT_OPEN/TILT_STOP/TILT_CLOSE",
+          "semantics": "Boolean true command",
+          "onlyIfMappedAndAuthorized": true
+        }
+      ],
+      "operatingFunctions": [
+        "Position, Auf/Stopp/Ab, Bewegung stoppen, Lamellenwinkel und Lamellen-Auf/Stopp/Ab"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "blind: Position, Auf/Ab/Stopp, tilt, Schutzkontakte"
+        ],
+        "missing": [
+          "Getrennte Lamellenimpulse; tatsächlichen Wertebereich und Polarität statt pauschal0..100 erhalten"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": "blind",
+          "status": "limited_fields"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P0",
+      "notes": []
+    },
+    {
+      "type": "blindButtons",
+      "scope": "detected_builtin",
+      "widget": "BlindButtons",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/BlindButtons.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "TILT_ACTUAL",
+        "TILT_SET"
+      ],
+      "writeSlots": [
+        {
+          "slot": "OPEN/STOP/CLOSE",
+          "semantics": "Boolean true commands without main position requirement",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "TILT_OPEN/TILT_STOP/TILT_CLOSE",
+          "semantics": "Boolean true commands",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "TILT_SET",
+          "semantics": "Optional numeric tilt",
+          "onlyIfMappedAndAuthorized": true
+        }
+      ],
+      "operatingFunctions": [
+        "Tastenbeschattung ohne Positionssensor; optionale Lamellenbedienung"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "blind kann reine Auf/Ab/Stopp-Zuordnung verwenden"
+        ],
+        "missing": [
+          "Lamellen-Auf/Stopp/Ab"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": "blind",
+          "status": "limited_fields"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P0",
+      "notes": []
+    },
+    {
+      "type": "button",
+      "scope": "detected_builtin",
+      "widget": "Button",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Button.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [],
+      "writeSlots": [
+        {
+          "slot": "SET",
+          "semantics": "One Boolean true write; no false-release write in this widget",
+          "onlyIfMappedAndAuthorized": true
+        }
+      ],
+      "operatingFunctions": [
+        "Einmaliger Auslöseimpuls, Druckanzeige, optionale Bestätigung"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "switch momentary und scene trigger vorhanden"
+        ],
+        "missing": [
+          "Einmal true versus vorhandener true/false-Puls ausdrücklich unterscheiden; Bestätigungs-UX"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": null,
+          "status": "not_offered"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P1",
+      "notes": [
+        "Browser-PIN ist keine Autorisierung. Referenz zeigt sofort 1200ms gedrückt, keine physische Bestätigung."
+      ]
+    },
+    {
+      "type": "buttonSensor",
+      "scope": "detected_builtin",
+      "widget": "ButtonSensor",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/ButtonSensor.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "PRESS",
+        "PRESS_LONG"
+      ],
+      "writeSlots": [],
+      "operatingFunctions": [
+        "Empfangener kurzer/langer Tastendruck, steigende Flanke,1.5sHighlight, letztes Ereignis"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "sensor: Einzelanzeige"
+        ],
+        "missing": [
+          "Zwei Ereigniskanäle und Zeit/Flankenanzeige"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": "sensor",
+          "status": "limited_fields"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P1",
+      "notes": [
+        "Read-only event input; never turn into writable button."
+      ]
+    },
+    {
+      "type": "camera",
+      "scope": "detected_builtin",
+      "widget": "Camera",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Camera.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx",
+        "src-admin/src/WidgetsManager/Widgets/Image.tsx"
+      ],
+      "readSlots": [
+        "URL",
+        "NIGHTMODE",
+        "AUTOFOCUS",
+        "AUTOWHITEBALANCE",
+        "BRIGHTNESS",
+        "PTZ"
+      ],
+      "writeSlots": [
+        {
+          "slot": "NIGHTMODE/AUTOFOCUS/AUTOWHITEBALANCE/BRIGHTNESS",
+          "semantics": "Boolean switches; BRIGHTNESS is Boolean in this reference",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "PTZ",
+          "semantics": "One numeric state with metadata bounds; degrees or preset index",
+          "onlyIfMappedAndAuthorized": true
+        }
+      ],
+      "operatingFunctions": [
+        "Bild/Refresh, großes Kameradialogfenster, vier Schalter, PTZ"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "camera: URL-State/Snapshot/Live/Refresh"
+        ],
+        "missing": [
+          "PTZ und Feature-Schalter, zugeordnete Schreibrechte und Dialog"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": "camera",
+          "status": "limited_fields"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P0",
+      "notes": [
+        "Inherits Image.tsx; no invented two-axis PTZ or numeric brightness."
+      ]
+    },
+    {
+      "type": "vacuumCleaner",
+      "scope": "detected_builtin",
+      "widget": "VacuumCleaner",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/VacuumCleaner.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "POWER",
+        "PAUSE",
+        "MODE",
+        "WORK_MODE",
+        "RUN_MODE",
+        "BATTERY",
+        "WATER",
+        "WASTE",
+        "STATE",
+        "PROGRESS",
+        "PHASE",
+        "MAP_BASE64",
+        "MAP_URL"
+      ],
+      "writeSlots": [
+        {
+          "slot": "POWER",
+          "semantics": "Boolean or numeric0/1",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "PAUSE",
+          "semantics": "Boolean toggle",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "HOME",
+          "semantics": "Boolean true return-home",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "MODE/WORK_MODE/RUN_MODE",
+          "semantics": "Numeric selectors from common.states",
+          "onlyIfMappedAndAuthorized": true
+        }
+      ],
+      "operatingFunctions": [
+        "Power/Pause/Home, drei Moduswahlen, Fortschritt/Phase, Batterie/Behälter/Verschleiß, Karte"
+      ],
+      "eos909": {
+        "status": "missing",
+        "reusable": [],
+        "missing": [
+          "Staubsaugervertrag, Return-Home, Mehrfachstatus, begrenzte Kartenbilder"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": null,
+          "status": "not_offered"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P0",
+      "notes": [
+        "MAP_BASE64 precedes MAP_URL in reference; retain EOS image URL/data limits."
+      ]
+    },
+    {
+      "type": "contact",
+      "scope": "detected_builtin",
+      "widget": "Contact",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Contact.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx",
+        "src-admin/src/WidgetsManager/Widgets/Window.tsx"
+      ],
+      "readSlots": [
+        "ACTUAL"
+      ],
+      "writeSlots": [],
+      "operatingFunctions": [
+        "Kontaktzustand und Änderungsalter wie Window"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "sensor manuell"
+        ],
+        "missing": [
+          "Semantisches Profil/Auto-Erkennung"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": false,
+          "allowedTypeMapTarget": null,
+          "status": "not_offered"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P1",
+      "notes": []
+    },
+    {
+      "type": "coAlarm",
+      "scope": "detected_builtin",
+      "widget": "CoAlarm",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/CoAlarm.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "ACTUAL",
+        "SEVERITY"
+      ],
+      "writeSlots": [],
+      "operatingFunctions": [
+        "CO-Alarm im ACTUAL-Slot, Schweregrad/Alter"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "sensor manuell"
+        ],
+        "missing": [
+          "CO-Profil/Auto-Erkennung"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": false,
+          "allowedTypeMapTarget": null,
+          "status": "not_offered"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P1",
+      "notes": []
+    },
+    {
+      "type": "pressure",
+      "scope": "detected_builtin",
+      "widget": "Pressure",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Pressure.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "PRESSURE"
+      ],
+      "writeSlots": [],
+      "operatingFunctions": [
+        "Druckwert, Einheit, Verlauf"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "numeric sensor manuell"
+        ],
+        "missing": [
+          "Auto-Erkennung/Slotbindung, Profil"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": false,
+          "allowedTypeMapTarget": null,
+          "status": "not_offered"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P2",
+      "notes": []
+    },
+    {
+      "type": "flow",
+      "scope": "detected_builtin",
+      "widget": "Flow",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Flow.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "FLOW"
+      ],
+      "writeSlots": [],
+      "operatingFunctions": [
+        "Durchflusswert, Einheit, Verlauf"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "numeric sensor manuell"
+        ],
+        "missing": [
+          "Auto-Erkennung/Slotbindung, Profil"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": false,
+          "allowedTypeMapTarget": null,
+          "status": "not_offered"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P2",
+      "notes": []
+    },
+    {
+      "type": "electricity",
+      "scope": "detected_builtin",
+      "widget": "Electricity",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Electricity.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "ELECTRIC_POWER",
+        "CONSUMPTION",
+        "CURRENT",
+        "VOLTAGE",
+        "FREQUENCY"
+      ],
+      "writeSlots": [],
+      "operatingFunctions": [
+        "Beliebige Kombination aus Leistung/Energie/Strom/Spannung/Frequenz; primär/sekundär+alleInfo/Verlauf"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "sensor: einzelne Messung"
+        ],
+        "missing": [
+          "Mehrfachwerte und Auto-Erkennung"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": false,
+          "allowedTypeMapTarget": null,
+          "status": "not_offered"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P1",
+      "notes": [
+        "Known roles: value.power, value.power.consumption, value.current, value.voltage, value.frequency; actual metadata remains authoritative."
+      ]
+    },
+    {
+      "type": "airQuality",
+      "scope": "detected_builtin",
+      "widget": "AirQuality",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/AirQuality.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "AQI",
+        "CO2",
+        "TVOC",
+        "PM1",
+        "PM25",
+        "PM10",
+        "CO",
+        "NO2",
+        "O3",
+        "CH2O",
+        "RN",
+        "SO2",
+        "CO2_LEVEL",
+        "TVOC_LEVEL",
+        "PM1_LEVEL",
+        "PM25_LEVEL",
+        "PM10_LEVEL",
+        "CO_LEVEL",
+        "NO2_LEVEL",
+        "O3_LEVEL",
+        "CH2O_LEVEL",
+        "RN_LEVEL",
+        "SO2_LEVEL",
+        "ACTUAL",
+        "HUMIDITY",
+        "PRESSURE",
+        "POWER"
+      ],
+      "writeSlots": [
+        {
+          "slot": "POWER",
+          "semantics": "Optional Boolean toggle; read-only users may open details",
+          "onlyIfMappedAndAuthorized": true
+        }
+      ],
+      "operatingFunctions": [
+        "AQI/Pollutanten+jeweiligeStufe, Risikoreihenfolge, Umgebungswerte, optionalPower"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "Einzelne sensor/switch-Primitiven"
+        ],
+        "missing": [
+          "Kompositgerät, enum-levels ausMetadaten, optionalPower"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": false,
+          "allowedTypeMapTarget": null,
+          "status": "not_offered"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P1",
+      "notes": [
+        "AQI numeric value is not universally0..6; common.states takes precedence."
+      ]
+    },
+    {
+      "type": "lock",
+      "scope": "detected_builtin",
+      "widget": "Lock",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Lock.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "ACTUAL",
+        "SET",
+        "DOOR_STATE"
+      ],
+      "writeSlots": [
+        {
+          "slot": "SET",
+          "semantics": "Boolean lock/unlock inverse of isLocked",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "OPEN",
+          "semantics": "Boolean true; separate latch/door-open action",
+          "onlyIfMappedAndAuthorized": true
+        }
+      ],
+      "operatingFunctions": [
+        "Verriegeln/Entriegeln, getrenntes Öffnen, Türzustand, Bestätigung pro Aktionsklasse"
+      ],
+      "eos909": {
+        "status": "missing",
+        "reusable": [],
+        "missing": [
+          "Semantischer Schlossvertrag samt separatem OPEN/Türkontakt und Bestätigung"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": null,
+          "status": "not_offered"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P0",
+      "notes": []
+    },
+    {
+      "type": "door",
+      "scope": "detected_builtin",
+      "widget": "Door",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Door.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx",
+        "src-admin/src/WidgetsManager/Widgets/Window.tsx"
+      ],
+      "readSlots": [
+        "ACTUAL"
+      ],
+      "writeSlots": [],
+      "operatingFunctions": [
+        "Türsensorzustand und Änderungsalter wie Window"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "sensor: Rohwert"
+        ],
+        "missing": [
+          "Kontaktsemantik, kein Entriegelungsbefehl"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": "sensor",
+          "status": "limited_fields"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P1",
+      "notes": []
+    },
+    {
+      "type": "floodAlarm",
+      "scope": "detected_builtin",
+      "widget": "FloodAlarm",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/FloodAlarm.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "ACTUAL"
+      ],
+      "writeSlots": [],
+      "operatingFunctions": [
+        "Wasseralarm, Zeit, optional nurbeiAlarm"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "sensor: primärer Status"
+        ],
+        "missing": [
+          "Profil/Alter; Referenz-null=>false nicht kopieren"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": "sensor",
+          "status": "limited_fields"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P1",
+      "notes": []
+    },
+    {
+      "type": "fireAlarm",
+      "scope": "detected_builtin",
+      "widget": "FireAlarm",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/FireAlarm.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "ACTUAL",
+        "CO",
+        "SEVERITY"
+      ],
+      "writeSlots": [],
+      "operatingFunctions": [
+        "Rauch/CO getrennt in einem Alarmgerät, Schweregrad, Unbekannt/Zeit, optional nurbeiAlarm"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "sensor: primärer Status"
+        ],
+        "missing": [
+          "Mehrfachalarm/Schweregrad und unbekannte Werte"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": "sensor",
+          "status": "limited_fields"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P1",
+      "notes": []
+    },
+    {
+      "type": "humidity",
+      "scope": "detected_builtin",
+      "widget": "Humidity",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Humidity.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "ACTUAL",
+        "SECOND"
+      ],
+      "writeSlots": [],
+      "operatingFunctions": [
+        "Feuchte + optionale Temperatur"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "sensor: primärer Messwert"
+        ],
+        "missing": [
+          "SECOND und beide Einheiten"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": "sensor",
+          "status": "limited_fields"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P1",
+      "notes": []
+    },
+    {
+      "type": "illuminance",
+      "scope": "detected_builtin",
+      "widget": "Illuminance",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Illuminance.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "ACTUAL"
+      ],
+      "writeSlots": [],
+      "operatingFunctions": [
+        "Helligkeitswert, Einheit, Verlauf"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "sensor: primärer Messwert/Einheit"
+        ],
+        "missing": [
+          "Semantisches Profil und gemeinsame Zusatzfunktionen"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": "sensor",
+          "status": "limited_fields"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P2",
+      "notes": []
+    },
+    {
+      "type": "thermostat",
+      "scope": "detected_builtin",
+      "widget": "Thermostat",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Thermostat.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx",
+        "src-admin/src/WidgetsManager/Widgets/climate.ts"
+      ],
+      "readSlots": [
+        "SET",
+        "SET_HEATING",
+        "SET_COOLING",
+        "ACTUAL",
+        "HUMIDITY",
+        "BOOST",
+        "POWER",
+        "MODE",
+        "WORKING_MODE",
+        "PARTY"
+      ],
+      "writeSlots": [
+        {
+          "slot": "SET/SET_HEATING/SET_COOLING",
+          "semantics": "Each independently mapped range/step/write flag; heating<=cooling, no invented fixed deadband",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "POWER",
+          "semantics": "Boolean",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "MODE",
+          "semantics": "Typed enum value",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "PARTY",
+          "semantics": "Boolean",
+          "onlyIfMappedAndAuthorized": true
+        }
+      ],
+      "operatingFunctions": [
+        "Einzel-/Dual-Sollwerte, Ist/Feuchte, Power/Party/Modus, Boost-/Arbeitsmodus-Anzeige"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "rtr: ein Sollwert/Ist/Feuchte/Power/Modus"
+        ],
+        "missing": [
+          "Getrennte Heiz-/Kühlsollwerte, Party, Arbeitsmodus/Boostanzeige, typisierte Moduswahl"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": "rtr",
+          "status": "limited_fields"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P0",
+      "notes": [
+        "BOOST and WORKING_MODE are display-only here; shared climate.ts supplies dual-target behavior."
+      ]
+    },
+    {
+      "type": "airCondition",
+      "scope": "detected_builtin",
+      "widget": "AirCondition",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/AirCondition.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx",
+        "src-admin/src/WidgetsManager/Widgets/climate.ts"
+      ],
+      "readSlots": [
+        "SET",
+        "SET_HEATING",
+        "SET_COOLING",
+        "ACTUAL",
+        "HUMIDITY",
+        "BOOST",
+        "POWER",
+        "MODE",
+        "WORKING_MODE",
+        "SPEED",
+        "SPEED_LEVEL",
+        "SWING",
+        "AIRFLOW_DIRECTION"
+      ],
+      "writeSlots": [
+        {
+          "slot": "SET/SET_HEATING/SET_COOLING",
+          "semantics": "Each independently mapped range/step/write flag; heating<=cooling, no invented fixed deadband",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "POWER",
+          "semantics": "Boolean",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "MODE",
+          "semantics": "Typed enum value",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "BOOST",
+          "semantics": "Boolean toggle",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "SPEED/AIRFLOW_DIRECTION",
+          "semantics": "Typed enum values",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "SPEED_LEVEL",
+          "semantics": "Numeric with metadata bounds",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "SWING",
+          "semantics": "Boolean or enum",
+          "onlyIfMappedAndAuthorized": true
+        }
+      ],
+      "operatingFunctions": [
+        "Dual-Sollwerte, Power/Boost/Modus, Lüfterwahl/-stufe, Swing/Luftrichtung, Status"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "rtr: ein Sollwert/Power/Modus/Fan/Swing"
+        ],
+        "missing": [
+          "Dual-Sollwerte, Boost, getrennte Geschwindigkeit/Stufe, Luftrichtung, Arbeitsmodus/enum-UI"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": "rtr",
+          "status": "limited_fields"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P0",
+      "notes": []
+    },
+    {
+      "type": "fan",
+      "scope": "detected_builtin",
+      "widget": "Fan",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Fan.tsx",
+        "src-admin/src/WidgetsManager/Widgets/FanBase.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "POWER",
+        "SPEED",
+        "SPEED_LEVEL",
+        "SWING",
+        "AIRFLOW_DIRECTION"
+      ],
+      "writeSlots": [
+        {
+          "slot": "POWER",
+          "semantics": "Boolean or numeric0/1 from declared object type; requires known state",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "SPEED",
+          "semantics": "Typed enum or numeric input/range",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "SPEED_LEVEL",
+          "semantics": "Continuous numeric with min/max/step/unit",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "SWING",
+          "semantics": "Boolean or declared enum",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "AIRFLOW_DIRECTION",
+          "semantics": "Declared enum value",
+          "onlyIfMappedAndAuthorized": true
+        }
+      ],
+      "operatingFunctions": [
+        "Power, Geschwindigkeitswahl, kontinuierliche Stufe, Swing, Luftrichtung"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "rtr: Power, fanSpeed, Swing; einzelne generic value/switch"
+        ],
+        "missing": [
+          "Zwei unabhängige Geschwindigkeiten, Luftrichtung und kombiniertes Gerät; enum- statt Raw-Textbedienung"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": false,
+          "allowedTypeMapTarget": null,
+          "status": "not_offered"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P1",
+      "notes": [
+        "Category renders Fan.tsx/AirPurifier.tsx subclasses of FanBase.tsx."
+      ]
+    },
+    {
+      "type": "airPurifier",
+      "scope": "detected_builtin",
+      "widget": "AirPurifier",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/AirPurifier.tsx",
+        "src-admin/src/WidgetsManager/Widgets/FanBase.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "POWER",
+        "SPEED",
+        "SPEED_LEVEL",
+        "SWING",
+        "AIRFLOW_DIRECTION"
+      ],
+      "writeSlots": [
+        {
+          "slot": "POWER",
+          "semantics": "Boolean or numeric0/1 from declared object type; requires known state",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "SPEED",
+          "semantics": "Typed enum or numeric input/range",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "SPEED_LEVEL",
+          "semantics": "Continuous numeric with min/max/step/unit",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "SWING",
+          "semantics": "Boolean or declared enum",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "AIRFLOW_DIRECTION",
+          "semantics": "Declared enum value",
+          "onlyIfMappedAndAuthorized": true
+        }
+      ],
+      "operatingFunctions": [
+        "Power, Geschwindigkeitswahl, kontinuierliche Stufe, Swing, Luftrichtung"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "rtr: Power, fanSpeed, Swing; einzelne generic value/switch"
+        ],
+        "missing": [
+          "Zwei unabhängige Geschwindigkeiten, Luftrichtung und kombiniertes Gerät; enum- statt Raw-Textbedienung"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": false,
+          "allowedTypeMapTarget": null,
+          "status": "not_offered"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P1",
+      "notes": [
+        "Category renders Fan.tsx/AirPurifier.tsx subclasses of FanBase.tsx."
+      ]
+    },
+    {
+      "type": "pump",
+      "scope": "detected_builtin",
+      "widget": "Pump",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Pump.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "POWER",
+        "LEVEL",
+        "TEMPERATURE",
+        "PRESSURE",
+        "FLOW"
+      ],
+      "writeSlots": [
+        {
+          "slot": "POWER",
+          "semantics": "Boolean or numeric0/1 based on metadata",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "LEVEL",
+          "semantics": "Numeric range/step/unit",
+          "onlyIfMappedAndAuthorized": true
+        }
+      ],
+      "operatingFunctions": [
+        "Power, Leistungs-/Förderstufe, Temperatur/Druck/Durchfluss"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "Einzelne switch/value/sensor-Primitiven"
+        ],
+        "missing": [
+          "Kombiniertes Pumpengerät und Mehrfachmesswerte"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": false,
+          "allowedTypeMapTarget": null,
+          "status": "not_offered"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P1",
+      "notes": []
+    },
+    {
+      "type": "warning",
+      "scope": "detected_builtin",
+      "widget": "Warning",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Warning.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "LEVEL",
+        "TITLE",
+        "INFO",
+        "START",
+        "END"
+      ],
+      "writeSlots": [],
+      "operatingFunctions": [
+        "Warnschwere, Titel/Text, Gültigkeitszeitraum, optional ausblenden"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "sensor: einzelner Primärwert"
+        ],
+        "missing": [
+          "Strukturierte Warnung statt Einzeldatenpunkt"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": "sensor",
+          "status": "limited_fields"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P1",
+      "notes": []
+    },
+    {
+      "type": "volume",
+      "scope": "detected_builtin",
+      "widget": "Volume",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Volume.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "ACTUAL",
+        "SET"
+      ],
+      "writeSlots": [
+        {
+          "slot": "SET",
+          "semantics": "Numeric volume; mute sets0 and unmutes restored last nonzero",
+          "onlyIfMappedAndAuthorized": true
+        }
+      ],
+      "operatingFunctions": [
+        "Standalone-Lautstärkebogen/-regler und Mute-Wiederherstellung"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "player volume oder numeric value"
+        ],
+        "missing": [
+          "Eigenständiges Volume-Profil; Mute-Speicherverhalten"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": null,
+          "status": "not_offered"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P2",
+      "notes": [
+        "MUTE property is unused by this widget; volumeGroup does not imply fanout by this widget."
+      ],
+      "declaredButUnusedSlots": [
+        "MUTE"
+      ]
+    },
+    {
+      "type": "volumeGroup",
+      "scope": "detected_builtin",
+      "widget": "Volume",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Volume.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "ACTUAL",
+        "SET"
+      ],
+      "writeSlots": [
+        {
+          "slot": "SET",
+          "semantics": "Numeric volume; mute sets0 and unmutes restored last nonzero",
+          "onlyIfMappedAndAuthorized": true
+        }
+      ],
+      "operatingFunctions": [
+        "Standalone-Lautstärkebogen/-regler und Mute-Wiederherstellung"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "player volume oder numeric value"
+        ],
+        "missing": [
+          "Eigenständiges Volume-Profil; Mute-Speicherverhalten"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": null,
+          "status": "not_offered"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P2",
+      "notes": [
+        "MUTE property is unused by this widget; volumeGroup does not imply fanout by this widget."
+      ],
+      "declaredButUnusedSlots": [
+        "MUTE"
+      ]
+    },
+    {
+      "type": "media",
+      "scope": "detected_builtin",
+      "widget": "MediaPlayer",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/MediaPlayer.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "STATE",
+        "TITLE",
+        "ARTIST",
+        "ALBUM",
+        "COVER",
+        "VOLUME_ACTUAL",
+        "VOLUME",
+        "SET",
+        "MUTE",
+        "DURATION",
+        "ELAPSED"
+      ],
+      "writeSlots": [
+        {
+          "slot": "PLAY/PAUSE/STOP/NEXT/PREV",
+          "semantics": "Boolean true command",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "STATE",
+          "semantics": "Boolean play/pause/stop fallback when dedicated controls absent",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "VOLUME",
+          "semantics": "Numeric volume",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "MUTE",
+          "semantics": "Boolean toggle; if absent, VOLUME0/restore previous nonzero",
+          "onlyIfMappedAndAuthorized": true
+        }
+      ],
+      "operatingFunctions": [
+        "Transport, Lautstärke/Mute, Titel/Interpret/Album/Cover, Dauer/Position-Anzeige"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "player: Transport, Lautstärke/Mute/Power, Metadaten; zusätzlich Seek/TTS/Station/Playlist/Shuffle/Repeat"
+        ],
+        "missing": [
+          "DURATION/ELAPSED, separates Album; automatische media-Zuordnung reparieren"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": null,
+          "status": "not_offered"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P1",
+      "notes": [
+        "Reference progress is display-only. Retain additional EOS features."
+      ]
+    },
+    {
+      "type": "tv",
+      "scope": "detected_builtin",
+      "widget": "Tv",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Tv.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "POWER",
+        "ART_MODE",
+        "VOLUME_ACTUAL",
+        "VOLUME",
+        "MUTE",
+        "INPUT",
+        "APP"
+      ],
+      "writeSlots": [
+        {
+          "slot": "POWER/ART_MODE/MUTE",
+          "semantics": "Boolean",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "VOLUME",
+          "semantics": "Numeric",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "VOLUME_UP/VOLUME_DOWN",
+          "semantics": "Boolean true or numeric volume +/-1 fallback",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "APP/INPUT",
+          "semantics": "String enum selectors",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "KEY",
+          "semantics": "Known remote-key string validated against device declarations",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "PLAY/PAUSE/STOP/NEXT/PREV",
+          "semantics": "Boolean true; selected actions have KEY fallback",
+          "onlyIfMappedAndAuthorized": true
+        }
+      ],
+      "operatingFunctions": [
+        "Power/Kunstmodus, Lautstärkewippe/Mute, App/Eingang, Navigation/Ziffern/Farbtasten/Transport"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "player: Power, Volume, Transport"
+        ],
+        "missing": [
+          "TV-KEY/App/Input/ArtMode/Wippe-Vertrag und sichere Tastenauswahl"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": false,
+          "allowedTypeMapTarget": null,
+          "status": "not_offered"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P1",
+      "notes": []
+    },
+    {
+      "type": "fillLevel",
+      "scope": "detected_builtin",
+      "widget": "Tank",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Tank.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "ACTUAL"
+      ],
+      "writeSlots": [],
+      "operatingFunctions": [
+        "Rohwert/Einheit/Range, normierter Füllstand, zusätzliche nongenericSlots imDialog"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "numeric sensor"
+        ],
+        "missing": [
+          "Tank-Profil mit Metadatenrange und Zusatzwerten"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": false,
+          "allowedTypeMapTarget": null,
+          "status": "not_offered"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P2",
+      "notes": []
+    },
+    {
+      "type": "slider",
+      "scope": "detected_builtin",
+      "widget": "Slider",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Slider.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "ACTUAL",
+        "SET",
+        "ON_ACTUAL",
+        "ON"
+      ],
+      "writeSlots": [
+        {
+          "slot": "SET",
+          "semantics": "Numeric raw range/unit; common.states enables enum selection",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "ON",
+          "semantics": "Optional Boolean power",
+          "onlyIfMappedAndAuthorized": true
+        }
+      ],
+      "operatingFunctions": [
+        "Regler/Zahl/Enum mit optionalem Power; sofort/debounced/OK-Abbrechen; Valve/Fan/Gauge-Ansichten"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "writable sensor: number bounds/step; Boolean sensor"
+        ],
+        "missing": [
+          "Level+Power in einem Gerät, enum-labels, Bestätigungsmodus und Device-Metadaten"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": null,
+          "status": "not_offered"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P1",
+      "notes": []
+    },
+    {
+      "type": "percentage",
+      "scope": "detected_builtin",
+      "widget": "Slider",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Slider.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "ACTUAL",
+        "SET",
+        "ON_ACTUAL",
+        "ON"
+      ],
+      "writeSlots": [
+        {
+          "slot": "SET",
+          "semantics": "Numeric raw range/unit; common.states enables enum selection",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "ON",
+          "semantics": "Optional Boolean power",
+          "onlyIfMappedAndAuthorized": true
+        }
+      ],
+      "operatingFunctions": [
+        "Regler/Zahl/Enum mit optionalem Power; sofort/debounced/OK-Abbrechen; Valve/Fan/Gauge-Ansichten"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "writable sensor: number bounds/step; Boolean sensor"
+        ],
+        "missing": [
+          "Level+Power in einem Gerät, enum-labels, Bestätigungsmodus und Device-Metadaten"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": null,
+          "status": "not_offered"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P1",
+      "notes": []
+    },
+    {
+      "type": "info",
+      "scope": "detected_builtin",
+      "widget": "Info",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Info.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "ACTUAL",
+        "PRESSURE",
+        "FLOW",
+        "AQI",
+        "ELECTRIC_POWER",
+        "CONSUMPTION",
+        "CURRENT",
+        "VOLTAGE",
+        "FREQUENCY"
+      ],
+      "writeSlots": [],
+      "operatingFunctions": [
+        "Alle passenden ACTUAL/PRESSURE/FLOW/AQI-Werte, sonst erste Elektromessung; Typ/Name/Einheit/Verlauf jeZeile"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "sensor: ein Boolean/Text/Zahlenwert"
+        ],
+        "missing": [
+          "Mehrfachlesevertrag, keine Reduktion auf first state"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": "sensor",
+          "status": "limited_fields"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P1",
+      "notes": [
+        "Info with ACTUAL stateRole matching value.fill|level.tank|tank dispatches Tank instead."
+      ]
+    },
+    {
+      "type": "image",
+      "scope": "detected_builtin",
+      "widget": "Image",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Image.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "URL"
+      ],
+      "writeSlots": [],
+      "operatingFunctions": [
+        "Bild ausURL-State, Refresh und optionalTimestamp; beide standardmäßigaus"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "camera/widget können einzelne Bilder/URLs anzeigen"
+        ],
+        "missing": [
+          "Image-Profil und Refreshoptionen; sichereURL-Grenze"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": null,
+          "status": "not_offered"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P2",
+      "notes": []
+    },
+    {
+      "type": "location",
+      "scope": "detected_builtin",
+      "widget": "Location",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Location.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "LATITUDE",
+        "LONGITUDE",
+        "GPS",
+        "ELEVATION",
+        "RADIUS",
+        "ACCURACY"
+      ],
+      "writeSlots": [],
+      "operatingFunctions": [
+        "Koordinaten/Einzel-GPS, Radius/Genauigkeit, Karte, bis3 Zusatzpositionen"
+      ],
+      "eos909": {
+        "status": "missing",
+        "reusable": [],
+        "missing": [
+          "Location-Vertrag und explizite Karten-/Egressentscheidung"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": null,
+          "status": "not_offered"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P2",
+      "notes": [
+        "Additional IDs extraPosition1Id..3Id. External providers OpenStreetMap,CARTO,Esri; do not auto-fetch merely on detection."
+      ],
+      "additionalConfiguredReadFields": [
+        "extraPosition1Id",
+        "extraPosition2Id",
+        "extraPosition3Id"
+      ]
+    },
+    {
+      "type": "locationOne",
+      "scope": "detected_builtin",
+      "widget": "Location",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Location.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "LATITUDE",
+        "LONGITUDE",
+        "GPS",
+        "ELEVATION",
+        "RADIUS",
+        "ACCURACY"
+      ],
+      "writeSlots": [],
+      "operatingFunctions": [
+        "Koordinaten/Einzel-GPS, Radius/Genauigkeit, Karte, bis3 Zusatzpositionen"
+      ],
+      "eos909": {
+        "status": "missing",
+        "reusable": [],
+        "missing": [
+          "Location-Vertrag und explizite Karten-/Egressentscheidung"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": null,
+          "status": "not_offered"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P2",
+      "notes": [
+        "Additional IDs extraPosition1Id..3Id. External providers OpenStreetMap,CARTO,Esri; do not auto-fetch merely on detection."
+      ],
+      "additionalConfiguredReadFields": [
+        "extraPosition1Id",
+        "extraPosition2Id",
+        "extraPosition3Id"
+      ]
+    },
+    {
+      "type": "weatherCurrent",
+      "scope": "detected_builtin",
+      "widget": "WeatherCurrent",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/WeatherCurrent.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "ACTUAL",
+        "ICON",
+        "WEATHER",
+        "HUMIDITY",
+        "WIND_SPEED",
+        "WIND_DIRECTION",
+        "PRESSURE",
+        "PRECIPITATION_CHANCE",
+        "REAL_FEEL_TEMPERATURE",
+        "UV"
+      ],
+      "writeSlots": [],
+      "operatingFunctions": [
+        "Aktuelles Wetter als Mehrfachmessung mit Beschreibung/Icon/Zusatzmetriken"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "Einzelne sensor-Werte"
+        ],
+        "missing": [
+          "DP-basiertes Wetterkomposit"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": null,
+          "status": "not_offered"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P1",
+      "notes": []
+    },
+    {
+      "type": "weatherForecast",
+      "scope": "detected_builtin",
+      "widget": "WeatherForecast",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/WeatherForecast.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "readSlots": [
+        "ICON",
+        "TEMP_MIN",
+        "TEMP_MAX",
+        "TEMP",
+        "DOW",
+        "STATE",
+        "HUMIDITY",
+        "PRECIPITATION_CHANCE",
+        "WIND_SPEED",
+        "LOCATION",
+        "ICON1",
+        "TEMP_MIN1",
+        "TEMP_MAX1",
+        "DOW1",
+        "STATE1",
+        "PRECIPITATION_CHANCE1",
+        "ICON2",
+        "TEMP_MIN2",
+        "TEMP_MAX2",
+        "DOW2",
+        "STATE2",
+        "PRECIPITATION_CHANCE2",
+        "ICON3",
+        "TEMP_MIN3",
+        "TEMP_MAX3",
+        "DOW3",
+        "STATE3",
+        "PRECIPITATION_CHANCE3",
+        "ICON4",
+        "TEMP_MIN4",
+        "TEMP_MAX4",
+        "DOW4",
+        "STATE4",
+        "PRECIPITATION_CHANCE4",
+        "ICON5",
+        "TEMP_MIN5",
+        "TEMP_MAX5",
+        "DOW5",
+        "STATE5",
+        "PRECIPITATION_CHANCE5",
+        "ICON6",
+        "TEMP_MIN6",
+        "TEMP_MAX6",
+        "DOW6",
+        "STATE6",
+        "PRECIPITATION_CHANCE6",
+        "ICON7",
+        "TEMP_MIN7",
+        "TEMP_MAX7",
+        "DOW7",
+        "STATE7",
+        "PRECIPITATION_CHANCE7"
+      ],
+      "writeSlots": [],
+      "operatingFunctions": [
+        "Tag0 und bis7 zusätzliche indexierte Tagesvorhersagen"
+      ],
+      "eos909": {
+        "status": "missing",
+        "reusable": [],
+        "missing": [
+          "Mehrtage-Wettervertrag und Anzeige"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": null,
+          "status": "not_offered"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P1",
+      "notes": []
+    },
+    {
+      "type": "rgbSingle",
+      "scope": "detected_builtin",
+      "widget": "ColorLight",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/ColorLight.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx",
+        "src-admin/src/WidgetsManager/Widgets/Dimmer.tsx",
+        "src-admin/src/WidgetsManager/Widgets/ColorLightDialog.tsx"
+      ],
+      "readSlots": [
+        "RGB",
+        "ACTUAL",
+        "SET",
+        "DIMMER",
+        "BRIGHTNESS",
+        "ON_ACTUAL",
+        "ON_SET",
+        "ON",
+        "TEMPERATURE",
+        "EFFECT",
+        "TRANSITION_TIME"
+      ],
+      "writeSlots": [
+        {
+          "slot": "SET/DIMMER/BRIGHTNESS",
+          "semantics": "Numeric brightness according to mapped metadata",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "ON_SET/ON",
+          "semantics": "Boolean power",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "TEMPERATURE",
+          "semantics": "Kelvin, metadata range or reference fallback 2000..6500",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "EFFECT",
+          "semantics": "Typed enum value",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "TRANSITION_TIME",
+          "semantics": "Numeric duration",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "RGB",
+          "semantics": "Hex string preserving observed leading # convention",
+          "onlyIfMappedAndAuthorized": true
+        }
+      ],
+      "operatingFunctions": [
+        "Gemeinsamer RGB-Datenpunkt",
+        "Helligkeit/Power gemäß Zuordnung",
+        "Farb-/Helligkeits-/CT-Presets",
+        "Geerbte Effekt-/Übergangszeitbedienung"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "color: gemeinsamer RGB-State mit hex/rgb/int"
+        ],
+        "missing": [
+          "#-Konvention prüfen; Effekt/Übergangszeit"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": "color",
+          "status": "limited_fields"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P1",
+      "notes": [
+        "WHITE ist in der Referenz nur einer Eigenschaft zugewiesen; kein separater Lese-/Schreibpfad. rgbwSingle erhält W-Suffix, statt unabhängige W-Bedienung anzubieten.",
+        "Inherited Dimmer.tsx and ColorLightDialog.tsx; only mapped variants expose controls."
+      ]
+    },
+    {
+      "type": "rgbwSingle",
+      "scope": "detected_builtin",
+      "widget": "ColorLight",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/ColorLight.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx",
+        "src-admin/src/WidgetsManager/Widgets/Dimmer.tsx",
+        "src-admin/src/WidgetsManager/Widgets/ColorLightDialog.tsx"
+      ],
+      "readSlots": [
+        "RGBW",
+        "ACTUAL",
+        "SET",
+        "DIMMER",
+        "BRIGHTNESS",
+        "ON_ACTUAL",
+        "ON_SET",
+        "ON",
+        "TEMPERATURE",
+        "EFFECT",
+        "TRANSITION_TIME"
+      ],
+      "writeSlots": [
+        {
+          "slot": "SET/DIMMER/BRIGHTNESS",
+          "semantics": "Numeric brightness according to mapped metadata",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "ON_SET/ON",
+          "semantics": "Boolean power",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "TEMPERATURE",
+          "semantics": "Kelvin, metadata range or reference fallback 2000..6500",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "EFFECT",
+          "semantics": "Typed enum value",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "TRANSITION_TIME",
+          "semantics": "Numeric duration",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "RGBW",
+          "semantics": "Packed RGB hex plus preserved current white suffix",
+          "onlyIfMappedAndAuthorized": true
+        }
+      ],
+      "operatingFunctions": [
+        "Gepackter RGBW-Datenpunkt",
+        "Helligkeit/Power gemäß Zuordnung",
+        "Farb-/Helligkeits-/CT-Presets",
+        "Geerbte Effekt-/Übergangszeitbedienung"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "color und separates white vorhanden"
+        ],
+        "missing": [
+          "Gepacktes RGBW erhalten; separates white ist kein Ersatz"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": "color",
+          "status": "limited_fields"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P1",
+      "notes": [
+        "WHITE ist in der Referenz nur einer Eigenschaft zugewiesen; kein separater Lese-/Schreibpfad. rgbwSingle erhält W-Suffix, statt unabhängige W-Bedienung anzubieten.",
+        "Inherited Dimmer.tsx and ColorLightDialog.tsx; only mapped variants expose controls."
+      ]
+    },
+    {
+      "type": "rgb",
+      "scope": "detected_builtin",
+      "widget": "ColorLight",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/ColorLight.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx",
+        "src-admin/src/WidgetsManager/Widgets/Dimmer.tsx",
+        "src-admin/src/WidgetsManager/Widgets/ColorLightDialog.tsx"
+      ],
+      "readSlots": [
+        "RED",
+        "GREEN",
+        "BLUE",
+        "ACTUAL",
+        "SET",
+        "DIMMER",
+        "BRIGHTNESS",
+        "ON_ACTUAL",
+        "ON_SET",
+        "ON",
+        "TEMPERATURE",
+        "EFFECT",
+        "TRANSITION_TIME"
+      ],
+      "writeSlots": [
+        {
+          "slot": "SET/DIMMER/BRIGHTNESS",
+          "semantics": "Numeric brightness according to mapped metadata",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "ON_SET/ON",
+          "semantics": "Boolean power",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "TEMPERATURE",
+          "semantics": "Kelvin, metadata range or reference fallback 2000..6500",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "EFFECT",
+          "semantics": "Typed enum value",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "TRANSITION_TIME",
+          "semantics": "Numeric duration",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "RED/GREEN/BLUE",
+          "semantics": "Separate numeric channels 0..255",
+          "onlyIfMappedAndAuthorized": true
+        }
+      ],
+      "operatingFunctions": [
+        "Getrennte RGB-Kanäle",
+        "Helligkeit/Power gemäß Zuordnung",
+        "Farb-/Helligkeits-/CT-Presets",
+        "Geerbte Effekt-/Übergangszeitbedienung"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "RGB-Farbwähler vorhanden"
+        ],
+        "missing": [
+          "Separate R/G/B-Zuordnung und Schreiben"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": null,
+          "status": "not_offered"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P1",
+      "notes": [
+        "WHITE ist in der Referenz nur einer Eigenschaft zugewiesen; kein separater Lese-/Schreibpfad. rgbwSingle erhält W-Suffix, statt unabhängige W-Bedienung anzubieten.",
+        "Inherited Dimmer.tsx and ColorLightDialog.tsx; only mapped variants expose controls."
+      ],
+      "declaredButUnusedSlots": [
+        "WHITE"
+      ]
+    },
+    {
+      "type": "hue",
+      "scope": "detected_builtin",
+      "widget": "ColorLight",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/ColorLight.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx",
+        "src-admin/src/WidgetsManager/Widgets/Dimmer.tsx",
+        "src-admin/src/WidgetsManager/Widgets/ColorLightDialog.tsx"
+      ],
+      "readSlots": [
+        "HUE",
+        "SATURATION",
+        "ACTUAL",
+        "SET",
+        "DIMMER",
+        "BRIGHTNESS",
+        "ON_ACTUAL",
+        "ON_SET",
+        "ON",
+        "TEMPERATURE",
+        "EFFECT",
+        "TRANSITION_TIME"
+      ],
+      "writeSlots": [
+        {
+          "slot": "SET/DIMMER/BRIGHTNESS",
+          "semantics": "Numeric brightness according to mapped metadata",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "ON_SET/ON",
+          "semantics": "Boolean power",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "TEMPERATURE",
+          "semantics": "Kelvin, metadata range or reference fallback 2000..6500",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "EFFECT",
+          "semantics": "Typed enum value",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "TRANSITION_TIME",
+          "semantics": "Numeric duration",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "HUE",
+          "semantics": "Hue degrees from selected RGB",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "SATURATION",
+          "semantics": "Percent 0..100 from selected RGB",
+          "onlyIfMappedAndAuthorized": true
+        }
+      ],
+      "operatingFunctions": [
+        "Hue/Sättigungs-Kanäle",
+        "Helligkeit/Power gemäß Zuordnung",
+        "Farb-/Helligkeits-/CT-Presets",
+        "Geerbte Effekt-/Übergangszeitbedienung"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "RGB-Farbwähler vorhanden"
+        ],
+        "missing": [
+          "HUE/SATURATION-Zuordnung und Konvertierung"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": null,
+          "status": "not_offered"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P1",
+      "notes": [
+        "WHITE ist in der Referenz nur einer Eigenschaft zugewiesen; kein separater Lese-/Schreibpfad. rgbwSingle erhält W-Suffix, statt unabhängige W-Bedienung anzubieten.",
+        "Inherited Dimmer.tsx and ColorLightDialog.tsx; only mapped variants expose controls."
+      ]
+    },
+    {
+      "type": "cie",
+      "scope": "detected_builtin",
+      "widget": "ColorLight",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/ColorLight.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx",
+        "src-admin/src/WidgetsManager/Widgets/Dimmer.tsx",
+        "src-admin/src/WidgetsManager/Widgets/ColorLightDialog.tsx"
+      ],
+      "readSlots": [
+        "CIE",
+        "ACTUAL",
+        "SET",
+        "DIMMER",
+        "BRIGHTNESS",
+        "ON_ACTUAL",
+        "ON_SET",
+        "ON",
+        "TEMPERATURE",
+        "EFFECT",
+        "TRANSITION_TIME"
+      ],
+      "writeSlots": [
+        {
+          "slot": "SET/DIMMER/BRIGHTNESS",
+          "semantics": "Numeric brightness according to mapped metadata",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "ON_SET/ON",
+          "semantics": "Boolean power",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "TEMPERATURE",
+          "semantics": "Kelvin, metadata range or reference fallback 2000..6500",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "EFFECT",
+          "semantics": "Typed enum value",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "TRANSITION_TIME",
+          "semantics": "Numeric duration",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "CIE",
+          "semantics": "RGB converted to x,y string with four decimals",
+          "onlyIfMappedAndAuthorized": true
+        }
+      ],
+      "operatingFunctions": [
+        "CIE-xy",
+        "Helligkeit/Power gemäß Zuordnung",
+        "Farb-/Helligkeits-/CT-Presets",
+        "Geerbte Effekt-/Übergangszeitbedienung"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "RGB-Farbwähler vorhanden"
+        ],
+        "missing": [
+          "CIE-Feedback und Umrechnung"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": null,
+          "status": "not_offered"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P1",
+      "notes": [
+        "WHITE ist in der Referenz nur einer Eigenschaft zugewiesen; kein separater Lese-/Schreibpfad. rgbwSingle erhält W-Suffix, statt unabhängige W-Bedienung anzubieten.",
+        "Inherited Dimmer.tsx and ColorLightDialog.tsx; only mapped variants expose controls."
+      ]
+    },
+    {
+      "type": "ct",
+      "scope": "detected_builtin",
+      "widget": "ColorLight",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/ColorLight.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx",
+        "src-admin/src/WidgetsManager/Widgets/Dimmer.tsx",
+        "src-admin/src/WidgetsManager/Widgets/ColorLightDialog.tsx"
+      ],
+      "readSlots": [
+        "TEMPERATURE",
+        "ACTUAL",
+        "SET",
+        "DIMMER",
+        "BRIGHTNESS",
+        "ON_ACTUAL",
+        "ON_SET",
+        "ON",
+        "EFFECT",
+        "TRANSITION_TIME"
+      ],
+      "writeSlots": [
+        {
+          "slot": "SET/DIMMER/BRIGHTNESS",
+          "semantics": "Numeric brightness according to mapped metadata",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "ON_SET/ON",
+          "semantics": "Boolean power",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "TEMPERATURE",
+          "semantics": "Kelvin, metadata range or reference fallback 2000..6500",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "EFFECT",
+          "semantics": "Typed enum value",
+          "onlyIfMappedAndAuthorized": true
+        },
+        {
+          "slot": "TRANSITION_TIME",
+          "semantics": "Numeric duration",
+          "onlyIfMappedAndAuthorized": true
+        }
+      ],
+      "operatingFunctions": [
+        "Nur Farbtemperatur",
+        "Helligkeit/Power gemäß Zuordnung",
+        "Farb-/Helligkeits-/CT-Presets",
+        "Geerbte Effekt-/Übergangszeitbedienung"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "colorTemperature: Kelvin, Power und Helligkeit"
+        ],
+        "missing": [
+          "CT-Profil ohne unerlaubte RGB-Bedienung; Effekte/Übergangszeit"
+        ],
+        "automaticDetection": {
+          "installedEnumHasType": true,
+          "allowedTypeMapTarget": null,
+          "status": "not_offered"
+        },
+        "sources": [
+          "ui/src-ts/runtime-executables/lib/smarthome-contract.ts",
+          "ui/src-ts/runtime-executables/www/smarthome.ts",
+          "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+          "ui/src-ts/runtime-executables/main.ts"
+        ]
+      },
+      "priority": "P1",
+      "notes": [
+        "WHITE ist in der Referenz nur einer Eigenschaft zugewiesen; kein separater Lese-/Schreibpfad. rgbwSingle erhält W-Suffix, statt unabhängige W-Bedienung anzubieten.",
+        "Inherited Dimmer.tsx and ColorLightDialog.tsx; only mapped variants expose controls."
+      ]
+    }
+  ],
+  "customWidgets": [
+    {
+      "type": "clock",
+      "scope": "custom_builtin",
+      "widget": "Clock",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Clock.tsx",
+        "src-admin/src/WidgetsManager/CustomWidgetConfigs.tsx"
+      ],
+      "configuredReadFields": [],
+      "configuredWriteFields": [],
+      "operatingFunctions": [
+        "Analog/Digital, Datum/Wochentag/Sekunden, lokaler Sonnenauf-/untergang ausStandort"
+      ],
+      "optionalExternalBoundary": [],
+      "eos909": {
+        "status": "missing",
+        "reusable": [],
+        "missing": [
+          "Eigenes Clock-Element"
+        ]
+      }
+    },
+    {
+      "type": "weather",
+      "scope": "custom_builtin",
+      "widget": "Weather",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Weather.tsx",
+        "src-admin/src/WidgetsManager/CustomWidgetConfigs.tsx"
+      ],
+      "configuredReadFields": [
+        "weatherSource",
+        "instance",
+        "location",
+        "latitude",
+        "longitude",
+        "city"
+      ],
+      "configuredWriteFields": [],
+      "operatingFunctions": [
+        "DP-basierteAdapterdaten oder optionaleOpenMeteo/met.no-Daten; aktuell+Vorhersage"
+      ],
+      "optionalExternalBoundary": [
+        "Explicit optional Open-Meteo/met.no fetch,30min refresh; met.no icons useGitHubraw"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "Einzelne Sensoren"
+        ],
+        "missing": [
+          "LokalesKomposit+Quellenkonfiguration"
+        ]
+      }
+    },
+    {
+      "type": "iframe",
+      "scope": "custom_builtin",
+      "widget": "Iframe",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Iframe.tsx",
+        "src-admin/src/WidgetsManager/CustomWidgetConfigs.tsx"
+      ],
+      "configuredReadFields": [
+        "url"
+      ],
+      "configuredWriteFields": [],
+      "operatingFunctions": [
+        "Einbetten, Refresh, Dialog/neuerTab/gleicherTab, WebPort-Kontext"
+      ],
+      "optionalExternalBoundary": [
+        "Only configured permitted navigation/embedding; preserve EOS URL/sandbox policy"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "widget iframe/url und vorhandenesSandboxing"
+        ],
+        "missing": [
+          "VollständigeKlick/Refreshoptionen"
+        ]
+      },
+      "settingsFields": [
+        "refreshInterval",
+        "appendTimestamp",
+        "clickAction"
+      ]
+    },
+    {
+      "type": "gauge",
+      "scope": "custom_builtin",
+      "widget": "Gauge",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Gauge.tsx",
+        "src-admin/src/WidgetsManager/CustomWidgetConfigs.tsx"
+      ],
+      "configuredReadFields": [
+        "gaugeStateId",
+        "gaugeStateId2"
+      ],
+      "configuredWriteFields": [],
+      "operatingFunctions": [
+        "Bis2 Messwerte, Min/Max/Einheit/Präzision/Prozent/Farbschwellen/Gradient, Verlauf"
+      ],
+      "optionalExternalBoundary": [],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "numeric sensor"
+        ],
+        "missing": [
+          "Gauge-Profil undZweitwert"
+        ]
+      }
+    },
+    {
+      "type": "wind",
+      "scope": "custom_builtin",
+      "widget": "Wind",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Wind.tsx",
+        "src-admin/src/WidgetsManager/CustomWidgetConfigs.tsx"
+      ],
+      "configuredReadFields": [
+        "directionStateId",
+        "speedStateId",
+        "gustsStateId"
+      ],
+      "configuredWriteFields": [],
+      "operatingFunctions": [
+        "Kompass/Richtung,Geschwindigkeit,Böen"
+      ],
+      "optionalExternalBoundary": [],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "einzelne sensor"
+        ],
+        "missing": [
+          "Dreiwert-Windkomposit"
+        ]
+      }
+    },
+    {
+      "type": "universal",
+      "scope": "custom_builtin",
+      "widget": "Universal",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Universal.tsx",
+        "src-admin/src/WidgetsManager/CustomWidgetConfigs.tsx"
+      ],
+      "configuredReadFields": [
+        "stateId",
+        "secondaryStateId",
+        "opacityStateId",
+        "icons[].stateId",
+        "icon1StateId",
+        "icon2StateId",
+        "icon3StateId"
+      ],
+      "configuredWriteFields": [
+        "actionStateId",
+        "actionType:value|toggle",
+        "typed actionValue"
+      ],
+      "operatingFunctions": [
+        "Mehrfachanzeige,bedingteIcons/Farben,TypedValueoderToggle,Min/Max-NumericToggle,Bestätigung,QuickChart,History"
+      ],
+      "optionalExternalBoundary": [
+        "Frontend PIN must not be treated as authorization"
+      ],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "writable sensor plus bestehendeIcons"
+        ],
+        "missing": [
+          "Mehrfachlesevertrag,getrennteAktion,MetadatenTyp/Enum,gemeinsameHistoryfunktionen"
+        ]
+      }
+    },
+    {
+      "type": "presence",
+      "scope": "custom_builtin",
+      "widget": "Presence",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Presence.tsx",
+        "src-admin/src/WidgetsManager/CustomWidgetConfigs.tsx"
+      ],
+      "configuredReadFields": [
+        "presenceStateId"
+      ],
+      "configuredWriteFields": [],
+      "operatingFunctions": [
+        "Präsenz,invertierbar,abwesendverbergen/abdimmen"
+      ],
+      "optionalExternalBoundary": [],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "binary sensor"
+        ],
+        "missing": [
+          "Präsenzprofil/Sichtbarkeit"
+        ]
+      }
+    },
+    {
+      "type": "energyFlow",
+      "scope": "custom_builtin",
+      "widget": "EnergyFlow",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/EnergyFlow.tsx",
+        "src-admin/src/WidgetsManager/CustomWidgetConfigs.tsx"
+      ],
+      "configuredReadFields": [
+        "producers[].stateId",
+        "producers[].todayStateId",
+        "consumers[].stateId",
+        "consumers[].todayStateId",
+        "batterySocStateId",
+        "batteryVoltageStateId",
+        "batteryCurrentStateId",
+        "batteryPowerStateId"
+      ],
+      "configuredWriteFields": [],
+      "operatingFunctions": [
+        "ArraysErzeuger/Verbraucher,Leistung/Tageswerte,Batteriestatus,animierteFlüsse,Verlauf"
+      ],
+      "optionalExternalBoundary": [],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "EOS hat separates EMS/EnergieDashboard, keine gleichwertige freieSmartHome-Kachel"
+        ],
+        "missing": [
+          "KonfigurierbaresSmartHome-Energieflusskomposit"
+        ]
+      }
+    },
+    {
+      "type": "markdown",
+      "scope": "custom_builtin",
+      "widget": "Markdown",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/Markdown.tsx",
+        "src-admin/src/WidgetsManager/CustomWidgetConfigs.tsx"
+      ],
+      "configuredReadFields": [
+        "configured markdown",
+        "font size",
+        "alignment"
+      ],
+      "configuredWriteFields": [],
+      "operatingFunctions": [
+        "Markdown/GFM Notiz, großeDialogansicht"
+      ],
+      "optionalExternalBoundary": [
+        "Raw HTML disabled; unsafe link schemes filtered; preserve link policy"
+      ],
+      "eos909": {
+        "status": "missing",
+        "reusable": [],
+        "missing": [
+          "SicheresMarkdown-Element"
+        ]
+      }
+    },
+    {
+      "type": "newline",
+      "scope": "custom_builtin",
+      "widget": "Layout",
+      "sources": [
+        "src-admin/src/WidgetsManager/CustomWidgetConfigs.tsx",
+        "src-admin/src/WidgetsManager/Category.tsx"
+      ],
+      "configuredReadFields": [],
+      "configuredWriteFields": [],
+      "operatingFunctions": [
+        "NurLayoutumbruch,keinGerät"
+      ],
+      "optionalExternalBoundary": [],
+      "eos909": {
+        "status": "partial",
+        "reusable": [
+          "Grid/Seiten/Raumstruktur"
+        ],
+        "missing": [
+          "ExpliziterLayoutumbruchfallsgewünscht"
+        ]
+      }
+    }
+  ],
+  "sharedFunctions": {
+    "indicatorSlots": [
+      "WORKING",
+      "UNREACH",
+      "LOWBAT",
+      "MAINTAIN",
+      "ERROR",
+      "DIRECTION",
+      "DIRECTION_ENUM",
+      "CONNECTED",
+      "BATTERY",
+      "RSSI",
+      "FILTER_CHANGE",
+      "WASTE_ALARM",
+      "WATER_ALARM",
+      "MUTED",
+      "TEST",
+      "WINDOW"
+    ],
+    "extraInformationSlots": [
+      "ELECTRIC_POWER",
+      "CURRENT",
+      "VOLTAGE",
+      "CONSUMPTION",
+      "FREQUENCY",
+      "FILTER",
+      "BRUSH",
+      "SIDE_BRUSH",
+      "SENSORS",
+      "VALVE",
+      "FILTER_CONDITION",
+      "FILTER_CONDITION_CARBON"
+    ],
+    "onTime": {
+      "slot": "ON_TIME",
+      "read": true,
+      "write": "Nonnegative rounded integer seconds only on commit, never each keystroke; no optimistic state"
+    },
+    "history": [
+      "Configured history source",
+      "Tile trend arrow and selected history period",
+      "Chart dialog and smoothing",
+      "Min/max last24h orsince-midnight",
+      "Per-extra-reading history",
+      "No fabricated history if source absent"
+    ],
+    "metadata": [
+      "Name/icon/color",
+      "Unit/range/step",
+      "common.states object/array/semicolon syntax",
+      "Typed enum keys numeric or string",
+      "Separate command/readback values"
+    ],
+    "genericMappedStateEditor": {
+      "source": "src/lib/DeviceManagement.ts",
+      "rules": [
+        "Every mapped state can be shown independently",
+        "common.states -> enum selector",
+        "Boolean -> switch",
+        "Numeric bounded range -> slider; declared% withoutbounds referenceUI defaults0..100 only",
+        "Numeric withoutbounds -> numericinput",
+        "Text -> textinput",
+        "Read-only state -> text",
+        "Command and feedback remain separate rows"
+      ],
+      "eos909Gap": "Existing sensor handles one mapped value, not every mapped state of a composite device"
+    },
+    "presentation": [
+      "Read/control distinction",
+      "Confirm dialog or optional browserPIN UX",
+      "Read-only detail/infodialog",
+      "Press/keyboard/touch feedback",
+      "Vertical-scroll cancellation",
+      "Unknown value remains unknown in EOS even where reference coercefalse"
+    ],
+    "eos909": {
+      "present": [
+        "battery/lowbat, unreachable,error indicators",
+        "Separate readback quality",
+        "Press/keyboard/touch cancellation helpers",
+        "Per-device EOS timers (distinct from ON_TIME)",
+        "Existing scenes/EMS/history pages"
+      ],
+      "missing": [
+        "Remaining generic indicator slots",
+        "Multi-value info+history in everySmartHomewidget",
+        "ON_TIME per-device setting",
+        "Reference trend/minmax/chart features in eachtile",
+        "Generic typed enumeration of all mappedstates"
+      ]
+    },
+    "sources": [
+      "src-admin/src/WidgetsManager/Widgets/Generic.tsx",
+      "src-admin/src/WidgetsManager/Widgets/ChartDialog.tsx",
+      "src-admin/src/WidgetsManager/Widgets/commonStates.ts",
+      "src/lib/DeviceManagement.ts"
+    ]
+  },
+  "tvAllowedReferenceKeys": [
+    "UP",
+    "DOWN",
+    "LEFT",
+    "RIGHT",
+    "SELECT",
+    "MENU",
+    "GUIDE",
+    "INFO",
+    "BACK",
+    "HOME",
+    "EXIT",
+    "CHANNEL_UP",
+    "CHANNEL_DOWN",
+    "REWIND",
+    "PLAY",
+    "PAUSE",
+    "STOP",
+    "FAST_FORWARD",
+    "RED",
+    "GREEN",
+    "YELLOW",
+    "BLUE",
+    "NUMBER_0",
+    "NUMBER_1",
+    "NUMBER_2",
+    "NUMBER_3",
+    "NUMBER_4",
+    "NUMBER_5",
+    "NUMBER_6",
+    "NUMBER_7",
+    "NUMBER_8",
+    "NUMBER_9"
+  ],
+  "existingDefectsAndDesignRequirements": [
+    {
+      "id": "TD_MEDIA_NAME",
+      "priority": "P0",
+      "finding": "EOS maps mediaPlayer, actual installed/reference enum is media; allowedTypes currently excludes media",
+      "recommendation": "Add media->player and retain legacyalias ifneeded"
+    },
+    {
+      "id": "TD_FIRST_ONLY",
+      "priority": "P1",
+      "finding": "EOS chooses detected.find per root; subsequent legitimate patterns discarded",
+      "recommendation": "Process all supported controls then stable identity/dedup/reconciliation"
+    },
+    {
+      "id": "TD_VERSION",
+      "priority": "P1",
+      "finding": "EOS5.0.10 enum lacks contact/coAlarm/pressure/flow/electricity/airQuality/fan/airPurifier/pump/tv/fillLevel",
+      "recommendation": "Validate actual detector6.2 pattern package and controlled upgrade; declaration alone is not support"
+    },
+    {
+      "id": "TD_DROPPED_FIELDS",
+      "priority": "P1",
+      "finding": "Current proposals map onlyprimarysensor, basicclimate, basicmedia,URLcamera, two packedRGB kinds",
+      "recommendation": "Preserve every applicable slot and separate read/write metadata"
+    },
+    {
+      "id": "UI_GUARDS",
+      "priority": "P0",
+      "finding": "Frontend confirmation and detected type do not grant write rights",
+      "recommendation": "Server validates mapped device/action/DP/type/enum/bounds/role/license and stronger existing safety"
+    },
+    {
+      "id": "ROLE_SOURCE",
+      "priority": "P1",
+      "finding": "Control slots are not a universal hardware common.role definition",
+      "recommendation": "Carry actual common.role/unit/type/read/write/min/max/step/states; verify external detector pattern definitions separately"
+    }
+  ],
+  "onboarding": {
+    "manual": [
+      "Select semantic device/profile",
+      "Assign only intended slots using authorized DP picker",
+      "Fetch actual DP metadata; read/write targets remain separate",
+      "Offer typed enum/range controls and explain optional missing slots",
+      "Validate mapping without executing a device command",
+      "Choose existing room or create authorized room; preserve floor/function",
+      "Persist transactionally through current config path; keep existing deviceIDs"
+    ],
+    "automatic": [
+      "Use supported installed detectorpatterns in authorized objectscope",
+      "Read-only preview; no aliases/devicecommands created by discovery",
+      "Process all candidatecontrols; prevent siblingalias contamination/duplicateoptional-slot assignment",
+      "Retain command/readback identities including alias mapping; unknownmapping staysreview-needed",
+      "Compare existingprovenance/signature/manualoverrides; no duplicates or destructive replacement",
+      "Show proposed roles/type/unit/range/states and unsupportedslots",
+      "Approve mappings then choose room; ambiguity never silently assigned",
+      "Persist via existing transaction/ownership path"
+    ],
+    "preserveEOSExtras": [
+      "Scenes",
+      "Timers/logicalclocks",
+      "SmartHome pages/floors/functions/rooms",
+      "Player seek/TTS/stations/playlists/shuffle/repeat",
+      "Centrallicense/session/CSRF",
+      "Cover/climatesafety and independentSTOP",
+      "Migration/provenance/manualoverrides"
+    ],
+    "sources": [
+      "ui/src-ts/runtime-executables/lib/smarthome-import.ts",
+      "ui/src-ts/runtime-executables/www/smarthome-config.ts",
+      "ui/src-ts/runtime-executables/main.ts",
+      "src/lib/WidgetsManagement.ts",
+      "src-admin/src/Devices/SmartDetector.ts"
+    ]
+  },
+  "extensions": [
+    {
+      "type": "plugin",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/WidgetPlugin.tsx",
+        "src-admin/src/WidgetsManager/pluginLoader.ts",
+        "src-admin/src/WidgetsManager/PluginServices.tsx"
+      ],
+      "scope": "External module-federated adapter widget code and optional background services; separate approval/threat boundary; not builtin function parity"
+    },
+    {
+      "type": "webComponent",
+      "sources": [
+        "src-admin/src/WidgetsManager/Widgets/WidgetWebComponent.tsx",
+        "src-admin/src/WidgetsManager/webComponents.ts"
+      ],
+      "scope": "External modules/manifests/sendTo capabilities; separate contract/security review; not auto-imported"
+    }
+  ],
+  "verification": {
+    "method": "Source review plus exact dispatch inventory comparison",
+    "productChangesByThisInventory": false,
+    "hardwareTests": false,
+    "visualBrowserAcceptance": false,
+    "parityImplementationAccepted": false,
+    "limitations": [
+      "Dependency detector6.2 role-pattern definitions not included in uploadedsource; not guessed",
+      "Raw slot presence does not prove hardware capability",
+      "Missing optional slots must not fabricate controls",
+      "Source widget defects/optimisticstate/unsafeURLs must not weaken EOS boundaries"
+    ]
+  }
+}

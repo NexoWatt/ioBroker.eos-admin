@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/smarthome.ts
- * Quell-Hash: sha256:60acd56e451dd37da76072584c4ba4cf5a70a209fb6e0ac08500711224aca963
+ * Quell-Hash: sha256:948a256d3377aca135c38f4d818955e5b01c0fb86b327f1e6b2f372c774f1f90
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -2621,6 +2621,14 @@ function nwGetAccentColor(dev, iconName) {
   // URLs aus Metadaten übernehmen; nur die normalisierte RGB-Hexform ist erlaubt.
   const configured = dev && dev.ui && dev.ui.color;
   if (typeof configured === 'string' && /^#[0-9a-f]{6}$/i.test(configured)) return configured;
+  const profile = String(dev?.deviceControls?.profile || '').toLowerCase();
+  if (['light', 'dimmer', 'rgb', 'rgbsingle', 'rgbwsingle', 'hue', 'cie', 'ct'].includes(profile)) return '#f6c65b';
+  if (['thermostat', 'aircondition', 'temperature'].includes(profile)) return '#ff9869';
+  if (['blind', 'blindbuttons', 'gate', 'lock', 'door', 'window'].includes(profile)) return '#ad98ff';
+  if (['media', 'tv', 'volume', 'volumegroup', 'image', 'location', 'locationone'].includes(profile)) return '#56c9f4';
+  if (['warning', 'firealarm', 'floodalarm', 'coalarm', 'smoke'].includes(profile)) return '#ff8b9b';
+  if (['airquality', 'humidity', 'weathercurrent', 'weatherforecast', 'wind', 'pressure', 'flow'].includes(profile)) return '#46ddd0';
+  if (profile) return '#24dfac';
   const type = String(dev.type || '').toLowerCase();
   const fn = String(dev.function || '').toLowerCase();
 
@@ -3931,7 +3939,53 @@ function nwShowShToastForTile(dev) {
  * Zusammenhang: Teil von SmartHome: Räume, Geräte, Kacheln, Popover; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
  * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
  */
+const nwCustomTilePool = new Map();
+function nwReleaseUnusedCustomTiles() {
+  for (const [id, entry] of nwCustomTilePool) {
+    if (!entry.node.isConnected) { window.NW_SH_CUSTOM_VIEWS?.destroy(entry.node); nwCustomTilePool.delete(id); }
+  }
+}
+window.addEventListener('pagehide', () => {
+  for (const entry of nwCustomTilePool.values()) window.NW_SH_CUSTOM_VIEWS?.destroy(entry.node);
+  nwCustomTilePool.clear();
+});
 function nwCreateTile(dev, opts) {
+  const cacheId = String(dev.id); const kind = dev.customView && dev.customView.kind;
+  let cached = nwCustomTilePool.get(cacheId);
+  if (cached && cached.kind !== kind) { window.NW_SH_CUSTOM_VIEWS?.destroy(cached.node); nwCustomTilePool.delete(cacheId); cached = null; }
+  if (cached) window.NW_SH_CUSTOM_VIEWS?.update(cached.node, dev);
+  const custom = cached ? cached.node : window.NW_SH_CUSTOM_VIEWS?.renderTile(dev);
+  if (custom && !cached && nwCustomTilePool.size < 1024) nwCustomTilePool.set(cacheId, { kind, node: custom });
+  const complete = custom || window.NW_SH_DEVICE_CONTROLS?.renderTile(dev);
+  if (complete) {
+    complete.classList.add('nw-sh-tile', 'nw-sh-tile--size-' + nwGetTileSize(dev));
+    complete.dataset.nwDeviceId = String(dev.id);
+    complete.style.setProperty('--sh-accent', nwGetAccentColor(dev, nwGuessIconName(dev)));
+    const tools = document.createElement('div'); tools.className = 'nw-sh-dc-toolbar';
+    const favorite = document.createElement('button'); favorite.type = 'button';
+    favorite.className = 'nw-sh-favbtn'; favorite.textContent = nwIsFavorite(dev) ? '★' : '☆';
+    favorite.setAttribute('aria-label', 'Favorit: ' + String(dev.alias || dev.id));
+    favorite.setAttribute('aria-pressed', String(nwIsFavorite(dev))); favorite.dataset.nwActionKey = 'favorite';
+    favorite.addEventListener('click', event => { event.stopPropagation(); nwToggleFavorite(dev); nwApplyFiltersAndRender(); });
+    tools.appendChild(favorite);
+    if (nwSupportsTimer(dev)) {
+      const timer = document.createElement('button'); timer.type = 'button'; timer.textContent = 'Zeitschaltuhr';
+      timer.className = 'nw-sh-dc-button'; timer.addEventListener('click', event => { event.stopPropagation(); nwOpenTimerPopover(dev, timer); });
+      tools.appendChild(timer);
+    }
+    // Bereits vorhandene EOS-Zusatzfunktionen (z. B. Sender/TTS/Szenen) bleiben erreichbar.
+    if (['dimmer', 'blind', 'rtr', 'player', 'color'].includes(String(dev.type || '').toLowerCase())) {
+      const details = document.createElement('button'); details.type = 'button'; details.textContent = 'Weitere EOS-Funktionen';
+      details.className = 'nw-sh-dc-button'; details.addEventListener('click', event => { event.stopPropagation(); nwOpenDevicePopover(dev, details); });
+      tools.appendChild(details);
+    }
+    if (opts && opts.showRoom) {
+      const room = document.createElement('span'); room.textContent = String(dev.room || ''); tools.prepend(room);
+    }
+    complete.querySelector(':scope > .nw-sh-dc-toolbar')?.remove();
+    complete.prepend(tools);
+    return complete;
+  }
   const type = String(dev.type || '').toLowerCase();
   const bigValue = nwFormatBigValue(dev);
   const hasBigValue = !!(bigValue && bigValue.hasValue);
@@ -4229,52 +4283,7 @@ function nwCreateTile(dev, opts) {
         meta.textContent = parts.join(' · ') || '';
         big.appendChild(meta);
 
-        if (size === 'xl' && canWrite && dev.io && dev.io.climate && dev.io.climate.setpointId) {
-          const controls = document.createElement('div');
-          controls.className = 'nw-sh-controls nw-sh-controls--rtr';
-
-          const btnMinus = document.createElement('button');
-          btnMinus.type = 'button';
-          btnMinus.className = 'nw-sh-btn';
-          btnMinus.textContent = '−';
-
-          const btnPlus = document.createElement('button');
-          btnPlus.type = 'button';
-          btnPlus.className = 'nw-sh-btn';
-          btnPlus.textContent = '+';
-
-          /**
-           * Code-Teil: Arrow-Funktion `stop`
-           * Zweck: verwaltet Lifecycle/Ressourcen wie Server, Timer oder SSE-Verbindungen.
-           * Zusammenhang: Hängt an DOM-IDs, /api/state, /config und den vom Backend veröffentlichten States; Änderungen müssen mit main.js/ems/* abgestimmt bleiben.
-           * TypeScript-Hinweis: Beim TypeScript-Umbau Parameter, Rückgabewert und verwendete State-/Config-Struktur explizit typisieren.
-           */
-          /**
-           * Code-Teil: stop
-           * Zweck: Stoppt Prozess, Timer, Engine oder Verbindung.
-           * Zusammenhang: Teil von SmartHome: Räume, Geräte, Kacheln, Popover; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
-           * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
-           */
-          const stop = (ev) => ev.stopPropagation();
-          // Ereignis-Kommentar: Bindet das UI-Ereignis 'click' an btnMinus. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
-          btnMinus.addEventListener('click', stop);
-          // Ereignis-Kommentar: Bindet das UI-Ereignis 'click' an btnPlus. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
-          btnPlus.addEventListener('click', stop);
-
-          // Ereignis-Kommentar: Bindet das UI-Ereignis 'click' an btnMinus. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
-          btnMinus.addEventListener('click', async () => {
-            await nwAdjustRtrSetpoint(dev, -0.5);
-          });
-
-          // Ereignis-Kommentar: Bindet das UI-Ereignis 'click' an btnPlus. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
-          btnPlus.addEventListener('click', async () => {
-            await nwAdjustRtrSetpoint(dev, 0.5);
-          });
-
-          controls.appendChild(btnMinus);
-          controls.appendChild(btnPlus);
-          big.appendChild(controls);
-        }
+        
       }
     }
 
@@ -4316,7 +4325,7 @@ function nwCreateTile(dev, opts) {
     label.textContent = type === 'blind' ? 'Position' : 'Helligkeit';
     const hint = document.createElement('div');
     hint.className = 'nw-sh-tile-dial__hint';
-    hint.textContent = 'Bedienung öffnen';
+    hint.textContent = '';
     meta.appendChild(label);
     meta.appendChild(hint);
 
@@ -4471,25 +4480,7 @@ function nwCreateTile(dev, opts) {
     addMiniToggle();
   }
 
-  if (type === 'dimmer' && dev.io && dev.io.level && (dev.io.level.writeId || dev.io.level.readId)) {
-    const lvlCfg = dev.io.level;
-    const min = typeof lvlCfg.min === 'number' ? lvlCfg.min : 0;
-    const max = typeof lvlCfg.max === 'number' ? lvlCfg.max : 100;
-    const step = typeof lvlCfg.step === 'number' ? lvlCfg.step : 5;
-    const st = dev.state || {};
-    const current = (typeof st.level === 'number') ? st.level : null;
-
-    if (typeof current === 'number') addMiniBtn('−', 'Dimmen −', async () => {
-      const next = Math.max(min, Math.min(max, current - step));
-      await nwSetLevel(dev.id, next);
-      await nwReloadDevices({ force: true });
-    });
-    if (typeof current === 'number') addMiniBtn('+', 'Dimmen +', async () => {
-      const next = Math.max(min, Math.min(max, current + step));
-      await nwSetLevel(dev.id, next);
-      await nwReloadDevices({ force: true });
-    });
-  }
+  
 
   if (type === 'scene') {
     addMiniBtn('▶', 'Szene ausführen', async () => {
@@ -5426,10 +5417,6 @@ const NW_SH_LIVE_PREVIEW_LS_KEY = 'nw_sh_live_preview';
 const NW_SH_LIVE_PREVIEW_DEFAULT = true;
 const NW_SH_LIVE_PREVIEW_THROTTLE_MS = 200; // max ~5 writes/s while dragging
 
-// SmartHome Tooltip/Popover: step controls for sliders (Dimmer/Jalousie)
-const NW_SH_STEP_DIMMER_LS_KEY = 'nw_sh_step_dimmer';
-const NW_SH_STEP_BLIND_LS_KEY = 'nw_sh_step_blind';
-const NW_SH_STEP_DEFAULT = 5;
 
 // SmartHome: Favoriten (Schnellzugriff)
 const NW_SH_FAVORITES_FIRST_LS_KEY = 'nw_sh_favorites_first';
@@ -6129,7 +6116,7 @@ function nwCreateLevelPopover(dev, canWrite, opts) {
     step: 1,
     unit: '%',
     label,
-    sub2: 'Halbkreis ziehen oder +/− tippen',
+    sub2: '',
     canWrite: hasWrite,
     formatter: (val) => Math.round(val) + '%',
     minmaxFormatter: (val) => Math.round(val) + '%',
@@ -6187,98 +6174,6 @@ function nwCreateLevelPopover(dev, canWrite, opts) {
     presets.appendChild(b);
   });
 
-  // Step controls: step size (1/5/10) + +/-
-  let step = nwLoadNumberLS(NW_SH_STEP_DIMMER_LS_KEY, NW_SH_STEP_DEFAULT);
-  if (![1, 5, 10].includes(step)) step = NW_SH_STEP_DEFAULT;
-
-  const stepRow = document.createElement('div');
-  stepRow.className = 'nw-sh-popover__steprow';
-
-  const stepLabel = document.createElement('div');
-  stepLabel.className = 'nw-sh-popover__label';
-  stepLabel.textContent = 'Schritt';
-
-  const stepTools = document.createElement('div');
-  stepTools.className = 'nw-sh-popover__steptools';
-
-  const stepChoices = [1, 5, 10];
-  const stepBtns = new Map();
-  /**
-   * Code-Teil: syncStepBtns
-   * Zweck: Synchronisiert zwei Datenquellen bzw. UI und State.
-   * Zusammenhang: Teil von SmartHome: Räume, Geräte, Kacheln, Popover; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
-   * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
-   */
-  function syncStepBtns() {
-    stepChoices.forEach((s) => {
-      const btn = stepBtns.get(s);
-      if (!btn) return;
-      btn.classList.toggle('nw-sh-chip--active', s === step);
-      btn.setAttribute('aria-pressed', s === step ? 'true' : 'false');
-    });
-  }
-
-  const stepChoiceWrap = document.createElement('div');
-  stepChoiceWrap.className = 'nw-sh-popover__stepchoices';
-  stepChoices.forEach((s) => {
-    const c = document.createElement('button');
-    c.type = 'button';
-    c.className = 'nw-sh-chip nw-sh-chip--mini';
-    c.textContent = String(s);
-    c.title = 'Schrittweite ' + s;
-    c.disabled = !hasWrite;
-    c.setAttribute('aria-pressed', 'false');
-    // Ereignis-Kommentar: Bindet das UI-Ereignis 'click' an c. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
-    c.addEventListener('click', (ev) => ev.stopPropagation());
-    // Ereignis-Kommentar: Bindet das UI-Ereignis 'click' an c. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
-    c.addEventListener('click', () => {
-      if (!hasWrite) return;
-      step = s;
-      nwSaveNumberLS(NW_SH_STEP_DIMMER_LS_KEY, step);
-      syncStepBtns();
-    });
-    stepBtns.set(s, c);
-    stepChoiceWrap.appendChild(c);
-  });
-  syncStepBtns();
-
-  const minus = document.createElement('button');
-  minus.type = 'button';
-  minus.className = 'nw-sh-btn nw-sh-btn--mini';
-  minus.textContent = '−';
-  minus.title = 'Wert verringern';
-  minus.disabled = !hasWrite;
-  // Ereignis-Kommentar: Bindet das UI-Ereignis 'click' an minus. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
-  minus.addEventListener('click', (ev) => ev.stopPropagation());
-  // Ereignis-Kommentar: Bindet das UI-Ereignis 'click' an minus. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
-  minus.addEventListener('click', async () => {
-    if (!hasWrite) return;
-    const cur = Number(slider.value);
-    await commitLevel(cur - step);
-  });
-
-  const plus = document.createElement('button');
-  plus.type = 'button';
-  plus.className = 'nw-sh-btn nw-sh-btn--mini';
-  plus.textContent = '+';
-  plus.title = 'Wert erhöhen';
-  plus.disabled = !hasWrite;
-  // Ereignis-Kommentar: Bindet das UI-Ereignis 'click' an plus. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
-  plus.addEventListener('click', (ev) => ev.stopPropagation());
-  // Ereignis-Kommentar: Bindet das UI-Ereignis 'click' an plus. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
-  plus.addEventListener('click', async () => {
-    if (!hasWrite) return;
-    const cur = Number(slider.value);
-    await commitLevel(cur + step);
-  });
-
-  stepTools.appendChild(stepChoiceWrap);
-  stepTools.appendChild(minus);
-  stepTools.appendChild(plus);
-
-  stepRow.appendChild(stepLabel);
-  stepRow.appendChild(stepTools);
-
   const hint = document.createElement('div');
   hint.className = 'nw-sh-popover__hint';
   /**
@@ -6289,12 +6184,10 @@ function nwCreateLevelPopover(dev, canWrite, opts) {
    */
   function updateHint() {
     if (!hasWrite) {
-      hint.textContent = 'Nur Anzeige (keine Schreib‑DP / writeId konfiguriert).';
+      hint.textContent = 'Nur Anzeige';
       return;
     }
-    hint.textContent = livePreview
-      ? 'Live-Vorschau: AN (gedrosselt). Beim Loslassen wird der Wert final übernommen.'
-      : 'Tipp: Regler ziehen – Wert wird beim Loslassen übernommen.';
+    hint.textContent = '';
   }
 
   updateHint();
@@ -6303,7 +6196,6 @@ function nwCreateLevelPopover(dev, canWrite, opts) {
   wrap.appendChild(dial);
   wrap.appendChild(slider);
   wrap.appendChild(presets);
-  wrap.appendChild(stepRow);
   wrap.appendChild(hint);
 
   const cctCfg = dev.io && dev.io.colorTemperature ? dev.io.colorTemperature : null;
@@ -6900,12 +6792,10 @@ function nwCreateColorPopover(dev, canWrite) {
    */
   function updateHint() {
     if (!hasWrite) {
-      hint.textContent = 'RGB-Farbe nur Anzeige. Weitere Lichtkanäle können unten separat bedient werden.';
+      hint.textContent = 'RGB-Farbe nur Anzeige';
       return;
     }
-    hint.textContent = livePreview
-      ? 'Live-Vorschau: AN (gedrosselt). Beim Loslassen wird die RGB-Farbe final übernommen.'
-      : 'Tipp: RGB-Farbe wählen – wird beim Loslassen übernommen.';
+    hint.textContent = '';
   }
   updateHint();
 
@@ -7247,98 +7137,6 @@ function nwCreateBlindPopover(dev, canWrite) {
     presets.appendChild(b);
   });
 
-  // Step controls: step size (1/5/10) + +/-
-  let step = nwLoadNumberLS(NW_SH_STEP_BLIND_LS_KEY, NW_SH_STEP_DEFAULT);
-  if (![1, 5, 10].includes(step)) step = NW_SH_STEP_DEFAULT;
-
-  const stepRow = document.createElement('div');
-  stepRow.className = 'nw-sh-popover__steprow';
-
-  const stepLabel = document.createElement('div');
-  stepLabel.className = 'nw-sh-popover__label';
-  stepLabel.textContent = 'Schritt';
-
-  const stepTools = document.createElement('div');
-  stepTools.className = 'nw-sh-popover__steptools';
-
-  const stepChoices = [1, 5, 10];
-  const stepBtns = new Map();
-  /**
-   * Code-Teil: syncStepBtns
-   * Zweck: Synchronisiert zwei Datenquellen bzw. UI und State.
-   * Zusammenhang: Teil von SmartHome: Räume, Geräte, Kacheln, Popover; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
-   * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
-   */
-  function syncStepBtns() {
-    stepChoices.forEach((s) => {
-      const btn = stepBtns.get(s);
-      if (!btn) return;
-      btn.classList.toggle('nw-sh-chip--active', s === step);
-      btn.setAttribute('aria-pressed', s === step ? 'true' : 'false');
-    });
-  }
-
-  const stepChoiceWrap = document.createElement('div');
-  stepChoiceWrap.className = 'nw-sh-popover__stepchoices';
-  stepChoices.forEach((s) => {
-    const c = document.createElement('button');
-    c.type = 'button';
-    c.className = 'nw-sh-chip nw-sh-chip--mini';
-    c.textContent = String(s);
-    c.title = 'Schrittweite ' + s;
-    c.disabled = !canMove;
-    c.setAttribute('aria-pressed', 'false');
-    // Ereignis-Kommentar: Bindet das UI-Ereignis 'click' an c. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
-    c.addEventListener('click', (ev) => ev.stopPropagation());
-    // Ereignis-Kommentar: Bindet das UI-Ereignis 'click' an c. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
-    c.addEventListener('click', () => {
-      if (!canMove) return;
-      step = s;
-      nwSaveNumberLS(NW_SH_STEP_BLIND_LS_KEY, step);
-      syncStepBtns();
-    });
-    stepBtns.set(s, c);
-    stepChoiceWrap.appendChild(c);
-  });
-  syncStepBtns();
-
-  const minus = document.createElement('button');
-  minus.type = 'button';
-  minus.className = 'nw-sh-btn nw-sh-btn--mini';
-  minus.textContent = '−';
-  minus.title = 'Position verringern';
-  minus.disabled = !canMove;
-  // Ereignis-Kommentar: Bindet das UI-Ereignis 'click' an minus. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
-  minus.addEventListener('click', (ev) => ev.stopPropagation());
-  // Ereignis-Kommentar: Bindet das UI-Ereignis 'click' an minus. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
-  minus.addEventListener('click', async () => {
-    if (!canMove) return;
-    const cur = Number(slider.value);
-    await commitPos(cur - step);
-  });
-
-  const plus = document.createElement('button');
-  plus.type = 'button';
-  plus.className = 'nw-sh-btn nw-sh-btn--mini';
-  plus.textContent = '+';
-  plus.title = 'Position erhöhen';
-  plus.disabled = !canMove;
-  // Ereignis-Kommentar: Bindet das UI-Ereignis 'click' an plus. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
-  plus.addEventListener('click', (ev) => ev.stopPropagation());
-  // Ereignis-Kommentar: Bindet das UI-Ereignis 'click' an plus. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
-  plus.addEventListener('click', async () => {
-    if (!canMove) return;
-    const cur = Number(slider.value);
-    await commitPos(cur + step);
-  });
-
-  stepTools.appendChild(stepChoiceWrap);
-  stepTools.appendChild(minus);
-  stepTools.appendChild(plus);
-
-  stepRow.appendChild(stepLabel);
-  stepRow.appendChild(stepTools);
-
   const hint = document.createElement('div');
   hint.className = 'nw-sh-popover__hint';
   /**
@@ -7353,16 +7151,14 @@ function nwCreateBlindPopover(dev, canWrite) {
       return;
     }
     if (!canWrite) {
-      hint.textContent = 'Nur Anzeige (keine Schreib‑DP konfiguriert).';
+      hint.textContent = 'Nur Anzeige';
       return;
     }
     if (!hasWrite) {
-      hint.textContent = 'Tipp: Tasten nutzen (kein Positions‑Schreibwert konfiguriert).';
+      hint.textContent = 'Position nur Anzeige';
       return;
     }
-    hint.textContent = livePreview
-      ? 'Live-Vorschau: AN (gedrosselt). Beim Loslassen wird der Wert final übernommen. Auf=0, Ab=1.'
-      : 'Tipp: Regler 0–100 % ziehen oder Tasten nutzen. Auf=0, Ab=1.';
+    hint.textContent = '';
   }
 
   updateHint();
@@ -7417,6 +7213,7 @@ function nwCreateBlindPopover(dev, canWrite) {
     b.type = 'button';
     b.className = 'nw-sh-btn';
     b.textContent = label;
+    b.setAttribute('aria-label', action === 'stop' ? 'Stopp' : action === 'up' ? 'Öffnen' : 'Schließen');
     const actionAllowed = canWrite && (action === 'stop' || !movementBlocked);
     b.disabled = !actionAllowed;
     // Ereignis-Kommentar: Bindet das UI-Ereignis 'click' an b. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
@@ -7441,7 +7238,6 @@ function nwCreateBlindPopover(dev, canWrite) {
   wrap.appendChild(dial);
   wrap.appendChild(slider);
   wrap.appendChild(presets);
-  wrap.appendChild(stepRow);
   wrap.appendChild(controls);
   wrap.appendChild(hint);
 
@@ -7774,15 +7570,15 @@ function nwCreateValueGauge(opts) {
   const overlay = document.createElement('div');
   overlay.className = 'nw-sh-gauge__overlay';
 
-  const btnMinus = document.createElement('button');
-  btnMinus.type = 'button';
-  btnMinus.className = 'nw-sh-gauge__btn';
-  btnMinus.textContent = '−';
+  
+  
+  
+  
 
-  const btnPlus = document.createElement('button');
-  btnPlus.type = 'button';
-  btnPlus.className = 'nw-sh-gauge__btn';
-  btnPlus.textContent = '+';
+  
+  
+  
+  
 
   const center = document.createElement('div');
   center.className = 'nw-sh-gauge__center';
@@ -7802,12 +7598,12 @@ function nwCreateValueGauge(opts) {
   if (label) center.appendChild(labEl);
   if (sub2) center.appendChild(sub2El);
 
-  const btnRow = document.createElement('div');
-  btnRow.className = 'nw-sh-gauge__btnrow';
-  btnRow.appendChild(btnMinus);
-  btnRow.appendChild(btnPlus);
+  
+  
+  
+  
   overlay.appendChild(center);
-  overlay.appendChild(btnRow);
+  
   canvas.appendChild(overlay);
 
   const minmax = document.createElement('div');
@@ -7866,31 +7662,12 @@ function nwCreateValueGauge(opts) {
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
   const stop = (ev) => ev.stopPropagation();
-  // Ereignis-Kommentar: Bindet das UI-Ereignis 'click' an btnMinus. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
-  btnMinus.addEventListener('click', stop);
-  // Ereignis-Kommentar: Bindet das UI-Ereignis 'click' an btnPlus. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
-  btnPlus.addEventListener('click', stop);
-  // Ereignis-Kommentar: Bindet das UI-Ereignis 'click' an btnMinus. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
-  btnMinus.addEventListener('click', async () => {
-    if (!canWrite) return;
-    setValue(value - step);
-    await commit();
-  });
-  // Ereignis-Kommentar: Bindet das UI-Ereignis 'click' an btnPlus. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
-  btnPlus.addEventListener('click', async () => {
-    if (!canWrite) return;
-    setValue(value + step);
-    await commit();
-  });
+  
+  
+  
+  
 
-  if (!canWrite) {
-    btnMinus.disabled = true;
-    btnPlus.disabled = true;
-    btnMinus.style.opacity = '0.5';
-    btnPlus.style.opacity = '0.5';
-    btnMinus.style.cursor = 'default';
-    btnPlus.style.cursor = 'default';
-  }
+  
 
   /**
    * Code-Teil: Arrow-Funktion `pickFromClient`
@@ -8162,19 +7939,19 @@ function nwCreateThermostatGauge(opts) {
 
   canvas.appendChild(svg);
 
-  // Overlay: value + +/- buttons (Apple‑ähnlich)
+  // Wertanzeige über dem Regler
   const overlay = document.createElement('div');
   overlay.className = 'nw-sh-gauge__overlay';
 
-  const btnMinus = document.createElement('button');
-  btnMinus.type = 'button';
-  btnMinus.className = 'nw-sh-gauge__btn';
-  btnMinus.textContent = '−';
+  
+  
+  
+  
 
-  const btnPlus = document.createElement('button');
-  btnPlus.type = 'button';
-  btnPlus.className = 'nw-sh-gauge__btn';
-  btnPlus.textContent = '+';
+  
+  
+  
+  
 
   const center = document.createElement('div');
   center.className = 'nw-sh-gauge__center';
@@ -8194,15 +7971,14 @@ function nwCreateThermostatGauge(opts) {
   if (subtitle) center.appendChild(labEl);
   if (sub2) center.appendChild(sub2El);
 
-  // Buttons are placed BELOW the value for a cleaner, more readable layout
-  // (especially on touch devices).
-  const btnRow = document.createElement('div');
-  btnRow.className = 'nw-sh-gauge__btnrow';
-  btnRow.appendChild(btnMinus);
-  btnRow.appendChild(btnPlus);
+  // Die Wertanzeige bleibt ohne zusätzliche Schritttasten im Mittelpunkt.
+  
+  
+  
+  
 
   overlay.appendChild(center);
-  overlay.appendChild(btnRow);
+  
 
   canvas.appendChild(overlay);
 
@@ -8283,33 +8059,14 @@ function nwCreateThermostatGauge(opts) {
   const stop = (ev) => ev.stopPropagation();
 
   // Buttons
-  // Ereignis-Kommentar: Bindet das UI-Ereignis 'click' an btnMinus. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
-  btnMinus.addEventListener('click', stop);
-  // Ereignis-Kommentar: Bindet das UI-Ereignis 'click' an btnPlus. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
-  btnPlus.addEventListener('click', stop);
+  
+  
 
-  // Ereignis-Kommentar: Bindet das UI-Ereignis 'click' an btnMinus. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
-  btnMinus.addEventListener('click', async () => {
-    if (!canWrite) return;
-    setValue(value - step);
-    await commit();
-  });
+  
 
-  // Ereignis-Kommentar: Bindet das UI-Ereignis 'click' an btnPlus. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
-  btnPlus.addEventListener('click', async () => {
-    if (!canWrite) return;
-    setValue(value + step);
-    await commit();
-  });
+  
 
-  if (!canWrite) {
-    btnMinus.disabled = true;
-    btnPlus.disabled = true;
-    btnMinus.style.opacity = '0.5';
-    btnPlus.style.opacity = '0.5';
-    btnMinus.style.cursor = 'default';
-    btnPlus.style.cursor = 'default';
-  }
+  
 
   /**
    * Code-Teil: Arrow-Funktion `pickFromClient`
@@ -8683,7 +8440,7 @@ function nwCreatePlayerPopover(dev, canWrite) {
       const isParty = sel.length > 0 && allIds.every((id) => selSet.has(id));
       partyBtn.classList.toggle('nw-sh-chip--active', isParty);
       soloBtn.classList.toggle('nw-sh-chip--active', sel.length === 1 && sel[0] === dev.id);
-      hint.textContent = sel.length > 1 ? `Steuert ${sel.length} Zonen gleichzeitig.` : 'Nur diese Zone.';
+      hint.textContent = sel.length > 1 ? `Steuert ${sel.length} Zonen gleichzeitig.` : '';
     };
 
     partyBtn.addEventListener('click', (e) => {
@@ -11028,12 +10785,14 @@ function nwApplyPageFilters(devices) {
  * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
  */
 function nwApplyFiltersAndRender() {
+  try {
   const activePage = (nwPageState.pages || []).find(p => p && p.id === nwPageState.activeId) || null;
 
   // 1) Apply base filters from the active page
   const base = nwApplyPageFilters(nwAllDevices);
   // 2) Apply user filters (favorites + function chip)
   const filtered = nwApplyFilters(base);
+  if (!filtered.length) { const roomRoot = document.getElementById('nw-smarthome-rooms'); if (roomRoot) nwClear(roomRoot); }
 
   // Home uses its own overview layout (floors + favorites). No chip UI here.
   if (nwIsHomePage(activePage)) {
@@ -11058,6 +10817,7 @@ function nwApplyFiltersAndRender() {
       nwShowEmptyState(true, { enabled: nwSmartHomeEnabled, reason: 'empty' });
     } else {
       nwShowEmptyState(true, { reason: 'filtered' });
+    const roomRoot = document.getElementById('nw-smarthome-rooms'); if (roomRoot) nwClear(roomRoot);
     }
     return;
   }
@@ -11065,6 +10825,7 @@ function nwApplyFiltersAndRender() {
   nwShowEmptyState(false);
   if (nwShFiltersUiEnabled && nwViewState.mode === 'functions') nwRenderFunctions(filtered);
   else nwRenderRooms(filtered);
+  } finally { nwReleaseUnusedCustomTiles(); }
 }
 
 // ---------- Auto refresh + bootstrap ----------
@@ -11080,11 +10841,13 @@ function nwDeviceRenderSignature(devices) {
     if (!value || typeof value !== 'object' || Array.isArray(value)) return value;
     const copy = { ...value };
     delete copy.ageMs;
+    delete copy.age;
     return copy;
   };
   return JSON.stringify(devices.map((dev) => {
     if (!dev || typeof dev !== 'object') return dev;
     const copy = { ...dev };
+    if (dev.deviceControls) copy.deviceControls = { ...dev.deviceControls, fields: (dev.deviceControls.fields || []).map(withoutAge) };
     if (dev.quality) copy.quality = withoutAge(dev.quality);
     if (dev.fieldQuality) {
       copy.fieldQuality = Object.fromEntries(Object.entries(dev.fieldQuality).map(([field, quality]) => [field, withoutAge(quality)]));
@@ -11111,7 +10874,7 @@ async function nwReloadDevices(opts) {
     nwAllDevices = arr;
     nwSyncOpenPopoverFeedback(arr);
 
-    if (window.NW_SH_TOUCH?.isInteracting()) return;
+    if (window.NW_SH_TOUCH?.isInteracting() || window.NW_SH_DEVICE_CONTROLS?.isInteracting() || window.NW_SH_CUSTOM_VIEWS?.isInteracting?.()) return;
     if (!force && sig === nwLastDevicesSignature) return;
 
     nwLastDevicesSignature = sig;
@@ -11321,3 +11084,6 @@ async function nwBootstrap() {
 
 // Ereignis-Kommentar: Bindet das UI-Ereignis 'DOMContentLoaded' an document. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
 document.addEventListener('DOMContentLoaded', nwBootstrap);
+
+// Geräteprofile melden nur erfolgreiche Befehlsübergaben; Istwerte werden erneut vom Server gelesen.
+window.addEventListener('nw-smarthome-refresh', () => nwRefreshDevicesSoon(150));

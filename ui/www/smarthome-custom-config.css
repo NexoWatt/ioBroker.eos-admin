@@ -1,0 +1,67 @@
+/* Copyright (c) 2026 NexoWatt. All rights reserved. Confidential and Proprietary.
+ * Eigene Ansichten: strukturierte lokale Konfiguration, keine eingebettete Vorschau. */
+body.nw-page-smarthome-config .nw-sh-custom-config {
+  margin: 18px 0;
+  padding: 16px;
+  min-width: 0;
+  color: #e7f6f7;
+  background: #0c202b;
+  border: 1px solid rgba(61, 176, 164, .25);
+  border-radius: 16px;
+}
+body.nw-page-smarthome-config .nw-sh-custom-config__heading {
+  padding: 10px 4px;
+  min-height: 44px;
+  font-size: 16px;
+  font-weight: 750;
+  line-height: 1.4;
+  color: #c8fff0;
+  cursor: pointer;
+}
+body.nw-page-smarthome-config .nw-sh-custom-config__intro,
+body.nw-page-smarthome-config .nw-sh-custom-config__hint {
+  margin: 8px 0 12px;
+  color: #aec8d1;
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+body.nw-page-smarthome-config .nw-sh-custom-config__status {
+  margin: 12px 0;
+  padding: 10px 12px;
+  border-left: 3px solid #24cda1;
+  background: rgba(28, 165, 134, .09);
+  border-radius: 4px;
+  color: #c5eade;
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+body.nw-page-smarthome-config .nw-sh-custom-config__status[data-state="error"] { border-color: #f2b454; color: #f4d5a4; background: rgba(242, 180, 84, .09); }
+body.nw-page-smarthome-config .nw-sh-custom-config__selector { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0; }
+body.nw-page-smarthome-config .nw-sh-custom-config__selector > select { flex: 1 1 220px; width: auto; min-width: 0; }
+body.nw-page-smarthome-config .nw-sh-custom-config__settings { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 14px; }
+body.nw-page-smarthome-config .nw-sh-custom-config__field { display: flex; flex-direction: column; gap: 6px; min-width: 0; margin: 0; }
+body.nw-page-smarthome-config .nw-sh-custom-config__label { margin: 0; color: #c9dee5; font-size: 13px; line-height: 1.5; font-weight: 650; overflow-wrap: anywhere; }
+body.nw-page-smarthome-config .nw-sh-custom-config :is(input, select, textarea, button) { min-height: 44px; max-width: 100%; box-sizing: border-box; }
+body.nw-page-smarthome-config .nw-sh-custom-config :is(input, select, textarea) { width: 100%; min-width: 0; }
+body.nw-page-smarthome-config .nw-sh-custom-config .nw-sh-custom-config__checkbox { width: 44px; height: 44px; margin: 0; accent-color: #00cfa2; cursor: pointer; }
+body.nw-page-smarthome-config .nw-sh-custom-config__field:has(textarea) { grid-column: 1 / -1; }
+body.nw-page-smarthome-config .nw-sh-custom-config__textarea { min-height: 160px; resize: vertical; line-height: 1.6; }
+body.nw-page-smarthome-config .nw-sh-custom-config__list { grid-column: 1 / -1; min-width: 0; padding: 14px; border: 1px solid rgba(61, 176, 164, .2); border-radius: 12px; background: #0a1923; }
+body.nw-page-smarthome-config .nw-sh-custom-config__list-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: 10px; padding: 12px 0; margin: 8px 0; border-top: 1px solid rgba(143, 190, 201, .2); }
+body.nw-page-smarthome-config .nw-sh-custom-config__list-row > button { align-self: end; }
+body.nw-page-smarthome-config .nw-sh-custom-config__scalar { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+body.nw-page-smarthome-config .nw-sh-custom-config__button { white-space: normal; line-height: 1.4; }
+body.nw-page-smarthome-config .nw-sh-custom-config :focus-visible { outline: 2px solid #64f4ce; outline-offset: 3px; }
+body.nw-page-smarthome-config .nw-sh-custom-config button:disabled { opacity: .55; cursor: default; }
+body.nw-page-smarthome-config .nw-sh-custom-config [hidden] { display: none !important; }
+@media (max-width: 560px) {
+  body.nw-page-smarthome-config .nw-sh-custom-config { padding: 12px; }
+  body.nw-page-smarthome-config .nw-sh-custom-config__selector > * { flex: 1 1 100%; }
+}
+@media (forced-colors: active) {
+  body.nw-page-smarthome-config .nw-sh-custom-config,
+  body.nw-page-smarthome-config .nw-sh-custom-config__list { border-color: CanvasText; }
+  body.nw-page-smarthome-config .nw-sh-custom-config :focus-visible { outline-color: Highlight; }
+}

@@ -1,0 +1,7 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> iobroker.eos-admin@9.0.10 typecheck
+> tsc -p tsconfig.build.json --noEmit && tsc -p ui/tsconfig.ephemeral-cache.json && tsc -p ui/tsconfig.hosted-adapter.json && tsc -p modules/eebus/tsconfig.json --noEmit && tsc -p modules/backup/tsconfig.json --noEmit && tsc -p ui/tsconfig.smarthome-activation.json && tsc -p ui/tsconfig.ui-auth-frontend.json && tsc -p ui/tsconfig.preserved-ui-config.json && tsc -p ui/tsconfig.smarthome-feedback.json && tsc -p ui/tsconfig.smarthome-touch.json && tsc -p ui/tsconfig.smarthome-presentation.json && tsc -p ui/tsconfig.smarthome-device-controls.json && tsc -p ui/tsconfig.smarthome-device-api.json && tsc -p ui/tsconfig.smarthome-device-detection.json && tsc -p ui/tsconfig.smarthome-device-config.json && tsc -p ui/tsconfig.smarthome-device-controls-browser.json && tsc -p ui/tsconfig.smarthome-custom-views.json && tsc -p ui/tsconfig.smarthome-custom-contract.json && tsc -p ui/tsconfig.smarthome-custom-config.json && tsc -p ui/tsconfig.smarthome-device-legacy.json && tsc -p ui/tsconfig.smarthome-device-aliases.json && tsc -p ui/tsconfig.smarthome-alias-config.json && tsc -p ui/tsconfig.smarthome-device-categories.json && tsc -p ui/tsconfig.smarthome-layout-editor.json
+

@@ -1,0 +1,24 @@
+✔ catalog follows installed 6.2 dependency and every builtin external pattern (3.23014ms)
+✔ real detection retains secondary values and readonly/actual unit metadata (12.093414ms)
+✔ real media and fan patterns produce complete external profiles (2.99897ms)
+✔ foreign optional alias siblings and duplicate values are removed without mutation (0.354892ms)
+✔ siblings with shared diagnostics have separate stable identity and room assignment (1.773508ms)
+✔ stable slot provenance retains manual changes when field order and source mappings change (1.314223ms)
+✔ explicit object directions never invent read/write permissions and alias cycles block import (1.064726ms)
+✔ alias preference keeps the alias and distinguishes its read and write targets (0.914505ms)
+✔ legacy provenance upgrades without changing the existing legacy type or manual room (1.138845ms)
+✔ repeated primary slots become independent controls and forecast day slots stay typed (1.02672ms)
+✔ profile-enabled legacy groups never turn readonly feedback into write mappings (76.884204ms)
+✔ existing cover protections remain part of strict profiles and conflicting sources are rejected (1.072046ms)
+✔ managed aliases retain canonical import identity while preserving alias bindings and display (1.663596ms)
+✔ different user alias conversions are not collapsed merely because physical targets match (0.697405ms)
+✔ actual alias creation followed by TypeDetector6.2 rediscovery preserves canonical identity and existing customer configuration (43.2141ms)
+✔ manual fallback slots do not invent detector mappings or broaden readonly media STATE commands (1.008483ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 868.84156

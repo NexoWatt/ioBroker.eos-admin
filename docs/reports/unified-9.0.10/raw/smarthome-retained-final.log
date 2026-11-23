@@ -1,0 +1,17 @@
+✔ Nur Qualitäts-Alterszähler werden aus der Signatur entfernt; Eingaben bleiben unverändert (10.991586ms)
+✔ Gerätetypen, Namen, Favoriten und Qualität bleiben im echten Kachelrenderer erhalten (11.41755ms)
+✔ Batterie-Prozent, LowBattery, fehlende/veraltete Werte und Störungen werden unterschieden (3.158878ms)
+✔ Detaildialog bleibt beim Poll erhalten und bietet Escape, Fokusfang und Rückkehr (15.085254ms)
+✔ Timerentwurf erhält denselben modalen Lebenszyklus und bleibt bei State-Polls bestehen (5.545786ms)
+✔ Konfigurations-/Rechtewechsel schließt einen bestehenden Dialog statt alte Bedienfreigabe zu behalten (4.187728ms)
+✔ Poll aktualisiert Alter ohne Neurender, echte Qualitäts-/Wertwechsel rendern weiter (4.566134ms)
+✔ Schalt-/Szenen-Payloads, Dimmerregler ohne Schritttasten und Klima-Regelgrenzen bleiben erhalten (4.728811ms)
+✔ Favoriten-Schlüssel und lokale Overrides werden unverändert weiterverwendet (2.404519ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 174.365083

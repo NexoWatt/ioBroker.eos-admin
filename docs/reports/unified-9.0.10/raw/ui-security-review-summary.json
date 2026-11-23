@@ -1,0 +1,44 @@
+{
+  "sourceFiles": 206,
+  "current": 3197,
+  "newReviewedOccurrences": 98,
+  "newReviewedEntries": 84,
+  "retired": [
+    {
+      "file": "src-ts/runtime-executables/lib/smarthome-import.ts",
+      "fingerprint": "6e10264e66b69c2dfc5f174d22ad25c7d0adaf2c8d2e6d0e339a8d0cf7032f74",
+      "count": 1
+    },
+    {
+      "file": "src-ts/runtime-executables/lib/smarthome-import.ts",
+      "fingerprint": "215b66e326d5c71f9ca7ac29ab9f042211974ece004d5d2073192105e8845e9c",
+      "count": 1
+    },
+    {
+      "file": "src-ts/runtime-executables/main.ts",
+      "fingerprint": "a0600c6299d4ab4bf95fcf45c1bf7d9c2818905e98b801f7ceab817b1057d718",
+      "count": 1
+    },
+    {
+      "file": "src-ts/runtime-executables/main.ts",
+      "fingerprint": "3b21106a2b62faf7d7285a637b1e33385095b397ce6bc0316d1c07686e84e41a",
+      "count": 1
+    },
+    {
+      "file": "src-ts/runtime-executables/main.ts",
+      "fingerprint": "d1797da9723f3157e83f5e3cf9417da2abb938568bda7e7976c0d7427d5ea65d",
+      "count": 1
+    }
+  ],
+  "updatedSources": [
+    "src-ts/runtime-executables/main.ts",
+    "src-ts/runtime-executables/lib/smarthome-import.ts",
+    "src-ts/runtime-executables/www/smarthome-config.ts",
+    "src-ts/runtime-executables/www/smarthome.ts"
+  ],
+  "introduced": [],
+  "carried": 3197,
+  "legacyCarried": 2952,
+  "individuallyReviewed": 245,
+  "absent": 108
+}

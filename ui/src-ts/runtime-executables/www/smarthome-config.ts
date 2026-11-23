@@ -182,7 +182,7 @@ function nwEnsureShcfgUiState() {
       const stored = localStorage.getItem('nw-shcfg-ui-mode');
 
       // Never force users back into legacy UI
-      if (stored === 'home' || stored === 'builder' || stored === 'backup' || stored === 'timers' || stored === 'scenes' || stored === 'detect') {
+      if (stored === 'home' || stored === 'builder' || stored === 'backup' || stored === 'timers' || stored === 'scenes' || stored === 'detect' || stored === 'devices' || stored === 'layout') {
         mode = stored;
       }
     } catch (_) {}
@@ -608,7 +608,7 @@ function nwShcNormalizeIconName(value) {
     schuppen: 'shed',
   };
 
-  return map[key] || key;
+  return Object.hasOwn(map, key) ? map[key] : key;
 }
 /**
  * Code-Teil: nwShcSafeBadgeText
@@ -724,8 +724,9 @@ function nwShcRenderIconPreview(previewEl, iconValue) {
     }
   }
 
-  const key = nwShcNormalizeIconName(raw);
-  if (key && NW_SH_ICON_PREVIEW_SVGS[key]) {
+  const normalized = nwShcNormalizeIconName(raw);
+  const key = normalized && Object.hasOwn(NW_SH_ICON_PREVIEW_SVGS, normalized) ? normalized : normalized && normalized.startsWith('3d-') && Object.hasOwn(NW_SH_ICON_PREVIEW_SVGS, normalized.slice(3)) ? normalized.slice(3) : normalized;
+  if (key && Object.hasOwn(NW_SH_ICON_PREVIEW_SVGS, key)) {
     previewEl.innerHTML = NW_SH_ICON_PREVIEW_SVGS[key];
     previewEl.style.fontSize = '';
     return;
@@ -734,11 +735,11 @@ function nwShcRenderIconPreview(previewEl, iconValue) {
   previewEl.innerHTML = '';
   // Note: some emojis use variation selectors / multi-codepoint sequences.
   // We still want a preview even if the string is a bit longer.
-  if (raw && raw.length <= 10) {
+  if (raw && raw.length <= 10 && !/^[a-zA-Z0-9_-]+$/.test(raw)) {
     previewEl.textContent = raw;
     previewEl.style.fontSize = '0.9rem';
   } else {
-    previewEl.textContent = '';
+    previewEl.innerHTML = NW_SH_ICON_PREVIEW_SVGS.generic || '';
   }
 }
 
@@ -1204,7 +1205,7 @@ function nwValidateConfig(cfg) {
       nwPushIssue(out, 'warn', 'Gerät', 'Gerät ohne Alias (Kachel-Titel wirkt leer).', ent);
     }
 
-    const type = (d && typeof d.type === 'string') ? d.type.trim() : '';
+    const type = d && d.customView ? 'device' : ((d && typeof d.type === 'string') ? d.type.trim() : '');
     if (!type) {
       nwPushIssue(out, 'error', 'Gerät', 'Gerät ohne Typ.', ent);
     }
@@ -1228,6 +1229,9 @@ function nwValidateConfig(cfg) {
 
     // IO validation by type (lightweight, no DB reads)
     const io = (d && typeof d.io === 'object' && d.io) ? d.io : {};
+    const controlEditorError = nwShcfgControlEditorError(d);
+    if (controlEditorError) nwPushIssue(out, 'error', 'Bedienprofil / eigene Ansicht', controlEditorError, ent);
+
 
     /**
      * Code-Teil: Arrow-Funktion `chkDp`
@@ -1660,8 +1664,9 @@ function nwGetTypeLabel(type) {
     sensor: 'Sensor',
     scene: 'Szene',
     logicStatus: 'Logik-Status',
+    device: 'Gerät mit vollständiger Bedienung',
   };
-  return map[t] || (t || 'Typ?');
+  return Object.hasOwn(map, t) ? map[t] : (t || 'Typ?');
 }
 /**
  * Code-Teil: nwSetStatus
@@ -2772,6 +2777,13 @@ async function nwImportSmartHomeConfigFromFile(file) {
  */
 async function nwSaveSmartHomeConfig() {
   if (!nwShcState.config) return;
+  // Neue Profil-/Ansichtseingaben dürfen nicht per allgemeiner Warnungsbestätigung
+  // umgangen werden: ungültige Eingaben würden sonst alte Werte unbemerkt speichern.
+  for (const dev of nwShcState.config.devices || []) {
+    const error = nwShcfgControlEditorError(dev);
+    if (error) { nwSetStatus('Speichern abgebrochen: ' + error, 'error'); return; }
+  }
+
 
   // Pages JSON must be valid (otherwise SmartHome navigation can break)
   const pagesRes = nwParsePagesJson(nwShcState.pagesJsonText);
@@ -2886,10 +2898,6 @@ async function nwReloadSmartHomeConfig() {
  * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
  */
 function nwRenderAll() {
-  const cfg = nwShcState.config || { rooms: [], functions: [], devices: [] };
-  nwRenderRoomsEditor(cfg.rooms || []);
-  nwRenderFunctionsEditor(cfg.functions || []);
-  nwRenderDevicesEditor(cfg.devices || [], cfg.rooms || [], cfg.functions || []);
 
   // Home tiles / editor rendering (non-destructive)
   nwRenderShcfgShell();
@@ -2910,13 +2918,13 @@ function nwRenderAll() {
  */
 function nwShcfgSetMode(mode, opts = {}) {
   nwEnsureShcfgUiState();
-  const allowed = ['home', 'builder', 'timers', 'scenes', 'detect', 'classic'];
+  const allowed = ['home', 'builder', 'devices', 'layout', 'timers', 'scenes', 'detect', 'classic'];
   if (!allowed.includes(mode)) return;
 
   nwShcState.ui.mode = mode;
   // Persist only the modern modes. Classic is intentionally not persisted.
   try {
-    if (mode === 'home' || mode === 'builder' || mode === 'timers' || mode === 'scenes' || mode === 'detect') {
+    if (mode === 'home' || mode === 'builder' || mode === 'timers' || mode === 'scenes' || mode === 'detect' || mode === 'devices' || mode === 'layout') {
       localStorage.setItem('nw-shcfg-ui-mode', mode);
     }
   } catch (_) {}
@@ -3072,6 +3080,26 @@ function nwInitShcfgShellUi() {
     });
   });
 
+  const bindStep = (id, action) => {
+    const button = document.getElementById(id);
+    if (button) button.addEventListener('click', () => { const menu = button.closest('.nw-shcfg-more'); if (menu) menu.open = false; action(); });
+  };
+  bindStep('nw-shcfg-step-building', () => nwShcfgEnterBuilder({ view: 'rooms', tab: 'building' }));
+  for (const mode of ['devices', 'layout', 'scenes', 'timers', 'classic', 'home']) bindStep('nw-shcfg-step-' + mode, () => nwShcfgSetMode(mode));
+  bindStep('nw-shcfg-step-detect', () => nwShcfgSetMode('detect'));
+  bindStep('nw-shcfg-tile-devices', () => nwShcfgSetMode('devices'));
+  bindStep('nw-shcfg-tile-layout', () => nwShcfgSetMode('layout'));
+  bindStep('nw-shcfg-devices-detect', () => nwShcfgSetMode('detect'));
+  bindStep('nw-shcfg-devices-templates', () => nwShcfgEnterBuilder({ view: 'rooms', tab: 'devices' }));
+  bindStep('nw-shcfg-layout-edit', () => {
+    const selected = nwShcState.ui.layout && nwShcState.ui.layout.selectedId;
+    if (selected) nwShcState.ui.builder.selected = { kind: 'device', id: selected };
+    nwShcfgSetMode('devices');
+  });
+  bindStep('nw-shcfg-devices-add', () => {
+    const dev = nwAddDeviceFromTemplate('device', { silent: true });
+    if (dev) { nwShcState.ui.builder.selected = { kind: 'device', id: dev.id }; nwShcfgSetMode('devices'); }
+  });
   // Initial visibility
   nwRenderShcfgShell();
 
@@ -3105,6 +3133,77 @@ function nwShcfgApplyBuilderSizing() {
  * Zusammenhang: Teil von SmartHome: Räume, Geräte, Kacheln, Popover; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
  * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
  */
+/** Arbeitet mit derselben bestehenden Geräteauswahl, rendert aber nur ein Formular. */
+function nwRenderShcfgDeviceWorkspace() {
+  const browser = document.getElementById('nw-shcfg-device-browser');
+  const props = document.getElementById('nw-shcfg-device-properties');
+  const helper = window.NW_SH_LAYOUT_EDITOR;
+  if (!browser || !props || !helper) return;
+  const cfg = nwShcState.config || {};
+  const devices = Array.isArray(cfg.devices) ? cfg.devices : [];
+  const ui = nwShcState.ui;
+  ui.deviceBrowser = ui.deviceBrowser || {};
+  const selected = ui.builder.selected;
+  if (!selected || selected.kind !== 'device' || !devices.some(dev => dev.id === selected.id)) {
+    ui.builder.selected = devices.length ? { kind: 'device', id: devices[0].id } : null;
+  }
+  ui.deviceBrowser.selectedId = ui.builder.selected && ui.builder.selected.kind === 'device' ? ui.builder.selected.id : '';
+  const showProperties = () => {
+    if (!ui.builder.selected || ui.builder.selected.kind !== 'device') { props.textContent = 'Gerät auswählen oder über „+ Gerät“ anlegen.'; return; }
+    nwRenderShcfgBuilderProps(props); nwCompactDeviceProperties(props);
+  };
+  helper.mount(browser, { devices, rooms: cfg.rooms || [], floors: cfg.floors || [], mode: 'devices', preferences: ui.deviceBrowser,
+    onChange: () => false,
+    onEdit: id => {
+      ui.builder.selected = { kind: 'device', id }; ui.deviceBrowser.selectedId = id;
+      showProperties(); props.setAttribute('tabindex', '-1'); props.focus({ preventScroll: true });
+      if (window.matchMedia && window.matchMedia('(max-width: 1100px)').matches) props.scrollIntoView({ block: 'start' });
+    },
+  });
+  showProperties();
+}
+/** Nur order-Werte übernehmen; keine Objektkopie überschreibt Kundenwerte oder Bindungen. */
+function nwRenderShcfgLayoutWorkspace() {
+  const root = document.getElementById('nw-shcfg-layout-editor');
+  const helper = window.NW_SH_LAYOUT_EDITOR;
+  if (!root || !helper) return;
+  const config = nwShcState.config || {};
+  const devices = Array.isArray(config.devices) ? config.devices : [];
+  nwShcState.ui.layout = nwShcState.ui.layout || {};
+  const baseline = new Map(devices.map(dev => [dev.id, { order: dev.order, roomId: dev.roomId, floorId: dev.floorId }]));
+  helper.mount(root, { devices, rooms: config.rooms || [], floors: config.floors || [], preferences: nwShcState.ui.layout,
+    onChange: patches => {
+      if (nwShcState.config !== config || !Array.isArray(patches) || !patches.length || patches.length > devices.length) return false;
+      const seen = new Set(); const changes = [];
+      for (const patch of patches) {
+        const dev = (config.devices || []).find(item => item.id === patch.id); const before = baseline.get(patch.id);
+        if (!dev || !before || seen.has(patch.id) || !Number.isFinite(patch.order) || dev.order !== before.order || dev.roomId !== before.roomId || dev.floorId !== before.floorId) return false;
+        seen.add(patch.id); changes.push({ dev, order: patch.order });
+      }
+      for (const change of changes) {
+        change.dev.order = change.order;
+        baseline.set(change.dev.id, { order: change.order, roomId: change.dev.roomId, floorId: change.dev.floorId });
+      }
+      nwMarkDirty(true); nwSetStatus('Kachelanordnung im Entwurf geändert – bitte speichern.', 'dirty'); return true;
+    },
+  });
+}
+/** Bestehende Bedienelemente samt Handlern in einen geschlossenen Abschnitt verschieben. */
+function nwCompactDeviceProperties(container) {
+  const selected = nwShcState.ui && nwShcState.ui.builder && nwShcState.ui.builder.selected;
+  if (!selected || selected.kind !== 'device') return;
+  const marker = container.querySelector('[data-shcfg-io-start]');
+  if (!marker) return;
+  const legacy = document.createElement('details'); legacy.className = 'nw-shcfg-advanced';
+  const summary = document.createElement('summary'); summary.textContent = 'Zusätzliche Datenpunkte und Geräteeinstellungen'; legacy.appendChild(summary);
+  let after = false;
+  for (const node of Array.from(container.children)) {
+    if (node === marker) { after = true; continue; }
+    if (after && node.tagName !== 'DETAILS' && !node.classList.contains('nw-sh-alias-tools')) legacy.appendChild(node);
+  }
+  marker.remove();
+  if (legacy.children.length > 1) container.appendChild(legacy);
+}
 function nwRenderShcfgShell() {
   nwEnsureShcfgUiState();
 
@@ -3126,6 +3225,26 @@ function nwRenderShcfgShell() {
   timers.style.display = (mode === 'timers') ? '' : 'none';
   scenes.style.display = (mode === 'scenes') ? '' : 'none';
   classic.style.display = (mode === 'classic') ? '' : 'none';
+  const deviceWorkspace = document.getElementById('nw-shcfg-devices-workspace');
+  const layoutWorkspace = document.getElementById('nw-shcfg-layout-workspace');
+  if (deviceWorkspace) deviceWorkspace.style.display = mode === 'devices' ? '' : 'none';
+  if (layoutWorkspace) layoutWorkspace.style.display = mode === 'layout' ? '' : 'none';
+  const activeStep = mode === 'builder' ? 'building' : mode;
+  for (const step of ['building', 'devices', 'layout']) {
+    const button = document.getElementById('nw-shcfg-step-' + step);
+    if (button) { if (step === activeStep) button.setAttribute('aria-current', 'page'); else button.removeAttribute('aria-current'); }
+  }
+  if (mode === 'devices') nwRenderShcfgDeviceWorkspace();
+  if (mode === 'layout') nwRenderShcfgLayoutWorkspace();
+  if (mode === 'classic') {
+    const cfg = nwShcState.config || {};
+    nwRenderRoomsEditor(cfg.rooms || []); nwRenderFunctionsEditor(cfg.functions || []);
+    nwRenderDevicesEditor(cfg.devices || [], cfg.rooms || [], cfg.functions || []);
+  } else {
+    const legacy = document.getElementById('nw-config-devices');
+    if (legacy) legacy.replaceChildren();
+  }
+
 
   if (mode === 'builder') {
     nwRenderShcfgBuilder();
@@ -3277,7 +3396,7 @@ function nwShcfgDetectorMatchesFilter(suggestion, term) {
  */
 /** Quellenmetadaten erzeugen Räume/Funktionen ausschließlich beim bewussten
  * Übernehmen einer ausgewählten Zuordnung. Bestehende IDs/Namen bleiben erhalten. */
-function nwShcfgAcceptDetectedAssignment(suggestion, assignment) {
+function nwShcfgAcceptDetectedAssignment(suggestion, assignment, commit = true) {
   const cfg = nwShcState.config;
   const additions = [];
   for (const [collection, key] of [['rooms', 'roomId'], ['functions', 'functionId']]) {
@@ -3289,6 +3408,7 @@ function nwShcfgAcceptDetectedAssignment(suggestion, assignment) {
     if (!candidate) throw new Error('Die vorgeschlagene Raum-/Funktionszuordnung ist nicht mehr verfügbar.');
     additions.push({ collection, value: { id, name: candidate.name, order: existing.length, ...(collection === 'rooms' ? { floorId: null } : {}) } });
   }
+  if (!commit) return;
   additions.forEach(({ collection, value }) => {
     if (!Array.isArray(cfg[collection])) cfg[collection] = [];
     cfg[collection].push(value);
@@ -3298,77 +3418,83 @@ function nwShcfgAcceptDetectedAssignment(suggestion, assignment) {
 /** Vorhandene Entwurfszuordnungen einschließlich bereits importierter Aliase
  * ebenfalls berücksichtigen; ein erneuter Klick legt kein zweites Gerät an. */
 function nwShcfgDraftContainsSuggestion(suggestion) {
-  const wanted = new Set([...(suggestion.semanticIds || []), ...((suggestion.provenance && suggestion.provenance.sourceStateIds) || [])]);
+  const diagnosticKeys = new Set(['BATTERY', 'RSSI', 'LOWBAT', 'UNREACH', 'UNREACH_STICKY', 'MAINTAIN', 'ERROR', 'CONNECTED', 'WORKING', 'DIRECTION', 'DIRECTION_ENUM']);
+  const coreStates = (Array.isArray(suggestion.states) ? suggestion.states : []).filter(state => state && state.indicator !== true && !diagnosticKeys.has(state.key));
+  const wanted = new Set([...(suggestion.semanticIds || []), ...coreStates.map(state => state.id).filter(id => typeof id === 'string' && id)]);
   return (nwShcState.config.devices || []).some(dev => {
     const provenance = dev.importProvenance || {};
-    if (provenance.sourceId && provenance.sourceId === suggestion.sourceId) return true;
+    const sourceControl = (suggestion.provenance && suggestion.provenance.controlId) || (suggestion.proposal && suggestion.proposal.importProvenance && suggestion.proposal.importProvenance.controlId);
+    if (provenance.sourceId && provenance.sourceId === suggestion.sourceId
+      && (!provenance.controlId || !sourceControl || provenance.controlId === sourceControl)) return true;
     if ((provenance.semanticStateIds || []).some(id => wanted.has(id))) return true;
+    const profileFields = dev.io && dev.io.deviceControls && dev.io.deviceControls.fields;
+    if (Array.isArray(profileFields) && profileFields.some(field => field && !diagnosticKeys.has(field.key) && (wanted.has(field.readId) || wanted.has(field.writeId)))) return true;
     return Object.entries(dev.io || {}).some(([group, fields]) => group !== 'indicators' && fields && typeof fields === 'object'
       && Object.entries(fields).some(([key, value]) => /Id$/.test(key) && typeof value === 'string' && wanted.has(value)));
   });
 }
 
-function nwImportTypeDetectedSuggestion(suggestionId) {
+async function nwImportTypeDetectedSuggestion(suggestionId) {
   const det = nwShcState.detector || {};
-  const suggestion = Array.isArray(det.results) ? det.results.find((x) => x && x.id === suggestionId) : null;
+  if (det.importing) return;
+  const suggestion = Array.isArray(det.results) ? det.results.find(x => x && x.id === suggestionId) : null;
   if (!suggestion) return;
-  if (suggestion.imported) {
-    nwSetDetectorStatus('Der Vorschlag wurde bereits übernommen.', 'warn');
-    return;
-  }
-  if (suggestion.alreadyConfigured || nwShcfgDraftContainsSuggestion(suggestion)) {
-    nwSetDetectorStatus('Dieser Vorschlag ist bereits im Projekt vorhanden.', 'warn');
-    return;
+  if (suggestion.imported || suggestion.alreadyConfigured || nwShcfgDraftContainsSuggestion(suggestion)) {
+    nwSetDetectorStatus('Dieser Vorschlag ist bereits im Projekt vorhanden.', 'warn'); return;
   }
   if (!suggestion.importable || !suggestion.proposal || !suggestion.proposal.type) {
-    nwSetDetectorStatus('Dieser Vorschlag kann nicht automatisch übernommen werden und sollte manuell geprüft werden.', 'warn');
-    return;
+    nwSetDetectorStatus('Dieser Vorschlag kann nicht automatisch übernommen werden und sollte manuell geprüft werden.', 'warn'); return;
   }
-
-  const assignment = nwShcfgGetDetectorAssignment(suggestionId);
-  const proposal = nwShcfgCloneJson(suggestion.proposal || {}, {});
+  const config = nwShcState.config;
+  const assignment = Object.assign({}, nwShcfgGetDetectorAssignment(suggestionId));
+  const proposal = nwShcfgCloneJson(suggestion.proposal, {});
   const type = String(proposal.type || '').trim();
-  if (!type) {
-    nwSetDetectorStatus('Vorschlag enthält keinen unterstützten Zieltyp.', 'error');
-    return;
-  }
-
-  try { nwShcfgAcceptDetectedAssignment(suggestion, assignment); }
+  if (!type) { nwSetDetectorStatus('Vorschlag enthält keinen unterstützten Zieltyp.', 'error'); return; }
+  try { nwShcfgAcceptDetectedAssignment(suggestion, assignment, false); }
   catch (error) { nwSetDetectorStatus(error.message || 'Zuordnung konnte nicht übernommen werden.', 'error'); return; }
-
-  const dev = nwAddDeviceFromTemplate(type, {
-    roomId: assignment.roomId || '',
-    functionId: assignment.functionId || '',
-    silent: true,
-  });
-  if (!dev) {
-    nwSetDetectorStatus('Gerät konnte nicht angelegt werden.', 'error');
-    return;
-  }
-
+  let dev = nwAddDeviceFromTemplate(type, { roomId: assignment.roomId || '', functionId: assignment.functionId || '', silent: true, draftOnly: true });
+  if (!dev) { nwSetDetectorStatus('Geräteentwurf konnte nicht vorbereitet werden.', 'error'); return; }
   dev.alias = proposal.alias || suggestion.displayName || dev.alias || dev.id;
   dev.roomId = assignment.roomId || null;
   dev.functionId = assignment.functionId || null;
   if (proposal.icon) dev.icon = proposal.icon;
-  if (proposal.behavior && typeof proposal.behavior === 'object') {
-    dev.behavior = Object.assign({}, dev.behavior || {}, proposal.behavior);
-  }
-  if (proposal.ui && typeof proposal.ui === 'object') {
-    dev.ui = Object.assign({}, dev.ui || {}, proposal.ui);
-  }
-  if (proposal.io && typeof proposal.io === 'object') {
-    dev.io = proposal.io;
-  }
+  if (proposal.behavior && typeof proposal.behavior === 'object') dev.behavior = Object.assign({}, dev.behavior || {}, proposal.behavior);
+  if (proposal.ui && typeof proposal.ui === 'object') dev.ui = Object.assign({}, dev.ui || {}, proposal.ui);
+  if (proposal.io && typeof proposal.io === 'object') dev.io = proposal.io;
+  if (proposal.customView) dev.customView = nwShcfgCloneJson(proposal.customView, null);
   if (Array.isArray(proposal.stations)) dev.stations = proposal.stations;
   if (Array.isArray(proposal.playlists)) dev.playlists = proposal.playlists;
   if (proposal.importProvenance) dev.importProvenance = nwShcfgCloneJson(proposal.importProvenance, null);
-
-  suggestion.imported = true;
-  suggestion.alreadyConfigured = true;
-  nwNormalizeDeviceOrder();
-  nwMarkDirty(true);
-  nwSetDetectorStatus(`„${dev.alias || dev.id}“ als Vorschlag übernommen – bitte speichern.`, 'ok');
-  nwRenderAll();
+  const aliasHelper = window.NW_SH_ALIAS_CONFIG;
+  const canAlias = !!(aliasHelper && aliasHelper.canCreate());
+  const useAliases = det.useAliases === true || (det.useAliases === undefined && canAlias);
+  if (useAliases && !canAlias) { nwSetDetectorStatus('Für die Alias-Anlage ist die Berechtigung mapping.edit erforderlich.', 'error'); return; }
+  if (useAliases && !window.confirm('Alias-Datenpunkte für „' + (dev.alias || dev.id) + '“ verwenden oder anlegen und das Gerät in den Entwurf übernehmen? Bestehende passende Aliase werden wiederverwendet. Die SmartHome-Konfiguration wird erst mit „Speichern“ aktiviert.')) return;
+  det.importing = true;
+  nwRenderShcfgDetector();
+  let aliasResult = null;
+  try {
+    if (useAliases) {
+      nwSetDetectorStatus('Alias-Verknüpfungen werden geprüft und angelegt …', null);
+      aliasResult = await aliasHelper.create([dev]);
+      dev = aliasResult.devices[0];
+    }
+    const currentResults = (nwShcState.detector || {}).results || [];
+    if (nwShcState.config !== config || !currentResults.includes(suggestion) || (config.devices || []).some(item => item.id === dev.id) || nwShcfgDraftContainsSuggestion(suggestion)) {
+      nwSetDetectorStatus('Der Entwurf oder die Erkennung wurde zwischenzeitlich geändert. Gerät nicht übernommen; bereits angelegte Aliase bleiben erhalten. Bitte den Vorschlag erneut prüfen.', 'warn'); return;
+    }
+    nwShcfgAcceptDetectedAssignment(suggestion, assignment);
+    if (!Array.isArray(config.devices)) config.devices = [];
+    config.devices.push(dev);
+    suggestion.imported = true; suggestion.alreadyConfigured = true;
+    nwNormalizeDeviceOrder(); nwMarkDirty(true);
+    nwSetDetectorStatus('„' + (dev.alias || dev.id) + '“ übernommen – bitte speichern.' + (aliasResult ? ' Aliase: ' + aliasResult.created.length + ' angelegt, ' + aliasResult.reused.length + ' wiederverwendet.' : ''), 'ok');
+    nwRenderAll();
+  } catch (error) {
+    nwSetDetectorStatus(error && error.message ? error.message : 'Übernahme fehlgeschlagen. Der Geräteentwurf bleibt unverändert.', 'error');
+  } finally {
+    det.importing = false; nwRenderShcfgDetector();
+  }
 }
 
 /** Prüft nur feste Importfelder. IDs, Räume, Favoriten, Szenen, Timer und
@@ -3376,9 +3502,17 @@ function nwImportTypeDetectedSuggestion(suggestionId) {
 function nwShcfgImportFieldAllowed(path) {
   return typeof path === 'string' && path.length <= 160 && !path.split('.').some(key => ['__proto__', 'prototype', 'constructor'].includes(key))
     && (['alias', 'icon', 'ui.unit', 'ui.color', 'ui.precision'].includes(path)
-      || /^io\.(switch|level|color|white|colorTemperature|cover|climate|player|sensor|camera|indicators)\.[A-Za-z][A-Za-z0-9]{0,60}$/.test(path));
+      || /^io\.(switch|level|color|white|colorTemperature|cover|climate|player|sensor|camera|indicators)\.[A-Za-z][A-Za-z0-9]{0,60}$/.test(path)
+      || path === 'io.deviceControls.profile'
+      || /^io\.deviceControls\.fields\.[A-Z][A-Z0-9_]{0,63}\.(readId|writeId)$/.test(path));
 }
 function nwShcfgImportFieldValue(device, path) {
+  const fieldPath = /^io\.deviceControls\.fields\.([A-Z][A-Z0-9_]{0,63})\.(readId|writeId)$/.exec(String(path));
+  if (fieldPath) {
+    const fields = device && device.io && device.io.deviceControls && device.io.deviceControls.fields;
+    const field = Array.isArray(fields) ? fields.find(row => row && row.key === fieldPath[1]) : null;
+    return field && typeof field[fieldPath[2]] === 'string' ? field[fieldPath[2]] : null;
+  }
   let value = device;
   for (const key of String(path).split('.')) value = value && typeof value === 'object' ? value[key] : undefined;
   return value === undefined ? null : value;
@@ -3387,7 +3521,7 @@ function nwShcfgImportFieldValue(device, path) {
 /** Alle ausgewählten Änderungen vorprüfen, dann den Entwurf atomar ersetzen.
  * Nichts wird sofort gespeichert. Nicht ausgewählte/manuell geänderte Werte
  * bleiben bestehen; eine in der Zwischenzeit bearbeitete Auswahl wird abgewiesen. */
-function nwApplyTypeDetectedUpdate(suggestionId, selectedPaths) {
+function nwApplyTypeDetectedUpdate(suggestionId, selectedPaths, options = {}) {
   const suggestion = ((nwShcState.detector || {}).results || []).find(row => row && row.id === suggestionId);
   const update = suggestion && suggestion.update;
   const devices = nwShcState.config.devices || [];
@@ -3411,6 +3545,26 @@ function nwApplyTypeDetectedUpdate(suggestionId, selectedPaths) {
   const next = nwShcfgCloneJson(current, null);
   if (!next) return false;
   for (const change of changes) {
+    const fieldPath = /^io\.deviceControls\.fields\.([A-Z][A-Z0-9_]{0,63})\.(readId|writeId)$/.exec(change.path);
+    if (fieldPath) {
+      if (change.proposed !== null && typeof change.proposed !== 'string') return false;
+      next.io = next.io || {};
+      next.io.deviceControls = next.io.deviceControls || { profile: '', fields: [] };
+      const controls = next.io.deviceControls;
+      if (!Array.isArray(controls.fields)) controls.fields = [];
+      let field = controls.fields.find(row => row && row.key === fieldPath[1]);
+      if (!field && change.proposed !== null) {
+        if (controls.fields.length >= 128) return false;
+        field = { key: fieldPath[1] };
+        controls.fields.push(field);
+      }
+      if (field) {
+        if (change.proposed === null) delete field[fieldPath[2]];
+        else field[fieldPath[2]] = change.proposed;
+        controls.fields = controls.fields.filter(row => row.readId || row.writeId);
+      }
+      continue;
+    }
     const keys = change.path.split('.');
     const leaf = keys.pop();
     let target = next;
@@ -3421,12 +3575,51 @@ function nwApplyTypeDetectedUpdate(suggestionId, selectedPaths) {
     target[leaf] = change.proposed;
   }
   next.importProvenance = nwShcfgCloneJson(suggestion.proposal.importProvenance, existingProvenance);
+  if (options.draftOnly) return next;
   devices[index] = next;
   suggestion.imported = true;
   nwMarkDirty(true);
   nwSetDetectorStatus(changes.length ? `${changes.length} ausgewählte Änderung(en) übernommen – bitte speichern.` : 'Quellenstand bestätigt; vorhandene Gerätewerte bleiben erhalten – bitte speichern.', 'ok');
   nwRenderAll();
   return true;
+}
+/** Ausgewählte Quellenänderungen mit Alias-Anlage zunächst getrennt vorbereiten.
+ * Raum-/Verhaltensänderungen während der Anfrage werden aus dem frischen Entwurf erhalten. */
+async function nwApplyTypeDetectedUpdateWithAliases(suggestionId, selectedPaths) {
+  const det = nwShcState.detector || {};
+  if (det.importing) return false;
+  const paths = Array.isArray(selectedPaths) ? selectedPaths.slice() : [];
+  const aliasHelper = window.NW_SH_ALIAS_CONFIG;
+  const useAliases = paths.length > 0 && (det.useAliases === true || (det.useAliases === undefined && aliasHelper && aliasHelper.canCreate()));
+  if (!useAliases) return nwApplyTypeDetectedUpdate(suggestionId, paths);
+  if (!aliasHelper || !aliasHelper.canCreate()) { nwSetDetectorStatus('Für die Alias-Anlage ist mapping.edit erforderlich.', 'error'); return false; }
+  const staged = nwApplyTypeDetectedUpdate(suggestionId, paths, { draftOnly: true });
+  if (!staged) return false;
+  const config = nwShcState.config;
+  const original = (config.devices || []).find(dev => dev.id === staged.id);
+  if (!original) return false;
+  const beforeIo = JSON.stringify(original.io || {});
+  const beforeProvenance = JSON.stringify(original.importProvenance || null);
+  if (!window.confirm('Ausgewählte Änderungen übernehmen und Alias-Datenpunkte für „' + (original.alias || original.id) + '“ verwenden oder anlegen? Passende Aliase werden wiederverwendet. Die Konfiguration anschließend speichern.')) return false;
+  det.importing = true; nwRenderShcfgDetector();
+  try {
+    const result = await aliasHelper.create([staged]);
+    const index = (nwShcState.config.devices || []).findIndex(dev => dev.id === original.id);
+    if (nwShcState.config !== config || index < 0 || config.devices[index] !== original || JSON.stringify(original.io || {}) !== beforeIo || JSON.stringify(original.importProvenance || null) !== beforeProvenance) {
+      nwSetDetectorStatus('Datenpunktzuordnung zwischenzeitlich geändert. Alias-Ergebnis nicht übernommen; bereits angelegte Aliase bleiben erhalten. Bitte erneut prüfen.', 'warn'); return false;
+    }
+    const fresh = nwApplyTypeDetectedUpdate(suggestionId, paths, { draftOnly: true });
+    if (!fresh) return false;
+    fresh.io = result.devices[0].io;
+    fresh.importProvenance = result.devices[0].importProvenance;
+    config.devices[index] = fresh;
+    const suggestion = (det.results || []).find(item => item.id === suggestionId);
+    if (suggestion) suggestion.imported = true;
+    nwMarkDirty(true);
+    nwSetDetectorStatus(paths.length + ' Änderung(en) im Entwurf übernommen. Aliase: ' + result.created.length + ' angelegt, ' + result.reused.length + ' wiederverwendet. Bitte speichern.', 'ok');
+    nwRenderAll(); return true;
+  } catch (error) { nwSetDetectorStatus(error && error.message ? error.message : 'Aktualisierung fehlgeschlagen; Entwurf unverändert.', 'error'); return false; }
+  finally { det.importing = false; nwRenderShcfgDetector(); }
 }
 /**
  * Code-Teil: nwRenderShcfgDetector
@@ -3477,6 +3670,16 @@ function nwRenderShcfgDetector() {
   showConfiguredLabel.appendChild(showConfiguredText);
   toolbar.appendChild(showConfiguredLabel);
 
+  const aliasHelper = window.NW_SH_ALIAS_CONFIG;
+  const canAlias = !!(aliasHelper && aliasHelper.canCreate());
+  if (det.useAliases === undefined) det.useAliases = canAlias;
+  const aliases = document.createElement('label'); aliases.className = 'nw-shcfg-detect__toggle';
+  const aliasCheck = document.createElement('input'); aliasCheck.type = 'checkbox';
+  aliasCheck.checked = canAlias && det.useAliases !== false; aliasCheck.disabled = !canAlias || !!det.importing;
+  aliasCheck.addEventListener('change', () => { det.useAliases = aliasCheck.checked; });
+  const aliasText = document.createElement('span');
+  aliasText.textContent = 'Alias-Datenpunkte verwenden/anlegen' + (canAlias ? ' (bestehende Aliase wiederverwenden)' : ' (Berechtigung mapping.edit erforderlich)');
+  aliases.appendChild(aliasCheck); aliases.appendChild(aliasText); toolbar.appendChild(aliases);
   root.appendChild(toolbar);
 
   const summary = document.createElement('div');
@@ -3673,7 +3876,7 @@ function nwRenderShcfgDetector() {
             const at = selected.indexOf(change.path);
             if (check.checked && at < 0) selected.push(change.path);
             if (!check.checked && at >= 0) selected.splice(at, 1);
-            applyBtn.disabled = selected.length === 0 || !suggestion.importable;
+            applyBtn.disabled = !!det.importing || selected.length === 0 || !suggestion.importable;
           });
           const text = document.createElement('span');
           text.textContent = `${change.path}: ${format(change.current)} → ${format(change.proposed)}${change.manualOverride ? ' · manuell angepasst' : ''}`;
@@ -3686,13 +3889,13 @@ function nwRenderShcfgDetector() {
         }
         applyBtn.type = 'button'; applyBtn.className = 'nw-config-btn';
         applyBtn.textContent = 'Ausgewählte Änderungen übernehmen';
-        applyBtn.disabled = selected.length === 0 || !suggestion.importable;
-        applyBtn.addEventListener('click', () => nwApplyTypeDetectedUpdate(suggestion.id, selected));
+        applyBtn.disabled = !!det.importing || selected.length === 0 || !suggestion.importable;
+        applyBtn.addEventListener('click', () => { void nwApplyTypeDetectedUpdateWithAliases(suggestion.id, selected); });
         review.appendChild(applyBtn);
         const keepBtn = document.createElement('button');
         keepBtn.type = 'button'; keepBtn.className = 'nw-config-btn';
         keepBtn.textContent = 'Gerätewerte beibehalten';
-        keepBtn.disabled = !suggestion.importable;
+        keepBtn.disabled = !!det.importing || !suggestion.importable;
         keepBtn.addEventListener('click', () => nwApplyTypeDetectedUpdate(suggestion.id, []));
         review.appendChild(keepBtn);
         card.appendChild(review);
@@ -3772,9 +3975,10 @@ function nwRenderShcfgDetector() {
         importBtn.textContent = 'Manuell prüfen';
         importBtn.disabled = true;
       } else {
-        importBtn.textContent = 'Übernehmen';
+        importBtn.textContent = det.importing ? 'Alias-Anlage läuft …' : 'Übernehmen';
+        importBtn.disabled = !!det.importing;
         // Ereignis-Kommentar: Bindet das UI-Ereignis 'click' an importBtn. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
-        importBtn.addEventListener('click', () => nwImportTypeDetectedSuggestion(suggestion.id));
+        importBtn.addEventListener('click', () => { void nwImportTypeDetectedSuggestion(suggestion.id); });
       }
       actions.appendChild(importBtn);
 
@@ -5179,6 +5383,7 @@ const NW_SHCFG_BUILDER_DEVICE_TEMPLATES = [
   { id: 'hue_lights', type: 'color', group: 'Licht', name: 'Hue Leuchten', icon: '3d-bulb', meta: 'Farbe + Helligkeit', capabilities: { brightness: true, rgb: true, white: true, colorTemperature: true } },
 
   // System
+  { id: 'device', type: 'device', group: 'System', name: 'Gerät mit vollständiger Bedienung', icon: '3d-grid', meta: 'Bedienprofil & Datenpunkte' },
   { id: 'switch', type: 'switch', group: 'System', name: 'Schalter', icon: '3d-toggle', meta: 'Ein/Aus' },
   { id: 'button_press_release', type: 'switch', group: 'System', name: 'Taster (Drücken/Loslassen)', icon: '3d-toggle', meta: 'Momentary', behavior: { commandMode: 'momentary', pulseMs: 250 }, capabilities: { momentary: true } },
   { id: 'button_toggle', type: 'switch', group: 'System', name: 'Taster (Ein/Aus)', icon: '3d-toggle', meta: 'Toggle', behavior: { commandMode: 'toggle' } },
@@ -5330,6 +5535,7 @@ function nwRenderShcfgBuilder() {
   nwRenderShcfgBuilderLib(lib);
   nwRenderShcfgBuilderWorkspace(work);
   nwRenderShcfgBuilderProps(props);
+  nwCompactDeviceProperties(props);
 }
 /**
  * Code-Teil: nwShcfgLibGroup
@@ -5911,7 +6117,7 @@ function nwRenderShcfgBuilderWorkspace(container) {
 
     const grid = document.createElement('div');
     grid.className = 'nw-shcfg-grid';
-    const roomDevices = devices.filter(d => d.roomId === room.id);
+    const roomDevices = devices.filter(d => d.roomId === room.id).slice().sort(nwSortByOrder);
     if (!roomDevices.length) {
       const empty = document.createElement('div');
       empty.className = 'nw-config-hint';
@@ -5927,11 +6133,8 @@ function nwRenderShcfgBuilderWorkspace(container) {
       const titleRow = document.createElement('div');
       titleRow.className = 'nw-shcfg-card__title';
       const ico = document.createElement('span');
-      ico.textContent = (
-        (dev.templateId && NW_SHCFG_BUILDER_DEVICE_TEMPLATES.find(t => t.id === dev.templateId)?.icon) ||
-        (NW_SHCFG_BUILDER_DEVICE_TEMPLATES.find(t => t.type === dev.type)?.icon) ||
-        '🧩'
-      );
+      ico.className = 'nw-shcfg-devchip__icon';
+      nwShcRenderIconPreview(ico, dev.icon || (dev.templateId && NW_SHCFG_BUILDER_DEVICE_TEMPLATES.find(t => t.id === dev.templateId)?.icon) || 'generic');
       const t = document.createElement('span');
       t.textContent = dev.alias || dev.id;
       titleRow.appendChild(ico);
@@ -6010,7 +6213,7 @@ function nwRenderShcfgBuilderWorkspace(container) {
   container.appendChild(drop);
 
   const grid = document.createElement('div');
-  grid.className = 'nw-shcfg-grid';
+  grid.className = 'nw-shcfg-grid nw-shcfg-grid--floors';
   const floors = (cfg.floors || []).slice().sort((a, b) => (a.order || 0) - (b.order || 0));
   const roomsAll = (cfg.rooms || []).slice();
   const hasUnassigned = roomsAll.some(r => r && !r.floorId);
@@ -6553,10 +6756,13 @@ function nwRenderShcfgBuilderProps(container) {
     idInput.readOnly = true;
     container.appendChild(nwCreateFieldRow('ID', idInput));
 
-    // Type (read-only for safety)
-    const typeInput = nwShcfgCreateTextInput(dev.type, () => {}, {});
-    typeInput.readOnly = true;
-    container.appendChild(nwCreateFieldRow('Typ', typeInput));
+    // A display change preserves all existing bindings and requires an explicit choice.
+    const displayTypes = ['device', 'switch', 'dimmer', 'color', 'blind', 'rtr', 'sensor', 'scene', 'player', 'camera', 'widget', 'logicStatus'];
+    container.appendChild(nwCreateFieldRow('Darstellungstyp', nwShcfgCreateSelect(displayTypes.map(value => ({ value, label: nwGetTypeLabel(value) })), dev.type, value => {
+      if (value === dev.type) return;
+      if (!window.confirm('Darstellungstyp ändern? Vorhandene Datenpunktzuordnungen und Bedienprofile bleiben erhalten. Die benötigten Einstellungen anschließend prüfen und speichern.')) { nwRenderShcfgShell(); return; }
+      dev.type = value; nwMarkDirty(true); nwRenderShcfgShell();
+    })));
 
     // Placement (room vs floor)
     const floors = Array.isArray(cfg.floors) ? cfg.floors.slice().sort(nwSortByOrder) : [];
@@ -6631,10 +6837,12 @@ function nwRenderShcfgBuilderProps(container) {
     ioTitle.className = 'nw-config-card__subtitle';
     ioTitle.style.marginTop = '10px';
     ioTitle.textContent = 'Datenpunkte (NexoWatt EOS)';
+    ioTitle.dataset.shcfgIoStart = 'true';
     container.appendChild(ioTitle);
 
     dev.io = dev.io || {};
     dev.behavior = dev.behavior || {};
+    nwMountDeviceControlProfile(container, dev, false);
 
     const ensureObject = (parent, key, defaults = {}) => {
       if (!parent[key] || typeof parent[key] !== 'object' || Array.isArray(parent[key])) parent[key] = { ...defaults };
@@ -6848,6 +7056,7 @@ function nwRenderShcfgBuilderProps(container) {
 
     // Zusatzstatus bleibt optional. Er erzeugt niemals einen Schreib-Datenpunkt.
     const statusDetails = document.createElement('details');
+    statusDetails.className = 'nw-shcfg-advanced';
     const statusSummary = document.createElement('summary');
     statusSummary.textContent = 'Optionaler Gerätestatus und Darstellung';
     statusDetails.appendChild(statusSummary);
@@ -6999,8 +7208,7 @@ function nwMoveItemTo(arr, fromIndex, toIndex) {
   if (from === to) return;
 
   const item = arr.splice(from, 1)[0];
-  // If moved downwards, the target index shifts after removal.
-  if (from < to) to -= 1;
+  // toIndex is the final displayed position, including when moving downwards.
   arr.splice(to, 0, item);
   arr.forEach((it, i) => {
     if (it) it.order = i + 1;
@@ -7413,9 +7621,14 @@ function nwNormalizeRoomOrder() {
 function nwNormalizeDeviceOrder() {
   if (!nwShcState.config) return;
   const arr = Array.isArray(nwShcState.config.devices) ? nwShcState.config.devices : [];
-  arr.forEach((d, i) => {
-    if (d) d.order = i + 1;
+  const stable = arr.map((device, index) => ({ device, index }));
+  stable.sort((a, b) => {
+    const left = a.device && typeof a.device.order === 'number' && Number.isFinite(a.device.order) ? a.device.order : Number.MAX_SAFE_INTEGER;
+    const right = b.device && typeof b.device.order === 'number' && Number.isFinite(b.device.order) ? b.device.order : Number.MAX_SAFE_INTEGER;
+    return left - right || a.index - b.index;
   });
+  arr.splice(0, arr.length, ...stable.map(item => item.device));
+  arr.forEach((d, i) => { if (d) d.order = i + 1; });
 }
 /**
  * Code-Teil: nwEnsureUniqueDeviceId
@@ -7492,7 +7705,7 @@ function nwAddDeviceFromTemplate(templateId, opts = {}) {
   const tpl = NW_SHCFG_BUILDER_DEVICE_TEMPLATES.find((row) => row.id === tid)
     || NW_SHCFG_BUILDER_DEVICE_TEMPLATES.find((row) => row.type === tid);
   let type = (tpl && tpl.type) ? String(tpl.type) : tid;
-  if (!['switch', 'dimmer', 'color', 'blind', 'rtr', 'scene', 'sensor', 'player', 'camera', 'widget'].includes(type)) {
+  if (!['switch', 'dimmer', 'color', 'blind', 'rtr', 'scene', 'sensor', 'player', 'camera', 'widget', 'device'].includes(type)) {
     type = 'switch';
   }
 
@@ -7640,6 +7853,7 @@ function nwAddDeviceFromTemplate(templateId, opts = {}) {
     dev.capabilities.writableValue = writable;
   }
 
+  if (opts && opts.draftOnly) return dev;
   devices.push(dev);
   nwShcState.config.devices = devices;
   nwNormalizeDeviceOrder();
@@ -7748,7 +7962,110 @@ async function nwDpSetState(dpId, val) {
  * Zusammenhang: Teil von SmartHome: Räume, Geräte, Kacheln, Popover; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
  * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
  */
-function nwCreateDpInput(labelText, value, onChange) {
+/** Vollständige Profilzuordnung bleibt Teil des bisherigen Konfigurationsentwurfs.
+ * Der wiederverwendete Picker erlaubt Lesen/Auswählen, aber keine Schreibtests. */
+function nwShcfgControlEditorError(dev) {
+  const mapping = dev && dev.io && dev.io.deviceControls;
+  if (dev && dev.customView) {
+    const custom = window.NW_SH_CUSTOM_CONFIG;
+    if (!custom || typeof custom.validationError !== 'function') return 'Ansichts-Editor nicht verfügbar. Bitte Seite neu laden.';
+    const error = custom.validationError(dev.customView, mapping);
+    if (error) return error;
+  }
+  if ((dev && dev.type === 'device') || mapping) {
+    const helper = window.NW_SH_DEVICE_CONFIG;
+    if (!helper || typeof helper.validationError !== 'function') return 'Bedienprofil-Editor nicht verfügbar. Bitte Seite neu laden.';
+    return helper.validationError(mapping, dev.type === 'device' && !dev.customView);
+  }
+  return null;
+}
+/** Bewusst gestartete Alias-Anlage ändert nur IO/Quellenbasis des aktuellen Entwurfs.
+ * Andere ungespeicherte Geräte- oder Raumänderungen werden nicht ersetzt. */
+async function nwCreateDeviceDraftAliases(dev, status, button) {
+  const helper = window.NW_SH_ALIAS_CONFIG;
+  if (!helper || !helper.canCreate()) { status.textContent = 'Berechtigung mapping.edit für die Alias-Anlage fehlt.'; return; }
+  const validation = nwValidateConfig({ rooms: nwShcState.config.rooms || [], functions: nwShcState.config.functions || [], devices: [dev] });
+  if (validation.errors && validation.errors.length) { status.textContent = 'Bitte die Gerätekonfiguration zuerst korrigieren: ' + (validation.errors[0].message || 'ungültige Datenpunktzuordnung'); return; }
+  if (!window.confirm('Alias-Verknüpfungen für „' + (dev.alias || dev.id) + '“ anlegen oder wiederverwenden? Es werden Alias-Objekte angelegt, aber keine Gerätewerte geschrieben. Anschließend die geänderte SmartHome-Konfiguration speichern.')) return;
+  const config = nwShcState.config;
+  const beforeIo = JSON.stringify(dev.io || {});
+  const beforeProvenance = JSON.stringify(dev.importProvenance || null);
+  button.disabled = true;
+  status.textContent = 'Alias-Verknüpfungen werden angelegt …';
+  try {
+    const result = await helper.create([dev]);
+    const current = (nwShcState.config.devices || []).find(item => item && item.id === dev.id);
+    if (nwShcState.config !== config || current !== dev || JSON.stringify(dev.io || {}) !== beforeIo || JSON.stringify(dev.importProvenance || null) !== beforeProvenance) {
+      const message = 'Die Datenpunktzuordnung wurde zwischenzeitlich geändert. Alias-Ergebnis nicht in den Entwurf übernommen; bereits angelegte Aliase bleiben erhalten. Bitte erneut prüfen.';
+      status.textContent = message; nwSetStatus(message, 'error'); return;
+    }
+    const updated = result.devices[0];
+    dev.io = updated.io;
+    if (updated.importProvenance !== undefined) dev.importProvenance = updated.importProvenance;
+    nwMarkDirty(true);
+    nwSetStatus('Alias-Verknüpfungen im Entwurf: ' + result.created.length + ' angelegt, ' + result.reused.length + ' wiederverwendet. Bitte speichern.', 'ok');
+    nwRenderAll();
+  } catch (error) {
+    const message = error && error.message ? error.message : 'Alias-Anlage nicht bestätigt. Der Entwurf bleibt unverändert.';
+    status.textContent = message; nwSetStatus(message, 'error');
+  } finally { button.disabled = !helper.canCreate(); }
+}
+function nwMountAliasTools(container, dev) {
+  const wrapper = document.createElement('details'); wrapper.className = 'nw-sh-alias-tools nw-shcfg-advanced';
+  const summary = document.createElement('summary'); summary.textContent = 'Alias-Verknüpfungen'; wrapper.appendChild(summary);
+  const button = document.createElement('button'); button.type = 'button'; button.className = 'nw-config-btn';
+  button.textContent = 'Alias-Verknüpfungen anlegen';
+  const helper = window.NW_SH_ALIAS_CONFIG;
+  const hasProfile = !!(dev.io && dev.io.deviceControls);
+  button.disabled = !helper || !helper.canCreate() || !hasProfile;
+  const status = document.createElement('p'); status.className = 'nw-sh-alias-tools__status';
+  status.setAttribute('role', 'status'); status.setAttribute('aria-live', 'polite');
+  status.textContent = !hasProfile ? 'Zuerst ein vollständiges Bedienprofil mit Datenpunkten zuordnen.' : button.disabled ? 'Berechtigung mapping.edit erforderlich.' : 'Passende Aliase werden wiederverwendet. Nur die Datenpunktzuordnung dieses Geräts wird im Entwurf umgestellt.';
+  button.addEventListener('click', () => { void nwCreateDeviceDraftAliases(dev, status, button); });
+  wrapper.appendChild(button); wrapper.appendChild(status); container.appendChild(wrapper);
+}
+function nwMountDeviceControlProfile(container, dev, expanded = false) {
+  nwMountAliasTools(container, dev);
+  const custom = window.NW_SH_CUSTOM_CONFIG;
+  if (custom && typeof custom.mount === 'function') {
+    custom.mount(container, dev.customView, {
+      expanded,
+      getControls: () => dev.io && dev.io.deviceControls,
+      onChange: (view, mapping, rebuild) => {
+        if (view) dev.customView = view; else delete dev.customView;
+        if (mapping !== undefined) {
+          dev.io = dev.io || {};
+          if (mapping) dev.io.deviceControls = mapping; else delete dev.io.deviceControls;
+        }
+        nwMarkDirty(true);
+        if (rebuild) nwRenderAll();
+      },
+    });
+  }
+  const helper = window.NW_SH_DEVICE_CONFIG;
+  if (!helper || typeof helper.mount !== 'function') {
+    if (dev.type === 'device' || (dev.io && dev.io.deviceControls)) {
+      const warning = document.createElement('p');
+      warning.className = 'nw-config-status nw-config-status--error';
+      warning.textContent = 'Bedienprofil-Editor nicht verfügbar. Vorhandene Zuordnungen bleiben erhalten. Bitte Seite neu laden.';
+      container.appendChild(warning);
+    }
+    return;
+  }
+  helper.mount(container, dev.io && dev.io.deviceControls, {
+    expanded,
+    fixedProfile: dev.customView && dev.customView.kind ? 'custom_' + dev.customView.kind : undefined,
+    createDpInput: (label, value, onChange) => nwCreateDpInput(label, value, onChange, { allowWriteTest: false }),
+    onChange: mapping => {
+      dev.io = dev.io || {};
+      if (mapping) dev.io.deviceControls = mapping;
+      else delete dev.io.deviceControls;
+      nwMarkDirty(true);
+    },
+  });
+}
+
+function nwCreateDpInput(labelText, value, onChange, options = {}) {
   const wrapper = document.createElement('div');
   wrapper.className = 'nw-config-dp-input-wrapper';
 
@@ -7852,7 +8169,7 @@ function nwCreateDpInput(labelText, value, onChange) {
 
   let btnSet = null;
   const canTestWrite = !!(window.NW_AUTH && typeof window.NW_AUTH.hasCapability === 'function' && window.NW_AUTH.hasCapability('smarthome.configure'));
-  if (allowWrite && canTestWrite) {
+  if (allowWrite && canTestWrite && options.allowWriteTest !== false) {
     btnSet = document.createElement('button');
     btnSet.type = 'button';
     btnSet.className = 'nw-config-dp-button';
@@ -8167,6 +8484,7 @@ function nwRenderDevicesEditor(devices, rooms, functions) {
     typeSelect.className = 'nw-config-select';
     const typeOptions = [
       { value: '', label: '(kein Typ)' },
+      { value: 'device', label: 'Gerät mit vollständiger Bedienung' },
       { value: 'switch', label: 'Schalter' },
       { value: 'color', label: 'Farb‑Licht (RGB)' },
       { value: 'dimmer', label: 'Dimmer' },
@@ -9529,6 +9847,7 @@ function nwRenderDevicesEditor(devices, rooms, functions) {
       body.appendChild(nwCreateFieldRow('Farbtemperatur-Bereich', range));
     }
 
+    nwMountDeviceControlProfile(body, dev);
     card.appendChild(body);
     grid.appendChild(card);
   });
