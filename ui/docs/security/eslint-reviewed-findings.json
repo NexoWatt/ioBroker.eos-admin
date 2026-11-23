@@ -1680,8 +1680,8 @@
       "count": 1,
       "reason": "Die Literalmap enthält nur up/stop/down; mk wird an allen drei Aufrufstellen mit genau diesen festen Aktionen aufgerufen. Ergebnis setzt ausschließlich aria-label mit setAttribute, keinen HTML-/Befehlsinhalt. canWrite-/Alarm-/Mappingprüfungen bleiben vor dem Bedienhandler wirksam.",
       "evidence": "test/smarthome-modern-ui.test.cjs",
-      "review": "2026-11-19 site-specific source/dataflow review for 1.0.37; scanner remains enabled, no general exception",
-      "sourceCodeSha256": "ae23f97778eddeaf76c849b0501ccc8b8f41ac94ec17af86ef3cfb662904ce40"
+      "review": "2026-11-19 site-specific source/dataflow review for 1.0.37; scanner remains enabled, no general exception Nachprüfung 23.11.2026 für EOS 9.0.9: unveränderte lokale Literalmap und genau drei feste mk-Aufrufe up/stop/down; ausschließlich aria-label, vorhandene Bewegungs-/Stoppfreigaben unverändert. Fingerprint, Anzahl, ursprüngliche Begründung und Beleg bleiben erhalten. Siehe EOS docs/reports/unified-9.0.9/SECURITY_DELTA_REVIEW.md.",
+      "sourceCodeSha256": "14336c29c22c31941b9c95fbe6957e65a78aef6bfd519e031fb29b52edd26b0e"
     },
     {
       "file": "src-ts/runtime-executables/main.ts",
@@ -1794,6 +1794,20 @@
       "evidence": "EOS repository: docs/reports/unified-9.0.8/SECURITY_DELTA_REVIEW.md",
       "review": "23.11.2026 Einzelreview des tatsächlichen Quellblocks und seiner festen Eingabe-/Schlüsselherkunft für 9.0.8. Keine Änderung der Scannerregel oder historischen Baseline.",
       "sourceCodeSha256": "fb8f0d03a9d33672e2554bf7f89ab7ecc4df03378d036d71fa9fb2189b4860b8"
+    },
+    {
+      "file": "src-ts/runtime-executables/www/smarthome-presentation.ts",
+      "rule": "security/detect-object-injection",
+      "fingerprint": "3c0685158876e40604804f05528117f91dcfce4408a7f8d81d94cb5f4ad9cd6e",
+      "line": 50,
+      "column": 33,
+      "fatal": false,
+      "severity": 2,
+      "count": 1,
+      "reason": "fieldUsable liest fields[field] ausschließlich über zwölf lokale Aufrufstellen mit festen StateField-Literalen (on, level, position, currentTemp, setpoint, title, artist, playing, power, source, muted). Gerätedaten bestimmen keinen Eigenschaftsnamen. Kein dynamischer Schreibzugriff, keine Prototypmutation und kein HTML-Sink; das Ergebnis begrenzt nur die Qualitätsanzeige. Texte werden mit textContent, Positionen nur als endliche Zahl von 0 bis 100 gerendert. Keine Rechte-/Befehlserteilung.",
+      "evidence": "test/unified/smarthome-presentation.test.cjs; EOS docs/reports/unified-9.0.9/SECURITY_DELTA_REVIEW.md",
+      "review": "2026-11-23 site-specific source/dataflow review for EOS 9.0.9; all fieldUsable call sites inspected; scanner remains enabled, count=1, no general exception",
+      "sourceCodeSha256": "84a5606847fb997dbd89f5605a6cceb2a58be6894596f84f161d18ade4306be4"
     }
   ]
 }

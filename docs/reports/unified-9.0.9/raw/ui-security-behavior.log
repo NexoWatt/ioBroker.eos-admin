@@ -1,0 +1,34 @@
+✔ hands commands to the existing fetch/CSRF boundary and reports only EOS handoff (31.68956ms)
+✔ identical in-flight impulses are deduplicated, STOP is independent and older completion cannot overwrite it (5.603113ms)
+✔ deadline aborts the actual request, settles even a hung wrapper, and never retries (4.53367ms)
+✔ session, rights, HTTP, JSON, network and unconfirmed replies stay safe and visible (11.408783ms)
+✔ response limit cancels streaming data and endpoint/payload validation makes no network request (3.23526ms)
+✔ normal request capacity is bounded, STOP has reserved capacity, and page exit aborts pending work (29.615378ms)
+✔ feedback retention is bounded and does not retain DOM nodes for removed devices (78.703974ms)
+✔ press feedback is immediate, keyboard accessible and cancelled by movement, scroll, cancellation and focus loss (1.285611ms)
+✔ haptics are optional and never fire for ranges, synthetic/cancelled clicks or scrolling (2.517864ms)
+✔ a second STOP after intervening movement always reaches fetch while the first STOP is pending (1.823933ms)
+✔ timer saves accept the full retained collection beyond128KiB and still cancel replies above1MiB (4.541451ms)
+✔ all existing tile kinds keep names, controls and values; decoration is idempotent and data stays unchanged (6.145761ms)
+✔ toggle labels distinguish actual off, on, momentary and unavailable feedback without changing ARIA or permissions (2.872856ms)
+✔ blind positions are neutral, bounded and quality-aware; invalid data never appears as zero (2.793389ms)
+✔ climate existing Ist/Soll and humidity are retained, including a valid zero temperature (2.971551ms)
+✔ media metadata uses text only, preserves room/transport/source and never loads an artwork URL (3.471562ms)
+✔ malformed device input only decorates a generic tile and never creates control capability (2.823644ms)
+✔ touch tap holds native writes until release and emits exactly one final input/change (5.731803ms)
+✔ horizontal drag previews the native thumb but writes only the final value (1.448331ms)
+✔ vertical/diagonal scroll, recent scrolling and pointer cancellation never dispatch commands (5.11883ms)
+✔ mouse, pen and keyboard regain their native event contracts after touch cancellation (2.738909ms)
+✔ wrong pointer and multi-touch cannot complete or transfer another gesture (1.061502ms)
+✔ removed/disabled controls, blur, page hide, visibility and capture loss cancel the pending value (4.85304ms)
+✔ binding is idempotent, uses one shared lifecycle listener set and has no timers (1.749805ms)
+✔ input listener revoking access prevents the final change handler from writing (1.086789ms)
+✔ poll-side interaction check releases a removed control without requiring another pointer event (1.056024ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 581.541611

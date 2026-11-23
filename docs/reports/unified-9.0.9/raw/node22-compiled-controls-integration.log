@@ -1,0 +1,56 @@
+(node:1746) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:1753) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual build default dimmer/color cards expose bound inline controls with existing range and payload
+ok 1 - actual build default dimmer/color cards expose bound inline controls with existing range and payload
+  ---
+  duration_ms: 26.742923
+  type: 'test'
+  ...
+# Subtest: actual build readonly/missing output bindings cannot write through the new inline control
+ok 2 - actual build readonly/missing output bindings cannot write through the new inline control
+  ---
+  duration_ms: 11.284071
+  type: 'test'
+  ...
+# Subtest: actual build shared feedback keeps all device/timer API payloads and legacy return contracts
+ok 3 - actual build shared feedback keeps all device/timer API payloads and legacy return contracts
+  ---
+  duration_ms: 9.8691
+  type: 'test'
+  ...
+# Subtest: actual build transport/API failures return safely with feedback and never modify device state optimistically
+ok 4 - actual build transport/API failures return safely with feedback and never modify device state optimistically
+  ---
+  duration_ms: 15.541635
+  type: 'test'
+  ...
+# Subtest: actual build compatibility fallback also handles failed/invalid responses without uncaught rejection
+ok 5 - actual build compatibility fallback also handles failed/invalid responses without uncaught rejection
+  ---
+  duration_ms: 18.926514
+  type: 'test'
+  ...
+# Subtest: actual build device polling retains inline touch DOM, updates data and renders after the gesture
+ok 6 - actual build device polling retains inline touch DOM, updates data and renders after the gesture
+  ---
+  duration_ms: 7.536767
+  type: 'test'
+  ...
+# Subtest: actual build color touch release runs one final color command even with live preview enabled
+ok 7 - actual build color touch release runs one final color command even with live preview enabled
+  ---
+  duration_ms: 7.034279
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 591.119695

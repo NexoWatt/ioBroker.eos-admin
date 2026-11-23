@@ -1,0 +1,15 @@
+✔ actual build default dimmer/color cards expose bound inline controls with existing range and payload (27.070845ms)
+✔ actual build readonly/missing output bindings cannot write through the new inline control (10.920055ms)
+✔ actual build shared feedback keeps all device/timer API payloads and legacy return contracts (11.551309ms)
+✔ actual build transport/API failures return safely with feedback and never modify device state optimistically (9.988274ms)
+✔ actual build compatibility fallback also handles failed/invalid responses without uncaught rejection (8.501447ms)
+✔ actual build device polling retains inline touch DOM, updates data and renders after the gesture (3.769305ms)
+✔ actual build color touch release runs one final color command even with live preview enabled (4.813061ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 349.198212

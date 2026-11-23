@@ -1,9 +1,9 @@
 {
   "schema": "nexowatt.admin-bundle-components.v1",
-  "generatedAt": "2026-11-23T09:18:36.045Z",
+  "generatedAt": "2026-11-23T13:00:44.384Z",
   "provenance": "Rollup writeBundle module graph; npm modules with renderedLength > 0; hashes of final files",
   "limitations": "Lists npm packages contributing rendered JavaScript. Not a source code review, OS inventory or vulnerability clearance.",
-  "packageLockSha256": "6eb9196613552643b2163dabe1f41e4cdb76c991969cb3f213236b460066f2c3",
+  "packageLockSha256": "6d96bd374a887b26ee1c9ec39ed731de2fe8a542f3a2298de9484029b9e96105",
   "viteConfigSha256": "f59d3db711ab3bff7de7b2b2e8cbc1066375df69ecbe5b5476ef1c54aabe0986",
   "entryHtmlSha256": "3bff4f192b50cd550ae0b60e8006e6028cef9b7224d64a84d8e69bac08910d01",
   "projectModules": [

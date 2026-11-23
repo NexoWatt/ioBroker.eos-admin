@@ -1,0 +1,1 @@
+[smarthome-config-transactional] OK: SmartHome-Konfiguration wird vor Aktivierung vollständig validiert und bei Aktivierungs-/Persistenzfehlern zurückgerollt.

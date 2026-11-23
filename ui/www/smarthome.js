@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/smarthome.ts
- * Quell-Hash: sha256:06c4e110a22de74c35538dae57dec6a70c6dcdf712c2c8d9b7e6b4b830e5e317
+ * Quell-Hash: sha256:60acd56e451dd37da76072584c4ba4cf5a70a209fb6e0ac08500711224aca963
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -3077,6 +3077,29 @@ function nwCreateIconElement(dev, isOn, iconSpec, accent) {
   return wrap;
 }
 
+/** Central UI command feedback; the existing authenticated fetch wrapper and server permissions remain authoritative. */
+async function nwSmartHomePost(endpoint, payload, deviceId) {
+  if (window.NW_SH_FEEDBACK) return window.NW_SH_FEEDBACK.post(endpoint, payload, String(deviceId));
+  // Compatibility with an older cached page: same API, bounded request, no retry.
+  const controller = typeof AbortController === 'function' ? new AbortController() : null;
+  const timer = controller ? setTimeout(() => controller.abort(), 5000) : null;
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload), ...(controller ? { signal: controller.signal } : {}),
+    });
+    const data = await response.json().catch(() => null);
+    return response.ok && data && data.ok === true ? data : null;
+  } catch (_error) { return null; }
+  finally { if (timer !== null) clearTimeout(timer); }
+}
+
+/** Bind only view helpers: no action is emitted by rendering a tile or opening a dialog. */
+function nwBindSmartHomeControls(root, deviceId) {
+  root.querySelectorAll('input[type="range"]').forEach(input => window.NW_SH_TOUCH?.bindRange(input));
+  window.NW_SH_FEEDBACK?.attachStatus(root, String(deviceId));
+}
+
 // ---------- Networking ----------
 /**
  * Code-Teil: nwFetchDevices
@@ -3100,15 +3123,8 @@ async function nwFetchDevices() {
 async function nwToggleDevice(id, value) {
   const body = { id };
   if (typeof value === 'boolean') body.value = value;
-  const res = await fetch('/api/smarthome/toggle', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) return null;
-  const data = await res.json().catch(() => null);
-  if (!data || !data.ok) return null;
-  return data.state || { ok: true };
+  const data = await nwSmartHomePost('/api/smarthome/toggle', body, id);
+  return data ? (data.state || { ok: true }) : null;
 }
 /**
  * Code-Teil: nwSetLevel
@@ -3117,15 +3133,8 @@ async function nwToggleDevice(id, value) {
  * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
  */
 async function nwSetLevel(id, level) {
-  const res = await fetch('/api/smarthome/level', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ id, level }),
-  });
-  if (!res.ok) return null;
-  const data = await res.json();
-  if (!data || !data.ok) return null;
-  return data.state || null;
+  const data = await nwSmartHomePost('/api/smarthome/level', { id, level }, id);
+  return data ? (data.state || null) : null;
 }
 /**
  * Code-Teil: nwSetColor
@@ -3134,18 +3143,9 @@ async function nwSetLevel(id, level) {
  * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
  */
 async function nwSetColor(id, colorOrPayload) {
-  const payload = (colorOrPayload && typeof colorOrPayload === 'object' && !Array.isArray(colorOrPayload))
-    ? { ...colorOrPayload }
-    : { color: colorOrPayload };
-  const res = await fetch('/api/smarthome/color', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ id, ...payload }),
-  });
-  if (!res.ok) return null;
-  const data = await res.json().catch(() => null);
-  if (!data || !data.ok) return null;
-  return data.state || { ok: true };
+  const payload = (colorOrPayload && typeof colorOrPayload === 'object' && !Array.isArray(colorOrPayload)) ? { ...colorOrPayload } : { color: colorOrPayload };
+  const data = await nwSmartHomePost('/api/smarthome/color', { ...payload, id }, id);
+  return data ? (data.state || { ok: true }) : null;
 }
 /**
  * Code-Teil: nwCoverAction
@@ -3156,14 +3156,7 @@ async function nwSetColor(id, colorOrPayload) {
 async function nwCoverAction(id, action, value) {
   const body = { id, action };
   if (typeof value !== 'undefined') body.value = value;
-  const res = await fetch('/api/smarthome/cover', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) return false;
-  const data = await res.json().catch(() => null);
-  return !!(data && data.ok);
+  return !!(await nwSmartHomePost('/api/smarthome/cover', body, id));
 }
 /**
  * Code-Teil: nwPlayerAction
@@ -3174,16 +3167,8 @@ async function nwCoverAction(id, action, value) {
 async function nwPlayerAction(id, action, value) {
   const body = { id, action };
   if (typeof value !== 'undefined') body.value = value;
-
-  const res = await fetch('/api/smarthome/player', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) return null;
-  const data = await res.json();
-  if (!data || !data.ok) return null;
-  return data.state || null;
+  const data = await nwSmartHomePost('/api/smarthome/player', body, id);
+  return data ? (data.state || null) : null;
 }
 
 // Multiroom (UI-seitig): dieselbe Aktion auf mehrere Player-Zonen anwenden
@@ -3213,40 +3198,21 @@ async function nwPlayerActionMulti(primaryId, action, value) {
  * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
  */
 async function nwSetRtrSetpoint(id, setpoint) {
-  const res = await fetch('/api/smarthome/rtrSetpoint', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ id, setpoint }),
-  });
-  if (!res.ok) return null;
-  const data = await res.json();
-  if (!data || !data.ok) return null;
-  return data.state || null;
+  const data = await nwSmartHomePost('/api/smarthome/rtrSetpoint', { id, setpoint }, id);
+  return data ? (data.state || null) : null;
 }
 
 
 async function nwClimateAction(id, action, value) {
   const body = { id, action };
   if (typeof value !== 'undefined') body.value = value;
-  const res = await fetch('/api/smarthome/climate', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) return null;
-  const data = await res.json().catch(() => null);
-  return data && data.ok ? (data.state || { ok: true }) : null;
+  const data = await nwSmartHomePost('/api/smarthome/climate', body, id);
+  return data ? (data.state || { ok: true }) : null;
 }
 
 async function nwSetSmartHomeValue(id, value) {
-  const res = await fetch('/api/smarthome/value', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ id, value }),
-  });
-  if (!res.ok) return null;
-  const data = await res.json().catch(() => null);
-  return data && data.ok ? (data.state || { ok: true }) : null;
+  const data = await nwSmartHomePost('/api/smarthome/value', { id, value }, id);
+  return data ? (data.state || { ok: true }) : null;
 }
 
 // --- Zeitschaltuhren (Endkunde) ---
@@ -3257,15 +3223,8 @@ async function nwSetSmartHomeValue(id, value) {
  * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
  */
 async function nwSaveDeviceTimer(deviceId, timer) {
-  const res = await fetch('/api/smarthome/timers', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ deviceId, timer }),
-  });
-  if (!res.ok) return null;
-  const data = await res.json();
-  if (!data || !data.ok) return null;
-  return data.config || null;
+  const data = await nwSmartHomePost('/api/smarthome/timers', { deviceId, timer }, deviceId);
+  return data ? (data.config || null) : null;
 }
 /**
  * Code-Teil: nwDeleteDeviceTimer
@@ -3274,15 +3233,8 @@ async function nwSaveDeviceTimer(deviceId, timer) {
  * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
  */
 async function nwDeleteDeviceTimer(deviceId) {
-  const res = await fetch('/api/smarthome/timers', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ deviceId, delete: true }),
-  });
-  if (!res.ok) return null;
-  const data = await res.json();
-  if (!data || !data.ok) return null;
-  return data.config || null;
+  const data = await nwSmartHomePost('/api/smarthome/timers', { deviceId, delete: true }, deviceId);
+  return data ? (data.config || null) : null;
 }
 /**
  * Code-Teil: nwAdjustRtrSetpoint
@@ -4381,7 +4333,7 @@ function nwCreateTile(dev, opts) {
 
   // Dimmer/Blind: optional slider (if level mapping exists)
   // We only show the slider on extra-large tiles to keep the default grid close to the standard tile UX.
-  if (size === 'xl' && (type === 'dimmer' || type === 'blind') && dev.io && dev.io.level && (dev.io.level.readId || dev.io.level.writeId)) {
+  if ((type === 'dimmer' || type === 'color' || (size === 'xl' && type === 'blind')) && dev.io && dev.io.level && (dev.io.level.readId || dev.io.level.writeId)) {
     const lvlCfg = dev.io.level;
     const min = type === 'blind' ? 0 : (typeof lvlCfg.min === 'number' ? lvlCfg.min : 0);
     const max = type === 'blind' ? 100 : (typeof lvlCfg.max === 'number' ? lvlCfg.max : 100);
@@ -4389,7 +4341,7 @@ function nwCreateTile(dev, opts) {
     const current = type === 'blind'
       ? ((typeof st.position === 'number') ? st.position : (typeof st.level === 'number' ? st.level : 0))
       : ((typeof st.level === 'number') ? st.level : (typeof st.position === 'number' ? st.position : 0));
-    const hasLevelWrite = canWrite && !!(lvlCfg.writeId || lvlCfg.readId);
+    const hasLevelWrite = canWrite && !!lvlCfg.writeId;
 
     const slider = document.createElement('input');
     slider.type = 'range';
@@ -4397,6 +4349,8 @@ function nwCreateTile(dev, opts) {
     slider.max = String(max);
     slider.value = String(Math.max(min, Math.min(max, current)));
     slider.className = 'nw-sh-slider nw-sh-slider--tilebig';
+    slider.step = String(typeof lvlCfg.step === 'number' && lvlCfg.step > 0 ? lvlCfg.step : 1);
+    slider.setAttribute('aria-label', fullName + (type === 'blind' ? ': Position' : ': Helligkeit'));
     slider.disabled = !hasLevelWrite;
 
     // Visual progress fill (accent track)
@@ -4513,7 +4467,7 @@ function nwCreateTile(dev, opts) {
     footer.appendChild(b);
   };
 
-  if (type === 'switch' || type === 'color' || type === 'dimmer') {
+  if (type === 'switch' || type === 'dimmer' || (type === 'color' && dev.io?.switch?.writeId)) {
     addMiniToggle();
   }
 
@@ -4734,6 +4688,8 @@ function nwCreateTile(dev, opts) {
     await nwReloadDevices({ force: true });
   });
 
+  window.NW_SH_PRESENTATION?.decorate(tile, dev);
+  nwBindSmartHomeControls(tile, dev.id);
   return tile;
 }
 
@@ -5002,6 +4958,7 @@ function nwEnsurePopover() {
  * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
  */
 function nwClosePopover() {
+  window.NW_SH_TOUCH?.cancel();
   if (!nwPopoverEl || !nwPopoverBackdropEl) return;
   const returnFocus = nwPopoverReturnFocus;
   nwPopoverOpenId = null;
@@ -5043,6 +5000,7 @@ function nwOpenDevicePopover(dev, anchorEl) {
 
   nwPopoverEl.innerHTML = '';
   nwBuildPopoverContent(dev);
+  nwBindSmartHomeControls(nwPopoverEl, dev.id);
   nwActivatePopoverSurface(anchorEl);
 }
 
@@ -5070,6 +5028,7 @@ function nwOpenTimerPopover(dev, anchorEl) {
 
   nwPopoverEl.innerHTML = '';
   nwBuildTimerPopoverContent(dev);
+  nwBindSmartHomeControls(nwPopoverEl, dev.id);
   nwActivatePopoverSurface(anchorEl);
 }
 /**
@@ -6195,7 +6154,7 @@ function nwCreateLevelPopover(dev, canWrite, opts) {
     if (dial && typeof dial.nwSetValue === 'function') dial.nwSetValue(raw);
 
     // Optional: live-preview (throttled) while dragging.
-    if (hasWrite && livePreview && liveSender) {
+    if (hasWrite && livePreview && liveSender && !window.NW_SH_TOUCH?.isCommitting(slider)) {
       liveSender.trigger(raw, false);
     }
   });
@@ -6893,7 +6852,7 @@ function nwCreateColorPopover(dev, canWrite) {
     hsv.v = clamp01(val / 100);
     const hex = hsvToHex(hsv.h, hsv.s, hsv.v);
     setUi(hex);
-    if (hasWrite && livePreview && liveSender) {
+    if (hasWrite && livePreview && liveSender && !window.NW_SH_TOUCH?.isCommitting(valueSlider)) {
       liveSender.trigger(String(hex), false);
     }
   });
@@ -7255,7 +7214,7 @@ function nwCreateBlindPopover(dev, canWrite) {
     if (dial && typeof dial.nwSetValue === 'function') dial.nwSetValue(raw);
 
     // Optional: live-preview (throttled) while dragging.
-    if (canMove && livePreview && liveSender) {
+    if (canMove && livePreview && liveSender && !window.NW_SH_TOUCH?.isCommitting(slider)) {
       liveSender.trigger(raw, false);
     }
   });
@@ -11152,6 +11111,7 @@ async function nwReloadDevices(opts) {
     nwAllDevices = arr;
     nwSyncOpenPopoverFeedback(arr);
 
+    if (window.NW_SH_TOUCH?.isInteracting()) return;
     if (!force && sig === nwLastDevicesSignature) return;
 
     nwLastDevicesSignature = sig;
@@ -11300,6 +11260,7 @@ async function nwLoadUiConfigFlags() {
  * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
  */
 async function nwBootstrap() {
+  window.NW_SH_FEEDBACK?.install();
   nwInitMenu();
 
   // Detect if the filter UI exists in the DOM. If not, we intentionally run in "clean" mode.

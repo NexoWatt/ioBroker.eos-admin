@@ -1,7 +1,7 @@
 {
   "name": "iobroker.eos-admin",
   "description": "NexoWatt EOS: licensed local energy management, dashboard and ioBroker system administration in one adapter.",
-  "version": "9.0.8",
+  "version": "9.0.9",
   "contributors": [
     "bluefox <dogafox@gmail.com>",
     "apollon77",
@@ -174,7 +174,9 @@
     "tools/eos-tls-issuer.cjs",
     "tools/eos-memory-cache-benchmark.cjs",
     "START_HIER_9.0.8.md",
-    "docs/reports/unified-9.0.8/"
+    "docs/reports/unified-9.0.8/",
+    "START_HIER_9.0.9.md",
+    "docs/reports/unified-9.0.9/"
   ],
   "scripts": {
     "start": "cd src-admin && npm run start",
@@ -195,10 +197,10 @@
     "test:retained": "node --test test/eos-session-security.test.cjs test/eos-web-resources.test.cjs test/eos-auth-regressions.test.cjs",
     "test:package": "node --test test/eos-unified-metadata.test.cjs",
     "test:integration": "mocha test/integration-unified.cjs --exit",
-    "typecheck": "tsc -p tsconfig.build.json --noEmit && tsc -p ui/tsconfig.ephemeral-cache.json && tsc -p ui/tsconfig.hosted-adapter.json && tsc -p modules/eebus/tsconfig.json --noEmit && tsc -p modules/backup/tsconfig.json --noEmit && tsc -p ui/tsconfig.smarthome-activation.json && tsc -p ui/tsconfig.ui-auth-frontend.json && tsc -p ui/tsconfig.preserved-ui-config.json",
+    "typecheck": "tsc -p tsconfig.build.json --noEmit && tsc -p ui/tsconfig.ephemeral-cache.json && tsc -p ui/tsconfig.hosted-adapter.json && tsc -p modules/eebus/tsconfig.json --noEmit && tsc -p modules/backup/tsconfig.json --noEmit && tsc -p ui/tsconfig.smarthome-activation.json && tsc -p ui/tsconfig.ui-auth-frontend.json && tsc -p ui/tsconfig.preserved-ui-config.json && tsc -p ui/tsconfig.smarthome-feedback.json && tsc -p ui/tsconfig.smarthome-touch.json && tsc -p ui/tsconfig.smarthome-presentation.json",
     "build:installer": "npm --prefix ui/src-admin-tab run build",
     "sbom": "npm sbom --sbom-format=cyclonedx > release-manifests/unified/build-environment.cdx.json && node tools/eos-sbom-vendored.cjs",
-    "lint:unified": "eslint -c eslint.unified.config.mjs src/lib/eosUnifiedBoundary.js src/lib/eosUnifiedOwnership.js src/lib/eosLicenseCore.js src/lib/eosLicensePolicy.js src/lib/eosLicenseService.js src/lib/eosLicenseTrust.js src/lib/eosLicenseHttp.js tools/eos-release-check.cjs tools/eos-release-manifest.cjs tools/eos-migration-plan.cjs tools/eos-access-diagnostics.cjs deploy/render-ingress.cjs tools/eos-sbom-vendored.cjs src/lib/eosModuleHost.js src/lib/eosModuleHttp.js src/lib/eosModuleConfigStore.js src/lib/eosLegacyMigration.js tools/eos-tls-issuer.cjs && eslint -c modules/backup/eslint.config.mjs modules/backup/src && eslint -c ui/eslint.smarthome-activation.config.mjs ui/src-ts/runtime-executables/lib/smarthome-activation.ts && eslint -c ui/eslint.preserved-ui-config.config.mjs ui/src-ts/runtime-executables/lib/preserved-ui-config.ts",
+    "lint:unified": "eslint -c eslint.unified.config.mjs src/lib/eosUnifiedBoundary.js src/lib/eosUnifiedOwnership.js src/lib/eosLicenseCore.js src/lib/eosLicensePolicy.js src/lib/eosLicenseService.js src/lib/eosLicenseTrust.js src/lib/eosLicenseHttp.js tools/eos-release-check.cjs tools/eos-release-manifest.cjs tools/eos-migration-plan.cjs tools/eos-access-diagnostics.cjs deploy/render-ingress.cjs tools/eos-sbom-vendored.cjs src/lib/eosModuleHost.js src/lib/eosModuleHttp.js src/lib/eosModuleConfigStore.js src/lib/eosLegacyMigration.js tools/eos-tls-issuer.cjs && eslint -c modules/backup/eslint.config.mjs modules/backup/src && eslint -c ui/eslint.smarthome-activation.config.mjs ui/src-ts/runtime-executables/lib/smarthome-activation.ts && eslint -c ui/eslint.preserved-ui-config.config.mjs ui/src-ts/runtime-executables/lib/preserved-ui-config.ts && eslint -c ui/eslint.smarthome-feedback.config.mjs ui/src-ts/runtime-executables/www/smarthome-feedback.ts && eslint -c ui/eslint.smarthome-touch.config.mjs ui/src-ts/runtime-executables/www/smarthome-touch.ts && eslint -c ui/eslint.smarthome-presentation.config.mjs ui/src-ts/runtime-executables/www/smarthome-presentation.ts",
     "test:modules": "node --test test/eos-hosted-eebus-bridge.test.cjs test/eos-module*.test.cjs test/eos-discovery.test.cjs modules/devices/test/*.test.* modules/eebus/test/*.test.* && node --test modules/eebus/test/config.js modules/eebus/test/cls-control-parser.js modules/eebus/test/nexowatt-bridge.js modules/eebus/test/implementation-result-order.js && node --test modules/backup/test/*.test.cjs",
     "build:modules": "tsc -p modules/eebus/tsconfig.json && tsc -p modules/backup/tsconfig.json"
   },
@@ -212,7 +214,7 @@
   },
   "nexowattReleasePolicy": {
     "distTag": "next",
-    "purpose": "SmartHome activation and preservation checks, same-tab administration, maintained backup scheduler, Node.js 22 and 24; see START_HIER_9.0.8.md."
+    "purpose": "SmartHome operating tiles, touch-safe ranges and separate press/command feedback, Node.js 22 and 24; see START_HIER_9.0.9.md."
   },
   "publisher": "NexoWatt",
   "nexowattUpstream": {

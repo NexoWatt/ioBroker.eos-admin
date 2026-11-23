@@ -1,0 +1,12 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> nexowatt-eos-ui-internal@9.0.9 docs:build
+> node scripts/generate-code-documentation.cjs
+
+[code-docs] 283 Quelldateien und 284 Verzeichnisseiten aktualisiert.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> nexowatt-eos-ui-internal@9.0.9 docs:check
+> node scripts/verify-code-documentation.cjs
+
+[code-docs] OK: 283 deutsche Modulbeschreibungen und Quellverknüpfungen synchron.

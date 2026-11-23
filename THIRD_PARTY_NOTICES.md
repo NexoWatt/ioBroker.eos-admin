@@ -55,3 +55,9 @@ The locked protocol dependencies include modbus-serial (ISC), MQTT.js (MIT), ser
 The original NexoWatt EOS Backup 1.0.10 archive contains MIT-licensed material derived from ioBroker.backitup, Copyright 2018–2026 simatec and 2026 NexoWatt. Its exact original LICENSE and NOTICE are retained under `modules/backup/upstream/`; the inherited NOTICE still refers to 1.0.9 and is intentionally not rewritten. Archive and retained-file hashes are recorded in `modules/backup/provenance.json`. The proprietary EOS notice does not withdraw these existing MIT rights.
 
 The integrated backup uses locked tar-fs (MIT), cron-parser (MIT), ftp (MIT), Dropbox SDK (MIT), fast-xml-parser (MIT), axios (MIT), and MQTT.js (MIT). Their resolved runtime dependency closure is in the CycloneDX SBOM. Installed dependency packages retain their own license texts. No third-party CA certificate, private manufacturer key, cloud credential, or customer archive is included.
+
+## SmartHome operating-interface reference (9.0.9)
+
+The user-supplied `ioBroker.devices-master.zip` identifies `iobroker.devices` 4.4.0, Copyright (c) 2019–2026 bluefox, under the MIT license. Its archive SHA-256 is `a0166efec63ae7e5dc5ce3d25d41e60a321f7f58444c127c2cc4c9535a46ba2f`. The exact supplied license is retained conservatively in `ui/www/licenses/iobroker-devices-MIT.txt`; the proprietary NexoWatt notices do not withdraw rights granted under that license.
+
+The SmartHome changes reimplement selected operating and touch-interaction patterns within the existing EOS frontend. This is not an import of the complete ioBroker.devices adapter, its React/MUI application, device/alias detection, backend, plugin services or external widget loaders. Scope, reference paths and provenance limits are recorded in `docs/reports/unified-9.0.9/DEVICE_UI_REFERENCE.md`.

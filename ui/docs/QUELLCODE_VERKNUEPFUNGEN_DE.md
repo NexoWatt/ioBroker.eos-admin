@@ -2,7 +2,7 @@
 
 Automatisch aus den Originalquellen erzeugter Wegweiser. Einstieg und fachliche Abläufe: [Quellcode verstehen](QUELLCODE_WEGWEISER_DE.md). Pflege: [Dokumentationsstandard](DOKUMENTATIONSSTANDARD_DE.md).
 
-Erfasst: 280 selbst gepflegte TS-/TSX-Dateien, 6575 benannte Funktionen/Methoden. Generierte Spiegel, Testdateien, externe Pakete und Build-Artefakte sind ausgeschlossen.
+Erfasst: 283 selbst gepflegte TS-/TSX-Dateien, 6611 benannte Funktionen/Methoden. Generierte Spiegel, Testdateien, externe Pakete und Build-Artefakte sind ausgeschlossen.
 
 Die Funktionslinks zeigen auf die Originalquelle. Statische Imports und dynamische Kommunikation sind verschieden; Backend-API, ioBroker-States und HTML-/Browser-Globals werden im fachlichen Wegweiser erklärt.
 
@@ -275,6 +275,9 @@ Die Funktionslinks zeigen auf die Originalquelle. Statische Imports und dynamisc
 | [src-ts/runtime-executables/www/simulation.ts](../src-ts/runtime-executables/www/simulation.ts) | Verbindet Simulations-Eingaben und Auswertung mit dem dafür vorgesehenen Backend-Bereich. | [Verknüpfungen und Funktionen](quellcode/src-ts/runtime-executables/www/simulation.md) |
 | [src-ts/runtime-executables/www/smarthome-activation.ts](../src-ts/runtime-executables/www/smarthome-activation.ts) | Zeigt und speichert die SmartHome-Aktivierung direkt im Installer. | [Verknüpfungen und Funktionen](quellcode/src-ts/runtime-executables/www/smarthome-activation.md) |
 | [src-ts/runtime-executables/www/smarthome-config.ts](../src-ts/runtime-executables/www/smarthome-config.ts) | Ermöglicht Installern und Admins die Einrichtung von Etagen, Räumen, Geräten, Seiten und Szenen und speichert den gemeinsamen SmartHome-Vertrag. | [Verknüpfungen und Funktionen](quellcode/src-ts/runtime-executables/www/smarthome-config.md) |
+| [src-ts/runtime-executables/www/smarthome-feedback.ts](../src-ts/runtime-executables/www/smarthome-feedback.ts) | Zeigt Druck- und Übergaberückmeldungen für die vorhandenen SmartHome-Bedienelemente. | [Verknüpfungen und Funktionen](quellcode/src-ts/runtime-executables/www/smarthome-feedback.md) |
+| [src-ts/runtime-executables/www/smarthome-presentation.ts](../src-ts/runtime-executables/www/smarthome-presentation.ts) | Ergänzt bestehende SmartHome-Kacheln um einheitliche Typ- und Zustandsanzeigen. | [Verknüpfungen und Funktionen](quellcode/src-ts/runtime-executables/www/smarthome-presentation.md) |
+| [src-ts/runtime-executables/www/smarthome-touch.ts](../src-ts/runtime-executables/www/smarthome-touch.ts) | Trennt Touch-Bedienung eines nativen Bereichsreglers vom Scrollen. | [Verknüpfungen und Funktionen](quellcode/src-ts/runtime-executables/www/smarthome-touch.md) |
 | [src-ts/runtime-executables/www/smarthome.ts](../src-ts/runtime-executables/www/smarthome.ts) | Stellt die konfigurierte SmartHome-Oberfläche dar und übermittelt freigegebene Geräte-/Szenenaktionen. | [Verknüpfungen und Funktionen](quellcode/src-ts/runtime-executables/www/smarthome.md) |
 | [src-ts/runtime-executables/www/storagefarm.ts](../src-ts/runtime-executables/www/storagefarm.ts) | Zeigt aggregierte Speicherfarm-Werte und Einzelspeicher. Der dynamische Netzanschluss wird vollständig in seiner eigenen Installer-App eingerichtet. | [Verknüpfungen und Funktionen](quellcode/src-ts/runtime-executables/www/storagefarm.md) |
 | [src-ts/runtime-executables/www/sw.ts](../src-ts/runtime-executables/www/sw.ts) | Verwaltet den Service-Worker-Cache für die Browser-Anwendung und den Wechsel zwischen Cache-Versionen. | [Verknüpfungen und Funktionen](quellcode/src-ts/runtime-executables/www/sw.md) |

@@ -1337,9 +1337,24 @@
       "codeHash": "4cc8f1edf4530f29ada5c2221f93a525ed65323eaf47843b0215ed5d01cb1af9"
     },
     {
+      "path": "src-ts/runtime-executables/www/smarthome-feedback.ts",
+      "sourceHash": "c006e534e130a9da08a35245fc40f9662497148187aa046b738540ca2b0924ea",
+      "codeHash": "6378c5510ca899e720ae894cd9d1564a8908ed18389b5a8ba573cbebdb034d43"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/smarthome-presentation.ts",
+      "sourceHash": "5a52d575109fb6d97d703fac2c81d6723dc28ec3532f0b2d66e5a6e921543421",
+      "codeHash": "84a5606847fb997dbd89f5605a6cceb2a58be6894596f84f161d18ade4306be4"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/smarthome-touch.ts",
+      "sourceHash": "83e085178d347ccf58b20fc9bc1befc777f0b552fa6d3277f2dea2dfcab467bf",
+      "codeHash": "d57c5a93bb5658c71d1c4823b4a9175f2047cb22ff5b104a09bb5bdccca591a8"
+    },
+    {
       "path": "src-ts/runtime-executables/www/smarthome.ts",
-      "sourceHash": "06c4e110a22de74c35538dae57dec6a70c6dcdf712c2c8d9b7e6b4b830e5e317",
-      "codeHash": "ae23f97778eddeaf76c849b0501ccc8b8f41ac94ec17af86ef3cfb662904ce40"
+      "sourceHash": "60acd56e451dd37da76072584c4ba4cf5a70a209fb6e0ac08500711224aca963",
+      "codeHash": "14336c29c22c31941b9c95fbe6957e65a78aef6bfd519e031fb29b52edd26b0e"
     },
     {
       "path": "src-ts/runtime-executables/www/storagefarm.ts",
@@ -2472,8 +2487,20 @@
       "hash": "8c52bb4c61b5e145e0881b00d137e35c18fd7278703d73876220ed5947def4d9"
     },
     {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/smarthome-feedback.md",
+      "hash": "11bcb516340694488830712b77d075b6ae875ccc0813d7d38b2d2b3ca0f6a94a"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/smarthome-presentation.md",
+      "hash": "e125d6a0739d50983622976ea36ced0bdc8d0d33f9f1f01fd3f75d78628d0de1"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/smarthome-touch.md",
+      "hash": "34b91582121cd995ad0cf1f1653c0ac0ca09942f8a32ded2de4263a2a10c3035"
+    },
+    {
       "path": "docs/quellcode/src-ts/runtime-executables/www/smarthome.md",
-      "hash": "98b2e54323fcd87a097328ae2f911d526118964e139ba3762ef83f3ba72d65b1"
+      "hash": "eac528bf00897cf8a6a2cc635db4d6e4383dcf50284d99af95c49472dc0209b5"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/storagefarm.md",
@@ -2525,7 +2552,7 @@
     },
     {
       "path": "docs/QUELLCODE_VERKNUEPFUNGEN_DE.md",
-      "hash": "80e2744adf86e4528d252fe1dee858498f141cb7001d736fed54ad67adefd4c3"
+      "hash": "ce7f95e0ada9ba4acc06d8fc3d7a62c64299b01d30b298a990376db2172f3f94"
     }
   ]
 }

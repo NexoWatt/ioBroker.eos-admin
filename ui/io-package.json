@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "nexowatt-ui",
-    "version": "9.0.8",
+    "version": "9.0.9",
     "news": {
       "9.0.8": {
         "en": "Explicit SmartHome activation, protected legacy configuration loading, same-tab administration and maintained backup scheduling. Node.js 22 and 24 supported; test channel with documented migration limits.",

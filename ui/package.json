@@ -1,6 +1,6 @@
 {
   "name": "nexowatt-eos-ui-internal",
-  "version": "9.0.8",
+  "version": "9.0.9",
   "description": "Internal UI and EMS module hosted by iobroker.eos-admin; not an ioBroker adapter entry point.",
   "author": "NexoWatt",
   "license": "UNLICENSED",
