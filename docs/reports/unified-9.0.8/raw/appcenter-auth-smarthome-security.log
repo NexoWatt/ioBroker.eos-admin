@@ -1,0 +1,13 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> nexowatt-eos-ui-internal@9.0.8 test:appcenter-auth-smarthome-security
+> node scripts/verify-appcenter-auth-smarthome-security.js
+
+PASS Unbestätigter Start sperrt Hintergrund und lädt kein Passwortformular
+PASS Statusfehler und Kunden-Wildcards öffnen das AppCenter nicht
+PASS Nur bestätigte Fachrolle entsperrt und stellt vorherigen inert-Zustand wieder her
+PASS Außenklick, Escape und erneutes Prüfen besitzen keinen Entsperrpfad
+PASS Sitzungsverlust oder verborgenes Dokument sperrt bereits freigegebene Inhalte erneut
+PASS Ein Frame bietet ausschließlich einen sicheren separaten Loginlink
+[appcenter-auth-modal-lock] PASS 6 original gate-function groups; separate login, role denial and inert/hidden restoration. DOM simulation only, no browser focus/layout claim.
+[appcenter-auth-smarthome-security] OK: AppCenter and SmartHome setup are fail-closed; DP discovery/assignment requires Installer/Admin.

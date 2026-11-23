@@ -1,0 +1,14 @@
+✔ egress fixture scopes exactly to installed EOS entrypoint, not npm/setup or test runner (1.296136ms)
+✔ rating URL and proxy absolute targets are blocked before any HTTP dispatch (10.514521ms)
+✔ nonloopback raw socket, TLS, DNS and fetch fail without transport or identifier exposure (0.895651ms)
+✔ loopback options remain available and literal server bind addresses require no DNS egress (0.337812ms)
+✔ fixture permits an actual wildcard listener and HTTP exchange on loopback in an isolated child (135.149081ms)
+✔ NODE_OPTIONS preload automatically blocks installed adapter but leaves npm role unmodified (182.536342ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 504.858717

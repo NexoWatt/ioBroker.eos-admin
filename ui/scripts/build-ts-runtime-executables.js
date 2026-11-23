@@ -24,6 +24,8 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const ts = require('typescript');
+const vm = require('node:vm');
+const { wrap } = require('node:module');
 
 const root = path.resolve(__dirname, '..');
 const sourceRoot = path.join(root, 'src-ts', 'runtime-executables');
@@ -168,7 +170,16 @@ function normalizeBuiltOutput(sourceAbs) {
   const body = shouldTranspile
     ? transpileMarkedRuntimeSource(sourceAbs, stripped.body)
     : stripped.body;
-  return stripped.shebang + stripped.license + header + body;
+  const output = stripped.shebang + stripped.license + header + body;
+  // Vor jedem Schreiben die tatsächlich erzeugten JS-Bytes prüfen. Ein falsch
+  // platzierter Transpile-Marker darf keine TS-Typen als scheinbar gültiges
+  // Runtime-Artefakt ausliefern. Kompilieren führt den Code nicht aus.
+  try {
+    new vm.Script(wrap(output.replace(/^#![^\n]*\n/, '')), { filename: runtimeRel });
+  } catch (error) {
+    fail(`Ungültiges Runtime-JavaScript für ${runtimeRel}: ${error.message}`);
+  }
+  return output;
 }
 
 function buildExpectedOutputs() {

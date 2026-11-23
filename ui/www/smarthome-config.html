@@ -102,9 +102,21 @@
 
         </div>
 <div id="nw-config-status" class="nw-config-status"></div>
-<div id="nw-config-enabled-hint" class="nw-config-status" style="display:none;margin-top:4px;color:#facc15;"></div>
       </div>
     </div>
+
+    <section class="nw-config-section" aria-labelledby="nw-smarthome-activation-title">
+      <div class="nw-config-section__head">
+        <h2 id="nw-smarthome-activation-title" class="nw-config-section__title">SmartHome-Aktivierung</h2>
+      </div>
+      <label><input id="nw-smarthome-enabled" type="checkbox" disabled aria-describedby="nw-smarthome-activation-help"/> SmartHome-Bereich aktivieren</label>
+      <p id="nw-smarthome-activation-help">Gebäude und Räume allein aktivieren den Bereich nicht. Gebäude und Geräte bleiben gespeichert. Deaktivieren blendet SmartHome aus und deaktiviert dessen Gerätebedienung.</p>
+      <div class="nw-config-row__actions" style="justify-content:flex-start;gap:8px;">
+        <button id="nw-smarthome-activation-save" class="nw-config-btn nw-config-btn--primary" type="button" disabled>Aktivierung speichern</button>
+        <button id="nw-smarthome-activation-reload" class="nw-config-btn nw-config-btn--ghost" type="button" disabled>Status neu laden</button>
+      </div>
+      <div id="nw-smarthome-activation-status" class="nw-config-status" role="status" aria-live="polite">SmartHome-Status wird geladen …</div>
+    </section>
 
     <!-- Home / Module tiles -->
     <section id="nw-shcfg-home" class="nw-config-section nw-shcfg-home">
@@ -531,6 +543,7 @@
 </main>
 
 <script src="/static/nw-shell.js"></script>
+<script src="/static/smarthome-activation.js"></script>
 <script src="/static/smarthome-config.js"></script>
 
 

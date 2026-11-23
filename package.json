@@ -1,7 +1,7 @@
 {
   "name": "iobroker.eos-admin",
   "description": "NexoWatt EOS: licensed local energy management, dashboard and ioBroker system administration in one adapter.",
-  "version": "9.0.7",
+  "version": "9.0.8",
   "contributors": [
     "bluefox <dogafox@gmail.com>",
     "apollon77",
@@ -39,7 +39,7 @@
     "bonjour-service": "1.4.4",
     "compression": "^1.8.2",
     "cookie-parser": "^1.4.7",
-    "cron-parser": "5.7.0",
+    "cron-parser": "5.10.6",
     "dropbox": "10.66.0",
     "express": "^5.3.0",
     "express-fileupload": "^1.5.2",
@@ -54,7 +54,6 @@
     "modbus-serial": "8.0.25",
     "mqtt": "5.16.1",
     "multicast-dns": "7.2.5",
-    "node-schedule": "2.1.1",
     "nodemailer": "10.1.4",
     "oauth2-server": "npm:@node-oauth/oauth2-server@5.3.1",
     "semver": "^7.8.5",
@@ -173,7 +172,9 @@
     "START_HIER_9.0.7.md",
     "docs/reports/unified-9.0.7/",
     "tools/eos-tls-issuer.cjs",
-    "tools/eos-memory-cache-benchmark.cjs"
+    "tools/eos-memory-cache-benchmark.cjs",
+    "START_HIER_9.0.8.md",
+    "docs/reports/unified-9.0.8/"
   ],
   "scripts": {
     "start": "cd src-admin && npm run start",
@@ -194,10 +195,10 @@
     "test:retained": "node --test test/eos-session-security.test.cjs test/eos-web-resources.test.cjs test/eos-auth-regressions.test.cjs",
     "test:package": "node --test test/eos-unified-metadata.test.cjs",
     "test:integration": "mocha test/integration-unified.cjs --exit",
-    "typecheck": "tsc -p tsconfig.build.json --noEmit && tsc -p ui/tsconfig.ephemeral-cache.json && tsc -p ui/tsconfig.hosted-adapter.json && tsc -p modules/eebus/tsconfig.json --noEmit && tsc -p modules/backup/tsconfig.json --noEmit",
+    "typecheck": "tsc -p tsconfig.build.json --noEmit && tsc -p ui/tsconfig.ephemeral-cache.json && tsc -p ui/tsconfig.hosted-adapter.json && tsc -p modules/eebus/tsconfig.json --noEmit && tsc -p modules/backup/tsconfig.json --noEmit && tsc -p ui/tsconfig.smarthome-activation.json && tsc -p ui/tsconfig.ui-auth-frontend.json && tsc -p ui/tsconfig.preserved-ui-config.json",
     "build:installer": "npm --prefix ui/src-admin-tab run build",
     "sbom": "npm sbom --sbom-format=cyclonedx > release-manifests/unified/build-environment.cdx.json && node tools/eos-sbom-vendored.cjs",
-    "lint:unified": "eslint -c eslint.unified.config.mjs src/lib/eosUnifiedBoundary.js src/lib/eosUnifiedOwnership.js src/lib/eosLicenseCore.js src/lib/eosLicensePolicy.js src/lib/eosLicenseService.js src/lib/eosLicenseTrust.js src/lib/eosLicenseHttp.js tools/eos-release-check.cjs tools/eos-release-manifest.cjs tools/eos-migration-plan.cjs tools/eos-access-diagnostics.cjs deploy/render-ingress.cjs tools/eos-sbom-vendored.cjs src/lib/eosModuleHost.js src/lib/eosModuleHttp.js src/lib/eosModuleConfigStore.js src/lib/eosLegacyMigration.js tools/eos-tls-issuer.cjs && eslint -c modules/backup/eslint.config.mjs modules/backup/src",
+    "lint:unified": "eslint -c eslint.unified.config.mjs src/lib/eosUnifiedBoundary.js src/lib/eosUnifiedOwnership.js src/lib/eosLicenseCore.js src/lib/eosLicensePolicy.js src/lib/eosLicenseService.js src/lib/eosLicenseTrust.js src/lib/eosLicenseHttp.js tools/eos-release-check.cjs tools/eos-release-manifest.cjs tools/eos-migration-plan.cjs tools/eos-access-diagnostics.cjs deploy/render-ingress.cjs tools/eos-sbom-vendored.cjs src/lib/eosModuleHost.js src/lib/eosModuleHttp.js src/lib/eosModuleConfigStore.js src/lib/eosLegacyMigration.js tools/eos-tls-issuer.cjs && eslint -c modules/backup/eslint.config.mjs modules/backup/src && eslint -c ui/eslint.smarthome-activation.config.mjs ui/src-ts/runtime-executables/lib/smarthome-activation.ts && eslint -c ui/eslint.preserved-ui-config.config.mjs ui/src-ts/runtime-executables/lib/preserved-ui-config.ts",
     "test:modules": "node --test test/eos-hosted-eebus-bridge.test.cjs test/eos-module*.test.cjs test/eos-discovery.test.cjs modules/devices/test/*.test.* modules/eebus/test/*.test.* && node --test modules/eebus/test/config.js modules/eebus/test/cls-control-parser.js modules/eebus/test/nexowatt-bridge.js modules/eebus/test/implementation-result-order.js && node --test modules/backup/test/*.test.cjs",
     "build:modules": "tsc -p modules/eebus/tsconfig.json && tsc -p modules/backup/tsconfig.json"
   },
@@ -211,7 +212,7 @@
   },
   "nexowattReleasePolicy": {
     "distTag": "next",
-    "purpose": "Configuration persistence, legacy migration, backup, local certificates and resource improvements; see START_HIER_9.0.7.md and versioned evidence."
+    "purpose": "SmartHome activation and preservation checks, same-tab administration, maintained backup scheduler, Node.js 22 and 24; see START_HIER_9.0.8.md."
   },
   "publisher": "NexoWatt",
   "nexowattUpstream": {

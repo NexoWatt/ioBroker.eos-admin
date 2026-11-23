@@ -164,7 +164,9 @@ class EosLegacyMigration {
         const config = decryptNative(this.owner, object);
         let prepared;
         if (id === 'ui') {
-            prepared = { config: { ...config } };
+            const { readPreservedUiStates } = require(join(this.options.baseDir, 'ui/lib/preserved-ui-config'));
+            const states = await readPreservedUiStates(this.reader, source);
+            prepared = { config: { ...config }, requiredStates: states.requiredStates };
             for (const key of ['licenseKey', 'auth', 'port', 'secure', 'certPublic', 'certPrivate', 'certChained', 'bind']) delete prepared.config[key];
         } else {
             const factory = this.options.factories?.[id] || require(join(this.options.baseDir, 'modules', id, 'index.js'));
@@ -180,6 +182,7 @@ class EosLegacyMigration {
         if (!record(prepared?.config)) throw fail('EOS_MIGRATION_CONFIG_INVALID');
         const migration = { source, sourceVersion: object.common.version, preserveNamespace: true,
             importedAt: new Date().toISOString(), statesCopied: false, mappingsRewritten: false,
+            ...(id === 'ui' ? { requiredStates: prepared.requiredStates } : {}),
             identityImported: prepared.identityImported === true, omittedFields: id === 'ui' ? ['host transport/authentication/license fields'] : [] };
         return { id, source, enabled: object.common.enabled === true, nativeHash: nativeHash(object),
             host: object.common.host, sourceVersion: object.common.version, envelope: this.envelope(prepared.config, migration),
@@ -302,6 +305,13 @@ class EosLegacyMigration {
             for (const row of candidates) {
                 const current = await this.reader.getForeignObjectAsync(`system.adapter.${row.source}`);
                 if (!this.matchesSource(current, row)) throw fail('EOS_MIGRATION_SOURCE_CHANGED');
+                if (row.id === 'ui') {
+                    // Recheck after confirmed stop: an in-flight old save may have
+                    // changed the JSON after preflight. Never activate partial data.
+                    const { readPreservedUiStates } = require(join(this.options.baseDir, 'ui/lib/preserved-ui-config'));
+                    const states = await readPreservedUiStates(this.reader, row.source, row.envelope.migration.requiredStates);
+                    row.envelope.migration.requiredStates = states.requiredStates;
+                }
                 await row.prepareFiles?.();
                 await this.store.save(row.id, row.envelope);
             }

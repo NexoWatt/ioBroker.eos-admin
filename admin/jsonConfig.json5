@@ -44,6 +44,12 @@
                     help: 'Übernimmt eindeutig zugeordnete, geprüfte Altinstanzen beim Start. Bei nicht sicher übernehmbaren Einstellungen bleibt die Altinstanz erhalten. Ergebnis und Sperrgründe stehen in EOS unter Übernahme.',
                     xs: 12,
                 },
+                eosExternalRatings: {
+                    type: 'checkbox',
+                    label: 'Online-Adapterbewertungen abrufen (übermittelt System-UUID an ioBroker)',
+                    help: 'Standardmäßig ausgeschaltet. Nur nach Aktivierung fragt EOS Bewertungen bei rating.iobroker.net ab und übermittelt dabei die System-UUID. Für den lokalen EOS-Betrieb ist diese Funktion nicht erforderlich.',
+                    xs: 12,
+                },
                 eosMdnsHostname: {
                     type: 'text',
                     label: 'Lokaler EOS-Name (ohne .local)',

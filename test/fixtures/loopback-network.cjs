@@ -11,3 +11,11 @@ os.networkInterfaces = () => ({
         // Synthetic locally administered MAC prevents the controller's OS CLI fallback.
         mac: '02:00:00:00:00:01', internal: true, cidr: '127.0.0.1/8'}],
 });
+
+const { isInstalledAdapter, installLoopbackEgress } = require('./loopback-egress.cjs');
+if (isInstalledAdapter(process.argv, process.cwd())) {
+    installLoopbackEgress({
+        http: require('node:http'), https: require('node:https'),
+        net: require('node:net'), tls: require('node:tls'), dns: require('node:dns'),
+    });
+}

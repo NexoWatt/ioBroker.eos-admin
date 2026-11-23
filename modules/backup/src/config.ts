@@ -7,10 +7,13 @@ import { validateNotificationConfig } from './notifications';
 import { readFileSync } from 'node:fs';
 import { join, isAbsolute, resolve } from 'node:path';
 import { record, fail, str, num, flag, type Config } from './types';
+import { backupCronExpression, nextCronInvocation } from './scheduler';
 const defaults: unknown = JSON.parse(readFileSync(join(__dirname, '../defaults.json'), 'utf8'));
 const BOOL_FIELDS = [
     'minimalEnabled',
     'ccuEnabled',
+    'iobrokerCron',
+    'ccuCron',
     'eosProfileEnabled',
     'eosIncludeVendorFile',
     'eosIncludeVendorSecret',
@@ -91,6 +94,10 @@ export function validateConfig(input: unknown): Config {
 }
 /** Fail before changing a legacy instance when its operating mode cannot be preserved safely. */
 export function preflight(c: Config): void {
+    for (const kind of ['iobroker', 'ccu'] as const) {
+        if (flag(c, kind === 'iobroker' ? 'minimalEnabled' : 'ccuEnabled'))
+            nextCronInvocation(backupCronExpression(c, kind), Date.now());
+    }
     if (!['Single'].includes(str(c, 'hostType', 'Single'))) throw fail('EOS_BACKUP_MIGRATION_MULTIHOST_REVIEW');
     if (flag(c, 'mysqlSkipSSL') && flag(c, 'mySqlEnabled')) throw fail('EOS_BACKUP_MYSQL_TLS_REVIEW');
     if (flag(c, 'ignoreErrors')) throw fail('EOS_BACKUP_PARTIAL_SUCCESS_REVIEW');

@@ -602,8 +602,8 @@
       "count": 2,
       "reason": "Der Diagnosezähler wird mit Object.create(null) initialisiert; dynamische Fehlerklassen können dadurch keine Prototyp-Setter verändern. Der neue Peerclient liefert nur eigene feste Fehlercodes.",
       "evidence": "docs/reports/admin-https-2026-11-03/PROXY_HTML_REVIEW_DE.md",
-      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): Beide Diagnosezählerzugriffe bleiben in Object.create(null); die vorgeschaltete Fehlerklassifikation liefert feste Labels. Listener-/TLS-Ergänzung am Ende von startServer verändert weder Schlüsselherkunft noch Akkumulator. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Abschließender Lifecycle-Diff zusätzlich geprüft: ausschließlich UiTlsConfigurationError wird in onReady lokal behandelt; EMS-Initialisierung bleibt erhalten, der Mutationstoken wird via finally freigegeben, Shutdown wird vor und nach der Zertifikatsauflösung geprüft. Keine Änderung dieser Fundstelle oder ihrer Datenherkunft. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md.",
-      "sourceCodeSha256": "fa9cee15e00b7a7f36d3ff6cc4dac5382ed20478392d91dbdd48bcdb27895166"
+      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): Beide Diagnosezählerzugriffe bleiben in Object.create(null); die vorgeschaltete Fehlerklassifikation liefert feste Labels. Listener-/TLS-Ergänzung am Ende von startServer verändert weder Schlüsselherkunft noch Akkumulator. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Abschließender Lifecycle-Diff zusätzlich geprüft: ausschließlich UiTlsConfigurationError wird in onReady lokal behandelt; EMS-Initialisierung bleibt erhalten, der Mutationstoken wird via finally freigegeben, Shutdown wird vor und nach der Zertifikatsauflösung geprüft. Keine Änderung dieser Fundstelle oder ihrer Datenherkunft. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md. Nachprüfung 23.11.2026 für 9.0.8: Fundstelle und Datenherkunft im tatsächlichen Delta nachgeprüft; Regel, Fingerprint und Anzahl bleiben unverändert. Siehe EOS repository: docs/reports/unified-9.0.8/SECURITY_DELTA_REVIEW.md.",
+      "sourceCodeSha256": "2d76b764db272c6a7b64cd210d06d88af86d8ea5fa99d1a262679cd7c9bbab61"
     },
     {
       "file": "src-admin-tab/src/pages/DynamicGridPage.tsx",
@@ -1092,8 +1092,8 @@
       "count": 1,
       "reason": "localId wird ausschließlich aus validierten Partner-App-IDs gebildet; directMarketing ist explizit grid. Lokaler Lesezugriff mit zusätzlicher installed/enabled-/Lizenzprüfung, kein fremder Prototyp-Schlüssel.",
       "evidence": "docs/reports/admin-https-2026-11-03/PROXY_HTML_REVIEW_DE.md",
-      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): Partner-App-Lesezugriff unverändert: vorgelagerte PartnerAppId-Positivliste, explizite directMarketing→grid-Zuordnung und aktive Lizenz-/Installationsprüfung. Keine neuen Aufrufer durch TLS. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Abschließender Lifecycle-Diff zusätzlich geprüft: ausschließlich UiTlsConfigurationError wird in onReady lokal behandelt; EMS-Initialisierung bleibt erhalten, der Mutationstoken wird via finally freigegeben, Shutdown wird vor und nach der Zertifikatsauflösung geprüft. Keine Änderung dieser Fundstelle oder ihrer Datenherkunft. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md.",
-      "sourceCodeSha256": "fa9cee15e00b7a7f36d3ff6cc4dac5382ed20478392d91dbdd48bcdb27895166"
+      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): Partner-App-Lesezugriff unverändert: vorgelagerte PartnerAppId-Positivliste, explizite directMarketing→grid-Zuordnung und aktive Lizenz-/Installationsprüfung. Keine neuen Aufrufer durch TLS. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Abschließender Lifecycle-Diff zusätzlich geprüft: ausschließlich UiTlsConfigurationError wird in onReady lokal behandelt; EMS-Initialisierung bleibt erhalten, der Mutationstoken wird via finally freigegeben, Shutdown wird vor und nach der Zertifikatsauflösung geprüft. Keine Änderung dieser Fundstelle oder ihrer Datenherkunft. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md. Nachprüfung 23.11.2026 für 9.0.8: Fundstelle und Datenherkunft im tatsächlichen Delta nachgeprüft; Regel, Fingerprint und Anzahl bleiben unverändert. Siehe EOS repository: docs/reports/unified-9.0.8/SECURITY_DELTA_REVIEW.md.",
+      "sourceCodeSha256": "2d76b764db272c6a7b64cd210d06d88af86d8ea5fa99d1a262679cd7c9bbab61"
     },
     {
       "file": "src-ts/runtime-executables/main.ts",
@@ -1106,8 +1106,8 @@
       "count": 1,
       "reason": "Lokale Availability-Map wird durch die Regelung mit Object.create(null) geführt. Bereits freigegebene Ressource wird nur gelesen; tatsächlicher Boolean und frischer Zeitstempel erforderlich.",
       "evidence": "docs/reports/admin-https-2026-11-03/PROXY_HTML_REVIEW_DE.md",
-      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): Availability-Lesezugriff und Datenherkunft nachgeprüft: lokale Null-Prototyp-Map, Ressource aus Partnerfreigabe, Boolean- und 15-s-Frischeprüfung. Gegen 1.0.37 unverändert. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Abschließender Lifecycle-Diff zusätzlich geprüft: ausschließlich UiTlsConfigurationError wird in onReady lokal behandelt; EMS-Initialisierung bleibt erhalten, der Mutationstoken wird via finally freigegeben, Shutdown wird vor und nach der Zertifikatsauflösung geprüft. Keine Änderung dieser Fundstelle oder ihrer Datenherkunft. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md.",
-      "sourceCodeSha256": "fa9cee15e00b7a7f36d3ff6cc4dac5382ed20478392d91dbdd48bcdb27895166"
+      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): Availability-Lesezugriff und Datenherkunft nachgeprüft: lokale Null-Prototyp-Map, Ressource aus Partnerfreigabe, Boolean- und 15-s-Frischeprüfung. Gegen 1.0.37 unverändert. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Abschließender Lifecycle-Diff zusätzlich geprüft: ausschließlich UiTlsConfigurationError wird in onReady lokal behandelt; EMS-Initialisierung bleibt erhalten, der Mutationstoken wird via finally freigegeben, Shutdown wird vor und nach der Zertifikatsauflösung geprüft. Keine Änderung dieser Fundstelle oder ihrer Datenherkunft. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md. Nachprüfung 23.11.2026 für 9.0.8: Fundstelle und Datenherkunft im tatsächlichen Delta nachgeprüft; Regel, Fingerprint und Anzahl bleiben unverändert. Siehe EOS repository: docs/reports/unified-9.0.8/SECURITY_DELTA_REVIEW.md.",
+      "sourceCodeSha256": "2d76b764db272c6a7b64cd210d06d88af86d8ea5fa99d1a262679cd7c9bbab61"
     },
     {
       "file": "src-ts/runtime-executables/main.ts",
@@ -1120,8 +1120,8 @@
       "count": 1,
       "reason": "readState-Callback wird vom PartnerRuntime nur mit fest codierten Bilanz-/PV-/Netzleistungs-State-IDs aufgerufen. Kein Partnertext kann beliebige id-Pfade an diesen Cache-Lesezugriff liefern.",
       "evidence": "docs/reports/admin-https-2026-11-03/PROXY_HTML_REVIEW_DE.md",
-      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): Cache-Lesezugriff unverändert; PartnerRuntime/readPartnerProjection erzeugt die Bilanz-/PV-/Netz-Statekennungen aus festen internen Projektionen. Kein frei übergebener Partnerpfad. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Abschließender Lifecycle-Diff zusätzlich geprüft: ausschließlich UiTlsConfigurationError wird in onReady lokal behandelt; EMS-Initialisierung bleibt erhalten, der Mutationstoken wird via finally freigegeben, Shutdown wird vor und nach der Zertifikatsauflösung geprüft. Keine Änderung dieser Fundstelle oder ihrer Datenherkunft. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md.",
-      "sourceCodeSha256": "fa9cee15e00b7a7f36d3ff6cc4dac5382ed20478392d91dbdd48bcdb27895166"
+      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): Cache-Lesezugriff unverändert; PartnerRuntime/readPartnerProjection erzeugt die Bilanz-/PV-/Netz-Statekennungen aus festen internen Projektionen. Kein frei übergebener Partnerpfad. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Abschließender Lifecycle-Diff zusätzlich geprüft: ausschließlich UiTlsConfigurationError wird in onReady lokal behandelt; EMS-Initialisierung bleibt erhalten, der Mutationstoken wird via finally freigegeben, Shutdown wird vor und nach der Zertifikatsauflösung geprüft. Keine Änderung dieser Fundstelle oder ihrer Datenherkunft. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md. Nachprüfung 23.11.2026 für 9.0.8: Fundstelle und Datenherkunft im tatsächlichen Delta nachgeprüft; Regel, Fingerprint und Anzahl bleiben unverändert. Siehe EOS repository: docs/reports/unified-9.0.8/SECURITY_DELTA_REVIEW.md.",
+      "sourceCodeSha256": "2d76b764db272c6a7b64cd210d06d88af86d8ea5fa99d1a262679cd7c9bbab61"
     },
     {
       "file": "src-ts/runtime-executables/main.ts",
@@ -1134,8 +1134,8 @@
       "count": 1,
       "reason": "Lokale Telemetry-Map wird von der Regelung mit Object.create(null) geführt. Die zuvor an die Partnerfreigabe gebundene Ressource wird ausschließlich gelesen und anschließend fachlich projiziert.",
       "evidence": "docs/reports/admin-https-2026-11-03/PROXY_HTML_REVIEW_DE.md",
-      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): Telemetry-Lesezugriff unverändert; bestehende Regler erzeugen die Null-Prototyp-Map, Partnerprojektion prüft Ressource und Messdaten. TLS-Start ergänzt keine Telemetrieschreibstelle. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Abschließender Lifecycle-Diff zusätzlich geprüft: ausschließlich UiTlsConfigurationError wird in onReady lokal behandelt; EMS-Initialisierung bleibt erhalten, der Mutationstoken wird via finally freigegeben, Shutdown wird vor und nach der Zertifikatsauflösung geprüft. Keine Änderung dieser Fundstelle oder ihrer Datenherkunft. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md.",
-      "sourceCodeSha256": "fa9cee15e00b7a7f36d3ff6cc4dac5382ed20478392d91dbdd48bcdb27895166"
+      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): Telemetry-Lesezugriff unverändert; bestehende Regler erzeugen die Null-Prototyp-Map, Partnerprojektion prüft Ressource und Messdaten. TLS-Start ergänzt keine Telemetrieschreibstelle. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Abschließender Lifecycle-Diff zusätzlich geprüft: ausschließlich UiTlsConfigurationError wird in onReady lokal behandelt; EMS-Initialisierung bleibt erhalten, der Mutationstoken wird via finally freigegeben, Shutdown wird vor und nach der Zertifikatsauflösung geprüft. Keine Änderung dieser Fundstelle oder ihrer Datenherkunft. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md. Nachprüfung 23.11.2026 für 9.0.8: Fundstelle und Datenherkunft im tatsächlichen Delta nachgeprüft; Regel, Fingerprint und Anzahl bleiben unverändert. Siehe EOS repository: docs/reports/unified-9.0.8/SECURITY_DELTA_REVIEW.md.",
+      "sourceCodeSha256": "2d76b764db272c6a7b64cd210d06d88af86d8ea5fa99d1a262679cd7c9bbab61"
     },
     {
       "file": "src-ts/runtime-executables/ems/modules/dynamic-grid-connection.ts",
@@ -1456,8 +1456,8 @@
       "count": 1,
       "reason": "getStoredSession liest ausschließlich den intern aus Profil/Instanz/Port erzeugten COOKIE_NAME. parseUiCookies liefert eine Null-Prototyp-Map mit begrenzten Stringwerten und Dublettenabwehr. Der Wert ist nur Schlüssel zur serverseitigen Session-Map; Konto-/Rollen-/Ablaufprüfung folgt vor Freigabe.",
       "evidence": "docs/reports/smarthome-auth-2026-11-19/PRUEFBERICHT_DE.md",
-      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): getStoredSession liest weiterhin den intern abgeleiteten COOKIE_NAME aus parseUiCookies mit Null-Prototyp, Größenlimit und Dublettenabwehr; serverseitige Bindungs-, Konten- und Ablaufprüfungen unverändert. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Abschließender Lifecycle-Diff zusätzlich geprüft: ausschließlich UiTlsConfigurationError wird in onReady lokal behandelt; EMS-Initialisierung bleibt erhalten, der Mutationstoken wird via finally freigegeben, Shutdown wird vor und nach der Zertifikatsauflösung geprüft. Keine Änderung dieser Fundstelle oder ihrer Datenherkunft. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md.",
-      "sourceCodeSha256": "fa9cee15e00b7a7f36d3ff6cc4dac5382ed20478392d91dbdd48bcdb27895166"
+      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): getStoredSession liest weiterhin den intern abgeleiteten COOKIE_NAME aus parseUiCookies mit Null-Prototyp, Größenlimit und Dublettenabwehr; serverseitige Bindungs-, Konten- und Ablaufprüfungen unverändert. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Abschließender Lifecycle-Diff zusätzlich geprüft: ausschließlich UiTlsConfigurationError wird in onReady lokal behandelt; EMS-Initialisierung bleibt erhalten, der Mutationstoken wird via finally freigegeben, Shutdown wird vor und nach der Zertifikatsauflösung geprüft. Keine Änderung dieser Fundstelle oder ihrer Datenherkunft. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md. Nachprüfung 23.11.2026 für 9.0.8: Im aktuellen Scannerlauf abwesend, keine neue Ausnahme aktiviert. Siehe EOS repository: docs/reports/unified-9.0.8/SECURITY_DELTA_REVIEW.md.",
+      "sourceCodeSha256": "2d76b764db272c6a7b64cd210d06d88af86d8ea5fa99d1a262679cd7c9bbab61"
     },
     {
       "file": "src-ts/runtime-executables/main.ts",
@@ -1470,8 +1470,8 @@
       "count": 1,
       "reason": "doAuthLogout liest nur den intern berechneten COOKIE_NAME aus dem begrenzten Null-Prototyp-Cookiedictionary. Kein Request wählt einen Propertynamen. Der Wert kann ausschließlich diese Server-Session aus der Map entfernen; angemeldete Zugriffe erfordern zuvor den CSRF-Vergleich.",
       "evidence": "docs/reports/smarthome-auth-2026-11-19/PRUEFBERICHT_DE.md",
-      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): doAuthLogout bleibt auf den intern gebundenen Cookie-Namen und dieselbe serverseitige Sitzungsmap begrenzt; vorgelagerter konstanter CSRF-Vergleich unverändert. Kein TLS-bedingter Auth-Bypass. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Abschließender Lifecycle-Diff zusätzlich geprüft: ausschließlich UiTlsConfigurationError wird in onReady lokal behandelt; EMS-Initialisierung bleibt erhalten, der Mutationstoken wird via finally freigegeben, Shutdown wird vor und nach der Zertifikatsauflösung geprüft. Keine Änderung dieser Fundstelle oder ihrer Datenherkunft. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md.",
-      "sourceCodeSha256": "fa9cee15e00b7a7f36d3ff6cc4dac5382ed20478392d91dbdd48bcdb27895166"
+      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): doAuthLogout bleibt auf den intern gebundenen Cookie-Namen und dieselbe serverseitige Sitzungsmap begrenzt; vorgelagerter konstanter CSRF-Vergleich unverändert. Kein TLS-bedingter Auth-Bypass. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Abschließender Lifecycle-Diff zusätzlich geprüft: ausschließlich UiTlsConfigurationError wird in onReady lokal behandelt; EMS-Initialisierung bleibt erhalten, der Mutationstoken wird via finally freigegeben, Shutdown wird vor und nach der Zertifikatsauflösung geprüft. Keine Änderung dieser Fundstelle oder ihrer Datenherkunft. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md. Nachprüfung 23.11.2026 für 9.0.8: Im aktuellen Scannerlauf abwesend, keine neue Ausnahme aktiviert. Siehe EOS repository: docs/reports/unified-9.0.8/SECURITY_DELTA_REVIEW.md.",
+      "sourceCodeSha256": "2d76b764db272c6a7b64cd210d06d88af86d8ea5fa99d1a262679cd7c9bbab61"
     },
     {
       "file": "src-ts/runtime-executables/main.ts",
@@ -1484,8 +1484,8 @@
       "count": 1,
       "reason": "Logout liest pro registriertem SSE-Client ausschließlich denselben intern berechneten COOKIE_NAME. Null-Prototyp-Parser und Stringvergleich dienen nur der Zuordnung und Schließung derselben Sitzung, ohne fremde Objektmutation oder Rechtevergabe.",
       "evidence": "docs/reports/smarthome-auth-2026-11-19/PRUEFBERICHT_DE.md",
-      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): SSE-Logoutzuordnung liest denselben internen Cookie-Namen aus dem begrenzten Null-Prototyp-Parser und schließt nur passende Sitzungen; keine geänderte Rechte- oder Objektmutation. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Abschließender Lifecycle-Diff zusätzlich geprüft: ausschließlich UiTlsConfigurationError wird in onReady lokal behandelt; EMS-Initialisierung bleibt erhalten, der Mutationstoken wird via finally freigegeben, Shutdown wird vor und nach der Zertifikatsauflösung geprüft. Keine Änderung dieser Fundstelle oder ihrer Datenherkunft. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md.",
-      "sourceCodeSha256": "fa9cee15e00b7a7f36d3ff6cc4dac5382ed20478392d91dbdd48bcdb27895166"
+      "review": "2026-11-22 Abschlussreview für 1.0.38 (HTTPS/PWA): SSE-Logoutzuordnung liest denselben internen Cookie-Namen aus dem begrenzten Null-Prototyp-Parser und schließt nur passende Sitzungen; keine geänderte Rechte- oder Objektmutation. Fingerprint, Anzahl, Begründung und ursprünglicher Beleg bleiben unverändert. Zusatznachweis: docs/reports/branding-2026-11-22/ESLINT_EINZELREVIEW_DE.md Abschließender Lifecycle-Diff zusätzlich geprüft: ausschließlich UiTlsConfigurationError wird in onReady lokal behandelt; EMS-Initialisierung bleibt erhalten, der Mutationstoken wird via finally freigegeben, Shutdown wird vor und nach der Zertifikatsauflösung geprüft. Keine Änderung dieser Fundstelle oder ihrer Datenherkunft. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md. Nachprüfung 23.11.2026 für 9.0.8: Im aktuellen Scannerlauf abwesend, keine neue Ausnahme aktiviert. Siehe EOS repository: docs/reports/unified-9.0.8/SECURITY_DELTA_REVIEW.md.",
+      "sourceCodeSha256": "2d76b764db272c6a7b64cd210d06d88af86d8ea5fa99d1a262679cd7c9bbab61"
     },
     {
       "file": "src-ts/runtime-executables/www/smarthome-config.ts",
@@ -1498,8 +1498,8 @@
       "count": 1,
       "reason": "key stammt nur aus der festen Paarliste roomId/functionId. Der gelesene Wert muss nachfolgend eine Bestands-ID oder einen ausdrücklich gewählten create-Vorschlag treffen; kein freier Eigenschaftspfad.",
       "evidence": "docs/reports/smarthome-import-2026-11-19/PRUEFBERICHT_DE.md",
-      "review": "2026-11-19 site-specific source/dataflow review for 1.0.37; scanner remains enabled, no general exception",
-      "sourceCodeSha256": "9feb8ba11b858e9cc0bf57bdadde5fa3405805f1767676aaecab08e2fb1b240d"
+      "review": "2026-11-19 site-specific source/dataflow review for 1.0.37; scanner remains enabled, no general exception Nachprüfung 23.11.2026 für 9.0.8: Fundstelle und Datenherkunft im tatsächlichen Delta nachgeprüft; Regel, Fingerprint und Anzahl bleiben unverändert. Siehe EOS repository: docs/reports/unified-9.0.8/SECURITY_DELTA_REVIEW.md.",
+      "sourceCodeSha256": "4cc8f1edf4530f29ada5c2221f93a525ed65323eaf47843b0215ed5d01cb1af9"
     },
     {
       "file": "src-ts/runtime-executables/www/smarthome-config.ts",
@@ -1512,8 +1512,8 @@
       "count": 2,
       "reason": "collection ist ausschließlich rooms oder functions aus der lokalen Literalliste. Beide Zugriffe lesen die jeweilige vorhandene Entwurfsliste und akzeptieren nur Arrays; kein Metadatenwert bestimmt den Propertynamen.",
       "evidence": "docs/reports/smarthome-import-2026-11-19/PRUEFBERICHT_DE.md",
-      "review": "2026-11-19 site-specific source/dataflow review for 1.0.37; scanner remains enabled, no general exception",
-      "sourceCodeSha256": "9feb8ba11b858e9cc0bf57bdadde5fa3405805f1767676aaecab08e2fb1b240d"
+      "review": "2026-11-19 site-specific source/dataflow review for 1.0.37; scanner remains enabled, no general exception Nachprüfung 23.11.2026 für 9.0.8: Fundstelle und Datenherkunft im tatsächlichen Delta nachgeprüft; Regel, Fingerprint und Anzahl bleiben unverändert. Siehe EOS repository: docs/reports/unified-9.0.8/SECURITY_DELTA_REVIEW.md.",
+      "sourceCodeSha256": "4cc8f1edf4530f29ada5c2221f93a525ed65323eaf47843b0215ed5d01cb1af9"
     },
     {
       "file": "src-ts/runtime-executables/www/smarthome-config.ts",
@@ -1526,8 +1526,8 @@
       "count": 1,
       "reason": "Metadatenzugriff mit ausschließlich collection=rooms/functions. find verlangt die ausdrücklich gewählte ID und create===true; keine automatische Zuordnung und kein dynamischer Code-/Pfadaufruf.",
       "evidence": "docs/reports/smarthome-import-2026-11-19/PRUEFBERICHT_DE.md",
-      "review": "2026-11-19 site-specific source/dataflow review for 1.0.37; scanner remains enabled, no general exception",
-      "sourceCodeSha256": "9feb8ba11b858e9cc0bf57bdadde5fa3405805f1767676aaecab08e2fb1b240d"
+      "review": "2026-11-19 site-specific source/dataflow review for 1.0.37; scanner remains enabled, no general exception Nachprüfung 23.11.2026 für 9.0.8: Fundstelle und Datenherkunft im tatsächlichen Delta nachgeprüft; Regel, Fingerprint und Anzahl bleiben unverändert. Siehe EOS repository: docs/reports/unified-9.0.8/SECURITY_DELTA_REVIEW.md.",
+      "sourceCodeSha256": "4cc8f1edf4530f29ada5c2221f93a525ed65323eaf47843b0215ed5d01cb1af9"
     },
     {
       "file": "src-ts/runtime-executables/www/smarthome-config.ts",
@@ -1540,8 +1540,8 @@
       "count": 2,
       "reason": "Die Collection in additions wurde nur aus rooms/functions erzeugt und vollständig vorgeprüft. Die beiden Zugriffe prüfen/initialisieren genau diese Entwurfslisten; kein vom Vorschlag gelieferter Propertyname wird benutzt.",
       "evidence": "docs/reports/smarthome-import-2026-11-19/PRUEFBERICHT_DE.md",
-      "review": "2026-11-19 site-specific source/dataflow review for 1.0.37; scanner remains enabled, no general exception",
-      "sourceCodeSha256": "9feb8ba11b858e9cc0bf57bdadde5fa3405805f1767676aaecab08e2fb1b240d"
+      "review": "2026-11-19 site-specific source/dataflow review for 1.0.37; scanner remains enabled, no general exception Nachprüfung 23.11.2026 für 9.0.8: Fundstelle und Datenherkunft im tatsächlichen Delta nachgeprüft; Regel, Fingerprint und Anzahl bleiben unverändert. Siehe EOS repository: docs/reports/unified-9.0.8/SECURITY_DELTA_REVIEW.md.",
+      "sourceCodeSha256": "4cc8f1edf4530f29ada5c2221f93a525ed65323eaf47843b0215ed5d01cb1af9"
     },
     {
       "file": "src-ts/runtime-executables/www/smarthome-config.ts",
@@ -1554,8 +1554,8 @@
       "count": 1,
       "reason": "push schreibt nur in die zuvor geprüfte rooms/functions-Liste. value wird lokal mit festen Feldern id/name/order/floorId erzeugt. Reiner Installerentwurf nach ausdrücklicher Übernahme, ohne API-/Statewrite.",
       "evidence": "docs/reports/smarthome-import-2026-11-19/PRUEFBERICHT_DE.md",
-      "review": "2026-11-19 site-specific source/dataflow review for 1.0.37; scanner remains enabled, no general exception",
-      "sourceCodeSha256": "9feb8ba11b858e9cc0bf57bdadde5fa3405805f1767676aaecab08e2fb1b240d"
+      "review": "2026-11-19 site-specific source/dataflow review for 1.0.37; scanner remains enabled, no general exception Nachprüfung 23.11.2026 für 9.0.8: Fundstelle und Datenherkunft im tatsächlichen Delta nachgeprüft; Regel, Fingerprint und Anzahl bleiben unverändert. Siehe EOS repository: docs/reports/unified-9.0.8/SECURITY_DELTA_REVIEW.md.",
+      "sourceCodeSha256": "4cc8f1edf4530f29ada5c2221f93a525ed65323eaf47843b0215ed5d01cb1af9"
     },
     {
       "file": "src-ts/runtime-executables/www/smarthome-config.ts",
@@ -1568,8 +1568,8 @@
       "count": 1,
       "reason": "nwShcfgImportFieldValue wird erst nach nwShcfgImportFieldAllowed aufgerufen. Es liest den aktuellen Gerätewert entlang begrenzter fester Feldfamilien; __proto__/constructor/prototype sind ausgeschlossen. Keine Mutation.",
       "evidence": "docs/reports/smarthome-import-2026-11-19/PRUEFBERICHT_DE.md",
-      "review": "2026-11-19 site-specific source/dataflow review for 1.0.37; scanner remains enabled, no general exception",
-      "sourceCodeSha256": "9feb8ba11b858e9cc0bf57bdadde5fa3405805f1767676aaecab08e2fb1b240d"
+      "review": "2026-11-19 site-specific source/dataflow review for 1.0.37; scanner remains enabled, no general exception Nachprüfung 23.11.2026 für 9.0.8: Fundstelle und Datenherkunft im tatsächlichen Delta nachgeprüft; Regel, Fingerprint und Anzahl bleiben unverändert. Siehe EOS repository: docs/reports/unified-9.0.8/SECURITY_DELTA_REVIEW.md.",
+      "sourceCodeSha256": "4cc8f1edf4530f29ada5c2221f93a525ed65323eaf47843b0215ed5d01cb1af9"
     },
     {
       "file": "src-ts/runtime-executables/www/smarthome-config.ts",
@@ -1582,8 +1582,8 @@
       "count": 1,
       "reason": "index kommt aus devices.findIndex auf die vorhandene Geräte-ID und wird vor Zugriff auf >=0 geprüft. Arrayindex statt frei übergebenem Propertynamen; Quellen-/Zieltypabgleich folgt.",
       "evidence": "docs/reports/smarthome-import-2026-11-19/PRUEFBERICHT_DE.md",
-      "review": "2026-11-19 site-specific source/dataflow review for 1.0.37; scanner remains enabled, no general exception",
-      "sourceCodeSha256": "9feb8ba11b858e9cc0bf57bdadde5fa3405805f1767676aaecab08e2fb1b240d"
+      "review": "2026-11-19 site-specific source/dataflow review for 1.0.37; scanner remains enabled, no general exception Nachprüfung 23.11.2026 für 9.0.8: Fundstelle und Datenherkunft im tatsächlichen Delta nachgeprüft; Regel, Fingerprint und Anzahl bleiben unverändert. Siehe EOS repository: docs/reports/unified-9.0.8/SECURITY_DELTA_REVIEW.md.",
+      "sourceCodeSha256": "4cc8f1edf4530f29ada5c2221f93a525ed65323eaf47843b0215ed5d01cb1af9"
     },
     {
       "file": "src-ts/runtime-executables/www/smarthome-config.ts",
@@ -1596,8 +1596,8 @@
       "count": 4,
       "reason": "Alle change.path-Werte werden vor jeder Mutation mit nwShcfgImportFieldAllowed, aktuellem Vergleichswert und Skalartypen geprüft. Feste Pfadgruppen, begrenzte Länge und Prototypsperre. Vier Zugriffe initialisieren nur Container einer JSON-Gerätekopie; atomarer Bestandsersatz folgt erst danach.",
       "evidence": "docs/reports/smarthome-import-2026-11-19/PRUEFBERICHT_DE.md",
-      "review": "2026-11-19 site-specific source/dataflow review for 1.0.37; scanner remains enabled, no general exception",
-      "sourceCodeSha256": "9feb8ba11b858e9cc0bf57bdadde5fa3405805f1767676aaecab08e2fb1b240d"
+      "review": "2026-11-19 site-specific source/dataflow review for 1.0.37; scanner remains enabled, no general exception Nachprüfung 23.11.2026 für 9.0.8: Fundstelle und Datenherkunft im tatsächlichen Delta nachgeprüft; Regel, Fingerprint und Anzahl bleiben unverändert. Siehe EOS repository: docs/reports/unified-9.0.8/SECURITY_DELTA_REVIEW.md.",
+      "sourceCodeSha256": "4cc8f1edf4530f29ada5c2221f93a525ed65323eaf47843b0215ed5d01cb1af9"
     },
     {
       "file": "src-ts/runtime-executables/www/smarthome-config.ts",
@@ -1610,8 +1610,8 @@
       "count": 1,
       "reason": "target traversiert ausschließlich die vorgeprüften festen Pfadgruppen der JSON-Gerätekopie. Prototypsegmente und freie Rollen-/ID-/Raum-/Szenenpfade sind ausgeschlossen; kein direktes Mutieren des bestehenden Geräts.",
       "evidence": "docs/reports/smarthome-import-2026-11-19/PRUEFBERICHT_DE.md",
-      "review": "2026-11-19 site-specific source/dataflow review for 1.0.37; scanner remains enabled, no general exception",
-      "sourceCodeSha256": "9feb8ba11b858e9cc0bf57bdadde5fa3405805f1767676aaecab08e2fb1b240d"
+      "review": "2026-11-19 site-specific source/dataflow review for 1.0.37; scanner remains enabled, no general exception Nachprüfung 23.11.2026 für 9.0.8: Fundstelle und Datenherkunft im tatsächlichen Delta nachgeprüft; Regel, Fingerprint und Anzahl bleiben unverändert. Siehe EOS repository: docs/reports/unified-9.0.8/SECURITY_DELTA_REVIEW.md.",
+      "sourceCodeSha256": "4cc8f1edf4530f29ada5c2221f93a525ed65323eaf47843b0215ed5d01cb1af9"
     },
     {
       "file": "src-ts/runtime-executables/www/smarthome-config.ts",
@@ -1624,8 +1624,8 @@
       "count": 1,
       "reason": "leaf gehört zum vollständig freigegebenen Importpfad; proposed ist null oder ein endlicher Skalar. Nur JSON-Gerätekopie nach ausdrücklicher Feldwahl und Konfliktvergleich; Prototypschlüssel und Funktions-/Objektwerte sind gesperrt.",
       "evidence": "docs/reports/smarthome-import-2026-11-19/PRUEFBERICHT_DE.md",
-      "review": "2026-11-19 site-specific source/dataflow review for 1.0.37; scanner remains enabled, no general exception",
-      "sourceCodeSha256": "9feb8ba11b858e9cc0bf57bdadde5fa3405805f1767676aaecab08e2fb1b240d"
+      "review": "2026-11-19 site-specific source/dataflow review for 1.0.37; scanner remains enabled, no general exception Nachprüfung 23.11.2026 für 9.0.8: Fundstelle und Datenherkunft im tatsächlichen Delta nachgeprüft; Regel, Fingerprint und Anzahl bleiben unverändert. Siehe EOS repository: docs/reports/unified-9.0.8/SECURITY_DELTA_REVIEW.md.",
+      "sourceCodeSha256": "4cc8f1edf4530f29ada5c2221f93a525ed65323eaf47843b0215ed5d01cb1af9"
     },
     {
       "file": "src-ts/runtime-executables/www/smarthome-config.ts",
@@ -1638,8 +1638,8 @@
       "count": 1,
       "reason": "devices[index] ersetzt genau den durch findIndex und Quellen-/Typvergleich bestimmten vorhandenen Arrayeintrag. next ist dessen JSON-Kopie mit vollständig vorgeprüften Änderungen; keine Neuvergabe von IDs, Zuordnungen oder Szenen-/Timerbezügen.",
       "evidence": "docs/reports/smarthome-import-2026-11-19/PRUEFBERICHT_DE.md",
-      "review": "2026-11-19 site-specific source/dataflow review for 1.0.37; scanner remains enabled, no general exception",
-      "sourceCodeSha256": "9feb8ba11b858e9cc0bf57bdadde5fa3405805f1767676aaecab08e2fb1b240d"
+      "review": "2026-11-19 site-specific source/dataflow review for 1.0.37; scanner remains enabled, no general exception Nachprüfung 23.11.2026 für 9.0.8: Fundstelle und Datenherkunft im tatsächlichen Delta nachgeprüft; Regel, Fingerprint und Anzahl bleiben unverändert. Siehe EOS repository: docs/reports/unified-9.0.8/SECURITY_DELTA_REVIEW.md.",
+      "sourceCodeSha256": "4cc8f1edf4530f29ada5c2221f93a525ed65323eaf47843b0215ed5d01cb1af9"
     },
     {
       "file": "src-ts/runtime-executables/www/smarthome-config.ts",
@@ -1652,8 +1652,8 @@
       "count": 1,
       "reason": "key stammt ausschließlich aus batteryId/unreachableId/errorId der lokalen Literalliste. Lesen zur Belegung eines Text-/DP-Eingabeelements; kein Propertyname aus Nutzereingaben.",
       "evidence": "docs/reports/smarthome-import-2026-11-19/PRUEFBERICHT_DE.md",
-      "review": "2026-11-19 site-specific source/dataflow review for 1.0.37; scanner remains enabled, no general exception",
-      "sourceCodeSha256": "9feb8ba11b858e9cc0bf57bdadde5fa3405805f1767676aaecab08e2fb1b240d"
+      "review": "2026-11-19 site-specific source/dataflow review for 1.0.37; scanner remains enabled, no general exception Nachprüfung 23.11.2026 für 9.0.8: Fundstelle und Datenherkunft im tatsächlichen Delta nachgeprüft; Regel, Fingerprint und Anzahl bleiben unverändert. Siehe EOS repository: docs/reports/unified-9.0.8/SECURITY_DELTA_REVIEW.md.",
+      "sourceCodeSha256": "4cc8f1edf4530f29ada5c2221f93a525ed65323eaf47843b0215ed5d01cb1af9"
     },
     {
       "file": "src-ts/runtime-executables/www/smarthome-config.ts",
@@ -1666,8 +1666,8 @@
       "count": 1,
       "reason": "Eventclosure bindet nur batteryId/unreachableId/errorId aus fester Liste. nwShcfgNullIfEmpty normalisiert den Eingabewert; Write nur im lokalen Entwurf. Der Backendvertrag zählt diese Statuszuordnungen ausschließlich als Lese-IDs.",
       "evidence": "docs/reports/smarthome-import-2026-11-19/PRUEFBERICHT_DE.md",
-      "review": "2026-11-19 site-specific source/dataflow review for 1.0.37; scanner remains enabled, no general exception",
-      "sourceCodeSha256": "9feb8ba11b858e9cc0bf57bdadde5fa3405805f1767676aaecab08e2fb1b240d"
+      "review": "2026-11-19 site-specific source/dataflow review for 1.0.37; scanner remains enabled, no general exception Nachprüfung 23.11.2026 für 9.0.8: Fundstelle und Datenherkunft im tatsächlichen Delta nachgeprüft; Regel, Fingerprint und Anzahl bleiben unverändert. Siehe EOS repository: docs/reports/unified-9.0.8/SECURITY_DELTA_REVIEW.md.",
+      "sourceCodeSha256": "4cc8f1edf4530f29ada5c2221f93a525ed65323eaf47843b0215ed5d01cb1af9"
     },
     {
       "file": "src-ts/runtime-executables/www/smarthome.ts",
@@ -1694,8 +1694,8 @@
       "count": 1,
       "reason": "queryNumber liest nur die intern fest kodierten Namen from/to/step. Zahlen und Zeitraster werden anschließend begrenzt validiert; kein dynamischer Schreibschlüssel.",
       "evidence": "EOS repository: docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md",
-      "review": "23.11.2026 Einzelreview des tatsächlichen Quellblocks und bestehender ausführbarer History-Regression; keine pauschale Baseline-Erweiterung. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md.",
-      "sourceCodeSha256": "fa9cee15e00b7a7f36d3ff6cc4dac5382ed20478392d91dbdd48bcdb27895166"
+      "review": "23.11.2026 Einzelreview des tatsächlichen Quellblocks und bestehender ausführbarer History-Regression; keine pauschale Baseline-Erweiterung. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md. Nachprüfung 23.11.2026 für 9.0.8: Fundstelle und Datenherkunft im tatsächlichen Delta nachgeprüft; Regel, Fingerprint und Anzahl bleiben unverändert. Siehe EOS repository: docs/reports/unified-9.0.8/SECURITY_DELTA_REVIEW.md.",
+      "sourceCodeSha256": "2d76b764db272c6a7b64cd210d06d88af86d8ea5fa99d1a262679cd7c9bbab61"
     },
     {
       "file": "src-ts/runtime-executables/main.ts",
@@ -1708,8 +1708,8 @@
       "count": 1,
       "reason": "Der binäre Suchindex ist ganzzahlig und vor dem Zugriff durch die Länge der normalisierten Zahlenpaare begrenzt. Ausschließlich lesender Arrayzugriff.",
       "evidence": "EOS repository: docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md",
-      "review": "23.11.2026 Einzelreview des tatsächlichen Quellblocks und bestehender ausführbarer History-Regression; keine pauschale Baseline-Erweiterung. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md.",
-      "sourceCodeSha256": "fa9cee15e00b7a7f36d3ff6cc4dac5382ed20478392d91dbdd48bcdb27895166"
+      "review": "23.11.2026 Einzelreview des tatsächlichen Quellblocks und bestehender ausführbarer History-Regression; keine pauschale Baseline-Erweiterung. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md. Nachprüfung 23.11.2026 für 9.0.8: Fundstelle und Datenherkunft im tatsächlichen Delta nachgeprüft; Regel, Fingerprint und Anzahl bleiben unverändert. Siehe EOS repository: docs/reports/unified-9.0.8/SECURITY_DELTA_REVIEW.md.",
+      "sourceCodeSha256": "2d76b764db272c6a7b64cd210d06d88af86d8ea5fa99d1a262679cd7c9bbab61"
     },
     {
       "file": "src-ts/runtime-executables/main.ts",
@@ -1722,8 +1722,8 @@
       "count": 1,
       "reason": "Verankerte Dezimalgrammatik mit disjunkten Ziffern-/Punkt-/Exponentsegmenten; keine überlappende wiederholte Alternative. Nicht endliche Ergebnisse werden abgewiesen.",
       "evidence": "EOS repository: docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md",
-      "review": "23.11.2026 Einzelreview des tatsächlichen Quellblocks und bestehender ausführbarer History-Regression; keine pauschale Baseline-Erweiterung. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md.",
-      "sourceCodeSha256": "fa9cee15e00b7a7f36d3ff6cc4dac5382ed20478392d91dbdd48bcdb27895166"
+      "review": "23.11.2026 Einzelreview des tatsächlichen Quellblocks und bestehender ausführbarer History-Regression; keine pauschale Baseline-Erweiterung. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md. Nachprüfung 23.11.2026 für 9.0.8: Fundstelle und Datenherkunft im tatsächlichen Delta nachgeprüft; Regel, Fingerprint und Anzahl bleiben unverändert. Siehe EOS repository: docs/reports/unified-9.0.8/SECURITY_DELTA_REVIEW.md.",
+      "sourceCodeSha256": "2d76b764db272c6a7b64cd210d06d88af86d8ea5fa99d1a262679cd7c9bbab61"
     },
     {
       "file": "src-ts/runtime-executables/www/year-report.ts",
@@ -1752,6 +1752,48 @@
       "evidence": "EOS repository: docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md",
       "review": "23.11.2026 Einzelreview des tatsächlichen Quellblocks und bestehender ausführbarer History-Regression; keine pauschale Baseline-Erweiterung. Nachprüfung 23.11.2026: siehe EOS docs/reports/unified-9.0.7/STATIC_REVIEW_DE.md.",
       "sourceCodeSha256": "997bec130c294b8730dc35dc56d08d9a36a3bd6922590d28aa4d08a5ebcdfab5"
+    },
+    {
+      "file": "src-ts/runtime-executables/lib/preserved-ui-config.ts",
+      "rule": "security/detect-object-injection",
+      "fingerprint": "38eccf344cefde55b47139665e4b2429b0aa622cafe0711288f3d7008384a765",
+      "line": 55,
+      "column": 17,
+      "fatal": false,
+      "severity": 2,
+      "count": 3,
+      "reason": "Drei ausschließlich lesende value[field]-Zugriffe. field stammt nur aus lokalen Literalgruppen für SmartHome-Arrays, Graphen, Timer oder Uhren. Begrenztes JSON und vorgelagerte Prototypschlüsselsperre; keine eingabegesteuerten Eigenschaftsnamen oder Objektmutation.",
+      "evidence": "EOS repository: docs/reports/unified-9.0.8/SECURITY_DELTA_REVIEW.md",
+      "review": "23.11.2026 Einzelreview des tatsächlichen Quellblocks und seiner festen Eingabe-/Schlüsselherkunft für 9.0.8. Keine Änderung der Scannerregel oder historischen Baseline.",
+      "sourceCodeSha256": "0f7cdf292c253fc3307d872f04360cb31df3e35c1d474cb74916af8ce8dfa7d2"
+    },
+    {
+      "file": "src-ts/runtime-executables/lib/preserved-ui-config.ts",
+      "rule": "security/detect-object-injection",
+      "fingerprint": "1dc026b127729595690224d8dd5739b141ad0c6f1bd7a1537bff2d5969f42505",
+      "line": 62,
+      "column": 17,
+      "fatal": false,
+      "severity": 2,
+      "count": 2,
+      "reason": "Zwei ausschließlich lesende parsed[field]-Zugriffe mit der festen Literalgruppe smartHome/smartHomeConfig/logicEditor. Der Parser prüft bekannte Abschnittsformen nach Größen-, Tiefen- und Prototypschlüsselprüfung; externe Inhalte bestimmen keinen Eigenschaftsnamen.",
+      "evidence": "EOS repository: docs/reports/unified-9.0.8/SECURITY_DELTA_REVIEW.md",
+      "review": "23.11.2026 Einzelreview des tatsächlichen Quellblocks und seiner festen Eingabe-/Schlüsselherkunft für 9.0.8. Keine Änderung der Scannerregel oder historischen Baseline.",
+      "sourceCodeSha256": "0f7cdf292c253fc3307d872f04360cb31df3e35c1d474cb74916af8ce8dfa7d2"
+    },
+    {
+      "file": "src-ts/runtime-executables/lib/smarthome-activation.ts",
+      "rule": "security/detect-possible-timing-attacks",
+      "fingerprint": "c44792017ca8db5fe1f20ed60d44173b1fabfdd416966e859f5b63a1c221aaf5",
+      "line": 109,
+      "column": 13,
+      "fatal": false,
+      "severity": 2,
+      "count": 1,
+      "reason": "=== vergleicht die Identität eines lokal mit {} erzeugten Sperrmarkers, keinen geheimen String oder Authentifizierungstoken. Die Objektreferenz kommt nicht aus dem Request und verhindert im finally-Block die Freigabe einer fremden Konfigurationssperre.",
+      "evidence": "EOS repository: docs/reports/unified-9.0.8/SECURITY_DELTA_REVIEW.md",
+      "review": "23.11.2026 Einzelreview des tatsächlichen Quellblocks und seiner festen Eingabe-/Schlüsselherkunft für 9.0.8. Keine Änderung der Scannerregel oder historischen Baseline.",
+      "sourceCodeSha256": "fb8f0d03a9d33672e2554bf7f89ab7ecc4df03378d036d71fa9fb2189b4860b8"
     }
   ]
 }

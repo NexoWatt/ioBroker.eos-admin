@@ -1,21 +1,22 @@
 {
-  "version": "9.0.7",
+  "version": "9.0.8",
   "channel": "next",
   "baseFrontend": "Rebuilt from official Admin 8.3.5 sources plus reviewed EOS integration using React 19 and Vite; see source-bound frontend manifest.",
   "runtimeEntry": "vite-manifest",
-  "releaseType": "unified-persistence-migration-certificates",
-  "release": "unified-persistence-migration-certificates",
-  "label": "9.0.7",
+  "releaseType": "unified-smarthome-preservation-node22",
+  "release": "unified-smarthome-preservation-node22",
+  "label": "9.0.8",
   "notes": [
     "Preserves the existing ioBroker Admin and the combined EOS login/runtime.",
     "One central NWL3 activation, private persistence and authorized public-key recovery.",
     "Manufacturer vault/private keys stay on the issuer computer; live-device acceptance remains required."
   ],
   "changes": [
-    "Persist module configuration without controller restart or session loss",
-    "Guarded legacy migration retaining source data-point namespaces",
-    "Integrated backup and local private-CA certificate management",
-    "Consistent Devices and EEBus interfaces and bounded idle caches"
+    "Explicit authorized SmartHome activation without adapter restart",
+    "Preserved UI customer configuration preflight and no unrelated global restore",
+    "Administration opens in the current browser tab",
+    "Backup cron-parser 5 scheduler without deprecated node-schedule dependency",
+    "Node.js 22 and 24 verification matrix"
   ],
   "brandingCacheVersion": 7110,
   "shellCacheVersion": 7110,
@@ -29,7 +30,7 @@
     "commit": "6f77eedf525813a7a61d79188d1ff05dffd05086"
   },
   "product": "NexoWatt EOS",
-  "status": "9.0.7 test release; actual evidence and target-device acceptance limitations in versioned report",
+  "status": "9.0.8 test release; see versioned report for executed checks and migration limits",
   "sourceComponents": {
     "admin": "8.0.2",
     "ui": "1.0.38",

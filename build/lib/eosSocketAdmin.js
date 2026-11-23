@@ -13,7 +13,8 @@ function thresholdCommands(value) {
         !record(value.eventsThreshold) ||
         typeof value.start !== 'function' ||
         typeof value.disableEventThreshold !== 'function' ||
-        typeof value.stateChange !== 'function') {
+        typeof value.stateChange !== 'function' ||
+        typeof value.updateRatings !== 'function') {
         return false;
     }
     const threshold = value.eventsThreshold;
@@ -26,8 +27,9 @@ function thresholdCommands(value) {
 }
 /**
  * Admin transport for the combined owner. Authentication, ACLs and commands stay upstream.
- * Only the threshold lifecycle is owned here: the upstream timer assumes a browser has
+ * The threshold lifecycle is owned here: the upstream timer assumes a browser has
  * subscribed already, and its detached async transitions cannot be cancelled on close.
+ * External ratings remain optional: no system UUID leaves EOS without an explicit opt-in.
  */
 class EosSocketAdmin extends socket_classes_1.SocketAdmin {
     thresholdCommands;
@@ -48,6 +50,17 @@ class EosSocketAdmin extends socket_classes_1.SocketAdmin {
         commands.subscribes.stateChange ??= Object.create(null);
         commands.start = callback => this.startThreshold(callback);
         commands.disableEventThreshold = () => this.disableThreshold();
+        // SocketAdmin.updateRatings and the getRatings RPC share this checked
+        // commands object in pinned socket-classes 2.10.0. No private-field access
+        // or ACL replacement: retain upstream fetching only after explicit consent.
+        const updateRatings = commands.updateRatings.bind(commands);
+        commands.updateRatings = (uuid, isAutoUpdate) => {
+            const config = adapter.config;
+            if (this.closed || !record(config) || config.eosExternalRatings !== true) {
+                return Promise.resolve(null);
+            }
+            return updateRatings(uuid, isAutoUpdate);
+        };
         // The UI command otherwise reaches the upstream private enable method directly.
         // Keep the original command permission boundary, including EOS's later role guard.
         this.addCommandHandler('eventsThreshold', (client, enabled) => {

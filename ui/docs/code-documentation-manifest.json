@@ -1117,9 +1117,19 @@
       "codeHash": "820a192da14d6aab728f184176f54bd75ac25c91ccbb89260f9750535286e2fa"
     },
     {
+      "path": "src-ts/runtime-executables/lib/preserved-ui-config.ts",
+      "sourceHash": "3ef028b6f9f4365eda068c17a5d205553487179afe064764e8a721d0aee292c6",
+      "codeHash": "0f7cdf292c253fc3307d872f04360cb31df3e35c1d474cb74916af8ce8dfa7d2"
+    },
+    {
       "path": "src-ts/runtime-executables/lib/runtime-proxy-html.ts",
       "sourceHash": "b32c28ba952ef6f065216cb3d556f42c8ab5332a7f7de042edf5fc37d235b524",
       "codeHash": "1c00f211c07206fc5e78ac0abf214bd827aeba6c7fce5f14598c38aa4d936a01"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/smarthome-activation.ts",
+      "sourceHash": "41621ef404cb4e99f090e5888feab95253b2aeff299b939451ce635b946e0a71",
+      "codeHash": "fb8f0d03a9d33672e2554bf7f89ab7ecc4df03378d036d71fa9fb2189b4860b8"
     },
     {
       "path": "src-ts/runtime-executables/lib/smarthome-contract.ts",
@@ -1153,8 +1163,8 @@
     },
     {
       "path": "src-ts/runtime-executables/main.ts",
-      "sourceHash": "7111862ae6cbd392ed7e984915b0d51a13143e489d13dc74a1c08a85c3dacec6",
-      "codeHash": "fa9cee15e00b7a7f36d3ff6cc4dac5382ed20478392d91dbdd48bcdb27895166"
+      "sourceHash": "ea90c6f81715b29638454810a6744e4d7bca5fadc88671e3c7e09cdc76260b81",
+      "codeHash": "2d76b764db272c6a7b64cd210d06d88af86d8ea5fa99d1a262679cd7c9bbab61"
     },
     {
       "path": "src-ts/runtime-executables/www/admin-guard.ts",
@@ -1317,9 +1327,14 @@
       "codeHash": "6df82b95f8e35ba6892f8741f14714308bbee9ce774b3662632cad3747360389"
     },
     {
+      "path": "src-ts/runtime-executables/www/smarthome-activation.ts",
+      "sourceHash": "fcdb69a4abb524ea6e021bd996c2729b1a424d8ab2c0b9ece1edcff5d63a20b4",
+      "codeHash": "fbf4e3217509155f4e3ac5a9860cf3814810b89be7b036351c57e3b76a8ef621"
+    },
+    {
       "path": "src-ts/runtime-executables/www/smarthome-config.ts",
-      "sourceHash": "03736603e65152cd007989c0a0bdcffb3d86e82490428f6fff08960914028a41",
-      "codeHash": "9feb8ba11b858e9cc0bf57bdadde5fa3405805f1767676aaecab08e2fb1b240d"
+      "sourceHash": "11341ea442395aa9e23ed8dfbf22cea27cee11d64c6123f2190af4ff22bef95e",
+      "codeHash": "4cc8f1edf4530f29ada5c2221f93a525ed65323eaf47843b0215ed5d01cb1af9"
     },
     {
       "path": "src-ts/runtime-executables/www/smarthome.ts",
@@ -2281,8 +2296,16 @@
       "hash": "a00b2bd29454816b588efe5123842930c4a26d9912c404cbb9fd3505fcdd3e52"
     },
     {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/preserved-ui-config.md",
+      "hash": "70755c4cd3420e32ad517bc81703a93d2c6d46946dafa4e80f7ec0120d827361"
+    },
+    {
       "path": "docs/quellcode/src-ts/runtime-executables/lib/runtime-proxy-html.md",
       "hash": "149a53c477acc689eb07660935ad35dc83d2c0d3a0df4a1dd959faa503529e6a"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/smarthome-activation.md",
+      "hash": "8e26599127afd2056c14ce218e9b5c8301df96867e1573b40c7bd007a4420689"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/lib/smarthome-contract.md",
@@ -2310,7 +2333,7 @@
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/main.md",
-      "hash": "e595ae5613de39a03f8867e8149fb2c10163c0d72d68ec38e5274341d4bbe03c"
+      "hash": "e6c249d5f1b56bca64ac05f88e156a3f298390d1cea86ff4ff537ffd3ed8bc9d"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/admin-guard.md",
@@ -2441,8 +2464,12 @@
       "hash": "05049f8e82a47b70a247d618f7f2b4842e961eb0c959b302a5fd172c620051ec"
     },
     {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/smarthome-activation.md",
+      "hash": "8c98a760bab1421a3e8eb3157c1a4ed976ba9c9b84a27016b11980ae88c11d3c"
+    },
+    {
       "path": "docs/quellcode/src-ts/runtime-executables/www/smarthome-config.md",
-      "hash": "867c9c65a18a1baa520abd478d17b89252d2fe135b0ed74e1356dd9669994265"
+      "hash": "8c52bb4c61b5e145e0881b00d137e35c18fd7278703d73876220ed5947def4d9"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/smarthome.md",
@@ -2498,7 +2525,7 @@
     },
     {
       "path": "docs/QUELLCODE_VERKNUEPFUNGEN_DE.md",
-      "hash": "812ef8389aa142f1f92f160c99eced431562d16657657fd2c12a8b5fa33d8c27"
+      "hash": "80e2744adf86e4528d252fe1dee858498f141cb7001d736fed54ad67adefd4c3"
     }
   ]
 }

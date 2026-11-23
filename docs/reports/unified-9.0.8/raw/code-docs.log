@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> nexowatt-eos-ui-internal@9.0.8 docs:build
+> node scripts/generate-code-documentation.cjs
+
+[code-docs] 280 Quelldateien und 281 Verzeichnisseiten aktualisiert.

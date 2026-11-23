@@ -11,10 +11,10 @@ import { createHash, randomUUID } from 'node:crypto';
 import { assertFreeSpace, assertControllerDataFolders } from './preflight';
 import { LEGACY_NAME } from './legacy';
 import { validateConfig, preflightLegacyConfig, migrateLegacyConfig } from './config';
+import { backupCronExpression, scheduleBackup, type ScheduledJob } from './scheduler';
 import { ARCHIVE_NAME, keyFile, privateDir } from './files';
 import {
     record,
-    str,
     num,
     flag,
     fail,
@@ -44,13 +44,6 @@ function isJobResult(value: unknown): value is JobResult {
                 typeof file.sha256 === 'string',
         )
     );
-}
-interface ScheduledJob {
-    cancel(): void;
-    nextInvocation(): Date | null;
-}
-interface Scheduler {
-    scheduleJob(spec: string, handler: () => void): ScheduledJob | null;
 }
 class HostedBackup {
     readonly options: Options;
@@ -171,21 +164,13 @@ class HostedBackup {
         if (this.stopping) throw fail('EOS_BACKUP_STOPPING');
         await this.state('info.status', 'READY');
         if (this.stopping) throw fail('EOS_BACKUP_STOPPING');
-        const schedule = require('node-schedule') as Scheduler;
         for (const kind of ['iobroker', 'ccu'] as const) {
             const enabled = kind === 'iobroker' ? 'minimalEnabled' : 'ccuEnabled';
             if (!flag(this.config, enabled)) continue;
-            const prefix = kind === 'iobroker' ? 'minimal' : 'ccu',
-                cronEnabled = kind === 'iobroker' ? 'iobrokerCron' : 'ccuCron';
-            const parts = str(this.config, prefix + 'Time').split(':');
-            const expr = flag(this.config, cronEnabled)
-                ? str(this.config, kind + 'CronJob')
-                : `10 ${Number(parts[1])} ${Number(parts[0])} */${num(this.config, prefix + 'EveryXDays', 1)} * *`;
-            const job = schedule.scheduleJob(expr, () => {
+            const job = scheduleBackup(backupCronExpression(this.config, kind), () => {
                 if (this.current || !this.options.canOperate() || this.stopping) return;
                 void this.startJob(kind, true).catch(() => this.options.adapter.log.warn('EOS_BACKUP_SCHEDULE_FAILED'));
-            });
-            if (!job) throw fail('EOS_BACKUP_SCHEDULE_INVALID');
+            }, code => this.options.adapter.log.warn(code));
             this.schedule.push(job);
         }
         this.watchdog = setInterval(() => {

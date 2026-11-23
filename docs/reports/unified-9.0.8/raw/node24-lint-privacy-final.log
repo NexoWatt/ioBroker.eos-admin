@@ -1,0 +1,39 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> iobroker.eos-admin@9.0.8 lint
+> npm run lint-backend && cd src-admin && npm run lint
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> iobroker.eos-admin@9.0.8 lint-backend
+> eslint -c eslint.config.mjs src && npm run lint:unified
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> iobroker.eos-admin@9.0.8 lint:unified
+> eslint -c eslint.unified.config.mjs src/lib/eosUnifiedBoundary.js src/lib/eosUnifiedOwnership.js src/lib/eosLicenseCore.js src/lib/eosLicensePolicy.js src/lib/eosLicenseService.js src/lib/eosLicenseTrust.js src/lib/eosLicenseHttp.js tools/eos-release-check.cjs tools/eos-release-manifest.cjs tools/eos-migration-plan.cjs tools/eos-access-diagnostics.cjs deploy/render-ingress.cjs tools/eos-sbom-vendored.cjs src/lib/eosModuleHost.js src/lib/eosModuleHttp.js src/lib/eosModuleConfigStore.js src/lib/eosLegacyMigration.js tools/eos-tls-issuer.cjs && eslint -c modules/backup/eslint.config.mjs modules/backup/src && eslint -c ui/eslint.smarthome-activation.config.mjs ui/src-ts/runtime-executables/lib/smarthome-activation.ts && eslint -c ui/eslint.preserved-ui-config.config.mjs ui/src-ts/runtime-executables/lib/preserved-ui-config.ts
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> src-rx@9.0.8 lint
+> eslint -c eslint.config.mjs src
+
+
+<workspace>/iobroker.eos-admin/src-admin/src/components/Adapters/AdaptersList.tsx
+  426:5  warning  Expected 'this' to be used by class method 'shouldShowRepositoryWarning'  class-methods-use-this
+
+<workspace>/iobroker.eos-admin/src-admin/src/components/Enums/EnumDetails.tsx
+  558:11  warning  The 'memberIds' logical expression could make the dependencies of useMemo Hook (at line 576) change on every render. To fix this, wrap the initialization of 'memberIds' in its own useMemo() Hook  react-hooks/exhaustive-deps
+
+<workspace>/iobroker.eos-admin/src-admin/src/components/Intro/NexoWattEmsOverview.tsx
+  302:11  warning  The 'summary' logical expression could make the dependencies of useMemo Hook (at line 322) change on every render. To fix this, wrap the initialization of 'summary' in its own useMemo() Hook  react-hooks/exhaustive-deps
+
+<workspace>/iobroker.eos-admin/src-admin/src/components/UsedResources.tsx
+  110:1  warning  Missing @param "props.socket"    jsdoc/check-param-names
+  110:1  warning  Missing @param "props.instance"  jsdoc/check-param-names
+
+<workspace>/iobroker.eos-admin/src-admin/src/tabs/Intro.tsx
+  1918:5  warning  Expected 'this' to be used by class method 'getOverviewRoleConfig'  class-methods-use-this
+
+✖ 6 problems (0 errors, 6 warnings)
+

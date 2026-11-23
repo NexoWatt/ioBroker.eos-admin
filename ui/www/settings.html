@@ -115,7 +115,10 @@
     <div class="row" style="align-items:center; margin-top:10px;">
       <span>Installateur</span>
       <div style="display:flex;gap:10px;align-items:center;justify-content:flex-end;flex:1 1 auto">
-        <a class="btn" id="openInstallerBtn" href="#">Admin öffnen</a>
+        <!-- Der gemeinsame EOS-Admin liegt am selben Ursprung unter /system/.
+             Native Navigation erhält die Sitzung und bleibt im aktuellen Tab;
+             die serverseitige Rollenprüfung entscheidet über den Zugang. -->
+        <a class="btn" id="openInstallerBtn" href="/system/" target="_self">Admin öffnen</a>
       </div>
     </div>
 
@@ -860,37 +863,6 @@
   </div>
 </section>
 
-
-<script>
-// Im Admin-Proxy bleibt der Rückweg am selben TLS-Ursprung und Public-Pfad.
-// Der direkte Runtime-Aufruf behält den bisherigen lokalen Admin-Port 8081.
-(function () {
-  try {
-    var btn = document.getElementById('openInstallerBtn');
-    if (!btn) return;
-
-    var proto = window.location.protocol || 'http:';
-    var host = window.location.hostname;
-    if (!host) {
-      var h = (window.location.host || '').split(':');
-      host = h && h[0] ? h[0] : 'localhost';
-    }
-
-    var adminUrl = window.NW_RUNTIME?.isProxy
-      ? '/system/'
-      : '/system/';
-    btn.setAttribute('href', adminUrl);
-    btn.setAttribute('target', '_blank');
-    btn.setAttribute('rel', 'noopener');
-
-    // Ensure click always opens a new tab (even if some browsers ignore target on dynamically set href).
-    btn.addEventListener('click', function (e) {
-      try { e.preventDefault(); } catch (_e) {}
-      try { window.open(adminUrl, '_blank', 'noopener'); } catch (_e2) { window.location.href = adminUrl; }
-    });
-  } catch (_e) {}
-})();
-</script>
 
 <script src="/static/pwa.js" defer></script>
 

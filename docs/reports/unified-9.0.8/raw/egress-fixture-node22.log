@@ -1,0 +1,50 @@
+(node:44) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:51) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: egress fixture scopes exactly to installed EOS entrypoint, not npm/setup or test runner
+ok 1 - egress fixture scopes exactly to installed EOS entrypoint, not npm/setup or test runner
+  ---
+  duration_ms: 1.144382
+  type: 'test'
+  ...
+# Subtest: rating URL and proxy absolute targets are blocked before any HTTP dispatch
+ok 2 - rating URL and proxy absolute targets are blocked before any HTTP dispatch
+  ---
+  duration_ms: 11.295391
+  type: 'test'
+  ...
+# Subtest: nonloopback raw socket, TLS, DNS and fetch fail without transport or identifier exposure
+ok 3 - nonloopback raw socket, TLS, DNS and fetch fail without transport or identifier exposure
+  ---
+  duration_ms: 0.714212
+  type: 'test'
+  ...
+# Subtest: loopback options remain available and literal server bind addresses require no DNS egress
+ok 4 - loopback options remain available and literal server bind addresses require no DNS egress
+  ---
+  duration_ms: 0.499032
+  type: 'test'
+  ...
+# Subtest: fixture permits an actual wildcard listener and HTTP exchange on loopback in an isolated child
+ok 5 - fixture permits an actual wildcard listener and HTTP exchange on loopback in an isolated child
+  ---
+  duration_ms: 104.995783
+  type: 'test'
+  ...
+# Subtest: NODE_OPTIONS preload automatically blocks installed adapter but leaves npm role unmodified
+ok 6 - NODE_OPTIONS preload automatically blocks installed adapter but leaves npm role unmodified
+  ---
+  duration_ms: 131.831022
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 353.477718

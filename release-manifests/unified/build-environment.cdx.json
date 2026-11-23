@@ -2,10 +2,10 @@
   "$schema": "http://cyclonedx.org/schema/bom-1.5.schema.json",
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
-  "serialNumber": "urn:uuid:eafa4801-ee40-47da-bd7f-d580bfd42749",
+  "serialNumber": "urn:uuid:9c48d207-6b46-4d30-8e9d-7e38e48c1a4c",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-11-23T07:47:10.346Z",
+    "timestamp": "2026-11-23T09:21:04.645Z",
     "lifecycles": [
       {
         "phase": "build"
@@ -19,14 +19,14 @@
       }
     ],
     "component": {
-      "bom-ref": "iobroker.eos-admin@9.0.7",
+      "bom-ref": "iobroker.eos-admin@9.0.8",
       "type": "library",
       "name": "iobroker.eos-admin",
-      "version": "9.0.7",
+      "version": "9.0.8",
       "scope": "required",
       "author": "NexoWatt",
       "description": "NexoWatt EOS: licensed local energy management, dashboard and ioBroker system administration in one adapter.",
-      "purl": "pkg:npm/iobroker.eos-admin@9.0.7",
+      "purl": "pkg:npm/iobroker.eos-admin@9.0.8",
       "properties": [],
       "externalReferences": []
     }
@@ -11522,19 +11522,19 @@
       ]
     },
     {
-      "bom-ref": "cron-parser@5.7.0",
+      "bom-ref": "cron-parser@5.10.6",
       "type": "library",
       "name": "cron-parser",
-      "version": "5.7.0",
+      "version": "5.10.6",
       "scope": "required",
       "author": "Harri Siirak",
       "description": "Node.js library for parsing crontab instructions",
-      "purl": "pkg:npm/cron-parser@5.7.0",
+      "purl": "pkg:npm/cron-parser@5.10.6",
       "properties": [],
       "externalReferences": [
         {
           "type": "distribution",
-          "url": "https://registry.npmjs.org/cron-parser/-/cron-parser-5.7.0.tgz"
+          "url": "https://registry.npmjs.org/cron-parser/-/cron-parser-5.10.6.tgz"
         },
         {
           "type": "vcs",
@@ -11544,7 +11544,7 @@
       "hashes": [
         {
           "alg": "SHA-512",
-          "content": "892a431e9c305bf1a1220e0954e0d8956504a4c3528a6687bea3a11e93b3d56f98f7bcf594bd677fe769705d7b70dc054694ed28df5d7af822d5fc5f969dcf87"
+          "content": "929a31810caf78ed65dbd9f0f8559dbe6a2dc95ede392cc61d0a718973846480ce8ea3b5891ea47e02743d51d3b95dbab817a62aade9a7399aedd1c5006eef8b"
         }
       ],
       "licenses": [
@@ -21231,48 +21231,6 @@
       ]
     },
     {
-      "bom-ref": "long-timeout@0.1.1",
-      "type": "library",
-      "name": "long-timeout",
-      "version": "0.1.1",
-      "scope": "required",
-      "author": "Christian Tellnes <christian@tellnes.no> (http://christian.tellnes.com/)",
-      "description": "Long timeout makes it possible to have a timeout or interval that is longer than 24.8 days (2^31-1 milliseconds).",
-      "purl": "pkg:npm/long-timeout@0.1.1",
-      "properties": [],
-      "externalReferences": [
-        {
-          "type": "distribution",
-          "url": "https://registry.npmjs.org/long-timeout/-/long-timeout-0.1.1.tgz"
-        },
-        {
-          "type": "vcs",
-          "url": "git://github.com/tellnes/long-timeout.git"
-        },
-        {
-          "type": "website",
-          "url": "https://github.com/tellnes/long-timeout"
-        },
-        {
-          "type": "issue-tracker",
-          "url": "https://github.com/tellnes/long-timeout/issues"
-        }
-      ],
-      "hashes": [
-        {
-          "alg": "SHA-512",
-          "content": "04546e414a9cef1d8d5b17c9042c94acdf226146339f32fd2513a6473d6067a2a5388826a03fa78cf55b6fe54d9f69c630a82032c2bbf6250d12b8a596caf1ef"
-        }
-      ],
-      "licenses": [
-        {
-          "license": {
-            "id": "MIT"
-          }
-        }
-      ]
-    },
-    {
       "bom-ref": "loose-envify@1.4.0",
       "type": "library",
       "name": "loose-envify",
@@ -23366,74 +23324,6 @@
         {
           "alg": "SHA-512",
           "content": "c11348af0e039952ca4256e038c764331dbb5aba737acda187926d6e2d9b8cf77ee3026cb5622a3f903e96c727a9b9b4c71993e41a60f0b79ce48b44070c7a05"
-        }
-      ],
-      "licenses": [
-        {
-          "license": {
-            "id": "MIT"
-          }
-        }
-      ]
-    },
-    {
-      "bom-ref": "node-schedule@2.1.1",
-      "type": "library",
-      "name": "node-schedule",
-      "version": "2.1.1",
-      "scope": "required",
-      "author": "Matt Patenaude",
-      "description": "A cron-like and not-cron-like job scheduler for Node.",
-      "purl": "pkg:npm/node-schedule@2.1.1",
-      "properties": [],
-      "externalReferences": [
-        {
-          "type": "distribution",
-          "url": "https://registry.npmjs.org/node-schedule/-/node-schedule-2.1.1.tgz"
-        },
-        {
-          "type": "vcs",
-          "url": "https://github.com/node-schedule/node-schedule.git"
-        }
-      ],
-      "hashes": [
-        {
-          "alg": "SHA-512",
-          "content": "39775e810ab4dce997123b768593f7dd6d983ecfc4e41705424b38ebe1b6800c6ce201ce2150f5bbb12a9582d848ab1a229c8a08af466e4d2d6b5fe08d148c45"
-        }
-      ],
-      "licenses": [
-        {
-          "license": {
-            "id": "MIT"
-          }
-        }
-      ]
-    },
-    {
-      "bom-ref": "cron-parser@4.9.0",
-      "type": "library",
-      "name": "cron-parser",
-      "version": "4.9.0",
-      "scope": "required",
-      "author": "Harri Siirak",
-      "description": "Node.js library for parsing crontab instructions",
-      "purl": "pkg:npm/cron-parser@4.9.0",
-      "properties": [],
-      "externalReferences": [
-        {
-          "type": "distribution",
-          "url": "https://registry.npmjs.org/cron-parser/-/cron-parser-4.9.0.tgz"
-        },
-        {
-          "type": "vcs",
-          "url": "https://github.com/harrisiirak/cron-parser.git"
-        }
-      ],
-      "hashes": [
-        {
-          "alg": "SHA-512",
-          "content": "a7449a363ac73a741e47cfd59df19b9a0f6d7b691fc98490ed273f8ffe83b4f2f7250bcac668cef534a3345a6e8ea577bc461806f34dbd74b1cf292c056031d5"
         }
       ],
       "licenses": [
@@ -27555,48 +27445,6 @@
         {
           "alg": "SHA-512",
           "content": "d87fee43bf9234fd212b5e91a2b4da934996ac5a2aa38027015192525d9d4f4ee86e059d5adf60ae697e5439752e496050e3d633801ba34bbce82be9f2f16363"
-        }
-      ],
-      "licenses": [
-        {
-          "license": {
-            "id": "MIT"
-          }
-        }
-      ]
-    },
-    {
-      "bom-ref": "sorted-array-functions@1.3.0",
-      "type": "library",
-      "name": "sorted-array-functions",
-      "version": "1.3.0",
-      "scope": "required",
-      "author": "Mathias Buus (@mafintosh)",
-      "description": "Maintain and search through a sorted array using some low level functions",
-      "purl": "pkg:npm/sorted-array-functions@1.3.0",
-      "properties": [],
-      "externalReferences": [
-        {
-          "type": "distribution",
-          "url": "https://registry.npmjs.org/sorted-array-functions/-/sorted-array-functions-1.3.0.tgz"
-        },
-        {
-          "type": "vcs",
-          "url": "https://github.com/mafintosh/sorted-array-functions.git"
-        },
-        {
-          "type": "website",
-          "url": "https://github.com/mafintosh/sorted-array-functions"
-        },
-        {
-          "type": "issue-tracker",
-          "url": "https://github.com/mafintosh/sorted-array-functions/issues"
-        }
-      ],
-      "hashes": [
-        {
-          "alg": "SHA-512",
-          "content": "dacaa0cde16589de8de19d9f510d5cbc599338b462fec103cd243438a61c86a8283e6401572337f79f6a631ddfa52e84b1e7fcd0a8e6a603de12bd36f1d3f738"
         }
       ],
       "licenses": [
@@ -32004,7 +31852,7 @@
   ],
   "dependencies": [
     {
-      "ref": "iobroker.eos-admin@9.0.7",
+      "ref": "iobroker.eos-admin@9.0.8",
       "dependsOn": [
         "@iobroker/adapter-core@3.4.3",
         "@iobroker/plugin-docker@1.2.1",
@@ -32018,7 +31866,7 @@
         "bonjour-service@1.4.4",
         "compression@1.8.2",
         "cookie-parser@1.4.7",
-        "cron-parser@5.7.0",
+        "cron-parser@5.10.6",
         "dropbox@10.66.0",
         "express@5.3.0",
         "express-fileupload@1.5.2",
@@ -32033,7 +31881,6 @@
         "modbus-serial@8.0.25",
         "mqtt@5.16.1",
         "multicast-dns@7.2.5",
-        "node-schedule@2.1.1",
         "nodemailer@10.1.4",
         "@node-oauth/oauth2-server@5.3.1",
         "semver@7.8.5",
@@ -33930,7 +33777,7 @@
       ]
     },
     {
-      "ref": "cron-parser@5.7.0",
+      "ref": "cron-parser@5.10.6",
       "dependsOn": [
         "luxon@3.7.2"
       ]
@@ -35629,10 +35476,6 @@
       "dependsOn": []
     },
     {
-      "ref": "long-timeout@0.1.1",
-      "dependsOn": []
-    },
-    {
       "ref": "loose-envify@1.4.0",
       "dependsOn": [
         "js-tokens@4.0.0"
@@ -35962,20 +35805,6 @@
     {
       "ref": "node-releases@2.0.51",
       "dependsOn": []
-    },
-    {
-      "ref": "node-schedule@2.1.1",
-      "dependsOn": [
-        "cron-parser@4.9.0",
-        "long-timeout@0.1.1",
-        "sorted-array-functions@1.3.0"
-      ]
-    },
-    {
-      "ref": "cron-parser@4.9.0",
-      "dependsOn": [
-        "luxon@3.7.2"
-      ]
     },
     {
       "ref": "node.extend@2.0.3",
@@ -36664,10 +36493,6 @@
         "ip-address@10.7.6",
         "smart-buffer@4.2.0"
       ]
-    },
-    {
-      "ref": "sorted-array-functions@1.3.0",
-      "dependsOn": []
     },
     {
       "ref": "source-map@0.6.1",

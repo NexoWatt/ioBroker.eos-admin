@@ -2287,18 +2287,13 @@ class Admin extends adapter_core_1.Adapter {
         socket.start(server, ws_server_1.SocketIO, { store, oauth2Only: true, noBasicAuth: this.config.noBasicAuth });
         // subscribe to all object changes
         socket.subscribe('objectChange', '*');
-        this.getForeignObjectAsync('system.meta.uuid')
-            .then(async (obj) => {
-            if (obj?.native) {
-                try {
-                    await socket.updateRatings();
-                }
-                catch (error) {
-                    this.log.error(`Cannot fetch ratings: ${error.toString()}`);
-                }
-            }
-        })
-            .catch(error => this.log.error(`Cannot read UUID: ${error}`));
+        // Optional ioBroker ratings disclose the system UUID. Leave both the UUID
+        // lookup and external request disabled unless the administrator opted in.
+        if (this.config.eosExternalRatings === true) {
+            void socket.updateRatings().catch(() => {
+                this.log.warn('EOS_EXTERNAL_RATINGS_UNAVAILABLE: Online-Adapterbewertungen konnten nicht geladen werden.');
+            });
+        }
     }
     async applyRightsToObjects(pattern, types) {
         let len = 0;

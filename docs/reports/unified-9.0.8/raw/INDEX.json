@@ -1,0 +1,151 @@
+{
+  "version": "9.0.8",
+  "date": "2026-11-23",
+  "note": "Synthetic isolated test environments; no customer backup loaded. Latest controller logs include the product privacy default and test-only transport guard. Earlier build logs document unchanged frontend/module builds; final runtime byte checks bind the shipped package.",
+  "files": [
+    {
+      "file": "node22-npm-test-privacy-final.log",
+      "sourceSha256": "f3a20640c59ed650f53c423fce107ae37b2dfb916689082a2ddf313af3c5633b",
+      "deliveredSha256": "f3a20640c59ed650f53c423fce107ae37b2dfb916689082a2ddf313af3c5633b",
+      "formatting": "ANSI removed and workspace prefix normalized"
+    },
+    {
+      "file": "node24-npm-test-privacy-final.log",
+      "sourceSha256": "91452ab5438cb2ce665ac05c2aa9c1884464b6f0107b34aa28edd29c296cedfb",
+      "deliveredSha256": "91452ab5438cb2ce665ac05c2aa9c1884464b6f0107b34aa28edd29c296cedfb",
+      "formatting": "ANSI removed and workspace prefix normalized"
+    },
+    {
+      "file": "node22-typecheck-privacy-final.log",
+      "sourceSha256": "f5b6109ec9a6edcdd7dacd4464dbc794949614a9624c8736918ca05e25be6dfa",
+      "deliveredSha256": "f5b6109ec9a6edcdd7dacd4464dbc794949614a9624c8736918ca05e25be6dfa",
+      "formatting": "ANSI removed and workspace prefix normalized"
+    },
+    {
+      "file": "node24-typecheck-privacy-final.log",
+      "sourceSha256": "a46414da3e3521f6170823f069759138d913a1269ab0170021755d2d9c66adb7",
+      "deliveredSha256": "a46414da3e3521f6170823f069759138d913a1269ab0170021755d2d9c66adb7",
+      "formatting": "ANSI removed and workspace prefix normalized"
+    },
+    {
+      "file": "node24-lint-privacy-final.log",
+      "sourceSha256": "9830dfb2ebc05db89dd26e9f8b6512ce8878805a4076d39676464c296207a28b",
+      "deliveredSha256": "a0bb54d4a8da032e996e2210d2b15aeebafb9ce2da280acc37fe4d0a5007cd40",
+      "formatting": "ANSI removed and workspace prefix normalized"
+    },
+    {
+      "file": "node22-integration-loopback-final.log",
+      "sourceSha256": "fcb23eb1f7168f3c606a87be7befb21f5592f21fc2a112891d0c09461410a552",
+      "deliveredSha256": "3cab0b02840500056b7f188b9a226635f0315af4dfe4a2d13c58f77688e78285",
+      "formatting": "ANSI removed and workspace prefix normalized"
+    },
+    {
+      "file": "node24-integration-loopback-final.log",
+      "sourceSha256": "fefd1cfbf9b82c58c8e8a9e223eeef3025abcf1f7f508999d573ebf6857f318d",
+      "deliveredSha256": "4556faed74b56c8738fde2d18e2bbc5d5599fecf555f3c76cbfb79bca1fe5283",
+      "formatting": "ANSI removed and workspace prefix normalized"
+    },
+    {
+      "file": "node22-runtime-engines.json",
+      "sourceSha256": "813bab3dcdabcaa59737cc26cb9cb9145af37fec1c3efb9941861b0b0695deb5",
+      "deliveredSha256": "813bab3dcdabcaa59737cc26cb9cb9145af37fec1c3efb9941861b0b0695deb5",
+      "formatting": "unchanged"
+    },
+    {
+      "file": "runtime-audit.json",
+      "sourceSha256": "3f40076a6ca8b4391dfd8c6b48ceef51237e6a24325d0aaa4108b9874b033a3f",
+      "deliveredSha256": "3f40076a6ca8b4391dfd8c6b48ceef51237e6a24325d0aaa4108b9874b033a3f",
+      "formatting": "unchanged"
+    },
+    {
+      "file": "full-audit.json",
+      "sourceSha256": "745d8ea5da094c1612124e9bfb523481941a605d8edf354881710ba52b83ea22",
+      "deliveredSha256": "745d8ea5da094c1612124e9bfb523481941a605d8edf354881710ba52b83ea22",
+      "formatting": "unchanged"
+    },
+    {
+      "file": "ui-security.json",
+      "sourceSha256": "280f4afa159e50fdccda36d588b4c11144223f5bbfa2f908063ea1c660808b5a",
+      "deliveredSha256": "280f4afa159e50fdccda36d588b4c11144223f5bbfa2f908063ea1c660808b5a",
+      "formatting": "unchanged"
+    },
+    {
+      "file": "egress-fixture-node22.log",
+      "sourceSha256": "b2306ecc27a920a6452d83067b335595dbcb63a351baed95db61a6a51b79b970",
+      "deliveredSha256": "b2306ecc27a920a6452d83067b335595dbcb63a351baed95db61a6a51b79b970",
+      "formatting": "ANSI removed and workspace prefix normalized"
+    },
+    {
+      "file": "egress-fixture-node24.log",
+      "sourceSha256": "5dfb538e6f524b81751168aa3d397dcb1cee323c8fd9afac3a3d8c95cc8ea8e2",
+      "deliveredSha256": "5dfb538e6f524b81751168aa3d397dcb1cee323c8fd9afac3a3d8c95cc8ea8e2",
+      "formatting": "ANSI removed and workspace prefix normalized"
+    },
+    {
+      "file": "frontend-build.log",
+      "sourceSha256": "016e9b8a79a1cd1fe29e174bd97e7af8acbe8f8707d7d613867147f6bde979c9",
+      "deliveredSha256": "016e9b8a79a1cd1fe29e174bd97e7af8acbe8f8707d7d613867147f6bde979c9",
+      "formatting": "ANSI removed and workspace prefix normalized"
+    },
+    {
+      "file": "installer-build.log",
+      "sourceSha256": "8e3626f31d7c141a3d252370dbbc7952dcbfabd92c1ddf9222b457bf6076b2dc",
+      "deliveredSha256": "8e3626f31d7c141a3d252370dbbc7952dcbfabd92c1ddf9222b457bf6076b2dc",
+      "formatting": "ANSI removed and workspace prefix normalized"
+    },
+    {
+      "file": "backend-build.log",
+      "sourceSha256": "7a2c2f801fd7f3e79b397d59df7424b2451bf4f2645315c37aeb5e8e2a966d7a",
+      "deliveredSha256": "7a2c2f801fd7f3e79b397d59df7424b2451bf4f2645315c37aeb5e8e2a966d7a",
+      "formatting": "ANSI removed and workspace prefix normalized"
+    },
+    {
+      "file": "smarthome-browser-lint.log",
+      "sourceSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "deliveredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "formatting": "ANSI removed and workspace prefix normalized"
+    },
+    {
+      "file": "smarthome-contract-runtime.log",
+      "sourceSha256": "2658f7825267eed690f536dc4cc87f5dc8f56a9a01b0ad4e8f1c805746cfc30e",
+      "deliveredSha256": "2658f7825267eed690f536dc4cc87f5dc8f56a9a01b0ad4e8f1c805746cfc30e",
+      "formatting": "ANSI removed and workspace prefix normalized"
+    },
+    {
+      "file": "smarthome-config-transactional.log",
+      "sourceSha256": "3a5f913bbb3d5314f9b7cd440a631832d7182d139ff76219f87e96cd61cdc0ef",
+      "deliveredSha256": "3a5f913bbb3d5314f9b7cd440a631832d7182d139ff76219f87e96cd61cdc0ef",
+      "formatting": "ANSI removed and workspace prefix normalized"
+    },
+    {
+      "file": "smarthome-scene-guard.log",
+      "sourceSha256": "7fb45e6fdc91307357b73cf1f74f13b636aa2e53dcfd413667c3ba151552aafc",
+      "deliveredSha256": "7fb45e6fdc91307357b73cf1f74f13b636aa2e53dcfd413667c3ba151552aafc",
+      "formatting": "ANSI removed and workspace prefix normalized"
+    },
+    {
+      "file": "customer-feature-visibility-runtime.log",
+      "sourceSha256": "b923d9000835fb01a43dab6c8e6188e510275852de573dddc4b28536b51af296",
+      "deliveredSha256": "b923d9000835fb01a43dab6c8e6188e510275852de573dddc4b28536b51af296",
+      "formatting": "ANSI removed and workspace prefix normalized"
+    },
+    {
+      "file": "appcenter-auth-smarthome-security.log",
+      "sourceSha256": "873cebe6456b62cd5a2a2633b1b3b53488de6dff3e5125ae66af593cf85165fc",
+      "deliveredSha256": "873cebe6456b62cd5a2a2633b1b3b53488de6dff3e5125ae66af593cf85165fc",
+      "formatting": "ANSI removed and workspace prefix normalized"
+    },
+    {
+      "file": "ui-auth-frontend.log",
+      "sourceSha256": "c6d55ae95d655b788036df5ef691f203dbd679c5914f5bb4614b3188993358c1",
+      "deliveredSha256": "c6d55ae95d655b788036df5ef691f203dbd679c5914f5bb4614b3188993358c1",
+      "formatting": "ANSI removed and workspace prefix normalized"
+    },
+    {
+      "file": "code-docs.log",
+      "sourceSha256": "00b540fa8774ef776903efa70f3c775c5124e36db465b2cb6a19202d9c3e51b9",
+      "deliveredSha256": "00b540fa8774ef776903efa70f3c775c5124e36db465b2cb6a19202d9c3e51b9",
+      "formatting": "ANSI removed and workspace prefix normalized"
+    }
+  ]
+}

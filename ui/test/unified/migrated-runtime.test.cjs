@@ -45,6 +45,47 @@ test('migrated UI protects original credential states without widening its exact
   } finally { await h.close(); }
 });
 
+for (const enabled of [true, false]) {
+  test(`migrated SmartHome hydrates current building, assignments, scenes, timers and logic without changing native ${enabled ? 'enabled' : 'disabled'}`, async t => {
+    const { createHarness } = require('./http-harness.cjs');
+    const data = require('../../../test/fixtures/smarthome-legacy.cjs')(enabled);
+    const h = await createHarness({ legacyNamespace: 'nexowatt-ui.0' });
+    t.after(() => h.close());
+    h.adapter.config = structuredClone(data.native);
+    // Only suppress the real-time scheduler: this regression proves hydration and IDs,
+    // not timer execution on a physical actuator or a wall-clock-dependent schedule.
+    h.adapter._nwScheduleNextSmartHomeTimer = () => {};
+    h.adapter._nwScheduleNextSmartHomeLogicClock = () => {};
+    h.adapter._nwRefreshLogicClockStatesNow = async () => {};
+    h.states.set('nexowatt-ui.0.installer.configJson', { val: JSON.stringify(data.patch), ack: true });
+    h.states.set('nexowatt-ui.0.smarthome.timersJson', { val: JSON.stringify(data.timers), ack: true });
+    h.states.set('nexowatt-ui.0.smarthome.logicClocksJson', { val: JSON.stringify(data.clocks), ack: true });
+    h.states.set('knx.0.living.light.command', { val: false, ack: false });
+    await h.adapter.loadInstallerConfigFromState();
+    assert.equal(h.adapter.config.smartHome.enabled, enabled);
+    assert.equal(h.adapter._nwNativeConfigBase.smartHome.enabled, enabled);
+    assert.deepEqual(h.adapter.config.smartHomeConfig, data.patch.smartHomeConfig);
+    assert.deepEqual(h.adapter.config.logicEditor, data.patch.logicEditor);
+    assert.equal(h.adapter.config.smartHome.datapoints.roomTemp, 'knx.0.living.temperature');
+    assert.equal(h.adapter.config.smartHome.datapoints.blindPosition, 'knx.0.living.blind.position');
+    await h.adapter.loadSmartHomeTimersFromState();
+    await h.adapter.loadSmartHomeLogicClocksFromState();
+    assert.deepEqual(h.adapter.getSmartHomeTimersConfig(), data.timers);
+    assert.deepEqual(h.adapter.getSmartHomeLogicClocksConfig(), data.clocks);
+    const config = h.adapter.getSmartHomeConfig();
+    assert.equal(config.rooms[0].name, 'Wohnzimmer');
+    assert.equal(config.rooms[0].floorId, 'eg');
+    assert.equal(config.devices[0].roomId, 'living');
+    assert.equal(config.devices[0].io.switch.readId, 'knx.0.living.light.status');
+    assert.equal(config.devices[0].io.switch.writeId, 'knx.0.living.light.command');
+    assert.equal(config.scenes[0].id, 'evening');
+    assert.equal(config.pages[0].id, 'living_page');
+    assert.deepEqual(h.states.get('knx.0.living.light.command'), { val: false, ack: false });
+    assert.equal(h.states.has('eos-admin.0.installer.configJson'), false);
+    assert.equal([...h.states.keys()].some(id => id.startsWith('eos-admin.0.smarthome.')), false);
+  });
+}
+
 test('migrated UI accepts only its owner private EEBus capability, never a foreign owner source', async t => {
   const adapter = { namespace: 'nexowatt-ui.0', hostNamespace: 'eos-admin.2', config: { installerConfig: { para14a: true }, countryProfile: { country: 'DE' } },
     emsEngine: { mm: {} }, _nwLicenseOk: true, _nwLicenseAllowsAppId: () => true,

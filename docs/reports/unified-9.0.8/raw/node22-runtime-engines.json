@@ -1,0 +1,8 @@
+{
+  "version": "9.0.8",
+  "node": "22.23.4",
+  "cronParser": "5.10.6",
+  "scope": "non-dev package-lock entries with declared node engine",
+  "checked": 249,
+  "incompatible": []
+}

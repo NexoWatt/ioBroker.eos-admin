@@ -188,7 +188,7 @@ function enrichModules(bom, pkg, root = ROOT) {
         rootRow.dependsOn.push(ref);
         const names = id === 'devices' ? ['axios', 'modbus-serial', 'mqtt', 'serialport']
             : id === 'eebus' ? ['ws', 'bonjour-service']
-                : ['tar-fs', 'node-schedule', 'cron-parser', 'ftp', 'dropbox', 'fast-xml-parser', 'axios', 'mqtt'];
+                : ['tar-fs', 'cron-parser', 'ftp', 'dropbox', 'fast-xml-parser', 'axios', 'mqtt'];
         const dependsOn = names.map(name => {
             const item = result.components.find(row => row.name === name && row.version === require(path.join(root, 'package-lock.json')).packages[`node_modules/${name}`].version);
             if (!item) throw new Error('SBOM_MODULE_DEPENDENCY_MISSING');

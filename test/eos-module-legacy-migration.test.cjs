@@ -135,6 +135,74 @@ test('UI native settings move to protected config; two successive saves read cur
     assert.equal(x.mutations.some(row => row.id === 'system.adapter.eos-admin.1'), false);
 });
 
+for (const enabled of [true, false]) {
+    test(`SmartHome migration preserves explicit ${enabled ? 'enabled' : 'disabled'} setting and existing customer configuration states`, async () => {
+        const data = require('./fixtures/smarthome-legacy.cjs')(enabled);
+        const x = fixture([{ id: 'ui', source: 'nexowatt-ui.0', version: '1.0.38', native: data.native }]);
+        const originalNative = structuredClone(data.native);
+        const preserved = new Map([
+            ['nexowatt-ui.0.installer.configJson', { val: JSON.stringify(data.patch), ack: true }],
+            ['nexowatt-ui.0.smarthome.timersJson', { val: JSON.stringify(data.timers), ack: true }],
+            ['nexowatt-ui.0.smarthome.logicClocksJson', { val: JSON.stringify(data.clocks), ack: true }],
+            ['nexowatt-ui.0.smarthome.logicClocks.evening.active', { val: true, ack: true }],
+            ['knx.0.living.light.command', { val: false, ack: false }],
+        ]);
+        for (const [id, state] of preserved) {
+            x.states.set(id, structuredClone(state));
+            x.objects.set(id, { _id: id, type: 'state', common: { type: typeof state.val, read: true, write: true,
+                custom: { 'history.0': { enabled: true } } }, native: {} });
+        }
+        const originalObjects = [...preserved.keys()].map(id => structuredClone(x.objects.get(id)));
+        await x.migration.start();
+        assert.equal(x.migration.phase, 'TRANSFERRED');
+        assert.deepEqual(x.owner.config.eosUi, originalNative);
+        assert.equal(x.owner.config.eosUiMigration.source, 'nexowatt-ui.0');
+        assert.equal(x.owner.config.eosUiMigration.preserveNamespace, true);
+        for (const [id, state] of preserved) assert.deepEqual(x.states.get(id), state, id);
+        assert.deepEqual([...preserved.keys()].map(id => x.objects.get(id)), originalObjects);
+        assert.equal([...x.states.keys()].some(id => id.startsWith('eos-admin.1.smarthome.')), false);
+        assert.deepEqual(x.objects.get('system.adapter.nexowatt-ui.0').native, originalNative);
+        // Restart loading must use the stored customer configuration, not package defaults.
+        x.owner.config.eosUi = structuredClone(defaults);
+        const again = new EosLegacyMigration(x.owner, { baseDir: path.resolve(__dirname, '..'), dataDir: '/tmp/unused' });
+        await again.loadDestinations();
+        assert.deepEqual(x.owner.config.eosUi, originalNative);
+    });
+}
+
+test('UI preflight blocks corrupt or unreadable existing customer states before stopping the old writer', async () => {
+    for (const defect of ['json', 'shape', 'unavailable', 'rejected', 'timers', 'clocks']) {
+        const x = fixture([{ id: 'ui', source: 'nexowatt-ui.0', version: '1.0.38', native: { smartHome: { enabled: true } } }]);
+        const id = defect === 'timers' ? 'nexowatt-ui.0.smarthome.timersJson'
+            : defect === 'clocks' ? 'nexowatt-ui.0.smarthome.logicClocksJson' : 'nexowatt-ui.0.installer.configJson';
+        x.objects.set(id, { _id: id, type: 'state', common: { type: 'string', read: false }, native: {} });
+        if (defect !== 'unavailable') x.states.set(id, { val: defect === 'shape' ? '{"smartHomeConfig":{"devices":{}}}' : '{broken', ack: true });
+        if (defect === 'rejected') {
+            const read = x.owner.getForeignStateAsync;
+            x.owner.getForeignStateAsync = async key => { if (key === id) throw new Error('not authorized'); return read(key); };
+        }
+        await x.migration.start();
+        assert.equal(x.migration.phase, 'BLOCKED', defect);
+        assert.match(x.migration.status().code, /^EOS_MIGRATION_UI_STATE_/);
+        assert.equal(x.objects.get('system.adapter.nexowatt-ui.0').common.enabled, true);
+        assert.equal(x.mutations.some(row => row.id.startsWith('system.adapter.')), false);
+    }
+});
+
+test('UI state lost between preflight and stopped cutover causes rollback instead of default activation', async () => {
+    const x = fixture([{ id: 'ui', source: 'nexowatt-ui.0', version: '1.0.38', native: { smartHome: { enabled: true } } }]);
+    x.states.set('nexowatt-ui.0.smarthome.timersJson', { val: '{"timers":[{"deviceId":"light","enabled":true}]}', ack: true });
+    const change = x.owner.extendForeignObjectAsync;
+    x.owner.extendForeignObjectAsync = async (id, patch) => {
+        await change(id, patch);
+        if (patch.common?.enabled === false) x.states.delete('nexowatt-ui.0.smarthome.timersJson');
+    };
+    await x.migration.start();
+    assert.equal(x.migration.phase, 'ROLLED_BACK');
+    assert.equal(x.objects.get('system.adapter.nexowatt-ui.0').common.enabled, true);
+    assert.equal(x.owner.config.eosUiMigration, undefined);
+});
+
 test('known old-instance RPC consumers block cutover while full datapoint references stay valid', async () => {
     for (const mode of ['adapter', 'script']) {
         const x = fixture();

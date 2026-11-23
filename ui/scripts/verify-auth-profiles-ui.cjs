@@ -132,7 +132,13 @@ async function main() {
     for (const target of ['//foreign.test/', '/api/set', '/smarthome-config.html', '/%2f%2fforeign.test/']) {
       const f = fixture('login', signedIn('customer'), { url: 'https://nexowatt.test/login.html?returnTo=' + encodeURIComponent(target) }); await f.settle(); assert.equal(f.redirects[0], '/');
     }
-    const f = fixture('login', signedIn('installer')); await f.settle(); assert.equal(f.redirects[0], '/ems-apps.html');
+    // Gemeinsamer EOS-Einstieg ist für alle Rollen das Dashboard. Explizite,
+    // berechtigte Installer-Rücksprünge bleiben weiterhin erhalten.
+    for (const role of ['customer', 'installer', 'admin']) {
+      const f = fixture('login', signedIn(role)); await f.settle(); assert.equal(f.redirects[0], '/');
+    }
+    const installerReturn = fixture('login', signedIn('installer'), { url: 'https://nexowatt.test/login.html?returnTo=%2Fems-apps.html' });
+    await installerReturn.settle(); assert.equal(installerReturn.redirects[0], '/ems-apps.html');
     const proxy = fixture('login', signedIn('customer'), { proxy: true, url: 'https://nexowatt.test/admin/proxy/nexowatt-ui.2/login.html?returnTo=%2Fadmin%2Fproxy%2Fnexowatt-ui.3%2Fsmarthome.html' });
     await proxy.settle(); assert.equal(proxy.redirects[0], '/admin/proxy/nexowatt-ui.2/');
   });

@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/main.ts
- * Quell-Hash: sha256:7111862ae6cbd392ed7e984915b0d51a13143e489d13dc74a1c08a85c3dacec6
+ * Quell-Hash: sha256:ea90c6f81715b29638454810a6744e4d7bca5fadc88671e3c7e09cdc76260b81
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -35,6 +35,8 @@ const express = require('express4');
 const { safeHttpFailure, safeConfigurationFailure, createPublicHttpError } = require('./lib/http-error-boundary');
 const { createHostedHttpHandler } = require('./lib/hosted-http-boundary');
 const { enrichSmartHomeImportSuggestion, reconcileSmartHomeImportSuggestions, normalizeSmartHomeCameraStateUrl } = require('./lib/smarthome-import');
+const { smartHomeEnabled, registerSmartHomeActivationApi } = require('./lib/smarthome-activation');
+const { readPreservedUiStates } = require('./lib/preserved-ui-config');
 const { createRuntimeFileSender, runtimeProxyPrefix, rewriteRuntimeProxyHtml, isHttpsRuntimeProxy } = require('./lib/runtime-proxy-html');
 const { parseUiCookies, isPublicUiRequest, isIndependentMachineRequest, uiRequestPath, constantTimeToken } = require('./lib/ui-access-policy');
 const { resolveUiTlsOptions, UiTlsConfigurationError } = require('./lib/ui-server-transport');
@@ -1021,9 +1023,13 @@ class NexoWattVis extends HostedAdapter {
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
   async loadSmartHomeTimersFromState() {
+    const preservedMode = this.namespace !== this.hostNamespace && /^nexowatt-ui\.\d+$/.test(this.namespace);
+    const preserved = preservedMode
+      ? (this._nwPreservedUiStates || await readPreservedUiStates(this, this.namespace, this._owner.config.eosUiMigration?.requiredStates)) : null;
     let raw = '';
     try {
-      const st = await this.getStateAsync('smarthome.timersJson');
+      const st = preserved ? (preserved.values['smarthome.timersJson'] === null ? null : { val: JSON.stringify(preserved.values['smarthome.timersJson']) })
+        : await this.getStateAsync('smarthome.timersJson');
       if (st && typeof st.val === 'string') raw = st.val;
     } catch (_e) {
       raw = '';
@@ -1315,9 +1321,13 @@ class NexoWattVis extends HostedAdapter {
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
   async loadSmartHomeLogicClocksFromState() {
+    const preservedMode = this.namespace !== this.hostNamespace && /^nexowatt-ui\.\d+$/.test(this.namespace);
+    const preserved = preservedMode
+      ? (this._nwPreservedUiStates || await readPreservedUiStates(this, this.namespace, this._owner.config.eosUiMigration?.requiredStates)) : null;
     let raw = '';
     try {
-      const st = await this.getStateAsync('smarthome.logicClocksJson');
+      const st = preserved ? (preserved.values['smarthome.logicClocksJson'] === null ? null : { val: JSON.stringify(preserved.values['smarthome.logicClocksJson']) })
+        : await this.getStateAsync('smarthome.logicClocksJson');
       if (st && typeof st.val === 'string') raw = st.val;
     } catch (_e) {
       raw = '';
@@ -1343,6 +1353,7 @@ class NexoWattVis extends HostedAdapter {
     try { await this._nwRefreshLogicClockStatesNow('load'); } catch (_e3) {}
 
     this._nwScheduleNextSmartHomeLogicClock('load');
+    if (preservedMode) this._nwPreservedUiStates = null;
   }
   /** Code-Teil: persistSmartHomeLogicClocksToState – bestehender Helfer; Aufrufer und State-/API-Verträge bei Änderungen mitprüfen. */
   async persistSmartHomeLogicClocksToState(cfg) {
@@ -4689,6 +4700,7 @@ class NexoWattVis extends HostedAdapter {
   }
 
   async loadInstallerConfigFromState() {
+    const preservedMode = this.namespace !== this.hostNamespace && /^nexowatt-ui\.\d+$/.test(this.namespace);
     try {
       const baseNative = (this.config && typeof this.config === 'object') ? this.config : {};
       // Kunden-Navigation: Admin-native Schalter dürfen nicht durch alte Installer-Patches
@@ -4701,7 +4713,11 @@ class NexoWattVis extends HostedAdapter {
       let needPersist = false;
       let source = 'state';
 
-      const st = await this.getStateAsync('installer.configJson');
+      const preserved = preservedMode
+        ? (this._nwPreservedUiStates || await readPreservedUiStates(this, this.namespace, this._owner.config.eosUiMigration?.requiredStates))
+        : null;
+      const st = preserved ? (preserved.values['installer.configJson'] === null ? null : { val: JSON.stringify(preserved.values['installer.configJson']) })
+        : await this.getStateAsync('installer.configJson');
       const raw = st && st.val;
 
       if (typeof raw === 'string' && raw.trim()) {
@@ -4726,7 +4742,7 @@ class NexoWattVis extends HostedAdapter {
       // Extra safety: even if the state contains *valid* JSON (e.g. an empty patch), it may still be
       // a reset after an update. In that case, prefer the uninstall-proof userdata backup when it
       // contains a more complete configuration (e.g. mapped datapoints).
-      try {
+      if (!preservedMode) try {
         const stateScore = this._nwPatchScore ? this._nwPatchScore(patch) : 0;
         const b = await this.nwReadUserdataBackup();
         const bPatch = (b && typeof b === 'object') ? b.configPatch : null;
@@ -4739,7 +4755,7 @@ class NexoWattVis extends HostedAdapter {
         }
       } catch (_e) {}
 // Fallback: read uninstall-proof backup from 0_userdata.0 when state is empty/invalid
-      if (needPersist) {
+      if (needPersist && !preservedMode) {
         try {
           const b = await this.nwReadUserdataBackup();
           if (b && b.configPatch && typeof b.configPatch === 'object' && !Array.isArray(b.configPatch)) {
@@ -4784,6 +4800,7 @@ class NexoWattVis extends HostedAdapter {
 
     } catch (e) {
       this.log.warn('loadInstallerConfigFromState failed: credential-config-load-failed');
+      if (preservedMode) throw e;
     }
   }
   /**
@@ -10165,7 +10182,7 @@ nwValidateLogicEditorConfig(config) {
  */
 buildSmartHomeDevicesFromConfig() {
   const smCfg = (this.config && this.config.smartHome) || {};
-  const enabled = !!smCfg.enabled;
+  const enabled = smartHomeEnabled(this.config, this._nwNativeConfigBase);
   const dps = smCfg.datapoints || {};
   const devices = [];
 
@@ -11531,6 +11548,9 @@ async onReady() {
       admitted = true;
       this._nwRuntimeLicenseSnapshot();
       this._hostedOperational = true;
+      // Bestands-Uhren erst nach vollständiger Hydration editierbar machen:
+      // bestätigte HTTP-Saves dürfen nicht vom Start-Snapshot ersetzt werden.
+      this._nwSmartHomeHydrating = this.namespace !== this.hostNamespace && /^nexowatt-ui\.\d+$/.test(this.namespace);
       await startupStep(() => this.migrateNativeConfig());
       await startupStep(() => this.ensureInfoConnectionState());
       await startupStep(() => this._nwSetInfoConnection(false, 'startup'));
@@ -11567,6 +11587,11 @@ async onReady() {
           this._nwStartConnectionHeartbeat();
         }
 
+        // Bestandsdaten vor jedem Anlegen von Default-States prüfen. Ein alter
+        // fremder userdata-Backup darf fehlende Kundendaten nicht verdecken.
+        if (this.namespace !== this.hostNamespace && /^nexowatt-ui\.\d+$/.test(this.namespace)) {
+          this._nwPreservedUiStates = await startupStep(() => readPreservedUiStates(this, this.namespace, this._owner.config.eosUiMigration?.requiredStates));
+        }
         // create states first, then write config defaults
         await startupStep(() => this.ensureInstallerStates());
         // cleanup: remove deprecated 'installer.password' object if present
@@ -11711,10 +11736,15 @@ async onReady() {
       this.buildSmartHomeDevicesFromConfig();
 
       // SmartHome: Endkunden-Zeitschaltuhren laden + Scheduler starten
-      try { await startupStep(() => this.loadSmartHomeTimersFromState()); } catch (_e) {}
+      try { await startupStep(() => this.loadSmartHomeTimersFromState()); } catch (_e) {
+        if (this.namespace !== this.hostNamespace && /^nexowatt-ui\.\d+$/.test(this.namespace)) throw _e;
+      }
 
       // SmartHome: Logik-Uhren laden + Scheduler starten
-      try { await startupStep(() => this.loadSmartHomeLogicClocksFromState()); } catch (_e) {}
+      try { await startupStep(() => this.loadSmartHomeLogicClocksFromState()); } catch (_e) {
+        if (this.namespace !== this.hostNamespace && /^nexowatt-ui\.\d+$/.test(this.namespace)) throw _e;
+      }
+      this._nwSmartHomeHydrating = false;
 
       // NexoLogic (node/graph) runtime engine
       try { await startupStep(() => this.initLogicEngine()); } catch (e) { this.log.warn('NexoLogic init failed: ' + (e && e.message ? e.message : e)); }
@@ -11725,12 +11755,19 @@ async onReady() {
       else this.log.warn('EOS_EMS_INIT_FAILED: Bedienoberfläche verfügbar, Betriebsstart unvollständig.');
     } catch (e) {
       if (this._nwShuttingDown) return;
-      if (e && ['EOS_UI_OWNERSHIP_LOST', 'EOS_UI_LICENSE_LOST'].includes(e.message)) {
+      const fatalStartupCodes = ['EOS_UI_OWNERSHIP_LOST', 'EOS_UI_LICENSE_LOST',
+        'EOS_MIGRATION_UI_STATE_INVALID', 'EOS_MIGRATION_UI_STATE_UNAVAILABLE', 'EOS_MIGRATION_UI_STATE_TIMEOUT'];
+      const fatalStartupCode = e && (fatalStartupCodes.includes(e.code) ? e.code
+        : (fatalStartupCodes.includes(e.message) ? e.message : ''));
+      if (fatalStartupCode) {
         // An incomplete start may not resume after losing its admission. Cleanup only
         // owns runtime resources; the owner's HTTPS listener and recovery routes stay up.
+        // Dasselbe gilt für beschädigte Bestandskonfigurationen, auch nach bereits
+        // abgeschlossener Migration: kein schreibbarer Rückfall auf native Defaults.
+        this._nwPreservedUiStates = null;
         await new Promise(resolve => this.onUnload(resolve));
-        this._hostedStartup = { state: 'degraded', error: e.message };
-        this.log.error(`${e.message}: Betriebsstart abgebrochen; Adapterneustart erforderlich.`);
+        this._hostedStartup = { state: 'degraded', error: fatalStartupCode };
+        this.log.error(`${fatalStartupCode}: Betriebsstart abgebrochen; Adapterneustart erforderlich.`);
         return;
       }
       this._hostedStartup = { state: 'degraded', error: 'EOS_UI_STARTUP_FAILED' };
@@ -13646,6 +13683,10 @@ app.post('/api/smarthome/scene/run', requireAuth, async (req, res) => {
 // --- SmartHome Zeitschaltuhren (Endkunde) ---
 // API-Kommentar: GET-Route. Zweck: stellt einen Web-/API-Endpunkt bereit. Zusammenhang: Frontend-Dateien in www/* können diesen Endpunkt direkt nutzen. Route/Handler: '/api/smarthome/timers', requireAuth, async (_req, res) => {
 app.get('/api/smarthome/timers', requireAuth, async (_req, res) => {
+  if (this._nwSmartHomeHydrating === true || this._nwShuttingDown === true) {
+    sendNoStore(res);
+    return res.status(503).json({ ok: false, error: this._nwShuttingDown ? 'EOS_UI_UNAVAILABLE' : 'EOS_SMARTHOME_INITIALIZING' });
+  }
   try {
     const cfg = this.getSmartHomeTimersConfig();
     res.json({ ok: true, config: cfg });
@@ -13657,6 +13698,10 @@ app.get('/api/smarthome/timers', requireAuth, async (_req, res) => {
 
 // API-Kommentar: POST-Route. Zweck: stellt einen Web-/API-Endpunkt bereit. Zusammenhang: Frontend-Dateien in www/* können diesen Endpunkt direkt nutzen. Route/Handler: '/api/smarthome/timers', requireAuth, async (req, res) => {
 app.post('/api/smarthome/timers', requireAuth, async (req, res) => {
+  if (this._nwSmartHomeHydrating === true || this._nwShuttingDown === true) {
+    sendNoStore(res);
+    return res.status(503).json({ ok: false, error: this._nwShuttingDown ? 'EOS_UI_UNAVAILABLE' : 'EOS_SMARTHOME_INITIALIZING' });
+  }
   try {
     const body = req.body || {};
     const current = this.getSmartHomeTimersConfig();
@@ -13706,6 +13751,10 @@ app.post('/api/smarthome/timers', requireAuth, async (req, res) => {
 // --- SmartHome Logik-Uhren (Installer) ---
 // NexoLogic kann frei zugeordnete Datenpunkte schreiben: Einrichtung nur für Installer/Admin.
 app.get('/api/smarthome/logic-clocks', requireNexoLogicConfig, async (_req, res) => {
+  if (this._nwSmartHomeHydrating === true || this._nwShuttingDown === true) {
+    sendNoStore(res);
+    return res.status(503).json({ ok: false, error: this._nwShuttingDown ? 'EOS_UI_UNAVAILABLE' : 'EOS_SMARTHOME_INITIALIZING' });
+  }
   try {
     const cfg = this.getSmartHomeLogicClocksConfig();
     res.json({ ok: true, config: cfg });
@@ -13717,6 +13766,10 @@ app.get('/api/smarthome/logic-clocks', requireNexoLogicConfig, async (_req, res)
 
 // NexoLogic kann frei zugeordnete Datenpunkte schreiben: Einrichtung nur für Installer/Admin.
 app.post('/api/smarthome/logic-clocks', requireNexoLogicConfig, async (req, res) => {
+  if (this._nwSmartHomeHydrating === true || this._nwShuttingDown === true) {
+    sendNoStore(res);
+    return res.status(503).json({ ok: false, error: this._nwShuttingDown ? 'EOS_UI_UNAVAILABLE' : 'EOS_SMARTHOME_INITIALIZING' });
+  }
   try {
     const body = req.body || {};
     const current = this.getSmartHomeLogicClocksConfig();
@@ -14397,6 +14450,9 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
     });
 
 // --- SmartHomeConfig API (VIS-Konfig & Editor) ---
+    // Eigener Schalter ersetzt die entfallenen UI-Adapter-Einstellungen. Die
+    // Gebäudestruktur aktiviert SmartHome nicht stillschweigend.
+    registerSmartHomeActivationApi(app, this, requireSmartHomeConfig);
     // Technische SmartHome-Konfiguration: Lesen und Schreiben nur für Installer/Admin.
     app.get('/api/smarthome/config', requireSmartHomeConfig, (req, res) => {
       try {
@@ -22536,27 +22592,7 @@ app.get('/config', async (req, res) => {
       const storageFarmConfigured = storageFarmConfiguredCount >= 2;
       const storageFarmAvailable = !!(storageFarmAppActive && storageFarmConfigured);
 
-      const smartHomeAdminEnabled = (() => {
-        try {
-          const nativeCfg = (this._nwNativeConfigBase && typeof this._nwNativeConfigBase === 'object') ? this._nwNativeConfigBase : {};
-          const nativeSmartHome = (nativeCfg.smartHome && typeof nativeCfg.smartHome === 'object') ? nativeCfg.smartHome : null;
-          if (nativeSmartHome && typeof nativeSmartHome.enabled === 'boolean') return nativeSmartHome.enabled === true;
-        } catch (_e) {}
-        return !!(cfg.smartHome && cfg.smartHome.enabled);
-      })();
-      const smartHomeAppCenterActive = (() => {
-        try {
-          const emsApps = (cfg && cfg.emsApps && typeof cfg.emsApps === 'object') ? cfg.emsApps : {};
-          const apps = (emsApps.apps && typeof emsApps.apps === 'object') ? emsApps.apps : {};
-          const app = (apps.smartHome && typeof apps.smartHome === 'object')
-            ? apps.smartHome
-            : ((apps.smarthome && typeof apps.smarthome === 'object') ? apps.smarthome : null);
-          return !!(app && app.installed === true && app.enabled === true);
-        } catch (_e) {
-          return false;
-        }
-      })();
-      const smartHomeCustomerEnabled = !!(smartHomeAdminEnabled || smartHomeAppCenterActive);
+      const smartHomeCustomerEnabled = smartHomeEnabled(cfg, this._nwNativeConfigBase);
       const smartHomeForConfig = Object.assign({}, (cfg.smartHome && typeof cfg.smartHome === 'object') ? cfg.smartHome : {}, { enabled: smartHomeCustomerEnabled });
 
       /**
@@ -33606,6 +33642,8 @@ return res.json(out);
     this._nwShuttingDown = true;
     this._hostedStartup = { state: 'stopped', error: '' };
     this._hostedOperational = false;
+    this._nwSmartHomeHydrating = false;
+    this._nwPreservedUiStates = null;
     try { this._nwCancelHistoryRequests?.(); } catch (_eHistory) {}
     this._nwHistoryApiCache?.clear();
     this._nwShcfgDetectCache?.clear();

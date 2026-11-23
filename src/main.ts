@@ -2679,17 +2679,15 @@ class Admin extends Adapter {
         // subscribe to all object changes
         socket.subscribe('objectChange', '*');
 
-        this.getForeignObjectAsync('system.meta.uuid')
-            .then(async obj => {
-                if (obj?.native) {
-                    try {
-                        await socket.updateRatings();
-                    } catch (error) {
-                        this.log.error(`Cannot fetch ratings: ${(error as Error).toString()}`);
-                    }
-                }
-            })
-            .catch(error => this.log.error(`Cannot read UUID: ${error}`));
+        // Optional ioBroker ratings disclose the system UUID. Leave both the UUID
+        // lookup and external request disabled unless the administrator opted in.
+        if (this.config.eosExternalRatings === true) {
+            void socket.updateRatings().catch(() => {
+                this.log.warn(
+                    'EOS_EXTERNAL_RATINGS_UNAVAILABLE: Online-Adapterbewertungen konnten nicht geladen werden.',
+                );
+            });
+        }
     }
 
     async applyRightsToObjects(pattern: string, types: string[] | string): Promise<number> {

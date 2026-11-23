@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "eos-admin",
-    "version": "9.0.7",
+    "version": "9.0.8",
     "titleLang": {
       "en": "NexoWatt EOS",
       "de": "NexoWatt EOS",
@@ -18,6 +18,10 @@
     "connectionType": "local",
     "dataSource": "push",
     "news": {
+      "9.0.8": {
+        "en": "Explicit SmartHome activation, protected legacy configuration loading, same-tab administration and maintained backup scheduling. Node.js 22 and 24 supported; test channel with documented migration limits.",
+        "de": "SmartHome direkt aktivieren, geschützte Bestandskonfiguration laden, Administration im selben Tab und gepflegte Backup-Zeitplanung. Node.js 22 und 24 unterstützt; Prüfkanal mit dokumentierten Migrationsgrenzen."
+      },
       "9.0.7": {
         "de": "Gerätekonfiguration ohne Sitzungsabbruch, geprüfte Bestandsübernahme, integrierte Sicherung und lokale Zertifikatsverwaltung. Einheitliche Moduloberflächen und begrenzte Caches. Umfang und Abnahmegrenzen siehe Prüfbericht.",
         "en": "Device configuration without session interruption, guarded legacy migration, integrated backup and local certificate management. Consistent module interfaces and bounded caches. See the report for scope and acceptance limitations."
@@ -101,11 +105,6 @@
         "de": "Stable-Hotfix 7.10.2 beseitigt die EOS-Admin-Startschleife: Stable-Update-Status wird nicht mehr in die laufende Instanzkonfiguration geschrieben, der erste Abgleich startet verzögert und das Release prüft die vollständige Backend-Modulkette einschließlich eosRequestSecurity.",
         "en": "Stable hotfix 7.10.2 removes the EOS Admin restart loop: stable-update status is no longer written to the running instance configuration, first reconciliation is delayed, and the release validates the complete backend module chain including eosRequestSecurity.",
         "nl": "Stable-hotfix 7.10.2 verhelpt de EOS Admin-herstartlus: de status van stabiele updates wordt niet meer naar de configuratie van de actieve instantie geschreven, de eerste synchronisatie start vertraagd en de release controleert de volledige backendmoduleketen inclusief eosRequestSecurity."
-      },
-      "7.10.1": {
-        "de": "Stable-Kandidat 7.10.1 basiert wieder auf 7.9.98: native Passwortverwaltung ohne erzwungene Erstpasswortseite, dauerhafter Cockpit-Scrollbereich, Stift im unteren Kartenbereich und abschaltbare NexoWatt-Stable-Updates.",
-        "en": "Stable candidate 7.10.1 returns to the 7.9.98 baseline: native password management without forced first-password page, persistent cockpit scrolling, in-grid edit control and optional NexoWatt stable updates.",
-        "nl": "Stable-kandidaat 7.10.1 keert terug naar de 7.9.98-basis: native wachtwoordbeheer zonder verplichte eerste-wachtwoordpagina, blijvend cockpit-scrollen, bewerken in het onderste kaartgebied en uitschakelbare NexoWatt-stabiele updates."
       }
     },
     "desc": {
@@ -362,6 +361,7 @@
     "eosExternalOrigin": "",
     "eosModules": {},
     "eosAutoMigrate": true,
+    "eosExternalRatings": false,
     "eosMdnsEnabled": true,
     "eosMdnsHostname": "nexowatt",
     "eosUnifiedEnabled": true,

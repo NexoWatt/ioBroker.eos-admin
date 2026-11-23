@@ -9,6 +9,8 @@ export interface AdminAdapterConfig extends ioBroker.AdapterConfig {
     eosMdnsHostname?: string;
     /** Migrate only compatible, unambiguous legacy instances after preflight. */
     eosAutoMigrate?: boolean;
+    /** Explicit opt-in: ioBroker online ratings receive the system UUID. */
+    eosExternalRatings?: boolean;
     /** Answer ACME HTTP-01 challenges published by the acme adapter. Enabled if not set */
     acmeChallenge: boolean;
     accessAllowedConfigs: string[];
