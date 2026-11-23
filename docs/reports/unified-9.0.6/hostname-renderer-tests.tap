@@ -1,0 +1,70 @@
+TAP version 13
+# Subtest: default uses verified TLS upstream, explicit SNI and exact unchanged Browser Host
+ok 1 - default uses verified TLS upstream, explicit SNI and exact unchanged Browser Host
+  ---
+  duration_ms: 7.121197
+  type: 'test'
+  ...
+# Subtest: local alias is explicit and HTTP loopback is an explicit incompatible legacy profile
+ok 2 - local alias is explicit and HTTP loopback is an explicit incompatible legacy profile
+  ---
+  duration_ms: 1.219871
+  type: 'test'
+  ...
+# Subtest: nexowatt is an explicit exact public host while upstream identity and existing defaults stay separate
+ok 3 - nexowatt is an explicit exact public host while upstream identity and existing defaults stay separate
+  ---
+  duration_ms: 1.865921
+  type: 'test'
+  ...
+# Subtest: public host validation rejects unsafe authorities and does not silently repair them
+ok 4 - public host validation rejects unsafe authorities and does not silently repair them
+  ---
+  duration_ms: 1.958289
+  type: 'test'
+  ...
+# Subtest: TLS requires an explicit CA file and strictly validated DNS certificate identity
+ok 5 - TLS requires an explicit CA file and strictly validated DNS certificate identity
+  ---
+  duration_ms: 0.736113
+  type: 'test'
+  ...
+# Subtest: host and every certificate-path interpolation reject injection and ambiguous paths
+ok 6 - host and every certificate-path interpolation reject injection and ambiguous paths
+  ---
+  duration_ms: 0.653571
+  type: 'test'
+  ...
+# Subtest: files and complete parent chains reject symlinks, insecure permissions and absent inputs
+ok 7 - files and complete parent chains reject symlinks, insecure permissions and absent inputs
+  ---
+  duration_ms: 1.800564
+  type: 'test'
+  ...
+# Subtest: output is private and exclusive, including symlink and parent-directory attacks
+ok 8 - output is private and exclusive, including symlink and parent-directory attacks
+  ---
+  duration_ms: 1.379329
+  type: 'test'
+  ...
+# Subtest: CLI rejects duplicate/unknown parameters and never replaces an existing file
+ok 9 - CLI rejects duplicate/unknown parameters and never replaces an existing file
+  ---
+  duration_ms: 422.370843
+  type: 'test'
+  ...
+# Subtest: nginx -t validates the generated TLS fragment when the binary is available
+ok 10 - nginx -t validates the generated TLS fragment when the binary is available # SKIP nginx not installed; no nginx syntax or real TLS handshake claim
+  ---
+  duration_ms: 1.648428
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 1
+# todo 0
+# duration_ms 573.860577

@@ -38,7 +38,7 @@ assert.match(p.version, /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/);
 assert.ok(!p.dependencies['iobroker.nexowatt-ui'], 'UI must be an internal module');
 for (const rel of [p.main, 'ui/main.js', 'adminWww/index.html', 'ui/www/login.html', 'ui/admin/react/index.html',
     'build/lib/eosUnifiedBoundary.js', 'build/lib/eosLicenseService.js',
-    'build/lib/eosSocketAdmin.js', 'build/lib/eosStateSubscriptions.js', 'release-manifests/unified/runtime.cdx.json']) {
+    'build/lib/eosSocketAdmin.js', 'build/lib/eosStateSubscriptions.js', 'build/lib/eosModuleHost.js', 'build/lib/eosModuleHttp.js', 'build/lib/eosDiscovery.js', 'modules/devices/index.js', 'modules/devices/admin/index.html', 'modules/eebus/index.js', 'modules/eebus/build/lib/eebusRuntime.js', 'modules/eebus/admin/index.html', 'release-manifests/unified/runtime.cdx.json']) {
     assert.ok(fs.statSync(path.join(root, rel)).isFile(), `MISSING_RUNTIME: ${rel}`);
 }
 assert.equal(require('./nexowatt-vendored-webserver.cjs').inspectVendoredWebserver(p, lock, root), null, 'VENDORED_SOURCE_PROVENANCE');

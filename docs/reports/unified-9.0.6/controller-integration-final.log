@@ -1,0 +1,94 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> iobroker.eos-admin@9.0.6 test:integration
+> mocha test/integration-unified.cjs --exit
+
+
+Running tests in /tmp/nexowatt-eos-906-controller/test-iobroker.eos-admin
+
+
+
+  Adapter integration tests
+
+up to date in 517ms
+
+up to date in 339ms
+
+added 258 packages in 16s
+    Adapter startup
+2026-11-23 06:34:36.589  - info: eos-admin.0 (619) starting. Version 9.0.6 in /tmp/nexowatt-eos-906-controller/test-iobroker.eos-admin/node_modules/iobroker.eos-admin, node: v24.22.3, js-controller: 7.2.5
+2026-11-23 06:34:36.667  - warn: eos-admin.0 (619) EOS account installer disabled: unique credential provisioning by Admin required
+2026-11-23 06:34:36.688  - warn: eos-admin.0 (619) EOS account guest disabled: unique credential provisioning by Admin required
+2026-11-23 06:34:36.709  - warn: eos-admin.0 (619) EOS account user disabled: unique credential provisioning by Admin required
+2026-11-23 06:34:36.716  - info: eos-admin.0 (619) [EOS licensing] TRUST_PERMISSIONS
+2026-11-23 06:34:36.816  - info: eos-admin.0 (619) requesting all objects
+2026-11-23 06:34:36.826  - info: eos-admin.0 (619) Operating-system password testing and changes are disabled in EOS; use authorized OS maintenance.
+2026-11-23 06:34:36.828  - warn: eos-admin.0 (619) Cannot check Node.js versions; bounded request or local update failed
+2026-11-23 06:34:36.835  - info: eos-admin.0 (619) received all objects
+2026-11-23 06:34:36.992  - info: eos-admin.0 (619) Request actual repository...
+2026-11-23 06:34:36.993  - warn: eos-admin.0 (619) Cannot update news; bounded request or local update failed
+2026-11-23 06:34:36.996  - error: eos-admin.0 (619) Host is not alive
+2026-11-23 06:34:37.026  - info: eos-admin.0 (619) [NexoWatt stable updates] Unattended installation blocked; managed policies quarantined (startup-security-migration)
+2026-11-23 06:34:37.072  - warn: eos-admin.0 (619) Repository cannot be read: Active repo - stable
+2026-11-23 06:34:37.074  - info: eos-admin.0 (619) Secure socket.io server listening on port 8188
+2026-11-23 06:34:37.082  - info: eos-admin.0 (619) EOS_HTTPS_READY: https server listening on 0.0.0.0:8188; login and system console available
+2026-11-23 06:34:37.082  - info: eos-admin.0 (619) EOS configured port: 8188; use a reachable host address with HTTPS.
+2026-11-23 06:34:37.082  - warn: eos-admin.0 (619) EOS_MDNS_NO_LOCAL_ADDRESS: Lokale Namensankündigung beendet; EOS bleibt über seine IP erreichbar.
+2026-11-23 06:34:37.126  - warn: eos-admin.0 (619) Active repository "stable" cannot be read
+The adapter started successfully.
+      ✔ The adapter starts (5758ms)
+2026-11-23 06:34:41.697  - info: eos-admin.0 (619) Got terminate signal TERMINATE_YOURSELF
+2026-11-23 06:34:41.708  - info: eos-admin.0 (619) terminating
+2026-11-23 06:34:41.709  - info: eos-admin.0 (619) Terminated (ADAPTER_REQUESTED_TERMINATION): Without reason
+2026-11-23 06:34:42.085  - warn: eos-admin.0 (619) Cannot update rating: timeout of 15000ms exceeded
+2026-11-23 06:34:42.206  - info: eos-admin.0 (619) terminating
+2026-11-23 06:34:42.207  - info: eos-admin.0 (619) terminating
+    User-defined tests
+      Unified real HTTPS onboarding and existing Admin preservation
+2026-11-23 06:34:43.134  - info: eos-admin.0 (636) starting. Version 9.0.6 in /tmp/nexowatt-eos-906-controller/test-iobroker.eos-admin/node_modules/iobroker.eos-admin, node: v24.22.3, js-controller: 7.2.5
+2026-11-23 06:34:43.219  - warn: eos-admin.0 (636) EOS account installer disabled: unique credential provisioning by Admin required
+2026-11-23 06:34:43.237  - warn: eos-admin.0 (636) EOS account guest disabled: unique credential provisioning by Admin required
+2026-11-23 06:34:43.255  - warn: eos-admin.0 (636) EOS account user disabled: unique credential provisioning by Admin required
+2026-11-23 06:34:43.268  - info: eos-admin.0 (636) [EOS licensing] TRUST_PERMISSIONS
+2026-11-23 06:34:43.345  - info: eos-admin.0 (636) EOS ACL guard restricted legacy admin visibility to system.group.administrator
+2026-11-23 06:34:43.369  - info: eos-admin.0 (636) requesting all objects
+2026-11-23 06:34:43.379  - info: eos-admin.0 (636) Operating-system password testing and changes are disabled in EOS; use authorized OS maintenance.
+2026-11-23 06:34:43.380  - warn: eos-admin.0 (636) Cannot check Node.js versions; bounded request or local update failed
+2026-11-23 06:34:43.386  - info: eos-admin.0 (636) received all objects
+2026-11-23 06:34:43.714  - info: eos-admin.0 (636) Request actual repository...
+2026-11-23 06:34:43.715  - warn: eos-admin.0 (636) Cannot update news; bounded request or local update failed
+2026-11-23 06:34:43.718  - error: eos-admin.0 (636) Host is not alive
+2026-11-23 06:34:43.746  - info: eos-admin.0 (636) [NexoWatt stable updates] Unattended installation blocked; managed policies quarantined (startup-security-migration)
+2026-11-23 06:34:43.791  - warn: eos-admin.0 (636) Repository cannot be read: Active repo - stable
+2026-11-23 06:34:43.794  - info: eos-admin.0 (636) Secure socket.io server listening on port 8188
+2026-11-23 06:34:43.884  - info: eos-admin.0 (636) EOS_HTTPS_READY: https server listening on 0.0.0.0:8188; login and system console available
+2026-11-23 06:34:43.885  - info: eos-admin.0 (636) EOS configured port: 8188; use a reachable host address with HTTPS.
+2026-11-23 06:34:43.930  - warn: eos-admin.0 (636) Active repository "stable" cannot be read
+2026-11-23 06:34:46.901  - info: eos-admin.0 (636) Unsubscribe from all states, except system's, because over 3 seconds the number of events is over 200 (in last second 0)
+2026-11-23 06:34:48.746  - warn: eos-admin.0 (636) Repository cannot be read: Active repo - stable
+2026-11-23 06:34:48.750  - warn: eos-admin.0 (636) Active repository "stable" cannot be read
+2026-11-23 06:35:46.887  - info: eos-admin.0 (636) Subscribe to all states again
+        ✔ survives a real state burst before any socket client connects and recovers its threshold (63416ms)
+        ✔ requires a trusted certificate and verifies the requested hostname
+        ✔ serves the single login and its actual script over verified TLS without an Origin header
+        ✔ accepts SAN-covered IP and hostname authorities including normalized HTTPS default ports (433ms)
+        ✔ permits only top-level entry navigation from an HTTP Admin while rejecting cross-site APIs
+        ✔ preserves enabled Admin port 8081 and all-interface bind across startup and repeated object events (3313ms)
+        ✔ denies anonymous APIs and rejects cross-origin authentication
+        ✔ authenticates once using a Secure HttpOnly cookie and directs the administrator to central activation (349ms)
+        ✔ serves integrated module editors and protects their APIs before activation (422ms)
+        - imports the release-pinned manufacturer public key through the real authenticated HTTPS route [environment skip: /, /etc lack POSIX root ownership; TRUST_PERMISSIONS verified]
+        - rejects an unapproved public key and preserves the previously imported manufacturer authority [environment skip: /, /etc lack POSIX root ownership; no manufacturer import possible]
+        ✔ requires CSRF for logout and revokes the authenticated session (104ms)
+2026-11-23 06:35:51.987  - info: eos-admin.0 (636) Got terminate signal TERMINATE_YOURSELF
+2026-11-23 06:35:51.990  - info: eos-admin.0 (636) terminating
+2026-11-23 06:35:51.991  - info: eos-admin.0 (636) Terminated (ADAPTER_REQUESTED_TERMINATION): Without reason
+2026-11-23 06:35:52.490  - info: eos-admin.0 (636) terminating
+2026-11-23 06:35:52.491  - info: eos-admin.0 (636) terminating
+        ✔ leaves the existing Admin recovery endpoint unchanged when EOS is stopped (520ms)
+        ✔ restarts the installed package against the same database and preserves HTTPS login and Admin access (2073ms)
+
+
+  13 passing (2m)
+  2 pending
+

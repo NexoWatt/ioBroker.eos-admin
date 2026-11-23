@@ -2,10 +2,10 @@
   "$schema": "http://cyclonedx.org/schema/bom-1.5.schema.json",
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
-  "serialNumber": "urn:uuid:9f39e1fc-1063-40b1-8616-307e5c83e8ad",
+  "serialNumber": "urn:uuid:95d02257-c118-4829-bcb6-5dea3414c444",
   "version": 2,
   "metadata": {
-    "timestamp": "2026-11-22T20:02:59.541Z",
+    "timestamp": "2026-11-23T05:27:26.719Z",
     "lifecycles": [
       {
         "phase": "build"
@@ -19,19 +19,57 @@
       }
     ],
     "component": {
-      "bom-ref": "iobroker.eos-admin@9.0.5",
+      "bom-ref": "iobroker.eos-admin@9.0.6",
       "type": "library",
       "name": "iobroker.eos-admin",
-      "version": "9.0.5",
+      "version": "9.0.6",
       "scope": "required",
       "author": "NexoWatt",
       "description": "NexoWatt EOS: licensed local energy management, dashboard and ioBroker system administration in one adapter.",
-      "purl": "pkg:npm/iobroker.eos-admin@9.0.5",
+      "purl": "pkg:npm/iobroker.eos-admin@9.0.6",
       "properties": [],
       "externalReferences": []
     }
   },
   "components": [
+    {
+      "bom-ref": "@babel/runtime@7.29.15",
+      "type": "library",
+      "name": "@babel/runtime",
+      "version": "7.29.15",
+      "scope": "required",
+      "author": "The Babel Team (https://babel.dev/team)",
+      "description": "babel's modular runtime helpers",
+      "purl": "pkg:npm/%40babel/runtime@7.29.15",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@babel/runtime/-/runtime-7.29.15.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/babel/babel.git"
+        },
+        {
+          "type": "website",
+          "url": "https://babel.dev/docs/en/next/babel-runtime"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "df4e20b1b6c656641cf9c3461f3c07065a9ea587562ca8f7557090046b7f106715ecf50f7ca23b90050d5b515910e0b095088bbd08e0d4911a025450eb5ea1f9"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
     {
       "bom-ref": "@balena/dockerignore@1.0.2",
       "type": "library",
@@ -794,6 +832,48 @@
       ]
     },
     {
+      "bom-ref": "@leichtgewicht/ip-codec@2.0.5",
+      "type": "library",
+      "name": "@leichtgewicht/ip-codec",
+      "version": "2.0.5",
+      "scope": "required",
+      "author": "Martin Heidegger",
+      "description": "Small package to encode or decode IP addresses from buffers to strings.",
+      "purl": "pkg:npm/%40leichtgewicht/ip-codec@2.0.5",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@leichtgewicht/ip-codec/-/ip-codec-2.0.5.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git+https://github.com/martinheidegger/ip-codec.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/martinheidegger/ip-codec#readme"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/martinheidegger/ip-codec/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "568f8f4a9646dbf7e682688dcd82bda96461f21fc21ebc03d26a358750f32f8cb31cd49f598ba319362c586ade0f4d3481c82667b2b862ce93c7d4f1b6c29d0f"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
       "bom-ref": "@node-oauth/formats@1.0.0",
       "type": "library",
       "name": "@node-oauth/formats",
@@ -1141,6 +1221,584 @@
       ]
     },
     {
+      "bom-ref": "@serialport/binding-mock@10.2.2",
+      "type": "library",
+      "name": "@serialport/binding-mock",
+      "version": "10.2.2",
+      "scope": "required",
+      "description": "The mock serialport bindings",
+      "purl": "pkg:npm/%40serialport/binding-mock@10.2.2",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@serialport/binding-mock/-/binding-mock-10.2.2.tgz"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/serialport/binding-mock"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "1c01731a193d3ae14ca6ea2beda4f91b50a13e09f9a92b2495314e4d45fbd9197aa74c7071256c46d1bfc5a1a9e9bc6937b7c8f43fd2f131cb0566c1812ea577"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@serialport/bindings-cpp@12.0.1",
+      "type": "library",
+      "name": "@serialport/bindings-cpp",
+      "version": "12.0.1",
+      "scope": "required",
+      "description": "SerialPort Hardware bindings for node serialport written in c++",
+      "purl": "pkg:npm/%40serialport/bindings-cpp@12.0.1",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@serialport/bindings-cpp/-/bindings-cpp-12.0.1.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/serialport/bindings-cpp.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "af65cec18d9d0ef6d6edd2aa48f224da0cecafa33a4297bdfbf360b3de1f35a365713442574d8f7daa0399181cb9ba4d55570b0139714b13d3203c35d9d6ca3a"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@serialport/parser-delimiter@11.0.0",
+      "type": "library",
+      "name": "@serialport/parser-delimiter",
+      "version": "11.0.0",
+      "scope": "required",
+      "purl": "pkg:npm/%40serialport/parser-delimiter@11.0.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@serialport/parser-delimiter/-/parser-delimiter-11.0.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/serialport/node-serialport.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "6992c98654538d2984c2594b1bb4b827cb3c72d4404b471bbc2a4ef3bb262ef9777b8060cdb56017a67acda25ddc08e2dae4a26207de74274d7382fa5bed44da"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@serialport/parser-readline@11.0.0",
+      "type": "library",
+      "name": "@serialport/parser-readline",
+      "version": "11.0.0",
+      "scope": "required",
+      "purl": "pkg:npm/%40serialport/parser-readline@11.0.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@serialport/parser-readline/-/parser-readline-11.0.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/serialport/node-serialport.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "ad1022be14644f760edbc5a39a61b81505fa2fe28c6f9fe2921cb29517f358fc349d25f2f7bfaed3ba5e4bd09b1ea68dbc990c847d65a1ca761f7e9a18c38420"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "debug@4.3.4",
+      "type": "library",
+      "name": "debug",
+      "version": "4.3.4",
+      "scope": "required",
+      "author": "Josh Junon <josh.junon@protonmail.com>",
+      "description": "Lightweight debugging utility for Node.js and the browser",
+      "purl": "pkg:npm/debug@4.3.4",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/debug/-/debug-4.3.4.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/debug-js/debug.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "3d15851ee494dde0ed4093ef9cd63b25c91eb758f4b793ae3ac1733cfcec7a40f9d9997ca947c520f122b305ea22f1d61951ce817fbb1bfbc234d85e870c5f91"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "ms@2.1.2",
+      "type": "library",
+      "name": "ms",
+      "version": "2.1.2",
+      "scope": "required",
+      "description": "Tiny millisecond conversion utility",
+      "purl": "pkg:npm/ms@2.1.2",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/ms/-/ms-2.1.2.tgz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "b0690fc7e56332d980e8c5f6ee80381411442c50996784b85ea7863970afebcb53fa36f7be4fd1c9a2963f43d32b25ad98b48cd1bf9a7544c4bdbb353c4687db"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@serialport/bindings-interface@1.2.2",
+      "type": "library",
+      "name": "@serialport/bindings-interface",
+      "version": "1.2.2",
+      "scope": "required",
+      "description": "SerialPort Bindings Typescript Types",
+      "purl": "pkg:npm/%40serialport/bindings-interface@1.2.2",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@serialport/bindings-interface/-/bindings-interface-1.2.2.tgz"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/serialport/bindings-interface"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "0896947796cbbed33d7397663bdacf0473d74daf51d94c29909d30761f4909871bacf5ac2b3f84aef4748412dea3b34f7a215d8c53b8b289d19638b0e1dd9788"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@serialport/parser-byte-length@12.0.0",
+      "type": "library",
+      "name": "@serialport/parser-byte-length",
+      "version": "12.0.0",
+      "scope": "required",
+      "purl": "pkg:npm/%40serialport/parser-byte-length@12.0.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@serialport/parser-byte-length/-/parser-byte-length-12.0.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/serialport/node-serialport.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "d1e8b4b711408feb3a153882245049d53da1a4a917f0c7743eee9da8cad8a22ae33ec9032c94606462eaa32dff9675356e4bc7a6724efbda09dcf07dbfcacd96"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@serialport/parser-cctalk@12.0.0",
+      "type": "library",
+      "name": "@serialport/parser-cctalk",
+      "version": "12.0.0",
+      "scope": "required",
+      "purl": "pkg:npm/%40serialport/parser-cctalk@12.0.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@serialport/parser-cctalk/-/parser-cctalk-12.0.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/serialport/node-serialport.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "d0f7cbccef6dd97e6e7cab813b7e0340a2d7ac20aa4bdc73d83d297ee68b35e4e4c86501bf8dbacf1a0c7f7aec311a1d0ce64d6c56e5bb701ef3830e4178e767"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@serialport/parser-delimiter@12.0.0",
+      "type": "library",
+      "name": "@serialport/parser-delimiter",
+      "version": "12.0.0",
+      "scope": "required",
+      "purl": "pkg:npm/%40serialport/parser-delimiter@12.0.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@serialport/parser-delimiter/-/parser-delimiter-12.0.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/serialport/node-serialport.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "82edbab55b79950a326e1a2b2d33ec1f68f62e75f700e3f6c7fdf8f835124cd6944f3bb67c15f0fa2b158d0269501156bba69e411670e5b2689795fd1b18db97"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@serialport/parser-inter-byte-timeout@12.0.0",
+      "type": "library",
+      "name": "@serialport/parser-inter-byte-timeout",
+      "version": "12.0.0",
+      "scope": "required",
+      "purl": "pkg:npm/%40serialport/parser-inter-byte-timeout@12.0.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@serialport/parser-inter-byte-timeout/-/parser-inter-byte-timeout-12.0.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/serialport/node-serialport.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "1a70a1f0ad0d00449f842b9702df857c1473d427fd0b32205dfa7b49d3205f0aedb949c20bfcae453505591beece160aa00a354cbd21854a3bed2147507d53ff"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@serialport/parser-packet-length@12.0.0",
+      "type": "library",
+      "name": "@serialport/parser-packet-length",
+      "version": "12.0.0",
+      "scope": "required",
+      "purl": "pkg:npm/%40serialport/parser-packet-length@12.0.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@serialport/parser-packet-length/-/parser-packet-length-12.0.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/serialport/node-serialport.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "a75862091aaf1871cb08dffc6623d463f1b4cebc5dee0b59b36e759fe71f3539fef3baf071d51ebbd0e9b3701a771df4fec3861852fa6eb21118ae25fedeccb9"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@serialport/parser-readline@12.0.0",
+      "type": "library",
+      "name": "@serialport/parser-readline",
+      "version": "12.0.0",
+      "scope": "required",
+      "purl": "pkg:npm/%40serialport/parser-readline@12.0.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@serialport/parser-readline/-/parser-readline-12.0.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/serialport/node-serialport.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "3bb732c02582f0f88e32fa3f82094405f0242e3a7f48434430be3a0570f291f28fe664cf338e9731a5f52f4c1a594e835c9a4182368befec97e95ae254f6cde3"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@serialport/parser-ready@12.0.0",
+      "type": "library",
+      "name": "@serialport/parser-ready",
+      "version": "12.0.0",
+      "scope": "required",
+      "purl": "pkg:npm/%40serialport/parser-ready@12.0.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@serialport/parser-ready/-/parser-ready-12.0.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/serialport/node-serialport.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "ca00f08f73b8483a5995bad152b6a85c8a08a9bf2c33b68c2abc868d84c81742519ca781d72b3cfb0229d1114c7456ceeb662b8940dec6d1c1e549b970a1525a"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@serialport/parser-regex@12.0.0",
+      "type": "library",
+      "name": "@serialport/parser-regex",
+      "version": "12.0.0",
+      "scope": "required",
+      "purl": "pkg:npm/%40serialport/parser-regex@12.0.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@serialport/parser-regex/-/parser-regex-12.0.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/serialport/node-serialport.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "7420158783ffa59acb70fbfd349da6bcf44183ae0be635ee891c48972c71759187e16b9bc1755763f9014e28509a200c3f16d3df2b21497f1fdbe7dea96b31a8"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@serialport/parser-slip-encoder@12.0.0",
+      "type": "library",
+      "name": "@serialport/parser-slip-encoder",
+      "version": "12.0.0",
+      "scope": "required",
+      "purl": "pkg:npm/%40serialport/parser-slip-encoder@12.0.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@serialport/parser-slip-encoder/-/parser-slip-encoder-12.0.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/serialport/node-serialport.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "d003f10c647d62f2574d17d8fae4468733a14e95396a4487d7cdd151cc3337b41787cff58f016c14b0aed20ae60147e2f9f22d0a447e5ebd5370d24b475dd534"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@serialport/parser-spacepacket@12.0.0",
+      "type": "library",
+      "name": "@serialport/parser-spacepacket",
+      "version": "12.0.0",
+      "scope": "required",
+      "purl": "pkg:npm/%40serialport/parser-spacepacket@12.0.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@serialport/parser-spacepacket/-/parser-spacepacket-12.0.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/serialport/node-serialport.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "768cce37184f0bfefca67b6ec69cff34eb55a6cf2a21cfd467375cfcbb8fbd5b2a0a8257891c4e83a66d08ffd6e7c8a26c90ca3d93c058f198799b7d0c9c48f9"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@serialport/stream@12.0.0",
+      "type": "library",
+      "name": "@serialport/stream",
+      "version": "12.0.0",
+      "scope": "required",
+      "purl": "pkg:npm/%40serialport/stream@12.0.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@serialport/stream/-/stream-12.0.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/serialport/node-serialport.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "f4e9fae2b873baa29d390ca260b62fda540e8774d953f0f7f88582479824d1a94f7a5da7c29a786300c41a25017eb41911d43ac70c343d6933aad878c2ac17dd"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
       "bom-ref": "@so-ric/colorspace@1.1.6",
       "type": "library",
       "name": "@so-ric/colorspace",
@@ -1327,6 +1985,43 @@
       ]
     },
     {
+      "bom-ref": "@types/readable-stream@4.0.25",
+      "type": "library",
+      "name": "@types/readable-stream",
+      "version": "4.0.25",
+      "scope": "required",
+      "description": "TypeScript definitions for readable-stream",
+      "purl": "pkg:npm/%40types/readable-stream@4.0.25",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@types/readable-stream/-/readable-stream-4.0.25.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/readable-stream"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "ec6b312fc59de57de387bdffaa05bb5829db06f192743f14dc4e098aebacdfff08f8f376d03b65909b70161affb089977c30d0d99d378bff70362205dd3552b3"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
       "bom-ref": "@types/triple-beam@1.3.5",
       "type": "library",
       "name": "@types/triple-beam",
@@ -1353,6 +2048,85 @@
         {
           "alg": "SHA-512",
           "content": "e966987ac4e144c0a5d7d8abc8c60feffc76395802b5b2157e50c61695a76fd8ab5c8dd48d8138033998ba250a635009b2d1a28e863e32052cccc811c4861363"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@types/ws@8.18.2",
+      "type": "library",
+      "name": "@types/ws",
+      "version": "8.18.2",
+      "scope": "required",
+      "description": "TypeScript definitions for ws",
+      "purl": "pkg:npm/%40types/ws@8.18.2",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@types/ws/-/ws-8.18.2.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/ws"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "ebb31097e7e958a5534f53587679a8dd4e2c73fc4fa3fcd00677159c8ef8aa641ad33fdbfb583a898a8d98608f6f13becf3d9a9256f4f1ad281df7a0895774ff"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "abort-controller@3.0.0",
+      "type": "library",
+      "name": "abort-controller",
+      "version": "3.0.0",
+      "scope": "required",
+      "author": "Toru Nagashima (https://github.com/mysticatea)",
+      "description": "An implementation of WHATWG AbortController interface.",
+      "purl": "pkg:npm/abort-controller@3.0.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/abort-controller/-/abort-controller-3.0.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git+https://github.com/mysticatea/abort-controller.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/mysticatea/abort-controller#readme"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/mysticatea/abort-controller/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "87c950f2d69c6589d1def3504e089b8feb4e0c7239ffe974e80bb63dcae2bff1a67add1e6a3e13c161f8d6c3bdc271c3890b048f5f6ad1daf375675e007b707a"
         }
       ],
       "licenses": [
@@ -2220,6 +2994,90 @@
       ]
     },
     {
+      "bom-ref": "bonjour-service@1.4.4",
+      "type": "library",
+      "name": "bonjour-service",
+      "version": "1.4.4",
+      "scope": "required",
+      "author": "ON LX Lited <team@onlx.ltd> (https://onlx.ltd)",
+      "description": "A Bonjour/Zeroconf implementation in TypeScript",
+      "purl": "pkg:npm/bonjour-service@1.4.4",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/bonjour-service/-/bonjour-service-1.4.4.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/onlxltd/bonjour-service.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/onlxltd/bonjour-service"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/onlxltd/bonjour-service/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "8c265c56fedea1ce107ac46c730119b5244e05e9fee8ba4a026048b10610aec01e5472f2317597fede9e215e4a891658354065f1e56a226104310f0be7e73f2b"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "broker-factory@3.1.15",
+      "type": "library",
+      "name": "broker-factory",
+      "version": "3.1.15",
+      "scope": "required",
+      "author": "Christoph Guttandin",
+      "description": "A little factory function to create a broker for a JSON-RPC based Web Worker.",
+      "purl": "pkg:npm/broker-factory@3.1.15",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/broker-factory/-/broker-factory-3.1.15.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/chrisguttandin/broker-factory.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/chrisguttandin/broker-factory"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/chrisguttandin/broker-factory/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "928f9a5af80db8fe3d99e1ab76352eeeb0be63e59a8b77023f13f7c56c07b077de8458ce879650336c82e20101d9475d799fd85e19b42b5786fcbe9fc729b63a"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
       "bom-ref": "buffer@5.7.1",
       "type": "library",
       "name": "buffer",
@@ -2939,6 +3797,48 @@
       ]
     },
     {
+      "bom-ref": "commist@3.2.0",
+      "type": "library",
+      "name": "commist",
+      "version": "3.2.0",
+      "scope": "required",
+      "author": "Matteo Collina <hello@matteocollina.com>",
+      "description": "Build your commands on minimist!",
+      "purl": "pkg:npm/commist@3.2.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/commist/-/commist-3.2.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/mcollina/commist.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/mcollina/commist"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/mcollina/commist/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "e0f20ca0f9e2868f8ba979a94b977736e1989dc1ba5d6964052546896c9c2f6d9d778d8e61d5068a5d825aece495a268371cb1512a4ee0c288054f78be258d03"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
       "bom-ref": "compressible@2.0.18",
       "type": "library",
       "name": "compressible",
@@ -3049,6 +3949,44 @@
         {
           "alg": "SHA-512",
           "content": "4e9a7ad0fe885090d3b8eabfe59f1c76c93326e8dfc2a7ce4e4af02308fb211212a679099d3e92c89e0f08f9c63281630bd75d85a979295218b40b7dee2c74e4"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "concat-stream@2.0.0",
+      "type": "library",
+      "name": "concat-stream",
+      "version": "2.0.0",
+      "scope": "required",
+      "author": "Max Ogden <max@maxogden.com>",
+      "description": "writable stream that concatenates strings or binary data and calls a callback with the result",
+      "purl": "pkg:npm/concat-stream@2.0.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/concat-stream/-/concat-stream-2.0.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "http://github.com/maxogden/concat-stream.git"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "http://github.com/maxogden/concat-stream/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "316b9f61d170e7771c1a3080f8e97b5c96290255bafe9ad2333b8f393467246706cee84b9f849caf3eea7faa3c6d1399e75e25b5acdc2052597af71f6e8d31ec"
         }
       ],
       "licenses": [
@@ -3490,6 +4428,40 @@
         {
           "alg": "SHA-512",
           "content": "daedce1b7c6e7f9305cb373831cb4d4542a38f02be524a2f458743d9e77f3593593ebb7496a1e72cac46865155bc06f8fe8b9f220406de75a0c267936c73af5c"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "dns-packet@5.6.1",
+      "type": "library",
+      "name": "dns-packet",
+      "version": "5.6.1",
+      "scope": "required",
+      "author": "Mathias Buus",
+      "description": "An abstract-encoding compliant module for encoding / decoding DNS packets",
+      "purl": "pkg:npm/dns-packet@5.6.1",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/dns-packet/-/dns-packet-5.6.1.tgz"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/mafintosh/dns-packet"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "97881c4a8ba172020a46fcb2f7d44d54e8315e289c13eda366836668d999e895e219a8c138901eb24d4e06526e33993673e7ae74674bc43a97b8f08a223ea4a7"
         }
       ],
       "licenses": [
@@ -4151,6 +5123,86 @@
         {
           "alg": "SHA-512",
           "content": "a8009776effd5473c1cdcca174e591e7f21a86118c7f4ae84de6497f3cf4efb1b0ca570377dd323872e8ba19afec62795f33e2e9e91a41677c02f3cfda73afa4"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "event-target-shim@5.0.1",
+      "type": "library",
+      "name": "event-target-shim",
+      "version": "5.0.1",
+      "scope": "required",
+      "author": "Toru Nagashima",
+      "description": "An implementation of WHATWG EventTarget interface.",
+      "purl": "pkg:npm/event-target-shim@5.0.1",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/event-target-shim/-/event-target-shim-5.0.1.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/mysticatea/event-target-shim.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/mysticatea/event-target-shim"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/mysticatea/event-target-shim/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "8bfd976e74b3feec51094ebe35d54980a5834cce36efe32a61b910cc3df6d43b8240952a3ae24a200d08336f96db1b581dd28e999e1d47a7c4c6c7784972fe59"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "events@3.3.0",
+      "type": "library",
+      "name": "events",
+      "version": "3.3.0",
+      "scope": "required",
+      "author": "Irakli Gozalishvili <rfobic@gmail.com> (http://jeditoolkit.com)",
+      "description": "Node's event emitter for all engines.",
+      "purl": "pkg:npm/events@3.3.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/events/-/events-3.3.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/Gozala/events.git"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "http://github.com/Gozala/events/issues/"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "990c3ed9f9106c02f343b574318d08a9d9d734e793b4fe2bd2537dcfb0006b009782a79aedb0e28b6d0062b201ac577f1f1d0cd8e733e92d75d4268591471bd1"
         }
       ],
       "licenses": [
@@ -4911,6 +5963,48 @@
         {
           "alg": "SHA-512",
           "content": "7f7a90f68432f63d808417bf1fd542f75c0b98a042094fe00ce9ca340606e61b303bb04b2a3d3d1dce4760dcfd70623efb19690c22200da8ad56cd3701347ce1"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "fast-unique-numbers@9.0.27",
+      "type": "library",
+      "name": "fast-unique-numbers",
+      "version": "9.0.27",
+      "scope": "required",
+      "author": "Christoph Guttandin",
+      "description": "A module to create a set of unique numbers as fast as possible.",
+      "purl": "pkg:npm/fast-unique-numbers@9.0.27",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/fast-unique-numbers/-/fast-unique-numbers-9.0.27.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/chrisguttandin/fast-unique-numbers.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/chrisguttandin/fast-unique-numbers"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/chrisguttandin/fast-unique-numbers/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "9c303d00378834df12036bb6c02b54fac8961534c3a90477ed7be03c80c399ba1641e131cfb5f49889b1b9a37e90975d96222acb61695519a7bd167e8fc8b5fc"
         }
       ],
       "licenses": [
@@ -5907,6 +7001,48 @@
       ]
     },
     {
+      "bom-ref": "help-me@5.0.0",
+      "type": "library",
+      "name": "help-me",
+      "version": "5.0.0",
+      "scope": "required",
+      "author": "Matteo Collina <hello@matteocollina.com>",
+      "description": "Help command for node, partner of minimist and commist",
+      "purl": "pkg:npm/help-me@5.0.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/help-me/-/help-me-5.0.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/mcollina/help-me.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/mcollina/help-me"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/mcollina/help-me/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "ef18289945fa00399c6331629341f303187fef7625291f5b985cdfe75099c11f9be98b735369b4bb8f61402a95e92be5a88aac6b1a2f7f076f6e7b30ddbff3a6"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
       "bom-ref": "http-errors@2.0.1",
       "type": "library",
       "name": "http-errors",
@@ -6033,6 +7169,40 @@
         {
           "license": {
             "id": "ISC"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "ip-address@10.7.6",
+      "type": "library",
+      "name": "ip-address",
+      "version": "10.7.6",
+      "scope": "required",
+      "author": "Beau Gunderson <beau@beaugunderson.com> (https://beaugunderson.com/)",
+      "description": "A library for parsing IPv4 and IPv6 IP addresses in node and the browser.",
+      "purl": "pkg:npm/ip-address@10.7.6",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/ip-address/-/ip-address-10.7.6.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/beaugunderson/ip-address.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "d342d890ce9bc882daf5e408c7aaa869708ce34c532dde7a019e2fc9a3d6dd84f26f8f556583e8e71b2202ae2db90e78187e11ee055d612709d41ec1efb3ee4e"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
           }
         }
       ]
@@ -7430,6 +8600,44 @@
       ]
     },
     {
+      "bom-ref": "minimist@1.2.8",
+      "type": "library",
+      "name": "minimist",
+      "version": "1.2.8",
+      "scope": "required",
+      "author": "James Halliday",
+      "description": "parse argument options",
+      "purl": "pkg:npm/minimist@1.2.8",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/minimist/-/minimist-1.2.8.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/minimistjs/minimist.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/minimistjs/minimist"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "db2c8047ca8190ddd8ba17896a7529582e54ddb6f9a2c0f2c0d07c4730d5943c031dba1c009bdeaaa8f5bbcf92543ee39164f8cafb070a95aaa96a80c5bd3308"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
       "bom-ref": "mkdirp-classic@0.5.3",
       "type": "library",
       "name": "mkdirp-classic",
@@ -7461,6 +8669,583 @@
         {
           "alg": "SHA-512",
           "content": "80a2dc444321b6e651c1101fa8fdd1156f932b826a029541b4e21fb55823b8006902da7184f19a0dc7ef6e136f0f407c883d6852bfedc57df936371a63a36cfc"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "modbus-serial@8.0.25",
+      "type": "library",
+      "name": "modbus-serial",
+      "version": "8.0.25",
+      "scope": "required",
+      "author": "Yaacov Zamir <kobi.zamir@gmail.com>",
+      "description": "A pure JavaScript implementation of MODBUS-RTU (Serial and TCP) for NodeJS. The serialport package is an optional dependency (use npm install --no-optional to skip).",
+      "purl": "pkg:npm/modbus-serial@8.0.25",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/modbus-serial/-/modbus-serial-8.0.25.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git+https://github.com/yaacov/node-modbus-serial.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/yaacov/node-modbus-serial#readme"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/yaacov/node-modbus-serial/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "4fa3875bcd24ec3b58645f7aa276afc3ce085cdbb8e045be7f26e055fb560063ab68bf2f4e6319a1df30ead84ead68f6236a870bd1ac9f69e2b554d40e287ee8"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@serialport/bindings-cpp@13.0.0",
+      "type": "library",
+      "name": "@serialport/bindings-cpp",
+      "version": "13.0.0",
+      "scope": "optional",
+      "description": "SerialPort Hardware bindings for node serialport written in c++",
+      "purl": "pkg:npm/%40serialport/bindings-cpp@13.0.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@serialport/bindings-cpp/-/bindings-cpp-13.0.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/serialport/bindings-cpp.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "af6e68e0193fbda3b52f251f63fba547a84283f69688de96a369635656f83e3e5ba9619c4910b856c7b86bd01c6a9b80bbf15e0731c26ca32f450782b8a8f321"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "debug@4.4.0",
+      "type": "library",
+      "name": "debug",
+      "version": "4.4.0",
+      "scope": "optional",
+      "author": "Josh Junon (https://github.com/qix-)",
+      "description": "Lightweight debugging utility for Node.js and the browser",
+      "purl": "pkg:npm/debug@4.4.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/debug/-/debug-4.4.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/debug-js/debug.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "e964d9fc8c4263f4fa0402e8647684e1cb69f719be679918fe9cd86821d115ec958688f196b9bee3acbaf0703a86bd1373012cb28c4d8831142508df3d9fd160"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@serialport/parser-byte-length@13.0.0",
+      "type": "library",
+      "name": "@serialport/parser-byte-length",
+      "version": "13.0.0",
+      "scope": "optional",
+      "purl": "pkg:npm/%40serialport/parser-byte-length@13.0.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@serialport/parser-byte-length/-/parser-byte-length-13.0.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/serialport/node-serialport.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "df6cafa9e4c0a89cc012d5f9cc2acdd4c7a3e7a189e61fdc545b020cf6c5f52d59482f455a33aa34082d072b1e1df153493b3fe19050659719069a25b7cb149e"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@serialport/parser-cctalk@13.0.0",
+      "type": "library",
+      "name": "@serialport/parser-cctalk",
+      "version": "13.0.0",
+      "scope": "optional",
+      "purl": "pkg:npm/%40serialport/parser-cctalk@13.0.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@serialport/parser-cctalk/-/parser-cctalk-13.0.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/serialport/node-serialport.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "444ac07b9ee0f60be7962795606227d71ca66f56f33576f642d510775e05a666d041895cae6b919c9c0a6b50604c2ba3a02921b5a4ed80795b0563b19bc536b8"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@serialport/parser-delimiter@13.0.0",
+      "type": "library",
+      "name": "@serialport/parser-delimiter",
+      "version": "13.0.0",
+      "scope": "optional",
+      "purl": "pkg:npm/%40serialport/parser-delimiter@13.0.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@serialport/parser-delimiter/-/parser-delimiter-13.0.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/serialport/node-serialport.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "42ac9bd055f56afb375da6d0a8d6994a2bf255b97fca5d23cb0226a7b78fbdf64a2f0c7b8c1663bcbf876b0b7dc081bab5fabacdb14cdb8bf30822bb4443148a"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@serialport/parser-inter-byte-timeout@13.0.0",
+      "type": "library",
+      "name": "@serialport/parser-inter-byte-timeout",
+      "version": "13.0.0",
+      "scope": "optional",
+      "purl": "pkg:npm/%40serialport/parser-inter-byte-timeout@13.0.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@serialport/parser-inter-byte-timeout/-/parser-inter-byte-timeout-13.0.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/serialport/node-serialport.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "6b4c3459e7135bb6c3d981d6ae94f3d6eca2580d9f0cdca6d248e63de352c19d9708ff896e2ad9b77d65e379b67b2eaa5c8b53615b9006d866ef9b0f55e1e718"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@serialport/parser-packet-length@13.0.0",
+      "type": "library",
+      "name": "@serialport/parser-packet-length",
+      "version": "13.0.0",
+      "scope": "optional",
+      "purl": "pkg:npm/%40serialport/parser-packet-length@13.0.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@serialport/parser-packet-length/-/parser-packet-length-13.0.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/serialport/node-serialport.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "eb46430c8a98462d17b3648f654a3826be4b2c88ed6feaefccf28c242a21aceead02a483a689dc369701d4ee16db598a4f1623a889d2cfe78caed9342cb7d922"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@serialport/parser-ready@13.0.0",
+      "type": "library",
+      "name": "@serialport/parser-ready",
+      "version": "13.0.0",
+      "scope": "optional",
+      "purl": "pkg:npm/%40serialport/parser-ready@13.0.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@serialport/parser-ready/-/parser-ready-13.0.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/serialport/node-serialport.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "24d51003ecb645fb386d4f9c19836a38f9cd30071aca1856f972598a148b417387719b059ce6b617d62d320f555d15887271e574762d8aca7ad84b63970db86f"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@serialport/parser-regex@13.0.0",
+      "type": "library",
+      "name": "@serialport/parser-regex",
+      "version": "13.0.0",
+      "scope": "optional",
+      "purl": "pkg:npm/%40serialport/parser-regex@13.0.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@serialport/parser-regex/-/parser-regex-13.0.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/serialport/node-serialport.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "9bb1e921fe7a1b95dcb83740dc3077e19d29262c313516a44e11078d26b8986d393a7598bf4206f25da853261fb86328c1059a56743ef2bf9bae53f11951fe78"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@serialport/parser-slip-encoder@13.0.0",
+      "type": "library",
+      "name": "@serialport/parser-slip-encoder",
+      "version": "13.0.0",
+      "scope": "optional",
+      "purl": "pkg:npm/%40serialport/parser-slip-encoder@13.0.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@serialport/parser-slip-encoder/-/parser-slip-encoder-13.0.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/serialport/node-serialport.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "7d41d9104c66ea2cc9eeb834035ca35f0bb8b0ecde0643c08c364f7dbf97428aa0b4a024facf877c80a2627ecdd9053d83269e08ef152a05b08be6ff0e8c183a"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@serialport/parser-spacepacket@13.0.0",
+      "type": "library",
+      "name": "@serialport/parser-spacepacket",
+      "version": "13.0.0",
+      "scope": "optional",
+      "purl": "pkg:npm/%40serialport/parser-spacepacket@13.0.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@serialport/parser-spacepacket/-/parser-spacepacket-13.0.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/serialport/node-serialport.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "0e85c9de61589b20fc5fff3ddf56a026fac13f1a936980ec3e8972f7f7304127a1feae048d0343f72497071a56cf959ca72094e233aebaca824803ec6c1df412"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@serialport/stream@13.0.0",
+      "type": "library",
+      "name": "@serialport/stream",
+      "version": "13.0.0",
+      "scope": "optional",
+      "purl": "pkg:npm/%40serialport/stream@13.0.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@serialport/stream/-/stream-13.0.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/serialport/node-serialport.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "17bc4b24ab231a8d96b8458c4843b54a299170e03e5ad5880ac635debd1a871f2cd9279c3d01f4eb7dfc836f0e4fb716eee45723ba0440093adaa879807256de"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "node-addon-api@8.3.0",
+      "type": "library",
+      "name": "node-addon-api",
+      "version": "8.3.0",
+      "scope": "optional",
+      "description": "Node.js API (Node-API)",
+      "purl": "pkg:npm/node-addon-api@8.3.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/node-addon-api/-/node-addon-api-8.3.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/nodejs/node-addon-api.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/nodejs/node-addon-api"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/nodejs/node-addon-api/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "f153a92c716b3909401fea80d19cee1919402d103afcb561f1026575bac2e03634857a0c3f497801cabc4f3142d35f07ced5a246ac82123d9a4d663652f9c952"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "node-gyp-build@4.8.4",
+      "type": "library",
+      "name": "node-gyp-build",
+      "version": "4.8.4",
+      "scope": "optional",
+      "author": "Mathias Buus (@mafintosh)",
+      "description": "Build tool and bindings loader for node-gyp that supports prebuilds",
+      "purl": "pkg:npm/node-gyp-build@4.8.4",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/node-gyp-build/-/node-gyp-build-4.8.4.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/prebuild/node-gyp-build.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/prebuild/node-gyp-build"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/prebuild/node-gyp-build/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "2c0e198f096751b947560ab4a01177265ffa87f36fb397f304bc1d105e27bb19c576c7da8dd7b859fc6d26bdc26a21fe17a7b070807fab88d0e14ccfca277e09"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "serialport@13.0.0",
+      "type": "library",
+      "name": "serialport",
+      "version": "13.0.0",
+      "scope": "optional",
+      "description": "Node.js package to access serial ports. Linux, OSX and Windows. Welcome your robotic JavaScript overlords. Better yet, program them!",
+      "purl": "pkg:npm/serialport@13.0.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/serialport/-/serialport-13.0.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/serialport/node-serialport.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "3c7a674ddf22b0c18f7c54d9342cce669f66e2600948d5a57bd271bba04f4dc5aaed85e5e6a37bb69f12827d21f96206703e89173e500e08b10b6b38556eefce"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@serialport/parser-readline@13.0.0",
+      "type": "library",
+      "name": "@serialport/parser-readline",
+      "version": "13.0.0",
+      "scope": "optional",
+      "purl": "pkg:npm/%40serialport/parser-readline@13.0.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@serialport/parser-readline/-/parser-readline-13.0.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/serialport/node-serialport.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "768bf7cd8a327f476dd52b9d775ab8d955584385a5962174318bc0300dcc3b2894d48786e2197427a6ee040db0e209770ce082d39b4680b0cdff7c882fcd60b0"
         }
       ],
       "licenses": [
@@ -7509,6 +9294,193 @@
       ]
     },
     {
+      "bom-ref": "mqtt@5.16.1",
+      "type": "library",
+      "name": "mqtt",
+      "version": "5.16.1",
+      "scope": "required",
+      "description": "A library for the MQTT protocol",
+      "purl": "pkg:npm/mqtt@5.16.1",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/mqtt/-/mqtt-5.16.1.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/mqttjs/MQTT.js.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "f5a11a891fe62db96c3008b29c3f2aba17064da20d76d6b66ddca49c0b5f5731127e87ba35c761fee12ce69fb7cea71312d81812bc0be29364d10900ca75f196"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "mqtt-packet@9.0.2",
+      "type": "library",
+      "name": "mqtt-packet",
+      "version": "9.0.2",
+      "scope": "required",
+      "description": "Parse and generate MQTT packets like a breeze",
+      "purl": "pkg:npm/mqtt-packet@9.0.2",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/mqtt-packet/-/mqtt-packet-9.0.2.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/mqttjs/mqtt-packet.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/mqttjs/mqtt-packet"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/mqttjs/mqtt-packet/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "32f218d01f3faa3abb6cac5d375783fa7ae58e879a6a2faa8cb2607d19f74e232ecf4a5a9ac2166366c53833d931236669bb0b00d5ec2e5e043285af95a4d958"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "bl@6.1.6",
+      "type": "library",
+      "name": "bl",
+      "version": "6.1.6",
+      "scope": "required",
+      "description": "Buffer List: collect buffers and access with a standard readable Buffer interface, streamable too!",
+      "purl": "pkg:npm/bl@6.1.6",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/bl/-/bl-6.1.6.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/rvagg/bl.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/rvagg/bl"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "8cbb0f80dfd84af3d483d517d0a77bdc25e99b63ec83d17131e0925e79375813b708c4f5d093308a3b9b8467c70a716ee933e7d5e8b76fdef9771bfb2b6a5656"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "buffer@6.0.3",
+      "type": "library",
+      "name": "buffer",
+      "version": "6.0.3",
+      "scope": "required",
+      "author": "Feross Aboukhadijeh",
+      "description": "Node.js Buffer API, for the browser",
+      "purl": "pkg:npm/buffer@6.0.3",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/buffer/-/buffer-6.0.3.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/feross/buffer.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/feross/buffer"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/feross/buffer/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "153882a4dc6dc226591c465b71b4c87198c44552029fdcaafe90c591397de7f031cc3d6768172d37b60eebcae233f80b48363bb1dacc6f2f21a1f00362ebaa38"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "lru-cache@10.4.3",
+      "type": "library",
+      "name": "lru-cache",
+      "version": "10.4.3",
+      "scope": "required",
+      "author": "Isaac Z. Schlueter <i@izs.me>",
+      "description": "A cache object that deletes the least-recently-used items.",
+      "purl": "pkg:npm/lru-cache@10.4.3",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/lru-cache/-/lru-cache-10.4.3.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/isaacs/node-lru-cache.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "24d03365c5eb0ade365462ee633d337c0cc37c0bc9596e807d8943050c835790c2948da6e6c0262be3883bbb39f577ec46c587a74da3009ad169d3d1193b7a49"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC"
+          }
+        }
+      ]
+    },
+    {
       "bom-ref": "ms@2.1.3",
       "type": "library",
       "name": "ms",
@@ -7527,6 +9499,48 @@
         {
           "alg": "SHA-512",
           "content": "e85973b9b4cb646dc9d9afcd542025784863ceae68c601f268253dc985ef70bb2fa1568726afece715c8ebf5d73fab73ed1f7100eb479d23bfb57b45dd645394"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "multicast-dns@7.2.5",
+      "type": "library",
+      "name": "multicast-dns",
+      "version": "7.2.5",
+      "scope": "required",
+      "author": "Mathias Buus (@mafintosh)",
+      "description": "Low level multicast-dns implementation in pure javascript",
+      "purl": "pkg:npm/multicast-dns@7.2.5",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/multicast-dns/-/multicast-dns-7.2.5.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/mafintosh/multicast-dns.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/mafintosh/multicast-dns"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/mafintosh/multicast-dns/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "d9ece73c93fccf60452d7e74b5fd0bb8e0eba4836a3f5455226fc239b6d37014484d08260bf4e3711105d4d79307321c4795cefee916a3e6073a305b17022ea6"
         }
       ],
       "licenses": [
@@ -7600,6 +9614,47 @@
       ]
     },
     {
+      "bom-ref": "node-addon-api@7.0.0",
+      "type": "library",
+      "name": "node-addon-api",
+      "version": "7.0.0",
+      "scope": "required",
+      "description": "Node.js API (Node-API)",
+      "purl": "pkg:npm/node-addon-api@7.0.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/node-addon-api/-/node-addon-api-7.0.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/nodejs/node-addon-api.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/nodejs/node-addon-api"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/nodejs/node-addon-api/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "be06c12534b89b9fca904d7ab792f2d165bd873e3ab3002cb6fd21618c0cb5b1bb0339d184dc9f2d17bc1d9022588a5c1f3a0eec7c612ee0508fdac9fc7a3464"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
       "bom-ref": "node-forge@1.4.3",
       "type": "library",
       "name": "node-forge",
@@ -7636,6 +9691,48 @@
       "licenses": [
         {
           "expression": "(BSD-3-Clause OR GPL-2.0)"
+        }
+      ]
+    },
+    {
+      "bom-ref": "node-gyp-build@4.6.0",
+      "type": "library",
+      "name": "node-gyp-build",
+      "version": "4.6.0",
+      "scope": "required",
+      "author": "Mathias Buus (@mafintosh)",
+      "description": "Build tool and bindings loader for node-gyp that supports prebuilds",
+      "purl": "pkg:npm/node-gyp-build@4.6.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/node-gyp-build/-/node-gyp-build-4.6.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/prebuild/node-gyp-build.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/prebuild/node-gyp-build"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/prebuild/node-gyp-build/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "3536552a7f48ca52f053368a8e46acd5ee2ed832cd715e2b7586a00383d674fc16f3b062ef3f81ce7c8a491c12ffbeb5b55fe5cc2197a655ac89a3232ea3f6cd"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
         }
       ]
     },
@@ -8244,6 +10341,81 @@
       ]
     },
     {
+      "bom-ref": "process@0.11.10",
+      "type": "library",
+      "name": "process",
+      "version": "0.11.10",
+      "scope": "required",
+      "author": "Roman Shtylman <shtylman@gmail.com>",
+      "description": "process information for node.js and browsers",
+      "purl": "pkg:npm/process@0.11.10",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/process/-/process-0.11.10.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/shtylman/node-process.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "71d19e7ff76b585a32743d49b0ccee15ff35d349d997e193fb269c7366c471e7797fd463938cfe5ad1544c1bbd3e13a2f63fe37e604fbb498c118e3021d005f0"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "process-nextick-args@2.0.1",
+      "type": "library",
+      "name": "process-nextick-args",
+      "version": "2.0.1",
+      "scope": "required",
+      "description": "process.nextTick but always with args",
+      "purl": "pkg:npm/process-nextick-args@2.0.1",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/process-nextick-args/-/process-nextick-args-2.0.1.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/calvinmetcalf/process-nextick-args.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/calvinmetcalf/process-nextick-args"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/calvinmetcalf/process-nextick-args/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "de8b943a9421b60adb39ad7b27bfaec4e4e92136166863fbfc0868477f80fbfd5ef6c92bcde9468bf757cc4632bdbc6e6c417a5a7db2a6c7132a22891459f56a"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
       "bom-ref": "promisify-child-process@4.1.2",
       "type": "library",
       "name": "promisify-child-process",
@@ -8544,6 +10716,47 @@
       ]
     },
     {
+      "bom-ref": "readable-stream@4.8.0",
+      "type": "library",
+      "name": "readable-stream",
+      "version": "4.8.0",
+      "scope": "required",
+      "description": "Node.js Streams, a user-land copy of the stream library from Node.js",
+      "purl": "pkg:npm/readable-stream@4.8.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/readable-stream/-/readable-stream-4.8.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/nodejs/readable-stream"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/nodejs/readable-stream"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/nodejs/readable-stream/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "da38534d4dc48a5a7fd83313ef581b728a82df97901dab0c247d111e4631c25c48bf7f8547a639c401592301062f12a48d9604165b2230d21dc14aa32b694b1d"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
       "bom-ref": "readline@1.3.0",
       "type": "library",
       "name": "readline",
@@ -8628,6 +10841,48 @@
         {
           "alg": "SHA-512",
           "content": "5dfd2759ee91b1ece214cbbe029f5b8a251b9a996ae92f7fa7eef0ed85cffc904786b5030d48706bebc0372b9bbaa7d9593bde53ffc36151ac0c6ed128bfef13"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "rfdc@1.4.1",
+      "type": "library",
+      "name": "rfdc",
+      "version": "1.4.1",
+      "scope": "required",
+      "author": "David Mark Clements <david.clements@nearform.com>",
+      "description": "Really Fast Deep Clone",
+      "purl": "pkg:npm/rfdc@1.4.1",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/rfdc/-/rfdc-1.4.1.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git+https://github.com/davidmarkclements/rfdc.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/davidmarkclements/rfdc#readme"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/davidmarkclements/rfdc/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "ab56f737942445459497b8b2ca569a8f790ea484f43768bd32a2044173fbdc656c37d730ddf771f17eb77049968491a2d8f3c2176dc88e9ee4b66777f6b6b020"
         }
       ],
       "licenses": [
@@ -8917,6 +11172,39 @@
         {
           "license": {
             "id": "Apache-2.0"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "serialport@12.0.0",
+      "type": "library",
+      "name": "serialport",
+      "version": "12.0.0",
+      "scope": "required",
+      "description": "Node.js package to access serial ports. Linux, OSX and Windows. Welcome your robotic JavaScript overlords. Better yet, program them!",
+      "purl": "pkg:npm/serialport@12.0.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/serialport/-/serialport-12.0.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/serialport/node-serialport.git"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "0261f70fd8473c59a717fa2afebbe281f880a2e00ac8afd38e7ae4c19458485671360809c70bdb01b7d8acb7aebeaee4b54761b877557528e3f39d99e7947eb8"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
           }
         }
       ]
@@ -9264,6 +11552,90 @@
       ]
     },
     {
+      "bom-ref": "smart-buffer@4.2.0",
+      "type": "library",
+      "name": "smart-buffer",
+      "version": "4.2.0",
+      "scope": "required",
+      "author": "Josh Glazebrook",
+      "description": "smart-buffer is a Buffer wrapper that adds automatic read & write offset tracking, string operations, data insertions, and more.",
+      "purl": "pkg:npm/smart-buffer@4.2.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/smart-buffer/-/smart-buffer-4.2.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/JoshGlazebrook/smart-buffer.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/JoshGlazebrook/smart-buffer/"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/JoshGlazebrook/smart-buffer/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "f7884ad0787cacfa90976c577371ec681a0e5ca576d0c4e83e4717bf06c84962c4b3eeb8b01ab9905827da42431dbd4faf2f72acfd1dc6b088f5145c8bb4572a"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "socks@2.8.11",
+      "type": "library",
+      "name": "socks",
+      "version": "2.8.11",
+      "scope": "required",
+      "author": "Josh Glazebrook",
+      "description": "Fully featured SOCKS proxy client supporting SOCKSv4, SOCKSv4a, and SOCKSv5. Includes Bind and Associate functionality.",
+      "purl": "pkg:npm/socks@2.8.11",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/socks/-/socks-2.8.11.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git+https://github.com/JoshGlazebrook/socks.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/JoshGlazebrook/socks/"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/JoshGlazebrook/socks/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "d87fee43bf9234fd212b5e91a2b4da934996ac5a2aa38027015192525d9d4f4ee86e059d5adf60ae697e5439752e496050e3d633801ba34bbce82be9f2f16363"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
       "bom-ref": "source-map@0.6.1",
       "type": "library",
       "name": "source-map",
@@ -9408,6 +11780,44 @@
         {
           "alg": "SHA-512",
           "content": "439b61052c69e6df163d34c9412e7d2eb1aa399a8eb2b843183566f1acc2a8806348177b9ddf68d8f33e983ba5410921f21fffe14ea11599dcfe6ba5f2de6959"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "split2@4.2.0",
+      "type": "library",
+      "name": "split2",
+      "version": "4.2.0",
+      "scope": "required",
+      "author": "Matteo Collina <hello@matteocollina.com>",
+      "description": "split a Text Stream into a Line Stream, using Stream 3",
+      "purl": "pkg:npm/split2@4.2.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/split2/-/split2-4.2.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/mcollina/split2.git"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "http://github.com/mcollina/split2/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "51c8dc24e5a49eb36417a3cb5fcdea70733a28781528d915eb663c6b9b980d5bfdc9d19057000730aa877498ded554d6a658c6d1662908386b09d00e607e135a"
         }
       ],
       "licenses": [
@@ -9852,6 +12262,48 @@
       ]
     },
     {
+      "bom-ref": "thunky@1.1.0",
+      "type": "library",
+      "name": "thunky",
+      "version": "1.1.0",
+      "scope": "required",
+      "author": "Mathias Buus Madsen <mathiasbuus@gmail.com>",
+      "description": "delay the evaluation of a paramless async function and cache the result",
+      "purl": "pkg:npm/thunky@1.1.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/thunky/-/thunky-1.1.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/mafintosh/thunky.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/mafintosh/thunky#readme"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/mafintosh/thunky/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "78763b9c17ed813841a8ec8719537e97c805d01b9c3f4f5f328d283bf2dbd30d4e17cd1d26ffa50d5a571bad16310be47310243726cab2b10813766d28698fac"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
       "bom-ref": "tiny-glob@0.2.9",
       "type": "library",
       "name": "tiny-glob",
@@ -9954,6 +12406,48 @@
       ]
     },
     {
+      "bom-ref": "tslib@2.9.1",
+      "type": "library",
+      "name": "tslib",
+      "version": "2.9.1",
+      "scope": "required",
+      "author": "Microsoft Corp.",
+      "description": "Runtime library for TypeScript helper functions",
+      "purl": "pkg:npm/tslib@2.9.1",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/tslib/-/tslib-2.9.1.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/Microsoft/tslib.git"
+        },
+        {
+          "type": "website",
+          "url": "https://www.typescriptlang.org/"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/Microsoft/TypeScript/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "6b8531f552ae20c1ec392ec435b12aea12b66466084f6ed1b65d04e1e0fd2aac3184a89078c644ffdc5bdc8758c166923b220140b1318508170d3628882c6758"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "0BSD"
+          }
+        }
+      ]
+    },
+    {
       "bom-ref": "tweetnacl@0.14.5",
       "type": "library",
       "name": "tweetnacl",
@@ -10044,6 +12538,44 @@
         {
           "alg": "SHA-512",
           "content": "8ff3bf77b19c642c8d97bfe1c1901beb4eabcea932bda0dcb4b99c91bc4bcc7bc50734c91ee1847687404dc3f7c884680eb2c790801326ebf36c5969fe48b671"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "typedarray@0.0.6",
+      "type": "library",
+      "name": "typedarray",
+      "version": "0.0.6",
+      "scope": "required",
+      "author": "James Halliday",
+      "description": "TypedArray polyfill for old browsers",
+      "purl": "pkg:npm/typedarray@0.0.6",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/typedarray/-/typedarray-0.0.6.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git://github.com/substack/typedarray.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/substack/typedarray"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "fda0831066ad1af67604893e1e62dfe227c2245c2f28535bf7f25e64f32e95f805ada727f5015c01fe463bc07f9b07948d2a1b952e489f471686aa5fb3fe4f40"
         }
       ],
       "licenses": [
@@ -10527,6 +13059,174 @@
       ]
     },
     {
+      "bom-ref": "worker-factory@7.0.50",
+      "type": "library",
+      "name": "worker-factory",
+      "version": "7.0.50",
+      "scope": "required",
+      "author": "Christoph Guttandin",
+      "description": "A little factory function to create a JSON-RPC based Web Worker implementation.",
+      "purl": "pkg:npm/worker-factory@7.0.50",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/worker-factory/-/worker-factory-7.0.50.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/chrisguttandin/worker-factory.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/chrisguttandin/worker-factory"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/chrisguttandin/worker-factory/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "861c1cd06fac170338a81ba12485019f6a7525ff2ffc5c262d400d05ffd0f8bb76b88f267c86508576994000a87500f847b669e9c9ffebbd366c8bcd9f6a6e25"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "worker-timers@8.0.34",
+      "type": "library",
+      "name": "worker-timers",
+      "version": "8.0.34",
+      "scope": "required",
+      "author": "Christoph Guttandin",
+      "description": "A replacement for setInterval() and setTimeout() which works in unfocused windows.",
+      "purl": "pkg:npm/worker-timers@8.0.34",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/worker-timers/-/worker-timers-8.0.34.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/chrisguttandin/worker-timers.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/chrisguttandin/worker-timers"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/chrisguttandin/worker-timers/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "5972fe0eab26d06e9d9c2ebaad0b2f337b4f4f669d85ba928ab5940991a096400b3abf28712d0a9695348ae29b8df9493a5bb7c9d66290c115ad89c738cf6cbb"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "worker-timers-broker@8.0.18",
+      "type": "library",
+      "name": "worker-timers-broker",
+      "version": "8.0.18",
+      "scope": "required",
+      "author": "Christoph Guttandin",
+      "description": "The broker which is used by the worker-timers package.",
+      "purl": "pkg:npm/worker-timers-broker@8.0.18",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/worker-timers-broker/-/worker-timers-broker-8.0.18.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/chrisguttandin/worker-timers-broker.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/chrisguttandin/worker-timers-broker"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/chrisguttandin/worker-timers-broker/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "16b8f30d55f5c0a7d93748116c216abfc547b939dc1b8b1b23f586120e2d49241e22c9f0aa0e1805858c00760b26d50311862688aeb950a16b54c564da2ac34a"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "worker-timers-worker@9.0.15",
+      "type": "library",
+      "name": "worker-timers-worker",
+      "version": "9.0.15",
+      "scope": "required",
+      "author": "Christoph Guttandin",
+      "description": "The worker which is used by the worker-timers package.",
+      "purl": "pkg:npm/worker-timers-worker@9.0.15",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/worker-timers-worker/-/worker-timers-worker-9.0.15.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/chrisguttandin/worker-timers-worker.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/chrisguttandin/worker-timers-worker"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/chrisguttandin/worker-timers-worker/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "28a51eee567f022827af9d47ea13948a4f0bc139c88288c7ff59708658bc03ca88108c9ec288194e9369316e41e8117b9e6c013a45284d881fd47dd04a172348"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
       "bom-ref": "wrappy@1.0.2",
       "type": "library",
       "name": "wrappy",
@@ -10716,10 +13416,10 @@
       ]
     },
     {
-      "bom-ref": "nexowatt:vendored:webserver@3.4.0+nexowatt.9.0.5",
+      "bom-ref": "nexowatt:vendored:webserver@3.4.0+nexowatt.9.0.6",
       "type": "library",
       "name": "@iobroker/webserver",
-      "version": "3.4.0+nexowatt.9.0.5",
+      "version": "3.4.0+nexowatt.9.0.6",
       "scope": "required",
       "description": "Locally vendored @iobroker/webserver 3.4.0 with two reviewed certificate-material logging replacements; not an unmodified registry release.",
       "licenses": [
@@ -10793,11 +13493,99 @@
           "value": "66e875909fcabff41cdf2acfddc8bf0876d2cfdad9bbeeb983dbd7f411aa059f"
         }
       ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "nexowatt:integrated:devices@9.0.6",
+      "name": "NexoWatt EOS integrated devices",
+      "version": "9.0.6",
+      "scope": "required",
+      "licenses": [
+        {
+          "license": {
+            "name": "NexoWatt Proprietary License"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "0fffc35a8d6dc207d673481d44dd58ea7b79c62160565a4f58c68a63c3f1a059"
+        }
+      ],
+      "pedigree": {
+        "ancestors": [
+          {
+            "type": "library",
+            "name": "iobroker.nexowatt-devices",
+            "version": "0.5.176"
+          }
+        ],
+        "notes": "Modified integrated source; physical-device interoperability requires separate commissioning."
+      },
+      "properties": [
+        {
+          "name": "nexowatt:source-root",
+          "value": "modules/devices"
+        },
+        {
+          "name": "nexowatt:provenance:sha256",
+          "value": "7d60db68307151997ce0401c1187ec22bb44803c5620eb8f656901245aa91c25"
+        },
+        {
+          "name": "nexowatt:tree-hash-format",
+          "value": "SHA-256 of sorted relative path / SHA-256 JSON pairs"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "nexowatt:integrated:eebus@9.0.6",
+      "name": "NexoWatt EOS integrated eebus",
+      "version": "9.0.6",
+      "scope": "required",
+      "licenses": [
+        {
+          "license": {
+            "name": "NexoWatt Proprietary License"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "f21b52b51d09ab1e64711272a690b41dfd7c39258890f83161db3d66d79ceb84"
+        }
+      ],
+      "pedigree": {
+        "ancestors": [
+          {
+            "type": "library",
+            "name": "iobroker.eebus",
+            "version": "0.3.0"
+          }
+        ],
+        "notes": "Modified integrated source; physical-device interoperability requires separate commissioning."
+      },
+      "properties": [
+        {
+          "name": "nexowatt:source-root",
+          "value": "modules/eebus"
+        },
+        {
+          "name": "nexowatt:provenance:sha256",
+          "value": "b808a81ac68247054d0cde80a13b65cd175cd418d2af7bc32c8287031f241a01"
+        },
+        {
+          "name": "nexowatt:tree-hash-format",
+          "value": "SHA-256 of sorted relative path / SHA-256 JSON pairs"
+        }
+      ]
     }
   ],
   "dependencies": [
     {
-      "ref": "iobroker.eos-admin@9.0.5",
+      "ref": "iobroker.eos-admin@9.0.6",
       "dependsOn": [
         "@iobroker/adapter-core@3.4.3",
         "@iobroker/plugin-docker@1.2.1",
@@ -10808,6 +13596,7 @@
         "ajv@8.20.0",
         "axios@1.20.0",
         "body-parser@2.4.0",
+        "bonjour-service@1.4.4",
         "compression@1.8.2",
         "cookie-parser@1.4.7",
         "express@5.3.0",
@@ -10818,12 +13607,22 @@
         "jsonwebtoken@9.0.3",
         "jwks-rsa@4.1.0",
         "mime-types@3.0.2",
+        "modbus-serial@8.0.25",
+        "mqtt@5.16.1",
+        "multicast-dns@7.2.5",
         "nodemailer@10.1.4",
         "@node-oauth/oauth2-server@5.3.1",
         "semver@7.8.5",
+        "serialport@12.0.0",
         "ws@8.22.0",
-        "nexowatt:vendored:webserver@3.4.0+nexowatt.9.0.5"
+        "nexowatt:vendored:webserver@3.4.0+nexowatt.9.0.6",
+        "nexowatt:integrated:devices@9.0.6",
+        "nexowatt:integrated:eebus@9.0.6"
       ]
+    },
+    {
+      "ref": "@babel/runtime@7.29.15",
+      "dependsOn": []
     },
     {
       "ref": "@balena/dockerignore@1.0.2",
@@ -10985,6 +13784,10 @@
       "dependsOn": []
     },
     {
+      "ref": "@leichtgewicht/ip-codec@2.0.5",
+      "dependsOn": []
+    },
+    {
       "ref": "@node-oauth/formats@1.0.0",
       "dependsOn": []
     },
@@ -11027,6 +13830,96 @@
       "dependsOn": []
     },
     {
+      "ref": "@serialport/binding-mock@10.2.2",
+      "dependsOn": [
+        "@serialport/bindings-interface@1.2.2",
+        "debug@4.4.3"
+      ]
+    },
+    {
+      "ref": "@serialport/bindings-cpp@12.0.1",
+      "dependsOn": [
+        "@serialport/bindings-interface@1.2.2",
+        "@serialport/parser-readline@11.0.0",
+        "debug@4.3.4",
+        "node-addon-api@7.0.0",
+        "node-gyp-build@4.6.0"
+      ]
+    },
+    {
+      "ref": "@serialport/parser-delimiter@11.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "@serialport/parser-readline@11.0.0",
+      "dependsOn": [
+        "@serialport/parser-delimiter@11.0.0"
+      ]
+    },
+    {
+      "ref": "debug@4.3.4",
+      "dependsOn": [
+        "ms@2.1.2"
+      ]
+    },
+    {
+      "ref": "ms@2.1.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "@serialport/bindings-interface@1.2.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "@serialport/parser-byte-length@12.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "@serialport/parser-cctalk@12.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "@serialport/parser-delimiter@12.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "@serialport/parser-inter-byte-timeout@12.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "@serialport/parser-packet-length@12.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "@serialport/parser-readline@12.0.0",
+      "dependsOn": [
+        "@serialport/parser-delimiter@12.0.0"
+      ]
+    },
+    {
+      "ref": "@serialport/parser-ready@12.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "@serialport/parser-regex@12.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "@serialport/parser-slip-encoder@12.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "@serialport/parser-spacepacket@12.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "@serialport/stream@12.0.0",
+      "dependsOn": [
+        "@serialport/bindings-interface@1.2.2",
+        "debug@4.3.4"
+      ]
+    },
+    {
       "ref": "@so-ric/colorspace@1.1.6",
       "dependsOn": [
         "color@5.0.3",
@@ -11055,8 +13948,26 @@
       ]
     },
     {
+      "ref": "@types/readable-stream@4.0.25",
+      "dependsOn": [
+        "@types/node@22.20.5"
+      ]
+    },
+    {
       "ref": "@types/triple-beam@1.3.5",
       "dependsOn": []
+    },
+    {
+      "ref": "@types/ws@8.18.2",
+      "dependsOn": [
+        "@types/node@22.20.5"
+      ]
+    },
+    {
+      "ref": "abort-controller@3.0.0",
+      "dependsOn": [
+        "event-target-shim@5.0.1"
+      ]
     },
     {
       "ref": "accepts@2.0.0",
@@ -11203,6 +14114,22 @@
       ]
     },
     {
+      "ref": "bonjour-service@1.4.4",
+      "dependsOn": [
+        "fast-deep-equal@3.1.3",
+        "multicast-dns@7.2.5"
+      ]
+    },
+    {
+      "ref": "broker-factory@3.1.15",
+      "dependsOn": [
+        "@babel/runtime@7.29.15",
+        "fast-unique-numbers@9.0.27",
+        "tslib@2.9.1",
+        "worker-factory@7.0.50"
+      ]
+    },
+    {
       "ref": "buffer@5.7.1",
       "dependsOn": [
         "base64-js@1.5.1",
@@ -11321,6 +14248,10 @@
       ]
     },
     {
+      "ref": "commist@3.2.0",
+      "dependsOn": []
+    },
+    {
       "ref": "compressible@2.0.18",
       "dependsOn": [
         "mime-db@1.54.0"
@@ -11348,6 +14279,15 @@
     {
       "ref": "ms@2.0.0",
       "dependsOn": []
+    },
+    {
+      "ref": "concat-stream@2.0.0",
+      "dependsOn": [
+        "buffer-from@1.1.2",
+        "inherits@2.0.4",
+        "readable-stream@3.6.2",
+        "typedarray@0.0.6"
+      ]
     },
     {
       "ref": "content-disposition@2.0.1",
@@ -11414,6 +14354,12 @@
       "dependsOn": [
         "es6-promise@4.2.8",
         "nan@2.23.0"
+      ]
+    },
+    {
+      "ref": "dns-packet@5.6.1",
+      "dependsOn": [
+        "@leichtgewicht/ip-codec@2.0.5"
       ]
     },
     {
@@ -11522,6 +14468,14 @@
         "stream-combiner@0.2.2",
         "through@2.3.8"
       ]
+    },
+    {
+      "ref": "event-target-shim@5.0.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "events@3.3.0",
+      "dependsOn": []
     },
     {
       "ref": "express@5.3.0",
@@ -11752,6 +14706,13 @@
       "dependsOn": []
     },
     {
+      "ref": "fast-unique-numbers@9.0.27",
+      "dependsOn": [
+        "@babel/runtime@7.29.15",
+        "tslib@2.9.1"
+      ]
+    },
+    {
       "ref": "fast-uri@3.1.9",
       "dependsOn": []
     },
@@ -11893,6 +14854,10 @@
       ]
     },
     {
+      "ref": "help-me@5.0.0",
+      "dependsOn": []
+    },
+    {
       "ref": "http-errors@2.0.1",
       "dependsOn": [
         "depd@2.0.0",
@@ -11912,6 +14877,10 @@
     },
     {
       "ref": "inherits@2.0.4",
+      "dependsOn": []
+    },
+    {
+      "ref": "ip-address@10.7.6",
       "dependsOn": []
     },
     {
@@ -12115,16 +15084,174 @@
       "dependsOn": []
     },
     {
+      "ref": "minimist@1.2.8",
+      "dependsOn": []
+    },
+    {
       "ref": "mkdirp-classic@0.5.3",
       "dependsOn": []
+    },
+    {
+      "ref": "modbus-serial@8.0.25",
+      "dependsOn": [
+        "debug@4.4.3",
+        "serialport@13.0.0"
+      ]
+    },
+    {
+      "ref": "@serialport/bindings-cpp@13.0.0",
+      "dependsOn": [
+        "@serialport/bindings-interface@1.2.2",
+        "@serialport/parser-readline@12.0.0",
+        "debug@4.4.0",
+        "node-addon-api@8.3.0",
+        "node-gyp-build@4.8.4"
+      ]
+    },
+    {
+      "ref": "debug@4.4.0",
+      "dependsOn": [
+        "ms@2.1.3"
+      ]
+    },
+    {
+      "ref": "@serialport/parser-byte-length@13.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "@serialport/parser-cctalk@13.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "@serialport/parser-delimiter@13.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "@serialport/parser-inter-byte-timeout@13.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "@serialport/parser-packet-length@13.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "@serialport/parser-ready@13.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "@serialport/parser-regex@13.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "@serialport/parser-slip-encoder@13.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "@serialport/parser-spacepacket@13.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "@serialport/stream@13.0.0",
+      "dependsOn": [
+        "@serialport/bindings-interface@1.2.2",
+        "debug@4.4.0"
+      ]
+    },
+    {
+      "ref": "node-addon-api@8.3.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "node-gyp-build@4.8.4",
+      "dependsOn": []
+    },
+    {
+      "ref": "serialport@13.0.0",
+      "dependsOn": [
+        "@serialport/binding-mock@10.2.2",
+        "@serialport/bindings-cpp@13.0.0",
+        "@serialport/parser-byte-length@13.0.0",
+        "@serialport/parser-cctalk@13.0.0",
+        "@serialport/parser-delimiter@13.0.0",
+        "@serialport/parser-inter-byte-timeout@13.0.0",
+        "@serialport/parser-packet-length@13.0.0",
+        "@serialport/parser-readline@13.0.0",
+        "@serialport/parser-ready@13.0.0",
+        "@serialport/parser-regex@13.0.0",
+        "@serialport/parser-slip-encoder@13.0.0",
+        "@serialport/parser-spacepacket@13.0.0",
+        "@serialport/stream@13.0.0",
+        "debug@4.4.0"
+      ]
+    },
+    {
+      "ref": "@serialport/parser-readline@13.0.0",
+      "dependsOn": [
+        "@serialport/parser-delimiter@13.0.0"
+      ]
     },
     {
       "ref": "moment@2.31.0",
       "dependsOn": []
     },
     {
+      "ref": "mqtt@5.16.1",
+      "dependsOn": [
+        "@types/readable-stream@4.0.25",
+        "@types/ws@8.18.2",
+        "commist@3.2.0",
+        "concat-stream@2.0.0",
+        "debug@4.4.3",
+        "help-me@5.0.0",
+        "lru-cache@10.4.3",
+        "minimist@1.2.8",
+        "mqtt-packet@9.0.2",
+        "readable-stream@4.8.0",
+        "rfdc@1.4.1",
+        "socks@2.8.11",
+        "split2@4.2.0",
+        "worker-timers@8.0.34",
+        "ws@8.22.0"
+      ]
+    },
+    {
+      "ref": "mqtt-packet@9.0.2",
+      "dependsOn": [
+        "bl@6.1.6",
+        "debug@4.4.3",
+        "process-nextick-args@2.0.1"
+      ]
+    },
+    {
+      "ref": "bl@6.1.6",
+      "dependsOn": [
+        "@types/readable-stream@4.0.25",
+        "buffer@6.0.3",
+        "inherits@2.0.4",
+        "readable-stream@4.8.0"
+      ]
+    },
+    {
+      "ref": "buffer@6.0.3",
+      "dependsOn": [
+        "base64-js@1.5.1",
+        "ieee754@1.2.1"
+      ]
+    },
+    {
+      "ref": "lru-cache@10.4.3",
+      "dependsOn": []
+    },
+    {
       "ref": "ms@2.1.3",
       "dependsOn": []
+    },
+    {
+      "ref": "multicast-dns@7.2.5",
+      "dependsOn": [
+        "dns-packet@5.6.1",
+        "thunky@1.1.0"
+      ]
     },
     {
       "ref": "nan@2.23.0",
@@ -12135,7 +15262,15 @@
       "dependsOn": []
     },
     {
+      "ref": "node-addon-api@7.0.0",
+      "dependsOn": []
+    },
+    {
       "ref": "node-forge@1.4.3",
+      "dependsOn": []
+    },
+    {
+      "ref": "node-gyp-build@4.6.0",
       "dependsOn": []
     },
     {
@@ -12234,6 +15369,14 @@
       ]
     },
     {
+      "ref": "process@0.11.10",
+      "dependsOn": []
+    },
+    {
+      "ref": "process-nextick-args@2.0.1",
+      "dependsOn": []
+    },
+    {
       "ref": "promisify-child-process@4.1.2",
       "dependsOn": []
     },
@@ -12298,6 +15441,16 @@
       ]
     },
     {
+      "ref": "readable-stream@4.8.0",
+      "dependsOn": [
+        "abort-controller@3.0.0",
+        "buffer@6.0.3",
+        "events@3.3.0",
+        "process@0.11.10",
+        "string_decoder@1.3.0"
+      ]
+    },
+    {
       "ref": "readline@1.3.0",
       "dependsOn": []
     },
@@ -12307,6 +15460,10 @@
     },
     {
       "ref": "require-from-string@2.0.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "rfdc@1.4.1",
       "dependsOn": []
     },
     {
@@ -12360,6 +15517,25 @@
     {
       "ref": "seq-logging@1.1.2",
       "dependsOn": []
+    },
+    {
+      "ref": "serialport@12.0.0",
+      "dependsOn": [
+        "@serialport/binding-mock@10.2.2",
+        "@serialport/bindings-cpp@12.0.1",
+        "@serialport/parser-byte-length@12.0.0",
+        "@serialport/parser-cctalk@12.0.0",
+        "@serialport/parser-delimiter@12.0.0",
+        "@serialport/parser-inter-byte-timeout@12.0.0",
+        "@serialport/parser-packet-length@12.0.0",
+        "@serialport/parser-readline@12.0.0",
+        "@serialport/parser-ready@12.0.0",
+        "@serialport/parser-regex@12.0.0",
+        "@serialport/parser-slip-encoder@12.0.0",
+        "@serialport/parser-spacepacket@12.0.0",
+        "@serialport/stream@12.0.0",
+        "debug@4.3.4"
+      ]
     },
     {
       "ref": "serve-static@2.2.0",
@@ -12425,6 +15601,17 @@
       "dependsOn": []
     },
     {
+      "ref": "smart-buffer@4.2.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "socks@2.8.11",
+      "dependsOn": [
+        "ip-address@10.7.6",
+        "smart-buffer@4.2.0"
+      ]
+    },
+    {
       "ref": "source-map@0.6.1",
       "dependsOn": []
     },
@@ -12443,6 +15630,10 @@
     },
     {
       "ref": "split-ca@1.0.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "split2@4.2.0",
       "dependsOn": []
     },
     {
@@ -12517,6 +15708,10 @@
       "dependsOn": []
     },
     {
+      "ref": "thunky@1.1.0",
+      "dependsOn": []
+    },
+    {
       "ref": "tiny-glob@0.2.9",
       "dependsOn": [
         "globalyzer@0.1.0",
@@ -12529,6 +15724,10 @@
     },
     {
       "ref": "triple-beam@1.4.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "tslib@2.9.1",
       "dependsOn": []
     },
     {
@@ -12545,6 +15744,10 @@
     },
     {
       "ref": "content-type@2.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "typedarray@0.0.6",
       "dependsOn": []
     },
     {
@@ -12635,6 +15838,41 @@
       ]
     },
     {
+      "ref": "worker-factory@7.0.50",
+      "dependsOn": [
+        "@babel/runtime@7.29.15",
+        "fast-unique-numbers@9.0.27",
+        "tslib@2.9.1"
+      ]
+    },
+    {
+      "ref": "worker-timers@8.0.34",
+      "dependsOn": [
+        "@babel/runtime@7.29.15",
+        "tslib@2.9.1",
+        "worker-timers-broker@8.0.18",
+        "worker-timers-worker@9.0.15"
+      ]
+    },
+    {
+      "ref": "worker-timers-broker@8.0.18",
+      "dependsOn": [
+        "@babel/runtime@7.29.15",
+        "broker-factory@3.1.15",
+        "fast-unique-numbers@9.0.27",
+        "tslib@2.9.1",
+        "worker-timers-worker@9.0.15"
+      ]
+    },
+    {
+      "ref": "worker-timers-worker@9.0.15",
+      "dependsOn": [
+        "@babel/runtime@7.29.15",
+        "tslib@2.9.1",
+        "worker-factory@7.0.50"
+      ]
+    },
+    {
       "ref": "wrappy@1.0.2",
       "dependsOn": []
     },
@@ -12663,11 +15901,27 @@
       "dependsOn": []
     },
     {
-      "ref": "nexowatt:vendored:webserver@3.4.0+nexowatt.9.0.5",
+      "ref": "nexowatt:vendored:webserver@3.4.0+nexowatt.9.0.6",
       "dependsOn": [
         "@node-oauth/oauth2-server@5.3.1",
         "jsonwebtoken@9.0.3",
         "jwks-rsa@4.1.0"
+      ]
+    },
+    {
+      "ref": "nexowatt:integrated:devices@9.0.6",
+      "dependsOn": [
+        "axios@1.20.0",
+        "modbus-serial@8.0.25",
+        "mqtt@5.16.1",
+        "serialport@12.0.0"
+      ]
+    },
+    {
+      "ref": "nexowatt:integrated:eebus@9.0.6",
+      "dependsOn": [
+        "ws@8.22.0",
+        "bonjour-service@1.4.4"
       ]
     }
   ]

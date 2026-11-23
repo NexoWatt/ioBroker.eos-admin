@@ -1,7 +1,12 @@
 # HTTPS-Zugänge für NexoWatt EOS
 
 NexoWatt EOS unterstützt den direkten TLS-Zugang auf **Port 8188** und einen
-separat eingerichteten Nginx-Zugang auf **Port 443**. Der normale ioBroker Admin
+separat eingerichteten Zugang auf **Port 443**. Ab 9.0.6 kündigt EOS den Namen
+`nexowatt.local` selbst im lokalen Netz über mDNS an (abschaltbar). Für 443 ist
+ein einfacher TLS-erhaltender [systemd-Passthrough](systemd/README.md) beigefügt;
+ein bestehender Nginx kann alternativ das unten beschriebene Profil verwenden.
+Die aktuelle Anleitung steht in [NEXOWATT_LOCAL_HTTPS.md](NEXOWATT_LOCAL_HTTPS.md).
+Der normale ioBroker Admin
 auf **Port 8081** bleibt ein eigener Dienst und wird durch dieses Template nicht
 umkonfiguriert oder abgeschaltet. Nginx wird weder bei npm-Installation noch
 bei Adapterstart automatisch installiert, aktiviert oder mit Rootrechten gestartet.
@@ -13,10 +18,22 @@ bei Adapterstart automatisch installiert, aktiviert oder mit Rootrechten gestart
 | `https://NexoWattEOS` | Zusätzlich lokale DNS-/Hosts-Auflösung von `nexowatteos` auf die Geräte-IP |
 | `https://nexowatteos.local` | Nur bei vorhandener, geprüfter DNS-/mDNS-Auflösung und bewusst aktivierter Zusatzoption |
 
-Der Name wird durch einen Nginx-`server_name`-Eintrag nicht im Netzwerk bekannt
-gemacht. Es wird kein DNS-/mDNS-Dienst mitinstalliert. Mehrere Geräte benötigen
-unterscheidbare lokale Namenszuordnungen; dieses enge Profil ist für ein Gerät
-mit dem Namen `nexowatteos` vorgesehen.
+Die folgende Tabelle beschreibt das ursprüngliche optionale Nginx-Profil.
+Der Name wird durch dessen `server_name`-Eintrag allein nicht im Netzwerk bekannt
+gemacht. Die neue Adapterankündigung verwendet standardmäßig `nexowatt.local`.
+Mehrere Geräte benötigen unterscheidbare Namen und passende Zertifikate.
+
+## Gewünschter Kurzname `https://nexowatt`
+
+Ab 9.0.6 wählt `--hostname nexowatt` ausdrücklich diesen öffentlichen Namen.
+Ohne die Option bleibt das bisherige Profil `nexowatteos` erhalten. Name und
+Port-443-Zugang sind getrennte Einrichtungen. Für `.local` stellt EOS die
+Ankündigung selbst bereit; der bloße Kurzname hängt weiterhin vom lokalen
+Namensdienst ab. Ein passendes vertrautes Zertifikat und der systemseitige Proxy
+müssen vorhanden sein. Die vollständige Anleitung für `192.168.10.153` steht in
+[NEXOWATT_LOCAL_HTTPS.md](NEXOWATT_LOCAL_HTTPS.md). Sitzungen der IP werden nicht
+an den anderen Hostnamen übertragen; nach der ersten Anmeldung unter `nexowatt`
+bleibt dieser Name der gemeinsame Einstieg.
 
 ## Standardprofil: HTTPS auch zum EOS-Upstream
 
@@ -50,7 +67,8 @@ node deploy/render-ingress.cjs --ip 192.168.10.192 \
 
 `--upstream-protocol https` ist der Standard und kann ausdrücklich ergänzt
 werden. `--upstream-name` und `--upstream-ca` bleiben Pflichtangaben. Nur wenn
-`nexowatteos.local` bereits zuverlässig auflösbar ist, zusätzlich
+`nexowatteos.local` (oder bei `--hostname nexowatt` entsprechend `nexowatt.local`)
+bereits zuverlässig auflösbar ist, zusätzlich
 `--include-local-name true` verwenden. Das Fragment gehört in Nginx' `http {}`-
 Kontext. Es reserviert 443 für die Geräte-IP und die ausdrücklich erlaubten
 Namen. Fremde Hostnamen und andere Host-Ports werden abgewiesen. Der ursprüngliche
@@ -60,8 +78,9 @@ Browser-Host wird mit `proxy_set_header Host $http_host` unverändert an EOS
 ## Zertifikate, Dateien und Rechte
 
 Das **öffentliche Zertifikat auf 443** benötigt die Geräte-IP als **IP-SAN** und
-`nexowatteos` als **DNS-SAN**; bei aktivierter Zusatzoption außerdem
-`nexowatteos.local`. Für den direkten Zugang auf 8188 muss auch das EOS-Zertifikat
+den gewählten öffentlichen Namen (standardmäßig `nexowatteos`, mit
+`--hostname nexowatt` dann `nexowatt`) als **DNS-SAN**; bei aktivierter
+Zusatzoption außerdem diesen Namen mit `.local`. Für den direkten Zugang auf 8188 muss auch das EOS-Zertifikat
 die dort tatsächlich verwendeten IP-/DNS-SANs abdecken. Eine CA beziehungsweise
 ein ausdrücklich vertrautes, individuelles selbstsigniertes Zertifikat muss
 auf den Bediengeräten vertrauenswürdig eingerichtet sein. Ein Hostname im

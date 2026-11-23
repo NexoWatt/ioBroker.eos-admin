@@ -267,6 +267,8 @@ class Admin extends adapter_core_1.Adapter {
     eosStateSubscriptions;
     /** Local license authority; management/recovery is never license-gated. */
     eosHostedRuntime;
+    eosModuleHost;
+    eosDiscovery;
     eosOwnership;
     eosLicenseService;
     /** secret used for the socket connection */
@@ -349,6 +351,7 @@ class Admin extends adapter_core_1.Adapter {
             this.eosHostedRuntime?.revokeSessions?.();
         }
         this.eosOwnership?.onObjectChange(id, obj);
+        this.eosModuleHost?.onObjectChange(id, obj);
         this.eosHostedRuntime?.onObjectChange?.(id, obj);
         if (/^system\.(?:user|group)\./.test(id)) {
             this.uiPushSessions.clear();
@@ -407,6 +410,7 @@ class Admin extends adapter_core_1.Adapter {
             webServer?.resetIndexHtml();
         }
         this.eosOwnership?.onStateChange(id, state);
+        this.eosModuleHost?.onStateChange(id, state);
         this.eosHostedRuntime?.onStateChange?.(id, state);
         socket?.stateChange(id, state);
     };
@@ -927,6 +931,8 @@ class Admin extends adapter_core_1.Adapter {
         deadline = setTimeout(finish, 2000);
         deadline.unref?.();
         cleanup(() => this.eosOwnership?.stop());
+        cleanup(() => this.eosDiscovery?.stop());
+        const modulesStopped = this.eosModuleHost?.stop() || Promise.resolve();
         cleanup(() => this.eosLicenseService?.stop());
         cleanup(() => this.eosSessionSecurity?.stop());
         cleanup(() => this.uiPushSessions.clear());
@@ -962,11 +968,11 @@ class Admin extends adapter_core_1.Adapter {
             });
         };
         if (!this.eosHostedRuntime) {
-            finishSubscriptions();
+            void modulesStopped.then(finishSubscriptions, finishSubscriptions);
             return;
         }
         try {
-            void this.eosHostedRuntime.stop().then(finishSubscriptions, finishSubscriptions);
+            void Promise.allSettled([this.eosHostedRuntime.stop(), modulesStopped]).then(finishSubscriptions, finishSubscriptions);
         }
         catch {
             finishSubscriptions();

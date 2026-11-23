@@ -1,0 +1,14 @@
+# NexoWatt EOS: optional system-owned TCP listener, installed only by an operator.
+[Unit]
+Description=NexoWatt EOS HTTPS entry on port 443
+
+[Socket]
+ListenStream=0.0.0.0:443
+ListenStream=[::]:443
+BindIPv6Only=ipv6-only
+Accept=no
+NoDelay=true
+Backlog=128
+
+[Install]
+WantedBy=sockets.target

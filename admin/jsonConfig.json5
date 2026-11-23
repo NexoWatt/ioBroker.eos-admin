@@ -32,6 +32,20 @@
                     help: 'Bei direktem HTTPS leer lassen, wenn Geräte-IP, Gerätename und unterschiedliche HTTPS-Ports verwendet werden. Ein Eintrag beschränkt den Zugriff auf genau diese Adresse. Keine Pfade oder Zugangsdaten.',
                     xs: 12,
                 },
+                eosMdnsEnabled: {
+                    type: 'checkbox',
+                    label: 'EOS im lokalen Netzwerk bekanntgeben (mDNS)',
+                    help: 'Meldet den laufenden HTTPS-Dienst unter nexowatt.local. https://nexowatt ohne Port benötigt zusätzlich lokale DNS-Auflösung und eine HTTPS-Einrichtung auf Port 443.',
+                    xs: 12,
+                },
+                eosMdnsHostname: {
+                    type: 'text',
+                    label: 'Lokaler EOS-Name (ohne .local)',
+                    help: 'Standard: nexowatt. Bei Namenskonflikten einen eindeutigen Namen wählen und den Zertifikatsnamen entsprechend anpassen. Bestehende ioBroker-Admin-Ports bleiben unverändert.',
+                    hidden: 'data.eosMdnsEnabled === false',
+                    validator: 'typeof data.eosMdnsHostname === "string" && /^[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?$/.test(data.eosMdnsHostname)',
+                    xs: 12,
+                },
                 secure: {
                     newLine: true,
                     type: 'checkbox',

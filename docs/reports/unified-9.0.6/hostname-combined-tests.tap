@@ -1,0 +1,30 @@
+✔ announces only its own https service after three targeted probes and excludes private metadata (10.787756ms)
+✔ generated probes and announcements round-trip through the shipped DNS packet codec (6.312719ms)
+✔ disabled/invalid configuration does not open a socket or throw (0.474865ms)
+✔ host collision during probing stops publication without changing hostname or EOS (0.527324ms)
+✔ different simultaneous host claim and incompatible service identity fail closed (0.475156ms)
+✔ own addresses, IPv6 textual variants and expired foreign answers do not conflict (0.326695ms)
+✔ post-publication conflict withdraws records and closes discovery (0.266096ms)
+✔ responses are bounded to own names and one per second; malformed data is ignored (0.549686ms)
+✔ no addresses, UDP errors and probe failures are nonfatal and leave no retry storm (0.389519ms)
+✔ stopping during probe and a missing goodbye callback both close within bounds (0.395398ms)
+✔ UDP readiness and first publication callbacks have a bounded startup deadline (0.232645ms)
+✔ address changes withdraw old records and reprobe; specific bind and IPv6 follow listener (0.354376ms)
+✔ default uses verified TLS upstream, explicit SNI and exact unchanged Browser Host (9.64619ms)
+✔ local alias is explicit and HTTP loopback is an explicit incompatible legacy profile (0.874739ms)
+✔ nexowatt is an explicit exact public host while upstream identity and existing defaults stay separate (1.418487ms)
+✔ public host validation rejects unsafe authorities and does not silently repair them (1.307242ms)
+✔ TLS requires an explicit CA file and strictly validated DNS certificate identity (0.49824ms)
+✔ host and every certificate-path interpolation reject injection and ambiguous paths (0.36384ms)
+✔ files and complete parent chains reject symlinks, insecure permissions and absent inputs (1.93186ms)
+✔ output is private and exclusive, including symlink and parent-directory attacks (1.655179ms)
+✔ CLI rejects duplicate/unknown parameters and never replaces an existing file (475.521482ms)
+﹣ nginx -t validates the generated TLS fragment when the binary is available (2.298649ms) # nginx not installed; no nginx syntax or real TLS handshake claim
+ℹ tests 22
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 1
+ℹ todo 0
+ℹ duration_ms 733.507162

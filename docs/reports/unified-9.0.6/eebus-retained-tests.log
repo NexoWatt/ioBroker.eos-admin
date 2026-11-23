@@ -1,0 +1,16 @@
+CLS control parser tests passed.
+✔ modules/eebus/test/cls-control-parser.js (82.001575ms)
+Config migration tests passed.
+✔ modules/eebus/test/config.js (67.826438ms)
+Final SPINE implementation result ordering tests passed.
+✔ modules/eebus/test/implementation-result-order.js (75.604283ms)
+NexoWatt direct bridge tests passed.
+✔ modules/eebus/test/nexowatt-bridge.js (231.110814ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 247.072275

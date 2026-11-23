@@ -1,0 +1,20 @@
+✔ announces only its own https service after three targeted probes and excludes private metadata (7.471573ms)
+✔ generated probes and announcements round-trip through the shipped DNS packet codec (6.356676ms)
+✔ disabled/invalid configuration does not open a socket or throw (0.459923ms)
+✔ host collision during probing stops publication without changing hostname or EOS (0.441295ms)
+✔ different simultaneous host claim and incompatible service identity fail closed (0.475677ms)
+✔ own addresses, IPv6 textual variants and expired foreign answers do not conflict (0.276871ms)
+✔ post-publication conflict withdraws records and closes discovery (0.272404ms)
+✔ responses are bounded to own names and one per second; malformed data is ignored (0.489257ms)
+✔ no addresses, UDP errors and probe failures are nonfatal and leave no retry storm (0.387836ms)
+✔ stopping during probe and a missing goodbye callback both close within bounds (0.301909ms)
+✔ UDP readiness and first publication callbacks have a bounded startup deadline (0.233637ms)
+✔ address changes withdraw old records and reprobe; specific bind and IPv6 follow listener (0.581494ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 225.869193

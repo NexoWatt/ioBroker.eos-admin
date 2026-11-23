@@ -1,3 +1,7 @@
+> **9.0.6 – integrierte Geräte-/EEBus-Module und lokale Geräteerkennung:**
+> [Update und Inbetriebnahme](START_HIER_9.0.6.md) · [Prüfumfang](docs/reports/unified-9.0.6/PRUEFBERICHT.md).
+> Eine zentrale EOS-Systemlizenz. Die Übernahme vorhandener Einzeladapter erfolgt kontrolliert; hardwarebezogene Abnahme bleibt erforderlich.
+
 # NexoWatt EOS
 
 **Version 9.0.5 · technisches Paket: `iobroker.eos-admin` · Vertriebskanal: `next`**

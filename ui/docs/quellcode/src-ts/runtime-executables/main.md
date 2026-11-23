@@ -869,13 +869,16 @@ Parameter sind die Namen aus der Signatur, keine geratenen Datenverträge. Die A
 | [`clearTimers`](../../../../src-ts/runtime-executables/main.ts#L33532) | – | clearTimeout |
 | [`finish`](../../../../src-ts/runtime-executables/main.ts#L33544) | – | clearTimers, done, this._serverSockets.clear |
 | [`NexoWattVis.onUnload`](../../../../src-ts/runtime-executables/main.ts#L33582) | callback | Date.now, clearTimeout, done, this._adminOverviewPublisher?.stop, this._meshCoordinator?.stop, this._nwCancelHistoryRequests, this._nwClearTimer, this._nwCloseServer, this._nwCloseSseClients, this._nwSetInfoConnection, this._nwSmartHomePulseTimers.clear, this._nwSmartHomePulseTimers.entries, this._nwStopConnectionHeartbeat, this._nwStopLiveCoreRefresh (weitere in der Quelle) |
-| [`createHostedRuntime`](../../../../src-ts/runtime-executables/main.ts#L33659) | owner, bridge | Object.create |
-| [`startOperational`](../../../../src-ts/runtime-executables/main.ts#L33670) | – | Promise.resolve, centralLicenseSnapshot, guardedBridge.canWrite |
-| [`start`](../../../../src-ts/runtime-executables/main.ts#L33699) | – | Promise.resolve |
-| [`startOperational`](../../../../src-ts/runtime-executables/main.ts#L33721) | – | startOperational |
-| [`handle`](../../../../src-ts/runtime-executables/main.ts#L33722) | req, res, next | res.status, runtime._hostedHttpHandler, startOperational |
-| [`onStateChange`](../../../../src-ts/runtime-executables/main.ts#L33729) | id, state | runtime.onStateChange |
-| [`onMessage`](../../../../src-ts/runtime-executables/main.ts#L33730) | message | runtime.onMessage |
-| [`revokeSessions`](../../../../src-ts/runtime-executables/main.ts#L33731) | – | runtime._nwCloseSseClients |
-| [`status`](../../../../src-ts/runtime-executables/main.ts#L33732) | – | guardedBridge.canWrite |
-| [`stop`](../../../../src-ts/runtime-executables/main.ts#L33733) | – | – |
+| [`createHostedRuntime`](../../../../src-ts/runtime-executables/main.ts#L33659) | owner, bridge | Object.create, runtime._para14aEebusApi.attachHostedBridge |
+| [`canOperate`](../../../../src-ts/runtime-executables/main.ts#L33669) | – | centralLicenseSnapshot, guardedBridge.canWrite |
+| [`sendFeedback`](../../../../src-ts/runtime-executables/main.ts#L33670) | message | bridge.hostedModuleFeedback |
+| [`startOperational`](../../../../src-ts/runtime-executables/main.ts#L33677) | – | Promise.resolve, centralLicenseSnapshot, guardedBridge.canWrite |
+| [`start`](../../../../src-ts/runtime-executables/main.ts#L33706) | – | Promise.resolve |
+| [`startOperational`](../../../../src-ts/runtime-executables/main.ts#L33728) | – | startOperational |
+| [`handle`](../../../../src-ts/runtime-executables/main.ts#L33729) | req, res, next | res.status, runtime._hostedHttpHandler, startOperational |
+| [`onStateChange`](../../../../src-ts/runtime-executables/main.ts#L33736) | id, state | runtime.onStateChange |
+| [`onMessage`](../../../../src-ts/runtime-executables/main.ts#L33737) | message | runtime.onMessage |
+| [`onHostedEebusMessage`](../../../../src-ts/runtime-executables/main.ts#L33738) | message | Promise.resolve, runtime._para14aEebusApi.handleHostedMessage |
+| [`revokeSessions`](../../../../src-ts/runtime-executables/main.ts#L33742) | – | runtime._nwCloseSseClients |
+| [`status`](../../../../src-ts/runtime-executables/main.ts#L33743) | – | guardedBridge.canWrite |
+| [`stop`](../../../../src-ts/runtime-executables/main.ts#L33744) | – | – |

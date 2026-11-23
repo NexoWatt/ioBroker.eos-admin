@@ -1,7 +1,7 @@
 (() => {
     'use strict';
 
-    const VERSION = 'v7109-nexowatt-native-shell-clean-core-surfaces';
+    const VERSION = 'v7110-nexowatt-native-shell-wrapping-navigation';
     const previous = window.NEXOWATT_NATIVE_SHELL;
     if (previous?.version === VERSION) return;
     previous?.destroy?.();
@@ -17,6 +17,32 @@
     let retryTimer = 0;
     let scheduled = false;
     let destroyed = false;
+    let navigationElement = null;
+    let navigationObserver = null;
+
+    // Follow the actual wrapped height instead of reserving one fixed row.
+    // One observer is retained, replaced on drawer remount and released on logout/destroy.
+    const measureNavigation = () => {
+        if (destroyed || !navigationElement?.isConnected) return;
+        const height = Math.ceil(navigationElement.getBoundingClientRect().height);
+        if (!Number.isFinite(height) || height <= 0) return;
+        const value = `${height}px`;
+        const style = document.documentElement.style;
+        if (style.getPropertyValue('--nx-nav-h') !== value) style.setProperty('--nx-nav-h', value);
+    };
+    const trackNavigation = element => {
+        if (element !== navigationElement) {
+            navigationObserver?.disconnect();
+            navigationObserver = null;
+            navigationElement = element;
+            if (element && typeof window.ResizeObserver === 'function') {
+                navigationObserver = new window.ResizeObserver(measureNavigation);
+                navigationObserver.observe(element);
+            }
+            if (!element) document.documentElement.style.removeProperty('--nx-nav-h');
+        }
+        measureNavigation();
+    };
 
     const routeClasses = [
         'intro', 'adapters', 'instances', 'objects', 'enums', 'logs', 'users', 'hosts', 'files', 'scripts', 'other',
@@ -110,7 +136,7 @@
 
     const ensureNavigationContainer = () => {
         const drawer = document.querySelector('.MuiDrawer-paper');
-        if (!drawer) return;
+        if (!drawer) { trackNavigation(null); return; }
         drawer.classList.add('eos-drawer');
 
         const nativeHeader = drawer.querySelector('[data-eos-drawer-header="1"]');
@@ -144,6 +170,7 @@
         const compact = safe(() => localStorage.getItem('nexowatt:eosNavCompact') === '1') || false;
         document.documentElement.classList.toggle('eos-nav-compact', compact);
         toggle.setAttribute('aria-pressed', compact ? 'true' : 'false');
+        trackNavigation(drawer);
     };
 
     const ensureModernOverview = () => {
@@ -238,6 +265,7 @@
             ensureModernOverview();
             ensureTechnicalSurface();
         } else {
+            trackNavigation(null);
             document.getElementById('eos-native-overview-hero')?.remove();
             document.getElementById('eos-technical-surface-header')?.remove();
         }
@@ -279,6 +307,7 @@
         version: VERSION,
         refresh: schedule,
         destroy() {
+            trackNavigation(null);
             destroyed = true;
             abort.abort();
             unsubscribeDom?.();

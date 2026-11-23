@@ -1,8 +1,13 @@
 {
   "common": {
     "name": "nexowatt-ui",
-    "version": "9.0.5",
+    "version": "9.0.6",
     "news": {
+      "9.0.6": {
+        "de": "Integrierte Geräte- und EEBus-Module mit zentraler EOS-Lizenz, geschützter Übergabe bestehender Instanzen, Installer-Rückweg und mehrzeiliger Admin-Navigation. Lokale Geräteankündigung und vorbereiteter HTTPS-Zugang ohne Port. Prüfumfang und offene Hardware-Abnahme siehe Prüfbericht.",
+        "en": "Integrated Devices and EEBus modules with the central EOS license, guarded legacy handover, installer return navigation and wrapping admin navigation. Local discovery and prepared portless HTTPS access. See the report for validation scope and remaining hardware acceptance.",
+        "nl": "Geïntegreerde Devices- en EEBus-modules met centrale EOS-licentie, beveiligde overdracht, terugkeer vanuit de installer en navigatie op meerdere regels. Lokale detectie en voorbereide HTTPS-toegang zonder poort. Zie het testrapport voor de resterende hardwarecontrole."
+      },
       "9.0.5": {
         "de": "9.0.5 korrigiert den History-Absturz an der Übergabe zwischen Verwaltungsserver und eingebetteter UI. History-Anfragen erhalten begrenzte Ressourcen und kontrollierte Fehlerantworten; die EOS-Systemverwaltung verwendet das NexoWatt-Startlogo. Zentrale Lizenz, HTTPS auf 8188 und vorhandener Adminzugang bleiben erhalten. Teststand für next; tatsächliche Nachweise und offene Zielgeräteprüfung siehe Prüfbericht.",
         "en": "9.0.5 fixes the History crash at the boundary between the administration server and embedded UI. History requests have bounded resources and controlled error responses; EOS system administration uses the NexoWatt startup logo. The central license, HTTPS on 8188 and existing admin access are preserved. Test release for next; see the report for actual evidence and outstanding target-device acceptance.",

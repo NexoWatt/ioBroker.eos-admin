@@ -462,6 +462,18 @@ class EosLicenseService {
         };
     }
 
+    /** Embedded modules share the system entitlement; legacy licenses retain their signed adapter scope. */
+    allowsEmbeddedModule(id) {
+        const adapters = { devices: 'nexowatt-devices', eebus: 'eebus' };
+        const status = this.statusView();
+        return (
+            Object.hasOwn(adapters, id) &&
+            status.valid === true &&
+            status.coreEnabled === true &&
+            (this.claims.scope === 'system' || this.claims.adapters.includes(adapters[id]))
+        );
+    }
+
     status() {
         return this.run(async () => {
             await this.evaluate();

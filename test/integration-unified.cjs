@@ -245,7 +245,7 @@ tests.integration(path.resolve(__dirname, '..'), {
                         '-subj',
                         '/CN=nexowatteos',
                         '-addext',
-                        'subjectAltName=IP:127.0.0.1,DNS:localhost,DNS:nexowatteos',
+                        'subjectAltName=IP:127.0.0.1,DNS:localhost,DNS:nexowatteos,DNS:nexowatt,DNS:nexowatt.local',
                     ],
                     { stdio: 'pipe', timeout: 15000 },
                 );
@@ -307,6 +307,7 @@ tests.integration(path.resolve(__dirname, '..'), {
                         certPrivate: 'defaultPrivate',
                         certChained: '',
                         eosExternalOrigin: '',
+                        eosMdnsEnabled: false,
                         eosLockLegacyAdmin: true,
                         eosLegacyAdminLockPort: 18081,
                         eosLegacyAdminLockBind: '127.0.0.1',
@@ -433,6 +434,8 @@ tests.integration(path.resolve(__dirname, '..'), {
                     { host: 'NexoWattEOS:8188', servername: 'nexowatteos' },
                     { host: 'NexoWattEOS:443', servername: 'nexowatteos' },
                     { host: 'nexowatteos', servername: 'nexowatteos' },
+                    { host: 'nexowatt', servername: 'nexowatt' },
+                    { host: 'nexowatt.local:443', servername: 'nexowatt.local' },
                     { host: '127.0.0.1:443', servername: '' },
                 ]) {
                     const response = await request('/login.html', {
@@ -537,6 +540,27 @@ tests.integration(path.resolve(__dirname, '..'), {
                 assert.equal(status.nextUrl, '/nexowatt/license');
                 assert.equal((await request('/nexowatt/license', { headers: { cookie } })).status, 200);
                 assert.equal((await request('/system/', { headers: { cookie } })).status, 200);
+                await assertAdminPreserved();
+            });
+            it('serves integrated module editors and protects their APIs before activation', async () => {
+                for (const id of ['devices', 'eebus']) {
+                    assert.equal((await request(`/api/eos/modules/${id}`)).status, 401);
+                    assert.equal((await request(`/modules/${id}/`)).status, 302);
+                    const page = await request(`/modules/${id}/`, { headers: { cookie } });
+                    assert.equal(page.status, 200);
+                    assert.match(await page.text(), /NexoWatt EOS/);
+                    const view = await request(`/api/eos/modules/${id}`, { headers: { cookie } });
+                    assert.equal(view.status, 200);
+                    const body = await view.json();
+                    assert.equal(body.config.enabled, false);
+                    assert.ok(typeof body.csrfToken === 'string' && body.csrfToken.length >= 16);
+                    const write = await request(`/api/eos/modules/${id}`, { method: 'PUT',
+                        headers: { cookie, origin: base, 'content-type': 'application/json' },
+                        body: JSON.stringify({ config: { enabled: true } }) });
+                    assert.equal(write.status, 403, 'Module configuration requires the session CSRF token');
+                }
+                assert.equal((await request('/modules/devices/vendor/jquery.js', { headers: { cookie } })).status, 200);
+                assert.equal((await request('/modules/eebus/index.js', { headers: { cookie } })).status, 200);
                 await assertAdminPreserved();
             });
             it('imports the release-pinned manufacturer public key through the real authenticated HTTPS route', async function () {

@@ -19,7 +19,7 @@
  * NexoWatt EEBUS Gateway und dem zentralen §14a-Regler von NexoWatt EOS.
  *
  * Zeitkritischer Pfad:
- * EEBUS LPC -> ioBroker sendTo -> Ingress im Arbeitsspeicher -> EMS-Tick 0 ms.
+ * EEBUS LPC -> lokale Capability (oder externe Adapter-API) -> Ingress -> EMS-Tick 0 ms.
  * Diagnose-States werden erst nach der API-Antwort im Hintergrund geschrieben.
  * Eine manuelle Datenpunkt-Zuordnung der CLS-Box ist im Direktbetrieb nicht nötig.
  */
@@ -54,6 +54,15 @@ const RELEVANT_CONTROLLER_MODULES = Object.freeze([
 
 
 type AnyRecord = Record<string, any>;
+
+type HostedBridge = {
+  sourceInstance: string;
+  canOperate: () => boolean;
+  sendFeedback: (message: AnyRecord) => boolean;
+};
+// Private object identity is the proof. Serialized bus messages cannot acquire it.
+const hostedBridges = new WeakMap<object, HostedBridge>();
+const hostedReplies = new WeakMap<object, (payload: AnyRecord) => void>();
 
 type TimingTargets = {
   acceptance: number;
@@ -183,6 +192,38 @@ class Para14aEebusDirectApi {
     this.bridgeHeartbeatSec = 30;
     this.helloWatchdog = null;
     this.localFailsafeSignature = '';
+  }
+
+  attachHostedBridge(bridge: HostedBridge): void {
+    if (hostedBridges.has(this) || bridge.sourceInstance !== `${this.adapter.namespace}.eebus`
+      || !/^eos-admin\.\d+\.eebus$/.test(bridge.sourceInstance)
+      || typeof bridge.canOperate !== 'function' || typeof bridge.sendFeedback !== 'function') {
+      throw new Error('EOS_EEBUS_BRIDGE_INVALID');
+    }
+    hostedBridges.set(this, Object.freeze({ ...bridge }));
+  }
+
+  async handleHostedMessage(input: AnyRecord): Promise<AnyRecord> {
+    const bridge = hostedBridges.get(this);
+    if (!bridge || !bridge.canOperate() || !this.initialized) {
+      return { accepted: false, error: 'EOS_EEBUS_BRIDGE_UNAVAILABLE' };
+    }
+    if (input?.from !== bridge.sourceInstance
+      || ![HELLO_COMMAND, CONTROL_COMMAND].includes(input?.command)) {
+      return { accepted: false, error: 'EOS_EEBUS_BRIDGE_INVALID' };
+    }
+    const obj = { from: bridge.sourceInstance, command: input.command, message: input.message };
+    let reply: AnyRecord = { accepted: false, error: 'EOS_EEBUS_NO_REPLY' };
+    hostedReplies.set(obj, payload => { reply = payload; });
+    try { await this.handleMessage(obj); }
+    finally { hostedReplies.delete(obj); }
+    return reply;
+  }
+
+  _isHostedSource(obj: AnyRecord): boolean {
+    const bridge = hostedBridges.get(this);
+    return !!bridge && hostedReplies.has(obj) && bridge.canOperate()
+      && obj.from === bridge.sourceInstance;
   }
 
   async init(): Promise<void> {
@@ -528,7 +569,7 @@ class Para14aEebusDirectApi {
     const message: AnyRecord = obj?.message && typeof obj.message === 'object' ? obj.message as AnyRecord : {};
     const sender = normalizeInstance(obj?.from);
     const declaredSource = normalizeInstance(message.sourceInstance);
-    const sourceValid = isEebusInstance(sender) && declaredSource === sender;
+    const sourceValid = (isEebusInstance(sender) || this._isHostedSource(obj)) && declaredSource === sender;
     const compatible = Number(message.apiVersion) === API_VERSION;
     const accepted = this.initialized && sourceValid && compatible;
 
@@ -589,7 +630,7 @@ class Para14aEebusDirectApi {
   _handleControl(obj: AnyRecord): void {
     const message: AnyRecord = obj?.message && typeof obj.message === 'object' ? obj.message as AnyRecord : {};
     const receivedByUiAtMs = Date.now();
-    const validation = this._validatePacket(message, obj?.from);
+    const validation = this._validatePacket(message, obj?.from, this._isHostedSource(obj));
     if (!validation.ok) {
       this.rejectedCount += 1;
       const response = this._rejectionResponse(message, receivedByUiAtMs, validation.reason);
@@ -735,11 +776,11 @@ class Para14aEebusDirectApi {
     };
   }
 
-  _validatePacket(message: AnyRecord, from: unknown): ValidationResult {
+  _validatePacket(message: AnyRecord, from: unknown, hosted = false): ValidationResult {
     const sender = normalizeInstance(from);
     const sourceInstance = normalizeInstance(message.sourceInstance);
     if (!this.initialized) return { ok: false, reason: 'direct-api-not-initialized' };
-    if (!isEebusInstance(sender) || sourceInstance !== sender) {
+    if ((!isEebusInstance(sender) && !hosted) || sourceInstance !== sender) {
       return { ok: false, reason: 'invalid-or-mismatched-eebus-source' };
     }
     if (!this.sourceInstance || this.lastHelloAtMs <= 0 || sender !== this.sourceInstance) {
@@ -990,6 +1031,10 @@ class Para14aEebusDirectApi {
 
   _sendImplementationFeedback(targetInstance: string, feedback: AnyRecord): boolean {
     try {
+      const bridge = hostedBridges.get(this);
+      if (bridge && targetInstance === bridge.sourceInstance) {
+        return bridge.canOperate() && bridge.sendFeedback({ command: IMPLEMENTATION_COMMAND, message: feedback }) === true;
+      }
       this.adapter.sendTo(targetInstance, IMPLEMENTATION_COMMAND, feedback, () => {});
       return true;
     } catch (_error) {
@@ -1043,6 +1088,8 @@ class Para14aEebusDirectApi {
   }
 
   _reply(obj: AnyRecord, payload: AnyRecord): void {
+    const localReply = obj && hostedReplies.get(obj);
+    if (localReply) { localReply(payload); return; }
     if (!obj?.callback) return;
     try {
       this.adapter.sendTo(obj.from, obj.command, payload, obj.callback);

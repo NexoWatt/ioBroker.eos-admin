@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "templates": {
+    "ess.fenecon.FeneconHomeEssImpl": [
+      "cTRL_BALANCING_COMPONENT_ID",
+      "cTRL_BALANCING_BLOCK_LENGTH",
+      "cTRL_BALANCING_OPENEMS_COMPONENT_HASH",
+      "cTRL_BALANCING_OPENEMS_COMPONENT_LENGTH",
+      "cTRL_BALANCING_STATE",
+      "cTRL_BALANCING_IMPL_HASH",
+      "cTRL_BALANCING_IMPL_LENGTH",
+      "sET_GRID_ACTIVE_POWER",
+      "sYSTEM_TIME_UTC",
+      "aCTIVE_POWER_L1",
+      "aCTIVE_POWER_L2",
+      "aCTIVE_POWER_L3",
+      "gRID_POWER_L1",
+      "gRID_POWER_L2",
+      "gRID_POWER_L3",
+      "pV_AC_POWER_L1",
+      "pV_AC_POWER_L2",
+      "pV_AC_POWER_L3",
+      "lOAD_POWER_L1",
+      "lOAD_POWER_L2",
+      "lOAD_POWER_L3",
+      "gRID_MODE_OFFGRID_TIME",
+      "eSS_CAPACITY_SUM",
+      "eSS0_REACTIVE_POWER",
+      "aVAILABLE_CHARGE_ENERGY",
+      "aVAILABLE_DISCHARGE_ENERGY"
+    ]
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "allowJs": true, "checkJs": false, "noEmit": true, "target": "ES2022",
+    "module": "node16", "moduleResolution": "node16", "skipLibCheck": true,
+    "types": ["node"], "strictNullChecks": true, "noImplicitAny": true
+  },
+  "files": ["index.js", "operation-guard.js", "lib/operationContext.js", "contracts.d.ts"]
+}

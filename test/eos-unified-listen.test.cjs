@@ -27,7 +27,10 @@ vm.runInNewContext(compiled, {
     exports: exportsValue, module: { exports: exportsValue }, __dirname: path.dirname(webFile), __filename: webFile,
     Buffer, URL, Error, console, process, setTimeout, clearTimeout,
     require: name => {
-        if (name === '@iobroker/adapter-core') return { EXIT_CODES: { ADAPTER_REQUESTED_TERMINATION: 11 }, I18n: {} };
+        if (name === '@iobroker/adapter-core') return {
+            EXIT_CODES: { ADAPTER_REQUESTED_TERMINATION: 11 }, I18n: {},
+            getAbsoluteInstanceDataDir: () => path.join(require('node:os').tmpdir(), 'eos-listen-module-fixture'),
+        };
         if (!emitted && name.startsWith('.') && fs.existsSync(path.resolve(path.dirname(webFile), `${name}.ts`))) {
             return require('tsx/cjs/api').require(path.resolve(path.dirname(webFile), `${name}.ts`), webFile);
         }
@@ -52,6 +55,7 @@ async function close(server) {
 function certificate(altNames = [
     { type: 7, ip: '127.0.0.1' }, { type: 7, ip: '192.168.10.192' },
     { type: 2, value: 'localhost' }, { type: 2, value: 'nexowatteos' },
+    { type: 2, value: 'nexowatt' }, { type: 2, value: 'nexowatt.local' },
 ], issuer = null, isCa = true, commonName = 'localhost') {
     const controllerRequire = createRequire(require.resolve('@iobroker/js-controller-common-db'));
     const forge = controllerRequire('node-forge');
@@ -316,8 +320,9 @@ async function hostedTlsFixture(t, migrate) {
     const systemRequests = new WeakSet();
     app.use((req, _res, next) => { if (req.path.startsWith('/system/')) systemRequests.add(req); next(); });
     const boundary = new UnifiedSessions(owner, { secure: true, externalOrigin: '' });
-    const status = async req => req.headers.cookie === 'fixture=admin' ? {
-        authenticated: true, authed: true, user: 'system.user.admin', role: 'admin', groups: ['system.group.administrator'],
+    let sessionActive = true; let sessionRole = 'admin';
+    const status = async req => sessionActive && req.headers.cookie === 'fixture=admin' ? {
+        authenticated: true, authed: true, user: 'system.user.admin', role: sessionRole, groups: ['system.group.administrator'],
         capabilities: ['*'], csrfToken: 'c'.repeat(32), credentialKey: 'credential-fixture', mustChangePassword: false,
         activationRequired: false,
     } : { authenticated: false, authed: false, role: 'none', mustChangePassword: false, activationRequired: false };
@@ -352,11 +357,68 @@ async function hostedTlsFixture(t, migrate) {
         tlsRequest(server, cert.cert, { host, origin, ...(auth ? { cookie: 'fixture=admin' } : {}),
             ...(csrf ? { 'x-nw-csrf': 'c'.repeat(32) } : {}), 'content-type': 'application/json' }, method, url,
         method === 'POST' ? { id: 'device.0.control', value: true } : undefined);
-    return { runtime, request, logs, server, owner, instance: () => runtimeObject,
+    return { runtime, request, logs, server, owner, cert: cert.cert, instance: () => runtimeObject,
         migrationCalls: () => migrationCalls, foreignWrites: () => foreignWrites,
+        setSessionActive(value) { sessionActive = value; }, setSessionRole(value) { sessionRole = value; },
         setLicensed(value) { licensed = value; }, setWritable(value) { writable = value; } };
 }
 function deferred() { let resolve; const promise = new Promise(done => { resolve = done; }); return { promise, resolve }; }
+
+test('verified nexowatt TLS authority opens login for anonymous/expired sessions and dashboard for an active session', async t => {
+    const h = await hostedTlsFixture(t, async () => {});
+    const named = (url, cookie) => tlsRequest(h.server, h.cert, { host: 'nexowatt',
+        ...(cookie ? { cookie } : {}) }, 'GET', url, undefined, 'nexowatt');
+    assert.equal(await named('/', undefined), 303);
+    assert.equal(await named('/login.html', undefined), 200);
+    assert.equal(await named('/', 'fixture=admin'), 200);
+    assert.equal(await named('/api/eos/modules/devices', 'fixture=admin'), 200);
+    h.setSessionRole('installer');
+    assert.equal(await named('/api/eos/modules/devices', 'fixture=admin'), 403);
+    h.setSessionActive(false);
+    assert.equal(await named('/', 'fixture=admin'), 303);
+    assert.equal(await named('/api/eos/modules/devices', 'fixture=admin'), 401);
+    assert.equal(await named('/', 'fixture=expired-invalid'), 303);
+});
+
+test('module host crosses the actual private hosted UI bridge and returns implementation feedback', async t => {
+    const h = await hostedTlsFixture(t, async () => {});
+    const host = h.owner.eosModuleHost;
+    const feedback = []; let facade;
+    const moduleFactory = { validateConfig: value => ({ ...value, enabled: value.enabled === true }),
+        createHostedModule(options) { facade = options.adapter; return {
+            start: async () => {}, stop: async () => {}, getStatus: () => ({}),
+            onMessage: message => feedback.push(message),
+        }; } };
+    host.options.factories = { devices: moduleFactory, eebus: moduleFactory };
+    h.owner.decrypt = value => JSON.parse(value).content;
+    h.owner.config.eosModules = { eebus: { v: 1, encrypted: JSON.stringify({ content: '{"enabled":true}' }) } };
+    h.owner.eosLicenseService.allowsEmbeddedModule = () => h.owner.eosLicenseService.statusView().valid;
+    h.owner.unsubscribeForeignStatesAsync = async () => {};
+    await host.start(); t.after(() => host.stop());
+    // Hardware/EMS readiness is a fixture. Host routing, runtime entry method,
+    // capability proof, API validation and reverse feedback are production code.
+    const instance = h.instance(); instance._hostedOperational = true; instance._nwLicenseOk = true;
+    instance.config.installerConfig = { para14a: true }; instance.config.countryProfile = { country: 'DE' };
+    instance.emsEngine = { mm: {}, stop() {} }; instance._nwLicenseAllowsAppId = () => true;
+    instance._nwRequestImmediateEmsTick = () => true;
+    const api = instance._para14aEebusApi; await api.init();
+    const source = 'eos-admin.0.eebus';
+    const send = (command, message) => new Promise(resolve => facade.sendTo('eos-admin.0', command, message, resolve));
+    const hello = await send('nexowatt.para14a.hello.v1', { apiVersion: 1, sourceInstance: source, bridgeHeartbeatSec: 30 });
+    assert.equal(hello.accepted, true);
+    const accepted = await send('nexowatt.para14a.command.v1', {
+        schema: 'nexowatt.para14a.command.v1', apiVersion: 1, sourceInstance: source, commandId: 'full-host-contract',
+        operation: 'limitConsumption', active: true, limitW: 4200, receivedAtMs: Date.now(),
+        validUntilMs: Date.now() + 60000, heartbeatAtMs: Date.now(), heartbeatTimeoutMs: 60000,
+    });
+    assert.equal(accepted.accepted, true); assert.equal(api.ingress.limitW, 4200);
+    assert.equal(api._sendImplementationFeedback(source, { status: 'applied' }), true);
+    assert.equal(feedback.length, 1); assert.equal(feedback[0].command, 'nexowatt.para14a.implementation.v1');
+    h.setLicensed(false);
+    assert.equal((await send('nexowatt.para14a.hello.v1', { apiVersion: 1, sourceInstance: source })).accepted, false);
+    assert.equal(api._sendImplementationFeedback(source, { status: 'applied' }), false);
+    assert.equal(feedback.length, 1);
+});
 
 test('valid license and stalled operational startup cannot hold the HTTPS login or recovery console hostage', async t => {
     const pending = deferred();

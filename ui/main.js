@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/main.ts
- * Quell-Hash: sha256:61ecac1b37a4eb9ccd8504cbb9b9830d46950277207f1d373f59554a4a63daa4
+ * Quell-Hash: sha256:dd562d89d820b51f4a69fd64ad5bfcc7eb933597adaea42d8450707e9b125a24
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -33679,6 +33679,13 @@ function createHostedRuntime(owner, bridge) {
   const guardedBridge = Object.create(bridge);
   guardedBridge.canWrite = () => !stopping && runtime?._nwShuttingDown !== true && bridge.canWrite() === true;
   runtime = new NexoWattVis({ owner, bridge: guardedBridge });
+  if (typeof bridge.hostedModuleFeedback === 'function') {
+    runtime._para14aEebusApi.attachHostedBridge({
+      sourceInstance: `${owner.namespace}.eebus`,
+      canOperate: () => guardedBridge.canWrite() === true && centralLicenseSnapshot(guardedBridge).ok,
+      sendFeedback: message => bridge.hostedModuleFeedback(message),
+    });
+  }
   let started = false;
   let startPromise = null;
   let operationalPromise = null;
@@ -33744,6 +33751,10 @@ function createHostedRuntime(owner, bridge) {
     },
     onStateChange(id, state) { if (runtime._hostedOperational && !stopping) return runtime.onStateChange(id, state); },
     onMessage(message) { return runtime._hostedOperational && !stopping ? runtime.onMessage(message) : false; },
+    onHostedEebusMessage(message) {
+      if (!runtime._hostedOperational || stopping) return Promise.resolve({ accepted: false, error: 'EOS_UI_UNAVAILABLE' });
+      return runtime._para14aEebusApi.handleHostedMessage(message);
+    },
     revokeSessions() { runtime._nwCloseSseClients(); },
     status() { return { ...(runtime._hostedStartup || { state: 'stopped', error: '' }), active: started && !stopping, emsReady: !stopping && runtime._hostedStartup?.state === 'ready' && !!runtime.emsEngine, canWrite: guardedBridge.canWrite() === true }; },
     stop() {

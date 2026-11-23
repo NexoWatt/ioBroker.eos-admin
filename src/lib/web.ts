@@ -1,4 +1,4 @@
-import { commonTools, EXIT_CODES, I18n } from '@iobroker/adapter-core';
+import { commonTools, EXIT_CODES, I18n, getAbsoluteInstanceDataDir } from '@iobroker/adapter-core';
 import { WebServer, createOAuth2Server, type OAuth2Model, type OidcConfig } from './vendor/webserver';
 import express from 'express';
 import type { Express, Response, Request, NextFunction } from 'express';
@@ -31,6 +31,9 @@ import { InstanceProxy } from './instanceProxy';
 import { UnifiedSessions, transportAllowed, sameOrigin as unifiedSameOrigin } from './eosUnifiedBoundary';
 import type { OwnershipGuard } from './eosUnifiedOwnership';
 import type { EosHostedRuntime } from './eosUnifiedRuntime';
+import { EosModuleHost } from './eosModuleHost';
+import { registerEosModuleRoutes } from './eosModuleHttp';
+import { createEosDiscovery, type EosDiscovery } from './eosDiscovery';
 
 let AdapterStore;
 /** Content of a socket-io file */
@@ -170,6 +173,8 @@ interface AdminAdapter extends ioBroker.Adapter {
     eosSessionSecurity?: { bindOAuthModel(model: unknown): void; revoke(): void };
     eosLicenseService?: EosLicenseService;
     eosHostedRuntime?: EosHostedRuntime;
+    eosModuleHost?: EosModuleHost;
+    eosDiscovery?: EosDiscovery;
     eosOwnership?: OwnershipGuard;
     config: AdminAdapterConfig;
     getSession: (id: string, callback: (token?: InternalStorageToken | null) => void) => void;
@@ -356,6 +361,8 @@ export default class Web {
     private unified!: UnifiedSessions;
     private startupFailed = false;
     private closed = false;
+    private moduleHost: EosModuleHost | undefined;
+    private discovery: EosDiscovery | undefined;
 
     /**
      * Create a new instance of Web
@@ -449,6 +456,8 @@ export default class Web {
     }
 
     close(): void {
+        this.discovery?.stop();
+        void this.moduleHost?.stop().catch(() => this.adapter.log.warn('EOS_MODULE_STOP_FAILED'));
         this.closed = true;
         if (this.checkTimeout) {
             this.adapter.clearTimeout(this.checkTimeout);
@@ -2066,6 +2075,21 @@ export default class Web {
         app.post('/api/license/save', (_req: Request, res: Response): void => {
             res.status(409).json({ error: 'USE_CENTRAL_ACTIVATION', url: '/nexowatt/license' });
         });
+        const moduleHost = new EosModuleHost(this.adapter, {
+            baseDir: this.baseDir,
+            dataDir: join(getAbsoluteInstanceDataDir(this.adapter), 'modules'),
+        });
+        this.adapter.eosModuleHost = moduleHost;
+        this.moduleHost = moduleHost;
+        registerEosModuleRoutes({
+            app,
+            host: moduleHost,
+            baseDir: this.baseDir,
+            jsonParser: bodyParser.json({ limit: '512kb', strict: true }),
+            authorize: (req: Request) => this.unified.status(req),
+            csrfAllowed: (req: Request) => this.unified.csrfAllowed(req),
+            requestAllowed: (req: Request) => this.unified.requestAllowed(req),
+        });
         const factory = createRequire(__filename)(join(this.baseDir, 'ui', 'main.js')) as {
             createHostedRuntime: (owner: AdminAdapter, bridge: Record<string, unknown>) => EosHostedRuntime;
         };
@@ -2079,8 +2103,15 @@ export default class Web {
             machineRequestAllowed: (req: Request) => this.unified.machineRequestAllowed(req),
             canWrite: () => this.adapter.eosOwnership?.canWrite() === true,
             isListening: () => !this.closed && !this.startupFailed && this.server.server?.listening === true,
+            hostedModuleFeedback: (message: { command: string; message?: unknown }) =>
+                moduleHost.receiveBridge(message),
         });
         this.adapter.eosHostedRuntime = runtime;
+        moduleHost.bindBridge(message =>
+            runtime.onHostedEebusMessage
+                ? runtime.onHostedEebusMessage(message)
+                : Promise.reject(new Error('EOS_MODULE_BRIDGE_UNAVAILABLE')),
+        );
         await runtime.start();
         app.use((req: Request, res: Response, next: NextFunction): void => {
             if (!this.isUnifiedRequest(req)) {
@@ -3352,6 +3383,21 @@ export default class Web {
                     ? `EOS public address: ${this.unified.origin}`
                     : `EOS configured port: ${listenAddress.port}; use a reachable host address with ${this.settings.secure ? 'HTTPS' : 'local HTTP'}.`,
             );
+            this.adapter.eosDiscovery = createEosDiscovery({
+                adapter: this.adapter,
+                enabled:
+                    this.settings.secure === true &&
+                    this.settings.auth === true &&
+                    this.settings.eosMdnsEnabled !== false,
+                hostname: this.settings.eosMdnsHostname || 'nexowatt',
+                port: listenAddress.port,
+                bind: listenAddress.host,
+            });
+            this.discovery = this.adapter.eosDiscovery;
+            this.adapter.eosDiscovery.start();
+            void this.adapter.eosModuleHost?.start().catch(() => {
+                this.adapter.log.warn('EOS_MODULE_START_UNAVAILABLE: HTTPS remains available.');
+            });
             // The authenticated shell is now reachable. Device, history and EMS initialization
             // must never hold the only HTTPS listener hostage or hide the recovery console.
             void this.adapter.eosHostedRuntime?.startOperational().catch(() => {

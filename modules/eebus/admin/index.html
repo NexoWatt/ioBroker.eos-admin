@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="de">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NexoWatt EOS · EEBus</title><link rel="stylesheet" href="/modules/eebus/style.css"><script defer src="/modules/eebus/index.js"></script></head>
+<body><main><header><div><small>NEXOWATT EOS</small><h1>EEBus</h1></div><nav><a href="/system/">Zur Systemverwaltung</a><a href="/">Zum Dashboard</a></nav></header>
+<p>SHIP-Geräte entdecken, ausdrücklich koppeln und SPINE-Daten in EOS nutzen. Die gemeinsame EOS-Systemlizenz gilt auch für dieses Modul.</p>
+<p class="notice">Der integrierte SHIP/SPINE-Kern ist ein Teststand. Freigabe und Schreibfunktionen erst nach Prüfung des konkreten Geräts aktivieren. Ein öffentlicher Lizenz-Prüfschlüssel ist keine EEBus-Geräteidentität.</p>
+<p id="message" role="status" aria-live="polite">Status wird geladen …</p>
+<section><h2>Betriebsstatus</h2><dl id="status"></dl><button id="refresh" type="button">Status aktualisieren</button></section>
+<section><h2>Geräte und Kopplung</h2><p>Den SKI und Zertifikat-Fingerabdruck an der Gegenstelle vergleichen. Ein Zertifikatwechsel erfordert eine erneute ausdrückliche Kopplung.</p><div id="devices"></div></section>
+<section><h2>Konfiguration</h2><p>Das Modul ist zunächst deaktiviert. „Modul aktivieren“ startet EEBus nach dem Speichern. Der Testmodus verhindert Steuerbefehle. Für aktive CLS-Vorgaben müssen deren Übernahme freigegeben und der Testmodus deaktiviert sein. Änderungen starten nur das EEBus-Modul neu.</p><form id="config-form"><div id="basic-fields" class="fields"></div><details><summary>Erweiterte EEBus-Einstellungen</summary><div id="expert-fields" class="fields"></div></details></form><button id="save" type="button">Konfiguration speichern</button></section>
+<section><h2>Bestehende EEBus-Konfiguration übernehmen</h2><p>Die alte Instanz muss deaktiviert und vollständig gestoppt sein. Der Import aktiviert das Modul nicht und übernimmt keine privaten Schlüssel oder Kopplungsfreigaben. Bestehende Datenpunkte bleiben erhalten; neue liegen unter <code>eos-admin.&lt;Instanz&gt;.eebus</code>. Geräte anschließend neu koppeln.</p><label for="legacy">Alte Instanz</label><input id="legacy" value="eebus.0" pattern="eebus\.[0-9]+" maxlength="32"><button id="import" type="button">Konfiguration übernehmen</button></section>
+</main></body></html>

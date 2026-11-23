@@ -41,6 +41,8 @@ import { EosLicenseService } from './lib/eosLicenseService';
 import { EosSessionSecurity } from './lib/eosSessionSecurity';
 import { createOwnershipGuard } from './lib/eosUnifiedOwnership';
 import type { EosHostedRuntime } from './lib/eosUnifiedRuntime';
+import type { EosModuleHost } from './lib/eosModuleHost';
+import type { EosDiscovery } from './lib/eosDiscovery';
 import { EosUiSessionRegistry, type EosUiIdentity, type EosUiSession } from './lib/eosUiSessionRegistry';
 import { requestHttpsJson } from './lib/eosHttpsClient';
 import { EosSocketAdmin } from './lib/eosSocketAdmin';
@@ -341,6 +343,8 @@ class Admin extends Adapter {
 
     /** Local license authority; management/recovery is never license-gated. */
     public eosHostedRuntime: EosHostedRuntime | undefined;
+    public eosModuleHost: EosModuleHost | undefined;
+    public eosDiscovery: EosDiscovery | undefined;
     public eosOwnership: ReturnType<typeof createOwnershipGuard> | undefined;
     public eosLicenseService: EosLicenseService | undefined;
     /** The host this instance runs on. Optional on `Adapter`, but always set for a started instance. */
@@ -449,6 +453,7 @@ class Admin extends Adapter {
             this.eosHostedRuntime?.revokeSessions?.();
         }
         this.eosOwnership?.onObjectChange(id, obj);
+        this.eosModuleHost?.onObjectChange(id, obj);
         this.eosHostedRuntime?.onObjectChange?.(id, obj);
         if (/^system\.(?:user|group)\./.test(id)) {
             this.uiPushSessions.clear();
@@ -513,6 +518,7 @@ class Admin extends Adapter {
         }
 
         this.eosOwnership?.onStateChange(id, state);
+        this.eosModuleHost?.onStateChange(id, state);
         this.eosHostedRuntime?.onStateChange?.(id, state);
         socket?.stateChange(id, state);
     };
@@ -1124,6 +1130,8 @@ class Admin extends Adapter {
         deadline = setTimeout(finish, 2000);
         deadline.unref?.();
         cleanup(() => this.eosOwnership?.stop());
+        cleanup(() => this.eosDiscovery?.stop());
+        const modulesStopped = this.eosModuleHost?.stop() || Promise.resolve();
         cleanup(() => this.eosLicenseService?.stop());
         cleanup(() => this.eosSessionSecurity?.stop());
         cleanup(() => this.uiPushSessions.clear());
@@ -1159,11 +1167,14 @@ class Admin extends Adapter {
             });
         };
         if (!this.eosHostedRuntime) {
-            finishSubscriptions();
+            void modulesStopped.then(finishSubscriptions, finishSubscriptions);
             return;
         }
         try {
-            void this.eosHostedRuntime.stop().then(finishSubscriptions, finishSubscriptions);
+            void Promise.allSettled([this.eosHostedRuntime.stop(), modulesStopped]).then(
+                finishSubscriptions,
+                finishSubscriptions,
+            );
         } catch {
             finishSubscriptions();
         }

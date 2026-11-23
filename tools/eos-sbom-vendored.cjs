@@ -149,6 +149,53 @@ function enrich(bom, pkg, provenance, provenanceSha256) {
     return { bom: result, changed: true, ref };
 }
 
+/** Record integrated proprietary source modules alongside their locked protocol dependencies. */
+function enrichModules(bom, pkg, root = ROOT) {
+    const result = structuredClone(bom);
+    const rootRow = result.dependencies.find(row => row.ref === result.metadata.component['bom-ref']);
+    if (!rootRow) throw new Error('SBOM_MODULE_ROOT_MISSING');
+    for (const id of ['devices', 'eebus']) {
+        const directory = `modules/${id}`;
+        const file = path.join(root, directory, 'provenance.json');
+        const bytes = fs.readFileSync(file);
+        const origin = JSON.parse(bytes);
+        const ref = `nexowatt:integrated:${id}@${pkg.version}`;
+        const hashes = [];
+        const visit = relative => {
+            for (const name of fs.readdirSync(path.join(root, relative)).sort()) {
+                const local = `${relative}/${name}`;
+                const stat = fs.lstatSync(path.join(root, local));
+                if (stat.isSymbolicLink()) throw new Error('SBOM_MODULE_SYMLINK');
+                if (name === 'node_modules' || name === '.git') throw new Error('SBOM_MODULE_UNEXPECTED_TREE');
+                if (stat.isDirectory()) visit(local);
+                else if (stat.isFile()) hashes.push([local, HASH(fs.readFileSync(path.join(root, local)))]);
+                else throw new Error('SBOM_MODULE_FILE_INVALID');
+            }
+        };
+        visit(directory);
+        if (typeof origin.version !== 'string' || typeof origin.name !== 'string') throw new Error('SBOM_MODULE_PROVENANCE_INVALID');
+        const component = { type: 'library', 'bom-ref': ref, name: `NexoWatt EOS integrated ${id}`, version: pkg.version,
+            scope: 'required', licenses: [{ license: { name: 'NexoWatt Proprietary License' } }],
+            hashes: [{ alg: 'SHA-256', content: HASH(JSON.stringify(hashes)) }],
+            pedigree: { ancestors: [{ type: 'library', name: origin.name, version: origin.version }],
+                notes: 'Modified integrated source; physical-device interoperability requires separate commissioning.' },
+            properties: [{ name: 'nexowatt:source-root', value: directory },
+                { name: 'nexowatt:provenance:sha256', value: HASH(bytes) },
+                { name: 'nexowatt:tree-hash-format', value: 'SHA-256 of sorted relative path / SHA-256 JSON pairs' }] };
+        if (result.components.some(row => row['bom-ref'] === ref)) throw new Error('SBOM_MODULE_DUPLICATE');
+        result.components.push(component);
+        rootRow.dependsOn.push(ref);
+        const names = id === 'devices' ? ['axios', 'modbus-serial', 'mqtt', 'serialport'] : ['ws', 'bonjour-service'];
+        const dependsOn = names.map(name => {
+            const item = result.components.find(row => row.name === name && row.version === require(path.join(root, 'package-lock.json')).packages[`node_modules/${name}`].version);
+            if (!item) throw new Error('SBOM_MODULE_DEPENDENCY_MISSING');
+            return item['bom-ref'];
+        });
+        result.dependencies.push({ ref, dependsOn });
+    }
+    return result;
+}
+
 function main(args) {
     if (args.length > 1 || (args.length === 1 && args[0] !== '--check')) throw new Error('SBOM_ARGUMENTS_INVALID');
     let bytes = null;
@@ -161,6 +208,7 @@ function main(args) {
     const full = JSON.parse(readRegular(FULL_BOM_PATH, 16 * 1024 * 1024));
     const runtime = selectRuntime(full, pkg, lock);
     const output = enrich(runtime.bom, pkg, JSON.parse(provenanceBytes), HASH(provenanceBytes));
+    output.bom = enrichModules(output.bom, pkg);
     const serialized = Buffer.from(JSON.stringify(output.bom, null, 2) + '\n');
     const changed = !bytes || !serialized.equals(bytes);
     if (args[0] === '--check' && changed) throw new Error('SBOM_VENDOR_ENRICHMENT_REQUIRED');
@@ -195,4 +243,4 @@ if (require.main === module) {
         process.exitCode = 1;
     }
 }
-module.exports = { enrich, selectRuntime };
+module.exports = { enrich, selectRuntime, enrichModules };

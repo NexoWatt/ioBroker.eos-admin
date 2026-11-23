@@ -24,6 +24,7 @@ import {
     SpaceDashboard as DashboardIcon,
     Devices as DeviceManagerIcon,
     Settings as SystemSettingsIcon,
+    Hub as EebusIcon,
     PersonOutlined as UserIcon,
 } from '@mui/icons-material';
 
@@ -1028,7 +1029,7 @@ class Drawer extends Component<DrawerProps, DrawerState> {
         }, delay);
     }
 
-    /** Fixed entry points stay before the independently scrolling adapter tab strip. */
+    /** Fixed EOS entry points occupy the first row; native module tabs wrap below. */
     renderSystemNavigation(): JSX.Element | null {
         const role = this.props.eosAccessRole;
         if (!['admin', 'service', 'installer', 'enduser'].includes(role)) {
@@ -1053,6 +1054,24 @@ class Drawer extends Component<DrawerProps, DrawerState> {
                         icon={<DeviceManagerIcon />}
                     />
                 ) : null}
+                {role === 'admin' ? (
+                    <>
+                        <DrawerItem
+                            theme={this.props.theme}
+                            compact={false}
+                            onClick={() => window.location.assign('/modules/devices/')}
+                            text="Devices"
+                            icon={<DeviceManagerIcon />}
+                        />
+                        <DrawerItem
+                            theme={this.props.theme}
+                            compact={false}
+                            onClick={() => window.location.assign('/modules/eebus/')}
+                            text="EEBus"
+                            icon={<EebusIcon />}
+                        />
+                    </>
+                ) : null}
                 {administrator ? (
                     <>
                         <IsVisible
@@ -1076,7 +1095,7 @@ class Drawer extends Component<DrawerProps, DrawerState> {
     }
 
     /**
-     * The account/logout entry stays separate from the scrolling adapter tab strip.
+     * The account/logout entry stays separate from the wrapping module navigation.
      */
     renderFooter(): JSX.Element {
         const compact = !this.isSwipeable() && this.props.state !== STATES.opened;

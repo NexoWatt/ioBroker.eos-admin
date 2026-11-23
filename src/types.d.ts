@@ -2,6 +2,11 @@ export interface AdminAdapterConfig extends ioBroker.AdapterConfig {
     /** Fixed external HTTPS origin; forwarded headers never establish trust. */
     eosExternalOrigin?: string;
     eosUi?: Record<string, unknown>;
+    /** Versioned encrypted configurations for the integrated device runtimes. */
+    eosModules?: Record<string, { v: number; encrypted: string; migration?: Record<string, unknown> | null }>;
+    /** Local multicast discovery is optional; it does not establish DNS or TLS trust. */
+    eosMdnsEnabled?: boolean;
+    eosMdnsHostname?: string;
     /** Answer ACME HTTP-01 challenges published by the acme adapter. Enabled if not set */
     acmeChallenge: boolean;
     accessAllowedConfigs: string[];

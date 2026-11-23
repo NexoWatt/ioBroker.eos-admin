@@ -43,3 +43,9 @@ The complete MIT license texts for both pinned schema repositories are retained 
 ## EasyAccess-Nachprüfung vom 05.11.2026
 
 Die tatsächliche Zusammensetzung von `@iobroker/admin-component-easy-access`3.0.8 und seine Generatorherkunft sind unter `docs/ea/` dokumentiert. Dort liegen eine ergänzende CycloneDX-Komponentenliste, unveränderte verfügbare Lizenz-/Notice-Texte und `license-provenance.json`. Fehlende Volltexte für qrcode-generator2.0.4 und das native Rolldown-Buildbinding1.2.7 bleiben ausdrücklich offen. Der Anwendungscode wurde nicht verändert.
+
+## Integrated NexoWatt modules (9.0.6)
+
+NexoWatt Devices 0.5.176 and NexoWatt EEBus 0.3.0 are integrated, modified NexoWatt proprietary source components. Their provenance and retained original license texts are in `modules/devices/` and `modules/eebus/`. The common EOS system license is checked by the owning adapter; these modules are not separate public/free licenses. Existing third-party license grants remain unaffected.
+
+The locked protocol dependencies include modbus-serial (ISC), MQTT.js (MIT), serialport (MIT), bonjour-service (MIT), multicast-dns (MIT), axios (MIT) and ws (MIT). The runtime CycloneDX SBOM records their resolved dependency closure and the integrated module trees. The classic Devices editor reuses the already bundled jQuery/Materialize assets and their original notices.

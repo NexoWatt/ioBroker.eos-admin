@@ -64,6 +64,9 @@ const eosUploadGuard_1 = require("./eosUploadGuard");
 const eosFileTransferSecurity_1 = require("./eosFileTransferSecurity");
 const instanceProxy_1 = require("./instanceProxy");
 const eosUnifiedBoundary_1 = require("./eosUnifiedBoundary");
+const eosModuleHost_1 = require("./eosModuleHost");
+const eosModuleHttp_1 = require("./eosModuleHttp");
+const eosDiscovery_1 = require("./eosDiscovery");
 let AdapterStore;
 /** Content of a socket-io file */
 let socketIoFile;
@@ -328,6 +331,8 @@ class Web {
     unified;
     startupFailed = false;
     closed = false;
+    moduleHost;
+    discovery;
     /**
      * Create a new instance of Web
      *
@@ -402,6 +407,8 @@ class Web {
         return page404.replace(/%(LANGUAGE|TITLE|MESSAGE|DETAIL|HOME|BACK)%/g, (_match, name) => values[name]);
     }
     close() {
+        this.discovery?.stop();
+        void this.moduleHost?.stop().catch(() => this.adapter.log.warn('EOS_MODULE_STOP_FAILED'));
         this.closed = true;
         if (this.checkTimeout) {
             this.adapter.clearTimeout(this.checkTimeout);
@@ -1824,6 +1831,21 @@ class Web {
         app.post('/api/license/save', (_req, res) => {
             res.status(409).json({ error: 'USE_CENTRAL_ACTIVATION', url: '/nexowatt/license' });
         });
+        const moduleHost = new eosModuleHost_1.EosModuleHost(this.adapter, {
+            baseDir: this.baseDir,
+            dataDir: (0, node_path_1.join)((0, adapter_core_1.getAbsoluteInstanceDataDir)(this.adapter), 'modules'),
+        });
+        this.adapter.eosModuleHost = moduleHost;
+        this.moduleHost = moduleHost;
+        (0, eosModuleHttp_1.registerEosModuleRoutes)({
+            app,
+            host: moduleHost,
+            baseDir: this.baseDir,
+            jsonParser: bodyParser.json({ limit: '512kb', strict: true }),
+            authorize: (req) => this.unified.status(req),
+            csrfAllowed: (req) => this.unified.csrfAllowed(req),
+            requestAllowed: (req) => this.unified.requestAllowed(req),
+        });
         const factory = (0, node_module_1.createRequire)(__filename)((0, node_path_1.join)(this.baseDir, 'ui', 'main.js'));
         if (typeof factory.createHostedRuntime !== 'function') {
             throw new Error('EOS_UI_FACTORY_MISSING');
@@ -1835,8 +1857,12 @@ class Web {
             machineRequestAllowed: (req) => this.unified.machineRequestAllowed(req),
             canWrite: () => this.adapter.eosOwnership?.canWrite() === true,
             isListening: () => !this.closed && !this.startupFailed && this.server.server?.listening === true,
+            hostedModuleFeedback: (message) => moduleHost.receiveBridge(message),
         });
         this.adapter.eosHostedRuntime = runtime;
+        moduleHost.bindBridge(message => runtime.onHostedEebusMessage
+            ? runtime.onHostedEebusMessage(message)
+            : Promise.reject(new Error('EOS_MODULE_BRIDGE_UNAVAILABLE')));
         await runtime.start();
         app.use((req, res, next) => {
             if (!this.isUnifiedRequest(req)) {
@@ -2883,6 +2909,20 @@ class Web {
             this.adapter.log.info(this.unified.origin
                 ? `EOS public address: ${this.unified.origin}`
                 : `EOS configured port: ${listenAddress.port}; use a reachable host address with ${this.settings.secure ? 'HTTPS' : 'local HTTP'}.`);
+            this.adapter.eosDiscovery = (0, eosDiscovery_1.createEosDiscovery)({
+                adapter: this.adapter,
+                enabled: this.settings.secure === true &&
+                    this.settings.auth === true &&
+                    this.settings.eosMdnsEnabled !== false,
+                hostname: this.settings.eosMdnsHostname || 'nexowatt',
+                port: listenAddress.port,
+                bind: listenAddress.host,
+            });
+            this.discovery = this.adapter.eosDiscovery;
+            this.adapter.eosDiscovery.start();
+            void this.adapter.eosModuleHost?.start().catch(() => {
+                this.adapter.log.warn('EOS_MODULE_START_UNAVAILABLE: HTTPS remains available.');
+            });
             // The authenticated shell is now reachable. Device, history and EMS initialization
             // must never hold the only HTTPS listener hostage or hide the recovery console.
             void this.adapter.eosHostedRuntime?.startOperational().catch(() => {

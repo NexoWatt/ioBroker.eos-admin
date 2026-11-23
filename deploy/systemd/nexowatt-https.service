@@ -1,0 +1,32 @@
+# Encrypted TCP passthrough only. EOS performs TLS, login and authorization.
+[Unit]
+Description=NexoWatt EOS HTTPS passthrough to local TLS listener
+Requires=nexowatt-https.socket
+After=nexowatt-https.socket
+
+[Service]
+Type=notify
+ExecStart=/usr/lib/systemd/systemd-socket-proxyd --connections-max=128 127.0.0.1:8188
+DynamicUser=yes
+NoNewPrivileges=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+LockPersonality=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+SystemCallArchitectures=native
+UMask=0077
+MemoryMax=64M
+TasksMax=16
+LimitNOFILE=512
+Restart=on-failure
+RestartSec=5s
+TimeoutStopSec=5s

@@ -1,26 +1,26 @@
 {
-  "version": "9.0.5",
+  "version": "9.0.6",
   "channel": "next",
   "baseFrontend": "Rebuilt from official Admin 8.3.5 sources plus reviewed EOS integration using React 19 and Vite; see source-bound frontend manifest.",
   "runtimeEntry": "vite-manifest",
-  "releaseType": "unified-history-stability",
-  "release": "unified-history-stability",
-  "label": "9.0.5",
+  "releaseType": "unified-modules-discovery",
+  "release": "unified-modules-discovery",
+  "label": "9.0.6",
   "notes": [
     "Preserves the existing ioBroker Admin and the combined EOS login/runtime.",
     "One central NWL3 activation, private persistence and authorized public-key recovery.",
     "Manufacturer vault/private keys stay on the issuer computer; live-device acceptance remains required."
   ],
   "changes": [
-    "Preserve query parameters across the Express 5 administration / Express 4 embedded UI boundary",
-    "Contain asynchronous route errors and bound history processing and response resources",
-    "Use NexoWatt branding while the EOS system administration loads",
-    "Treat late subscription cleanup during shutdown as an idempotent operation"
+    "Embedded Devices and EEBus with one central license and exclusive device ownership",
+    "Private in-process EEBus control bridge with current authorization checks",
+    "Installer return paths and responsive two-tier administration navigation",
+    "Local mDNS discovery and reviewed systemd HTTPS passthrough deployment files"
   ],
-  "brandingCacheVersion": 7109,
-  "shellCacheVersion": 7109,
-  "nativeShellVersion": 7109,
-  "shellCacheTag": "7109",
+  "brandingCacheVersion": 7110,
+  "shellCacheVersion": 7110,
+  "nativeShellVersion": 7110,
+  "shellCacheTag": "7110",
   "autoUpdateCacheVersion": 7103,
   "autoUpdateCacheTag": "7103",
   "upstream": {
@@ -29,10 +29,12 @@
     "commit": "6f77eedf525813a7a61d79188d1ff05dffd05086"
   },
   "product": "NexoWatt EOS",
-  "status": "9.0.5 history stability integration test release; evidence in versioned report, not a production or CRA conformity declaration",
+  "status": "9.0.6 integration test release; evidence in versioned report, not a production or CRA conformity declaration",
   "sourceComponents": {
     "admin": "8.0.2",
     "ui": "1.0.38",
-    "licenseContract": "Keygen 1.0.4 NWL3"
+    "licenseContract": "Keygen 1.0.4 NWL3",
+    "devices": "0.5.176",
+    "eebus": "0.3.0; 1c0eb410d516b90d60f6e475e6822bf5836bfd66"
   }
 }

@@ -2,7 +2,7 @@
 
 Automatisch aus den Originalquellen erzeugter Wegweiser. Einstieg und fachliche Abläufe: [Quellcode verstehen](QUELLCODE_WEGWEISER_DE.md). Pflege: [Dokumentationsstandard](DOKUMENTATIONSSTANDARD_DE.md).
 
-Erfasst: 275 selbst gepflegte TS-/TSX-Dateien, 6531 benannte Funktionen/Methoden. Generierte Spiegel, Testdateien, externe Pakete und Build-Artefakte sind ausgeschlossen.
+Erfasst: 276 selbst gepflegte TS-/TSX-Dateien, 6540 benannte Funktionen/Methoden. Generierte Spiegel, Testdateien, externe Pakete und Build-Artefakte sind ausgeschlossen.
 
 Die Funktionslinks zeigen auf die Originalquelle. Statische Imports und dynamische Kommunikation sind verschieden; Backend-API, ioBroker-States und HTML-/Browser-Globals werden im fachlichen Wegweiser erklärt.
 
@@ -14,12 +14,13 @@ Die Funktionslinks zeigen auf die Originalquelle. Statische Imports und dynamisc
 | [src-admin-tab/src/lib/adminConnection.ts](../src-admin-tab/src/lib/adminConnection.ts) | Kapselt die Verbindung zur Adapter-Instanz und die geschützten Anmelde-, Konfigurations- und SMTP-API-Aufrufe. | [Verknüpfungen und Funktionen](quellcode/src-admin-tab/src/lib/adminConnection.md) |
 | [src-admin-tab/src/lib/adminContracts.ts](../src-admin-tab/src/lib/adminContracts.ts) | Prüft native Admin-DTOs an API- und Nachrichtengrenzen vor Änderungen am Formularzustand. | [Verknüpfungen und Funktionen](quellcode/src-admin-tab/src/lib/adminContracts.md) |
 | [src-admin-tab/src/lib/dataPointPicker.ts](../src-admin-tab/src/lib/dataPointPicker.ts) | Öffnet den vorhandenen AppCenter-Datenpunktdialog für React-Felder. | [Verknüpfungen und Funktionen](quellcode/src-admin-tab/src/lib/dataPointPicker.md) |
+| [src-admin-tab/src/lib/installerNavigation.ts](../src-admin-tab/src/lib/installerNavigation.ts) | Bestimmt die rollenabhängigen Rückwege und Moduleinstiege des Installers. | [Verknüpfungen und Funktionen](quellcode/src-admin-tab/src/lib/installerNavigation.md) |
 | [src-admin-tab/src/lib/mesh-types.ts](../src-admin-tab/src/lib/mesh-types.ts) | Prüft Mesh-API-Daten und importierte Paarungen vor der Formularverwendung. | [Verknüpfungen und Funktionen](quellcode/src-admin-tab/src/lib/mesh-types.md) |
 | [src-admin-tab/src/lib/partnerContracts.ts](../src-admin-tab/src/lib/partnerContracts.ts) | Prüft den vollständigen Partner-API-Vertrag vor der Anzeige und vor Schreibanfragen. | [Verknüpfungen und Funktionen](quellcode/src-admin-tab/src/lib/partnerContracts.md) |
 | [src-admin-tab/src/main.tsx](../src-admin-tab/src/main.tsx) | Startet React im Admin-Dokument und bindet Routing sowie die App-Komponente ein. | [Verknüpfungen und Funktionen](quellcode/src-admin-tab/src/main.md) |
 | [src-admin-tab/src/pages/ArbitragePage.tsx](../src-admin-tab/src/pages/ArbitragePage.tsx) | Eigenständiger React-Einstieg für Speicherhandel im EMS App-Center. | [Verknüpfungen und Funktionen](quellcode/src-admin-tab/src/pages/ArbitragePage.md) |
 | [src-admin-tab/src/pages/DynamicGridPage.tsx](../src-admin-tab/src/pages/DynamicGridPage.tsx) | Vollständige, herstellerunabhängige Einrichtung der App Dynamischer Netzanschluss. | [Verknüpfungen und Funktionen](quellcode/src-admin-tab/src/pages/DynamicGridPage.md) |
-| [src-admin-tab/src/pages/InstallerPage.tsx](../src-admin-tab/src/pages/InstallerPage.tsx) | Zeigt die zur angemeldeten Rolle passenden Einstiege in App-Center, Simulation, SmartHome und Admin-Verwaltung. | [Verknüpfungen und Funktionen](quellcode/src-admin-tab/src/pages/InstallerPage.md) |
+| [src-admin-tab/src/pages/InstallerPage.tsx](../src-admin-tab/src/pages/InstallerPage.tsx) | Zeigt die zur angemeldeten Rolle passenden Einstiege in App-Center, Simulation, SmartHome, Devices und EEBus sowie den direkten Rückweg zur EOS-Administration und zum Dashboard. | [Verknüpfungen und Funktionen](quellcode/src-admin-tab/src/pages/InstallerPage.md) |
 | [src-admin-tab/src/pages/LicensePage.tsx](../src-admin-tab/src/pages/LicensePage.tsx) | Entfernt alte Lizenzschlüssel-Browserreste und leitet zur streng geschützten Runtime-Lizenzseite weiter. | [Verknüpfungen und Funktionen](quellcode/src-admin-tab/src/pages/LicensePage.md) |
 | [src-admin-tab/src/pages/MeshAccountingPanel.tsx](../src-admin-tab/src/pages/MeshAccountingPanel.tsx) | Betreiberansicht für optionale Zählerarchive und Abrechnungsentwürfe. | [Verknüpfungen und Funktionen](quellcode/src-admin-tab/src/pages/MeshAccountingPanel.md) |
 | [src-admin-tab/src/pages/MeshCoordinatorPage.tsx](../src-admin-tab/src/pages/MeshCoordinatorPage.tsx) | Führt Installer/Admin durch Master-, Slave-, Grenz- und Paarungseinstellungen. | [Verknüpfungen und Funktionen](quellcode/src-admin-tab/src/pages/MeshCoordinatorPage.md) |

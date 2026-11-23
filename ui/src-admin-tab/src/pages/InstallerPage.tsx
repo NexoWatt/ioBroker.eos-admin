@@ -5,7 +5,7 @@
  */
 /**
  * NexoWatt Quellcode-Erklärung (DE)
- * Aufgabe: Zeigt die zur angemeldeten Rolle passenden Einstiege in App-Center, Simulation, SmartHome und Admin-Verwaltung.
+ * Aufgabe: Zeigt die zur angemeldeten Rolle passenden Einstiege in App-Center, Simulation, SmartHome, Devices und EEBus sowie den direkten Rückweg zur EOS-Administration und zum Dashboard.
  * Daten und Wirkung: Verbindet die in dieser Datei sichtbaren Browser-Eingaben, Anzeigeelemente und API-/Hilfsaufrufe. Der Backend-Pfad entscheidet weiterhin über Berechtigungen und zulässige Schreibwirkungen.
  * Bei Änderungen: DOM-/API-Verträge und Rollenrechte mitprüfen; Kommentare und docs:build nach fachlichen Änderungen aktualisieren.
  * Verknüpfungen: docs/quellcode/src-admin-tab/src/pages/InstallerPage.md
@@ -39,6 +39,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import PageShell from './PageShell';
 import { useRuntimeAccess } from './ProtectedRuntimeRoute';
+import { installerModuleLinks, installerReturnLinks } from '../lib/installerNavigation';
 import {
   getInstance,
   openExternal,
@@ -91,7 +92,12 @@ export default function InstallerPage() {
 
   // EMS-Regelungsapps werden ausschließlich über EMS Apps geöffnet; diese
   // Startseite enthält nur die übergeordneten Bereiche und Nicht-EMS-Werkzeuge.
-  const actions = [
+  const actions: { label: string; adminOnly?: boolean; variant?: 'primary'; onClick: () => void }[] = [
+    ...installerModuleLinks(access).map(link => ({
+      label: link.label,
+      adminOnly: true,
+      onClick: () => openExternal(`${baseUrl}${link.path}`),
+    })),
     { label: 'E-Mail-Versand', adminOnly: true, onClick: () => openExternal(`${baseUrl}/mail-setup/?instance=${instance}#/notification-mail`) },
     {
       label: 'VIS öffnen',
@@ -126,6 +132,11 @@ export default function InstallerPage() {
       title="Installer"
       subtitle="Wähle, was geöffnet werden soll. Die Verbindung wird aus der Adapter-Instanz ermittelt. Die Installer-Seite ist für Konfiguration und Mapping gedacht."
       showBack={false}
+      actions={baseUrl ? installerReturnLinks(access).map(link => (
+        <a key={link.path} className="nw-link-button" href={`${baseUrl}${link.path}`} target="_top">
+          {link.label}
+        </a>
+      )) : null}
     >
       <section className="nw-card nw-card--centered">
         <div className="nw-button-grid">

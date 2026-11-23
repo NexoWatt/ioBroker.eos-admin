@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "baselineAdapterVersion": "0.5.143",
+  "templates": {
+    "ess.fenecon.FeneconHomeEssImpl": {
+      "release": "0.5.176",
+      "evidence": "docs/FENECON_SYSTEM_MAPPING_0.5.176.md",
+      "reason": "User-authorized FEMS mapping correction: uint16 undefined values, explicit float NaN, WO controls; command-only aliases and negative charge limit. All existing IDs preserved. New datapoints separately approved.",
+      "baselineTemplateHash": "02c909035a25ed3c7a61eddd2c265ceab9390ce01ef8a68de724370ebde89292",
+      "correctedTemplateHash": "899745b6e665c7d13dd7bf3cfaf75c4381cb486b704ac4fd5ed422e6e5276a30",
+      "baselineAliasHash": "8b100cbc76c5933efd166e04079da9f3a361a17b60cdd574f0ddfc4e9a2dd99e",
+      "correctedAliasHash": "40698d68be2d2c2111d40a33a8bdca19d5d8231e20bd7591119bd91410b5a520",
+      "baselineAliasCount": 21,
+      "correctedAliasCount": 21,
+      "changedLegacyDescriptorPaths": [
+        "ctrl.powerSetpointW",
+        "ctrl.chargePowerW",
+        "ctrl.dischargePowerW",
+        "ctrl.maxChargePowerW",
+        "ctrl.maxDischargePowerW"
+      ]
+    }
+  }
+}

@@ -1,6 +1,9 @@
 import config from '@iobroker/eslint-config';
 
 export default [
+    // Vendored upstream bytes are verified by the pinned provenance gate, never reformatted.
+    // Declaration-adjacent JS boundaries use the executable rules in lint:unified.
+    { ignores: ['src/lib/vendor/webserver/**', 'src/lib/eosModuleHost.js', 'src/lib/eosModuleHttp.js', 'src/lib/eosUnifiedOwnership.js'] },
     ...config,
     {
         languageOptions: {

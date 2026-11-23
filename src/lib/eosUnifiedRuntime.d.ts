@@ -9,4 +9,5 @@ export interface EosHostedRuntime {
     onStateChange?(id: string, state: ioBroker.State | null | undefined): void;
     onObjectChange?(id: string, object: ioBroker.Object | null | undefined): void;
     onMessage?(message: ioBroker.Message): boolean | void;
+    onHostedEebusMessage?(message: { from: string; command: string; message: unknown }): Promise<unknown>;
 }

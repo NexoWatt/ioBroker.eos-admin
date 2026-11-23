@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "module": "devices",
+  "upstream": {
+    "name": "iobroker.nexowatt-devices",
+    "version": "0.5.176",
+    "author": "NexoWatt / Dominique Manteufel",
+    "license": "LicenseRef-NexoWatt-Proprietary",
+    "licenseFile": "UPSTREAM-LICENSE",
+    "archive": "iobroker.nexowatt-devices-0.5.176_FULL_REPOSITORY.zip",
+    "archiveSha256": "f254c5b7d1421a432718cc7b2d5b5576925a2ddb0216e192dec3cabbf49d75d4",
+    "source": "User project archive; source newer than GitHub 0.5.175"
+  },
+  "integration": {
+    "host": "iobroker.eos-admin",
+    "release": "9.0.6",
+    "singleProcess": true,
+    "licenseAuthority": "EOS central NWL3",
+    "changes": [
+      "Hosted factory, validated configuration and isolated scoped namespace facade",
+      "Authenticated full device editor with central API/CSRF and shared activation",
+      "Per-operation central gate including shared serial queue dispatch",
+      "Serial reconnect queue deadlock fix",
+      "Stop cleanup after rejected final MQTT safe publish",
+      "Bounded verified HTTPS, public trusted CA import and stop abort",
+      "Explicit disabled legacy configuration import; state ID mapping requires review"
+    ],
+    "limitations": [
+      "No physical-device/serial-hardware acceptance test",
+      "No blanket CRA conformity or production release certification"
+    ]
+  },
+  "upstreamFiles": {
+    "lib/alias-contract-v1.json": "b7dc0f826f156784124a59fc4e138fd9cc0e24ffa2e78d9a147dd563bddba16a",
+    "lib/aliasContract.js": "3dcfdd3c66486a9e82e1376919bc430af53343b876dfecf1fd4c39c09e263497",
+    "lib/deviceRuntime.js": "22ea52630835d83b86e3b01d467dcaff073aae8783ae006fbdfb8f48eb392eb7",
+    "lib/deyeProtocol.js": "83696212de1298abf7f649d0ff4515167fb648fcf2f7830904d31b151e0bef3d",
+    "lib/drivers/canbus.js": "2dabf644b97a3cbde7e1c35b98156b067f9fe75d5ca74c024bb28a26f4b63ba8",
+    "lib/drivers/deyeModbus.js": "fa67cfe4535867b596a762d2863221f41f6426f5a7224960c660051284b592af",
+    "lib/drivers/http.js": "6a29b83fc160ebde0f21e1af4a16b0ed173974bcea771bbfb36065839274db8a",
+    "lib/drivers/kostalRs485.js": "a02bec0bc606c7273fb6c9879a877674aa9df4f83d55b5b1ba484e2171198632",
+    "lib/drivers/kostalRs485Bus.js": "834b06d8573a707f6303a4c6e60a262197a69c5c419ec7ded0ed098e82fd193e",
+    "lib/drivers/kostalTcp.js": "b4efc3360917f37a31ef98275cd18efcc1baf27a19a8dbbd890011d50c070d52",
+    "lib/drivers/mbus.js": "141760397df4b631bad90184ef5fbb779d0d9b812e0491188d500d93f1dc0fb8",
+    "lib/drivers/mbusBus.js": "7694f88a83e018d50bf0983df87588a95a631ee1754984cb7deac2b15fd73022",
+    "lib/drivers/modbus.js": "4d9068b91ac34f3a83848ce7ff6f1f99dae89d2cc25366babbefad4766c00843",
+    "lib/drivers/modbusAsciiBus.js": "5ec4c0481a585ca95c5a531963b44b9e5c36176f504e34ba4f53112c6dfbbb4d",
+    "lib/drivers/modbusRtuBus.js": "33f999be6fcfd763b2af5010e3596ecd9ef6080cc68623e5687c3a315020d4cc",
+    "lib/drivers/mqtt.js": "a9f28fd18d8f3a2a7b829f32fc5c46435f056ff4ce4319b26f27a7ef80816c36",
+    "lib/drivers/onewire.js": "9e6258fef8499b7970daf38b2c2f2a830085c07cafaa09477757d3b02144fffb",
+    "lib/drivers/speedwire.js": "2c0ad562c6afa98cbde3ffbdfb1e25c17d5bc18a9fe2199a0e4f917e647cce53",
+    "lib/drivers/taCmi.js": "3f18a07891483800433b1ac7da325cb10fdd5ef8ac431c68874e49f9861a69b6",
+    "lib/drivers/udp.js": "bf6392eaf76739fa5fbd5d672561b87724d34b69b552971cc086f2a9da077d8d",
+    "lib/drivers/vartaModbus.js": "684e3fb27072601fde630c00e743987b2ac6d7e416e9fb241c6c2370015623a4",
+    "lib/sungrowFastFeedbackPatch.js": "baabce83e73e2df234f15328f0f4b6e3ecbefe9bada5d1f74a374e4ea0575d61",
+    "lib/templates.json": "ec359447d3dc5c0b8b7d505236e63b964770510fe82211aed51a94d324585487",
+    "lib/utils.js": "8362f5b1ae0a20ce3892b7c14b86436b15064fee078cea0f0638d91867b743e3",
+    "lib/vartaExtendedProtocol.js": "99f602c8ecbf1bb0ed861b0aad02c6834c38c99edb6d7955f9f7145ee4e073e8",
+    "lib/vartaProtocol.js": "b55053bea4d42f26f784c46def315af0b83d6c2c7f56d8e0994b3b2b04e70fbb",
+    "lib/weidmuellerCodec.js": "44793113e1718820ccaca0176564ab9f20bddb302dcfbd25682af7b8ad1e34a1"
+  },
+  "name": "iobroker.nexowatt-devices",
+  "version": "0.5.176"
+}

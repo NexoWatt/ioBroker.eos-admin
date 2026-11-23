@@ -18,7 +18,7 @@ before(() => {
         upstreamCa: path.join(directory, 'test-ca.pem') };
     // Ephemeral test key, never a literal/shipped private key or production CA.
     const generated = spawnSync('openssl', ['req', '-x509', '-newkey', 'rsa:2048', '-nodes', '-days', '2',
-        '-subj', '/CN=nexowatteos', '-addext', 'subjectAltName=IP:192.168.10.192,DNS:nexowatteos,DNS:nexowatteos.local',
+        '-subj', '/CN=nexowatteos', '-addext', 'subjectAltName=IP:192.168.10.192,DNS:nexowatteos,DNS:nexowatteos.local,DNS:nexowatt,DNS:nexowatt.local',
         '-keyout', value.privateKey, '-out', value.certificate], { encoding: 'utf8', timeout: 10000 });
     assert.equal(generated.status, 0, 'OpenSSL must generate the ephemeral certificate fixture');
     fs.chmodSync(value.privateKey, 0o600);
@@ -52,7 +52,9 @@ test('default uses verified TLS upstream, explicit SNI and exact unchanged Brows
 
 test('local alias is explicit and HTTP loopback is an explicit incompatible legacy profile', () => {
     assert.match(render({ ...value, includeLocalName: true }), /server_name 192\.168\.10\.192 nexowatteos nexowatteos\.local;/);
-    const { upstreamName, upstreamCa, ...legacy } = value;
+    const legacy = { ...value };
+    delete legacy.upstreamName;
+    delete legacy.upstreamCa;
     const output = render({ ...legacy, upstreamProtocol: 'http' });
     assert.match(output, /proxy_pass http:\/\/127\.0\.0\.1:8188;/);
     assert.match(output, /server_name 192\.168\.10\.192;/);
@@ -61,6 +63,30 @@ test('local alias is explicit and HTTP loopback is an explicit incompatible lega
     assert.throws(() => render({ ...value, upstreamProtocol: 'http' }), /HTTP_PROFILE_TLS_OPTIONS_FORBIDDEN/);
     assert.throws(() => render({ ...value, upstreamProtocol: 'https; include evil' }), /UPSTREAM_PROTOCOL_INVALID/);
     assert.throws(() => render({ ...value, includeLocalName: 'true' }), /LOCAL_NAME_OPTION_INVALID/);
+    assert.throws(() => render({ ...legacy, upstreamProtocol: 'http', hostname: 'nexowatt' }), /HTTP_PROFILE_TLS_OPTIONS_FORBIDDEN/);
+});
+
+test('nexowatt is an explicit exact public host while upstream identity and existing defaults stay separate', () => {
+    const output = render({ ...value, hostname: 'nexowatt' });
+    assert.match(output, /server_name 192\.168\.10\.192 nexowatt;/);
+    assert.match(output, /"nexowatt" 1;/);
+    assert.match(output, /"nexowatt:443" 1;/);
+    assert.equal(output.includes('"nexowatteos" 1;'), false);
+    assert.match(output, /proxy_ssl_name nexowatteos;/);
+    assert.match(output, /proxy_set_header Host \$http_host;/);
+    assert.match(output, /proxy_ssl_verify on;/);
+    assert.match(render({ ...value, hostname: 'nexowatt', includeLocalName: true }),
+        /server_name 192\.168\.10\.192 nexowatt nexowatt\.local;/);
+    assert.match(render(value), /server_name 192\.168\.10\.192 nexowatteos;/);
+});
+
+test('public host validation rejects unsafe authorities and does not silently repair them', () => {
+    for (const hostname of [null, '', 'NexoWatt', '*.local', '127.0.0.1', 'nexowatt:443',
+        'https://nexowatt', 'a..b', '-bad', 'bad-', 'name.', '$host', 'name; deny all;', 'name\n', 'a'.repeat(64)]) {
+        assert.throws(() => render({ ...value, hostname }), /HOSTNAME_INVALID/);
+    }
+    const maximumName = [63, 63, 63, 61].map(length => 'a'.repeat(length)).join('.');
+    assert.throws(() => render({ ...value, hostname: maximumName, includeLocalName: true }), /HOSTNAME_INVALID/);
 });
 
 test('TLS requires an explicit CA file and strictly validated DNS certificate identity', () => {
@@ -127,6 +153,12 @@ test('CLI rejects duplicate/unknown parameters and never replaces an existing fi
     assert.match(run(['--ip', '127.0.0.1']).stderr, /ARGUMENTS_INVALID/);
     assert.match(run(['--upstream-host', 'evil.example']).stderr, /ARGUMENTS_INVALID/);
     assert.match(run(['--include-local-name', 'maybe']).stderr, /LOCAL_NAME_OPTION_INVALID/);
+    const namedOutput = path.join(directory, 'cli-nexowatt.conf');
+    const named = spawnSync(process.execPath, [script, ...args.slice(0, -2), '--hostname', 'nexowatt', '--output', namedOutput],
+        { encoding: 'utf8', timeout: 10000 });
+    assert.equal(named.status, 0);
+    assert.match(fs.readFileSync(namedOutput, 'utf8'), /server_name 192\.168\.10\.192 nexowatt;/);
+    assert.match(run(['--hostname', 'nexowatt;']).stderr, /HOSTNAME_INVALID/);
 });
 
 test('nginx -t validates the generated TLS fragment when the binary is available', t => {

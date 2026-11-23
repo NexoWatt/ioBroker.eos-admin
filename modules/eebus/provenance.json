@@ -1,0 +1,35 @@
+{
+  "component": "NexoWatt EOS embedded EEBus",
+  "integrationVersion": "9.0.6",
+  "upstream": {
+    "name": "iobroker.eebus",
+    "version": "0.3.0",
+    "repository": "https://github.com/NexoWatt/ioBroker.eebus",
+    "commit": "1c0eb410d516b90d60f6e475e6822bf5836bfd66",
+    "source": "src/lib/*.ts",
+    "license": "LicenseRef-NexoWatt-Proprietary",
+    "licenseFile": "LICENSE"
+  },
+  "changes": [
+    "Hosted module factory, single EOS NWL3 license and same-process para14a bridge; no second adapter-core instance",
+    "Explicit inactive configuration migration to eos-admin.N.eebus states, new device pairing, legacy configuration retained",
+    "SHIP TLS certificate identity and fingerprint pinning, explicit pairing, handshake ordering and live revocation",
+    "Bounded sessions, frames, discovery, queues and shutdown; caught asynchronous callbacks and coalesced periodic tasks",
+    "Local 0600 SHIP identity storage, validated key pair and fail-closed corrupt identity recovery",
+    "Dry-run covers incoming CLS and outgoing controls, no untrusted bypass, capability checks at message dispatch",
+    "Functional module configuration, discovery, pairing and admin navigation UI"
+  ],
+  "excludedUpstreamFiles": [
+    "node_modules",
+    "package-lock.json",
+    "src/main.ts",
+    "main.js"
+  ],
+  "runtimeDependencies": {
+    "ws": "root package-lock.json",
+    "bonjour-service": "root package-lock.json"
+  },
+  "supportStatus": "Integrated SHIP/SPINE field-test core; physical-device interoperability and certification remain unverified",
+  "name": "iobroker.eebus",
+  "version": "0.3.0"
+}
