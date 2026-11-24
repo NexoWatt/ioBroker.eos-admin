@@ -31,6 +31,9 @@ async function setup(t, factory = { validateConfig: input => ({ ...input, enable
     const factories = { devices: { ...factory, createHostedModule() { runtimeStarts++; throw new Error('Import must not start a runtime'); } },
         eebus: { validateConfig: input => input }, backup: { validateConfig: input => input } };
     const host = new EosModuleHost(owner, { baseDir: process.cwd(), dataDir: '/tmp/eos-import-test-only', factories });
+    // Import-store isolation uses no EMS controller; real controller admission is
+    // separately exercised through the production Web/HTTP pipeline.
+    host.bindDeviceEms(async () => ({ statuses: [] }), async () => () => {});
     t.after(async () => {
         if ([...host.entries.values()].some(entry => entry.stopFailed)) await assert.rejects(host.stop(), /EOS_MODULE_STOP_UNCONFIRMED/);
         else await host.stop();

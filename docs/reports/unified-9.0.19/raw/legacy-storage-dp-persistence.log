@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> nexowatt-eos-ui-internal@9.0.19 test:storage-appcenter-dp-persistence
+> node scripts/verify-storage-appcenter-dp-persistence.js
+
+[storage-appcenter-dp-persistence] OK: vollständige manuelle Speicher-DPs bleiben nach Save/Restart autoritativ; globale Fallbacks sind runtime-only.

@@ -623,11 +623,7 @@ function formatNum(v, suffix='') {
  * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
  */
 function formatPricePerKwh(v){
-  if (v===undefined || v===null || isNaN(v)) return '--';
-  const n = Number(v);
-  // assume €/kWh if v < 10, else probably ct/kWh
-  if (n < 10) return n.toFixed(3) + ' €/kWh';
-  return (n/100).toFixed(2) + ' €/kWh'; // if provided in ct
+  return window.NexoWattTariffDisplay.format(v);
 }
 
 // ------------------------------
@@ -645,99 +641,9 @@ function formatPricePerKwh(v){
  * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
  */
 function nwParsePriceCurve(raw) {
-  if (raw === null || raw === undefined) return [];
-
-  let data = raw;
-  if (typeof raw === 'string') {
-    const s = raw.trim();
-    if (!s) return [];
-    try { data = JSON.parse(s); } catch (_e) { return []; }
-  }
-
-  // Some adapters wrap the array
-  if (data && typeof data === 'object' && !Array.isArray(data)) {
-    const arr = data.prices || data.data || data.items || data.values || null;
-    if (Array.isArray(arr)) data = arr;
-    else return [];
-  }
-
-  if (!Array.isArray(data)) return [];
-  /**
-   * Code-Teil: normalizePriceEurPerKwh
-   * Zweck: Kapselt einen lokalen Verarbeitungsschritt, damit Aufrufer nicht direkt in Detaildaten eingreifen.
-   * Zusammenhang: Teil von Kunden-LIVE-Frontend: Dashboard, Energiefluss, Schnellsteuerung; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
-   * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
-   */
-  function normalizePriceEurPerKwh(v){
-    if (v === null || v === undefined) return null;
-    let n = Number(v);
-    if (!Number.isFinite(n)) return null;
-    // auto convert ct/kWh -> €/kWh (same heuristic as backend: values >=10 are assumed to be ct)
-    if (Math.abs(n) >= 10) n = n / 100;
-    if (!Number.isFinite(n)) return null;
-    return n;
-  }
-
-  const out = [];
-  for (const it of data) {
-    if (!it || typeof it !== 'object') continue;
-
-    // price heuristics
-    let pRaw = null;
-    if (it.total !== undefined) pRaw = it.total;
-    else if (it.price !== undefined) pRaw = it.price;
-    else if (it.value !== undefined) pRaw = it.value;
-    else if (it.marketprice !== undefined) pRaw = it.marketprice;
-    else if (it.marketPrice !== undefined) pRaw = it.marketPrice;
-    else if (it.energyPrice !== undefined) pRaw = it.energyPrice;
-    if (pRaw === null && it.price && typeof it.price === 'object') {
-      if (it.price.total !== undefined) pRaw = it.price.total;
-      else if (it.price.value !== undefined) pRaw = it.price.value;
-    }
-    const priceEurKwh = normalizePriceEurPerKwh(pRaw);
-    if (!Number.isFinite(priceEurKwh)) continue;
-
-    // time heuristics
-    const startRaw = (it.startsAt !== undefined) ? it.startsAt
-      : (it.start !== undefined) ? it.start
-      : (it.startTime !== undefined) ? it.startTime
-      : (it.from !== undefined) ? it.from
-      : (it.begin !== undefined) ? it.begin
-      : (it.timestamp !== undefined) ? it.timestamp
-      : (it.time !== undefined) ? it.time
-      : null;
-
-    let startMs = null;
-    if (typeof startRaw === 'number' && Number.isFinite(startRaw)) {
-      startMs = (startRaw < 1e12) ? startRaw * 1000 : startRaw;
-    } else if (typeof startRaw === 'string') {
-      const t = Date.parse(startRaw);
-      if (Number.isFinite(t)) startMs = t;
-    }
-    if (!startMs) continue;
-
-    const endRaw = (it.endsAt !== undefined) ? it.endsAt
-      : (it.end !== undefined) ? it.end
-      : (it.endTime !== undefined) ? it.endTime
-      : (it.to !== undefined) ? it.to
-      : (it.until !== undefined) ? it.until
-      : null;
-
-    let endMs = null;
-    if (typeof endRaw === 'number' && Number.isFinite(endRaw)) {
-      endMs = (endRaw < 1e12) ? endRaw * 1000 : endRaw;
-    } else if (typeof endRaw === 'string') {
-      const t = Date.parse(endRaw);
-      if (Number.isFinite(t)) endMs = t;
-    }
-    if (!endMs) endMs = startMs + 60 * 60 * 1000;
-    if (endMs <= startMs) endMs = startMs + 60 * 60 * 1000;
-
-    out.push({ startMs, endMs, priceEurKwh });
-  }
-  out.sort((a,b)=> a.startMs - b.startMs);
-  return out;
+  return window.NexoWattTariffDisplay.parseCurve(raw);
 }
+
 /**
  * Code-Teil: nwNiceStep
  * Zweck: Kapselt einen lokalen Verarbeitungsschritt, damit Aufrufer nicht direkt in Detaildaten eingreifen.
@@ -1043,7 +949,9 @@ function nwDrawTariffForecastChart(canvas, curve, opts){
   ctx.textBaseline = 'top';
   const xHours = [0, 6, 12, 18];
   xHours.forEach(h => {
-    const t = dayStartMs + h * 60 * 60 * 1000;
+    const localTick = new Date(dayStartMs);
+    localTick.setHours(h, 0, 0, 0);
+    const t = localTick.getTime();
     const x = xOf(t);
     const lab = String(h).padStart(2,'0') + ':00';
     ctx.fillText(lab, x, H - m.B + 6);
@@ -1170,10 +1078,7 @@ function initTariffForecastTooltip(){
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
   function getTodayRange(){
-    const d0 = new Date();
-    d0.setHours(0,0,0,0);
-    const d1 = new Date(d0.getTime() + 24*60*60*1000);
-    return { startMs: d0.getTime(), endMs: d1.getTime() };
+    return window.NexoWattTariffDisplay.dayRange(Date.now());
   }
   /**
    * Code-Teil: update
@@ -1204,21 +1109,15 @@ function initTariffForecastTooltip(){
     const ts = tsOf('priceTodayJson') || tsOf('tarif.preisAktuellEurProKwh') || tsOf('priceCurrent');
     const tsTxt = ts ? ('aktualisiert ' + _fmtTimeHHmm(ts)) : '';
     // Current price
-    const pNow = v('priceCurrent') ?? v('tarif.preisAktuellEurProKwh');
+    const pNow = window.NexoWattTariffDisplay.display(window.latestState, window.__nwCfg?.tariffDisplay, Date.now(), window.__nwTariffLiveOnline !== false).current;
     const pNowTxt = (pNow !== null && pNow !== undefined && Number.isFinite(Number(pNow))) ? nwFormatCt(Number(pNow)) : '';
-    const meta = [pNowTxt ? ('Aktuell ' + pNowTxt) : '', tsTxt].filter(Boolean).join(' • ');
+    const meta = [window.NexoWattTariffDisplay.resolution(curveToday), pNowTxt ? ('Aktuell ' + pNowTxt) : '', tsTxt].filter(Boolean).join(' • ');
     if (metaEl) metaEl.textContent = meta || '—';
 
     // min/avg/max
     const ps = curveToday.map(x => x.priceEurKwh).filter(n => Number.isFinite(Number(n)));
-    // Downsample very fine-grained curves (e.g. 15-min) to keep the chart visually clean.
-    // Many providers deliver 15-minute slots; aggregating to 60 minutes makes the forecast easier to read.
-    let curvePlot = curveToday;
-    const intMs = curveToday.map(x => (Number(x.endMs) - Number(x.startMs))).filter(n => Number.isFinite(n) && n > 0);
-    const medMs = nwMedian(intMs);
-    if (Number.isFinite(medMs) && medMs < 30 * 60 * 1000) {
-      curvePlot = nwAggregateCurve(curveToday, startMs, endMs, 60 * 60 * 1000);
-    }
+    // Originalintervalle bleiben erhalten: echte Viertelstunden werden nicht zu Stunden gemittelt.
+    const curvePlot = curveToday;
 
     if (ps.length > 0) {
       const min = Math.min(...ps);
@@ -1945,6 +1844,9 @@ function nwLatestStateTimestamp(keys) {
  */
 function nwSetLiveOnline(isOnline) {
   const online = !!isOnline;
+  const tariffConnectionChanged = window.__nwTariffLiveOnline !== online;
+  window.__nwTariffLiveOnline = online;
+  if (tariffConnectionChanged) updateEmsControlUi();
   setText('sideConnection', online ? 'Online' : 'Offline');
   setText('sideStatusText', online ? 'Alle Systeme normal' : 'Verbindung wird aufgebaut');
   const dot = document.getElementById('sideLiveDot');
@@ -1956,6 +1858,18 @@ function nwSetLiveOnline(isOnline) {
  * Zusammenhang: Teil von Kunden-LIVE-Frontend: Dashboard, Energiefluss, Schnellsteuerung; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
  * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
  */
+function getEvcsPowerW(readValue) {
+  const d = typeof readValue === 'function' ? readValue : (key => {
+    const snapshot = window.latestState || state || {};
+    return typeof snapshot === 'object' && Object.hasOwn(snapshot, key) ? Reflect.get(snapshot, key)?.value : undefined;
+  });
+  const mapped = window.__nwCfg?.datapoints?.consumptionEvcs;
+  return window.NexoWattPowerMeasurements?.resolveEvcsPower({
+    overrideConfigured: typeof mapped === 'string' && mapped.trim().length > 0,
+    override: d('consumptionEvcs'), aggregate: d('evcs.totalPowerW'), legacy: d('evcsPower'),
+  }) ?? null;
+}
+
 function updateDashboardShellUi(data) {
   const snap = data || {};
   const d = typeof snap.d === 'function' ? snap.d : ((k) => (window.latestState || state || {})[k]?.value);
@@ -1971,7 +1885,7 @@ function updateDashboardShellUi(data) {
   const discharge = Math.max(0, Number(snap.discharge ?? 0) || 0);
   const batterySigned = discharge - charge;
   const evcsAvailable = nwEvcsFeatureFromConfig();
-  const evcsPower = evcsAvailable ? (Number(snap.evcsPower ?? d('consumptionEvcs') ?? d('evcsPower') ?? 0) || 0) : 0;
+  const evcsPower = evcsAvailable ? getEvcsPowerW(d) : null;
   try { nwApplyCustomerFeatureVisibility(window.__nwCfg || {}, window.latestState || state || {}); } catch (_e) {}
 
   const soc = (snap.socN !== undefined && snap.socN !== null) ? Number(snap.socN) : coerceNumber(d('storageSoc'));
@@ -1995,7 +1909,7 @@ function updateDashboardShellUi(data) {
   setText('sideGridBuyPower', formatFlowPower(Math.max(0, buy)));
   setText('sideGridSellPower', formatFlowPower(Math.max(0, sell)));
   setText('sideBatteryPower', (batterySigned < 0 ? '-' : '') + formatFlowPower(Math.abs(batterySigned)));
-  if (evcsAvailable) setText('sideEvcsPower', formatFlowPower(Math.abs(evcsPower)));
+  if (evcsAvailable) setText('sideEvcsPower', evcsPower === null ? '--' : formatFlowPower(Math.abs(evcsPower)));
 
   const ts = nwLatestStateTimestamp([
     'pvPower', 'productionTotal', 'consumptionTotal', 'gridPower', 'gridBuyPower',
@@ -3439,7 +3353,8 @@ function render() {
 
 
   const evcsAvailableNow = nwEvcsFeatureFromConfig();
-  setText('consumptionEvcs', evcsAvailableNow ? formatPower(d('consumptionEvcs') ?? 0) : '');
+  const evcsPowerNow = getEvcsPowerW(d);
+  setText('consumptionEvcs', evcsAvailableNow ? (evcsPowerNow === null ? '--' : formatPower(evcsPowerNow)) : '');
   setText('consumptionEnergyKwh', formatEnergyKwh(d('consumptionEnergyKwh')));
   setText('consumptionBuilding', formatPower(d('consumptionTotal') ?? 0));
 
@@ -3572,7 +3487,7 @@ function render() {
       socN,
       autarkyN,
       selfcN,
-      evcsPower: nwEvcsFeatureFromConfig() ? (d('consumptionEvcs') ?? 0) : 0,
+      evcsPower: nwEvcsFeatureFromConfig() ? getEvcsPowerW(d) : null,
       co2Text: co2TextDash
     });
   } catch (_e) {}
@@ -6453,8 +6368,9 @@ function updateEmsControlUi() {
     const card = document.getElementById('tariffCard');
     if (card) card.classList.toggle('hidden', !showCard);
 
-    const priceNow = v('priceCurrent');
-    const priceAvg = v('priceAverage');
+    const tariffDisplay = window.NexoWattTariffDisplay.display(st, window.__nwCfg?.tariffDisplay, Date.now(), window.__nwTariffLiveOnline !== false);
+    const priceNow = tariffDisplay.current;
+    const priceAvg = tariffDisplay.average;
 
     /**
      * Code-Teil: Arrow-Funktion `setText`
@@ -6470,14 +6386,10 @@ function updateEmsControlUi() {
      */
     const setText = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
 
-    // Price display
-    if (!tariffOn) {
-      setText('priceCurrent', 'Aus');
-      setText('priceAverage', '--');
-    } else {
-      setText('priceCurrent', formatPricePerKwh(priceNow));
-      setText('priceAverage', formatPricePerKwh(priceAvg));
-    }
+    // Der Preisabruf ist unabhängig von der bewussten Freigabe der Tarifoptimierung.
+    setText('priceCurrent', formatPricePerKwh(priceNow));
+    setText('priceAverage', formatPricePerKwh(priceAvg));
+    if (card) card.title = tariffDisplay.status;
 
     // Peak short status (Netzschutz – nur Installateur konfigurierbar)
     const peakStatus = String(v('peakShaving.control.status') || '').trim();
@@ -6561,8 +6473,8 @@ function updateEmsControlUi() {
         }
       }
 
-      setText('emsPriceCurrent', tariffOn ? formatPricePerKwh(priceNow) : '--');
-      setText('emsPriceAvg', tariffOn ? formatPricePerKwh(priceAvg) : '--');
+      setText('emsPriceCurrent', formatPricePerKwh(priceNow));
+      setText('emsPriceAvg', formatPricePerKwh(priceAvg));
 
       // Priority buttons
       const prioWrap = document.getElementById('emsTariffPriorityButtons');
@@ -8672,7 +8584,8 @@ function updateEnergyWeb() {
   let pv = getCanonicalPvPowerW(d);
   let { buy, sell } = getGridImportExport(d);
   let load = +(d('consumptionTotal') ?? 0);
-  let c2 = +(d('evcs.totalPowerW') ?? d('consumptionEvcs') ?? 0); // Wallbox (sum)
+  const evcsPowerW = getEvcsPowerW(d);
+  let c2 = evcsPowerW ?? 0; // Unknown is used as zero only for drawing geometry, never as a displayed measurement.
 
   // Batterie: zentral normalisieren wie den NVP.
   // Signed batteryPower-Konvention: -W = Laden, +W = Entladen;
@@ -8805,7 +8718,7 @@ function updateEnergyWeb() {
   // grid text: +Bezug, -Einspeisung
   T('gridVal', gridShowVal ? (gridSellMode ? ('-'+formatFlowPower(gridShowVal)) : formatFlowPower(gridShowVal)) : formatFlowPower(0));
   // EV & Batterie Texte
-  T('c2Val', formatFlowPower(evShowVal));
+  T('c2Val', evcsPowerW === null ? '--' : formatFlowPower(evShowVal));
   T('restVal', batShowVal ? (batRev ? ('-'+formatFlowPower(batShowVal)) : formatFlowPower(batShowVal)) : formatFlowPower(0));
   T('centerPower', formatFlowPower(Math.max(0, loadDisplay)));
   if (soc===undefined || isNaN(Number(soc))) { T('batterySocIn','-- %'); } else { T('batterySocIn', Number(soc).toFixed(0)+' %'); }
@@ -8830,7 +8743,7 @@ function updateEnergyWeb() {
   if (evcsLine) evcsLine.style.display = evAvail ? '' : 'none';
   show('linePV', pvValNum>0);
   show('lineGrid', gridShowVal>0);
-  show('lineC2', evAvail && evShowVal>0);
+  show('lineC2', evAvail && evcsPowerW !== null && evShowVal>0);
   show('lineRest', batShowVal>0);
 
   // Richtung
@@ -10005,7 +9918,7 @@ render = function(){ try{ _renderOld(); }catch(e){ console.warn('render', e); } 
 
   // Update values from state inside global render()
   window.__evcsApply = function(d, s){
-    const p = d('evcs.totalPowerW') ?? d('consumptionEvcs') ?? 0;
+    const p = getEvcsPowerW(d);
     const st = d('evcs.1.status') ?? d('evcsStatus') ?? '--';
 
     // EMS available?
@@ -10069,7 +9982,7 @@ render = function(){ try{ _renderOld(); }catch(e){ console.warn('render', e); } 
                            'conic-gradient(#6c5ce7 0% ' + deg + ', #2a2f35 ' + deg + ' 100%)';
     }
 
-    const pb = qs('evcsPowerBig'); if (pb) pb.textContent = fmtP(p);
+    const pb = qs('evcsPowerBig'); if (pb) pb.textContent = p === null ? '--' : fmtP(p);
     const sm = qs('evcsStatusModal'); if (sm) sm.textContent = st;
 
     // Optional: Fahrzeug-SoC anzeigen, falls vorhanden

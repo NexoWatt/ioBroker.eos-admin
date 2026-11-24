@@ -1,0 +1,14 @@
+{
+  "name": "legacy-core-limits-tariff-final",
+  "command": [
+    "npm",
+    "run",
+    "test:core-limits-typed-runtime-phase1"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin/ui",
+  "startedAt": "2026-11-24T18:23:01.264349+00:00",
+  "durationSeconds": 0.606,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-919/legacy-core-limits-tariff-final.log",
+  "sha256": "7bc3373d9828c30f9629c859fb40b0ef46ee892dc127bd0a6e027fdecd6bb2fc"
+}

@@ -4,7 +4,15 @@
 // Cookies belong to a host, not a TCP port. The upstream OAuth/Socket.IO
 // implementation uses Admin's generic names internally. Translate them only at
 // this EOS server's boundary; never read, overwrite or clear Admin's cookies.
-const GENERIC = ['access_token', 'refresh_token', 'connect.sid', 'io', 'ioBroker.sid', 'eos-admin.sid', 'nexowatt_eos_first_login'];
+const GENERIC = [
+    'access_token',
+    'refresh_token',
+    'connect.sid',
+    'io',
+    'ioBroker.sid',
+    'eos-admin.sid',
+    'nexowatt_eos_first_login',
+];
 const RESERVED_PREFIX = 'nexowatt_eos_';
 const MAX_COOKIE_BYTES = 16_384;
 
@@ -120,12 +128,16 @@ function createEosCookieNamespace(namespace) {
                     }
                     args[index] = values;
                 } else if (headers && typeof headers === 'object') {
-                    args[index] = Object.fromEntries(Object.entries(headers).map(([name, value]) => [
-                        name,
-                        name.toLowerCase() === 'set-cookie'
-                            ? (Array.isArray(value) ? value.map(rewriteCookie) : rewriteCookie(value))
-                            : value,
-                    ]));
+                    args[index] = Object.fromEntries(
+                        Object.entries(headers).map(([name, value]) => [
+                            name,
+                            name.toLowerCase() === 'set-cookie'
+                                ? Array.isArray(value)
+                                    ? value.map(rewriteCookie)
+                                    : rewriteCookie(value)
+                                : value,
+                        ]),
+                    );
                 }
                 return writeHead.apply(this, args);
             };

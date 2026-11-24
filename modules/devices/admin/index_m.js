@@ -13,6 +13,7 @@ let manufacturersByCategory = {}; // cat -> [manu]
 let templatesByCatManu = {}; // cat -> manu -> [template]
 let devices = [];
 let editIndex = -1;
+let emsRenewalRequested = false;
 let onChangeGlobal = null;
 let uiInitialized = false;
 let lastSuggestedId = '';
@@ -846,6 +847,14 @@ function updateEmsControls(settings) {
   }
   select.value = choices.some(choice => choice.value === desired.mode) ? desired.mode : 'auto';
   document.getElementById('dev_ems_scope').value = desired.scope || '';
+  if (settings) {
+    document.getElementById('dev_ems_requested').checked = desired.activation?.requested !== false;
+    const limits = desired.activation?.limits || {};
+    for (const key of ['coupling', 'maxChargeW', 'maxDischargeW', 'capacityKWh', 'chargerType', 'phases', 'minCurrentA', 'maxCurrentA', 'minPowerW', 'maxPowerW']) {
+      const control = document.getElementById('dev_ems_' + key);
+      control.value = Object.hasOwn(limits, key) ? String(Reflect.get(limits, key)) : '';
+    }
+  }
   updateEmsTargets(settings ? (desired.flowSlot ?? '') : undefined);
 }
 
@@ -866,6 +875,52 @@ function updateEmsTargets(savedSlot) {
   field.hidden = targets.length === 0;
   document.getElementById('dev_ems_scope_field').hidden = !['singleStorage', 'storageFarm', 'gridMeter'].includes(mode);
   document.getElementById('dev_ems_help').textContent = window.EosDeviceEms.help(String($('#dev_category').val() || ''), mode, scope);
+  updateEmsActivation();
+}
+
+function updateEmsActivation() {
+  const mode = document.getElementById('dev_ems_mode').value;
+  const category = String($('#dev_category').val() || '').toUpperCase();
+  const storage = ['singleStorage', 'storageFarm'].includes(mode);
+  const charger = mode === 'auto' && ['EVCS', 'EVSE'].includes(category);
+  const applicable = storage || charger || ['gridMeter', 'generationMeter', 'consumptionMeter', 'pvInverter'].includes(mode);
+  document.getElementById('dev_ems_activation_field').hidden = !applicable;
+  const requested = document.getElementById('dev_ems_requested').checked;
+  const type = document.getElementById('dev_ems_chargerType').value;
+  for (const field of document.querySelectorAll('[data-ems-limit]')) {
+    const group = field.dataset.emsLimit;
+    field.hidden = !requested || !(group === 'storage' && storage || group === 'charger' && charger || group === type && charger);
+  }
+  document.getElementById('dev_ems_limits_help').hidden = !requested || !(storage || charger);
+  document.getElementById('dev_ems_limits_title').hidden = !requested || !(storage || charger);
+}
+
+function collectEmsActivation(value, previous) {
+  if (document.getElementById('dev_ems_activation_field').hidden) return;
+  const requested = document.getElementById('dev_ems_requested').checked;
+  const limits = { ...(previous?.activation?.limits || {}) };
+  const storage = ['singleStorage', 'storageFarm'].includes(value.mode);
+  const charger = value.mode === 'auto';
+  const kind = document.getElementById('dev_ems_chargerType').value;
+  const fields = storage ? ['coupling', 'maxChargeW', 'maxDischargeW', 'capacityKWh']
+    : charger ? ['chargerType', ...(kind === 'dc' ? ['minPowerW', 'maxPowerW'] : ['phases', 'minCurrentA', 'maxCurrentA'])] : [];
+  for (const key of fields) {
+    const raw = document.getElementById('dev_ems_' + key).value.trim();
+    if (!raw) continue; // Existing App-Center limits are resolved on the server.
+    if (['coupling', 'chargerType'].includes(key)) {
+      if (!['ac', 'dc'].includes(raw)) throw new Error('Bitte eine gültige Anbindung auswählen.');
+      Reflect.set(limits, key, raw);
+    } else {
+      const numeric = Number(raw);
+      if (!Number.isFinite(numeric) || numeric <= 0 || numeric > 10000000 || key === 'phases' && ![1, 3].includes(numeric)) throw new Error('Bitte positive, gültige EMS-Grenzen eingeben.');
+      Reflect.set(limits, key, numeric);
+    }
+  }
+  if (requested && limits.minCurrentA > limits.maxCurrentA || requested && limits.minPowerW > limits.maxPowerW) throw new Error('Die minimale Ladegrenze darf die maximale Grenze nicht überschreiten.');
+  if (requested && editIndex < 0 && storage && (!limits.maxChargeW || !limits.maxDischargeW)) throw new Error('Für den neuen Speicher maximale Lade- und Entladeleistung angeben.');
+  if (requested && editIndex < 0 && charger && (!limits.chargerType || kind === 'ac' && (!limits.phases || !limits.minCurrentA || !limits.maxCurrentA) || kind === 'dc' && (!limits.minPowerW || !limits.maxPowerW))) throw new Error('Für den neuen Ladepunkt Ladeart und zugehörige Grenzen angeben.');
+  value.activation = { requested, limits };
+  if (previous?.activation?.requestId) value.activation.requestId = previous.activation.requestId;
 }
 
 function collectEmsIntent() {
@@ -886,6 +941,7 @@ function collectEmsIntent() {
     if (!chosen) throw new Error('Ziel für die Zuordnung im Energiefluss auswählen');
     value.flowSlot = chosen.value;
   }
+  collectEmsActivation(value, previous);
   return value;
 }
 
@@ -905,16 +961,17 @@ function renderDevicesTable() {
     const tplName = tpl ? (tpl.name || tpl.id) : (d.templateId || '');
 
     const ems = emsPresentation(d);
+    const capabilities = window.EosDeviceEms.capabilities(tpl);
     const row = $(`
       <tr>
         <td>${d.enabled ? '✓' : ''}</td>
         <td><code>${escapeHtml(d.id)}</code></td>
-        <td>${escapeHtml(d.name || '')}</td>
+        <td>${escapeHtml(d.name || '')}${capabilities.length ? `<details class="nexo-ems-notes"><summary>Profilfunktionen</summary><div class="nexo-capability-chips">${capabilities.map(item => `<span>${escapeHtml(item)}</span>`).join('')}</div><p>Profilangaben · Betriebsfreigabe siehe EMS-Status.</p></details>` : ''}</td>
         <td>${escapeHtml(d.category || '')}</td>
         <td>${escapeHtml(manufacturer)}</td>
         <td>${escapeHtml(tplName)}</td>
         <td>${escapeHtml(d.protocol || '')}</td>
-        <td class="nexo-ems-cell"><span data-eos-ems-id="${escapeHtml(d.id)}" data-eos-ems-mode="${escapeHtml(window.EosDeviceEms.intent(d.ems).mode)}" data-eos-ems-enabled="${d.enabled !== false}" data-state="${escapeHtml(ems.status)}">${escapeHtml(ems.label)} · ${escapeHtml(ems.detail)}</span></td>
+        <td class="nexo-ems-cell"><span data-eos-ems-id="${escapeHtml(d.id)}" data-eos-ems-mode="${escapeHtml(window.EosDeviceEms.intent(d.ems).mode)}" data-eos-ems-enabled="${d.enabled !== false}" data-state="${escapeHtml(ems.status)}">${escapeHtml(ems.label)} · ${escapeHtml(ems.detail)}</span><details class="nexo-ems-notes"${ems.optionalDetail ? '' : ' hidden'}><summary>Profilhinweise</summary><p>${escapeHtml(ems.optionalDetail || '')}</p></details></td>
         <td class="actions">
           <a href="#!" class="btn-small waves-effect" data-action="edit" data-idx="${idx}">${escapeHtml('Gerät bearbeiten')}</a>
           <a href="#!" class="btn-small red waves-effect" data-action="delete" data-idx="${idx}">${escapeHtml('Löschen')}</a>
@@ -1121,8 +1178,27 @@ function collectFeneconControllerOffset() {
   return offset;
 }
 
+function renderProfileCapabilities(template) {
+  const container = document.getElementById('dev_profile_capabilities');
+  container.replaceChildren();
+  const title = document.createElement('p');
+  title.textContent = 'Im Geräteprofil vorgesehen';
+  title.className = 'nexo-muted'; container.appendChild(title);
+  const capabilities = window.EosDeviceEms.capabilities(template);
+  const list = document.createElement('div'); list.className = 'nexo-capability-chips';
+  for (const capability of capabilities) {
+    const chip = document.createElement('span'); chip.textContent = capability; list.appendChild(chip);
+  }
+  if (!capabilities.length) list.textContent = 'Keine eindeutigen Funktionsangaben im geladenen Profil.';
+  container.appendChild(list);
+  const hint = document.createElement('p'); hint.className = 'nexo-muted nexo-capability-hint';
+  hint.textContent = 'Die tatsächliche EMS-Verwendbarkeit wird anhand der Alias-Datenpunkte geprüft und im Gerätestatus angezeigt.';
+  container.appendChild(hint);
+}
+
 function renderDatapoints(templateId) {
   const tpl = templatesById[templateId];
+  renderProfileCapabilities(tpl);
   renderVartaOptions(tpl);
   renderDeyeOptions(tpl);
   renderFeneconOptions(tpl);
@@ -1151,6 +1227,7 @@ function renderDatapoints(templateId) {
 }
 
 function openDeviceModal(device, idx) {
+  emsRenewalRequested = false;
   editIndex = (typeof idx === 'number') ? idx : -1;
   $('#modalTitle').text(editIndex >= 0 ? 'Gerät bearbeiten' : 'Gerät hinzufügen');
 
@@ -1229,6 +1306,7 @@ function openDeviceModal(device, idx) {
   refreshSelect($('#mb_wordOrder'));
   refreshSelect($('#mb_byteOrder'));
   applyTemplateModbusTcpDefaultsToForm(tpl, proto, c);
+  renderProfileCapabilities(tpl);
   renderVartaOptions(tpl);
   $('#varta_allow_sf_writes').prop('checked', device.vartaAllowScaleFactorWrites === true && !!(tpl && tpl.driverHints && tpl.driverHints.vartaModbus && ['pulseNeo', 'flexStorage'].includes(tpl.driverHints.vartaModbus.product)));
   $('#varta_extended_enabled').prop('checked', device.vartaExtendedEnabled !== false);
@@ -1627,7 +1705,12 @@ function updateJsonPreview() {
 }
 
 function initEventHandlers() {
-  $('#dev_ems_mode').on('change', () => updateEmsTargets());
+  $('#dev_ems_mode').on('change', () => { document.getElementById('dev_ems_requested').checked = true; updateEmsTargets(); });
+  $('#dev_ems_requested').on('change', () => {
+    if (document.getElementById('dev_ems_requested').checked && editIndex >= 0) emsRenewalRequested = true;
+    updateEmsActivation();
+  });
+  $('#dev_ems_chargerType').on('change', updateEmsActivation);
   $('#dev_ems_scope').on('change', () => updateEmsTargets());
   $('#fenecon_ctrl_profile').on('change', function () {
     const profile = $('#fenecon_ctrl_profile').val();
@@ -1895,6 +1978,7 @@ function initEventHandlers() {
         devices.push(d);
       }
 
+      if (emsRenewalRequested) window.EosDeviceEms.requestRenewal(d.id);
       devices.sort((a, b) => (a.id || '').localeCompare(b.id || ''));
 
       renderDevicesTable();

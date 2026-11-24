@@ -39,7 +39,14 @@ async function fixture(t, initial = {}, allowed = true) {
     } };
     const options = { baseDir: path.resolve(__dirname, '..'), dataDir: '/tmp/eos-device-save-fixture',
         factories: { devices: factory, eebus: { validateConfig: input => input }, backup: { validateConfig: input => input } } };
-    let host = new EosModuleHost(owner, options);
+    const newHost = () => {
+        const instance = new EosModuleHost(owner, options);
+        // This persistence/authentication fixture has no EMS controller. Supply
+        // its explicit empty-controller admission; production is covered by Web.
+        instance.bindDeviceEms(async () => ({ statuses: [] }), async () => () => {});
+        return instance;
+    };
+    let host = newHost();
     const session = await installIdleSession(owner);
     const authority = new UnifiedSessions(owner, { secure: false, externalOrigin: '',
         resolveAccess: async req => req.headers.cookie === `access_token=${session.token}`
@@ -62,8 +69,9 @@ async function fixture(t, initial = {}, allowed = true) {
         return { status: response.status, body: await response.json() };
     };
     return { owner, objects, writes, runtimes, get, put, host: () => host,
+        browserFetch(url, options = {}) { return fetch(origin + url, { ...options, headers: { ...options.headers, cookie: `access_token=${session.token}`, origin } }); },
         allowed(value) { allowStartup = value; }, failRead(value) { failRead = value; },
-        async restart() { await host.stop(); owner.config = { eosModules: {} }; host = new EosModuleHost(owner, options); return host; } };
+        async restart() { await host.stop(); owner.config = { eosModules: {} }; host = newHost(); return host; } };
 }
 
 test('SMA device create/save/reload and enable toggle survive a new host with packaged defaults', async t => {
@@ -191,4 +199,94 @@ test('operational start joins an accepted pre-start save, preserving commit erro
             if (outcome === 'commit') assert.deepEqual(f.runtimes[0].config.devices, [edited]);
         }
     }
+});
+
+test('actual Devices HTTP response drives the browser bridge through one global Save, CSRF and automatic per-device status', async t => {
+    const vm = require('node:vm');
+    const fs = require('node:fs');
+    const device = { ...meter, category: 'METER', ems: { mode: 'gridMeter', scope: 'M0' } };
+    const f = await fixture(t, { devices: [device], futureModuleOption: { retain: true } });
+    const nodes = new Map(), timers = new Map(), events = new Map();
+    let draft, loads = 0, writes = 0, timerId = 0;
+    class Element {
+        constructor() { this.textContent = ''; this.dataset = {}; this.events = {}; this.disabled = false; this.checked = false; }
+        addEventListener(type, fn) { this.events[type] = fn; }
+    }
+    const node = id => { if (!nodes.has(id)) nodes.set(id, new Element()); return nodes.get(id); };
+    const row = new Element(); row.dataset = { eosEmsId: 'meter1', eosEmsEnabled: 'true', eosEmsMode: 'gridMeter' };
+    const window = { setTimeout(fn) { const id = ++timerId; timers.set(id, fn); return id; }, clearTimeout(id) { timers.delete(id); },
+        addEventListener(type, fn) { events.set(type, fn); } };
+    const context = vm.createContext({ window, HTMLElement: Element, crypto: require('node:crypto').webcrypto, AbortSignal, Error,
+        document: { hidden: false, getElementById: node, querySelectorAll: selector => selector === '[data-eos-ems-id]' ? [row] : [],
+            addEventListener(type, fn) { events.set(type, fn); } },
+        async fetch(url, options) { if (options?.method === 'PUT') writes++; return f.browserFetch(url, options); },
+        async load(config) { loads++; draft = structuredClone(config); }, save(callback) { callback(draft); } });
+    for (const file of ['ems-assignment.js', 'host-bridge.js']) vm.runInContext(fs.readFileSync(path.join(__dirname, '../modules/devices/admin', file), 'utf8'), context);
+    const settle = async predicate => {
+        for (let i = 0; i < 100; i++) { if (predicate()) return; await new Promise(resolve => setTimeout(resolve, 2)); }
+        assert.fail('HTTP-driven browser operation did not settle');
+    };
+    events.get('DOMContentLoaded')(); await settle(() => node('eosModuleSave').disabled === false && loads === 1);
+    assert.match(node('eosEmsStatus').textContent, /nicht verfügbar|gestartet|Rückmeldung|vorbereitet|fehlgeschlagen/);
+    assert.doesNotMatch(row.textContent, /Status nach dem Speichern verfügbar/);
+    node('eosModuleSave').events.click(); await settle(() => writes === 1 && loads === 2 && node('eosModuleSave').disabled === false);
+    const stored = await f.get();
+    assert.equal(stored.config.devices[0].ems.activation.requested, true);
+    assert.match(stored.config.devices[0].ems.activation.requestId, /^[0-9a-f-]{36}$/);
+    assert.deepEqual(stored.config.futureModuleOption, { retain: true });
+    assert.equal(stored.config.devices[0].connection.password, '__EOS_SECRET_UNCHANGED__');
+    assert.equal(f.writes.length, 1, 'one global Save persists one authoritative Devices configuration');
+    assert.equal(f.runtimes.length, 0, 'the isolated pre-start HTTP test never opens a hardware transport');
+    // Real host/routes keep a concrete service error visible, instead of an absent optional field.
+    assert.ok(stored.emsCommissioning, 'host view always provides its commissioning contract');
+    assert.ok(row.textContent.length > 20);
+    const token = stored.config.devices[0].ems.activation.requestId;
+    draft.devices[0].name = 'Renamed safely';
+    node('eosModuleSave').events.click(); await settle(() => writes === 2 && loads === 3 && node('eosModuleSave').disabled === false);
+    assert.equal((await f.get()).config.devices[0].ems.activation.requestId, token, 'an unrelated edit cannot replay an activation');
+    let simulatedService = { state: 'pending', code: 'EOS_EMS_CONFIGURATION_PENDING', statuses: [] };
+    f.host().deviceEms = { view: () => simulatedService, stop() {} }; // EMS transport is deliberately isolated; HTTP/host contract stays real.
+    node('eosEmsRefresh').events.click(); await settle(() => timers.size === 1);
+    const currentLoads = loads; draft.devices[0].name = 'Unsaved remains';
+    simulatedService = { state: 'ready', statuses: [{ deviceId: 'meter1', status: 'mapped', code: 'ACTIVATION_APPLIED', activationApplied: true, activationRequestId: token }] };
+    const pending = timers.entries().next().value; timers.delete(pending[0]); pending[1]();
+    await settle(() => row.textContent.includes('EMS eingerichtet'));
+    assert.equal(loads, currentLoads); assert.equal(draft.devices[0].name, 'Unsaved remains');
+    assert.match(row.textContent, /wartet auf gültige Messwerte/);
+    assert.equal(timers.size, 0, 'completed status stops polling');
+    events.get('pagehide')(); assert.equal(timers.size, 0);
+});
+
+test('real module HTTP status advances READY to failure and recovery without replacing the dirty browser draft', async t => {
+    const vm = require('node:vm'), fs = require('node:fs');
+    const f = await fixture(t, { enabled: true, devices: [meter] }); await f.get();
+    f.host().entries.get('devices').reason = 'READY';
+    f.host().deviceEms = { view: () => ({ state: 'ready', statuses: [{ deviceId: 'meter1', status: 'mapped', code: 'MAPPED' }] }), stop() {}, request() {} };
+    const nodes = new Map(), timers = new Map(), events = new Map(); let draft, changed, loads = 0, timerId = 0, reads = 0;
+    class Element { constructor() { this.textContent = ''; this.dataset = {}; this.events = {}; } addEventListener(type, fn) { this.events[type] = fn; } }
+    const node = id => { if (!nodes.has(id)) nodes.set(id, new Element()); return nodes.get(id); };
+    const document = { hidden: false, getElementById: node, querySelectorAll: () => [], addEventListener(type, fn) { events.set(type, fn); } };
+    const window = { setTimeout(fn, delay) { const id = ++timerId; timers.set(id, { fn, delay }); return id; }, clearTimeout(id) { timers.delete(id); }, addEventListener(type, fn) { events.set(type, fn); } };
+    const context = vm.createContext({ window, document, HTMLElement: Element, crypto: require('node:crypto').webcrypto, AbortSignal, Error,
+        async fetch(url, options) { assert.equal(options.method, undefined, 'runtime refresh performs no mutation'); reads++; return f.browserFetch(url, options); },
+        async load(config, onChange) { loads++; draft = structuredClone(config); changed = onChange; }, save(callback) { callback(draft); } });
+    for (const file of ['ems-assignment.js', 'host-bridge.js']) vm.runInContext(fs.readFileSync(path.join(__dirname, '../modules/devices/admin', file), 'utf8'), context);
+    const settle = async predicate => { for (let i = 0; i < 100; i++) { if (predicate()) return; await new Promise(resolve => setTimeout(resolve, 2)); } assert.fail('Runtime status did not settle'); };
+    const tick = async () => { const [id, timer] = timers.entries().next().value; timers.delete(id); timer.fn(); await settle(() => timers.size > 0); };
+    events.get('DOMContentLoaded')(); await settle(() => loads === 1 && timers.size === 1);
+    assert.match(node('eosModuleRuntimeStatus').textContent, /Startfreigabe bestätigt noch keine/);
+    draft.devices[0].name = 'Customer unsaved'; changed(true);
+    f.host().entries.get('devices').reason = 'START_FAILED_RESTART_REQUIRED';
+    await tick(); assert.match(node('eosModuleRuntimeStatus').textContent, /konnte nicht starten/);
+    assert.equal(node('eosModuleRuntimeStatus').dataset.error, 'true');
+    assert.equal(node('eosModuleStatus').textContent, 'Ungespeicherte Änderungen.');
+    assert.equal(timers.values().next().value.delay, 10000, 'stable status monitor uses a bounded ten-second cadence');
+    await f.host().start(); f.runtimes[0].getStatus = async () => ({ state: 'running', connected: false });
+    await tick(); assert.match(node('eosModuleRuntimeStatus').textContent, /Noch keine aktuellen Gerätedaten bestätigt/);
+    f.runtimes[0].getStatus = async () => ({ state: 'running', connected: true });
+    await tick(); assert.match(node('eosModuleRuntimeStatus').textContent, /Messwertfrische je Gerät prüfen/);
+    assert.equal(loads, 1); assert.equal(draft.devices[0].name, 'Customer unsaved'); assert.equal(f.writes.length, 0);
+    document.hidden = true; events.get('visibilitychange')(); assert.equal(timers.size, 0, 'hiding the page cancels its scheduled poll');
+    const previousReads = reads; document.hidden = false; events.get('visibilitychange')(); await settle(() => timers.size === 1 && reads > previousReads);
+    assert.equal(loads, 1); events.get('pagehide')(); assert.equal(timers.size, 0);
 });

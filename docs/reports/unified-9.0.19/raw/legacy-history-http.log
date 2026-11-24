@@ -1,0 +1,39 @@
+✔ asynchronous malformed History payloads cannot throw out of the callback (8.908744ms)
+✔ valid numeric zero stays zero, null does not create measured zero, supported envelopes agree (26.656186ms)
+✔ one five-second deadline includes fallback rounds and ignores late responses (2.135957ms)
+✔ shutdown cancels History reads and new reads fail without starting transports (1.184243ms)
+✔ thrown and rejected transports become bounded API errors with sibling cleanup (2.062115ms)
+✔ oversized raw response stops processing and cleans all pending branches (0.924222ms)
+✔ invalid and allocation-amplifying ranges are rejected before provider work (3.803898ms)
+✔ day, week, month, leap-year and six-hour annual-report presets preserve finite output bounds (14.319271ms)
+✔ identical requests share work; a fifth distinct computation gets backpressure (2.232862ms)
+✔ completed payload cache retains at most four requests and expires old responses (37.631343ms)
+✔ current counter reads share History deadline instead of leaving request hanging (2.900657ms)
+✔ 200-charge-point fallback uses at most eight simultaneous reads and retains correct sums (31.942006ms)
+✔ four maximum-range payloads stay within measured row and serialized-size budgets (343.19089ms)
+ℹ {"profile":"History-only controlled provider; not customer RSS","gcAvailable":false,"cacheEntries":4,"rowsPerPayload":106496,"largestPayloadBytes":1919024,"heapDeltaBytes":7092944}
+✔ leading missing buckets stay unknown in complete-period energy totals; measured zero remains zero (7.430107ms)
+✔ exact-energy EV fallback is also bounded and cannot swallow its timeout as a complete result (2.040082ms)
+✔ optimized price lookup retains exact last-value and duplicate-timestamp semantics (33.133348ms)
+✔ annual report still requests all ten years with two concurrent requests and original order (9.615257ms)
+✔ missing getHistory callback rejects within five seconds and discards late or repeated replies (4.009687ms)
+✔ timely history remains unchanged and clears its deadline timer (1.274519ms)
+✔ candidate fallback shares one monotonic five-second budget instead of multiplying it (1.984108ms)
+✔ shutdown cancels all pending history work, releases timers and rejects new requests (1.617867ms)
+✔ startup energy totals finish after failed history without publishing zeros or refreshing old CO2 (3.286859ms)
+✔ empty or invalid history and missing candidate mappings preserve old measurements (3.531227ms)
+✔ valid zero-power samples remain legitimate measurements and nonzero energy integration remains unchanged (3.112476ms)
+✔ a reply after a stalled event loop cannot beat the deadline callback or extend the hard cap (2.05847ms)
+✔ a failed history branch preserves its old value and CO2 while other genuine measurements may update (1.877347ms)
+✔ mapped but absent energy values are not converted to freshly published zero CO2 (1.502122ms)
+✔ real normalizer rejects null, boolean, blank and nonfinite values without synthesizing zero measurements (12.814545ms)
+✔ real normalizer rejects malformed rows/timestamps and retains finite Influx samples and timestamps (2.375307ms)
+✔ history timeout diagnostics are constant, once per cycle and throttled for five monotonic minutes (3.421772ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 30
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1565.830942

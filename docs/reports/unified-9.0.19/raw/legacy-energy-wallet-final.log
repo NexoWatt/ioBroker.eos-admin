@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> nexowatt-eos-ui-internal@9.0.19 test:energy-wallet-diagnostics
+> node scripts/verify-energy-wallet-diagnostics.js
+
+OK: energy-wallet diagnostics 0.8.24 checks passed.

@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "nexowatt-ui",
-    "version": "9.0.18",
+    "version": "9.0.19",
     "news": {
       "9.0.18": {
         "en": "Automatic supported-device commissioning and explicit EMS/energy-flow roles. Existing mappings and data points are preserved; new control targets require commissioning.",

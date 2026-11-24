@@ -1,0 +1,15 @@
+{
+  "name": "legacy-history-http",
+  "command": [
+    "node",
+    "--test",
+    "../test/eos-history-deadline.test.cjs",
+    "../test/eos-history-api-stability.test.cjs"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin/ui",
+  "startedAt": "2026-11-24T18:11:54.995089+00:00",
+  "durationSeconds": 1.693,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-919/legacy-history-http.log",
+  "sha256": "12aa78478e4b56fc9172b9e860b46b27f068620972488e7654f29fed882fe520"
+}

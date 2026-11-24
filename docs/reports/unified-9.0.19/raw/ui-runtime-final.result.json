@@ -1,0 +1,14 @@
+{
+  "name": "ui-runtime-final",
+  "command": [
+    "npm",
+    "run",
+    "build:ui-runtime"
+  ],
+  "cwd": ".",
+  "startedAt": "2026-11-24T18:32:31.842066+00:00",
+  "durationSeconds": 3.363,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-919/ui-runtime-final.log",
+  "sha256": "e9c89da2a9f71044352be2da33351b0c82ae662b4f57c0695bf854b66ec97afa"
+}

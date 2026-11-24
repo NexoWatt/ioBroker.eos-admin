@@ -95,6 +95,9 @@ export function prepareCustomerTariffChange(root: Dict, incoming: unknown, names
     const providerId = own(submitted, 'providerId') ? text(submitted.providerId, 32) : storedText(previous.providerId, 'manual-dp');
     if (!PROVIDERS.includes(providerId as typeof PROVIDERS[number])) invalid('Dieser Anschluss wird vom Installateur verwaltet. Bitte einen angebotenen Anbieter wählen.');
     next.providerId = providerId;
+    // Explicit customer saves request Tibber's actual quarter-hour data, independently
+    // of a legacy hourly setting. Other provider contracts remain unchanged.
+    if (providerId === 'tibber') next.resolutionMinutes = 15;
     if (own(submitted, 'enabled') && typeof submitted.enabled !== 'boolean') invalid('Die Tarifaktivierung ist ungültig.');
     next.enabled = own(submitted, 'enabled') ? submitted.enabled : previous.enabled === true;
     const country = own(submitted, 'country') ? text(submitted.country, 2) : previous.country === 'NL' ? 'NL' : 'DE';

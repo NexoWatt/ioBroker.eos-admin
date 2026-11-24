@@ -1,0 +1,14 @@
+{
+  "name": "ui-sbom-final",
+  "command": [
+    "npm",
+    "run",
+    "sbom:cra:release"
+  ],
+  "cwd": "ui",
+  "startedAt": "2026-11-24T18:46:46.390462+00:00",
+  "durationSeconds": 1.697,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-919/ui-sbom-final.log",
+  "sha256": "b054ebb85f47ca9a196a7c6eaa5445015c267a920e7bea0aa103d5cde9274dfc"
+}

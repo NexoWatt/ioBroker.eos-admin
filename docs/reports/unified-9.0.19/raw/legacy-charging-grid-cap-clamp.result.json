@@ -1,0 +1,14 @@
+{
+  "name": "legacy-charging-grid-cap-clamp",
+  "command": [
+    "npm",
+    "run",
+    "test:charging-grid-cap-clamp"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin/ui",
+  "startedAt": "2026-11-24T18:14:15.224022+00:00",
+  "durationSeconds": 0.283,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-919/legacy-charging-grid-cap-clamp.log",
+  "sha256": "b91655436dee216cf789533b488fe51b195dc08aeb5306c975e23b1dd3a8e646"
+}

@@ -67,6 +67,8 @@ async function fixture(t, options = {}) {
       devices: input.devices, canRun: () => owner.eosOwnership.canWrite() });
     return planDeviceEms({ ...input, ...targets, limits: { chargePoints: 12, batteries: 4 } });
   };
+  adapter._bridge.resolveDeviceProfileReferences = config => resolveDeviceEmsTargets({ owner,
+    references: getDeviceEmsReferences(config), devices: [], canRun: () => owner.eosOwnership.canWrite() });
   adapter.config.settingsConfig = { evcsCount: 1, evcsList: [structuredClone(manual)] };
   adapter.config.settings = { customCustomerPreference: 'retain' };
   adapter._nwInstallerConfigPatch = { settingsConfig: structuredClone(adapter.config.settingsConfig),
@@ -94,7 +96,7 @@ async function fixture(t, options = {}) {
   function newHost() {
     const host = new EosModuleHost(owner, { baseDir: path.resolve(__dirname, '..'),
       dataDir: '/tmp/eos-device-ems-test-only', factories: { devices: factory, eebus: inactive, backup: inactive } });
-    host.bindDeviceEms(devices => adapter.reconcileDeviceEms(devices));
+    host.bindDeviceEms(devices => adapter.reconcileDeviceEms(devices), request => adapter.reserveDeviceProfileChange(request));
     hosts.push(host); return host;
   }
   t.after(async () => { for (const host of hosts) await host.stop(); await h.close(); });

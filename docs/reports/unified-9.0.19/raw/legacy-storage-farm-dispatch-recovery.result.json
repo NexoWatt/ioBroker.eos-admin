@@ -1,0 +1,14 @@
+{
+  "name": "legacy-storage-farm-dispatch-recovery",
+  "command": [
+    "npm",
+    "run",
+    "test:storage-farm-dispatch-recovery"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin/ui",
+  "startedAt": "2026-11-24T18:11:54.995404+00:00",
+  "durationSeconds": 0.511,
+  "exitCode": 1,
+  "log": "/workspace/scratch/741f792566ea/setup-919/legacy-storage-farm-dispatch-recovery.log",
+  "sha256": "19f00d23ef0da9ecd1bcb51f0a7809049e97ebde6c889fbfecfb0874f7c5eafc"
+}

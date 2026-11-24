@@ -41,7 +41,11 @@ async function fixture(settings = {}) {
             manualImport: settings.manualImport, csrfToken: token, migration: settings.migration || null, status: { active: false, reason: settings.reason || 'DISABLED' } }) };
     } };
     vm.runInNewContext(source, context, { filename: 'host-bridge.js' }); domEvents.get('DOMContentLoaded')();
-    await flushUntil(() => node('eosModuleStatus').textContent.startsWith('Gerätemodul:'));
+    // Configuration/edit readiness is separate from the periodically updated
+    // runtime status. Wait for the actual completed load, not an obsolete label.
+    await flushUntil(() => loads === 1 && node('eosModuleReload').disabled === false);
+    assert.match(node('eosModuleStatus').textContent, /Gerätekonfiguration geladen|Konfiguration gesperrt/);
+    assert.notEqual(node('eosModuleRuntimeStatus').textContent, '');
     return { node, requests, draft: () => edited, stored: () => stored, loads: () => loads,
         changed() { onChange(true); }, confirmations: () => confirmations,
         readiness(value, reason = '') { settings.configurationReady = value; settings.configurationReason = reason; },

@@ -63,47 +63,51 @@ Parameter sind die Namen aus der Signatur, keine geratenen Datenverträge. Die A
 | Funktion / Methode | Parameter | Direkt sichtbare Aufrufe (Auszug) |
 | --- | --- | --- |
 | [`keyFromModule`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L164) | moduleRow | String |
-| [`ModuleManager.constructor`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L196) | adapter, dpRegistry | startRc85HeapMonitor |
-| [`getDiagnostics`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L224) | – | rc88RuntimeHardeningSnapshot, this.adapter?._nwGetMemoryDiagnostics |
-| [`onPressure`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L228) | sample | this.adapter?._nwHandleHeapPressure |
-| [`onBeforeRestart`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L229) | sample | this.adapter?._nwPrepareControlledRestart |
-| [`ModuleManager._licenseEdition`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L256) | – | String, featureFlags.normalizeEdition, this.adapter._nwCurrentLicenseEdition |
-| [`ModuleManager._licenseAllowsApp`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L267) | appId | String, featureFlags.allowsApp, hemsApps.has, this._licenseEdition, this.adapter._nwLicenseAllowsAppId |
-| [`ModuleManager._getDiagCfg`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L284) | – | Math.round, Number, Number.isFinite |
-| [`ModuleManager._diagLog`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L319) | level, msg | fn.call |
-| [`ModuleManager._limitJson`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L343) | obj, maxLen | JSON.stringify, Number.isFinite, s.slice |
-| [`ModuleManager._ensureModuleInitialized`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L360) | moduleRow, reason, cycleId | Date.now, Math.max, Number, Number.isFinite, String, keyFromModule, priorityForOwner, this.adapter.log.warn, withActuatorShadowContext |
-| [`ModuleManager._deactivateModule`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L401) | moduleRow, cycleId, force | Date.now, SAFETY_ACTUATOR_MODULES.has, String, invalidateSafetyEnvelope, keyFromModule, priorityForOwner, this._ensureModuleInitialized, this.adapter.log.warn, this.adapter?._nwRequestImmediateEmsTick, withActuatorShadowContext |
-| [`ModuleManager.init`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L477) | – | SAFETY_ACTUATOR_MODULES.has, String, alwaysInit.has, gridConstraintsModule.setDeferredDynamicPv, m.enabledFn, this._deactivateModule, this._ensureModuleInitialized, this._nvpTopologyModule.init, this.modules.push |
-| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L482) | – | – |
-| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L489) | – | – |
-| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L500) | – | this._licenseAllowsApp |
-| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L517) | – | – |
-| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L524) | – | this._licenseAllowsApp |
-| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L532) | – | require, this._licenseAllowsApp |
-| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L541) | – | – |
-| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L548) | – | – |
-| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L556) | – | – |
-| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L563) | – | – |
-| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L573) | – | this._licenseAllowsApp |
-| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L586) | – | Array.isArray, Number, Number.isFinite, this._licenseAllowsApp |
-| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L618) | – | String, this._licenseAllowsApp |
-| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L630) | – | this._licenseAllowsApp |
-| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L639) | – | this._licenseAllowsApp |
-| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L653) | – | this._licenseAllowsApp |
-| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L669) | – | this._licenseAllowsApp |
-| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L682) | – | – |
-| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L694) | – | this._licenseAllowsApp |
-| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L703) | – | this._licenseAllowsApp |
-| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L712) | – | this._licenseAllowsApp |
-| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L721) | – | this._licenseAllowsApp |
-| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L730) | – | – |
-| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L737) | – | this._licenseAllowsApp |
-| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L743) | – | this._licenseAllowsApp |
-| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L751) | – | this._licenseAllowsApp |
-| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L767) | – | – |
-| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L775) | – | – |
-| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L785) | – | this._licenseAllowsApp |
-| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L794) | – | – |
-| [`ModuleManager.tick`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L840) | – | Array.isArray, Date.now, Math.max, Math.min, Number, Number.isFinite, SAFETY_CRITICAL_MODULES.has, String, beginAcceptedPowerEffectCycle, beginSafetyCycle, errors.push, errors.slice, invalidateSafetyEnvelope, m.enabledFn (weitere in der Quelle) |
-| [`ModuleManager.stop`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L1068) | – | m.instance.stop, rc88ClearRuntimeHardening, this._nvpTopologyModule?.stop, this._stopHeapMonitor |
+| [`ModuleManager.constructor`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L198) | adapter, dpRegistry | startRc85HeapMonitor |
+| [`getDiagnostics`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L226) | – | rc88RuntimeHardeningSnapshot, this.adapter?._nwGetMemoryDiagnostics |
+| [`onPressure`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L230) | sample | this.adapter?._nwHandleHeapPressure |
+| [`onBeforeRestart`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L231) | sample | this.adapter?._nwPrepareControlledRestart |
+| [`ModuleManager._licenseEdition`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L258) | – | String, featureFlags.normalizeEdition, this.adapter._nwCurrentLicenseEdition |
+| [`ModuleManager._licenseAllowsApp`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L269) | appId | String, featureFlags.allowsApp, hemsApps.has, this._licenseEdition, this.adapter._nwLicenseAllowsAppId |
+| [`ModuleManager._getDiagCfg`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L286) | – | Math.round, Number, Number.isFinite |
+| [`ModuleManager._diagLog`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L321) | level, msg | fn.call |
+| [`ModuleManager._limitJson`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L345) | obj, maxLen | JSON.stringify, Number.isFinite, s.slice |
+| [`ModuleManager._trackModuleWork`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L359) | work | Promise.resolve, settlement.then, task.then, this._pendingModuleWork.add |
+| [`ModuleManager.waitForPendingWork`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L367) | – | Promise.all |
+| [`ModuleManager._ensureModuleInitialized`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L377) | moduleRow, reason, cycleId | Date.now, Math.max, Number, Number.isFinite, String, keyFromModule, priorityForOwner, this.adapter.log.warn, withActuatorShadowContext |
+| [`ModuleManager._deactivateModule`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L418) | moduleRow, cycleId, force | Date.now, SAFETY_ACTUATOR_MODULES.has, String, invalidateSafetyEnvelope, keyFromModule, priorityForOwner, this._ensureModuleInitialized, this.adapter.log.warn, this.adapter?._nwRequestImmediateEmsTick, withActuatorShadowContext |
+| [`ModuleManager.init`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L494) | – | SAFETY_ACTUATOR_MODULES.has, String, alwaysInit.has, gridConstraintsModule.setDeferredDynamicPv, m.enabledFn, this._deactivateModule, this._ensureModuleInitialized, this._nvpTopologyModule.init, this.modules.push |
+| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L499) | – | – |
+| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L506) | – | – |
+| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L517) | – | this._licenseAllowsApp |
+| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L534) | – | – |
+| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L541) | – | this._licenseAllowsApp |
+| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L549) | – | require, this._licenseAllowsApp |
+| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L558) | – | – |
+| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L565) | – | – |
+| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L573) | – | – |
+| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L580) | – | – |
+| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L590) | – | this._licenseAllowsApp |
+| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L603) | – | Array.isArray, Number, Number.isFinite, this._licenseAllowsApp |
+| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L635) | – | String, this._licenseAllowsApp |
+| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L647) | – | this._licenseAllowsApp |
+| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L656) | – | this._licenseAllowsApp |
+| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L670) | – | this._licenseAllowsApp |
+| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L686) | – | this._licenseAllowsApp |
+| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L699) | – | – |
+| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L711) | – | this._licenseAllowsApp |
+| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L720) | – | this._licenseAllowsApp |
+| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L729) | – | this._licenseAllowsApp |
+| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L738) | – | this._licenseAllowsApp |
+| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L747) | – | – |
+| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L754) | – | this._licenseAllowsApp |
+| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L760) | – | this._licenseAllowsApp |
+| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L768) | – | this._licenseAllowsApp |
+| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L784) | – | – |
+| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L792) | – | – |
+| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L802) | – | this._licenseAllowsApp |
+| [`enabledFn`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L811) | – | – |
+| [`ModuleManager.tick`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L857) | – | Array.isArray, Date.now, Math.max, Math.min, Number, Number.isFinite, SAFETY_CRITICAL_MODULES.has, String, beginAcceptedPowerEffectCycle, beginSafetyCycle, errors.push, errors.slice, invalidateSafetyEnvelope, m.enabledFn (weitere in der Quelle) |
+| [`ModuleManager.stop`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L1085) | – | Promise.allSettled, stopOne, this._nvpTopologyModule?.stop?.bind |
+| [`stopOne`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L1088) | stop | Promise.reject, Promise.resolve, pending.push, stop |
+| [`ModuleManager.stopAndWait`](../../../../../src-ts/runtime-executables/ems/module-manager.ts#L1107) | – | results?.some, this.stop |

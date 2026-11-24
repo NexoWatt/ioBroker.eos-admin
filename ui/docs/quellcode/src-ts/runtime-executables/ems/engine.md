@@ -16,6 +16,7 @@ Statisch gefundene Imports/require-Aufrufe. Ein Import belegt eine Code-Verknüp
 | --- | --- |
 | `./datapoints` | [src-ts/runtime-executables/ems/datapoints.ts](../../../../../src-ts/runtime-executables/ems/datapoints.ts) |
 | `./module-manager` | [src-ts/runtime-executables/ems/module-manager.ts](../../../../../src-ts/runtime-executables/ems/module-manager.ts) |
+| `../lib/installer-lifecycle` | [src-ts/runtime-executables/lib/installer-lifecycle.ts](../../../../../src-ts/runtime-executables/lib/installer-lifecycle.ts) |
 | `./services/storage-override-bridge` | [src-ts/runtime-executables/ems/services/storage-override-bridge.ts](../../../../../src-ts/runtime-executables/ems/services/storage-override-bridge.ts) |
 | `./services/measurement-freshness` | [src-ts/runtime-executables/ems/services/measurement-freshness.ts](../../../../../src-ts/runtime-executables/ems/services/measurement-freshness.ts) |
 | `./services/actuator-shadow-arbiter` | [src-ts/runtime-executables/ems/services/actuator-shadow-arbiter.ts](../../../../../src-ts/runtime-executables/ems/services/actuator-shadow-arbiter.ts) |
@@ -31,22 +32,25 @@ Parameter sind die Namen aus der Signatur, keine geratenen Datenverträge. Die A
 
 | Funktion / Methode | Parameter | Direkt sichtbare Aufrufe (Auszug) |
 | --- | --- | --- |
-| [`clampNumber`](../../../../../src-ts/runtime-executables/ems/engine.ts#L72) | n, min, max, fallback | Math.max, Math.min, Number, Number.isFinite |
-| [`EmsEngine.constructor`](../../../../../src-ts/runtime-executables/ems/engine.ts#L109) | adapter | – |
-| [`EmsEngine._setInterval`](../../../../../src-ts/runtime-executables/ems/engine.ts#L177) | fn, ms | a.setInterval, setInterval |
-| [`guarded`](../../../../../src-ts/runtime-executables/ems/engine.ts#L180) | args | fn |
-| [`EmsEngine._clearInterval`](../../../../../src-ts/runtime-executables/ems/engine.ts#L190) | timer | a.clearInterval, clearInterval |
-| [`EmsEngine._setTimeout`](../../../../../src-ts/runtime-executables/ems/engine.ts#L202) | fn, ms | a.setTimeout, setTimeout |
-| [`guarded`](../../../../../src-ts/runtime-executables/ems/engine.ts#L205) | args | fn |
-| [`EmsEngine._clearTimeout`](../../../../../src-ts/runtime-executables/ems/engine.ts#L217) | timer | a.clearTimeout, clearTimeout |
-| [`EmsEngine._scheduleImmediateTick`](../../../../../src-ts/runtime-executables/ems/engine.ts#L231) | delayMs | clampNumber, this._setTimeout |
-| [`EmsEngine.requestImmediateTick`](../../../../../src-ts/runtime-executables/ems/engine.ts#L265) | reason, delayMs | String, this._scheduleImmediateTick |
-| [`EmsEngine.requestNvpTick`](../../../../../src-ts/runtime-executables/ems/engine.ts#L279) | reason | Date.now, Math.round, String, this.adapter.setStateAsync, this.requestImmediateTick |
-| [`EmsEngine.handleExternalStateChange`](../../../../../src-ts/runtime-executables/ems/engine.ts#L301) | id, state | Number, Number.isFinite, String, objectId.slice, this._nvpSourceIds.has, this.requestNvpTick |
-| [`EmsEngine._ensureInternalStates`](../../../../../src-ts/runtime-executables/ems/engine.ts#L320) | – | Object.entries, a.setObjectNotExistsAsync |
-| [`EmsEngine._buildChargingConfig`](../../../../../src-ts/runtime-executables/ems/engine.ts#L597) | – | Array.isArray, Math.max, Math.min, Math.round, Number, Number.isFinite, String, cfg.peakShaving.gridPointPowerId.trim, computeChargingInfrastructureCapacity, dps.gridBuyPower.trim, dps.gridPointConnected.trim, dps.gridPointPower.trim, dps.gridPointWatchdog.trim, dps.gridSellPower.trim (weitere in der Quelle) |
-| [`EmsEngine._publishSchedulerHeartbeat`](../../../../../src-ts/runtime-executables/ems/engine.ts#L1111) | reason | Date.now, Math.max, Math.round, Promise.allSettled, String, clampNumber, this.adapter.setStateAsync |
-| [`EmsEngine._startSchedulerHeartbeat`](../../../../../src-ts/runtime-executables/ems/engine.ts#L1150) | – | this._publishSchedulerHeartbeat, this._setInterval |
-| [`EmsEngine.init`](../../../../../src-ts/runtime-executables/ems/engine.ts#L1173) | – | String, adapter.config.peakShaving.gridPointPowerId.trim, adapter.log.info, adapter.subscribeStates, applyStorageMeasurementOverrides, clampNumber, dps.gridBuyPower.trim, dps.gridPointConnected.trim, dps.gridPointPower.trim, dps.gridPointWatchdog.trim, dps.gridSellPower.trim, dps.storageCapacityKwh.trim, id.includes, id.match (weitere in der Quelle) |
-| [`EmsEngine.tick`](../../../../../src-ts/runtime-executables/ems/engine.ts#L1353) | – | Array.isArray, Date.now, Math.max, Math.min, Math.round, Number, Number.isFinite, String, buildNvpSnapshotFromRegistry, clampNumber, this._publishSchedulerHeartbeat, this._scheduleImmediateTick, this.adapter._meshCoordinator?.currentLimits, this.adapter._meshCoordinator?.markApplied (weitere in der Quelle) |
-| [`EmsEngine.stop`](../../../../../src-ts/runtime-executables/ems/engine.ts#L1557) | – | Date.now, this._actuatorShadowArbiter.uninstall, this._clearInterval, this._clearTimeout, this.mm.stop |
+| [`clampNumber`](../../../../../src-ts/runtime-executables/ems/engine.ts#L73) | n, min, max, fallback | Math.max, Math.min, Number, Number.isFinite |
+| [`EmsEngine.constructor`](../../../../../src-ts/runtime-executables/ems/engine.ts#L110) | adapter | – |
+| [`EmsEngine._setInterval`](../../../../../src-ts/runtime-executables/ems/engine.ts#L180) | fn, ms | a.setInterval, setInterval |
+| [`guarded`](../../../../../src-ts/runtime-executables/ems/engine.ts#L183) | args | fn |
+| [`EmsEngine._clearInterval`](../../../../../src-ts/runtime-executables/ems/engine.ts#L193) | timer | a.clearInterval, clearInterval |
+| [`EmsEngine._setTimeout`](../../../../../src-ts/runtime-executables/ems/engine.ts#L205) | fn, ms | a.setTimeout, setTimeout |
+| [`guarded`](../../../../../src-ts/runtime-executables/ems/engine.ts#L208) | args | fn |
+| [`EmsEngine._clearTimeout`](../../../../../src-ts/runtime-executables/ems/engine.ts#L220) | timer | a.clearTimeout, clearTimeout |
+| [`EmsEngine._scheduleImmediateTick`](../../../../../src-ts/runtime-executables/ems/engine.ts#L234) | delayMs | clampNumber, this._setTimeout |
+| [`EmsEngine.requestImmediateTick`](../../../../../src-ts/runtime-executables/ems/engine.ts#L268) | reason, delayMs | String, this._scheduleImmediateTick |
+| [`EmsEngine.requestNvpTick`](../../../../../src-ts/runtime-executables/ems/engine.ts#L282) | reason | Date.now, Math.round, String, this.adapter.setStateAsync, this.requestImmediateTick |
+| [`EmsEngine.handleExternalStateChange`](../../../../../src-ts/runtime-executables/ems/engine.ts#L304) | id, state | Number, Number.isFinite, String, objectId.slice, this._nvpSourceIds.has, this.requestNvpTick |
+| [`EmsEngine._ensureInternalStates`](../../../../../src-ts/runtime-executables/ems/engine.ts#L323) | – | Object.entries, a.setObjectNotExistsAsync |
+| [`EmsEngine._buildChargingConfig`](../../../../../src-ts/runtime-executables/ems/engine.ts#L600) | – | Array.isArray, Math.max, Math.min, Math.round, Number, Number.isFinite, String, cfg.peakShaving.gridPointPowerId.trim, computeChargingInfrastructureCapacity, dps.gridBuyPower.trim, dps.gridPointConnected.trim, dps.gridPointPower.trim, dps.gridPointWatchdog.trim, dps.gridSellPower.trim (weitere in der Quelle) |
+| [`EmsEngine._publishSchedulerHeartbeat`](../../../../../src-ts/runtime-executables/ems/engine.ts#L1114) | reason | Date.now, Math.max, Math.round, Promise.allSettled, String, clampNumber, this.adapter.setStateAsync |
+| [`EmsEngine._startSchedulerHeartbeat`](../../../../../src-ts/runtime-executables/ems/engine.ts#L1154) | – | this._publishSchedulerHeartbeat, this._setInterval |
+| [`EmsEngine.init`](../../../../../src-ts/runtime-executables/ems/engine.ts#L1177) | – | String, adapter.config.peakShaving.gridPointPowerId.trim, adapter.log.info, adapter.subscribeStates, applyStorageMeasurementOverrides, clampNumber, dps.gridBuyPower.trim, dps.gridPointConnected.trim, dps.gridPointPower.trim, dps.gridPointWatchdog.trim, dps.gridSellPower.trim, dps.storageCapacityKwh.trim, id.includes, id.match (weitere in der Quelle) |
+| [`EmsEngine.tick`](../../../../../src-ts/runtime-executables/ems/engine.ts#L1357) | – | Array.isArray, Date.now, Math.max, Math.min, Math.round, Number, Number.isFinite, String, buildNvpSnapshotFromRegistry, clampNumber, finishCycle, this._activeCycleCompletions.add, this._activeCycleCompletions.delete, this._publishSchedulerHeartbeat (weitere in der Quelle) |
+| [`EmsEngine.prepareReconfigure`](../../../../../src-ts/runtime-executables/ems/engine.ts#L1569) | timeoutMs | Promise.all, awaitEmsTransition, this._clearInterval, this._clearTimeout, this._publishSchedulerHeartbeat |
+| [`EmsEngine.stopForReconfigure`](../../../../../src-ts/runtime-executables/ems/engine.ts#L1579) | timeoutMs | Math.max, Math.min, Math.round, Number.isFinite, Promise.resolve, awaitEmsTransition, performance.now, remaining, this.mm.waitForPendingWork, this.mm?.stopAndWait, this.prepareReconfigure, this.stop |
+| [`remaining`](../../../../../src-ts/runtime-executables/ems/engine.ts#L1582) | – | performance.now |
+| [`EmsEngine.stop`](../../../../../src-ts/runtime-executables/ems/engine.ts#L1596) | – | Date.now, this._actuatorShadowArbiter.uninstall, this._clearInterval, this._clearTimeout, this.mm.stop |

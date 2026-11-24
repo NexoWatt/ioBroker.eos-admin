@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/module-manager.ts
- * Quell-Hash: sha256:6747d170f616bff498e7501e2bc0d12ab6d7c00efa383074a803222b59248b70
+ * Quell-Hash: sha256:382f3613b2f3099328fb22e4e23b7e5a1298519fa774d5fbb4c0a228bbd50f57
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -156,6 +156,7 @@ class ModuleManager {
      * @param {*} dpRegistry
      */
     constructor(adapter, dpRegistry) {
+        this._pendingModuleWork = new Set();
         this.adapter = adapter;
         this.dp = dpRegistry || null;
         /** @type {Array<{key: string, instance: any, enabledFn: () => boolean}>} */
@@ -307,6 +308,19 @@ class ModuleManager {
         if (!maxLen || !Number.isFinite(maxLen) || maxLen < 1000)
             maxLen = 20000;
         return s.length > maxLen ? (s.slice(0, maxLen) + '...') : s;
+    }
+    /** Behält auch bereits zeitüberschrittene Modulaufträge bis zum echten Ende.
+     * Der äußere Watchdog darf sie melden, aber eine Rekonfiguration darf danach
+     * keinen zweiten Regler auf denselben Aktor starten. */
+    _trackModuleWork(work) {
+        const task = Promise.resolve().then(work);
+        const settlement = task.then(() => undefined, () => undefined);
+        this._pendingModuleWork.add(settlement);
+        void settlement.then(() => { this._pendingModuleWork.delete(settlement); });
+        return task;
+    }
+    async waitForPendingWork() {
+        await Promise.all([...this._pendingModuleWork]);
     }
     /**
      * Initialisiert ein Modul genau einmal, bevor dessen erster Regel-Tick laeuft.
@@ -851,7 +865,7 @@ class ModuleManager {
                 // must not freeze the complete EMS scheduler. The helper also
                 // deduplicates unresolved work so no Promise pile-up can grow the
                 // V8 heap on every one-second cycle.
-                const isolated = await (0, rc85_runtime_hardening_1.rc85RunIsolatedResult)(`ems-module:${key}`, timeoutMs, () => withActuatorShadowContext(this.adapter, { owner: key, module: key, priority: priorityForOwner(key), reason: 'module-tick', cycleId: this._tickCount, leaseMs: 15000 }, () => m.instance.tick()), this.adapter?.log || console);
+                const isolated = await (0, rc85_runtime_hardening_1.rc85RunIsolatedResult)(`ems-module:${key}`, timeoutMs, () => this._trackModuleWork(() => withActuatorShadowContext(this.adapter, { owner: key, module: key, priority: priorityForOwner(key), reason: 'module-tick', cycleId: this._tickCount, leaseMs: 15000 }, () => m.instance.tick())), this.adapter?.log || console);
                 if (!isolated.ok) {
                     const prefix = isolated.timedOut
                         ? 'module-timeout'
@@ -970,29 +984,38 @@ class ModuleManager {
      * Ablauf und Zusammenhang: Beendet Module und Laufzeitüberwachung. Wird von der Engine beim Stoppen aufgerufen, damit Modul-Timer und weitere Hintergrundarbeit nicht fortlaufen.
      */
     stop() {
-        try {
-            this._nvpTopologyModule?.stop?.();
-        }
-        catch (_error) { }
-        this._nvpTopologyModule = undefined;
-        try {
-            this._stopHeapMonitor?.();
-        }
-        catch (_error) { }
-        this._stopHeapMonitor = undefined;
-        try {
-            (0, rc85_runtime_hardening_1.rc88ClearRuntimeHardening)();
-        }
-        catch (_error) { }
-        for (const m of this.modules || []) {
+        if (this._stopCompletion)
+            return;
+        const pending = [];
+        const stopOne = (stop) => {
+            if (!stop)
+                return;
             try {
-                if (m && m.instance && typeof m.instance.stop === 'function')
-                    m.instance.stop();
+                pending.push(Promise.resolve(stop()));
             }
-            catch (_e) {
-                // Ein fehlerhaftes Modul darf den restlichen Shutdown nicht blockieren.
+            catch (error) {
+                pending.push(Promise.reject(error));
             }
+        };
+        stopOne(this._nvpTopologyModule?.stop?.bind(this._nvpTopologyModule));
+        this._nvpTopologyModule = undefined;
+        stopOne(this._stopHeapMonitor);
+        this._stopHeapMonitor = undefined;
+        stopOne(() => (0, rc85_runtime_hardening_1.rc88ClearRuntimeHardening)());
+        for (const row of this.modules || []) {
+            const instance = row.instance;
+            if (instance && typeof instance.stop === 'function')
+                stopOne(() => instance.stop());
         }
+        // Every rejection is observed even when adapter unload cannot await us.
+        this._stopCompletion = Promise.allSettled(pending);
+    }
+    /** Nur ein vollständig beendeter alter Modulbestand darf ersetzt werden. */
+    async stopAndWait() {
+        this.stop();
+        const results = await this._stopCompletion;
+        if (results?.some(result => result.status === 'rejected'))
+            throw new Error('EOS_EMS_MODULE_STOP_FAILED');
     }
 }
 module.exports = { ModuleManager };

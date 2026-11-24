@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/services/tariff-provider-registry.ts
- * Quell-Hash: sha256:e1006662d8d67efbd2ce3e4b5a3cf05951a44e4092bdc38d4f589c96765becc4
+ * Quell-Hash: sha256:ccedb21357657cc4dd04ef45dba76592fe81aa5154366185d65b0dd524a4cb6b
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -62,7 +62,7 @@ const PROVIDERS = Object.freeze([
         sourceType: 'graphql',
         directApi: true,
         requires: ['accessToken'],
-        supportsResolution: [15, 60],
+        supportsResolution: [15],
         description: 'Direkte GraphQL-Integration; persönlicher Token oder registrierter OAuth-Client.',
     },
     {
@@ -297,7 +297,11 @@ function splitTodayTomorrow(intervals, nowMs = Date.now(), timeZone = 'Europe/Be
         }
     };
     const todayKey = dateKey(nowMs);
-    const tomorrowKey = dateKey(nowMs + 24 * 60 * 60 * 1000);
+    // Advance the local calendar date, not the current instant by 24 hours.
+    // DST days have 23/25 hours; adding 24h can select today or the day after.
+    const tomorrowCalendar = new Date(`${todayKey}T12:00:00.000Z`);
+    tomorrowCalendar.setUTCDate(tomorrowCalendar.getUTCDate() + 1);
+    const tomorrowKey = tomorrowCalendar.toISOString().slice(0, 10);
     const today = [];
     const tomorrow = [];
     for (const row of intervals || []) {
@@ -316,8 +320,8 @@ function currentAndAverage(intervals, nowMs = Date.now()) {
     return { current: active ? Number(active.total) : null, average };
 }
 
-function buildTibberQuery(resolutionMinutes = 15) {
-    const resolution = Number(resolutionMinutes) <= 15 ? 'QUARTER_HOURLY' : 'HOURLY';
+function buildTibberQuery() {
+    const resolution = 'QUARTER_HOURLY';
     return `query NexoWattPriceInfo { viewer { homes { id appNickname address { address1 postalCode city country } currentSubscription { priceInfo(resolution: ${resolution}) { current { total energy tax startsAt level currency } today { total energy tax startsAt level currency } tomorrow { total energy tax startsAt level currency } } } } } }`;
 }
 
@@ -330,9 +334,8 @@ function normalizeTibber(payload, config = {}) {
     const priceInfo = getByPath(home, 'currentSubscription.priceInfo');
     if (!priceInfo || !Array.isArray(priceInfo.today) || !priceInfo.today.length || (priceInfo.tomorrow !== undefined && !Array.isArray(priceInfo.tomorrow))) throw new Error('tibber_no_price_info');
     const rows = [...priceInfo.today, ...(priceInfo.tomorrow || [])];
-    const resolutionMinutes = Number(config.resolutionMinutes) <= 15 ? 15 : 60;
     const intervals = normalizeRows(rows, {
-        resolutionMinutes,
+        resolutionMinutes: 15,
         priceComponent: 'total',
         unit: 'EUR/kWh',
         formula: { priceIncludesVat: true },
@@ -640,7 +643,7 @@ async function fetchTibber(config = {}, signal) {
             'Authorization': `Bearer ${token}`,
             'User-Agent': String(config.userAgent || DEFAULT_USER_AGENT),
         },
-        body: JSON.stringify({ query: buildTibberQuery(config.resolutionMinutes) }),
+        body: JSON.stringify({ query: buildTibberQuery() }),
     }, signal);
     if (!payload || typeof payload !== 'object' || Array.isArray(payload)) throw new Error('tibber_invalid_response');
     if (payload.errors !== undefined && !Array.isArray(payload.errors)) throw new Error('tibber_invalid_response');

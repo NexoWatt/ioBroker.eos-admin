@@ -24,6 +24,8 @@ function translateAll() {
     let emsTimer = null;
     let emsPolls = 0;
     let pageActive = true;
+    let monitorRuntime = false;
+    let runtimeStarting = false;
     /** @type {Readonly<Record<string, string>>} */
     const importMessages = Object.freeze({
         EOS_MODULE_NOT_READY: 'Die gespeicherte Modulkonfiguration ist noch nicht freigegeben oder konnte nicht geladen werden. Bitte den Status der Bestandsübernahme und das ioBroker-Protokoll prüfen; nach einer Lizenzaktivierung kann ein kontrollierter EOS-Neustart nötig sein.',
@@ -40,6 +42,11 @@ function translateAll() {
         EOS_DEVICES_EMS_INTENT: 'Bitte eine gültige EMS-Funktion für das Gerät auswählen.',
         EOS_DEVICES_EMS_SCOPE: 'Bitte den Regelbereich / Messpunkt M0 oder M1 auswählen.',
         EOS_DEVICES_EMS_SLOT: 'Bitte einen passenden Platz im Energiefluss auswählen.',
+        EOS_DEVICES_PROFILE_CHECK_UNAVAILABLE: 'Die Startprüfung ist noch nicht abgeschlossen. Deine Eingaben bleiben erhalten; nach Bereitschaft erneut speichern.',
+        EOS_DEVICES_PROFILE_IN_USE: 'Das Geräteprofil wird noch von einer aktiven EMS-Regelung verwendet. Zuerst die zugehörige Regelung deaktivieren, dann den Profilwechsel erneut speichern. Deine Eingaben bleiben erhalten.',
+        EOS_DEVICE_EMS_BUSY: 'Eine EMS-Konfigurationsänderung läuft bereits. Deine Eingaben bleiben erhalten; nach Abschluss erneut speichern.',
+        EOS_DEVICES_EMS_ACTIVATION: 'Der EMS-Einrichtungsauftrag ist ungültig. Gerät bearbeiten und erneut übernehmen.',
+        EOS_DEVICES_EMS_LIMITS: 'EMS-Grenzen sind ungültig. Bitte positive Werte und die Ladeart im Gerätefenster prüfen.',
         EOS_DEVICES_EMS_GROUP: 'Die gespeicherte EMS-Gruppenkennung ist ungültig. Bitte im App-Center prüfen.',
         EOS_MODULE_BUSY: 'Eine Konfigurationsänderung oder ein Stopp läuft bereits. Bitte den Abschluss abwarten und danach neu laden.',
     });
@@ -109,6 +116,22 @@ function translateAll() {
     }
     function renderEms(result) {
         if (window.EosDeviceEms) window.EosDeviceEms.render(result.emsCommissioning);
+        const runtime = window.EosDeviceEms?.runtimeStatus?.(result.status);
+        const line = element('eosModuleRuntimeStatus');
+        monitorRuntime = runtime?.monitor === true;
+        runtimeStarting = runtime?.starting === true;
+        if (line) {
+            line.textContent = runtime?.text || 'Laufstatus des Gerätemoduls ist noch nicht bestätigt.';
+            line.dataset.state = runtime?.state || 'unknown';
+            line.dataset.error = String(runtime?.state === 'error' || runtime?.state === 'blocked');
+        }
+    }
+    function needsStatusPolling(result) {
+        return monitorRuntime || runtimeStarting || (emsPolls < 30 && (window.EosDeviceEms?.needsPolling?.() ?? result.emsCommissioning?.state === 'pending'));
+    }
+    function statusUnavailable() {
+        const line = element('eosModuleRuntimeStatus');
+        if (line) { line.textContent = 'Laufstatus momentan nicht erreichbar. Der vorherige Laufstatus ist nicht bestätigt; gespeicherte Einstellungen und Eingaben bleiben erhalten.'; line.dataset.state = 'unknown'; line.dataset.error = 'true'; }
     }
     function stopEmsPolling() {
         if (emsTimer !== null) window.clearTimeout(emsTimer);
@@ -116,7 +139,7 @@ function translateAll() {
     }
     function scheduleEmsPolling() {
         stopEmsPolling();
-        if (!window.EosDeviceEms || !pageActive || emsPolls >= 12) return;
+        if (!window.EosDeviceEms || !pageActive || document.hidden || (emsPolls >= 30 && !monitorRuntime && !runtimeStarting)) return;
         emsTimer = window.setTimeout(() => {
             emsTimer = null;
             if (!pageActive || document.hidden) return;
@@ -124,24 +147,27 @@ function translateAll() {
             if (busy) { scheduleEmsPolling(); return; }
             void request().then(result => {
                 renderEms(result);
-                if (result.emsCommissioning?.state === 'pending') scheduleEmsPolling();
+                if (needsStatusPolling(result)) scheduleEmsPolling();
             }).catch(() => {
+                statusUnavailable();
+                if (monitorRuntime) scheduleEmsPolling();
                 const hint = element('eosEmsStatus');
                 if (hint) hint.textContent = 'Zuordnungsstatus konnte nicht aktualisiert werden. Eingaben bleiben erhalten; Status erneut aktualisieren.';
             });
-        }, 2500);
+        }, emsPolls < 30 && (runtimeStarting || window.EosDeviceEms?.needsPolling?.()) ? 2500 : monitorRuntime ? 10000 : 2500);
     }
     async function refreshEms() {
         const result = await request();
         renderEms(result);
         emsPolls = 0;
-        if (result.emsCommissioning?.state === 'pending') scheduleEmsPolling();
+        if (needsStatusPolling(result)) scheduleEmsPolling();
     }
     async function reload() {
         const result = await request();
         if (!result.config || typeof result.csrfToken !== 'string') throw new Error('EOS_DEVICES_INVALID_RESPONSE');
         csrfToken = result.csrfToken;
         originalConfig = result.config;
+        window.EosDeviceEms?.setDevices?.(result.config.devices);
         element('eosModuleEnabled').checked = result.config.enabled === true;
         ready = false;
         await load(result.config, value => { if (value) changed(); });
@@ -151,12 +177,9 @@ function translateAll() {
         importAvailability(result);
         renderEms(result);
         emsPolls = 0;
-        if (result.emsCommissioning?.state === 'pending') scheduleEmsPolling();
+        if (needsStatusPolling(result)) scheduleEmsPolling();
         element('eosModuleSave').disabled = !ready;
-        const moduleState = result.status?.active === true
-            ? (result.status?.details?.state || 'running')
-            : (result.status?.reason && result.status.reason !== 'RUNNING' ? result.status.reason : 'nicht aktiv');
-        status(ready ? `Gerätemodul: ${moduleState}. Gerätevorlagen werden lokal geladen.`
+        status(ready ? 'Gespeicherte Gerätekonfiguration geladen. Laufstatus und EMS-Zuordnung werden getrennt geprüft.'
             : `Gerätemodul: Konfiguration gesperrt. ${messageFor(result.configurationReason || 'EOS_MODULE_NOT_READY')}`, !ready);
     }
     async function action(callback) {
@@ -185,9 +208,10 @@ function translateAll() {
     document.addEventListener('DOMContentLoaded', () => {
         if (window.EosDeviceEms) {
             window.addEventListener('pagehide', () => { pageActive = false; stopEmsPolling(); });
-            window.addEventListener('pageshow', () => { pageActive = true; });
+            window.addEventListener('pageshow', () => { pageActive = true; if (ready) void refreshEms().catch(statusUnavailable); });
+            document.addEventListener('visibilitychange', () => { if (document.hidden) stopEmsPolling(); else if (pageActive && ready) void refreshEms().catch(statusUnavailable); });
             element('eosEmsRefresh').addEventListener('click', () => {
-                void refreshEms().catch(() => { element('eosEmsStatus').textContent = 'Zuordnungsstatus nicht erreichbar. Geräteeingaben bleiben erhalten.'; });
+                void refreshEms().catch(() => { statusUnavailable(); element('eosEmsStatus').textContent = 'Zuordnungsstatus nicht erreichbar. Geräteeingaben bleiben erhalten.'; });
             });
         }
         element('eosModuleEnabled').addEventListener('change', changed);
@@ -199,6 +223,7 @@ function translateAll() {
             if (!ready) throw new Error(messageFor('EOS_MODULE_NOT_READY'));
             const edited = await new Promise(resolve => save(resolve));
             const config = { ...originalConfig, ...edited, enabled: element('eosModuleEnabled').checked };
+            if (window.EosDeviceEms?.prepareSave) config.devices = window.EosDeviceEms.prepareSave(config.devices, originalConfig.devices);
             delete config.devicesJson;
             status('Konfiguration wird sicher gespeichert und übernommen …');
             await request('', { method: 'PUT', body: JSON.stringify({ config }) });

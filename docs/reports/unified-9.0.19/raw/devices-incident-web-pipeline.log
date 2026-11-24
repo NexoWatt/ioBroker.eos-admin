@@ -1,0 +1,22 @@
+▶ actual module HTTP rejects a live profile replacement before persistence and allows it after AppCenter deactivation
+  ✔ direct Devices alias (2095.978681ms)
+  ✔ external split ioBroker alias (460.745079ms)
+✔ actual module HTTP rejects a live profile replacement before persistence and allows it after AppCenter deactivation (2557.793671ms)
+✔ actual profile HTTP reservation blocks concurrent AppCenter activation and releases after a failed controller commit (419.400693ms)
+✔ removing and reintroducing a device ID cannot reuse its still-active EMS references with another profile (709.210924ms)
+✔ production Web bridge and actual hosted startup process device-save HTTP without manual reconciliation (3423.872326ms)
+▶ one device HTTP save adopts the manual farm row, adds SolaX and SMA M0, and activates the corresponding app atomically
+  ✔ fresh hosted instance rehydrates the persisted device and EMS configuration without another setup call (321.876995ms)
+✔ one device HTTP save adopts the manual farm row, adds SolaX and SMA M0, and activates the corresponding app atomically (1067.618839ms)
+✔ HTTP rejects a new device ID during unknown hosted configuration hydration, then accepts the retained draft after readiness (343.447178ms)
+✔ late actual manifest event completes commissioning; telemetry bursts do not restart inventory scans (714.448295ms)
+✔ running Devices retain an ownership lease while other modules initialize slowly (15032.661197ms)
+✔ real device polling keeps FENECON PV, converter feedback and battery flow distinct in an activated mixed farm (5695.255923ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 30167.086153

@@ -1,0 +1,14 @@
+{
+  "name": "legacy-storage-functional-safety",
+  "command": [
+    "npm",
+    "run",
+    "test:storage-control-functional-safety"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin/ui",
+  "startedAt": "2026-11-24T18:11:44.725533+00:00",
+  "durationSeconds": 0.477,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-919/legacy-storage-functional-safety.log",
+  "sha256": "3916ab1e837af2f2bba45ab2cfac5db859a9b8eca905a7cb430b984a230c3b40"
+}

@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/modules/storage-control.ts
- * Quell-Hash: sha256:e485ef1fdbbbf90d33adf49bdd1a17e97e7f216a39072dc3a0e6437e294d9397
+ * Quell-Hash: sha256:e8d44e13782e130773163c03326564b675e324cdd0783367adaf10f6c232f9d8
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -8188,9 +8188,10 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
             const appsRoot = (rootCfg.emsApps && typeof rootCfg.emsApps === 'object') ? rootCfg.emsApps : {};
             const apps = (appsRoot.apps && typeof appsRoot.apps === 'object') ? appsRoot.apps : {};
             const singleApp = (apps.storage && typeof apps.storage === 'object') ? apps.storage : null;
-            const singleAppActive = singleApp
+            const deviceAssignmentDisabled = rootCfg.storage?._eosDevice?.v === 1 && rootCfg.storage?.enabled === false;
+            const singleAppActive = !deviceAssignmentDisabled && (singleApp
                 ? (singleApp.installed === true && singleApp.enabled === true)
-                : (rootCfg.enableStorageControl === true);
+                : (rootCfg.enableStorageControl === true));
 
             const farm = (this.adapter && typeof this.adapter._nwGetStorageFarmRuntimeInfo === 'function')
                 ? this.adapter._nwGetStorageFarmRuntimeInfo()
@@ -8280,7 +8281,7 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
                 ? (app.installed === true && app.enabled === true)
                 : (rootCfg.enableStorageFarm === true);
 
-            return !!(enabledByConfig && configuredCount >= 2);
+            return !!(enabledByConfig && configuredCount >= 1);
         } catch {
             return false;
         }

@@ -79,7 +79,7 @@ function validateConfig(input = {}) {
         if (!PROTOCOLS.includes(device.protocol)) throw failure('EOS_DEVICES_CONFIG_PROTOCOL');
         if (device.enabled !== undefined && typeof device.enabled !== 'boolean') throw failure('EOS_DEVICES_CONFIG_ENABLED');
         if (device.ems !== undefined) {
-            if (!record(device.ems) || Object.keys(device.ems).some(key => !['mode', 'scope', 'flowSlot', 'group'].includes(key))) throw failure('EOS_DEVICES_EMS_INTENT');
+            if (!record(device.ems) || Object.keys(device.ems).some(key => !['mode', 'scope', 'flowSlot', 'group', 'activation'].includes(key))) throw failure('EOS_DEVICES_EMS_INTENT');
             const intent = device.ems;
             if (typeof intent.mode !== 'string' || !['auto', 'monitor', 'manual', 'singleStorage', 'storageFarm', 'gridMeter', 'generationMeter', 'consumptionMeter', 'pvInverter'].includes(intent.mode)) throw failure('EOS_DEVICES_EMS_INTENT');
             if (intent.scope !== undefined && (typeof intent.scope !== 'string' || !['M0', 'M1'].includes(intent.scope))) throw failure('EOS_DEVICES_EMS_SCOPE');
@@ -88,6 +88,28 @@ function validateConfig(input = {}) {
             if (['generationMeter', 'pvInverter'].includes(intent.mode) && (typeof intent.flowSlot !== 'number' || intent.flowSlot < 0 || intent.flowSlot > 5)) throw failure('EOS_DEVICES_EMS_SLOT');
             if (intent.mode === 'consumptionMeter' && (typeof intent.flowSlot !== 'number' || intent.flowSlot < 1 || intent.flowSlot > 10)) throw failure('EOS_DEVICES_EMS_SLOT');
             if (['singleStorage', 'storageFarm', 'gridMeter'].includes(intent.mode) && intent.scope === undefined) throw failure('EOS_DEVICES_EMS_SCOPE');
+            if (intent.activation !== undefined) {
+                const activation = intent.activation;
+                if (!record(activation) || Object.keys(activation).some(key => !['requested', 'requestId', 'limits'].includes(key))
+                    || typeof activation.requested !== 'boolean' || typeof activation.requestId !== 'string'
+                    || !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(activation.requestId)) throw failure('EOS_DEVICES_EMS_ACTIVATION');
+                if (activation.limits !== undefined) {
+                    const limits = activation.limits;
+                    const numbers = ['maxChargeW', 'maxDischargeW', 'capacityKWh', 'minCurrentA', 'maxCurrentA', 'minPowerW', 'maxPowerW'];
+                    if (!record(limits) || Object.keys(limits).some(key => ![...numbers, 'coupling', 'chargerType', 'phases'].includes(key))) throw failure('EOS_DEVICES_EMS_LIMITS');
+                    for (const key of numbers) {
+                        const value = Reflect.get(limits, key);
+                        if (value !== undefined && (typeof value !== 'number' || !Number.isFinite(value) || value <= 0 || value > 10000000)) throw failure('EOS_DEVICES_EMS_LIMITS');
+                    }
+                    for (const key of ['coupling', 'chargerType']) {
+                        const value = Reflect.get(limits, key);
+                        if (value !== undefined && (typeof value !== 'string' || !['ac', 'dc'].includes(value))) throw failure('EOS_DEVICES_EMS_LIMITS');
+                    }
+                    if (limits.phases !== undefined && (typeof limits.phases !== 'number' || ![1, 3].includes(limits.phases))) throw failure('EOS_DEVICES_EMS_LIMITS');
+                    if (typeof limits.minCurrentA === 'number' && typeof limits.maxCurrentA === 'number' && limits.minCurrentA > limits.maxCurrentA
+                        || typeof limits.minPowerW === 'number' && typeof limits.maxPowerW === 'number' && limits.minPowerW > limits.maxPowerW) throw failure('EOS_DEVICES_EMS_LIMITS');
+                }
+            }
         }
         if (device.connection !== undefined && !record(device.connection)) throw failure('EOS_DEVICES_CONFIG_CONNECTION');
         const connection = device.connection || {};
@@ -227,8 +249,13 @@ function createHostedModule({ adapter, canOperate, config = {}, runtimeFactory }
         if (statusBusy || stopping) return;
         statusBusy = true;
         try {
-            if (active && !permitted()) { await stop(); return; }
-            await writeConnection(active && [...runtimes.values()].some(runtime => runtime.started && runtime._hbOnline === true));
+            // The host owns shutdown and its confirmation. A temporarily expired
+            // lease must not stop this module behind the host's back and leave a
+            // permanently inactive runtime labelled RUNNING after lease renewal.
+            // Every driver operation remains synchronously gated by permitted().
+            const allowed = permitted();
+            if (active) state = allowed ? 'running' : 'blocked';
+            await writeConnection(allowed && [...runtimes.values()].some(runtime => runtime.started && runtime._hbOnline === true));
         } finally { statusBusy = false; }
     }
     async function start() {
@@ -260,20 +287,30 @@ function createHostedModule({ adapter, canOperate, config = {}, runtimeFactory }
                 const { DeviceRuntime } = require('./lib/deviceRuntime');
                 factory = (device, template) => /** @type {HostedRuntime} */ (/** @type {unknown} */ (new DeviceRuntime(adapter, device, template, settings)));
             }
-            for (const device of settings.devices) {
-                if (device.enabled === false) continue;
-                if (!permitted() || epoch !== generation) throw failure('EOS_DEVICES_STOPPED');
-                const template = structuredClone(catalog.byId.get(device.templateId));
-                if (!factory || !template) throw failure('EOS_DEVICES_RUNTIME_UNAVAILABLE');
-                const runtime = factory(structuredClone(device), template);
-                const createDriver = runtime._createDriver;
-                runtime._createDriver = function hostedDriver() { return guardDriver(createDriver.call(this), permitted); };
-                runtimes.set(device.id, runtime); // Include partially initialized runtimes in cleanup.
-                await runtime.initObjects();
-                if (!permitted() || epoch !== generation) throw failure('EOS_DEVICES_STOPPED');
-                await runtime.start();
-                if (!permitted() || epoch !== generation) { await runtime.stop(); throw failure('EOS_DEVICES_STOPPED'); }
-            }
+            const pendingDevices = settings.devices.filter(device => device.enabled !== false);
+            let nextDevice = 0;
+            const startDevice = async () => {
+                while (nextDevice < pendingDevices.length) {
+                    const device = pendingDevices[nextDevice++];
+                    if (device.enabled === false) continue;
+                    if (!permitted() || epoch !== generation) throw failure('EOS_DEVICES_STOPPED');
+                    const template = structuredClone(catalog.byId.get(device.templateId));
+                    if (!factory || !template) throw failure('EOS_DEVICES_RUNTIME_UNAVAILABLE');
+                    const runtime = factory(structuredClone(device), template);
+                    const createDriver = runtime._createDriver;
+                    runtime._createDriver = function hostedDriver() { return guardDriver(createDriver.call(this), permitted); };
+                    runtimes.set(device.id, runtime); // Include partially initialized runtimes in cleanup.
+                    await runtime.initObjects();
+                    if (!permitted() || epoch !== generation) throw failure('EOS_DEVICES_STOPPED');
+                    await runtime.start({ backgroundInitialPoll: true });
+                    if (!permitted() || epoch !== generation) { await runtime.stop(); throw failure('EOS_DEVICES_STOPPED'); }
+                }
+            };
+            // Bound object provisioning to four workers. Initial network reads
+            // remain owned by each runtime and never serialize all other devices.
+            const results = await Promise.allSettled(Array.from({ length: Math.min(4, pendingDevices.length) }, startDevice));
+            const failed = results.find(result => result.status === 'rejected');
+            if (failed?.status === 'rejected') throw failed.reason;
             if (!permitted() || epoch !== generation) throw failure('EOS_DEVICES_STOPPED');
             state = 'running';
             timer = setInterval(() => { void refresh().catch(() => { lastError = 'EOS_DEVICES_STATUS_FAILED'; }); }, 1000);

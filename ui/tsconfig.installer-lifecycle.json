@@ -5,7 +5,9 @@
     "target": "ES2022",
     "module": "commonjs",
     "skipLibCheck": true,
-    "types": ["node"],
+    "types": [
+      "node"
+    ],
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
     "noImplicitOverride": true,
@@ -13,5 +15,9 @@
     "noFallthroughCasesInSwitch": true,
     "useUnknownInCatchVariables": true
   },
-  "files": ["src-ts/runtime-executables/lib/installer-lifecycle.ts"]
+  "files": [
+    "src-ts/runtime-executables/lib/installer-lifecycle.ts",
+    "src-ts/runtime-executables/lib/storage-farm-overview.ts",
+    "src-ts/runtime-executables/lib/tariff-price.ts"
+  ]
 }

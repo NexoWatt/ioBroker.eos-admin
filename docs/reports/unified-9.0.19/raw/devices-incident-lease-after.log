@@ -1,0 +1,9 @@
+✔ real UDP polling resumes after actual temporary lease expiry without a misleading active but stopped module (13132.782412ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13412.587904

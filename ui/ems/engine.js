@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/engine.ts
- * Quell-Hash: sha256:cf0e987dd8364761dfd856ad05884658c0f9697e13970cdbbaa93da1558ec3a6
+ * Quell-Hash: sha256:7acb8a93dc3b22b9b8371d598082cdca739ff685ebca32d04871f84a0379e394
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -72,6 +72,7 @@
 'use strict';
 const { DatapointRegistry } = require('./datapoints');
 const { ModuleManager } = require('./module-manager');
+const { awaitEmsTransition } = require('../lib/installer-lifecycle');
 const { applyStorageMeasurementOverrides } = require('./services/storage-override-bridge');
 const { buildNvpSnapshotFromRegistry } = require('./services/measurement-freshness');
 const { installActuatorShadowArbiter } = require('./services/actuator-shadow-arbiter');
@@ -147,6 +148,8 @@ class EmsEngine {
         this._lastTickEndMs = 0;
         // Tick mutex (Phase 4.0): prevent overlapping async ticks.
         this._tickRunning = false;
+        this._reconfiguring = false;
+        this._activeCycleCompletions = new Set();
         this._tickSkipCount = 0;
         this._tickSequence = 0;
         this._activeTickId = 0;
@@ -239,7 +242,7 @@ class EmsEngine {
      * parallele Regelzyklen noch unnötige Wartezeit bis zum nächsten Intervall.
      */
     _scheduleImmediateTick(delayMs = this._immediateTickDebounceMs) {
-        if (!this.adapter || this.adapter._nwShuttingDown || !this._immediateTickPending)
+        if (!this.adapter || this.adapter._nwShuttingDown || this._reconfiguring || !this._immediateTickPending)
             return false;
         if (this._immediateTickTimer)
             return true;
@@ -1075,7 +1078,8 @@ class EmsEngine {
         this.adapter._nwEmsSchedulerHealth = {
             heartbeatAt: now,
             sequence: this._schedulerHeartbeatSequence,
-            reason: String(reason || 'timer'),
+            reason: this._reconfiguring ? 'configuration-pending' : String(reason || 'timer'),
+            reconfiguring: this._reconfiguring === true,
             tickRunning: this._tickRunning === true,
             activeTickAgeMs,
             tickStalled,
@@ -1090,7 +1094,7 @@ class EmsEngine {
             await Promise.allSettled([
                 this.adapter.setStateAsync('ems.core.schedulerHeartbeatAt', { val: now, ack: true }),
                 this.adapter.setStateAsync('ems.core.schedulerHeartbeatSequence', { val: Math.round(this._schedulerHeartbeatSequence), ack: true }),
-                this.adapter.setStateAsync('ems.core.schedulerAlive', { val: true, ack: true }),
+                this.adapter.setStateAsync('ems.core.schedulerAlive', { val: !this._reconfiguring, ack: true }),
             ]);
         }
         finally {
@@ -1323,7 +1327,7 @@ class EmsEngine {
      * Ablauf und Zusammenhang: Bildet die frische gemeinsame Messbasis, übernimmt Speicher-Messwertzuordnungen und ruft den Modulmanager auf. Tick-Sperre und Diagnosezeitstempel begrenzen Überlappungen; der finally-Pfad gibt den Lauf wieder frei.
      */
     async tick() {
-        if (!this.adapter || this.adapter._nwShuttingDown || !this.dp || !this.mm)
+        if (!this.adapter || this.adapter._nwShuttingDown || this._reconfiguring || !this.dp || !this.mm)
             return;
         // Prevent overlapping async ticks (deterministic scheduler).
         if (this._tickRunning) {
@@ -1333,7 +1337,7 @@ class EmsEngine {
             // RC85_STALE_TICK_RECOVERY: Module-level watchdogs normally guarantee a
             // bounded cycle. This final recovery prevents a stale mutex left by an
             // unforeseen runtime edge case from suppressing every future EMS tick.
-            if (runningAgeMs >= configuredStaleMs) {
+            if (runningAgeMs >= configuredStaleMs && this._activeCycleCompletions.size === 0) {
                 this._staleTickRecoveryCount += 1;
                 this._lastStaleTickRecoveryMs = now;
                 this._tickRunning = false;
@@ -1359,6 +1363,9 @@ class EmsEngine {
             }
         }
         this._tickRunning = true;
+        let finishCycle;
+        const completed = new Promise(resolve => { finishCycle = resolve; });
+        this._activeCycleCompletions.add(completed);
         const tickId = ++this._tickSequence;
         this._activeTickId = tickId;
         const tickStart = Date.now();
@@ -1508,9 +1515,11 @@ class EmsEngine {
             // geändert, folgt direkt ein weiterer normaler EMS-Tick. Die kurze
             // Nachlaufverzögerung verhindert einen Busy-Loop und lässt State-Updates
             // desselben Bedienvorgangs zusammenlaufen.
-            if (this._immediateTickPending && !this._immediateTickTimer && this.adapter && !this.adapter._nwShuttingDown) {
+            if (this._immediateTickPending && !this._immediateTickTimer && this.adapter && !this.adapter._nwShuttingDown && !this._reconfiguring) {
                 this._scheduleImmediateTick(10);
             }
+            this._activeCycleCompletions.delete(completed);
+            finishCycle();
         }
     }
     /**
@@ -1528,7 +1537,45 @@ class EmsEngine {
     /**
      * Ablauf und Zusammenhang: Beendet periodische, schnelle und Heartbeat-Timer und stoppt die Module. Dieser Pfad gehört zur Adapter-Abschaltung und darf keine neue Stellanforderung planen.
      */
+    /** Pausiert neue Regelzyklen, bevor eine neue Konfiguration sichtbar wird.
+     * Ein Timeout lässt die alte Engine gesperrt; eine zweite Engine darf dann
+     * nicht gleichzeitig auf dieselben Aktoren schreiben. HTTP/Sitzungen bleiben erhalten. */
+    async prepareReconfigure(timeoutMs = 5000) {
+        this._reconfiguring = true;
+        if (this._timer) {
+            this._clearInterval(this._timer);
+            this._timer = null;
+        }
+        if (this._immediateTickTimer) {
+            this._clearTimeout(this._immediateTickTimer);
+            this._immediateTickTimer = null;
+        }
+        this._immediateTickPending = false;
+        await awaitEmsTransition(Promise.all([...this._activeCycleCompletions, this._publishSchedulerHeartbeat('configuration-pending')]), timeoutMs);
+    }
+    /** Beendet nach dem letzten alten Zyklus auch asynchrone Modul-Stopps.
+     * Erst der bestätigte Abschluss erlaubt einen frischen Registry-/Modulaufbau. */
+    async stopForReconfigure(timeoutMs = 5000) {
+        const budget = Number.isFinite(timeoutMs) ? Math.max(1, Math.min(5000, Math.round(timeoutMs))) : 5000;
+        const deadline = performance.now() + budget;
+        const remaining = () => {
+            const left = deadline - performance.now();
+            if (left <= 0)
+                throw new Error('EOS_EMS_CONFIG_WAIT_TIMEOUT');
+            return left;
+        };
+        await this.prepareReconfigure(remaining());
+        // A module watchdog may already have returned while its real task still runs.
+        // Keep its old registry/configuration intact until that task has also ended.
+        if (this.mm?.waitForPendingWork)
+            await awaitEmsTransition(this.mm.waitForPendingWork(), remaining());
+        const moduleStop = this.mm?.stopAndWait?.();
+        this.stop();
+        if (moduleStop)
+            await awaitEmsTransition(Promise.resolve(moduleStop), remaining());
+    }
     stop() {
+        this._reconfiguring = true;
         if (this._schedulerHeartbeatTimer) {
             this._clearInterval(this._schedulerHeartbeatTimer);
             this._schedulerHeartbeatTimer = null;

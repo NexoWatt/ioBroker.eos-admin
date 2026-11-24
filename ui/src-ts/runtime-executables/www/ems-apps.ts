@@ -1388,7 +1388,7 @@
         // Darum werden leere editierbare Felder angelegt, damit der Installateur
         // die Speicher direkt wieder anbinden kann, statt bei "Noch keine Speicher"
         // festzuhängen.
-        socId: '', signedPowerId: '', chargePowerId: '', dischargePowerId: '', pvPowerId: '',
+        socId: '', signedPowerId: '', batteryFlowPowerId: '', chargePowerId: '', dischargePowerId: '', pvPowerId: '',
         vendorProfile: 'generic', feneconControlMode: 'auto',
         feneconGridSetpointId: '', feneconEssActualPowerId: '', feneconNvpPowerId: '', feneconConsumptionTotalId: '', feneconMinPowerId: '', feneconMaxPowerId: '',
         feneconActualSetpointId: '', feneconPvDcId: '', feneconPvAcId: '', feneconPvTotalId: '',
@@ -1468,6 +1468,7 @@
       feneconControlMode,
       socId: textFrom('socId', 'socObjectId', 'socDp', 'storageSocId', 'storageSoc'),
       signedPowerId: textFrom('signedPowerId', 'batteryPowerObjectId', 'signedPowerDp', 'powerObjectId', 'powerId', 'batteryPower'),
+      batteryFlowPowerId: textFrom('batteryFlowPowerId'),
       chargePowerId: textFrom('chargePowerId', 'batteryChargePowerObjectId', 'chargePowerDp', 'chargeDp', 'storageChargePower'),
       dischargePowerId: textFrom('dischargePowerId', 'batteryDischargePowerObjectId', 'dischargePowerDp', 'dischargeDp', 'storageDischargePower'),
       pvPowerId: textFrom('pvPowerId', 'pvPowerObjectId', 'pvPowerDp', 'storagePvPowerId'),
@@ -1834,6 +1835,13 @@ function _collectFlowPowerDpIsWFromUI() {
       }
       if (expectRead && info.common && info.common.read === false) {
         _setBadge(inp.id, 'warn', 'write-only');
+        continue;
+      }
+
+      const expectPower = inp.dataset.dpPower === '1' || /powerId|setPowerWId|budgetPowerId|gridPowerId|pvSurplusPowerId|PowerObjectId|PowerWriteId|PowerReadId/i.test(inp.id);
+      const powerIssue = expectPower ? window.NexoWattPowerMeasurements?.validatePowerReference(info) : null;
+      if (powerIssue) {
+        _setBadge(inp.id, powerIssue.kind, powerIssue.text);
         continue;
       }
 
@@ -3601,6 +3609,7 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
       input.placeholder = field.placeholder || '';
       input.value = valueOrEmpty(getter(field.key));
       input.id = inputId;
+      if (field.power) input.dataset.dpPower = '1';
       input.autocomplete = 'off';
       input.spellcheck = false;
       input.title = String(input.value || '').trim();
@@ -4025,6 +4034,7 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
       dpInput.placeholder = 'Datenpunkt (W/kW) (optional)';
       dpInput.value = valueOrEmpty(dps[dpKey]);
       dpInput.dataset.dpInput = '1';
+      dpInput.dataset.dpPower = '1';
       // Ereignis-Kommentar: Bindet das UI-Ereignis 'change' an dpInput. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
       dpInput.addEventListener('change', () => {
         currentConfig.datapoints = currentConfig.datapoints || {};
@@ -9967,6 +9977,7 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
 
       grid.appendChild(mkDpField('SoC (%)', `sf_${idx}_socId`, s.socId, (v) => { const sf2 = _ensureStorageFarmCfg(); sf2.storages[i].socId = v; }, 'SoC‑Datenpunkt'));
       grid.appendChild(mkDpField('Istleistung Signed (W)', `sf_${idx}_signedPowerId`, s.signedPowerId, (v) => { const sf2 = _ensureStorageFarmCfg(); sf2.storages[i].signedPowerId = v; }, '(-) laden / (+) entladen'));
+      grid.appendChild(mkDpField('Batterieanteil für Energiefluss (W)', `sf_${idx}_batteryFlowPowerId`, s.batteryFlowPowerId, (v) => { const row = _ensureStorageFarmCfg().storages.at(i); if (row) row.batteryFlowPowerId = v; }, 'Optional: echter Batterieanteil ohne DC-PV, z. B. FENECON 415; Regler-Istleistung bleibt getrennt.'));
       grid.appendChild(mkDpField('Ist Ladeleistung (W)', `sf_${idx}_chargePowerId`, s.chargePowerId, (v) => { const sf2 = _ensureStorageFarmCfg(); sf2.storages[i].chargePowerId = v; }, 'Messwert (optional)'));
       grid.appendChild(mkDpField('Ist Entladeleistung (W)', `sf_${idx}_dischargePowerId`, s.dischargePowerId, (v) => { const sf2 = _ensureStorageFarmCfg(); sf2.storages[i].dischargePowerId = v; }, 'Messwert (optional)'));
 
@@ -10041,6 +10052,7 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
           feneconApiTimeoutSec: 60,
           socId: '',
           signedPowerId: '',
+          batteryFlowPowerId: '',
           chargePowerId: '',
           dischargePowerId: '',
           pvPowerId: '',

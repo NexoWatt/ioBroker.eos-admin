@@ -1,0 +1,13 @@
+{
+  "name": "node24-tests-final",
+  "command": [
+    "npm",
+    "test"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin",
+  "startedAt": "2026-11-24T18:44:05.950505+00:00",
+  "durationSeconds": 44.327,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-919/node24-tests-final.log",
+  "sha256": "25b3f51c0f6c5587c7e7009607419da7626410f58d88a988fd907d00459c90bf"
+}

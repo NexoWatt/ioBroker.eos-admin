@@ -40,7 +40,8 @@ test('one central entitlement starts the integrated module without a second adap
     assert.equal(x.instances.length, 1); assert.equal(x.instances[0].options.adapter.namespace, 'eos-admin.0');
     assert.equal(x.instances[0].options.canOperate(), true);
     assert.equal((await x.host.view('devices')).status.active, true);
-    assert.deepEqual((await x.host.view('devices')).status.details, { healthy: true });
+    assert.deepEqual((await x.host.view('devices')).status.details, { healthy: true,
+        startup: { completedObjects: 0, pending: false, error: '' } });
 });
 
 test('disabled and unlicensed modules create no runtime; metadata remains available', async t => {
@@ -109,6 +110,9 @@ test('secret masking and restoration follow device IDs when rows move', () => {
 
 test('saved configurations are encrypted and API views never return device credentials', async t => {
     const x = setup({ devices: { enabled: false }, eebus: { enabled: false } }); t.after(() => x.host.stop()); await x.host.start();
+    // This storage-isolation test has no EMS runtime; explicitly provide its
+    // empty-controller admission boundary instead of bypassing it in production.
+    x.host.bindDeviceEms(async () => ({ statuses: [] }), async () => () => {});
     const view = await x.host.save('devices', { enabled: false, devices: [{ id: 'one', connection: { password: 'sensitive-config' } }] });
     assert.equal(JSON.stringify(view).includes('sensitive-config'), false);
     const stored = x.writes.find(write => write.id === 'eos-admin.0.modules.devices.configuration').object.native;
@@ -252,4 +256,58 @@ test('backup data-folder inventory exposes only bounded paths and rejects revoke
     const get = x.owner.getObjectViewAsync;
     x.owner.getObjectViewAsync = async (...args) => { const result = await get(...args); x.owner.owned = false; return result; };
     await assert.rejects(adapter.getBackupDataFolders(), /INACTIVE/);
+});
+
+test('device view exposes an explicit commissioning bridge status before binding instead of an empty placeholder', async t => {
+    const x = setup({ devices: { enabled: true, devices: [{ id: 'ess.main', templateId: 'retained-profile' }] }, eebus: { enabled: false } });
+    t.after(() => x.host.stop()); await x.host.start();
+    const view = await x.host.view('devices');
+    assert.equal(view.status.active, true);
+    assert.equal(view.emsCommissioning.state, 'pending');
+    assert.equal(view.emsCommissioning.code, 'EOS_EMS_BRIDGE_UNAVAILABLE');
+    assert.equal(view.emsCommissioning.statuses[0].deviceId, 'ess.main');
+    assert.equal(view.emsCommissioning.statuses[0].code, 'EOS_EMS_BRIDGE_UNAVAILABLE');
+});
+
+test('active profile admission rejection occurs before persistent changes and preserves the existing runtime', async t => {
+    const original = { id: 'ess.main', templateId: 'old-profile', protocol: 'modbusTcp', name: 'Original' };
+    const x = setup({ devices: { enabled: true, devices: [original] }, eebus: { enabled: false } });
+    t.after(() => x.host.stop()); await x.host.start();
+    let checks = 0;
+    x.host.bindDeviceEms(async () => ({ statuses: [] }), async request => {
+        checks++;
+        assert.equal(request.namespace, 'eos-admin.0');
+        assert.deepEqual(request.changes[0], { deviceId: 'ess.main', previousTemplateId: 'old-profile', templateId: 'new-profile', previousProtocol: 'modbusTcp', protocol: 'modbusTcp' });
+        throw Object.assign(new Error('EOS_DEVICES_PROFILE_IN_USE'), { code: 'EOS_DEVICES_PROFILE_IN_USE' });
+    });
+    const before = x.writes.length; const runtime = x.instances[0];
+    await assert.rejects(x.host.save('devices', { enabled: true, devices: [{ ...original, templateId: 'new-profile' }] }), /PROFILE_IN_USE/);
+    assert.equal(checks, 1); assert.equal(x.writes.length, before); assert.equal(runtime.stops, 0);
+    assert.equal((await x.host.view('devices')).config.devices[0].templateId, 'old-profile');
+    await x.host.save('devices', { enabled: true, devices: [{ ...original, name: 'Renamed' }] });
+    assert.equal(checks, 1, 'ordinary names/settings do not need a profile replacement reservation');
+    assert.equal((await x.host.view('devices')).config.devices[0].name, 'Renamed');
+});
+
+test('profile changes require the bridge, while a stopped controller can reserve and persist a replacement', async t => {
+    const original = { id: 'ess', templateId: 'same-profile', protocol: 'modbusTcp' };
+    const x = setup({ devices: { enabled: false, devices: [original] }, eebus: { enabled: false } });
+    t.after(() => x.host.stop()); await x.host.start();
+    const next = { enabled: false, devices: [{ ...original, protocol: 'modbusRtu' }] };
+    await assert.rejects(x.host.save('devices', next), /PROFILE_CHECK_UNAVAILABLE/);
+    await assert.rejects(x.host.save('devices', { enabled: true, devices: [original, {
+        id: 'newly-added', name: 'New', templateId: 'another-profile', protocol: 'modbusTcp' }] }), /PROFILE_CHECK_UNAVAILABLE/);
+    let held = false, released = 0, completeCommit;
+    x.host.bindDeviceEms(async () => ({ statuses: [] }), async () => {
+        held = true; return () => { held = false; released++; };
+    });
+    const write = x.host.configStore.save.bind(x.host.configStore);
+    x.host.configStore.save = async (...args) => { await new Promise(resolve => { completeCommit = resolve; }); return write(...args); };
+    const saving = x.host.save('devices', next);
+    while (!completeCommit) await new Promise(resolve => setImmediate(resolve));
+    assert.equal(held, true); assert.equal(released, 0);
+    await assert.rejects(x.host.save('devices', next), /MODULE_BUSY/);
+    completeCommit(); await saving;
+    assert.equal(held, false); assert.equal(released, 1);
+    assert.equal((await x.host.view('devices')).config.devices[0].protocol, 'modbusRtu');
 });

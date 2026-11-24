@@ -29,6 +29,7 @@ const { MbusDriver } = require('./drivers/mbus');
 const { KostalTcpDriver } = require('./drivers/kostalTcp');
 const { KostalRs485Driver } = require('./drivers/kostalRs485');
 const { TaCmiDriver } = require('./drivers/taCmi');
+const { isEnergyFreshnessClass, isEnergyFreshnessAlias, captureAliasSources, hasNewAliasSample } = require('./deviceAliasFreshness');
 
 const ABL_EMH1_LIVE_ALIAS_PATHS = new Set([
   'r.currentL1',
@@ -47,10 +48,10 @@ const ABL_EMH1_LIVE_ALIAS_PATHS = new Set([
 // suppresses identical writes, which can make an upstream load-management
 // failsafe classify a healthy charger as stale.
 //
-// Keep the scope deliberately narrow: only operational readback/status aliases
-// of the canonical evCharger class are periodically re-published, and only after
-// a real successful device snapshot. Static metadata, energy counters and command
-// aliases remain change-only to avoid unnecessary state/history traffic.
+// EV charger feedback keeps its established refresh policy below. Operational
+// meter/storage/PV aliases use deviceAliasFreshness as well, with exact sampled
+// source evidence for polled, Speedwire and MQTT data. Static metadata, energy
+// counters and command aliases remain change-only to bound state/history traffic.
 const EV_CHARGER_FRESHNESS_ALIAS_PATHS = new Set([
   'comm.connected',
   'alarm.offline',
@@ -110,6 +111,9 @@ class DeviceRuntime {
     this.driver = null;
     this.pollTimer = null;
     this._pollLoopActive = false;
+    this._lifecycleGeneration = 0;
+    /** @type {Promise<void> | null} */
+    this._initialPollPromise = null;
 
     // Stop optional write loop and clear queued writes
     try {
@@ -190,6 +194,7 @@ class DeviceRuntime {
     this._writeThrottleMs = 0;
     this._writeQueueMaxPerTick = 1;
     this._writeQueue = new Map(); // dpId -> { dp, deviceValue, ackByRelId, attempts, isPreWrite, preWriteTriggerDpId }
+    this._lastSuccessfulQueuedValueByDpId = new Map();
     this._writeLoopActive = false;
     this._writeTimer = null;
     this._writeLoopBusy = false;
@@ -219,7 +224,7 @@ class DeviceRuntime {
     this._hbLastSourceStamp = 0;
 
     // Cache last adapter-written values per state. This avoids flooding ioBroker with
-    // unchanged setState() calls on every poll cycle. Safety-critical EV charger
+    // unchanged setState() calls on every poll cycle. Operational energy/EV
     // aliases can opt into a bounded periodic refresh so their ioBroker timestamp
     // proves that a new device snapshot was actually received.
     this._stateCache = new Map(); // relId -> { val, ack, writtenAt }
@@ -689,7 +694,7 @@ class DeviceRuntime {
   }
 
   _computeLiveAliasRefreshMs({ fastIntervalMs, isEventDriven } = {}) {
-    if (this.aliasDeviceClass !== 'evCharger') return 0;
+    if (this.aliasDeviceClass !== 'evCharger' && !isEnergyFreshnessClass(this.aliasDeviceClass)) return 0;
 
     const candidates = [
       this.cfg && this.cfg.liveStatusRefreshMs,
@@ -730,11 +735,24 @@ class DeviceRuntime {
     return !!path && EV_CHARGER_FRESHNESS_ALIAS_PATHS.has(path);
   }
 
-  _liveAliasRefreshOptions(relId, values, ctx) {
+  _liveAliasRefreshOptions(relId, values, ctx, sourceIds = []) {
     if (!(this._liveAliasRefreshMs > 0)) return undefined;
-    if (!this._isEvChargerFreshnessAlias(relId)) return undefined;
-    if (ctx && ctx.connected === false) return undefined;
+    const energyAlias = isEnergyFreshnessAlias(this.aliasDeviceClass, legacyAliasPath(relId));
+    if (!this._isEvChargerFreshnessAlias(relId) && !energyAlias) return undefined;
+    if (ctx && (ctx.connected === false || ctx.diagnosticsOnly === true)) return undefined;
     if (!values || typeof values !== 'object' || Object.keys(values).length === 0) return undefined;
+    if (energyAlias) {
+      const path = legacyAliasPath(relId);
+      const connectionAlias = path === 'comm.connected' || path === 'alarm.offline';
+      if (!hasNewAliasSample({
+        protocol: String(this.cfg.protocol || '').toLowerCase(),
+        sourceIds: connectionAlias ? Object.keys(values) : sourceIds,
+        values,
+        lastWriteMs: Number(this._stateCache.get(String(relId))?.writtenAt) || 0,
+        sampleTimestamp: Number(this.driver?.lastSeen),
+        sourceTimestamps: this.driver?.updatedAtByDpId,
+      })) return undefined;
+    }
     return { refreshAfterMs: this._liveAliasRefreshMs };
   }
 
@@ -995,10 +1013,10 @@ class DeviceRuntime {
       await this._setStateCached(relId, this._hbLastSeen || now, true);
     }
 
-    // Keep the online state timestamp fresh for EV chargers as an additional
+    // Keep the online state timestamp fresh for live energy/EV devices as an additional
     // liveness signal. This is still tied to real incoming data; no timer fabricates
     // freshness while communication is down.
-    if (this.aliasDeviceClass === 'evCharger' && this._liveAliasRefreshMs > 0) {
+    if (this._liveAliasRefreshMs > 0) {
       for (const relId of this._hbRelIds('online')) {
         await this._setStateCached(relId, true, true, { refreshAfterMs: this._liveAliasRefreshMs });
       }
@@ -4927,12 +4945,12 @@ class DeviceRuntime {
                 const asBool = (typeof v === 'boolean') ? v : (Number.isFinite(Number(v)) ? Number(v) !== 0 : undefined);
                 if (asBool === false) return stopCurrentA;
                 if (asBool === true) {
-                  // For Alfen the release switch must not overwrite an already commanded
+                  // For MENNEKES the release switch must not overwrite an already commanded
                   // dynamic current limit.  Min+PV/PV modes often write 6 A first and then
                   // set run=true; returning a hard-coded 16 A here would cancel that 6 A
                   // command.  Reuse the latest desired current if present, otherwise fall
                   // back to the configured release current.
-                  const key = String(primaryCurrentWriteDp.id);
+                  const key = String(currentLimitDp.id);
                   const lastCmd = this._lastCommandedValueByDpId && this._lastCommandedValueByDpId.has(key)
                     ? Number(this._lastCommandedValueByDpId.get(key))
                     : NaN;
@@ -6469,6 +6487,7 @@ class DeviceRuntime {
       if (this.template?.driverHints?.oemModbusV1003 && def.commandOnlyAlias === true) continue;
 
       let outVal;
+      let sampleSourceIds = [];
 
       if (def.kind === 'dp') {
         if (!def.dpId) continue;
@@ -6491,6 +6510,7 @@ class DeviceRuntime {
             continue;
           }
           raw = v[def.dpId];
+          sampleSourceIds = [def.dpId];
         }
 
         if (typeof def.fromDevice === 'function') {
@@ -6502,7 +6522,13 @@ class DeviceRuntime {
       } else if (def.kind === 'computed') {
         if (typeof def.get !== 'function') continue;
         try {
-          outVal = def.get(v, c);
+          if (isEnergyFreshnessAlias(this.aliasDeviceClass, legacyAliasPath(def.relId))) {
+            const observed = captureAliasSources(v, snapshot => def.get(snapshot, c));
+            outVal = observed.value;
+            sampleSourceIds = observed.sourceIds;
+          } else {
+            outVal = def.get(v, c);
+          }
         } catch (e) {
           // Never let one broken computed alias kill the device update loop
           if (!this._aliasErrTs) this._aliasErrTs = {};
@@ -6524,7 +6550,7 @@ class DeviceRuntime {
         def.relId,
         outVal,
         true,
-        this._liveAliasRefreshOptions(def.relId, v, c),
+        this._liveAliasRefreshOptions(def.relId, v, c, sampleSourceIds),
       );
     }
   }
@@ -6535,7 +6561,7 @@ class DeviceRuntime {
       // Metadata and error envelopes can change aliases without proving live
       // telemetry. Preserve transport errors and the existing heartbeat state.
       const lastError = String(this._stateCache.get(`${this.baseId}.info.lastError`)?.val || '');
-      await this._updateAliases(values || {}, { connected: this._hbOnline === true, lastError }).catch(() => {});
+      await this._updateAliases(values || {}, { connected: this._hbOnline === true, lastError, diagnosticsOnly: true }).catch(() => {});
       return;
     }
     const connected = context.connected !== false;
@@ -6636,9 +6662,11 @@ class DeviceRuntime {
     throw new Error(`Unsupported protocol: ${proto}`);
   }
 
-  async start() {
+  /** @param {{backgroundInitialPoll?: boolean}} [options] */
+  async start({ backgroundInitialPoll = false } = {}) {
     if (this.started) return;
     this.started = true;
+    const lifecycleGeneration = ++this._lifecycleGeneration;
 
     if (this.cfg.enabled === false) {
       this.adapter.log.info(`[${this.cfg.id}] disabled - skipping`);
@@ -6646,6 +6674,19 @@ class DeviceRuntime {
     }
 
     this.driver = this._createDriver();
+    const startupDriver = this.driver;
+    const current = () => this.started && this._lifecycleGeneration === lifecycleGeneration && this.driver === startupDriver;
+    /** @param {() => Promise<void>} operation */
+    const runInitial = async operation => {
+      if (!backgroundInitialPoll) { await operation(); return; }
+      // Hosted metadata readiness is independent of the first network response.
+      // Retain the original promise so stop can cancel the transport and drain it.
+      const pending = Promise.resolve().then(operation).catch(() => {
+        if (current()) this.adapter.log.warn(`[${this.cfg.id}] EOS_DEVICES_INITIAL_POLL_FAILED; inspect device connection status`);
+      });
+      this._initialPollPromise = pending;
+      void pending.then(() => { if (this._initialPollPromise === pending) this._initialPollPromise = null; });
+    };
 
     // Heartbeat session init: start "offline" until we receive *real* data.
     // (We still keep the counter monotonic across restarts.)
@@ -6657,6 +6698,7 @@ class DeviceRuntime {
     await this._setStateCached(this._hbRelId('online'), false, true);
     await this._setStateCached(this._hbRelId('lastSeenMs'), 0, true);
     await this._resetAblEmh1LiveMeasurements();
+    if (!current()) return;
 
     // Event-driven protocols (no polling)
     if (this.cfg.protocol === 'mqtt' || this.cfg.protocol === 'canbus') {
@@ -6667,15 +6709,18 @@ class DeviceRuntime {
       await this._setStateCached(`${this.baseId}.info.connection`, false, true);
       await this._setStateCached(`${this.baseId}.info.lastError`, '', true);
       await this._updateAliases({}, { connected: false, lastError: '' }).catch(() => {});
-      try {
-        await this.driver.connect(this.getDatapoints());
-      } catch (e) {
-        await this._setError(e);
-      }
-
-      // Heartbeat timeout for push protocols
-      this._hbTimeoutMs = this._computeHeartbeatTimeoutMs({ isEventDriven: true });
-      this._startHeartbeatChecker();
+      await runInitial(async () => {
+        if (!current()) return;
+        try {
+          await startupDriver.connect(this.getDatapoints());
+        } catch (e) {
+          if (current()) await this._setError(e);
+        }
+        if (!current()) return;
+        // Heartbeat timeout for push protocols
+        this._hbTimeoutMs = this._computeHeartbeatTimeoutMs({ isEventDriven: true });
+        this._startHeartbeatChecker();
+      });
 
       // Both event-driven drivers own their actual transport status; heartbeat
       // remains tied to received device data.
@@ -6772,6 +6817,7 @@ class DeviceRuntime {
 
     // Reset per-start runtime state
     this._writeQueue.clear();
+    this._lastSuccessfulQueuedValueByDpId.clear();
     this._writeBusy = false;
 
     // Optional: restore last control setpoints on start/reconnect (template hinted).
@@ -6802,11 +6848,12 @@ class DeviceRuntime {
 
 
     const doPoll = async (dps) => {
-      if (!this.driver) return;
+      if (!current()) return;
       const pollDps = Array.isArray(dps) ? dps : allDps;
       try {
         const wasOk = this._connOk;
-        const values = await this.driver.readDatapoints(pollDps);
+        const values = await startupDriver.readDatapoints(pollDps);
+        if (!current()) return;
         const hasData = values && typeof values === 'object' && Object.entries(values).some(([id, value]) =>
           this.dpById.has(id) && value !== null && value !== undefined &&
           (typeof value !== 'number' || Number.isFinite(value))
@@ -6843,6 +6890,7 @@ class DeviceRuntime {
         }
 
         for (const [dpId, rawVal] of Object.entries(values)) {
+          if (!current()) return;
           const dp = this.dpById.get(dpId);
           if (!dp) continue;
 
@@ -6866,9 +6914,9 @@ class DeviceRuntime {
           await this._setStateCached(relId, val, true);
         }
 
-        await this._updateAliases(values, { connected: true, lastError: '' });
+        if (current()) await this._updateAliases(values, { connected: true, lastError: '' });
       } catch (e) {
-        await this._setError(e);
+        if (current()) await this._setError(e);
       }
     };
 
@@ -6876,117 +6924,138 @@ class DeviceRuntime {
     // Some devices close the Modbus session on optional/unsupported registers; templates can
     // start with the fast set first so core data comes online immediately.
     const initialFastOnly = !!(tplPolling && (tplPolling.initialFastOnly === true || String(tplPolling.initialFastOnly).toLowerCase() === 'true'));
-    await doPoll(initialFastOnly ? fastDps : slowDps);
+    const initializePolling = async () => {
+      await doPoll(initialFastOnly ? fastDps : slowDps);
+      if (!current()) return;
 
-    // Self-scheduling poll loop (prevents overlaps/backlog and keeps cadence stable).
-    this._pollLoopActive = true;
+      // Self-scheduling poll loop (prevents overlaps/backlog and keeps cadence stable).
+      this._pollLoopActive = true;
 
-    const self = this;
-    let nextFastAt = Date.now() + fastIntervalMs;
-    let nextSlowAt = useSplitPolling ? (Date.now() + slowIntervalMs) : Number.POSITIVE_INFINITY;
+      const self = this;
+      let nextFastAt = Date.now() + fastIntervalMs;
+      let nextSlowAt = useSplitPolling ? (Date.now() + slowIntervalMs) : Number.POSITIVE_INFINITY;
 
-    let loopFn = null;
+      let loopFn = null;
 
-    function scheduleNext(delay) {
-      if (!self._pollLoopActive) return;
-      const d = Math.max(0, Number(delay) || 0);
-      if (self.pollTimer) {
-        clearTimeout(self.pollTimer);
-        self.pollTimer = null;
-      }
-      self.pollTimer = setTimeout(() => {
-        if (loopFn) loopFn().catch(() => {});
-      }, Math.max(fixedFastCadence ? 25 : 250, d));
-    }
-
-    async function pollLoop() {
-      if (!self._pollLoopActive || !self.driver) return;
-
-      const cycleStartedAt = Date.now();
-      const now = cycleStartedAt;
-      const runSlow = useSplitPolling && now >= nextSlowAt;
-
-      // Default profiles schedule from completion to avoid catch-up loops. Fast closed-loop
-      // profiles may opt into a fixed start-to-start cadence. If a poll overruns its target,
-      // the self-scheduling loop still never overlaps; it simply continues as soon as safe.
-      if (runSlow) {
-        await doPoll(slowDps);
-      } else {
-        await doPoll(fastDps);
-      }
-
-      const finishedAt = Date.now();
-      const nextFastBaseAt = fixedFastCadence ? cycleStartedAt : finishedAt;
-      if (runSlow) {
-        nextSlowAt = finishedAt + slowIntervalMs;
-        nextFastAt = Math.max(finishedAt, nextFastBaseAt + fastIntervalMs);
-      } else {
-        nextFastAt = Math.max(finishedAt, nextFastBaseAt + fastIntervalMs);
-      }
-
-      if (!self._pollLoopActive || !self.driver) return;
-
-      const nextAt = Math.min(nextFastAt, nextSlowAt);
-      scheduleNext(nextAt - Date.now());
-    }
-
-    async function cadenceLoop() {
-      if (!self._pollLoopActive || !self.driver) return;
-
-      const cycleStartedAt = Date.now();
-      const now = cycleStartedAt;
-      const runSlow = useSplitPolling && now >= nextSlowAt;
-      const runFast = now >= nextFastAt;
-
-      const hasQueuedWrites = !!(self._writeQueue && self._writeQueue.size > 0);
-
-      // Prioritise queued control writes over a due poll tick. Storage dispatch must
-      // reach the inverter promptly; the next read cycle can then confirm the result.
-      if (hasQueuedWrites) {
-        const maxWrites = Math.max(1, Number(self._writeQueueMaxPerTick || 1));
-        for (let i = 0; i < maxWrites; i++) {
-          await self._flushWriteQueueOnce();
-          if (!self._writeQueue || self._writeQueue.size === 0) break;
+      function scheduleNext(delay) {
+        if (!current() || !self._pollLoopActive) return;
+        const d = Math.max(0, Number(delay) || 0);
+        if (self.pollTimer) {
+          clearTimeout(self.pollTimer);
+          self.pollTimer = null;
         }
-      } else if (runSlow) {
-        await doPoll(slowDps);
-        const finishedAt = Date.now();
-        const nextFastBaseAt = fixedFastCadence ? cycleStartedAt : finishedAt;
-        nextSlowAt = finishedAt + slowIntervalMs;
-        nextFastAt = Math.max(finishedAt, nextFastBaseAt + fastIntervalMs);
-      } else if (runFast) {
-        await doPoll(fastDps);
-        const finishedAt = Date.now();
-        const nextFastBaseAt = fixedFastCadence ? cycleStartedAt : finishedAt;
-        nextFastAt = Math.max(finishedAt, nextFastBaseAt + fastIntervalMs);
+        self.pollTimer = setTimeout(() => {
+          if (loopFn) loopFn().catch(() => {});
+        }, Math.max(fixedFastCadence ? 25 : 250, d));
       }
 
-      if (!self._pollLoopActive || !self.driver) return;
-      scheduleNext(self._commandCadenceMs);
-    }
+      async function pollLoop() {
+        if (!current() || !self._pollLoopActive || !self.driver) return;
 
-    // Decide which scheduler to use
-    loopFn = self._useCommandCadenceScheduler ? cadenceLoop : pollLoop;
+        const cycleStartedAt = Date.now();
+        const now = cycleStartedAt;
+        const runSlow = useSplitPolling && now >= nextSlowAt;
 
-    if (self._useCommandCadenceScheduler) {
-      // Tick-based cadence scheduler (e.g., 1000ms) to stay within strict Modbus timing constraints.
-      scheduleNext(self._commandCadenceMs);
-    } else {
-      // Start after the fast interval (initial full refresh has already happened).
-      scheduleNext(nextFastAt - Date.now());
+        // Default profiles schedule from completion to avoid catch-up loops. Fast closed-loop
+        // profiles may opt into a fixed start-to-start cadence. If a poll overruns its target,
+        // the self-scheduling loop still never overlaps; it simply continues as soon as safe.
+        if (runSlow) {
+          await doPoll(slowDps);
+        } else {
+          await doPoll(fastDps);
+        }
 
-      // If writes are throttled via queue and we do not use the cadence scheduler, start the write loop.
-      if (self._writeQueueEnabled) self._startWriteLoop();
-    }
+        const finishedAt = Date.now();
+        const nextFastBaseAt = fixedFastCadence ? cycleStartedAt : finishedAt;
+        if (runSlow) {
+          nextSlowAt = finishedAt + slowIntervalMs;
+          nextFastAt = Math.max(finishedAt, nextFastBaseAt + fastIntervalMs);
+        } else {
+          nextFastAt = Math.max(finishedAt, nextFastBaseAt + fastIntervalMs);
+        }
 
-    // Optional template-defined Modbus watchdog auto-writes (e.g., TESVOLT VK interface).
-    await this._startAutoWatchdogs();
-    // Seed watchdog/keepalive command memory from persistent command aliases after restarts.
-    await this._seedSetpointKeepaliveFromCommandAliases().catch(e => {
-      this.adapter.log.debug(`[${this.cfg.id}] SetpointKeepalive seed failed: ${e && e.message ? e.message : e}`);
-    });
-    await this._startSetpointKeepalive();
-    await this._startSungrowExternalEmsHeartbeat();
+        if (!current() || !self._pollLoopActive || !self.driver) return;
+
+        const nextAt = Math.min(nextFastAt, nextSlowAt);
+        scheduleNext(nextAt - Date.now());
+      }
+
+      let writeCyclesSincePoll = 0;
+      async function cadenceLoop() {
+        if (!current() || !self._pollLoopActive || !self.driver) return;
+
+        const cycleStartedAt = Date.now();
+        const now = cycleStartedAt;
+        const runSlow = useSplitPolling && now >= nextSlowAt;
+        const runFast = now >= nextFastAt;
+
+        const hasQueuedWrites = !!(self._writeQueue && self._writeQueue.size > 0);
+        const nextWrite = hasQueuedWrites ? self._pickNextQueuedWrite() : null;
+        const queued = nextWrite && nextWrite[1];
+        // A new zero power/current command gets one extra slot before a due read.
+        // Repeated already-sent zero commands must not keep an offline/freshness
+        // stop loop from obtaining the measurements needed to recover safely.
+        const urgentStop = queued && queued.deviceValue === 0 && !queued.meta?.isPreWrite &&
+          ['W', 'kW', 'A'].includes(queued.dp?.unit) &&
+          self._lastSuccessfulQueuedValueByDpId.get(String(queued.dp.id)) !== 0;
+        const readDue = runSlow || runFast;
+        const writeBeforeRead = !readDue || writeCyclesSincePoll === 0 || (urgentStop && writeCyclesSincePoll < 2);
+
+        // Preserve the configured command spacing and the queue's pre-write /
+        // coalescing rules, but bound read starvation when EMS writes every tick.
+        if (hasQueuedWrites && writeBeforeRead) {
+          const maxWrites = Math.max(1, Number(self._writeQueueMaxPerTick || 1));
+          for (let i = 0; i < maxWrites; i++) {
+            await self._flushWriteQueueOnce();
+            if (!self._writeQueue || self._writeQueue.size === 0) break;
+          }
+          writeCyclesSincePoll++;
+        } else if (runSlow) {
+          await doPoll(slowDps);
+          writeCyclesSincePoll = 0;
+          const finishedAt = Date.now();
+          const nextFastBaseAt = fixedFastCadence ? cycleStartedAt : finishedAt;
+          nextSlowAt = finishedAt + slowIntervalMs;
+          nextFastAt = Math.max(finishedAt, nextFastBaseAt + fastIntervalMs);
+        } else if (runFast) {
+          await doPoll(fastDps);
+          writeCyclesSincePoll = 0;
+          const finishedAt = Date.now();
+          const nextFastBaseAt = fixedFastCadence ? cycleStartedAt : finishedAt;
+          nextFastAt = Math.max(finishedAt, nextFastBaseAt + fastIntervalMs);
+        }
+
+        if (!current() || !self._pollLoopActive || !self.driver) return;
+        scheduleNext(self._commandCadenceMs);
+      }
+
+      // Decide which scheduler to use
+      loopFn = self._useCommandCadenceScheduler ? cadenceLoop : pollLoop;
+
+      if (self._useCommandCadenceScheduler) {
+        // Tick-based cadence scheduler (e.g., 1000ms) to stay within strict Modbus timing constraints.
+        scheduleNext(self._commandCadenceMs);
+      } else {
+        // Start after the fast interval (initial full refresh has already happened).
+        scheduleNext(nextFastAt - Date.now());
+
+        // If writes are throttled via queue and we do not use the cadence scheduler, start the write loop.
+        if (self._writeQueueEnabled) self._startWriteLoop();
+      }
+
+      // Optional template-defined Modbus watchdog auto-writes (e.g., TESVOLT VK interface).
+      await this._startAutoWatchdogs();
+      if (!current()) return;
+      // Seed watchdog/keepalive command memory from persistent command aliases after restarts.
+      await this._seedSetpointKeepaliveFromCommandAliases().catch(e => {
+        this.adapter.log.debug(`[${this.cfg.id}] SetpointKeepalive seed failed: ${e && e.message ? e.message : e}`);
+      });
+      if (!current()) return;
+      await this._startSetpointKeepalive();
+      if (!current()) return;
+      await this._startSungrowExternalEmsHeartbeat();
+    };
+    await runInitial(initializePolling);
   }
 
   _isVartaLogicalWriteError(error) {
@@ -7224,6 +7293,9 @@ class DeviceRuntime {
   }
 
   async stop() {
+    ++this._lifecycleGeneration;
+    this.started = false;
+    const initialPoll = this._initialPollPromise;
     this._pollLoopActive = false;
     if (this.pollTimer) {
       clearTimeout(this.pollTimer);
@@ -7300,6 +7372,7 @@ class DeviceRuntime {
       try { await this.driver.disconnect(); } catch (e) { /* ignore */ }
       this.driver = null;
     }
+    if (initialPoll) await initialPoll;
     this.started = false;
   }
 
@@ -7633,10 +7706,11 @@ class DeviceRuntime {
 
       const result = await this.driver.writeDatapoint(entry.dp, entry.deviceValue);
       this._recordWrite(entry.dp.id, { skipPostWriteRepeat: entry.meta?.skipPostWriteRepeat === true });
-      const isCurrent = () => this._writeQueue.get(key) === entry;
-      if (!isCurrent()) return;
       const effectiveValue = result && Object.prototype.hasOwnProperty.call(result, 'effectiveValue')
         ? result.effectiveValue : entry.deviceValue;
+      this._lastSuccessfulQueuedValueByDpId.set(String(entry.dp.id), effectiveValue);
+      const isCurrent = () => this._writeQueue.get(key) === entry;
+      if (!isCurrent()) return;
 
       // Persist last setpoint for restore-on-start/reconnect (best-effort)
       await this._persistSetpointValueIfNeeded(entry.dp, effectiveValue).catch(() => {});

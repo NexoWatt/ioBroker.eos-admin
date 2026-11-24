@@ -8,6 +8,16 @@ export interface ModuleBridgeMessage {
     command: string;
     message: unknown;
 }
+export interface DeviceProfileChanges {
+    namespace: string;
+    changes: Array<{
+        deviceId: string;
+        previousTemplateId: string;
+        templateId: string;
+        previousProtocol: string;
+        protocol: string;
+    }>;
+}
 export interface ModuleView {
     id: string;
     config: Record<string, unknown>;
@@ -38,7 +48,11 @@ export class EosModuleHost {
     migrationStatus(): LegacyMigrationStatus;
     bindBridge(handler: (message: ModuleBridgeMessage) => Promise<unknown>): void;
     receiveBridge(message: { command: string; message?: unknown }): boolean;
-    bindDeviceEms(handler: (devices: DeviceEmsInventory[]) => Promise<unknown>): void;
+    bindDeviceEms(
+        handler: (devices: DeviceEmsInventory[]) => Promise<unknown>,
+        reserveProfileChange?: (change: DeviceProfileChanges) => Promise<() => void>,
+    ): void;
     requestDeviceEms(): void;
     flushDeviceEms(): Promise<void>;
+    deviceEmsView(): DeviceEmsPublicView;
 }

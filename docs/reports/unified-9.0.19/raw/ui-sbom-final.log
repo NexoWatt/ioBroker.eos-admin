@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> nexowatt-eos-ui-internal@9.0.19 sbom:cra:release
+> node scripts/generate-cra-sbom.cjs --release
+
+[cra-sbom] Produkt-SBOM erzeugt und geprüft: nexowatt-eos-ui-internal@9.0.19; 555 Paketdateien gebunden.

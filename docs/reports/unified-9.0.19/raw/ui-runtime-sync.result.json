@@ -1,0 +1,14 @@
+{
+  "name": "ui-runtime-sync",
+  "command": [
+    "npm",
+    "run",
+    "check:ts-runtime-executables"
+  ],
+  "cwd": ".",
+  "startedAt": "2026-11-24T18:34:52.672263+00:00",
+  "durationSeconds": 3.383,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-919/ui-runtime-sync.log",
+  "sha256": "f52688c6c1652a1371297501fc734f3bf51947867e88fbe4a5944b6205a448e9"
+}

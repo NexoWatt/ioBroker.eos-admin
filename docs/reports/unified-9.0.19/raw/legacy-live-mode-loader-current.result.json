@@ -1,0 +1,14 @@
+{
+  "name": "legacy-live-mode-loader-current",
+  "command": [
+    "node",
+    "/workspace/scratch/741f792566ea/setup-919/legacy-test-loader.cjs",
+    "verify-live-evcs-mode-confirmation.cjs"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin/ui",
+  "startedAt": "2026-11-24T18:14:03.673843+00:00",
+  "durationSeconds": 0.156,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-919/legacy-live-mode-loader-current.log",
+  "sha256": "006ee9ce1a989a96f6cc5934e0ca4098e777a66e305e73f69c481328258a8622"
+}

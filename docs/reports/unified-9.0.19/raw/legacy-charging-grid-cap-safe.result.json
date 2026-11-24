@@ -1,0 +1,14 @@
+{
+  "name": "legacy-charging-grid-cap-safe",
+  "command": [
+    "npm",
+    "run",
+    "test:charging-grid-cap-safe"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin/ui",
+  "startedAt": "2026-11-24T18:14:15.220170+00:00",
+  "durationSeconds": 0.356,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-919/legacy-charging-grid-cap-safe.log",
+  "sha256": "f3000c8ead02ea7fa6cd28dfe97b2731954f01e1e38fbb34d0f6f3b37fec04fa"
+}

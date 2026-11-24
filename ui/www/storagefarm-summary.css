@@ -1,0 +1,17 @@
+/* Copyright (c) 2026 NexoWatt. Confidential and proprietary. */
+.nw-farm-summary { margin: 20px 0 24px; }
+.nw-farm-summary__heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.nw-farm-summary__heading h3 { margin: 0; font-size: 1.1rem; color: #e5f5f5; }
+.nw-farm-members { border: 1px solid #245a5b; background: #0a302d; color: #a5f1d4; padding: 7px 12px; border-radius: 999px; font-size: .8rem; }
+.nw-farm-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.nw-farm-metric { border: 1px solid #244251; border-radius: 16px; padding: 18px; min-width: 0; background: linear-gradient(135deg, #0a2430, #071722); border-top: 2px solid #35d9ad; }
+.nw-farm-metric h4 { margin: 0 0 12px; font-size: .85rem; font-weight: 600; color: #b5ced8; }
+.nw-farm-metric strong { display: block; margin-bottom: 8px; font-size: clamp(1.35rem, 2.2vw, 2.1rem); letter-spacing: -.02em; color: #f1fbfa; overflow-wrap: anywhere; }
+.nw-farm-metric small { display: block; color: #a7c0cb; font-size: .76rem; line-height: 1.45; }
+#sf_metric_soc { border-top-color: #9b91ff; } #sf_metric_pv { border-top-color: #f5c76c; }
+#sf_metric_charge { border-top-color: #55c7fa; } #sf_metric_discharge { border-top-color: #f2a68c; }
+.nw-farm-metric[data-quality="partial"], .nw-farm-metric[data-quality="missing"] { border-top-color: #dfb967; }
+.nw-farm-metric[data-quality="stale"] { opacity: .75; border-top-color: #ad8790; }
+.nw-farm-summary__hint { color: #bacbd2; font-size: .82rem; line-height: 1.5; margin: 14px 0 0; }
+@media (max-width: 900px) { .nw-farm-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 460px) { .nw-farm-metrics { grid-template-columns: 1fr; } .nw-farm-metric { padding: 16px; } }

@@ -1,0 +1,14 @@
+{
+  "name": "legacy-energy-wallet-final",
+  "command": [
+    "npm",
+    "run",
+    "test:energy-wallet-diagnostics"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin/ui",
+  "startedAt": "2026-11-24T18:23:01.270116+00:00",
+  "durationSeconds": 0.263,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-919/legacy-energy-wallet-final.log",
+  "sha256": "7b9c21242569f20487489e6ec53f1392e8f86f0ce3cfdf3ed2b7bd32a26fb779"
+}

@@ -38,7 +38,9 @@ const os = require('os');
 // JSON bleibt unkomprimiert: inflate:false verhindert Dekompressionsfehler auch mit älteren ioBroker-Abhängigkeitsbäumen.
 const bodyParser = express.json({ limit: '5mb', inflate: false });
 const crypto = require('crypto');
-const { installerRevision, assertInstallerRevision, provisionInstallerObjects } = require('./lib/installer-lifecycle');
+const { installerRevision, assertInstallerRevision, provisionInstallerObjects, assertDeviceAppActivations, numericMeasurement, activeDeviceProfileReferences } = require('./lib/installer-lifecycle');
+const { buildFarmOverview } = require('./lib/storage-farm-overview');
+const { tariffDisplayConfig } = require('./lib/tariff-price');
 const { customerTariffView, prepareCustomerTariffChange } = require('./lib/customer-tariff');
 const https = require('https');
 const pkg = require('./package.json');
@@ -2550,13 +2552,14 @@ class NexoWattVis extends HostedAdapter {
           if (!Number.isFinite(n) || n <= 0) return value;
           return Math.round(hardLimitW > 0 ? Math.min(n, hardLimitW) : n);
         };
-        p.storage.ratedPowerW = normalizePositiveW(p.storage.ratedPowerW);
-        p.storage.maxChargeW = normalizePositiveW(p.storage.maxChargeW);
-        p.storage.maxDischargeW = normalizePositiveW(p.storage.maxDischargeW);
-        p.storage.selfMaxChargeW = normalizePositiveW(p.storage.selfMaxChargeW);
-        p.storage.selfMaxDischargeW = normalizePositiveW(p.storage.selfMaxDischargeW);
-        p.storage.lskMaxChargeW = normalizePositiveW(p.storage.lskMaxChargeW);
-        p.storage.lskMaxDischargeW = normalizePositiveW(p.storage.lskMaxDischargeW);
+        // Optionale, nicht gesetzte Grenzen bleiben abwesend. Ein leeres Speicher-
+        // Objekt darf durch die Lizenznormalisierung keine undefined-Eigenschaften
+        // erhalten, die einen späteren Geräteplan ungültig machen; 0/null bleiben exakt erhalten.
+        for (const key of ['ratedPowerW', 'maxChargeW', 'maxDischargeW', 'selfMaxChargeW', 'selfMaxDischargeW', 'lskMaxChargeW', 'lskMaxDischargeW']) {
+          const value = Reflect.get(p.storage, key);
+          if (value === undefined) Reflect.deleteProperty(p.storage, key);
+          else Reflect.set(p.storage, key, normalizePositiveW(value));
+        }
       }
       // Home: Auch Farm-Zeilen behalten die bestehende Leistungsgrenze.
       // Der finale gemeinsame Speicherbefehl wird zusätzlich zentral begrenzt.
@@ -4883,8 +4886,9 @@ class NexoWattVis extends HostedAdapter {
     await this._meshCoordinator?.syncAppLifecycle();
   }
 
-  /** Automatic aliases are planned under the same lock as manual AppCenter saves.
-   * Only configuration and missing own objects change; no app/control permission is enabled. */
+  /** Gerätezuordnungen und ausdrücklich gespeicherte EMS-Inbetriebnahmen verwenden
+   * denselben Mutationsschutz wie AppCenter. Der Planner verbraucht bestätigte
+   * Einzelaufträge; Neustarts erteilen keine neue App-/Stellfreigabe. */
   async reconcileDeviceEms(devices) {
     const assertReady = () => {
       if (this._nwShuttingDown || this._bridge.canWrite() !== true) throw new Error('EOS_UI_OWNERSHIP_REQUIRED');
@@ -4898,7 +4902,8 @@ class NexoWattVis extends HostedAdapter {
       assertReady();
       if (typeof this._bridge.deviceEmsPlan !== 'function') throw new Error('EOS_DEVICE_EMS_UNAVAILABLE');
       const effective = this.nwApplyInstallerPatchToRuntimeConfig(this.config || {}, this._nwInstallerConfigPatch || {});
-      const plan = await this._bridge.deviceEmsPlan({ config: effective, devices });
+      const allowedApps = ['charging', 'storage', 'storagefarm'].filter(id => this._nwLicenseAllowsAppId(id));
+      const plan = await this._bridge.deviceEmsPlan({ config: effective, devices, allowedApps });
       assertReady();
       if (!plan.changed && !this._nwDeviceEmsApplyPending) return { changed: false, statuses: plan.statuses };
       const patch = this.nwDeepMerge(this._nwDeepClone(this._nwInstallerConfigPatch || {}), plan.patch);
@@ -4906,6 +4911,9 @@ class NexoWattVis extends HostedAdapter {
         await prepareDynamicGridInstallerPatch(this, patch, plan.patch, currentDynamicGridConfig(this).configVersion);
       }
       const next = this.nwApplyInstallerPatchToRuntimeConfig(this.config || {}, patch);
+      assertDeviceAppActivations(effective, { emsApps: patch.emsApps }, id => this._nwLicenseAllowsAppId(id));
+      const storageLicense = this._nwValidateStorageFarmLicense(next);
+      if (!storageLicense.ok) throw new Error(String(storageLicense.error || 'EOS_EMS_STORAGE_LICENSE_REQUIRED'));
       await this._nwProvisionInstallerObjects(next);
       assertReady();
       if (plan.changed) {
@@ -4914,6 +4922,9 @@ class NexoWattVis extends HostedAdapter {
         this._nwInstallerConfigRawPatch = this._nwDeepClone(patch);
       }
       this._nwDeviceEmsApplyPending = true;
+      this._nwEmsInitError = 'EOS_EMS_CONFIG_APPLY_PENDING';
+      assertReady();
+      if (this.emsEngine?.stopForReconfigure) await this.emsEngine.stopForReconfigure();
       assertReady();
       this.config = next;
       await this._nwApplyInstallerRuntime(true, 'device-commissioning');
@@ -4922,6 +4933,51 @@ class NexoWattVis extends HostedAdapter {
       catch (_error) { this.log.warn('EOS_DEVICE_EMS_BACKUP_FAILED: Einstellungen gespeichert; zusätzliche Sicherung fehlgeschlagen.'); }
       return { changed: plan.changed, statuses: plan.statuses };
     } finally { this._nwEndInstallerConfigMutation(token); }
+  }
+
+  /** Profil-/Protokollwechsel darf eine laufende Regelung nicht unter unveränderten
+   * Geräte-DP-IDs auf andere Register umlenken. Derselbe Save-Token bleibt bis zum
+   * abgeschlossenen Geräte-Commit beim Host; reine Umbenennungen rufen diesen Pfad nicht auf. */
+  async reserveDeviceProfileChange(input) {
+    const codeError = (code) => Object.assign(new Error(code), { code });
+    const assertReady = () => {
+      if (this._nwShuttingDown || this._bridge.canWrite() !== true || !['ready', 'degraded'].includes(this._hostedStartup?.state)) {
+        throw codeError('EOS_DEVICES_PROFILE_CHECK_UNAVAILABLE');
+      }
+    };
+    assertReady();
+    const namespace = typeof input?.namespace === 'string' ? input.namespace : '';
+    const changes = Array.isArray(input?.changes) ? input.changes : null;
+    if (!/^[a-zA-Z0-9_-]+\.\d+$/.test(namespace) || !changes || changes.length < 1 || changes.length > 128) throw codeError('EOS_DEVICES_PROFILE_CHECK_UNAVAILABLE');
+    const prefixes = changes.map(change => {
+      const id = typeof change?.deviceId === 'string' ? change.deviceId : '';
+      if (!id || id.length > 128 || !id.split('.').every(part => /^[a-zA-Z0-9_-]+$/.test(part))) throw codeError('EOS_DEVICES_PROFILE_CHECK_UNAVAILABLE');
+      return `${namespace}.devices.${id}.`;
+    });
+    const token = this._nwBeginInstallerConfigMutation();
+    if (!token) throw codeError('EOS_DEVICE_EMS_BUSY');
+    let retained = false;
+    try {
+      const effective = this.nwApplyInstallerPatchToRuntimeConfig(this.config || {}, this._nwInstallerConfigPatch || {});
+      const refs = activeDeviceProfileReferences(effective);
+      const touches = id => typeof id === 'string' && prefixes.some(prefix => id.startsWith(prefix));
+      if ([...refs.read, ...refs.write].some(touches)) throw codeError('EOS_DEVICES_PROFILE_IN_USE');
+      if (refs.read.length || refs.write.length) {
+        if (typeof this._bridge.resolveDeviceProfileReferences !== 'function') throw codeError('EOS_DEVICES_PROFILE_CHECK_UNAVAILABLE');
+        // A small reference-only projection avoids passing unrelated optional native
+        // fields/secrets into the strict alias resolver.
+        const resolved = await this._bridge.resolveDeviceProfileReferences({ storage: { profileReferences: [
+          ...refs.read.map(id => ({ readObjectId: id })), ...refs.write.map(id => ({ writeObjectId: id })),
+        ] } });
+        assertReady();
+        if (!resolved || !resolved.readTargets || !resolved.writeTargets || typeof resolved.readTargets !== 'object' || typeof resolved.writeTargets !== 'object') throw codeError('EOS_DEVICES_PROFILE_CHECK_UNAVAILABLE');
+        if ([...Object.values(resolved.readTargets), ...Object.values(resolved.writeTargets)].some(touches)) throw codeError('EOS_DEVICES_PROFILE_IN_USE');
+      }
+      assertReady();
+      retained = true;
+      let released = false;
+      return () => { if (!released) { released = true; this._nwEndInstallerConfigMutation(token); } };
+    } finally { if (!retained) this._nwEndInstallerConfigMutation(token); }
   }
 
   async persistInstallerConfigToState(patchObj) {
@@ -5781,6 +5837,7 @@ class NexoWattVis extends HostedAdapter {
       feneconControlMode,
       // Messwerte
       socId: textFrom('socId', 'socObjectId', 'socDp', 'storageSocId', 'storageSoc'),
+      batteryFlowPowerId: textFrom('batteryFlowPowerId'),
       signedPowerId: textFrom('signedPowerId', 'batteryPowerObjectId', 'signedPowerDp', 'powerObjectId', 'powerId', 'batteryPower'),
       chargePowerId: textFrom('chargePowerId', 'batteryChargePowerObjectId', 'chargePowerDp', 'chargeDp', 'storageChargePower'),
       dischargePowerId: textFrom('dischargePowerId', 'batteryDischargePowerObjectId', 'dischargePowerDp', 'dischargeDp', 'storageDischargePower'),
@@ -5917,10 +5974,10 @@ class NexoWattVis extends HostedAdapter {
       const appCenterActive = !!(app && app.installed === true && app.enabled === true);
       const legacyActive = cfg.enableStorageFarm === true;
 
-      // Eine Farm ist erst ab zwei real konfigurierten Speichern fachlich aktiv.
+      // Eine ausdrücklich aktivierte Farm darf mit einem real konfigurierten Speicher beginnen.
       const configuredCount = configuredRows.length;
       const enabledByConfig = appRecordPresent ? appCenterActive : legacyActive;
-      const active = !!(enabledByConfig && configuredCount >= 2);
+      const active = !!(enabledByConfig && configuredCount >= 1);
       const writableRows = configuredRows.filter((row) => this._nwStorageFarmRowHasWritableDatapoint(row));
       const writableCount = writableRows.length;
       return {
@@ -5982,7 +6039,8 @@ class NexoWattVis extends HostedAdapter {
       const singleAppRecordPresent = !!singleApp;
       const singleAppCenterActive = !!(singleApp && singleApp.installed === true && singleApp.enabled === true);
       const singleLegacyActive = cfg.enableStorageControl === true;
-      const singleAppActive = singleAppRecordPresent ? singleAppCenterActive : singleLegacyActive;
+      const deviceAssignmentDisabled = cfg.storage?._eosDevice?.v === 1 && cfg.storage?.enabled === false;
+      const singleAppActive = !deviceAssignmentDisabled && (singleAppRecordPresent ? singleAppCenterActive : singleLegacyActive);
 
       const farm = (typeof this._nwGetStorageFarmRuntimeInfo === 'function')
         ? this._nwGetStorageFarmRuntimeInfo()
@@ -6084,6 +6142,12 @@ class NexoWattVis extends HostedAdapter {
       socDegraded: { type: 'boolean', role: 'indicator', def: false, name: 'SoC Qualität reduziert (Debug)' },
       medianSoc: { type: 'number', role: 'value', def: 0, name: 'SoC Median (%) (abgeleitet)' },
       totalPowerW: { type: 'number', role: 'value.power', def: 0, name: 'Gesamtleistung Speicherfarm (W, + Entladen / - Laden)' },
+      totalBatteryPowerW: { type: 'number', role: 'value.power', def: 0, name: 'Physischer Batteriefluss ohne durchgeleitete PV (W)' },
+      totalBatteryChargePowerW: { type: 'number', role: 'value.power', def: 0, name: 'Physische Brutto-Ladeleistung aller Farmbatterien (W)' },
+      totalBatteryDischargePowerW: { type: 'number', role: 'value.power', def: 0, name: 'Physische Brutto-Entladeleistung aller Farmbatterien (W)' },
+      displayMeanSoc: { type: 'number', role: 'value', def: 0, unit: '%', name: 'Arithmetischer SoC-Mittelwert frischer Farmproben (siehe Abdeckung)' },
+      totalCapacityKWh: { type: 'number', role: 'value', def: 0, unit: 'kWh', name: 'Vollständige konfigurierte Nennkapazität der Farm' },
+      overviewJson: { type: 'string', role: 'json', def: '{}', name: 'Gemeinsame Farmübersicht mit Frische und Messabdeckung' },
       powerSourcesTotal: { type: 'number', role: 'value', def: 0, name: 'Eindeutige Speicher-Leistungsquellen der Farm' },
       powerSourcesOnline: { type: 'number', role: 'value', def: 0, name: 'Aktive Speicher-Leistungsquellen der Farm' },
       totalChargePowerW: { type: 'number', role: 'value.power', def: 0, name: 'Brutto-Ladeleistung aller Speicher (W) (abgeleitet)' },
@@ -6115,7 +6179,7 @@ class NexoWattVis extends HostedAdapter {
           read: true,
           write: false,
           def: c.def,
-          ...(key.endsWith('PowerW') ? { unit: 'W' } : {}),
+          ...(key.endsWith('PowerW') ? { unit: 'W' } : (c.unit ? { unit: c.unit } : {})),
         },
         native: {},
       });
@@ -6373,7 +6437,7 @@ class NexoWattVis extends HostedAdapter {
         try {
           if (val === null || val === undefined) return NaN;
           if (typeof val === 'number') return val;
-          if (typeof val === 'boolean') return val ? 1 : 0;
+          if (typeof val === 'boolean') return NaN;
           if (typeof val === 'string') {
             let s = val.trim();
             if (!s) return NaN;
@@ -6472,6 +6536,7 @@ class NexoWattVis extends HostedAdapter {
 
         const st = await getState(sid);
         if (!st || st.val === undefined || st.val === null) return NaN;
+        if (opts.display === true && ((st.q !== undefined && st.q !== 0) || !Number.isFinite(st.ts) || st.ts > now + 1000)) return NaN;
 
         // IMPORTANT: We intentionally do NOT apply stale filtering here.
         // Some devices update SoC or power only sporadically; the UI should still show
@@ -6487,13 +6552,14 @@ class NexoWattVis extends HostedAdapter {
         let n = parseNum(st.val);
         if (!Number.isFinite(n)) return NaN;
 
-        if (kind === 'soc') {
+        if (kind === 'soc' || kind === 'soc-display') {
           // Accept both percent (0..100) and fraction (0..1) formats.
           const unit = await getUnit(sid);
           const ul = String(unit || '').toLowerCase();
           if (!ul.includes('%')) {
             if (n > 0 && n <= 1) n = n * 100;
           }
+          if (kind === 'soc-display' && (n < 0 || n > 100)) return NaN;
           if (Number.isFinite(n)) {
             if (n < 0) n = 0;
             if (n > 100) n = 100;
@@ -6515,6 +6581,7 @@ class NexoWattVis extends HostedAdapter {
             else if (sl.endsWith('w')) unit = 'W';
           }
 
+          if (opts.display === true && unit && !/^(?:[kmg]?w|(?:kilo|mega|giga)?watts?)$/i.test(String(unit).trim().replace(/\s+/g, ''))) return NaN;
           return scalePowerToW(n, unit);
         }
 
@@ -6523,6 +6590,7 @@ class NexoWattVis extends HostedAdapter {
 
       let totalCharge = 0;
       let totalDischarge = 0;
+      const batteryFlowSources = new Set();
       let totalPvAc = 0;
       let totalPvDc = 0;
       let totalPvUnknown = 0;
@@ -6554,6 +6622,8 @@ class NexoWattVis extends HostedAdapter {
       let socSourcesOnline = 0;
 
       const statusRows = [];
+      const overviewMembers = [];
+      const overviewPvSources = [];
       const farmWritableStorageCount = list.filter((row) => this._nwStorageFarmRowHasWritableDatapoint(row)).length;
 
       const maxLicensedStorages = this._nwLicenseMaxStorages();
@@ -7064,6 +7134,12 @@ class NexoWattVis extends HostedAdapter {
           status.pvSourceOnline = !!pvFresh;
           if (pvAgeMs !== null) status.pvSourceAgeSec = Math.floor(pvAgeMs / 1000);
           if (pvFresh && Number.isFinite(pvValue)) status.pvPowerW = pvAbs;
+          const displayPv = !explicitOffline ? await readNumber(pvSourceId, 'power', { allowStale: false, display: true }) : NaN;
+          // Gepunktete Geräte-IDs enden erst vor `.aliases.`, nicht am ersten Punkt.
+          // Unbekannte manuelle Pfade bleiben exakte Quellen statt geratenen Geräteklassen.
+          const aliasDeviceBase = pvSourceId.match(/^(.*\.devices\..+?)\.aliases(?:\.|$)/)?.[1];
+          const overviewPvKey = aliasDeviceBase || pvSourceId;
+          overviewPvSources.push({ key: overviewPvKey, powerW: Number.isFinite(displayPv) ? Math.max(0, Math.abs(displayPv)) : null });
           pvSourceRows.push({
             id: pvSourceId,
             physicalKey,
@@ -7075,6 +7151,27 @@ class NexoWattVis extends HostedAdapter {
             autoDetected: !!status.pvAutoId,
           });
         }
+
+        // Physischer Batteriefluss ist bei Hybridgeräten nicht die gesamte
+        // ESS-Konverterleistung. Die vorhandenen Regler-Summen bleiben unverändert;
+        // nur Anzeige/History erhalten bei expliziter Zuordnung die Batteriemessung.
+        const batteryFlowId = String(row.batteryFlowPowerId || '').trim();
+        const batteryFlowKey = batteryFlowId ? `power:${batteryFlowId}` : (signedFeedbackUsable ? `power:${signedId}` : powerSourceKey);
+        const duplicateBatteryFlow = !!batteryFlowKey && batteryFlowSources.has(batteryFlowKey);
+        if (batteryFlowKey) batteryFlowSources.add(batteryFlowKey);
+        const overviewSoc = !explicitOffline && socId
+          ? await readNumber(socId, 'soc-display', { allowStale: false, display: true }) : NaN;
+        const overviewCapacity = numericMeasurement(row.capacityKWh);
+        const overviewMember = {
+          key: String(batteryFlowKey || row._eosDevice?.baseId || (socId ? `soc:${socId}` : status.dispatchKey)),
+          fresh: isFreshOnline,
+          batteryPowerW: null,
+          socPct: Number.isFinite(overviewSoc) ? overviewSoc : null,
+          capacityKWh: overviewCapacity !== null && overviewCapacity > 0 ? overviewCapacity : null,
+        };
+        overviewMembers.push(overviewMember);
+        status.displaySocPct = overviewMember.socPct;
+        status.capacityKWh = overviewMember.capacityKWh;
 
         // Only fresh-online storages contribute live power values to the farm totals.
         // Degraded/stale systems stay visible and may remain dispatchable, but they are
@@ -7143,6 +7240,29 @@ class NexoWattVis extends HostedAdapter {
           powerSourcesOnline++;
         }
 
+        if (batteryFlowKey) {
+          // Die neue Anzeige akzeptiert keinen halben Split-Messsatz als vollständige
+          // Batteriequelle. Vorhandene Regler-Summen behalten ihre bisherigen Regeln.
+          let physicalPower = NaN;
+          if (batteryFlowId && !isMappedSetpointPowerId(batteryFlowId)) {
+            physicalPower = await readNumber(batteryFlowId, 'power', { allowStale: false, display: true });
+          } else if (!batteryFlowId && signedFeedbackUsable) {
+            const signed = await readNumber(signedId, 'power', { allowStale: false, display: true });
+            physicalPower = invSigned ? -signed : signed;
+          } else if (!batteryFlowId && (chargeFeedbackUsable || dischargeFeedbackUsable)) {
+            const charge = chargeFeedbackUsable ? await readNumber(chgId, 'power', { allowStale: false, display: true }) : 0;
+            const discharge = dischargeFeedbackUsable ? await readNumber(dchgId, 'power', { allowStale: false, display: true }) : 0;
+            if (Number.isFinite(charge) && Number.isFinite(discharge)) physicalPower =
+              Math.max(0, invDchg ? -discharge : discharge) - Math.max(0, invChg ? -charge : charge);
+          }
+          if (Number.isFinite(physicalPower)) {
+            status.batteryFlowPowerW = physicalPower;
+            overviewMember.batteryPowerW = physicalPower;
+            if (duplicateBatteryFlow) status.batteryFlowDuplicate = true;
+          } else {
+            status.batteryFlowMissing = true;
+          }
+        }
         statusRows.push(status);
         available++;
       }
@@ -7192,6 +7312,9 @@ class NexoWattVis extends HostedAdapter {
       const capacityWeightedSocState = Math.round(capacityWeightedSoc * 10) / 10;
       const capacityWeightedSocOnlineState = Math.round(capacityWeightedSocOnline * 10) / 10;
       const totalPowerState = Math.round(totalPower);
+      const farmOverview = buildFarmOverview(overviewMembers, overviewPvSources, now);
+      const farmOverviewJson = JSON.stringify(farmOverview);
+      const totalBatteryPowerState = farmOverview.battery.netW;
       const totalChargeState = Math.round(totalCharge);
       const totalDischargeState = Math.round(totalDischarge);
       const totalPvState = Math.round(totalPv);
@@ -7209,6 +7332,12 @@ class NexoWattVis extends HostedAdapter {
       await this.setStateAsync('storageFarm.socSourcesOnline', { val: socSourcesOnline, ack: true });
       await this.setStateAsync('storageFarm.socDegraded', { val: !!socDegraded, ack: true });
       await this.setStateAsync('storageFarm.totalPowerW', { val: totalPowerState, ack: true });
+      await this.setStateAsync('storageFarm.totalBatteryPowerW', { val: totalBatteryPowerState, ack: true });
+      await this.setStateAsync('storageFarm.totalBatteryChargePowerW', { val: farmOverview.battery.chargeW, ack: true });
+      await this.setStateAsync('storageFarm.totalBatteryDischargePowerW', { val: farmOverview.battery.dischargeW, ack: true });
+      await this.setStateAsync('storageFarm.displayMeanSoc', { val: farmOverview.soc.meanPct, ack: true });
+      await this.setStateAsync('storageFarm.totalCapacityKWh', { val: farmOverview.capacity.totalKWh, ack: true });
+      await this.setStateAsync('storageFarm.overviewJson', { val: farmOverviewJson, ack: true });
       await this.setStateAsync('storageFarm.powerSourcesTotal', { val: seenPowerSourceKeys.size, ack: true });
       await this.setStateAsync('storageFarm.powerSourcesOnline', { val: powerSourcesOnline, ack: true });
       await this.setStateAsync('storageFarm.totalChargePowerW', { val: totalChargeState, ack: true });
@@ -7243,6 +7372,12 @@ class NexoWattVis extends HostedAdapter {
         this.updateValue('storageFarm.socSourcesOnline', socSourcesOnline, now);
         this.updateValue('storageFarm.socDegraded', !!socDegraded, now);
         this.updateValue('storageFarm.totalPowerW', totalPowerState, now);
+        this.updateValue('storageFarm.totalBatteryPowerW', totalBatteryPowerState, now);
+        this.updateValue('storageFarm.totalBatteryChargePowerW', farmOverview.battery.chargeW, now);
+        this.updateValue('storageFarm.totalBatteryDischargePowerW', farmOverview.battery.dischargeW, now);
+        this.updateValue('storageFarm.displayMeanSoc', farmOverview.soc.meanPct, now);
+        this.updateValue('storageFarm.totalCapacityKWh', farmOverview.capacity.totalKWh, now);
+        this.updateValue('storageFarm.overviewJson', farmOverviewJson, now);
         this.updateValue('storageFarm.powerSourcesTotal', seenPowerSourceKeys.size, now);
         this.updateValue('storageFarm.powerSourcesOnline', powerSourcesOnline, now);
         this.updateValue('storageFarm.totalChargePowerW', totalChargeState, now);
@@ -7267,8 +7402,8 @@ class NexoWattVis extends HostedAdapter {
         // keinen ausdrücklichen Einzel-Speicher-Override gesetzt hat. So bleibt eine
         // Kundenanlage ohne Farm und auch eine bewusst abweichende Messquelle autoritativ.
         try {
-          const netCharge = totalPowerState < 0 ? Math.abs(totalPowerState) : 0;
-          const netDischarge = totalPowerState > 0 ? totalPowerState : 0;
+          const netCharge = totalBatteryPowerState === null ? null : totalBatteryPowerState < 0 ? Math.abs(totalBatteryPowerState) : 0;
+          const netDischarge = totalBatteryPowerState === null ? null : totalBatteryPowerState > 0 ? totalBatteryPowerState : 0;
           const mapped = (this.config && this.config.datapoints && typeof this.config.datapoints === 'object')
             ? this.config.datapoints
             : {};
@@ -7282,7 +7417,7 @@ class NexoWattVis extends HostedAdapter {
           if (!hasPowerOverride) {
             this.updateValue('storageChargePower', netCharge, now, { raw: false });
             this.updateValue('storageDischargePower', netDischarge, now, { raw: false });
-            this.updateValue('batteryPower', totalPowerState, now, { raw: false });
+            this.updateValue('batteryPower', totalBatteryPowerState, now, { raw: false });
           }
 
           // PV bleibt ausschließlich in storageFarm.totalPv*. Die zentrale
@@ -9207,7 +9342,7 @@ class NexoWattVis extends HostedAdapter {
   }
 
   _nwIsReadOnlyEvcsMirrorKey(key) {
-    return /^evcs\.\d+\.(powerW|energyTotalKwh|vehicleSoc|status|online|active|vehicleConnected|chargeDemand|heartbeat|phaseFeedback|lock|rfidLast)$/.test(String(key || ''));
+    return /^evcs\.\d+\.(powerW|energyTotalKwh|vehicleSoc|status|online|dataFresh|active|chargingState|vehicleConnected|chargeDemand|heartbeat|phaseFeedback|lock|rfidLast)$/.test(String(key || ''));
   }
 
   _nwEvcsMirrorValue(binding, value) {
@@ -9352,11 +9487,15 @@ class NexoWattVis extends HostedAdapter {
         _dayBaseDate: { type: 'string', role: 'text', def: '', read: true, write: false },
         status:        { type: 'string', role: 'state', def: '', read: true, write: false },
         online:        { type: 'boolean', role: 'indicator.reachable', def: false, read: true, write: false },
+        // Separate OCPP freshness from transport reachability. Every input
+        // mirror needs its own object before subscription or the first read.
+        dataFresh:     { type: 'boolean', role: 'indicator', def: false, read: true, write: false },
         active:        { type: 'boolean', role: 'switch', def: false, read: true, write: false },
         // Rohspiegel der optionalen Semantik-/Heartbeat-/Phasen-DPs. Die eigentliche
         // Auswertung bleibt im Charging-Management am Original-DP; der Stringspiegel
         // dient UI, Diagnose und History ohne verlustbehaftete Typkonvertierung.
         vehicleConnected: { type: 'string', role: 'text', def: '', read: true, write: false },
+        chargingState: { type: 'string', role: 'text', def: '', read: true, write: false },
         chargeDemand:  { type: 'string', role: 'text', def: '', read: true, write: false },
         heartbeat:     { type: 'string', role: 'text', def: '', read: true, write: false },
         phaseFeedback: { type: 'string', role: 'text', def: '', read: true, write: false },
@@ -11953,9 +12092,12 @@ async onReady() {
 
     if (this.emsEngine && !doForce) return;
 
-    // Force: stop + drop existing engine so we can recover from init failures
-    if (doForce && this.emsEngine && typeof this.emsEngine.stop === 'function') {
-      try { this.emsEngine.stop(); } catch (_e) {}
+    // A replacement must never reuse the old registry or overlap an old tick.
+    // Failure keeps the old engine paused and visible for the next apply attempt.
+    if (doForce && this.emsEngine) {
+      if (typeof this.emsEngine.stopForReconfigure === 'function') await this.emsEngine.stopForReconfigure();
+      else if (typeof this.emsEngine.stop === 'function') await this.emsEngine.stop();
+      this.emsEngine = null;
     }
 
     // Reset last error
@@ -12126,6 +12268,9 @@ async onReady() {
     await primeKey('tarif.statusText');
     await primeKey('tarif.netFeeMode');
     await primeKey('tariffProvider.currentPriceEurPerKwh');
+    await primeKey('tariffProvider.averagePriceEurPerKwh');
+    await primeKey('tariffProvider.fresh');
+    await primeKey('tariffProvider.statusJson');
     await primeKey('chargingManagement.control.tsControlProductiveJson');
     await primeKey('chargingManagement.control.tsAllocationShadowJson');
     await primeKey('chargingManagement.control.tsAllocationProductivePrepJson');
@@ -15959,6 +16104,8 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
         // Persist an additional uninstall-proof backup into 0_userdata.0 (best-effort)
         try { await this.nwWriteUserdataBackup(mergedPatch, 'config-save'); } catch (_e) {}
 
+        // Pause old writers before exposing the new mappings to runtime consumers.
+        if (restartEms && this.emsEngine?.stopForReconfigure) await this.emsEngine.stopForReconfigure();
         // Apply patch to runtime config (App-Center SoT: replace installer-managed sections)
         this.config = (this.config && typeof this.config === 'object') ? this.config : {};
         this.config = this.nwApplyInstallerPatchToRuntimeConfig(this.config, mergedPatch);
@@ -16156,6 +16303,8 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
         if (await this.persistInstallerConfigToState(finalPatch) === false) throw new Error('Installer-Import konnte nicht gespeichert werden.');
         this._nwInstallerConfigPatch = finalPatch;
 
+        // Pause old writers before exposing the imported mappings.
+        if (restartEms && this.emsEngine?.stopForReconfigure) await this.emsEngine.stopForReconfigure();
         // Apply patch as SoT (replace installer-managed sections)
         this.config = this.nwApplyInstallerPatchToRuntimeConfig(baseNative, finalPatch);
         await this._nwApplyInstallerRuntime(restartEms, 'import');
@@ -22794,10 +22943,10 @@ app.get('/config', async (req, res) => {
         : false;
       // Stale Runtime-States und Legacy-enableStorageFarm dürfen die Kundenansicht
       // nicht öffnen. Sichtbar ist die Farm nur bei AppCenter installed+enabled und
-      // mindestens zwei echten Speicherzeilen; dieselbe Zeilenerkennung nutzt auch
+      // mindestens einer echten Speicherzeile; dieselbe Zeilenerkennung nutzt auch
       // Aggregation und Scheduler.
       const storageFarmConfiguredCount = storageRowsFromConfig.filter(storageFarmRowHasRealDatapoint).length;
-      const storageFarmConfigured = storageFarmConfiguredCount >= 2;
+      const storageFarmConfigured = storageFarmConfiguredCount >= 1;
       const storageFarmAvailable = !!(storageFarmAppActive && storageFarmConfigured);
 
       const smartHomeCustomerEnabled = smartHomeEnabled(cfg, this._nwNativeConfigBase);
@@ -22964,6 +23113,7 @@ app.get('/config', async (req, res) => {
       const sess = authEnabled ? await resolveAccess(req) : null;
 
       const nwConfigPayload = {
+        tariffDisplay: tariffDisplayConfig(cfg, this.namespace),
         locale: this._nwBuildLocaleInfo(),
         countryProfile: this._nwBuildCountryProfileInfo(),
         units: cfg.units || { power: 'W', energy: 'kWh' },
@@ -26931,6 +27081,7 @@ return res.json(out);
       'totalSoc', 'medianSoc', 'totalSocOnline', 'capacityWeightedSoc', 'capacityWeightedSocOnline',
       'socSourcesTotal', 'socSourcesOnline', 'socDegraded',
       'totalPowerW', 'powerSourcesTotal', 'powerSourcesOnline', 'totalChargePowerW', 'totalDischargePowerW',
+      'totalBatteryPowerW', 'totalBatteryChargePowerW', 'totalBatteryDischargePowerW', 'displayMeanSoc', 'totalCapacityKWh', 'overviewJson',
       'totalPvPowerW', 'totalPvAcPowerW', 'totalPvDcPowerW', 'totalPvUnknownPowerW',
       'pvSourcesTotal', 'pvSourcesOnline', 'pvSourcesJson',
       'storagesOnline', 'storagesDegraded', 'storagesDispatchAvailable',
@@ -28050,8 +28201,7 @@ return res.json(out);
     try {
       const rec = this.stateCache && this.stateCache[key];
       if (!rec) return null;
-      const n = Number(rec.value);
-      return Number.isFinite(n) ? n : null;
+      return numericMeasurement(rec.value);
     } catch (_e) {
       return null;
     }
@@ -28085,8 +28235,8 @@ return res.json(out);
     try {
       const rec = this.stateCache && this.stateCache[key];
       if (!rec) return fallback;
-      const n = Number(rec.value);
-      if (!Number.isFinite(n)) return fallback;
+      const n = numericMeasurement(rec.value);
+      if (n === null) return fallback;
       const maxAge = Number(maxAgeMs);
       if (Number.isFinite(maxAge) && maxAge > 0) {
         const age = this._nwGetCacheAgeMs(key, now);
@@ -28108,8 +28258,8 @@ return res.json(out);
     try {
       const rec = (this._nwRawValueCache && this._nwRawValueCache[key]) || (this.stateCache && this.stateCache[key]);
       if (!rec) return fallback;
-      const n = Number(rec.value);
-      if (!Number.isFinite(n)) return fallback;
+      const n = numericMeasurement(rec.value);
+      if (n === null) return fallback;
       const maxAge = Number(maxAgeMs);
       if (Number.isFinite(maxAge) && maxAge > 0) {
         const ts = Number(rec.ts);
@@ -28166,7 +28316,7 @@ return res.json(out);
       // Runtime-States sind Ergebnisse dieser Konfiguration und dürfen sie nicht
       // rückwärts durch einen alten false-/0-Wert überschreiben.
       const runtimeInfo = this._nwGetStorageFarmRuntimeInfo();
-      return !!(runtimeInfo.active && Number(runtimeInfo.configuredCount || 0) >= 2);
+      return !!(runtimeInfo.active && Number(runtimeInfo.configuredCount || 0) >= 1);
     } catch (_e) {
       return false;
     }
@@ -28182,23 +28332,24 @@ return res.json(out);
     const now = Number.isFinite(Number(opts.now)) ? Number(opts.now) : Date.now();
     const active = this._nwStorageFarmIsActiveFromCache();
     const read = (key) => {
-      const value = this._nwGetNumberFromCache(key);
-      return Number.isFinite(Number(value)) ? Number(value) : null;
+      return this._nwGetNumberFromCache(key);
     };
 
     const grossChargeW = Math.max(0, Math.abs(read('storageFarm.totalChargePowerW') || 0));
     const grossDischargeW = Math.max(0, Math.abs(read('storageFarm.totalDischargePowerW') || 0));
     const powerSourcesTotal = Math.max(0, Math.round(read('storageFarm.powerSourcesTotal') || 0));
+    const hasBatteryFlow = Object.prototype.hasOwnProperty.call(this.stateCache || {}, 'storageFarm.totalBatteryPowerW');
+    const batteryFlowState = read('storageFarm.totalBatteryPowerW');
     const signedState = read('storageFarm.totalPowerW');
 
     // Nach einem Update kann der neu angelegte totalPowerW-State kurz 0 W enthalten,
     // während die bereits vorhandenen Brutto-States noch den echten Farmfluss zeigen.
     // Erst nach mindestens einer ausgewerteten Leistungsquelle ist totalPowerW führend.
-    const signedW = (signedState !== null && (powerSourcesTotal > 0 || (grossChargeW <= 0 && grossDischargeW <= 0)))
-      ? signedState
-      : (grossDischargeW - grossChargeW);
-    const chargeW = signedW < 0 ? Math.abs(signedW) : 0;
-    const dischargeW = signedW > 0 ? signedW : 0;
+    const signedW = hasBatteryFlow ? batteryFlowState
+      : (signedState !== null && (powerSourcesTotal > 0 || (grossChargeW <= 0 && grossDischargeW <= 0)))
+        ? signedState : (grossDischargeW - grossChargeW);
+    const chargeW = signedW === null ? null : signedW < 0 ? Math.abs(signedW) : 0;
+    const dischargeW = signedW === null ? null : signedW > 0 ? signedW : 0;
 
     const pvTotalState = Math.max(0, Math.abs(read('storageFarm.totalPvPowerW') || 0));
     let pvAcW = Math.max(0, Math.abs(read('storageFarm.totalPvAcPowerW') || 0));
@@ -28224,9 +28375,9 @@ return res.json(out);
     return {
       active,
       soc: read('storageFarm.totalSoc'),
-      totalPowerW: Math.round(signedW),
-      chargeW: Math.round(chargeW),
-      dischargeW: Math.round(dischargeW),
+      totalPowerW: signedW === null ? null : Math.round(signedW),
+      chargeW: chargeW === null ? null : Math.round(chargeW),
+      dischargeW: dischargeW === null ? null : Math.round(dischargeW),
       grossChargeW: Math.round(grossChargeW),
       grossDischargeW: Math.round(grossDischargeW),
       pvTotalW: Math.round(pvTotalW),
@@ -28235,7 +28386,7 @@ return res.json(out);
       pvUnknownW: Math.round(pvUnknownW),
       pvSources,
       ageMs: {
-        totalPowerW: this._nwGetCacheAgeMs('storageFarm.totalPowerW', now),
+        totalPowerW: this._nwGetCacheAgeMs(hasBatteryFlow ? 'storageFarm.totalBatteryPowerW' : 'storageFarm.totalPowerW', now),
         totalSoc: this._nwGetCacheAgeMs('storageFarm.totalSoc', now),
         totalPvPowerW: this._nwGetCacheAgeMs('storageFarm.totalPvPowerW', now),
       },
@@ -28509,8 +28660,8 @@ return res.json(out);
       : null;
     const sfEnabled = !!(farmMetrics && farmMetrics.active);
     if (farmSelectedForControl) {
-      let signed = farmMetrics ? Number(farmMetrics.totalPowerW) : NaN;
-      if (Number.isFinite(signed)) {
+      let signed = farmMetrics ? numericMeasurement(farmMetrics.totalPowerW) : null;
+      if (signed !== null && Number.isFinite(signed)) {
         // storageFarm.totalPowerW ist bereits pro Speicher normalisiert und besitzt
         // eine feste Konvention (+ Entladen / - Laden). Das globale Einzel-Speicher-
         // Anzeige-Invert darf diesen kanonischen Farmwert nicht ein zweites Mal drehen.
@@ -28952,8 +29103,6 @@ return res.json(out);
           available: false,
           source: 'js-mode',
           mode,
-        userMode,
-        userEnabled,
           ok: true,
           mismatches: [],
           runtime: runtimeValues,
@@ -28998,8 +29147,6 @@ return res.json(out);
         available: true,
         source: mode === 'ts' ? 'ts-mirror-switch-candidate' : 'ts-mirror-shadow',
         mode,
-        userMode,
-        userEnabled,
         ok: mismatches.length === 0,
         mismatches,
         runtime: runtimeValues,
@@ -34001,6 +34148,10 @@ function createHostedRuntime(owner, bridge) {
         });
       }
       await startPromise;
+    },
+    reserveDeviceProfileChange(input) {
+      if (stopRequested) return Promise.reject(Object.assign(new Error('EOS_DEVICES_PROFILE_CHECK_UNAVAILABLE'), { code: 'EOS_DEVICES_PROFILE_CHECK_UNAVAILABLE' }));
+      return runtime.reserveDeviceProfileChange(input);
     },
     reconcileDeviceEms(devices) {
       if (stopRequested) return Promise.reject(new Error('EOS_UI_STOPPING'));

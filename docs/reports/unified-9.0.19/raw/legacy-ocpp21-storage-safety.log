@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> nexowatt-eos-ui-internal@9.0.19 test:rc59-ocpp21-native-storage-safety
+> node scripts/verify-rc59-ocpp21-native-storage-safety.js
+
+[rc59-ocpp21-native-storage-safety] OK: direct OCPP21 mapping, charging tick diagnostics and storage-farm safety recovery are consistent.

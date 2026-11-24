@@ -1,0 +1,14 @@
+{
+  "name": "legacy-load-grid-sanity",
+  "command": [
+    "npm",
+    "run",
+    "test:loadmanagement-grid-cap-sanity"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin/ui",
+  "startedAt": "2026-11-24T18:14:15.220201+00:00",
+  "durationSeconds": 0.322,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-919/legacy-load-grid-sanity.log",
+  "sha256": "5272c94af4a0e79aaabd60928db8a104480f8d44157ae4366072e78ed51c331c"
+}

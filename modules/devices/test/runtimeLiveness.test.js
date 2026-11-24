@@ -62,7 +62,7 @@ test('MQTT diagnostic-only snapshots update aliases without clearing errors or f
   await runtime._handleMqttSnapshot({ errors: 2 }, { connected: true, diagnosticsOnly: true });
   assert.equal(states.get('devices.test.info.connection').val, false);
   assert.equal(states.get('devices.test.info.lastError').val, 'No current telemetry');
-  assert.deepEqual(received, { values: { errors: 2 }, context: { connected: false, lastError: 'No current telemetry' } });
+  assert.deepEqual(received, { values: { errors: 2 }, context: { connected: false, lastError: 'No current telemetry', diagnosticsOnly: true } });
   assert.equal(runtime._hbLastSeen, 0);
 });
 

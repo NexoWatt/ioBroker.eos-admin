@@ -1,0 +1,14 @@
+{
+  "name": "backend-final",
+  "command": [
+    "npm",
+    "run",
+    "build:unified-backend"
+  ],
+  "cwd": ".",
+  "startedAt": "2026-11-24T18:40:08.186301+00:00",
+  "durationSeconds": 4.571,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-919/backend-final.log",
+  "sha256": "f97df72c541c79daa1110dd118043c38d015d87994d4d92a3b486a376964dda8"
+}

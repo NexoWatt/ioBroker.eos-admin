@@ -1,0 +1,14 @@
+{
+  "name": "legacy-storage-dp-persistence",
+  "command": [
+    "npm",
+    "run",
+    "test:storage-appcenter-dp-persistence"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin/ui",
+  "startedAt": "2026-11-24T18:11:55.030794+00:00",
+  "durationSeconds": 0.456,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-919/legacy-storage-dp-persistence.log",
+  "sha256": "c7053c83ade279c86daf8f1a575e0a727acb3d75c60d3d4369ce7f88a33b147c"
+}

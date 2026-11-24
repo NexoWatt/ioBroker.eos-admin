@@ -1,15 +1,15 @@
 {
   "schema": 1,
-  "version": "9.0.18",
+  "version": "9.0.19",
   "snapshot": {
     "algorithm": "SHA-256",
-    "files": 4244,
-    "sha256": "804c355be1c159ccc55ba9621fcc9ec44bb90cd7d7b340baea9f27724635a511"
+    "files": 4406,
+    "sha256": "2b09cc00982b34111829ba051f08c07610e3c6a156d43ce4d212de5bd6a4e958"
   },
   "evidence": {
     "index": {
-      "path": "docs/reports/unified-9.0.18/raw/INDEX.json",
-      "sha256": "16799317a24fe3b75e7247d0917f5a9f281ddce092fc7344a06f207e9ba0164e"
+      "path": "docs/reports/unified-9.0.19/raw/INDEX.json",
+      "sha256": "a0d3907e4996a41d542285182183404cb32cb6ca88c14b93df6919f52595bc30"
     },
     "runs": [
       {
@@ -17,18 +17,18 @@
         "nodeVersion": "v22.23.4",
         "command": "npm test",
         "result": {
-          "tests": 1574,
-          "pass": 1572,
+          "tests": 1710,
+          "pass": 1708,
           "fail": 0,
           "skipped": 2,
           "cancelled": 0
         },
         "log": {
-          "path": "docs/reports/unified-9.0.18/raw/node22-tests-final.log",
-          "sha256": "41e3b93512fe3c25f1e639cbc7618e22daecd404aa9fa943301a2313335f593e"
+          "path": "docs/reports/unified-9.0.19/raw/node22-tests-final.log",
+          "sha256": "3b1e097918d0ec6e4b10004c4dccfa95357b05b13ddbd8279270fbc8bbeec9f5"
         },
         "runtime": {
-          "path": "docs/reports/unified-9.0.18/raw/node22-version.log",
+          "path": "docs/reports/unified-9.0.19/raw/node22-version.log",
           "sha256": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906"
         }
       },
@@ -37,18 +37,18 @@
         "nodeVersion": "v24.22.3",
         "command": "npm test",
         "result": {
-          "tests": 1574,
-          "pass": 1572,
+          "tests": 1710,
+          "pass": 1708,
           "fail": 0,
           "skipped": 2,
           "cancelled": 0
         },
         "log": {
-          "path": "docs/reports/unified-9.0.18/raw/node24-tests-final.log",
-          "sha256": "1d262f25ec5c611a995cda4e695610266f48832c8bf47f2cd91066a24cc8fb83"
+          "path": "docs/reports/unified-9.0.19/raw/node24-tests-final.log",
+          "sha256": "25b3f51c0f6c5587c7e7009607419da7626410f58d88a988fd907d00459c90bf"
         },
         "runtime": {
-          "path": "docs/reports/unified-9.0.18/raw/node24-version.log",
+          "path": "docs/reports/unified-9.0.19/raw/node24-version.log",
           "sha256": "4409d3bfa08b82f385bd424eeda65fc63b756129f0e89e82df77f1fecafccc14"
         }
       }

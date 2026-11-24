@@ -1,0 +1,14 @@
+{
+  "name": "tariff-price-chain-old-918",
+  "command": [
+    "node",
+    "-e",
+    "const Module=require('node:module'); const load=Module._load; Module._load=function(request,parent,isMain){return load.call(this,request==='../ui/ems/modules/tarif-vis'?'/workspace/scratch/741f792566ea/source-918/iobroker.eos-admin/ui/ems/modules/tarif-vis.js':request,parent,isMain)}; require('./test/eos-customer-tariff-price-chain.test.cjs');"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin",
+  "startedAt": "2026-11-24T18:29:13.793651+00:00",
+  "durationSeconds": 0.193,
+  "exitCode": 1,
+  "log": "/workspace/scratch/741f792566ea/setup-919/tariff-price-chain-old-918.log",
+  "sha256": "a0aefb0e9c7a76dbdb508b68708bbee22afaa9a4d5247376526d18ffd6c590cd"
+}

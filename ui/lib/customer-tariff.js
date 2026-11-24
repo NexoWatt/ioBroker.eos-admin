@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/lib/customer-tariff.ts
- * Quell-Hash: sha256:c67703360c97d4d9630b72d2809ab1d21c3643d5443de6db3163dfbf80cc4024
+ * Quell-Hash: sha256:5db65b97227afa18549301a412a220aa573ada0e57bfb766424bde7d611b3683
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -122,6 +122,10 @@ function prepareCustomerTariffChange(root, incoming, namespace, registry) {
     if (!PROVIDERS.includes(providerId))
         invalid('Dieser Anschluss wird vom Installateur verwaltet. Bitte einen angebotenen Anbieter wählen.');
     next.providerId = providerId;
+    // Explicit customer saves request Tibber's actual quarter-hour data, independently
+    // of a legacy hourly setting. Other provider contracts remain unchanged.
+    if (providerId === 'tibber')
+        next.resolutionMinutes = 15;
     if (own(submitted, 'enabled') && typeof submitted.enabled !== 'boolean')
         invalid('Die Tarifaktivierung ist ungültig.');
     next.enabled = own(submitted, 'enabled') ? submitted.enabled : previous.enabled === true;

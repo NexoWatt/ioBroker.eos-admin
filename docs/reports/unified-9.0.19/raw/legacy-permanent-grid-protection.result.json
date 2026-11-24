@@ -1,0 +1,14 @@
+{
+  "name": "legacy-permanent-grid-protection",
+  "command": [
+    "npm",
+    "run",
+    "test:rc82-permanent-grid-protection"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin/ui",
+  "startedAt": "2026-11-24T18:11:55.020192+00:00",
+  "durationSeconds": 1.109,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-919/legacy-permanent-grid-protection.log",
+  "sha256": "31da7218bbea695600f2716bf89b718d7bcdd0c8824b3957b7e5cc350b88281e"
+}

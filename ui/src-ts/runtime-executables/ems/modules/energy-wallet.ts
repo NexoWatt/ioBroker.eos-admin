@@ -56,6 +56,7 @@
  */
 'use strict';
 const { BaseModule } = require('./base');
+const { tariffPriceNumber } = require('../../lib/tariff-price');
 function num(v, fallback = null) {
   const n = Number(v);
   return Number.isFinite(n) ? n : fallback;
@@ -90,13 +91,13 @@ function yearKeyLocal(date = new Date()) {
   return String(date.getFullYear());
 }
 
-function normalizePriceEurPerKwh(value, fallback) {
-  const n = num(value, fallback);
+function normalizePriceEurPerKwh(value, fallback, explicitEur = false) {
+  const n = tariffPriceNumber(value);
   if (!Number.isFinite(n)) return fallback;
   const abs = Math.abs(n);
   // Installer geben Preise häufig in ct/kWh ein. Werte >2 und <=500 interpretieren wir als ct/kWh.
-  const eur = abs > 2 && abs <= 500 ? n / 100 : n;
-  if (!Number.isFinite(eur) || eur < -2 || eur > 5) return fallback;
+  const eur = !explicitEur && abs > 2 && abs <= 500 ? n / 100 : n;
+  if (!Number.isFinite(eur) || (explicitEur ? Math.abs(eur) > 100 : eur < -2 || eur > 5)) return fallback;
   return eur;
 }
 
@@ -399,37 +400,34 @@ class EnergyWalletModule extends BaseModule {
       const rec = this._cacheEntry(key);
       if (!rec) continue;
       const raw = rec && typeof rec === 'object' && Object.prototype.hasOwnProperty.call(rec, 'value') ? rec.value : rec;
-      const n = Number(raw);
-      if (Number.isFinite(n)) return n;
+      const n = tariffPriceNumber(raw);
+      if (n !== null) return n;
     }
     return fallback;
   }
 
 
-  _readStateCandidate(keys) {
-    // 0.8.24: Für dynamische Tarifpreise reicht der Zahlenwert allein nicht mehr.
-    // Das Wertkonto muss auch wissen, welcher State verwendet wurde und wie alt der
-    // Preis ist. Nur so kann die LIVE-Karte eine nachvollziehbare Preisquelle zeigen
-    // und ein alter Zeittarif sauber auf den festen Preis zurückfallen.
+  _readStateCandidate(keys, maxAgeSec = 7200) {
+    // A missing derived budget price must not hide a real current provider price.
+    // Inspect every candidate's own timestamp; retain a stale candidate only for
+    // diagnosis after all fresher fallbacks have been considered.
     const list = Array.isArray(keys) ? keys : [keys];
     const now = Date.now();
+    let staleCandidate = null;
     for (const key of list) {
-      const rec = this._cacheEntry(key);
-      if (!rec) continue;
+      const cached = this.adapter?.stateCache && Object.prototype.hasOwnProperty.call(this.adapter.stateCache, key) ? Reflect.get(this.adapter.stateCache, key) : null;
+      const rec = cached && typeof cached === 'object' && !Array.isArray(cached) ? cached : null;
+      if (!rec || (rec.q !== undefined && rec.q !== 0)) continue;
       const raw = rec && typeof rec === 'object' && Object.prototype.hasOwnProperty.call(rec, 'value') ? rec.value : rec;
-      const n = Number(raw);
-      if (!Number.isFinite(n)) continue;
-      const tsRaw = rec && typeof rec === 'object' ? Number(rec.ts || rec.lc || 0) : 0;
-      const ts = Number.isFinite(tsRaw) && tsRaw > 0 ? tsRaw : now;
-      return {
-        found: true,
-        key: String(key),
-        value: n,
-        ts,
-        ageSec: Math.max(0, Math.round((now - ts) / 1000)),
-      };
+      const n = tariffPriceNumber(raw);
+      if (n === null) continue;
+      const ts = typeof rec.ts === 'number' ? rec.ts : null;
+      if (ts === null || !Number.isFinite(ts) || ts <= 0 || ts > now + 1000) continue;
+      const candidate = { found: true, key: String(key), value: n, ts, ageSec: Math.max(0, Math.round((now - ts) / 1000)) };
+      if (candidate.ageSec <= maxAgeSec) return candidate;
+      if (!staleCandidate) staleCandidate = candidate;
     }
-    return { found: false, key: '', value: null, ts: 0, ageSec: 0 };
+    return staleCandidate || { found: false, key: '', value: null, ts: 0, ageSec: 0 };
   }
 
 
@@ -595,6 +593,8 @@ class EnergyWalletModule extends BaseModule {
     // - Quelle, Alter und Fallback-Grund werden veröffentlicht, damit Nutzerkarte und
     //   Installateurdiagnose nicht dieselbe Warnsprache verwenden müssen.
     const dynamicTariffActive = this._readStateBool(['settings.dynamicTariff', 'dynamicTariff'], false);
+    const maxAgeSecRaw = cfg.dynamicTariffMaxAgeSec !== undefined ? Number(cfg.dynamicTariffMaxAgeSec) : 7200;
+    const maxAgeSec = Math.round(clamp(Number.isFinite(maxAgeSecRaw) ? maxAgeSecRaw : 7200, 60, 86400));
     const tariffCandidate = this._readStateCandidate([
       'ems.budget.tariff.currentPriceEurKwh',
       'tarif.preisAktuellEurProKwh',
@@ -602,12 +602,11 @@ class EnergyWalletModule extends BaseModule {
       'priceCurrent',
       'tarif.priceCurrent',
       'tariff.priceCurrent',
-    ]);
-    const tariffNow = tariffCandidate.found ? normalizePriceEurPerKwh(tariffCandidate.value, null) : null;
-    const maxAgeSecRaw = cfg.dynamicTariffMaxAgeSec !== undefined ? Number(cfg.dynamicTariffMaxAgeSec) : 7200;
-    const maxAgeSec = Math.round(clamp(Number.isFinite(maxAgeSecRaw) ? maxAgeSecRaw : 7200, 60, 86400));
-    const tariffFinite = Number.isFinite(Number(tariffNow));
-    const tariffFresh = tariffFinite && (!tariffCandidate.found || tariffCandidate.ageSec <= maxAgeSec);
+    ], maxAgeSec);
+    const canonicalEurPrice = ['ems.budget.tariff.currentPriceEurKwh', 'tarif.preisAktuellEurProKwh', 'historie.tariff.providerCurrentEurPerKwh'].includes(tariffCandidate.key);
+    const tariffNow = tariffCandidate.found ? normalizePriceEurPerKwh(tariffCandidate.value, null, canonicalEurPrice) : null;
+    const tariffFinite = tariffCandidate.found && typeof tariffNow === 'number' && Number.isFinite(tariffNow);
+    const tariffFresh = tariffFinite && tariffCandidate.ageSec <= maxAgeSec;
     const dynamicTariffAvailable = dynamicTariffActive && tariffFinite && tariffFresh;
 
     const fixedInput = this._readStateNumber([

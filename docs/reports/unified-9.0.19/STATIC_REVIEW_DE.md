@@ -1,0 +1,11 @@
+# Statische Einzelprüfung 9.0.19
+
+24.11.2026. Die Quelländerungen an `main.ts` betreffen den kontrollierten EMS-Konfigurationswechsel, Geräteaufträge, die Farm-Messwertanzeige und die Ladepunkt-Objektanlage. `www/ems-apps.ts` trennt physische Batterieflusszuordnung und typgerechte Leistungseingänge. Die entsprechenden Diffs gegenüber der ausgelieferten 9.0.18 wurden gelesen; die folgenden bereits einzeln bewerteten Fundstellen bleiben in ihrer Schlüssel-/Zugriffsgrenze unverändert.
+
+Die neun vorhandenen Einzelbewertungen in `main.ts` betreffen drei Null-Prototyp-Diagnose-/Verfügbarkeits-/Telemetriemaps, eine validierte Partner-App-ID, feste Partner-State-IDs, die festen numerischen Queryfelder from/to/step, einen begrenzten binären Array-Suchindex, eine verankerte Dezimalgrammatik und eine ausschließlich nach Own-Property-Prüfung gelesene Discovery-Fehlerliste. Die vorhandene Einzelbewertung in `www/ems-apps.ts` betrifft die feste Eigenschaft `pvPowerId` der bereits begrenzten ausgewählten Farmzeile. Diese Operationen wurden durch die neuen Lifecycle-/Farmfunktionen nicht um zusätzliche fremde Schreibschlüssel erweitert.
+
+Nur die zehn zugehörigen Quellhashbindungen und ihre Nachprüfungsvermerke wurden aktualisiert. Fingerprints, Anzahl, ursprüngliche Begründungen und Belege bleiben bestehen. Die historische Baseline wurde nicht neu aufgebaut. Neue Helper werden zusätzlich mit striktem TypeScript und typisiertem ESLint geprüft. Der abschließende Sicherheitslauf muss weiterhin null neu blockierte Befunde ergeben. Bestehende historische Befunde sind im Hauptprüfbericht ausdrücklich als offen ausgewiesen; dies ist kein befundfreier Gesamtsicherheitsnachweis.
+
+## Abschließender Tarifscan
+
+Der neue Dashboard-Preisparser verwendet eine auf 64 Zeichen begrenzte Zeichenprüfung und numerische Validierung statt eines verschachtelten regulären Ausdrucks. Der Wallet-Cache liest ausschließlich zuvor bestätigte eigene Schlüssel über Reflect.get. Die beiden neu gemeldeten Scannerstellen wurden im Code korrigiert, nicht in die Ausnahmen aufgenommen. Danach: 218 Quellen, 3222 inventarisierte Fundstellen, 0 neue blockierte Befunde. 17 echte Anzeige-/Preis-/Verbraucherkettenfälle bestehen nach dieser Änderung.

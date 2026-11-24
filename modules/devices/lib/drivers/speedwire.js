@@ -302,6 +302,7 @@ class SpeedwireHub {
     if (this._restarting) return;
     if (this.starting) return;
     if (!this.socket) return;
+    if (!this.handlers.size) return;
 
     this._restarting = true;
     const sock = this.socket;
@@ -323,6 +324,7 @@ class SpeedwireHub {
     });
 
     try {
+      if (!this.handlers.size) return;
       if (reason) this._logWarn(`[speedwire] Restarting UDP listener (${reason}).`);
       await this.start();
     } catch (e) {
@@ -426,13 +428,23 @@ class SpeedwireHub {
       sock.on('error', (err) => {
         this._logWarn(`[speedwire] UDP socket error (${this.multicastGroup}:${this.port}): ${_errMsg(err)}`);
         try { sock.close(); } catch (_) { /* ignore */ }
-        this.socket = null;
-        this.started = false;
-        this.starting = null;
+        if (this.socket === sock) {
+          this.socket = null;
+          this.started = false;
+        }
+      });
+      // A closed socket is no longer a running receiver. Keep its subscribers;
+      // the next ordinary device read can create a replacement listener.
+      sock.on('close', () => {
+        if (this.socket === sock) {
+          this.socket = null;
+          this.started = false;
+        }
       });
 
       sock.on('message', (msg, rinfo) => {
         try {
+          if (this.socket !== sock) return;
           this.rxCount += 1;
           this.lastRxAt = Date.now();
 
@@ -543,10 +555,10 @@ class SpeedwireHub {
       this._startWatchdog();
 
       this.started = true;
-      this.starting = null;
     })();
 
-    return await this.starting;
+    try { return await this.starting; }
+    finally { this.starting = null; }
   }
 
   addHandler(fn) {
@@ -559,7 +571,10 @@ class SpeedwireHub {
 
   async stopIfUnused() {
     if (this.handlers.size) return;
-    if (!this.socket) return;
+    // Binding is asynchronous. Wait for its completion before closing, and
+    // recheck users because a replacement driver may have joined meanwhile.
+    if (this.starting) { try { await this.starting; } catch (_) { /* Failed binds still need cleanup. */ } }
+    if (this.handlers.size) return;
 
     if (this._refreshTimer) {
       try { clearInterval(this._refreshTimer); } catch (_) { /* ignore */ }
@@ -576,6 +591,7 @@ class SpeedwireHub {
     this.started = false;
     this.starting = null;
 
+    if (!sock) return;
     await new Promise((resolve) => {
       try { sock.close(() => resolve()); } catch (_) { resolve(); }
     });
@@ -654,20 +670,19 @@ class SpeedwireDriver {
   }
 
   async _ensureListener() {
-    if (this.hub) return;
-
-    const { hub, key } = getHub(this.adapter, {
-      port: this.port,
-      multicastGroup: this.multicastGroup,
-      interfaceAddress: this.interfaceAddress,
-    });
-
-    this.hub = hub;
-    this.hubKey = key;
-
-    await this.hub.start();
-
-    this.unregister = this.hub.addHandler((parsed, rinfo) => {
+    if (!this.hub) {
+      const { hub, key } = getHub(this.adapter, {
+        port: this.port,
+        multicastGroup: this.multicastGroup,
+        interfaceAddress: this.interfaceAddress,
+      });
+      this.hub = hub;
+      this.hubKey = key;
+    }
+    const hub = this.hub;
+    // Register before awaiting the bind. This prevents a concurrent disconnect
+    // from treating a pending replacement subscriber as an unused listener.
+    if (!this.unregister) this.unregister = hub.addHandler((parsed, rinfo) => {
       try {
         // Track any parsed meter telegrams (helps detect filterHost issues)
         this.lastSeenAny = Date.now();
@@ -683,6 +698,9 @@ class SpeedwireDriver {
         // ignore
       }
     });
+    // A hub reference alone is not liveness: an earlier bind or socket error
+    // may have closed its receiver. start() is idempotent while really active.
+    await hub.start();
   }
 
   async disconnect() {
@@ -700,9 +718,11 @@ class SpeedwireDriver {
       if (hub) await hub.stopIfUnused();
     } catch (_) { /* ignore */ }
 
-    // Cleanup global map if the hub stopped
+    // A failed bind may leave an intentionally retained hub with other users.
+    // Remove only this unused, stopped registry entry, never a replacement hub
+    // installed while our asynchronous disconnect was finishing.
     try {
-      if (key && hub && !hub.socket) _hubByKey.delete(key);
+      if (key && hub && !hub.socket && !hub.starting && !hub.handlers.size && _hubByKey.get(key) === hub) _hubByKey.delete(key);
     } catch (_) { /* ignore */ }
   }
 

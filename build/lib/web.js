@@ -1821,15 +1821,27 @@ class Web {
         }
         const runtime = factory.createHostedRuntime(this.adapter, {
             deviceEmsPlan: async (input) => {
+                const config = (0, eosDeviceEmsService_1.projectDeviceEmsConfig)(input.config);
                 const targets = await (0, eosDeviceEmsService_1.resolveDeviceEmsTargets)({
                     owner: this.adapter,
-                    references: (0, eosDeviceEmsPlan_1.getDeviceEmsReferences)(input.config),
+                    references: (0, eosDeviceEmsPlan_1.getDeviceEmsReferences)(config),
                     devices: input.devices,
                     canRun: () => this.adapter.eosOwnership?.canWrite() === true,
                 });
-                return (0, eosDeviceEmsPlan_1.planDeviceEms)({ ...input, ...targets, limits: this.adapter.eosLicenseService?.statusView().limits || {} });
+                return (0, eosDeviceEmsPlan_1.planDeviceEms)({
+                    ...input,
+                    config,
+                    ...targets,
+                    limits: this.adapter.eosLicenseService?.statusView().limits || {},
+                });
             },
             deviceEmsConfigChanged: () => moduleHost.requestDeviceEms(),
+            resolveDeviceProfileReferences: async (config) => (0, eosDeviceEmsService_1.resolveDeviceEmsTargets)({
+                owner: this.adapter,
+                references: (0, eosDeviceEmsPlan_1.getDeviceEmsReferences)((0, eosDeviceEmsService_1.projectDeviceEmsConfig)(config)),
+                devices: [],
+                canRun: () => !this.closed && this.adapter.eosOwnership?.canWrite() === true,
+            }),
             resolveAccess: (req) => this.unified.status(req),
             getLicense: () => this.adapter.eosLicenseService?.statusView(),
             // Read-only readiness evidence: a blocked handover is not an endlessly
@@ -1854,7 +1866,11 @@ class Web {
         this.adapter.eosHostedRuntime = runtime;
         moduleHost.bindDeviceEms(devices => runtime.reconcileDeviceEms
             ? runtime.reconcileDeviceEms(devices)
-            : Promise.reject(new Error('EOS_EMS_RUNTIME_PENDING')));
+            : Promise.reject(new Error('EOS_EMS_RUNTIME_PENDING')), change => runtime.reserveDeviceProfileChange
+            ? runtime.reserveDeviceProfileChange(change)
+            : Promise.reject(Object.assign(new Error('EOS_DEVICES_PROFILE_CHECK_UNAVAILABLE'), {
+                code: 'EOS_DEVICES_PROFILE_CHECK_UNAVAILABLE',
+            })));
         moduleHost.bindBridge(message => runtime.onHostedEebusMessage
             ? runtime.onHostedEebusMessage(message)
             : Promise.reject(new Error('EOS_MODULE_BRIDGE_UNAVAILABLE')));

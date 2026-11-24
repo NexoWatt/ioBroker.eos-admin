@@ -13,5 +13,5 @@
     "skipLibCheck": true,
     "types": ["node"]
   },
-  "files": ["lib/deviceAliasSemantics.js"]
+  "files": ["lib/deviceAliasSemantics.js", "lib/deviceAliasFreshness.js"]
 }

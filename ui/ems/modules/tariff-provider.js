@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/modules/tariff-provider.ts
- * Quell-Hash: sha256:871a843c9c2da28fce4f0d53a843062d27a0189302f90787442e56987c55add8
+ * Quell-Hash: sha256:217202ce9ba4fde752c10636edc4f6020ecb9af79ce98d86fedde79c0738ce64
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -244,6 +244,10 @@ class TariffProviderModule extends BaseModule {
             country: String(cfg.country || this.adapter?.config?.countryProfile?.country || 'DE').toUpperCase() === 'NL' ? 'NL' : 'DE',
             timeZone: String(cfg.timeZone || (String(cfg.country || '').toUpperCase() === 'NL' ? 'Europe/Amsterdam' : 'Europe/Berlin')),
             ...cfg,
+            // Tibber liefert die angeforderte Viertelstundenreihe auch bei einer
+            // gespeicherten älteren 60-Minuten-Auswahl. Die Einstellung anderer
+            // Provider und der persistierte Kundenstand bleiben unverändert.
+            ...(this._providerSourceId(cfg) === 'tibber' ? { resolutionMinutes: 15 } : {}),
             // Nach ...cfg begrenzen: eine gespeicherte Alt-Konfiguration darf
             // die 5-s-Gesamtfrist einschließlich OAuth nicht überschreiben.
             timeoutMs: Math.max(1, Math.min(5000, Math.round(Number(cfg.timeoutMs) || 5000))),
@@ -295,9 +299,10 @@ class TariffProviderModule extends BaseModule {
             const split = splitTodayTomorrow(this._intervals, nowMs, cfg && cfg.timeZone);
             const hour = this._localHour(nowMs, cfg && cfg.timeZone);
             // Tibber recommends caching today/tomorrow and avoiding frequent
-            // price requests. Once tomorrow is available, four refreshes per day
-            // are sufficient. During the expected publication window we retry
-            // hourly until tomorrow prices are present.
+            // price requests. Once tomorrow is available, prefer a six-hour
+            // cadence; _scheduleNextFetch shortens it when the customer's
+            // freshness deadline requires an earlier refresh. During the
+            // expected publication window retry hourly until tomorrow exists.
             if (split.tomorrow.length) return Math.max(requested, 360);
             if (hour >= 12 && hour <= 20) return Math.max(requested, 60);
             return Math.max(requested, 180);
@@ -314,8 +319,25 @@ class TariffProviderModule extends BaseModule {
         const provider = this._providerSourceId(cfg);
         const dayKey = Math.floor(Number(nowMs) / (24 * 60 * 60 * 1000));
         const jitter = this._stableJitterFactor(`${this.adapter && this.adapter.namespace || 'nexowatt-ui'}:${provider}:${dayKey}:${this._consecutiveErrors}`);
-        this._effectiveRefreshMinutes = Math.round(effectiveMinutes * 100) / 100;
-        this._nextFetchMs = Math.round(Number(nowMs) + effectiveMinutes * 60 * 1000 * jitter);
+        const now = Number(nowMs);
+        let delayMs = effectiveMinutes * 60 * 1000 * jitter;
+        let boundedMinutes = effectiveMinutes;
+        // A provider's economical fetch cadence must never schedule a known
+        // successful curve beyond the customer's existing freshness deadline.
+        // Leave time for the bounded request and another attempt; apply this
+        // ceiling after jitter, without extending freshness or relabeling data.
+        if (this._lastSuccessMs > 0) {
+            const freshnessMs = Math.max(30, Math.min(4320, Number(cfg?.maxStaleMinutes) || 180)) * 60 * 1000;
+            const remainingMs = this._lastSuccessMs + freshnessMs - now;
+            const reserveMs = Math.max(10000, Math.min(300000, freshnessMs * 0.1));
+            if (remainingMs > 0) {
+                const boundedDelay = Math.min(delayMs, Math.max(60000, remainingMs - reserveMs));
+                if (boundedDelay < delayMs) boundedMinutes = boundedDelay / 60000;
+                delayMs = boundedDelay;
+            }
+        }
+        this._effectiveRefreshMinutes = Math.round(boundedMinutes * 100) / 100;
+        this._nextFetchMs = Math.round(now + delayMs);
         return this._nextFetchMs;
     }
 

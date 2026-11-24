@@ -36,7 +36,7 @@ import type { OwnershipGuard } from './eosUnifiedOwnership';
 import type { EosHostedRuntime } from './eosUnifiedRuntime';
 import { EosModuleHost } from './eosModuleHost';
 import { getDeviceEmsReferences, planDeviceEms } from './eosDeviceEmsPlan';
-import { resolveDeviceEmsTargets, type DeviceEmsInventory } from './eosDeviceEmsService';
+import { resolveDeviceEmsTargets, projectDeviceEmsConfig, type DeviceEmsInventory } from './eosDeviceEmsService';
 import { registerEosModuleRoutes } from './eosModuleHttp';
 import { createEosDiscovery, type EosDiscovery } from './eosDiscovery';
 import { EosTlsManager } from './eosTlsManager';
@@ -2064,16 +2064,33 @@ export default class Web {
             throw new Error('EOS_UI_FACTORY_MISSING');
         }
         const runtime = factory.createHostedRuntime(this.adapter, {
-            deviceEmsPlan: async (input: { config: unknown; devices: DeviceEmsInventory[] }) => {
+            deviceEmsPlan: async (input: {
+                config: unknown;
+                devices: DeviceEmsInventory[];
+                allowedApps?: string[];
+            }) => {
+                const config = projectDeviceEmsConfig(input.config);
                 const targets = await resolveDeviceEmsTargets({
                     owner: this.adapter,
-                    references: getDeviceEmsReferences(input.config),
+                    references: getDeviceEmsReferences(config),
                     devices: input.devices,
                     canRun: () => this.adapter.eosOwnership?.canWrite() === true,
                 });
-                return planDeviceEms({ ...input, ...targets, limits: this.adapter.eosLicenseService?.statusView().limits || {} });
+                return planDeviceEms({
+                    ...input,
+                    config,
+                    ...targets,
+                    limits: this.adapter.eosLicenseService?.statusView().limits || {},
+                });
             },
             deviceEmsConfigChanged: () => moduleHost.requestDeviceEms(),
+            resolveDeviceProfileReferences: async (config: unknown) =>
+                resolveDeviceEmsTargets({
+                    owner: this.adapter,
+                    references: getDeviceEmsReferences(projectDeviceEmsConfig(config)),
+                    devices: [],
+                    canRun: () => !this.closed && this.adapter.eosOwnership?.canWrite() === true,
+                }),
             resolveAccess: (req: Request) => this.unified.status(req),
             getLicense: () => this.adapter.eosLicenseService?.statusView(),
             // Read-only readiness evidence: a blocked handover is not an endlessly
@@ -2097,10 +2114,19 @@ export default class Web {
                 moduleHost.receiveBridge(message),
         });
         this.adapter.eosHostedRuntime = runtime;
-        moduleHost.bindDeviceEms(devices =>
-            runtime.reconcileDeviceEms
-                ? runtime.reconcileDeviceEms(devices)
-                : Promise.reject(new Error('EOS_EMS_RUNTIME_PENDING')),
+        moduleHost.bindDeviceEms(
+            devices =>
+                runtime.reconcileDeviceEms
+                    ? runtime.reconcileDeviceEms(devices)
+                    : Promise.reject(new Error('EOS_EMS_RUNTIME_PENDING')),
+            change =>
+                runtime.reserveDeviceProfileChange
+                    ? runtime.reserveDeviceProfileChange(change)
+                    : Promise.reject(
+                          Object.assign(new Error('EOS_DEVICES_PROFILE_CHECK_UNAVAILABLE'), {
+                              code: 'EOS_DEVICES_PROFILE_CHECK_UNAVAILABLE',
+                          }),
+                      ),
         );
         moduleHost.bindBridge(message =>
             runtime.onHostedEebusMessage

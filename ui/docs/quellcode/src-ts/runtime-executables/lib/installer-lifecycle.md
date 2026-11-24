@@ -19,6 +19,7 @@ Statisch gefundene Imports/require-Aufrufe. Ein Import belegt eine Code-Verknüp
 
 **Direkt importiert von:**
 
+- [src-ts/runtime-executables/ems/engine.ts](../../../../../src-ts/runtime-executables/ems/engine.ts)
 - [src-ts/runtime-executables/main.ts](../../../../../src-ts/runtime-executables/main.ts)
 
 ## Funktionen und Methoden
@@ -32,3 +33,9 @@ Parameter sind die Namen aus der Signatur, keine geratenen Datenverträge. Die A
 | [`installerRevision`](../../../../../src-ts/runtime-executables/lib/installer-lifecycle.ts#L35) | patch | JSON.stringify, canonical, createHmac, record |
 | [`assertInstallerRevision`](../../../../../src-ts/runtime-executables/lib/installer-lifecycle.ts#L40) | expected, patch | Object.keys, createPublicHttpError, installerRevision, record |
 | [`provisionInstallerObjects`](../../../../../src-ts/runtime-executables/lib/installer-lifecycle.ts#L51) | options | createPublicHttpError, options.canWrite, step |
+| [`awaitEmsTransition`](../../../../../src-ts/runtime-executables/lib/installer-lifecycle.ts#L68) | operation, timeoutMs | Math.max, Math.min, Math.round, Number.isFinite, Promise.race, clearTimeout |
+| [`assertDeviceAppActivations`](../../../../../src-ts/runtime-executables/lib/installer-lifecycle.ts#L79) | current, planned, allowed | Object.entries, Reflect.get, allowed, createPublicHttpError, record |
+| [`numericMeasurement`](../../../../../src-ts/runtime-executables/lib/installer-lifecycle.ts#L94) | value | Number, Number.isFinite, value.trim |
+| [`activeDeviceProfileReferences`](../../../../../src-ts/runtime-executables/lib/installer-lifecycle.ts#L104) | value | Array.isArray, Reflect.get, active, controllerMeasurementKeys.push, read.add, record, walk |
+| [`active`](../../../../../src-ts/runtime-executables/lib/installer-lifecycle.ts#L107) | id, flag | Object.keys, Reflect.get, record |
+| [`walk`](../../../../../src-ts/runtime-executables/lib/installer-lifecycle.ts#L116) | item, depth | Array.isArray, Object.entries, record, walk, writeKey.test |

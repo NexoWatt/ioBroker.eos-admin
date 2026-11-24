@@ -1,0 +1,14 @@
+{
+  "name": "legacy-core-limits-phase2",
+  "command": [
+    "npm",
+    "run",
+    "test:core-limits-typed-runtime-phase2"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin/ui",
+  "startedAt": "2026-11-24T18:14:15.225296+00:00",
+  "durationSeconds": 0.501,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-919/legacy-core-limits-phase2.log",
+  "sha256": "7fd9757b9cece5721080b078bfcf86560dcf48592fecc6502ff88aff0a6ba69a"
+}

@@ -1,0 +1,14 @@
+{
+  "name": "legacy-storage-topology-loader-current",
+  "command": [
+    "node",
+    "/workspace/scratch/741f792566ea/setup-919/legacy-test-loader.cjs",
+    "verify-storage-topology-authority.js"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin/ui",
+  "startedAt": "2026-11-24T18:14:03.671917+00:00",
+  "durationSeconds": 0.397,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-919/legacy-storage-topology-loader-current.log",
+  "sha256": "c08d354612e434da47a97a3a26d22d896c141a875a0512eed2f9c91f62073d6a"
+}

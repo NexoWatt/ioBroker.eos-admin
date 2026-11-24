@@ -26,21 +26,21 @@ Parameter sind die Namen aus der Signatur, keine geratenen Datenverträge. Die A
 
 | Funktion / Methode | Parameter | Direkt sichtbare Aufrufe (Auszug) |
 | --- | --- | --- |
-| [`el`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L69) | id | document.getElementById |
-| [`stateVal`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L76) | key | Object.prototype.hasOwnProperty.call |
-| [`num`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L86) | v | Number, Number.isFinite |
-| [`formatPower`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L96) | v | Math.abs, Math.round, num |
-| [`parseJsonSafe`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L111) | raw, fallback | Array.isArray, JSON.parse, String |
-| [`statusList`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L126) | – | Array.isArray, parseJsonSafe, stateVal |
-| [`setLive`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L136) | ok | dot.classList.toggle, el |
-| [`setMsg`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L146) | text | el |
-| [`statusText`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L156) | row | Array.isArray, Math.abs, num, reasons.some |
-| [`cell`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L183) | rowEl, text, label | String, d.setAttribute, document.createElement, rowEl.appendChild |
-| [`renderRows`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L196) | list | Array.isArray, document.createElement, el, list.forEach, setMsg, wrap.appendChild |
-| [`renderSummary`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L228) | – | Math.abs, Math.max, Number, String, el, formatPower, num, stateVal |
-| [`render`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L261) | – | renderRows, renderSummary, statusList |
-| [`loadConfig`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L271) | – | Array.isArray, Math.max, Math.round, Number, el, evcsMenu.classList.toggle, evcsTab.classList.toggle, fetch, setMsg, settingsConfig.evcsList.filter, sfMenu.classList.toggle, sfTab.classList.toggle, shMenu.classList.toggle, shTab.classList.toggle (weitere in der Quelle) |
-| [`loadState`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L304) | – | fetch, render, setLive, setMsg |
-| [`startEvents`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L322) | – | window.NW_RUNTIME?.url, window.setInterval |
-| [`bind`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L351) | – | el, reload.addEventListener |
-| [`ready`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L361) | fn | document.addEventListener, fn |
+| [`el`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L71) | id | document.getElementById |
+| [`stateVal`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L78) | key | Object.prototype.hasOwnProperty.call |
+| [`num`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L88) | v | Number, Number.isFinite |
+| [`formatPower`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L99) | v | Math.abs, Math.round, num |
+| [`parseJsonSafe`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L114) | raw, fallback | Array.isArray, JSON.parse, String |
+| [`statusList`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L129) | – | Array.isArray, parseJsonSafe, stateVal |
+| [`setLive`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L139) | ok | dot.classList.toggle, el, window.NWStorageFarmSummary.render |
+| [`setMsg`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L151) | text | el |
+| [`statusText`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L161) | row | Array.isArray, Math.abs, num, reasons.some |
+| [`cell`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L188) | rowEl, text, label | String, d.setAttribute, document.createElement, rowEl.appendChild |
+| [`renderRows`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L201) | list | Array.isArray, document.createElement, el, list.forEach, setMsg, wrap.appendChild |
+| [`renderSummary`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L233) | – | String, el, stateVal, window.NWStorageFarmSummary.render |
+| [`render`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L246) | – | renderRows, renderSummary, statusList |
+| [`loadConfig`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L256) | – | Array.isArray, Math.max, Math.round, Number, el, evcsMenu.classList.toggle, evcsTab.classList.toggle, fetch, setMsg, settingsConfig.evcsList.filter, sfMenu.classList.toggle, sfTab.classList.toggle, shMenu.classList.toggle, shTab.classList.toggle (weitere in der Quelle) |
+| [`loadState`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L289) | – | fetch, render, setLive, setMsg |
+| [`startEvents`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L307) | – | window.NW_RUNTIME?.url, window.setInterval |
+| [`bind`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L336) | – | el, reload.addEventListener |
+| [`ready`](../../../../../src-ts/runtime-executables/www/storagefarm.ts#L346) | fn | document.addEventListener, fn |

@@ -1,0 +1,26 @@
+✖ real UDP polling resumes after actual temporary lease expiry without a misleading active but stopped module (18907.368148ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 19179.841184
+
+✖ failing tests:
+
+test at test/eos-device-ems-udp-lifecycle.test.cjs:107:1
+✖ real UDP polling resumes after actual temporary lease expiry without a misleading active but stopped module (18907.368148ms)
+  AssertionError [ERR_ASSERTION]: {"status":{"id":"devices","enabled":true,"active":true,"reason":"RUNNING","blockers":[],"details":{"state":"stopped","sourceVersion":"0.5.176","configured":1,"running":0,"connected":false,"lastError":""},"namespace":"eos-admin.0.devices"},"logs":[{"level":"debug","message":"[speedwire] Listening (unicast) on 0.0.0.0:33931"},{"level":"warn","message":"[meter1] Speedwire: no telegram received yet (group 127.0.0.1:33931, filter 127.0.0.1). Joined interfaces: n/a. Hint: set \"Interface address\" to the ioBroker host IPv4 in the SMA LAN (especially on Docker/LXC/VM or multi-NIC hosts) and ensure UDP multicast 239.12.255.254:9522 is not blocked. | Hint: Speedwire uses UDP multicast (typically 239.12.255.254:9522). Ensure the ioBroker host is in the same L2 network, multicast is not blocked, and your switch/router supports IGMP (v2). In virtualized setups (Docker/LXC/VM), ensure multicast traffic reaches the container/VM (bridge/host-networking)."},{"level":"warn","message":"[meter1] EOS_DEVICES_NOT_AUTHORIZED"}],"started":[false]}
+      at waitUntil (/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin/test/eos-device-ems-udp-lifecycle.test.cjs:17:12)
+      at async TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin/test/eos-device-ems-udp-lifecycle.test.cjs:119:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: undefined,
+    operator: 'fail',
+    diff: 'simple'
+  }

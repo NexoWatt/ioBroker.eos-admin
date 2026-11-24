@@ -49,7 +49,7 @@ test('Devices EMS form: wallbox default, meter/PV targets, storage choice, durab
                 if (url.pathname.endsWith('/command')) { res.end(JSON.stringify({ result: [] })); return; }
                 res.end(JSON.stringify({ config, csrfToken: 'fixture-csrf', configurationReady: true,
                     status: { active: true, reason: 'RUNNING' }, emsCommissioning: { state: ready ? 'ready' : 'pending',
-                        statuses: config.devices.map(d => ({ deviceId: d.id, status: ready ? 'mapped' : 'pending', code: ready ? 'COMMISSIONING_REQUIRED' : 'ALIASES_PENDING' })) } })); return;
+                        statuses: config.devices.map(d => ({ deviceId: d.id, status: ready ? 'mapped' : 'pending', code: ready ? 'ACTIVATION_APPLIED' : 'ALIASES_PENDING', activationApplied: ready, activationRequestId: d.ems?.activation?.requestId })) } })); return;
             }
             if (url.pathname === '/eos-session-idle.js') { res.setHeader('Content-Type', 'text/javascript'); res.end('/* idle lifecycle separately tested */'); return; }
             const asset = assets[url.pathname];
@@ -80,6 +80,8 @@ test('Devices EMS form: wallbox default, meter/PV targets, storage choice, durab
     await edit('evcs1');
     assert.equal(await page.$eval('#dev_ems_mode', e => e.value), 'auto');
     assert.match(await page.$eval('#dev_ems_help', e => e.textContent), /automatisch unter Ladepunkte/);
+    await page.select('#dev_ems_chargerType', 'ac'); await page.select('#dev_ems_phases', '3');
+    await page.type('#dev_ems_minCurrentA', '6'); await page.type('#dev_ems_maxCurrentA', '16');
     await keepDraft();
     await edit('meter1');
     await page.select('#dev_ems_mode', 'generationMeter');
@@ -89,19 +91,21 @@ test('Devices EMS form: wallbox default, meter/PV targets, storage choice, durab
     await keepDraft();
     await edit('pv1'); await page.select('#dev_ems_mode', 'pvInverter'); await page.select('#dev_ems_slot', '2'); await keepDraft();
     await edit('storage1'); await page.select('#dev_ems_mode', 'storageFarm'); await page.select('#dev_ems_scope', 'M0');
+    await page.select('#dev_ems_coupling', 'dc'); await page.type('#dev_ems_maxChargeW', '10000'); await page.type('#dev_ems_maxDischargeW', '10000'); await page.type('#dev_ems_capacityKWh', '20');
     if (screenshots) { await fs.mkdir(screenshots, { recursive: true }); await page.screenshot({ path: path.join(screenshots, 'devices-ems-desktop.png') }); }
     await keepDraft();
     await page.click('#eosModuleSave');
     await page.waitForFunction(() => document.getElementById('eosEmsStatus').textContent.includes('4 Gerät(e) zugeordnet') && !document.getElementById('eosDeviceEditor').inert);
     assert.equal(received.filter(r => r.method === 'PUT').length, 1);
     const byId = Object.fromEntries(config.devices.map(d => [d.id, d]));
-    assert.deepEqual(byId.evcs1.ems, { mode: 'auto' });
-    assert.deepEqual(byId.meter1.ems, { mode: 'generationMeter', flowSlot: 1 });
-    assert.deepEqual(byId.pv1.ems, { mode: 'pvInverter', flowSlot: 2 });
-    assert.deepEqual(byId.storage1.ems, { mode: 'storageFarm', scope: 'M0' });
+    assert.equal(byId.evcs1.ems.mode, 'auto'); assert.equal(byId.evcs1.ems.activation.limits.maxCurrentA, 16);
+    assert.equal(byId.meter1.ems.mode, 'generationMeter'); assert.equal(byId.meter1.ems.flowSlot, 1);
+    assert.equal(byId.pv1.ems.mode, 'pvInverter'); assert.equal(byId.pv1.ems.flowSlot, 2);
+    assert.equal(byId.storage1.ems.mode, 'storageFarm'); assert.equal(byId.storage1.ems.scope, 'M0'); assert.equal(byId.storage1.ems.activation.limits.capacityKWh, 20);
+    for (const device of config.devices) { assert.equal(device.ems.activation.requested, true); assert.match(device.ems.activation.requestId, /^[0-9a-f-]{36}$/); }
     assert.deepEqual(config.futureModuleSetting, { retain: true });
     for (const d of config.devices) { assert.equal(d.futureSetting, 'keep'); assert.equal(d.connection.password, '__EOS_SECRET_UNCHANGED__'); assert.equal(d.connection.customRetained, 9); }
-    assert.match(await page.$eval('[data-eos-ems-id="evcs1"]', e => e.textContent), /Betriebsfreigabe/);
+    assert.match(await page.$eval('[data-eos-ems-id="evcs1"]', e => e.textContent), /EMS eingerichtet/);
     assert.equal(await page.$eval('a[href*="tab=evcs"]', e => e.target), '');
     await edit('meter1');
     await page.$eval('#dev_name', e => { e.value = 'Unsaved customer name'; e.dispatchEvent(new Event('input', { bubbles: true })); });

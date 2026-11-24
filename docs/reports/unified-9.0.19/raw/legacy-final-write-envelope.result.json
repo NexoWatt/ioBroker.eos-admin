@@ -1,0 +1,14 @@
+{
+  "name": "legacy-final-write-envelope",
+  "command": [
+    "npm",
+    "run",
+    "test:safety-envelope-final-write"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin/ui",
+  "startedAt": "2026-11-24T18:14:15.221324+00:00",
+  "durationSeconds": 0.349,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-919/legacy-final-write-envelope.log",
+  "sha256": "c212f4d5f8a8d73dd493c326f33da0cda2282b3f1ebcda0cff73ae6bee7e96f6"
+}

@@ -513,8 +513,8 @@ code {
 .eos-host-links { margin-bottom: 12px; }
 .eos-host-actions label { color: #e6edf3; padding-right: 12px; }
 .eos-host-actions .btn-flat { color: #bce9dc; border: 1px solid #45685f; }
-#eosModuleStatus { margin: 10px 0 0; }
-#eosModuleStatus[data-error="true"] { color: #ffaaa1; }
+#eosModuleStatus, #eosModuleRuntimeStatus { margin: 10px 0 0; }
+#eosModuleStatus[data-error="true"], #eosModuleRuntimeStatus[data-error="true"] { color: #ffaaa1; }
 .eos-host-import { margin-top: 12px; }
 .eos-host-import summary { cursor: pointer; color: #a3d5c6; }
 .eos-host-import input { max-width: 280px; }
@@ -556,8 +556,8 @@ body.eos-module-page {
 .m .eos-host-actions input[type="checkbox"] { appearance: auto; -webkit-appearance: checkbox; opacity: 1; pointer-events: auto; position: static; width: 20px; height: 20px; margin: 0; }
 .m .eos-host-actions input[type="checkbox"] + span { padding-left: 0; line-height: 1.5; height: auto; }
 .m .eos-host-actions input[type="checkbox"] + span::before, .m .eos-host-actions input[type="checkbox"] + span::after { display: none; }
-.m #eosModuleStatus { margin: 14px 0 0; color: #b7d9cd; font-size: 14px; }
-.m #eosModuleStatus[data-error="true"] { color: #ffadb8; }
+.m #eosModuleStatus, .m #eosModuleRuntimeStatus { margin: 14px 0 0; color: #b7d9cd; font-size: 14px; }
+.m #eosModuleStatus[data-error="true"], .m #eosModuleRuntimeStatus[data-error="true"] { color: #ffadb8; }
 .m #eosModuleStatus a { display: inline-block; margin-left: 8px; text-decoration: underline; color: #baffdf; }
 .m .eos-host-import { border-top: 1px solid var(--eos-border); margin-top: 16px; padding-top: 14px; }
 .m .eos-host-import p { color: var(--eos-muted); font-size: 14px; max-width: 1000px; }
@@ -662,3 +662,16 @@ body.eos-module-page {
 .nexo-ems-cell [data-state="mapped"], #eosEmsStatus[data-state="mapped"] { color: #6fe4bc; }
 .nexo-ems-cell [data-state="conflict"], #eosEmsStatus[data-state="conflict"] { color: #ffb0a5; }
 .nexo-ems-cell [data-state="pending"] { color: #f0d594; }
+
+.nexo-ems-config [hidden] { display: none !important; }
+.nexo-ems-check { display: flex; align-items: center; gap: 10px; margin: 20px 0 10px; }
+.nexo-ems-fields input { box-sizing: border-box; width: 100%; }
+.nexo-ems-step { font-size: .8rem; color: #65dfba; letter-spacing: .04em; font-weight: 700; margin: 20px 0 12px; }
+.nexo-ems-notes { margin-top: 8px; color: #b0c5d1; }
+.nexo-ems-notes[hidden] { display: none; }
+.nexo-ems-notes summary { cursor: pointer; font-size: .8rem; }
+
+.nexo-profile-capabilities { border-bottom: 1px solid var(--eos-border); padding-bottom: 12px; }
+.nexo-capability-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.nexo-capability-chips span { border: 1px solid #24585c; border-radius: 999px; padding: 4px 9px; color: #a7ead9; background: #0a2b31; font-size: .77rem; }
+.nexo-capability-hint { font-size: .8rem; margin-bottom: 0; }

@@ -1,0 +1,14 @@
+{
+  "name": "legacy-charging-mode-recovery",
+  "command": [
+    "npm",
+    "run",
+    "test:charging-mode-recovery"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin/ui",
+  "startedAt": "2026-11-24T18:11:44.728087+00:00",
+  "durationSeconds": 0.862,
+  "exitCode": 1,
+  "log": "/workspace/scratch/741f792566ea/setup-919/legacy-charging-mode-recovery.log",
+  "sha256": "d77be97499988f7059c614a8e540f99c302535798ca2f11e36e06946b8976e10"
+}

@@ -1,0 +1,2 @@
+{"original":"/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin/ui/scripts/verify-rc78-import-only-grid-budget.cjs","sha256":"127df4069adf93207457f29895cd2806d43f1a6323abe6d7f41c736579133c1b","adaptations":["Replace only obsolete positive offline-cache-name assertion with current stricter worker retirement contract: remove old caches, unregister and no fetch interception. All import/grid-budget/safety assertions unchanged."]}
+[rc78-import-only-grid-budget] OK: signed NVP, central budget, EVCS cap and final writer treat the connection limit as import-only.

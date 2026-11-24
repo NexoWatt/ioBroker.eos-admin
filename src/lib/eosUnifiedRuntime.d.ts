@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
 import type { DeviceEmsInventory } from './eosDeviceEmsService';
+import type { DeviceProfileChanges } from './eosModuleHost';
 export interface EosHostedRuntime {
     /** Build the request router only; device/EMS startup is explicitly separate. */
     start(): Promise<void>;
@@ -12,4 +13,5 @@ export interface EosHostedRuntime {
     onMessage?(message: ioBroker.Message): boolean | void;
     onHostedEebusMessage?(message: { from: string; command: string; message: unknown }): Promise<unknown>;
     reconcileDeviceEms?(devices: DeviceEmsInventory[]): Promise<unknown>;
+    reserveDeviceProfileChange?(change: DeviceProfileChanges): Promise<() => void>;
 }

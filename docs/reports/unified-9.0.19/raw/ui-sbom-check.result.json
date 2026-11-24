@@ -1,0 +1,14 @@
+{
+  "name": "ui-sbom-check",
+  "command": [
+    "npm",
+    "run",
+    "sbom:check"
+  ],
+  "cwd": "ui",
+  "startedAt": "2026-11-24T18:46:48.119548+00:00",
+  "durationSeconds": 0.248,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-919/ui-sbom-check.log",
+  "sha256": "001fd3fd16d8a6922bcf611ae8ca74f71c11a7ea2b486fc5fd43d96d8fbe9df7"
+}

@@ -1,0 +1,14 @@
+{
+  "name": "legacy-farm-dispatch-loader-current",
+  "command": [
+    "node",
+    "/workspace/scratch/741f792566ea/setup-919/legacy-test-loader.cjs",
+    "verify-storage-farm-dispatch-recovery.js"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin/ui",
+  "startedAt": "2026-11-24T18:14:03.659824+00:00",
+  "durationSeconds": 0.375,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-919/legacy-farm-dispatch-loader-current.log",
+  "sha256": "4faee525a8566e2e0ec0a3b3845ee50704243ee166688e807e677512055c8ace"
+}

@@ -58,6 +58,7 @@
 'use strict';
 
 const { BaseModule } = require('./base');
+const { tariffPriceUnit, normalizeTariffPrice } = require('../../lib/tariff-price');
 
 /**
  * Speicher-Netzladen ist strikt an einen frischen, aktiven und als „günstig“
@@ -512,22 +513,28 @@ class TarifVisModule extends BaseModule {
 	 * Zusammenhang: Gehört zu EMS-Modul (Regelungs-, Diagnose- oder Beratungslogik innerhalb der EMS-Engine) und wird von benachbarten UI-/API-/EMS-Bausteinen genutzt.
 	 * Wartung/TypeScript: Änderungen an Signatur oder Rückgabe können abhängige Aufrufer beeinflussen; Aufrufstellen mitprüfen. Beim TS-Umbau Parameter, Rückgabe und genutzte State-/Config-Objekte explizit typisieren.
 	 */
-	_normalizePriceEurPerKwh(v, fallback = null) {
-		// Normalizes either €/kWh or ct/kWh into €/kWh.
-		// Heuristic: values with |v| > 2 are interpreted as ct/kWh (common sources: 31.5, 40, ...).
-		let n = (typeof v === 'number') ? v : this._num(v, fallback);
-		if (!Number.isFinite(n)) return fallback;
+	_normalizePriceEurPerKwh(v, fallback = null, unit = 'auto') {
+        // Preserve the established locale parser, but never interpret status values as money.
+        if (typeof v !== 'number' && typeof v !== 'string') return fallback;
+        const parsed = this._num(v, null);
+        const value = normalizeTariffPrice(parsed, tariffPriceUnit(unit));
+        return value === null ? fallback : value;
+    }
 
-		// Auto-convert ct/kWh -> €/kWh
-		const abs = Math.abs(n);
-		if (abs > 2 && abs <= 500) {
-			n = n / 100;
-		}
-
-		// Plausibility (allow small negative prices)
-		if (!Number.isFinite(n) || n < -2 || n > 2) return fallback;
-		return n;
-	}
+    /** Preis-Einheit aus dem tatsächlichen Mapping: eigene Provider-DPs sind EUR/kWh.
+     * Manuelle Einheiten bleiben erhalten; nicht typisierte Legacy-Quellen nutzen Auto. */
+    _priceInputUnit(key, field, providerSuffix) {
+        const entry = this.dp && typeof this.dp.getEntry === 'function' ? this.dp.getEntry(key) : null;
+        if (entry?.objectId === `${this.adapter.namespace}.tariffProvider.${providerSuffix}`) return 'EUR/kWh';
+        const units = this.adapter?.config?.units || {};
+        const configured = field === 'priceCurrent' ? units.priceCurrent : field === 'priceAverage' ? units.priceAverage
+            : field === 'priceTodayJson' ? units.priceTodayJson : field === 'priceTomorrowJson' ? units.priceTomorrowJson : '';
+        for (const candidate of [configured, entry?.unitIn, entry?.unit]) {
+            const unit = tariffPriceUnit(candidate);
+            if (unit !== 'auto') return unit;
+        }
+        return 'auto';
+    }
 
     /**
      * Code-Teil: Methode `_parsePriceCurve`
@@ -541,7 +548,7 @@ class TarifVisModule extends BaseModule {
      * Zusammenhang: Teil von EMS-Modul: Regelung, Diagnose oder Beratung; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
      * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
      */
-    _parsePriceCurve(raw) {
+    _parsePriceCurve(raw, unit = 'auto') {
         // Accepts either a JSON string or already-parsed array/object.
         // Expected (tibber-like) schema: [{ total: 0.318, startsAt: "...", endsAt: "..." }, ...]
         if (raw === null || raw === undefined) return [];
@@ -613,7 +620,7 @@ class TarifVisModule extends BaseModule {
                         continue;
                     }
                     const raw = (typeof it === 'number') ? it : Number(String(it).trim());
-                    const priceEurKwh = this._normalizePriceEurPerKwh(raw, null);
+                    const priceEurKwh = this._normalizePriceEurPerKwh(raw, null, unit);
                     if (!Number.isFinite(priceEurKwh)) {
                         idx++;
                         continue;
@@ -646,7 +653,12 @@ class TarifVisModule extends BaseModule {
                 else if (it.price.value !== undefined) pRaw = it.price.value;
             }
 
-            const price = this._normalizePriceEurPerKwh(pRaw, null);
+            // The normalized provider/Tibber contract is already EUR/kWh. Explicit
+            // units still take precedence for manually mapped structured curves.
+            const rowUnit = tariffPriceUnit(it.unit);
+            const curveUnit = unit !== 'auto' ? unit : rowUnit !== 'auto' ? rowUnit
+                : (typeof it.total === 'number' && typeof it.startsAt === 'string' && it.currency === 'EUR') ? 'EUR/kWh' : 'auto';
+            const price = this._normalizePriceEurPerKwh(pRaw, null, curveUnit);
             if (typeof price !== 'number' || !Number.isFinite(price)) continue;
 
             // Time field heuristics
@@ -1082,7 +1094,7 @@ class TarifVisModule extends BaseModule {
             const currentPriceDirectFresh = currentPriceAgeMs === null || currentPriceAgeMs === undefined || currentPriceAgeMs <= currentPriceMaxAgeMs;
 			if (this.dp && typeof this.dp.getEntry === 'function' && this.dp.getEntry('tarif.preisAktuellEurProKwh')) {
 				const raw = this.dp.getNumberFresh('tarif.preisAktuellEurProKwh', currentPriceMaxAgeMs, null);
-				preisAktuell = this._normalizePriceEurPerKwh(raw, null);
+				preisAktuell = this._normalizePriceEurPerKwh(raw, null, this._priceInputUnit('tarif.preisAktuellEurProKwh', 'priceCurrent', 'currentPriceEurPerKwh'));
                 if (typeof preisAktuell === 'number' && Number.isFinite(preisAktuell)) preisAktuellSource = 'provider-current';
 			}
 
@@ -1092,7 +1104,7 @@ class TarifVisModule extends BaseModule {
                 : null;
 			if (this.dp && typeof this.dp.getEntry === 'function' && this.dp.getEntry('tarif.preisDurchschnittEurProKwh')) {
 				const raw = this.dp.getNumberFresh('tarif.preisDurchschnittEurProKwh', averagePriceMaxAgeMs, null);
-				preisDurchschnitt = this._normalizePriceEurPerKwh(raw, null);
+				preisDurchschnitt = this._normalizePriceEurPerKwh(raw, null, this._priceInputUnit('tarif.preisDurchschnittEurProKwh', 'priceAverage', 'averagePriceEurPerKwh'));
 			}
 
 			const preisVisOk = (typeof preisGrenzeVis === 'number' && Number.isFinite(preisGrenzeVis));
@@ -1148,8 +1160,8 @@ class TarifVisModule extends BaseModule {
                     ? this.dp.getRaw('tarif.pricesTomorrowJson')
                     : null;
 
-                const todayArr = this._parsePriceCurve(rawToday);
-                const tomorrowArr = this._parsePriceCurve(rawTomorrow);
+                const todayArr = this._parsePriceCurve(rawToday, this._priceInputUnit('tarif.pricesTodayJson', 'priceTodayJson', 'pricesTodayJson'));
+                const tomorrowArr = this._parsePriceCurve(rawTomorrow, this._priceInputUnit('tarif.pricesTomorrowJson', 'priceTomorrowJson', 'pricesTomorrowJson'));
 
                 const all = [...todayArr, ...tomorrowArr]
                     .filter(x => x && Number.isFinite(x.startMs) && Number.isFinite(x.endMs) && Number.isFinite(x.priceEurKwh))

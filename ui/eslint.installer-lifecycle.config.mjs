@@ -2,7 +2,7 @@
 import tseslint from 'typescript-eslint';
 import globals from 'globals';
 export default tseslint.config({
-    files: ['ui/src-ts/runtime-executables/lib/installer-lifecycle.ts'],
+    files: ['ui/src-ts/runtime-executables/lib/installer-lifecycle.ts', 'ui/src-ts/runtime-executables/lib/storage-farm-overview.ts', 'ui/src-ts/runtime-executables/lib/tariff-price.ts'],
     extends: tseslint.configs.recommendedTypeChecked,
     languageOptions: {
         globals: globals.node,

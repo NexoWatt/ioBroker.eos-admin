@@ -1,0 +1,14 @@
+{
+  "name": "tariff-price-chain-919",
+  "command": [
+    "node",
+    "--test",
+    "test/eos-customer-tariff-price-chain.test.cjs"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin",
+  "startedAt": "2026-11-24T18:29:30.263400+00:00",
+  "durationSeconds": 0.249,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-919/tariff-price-chain-919.log",
+  "sha256": "f4e2bc4635e2e114d52405cf934aae2e2714f84ebea52b2ee89b10c017b69e88"
+}

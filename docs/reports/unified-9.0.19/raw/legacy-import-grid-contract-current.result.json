@@ -1,0 +1,14 @@
+{
+  "name": "legacy-import-grid-contract-current",
+  "command": [
+    "node",
+    "/workspace/scratch/741f792566ea/setup-919/legacy-test-loader.cjs",
+    "verify-rc78-import-only-grid-budget.cjs"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin/ui",
+  "startedAt": "2026-11-24T18:14:03.666732+00:00",
+  "durationSeconds": 0.093,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-919/legacy-import-grid-contract-current.log",
+  "sha256": "eada12797a82104e23a97e495eddc0aa190bfe907ee794385730d4a42e99b54e"
+}

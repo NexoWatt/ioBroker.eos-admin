@@ -1,0 +1,11 @@
+✔ real host starts three real device profiles while their first physical responses are still pending (191.90379ms)
+✔ stop drains a pending first read after disconnect and discards its late values without reopening timers (58.11926ms)
+✔ three customer profiles finish bounded slow controller metadata preparation without losing the hosted start (14023.286595ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 14553.581287

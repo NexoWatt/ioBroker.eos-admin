@@ -1,0 +1,13 @@
+{
+  "name": "node22-tests-final",
+  "command": [
+    "npm",
+    "test"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin",
+  "startedAt": "2026-11-24T18:44:50.307861+00:00",
+  "durationSeconds": 43.964,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-919/node22-tests-final.log",
+  "sha256": "3b1e097918d0ec6e4b10004c4dccfa95357b05b13ddbd8279270fbc8bbeec9f5"
+}

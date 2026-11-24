@@ -8,6 +8,9 @@ export interface EosDeviceEmsStatus {
     mappedFields: string[];
     missing: string[];
     optionalMissing: string[];
+    activationRequestId: string;
+    activationApplied: boolean;
+    corrections: string[];
 }
 export interface EosDeviceEmsPlan {
     config: Record<string, Json>;
@@ -21,5 +24,7 @@ export function planDeviceEms(input: {
     limits?: { chargePoints?: unknown; batteries?: unknown };
     writeTargets?: Record<string, string>;
     readTargets?: Record<string, string>;
+    referenceMeta?: Record<string, { type?: unknown; unit?: unknown; read?: unknown; write?: unknown }>;
+    allowedApps?: string[];
 }): EosDeviceEmsPlan;
 export function getDeviceEmsReferences(config: unknown): { read: string[]; write: string[] };

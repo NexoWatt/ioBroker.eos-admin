@@ -1,0 +1,14 @@
+{
+  "name": "legacy-import-grid-budget",
+  "command": [
+    "npm",
+    "run",
+    "test:rc78-import-only-grid-budget"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin/ui",
+  "startedAt": "2026-11-24T18:11:55.043268+00:00",
+  "durationSeconds": 0.38,
+  "exitCode": 1,
+  "log": "/workspace/scratch/741f792566ea/setup-919/legacy-import-grid-budget.log",
+  "sha256": "4499755583c672407552703c041d6830bc228a75ff5503557ecae587628116d6"
+}

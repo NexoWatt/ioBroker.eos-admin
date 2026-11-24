@@ -1,0 +1,14 @@
+{
+  "name": "ui-security-final",
+  "command": [
+    "npm",
+    "run",
+    "lint:security"
+  ],
+  "cwd": "ui",
+  "startedAt": "2026-11-24T18:32:38.874120+00:00",
+  "durationSeconds": 24.011,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-919/ui-security-final.log",
+  "sha256": "83e39bd5931120281a66a27f5a156b86f09ec50d94cd8788cbfa19ec414fb136"
+}

@@ -60,6 +60,8 @@
 
   var state = {};
   var pollTimer = null;
+  var aggregateTimer = null;
+  var liveConnected = false;
   /**
    * Code-Teil: el
    * Zweck: Kapselt einen lokalen Verarbeitungsschritt, damit Aufrufer nicht direkt in Detaildaten eingreifen.
@@ -84,6 +86,7 @@
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
   function num(v) {
+    if (v === null || v === undefined || v === '' || typeof v === 'boolean') return null;
     var n = Number(v);
     return Number.isFinite(n) ? n : null;
   }
@@ -134,6 +137,8 @@
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
   function setLive(ok) {
+    liveConnected = !!ok;
+    if (window.NWStorageFarmSummary) window.NWStorageFarmSummary.render(state, liveConnected);
     var dot = el('liveDot');
     if (dot) dot.classList.toggle('live', !!ok);
   }
@@ -230,27 +235,7 @@
     var mode = String(stateVal('storageFarm.mode') || 'pool').toLowerCase();
     if (modeLabel) modeLabel.textContent = 'Modus: ' + (mode === 'groups' ? 'Gruppen' : 'Pool');
 
-    var soc = stateVal('storageFarm.totalSoc');
-    var net = stateVal('storageFarm.totalPowerW');
-    var chg = stateVal('storageFarm.totalChargePowerW');
-    var dchg = stateVal('storageFarm.totalDischargePowerW');
-    var pv = stateVal('storageFarm.totalPvPowerW');
-    var on = stateVal('storageFarm.storagesOnline');
-    var disp = stateVal('storageFarm.storagesDispatchAvailable');
-    var deg = stateVal('storageFarm.storagesDegraded');
-    var tot = stateVal('storageFarm.storagesTotal');
-    var socText = num(soc) === null ? '--' : num(soc).toFixed(1);
-    var netN = num(net);
-    if (netN === null) {
-      var chgN = num(chg);
-      var dchgN = num(dchg);
-      if (chgN !== null || dchgN !== null) netN = Math.max(0, dchgN || 0) - Math.max(0, chgN || 0);
-    }
-    var netText = netN === null ? '--' : (netN > 0 ? 'Entladen ' : (netN < 0 ? 'Laden ' : 'Neutral ')) + formatPower(Math.abs(netN));
-    var text = 'SoC Ø: ' + socText + ' % | Farm netto: ' + netText + ' | PV/WR: ' + formatPower(pv) + ' | Brutto Laden: ' + formatPower(chg) + ' | Brutto Entladen: ' + formatPower(dchg) + ' | Online: ' + (on !== undefined ? on : '--') + '/' + (tot !== undefined ? tot : '--') + ' | Regelbar: ' + (disp !== undefined ? disp : '--') + '/' + (tot !== undefined ? tot : '--');
-    if (deg !== undefined && Number(deg) > 0) text += ' | Degraded: ' + deg;
-    var summary = el('sf_summary');
-    if (summary) summary.textContent = text;
+    if (window.NWStorageFarmSummary) window.NWStorageFarmSummary.render(state, liveConnected);
   }
   /**
    * Code-Teil: render
@@ -379,6 +364,9 @@
     loadConfig();
     loadState();
     startEvents();
+    aggregateTimer = window.setInterval(function () { if (window.NWStorageFarmSummary) window.NWStorageFarmSummary.render(state, liveConnected); }, 5000);
+    window.addEventListener('pagehide', function () { if (aggregateTimer !== null) { window.clearInterval(aggregateTimer); aggregateTimer = null; } });
+    window.addEventListener('pageshow', function () { if (aggregateTimer === null) aggregateTimer = window.setInterval(function () { if (window.NWStorageFarmSummary) window.NWStorageFarmSummary.render(state, liveConnected); }, 5000); });
 
   });
 })();

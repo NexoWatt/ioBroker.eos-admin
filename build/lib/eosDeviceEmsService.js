@@ -18,6 +18,9 @@ const MAX_MANIFEST_BYTES = 65536;
 const CLASSES = new Set(['evCharger', 'meter', 'pvInverter', 'storageSystem', 'battery', 'batteryInverter', 'heat', 'io', 'solarCharger', 'generic']);
 const MODES = new Set(['auto', 'monitor', 'manual', 'singleStorage', 'storageFarm', 'gridMeter', 'generationMeter', 'consumptionMeter', 'pvInverter']);
 const RETRIES = [1000, 2000, 5000, 10000, 15000, 30000];
+const PLANNER_CONFIG_KEYS = Object.freeze(['settingsConfig', 'settings', 'storage', 'storageFarm', 'gridConstraints',
+    'thermalControl', 'thermal', 'heatingRod', 'threshold', 'generator', 'bhkw',
+    'dynamicGridConnection', 'datapoints', 'vis', 'eosDeviceEms', 'emsApps']);
 /** @param {unknown} value @returns {value is RecordValue} */
 function record(value) { return value !== null && typeof value === 'object' && !Array.isArray(value); }
 /** @param {string} code */
@@ -26,6 +29,20 @@ function fail(code) { return Object.assign(new Error(code), { code }); }
 function text(value, max = 160) { return typeof value === 'string' && value.length <= max && ![...value].some(character => character.charCodeAt(0) < 32) ? value : ''; }
 /** @param {unknown} value @returns {value is string} */
 function safeId(value) { return typeof value === 'string' && /^[A-Za-z0-9_-][A-Za-z0-9_.-]{0,159}$/.test(value) && !value.split('.').some(part => !part || ['__proto__', 'prototype', 'constructor'].includes(part)); }
+/** The adapter runtime also contains TLS handles, optional port fields and other
+ * non-installer data. Only the planner's explicit configuration contract crosses
+ * this boundary; the planner still strictly validates every included section.
+ * @param {unknown} value @returns {RecordValue} */
+function projectDeviceEmsConfig(value) {
+    if (!record(value))
+        throw fail('EOS_EMS_PLAN_CONFIG_INVALID');
+    /** @type {RecordValue} */
+    const result = {};
+    for (const key of PLANNER_CONFIG_KEYS)
+        if (Object.prototype.hasOwnProperty.call(value, key) && value[key] !== undefined)
+            result[key] = value[key];
+    return result;
+}
 /** @param {unknown} value @returns {RecordValue} */
 function publicIntent(value) {
     if (!record(value))
@@ -38,7 +55,53 @@ function publicIntent(value) {
         result.flowSlot = value.flowSlot;
     if (text(value.group, 80))
         result.group = value.group;
+    if (value.activation !== undefined) {
+        const activation = value.activation;
+        if (!record(activation) || typeof activation.requested !== 'boolean' ||
+            typeof activation.requestId !== 'string' || !/^[A-Za-z0-9][A-Za-z0-9_-]{15,127}$/.test(activation.requestId))
+            throw fail('EOS_EMS_ACTIVATION_INVALID');
+        /** @type {RecordValue} */
+        const limits = {};
+        if (activation.limits !== undefined) {
+            if (!record(activation.limits))
+                throw fail('EOS_EMS_ACTIVATION_INVALID');
+            for (const key of ['maxChargeW', 'maxDischargeW', 'capacityKWh', 'minCurrentA', 'maxCurrentA', 'minPowerW', 'maxPowerW']) {
+                const limit = activation.limits[key];
+                if (limit !== undefined) {
+                    if (typeof limit !== 'number' || !Number.isFinite(limit) || limit <= 0)
+                        throw fail('EOS_EMS_ACTIVATION_INVALID');
+                    limits[key] = limit;
+                }
+            }
+            for (const key of ['coupling', 'chargerType']) {
+                const limit = activation.limits[key];
+                if (limit !== undefined) {
+                    if (limit !== 'ac' && limit !== 'dc')
+                        throw fail('EOS_EMS_ACTIVATION_INVALID');
+                    limits[key] = limit;
+                }
+            }
+            if (activation.limits.phases !== undefined) {
+                if (activation.limits.phases !== 1 && activation.limits.phases !== 3)
+                    throw fail('EOS_EMS_ACTIVATION_INVALID');
+                limits.phases = activation.limits.phases;
+            }
+        }
+        result.activation = { requested: activation.requested, requestId: activation.requestId, limits };
+    }
     return result;
+}
+/** A failure before discovery must still be visible for every saved device.
+ * @param {DeviceEmsSnapshot} snapshot @param {string} code @returns {DeviceEmsPublicView['statuses']} */
+function blockedStatuses(snapshot, code) {
+    if (!Array.isArray(snapshot.devices) || !/^(?:eos-admin|nexowatt-devices)\.\d+$/.test(snapshot.namespace))
+        return [];
+    return snapshot.devices.slice(0, MAX_DEVICES).filter(value => record(value) && safeId(value.id)).map(value => {
+        const device = /** @type {RecordValue} */ (value);
+        const id = String(device.id);
+        return { deviceId: id, devId: id, baseId: `${snapshot.namespace}.devices.${id}`, status: 'pending', code,
+            target: '', mappedFields: [], missing: [], optionalMissing: [] };
+    });
 }
 /** Bounded database reads only. No timeout is ever used to pretend a write completed.
  * @template T @param {Promise<T>} operation @param {number} milliseconds @returns {Promise<T>} */
@@ -53,7 +116,7 @@ function readDeadline(operation, milliseconds) {
  * controller-wide object scan. Alias expressions are not executed: this checks
  * command/read identity, not signal conversion or arbitrary hardware topology.
  * @param {import('./eosDeviceEmsService').DeviceEmsTargetOptions} options
- * @returns {Promise<{readTargets: Record<string,string>, writeTargets: Record<string,string>}>} */
+ * @returns {Promise<import('./eosDeviceEmsService').DeviceEmsTargets>} */
 async function resolveDeviceEmsTargets(options) {
     const references = options.references;
     const valid = (/** @type {unknown} */ id) => typeof id === 'string' && id.length > 0 && id.length <= 512
@@ -66,10 +129,13 @@ async function resolveDeviceEmsTargets(options) {
     const deadline = Date.now() + 10000;
     let aborted = false;
     const known = new Map();
+    /** @type {Map<string, import('./eosDeviceEmsService').DeviceEmsAlias>} */
+    const knownMetadata = new Map();
     for (const device of options.devices)
         for (const metadata of Object.values(device.aliasMeta || {})) {
             if (!valid(metadata.id))
                 continue;
+            knownMetadata.set(metadata.id, metadata);
             if (valid(metadata.targetId))
                 known.set(metadata.id, metadata.targetId);
             // Generated V1 heartbeat/computed readings are states in their own
@@ -97,23 +163,41 @@ async function resolveDeviceEmsTargets(options) {
         }
         return request;
     };
+    /** @type {Record<string,import('./eosDeviceEmsService').DeviceEmsReferenceMeta>} */
+    const referenceMeta = Object.create(null);
     /** @param {string} id @param {'read'|'write'} mode @returns {Promise<string>} */
     const resolve = async (id, mode) => {
+        const originalId = id;
         const visited = new Set();
+        let permitted = true;
+        /** @param {RecordValue|import('./eosDeviceEmsService').DeviceEmsAlias|null} common */
+        const inspect = common => {
+            permitted = permitted && common !== null && (mode === 'read' ? common.read !== false : common.write === true);
+            if (id === originalId && !referenceMeta[originalId])
+                referenceMeta[originalId] = {
+                    type: common ? text(common.type, 30) : '', unit: common ? text(common.unit, 30) : '', read: false, write: false,
+                };
+            referenceMeta[originalId][mode] = permitted;
+        };
         for (let depth = 0; depth < 8; depth++) {
             guard();
-            if (known.has(id))
+            if (known.has(id)) {
+                inspect(knownMetadata.get(id) || null);
                 return known.get(id);
+            }
             if (visited.has(id))
                 throw fail('EOS_EMS_TARGET_ALIAS_PENDING');
             visited.add(id);
             const object = await read(id);
             // A missing former leaf cannot currently send commands. Keep its
             // exact identity; do not invent another target or delete its mapping.
-            if (object === null || object === undefined)
+            if (object === null || object === undefined) {
+                inspect(null);
                 return id;
+            }
             if (!record(object) || object._id !== id || object.type !== 'state' || !record(object.common))
                 throw fail('EOS_EMS_TARGET_ALIAS_PENDING');
+            inspect(object.common);
             // Previous device releases also exposed aliases without the V1
             // suffix. Resolve them only against the saved, verified device and
             // template identity, using their actual native target metadata.
@@ -167,7 +251,7 @@ async function resolveDeviceEmsTargets(options) {
         throw fail('EOS_EMS_TARGET_RESOLUTION_PENDING');
     }
     guard();
-    return { readTargets, writeTargets };
+    return { readTargets, writeTargets, referenceMeta };
 }
 /** Event-driven device commissioning. Inventory is reconstructed only from the
  * protected saved device list and real V1 objects. Hardware commands are never sent. */
@@ -183,6 +267,7 @@ class EosDeviceEmsService {
         this.dirty = false;
         this.retry = 0;
         this.sequence = 0;
+        this.lastReportedCode = '';
         /** @type {DeviceEmsPublicView} */
         this.current = { state: 'pending', code: 'EOS_EMS_CONFIGURATION_PENDING', updatedAt: 0, statuses: [] };
     }
@@ -196,7 +281,8 @@ class EosDeviceEmsService {
         this.retry = 0;
         if (reason === 'configuration') {
             this.sequence++;
-            this.current = { state: 'pending', code: 'EOS_EMS_CONFIGURATION_PENDING', updatedAt: Date.now(), statuses: this.current.statuses };
+            this.current = { state: 'pending', code: 'EOS_EMS_CONFIGURATION_PENDING', updatedAt: Date.now(),
+                statuses: blockedStatuses(this.options.getSnapshot(), 'EOS_EMS_CONFIGURATION_PENDING') };
         }
         this.schedule(250);
     }
@@ -237,7 +323,7 @@ class EosDeviceEmsService {
                 const baseId = `${snapshot.namespace}.devices.${device.id}`;
                 /** @type {DeviceEmsInventory} */
                 const row = { baseId, deviceId: device.id, devId: device.id, name: text(device.name) || device.id,
-                    enabled: snapshot.moduleEnabled && device.enabled !== false, templateId: text(device.templateId),
+                    enabled: snapshot.moduleEnabled && device.enabled !== false, templateId: text(device.templateId), protocol: text(device.protocol, 32),
                     deviceClass: 'generic', category: '', aliases: {}, aliasMeta: {}, capabilities: [], missingRequired: [],
                     ems: publicIntent(device.ems) };
                 result[index] = row;
@@ -339,20 +425,30 @@ class EosDeviceEmsService {
                     return { deviceId, devId: deviceId, baseId: text(row.baseId, 512), status: text(row.status, 40), code: text(row.code, 100),
                         target: text(row.target, 100), mappedFields: Array.isArray(row.mappedFields) ? row.mappedFields.filter(x => typeof x === 'string').slice(0, MAX_ALIASES) : [],
                         missing: Array.isArray(row.missing) ? row.missing.filter(x => typeof x === 'string').slice(0, MAX_ALIASES) : [],
-                        optionalMissing: Array.isArray(row.optionalMissing) ? row.optionalMissing.filter(x => text(x, 160)).slice(0, MAX_ALIASES) : [] };
+                        optionalMissing: Array.isArray(row.optionalMissing) ? row.optionalMissing.filter(x => text(x, 160)).slice(0, MAX_ALIASES) : [],
+                        corrections: Array.isArray(row.corrections) ? row.corrections.filter(x => typeof x === 'string' && /^[A-Z][A-Z0-9_]{1,99}$/.test(x)).slice(0, 32) : [],
+                        ...(typeof row.activationRequestId === 'string' && /^[A-Za-z0-9][A-Za-z0-9_-]{15,127}$/.test(row.activationRequestId)
+                            ? { activationRequestId: row.activationRequestId, activationApplied: row.activationApplied === true } : {}) };
                 });
                 const pending = statuses.some(row => row.status === 'pending');
                 const conflict = statuses.some(row => row.status === 'conflict');
                 this.current = { state: conflict ? 'error' : pending ? 'pending' : 'ready',
                     code: conflict ? 'EOS_EMS_ASSIGNMENT_CONFLICT' : pending ? 'EOS_EMS_ALIASES_PENDING' : '', updatedAt: Date.now(), statuses };
+                this.lastReportedCode = '';
                 if (pending && this.retry < RETRIES.length)
                     this.dirty = true;
             }
             catch (error) {
                 const code = error instanceof Error && /^[A-Z][A-Z0-9_]{1,99}$/.test(error.message) ? error.message : 'EOS_EMS_ASSIGNMENT_FAILED';
                 const transient = /PENDING|STARTING|NOT_READY|BUSY|CHANGED|UNAVAILABLE/.test(code);
-                if (!this.stopped)
-                    this.current = { state: transient ? 'pending' : 'error', code, updatedAt: Date.now(), statuses: this.current.statuses };
+                if (!this.stopped) {
+                    this.current = { state: transient ? 'pending' : 'error', code, updatedAt: Date.now(),
+                        statuses: blockedStatuses(this.options.getSnapshot(), code) };
+                    if (code !== this.lastReportedCode) {
+                        this.lastReportedCode = code;
+                        this.options.report?.(code);
+                    }
+                }
                 if (transient && this.retry < RETRIES.length)
                     this.dirty = true;
             }
@@ -373,5 +469,5 @@ class EosDeviceEmsService {
         await this.pending;
     }
 }
-module.exports = { EosDeviceEmsService, resolveDeviceEmsTargets };
+module.exports = { EosDeviceEmsService, resolveDeviceEmsTargets, projectDeviceEmsConfig };
 //# sourceMappingURL=eosDeviceEmsService.js.map

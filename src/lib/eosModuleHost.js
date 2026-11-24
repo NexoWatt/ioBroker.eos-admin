@@ -12,6 +12,8 @@ const SECRET_KEY = /password|passwd|^pass$|accessjson|expertmount|secret|token|p
 const MAX_CONFIG_BYTES = 512 * 1024;
 const MAX_LEGACY_INSTANCES = 64;
 const LEASE_MS = 12000;
+const DEVICES_START_IDLE_MS = 10000;
+const DEVICES_START_TOTAL_MS = 120000;
 const isRecord = value => !!value && typeof value === 'object' && !Array.isArray(value);
 const fail = code => Object.assign(new Error(code), { code });
 
@@ -103,11 +105,13 @@ class EosModuleHost {
         this.mutation = false;
         this.timer = null;
         this.nextOwnershipCheck = 0;
+        this.leasePending = null;
         this.bridgeHandler = null;
         this.bridgeReply = null;
         this.stopped = false;
         this.stopPromise = null;
         this.deviceEms = null;
+        this.reserveDeviceProfileChange = null;
         for (const id of Object.keys(MODULES)) {
             this.entries.set(id, { id, module: null, config: { enabled: false }, configLoaded: false, reason: 'DISABLED', lease: 0,
                 generation: 0, blockers: [], loading: false, failed: false, started: false, startup: null, stopEntryPromise: null, pendingWrites: new Set(), timers: new Set(), subscriptions: new Set(), downloads: new Set() });
@@ -120,8 +124,9 @@ class EosModuleHost {
     }
 
     /** Bind only the internal hosted runtime, never a URL or browser callback. */
-    bindDeviceEms(handler) {
+    bindDeviceEms(handler, reserveProfileChange) {
         if (this.deviceEms || this.stopped || typeof handler !== 'function') throw fail('EOS_EMS_BRIDGE_INVALID');
+        this.reserveDeviceProfileChange = typeof reserveProfileChange === 'function' ? reserveProfileChange : null;
         this.deviceEms = new EosDeviceEmsService({
             owner: this.owner,
             getSnapshot: () => {
@@ -132,6 +137,7 @@ class EosModuleHost {
                         (entry.started === true && this.canOperate('devices', entry.generation))) };
             },
             canRun: () => !this.stopped && !this.mutation && this.licensed('devices') && this.owner.eosOwnership?.canWrite() === true,
+            report: code => this.owner.log.warn(`[EOS EMS commissioning] ${code}; saved device configuration remains unchanged`),
             apply: async devices => {
                 // Keep the authoritative device revision stable until the hosted
                 // configuration write completes. Discovery itself holds no lock.
@@ -146,6 +152,17 @@ class EosModuleHost {
 
     requestDeviceEms() { this.deviceEms?.request('apps'); }
     async flushDeviceEms() { await this.deviceEms?.flush(); }
+
+    deviceEmsView() {
+        if (this.deviceEms) return this.deviceEms.view();
+        const entry = this.entries.get('devices');
+        const code = this.stopped ? 'EOS_EMS_STOPPED' : 'EOS_EMS_BRIDGE_UNAVAILABLE';
+        return { state: this.stopped ? 'stopped' : 'pending', code, updatedAt: 0,
+            statuses: (Array.isArray(entry.config.devices) ? entry.config.devices.slice(0, 128) : [])
+                .filter(device => typeof device?.id === 'string' && /^[A-Za-z0-9_-][A-Za-z0-9_.-]{0,159}$/.test(device.id))
+                .map(device => ({ deviceId: device.id, devId: device.id, baseId: `${this.namespace('devices')}.devices.${device.id}`,
+                    status: 'pending', code, target: '', mappedFields: [], missing: [], optionalMissing: [] })) };
+    }
 
     readConfig(id) {
         return this.decodeConfig(id, this.owner.config.eosModules?.[id]);
@@ -271,6 +288,7 @@ class EosModuleHost {
         entry.module = null;
         entry.started = false;
         entry.generation++;
+        startup?.cancel?.();
         const markUnconfirmed = () => {
             entry.failed = true; entry.stopFailed = true; entry.reason = 'STOP_FAILED_RESTART_REQUIRED';
         };
@@ -357,6 +375,18 @@ class EosModuleHost {
             void pending.then(() => entry.pendingWrites.delete(pending), () => entry.pendingWrites.delete(pending));
             return pending;
         };
+        const metadata = operation => mutate(async () => {
+            const result = await operation();
+            const startup = entry.startup;
+            // Only completed object provisioning advances startup. Telemetry,
+            // attempted/failed IO and a previous generation cannot keep it alive.
+            if (entry.id === 'devices' && entry.generation === generation &&
+                startup?.generation === generation && !startup.settled) {
+                startup.lastProgressAt = performance.now();
+                startup.completedObjects++;
+            }
+            return result;
+        });
         return {
             namespace, hostNamespace: owner.namespace,
             eosTargetNamespace: owner.config.eosUiMigration?.preserveNamespace ? owner.config.eosUiMigration.source : owner.namespace,
@@ -366,12 +396,12 @@ class EosModuleHost {
             setObjectNotExistsAsync: (id, object) => {
                 if (entry.generation !== generation) return Promise.reject(fail('EOS_MODULE_STOPPED'));
                 const full = resolve(id);
-                return mutate(() => owner.setForeignObjectNotExistsAsync(full, object));
+                return metadata(() => owner.setForeignObjectNotExistsAsync(full, object));
             },
             extendObjectAsync: (id, object) => {
                 if (entry.generation !== generation) return Promise.reject(fail('EOS_MODULE_STOPPED'));
                 const full = resolve(id);
-                return mutate(() => owner.extendForeignObjectAsync(full, object));
+                return metadata(() => owner.extendForeignObjectAsync(full, object));
             },
             setStateAsync: (id, value, ack) => {
                 if (entry.generation !== generation) {
@@ -461,27 +491,41 @@ class EosModuleHost {
         };
     }
 
+    async renewOwnershipLeases() {
+        if (!this.running || !this.initialized || this.stopped) return;
+        if (this.leasePending) return this.leasePending;
+        if (performance.now() < this.nextOwnershipCheck) return;
+        this.nextOwnershipCheck = performance.now() + 4000;
+        // Lease renewal cannot wait behind another module's initial connection or
+        // shutdown. The fixed three-module inventory remains bounded and fenced.
+        this.leasePending = Promise.all([...this.entries.values()].map(async entry => {
+            if (!entry.config.enabled || entry.failed) return;
+            const generation = entry.generation;
+            try {
+                const allowed = await bounded(this.inspectOwnership(entry));
+                if (!this.running || this.stopped || generation !== entry.generation) return;
+                if (!this.licensed(entry.id)) this.revoke(entry, 'LICENSE_REQUIRED');
+                else if (this.owner.eosOwnership?.canWrite() !== true) this.revoke(entry, 'EOS_OWNERSHIP_REQUIRED');
+                else if (!allowed) this.revoke(entry, 'LEGACY_CONFLICT');
+                else { entry.lease = performance.now() + LEASE_MS; entry.reason = entry.module ? (entry.started ? 'RUNNING' : 'STARTING') : 'READY'; }
+            } catch {
+                if (this.running && !this.stopped && generation === entry.generation) this.revoke(entry, 'OWNERSHIP_UNAVAILABLE');
+            }
+        })).finally(() => { this.leasePending = null; });
+        await this.leasePending;
+    }
+
     async reconcile() {
+        if (!this.running || !this.initialized || this.stopped) return;
+        await this.renewOwnershipLeases();
         if (!this.running || !this.initialized || this.stopped) return;
         if (this.pending) return this.pending;
         this.pending = (async () => {
-            const checkOwnership = performance.now() >= this.nextOwnershipCheck;
-            if (checkOwnership) this.nextOwnershipCheck = performance.now() + 4000;
             for (const entry of this.entries.values()) {
                 if (!this.running || this.stopped) break;
                 if (!entry.config.enabled) this.revoke(entry, 'DISABLED');
                 else if (!this.licensed(entry.id)) this.revoke(entry, 'LICENSE_REQUIRED');
                 else if (this.owner.eosOwnership?.canWrite() !== true) this.revoke(entry, 'EOS_OWNERSHIP_REQUIRED');
-                else if (checkOwnership && !entry.failed) {
-                    const generation = entry.generation;
-                    try {
-                        const allowed = await bounded(this.inspectOwnership(entry));
-                        if (this.running && !this.stopped && generation === entry.generation) {
-                            if (allowed) { entry.lease = performance.now() + LEASE_MS; entry.reason = entry.module && entry.started ? 'RUNNING' : 'READY'; }
-                            else this.revoke(entry, 'LEGACY_CONFLICT');
-                        }
-                    } catch { this.revoke(entry, 'OWNERSHIP_UNAVAILABLE'); }
-                }
                 if (entry.module && entry.moduleGeneration !== entry.generation) await this.stopEntry(entry);
                 if (!this.canOperate(entry.id, entry.generation)) {
                     if (entry.module) await this.stopEntry(entry);
@@ -506,24 +550,47 @@ class EosModuleHost {
                     entry.moduleGeneration = generation;
                     entry.started = false;
                     entry.stopEntryPromise = null;
-                    const startup = { module, settled: false, promise: Promise.resolve().then(() => module.start()) };
+                    entry.startupError = '';
+                    entry.reason = 'STARTING';
+                    const now = performance.now();
+                    const startup = { module, generation, startedAt: now, lastProgressAt: now, completedObjects: 0,
+                        settled: false, promise: Promise.resolve().then(() => module.start()) };
                     entry.startup = startup;
                     void startup.promise.then(() => { startup.settled = true; }, () => { startup.settled = true; });
-                    await bounded(startup.promise, 10000);
+                    if (entry.id === 'devices') await this.waitForDevicesStart(entry, startup);
+                    else await bounded(startup.promise, 10000);
                     if (!this.canOperate(entry.id, generation)) await this.stopEntry(entry);
                     else {
                         entry.started = true; entry.reason = 'RUNNING';
                         if (entry.id === 'devices') this.deviceEms?.request('started');
                     }
-                } catch {
+                } catch (error) {
+                    entry.startupError = ['EOS_MODULE_START_IDLE_TIMEOUT', 'EOS_MODULE_START_TOTAL_TIMEOUT',
+                        'EOS_MODULE_START_CANCELLED'].includes(error?.code) ? error.code : 'EOS_MODULE_START_FAILED';
                     if (!entry.stopFailed) this.revoke(entry, 'START_FAILED_RESTART_REQUIRED');
                     entry.failed = true;
                     await this.stopEntry(entry);
-                    this.owner.log.warn(`EOS_MODULE_START_FAILED: ${entry.id}; HTTPS remains available`);
+                    this.owner.log.warn(`EOS_MODULE_START_FAILED: ${entry.id}; ${entry.startupError}; HTTPS remains available`);
                 }
             }
         })().catch(() => this.owner.log.warn('EOS_MODULE_RECONCILE_FAILED')).finally(() => { this.pending = null; });
         return this.pending;
+    }
+
+    async waitForDevicesStart(entry, startup) {
+        let timer;
+        const monitor = new Promise((_, reject) => {
+            startup.cancel = () => reject(fail('EOS_MODULE_START_CANCELLED'));
+            timer = setInterval(() => {
+                const now = performance.now();
+                if (!this.canOperate(entry.id, startup.generation)) startup.cancel();
+                else if (now - startup.startedAt >= DEVICES_START_TOTAL_MS) reject(fail('EOS_MODULE_START_TOTAL_TIMEOUT'));
+                else if (now - startup.lastProgressAt >= DEVICES_START_IDLE_MS) reject(fail('EOS_MODULE_START_IDLE_TIMEOUT'));
+            }, 250);
+        });
+        // Retain startup.promise itself for stopEntry's late-resource cleanup.
+        try { await Promise.race([startup.promise, monitor]); }
+        finally { clearInterval(timer); startup.cancel = null; }
     }
 
     async start() {
@@ -602,6 +669,11 @@ class EosModuleHost {
         let details = {};
         try { details = entry.module ? await bounded(entry.module.getStatus?.() || {}, 2000) : {}; }
         catch { details = { statusUnavailable: true }; }
+        if (entry.id === 'devices' && entry.startup) {
+            details = { ...details, startup: { completedObjects: entry.startup.completedObjects,
+                pending: !!entry.module && !entry.started && !entry.startup.settled,
+                error: entry.startupError || '' } };
+        }
         return { id, enabled: entry.config.enabled === true, active: !!entry.module && entry.started === true && entry.moduleGeneration === entry.generation && this.canOperate(id, entry.generation),
             reason: entry.reason, blockers: entry.blockers, details: redact(assertJson(details)),
             namespace: id === 'devices' ? `${this.namespace(id)}.devices` : this.namespace(id) };
@@ -614,7 +686,7 @@ class EosModuleHost {
         const reason = this.configurationReason(id);
         return { id, config: redact(entry.config), configurationReady: !reason, configurationLoaded: entry.configLoaded,
             configurationReason: reason, status: await this.status(id),
-            ...(id === 'devices' && this.deviceEms ? { emsCommissioning: this.deviceEms.view() } : {}),
+            ...(id === 'devices' ? { emsCommissioning: this.deviceEmsView() } : {}),
             manualImport: this.manualImportStatus(id), migration: entry.loadedEnvelope?.migration || this.owner.config.eosModules?.[id]?.migration || null };
     }
 
@@ -650,27 +722,60 @@ class EosModuleHost {
         const entry = this.entries.get(id);
         if (!entry) throw fail('EOS_MODULE_UNKNOWN');
         const normalized = this.factory(id).validateConfig(restoreSecrets(assertJson(config), entry.config));
-        const encrypted = this.owner.encrypt(JSON.stringify(normalized));
-        if (typeof encrypted !== 'string' || encrypted === JSON.stringify(normalized)) throw fail('EOS_MODULE_ENCRYPTION');
-        const envelope = { v: 1, encrypted,
-            migration: migration || entry.loadedEnvelope?.migration || this.owner.config.eosModules?.[id]?.migration || null };
-        // Commit before interrupting the old runtime. Failed/conflicting writes
-        // leave its validated settings and transport generation untouched.
-        await bounded(this.configStore.save(id, envelope));
-        this.revoke(entry, 'CONFIG_CHANGED');
-        await this.stopEntry(entry);
-        this.owner.config.eosModules = { ...this.owner.config.eosModules, [id]: envelope };
-        entry.config = normalized;
-        entry.loadedEnvelope = envelope;
-        if (!entry.stopFailed) {
-            entry.failed = false; entry.reason = normalized.enabled ? 'STARTING' : 'DISABLED';
-        } else {
-            entry.failed = true; entry.reason = 'STOP_FAILED_RESTART_REQUIRED';
+        const previous = new Map((id === 'devices' && Array.isArray(entry.config.devices) ? entry.config.devices : [])
+            .map(device => [device.id, device]));
+        const changes = (id === 'devices' && Array.isArray(normalized.devices) ? normalized.devices : []).flatMap(device => {
+            const before = previous.get(device.id);
+            // A newly introduced ID may still be referenced by an active EMS row
+            // after an earlier removal (including before a process restart).
+            // It needs the same real-controller admission as a profile change.
+            return !before || before.templateId !== device.templateId || before.protocol !== device.protocol
+                ? [{ deviceId: device.id, previousTemplateId: before?.templateId || '', templateId: device.templateId,
+                    previousProtocol: before?.protocol || '', protocol: device.protocol }] : [];
+        });
+        let releaseProfileChange = null;
+        if (changes.length) {
+            if (!this.reserveDeviceProfileChange) throw fail('EOS_DEVICES_PROFILE_CHECK_UNAVAILABLE');
+            releaseProfileChange = await this.reserveDeviceProfileChange({ namespace: this.namespace('devices'), changes });
+            if (typeof releaseProfileChange !== 'function') throw fail('EOS_DEVICES_PROFILE_CHECK_UNAVAILABLE');
         }
-        this.nextOwnershipCheck = 0;
-        if (id === 'devices') this.deviceEms?.request('configuration');
-        void this.reconcile();
-        return this.view(id);
+        let commit;
+        let commitSettled = true;
+        try {
+            if (this.stopped) throw fail('EOS_MODULE_BUSY');
+            const encrypted = this.owner.encrypt(JSON.stringify(normalized));
+            if (typeof encrypted !== 'string' || encrypted === JSON.stringify(normalized)) throw fail('EOS_MODULE_ENCRYPTION');
+            const envelope = { v: 1, encrypted,
+                migration: migration || entry.loadedEnvelope?.migration || this.owner.config.eosModules?.[id]?.migration || null };
+            // Commit before interrupting the old runtime. Failed/conflicting writes
+            // leave its validated settings and transport generation untouched.
+            commitSettled = false;
+            commit = this.configStore.save(id, envelope);
+            void commit.then(() => { commitSettled = true; }, () => { commitSettled = true; });
+            await bounded(commit);
+            this.revoke(entry, 'CONFIG_CHANGED');
+            await this.stopEntry(entry);
+            this.owner.config.eosModules = { ...this.owner.config.eosModules, [id]: envelope };
+            entry.config = normalized;
+            entry.loadedEnvelope = envelope;
+            if (!entry.stopFailed) {
+                entry.failed = false; entry.reason = normalized.enabled ? 'STARTING' : 'DISABLED';
+            } else {
+                entry.failed = true; entry.reason = 'STOP_FAILED_RESTART_REQUIRED';
+            }
+            this.nextOwnershipCheck = 0;
+            if (id === 'devices') this.deviceEms?.request('configuration');
+            void this.reconcile();
+            return await this.view(id);
+        } finally {
+            // A timeout never proves that a persistent write was cancelled. Keep
+            // the shared installer reservation until that original commit settles.
+            if (releaseProfileChange) {
+                if (commit && !commitSettled) void commit.then(releaseProfileChange, releaseProfileChange)
+                    .catch(() => this.owner.log.warn('EOS_DEVICES_PROFILE_RESERVATION_RELEASE_FAILED'));
+                else releaseProfileChange();
+            }
+        }
     }
 
     async importLegacy(id, instance) {

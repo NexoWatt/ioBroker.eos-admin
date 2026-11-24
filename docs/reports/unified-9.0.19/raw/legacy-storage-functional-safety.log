@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> nexowatt-eos-ui-internal@9.0.19 test:storage-control-functional-safety
+> node scripts/verify-storage-control-functional-safety.js
+
+[storage-control-functional-safety] OK: Speicherregelung, MultiUse-Routing, Speicherfarm-Verteilung und Be-/Entlade-Caps funktional abgesichert.

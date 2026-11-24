@@ -15,6 +15,7 @@ export interface DeviceEmsInventory {
     name: string;
     enabled: boolean;
     templateId: string;
+    protocol: string;
     deviceClass: string;
     category: string;
     aliases: Record<string, string>;
@@ -45,6 +46,9 @@ export interface DeviceEmsPublicView {
         mappedFields: string[];
         missing: string[];
         optionalMissing: string[];
+        activationRequestId?: string;
+        activationApplied?: boolean;
+        corrections?: string[];
     }>;
 }
 export interface DeviceEmsServiceOptions {
@@ -55,6 +59,7 @@ export interface DeviceEmsServiceOptions {
     getSnapshot(): DeviceEmsSnapshot;
     canRun(): boolean;
     apply(devices: DeviceEmsInventory[]): Promise<unknown>;
+    report?(code: string): void;
 }
 export interface DeviceEmsTargetOptions {
     owner: { getForeignObjectAsync(id: string): Promise<unknown> };
@@ -62,10 +67,19 @@ export interface DeviceEmsTargetOptions {
     devices: DeviceEmsInventory[];
     canRun?(): boolean;
 }
-export function resolveDeviceEmsTargets(options: DeviceEmsTargetOptions): Promise<{
+export interface DeviceEmsReferenceMeta {
+    type: string;
+    unit: string;
+    read: boolean;
+    write: boolean;
+}
+export interface DeviceEmsTargets {
     readTargets: Record<string, string>;
     writeTargets: Record<string, string>;
-}>;
+    referenceMeta: Record<string, DeviceEmsReferenceMeta>;
+}
+export function resolveDeviceEmsTargets(options: DeviceEmsTargetOptions): Promise<DeviceEmsTargets>;
+export function projectDeviceEmsConfig(value: unknown): Record<string, unknown>;
 export class EosDeviceEmsService {
     constructor(options: DeviceEmsServiceOptions);
     request(reason?: string): void;

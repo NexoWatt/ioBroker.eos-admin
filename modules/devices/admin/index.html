@@ -11,8 +11,8 @@
   <link rel="stylesheet" href="style.css">
   <script defer src="vendor/jquery.js"></script>
   <script defer src="vendor/materialize.js"></script>
-  <script defer src="ems-assignment.js?v=9.0.18"></script>
-  <script defer src="host-bridge.js?v=9.0.18"></script>
+  <script defer src="ems-assignment.js?v=9.0.19"></script>
+  <script defer src="host-bridge.js?v=9.0.19"></script>
   <script defer src="words.js"></script>
   <script defer src="index_m.js"></script>
 <script defer src="/eos-session-idle.js"></script>
@@ -39,10 +39,11 @@
       <button type="button" class="btn-flat" id="eosModuleReload">Neu laden</button>
     </div>
     <p id="eosModuleStatus" role="status" aria-live="polite">Konfiguration wird geladen …</p>
+    <p id="eosModuleRuntimeStatus" role="status" aria-live="polite">Laufstatus wird geprüft …</p>
     <div class="nexo-ems-summary" aria-label="Automatische EMS-Zuordnung">
       <p id="eosEmsStatus" role="status" aria-live="polite">EMS-Zuordnung wird geprüft …</p>
       <p class="nexo-hint">Bei einer Datenpunkt-Zuordnung den passenden Mess- oder Steuerdatenpunkt auswählen. Eine feste Zahl wie 10000 gehört in ein Feld für Leistungsgrenzen, nicht in ein Datenpunkt-Feld.</p>
-      <div class="nexo-ems-links"><a href="/ems-apps.html?nwAdmin=1&amp;tab=evcs">Ladepunkte öffnen</a><a href="/ems-apps.html?nwAdmin=1">EMS App-Center öffnen</a><button type="button" class="btn-flat" id="eosEmsRefresh">Zuordnungsstatus aktualisieren</button></div>
+      <div class="nexo-ems-links"><a href="/ems-apps.html?nwAdmin=1&amp;tab=evcs">Ladepunkte öffnen</a><a href="/ems-apps.html?nwAdmin=1">EMS App-Center öffnen</a><button type="button" class="btn-flat" id="eosEmsRefresh">Status aktualisieren</button></div>
     </div>
     <a id="eosConfigurationHelp" href="/migration/" hidden>Bestandsübernahme und Freigabestatus öffnen</a>
     <details class="eos-host-import"><summary>Bestehenden Geräteadapter übernehmen</summary>
@@ -243,13 +244,33 @@
 
       <section class="nexo-ems-config" aria-labelledby="dev_ems_title">
         <h6 id="dev_ems_title">EMS-Zuordnung</h6>
+        <div id="dev_profile_capabilities" class="nexo-profile-capabilities" aria-live="polite"></div>
+        <p class="nexo-ems-step">Aufgabe &amp; Anlagenbereich</p>
         <div class="nexo-ems-fields">
           <div><label for="dev_ems_mode">Funktion im Energiesystem</label><select id="dev_ems_mode" class="browser-default" aria-describedby="dev_ems_help"></select></div>
-          <div id="dev_ems_scope_field" hidden><label for="dev_ems_scope">Regelbereich / Messpunkt</label><select id="dev_ems_scope" class="browser-default"><option value="">Bitte auswählen</option><option value="M0">Hauptanschluss / M0</option><option value="M1">Unteranlage / M1</option></select></div>
+          <div id="dev_ems_scope_field" hidden><label for="dev_ems_scope">Regelbereich / Messpunkt</label><select id="dev_ems_scope" class="browser-default"><option value="">Bitte auswählen</option><option value="M0">M0 · Regelpunkt NVP / Hauptanschluss</option><option value="M1">Unteranlage / M1</option></select></div>
           <div id="dev_ems_slot_field" hidden><label for="dev_ems_slot">Zuordnung im Energiefluss</label><select id="dev_ems_slot" class="browser-default"></select></div>
         </div>
         <p id="dev_ems_help" class="nexo-muted"></p>
-        <p class="nexo-muted">Die Zuordnung wird zusammen mit dem Gerät über „Speichern und übernehmen“ übernommen. Leistungsgrenzen und Betriebsfreigabe anschließend im App-Center prüfen.</p>
+        <div id="dev_ems_activation_field" hidden>
+          <label class="nexo-ems-check"><input type="checkbox" id="dev_ems_requested"><span>Im EMS verwenden und aktivieren</span></label>
+          <p class="nexo-muted">Mit „Speichern und übernehmen“ werden Gerät, Zuordnung und die benötigten EMS-Apps gemeinsam eingerichtet. Messwertprüfung und Anlagenschutz bleiben wirksam.</p>
+          <p class="nexo-ems-step" id="dev_ems_limits_title">Betriebsgrenzen</p>
+          <div id="dev_ems_limits" class="nexo-ems-fields">
+            <div data-ems-limit="storage"><label for="dev_ems_coupling">Speicher-Anbindung</label><select id="dev_ems_coupling" class="browser-default"><option value="">Vorhandene Anbindung / Geräteprofil</option><option value="ac">AC-gekoppelt</option><option value="dc">DC-gekoppelt</option></select></div>
+            <div data-ems-limit="storage"><label for="dev_ems_maxChargeW">Maximale Ladeleistung (W)</label><input id="dev_ems_maxChargeW" type="number" min="1" step="1" inputmode="decimal" placeholder="z. B. 10000"></div>
+            <div data-ems-limit="storage"><label for="dev_ems_maxDischargeW">Maximale Entladeleistung (W)</label><input id="dev_ems_maxDischargeW" type="number" min="1" step="1" inputmode="decimal" placeholder="z. B. 10000"></div>
+            <div data-ems-limit="storage"><label for="dev_ems_capacityKWh">Speicherkapazität (kWh, optional)</label><input id="dev_ems_capacityKWh" type="number" min="0.001" step="any" inputmode="decimal"></div>
+            <div data-ems-limit="charger"><label for="dev_ems_chargerType">Ladepunkt-Art</label><select id="dev_ems_chargerType" class="browser-default"><option value="">Bitte auswählen</option><option value="ac">AC-Wallbox</option><option value="dc">DC-Ladepunkt</option></select></div>
+            <div data-ems-limit="ac"><label for="dev_ems_phases">Anzahl Phasen</label><select id="dev_ems_phases" class="browser-default"><option value="">Bitte auswählen</option><option value="1">1 Phase</option><option value="3">3 Phasen</option></select></div>
+            <div data-ems-limit="ac"><label for="dev_ems_minCurrentA">Minimaler Ladestrom (A)</label><input id="dev_ems_minCurrentA" type="number" min="0.1" step="any" inputmode="decimal"></div>
+            <div data-ems-limit="ac"><label for="dev_ems_maxCurrentA">Maximaler Ladestrom (A)</label><input id="dev_ems_maxCurrentA" type="number" min="0.1" step="any" inputmode="decimal"></div>
+            <div data-ems-limit="dc"><label for="dev_ems_minPowerW">Minimale Ladeleistung (W)</label><input id="dev_ems_minPowerW" type="number" min="1" step="1" inputmode="decimal"></div>
+            <div data-ems-limit="dc"><label for="dev_ems_maxPowerW">Maximale Ladeleistung (W)</label><input id="dev_ems_maxPowerW" type="number" min="1" step="1" inputmode="decimal"></div>
+          </div>
+          <p id="dev_ems_limits_help" class="nexo-muted">Leistungsgrenzen laut Gerät und Installation angeben. Bereits gültige EMS-Grenzen bleiben erhalten; diese Angaben ergänzen fehlende Grenzen. Offene Werte werden nach dem Übernehmen am Gerät angezeigt. Es werden keine unbegrenzten Leistungen angenommen.</p>
+        </div>
+        <p class="nexo-muted">Die Zuordnung wird zusammen mit dem Gerät über „Speichern und übernehmen“ übernommen. Die Einrichtung erfolgt hier; im App-Center sind anschließend die übernommenen Ergebnisse sichtbar.</p>
       </section>
 
       <div class="row">

@@ -100,12 +100,14 @@ assert.ok(moduleSource.includes('Math.pow(2'), 'exponential backoff missing');
     {startsAt:'2026-08-02T10:00:00Z',endsAt:'2026-08-02T10:15:00Z',total:0.3}
   ];
   mod._consecutiveErrors=0;
+  mod._lastSuccessMs=now;
   mod._scheduleNextFetch(tibberCfg,now,true);
-  assert.equal(mod._effectiveRefreshMinutes,360, 'Tibber with tomorrow prices must be cached for six hours');
+  assert.equal(mod._effectiveRefreshMinutes,27, 'Tibber must refresh before the configured 30-minute freshness deadline');
   const tibberDelayMinutes=(mod._nextFetchMs-now)/60000;
-  assert.ok(tibberDelayMinutes>=324 && tibberDelayMinutes<=396, 'Tibber jitter must stay within +/-10%');
+  assert.equal(tibberDelayMinutes,27, 'jitter must not extend a known good cache past its freshness deadline');
 
   mod._intervals=[];
+  mod._lastSuccessMs=0;
   const publicationWindow=Date.parse('2026-08-01T14:00:00Z');
   mod._scheduleNextFetch(tibberCfg,publicationWindow,true);
   assert.equal(mod._effectiveRefreshMinutes,60, 'Tibber missing tomorrow prices should retry hourly in publication window');

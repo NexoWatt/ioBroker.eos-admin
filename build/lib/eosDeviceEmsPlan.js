@@ -9,14 +9,15 @@
  */
 /**
  * Deterministic commissioning plan for verified device inventories. This module
- * never accesses the controller, writes states, enables an app, or creates a
- * device command. Its output must pass the normal versioned configuration save.
+ * never accesses the controller or writes device states. Explicit one-shot
+ * commissioning intents may enable validated rows/apps in the returned plan.
+ * Its output must pass the normal versioned configuration save.
  * Existing non-empty installer assignments are authoritative.
  * @typedef {import('./eosDeviceEmsPlan').Json} Json
  * @typedef {{[key: string]: Json}} Dict
  * @typedef {{id: string, type: string, unit: string, read: boolean, write: boolean, targetId: string}} Alias
- * @typedef {{baseId: string, devId: string, name: string, templateId: string, deviceClass: string, enabled: boolean, aliases: Map<string, Alias>, ems: Dict, discoveryCode: string}} Device
- * @typedef {{baseId: string, devId: string, status: string, code: string, target: string, mappedFields: string[], missing: string[], optionalMissing: string[]}} Status
+ * @typedef {{baseId: string, devId: string, name: string, templateId: string, protocol: string, deviceClass: string, enabled: boolean, aliases: Map<string, Alias>, ems: Dict, discoveryCode: string}} Device
+ * @typedef {{baseId: string, devId: string, status: string, code: string, target: string, mappedFields: string[], missing: string[], optionalMissing: string[], activationRequestId: string, activationApplied: boolean, corrections:string[]}} Status
  */
 const MODES = new Set(['auto', 'monitor', 'manual', 'singleStorage', 'storageFarm', 'gridMeter', 'generationMeter', 'consumptionMeter', 'pvInverter']);
 const STORAGE_CLASSES = new Set(['storageSystem', 'battery', 'batteryInverter']);
@@ -24,6 +25,7 @@ const MAX_DEVICES = 256;
 const MAX_CONFIG_BYTES = 2 * 1024 * 1024;
 const MAX_ROWS = 100;
 const { Buffer } = require('node:buffer');
+const { createHash } = require('node:crypto');
 /** @param {unknown} value @returns {value is Dict} */
 function isRecord(value) {
     return value !== null && typeof value === 'object' && !Array.isArray(value) &&
@@ -102,6 +104,31 @@ function device(raw) {
     if (ems.flowSlot !== undefined && (!Number.isInteger(ems.flowSlot) || Number(ems.flowSlot) < 0 || Number(ems.flowSlot) > 10)) {
         throw fail('EOS_EMS_PLAN_INTENT_INVALID');
     }
+    if (ems.activation !== undefined) {
+        const activation = record(ems.activation);
+        if (typeof activation.requested !== 'boolean' || !/^[A-Za-z0-9][A-Za-z0-9_-]{15,127}$/.test(text(activation.requestId))) {
+            throw fail('EOS_EMS_PLAN_ACTIVATION_INVALID');
+        }
+        if (activation.limits !== undefined && !isRecord(activation.limits))
+            throw fail('EOS_EMS_PLAN_ACTIVATION_INVALID');
+        const numericLimits = new Set(['maxChargeW', 'maxDischargeW', 'capacityKWh', 'minCurrentA', 'maxCurrentA', 'minPowerW', 'maxPowerW']);
+        for (const [key, value] of Object.entries(record(activation.limits))) {
+            if (numericLimits.has(key)) {
+                if (typeof value !== 'number' || !Number.isFinite(value) || value <= 0 || value > 1000000000)
+                    throw fail('EOS_EMS_PLAN_ACTIVATION_INVALID');
+            }
+            else if (key === 'coupling' || key === 'chargerType') {
+                if (value !== 'ac' && value !== 'dc')
+                    throw fail('EOS_EMS_PLAN_ACTIVATION_INVALID');
+            }
+            else if (key === 'phases') {
+                if (value !== 1 && value !== 3)
+                    throw fail('EOS_EMS_PLAN_ACTIVATION_INVALID');
+            }
+            else
+                throw fail('EOS_EMS_PLAN_ACTIVATION_INVALID');
+        }
+    }
     const aliases = new Map();
     const metadata = record(row.aliasMeta);
     if (Object.keys(metadata).length > 512)
@@ -119,7 +146,7 @@ function device(raw) {
         aliases.set(key, { id, type: text(meta.type), unit: text(meta.unit), read: meta.read !== false,
             write: meta.write === true, targetId: target || id });
     }
-    return { baseId, devId, name: text(row.name).slice(0, 128) || devId, templateId: text(row.templateId), deviceClass: text(row.deviceClass),
+    return { baseId, devId, name: text(row.name).slice(0, 128) || devId, templateId: text(row.templateId), protocol: text(row.protocol), deviceClass: text(row.deviceClass),
         enabled: row.enabled !== false, aliases, ems, discoveryCode: text(row.discoveryCode) };
 }
 /** @param {Device} dev @param {string[]} keys @param {boolean} [write] @param {string[]} [types] @param {string[]} [units] @returns {string} */
@@ -139,8 +166,8 @@ function identity(dev, mode) { return { v: 1, baseId: dev.baseId, devId: dev.dev
 /** @param {Dict} row @param {Device} dev @returns {boolean} */
 function belongs(row, dev) {
     const owner = record(row._eosDevice);
-    if (owner.v === 1 && owner.baseId === dev.baseId)
-        return true;
+    if (owner.v === 1)
+        return owner.baseId === dev.baseId;
     return Object.entries(row).some(([key, value]) => /(?:Id|ObjectId)$/.test(key) &&
         typeof value === 'string' && value.startsWith(`${dev.baseId}.`));
 }
@@ -152,7 +179,7 @@ function fill(row, key, value, result) {
     result.mappedFields.push(key);
 }
 /** @param {Device} dev @returns {Status} */
-function status(dev) { return { baseId: dev.baseId, devId: dev.devId, status: 'pending', code: 'ALIASES_PENDING', target: '', mappedFields: [], missing: [], optionalMissing: [] }; }
+function status(dev) { return { baseId: dev.baseId, devId: dev.devId, status: 'pending', code: 'ALIASES_PENDING', target: '', mappedFields: [], missing: [], optionalMissing: [], activationRequestId: text(record(dev.ems.activation).requestId), activationApplied: false, corrections: [] }; }
 /** An entered power value is not an object ID. Keep it for correction, never resolve it as a DP. @param {unknown} value */
 function numericReference(value) { return typeof value === 'number' || (typeof value === 'string' && /^[+-]?\d+(?:[.,]\d+)?$/.test(value.trim())); }
 /** Only bounded configuration reference strings, never secrets or values, enter conflict detection. @param {unknown} value @returns {string[]} */
@@ -186,7 +213,7 @@ function getDeviceEmsReferences(value) {
     const config = copyConfig(value);
     const read = new Set();
     const write = new Set();
-    const writeKey = /(?:write|^set|^target|^runObjectId$|^maxChargeObjectId$|^maxDischargeObjectId$|^phaseSwitchId$|^chargeEnableObjectId$|^dischargeEnableObjectId$|^feneconGridSetpoint|^e3dcSetPower|^enableId$)/i;
+    const writeKey = /(?:write|^set|^target|^output(?:Object)?Id$|^(?:pv)?feedInLimit|^pvLimit|^runObjectId$|^maxChargeObjectId$|^maxDischargeObjectId$|^phaseSwitchId$|^chargeEnableObjectId$|^dischargeEnableObjectId$|^feneconGridSetpoint|^e3dcSetPower|^enableId$)/i;
     /** @param {unknown} item @param {number} depth */
     const walk = (item, depth) => {
         if (!item || typeof item !== 'object' || depth > 12)
@@ -202,10 +229,11 @@ function getDeviceEmsReferences(value) {
         }
     };
     for (const item of [record(config.settingsConfig).evcsList, config.storage, config.storageFarm,
-        config.gridConstraints, config.thermalControl, config.dynamicGridConnection])
+        config.gridConstraints, config.thermalControl, config.thermal, config.vis, config.heatingRod, config.threshold,
+        config.generator, config.bhkw, config.dynamicGridConnection])
         walk(item, 0);
     for (const [key, id] of Object.entries(record(config.datapoints))) {
-        if (/^(?:pvPower|producer\d+Power|consumer\d+Power|gridPointPower)$/.test(key) && typeof id === 'string' && id.length <= 512 && id)
+        if (/^(?:pvPower|producer\d+Power|consumer\d+Power|gridPointPower|consumptionEvcs|batteryPower|storageSoc)$/.test(key) && typeof id === 'string' && id.length <= 512 && id)
             read.add(id);
     }
     if (read.size + write.size > 1024)
@@ -213,7 +241,7 @@ function getDeviceEmsReferences(value) {
     return { read: [...read].sort(), write: [...write].sort() };
 }
 /**
- * @param {{config: unknown, devices: unknown, limits?: {chargePoints?: unknown, batteries?: unknown}, writeTargets?: Record<string,string>, readTargets?: Record<string,string>}} input
+ * @param {{config: unknown, devices: unknown, limits?: {chargePoints?: unknown, batteries?: unknown}, writeTargets?: Record<string,string>, readTargets?: Record<string,string>, referenceMeta?: Record<string,{type?:unknown,unit?:unknown,read?:unknown,write?:unknown}>, allowedApps?:string[]}} input
  * @returns {{config: Dict, patch: Dict, changed: boolean, statuses: Status[]}}
  */
 function planDeviceEms(input) {
@@ -243,6 +271,35 @@ function planDeviceEms(input) {
     const storageLimit = limit(input.limits?.batteries, MAX_ROWS);
     /** @type {Status[]} */
     const statuses = [];
+    /** Existing live rows are restored if explicit commissioning cannot complete. @type {Map<string, Dict>} */
+    const activeOriginals = new Map();
+    /** @param {Device} dev @returns {Dict} */
+    const binding = dev => record(record(record(config.eosDeviceEms).bindings)[dev.baseId]);
+    /** @param {Device} dev */
+    const explicitApply = dev => record(dev.ems.activation).requested === true &&
+        text(record(dev.ems.activation).requestId) !== text(binding(dev).activationRequestId);
+    /** @param {Device} dev */
+    const requestFingerprint = dev => {
+        const activation = record(dev.ems.activation);
+        const bounds = record(activation.limits);
+        return createHash('sha256').update(JSON.stringify({ requested: activation.requested, mode: dev.ems.mode || 'auto',
+            scope: dev.ems.scope || '', flowSlot: dev.ems.flowSlot ?? null, templateId: dev.templateId, protocol: dev.protocol, deviceClass: dev.deviceClass,
+            limits: Object.fromEntries(Object.keys(bounds).sort().map(key => [key, bounds[key]])) })).digest('hex');
+    };
+    /** @param {string} id @param {Device} dev */
+    const belongsReference = (id, dev) => id.startsWith(`${dev.baseId}.`) || [...dev.aliases.values()].some(meta => meta.read && readTargetOf(id) === readTargetOf(meta.id) || meta.write && targetOf(id) === targetOf(meta.id));
+    /** Only identity-bearing measurement/command fields may adopt a legacy row. @param {Dict} row @returns {string[]} */
+    const primaryIds = row => Object.entries(row).flatMap(([key, value]) => {
+        if (key === 'datapoints' && isRecord(value))
+            return primaryIds(value);
+        return /^(?:socId|socObjectId|signedPowerId|batteryPowerObjectId|powerId|energyTotalId|chargePowerId|dischargePowerId|setSignedPowerId|setChargePowerId|setDischargePowerId|targetPowerObjectId|targetChargePowerObjectId|targetDischargePowerObjectId|setCurrentAId|setPowerWId|feneconEssActualPowerId|feneconEssActualPowerObjectId)$/.test(key)
+            && typeof value === 'string' && value && !numericReference(value) ? [value] : [];
+    });
+    /** @param {Dict} row @param {Device} dev */
+    const belongsDevice = (row, dev) => record(row._eosDevice).v === 1 ? record(row._eosDevice).baseId === dev.baseId
+        : belongs(row, dev) || explicitApply(dev) && primaryIds(row).some(id => belongsReference(id, dev));
+    /** @param {Dict} row @param {Device} dev */
+    const mixedIdentity = (row, dev) => primaryIds(row).some(id => !belongsReference(id, dev));
     /** @param {Dict} row @param {Device} dev @param {string} mode @param {string} target */
     const remember = (row, dev, mode, target) => {
         if (!row._eosDevice)
@@ -254,7 +311,7 @@ function planDeviceEms(input) {
         const bindings = section(registry, 'bindings');
         const next = { target, mode, ...(dev.ems.scope ? { scope: dev.ems.scope } : {}),
             ...(dev.ems.flowSlot !== undefined ? { flowSlot: dev.ems.flowSlot } : {}) };
-        bindings[dev.baseId] = next;
+        bindings[dev.baseId] = { ...record(bindings[dev.baseId]), ...next };
     };
     /** @param {Device} dev @param {Dict} candidate @param {unknown[]} competing @returns {boolean} */
     const conflict = (dev, candidate, competing) => {
@@ -266,13 +323,13 @@ function planDeviceEms(input) {
     const ev = (dev, result) => {
         const settings = section(config, 'settingsConfig');
         const list = rows(settings, 'evcsList', 50);
-        const found = list.filter(row => belongs(row, dev));
+        const found = list.filter(row => belongsDevice(row, dev));
         if (found.length > 1) {
             result.status = 'conflict';
             result.code = 'DUPLICATE_DEVICE_MAPPING';
             return;
         }
-        if (found.length && mappedIds(found[0]).some(id => !id.startsWith(`${dev.baseId}.`))) {
+        if (found.length && mixedIdentity(found[0], dev)) {
             result.status = 'conflict';
             result.code = 'MIXED_MANUAL_MAPPING';
             return;
@@ -283,6 +340,8 @@ function planDeviceEms(input) {
             return;
         }
         const row = found[0] || { enabled: false };
+        if (found.length && row.enabled !== false && explicitApply(dev))
+            activeOriginals.set(dev.baseId, copyConfig(row));
         const next = copyConfig(row);
         fill(next, 'name', dev.name, result);
         const fields = {
@@ -307,7 +366,8 @@ function planDeviceEms(input) {
             const meta = [...dev.aliases.values()].find(item => item.id === fields.energyTotalId);
             fill(next, 'energyTotalInputIsWh', meta?.unit === 'Wh', result);
         }
-        if (conflict(dev, next, [list.filter(item => item !== row), config.storage, config.storageFarm, config.gridConstraints, config.thermalControl])) {
+        if (conflict(dev, next, [list.filter(item => item !== row), config.storage, config.storageFarm, config.gridConstraints,
+            config.thermalControl, config.thermal, config.vis, config.heatingRod, config.threshold, config.generator, config.bhkw])) {
             result.status = 'conflict';
             result.code = 'CONTROL_TARGET_ALREADY_ASSIGNED';
             result.mappedFields = [];
@@ -343,8 +403,8 @@ function planDeviceEms(input) {
         const farmConfig = record(config.storageFarm);
         const farmRows = Array.isArray(farmConfig.storages) ? farmConfig.storages.filter(isRecord) : [];
         const singleAssigned = mappedIds(single).some(Boolean);
-        const existingSameSingle = belongs(record(single.datapoints), dev) || belongs(single, dev);
-        const existingSameFarm = farmRows.filter(row => belongs(row, dev));
+        const existingSameSingle = belongsDevice(single, dev);
+        const existingSameFarm = farmRows.filter(row => belongsDevice(row, dev));
         if ((farm && existingSameSingle) || (!farm && existingSameFarm.length) || existingSameFarm.length > 1) {
             result.status = 'conflict';
             result.code = 'STORAGE_CONTROLLER_ALREADY_ASSIGNED';
@@ -356,7 +416,7 @@ function planDeviceEms(input) {
             return;
         }
         const existing = farm ? existingSameFarm[0] : existingSameSingle ? single : undefined;
-        if (existing && mappedIds(existing).some(id => !id.startsWith(`${dev.baseId}.`))) {
+        if (existing && mixedIdentity(existing, dev)) {
             result.status = 'conflict';
             result.code = 'MIXED_MANUAL_MAPPING';
             return;
@@ -371,6 +431,10 @@ function planDeviceEms(input) {
         // A new assignment still needs commissioning even if its empty section
         // had enabled=true from an earlier installer selection.
         const row = existing ? copyConfig(existing) : farm ? { enabled: false } : { ...copyConfig(single), enabled: false };
+        if (existing && existing.enabled !== false && explicitApply(dev))
+            activeOriginals.set(dev.baseId, copyConfig(existing));
+        if (existing && !existing._eosDevice && explicitApply(dev))
+            result.corrections.push('LEGACY_ROW_ADOPTED');
         const destination = farm ? row : section(row, 'datapoints');
         fill(row, 'name', dev.name, result);
         const feneconHome = dev.templateId === 'ess.fenecon.FeneconHomeEssImpl';
@@ -384,6 +448,22 @@ function planDeviceEms(input) {
             return '';
         };
         const homeFeedback = feneconHome ? homePower(['r.essActivePower'], 'eSS0_ACTIVE_POWER') : '';
+        if (feneconHome && homeFeedback && explicitApply(dev)) {
+            const old = text(destination[farm ? 'signedPowerId' : 'batteryPowerObjectId']);
+            const oldActor = text(destination[farm ? 'feneconEssActualPowerId' : 'feneconEssActualPowerObjectId']);
+            /** @param {string} value */
+            const isWrongFeedback = value => value && (['r.power', 'r.powerAc', 'r.powerBalance'].some(key => value === `${dev.baseId}.aliases.${key}` || value === `${dev.baseId}.aliases.v1.${key}`) ||
+                [`${dev.baseId}.bATTERY_AC_POWER`, `${dev.baseId}.bATTERY_POWER`].includes(readTargetOf(value)));
+            if (isWrongFeedback(old)) {
+                destination[farm ? 'signedPowerId' : 'batteryPowerObjectId'] = homeFeedback;
+                result.corrections.push('FENECON_ACTOR_FEEDBACK_CORRECTED');
+            }
+            if (isWrongFeedback(oldActor)) {
+                destination[farm ? 'feneconEssActualPowerId' : 'feneconEssActualPowerObjectId'] = homeFeedback;
+                if (!result.corrections.includes('FENECON_ACTOR_FEEDBACK_CORRECTED'))
+                    result.corrections.push('FENECON_ACTOR_FEEDBACK_CORRECTED');
+            }
+        }
         const keys = farm ? {
             socId: ['r.soc'], signedPowerId: feneconHome ? [] : ['r.essActivePower', 'r.powerAc', 'r.power'],
             chargePowerId: ['r.powerCharge'], dischargePowerId: ['r.powerDischarge'],
@@ -432,13 +512,24 @@ function planDeviceEms(input) {
             }
             const gridKey = farm ? 'feneconGridSetpointId' : 'feneconGridSetpointObjectId';
             const nativeGrid = homePower(['ctrl.gridSetpointW', 'ctrl.napSetpointW'], 'sET_GRID_ACTIVE_POWER', true);
+            const oldGrid = text(destination[gridKey]);
+            if (explicitApply(dev) && oldGrid && (oldGrid === `${dev.baseId}.aliases.ctrl.powerSetpointW` ||
+                oldGrid === `${dev.baseId}.aliases.v1.ctrl.powerSetpointW` || targetOf(oldGrid) === `${dev.baseId}.sET_ACTIVE_POWER`)) {
+                destination[gridKey] = nativeGrid;
+                result.corrections.push('FENECON_NATIVE_TARGET_CORRECTED');
+            }
+            const multipleFarm = farm && devices.filter(item => item.enabled && item.ems.mode === 'storageFarm').length > 1;
+            if (explicitApply(dev) && signed && homeFeedback && multipleFarm && row.feneconControlMode !== 'direct-ess') {
+                row.feneconControlMode = 'direct-ess';
+                result.corrections.push('FENECON_DIRECT_ESS_SELECTED');
+            }
             // Populate both real target references without changing an existing
             // mode: direct-ess uses 706; fems-grid uses its guarded controller.
             const directMode = row.feneconControlMode === 'direct-ess';
             if (directMode && !commandKeys.slice(0, 3).some(key => !empty(destination[key])) && signed) {
                 fill(destination, commandKeys[0], signed, result);
             }
-            const preserveAutoDirect = existing && row.enabled !== false && empty(destination[gridKey]) &&
+            const preserveAutoDirect = !explicitApply(dev) && existing && row.enabled !== false && empty(destination[gridKey]) &&
                 !['direct-ess', 'fems-grid'].includes(text(row.feneconControlMode)) &&
                 commandKeys.slice(0, 3).some(key => !empty(destination[key]));
             if (preserveAutoDirect && nativeGrid)
@@ -487,13 +578,33 @@ function planDeviceEms(input) {
             fill(destination, farm ? 'pvPowerId' : 'dcPvPowerObjectId', dcPv, result);
         else if (farm && row.coupling === 'ac')
             fill(destination, 'pvPowerId', acPv, result);
+        const pvKey = farm ? 'pvPowerId' : 'dcPvPowerObjectId';
+        if (explicitApply(dev) && numericReference(destination[pvKey]) && row.coupling === 'dc' && dcPv) {
+            destination[pvKey] = dcPv;
+            result.corrections.push('PV_POWER_REFERENCE_CORRECTED');
+        }
+        // The Home ESS actuator channel 604 is deliberately separate from the
+        // physical battery/display channel 415. Never feed its DC-PV component
+        // into the home's displayed battery discharge a second time.
+        const batteryFlow = feneconHome ? alias(dev, ['r.powerAc', 'r.power'], false, ['number'], ['W']) : '';
+        if (farm && batteryFlow)
+            fill(row, 'batteryFlowPowerId', batteryFlow, result);
+        if (!farm && batteryFlow) {
+            const globalDp = section(config, 'datapoints');
+            if (empty(globalDp.batteryPower)) {
+                fill(globalDp, 'batteryPower', batteryFlow, result);
+                section(section(config, 'settings'), 'flowPowerDpIsW').batteryPower = true;
+            }
+            fill(globalDp, 'storageSoc', alias(dev, ['r.soc'], false, ['number'], ['%']), result);
+        }
         if (!mappedIds(destination).length) {
             result.code = 'ALIASES_PENDING';
             result.mappedFields = [];
             return;
         }
         const competing = [farm ? [single, ...farmRows.filter(item => item !== existing)] : farmRows,
-            record(config.settingsConfig).evcsList, config.gridConstraints, config.thermalControl];
+            record(config.settingsConfig).evcsList, config.gridConstraints, config.thermalControl, config.thermal, config.vis,
+            config.heatingRod, config.threshold, config.generator, config.bhkw];
         if (conflict(dev, row, competing)) {
             result.status = 'conflict';
             result.code = 'CONTROL_TARGET_ALREADY_ASSIGNED';
@@ -518,7 +629,7 @@ function planDeviceEms(input) {
         if (farm) {
             const list = rows(section(config, 'storageFarm'), 'storages');
             if (existing)
-                list[list.findIndex(item => belongs(item, dev))] = row;
+                list[list.findIndex(item => belongsDevice(item, dev))] = row;
             else
                 list.push(row);
         }
@@ -648,7 +759,12 @@ function planDeviceEms(input) {
         else if (key === 'pvPower')
             fill(owner, 'pvName', dev.name, result);
         if (mode === 'gridMeter') {
-            fill(dp, 'gridPointConnected', alias(dev, ['r.online', 'comm.connected'], false, ['boolean']), result);
+            const connected = alias(dev, ['comm.connected', 'r.online'], false, ['boolean']);
+            if (explicitApply(dev) && connected && [`${dev.baseId}.aliases.r.online`, `${dev.baseId}.aliases.v1.r.online`].includes(text(dp.gridPointConnected)) && dp.gridPointConnected !== connected) {
+                dp.gridPointConnected = connected;
+                result.corrections.push('NVP_TRANSPORT_STATUS_SELECTED');
+            }
+            fill(dp, 'gridPointConnected', connected, result);
             fill(dp, 'gridPointWatchdog', alias(dev, ['r.heartbeat', 'r.lastSeenMs']), result);
         }
         remember(owner, dev, mode, key);
@@ -659,6 +775,12 @@ function planDeviceEms(input) {
     // Existing auto-created control rows survive missing/deactivated devices, but
     // are held inactive. Re-adding a device never grants activation by itself.
     const activeBases = new Set(devices.filter(dev => dev.enabled && dev.ems.mode !== 'monitor').map(dev => dev.baseId));
+    const disableSingleApp = () => {
+        const root = section(config, 'emsApps');
+        if (root.schemaVersion === undefined)
+            root.schemaVersion = 1;
+        section(section(root, 'apps'), 'storage').enabled = false;
+    };
     const controlRows = [
         ...(Array.isArray(record(config.settingsConfig).evcsList) ? /** @type {Json[]} */ (record(config.settingsConfig).evcsList) : []),
         ...(Array.isArray(record(config.storageFarm).storages) ? /** @type {Json[]} */ (record(config.storageFarm).storages) : []),
@@ -667,13 +789,42 @@ function planDeviceEms(input) {
     for (const item of controlRows) {
         const row = record(item);
         const owner = record(row._eosDevice);
-        if (owner.v === 1 && typeof owner.baseId === 'string' && !activeBases.has(owner.baseId))
+        if (owner.v === 1 && typeof owner.baseId === 'string' && !activeBases.has(owner.baseId)) {
             row.enabled = false;
+            if (row === config.storage)
+                disableSingleApp();
+        }
     }
     for (const dev of devices) {
         const result = status(dev);
         statuses.push(result);
         const mode = text(dev.ems.mode) || 'auto';
+        const previousBinding = binding(dev);
+        const profileChanged = typeof previousBinding.deviceTemplateId === 'string' &&
+            (previousBinding.deviceTemplateId !== dev.templateId || typeof previousBinding.deviceProtocol === 'string' && previousBinding.deviceProtocol !== dev.protocol ||
+                !dev.discoveryCode && previousBinding.deviceClass !== dev.deviceClass);
+        if (profileChanged) {
+            // Reusing a device ID is not permission to transfer a commissioned
+            // controller to another hardware profile. Preserve the assignment
+            // for review, but never restore an active old-profile row on a
+            // failed attempt to commission its replacement.
+            let incompatibleVendor = false;
+            for (const item of controlRows) {
+                const row = record(item);
+                const owner = record(row._eosDevice);
+                if (owner.v === 1 && owner.baseId === dev.baseId) {
+                    row.enabled = false;
+                    if (row === config.storage)
+                        disableSingleApp();
+                    if (row.vendorProfile === 'fenecon-openems' && dev.templateId !== 'ess.fenecon.FeneconHomeEssImpl')
+                        incompatibleVendor = true;
+                }
+            }
+            if (!explicitApply(dev) || incompatibleVendor) {
+                result.code = 'ACTIVATION_PROFILE_CHANGED';
+                continue;
+            }
+        }
         if (!dev.enabled) {
             result.status = 'disabled';
             result.code = 'DEVICE_DISABLED';
@@ -686,6 +837,12 @@ function planDeviceEms(input) {
         }
         if (dev.discoveryCode || !dev.aliases.size) {
             result.code = dev.discoveryCode || 'ALIASES_PENDING';
+            continue;
+        }
+        if (result.activationRequestId && binding(dev).activationRequestId === result.activationRequestId &&
+            binding(dev).activationFingerprint !== requestFingerprint(dev)) {
+            result.status = 'conflict';
+            result.code = 'ACTIVATION_REQUEST_CHANGED';
             continue;
         }
         const checkpoint = copyConfig(config);
@@ -726,6 +883,257 @@ function planDeviceEms(input) {
                 Object.assign(config, checkpoint);
                 result.mappedFields = [];
             }
+        }
+    }
+    // Commission only explicit, unconsumed installer requests. These records are
+    // persisted with the exact same versioned patch as the row/app changes, so a
+    // restart or a later background inventory refresh cannot replay activation.
+    const grantedApps = new Set(Array.isArray(input.allowedApps) ? input.allowedApps : []);
+    const references = new Map(Object.entries(input.referenceMeta || {}));
+    for (const dev of devices)
+        for (const meta of dev.aliases.values())
+            references.set(meta.id, meta);
+    /** @param {unknown} value @returns {number|null} */
+    const number = value => typeof value === 'number' && Number.isFinite(value) ? value
+        : typeof value === 'string' && /^[+-]?\d+(?:\.\d+)?$/.test(value.trim()) ? Number(value) : null;
+    /** @param {unknown} id @param {boolean} write @param {string} type @param {string[]} units */
+    const validReference = (id, write, type, units) => {
+        if (typeof id !== 'string' || !id || numericReference(id))
+            return false;
+        const meta = references.get(id);
+        return !!meta && meta.type === type && (write ? meta.write === true : meta.read === true) &&
+            (!units.length || units.includes(text(meta.unit)));
+    };
+    /** @param {Device} dev @returns {Dict|undefined} */
+    const managedRow = dev => {
+        const target = text(binding(dev).target);
+        if (target === 'storage')
+            return isRecord(config.storage) ? config.storage : undefined;
+        const list = target === 'storageFarm' ? record(config.storageFarm).storages : target === 'evcs' ? record(config.settingsConfig).evcsList : undefined;
+        return Array.isArray(list) ? list.filter(isRecord).find(row => record(row._eosDevice).baseId === dev.baseId) : undefined;
+    };
+    for (let index = 0; index < devices.length; index++) {
+        const dev = devices[index];
+        const result = statuses[index];
+        const activation = record(dev.ems.activation);
+        const requestId = text(activation.requestId);
+        if (!requestId || !dev.enabled || result.status === 'conflict' || result.code === 'ACTIVATION_PROFILE_CHANGED')
+            continue;
+        const mode = text(dev.ems.mode) || 'auto';
+        const appId = dev.deviceClass === 'evCharger' && mode === 'auto' ? 'charging'
+            : mode === 'singleStorage' ? 'storage' : mode === 'storageFarm' ? 'storagefarm' : '';
+        const row = managedRow(dev);
+        if (binding(dev).activationRequestId === requestId) {
+            // A consumed request records a previous successful save, not proof
+            // that today's device metadata is available and still usable.
+            if (result.status !== 'mapped')
+                continue;
+            result.activationApplied = true;
+            const app = record(record(record(config.emsApps).apps)[appId]);
+            if (activation.requested === false)
+                result.code = 'ACTIVATION_DISABLED';
+            else if (appId && (row?.enabled === false || app.enabled !== true || app.installed !== true))
+                result.code = 'APP_DISABLED';
+            else if (!result.missing.length)
+                result.code = 'ACTIVATION_APPLIED';
+            continue;
+        }
+        if (result.status !== 'mapped')
+            continue;
+        /** @type {Dict} */
+        const proposedBounds = {};
+        const limits = record(activation.limits);
+        /** Keep existing valid customer limits authoritative; populate missing finite bounds. @param {string} key @param {number} max @param {boolean} [zeroAllowed] */
+        const requireBound = (key, max, zeroAllowed = false) => {
+            const current = number(row?.[key]);
+            const supplied = number(limits[key]);
+            const value = current !== null && (zeroAllowed ? current >= 0 : current > 0) && current <= max ? current : supplied;
+            if (value === null || !Number.isFinite(value) || (zeroAllowed ? value < 0 : value <= 0) || value > max) {
+                result.missing.push(`limit:${key}`);
+                return null;
+            }
+            if (current !== value)
+                proposedBounds[key] = value;
+            return value;
+        };
+        /** @param {string} key @param {boolean} write @param {string} type @param {string[]} units */
+        const requireReference = (key, write, type, units) => {
+            const target = mode === 'singleStorage' ? record(row?.datapoints) : record(row);
+            if (!validReference(target[key], write, type, units))
+                result.missing.push(`reference:${key}`);
+        };
+        if (activation.requested === true && appId) {
+            if (!row)
+                result.missing.push('deviceRow');
+            if (!grantedApps.has(appId))
+                result.missing.push(`license:${appId}`);
+            const gridId = record(config.datapoints).gridPointPower;
+            const gridMeta = typeof gridId === 'string' ? references.get(gridId) : undefined;
+            const perDpW = record(record(config.settings).flowPowerDpIsW).gridPointPower;
+            const gridUnit = text(gridMeta?.unit);
+            if (!validReference(gridId, false, 'number', ['W', 'kW']) || gridUnit === 'W' && perDpW === false || gridUnit === 'kW' && perDpW !== false) {
+                result.missing.push('gridPointPower');
+            }
+            if (appId === 'charging') {
+                requireReference('powerId', false, 'number', ['W']);
+                const chargerType = text(row?.chargerType) || text(limits.chargerType);
+                if (!['ac', 'dc'].includes(chargerType))
+                    result.missing.push('limit:chargerType');
+                else if (empty(row?.chargerType))
+                    proposedBounds.chargerType = chargerType;
+                if (chargerType === 'ac') {
+                    const phases = number(row?.phases) ?? number(limits.phases);
+                    if (phases !== 1 && phases !== 3)
+                        result.missing.push('limit:phases');
+                    else if (number(row?.phases) !== phases)
+                        proposedBounds.phases = phases;
+                    const min = requireBound('minCurrentA', 1000);
+                    const max = requireBound('maxCurrentA', 1000);
+                    if (min !== null && max !== null && min > max)
+                        result.missing.push('limit:minCurrentA|maxCurrentA');
+                    if (empty(row?.setCurrentAId))
+                        requireReference('setPowerWId', true, 'number', ['W']);
+                    else
+                        requireReference('setCurrentAId', true, 'number', ['A']);
+                }
+                else if (chargerType === 'dc') {
+                    const min = requireBound('minPowerW', 1000000000);
+                    const max = requireBound('maxPowerW', 1000000000);
+                    if (min !== null && max !== null && min > max)
+                        result.missing.push('limit:minPowerW|maxPowerW');
+                    requireReference('setPowerWId', true, 'number', ['W']);
+                }
+                if (!empty(row?.enableWriteId))
+                    requireReference('enableWriteId', true, 'boolean', []);
+            }
+            else {
+                const farm = appId === 'storagefarm';
+                requireReference(farm ? 'socId' : 'socObjectId', false, 'number', ['%']);
+                requireReference(farm ? 'signedPowerId' : 'batteryPowerObjectId', false, 'number', ['W']);
+                const destination = farm ? record(row) : record(row?.datapoints);
+                const native = row?.vendorProfile === 'fenecon-openems' && row?.feneconControlMode === 'fems-grid';
+                if (native)
+                    requireReference(farm ? 'feneconGridSetpointId' : 'feneconGridSetpointObjectId', true, 'number', ['W']);
+                else if (!empty(destination[farm ? 'setSignedPowerId' : 'targetPowerObjectId']))
+                    requireReference(farm ? 'setSignedPowerId' : 'targetPowerObjectId', true, 'number', ['W']);
+                else {
+                    requireReference(farm ? 'setChargePowerId' : 'targetChargePowerObjectId', true, 'number', ['W']);
+                    requireReference(farm ? 'setDischargePowerId' : 'targetDischargePowerObjectId', true, 'number', ['W']);
+                }
+                const charge = requireBound('maxChargeW', 1000000000, farm);
+                const discharge = requireBound('maxDischargeW', 1000000000, farm);
+                if (charge === 0 && discharge === 0)
+                    result.missing.push('limit:storagePower');
+                const coupling = text(row?.coupling) || text(limits.coupling);
+                if (!['ac', 'dc'].includes(coupling))
+                    result.missing.push('limit:coupling');
+                else if (empty(row?.coupling))
+                    proposedBounds.coupling = coupling;
+                if (!empty(limits.capacityKWh) && empty(row?.capacityKWh))
+                    requireBound('capacityKWh', 10000000);
+                const otherApp = record(record(record(config.emsApps).apps)[farm ? 'storage' : 'storagefarm']);
+                const otherRows = farm ? [record(config.storage)] : (Array.isArray(record(config.storageFarm).storages) ? /** @type {Json[]} */ (record(config.storageFarm).storages) : []);
+                if (otherApp.enabled === true && otherRows.some(item => record(item).enabled !== false && mappedIds(item).length))
+                    result.missing.push('otherStorageController');
+            }
+        }
+        if (activation.requested === true && result.missing.length) {
+            result.missing = [...new Set(result.missing)];
+            result.status = 'pending';
+            result.code = 'ACTIVATION_PENDING';
+            const original = activeOriginals.get(dev.baseId);
+            if (row && original) {
+                for (const key of Object.keys(row))
+                    delete row[key];
+                Object.assign(row, original);
+                result.corrections = [];
+                result.mappedFields = [];
+            }
+            continue;
+        }
+        if (row && appId) {
+            Object.assign(row, proposedBounds);
+            row.enabled = activation.requested === true;
+            if (appId === 'storage' && activation.requested === false)
+                disableSingleApp();
+        }
+        if (activation.requested === true && appId) {
+            const registry = section(config, 'emsApps');
+            fill(registry, 'schemaVersion', 1, result);
+            const app = section(section(registry, 'apps'), appId);
+            app.installed = true;
+            app.enabled = true;
+            if (appId === 'charging') {
+                const dp = record(config.datapoints);
+                const oldEv = text(dp.consumptionEvcs);
+                if (oldEv && references.get(oldEv)?.type === 'boolean') {
+                    dp.consumptionEvcs = '';
+                    result.corrections.push('EV_FLOW_BOOLEAN_OVERRIDE_REMOVED');
+                }
+            }
+        }
+        const registry = section(config, 'eosDeviceEms');
+        registry.v = 1;
+        const bindings = section(registry, 'bindings');
+        bindings[dev.baseId] = { ...record(bindings[dev.baseId]), activationRequestId: requestId,
+            activationFingerprint: requestFingerprint(dev), activationRequested: activation.requested === true,
+            deviceTemplateId: dev.templateId, deviceProtocol: dev.protocol, deviceClass: dev.deviceClass };
+        result.activationApplied = true;
+        result.code = activation.requested === true ? 'ACTIVATION_APPLIED' : 'ACTIVATION_DISABLED';
+    }
+    // Switching on a shared app also switches on every enabled controller row.
+    // Do not implicitly start a dormant manual row or a row whose commissioning
+    // is still incomplete just because another device was added successfully.
+    for (const appId of ['charging', 'storagefarm']) {
+        const oldApp = record(record(record(before.emsApps).apps)[appId]);
+        const app = record(record(record(config.emsApps).apps)[appId]);
+        if (oldApp.installed === true && oldApp.enabled === true || app.enabled !== true)
+            continue;
+        const list = appId === 'charging' ? record(config.settingsConfig).evcsList : record(config.storageFarm).storages;
+        if (!Array.isArray(list))
+            continue;
+        const controllingFields = appId === 'charging' ? ['setCurrentAId', 'setPowerWId', 'enableWriteId']
+            : ['setSignedPowerId', 'setChargePowerId', 'setDischargePowerId', 'feneconGridSetpointId'];
+        const relevant = devices.filter(dev => appId === 'charging' ? dev.deviceClass === 'evCharger' && (dev.ems.mode || 'auto') === 'auto' : dev.ems.mode === 'storageFarm');
+        const approved = new Set(relevant.filter(dev => {
+            const result = statuses.find(item => item.baseId === dev.baseId);
+            return record(dev.ems.activation).requested === true && result?.activationApplied === true && result.code === 'ACTIVATION_APPLIED' &&
+                text(record(record(record(before.eosDeviceEms).bindings)[dev.baseId]).activationRequestId) !== result.activationRequestId;
+        }).map(dev => dev.baseId));
+        const hasDormantController = list.filter(isRecord).some(row => row.enabled !== false && controllingFields.some(key => !empty(row[key])) &&
+            !approved.has(text(record(row._eosDevice).baseId)));
+        if (!hasDormantController)
+            continue;
+        app.enabled = false;
+        for (const dev of relevant) {
+            if (!approved.has(dev.baseId))
+                continue;
+            const result = /** @type {Status} */ (statuses.find(item => item.baseId === dev.baseId));
+            const row = managedRow(dev);
+            const original = activeOriginals.get(dev.baseId);
+            if (row) {
+                if (original) {
+                    for (const key of Object.keys(row))
+                        delete row[key];
+                    Object.assign(row, original);
+                    result.corrections = [];
+                    result.mappedFields = [];
+                }
+                else
+                    row.enabled = false;
+            }
+            const previous = record(record(record(before.eosDeviceEms).bindings)[dev.baseId]);
+            const current = binding(dev);
+            for (const key of ['activationRequestId', 'activationFingerprint', 'activationRequested', 'deviceTemplateId', 'deviceProtocol', 'deviceClass']) {
+                if (previous[key] === undefined)
+                    delete current[key];
+                else
+                    current[key] = previous[key];
+            }
+            result.activationApplied = false;
+            result.status = 'pending';
+            result.code = 'ACTIVATION_PENDING';
+            result.missing.push('otherUncommissionedController');
         }
     }
     /** @type {Dict} */

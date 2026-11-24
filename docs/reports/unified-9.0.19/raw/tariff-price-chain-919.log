@@ -1,0 +1,11 @@
+✔ actual provider publication → TarifVis → CoreLimits → Wallet keeps EUR/kWh including high, zero and negative prices (65.539764ms)
+✔ structured EUR curves keep their prices while untyped legacy cents and explicit units retain their conversions (0.215755ms)
+✔ actual manual mapping preserves cent conversion and supports explicit EUR unit without changing freshness (4.65532ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 187.622332

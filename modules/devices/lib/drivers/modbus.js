@@ -27,6 +27,14 @@ function _errMsg(err) {
   try { return (err && err.message) ? String(err.message) : String(err); } catch (_) { return ''; }
 }
 
+// Hosted authorization and lifecycle boundaries are not device/register errors.
+// They must abort the whole snapshot without marking valid optional registers
+// unsupported for the subsequent permitted poll.
+function isReadOperationBoundaryError(err) {
+  return ['EOS_DEVICES_NOT_AUTHORIZED', 'EOS_DEVICES_STOPPED', 'EOS_MODULE_STOPPED', 'EOS_OWNERSHIP_REQUIRED']
+    .includes(_errCode(err) || _errMsg(err));
+}
+
 function isTransportError(err) {
   const code = _errCode(err);
   const msg = _errMsg(err);
@@ -2370,6 +2378,7 @@ class ModbusDriver {
                 return true;
               }
             } catch (e) {
+              if (isReadOperationBoundaryError(e)) throw e;
               // Ignore probe errors and continue scanning.
             }
           }
@@ -2398,7 +2407,8 @@ class ModbusDriver {
     // Ensure discovery has run so we know the correct unitId/base/fc/endian.
     try {
       await this._maybeDiscoverSunSpec();
-    } catch (_) {
+    } catch (error) {
+      if (isReadOperationBoundaryError(error)) throw error;
       // ignore
     }
 
@@ -2428,6 +2438,7 @@ class ModbusDriver {
       try {
         hdr = await readRegs(base + off, 2);
       } catch (e) {
+        if (isReadOperationBoundaryError(e)) throw e;
         break;
       }
 
@@ -2863,6 +2874,7 @@ async readDatapoints(datapoints) {
   };
 
   const handleGroupReadError = async (fc, g, e, unitId) => {
+    if (isReadOperationBoundaryError(e)) throw e;
     const isRequired = groupHasRequiredDp(g);
 
     if (isTransportError(e)) {
@@ -2998,6 +3010,7 @@ async readDatapoints(datapoints) {
         const regs = await readRegisterGroupRaw(fc, item.addr, Number(item.len || item.src.length || 1), unitId);
         if (storeRegisterItemValue(item, regs, item.addr)) success += 1;
       } catch (e) {
+        if (isReadOperationBoundaryError(e)) throw e;
         lastErr = e;
         if (groupHasRequiredDp(ig)) {
           requiredFailure = e;
@@ -3029,7 +3042,7 @@ async readDatapoints(datapoints) {
       return s && s.sunspecModel !== undefined && s.sunspecModel !== null;
     });
     if (needsSunSpec) {
-      try { await this._maybeScanSunSpecModels(); } catch (_) {}
+      try { await this._maybeScanSunSpecModels(); } catch (error) { if (isReadOperationBoundaryError(error)) throw error; }
     }
 
     const readItems = (datapoints || []).map(dp => {
@@ -3129,6 +3142,7 @@ async readDatapoints(datapoints) {
         try {
           regs = await readRegisterGroupRaw(fc, g.start, len, unitId);
         } catch (e) {
+          if (isReadOperationBoundaryError(e)) throw e;
           let fallbackReadOk = false;
           if (isModbusIllegalAddressOrValue(e)) {
             for (const off of groupFallbackOffsets(g)) {
@@ -3139,7 +3153,8 @@ async readDatapoints(datapoints) {
                 fallbackReadOk = true;
                 this._cacheAlfenReadVariantForGroup(g, unitId, off);
                 break;
-              } catch (_) {
+              } catch (fallbackError) {
+                if (isReadOperationBoundaryError(fallbackError)) throw fallbackError;
                 // Try the next explicitly configured fallback offset, if any.
               }
             }

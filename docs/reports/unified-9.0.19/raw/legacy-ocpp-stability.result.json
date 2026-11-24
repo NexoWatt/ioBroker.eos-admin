@@ -1,0 +1,14 @@
+{
+  "name": "legacy-ocpp-stability",
+  "command": [
+    "npm",
+    "run",
+    "test:rc57-ocpp-stability"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin/ui",
+  "startedAt": "2026-11-24T18:11:44.742457+00:00",
+  "durationSeconds": 0.505,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-919/legacy-ocpp-stability.log",
+  "sha256": "260fb266e2d5c159e4716f7d4cef028a6dbdc3907ebd3248f8a79285b6a55aae"
+}

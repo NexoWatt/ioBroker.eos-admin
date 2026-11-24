@@ -56,6 +56,7 @@
  */
 
 'use strict';
+const { readTariffPriceState } = require('../../lib/tariff-price');
 
 
 /**
@@ -2932,10 +2933,11 @@ class CoreLimitsModule extends BaseModule {
 
         const tariffActive = await readStateBool(this.adapter, 'tarif.aktiv', false);
         const tariffState = await readStateString(this.adapter, 'tarif.state', '');
-        const tariffCurrentPrice = await readStateNumber(this.adapter, 'tarif.preisAktuellEurProKwh', null);
+        const tariffCurrentPriceFresh = await readStateBool(this.adapter, 'tarif.currentPriceFresh', null);
+        const tariffCurrentPrice = tariffCurrentPriceFresh === false ? null : await readTariffPriceState(this.adapter, 'tarif.preisAktuellEurProKwh');
         const tariffNegativeActive = await readStateBool(this.adapter, 'tarif.negativpreisAktiv', false);
         const tariffGridImportPreferred = await readStateBool(this.adapter, 'tarif.netzbezugBevorzugt', tariffNegativeActive);
-        const tariffNegativeMinPrice = await readStateNumber(this.adapter, 'tarif.negativPreisMinEurProKwh', null);
+        const tariffNegativeMinPrice = await readTariffPriceState(this.adapter, 'tarif.negativPreisMinEurProKwh');
         const tariffNextNegativeFrom = await readStateString(this.adapter, 'tarif.naechstesNegativVon', '');
         const tariffNextNegativeTo = await readStateString(this.adapter, 'tarif.naechstesNegativBis', '');
         const tariffStatus = await readStateString(this.adapter, 'tarif.negativpreisStatus', '');

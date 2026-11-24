@@ -1,0 +1,15 @@
+{
+  "name": "devices-hosted-typecheck-node24",
+  "command": [
+    "node",
+    "node_modules/typescript/bin/tsc",
+    "-p",
+    "modules/devices/tsconfig.hosted.json"
+  ],
+  "cwd": ".",
+  "startedAt": "2026-11-24T18:42:03.893811+00:00",
+  "durationSeconds": 1.893,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-919/devices-hosted-typecheck-node24.log",
+  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

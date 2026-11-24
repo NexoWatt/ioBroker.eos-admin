@@ -50,7 +50,7 @@ export interface HostedRuntime {
     _stopWriteLoop?(): void;
     _createDriver(): Driver;
     initObjects(): Promise<unknown>;
-    start(): Promise<unknown>;
+    start(options?: { backgroundInitialPoll?: boolean }): Promise<unknown>;
     stop(): Promise<unknown>;
     handleStateChange(id: string, state: State): Promise<unknown>;
 }

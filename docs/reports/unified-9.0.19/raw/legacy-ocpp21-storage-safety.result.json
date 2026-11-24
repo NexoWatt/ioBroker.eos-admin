@@ -1,0 +1,14 @@
+{
+  "name": "legacy-ocpp21-storage-safety",
+  "command": [
+    "npm",
+    "run",
+    "test:rc59-ocpp21-native-storage-safety"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin/ui",
+  "startedAt": "2026-11-24T18:11:44.729928+00:00",
+  "durationSeconds": 0.472,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-919/legacy-ocpp21-storage-safety.log",
+  "sha256": "9b0fce63b76c53e2e08f2615f6e97b39d0e7a053d0eb9a464a9f99af45238a58"
+}

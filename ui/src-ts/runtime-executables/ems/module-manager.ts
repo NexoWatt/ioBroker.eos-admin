@@ -189,6 +189,8 @@ class ModuleManager {
     _stopHeapMonitor?: () => void;
     _gridConstraintsModule?: ModuleInstance;
     _nvpTopologyModule?: ModuleInstance;
+    _stopCompletion?: Promise<PromiseSettledResult<unknown>[]>;
+    private readonly _pendingModuleWork = new Set<Promise<void>>();
     /**
      * @param {any} adapter
      * @param {*} dpRegistry
@@ -349,6 +351,21 @@ class ModuleManager {
         }
         if (!maxLen || !Number.isFinite(maxLen) || maxLen < 1000) maxLen = 20000;
         return s.length > maxLen ? (s.slice(0, maxLen) + '...') : s;
+    }
+
+    /** Behält auch bereits zeitüberschrittene Modulaufträge bis zum echten Ende.
+     * Der äußere Watchdog darf sie melden, aber eine Rekonfiguration darf danach
+     * keinen zweiten Regler auf denselben Aktor starten. */
+    private _trackModuleWork<T>(work: () => T | Promise<T>): Promise<T> {
+        const task = Promise.resolve().then(work);
+        const settlement = task.then(() => undefined, () => undefined);
+        this._pendingModuleWork.add(settlement);
+        void settlement.then(() => { this._pendingModuleWork.delete(settlement); });
+        return task;
+    }
+
+    async waitForPendingWork(): Promise<void> {
+        await Promise.all([...this._pendingModuleWork]);
     }
 
     /**
@@ -936,11 +953,11 @@ class ModuleManager {
                 const isolated = await rc85RunIsolatedResult(
                     `ems-module:${key}`,
                     timeoutMs,
-                    () => withActuatorShadowContext(
+                    () => this._trackModuleWork(() => withActuatorShadowContext(
                         this.adapter,
                         { owner: key, module: key, priority: priorityForOwner(key), reason: 'module-tick', cycleId: this._tickCount, leaseMs: 15000 },
                         () => m.instance.tick!(),
-                    ),
+                    )),
                     this.adapter?.log || console,
                 );
                 if (!isolated.ok) {
@@ -1066,18 +1083,31 @@ class ModuleManager {
      * Ablauf und Zusammenhang: Beendet Module und Laufzeitüberwachung. Wird von der Engine beim Stoppen aufgerufen, damit Modul-Timer und weitere Hintergrundarbeit nicht fortlaufen.
      */
     stop() {
-        try { this._nvpTopologyModule?.stop?.(); } catch (_error) {}
+        if (this._stopCompletion) return;
+        const pending: Promise<unknown>[] = [];
+        const stopOne = (stop: (() => unknown) | undefined): void => {
+            if (!stop) return;
+            try { pending.push(Promise.resolve(stop())); }
+            catch (error: unknown) { pending.push(Promise.reject(error)); }
+        };
+        stopOne(this._nvpTopologyModule?.stop?.bind(this._nvpTopologyModule));
         this._nvpTopologyModule = undefined;
-        try { this._stopHeapMonitor?.(); } catch (_error) {}
+        stopOne(this._stopHeapMonitor);
         this._stopHeapMonitor = undefined;
-        try { rc88ClearRuntimeHardening(); } catch (_error) {}
-        for (const m of this.modules || []) {
-            try {
-                if (m && m.instance && typeof m.instance.stop === 'function') m.instance.stop();
-            } catch (_e) {
-                // Ein fehlerhaftes Modul darf den restlichen Shutdown nicht blockieren.
-            }
+        stopOne(() => rc88ClearRuntimeHardening());
+        for (const row of this.modules || []) {
+            const instance = row.instance;
+            if (instance && typeof instance.stop === 'function') stopOne(() => instance.stop());
         }
+        // Every rejection is observed even when adapter unload cannot await us.
+        this._stopCompletion = Promise.allSettled(pending);
+    }
+
+    /** Nur ein vollständig beendeter alter Modulbestand darf ersetzt werden. */
+    async stopAndWait(): Promise<void> {
+        this.stop();
+        const results = await this._stopCompletion;
+        if (results?.some(result => result.status === 'rejected')) throw new Error('EOS_EMS_MODULE_STOP_FAILED');
     }
 
 }

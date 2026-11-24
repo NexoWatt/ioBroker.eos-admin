@@ -34,6 +34,7 @@
   <meta content="width=device-width, initial-scale=1" name="viewport"/>
   <title>NexoWatt EOS – Speicherfarm</title>
   <link href="/static/styles.css" rel="stylesheet"/>
+  <link href="/static/storagefarm-summary.css" rel="stylesheet"/>
   <script src="/static/nw-i18n.js" defer></script>
 <script defer src="/eos-session-idle.js"></script>
 </head>
@@ -79,13 +80,26 @@
       <div>
         <div class="nw-page-hero__eyebrow">Speicherfarm</div>
         <h2>Speicherfarm</h2>
-        <small id="sf_summary">SoC Ø: -- % | Farm netto: -- | PV/WR: -- | Brutto Laden: -- | Brutto Entladen: -- | Online: --/-- | Regelbar: --/--</small>
+        <small id="sf_summary">Gesamtübersicht wird geladen …</small>
       </div>
       <div class="nw-storagefarm-actions">
         <span id="sf_mode_label" class="nw-storagefarm-mode">Modus: --</span>
         <button class="btn" id="sf_reload" type="button">Neu laden</button>
       </div>
     </div>
+
+    <section class="nw-farm-summary" aria-label="Speicherfarm Gesamtübersicht">
+      <div class="nw-farm-summary__heading"><h3>Gesamte Speicherfarm</h3><span id="sf_members" class="nw-farm-members">— / — aktuell</span></div>
+      <div class="nw-farm-metrics">
+        <article class="nw-farm-metric" id="sf_metric_capacity"><h4 id="sf_capacity_label">Gesamtkapazität</h4><strong id="sf_capacity_value">—</strong><small id="sf_capacity_detail">Noch keine bestätigten Daten</small></article>
+        <article class="nw-farm-metric" id="sf_metric_soc"><h4 id="sf_soc_label">Ø Ladezustand</h4><strong id="sf_soc_value">—</strong><small id="sf_soc_detail">Noch keine bestätigten Daten</small></article>
+        <article class="nw-farm-metric" id="sf_metric_net"><h4 id="sf_net_label">Batterieleistung netto</h4><strong id="sf_net_value">—</strong><small id="sf_net_detail">Noch keine bestätigten Daten</small></article>
+        <article class="nw-farm-metric" id="sf_metric_charge"><h4 id="sf_charge_label">Ladeleistung gesamt</h4><strong id="sf_charge_value">—</strong><small id="sf_charge_detail">Noch keine bestätigten Daten</small></article>
+        <article class="nw-farm-metric" id="sf_metric_discharge"><h4 id="sf_discharge_label">Entladeleistung gesamt</h4><strong id="sf_discharge_value">—</strong><small id="sf_discharge_detail">Noch keine bestätigten Daten</small></article>
+        <article class="nw-farm-metric" id="sf_metric_pv"><h4 id="sf_pv_label">PV-Leistung gesamt</h4><strong id="sf_pv_value">—</strong><small id="sf_pv_detail">Noch keine bestätigten Daten</small></article>
+      </div>
+      <p class="nw-farm-summary__hint" id="sf_aggregate_hint" role="status">Warte auf aktuelle Farmdaten.</p>
+    </section>
 
     <div class="sf-table nw-storagefarm-table" role="table" aria-label="Speicherfarm Status">
       <div class="nw-storagefarm-row nw-storagefarm-row--head" role="row">
@@ -101,6 +115,7 @@
   </section>
 </main>
 
+<script src="/static/storagefarm-summary.js"></script>
 <script src="/static/storagefarm.js"></script>
 <script src="/static/cockpit-shell.js"></script>
 <script src="/static/pwa.js" defer></script>

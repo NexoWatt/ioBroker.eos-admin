@@ -1,0 +1,2 @@
+{"original":"/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin/ui/scripts/verify-storage-topology-authority.js","sha256":"9b432fdbb95e31d67154b252020d91db8deb5abfe6cd9ac84502e0d35701e6e2","adaptations":["Use actual hosted runtime fixture instead of removed standalone adapter factory; keep original fake database/actuator behavior and every scenario assertion; installed type-detector is loaded normally."]}
+[storage-topology-authority] OK: AppCenter, Policies, Messquellen und Hardwarewriter nutzen genau eine exklusive Speicher-Topologie.

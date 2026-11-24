@@ -1,0 +1,14 @@
+{
+  "name": "installer-build",
+  "command": [
+    "npm",
+    "run",
+    "build:installer"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin",
+  "startedAt": "2026-11-24T18:10:52.049014+00:00",
+  "durationSeconds": 9.506,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-919/installer-build.log",
+  "sha256": "4c860fdd1bb3cc23d0ecf0c523b388731823519cd092b62437c1f8c9eac105e5"
+}

@@ -8172,9 +8172,10 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
             const appsRoot = (rootCfg.emsApps && typeof rootCfg.emsApps === 'object') ? rootCfg.emsApps : {};
             const apps = (appsRoot.apps && typeof appsRoot.apps === 'object') ? appsRoot.apps : {};
             const singleApp = (apps.storage && typeof apps.storage === 'object') ? apps.storage : null;
-            const singleAppActive = singleApp
+            const deviceAssignmentDisabled = rootCfg.storage?._eosDevice?.v === 1 && rootCfg.storage?.enabled === false;
+            const singleAppActive = !deviceAssignmentDisabled && (singleApp
                 ? (singleApp.installed === true && singleApp.enabled === true)
-                : (rootCfg.enableStorageControl === true);
+                : (rootCfg.enableStorageControl === true));
 
             const farm = (this.adapter && typeof this.adapter._nwGetStorageFarmRuntimeInfo === 'function')
                 ? this.adapter._nwGetStorageFarmRuntimeInfo()
@@ -8264,7 +8265,7 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
                 ? (app.installed === true && app.enabled === true)
                 : (rootCfg.enableStorageFarm === true);
 
-            return !!(enabledByConfig && configuredCount >= 2);
+            return !!(enabledByConfig && configuredCount >= 1);
         } catch {
             return false;
         }
