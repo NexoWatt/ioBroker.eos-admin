@@ -2,8 +2,8 @@
  * NexoWatt unattended-upgrade quarantine.
  * This release never enables automatic code installation. A repository label,
  * adapter prefix or free-form publisher field cannot authenticate a release.
- * Existing EOS-managed policies are migrated to none; manual administrator
- * updates remain available. A future signed, version-pinned rollout is separate.
+ * EOS only records its own disabled status. Shared adapter and repository
+ * policies belong to the ioBroker administrator and are never changed here.
  */
 
 export type NexoWattAutoUpdatePolicy = 'none' | 'patch' | 'minor' | 'major';
@@ -24,7 +24,6 @@ interface NexoWattAutoUpdateAdapter {
         error: (message: string) => void;
     };
     getForeignObjectAsync: (id: string) => Promise<any>;
-    setForeignObjectAsync: (id: string, object: any, options?: any) => Promise<any>;
     getObjectViewAsync: (design: string, search: string, params: any, options?: any) => Promise<any>;
     getStateAsync: (id: string) => Promise<any>;
     setStateAsync: (id: string, value: any, ack?: boolean) => Promise<any>;
@@ -97,7 +96,7 @@ export class NexoWattStableUpdateManager {
 
     async start(): Promise<NexoWattStableUpdateStatus> {
         this.stopped = false;
-        // Do not leave a legacy auto-install window while browser assets load.
+        // Block EOS-initiated installation without rewriting controller policy.
         const status = await this.reconcile('startup-security-migration');
         this.ensurePeriodicTimer();
         return status;
@@ -291,65 +290,8 @@ export class NexoWattStableUpdateManager {
                 ? state.managedAdapters.filter(name => typeof name === 'string' && validAdapterName(name))
                 : []),
         ]);
-        state.previousPolicies ||= {};
-        for (const name of [...names].sort()) {
-            if (this.stopped) {
-                return this.statusFromPersisted(false, state);
-            }
-            const current = await this.adapter.getForeignObjectAsync(`system.adapter.${name}`);
-            if (!current?.common) {
-                continue;
-            }
-            // Preserve the old value only for an explicitly reviewed later
-            // migration. Never restore an automatic policy in this release.
-            if (!Object.prototype.hasOwnProperty.call(state.previousPolicies, name)) {
-                const previous = current.common.automaticUpgrade;
-                state.previousPolicies[name] = ['none', 'patch', 'minor', 'major'].includes(previous) ? previous : null;
-            }
-            await this.writeAdapterPolicy(name, POLICY);
-        }
-        const systemConfig = await this.adapter.getForeignObjectAsync('system.config');
-        if (systemConfig?.common) {
-            let systemConfigChanged = false;
-            const auto =
-                systemConfig.common.adapterAutoUpgrade && typeof systemConfig.common.adapterAutoUpgrade === 'object'
-                    ? clone(systemConfig.common.adapterAutoUpgrade)
-                    : null;
-            if (auto && state.selectedRepository) {
-                auto.repositories =
-                    auto.repositories && typeof auto.repositories === 'object' ? { ...auto.repositories } : {};
-                if (
-                    auto.repositories[state.selectedRepository] === true &&
-                    (state.previousRepositoryEnabled === false || state.previousRepositoryEnabled === null)
-                ) {
-                    if (state.previousRepositoryEnabled === null || state.previousRepositoryEnabled === undefined) {
-                        delete auto.repositories[state.selectedRepository];
-                    } else {
-                        auto.repositories[state.selectedRepository] = state.previousRepositoryEnabled;
-                    }
-                    systemConfigChanged = true;
-                }
-                if (JSON.stringify(systemConfig.common.adapterAutoUpgrade) !== JSON.stringify(auto)) {
-                    systemConfig.common.adapterAutoUpgrade = auto;
-                    systemConfigChanged = true;
-                }
-            }
-            if (
-                state.ownsActiveRepoOrder &&
-                Array.isArray(state.previousActiveRepo) &&
-                Array.isArray(systemConfig.common.activeRepo) &&
-                systemConfig.common.activeRepo[0] === state.selectedRepository
-            ) {
-                systemConfig.common.activeRepo = [...state.previousActiveRepo];
-                systemConfigChanged = true;
-            }
-            if (systemConfigChanged && !this.stopped) {
-                await this.adapter.setForeignObjectAsync('system.config', systemConfig, { user: ADMIN_USER });
-            }
-        }
-        state.previousRepositoryEnabled = undefined;
-        state.previousActiveRepo = undefined;
-        state.ownsActiveRepoOrder = false;
+        // Retain historic recovery evidence; do not restore or quarantine shared
+        // policy from a stale snapshot. Even a NexoWatt name is not ownership.
         state.managedAdapters = [...names].sort();
         state.availableStableAdapters = [];
         state.lastSync = Date.now();
@@ -359,31 +301,10 @@ export class NexoWattStableUpdateManager {
         }
         if (!this.stopped) {
             this.adapter.log.info(
-                `[NexoWatt stable updates] Unattended installation blocked; managed policies quarantined (${reason})`,
+                `[NexoWatt stable updates] EOS unattended installation blocked; ioBroker policies unchanged (${reason})`,
             );
         }
         return this.statusFromPersisted(false, state);
-    }
-
-    private async writeAdapterPolicy(name: string, policy: NexoWattAutoUpdatePolicy | null): Promise<void> {
-        if (!validAdapterName(name)) {
-            throw new Error('invalidManagedAdapterName');
-        }
-        const id = `system.adapter.${name}`;
-        const object = await this.adapter.getForeignObjectAsync(id);
-        if (!object?.common || this.stopped) {
-            return;
-        }
-        const current = object.common.automaticUpgrade as NexoWattAutoUpdatePolicy | undefined;
-        if ((policy === null && current === undefined) || current === policy) {
-            return;
-        }
-        if (policy === null) {
-            delete object.common.automaticUpgrade;
-        } else {
-            object.common.automaticUpgrade = policy;
-        }
-        await this.adapter.setForeignObjectAsync(id, object, { user: ADMIN_USER });
     }
 
     private async persist(enabled: boolean, state: PersistedState): Promise<void> {

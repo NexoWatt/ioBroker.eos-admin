@@ -297,6 +297,15 @@ tests.integration(path.resolve(__dirname, '..'), {
                 legacyAdmin.native = { ...legacyAdmin.native, port: 8081, bind: '0.0.0.0', auth: true, secure: false };
                 expectedAdminSettings = accessSettings(legacyAdmin);
                 await harness.objects.setObjectAsync(legacyAdmin._id, legacyAdmin);
+                // This suite models fresh, manual setup before activation, not a
+                // licensed cutover. Prove that no legacy instance could be bypassed.
+                for (const name of ['nexowatt-ui', 'nexowatt-devices', 'eebus', 'nexowatt-backup']) {
+                    const inventory = await harness.objects.getObjectViewAsync('system', 'instance', {
+                        startkey: `system.adapter.${name}.`, endkey: `system.adapter.${name}.\u9999`,
+                    });
+                    assert.ok(Array.isArray(inventory?.rows), 'Legacy inventory must be available');
+                    assert.equal(inventory.rows.length, 0, `Fresh setup unexpectedly contains ${name}`);
+                }
                 await harness.changeAdapterConfig('eos-admin', {
                     native: {
                         port,
@@ -308,6 +317,9 @@ tests.integration(path.resolve(__dirname, '..'), {
                         certChained: '',
                         eosExternalOrigin: '',
                         eosMdnsEnabled: false,
+                        // Explicit manual setup; the production default and license
+                        // prerequisite for automatic migration remain unchanged.
+                        eosAutoMigrate: false,
                         eosLockLegacyAdmin: true,
                         eosLegacyAdminLockPort: 18081,
                         eosLegacyAdminLockBind: '127.0.0.1',
@@ -528,8 +540,10 @@ tests.integration(path.resolve(__dirname, '..'), {
                 assert.equal(response.status, 200, `Login failed; error=${await responseErrorCode(response)}`);
                 assert.ok(!body.access_token && !body.refresh_token, 'no bearer tokens in JSON');
                 const cookieHeaders = response.headers.getSetCookie();
-                const accessCookie = cookieHeaders.find(value => value.startsWith('access_token='));
+                const accessCookie = cookieHeaders.find(value => value.startsWith('nexowatt_eos_admin_0_access_token='));
                 assert.ok(accessCookie, 'login must issue an access cookie');
+                assert.ok(!cookieHeaders.some(value => /^(access_token|refresh_token|connect\.sid)=/.test(value)),
+                    'EOS must not overwrite standard Admin cookies on another port');
                 assert.match(accessCookie, /;\s*Secure(?:;|$)/i);
                 assert.match(accessCookie, /;\s*HttpOnly(?:;|$)/i);
                 cookie = cookieHeaders.map(value => value.split(';')[0]).join('; ');
@@ -566,7 +580,19 @@ tests.integration(path.resolve(__dirname, '..'), {
             it('persists device settings without restarting EOS or invalidating the active login', async function () {
                 this.timeout(10000);
                 const before = await harness.objects.getObjectAsync('system.adapter.eos-admin.0');
+                assert.equal(before.native.eosAutoMigrate, false, 'Only explicit fresh manual setup permits this draft');
+                const migrationResponse = await request('/api/eos/migration', { headers: { cookie } });
+                assert.equal(migrationResponse.status, 200);
+                const migration = await migrationResponse.json();
+                assert.equal(migration.phase, 'DISABLED');
+                assert.deepEqual(migration.sources, []);
+                const licenseResponse = await request('/api/license/info', { headers: { cookie } });
+                assert.equal(licenseResponse.status, 200);
+                const license = await licenseResponse.json();
+                assert.equal(license.valid, false, 'Manual configuration must not grant a license');
+                assert.equal(license.coreEnabled, false, 'The unlicensed runtime must remain fenced');
                 const view = await (await request('/api/eos/modules/devices', { headers: { cookie } })).json();
+                assert.equal(view.status.active, false, 'The device runtime must remain nonoperational');
                 const configuration = { ...view.config, enabled: false, devices: [] };
                 const saved = await request('/api/eos/modules/devices', {
                     method: 'PUT',
@@ -584,6 +610,8 @@ tests.integration(path.resolve(__dirname, '..'), {
                 const persisted = await (await request('/api/eos/modules/devices', { headers: { cookie } })).json();
                 assert.equal(persisted.config.enabled, false);
                 assert.deepEqual(persisted.config.devices, []);
+                assert.equal(persisted.status.active, false, 'Saving a disabled draft must not arm device operation');
+                assert.equal(status.activationRequired, true, 'Saving a draft must not bypass central activation');
                 await assertAdminPreserved();
             });
             it('protects the installed migration and certificate pages and creates a private device CSR', async () => {
@@ -816,7 +844,7 @@ tests.integration(path.resolve(__dirname, '..'), {
                         'Restart must not expose bearer tokens in JSON',
                     );
                     const newCookies = response.headers.getSetCookie();
-                    const accessCookie = newCookies.find(value => value.startsWith('access_token='));
+                    const accessCookie = newCookies.find(value => value.startsWith('nexowatt_eos_admin_0_access_token='));
                     assert.ok(accessCookie, 'Restart login must issue a new access cookie');
                     assert.match(accessCookie, /;\s*Secure(?:;|$)/i);
                     assert.match(accessCookie, /;\s*HttpOnly(?:;|$)/i);

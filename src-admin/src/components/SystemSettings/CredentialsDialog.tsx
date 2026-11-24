@@ -427,7 +427,7 @@ export default class CredentialsDialog extends BaseSystemSettingsDialog<
                 add(credentialId, {
                     instance: this.props.t('AI assistant'),
                     key: CHAT_SETTINGS_OBJECT_ID,
-                    icon: 'adapter/admin/admin.svg',
+                    icon: 'img/admin.svg',
                 });
             }
         } catch {

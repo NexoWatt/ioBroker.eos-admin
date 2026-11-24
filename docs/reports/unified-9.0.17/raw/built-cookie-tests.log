@@ -1,0 +1,16 @@
+✔ parallel HTTPS ports keep standard Admin login, refresh and session cookies through EOS login/logout (541.097205ms)
+✔ EOS ignores generic and foreign-instance cookies; duplicate own credentials are rejected before OAuth (500.631558ms)
+✔ raw WebSocket upgrades normalize before later generic-cookie auth listeners and reject duplicates (225.539439ms)
+✔ direct writeHead Set-Cookie object and raw-array forms cannot overwrite Admin credentials (251.118242ms)
+✔ actual instance proxy strips EOS/Admin credentials in both directions while retaining adapter cookies (337.144257ms)
+✔ production Web registration keeps cookie isolation outside the proxy upgrade interceptor (34.616448ms)
+✔ response cookie mapping is idempotent and preserves application cookies and security attributes (0.408394ms)
+✔ cookie-name whitespace cannot smuggle Admin credentials past downstream tolerant cookie parsers (0.301274ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2268.491441

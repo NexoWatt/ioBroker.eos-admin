@@ -1,3 +1,5 @@
+> **9.0.17:** Getrennte EOS-Browsercookies und keine automatischen Änderungen fremder ioBroker-Rechte oder Metadaten. Standard-Admin und Backitup bleiben eigenständige Adapter. [Anleitung](START_HIER_9.0.17.md) · [Prüfbericht](docs/reports/unified-9.0.17/PRUEFBERICHT.md).
+
 > **9.0.16:** Geräte speichern auch vor dem operativen Modulstart; bei ausstehender Übernahme klare Sperranzeige. Nachgewiesene Überschreibungen gespeicherter Einstellungen beim Start korrigiert; alte Installer-Dateien beim Überkopieren für `npm publish` berücksichtigt; Website-Abmeldung nach zehn Minuten ohne Bedienung. [Anleitung](START_HIER_9.0.16.md) · [Prüfbericht](docs/reports/unified-9.0.16/PRUEFBERICHT.md).
 
 > **9.0.15:** Gemeinsames Smartphone-App-Symbol mit dem NexoWatt-Logo und klar benannter Zugang zur Bestandsübernahme. [Anleitung](START_HIER_9.0.15.md) · [Prüfbericht](docs/reports/unified-9.0.15/PRUEFBERICHT.md).
@@ -20,16 +22,16 @@
 
 # NexoWatt EOS
 
-**Version 9.0.16 · technisches Paket: `iobroker.eos-admin` · Vertriebskanal: `next`**
+**Version 9.0.17 · technisches Paket: `iobroker.eos-admin` · Vertriebskanal: `next`**
 
 NexoWatt EOS verbindet die Systemverwaltung aus EOS-Admin 8.0.2 mit Dashboard,
 Installer und Energiemanagement aus NexoWatt UI 1.0.38. Eine ioBroker-Instanz betreibt
 die gemeinsamen Module. Die bisherige UI wird im Zielbetrieb nicht zusätzlich gestartet.
 Der technische Paketname bleibt für bestehende Integrationen erhalten.
 
-Version 9.0.16 bleibt ein Integrations-Teststand für `next`. Die Versionsnummer ist
+Version 9.0.17 bleibt ein Integrations-Teststand für `next`. Die Versionsnummer ist
 kein Nachweis einer allgemeinen Produktivfreigabe oder CRA-Konformität. Tatsächliche
-Ergebnisse und Artefakthashes stehen im [Prüfbericht 9.0.16](docs/reports/unified-9.0.16/PRUEFBERICHT.md).
+Ergebnisse und Artefakthashes stehen im [Prüfbericht 9.0.17](docs/reports/unified-9.0.17/PRUEFBERICHT.md).
 Die [Berichte zu 9.0.4](docs/reports/unified-9.0.4/PRUEFBERICHT.md),
 [9.0.3](docs/reports/unified-9.0.3/PRUEFBERICHT.md) und früheren Versionen bleiben
 historische Belege; ihre Ergebnisse bestätigen keine späteren Änderungen.
@@ -185,3 +187,17 @@ Sicherheitsanforderungen, STRIDE-Risiken, CRA-/DSGVO-Bezug und offene Nachweise 
 [Lizenzwiederherstellung seit 9.0.2](docs/unified/LICENSE_RECOVERY_9.0.2.md) ·
 [Historischer Prüfbericht 9.0.2](docs/reports/unified-9.0.2/PRUEFBERICHT.md).
 Der [Prüfbericht 9.0.5](docs/reports/unified-9.0.5/PRUEFBERICHT.md) ordnet die tatsächlich ausgeführten Prüfungen und offenen Punkte diesem Lieferstand zu.
+
+
+## Archivierter Änderungsvermerk 8.0.0
+
+Der älteste Eintrag wurde für die ioBroker-Grenze von höchstens 20 `common.news`-Versionen aus den Paketmetadaten hierher verschoben. Der Wortlaut bleibt erhalten:
+
+```json
+{
+  "8.0.0": {
+    "en": "Native migration to ioBroker Admin 8.3.5 with EOS security, roles, licensing and authenticated instance proxy.",
+    "de": "Native Umstellung auf ioBroker Admin 8.3.5 mit EOS-Schutzmaßnahmen, Rollen, Lizenzen und authentifiziertem Instanzproxy."
+  }
+}
+```

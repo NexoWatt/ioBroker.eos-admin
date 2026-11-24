@@ -131,3 +131,25 @@ EOS-MERGE-T07 bleibt die maßgebliche Vertrauensgrenze: genau ein Regler-/Transp
 `EOS-MIG-014-02` betrifft Datenverlust durch eine ignorierte alte `devicesJson`-Liste. Die Korrektur ist auf den Legacy-Import begrenzt; widersprüchliche Quellen werden abgelehnt. `EOS-MIG-014-03` betrifft konkurrierende manuelle Import-/Konfigurationsoperationen und die Erhaltung bereits gebundener Namespaces. Die endgültigen Prüfergebnisse und die Grenzen des Laufzeitmodells stehen im [9.0.14-Prüfbericht](../reports/unified-9.0.14/PRUEFBERICHT.md).
 
 Die Wiederherstellung wird nicht durch Umgehen des Start-, Lizenz- oder Eigentumsgates ermöglicht. Bei geschützten Fremdadapter-Credentials bleibt die Controllergrenze erhalten. Die Prüfung ist ein Software- und Regressionstestnachweis; physische Übergabe, tatsächliche Kundeneinstellungen und Reaktionszeiten sind auf der Anlage zu prüfen. Keine zusätzliche Aussage zur CRA-Konformität oder Serienfreigabe entsteht daraus.
+
+
+## Änderungsbezug 9.0.17 – unabhängiger Admin-Parallelbetrieb
+
+Die Änderungen betreffen die Vertrauensgrenzen zwischen dem EOS-Webserver,
+den gemeinsam verwendeten ioBroker-Datenbanken und eigenständigen Adaptern.
+Sie erweitern den technischen Nachweis; sie erklären keine vollständige
+CRA-Konformität oder allgemeine Produktionsfreigabe.
+
+| ID / STRIDE | Befund und Maßnahme | Nachweis und verbleibende Grenze |
+| --- | --- | --- |
+| EOS-COEX-017-01 / S,D | Gleiche Cookienamen kollidieren auf demselben Host auch bei unterschiedlichen Ports. EOS nutzt instanzbezogene Cookies an seiner HTTP-/WebSocket-Grenze und ein eigenes privates Socket-Geheimnis. Generische Admincookies werden weder übernommen noch gelöscht; Weiterleitungen filtern fremde Anmeldedaten. CWE-613/862. | Reale TLS-/Socket-/Proxytests; gegenseitige Browserbedienung und konkrete Anlagenabnahme bleiben gesondert. |
+| EOS-COEX-017-02 / T,E,D | Automatische globale ACL-, Gruppen- und Fremdobjektpflege konnte den Standard-Admin beeinflussen. Bestehende fremde Benutzer, Gruppen, Icons und Konfigurationen bleiben unverändert. Nur fehlende eigene EOS-Rollengruppen werden angelegt; HTTP und Socket leiten Rechte aus tatsächlichen Mitgliedschaften ab. CWE-732/862. | Negativtests für leere und fremde Rollengruppen, bestehende ACLs sowie Standard-Admin/Backitup/Discovery. Keine automatische Rekonstruktion unbekannter früherer Rechte. |
+| EOS-COEX-017-03 / T,D | Ganze Instanzobjekte aus alten Leseständen können gleichzeitig gespeicherte Geräte-/EMS-Einstellungen überschreiben. Die betroffenen eigenen Verwaltungswege ändern nur die jeweils vorgesehenen Eigenschaften. | Tests für gleichzeitige Konfigurationsänderungen und bestehende Geräte-/EMS-Daten; Versionsupdate ist keine erneute Bestandsübernahme. |
+| EOS-COEX-017-04 / T,D | EOS-eigene Updatepflege darf keine globale Repository-Reihenfolge oder fremde Updatepolitik ändern. Der eigene automatische Installationspfad bleibt gesperrt; Standard-Backitup gehört nicht zu den Übernahmequellen. | Gezielte Update-/Migrations-/Backup-Grenztests. Unterstützte Controller-Abfragen können weiterhin den gemeinsamen Repository-Metadaten-Cache auffrischen. |
+
+Ergebnisse und tatsächliche Umgebungsgrenzen stehen im
+[9.0.17-Prüfbericht](../reports/unified-9.0.17/PRUEFBERICHT.md), der aktuelle
+[ioBroker-Richtlinienabgleich](../reports/unified-9.0.17/IOBROKER_GUIDELINES_REVIEW_DE.md)
+führt die verwendeten offiziellen Quellen auf. Der gemeinsame Controller- und
+Betriebssystemzugang bleibt eine gemeinsame Vertrauenszone; die Korrektur ist
+keine Prozess-Sandbox gegenüber beliebigem lokal ausgeführtem Code.

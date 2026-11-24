@@ -1,0 +1,12 @@
+✔ unified metadata validates against the unchanged upstream schema (171.915059ms)
+✔ ioBroker JSON configuration remains valid (530.141971ms)
+✔ own instance states have meaningful roles without changing existing state types (1.897535ms)
+✔ one installable adapter and a retained Express4 UI runtime (0.952545ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 906.91573

@@ -10,8 +10,8 @@ export default [
             parserOptions: {
                 tsconfigRootDir: import.meta.dirname,
                 projectService: {
-                    // TypeScript prioritizes the adjacent declaration file for this legacy JS helper.
-                    allowDefaultProject: ['src/lib/eosNewsSecurity.js'],
+                    // TypeScript prioritizes the adjacent declaration file for these JS helpers.
+                    allowDefaultProject: ['src/lib/eosNewsSecurity.js', 'src/lib/eosRolePolicy.js'],
                     defaultProject: 'tsconfig.json',
                 },
             },

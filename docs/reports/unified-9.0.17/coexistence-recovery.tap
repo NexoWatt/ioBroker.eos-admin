@@ -1,0 +1,76 @@
+TAP version 13
+# Subtest: recovery defaults to check and rejects all writes and unknown target paths
+ok 1 - recovery defaults to check and rejects all writes and unknown target paths
+  ---
+  duration_ms: 2.678487
+  type: 'test'
+  ...
+# Subtest: valid saved ACL with exact old EOS target produces only a conditional review proposal
+ok 2 - valid saved ACL with exact old EOS target produces only a conditional review proposal
+  ---
+  duration_ms: 1.928562
+  type: 'test'
+  ...
+# Subtest: changed current ACL including preserved state bits never gets a restore proposal
+ok 3 - changed current ACL including preserved state bits never gets a restore proposal
+  ---
+  duration_ms: 0.519022
+  type: 'test'
+  ...
+# Subtest: missing, corrupt and non-ACL preimages are preserved without invented defaults
+ok 4 - missing, corrupt and non-ACL preimages are preserved without invented defaults
+  ---
+  duration_ms: 0.617557
+  type: 'test'
+  ...
+# Subtest: unmanaged or unreadable objects never become write candidates
+ok 5 - unmanaged or unreadable objects never become write candidates
+  ---
+  duration_ms: 0.454311
+  type: 'test'
+  ...
+# Subtest: only bounded ordinary ACLs and JSON values can be reported
+ok 6 - only bounded ordinary ACLs and JSON values can be reported
+  ---
+  duration_ms: 0.488504
+  type: 'test'
+  ...
+# Subtest: reader executes only fixed property gets without shell or inherited Node injection
+ok 7 - reader executes only fixed property gets without shell or inherited Node injection
+  ---
+  duration_ms: 0.841957
+  type: 'test'
+  ...
+# Subtest: child failures never expose stderr or sensitive output
+ok 8 - child failures never expose stderr or sensitive output
+  ---
+  duration_ms: 0.450634
+  type: 'test'
+  ...
+# Subtest: administrator capability damage without preimage is diagnosed but not reset
+ok 9 - administrator capability damage without preimage is diagnosed but not reset
+  ---
+  duration_ms: 1.221628
+  type: 'test'
+  ...
+# Subtest: standalone fake-controller run works after EOS removal and never writes live configuration
+ok 10 - standalone fake-controller run works after EOS removal and never writes live configuration
+  ---
+  duration_ms: 1225.375922
+  type: 'test'
+  ...
+# Subtest: controller identity and report-file protections reject substitution or overwrite
+ok 11 - controller identity and report-file protections reject substitution or overwrite
+  ---
+  duration_ms: 1.560994
+  type: 'test'
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 11
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1382.535025

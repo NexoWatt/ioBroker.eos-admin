@@ -1,0 +1,27 @@
+{
+  "runtime": "Node 24.22.3",
+  "uid": 1000,
+  "ancestors": [
+    {
+      "path": "/",
+      "uid": 1000,
+      "gid": 1000,
+      "mode": "0o755",
+      "symlink": false
+    },
+    {
+      "path": "/tmp",
+      "uid": 1000,
+      "gid": 1000,
+      "mode": "0o755",
+      "symlink": false
+    },
+    {
+      "path": "/tmp/eos-917-controller-node24-final-lscv_p4_",
+      "uid": 1000,
+      "gid": 1000,
+      "mode": "0o700",
+      "symlink": false
+    }
+  ]
+}

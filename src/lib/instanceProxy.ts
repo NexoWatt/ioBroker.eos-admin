@@ -42,7 +42,18 @@ interface Authorization {
 }
 type ObjectValue = Record<string, unknown>;
 const HIDDEN_AUTHORIZATION = Symbol('eosProxyAuthorization');
-const ADMIN_COOKIES = new Set(['access_token', 'refresh_token', 'connect.sid', 'nexowatt_eos_first_login']);
+const ADMIN_COOKIES = new Set([
+    'access_token',
+    'refresh_token',
+    'connect.sid',
+    'io',
+    'ioBroker.sid',
+    'eos-admin.sid',
+    'nexowatt_eos_first_login',
+]);
+// Never forward another EOS instance's host cookies to a proxied adapter, or
+// allow that adapter to replace the enclosing EOS login cookie in its response.
+const isAdminCookie = (name: string): boolean => ADMIN_COOKIES.has(name) || name.startsWith('nexowatt_eos_');
 const HOP_HEADERS = new Set([
     'connection',
     'keep-alive',
@@ -448,7 +459,7 @@ export class InstanceProxy {
         const cookie = req.headers.cookie
             ?.split(';')
             .map(value => value.trim())
-            .filter(value => !ADMIN_COOKIES.has(value.split('=', 1)[0] || ''))
+            .filter(value => !isAdminCookie(value.split('=', 1)[0] || ''))
             .join('; ');
         if (cookie) {
             headers.cookie = cookie;
@@ -472,7 +483,7 @@ export class InstanceProxy {
             return null;
         }
         const name = first.split('=', 1)[0] || '';
-        if (ADMIN_COOKIES.has(name) || name.startsWith('__Host-')) {
+        if (isAdminCookie(name) || name.startsWith('__Host-')) {
             return null;
         }
         const attributes = parts.map(part => part.trim()).filter(part => !/^(?:domain|path)\s*=/i.test(part));

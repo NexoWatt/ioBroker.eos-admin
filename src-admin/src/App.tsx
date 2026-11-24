@@ -632,7 +632,8 @@ class App extends Router<AppProps, AppState> {
     private languageSet: boolean = false;
     private socket: AdminConnection | null = null;
     private adminInstance: string = '';
-    private newsInstance: number = 0;
+    private newsSubscription: string | undefined;
+    private newsSubscribeTimer: ReturnType<typeof setTimeout> | null = null;
     private doNotAskSessionExpiration: number = 0;
     private tabsInfo: AdminTab[] | null = null;
     private pendingCommandTimer: ReturnType<typeof setTimeout> | null = null;
@@ -1559,14 +1560,15 @@ class App extends Router<AppProps, AppState> {
                         // Give some time for communication
                         setTimeout(() => this.logsWorkerChanged(this.state.currentHost), 1000);
 
-                        setTimeout(
-                            () =>
-                                this.findNewsInstance().then(instance => {
-                                    this.newsInstance = instance;
-                                    void this.socket?.subscribeState(`admin.${instance}.info.newsFeed`, this.onNews);
-                                }),
-                            5_000,
-                        );
+                        if (this.newsSubscribeTimer) {
+                            clearTimeout(this.newsSubscribeTimer);
+                        }
+                        this.newsSubscribeTimer = setTimeout(() => {
+                            this.newsSubscribeTimer = null;
+                            void this.subscribeOwnNews().catch(error =>
+                                console.warn(`Cannot subscribe EOS news: ${error}`),
+                            );
+                        }, 5_000);
 
                         setTimeout(async () => {
                             const notifications = await this.hostsWorker?.getNotifications(newState.currentHost);
@@ -1622,6 +1624,14 @@ class App extends Router<AppProps, AppState> {
         window.removeEventListener('nexowatt-eos-policy', this.onEosPolicyChanged);
         this.socket?.unsubscribeState('system.adapter.discovery.0.alive', this.onDiscoveryAlive);
         void this.socket?.unsubscribeObject('system.discovery', this.onDiscoveryObject);
+        if (this.newsSubscribeTimer) {
+            clearTimeout(this.newsSubscribeTimer);
+            this.newsSubscribeTimer = null;
+        }
+        if (this.newsSubscription) {
+            void this.socket?.unsubscribeState(this.newsSubscription, this.onNews);
+            this.newsSubscription = undefined;
+        }
 
         this.adaptersWorker?.unregisterRepositoryHandler(this.repoChangeHandler);
         this.adaptersWorker?.unregisterHandler(this.adaptersChangeHandler);
@@ -1877,22 +1887,23 @@ class App extends Router<AppProps, AppState> {
             />
         ) : null;
 
-    async findNewsInstance(): Promise<number> {
-        const maxCount = 200;
-        if (this.socket) {
-            for (let instance = 0; instance < maxCount; instance++) {
-                try {
-                    const adminAlive = await this.socket.getState(`system.adapter.eos-admin.${instance}.alive`);
-                    if (adminAlive?.val) {
-                        return instance;
-                    }
-                } catch (e) {
-                    console.error(`Cannot find news instance: ${(e as Error).stack}`);
-                    this.showAlert(`Cannot find news instance: ${(e as Error).stack}`, 'error');
-                }
-            }
+    private ownNewsState(field: 'newsFeed' | 'newsLastId'): string {
+        if (!/^eos-admin\.(0|[1-9]\d*)$/.test(this.adminInstance)) {
+            throw new Error('EOS_NEWS_INSTANCE_UNAVAILABLE');
         }
-        return 0;
+        return `${this.adminInstance}.info.${field}`;
+    }
+
+    private async subscribeOwnNews(): Promise<void> {
+        if (!this.socket) {
+            return;
+        }
+        const id = this.ownNewsState('newsFeed');
+        if (this.newsSubscription && this.newsSubscription !== id) {
+            this.socket.unsubscribeState(this.newsSubscription, this.onNews);
+        }
+        this.newsSubscription = id;
+        await this.socket.subscribeState(id, this.onNews);
     }
 
     /**
@@ -2018,7 +2029,7 @@ class App extends Router<AppProps, AppState> {
                 return;
             }
 
-            const lastNewsId = await this.socket.getState(`admin.${this.newsInstance}.info.newsLastId`);
+            const lastNewsId = await this.socket.getState(this.ownNewsState('newsLastId'));
             if (newsFeed?.val) {
                 let news = null;
                 try {
@@ -2093,7 +2104,7 @@ class App extends Router<AppProps, AppState> {
                 current={this.state.showNews.lastNewsId}
                 onSetLastNewsId={async id => {
                     if (id) {
-                        await this.socket!.setState(`admin.${this.newsInstance}.info.newsLastId`, {
+                        await this.socket!.setState(this.ownNewsState('newsLastId'), {
                             val: id,
                             ack: true,
                         });

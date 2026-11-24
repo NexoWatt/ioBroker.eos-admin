@@ -116,8 +116,12 @@ function fixture(
     const subscriptionCleanup = [];
     Object.assign(target, {
         eosStateSubscriptions: {
-            async closeSocket() { subscriptionCleanup.push('socket'); },
-            async close() { subscriptionCleanup.push('all'); },
+            async closeSocket() {
+                subscriptionCleanup.push('socket');
+            },
+            async close() {
+                subscriptionCleanup.push('all');
+            },
         },
         config: {
             eosLockLegacyAdmin: flag,
@@ -219,7 +223,7 @@ test('license service messages remain available before Socket startup', async ()
     assert.deepEqual(replies, [['test.0', 'eos.license.check', result, callback]]);
 });
 
-test('Web creation waits for the complete initial role and ACL reconciliation', async () => {
+test('Web creation waits for EOS roles without changing platform ACLs', async () => {
     const x = fixture(true);
     const order = [];
     let release;
@@ -245,7 +249,7 @@ test('Web creation waits for the complete initial role and ACL reconciliation', 
     assert.equal(x.target.eosSecurityTimer, undefined);
     release();
     await startup;
-    assert.deepEqual(order, ['roles-start', 'roles-complete', 'system-acl', 'admin-acl', 'web-data']);
+    assert.deepEqual(order, ['roles-start', 'roles-complete', 'web-data']);
     assert.ok(x.target.eosSecurityTimer);
     assert.equal(x.errors.length, 0);
 });
@@ -381,8 +385,12 @@ test('unload diagnoses rejected subscription cleanup and still completes once', 
     const x = fixture(true);
     let called = 0;
     x.target.eosStateSubscriptions = {
-        async closeSocket() { throw new Error('fixture socket cleanup'); },
-        async close() { throw new Error('fixture owner cleanup'); },
+        async closeSocket() {
+            throw new Error('fixture socket cleanup');
+        },
+        async close() {
+            throw new Error('fixture owner cleanup');
+        },
     };
     x.target.onUnload(() => called++);
     await settled();

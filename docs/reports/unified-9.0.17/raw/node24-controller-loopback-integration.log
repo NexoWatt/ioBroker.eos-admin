@@ -1,0 +1,63 @@
+[EOS integration environment] denied interface enumeration: synthetic IPv4/IPv6 loopback only
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "nodedir". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> iobroker.eos-admin@9.0.17 test:integration
+> mocha test/integration-unified.cjs --exit
+
+
+Running tests in <WORKSPACE>/setup-917/controller-tmp-node24/test-iobroker.eos-admin
+
+
+
+  Adapter integration tests
+
+added 256 packages in 25s
+
+up to date in 440ms
+
+added 287 packages in 11s
+    Adapter startup
+[EOS integration environment] denied interface enumeration: synthetic IPv4/IPv6 loopback only
+2026-11-24 06:44:53.185  - info: eos-admin.0 (812) starting. Version 9.0.17 in <WORKSPACE>/setup-917/controller-tmp-node24/test-iobroker.eos-admin/node_modules/iobroker.eos-admin, node: v24.22.3, js-controller: 7.2.5
+2026-11-24 06:44:53.272  - warn: eos-admin.0 (812) EOS account installer disabled: unique credential provisioning by Admin required
+2026-11-24 06:44:53.294  - warn: eos-admin.0 (812) EOS account guest disabled: unique credential provisioning by Admin required
+2026-11-24 06:44:53.315  - warn: eos-admin.0 (812) EOS account user disabled: unique credential provisioning by Admin required
+2026-11-24 06:44:53.320  - info: eos-admin.0 (812) [EOS licensing] STORAGE_UNSAFE_PATH
+2026-11-24 06:44:53.373  - error: eos-admin.0 (812) EOS_SOCKET_SECRET_UNAVAILABLE: EOS private session secret unavailable; web startup denied.
+The adapter started successfully.
+      ✔ The adapter starts (6013ms)
+2026-11-24 06:44:58.233  - info: eos-admin.0 (812) Got terminate signal TERMINATE_YOURSELF
+2026-11-24 06:44:58.239  - info: eos-admin.0 (812) terminating
+2026-11-24 06:44:58.239  - info: eos-admin.0 (812) Terminated (ADAPTER_REQUESTED_TERMINATION): Without reason
+2026-11-24 06:44:58.738  - info: eos-admin.0 (812) terminating
+2026-11-24 06:44:58.739  - info: eos-admin.0 (812) terminating
+    User-defined tests
+      Unified real HTTPS onboarding and existing Admin preservation
+[EOS integration environment] denied interface enumeration: synthetic IPv4/IPv6 loopback only
+2026-11-24 06:44:59.772  - info: eos-admin.0 (829) starting. Version 9.0.17 in <WORKSPACE>/setup-917/controller-tmp-node24/test-iobroker.eos-admin/node_modules/iobroker.eos-admin, node: v24.22.3, js-controller: 7.2.5
+2026-11-24 06:44:59.873  - warn: eos-admin.0 (829) EOS account installer disabled: unique credential provisioning by Admin required
+2026-11-24 06:44:59.936  - warn: eos-admin.0 (829) EOS account guest disabled: unique credential provisioning by Admin required
+2026-11-24 06:44:59.959  - warn: eos-admin.0 (829) EOS account user disabled: unique credential provisioning by Admin required
+2026-11-24 06:44:59.967  - info: eos-admin.0 (829) [EOS licensing] STORAGE_UNSAFE_PATH
+2026-11-24 06:45:00.022  - error: eos-admin.0 (829) EOS_SOCKET_SECRET_UNAVAILABLE: EOS private session secret unavailable; web startup denied.
+        1) "before all" hook for "survives a real state burst before any socket client connects and recovers its threshold"
+2026-11-24 06:45:44.821  - info: eos-admin.0 (829) Got terminate signal TERMINATE_YOURSELF
+2026-11-24 06:45:44.829  - info: eos-admin.0 (829) terminating
+2026-11-24 06:45:44.830  - info: eos-admin.0 (829) Terminated (ADAPTER_REQUESTED_TERMINATION): Without reason
+2026-11-24 06:45:45.327  - info: eos-admin.0 (829) terminating
+2026-11-24 06:45:45.328  - info: eos-admin.0 (829) terminating
+
+
+  1 passing (2m)
+  1 failing
+
+  1) Adapter integration tests
+       User-defined tests
+         Unified real HTTPS onboarding and existing Admin preservation
+           "before all" hook for "survives a real state burst before any socket client connects and recovers its threshold":
+     Error: Unified verified HTTPS did not become ready on port 8188
+      at Context.<anonymous> (test/integration-unified.cjs:329:23)
+
+
+

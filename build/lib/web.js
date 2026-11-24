@@ -55,6 +55,8 @@ const express_fileupload_1 = __importDefault(require("express-fileupload"));
 const session = __importStar(require("express-session"));
 const bodyParser = __importStar(require("body-parser"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const eosCookieNamespace_1 = require("./eosCookieNamespace");
+const eosRolePolicy_1 = require("./eosRolePolicy");
 const eosRequestSecurity_1 = require("./eosRequestSecurity");
 const eosAutoUpdate_1 = require("./eosAutoUpdate");
 const eosLicenseHttp_1 = require("./eosLicenseHttp");
@@ -350,6 +352,7 @@ class Web {
     oauth2Model = null;
     /** Authenticated, bounded forwarding to the web server of an installed instance. */
     instanceProxy;
+    detachCookieNamespace;
     systemRequests = new WeakSet();
     unified;
     startupFailed = false;
@@ -449,6 +452,8 @@ class Web {
             this.checkTimeout = undefined;
         }
         this.nexowattStableUpdateManager?.stop();
+        this.detachCookieNamespace?.();
+        this.detachCookieNamespace = undefined;
         this.instanceProxy.close();
         void this.adapter.setState('info.connection', false, true);
         this.server.server?.close();
@@ -794,19 +799,6 @@ class Web {
             this.adapter.log.warn('Compressed log preview unavailable; original gzip returned.');
         }
     }
-    normalizeEosGroupId(value) {
-        if (typeof value !== 'string') {
-            return null;
-        }
-        let group = value.trim();
-        if (!group) {
-            return null;
-        }
-        if (!group.startsWith('system.group.')) {
-            group = `system.group.${group.replace(/^group\./, '')}`;
-        }
-        return /^system\.group\.[a-z0-9_.-]+$/i.test(group) ? group : null;
-    }
     normalizeEosUserId(value) {
         if (!value) {
             return null;
@@ -845,42 +837,7 @@ class Web {
         return /^[a-z0-9_-]+$/.test(adapter) ? adapter : null;
     }
     getEosSecurityAdminGroups() {
-        const configured = [
-            this.settings.eosAdminOnlyGroups,
-            this.settings.eosSecurityAdminGroups,
-            this.settings.eosAdminOnlyGroup,
-            this.settings.eosServiceGroups,
-            this.settings.eosNexoWattServiceGroups,
-        ];
-        const groups = new Set();
-        const add = (value) => {
-            if (!value) {
-                return;
-            }
-            if (Array.isArray(value)) {
-                value.forEach(add);
-                return;
-            }
-            if (typeof value === 'object') {
-                const row = value;
-                if (row.enabled === false) {
-                    return;
-                }
-                add(row.group || row.id || row.name);
-                return;
-            }
-            const group = this.normalizeEosGroupId(value);
-            if (group) {
-                groups.add(group);
-            }
-        };
-        add(configured);
-        groups.add('system.group.administrator');
-        // NexoWatt-specific service groups are full administrator/service roles.
-        // Generic installer/service wording is never enough to grant full access.
-        groups.add('system.group.nexowatt-service');
-        groups.add('system.group.eos-service');
-        return [...groups].sort();
+        return (0, eosRolePolicy_1.getEosRoleGroups)(this.settings, 'service');
     }
     getEosProtectedAdapterNames() {
         // v47: frontend delete protection is core-only. Ignore old eosProtectedAdapters
@@ -955,52 +912,11 @@ class Web {
         const user = await enabledUser(session.user);
         return this.adapter.eosSessionSecurity?.idleView(session).authenticated ? user : null;
     }
-    getEosConfiguredRoleGroups(...keys) {
-        const groups = new Set();
-        const add = (value) => {
-            if (!value) {
-                return;
-            }
-            if (Array.isArray(value)) {
-                value.forEach(add);
-                return;
-            }
-            if (typeof value === 'object') {
-                const row = value;
-                if (row.enabled === false) {
-                    return;
-                }
-                add(row.group || row.id || row.name);
-                return;
-            }
-            const group = this.normalizeEosGroupId(value);
-            if (group) {
-                groups.add(group);
-            }
-        };
-        const settings = { ...this.settings };
-        keys.forEach(key => add(settings[key]));
-        return [...groups].sort();
-    }
     getEosInstallerGroups() {
-        const groups = new Set(this.getEosConfiguredRoleGroups('eosInstallerGroups', 'eosInstallateurGroups', 'eosCommissioningGroups'));
-        groups.add('system.group.installateur');
-        groups.add('system.group.installateure');
-        groups.add('system.group.installer');
-        groups.add('system.group.techniker');
-        groups.add('system.group.inbetriebnahme');
-        groups.add('system.group.integrator');
-        return [...groups].sort();
+        return (0, eosRolePolicy_1.getEosRoleGroups)(this.settings, 'installer');
     }
     getEosEndUserGroups() {
-        const groups = new Set(this.getEosConfiguredRoleGroups('eosEndUserGroups', 'eosEndkundeGroups', 'eosCustomerGroups'));
-        groups.add('system.group.endkunde');
-        groups.add('system.group.endkunden');
-        groups.add('system.group.kunde');
-        groups.add('system.group.kunden');
-        groups.add('system.group.user');
-        groups.add('system.group.users');
-        return [...groups].sort();
+        return (0, eosRolePolicy_1.getEosRoleGroups)(this.settings, 'enduser');
     }
     getTranslatedName(value) {
         if (!value) {
@@ -1058,37 +974,12 @@ class Web {
     async getEosGroupsForUser(userId) {
         return (await this.getEosGroupDetailsForUser(userId)).map(group => group.id);
     }
-    normalizeEosRoleText(value) {
-        return (typeof value === 'string' ? value : '')
-            .toLowerCase()
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .replace(/^system\.group\./, '')
-            .replace(/[^a-z0-9]+/g, ' ')
-            .trim();
-    }
-    resolveEosRole(userId, groups, groupNames, adminGroups) {
-        if (groups.includes('system.group.administrator') || groups.some(group => adminGroups.includes(group))) {
-            return 'admin';
-        }
-        const installerGroups = this.getEosInstallerGroups();
-        if (groups.some(group => installerGroups.includes(group))) {
-            return 'installer';
-        }
-        const endUserGroups = this.getEosEndUserGroups();
-        if (groups.some(group => endUserGroups.includes(group))) {
-            return 'enduser';
-        }
-        // Display names and descriptions are presentation data, never role credentials.
-        // Secure default: a normal authenticated, non-admin ioBroker user is an EOS end user.
-        return 'enduser';
-    }
     async getEosAccessForUserId(userId) {
         const groupDetails = userId ? await this.getEosGroupDetailsForUser(userId) : [];
         const groups = groupDetails.map(group => group.id);
         const groupNames = groupDetails.flatMap(group => [group.name, group.desc]).filter(Boolean);
         const adminGroups = this.getEosSecurityAdminGroups();
-        const role = this.resolveEosRole(userId, groups, groupNames, adminGroups);
+        const role = (0, eosRolePolicy_1.resolveEosRole)(this.settings, userId, groups);
         return { userId, groupDetails, groups, groupNames, adminGroups, role };
     }
     async getEosRequestAccess(req) {
@@ -1612,8 +1503,10 @@ class Web {
             res.status(503).json({ error: 'systemConfigUnavailable' });
             return;
         }
-        const next = { ...systemConfig, common: { ...systemConfig.common } };
-        const common = { ...next.common };
+        // Keep only fields explicitly changed by this request. A snapshot write
+        // would roll back concurrent settings changed in another Admin session.
+        const common = {};
+        const previous = systemConfig.common;
         const setString = (key, maxLength, allowed) => {
             if (!(key in input)) {
                 return;
@@ -1623,7 +1516,7 @@ class Web {
                 return;
             }
             const value = String(inputValue).trim().slice(0, maxLength);
-            if (!allowed || allowed.includes(value)) {
+            if ((!allowed || allowed.includes(value)) && value !== previous[key]) {
                 common[key] = value;
             }
         };
@@ -1632,7 +1525,7 @@ class Web {
                 return;
             }
             const value = Number(input[key]);
-            if (Number.isFinite(value) && value >= min && value <= max) {
+            if (Number.isFinite(value) && value >= min && value <= max && value !== previous[key]) {
                 common[key] = value;
             }
         };
@@ -1642,8 +1535,10 @@ class Web {
         setString('currency', 8);
         setString('dateFormat', 16, ['DD.MM.YYYY', 'YYYY.MM.DD', 'MM/DD/YYYY']);
         if ('isFloatComma' in input) {
-            common.isFloatComma =
-                input.isFloatComma === true || input.isFloatComma === 'true' || input.isFloatComma === 1;
+            const value = input.isFloatComma === true || input.isFloatComma === 'true' || input.isFloatComma === 1;
+            if (value !== previous.isFloatComma) {
+                common.isFloatComma = value;
+            }
         }
         const histories = await this.getEosHistoryInstances();
         setString('defaultHistory', 100, ['', ...histories]);
@@ -1653,14 +1548,12 @@ class Web {
         setString('city', 120);
         setCoordinate('latitude', -90, 90);
         setCoordinate('longitude', -180, 180);
-        // Explicitly ignore every privilege/security field even if a manipulated browser submits it.
-        delete common.expertMode;
-        common.expertMode = systemConfig.common.expertMode === true;
-        common.activeRepo = systemConfig.common.activeRepo;
-        common.defaultNewAcl = systemConfig.common.defaultNewAcl;
-        Object.assign(next.common, common);
-        await this.adapter.setForeignObjectAsync('system.config', next);
-        this.adapter.log.info(`EOS installer basic settings updated by ${access.userId || 'unknown user'}`);
+        // No expertMode, repositories, default ACLs, native data or other
+        // security fields are part of this narrowly authorized settings patch.
+        if (Object.keys(common).length) {
+            await this.adapter.extendForeignObjectAsync('system.config', { common });
+            this.adapter.log.info(`EOS installer basic settings updated by ${access.userId || 'unknown user'}`);
+        }
         await this.sendEosBasicSettings(req, res);
     }
     getEosReadonlySystemInfo() {
@@ -2026,7 +1919,9 @@ class Web {
         this.settings = { ...this.settings, bind, auth: true };
         const listenAddress = eosListenAddress(this.settings);
         if (this.settings.port) {
+            const eosCookies = (0, eosCookieNamespace_1.createEosCookieNamespace)(this.adapter.namespace);
             this.server.app = (0, express_1.default)();
+            this.server.app.use(eosCookies.middleware);
             if (!this.unified.origin) {
                 this.server.app.use((0, eosWebResources_1.loopbackHttpGuard)(this.settings.secure));
             }
@@ -2960,6 +2855,9 @@ class Web {
                 }
             });
             this.instanceProxy.attach(this.server.server);
+            // Remain outside the proxy's upgrade dispatcher: it consumes its
+            // own upgrades before the server's ordinary event listeners run.
+            this.detachCookieNamespace = eosCookies.attach(this.server.server);
         }
         else {
             throw new Error('EOS_LISTEN_PORT_INVALID: Configure one TCP port from 1 to 65535');

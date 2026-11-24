@@ -88,6 +88,48 @@ test('unlicensed fresh installation remains fenced until licensed startup checks
     assert.equal(x.mutations.length, 0);
 });
 
+test('standard Backitup instances are not legacy EOS backup migration sources', async t => {
+    const x = fixture([
+        { source: 'backitup.0', version: '4.0.1', native: { minimalEnabled: true, iobrokerCronJob: '0 3 * * *', customerSetting: { retention: 7 } } },
+        { source: 'backitup.2', version: '4.0.1', enabled: false, native: { minimalEnabled: false, customerSetting: { retention: 14 } } },
+    ]);
+    t.after(() => x.migration.stop());
+    const originals = new Map(structuredClone([...x.objects].filter(([id]) => id.startsWith('system.adapter.backitup.'))));
+    const alive = new Map(structuredClone([...x.states].filter(([id]) => id.startsWith('system.adapter.backitup.'))));
+    await x.migration.start();
+    assert.equal(x.migration.phase, 'NOT_NEEDED');
+    assert.equal(x.mutations.length, 0, 'standard Backitup causes no migration writes');
+    assert.equal(x.owner.config.eosModules.backup, undefined);
+    for (const [id, object] of originals) assert.deepEqual(x.objects.get(id), object, 'enabled state and customer configuration remain unchanged');
+    for (const [id, state] of alive) assert.deepEqual(x.states.get(id), state);
+});
+
+test('legacy Devices cutover preserves standard Backitup configuration, ACL, history and running state', async t => {
+    const x = fixture([
+        { source: 'backitup.0', version: '4.0.1', native: { minimalEnabled: true, iobrokerCronJob: '0 3 * * *', customerSetting: { retention: 7 } } },
+        { source: 'nexowatt-devices.0', version: '0.5.176', native: { devices: [], pollIntervalMs: 2500 } },
+    ]);
+    t.after(() => x.migration.stop());
+    const backup = x.objects.get('system.adapter.backitup.0');
+    backup.acl = { owner: 'system.user.admin', ownerGroup: 'system.group.administrator', object: 0x664 };
+    const previousBackup = structuredClone(backup);
+    const historyId = 'backitup.0.history.html';
+    const historyObject = { _id: historyId, type: 'state', common: { type: 'string', role: 'html', read: true, write: false }, native: {} };
+    const historyState = { val: 'existing backup history', ack: true, ts: Date.now() };
+    const alive = structuredClone(x.states.get('system.adapter.backitup.0.alive'));
+    x.objects.set(historyId, historyObject);
+    x.states.set(historyId, historyState);
+    await x.migration.start();
+    assert.equal(x.migration.phase, 'TRANSFERRED');
+    assert.equal(x.objects.get('system.adapter.nexowatt-devices.0').common.enabled, false);
+    assert.deepEqual(x.objects.get(backup._id), previousBackup);
+    assert.deepEqual(x.states.get('system.adapter.backitup.0.alive'), alive);
+    assert.deepEqual(x.objects.get(historyId), historyObject);
+    assert.deepEqual(x.states.get(historyId), historyState);
+    assert.equal(x.owner.config.eosModules.backup, undefined);
+    assert.equal(x.mutations.some(row => /^(?:system\.adapter\.)?backitup\./.test(row.id)), false);
+});
+
 test('automatic handover preserves namespace, custom/history objects and settings including credentials', async t => {
     const x = fixture(); const source = x.objects.get('system.adapter.nexowatt-devices.0');
     source.native.devices = [{ id: 'ess1', password: 'synthetic-test-secret' }];

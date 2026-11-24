@@ -1,0 +1,155 @@
+TAP version 13
+# Subtest: encrypted backup roundtrips, authentication failure removes only newly created plaintext
+ok 1 - encrypted backup roundtrips, authentication failure removes only newly created plaintext
+  ---
+  duration_ms: 62.908393
+  type: 'test'
+  ...
+# Subtest: empty encrypted file authenticates, duplicate publication and symlink sources preserve originals
+ok 2 - empty encrypted file authenticates, duplicate publication and symlink sources preserve originals
+  ---
+  duration_ms: 16.324105
+  type: 'test'
+  ...
+# Subtest: private copy closes the source after destination-open failure and preserves previous content
+ok 3 - private copy closes the source after destination-open failure and preserves previous content
+  ---
+  duration_ms: 31.275787
+  type: 'test'
+  ...
+# Subtest: directory archive preserves allowed files and excludes backup recursion; symlinks are rejected
+ok 4 - directory archive preserves allowed files and excludes backup recursion; symlinks are rejected
+  ---
+  duration_ms: 43.383367
+  type: 'test'
+  ...
+# Subtest: 64 MiB encryption/decryption streams with bounded JavaScript heap and exact restored bytes
+ok 5 - 64 MiB encryption/decryption streams with bounded JavaScript heap and exact restored bytes
+  ---
+  duration_ms: 729.373694
+  type: 'test'
+  ...
+# {"sourceBytes":67108864,"maximumHeapDelta":1139992,"maximumRssDelta":53116928,"scope":"isolated backup stream test; not customer RSS"}
+# Subtest: commands handle spawn errors/nonzero exit/output limit/timeout without leaking partial output
+ok 6 - commands handle spawn errors/nonzero exit/output limit/timeout without leaking partial output
+  ---
+  duration_ms: 183.586727
+  type: 'test'
+  ...
+# Subtest: output-open failure cannot start the command; successful output closes and remains private
+ok 7 - output-open failure cannot start the command; successful output closes and remains private
+  ---
+  duration_ms: 39.284842
+  type: 'test'
+  ...
+# Subtest: real child worker creates encrypted controller and private EOS profile, API status has no recovery key
+ok 8 - real child worker creates encrypted controller and private EOS profile, API status has no recovery key
+  ---
+  duration_ms: 318.283508
+  type: 'test'
+  ...
+# Subtest: download rejects traversal and symlinks; export requires explicit command confirmation
+ok 9 - download rejects traversal and symlinks; export requires explicit command confirmation
+  ---
+  duration_ms: 6.91253
+  type: 'test'
+  ...
+# Subtest: configuration refuses unsafe executable, insecure FTPS and automatic mount before migration
+ok 10 - configuration refuses unsafe executable, insecure FTPS and automatic mount before migration
+  ---
+  duration_ms: 27.511509
+  type: 'test'
+  ...
+# Subtest: legacy config keeps custom fields and decrypts documented XOR event passwords only
+ok 11 - legacy config keeps custom fields and decrypts documented XOR event passwords only
+  ---
+  duration_ms: 1.475266
+  type: 'test'
+  ...
+# Subtest: legacy archive import keeps original and publishes authenticated encrypted copy
+ok 12 - legacy archive import keeps original and publishes authenticated encrypted copy
+  ---
+  duration_ms: 262.58216
+  type: 'test'
+  ...
+# Subtest: migration leaves inactive unsupported settings intact and refuses active missing installation
+ok 13 - migration leaves inactive unsupported settings intact and refuses active missing installation
+  ---
+  duration_ms: 5.096175
+  type: 'test'
+  ...
+# Subtest: custom controller dataFolder overlap is blocked before spawning a backup worker
+ok 14 - custom controller dataFolder overlap is blocked before spawning a backup worker
+  ---
+  duration_ms: 9.811716
+  type: 'test'
+  ...
+# Subtest: cron schedule starts the real hosted backup worker and stop removes its next run
+ok 15 - cron schedule starts the real hosted backup worker and stop removes its next run
+  ---
+  duration_ms: 917.03302
+  type: 'test'
+  ...
+# Subtest: offline restore authenticates and preserves an existing output directory
+ok 16 - offline restore authenticates and preserves an existing output directory
+  ---
+  duration_ms: 42.674619
+  type: 'test'
+  ...
+# Subtest: OAuth refresh cache is encrypted, survives jobs and invalidates after deliberate config change
+ok 17 - OAuth refresh cache is encrypted, survives jobs and invalidates after deliberate config change
+  ---
+  duration_ms: 14.800709
+  type: 'test'
+  ...
+# Subtest: stop kills worker plus inherited command process group and clears private job files
+ok 18 - stop kills worker plus inherited command process group and clears private job files
+  ---
+  duration_ms: 208.998501
+  type: 'test'
+  ...
+# Subtest: stop during delayed startup fences late readiness, subscriptions, key and timers
+ok 19 - stop during delayed startup fences late readiness, subscriptions, key and timers
+  ---
+  duration_ms: 74.725998
+  type: 'test'
+  ...
+# Subtest: synchronous worker creation error clears running state and allows controlled retry
+ok 20 - synchronous worker creation error clears running state and allows controlled retry
+  ---
+  duration_ms: 8.787832
+  type: 'test'
+  ...
+# Subtest: oversized private job history is rejected before reading into the parent heap
+ok 21 - oversized private job history is rejected before reading into the parent heap
+  ---
+  duration_ms: 12.100446
+  type: 'test'
+  ...
+# Subtest: rejected unsubscribe still clears secrets, timers and permits repeated stop
+ok 22 - rejected unsubscribe still clears secrets, timers and permits repeated stop
+  ---
+  duration_ms: 10.488304
+  type: 'test'
+  ...
+# Subtest: offline recovery key installation preserves exact key and never overwrites existing identity
+ok 23 - offline recovery key installation preserves exact key and never overwrites existing identity
+  ---
+  duration_ms: 5.075105
+  type: 'test'
+  ...
+# Subtest: controller dataFolder overlap refuses ancestor, nested and symlink archive recursion
+ok 24 - controller dataFolder overlap refuses ancestor, nested and symlink archive recursion
+  ---
+  duration_ms: 5.421594
+  type: 'test'
+  ...
+1..24
+# tests 24
+# suites 0
+# pass 24
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1751.940078

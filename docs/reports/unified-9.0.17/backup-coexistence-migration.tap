@@ -1,0 +1,406 @@
+TAP version 13
+# Subtest: one central entitlement starts the integrated module without a second adapter or license
+ok 1 - one central entitlement starts the integrated module without a second adapter or license
+  ---
+  duration_ms: 8.769922
+  type: 'test'
+  ...
+# Subtest: disabled and unlicensed modules create no runtime; metadata remains available
+ok 2 - disabled and unlicensed modules create no runtime; metadata remains available
+  ---
+  duration_ms: 3.896972
+  type: 'test'
+  ...
+# Subtest: license loss denies existing operation closures synchronously and stops transports
+ok 3 - license loss denies existing operation closures synchronously and stops transports
+  ---
+  duration_ms: 2.120904
+  type: 'test'
+  ...
+# Subtest: normal host heartbeat preserves a running module and generation
+ok 4 - normal host heartbeat preserves a running module and generation
+  ---
+  duration_ms: 10.23723
+  type: 'test'
+  ...
+# Subtest: legacy enable revokes immediately; confirmed stop creates a new valid generation
+ok 5 - legacy enable revokes immediately; confirmed stop creates a new valid generation
+  ---
+  duration_ms: 4.693204
+  type: 'test'
+  ...
+# Subtest: a race during legacy inventory cannot renew an invalidated operation lease
+ok 6 - a race during legacy inventory cannot renew an invalidated operation lease
+  ---
+  duration_ms: 2.000799
+  type: 'test'
+  ...
+# Subtest: facade constrains namespaces and suppresses stale telemetry after lifecycle end
+ok 7 - facade constrains namespaces and suppresses stale telemetry after lifecycle end
+  ---
+  duration_ms: 2.889204
+  type: 'test'
+  ...
+# Subtest: secret masking and restoration follow device IDs when rows move
+ok 8 - secret masking and restoration follow device IDs when rows move
+  ---
+  duration_ms: 0.731351
+  type: 'test'
+  ...
+# Subtest: saved configurations are encrypted and API views never return device credentials
+ok 9 - saved configurations are encrypted and API views never return device credentials
+  ---
+  duration_ms: 2.2356
+  type: 'test'
+  ...
+# Subtest: configuration cannot reopen a runtime after failed transport shutdown
+ok 10 - configuration cannot reopen a runtime after failed transport shutdown
+  ---
+  duration_ms: 1.914397
+  type: 'test'
+  ...
+# Subtest: config rejects prototype keys and excessive depth before persistence
+ok 11 - config rejects prototype keys and excessive depth before persistence
+  ---
+  duration_ms: 0.462156
+  type: 'test'
+  ...
+# Subtest: integrated licenses preserve NWL2 adapter scope and fail closed on expired core entitlement
+ok 12 - integrated licenses preserve NWL2 adapter scope and fail closed on expired core entitlement
+  ---
+  duration_ms: 2.648943
+  type: 'test'
+  ...
+# Subtest: concurrent HTTP-close and adapter-unload share transport cleanup, and late startup never installs a timer
+ok 13 - concurrent HTTP-close and adapter-unload share transport cleanup, and late startup never installs a timer
+  ---
+  duration_ms: 16.665587
+  type: 'test'
+  ...
+# Subtest: preserved legacy EEBus namespace keeps state IDs while private bridge remains tied to EOS owner
+ok 14 - preserved legacy EEBus namespace keeps state IDs while private bridge remains tied to EOS owner
+  ---
+  duration_ms: 2.505454
+  type: 'test'
+  ...
+# Subtest: backup secret fields stay redacted and restored by unique endpoint rather than row index
+ok 15 - backup secret fields stay redacted and restored by unique endpoint rather than row index
+  ---
+  duration_ms: 0.499175
+  type: 'test'
+  ...
+# Subtest: backup notifications use only configured validated target and lose authority on revocation
+ok 16 - backup notifications use only configured validated target and lose authority on revocation
+  ---
+  duration_ms: 1.63859
+  type: 'test'
+  ...
+# Subtest: backup downloads clean late file streams after timeout or stop and bound concurrent opens
+ok 17 - backup downloads clean late file streams after timeout or stop and bound concurrent opens
+  ---
+  duration_ms: 22.486585
+  type: 'test'
+  ...
+# Subtest: backup data-folder inventory exposes only bounded paths and rejects revoked or malformed reads
+ok 18 - backup data-folder inventory exposes only bounded paths and rejects revoked or malformed reads
+  ---
+  duration_ms: 1.60611
+  type: 'test'
+  ...
+# Subtest: enabled target and unconfirmed target stop refuse manual import without mutation
+ok 19 - enabled target and unconfirmed target stop refuse manual import without mutation
+  ---
+  duration_ms: 8.964518
+  type: 'test'
+  ...
+# Subtest: manual reimport cannot remove an established legacy namespace binding
+ok 20 - manual reimport cannot remove an established legacy namespace binding
+  ---
+  duration_ms: 1.393101
+  type: 'test'
+  ...
+# Subtest: manual import reserves the full conversion: concurrent enable and imports cannot overwrite it
+ok 21 - manual import reserves the full conversion: concurrent enable and imports cannot overwrite it
+  ---
+  duration_ms: 5.433491
+  type: 'test'
+  ...
+# Subtest: source reactivation during conversion is rejected before persistence
+ok 22 - source reactivation during conversion is rejected before persistence
+  ---
+  duration_ms: 1.349609
+  type: 'test'
+  ...
+# Subtest: host shutdown during conversion prevents an import commit
+ok 23 - host shutdown during conversion prevents an import commit
+  ---
+  duration_ms: 1.167287
+  type: 'test'
+  ...
+# Subtest: real manual Devices import preserves old JSON-only devices and credentials without activating
+ok 24 - real manual Devices import preserves old JSON-only devices and credentials without activating
+  ---
+  duration_ms: 55.012331
+  type: 'test'
+  ...
+# Subtest: real manual Devices import rejects conflicting arrays before persisting
+ok 25 - real manual Devices import rejects conflicting arrays before persisting
+  ---
+  duration_ms: 1.890272
+  type: 'test'
+  ...
+# Subtest: unstarted migration-blocked host never treats a default empty entry as loaded target configuration
+ok 26 - unstarted migration-blocked host never treats a default empty entry as loaded target configuration
+  ---
+  duration_ms: 1.253689
+  type: 'test'
+  ...
+# Subtest: startup configuration load excludes import and save, and concurrent start waits for the same initialization
+ok 27 - startup configuration load excludes import and save, and concurrent start waits for the same initialization
+  ---
+  duration_ms: 13.04169
+  type: 'test'
+  ...
+# Subtest: unreadable persisted target is not replaceable through default config or manual import
+ok 28 - unreadable persisted target is not replaceable through default config or manual import
+  ---
+  duration_ms: 1.40909
+  type: 'test'
+  ...
+# Subtest: manual backup import reports its actual backup target prefix
+ok 29 - manual backup import reports its actual backup target prefix
+  ---
+  duration_ms: 1.727757
+  type: 'test'
+  ...
+# Subtest: late license activation cannot start defaults before a new complete legacy preflight
+ok 30 - late license activation cannot start defaults before a new complete legacy preflight
+  ---
+  duration_ms: 16.586288
+  type: 'test'
+  ...
+# Subtest: unlicensed fresh installation remains fenced until licensed startup checks an empty inventory
+ok 31 - unlicensed fresh installation remains fenced until licensed startup checks an empty inventory
+  ---
+  duration_ms: 1.554433
+  type: 'test'
+  ...
+# Subtest: standard Backitup instances are not legacy EOS backup migration sources
+ok 32 - standard Backitup instances are not legacy EOS backup migration sources
+  ---
+  duration_ms: 4.348267
+  type: 'test'
+  ...
+# Subtest: legacy Devices cutover preserves standard Backitup configuration, ACL, history and running state
+ok 33 - legacy Devices cutover preserves standard Backitup configuration, ACL, history and running state
+  ---
+  duration_ms: 3.857087
+  type: 'test'
+  ...
+# Subtest: automatic handover preserves namespace, custom/history objects and settings including credentials
+ok 34 - automatic handover preserves namespace, custom/history objects and settings including credentials
+  ---
+  duration_ms: 15.339322
+  type: 'test'
+  ...
+# Subtest: preflight ambiguity, unknown version, remote host, missing license and existing destination never stop a source
+ok 35 - preflight ambiguity, unknown version, remote host, missing license and existing destination never stop a source
+  ---
+  duration_ms: 4.558301
+  type: 'test'
+  ...
+# Subtest: failed target persistence restores confirmed legacy runtime; journal prevents repeated interruption
+ok 36 - failed target persistence restores confirmed legacy runtime; journal prevents repeated interruption
+  ---
+  duration_ms: 4.960976
+  type: 'test'
+  ...
+# Subtest: crash while stopping is rolled back before new runtime gains write ownership
+ok 37 - crash while stopping is rolled back before new runtime gains write ownership
+  ---
+  duration_ms: 2.213327
+  type: 'test'
+  ...
+# Subtest: failed new runtime with uncertain transport stop never re-enables legacy writer
+ok 38 - failed new runtime with uncertain transport stop never re-enables legacy writer
+  ---
+  duration_ms: 3.551113
+  type: 'test'
+  ...
+# Subtest: encrypted native credentials decrypt exactly once; missing protected fields block all source changes
+ok 39 - encrypted native credentials decrypt exactly once; missing protected fields block all source changes
+  ---
+  duration_ms: 3.050917
+  type: 'test'
+  ...
+# Subtest: UI native settings move to protected config; two successive saves read current values and preserve old source
+ok 40 - UI native settings move to protected config; two successive saves read current values and preserve old source
+  ---
+  duration_ms: 6.74054
+  type: 'test'
+  ...
+# Subtest: SmartHome migration preserves explicit enabled setting and existing customer configuration states
+ok 41 - SmartHome migration preserves explicit enabled setting and existing customer configuration states
+  ---
+  duration_ms: 5.085749
+  type: 'test'
+  ...
+# Subtest: SmartHome migration preserves explicit disabled setting and existing customer configuration states
+ok 42 - SmartHome migration preserves explicit disabled setting and existing customer configuration states
+  ---
+  duration_ms: 4.085716
+  type: 'test'
+  ...
+# Subtest: UI preflight blocks corrupt or unreadable existing customer states before stopping the old writer
+ok 43 - UI preflight blocks corrupt or unreadable existing customer states before stopping the old writer
+  ---
+  duration_ms: 7.674991
+  type: 'test'
+  ...
+# Subtest: UI state lost between preflight and stopped cutover causes rollback instead of default activation
+ok 44 - UI state lost between preflight and stopped cutover causes rollback instead of default activation
+  ---
+  duration_ms: 3.208272
+  type: 'test'
+  ...
+# Subtest: known old-instance RPC consumers block cutover while full datapoint references stay valid
+ok 45 - known old-instance RPC consumers block cutover while full datapoint references stay valid
+  ---
+  duration_ms: 6.043174
+  type: 'test'
+  ...
+# Subtest: changed source host/version during preflight never resumes an unreviewed original adapter
+ok 46 - changed source host/version during preflight never resumes an unreviewed original adapter
+  ---
+  duration_ms: 2.319757
+  type: 'test'
+  ...
+# Subtest: a bounded database read cannot hold startup or stop legacy writers indefinitely
+ok 47 - a bounded database read cannot hold startup or stop legacy writers indefinitely
+  ---
+  duration_ms: 21.292968
+  type: 'test'
+  ...
+# Subtest: another active EOS instance blocks automatic takeover before disabling old sources
+ok 48 - another active EOS instance blocks automatic takeover before disabling old sources
+  ---
+  duration_ms: 1.176425
+  type: 'test'
+  ...
+# Subtest: transferred module destination must persist with its original namespace binding on restart
+ok 49 - transferred module destination must persist with its original namespace binding on restart
+  ---
+  duration_ms: 6.299634
+  type: 'test'
+  ...
+# Subtest: committed UI accepts legitimate later configuration edits on a fresh process restart
+ok 50 - committed UI accepts legitimate later configuration edits on a fresh process restart
+  ---
+  duration_ms: 4.78762
+  type: 'test'
+  ...
+# Subtest: TLS or listener failure before any hosted runtime exists restores old sources and fences late startup
+ok 51 - TLS or listener failure before any hosted runtime exists restores old sources and fences late startup
+  ---
+  duration_ms: 2.518449
+  type: 'test'
+  ...
+# Subtest: early verification times out even when the web constructor is never reached
+ok 52 - early verification times out even when the web constructor is never reached
+  ---
+  duration_ms: 4.645444
+  type: 'test'
+  ...
+# Subtest: active module with a pending start cannot commit until RUNNING is confirmed
+ok 53 - active module with a pending start cannot commit until RUNNING is confirmed
+  ---
+  duration_ms: 253.300885
+  type: 'test'
+  ...
+# Subtest: concurrent startup failure has one recovery and never restores old writers before all stop promises settle
+ok 54 - concurrent startup failure has one recovery and never restores old writers before all stop promises settle
+  ---
+  duration_ms: 7.085297
+  type: 'test'
+  ...
+# Subtest: a pending stop timeout remains fenced even if that stop settles later
+ok 55 - a pending stop timeout remains fenced even if that stop settles later
+  ---
+  duration_ms: 12.638582
+  type: 'test'
+  ...
+# Subtest: rejected runtime stop and sticky module stop failure never reactivate old sources
+ok 56 - rejected runtime stop and sticky module stop failure never reactivate old sources
+  ---
+  duration_ms: 4.48287
+  type: 'test'
+  ...
+# Subtest: source identity is checked again immediately before rollback re-enable
+ok 57 - source identity is checked again immediately before rollback re-enable
+  ---
+  duration_ms: 3.805101
+  type: 'test'
+  ...
+# Subtest: rejected commit persistence recovers without leaving a false COMMITTED state
+ok 58 - rejected commit persistence recovers without leaving a false COMMITTED state
+  ---
+  duration_ms: 2.63607
+  type: 'test'
+  ...
+# Subtest: concurrent commit persistence cannot overwrite a later startup recovery decision
+ok 59 - concurrent commit persistence cannot overwrite a later startup recovery decision
+  ---
+  duration_ms: 2.771564
+  type: 'test'
+  ...
+# Subtest: intentional shutdown fences monitoring; the transferred journal is verified on next startup
+ok 60 - intentional shutdown fences monitoring; the transferred journal is verified on next startup
+  ---
+  duration_ms: 4.073914
+  type: 'test'
+  ...
+# Subtest: preflight BLOCKED prevents operational starts while the original disabled UI remains unchanged
+ok 61 - preflight BLOCKED prevents operational starts while the original disabled UI remains unchanged
+  ---
+  duration_ms: 0.578605
+  type: 'test'
+  ...
+# Subtest: uncertain stop remains ROLLBACK_REQUIRED across restart without automatically re-enabling sources
+ok 62 - uncertain stop remains ROLLBACK_REQUIRED across restart without automatically re-enabling sources
+  ---
+  duration_ms: 2.350595
+  type: 'test'
+  ...
+# Subtest: interrupted ROLLING_BACK needs persisted completed-stop proof; absent or false proof stays fenced
+ok 63 - interrupted ROLLING_BACK needs persisted completed-stop proof; absent or false proof stays fenced
+  ---
+  duration_ms: 6.571785
+  type: 'test'
+  ...
+# Subtest: revoked license, ownership or runtime readiness during source verification cannot commit
+ok 64 - revoked license, ownership or runtime readiness during source verification cannot commit
+  ---
+  duration_ms: 67.438173
+  type: 'test'
+  ...
+# Subtest: the early monitor deadline also covers an unresolved asynchronous readiness observation
+ok 65 - the early monitor deadline also covers an unresolved asynchronous readiness observation
+  ---
+  duration_ms: 12.659742
+  type: 'test'
+  ...
+# Subtest: a late readiness rejection after intentional shutdown does not begin rollback or re-enable old writers
+ok 66 - a late readiness rejection after intentional shutdown does not begin rollback or re-enable old writers
+  ---
+  duration_ms: 1.848774
+  type: 'test'
+  ...
+1..66
+# tests 66
+# suites 0
+# pass 66
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 634.417636

@@ -1,0 +1,46 @@
+TAP version 13
+# Subtest: exact historical HTTP fallback groups remain stable for both transports
+ok 1 - exact historical HTTP fallback groups remain stable for both transports
+  ---
+  duration_ms: 1.794081
+  type: 'test'
+  ...
+# Subtest: all established configuration aliases preserve explicit customer role mappings
+ok 2 - all established configuration aliases preserve explicit customer role mappings
+  ---
+  duration_ms: 2.679189
+  type: 'test'
+  ...
+# Subtest: disabled custom rows are skipped while old canonical fallback behavior is retained
+ok 3 - disabled custom rows are skipped while old canonical fallback behavior is retained
+  ---
+  duration_ms: 0.20274
+  type: 'test'
+  ...
+# Subtest: administrator username and labels alone never grant administrator access
+ok 4 - administrator username and labels alone never grant administrator access
+  ---
+  duration_ms: 0.259897
+  type: 'test'
+  ...
+# Subtest: actual membership determines precedence and removal loses privilege on next resolution
+ok 5 - actual membership determines precedence and removal loses privilege on next resolution
+  ---
+  duration_ms: 1.089741
+  type: 'test'
+  ...
+# Subtest: normalization is exact, bounded and refuses wildcards or inherited configuration
+ok 6 - normalization is exact, bounded and refuses wildcards or inherited configuration
+  ---
+  duration_ms: 0.310963
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 112.035134

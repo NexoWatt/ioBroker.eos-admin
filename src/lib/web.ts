@@ -17,6 +17,8 @@ import type { Store } from 'express-session';
 import * as session from 'express-session';
 import * as bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
+import { createEosCookieNamespace } from './eosCookieNamespace';
+import { getEosRoleGroups, resolveEosRole as resolveSharedEosRole } from './eosRolePolicy';
 import type { InternalStorageToken } from '@iobroker/socket-classes';
 import type { AdminAdapterConfig } from '../types';
 import { hasEosUrlCredentials, isEosSameOriginRequest, safeEosLoginPrefix } from './eosRequestSecurity';
@@ -386,6 +388,7 @@ export default class Web {
     private oauth2Model: OAuth2Model | null = null;
     /** Authenticated, bounded forwarding to the web server of an installed instance. */
     private readonly instanceProxy: InstanceProxy;
+    private detachCookieNamespace: (() => void) | undefined;
     private readonly systemRequests = new WeakSet<Request>();
     private unified!: UnifiedSessions;
     private startupFailed = false;
@@ -503,6 +506,8 @@ export default class Web {
         }
 
         this.nexowattStableUpdateManager?.stop();
+        this.detachCookieNamespace?.();
+        this.detachCookieNamespace = undefined;
         this.instanceProxy.close();
 
         void this.adapter.setState('info.connection', false, true);
@@ -881,20 +886,6 @@ export default class Web {
         }
     }
 
-    private normalizeEosGroupId(value: unknown): string | null {
-        if (typeof value !== 'string') {
-            return null;
-        }
-        let group = value.trim();
-        if (!group) {
-            return null;
-        }
-        if (!group.startsWith('system.group.')) {
-            group = `system.group.${group.replace(/^group\./, '')}`;
-        }
-        return /^system\.group\.[a-z0-9_.-]+$/i.test(group) ? group : null;
-    }
-
     private normalizeEosUserId(value: unknown): string | null {
         if (!value) {
             return null;
@@ -935,42 +926,7 @@ export default class Web {
     }
 
     private getEosSecurityAdminGroups(): string[] {
-        const configured = [
-            this.settings.eosAdminOnlyGroups,
-            this.settings.eosSecurityAdminGroups,
-            this.settings.eosAdminOnlyGroup,
-            this.settings.eosServiceGroups,
-            this.settings.eosNexoWattServiceGroups,
-        ];
-        const groups = new Set<string>();
-        const add = (value: unknown): void => {
-            if (!value) {
-                return;
-            }
-            if (Array.isArray(value)) {
-                value.forEach(add);
-                return;
-            }
-            if (typeof value === 'object') {
-                const row = value as { group?: unknown; id?: unknown; name?: unknown; enabled?: unknown };
-                if (row.enabled === false) {
-                    return;
-                }
-                add(row.group || row.id || row.name);
-                return;
-            }
-            const group = this.normalizeEosGroupId(value);
-            if (group) {
-                groups.add(group);
-            }
-        };
-        add(configured);
-        groups.add('system.group.administrator');
-        // NexoWatt-specific service groups are full administrator/service roles.
-        // Generic installer/service wording is never enough to grant full access.
-        groups.add('system.group.nexowatt-service');
-        groups.add('system.group.eos-service');
-        return [...groups].sort();
+        return getEosRoleGroups(this.settings, 'service');
     }
 
     private getEosProtectedAdapterNames(): string[] {
@@ -1051,59 +1007,12 @@ export default class Web {
         return this.adapter.eosSessionSecurity?.idleView(session).authenticated ? user : null;
     }
 
-    private getEosConfiguredRoleGroups(...keys: string[]): string[] {
-        const groups = new Set<string>();
-        const add = (value: unknown): void => {
-            if (!value) {
-                return;
-            }
-            if (Array.isArray(value)) {
-                value.forEach(add);
-                return;
-            }
-            if (typeof value === 'object') {
-                const row = value as { group?: unknown; id?: unknown; name?: unknown; enabled?: unknown };
-                if (row.enabled === false) {
-                    return;
-                }
-                add(row.group || row.id || row.name);
-                return;
-            }
-            const group = this.normalizeEosGroupId(value);
-            if (group) {
-                groups.add(group);
-            }
-        };
-
-        const settings: Record<string, unknown> = { ...this.settings };
-        keys.forEach(key => add(settings[key]));
-        return [...groups].sort();
-    }
-
     private getEosInstallerGroups(): string[] {
-        const groups = new Set<string>(
-            this.getEosConfiguredRoleGroups('eosInstallerGroups', 'eosInstallateurGroups', 'eosCommissioningGroups'),
-        );
-        groups.add('system.group.installateur');
-        groups.add('system.group.installateure');
-        groups.add('system.group.installer');
-        groups.add('system.group.techniker');
-        groups.add('system.group.inbetriebnahme');
-        groups.add('system.group.integrator');
-        return [...groups].sort();
+        return getEosRoleGroups(this.settings, 'installer');
     }
 
     private getEosEndUserGroups(): string[] {
-        const groups = new Set<string>(
-            this.getEosConfiguredRoleGroups('eosEndUserGroups', 'eosEndkundeGroups', 'eosCustomerGroups'),
-        );
-        groups.add('system.group.endkunde');
-        groups.add('system.group.endkunden');
-        groups.add('system.group.kunde');
-        groups.add('system.group.kunden');
-        groups.add('system.group.user');
-        groups.add('system.group.users');
-        return [...groups].sort();
+        return getEosRoleGroups(this.settings, 'enduser');
     }
 
     private getTranslatedName(value: ioBroker.StringOrTranslated | undefined): string {
@@ -1166,41 +1075,6 @@ export default class Web {
         return (await this.getEosGroupDetailsForUser(userId)).map(group => group.id);
     }
 
-    private normalizeEosRoleText(value: unknown): string {
-        return (typeof value === 'string' ? value : '')
-            .toLowerCase()
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .replace(/^system\.group\./, '')
-            .replace(/[^a-z0-9]+/g, ' ')
-            .trim();
-    }
-
-    private resolveEosRole(
-        userId: string | null,
-        groups: string[],
-        groupNames: string[],
-        adminGroups: string[],
-    ): 'admin' | 'installer' | 'enduser' {
-        if (groups.includes('system.group.administrator') || groups.some(group => adminGroups.includes(group))) {
-            return 'admin';
-        }
-
-        const installerGroups = this.getEosInstallerGroups();
-        if (groups.some(group => installerGroups.includes(group))) {
-            return 'installer';
-        }
-
-        const endUserGroups = this.getEosEndUserGroups();
-        if (groups.some(group => endUserGroups.includes(group))) {
-            return 'enduser';
-        }
-
-        // Display names and descriptions are presentation data, never role credentials.
-        // Secure default: a normal authenticated, non-admin ioBroker user is an EOS end user.
-        return 'enduser';
-    }
-
     private async getEosAccessForUserId(userId: string | null): Promise<{
         userId: string | null;
         groupDetails: { id: string; name: string; desc: string }[];
@@ -1213,7 +1087,7 @@ export default class Web {
         const groups = groupDetails.map(group => group.id);
         const groupNames = groupDetails.flatMap(group => [group.name, group.desc]).filter(Boolean);
         const adminGroups = this.getEosSecurityAdminGroups();
-        const role = this.resolveEosRole(userId, groups, groupNames, adminGroups);
+        const role = resolveSharedEosRole(this.settings, userId, groups);
         return { userId, groupDetails, groups, groupNames, adminGroups, role };
     }
 
@@ -1813,8 +1687,10 @@ export default class Web {
             return;
         }
 
-        const next = { ...systemConfig, common: { ...systemConfig.common } } as ioBroker.SystemConfigObject;
-        const common: Record<string, unknown> = { ...next.common };
+        // Keep only fields explicitly changed by this request. A snapshot write
+        // would roll back concurrent settings changed in another Admin session.
+        const common: Record<string, unknown> = {};
+        const previous = systemConfig.common as unknown as Record<string, unknown>;
         const setString = (key: string, maxLength: number, allowed?: string[]): void => {
             if (!(key in input)) {
                 return;
@@ -1824,7 +1700,7 @@ export default class Web {
                 return;
             }
             const value = String(inputValue).trim().slice(0, maxLength);
-            if (!allowed || allowed.includes(value)) {
+            if ((!allowed || allowed.includes(value)) && value !== previous[key]) {
                 common[key] = value;
             }
         };
@@ -1833,7 +1709,7 @@ export default class Web {
                 return;
             }
             const value = Number(input[key]);
-            if (Number.isFinite(value) && value >= min && value <= max) {
+            if (Number.isFinite(value) && value >= min && value <= max && value !== previous[key]) {
                 common[key] = value;
             }
         };
@@ -1844,8 +1720,10 @@ export default class Web {
         setString('currency', 8);
         setString('dateFormat', 16, ['DD.MM.YYYY', 'YYYY.MM.DD', 'MM/DD/YYYY']);
         if ('isFloatComma' in input) {
-            common.isFloatComma =
-                input.isFloatComma === true || input.isFloatComma === 'true' || input.isFloatComma === 1;
+            const value = input.isFloatComma === true || input.isFloatComma === 'true' || input.isFloatComma === 1;
+            if (value !== previous.isFloatComma) {
+                common.isFloatComma = value;
+            }
         }
         const histories = await this.getEosHistoryInstances();
         setString('defaultHistory', 100, ['', ...histories]);
@@ -1856,15 +1734,12 @@ export default class Web {
         setCoordinate('latitude', -90, 90);
         setCoordinate('longitude', -180, 180);
 
-        // Explicitly ignore every privilege/security field even if a manipulated browser submits it.
-        delete common.expertMode;
-        common.expertMode = systemConfig.common.expertMode === true;
-        common.activeRepo = systemConfig.common.activeRepo;
-        common.defaultNewAcl = systemConfig.common.defaultNewAcl;
-
-        Object.assign(next.common, common);
-        await this.adapter.setForeignObjectAsync('system.config', next);
-        this.adapter.log.info(`EOS installer basic settings updated by ${access.userId || 'unknown user'}`);
+        // No expertMode, repositories, default ACLs, native data or other
+        // security fields are part of this narrowly authorized settings patch.
+        if (Object.keys(common).length) {
+            await this.adapter.extendForeignObjectAsync('system.config', { common });
+            this.adapter.log.info(`EOS installer basic settings updated by ${access.userId || 'unknown user'}`);
+        }
         await this.sendEosBasicSettings(req, res);
     }
 
@@ -2300,7 +2175,9 @@ export default class Web {
         this.settings = { ...this.settings, bind, auth: true };
         const listenAddress = eosListenAddress(this.settings);
         if (this.settings.port) {
+            const eosCookies = createEosCookieNamespace(this.adapter.namespace);
             this.server.app = express();
+            this.server.app.use(eosCookies.middleware);
             if (!this.unified.origin) {
                 this.server.app.use(loopbackHttpGuard(this.settings.secure));
             }
@@ -3444,6 +3321,9 @@ export default class Web {
                 }
             });
             this.instanceProxy.attach(this.server.server);
+            // Remain outside the proxy's upgrade dispatcher: it consumes its
+            // own upgrades before the server's ordinary event listeners run.
+            this.detachCookieNamespace = eosCookies.attach(this.server.server);
         } else {
             throw new Error('EOS_LISTEN_PORT_INVALID: Configure one TCP port from 1 to 65535');
         }

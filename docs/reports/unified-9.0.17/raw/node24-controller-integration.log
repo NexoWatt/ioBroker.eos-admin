@@ -1,0 +1,39 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> iobroker.eos-admin@9.0.17 test:integration
+> mocha test/integration-unified.cjs --exit
+
+
+Running tests in /tmp/test-iobroker.eos-admin
+
+
+
+  Adapter integration tests
+
+up to date in 2s
+    1) "before all" hook: prepareTests in "Adapter integration tests"
+
+
+  0 passing (1m)
+  1 failing
+
+  1) Adapter integration tests
+       "before all" hook: prepareTests in "Adapter integration tests":
+     Error: Cannot find module '@iobroker/db-objects-jsonl'
+Require stack:
+- <EOS_REPOSITORY>/node_modules/@iobroker/testing/build/tests/integration/lib/dbConnection.js
+- <EOS_REPOSITORY>/node_modules/@iobroker/testing/build/tests/integration/index.js
+- <EOS_REPOSITORY>/node_modules/@iobroker/testing/build/tests/index.js
+- <EOS_REPOSITORY>/node_modules/@iobroker/testing/build/index.js
+- <EOS_REPOSITORY>/test/integration-unified.cjs
+      at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+      at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+      at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+      at require.resolve (node:internal/modules/helpers:175:31)
+      at DBConnection.createObjectsDB (node_modules/@iobroker/testing/build/tests/integration/lib/dbConnection.js:175:39)
+      at DBConnection.start (node_modules/@iobroker/testing/build/tests/integration/lib/dbConnection.js:135:20)
+      at Context.prepareTests (node_modules/@iobroker/testing/build/tests/integration/index.js:79:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+
+
