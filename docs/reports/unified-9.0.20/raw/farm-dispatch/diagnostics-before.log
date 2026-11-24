@@ -1,0 +1,138 @@
+▶ 1%/98% pool dispatch preserves redistribution and explains only the actual per-member floor exclusion
+  ✖ 1/98 (71.287362ms)
+  ✖ 98/1 (27.156025ms)
+✖ 1%/98% pool dispatch preserves redistribution and explains only the actual per-member floor exclusion (99.71541ms)
+✖ missing member SoC remains unknown in diagnostics and does not block the other member (16.478344ms)
+▶ explicit zero limit and discharge prohibition remain blocking and are not relabelled as a SoC error
+  ✖ discharge_limit_zero (15.408083ms)
+  ✖ discharge_not_allowed (24.261846ms)
+✖ explicit zero limit and discharge prohibition remain blocking and are not relabelled as a SoC error (40.504846ms)
+✖ idle and charge reports do not pretend that a discharge floor was applied to the current request (12.294213ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 0
+ℹ fail 8
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 527.962744
+
+✖ failing tests:
+
+test at test/eos-storagefarm-dispatch-diagnostics.test.cjs:57:17
+✖ 1/98 (71.287362ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  10000 !== 5000
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-storagefarm-dispatch-diagnostics.test.cjs:62:20)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-storagefarm-dispatch-diagnostics.test.cjs:57:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 10000,
+    expected: 5000,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-storagefarm-dispatch-diagnostics.test.cjs:57:17
+✖ 98/1 (27.156025ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  10000 !== 5000
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-storagefarm-dispatch-diagnostics.test.cjs:62:20)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-storagefarm-dispatch-diagnostics.test.cjs:57:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 10000,
+    expected: 5000,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-storagefarm-dispatch-diagnostics.test.cjs:78:1
+✖ missing member SoC remains unknown in diagnostics and does not block the other member (16.478344ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== null
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-storagefarm-dispatch-diagnostics.test.cjs:82:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: null,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-storagefarm-dispatch-diagnostics.test.cjs:89:17
+✖ discharge_limit_zero (15.408083ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  5000 !== 0
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-storagefarm-dispatch-diagnostics.test.cjs:94:20)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-storagefarm-dispatch-diagnostics.test.cjs:89:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 5000,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-storagefarm-dispatch-diagnostics.test.cjs:89:17
+✖ discharge_not_allowed (24.261846ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  5000 !== 0
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-storagefarm-dispatch-diagnostics.test.cjs:94:20)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-storagefarm-dispatch-diagnostics.test.cjs:89:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 5000,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-storagefarm-dispatch-diagnostics.test.cjs:102:1
+✖ idle and charge reports do not pretend that a discharge floor was applied to the current request (12.294213ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - null
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-storagefarm-dispatch-diagnostics.test.cjs:108:20)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: null,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

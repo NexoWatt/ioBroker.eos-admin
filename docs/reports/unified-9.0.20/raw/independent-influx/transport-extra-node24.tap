@@ -1,0 +1,11 @@
+✔ truncated CSV response aborts instead of returning partial chart or fabricated values (25.102742ms)
+✔ response byte budget aborts a real large stream and frees concurrent capacity (320.314358ms)
+✔ explicit same-timestamp write retry sends byte-identical idempotent points and retains genuine zeros (11.686214ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 643.065919

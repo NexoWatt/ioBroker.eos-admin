@@ -1,0 +1,69 @@
+{
+  "sourceBefore": "9.0.19",
+  "sourceAfter": "9.0.20 development",
+  "checks": [
+    {
+      "command": "node --test test/eos-ems-failed-init.test.cjs test/eos-ems-reconfiguration.test.cjs test/eos-device-ems-apply-retry.test.cjs test/eos-device-ems-runtime.test.cjs test/eos-device-ems-checkpoint-review.test.cjs test/eos-device-ems-review.test.cjs test/eos-device-ems-activation.test.cjs test/eos-device-ems-plan.test.cjs ui/test/unified/full-startup.test.cjs ui/test/unified/hosted-startup-status.test.cjs test/eos-unified-listen.test.cjs",
+      "node": "24.22.3",
+      "exitCode": 0,
+      "tests": 141,
+      "pass": 141,
+      "fail": 0,
+      "skip": 0
+    },
+    {
+      "command": "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node --test test/eos-ems-failed-init.test.cjs test/eos-ems-reconfiguration.test.cjs test/eos-device-ems-apply-retry.test.cjs test/eos-device-ems-runtime.test.cjs test/eos-device-ems-checkpoint-review.test.cjs test/eos-device-ems-review.test.cjs test/eos-device-ems-activation.test.cjs test/eos-device-ems-plan.test.cjs ui/test/unified/full-startup.test.cjs ui/test/unified/hosted-startup-status.test.cjs test/eos-unified-listen.test.cjs",
+      "node": "22.23.4",
+      "exitCode": 0,
+      "tests": 141,
+      "pass": 141,
+      "fail": 0,
+      "skip": 0
+    }
+  ],
+  "logs": [
+    {
+      "file": "commissioning-planner-919-before.log",
+      "sha256": "dcb809a68debce5ea5cb96f1663cb95cdd7b3bee927d3c34cf2255e68b62da64",
+      "bytes": 2072
+    },
+    {
+      "file": "commissioning-runtime-retry-919-before.log",
+      "sha256": "f375e248138641fb01a30bfaae325d6ee0a9239bdaa6e554def29a203acf492d",
+      "bytes": 1147
+    },
+    {
+      "file": "commissioning-failed-init-drain-919-before.log",
+      "sha256": "877516ab73eb5c6d61f67ee2dbee2258f311dadad7d5d8b1ef55ccb548c1199d",
+      "bytes": 506
+    },
+    {
+      "file": "commissioning-final-node22.log",
+      "sha256": "a5f662ab3791be3271d42528132555f5b642e57129ed2ccb209df59e4ad0299f",
+      "bytes": 38270
+    },
+    {
+      "file": "commissioning-final-node24.log",
+      "sha256": "949fb80f5f63d114bee04c7af1313191ad979ddd3670c442eb95719e35fa6052",
+      "bytes": 15514
+    },
+    {
+      "file": "commissioning-types-node24.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "file": "commissioning-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "file": "commissioning-retained-readiness-before.log",
+      "sha256": "d58ab074d33edb9cf40aebb278304916819f608850232067e66a3b36ddc23f84",
+      "bytes": 1142,
+      "source": "9.0.20 intermediate runtime before readiness follow-up; expected regression failure, not a 9.0.19 result",
+      "command": "node --test --test-name-pattern='rejected partial-engine cleanup' ui/test/unified/full-startup.test.cjs",
+      "exitCode": 1
+    }
+  ]
+}

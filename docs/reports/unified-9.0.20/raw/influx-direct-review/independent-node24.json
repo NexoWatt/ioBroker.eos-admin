@@ -1,0 +1,12 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "/workspace/scratch/741f792566ea/audit-920/influx-review/runtime-after.test.cjs",
+    "/workspace/scratch/741f792566ea/audit-920/influx-review/transport-extra.test.cjs",
+    "/workspace/scratch/741f792566ea/audit-920/influx-review/hosted-module-history.test.cjs"
+  ],
+  "start": "2026-11-24T20:40:00.026527+00:00",
+  "exitCode": 0,
+  "logSha256": "2a6ac9c75fe261cd0de7f55e437a073c3dc7245d06ef7c2f2cbb3f9ae577dc28"
+}

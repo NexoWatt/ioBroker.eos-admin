@@ -1,0 +1,13 @@
+{
+  "name": "command-ack-output-modes",
+  "command": [
+    "node",
+    "ui/scripts/verify-storage-appcenter-output-modes.js"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+  "startedAt": "2026-11-24T20:00:58.750508+00:00",
+  "durationSeconds": 0.118,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/audit-919/isolation/command-ack-output-modes.log",
+  "sha256": "f8f36d226a0d53ddceb25d77fc6bfdf175c22be303d7cb2e257279502d35b842"
+}

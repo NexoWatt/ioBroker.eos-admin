@@ -1,0 +1,26 @@
+{
+  "name": "serial-helper-typecheck",
+  "command": [
+    "node",
+    "node_modules/typescript/bin/tsc",
+    "--ignoreConfig",
+    "--allowJs",
+    "--checkJs",
+    "--strict",
+    "--noEmit",
+    "--target",
+    "ES2022",
+    "--module",
+    "node16",
+    "--moduleResolution",
+    "node16",
+    "--skipLibCheck",
+    "modules/devices/lib/drivers/modbusSerialLease.js"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+  "startedAt": "2026-11-24T19:14:21.534640+00:00",
+  "durationSeconds": 0.734,
+  "exitCode": 2,
+  "log": "/workspace/scratch/741f792566ea/audit-919/isolation/serial-helper-typecheck.log",
+  "sha256": "4067f41f8eddf191c7917340ad077e3f76c416928feed8c404445e67b654d738"
+}

@@ -1,0 +1,24 @@
+✔ direct v2 check validates actual org/bucket authentication, query preserves negative and zero prices (57.731774ms)
+✔ reachable health port alone is insufficient and server error bodies never expose credentials (12.139868ms)
+✔ direct writes use v2 line protocol, explicit milliseconds and real204 success (4.741599ms)
+✔ redirects are never followed with the token and HTTP429 is bounded (3.512498ms)
+✔ configuration rejects URL credentials, fragments, API paths and malformed trust without weakening TLS (0.68468ms)
+✔ Flux interpolation, names and line protocol cannot inject statements or rows (0.603148ms)
+✔ CSV parser preserves missing samples, string snapshots and repeated annotated tables (1.253638ms)
+✔ server cannot exceed requested row limit or return an oversized body (125.799399ms)
+✔ real unresponsive connection is aborted within the total5s check budget (5001.907111ms)
+✔ successful slow health and stalled query share one total5s connection-check deadline (5013.933632ms)
+✔ history rejects out-of-range rows while accepting the first partial aggregate window (13.960019ms)
+✔ query bounds reject unbounded history and invalid sampling options before IO (0.408184ms)
+✔ closing aborts outstanding queries and bounds concurrent requests (3.451857ms)
+✔ each DNS connection uses vetted answers and rejects rebinding before credentials leave (6.926299ms)
+✔ caller remaining budget includes unresolved DNS and still reserves all concurrency slots (32.383354ms)
+✔ HTTPS rejects untrusted certificates and accepts only explicitly supplied matching CA (129.260938ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10806.665841

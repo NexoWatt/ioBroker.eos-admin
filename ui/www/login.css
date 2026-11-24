@@ -29,6 +29,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #22b8
 .nw-login-orbit-dot--one{top:3px;left:87px}.nw-login-orbit-dot--two{top:104px;left:21px}.nw-login-orbit-dot--three{top:104px;left:151px}
 .nw-login-panel{display:grid;place-items:center;padding:56px 32px;background:#061526}
 .nw-login-card{width:min(100%,390px)}
+.nw-login-app-icon{display:block;width:64px;height:64px;max-width:100%;object-fit:contain;margin:0 0 18px}
 .nw-login-card h2{margin:0 0 12px;font-size:32px;line-height:1.2;font-weight:590;letter-spacing:-1.1px}
 .nw-login-description{margin:0 0 24px;color:var(--login-muted);font-size:14px;line-height:1.7}
 .nw-login-status{margin:0 0 22px;border-left:3px solid #00e676;padding:10px 12px;background:#0d2937;border-radius:0 6px 6px 0;color:#c0d8e5;font-size:13px;line-height:1.6;overflow-wrap:anywhere}

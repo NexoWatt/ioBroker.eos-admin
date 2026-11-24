@@ -19,6 +19,7 @@ Statisch gefundene Imports/require-Aufrufe. Ein Import belegt eine Code-Verknüp
 | `./pages/InstallerPage` | [src-admin-tab/src/pages/InstallerPage.tsx](../../../../src-admin-tab/src/pages/InstallerPage.tsx) |
 | `./pages/MeshCoordinatorPage` | [src-admin-tab/src/pages/MeshCoordinatorPage.tsx](../../../../src-admin-tab/src/pages/MeshCoordinatorPage.tsx) |
 | `./pages/NotificationMailPage` | [src-admin-tab/src/pages/NotificationMailPage.tsx](../../../../src-admin-tab/src/pages/NotificationMailPage.tsx) |
+| `./pages/HistorySetupPage` | [src-admin-tab/src/pages/HistorySetupPage.tsx](../../../../src-admin-tab/src/pages/HistorySetupPage.tsx) |
 | `./pages/DynamicGridPage` | [src-admin-tab/src/pages/DynamicGridPage.tsx](../../../../src-admin-tab/src/pages/DynamicGridPage.tsx) |
 | `./pages/ArbitragePage` | [src-admin-tab/src/pages/ArbitragePage.tsx](../../../../src-admin-tab/src/pages/ArbitragePage.tsx) |
 | `./pages/PartnerIntegrationsPage` | [src-admin-tab/src/pages/PartnerIntegrationsPage.tsx](../../../../src-admin-tab/src/pages/PartnerIntegrationsPage.tsx) |
@@ -37,4 +38,4 @@ Parameter sind die Namen aus der Signatur, keine geratenen Datenverträge. Die A
 
 | Funktion / Methode | Parameter | Direkt sichtbare Aufrufe (Auszug) |
 | --- | --- | --- |
-| [`App`](../../../../src-admin-tab/src/App.tsx#L46) | – | getRuntimeProxyBase, pathname.slice, pathname.startsWith, runtimePath.startsWith |
+| [`App`](../../../../src-admin-tab/src/App.tsx#L47) | – | getRuntimeProxyBase, pathname.slice, pathname.startsWith, runtimePath.startsWith |

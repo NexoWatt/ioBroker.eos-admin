@@ -1,0 +1,11 @@
+✔ Apple compatibility files are GET/HEAD-only public names (1.220758ms)
+✔ similar icon names and encoded protected paths do not become public (0.571671ms)
+✔ PWA requests do not create independent machine-command permission (0.395325ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 278.760693

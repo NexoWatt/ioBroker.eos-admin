@@ -30,6 +30,7 @@ const { KostalTcpDriver } = require('./drivers/kostalTcp');
 const { KostalRs485Driver } = require('./drivers/kostalRs485');
 const { TaCmiDriver } = require('./drivers/taCmi');
 const { isEnergyFreshnessClass, isEnergyFreshnessAlias, captureAliasSources, hasNewAliasSample } = require('./deviceAliasFreshness');
+const { hasSameReadResponse } = require('./modbusReadEvidence');
 
 const ABL_EMH1_LIVE_ALIAS_PATHS = new Set([
   'r.currentL1',
@@ -95,6 +96,13 @@ class DeviceRuntime {
     // These are created under: devices.<id>.aliases.*
     this.aliasByStateRelId = new Map(); // relId -> aliasDef
     this.aliasDefs = []; // list of aliasDef
+    // Mode-dependent device readbacks never use command acknowledgements or
+    // cached mode objects as evidence. No additional polling or timer is needed.
+    this._qualifiedAliasSamples = new Map();
+    this._qualifiedAliasGeneration = 0;
+    this._qualifiedAliasPendingWrites = new Set();
+    this._qualifiedAliasMaxAgeMs = Math.max(1000,
+      (Number(this.template?.driverHints?.polling?.slowIntervalMs) || 5000) + 10000);
 
     // Alias Contract v1: versioned, manufacturer-independent interface for the
     // NexoWatt UI and future integration adapters. Legacy aliases remain available.
@@ -6449,6 +6457,7 @@ class DeviceRuntime {
   }
 
   async _updateAliases(values, ctx) {
+    const readContextGeneration = this._qualifiedAliasGeneration;
     await this._updateVartaTableCapabilities(values).catch(error => {
       this.adapter.log.debug(`[${this.cfg.id}] VARTA table capability metadata update failed: ${error && error.message ? error.message : error}`);
     });
@@ -6481,13 +6490,42 @@ class DeviceRuntime {
         );
         continue;
       }
-      if (connectionOnlyUpdate && !isConnectionAlias(def.relId)) continue;
+      if (connectionOnlyUpdate && !isConnectionAlias(def.relId) && !def.requiredReadContext) continue;
       // DEPower command memory is filled when a request is queued. Polling must
       // never turn an unsent/rejected request into a successful acknowledgement.
       if (this.template?.driverHints?.oemModbusV1003 && def.commandOnlyAlias === true) continue;
 
       let outVal;
       let sampleSourceIds = [];
+
+      if (def.requiredReadContext) {
+        if (readContextGeneration !== this._qualifiedAliasGeneration) continue;
+        const requirement = def.requiredReadContext;
+        const hasTarget = Object.prototype.hasOwnProperty.call(v, def.dpId);
+        const hasContext = Object.prototype.hasOwnProperty.call(v, requirement.dpId);
+        const previousSampleAt = this._qualifiedAliasSamples.get(def.relId);
+        const now = Date.now();
+        const freshPair = c.connected !== false && c.diagnosticsOnly !== true &&
+          String(this.cfg.protocol || '').startsWith('modbus') && hasTarget && hasContext &&
+          hasSameReadResponse(v, def.dpId, requirement.dpId) &&
+          typeof v[def.dpId] === 'number' && Number.isFinite(v[def.dpId]) &&
+          typeof v[requirement.dpId] === 'number' && v[requirement.dpId] === requirement.value;
+        if (freshPair) {
+          this._qualifiedAliasSamples.set(def.relId, now);
+          sampleSourceIds.push(requirement.dpId);
+        } else {
+          const incompletePair = (hasTarget || hasContext) && c.diagnosticsOnly !== true;
+          const expired = previousSampleAt === undefined || now < previousSampleAt ||
+            now - previousSampleAt > this._qualifiedAliasMaxAgeMs;
+          if (c.connected === false || incompletePair || expired) {
+            this._qualifiedAliasSamples.delete(def.relId);
+            await this._setQualifiedAliasValue(def.relId, null, readContextGeneration);
+          }
+          // An unrelated fast poll keeps the previous timestamp until expiry;
+          // it never lends fresh evidence to the last slow mode/target pair.
+          continue;
+        }
+      }
 
       if (def.kind === 'dp') {
         if (!def.dpId) continue;
@@ -6510,7 +6548,7 @@ class DeviceRuntime {
             continue;
           }
           raw = v[def.dpId];
-          sampleSourceIds = [def.dpId];
+          sampleSourceIds.push(def.dpId);
         }
 
         if (typeof def.fromDevice === 'function') {
@@ -6546,13 +6584,32 @@ class DeviceRuntime {
         continue;
       }
 
-      await this._setStateCached(
-        def.relId,
-        outVal,
-        true,
-        this._liveAliasRefreshOptions(def.relId, v, c, sampleSourceIds),
-      );
+      const refreshOptions = this._liveAliasRefreshOptions(def.relId, v, c, sampleSourceIds);
+      if (def.requiredReadContext) {
+        await this._setQualifiedAliasValue(def.relId, outVal, readContextGeneration, refreshOptions);
+      } else {
+        await this._setStateCached(def.relId, outVal, true, refreshOptions);
+      }
     }
+  }
+
+  async _invalidateQualifiedAliases() {
+    const generation = ++this._qualifiedAliasGeneration;
+    this._qualifiedAliasSamples.clear();
+    // A confirmed stop must finish after an already submitted readback write;
+    // otherwise its late completion could resurrect evidence from the old poll.
+    await Promise.all([...this._qualifiedAliasPendingWrites]);
+    if (generation !== this._qualifiedAliasGeneration) return;
+    for (const def of this.aliasDefs || []) {
+      if (def.requiredReadContext) await this._setStateCached(def.relId, null, true);
+    }
+  }
+
+  async _setQualifiedAliasValue(relId, value, generation, options = undefined) {
+    if (generation !== this._qualifiedAliasGeneration) return;
+    const pending = this._setStateCached(relId, value, true, options);
+    this._qualifiedAliasPendingWrites.add(pending);
+    try { await pending; } finally { this._qualifiedAliasPendingWrites.delete(pending); }
   }
 
   async _handleMqttSnapshot(values, meta) {
@@ -6669,6 +6726,7 @@ class DeviceRuntime {
     const lifecycleGeneration = ++this._lifecycleGeneration;
 
     if (this.cfg.enabled === false) {
+      await this._invalidateQualifiedAliases();
       this.adapter.log.info(`[${this.cfg.id}] disabled - skipping`);
       return;
     }
@@ -6676,6 +6734,8 @@ class DeviceRuntime {
     this.driver = this._createDriver();
     const startupDriver = this.driver;
     const current = () => this.started && this._lifecycleGeneration === lifecycleGeneration && this.driver === startupDriver;
+    await this._invalidateQualifiedAliases();
+    if (!current()) return;
     /** @param {() => Promise<void>} operation */
     const runInitial = async operation => {
       if (!backgroundInitialPoll) { await operation(); return; }
@@ -6772,6 +6832,14 @@ class DeviceRuntime {
 
     if (tplPolling && Array.isArray(tplPolling.fastDpIds) && tplPolling.fastDpIds.length) {
       const idSet = new Set(tplPolling.fastDpIds.map(x => String(x)));
+      // BMS numeric limits are live control inputs, not static metadata. Keep
+      // their already mapped read sources on the existing fast schedule only.
+      for (const def of this.aliasDefs || []) {
+        if (def.kind === 'dp' && def.rw === 'ro' && def.dpId &&
+            ['r.allowedChargePower', 'r.allowedDischargePower'].includes(legacyAliasPath(def.relId))) {
+          idSet.add(String(def.dpId));
+        }
+      }
       fastDps = allDps.filter(dp => dp && idSet.has(String(dp.id)));
       useSplitPolling = (fastDps.length > 0) && (slowIntervalMs > 0);
     }
@@ -6792,6 +6860,8 @@ class DeviceRuntime {
     fastIntervalMs = clampInterval(fastIntervalMs);
     if (useSplitPolling) slowIntervalMs = clampInterval(slowIntervalMs);
     this._liveAliasRefreshMs = this._computeLiveAliasRefreshMs({ fastIntervalMs, isEventDriven: false });
+    this._qualifiedAliasSamples.clear();
+    this._qualifiedAliasMaxAgeMs = (useSplitPolling ? slowIntervalMs : fastIntervalMs) + 10000;
 
     // Heartbeat timeout derived from polling interval (unless overridden).
     this._hbTimeoutMs = this._computeHeartbeatTimeoutMs({ fastIntervalMs, isEventDriven: false });
@@ -7360,6 +7430,7 @@ class DeviceRuntime {
     this._hbOnline = false;
 
     // Stop optional write loop and clear queued writes
+    await this._invalidateQualifiedAliases();
     try {
       this._writeQueueEnabled = false;
       this._stopWriteLoop();

@@ -63,14 +63,18 @@ function check(name, run) {
 const sharedActions = {
   'VIS öffnen': '/',
   'EMS Apps öffnen': '/ems-apps.html?nwAdmin=1&instance=3&adminPort=9443',
+  'Historie einrichten': '/installer/?instance=3#/history-setup',
   Simulation: '/simulation.html?nwAdmin=1&instance=3&adminPort=9443',
   'SmartHome VIS': '/smarthome.html',
   'SmartHome Config': '/smarthome-config.html?nwAdmin=1&instance=3&adminPort=9443',
 };
 const adminActions = {
   'E-Mail-Versand': '/mail-setup/?instance=3#/notification-mail',
-  Lizenz: '/license.html?nwAdmin=1&instance=3&adminPort=9443',
+  Lizenz: '/nexowatt/license',
+  Devices: '/modules/devices/', EEBus: '/modules/eebus/', Sicherung: '/modules/backup/',
+  Zertifikate: '/security/tls/', Bestandsübernahme: '/migration/',
 };
+const installerNavigation = loadSource('src-admin-tab/src/lib/installerNavigation.ts', {}, {});
 const contracts = loadSource('src-admin-tab/src/lib/adminContracts.ts', {}, {});
 const picker = loadSource('src-admin-tab/src/lib/dataPointPicker.ts', { './adminContracts': contracts, './adminConnection': { getRuntimeProxyBase: () => null } }, {});
 const dp = loadSource('src-admin-tab/src/components/DpField.tsx', { '../lib/dataPointPicker': picker }, {});
@@ -83,6 +87,7 @@ for (const role of ['installer', 'admin']) {
     const ui = loadSource('src-admin-tab/src/pages/InstallerPage.tsx', {
       './PageShell': props => { shellProps = props; return React.createElement('main', null, props.children); },
       './ProtectedRuntimeRoute': { useRuntimeAccess: () => ({ authed: true, role }) },
+      '../lib/installerNavigation': installerNavigation,
       '../lib/adminConnection': {
         getInstance: () => '3',
         openExternal: url => opened.push(url),

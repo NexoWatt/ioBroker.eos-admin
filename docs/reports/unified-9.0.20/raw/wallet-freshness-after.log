@@ -1,0 +1,19 @@
+✔ actual provider publication → TarifVis → CoreLimits → Wallet keeps EUR/kWh including high, zero and negative prices (76.823979ms)
+✔ structured EUR curves keep their prices while untyped legacy cents and explicit units retain their conversions (0.337118ms)
+✔ actual manual mapping preserves cent conversion and supports explicit EUR unit without changing freshness (3.714453ms)
+✔ strict price reader rejects missing/status data and preserves genuine zero and negative prices (1.043761ms)
+✔ wallet skips null, status and stale budget candidates in favour of the real fresh canonical price (1.359588ms)
+✔ wallet missing, invalid timestamp and stale-only tariffs use the configured fixed fallback; real zero remains dynamic (0.441045ms)
+✔ real CoreLimits tick keeps missing tariff prices null and respects explicit stale flag without changing physical limits (63.050063ms)
+✔ customer /config only exposes source kinds and safe price units, with no object IDs or credentials (58.541183ms)
+✔ explicit customer Tibber save replaces legacy hourly resolution and retains credentials and unrelated settings (49.868162ms)
+✔ wallet cannot revive an explicitly invalid tariff through fresh budget, direct, history or legacy caches (2.445593ms)
+✔ wallet retains true zero, negative prices and legacy sources without a freshness flag (0.215805ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 473.821329

@@ -1,0 +1,46 @@
+{
+  "applications": 1,
+  "applyPending": true,
+  "service": {
+    "state": "error",
+    "code": "EOS_EMS_APPLY_FAILED",
+    "updatedAt": 1795547259557,
+    "statuses": [
+      {
+        "deviceId": "storage",
+        "devId": "storage",
+        "baseId": "eos-admin.0.devices.storage",
+        "status": "pending",
+        "code": "EOS_EMS_APPLY_FAILED",
+        "target": "",
+        "mappedFields": [],
+        "missing": [],
+        "optionalMissing": []
+      },
+      {
+        "deviceId": "grid",
+        "devId": "grid",
+        "baseId": "eos-admin.0.devices.grid",
+        "status": "pending",
+        "code": "EOS_EMS_APPLY_FAILED",
+        "target": "",
+        "mappedFields": [],
+        "missing": [],
+        "optionalMissing": []
+      }
+    ]
+  },
+  "retryScheduled": false
+}
+AssertionError [ERR_ASSERTION]: confirmed post-persistence apply failure should retry within its existing bounded budget
+
+1 !== 2
+
+    at /workspace/scratch/741f792566ea/audit-919/commissioning/runtime-retry-before.cjs:17:199 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 2,
+  operator: 'strictEqual',
+  diff: 'simple'
+}

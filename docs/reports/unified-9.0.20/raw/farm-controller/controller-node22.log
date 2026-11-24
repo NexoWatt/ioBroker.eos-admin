@@ -1,0 +1,110 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual farm controller dispatches600W to eligible member at SoCs1/98
+ok 1 - actual farm controller dispatches600W to eligible member at SoCs1/98
+  ---
+  duration_ms: 97.645545
+  type: 'test'
+  ...
+# Subtest: actual farm controller dispatches600W to eligible member at SoCs98/1
+ok 2 - actual farm controller dispatches600W to eligible member at SoCs98/1
+  ---
+  duration_ms: 21.455235
+  type: 'test'
+  ...
+# Subtest: both members below configured minimum receive no discharge command
+ok 3 - both members below configured minimum receive no discharge command
+  ---
+  duration_ms: 36.660099
+  type: 'test'
+  ...
+# Subtest: eligible member's explicit0W limit remains binding
+ok 4 - eligible member's explicit0W limit remains binding
+  ---
+  duration_ms: 15.770536
+  type: 'test'
+  ...
+# Subtest: eligible member's explicit250W limit remains binding
+ok 5 - eligible member's explicit250W limit remains binding
+  ---
+  duration_ms: 31.811899
+  type: 'test'
+  ...
+# Subtest: eligible full member blocked bystaleMember cannot discharge
+ok 6 - eligible full member blocked bystaleMember cannot discharge
+  ---
+  duration_ms: 36.008127
+  type: 'test'
+  ...
+# Subtest: empty member'sstaleMember does not block healthy full member
+ok 7 - empty member'sstaleMember does not block healthy full member
+  ---
+  duration_ms: 12.447523
+  type: 'test'
+  ...
+# Subtest: eligible full member blocked byfaultMember cannot discharge
+ok 8 - eligible full member blocked byfaultMember cannot discharge
+  ---
+  duration_ms: 12.301032
+  type: 'test'
+  ...
+# Subtest: empty member'sfaultMember does not block healthy full member
+ok 9 - empty member'sfaultMember does not block healthy full member
+  ---
+  duration_ms: 19.855046
+  type: 'test'
+  ...
+# Subtest: eligible full member blocked bydeniedMember cannot discharge
+ok 10 - eligible full member blocked bydeniedMember cannot discharge
+  ---
+  duration_ms: 12.888827
+  type: 'test'
+  ...
+# Subtest: empty member'sdeniedMember does not block healthy full member
+ok 11 - empty member'sdeniedMember does not block healthy full member
+  ---
+  duration_ms: 13.064612
+  type: 'test'
+  ...
+# Subtest: global admission remains binding:{"staleGrid":true}
+ok 12 - global admission remains binding:{"staleGrid":true}
+  ---
+  duration_ms: 20.692126
+  type: 'test'
+  ...
+# Subtest: global admission remains binding:{"tariffBlock":true}
+ok 13 - global admission remains binding:{"tariffBlock":true}
+  ---
+  duration_ms: 10.374361
+  type: 'test'
+  ...
+# Subtest: global admission remains binding:{"enabled":false}
+ok 14 - global admission remains binding:{"enabled":false}
+  ---
+  duration_ms: 7.134312
+  type: 'test'
+  ...
+# Subtest: explicit global MultiUse50% reserve blocks49.5% mean without silently overriding operator policy
+ok 15 - explicit global MultiUse50% reserve blocks49.5% mean without silently overriding operator policy
+  ---
+  duration_ms: 13.337352
+  type: 'test'
+  ...
+# Subtest: farm write acceptance does not masquerade as measured response: 63W actual versus673W target times out
+ok 16 - farm write acceptance does not masquerade as measured response: 63W actual versus673W target times out
+  ---
+  duration_ms: 16.803831
+  type: 'test'
+  ...
+1..16
+# tests 16
+# suites 0
+# pass 16
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 747.06617

@@ -1,0 +1,23 @@
+✔ public contract discards secrets and invalid success responses cannot unlock saves (1.558737ms)
+✔ draft payload preserves adapter mode and does not send public flags or unrelated history settings (0.986084ms)
+✔ saved token cannot be reused at another origin; explicit new token permits a new valid URL (0.695918ms)
+✔ custom CA preserve/remove and HTTPS rules are explicit; read check never establishes write permission (0.386231ms)
+✔ errors translate auth/network/TLS/bucket/conflict without leaking raw upstream details (0.355706ms)
+✔ actual React mode change is local; draft check and explicit revision save use separate API operations (91.329396ms)
+✔ failed/conflicting saves keep draft secrets and revision; status refresh cannot replace the unsaved draft (53.82516ms)
+✔ draft edits invalidate old check results; transport ready cannot fake read/write success (53.378537ms)
+✔ failed initial load leaves write actions disabled and explicit retry can recover (24.687669ms)
+✔ late initial response after unmount cannot expose data or unlock controls (51.523003ms)
+✔ installer action is admin/installer only and uses confirmed runtime/proxy origin in the same tab (81.096058ms)
+✔ actual route retains protected capability and explicit roles; responsive history section is scoped (2.080773ms)
+✔ saved read/write errors and duplicate recording warning stay independent of a successful opposite operation (50.700736ms)
+✔ concrete backend error codes distinguish busy/config/save/address and post-save activation failures (0.302936ms)
+✔ actual dedicated transport wrapper retains single same-origin API boundary and rejects unplanned suffixes (31.472616ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1005.361458

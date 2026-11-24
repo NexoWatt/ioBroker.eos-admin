@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "eos-admin",
-    "version": "9.0.19",
+    "version": "9.0.20",
     "titleLang": {
       "en": "NexoWatt EOS",
       "de": "NexoWatt EOS",
@@ -18,6 +18,10 @@
     "connectionType": "local",
     "dataSource": "push",
     "news": {
+      "9.0.20": {
+        "en": "Fix browser-independent device commands, storage-farm feedback and dynamic limits; add direct InfluxDB 2 history with protected credentials and improve login/home-screen icons. Preserve customer configuration.",
+        "de": "Gerätebefehle unabhängig vom Browser, Farm-Rückmeldungen und dynamische Grenzen korrigiert; direkte InfluxDB-2-Historie sowie Login- und Home-Bildschirm-Symbole ergänzt. Kundeneinstellungen bleiben erhalten."
+      },
       "9.0.19": {
         "en": "Fix device-to-EMS commissioning, fresh unchanged measurements and energy flow; preserve existing customer settings.",
         "de": "Geräteübergabe ins EMS, Aktualität unveränderter Messwerte und Energiefluss korrigiert; bestehende Kundeneinstellungen erhalten."
@@ -96,10 +100,6 @@
       "9.0.1": {
         "en": "Preserve existing ioBroker Admin access, use a fixed authenticated HTTPS listener, and reject TLS downgrade and port hopping.",
         "de": "Bestehenden ioBroker-Admin erhalten; fester HTTPS-Port mit Anmeldung; kein TLS-Rückfall und kein automatischer Portwechsel."
-      },
-      "9.0.0-alpha.1": {
-        "en": "First unified EOS preview: shared UI, system administration, login and license authority.",
-        "de": "Erste gemeinsame EOS-Vorabversion mit UI, Systemverwaltung, Anmeldung und zentraler Lizenz."
       }
     },
     "desc": {
@@ -137,7 +137,7 @@
     "icon": "admin.svg",
     "messagebox": true,
     "enabled": true,
-    "extIcon": "https://unpkg.com/iobroker.eos-admin@9.0.19/admin/admin.svg",
+    "extIcon": "https://unpkg.com/iobroker.eos-admin@9.0.20/admin/admin.svg",
     "keywords": [
       "NexoWatt",
       "EOS",
@@ -148,7 +148,7 @@
       "licensed"
     ],
     "compact": false,
-    "readme": "https://unpkg.com/iobroker.eos-admin@9.0.19/README.md",
+    "readme": "https://unpkg.com/iobroker.eos-admin@9.0.20/README.md",
     "authors": [
       "NexoWatt"
     ],
@@ -160,7 +160,7 @@
     "type": "general",
     "licenseInformation": {
       "type": "paid",
-      "link": "https://unpkg.com/iobroker.eos-admin@9.0.19/LICENSE"
+      "link": "https://unpkg.com/iobroker.eos-admin@9.0.20/LICENSE"
     },
     "logTransporter": true,
     "stopBeforeUpdate": true,

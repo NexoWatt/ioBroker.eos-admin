@@ -1,0 +1,21 @@
+✔ actual TarifVis → hosted adapter → HTTP history preserves negative price and namespace (migration=false) (23.282452ms)
+✔ actual TarifVis → hosted adapter → HTTP history preserves negative price and namespace (migration=true) (7.409535ms)
+✔ actual Para14a publication retains source timestamp; denied and failed state writes never reach Influx (3.778669ms)
+✔ unregistered physical states remain outside direct historian scope (1.066115ms)
+✔ bad string and oversized ID cannot poison a valid queued measurement (2.378661ms)
+✔ eight pending real HTTP history queries retain writer capacity and original sample timestamp (24.946919ms)
+✔ reconfiguration fences captured old writes and late active completions from new queue accounting (0.552883ms)
+✔ normal drain flushes queued values, rejects late captures and commits, and closes once complete (0.526844ms)
+✔ drain deadline is bounded and counts the unconfirmed active point without a fake success (19.376501ms)
+✔ legacy default remains inert; bad quality, ackfalse, null and NaN never enter the historian (0.436947ms)
+✔ truncated CSV response aborts instead of returning partial chart or fabricated values (21.033626ms)
+✔ response byte budget aborts a real large stream and frees concurrent capacity (49.893956ms)
+✔ explicit same-timestamp write retry sends byte-identical idempotent points and retains genuine zeros (5.180879ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 299.383496

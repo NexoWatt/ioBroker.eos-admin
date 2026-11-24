@@ -307,6 +307,7 @@ class EosModuleHost {
             return entry.stopEntryPromise;
         const module = entry.module;
         const startup = entry.startup;
+        const commandSubscription = entry.commandSubscriptionPending;
         const wasStarting = startup?.module === module && startup.settled !== true;
         entry.module = null;
         entry.started = false;
@@ -349,6 +350,13 @@ class EosModuleHost {
             // Do not restore the old owner while an accepted mutation may still
             // settle into the retained namespace. Never retry an uncertain write.
             await Promise.allSettled([...entry.pendingWrites]);
+            // Startup may still be waiting for subscription acknowledgement.
+            // Drain that acquisition and release only this module's lease.
+            const releaseCommands = await commandSubscription?.catch(() => null);
+            if (releaseCommands)
+                await releaseCommands();
+            if (entry.commandSubscriptionPending === commandSubscription)
+                entry.commandSubscriptionPending = null;
             const subscriptions = [...entry.subscriptions];
             await Promise.all(subscriptions.map(pattern => bounded(Promise.resolve().then(() => this.owner.unsubscribeForeignStatesAsync(pattern)), 1000)));
             for (const pattern of subscriptions)
@@ -613,7 +621,39 @@ class EosModuleHost {
                 if (entry.module || entry.failed)
                     continue;
                 const generation = entry.generation;
+                // A completed previous stop belongs to its old startup attempt.
+                // New acquisition/factory failures must run their own cleanup.
+                entry.stopEntryPromise = null;
                 try {
+                    if (entry.id === 'devices') {
+                        const namespace = this.namespace(entry.id);
+                        if (!/^(?:eos-admin|nexowatt-devices)\.\d+$/.test(namespace))
+                            throw fail('EOS_MODULE_STATE_SCOPE');
+                        const pattern = `${namespace}.devices.*`;
+                        // Raw control states, legacy aliases and AliasV1 all need
+                        // delivery independently of browser subscriptions and EMS
+                        // mappings. Acquire before factory/start can open hardware.
+                        entry.commandSubscriptionPending = this.owner.eosStateSubscriptions?.acquireHost
+                            ? this.owner.eosStateSubscriptions.acquireHost(pattern)
+                            : Promise.resolve(this.owner.subscribeForeignStatesAsync(pattern)).then(() => {
+                                let released = false;
+                                let releasing = null;
+                                return async () => {
+                                    if (released)
+                                        return;
+                                    releasing ||= Promise.resolve().then(() => this.owner.unsubscribeForeignStatesAsync(pattern))
+                                        .then(() => { released = true; }).finally(() => { releasing = null; });
+                                    await releasing;
+                                };
+                            });
+                        // Keep the original promise for late stop cleanup; a slow
+                        // controller must not hold startup/reconcile indefinitely.
+                        const releaseCommands = await bounded(entry.commandSubscriptionPending, 10000);
+                        if (!this.canOperate(entry.id, generation)) {
+                            await releaseCommands();
+                            throw fail('EOS_MODULE_STOPPED');
+                        }
+                    }
                     const factory = this.factory(entry.id);
                     const module = factory.createHostedModule({
                         adapter: this.facade(entry, generation), config: entry.config,

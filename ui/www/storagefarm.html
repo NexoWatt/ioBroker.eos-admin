@@ -26,7 +26,7 @@
   <link rel="manifest" href="/manifest.webmanifest">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/nexowatt-32.png">
   <link rel="icon" type="image/png" sizes="192x192" href="/assets/icons/nexowatt-192.png">
-  <link rel="apple-touch-icon" sizes="1024x1024" href="/apple-touch-icon.png?v=952ceb9cef3f">
+  <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="/assets/icons/nexowatt-180.png?v=083e11ab28ec">
   <!-- Gemeinsamer direkter/Proxy-Bootstrap: Sitzung und CSRF vor der Bedienlogik. -->
   <script src="/static/runtime-base.js"></script>
   <script src="/static/auth.js"></script>
@@ -112,10 +112,24 @@
       <div id="sf_status_rows" class="nw-storagefarm-rows"></div>
     </div>
     <small id="sf_msg" class="nw-storagefarm-msg"></small>
+    <section class="nw-farm-dispatch" aria-labelledby="sf_dispatch_title">
+      <h3 id="sf_dispatch_title">Regelauftrag &amp; Rückmeldung</h3>
+      <p id="sf_dispatch_status" role="status">Warte auf aktuelle Verteilungsdiagnose.</p>
+      <div class="nw-farm-metrics">
+        <article class="nw-farm-metric"><h4>Angefordert</h4><strong id="sf_dispatch_requested">—</strong><small id="sf_dispatch_requested_detail">Keine aktuelle Anforderung</small></article>
+        <article class="nw-farm-metric"><h4>An Schreibpfad übergeben</h4><strong id="sf_dispatch_accepted">—</strong><small id="sf_dispatch_accepted_detail">Keine Treiber-, Geräte- oder Leistungsbestätigung</small></article>
+        <article class="nw-farm-metric"><h4>Tatsächlich gemessen</h4><strong id="sf_dispatch_measured">—</strong><small id="sf_dispatch_measured_detail">Keine aktuelle Messung</small></article>
+      </div>
+      <p id="sf_dispatch_ems" class="nw-farm-summary__hint">EMS-Entscheidung unbekannt.</p>
+      <p id="sf_dispatch_floor" class="nw-farm-summary__hint">Mindest-SoC nicht mitgeteilt.</p>
+      <div id="sf_dispatch_members" class="nw-farm-dispatch-members"></div>
+    </section>
+
   </section>
 </main>
 
 <script src="/static/storagefarm-summary.js"></script>
+<script src="/static/storagefarm-dispatch.js"></script>
 <script src="/static/storagefarm.js"></script>
 <script src="/static/cockpit-shell.js"></script>
 <script src="/static/pwa.js" defer></script>

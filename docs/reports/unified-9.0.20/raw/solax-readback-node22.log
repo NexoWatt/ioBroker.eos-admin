@@ -1,0 +1,542 @@
+TAP version 13
+# (node:19) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Alias Contract v1 files are synchronized and every template declares an explicit device class
+ok 1 - Alias Contract v1 files are synchronized and every template declares an explicit device class
+  ---
+  duration_ms: 2.672294
+  type: 'test'
+  ...
+# Subtest: all 195 templates satisfy the canonical path, type, role and unit contract
+ok 2 - all 195 templates satisfy the canonical path, type, role and unit contract
+  ---
+  duration_ms: 138.745501
+  type: 'test'
+  ...
+# Subtest: the v1 namespace converts vendor units to W, Wh, A, V, °C, seconds, percent and Hz
+ok 3 - the v1 namespace converts vendor units to W, Wh, A, V, °C, seconds, percent and Hz
+  ---
+  duration_ms: 1.530594
+  type: 'test'
+  ...
+# Subtest: manufacturer-specific EV control semantics remain intact behind canonical aliases
+ok 4 - manufacturer-specific EV control semantics remain intact behind canonical aliases
+  ---
+  duration_ms: 0.846785
+  type: 'test'
+  ...
+# Subtest: CHARGER and DC_CHARGER are solar chargers and can never appear as EV wallboxes
+ok 5 - CHARGER and DC_CHARGER are solar chargers and can never appear as EV wallboxes
+  ---
+  duration_ms: 0.519112
+  type: 'test'
+  ...
+# Subtest: dynamic TA CMI aliases are mirrored into canonical heat paths and refresh the manifest
+ok 6 - dynamic TA CMI aliases are mirrored into canonical heat paths and refresh the manifest
+  ---
+  duration_ms: 92.153149
+  type: 'test'
+  ...
+# Subtest: device initialization creates v1 objects, heartbeat states and machine-readable metadata
+ok 7 - device initialization creates v1 objects, heartbeat states and machine-readable metadata
+  ---
+  duration_ms: 13.735141
+  type: 'test'
+  ...
+# (node:20) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: constant SMA grid samples stay fresh for 30 minutes; cached telegrams, failed polls and counters do not
+ok 8 - constant SMA grid samples stay fresh for 30 minutes; cached telegrams, failed polls and counters do not
+  ---
+  duration_ms: 772.895882
+  type: 'test'
+  ...
+# Subtest: FENECON real battery, SOC, PV, converter and grid samples refresh within bound while commands remain change-only
+ok 9 - FENECON real battery, SOC, PV, converter and grid samples refresh within bound while commands remain change-only
+  ---
+  duration_ms: 8.088749
+  type: 'test'
+  ...
+# Subtest: SolaX applied-target readback refreshes only from actual poll, never write acknowledgement or unrelated packet
+ok 10 - SolaX applied-target readback refreshes only from actual poll, never write acknowledgement or unrelated packet
+  ---
+  duration_ms: 3.503505
+  type: 'test'
+  ...
+# Subtest: MQTT full caches and diagnostic packets cannot refresh an old source or a partially updated computed alias
+ok 11 - MQTT full caches and diagnostic packets cannot refresh an old source or a partially updated computed alias
+  ---
+  duration_ms: 2.492793
+  type: 'test'
+  ...
+# Subtest: FENECON 780 controller block / 882 target changes only controller route and retains all verified read aliases
+ok 12 - FENECON 780 controller block / 882 target changes only controller route and retains all verified read aliases
+  ---
+  duration_ms: 2.767197
+  type: 'test'
+  ...
+# (node:21) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: all 195 profiles retain existing aliases; new semantics are additive, source-bound and read-only
+ok 13 - all 195 profiles retain existing aliases; new semantics are additive, source-bound and read-only
+  ---
+  duration_ms: 301.254245
+  type: 'test'
+  ...
+# Subtest: FENECON keeps battery power separate from ESS converter/DC PV and does not fabricate 706 readback
+ok 14 - FENECON keeps battery power separate from ESS converter/DC PV and does not fabricate 706 readback
+  ---
+  duration_ms: 1.745909
+  type: 'test'
+  ...
+# Subtest: both SolaX profiles share W units and signed limits, with genuine readable target and no invented grid target
+ok 15 - both SolaX profiles share W units and signed limits, with genuine readable target and no invented grid target
+  ---
+  duration_ms: 7.727755
+  type: 'test'
+  ...
+# Subtest: readback is actual polling data and cannot acknowledge queued or failed commands
+ok 16 - readback is actual polling data and cannot acknowledge queued or failed commands
+  ---
+  duration_ms: 20.596361
+  type: 'test'
+  ...
+# Subtest: VARTA sign conversion and DEYE MPPT aggregation remain canonical without new control capability
+ok 17 - VARTA sign conversion and DEYE MPPT aggregation remain canonical without new control capability
+  ---
+  duration_ms: 1.030892
+  type: 'test'
+  ...
+# Subtest: unknown, write-only, missing, remapped and differently scaled sources remain unavailable
+ok 18 - unknown, write-only, missing, remapped and differently scaled sources remain unavailable
+  ---
+  duration_ms: 2.387905
+  type: 'test'
+  ...
+# (node:27) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual hosted gate loss after one SolaX read aborts the snapshot without poisoning remaining optional groups
+ok 19 - actual hosted gate loss after one SolaX read aborts the snapshot without poisoning remaining optional groups
+  ---
+  duration_ms: 29.335739
+  type: 'test'
+  ...
+# Subtest: authorization and explicit stop errors bypass optional caching for registers, coils and discrete inputs
+ok 20 - authorization and explicit stop errors bypass optional caching for registers, coils and discrete inputs
+  ---
+  duration_ms: 25.127573
+  type: 'test'
+  ...
+# Subtest: a gate error inside an already split read cannot blacklist an optional item or continue the other items
+ok 21 - a gate error inside an already split read cannot blacklist an optional item or continue the other items
+  ---
+  duration_ms: 10.721163
+  type: 'test'
+  ...
+# Subtest: authorization failure at a documented fallback is not swallowed as the original illegal-register response
+ok 22 - authorization failure at a documented fallback is not swallowed as the original illegal-register response
+  ---
+  duration_ms: 1.832339
+  type: 'test'
+  ...
+# Subtest: genuine unsupported optional registers retain their existing cooldown while useful groups remain readable
+ok 23 - genuine unsupported optional registers retain their existing cooldown while useful groups remain readable
+  ---
+  duration_ms: 11.152662
+  type: 'test'
+  ...
+# Subtest: authorization loss during optional SunSpec scanning is propagated and cannot cache an incomplete model map
+ok 24 - authorization loss during optional SunSpec scanning is propagated and cannot cache an incomplete model map
+  ---
+  duration_ms: 3.658008
+  type: 'test'
+  ...
+# Subtest: the read entry point does not hide an authorization error from optional model discovery
+ok 25 - the read entry point does not hide an authorization error from optional model discovery
+  ---
+  duration_ms: 0.811021
+  type: 'test'
+  ...
+# (node:28) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: disconnect during reconnect backoff prevents an old hosted connect opening a socket after stop
+ok 26 - disconnect during reconnect backoff prevents an old hosted connect opening a socket after stop
+  ---
+  duration_ms: 284.400193
+  type: 'test'
+  ...
+# Subtest: lease loss during reconnect backoff blocks TCP dispatch and a subsequent authorized attempt still works
+ok 27 - lease loss during reconnect backoff blocks TCP dispatch and a subsequent authorized attempt still works
+  ---
+  duration_ms: 205.054588
+  type: 'test'
+  ...
+# Subtest: late old backoff cannot close or change a replacement connection, even after authorization returns
+ok 28 - late old backoff cannot close or change a replacement connection, even after authorization returns
+  ---
+  duration_ms: 251.395151
+  type: 'test'
+  ...
+# Subtest: a cancelled old ensureConnected caller cannot mark the replacement connection offline
+ok 29 - a cancelled old ensureConnected caller cannot mark the replacement connection offline
+  ---
+  duration_ms: 251.545292
+  type: 'test'
+  ...
+# Subtest: late real TCP connection completion cannot invalidate the replacement client
+ok 30 - late real TCP connection completion cannot invalidate the replacement client
+  ---
+  duration_ms: 9.515241
+  type: 'test'
+  ...
+# Subtest: concurrent callers still share one TCP connection while no disconnect occurs
+ok 31 - concurrent callers still share one TCP connection while no disconnect occurs
+  ---
+  duration_ms: 152.406164
+  type: 'test'
+  ...
+# Subtest: authorization loss inside optional SunSpec discovery is not reported as successful connection
+ok 32 - authorization loss inside optional SunSpec discovery is not reported as successful connection
+  ---
+  duration_ms: 21.747394
+  type: 'test'
+  ...
+# Subtest: actual interrupted SunSpec discovery stays retryable and does not cache an unverified unit
+ok 33 - actual interrupted SunSpec discovery stays retryable and does not cache an unverified unit
+  ---
+  duration_ms: 8.458806
+  type: 'test'
+  ...
+# Subtest: late actual SunSpec probe cannot mutate replacement metadata or timeout
+ok 34 - late actual SunSpec probe cannot mutate replacement metadata or timeout
+  ---
+  duration_ms: 10.919831
+  type: 'test'
+  ...
+# Subtest: concurrent SunSpec discovery shares a single current-generation probe
+ok 35 - concurrent SunSpec discovery shares a single current-generation probe
+  ---
+  duration_ms: 5.993374
+  type: 'test'
+  ...
+# Subtest: late model-map response cannot overwrite the replacement generation cache
+ok 36 - late model-map response cannot overwrite the replacement generation cache
+  ---
+  duration_ms: 6.596802
+  type: 'test'
+  ...
+# (node:32) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: complete FC3/FC4 words preserve signed values, genuine zero and configured sentinels
+ok 37 - complete FC3/FC4 words preserve signed values, genuine zero and configured sentinels
+  ---
+  duration_ms: 57.31799
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 missing response fails without fabricated power, fallback or skip caching
+ok 38 - required FC3/FC4 missing response fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 2.766174
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 missing data fails without fabricated power, fallback or skip caching
+ok 39 - required FC3/FC4 missing data fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 5.677959
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 non-array data fails without fabricated power, fallback or skip caching
+ok 40 - required FC3/FC4 non-array data fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 1.707991
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 empty data fails without fabricated power, fallback or skip caching
+ok 41 - required FC3/FC4 empty data fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 10.070432
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 short data fails without fabricated power, fallback or skip caching
+ok 42 - required FC3/FC4 short data fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 1.722844
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 overlong data fails without fabricated power, fallback or skip caching
+ok 43 - required FC3/FC4 overlong data fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 9.793236
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 short payload buffer fails without fabricated power, fallback or skip caching
+ok 44 - required FC3/FC4 short payload buffer fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 27.931354
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 overlong payload buffer fails without fabricated power, fallback or skip caching
+ok 45 - required FC3/FC4 overlong payload buffer fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 1.052965
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 sparse data fails without fabricated power, fallback or skip caching
+ok 46 - required FC3/FC4 sparse data fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 1.131834
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 null word fails without fabricated power, fallback or skip caching
+ok 47 - required FC3/FC4 null word fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 9.256667
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 undefined word fails without fabricated power, fallback or skip caching
+ok 48 - required FC3/FC4 undefined word fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 0.791061
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 NaN word fails without fabricated power, fallback or skip caching
+ok 49 - required FC3/FC4 NaN word fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 0.709578
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 infinite word fails without fabricated power, fallback or skip caching
+ok 50 - required FC3/FC4 infinite word fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 0.774586
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 fractional word fails without fabricated power, fallback or skip caching
+ok 51 - required FC3/FC4 fractional word fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 3.627601
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 negative word fails without fabricated power, fallback or skip caching
+ok 52 - required FC3/FC4 negative word fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 0.866425
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 overflowing word fails without fabricated power, fallback or skip caching
+ok 53 - required FC3/FC4 overflowing word fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 0.510458
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 string word fails without fabricated power, fallback or skip caching
+ok 54 - required FC3/FC4 string word fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 0.603719
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 boolean word fails without fabricated power, fallback or skip caching
+ok 55 - required FC3/FC4 boolean word fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 0.381655
+  type: 'test'
+  ...
+# Subtest: required short group fails the whole snapshot even when another live value was read
+ok 56 - required short group fails the whole snapshot even when another live value was read
+  ---
+  duration_ms: 0.492972
+  type: 'test'
+  ...
+# Subtest: slow split failure of required grid power cannot suppress the following recovered fast poll
+ok 57 - slow split failure of required grid power cannot suppress the following recovered fast poll
+  ---
+  duration_ms: 1.198214
+  type: 'test'
+  ...
+# Subtest: existing required skip entries cannot hide repeated errors or later recovery
+ok 58 - existing required skip entries cannot hide repeated errors or later recovery
+  ---
+  duration_ms: 11.352523
+  type: 'test'
+  ...
+# Subtest: required entries remain readable inside cached split mode while optional failure stays isolated
+ok 59 - required entries remain readable inside cached split mode while optional failure stays isolated
+  ---
+  duration_ms: 1.13596
+  type: 'test'
+  ...
+# Subtest: malformed required split response is not hidden by a valid optional neighbour
+ok 60 - malformed required split response is not hidden by a valid optional neighbour
+  ---
+  duration_ms: 0.938543
+  type: 'test'
+  ...
+# Subtest: optional malformed split response is cached without losing required grid or retrying the block
+ok 61 - optional malformed split response is cached without losing required grid or retrying the block
+  ---
+  duration_ms: 1.00935
+  type: 'test'
+  ...
+# Subtest: an optional standalone malformed group remains isolated and bounded; all-invalid reads still fail
+ok 62 - an optional standalone malformed group remains isolated and bounded; all-invalid reads still fail
+  ---
+  duration_ms: 1.110512
+  type: 'test'
+  ...
+# Subtest: required transport failures preserve their original code without retries or skip caching
+ok 63 - required transport failures preserve their original code without retries or skip caching
+  ---
+  duration_ms: 0.749088
+  type: 'test'
+  ...
+# (node:45) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: poll without usable measurements does not manufacture liveness: empty response
+ok 64 - poll without usable measurements does not manufacture liveness: empty response
+  ---
+  duration_ms: 38.604545
+  type: 'test'
+  ...
+# Subtest: poll without usable measurements does not manufacture liveness: undefined
+ok 65 - poll without usable measurements does not manufacture liveness: undefined
+  ---
+  duration_ms: 1.099776
+  type: 'test'
+  ...
+# Subtest: poll without usable measurements does not manufacture liveness: null
+ok 66 - poll without usable measurements does not manufacture liveness: null
+  ---
+  duration_ms: 7.622497
+  type: 'test'
+  ...
+# Subtest: poll without usable measurements does not manufacture liveness: NaN
+ok 67 - poll without usable measurements does not manufacture liveness: NaN
+  ---
+  duration_ms: 6.169739
+  type: 'test'
+  ...
+# Subtest: MQTT subscription diagnostic arriving during connect is not overwritten at startup
+ok 68 - MQTT subscription diagnostic arriving during connect is not overwritten at startup
+  ---
+  duration_ms: 1.58119
+  type: 'test'
+  ...
+# Subtest: MQTT diagnostic-only snapshots update aliases without clearing errors or fabricating liveness
+ok 69 - MQTT diagnostic-only snapshots update aliases without clearing errors or fabricating liveness
+  ---
+  duration_ms: 3.643626
+  type: 'test'
+  ...
+# Subtest: a valid zero measurement establishes liveness
+ok 70 - a valid zero measurement establishes liveness
+  ---
+  duration_ms: 7.952664
+  type: 'test'
+  ...
+# Subtest: mqtt startup preserves a connection failure diagnostic
+ok 71 - mqtt startup preserves a connection failure diagnostic
+  ---
+  duration_ms: 1.602303
+  type: 'test'
+  ...
+# Subtest: canbus startup preserves a connection failure diagnostic
+ok 72 - canbus startup preserves a connection failure diagnostic
+  ---
+  duration_ms: 1.292906
+  type: 'test'
+  ...
+# (node:46) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# {"runtime":"v22.23.4","wireBlocks":[{"fc":16,"addr":160,"regs":[4,600,0,600,160]},{"fc":16,"addr":160,"regs":[4,64936,65535,600,160]},{"fc":16,"addr":160,"regs":[4,0,0,600,160]}],"deniedWritePackets":0}
+# Subtest: actual SolaX AliasV1 dispatch reaches real loopback Modbus TCP as complete Mode4 block with signed W
+ok 73 - actual SolaX AliasV1 dispatch reaches real loopback Modbus TCP as complete Mode4 block with signed W
+  ---
+  duration_ms: 46.626712
+  type: 'test'
+  ...
+# {"runtime":"v22.23.4","measured":{"sOC":98,"bATTERY_POWER":600,"aLLOWED_CHARGE_POWER":5000,"aLLOWED_DISCHARGE_POWER":0},"zeroCapabilityPreserved":true}
+# Subtest: actual read path preserves positive discharge, 98% SoC and valid zero BMS discharge capability
+ok 74 - actual read path preserves positive discharge, 98% SoC and valid zero BMS discharge capability
+  ---
+  duration_ms: 21.797319
+  type: 'test'
+  ...
+# {"runtime":"v22.23.4","rawCommandAck":700,"actualMode4Readback":600,"mode8Interpretation":null,"interpretationRequiresMode4":true}
+# Subtest: SolaX readback uses actual mode4 poll and becomes unknown after mode8 or missing current mode
+ok 75 - SolaX readback uses actual mode4 poll and becomes unknown after mode8 or missing current mode
+  ---
+  duration_ms: 9.958749
+  type: 'test'
+  ...
+# Subtest: unknown, invalid, disconnected and expired mode context never keeps a usable target or fabricates freshness
+ok 76 - unknown, invalid, disconnected and expired mode context never keeps a usable target or fabricates freshness
+  ---
+  duration_ms: 21.227741
+  type: 'test'
+  ...
+# Subtest: only the exact verified mode descriptor enables contextual readback; the existing slow poll includes both fields
+ok 77 - only the exact verified mode descriptor enables contextual readback; the existing slow poll includes both fields
+  ---
+  duration_ms: 1.610215
+  type: 'test'
+  ...
+# Subtest: separate isolated register replies cannot combine old mode4 with mode8 target words
+ok 78 - separate isolated register replies cannot combine old mode4 with mode8 target words
+  ---
+  duration_ms: 6.225103
+  type: 'test'
+  ...
+# Subtest: separate adaptive register replies cannot combine old mode4 with mode8 target words
+ok 79 - separate adaptive register replies cannot combine old mode4 with mode8 target words
+  ---
+  duration_ms: 7.612562
+  type: 'test'
+  ...
+# Subtest: separate maxReadRegs register replies cannot combine old mode4 with mode8 target words
+ok 80 - separate maxReadRegs register replies cannot combine old mode4 with mode8 target words
+  ---
+  duration_ms: 5.228482
+  type: 'test'
+  ...
+# Subtest: even a full cached copy cannot manufacture the actual response provenance
+ok 81 - even a full cached copy cannot manufacture the actual response provenance
+  ---
+  duration_ms: 5.456555
+  type: 'test'
+  ...
+# Subtest: stop drains earlier alias work without reviving an old sample
+ok 82 - stop drains earlier alias work without reviving an old sample
+  ---
+  duration_ms: 4.734769
+  type: 'test'
+  ...
+# Subtest: stop drains submitted readback work without reviving an old sample
+ok 83 - stop drains submitted readback work without reviving an old sample
+  ---
+  duration_ms: 3.502594
+  type: 'test'
+  ...
+# Subtest: real unchanged BMS caps stay fresh beyond 60s, while failed/skipped/unrelated polls do not renew them
+ok 84 - real unchanged BMS caps stay fresh beyond 60s, while failed/skipped/unrelated polls do not renew them
+  ---
+  duration_ms: 42.519248
+  type: 'test'
+  ...
+# Subtest: runtime fast scheduler includes only the two existing numeric cap sources without speeding up the full map
+ok 85 - runtime fast scheduler includes only the two existing numeric cap sources without speeding up the full map
+  ---
+  duration_ms: 8.48803
+  type: 'test'
+  ...
+1..85
+# tests 85
+# suites 0
+# pass 85
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1666.849244
+
+(node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)

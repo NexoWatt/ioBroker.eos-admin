@@ -1,0 +1,14 @@
+{
+  "name": "serial-gates-node22",
+  "command": [
+    "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node",
+    "--test",
+    "modules/devices/test/serialOperationGate.test.js"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+  "startedAt": "2026-11-24T19:17:01.284436+00:00",
+  "durationSeconds": 0.197,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/audit-919/isolation/serial-gates-node22.log",
+  "sha256": "620ac14ac2c6137dd1fc61e8794f94b383195e2f33658fa554ff6fb90fc9dc09"
+}

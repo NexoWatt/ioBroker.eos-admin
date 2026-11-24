@@ -1,0 +1,16 @@
+{
+  "name": "migration-node24",
+  "command": [
+    "node",
+    "--test",
+    "test/eos-module-migration-start-budget.test.cjs",
+    "test/eos-module-legacy-migration.test.cjs",
+    "test/eos-module-migration-review.test.cjs"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+  "startedAt": "2026-11-24T19:07:25.972745+00:00",
+  "durationSeconds": 0.738,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/audit-919/isolation/migration-node24.log",
+  "sha256": "ad6136cd206a63aeb1141c914014e28df370f5e38ac8e9fac5656acbfb1d0393"
+}

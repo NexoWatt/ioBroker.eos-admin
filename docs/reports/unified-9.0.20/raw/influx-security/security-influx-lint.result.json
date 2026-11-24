@@ -1,0 +1,17 @@
+{
+  "name": "security-influx-lint",
+  "command": [
+    "node",
+    "node_modules/eslint/bin/eslint.js",
+    "--config",
+    "ui/eslint.influx-security.config.mjs",
+    "ui/src-ts/runtime-executables/lib/influx-config.ts",
+    "ui/src-ts/runtime-executables/lib/influx-network-policy.ts"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+  "startedAt": "2026-11-24T20:39:43.072671+00:00",
+  "durationSeconds": 1.998,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-920/security-influx-lint.log",
+  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

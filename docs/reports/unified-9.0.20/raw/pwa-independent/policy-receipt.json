@@ -1,0 +1,71 @@
+{
+  "receipts": [
+    {
+      "start": "2026-11-24T21:06:04.841Z",
+      "end": "2026-11-24T21:06:05.217Z",
+      "version": "v22.23.4",
+      "command": [
+        "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node",
+        "--test",
+        "/workspace/scratch/741f792566ea/audit-920/pwa-review/policy-boundaries.test.cjs"
+      ],
+      "exit": 0,
+      "signal": null,
+      "log": "policy-v22.23.4.tap",
+      "logSha256": "81354a1e12215e23f85144c9c730e2efac2d630b404b55569d90ee639c747705"
+    },
+    {
+      "start": "2026-11-24T21:06:05.218Z",
+      "end": "2026-11-24T21:06:05.581Z",
+      "version": "v24.22.3",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "--test",
+        "/workspace/scratch/741f792566ea/audit-920/pwa-review/policy-boundaries.test.cjs"
+      ],
+      "exit": 0,
+      "signal": null,
+      "log": "policy-v24.22.3.tap",
+      "logSha256": "a28cfe0e956a231548237b04a94ac2a48be8c6d1050637d0a587153563fe49ce"
+    }
+  ],
+  "sources": [
+    {
+      "file": "src/lib/web.ts",
+      "sha256": "9393ac6d33a18b7682cfce865dee6dc26cc9b3950f2c03fa8ed13e5d6c9807ab"
+    },
+    {
+      "file": "ui/src-ts/runtime-executables/main.ts",
+      "sha256": "11f2616a2f7f2e5066c180db4316c7f0b219b066790e7c4563dab3e1104d3d96"
+    },
+    {
+      "file": "ui/src-ts/runtime-executables/lib/ui-access-policy.ts",
+      "sha256": "c3b68fac91389ad1502fd03a889fdeca278c5230f7441c80bd77b767f0f030de"
+    },
+    {
+      "file": "ui/src-ts/runtime-executables/www/pwa.ts",
+      "sha256": "cae266c2f9d5010485a639a17b0270111c6c1b1cb6d3eed51a75e6a330af898c"
+    },
+    {
+      "file": "ui/src-ts/runtime-executables/www/runtime-base.ts",
+      "sha256": "f514c7b6601b7eaa7522b3dd8316d2d05041cd2ddbfd553442baac5678d2f0a5"
+    },
+    {
+      "file": "ui/src-ts/runtime-executables/www/sw.ts",
+      "sha256": "77ebebe3eebc7f18635591c82748ef9be8834775f32c80b83c260924196a66b1"
+    },
+    {
+      "file": "ui/www/login.html",
+      "sha256": "13df403bbcf8ead3cf815c41605620b365e0e005c8b3ff6b585f7f137eaccc23"
+    },
+    {
+      "file": "ui/www/login.css",
+      "sha256": "680ff483c4172ce55a927c1d71f75230f1102b77b2393f45c451ff370adb08a2"
+    },
+    {
+      "file": "src-admin/build-tools/eos-public-assets.mjs",
+      "sha256": "20214ee4b94e13930e078d2338a4c061c54fd11dab97ba24738a1bf7dcc5d59b"
+    }
+  ],
+  "limitation": "Request-policy tests against canonical TypeScript; no live iOS install or customer TLS trust tested."
+}

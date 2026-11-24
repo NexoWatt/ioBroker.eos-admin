@@ -1,0 +1,14 @@
+{
+  "name": "wallet-freshness-before",
+  "command": [
+    "node",
+    "--test",
+    "test/eos-customer-tariff-wallet-freshness.test.cjs"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+  "startedAt": "2026-11-24T19:06:23.172416+00:00",
+  "durationSeconds": 0.277,
+  "exitCode": 1,
+  "log": "/workspace/scratch/741f792566ea/setup-920/wallet-freshness-before.log",
+  "sha256": "4467d5ba0142298817ba9330bec55fb3889efc0ace6181560476c25878606497"
+}

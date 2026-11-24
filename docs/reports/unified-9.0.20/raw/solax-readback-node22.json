@@ -1,0 +1,30 @@
+{
+  "node": "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node",
+  "args": [
+    "--test",
+    "modules/devices/test/solaxReadbackContext.test.js",
+    "modules/devices/test/deviceAliasSemantics.test.js",
+    "modules/devices/test/deviceAliasFreshness.test.js",
+    "modules/devices/test/modbusReadIntegrity.test.js",
+    "modules/devices/test/modbusAuthorizationReads.test.js",
+    "modules/devices/test/modbusConnectLifecycle.test.js",
+    "modules/devices/test/aliasContractV1.test.js",
+    "modules/devices/test/runtimeLiveness.test.js"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+  "start": "2026-11-24T20:09:36.736Z",
+  "end": "2026-11-24T20:09:38.503Z",
+  "exitCode": 0,
+  "sha256": "b13234c86e3c84391fbdb7252a74a82aa729592d8ca020c3782bb6a7d4147c91",
+  "sourceSha256": {
+    "modules/devices/lib/deviceRuntime.js": "cde164a1f7bf2e37a8d03975aec827c2345d4afbaed69b8075d43675233e1a9b",
+    "modules/devices/lib/drivers/modbus.js": "f5781745e9e5daea54c0b2efcb8d5dc69cdaff2d744d9dd844bc19890be8f90b",
+    "modules/devices/lib/modbusReadEvidence.js": "36fa9af8dc99af3a97a78830527940b4fa5c5c89127864da2df844fb8b83bbd1",
+    "modules/devices/lib/deviceAliasSemantics.js": "3da22af62c4b8f887e3d5961aea17182326c9afd9c771a73f4816f8cba18df2b",
+    "modules/devices/lib/device-alias-semantics-v1.json": "d88b7d294eb6c88779984d78dff24ddef00e554b3f030e02361d658351ef3868",
+    "modules/devices/lib/deviceAliasFreshness.js": "4061787ff9fd27f9e2b050e9e134bae71db623b362f4c265359a57d9a5b6f64e",
+    "modules/devices/test/solaxReadbackContext.test.js": "d0abae50646a271e787af33884968c1e23ba3d857248a7f8a0b51797d032fc61",
+    "modules/devices/test/deviceAliasFreshness.test.js": "fa050655fec5475a29cc8a606854bcd90b7668eba80f6116aafa3fcfefe1035a",
+    "modules/devices/tsconfig.alias-semantics.json": "1239cc329a5f6ef1462dcf2e6a53f2b824195ecd7909fba817877c4c9ff7d574"
+  }
+}

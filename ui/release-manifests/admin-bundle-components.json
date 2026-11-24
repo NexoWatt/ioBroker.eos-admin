@@ -1,15 +1,15 @@
 {
   "schema": "nexowatt.admin-bundle-components.v1",
-  "generatedAt": "2026-11-24T18:11:01.508Z",
+  "generatedAt": "2026-11-24T21:05:33.166Z",
   "provenance": "Rollup writeBundle module graph; npm modules with renderedLength > 0; hashes of final files",
   "limitations": "Lists npm packages contributing rendered JavaScript. Not a source code review, OS inventory or vulnerability clearance.",
-  "packageLockSha256": "0c7e35a5d54138e48f92ab3d219653c0a912021fc77fbed42b5f054f4d11479c",
+  "packageLockSha256": "0c7159acf7768657418a1c599587267b021b8a9c5cccd97b22ae2c0d47e72376",
   "viteConfigSha256": "f59d3db711ab3bff7de7b2b2e8cbc1066375df69ecbe5b5476ef1c54aabe0986",
   "entryHtmlSha256": "e4eafa219c5154ae588b73b6f8f5673b976e6da239e620a99b9dda7c83f1685a",
   "projectModules": [
     {
       "path": "src-admin-tab/src/App.tsx",
-      "sha256": "130004830b352357603184300d09b4308e96773e5e8ba28365b72c56f0c9bbd8"
+      "sha256": "19da0dd3f2127f39a2cfe190b84d08c4ca6a64264a65e45a619bc802324986f7"
     },
     {
       "path": "src-admin-tab/src/components/DpField.tsx",
@@ -21,7 +21,7 @@
     },
     {
       "path": "src-admin-tab/src/lib/adminConnection.ts",
-      "sha256": "9ce44f4d20f8de67e0ceb1d3cae198e1dc18934bdfbe559d4e766613916cc0dc"
+      "sha256": "458718f60454255dd86d43efc909c6dc52bf9c8b12afa5cd512e4f9e6806b243"
     },
     {
       "path": "src-admin-tab/src/lib/adminContracts.ts",
@@ -30,6 +30,10 @@
     {
       "path": "src-admin-tab/src/lib/dataPointPicker.ts",
       "sha256": "e28946e685fffe198314fe4463459a42c2349a2e4481e9ffe39277e187953da1"
+    },
+    {
+      "path": "src-admin-tab/src/lib/historySetup.ts",
+      "sha256": "158c75a9fc407e1e15e16d86d9469890c22fa046ed4ddc40bd72eb5ccc97b8bc"
     },
     {
       "path": "src-admin-tab/src/lib/installerNavigation.ts",
@@ -56,8 +60,12 @@
       "sha256": "c2ac1f3935c488e780785b0d8b7ea4b3141e7824d56ec0bb6b28b86991668b19"
     },
     {
+      "path": "src-admin-tab/src/pages/HistorySetupPage.tsx",
+      "sha256": "bc37d6eb192a040955743eacbe385078a1241cc03f84e01bc2131bc9ba305441"
+    },
+    {
       "path": "src-admin-tab/src/pages/InstallerPage.tsx",
-      "sha256": "64ad8d878443c379448a638c64918043bada8d3bc90e6c3151c3476f356e106a"
+      "sha256": "873176154f003f59cc2ff8bb9ce9d97453a96aa88fbc0b23cd576f9d622104a6"
     },
     {
       "path": "src-admin-tab/src/pages/LicensePage.tsx",
@@ -174,12 +182,12 @@
   ],
   "artifacts": [
     {
-      "path": "admin/react/assets/index-Bq5IupDw.js",
-      "sha256": "f73211150e035e301009925e379ae7746e50c666ee96148f1ba7f5660d0e8baa"
+      "path": "admin/react/assets/index-BJO3q7oe.js",
+      "sha256": "dd873a53cb80dcb477e155e2bb21934e7a1415d6ffee463ac2da6c7408348d3c"
     },
     {
-      "path": "admin/react/assets/index-CuquHlsY.css",
-      "sha256": "b0d51266b2e541f5a26c8319dc45cd44a682b02cbc9d96fd001f3793c8c3e459"
+      "path": "admin/react/assets/index-ofLP_Y7y.css",
+      "sha256": "e662aab237d22b8224e569c9b5b939bae0860ec1bfea1b2364480dd60fe3b363"
     },
     {
       "path": "admin/react/assets/nexowatt-192-43ZwQ44y.png",
@@ -187,7 +195,7 @@
     },
     {
       "path": "admin/react/index.html",
-      "sha256": "99a91528fbf72cb1287d4663756e30055d6bdab5d9f98f30dcb0b47af338e3d2"
+      "sha256": "f2867830c08269195d54790f515c49a284520a2fd19cafcf162acc18bdb95af6"
     }
   ]
 }

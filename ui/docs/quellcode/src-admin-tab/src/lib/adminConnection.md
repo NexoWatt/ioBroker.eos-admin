@@ -22,6 +22,7 @@ Statisch gefundene Imports/require-Aufrufe. Ein Import belegt eine Code-Verknüp
 - [src-admin-tab/src/components/EmbeddedEmsFrame.tsx](../../../../../src-admin-tab/src/components/EmbeddedEmsFrame.tsx)
 - [src-admin-tab/src/lib/dataPointPicker.ts](../../../../../src-admin-tab/src/lib/dataPointPicker.ts)
 - [src-admin-tab/src/pages/DynamicGridPage.tsx](../../../../../src-admin-tab/src/pages/DynamicGridPage.tsx)
+- [src-admin-tab/src/pages/HistorySetupPage.tsx](../../../../../src-admin-tab/src/pages/HistorySetupPage.tsx)
 - [src-admin-tab/src/pages/InstallerPage.tsx](../../../../../src-admin-tab/src/pages/InstallerPage.tsx)
 - [src-admin-tab/src/pages/MeshAccountingPanel.tsx](../../../../../src-admin-tab/src/pages/MeshAccountingPanel.tsx)
 - [src-admin-tab/src/pages/MeshCoordinatorPage.tsx](../../../../../src-admin-tab/src/pages/MeshCoordinatorPage.tsx)
@@ -99,6 +100,7 @@ Parameter sind die Namen aus der Signatur, keine geratenen Datenverträge. Die A
 | [`readLicenseStatus`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1079) | instance, conn | Number, Promise.all, String, getAdminConnection, getInstance, getState |
 | [`openExternal`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1138) | url | – |
 | [`notificationMailRequest`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1150) | payload | requestRuntimeApi |
-| [`meshCoordinatorRequest`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1155) | suffix, payload | requestRuntimeApi |
-| [`dynamicGridRequest`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1160) | suffix, payload | requestRuntimeApi |
-| [`partnerIntegrationsRequest`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1166) | suffix, payload | requestRuntimeApi |
+| [`historySetupRequest`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1155) | suffix, payload | requestRuntimeApi |
+| [`meshCoordinatorRequest`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1161) | suffix, payload | requestRuntimeApi |
+| [`dynamicGridRequest`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1166) | suffix, payload | requestRuntimeApi |
+| [`partnerIntegrationsRequest`](../../../../../src-admin-tab/src/lib/adminConnection.ts#L1172) | suffix, payload | requestRuntimeApi |

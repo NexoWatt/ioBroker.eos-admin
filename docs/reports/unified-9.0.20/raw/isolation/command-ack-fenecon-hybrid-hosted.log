@@ -1,0 +1,3 @@
+AssertionError [ERR_ASSERTION]: Farm AUTO without a genuine FEMS grid target must continuously use direct ESS dispatch: [{"id":"farm.fenecon.set","val":0}]
+    at testFarmContinuousAuto (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/ui/scripts/verify-fenecon-hybrid-controller.js:565:12)
+    at async /workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/ui/scripts/verify-fenecon-hybrid-controller.js:986:3

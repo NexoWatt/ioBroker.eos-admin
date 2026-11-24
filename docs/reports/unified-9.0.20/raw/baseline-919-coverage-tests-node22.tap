@@ -1,0 +1,721 @@
+(node:6) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: announces only its own https service after three targeted probes and excludes private metadata
+ok 1 - announces only its own https service after three targeted probes and excludes private metadata
+  ---
+  duration_ms: 14.856145
+  type: 'test'
+  ...
+# Subtest: generated probes and announcements round-trip through the shipped DNS packet codec
+ok 2 - generated probes and announcements round-trip through the shipped DNS packet codec
+  ---
+  duration_ms: 6.013144
+  type: 'test'
+  ...
+# Subtest: disabled/invalid configuration does not open a socket or throw
+ok 3 - disabled/invalid configuration does not open a socket or throw
+  ---
+  duration_ms: 0.632643
+  type: 'test'
+  ...
+# Subtest: host collision during probing stops publication without changing hostname or EOS
+ok 4 - host collision during probing stops publication without changing hostname or EOS
+  ---
+  duration_ms: 0.596628
+  type: 'test'
+  ...
+# Subtest: different simultaneous host claim and incompatible service identity fail closed
+ok 5 - different simultaneous host claim and incompatible service identity fail closed
+  ---
+  duration_ms: 0.579693
+  type: 'test'
+  ...
+# Subtest: own addresses, IPv6 textual variants and expired foreign answers do not conflict
+ok 6 - own addresses, IPv6 textual variants and expired foreign answers do not conflict
+  ---
+  duration_ms: 0.458491
+  type: 'test'
+  ...
+# Subtest: post-publication conflict withdraws records and closes discovery
+ok 7 - post-publication conflict withdraws records and closes discovery
+  ---
+  duration_ms: 0.447523
+  type: 'test'
+  ...
+# Subtest: responses are bounded to own names and one per second; malformed data is ignored
+ok 8 - responses are bounded to own names and one per second; malformed data is ignored
+  ---
+  duration_ms: 2.362788
+  type: 'test'
+  ...
+# Subtest: no addresses, UDP errors and probe failures are nonfatal and leave no retry storm
+ok 9 - no addresses, UDP errors and probe failures are nonfatal and leave no retry storm
+  ---
+  duration_ms: 0.618621
+  type: 'test'
+  ...
+# Subtest: stopping during probe and a missing goodbye callback both close within bounds
+ok 10 - stopping during probe and a missing goodbye callback both close within bounds
+  ---
+  duration_ms: 0.569598
+  type: 'test'
+  ...
+# Subtest: UDP readiness and first publication callbacks have a bounded startup deadline
+ok 11 - UDP readiness and first publication callbacks have a bounded startup deadline
+  ---
+  duration_ms: 0.245199
+  type: 'test'
+  ...
+# Subtest: address changes withdraw old records and reprobe; specific bind and IPv6 follow listener
+ok 12 - address changes withdraw old records and reprobe; specific bind and IPv6 follow listener
+  ---
+  duration_ms: 0.513803
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:14) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:14) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# (node:14) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual owner HTTP routes: idle polls/new page loads never extend ten minutes; another browser stays active
+ok 13 - actual owner HTTP routes: idle polls/new page loads never extend ten minutes; another browser stays active
+  ---
+  duration_ms: 1241.037588
+  type: 'test'
+  ...
+# Subtest: actual owner activity HTTP requires same-origin CSRF and cannot revive an expired family
+ok 14 - actual owner activity HTTP requires same-origin CSRF and cannot revive an expired family
+  ---
+  duration_ms: 176.934306
+  type: 'test'
+  ...
+# Subtest: a cached upstream req.user cannot retain EOS authority after idle expiry
+ok 15 - a cached upstream req.user cannot retain EOS authority after idle expiry
+  ---
+  duration_ms: 149.414889
+  type: 'test'
+  ...
+# Subtest: actual hosted SSE is closed at idle expiry even without a new data frame, independently per login
+ok 16 - actual hosted SSE is closed at idle expiry even without a new data frame, independently per login
+  ---
+  duration_ms: 141.667023
+  type: 'test'
+  ...
+# Subtest: pinned upstream log and instance publications cannot send after idle expiry before the prune timer
+ok 17 - pinned upstream log and instance publications cannot send after idle expiry before the prune timer
+  ---
+  duration_ms: 118.508073
+  type: 'test'
+  ...
+# (node:18) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: migration page explains blocked protected fields and shows existing instances without mutation requests
+ok 18 - migration page explains blocked protected fields and shows existing instances without mutation requests
+  ---
+  duration_ms: 71.294371
+  type: 'test'
+  ...
+# Subtest: migration page rejects markup-shaped data and renders authentication failure as text
+ok 19 - migration page rejects markup-shaped data and renders authentication failure as text
+  ---
+  duration_ms: 2.957483
+  type: 'test'
+  ...
+# Subtest: late license activation explains the pending restart without claiming a missing license or completed migration
+ok 20 - late license activation explains the pending restart without claiming a missing license or completed migration
+  ---
+  duration_ms: 2.429418
+  type: 'test'
+  ...
+# (node:21) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: offline issuer limits the same file descriptor and rejects symlinks and insecure secrets
+ok 21 - offline issuer limits the same file descriptor and rejects symlinks and insecure secrets
+  ---
+  duration_ms: 21.441937
+  type: 'test'
+  ...
+# Subtest: offline issuer refuses public CSR growth after metadata validation without an unbounded read
+ok 22 - offline issuer refuses public CSR growth after metadata validation without an unbounded read
+  ---
+  duration_ms: 9.713385
+  type: 'test'
+  ...
+# Subtest: offline issuer detects a truncated CSR instead of signing partial input
+ok 23 - offline issuer detects a truncated CSR instead of signing partial input
+  ---
+  duration_ms: 4.92739
+  type: 'test'
+  ...
+# (node:22) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:22) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: issuer creates encrypted offline CA; device CSR and public downloads never reveal either private key
+ok 24 - issuer creates encrypted offline CA; device CSR and public downloads never reveal either private key
+  ---
+  duration_ms: 444.95663
+  type: 'test'
+  ...
+# Subtest: actual EOS HTTPS startup, SNI and IP use trusted identity; renewal preserves listener and survives restart
+ok 25 - actual EOS HTTPS startup, SNI and IP use trusted identity; renewal preserves listener and survives restart
+  ---
+  duration_ms: 1242.072779
+  type: 'test'
+  ...
+# Subtest: wrong SAN, root fingerprint, request ID, key, expiry and CA are refused without changing active certificate
+ok 26 - wrong SAN, root fingerprint, request ID, key, expiry and CA are refused without changing active certificate
+  ---
+  duration_ms: 431.797234
+  type: 'test'
+  ...
+# Subtest: failed atomic activation and failed live context retain the previous identity and pending request
+ok 27 - failed atomic activation and failed live context retain the previous identity and pending request
+  ---
+  duration_ms: 314.442473
+  type: 'test'
+  ...
+# Subtest: concurrent requests are bounded; pending requests require explicit replacement and consumed requests cannot replay
+ok 28 - concurrent requests are bounded; pending requests require explicit replacement and consumed requests cannot replay
+  ---
+  duration_ms: 206.529629
+  type: 'test'
+  ...
+# Subtest: committed certificate reports cleanup and directory-sync warnings without claiming a failed activation
+ok 29 - committed certificate reports cleanup and directory-sync warnings without claiming a failed activation
+  ---
+  duration_ms: 223.84735
+  type: 'test'
+  ...
+# Subtest: chain status and renewal warning include an intermediate that expires before the leaf
+ok 30 - chain status and renewal warning include an intermediate that expires before the leaf
+  ---
+  duration_ms: 151.304965
+  type: 'test'
+  ...
+# Subtest: invalid names and unsafe storage are rejected, not used as command/config fragments
+ok 31 - invalid names and unsafe storage are rejected, not used as command/config fragments
+  ---
+  duration_ms: 77.237429
+  type: 'test'
+  ...
+# (node:22) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# Subtest: HTTP routes enforce real unified session, role, CSRF and same-origin for certificate actions
+ok 32 - HTTP routes enforce real unified session, role, CSRF and same-origin for certificate actions
+  ---
+  duration_ms: 298.320253
+  type: 'test'
+  ...
+# (node:24) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: an untouched page logs out at ten minutes; background status reads do not renew
+ok 33 - an untouched page logs out at ten minutes; background status reads do not renew
+  ---
+  duration_ms: 14.164067
+  type: 'test'
+  ...
+# Subtest: trusted pointerdown extends idle exactly from the last submitted input
+ok 34 - trusted pointerdown extends idle exactly from the last submitted input
+  ---
+  duration_ms: 2.726515
+  type: 'test'
+  ...
+# Subtest: trusted keydown extends idle exactly from the last submitted input
+ok 35 - trusted keydown extends idle exactly from the last submitted input
+  ---
+  duration_ms: 2.812164
+  type: 'test'
+  ...
+# Subtest: trusted touchstart extends idle exactly from the last submitted input
+ok 36 - trusted touchstart extends idle exactly from the last submitted input
+  ---
+  duration_ms: 10.117244
+  type: 'test'
+  ...
+# Subtest: trusted wheel extends idle exactly from the last submitted input
+ok 37 - trusted wheel extends idle exactly from the last submitted input
+  ---
+  duration_ms: 3.596135
+  type: 'test'
+  ...
+# Subtest: synthetic events, passive pointer motion, polling and visibility never count as input
+ok 38 - synthetic events, passive pointer motion, polling and visibility never count as input
+  ---
+  duration_ms: 2.160363
+  type: 'test'
+  ...
+# Subtest: a burst is bounded and its final gesture still gets a trailing update
+ok 39 - a burst is bounded and its final gesture still gets a trailing update
+  ---
+  duration_ms: 3.495824
+  type: 'test'
+  ...
+# Subtest: an active sibling tab keeps the same family open without the idle tab renewing
+ok 40 - an active sibling tab keeps the same family open without the idle tab renewing
+  ---
+  duration_ms: 4.581939
+  type: 'test'
+  ...
+# Subtest: unrelated sessions and fabricated cross-tab deadlines cannot extend or end a page
+ok 41 - unrelated sessions and fabricated cross-tab deadlines cannot extend or end a page
+  ---
+  duration_ms: 2.209347
+  type: 'test'
+  ...
+# Subtest: sleep and BFCache resume checks the server before accepting a late gesture
+ok 42 - sleep and BFCache resume checks the server before accepting a late gesture
+  ---
+  duration_ms: 2.020583
+  type: 'test'
+  ...
+# Subtest: offline timeout hides the old page and does not stop devices or EMS
+ok 43 - offline timeout hides the old page and does not stop devices or EMS
+  ---
+  duration_ms: 3.10846
+  type: 'test'
+  ...
+# Subtest: refresh changes CSRF without losing a fresh real gesture or creating periodic writes
+ok 44 - refresh changes CSRF without losing a fresh real gesture or creating periodic writes
+  ---
+  duration_ms: 7.224108
+  type: 'test'
+  ...
+# Subtest: CSRF rotation just before expiry never delays the real gesture beyond the server deadline
+ok 45 - CSRF rotation just before expiry never delays the real gesture beyond the server deadline
+  ---
+  duration_ms: 3.123553
+  type: 'test'
+  ...
+# Subtest: same-origin Admin frame interactions count; frame reload listeners bind the new document
+ok 46 - same-origin Admin frame interactions count; frame reload listeners bind the new document
+  ---
+  duration_ms: 2.113873
+  type: 'test'
+  ...
+# Subtest: login page is excluded and duplicate loading never registers a second timer or API request
+ok 47 - login page is excluded and duplicate loading never registers a second timer or API request
+  ---
+  duration_ms: 2.594106
+  type: 'test'
+  ...
+# Subtest: blocked cross-tab transport keeps server checks and inactivity logout working
+ok 48 - blocked cross-tab transport keeps server checks and inactivity logout working
+  ---
+  duration_ms: 1.685007
+  type: 'test'
+  ...
+# Subtest: all canonical EOS screens include the shared root client, including recovery and module pages
+ok 49 - all canonical EOS screens include the shared root client, including recovery and module pages
+  ---
+  duration_ms: 5.873143
+  type: 'test'
+  ...
+# Subtest: instance proxy rendering and fetch mapping preserve the shared owner idle routes
+ok 50 - instance proxy rendering and fetch mapping preserve the shared owner idle routes
+  ---
+  duration_ms: 232.041864
+  type: 'test'
+  ...
+# (node:24) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:39) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:39) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# Subtest: one root app identity and the exact uploaded icon are shared by dashboard, login and system console
+ok 51 - one root app identity and the exact uploaded icon are shared by dashboard, login and system console
+  ---
+  duration_ms: 16.343359
+  type: 'test'
+  ...
+# (node:39) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual owner mount serves install metadata publicly while root launch retains session, password and license gates
+ok 52 - actual owner mount serves install metadata publicly while root launch retains session, password and license gates
+  ---
+  duration_ms: 1350.808916
+  type: 'test'
+  ...
+# (node:45) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: explicit SmartHome choice wins; without it native/AppCenter choices and disabled installations remain unchanged
+ok 53 - explicit SmartHome choice wins; without it native/AppCenter choices and disabled installations remain unchanged
+  ---
+  duration_ms: 1.096892
+  type: 'test'
+  ...
+# Subtest: installer activates actual customer devices and navigation without instance update or actuator write; off retains configuration
+ok 54 - installer activates actual customer devices and navigation without instance update or actuator write; off retains configuration
+  ---
+  duration_ms: 164.934119
+  type: 'test'
+  ...
+# Subtest: activation is admin/installer only with CSRF and the existing central SmartHome license
+ok 55 - activation is admin/installer only with CSRF and the existing central SmartHome license
+  ---
+  duration_ms: 26.720304
+  type: 'test'
+  ...
+# Subtest: activation rejects missing, coerced and extra input fields without changing customer data
+ok 56 - activation rejects missing, coerced and extra input fields without changing customer data
+  ---
+  duration_ms: 16.27742
+  type: 'test'
+  ...
+# Subtest: failed activation persistence retains enabled choice, layout and device cache and releases shared save lock
+ok 57 - failed activation persistence retains enabled choice, layout and device cache and releases shared save lock
+  ---
+  duration_ms: 10.631869
+  type: 'test'
+  ...
+# Subtest: concurrent activation and layout saves cannot overwrite each other; activation does not stop EMS partner runtime
+ok 58 - concurrent activation and layout saves cannot overwrite each other; activation does not stop EMS partner runtime
+  ---
+  duration_ms: 40.804751
+  type: 'test'
+  ...
+# Subtest: migrated namespace keeps activation after restart hydration, with all legacy settings and schedules untouched
+ok 59 - migrated namespace keeps activation after restart hydration, with all legacy settings and schedules untouched
+  ---
+  duration_ms: 40.301623
+  type: 'test'
+  ...
+# (node:82) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: every independent reference category and read/write slot is available, including manual fallbacks and numbered forecast fields
+ok 60 - every independent reference category and read/write slot is available, including manual fallbacks and numbered forecast fields
+  ---
+  duration_ms: 16.100203
+  type: 'test'
+  ...
+# Subtest: socket: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 61 - socket: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 2.86291
+  type: 'test'
+  ...
+# Subtest: light: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 62 - light: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 1.179326
+  type: 'test'
+  ...
+# Subtest: dimmer: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 63 - dimmer: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.835968
+  type: 'test'
+  ...
+# Subtest: temperature: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 64 - temperature: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 1.037543
+  type: 'test'
+  ...
+# Subtest: motion: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 65 - motion: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.594475
+  type: 'test'
+  ...
+# Subtest: window: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 66 - window: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.65746
+  type: 'test'
+  ...
+# Subtest: windowTilt: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 67 - windowTilt: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 1.180958
+  type: 'test'
+  ...
+# Subtest: gate: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 68 - gate: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 1.033186
+  type: 'test'
+  ...
+# Subtest: blind: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 69 - blind: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.994567
+  type: 'test'
+  ...
+# Subtest: blindButtons: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 70 - blindButtons: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.686093
+  type: 'test'
+  ...
+# Subtest: button: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 71 - button: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.826044
+  type: 'test'
+  ...
+# Subtest: buttonSensor: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 72 - buttonSensor: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.572492
+  type: 'test'
+  ...
+# Subtest: camera: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 73 - camera: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.410859
+  type: 'test'
+  ...
+# Subtest: vacuumCleaner: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 74 - vacuumCleaner: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.524019
+  type: 'test'
+  ...
+# Subtest: contact: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 75 - contact: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.39853
+  type: 'test'
+  ...
+# Subtest: coAlarm: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 76 - coAlarm: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 1.389612
+  type: 'test'
+  ...
+# Subtest: pressure: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 77 - pressure: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.436057
+  type: 'test'
+  ...
+# Subtest: flow: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 78 - flow: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.538662
+  type: 'test'
+  ...
+# Subtest: electricity: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 79 - electricity: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.905253
+  type: 'test'
+  ...
+# Subtest: airQuality: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 80 - airQuality: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.642067
+  type: 'test'
+  ...
+# Subtest: lock: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 81 - lock: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.329987
+  type: 'test'
+  ...
+# Subtest: door: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 82 - door: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.355545
+  type: 'test'
+  ...
+# Subtest: floodAlarm: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 83 - floodAlarm: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.356386
+  type: 'test'
+  ...
+# Subtest: fireAlarm: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 84 - fireAlarm: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.463698
+  type: 'test'
+  ...
+# Subtest: humidity: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 85 - humidity: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.467604
+  type: 'test'
+  ...
+# Subtest: illuminance: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 86 - illuminance: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.304518
+  type: 'test'
+  ...
+# Subtest: thermostat: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 87 - thermostat: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.319802
+  type: 'test'
+  ...
+# Subtest: airCondition: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 88 - airCondition: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.363938
+  type: 'test'
+  ...
+# Subtest: fan: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 89 - fan: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.319982
+  type: 'test'
+  ...
+# Subtest: airPurifier: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 90 - airPurifier: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 6.63455
+  type: 'test'
+  ...
+# Subtest: pump: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 91 - pump: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.366041
+  type: 'test'
+  ...
+# Subtest: warning: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 92 - warning: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.289687
+  type: 'test'
+  ...
+# Subtest: volume: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 93 - volume: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.421094
+  type: 'test'
+  ...
+# Subtest: volumeGroup: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 94 - volumeGroup: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.413573
+  type: 'test'
+  ...
+# Subtest: media: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 95 - media: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.302605
+  type: 'test'
+  ...
+# Subtest: tv: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 96 - tv: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.261523
+  type: 'test'
+  ...
+# Subtest: fillLevel: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 97 - fillLevel: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.288214
+  type: 'test'
+  ...
+# Subtest: slider: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 98 - slider: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.254634
+  type: 'test'
+  ...
+# Subtest: percentage: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 99 - percentage: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.293161
+  type: 'test'
+  ...
+# Subtest: info: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 100 - info: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.396046
+  type: 'test'
+  ...
+# Subtest: image: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 101 - image: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.287673
+  type: 'test'
+  ...
+# Subtest: location: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 102 - location: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.287273
+  type: 'test'
+  ...
+# Subtest: locationOne: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 103 - locationOne: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.275755
+  type: 'test'
+  ...
+# Subtest: weatherCurrent: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 104 - weatherCurrent: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.281113
+  type: 'test'
+  ...
+# Subtest: weatherForecast: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 105 - weatherForecast: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.256376
+  type: 'test'
+  ...
+# Subtest: rgbSingle: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 106 - rgbSingle: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.244127
+  type: 'test'
+  ...
+# Subtest: rgbwSingle: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 107 - rgbwSingle: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.2857
+  type: 'test'
+  ...
+# Subtest: rgb: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 108 - rgb: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.244047
+  type: 'test'
+  ...
+# Subtest: hue: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 109 - hue: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.240963
+  type: 'test'
+  ...
+# Subtest: cie: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 110 - cie: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.239331
+  type: 'test'
+  ...
+# Subtest: ct: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+ok 111 - ct: genuine zero/false values survive while missing values and nonzero quality never become confirmed data
+  ---
+  duration_ms: 0.357449
+  type: 'test'
+  ...
+# Subtest: every independently inventoried write slot accepts its correctly typed authorized command exactly once and rejects missing write authority
+ok 112 - every independently inventoried write slot accepts its correctly typed authorized command exactly once and rejects missing write authority
+  ---
+  duration_ms: 26.517298
+  type: 'test'
+  ...
+# Subtest: manual media state/volume and percentage/color power retain explicit type semantics instead of guessed boolean/numeric coercion
+ok 113 - manual media state/volume and percentage/color power retain explicit type semantics instead of guessed boolean/numeric coercion
+  ---
+  duration_ms: 1.49404
+  type: 'test'
+  ...
+1..113
+# tests 113
+# suites 0
+# pass 113
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3809.275387

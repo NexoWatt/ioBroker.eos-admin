@@ -1,0 +1,112 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: direct v2 check validates actual org/bucket authentication, query preserves negative and zero prices
+ok 1 - direct v2 check validates actual org/bucket authentication, query preserves negative and zero prices
+  ---
+  duration_ms: 44.653042
+  type: 'test'
+  ...
+# Subtest: reachable health port alone is insufficient and server error bodies never expose credentials
+ok 2 - reachable health port alone is insufficient and server error bodies never expose credentials
+  ---
+  duration_ms: 6.686557
+  type: 'test'
+  ...
+# Subtest: direct writes use v2 line protocol, explicit milliseconds and real204 success
+ok 3 - direct writes use v2 line protocol, explicit milliseconds and real204 success
+  ---
+  duration_ms: 3.983428
+  type: 'test'
+  ...
+# Subtest: redirects are never followed with the token and HTTP429 is bounded
+ok 4 - redirects are never followed with the token and HTTP429 is bounded
+  ---
+  duration_ms: 11.613976
+  type: 'test'
+  ...
+# Subtest: configuration rejects URL credentials, fragments, API paths and malformed trust without weakening TLS
+ok 5 - configuration rejects URL credentials, fragments, API paths and malformed trust without weakening TLS
+  ---
+  duration_ms: 0.785593
+  type: 'test'
+  ...
+# Subtest: Flux interpolation, names and line protocol cannot inject statements or rows
+ok 6 - Flux interpolation, names and line protocol cannot inject statements or rows
+  ---
+  duration_ms: 0.72384
+  type: 'test'
+  ...
+# Subtest: CSV parser preserves missing samples, string snapshots and repeated annotated tables
+ok 7 - CSV parser preserves missing samples, string snapshots and repeated annotated tables
+  ---
+  duration_ms: 3.363805
+  type: 'test'
+  ...
+# Subtest: server cannot exceed requested row limit or return an oversized body
+ok 8 - server cannot exceed requested row limit or return an oversized body
+  ---
+  duration_ms: 225.706019
+  type: 'test'
+  ...
+# Subtest: real unresponsive connection is aborted within the total5s check budget
+ok 9 - real unresponsive connection is aborted within the total5s check budget
+  ---
+  duration_ms: 5002.14194
+  type: 'test'
+  ...
+# Subtest: successful slow health and stalled query share one total5s connection-check deadline
+ok 10 - successful slow health and stalled query share one total5s connection-check deadline
+  ---
+  duration_ms: 5011.610662
+  type: 'test'
+  ...
+# Subtest: history rejects out-of-range rows while accepting the first partial aggregate window
+ok 11 - history rejects out-of-range rows while accepting the first partial aggregate window
+  ---
+  duration_ms: 11.238061
+  type: 'test'
+  ...
+# Subtest: query bounds reject unbounded history and invalid sampling options before IO
+ok 12 - query bounds reject unbounded history and invalid sampling options before IO
+  ---
+  duration_ms: 0.340803
+  type: 'test'
+  ...
+# Subtest: closing aborts outstanding queries and bounds concurrent requests
+ok 13 - closing aborts outstanding queries and bounds concurrent requests
+  ---
+  duration_ms: 5.23018
+  type: 'test'
+  ...
+# Subtest: each DNS connection uses vetted answers and rejects rebinding before credentials leave
+ok 14 - each DNS connection uses vetted answers and rejects rebinding before credentials leave
+  ---
+  duration_ms: 8.86686
+  type: 'test'
+  ...
+# Subtest: caller remaining budget includes unresolved DNS and still reserves all concurrency slots
+ok 15 - caller remaining budget includes unresolved DNS and still reserves all concurrency slots
+  ---
+  duration_ms: 31.029361
+  type: 'test'
+  ...
+# Subtest: HTTPS rejects untrusted certificates and accepts only explicitly supplied matching CA
+ok 16 - HTTPS rejects untrusted certificates and accepts only explicitly supplied matching CA
+  ---
+  duration_ms: 160.619876
+  type: 'test'
+  ...
+1..16
+# tests 16
+# suites 0
+# pass 16
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 10900.07026

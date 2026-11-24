@@ -1,0 +1,18 @@
+{
+  "startedAt": "2026-11-24T20:41:03.040193+00:00",
+  "finishedAt": "2026-11-24T20:41:03.769019+00:00",
+  "command": [
+    "node",
+    "--test",
+    "/workspace/scratch/741f792566ea/audit-920/influx-review/transport-extra.test.cjs"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+  "exitCode": 0,
+  "logSha256": "786ebd205c08e1e72765503bb868d811e70e69a3b1c99d271ba7718f1e39c4cf",
+  "sources": {
+    "ui/src-ts/runtime-executables/lib/influx-network-policy.ts": "f61bc80bb8c357027ced85eade1b061c094581a1572f6e3e435a83d7ac8a3d4d",
+    "ui/src-ts/runtime-executables/lib/influx-config.ts": "61495625d84c72b832777a9ead672ac249a8fa1d3276dc803bd61b5cac6e4c55",
+    "ui/src-ts/runtime-executables/lib/influx-history-runtime.ts": "84605e7e4ceefe43fd8d034d1e06ee0c6840f765059a11b326f293ddc2cd31f0",
+    "ui/src-ts/runtime-executables/lib/influx-direct.ts": "14704294fdfdf2864a3d106b20767189f743db5b0eebf38144ea3606e5659faf"
+  }
+}

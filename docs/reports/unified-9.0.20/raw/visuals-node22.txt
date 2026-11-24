@@ -1,0 +1,258 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual flow keeps measured zero during export and never invents 100 W or indefinitely holds a previous load
+ok 1 - actual flow keeps measured zero during export and never invents 100 W or indefinitely holds a previous load
+  ---
+  duration_ms: 16.589132
+  type: 'test'
+  ...
+# Subtest: actual flow differentiates null, missing, bool and zero SoC and does not suppress valid raw PV behind null derived PV
+ok 2 - actual flow differentiates null, missing, bool and zero SoC and does not suppress valid raw PV behind null derived PV
+  ---
+  duration_ms: 2.093365
+  type: 'test'
+  ...
+# Subtest: stale, future, absent or offline measurements stay unknown in the same flow and sidebar; fresh unchanged zero recovers
+ok 3 - stale, future, absent or offline measurements stay unknown in the same flow and sidebar; fresh unchanged zero recovers
+  ---
+  duration_ms: 1.939834
+  type: 'test'
+  ...
+# Subtest: no measurement/engine data never claims active engine, stable grid or healthy system
+ok 4 - no measurement/engine data never claims active engine, stable grid or healthy system
+  ---
+  duration_ms: 6.002056
+  type: 'test'
+  ...
+# Subtest: canonical NVP-invalid signal prevents a stale fallback from appearing as import/export or 100 percent self-sufficiency
+ok 5 - canonical NVP-invalid signal prevents a stale fallback from appearing as import/export or 100 percent self-sufficiency
+  ---
+  duration_ms: 1.210544
+  type: 'test'
+  ...
+# Subtest: farm flow uses complete atomic gross sums and arithmetic SoC; partial and stale overview do not revive old aggregate values
+ok 6 - farm flow uses complete atomic gross sums and arithmetic SoC; partial and stale overview do not revive old aggregate values
+  ---
+  duration_ms: 2.084872
+  type: 'test'
+  ...
+# Subtest: strict read rejects malformed values, absent timestamps and future samples but accepts newly confirmed constant zero
+ok 7 - strict read rejects malformed values, absent timestamps and future samples but accepts newly confirmed constant zero
+  ---
+  duration_ms: 0.754707
+  type: 'test'
+  ...
+# Subtest: both shipped entry pages load the strict live helper before the actual dashboard renderer
+ok 8 - both shipped entry pages load the strict live helper before the actual dashboard renderer
+  ---
+  duration_ms: 0.641697
+  type: 'test'
+  ...
+# Subtest: missing split-meter sides and missing NVP cannot manufacture a complete flow or a balance-derived battery
+ok 9 - missing split-meter sides and missing NVP cannot manufacture a complete flow or a balance-derived battery
+  ---
+  duration_ms: 1.588293
+  type: 'test'
+  ...
+# Subtest: extra producer and consumer nodes never display command power or missing measurements as measured zero
+ok 10 - extra producer and consumer nodes never display command power or missing measurements as measured zero
+  ---
+  duration_ms: 2.31621
+  type: 'test'
+  ...
+# Subtest: visible dashboard ages measurements even without a new SSE event; hidden and non-dashboard pages do not rerender
+ok 11 - visible dashboard ages measurements even without a new SSE event; hidden and non-dashboard pages do not rerender
+  ---
+  duration_ms: 0.779895
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: device save refreshes rotated session CSRF without discarding the edited device
+ok 12 - device save refreshes rotated session CSRF without discarding the edited device
+  ---
+  duration_ms: 21.086145
+  type: 'test'
+  ...
+# Subtest: expired session preserves the unsaved form and allows explicit retry after a separate login
+ok 13 - expired session preserves the unsaved form and allows explicit retry after a separate login
+  ---
+  duration_ms: 3.566135
+  type: 'test'
+  ...
+# Subtest: forbidden mutation is never replayed and preserves its draft for correction
+ok 14 - forbidden mutation is never replayed and preserves its draft for correction
+  ---
+  duration_ms: 3.724373
+  type: 'test'
+  ...
+# Subtest: enabled stored module exposes the exact import prerequisite and never posts a manual import
+ok 15 - enabled stored module exposes the exact import prerequisite and never posts a manual import
+  ---
+  duration_ms: 2.292665
+  type: 'test'
+  ...
+# Subtest: preserved automatic migration cannot be replaced by a manual import from the editor
+ok 16 - preserved automatic migration cannot be replaced by a manual import from the editor
+  ---
+  duration_ms: 13.517443
+  type: 'test'
+  ...
+# Subtest: manual import explains a newly blocked server state without losing the draft or replaying writes
+ok 17 - manual import explains a newly blocked server state without losing the draft or replaying writes
+  ---
+  duration_ms: 7.962811
+  type: 'test'
+  ...
+# Subtest: unconfirmed module stop blocks the editor import without instructing an unsafe retry
+ok 18 - unconfirmed module stop blocks the editor import without instructing an unsafe retry
+  ---
+  duration_ms: 4.085196
+  type: 'test'
+  ...
+# Subtest: uninitialized module configuration stays readable but cannot be saved or manually imported
+ok 19 - uninitialized module configuration stays readable but cannot be saved or manually imported
+  ---
+  duration_ms: 1.646771
+  type: 'test'
+  ...
+# Subtest: migration-blocked editor explains the prerequisite and unlocks after a fresh released configuration load
+ok 20 - migration-blocked editor explains the prerequisite and unlocks after a fresh released configuration load
+  ---
+  duration_ms: 2.794842
+  type: 'test'
+  ...
+# Subtest: reload does not silently discard the pending device draft
+ok 21 - reload does not silently discard the pending device draft
+  ---
+  duration_ms: 2.843726
+  type: 'test'
+  ...
+# (node:14) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: EV card, sidebar, modal and flow use one source model; valid manual override wins, booleans never become watts
+ok 22 - EV card, sidebar, modal and flow use one source model; valid manual override wins, booleans never become watts
+  ---
+  duration_ms: 893.068673
+  type: 'test'
+  ...
+# Subtest: actual App-Center validator rejects boolean/energy/invalid power states and accepts numeric W/kW
+ok 23 - actual App-Center validator rejects boolean/energy/invalid power states and accepts numeric W/kW
+  ---
+  duration_ms: 147.037321
+  type: 'test'
+  ...
+# Subtest: every shipped entry point loads the measurement helper before its consuming script
+ok 24 - every shipped entry point loads the measurement helper before its consuming script
+  ---
+  duration_ms: 1.072375
+  type: 'test'
+  ...
+# Subtest: App-Center recovery and save roundtrip preserve separate battery-flow feedback without replacing controller feedback
+ok 25 - App-Center recovery and save roundtrip preserve separate battery-flow feedback without replacing controller feedback
+  ---
+  duration_ms: 473.789848
+  type: 'test'
+  ...
+# (node:17) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:17) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# Subtest: atomic farm overview displays physical battery gross totals, configured capacity and arithmetic SoC
+ok 26 - atomic farm overview displays physical battery gross totals, configured capacity and arithmetic SoC
+  ---
+  duration_ms: 34.203279
+  type: 'test'
+  ...
+# Subtest: partial coverage suppresses full power sums and explicitly labels partial capacity and SoC mean
+ok 27 - partial coverage suppresses full power sums and explicitly labels partial capacity and SoC mean
+  ---
+  duration_ms: 8.501488
+  type: 'test'
+  ...
+# Subtest: lost connection and aged snapshots clear live totals without presenting unknown values as zero
+ok 28 - lost connection and aged snapshots clear live totals without presenting unknown values as zero
+  ---
+  duration_ms: 1.722456
+  type: 'test'
+  ...
+# Subtest: true zero remains visible while null totals, unsupported payloads and absent PV sources remain unavailable
+ok 29 - true zero remains visible while null totals, unsupported payloads and absent PV sources remain unavailable
+  ---
+  duration_ms: 3.82136
+  type: 'test'
+  ...
+# Subtest: real aggregation helper and UI agree on counterflow, partial metrics and independently deduplicated PV sources
+ok 30 - real aggregation helper and UI agree on counterflow, partial metrics and independently deduplicated PV sources
+  ---
+  duration_ms: 18.049393
+  type: 'test'
+  ...
+# Subtest: App-Center farm links directly to the complete overview in the same tab
+ok 31 - App-Center farm links directly to the complete overview in the same tab
+  ---
+  duration_ms: 5.64674
+  type: 'test'
+  ...
+# (node:18) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:18) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# Subtest: actual dashboard tooltip draws all 96 supplied quarter-hours, including zero and negative intervals, without hourly averaging
+ok 32 - actual dashboard tooltip draws all 96 supplied quarter-hours, including zero and negative intervals, without hourly averaging
+  ---
+  duration_ms: 13.762022
+  type: 'test'
+  ...
+# Subtest: actual dashboard retains all 92/100 quarter-hours on European daylight-saving days and places local clock labels correctly
+ok 33 - actual dashboard retains all 92/100 quarter-hours on European daylight-saving days and places local clock labels correctly
+  ---
+  duration_ms: 10.343389
+  type: 'test'
+  ...
+# Subtest: price card and modal show confirmed Tibber prices while optimization remains off and an unrelated budget price is null
+ok 34 - price card and modal show confirmed Tibber prices while optimization remains off and an unrelated budget price is null
+  ---
+  duration_ms: 1.370235
+  type: 'test'
+  ...
+# Subtest: expired, absent, false or null source values clear the visible price rather than turning into zero or reusing budget values
+ok 35 - expired, absent, false or null source values clear the visible price rather than turning into zero or reusing budget values
+  ---
+  duration_ms: 2.357854
+  type: 'test'
+  ...
+# Subtest: legacy manual mappings remain authoritative, with explicit cent conversion and no connected-provider override
+ok 36 - legacy manual mappings remain authoritative, with explicit cent conversion and no connected-provider override
+  ---
+  duration_ms: 1.441913
+  type: 'test'
+  ...
+# Subtest: hourly source data stays hourly; missing tomorrow does not remove today or invent quarter-hours
+ok 37 - hourly source data stays hourly; missing tomorrow does not remove today or invent quarter-hours
+  ---
+  duration_ms: 2.31541
+  type: 'test'
+  ...
+# Subtest: real provider publication feeds the dashboard without enabling a control or fabricating absent values
+ok 38 - real provider publication feeds the dashboard without enabling a control or fabricating absent values
+  ---
+  duration_ms: 51.477063
+  type: 'test'
+  ...
+# Subtest: both shipped dashboard entry pages load the typed price helper before app.js
+ok 39 - both shipped dashboard entry pages load the typed price helper before app.js
+  ---
+  duration_ms: 1.225317
+  type: 'test'
+  ...
+1..39
+# tests 39
+# suites 0
+# pass 39
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2323.200235

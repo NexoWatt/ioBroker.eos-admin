@@ -1,0 +1,51 @@
+✔ actual flow keeps measured zero during export and never invents 100 W or indefinitely holds a previous load (23.578186ms)
+✔ actual flow differentiates null, missing, bool and zero SoC and does not suppress valid raw PV behind null derived PV (7.008384ms)
+✔ stale, future, absent or offline measurements stay unknown in the same flow and sidebar; fresh unchanged zero recovers (3.809632ms)
+✔ no measurement/engine data never claims active engine, stable grid or healthy system (2.160095ms)
+✔ canonical NVP-invalid signal prevents a stale fallback from appearing as import/export or 100 percent self-sufficiency (2.044752ms)
+✔ farm flow uses complete atomic gross sums and arithmetic SoC; partial and stale overview do not revive old aggregate values (6.610853ms)
+✔ strict read rejects malformed values, absent timestamps and future samples but accepts newly confirmed constant zero (7.450199ms)
+✔ both shipped entry pages load the strict live helper before the actual dashboard renderer (1.340581ms)
+✔ missing split-meter sides and missing NVP cannot manufacture a complete flow or a balance-derived battery (5.297584ms)
+✔ extra producer and consumer nodes never display command power or missing measurements as measured zero (4.100741ms)
+✔ visible dashboard ages measurements even without a new SSE event; hidden and non-dashboard pages do not rerender (2.06991ms)
+✔ device save refreshes rotated session CSRF without discarding the edited device (29.967715ms)
+✔ expired session preserves the unsaved form and allows explicit retry after a separate login (4.633253ms)
+✔ forbidden mutation is never replayed and preserves its draft for correction (3.071309ms)
+✔ enabled stored module exposes the exact import prerequisite and never posts a manual import (3.343269ms)
+✔ preserved automatic migration cannot be replaced by a manual import from the editor (13.068165ms)
+✔ manual import explains a newly blocked server state without losing the draft or replaying writes (4.523388ms)
+✔ unconfirmed module stop blocks the editor import without instructing an unsafe retry (7.030876ms)
+✔ uninitialized module configuration stays readable but cannot be saved or manually imported (1.609035ms)
+✔ migration-blocked editor explains the prerequisite and unlocks after a fresh released configuration load (2.080696ms)
+✔ reload does not silently discard the pending device draft (1.529716ms)
+✔ EV card, sidebar, modal and flow use one source model; valid manual override wins, booleans never become watts (922.700036ms)
+✔ actual App-Center validator rejects boolean/energy/invalid power states and accepts numeric W/kW (219.35945ms)
+✔ every shipped entry point loads the measurement helper before its consuming script (1.412519ms)
+✔ App-Center recovery and save roundtrip preserve separate battery-flow feedback without replacing controller feedback (441.541197ms)
+(node:20) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ atomic farm overview displays physical battery gross totals, configured capacity and arithmetic SoC (49.685944ms)
+✔ partial coverage suppresses full power sums and explicitly labels partial capacity and SoC mean (2.325164ms)
+✔ lost connection and aged snapshots clear live totals without presenting unknown values as zero (15.154569ms)
+✔ true zero remains visible while null totals, unsupported payloads and absent PV sources remain unavailable (10.307836ms)
+✔ real aggregation helper and UI agree on counterflow, partial metrics and independently deduplicated PV sources (21.193913ms)
+✔ App-Center farm links directly to the complete overview in the same tab (2.921614ms)
+(node:21) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ actual dashboard tooltip draws all 96 supplied quarter-hours, including zero and negative intervals, without hourly averaging (38.412232ms)
+✔ actual dashboard retains all 92/100 quarter-hours on European daylight-saving days and places local clock labels correctly (22.014979ms)
+✔ price card and modal show confirmed Tibber prices while optimization remains off and an unrelated budget price is null (6.507898ms)
+✔ expired, absent, false or null source values clear the visible price rather than turning into zero or reusing budget values (2.916346ms)
+✔ legacy manual mappings remain authoritative, with explicit cent conversion and no connected-provider override (2.238714ms)
+✔ hourly source data stays hourly; missing tomorrow does not remove today or invent quarter-hours (3.85485ms)
+✔ real provider publication feeds the dashboard without enabling a control or fabricating absent values (60.974007ms)
+✔ both shipped dashboard entry pages load the typed price helper before app.js (1.360851ms)
+ℹ tests 39
+ℹ suites 0
+ℹ pass 39
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2193.09677

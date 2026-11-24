@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/storagefarm.ts
- * Quell-Hash: sha256:2595c1640ed238436c8dc2b3bafbf815d874da8708d635668c0318ed9a91b803
+ * Quell-Hash: sha256:c5b60c8ff566faf606ed843959a8f43f9ef206433f5675f2dea9841233679144
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -143,8 +143,7 @@
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
   function statusList() {
-    var list = parseJsonSafe(stateVal('storageFarm.storagesStatusJson'), []);
-    return Array.isArray(list) ? list : [];
+    return window.NWStorageFarmDispatch ? window.NWStorageFarmDispatch.rows(state, liveConnected) : [];
   }
   /**
    * Code-Teil: setLive
@@ -154,7 +153,7 @@
    */
   function setLive(ok) {
     liveConnected = !!ok;
-    if (window.NWStorageFarmSummary) window.NWStorageFarmSummary.render(state, liveConnected);
+    render();
     var dot = el('liveDot');
     if (dot) dot.classList.toggle('live', !!ok);
   }
@@ -175,26 +174,9 @@
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
   function statusText(row) {
-    if (row && row.licenseBlocked === true) return 'Gesperrt: Lizenzgrenze';
-    var online = !!(row && (row.online === true || row.displayOnline === true || row.dispatchAvailable === true));
-    var degraded = !!(row && (row.degraded === true || row.state === 'degraded'));
-    var reasons = []
-      .concat(row && Array.isArray(row.dispatchBlockedReasons) ? row.dispatchBlockedReasons : [])
-      .concat(row && Array.isArray(row.chargeBlockedReasons) ? row.chargeBlockedReasons : [])
-      .concat(row && Array.isArray(row.dischargeBlockedReasons) ? row.dischargeBlockedReasons : []);
-    var hardLock = reasons.some(function (x) {
-      return ['available_false', 'fault_active', 'device_offline', 'charge_not_allowed', 'discharge_not_allowed'].indexOf(String(x || '')) >= 0;
-    });
-    var chg = num(row && row.chargePowerW) || 0;
-    var dchg = num(row && row.dischargePowerW) || 0;
-    var idle = Math.abs(chg) + Math.abs(dchg) < 20;
-
-    if (online && row && row.dispatchAvailable === true) return degraded ? 'Degraded / Bereit' : (idle ? 'Online / Standby' : 'Online / Bereit');
-    if (online && hardLock) return 'Gesperrt';
-    if (online) return degraded ? 'Degraded / prüfen' : 'Online / prüfen';
-    if (row && row.dispatchAvailable) return 'Regelbar';
-    return 'Offline';
+    return window.NWStorageFarmDispatch ? window.NWStorageFarmDispatch.status(row) : 'Status unbekannt';
   }
+
   /**
    * Code-Teil: cell
    * Zweck: Kapselt einen lokalen Verarbeitungsschritt, damit Aufrufer nicht direkt in Detaildaten eingreifen.
@@ -262,6 +244,7 @@
   function render() {
     renderSummary();
     renderRows(statusList());
+    if (window.NWStorageFarmDispatch) window.NWStorageFarmDispatch.render(state, liveConnected);
   }
   /**
    * Code-Teil: loadConfig
@@ -307,7 +290,6 @@
       var snap = await fetch('/api/state', { cache: 'no-store' }).then(function (r) { return r.json(); });
       state = snap || {};
       window.latestState = state;
-      render();
       setLive(true);
     } catch (_e) {
       setLive(false);
@@ -380,9 +362,9 @@
     loadConfig();
     loadState();
     startEvents();
-    aggregateTimer = window.setInterval(function () { if (window.NWStorageFarmSummary) window.NWStorageFarmSummary.render(state, liveConnected); }, 5000);
+    aggregateTimer = window.setInterval(function () { render(); }, 5000);
     window.addEventListener('pagehide', function () { if (aggregateTimer !== null) { window.clearInterval(aggregateTimer); aggregateTimer = null; } });
-    window.addEventListener('pageshow', function () { if (aggregateTimer === null) aggregateTimer = window.setInterval(function () { if (window.NWStorageFarmSummary) window.NWStorageFarmSummary.render(state, liveConnected); }, 5000); });
+    window.addEventListener('pageshow', function () { if (aggregateTimer === null) aggregateTimer = window.setInterval(function () { render(); }, 5000); });
 
   });
 })();

@@ -1,0 +1,304 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: optional unsupported register objects alone do not bind or disable an existing device
+ok 1 - optional unsupported register objects alone do not bind or disable an existing device
+  ---
+  duration_ms: 20.986751
+  type: 'test'
+  ...
+# Subtest: later valid capability measurement including zero fills binding once; stale later data never removes it
+ok 2 - later valid capability measurement including zero fills binding once; stale later data never removes it
+  ---
+  duration_ms: 4.992096
+  type: 'test'
+  ...
+# Subtest: automatic power capability binding rejects null
+ok 3 - automatic power capability binding rejects null
+  ---
+  duration_ms: 0.958403
+  type: 'test'
+  ...
+# Subtest: automatic power capability binding rejects numeric string
+ok 4 - automatic power capability binding rejects numeric string
+  ---
+  duration_ms: 1.330564
+  type: 'test'
+  ...
+# Subtest: automatic power capability binding rejects negative
+ok 5 - automatic power capability binding rejects negative
+  ---
+  duration_ms: 1.159185
+  type: 'test'
+  ...
+# Subtest: automatic power capability binding rejects not acknowledged
+ok 6 - automatic power capability binding rejects not acknowledged
+  ---
+  duration_ms: 0.941718
+  type: 'test'
+  ...
+# Subtest: automatic power capability binding rejects bad quality
+ok 7 - automatic power capability binding rejects bad quality
+  ---
+  duration_ms: 0.859785
+  type: 'test'
+  ...
+# Subtest: automatic power capability binding rejects stale
+ok 8 - automatic power capability binding rejects stale
+  ---
+  duration_ms: 0.780756
+  type: 'test'
+  ...
+# Subtest: automatic power capability binding rejects future
+ok 9 - automatic power capability binding rejects future
+  ---
+  duration_ms: 1.163622
+  type: 'test'
+  ...
+# Subtest: manual capability references and existing fixed limits survive subsequent inventory reconciliation
+ok 10 - manual capability references and existing fixed limits survive subsequent inventory reconciliation
+  ---
+  duration_ms: 3.090864
+  type: 'test'
+  ...
+# Subtest: automatic numeric capability requires canonical W metadata, not guessed kW conversion
+ok 11 - automatic numeric capability requires canonical W metadata, not guessed kW conversion
+  ---
+  duration_ms: 1.131473
+  type: 'test'
+  ...
+# Subtest: two actual slow source samples do not install a shorter capability freshness gate
+ok 12 - two actual slow source samples do not install a shorter capability freshness gate
+  ---
+  duration_ms: 2.234204
+  type: 'test'
+  ...
+# Subtest: repeated cached sample does not prove source cadence; a later fresh sample does
+ok 13 - repeated cached sample does not prove source cadence; a later fresh sample does
+  ---
+  duration_ms: 1.405326
+  type: 'test'
+  ...
+# Subtest: generation or explicit configuration change discards preceding cadence evidence
+ok 14 - generation or explicit configuration change discards preceding cadence evidence
+  ---
+  duration_ms: 1.40811
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual farm controller dispatches600W to eligible member at SoCs1/98
+ok 15 - actual farm controller dispatches600W to eligible member at SoCs1/98
+  ---
+  duration_ms: 160.389135
+  type: 'test'
+  ...
+# Subtest: actual farm controller dispatches600W to eligible member at SoCs98/1
+ok 16 - actual farm controller dispatches600W to eligible member at SoCs98/1
+  ---
+  duration_ms: 21.538112
+  type: 'test'
+  ...
+# Subtest: both members below configured minimum receive no discharge command
+ok 17 - both members below configured minimum receive no discharge command
+  ---
+  duration_ms: 31.590763
+  type: 'test'
+  ...
+# Subtest: eligible member's explicit0W limit remains binding
+ok 18 - eligible member's explicit0W limit remains binding
+  ---
+  duration_ms: 18.171161
+  type: 'test'
+  ...
+# Subtest: eligible member's explicit250W limit remains binding
+ok 19 - eligible member's explicit250W limit remains binding
+  ---
+  duration_ms: 41.001899
+  type: 'test'
+  ...
+# Subtest: eligible full member blocked bystaleMember cannot discharge
+ok 20 - eligible full member blocked bystaleMember cannot discharge
+  ---
+  duration_ms: 36.398892
+  type: 'test'
+  ...
+# Subtest: empty member'sstaleMember does not block healthy full member
+ok 21 - empty member'sstaleMember does not block healthy full member
+  ---
+  duration_ms: 12.590278
+  type: 'test'
+  ...
+# Subtest: eligible full member blocked byfaultMember cannot discharge
+ok 22 - eligible full member blocked byfaultMember cannot discharge
+  ---
+  duration_ms: 12.488664
+  type: 'test'
+  ...
+# Subtest: empty member'sfaultMember does not block healthy full member
+ok 23 - empty member'sfaultMember does not block healthy full member
+  ---
+  duration_ms: 22.000737
+  type: 'test'
+  ...
+# Subtest: eligible full member blocked bydeniedMember cannot discharge
+ok 24 - eligible full member blocked bydeniedMember cannot discharge
+  ---
+  duration_ms: 12.397067
+  type: 'test'
+  ...
+# Subtest: empty member'sdeniedMember does not block healthy full member
+ok 25 - empty member'sdeniedMember does not block healthy full member
+  ---
+  duration_ms: 18.830885
+  type: 'test'
+  ...
+# Subtest: global admission remains binding:{"staleGrid":true}
+ok 26 - global admission remains binding:{"staleGrid":true}
+  ---
+  duration_ms: 22.248
+  type: 'test'
+  ...
+# Subtest: global admission remains binding:{"tariffBlock":true}
+ok 27 - global admission remains binding:{"tariffBlock":true}
+  ---
+  duration_ms: 10.278387
+  type: 'test'
+  ...
+# Subtest: global admission remains binding:{"enabled":false}
+ok 28 - global admission remains binding:{"enabled":false}
+  ---
+  duration_ms: 8.278976
+  type: 'test'
+  ...
+# Subtest: explicit global MultiUse50% reserve blocks49.5% mean without silently overriding operator policy
+ok 29 - explicit global MultiUse50% reserve blocks49.5% mean without silently overriding operator policy
+  ---
+  duration_ms: 15.550705
+  type: 'test'
+  ...
+# Subtest: farm write acceptance does not masquerade as measured response: 63W actual versus673W target times out
+ok 30 - farm write acceptance does not masquerade as measured response: 63W actual versus673W target times out
+  ---
+  duration_ms: 18.163129
+  type: 'test'
+  ...
+# Subtest: fresh device discharge capability 0W caps real controller allocation to 0W
+ok 31 - fresh device discharge capability 0W caps real controller allocation to 0W
+  ---
+  duration_ms: 22.020387
+  type: 'test'
+  ...
+# Subtest: fresh device discharge capability 250W caps real controller allocation to 250W
+ok 32 - fresh device discharge capability 250W caps real controller allocation to 250W
+  ---
+  duration_ms: 11.267576
+  type: 'test'
+  ...
+# Subtest: fresh device discharge capability 9566W caps real controller allocation to 600W
+ok 33 - fresh device discharge capability 9566W caps real controller allocation to 600W
+  ---
+  duration_ms: 12.012047
+  type: 'test'
+  ...
+# Subtest: numeric hardware capability cannot raise an installer limit
+ok 34 - numeric hardware capability cannot raise an installer limit
+  ---
+  duration_ms: 16.369138
+  type: 'test'
+  ...
+# Subtest: bound missing device capability blocks only its own direction without erasing mapping
+ok 35 - bound missing device capability blocks only its own direction without erasing mapping
+  ---
+  duration_ms: 12.875327
+  type: 'test'
+  ...
+# Subtest: bound stale device capability blocks only its own direction without erasing mapping
+ok 36 - bound stale device capability blocks only its own direction without erasing mapping
+  ---
+  duration_ms: 9.711824
+  type: 'test'
+  ...
+# Subtest: bound unacknowledged device capability blocks only its own direction without erasing mapping
+ok 37 - bound unacknowledged device capability blocks only its own direction without erasing mapping
+  ---
+  duration_ms: 22.938684
+  type: 'test'
+  ...
+# Subtest: bound bad quality device capability blocks only its own direction without erasing mapping
+ok 38 - bound bad quality device capability blocks only its own direction without erasing mapping
+  ---
+  duration_ms: 10.684298
+  type: 'test'
+  ...
+# Subtest: bound negative device capability blocks only its own direction without erasing mapping
+ok 39 - bound negative device capability blocks only its own direction without erasing mapping
+  ---
+  duration_ms: 13.367709
+  type: 'test'
+  ...
+# Subtest: bound string device capability blocks only its own direction without erasing mapping
+ok 40 - bound string device capability blocks only its own direction without erasing mapping
+  ---
+  duration_ms: 9.246452
+  type: 'test'
+  ...
+# Subtest: bound wrong unit device capability blocks only its own direction without erasing mapping
+ok 41 - bound wrong unit device capability blocks only its own direction without erasing mapping
+  ---
+  duration_ms: 12.33292
+  type: 'test'
+  ...
+# Subtest: capability block of empty member does not suppress eligible full member
+ok 42 - capability block of empty member does not suppress eligible full member
+  ---
+  duration_ms: 22.159026
+  type: 'test'
+  ...
+# Subtest: charge capability independently clamps charging while discharge admission remains intact
+ok 43 - charge capability independently clamps charging while discharge admission remains intact
+  ---
+  duration_ms: 11.48297
+  type: 'test'
+  ...
+# Subtest: exclusive native FEMS path honors bound capability: zero discharge
+ok 44 - exclusive native FEMS path honors bound capability: zero discharge
+  ---
+  duration_ms: 9.344275
+  type: 'test'
+  ...
+# Subtest: exclusive native FEMS path honors bound capability: 250W discharge
+ok 45 - exclusive native FEMS path honors bound capability: 250W discharge
+  ---
+  duration_ms: 13.408029
+  type: 'test'
+  ...
+# Subtest: exclusive native FEMS path honors bound capability: stale discharge
+ok 46 - exclusive native FEMS path honors bound capability: stale discharge
+  ---
+  duration_ms: 6.527099
+  type: 'test'
+  ...
+# Subtest: exclusive native FEMS path honors bound capability: 250W charge
+ok 47 - exclusive native FEMS path honors bound capability: 250W charge
+  ---
+  duration_ms: 8.853061
+  type: 'test'
+  ...
+# Subtest: exclusive native FEMS path honors bound capability: opposite direction stays available
+ok 48 - exclusive native FEMS path honors bound capability: opposite direction stays available
+  ---
+  duration_ms: 6.870435
+  type: 'test'
+  ...
+1..48
+# tests 48
+# suites 0
+# pass 48
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1158.464209

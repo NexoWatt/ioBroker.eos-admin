@@ -1,0 +1,29 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: MENNEKES V1 run retains the explicitly commanded 6 A instead of throwing or restoring 16 A
+ok 1 - MENNEKES V1 run retains the explicitly commanded 6 A instead of throwing or restoring 16 A
+  ---
+  duration_ms: 21.579591
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:13) ExperimentalWarning: The MockTimers API is an experimental feature and might change at any time
+# Subtest: real SolaX cadence alternates due reads with continuous EMS writes and prioritizes a new stop once
+ok 2 - real SolaX cadence alternates due reads with continuous EMS writes and prioritizes a new stop once
+  ---
+  duration_ms: 30.454017
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 293.055795

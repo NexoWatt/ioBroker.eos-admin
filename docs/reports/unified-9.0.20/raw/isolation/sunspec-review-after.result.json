@@ -1,0 +1,13 @@
+{
+  "name": "sunspec-review-after",
+  "command": [
+    "node",
+    "/workspace/scratch/741f792566ea/audit-919/isolation/repro-sunspec-discovery.cjs"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+  "startedAt": "2026-11-24T19:17:43.470811+00:00",
+  "durationSeconds": 0.109,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/audit-919/isolation/sunspec-review-after.log",
+  "sha256": "f667a89ce75aff92492641cee9ef7f70db8137f29ef170ce4e66105693b25792"
+}

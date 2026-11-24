@@ -1,0 +1,16 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"result":{"resolved":true},"connectionsAfterConfirmedStop":1,"driverConnected":true,"hasClient":true,"elapsedAfterStop":329,"logs":["[audit] Modbus connected (modbusTcp)"]}
+AssertionError [ERR_ASSERTION]: A stopped/unauthorized hosted driver must not open a new TCP connection after its reconnect backoff
+
+1 !== 0
+
+    at /workspace/scratch/741f792566ea/audit-919/device/modbus-stop-backoff.cjs:21:9
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}

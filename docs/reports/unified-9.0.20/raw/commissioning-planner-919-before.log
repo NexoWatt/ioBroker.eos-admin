@@ -1,0 +1,70 @@
+{
+  "status": [
+    {
+      "baseId": "eos-admin.0.devices.aaa",
+      "devId": "aaa",
+      "status": "manual",
+      "code": "MANUAL_MAPPING",
+      "target": "",
+      "mappedFields": [],
+      "missing": [],
+      "optionalMissing": [],
+      "activationRequestId": "",
+      "activationApplied": false,
+      "corrections": []
+    },
+    {
+      "baseId": "eos-admin.0.devices.grid",
+      "devId": "grid",
+      "status": "mapped",
+      "code": "ACTIVATION_APPLIED",
+      "target": "datapoints.gridPointPower",
+      "mappedFields": [],
+      "missing": [],
+      "optionalMissing": [],
+      "activationRequestId": "request-grid-0123456789012345",
+      "activationApplied": true,
+      "corrections": []
+    },
+    {
+      "baseId": "eos-admin.0.devices.storage",
+      "devId": "storage",
+      "status": "pending",
+      "code": "ACTIVATION_PROFILE_CHANGED",
+      "target": "",
+      "mappedFields": [],
+      "missing": [],
+      "optionalMissing": [],
+      "activationRequestId": "request-storage-0123456789012345",
+      "activationApplied": false,
+      "corrections": []
+    }
+  ],
+  "actualEnabled": true,
+  "expectedEnabled": false
+}
+node:assert:152
+  throw new AssertionError(obj);
+  ^
+
+AssertionError [ERR_ASSERTION]: a preceding unassigned generic device must not defeat replacement-profile safety
+
+true !== false
+
+    at Object.<anonymous> (/workspace/scratch/741f792566ea/audit-919/commissioning/profile-replacement-after-unmapped.cjs:15:8)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14)
+    at Object..js (node:internal/modules/cjs/loader:2060:10)
+    at Module.load (node:internal/modules/cjs/loader:1651:32)
+    at Module._load (node:internal/modules/cjs/loader:1443:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: true,
+  expected: false,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.22.3

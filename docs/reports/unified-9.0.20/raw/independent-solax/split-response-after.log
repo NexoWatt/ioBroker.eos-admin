@@ -1,0 +1,1 @@
+{"node":"v24.22.3","requests":[{"fc":3,"addr":416,"len":1},{"fc":3,"addr":417,"len":2},{"fc":3,"addr":419,"len":1},{"fc":3,"addr":420,"len":1}],"values":{"sET_CONTROL_MODE":4,"sET_ACTIVE_POWER":32768001,"vPP_WAIT_TIMEOUT":0,"vPP_NEXT_MOTION":0},"readback":{"val":null,"ack":true}}

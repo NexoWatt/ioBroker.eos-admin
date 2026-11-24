@@ -1,0 +1,54 @@
+✔ farm own ack:false echo stays pending and idempotent; later ack only confirms the driver (42.600343ms)
+✔ farm delayed acknowledgment cannot confirm a newer request; invalid quality remains a failure (4.347086ms)
+✔ farm missing/null/blank/boolean values never confirm a zero command (2.666475ms)
+✔ farm real mismatch, write failure and authority revocation are not pending successes (63.888168ms)
+✔ actual single-storage command path keeps run enabled while matching command acknowledgments are pending (6.788021ms)
+✔ single-storage real mismatch still clears run; pending cannot hide a rejected primary write (125.240137ms)
+✔ single-storage actual ack is driver-only and late/invalid acknowledgment is not confirmed (0.578751ms)
+✔ actual farm controller dispatches600W to eligible member at SoCs1/98 (91.167484ms)
+✔ actual farm controller dispatches600W to eligible member at SoCs98/1 (18.74815ms)
+✔ both members below configured minimum receive no discharge command (14.960285ms)
+✔ eligible member's explicit0W limit remains binding (17.610756ms)
+✔ eligible member's explicit250W limit remains binding (21.400684ms)
+✔ eligible full member blocked bystaleMember cannot discharge (11.453856ms)
+✔ empty member'sstaleMember does not block healthy full member (16.76962ms)
+✔ eligible full member blocked byfaultMember cannot discharge (11.846237ms)
+✔ empty member'sfaultMember does not block healthy full member (15.15528ms)
+✔ eligible full member blocked bydeniedMember cannot discharge (10.661504ms)
+✔ empty member'sdeniedMember does not block healthy full member (8.990727ms)
+✔ global admission remains binding:{"staleGrid":true} (14.393482ms)
+✔ global admission remains binding:{"tariffBlock":true} (8.647551ms)
+✔ global admission remains binding:{"enabled":false} (9.300644ms)
+✔ explicit global MultiUse50% reserve blocks49.5% mean without silently overriding operator policy (9.123037ms)
+✔ farm write acceptance does not masquerade as measured response: 63W actual versus673W target times out (13.931478ms)
+✔ fresh device discharge capability 0W caps real controller allocation to 0W (11.269258ms)
+✔ fresh device discharge capability 250W caps real controller allocation to 250W (12.906088ms)
+✔ fresh device discharge capability 9566W caps real controller allocation to 600W (11.400736ms)
+✔ numeric hardware capability cannot raise an installer limit (19.197135ms)
+✔ bound missing device capability blocks only its own direction without erasing mapping (8.713681ms)
+✔ bound stale device capability blocks only its own direction without erasing mapping (8.954033ms)
+✔ bound unacknowledged device capability blocks only its own direction without erasing mapping (10.618057ms)
+✔ bound bad quality device capability blocks only its own direction without erasing mapping (9.932065ms)
+✔ bound negative device capability blocks only its own direction without erasing mapping (17.280239ms)
+✔ bound string device capability blocks only its own direction without erasing mapping (8.371796ms)
+✔ bound wrong unit device capability blocks only its own direction without erasing mapping (7.814206ms)
+✔ capability block of empty member does not suppress eligible full member (8.330645ms)
+✔ charge capability independently clamps charging while discharge admission remains intact (8.910907ms)
+▶ 1%/98% pool dispatch preserves redistribution and explains only the actual per-member floor exclusion
+  ✔ 1/98 (62.143952ms)
+  ✔ 98/1 (11.225132ms)
+✔ 1%/98% pool dispatch preserves redistribution and explains only the actual per-member floor exclusion (74.452565ms)
+✔ missing member SoC remains unknown in diagnostics and does not block the other member (12.583417ms)
+▶ explicit zero limit and discharge prohibition remain blocking and are not relabelled as a SoC error
+  ✔ discharge_limit_zero (8.863526ms)
+  ✔ discharge_not_allowed (10.238837ms)
+✔ explicit zero limit and discharge prohibition remain blocking and are not relabelled as a SoC error (19.567303ms)
+✔ idle and charge reports do not pretend that a discharge floor was applied to the current request (10.019786ms)
+ℹ tests 44
+ℹ suites 0
+ℹ pass 44
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 698.892424

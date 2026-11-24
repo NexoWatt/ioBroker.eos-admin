@@ -1,0 +1,18 @@
+{
+  "command": [
+    "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node",
+    "--test",
+    "modules/devices/test/modbusConnectLifecycle.test.js",
+    "modules/devices/test/modbusAuthorizationReads.test.js",
+    "modules/devices/test/modbusReadIntegrity.test.js",
+    "modules/devices/test/serialOperationGate.test.js",
+    "test/eos-mennekes-control.test.cjs",
+    "test/eos-solax-cadence.test.cjs"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+  "startedAt": "2026-11-24T19:13:19.419377+00:00",
+  "finishedAt": "2026-11-24T19:13:20.745741+00:00",
+  "exitCode": 0,
+  "log": "node22-modbus-final.log",
+  "sha256": "94c5b35dbc02b3a65ff53e0d285a595f93f467dcff408e7b4f3c6b0c732ef6cb"
+}

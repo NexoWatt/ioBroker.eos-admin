@@ -1,0 +1,26 @@
+✔ actual diagnostic DOM separates requested, accepted command and measured farm output (14.954776ms)
+✔ same-name members are joined by dispatchKey despite reversed result order, and floor/caps describe only that request (1.631276ms)
+✔ a missing, limited or blocked command is never presented as an explicit zero request or healthy standby (1.856706ms)
+✔ both source JSON age and state timestamp must be current; offline or future data is unknown (1.530795ms)
+✔ ambiguous legacy names, conflicting keys and duplicate member keys never receive another storage command (2.163367ms)
+✔ unknown caps, boolean/null power, missing reasons and changed EMS target stay explicit instead of being fabricated (1.695803ms)
+✔ diagnostic reason/name payload is rendered as text only and malformed JSON cannot create a false available state (1.216972ms)
+✔ shipped farm page loads strict diagnostic renderer before page logic and exposes all three actual DOM cards (0.251278ms)
+✔ own command-DP echo never confirms the driver or device, even when old JSON says confirmed (2.534396ms)
+✔ configured limit, device allowance and effective request limit remain distinct across current and legacy snapshots (5.482484ms)
+(node:13) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ atomic farm overview displays physical battery gross totals, configured capacity and arithmetic SoC (16.783449ms)
+✔ partial coverage suppresses full power sums and explicitly labels partial capacity and SoC mean (1.280368ms)
+✔ lost connection and aged snapshots clear live totals without presenting unknown values as zero (0.950762ms)
+✔ true zero remains visible while null totals, unsupported payloads and absent PV sources remain unavailable (2.503469ms)
+✔ real aggregation helper and UI agree on counterflow, partial metrics and independently deduplicated PV sources (7.577118ms)
+✔ App-Center farm links directly to the complete overview in the same tab (0.582767ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 541.468876

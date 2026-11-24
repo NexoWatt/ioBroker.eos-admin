@@ -1,0 +1,9 @@
+13df403bbcf8ead3cf815c41605620b365e0e005c8b3ff6b585f7f137eaccc23  ui/www/login.html
+680ff483c4172ce55a927c1d71f75230f1102b77b2393f45c451ff370adb08a2  ui/www/login.css
+083e11ab28ec00b37d3d47776946c5fad4d79277fdc440cdbb20181a7f064f76  ui/www/assets/icons/nexowatt-180.png
+7f93d65d9e1d795bf127e1af31d88d7468ccb70b026f98351d0abbc3f3bd4df6  ui/www/assets/icons/nexowatt-192.png
+952ceb9cef3f7f22a150dd8ea396285f70b9d8c19de8e7c1452bf2ff983ae6bd  ui/www/apple-touch-icon.png
+952ceb9cef3f7f22a150dd8ea396285f70b9d8c19de8e7c1452bf2ff983ae6bd  ui/www/assets/icons/nexowatt-1024.png
+051ee6b9b735df4293e2a1fe2c8807297a1362494e367fbb2a2677360ff0c83d  src-admin/index.html
+083e11ab28ec00b37d3d47776946c5fad4d79277fdc440cdbb20181a7f064f76  src-admin/public/assets/icons/nexowatt-180.png
+20214ee4b94e13930e078d2338a4c061c54fd11dab97ba24738a1bf7dcc5d59b  src-admin/build-tools/eos-public-assets.mjs

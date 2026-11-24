@@ -1,0 +1,296 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: farm own ack:false echo stays pending and idempotent; later ack only confirms the driver
+ok 1 - farm own ack:false echo stays pending and idempotent; later ack only confirms the driver
+  ---
+  duration_ms: 56.978279
+  type: 'test'
+  ...
+# Subtest: farm delayed acknowledgment cannot confirm a newer request; invalid quality remains a failure
+ok 2 - farm delayed acknowledgment cannot confirm a newer request; invalid quality remains a failure
+  ---
+  duration_ms: 5.801565
+  type: 'test'
+  ...
+# Subtest: farm missing/null/blank/boolean values never confirm a zero command
+ok 3 - farm missing/null/blank/boolean values never confirm a zero command
+  ---
+  duration_ms: 4.452865
+  type: 'test'
+  ...
+# Subtest: farm real mismatch, write failure and authority revocation are not pending successes
+ok 4 - farm real mismatch, write failure and authority revocation are not pending successes
+  ---
+  duration_ms: 64.36469
+  type: 'test'
+  ...
+# Subtest: actual single-storage command path keeps run enabled while matching command acknowledgments are pending
+ok 5 - actual single-storage command path keeps run enabled while matching command acknowledgments are pending
+  ---
+  duration_ms: 9.501506
+  type: 'test'
+  ...
+# Subtest: single-storage real mismatch still clears run; pending cannot hide a rejected primary write
+ok 6 - single-storage real mismatch still clears run; pending cannot hide a rejected primary write
+  ---
+  duration_ms: 125.973693
+  type: 'test'
+  ...
+# Subtest: single-storage actual ack is driver-only and late/invalid acknowledgment is not confirmed
+ok 7 - single-storage actual ack is driver-only and late/invalid acknowledgment is not confirmed
+  ---
+  duration_ms: 0.598141
+  type: 'test'
+  ...
+# Subtest: farm keepalive renews a pending request without inventing confirmation or writing zero
+ok 8 - farm keepalive renews a pending request without inventing confirmation or writing zero
+  ---
+  duration_ms: 3.785069
+  type: 'test'
+  ...
+# Subtest: pending neutralization reports requested and retains the native FEMS watchdog handoff
+ok 9 - pending neutralization reports requested and retains the native FEMS watchdog handoff
+  ---
+  duration_ms: 0.946875
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual farm controller dispatches600W to eligible member at SoCs1/98
+ok 10 - actual farm controller dispatches600W to eligible member at SoCs1/98
+  ---
+  duration_ms: 200.189086
+  type: 'test'
+  ...
+# Subtest: actual farm controller dispatches600W to eligible member at SoCs98/1
+ok 11 - actual farm controller dispatches600W to eligible member at SoCs98/1
+  ---
+  duration_ms: 30.759362
+  type: 'test'
+  ...
+# Subtest: both members below configured minimum receive no discharge command
+ok 12 - both members below configured minimum receive no discharge command
+  ---
+  duration_ms: 13.970635
+  type: 'test'
+  ...
+# Subtest: eligible member's explicit0W limit remains binding
+ok 13 - eligible member's explicit0W limit remains binding
+  ---
+  duration_ms: 14.072959
+  type: 'test'
+  ...
+# Subtest: eligible member's explicit250W limit remains binding
+ok 14 - eligible member's explicit250W limit remains binding
+  ---
+  duration_ms: 20.540667
+  type: 'test'
+  ...
+# Subtest: eligible full member blocked bystaleMember cannot discharge
+ok 15 - eligible full member blocked bystaleMember cannot discharge
+  ---
+  duration_ms: 16.070267
+  type: 'test'
+  ...
+# Subtest: empty member'sstaleMember does not block healthy full member
+ok 16 - empty member'sstaleMember does not block healthy full member
+  ---
+  duration_ms: 25.264991
+  type: 'test'
+  ...
+# Subtest: eligible full member blocked byfaultMember cannot discharge
+ok 17 - eligible full member blocked byfaultMember cannot discharge
+  ---
+  duration_ms: 12.68554
+  type: 'test'
+  ...
+# Subtest: empty member'sfaultMember does not block healthy full member
+ok 18 - empty member'sfaultMember does not block healthy full member
+  ---
+  duration_ms: 16.829169
+  type: 'test'
+  ...
+# Subtest: eligible full member blocked bydeniedMember cannot discharge
+ok 19 - eligible full member blocked bydeniedMember cannot discharge
+  ---
+  duration_ms: 20.571163
+  type: 'test'
+  ...
+# Subtest: empty member'sdeniedMember does not block healthy full member
+ok 20 - empty member'sdeniedMember does not block healthy full member
+  ---
+  duration_ms: 10.592609
+  type: 'test'
+  ...
+# Subtest: global admission remains binding:{"staleGrid":true}
+ok 21 - global admission remains binding:{"staleGrid":true}
+  ---
+  duration_ms: 10.164654
+  type: 'test'
+  ...
+# Subtest: global admission remains binding:{"tariffBlock":true}
+ok 22 - global admission remains binding:{"tariffBlock":true}
+  ---
+  duration_ms: 15.690484
+  type: 'test'
+  ...
+# Subtest: global admission remains binding:{"enabled":false}
+ok 23 - global admission remains binding:{"enabled":false}
+  ---
+  duration_ms: 8.52737
+  type: 'test'
+  ...
+# Subtest: explicit global MultiUse50% reserve blocks49.5% mean without silently overriding operator policy
+ok 24 - explicit global MultiUse50% reserve blocks49.5% mean without silently overriding operator policy
+  ---
+  duration_ms: 11.699255
+  type: 'test'
+  ...
+# Subtest: farm write acceptance does not masquerade as measured response: 63W actual versus673W target times out
+ok 25 - farm write acceptance does not masquerade as measured response: 63W actual versus673W target times out
+  ---
+  duration_ms: 25.833927
+  type: 'test'
+  ...
+# Subtest: fresh device discharge capability 0W caps real controller allocation to 0W
+ok 26 - fresh device discharge capability 0W caps real controller allocation to 0W
+  ---
+  duration_ms: 10.661192
+  type: 'test'
+  ...
+# Subtest: fresh device discharge capability 250W caps real controller allocation to 250W
+ok 27 - fresh device discharge capability 250W caps real controller allocation to 250W
+  ---
+  duration_ms: 8.683684
+  type: 'test'
+  ...
+# Subtest: fresh device discharge capability 9566W caps real controller allocation to 600W
+ok 28 - fresh device discharge capability 9566W caps real controller allocation to 600W
+  ---
+  duration_ms: 14.605982
+  type: 'test'
+  ...
+# Subtest: numeric hardware capability cannot raise an installer limit
+ok 29 - numeric hardware capability cannot raise an installer limit
+  ---
+  duration_ms: 11.308527
+  type: 'test'
+  ...
+# Subtest: bound missing device capability blocks only its own direction without erasing mapping
+ok 30 - bound missing device capability blocks only its own direction without erasing mapping
+  ---
+  duration_ms: 16.412061
+  type: 'test'
+  ...
+# Subtest: bound stale device capability blocks only its own direction without erasing mapping
+ok 31 - bound stale device capability blocks only its own direction without erasing mapping
+  ---
+  duration_ms: 8.766429
+  type: 'test'
+  ...
+# Subtest: bound unacknowledged device capability blocks only its own direction without erasing mapping
+ok 32 - bound unacknowledged device capability blocks only its own direction without erasing mapping
+  ---
+  duration_ms: 8.535472
+  type: 'test'
+  ...
+# Subtest: bound bad quality device capability blocks only its own direction without erasing mapping
+ok 33 - bound bad quality device capability blocks only its own direction without erasing mapping
+  ---
+  duration_ms: 12.656006
+  type: 'test'
+  ...
+# Subtest: bound negative device capability blocks only its own direction without erasing mapping
+ok 34 - bound negative device capability blocks only its own direction without erasing mapping
+  ---
+  duration_ms: 8.943766
+  type: 'test'
+  ...
+# Subtest: bound string device capability blocks only its own direction without erasing mapping
+ok 35 - bound string device capability blocks only its own direction without erasing mapping
+  ---
+  duration_ms: 8.619298
+  type: 'test'
+  ...
+# Subtest: bound wrong unit device capability blocks only its own direction without erasing mapping
+ok 36 - bound wrong unit device capability blocks only its own direction without erasing mapping
+  ---
+  duration_ms: 17.116145
+  type: 'test'
+  ...
+# Subtest: capability block of empty member does not suppress eligible full member
+ok 37 - capability block of empty member does not suppress eligible full member
+  ---
+  duration_ms: 10.029651
+  type: 'test'
+  ...
+# Subtest: charge capability independently clamps charging while discharge admission remains intact
+ok 38 - charge capability independently clamps charging while discharge admission remains intact
+  ---
+  duration_ms: 14.002513
+  type: 'test'
+  ...
+# (node:14) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: 1%/98% pool dispatch preserves redistribution and explains only the actual per-member floor exclusion
+    # Subtest: 1/98
+    ok 1 - 1/98
+      ---
+      duration_ms: 82.846788
+      type: 'test'
+      ...
+    # Subtest: 98/1
+    ok 2 - 98/1
+      ---
+      duration_ms: 20.819867
+      type: 'test'
+      ...
+    1..2
+ok 39 - 1%/98% pool dispatch preserves redistribution and explains only the actual per-member floor exclusion
+  ---
+  duration_ms: 105.288127
+  type: 'test'
+  ...
+# Subtest: missing member SoC remains unknown in diagnostics and does not block the other member
+ok 40 - missing member SoC remains unknown in diagnostics and does not block the other member
+  ---
+  duration_ms: 14.890009
+  type: 'test'
+  ...
+# Subtest: explicit zero limit and discharge prohibition remain blocking and are not relabelled as a SoC error
+    # Subtest: discharge_limit_zero
+    ok 1 - discharge_limit_zero
+      ---
+      duration_ms: 11.459779
+      type: 'test'
+      ...
+    # Subtest: discharge_not_allowed
+    ok 2 - discharge_not_allowed
+      ---
+      duration_ms: 19.304566
+      type: 'test'
+      ...
+    1..2
+ok 41 - explicit zero limit and discharge prohibition remain blocking and are not relabelled as a SoC error
+  ---
+  duration_ms: 31.461184
+  type: 'test'
+  ...
+# Subtest: idle and charge reports do not pretend that a discharge floor was applied to the current request
+ok 42 - idle and charge reports do not pretend that a discharge floor was applied to the current request
+  ---
+  duration_ms: 11.266313
+  type: 'test'
+  ...
+1..42
+# tests 46
+# suites 0
+# pass 46
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 963.221001

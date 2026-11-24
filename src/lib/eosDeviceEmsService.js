@@ -235,6 +235,10 @@ class EosDeviceEmsService {
         this.retry = 0;
         this.sequence = 0;
         this.lastReportedCode = '';
+        /** @type {Map<string, {ts: number, qualified: boolean}>} */
+        this.powerCapabilitySamples = new Map();
+        /** @type {number|null} */
+        this.powerCapabilityGeneration = null;
         /** @type {DeviceEmsPublicView} */
         this.current = { state: 'pending', code: 'EOS_EMS_CONFIGURATION_PENDING', updatedAt: 0, statuses: [] };
     }
@@ -249,6 +253,7 @@ class EosDeviceEmsService {
         this.retry = 0;
         if (reason === 'configuration') {
             this.sequence++;
+            this.powerCapabilitySamples.clear(); this.powerCapabilityGeneration = null;
             this.current = { state: 'pending', code: 'EOS_EMS_CONFIGURATION_PENDING', updatedAt: Date.now(),
                 statuses: blockedStatuses(this.options.getSnapshot(), 'EOS_EMS_CONFIGURATION_PENDING') };
         }
@@ -277,6 +282,9 @@ class EosDeviceEmsService {
     /** @param {DeviceEmsSnapshot} snapshot @returns {Promise<DeviceEmsInventory[]>} */
     async inventory(snapshot) {
         if (!/^(?:eos-admin|nexowatt-devices)\.\d+$/.test(snapshot.namespace) || !Array.isArray(snapshot.devices) || snapshot.devices.length > MAX_DEVICES) throw fail('EOS_EMS_INVENTORY_SCOPE');
+        if (snapshot.generation !== this.powerCapabilityGeneration) {
+            this.powerCapabilitySamples.clear(); this.powerCapabilityGeneration = snapshot.generation;
+        }
         const deadline = Date.now() + 10000;
         /** @type {DeviceEmsInventory[]} */
         const result = new Array(snapshot.devices.length);
@@ -333,6 +341,35 @@ class EosDeviceEmsService {
                             type: String(common.type), unit: text(common.unit, 30), role: text(common.role, 80),
                             ...(target ? { targetId: `${baseId}.${target}` } : {}) };
                     }
+                    // Two bounded reads only, within the existing inventory
+                    // deadline. A template's optional register is not evidence
+                    // of a supported dynamic hardware power limit.
+                    await Promise.all(['r.allowedChargePower', 'r.allowedDischargePower'].map(async key => {
+                        const metadata = key === 'r.allowedChargePower' ? row.aliasMeta['r.allowedChargePower'] : row.aliasMeta['r.allowedDischargePower'];
+                        if (!metadata || !metadata.read || metadata.type !== 'number' || metadata.unit !== 'W') return;
+                        let proven = false;
+                        try {
+                            const remaining = Math.min(1000, deadline - Date.now());
+                            if (remaining <= 0) throw fail('EOS_EMS_DISCOVERY_TIMEOUT');
+                            const observation = await readDeadline(this.options.owner.getForeignStateAsync(metadata.id), remaining);
+                            const now = Date.now();
+                            proven = record(observation) && observation.ack === true && (observation.q === undefined || observation.q === 0)
+                                && typeof observation.val === 'number' && Number.isFinite(observation.val) && observation.val >= 0 && observation.val <= 1000000000
+                                && typeof observation.ts === 'number' && Number.isFinite(observation.ts) && observation.ts <= now + 1000 && now - observation.ts <= 30000;
+                            if (proven && record(observation) && typeof observation.ts === 'number') {
+                                const previous = this.powerCapabilitySamples.get(metadata.id);
+                                const ts = observation.ts;
+                                // Prove the effective source cadence, including
+                                // template/device overrides, without guessing
+                                // it from one cached sample or creating a timer.
+                                const qualified = !!previous && (ts === previous.ts ? previous.qualified : ts > previous.ts && ts - previous.ts <= 10000);
+                                if (previous || this.powerCapabilitySamples.size < MAX_DEVICES * 2) this.powerCapabilitySamples.set(metadata.id, { ts, qualified });
+                                proven = qualified;
+                            }
+                        } catch { /* Unsupported/missing optional register: no automatic binding. */ }
+                        metadata.powerCapabilityValidated = proven;
+                        if (!proven) row.optionalPowerCapabilityPending = true;
+                    }));
                     if (!Object.keys(row.aliasMeta).length) row.discoveryCode = 'EOS_EMS_ALIASES_PENDING';
                 } catch {
                     row.discoveryCode = 'EOS_EMS_DISCOVERY_UNAVAILABLE';
@@ -378,10 +415,15 @@ class EosDeviceEmsService {
                 this.current = { state: conflict ? 'error' : pending ? 'pending' : 'ready',
                     code: conflict ? 'EOS_EMS_ASSIGNMENT_CONFLICT' : pending ? 'EOS_EMS_ALIASES_PENDING' : '', updatedAt: Date.now(), statuses };
                 this.lastReportedCode = '';
-                if (pending && this.retry < RETRIES.length) this.dirty = true;
+                if ((pending || devices.some(row => row.optionalPowerCapabilityPending === true)) && this.retry < RETRIES.length) this.dirty = true;
             } catch (error) {
                 const code = error instanceof Error && /^[A-Z][A-Z0-9_]{1,99}$/.test(error.message) ? error.message : 'EOS_EMS_ASSIGNMENT_FAILED';
-                const transient = /PENDING|STARTING|NOT_READY|BUSY|CHANGED|UNAVAILABLE/.test(code);
+                // These two post-persistence failures are safe to retry: the
+                // runtime retains its pending-apply marker and consumed intent,
+                // and drains the old engine before creating its replacement.
+                // An unknown/uncertain persistence failure is never replayed.
+                const transient = /PENDING|STARTING|NOT_READY|BUSY|CHANGED|UNAVAILABLE/.test(code)
+                    || code === 'EOS_EMS_APPLY_FAILED' || code === 'EOS_EMS_CONFIG_WAIT_TIMEOUT';
                 if (!this.stopped) {
                     this.current = { state: transient ? 'pending' : 'error', code, updatedAt: Date.now(),
                         statuses: blockedStatuses(this.options.getSnapshot(), code) };
@@ -402,6 +444,7 @@ class EosDeviceEmsService {
     /** No pending database request may start a later configuration write. */
     async stop() {
         this.stopped = true; this.sequence++;
+        this.powerCapabilitySamples.clear();
         clearTimeout(this.timer || undefined); this.timer = null;
         this.current = { ...this.current, state: 'stopped', code: 'EOS_EMS_STOPPED' };
         await this.pending;

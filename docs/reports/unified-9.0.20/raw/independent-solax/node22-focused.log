@@ -1,0 +1,165 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: constant SMA grid samples stay fresh for 30 minutes; cached telegrams, failed polls and counters do not
+ok 1 - constant SMA grid samples stay fresh for 30 minutes; cached telegrams, failed polls and counters do not
+  ---
+  duration_ms: 477.55395
+  type: 'test'
+  ...
+# Subtest: FENECON real battery, SOC, PV, converter and grid samples refresh within bound while commands remain change-only
+ok 2 - FENECON real battery, SOC, PV, converter and grid samples refresh within bound while commands remain change-only
+  ---
+  duration_ms: 5.159038
+  type: 'test'
+  ...
+# Subtest: SolaX applied-target readback refreshes only from actual poll, never write acknowledgement or unrelated packet
+ok 3 - SolaX applied-target readback refreshes only from actual poll, never write acknowledgement or unrelated packet
+  ---
+  duration_ms: 2.773726
+  type: 'test'
+  ...
+# Subtest: MQTT full caches and diagnostic packets cannot refresh an old source or a partially updated computed alias
+ok 4 - MQTT full caches and diagnostic packets cannot refresh an old source or a partially updated computed alias
+  ---
+  duration_ms: 1.738667
+  type: 'test'
+  ...
+# Subtest: FENECON 780 controller block / 882 target changes only controller route and retains all verified read aliases
+ok 5 - FENECON 780 controller block / 882 target changes only controller route and retains all verified read aliases
+  ---
+  duration_ms: 2.338491
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: all 195 profiles retain existing aliases; new semantics are additive, source-bound and read-only
+ok 6 - all 195 profiles retain existing aliases; new semantics are additive, source-bound and read-only
+  ---
+  duration_ms: 108.203626
+  type: 'test'
+  ...
+# Subtest: FENECON keeps battery power separate from ESS converter/DC PV and does not fabricate 706 readback
+ok 7 - FENECON keeps battery power separate from ESS converter/DC PV and does not fabricate 706 readback
+  ---
+  duration_ms: 1.026917
+  type: 'test'
+  ...
+# Subtest: both SolaX profiles share W units and signed limits, with genuine readable target and no invented grid target
+ok 8 - both SolaX profiles share W units and signed limits, with genuine readable target and no invented grid target
+  ---
+  duration_ms: 0.618391
+  type: 'test'
+  ...
+# Subtest: readback is actual polling data and cannot acknowledge queued or failed commands
+ok 9 - readback is actual polling data and cannot acknowledge queued or failed commands
+  ---
+  duration_ms: 2.396618
+  type: 'test'
+  ...
+# Subtest: VARTA sign conversion and DEYE MPPT aggregation remain canonical without new control capability
+ok 10 - VARTA sign conversion and DEYE MPPT aggregation remain canonical without new control capability
+  ---
+  duration_ms: 0.428846
+  type: 'test'
+  ...
+# Subtest: unknown, write-only, missing, remapped and differently scaled sources remain unavailable
+ok 11 - unknown, write-only, missing, remapped and differently scaled sources remain unavailable
+  ---
+  duration_ms: 1.455161
+  type: 'test'
+  ...
+# (node:19) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# {"runtime":"v22.23.4","wireBlocks":[{"fc":16,"addr":160,"regs":[4,600,0,600,160]},{"fc":16,"addr":160,"regs":[4,64936,65535,600,160]},{"fc":16,"addr":160,"regs":[4,0,0,600,160]}],"deniedWritePackets":0}
+# Subtest: actual SolaX AliasV1 dispatch reaches real loopback Modbus TCP as complete Mode4 block with signed W
+ok 12 - actual SolaX AliasV1 dispatch reaches real loopback Modbus TCP as complete Mode4 block with signed W
+  ---
+  duration_ms: 36.393479
+  type: 'test'
+  ...
+# {"runtime":"v22.23.4","measured":{"sOC":98,"bATTERY_POWER":600,"aLLOWED_CHARGE_POWER":5000,"aLLOWED_DISCHARGE_POWER":0},"zeroCapabilityPreserved":true}
+# Subtest: actual read path preserves positive discharge, 98% SoC and valid zero BMS discharge capability
+ok 13 - actual read path preserves positive discharge, 98% SoC and valid zero BMS discharge capability
+  ---
+  duration_ms: 10.084705
+  type: 'test'
+  ...
+# {"runtime":"v22.23.4","rawCommandAck":700,"actualMode4Readback":600,"mode8Interpretation":null,"interpretationRequiresMode4":true}
+# Subtest: SolaX readback uses actual mode4 poll and becomes unknown after mode8 or missing current mode
+ok 14 - SolaX readback uses actual mode4 poll and becomes unknown after mode8 or missing current mode
+  ---
+  duration_ms: 8.330133
+  type: 'test'
+  ...
+# Subtest: unknown, invalid, disconnected and expired mode context never keeps a usable target or fabricates freshness
+ok 15 - unknown, invalid, disconnected and expired mode context never keeps a usable target or fabricates freshness
+  ---
+  duration_ms: 11.553987
+  type: 'test'
+  ...
+# Subtest: only the exact verified mode descriptor enables contextual readback; the existing slow poll includes both fields
+ok 16 - only the exact verified mode descriptor enables contextual readback; the existing slow poll includes both fields
+  ---
+  duration_ms: 1.12232
+  type: 'test'
+  ...
+# Subtest: separate isolated register replies cannot combine old mode4 with mode8 target words
+ok 17 - separate isolated register replies cannot combine old mode4 with mode8 target words
+  ---
+  duration_ms: 5.347552
+  type: 'test'
+  ...
+# Subtest: separate adaptive register replies cannot combine old mode4 with mode8 target words
+ok 18 - separate adaptive register replies cannot combine old mode4 with mode8 target words
+  ---
+  duration_ms: 5.309485
+  type: 'test'
+  ...
+# Subtest: separate maxReadRegs register replies cannot combine old mode4 with mode8 target words
+ok 19 - separate maxReadRegs register replies cannot combine old mode4 with mode8 target words
+  ---
+  duration_ms: 7.795949
+  type: 'test'
+  ...
+# Subtest: even a full cached copy cannot manufacture the actual response provenance
+ok 20 - even a full cached copy cannot manufacture the actual response provenance
+  ---
+  duration_ms: 11.837123
+  type: 'test'
+  ...
+# Subtest: stop drains earlier alias work without reviving an old sample
+ok 21 - stop drains earlier alias work without reviving an old sample
+  ---
+  duration_ms: 10.335032
+  type: 'test'
+  ...
+# Subtest: stop drains submitted readback work without reviving an old sample
+ok 22 - stop drains submitted readback work without reviving an old sample
+  ---
+  duration_ms: 6.006464
+  type: 'test'
+  ...
+# Subtest: real unchanged BMS caps stay fresh beyond 60s, while failed/skipped/unrelated polls do not renew them
+ok 23 - real unchanged BMS caps stay fresh beyond 60s, while failed/skipped/unrelated polls do not renew them
+  ---
+  duration_ms: 71.261651
+  type: 'test'
+  ...
+# Subtest: runtime fast scheduler includes only the two existing numeric cap sources without speeding up the full map
+ok 24 - runtime fast scheduler includes only the two existing numeric cap sources without speeding up the full map
+  ---
+  duration_ms: 11.447417
+  type: 'test'
+  ...
+1..24
+# tests 24
+# suites 0
+# pass 24
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 746.381588

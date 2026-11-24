@@ -1,0 +1,16 @@
+{
+  "name": "command-ack-release-node22",
+  "command": [
+    "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node",
+    "--test",
+    "test/eos-storage-command-ack.test.cjs",
+    "test/eos-storagefarm-controller-dispatch.test.cjs",
+    "test/eos-storagefarm-dispatch-diagnostics.test.cjs"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+  "startedAt": "2026-11-24T20:06:38.491899+00:00",
+  "durationSeconds": 1.227,
+  "exitCode": 1,
+  "log": "/workspace/scratch/741f792566ea/audit-919/isolation/command-ack-release-node22.log",
+  "sha256": "1599557869417a3c179112ca6d8d961512d28c73e06e49175b30b38fdbbbd548"
+}

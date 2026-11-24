@@ -1,0 +1,11 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "test/eos-history-api-stability.test.cjs",
+    "test/eos-history-deadline.test.cjs"
+  ],
+  "start": "2026-11-24T20:48:36.180796+00:00",
+  "exitCode": 0,
+  "logSha256": "9ca726445afa978f3af9d5b696fbb768c1459cfe561c807957c20f12c6a7aa01"
+}

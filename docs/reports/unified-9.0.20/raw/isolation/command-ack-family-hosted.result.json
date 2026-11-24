@@ -1,0 +1,13 @@
+{
+  "name": "command-ack-family-hosted",
+  "command": [
+    "node",
+    "ui/scripts/verify-storage-command-family-readback.js"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+  "startedAt": "2026-11-24T20:02:24.113524+00:00",
+  "durationSeconds": 0.415,
+  "exitCode": 1,
+  "log": "/workspace/scratch/741f792566ea/audit-919/isolation/command-ack-family-hosted.log",
+  "sha256": "b204f28a12284df3b35a768e2165d5d2b6eef674f1a00f3cc8784f385ae93646"
+}

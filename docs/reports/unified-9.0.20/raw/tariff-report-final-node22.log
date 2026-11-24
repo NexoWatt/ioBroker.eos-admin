@@ -1,0 +1,151 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:12) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# Subtest: actual dashboard tooltip draws all 96 supplied quarter-hours, including zero and negative intervals, without hourly averaging
+ok 1 - actual dashboard tooltip draws all 96 supplied quarter-hours, including zero and negative intervals, without hourly averaging
+  ---
+  duration_ms: 11.300008
+  type: 'test'
+  ...
+# Subtest: actual dashboard retains all 92/100 quarter-hours on European daylight-saving days and places local clock labels correctly
+ok 2 - actual dashboard retains all 92/100 quarter-hours on European daylight-saving days and places local clock labels correctly
+  ---
+  duration_ms: 8.241932
+  type: 'test'
+  ...
+# Subtest: price card and modal show confirmed Tibber prices while optimization remains off and an unrelated budget price is null
+ok 3 - price card and modal show confirmed Tibber prices while optimization remains off and an unrelated budget price is null
+  ---
+  duration_ms: 1.995345
+  type: 'test'
+  ...
+# Subtest: expired, absent, false or null source values clear the visible price rather than turning into zero or reusing budget values
+ok 4 - expired, absent, false or null source values clear the visible price rather than turning into zero or reusing budget values
+  ---
+  duration_ms: 2.147504
+  type: 'test'
+  ...
+# Subtest: legacy manual mappings remain authoritative, with explicit cent conversion and no connected-provider override
+ok 5 - legacy manual mappings remain authoritative, with explicit cent conversion and no connected-provider override
+  ---
+  duration_ms: 1.657235
+  type: 'test'
+  ...
+# Subtest: hourly source data stays hourly; missing tomorrow does not remove today or invent quarter-hours
+ok 6 - hourly source data stays hourly; missing tomorrow does not remove today or invent quarter-hours
+  ---
+  duration_ms: 3.380661
+  type: 'test'
+  ...
+# Subtest: real provider publication feeds the dashboard without enabling a control or fabricating absent values
+ok 7 - real provider publication feeds the dashboard without enabling a control or fabricating absent values
+  ---
+  duration_ms: 32.416677
+  type: 'test'
+  ...
+# Subtest: both shipped dashboard entry pages load the typed price helper before app.js
+ok 8 - both shipped dashboard entry pages load the typed price helper before app.js
+  ---
+  duration_ms: 0.874928
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Tibber requests and normalizes quarter-hours even with an older hourly setting; zero/negative remain valid and null is rejected
+ok 9 - Tibber requests and normalizes quarter-hours even with an older hourly setting; zero/negative remain valid and null is rejected
+  ---
+  duration_ms: 16.919799
+  type: 'test'
+  ...
+# Subtest: local calendar splitting retains 92/96/100 quarter-hours and the next day across DST boundaries
+ok 10 - local calendar splitting retains 92/96/100 quarter-hours and the next day across DST boundaries
+  ---
+  duration_ms: 177.362617
+  type: 'test'
+  ...
+# Subtest: actual provider tick selects each cached quarter-hour without network calls and refreshes before customer freshness expires
+ok 11 - actual provider tick selects each cached quarter-hour without network calls and refreshes before customer freshness expires
+  ---
+  duration_ms: 75.700087
+  type: 'test'
+  ...
+# Subtest: provider failures do not extend freshness, do not spin requests and clear expired prices instead of creating zero
+ok 12 - provider failures do not extend freshness, do not spin requests and clear expired prices instead of creating zero
+  ---
+  duration_ms: 171.839048
+  type: 'test'
+  ...
+# Subtest: other providers retain their resolution and normal jittered cadence, while a shorter customer deadline still bounds refresh
+ok 13 - other providers retain their resolution and normal jittered cadence, while a shorter customer deadline still bounds refresh
+  ---
+  duration_ms: 83.353686
+  type: 'test'
+  ...
+# (node:16) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: missing tariff and import values remain unknown through interval and whole-period totals
+ok 14 - missing tariff and import values remain unknown through interval and whole-period totals
+  ---
+  duration_ms: 119.437715
+  type: 'test'
+  ...
+# Subtest: real zero and canonical negative EUR prices retain their value and calculated costs
+ok 15 - real zero and canonical negative EUR prices retain their value and calculated costs
+  ---
+  duration_ms: 11.127307
+  type: 'test'
+  ...
+# Subtest: missing quarters and pre-range samples are not indefinitely carried into report costs
+ok 16 - missing quarters and pre-range samples are not indefinitely carried into report costs
+  ---
+  duration_ms: 7.128585
+  type: 'test'
+  ...
+# Subtest: enabled missing network fee keeps its breakdown unknown while recorded total cost remains usable
+ok 17 - enabled missing network fee keeps its breakdown unknown while recorded total cost remains usable
+  ---
+  duration_ms: 5.971873
+  type: 'test'
+  ...
+# Subtest: static zero fallback is explicit and genuine network fees preserve the existing split
+ok 18 - static zero fallback is explicit and genuine network fees preserve the existing split
+  ---
+  duration_ms: 6.516594
+  type: 'test'
+  ...
+# Subtest: an open current quarter is not reported as a complete quarter of imported energy
+ok 19 - an open current quarter is not reported as a complete quarter of imported energy
+  ---
+  duration_ms: 6.172535
+  type: 'test'
+  ...
+# Subtest: malformed, reversed and over-730-day report ranges fail before history IO or allocation
+ok 20 - malformed, reversed and over-730-day report ranges fail before history IO or allocation
+  ---
+  duration_ms: 17.175996
+  type: 'test'
+  ...
+# Subtest: 730-day inclusive date ranges remain accepted without using a smaller chart limit
+ok 21 - 730-day inclusive date ranges remain accepted without using a smaller chart limit
+  ---
+  duration_ms: 5.914798
+  type: 'test'
+  ...
+# Subtest: report formatting and CSV leave missing values empty while keeping zero and negative costs
+ok 22 - report formatting and CSV leave missing values empty while keeping zero and negative costs
+  ---
+  duration_ms: 4.931667
+  type: 'test'
+  ...
+1..22
+# tests 22
+# suites 0
+# pass 22
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 769.669223

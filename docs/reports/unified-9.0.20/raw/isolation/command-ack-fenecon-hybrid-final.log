@@ -1,0 +1,3 @@
+TypeError: factory is not a function
+    at testFarmContinuousAuto (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/ui/scripts/verify-fenecon-hybrid-controller.js:476:21)
+    at /workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/ui/scripts/verify-fenecon-hybrid-controller.js:967:9

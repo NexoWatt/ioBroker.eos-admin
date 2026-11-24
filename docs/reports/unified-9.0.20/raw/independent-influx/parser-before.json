@@ -1,0 +1,31 @@
+{
+  "node": "v24.22.3",
+  "parser": {
+    "badTime": {
+      "error": "EOS_INFLUX_RESPONSE_INVALID"
+    },
+    "unknownType": {
+      "error": "EOS_INFLUX_RESPONSE_INVALID"
+    },
+    "emptyString": {
+      "value": [
+        {
+          "ts": 1795543200000,
+          "val": ""
+        }
+      ]
+    },
+    "unsafeInt": {
+      "error": "EOS_INFLUX_RESPONSE_INVALID"
+    },
+    "duplicateTime": {
+      "error": "EOS_INFLUX_RESPONSE_INVALID"
+    }
+  },
+  "emptyStringWrite": {
+    "value": "test value=\"\" 1"
+  },
+  "commentMeasurement": {
+    "error": "EOS_INFLUX_VALUE_INVALID"
+  }
+}

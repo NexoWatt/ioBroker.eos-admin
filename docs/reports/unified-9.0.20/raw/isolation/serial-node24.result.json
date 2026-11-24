@@ -1,0 +1,17 @@
+{
+  "name": "serial-node24",
+  "command": [
+    "node",
+    "--test",
+    "modules/devices/test/modbusSerialLifecycle.test.js",
+    "modules/devices/test/modbusReadIntegrity.test.js",
+    "modules/devices/test/modbusAuthorizationReads.test.js",
+    "modules/devices/test/modbusConnectLifecycle.test.js"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+  "startedAt": "2026-11-24T19:14:21.530951+00:00",
+  "durationSeconds": 5.449,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/audit-919/isolation/serial-node24.log",
+  "sha256": "14f709eff5a545aa3ea09cb9ab3bde19e2e8c23a2d22a9fe3677025e4dc59294"
+}

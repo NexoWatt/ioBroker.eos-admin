@@ -296,7 +296,28 @@
             "wordOrder": "le"
           }
         },
-        "transform": "identity"
+        "transform": "identity",
+        "requiredReadContext": {
+          "dpId": "sET_CONTROL_MODE",
+          "type": "number",
+          "rw": "rw",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 416,
+              "length": 1,
+              "dataType": "uint16"
+            },
+            "write": {
+              "fc": 16,
+              "address": 160,
+              "length": 1,
+              "dataType": "uint16"
+            }
+          },
+          "value": 4
+        }
       },
       "r.pvPowerTotal": {
         "dpId": "pV_POWER",

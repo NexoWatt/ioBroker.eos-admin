@@ -1,0 +1,12 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "test/eos-influx-hosted-module-history.test.cjs",
+    "/workspace/scratch/741f792566ea/audit-920/influx-review/runtime-after.test.cjs",
+    "/workspace/scratch/741f792566ea/audit-920/influx-review/transport-extra.test.cjs"
+  ],
+  "start": "2026-11-24T20:45:53.207041+00:00",
+  "exitCode": 0,
+  "logSha256": "6c219deead94d11b2c3c694efa6eda187c0661f273ff45b7b38e1a4152cbf777"
+}

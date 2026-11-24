@@ -1,0 +1,14 @@
+{
+  "name": "influx-transport-node22-final",
+  "command": [
+    "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node",
+    "--test",
+    "test/eos-influx-direct.test.cjs"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+  "startedAt": "2026-11-24T20:47:21.180593+00:00",
+  "durationSeconds": 11.01,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-920/influx-transport-node22-final.log",
+  "sha256": "fa74761a609fe4d05a95e31a720c6637a1e16c2401804d2ee2947f09b0200155"
+}

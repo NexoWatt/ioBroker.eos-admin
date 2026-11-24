@@ -1,0 +1,24 @@
+✔ actual farm controller dispatches600W to eligible member at SoCs1/98 (78.625167ms)
+✔ actual farm controller dispatches600W to eligible member at SoCs98/1 (19.924ms)
+✔ both members below configured minimum receive no discharge command (16.27108ms)
+✔ eligible member's explicit0W limit remains binding (18.309339ms)
+✔ eligible member's explicit250W limit remains binding (23.86901ms)
+✔ eligible full member blocked bystaleMember cannot discharge (12.709126ms)
+✔ empty member'sstaleMember does not block healthy full member (17.324266ms)
+✔ eligible full member blocked byfaultMember cannot discharge (10.940643ms)
+✔ empty member'sfaultMember does not block healthy full member (25.127565ms)
+✔ eligible full member blocked bydeniedMember cannot discharge (13.492235ms)
+✔ empty member'sdeniedMember does not block healthy full member (11.527016ms)
+✔ global admission remains binding:{"staleGrid":true} (11.795581ms)
+✔ global admission remains binding:{"tariffBlock":true} (169.386317ms)
+✔ global admission remains binding:{"enabled":false} (25.325072ms)
+✔ explicit global MultiUse50% reserve blocks49.5% mean without silently overriding operator policy (32.846357ms)
+✔ farm write acceptance does not masquerade as measured response: 63W actual versus673W target times out (18.68167ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 805.171768

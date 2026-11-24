@@ -1,0 +1,112 @@
+TAP version 13
+# (node:70) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: bad string and oversized ID cannot poison a valid queued measurement
+ok 1 - bad string and oversized ID cannot poison a valid queued measurement
+  ---
+  duration_ms: 1.998589
+  type: 'test'
+  ...
+# (node:70) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: eight pending real HTTP history queries retain writer capacity and original sample timestamp
+ok 2 - eight pending real HTTP history queries retain writer capacity and original sample timestamp
+  ---
+  duration_ms: 34.007011
+  type: 'test'
+  ...
+# Subtest: reconfiguration fences captured old writes and late active completions from new queue accounting
+ok 3 - reconfiguration fences captured old writes and late active completions from new queue accounting
+  ---
+  duration_ms: 0.565942
+  type: 'test'
+  ...
+# Subtest: normal drain flushes queued values, rejects late captures and commits, and closes once complete
+ok 4 - normal drain flushes queued values, rejects late captures and commits, and closes once complete
+  ---
+  duration_ms: 0.465701
+  type: 'test'
+  ...
+# Subtest: drain deadline is bounded and counts the unconfirmed active point without a fake success
+ok 5 - drain deadline is bounded and counts the unconfirmed active point without a fake success
+  ---
+  duration_ms: 19.644367
+  type: 'test'
+  ...
+# Subtest: legacy default remains inert; bad quality, ackfalse, null and NaN never enter the historian
+ok 6 - legacy default remains inert; bad quality, ackfalse, null and NaN never enter the historian
+  ---
+  duration_ms: 0.697511
+  type: 'test'
+  ...
+# (node:71) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:71) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: truncated CSV response aborts instead of returning partial chart or fabricated values
+ok 7 - truncated CSV response aborts instead of returning partial chart or fabricated values
+  ---
+  duration_ms: 43.217328
+  type: 'test'
+  ...
+# Subtest: response byte budget aborts a real large stream and frees concurrent capacity
+ok 8 - response byte budget aborts a real large stream and frees concurrent capacity
+  ---
+  duration_ms: 36.534137
+  type: 'test'
+  ...
+# Subtest: explicit same-timestamp write retry sends byte-identical idempotent points and retains genuine zeros
+ok 9 - explicit same-timestamp write retry sends byte-identical idempotent points and retains genuine zeros
+  ---
+  duration_ms: 9.771752
+  type: 'test'
+  ...
+# (node:72) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual TarifVis → hosted adapter → HTTP history preserves negative price and namespace (migration=false)
+ok 10 - actual TarifVis → hosted adapter → HTTP history preserves negative price and namespace (migration=false)
+  ---
+  duration_ms: 39.748696
+  type: 'test'
+  ...
+# Subtest: actual TarifVis → hosted adapter → HTTP history preserves negative price and namespace (migration=true)
+ok 11 - actual TarifVis → hosted adapter → HTTP history preserves negative price and namespace (migration=true)
+  ---
+  duration_ms: 10.491956
+  type: 'test'
+  ...
+# Subtest: actual Para14a publication retains source timestamp; denied and failed state writes never reach Influx
+ok 12 - actual Para14a publication retains source timestamp; denied and failed state writes never reach Influx
+  ---
+  duration_ms: 3.700071
+  type: 'test'
+  ...
+# Subtest: unregistered physical states remain outside direct historian scope
+ok 13 - unregistered physical states remain outside direct historian scope
+  ---
+  duration_ms: 0.823571
+  type: 'test'
+  ...
+# Subtest: actual SmartHome history route → main dispatch → Influx minmax preserves number values
+ok 14 - actual SmartHome history route → main dispatch → Influx minmax preserves number values
+  ---
+  duration_ms: 23.859312
+  type: 'test'
+  ...
+# Subtest: actual SmartHome history route → main dispatch → Influx minmax preserves boolean values
+ok 15 - actual SmartHome history route → main dispatch → Influx minmax preserves boolean values
+  ---
+  duration_ms: 9.07279
+  type: 'test'
+  ...
+1..15
+# tests 15
+# suites 0
+# pass 15
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 556.284533
+(node:63) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)

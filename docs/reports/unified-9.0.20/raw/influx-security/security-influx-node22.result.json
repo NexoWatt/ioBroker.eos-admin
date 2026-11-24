@@ -1,0 +1,15 @@
+{
+  "name": "security-influx-node22",
+  "command": [
+    "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node",
+    "--test",
+    "--test-reporter=tap",
+    "test/eos-influx-security.test.cjs"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+  "startedAt": "2026-11-24T20:39:43.070396+00:00",
+  "durationSeconds": 0.987,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-920/security-influx-node22.log",
+  "sha256": "c147801b6c7e6bbd0b040f29942b3a70fbb87bf44c217a88a4ea68dc92104251"
+}

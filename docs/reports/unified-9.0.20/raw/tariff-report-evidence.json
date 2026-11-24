@@ -1,0 +1,48 @@
+{
+  "sourceAfter": "9.0.20 development",
+  "beforeRun": {
+    "source": "9.0.20 generated runtime before tariff-report correction; frontend source already corrected",
+    "command": "node --test test/eos-tariff-report-integrity.test.cjs",
+    "exitCode": 1,
+    "tests": 9,
+    "pass": 2,
+    "fail": 7
+  },
+  "checks": [
+    {
+      "node": "22.23.4",
+      "command": "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node --test test/eos-tariff*.test.cjs",
+      "exitCode": 0,
+      "tests": 22,
+      "pass": 22,
+      "fail": 0,
+      "skip": 0
+    },
+    {
+      "node": "24.22.3",
+      "command": "node --test test/eos-tariff*.test.cjs",
+      "exitCode": 0,
+      "tests": 22,
+      "pass": 22,
+      "fail": 0,
+      "skip": 0
+    }
+  ],
+  "logs": [
+    {
+      "file": "tariff-report-before.log",
+      "sha256": "c1624e7152fa1143552f9b9026fec3b9235c103e3ba3f9324dd80c3fff049b06",
+      "bytes": 6489
+    },
+    {
+      "file": "tariff-report-final-node22.log",
+      "sha256": "5d5392d9c8aea136a06a764e816514fee050d8ae36b431632fcc5813e2e4ff76",
+      "bytes": 6981
+    },
+    {
+      "file": "tariff-report-final-node24.log",
+      "sha256": "ee91f53056d50eb53a71a85cdc1d7013c3ce417ce07f9f9989b366d232f0f8ff",
+      "bytes": 2928
+    }
+  ]
+}

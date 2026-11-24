@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/history.ts
- * Quell-Hash: sha256:3a7f1065dbbe6c058d802f25de4c143060a609ea5ffb17a08c084704f1955126
+ * Quell-Hash: sha256:e83f9d9791c6feaf52b091e272d61df1324729010daf84668775ef05b89d5e1c
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -768,11 +768,19 @@ function draw(){
     // consumer/producer series (those are shown as dashed overlay lines).
     let stackCtx = null;
     if (stackMode) {
-      const stackKeys = visibleBaseKeys.slice();
+      // Core selection is fixed; no caller-supplied name becomes an object lookup.
+      const coreSeries = new Map([
+        ['pv', series.pv], ['chg', series.chg], ['dchg', series.dchg], ['sell', series.sell],
+        ['buy', series.buy], ['evcs', series.evcs], ['load', series.load],
+      ]);
+      const stackKeys = visibleBaseKeys.filter(k => {
+        const item = coreSeries.get(k);
+        return Array.isArray(item?.values) && item.values.length;
+      });
       const valMap = {};
       stackKeys.forEach(k=>{
         const m = new Map();
-        const vals = (series[k]?.values)||[];
+        const vals = coreSeries.get(k)?.values || [];
         vals.forEach(p=>{ m.set(p[0], mapKW(k, p[1])); });
         valMap[k] = m;
       });
@@ -870,7 +878,7 @@ function draw(){
      */
     function mapKW(k, w){
       // w in Watts -> return kW with desired sign
-      const val = Number(w)||0;
+      const val = historyNumericValue(w);
       // dynamic Energiefluss series
       if (String(k||'').startsWith('c')) return -Math.abs(val)/1000; // Verbraucher
       if (String(k||'').startsWith('p')) return  Math.abs(val)/1000; // Erzeuger
@@ -927,16 +935,24 @@ function draw(){
       if (dash) ctx.setLineDash(dash);
       ctx.lineWidth = Number.isFinite(Number(width)) ? Number(width) : 2;
       ctx.strokeStyle = color;
+      let penDown = false;
       if (k==='soc'){
         let idx=0; let last=null;
         xs.forEach((ts,i)=>{
           while(idx<vals.length && vals[idx][0] <= ts){ last = vals[idx][1]; idx++; }
-          if(last==null) return;
+          if(!Number.isFinite(historyNumericValue(last))) { penDown = false; return; }
           const xx = x(ts); const yy = ySoc(last);
-          if (i===0) ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy);
+          if (!penDown) ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy);
+          penDown = true;
         });
       } else {
-        vals.forEach((p,i)=>{ const xx=x(p[0]); const yy = yPow(mapKW(k, p[1])); if (i===0) ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy); });
+        vals.forEach(p=>{
+          const value = mapKW(k, p[1]);
+          if (!Number.isFinite(value)) { penDown = false; return; }
+          const xx=x(p[0]); const yy=yPow(value);
+          if (!penDown) ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy);
+          penDown = true;
+        });
       }
       ctx.stroke(); ctx.restore();
     }
@@ -960,16 +976,16 @@ function draw(){
 
         for (const k of posKeys) {
           const v = valMap[k].get(ts);
-          const vv = Number.isFinite(v) ? v : 0;
+          const vv = Number.isFinite(v) ? v : NaN;
           stack[k].lower[i] = pos;
-          pos += (vv > 0 ? vv : 0);
+          pos += Number.isFinite(vv) ? Math.max(0, vv) : NaN;
           stack[k].upper[i] = pos;
         }
         for (const k of negKeys) {
           const v = valMap[k].get(ts);
-          const vv = Number.isFinite(v) ? v : 0;
+          const vv = Number.isFinite(v) ? v : NaN;
           stack[k].lower[i] = neg;
-          neg += (vv < 0 ? vv : 0);
+          neg += Number.isFinite(vv) ? Math.min(0, vv) : NaN;
           stack[k].upper[i] = neg;
         }
       }
@@ -998,23 +1014,27 @@ function draw(){
 
         const col = CORE_COLORS[k] || '#9aa4ad';
         ctx.save();
-        ctx.beginPath();
-        for (let i = 0; i < xs.length; i++) {
-          const xx = x(xs[i]);
-          const yy = yPow(seg.upper[i]);
-          if (i === 0) ctx.moveTo(xx, yy); else ctx.lineTo(xx, yy);
-        }
-        for (let i = xs.length - 1; i >= 0; i--) {
-          const xx = x(xs[i]);
-          const yy = yPow(seg.lower[i]);
-          ctx.lineTo(xx, yy);
-        }
-        ctx.closePath();
         ctx.fillStyle = hexToRgba(col, 0.32);
-        ctx.fill();
         ctx.strokeStyle = hexToRgba(col, 0.85);
         ctx.lineWidth = 1;
-        ctx.stroke();
+        // Paint each continuous known run separately; never close a polygon
+        // across an outage or treat a missing lower stack component as zero.
+        let first = 0;
+        while (first < xs.length) {
+          while (first < xs.length && (!Number.isFinite(seg.upper.at(first)) || !Number.isFinite(seg.lower.at(first)))) first++;
+          let last = first;
+          while (last < xs.length && Number.isFinite(seg.upper.at(last)) && Number.isFinite(seg.lower.at(last))) last++;
+          if (last - first >= 2) {
+            ctx.beginPath();
+            for (let i = first; i < last; i++) {
+              if (i === first) ctx.moveTo(x(xs.at(i)), yPow(seg.upper.at(i)));
+              else ctx.lineTo(x(xs.at(i)), yPow(seg.upper.at(i)));
+            }
+            for (let i = last - 1; i >= first; i--) ctx.lineTo(x(xs.at(i)), yPow(seg.lower.at(i)));
+            ctx.closePath(); ctx.fill(); ctx.stroke();
+          }
+          first = last + 1;
+        }
         ctx.restore();
       };
 
@@ -1175,15 +1195,21 @@ function draw(){
    * Zusammenhang: Teil von History/Reports: Charts, Zeiträume, Exporte; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
+  function historyNumericValue(value){
+    if (value == null || typeof value === 'boolean' || (typeof value === 'string' && !value.trim())) return NaN;
+    const number = Number(value);
+    return Number.isFinite(number) ? number : NaN;
+  }
   function aggregateEnergyKWh(vals, buckets){
     // vals: [ [ts, W], ... ], buckets: [{start,end}]
     const out = buckets.map(b=>({mid: (b.start+b.end)/2, kwh:0}));
     if(!vals || vals.length<2) return out;
     let i=0;
     for(let j=0;j<vals.length-1;j++){
-      let t0=+vals[j][0], v0=+vals[j][1];
-      let t1=+vals[j+1][0], v1=+vals[j+1][1];
-      if(!(t1>t0)) continue;
+      const current = vals.at(j), next = vals.at(j + 1);
+      let t0=+current[0], v0=historyNumericValue(current[1]);
+      let t1=+next[0], v1=historyNumericValue(next[1]);
+      if(!(t1>t0) || !Number.isFinite(v0) || !Number.isFinite(v1)) continue;
       // walk across buckets
       let segStart=t0, segV0=v0;
       while(segStart < t1){
@@ -1237,8 +1263,8 @@ function draw(){
   function sumEnergyKWh(vals){
     if(!Array.isArray(vals) || vals.length < 2) return 0;
     const points = vals
-      .map(p => [toTsMs(p[0]), Number(p[1])])
-      .filter(p => Number.isFinite(p[0]) && Number.isFinite(p[1]))
+      .map(p => [toTsMs(p[0]), historyNumericValue(p[1])])
+      .filter(p => Number.isFinite(p[0]))
       .sort((a, b) => a[0] - b[0]);
     if(points.length < 2) return 0;
 
@@ -1246,7 +1272,7 @@ function draw(){
     for(let i=0; i<points.length-1; i++){
       const t0 = points[i][0], v0 = Math.abs(points[i][1]);
       const t1 = points[i+1][0], v1 = Math.abs(points[i+1][1]);
-      if(t1 <= t0) continue;
+      if(t1 <= t0 || !Number.isFinite(v0) || !Number.isFinite(v1)) continue;
 
       const dt_s = (t1 - t0) / 1000;
       const avgW = (v0 + v1) / 2;
@@ -1261,8 +1287,8 @@ function draw(){
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
   function pickEnergyKwh(counterVal, integratedVal){
-    const counter = Number(counterVal);
-    const integrated = Number(integratedVal);
+    const counter = historyNumericValue(counterVal);
+    const integrated = historyNumericValue(integratedVal);
     const counterOk = Number.isFinite(counter) && counter >= 0;
     const integratedOk = Number.isFinite(integrated) && integrated >= 0;
     if (!counterOk) return integratedOk ? integrated : 0;
@@ -1277,14 +1303,14 @@ function draw(){
    * Zusammenhang: Teil von History/Reports: Charts, Zeiträume, Exporte; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
-  function formatMoney2(v){ return Number.isFinite(Number(v)) ? (Number(v).toFixed(2) + ' €') : '--'; }
+  function formatMoney2(v){ const n = historyNumericValue(v); return Number.isFinite(n) ? (n.toFixed(2) + ' €') : '--'; }
   /**
    * Code-Teil: formatPrice2
    * Zweck: Formatiert Daten für Anzeige oder Logs.
    * Zusammenhang: Teil von History/Reports: Charts, Zeiträume, Exporte; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
-  function formatPrice2(v){ return Number.isFinite(Number(v)) ? (Number(v).toFixed(2) + ' €/kWh') : '--'; }
+  function formatPrice2(v){ const n = historyNumericValue(v); return Number.isFinite(n) ? (n.toFixed(2) + ' €/kWh') : '--'; }
   /**
    * Code-Teil: formatKwh2
    * Zweck: Formatiert Daten für Anzeige oder Logs.
@@ -1300,8 +1326,8 @@ function draw(){
    */
   function normalizeNumericSeries(vals){
     const arr = (Array.isArray(vals) ? vals : [])
-      .map(p => [toTsMs(p && p[0]), Number(p && p[1])])
-      .filter(p => Number.isFinite(p[0]) && Number.isFinite(p[1]))
+      .map(p => [toTsMs(p && p[0]), historyNumericValue(p && p[1])])
+      .filter(p => Number.isFinite(p[0]))
       .sort((a, b) => a[0] - b[0]);
     const out = [];
     for (const p of arr){
@@ -1370,22 +1396,22 @@ function draw(){
       let base = valueAtHold(baseVals, mid);
       let netFee = valueAtHold(netFeeVals, mid);
       let total = valueAtHold(totalVals, mid);
-      if (!Number.isFinite(total)) {
-        const safeBase = Number.isFinite(base) ? base : 0;
+      if (!Number.isFinite(total) && Number.isFinite(base)) {
+        const safeBase = base;
         const safeNet = Number.isFinite(netFee) ? netFee : 0;
         total = safeBase + safeNet;
       }
-      if (!Number.isFinite(base)) base = Math.max(0, total - (Number.isFinite(netFee) ? netFee : 0));
+      if (!Number.isFinite(base)) base = total - (Number.isFinite(netFee) ? netFee : 0);
       if (!Number.isFinite(netFee)) netFee = Math.max(0, total - (Number.isFinite(base) ? base : total));
       const importKwh = Math.max(0, Number(importAgg[idx] && importAgg[idx].kwh) || 0);
-      const costEur = importKwh * Math.max(0, Number(total) || 0);
+      const costEur = importKwh * total;
       return {
         start: b.start,
         end: b.end,
         ts: mid,
-        base: Math.max(0, Number(base) || 0),
+        base,
         netFee: Math.max(0, Number(netFee) || 0),
-        total: Math.max(0, Number(total) || 0),
+        total,
         importKwh,
         costEur,
       };
@@ -1414,11 +1440,12 @@ function draw(){
         const ivDur = iv.end - iv.start;
         if (!(overlap > 0) || !(ivDur > 0)) return;
         const factor = overlap / ivDur;
+        importKwh += Number(iv.importKwh || 0) * factor;
+        if (!Number.isFinite(historyNumericValue(iv.total))) return;
         durAcc += overlap;
         baseAcc += Number(iv.base || 0) * overlap;
         netAcc += Number(iv.netFee || 0) * overlap;
         totalAcc += Number(iv.total || 0) * overlap;
-        importKwh += Number(iv.importKwh || 0) * factor;
         costEur += Number(iv.costEur || 0) * factor;
       });
       const ts = (b.start + b.end) / 2;
@@ -1426,11 +1453,11 @@ function draw(){
         start: b.start,
         end: b.end,
         ts,
-        base: durAcc > 0 ? (baseAcc / durAcc) : 0,
-        netFee: durAcc > 0 ? (netAcc / durAcc) : 0,
-        total: durAcc > 0 ? (totalAcc / durAcc) : 0,
+        base: durAcc > 0 ? (baseAcc / durAcc) : NaN,
+        netFee: durAcc > 0 ? (netAcc / durAcc) : NaN,
+        total: durAcc > 0 ? (totalAcc / durAcc) : NaN,
         importKwh: Math.max(0, importKwh),
-        costEur: Math.max(0, costEur),
+        costEur: durAcc > 0 ? costEur : NaN,
       };
     });
   }
@@ -1452,20 +1479,22 @@ function draw(){
         netFeeCost: null,
       };
     }
-    const prices = src.map(iv => Number(iv.total)).filter(Number.isFinite);
+    const prices = src.map(iv => historyNumericValue(iv.total)).filter(Number.isFinite);
     const importKwh = src.reduce((sum, iv) => sum + (Number(iv.importKwh) || 0), 0);
+    const pricedImportKwh = src.reduce((sum, iv) => sum + (Number.isFinite(historyNumericValue(iv.total))
+      ? (Number(iv.importKwh) || 0) : 0), 0);
     const totalCost = src.reduce((sum, iv) => sum + (Number(iv.costEur) || 0), 0);
     const netFeeCost = src.reduce((sum, iv) => sum + ((Number(iv.importKwh) || 0) * (Number(iv.netFee) || 0)), 0);
     let avgPrice = null;
-    if (importKwh > 0.0001) avgPrice = totalCost / importKwh;
+    if (prices.length && pricedImportKwh > 0.0001) avgPrice = totalCost / pricedImportKwh;
     else if (prices.length) avgPrice = prices.reduce((a, b) => a + b, 0) / prices.length;
     return {
       minPrice: prices.length ? Math.min(...prices) : null,
       maxPrice: prices.length ? Math.max(...prices) : null,
       avgPrice,
       importKwh,
-      totalCost,
-      netFeeCost,
+      totalCost: prices.length ? totalCost : null,
+      netFeeCost: prices.length ? netFeeCost : null,
     };
   }
   /**
@@ -1512,6 +1541,7 @@ function draw(){
     if (src.netFeeEnabled) parts.push('variables Netzentgelt aktiv');
     if (Array.isArray(intervals) && intervals.length) parts.push('Kosten werden aus historischem Preis × Bezug berechnet');
     else parts.push('Preis-Historie füllt sich ab diesem Update und dient später zum Gegenprüfen der Abrechnung');
+    if (Array.isArray(intervals) && intervals.some(iv => !Number.isFinite(historyNumericValue(iv.total)))) parts.push('Preislücken: Kosten nur für Abschnitte mit bekanntem Preis');
     return parts.join(' · ');
   }
   /**
@@ -1621,17 +1651,17 @@ function draw(){
     const B = 42;
 
     const leftVals = [];
-    if (isPriceSeriesVisible('total')) leftVals.push(...points.map(p => Number(p.total)).filter(Number.isFinite));
-    if (isPriceSeriesVisible('base')) leftVals.push(...points.map(p => Number(p.base)).filter(Number.isFinite));
-    if (isPriceSeriesVisible('netfee')) leftVals.push(...points.map(p => Number(p.netFee)).filter(Number.isFinite));
+    if (isPriceSeriesVisible('total')) leftVals.push(...points.map(p => historyNumericValue(p.total)).filter(Number.isFinite));
+    if (isPriceSeriesVisible('base')) leftVals.push(...points.map(p => historyNumericValue(p.base)).filter(Number.isFinite));
+    if (isPriceSeriesVisible('netfee')) leftVals.push(...points.map(p => historyNumericValue(p.netFee)).filter(Number.isFinite));
     let leftMin = leftVals.length ? Math.min(...leftVals) : 0;
     let leftMax = leftVals.length ? Math.max(...leftVals) : 1;
     if (!(leftMax > leftMin)) {
-      leftMin = Math.max(0, leftMin - 0.05);
+      leftMin -= 0.05;
       leftMax = leftMin + 0.10;
     } else {
       const pad = Math.max(0.01, (leftMax - leftMin) * 0.12);
-      leftMin = Math.max(0, leftMin - pad);
+      leftMin -= pad;
       leftMax += pad;
     }
 
@@ -1640,6 +1670,7 @@ function draw(){
     if (isPriceSeriesVisible('cost')) rightVals.push(...points.map(p => Number(p.costEur)).filter(Number.isFinite));
     let rightMax = rightVals.length ? Math.max(...rightVals) : 1;
     rightMax = Math.max(0.05, rightMax * 1.15);
+    const rightMin = rightVals.length ? Math.min(0, ...rightVals) * 1.15 : 0;
 
     /**
      * Code-Teil: Arrow-Funktion `x`
@@ -1670,7 +1701,7 @@ function draw(){
      * Zusammenhang: Teil von History/Reports: Charts, Zeiträume, Exporte; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
      * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
      */
-    const yRight = (val) => T + (H - B - T) * (1 - (Math.max(0, Number(val) || 0) / rightMax));
+    const yRight = (val) => T + (H - B - T) * (1 - ((Number(val) - rightMin) / (rightMax - rightMin)));
 
     // grid
     priceCtx.save();
@@ -1700,7 +1731,7 @@ function draw(){
     for (let i = 0; i < 5; i++) {
       const frac = 1 - (i / 4);
       const yy = T + i * (H - B - T) / 4 + 4;
-      const val = rightMax * frac;
+      const val = rightMin + (rightMax - rightMin) * frac;
       priceCtx.fillText(val.toFixed(2), W - R + 8, yy);
     }
     priceCtx.textAlign = 'right';
@@ -1759,8 +1790,8 @@ function draw(){
       priceCtx.beginPath();
       let started = false;
       points.forEach((p) => {
-        const val = Number(accessor(p));
-        if (!Number.isFinite(val)) return;
+        const val = historyNumericValue(accessor(p));
+        if (!Number.isFinite(val)) { started = false; return; }
         const xx = x(p.ts);
         const yy = (key === 'cost') ? yRight(val) : yLeft(val);
         if (!started) {
@@ -1790,7 +1821,7 @@ function draw(){
       priceCtx.restore();
     }
 
-    pricingChartState = { points, start, end, L, R, T, B, x, yLeft, yRight, leftMin, leftMax, rightMax };
+    pricingChartState = { points, start, end, L, R, T, B, x, yLeft, yRight, leftMin, leftMax, rightMin, rightMax };
   }
 
   (function initPricingTooltip(){
@@ -2134,8 +2165,13 @@ async function load(force = false){
      * Zusammenhang: Teil von History/Reports: Charts, Zeiträume, Exporte; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
      * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
      */
+    const exactValues = new Map([
+      ['productionKwh', exact.productionKwh], ['storageChargeKwh', exact.storageChargeKwh],
+      ['storageDischargeKwh', exact.storageDischargeKwh], ['gridExportKwh', exact.gridExportKwh],
+      ['gridImportKwh', exact.gridImportKwh], ['evKwh', exact.evKwh], ['consumptionKwh', exact.consumptionKwh],
+    ]);
     const exactNum = (key) => {
-      const n = Number(exact && exact[key]);
+      const n = historyNumericValue(exactValues.get(key));
       return Number.isFinite(n) && n >= 0 ? n : null;
     };
     const cards = document.getElementById('cards');
@@ -2147,6 +2183,9 @@ async function load(force = false){
      */
     function card(title, val){ const el=document.createElement('div'); el.className='card'; el.innerHTML = `<small>${nwHistoryEscapeHtml(title)}</small><b>${nwHistoryEscapeHtml(val)}</b>`; cards.appendChild(el); }
     cards.innerHTML='';
+    const hasGaps = Object.values(s || {}).some(item => Array.isArray(item?.values)
+      && item.values.some(row => row[0] < res.end && !Number.isFinite(historyNumericValue(row[1]))));
+    if (hasGaps) card('Datenbasis', 'Messlücken – berechnete Summen nur aus bekannten Abschnitten');
     const pvKwh = exactNum('productionKwh') ?? pickEnergyKwh(e.productionKwh, sumEnergyKWh(s.pv && s.pv.values));
     const chargeKwh = exactNum('storageChargeKwh') ?? pickEnergyKwh(e.storageChargeKwh, sumEnergyKWh(s.chg && s.chg.values));
     const dischargeKwh = exactNum('storageDischargeKwh') ?? pickEnergyKwh(e.storageDischargeKwh, sumEnergyKWh(s.dchg && s.dchg.values));
@@ -2606,25 +2645,26 @@ async function load(force = false){
        * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
        */
       function kv2(label, val, unit='kW'){ 
-        const v = Number(val||0).toFixed(2);
+        const value = historyNumericValue(val);
+        const v = Number.isFinite(value) ? value.toFixed(2) : '–';
         return `<div style="display:flex;justify-content:space-between;gap:8px"><span>${nwHistoryEscapeHtml(label)}</span><b>${v} ${nwHistoryEscapeHtml(unit)}</b></div>`; 
       }
-      const pv = collect.pv?.[1] ?? 0;
-      const chg = collect.chg?.[1] ?? 0;
-      const dchg = collect.dchg?.[1] ?? 0;
-      const buy = collect.buy?.[1] ?? 0;
-      const sell = collect.sell?.[1] ?? 0;
-      const load = collect.load?.[1] ?? 0;
-      const evcs = collect.evcs?.[1] ?? 0;
+      const pv = historyNumericValue(collect.pv?.[1]);
+      const chg = historyNumericValue(collect.chg?.[1]);
+      const dchg = historyNumericValue(collect.dchg?.[1]);
+      const buy = historyNumericValue(collect.buy?.[1]);
+      const sell = historyNumericValue(collect.sell?.[1]);
+      const load = historyNumericValue(collect.load?.[1]);
+      const evcs = historyNumericValue(collect.evcs?.[1]);
       const soc = collect.soc?.[1] ?? null;
 
       const rows = [];
       if (isSeriesVisible('pv')) rows.push(kv2('Erzeugung', pv/1000));
-      if (isSeriesVisible('chg')) rows.push(kv2('Beladung', -(Math.abs(chg)||0)/1000));
-      if (isSeriesVisible('dchg')) rows.push(kv2('Entladung', (Math.abs(dchg)||0)/1000));
+      if (isSeriesVisible('chg')) rows.push(kv2('Beladung', -Math.abs(chg)/1000));
+      if (isSeriesVisible('dchg')) rows.push(kv2('Entladung', Math.abs(dchg)/1000));
       if (isSeriesVisible('buy')) rows.push(kv2('Bezug', buy/1000));
       if (isSeriesVisible('sell')) rows.push(kv2('Einspeisung', sell/1000));
-      if (isSeriesVisible('evcs')) rows.push(kv2('E‑Mobilität', (Math.abs(evcs)||0)/1000));
+      if (isSeriesVisible('evcs')) rows.push(kv2('E‑Mobilität', Math.abs(evcs)/1000));
       if (isSeriesVisible('load')) rows.push(kv2('Verbrauch', load/1000));
       let html = `<div style="margin-bottom:6px;opacity:.9"><b>Leistung</b> · ${hh}</div>` + rows.join('');
 

@@ -1,0 +1,72 @@
+✖ slow Devices metadata progress commits at 60 seconds without the old 45-second rollback (54.156766ms)
+✖ confirmed progress has a fixed 165-second migration ceiling even if a faulty host never completes (17.497056ms)
+✔ no progress cannot extend the ordinary 45-second limit (13.311849ms)
+✔ READY transport status cannot extend the ordinary 45-second limit (14.15895ms)
+✔ unconfirmed metadata counter cannot extend the ordinary 45-second limit (21.37822ms)
+✔ constant historical count cannot extend the ordinary 45-second limit (13.359045ms)
+✔ invalid counter cannot extend the ordinary 45-second limit (22.292356ms)
+✔ progress does not conceal a module failure or defer confirmed rollback (4.18395ms)
+✖ intentional stop during extended startup does not resurrect old writers (6.944437ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 6
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 353.835427
+
+✖ failing tests:
+
+test at test/eos-module-migration-start-budget.test.cjs:71:1
+✖ slow Devices metadata progress commits at 60 seconds without the old 45-second rollback (54.156766ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'ROLLED_BACK'
+  - 'COMMITTED'
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-module-migration-start-budget.test.cjs:74:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'ROLLED_BACK',
+    expected: 'COMMITTED',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-module-migration-start-budget.test.cjs:80:1
+✖ confirmed progress has a fixed 165-second migration ceiling even if a faulty host never completes (17.497056ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  45000 !== 165000
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-module-migration-start-budget.test.cjs:83:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 45000,
+    expected: 165000,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-module-migration-start-budget.test.cjs:114:1
+✖ intentional stop during extended startup does not resurrect old writers (6.944437ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  45000 !== 50000
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-module-migration-start-budget.test.cjs:120:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 45000,
+    expected: 50000,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

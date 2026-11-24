@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/modules/energy-wallet.ts
- * Quell-Hash: sha256:0b1e11b104246e2b2e8584deb7d80d7ca353f61d2d770f1136eef413d04ffb69
+ * Quell-Hash: sha256:e6c23aeb59899289dab3bc6b1b3c2b0899985fdad9b81230af5b0b86c092d3f1
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -622,7 +622,11 @@ class EnergyWalletModule extends BaseModule {
     const canonicalEurPrice = ['ems.budget.tariff.currentPriceEurKwh', 'tarif.preisAktuellEurProKwh', 'historie.tariff.providerCurrentEurPerKwh'].includes(tariffCandidate.key);
     const tariffNow = tariffCandidate.found ? normalizePriceEurPerKwh(tariffCandidate.value, null, canonicalEurPrice) : null;
     const tariffFinite = tariffCandidate.found && typeof tariffNow === 'number' && Number.isFinite(tariffNow);
-    const tariffFresh = tariffFinite && tariffCandidate.ageSec <= maxAgeSec;
+    // A recent mirror/history write is not a new valid provider observation.
+    // Preserve legacy mappings without this flag, but honour explicit revocation
+    // of the current tariff across every fallback candidate.
+    const tariffSourceFresh = this._readStateBool(['tarif.currentPriceFresh'], true);
+    const tariffFresh = tariffFinite && tariffSourceFresh && tariffCandidate.ageSec <= maxAgeSec;
     const dynamicTariffAvailable = dynamicTariffActive && tariffFinite && tariffFresh;
 
     const fixedInput = this._readStateNumber([
@@ -656,7 +660,9 @@ class EnergyWalletModule extends BaseModule {
     );
 
     let dynamicTariffWarning = '';
-    if (dynamicTariffActive && !tariffCandidate.found) {
+    if (dynamicTariffActive && !tariffSourceFresh) {
+      dynamicTariffWarning = 'Die Tarifquelle meldet keinen gültigen aktuellen Preis. Das Wertkonto nutzt den festen Netzstrompreis.';
+    } else if (dynamicTariffActive && !tariffCandidate.found) {
       dynamicTariffWarning = 'Dynamischer Zeittarif ist aktiv, aber es wurde kein aktueller Tarifpreis gefunden. Das Wertkonto nutzt den festen Netzstrompreis.';
     } else if (dynamicTariffActive && tariffCandidate.found && !tariffFinite) {
       dynamicTariffWarning = `Dynamischer Tarifpreis aus ${tariffCandidate.key} ist nicht plausibel. Das Wertkonto nutzt den festen Netzstrompreis.`;

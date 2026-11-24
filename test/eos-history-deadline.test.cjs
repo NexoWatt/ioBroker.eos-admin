@@ -13,7 +13,7 @@ const parsed = ts.createSourceFile(filename, source, ts.ScriptTarget.Latest, tru
 const definition = parsed.statements.find(node => ts.isClassDeclaration(node) && node.name?.text === 'NexoWattVis');
 assert.ok(definition, 'canonical runtime class exists');
 const names = new Set(['_nwGetHistoryAvgSeries', '_nwGetHistoryAvgSeriesAny', '_nwCancelHistoryRequests',
-    '_nwNormalizeHistoryResult', '_nwNormTsMs', '_nwIntegrateKwh', 'updateEnergyTotalsFromInflux']);
+    '_nwNormalizeHistoryResult', '_nwNormTsMs', '_nwIntegrateKwh', 'updateEnergyTotalsFromInflux', '_nwDispatchHistory']);
 const methods = definition.members.filter(node => names.has(node.name?.getText(parsed))).map(node => node.getText(parsed));
 // The production generator copies this canonical file as JavaScript. Execute
 // the exact method text, without type erasure that could conceal invalid JS.

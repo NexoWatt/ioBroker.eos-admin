@@ -1,0 +1,15 @@
+{
+  "name": "security-influx-node24",
+  "command": [
+    "node",
+    "--test",
+    "--test-reporter=tap",
+    "test/eos-influx-security.test.cjs"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+  "startedAt": "2026-11-24T20:39:43.069936+00:00",
+  "durationSeconds": 1.081,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-920/security-influx-node24.log",
+  "sha256": "b88784d9f5738ad94e1c65bef947d21259fe9faa6ad02be21bdb8ef814cb4bb1"
+}

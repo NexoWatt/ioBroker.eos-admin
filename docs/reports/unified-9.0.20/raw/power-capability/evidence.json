@@ -1,0 +1,69 @@
+{
+  "scope": "bounded proven numeric power capability mapping, real farm controller/dispatcher and native FEMS target clamp",
+  "node22.23.4": "48/48",
+  "node24.22.3": "48/48 +86 existing regressions",
+  "typecheck": "tsconfig.eos-device-ems.json passed",
+  "lint": "eslint.unified.config.mjs changed planner/service passed",
+  "files": [
+    {
+      "path": "docs/reports/unified-9.0.20/raw/power-capability/power-capability-node22.log",
+      "sha256": "e66cf4f6f2dd65f35c071a5a1b189ed2aedad881b29fd2b2c067767823097577"
+    },
+    {
+      "path": "docs/reports/unified-9.0.20/raw/power-capability/power-capability-node24.log",
+      "sha256": "496ee6e5a1fda0a894c229f08e3a7c1b6512613bbad8d82b33dc07cd323cdf00"
+    },
+    {
+      "path": "docs/reports/unified-9.0.20/raw/power-capability/power-capability-existing-regressions-node24.log",
+      "sha256": "109c01024f7505067e7a23a0583110466f3ea064c606b5cb18c87ffca7201208"
+    },
+    {
+      "path": "docs/reports/unified-9.0.20/raw/power-capability/power-capability-typecheck.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/reports/unified-9.0.20/raw/power-capability/power-capability-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "src/lib/eosDeviceEmsService.js",
+      "sha256": "8a2a7d1a9cbc44691b362956c770bd7fea068c488e9ff2d1a523be403915c141"
+    },
+    {
+      "path": "src/lib/eosDeviceEmsService.d.ts",
+      "sha256": "561e6d57dafb53f03a9fad47c4ad7b7feffbd6437bf5948e790721d5a450165f"
+    },
+    {
+      "path": "src/lib/eosDeviceEmsPlan.js",
+      "sha256": "1f02c72bdd22a72a56d70727ff51bbd807120ec0250f0b0bae924f5042742220"
+    },
+    {
+      "path": "ui/src-ts/runtime-executables/main.ts",
+      "sha256": "5d9867b31d26f10b2cbfe36266fee8c789b9da354f406e064f944513d1b7ac09"
+    },
+    {
+      "path": "ui/src-ts/runtime-executables/www/ems-apps.ts",
+      "sha256": "16957513881167c7ea26b109d6c49bf5ee9008d776ffd4f2d6f2a3e5a2c1f160"
+    },
+    {
+      "path": "test/eos-device-ems-power-capability.test.cjs",
+      "sha256": "752faad37825a5c102fa6935a9a7704fa6223a25eeda965afa1c6b15dc2d6311"
+    },
+    {
+      "path": "test/eos-storagefarm-controller-dispatch.test.cjs",
+      "sha256": "a67987fa39dd35bfec31d173bcce37ecda9cba8b45c375f8841cde512a556c6e"
+    },
+    {
+      "path": "ui/main.js",
+      "sha256": "c2a8153eb9e0218eec59adc8c691735a089de15ff27469ee873260e780be14a5"
+    },
+    {
+      "path": "ui/ems/modules/storage-control.js",
+      "sha256": "cbb48e92a06b17e05f45a1d8462d7763573fa09357655ca46bcbb76aea57a5ff"
+    },
+    {
+      "path": "ui/ems/modules/nvp-coordinator.js",
+      "sha256": "04477b295b0933e053240e10cf17fdd6706d598abfcc9aecc33fe30ada9946e7"
+    }
+  ]
+}

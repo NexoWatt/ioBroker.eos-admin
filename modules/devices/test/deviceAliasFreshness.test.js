@@ -4,6 +4,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const Module = require('node:module');
 const templates = require('../lib/templates.json').templates;
+const { recordReadResponse } = require('../lib/modbusReadEvidence');
 const { buildSemanticAliasDefinitions } = require('../lib/deviceAliasSemantics');
 
 const originalLoad = Module._load;
@@ -94,7 +95,9 @@ test('SolaX applied-target readback refreshes only from actual poll, never write
   let now = 1000000;
   t.mock.method(Date, 'now', () => now);
   const { runtime, writes } = createRuntime('ess.solax.SolaXHybridX1X3Ess');
-  await runtime._updateAliases({ sET_ACTIVE_POWER: 900 }, { connected: true });
+  const actual = { sET_CONTROL_MODE: 4, sET_ACTIVE_POWER: 900 };
+  recordReadResponse(actual, Object.keys(actual));
+  await runtime._updateAliases(actual, { connected: true });
   const path = '.aliases.v1.r.powerSetpointReadbackW';
   now += 5000;
   await runtime._ackWrittenValue(runtime.dpById.get('sET_ACTIVE_POWER'), 1200);
@@ -102,7 +105,9 @@ test('SolaX applied-target readback refreshes only from actual poll, never write
   assert.equal(lastWrite(writes, path).val, 900);
   await runtime._updateAliases({ bMS1_SOC: 55 }, { connected: true });
   assert.equal(lastWrite(writes, path).ts, 1000000);
-  await runtime._updateAliases({ sET_ACTIVE_POWER: 900 }, { connected: true });
+  const nextActual = { sET_CONTROL_MODE: 4, sET_ACTIVE_POWER: 900 };
+  recordReadResponse(nextActual, Object.keys(nextActual));
+  await runtime._updateAliases(nextActual, { connected: true });
   assert.equal(lastWrite(writes, path).ts, now);
 });
 

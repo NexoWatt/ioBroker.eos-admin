@@ -1,0 +1,14 @@
+{
+  "name": "serial-gates-node24",
+  "command": [
+    "node",
+    "--test",
+    "modules/devices/test/serialOperationGate.test.js"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+  "startedAt": "2026-11-24T19:17:01.284266+00:00",
+  "durationSeconds": 0.247,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/audit-919/isolation/serial-gates-node24.log",
+  "sha256": "55ad5d59f7a16495ceab25d569533488e957fee25716faf094589f308e5fd921"
+}

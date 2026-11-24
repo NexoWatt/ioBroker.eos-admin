@@ -1,0 +1,6 @@
+[storage-command-family-readback] ERROR: AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+0 !== 3000
+
+    at verifyStorageFarm (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/ui/scripts/verify-storage-command-family-readback.js:298:12)
+    at async /workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/ui/scripts/verify-storage-command-family-readback.js:335:3

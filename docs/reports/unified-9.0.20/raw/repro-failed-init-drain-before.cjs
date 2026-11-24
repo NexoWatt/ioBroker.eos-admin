@@ -1,0 +1,15 @@
+'use strict';
+const assert=require('node:assert/strict');
+const root='/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin';
+const {createHarness}=require(root+'/ui/test/unified/http-harness.cjs');
+const {ModuleManager}=require(root+'/ui/ems/module-manager');
+(async()=>{const h=await createHarness();const a=h.adapter;const original=ModuleManager.prototype.init;let release;let settled=false;let stopped=false;let calls=0;
+try{a.config=structuredClone(require(root+'/ui/io-package.json').native);a.config.port=8188;a._hostedStartup={state:'ready'};a.startHistorieExportTimer=()=>{};h.owner.subscribeForeignStates=()=>{};h.owner.unsubscribeForeignStates=()=>{};
+await a.migrateNativeConfig();await a.loadInstallerConfigFromState();await a.syncSettingsConfigToStates();
+const drain=new Promise(r=>{release=()=>{settled=true;r();};});
+ModuleManager.prototype.init=async function(){await original.call(this);calls++;if(calls===1){this.modules.push({key:'syntheticPendingStop',instance:{stop(){stopped=true;return drain;}}});throw new Error('TEST_PARTIAL_INIT_FAILURE');}};
+await assert.rejects(a.initEmsEngine(),/TEST_PARTIAL_INIT_FAILURE/);assert.equal(stopped,true);assert.equal(settled,false);
+await a.initEmsEngine();
+console.log(JSON.stringify({initCount:calls,oldStopSettled:settled,newEngineRunning:!!a.emsEngine,oldEngineReferenceLost:a._nwEmsInitError===''}));
+assert.equal(calls,1,'replacement engine must wait for failed startup module cleanup');
+}finally{release?.();ModuleManager.prototype.init=original;await a.emsEngine?.stopForReconfigure?.();await new Promise(r=>a.onUnload(r));await h.close();}})().catch(e=>{console.error(e);process.exitCode=1;});

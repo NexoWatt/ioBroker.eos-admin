@@ -1,0 +1,62 @@
+TAP version 13
+# (node:43) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: legacy remains default with retained direct connection; registration is an explicit writer allowlist
+ok 1 - legacy remains default with retained direct connection; registration is an explicit writer allowlist
+  ---
+  duration_ms: 1.549753
+  type: 'test'
+  ...
+# (node:43) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: invalid point cannot poison valid batch; zero, negative and original timestamps survive
+ok 2 - invalid point cannot poison valid batch; zero, negative and original timestamps survive
+  ---
+  duration_ms: 5.38658
+  type: 'test'
+  ...
+# Subtest: capture/commit fence rejects pre-reconfigure writes and old completions cannot certify the new database
+ok 3 - capture/commit fence rejects pre-reconfigure writes and old completions cannot certify the new database
+  ---
+  duration_ms: 21.224837
+  type: 'test'
+  ...
+# Subtest: queue includes in-flight points in its 2000-point bound and exposes discarded samples
+ok 4 - queue includes in-flight points in its 2000-point bound and exposes discarded samples
+  ---
+  duration_ms: 17.787453
+  type: 'test'
+  ...
+# Subtest: six active reads reserve transport capacity for writes and bounded queued reads retain their budget
+ok 5 - six active reads reserve transport capacity for writes and bounded queued reads retain their budget
+  ---
+  duration_ms: 31.488819
+  type: 'test'
+  ...
+# Subtest: read/write failures recover independently and changesOnly can retry a later real sample
+ok 6 - read/write failures recover independently and changesOnly can retry a later real sample
+  ---
+  duration_ms: 11.201817
+  type: 'test'
+  ...
+# Subtest: normal close drains valid queued writes, fences new captures and reports timeout loss without hanging
+ok 7 - normal close drains valid queued writes, fences new captures and reports timeout loss without hanging
+  ---
+  duration_ms: 25.728228
+  type: 'test'
+  ...
+# Subtest: quarantined credential disables only history and legacy duplicate recording is a warning, not a mutation
+ok 8 - quarantined credential disables only history and legacy duplicate recording is a warning, not a mutation
+  ---
+  duration_ms: 0.67698
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 364.420983

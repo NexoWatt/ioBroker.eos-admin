@@ -10,7 +10,7 @@ test('disconnected RTU request reconnects without enqueueing behind itself', asy
     const { key, bus } = acquireBus({ log }, { path: '/dev/eos-test-rtu-a' });
     bus.client = { connectRTUBuffered(_path, _options, callback) { callback(); }, setID() {}, setTimeout() {}, async readHoldingRegisters() { return { data: [17] }; }, close(callback) { callback(); } };
     try { assert.deepEqual(await bounded(bus.readHoldingRegisters(1, 100, 0, 1)), { data: [17] }); }
-    finally { releaseBus(key); }
+    finally { await releaseBus(key); }
 });
 test('shared RTU bus retains each queued device capability and rejects revoked commands at dispatch', async () => {
     const { key, bus } = acquireBus({ log }, { path: '/dev/eos-test-rtu-b' });
@@ -31,7 +31,7 @@ test('shared RTU bus retains each queued device capability and rejects revoked c
         await assert.rejects(second, /NOT_AUTHORIZED/);
         await third;
         assert.deepEqual(writes, [{ id: 1, value: 1 }, { id: 3, value: 3 }]);
-    } finally { releaseBus(key); releaseBus(same.key); }
+    } finally { await releaseBus(key); await releaseBus(same.key); }
 });
 test('ASCII transport rejects a queued frame after gate closure without touching serial port', async () => {
     const { key, bus } = acquireAscii({ log }, { path: '/dev/eos-test-ascii' });
@@ -45,5 +45,5 @@ test('ASCII transport rejects a queued frame after gate closure without touching
         allowed = false; release();
         await assert.rejects(request, /NOT_AUTHORIZED/);
         assert.equal(writes, 0);
-    } finally { releaseAscii(key); }
+    } finally { await releaseAscii(key); }
 });

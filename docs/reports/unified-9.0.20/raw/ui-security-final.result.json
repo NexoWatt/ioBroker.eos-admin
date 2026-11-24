@@ -1,0 +1,14 @@
+{
+  "name": "ui-security-final",
+  "command": [
+    "npm",
+    "run",
+    "lint:security"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/ui",
+  "startedAt": "2026-11-24T21:06:31.292290+00:00",
+  "durationSeconds": 26.051,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-920/ui-security-final.log",
+  "sha256": "7056976310802e7df9879a3083c119f0dd122fdfa2155fb356213341df7eab2c"
+}

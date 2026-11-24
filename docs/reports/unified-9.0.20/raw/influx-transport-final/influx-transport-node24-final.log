@@ -1,0 +1,26 @@
+✔ direct v2 check validates actual org/bucket authentication, query preserves negative and zero prices (45.990013ms)
+✔ reachable health port alone is insufficient and server error bodies never expose credentials (13.436791ms)
+✔ direct writes use v2 line protocol, explicit milliseconds and real204 success (7.065748ms)
+✔ redirects are never followed with the token and HTTP429 is bounded (7.159739ms)
+✔ configuration rejects URL credentials, fragments, API paths and malformed trust without weakening TLS (1.427209ms)
+✔ Flux interpolation, names and line protocol cannot inject statements or rows (0.83014ms)
+✔ CSV parser preserves missing samples, string snapshots and repeated annotated tables (2.515247ms)
+✔ server cannot exceed requested row limit or return an oversized body (159.992776ms)
+✔ real unresponsive connection is aborted within the total5s check budget (5036.509124ms)
+✔ successful slow health and stalled query share one total5s connection-check deadline (5024.474204ms)
+✔ history rejects out-of-range rows while accepting the first partial aggregate window (11.606023ms)
+✔ SmartHome minmax keeps server-selected extrema and boolean values with original times (4.120884ms)
+✔ minmax requests complete time windows for dense histories and rejects excess response rows (2.207093ms)
+✔ query bounds reject unbounded history and invalid sampling options before IO (0.393953ms)
+✔ closing aborts outstanding queries and bounds concurrent requests (2.988029ms)
+✔ each DNS connection uses vetted answers and rejects rebinding before credentials leave (6.184501ms)
+✔ caller remaining budget includes unresolved DNS and still reserves all concurrency slots (31.623283ms)
+✔ HTTPS rejects untrusted certificates and accepts only explicitly supplied matching CA (106.270591ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10917.612547

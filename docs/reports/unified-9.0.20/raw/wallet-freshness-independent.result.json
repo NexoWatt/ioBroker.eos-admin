@@ -1,0 +1,13 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "test/eos-customer-tariff-wallet-freshness.test.cjs"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+  "startedAt": "2026-11-24T19:13:39.706511+00:00",
+  "finishedAt": "2026-11-24T19:13:39.986786+00:00",
+  "nodeVersion": "v24.22.3",
+  "exitCode": 0,
+  "logSha256": "a5f0d29d083c7185357101dc9248c1a0462cb35e385da4e8701712525bb7b5ca"
+}

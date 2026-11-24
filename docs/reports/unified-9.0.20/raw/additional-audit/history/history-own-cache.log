@@ -1,0 +1,17 @@
+✔ History uses real PV/load fallbacks when derived states are absent or stale; fresh zero stays zero (2.76305ms)
+✔ History never adds DC PV to the already merged canonical derived total (0.450959ms)
+✔ Farm PV fallback merges once and missing/stale farm SoC is not recorded as zero (0.526312ms)
+✔ missing/null/boolean prices never create a free provider price; configured manual fallback is retained (0.579523ms)
+✔ provider price freshness flag, age, quality and timestamp are respected without changing manual tariff mode (0.596959ms)
+✔ zero and negative canonical EUR prices and net-fee decomposition retain exact values (0.47168ms)
+✔ missing grid/battery/PV measurements produce gaps, never fresh invented zeros (0.246161ms)
+✔ stale raw observations and farm aggregate are not re-stamped as new History samples (0.292891ms)
+✔ the History sink rejects invalid data and retains real zero/negative measurements (0.393482ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1009.321679

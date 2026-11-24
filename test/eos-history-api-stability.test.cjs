@@ -7,12 +7,16 @@ const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 const ts = require('typescript');
+const tariffFilename = path.resolve(__dirname, '../ui/src-ts/runtime-executables/lib/tariff-price.ts');
+const tariffModule = { exports: {} };
+vm.runInNewContext(ts.transpileModule(fs.readFileSync(tariffFilename, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText, { exports: tariffModule.exports, module: tariffModule });
+const { tariffPriceNumber } = tariffModule.exports;
 const { EphemeralMap } = require('./fixtures/load-ephemeral-cache.cjs');
-const filename = path.resolve(__dirname, '../ui/src-ts/runtime-executables/main.ts');
+const filename = process.env.EOS_HISTORY_SOURCE || path.resolve(__dirname, '../ui/src-ts/runtime-executables/main.ts');
 const source = fs.readFileSync(filename, 'utf8');
 const parsed = ts.createSourceFile(filename, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
 const definition = parsed.statements.find(node => ts.isClassDeclaration(node) && node.name?.text === 'NexoWattVis');
-const names = new Set(['_nwNormalizeHistoryResult', '_nwNormTsMs', '_nwGetHistoryApiCached', '_nwSetHistoryApiCached', '_nwCancelHistoryRequests']);
+const names = new Set(['_nwNormalizeHistoryResult', '_nwNormTsMs', '_nwGetHistoryApiCached', '_nwSetHistoryApiCached', '_nwCancelHistoryRequests', '_nwDispatchHistory']);
 const methods = definition.members.filter(node => names.has(node.name?.getText(parsed))).map(node => node.getText(parsed));
 let route;
 function visit(node) {
@@ -30,7 +34,7 @@ function fixture() {
     let wall = from + 86400000;
     const timers = new Map();
     // Cache expiry owns separate unreferenced timers; timers below track history IO deadlines.
-    const context = { module: { exports: {} }, Map, EphemeralMap, performance: { now: () => time },
+    const context = { module: { exports: {} }, Map, EphemeralMap, tariffPriceNumber, performance: { now: () => time },
         Date: class extends Date { static now() { return wall; } },
         setTimeout(fn, delay) { const timer = { unref() {} }; timers.set(timer, { at: time + delay, fn }); return timer; },
         clearTimeout(timer) { timers.delete(timer); },
@@ -68,6 +72,90 @@ function fixture() {
 
 const goodRows = request => ({ result: [{ ts: request.options.start, val: 0 }, { ts: request.options.end, val: 1000 }] });
 function immediateGood(f) { f.runtime.sendTo = (_instance, _command, body, callback) => callback(goodRows(body)); }
+
+test('periodic canonical samples stop holding through outages; legacy sparse mappings still hold', async () => {
+    for (const canonical of [false, true]) {
+        const f = fixture();
+        f.runtime._nwGetHistoryDpCandidates = key => key === 'pvPower' ? [canonical ? 'eos-admin.0.historie.core.pv.powerW' : 'legacy.pv'] : [];
+        f.runtime.sendTo = (_i, _c, body, callback) => callback({ result: body.id.includes('pv') ? [
+            { ts: from, val: 1000 }, { ts: from + 600000, val: 1000 }, { ts: from + 3000000, val: 0 },
+        ] : [] });
+        const response = f.call({ from: String(from), to: String(from + 4200000), step: '600' });
+        await response.done;
+        assert.equal(response.body.ok, true);
+        const values = response.body.series.pv.values;
+        assert.equal(values[2][1], 1000, 'one expected export interval may be held');
+        assert.equal(values[3][1], canonical ? null : 1000);
+        assert.equal(values[4][1], canonical ? null : 1000);
+        assert.equal(values[5][1], 0, 'fresh measured zero resumes the series');
+        assert.equal(values[7][1], canonical ? null : 0);
+        if (canonical) assert.equal(response.body.energyExact.productionKwh, null, 'incomplete history is not an exact full-range energy total');
+    }
+});
+
+test('canonical hold follows configured export cadence rather than an arbitrary device TTL', async () => {
+    const f = fixture();
+    f.runtime.config.history.exportIntervalMs = 1800000;
+    f.runtime._nwGetHistoryDpCandidates = key => key === 'storageSoc' ? ['eos-admin.0.historie.core.storage.soc'] : [];
+    f.runtime.sendTo = (_i, _c, body, callback) => callback({ result: body.id.endsWith('.soc') ? [{ ts: from, val: 50 }] : [] });
+    const response = f.call({ from: String(from), to: String(from + 4200000), step: '600' });
+    await response.done;
+    assert.equal(response.body.ok, true);
+    assert.equal(response.body.series.soc.values[3][1], 50);
+    assert.equal(response.body.series.soc.values[4][1], null);
+});
+
+test('charge-point sum retains an outage when any configured member has no periodic sample', async () => {
+    const f = fixture();
+    f.runtime.evcsCount = 2;
+    f.runtime._nwGetHistoryDpCandidates = () => [];
+    f.runtime.sendTo = (_i, _c, body, callback) => callback({ result: body.id.includes('.lp1.') ? [
+        { ts: from, val: 1000 }, { ts: from + 2400000, val: 1000 },
+    ] : body.id.includes('.lp2.') ? [
+        { ts: from, val: 2000 }, { ts: from + 600000, val: 2000 }, { ts: from + 1200000, val: 2000 },
+        { ts: from + 1800000, val: 2000 }, { ts: from + 2400000, val: 2000 },
+    ] : [] });
+    const response = f.call({ from: String(from), to: String(from + 2400000), step: '600' });
+    await response.done;
+    assert.equal(response.body.ok, true);
+    assert.equal(response.body.series.evcs.values[0][1], 3000);
+    assert.equal(response.body.series.evcs.values[2][1], null);
+    assert.equal(response.body.series.evcs.values[3][1], null);
+    assert.equal(response.body.series.evcs.values[4][1], 3000);
+    assert.equal(response.body.energyExact.evKwh, null);
+});
+
+test('History API retains signed canonical EUR prices, fixed fee split and genuine zero', async () => {
+    for (const gross of [-8.5, -0.1, 0, 0.35]) {
+        const f = fixture();
+        f.runtime.stateCache['settings.dynamicTariff'] = { value: true };
+        f.runtime._nwGetHistoryDpCandidates = key => key === 'priceNetFee' ? ['test.netFee'] : [];
+        f.runtime.sendTo = (_i, _c, body, callback) => {
+            const val = body.id === 'test.netFee' ? 0.05 : body.id.endsWith('providerCurrentEurPerKwh') ? gross : null;
+            callback({ result: val === null ? [] : [{ ts: from, val }, { ts: from + 3600000, val }] });
+        };
+        const response = f.call({ from: String(from), to: String(from + 3600000), step: '900' });
+        await response.done;
+        assert.equal(response.body.ok, true);
+        assert.equal(response.body.pricing.series.total.values[0][1], gross);
+        assert.equal(response.body.pricing.series.base.values[0][1], gross - 0.05);
+        assert.equal(response.body.pricing.series.netFee.values[0][1], 0.05);
+    }
+});
+
+test('missing and invalid manual prices are not synthesized into free History quotes', async () => {
+    for (const raw of [null, undefined, false, '', 'invalid']) {
+        const f = fixture();
+        f.runtime.stateCache['settings.dynamicTariff'] = { value: true };
+        f.runtime.stateCache['settings.price'] = { value: raw };
+        f.runtime._nwGetHistoryDpCandidates = () => [];
+        f.runtime.sendTo = (_i, _c, _body, callback) => callback({ result: [] });
+        const response = f.call(); await response.done;
+        assert.equal(response.body.ok, true);
+        assert.equal(response.body.pricing.series.total.values[0][1], null);
+        assert.equal(response.body.pricing.series.base.values[0][1], null);
+    }
+});
 
 test('asynchronous malformed History payloads cannot throw out of the callback', async () => {
     for (const payload of [[null], { result: [undefined] }, { series: [{ values: {} }] }, { series: [{ values: [null] }] }]) {

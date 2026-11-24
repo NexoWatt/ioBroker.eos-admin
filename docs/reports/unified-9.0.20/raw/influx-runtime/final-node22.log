@@ -1,0 +1,326 @@
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: history settings enforce session, installer role, CSRF, ownership and optimistic revision before persistence
+ok 1 - history settings enforce session, installer role, CSRF, ownership and optimistic revision before persistence
+  ---
+  duration_ms: 114.799372
+  type: 'test'
+  ...
+# Subtest: save encrypts only the token, preserves customer configuration and blank token, returns no secret
+ok 2 - save encrypts only the token, preserves customer configuration and blank token, returns no secret
+  ---
+  duration_ms: 67.799059
+  type: 'test'
+  ...
+# Subtest: check authenticates real org/bucket without persisting or claiming a write
+ok 3 - check authenticates real org/bucket without persisting or claiming a write
+  ---
+  duration_ms: 19.591067
+  type: 'test'
+  ...
+# Subtest: direct target registration leaves existing adapter customs untouched and reports possible duplicate writer
+ok 4 - direct target registration leaves existing adapter customs untouched and reports possible duplicate writer
+  ---
+  duration_ms: 32.187596
+  type: 'test'
+  ...
+# Subtest: actual successful state write is historized once with source timestamp; failed writes and echo are excluded
+ok 5 - actual successful state write is historized once with source timestamp; failed writes and echo are excluded
+  ---
+  duration_ms: 65.04677
+  type: 'test'
+  ...
+# Subtest: dispatch uses direct reader while selected and returns to legacy sendTo without deleting connection
+ok 6 - dispatch uses direct reader while selected and returns to legacy sendTo without deleting connection
+  ---
+  duration_ms: 55.036949
+  type: 'test'
+  ...
+# Subtest: restart restores encrypted credentials and wrong system secret quarantines history without erasing device/EMS settings
+ok 7 - restart restores encrypted credentials and wrong system secret quarantines history without erasing device/EMS settings
+  ---
+  duration_ms: 30.512503
+  type: 'test'
+  ...
+# Subtest: encrypted backup export is recoverable but merge import cannot reuse its token at a changed destination
+ok 8 - encrypted backup export is recoverable but merge import cannot reuse its token at a changed destination
+  ---
+  duration_ms: 39.950182
+  type: 'test'
+  ...
+# Subtest: charging report rejects invalid and over-730-day ranges before IO while preserving full730-day selections
+ok 9 - charging report rejects invalid and over-730-day ranges before IO while preserving full730-day selections
+  ---
+  duration_ms: 20.682771
+  type: 'test'
+  ...
+# Subtest: charging report returns database failure instead of a successful zero-consumption report
+ok 10 - charging report returns database failure instead of a successful zero-consumption report
+  ---
+  duration_ms: 6.880009
+  type: 'test'
+  ...
+# Subtest: section14a audit differentiates real empty history, transport failure and invalid range
+ok 11 - section14a audit differentiates real empty history, transport failure and invalid range
+  ---
+  duration_ms: 12.852883
+  type: 'test'
+  ...
+# Subtest: 80-day direct charging report preserves >50000 requested points; 100 days coarsen rather than truncate
+ok 12 - 80-day direct charging report preserves >50000 requested points; 100 days coarsen rather than truncate
+  ---
+  duration_ms: 22.05609
+  type: 'test'
+  ...
+# Subtest: historian interception preserves exact native write overload arity and return value
+ok 13 - historian interception preserves exact native write overload arity and return value
+  ---
+  duration_ms: 2.495327
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: legacy remains default with retained direct connection; registration is an explicit writer allowlist
+ok 14 - legacy remains default with retained direct connection; registration is an explicit writer allowlist
+  ---
+  duration_ms: 1.90617
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: invalid point cannot poison valid batch; zero, negative and original timestamps survive
+ok 15 - invalid point cannot poison valid batch; zero, negative and original timestamps survive
+  ---
+  duration_ms: 7.294764
+  type: 'test'
+  ...
+# Subtest: capture/commit fence rejects pre-reconfigure writes and old completions cannot certify the new database
+ok 16 - capture/commit fence rejects pre-reconfigure writes and old completions cannot certify the new database
+  ---
+  duration_ms: 22.610034
+  type: 'test'
+  ...
+# Subtest: queue includes in-flight points in its 2000-point bound and exposes discarded samples
+ok 17 - queue includes in-flight points in its 2000-point bound and exposes discarded samples
+  ---
+  duration_ms: 17.75271
+  type: 'test'
+  ...
+# Subtest: six active reads reserve transport capacity for writes and bounded queued reads retain their budget
+ok 18 - six active reads reserve transport capacity for writes and bounded queued reads retain their budget
+  ---
+  duration_ms: 32.639385
+  type: 'test'
+  ...
+# Subtest: read/write failures recover independently and changesOnly can retry a later real sample
+ok 19 - read/write failures recover independently and changesOnly can retry a later real sample
+  ---
+  duration_ms: 11.713457
+  type: 'test'
+  ...
+# Subtest: normal close drains valid queued writes, fences new captures and reports timeout loss without hanging
+ok 20 - normal close drains valid queued writes, fences new captures and reports timeout loss without hanging
+  ---
+  duration_ms: 27.6088
+  type: 'test'
+  ...
+# Subtest: quarantined credential disables only history and legacy duplicate recording is a warning, not a mutation
+ok 21 - quarantined credential disables only history and legacy duplicate recording is a warning, not a mutation
+  ---
+  duration_ms: 0.974848
+  type: 'test'
+  ...
+# (node:14) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: only a complete configured port is accepted, without a fallback or ephemeral port
+ok 22 - only a complete configured port is accepted, without a fallback or ephemeral port
+  ---
+  duration_ms: 1.777105
+  type: 'test'
+  ...
+# (node:14) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: configured port is used exactly once and readiness follows successful bind
+ok 23 - configured port is used exactly once and readiness follows successful bind
+  ---
+  duration_ms: 38.551286
+  type: 'test'
+  ...
+# Subtest: occupied port fails once with EADDRINUSE and leaves the existing service intact
+ok 24 - occupied port fails once with EADDRINUSE and leaves the existing service intact
+  ---
+  duration_ms: 8.027126
+  type: 'test'
+  ...
+# Subtest: unavailable local interface fails once with EADDRNOTAVAIL instead of searching ports
+ok 25 - unavailable local interface fails once with EADDRNOTAVAIL instead of searching ports
+  ---
+  duration_ms: 1.239136
+  type: 'test'
+  ...
+# Subtest: TLS configuration cannot silently become a cleartext listener when certificates are absent
+ok 26 - TLS configuration cannot silently become a cleartext listener when certificates are absent
+  ---
+  duration_ms: 1.269712
+  type: 'test'
+  ...
+# Subtest: controller certificate read failures remain diagnosed TLS startup failures
+ok 27 - controller certificate read failures remain diagnosed TLS startup failures
+  ---
+  duration_ms: 0.516768
+  type: 'test'
+  ...
+# Subtest: collection TLS uses configured default for IP without SNI and retains a distinct hostname collection
+ok 28 - collection TLS uses configured default for IP without SNI and retains a distinct hostname collection
+  ---
+  duration_ms: 238.271858
+  type: 'test'
+  ...
+# Subtest: collection IP context sends the configured intermediate chain and accepts only the explicit root CA
+ok 29 - collection IP context sends the configured intermediate chain and accepts only the explicit root CA
+  ---
+  duration_ms: 263.551051
+  type: 'test'
+  ...
+# Subtest: a valid named collection cannot hide the absence of a default certificate for IP access
+ok 30 - a valid named collection cannot hide the absence of a default certificate for IP access
+  ---
+  duration_ms: 111.310539
+  type: 'test'
+  ...
+# Subtest: native TLS without a fixed origin serves IP/8188 and HTTPS/443 alias Host contracts
+ok 31 - native TLS without a fixed origin serves IP/8188 and HTTPS/443 alias Host contracts
+  ---
+  duration_ms: 113.857915
+  type: 'test'
+  ...
+# Subtest: invalid external origin is caught by Web startup and terminates once without controller mutations
+ok 32 - invalid external origin is caught by Web startup and terminates once without controller mutations
+  ---
+  duration_ms: 2.370409
+  type: 'test'
+  ...
+# Subtest: password/setup write guard uses canonical browser Origin and preserves explicit bearer compatibility
+ok 33 - password/setup write guard uses canonical browser Origin and preserves explicit bearer compatibility
+  ---
+  duration_ms: 0.39833
+  type: 'test'
+  ...
+# Subtest: actual TLS activation accepts Host443 normalization and rejects malformed Host before its service
+ok 34 - actual TLS activation accepts Host443 normalization and rejects malformed Host before its service
+  ---
+  duration_ms: 104.254184
+  type: 'test'
+  ...
+# Subtest: startup abort closes a bound listener and never mutates another adapter
+ok 35 - startup abort closes a bound listener and never mutates another adapter
+  ---
+  duration_ms: 1.439848
+  type: 'test'
+  ...
+# Subtest: startup failure closes admission immediately and awaits migration recovery before terminating once
+ok 36 - startup failure closes admission immediately and awaits migration recovery before terminating once
+  ---
+  duration_ms: 1.395972
+  type: 'test'
+  ...
+# Subtest: startup recovery rejection fences migration before termination and does not leak its promise
+ok 37 - startup recovery rejection fences migration before termination and does not leak its promise
+  ---
+  duration_ms: 0.35225
+  type: 'test'
+  ...
+# Subtest: already closed Web cannot initiate another migration recovery or terminate again
+ok 38 - already closed Web cannot initiate another migration recovery or terminate again
+  ---
+  duration_ms: 0.229495
+  type: 'test'
+  ...
+# Subtest: migration startup fence keeps login and authenticated recovery reachable without operational startup
+ok 39 - migration startup fence keeps login and authenticated recovery reachable without operational startup
+  ---
+  duration_ms: 325.071526
+  type: 'test'
+  ...
+# Subtest: verified nexowatt TLS authority opens login for anonymous/expired sessions and dashboard for an active session
+ok 40 - verified nexowatt TLS authority opens login for anonymous/expired sessions and dashboard for an active session
+  ---
+  duration_ms: 107.24656
+  type: 'test'
+  ...
+# Subtest: module host crosses the actual private hosted UI bridge and returns implementation feedback
+ok 41 - module host crosses the actual private hosted UI bridge and returns implementation feedback
+  ---
+  duration_ms: 110.954834
+  type: 'test'
+  ...
+# Subtest: valid license and stalled operational startup cannot hold the HTTPS login or recovery console hostage
+ok 42 - valid license and stalled operational startup cannot hold the HTTPS login or recovery console hostage
+  ---
+  duration_ms: 103.705157
+  type: 'test'
+  ...
+# Subtest: operational initialization failure leaves HTTPS recovery up and refuses real UI commands
+ok 43 - operational initialization failure leaves HTTPS recovery up and refuses real UI commands
+  ---
+  duration_ms: 62.913318
+  type: 'test'
+  ...
+# Subtest: hosted EMS readiness rejects retained failed, fenced or unscheduled engine references
+ok 44 - hosted EMS readiness rejects retained failed, fenced or unscheduled engine references
+  ---
+  duration_ms: 84.314121
+  type: 'test'
+  ...
+# Subtest: late startup completion after license loss cannot revive control
+ok 45 - late startup completion after license loss cannot revive control
+  ---
+  duration_ms: 96.69325
+  type: 'test'
+  ...
+# Subtest: late startup completion after ownership loss cannot revive control
+ok 46 - late startup completion after ownership loss cannot revive control
+  ---
+  duration_ms: 106.020023
+  type: 'test'
+  ...
+# Subtest: an unexpected operational promise rejection is contained without closing HTTPS
+ok 47 - an unexpected operational promise rejection is contained without closing HTTPS
+  ---
+  duration_ms: 127.814494
+  type: 'test'
+  ...
+# Subtest: optional startup catch cannot erase observed license loss after authority returns
+ok 48 - optional startup catch cannot erase observed license loss after authority returns
+  ---
+  duration_ms: 95.753915
+  type: 'test'
+  ...
+# Subtest: optional startup catch cannot erase observed ownership loss after authority returns
+ok 49 - optional startup catch cannot erase observed ownership loss after authority returns
+  ---
+  duration_ms: 161.664937
+  type: 'test'
+  ...
+# Subtest: optional startup catch cannot erase observed ownership loss after authority returns (rejected operation)
+ok 50 - optional startup catch cannot erase observed ownership loss after authority returns (rejected operation)
+  ---
+  duration_ms: 104.740156
+  type: 'test'
+  ...
+# Subtest: the explicit HTTPS-ready diagnostic requires a live listener and is suppressed after close
+ok 51 - the explicit HTTPS-ready diagnostic requires a live listener and is suppressed after close
+  ---
+  duration_ms: 95.412932
+  type: 'test'
+  ...
+1..51
+# tests 51
+# suites 0
+# pass 51
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3670.280098

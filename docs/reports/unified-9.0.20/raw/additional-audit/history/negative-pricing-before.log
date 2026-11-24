@@ -1,0 +1,96 @@
+✖ quarter-hour negative, zero and positive EUR quotes retain signed costs and fixed fee split (7.150436ms)
+✔ manual positive tariff behavior and zero quotation remain exact (42.48389ms)
+✔ time-weighted chart quote and energy-weighted summary keep their distinct existing definitions (7.124248ms)
+✖ known gross price derives a negative base without altering nonnegative fee semantics (2.561998ms)
+✖ unknown quotes stay unknown and do not become free interval prices (18.328838ms)
+✖ price and cost Canvas axes include negative values instead of clipping them to zero (8.948014ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 2
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 898.255199
+
+✖ failing tests:
+
+test at test/eos-history-negative-pricing.test.cjs:44:1
+✖ quarter-hour negative, zero and positive EUR quotes retain signed costs and fixed fee split (7.150436ms)
+  AssertionError [ERR_ASSERTION]: 0 !== -0.2
+      at close (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-history-negative-pricing.test.cjs:42:44)
+      at /workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-history-negative-pricing.test.cjs:49:32
+      at Array.forEach (<anonymous>)
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-history-negative-pricing.test.cjs:49:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at test/eos-history-negative-pricing.test.cjs:80:1
+✖ known gross price derives a negative base without altering nonnegative fee semantics (2.561998ms)
+  AssertionError [ERR_ASSERTION]: 0 !== -0.1
+      at close (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-history-negative-pricing.test.cjs:42:44)
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-history-negative-pricing.test.cjs:84:5)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at test/eos-history-negative-pricing.test.cjs:87:1
+✖ unknown quotes stay unknown and do not become free interval prices (18.328838ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(raw.every(iv => !Number.isFinite(iv.total) && !Number.isFinite(iv.costEur)))
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-history-negative-pricing.test.cjs:89:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at test/eos-history-negative-pricing.test.cjs:98:1
+✖ price and cost Canvas axes include negative values instead of clipping them to zero (8.948014ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(chart.leftMin < -0.4)
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-history-negative-pricing.test.cjs:104:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

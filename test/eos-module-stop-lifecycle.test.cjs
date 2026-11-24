@@ -44,6 +44,75 @@ function fixture({ pendingStart = true, stopTimeoutMs = 1000, stopFailure = 0 } 
     return { host, owner, start, writes, subscriptions, module: () => module, created: () => created };
 }
 
+test('stop during command subscription acquisition never opens hardware and drains coverage', async () => {
+    const f = fixture({ pendingStart: false }); const acquired = deferred(); const active = new Set();
+    let waiting = false;
+    f.owner.subscribeForeignStatesAsync = async pattern => {
+        if (pattern === 'eos-admin.0.devices.*') { waiting = true; await acquired.promise; }
+        active.add(pattern);
+    };
+    f.owner.unsubscribeForeignStatesAsync = async pattern => { active.delete(pattern); };
+    const { installEosStateSubscriptions } = require('tsx/cjs/api').require(require('node:path').resolve(__dirname, '../src/lib/eosStateSubscriptions.ts'), __filename);
+    f.owner.eosStateSubscriptions = installEosStateSubscriptions(f.owner);
+    const starting = f.host.start(); await until(() => waiting);
+    assert.equal(f.created(), 0, 'subscription must precede module construction and driver start');
+    let stopped = false; const stopping = f.host.stop().then(() => { stopped = true; });
+    await turn(); assert.equal(stopped, false);
+    acquired.resolve(); await Promise.all([starting, stopping]);
+    assert.equal(f.created(), 0); assert.equal(active.has('eos-admin.0.devices.*'), false);
+    await f.owner.eosStateSubscriptions.close(); assert.equal(active.size, 0);
+});
+
+test('a later factory failure after a successful stop releases its new command subscription', async () => {
+    const f = fixture({ pendingStart: false });
+    await f.host.start();
+    const entry = f.host.entries.get('devices');
+    await f.host.stopEntry(entry);
+    assert.equal(f.subscriptions.filter(([op, pattern]) => op === 'unsub' && pattern === 'eos-admin.0.devices.*').length, 1);
+    f.host.options.factories.devices.createHostedModule = () => { throw new Error('fixture factory failure'); };
+    f.host.nextOwnershipCheck = 0;
+    await f.host.reconcile();
+    assert.equal(f.subscriptions.filter(([op, pattern]) => op === 'sub' && pattern === 'eos-admin.0.devices.*').length, 2);
+    assert.equal(f.subscriptions.filter(([op, pattern]) => op === 'unsub' && pattern === 'eos-admin.0.devices.*').length, 2,
+        'previous resolved stop promise must not skip cleanup of a new acquisition');
+    await f.host.stop();
+});
+
+test('failed command subscription prevents factory creation and device writes', async () => {
+    const f = fixture({ pendingStart: false });
+    f.owner.subscribeForeignStatesAsync = async pattern => {
+        if (pattern === 'eos-admin.0.devices.*') throw new Error('fixture denied subscription');
+    };
+    await f.host.start();
+    assert.equal(f.created(), 0); assert.equal(f.writes.length, 0);
+    assert.equal((await f.host.status('devices')).active, false);
+    assert.equal(f.host.entries.get('devices').failed, true);
+    await f.host.stop();
+});
+
+test('hung command subscription times out fail-closed and late completion is drained', async t => {
+    const f = fixture({ pendingStart: false, stopTimeoutMs: 1000 });
+    const acquired = deferred(); const active = new Set(); let waiting = false;
+    f.owner.subscribeForeignStatesAsync = async pattern => {
+        if (pattern === 'eos-admin.0.devices.*') { waiting = true; await acquired.promise; }
+        active.add(pattern);
+    };
+    f.owner.unsubscribeForeignStatesAsync = async pattern => { active.delete(pattern); };
+    t.mock.timers.enable({ apis: ['setTimeout'] });
+    const starting = f.host.start(); await until(() => waiting);
+    // The original acquisition remains pending, while its public startup deadline
+    // and then cleanup deadline expire. No successful stop is invented.
+    t.mock.timers.tick(10001);
+    await until(() => f.host.entries.get('devices').stopEntryPromise);
+    t.mock.timers.tick(1001); await starting;
+    assert.equal(f.created(), 0); assert.equal(f.host.entries.get('devices').stopFailed, true);
+    await assert.rejects(f.host.stop(), /EOS_MODULE_STOP_UNCONFIRMED/);
+    acquired.resolve(); await until(() => !f.host.entries.get('devices').commandSubscriptionPending);
+    assert.equal(active.has('eos-admin.0.devices.*'), false);
+    assert.equal(f.created(), 0, 'late subscription never opens a revoked hardware generation');
+    assert.equal(f.host.entries.get('devices').stopFailed, true, 'late cleanup cannot promote uncertain stop');
+});
+
 test('module presence does not report active until its original start promise succeeds', async () => {
     const f = fixture(); const starting = f.host.start(); await until(() => f.module()?.starts === 1);
     assert.equal((await f.host.status('devices')).active, false);

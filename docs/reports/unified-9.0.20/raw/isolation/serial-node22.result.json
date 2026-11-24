@@ -1,0 +1,17 @@
+{
+  "name": "serial-node22",
+  "command": [
+    "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node",
+    "--test",
+    "modules/devices/test/modbusSerialLifecycle.test.js",
+    "modules/devices/test/modbusReadIntegrity.test.js",
+    "modules/devices/test/modbusAuthorizationReads.test.js",
+    "modules/devices/test/modbusConnectLifecycle.test.js"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+  "startedAt": "2026-11-24T19:14:21.538559+00:00",
+  "durationSeconds": 5.428,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/audit-919/isolation/serial-node22.log",
+  "sha256": "3217ef81da5d4e09d782eb51e9d9457c70a86c6c8880bf65310b7187547b64d0"
+}

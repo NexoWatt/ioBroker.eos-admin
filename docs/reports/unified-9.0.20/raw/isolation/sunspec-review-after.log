@@ -1,0 +1,3 @@
+first probe: EOS_DEVICES_NOT_AUTHORIZED
+flag after failed discovery: false
+retry result: true total probes: 2 confirmed base: 40000

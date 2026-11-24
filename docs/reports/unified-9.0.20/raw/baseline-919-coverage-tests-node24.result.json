@@ -1,0 +1,20 @@
+{
+  "start": "2026-11-24T19:04:33.739957+00:00",
+  "finished": "2026-11-24T19:04:38.174056+00:00",
+  "cwd": "/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin",
+  "command": [
+    "node",
+    "--test",
+    "test/eos-unified-pwa.test.cjs",
+    "test/eos-discovery.test.cjs",
+    "test/eos-module-migration-page.test.cjs",
+    "test/eos-unified-idle-client.test.cjs",
+    "test/eos-idle-integration.test.cjs",
+    "test/eos-tls-management.test.cjs",
+    "test/eos-tls-issuer-files.test.cjs",
+    "ui/test/unified/smarthome-activation.test.cjs",
+    "ui/test/unified/smarthome-device-parity.test.cjs"
+  ],
+  "exitCode": 0,
+  "logSha256": "8f635c898a00f8ed4c9ea6747cf3bdb5b6514143296f17dfbf1a17839d7c0210"
+}

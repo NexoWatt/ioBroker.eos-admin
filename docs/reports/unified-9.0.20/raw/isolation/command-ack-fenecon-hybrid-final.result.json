@@ -1,0 +1,13 @@
+{
+  "name": "command-ack-fenecon-hybrid-final",
+  "command": [
+    "node",
+    "ui/scripts/verify-fenecon-hybrid-controller.js"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+  "startedAt": "2026-11-24T20:01:16.968076+00:00",
+  "durationSeconds": 0.297,
+  "exitCode": 1,
+  "log": "/workspace/scratch/741f792566ea/audit-919/isolation/command-ack-fenecon-hybrid-final.log",
+  "sha256": "6dcba488317403c45288f3366fa71473db36f87d78838f27eb815ad71578aa1f"
+}

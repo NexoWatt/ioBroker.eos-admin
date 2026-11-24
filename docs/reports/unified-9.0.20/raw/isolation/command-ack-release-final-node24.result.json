@@ -1,0 +1,16 @@
+{
+  "name": "command-ack-release-final-node24",
+  "command": [
+    "node",
+    "--test",
+    "test/eos-storage-command-ack.test.cjs",
+    "test/eos-storagefarm-controller-dispatch.test.cjs",
+    "test/eos-storagefarm-dispatch-diagnostics.test.cjs"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+  "startedAt": "2026-11-24T20:07:20.982341+00:00",
+  "durationSeconds": 1.141,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/audit-919/isolation/command-ack-release-final-node24.log",
+  "sha256": "fce0905f4a94436a94c46533dcec5272757f8b704faaf3d6e59bf69de0c28917"
+}

@@ -1,0 +1,100 @@
+TAP version 13
+# (node:74) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual TarifVis → hosted adapter → HTTP history preserves negative price and namespace (migration=false)
+ok 1 - actual TarifVis → hosted adapter → HTTP history preserves negative price and namespace (migration=false)
+  ---
+  duration_ms: 21.702585
+  type: 'test'
+  ...
+# Subtest: actual TarifVis → hosted adapter → HTTP history preserves negative price and namespace (migration=true)
+ok 2 - actual TarifVis → hosted adapter → HTTP history preserves negative price and namespace (migration=true)
+  ---
+  duration_ms: 9.607434
+  type: 'test'
+  ...
+# Subtest: actual Para14a publication retains source timestamp; denied and failed state writes never reach Influx
+ok 3 - actual Para14a publication retains source timestamp; denied and failed state writes never reach Influx
+  ---
+  duration_ms: 3.784697
+  type: 'test'
+  ...
+# Subtest: unregistered physical states remain outside direct historian scope
+ok 4 - unregistered physical states remain outside direct historian scope
+  ---
+  duration_ms: 1.083621
+  type: 'test'
+  ...
+# (node:75) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: bad string and oversized ID cannot poison a valid queued measurement
+ok 5 - bad string and oversized ID cannot poison a valid queued measurement
+  ---
+  duration_ms: 2.028915
+  type: 'test'
+  ...
+# (node:75) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: eight pending real HTTP history queries retain writer capacity and original sample timestamp
+ok 6 - eight pending real HTTP history queries retain writer capacity and original sample timestamp
+  ---
+  duration_ms: 25.939122
+  type: 'test'
+  ...
+# Subtest: reconfiguration fences captured old writes and late active completions from new queue accounting
+ok 7 - reconfiguration fences captured old writes and late active completions from new queue accounting
+  ---
+  duration_ms: 0.501214
+  type: 'test'
+  ...
+# Subtest: normal drain flushes queued values, rejects late captures and commits, and closes once complete
+ok 8 - normal drain flushes queued values, rejects late captures and commits, and closes once complete
+  ---
+  duration_ms: 0.519102
+  type: 'test'
+  ...
+# Subtest: drain deadline is bounded and counts the unconfirmed active point without a fake success
+ok 9 - drain deadline is bounded and counts the unconfirmed active point without a fake success
+  ---
+  duration_ms: 19.445576
+  type: 'test'
+  ...
+# Subtest: legacy default remains inert; bad quality, ackfalse, null and NaN never enter the historian
+ok 10 - legacy default remains inert; bad quality, ackfalse, null and NaN never enter the historian
+  ---
+  duration_ms: 0.343247
+  type: 'test'
+  ...
+# (node:76) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:76) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: truncated CSV response aborts instead of returning partial chart or fabricated values
+ok 11 - truncated CSV response aborts instead of returning partial chart or fabricated values
+  ---
+  duration_ms: 21.986822
+  type: 'test'
+  ...
+# Subtest: response byte budget aborts a real large stream and frees concurrent capacity
+ok 12 - response byte budget aborts a real large stream and frees concurrent capacity
+  ---
+  duration_ms: 56.308384
+  type: 'test'
+  ...
+# Subtest: explicit same-timestamp write retry sends byte-identical idempotent points and retains genuine zeros
+ok 13 - explicit same-timestamp write retry sends byte-identical idempotent points and retains genuine zeros
+  ---
+  duration_ms: 6.369109
+  type: 'test'
+  ...
+1..13
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 272.345755
+(node:67) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)

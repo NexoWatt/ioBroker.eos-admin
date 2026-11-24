@@ -1,0 +1,48 @@
+{
+  "at": "2026-11-24T20:19:25.952446+00:00",
+  "checks": {
+    "919": {
+      "command": [
+        "node",
+        "ui/scripts/build-ts-runtime-mirrors.js",
+        "--check"
+      ],
+      "exitCode": 1,
+      "firstLines": [
+        "[ts-runtime-mirrors] ERROR: Runtime-TS-Spiegel sind nicht synchron.",
+        " - abweichend/fehlend: src-ts/runtime-mirrors/ems/datapoints.ts",
+        " - abweichend/fehlend: src-ts/runtime-mirrors/ems/engine.ts",
+        " - abweichend/fehlend: src-ts/runtime-mirrors/ems/module-manager.ts",
+        " - abweichend/fehlend: src-ts/runtime-mirrors/ems/modules/core-limits.ts"
+      ]
+    },
+    "920": {
+      "command": [
+        "node",
+        "ui/scripts/build-ts-runtime-mirrors.js",
+        "--check"
+      ],
+      "exitCode": 1,
+      "firstLines": [
+        "[ts-runtime-mirrors] ERROR: Runtime-TS-Spiegel sind nicht synchron.",
+        " - abweichend/fehlend: src-ts/runtime-mirrors/ems/modules/core-limits.ts",
+        " - abweichend/fehlend: src-ts/runtime-mirrors/ems/modules/energy-wallet.ts",
+        " - abweichend/fehlend: src-ts/runtime-mirrors/ems/modules/multi-use.ts",
+        " - abweichend/fehlend: src-ts/runtime-mirrors/ems/modules/storage-control.ts"
+      ]
+    }
+  },
+  "hashes": {
+    "919": {
+      "ui/src-ts/runtime-executables/ems/modules/core-limits.ts": "1b7a9c9b7f69a644713610de9afd141a124b8af89ed993c0aa5f0f9e463e61e9",
+      "ui/ems/modules/core-limits.js": "559f83c29410943d7208cf77541a260b0aaae055a862d5a2481057c5b4866af2",
+      "ui/src-ts/runtime-mirrors/ems/modules/core-limits.ts": "f4f90362793450b44472b486981e2fa7bf3e7a0741438d773543287048562dca"
+    },
+    "920": {
+      "ui/src-ts/runtime-executables/ems/modules/core-limits.ts": "1b7a9c9b7f69a644713610de9afd141a124b8af89ed993c0aa5f0f9e463e61e9",
+      "ui/ems/modules/core-limits.js": "559f83c29410943d7208cf77541a260b0aaae055a862d5a2481057c5b4866af2",
+      "ui/src-ts/runtime-mirrors/ems/modules/core-limits.ts": "f4f90362793450b44472b486981e2fa7bf3e7a0741438d773543287048562dca"
+    }
+  },
+  "coreLimitsAllThreeByteIdentical": true
+}

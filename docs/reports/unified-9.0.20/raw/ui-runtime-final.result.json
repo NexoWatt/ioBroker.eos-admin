@@ -1,0 +1,14 @@
+{
+  "name": "ui-runtime-final",
+  "command": [
+    "npm",
+    "run",
+    "build:ui-runtime"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+  "startedAt": "2026-11-24T21:05:20.592540+00:00",
+  "durationSeconds": 2.952,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-920/ui-runtime-final.log",
+  "sha256": "2055dc89e19dfd39164f7518b449d2b8c9d23f208268cb3b3960327b4bb95b10"
+}

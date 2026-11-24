@@ -1,0 +1,17 @@
+{
+  "startedAt": "2026-11-24T20:39:44.385961+00:00",
+  "finishedAt": "2026-11-24T20:39:44.560414+00:00",
+  "command": [
+    "node",
+    "/workspace/scratch/741f792566ea/audit-920/independent-influx-parser.cjs"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+  "exitCode": 0,
+  "logSha256": "a0a37fe19c276df745d9df1f7def29c920455ccc6a4869fe984f236aeb5c41c7",
+  "sources": {
+    "ui/src-ts/runtime-executables/lib/influx-network-policy.ts": "f61bc80bb8c357027ced85eade1b061c094581a1572f6e3e435a83d7ac8a3d4d",
+    "ui/src-ts/runtime-executables/lib/influx-config.ts": "61495625d84c72b832777a9ead672ac249a8fa1d3276dc803bd61b5cac6e4c55",
+    "ui/src-ts/runtime-executables/lib/influx-history-runtime.ts": "84605e7e4ceefe43fd8d034d1e06ee0c6840f765059a11b326f293ddc2cd31f0",
+    "ui/src-ts/runtime-executables/lib/influx-direct.ts": "14704294fdfdf2864a3d106b20767189f743db5b0eebf38144ea3606e5659faf"
+  }
+}

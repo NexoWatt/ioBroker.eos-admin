@@ -1,0 +1,127 @@
+✖ History line mapping preserves unknown values and real zero (14.006329ms)
+✖ power and SoC Canvas paths restart after explicit gaps (4.813177ms)
+✖ stacked areas create separate polygons on either side of a gap (15.585628ms)
+✖ integrated energy never bridges or ramps through null outage samples (2.394676ms)
+✖ normalization retains timestamped unknown markers for cost integration (4.338632ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 0
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 835.069897
+
+✖ failing tests:
+
+test at test/eos-history-chart-gaps.test.cjs:28:1
+✖ History line mapping preserves unknown values and real zero (14.006329ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(Number.isNaN(f.mapKW('pv', value)))
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-history-chart-gaps.test.cjs:30:67)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at test/eos-history-chart-gaps.test.cjs:34:1
+✖ power and SoC Canvas paths restart after explicit gaps (4.813177ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+      'move',
+      'line',
+  -   'move',
+      'line',
+  +   'line',
+  +   'line',
+  +   'line'
+    ]
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-history-chart-gaps.test.cjs:38:16)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'move', 'line', 'line', 'line', 'line', 'line' ],
+    expected: [ 'move', 'line', 'move', 'line' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-history-chart-gaps.test.cjs:42:1
+✖ stacked areas create separate polygons on either side of a gap (15.585628ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 2
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-history-chart-gaps.test.cjs:46:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-history-chart-gaps.test.cjs:50:1
+✖ integrated energy never bridges or ramps through null outage samples (2.394676ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0.75 !== 0.5
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-history-chart-gaps.test.cjs:52:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0.75,
+    expected: 0.5,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-history-chart-gaps.test.cjs:57:1
+✖ normalization retains timestamped unknown markers for cost integration (4.338632ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(Number.isNaN(normalized[2][1]))
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-history-chart-gaps.test.cjs:61:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

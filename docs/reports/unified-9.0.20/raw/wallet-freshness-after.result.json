@@ -1,0 +1,16 @@
+{
+  "name": "wallet-freshness-after",
+  "command": [
+    "node",
+    "--test",
+    "test/eos-customer-tariff-wallet-freshness.test.cjs",
+    "test/eos-customer-tariff-price-values.test.cjs",
+    "test/eos-customer-tariff-price-chain.test.cjs"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+  "startedAt": "2026-11-24T19:11:26.733104+00:00",
+  "durationSeconds": 0.544,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-920/wallet-freshness-after.log",
+  "sha256": "f7a2ef6580b85aaf7e0e65c5fcabb3c709395f5b0b9f255445cf8983a27315b0"
+}

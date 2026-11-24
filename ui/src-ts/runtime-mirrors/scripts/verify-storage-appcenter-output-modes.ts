@@ -24,7 +24,7 @@
  * - Der nächste Schritt ist pro Modul echte Typisierung statt pauschalem No-Check.
  * - Fachliche Kommentare markieren die Abschnitte, die später einzeln migriert werden.
  *
- * Original-Hash: f2e1f9085667a05ab74158dd2c746a9fcf5fad6b064a6d84bf8c8c7f8deb4920
+ * Original-Hash: 133278e1d9d302127960daa90ecf85efba4bf39119f4dd16d51c6829cb60373f
  */
 
 /**
@@ -204,7 +204,7 @@ async function verifyTargetPowerAllOutputs() {
   assert.strictEqual(state(adapter, 'speicher.regelung.targetMode'), 'split-charge-discharge');
   assert.strictEqual(state(adapter, 'speicher.regelung.schreibStatus'), 'split-geschrieben');
   assert.strictEqual(state(adapter, 'speicher.regelung.schreibOk'), true);
-  assert.strictEqual(state(adapter, 'speicher.regelung.commandDpReadbackStatus'), 'confirmed');
+  assert.strictEqual(state(adapter, 'speicher.regelung.commandDpReadbackStatus'), 'pending-ack');
 
   const writtenIds = new Set(dp.writes.map((row) => row.objectId));
   for (const id of [
@@ -250,7 +250,7 @@ async function verifySignedOnlyOutput() {
   assert.strictEqual(dp.last('st.targetPowerW').raw, -1200, 'Signed-Invertierung muss im Readbackvertrag berücksichtigt werden');
   assert.strictEqual(state(adapter, 'speicher.regelung.commandFamily'), 'signed');
   assert.strictEqual(state(adapter, 'speicher.regelung.schreibStatus'), 'signed-geschrieben');
-  assert.strictEqual(state(adapter, 'speicher.regelung.commandDpReadbackStatus'), 'confirmed');
+  assert.strictEqual(state(adapter, 'speicher.regelung.commandDpReadbackStatus'), 'pending-ack');
 }
 
 /**

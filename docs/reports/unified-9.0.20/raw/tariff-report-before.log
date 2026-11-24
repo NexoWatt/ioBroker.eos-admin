@@ -1,0 +1,147 @@
+✖ missing tariff and import values remain unknown through interval and whole-period totals (52.357846ms)
+✖ real zero and canonical negative EUR prices retain their value and calculated costs (16.013705ms)
+✖ missing quarters and pre-range samples are not indefinitely carried into report costs (8.00834ms)
+✖ enabled missing network fee keeps its breakdown unknown while recorded total cost remains usable (7.028734ms)
+✖ static zero fallback is explicit and genuine network fees preserve the existing split (7.269267ms)
+✖ an open current quarter is not reported as a complete quarter of imported energy (8.37388ms)
+✖ malformed, reversed and over-730-day report ranges fail before history IO or allocation (7.846506ms)
+✔ 730-day inclusive date ranges remain accepted without using a smaller chart limit (6.511782ms)
+✔ report formatting and CSV leave missing values empty while keeping zero and negative costs (4.284592ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 2
+ℹ fail 7
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 660.832954
+
+✖ failing tests:
+
+test at test/eos-tariff-report-integrity.test.cjs:31:1
+✖ missing tariff and import values remain unknown through interval and whole-period totals (52.357846ms)
+  AssertionError [ERR_ASSERTION]: baseEurPerKwh
+  
+  0 !== null
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-tariff-report-integrity.test.cjs:36:125)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: null,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-tariff-report-integrity.test.cjs:42:1
+✖ real zero and canonical negative EUR prices retain their value and calculated costs (16.013705ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  -5 !== -8.25
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-tariff-report-integrity.test.cjs:47:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: -5,
+    expected: -8.25,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-tariff-report-integrity.test.cjs:55:1
+✖ missing quarters and pre-range samples are not indefinitely carried into report costs (8.00834ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0.4 !== null
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-tariff-report-integrity.test.cjs:60:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0.4,
+    expected: null,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-tariff-report-integrity.test.cjs:66:1
+✖ enabled missing network fee keeps its breakdown unknown while recorded total cost remains usable (7.028734ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== null
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-tariff-report-integrity.test.cjs:69:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: null,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-tariff-report-integrity.test.cjs:75:1
+✖ static zero fallback is explicit and genuine network fees preserve the existing split (7.269267ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - true
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-tariff-report-integrity.test.cjs:78:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-tariff-report-integrity.test.cjs:85:1
+✖ an open current quarter is not reported as a complete quarter of imported energy (8.37388ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0.25 !== null
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-tariff-report-integrity.test.cjs:89:62)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0.25,
+    expected: null,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-tariff-report-integrity.test.cjs:94:1
+✖ malformed, reversed and over-730-day report ranges fail before history IO or allocation (7.846506ms)
+  AssertionError [ERR_ASSERTION]: bad:1795545000000
+  
+  200 !== 400
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-tariff-report-integrity.test.cjs:100:16)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 400,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -1,0 +1,45 @@
+{
+  "checkedAt": "2026-11-24T21:06:28.487091+00:00",
+  "nodes": [
+    "22.23.4",
+    "24.22.3"
+  ],
+  "variants": [
+    "source owner web + generated UI runtime",
+    "emitted build owner web + generated UI runtime"
+  ],
+  "checks": {
+    "node22-build.log": {
+      "sha256": "0cad7ba6bd98e138fb7bcab56813e9307ad5fbbaaab74d0368565eda5cddf14c",
+      "pass": 1,
+      "fail": 0
+    },
+    "node22-source.log": {
+      "sha256": "68f7ad390339bf49ddc9d8eb540616b1020a304a71ad057d7a202ceb19073291",
+      "pass": 1,
+      "fail": 0
+    },
+    "node24-build.log": {
+      "sha256": "d6a5e47c73468e1f900a3a66bd27a20ee6e77f15e4461b80c303672dd921117b",
+      "pass": 1,
+      "fail": 0
+    },
+    "node24-source.log": {
+      "sha256": "9ae9b3a953d49217c85a672861c9c4fcea7303d6295ab654c81a1406f1173b96",
+      "pass": 1,
+      "fail": 0
+    }
+  },
+  "files": {
+    "src/lib/web.ts": "9393ac6d33a18b7682cfce865dee6dc26cc9b3950f2c03fa8ed13e5d6c9807ab",
+    "build/lib/web.js": "bc0bc4795d1f5c9c104646d0facb925372dde333890b79226be2ce83613c611e",
+    "ui/src-ts/runtime-executables/main.ts": "11f2616a2f7f2e5066c180db4316c7f0b219b066790e7c4563dab3e1104d3d96",
+    "ui/main.js": "8dac1fa103d6594f02bf64f70a0c2c53f6af51c8297614ddf616d05f8ff05f19",
+    "ui/src-ts/runtime-executables/lib/ui-access-policy.ts": "c3b68fac91389ad1502fd03a889fdeca278c5230f7441c80bd77b767f0f030de",
+    "ui/lib/ui-access-policy.js": "6adba68fffc2404b73de32c16bad19c5b2ff0905b705f2f7ac1ea80e8adfb104",
+    "test/eos-pwa-anonymous-https.test.cjs": "c1797e0bc5969b4e8de616a9a764a0d3ab206eaebf0c3a286485a30e2a324733",
+    "ui/www/apple-touch-icon.png": "952ceb9cef3f7f22a150dd8ea396285f70b9d8c19de8e7c1452bf2ff983ae6bd",
+    "ui/www/assets/icons/nexowatt-180.png": "083e11ab28ec00b37d3d47776946c5fad4d79277fdc440cdbb20181a7f064f76",
+    "ui/www/login.html": "13df403bbcf8ead3cf815c41605620b365e0e005c8b3ff6b585f7f137eaccc23"
+  }
+}

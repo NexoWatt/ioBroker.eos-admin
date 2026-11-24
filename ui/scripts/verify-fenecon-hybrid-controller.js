@@ -466,16 +466,32 @@ async function testFarmContinuousAuto() {
   Module._load = function patchedLoad(request, parent, isMain) {
     if (request === '@iobroker/adapter-core') return { Adapter: FarmAdapterStub };
     if (request === 'express') return expressStub;
-    if (request === '@iobroker/type-detector') {
-      const error = new Error('optional dependency intentionally absent');
-      error.code = 'MODULE_NOT_FOUND';
-      throw error;
-    }
+    // The integrated SmartHome module requires the real packaged detector;
+    // this storage regression must not simulate its removal from the product.
     return originalLoad.call(this, request, parent, isMain);
   };
 
   try {
-    const factory = require(path.join(__dirname, '..', 'main.js'));
+    // Load the real integrated runtime class, using the current hosted API.
+    const filename = path.join(__dirname, '..', 'main.js');
+    const compiled = new Module(filename, module);
+    compiled.filename = filename; compiled.paths = Module._nodeModulePaths(path.dirname(filename));
+    compiled._compile(require('fs').readFileSync(filename, 'utf8') + '\nmodule.exports.TestRuntime = NexoWattVis;\n', filename);
+    const factory = () => {
+      const owner = new FarmAdapterStub({ name: 'eos-admin' });
+      owner.instance = 0; owner.config = { port: 8188, eosUi: {} };
+      const originalWrite = owner.setForeignStateAsync.bind(owner);
+      const originalRead = owner.getForeignStateAsync.bind(owner);
+      const prefix = owner.namespace + '.';
+      owner.setForeignStateAsync = (id, ...args) => id.startsWith(prefix)
+        ? owner.setStateAsync(id.slice(prefix.length), ...args) : originalWrite(id, ...args);
+      owner.getForeignStateAsync = (id, ...args) => id.startsWith(prefix)
+        ? owner.getStateAsync(id.slice(prefix.length), ...args) : originalRead(id, ...args);
+      return new compiled.exports.TestRuntime({ owner, bridge: {
+        canWrite: () => true, originAllowed: () => true, resolveAccess: async () => null,
+        getLicense: () => ({ valid: true, coreEnabled: true, edition: 'pro', features: ['energy', 'wallet', 'smartHome', 'microgridSlave'], limits: { batteries: 10, chargePoints: 10 } }),
+      } });
+    };
     const adapter = factory({});
     adapter._nwLicenseOk = true;
     adapter._nwLicenseInfo = { ok: true, edition: 'eos' };

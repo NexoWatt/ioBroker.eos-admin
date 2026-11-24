@@ -1496,6 +1496,8 @@
       invertSetSignedPowerSign: boolFrom(false, 'invertSetSignedPowerSign', 'targetPowerInvert', 'invertSetpointSign'),
       maxChargeW: numberFrom('maxChargeW', 'maxChargePowerW'),
       maxDischargeW: numberFrom('maxDischargeW', 'maxDischargePowerW'),
+      allowedChargePowerId: textFrom('allowedChargePowerId'),
+      allowedDischargePowerId: textFrom('allowedDischargePowerId'),
       availableId: textFrom('availableId', 'availableObjectId', 'availableDp', 'availabilityId'),
       faultId: textFrom('faultId', 'faultObjectId', 'faultDp', 'errorId'),
       chargeAllowedId: textFrom('chargeAllowedId', 'chargeAllowedObjectId', 'chargeAllowedDp', 'chargeEnableId'),
@@ -9994,6 +9996,11 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
       grid.appendChild(mkGridHelp('Diese Werte begrenzen die Farm-Verteilung pro Speicher. Leer = unbegrenzt, 0 W = diese Richtung sperren.'));
       grid.appendChild(mkNumField('Max. Beladen (W)', `sf_${idx}_maxChargeW`, s.maxChargeW, (v) => { const sf2 = _ensureStorageFarmCfg(); sf2.storages[i].maxChargeW = v; }, 'leer = unbegrenzt, 0 = sperren'));
       grid.appendChild(mkNumField('Max. Entladen (W)', `sf_${idx}_maxDischargeW`, s.maxDischargeW, (v) => { const sf2 = _ensureStorageFarmCfg(); sf2.storages[i].maxDischargeW = v; }, 'leer = unbegrenzt, 0 = sperren'));
+
+      grid.appendChild(mkGridDivider('Aktuelle Leistungsfreigabe des Geräts'));
+      grid.appendChild(mkGridHelp('Optionale Messwerte in W können die festen Grenzen weiter verringern. Automatisch erst nach zwei gültigen Gerätewerten mit höchstens 10 s Abstand zugeordnet. Ein zugeordneter fehlender oder veralteter Wert sperrt die jeweilige Richtung, spätestens nach 30 s ohne frische Messung.'));
+      grid.appendChild(mkDpField('Gerät erlaubt Laden (W)', `sf_${idx}_allowedChargePowerId`, s.allowedChargePowerId, (v) => { const row = _ensureStorageFarmCfg().storages.at(i); if (row) row.allowedChargePowerId = v; }, 'echte 0 W = Laden gesperrt'));
+      grid.appendChild(mkDpField('Gerät erlaubt Entladen (W)', `sf_${idx}_allowedDischargePowerId`, s.allowedDischargePowerId, (v) => { const row = _ensureStorageFarmCfg().storages.at(i); if (row) row.allowedDischargePowerId = v; }, 'echte 0 W = Entladen gesperrt'));
 
       // Verfügbarkeit & Freigaben
       grid.appendChild(mkGridDivider('Verfügbarkeit & Freigaben'));

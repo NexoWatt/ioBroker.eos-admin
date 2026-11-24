@@ -1,0 +1,21 @@
+(node:87) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:94) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:94) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# Subtest: fresh anonymous HTTPS launch exposes actual login branding and PWA icons while configuration remains protected
+ok 1 - fresh anonymous HTTPS launch exposes actual login branding and PWA icons while configuration remains protected
+  ---
+  duration_ms: 737.016879
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 997.818489

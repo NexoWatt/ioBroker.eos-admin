@@ -33,6 +33,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import InstallerPage from './pages/InstallerPage';
 import MeshCoordinatorPage from './pages/MeshCoordinatorPage';
 import NotificationMailPage from './pages/NotificationMailPage';
+import HistorySetupPage from './pages/HistorySetupPage';
 import DynamicGridPage from './pages/DynamicGridPage';
 import ArbitragePage from './pages/ArbitragePage';
 import PartnerIntegrationsPage from './pages/PartnerIntegrationsPage';
@@ -51,6 +52,7 @@ export default function App() {
   const runtimePath = proxyPath && pathname.startsWith(`${proxyPath}/`) ? pathname.slice(proxyPath.length) : pathname;
   return (
     <Routes>
+      <Route path="/history-setup" element={<ProtectedRuntimeRoute capability="appcenter.open" requiredRole="Installer oder Admin" title="Historie einrichten" allowedRoles={DYNAMIC_GRID_ROLES}><HistorySetupPage /></ProtectedRuntimeRoute>} />
       <Route path="/arbitrage" element={<ProtectedRuntimeRoute embedded capability="appcenter.open" requiredRole="Installer oder Admin" title="Arbitrage" allowedRoles={DYNAMIC_GRID_ROLES}><ArbitragePage /></ProtectedRuntimeRoute>} />
       <Route path="/partner-integrations/energyLedger" element={<ProtectedRuntimeRoute embedded capability="appcenter.open" requiredRole="Installer oder Admin" title="Bilanz · Partnerfreigaben" allowedRoles={DYNAMIC_GRID_ROLES}><PartnerIntegrationsPage appId="energyLedger" /></ProtectedRuntimeRoute>} />
       <Route path="/partner-integrations/directMarketing" element={<ProtectedRuntimeRoute embedded capability="appcenter.open" requiredRole="Installer oder Admin" title="Direktvermarktung · Partnerfreigaben" allowedRoles={DYNAMIC_GRID_ROLES}><PartnerIntegrationsPage appId="directMarketing" /></ProtectedRuntimeRoute>} />

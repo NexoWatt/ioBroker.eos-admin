@@ -1,0 +1,77 @@
+diff --git a/workspace/scratch/741f792566ea/audit-919/farm-redistribution/main-before-diagnostics.ts b/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/ui/src-ts/runtime-executables/main.ts
+index 22dc5d0..64d9559 100644
+--- a/workspace/scratch/741f792566ea/audit-919/farm-redistribution/main-before-diagnostics.ts
++++ b/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/ui/src-ts/runtime-executables/main.ts
+@@ -7902,6 +7902,9 @@ class NexoWattVis extends HostedAdapter {
+       return {
+         ...s,
+         soc,
++        // Preserve the observed value for diagnostics; do not change the
++        // established dispatch calculation's treatment of absent status fields.
++        _sfReportedSoc: numericMeasurement(st.soc),
+         online,
+         displayOnline,
+         offlineReason,
+@@ -8602,9 +8605,21 @@ class NexoWattVis extends HostedAdapter {
+         || commandFamily === 'signed'
+         || (commandFamily === 'split' && (direction === 'charge' ? !!chargeId : !!dischargeId));
+ 
++      // Explain this exact dispatch decision without redefining the status
++      // capability flags or changing the allocator/write path above.
++      const directionDispatchAvailable = eligibleForDispatch.includes(s);
++      const blockedReasons = [...(direction === 'charge' ? (s.chargeBlockedReasons || [])
++        : direction === 'discharge' ? (s.dischargeBlockedReasons || []) : [])];
++      if (direction === 'discharge' && dispatchEligible.includes(s) && !directionDispatchAvailable) {
++        blockedReasons.push(s._sfReportedSoc === null ? 'soc_missing' : 'soc_at_or_below_discharge_floor');
++      }
++      const effectiveDischargeLimit = direction === 'discharge'
++        ? (directionDispatchAvailable ? getLimitW(s, 'discharge') : 0) : null;
++
+       const r = {
+         name: s.name || '',
+-        soc: Number.isFinite(Number(s.soc)) ? Number(s.soc) : null,
++        dispatchKey: s._sfKey,
++        soc: s._sfReportedSoc,
+         state: s.state || '',
+         online: !!s.online,
+         dispatchAvailable: !!s.dispatchAvailable,
+@@ -8612,7 +8627,10 @@ class NexoWattVis extends HostedAdapter {
+         dischargeDispatchAvailable: !!s.dischargeDispatchAvailable,
+         maxChargeW: (s.maxChargeW !== null && Number.isFinite(Number(s.maxChargeW))) ? Number(s.maxChargeW) : null,
+         maxDischargeW: (s.maxDischargeW !== null && Number.isFinite(Number(s.maxDischargeW))) ? Number(s.maxDischargeW) : null,
+-        blockedReasons: direction === 'charge' ? (s.chargeBlockedReasons || []) : (direction === 'discharge' ? (s.dischargeBlockedReasons || []) : []),
++        directionDispatchAvailable,
++        dischargeFloorSocPct: direction === 'discharge' ? dischargeFloorSoc : null,
++        effectiveMaxDischargeW: Number.isFinite(effectiveDischargeLimit) ? effectiveDischargeLimit : null,
++        blockedReasons,
+         warnings: Array.isArray(s.dispatchWarnings) ? s.dispatchWarnings : [],
+         statusMatch: String(s.statusMatch || ''),
+         actualChargeW: Number.isFinite(Number(s.chargePowerW)) ? Number(s.chargePowerW) : null,
+@@ -8787,7 +8805,8 @@ class NexoWattVis extends HostedAdapter {
+           return Number.isFinite(v) ? Math.round(v) : null;
+         })(),
+         availableDischargePowerW: (() => {
+-          const v = sumLimitW(storages.filter(s => s.dischargeDispatchAvailable === true), 'discharge');
++          const v = sumLimitW(direction === 'discharge' ? eligibleForDispatch
++            : storages.filter(s => s.dischargeDispatchAvailable === true), 'discharge');
+           return Number.isFinite(v) ? Math.round(v) : null;
+         })(),
+         results: results.map(r => {
+@@ -8795,6 +8814,7 @@ class NexoWattVis extends HostedAdapter {
+           const authorityBlocks = writeRows.filter(wr => wr && wr.blocked === true);
+           return {
+             name: r.name || '',
++            dispatchKey: r.dispatchKey,
+             state: r.state || '',
+             online: r.online,
+             dispatchAvailable: r.dispatchAvailable,
+@@ -8802,6 +8822,9 @@ class NexoWattVis extends HostedAdapter {
+             dischargeDispatchAvailable: r.dischargeDispatchAvailable,
+             maxChargeW: r.maxChargeW,
+             maxDischargeW: r.maxDischargeW,
++            directionDispatchAvailable: r.directionDispatchAvailable,
++            dischargeFloorSocPct: r.dischargeFloorSocPct,
++            effectiveMaxDischargeW: r.effectiveMaxDischargeW,
+             blockedReasons: r.blockedReasons,
+             warnings: r.warnings,
+             statusMatch: r.statusMatch,

@@ -1,0 +1,13 @@
+'use strict';
+const fs=require('node:fs'),cp=require('node:child_process'),crypto=require('node:crypto');
+const cwd='/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin';
+const out=cwd+'/docs/reports/unified-9.0.20/raw/';
+const node=process.argv[2],tag=process.argv[3];
+const args=['--test','modules/devices/test/solaxReadbackContext.test.js','modules/devices/test/deviceAliasSemantics.test.js','modules/devices/test/deviceAliasFreshness.test.js','modules/devices/test/modbusReadIntegrity.test.js','modules/devices/test/modbusAuthorizationReads.test.js','modules/devices/test/modbusConnectLifecycle.test.js','modules/devices/test/aliasContractV1.test.js','modules/devices/test/runtimeLiveness.test.js'];
+const start=new Date().toISOString(),result=cp.spawnSync(node,args,{cwd,encoding:'utf8'}),end=new Date().toISOString();
+if (result.error) throw result.error;
+const log=result.stdout+'\n'+result.stderr,filename='solax-readback-'+tag;
+fs.writeFileSync(out+filename+'.log',log);
+fs.writeFileSync(out+filename+'.json',JSON.stringify({node,args,cwd,start,end,exitCode:result.status,sha256:crypto.createHash('sha256').update(log).digest('hex')},null,2)+'\n');
+console.log(JSON.stringify({tag,exitCode:result.status,summary:log.split('\n').filter(x=>/tests |pass |fail |duration_ms /.test(x))}));
+process.exitCode=result.status===0?0:1;

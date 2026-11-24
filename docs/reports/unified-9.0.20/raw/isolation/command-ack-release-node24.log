@@ -1,0 +1,72 @@
+✔ farm own ack:false echo stays pending and idempotent; later ack only confirms the driver (66.016987ms)
+✔ farm delayed acknowledgment cannot confirm a newer request; invalid quality remains a failure (6.075609ms)
+✔ farm missing/null/blank/boolean values never confirm a zero command (5.16633ms)
+✔ farm real mismatch, write failure and authority revocation are not pending successes (64.186861ms)
+✔ actual single-storage command path keeps run enabled while matching command acknowledgments are pending (8.582514ms)
+✔ single-storage real mismatch still clears run; pending cannot hide a rejected primary write (127.495851ms)
+✔ single-storage actual ack is driver-only and late/invalid acknowledgment is not confirmed (0.681987ms)
+✔ farm keepalive renews a pending request without inventing confirmation or writing zero (4.497652ms)
+✔ pending neutralization reports requested and retains the native FEMS watchdog handoff (0.953406ms)
+✖ actual farm diagnostic projection preserves missing command readback as null instead of zero (4.192173ms)
+✔ actual farm controller dispatches600W to eligible member at SoCs1/98 (174.522744ms)
+✔ actual farm controller dispatches600W to eligible member at SoCs98/1 (64.766194ms)
+✔ both members below configured minimum receive no discharge command (36.795315ms)
+✔ eligible member's explicit0W limit remains binding (36.152197ms)
+✔ eligible member's explicit250W limit remains binding (14.772795ms)
+✔ eligible full member blocked bystaleMember cannot discharge (12.763759ms)
+✔ empty member'sstaleMember does not block healthy full member (24.096588ms)
+✔ eligible full member blocked byfaultMember cannot discharge (14.859075ms)
+✔ empty member'sfaultMember does not block healthy full member (21.763251ms)
+✔ eligible full member blocked bydeniedMember cannot discharge (23.386014ms)
+✔ empty member'sdeniedMember does not block healthy full member (19.097261ms)
+✔ global admission remains binding:{"staleGrid":true} (28.052732ms)
+✔ global admission remains binding:{"tariffBlock":true} (13.745918ms)
+✔ global admission remains binding:{"enabled":false} (20.106416ms)
+✔ explicit global MultiUse50% reserve blocks49.5% mean without silently overriding operator policy (16.953048ms)
+✔ farm write acceptance does not masquerade as measured response: 63W actual versus673W target times out (18.71462ms)
+✔ fresh device discharge capability 0W caps real controller allocation to 0W (29.583177ms)
+✔ fresh device discharge capability 250W caps real controller allocation to 250W (38.83023ms)
+✔ fresh device discharge capability 9566W caps real controller allocation to 600W (46.537916ms)
+✔ numeric hardware capability cannot raise an installer limit (41.15524ms)
+✔ bound missing device capability blocks only its own direction without erasing mapping (14.651112ms)
+✔ bound stale device capability blocks only its own direction without erasing mapping (15.408001ms)
+✔ bound unacknowledged device capability blocks only its own direction without erasing mapping (11.852427ms)
+✔ bound bad quality device capability blocks only its own direction without erasing mapping (10.514944ms)
+✔ bound negative device capability blocks only its own direction without erasing mapping (16.633096ms)
+✔ bound string device capability blocks only its own direction without erasing mapping (8.351786ms)
+✔ bound wrong unit device capability blocks only its own direction without erasing mapping (8.237454ms)
+✔ capability block of empty member does not suppress eligible full member (8.800642ms)
+✔ charge capability independently clamps charging while discharge admission remains intact (10.723989ms)
+✔ exclusive native FEMS path honors bound capability: zero discharge (17.614944ms)
+✔ exclusive native FEMS path honors bound capability: 250W discharge (6.231884ms)
+✔ exclusive native FEMS path honors bound capability: stale discharge (5.340771ms)
+✔ exclusive native FEMS path honors bound capability: 250W charge (5.629306ms)
+✔ exclusive native FEMS path honors bound capability: opposite direction stays available (4.998728ms)
+▶ 1%/98% pool dispatch preserves redistribution and explains only the actual per-member floor exclusion
+  ✔ 1/98 (109.914903ms)
+  ✔ 98/1 (43.834234ms)
+✔ 1%/98% pool dispatch preserves redistribution and explains only the actual per-member floor exclusion (155.57685ms)
+✔ missing member SoC remains unknown in diagnostics and does not block the other member (30.285814ms)
+▶ explicit zero limit and discharge prohibition remain blocking and are not relabelled as a SoC error
+  ✔ discharge_limit_zero (21.354665ms)
+  ✔ discharge_not_allowed (38.9698ms)
+✔ explicit zero limit and discharge prohibition remain blocking and are not relabelled as a SoC error (61.43617ms)
+✔ idle and charge reports do not pretend that a discharge floor was applied to the current request (25.847231ms)
+ℹ tests 52
+ℹ suites 0
+ℹ pass 51
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1308.334373
+
+✖ failing tests:
+
+test at test/eos-storage-command-ack.test.cjs:150:1
+✖ actual farm diagnostic projection preserves missing command readback as null instead of zero (4.192173ms)
+  TypeError [Error]: Cannot read properties of undefined (reading 'apps')
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/test/eos-storage-command-ack.test.cjs:153:22)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)

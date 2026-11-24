@@ -1,0 +1,22 @@
+'use strict';
+const net=require('node:net');
+const assert=require('node:assert/strict');
+const root='/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin';
+const {ModbusDriver}=require(root+'/modules/devices/lib/drivers/modbus');
+const {guardDriver}=require(root+'/modules/devices/operation-guard');
+const template=require(root+'/modules/devices/lib/templates.json').templates.find(t=>t.id==='ess.solax.SolaXHybridX1X3Ess');
+(async()=>{
+ const accepted=[]; const server=net.createServer(socket=>accepted.push(socket));
+ await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(0,'127.0.0.1',resolve)});
+ const logs=[]; let allowed=true;
+ const driver=guardDriver(new ModbusDriver({log:Object.fromEntries(['info','debug','warn','error'].map(k=>[k,v=>logs.push(v)]))},{id:'audit',protocol:'modbusTcp',connection:{host:'127.0.0.1',port:server.address().port}},template,{}),()=>allowed);
+ driver._nextConnectAt=Date.now()+350;
+ const started=driver.connect().then(()=>({resolved:true}),e=>({rejected:e.code||e.message}));
+ await new Promise(resolve=>setTimeout(resolve,30));
+ allowed=false; await driver.disconnect();
+ const stoppedAt=Date.now();
+ const result=await started;
+ console.log(JSON.stringify({result,connectionsAfterConfirmedStop:accepted.length,driverConnected:driver.connected,hasClient:!!driver.client,elapsedAfterStop:Date.now()-stoppedAt,logs}));
+ await driver.disconnect(); for(const socket of accepted)socket.destroy(); await new Promise(resolve=>server.close(resolve));
+ assert.equal(accepted.length,0,'A stopped/unauthorized hosted driver must not open a new TCP connection after its reconnect backoff');
+})().catch(e=>{console.error(e);process.exitCode=1});

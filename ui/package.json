@@ -1,6 +1,6 @@
 {
   "name": "nexowatt-eos-ui-internal",
-  "version": "9.0.19",
+  "version": "9.0.20",
   "description": "Internal UI and EMS module hosted by iobroker.eos-admin; not an ioBroker adapter entry point.",
   "author": "NexoWatt",
   "license": "UNLICENSED",
@@ -1117,10 +1117,6 @@
     "tsconfig.ui-pwa.json",
     "scripts/verify-ui-pwa.cjs",
     "docs/security/UI_PWA_BOOTSTRAP_DE.md",
-    "admin/react/assets/index-Bq5IupDw.js",
-    "admin/react/assets/index-CuquHlsY.css",
-    "admin/react/assets/nexowatt-192-43ZwQ44y.png",
-    "admin/react/index.html",
     "lib/installer-lifecycle.js",
     "lib/customer-tariff.js",
     "www/customer-tariff.js",
@@ -1130,7 +1126,17 @@
     "www/storagefarm-summary.js",
     "www/storagefarm-summary.css",
     "www/tariff-display.js",
-    "lib/tariff-price.js"
+    "lib/tariff-price.js",
+    "www/live-display.js",
+    "www/storagefarm-dispatch.js",
+    "lib/influx-direct.js",
+    "lib/influx-config.js",
+    "lib/influx-network-policy.js",
+    "lib/influx-history-runtime.js",
+    "admin/react/assets/index-BJO3q7oe.js",
+    "admin/react/assets/index-ofLP_Y7y.css",
+    "admin/react/assets/nexowatt-192-43ZwQ44y.png",
+    "admin/react/index.html"
   ],
   "devDependencies": {
     "@iobroker/adapter-dev": "^1.5.0",

@@ -1,0 +1,16 @@
+{
+  "name": "migration-node22",
+  "command": [
+    "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node",
+    "--test",
+    "test/eos-module-migration-start-budget.test.cjs",
+    "test/eos-module-legacy-migration.test.cjs",
+    "test/eos-module-migration-review.test.cjs"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+  "startedAt": "2026-11-24T19:07:48.552974+00:00",
+  "durationSeconds": 0.757,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/audit-919/isolation/migration-node22.log",
+  "sha256": "0ccd44e711ee864fd46b45920af9a7d8d77343b158debfe065d5458e57c76322"
+}

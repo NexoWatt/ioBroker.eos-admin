@@ -1,5 +1,6 @@
 'use strict';
 const { assertOperationAllowed } = require('../operationContext');
+const { claimSerialPort, boundedSerialClose, serialError } = require('./modbusSerialLease');
 
 const ModbusRTU = require('modbus-serial');
 
@@ -38,6 +39,7 @@ class ModbusRtuBus {
     this.client = new ModbusRTU();
     this.connected = false;
     this.connecting = false;
+    this.closing = false;
 
     // Serialize all operations on this bus
     this._queue = Promise.resolve();
@@ -52,6 +54,7 @@ class ModbusRtuBus {
   }
 
   async ensureConnected() {
+    if (this.closing) throw serialError('E_MODBUS_SERIAL_CLOSING');
     if (this.connected) return true;
     if (this.connecting) {
       // Wait for current connect attempt
@@ -63,6 +66,7 @@ class ModbusRtuBus {
 
     return await this._enqueue(async () => {
       try {
+        if (this.closing) throw serialError('E_MODBUS_SERIAL_CLOSING');
         if (this.connected) return true;
         await new Promise((resolve, reject) => {
           assertOperationAllowed();
@@ -77,6 +81,7 @@ class ModbusRtuBus {
             (err) => (err ? reject(err) : resolve())
           );
         });
+        if (this.closing) throw serialError('E_MODBUS_SERIAL_CLOSING');
         this.connected = true;
         this.adapter.log.info(`[modbusRtuBus] connected ${this.opts.path} @${this.opts.baudRate} ${this.opts.parity} ${this.opts.dataBits}${this.opts.stopBits}`);
         return true;
@@ -90,10 +95,14 @@ class ModbusRtuBus {
   }
 
   async close() {
+    this.closing = true;
     return await this._enqueue(async () => {
       try {
-        if (this.client) {
-          try { this.client.close(() => {}); } catch (_) {}
+        if (this.client && this.client.isOpen !== false) {
+          await new Promise((resolve, reject) => {
+            try { this.client.close(error => error ? reject(error) : resolve()); }
+            catch (error) { reject(error); }
+          });
         }
       } finally {
         this.connected = false;
@@ -108,6 +117,7 @@ class ModbusRtuBus {
     await this.ensureConnected();
     return await this._enqueue(async () => {
       assertOperationAllowed();
+      if (this.closing) throw serialError('E_MODBUS_SERIAL_CLOSING');
       if (!this.connected) throw new Error('Serial transport disconnected before dispatch');
       this.client.setID(Number(unitId || 1));
       this.client.setTimeout(Number(timeoutMs || 2000));
@@ -158,23 +168,37 @@ function acquireBus(adapter, opts) {
 
   const existing = buses.get(key);
   if (existing) {
+    if (existing.closing) throw serialError('E_MODBUS_SERIAL_CLOSING');
     existing.refs++;
     return { key, bus: existing.bus };
   }
 
-  const bus = new ModbusRtuBus(adapter, opts);
-  buses.set(key, { bus, refs: 1 });
+  const releasePort = claimSerialPort((opts.path || '').toString().trim());
+  let bus;
+  try { bus = new ModbusRtuBus(adapter, opts); }
+  catch (error) { releasePort(); throw error; }
+  buses.set(key, { bus, refs: 1, closing: false, closePromise: null, releasePort });
   return { key, bus };
 }
 
-function releaseBus(key) {
+async function releaseBus(key) {
   const entry = buses.get(key);
   if (!entry) return;
+  if (entry.closePromise) return await boundedSerialClose(entry.closePromise);
   entry.refs--;
-  if (entry.refs <= 0) {
-    buses.delete(key);
-    // Close asynchronously
-    entry.bus.close().catch(() => {});
+  if (entry.refs > 0) return;
+  entry.closing = true;
+  entry.closePromise = entry.bus.close().then(() => {
+    // Late completion may release only this exact entry, never a replacement.
+    if (buses.get(key) === entry) {
+      buses.delete(key);
+      entry.releasePort();
+    }
+  });
+  try { await boundedSerialClose(entry.closePromise); }
+  catch (error) {
+    try { entry.bus.adapter.log.warn('EOS_MODBUS_SERIAL_STOP_UNCONFIRMED'); } catch (_) { /* Diagnostic failure does not restore transport authority. */ }
+    throw error;
   }
 }
 

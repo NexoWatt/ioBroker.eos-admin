@@ -36,6 +36,7 @@ Parameter sind die Namen aus der Signatur, keine geratenen Datenverträge. Die A
 | [`onClick`](../../../../../src-admin-tab/src/pages/InstallerPage.tsx#L105) | – | openExternal |
 | [`onClick`](../../../../../src-admin-tab/src/pages/InstallerPage.tsx#L109) | – | openExternal |
 | [`onClick`](../../../../../src-admin-tab/src/pages/InstallerPage.tsx#L113) | – | openExternal |
-| [`onClick`](../../../../../src-admin-tab/src/pages/InstallerPage.tsx#L118) | – | openExternal |
+| [`onClick`](../../../../../src-admin-tab/src/pages/InstallerPage.tsx#L117) | – | openExternal |
 | [`onClick`](../../../../../src-admin-tab/src/pages/InstallerPage.tsx#L122) | – | openExternal |
 | [`onClick`](../../../../../src-admin-tab/src/pages/InstallerPage.tsx#L126) | – | openExternal |
+| [`onClick`](../../../../../src-admin-tab/src/pages/InstallerPage.tsx#L130) | – | openExternal |

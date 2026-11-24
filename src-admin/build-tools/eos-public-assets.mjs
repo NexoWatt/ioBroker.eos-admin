@@ -40,7 +40,7 @@ export function rootWebappAssetUrls(html) {
         if (!['manifest', 'icon', 'apple-touch-icon'].includes(rel)) return tag;
         return tag.replace(/\bhref="([^"]+)"/i, (attribute, value) => {
             const local = value.replace(/^(?:\.\/|\/)/, '');
-            if (!/^(?:manifest\.webmanifest|apple-touch-icon\.png|assets\/icons\/nexowatt-(?:32|192)\.png)(?:\?[^"#]*)?$/.test(local)) {
+            if (!/^(?:manifest\.webmanifest|apple-touch-icon\.png|assets\/icons\/nexowatt-(?:32|180|192)\.png)(?:\?[^"#]*)?$/.test(local)) {
                 return attribute;
             }
             return `href="/${local}"`;

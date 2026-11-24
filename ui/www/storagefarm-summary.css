@@ -15,3 +15,18 @@
 .nw-farm-summary__hint { color: #bacbd2; font-size: .82rem; line-height: 1.5; margin: 14px 0 0; }
 @media (max-width: 900px) { .nw-farm-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 460px) { .nw-farm-metrics { grid-template-columns: 1fr; } .nw-farm-metric { padding: 16px; } }
+
+/* Diagnose trennt tatsächliche Messung von Verteilung und Befehlsannahme. */
+.nw-farm-dispatch { margin-top: 24px; padding-top: 20px; border-top: 1px solid #244251; }
+.nw-farm-dispatch h3 { color: #e5f5f5; font-size: 1.1rem; margin: 0 0 12px; }
+#sf_dispatch_status { color: #ead5a5; line-height: 1.5; overflow-wrap: anywhere; }
+.nw-farm-dispatch .nw-farm-metric { border-top-color: #4e91a1; }
+.nw-farm-dispatch-members { display: grid; gap: 10px; margin-top: 16px; }
+.nw-farm-dispatch-member { background: #081c29; border: 1px solid #244251; border-radius: 12px; min-width: 0; }
+.nw-farm-dispatch-member summary { padding: 14px 16px; cursor: pointer; color: #dcefeb; overflow-wrap: anywhere; }
+.nw-farm-dispatch-member summary:focus-visible { outline: 2px solid #35d9ad; outline-offset: 2px; }
+.nw-farm-dispatch-details { display: grid; gap: 12px; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0; padding: 0 16px 16px; }
+.nw-farm-dispatch-details > div { min-width: 0; overflow-wrap: anywhere; }
+.nw-farm-dispatch-details dt { color: #91acb8; font-size: .76rem; }
+.nw-farm-dispatch-details dd { color: #dcefeb; font-size: .84rem; margin: 5px 0 0; line-height: 1.45; }
+@media (max-width: 600px) { .nw-farm-dispatch-details { grid-template-columns: minmax(0, 1fr); } }

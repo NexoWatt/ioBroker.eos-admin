@@ -1,0 +1,3 @@
+[storage-command-family-readback] ERROR: TypeError: factory is not a function
+    at verifyStorageFarm (/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/ui/scripts/verify-storage-command-family-readback.js:229:21)
+    at /workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/ui/scripts/verify-storage-command-family-readback.js:316:9

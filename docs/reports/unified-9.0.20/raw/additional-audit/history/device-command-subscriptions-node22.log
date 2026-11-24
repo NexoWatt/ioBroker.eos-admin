@@ -1,0 +1,442 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: without a browser, raw, legacy and AliasV1 commands reach real hosted DeviceRuntime
+    # Subtest: EOS namespace
+    ok 1 - EOS namespace
+      ---
+      duration_ms: 138.803228
+      type: 'test'
+      ...
+    # Subtest: retained namespace
+    ok 2 - retained namespace
+      ---
+      duration_ms: 22.951438
+      type: 'test'
+      ...
+    1..2
+ok 1 - without a browser, raw, legacy and AliasV1 commands reach real hosted DeviceRuntime
+  ---
+  duration_ms: 163.033923
+  type: 'test'
+  ...
+# Subtest: browser subscribe/unsubscribe cannot enable or disable physical command delivery
+ok 2 - browser subscribe/unsubscribe cannot enable or disable physical command delivery
+  ---
+  duration_ms: 54.362935
+  type: 'test'
+  ...
+# Subtest: revoked device ownership rejects commands and stop preserves an independent host observer
+ok 3 - revoked device ownership rejects commands and stop preserves an independent host observer
+  ---
+  duration_ms: 15.426889
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: one central entitlement starts the integrated module without a second adapter or license
+ok 4 - one central entitlement starts the integrated module without a second adapter or license
+  ---
+  duration_ms: 29.675683
+  type: 'test'
+  ...
+# Subtest: disabled and unlicensed modules create no runtime; metadata remains available
+ok 5 - disabled and unlicensed modules create no runtime; metadata remains available
+  ---
+  duration_ms: 9.86915
+  type: 'test'
+  ...
+# Subtest: license loss denies existing operation closures synchronously and stops transports
+ok 6 - license loss denies existing operation closures synchronously and stops transports
+  ---
+  duration_ms: 14.357979
+  type: 'test'
+  ...
+# Subtest: normal host heartbeat preserves a running module and generation
+ok 7 - normal host heartbeat preserves a running module and generation
+  ---
+  duration_ms: 8.17603
+  type: 'test'
+  ...
+# Subtest: legacy enable revokes immediately; confirmed stop creates a new valid generation
+ok 8 - legacy enable revokes immediately; confirmed stop creates a new valid generation
+  ---
+  duration_ms: 9.799064
+  type: 'test'
+  ...
+# Subtest: a race during legacy inventory cannot renew an invalidated operation lease
+ok 9 - a race during legacy inventory cannot renew an invalidated operation lease
+  ---
+  duration_ms: 11.293905
+  type: 'test'
+  ...
+# Subtest: facade constrains namespaces and suppresses stale telemetry after lifecycle end
+ok 10 - facade constrains namespaces and suppresses stale telemetry after lifecycle end
+  ---
+  duration_ms: 8.918408
+  type: 'test'
+  ...
+# Subtest: secret masking and restoration follow device IDs when rows move
+ok 11 - secret masking and restoration follow device IDs when rows move
+  ---
+  duration_ms: 0.953826
+  type: 'test'
+  ...
+# Subtest: saved configurations are encrypted and API views never return device credentials
+ok 12 - saved configurations are encrypted and API views never return device credentials
+  ---
+  duration_ms: 7.731201
+  type: 'test'
+  ...
+# Subtest: configuration cannot reopen a runtime after failed transport shutdown
+ok 13 - configuration cannot reopen a runtime after failed transport shutdown
+  ---
+  duration_ms: 14.373823
+  type: 'test'
+  ...
+# Subtest: config rejects prototype keys and excessive depth before persistence
+ok 14 - config rejects prototype keys and excessive depth before persistence
+  ---
+  duration_ms: 0.309997
+  type: 'test'
+  ...
+# Subtest: integrated licenses preserve NWL2 adapter scope and fail closed on expired core entitlement
+ok 15 - integrated licenses preserve NWL2 adapter scope and fail closed on expired core entitlement
+  ---
+  duration_ms: 10.26097
+  type: 'test'
+  ...
+# Subtest: concurrent HTTP-close and adapter-unload share transport cleanup, and late startup never installs a timer
+ok 16 - concurrent HTTP-close and adapter-unload share transport cleanup, and late startup never installs a timer
+  ---
+  duration_ms: 25.983193
+  type: 'test'
+  ...
+# Subtest: preserved legacy EEBus namespace keeps state IDs while private bridge remains tied to EOS owner
+ok 17 - preserved legacy EEBus namespace keeps state IDs while private bridge remains tied to EOS owner
+  ---
+  duration_ms: 15.358916
+  type: 'test'
+  ...
+# Subtest: backup secret fields stay redacted and restored by unique endpoint rather than row index
+ok 18 - backup secret fields stay redacted and restored by unique endpoint rather than row index
+  ---
+  duration_ms: 0.406272
+  type: 'test'
+  ...
+# Subtest: backup notifications use only configured validated target and lose authority on revocation
+ok 19 - backup notifications use only configured validated target and lose authority on revocation
+  ---
+  duration_ms: 3.721353
+  type: 'test'
+  ...
+# Subtest: backup downloads clean late file streams after timeout or stop and bound concurrent opens
+ok 20 - backup downloads clean late file streams after timeout or stop and bound concurrent opens
+  ---
+  duration_ms: 24.164065
+  type: 'test'
+  ...
+# Subtest: backup data-folder inventory exposes only bounded paths and rejects revoked or malformed reads
+ok 21 - backup data-folder inventory exposes only bounded paths and rejects revoked or malformed reads
+  ---
+  duration_ms: 5.477798
+  type: 'test'
+  ...
+# Subtest: device view exposes an explicit commissioning bridge status before binding instead of an empty placeholder
+ok 22 - device view exposes an explicit commissioning bridge status before binding instead of an empty placeholder
+  ---
+  duration_ms: 1.433508
+  type: 'test'
+  ...
+# Subtest: active profile admission rejection occurs before persistent changes and preserves the existing runtime
+ok 23 - active profile admission rejection occurs before persistent changes and preserves the existing runtime
+  ---
+  duration_ms: 9.935329
+  type: 'test'
+  ...
+# Subtest: profile changes require the bridge, while a stopped controller can reserve and persist a replacement
+ok 24 - profile changes require the bridge, while a stopped controller can reserve and persist a replacement
+  ---
+  duration_ms: 13.449522
+  type: 'test'
+  ...
+# (node:14) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:14) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:14) ExperimentalWarning: The MockTimers API is an experimental feature and might change at any time
+# Subtest: stop during command subscription acquisition never opens hardware and drains coverage
+ok 25 - stop during command subscription acquisition never opens hardware and drains coverage
+  ---
+  duration_ms: 259.456654
+  type: 'test'
+  ...
+# Subtest: a later factory failure after a successful stop releases its new command subscription
+ok 26 - a later factory failure after a successful stop releases its new command subscription
+  ---
+  duration_ms: 17.504987
+  type: 'test'
+  ...
+# Subtest: failed command subscription prevents factory creation and device writes
+ok 27 - failed command subscription prevents factory creation and device writes
+  ---
+  duration_ms: 2.210158
+  type: 'test'
+  ...
+# Subtest: hung command subscription times out fail-closed and late completion is drained
+ok 28 - hung command subscription times out fail-closed and late completion is drained
+  ---
+  duration_ms: 23.173743
+  type: 'test'
+  ...
+# Subtest: module presence does not report active until its original start promise succeeds
+ok 29 - module presence does not report active until its original start promise succeeds
+  ---
+  duration_ms: 3.058705
+  type: 'test'
+  ...
+# Subtest: concurrent stop waits for late startup and closes newly opened transports before resolving
+ok 30 - concurrent stop waits for late startup and closes newly opened transports before resolving
+  ---
+  duration_ms: 15.441161
+  type: 'test'
+  ...
+# Subtest: a rejected pending startup still receives final cleanup before stop confirmation
+ok 31 - a rejected pending startup still receives final cleanup before stop confirmation
+  ---
+  duration_ms: 7.458951
+  type: 'test'
+  ...
+# Subtest: timeout is sticky unconfirmed shutdown; late startup cleanup cannot authorize a rollback
+ok 32 - timeout is sticky unconfirmed shutdown; late startup cleanup cannot authorize a rollback
+  ---
+  duration_ms: 27.425455
+  type: 'test'
+  ...
+# Subtest: a failing final cleanup remains unconfirmed even when the first cleanup succeeded
+ok 33 - a failing final cleanup remains unconfirmed even when the first cleanup succeeded
+  ---
+  duration_ms: 1.755043
+  type: 'test'
+  ...
+# Subtest: a failed running transport shutdown cannot be hidden by host stop or reconfiguration
+ok 34 - a failed running transport shutdown cannot be hidden by host stop or reconfiguration
+  ---
+  duration_ms: 1.452156
+  type: 'test'
+  ...
+# Subtest: shutdown during configuration read cannot create a delayed module or subscription
+ok 35 - shutdown during configuration read cannot create a delayed module or subscription
+  ---
+  duration_ms: 0.799163
+  type: 'test'
+  ...
+# Subtest: a late facade subscription is immediately removed after its generation was revoked
+ok 36 - a late facade subscription is immediately removed after its generation was revoked
+  ---
+  duration_ms: 0.997211
+  type: 'test'
+  ...
+# Subtest: confirmed stop waits for every accepted state/create/extend mutation to settle
+ok 37 - confirmed stop waits for every accepted state/create/extend mutation to settle
+  ---
+  duration_ms: 3.830748
+  type: 'test'
+  ...
+# Subtest: pending mutation timeout stays unconfirmed; bounded capacity and revoked calls never forward or retry
+ok 38 - pending mutation timeout stays unconfirmed; bounded capacity and revoked calls never forward or retry
+  ---
+  duration_ms: 71.72662
+  type: 'test'
+  ...
+# (node:20) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: original socket-classes 2.10.0 reproduces the reported unhandled rejection before any browser subscription
+ok 39 - original socket-classes 2.10.0 reproduces the reported unhandled rejection before any browser subscription
+  ---
+  duration_ms: 421.369454
+  type: 'test'
+  ...
+# Subtest: startup burst without browser enters and recovers threshold without exception
+ok 40 - startup burst without browser enters and recovers threshold without exception
+  ---
+  duration_ms: 380.033619
+  type: 'test'
+  ...
+# Subtest: the configured threshold and three consecutive intervals remain enforced
+ok 41 - the configured threshold and three consecutive intervals remain enforced
+  ---
+  duration_ms: 53.611524
+  type: 'test'
+  ...
+# Subtest: browser unsubscribe and recovery use the current subscription map, including a newly connected client
+ok 42 - browser unsubscribe and recovery use the current subscription map, including a newly connected client
+  ---
+  duration_ms: 71.927332
+  type: 'test'
+  ...
+# Subtest: threshold suppresses browser traffic still delivered to EMS while keeping system events under upstream ACLs
+ok 43 - threshold suppresses browser traffic still delivered to EMS while keeping system events under upstream ACLs
+  ---
+  duration_ms: 76.240797
+  type: 'test'
+  ...
+# Subtest: closing before either delayed threshold transition cancels all work and repeated close is safe
+ok 44 - closing before either delayed threshold transition cancels all work and repeated close is safe
+  ---
+  duration_ms: 94.215932
+  type: 'test'
+  ...
+# Subtest: stop during an awaited unsubscribe prevents subsequent transition requests
+ok 45 - stop during an awaited unsubscribe prevents subsequent transition requests
+  ---
+  duration_ms: 86.541933
+  type: 'test'
+  ...
+# Subtest: explicit browser threshold command preserves permission checks and uses the cancellable lifecycle
+ok 46 - explicit browser threshold command preserves permission checks and uses the cancellable lifecycle
+  ---
+  duration_ms: 34.382891
+  type: 'test'
+  ...
+# Subtest: subscription rejection and notification exceptions are handled locally without process-level suppression
+ok 47 - subscription rejection and notification exceptions are handled locally without process-level suppression
+  ---
+  duration_ms: 31.604518
+  type: 'test'
+  ...
+# (node:32) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: module command leases retain other module, host and socket ownership independently
+ok 48 - module command leases retain other module, host and socket ownership independently
+  ---
+  duration_ms: 4.279173
+  type: 'test'
+  ...
+# Subtest: module lease failure is retryable and socket close cannot release device commands
+ok 49 - module lease failure is retryable and socket close cannot release device commands
+  ---
+  duration_ms: 1.556814
+  type: 'test'
+  ...
+# (node:32) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: close drains pending command lease acquisition and late release is harmless
+ok 50 - close drains pending command lease acquisition and late release is harmless
+  ---
+  duration_ms: 12.144025
+  type: 'test'
+  ...
+# Subtest: module leases reject implicit global coverage and bound concurrent owners
+ok 51 - module leases reject implicit global coverage and bound concurrent owners
+  ---
+  duration_ms: 22.807562
+  type: 'test'
+  ...
+# Subtest: simultaneous module acquisitions cannot bypass the distinct-pattern bound
+ok 52 - simultaneous module acquisitions cannot bypass the distinct-pattern bound
+  ---
+  duration_ms: 106.821383
+  type: 'test'
+  ...
+# Subtest: browser threshold unsubscription cannot remove a matching EMS subscription
+ok 53 - browser threshold unsubscription cannot remove a matching EMS subscription
+  ---
+  duration_ms: 0.632812
+  type: 'test'
+  ...
+# Subtest: socket-first and host-first subscribers share the service bus, with no user escalation on other methods
+ok 54 - socket-first and host-first subscribers share the service bus, with no user escalation on other methods
+  ---
+  duration_ms: 0.363968
+  type: 'test'
+  ...
+# Subtest: duplicates are idempotent and wildcard removal is exact, not a global unsubscribe
+ok 55 - duplicates are idempotent and wildcard removal is exact, not a global unsubscribe
+  ---
+  duration_ms: 5.542585
+  type: 'test'
+  ...
+# Subtest: own-state async and callback methods share ownership with absolute socket patterns
+ok 56 - own-state async and callback methods share ownership with absolute socket patterns
+  ---
+  duration_ms: 1.044453
+  type: 'test'
+  ...
+# Subtest: subscription failure rolls back and a retry can establish and release the bus
+ok 57 - subscription failure rolls back and a retry can establish and release the bus
+  ---
+  duration_ms: 1.106546
+  type: 'test'
+  ...
+# Subtest: unsubscribe failure retains tracked ownership until a successful retry
+ok 58 - unsubscribe failure retains tracked ownership until a successful retry
+  ---
+  duration_ms: 0.564059
+  type: 'test'
+  ...
+# Subtest: concurrent subscribe/unsubscribe operations serialize without stale removal
+ok 59 - concurrent subscribe/unsubscribe operations serialize without stale removal
+  ---
+  duration_ms: 0.457188
+  type: 'test'
+  ...
+# Subtest: closing socket scope preserves EMS and blocks late timer and browser activity
+ok 60 - closing socket scope preserves EMS and blocks late timer and browser activity
+  ---
+  duration_ms: 1.194198
+  type: 'test'
+  ...
+# Subtest: late disconnect callbacks after shutdown succeed without touching the controller or logging noise
+ok 61 - late disconnect callbacks after shutdown succeed without touching the controller or logging noise
+  ---
+  duration_ms: 0.810341
+  type: 'test'
+  ...
+# Subtest: stop drains a backend subscribe already in flight, then removes it without resurrection
+ok 62 - stop drains a backend subscribe already in flight, then removes it without resurrection
+  ---
+  duration_ms: 8.059194
+  type: 'test'
+  ...
+# Subtest: invalid requests do not mutate bus interests and callback failures are handled
+ok 63 - invalid requests do not mutate bus interests and callback failures are handled
+  ---
+  duration_ms: 2.349167
+  type: 'test'
+  ...
+# Subtest: real SocketCommands publication still enforces user-specific state denial and ACL revocation on the shared bus
+ok 64 - real SocketCommands publication still enforces user-specific state denial and ACL revocation on the shared bus
+  ---
+  duration_ms: 92.86611
+  type: 'test'
+  ...
+# Subtest: controller-7 absent-object semantics are unchanged: no DB refusal is treated as readable by upstream
+ok 65 - controller-7 absent-object semantics are unchanged: no DB refusal is treated as readable by upstream
+  ---
+  duration_ms: 1.14231
+  type: 'test'
+  ...
+# Subtest: controller promisify captures original callback APIs and does not recurse into installed wrappers
+ok 66 - controller promisify captures original callback APIs and does not recurse into installed wrappers
+  ---
+  duration_ms: 708.256841
+  type: 'test'
+  ...
+# Subtest: controller foreign omitted-pattern defaults and own empty-pattern behavior remain compatible
+ok 67 - controller foreign omitted-pattern defaults and own empty-pattern behavior remain compatible
+  ---
+  duration_ms: 0.73708
+  type: 'test'
+  ...
+1..67
+# tests 69
+# suites 0
+# pass 69
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1511.138866

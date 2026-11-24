@@ -10,6 +10,8 @@
 */
 
 const ModbusRTU = require('modbus-serial');
+const { assertOperationAllowed } = require('../operationContext');
+const { recordReadResponse } = require('../modbusReadEvidence');
 const { acquireBus, releaseBus } = require('./modbusRtuBus');
 const { acquireBus: acquireAsciiBus, releaseBus: releaseAsciiBus } = require('./modbusAsciiBus');
 const { applyScale, removeScale, bigIntToNumberOrString } = require('../utils');
@@ -31,7 +33,7 @@ function _errMsg(err) {
 // They must abort the whole snapshot without marking valid optional registers
 // unsupported for the subsequent permitted poll.
 function isReadOperationBoundaryError(err) {
-  return ['EOS_DEVICES_NOT_AUTHORIZED', 'EOS_DEVICES_STOPPED', 'EOS_MODULE_STOPPED', 'EOS_OWNERSHIP_REQUIRED']
+  return ['EOS_DEVICES_NOT_AUTHORIZED', 'EOS_DEVICES_STOPPED', 'EOS_MODULE_STOPPED', 'EOS_OWNERSHIP_REQUIRED', 'E_MODBUS_CONNECT_CANCELLED']
     .includes(_errCode(err) || _errMsg(err));
 }
 
@@ -581,6 +583,7 @@ class ModbusDriver {
     }
     this.connected = false;
     this.connecting = false;
+    this._connectGeneration = 0;
     this._busy = false;
 
     // Cache for dynamic scale factors (e.g. SunSpec *_SF registers)
@@ -783,6 +786,7 @@ class ModbusDriver {
     this._sunSpecScanUnitIds = Array.isArray(hints.sunSpecScanUnitIds) ? hints.sunSpecScanUnitIds.map(Number) : null;
     this._sunSpecScanFcs = Array.isArray(hints.sunSpecScanFunctionCodes) ? hints.sunSpecScanFunctionCodes.map(Number) : null;
     this._sunSpecDiscovered = false;
+    this._sunSpecDiscoveryPending = null;
     this._sunSpecFc = null; // FC used for SunSpec registers (3/4)
     this._sunSpecFoundBase = null; // discovered base register for 'SunS'
     this._sunSpecModelsById = new Map(); // modelId -> [{offset,len}]
@@ -1087,6 +1091,13 @@ class ModbusDriver {
   }
 
   async connect() {
+    const generation = this._connectGeneration;
+    const cancelled = () => Object.assign(new Error('Modbus connect cancelled after disconnect'), { code: 'E_MODBUS_CONNECT_CANCELLED' });
+    const assertCurrent = () => {
+      if (generation !== this._connectGeneration) throw cancelled();
+      assertOperationAllowed();
+    };
+    assertCurrent();
     if (this.connected) return;
 
     // If another caller is already connecting, wait for it instead of returning early.
@@ -1097,7 +1108,9 @@ class ModbusDriver {
       const maxWait = Math.max(Number(this.connectTimeoutMs || 0), Number(this.operationTimeoutMs || 0), 5000);
       while (this.connecting && !this.connected && (Date.now() - started) < maxWait) {
         await sleep(50);
+        assertCurrent();
       }
+      assertCurrent();
       if (this.connected) return;
       if (this.connecting) {
         const err = this._makeTimeoutError('Modbus TCP connect wait', maxWait, 'E_MODBUS_CONNECT_TIMEOUT');
@@ -1118,8 +1131,12 @@ class ModbusDriver {
       // ignore
     }
 
+    // A stop can complete while reconnect backoff is sleeping. Never create a
+    // transport afterwards, even when a later session has become authorized.
+    let connectingClient = null;
     const c = this.device.connection || {};
     try {
+      assertCurrent();
       if (this.protocol === 'modbusTcp') {
         const host = c.host;
         const port = Number(c.port || 502);
@@ -1131,6 +1148,7 @@ class ModbusDriver {
         } catch (_) {}
 
         const tcpClient = new ModbusRTU();
+        connectingClient = tcpClient;
         this.client = tcpClient;
 
         const connectPromise = new Promise((resolve, reject) => {
@@ -1147,6 +1165,7 @@ class ModbusDriver {
           }
         );
 
+        assertCurrent();
         // The connection may have completed after a timeout and been replaced/closed.
         if (this.client !== tcpClient) {
           const err = new Error('Modbus TCP connect completed on stale client');
@@ -1197,6 +1216,7 @@ class ModbusDriver {
         throw new Error(`Unsupported Modbus protocol: ${this.protocol}`);
       }
 
+      assertCurrent();
       this.connected = true;
       this._failStreak = 0;
       this._nextConnectAt = 0;
@@ -1206,24 +1226,28 @@ class ModbusDriver {
       try {
         await this._maybeDiscoverSunSpec();
       } catch (e) {
-        // Discovery must never break connectivity.
+        if (isReadOperationBoundaryError(e)) throw e;
+        // Discovery must never break connectivity for ordinary unsupported models.
         this.adapter.log.debug(`[${this.device.id}] SunSpec discovery error: ${e && e.message ? e.message : e}`);
       }
+      assertCurrent();
     } catch (e) {
-      // Ensure we always reset the internal state and apply backoff on connect failures
-      if (isTransportError(e)) {
-        this._markDisconnected(e);
-      } else {
-        // still close any stale socket to avoid half-open sessions
-        this._markDisconnected(e);
+      if (generation !== this._connectGeneration) {
+        // Late completion belongs to the old attempt. Its cleanup must never
+        // close or mark disconnected the replacement session's TCP client.
+        if (connectingClient && connectingClient !== this.client) this._forceCloseTcpClient(connectingClient);
+        throw cancelled();
       }
+      // Ensure we always reset the internal state on this attempt's failure.
+      this._markDisconnected(e);
       throw e;
     } finally {
-      this.connecting = false;
+      if (generation === this._connectGeneration) this.connecting = false;
     }
   }
 
   async disconnect() {
+    ++this._connectGeneration;
     try {
       if (this.protocol === 'modbusTcp') {
         if (this.client) {
@@ -1232,13 +1256,13 @@ class ModbusDriver {
         }
       } else if (this.protocol === 'modbusRtu') {
         if (this.rtuBusKey) {
-          releaseBus(this.rtuBusKey);
+          await releaseBus(this.rtuBusKey);
         }
         this.rtuBus = null;
         this.rtuBusKey = null;
       } else if (this.protocol === 'modbusAscii') {
         if (this.asciiBusKey) {
-          releaseAsciiBus(this.asciiBusKey);
+          await releaseAsciiBus(this.asciiBusKey);
         }
         this.asciiBus = null;
         this.asciiBusKey = null;
@@ -1252,6 +1276,7 @@ class ModbusDriver {
   }
 
   async ensureConnected() {
+    const generation = this._connectGeneration;
     if (this.connected) {
       if (this.protocol === 'modbusTcp' && !this._isTcpOpen()) {
         this._markDisconnected(new Error('Port Not Open'));
@@ -1263,7 +1288,8 @@ class ModbusDriver {
       await this.connect();
       return this.connected;
     } catch (e) {
-      this.connected = false;
+      // An older caller may finish after disconnect and successful replacement.
+      if (generation === this._connectGeneration) this.connected = false;
       throw e;
     }
   }
@@ -2281,10 +2307,29 @@ class ModbusDriver {
 
   async _maybeDiscoverSunSpec() {
     if (!this._autoSunSpec) return false;
+    assertOperationAllowed();
     if (this._sunSpecDiscovered) return true;
+    const generation = this._connectGeneration;
+    if (this._sunSpecDiscoveryPending?.generation === generation) return this._sunSpecDiscoveryPending.promise;
+    const pending = { generation, promise: null };
+    pending.promise = this._discoverSunSpec(generation).finally(() => {
+      if (this._sunSpecDiscoveryPending === pending) this._sunSpecDiscoveryPending = null;
+    });
+    this._sunSpecDiscoveryPending = pending;
+    return pending.promise;
+  }
 
-    // Only do discovery once per runtime.
-    this._sunSpecDiscovered = true;
+  async _discoverSunSpec(generation) {
+    const client = this.client;
+    const originalUnitId = this.unitId;
+    const assertCurrent = () => {
+      if (generation !== this._connectGeneration || (this.protocol === 'modbusTcp' && client !== this.client)) {
+        throw Object.assign(new Error('Modbus discovery cancelled after disconnect'), { code: 'E_MODBUS_CONNECT_CANCELLED' });
+      }
+      assertOperationAllowed();
+    };
+    assertCurrent();
+    // Cache only a completed scan. A cancelled scan remains retryable.
 
     // Candidates (kept intentionally small to avoid long connect delays)
     const templateBase = Number.isFinite(this._sunSpecTemplateBase) ? this._sunSpecTemplateBase : 40000;
@@ -2327,6 +2372,7 @@ class ModbusDriver {
       }
 
       for (const uid of unitCandidates) {
+        assertCurrent();
         this._setUnitId(uid);
 
         for (const fc of fcCandidates) {
@@ -2337,6 +2383,7 @@ class ModbusDriver {
             if (testAddr < 0 || testAddr > 65535) continue;
 
             try {
+              assertCurrent();
               let regs;
               if (fc === 3) {
                 regs = (await this._mbReadHoldingRegisters(testAddr, 2)).data || [];
@@ -2346,10 +2393,12 @@ class ModbusDriver {
                 continue;
               }
 
+              assertCurrent();
               const sig = this._sunSpecSignatureInfo(regs);
               if (sig) {
                 // Compute only the *additional* offset beyond the manual offset.
                 const autoOff = b - templateBase - this.manualAddressOffset;
+                this._sunSpecDiscovered = true;
                 this.autoAddressOffset = autoOff;
                 this.autoUnitId = uid;
                 this._sunSpecFc = fc;
@@ -2385,15 +2434,20 @@ class ModbusDriver {
         }
       }
 
+      assertCurrent();
+      this._sunSpecDiscovered = true;
       this.adapter.log.debug(
         `[${this.device.id}] SunSpec discovery: signature not found. ` +
         `Keeping unitId=${this.unitId} and addressOffset(manual)=${this.manualAddressOffset}.`
       );
       return false;
+    } catch (error) {
+      if (generation === this._connectGeneration && this.client === client) this._setUnitId(originalUnitId);
+      throw error;
     } finally {
-      // Restore timeout
-      if (this.protocol === 'modbusTcp' && this.client && typeof this.client.setTimeout === 'function') {
-        try { this.client.setTimeout(originalTimeout); } catch (_) {}
+      // A late old scan must not change the replacement client's timeout.
+      if (generation === this._connectGeneration && this.protocol === 'modbusTcp' && this.client === client && client && typeof client.setTimeout === 'function') {
+        try { client.setTimeout(originalTimeout); } catch (_) {}
       }
     }
   }
@@ -2402,6 +2456,13 @@ class ModbusDriver {
 
   async _maybeScanSunSpecModels() {
     if (!this._autoSunSpec) return false;
+    const generation = this._connectGeneration;
+    const client = this.client;
+    const assertCurrent = () => {
+      if (generation !== this._connectGeneration || (this.protocol === 'modbusTcp' && client !== this.client)) throw Object.assign(new Error('Modbus model scan cancelled after disconnect'), { code: 'E_MODBUS_CONNECT_CANCELLED' });
+      assertOperationAllowed();
+    };
+    assertCurrent();
     if (this._sunSpecModelsScanned) return true;
 
     // Ensure discovery has run so we know the correct unitId/base/fc/endian.
@@ -2419,8 +2480,10 @@ class ModbusDriver {
     if (!Number.isFinite(base) || base < 0 || base > 65535) return false;
 
     const readRegs = async (addr, len) => {
-      if (fc === 4) return (await this._mbReadInputRegisters(addr, len)).data || [];
-      return (await this._mbReadHoldingRegisters(addr, len)).data || [];
+      assertCurrent();
+      const result = fc === 4 ? await this._mbReadInputRegisters(addr, len) : await this._mbReadHoldingRegisters(addr, len);
+      assertCurrent();
+      return result.data || [];
     };
 
     const modelsById = new Map();
@@ -2456,6 +2519,7 @@ class ModbusDriver {
       off += 2 + len;
     }
 
+    assertCurrent();
     this._sunSpecModelsById = modelsById;
     this._sunSpecModelsScanned = true;
 
@@ -3008,7 +3072,10 @@ async readDatapoints(datapoints) {
       if (shouldSkipGroup(fc, ig, unitId)) { skippedReadGroupCount += 1; continue; }
       try {
         const regs = await readRegisterGroupRaw(fc, item.addr, Number(item.len || item.src.length || 1), unitId);
-        if (storeRegisterItemValue(item, regs, item.addr)) success += 1;
+        if (storeRegisterItemValue(item, regs, item.addr)) {
+          recordReadResponse(out, [item.dp.id]);
+          success += 1;
+        }
       } catch (e) {
         if (isReadOperationBoundaryError(e)) throw e;
         lastErr = e;
@@ -3170,9 +3237,11 @@ async readDatapoints(datapoints) {
           }
         }
 
+        const sampledIds = [];
         for (const item of g.items) {
-          storeRegisterItemValue(item, regs, g.start);
+          if (storeRegisterItemValue(item, regs, g.start)) sampledIds.push(item.dp.id);
         }
+        recordReadResponse(out, sampledIds);
       }
     }
 

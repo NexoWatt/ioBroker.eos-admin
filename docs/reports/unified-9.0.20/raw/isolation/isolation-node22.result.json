@@ -1,0 +1,19 @@
+{
+  "name": "isolation-node22",
+  "command": [
+    "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node",
+    "--test",
+    "test/eos-unified-cookie-isolation.test.cjs",
+    "test/eos-session-security.test.cjs",
+    "test/eos-unified-idle-client.test.cjs",
+    "test/eos-idle-integration.test.cjs",
+    "test/eos-module-config-store.test.cjs",
+    "test/eos-unified-settings-preservation.test.cjs"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin",
+  "startedAt": "2026-11-24T19:07:48.553317+00:00",
+  "durationSeconds": 6.871,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/audit-919/isolation/isolation-node22.log",
+  "sha256": "4614ef4b72236797d5b9a75cc5a1d3309768eac8c56778f158ebc0f520bcb531"
+}

@@ -1,0 +1,56 @@
+✔ farm own ack:false echo stays pending and idempotent; later ack only confirms the driver (49.877839ms)
+✔ farm delayed acknowledgment cannot confirm a newer request; invalid quality remains a failure (4.338483ms)
+✔ farm missing/null/blank/boolean values never confirm a zero command (2.838013ms)
+✔ farm real mismatch, write failure and authority revocation are not pending successes (64.142436ms)
+✔ actual single-storage command path keeps run enabled while matching command acknowledgments are pending (8.759179ms)
+✔ single-storage real mismatch still clears run; pending cannot hide a rejected primary write (126.638284ms)
+✔ single-storage actual ack is driver-only and late/invalid acknowledgment is not confirmed (0.65089ms)
+✔ farm keepalive renews a pending request without inventing confirmation or writing zero (6.227537ms)
+✔ pending neutralization reports requested and retains the native FEMS watchdog handoff (0.959255ms)
+✔ actual farm controller dispatches600W to eligible member at SoCs1/98 (130.749138ms)
+✔ actual farm controller dispatches600W to eligible member at SoCs98/1 (21.913534ms)
+✔ both members below configured minimum receive no discharge command (30.844652ms)
+✔ eligible member's explicit0W limit remains binding (35.138506ms)
+✔ eligible member's explicit250W limit remains binding (25.40402ms)
+✔ eligible full member blocked bystaleMember cannot discharge (13.322128ms)
+✔ empty member'sstaleMember does not block healthy full member (20.909943ms)
+✔ eligible full member blocked byfaultMember cannot discharge (11.97521ms)
+✔ empty member'sfaultMember does not block healthy full member (11.849041ms)
+✔ eligible full member blocked bydeniedMember cannot discharge (17.055339ms)
+✔ empty member'sdeniedMember does not block healthy full member (11.858975ms)
+✔ global admission remains binding:{"staleGrid":true} (17.66723ms)
+✔ global admission remains binding:{"tariffBlock":true} (9.249977ms)
+✔ global admission remains binding:{"enabled":false} (5.991922ms)
+✔ explicit global MultiUse50% reserve blocks49.5% mean without silently overriding operator policy (10.757457ms)
+✔ farm write acceptance does not masquerade as measured response: 63W actual versus673W target times out (17.654481ms)
+✔ fresh device discharge capability 0W caps real controller allocation to 0W (13.281498ms)
+✔ fresh device discharge capability 250W caps real controller allocation to 250W (20.192243ms)
+✔ fresh device discharge capability 9566W caps real controller allocation to 600W (9.503509ms)
+✔ numeric hardware capability cannot raise an installer limit (14.291939ms)
+✔ bound missing device capability blocks only its own direction without erasing mapping (23.778192ms)
+✔ bound stale device capability blocks only its own direction without erasing mapping (16.75082ms)
+✔ bound unacknowledged device capability blocks only its own direction without erasing mapping (21.123875ms)
+✔ bound bad quality device capability blocks only its own direction without erasing mapping (8.16241ms)
+✔ bound negative device capability blocks only its own direction without erasing mapping (8.591316ms)
+✔ bound string device capability blocks only its own direction without erasing mapping (9.661406ms)
+✔ bound wrong unit device capability blocks only its own direction without erasing mapping (8.679088ms)
+✔ capability block of empty member does not suppress eligible full member (9.036785ms)
+✔ charge capability independently clamps charging while discharge admission remains intact (19.049642ms)
+▶ 1%/98% pool dispatch preserves redistribution and explains only the actual per-member floor exclusion
+  ✔ 1/98 (79.055029ms)
+  ✔ 98/1 (13.388349ms)
+✔ 1%/98% pool dispatch preserves redistribution and explains only the actual per-member floor exclusion (93.513749ms)
+✔ missing member SoC remains unknown in diagnostics and does not block the other member (15.025303ms)
+▶ explicit zero limit and discharge prohibition remain blocking and are not relabelled as a SoC error
+  ✔ discharge_limit_zero (8.541631ms)
+  ✔ discharge_not_allowed (10.485798ms)
+✔ explicit zero limit and discharge prohibition remain blocking and are not relabelled as a SoC error (19.562624ms)
+✔ idle and charge reports do not pretend that a discharge floor was applied to the current request (11.600727ms)
+ℹ tests 46
+ℹ suites 0
+ℹ pass 46
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1093.282974

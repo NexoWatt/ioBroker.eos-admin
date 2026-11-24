@@ -1,0 +1,223 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: periodic canonical samples stop holding through outages; legacy sparse mappings still hold
+ok 1 - periodic canonical samples stop holding through outages; legacy sparse mappings still hold
+  ---
+  duration_ms: 6.893068
+  type: 'test'
+  ...
+# Subtest: canonical hold follows configured export cadence rather than an arbitrary device TTL
+ok 2 - canonical hold follows configured export cadence rather than an arbitrary device TTL
+  ---
+  duration_ms: 1.030191
+  type: 'test'
+  ...
+# Subtest: charge-point sum retains an outage when any configured member has no periodic sample
+ok 3 - charge-point sum retains an outage when any configured member has no periodic sample
+  ---
+  duration_ms: 1.287919
+  type: 'test'
+  ...
+# Subtest: asynchronous malformed History payloads cannot throw out of the callback
+ok 4 - asynchronous malformed History payloads cannot throw out of the callback
+  ---
+  duration_ms: 5.075902
+  type: 'test'
+  ...
+# Subtest: valid numeric zero stays zero, null does not create measured zero, supported envelopes agree
+ok 5 - valid numeric zero stays zero, null does not create measured zero, supported envelopes agree
+  ---
+  duration_ms: 24.405985
+  type: 'test'
+  ...
+# Subtest: one five-second deadline includes fallback rounds and ignores late responses
+ok 6 - one five-second deadline includes fallback rounds and ignores late responses
+  ---
+  duration_ms: 2.976432
+  type: 'test'
+  ...
+# Subtest: shutdown cancels History reads and new reads fail without starting transports
+ok 7 - shutdown cancels History reads and new reads fail without starting transports
+  ---
+  duration_ms: 2.24518
+  type: 'test'
+  ...
+# Subtest: thrown and rejected transports become bounded API errors with sibling cleanup
+ok 8 - thrown and rejected transports become bounded API errors with sibling cleanup
+  ---
+  duration_ms: 5.080168
+  type: 'test'
+  ...
+# Subtest: oversized raw response stops processing and cleans all pending branches
+ok 9 - oversized raw response stops processing and cleans all pending branches
+  ---
+  duration_ms: 1.666369
+  type: 'test'
+  ...
+# Subtest: invalid and allocation-amplifying ranges are rejected before provider work
+ok 10 - invalid and allocation-amplifying ranges are rejected before provider work
+  ---
+  duration_ms: 5.620753
+  type: 'test'
+  ...
+# Subtest: day, week, month, leap-year and six-hour annual-report presets preserve finite output bounds
+ok 11 - day, week, month, leap-year and six-hour annual-report presets preserve finite output bounds
+  ---
+  duration_ms: 14.998036
+  type: 'test'
+  ...
+# Subtest: identical requests share work; a fifth distinct computation gets backpressure
+ok 12 - identical requests share work; a fifth distinct computation gets backpressure
+  ---
+  duration_ms: 2.385511
+  type: 'test'
+  ...
+# Subtest: completed payload cache retains at most four requests and expires old responses
+ok 13 - completed payload cache retains at most four requests and expires old responses
+  ---
+  duration_ms: 35.878198
+  type: 'test'
+  ...
+# Subtest: current counter reads share History deadline instead of leaving request hanging
+ok 14 - current counter reads share History deadline instead of leaving request hanging
+  ---
+  duration_ms: 2.167563
+  type: 'test'
+  ...
+# Subtest: 200-charge-point fallback uses at most eight simultaneous reads and retains correct sums
+ok 15 - 200-charge-point fallback uses at most eight simultaneous reads and retains correct sums
+  ---
+  duration_ms: 22.239644
+  type: 'test'
+  ...
+# Subtest: four maximum-range payloads stay within measured row and serialized-size budgets
+ok 16 - four maximum-range payloads stay within measured row and serialized-size budgets
+  ---
+  duration_ms: 368.610182
+  type: 'test'
+  ...
+# {"profile":"History-only controlled provider; not customer RSS","gcAvailable":false,"cacheEntries":4,"rowsPerPayload":106496,"largestPayloadBytes":1919024,"heapDeltaBytes":36553896}
+# Subtest: leading missing buckets stay unknown in complete-period energy totals; measured zero remains zero
+ok 17 - leading missing buckets stay unknown in complete-period energy totals; measured zero remains zero
+  ---
+  duration_ms: 6.507177
+  type: 'test'
+  ...
+# Subtest: exact-energy EV fallback is also bounded and cannot swallow its timeout as a complete result
+ok 18 - exact-energy EV fallback is also bounded and cannot swallow its timeout as a complete result
+  ---
+  duration_ms: 1.728272
+  type: 'test'
+  ...
+# Subtest: optimized price lookup retains exact last-value and duplicate-timestamp semantics
+ok 19 - optimized price lookup retains exact last-value and duplicate-timestamp semantics
+  ---
+  duration_ms: 33.416402
+  type: 'test'
+  ...
+# Subtest: annual report still requests all ten years with two concurrent requests and original order
+ok 20 - annual report still requests all ten years with two concurrent requests and original order
+  ---
+  duration_ms: 12.272757
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: History line mapping preserves unknown values and real zero
+ok 21 - History line mapping preserves unknown values and real zero
+  ---
+  duration_ms: 2.29783
+  type: 'test'
+  ...
+# Subtest: power and SoC Canvas paths restart after explicit gaps
+ok 22 - power and SoC Canvas paths restart after explicit gaps
+  ---
+  duration_ms: 7.28535
+  type: 'test'
+  ...
+# Subtest: stacked areas create separate polygons on either side of a gap
+ok 23 - stacked areas create separate polygons on either side of a gap
+  ---
+  duration_ms: 5.556717
+  type: 'test'
+  ...
+# Subtest: integrated energy never bridges or ramps through null outage samples
+ok 24 - integrated energy never bridges or ramps through null outage samples
+  ---
+  duration_ms: 1.255801
+  type: 'test'
+  ...
+# Subtest: normalization retains timestamped unknown markers for cost integration
+ok 25 - normalization retains timestamped unknown markers for cost integration
+  ---
+  duration_ms: 1.24844
+  type: 'test'
+  ...
+# (node:19) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: History uses real PV/load fallbacks when derived states are absent or stale; fresh zero stays zero
+ok 26 - History uses real PV/load fallbacks when derived states are absent or stale; fresh zero stays zero
+  ---
+  duration_ms: 2.406823
+  type: 'test'
+  ...
+# Subtest: History never adds DC PV to the already merged canonical derived total
+ok 27 - History never adds DC PV to the already merged canonical derived total
+  ---
+  duration_ms: 3.570756
+  type: 'test'
+  ...
+# Subtest: Farm PV fallback merges once and missing/stale farm SoC is not recorded as zero
+ok 28 - Farm PV fallback merges once and missing/stale farm SoC is not recorded as zero
+  ---
+  duration_ms: 0.463048
+  type: 'test'
+  ...
+# Subtest: missing/null/boolean prices never create a free provider price; configured manual fallback is retained
+ok 29 - missing/null/boolean prices never create a free provider price; configured manual fallback is retained
+  ---
+  duration_ms: 0.613403
+  type: 'test'
+  ...
+# Subtest: provider price freshness flag, age, quality and timestamp are respected without changing manual tariff mode
+ok 30 - provider price freshness flag, age, quality and timestamp are respected without changing manual tariff mode
+  ---
+  duration_ms: 0.476397
+  type: 'test'
+  ...
+# Subtest: zero and negative canonical EUR prices and net-fee decomposition retain exact values
+ok 31 - zero and negative canonical EUR prices and net-fee decomposition retain exact values
+  ---
+  duration_ms: 0.393493
+  type: 'test'
+  ...
+# Subtest: missing grid/battery/PV measurements produce gaps, never fresh invented zeros
+ok 32 - missing grid/battery/PV measurements produce gaps, never fresh invented zeros
+  ---
+  duration_ms: 0.326602
+  type: 'test'
+  ...
+# Subtest: stale raw observations and farm aggregate are not re-stamped as new History samples
+ok 33 - stale raw observations and farm aggregate are not re-stamped as new History samples
+  ---
+  duration_ms: 0.244849
+  type: 'test'
+  ...
+# Subtest: the History sink rejects invalid data and retains real zero/negative measurements
+ok 34 - the History sink rejects invalid data and retains real zero/negative measurements
+  ---
+  duration_ms: 0.686574
+  type: 'test'
+  ...
+1..34
+# tests 34
+# suites 0
+# pass 34
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1942.106923

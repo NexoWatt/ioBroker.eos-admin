@@ -1,0 +1,14 @@
+{
+  "name": "backend-final",
+  "command": [
+    "npm",
+    "run",
+    "build:unified-backend"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+  "startedAt": "2026-11-24T21:05:15.101835+00:00",
+  "durationSeconds": 5.445,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-920/backend-final.log",
+  "sha256": "6a2bbfe14771cd82d94f5b7f5a18d1b6f89ff29a6c77b1c6264844d9a78800b6"
+}

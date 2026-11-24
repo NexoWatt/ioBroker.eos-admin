@@ -1,0 +1,14 @@
+{
+  "name": "ui-runtime-sync",
+  "command": [
+    "npm",
+    "run",
+    "check:ts-runtime-executables"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/ui",
+  "startedAt": "2026-11-24T21:05:48.510540+00:00",
+  "durationSeconds": 4.707,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-920/ui-runtime-sync.log",
+  "sha256": "e12ae97658139a5c0bfd5f17f4d4809f8abc960b81fe567c24a67c83ea0a01f2"
+}

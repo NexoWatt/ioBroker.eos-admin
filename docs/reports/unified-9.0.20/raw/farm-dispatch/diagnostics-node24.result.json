@@ -1,0 +1,14 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "test/eos-storagefarm-dispatch-diagnostics.test.cjs"
+  ],
+  "startedAt": "2026-11-24T19:50:06.373539+00:00",
+  "finishedAt": "2026-11-24T19:50:06.977450+00:00",
+  "exitCode": 0,
+  "node": "v24.22.3",
+  "logSha256": "298026e4efb67caf2150c9c09e723c59351db687ff533ac2581d55f669e606ab",
+  "mainSourceSha256": "9239ab952d7881293ab8c14a6f06ebf9e5ae01cbe6b33bf30737e9cc2b8a3197",
+  "mainRuntimeSha256": "1d059d554b5f5b94695cb28b6a3a8373aa8a6841e1bcd4704e63fef401ebb661"
+}

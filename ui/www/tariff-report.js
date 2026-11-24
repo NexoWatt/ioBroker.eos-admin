@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/tariff-report.ts
- * Quell-Hash: sha256:81377a66665b5ea9714993d81e0170b655ecb46ce3b5d21dddad7ab0493b7cbf
+ * Quell-Hash: sha256:537dd58dde9a3043eb41357f79fee4098314eb6933a65868aaae051187f0fd12
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -77,6 +77,18 @@
 
   const state = { data: null };
   const INTERVAL_MINUTES = 15;
+  // Report-common retains legacy numeric coercion for other report pages.
+  // This report must render missing coverage as unknown, including CSV output.
+  function reportNumber(value){
+    if (typeof value !== 'number' && typeof value !== 'string') return undefined;
+    if (typeof value === 'string' && !value.trim()) return undefined;
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : undefined;
+  }
+  function csvNumber(value){
+    const parsed = reportNumber(value);
+    return parsed === undefined ? '' : parsed.toFixed(4).replace('.', ',');
+  }
   /**
    * Code-Teil: defaultFromMs
    * Zweck: Kapselt einen lokalen Verarbeitungsschritt, damit Aufrufer nicht direkt in Detaildaten eingreifen.
@@ -141,6 +153,7 @@
     if (meta && meta.dynamicTariff) items.push('dynamischer Tarif aktiv');
     if (meta && meta.netFeeEnabled) items.push('variables Netzentgelt aktiv');
     if (meta && meta.historyInstance) items.push('Historie ' + meta.historyInstance);
+    if (meta && meta.coverage && !meta.coverage.complete) items.push('Datenabdeckung unvollständig');
     items.push(INTERVAL_MINUTES + '-Minuten-Raster');
     items.forEach((txt) => {
       const el = document.createElement('span');
@@ -160,14 +173,14 @@
     if (!grid) return;
     grid.innerHTML = '';
     const items = [
-      ['Preis min', C.fmtPrice(summary && summary.minPrice)],
-      ['Preis max', C.fmtPrice(summary && summary.maxPrice)],
-      ['Ø Preis', C.fmtPrice(summary && summary.avgPrice)],
-      ['Bezug', C.fmtKwh(summary && summary.importKwh)],
-      ['Basis-Kosten', C.fmtMoney(summary && summary.baseCost)],
-      ['Netzentgelt', C.fmtMoney(summary && summary.netFeeCost)],
-      ['Gesamtkosten', C.fmtMoney(summary && summary.totalCost)],
-      ['Intervalle', C.fmtNum(summary && summary.intervals, 0)],
+      ['Preis min', C.fmtPrice(reportNumber(summary && summary.minPrice))],
+      ['Preis max', C.fmtPrice(reportNumber(summary && summary.maxPrice))],
+      ['Ø Preis', C.fmtPrice(reportNumber(summary && summary.avgPrice))],
+      ['Bezug', C.fmtKwh(reportNumber(summary && summary.importKwh))],
+      ['Basis-Kosten', C.fmtMoney(reportNumber(summary && summary.baseCost))],
+      ['Netzentgelt', C.fmtMoney(reportNumber(summary && summary.netFeeCost))],
+      ['Gesamtkosten', C.fmtMoney(reportNumber(summary && summary.totalCost))],
+      ['Intervalle', C.fmtNum(reportNumber(summary && summary.intervals), 0)],
     ];
     if (meta && meta.retentionTargetDays) {
       items.push(['Retention-Ziel', C.fmtNum(meta.retentionTargetDays, 0) + ' Tage']);
@@ -199,13 +212,13 @@
       tr.innerHTML = [
         `<td class="report-mono">${C.escapeHtml(C.fmtDateTime(row.startTs))}</td>`,
         `<td class="report-mono">${C.escapeHtml(C.fmtDateTime(row.endTs))}</td>`,
-        `<td class="num">${C.escapeHtml(C.fmtPrice(row.baseEurPerKwh))}</td>`,
-        `<td class="num">${C.escapeHtml(C.fmtPrice(row.netFeeEurPerKwh))}</td>`,
-        `<td class="num">${C.escapeHtml(C.fmtPrice(row.totalEurPerKwh))}</td>`,
-        `<td class="num">${C.escapeHtml(C.fmtKwh(row.importKwh))}</td>`,
-        `<td class="num">${C.escapeHtml(C.fmtMoney(row.baseCostEur))}</td>`,
-        `<td class="num">${C.escapeHtml(C.fmtMoney(row.netFeeCostEur))}</td>`,
-        `<td class="num">${C.escapeHtml(C.fmtMoney(row.totalCostEur))}</td>`
+        `<td class="num">${C.escapeHtml(C.fmtPrice(reportNumber(row.baseEurPerKwh)))}</td>`,
+        `<td class="num">${C.escapeHtml(C.fmtPrice(reportNumber(row.netFeeEurPerKwh)))}</td>`,
+        `<td class="num">${C.escapeHtml(C.fmtPrice(reportNumber(row.totalEurPerKwh)))}</td>`,
+        `<td class="num">${C.escapeHtml(C.fmtKwh(reportNumber(row.importKwh)))}</td>`,
+        `<td class="num">${C.escapeHtml(C.fmtMoney(reportNumber(row.baseCostEur)))}</td>`,
+        `<td class="num">${C.escapeHtml(C.fmtMoney(reportNumber(row.netFeeCostEur)))}</td>`,
+        `<td class="num">${C.escapeHtml(C.fmtMoney(reportNumber(row.totalCostEur)))}</td>`
       ].join('');
       tbody.appendChild(tr);
     });
@@ -228,7 +241,10 @@
       rangeMeta.textContent = parts.join(' · ');
     }
     if (note) {
-      note.textContent = 'Der Bericht nutzt 15-Minuten-Intervalle mit Datum/Uhrzeit. Kosten = Gesamtpreis × Netzbezug je Intervall und dienen als Nachweis zur Gegenprüfung der Stromanbieter-Abrechnung.';
+      const coverage = meta && meta.coverage;
+      note.textContent = 'Der Bericht nutzt 15-Minuten-Intervalle. Kosten = Gesamtpreis × Netzbezug je abgeschlossenem Intervall.';
+      if (coverage && !coverage.complete) note.textContent += ` Datenabdeckung unvollständig: ${coverage.missingIntervals} Intervall(e) fehlen oder sind noch offen. Betroffene Gesamtsummen bleiben unbekannt.`;
+      if (coverage && coverage.configuredPriceIntervals > 0) note.textContent += ' Für fehlende historische Festpreise wird der aktuell konfigurierte Festpreis verwendet; diese Kosten sind eine Schätzung.';
     }
     renderFlags(meta);
   }
@@ -253,7 +269,9 @@
       if (tbody) tbody.innerHTML = '';
       const empty = C.el('emptyState');
       if (empty) {
-        empty.textContent = 'Tarif-/Netzentgelt-Nachweis konnte nicht geladen werden.';
+        empty.textContent = res && res.error === 'EOS_HISTORY_RANGE_INVALID'
+          ? 'Bitte einen gültigen Zeitraum von höchstens 730 Tagen auswählen.'
+          : 'Tarif-/Netzentgelt-Nachweis konnte nicht geladen werden.';
         empty.classList.remove('hidden');
       }
       return false;
@@ -294,13 +312,13 @@
       lines.push([
         C.fmtDateTime(row.startTs),
         C.fmtDateTime(row.endTs),
-        Number(row.baseEurPerKwh || 0).toFixed(4).replace('.', ','),
-        Number(row.netFeeEurPerKwh || 0).toFixed(4).replace('.', ','),
-        Number(row.totalEurPerKwh || 0).toFixed(4).replace('.', ','),
-        Number(row.importKwh || 0).toFixed(4).replace('.', ','),
-        Number(row.baseCostEur || 0).toFixed(4).replace('.', ','),
-        Number(row.netFeeCostEur || 0).toFixed(4).replace('.', ','),
-        Number(row.totalCostEur || 0).toFixed(4).replace('.', ','),
+        csvNumber(row.baseEurPerKwh),
+        csvNumber(row.netFeeEurPerKwh),
+        csvNumber(row.totalEurPerKwh),
+        csvNumber(row.importKwh),
+        csvNumber(row.baseCostEur),
+        csvNumber(row.netFeeCostEur),
+        csvNumber(row.totalCostEur),
       ].join(';'));
     });
     const start = state.data && state.data.meta ? new Date(state.data.meta.start) : new Date();

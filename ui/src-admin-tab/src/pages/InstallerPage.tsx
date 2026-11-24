@@ -108,6 +108,10 @@ export default function InstallerPage() {
       label: 'EMS Apps öffnen',
       onClick: () => openExternal(`${baseUrl}/ems-apps.html?${adminBackQuery}`),
     },
+    ...(access?.role === 'admin' || access?.role === 'installer' ? [{
+      label: 'Historie einrichten',
+      onClick: () => openExternal(`${baseUrl}/installer/?instance=${instance}#/history-setup`),
+    }] : []),
     {
       label: 'Simulation',
       onClick: () => openExternal(`${baseUrl}/simulation.html?${adminBackQuery}`),

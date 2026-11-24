@@ -1,0 +1,33 @@
+{
+  "scope": "real storage controller, farm aggregation/dispatcher and NVP coordinator with fixture DB/device IO",
+  "results": {
+    "node22.23.4": "16/16 pass",
+    "node24.22.3": "16/16 pass"
+  },
+  "files": [
+    {
+      "path": "docs/reports/unified-9.0.20/raw/farm-controller/controller-node22.log",
+      "sha256": "e2bdb23b7c691a8210b36273884926ad57f353f2f192fe42a6575cd26007ab37"
+    },
+    {
+      "path": "docs/reports/unified-9.0.20/raw/farm-controller/controller-node24.log",
+      "sha256": "c40794ff8f64975e0ce2db035e3f6c31416a68b5cae698fd3fe74bbc9db9869e"
+    },
+    {
+      "path": "test/eos-storagefarm-controller-dispatch.test.cjs",
+      "sha256": "f8e1bff1753bdcb1dd8c1a01c975744c053aeb4dffd0b1b0c68eacb354193cae"
+    },
+    {
+      "path": "ui/main.js",
+      "sha256": "1d059d554b5f5b94695cb28b6a3a8373aa8a6841e1bcd4704e63fef401ebb661"
+    },
+    {
+      "path": "ui/ems/modules/storage-control.js",
+      "sha256": "0de4cdea122e0061c0924d40fa88558694de42f9243627808e29288577964027"
+    },
+    {
+      "path": "ui/ems/modules/nvp-coordinator.js",
+      "sha256": "04477b295b0933e053240e10cf17fdd6706d598abfcc9aecc33fe30ada9946e7"
+    }
+  ]
+}

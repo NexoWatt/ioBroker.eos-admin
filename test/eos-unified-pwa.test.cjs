@@ -16,6 +16,7 @@ const { UnifiedSessions } = require('../src/lib/eosUnifiedBoundary');
 const { installIdleSession } = require('./fixtures/eos-idle-session.cjs');
 const root = path.resolve(__dirname, '..');
 const sourceLogoSha256 = '952ceb9cef3f7f22a150dd8ea396285f70b9d8c19de8e7c1452bf2ff983ae6bd';
+const touchLogoSha256 = '083e11ab28ec00b37d3d47776946c5fad4d79277fdc440cdbb20181a7f064f76';
 const sha256 = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
 const read = file => fs.readFileSync(path.join(root, file));
 const manifest = () => JSON.parse(read('ui/www/manifest.webmanifest'));
@@ -51,6 +52,11 @@ test('one root app identity and the exact uploaded icon are shared by dashboard,
     assert.equal(sha256(uploaded), sourceLogoSha256, 'uploaded branding must remain byte-for-byte unchanged');
     assert.equal(pngSize(uploaded), '1024x1024');
     assert.deepEqual(read('ui/www/apple-touch-icon.png'), uploaded);
+    const touchLogo = read('ui/www/assets/icons/nexowatt-180.png');
+    assert.equal(sha256(touchLogo), touchLogoSha256, 'existing 180-pixel branding remains byte-for-byte unchanged');
+    assert.equal(pngSize(touchLogo), '180x180');
+    assert.deepEqual(read('src-admin/public/assets/icons/nexowatt-180.png'), touchLogo);
+    assert.deepEqual(read('adminWww/assets/icons/nexowatt-180.png'), touchLogo);
     assert.ok(app.icons.some(icon => icon.sizes === '1024x1024' && (icon.purpose || 'any') === 'any'));
     for (const size of ['192x192', '512x512']) {
         assert.ok(app.icons.some(icon => icon.sizes === size && (icon.purpose || 'any') === 'any'));
@@ -77,12 +83,13 @@ test('one root app identity and the exact uploaded icon are shared by dashboard,
         assert.equal(declarations.length, 1, `${file}: one manifest declaration`);
         const apple = links(html, 'apple-touch-icon');
         assert.equal(apple.length, 1, `${file}: one Apple icon declaration`);
-        assert.equal(apple[0].sizes, '1024x1024');
+        assert.equal(apple[0].sizes, '180x180');
+        assert.equal(apple[0].type, 'image/png');
         for (const page of ['/', '/system/', '/static/index.html', '/login.html']) {
             assert.equal(new URL(declarations[0].href, origin + page).href, rootManifest.href, `${file} from ${page}`);
             const iconUrl = new URL(apple[0].href, origin + page);
-            assert.equal(iconUrl.origin, origin); assert.equal(iconUrl.pathname, '/apple-touch-icon.png');
-            assert.equal(iconUrl.searchParams.get('v'), sourceLogoSha256.slice(0, 12), 'cache key follows supplied branding content');
+            assert.equal(iconUrl.origin, origin); assert.equal(iconUrl.pathname, '/assets/icons/nexowatt-180.png');
+            assert.equal(iconUrl.searchParams.get('v'), touchLogoSha256.slice(0, 12), 'cache key follows exact 180-pixel branding content');
         }
     }
 });
@@ -158,7 +165,7 @@ test('actual owner mount serves install metadata publicly while root launch reta
         const response = await fetch(origin + url, { redirect: 'manual', headers: { ...(auth ? { Cookie: `access_token=${token}` } : {}), ...extra } });
         return { response, bytes: Buffer.from(await response.arrayBuffer()) };
     };
-    const assets = ['/manifest.webmanifest', '/apple-touch-icon.png?v=' + sourceLogoSha256.slice(0, 12), '/assets/icons/nexowatt-1024.png', '/assets/icons/nexowatt-192.png', '/assets/icons/nexowatt-512.png'];
+    const assets = ['/manifest.webmanifest', '/apple-touch-icon.png?v=' + sourceLogoSha256.slice(0, 12), '/assets/icons/nexowatt-180.png?v=' + touchLogoSha256.slice(0, 12), '/assets/icons/nexowatt-1024.png', '/assets/icons/nexowatt-192.png', '/assets/icons/nexowatt-512.png'];
     for (const auth of [false, true]) {
         for (const url of assets) {
             const { response, bytes } = await request(url, auth, { Referer: origin + '/system/' });
@@ -171,6 +178,7 @@ test('actual owner mount serves install metadata publicly while root launch reta
                 assert.match(response.headers.get('content-type'), /^image\/png/);
                 assert.deepEqual(bytes, read('ui/www' + url.split('?')[0]));
                 if (url.includes('1024') || url.includes('apple-touch')) assert.equal(sha256(bytes), sourceLogoSha256);
+                if (url.includes('180')) { assert.equal(sha256(bytes), touchLogoSha256); assert.equal(pngSize(bytes), '180x180'); }
             }
         }
     }

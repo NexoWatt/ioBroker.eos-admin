@@ -1,0 +1,14 @@
+{
+  "name": "frontend-build",
+  "command": [
+    "npm",
+    "run",
+    "build:frontend"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+  "startedAt": "2026-11-24T21:04:26.239420+00:00",
+  "durationSeconds": 36.131,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-920/frontend-build.log",
+  "sha256": "e9246613a042a0cedfb714ff276c8471de760e1c942b82da54f3417e8451dab8"
+}

@@ -202,6 +202,16 @@
       "installerAssetFiles": 3,
       "matchedSealedInstallerAssetFiles": 3,
       "provenance": "Previously delivered repository bytes checked against the sealed 9.0.18 manifest; only exact obsolete frontend assets may be quarantined."
+    },
+    {
+      "archive": "NexoWatt_EOS_9.0.19_FULL_REPOSITORY.zip",
+      "version": "9.0.19",
+      "archiveSha256": "af873743bd82e93f588f2163b1b911313c324ea50cb108ae07f28c96c9a791dc",
+      "adminFiles": 358,
+      "matchedSealedFiles": 358,
+      "installerAssetFiles": 3,
+      "matchedSealedInstallerAssetFiles": 3,
+      "provenance": "Previously delivered archive bytes verified against its sealed files manifest; no current sealed file can be changed by this catalog."
     }
   ],
   "files": {
@@ -225,7 +235,8 @@
       "d96cce627907931c9e94af3834e01e30ee3a730c3030d543556100842b2d7f96",
       "e89471116d23bd515a702483c6a88650293cbb83bd2b01697c3b83e31d4e4fe8",
       "f933ca38b87d9c815e9375897b7f41a03d2211e06d5121fe9d0302aec8cd5f62",
-      "073711966d7f2c75a3a022fd84815b6f2ddb64887fbf246b1897b086615731db"
+      "073711966d7f2c75a3a022fd84815b6f2ddb64887fbf246b1897b086615731db",
+      "d5f5acf7db9fb360efbde0d9314b7a228eac868fb3145bf8212388f22f5b9213"
     ],
     "adminWww/LICENSE-NEXOWATT.md": [
       "00e4bfeb50137f4ca4572330216b9473ac63c8b33647c89466322169a25d6186"
@@ -250,7 +261,8 @@
       "e0382876c9d715db4fe61a2980a99c2dc17474123025a447ff92d94240d76ca3",
       "ef4ca5b87f5d3800154e699078a30f0818ad4a351b3e36767143542e5c707646",
       "f6ea2ea5dfea62f91a9cd6016313299f95aeb0860d15bb251f9e388f167681c8",
-      "a52dd6e7f9b02296753f06990437f4af3cc8dae9447a9dde5a86c20983c27ec5"
+      "a52dd6e7f9b02296753f06990437f4af3cc8dae9447a9dde5a86c20983c27ec5",
+      "1de31a7cce83a5eb501df015c837073fe15f0bcd8f0abaa876f12f4444f5038c"
     ],
     "adminWww/admin.svg": [
       "1167118074ff84d8cef82ad80c38609719dacfde9417126e46966c1ec986534b"
@@ -1410,7 +1422,8 @@
       "d79e1deed3faf3e5d6e2f2c570a0849b1de05ab6e540075632a197ba31475976",
       "e46b5ba1f2c63534d9bb1e433a6a66a479b65aa8da0528b67645f0a8dfd92a93",
       "fd1a2a5b781246c434b9d332c50ba5c1d6a8a96c0dfd92b6e622d15e101dd1d3",
-      "2a233523ae8c713a8edfcc4dde4e4306456fb78cc262a0c3d31d26767d7193a6"
+      "2a233523ae8c713a8edfcc4dde4e4306456fb78cc262a0c3d31d26767d7193a6",
+      "429d5c0b268ab1af50398f556c6d1d0bc61d161072a455c344312cbdef64b8ff"
     ],
     "adminWww/js/adapter-settings.js": [
       "ec118670b3a9923a96d6bc57b53de99704ac7a3aea71f91e42c763865944a91d"
@@ -2013,7 +2026,8 @@
       "e9e0a7f607b20b7550c5e0561493841a63d9de4dc49accc2f93803d69650fb53",
       "ee8bbcd40bb919680e45d4f8ee5e9646ae8f4024fa662f1fc2f60575f0a702e6",
       "ef28735d422b7d8a05cb1697840e71d836d8e848ff5fcb3612709f43cf122162",
-      "455d4d1e280de35cb48b4f28321865d59387c87a6ff3008ba1a35a2cc06e0a66"
+      "455d4d1e280de35cb48b4f28321865d59387c87a6ff3008ba1a35a2cc06e0a66",
+      "43664870d35b418765ff2aeba508fd412781f8f68f27428312bd1fcbce7e5614"
     ],
     "adminWww/mf-stats.json": [
       "1153b066fa41ee78bbb5f7e332497b0cb40c0aa55753195b0722cfdd01425220",
@@ -2035,7 +2049,8 @@
       "e592131c5e19dec4a99abad68f85b9fea3179acf2e89c7cc252e67dfbfff5461",
       "e7fc4db448575e580924f2d37fc0833c82f2ad77214506bb0c0148a9b78b2fa6",
       "e8c8df600345daca771a76fd6c743abe185b9d702079944108ca5e137c79c568",
-      "ec159ef9eaaa49462ee069419997c8dddcf5586f2317f4b5c9ef842c8d8ed659"
+      "ec159ef9eaaa49462ee069419997c8dddcf5586f2317f4b5c9ef842c8d8ed659",
+      "35c463096e31589b199aa286cf65aca0c0960c5a1b147192008927c2f1f90a36"
     ],
     "adminWww/remoteEntry-eos-8.0.2.js": [
       "b9254510e115f4155fe7f07c04cdccd6de51880a44434aea98a3b92be19f4016"
@@ -2114,7 +2129,8 @@
       "e34b48b4f10b8d730b6fd8d7759bb5b5033a107e20f80dbf967ce09c7cd6844b",
       "ea6531a2e67ac94847a453fb89f2484b19645c677f165d620bfefcb4e9a5e69c",
       "f6385d760f90489dda60a3d834a895dd124d5f5a11bf7217a07be26acbd8cb93",
-      "de32472cc260216adf0791a94cbe3e394368e1e9da49c9c72e2ef3d97fac9c6f"
+      "de32472cc260216adf0791a94cbe3e394368e1e9da49c9c72e2ef3d97fac9c6f",
+      "e83219c75f447123d322e98a0eb207e79ccfe71cf4d8c45759b694f48a9ecb46"
     ],
     "adminWww/robots.txt": [
       "90d24bc3bf698ac1e173739502298ccca72adf1f564fab05f484b8c48d1cadd2"
@@ -2232,6 +2248,72 @@
     ],
     "adminWww/remoteEntry-eos-9.0.18.js": [
       "158f29587e369eb2e709d0ba4cc99a91de13c483447c3dd2e0a473afaf076b2f"
+    ],
+    "adminWww/remoteEntry-eos-9.0.19.js": [
+      "1b6a05016e47c4537336d9792cf176706f587844391fe28e9f26693135504b26"
+    ],
+    "adminWww/assets/AdapterUpdateDialog-JOf2z4Vg.js": [
+      "e6960351d1df15e43dc50482960c2f845036b83b19643b9cb9d3c1cf56925ca3"
+    ],
+    "adminWww/assets/Adapters-C9fcSdWm.js": [
+      "e9598a041ba6e91978bfa535ac4f39f85830adfebee9e1bb3b47733a009b0e16"
+    ],
+    "adminWww/assets/ConfigManager-BeeLlT6D.js": [
+      "b5524659a0bd7caba433207dfedede7e99431f901bfc287aa9e3353f44791dac"
+    ],
+    "adminWww/assets/Enums-FqnXWl8U.js": [
+      "fa32f3108d86a8f38e7654e9ec7ada24a5a73923925d3f76fa51f3a41bb5fe53"
+    ],
+    "adminWww/assets/Fields-DMgrt5Pi.js": [
+      "a813563f314c05b900ba4d3a79440b773f2bba7f54aeb291f93fa3c69395c237"
+    ],
+    "adminWww/assets/Files-CIHtt12g.js": [
+      "26e6cf88ec5330594e7cf3ff4a10c72bf2cc42bdc6b4a9803a74525315b92821"
+    ],
+    "adminWww/assets/Hosts-fPLBzvTy.js": [
+      "9dcde9f86eae2db2d47e22477ab1991f7e3f2d0abd46f6ce6c24583d829694fc"
+    ],
+    "adminWww/assets/Instances-4XaVQlrT.js": [
+      "0206fa9e087bd35b780ad26ba55334b5d2319a922b15cc102f8f3e8e7d06ff45"
+    ],
+    "adminWww/assets/Intro-5TKriiLO.js": [
+      "faad4c2e59313adbf32496e46c537c733362a21e2bb1c86806ff5f53737e899e"
+    ],
+    "adminWww/assets/Logs-33zcIds-.js": [
+      "9e4a71360a5949e3ebb79ab9fd52f0f8a7efc6adce2bae118fdc7ac473c2408a"
+    ],
+    "adminWww/assets/Objects-CNQPVbNG.js": [
+      "09fd2a2f1700c89493be722149a69a2010d2d6040c34b9251b5441d40043723d"
+    ],
+    "adminWww/assets/Overview-BskXGOc8.js": [
+      "ed6b93ff90ed39aa54d5fb9028c2a740f64aafcdfca96649c66d5a31ce496ccc"
+    ],
+    "adminWww/assets/State-C8SJ_Iqo.js": [
+      "c7ab914312fa62079770b85ce8a72cebadef2abf4cec07272307fca294026c49"
+    ],
+    "adminWww/assets/UsedResources-CgqRa9ei.js": [
+      "345a1b45a2cb8b696fadf1aefcceaf3071fa30b515039ebdc2c8b3fee9c2f964"
+    ],
+    "adminWww/assets/Users-0JVYWR9u.js": [
+      "ea0e8acd7007c2c8233063692a0d14fa6ffdd243272312c06e826fb8d04c07cb"
+    ],
+    "adminWww/assets/bootstrap-D16lu6rd.js": [
+      "dedd69f9e61a952ef20926338e36bef29261f06618dcba881c69632545c08541"
+    ],
+    "adminWww/assets/hostInit-C8YZJuzi.js": [
+      "200bb86769fad61c229261dca1676f92cc964e2fe21d364e23f12d847ec7c6f5"
+    ],
+    "adminWww/assets/icons-material-CiNJ_6Ur.js": [
+      "296c53ce82cf4c7890e6306b0500c18f444c3c3971a27080ff9e162b1df3928c"
+    ],
+    "adminWww/assets/index-DA9Sphgh.js": [
+      "d7ebf214d9234fb6b61f7b08a4eebdc7398f9aec6c96aedc9ea86d2d44f5bb36"
+    ],
+    "adminWww/assets/installSVGRenderer-DPdkRa_d.js": [
+      "ee3035c7236b78b493b243c77c0cec9fbb930e912f75a4e8c7a6cccb5adea8b8"
+    ],
+    "adminWww/assets/mf-entry-bootstrap-0-a7ab91de.js": [
+      "a7ab91dec48a069dd454930a4cd4dd359be8927c0b3c9eb20553aa5708ad958c"
     ]
   }
 }

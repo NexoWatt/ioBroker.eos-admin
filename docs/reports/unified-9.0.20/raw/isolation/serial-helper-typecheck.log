@@ -1,0 +1,2 @@
+modules/devices/lib/drivers/modbusSerialLease.js(4,29): error TS2591: Cannot find name 'node:path'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+modules/devices/lib/drivers/modbusSerialLease.js(12,17): error TS2591: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.

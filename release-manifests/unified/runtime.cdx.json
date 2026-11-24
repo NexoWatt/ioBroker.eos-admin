@@ -2,10 +2,10 @@
   "$schema": "http://cyclonedx.org/schema/bom-1.5.schema.json",
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
-  "serialNumber": "urn:uuid:1bdc9c66-e8c3-4d14-bfe4-5b5e73dba5ca",
+  "serialNumber": "urn:uuid:582e4717-da2f-485f-9c52-796ba9b091bd",
   "version": 2,
   "metadata": {
-    "timestamp": "2026-11-24T18:43:54.974Z",
+    "timestamp": "2026-11-24T21:06:24.781Z",
     "lifecycles": [
       {
         "phase": "pre-build"
@@ -19,14 +19,14 @@
       }
     ],
     "component": {
-      "bom-ref": "iobroker.eos-admin@9.0.19",
+      "bom-ref": "iobroker.eos-admin@9.0.20",
       "type": "library",
       "name": "iobroker.eos-admin",
-      "version": "9.0.19",
+      "version": "9.0.20",
       "scope": "required",
       "author": "NexoWatt",
       "description": "NexoWatt EOS: licensed local energy management, dashboard and ioBroker system administration in one adapter.",
-      "purl": "pkg:npm/iobroker.eos-admin@9.0.19",
+      "purl": "pkg:npm/iobroker.eos-admin@9.0.20",
       "properties": [],
       "externalReferences": []
     }
@@ -11369,10 +11369,10 @@
       ]
     },
     {
-      "bom-ref": "nexowatt:vendored:webserver@3.4.0+nexowatt.9.0.19",
+      "bom-ref": "nexowatt:vendored:webserver@3.4.0+nexowatt.9.0.20",
       "type": "library",
       "name": "@iobroker/webserver",
-      "version": "3.4.0+nexowatt.9.0.19",
+      "version": "3.4.0+nexowatt.9.0.20",
       "scope": "required",
       "description": "Locally vendored @iobroker/webserver 3.4.0 with two reviewed certificate-material logging replacements; not an unmodified registry release.",
       "licenses": [
@@ -11449,9 +11449,9 @@
     },
     {
       "type": "library",
-      "bom-ref": "nexowatt:integrated:devices@9.0.19",
+      "bom-ref": "nexowatt:integrated:devices@9.0.20",
       "name": "NexoWatt EOS integrated devices",
-      "version": "9.0.19",
+      "version": "9.0.20",
       "scope": "required",
       "licenses": [
         {
@@ -11463,7 +11463,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "9e8a46063cf8e8bd78afc5ddb129d865f05647ad0da6f529ed524f11414d159e"
+          "content": "1b069541ffa67fda754ef34cd4ae94fd01ebe24999f244b9d167a9fa44337d85"
         }
       ],
       "pedigree": {
@@ -11493,9 +11493,9 @@
     },
     {
       "type": "library",
-      "bom-ref": "nexowatt:integrated:eebus@9.0.19",
+      "bom-ref": "nexowatt:integrated:eebus@9.0.20",
       "name": "NexoWatt EOS integrated eebus",
-      "version": "9.0.19",
+      "version": "9.0.20",
       "scope": "required",
       "licenses": [
         {
@@ -11537,9 +11537,9 @@
     },
     {
       "type": "library",
-      "bom-ref": "nexowatt:integrated:backup@9.0.19",
+      "bom-ref": "nexowatt:integrated:backup@9.0.20",
       "name": "NexoWatt EOS integrated backup",
-      "version": "9.0.19",
+      "version": "9.0.20",
       "scope": "required",
       "licenses": [
         {
@@ -11589,7 +11589,7 @@
   ],
   "dependencies": [
     {
-      "ref": "iobroker.eos-admin@9.0.19",
+      "ref": "iobroker.eos-admin@9.0.20",
       "dependsOn": [
         "@iobroker/adapter-core@3.4.3",
         "@iobroker/plugin-docker@1.2.1",
@@ -11624,10 +11624,10 @@
         "serialport@12.0.0",
         "tar-fs@3.1.3",
         "ws@8.22.0",
-        "nexowatt:vendored:webserver@3.4.0+nexowatt.9.0.19",
-        "nexowatt:integrated:devices@9.0.19",
-        "nexowatt:integrated:eebus@9.0.19",
-        "nexowatt:integrated:backup@9.0.19"
+        "nexowatt:vendored:webserver@3.4.0+nexowatt.9.0.20",
+        "nexowatt:integrated:devices@9.0.20",
+        "nexowatt:integrated:eebus@9.0.20",
+        "nexowatt:integrated:backup@9.0.20"
       ]
     },
     {
@@ -14093,7 +14093,7 @@
       "dependsOn": []
     },
     {
-      "ref": "nexowatt:vendored:webserver@3.4.0+nexowatt.9.0.19",
+      "ref": "nexowatt:vendored:webserver@3.4.0+nexowatt.9.0.20",
       "dependsOn": [
         "@node-oauth/oauth2-server@5.3.1",
         "jsonwebtoken@9.0.3",
@@ -14101,7 +14101,7 @@
       ]
     },
     {
-      "ref": "nexowatt:integrated:devices@9.0.19",
+      "ref": "nexowatt:integrated:devices@9.0.20",
       "dependsOn": [
         "axios@1.20.0",
         "modbus-serial@8.0.25",
@@ -14110,14 +14110,14 @@
       ]
     },
     {
-      "ref": "nexowatt:integrated:eebus@9.0.19",
+      "ref": "nexowatt:integrated:eebus@9.0.20",
       "dependsOn": [
         "ws@8.22.0",
         "bonjour-service@1.4.4"
       ]
     },
     {
-      "ref": "nexowatt:integrated:backup@9.0.19",
+      "ref": "nexowatt:integrated:backup@9.0.20",
       "dependsOn": [
         "tar-fs@3.1.3",
         "cron-parser@5.10.6",

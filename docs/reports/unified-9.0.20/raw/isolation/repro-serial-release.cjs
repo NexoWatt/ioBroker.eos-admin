@@ -1,0 +1,21 @@
+'use strict';
+const { createRequire } = require('node:module');
+const requireProduct = createRequire(process.env.EOS_REVIEW_PACKAGE || '/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin/package.json');
+const Serial = requireProduct('modbus-serial');
+const { acquireBus, releaseBus }=requireProduct('./modules/devices/lib/drivers/modbusRtuBus.js');
+const originalConnect=Serial.prototype.connectRTUBuffered, originalClose=Serial.prototype.close;
+const pending=[];let closes=0;
+Serial.prototype.connectRTUBuffered=function(_path,_opts,callback){pending.push(callback);};
+Serial.prototype.close=function(callback){closes++;callback?.();};
+(async()=>{
+ const logger={log:{info(){}}},opts={path:'/fixture/serial-only-test',baudRate:9600};
+ const first=acquireBus(logger,opts), firstPending=first.bus.ensureConnected();
+ await Promise.resolve();
+ const result=releaseBus(first.key);
+ const second=acquireBus(logger,opts), secondPending=second.bus.ensureConnected();
+ await Promise.resolve();
+ console.log(JSON.stringify({releaseReturned:result??null,releaseAwaitable:!!result?.then,closeCallsBeforeReplacement:closes,newBusWhileOldOpenPending:first.bus!==second.bus,concurrentPendingOpens:pending.length}));
+ for(const callback of pending) callback();
+ await Promise.all([firstPending,secondPending]);
+ releaseBus(second.key);await Promise.resolve();await Promise.resolve();
+})().finally(()=>{Serial.prototype.connectRTUBuffered=originalConnect;Serial.prototype.close=originalClose;}).catch(e=>{console.error(e);process.exitCode=1;});

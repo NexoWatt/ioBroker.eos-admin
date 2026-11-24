@@ -6,6 +6,7 @@ const LIVE_PATHS = new Set([
   'comm.connected', 'alarm.offline', 'alarm.fault', 'alarm.warning',
   'r.power', 'r.powerAc', 'r.powerCharge', 'r.powerDischarge', 'r.essActivePower',
   'r.soc', 'r.available', 'r.allowCharge', 'r.allowDischarge',
+  'r.allowedChargePower', 'r.allowedDischargePower',
   'r.gridPower', 'r.nvpPower', 'r.consumptionTotal',
   'r.pvPower', 'r.pvPowerDc', 'r.pvPowerAc', 'r.pvPowerTotal',
   'r.minPowerSetpointW', 'r.maxPowerSetpointW', 'r.powerSetpointReadbackW',

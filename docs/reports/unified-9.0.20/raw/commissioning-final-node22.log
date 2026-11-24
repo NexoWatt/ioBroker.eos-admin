@@ -1,0 +1,882 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: one explicit save adopts the legacy Home row, adds SolaX, binds SMA and activates exactly the farm app
+ok 1 - one explicit save adopts the legacy Home row, adds SolaX, binds SMA and activates exactly the farm app
+  ---
+  duration_ms: 29.341251
+  type: 'test'
+  ...
+# Subtest: consumed commissioning cannot re-enable an AppCenter disable after restart, updates or an unrelated save
+ok 2 - consumed commissioning cannot re-enable an AppCenter disable after restart, updates or an unrelated save
+  ---
+  duration_ms: 8.411375
+  type: 'test'
+  ...
+# Subtest: missing bounds, an unavailable app grant or an invalid NVP keep the request pending and rows inactive
+ok 3 - missing bounds, an unavailable app grant or an invalid NVP keep the request pending and rows inactive
+  ---
+  duration_ms: 18.110019
+  type: 'test'
+  ...
+# Subtest: reusing a consumed request for changed topology or limits is rejected without changing the operating configuration
+ok 4 - reusing a consumed request for changed topology or limits is rejected without changing the operating configuration
+  ---
+  duration_ms: 1.253417
+  type: 'test'
+  ...
+# Subtest: canonical alias resolution adopts exactly one manual row only with explicit commissioning and keeps unrelated devices
+ok 5 - canonical alias resolution adopts exactly one manual row only with explicit commissioning and keeps unrelated devices
+  ---
+  duration_ms: 5.340491
+  type: 'test'
+  ...
+# Subtest: an unsuccessful commissioning leaves an already operating legacy row and its command family untouched
+ok 6 - an unsuccessful commissioning leaves an already operating legacy row and its command family untouched
+  ---
+  duration_ms: 0.94312
+  type: 'test'
+  ...
+# Subtest: explicit wallbox commissioning repairs a boolean EV total override but preserves a numeric manual total
+ok 7 - explicit wallbox commissioning repairs a boolean EV total override but preserves a numeric manual total
+  ---
+  duration_ms: 7.469327
+  type: 'test'
+  ...
+# Subtest: a new explicit off request disables only its own row, retaining another member and the shared app
+ok 8 - a new explicit off request disables only its own row, retaining another member and the shared app
+  ---
+  duration_ms: 1.901994
+  type: 'test'
+  ...
+# Subtest: M0 prefers immediate transport connection and corrects its own slower online source only on explicit save
+ok 9 - M0 prefers immediate transport connection and corrects its own slower online source only on explicit save
+  ---
+  duration_ms: 0.848908
+  type: 'test'
+  ...
+# Subtest: known thermal control and flow-slot writers prevent a second physical command owner
+ok 10 - known thermal control and flow-slot writers prevent a second physical command owner
+  ---
+  duration_ms: 1.690735
+  type: 'test'
+  ...
+# Subtest: activation rejects malformed intent tokens and unknown or unbounded input limits
+ok 11 - activation rejects malformed intent tokens and unknown or unbounded input limits
+  ---
+  duration_ms: 0.86308
+  type: 'test'
+  ...
+# Subtest: explicit off and authoritative removal also disable the sole single-storage app, retaining its configuration
+ok 12 - explicit off and authoritative removal also disable the sole single-storage app, retaining its configuration
+  ---
+  duration_ms: 10.550446
+  type: 'test'
+  ...
+# Subtest: enabling a previously disabled shared app never starts an uncommissioned dormant manual controller
+ok 13 - enabling a previously disabled shared app never starts an uncommissioned dormant manual controller
+  ---
+  duration_ms: 1.156812
+  type: 'test'
+  ...
+# Subtest: one pending member prevents accidental start of a dormant shared farm while validated mapping is retained
+ok 14 - one pending member prevents accidental start of a dormant shared farm while validated mapping is retained
+  ---
+  duration_ms: 1.770576
+  type: 'test'
+  ...
+# Subtest: replacement commissioning never restores the active old profile on failure or inherits a vendor-specific controller
+ok 15 - replacement commissioning never restores the active old profile on failure or inherits a vendor-specific controller
+  ---
+  duration_ms: 1.643385
+  type: 'test'
+  ...
+# Subtest: temporary manifest failure with the service generic-class fallback preserves the previous safe configuration
+ok 16 - temporary manifest failure with the service generic-class fallback preserves the previous safe configuration
+  ---
+  duration_ms: 0.846095
+  type: 'test'
+  ...
+# Subtest: consumed activation is bound to the saved protocol, without binding mutable controller offsets
+ok 17 - consumed activation is bound to the saved protocol, without binding mutable controller offsets
+  ---
+  duration_ms: 6.554039
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: known post-commit EOS_EMS_APPLY_FAILED retries once without replaying the persisted activation
+ok 18 - known post-commit EOS_EMS_APPLY_FAILED retries once without replaying the persisted activation
+  ---
+  duration_ms: 1459.241796
+  type: 'test'
+  ...
+# Subtest: known post-commit EOS_EMS_CONFIG_WAIT_TIMEOUT retries once without replaying the persisted activation
+ok 19 - known post-commit EOS_EMS_CONFIG_WAIT_TIMEOUT retries once without replaying the persisted activation
+  ---
+  duration_ms: 1094.224778
+  type: 'test'
+  ...
+# Subtest: post-commit recovery remains bounded and never retries uncertain persistence or arbitrary failures
+ok 20 - post-commit recovery remains bounded and never retries uncertain persistence or arbitrary failures
+  ---
+  duration_ms: 4.1439
+  type: 'test'
+  ...
+# (node:14) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: auto: profile safety survives an earlier manual-generic checkpoint rollback
+ok 21 - auto: profile safety survives an earlier manual-generic checkpoint rollback
+  ---
+  duration_ms: 33.867085
+  type: 'test'
+  ...
+# Subtest: auto: profile safety survives an earlier pending-role checkpoint rollback
+ok 22 - auto: profile safety survives an earlier pending-role checkpoint rollback
+  ---
+  duration_ms: 1.144964
+  type: 'test'
+  ...
+# Subtest: auto: profile safety survives an earlier conflicting-grid checkpoint rollback
+ok 23 - auto: profile safety survives an earlier conflicting-grid checkpoint rollback
+  ---
+  duration_ms: 1.477054
+  type: 'test'
+  ...
+# Subtest: singleStorage: profile safety survives an earlier manual-generic checkpoint rollback
+ok 24 - singleStorage: profile safety survives an earlier manual-generic checkpoint rollback
+  ---
+  duration_ms: 11.158362
+  type: 'test'
+  ...
+# Subtest: singleStorage: profile safety survives an earlier pending-role checkpoint rollback
+ok 25 - singleStorage: profile safety survives an earlier pending-role checkpoint rollback
+  ---
+  duration_ms: 3.881044
+  type: 'test'
+  ...
+# Subtest: singleStorage: profile safety survives an earlier conflicting-grid checkpoint rollback
+ok 26 - singleStorage: profile safety survives an earlier conflicting-grid checkpoint rollback
+  ---
+  duration_ms: 3.795886
+  type: 'test'
+  ...
+# Subtest: storageFarm: profile safety survives an earlier manual-generic checkpoint rollback
+ok 27 - storageFarm: profile safety survives an earlier manual-generic checkpoint rollback
+  ---
+  duration_ms: 0.918493
+  type: 'test'
+  ...
+# Subtest: storageFarm: profile safety survives an earlier pending-role checkpoint rollback
+ok 28 - storageFarm: profile safety survives an earlier pending-role checkpoint rollback
+  ---
+  duration_ms: 9.102647
+  type: 'test'
+  ...
+# Subtest: storageFarm: profile safety survives an earlier conflicting-grid checkpoint rollback
+ok 29 - storageFarm: profile safety survives an earlier conflicting-grid checkpoint rollback
+  ---
+  duration_ms: 1.488341
+  type: 'test'
+  ...
+# (node:21) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: new wallbox is immediately registered with canonical aliases, held inactive, and does not enable an app
+ok 30 - new wallbox is immediately registered with canonical aliases, held inactive, and does not enable an app
+  ---
+  duration_ms: 9.998014
+  type: 'test'
+  ...
+# Subtest: retry and reordered inventory preserve stable identities without duplicated or renamed rows
+ok 31 - retry and reordered inventory preserve stable identities without duplicated or renamed rows
+  ---
+  duration_ms: 52.172213
+  type: 'test'
+  ...
+# Subtest: same display name never merges different physical chargers
+ok 32 - same display name never merges different physical chargers
+  ---
+  duration_ms: 0.77064
+  type: 'test'
+  ...
+# Subtest: preserved legacy namespace and dotted device IDs remain stable
+ok 33 - preserved legacy namespace and dotted device IDs remain stable
+  ---
+  duration_ms: 0.454684
+  type: 'test'
+  ...
+# Subtest: missing or foreign aliases do not invent a mapping or overwrite active settings
+ok 34 - missing or foreign aliases do not invent a mapping or overwrite active settings
+  ---
+  duration_ms: 0.911633
+  type: 'test'
+  ...
+# Subtest: read-only command or wrong canonical unit is never treated as a writable actuator
+ok 35 - read-only command or wrong canonical unit is never treated as a writable actuator
+  ---
+  duration_ms: 0.479011
+  type: 'test'
+  ...
+# Subtest: mixed manually mapped rows remain untouched instead of joining measurements and writes from different devices
+ok 36 - mixed manually mapped rows remain untouched instead of joining measurements and writes from different devices
+  ---
+  duration_ms: 1.236131
+  type: 'test'
+  ...
+# Subtest: central license bounds refuse only new rows and retain existing customers
+ok 37 - central license bounds refuse only new rows and retain existing customers
+  ---
+  duration_ms: 0.921518
+  type: 'test'
+  ...
+# Subtest: own alias variants and resolved manual aliases sharing a command target are rejected
+ok 38 - own alias variants and resolved manual aliases sharing a command target are rejected
+  ---
+  duration_ms: 1.017662
+  type: 'test'
+  ...
+# Subtest: device disable/removal/monitor keeps mappings and limits, holds owned row inactive, and does not auto-reactivate
+ok 39 - device disable/removal/monitor keeps mappings and limits, holds owned row inactive, and does not auto-reactivate
+  ---
+  duration_ms: 11.168178
+  type: 'test'
+  ...
+# Subtest: solar/DC charger is not registered as an EV charging point
+ok 40 - solar/DC charger is not registered as an EV charging point
+  ---
+  duration_ms: 0.547154
+  type: 'test'
+  ...
+# Subtest: single storage and farm use their actual configuration fields and exactly one command family
+ok 41 - single storage and farm use their actual configuration fields and exactly one command family
+  ---
+  duration_ms: 1.48731
+  type: 'test'
+  ...
+# Subtest: initial single-storage mapping retains previously configured customer limits and vendor settings
+ok 42 - initial single-storage mapping retains previously configured customer limits and vendor settings
+  ---
+  duration_ms: 0.473182
+  type: 'test'
+  ...
+# Subtest: a physical command target cannot be shared by storage and an existing charging controller
+ok 43 - a physical command target cannot be shared by storage and an existing charging controller
+  ---
+  duration_ms: 4.372103
+  type: 'test'
+  ...
+# Subtest: storage assigned to single regulator cannot also become a farm controller implicitly
+ok 44 - storage assigned to single regulator cannot also become a farm controller implicitly
+  ---
+  duration_ms: 1.064833
+  type: 'test'
+  ...
+# Subtest: storage control never maps hybrid powerBalance or guesses M1 dispatch
+ok 45 - storage control never maps hybrid powerBalance or guesses M1 dispatch
+  ---
+  duration_ms: 0.390839
+  type: 'test'
+  ...
+# Subtest: verified FENECON Home maps all real farm and single inputs while direct ESS and native FEMS targets stay distinct
+ok 46 - verified FENECON Home maps all real farm and single inputs while direct ESS and native FEMS targets stay distinct
+  ---
+  duration_ms: 7.271859
+  type: 'test'
+  ...
+# Subtest: Home native target and ESS feedback need the actual verified source; familiar alias names never promote 706 or 415
+ok 47 - Home native target and ESS feedback need the actual verified source; familiar alias names never promote 706 or 415
+  ---
+  duration_ms: 0.426372
+  type: 'test'
+  ...
+# Subtest: existing Auto direct ESS stays running with its command family; new native target requires explicit review
+ok 48 - existing Auto direct ESS stays running with its command family; new native target requires explicit review
+  ---
+  duration_ms: 0.921147
+  type: 'test'
+  ...
+# Subtest: FENECON numeric manual DP entry is retained for correction while available read fields are filled
+ok 49 - FENECON numeric manual DP entry is retained for correction while available read fields are filled
+  ---
+  duration_ms: 1.965089
+  type: 'test'
+  ...
+# Subtest: generic storage uses shared semantic PV and enable aliases without assuming FENECON-only algorithms
+ok 50 - generic storage uses shared semantic PV and enable aliases without assuming FENECON-only algorithms
+  ---
+  duration_ms: 0.332711
+  type: 'test'
+  ...
+# Subtest: explicit M0 meter maps signed W and freshness sources without replacing manual NVP
+ok 51 - explicit M0 meter maps signed W and freshness sources without replacing manual NVP
+  ---
+  duration_ms: 0.576008
+  type: 'test'
+  ...
+# Subtest: explicit M1 meter creates an inactive dynamic-grid measurement draft only
+ok 52 - explicit M1 meter creates an inactive dynamic-grid measurement draft only
+  ---
+  duration_ms: 0.45186
+  type: 'test'
+  ...
+# Subtest: one physical measurement is never duplicated between M1 and M0 or an energy-flow slot
+ok 53 - one physical measurement is never duplicated between M1 and M0 or an energy-flow slot
+  ---
+  duration_ms: 0.465682
+  type: 'test'
+  ...
+# Subtest: only bounded relevant references are requested and native alias read/write directions stay separate
+ok 54 - only bounded relevant references are requested and native alias read/write directions stay separate
+  ---
+  duration_ms: 0.43166
+  type: 'test'
+  ...
+# Subtest: explicit PV slot maps energy flow; a generation meter in same slot is conflict, never counted twice
+ok 55 - explicit PV slot maps energy flow; a generation meter in same slot is conflict, never counted twice
+  ---
+  duration_ms: 0.339461
+  type: 'test'
+  ...
+# Subtest: consumer meter and explicit heat monitoring use chosen existing slot
+ok 56 - consumer meter and explicit heat monitoring use chosen existing slot
+  ---
+  duration_ms: 0.194162
+  type: 'test'
+  ...
+# Subtest: no topology or source grouping is guessed from device names
+ok 57 - no topology or source grouping is guessed from device names
+  ---
+  duration_ms: 0.127302
+  type: 'test'
+  ...
+# Subtest: malformed config, dangerous keys, duplicate inventories, bad intent and excessive size are rejected
+ok 58 - malformed config, dangerous keys, duplicate inventories, bad intent and excessive size are rejected
+  ---
+  duration_ms: 58.218943
+  type: 'test'
+  ...
+# (node:26) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: consumed activation never grants control to a replacement profile or device class under the same alias base
+ok 59 - consumed activation never grants control to a replacement profile or device class under the same alias base
+  ---
+  duration_ms: 72.224823
+  type: 'test'
+  ...
+# Subtest: unchanged profile and semantic aliases retain their consumed activation across controller-address adjustment
+ok 60 - unchanged profile and semantic aliases retain their consumed activation across controller-address adjustment
+  ---
+  duration_ms: 2.286513
+  type: 'test'
+  ...
+# Subtest: a consumed token cannot turn an unavailable current alias inventory into a successful commissioning status
+ok 61 - a consumed token cannot turn an unavailable current alias inventory into a successful commissioning status
+  ---
+  duration_ms: 9.667828
+  type: 'test'
+  ...
+# Subtest: installing a shared app cannot silently start its previously dormant enabled manual controller
+ok 62 - installing a shared app cannot silently start its previously dormant enabled manual controller
+  ---
+  duration_ms: 1.539979
+  type: 'test'
+  ...
+# Subtest: profile replacement guard includes real split-NVP readers and both peak-shaving activation paths
+ok 63 - profile replacement guard includes real split-NVP readers and both peak-shaving activation paths
+  ---
+  duration_ms: 1.224945
+  type: 'test'
+  ...
+# Subtest: a persisted activation is not returned as successful until a failed runtime apply is retried
+ok 64 - a persisted activation is not returned as successful until a failed runtime apply is retried
+  ---
+  duration_ms: 978.600915
+  type: 'test'
+  ...
+# (node:32) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: discovers real V1 aliases in eos-admin.0, including dotted ids and command identity
+ok 65 - discovers real V1 aliases in eos-admin.0, including dotted ids and command identity
+  ---
+  duration_ms: 3.316554
+  type: 'test'
+  ...
+# Subtest: discovers real V1 aliases in nexowatt-devices.4, including dotted ids and command identity
+ok 66 - discovers real V1 aliases in nexowatt-devices.4, including dotted ids and command identity
+  ---
+  duration_ms: 0.573093
+  type: 'test'
+  ...
+# Subtest: missing metadata remains pending, then a later real manifest produces a mapping
+ok 67 - missing metadata remains pending, then a later real manifest produces a mapping
+  ---
+  duration_ms: 1.18889
+  type: 'test'
+  ...
+# Subtest: stale template aliases, unoffered capabilities and foreign objects never become assignable
+ok 68 - stale template aliases, unoffered capabilities and foreign objects never become assignable
+  ---
+  duration_ms: 2.357971
+  type: 'test'
+  ...
+# Subtest: manifest from a previous template and unacknowledged metadata are never trusted
+ok 69 - manifest from a previous template and unacknowledged metadata are never trusted
+  ---
+  duration_ms: 0.972314
+  type: 'test'
+  ...
+# Subtest: telemetry events do not schedule discovery; only metadata and alias object changes do
+ok 70 - telemetry events do not schedule discovery; only metadata and alias object changes do
+  ---
+  duration_ms: 0.578391
+  type: 'test'
+  ...
+# Subtest: configuration generation changes during reads discard the obsolete inventory
+ok 71 - configuration generation changes during reads discard the obsolete inventory
+  ---
+  duration_ms: 8.163247
+  type: 'test'
+  ...
+# Subtest: stop blocks a delayed discovery from writing configuration and cancels retry timers
+ok 72 - stop blocks a delayed discovery from writing configuration and cancels retry timers
+  ---
+  duration_ms: 0.976089
+  type: 'test'
+  ...
+# Subtest: unready runtime never discovers or applies; error messages cannot leak credentials
+ok 73 - unready runtime never discovers or applies; error messages cannot leak credentials
+  ---
+  duration_ms: 1.357263
+  type: 'test'
+  ...
+# Subtest: inventory size and namespace are bounded; no foreign adapter scan occurs
+ok 74 - inventory size and namespace are bounded; no foreign adapter scan occurs
+  ---
+  duration_ms: 0.871332
+  type: 'test'
+  ...
+# Subtest: assignment conflicts remain visible and cannot be reported as ready
+ok 75 - assignment conflicts remain visible and cannot be reported as ready
+  ---
+  duration_ms: 0.581536
+  type: 'test'
+  ...
+# Subtest: actual manual ioBroker alias chain resolves to a known V1 command and prevents duplicate commissioning
+ok 76 - actual manual ioBroker alias chain resolves to a known V1 command and prevents duplicate commissioning
+  ---
+  duration_ms: 13.137582
+  type: 'test'
+  ...
+# Subtest: split read and write aliases resolve independently with cached exact lookups
+ok 77 - split read and write aliases resolve independently with cached exact lookups
+  ---
+  duration_ms: 0.895849
+  type: 'test'
+  ...
+# Subtest: older non-V1 own aliases retain their verified physical command identity
+ok 78 - older non-V1 own aliases retain their verified physical command identity
+  ---
+  duration_ms: 2.451501
+  type: 'test'
+  ...
+# Subtest: generated V1 heartbeat and computed readings remain resolvable on repeated commissioning
+ok 79 - generated V1 heartbeat and computed readings remain resolvable on repeated commissioning
+  ---
+  duration_ms: 3.123483
+  type: 'test'
+  ...
+# Subtest: legacy computed and heartbeat leaves are accepted only as read-only sources
+ok 80 - legacy computed and heartbeat leaves are accepted only as read-only sources
+  ---
+  duration_ms: 1.489583
+  type: 'test'
+  ...
+# Subtest: alias cycles, uncertain reads and revoked authority cannot authorize a plan or leak errors
+ok 81 - alias cycles, uncertain reads and revoked authority cannot authorize a plan or leak errors
+  ---
+  duration_ms: 0.885173
+  type: 'test'
+  ...
+# Subtest: actual packaged UI configuration tolerates unrelated optional adapter fields without weakening installer validation
+ok 82 - actual packaged UI configuration tolerates unrelated optional adapter fields without weakening installer validation
+  ---
+  duration_ms: 696.220465
+  type: 'test'
+  ...
+# Subtest: saved device activation intent and validated limits reach the planner unchanged
+ok 83 - saved device activation intent and validated limits reach the planner unchanged
+  ---
+  duration_ms: 1.21523
+  type: 'test'
+  ...
+# Subtest: global runtime failures replace stale success with an explicit saved-device status and sanitized log
+ok 84 - global runtime failures replace stale success with an explicit saved-device status and sanitized log
+  ---
+  duration_ms: 20.480529
+  type: 'test'
+  ...
+# Subtest: reference metadata retains root units and does not authorize writing through read-only leaf aliases
+ok 85 - reference metadata retains root units and does not authorize writing through read-only leaf aliases
+  ---
+  duration_ms: 0.879163
+  type: 'test'
+  ...
+# Subtest: activation result correlation and exact correction codes are returned without arbitrary planner data
+ok 86 - activation result correlation and exact correction codes are returned without arbitrary planner data
+  ---
+  duration_ms: 0.900216
+  type: 'test'
+  ...
+# (node:35) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: failed startup waits for actual module drain, and concurrent callers cannot create a replacement
+ok 87 - failed startup waits for actual module drain, and concurrent callers cannot create a replacement
+  ---
+  duration_ms: 639.858467
+  type: 'test'
+  ...
+# Subtest: rejected failed-start cleanup retains the fenced engine and blocks nonforced and forced replacements
+ok 88 - rejected failed-start cleanup retains the fenced engine and blocks nonforced and forced replacements
+  ---
+  duration_ms: 144.274772
+  type: 'test'
+  ...
+# Subtest: bounded failed-start drain timeout retains ownership and allows a later confirmed cleanup to recover
+ok 89 - bounded failed-start drain timeout retains ownership and allows a later confirmed cleanup to recover
+  ---
+  duration_ms: 203.706992
+  type: 'test'
+  ...
+# Subtest: retained or stopped engine references cannot admit immediate EMS work or advertise running
+ok 90 - retained or stopped engine references cannot admit immediate EMS work or advertise running
+  ---
+  duration_ms: 63.461127
+  type: 'test'
+  ...
+# (node:45) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: real apply waits old tick and async module stop before config replacement, then rebinds all engine readers without losing session
+ok 91 - real apply waits old tick and async module stop before config replacement, then rebinds all engine readers without losing session
+  ---
+  duration_ms: 786.845628
+  type: 'test'
+  ...
+# Subtest: bounded reconfiguration timeout leaves old engine fenced and cannot create another actuator cycle
+ok 92 - bounded reconfiguration timeout leaves old engine fenced and cannot create another actuator cycle
+  ---
+  duration_ms: 17.743567
+  type: 'test'
+  ...
+# Subtest: numeric cache readers reject boolean, missing and collection values while retaining real zero
+ok 93 - numeric cache readers reject boolean, missing and collection values while retaining real zero
+  ---
+  duration_ms: 10.760784
+  type: 'test'
+  ...
+# Subtest: one configured active storage-farm member contributes real farm metrics to energy flow
+ok 94 - one configured active storage-farm member contributes real farm metrics to energy flow
+  ---
+  duration_ms: 14.343238
+  type: 'test'
+  ...
+# Subtest: FENECON farm keeps converter feedback for control while flow shows only battery power and separate DC PV
+ok 95 - FENECON farm keeps converter feedback for control while flow shows only battery power and separate DC PV
+  ---
+  duration_ms: 15.891188
+  type: 'test'
+  ...
+# Subtest: energy-flow shadow comparison produces a result rather than referencing undefined unrelated UI variables
+ok 96 - energy-flow shadow comparison produces a result rather than referencing undefined unrelated UI variables
+  ---
+  duration_ms: 11.159082
+  type: 'test'
+  ...
+# Subtest: a module task that timed out remains awaited before engine replacement and its late write uses only the old mapping
+ok 97 - a module task that timed out remains awaited before engine replacement and its late write uses only the old mapping
+  ---
+  duration_ms: 2145.429999
+  type: 'test'
+  ...
+# Subtest: a disabled commissioned single-storage row cannot acquire authority from an otherwise enabled app
+ok 98 - a disabled commissioned single-storage row cannot acquire authority from an otherwise enabled app
+  ---
+  duration_ms: 8.318686
+  type: 'test'
+  ...
+# (node:76) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: only a complete configured port is accepted, without a fallback or ephemeral port
+ok 99 - only a complete configured port is accepted, without a fallback or ephemeral port
+  ---
+  duration_ms: 1.337554
+  type: 'test'
+  ...
+# (node:76) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: configured port is used exactly once and readiness follows successful bind
+ok 100 - configured port is used exactly once and readiness follows successful bind
+  ---
+  duration_ms: 36.187178
+  type: 'test'
+  ...
+# Subtest: occupied port fails once with EADDRINUSE and leaves the existing service intact
+ok 101 - occupied port fails once with EADDRINUSE and leaves the existing service intact
+  ---
+  duration_ms: 7.128455
+  type: 'test'
+  ...
+# Subtest: unavailable local interface fails once with EADDRNOTAVAIL instead of searching ports
+ok 102 - unavailable local interface fails once with EADDRNOTAVAIL instead of searching ports
+  ---
+  duration_ms: 1.561371
+  type: 'test'
+  ...
+# Subtest: TLS configuration cannot silently become a cleartext listener when certificates are absent
+ok 103 - TLS configuration cannot silently become a cleartext listener when certificates are absent
+  ---
+  duration_ms: 0.924021
+  type: 'test'
+  ...
+# Subtest: controller certificate read failures remain diagnosed TLS startup failures
+ok 104 - controller certificate read failures remain diagnosed TLS startup failures
+  ---
+  duration_ms: 0.399011
+  type: 'test'
+  ...
+# Subtest: collection TLS uses configured default for IP without SNI and retains a distinct hostname collection
+ok 105 - collection TLS uses configured default for IP without SNI and retains a distinct hostname collection
+  ---
+  duration_ms: 225.510773
+  type: 'test'
+  ...
+# Subtest: collection IP context sends the configured intermediate chain and accepts only the explicit root CA
+ok 106 - collection IP context sends the configured intermediate chain and accepts only the explicit root CA
+  ---
+  duration_ms: 307.413218
+  type: 'test'
+  ...
+# Subtest: a valid named collection cannot hide the absence of a default certificate for IP access
+ok 107 - a valid named collection cannot hide the absence of a default certificate for IP access
+  ---
+  duration_ms: 100.393181
+  type: 'test'
+  ...
+# Subtest: native TLS without a fixed origin serves IP/8188 and HTTPS/443 alias Host contracts
+ok 108 - native TLS without a fixed origin serves IP/8188 and HTTPS/443 alias Host contracts
+  ---
+  duration_ms: 156.972441
+  type: 'test'
+  ...
+# Subtest: invalid external origin is caught by Web startup and terminates once without controller mutations
+ok 109 - invalid external origin is caught by Web startup and terminates once without controller mutations
+  ---
+  duration_ms: 2.002045
+  type: 'test'
+  ...
+# Subtest: password/setup write guard uses canonical browser Origin and preserves explicit bearer compatibility
+ok 110 - password/setup write guard uses canonical browser Origin and preserves explicit bearer compatibility
+  ---
+  duration_ms: 0.376537
+  type: 'test'
+  ...
+# Subtest: actual TLS activation accepts Host443 normalization and rejects malformed Host before its service
+ok 111 - actual TLS activation accepts Host443 normalization and rejects malformed Host before its service
+  ---
+  duration_ms: 94.801253
+  type: 'test'
+  ...
+# Subtest: startup abort closes a bound listener and never mutates another adapter
+ok 112 - startup abort closes a bound listener and never mutates another adapter
+  ---
+  duration_ms: 1.329181
+  type: 'test'
+  ...
+# Subtest: startup failure closes admission immediately and awaits migration recovery before terminating once
+ok 113 - startup failure closes admission immediately and awaits migration recovery before terminating once
+  ---
+  duration_ms: 1.070802
+  type: 'test'
+  ...
+# Subtest: startup recovery rejection fences migration before termination and does not leak its promise
+ok 114 - startup recovery rejection fences migration before termination and does not leak its promise
+  ---
+  duration_ms: 0.298039
+  type: 'test'
+  ...
+# Subtest: already closed Web cannot initiate another migration recovery or terminate again
+ok 115 - already closed Web cannot initiate another migration recovery or terminate again
+  ---
+  duration_ms: 0.274764
+  type: 'test'
+  ...
+# Subtest: migration startup fence keeps login and authenticated recovery reachable without operational startup
+ok 116 - migration startup fence keeps login and authenticated recovery reachable without operational startup
+  ---
+  duration_ms: 275.455276
+  type: 'test'
+  ...
+# Subtest: verified nexowatt TLS authority opens login for anonymous/expired sessions and dashboard for an active session
+ok 117 - verified nexowatt TLS authority opens login for anonymous/expired sessions and dashboard for an active session
+  ---
+  duration_ms: 214.96233
+  type: 'test'
+  ...
+# Subtest: module host crosses the actual private hosted UI bridge and returns implementation feedback
+ok 118 - module host crosses the actual private hosted UI bridge and returns implementation feedback
+  ---
+  duration_ms: 159.736363
+  type: 'test'
+  ...
+# Subtest: valid license and stalled operational startup cannot hold the HTTPS login or recovery console hostage
+ok 119 - valid license and stalled operational startup cannot hold the HTTPS login or recovery console hostage
+  ---
+  duration_ms: 77.623412
+  type: 'test'
+  ...
+# Subtest: operational initialization failure leaves HTTPS recovery up and refuses real UI commands
+ok 120 - operational initialization failure leaves HTTPS recovery up and refuses real UI commands
+  ---
+  duration_ms: 170.582584
+  type: 'test'
+  ...
+# Subtest: hosted EMS readiness rejects retained failed, fenced or unscheduled engine references
+ok 121 - hosted EMS readiness rejects retained failed, fenced or unscheduled engine references
+  ---
+  duration_ms: 193.975218
+  type: 'test'
+  ...
+# Subtest: late startup completion after license loss cannot revive control
+ok 122 - late startup completion after license loss cannot revive control
+  ---
+  duration_ms: 132.757279
+  type: 'test'
+  ...
+# Subtest: late startup completion after ownership loss cannot revive control
+ok 123 - late startup completion after ownership loss cannot revive control
+  ---
+  duration_ms: 69.298587
+  type: 'test'
+  ...
+# Subtest: an unexpected operational promise rejection is contained without closing HTTPS
+ok 124 - an unexpected operational promise rejection is contained without closing HTTPS
+  ---
+  duration_ms: 80.622528
+  type: 'test'
+  ...
+# Subtest: optional startup catch cannot erase observed license loss after authority returns
+ok 125 - optional startup catch cannot erase observed license loss after authority returns
+  ---
+  duration_ms: 71.530597
+  type: 'test'
+  ...
+# Subtest: optional startup catch cannot erase observed ownership loss after authority returns
+ok 126 - optional startup catch cannot erase observed ownership loss after authority returns
+  ---
+  duration_ms: 70.753176
+  type: 'test'
+  ...
+# Subtest: optional startup catch cannot erase observed ownership loss after authority returns (rejected operation)
+ok 127 - optional startup catch cannot erase observed ownership loss after authority returns (rejected operation)
+  ---
+  duration_ms: 127.195094
+  type: 'test'
+  ...
+# Subtest: the explicit HTTPS-ready diagnostic requires a live listener and is suppressed after close
+ok 128 - the explicit HTTPS-ready diagnostic requires a live listener and is suppressed after close
+  ---
+  duration_ms: 44.202939
+  type: 'test'
+  ...
+# (node:77) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: full hosted onReady initializes EMS with controller-shaped fixture and no device mappings
+ok 129 - full hosted onReady initializes EMS with controller-shaped fixture and no device mappings
+  ---
+  duration_ms: 755.071283
+  type: 'test'
+  ...
+# Subtest: EMS startup failure remains visible as degraded while authenticated shell survives
+ok 130 - EMS startup failure remains visible as degraded while authenticated shell survives
+  ---
+  duration_ms: 156.311196
+  type: 'test'
+  ...
+# Subtest: full startup with rejected partial-engine cleanup retains its fence and never advertises ready
+ok 131 - full startup with rejected partial-engine cleanup retains its fence and never advertises ready
+  ---
+  duration_ms: 99.213171
+  type: 'test'
+  ...
+# (node:92) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: startup status distinguishes waiting, unlicensed, blocked, failure and commissioned runtime
+ok 132 - startup status distinguishes waiting, unlicensed, blocked, failure and commissioned runtime
+  ---
+  duration_ms: 4.0311
+  type: 'test'
+  ...
+# Subtest: host-blocked migration and writer diagnostics stay distinct from ordinary startup
+ok 133 - host-blocked migration and writer diagnostics stay distinct from ordinary startup
+  ---
+  duration_ms: 1.086065
+  type: 'test'
+  ...
+# Subtest: failed startup cannot be relabelled as a harmless pending migration or stale grant
+ok 134 - failed startup cannot be relabelled as a harmless pending migration or stale grant
+  ---
+  duration_ms: 0.260052
+  type: 'test'
+  ...
+# Subtest: unknown metadata, secrets and unbounded blockers are never copied into status
+ok 135 - unknown metadata, secrets and unbounded blockers are never copied into status
+  ---
+  duration_ms: 0.363627
+  type: 'test'
+  ...
+# Subtest: readiness provider failure has no writes or change to the existing lifecycle snapshot
+ok 136 - readiness provider failure has no writes or change to the existing lifecycle snapshot
+  ---
+  duration_ms: 0.33156
+  type: 'test'
+  ...
+# Subtest: authenticated EMS status shows the actual migration blocker without starting or writing anything
+ok 137 - authenticated EMS status shows the actual migration blocker without starting or writing anything
+  ---
+  duration_ms: 120.639663
+  type: 'test'
+  ...
+# Subtest: EMS frontend displays blocked startup and its safe same-tab recovery link without claiming a running engine
+ok 138 - EMS frontend displays blocked startup and its safe same-tab recovery link without claiming a running engine
+  ---
+  duration_ms: 48.293038
+  type: 'test'
+  ...
+# Subtest: EMS frontend keeps diagnostic text inert and omits unauthorized or external recovery links
+ok 139 - EMS frontend keeps diagnostic text inert and omits unauthorized or external recovery links
+  ---
+  duration_ms: 29.303794
+  type: 'test'
+  ...
+# Subtest: restore frontend reports the specific startup reason and preserves other API error behavior
+ok 140 - restore frontend reports the specific startup reason and preserves other API error behavior
+  ---
+  duration_ms: 25.148157
+  type: 'test'
+  ...
+# Subtest: restore requests remain blocked for every incomplete start state, with accurate reason and preserved configuration
+ok 141 - restore requests remain blocked for every incomplete start state, with accurate reason and preserved configuration
+  ---
+  duration_ms: 87.698221
+  type: 'test'
+  ...
+1..141
+# tests 141
+# suites 0
+# pass 141
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5480.399788

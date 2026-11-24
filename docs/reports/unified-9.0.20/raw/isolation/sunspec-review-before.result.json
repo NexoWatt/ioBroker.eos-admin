@@ -1,0 +1,15 @@
+{
+  "name": "sunspec-review-before",
+  "command": [
+    "env",
+    "EOS_REVIEW_MODBUS=/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin/modules/devices/lib/drivers/modbus.js",
+    "node",
+    "/workspace/scratch/741f792566ea/audit-919/isolation/repro-sunspec-discovery.cjs"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin",
+  "startedAt": "2026-11-24T19:17:43.475022+00:00",
+  "durationSeconds": 0.115,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/audit-919/isolation/sunspec-review-before.log",
+  "sha256": "ee4f8db77805b1fb301a76284370fb01d2b234a25d626b00d85c10c6d732ffe8"
+}

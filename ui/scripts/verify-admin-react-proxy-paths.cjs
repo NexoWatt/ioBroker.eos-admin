@@ -20,6 +20,10 @@ const crypto = require('node:crypto');
 const ts = require('typescript');
 const root = path.resolve(__dirname, '../src-admin-tab/src');
 let count = 0;
+const navigationModule = { exports: {} };
+vm.runInNewContext(ts.transpileModule(fs.readFileSync(path.join(root, 'lib/installerNavigation.ts'), 'utf8'), {
+  compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
+}).outputText, { module: navigationModule, exports: navigationModule.exports });
 const cases = [
   { label: 'direkt HTTP', base: null, origin: 'http://eos.example:8188' },
   { label: 'direkt HTTPS', base: null, origin: 'https://eos.example' },
@@ -112,6 +116,7 @@ function routingFixture(relative) {
       if (name === 'react') return React;
       if (name === './PageShell') return { __esModule: true, default: 'PageShell' };
       if (name === './ProtectedRuntimeRoute') return { useRuntimeAccess: () => ({ authed: true, role: 'admin' }) };
+      if (name.endsWith('/installerNavigation')) return navigationModule.exports;
       if (name.endsWith('/adminConnection')) return {
         getInstance: () => '2', openExternal: url => opens.push(url),
         resolveRuntimeBaseUrl(instance) { reads.push(instance); return destination; },
@@ -191,7 +196,10 @@ function routingFixture(relative) {
         const expected = {
           'E-Mail-Versand': '/mail-setup/?instance=2#/notification-mail', 'VIS öffnen': '/',
           'EMS Apps öffnen': '/ems-apps.html' + suffix, Simulation: '/simulation.html' + suffix,
-          Lizenz: '/license.html' + suffix, 'SmartHome VIS': '/smarthome.html', 'SmartHome Config': '/smarthome-config.html' + suffix,
+          'Historie einrichten': '/installer/?instance=2#/history-setup',
+          Lizenz: '/nexowatt/license', 'SmartHome VIS': '/smarthome.html', 'SmartHome Config': '/smarthome-config.html' + suffix,
+          Devices: '/modules/devices/', EEBus: '/modules/eebus/', Sicherung: '/modules/backup/',
+          Zertifikate: '/security/tls/', Bestandsübernahme: '/migration/',
         };
         assert.deepEqual(buttons.map(button => button.props.children[0]).sort(), Object.keys(expected).sort());
         for (const button of buttons) { button.props.onClick(); assert.equal(f.opens.at(-1), base + expected[button.props.children[0]]); }

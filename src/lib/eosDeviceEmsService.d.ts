@@ -7,6 +7,7 @@ export interface DeviceEmsAlias {
     unit: string;
     role: string;
     targetId?: string;
+    powerCapabilityValidated?: boolean;
 }
 export interface DeviceEmsInventory {
     baseId: string;
@@ -24,6 +25,7 @@ export interface DeviceEmsInventory {
     missingRequired: string[];
     ems: Record<string, unknown>;
     discoveryCode?: string;
+    optionalPowerCapabilityPending?: boolean;
 }
 export interface DeviceEmsSnapshot {
     namespace: string;

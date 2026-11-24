@@ -1,0 +1,13 @@
+✔ existing 180px branding is reused byte-for-byte; uploaded 1024px logo and root fallback remain unchanged (4.013143ms)
+✔ all actual shared page heads declare the same public iPhone icon with a content-specific cache key (5.853414ms)
+✔ login form has the supplied uncropped emblem before its heading, independent of the story wordmark (1.086146ms)
+✔ actual console build rebasing keeps the new touch icon at the public EOS root and leaves scripts untouched (1.629364ms)
+✔ existing validated hosted-prefix HTML projection keeps anonymous logo and installation links in that instance (98.377851ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 456.556297

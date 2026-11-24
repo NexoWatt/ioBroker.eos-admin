@@ -1,0 +1,35 @@
+✔ constant SMA grid samples stay fresh for 30 minutes; cached telegrams, failed polls and counters do not (414.978303ms)
+✔ FENECON real battery, SOC, PV, converter and grid samples refresh within bound while commands remain change-only (4.651254ms)
+✔ SolaX applied-target readback refreshes only from actual poll, never write acknowledgement or unrelated packet (2.328977ms)
+✔ MQTT full caches and diagnostic packets cannot refresh an old source or a partially updated computed alias (1.416233ms)
+✔ FENECON 780 controller block / 882 target changes only controller route and retains all verified read aliases (2.289457ms)
+✔ all 195 profiles retain existing aliases; new semantics are additive, source-bound and read-only (92.999863ms)
+✔ FENECON keeps battery power separate from ESS converter/DC PV and does not fabricate 706 readback (1.080757ms)
+✔ both SolaX profiles share W units and signed limits, with genuine readable target and no invented grid target (0.871933ms)
+✔ readback is actual polling data and cannot acknowledge queued or failed commands (2.118229ms)
+✔ VARTA sign conversion and DEYE MPPT aggregation remain canonical without new control capability (0.57793ms)
+✔ unknown, write-only, missing, remapped and differently scaled sources remain unavailable (1.894022ms)
+{"runtime":"v24.22.3","wireBlocks":[{"fc":16,"addr":160,"regs":[4,600,0,600,160]},{"fc":16,"addr":160,"regs":[4,64936,65535,600,160]},{"fc":16,"addr":160,"regs":[4,0,0,600,160]}],"deniedWritePackets":0}
+✔ actual SolaX AliasV1 dispatch reaches real loopback Modbus TCP as complete Mode4 block with signed W (81.624811ms)
+{"runtime":"v24.22.3","measured":{"sOC":98,"bATTERY_POWER":600,"aLLOWED_CHARGE_POWER":5000,"aLLOWED_DISCHARGE_POWER":0},"zeroCapabilityPreserved":true}
+✔ actual read path preserves positive discharge, 98% SoC and valid zero BMS discharge capability (8.388902ms)
+{"runtime":"v24.22.3","rawCommandAck":700,"actualMode4Readback":600,"mode8Interpretation":null,"interpretationRequiresMode4":true}
+✔ SolaX readback uses actual mode4 poll and becomes unknown after mode8 or missing current mode (5.61213ms)
+✔ unknown, invalid, disconnected and expired mode context never keeps a usable target or fabricates freshness (14.938363ms)
+✔ only the exact verified mode descriptor enables contextual readback; the existing slow poll includes both fields (0.971773ms)
+✔ separate isolated register replies cannot combine old mode4 with mode8 target words (5.526952ms)
+✔ separate adaptive register replies cannot combine old mode4 with mode8 target words (5.393922ms)
+✔ separate maxReadRegs register replies cannot combine old mode4 with mode8 target words (3.406098ms)
+✔ even a full cached copy cannot manufacture the actual response provenance (3.71265ms)
+✔ stop drains earlier alias work without reviving an old sample (3.467602ms)
+✔ stop drains submitted readback work without reviving an old sample (4.11123ms)
+✔ real unchanged BMS caps stay fresh beyond 60s, while failed/skipped/unrelated polls do not renew them (28.668237ms)
+✔ runtime fast scheduler includes only the two existing numeric cap sources without speeding up the full map (6.608761ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 682.738789

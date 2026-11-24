@@ -1,0 +1,42 @@
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: existing 180px branding is reused byte-for-byte; uploaded 1024px logo and root fallback remain unchanged
+ok 1 - existing 180px branding is reused byte-for-byte; uploaded 1024px logo and root fallback remain unchanged
+  ---
+  duration_ms: 4.160034
+  type: 'test'
+  ...
+# Subtest: all actual shared page heads declare the same public iPhone icon with a content-specific cache key
+ok 2 - all actual shared page heads declare the same public iPhone icon with a content-specific cache key
+  ---
+  duration_ms: 7.31869
+  type: 'test'
+  ...
+# Subtest: login form has the supplied uncropped emblem before its heading, independent of the story wordmark
+ok 3 - login form has the supplied uncropped emblem before its heading, independent of the story wordmark
+  ---
+  duration_ms: 0.75034
+  type: 'test'
+  ...
+# Subtest: actual console build rebasing keeps the new touch icon at the public EOS root and leaves scripts untouched
+ok 4 - actual console build rebasing keeps the new touch icon at the public EOS root and leaves scripts untouched
+  ---
+  duration_ms: 3.97156
+  type: 'test'
+  ...
+# Subtest: existing validated hosted-prefix HTML projection keeps anonymous logo and installation links in that instance
+ok 5 - existing validated hosted-prefix HTML projection keeps anonymous logo and installation links in that instance
+  ---
+  duration_ms: 96.028195
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 516.731733

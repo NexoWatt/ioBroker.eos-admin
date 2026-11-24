@@ -1,11 +1,12 @@
 // @ts-check
 'use strict';
 
-/** @typedef {{dpId:string, type:string, unit:string, rw:string, source:Record<string, unknown>, transform:string}} Binding */
+/** @typedef {{dpId:string, type:string, rw:string, source:Record<string, unknown>, value:number}} ReadContext */
+/** @typedef {{dpId:string, type:string, unit:string, rw:string, source:Record<string, unknown>, transform:string, requiredReadContext?:ReadContext}} Binding */
 /** @typedef {{id?:string, type?:string, unit?:string, rw?:string, source?:Record<string, unknown>}} Datapoint */
 /** @typedef {{id?:string, category?:string, datapoints?:Datapoint[]}} Template */
 /** @typedef {{status:'available'|'unavailable', reason:string, dpId?:string}} Coverage */
-/** @typedef {{relId:string, name:string, role:string, type:string, unit:string, rw:string, kind:string, dpId:string, fromDevice:(value:unknown)=>number|null, semanticSource:string, deviceReadOnly:true}} SemanticDefinition */
+/** @typedef {{relId:string, name:string, role:string, type:string, unit:string, rw:string, kind:string, dpId:string, fromDevice:(value:unknown)=>number|null, semanticSource:string, deviceReadOnly:true, requiredReadContext?:ReadContext}} SemanticDefinition */
 
 /** @type {{schemaVersion:number, aliases:Record<string,string>, profiles:Record<string,Record<string,Binding>>}} */
 const policy = require('./device-alias-semantics-v1.json');
@@ -83,7 +84,15 @@ function buildSemanticAliasDefinitions(options) {
     }
     const dp = typeof getDpById === 'function' ? getDpById(binding.dpId)
       : (template.datapoints || []).find(item => item.id === binding.dpId);
-    const reason = unavailableReason(binding, dp, path);
+    let reason = unavailableReason(binding, dp, path);
+    const context = binding.requiredReadContext;
+    if (!reason && context) {
+      const modeDp = typeof getDpById === 'function' ? getDpById(context.dpId)
+        : (template.datapoints || []).find(item => item.id === context.dpId);
+      if (!modeDp || modeDp.type !== context.type || modeDp.rw !== context.rw ||
+          !Number.isFinite(context.value) || !hasDeviceRead(context.source) ||
+          !sameDescriptor(modeDp.source, context.source)) reason = 'readContextDescriptorChanged';
+    }
     if (reason) {
       coverage[path] = { status: 'unavailable', reason, dpId: binding.dpId };
       continue;
@@ -100,6 +109,7 @@ function buildSemanticAliasDefinitions(options) {
       fromDevice: value => transformValue(value, binding.transform),
       semanticSource: binding.dpId,
       deviceReadOnly: true,
+      ...(context ? { requiredReadContext: context } : {}),
     });
     coverage[path] = { status: 'available', reason: 'sourceDescriptorVerified', dpId: binding.dpId };
   }

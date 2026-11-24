@@ -1,0 +1,35 @@
+{
+  "node": "v22.23.4",
+  "parser": {
+    "badTime": {
+      "error": "EOS_INFLUX_RESPONSE_INVALID"
+    },
+    "unknownType": {
+      "error": "EOS_INFLUX_RESPONSE_INVALID"
+    },
+    "emptyString": {
+      "value": [
+        {
+          "ts": 1795543200000,
+          "val": ""
+        }
+      ]
+    },
+    "unsafeInt": {
+      "error": "EOS_INFLUX_RESPONSE_INVALID"
+    },
+    "duplicateTime": {
+      "error": "EOS_INFLUX_RESPONSE_INVALID"
+    }
+  },
+  "emptyStringWrite": {
+    "value": "test value=\"\" 1"
+  },
+  "commentMeasurement": {
+    "error": "EOS_INFLUX_VALUE_INVALID"
+  }
+}
+(node:29) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:29) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)

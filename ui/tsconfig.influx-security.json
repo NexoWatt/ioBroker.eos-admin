@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "strict": true, "noEmit": true, "target": "ES2022", "module": "commonjs",
+    "skipLibCheck": true, "types": ["node"], "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true, "noImplicitOverride": true,
+    "noImplicitReturns": true, "noFallthroughCasesInSwitch": true,
+    "useUnknownInCatchVariables": true
+  },
+  "files": ["src-ts/runtime-executables/lib/influx-config.ts", "src-ts/runtime-executables/lib/influx-network-policy.ts"]
+}

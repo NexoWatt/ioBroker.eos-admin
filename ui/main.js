@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/main.ts
- * Quell-Hash: sha256:29a6433294bddf757bdbe2e7ffba84bffe0fc70f2e3fbdbd63c6ea2e9dce4a16
+ * Quell-Hash: sha256:11f2616a2f7f2e5066c180db4316c7f0b219b066790e7c4563dab3e1104d3d96
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -54,10 +54,13 @@ const os = require('os');
 // JSON bleibt unkomprimiert: inflate:false verhindert Dekompressionsfehler auch mit älteren ioBroker-Abhängigkeitsbäumen.
 const bodyParser = express.json({ limit: '5mb', inflate: false });
 const crypto = require('crypto');
-const { installerRevision, assertInstallerRevision, provisionInstallerObjects, assertDeviceAppActivations, numericMeasurement, activeDeviceProfileReferences } = require('./lib/installer-lifecycle');
+const { installerRevision, assertInstallerRevision, provisionInstallerObjects, assertDeviceAppActivations, numericMeasurement, activeDeviceProfileReferences, awaitEmsTransition } = require('./lib/installer-lifecycle');
 const { buildFarmOverview } = require('./lib/storage-farm-overview');
-const { tariffDisplayConfig } = require('./lib/tariff-price');
+const { tariffDisplayConfig, tariffPriceNumber } = require('./lib/tariff-price');
 const { customerTariffView, prepareCustomerTariffChange } = require('./lib/customer-tariff');
+const { InfluxDirectClient } = require('./lib/influx-direct');
+const { InfluxHistoryRuntime } = require('./lib/influx-history-runtime');
+const { prepareInfluxHistoryChange, protectInfluxHistoryConfig, restoreInfluxHistoryConfig, redactInfluxHistoryConfig } = require('./lib/influx-config');
 const https = require('https');
 const pkg = require('./package.json');
 const { defaultEnergyOriginConfig, registerEnergyOriginApi } = require('./lib/energy-origin-api');
@@ -391,6 +394,16 @@ class NexoWattVis extends HostedAdapter {
     // responsive and avoids unnecessary InfluxDB round-trips.
     this._nwHistoryApiCache = new EphemeralMap(5000, 4);
     this._nwHistoryApiInflight = new Map();
+    this._nwDirectHistory = new InfluxHistoryRuntime(this.namespace);
+    // Only fulfilled ioBroker writes may enter the historian. Capture the event's
+    // timestamp before awaiting persistence; never await network I/O in an EMS tick.
+    const writeHistoryState = this.setStateAsync.bind(this);
+    this.setStateAsync = async (...args) => {
+      const captured = this._nwDirectHistory.capture(args[0], args[1], args[2]);
+      const result = await writeHistoryState(...args);
+      if (!isActuatorAuthorityBlockedResult(result)) this._nwDirectHistory.commit(captured);
+      return result;
+    };
     this._nwShcfgDetectCache = new EphemeralMap(30000, 1);
     this._nwTypeDetectorObjectsCache = null;
 
@@ -3355,6 +3368,7 @@ class NexoWattVis extends HostedAdapter {
       'settingsConfig',
       'datapoints',
       'installerConfig',
+      'history',
       'eosDeviceEms', // Server-owned commissioning identities survive updates and app changes.
       'countryProfile',
       'emsApps',
@@ -4700,7 +4714,7 @@ class NexoWattVis extends HostedAdapter {
     this._partnerRuntime = new PartnerRuntime({
       getRoot: () => this.config || {},
       isAppActive: (appId) => this._nwPartnerAppActive(appId),
-      controlAvailable: () => !!this.emsEngine && this._nwPartnerAppActive('arbitrage'),
+      controlAvailable: () => this._nwIsEmsReady() && this._nwPartnerAppActive('arbitrage'),
       isResourceAvailable: (resourceId) => {
         const availability = this._nwPartnerResourceAvailability?.[resourceId];
         const now = Date.now();
@@ -4774,6 +4788,7 @@ class NexoWattVis extends HostedAdapter {
 
       // Neue Laufzeitfelder werden ausschließlich im Speicher ergänzt. Ein normales
       // Update/Neustart schreibt keine normalisierte Fassung über vorhandene Kundendaten.
+      patch = restoreInfluxHistoryConfig(patch, this._nwHistorySecretCodec());
       const norm = this.nwNormalizeInstallerPatch(patch, baseNative);
       patch = norm.patch;
 
@@ -4784,6 +4799,7 @@ class NexoWattVis extends HostedAdapter {
 
       // Apply patch as installer SoT (replace installer-managed sections)
       this.config = this.nwApplyInstallerPatchToRuntimeConfig(baseNative, patch);
+      this._nwConfigureHistory();
       try { await this._nwValidateNvpTopology(); }
       catch (_nvpError) { this._nwNvpTopologyValidation = { configFingerprint: JSON.stringify(this.config.nvpTopology), validation: { valid: false, errors: [{ code: 'NVP_SOURCE_VALIDATION_FAILED', message: 'NVP-Quellenprüfung fehlgeschlagen.' }] } }; }
 
@@ -4869,6 +4885,7 @@ class NexoWattVis extends HostedAdapter {
   }
 
   async _nwApplyInstallerRuntime(restartEms, reason) {
+    this._nwConfigureHistory();
     const currentTariffModule = this.emsEngine?.mm?.modules?.find(entry => entry.key === 'tariffProvider')?.instance;
     if (currentTariffModule && typeof currentTariffModule.invalidateConfiguration === 'function') await currentTariffModule.invalidateConfiguration();
     if (currentTariffModule && typeof currentTariffModule.applyTariffMappings === 'function') await currentTariffModule.applyTariffMappings();
@@ -5009,7 +5026,7 @@ class NexoWattVis extends HostedAdapter {
     if (dynamicTransition && dynamicGridAppState(nextRuntime).active) this._nwDynamicGridOwnershipPending = nextRuntime.dynamicGridConnection;
     try {
       const obj = (patchObj && typeof patchObj === 'object') ? patchObj : {};
-      const json = JSON.stringify(obj);
+      const json = JSON.stringify(protectInfluxHistoryConfig(obj, this._nwHistorySecretCodec()));
       await this._nwProtectCredentialState('installer.configJson');
       await this.setStateAsync('installer.configJson', { val: json, ack: true });
       if (dynamicTransition) this._nwDynamicGridPendingCommit = dynamicTransition;
@@ -5166,7 +5183,7 @@ class NexoWattVis extends HostedAdapter {
         adapterVersion: (pkg && pkg.version) ? String(pkg.version) : '',
         instance: this.instance,
         reason: reason ? String(reason) : '',
-        configPatch: patch,
+        configPatch: protectInfluxHistoryConfig(patch, this._nwHistorySecretCodec()),
       };
 
       await this._nwProtectCredentialState(`${base}.backupJson`, true);
@@ -5210,6 +5227,7 @@ class NexoWattVis extends HostedAdapter {
             parseInstallerConfigState({ val: JSON.stringify(parsed.configPatch) });
           }
           if (parsed && typeof parsed === 'object') {
+            parsed.configPatch = restoreInfluxHistoryConfig(parsed.configPatch, this._nwHistorySecretCodec());
             // Automatische Erst-Recovery nimmt die aktuelle Sicherung; ein älterer
             // Stand mit mehr Geräten ist kein besserer Kundenstand.
             if (strict) return parsed;
@@ -5340,7 +5358,7 @@ class NexoWattVis extends HostedAdapter {
       const s = raw.trim();
       if (!s) return null;
       const patch = JSON.parse(s);
-      return (patch && typeof patch === 'object') ? patch : null;
+      return (patch && typeof patch === 'object') ? restoreInfluxHistoryConfig(patch, this._nwHistorySecretCodec()) : null;
     } catch (_e) {
       return null;
     }
@@ -5612,7 +5630,7 @@ class NexoWattVis extends HostedAdapter {
 
       // Backup current App-Center patch so we can restore after simulation.
       const basePatch = (this._nwInstallerConfigPatch && typeof this._nwInstallerConfigPatch === 'object') ? this._nwInstallerConfigPatch : {};
-      const backupJson = JSON.stringify(basePatch);
+      const backupJson = JSON.stringify(protectInfluxHistoryConfig(basePatch, this._nwHistorySecretCodec()));
       const backupWritten = await this.nwSimWriteStatus({
         active: false,
         instanceId: inst,
@@ -5885,6 +5903,8 @@ class NexoWattVis extends HostedAdapter {
       // Grenzen / optionale Signale
       maxChargeW: numberOrNull('maxChargeW', 'maxChargePowerW'),
       maxDischargeW: numberOrNull('maxDischargeW', 'maxDischargePowerW'),
+      allowedChargePowerId: textFrom('allowedChargePowerId'),
+      allowedDischargePowerId: textFrom('allowedDischargePowerId'),
       availableId: textFrom('availableId', 'availableObjectId', 'availableDp', 'availabilityId'),
       faultId: textFrom('faultId', 'faultObjectId', 'faultDp', 'errorId'),
       chargeAllowedId: textFrom('chargeAllowedId', 'chargeAllowedObjectId', 'chargeAllowedDp', 'chargeEnableId'),
@@ -6754,9 +6774,9 @@ class NexoWattVis extends HostedAdapter {
           }
         }
 
-        // Ab v0.6.258 sind die Leistungsgrenzen bewusst feste Eingaben in der Farm-Konfiguration.
-        // Dynamische Max-Leistungs-DPs werden in der harten Dispatch-Logik nicht mehr verwendet,
-        // damit die Speicherfarm auch mit einfachen Signed-DP-Systemen herstellerneutral läuft.
+        // Fixed installer limits remain authoritative upper bounds. Separately
+        // bound device capabilities may only reduce them. Optional unsupported
+        // registers are never automatically bound just because an object exists.
         const availableId = String(row.availableId || '').trim();
         const faultId = String(row.faultId || '').trim();
         const chargeAllowedId = String(row.chargeAllowedId || '').trim();
@@ -6981,6 +7001,23 @@ class NexoWattVis extends HostedAdapter {
           return { limitW: staticLimit, configured: false, fresh: true, missing: false, invalid: false };
         };
 
+        // A bound numeric device capability is a safety input, unlike optional
+        // change-only boolean flags. Missing/stale/invalid observations block
+        // this direction, never become an unlimited or fabricated zero value.
+        const readCapabilityW = async (id, staticLimit) => {
+          const sid = String(id || '').trim();
+          if (!sid) return { configured: false, limitW: staticLimit, status: 'unconfigured', valueW: null };
+          const st = await getState(sid);
+          let reason = '';
+          if (!st || st.val === undefined || st.val === null) reason = 'missing';
+          else if (typeof st.val !== 'number' || !Number.isFinite(st.val) || st.val < 0 || st.val > 1000000000
+            || st.ack !== true || (st.q !== undefined && st.q !== 0) || await getUnit(sid) !== 'W') reason = 'invalid';
+          else if (typeof st.ts !== 'number' || !Number.isFinite(st.ts) || st.ts > now + 1000 || now - st.ts > Math.min(staleMs, 30000)) reason = 'stale';
+          if (reason) return { configured: true, limitW: 0, status: reason, valueW: null };
+          const valueW = Math.floor(st.val);
+          return { configured: true, limitW: staticLimit === null ? valueW : Math.min(staticLimit, valueW), status: 'valid', valueW };
+        };
+
         const availState = await readBoolDp(availableId);
         const faultState = await readBoolDp(faultId);
         const chargeAllowedState = await readBoolDp(chargeAllowedId);
@@ -6988,8 +7025,10 @@ class NexoWattVis extends HostedAdapter {
         const chargeLimitState = await readLimitW(row.maxChargeW);
         const dischargeLimitState = await readLimitW(row.maxDischargeW);
 
-        const maxChargeW = chargeLimitState.limitW;
-        const maxDischargeW = dischargeLimitState.limitW;
+        const chargeCapability = await readCapabilityW(row.allowedChargePowerId, chargeLimitState.limitW);
+        const dischargeCapability = await readCapabilityW(row.allowedDischargePowerId, dischargeLimitState.limitW);
+        const maxChargeW = chargeCapability.limitW;
+        const maxDischargeW = dischargeCapability.limitW;
 
         const baseBlocked = [];
         if (status.licenseBlocked) baseBlocked.push('license_storage_limit');
@@ -7019,6 +7058,8 @@ class NexoWattVis extends HostedAdapter {
           else if (!chargeAllowedState.fresh) dispatchWarnings.push('charge_allowed_stale_using_last');
         }
         if (maxChargeW !== null && maxChargeW <= 0) chargeBlocked.push('charge_limit_zero');
+        if (chargeCapability.configured && chargeCapability.status !== 'valid') chargeBlocked.push(`charge_capability_${chargeCapability.status}`);
+        else if (chargeCapability.configured && chargeCapability.valueW === 0) chargeBlocked.push('charge_capability_zero');
 
         const dischargeBlocked = baseBlocked.slice();
         if (!hasDischargeSetpoint) dischargeBlocked.push('discharge_setpoint_missing');
@@ -7029,6 +7070,8 @@ class NexoWattVis extends HostedAdapter {
           else if (!dischargeAllowedState.fresh) dispatchWarnings.push('discharge_allowed_stale_using_last');
         }
         if (maxDischargeW !== null && maxDischargeW <= 0) dischargeBlocked.push('discharge_limit_zero');
+        if (dischargeCapability.configured && dischargeCapability.status !== 'valid') dischargeBlocked.push(`discharge_capability_${dischargeCapability.status}`);
+        else if (dischargeCapability.configured && dischargeCapability.valueW === 0) dischargeBlocked.push('discharge_capability_zero');
 
         const chargeDispatchAvailable = chargeBlocked.length === 0;
         const dischargeDispatchAvailable = dischargeBlocked.length === 0;
@@ -7046,6 +7089,10 @@ class NexoWattVis extends HostedAdapter {
         status.dischargeDispatchAvailable = !!dischargeDispatchAvailable;
         status.maxChargeW = (maxChargeW !== null) ? maxChargeW : null;
         status.maxDischargeW = (maxDischargeW !== null) ? maxDischargeW : null;
+        status.configuredMaxChargeW = chargeLimitState.limitW;
+        status.configuredMaxDischargeW = dischargeLimitState.limitW;
+        status.chargeCapability = { objectId: row.allowedChargePowerId || '', ...chargeCapability };
+        status.dischargeCapability = { objectId: row.allowedDischargePowerId || '', ...dischargeCapability };
         status.chargeBlockedReasons = chargeBlocked;
         status.dischargeBlockedReasons = dischargeBlocked;
         if (dispatchWarnings.length) status.dispatchWarnings = Array.from(new Set(dispatchWarnings));
@@ -7648,9 +7695,9 @@ class NexoWattVis extends HostedAdapter {
     });
   }
   /**
-   * Liest einen Farm-Kommandodatenpunkt nach dem Write zurueck. Das bestaetigt
-   * nicht die physische Batteriereaktion, aber sehr wohl, dass ioBroker und der
-   * nachgelagerte Adapter exakt den erwarteten Kommandowert halten.
+   * Trennt den angeforderten Kommandowert (ack:false) von einer aktuellen
+   * Adapter-/Treiberquittierung (ack:true). Auch letztere ist weder ein separat
+   * gelesenes Geräteregister noch eine bestätigte physische Batteriereaktion.
    */
   async _sfReadbackNumber(objectId, expectedValue, options = {}) {
     const id = String(objectId || '').trim();
@@ -7660,28 +7707,40 @@ class NexoWattVis extends HostedAdapter {
     const attempts = Math.max(1, Math.min(3, Number(options.attempts) || 3));
     const delayMs = Math.max(0, Math.min(100, Number(options.delayMs) || 30));
     const expected = Number(expectedValue);
+    const notBeforeTs = Math.max(0, Number(options.notBeforeTs) || 0);
     let last = null;
     for (let attempt = 1; attempt <= attempts; attempt++) {
       try {
         const state = await this.getForeignStateAsync(id);
         const raw = state && Object.prototype.hasOwnProperty.call(state, 'val') ? state.val : null;
-        const actual = typeof raw === 'number'
-          ? raw
-          : Number(String(raw === null || raw === undefined ? '' : raw).trim().replace(',', '.'));
+        const actual = typeof raw === 'number' ? raw
+          : (typeof raw === 'string' && raw.trim() ? Number(raw.trim().replace(',', '.')) : Number.NaN);
         const tolerance = Math.max(0.000001, Math.abs(expected) * 0.000001);
-        const ok = Number.isFinite(actual) && Number.isFinite(expected) && Math.abs(actual - expected) <= tolerance;
+        const matches = Number.isFinite(actual) && Number.isFinite(expected) && Math.abs(actual - expected) <= tolerance;
+        const ts = state && typeof state.ts === 'number' && Number.isFinite(state.ts) && state.ts > 0 ? state.ts : null;
+        const qualityOk = !!state && (state.q === undefined || state.q === 0);
+        const current = ts !== null && ts >= notBeforeTs && ts <= Date.now() + 1000;
+        const ok = matches && qualityOk && state.ack === true && current;
+        const pending = matches && qualityOk && !ok;
         last = {
           supported: true,
           ok,
-          status: ok ? 'confirmed' : (Number.isFinite(actual) ? 'mismatch' : 'value-missing'),
+          pending,
+          status: ok ? 'driver-acknowledged' : (pending ? 'pending-ack'
+            : (!qualityOk && state ? 'quality-invalid' : (Number.isFinite(actual) ? 'mismatch' : 'value-missing'))),
+          confirmationLevel: ok ? 'driver-acknowledged' : (pending ? 'requested' : 'none'),
+          pendingReason: pending ? (state.ack !== true ? 'ack-not-received' : 'ack-not-current') : '',
           objectId: id,
           expected,
           actual: Number.isFinite(actual) ? actual : raw,
-          ts: state && Number.isFinite(Number(state.ts)) ? Number(state.ts) : null,
+          ts,
           ack: state && typeof state.ack === 'boolean' ? state.ack : null,
+          q: state && state.q !== undefined ? state.q : null,
           attempts: attempt,
         };
-        if (ok) return last;
+        // A matching request is an asynchronous handoff, not a retryable
+        // mismatch. Observe the later ack on the next tick without blocking it.
+        if (ok || pending) return last;
       } catch (error) {
         last = {
           supported: true,
@@ -7736,13 +7795,16 @@ class NexoWattVis extends HostedAdapter {
     const age = now - lastTs;
 
     if (same && (!keepaliveEnabled || age < effectiveKeepaliveMs)) {
-      const current = await this._sfReadbackNumber(objectId, value, { attempts: 1, delayMs: 0 });
-      if (!current.supported || current.ok) {
+      const current = await this._sfReadbackNumber(objectId, value, { attempts: 1, delayMs: 0, notBeforeTs: lastTs });
+      if (!current.supported || current.ok || current.pending === true) {
         return {
           ok: true,
           skipped: true,
           changed: false,
           same: true,
+          submitted: true,
+          pending: current.pending === true,
+          confirmationLevel: current.confirmationLevel || 'requested',
           readback: current,
           readbackSupported: current.supported === true,
           readbackOk: current.supported === true ? current.ok === true : null,
@@ -7765,8 +7827,8 @@ class NexoWattVis extends HostedAdapter {
         };
       }
 
-      const readback = await this._sfReadbackNumber(objectId, value, { attempts: 3, delayMs: 30 });
-      if (readback.supported && !readback.ok) {
+      const readback = await this._sfReadbackNumber(objectId, value, { attempts: 3, delayMs: 30, notBeforeTs: now });
+      if (readback.supported && !readback.ok && readback.pending !== true) {
         this._sfLastSetpoints.delete(objectId);
         this._sfLastSetpointsTs.delete(objectId);
         return {
@@ -7787,6 +7849,9 @@ class NexoWattVis extends HostedAdapter {
         skipped: false,
         changed: true,
         same,
+        submitted: true,
+        pending: readback.pending === true,
+        confirmationLevel: readback.confirmationLevel || 'requested',
         keepalive: keepaliveEnabled && same && age >= effectiveKeepaliveMs,
         readback,
         readbackSupported: readback.supported === true,
@@ -7918,6 +7983,9 @@ class NexoWattVis extends HostedAdapter {
       return {
         ...s,
         soc,
+        // Preserve the observed value for diagnostics; do not change the
+        // established dispatch calculation's treatment of absent status fields.
+        _sfReportedSoc: numericMeasurement(st.soc),
         online,
         displayOnline,
         offlineReason,
@@ -8070,6 +8138,16 @@ class NexoWattVis extends HostedAdapter {
         if (Number.isFinite(minPowerW)) effectiveBatteryTargetW = Math.max(Number(minPowerW), effectiveBatteryTargetW);
         if (Number.isFinite(maxPowerW)) effectiveBatteryTargetW = Math.min(Number(maxPowerW), effectiveBatteryTargetW);
       }
+      // A bound device capability must also constrain the exclusive native
+      // FEMS path before translating battery power into a grid target. Without
+      // these new bindings, retain the established native controller behavior.
+      if (w > 0 && String(storage.allowedDischargePowerId || '').trim()) {
+        effectiveBatteryTargetW = storage.dischargeDispatchAvailable === true && Number.isFinite(storage.maxDischargeW)
+          ? Math.min(Math.max(0, effectiveBatteryTargetW), storage.maxDischargeW) : 0;
+      } else if (w < 0 && String(storage.allowedChargePowerId || '').trim()) {
+        effectiveBatteryTargetW = storage.chargeDispatchAvailable === true && Number.isFinite(storage.maxChargeW)
+          ? -Math.min(Math.max(0, -effectiveBatteryTargetW), storage.maxChargeW) : 0;
+      }
       // A FEMS grid target is not an ESS target: calculate the NVP value for
       // zero battery power instead of writing a misleading literal 0 to the grid DP.
       if (storage.licenseBlocked) effectiveBatteryTargetW = 0;
@@ -8167,7 +8245,8 @@ class NexoWattVis extends HostedAdapter {
       const readbackOk = readbackSupported ? writeResult.readbackOk === true : writeOk;
       const commandStatus = !calculation.ok
         ? String(calculation.reason || 'fenecon-calculation-failed')
-        : (!releaseOk ? 'fenecon-direct-release-failed' : (writeOk ? 'confirmed' : 'fenecon-grid-write-failed'));
+        : (!releaseOk ? 'fenecon-direct-release-failed' : (writeOk
+          ? String(writeResult.readback && writeResult.readback.status || 'unavailable') : 'fenecon-grid-write-failed'));
       const acceptedW = writeOk ? effectiveBatteryTargetW : 0;
       const failedW = writeOk ? 0 : w;
       const nativeResult = {
@@ -8201,6 +8280,11 @@ class NexoWattVis extends HostedAdapter {
         acceptedDeliveredW: acceptedW,
         failedW,
         unservedW: writeOk ? (w - effectiveBatteryTargetW) : w,
+        commandDpReadbackSupported: readbackSupported,
+        commandDpReadbackOk: readbackOk,
+        commandDpReadbackStatus: commandStatus,
+        commandDpReadbackPending: !!(writeResult && writeResult.pending === true),
+        commandConfirmationLevel: writeResult && writeResult.confirmationLevel || 'none',
         validation: feneconFarmValidation,
         results: [nativeResult],
       };
@@ -8233,6 +8317,8 @@ class NexoWattVis extends HostedAdapter {
         commandDpReadbackSupported: readbackSupported,
         commandDpReadbackOk: readbackOk,
         commandDpReadbackStatus: commandStatus,
+        commandDpReadbackPending: !!(writeResult && writeResult.pending === true),
+        commandConfirmationLevel: writeResult && writeResult.confirmationLevel || 'none',
         commandDpReadbackRows: writeResult && writeResult.readback ? [writeResult.readback] : [],
         requestSatisfied: writeOk && effectiveBatteryTargetW === w,
         partiallyAccepted: writeOk && effectiveBatteryTargetW !== w,
@@ -8618,9 +8704,21 @@ class NexoWattVis extends HostedAdapter {
         || commandFamily === 'signed'
         || (commandFamily === 'split' && (direction === 'charge' ? !!chargeId : !!dischargeId));
 
+      // Explain this exact dispatch decision without redefining the status
+      // capability flags or changing the allocator/write path above.
+      const directionDispatchAvailable = eligibleForDispatch.includes(s);
+      const blockedReasons = [...(direction === 'charge' ? (s.chargeBlockedReasons || [])
+        : direction === 'discharge' ? (s.dischargeBlockedReasons || []) : [])];
+      if (direction === 'discharge' && dispatchEligible.includes(s) && !directionDispatchAvailable) {
+        blockedReasons.push(s._sfReportedSoc === null ? 'soc_missing' : 'soc_at_or_below_discharge_floor');
+      }
+      const effectiveDischargeLimit = direction === 'discharge'
+        ? (directionDispatchAvailable ? getLimitW(s, 'discharge') : 0) : null;
+
       const r = {
         name: s.name || '',
-        soc: Number.isFinite(Number(s.soc)) ? Number(s.soc) : null,
+        dispatchKey: s._sfKey,
+        soc: s._sfReportedSoc,
         state: s.state || '',
         online: !!s.online,
         dispatchAvailable: !!s.dispatchAvailable,
@@ -8628,7 +8726,10 @@ class NexoWattVis extends HostedAdapter {
         dischargeDispatchAvailable: !!s.dischargeDispatchAvailable,
         maxChargeW: (s.maxChargeW !== null && Number.isFinite(Number(s.maxChargeW))) ? Number(s.maxChargeW) : null,
         maxDischargeW: (s.maxDischargeW !== null && Number.isFinite(Number(s.maxDischargeW))) ? Number(s.maxDischargeW) : null,
-        blockedReasons: direction === 'charge' ? (s.chargeBlockedReasons || []) : (direction === 'discharge' ? (s.dischargeBlockedReasons || []) : []),
+        directionDispatchAvailable,
+        dischargeFloorSocPct: direction === 'discharge' ? dischargeFloorSoc : null,
+        effectiveMaxDischargeW: Number.isFinite(effectiveDischargeLimit) ? effectiveDischargeLimit : null,
+        blockedReasons,
         warnings: Array.isArray(s.dispatchWarnings) ? s.dispatchWarnings : [],
         statusMatch: String(s.statusMatch || ''),
         actualChargeW: Number.isFinite(Number(s.chargePowerW)) ? Number(s.chargePowerW) : null,
@@ -8747,20 +8848,30 @@ class NexoWattVis extends HostedAdapter {
         key,
         objectId: readback ? String(readback.objectId || '') : '',
         expected: readback && Number.isFinite(Number(readback.expected)) ? Number(readback.expected) : null,
-        actual: readback && Number.isFinite(Number(readback.actual)) ? Number(readback.actual) : (readback ? readback.actual : null),
+        actual: readback && typeof readback.actual === 'number' && Number.isFinite(readback.actual)
+          ? readback.actual : (readback ? readback.actual : null),
         supported: !!(wr && wr.readbackSupported === true),
         ok: wr && typeof wr.readbackOk === 'boolean' ? wr.readbackOk : null,
+        pending: !!(readback && readback.pending === true),
+        ack: readback && typeof readback.ack === 'boolean' ? readback.ack : null,
+        ts: readback ? readback.ts : null,
+        q: readback ? readback.q : null,
+        confirmationLevel: readback ? String(readback.confirmationLevel || 'none') : 'none',
         status: readback ? String(readback.status || '') : String((wr && wr.reason) || ''),
       };
     }));
     const supportedCommandDpReadbacks = commandDpReadbackRows.filter((row) => row.supported);
     const commandDpReadbackSupported = supportedCommandDpReadbacks.length > 0;
     const commandDpReadbackOk = commandDpReadbackSupported
-      ? supportedCommandDpReadbacks.every((row) => row.ok === true)
+      ? commandDpReadbackRows.every((row) => row.supported && row.ok === true)
       : true;
     const commandDpReadbackStatus = commandDpReadbackSupported
-      ? (commandDpReadbackOk ? 'confirmed' : 'command-dp-mismatch')
+      ? (commandDpReadbackOk ? 'driver-acknowledged'
+        : (commandDpReadbackRows.every(row => !row.supported || row.ok === true || row.pending === true) ? 'pending-ack' : 'command-dp-mismatch'))
       : 'unavailable';
+    const commandDpReadbackPending = supportedCommandDpReadbacks.some(row => row.pending === true);
+    const commandConfirmationLevel = commandDpReadbackSupported && commandDpReadbackOk
+      ? 'driver-acknowledged' : (allConfiguredWritesAccepted ? 'requested' : 'none');
     const anyAcceptedPower = direction === 'idle' ? allConfiguredWritesAccepted : acceptedAbsW > 0;
     const requestSatisfied = direction === 'idle'
       ? allConfiguredWritesAccepted
@@ -8789,6 +8900,8 @@ class NexoWattVis extends HostedAdapter {
         commandDpReadbackSupported,
         commandDpReadbackOk,
         commandDpReadbackStatus,
+        commandDpReadbackPending,
+        commandConfirmationLevel,
         commandDpReadbackRows,
         requestSatisfied,
         status: dispatchStatus,
@@ -8803,7 +8916,8 @@ class NexoWattVis extends HostedAdapter {
           return Number.isFinite(v) ? Math.round(v) : null;
         })(),
         availableDischargePowerW: (() => {
-          const v = sumLimitW(storages.filter(s => s.dischargeDispatchAvailable === true), 'discharge');
+          const v = sumLimitW(direction === 'discharge' ? eligibleForDispatch
+            : storages.filter(s => s.dischargeDispatchAvailable === true), 'discharge');
           return Number.isFinite(v) ? Math.round(v) : null;
         })(),
         results: results.map(r => {
@@ -8811,6 +8925,7 @@ class NexoWattVis extends HostedAdapter {
           const authorityBlocks = writeRows.filter(wr => wr && wr.blocked === true);
           return {
             name: r.name || '',
+            dispatchKey: r.dispatchKey,
             state: r.state || '',
             online: r.online,
             dispatchAvailable: r.dispatchAvailable,
@@ -8818,6 +8933,9 @@ class NexoWattVis extends HostedAdapter {
             dischargeDispatchAvailable: r.dischargeDispatchAvailable,
             maxChargeW: r.maxChargeW,
             maxDischargeW: r.maxDischargeW,
+            directionDispatchAvailable: r.directionDispatchAvailable,
+            dischargeFloorSocPct: r.dischargeFloorSocPct,
+            effectiveMaxDischargeW: r.effectiveMaxDischargeW,
             blockedReasons: r.blockedReasons,
             warnings: r.warnings,
             statusMatch: r.statusMatch,
@@ -8875,6 +8993,8 @@ class NexoWattVis extends HostedAdapter {
       commandDpReadbackSupported,
       commandDpReadbackOk,
       commandDpReadbackStatus,
+      commandDpReadbackPending,
+      commandConfirmationLevel,
       commandDpReadbackRows,
       requestSatisfied,
       partiallyAccepted: !allConfiguredWritesAccepted && acceptedAbsW > 0,
@@ -12027,9 +12147,10 @@ async onReady() {
       try { await startupStep(() => this.initLogicEngine()); } catch (e) { this.log.warn('NexoLogic init failed: ' + (e && e.message ? e.message : e)); }
       if (this._nwShuttingDown) return;
       assertStartupAuthority();
-      this._hostedStartup = { state: this.emsEngine ? 'ready' : 'degraded', error: this.emsEngine ? '' : 'EOS_EMS_INIT_FAILED' };
+      const emsReady = this._nwIsEmsReady();
+      this._hostedStartup = { state: emsReady ? 'ready' : 'degraded', error: emsReady ? '' : 'EOS_EMS_INIT_FAILED' };
       this._bridge.deviceEmsConfigChanged?.();
-      if (this.emsEngine) this.log.info('NexoWatt EOS ist bereit.');
+      if (emsReady) this.log.info('NexoWatt EOS ist bereit.');
       else this.log.warn('EOS_EMS_INIT_FAILED: Bedienoberfläche verfügbar, Betriebsstart unvollständig.');
     } catch (e) {
       if (this._nwShuttingDown) return;
@@ -12096,6 +12217,14 @@ async onReady() {
       throw e;
     }
   }
+  // A retained engine can be fenced while asynchronous module cleanup is
+  // unresolved. Its presence alone does not establish operational readiness.
+  _nwIsEmsReady() {
+    const engine = this.emsEngine;
+    return !this._nwShuttingDown && !this._nwEmsInitError &&
+      !!engine?._timer && engine._reconfiguring !== true;
+  }
+
   /**
    * Code-Teil: initEmsEngine
    * Zweck: Initialisiert diesen Bereich und verbindet abhängige Startlogik.
@@ -12104,38 +12233,52 @@ async onReady() {
    */
   async initEmsEngine(force) {
     if (this._nwShuttingDown) throw new Error('EOS_UI_STOPPING');
-    const doForce = !!force;
-
-    if (this.emsEngine && !doForce) return;
-
-    // A replacement must never reuse the old registry or overlap an old tick.
-    // Failure keeps the old engine paused and visible for the next apply attempt.
-    if (doForce && this.emsEngine) {
-      if (typeof this.emsEngine.stopForReconfigure === 'function') await this.emsEngine.stopForReconfigure();
-      else if (typeof this.emsEngine.stop === 'function') await this.emsEngine.stop();
-      this.emsEngine = null;
-    }
-
-    // Reset last error
-    this._nwEmsInitError = '';
-
-    try {
-      if (!this.emsEngine) this.emsEngine = new EmsEngine(this);
-      await this.emsEngine.init();
+    if (this._nwEmsInitPending) return this._nwEmsInitPending;
+    const initialize = async () => {
+      if (!force && this._nwIsEmsReady()) return;
+      // Failed initialization may already own asynchronous module work. Keep
+      // that engine reachable until its bounded drain has actually completed.
+      const drainPrevious = async () => {
+        const previous = this.emsEngine;
+        if (!previous) return;
+        this._nwEmsInitError ||= 'EOS_EMS_CONFIG_APPLY_PENDING';
+        if (typeof previous.stopForReconfigure === 'function') await previous.stopForReconfigure();
+        else if (typeof previous.stop === 'function') await awaitEmsTransition(Promise.resolve(previous.stop()));
+        else throw new Error('EOS_EMS_STOP_UNCONFIRMED');
+        if (this.emsEngine === previous) this.emsEngine = null;
+      };
+      await drainPrevious();
       if (this._nwShuttingDown) throw new Error('EOS_UI_STOPPING');
-      await this._meshCoordinator?.syncAppLifecycle();
-      if (this._nwShuttingDown) throw new Error('EOS_UI_STOPPING');
-      this._nwEmsInitError = '';
-    } catch (e) {
-      this._nwEmsInitError = (e && e.message) ? String(e.message) : String(e);
-
+      this._nwEmsInitError = 'EOS_EMS_STARTING';
       try {
-        if (this.emsEngine && typeof this.emsEngine.stop === 'function') this.emsEngine.stop();
-      } catch (_e2) {}
-
-      this.emsEngine = null;
-      throw e;
+        this.emsEngine = new EmsEngine(this);
+        await this.emsEngine.init();
+        if (this._nwShuttingDown) throw new Error('EOS_UI_STOPPING');
+        await this._meshCoordinator?.syncAppLifecycle();
+        if (this._nwShuttingDown) throw new Error('EOS_UI_STOPPING');
+        this._nwEmsInitError = '';
+        if (this._hostedStartup?.state === 'degraded' && this._hostedStartup.error === 'EOS_EMS_INIT_FAILED' && this._nwIsEmsReady()) {
+          this._hostedStartup = { state: 'ready', error: '' };
+        }
+      } catch (e) {
+        this._nwEmsInitError = (e && e.message) ? String(e.message) : String(e);
+        try { await drainPrevious(); }
+        catch (_cleanupError) {
+          this.log.warn('EOS_EMS_FAILED_START_CLEANUP_PENDING: Alte EMS-Laufzeit bleibt bis zum bestätigten Stopp gesperrt.');
+        }
+        throw e;
+      }
+    };
+    const operation = initialize();
+    this._nwEmsInitPending = operation;
+    try { return await operation; }
+    catch (error) {
+      if (this._hostedStartup?.state === 'ready' && !this._nwIsEmsReady()) {
+        this._hostedStartup = { state: 'degraded', error: 'EOS_EMS_INIT_FAILED' };
+      }
+      throw error;
     }
+    finally { if (this._nwEmsInitPending === operation) this._nwEmsInitPending = null; }
   }
 
   /**
@@ -12618,7 +12761,7 @@ async onReady() {
 
     /** Öffentliche /config-Antwort von Datenpunktpfaden und Migrationsdiagnose befreien. */
     const nwSanitizePublicConfig = (payload, installerAccess = false) => {
-      if (installerAccess) return payload;
+      if (installerAccess) return redactInfluxHistoryConfig(payload);
       const src = (payload && typeof payload === 'object') ? payload : {};
       const out = Object.assign({}, src);
       delete out.featureVisibilityTsPreview;
@@ -12672,7 +12815,7 @@ async onReady() {
         customerWritePolicy: 'session',
         remoteIp: '',
       };
-      return out;
+      return redactInfluxHistoryConfig(out);
     };
     this._nwSanitizePublicConfig = nwSanitizePublicConfig;
 
@@ -12904,6 +13047,11 @@ app.get('/sw.js', (_req, res) => {
 app.get('/apple-touch-icon.png', (_req, res) => {
   res.type('image/png');
   res.sendFile(path.join(__dirname, 'www', 'apple-touch-icon.png'));
+});
+// Conventional iOS probes are fixed public image aliases, never a public directory.
+app.get(['/apple-touch-icon-precomposed.png', '/apple-touch-icon-180x180.png', '/apple-touch-icon-180x180-precomposed.png'], (_req, res) => {
+  res.type('image/png');
+  res.sendFile(path.join(__dirname, 'www', 'assets', 'icons', 'nexowatt-180.png'));
 });
 // API-Kommentar: GET-Route. Zweck: stellt einen Web-/API-Endpunkt bereit. Zusammenhang: Frontend-Dateien in www/* können diesen Endpunkt direkt nutzen. Route/Handler: '/favicon.ico', (_req, res) => {
 app.get('/favicon.ico', (_req, res) => {
@@ -13270,7 +13418,7 @@ registerSmartHomeDeviceApi(app, {
   history: (id, options) => new Promise(resolve => {
     const instance = String(this._nwGetHistoryInstance() || '').trim();
     if (!instance) return resolve({ error: 'HISTORY_NOT_CONFIGURED' });
-    this.sendTo(instance, 'getHistory', { id, options: { ...options, addId: false, ignoreNull: true, limit: 1000 } }, resolve);
+    this._nwDispatchHistory(instance, { id, options: { ...options, addId: false, ignoreNull: true, limit: 1000 } }, resolve);
   }),
 }, requireAuth, requireDpDiscovery);
 
@@ -15867,7 +16015,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
     // Antworten werden zusätzlich durch die bestehende globale Redaction abgesichert.
     const _nwTariffSecretKeys = new Set(['accessToken','securityToken','clientSecret','bearerToken','apiKey','password','refreshToken']);
     const _nwMaskTariffProviderForUi = (cfg) => {
-      const clone = this._nwDeepClone(cfg || {}) || {};
+      const clone = redactInfluxHistoryConfig(this._nwDeepClone(cfg || {}) || {});
       if (clone?.tariffProvider) delete clone.tariffProvider.retainedProviderCredentials;
       const creds = clone && clone.tariffProvider && clone.tariffProvider.credentials;
       if (creds && typeof creds === 'object') {
@@ -15878,7 +16026,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
       return clone;
     };
     const stripRetainedTariffCredentials = (patch) => {
-      const clean = this._nwDeepClone(patch || {}) || {};
+      const clean = protectInfluxHistoryConfig(this._nwDeepClone(patch || {}) || {}, this._nwHistorySecretCodec());
       if (clean.tariffProvider) delete clean.tariffProvider.retainedProviderCredentials;
       return clean;
     };
@@ -15921,6 +16069,61 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
     };
 
     // Abschnitt: Installer/App-Center-APIs. Änderungen wirken direkt auf EMS-Module und DP-Mapping.
+    const requireHistoryInstaller = (req, res, next) => {
+      if (!['admin', 'installer'].includes(req.nwSession?.role)) return sendForbidden(res);
+      return next();
+    };
+    const historyResponse = () => ({ ok: true, config: redactInfluxHistoryConfig({ history: this.config?.history || { provider: 'adapter' } }).history, configurationRevision: this._nwInstallerConfigRevision(), status: this._nwDirectHistory.status() });
+    const historyFailure = (res, error) => {
+      const rawCode = error?.code;
+      const code = typeof rawCode === 'string' && /^EOS_INFLUX_[A-Z_]{1,64}$/.test(rawCode) ? rawCode : 'EOS_INFLUX_REQUEST_FAILED';
+      const invalid = ['EOS_INFLUX_CONFIG_INVALID', 'EOS_INFLUX_PROVIDER_INVALID', 'EOS_INFLUX_TOKEN_INVALID', 'EOS_INFLUX_CA_INVALID', 'EOS_INFLUX_URL_INVALID', 'EOS_INFLUX_NEW_DESTINATION_REQUIRES_TOKEN'].includes(code);
+      return res.status(invalid ? 400 : 503).json({ ok: false, error: code });
+    };
+    app.get('/api/installer/history', requireInstaller, requireHistoryInstaller, (_req, res) => {
+      sendNoStore(res); this._nwConfigureHistory(); return res.json(historyResponse());
+    });
+    app.post('/api/installer/history/check', requireInstaller, requireHistoryInstaller, async (req, res) => {
+      sendNoStore(res);
+      if (this._nwShuttingDown || this._bridge.canWrite() !== true) return res.status(503).json({ ok: false, error: 'EOS_UI_OWNERSHIP_REQUIRED' });
+      if (this._nwHistoryCheckInFlight) return res.status(409).json({ ok: false, error: 'EOS_INFLUX_CHECK_BUSY' });
+      this._nwHistoryCheckInFlight = true;
+      let client = null;
+      try {
+        const candidate = prepareInfluxHistoryChange(this.config?.history, req.body?.history || { provider: 'influxdb2' });
+        if (candidate.provider !== 'influxdb2') return res.status(400).json({ ok: false, error: 'EOS_INFLUX_PROVIDER_INVALID' });
+        client = new InfluxDirectClient(candidate.influxdb2);
+        this._nwHistoryCheckClient = client;
+        const check = await client.check();
+        return res.json({ ok: true, check });
+      } catch (error) { return historyFailure(res, error); }
+      finally { client?.close(); this._nwHistoryCheckClient = null; this._nwHistoryCheckInFlight = false; }
+    });
+    app.post('/api/installer/history', requireInstaller, requireHistoryInstaller, async (req, res) => {
+      sendNoStore(res);
+      if (this._nwShuttingDown || this._bridge.canWrite() !== true) return res.status(503).json({ ok: false, error: 'EOS_UI_OWNERSHIP_REQUIRED' });
+      const mutation = beginMeshAppSave();
+      if (!mutation) return res.status(409).json({ ok: false, error: 'EOS_INFLUX_CONFIG_BUSY' });
+      try {
+        if (typeof req.body?.expectedConfigurationRevision !== 'string' || req.body.expectedConfigurationRevision !== this._nwInstallerConfigRevision()) {
+          return res.status(409).json({ ok: false, error: 'EOS_INSTALLER_CONFIG_CONFLICT' });
+        }
+        const history = prepareInfluxHistoryChange(this.config?.history, req.body?.history);
+        const patch = { ...this._nwDeepClone(this._nwInstallerConfigPatch || {}), history };
+        if (await this.persistInstallerConfigToState(patch) === false) return res.status(503).json({ ok: false, error: 'EOS_INFLUX_CONFIG_SAVE_FAILED' });
+        this._nwInstallerConfigPatch = patch;
+        this.config = this.nwApplyInstallerPatchToRuntimeConfig(this.config, patch);
+        if (this._nwShuttingDown || this._bridge.canWrite() !== true) return res.status(503).json({ ok: false, saved: true, error: 'EOS_UI_OWNERSHIP_REQUIRED' });
+        this._nwConfigureHistory();
+        await this.ensureHistorieExportStates();
+        if (!this._nwShuttingDown && this._bridge.canWrite() === true) {
+          void this.updateHistorieExportStates('history-save').catch(() => {});
+        }
+        try { await this.nwWriteUserdataBackup(patch, 'history-save'); } catch (_error) {}
+        return res.json(historyResponse());
+      } catch (error) { return historyFailure(res, error); }
+      finally { endMeshAppSave(mutation); }
+    });
     // API-Kommentar: GET-Route. Zweck: stellt einen Web-/API-Endpunkt bereit. Zusammenhang: Frontend-Dateien in www/* können diesen Endpunkt direkt nutzen. Route/Handler: '/api/installer/config', requireInstaller, async (_req, res) => {
     app.get('/api/installer/config', requireInstaller, async (_req, res) => {
       try {
@@ -16233,6 +16436,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
           res.status(400).json({ ok: false, error: 'invalid backup/patch' });
           return;
         }
+        patch = restoreInfluxHistoryConfig(patch, this._nwHistorySecretCodec());
         const tokenError = nwValidateStationTokenChanges(patch);
         if (tokenError) return res.status(400).json({ ok: false, error: 'invalid_station_token', message: tokenError });
 
@@ -16253,7 +16457,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
           'settingsConfig',
 
           // Optional diagnostics settings
-          'diagnostics',
+          'diagnostics', 'history',
         ]);
 
         // Build sanitized patch
@@ -16280,6 +16484,11 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
         } else { finalPatch.partnerIntegrations = this._nwDeepClone(currentPartnerConfig(this.config)); }
         if (Object.prototype.hasOwnProperty.call(safePatch, 'nvpTopology')) finalPatch.nvpTopology = this._nwDeepClone(safePatch.nvpTopology);
         else if (this.config.nvpTopology !== undefined) finalPatch.nvpTopology = this._nwDeepClone(this.config.nvpTopology);
+
+        // Credentials are atomic even for merge imports: a quarantined incoming
+        // envelope must never inherit the previous destination's plaintext token.
+        if (safePatch.history !== undefined) finalPatch.history = this._nwDeepClone(safePatch.history);
+        else if (this.config.history !== undefined) finalPatch.history = this._nwDeepClone(this.config.history);
 
         // Apply to runtime config based on instance native (drop old patch leftovers)
         let baseNative = {};
@@ -16326,7 +16535,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
         await this._nwApplyInstallerRuntime(restartEms, 'import');
         try { await this.nwWriteUserdataBackup(finalPatch, 'import'); } catch (_e) {}
 
-        res.json({ ok: true, imported: true, restarted: !!restartEms, config: _nwPickPersistedInstallerConfig(), configurationRevision: this._nwInstallerConfigRevision() });
+        res.json({ ok: true, imported: true, restarted: !!restartEms, config: _nwMaskTariffProviderForUi(_nwPickPersistedInstallerConfig()), configurationRevision: this._nwInstallerConfigRevision() });
         this._bridge.deviceEmsConfigChanged?.();
       } catch (e) {
         const failure = safeConfigurationFailure(e);
@@ -17346,7 +17555,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
     app.get('/api/ems/status', requireInstaller, async (req, res) => {
       try {
         const engine = this.emsEngine;
-        const running = !!(engine && engine._timer);
+        const running = this._nwIsEmsReady();
         const intervalMs = engine && typeof engine._intervalMs === 'number' ? engine._intervalMs : null;
 
         const mm = engine && engine.mm ? engine.mm : null;
@@ -18545,7 +18754,7 @@ app.get('/api/history', async (req, res) => {
          * Zusammenhang: Gehört zu ioBroker-Adapterkern (Adapter-Lifecycle, Webserver, REST-/SSE-API, State-Anlage, Lizenz und EMS-Engine) und wird von benachbarten UI-/API-/EMS-Bausteinen genutzt.
          * Wartung/TypeScript: Änderungen können Adapterstart, APIs, States und Webserver beeinflussen; unload/connection immer mittesten. Beim TS-Umbau Parameter, Rückgabe und genutzte State-/Config-Objekte explizit typisieren.
          */
-        const densifyHoldLast = (values, rangeStart = start, rangeEnd = end, rangeStepMs = stepMs) => {
+        const densifyHoldLast = (values, rangeStart = start, rangeEnd = end, rangeStepMs = stepMs, maxHoldMs = Infinity) => {
           const rStart = Number(rangeStart);
           const rEnd = Number(rangeEnd);
           const rStep = Number(rangeStepMs);
@@ -18572,12 +18781,15 @@ app.get('/api/history', async (req, res) => {
           const out = [];
           let havePrev = false;
           let prev = null;
+          let prevTs = -Infinity;
           for (let i = 0; i <= n; i++) {
             if (byIdx.has(i)) {
               prev = byIdx.get(i);
               havePrev = true;
+              prevTs = rStart + i * rStep;
             }
-            out.push([rStart + i * rStep, havePrev ? prev : null]);
+            const ts = rStart + i * rStep;
+            out.push([ts, havePrev && ts - prevTs <= maxHoldMs ? prev : null]);
           }
 
           // Ensure the series reaches exactly `rangeEnd` so the chart does not visually "stop"
@@ -18586,7 +18798,7 @@ app.get('/api/history', async (req, res) => {
           if (out.length) {
             const lastTs = out[out.length - 1][0];
             if (Number.isFinite(lastTs) && lastTs < rEnd) {
-              out.push([rEnd, havePrev ? prev : null]);
+              out.push([rEnd, havePrev && rEnd - prevTs <= maxHoldMs ? prev : null]);
             }
           }
           return out;
@@ -18691,11 +18903,21 @@ app.get('/api/history', async (req, res) => {
           const cacheKey = `${cacheId}|${queryStart}|${queryEnd}|${queryStepMs}`;
           if (requestSeriesCache.has(cacheKey)) return requestSeriesCache.get(cacheKey);
           const options = { start: queryStart, end: queryEnd, step: queryStepMs, aggregate: 'average', addId: false, ignoreNull: true };
+          // Canonical power/SoC states are exported periodically even when unchanged
+          // (tolAbs=0, Influx changesOnly=false). Missing later buckets are unknown,
+          // not permission to extend an old measurement across a device outage.
+          // Explicit legacy mappings and tariff states can be on-change: keep their
+          // established sparse-series contract instead of inventing a freshness age.
+          const periodicHistory = ['core.', 'evcs.', 'consumers.', 'producers.']
+            .some(part => sid?.startsWith(`${this.namespace}.historie.${part}`));
+          const exportRaw = Number(this.config?.history?.exportIntervalMs || this.config?.history?.intervalMs);
+          const exportMs = Math.max(600000, Math.min(3600000, Number.isFinite(exportRaw) ? Math.round(exportRaw) : 600000));
+          const maxHoldMs = periodicHistory ? Math.max(exportMs, queryStepMs) : Infinity;
           const promise = !sid ? Promise.resolve({ id: sid || id, values: [] }) : historyRequest(
-            callback => this.sendTo(inst, 'getHistory', { id: sid, options }, callback),
+            callback => this._nwDispatchHistory(inst, { id: sid, options }, callback),
             result => ({ id: sid, values: densifyHoldLast(
               this._nwNormalizeHistoryResult(result, 10000).map(point => [point.ts, point.val]),
-              queryStart, queryEnd, queryStepMs,
+              queryStart, queryEnd, queryStepMs, maxHoldMs,
             ) }),
           );
 
@@ -18726,7 +18948,7 @@ app.get('/api/history', async (req, res) => {
         const netFeeActiveNow = !!(this.stateCache && this.stateCache['settings.netFeeEnabled'] && this.stateCache['settings.netFeeEnabled'].value);
         const pricingActiveNow = !!(dynamicTariffActiveNow || netFeeActiveNow);
         const wantSocSeries = stepMs <= (10 * 60 * 1000);
-        const manualGrossPriceNow = Number(this.stateCache?.['settings.price']?.value);
+        const manualGrossPriceNow = tariffPriceNumber(this.stateCache?.['settings.price']?.value);
         const grossPriceCandidates = [
           `${this.namespace}.historie.tariff.providerCurrentEurPerKwh`,
           `${this.namespace}.tarif.preisAktuellEurProKwh`,
@@ -18820,13 +19042,13 @@ app.get('/api/history', async (req, res) => {
               : ((!dynamicTariffActive && Number.isFinite(manualGrossPrice)) ? manualGrossPrice : rawTotal);
             if (!Number.isFinite(total) && Number.isFinite(rawBase)) total = rawBase + netFee;
             if (!Number.isFinite(total) && Number.isFinite(manualGrossPrice)) total = manualGrossPrice;
-            if (!Number.isFinite(total)) total = 0;
-            total = Math.max(-5, total);
+            // These archived values already use EUR/kWh. Keep genuine signed
+            // prices; neither missing values nor a lower clamp create a quote.
+            if (!Number.isFinite(total)) total = null;
 
-            let base = total - netFee;
+            let base = total === null ? null : total - netFee;
             if (!Number.isFinite(base) && Number.isFinite(rawBase)) base = rawBase;
             if (!Number.isFinite(base)) base = total;
-            base = Math.max(-5, base);
 
             baseOut.push([ts, base]);
             totalOut.push([ts, total]);
@@ -18888,6 +19110,7 @@ app.get('/api/history', async (req, res) => {
               lpIds.push(`${this.namespace}.historie.evcs.lp${i}.powerW`);
             }
             const sumByTs = new Map();
+            const samplesByTs = new Map();
             // Avoid keeping up to 200 full charge-point arrays alive together.
             // Eight parallel reads still share the whole request deadline.
             for (let offset = 0; offset < lpIds.length; offset += 8) {
@@ -18895,18 +19118,21 @@ app.get('/api/history', async (req, res) => {
               const lpSeries = await Promise.all(batchIds.map(id => ask(id)));
               for (const series of lpSeries) {
                 for (const point of series.values) {
-                  if (point[1] === null || point[1] === undefined) continue;
                   const ts = Number(point[0]);
+                  if (!Number.isFinite(ts)) continue;
+                  if (!sumByTs.has(ts)) sumByTs.set(ts, 0);
+                  if (point[1] === null || point[1] === undefined) continue;
                   const value = Number(point[1]);
                   if (!Number.isFinite(ts) || !Number.isFinite(value)) continue;
                   sumByTs.set(ts, (sumByTs.get(ts) || 0) + value);
+                  samplesByTs.set(ts, (samplesByTs.get(ts) || 0) + 1);
                 }
               }
               for (const id of batchIds) requestSeriesCache.delete(`${id}|${start}|${end}|${Math.max(60000, stepS * 1000)}`);
             }
             const vals = Array.from(sumByTs.entries())
               .sort((a, b) => a[0] - b[0])
-              .map(([ts, v]) => [ts, v]);
+              .map(([ts, v]) => [ts, samplesByTs.get(ts) === count ? v : null]);
             if (vals.length >= 2) {
               evcs.id = `${this.namespace}.historie.evcs.sum.powerW`;
               evcs.values = vals;
@@ -18945,7 +19171,7 @@ const readCounterPoint = (id, newest) => {
     count: 1, returnNewestEntries: !!newest, removeBorderValues: false,
   };
   return historyRequest(
-    callback => this.sendTo(inst, 'getHistory', { id, options }, callback),
+    callback => this._nwDispatchHistory(inst, { id, options }, callback),
     result => {
       const points = this._nwNormalizeHistoryResult(result, 10000);
       return points.length ? (newest ? points[points.length - 1] : points[0]) : null;
@@ -19102,21 +19328,25 @@ const buildEnergyExact = async () => {
     if (count > 0) {
       const query = { start, end: energyExactEnd, stepMs: energyExactStepMs };
       const sumByTs = new Map();
+      const samplesByTs = new Map();
       for (let offset = 0; offset < count; offset += 8) {
         const ids = Array.from({ length: Math.min(8, count - offset) }, (_value, index) => `${this.namespace}.historie.evcs.lp${offset + index + 1}.powerW`);
         const lpSeries = await Promise.all(ids.map(id => ask(id, query)));
         for (const series of lpSeries) {
           for (const row of series.values) {
-            if (row[1] === null || row[1] === undefined) continue;
             const ts = Number(row[0]);
+            if (!Number.isFinite(ts) || ts > energyExactEnd) continue;
+            if (!sumByTs.has(ts)) sumByTs.set(ts, 0);
+            if (row[1] === null || row[1] === undefined) continue;
             const value = Number(row[1]);
             if (!Number.isFinite(ts) || !Number.isFinite(value) || ts > energyExactEnd) continue;
             sumByTs.set(ts, (sumByTs.get(ts) || 0) + value);
+            samplesByTs.set(ts, (samplesByTs.get(ts) || 0) + 1);
           }
         }
         for (const id of ids) requestSeriesCache.delete(`${id}|${start}|${energyExactEnd}|${energyExactStepMs}`);
       }
-      const vals = Array.from(sumByTs.entries()).sort((a, b) => a[0] - b[0]).map(([ts, v]) => [ts, v]);
+      const vals = Array.from(sumByTs.entries()).sort((a, b) => a[0] - b[0]).map(([ts, v]) => [ts, samplesByTs.get(ts) === count ? v : null]);
       if (vals.length >= 2) evExact = clipSeriesForIntegration({ id: `${this.namespace}.historie.evcs.sum.powerW`, values: vals }, energyExactEnd);
     }
   }
@@ -19147,7 +19377,8 @@ if (performance.now() >= historyDeadlineMs) throw Object.assign(new Error('EOS_H
           active: !!((this.stateCache && this.stateCache['settings.dynamicTariff'] && this.stateCache['settings.dynamicTariff'].value) || (this.stateCache && this.stateCache['settings.netFeeEnabled'] && this.stateCache['settings.netFeeEnabled'].value)),
           dynamicTariff: dynamicTariffActiveNow,
           netFeeEnabled: !!(this.stateCache && this.stateCache['settings.netFeeEnabled'] && this.stateCache['settings.netFeeEnabled'].value),
-          historyReady: [normalizedPricingSeries.base, priceNetFee, normalizedPricingSeries.total].some(s => Array.isArray(s && s.values) && s.values.length >= 2),
+          historyReady: [normalizedPricingSeries.base, normalizedPricingSeries.total].some(s => Array.isArray(s && s.values)
+            && s.values.some(point => Number.isFinite(tariffPriceNumber(point?.[1])))),
           series: { base: normalizedPricingSeries.base, netFee: priceNetFee, total: normalizedPricingSeries.total },
         };
         return { ok:true, start, end, step: stepS, series: out, extras: { consumers: extraConsumers, producers: extraProducers }, energy, energyExact, pricing };
@@ -19179,6 +19410,9 @@ if (performance.now() >= historyDeadlineMs) throw Object.assign(new Error('EOS_H
     app.get('/api/tariff/report', async (req, res) => {
       try {
         const intervalMs = 15 * 60 * 1000;
+        const retentionTargetDays = 730;
+        const maxDurationMs = retentionTargetDays * 24 * 3600 * 1000;
+        const maxReportBuckets = Math.ceil(maxDurationMs / intervalMs) + 1;
         /**
          * Code-Teil: parseTs
          * Zweck: Wandelt Rohwerte in ein stabiles internes Format um, damit spätere Logik konsistent arbeiten kann.
@@ -19187,6 +19421,7 @@ if (performance.now() >= historyDeadlineMs) throw Object.assign(new Error('EOS_H
          */
         const parseTs = (raw, { endOfDay = false } = {}) => {
           if (raw === null || raw === undefined || raw === '') return null;
+          if (typeof raw !== 'number' && typeof raw !== 'string') return null;
           if (typeof raw === 'number' && Number.isFinite(raw)) return raw < 1e12 ? raw * 1000 : raw;
           const s = String(raw).trim();
           if (!s) return null;
@@ -19198,6 +19433,7 @@ if (performance.now() >= historyDeadlineMs) throw Object.assign(new Error('EOS_H
           if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
             const [y, m, d] = s.split('-').map((n) => Number(n));
             const dt = new Date(y, m - 1, d, 0, 0, 0, 0);
+            if (dt.getFullYear() !== y || dt.getMonth() !== m - 1 || dt.getDate() !== d) return null;
             if (endOfDay) dt.setHours(23, 59, 59, 999);
             return dt.getTime();
           }
@@ -19226,48 +19462,46 @@ if (performance.now() >= historyDeadlineMs) throw Object.assign(new Error('EOS_H
          * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
          */
         const defaultFrom = (() => { const d = new Date(now); d.setHours(0, 0, 0, 0); return d.getTime(); })();
-        const requestedFrom = parseTs(req.query.from) ?? defaultFrom;
-        const requestedTo = parseTs(req.query.to, { endOfDay: true }) ?? now;
+        const requestedFrom = req.query.from === undefined ? defaultFrom : parseTs(req.query.from);
+        const requestedTo = req.query.to === undefined ? now : parseTs(req.query.to, { endOfDay: true });
         const start = alignDown(requestedFrom);
-        const end = Math.max(start + intervalMs, alignUp(requestedTo));
+        const end = alignUp(requestedTo);
+        const bucketCount = Math.ceil((end - start) / intervalMs);
+        // Keep the existing two-year report horizon, including one boundary
+        // bucket, but reject malformed or unbounded requests before any IO.
+        if (!Number.isSafeInteger(requestedFrom) || !Number.isSafeInteger(requestedTo) || requestedFrom < 0 ||
+            requestedTo <= requestedFrom || requestedTo > 8640000000000000 || requestedTo - requestedFrom > maxDurationMs ||
+            !Number.isSafeInteger(start) || !Number.isSafeInteger(end) || !Number.isSafeInteger(bucketCount) ||
+            bucketCount < 1 || bucketCount > maxReportBuckets) {
+          return res.status(400).json({ ok: false, error: 'EOS_HISTORY_RANGE_INVALID' });
+        }
         /**
-         * Code-Teil: densifyHoldLast
+         * Code-Teil: intervalSeries
          * Zweck: Kapselt einen lokalen Verarbeitungsschritt, damit Aufrufer nicht direkt in Detaildaten eingreifen.
          * Zusammenhang: Teil von Adapterkern: Lifecycle, Webserver, API, States, EMS-Engine; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
          * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
          */
-        const densifyHoldLast = (series) => {
+        const intervalSeries = (series) => {
           const src = Array.isArray(series) ? series : [];
-          const count = Math.max(1, Math.ceil((end - start) / intervalMs));
           const byIdx = new Map();
-          let havePrev = false;
-          let prev = null;
           for (const p of src) {
             const ts = this._nwNormTsMs(p && p.ts);
-            const val = Number(p && p.val);
-            if (!Number.isFinite(ts) || !Number.isFinite(val)) continue;
-            if (ts < start) {
-              prev = val;
-              havePrev = true;
-              continue;
-            }
-            const idx = Math.round((ts - start) / intervalMs);
-            if (idx < 0 || idx >= count) continue;
+            const val = tariffPriceNumber(p && p.val);
+            if (!Number.isFinite(ts) || ts < start || ts >= end) continue;
+            const idx = Math.floor((ts - start) / intervalMs);
             byIdx.set(idx, val);
           }
           const out = [];
-          for (let i = 0; i < count; i++) {
-            if (byIdx.has(i)) {
-              prev = byIdx.get(i);
-              havePrev = true;
-            }
-            out.push({ ts: start + (i * intervalMs), val: havePrev ? prev : null });
+          for (let i = 0; i < bucketCount; i++) {
+            // Missing averages are gaps, not zero and not another quarter's value.
+            out.push({ ts: start + (i * intervalMs), val: byIdx.has(i) ? byIdx.get(i) : null });
           }
           return out;
         };
 
         const dynamicTariffActive = !!(this.stateCache?.['settings.dynamicTariff']?.value);
-        const manualGrossPrice = Number(this.stateCache?.['settings.price']?.value);
+        const netFeeEnabled = !!(this.stateCache?.['settings.netFeeEnabled']?.value);
+        const manualGrossPrice = tariffPriceNumber(this.stateCache?.['settings.price']?.value);
         const grossPriceCandidates = [
           `${this.namespace}.historie.tariff.providerCurrentEurPerKwh`,
           `${this.namespace}.tarif.preisAktuellEurProKwh`,
@@ -19278,14 +19512,14 @@ if (performance.now() >= historyDeadlineMs) throw Object.assign(new Error('EOS_H
          * Zusammenhang: Teil von Adapterkern: Lifecycle, Webserver, API, States, EMS-Engine; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
          * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
          */
-        const seriesFor = async (name) => densifyHoldLast(await this._nwGetHistoryAvgSeriesAny(this._nwGetHistoryDpCandidates(name), Math.max(0, start - intervalMs), end, intervalMs));
+        const seriesFor = async (name) => intervalSeries(await this._nwGetHistoryAvgSeriesAny(this._nwGetHistoryDpCandidates(name), start, end, intervalMs));
         /**
          * Code-Teil: seriesForIds
          * Zweck: Kapselt einen lokalen Verarbeitungsschritt, damit Aufrufer nicht direkt in Detaildaten eingreifen.
          * Zusammenhang: Teil von Adapterkern: Lifecycle, Webserver, API, States, EMS-Engine; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
          * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
          */
-        const seriesForIds = async (ids) => densifyHoldLast(await this._nwGetHistoryAvgSeriesAny(ids, Math.max(0, start - intervalMs), end, intervalMs));
+        const seriesForIds = async (ids) => intervalSeries(await this._nwGetHistoryAvgSeriesAny(ids, start, end, intervalMs));
         const [baseSeries, netFeeSeries, totalSeries, grossSeries, buySeries] = await Promise.all([
           seriesFor('priceBase'),
           seriesFor('priceNetFee'),
@@ -19294,36 +19528,31 @@ if (performance.now() >= historyDeadlineMs) throw Object.assign(new Error('EOS_H
           seriesFor('gridBuyPower'),
         ]);
 
-        const bucketCount = Math.max(1, Math.ceil((end - start) / intervalMs));
         const intervals = [];
         for (let i = 0; i < bucketCount; i++) {
           const rowStart = start + (i * intervalMs);
           const rowEnd = rowStart + intervalMs;
-          const rawBase = Number(baseSeries[i] && baseSeries[i].val);
-          const rawNet = Number(netFeeSeries[i] && netFeeSeries[i].val);
-          const rawTotal = Number(totalSeries[i] && totalSeries[i].val);
-          const rawGross = Number(grossSeries[i] && grossSeries[i].val);
-          const rawBuy = Number(buySeries[i] && buySeries[i].val);
+          const rawBase = tariffPriceNumber(baseSeries.at(i)?.val);
+          const rawNet = tariffPriceNumber(netFeeSeries.at(i)?.val);
+          const rawTotal = tariffPriceNumber(totalSeries.at(i)?.val);
+          const rawGross = tariffPriceNumber(grossSeries.at(i)?.val);
+          const rawBuy = tariffPriceNumber(buySeries.at(i)?.val);
 
-          let netFee = Number.isFinite(rawNet) ? Math.max(0, rawNet) : 0;
-          let total = Number.isFinite(rawGross)
-            ? rawGross
-            : ((!dynamicTariffActive && Number.isFinite(manualGrossPrice)) ? manualGrossPrice : rawTotal);
-          if (!Number.isFinite(total) && Number.isFinite(rawBase)) total = rawBase + netFee;
-          if (!Number.isFinite(total) && Number.isFinite(manualGrossPrice)) total = manualGrossPrice;
-          if (!Number.isFinite(total)) total = 0;
-          total = Math.max(-5, total);
+          const netFee = Number.isFinite(rawNet) ? Math.max(0, rawNet) : netFeeEnabled ? null : 0;
+          let total = Number.isFinite(rawGross) ? rawGross : rawTotal;
+          if (!Number.isFinite(total) && Number.isFinite(rawBase) && Number.isFinite(netFee)) total = rawBase + netFee;
+          const configuredPriceFallback = !Number.isFinite(total) && !dynamicTariffActive && Number.isFinite(manualGrossPrice);
+          if (configuredPriceFallback) total = manualGrossPrice;
 
-          let base = total - netFee;
-          if (!Number.isFinite(base) && Number.isFinite(rawBase)) base = rawBase;
-          if (!Number.isFinite(base)) base = total;
-          base = Math.max(-5, base);
+          const base = Number.isFinite(total) && Number.isFinite(netFee) ? total - netFee : rawBase;
 
-          const importAvgW = Number.isFinite(rawBuy) ? Math.max(0, rawBuy) : 0;
-          const importKwh = (importAvgW * intervalMs) / 3600000000;
-          const baseCostEur = importKwh * base;
-          const netFeeCostEur = importKwh * netFee;
-          const totalCostEur = importKwh * total;
+          const importAvgW = Number.isFinite(rawBuy) ? Math.max(0, rawBuy) : null;
+          const intervalClosed = rowEnd <= now;
+          const importKwh = Number.isFinite(importAvgW) && intervalClosed ? (importAvgW * intervalMs) / 3600000000 : null;
+          const cost = price => Number.isFinite(importKwh) && Number.isFinite(price) ? importKwh * price : null;
+          const baseCostEur = cost(base);
+          const netFeeCostEur = cost(netFee);
+          const totalCostEur = cost(total);
 
           intervals.push({
             startTs: rowStart,
@@ -19336,16 +19565,27 @@ if (performance.now() >= historyDeadlineMs) throw Object.assign(new Error('EOS_H
             baseCostEur,
             netFeeCostEur,
             totalCostEur,
+            complete: [baseCostEur, netFeeCostEur, totalCostEur].every(Number.isFinite),
+            intervalClosed,
+            configuredPriceFallback,
           });
         }
-        const prices = intervals.map((row) => Number(row.totalEurPerKwh)).filter(Number.isFinite);
-        const totalImportKwh = intervals.reduce((sum, row) => sum + (Number(row.importKwh) || 0), 0);
-        const totalBaseCost = intervals.reduce((sum, row) => sum + (Number(row.baseCostEur) || 0), 0);
-        const totalNetFeeCost = intervals.reduce((sum, row) => sum + (Number(row.netFeeCostEur) || 0), 0);
-        const totalCost = intervals.reduce((sum, row) => sum + (Number(row.totalCostEur) || 0), 0);
-        const avgPrice = totalImportKwh > 0.0001
+        const prices = intervals.map(row => row.totalEurPerKwh).filter(Number.isFinite);
+        const completeSum = value => intervals.every(row => Number.isFinite(value(row)))
+          ? intervals.reduce((sum, row) => sum + value(row), 0) : null;
+        const totalImportKwh = completeSum(row => row.importKwh);
+        const totalBaseCost = completeSum(row => row.baseCostEur);
+        const totalNetFeeCost = completeSum(row => row.netFeeCostEur);
+        const totalCost = completeSum(row => row.totalCostEur);
+        const avgPrice = !Number.isFinite(totalImportKwh) || !Number.isFinite(totalCost) ? null : totalImportKwh > 0.0001
           ? (totalCost / totalImportKwh)
-          : (prices.length ? prices.reduce((a, b) => a + b, 0) / prices.length : null);
+          : (prices.length === bucketCount ? prices.reduce((a, b) => a + b, 0) / prices.length : null);
+        const completeIntervals = intervals.filter(row => row.complete).length;
+        const coverage = { complete: completeIntervals === bucketCount, completeIntervals,
+          missingIntervals: bucketCount - completeIntervals, priceIntervals: prices.length,
+          importIntervals: intervals.filter(row => Number.isFinite(row.importKwh)).length,
+          openIntervals: intervals.filter(row => !row.intervalClosed).length,
+          configuredPriceIntervals: intervals.filter(row => row.configuredPriceFallback).length };
 
         const historyInstance = String(this._nwGetHistoryInstance() || '').trim();
         res.json({
@@ -19360,17 +19600,19 @@ if (performance.now() >= historyDeadlineMs) throw Object.assign(new Error('EOS_H
             netFeeEnabled: !!(this.stateCache?.['settings.netFeeEnabled']?.value),
             historyInstance,
             historyReady: !!historyInstance,
-            retentionTargetDays: 730,
+            retentionTargetDays,
+            coverage,
           },
           summary: {
-            minPrice: prices.length ? Math.min(...prices) : null,
-            maxPrice: prices.length ? Math.max(...prices) : null,
+            minPrice: prices.length ? prices.reduce((a, b) => Math.min(a, b), Infinity) : null,
+            maxPrice: prices.length ? prices.reduce((a, b) => Math.max(a, b), -Infinity) : null,
             avgPrice,
             importKwh: totalImportKwh,
             baseCost: totalBaseCost,
             netFeeCost: totalNetFeeCost,
             totalCost,
             intervals: intervals.length,
+            complete: coverage.complete,
           },
           intervals,
         });
@@ -19401,6 +19643,7 @@ if (performance.now() >= historyDeadlineMs) throw Object.assign(new Error('EOS_H
           if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
             const [y, m, d] = s.split('-').map((n) => Number(n));
             const dt = new Date(y, m - 1, d, 0, 0, 0, 0);
+            if (dt.getFullYear() !== y || dt.getMonth() !== m - 1 || dt.getDate() !== d) return null;
             if (endOfDay) dt.setHours(23, 59, 59, 999);
             return dt.getTime();
           }
@@ -19409,10 +19652,13 @@ if (performance.now() >= historyDeadlineMs) throw Object.assign(new Error('EOS_H
         };
 
         const now = Date.now();
-        const requestedFrom = parseTs(req.query.from) ?? (now - (30 * 24 * 3600 * 1000));
-        const requestedTo = parseTs(req.query.to, { endOfDay: true }) ?? now;
+        const requestedFrom = req.query.from === undefined ? now - (30 * 24 * 3600 * 1000) : parseTs(req.query.from);
+        const requestedTo = req.query.to === undefined ? now : parseTs(req.query.to, { endOfDay: true });
         const start = requestedFrom;
-        const end = Math.max(start + 60000, requestedTo);
+        const end = requestedTo;
+        if (!Number.isSafeInteger(start) || !Number.isSafeInteger(end) || start < 0 || end <= start || end - start > 730 * 86400000) {
+          return res.status(400).json({ ok: false, error: 'EOS_HISTORY_RANGE_INVALID' });
+        }
         const historyInstance = String(this._nwGetHistoryInstance() || '').trim();
         /**
          * Code-Teil: getRawHistory
@@ -19420,9 +19666,10 @@ if (performance.now() >= historyDeadlineMs) throw Object.assign(new Error('EOS_H
          * Zusammenhang: Teil von Adapterkern: Lifecycle, Webserver, API, States, EMS-Engine; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
          * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
          */
-        const getRawHistory = (id) => new Promise((resolve) => {
+        const getRawHistory = (id) => new Promise((resolve, reject) => {
+          const unavailable = () => Object.assign(new Error('EOS_HISTORY_UNAVAILABLE'), { code: 'EOS_HISTORY_UNAVAILABLE' });
           const sid = this._nwTrimId(id);
-          if (!historyInstance || !sid) return resolve([]);
+          if (!historyInstance || !sid) return reject(unavailable());
           const spanMs = Math.max(1, end - start);
           const approxCount = Math.max(200, Math.min(50000, Math.ceil(spanMs / 60000) + 500));
           const options = {
@@ -19439,13 +19686,15 @@ if (performance.now() >= historyDeadlineMs) throw Object.assign(new Error('EOS_H
           const timer = setTimeout(() => {
             if (done) return;
             done = true;
-            resolve([]);
-          }, 8000);
+            reject(unavailable());
+          }, 5000);
           try {
-            this.sendTo(historyInstance, 'getHistory', { id: sid, options }, (resu) => {
+            this._nwDispatchHistory(historyInstance, { id: sid, options }, (resu) => {
               if (done) return;
               done = true;
               clearTimeout(timer);
+              if (resu?.error) return reject(unavailable());
+              try {
               let outArr = [];
               if (Array.isArray(resu)) outArr = resu;
               else if (resu && Array.isArray(resu.result)) {
@@ -19455,7 +19704,8 @@ if (performance.now() >= historyDeadlineMs) throw Object.assign(new Error('EOS_H
                 outArr = resu.series[0].values.map((v) => ({ ts: v[0], val: v[1] }));
               } else if (resu && Array.isArray(resu.data)) {
                 outArr = resu.data;
-              }
+              } else return reject(unavailable());
+              if (outArr.length > 50000) return reject(unavailable());
               const norm = (outArr || []).map((p) => {
                 const tRaw = Array.isArray(p) ? p[0] : (p.ts ?? p.time ?? p.t ?? p[0]);
                 const vRaw = Array.isArray(p) ? p[1] : (p.val ?? p.value ?? p[1]);
@@ -19464,10 +19714,12 @@ if (performance.now() >= historyDeadlineMs) throw Object.assign(new Error('EOS_H
                 return { ts, value: vRaw };
               }).filter(Boolean).sort((a, b) => a.ts - b.ts);
               resolve(norm);
+              } catch (_error) { reject(unavailable()); }
             });
           } catch (_e) {
+            done = true;
             clearTimeout(timer);
-            resolve([]);
+            reject(unavailable());
           }
         });
 
@@ -19538,6 +19790,7 @@ if (performance.now() >= historyDeadlineMs) throw Object.assign(new Error('EOS_H
           events,
         });
       } catch (e) {
+        if (e?.code === 'EOS_HISTORY_UNAVAILABLE') return res.status(503).json({ ok: false, error: e.code });
         res.json({ ok: false, error: 'internal_error' });
       }
     });
@@ -19580,6 +19833,7 @@ const nwBuildEvcsReport = async (query = {}) => {
     if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
       const [y, m, d] = s.split('-').map(n => Number(n));
       const dt = new Date(y, m - 1, d, 0, 0, 0, 0);
+      if (dt.getFullYear() !== y || dt.getMonth() !== m - 1 || dt.getDate() !== d) return null;
       if (endOfDay) dt.setHours(23, 59, 59, 999);
       return dt.getTime();
     }
@@ -19595,14 +19849,19 @@ const nwBuildEvcsReport = async (query = {}) => {
   const defFrom = nowMs - 7 * 24 * 3600 * 1000;
   const defTo = nowMs;
 
-  const fromQ = parseTs((query.from !== undefined ? query.from : defFrom)) ?? defFrom;
-  const toQ = parseTs((query.to !== undefined ? query.to : defTo), { endOfDay: true }) ?? defTo;
+  const fromQ = parseTs(query.from !== undefined ? query.from : defFrom);
+  const toQ = parseTs(query.to !== undefined ? query.to : defTo, { endOfDay: true });
+  const rangeFailure = () => Object.assign(new Error('EOS_HISTORY_RANGE_INVALID'), { code: 'EOS_HISTORY_RANGE_INVALID' });
+  if (!Number.isSafeInteger(fromQ) || !Number.isSafeInteger(toQ) || fromQ < 0 || toQ < fromQ) throw rangeFailure();
 
   // normalize to full local days
   const d0 = new Date(fromQ); d0.setHours(0, 0, 0, 0);
   const d1 = new Date(toQ); d1.setHours(23, 59, 59, 999);
   const start = +d0;
   const end = +d1;
+  // Limit calendar days before allocation, including DST transition days.
+  const calendarDays = (Date.UTC(d1.getFullYear(), d1.getMonth(), d1.getDate()) - Date.UTC(d0.getFullYear(), d0.getMonth(), d0.getDate())) / 86400000 + 1;
+  if (!Number.isSafeInteger(start) || !Number.isSafeInteger(end) || !Number.isInteger(calendarDays) || calendarDays < 1 || calendarDays > 730) throw rangeFailure();
   /**
    * Code-Teil: dayKeyOf
    * Zweck: Kapselt einen lokalen Verarbeitungsschritt, damit Aufrufer nicht direkt in Detaildaten eingreifen.
@@ -19678,7 +19937,7 @@ const nwBuildEvcsReport = async (query = {}) => {
    * Zusammenhang: Gehört zu ioBroker-Adapterkern (Adapter-Lifecycle, Webserver, REST-/SSE-API, State-Anlage, Lizenz und EMS-Engine) und wird von benachbarten UI-/API-/EMS-Bausteinen genutzt.
    * Wartung/TypeScript: Änderungen können Adapterstart, APIs, States und Webserver beeinflussen; unload/connection immer mittesten. Beim TS-Umbau Parameter, Rückgabe und genutzte State-/Config-Objekte explizit typisieren.
    */
-  const getHist = (id, startMs, endMs, aggregate = 'none', step = 0) => new Promise(resolve => {
+  const getHist = (id, startMs, endMs, aggregate = 'none', step = 0) => new Promise((resolve, reject) => {
     if (!id) return resolve([]);
     const agg = aggregate || 'none';
     const spanMs = Number(endMs) - Number(startMs);
@@ -19698,7 +19957,8 @@ const nwBuildEvcsReport = async (query = {}) => {
     if (wantsStep) options.step = stepMs;
 
     try {
-      this.sendTo(inst, 'getHistory', { id, options }, (resu) => {
+      this._nwDispatchHistory(inst, { id, options }, (resu) => {
+        if (resu?.error) return reject(Object.assign(new Error('EOS_HISTORY_UNAVAILABLE'), { code: 'EOS_HISTORY_UNAVAILABLE' }));
         let outArr = [];
         if (Array.isArray(resu)) outArr = resu;
         else if (resu && Array.isArray(resu.result)) {
@@ -19725,7 +19985,7 @@ const nwBuildEvcsReport = async (query = {}) => {
         resolve(norm);
       });
     } catch (e) {
-      resolve([]);
+      reject(Object.assign(new Error('EOS_HISTORY_UNAVAILABLE'), { code: 'EOS_HISTORY_UNAVAILABLE' }));
     }
   });
 
@@ -19888,6 +20148,8 @@ app.get('/api/evcs/report', async (req, res) => {
     const report = await nwBuildEvcsReport(req.query || {});
     res.json({ ok: true, ...report });
   } catch (e) {
+    if (e?.code === 'EOS_HISTORY_RANGE_INVALID') return res.status(400).json({ ok: false, error: e.code });
+    if (e?.code === 'EOS_HISTORY_UNAVAILABLE') return res.status(503).json({ ok: false, error: e.code });
     res.json({ ok: false, error: 'internal_error' });
   }
 });
@@ -20018,6 +20280,8 @@ app.get('/api/evcs/report.csv', async (req, res) => {
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
     res.status(200).send(csv);
   } catch (e) {
+    if (e?.code === 'EOS_HISTORY_RANGE_INVALID') return res.status(400).json({ ok: false, error: e.code });
+    if (e?.code === 'EOS_HISTORY_UNAVAILABLE') return res.status(503).json({ ok: false, error: e.code });
     res.status(500).type('text/plain').send('EVCS CSV Fehler.');
   }
 });
@@ -27235,7 +27499,7 @@ return res.json(out);
    */
   _nwRequestImmediateEmsTick(reason = 'customer-control', delayMs) {
     try {
-      if (this._nwShuttingDown) return false;
+      if (!this._nwIsEmsReady()) return false;
       const engine = this.emsEngine;
       if (engine && typeof engine.requestImmediateTick === 'function') {
         if (Number.isFinite(Number(delayMs))) {
@@ -27588,7 +27852,7 @@ return res.json(out);
    */
   setLocalStateWithCache(id, val, ts) {
     const t = Number(ts) || Date.now();
-    this.setStateAsync(id, val, true).catch(()=>{});
+    this.setStateAsync(id, { val, ack: true, ts: t }).catch(()=>{});
     try { this.updateValue(id, val, t); } catch(_e) {}
   }
 
@@ -28184,6 +28448,15 @@ return res.json(out);
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
   async _nwEnsureInfluxCustom(localId, inst, opts = null) {
+    this._nwConfigureHistory();
+    this._nwDirectHistory.register(localId, opts?.changesOnly === true);
+    if (this.config?.history?.provider === 'influxdb2') {
+      const object = await this.getObjectAsync(localId).catch(() => null);
+      const custom = object?.common?.custom;
+      const active = custom && typeof custom === 'object' && Object.entries(custom).some(([id, entry]) => /^influxdb\.\d+$/.test(id) && entry?.enabled === true);
+      this._nwDirectHistory.legacyRecording(localId, !!active);
+      return;
+    }
     try {
       const instance = String(inst || '').trim();
       if (!instance) return;
@@ -30531,8 +30804,8 @@ return res.json(out);
    */
   _nwSetHistorieValue(localId, val, ts, tolAbs = 1) {
     try {
-      const n = Number(val);
-      if (!Number.isFinite(n)) return;
+      const n = numericMeasurement(val);
+      if (n === null) return;
       if (!this._nwHistorieLast) this._nwHistorieLast = {};
       const last = this._nwHistorieLast[localId];
       const tol = Number.isFinite(Number(tolAbs)) ? Math.max(0, Number(tolAbs)) : 0;
@@ -30806,26 +31079,50 @@ return res.json(out);
     const {
       gridBuyW,
       gridSellW,
+      hasGrid,
     } = this._nwResolveGridImportExportFromCache();
     const historyCoreMaxAgeMs = Math.max(30000, Number(this.config?.settings?.deviceStaleTimeoutSec || 60) * 1000);
-    const pvDerivedW = this._nwGetNumberFromCacheFresh('derived.core.pv.totalW', historyCoreMaxAgeMs, null, now);
-    const pvW = this._nwGetNumberFromCache('pvPower') ?? this._nwGetNumberFromCache('productionTotal');
-    const loadDerivedW = this._nwGetNumberFromCacheFresh('derived.core.building.loadTotalW', historyCoreMaxAgeMs, null, now);
-    const loadW = Number.isFinite(Number(loadDerivedW)) ? Number(loadDerivedW) : this._nwGetNumberFromCache('consumptionTotal');
+    // History samples are observations, not a refresh of the last cached value.
+    // Missing timestamps, stale values and missing measurements remain gaps.
+    const readHistory = (key, maxAgeMs = historyCoreMaxAgeMs) => {
+      // Flow slots may supply a cache key. Only own data records are observations:
+      // no prototype lookup, getter invocation, or object path traversal is allowed.
+      if (typeof key !== 'string' || !/^[A-Za-z0-9_.-]{1,256}$/.test(key)
+        || key.split('.').some(part => ['__proto__', 'prototype', 'constructor'].includes(part))
+        || !this.stateCache || typeof this.stateCache !== 'object') return null;
+      const entry = Object.getOwnPropertyDescriptor(this.stateCache, key);
+      if (!entry || !('value' in entry) || !entry.value || typeof entry.value !== 'object') return null;
+      const timestamp = Object.getOwnPropertyDescriptor(entry.value, 'ts');
+      const measurement = Object.getOwnPropertyDescriptor(entry.value, 'value');
+      const quality = Object.getOwnPropertyDescriptor(entry.value, 'q');
+      if (!timestamp || !('value' in timestamp) || !measurement || !('value' in measurement)
+        || (quality && (!('value' in quality) || (quality.value !== undefined && quality.value !== 0)))) return null;
+      const stamp = numericMeasurement(timestamp.value);
+      if (stamp === null || stamp <= 0 || stamp > now || now - stamp > maxAgeMs) return null;
+      return numericMeasurement(measurement.value);
+    };
+    const pvDerivedW = readHistory('derived.core.pv.totalW');
+    const pvW = readHistory('pvPower') ?? readHistory('productionTotal');
+    const loadDerivedW = readHistory('derived.core.building.loadTotalW');
+    const loadW = loadDerivedW !== null ? loadDerivedW : readHistory('consumptionTotal');
     const storageAuthorityHist = (typeof this._nwGetStorageControlAuthority === 'function')
       ? this._nwGetStorageControlAuthority()
       : { selectedTopology: 'none', writerActive: false };
     const selectedStorageTopologyHist = String(storageAuthorityHist.selectedTopology || 'none');
-    const storageFlowHist = this._nwResolveBatteryFlowFromCache({ now });
-    let chgW = Number(storageFlowHist.chargeW);
-    let dchgW = Number(storageFlowHist.dischargeW);
+    const storageFlowHist = this._nwResolveBatteryFlowFromCache({ now, strictStale: true });
+    const storageMissing = ['missing', 'mapped-missing', 'storageFarm-missing-power', 'storageFarm-unavailable'].includes(storageFlowHist.src);
+    const farmPowerAge = storageFlowHist.staleMs && numericMeasurement(storageFlowHist.staleMs.farmPower);
+    const farmPowerStale = selectedStorageTopologyHist === 'farm'
+      && (farmPowerAge === null || farmPowerAge === undefined || farmPowerAge > historyCoreMaxAgeMs);
+    const chgW = storageMissing || farmPowerStale ? null : numericMeasurement(storageFlowHist.chargeW);
+    const dchgW = storageMissing || farmPowerStale ? null : numericMeasurement(storageFlowHist.dischargeW);
     // Mess-/Anzeigehoheit und Speicher-Schreibhoheit sind bewusst getrennt:
     // Ein im Energiefluss manuell zugeordneter SoC-DP muss auch dann in die
     // Historie gelangen, wenn NexoWatt den Speicher nur visualisiert und die
     // Speicherregelung/Farm nicht aktiv ist (z. B. herstellereigene 0-Einspeisung).
     const explicitStorageSocMapped = !!String(historyDps.storageSoc || '').trim();
     const explicitStorageSocValue = explicitStorageSocMapped
-      ? this._nwGetNumberFromCache('storageSoc')
+      ? readHistory('storageSoc')
       : null;
     const explicitStorageSocValid = explicitStorageSocMapped
       && explicitStorageSocValue !== null
@@ -30835,21 +31132,22 @@ return res.json(out);
     let soc = explicitStorageSocValid
       ? Math.max(0, Math.min(100, Number(explicitStorageSocValue)))
       : (selectedStorageTopologyHist === 'single'
-        ? this._nwGetNumberFromCache('storageSoc')
+        ? readHistory('storageSoc')
         : null);
-    const evW = this._nwGetNumberFromCache('evcs.totalPowerW');
+    const evW = readHistory('evcs.totalPowerW');
+    const historyEvAbsent = Number(this.evcsCount) === 0 && !String(historyDps.consumptionEvcs || '').trim();
 
-    const gridBuy = Number.isFinite(gridBuyW) ? Math.max(0, gridBuyW) : 0;
-    const gridSell = Number.isFinite(gridSellW) ? Math.max(0, gridSellW) : 0;
-    const gridNet = gridBuy - gridSell;
+    const gridBuy = hasGrid === true && Number.isFinite(gridBuyW) ? Math.max(0, gridBuyW) : null;
+    const gridSell = hasGrid === true && Number.isFinite(gridSellW) ? Math.max(0, gridSellW) : null;
+    const gridNet = gridBuy !== null && gridSell !== null ? gridBuy - gridSell : null;
 
     // Der bereits abgeleitete PV-Gesamtwert ist die kanonische Quelle für LIVE,
     // Historie und Budgetierung. Nur wenn er fehlt/veraltet ist, wird die Farm-PV
     // hier noch einmal mit dem direkten Anlagen-PV-DP zusammengeführt.
-    let pvTotal = Number.isFinite(Number(pvDerivedW))
-      ? Math.max(0, Number(pvDerivedW))
-      : (Number.isFinite(Number(pvW)) ? Math.max(0, Number(pvW)) : null);
-    const pvTotalFromDerived = Number.isFinite(Number(pvDerivedW));
+    let pvTotal = pvDerivedW !== null
+      ? Math.max(0, pvDerivedW)
+      : (pvW !== null ? Math.max(0, pvW) : null);
+    const pvTotalFromDerived = pvDerivedW !== null;
 
     // Historie und LIVE verwenden dieselbe zentrale Farm-PV-Zusammenführung. Dadurch
     // stimmen die aktuellen Energieflüsse, History-States und späteren Energiesummen
@@ -30863,7 +31161,8 @@ return res.json(out);
       && this.config.storage
       && String(this.config.storage.coupling || '').trim().toLowerCase() === 'dc');
 
-    if (!pvTotalFromDerived && sfEnabled && typeof this._nwMergeStorageFarmPvWithBase === 'function') {
+    if (!pvTotalFromDerived && sfEnabled && readHistory('storageFarm.totalPvPowerW') !== null
+      && typeof this._nwMergeStorageFarmPvWithBase === 'function') {
       const baseSourceId = String(historyDps.pvPower || historyDps.productionTotal || '').trim();
       const merged = this._nwMergeStorageFarmPvWithBase(pvTotal || 0, {
         now,
@@ -30871,8 +31170,8 @@ return res.json(out);
         baseSourceId,
       });
       pvTotal = Math.max(0, Number(merged.totalW) || 0);
-    } else if (singleStorageDcEnabled) {
-      const dcValueW = this._nwGetNumberFromCache('speicher.dcPvPowerW');
+    } else if (!pvTotalFromDerived && singleStorageDcEnabled) {
+      const dcValueW = readHistory('speicher.dcPvPowerW');
       if (Number.isFinite(dcValueW) && Number(dcValueW) !== 0) {
         const dcAbs = Math.abs(Number(dcValueW));
         if (pvTotal === null || pvTotal === 0) pvTotal = dcAbs;
@@ -30889,38 +31188,31 @@ return res.json(out);
     // autoritativ und wird nicht durch Writer-/App-Lifecycle auf null gesetzt.
     if (!explicitStorageSocValid) {
       if (selectedStorageTopologyHist === 'farm') {
-        const socFarm = farmMetricsHist && Number.isFinite(Number(farmMetricsHist.soc))
-          ? Number(farmMetricsHist.soc)
-          : this._nwGetNumberFromCache('storageFarm.totalSocOnline');
-        const socFarmFallback = Number.isFinite(Number(socFarm))
-          ? Number(socFarm)
-          : this._nwGetNumberFromCache('storageFarm.totalSoc');
-        soc = Number.isFinite(Number(socFarmFallback))
-          ? Math.max(0, Math.min(100, Number(socFarmFallback)))
-          : null;
+        const socFarm = readHistory('storageFarm.totalSocOnline') ?? readHistory('storageFarm.totalSoc');
+        soc = socFarm !== null ? Math.max(0, Math.min(100, socFarm)) : null;
       } else if (selectedStorageTopologyHist !== 'single') {
         soc = null;
       }
     }
 
     let loadTotal = Number.isFinite(loadW) ? Math.max(0, loadW) : null;
-    const chg = Number.isFinite(chgW) ? Math.max(0, chgW) : 0;
-    const dchg = Number.isFinite(dchgW) ? Math.max(0, dchgW) : 0;
-    const evAbs = Number.isFinite(evW) ? Math.abs(evW) : 0;
+    const chg = Number.isFinite(chgW) ? Math.max(0, chgW) : null;
+    const dchg = Number.isFinite(dchgW) ? Math.max(0, dchgW) : null;
+    const evAbs = Number.isFinite(evW) ? Math.abs(evW) : null;
 
-    if (loadTotal === null) {
-      const pvUse = pvTotal || 0;
-      loadTotal = Math.max(0, pvUse + gridBuy + dchg - gridSell - chg);
+    if (loadTotal === null && pvTotal !== null && gridBuy !== null && gridSell !== null && chg !== null && dchg !== null) {
+      loadTotal = Math.max(0, pvTotal + gridBuy + dchg - gridSell - chg);
     }
 
     // Energiefluss-Display (Rest) = Gesamtverbrauch - EV - optionale Verbraucher
     let extrasConsumersSum = 0;
     for (let i = 1; i <= 10; i++) {
-      const v = this._nwGetNumberFromCache(`consumer${i}Power`);
+      const v = readHistory(`consumer${i}Power`);
       if (!Number.isFinite(v)) continue;
       extrasConsumersSum += Math.max(0, Math.abs(v));
     }
-    const loadRest = Math.max(0, (loadTotal || 0) - evAbs - extrasConsumersSum);
+    const loadRest = loadTotal !== null && (evAbs !== null || historyEvAbsent)
+      ? Math.max(0, loadTotal - (evAbs ?? 0) - extrasConsumersSum) : null;
     /**
      * Code-Teil: _rawCacheValue
      * Zweck: Kapselt einen lokalen Verarbeitungsschritt, damit Aufrufer nicht direkt in Detaildaten eingreifen.
@@ -30943,8 +31235,8 @@ return res.json(out);
      */
     const _numOr = (key, fallback = null) => {
       try {
-        const n = Number(_rawCacheValue(key));
-        return Number.isFinite(n) ? n : fallback;
+        const n = numericMeasurement(_rawCacheValue(key));
+        return n !== null ? n : fallback;
       } catch (_e) {
         return fallback;
       }
@@ -31068,8 +31360,11 @@ return res.json(out);
     };
 
     const dynamicTariffActive = _boolOr('settings.dynamicTariff', false);
-    const providerPrice = _numOr('tarif.preisAktuellEurProKwh', null);
-    const providerAveragePrice = _numOr('tarif.preisDurchschnittEurProKwh', null);
+    const tariffMaxAgeMs = Math.max(15 * 60000, Math.min(360 * 60000, _numOr('tarif.currentPriceMaxAgeMs', 90 * 60000)));
+    const providerPrice = _rawCacheValue('tarif.currentPriceFresh') === false
+      ? null : readHistory('tarif.preisAktuellEurProKwh', tariffMaxAgeMs);
+    const providerAveragePrice = _rawCacheValue('tarif.curveFresh') === false
+      ? null : readHistory('tarif.preisDurchschnittEurProKwh', tariffMaxAgeMs);
     const manualPrice = _numOr('settings.price', 0.25);
 
     // Die in LIVE und vom Provider gelieferten Strompreise werden als Bruttopreise
@@ -31080,7 +31375,7 @@ return res.json(out);
     // So bleiben LIVE-Sicht und Historie konsistent.
     let tariffDisplayedGrossPrice = Number.isFinite(providerPrice) && dynamicTariffActive ? providerPrice : manualPrice;
     if (!Number.isFinite(tariffDisplayedGrossPrice)) tariffDisplayedGrossPrice = Number.isFinite(providerPrice) ? providerPrice : 0;
-    tariffDisplayedGrossPrice = Math.max(-5, tariffDisplayedGrossPrice);
+    // Canonical EUR/kWh prices are already validated by the provider; retain negative prices unchanged.
 
     const netFeeModeNow = _computeNetFeeModeNow();
     const netFeePriceNt = Math.max(0, Number(_numOr('settings.netFeePriceNt', 0)) || 0);
@@ -31090,19 +31385,19 @@ return res.json(out);
     if (_boolOr('settings.netFeeEnabled', false)) {
       tariffNetFeePrice = (netFeeModeNow === 'NT') ? netFeePriceNt : (netFeeModeNow === 'HT') ? netFeePriceHt : netFeePriceSt;
     }
-    const tariffTotalPrice = Math.max(-5, tariffDisplayedGrossPrice);
+    const tariffTotalPrice = tariffDisplayedGrossPrice;
     let tariffBasePrice = tariffTotalPrice - tariffNetFeePrice;
     if (!Number.isFinite(tariffBasePrice)) tariffBasePrice = tariffTotalPrice;
-    tariffBasePrice = Math.max(-5, tariffBasePrice);
+
 
     // Core series
     this._nwSetHistorieValue('historie.core.grid.buyW', gridBuy, now, 0);
     this._nwSetHistorieValue('historie.core.grid.sellW', gridSell, now, 0);
     this._nwSetHistorieValue('historie.core.grid.netW', gridNet, now, 0);
 
-    this._nwSetHistorieValue('historie.core.pv.totalW', pvTotal || 0, now, 0);
-    this._nwSetHistorieValue('historie.core.building.loadTotalW', loadTotal || 0, now, 0);
-    this._nwSetHistorieValue('historie.core.building.loadRestW', loadRest || 0, now, 0);
+    this._nwSetHistorieValue('historie.core.pv.totalW', pvTotal, now, 0);
+    this._nwSetHistorieValue('historie.core.building.loadTotalW', loadTotal, now, 0);
+    this._nwSetHistorieValue('historie.core.building.loadRestW', loadRest, now, 0);
 
     this._nwSetHistorieValue('historie.core.storage.chargeW', chg, now, 0);
     this._nwSetHistorieValue('historie.core.storage.dischargeW', dchg, now, 0);
@@ -31227,7 +31522,7 @@ return res.json(out);
     const evcsCount = Number(this.evcsCount || 0);
     if (Number.isFinite(evcsCount) && evcsCount > 0) {
       for (let i = 1; i <= evcsCount; i++) {
-        const v = this._nwGetNumberFromCache(`evcs.${i}.powerW`);
+        const v = readHistory(`evcs.${i}.powerW`);
         if (Number.isFinite(v)) this._nwSetHistorieValue(`historie.evcs.lp${i}.powerW`, Math.max(0, Math.abs(v)), now, 0);
       }
     }
@@ -31236,13 +31531,13 @@ return res.json(out);
     for (let i = 1; i <= 10; i++) {
       const info = this._nwGetFlowSlotInfo ? this._nwGetFlowSlotInfo('consumers', i) : null;
       if (!info || !String(info.objectId || '').trim()) continue;
-      const v = this._nwGetNumberFromCache(info.stateKey || info.key || `consumer${i}Power`);
+      const v = readHistory(info.stateKey || info.key || `consumer${i}Power`);
       if (Number.isFinite(v)) this._nwSetHistorieValue(`historie.consumers.c${i}.powerW`, Math.abs(v), now, 0);
     }
     for (let i = 1; i <= 5; i++) {
       const info = this._nwGetFlowSlotInfo ? this._nwGetFlowSlotInfo('producers', i) : null;
       if (!info || !String(info.objectId || '').trim()) continue;
-      const v = this._nwGetNumberFromCache(info.stateKey || info.key || `producer${i}Power`);
+      const v = readHistory(info.stateKey || info.key || `producer${i}Power`);
       if (Number.isFinite(v)) this._nwSetHistorieValue(`historie.producers.p${i}.powerW`, Math.abs(v), now, 0);
     }
   }
@@ -31479,7 +31774,32 @@ return res.json(out);
    * Zusammenhang: Teil von Adapterkern: Lifecycle, Webserver, API, States, EMS-Engine; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
+  _nwHistorySecretCodec() {
+    return { encrypt: value => this._owner.encrypt(value), decrypt: value => this._owner.decrypt(value) };
+  }
+
+  _nwConfigureHistory() {
+    if (this._nwShuttingDown) return;
+    if (!this._nwDirectHistory) this._nwDirectHistory = new InfluxHistoryRuntime(this.namespace);
+    this._nwDirectHistory.configure(this.config?.history);
+    if (this._nwHistoryProviderSignature !== JSON.stringify(this.config?.history || {})) {
+      this._nwHistoryProviderSignature = JSON.stringify(this.config?.history || {});
+      this._nwHistoryApiCache?.clear();
+      this._nwPara14aInfluxProvision = null;
+    }
+  }
+
+  _nwDispatchHistory(instance, payload, callback) {
+    if (this.config?.history?.provider !== 'influxdb2') return this.sendTo(instance, 'getHistory', payload, callback);
+    this._nwConfigureHistory();
+    return this._nwDirectHistory.query(payload.id, payload.options).then(
+      result => callback(result),
+      error => callback({ error: error.code || 'EOS_INFLUX_REQUEST_FAILED' })
+    );
+  }
+
   async _nwDetectInfluxInstance() {
+    if (this.config?.history?.provider === 'influxdb2') return 'eos-direct-influxdb2';
     try {
       // If user did not specify a history instance, try to detect an installed influxdb.X instance.
       if (this._nwTrimId((this.config && this.config.history && this.config.history.instance) || '')) return this._nwTrimId(this.config.history.instance);
@@ -31502,6 +31822,7 @@ return res.json(out);
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
   _nwGetHistoryInstance() {
+    if (this.config?.history?.provider === 'influxdb2') return 'eos-direct-influxdb2';
     const hcfg = (this.config && this.config.history) || {};
     const inst = this._nwTrimId(hcfg.instance) || this._nwTrimId(this._nwDetectedInfluxInstance) || 'influxdb.0';
     return inst;
@@ -31655,6 +31976,11 @@ return res.json(out);
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
   async _nwEnsurePara14aInfluxInstance(force = false) {
+    if (this.config?.history?.provider === 'influxdb2') {
+      this._nwConfigureHistory();
+      const status = this._nwDirectHistory.status();
+      return { instance: 'eos-direct-influxdb2', ready: status.state === 'ready', dedicated: false, autoProvisioned: false, provisionState: 'direct', provisionError: status.lastError };
+    }
     const now = Date.now();
     const cached = this._nwPara14aInfluxProvision;
     if (!force && cached && cached.result && (now - Number(cached.ts || 0) < 10 * 60 * 1000)) {
@@ -32974,7 +33300,7 @@ return res.json(out);
       timer = setTimeout(() => finish(failure('EOS_HISTORY_TIMEOUT')), remainingMs);
       timer.unref?.();
       try {
-        this.sendTo(inst, 'getHistory', { id: sid, options }, /** @param {unknown} resu */ (resu) => {
+        this._nwDispatchHistory(inst, { id: sid, options }, /** @param {unknown} resu */ (resu) => {
           if (settled) return;
           if (this._nwShuttingDown) return cancel();
           // A delayed event loop must not accept a callback beyond the budget.
@@ -34017,6 +34343,8 @@ return res.json(out);
     this._nwSmartHomeHydrating = false;
     this._nwPreservedUiStates = null;
     cleanup.capture(() => this._nwCancelHistoryRequests?.());
+    cleanup.capture(() => this._nwDirectHistory?.drainAndClose(3000));
+    cleanup.capture(() => this._nwHistoryCheckClient?.close());
     cleanup.capture(() => this._nwHistoryApiCache?.clear());
     cleanup.capture(() => this._nwShcfgDetectCache?.clear());
     cleanup.capture(() => this._nwTypeDetectorObjectsCache?.close());
@@ -34190,7 +34518,7 @@ function createHostedRuntime(owner, bridge) {
     revokeSessions() { runtime._nwCloseSseClients(); },
     status() { return { ...(stopUnconfirmed ? { state: 'stop-unconfirmed', error: 'EOS_UI_STOP_UNCONFIRMED' }
       : stopRequested ? { state: stopConfirmed ? 'stopped' : 'stopping', error: '' } : runtime._hostedStartup || { state: 'stopped', error: '' }),
-      active: started && !stopRequested, emsReady: !stopRequested && runtime._hostedStartup?.state === 'ready' && !!runtime.emsEngine, canWrite: guardedBridge.canWrite() === true }; },
+      active: started && !stopRequested, emsReady: !stopRequested && runtime._hostedStartup?.state === 'ready' && runtime._nwIsEmsReady(), canWrite: guardedBridge.canWrite() === true }; },
     stop() {
       if (!stopping) {
         // Sofortige, dauerhafte Sperre vor jedem await und jedem Cleanup-Callback.

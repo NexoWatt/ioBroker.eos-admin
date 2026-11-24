@@ -1,0 +1,482 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:12) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual owner HTTP routes: idle polls/new page loads never extend ten minutes; another browser stays active
+ok 1 - actual owner HTTP routes: idle polls/new page loads never extend ten minutes; another browser stays active
+  ---
+  duration_ms: 1024.281851
+  type: 'test'
+  ...
+# Subtest: actual owner activity HTTP requires same-origin CSRF and cannot revive an expired family
+ok 2 - actual owner activity HTTP requires same-origin CSRF and cannot revive an expired family
+  ---
+  duration_ms: 169.309837
+  type: 'test'
+  ...
+# Subtest: a cached upstream req.user cannot retain EOS authority after idle expiry
+ok 3 - a cached upstream req.user cannot retain EOS authority after idle expiry
+  ---
+  duration_ms: 137.078836
+  type: 'test'
+  ...
+# Subtest: actual hosted SSE is closed at idle expiry even without a new data frame, independently per login
+ok 4 - actual hosted SSE is closed at idle expiry even without a new data frame, independently per login
+  ---
+  duration_ms: 127.993736
+  type: 'test'
+  ...
+# Subtest: pinned upstream log and instance publications cannot send after idle expiry before the prune timer
+ok 5 - pinned upstream log and instance publications cannot send after idle expiry before the prune timer
+  ---
+  duration_ms: 104.429044
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: module persistence never writes the controller restart-triggering instance object
+ok 6 - module persistence never writes the controller restart-triggering instance object
+  ---
+  duration_ms: 19.056094
+  type: 'test'
+  ...
+# Subtest: 9.0.6 native config is retained as fallback only until a dedicated saved config exists
+ok 7 - 9.0.6 native config is retained as fallback only until a dedicated saved config exists
+  ---
+  duration_ms: 0.967887
+  type: 'test'
+  ...
+# Subtest: malformed or permissive persisted objects cannot silently restore stale native configuration
+ok 8 - malformed or permissive persisted objects cannot silently restore stale native configuration
+  ---
+  duration_ms: 6.439105
+  type: 'test'
+  ...
+# Subtest: stale config writer detects changed revision and keeps the newer stored envelope
+ok 9 - stale config writer detects changed revision and keeps the newer stored envelope
+  ---
+  duration_ms: 0.421504
+  type: 'test'
+  ...
+# Subtest: concurrent writes through the same running owner are bounded and never interleave
+ok 10 - concurrent writes through the same running owner are bounded and never interleave
+  ---
+  duration_ms: 0.641436
+  type: 'test'
+  ...
+# Subtest: failed persistence and missing writeback never report successful save
+ok 11 - failed persistence and missing writeback never report successful save
+  ---
+  duration_ms: 0.620244
+  type: 'test'
+  ...
+# Subtest: module names, prototype keys and envelope sizes are validated before storage
+ok 12 - module names, prototype keys and envelope sizes are validated before storage
+  ---
+  duration_ms: 29.814694
+  type: 'test'
+  ...
+# (node:19) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:19) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# Subtest: pinned upstream password login, token pair and refresh work with security binding
+ok 13 - pinned upstream password login, token pair and refresh work with security binding
+  ---
+  duration_ms: 16.021294
+  type: 'test'
+  ...
+# Subtest: real controller group view accepts string and translated display keys using canonical object IDs
+ok 14 - real controller group view accepts string and translated display keys using canonical object IDs
+  ---
+  duration_ms: 14.845473
+  type: 'test'
+  ...
+# Subtest: group display names, metadata and row order do not change credential proofs
+ok 15 - group display names, metadata and row order do not change credential proofs
+  ---
+  duration_ms: 3.62597
+  type: 'test'
+  ...
+# Subtest: missing, foreign, empty and duplicate canonical group IDs fail closed despite valid view keys
+ok 16 - missing, foreign, empty and duplicate canonical group IDs fail closed despite valid view keys
+  ---
+  duration_ms: 12.499602
+  type: 'test'
+  ...
+# Subtest: canonical group identity and ACL mutations revoke established capabilities
+ok 17 - canonical group identity and ACL mutations revoke established capabilities
+  ---
+  duration_ms: 4.880909
+  type: 'test'
+  ...
+# Subtest: all devices access and refresh tokens reject changed password without waiting for object event
+ok 18 - all devices access and refresh tokens reject changed password without waiting for object event
+  ---
+  duration_ms: 2.259492
+  type: 'test'
+  ...
+# Subtest: disable, deletion and changed group ACL independently invalidate both token classes
+ok 19 - disable, deletion and changed group ACL independently invalidate both token classes
+  ---
+  duration_ms: 12.741355
+  type: 'test'
+  ...
+# Subtest: observed disable then re-enable cannot resurrect old token after snapshot returns to original
+ok 20 - observed disable then re-enable cannot resurrect old token after snapshot returns to original
+  ---
+  duration_ms: 8.618507
+  type: 'test'
+  ...
+# Subtest: legacy and unbound external tokens are rejected and direct internal minting is denied
+ok 21 - legacy and unbound external tokens are rejected and direct internal minting is denied
+  ---
+  duration_ms: 4.500947
+  type: 'test'
+  ...
+# Subtest: proof cannot be forged by passing a user-shaped object or copied authenticated identity
+ok 22 - proof cannot be forged by passing a user-shaped object or copied authenticated identity
+  ---
+  duration_ms: 1.438586
+  type: 'test'
+  ...
+# Subtest: password mutation during credential verification and before token save fails closed
+ok 23 - password mutation during credential verification and before token save fails closed
+  ---
+  duration_ms: 1.402041
+  type: 'test'
+  ...
+# Subtest: refresh credential cannot cross revocation between lookup and save
+ok 24 - refresh credential cannot cross revocation between lookup and save
+  ---
+  duration_ms: 1.897928
+  type: 'test'
+  ...
+# Subtest: restart generation does not accept previously saved capabilities
+ok 25 - restart generation does not accept previously saved capabilities
+  ---
+  duration_ms: 4.995081
+  type: 'test'
+  ...
+# Subtest: session database failures and bounded stalled reads fail closed without unbounded backlog
+ok 26 - session database failures and bounded stalled reads fail closed without unbounded backlog
+  ---
+  duration_ms: 78.218508
+  type: 'test'
+  ...
+# Subtest: socket revocation synchronously blocks commands, clears subscriptions and closes every connection
+ok 27 - socket revocation synchronously blocks commands, clears subscriptions and closes every connection
+  ---
+  duration_ms: 3.043402
+  type: 'test'
+  ...
+# Subtest: metadata-only account updates do not revoke established capabilities
+ok 28 - metadata-only account updates do not revoke established capabilities
+  ---
+  duration_ms: 1.599989
+  type: 'test'
+  ...
+# Subtest: expired access and refresh capabilities fail closed in the common session reader
+ok 29 - expired access and refresh capabilities fail closed in the common session reader
+  ---
+  duration_ms: 1.811899
+  type: 'test'
+  ...
+# Subtest: late socket authentication cannot reopen a connection after revocation
+ok 30 - late socket authentication cannot reopen a connection after revocation
+  ---
+  duration_ms: 1.587941
+  type: 'test'
+  ...
+# Subtest: real five-second watchdog closes a socket after a missed credential object event
+ok 31 - real five-second watchdog closes a socket after a missed credential object event
+  ---
+  duration_ms: 5257.028877
+  type: 'test'
+  ...
+# Subtest: idle deadline rejects access and refresh at ten minutes despite status reads and automatic token rotation
+ok 32 - idle deadline rejects access and refresh at ten minutes despite status reads and automatic token rotation
+  ---
+  duration_ms: 8.921943
+  type: 'test'
+  ...
+# Subtest: only explicit activity extends the same family; other independent logins remain isolated
+ok 33 - only explicit activity extends the same family; other independent logins remain isolated
+  ---
+  duration_ms: 12.395013
+  type: 'test'
+  ...
+# Subtest: idle read and token-save races recheck after asynchronous work
+ok 34 - idle read and token-save races recheck after asynchronous work
+  ---
+  duration_ms: 6.243942
+  type: 'test'
+  ...
+# Subtest: idle expiry uses a monotonic clock and is unchanged by a backwards wall clock
+ok 35 - idle expiry uses a monotonic clock and is unchanged by a backwards wall clock
+  ---
+  duration_ms: 2.343869
+  type: 'test'
+  ...
+# Subtest: bounded families prune expired entries and never evict another still-active login
+ok 36 - bounded families prune expired entries and never evict another still-active login
+  ---
+  duration_ms: 5.982819
+  type: 'test'
+  ...
+# Subtest: idle timer disposes silent SSE and sockets, rejects refreshed old sockets and preserves active other family
+ok 37 - idle timer disposes silent SSE and sockets, rejects refreshed old sockets and preserves active other family
+  ---
+  duration_ms: 1106.985911
+  type: 'test'
+  ...
+# Subtest: throwing authentication callbacks and upstream token rotation do not cause unhandled promise rejection
+ok 38 - throwing authentication callbacks and upstream token rotation do not cause unhandled promise rejection
+  ---
+  duration_ms: 10.565812
+  type: 'test'
+  ...
+# Subtest: TOTP account contract never falls back to password-only issuance or cached/refresh tokens
+ok 39 - TOTP account contract never falls back to password-only issuance or cached/refresh tokens
+  ---
+  duration_ms: 12.697502
+  type: 'test'
+  ...
+# (node:22) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: parallel HTTPS ports keep standard Admin login, refresh and session cookies through EOS login/logout
+ok 40 - parallel HTTPS ports keep standard Admin login, refresh and session cookies through EOS login/logout
+  ---
+  duration_ms: 206.519036
+  type: 'test'
+  ...
+# Subtest: EOS ignores generic and foreign-instance cookies; duplicate own credentials are rejected before OAuth
+ok 41 - EOS ignores generic and foreign-instance cookies; duplicate own credentials are rejected before OAuth
+  ---
+  duration_ms: 114.344925
+  type: 'test'
+  ...
+# Subtest: raw WebSocket upgrades normalize before later generic-cookie auth listeners and reject duplicates
+ok 42 - raw WebSocket upgrades normalize before later generic-cookie auth listeners and reject duplicates
+  ---
+  duration_ms: 80.569818
+  type: 'test'
+  ...
+# Subtest: direct writeHead Set-Cookie object and raw-array forms cannot overwrite Admin credentials
+ok 43 - direct writeHead Set-Cookie object and raw-array forms cannot overwrite Admin credentials
+  ---
+  duration_ms: 103.202096
+  type: 'test'
+  ...
+# (node:22) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual instance proxy strips EOS/Admin credentials in both directions while retaining adapter cookies
+ok 44 - actual instance proxy strips EOS/Admin credentials in both directions while retaining adapter cookies
+  ---
+  duration_ms: 221.790641
+  type: 'test'
+  ...
+# Subtest: production Web registration keeps cookie isolation outside the proxy upgrade interceptor
+ok 45 - production Web registration keeps cookie isolation outside the proxy upgrade interceptor
+  ---
+  duration_ms: 0.726744
+  type: 'test'
+  ...
+# Subtest: response cookie mapping is idempotent and preserves application cookies and security attributes
+ok 46 - response cookie mapping is idempotent and preserves application cookies and security attributes
+  ---
+  duration_ms: 0.319951
+  type: 'test'
+  ...
+# Subtest: cookie-name whitespace cannot smuggle Admin credentials past downstream tolerant cookie parsers
+ok 47 - cookie-name whitespace cannot smuggle Admin credentials past downstream tolerant cookie parsers
+  ---
+  duration_ms: 0.289806
+  type: 'test'
+  ...
+# (node:27) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: an untouched page logs out at ten minutes; background status reads do not renew
+ok 48 - an untouched page logs out at ten minutes; background status reads do not renew
+  ---
+  duration_ms: 13.25567
+  type: 'test'
+  ...
+# Subtest: trusted pointerdown extends idle exactly from the last submitted input
+ok 49 - trusted pointerdown extends idle exactly from the last submitted input
+  ---
+  duration_ms: 3.679111
+  type: 'test'
+  ...
+# Subtest: trusted keydown extends idle exactly from the last submitted input
+ok 50 - trusted keydown extends idle exactly from the last submitted input
+  ---
+  duration_ms: 3.070573
+  type: 'test'
+  ...
+# Subtest: trusted touchstart extends idle exactly from the last submitted input
+ok 51 - trusted touchstart extends idle exactly from the last submitted input
+  ---
+  duration_ms: 5.107951
+  type: 'test'
+  ...
+# Subtest: trusted wheel extends idle exactly from the last submitted input
+ok 52 - trusted wheel extends idle exactly from the last submitted input
+  ---
+  duration_ms: 2.793998
+  type: 'test'
+  ...
+# Subtest: synthetic events, passive pointer motion, polling and visibility never count as input
+ok 53 - synthetic events, passive pointer motion, polling and visibility never count as input
+  ---
+  duration_ms: 2.508638
+  type: 'test'
+  ...
+# Subtest: a burst is bounded and its final gesture still gets a trailing update
+ok 54 - a burst is bounded and its final gesture still gets a trailing update
+  ---
+  duration_ms: 2.714397
+  type: 'test'
+  ...
+# Subtest: an active sibling tab keeps the same family open without the idle tab renewing
+ok 55 - an active sibling tab keeps the same family open without the idle tab renewing
+  ---
+  duration_ms: 5.370096
+  type: 'test'
+  ...
+# Subtest: unrelated sessions and fabricated cross-tab deadlines cannot extend or end a page
+ok 56 - unrelated sessions and fabricated cross-tab deadlines cannot extend or end a page
+  ---
+  duration_ms: 2.620086
+  type: 'test'
+  ...
+# Subtest: sleep and BFCache resume checks the server before accepting a late gesture
+ok 57 - sleep and BFCache resume checks the server before accepting a late gesture
+  ---
+  duration_ms: 1.968013
+  type: 'test'
+  ...
+# Subtest: offline timeout hides the old page and does not stop devices or EMS
+ok 58 - offline timeout hides the old page and does not stop devices or EMS
+  ---
+  duration_ms: 2.168255
+  type: 'test'
+  ...
+# Subtest: refresh changes CSRF without losing a fresh real gesture or creating periodic writes
+ok 59 - refresh changes CSRF without losing a fresh real gesture or creating periodic writes
+  ---
+  duration_ms: 2.80941
+  type: 'test'
+  ...
+# Subtest: CSRF rotation just before expiry never delays the real gesture beyond the server deadline
+ok 60 - CSRF rotation just before expiry never delays the real gesture beyond the server deadline
+  ---
+  duration_ms: 2.534447
+  type: 'test'
+  ...
+# Subtest: same-origin Admin frame interactions count; frame reload listeners bind the new document
+ok 61 - same-origin Admin frame interactions count; frame reload listeners bind the new document
+  ---
+  duration_ms: 2.212211
+  type: 'test'
+  ...
+# Subtest: login page is excluded and duplicate loading never registers a second timer or API request
+ok 62 - login page is excluded and duplicate loading never registers a second timer or API request
+  ---
+  duration_ms: 2.532584
+  type: 'test'
+  ...
+# Subtest: blocked cross-tab transport keeps server checks and inactivity logout working
+ok 63 - blocked cross-tab transport keeps server checks and inactivity logout working
+  ---
+  duration_ms: 1.50096
+  type: 'test'
+  ...
+# Subtest: all canonical EOS screens include the shared root client, including recovery and module pages
+ok 64 - all canonical EOS screens include the shared root client, including recovery and module pages
+  ---
+  duration_ms: 4.411542
+  type: 'test'
+  ...
+# Subtest: instance proxy rendering and fetch mapping preserve the shared owner idle routes
+ok 65 - instance proxy rendering and fetch mapping preserve the shared owner idle routes
+  ---
+  duration_ms: 106.652572
+  type: 'test'
+  ...
+# (node:27) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:37) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: restart/update preserves valid saved assignments including intentional empty values: {}
+ok 66 - restart/update preserves valid saved assignments including intentional empty values: {}
+  ---
+  duration_ms: 47.01406
+  type: 'test'
+  ...
+# Subtest: restart/update preserves valid saved assignments including intentional empty values: datapoints,settingsConfig,smartHomeConfig
+ok 67 - restart/update preserves valid saved assignments including intentional empty values: datapoints,settingsConfig,smartHomeConfig
+  ---
+  duration_ms: 13.085884
+  type: 'test'
+  ...
+# Subtest: restart/update preserves valid saved assignments including intentional empty values: datapoints,settingsConfig,storageFarm
+ok 68 - restart/update preserves valid saved assignments including intentional empty values: datapoints,settingsConfig,storageFarm
+  ---
+  duration_ms: 8.273879
+  type: 'test'
+  ...
+# Subtest: unavailable or invalid saved installer data cannot become defaults or overwrite a backup
+ok 69 - unavailable or invalid saved installer data cannot become defaults or overwrite a backup
+  ---
+  duration_ms: 5.298598
+  type: 'test'
+  ...
+# Subtest: only a confirmed missing installer state permits matching-instance recovery; failed writes do not update backups
+ok 70 - only a confirmed missing installer state permits matching-instance recovery; failed writes do not update backups
+  ---
+  duration_ms: 23.597022
+  type: 'test'
+  ...
+# Subtest: customer flow settings and disabled PV AI survive startup defaults; explicit settings saves still apply
+ok 71 - customer flow settings and disabled PV AI survive startup defaults; explicit settings saves still apply
+  ---
+  duration_ms: 14.983587
+  type: 'test'
+  ...
+# Subtest: unreadable StorageFarm assignments never get replaced by empty defaults
+ok 72 - unreadable StorageFarm assignments never get replaced by empty defaults
+  ---
+  duration_ms: 8.434931
+  type: 'test'
+  ...
+# Subtest: automatic missing-state recovery prefers current backup and rejects corrupt existing backups or unreadable storage
+ok 73 - automatic missing-state recovery prefers current backup and rejects corrupt existing backups or unreadable storage
+  ---
+  duration_ms: 8.596133
+  type: 'test'
+  ...
+# Subtest: configuration startup failures close the hosted runtime rather than leave writable default configuration
+ok 74 - configuration startup failures close the hosted runtime rather than leave writable default configuration
+  ---
+  duration_ms: 4.533226
+  type: 'test'
+  ...
+# Subtest: new flow states initialize from the saved installer settings after hydration, not earlier package defaults
+ok 75 - new flow states initialize from the saved installer settings after hydration, not earlier package defaults
+  ---
+  duration_ms: 8.95205
+  type: 'test'
+  ...
+1..75
+# tests 75
+# suites 0
+# pass 75
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6806.457222

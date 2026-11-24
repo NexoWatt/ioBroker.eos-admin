@@ -1,0 +1,93 @@
+{
+  "startedAt": "2026-11-24T19:11:43.267Z",
+  "finishedAt": "2026-11-24T19:11:46.407Z",
+  "file": "src-ts/runtime-executables/main.ts",
+  "eslintVersion": "10.13.0",
+  "rawSha256": "4a243e083f2537bd82b178ff7b79fc85eec175489e1ca2a70060974609d803e1",
+  "sourceCodeSha256": "db103a7dde990e38b865a486964474607f89e37db0248d511209f2ea70f096f1",
+  "count": 9,
+  "matches": [
+    {
+      "fingerprint": "52846315efe5cb1fd687f2d6436c4999102da11954b430f4bfad65a823670f5c",
+      "rule": "security/detect-object-injection",
+      "expectedCount": 2,
+      "actualCount": 2,
+      "line": 22698,
+      "column": 90,
+      "reason": "Der Diagnosezähler wird mit Object.create(null) initialisiert; dynamische Fehlerklassen können dadurch keine Prototyp-Setter verändern. Der neue Peerclient liefert nur eigene feste Fehlercodes."
+    },
+    {
+      "fingerprint": "284be3fe77000b1f5d8a5d7296f2772e4d14ee972e7415eab59412f88b64f8b8",
+      "rule": "security/detect-object-injection",
+      "expectedCount": 1,
+      "actualCount": 1,
+      "line": 4675,
+      "column": 17,
+      "reason": "localId wird ausschließlich aus validierten Partner-App-IDs gebildet; directMarketing ist explizit grid. Lokaler Lesezugriff mit zusätzlicher installed/enabled-/Lizenzprüfung, kein fremder Prototyp-Schlüssel."
+    },
+    {
+      "fingerprint": "48c91c7b19c3c39dd9f70b1244e95342cf66ab86a8ed71a4196272e0bbe5f2cc",
+      "rule": "security/detect-object-injection",
+      "expectedCount": 1,
+      "actualCount": 1,
+      "line": 4689,
+      "column": 30,
+      "reason": "Lokale Availability-Map wird durch die Regelung mit Object.create(null) geführt. Bereits freigegebene Ressource wird nur gelesen; tatsächlicher Boolean und frischer Zeitstempel erforderlich."
+    },
+    {
+      "fingerprint": "012aeb1f3bb1907433fb0cc309a9c0a283544112b34658a997940c62b549cfbd",
+      "rule": "security/detect-object-injection",
+      "expectedCount": 1,
+      "actualCount": 1,
+      "line": 4694,
+      "column": 26,
+      "reason": "readState-Callback wird vom PartnerRuntime nur mit fest codierten Bilanz-/PV-/Netzleistungs-State-IDs aufgerufen. Kein Partnertext kann beliebige id-Pfade an diesen Cache-Lesezugriff liefern."
+    },
+    {
+      "fingerprint": "a0f055d4076a53efda1a6208fcda4930beaee6122331ab7c796c33238cc6c3e3",
+      "rule": "security/detect-object-injection",
+      "expectedCount": 1,
+      "actualCount": 1,
+      "line": 4695,
+      "column": 38,
+      "reason": "Lokale Telemetry-Map wird von der Regelung mit Object.create(null) geführt. Die zuvor an die Partnerfreigabe gebundene Ressource wird ausschließlich gelesen und anschließend fachlich projiziert."
+    },
+    {
+      "fingerprint": "f966fa825d8a063b62bc5ba98284ecfc6143e5e505d236e32b0d64f8cef0cd74",
+      "rule": "security/detect-object-injection",
+      "expectedCount": 1,
+      "actualCount": 1,
+      "line": 18423,
+      "column": 23,
+      "reason": "queryNumber liest nur die intern fest kodierten Namen from/to/step. Zahlen und Zeitraster werden anschließend begrenzt validiert; kein dynamischer Schreibschlüssel."
+    },
+    {
+      "fingerprint": "3b107b890285ab2c4f9e903614d6d34763f4a729659d8e0524d65d18317319fe",
+      "rule": "security/detect-object-injection",
+      "expectedCount": 1,
+      "actualCount": 1,
+      "line": 18773,
+      "column": 17,
+      "reason": "Der binäre Suchindex ist ganzzahlig und vor dem Zugriff durch die Länge der normalisierten Zahlenpaare begrenzt. Ausschließlich lesender Arrayzugriff."
+    },
+    {
+      "fingerprint": "27297a9d7c7c8eb7e9f5a89509e1698c9e57f876d603aa37ce4c6b296f00a41f",
+      "rule": "security/detect-unsafe-regex",
+      "expectedCount": 1,
+      "actualCount": 1,
+      "line": 32904,
+      "column": 21,
+      "reason": "Verankerte Dezimalgrammatik mit disjunkten Ziffern-/Punkt-/Exponentsegmenten; keine überlappende wiederholte Alternative. Nicht endliche Ergebnisse werden abgewiesen."
+    },
+    {
+      "fingerprint": "fcd35d67be3c6ad4dc2da331e649307c2e516ef1628a8daba7e789400a1eeda4",
+      "rule": "security/detect-object-injection",
+      "expectedCount": 1,
+      "actualCount": 1,
+      "line": 14797,
+      "column": 61,
+      "reason": "Reiner Lesezugriff auf die lokale Literalmap zulässiger Discoveryfehler, ausschließlich nach Object.hasOwn(errors, code); sonst feste EOS_DETECTION_FAILED-Antwort. Kein geerbter Prototypwert, keine Weitergabe interner Ausnahmedetails und keine dynamische Funktion."
+    }
+  ],
+  "allUnchanged": true
+}

@@ -1,0 +1,15 @@
+{
+  "name": "security-influx-typecheck",
+  "command": [
+    "node",
+    "node_modules/typescript/bin/tsc",
+    "-p",
+    "ui/tsconfig.influx-security.json"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+  "startedAt": "2026-11-24T20:39:43.071215+00:00",
+  "durationSeconds": 1.177,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-920/security-influx-typecheck.log",
+  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

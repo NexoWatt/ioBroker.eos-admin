@@ -1,0 +1,106 @@
+TAP version 13
+# Subtest: dedicated history change preserves unrelated settings and token on same origin
+ok 1 - dedicated history change preserves unrelated settings and token on same origin
+  ---
+  duration_ms: 6.936182
+  type: 'test'
+  ...
+# Subtest: stored token cannot travel to another origin without an explicit replacement
+ok 2 - stored token cannot travel to another origin without an explicit replacement
+  ---
+  duration_ms: 0.795558
+  type: 'test'
+  ...
+# Subtest: strict request rejects invalid provider, fields, instance, injected envelope and secret types
+ok 3 - strict request rejects invalid provider, fields, instance, injected envelope and secret types
+  ---
+  duration_ms: 0.498872
+  type: 'test'
+  ...
+# Subtest: custom HTTPS CA is validated and blank preserves it until explicit clear
+ok 4 - custom HTTPS CA is validated and blank preserves it until explicit clear
+  ---
+  duration_ms: 192.859585
+  type: 'test'
+  ...
+# Subtest: plaintext token is encrypted in installer state and backup, while exact customer data survives
+ok 5 - plaintext token is encrypted in installer state and backup, while exact customer data survives
+  ---
+  duration_ms: 1.655853
+  type: 'test'
+  ...
+# Subtest: regular GET never returns plaintext, encrypted token or CA and never mutates config
+ok 6 - regular GET never returns plaintext, encrypted token or CA and never mutates config
+  ---
+  duration_ms: 0.460243
+  type: 'test'
+  ...
+# Subtest: crypto absence, failure and identity output fail closed with no plaintext fallback
+ok 7 - crypto absence, failure and identity output fail closed with no plaintext fallback
+  ---
+  duration_ms: 0.701005
+  type: 'test'
+  ...
+# Subtest: foreign host key quarantines only history and keeps recoverable ciphertext and EMS/device configuration
+ok 8 - foreign host key quarantines only history and keeps recoverable ciphertext and EMS/device configuration
+  ---
+  duration_ms: 0.724791
+  type: 'test'
+  ...
+# Subtest: malformed or purpose-confused ciphertext is quarantined, never interpreted as a token
+ok 9 - malformed or purpose-confused ciphertext is quarantined, never interpreted as a token
+  ---
+  duration_ms: 0.614596
+  type: 'test'
+  ...
+# Subtest: encrypted backup envelope cannot be redirected to a different origin to reveal its token
+ok 10 - encrypted backup envelope cannot be redirected to a different origin to reveal its token
+  ---
+  duration_ms: 0.689598
+  type: 'test'
+  ...
+# Subtest: imported plaintext credentials with an invalid destination are isolated without losing EMS data
+ok 11 - imported plaintext credentials with an invalid destination are isolated without losing EMS data
+  ---
+  duration_ms: 0.446983
+  type: 'test'
+  ...
+# Subtest: network policy allows private LAN and loopback IPv4/IPv6, HTTPS public, rejects public plaintext
+ok 12 - network policy allows private LAN and loopback IPv4/IPv6, HTTPS public, rejects public plaintext
+  ---
+  duration_ms: 0.881377
+  type: 'test'
+  ...
+# Subtest: metadata, link-local, multicast, unspecified and IPv4 mapped bypasses reject before any request
+ok 13 - metadata, link-local, multicast, unspecified and IPv4 mapped bypasses reject before any request
+  ---
+  duration_ms: 1.466708
+  type: 'test'
+  ...
+# Subtest: URL validation forbids secret-bearing URL parts and unsafe schemes while preserving LAN discovery names
+ok 14 - URL validation forbids secret-bearing URL parts and unsafe schemes while preserving LAN discovery names
+  ---
+  duration_ms: 0.416257
+  type: 'test'
+  ...
+# Subtest: actual ioBroker standard-key AES-192-CBC roundtrip, wrong-key isolation and encrypted backup recovery
+ok 15 - actual ioBroker standard-key AES-192-CBC roundtrip, wrong-key isolation and encrypted backup recovery
+  ---
+  duration_ms: 119.129999
+  type: 'test'
+  ...
+# Subtest: quarantined history never overwrites recovery envelope with a token left by an old deep merge
+ok 16 - quarantined history never overwrites recovery envelope with a token left by an old deep merge
+  ---
+  duration_ms: 0.389125
+  type: 'test'
+  ...
+1..16
+# tests 16
+# suites 0
+# pass 16
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1002.159726

@@ -1,0 +1,14 @@
+{
+  "name": "sbom-vendor-check",
+  "command": [
+    "node",
+    "tools/eos-sbom-vendored.cjs",
+    "--check"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+  "startedAt": "2026-11-24T21:06:25.192582+00:00",
+  "durationSeconds": 0.157,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-920/sbom-vendor-check.log",
+  "sha256": "266c033ebe1bfafa2d67437878df722d721fb48311d1f122e49d11c42f2cec70"
+}

@@ -6,6 +6,7 @@ type Interest = { host: boolean; socket: boolean };
 
 export interface EosStateSubscriptionManager {
     socketAdapter: ioBroker.Adapter;
+    acquireHost(pattern: string): Promise<() => Promise<void>>;
     closeSocket(): Promise<void>;
     close(): Promise<void>;
 }
@@ -23,6 +24,9 @@ export function installEosStateSubscriptions(adapter: ioBroker.Adapter): EosStat
     const subscribeRaw = adapter.subscribeForeignStatesAsync.bind(adapter);
     const unsubscribeRaw = adapter.unsubscribeForeignStatesAsync.bind(adapter);
     const interests = new Map<string, Interest>();
+    // Explicit module ownership is independent of the existing idempotent host
+    // API. Releasing a module must not release another host or socket consumer.
+    const hostLeases = new Map<string, Set<symbol>>();
     const queues = new Map<string, Promise<void>>();
     let stopped = false;
     let socketStopped = false;
@@ -86,9 +90,10 @@ export function installEosStateSubscriptions(adapter: ioBroker.Adapter): EosStat
                 return;
             }
             const next = { ...current, [scope]: subscribing };
-            if (!current.host && !current.socket && (next.host || next.socket)) {
+            const leased = Boolean(hostLeases.get(pattern)?.size);
+            if (!current.host && !current.socket && !leased && (next.host || next.socket)) {
                 await subscribeRaw(pattern);
-            } else if ((current.host || current.socket) && !next.host && !next.socket) {
+            } else if ((current.host || current.socket) && !next.host && !next.socket && !leased) {
                 await unsubscribeRaw(pattern);
             }
             // Commit only after IO succeeds: failed subscribe can be retried,
@@ -99,6 +104,57 @@ export function installEosStateSubscriptions(adapter: ioBroker.Adapter): EosStat
                 interests.delete(pattern);
             }
         });
+    }
+
+    async function releaseLease(pattern: string, token: symbol): Promise<void> {
+        return queue(pattern, async () => {
+            const leases = hostLeases.get(pattern);
+            if (!leases?.has(token)) {
+                return;
+            }
+            const current = interests.get(pattern);
+            if (leases.size === 1 && !current?.host && !current?.socket) {
+                await unsubscribeRaw(pattern);
+            }
+            // Retain a failed release so the same handle or close() can retry it.
+            leases.delete(token);
+            if (!leases.size) {
+                hostLeases.delete(pattern);
+            }
+        });
+    }
+
+    async function acquireHost(pattern: string): Promise<() => Promise<void>> {
+        // No implicit global wildcard and no array overload for module leases.
+        if (typeof pattern !== 'string' || !pattern || pattern === '*' || pattern.length > 512) {
+            throw new Error('EOS_STATE_SUBSCRIPTION_PATTERN_INVALID');
+        }
+        const token = Symbol('host-subscription');
+        await queue(pattern, async () => {
+            if (stopped) {
+                throw new Error('EOS_STATE_SUBSCRIPTIONS_STOPPED');
+            }
+            const leases = hostLeases.get(pattern) || new Set<symbol>();
+            if (leases.size >= 256 || (hostLeases.size >= 1024 && !hostLeases.has(pattern))) {
+                throw new Error('EOS_STATE_SUBSCRIPTION_LIMIT');
+            }
+            const current = interests.get(pattern);
+            // Reserve this pattern before asynchronous IO, so simultaneous
+            // acquisitions for different patterns cannot outrun the bound.
+            hostLeases.set(pattern, leases);
+            try {
+                if (!leases.size && !current?.host && !current?.socket) {
+                    await subscribeRaw(pattern);
+                }
+                leases.add(token);
+            } catch (error) {
+                if (!leases.size) {
+                    hostLeases.delete(pattern);
+                }
+                throw error;
+            }
+        });
+        return () => releaseLease(pattern, token);
     }
 
     async function changeAll(
@@ -189,6 +245,7 @@ export function installEosStateSubscriptions(adapter: ioBroker.Adapter): EosStat
 
     return {
         socketAdapter,
+        acquireHost,
         closeSocket(): Promise<void> {
             socketStopped = true;
             closingSocket ||= release('socket');
@@ -201,6 +258,12 @@ export function installEosStateSubscriptions(adapter: ioBroker.Adapter): EosStat
                 // Cleanup retries failed socket releases and still attempts host
                 // cleanup if a socket release failed.
                 const results = await Promise.allSettled([release('socket'), release('host')]);
+                const leaseResults = await Promise.allSettled(
+                    [...hostLeases].flatMap(([pattern, tokens]) =>
+                        [...tokens].map(token => releaseLease(pattern, token)),
+                    ),
+                );
+                results.push(...leaseResults);
                 if (results.some(result => result.status === 'rejected')) {
                     throw new Error('EOS_STATE_SUBSCRIPTION_CLEANUP_FAILED');
                 }

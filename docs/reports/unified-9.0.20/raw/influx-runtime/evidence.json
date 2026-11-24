@@ -1,0 +1,24 @@
+{
+  "date": "2026-11-24",
+  "node22": "22.23.4",
+  "node24": "24.22.3",
+  "tests": {
+    "eos-influx-history-api.test.cjs": 13,
+    "eos-influx-history-runtime.test.cjs": 8,
+    "eos-unified-listen.test.cjs": 30
+  },
+  "result": "51/51 on both runtimes",
+  "sha256": {
+    "ui/src-ts/runtime-executables/main.ts": "efc8fc5ccd39433f5c812e64c5e94864cfd01da68738e2a1de7810c2e67045e5",
+    "ui/main.js": "04120dd6dd53f1e26259dbdbaa3245ef6dbb38ee216c57cf619a46a1d50f549a",
+    "ui/src-ts/runtime-executables/lib/influx-history-runtime.ts": "69439306eafe8fca4aa96f13ffd0fc24db8c528ea4b9bdb495636509b041741d",
+    "ui/lib/influx-history-runtime.js": "fa47702e99aa990d9ff03d8ab387c883817faf8797b2fade4520ae21b7bc3b73",
+    "test/eos-influx-history-api.test.cjs": "fd50ee2f6632ba0df7adedfe14846bb0d214b01e0c7720c2bf67fb67e530bca0",
+    "test/eos-influx-history-runtime.test.cjs": "7eb3b1e410f4ebc7329a15e403f512de7d9eaf3a94f9c1b675d0df50472b390b",
+    "ui/tsconfig.influx-history-runtime.json": "55df08fc72cee10044b8a7cf286d90f72943bfc6adcfa374a6c2cd29e8807e01",
+    "ui/eslint.influx-history-runtime.config.mjs": "a1dcf4e47200159ff0b6ae3108ce8329de584783ca997e92b99b07aa8bc899cc",
+    "docs/reports/unified-9.0.20/raw/influx-runtime/final-node22.log": "2bbf50958980010e552d7d98e578d4de8635572faaf21f27b3103b2f81bfae1b",
+    "docs/reports/unified-9.0.20/raw/influx-runtime/final-node24.log": "440d252313058df2a9f0526f0f56ebbac6dccca500ab3ab8b232e6bd1c521f3e",
+    "test/eos-unified-listen.test.cjs": "fbdbecc0c2519ce9f6c631b1d9d218f18cef967a3955896e2a24574b1ba43b62"
+  }
+}

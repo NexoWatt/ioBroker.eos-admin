@@ -3,8 +3,8 @@
   "sources": [
     {
       "path": "src-admin-tab/src/App.tsx",
-      "sourceHash": "130004830b352357603184300d09b4308e96773e5e8ba28365b72c56f0c9bbd8",
-      "codeHash": "03fb4393798244927ef4cc1b2e34e826b1acf77fd8f1c5913632aa456a3eb10e"
+      "sourceHash": "19da0dd3f2127f39a2cfe190b84d08c4ca6a64264a65e45a619bc802324986f7",
+      "codeHash": "586f3c35b42b4e6bbcea0577195603461a580a1e9934c48ef8fd95a10fce7de8"
     },
     {
       "path": "src-admin-tab/src/components/DpField.tsx",
@@ -18,8 +18,8 @@
     },
     {
       "path": "src-admin-tab/src/lib/adminConnection.ts",
-      "sourceHash": "9ce44f4d20f8de67e0ceb1d3cae198e1dc18934bdfbe559d4e766613916cc0dc",
-      "codeHash": "94bd0f3fb3c1ab9bd9188690c3471737d53f3b6f84091921d18a821781950f40"
+      "sourceHash": "458718f60454255dd86d43efc909c6dc52bf9c8b12afa5cd512e4f9e6806b243",
+      "codeHash": "d633da3f7847ffdffcfc7786192947873274e4074c37b54f73cc0eb285b5dc9f"
     },
     {
       "path": "src-admin-tab/src/lib/adminContracts.ts",
@@ -30,6 +30,11 @@
       "path": "src-admin-tab/src/lib/dataPointPicker.ts",
       "sourceHash": "e28946e685fffe198314fe4463459a42c2349a2e4481e9ffe39277e187953da1",
       "codeHash": "2eb23353236fd925f7773e65d3bbe4a654afc93682e2d7f2a63a2ae0214a9cf1"
+    },
+    {
+      "path": "src-admin-tab/src/lib/historySetup.ts",
+      "sourceHash": "158c75a9fc407e1e15e16d86d9469890c22fa046ed4ddc40bd72eb5ccc97b8bc",
+      "codeHash": "fc9d8078db2a97507c366f367078795aaeae057f556d1ad32b3e2d0693c88728"
     },
     {
       "path": "src-admin-tab/src/lib/installerNavigation.ts",
@@ -62,9 +67,14 @@
       "codeHash": "b45dcb17f680544a57aeeb425368e31509b89b92c809caab82a94cc0a5516ee9"
     },
     {
+      "path": "src-admin-tab/src/pages/HistorySetupPage.tsx",
+      "sourceHash": "bc37d6eb192a040955743eacbe385078a1241cc03f84e01bc2131bc9ba305441",
+      "codeHash": "7a2b8a6b91a79044844f555b73d9eee4a4bbc31a39ae65a738b829518b3a6ea5"
+    },
+    {
       "path": "src-admin-tab/src/pages/InstallerPage.tsx",
-      "sourceHash": "64ad8d878443c379448a638c64918043bada8d3bc90e6c3151c3476f356e106a",
-      "codeHash": "10eaaac7d16f92ef3d533c050be5ca8a86cf295b3c9bcd342f857e67499fa854"
+      "sourceHash": "873176154f003f59cc2ff8bb9ce9d97453a96aa88fbc0b23cd576f9d622104a6",
+      "codeHash": "8f2ed99553536a1188cfe73da97b279248e7f10e31f65c38605a255371138a7e"
     },
     {
       "path": "src-admin-tab/src/pages/LicensePage.tsx",
@@ -618,8 +628,8 @@
     },
     {
       "path": "src-ts/runtime-executables/ems/modules/energy-wallet.ts",
-      "sourceHash": "0b1e11b104246e2b2e8584deb7d80d7ca353f61d2d770f1136eef413d04ffb69",
-      "codeHash": "563b0224ef18e86c8c99fbc248b4dfa4f7e08524c4c1e00edbd63d66bf447a1f"
+      "sourceHash": "e6c23aeb59899289dab3bc6b1b3c2b0899985fdad9b81230af5b0b86c092d3f1",
+      "codeHash": "c5d264f28e8afe75b0040cb15ee30815a8f7f8ca6c452955f8218ae1b4179b1f"
     },
     {
       "path": "src-ts/runtime-executables/ems/modules/generator-control.ts",
@@ -703,8 +713,8 @@
     },
     {
       "path": "src-ts/runtime-executables/ems/modules/storage-control.ts",
-      "sourceHash": "e8d44e13782e130773163c03326564b675e324cdd0783367adaf10f6c232f9d8",
-      "codeHash": "ca89ef5479af4dd33bd77e69bb928537de50b9f043331362c2bf1b4a1472e49c"
+      "sourceHash": "2b2fc6d9dc48f7d669636c365bf7645ffa4d9b68c7e706f6df02ebc4a412a1e2",
+      "codeHash": "3ad17dedda485a7ea39b4f908237a4cbf8cd878cb4694194e3bdff7b8109dc2e"
     },
     {
       "path": "src-ts/runtime-executables/ems/modules/storage-mapping.ts",
@@ -1037,6 +1047,26 @@
       "codeHash": "d0c2f62754728426981bcf27b0af8e0df5715bac4be9ff5c3942a568ad26fe9e"
     },
     {
+      "path": "src-ts/runtime-executables/lib/influx-config.ts",
+      "sourceHash": "f729bc8db4b96d8a3174ada1e38f6d9efbe1c5dc32a79ce608873348027ffad5",
+      "codeHash": "91e4173df35c0910cc60eafd882b24b86c54831bbc561b5660fedca3b23d71c0"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/influx-direct.ts",
+      "sourceHash": "f9378b74a08776253a63ccca58ba50b6ec74c88f07ad934caf921f732537bfc8",
+      "codeHash": "7858abff4a656861616c7260c3deeb728dbf264decad02c5818b03410ae62127"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/influx-history-runtime.ts",
+      "sourceHash": "69439306eafe8fca4aa96f13ffd0fc24db8c528ea4b9bdb495636509b041741d",
+      "codeHash": "2cec42cfba61fe7c2b5d1cd0098d6d8e161b63dc7e49034d461bd7bb08157fa6"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/influx-network-policy.ts",
+      "sourceHash": "a367d4c267f8fe76642292e32f6383531e914c5f10222ff50b375bfe4aa43474",
+      "codeHash": "e2de5053a3b26132b13c1c4716fbd8c14fb8b9e655968ca617fa0f713dcf158f"
+    },
+    {
       "path": "src-ts/runtime-executables/lib/installer-lifecycle.ts",
       "sourceHash": "df3487fcf381e39bedfa5d78a6ba0f47de44caa51e7e9aae0ab0cb7b420e550b",
       "codeHash": "5310f659e92b7056e35e079366c890e71b3133b4981f1682bda2f133aa676c3f"
@@ -1213,8 +1243,8 @@
     },
     {
       "path": "src-ts/runtime-executables/lib/ui-access-policy.ts",
-      "sourceHash": "1411973bbdef3000e723fcee3ffbce899f4890f3f10ac78897cab0414200f32a",
-      "codeHash": "2fafb4a67bcf207c15692079366f5ba3b991f94a44fec1d1818926e6c6b6a9cc"
+      "sourceHash": "c3b68fac91389ad1502fd03a889fdeca278c5230f7441c80bd77b767f0f030de",
+      "codeHash": "7db85cc2c23c5d0ee2022ab3a4066cd327b55b241b452d79f8703af8bc12ecf0"
     },
     {
       "path": "src-ts/runtime-executables/lib/ui-server-transport.ts",
@@ -1223,8 +1253,8 @@
     },
     {
       "path": "src-ts/runtime-executables/main.ts",
-      "sourceHash": "29a6433294bddf757bdbe2e7ffba84bffe0fc70f2e3fbdbd63c6ea2e9dce4a16",
-      "codeHash": "2d9a9d6abbdc4993b6d51fb1e4fa74d9dac80774ffed728816467ea3b21820a0"
+      "sourceHash": "11f2616a2f7f2e5066c180db4316c7f0b219b066790e7c4563dab3e1104d3d96",
+      "codeHash": "a791c0b8135b6a832cda954c6de8b55cc2350c61af81cd507431a02c9ef467a1"
     },
     {
       "path": "src-ts/runtime-executables/www/admin-guard.ts",
@@ -1233,8 +1263,8 @@
     },
     {
       "path": "src-ts/runtime-executables/www/app.ts",
-      "sourceHash": "2076f8c427c8f0c7fdbfacd67fce79eec650ce4e888130a66cb1c48b52459eb2",
-      "codeHash": "9d0ee73e57ea903602aad465cb7c02c223c1d6cfa57f2568678110e48d1a9e24"
+      "sourceHash": "f2f7f5a629acb3fa794938ab6fca2a76d6c03c423e427123135f09f900efe9dc",
+      "codeHash": "bbab4000bc0fe83dc65616237c753a09663e0aa47a0ef86086bc281c3412adc9"
     },
     {
       "path": "src-ts/runtime-executables/www/auth.ts",
@@ -1273,8 +1303,8 @@
     },
     {
       "path": "src-ts/runtime-executables/www/ems-apps.ts",
-      "sourceHash": "8c14de191f83d20f1c35f1b706e2d5787b015984587dc42ad707d62f33de338e",
-      "codeHash": "73889d338cfb6046ebaca9ba182b6d787dfa9883c7cdb3d3d69ec7821fc54b95"
+      "sourceHash": "16957513881167c7ea26b109d6c49bf5ee9008d776ffd4f2d6f2a3e5a2c1f160",
+      "codeHash": "c50c265067b5e7842476f0695b4d13dcdc167045ee50c6919e07b6982b59164f"
     },
     {
       "path": "src-ts/runtime-executables/www/energy-ledger.ts",
@@ -1313,13 +1343,18 @@
     },
     {
       "path": "src-ts/runtime-executables/www/history.ts",
-      "sourceHash": "3a7f1065dbbe6c058d802f25de4c143060a609ea5ffb17a08c084704f1955126",
-      "codeHash": "76edf0763731cd7560dbf64e0d4167ae6bfd4e9fe621956e9f7121641d455d9b"
+      "sourceHash": "e83f9d9791c6feaf52b091e272d61df1324729010daf84668775ef05b89d5e1c",
+      "codeHash": "eeacdb2ec855981d19fbeb4dd673ebae5c8739a7bd047df8b32ce95734c7029f"
     },
     {
       "path": "src-ts/runtime-executables/www/license.ts",
       "sourceHash": "b4f93be24ad83e993368ee0d61eaaaa0d110e6d10463fcbe33c840bd8bdfba8f",
       "codeHash": "3867c34f997fd0f7d27a6c7a8f748d944cd7c04c928b0e1af575a9bac455b88c"
+    },
+    {
+      "path": "src-ts/runtime-executables/www/live-display.ts",
+      "sourceHash": "d06eaaad6b89814a35b421faebba5bd1f9c61488edc91bcc28a80d004eb48c5c",
+      "codeHash": "74921e22a4c4b555d5e66ea62bebcd869eea0705c0d4b76203e7c2976c1a2184"
     },
     {
       "path": "src-ts/runtime-executables/www/logic.ts",
@@ -1472,14 +1507,19 @@
       "codeHash": "ea77916d65c41b24213baab332cd4fd023da977980cf1d1490a823e9c8eec03d"
     },
     {
+      "path": "src-ts/runtime-executables/www/storagefarm-dispatch.ts",
+      "sourceHash": "e26c3d9415d04f12110cd94c8d1d6eb47d46725d191789641aa1cc8ff357cb1f",
+      "codeHash": "0744f9f62a53559419f4e9d08335c9d3801d2c3d42e1502c61eaf1e12c895902"
+    },
+    {
       "path": "src-ts/runtime-executables/www/storagefarm-summary.ts",
       "sourceHash": "9ef2696d6a9308fc938ae02d7e64191aa6ea6b71ca3437ffdb50be0d59963d60",
       "codeHash": "1ac0236065aa5f7f70233437bff7d16e6c09d0cce4994c921646cdbc04357935"
     },
     {
       "path": "src-ts/runtime-executables/www/storagefarm.ts",
-      "sourceHash": "2595c1640ed238436c8dc2b3bafbf815d874da8708d635668c0318ed9a91b803",
-      "codeHash": "6dba66d73eb2a49087f854d2725d00991ddf4e893eaa34e0f61f2e36b19ac784"
+      "sourceHash": "c5b60c8ff566faf606ed843959a8f43f9ef206433f5675f2dea9841233679144",
+      "codeHash": "3b904476190391876a44d0ce0380c8dc2d2648802c788e5b15b232704ec06b90"
     },
     {
       "path": "src-ts/runtime-executables/www/sw.ts",
@@ -1493,8 +1533,8 @@
     },
     {
       "path": "src-ts/runtime-executables/www/tariff-report.ts",
-      "sourceHash": "81377a66665b5ea9714993d81e0170b655ecb46ce3b5d21dddad7ab0493b7cbf",
-      "codeHash": "d3eeff89553f25cf35c5573b509f831ad2abb70eeb42db07f9f112f7ac041c71"
+      "sourceHash": "537dd58dde9a3043eb41357f79fee4098314eb6933a65868aaae051187f0fd12",
+      "codeHash": "e10eefb7fb4667af66976c44d96a14be52ae0807449959ec279a37c574ac9a5a"
     },
     {
       "path": "src-ts/runtime-executables/www/year-report.ts",
@@ -1545,7 +1585,7 @@
   "documents": [
     {
       "path": "docs/quellcode/src-admin-tab/src/App.md",
-      "hash": "117a0f9a2daa0c4199720a4e0a7ecaf459798183ef82d381efc2737f593584c2"
+      "hash": "c95e4fe215b31154094a187cbfa7450e6d83984888efcc6d661288bcc25bcd68"
     },
     {
       "path": "docs/quellcode/src-admin-tab/src/components/DpField.md",
@@ -1557,7 +1597,7 @@
     },
     {
       "path": "docs/quellcode/src-admin-tab/src/lib/adminConnection.md",
-      "hash": "cfeabd9d46739f8576693788f9665afdf6f40a1ba289c7aeba5bff8df1f58d3c"
+      "hash": "8733372bbb24f993cd15106cd1e503f02e1de847b7177d0d624e280cee0e844d"
     },
     {
       "path": "docs/quellcode/src-admin-tab/src/lib/adminContracts.md",
@@ -1566,6 +1606,10 @@
     {
       "path": "docs/quellcode/src-admin-tab/src/lib/dataPointPicker.md",
       "hash": "faed817e88539e6458e2514b7d2226f834b47e70fa2200ae81ccf178ce3a53b2"
+    },
+    {
+      "path": "docs/quellcode/src-admin-tab/src/lib/historySetup.md",
+      "hash": "e73e52bdaa1bc4dc22258d10db122a8bae389d24106796a3291bc40d3fb1978b"
     },
     {
       "path": "docs/quellcode/src-admin-tab/src/lib/installerNavigation.md",
@@ -1592,8 +1636,12 @@
       "hash": "dbc30d4471c74077cd1cf62996bb732a6fb6327070469682bc936be01667aa8f"
     },
     {
+      "path": "docs/quellcode/src-admin-tab/src/pages/HistorySetupPage.md",
+      "hash": "1ed09128b3d12a7ef072758f13ce10e49183b563957315718893e4ac1e61d50d"
+    },
+    {
       "path": "docs/quellcode/src-admin-tab/src/pages/InstallerPage.md",
-      "hash": "2ae9400609bde0ffedfbefd0706dd54d1c0c16f1cede93bcc2f2ad37c552a6e2"
+      "hash": "a6d56c35b50a3d7360ad97a32fab2523f033cead892b7e7f7bdd6415deb74c7f"
     },
     {
       "path": "docs/quellcode/src-admin-tab/src/pages/LicensePage.md",
@@ -1613,7 +1661,7 @@
     },
     {
       "path": "docs/quellcode/src-admin-tab/src/pages/PageShell.md",
-      "hash": "aa829b8ab12135936fc1538b7130735f64d26c7b3890f6840c4e4c7e9479b7e7"
+      "hash": "0417c6a7bbc83e120a21a114634605303551cc8967ae59e411197277bcbdbd60"
     },
     {
       "path": "docs/quellcode/src-admin-tab/src/pages/PartnerIntegrationsPage.md",
@@ -2037,7 +2085,7 @@
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/energy-wallet.md",
-      "hash": "fa9b2744b8e10146de38362dbd636e24c94cb7c37f14e02ce06ce0afceb1240e"
+      "hash": "1438a1e87f297e3e5c3fcacac2602aaec5589813afe3ec4c24172112bdcda63e"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/generator-control.md",
@@ -2105,7 +2153,7 @@
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/storage-control.md",
-      "hash": "35aed00f274b680b46d0843c35bd867722cc6e9f7755ab5c84e85b5f8568dcd3"
+      "hash": "e35d6b0c1a6377724c904ef642fedbf80f574b0be909845b903460ba1e109f10"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/storage-mapping.md",
@@ -2372,6 +2420,22 @@
       "hash": "d5207cc679aa97baee0f6439127645a9e1892d0b62d36ca0304644d97678fad5"
     },
     {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/influx-config.md",
+      "hash": "3f92dc2d898287831b04f55345e8e8a905cc10aa458e90aea8404c242ad7751c"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/influx-direct.md",
+      "hash": "ce560d17f44d8d99cb9f57f8aacd232f8789f4495b49ed597e011b44e8c74175"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/influx-history-runtime.md",
+      "hash": "9ca9bcfa0b481842978c3fb0b846b753beebbc2e88435a79859ac311662d32d7"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/influx-network-policy.md",
+      "hash": "a0669dec0d9ac49d9f071b9e72c1c3dac84f6fad0773e11eb24106672ef02405"
+    },
+    {
       "path": "docs/quellcode/src-ts/runtime-executables/lib/installer-lifecycle.md",
       "hash": "ed7ccfd1144b149f2c00a97817972ce22f3ad1a8a4ef2df7a55ace1da7322973"
     },
@@ -2521,7 +2585,7 @@
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/main.md",
-      "hash": "9bb8fcf473e2ba5ceabb22e2dc6a00ecd93066c247f91ad77dd74f7b8e22ab2c"
+      "hash": "e4c06918f03b8a03126e2bf3d51ffa7fd0445e98bead40cc96d3d298a4f6407d"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/admin-guard.md",
@@ -2529,7 +2593,7 @@
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/app.md",
-      "hash": "783f8e320a01484cff453475bfdbff7202a2f7a748bcb4476328cb2930a690f7"
+      "hash": "b70d83eeee2716df3b6875e1ced3c8bbe862cfb0a418ecbab354bba8ba54557e"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/auth.md",
@@ -2561,7 +2625,7 @@
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/ems-apps.md",
-      "hash": "f2f3172a1a10d5e742313f104faa65b640129ba0ed25ad4b9e3f59551e06d098"
+      "hash": "caedc1736d124b0b4ded0e6c9aedb2ba92e1001339193b0b8570296255345a95"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/energy-ledger.md",
@@ -2593,11 +2657,15 @@
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/history.md",
-      "hash": "18e1fa0fb076cf9b380b4e287f9e1b83133846312bddccdefe18b244d012dd65"
+      "hash": "f65de28ece4517a659840459598d48cd754ec75a75873b245bb2907bb3bbd4bf"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/license.md",
       "hash": "d017b37739632c26ea194e19b512aa056021819497cf2df5d5f12d1a3172a227"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/live-display.md",
+      "hash": "aaa756a7a8c82ac4406c40e786502afa86b7078ffc8bfcf63ec39eae3f68e234"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/logic.md",
@@ -2720,12 +2788,16 @@
       "hash": "a7c644d7c81489eefce8949bbfed03068c0ea5e6ccf7c76851e45e48fbf1c35e"
     },
     {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/storagefarm-dispatch.md",
+      "hash": "b2f3a8f8139cac88f0e73c0140b3a1c10ad9b71938e46a37288a1cd9a79f533e"
+    },
+    {
       "path": "docs/quellcode/src-ts/runtime-executables/www/storagefarm-summary.md",
       "hash": "cff553984b63f40a54322d76333ea420800084e4b65468f40a89e8407dfdf2b0"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/storagefarm.md",
-      "hash": "f9f3c11a624c101e21dbe2b232247b9de1373b03a8dee68265d41cb5c269da57"
+      "hash": "45f0feef0fb7ba1912c0c4fd13c51354390ba2c2418db2e25a877509fb4c908d"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/sw.md",
@@ -2737,7 +2809,7 @@
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/tariff-report.md",
-      "hash": "d96226a8b4b6eb3bcac82f7441e62f1e527e18944cb66ac85a41b52547ed5987"
+      "hash": "3d424d6df84e86432f726728ed53296cf94d9d051c0eb46f531677600eb1f00c"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/year-report.md",
@@ -2777,7 +2849,7 @@
     },
     {
       "path": "docs/QUELLCODE_VERKNUEPFUNGEN_DE.md",
-      "hash": "d5ae05ea2cd034b2f67905e05719255bfbc75033060d36d7c9c6b5cd793f1e2f"
+      "hash": "92a033566e2479c97888394df631f7479d1cb9dd202be48c169bef4b18ecbb49"
     }
   ]
 }

@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/lib/ui-access-policy.ts
- * Quell-Hash: sha256:1411973bbdef3000e723fcee3ffbce899f4890f3f10ac78897cab0414200f32a
+ * Quell-Hash: sha256:c3b68fac91389ad1502fd03a889fdeca278c5230f7441c80bd77b767f0f030de
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -178,7 +178,7 @@ function uiRequestPath(req) {
 }
 const AUTH_READ = new Set(['/api/auth/status', '/api/strict-auth/status', '/api/session/me', '/api/locale']);
 const AUTH_WRITE = new Set(['/api/auth/login', '/api/strict-auth/login', '/api/installer/login', '/api/auth/logout', '/api/strict-auth/logout', '/api/installer/logout']);
-const PUBLIC_PAGES = new Set(['/login', '/login.html', '/static/login.html', '/favicon.ico', '/apple-touch-icon.png', '/manifest.webmanifest', '/sw.js']);
+const PUBLIC_PAGES = new Set(['/login', '/login.html', '/static/login.html', '/favicon.ico', '/apple-touch-icon.png', '/apple-touch-icon-precomposed.png', '/apple-touch-icon-180x180.png', '/apple-touch-icon-180x180-precomposed.png', '/manifest.webmanifest', '/sw.js']);
 /** Nur öffentliche Programm-Assets; niemals HTML, API-Daten oder Konfiguration. */
 function isPublicUiRequest(req) {
     const pathname = uiRequestPath(req);

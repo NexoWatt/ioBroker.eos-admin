@@ -15,7 +15,7 @@
  * Existing non-empty installer assignments are authoritative.
  * @typedef {import('./eosDeviceEmsPlan').Json} Json
  * @typedef {{[key: string]: Json}} Dict
- * @typedef {{id: string, type: string, unit: string, read: boolean, write: boolean, targetId: string}} Alias
+ * @typedef {{id: string, type: string, unit: string, read: boolean, write: boolean, targetId: string, powerCapabilityValidated: boolean}} Alias
  * @typedef {{baseId: string, devId: string, name: string, templateId: string, protocol: string, deviceClass: string, enabled: boolean, aliases: Map<string, Alias>, ems: Dict, discoveryCode: string}} Device
  * @typedef {{baseId: string, devId: string, status: string, code: string, target: string, mappedFields: string[], missing: string[], optionalMissing: string[], activationRequestId: string, activationApplied: boolean, corrections:string[]}} Status
  */
@@ -144,7 +144,7 @@ function device(raw) {
         if (target.length > 512 || [...target].some(character => character.charCodeAt(0) < 32 || character.charCodeAt(0) === 127))
             continue;
         aliases.set(key, { id, type: text(meta.type), unit: text(meta.unit), read: meta.read !== false,
-            write: meta.write === true, targetId: target || id });
+            write: meta.write === true, targetId: target || id, powerCapabilityValidated: meta.powerCapabilityValidated === true });
     }
     return { baseId, devId, name: text(row.name).slice(0, 128) || devId, templateId: text(row.templateId), protocol: text(row.protocol), deviceClass: text(row.deviceClass),
         enabled: row.enabled !== false, aliases, ems, discoveryCode: text(row.discoveryCode) };
@@ -476,6 +476,16 @@ function planDeviceEms(input) {
             const booleanField = ['availableId', 'faultId', 'chargeAllowedId', 'dischargeAllowedId'].includes(key);
             fill(destination, key, alias(dev, names, false, booleanField ? ['boolean'] : ['number'], key.startsWith('soc') ? ['%'] : booleanField ? [] : ['W']), result);
         }
+        // Optional registers may have alias objects even when the hardware does
+        // not support them. Only a verified measurement establishes this new
+        // binding; never overwrite a commissioned/manual capability mapping.
+        if (farm) {
+            for (const [key, name] of [['allowedChargePowerId', 'r.allowedChargePower'], ['allowedDischargePowerId', 'r.allowedDischargePower']]) {
+                if (dev.aliases.get(name)?.powerCapabilityValidated === true) {
+                    fill(destination, key, alias(dev, [name], false, ['number'], ['W']), result);
+                }
+            }
+        }
         const signed = feneconHome ? homePower(['ctrl.powerSetpointW'], 'sET_ACTIVE_POWER', true)
             : alias(dev, ['ctrl.powerSetpointW'], true, ['number'], ['W']);
         const charge = alias(dev, ['ctrl.chargePowerW'], true, ['number'], ['W']);
@@ -781,12 +791,15 @@ function planDeviceEms(input) {
             root.schemaVersion = 1;
         section(section(root, 'apps'), 'storage').enabled = false;
     };
-    const controlRows = [
+    // A rejected earlier device restores a cloned checkpoint. Resolve row
+    // references from the current config each time; retained references would
+    // disable abandoned objects instead of the rows in the returned plan.
+    const controlRows = () => [
         ...(Array.isArray(record(config.settingsConfig).evcsList) ? /** @type {Json[]} */ (record(config.settingsConfig).evcsList) : []),
         ...(Array.isArray(record(config.storageFarm).storages) ? /** @type {Json[]} */ (record(config.storageFarm).storages) : []),
         record(config.storage),
     ];
-    for (const item of controlRows) {
+    for (const item of controlRows()) {
         const row = record(item);
         const owner = record(row._eosDevice);
         if (owner.v === 1 && typeof owner.baseId === 'string' && !activeBases.has(owner.baseId)) {
@@ -809,7 +822,7 @@ function planDeviceEms(input) {
             // for review, but never restore an active old-profile row on a
             // failed attempt to commission its replacement.
             let incompatibleVendor = false;
-            for (const item of controlRows) {
+            for (const item of controlRows()) {
                 const row = record(item);
                 const owner = record(row._eosDevice);
                 if (owner.v === 1 && owner.baseId === dev.baseId) {

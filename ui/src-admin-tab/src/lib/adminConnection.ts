@@ -1151,6 +1151,12 @@ export async function notificationMailRequest(payload: unknown = null): Promise<
   return requestRuntimeApi('/api/installer/notification-mail', payload, 10000);
 }
 
+/** Installer history: bounded same-origin request, shared EOS session/CSRF, no mutation retry. */
+export async function historySetupRequest(suffix = '', payload: unknown = null): Promise<unknown> {
+  if (!['', '/check'].includes(suffix)) throw new Error('Ungültiger Historie-Aufruf.');
+  return requestRuntimeApi(`/api/installer/history${suffix}`, payload, 15000);
+}
+
 /** Geschützte Mesh-API nutzt dieselbe Instanzroute; kein erneutes Senden nach Fehlern. */
 export async function meshCoordinatorRequest(suffix = '', payload: unknown = null): Promise<unknown> {
   return requestRuntimeApi(`/api/mesh/coordinator${suffix}`, payload, 10000);

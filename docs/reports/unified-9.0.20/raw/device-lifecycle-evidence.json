@@ -1,0 +1,55 @@
+{
+  "recordedAt": "2026-11-24T19:14:09.533367+00:00",
+  "sourceBefore": "9.0.19 sealed",
+  "sourceAfter": "9.0.20 development",
+  "evidence": [
+    {
+      "file": "device-lifecycle-baseline-node22.log",
+      "sha256": "0695c0869b351adb27408a535ff1d052e81743d45b73c29101f2bac123fe8819"
+    },
+    {
+      "file": "device-lifecycle-baseline-node24.log",
+      "sha256": "8417709d7c7d88b7d09b8c2a460de0916e0d239bbc68cd6522e2bf2af987a328"
+    },
+    {
+      "file": "device-lifecycle-lint-after.json",
+      "sha256": "49ae2c9c45261044870ee896abf29595cc32b1e333043b3a8a2adb4886328fde"
+    },
+    {
+      "file": "device-lifecycle-lint-before.json",
+      "sha256": "bc8edd781cbb1796e9f4f0b40a8cbc8994f04f520426d7067067b4e253e3a641"
+    },
+    {
+      "file": "device-lifecycle-modbus-stop-backoff.cjs",
+      "sha256": "4e58d1456089057966a3e227b28cb73b9d5c86919fd636045f3ab9e68da588d8"
+    },
+    {
+      "file": "device-lifecycle-node22-control-review.log",
+      "sha256": "91b927b404856eb5616f9a163c0fef61298065e9dd41700db22f1af0cb8f0b59"
+    },
+    {
+      "file": "device-lifecycle-node22-modbus-final.json",
+      "sha256": "e2ab47c06da58bc4561390acbbd25251194aa177104beea9d69c7cc13f122ccb"
+    },
+    {
+      "file": "device-lifecycle-node22-modbus-final.log",
+      "sha256": "94c5b35dbc02b3a65ff53e0d285a595f93f467dcff408e7b4f3c6b0c732ef6cb"
+    },
+    {
+      "file": "device-lifecycle-node22-modbus-review.log",
+      "sha256": "83f83989d626b6e105918eebbda9ad0edff2624776f2c1f4b9084105fc602385"
+    },
+    {
+      "file": "device-lifecycle-node24-modbus-final.json",
+      "sha256": "9ff691b61ba5b55992b32382c960bb26c4f754578c3b83d3fba2f507229f7579"
+    },
+    {
+      "file": "device-lifecycle-node24-modbus-final.log",
+      "sha256": "d9ee68f30491f9e5d01b4a0a06dc165879e9c28b0c56f238f3eb2f573f46c463"
+    },
+    {
+      "file": "device-lifecycle-node24-modbus-review.log",
+      "sha256": "4b48e8645f4577b833bf0452052fe2c38d03b79ed23614232730ee4c44f296ab"
+    }
+  ]
+}

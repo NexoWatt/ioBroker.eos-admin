@@ -1,0 +1,103 @@
+{
+  "startedAt": "2026-11-24T20:08:59.968Z",
+  "finishedAt": "2026-11-24T20:09:23.754Z",
+  "file": "src-ts/runtime-executables/main.ts",
+  "eslintVersion": "10.13.0",
+  "rawSha256": "5d9867b31d26f10b2cbfe36266fee8c789b9da354f406e064f944513d1b7ac09",
+  "sourceCodeSha256": "4515a710303934adcfbfc1a4ce2dc5bd36ac61a97fe5b0c147fe5819687c8680",
+  "count": 9,
+  "matches": [
+    {
+      "fingerprint": "52846315efe5cb1fd687f2d6436c4999102da11954b430f4bfad65a823670f5c",
+      "rule": "security/detect-object-injection",
+      "expectedCount": 2,
+      "actualCount": 2,
+      "line": 22851,
+      "reason": "Der Diagnosez\u00e4hler wird mit Object.create(null) initialisiert; dynamische Fehlerklassen k\u00f6nnen dadurch keine Prototyp-Setter ver\u00e4ndern. Der neue Peerclient liefert nur eigene feste Fehlercodes.",
+      "oldCodeSha256": "969cbbabf0da2ea32806baf5a05a28383f4e6173dcbf73867fad2f572d7a4c96"
+    },
+    {
+      "fingerprint": "284be3fe77000b1f5d8a5d7296f2772e4d14ee972e7415eab59412f88b64f8b8",
+      "rule": "security/detect-object-injection",
+      "expectedCount": 1,
+      "actualCount": 1,
+      "line": 4675,
+      "reason": "localId wird ausschlie\u00dflich aus validierten Partner-App-IDs gebildet; directMarketing ist explizit grid. Lokaler Lesezugriff mit zus\u00e4tzlicher installed/enabled-/Lizenzpr\u00fcfung, kein fremder Prototyp-Schl\u00fcssel.",
+      "oldCodeSha256": "969cbbabf0da2ea32806baf5a05a28383f4e6173dcbf73867fad2f572d7a4c96"
+    },
+    {
+      "fingerprint": "48c91c7b19c3c39dd9f70b1244e95342cf66ab86a8ed71a4196272e0bbe5f2cc",
+      "rule": "security/detect-object-injection",
+      "expectedCount": 1,
+      "actualCount": 1,
+      "line": 4689,
+      "reason": "Lokale Availability-Map wird durch die Regelung mit Object.create(null) gef\u00fchrt. Bereits freigegebene Ressource wird nur gelesen; tats\u00e4chlicher Boolean und frischer Zeitstempel erforderlich.",
+      "oldCodeSha256": "969cbbabf0da2ea32806baf5a05a28383f4e6173dcbf73867fad2f572d7a4c96"
+    },
+    {
+      "fingerprint": "012aeb1f3bb1907433fb0cc309a9c0a283544112b34658a997940c62b549cfbd",
+      "rule": "security/detect-object-injection",
+      "expectedCount": 1,
+      "actualCount": 1,
+      "line": 4694,
+      "reason": "readState-Callback wird vom PartnerRuntime nur mit fest codierten Bilanz-/PV-/Netzleistungs-State-IDs aufgerufen. Kein Partnertext kann beliebige id-Pfade an diesen Cache-Lesezugriff liefern.",
+      "oldCodeSha256": "969cbbabf0da2ea32806baf5a05a28383f4e6173dcbf73867fad2f572d7a4c96"
+    },
+    {
+      "fingerprint": "a0f055d4076a53efda1a6208fcda4930beaee6122331ab7c796c33238cc6c3e3",
+      "rule": "security/detect-object-injection",
+      "expectedCount": 1,
+      "actualCount": 1,
+      "line": 4695,
+      "reason": "Lokale Telemetry-Map wird von der Regelung mit Object.create(null) gef\u00fchrt. Die zuvor an die Partnerfreigabe gebundene Ressource wird ausschlie\u00dflich gelesen und anschlie\u00dfend fachlich projiziert.",
+      "oldCodeSha256": "969cbbabf0da2ea32806baf5a05a28383f4e6173dcbf73867fad2f572d7a4c96"
+    },
+    {
+      "fingerprint": "f966fa825d8a063b62bc5ba98284ecfc6143e5e505d236e32b0d64f8cef0cd74",
+      "rule": "security/detect-object-injection",
+      "expectedCount": 1,
+      "actualCount": 1,
+      "line": 18543,
+      "reason": "queryNumber liest nur die intern fest kodierten Namen from/to/step. Zahlen und Zeitraster werden anschlie\u00dfend begrenzt validiert; kein dynamischer Schreibschl\u00fcssel.",
+      "oldCodeSha256": "969cbbabf0da2ea32806baf5a05a28383f4e6173dcbf73867fad2f572d7a4c96"
+    },
+    {
+      "fingerprint": "3b107b890285ab2c4f9e903614d6d34763f4a729659d8e0524d65d18317319fe",
+      "rule": "security/detect-object-injection",
+      "expectedCount": 1,
+      "actualCount": 1,
+      "line": 18906,
+      "reason": "Der bin\u00e4re Suchindex ist ganzzahlig und vor dem Zugriff durch die L\u00e4nge der normalisierten Zahlenpaare begrenzt. Ausschlie\u00dflich lesender Arrayzugriff.",
+      "oldCodeSha256": "969cbbabf0da2ea32806baf5a05a28383f4e6173dcbf73867fad2f572d7a4c96"
+    },
+    {
+      "fingerprint": "27297a9d7c7c8eb7e9f5a89509e1698c9e57f876d603aa37ce4c6b296f00a41f",
+      "rule": "security/detect-unsafe-regex",
+      "expectedCount": 1,
+      "actualCount": 1,
+      "line": 33068,
+      "reason": "Verankerte Dezimalgrammatik mit disjunkten Ziffern-/Punkt-/Exponentsegmenten; keine \u00fcberlappende wiederholte Alternative. Nicht endliche Ergebnisse werden abgewiesen.",
+      "oldCodeSha256": "969cbbabf0da2ea32806baf5a05a28383f4e6173dcbf73867fad2f572d7a4c96"
+    },
+    {
+      "fingerprint": "fcd35d67be3c6ad4dc2da331e649307c2e516ef1628a8daba7e789400a1eeda4",
+      "rule": "security/detect-object-injection",
+      "expectedCount": 1,
+      "actualCount": 1,
+      "line": 14917,
+      "reason": "Reiner Lesezugriff auf die lokale Literalmap zul\u00e4ssiger Discoveryfehler, ausschlie\u00dflich nach Object.hasOwn(errors, code); sonst feste EOS_DETECTION_FAILED-Antwort. Kein geerbter Prototypwert, keine Weitergabe interner Ausnahmedetails und keine dynamische Funktion.",
+      "oldCodeSha256": "969cbbabf0da2ea32806baf5a05a28383f4e6173dcbf73867fad2f572d7a4c96"
+    }
+  ],
+  "allUnchanged": true,
+  "mainScanner": {
+    "currentFindings": 482,
+    "unresolvedCarriedFindings": 472,
+    "individuallyReviewedFindings": 10,
+    "newlyBlockedFindings": 0,
+    "baselineFindingsAbsent": 25,
+    "blocked": []
+  },
+  "fullSourceReceipt": "final-ui-independent-review.json",
+  "limitation": "Fingerprint regression scan and individually reviewed fixed boundaries, not a blanket resolution of carried findings or CRA/ASVS certification."
+}

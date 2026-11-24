@@ -26,15 +26,17 @@ Parameter sind die Namen aus der Signatur, keine geratenen Datenverträge. Die A
 
 | Funktion / Methode | Parameter | Direkt sichtbare Aufrufe (Auszug) |
 | --- | --- | --- |
-| [`defaultFromMs`](../../../../../src-ts/runtime-executables/www/tariff-report.ts#L70) | – | C.getQuery, C.parseInputValue, Date.now |
-| [`defaultToMs`](../../../../../src-ts/runtime-executables/www/tariff-report.ts#L81) | – | C.getQuery, C.parseInputValue, Date.now |
-| [`fillInputs`](../../../../../src-ts/runtime-executables/www/tariff-report.ts#L92) | – | C.el, C.toInputValue, defaultFromMs, defaultToMs |
-| [`getRange`](../../../../../src-ts/runtime-executables/www/tariff-report.ts#L104) | – | C.el, C.parseInputValue, Math.max, defaultFromMs, defaultToMs |
-| [`renderFlags`](../../../../../src-ts/runtime-executables/www/tariff-report.ts#L120) | meta | C.el, items.forEach, items.push |
-| [`renderSummary`](../../../../../src-ts/runtime-executables/www/tariff-report.ts#L142) | summary, meta | C.el, C.fmtKwh, C.fmtMoney, C.fmtNum, C.fmtPrice, items.forEach, items.push |
-| [`renderTable`](../../../../../src-ts/runtime-executables/www/tariff-report.ts#L172) | intervals | Array.isArray, C.el, empty.classList.toggle, rows.forEach |
-| [`renderMeta`](../../../../../src-ts/runtime-executables/www/tariff-report.ts#L203) | meta | C.el, C.fmtDateTime, parts.join, parts.push, renderFlags |
-| [`load`](../../../../../src-ts/runtime-executables/www/tariff-report.ts#L225) | – | C.el, C.setUrlParams, empty.classList.remove, encodeURIComponent, fetch, getRange, renderMeta, renderSummary, renderTable |
-| [`loadAndPrint`](../../../../../src-ts/runtime-executables/www/tariff-report.ts#L258) | – | load, window.print |
-| [`exportCsv`](../../../../../src-ts/runtime-executables/www/tariff-report.ts#L271) | – | Array.isArray, C.downloadText, String, lines.join, rows.forEach, start.getDate, start.getFullYear, start.getMonth |
-| [`init`](../../../../../src-ts/runtime-executables/www/tariff-report.ts#L300) | – | C.el, C.setupTopbar, backBtn.addEventListener, exportBtn.addEventListener, fillInputs, fromInput.addEventListener, load, printBtn.addEventListener, reloadBtn.addEventListener, toInput.addEventListener |
+| [`reportNumber`](../../../../../src-ts/runtime-executables/www/tariff-report.ts#L66) | value | Number, Number.isFinite, value.trim |
+| [`csvNumber`](../../../../../src-ts/runtime-executables/www/tariff-report.ts#L72) | value | parsed.toFixed, reportNumber |
+| [`defaultFromMs`](../../../../../src-ts/runtime-executables/www/tariff-report.ts#L82) | – | C.getQuery, C.parseInputValue, Date.now |
+| [`defaultToMs`](../../../../../src-ts/runtime-executables/www/tariff-report.ts#L93) | – | C.getQuery, C.parseInputValue, Date.now |
+| [`fillInputs`](../../../../../src-ts/runtime-executables/www/tariff-report.ts#L104) | – | C.el, C.toInputValue, defaultFromMs, defaultToMs |
+| [`getRange`](../../../../../src-ts/runtime-executables/www/tariff-report.ts#L116) | – | C.el, C.parseInputValue, Math.max, defaultFromMs, defaultToMs |
+| [`renderFlags`](../../../../../src-ts/runtime-executables/www/tariff-report.ts#L132) | meta | C.el, items.forEach, items.push |
+| [`renderSummary`](../../../../../src-ts/runtime-executables/www/tariff-report.ts#L155) | summary, meta | C.el, C.fmtKwh, C.fmtMoney, C.fmtNum, C.fmtPrice, items.forEach, items.push, reportNumber |
+| [`renderTable`](../../../../../src-ts/runtime-executables/www/tariff-report.ts#L185) | intervals | Array.isArray, C.el, empty.classList.toggle, rows.forEach |
+| [`renderMeta`](../../../../../src-ts/runtime-executables/www/tariff-report.ts#L216) | meta | C.el, C.fmtDateTime, parts.join, parts.push, renderFlags |
+| [`load`](../../../../../src-ts/runtime-executables/www/tariff-report.ts#L241) | – | C.el, C.setUrlParams, empty.classList.remove, encodeURIComponent, fetch, getRange, renderMeta, renderSummary, renderTable |
+| [`loadAndPrint`](../../../../../src-ts/runtime-executables/www/tariff-report.ts#L276) | – | load, window.print |
+| [`exportCsv`](../../../../../src-ts/runtime-executables/www/tariff-report.ts#L289) | – | Array.isArray, C.downloadText, String, lines.join, rows.forEach, start.getDate, start.getFullYear, start.getMonth |
+| [`init`](../../../../../src-ts/runtime-executables/www/tariff-report.ts#L318) | – | C.el, C.setupTopbar, backBtn.addEventListener, exportBtn.addEventListener, fillInputs, fromInput.addEventListener, load, printBtn.addEventListener, reloadBtn.addEventListener, toInput.addEventListener |

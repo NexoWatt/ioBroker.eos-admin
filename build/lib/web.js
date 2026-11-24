@@ -1891,6 +1891,9 @@ class Web {
                     '/nexowatt-eos-logo.png',
                     '/manifest.webmanifest',
                     '/apple-touch-icon.png',
+                    '/apple-touch-icon-precomposed.png',
+                    '/apple-touch-icon-180x180.png',
+                    '/apple-touch-icon-180x180-precomposed.png',
                     '/sw.js',
                 ].includes(path) ||
                     /^\/(?:fonts|icons|assets\/icons)\//.test(path) ||

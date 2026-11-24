@@ -1,0 +1,14 @@
+{"initCount":2,"oldStopSettled":false,"newEngineRunning":true,"oldEngineReferenceLost":true}
+AssertionError [ERR_ASSERTION]: replacement engine must wait for failed startup module cleanup
+
+2 !== 1
+
+    at /workspace/scratch/741f792566ea/audit-919/commissioning/failed-init-drain-before.cjs:14:8
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 2,
+  expected: 1,
+  operator: 'strictEqual',
+  diff: 'simple'
+}

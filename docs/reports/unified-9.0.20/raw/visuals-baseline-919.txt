@@ -1,0 +1,36 @@
+CASE zero building while exporting, null SoC {
+  pvVal: '5000 W',
+  gridVal: '-5000 W',
+  restVal: '0 W',
+  centerPower: '100 W',
+  batterySocIn: '0 %'
+}
+CASE true 1200W before zero {
+  pvVal: '5000 W',
+  gridVal: '-3800 W',
+  restVal: '0 W',
+  centerPower: '1200 W',
+  batterySocIn: '-- %'
+}
+CASE after 400s of repeated true zero {
+  pvVal: '5000 W',
+  gridVal: '-5000 W',
+  restVal: '0 W',
+  centerPower: '1200 W',
+  batterySocIn: '0 %'
+} held timestamp age= 0
+CASE null derived PV, valid raw PV {
+  pvVal: '0 W',
+  gridVal: '0 W',
+  restVal: '0 W',
+  centerPower: '0 W',
+  batterySocIn: '-- %'
+}
+CASE no engine/no measurements sidebar {
+  sideEms: 'Aktiv',
+  sideGridStatus: 'Stabil',
+  sideStatusText: 'Alle Systeme normal',
+  sidePvPower: '0 W',
+  sideBuildingPower: '0 W',
+  sideBatteryPower: '0 W'
+}

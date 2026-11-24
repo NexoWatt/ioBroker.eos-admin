@@ -24,7 +24,7 @@
  * - Der nächste Schritt ist pro Modul echte Typisierung statt pauschalem No-Check.
  * - Fachliche Kommentare markieren die Abschnitte, die später einzeln migriert werden.
  *
- * Original-Hash: c5bd57c58dc467aaa21cbbcf2a313d4d9fa76de211fe17d8ba2bd5c7c4e36ada
+ * Original-Hash: 67923b08b76ca92fcc4c27fc84b7408a5d9e7b2791de1dfa1a81229cb5491bc4
  */
 
 /**
@@ -48,7 +48,7 @@
  * - genau eine Speicher-Kommandofamilie ist aktiv,
  * - nicht ausgewaehlte Familien werden neutralisiert,
  * - Split-Richtungswechsel schreibt inaktive Richtung zuerst auf 0,
- * - nur bestaetigte Kommandodatenpunkte gelten als akzeptiert,
+ * - ein uebergebener DP-Auftrag ist noch keine Treiberquittierung,
  * - dieselben Regeln gelten fuer Einzelspeicher und Speicherfarm.
  */
 
@@ -207,8 +207,8 @@ async function verifySingleStorage() {
   assert.strictEqual(adapter.foreign.get('single.ctrl.charge').val, 0);
   assert.strictEqual(adapter.foreign.get('single.ctrl.discharge').val, 7480);
   assert.strictEqual(adapter.value('speicher.regelung.commandFamily'), 'split');
-  assert.strictEqual(adapter.value('speicher.regelung.commandDpReadbackOk'), true);
-  assert.strictEqual(adapter.value('speicher.regelung.commandDpReadbackStatus'), 'confirmed');
+  assert.strictEqual(adapter.value('speicher.regelung.commandDpReadbackOk'), false);
+  assert.strictEqual(adapter.value('speicher.regelung.commandDpReadbackStatus'), 'pending-ack');
   assert.strictEqual(adapter.value('speicher.regelung.acceptedSollW'), 7480);
   assert.strictEqual(adapter.value('speicher.regelung.schreibOk'), true);
 
@@ -246,7 +246,7 @@ async function verifySingleStorage() {
   await signedMod._applyTargetW(1200, 'signed inverted discharge', 'eigenverbrauch');
   assert.strictEqual(signedAdapter.foreign.get('single.signed.inverted').val, -1200);
   assert.strictEqual(signedAdapter.value('speicher.regelung.commandFamily'), 'signed');
-  assert.strictEqual(signedAdapter.value('speicher.regelung.commandDpReadbackOk'), true);
+  assert.strictEqual(signedAdapter.value('speicher.regelung.commandDpReadbackOk'), false);
   assert.strictEqual(signedAdapter.value('speicher.regelung.acceptedSollW'), 1200);
 }
 
@@ -333,16 +333,43 @@ async function verifyStorageFarm() {
   Module._load = function patchedLoad(request, parent, isMain) {
     if (request === '@iobroker/adapter-core') return { Adapter: FarmAdapterStub };
     if (request === 'express') return expressStub;
-    if (request === '@iobroker/type-detector') {
-      const error = new Error('optional dependency intentionally absent');
-      error.code = 'MODULE_NOT_FOUND';
-      throw error;
-    }
+    // The integrated SmartHome module requires the real packaged detector;
+    // this storage regression must not simulate its removal from the product.
     return originalLoad.call(this, request, parent, isMain);
   };
 
   try {
-    const factory = require(path.join(__dirname, '..', 'main.js'));
+    // Load the real integrated runtime class, using the current hosted API.
+    const filename = path.join(__dirname, '..', 'main.js');
+    const compiled = new Module(filename, module);
+    compiled.filename = filename; compiled.paths = Module._nodeModulePaths(path.dirname(filename));
+    compiled._compile(require('fs').readFileSync(filename, 'utf8') + '\nmodule.exports.TestRuntime = NexoWattVis;\n', filename);
+/**
+ * Code-Teil: factory
+ *
+ * Zweck:
+ * Automatisch markierter Arrow-Funktion-Abschnitt aus der ursprünglichen JavaScript-Datei.
+ * Dieser Kommentar dient als Orientierung für die schrittweise TypeScript-Migration.
+ *
+ * Zusammenhang:
+ * Die produktive Logik liegt aktuell noch in der JS-Datei. Dieser TS-Spiegel zeigt,
+ * welcher konkrete Code-Abschnitt später typisiert, getestet und übernommen werden muss.
+ */
+    const factory = () => {
+      const owner = new FarmAdapterStub({ name: 'eos-admin' });
+      owner.instance = 0; owner.config = { port: 8188, eosUi: {} };
+      const originalWrite = owner.setForeignStateAsync.bind(owner);
+      const originalRead = owner.getForeignStateAsync.bind(owner);
+      const prefix = owner.namespace + '.';
+      owner.setForeignStateAsync = (id, ...args) => id.startsWith(prefix)
+        ? owner.setStateAsync(id.slice(prefix.length), ...args) : originalWrite(id, ...args);
+      owner.getForeignStateAsync = (id, ...args) => id.startsWith(prefix)
+        ? owner.getStateAsync(id.slice(prefix.length), ...args) : originalRead(id, ...args);
+      return new compiled.exports.TestRuntime({ owner, bridge: {
+        canWrite: () => true, originAllowed: () => true, resolveAccess: async () => null,
+        getLicense: () => ({ valid: true, coreEnabled: true, edition: 'pro', features: ['energy', 'wallet', 'smartHome', 'microgridSlave'], limits: { batteries: 10, chargePoints: 10 } }),
+      } });
+    };
     const adapter = factory({});
     adapter._nwLicenseOk = true;
     adapter._nwLicenseInfo = { ok: true, edition: 'eos' };
@@ -395,7 +422,9 @@ async function verifyStorageFarm() {
     assert.strictEqual(result.writeOk, true, JSON.stringify(result));
     assert.strictEqual(result.acceptedDeliveredW, 3000);
     assert.strictEqual(result.commandDpReadbackSupported, true);
-    assert.strictEqual(result.commandDpReadbackOk, true);
+    assert.strictEqual(result.commandDpReadbackOk, false);
+    assert.strictEqual(result.commandDpReadbackPending, true);
+    assert.strictEqual(result.commandDpReadbackStatus, 'pending-ack');
     assert.strictEqual(result.results[0].commandFamily, 'split');
     assert.deepStrictEqual(
       adapter.writes.slice(0, 3).map((row) => [row.id, row.val]),

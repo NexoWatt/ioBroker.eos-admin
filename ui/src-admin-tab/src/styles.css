@@ -443,3 +443,30 @@ body.nw-ems-embedded .nw-status { font-size: .78rem; padding: 8px 10px; }
 .nw-partner-preview { border-top: 1px solid var(--nw-border); margin-top: 20px; }
 .nw-partner-revoke { border-color: rgba(214, 173, 96, .5); }
 @media (max-width: 640px) { .nw-partner-permissions { grid-template-columns: 1fr; } }
+
+/* Historie: kompakte Installer-Gruppen, Geheimnisse nie als Statuswert anzeigen. */
+.nw-history-fields { border: 0; min-width: 0; padding: 0; margin: 0 0 20px; }
+.nw-history-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.nw-history-wide { grid-column: 1 / -1; }
+.nw-history-field { display: flex; flex-direction: column; gap: 8px; min-width: 0; margin: 14px 0; }
+.nw-history-field .nw-input { min-width: 0; max-width: 100%; width: 100%; box-sizing: border-box; }
+.nw-history-field textarea { resize: vertical; font-family: monospace; }
+.nw-history-field small, .nw-history-note { color: var(--nw-muted); line-height: 1.6; }
+.nw-history-tls { border-top: 1px solid var(--nw-border); padding-top: 14px; }
+.nw-history-tls summary { cursor: pointer; padding: 10px 0; }
+.nw-history-tls p { line-height: 1.6; }
+.nw-history-checkbox { display: flex; align-items: baseline; gap: 8px; margin: 16px 0; }
+.nw-history-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.nw-history-check { margin-top: 24px; border-top: 1px solid var(--nw-border); padding-top: 12px; }
+.nw-history-check-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.nw-history-check-grid > div { border: 1px solid var(--nw-border); border-radius: 12px; padding: 14px; min-width: 0; }
+.nw-history-check-grid span, .nw-history-check-grid strong { display: block; overflow-wrap: anywhere; }
+.nw-history-check-grid span { color: var(--nw-muted); margin-bottom: 8px; font-size: .85rem; }
+.nw-history-runtime { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.nw-history-runtime > div { padding: 12px; border-bottom: 1px solid var(--nw-border); min-width: 0; }
+.nw-history-runtime dt { color: var(--nw-muted); margin-bottom: 8px; }
+.nw-history-runtime dd { margin: 0; overflow-wrap: anywhere; }
+.nw-history-setup .nw-status { overflow-wrap: anywhere; }
+@media (max-width: 640px) { .nw-history-grid, .nw-history-check-grid, .nw-history-runtime { grid-template-columns: 1fr; } }
+.nw-history-failure { display: block; color: #ffb6bf; margin-top: 8px; line-height: 1.5; }
+.nw-history-warning { border-left: 3px solid #d6ad60; padding: 12px 15px; background: rgba(214, 173, 96, .08); line-height: 1.6; }

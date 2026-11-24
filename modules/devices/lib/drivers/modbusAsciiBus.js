@@ -1,5 +1,6 @@
 'use strict';
 const { assertOperationAllowed } = require('../operationContext');
+const { claimSerialPort, boundedSerialClose, serialError } = require('./modbusSerialLease');
 
 const { SerialPort } = require('serialport');
 
@@ -156,6 +157,7 @@ class ModbusAsciiBus {
     this.port = null;
     this.connected = false;
     this.connecting = false;
+    this.closing = false;
 
     // Serialize all operations on this bus
     this._queue = Promise.resolve();
@@ -191,7 +193,7 @@ class ModbusAsciiBus {
       const msg = `${event}${value ? ` ${String(value)}` : ''}`;
       this._debugTrace.push(msg);
       if (this._debugTrace.length > 12) this._debugTrace.splice(0, this._debugTrace.length - 12);
-    } catch (_) {}
+    } catch (_) { /* Diagnostic failure does not restore transport authority. */ }
   }
 
   _extractNextDelimitedLine() {
@@ -251,6 +253,7 @@ class ModbusAsciiBus {
   }
 
   async ensureConnected() {
+    if (this.closing) throw serialError('E_MODBUS_SERIAL_CLOSING');
     if (this.connected) return true;
     if (this.connecting) {
       await this._queue;
@@ -261,6 +264,7 @@ class ModbusAsciiBus {
 
     return await this._enqueue(async () => {
       try {
+        if (this.closing) throw serialError('E_MODBUS_SERIAL_CLOSING');
         if (this.connected) return true;
         if (!this.opts.path) throw new Error('Modbus ASCII: missing serial path');
 
@@ -276,21 +280,19 @@ class ModbusAsciiBus {
           autoOpen: false,
         });
 
-        await new Promise((resolve, reject) => {
-          port.open((err) => (err ? reject(err) : resolve()));
-        });
-
         this.port = port;
-        this.connected = true;
-
         port.on('data', (d) => this._onData(d));
         port.on('error', (err) => {
           this.connected = false;
-          try { this.adapter.log.warn(`[modbusAsciiBus] serial error ${this.opts.path}: ${err && err.message ? err.message : err}`); } catch (_) {}
+          try { this.adapter.log.warn(`[modbusAsciiBus] serial error ${this.opts.path}: ${err && err.message ? err.message : err}`); }
+          catch (_) { /* Diagnostic failure does not restore transport authority. */ }
         });
-        port.on('close', () => {
-          this.connected = false;
+        port.on('close', () => { this.connected = false; });
+        await new Promise((resolve, reject) => {
+          port.open((err) => (err ? reject(err) : resolve()));
         });
+        if (this.closing) throw serialError('E_MODBUS_SERIAL_CLOSING');
+        this.connected = true;
 
         this.adapter.log.info(`[modbusAsciiBus] connected ${this.opts.path} @${this.opts.baudRate} ${this.opts.parity} ${this.opts.dataBits}${this.opts.stopBits} resp=${this.opts.responseStart}`);
         return true;
@@ -304,34 +306,32 @@ class ModbusAsciiBus {
   }
 
   async _closePortInternal() {
+    const port = this.port;
     try {
-      if (this.port) {
-        try {
-          this.port.removeAllListeners('data');
-          this.port.removeAllListeners('error');
-          this.port.removeAllListeners('close');
-        } catch (_) {}
-        const p = this.port;
-        this.port = null;
-        await new Promise((resolve) => {
-          try {
-            if (p.isOpen) p.close(() => resolve());
-            else resolve();
-          } catch (_) {
-            resolve();
-          }
+      if (port) {
+        // Keep the error listener until close is confirmed; a failed close
+        // retains the port reference and the manager's exclusive lease.
+        port.removeAllListeners('data');
+        if (port.isOpen) await new Promise((resolve, reject) => {
+          try { port.close(error => error ? reject(error) : resolve()); }
+          catch (error) { reject(error); }
         });
+        port.removeAllListeners('error');
+        port.removeAllListeners('close');
+        if (this.port === port) this.port = null;
       }
     } finally {
       this.connected = false;
       this._rxText = '';
       this._frameQueue = [];
+      for (const pending of this._pending) pending.reject(serialError('E_MODBUS_SERIAL_CLOSING'));
       this._pending = [];
       this._debugTrace = [];
     }
   }
 
   async close() {
+    this.closing = true;
     return await this._enqueue(async () => {
       await this._closePortInternal();
     });
@@ -372,6 +372,7 @@ class ModbusAsciiBus {
     await this.ensureConnected();
     return await this._enqueue(async () => {
       assertOperationAllowed();
+      if (this.closing) throw serialError('E_MODBUS_SERIAL_CLOSING');
       if (!this.connected) throw new Error('Serial transport disconnected before dispatch');
       if (!this.port || !this.connected) throw new Error('Modbus ASCII: not connected');
 
@@ -514,22 +515,37 @@ function acquireBus(adapter, opts) {
 
   const existing = buses.get(key);
   if (existing) {
+    if (existing.closing) throw serialError('E_MODBUS_SERIAL_CLOSING');
     existing.refs++;
     return { key, bus: existing.bus };
   }
 
-  const bus = new ModbusAsciiBus(adapter, opts);
-  buses.set(key, { bus, refs: 1 });
+  const releasePort = claimSerialPort((opts.path || '').toString().trim());
+  let bus;
+  try { bus = new ModbusAsciiBus(adapter, opts); }
+  catch (error) { releasePort(); throw error; }
+  buses.set(key, { bus, refs: 1, closing: false, closePromise: null, releasePort });
   return { key, bus };
 }
 
-function releaseBus(key) {
+async function releaseBus(key) {
   const entry = buses.get(key);
   if (!entry) return;
+  if (entry.closePromise) return await boundedSerialClose(entry.closePromise);
   entry.refs--;
-  if (entry.refs <= 0) {
-    buses.delete(key);
-    entry.bus.close().catch(() => {});
+  if (entry.refs > 0) return;
+  entry.closing = true;
+  entry.closePromise = entry.bus.close().then(() => {
+    // Late completion may release only this exact entry, never a replacement.
+    if (buses.get(key) === entry) {
+      buses.delete(key);
+      entry.releasePort();
+    }
+  });
+  try { await boundedSerialClose(entry.closePromise); }
+  catch (error) {
+    try { entry.bus.adapter.log.warn('EOS_MODBUS_SERIAL_STOP_UNCONFIRMED'); } catch (_) { /* Diagnostic failure does not restore transport authority. */ }
+    throw error;
   }
 }
 

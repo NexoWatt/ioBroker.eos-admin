@@ -1,0 +1,52 @@
+✔ periodic canonical samples stop holding through outages; legacy sparse mappings still hold (8.563242ms)
+✔ canonical hold follows configured export cadence rather than an arbitrary device TTL (1.602142ms)
+✔ charge-point sum retains an outage when any configured member has no periodic sample (1.370984ms)
+✔ History API retains signed canonical EUR prices, fixed fee split and genuine zero (5.63884ms)
+✔ missing and invalid manual prices are not synthesized into free History quotes (4.514989ms)
+✔ asynchronous malformed History payloads cannot throw out of the callback (4.756691ms)
+✔ valid numeric zero stays zero, null does not create measured zero, supported envelopes agree (25.975058ms)
+✔ one five-second deadline includes fallback rounds and ignores late responses (2.526864ms)
+✔ shutdown cancels History reads and new reads fail without starting transports (1.468521ms)
+✔ thrown and rejected transports become bounded API errors with sibling cleanup (1.99254ms)
+✔ oversized raw response stops processing and cleans all pending branches (0.938162ms)
+✔ invalid and allocation-amplifying ranges are rejected before provider work (3.79173ms)
+✔ day, week, month, leap-year and six-hour annual-report presets preserve finite output bounds (13.411482ms)
+✔ identical requests share work; a fifth distinct computation gets backpressure (2.403839ms)
+✔ completed payload cache retains at most four requests and expires old responses (41.709838ms)
+✔ current counter reads share History deadline instead of leaving request hanging (2.649859ms)
+✔ 200-charge-point fallback uses at most eight simultaneous reads and retains correct sums (23.542245ms)
+✔ four maximum-range payloads stay within measured row and serialized-size budgets (394.515474ms)
+ℹ {"profile":"History-only controlled provider; not customer RSS","gcAvailable":false,"cacheEntries":4,"rowsPerPayload":106496,"largestPayloadBytes":1919024,"heapDeltaBytes":10984200}
+✔ leading missing buckets stay unknown in complete-period energy totals; measured zero remains zero (7.421685ms)
+✔ exact-energy EV fallback is also bounded and cannot swallow its timeout as a complete result (2.090888ms)
+✔ optimized price lookup retains exact last-value and duplicate-timestamp semantics (67.682644ms)
+✔ annual report still requests all ten years with two concurrent requests and original order (13.783673ms)
+✔ History line mapping preserves unknown values and real zero (11.022646ms)
+✔ power and SoC Canvas paths restart after explicit gaps (2.135655ms)
+✔ stacked areas create separate polygons on either side of a gap (17.917147ms)
+✔ integrated energy never bridges or ramps through null outage samples (1.258054ms)
+✔ normalization retains timestamped unknown markers for cost integration (5.22758ms)
+✔ History reads only own data cache records and never invokes configured cache accessors (3.870828ms)
+✔ History uses real PV/load fallbacks when derived states are absent or stale; fresh zero stays zero (0.75028ms)
+✔ History never adds DC PV to the already merged canonical derived total (0.50459ms)
+✔ Farm PV fallback merges once and missing/stale farm SoC is not recorded as zero (0.782518ms)
+✔ missing/null/boolean prices never create a free provider price; configured manual fallback is retained (0.953094ms)
+✔ provider price freshness flag, age, quality and timestamp are respected without changing manual tariff mode (0.751461ms)
+✔ zero and negative canonical EUR prices and net-fee decomposition retain exact values (0.61741ms)
+✔ missing grid/battery/PV measurements produce gaps, never fresh invented zeros (0.365781ms)
+✔ stale raw observations and farm aggregate are not re-stamped as new History samples (0.456517ms)
+✔ the History sink rejects invalid data and retains real zero/negative measurements (0.397929ms)
+✔ quarter-hour negative, zero and positive EUR quotes retain signed costs and fixed fee split (7.068843ms)
+✔ manual positive tariff behavior and zero quotation remain exact (2.937773ms)
+✔ time-weighted chart quote and energy-weighted summary keep their distinct existing definitions (2.407064ms)
+✔ known gross price derives a negative base without altering nonnegative fee semantics (2.369943ms)
+✔ unknown quotes stay unknown and do not become free interval prices (2.838053ms)
+✔ price and cost Canvas axes include negative values instead of clipping them to zero (12.000228ms)
+ℹ tests 43
+ℹ suites 0
+ℹ pass 43
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1785.211889

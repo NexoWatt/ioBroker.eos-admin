@@ -1,0 +1,18 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "modules/devices/test/modbusConnectLifecycle.test.js",
+    "modules/devices/test/modbusAuthorizationReads.test.js",
+    "modules/devices/test/modbusReadIntegrity.test.js",
+    "modules/devices/test/serialOperationGate.test.js",
+    "test/eos-mennekes-control.test.cjs",
+    "test/eos-solax-cadence.test.cjs"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+  "startedAt": "2026-11-24T19:13:18.014278+00:00",
+  "finishedAt": "2026-11-24T19:13:19.417215+00:00",
+  "exitCode": 0,
+  "log": "node24-modbus-final.log",
+  "sha256": "d9ee68f30491f9e5d01b4a0a06dc165879e9c28b0c56f238f3eb2f573f46c463"
+}

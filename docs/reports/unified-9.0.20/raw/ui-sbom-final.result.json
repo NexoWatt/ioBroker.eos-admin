@@ -1,0 +1,14 @@
+{
+  "name": "ui-sbom-final",
+  "command": [
+    "npm",
+    "run",
+    "sbom:cra:release"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin/ui",
+  "startedAt": "2026-11-24T21:06:25.396850+00:00",
+  "durationSeconds": 1.762,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-920/ui-sbom-final.log",
+  "sha256": "f29da5cdce2e41cd304d27812393632c7fb0074abb32a49090bf82112edcf7bd"
+}

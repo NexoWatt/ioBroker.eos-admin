@@ -1,0 +1,13 @@
+{
+  "name": "serial-before-repro",
+  "command": [
+    "node",
+    "/workspace/scratch/741f792566ea/audit-919/isolation/repro-serial-release.cjs"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-919/iobroker.eos-admin",
+  "startedAt": "2026-11-24T19:17:43.470482+00:00",
+  "durationSeconds": 0.111,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/audit-919/isolation/serial-before-repro.log",
+  "sha256": "f3887aa60549d25a589306a59db69fa537d484140ad56aad5e1eaa5e9bdedd37"
+}

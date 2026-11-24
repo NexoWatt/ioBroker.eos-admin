@@ -10,6 +10,11 @@ const SOURCES = Object.freeze({ ui: 'nexowatt-ui', devices: 'nexowatt-devices', 
 const VERSIONS = Object.freeze({ ui: ['1.0.35', '1.0.36', '1.0.37', '1.0.38'], devices: ['0.5.176'], eebus: ['0.3.0'], backup: ['1.0.10'] });
 const ACL = { owner: 'system.user.admin', ownerGroup: 'system.group.administrator', object: 0x600, state: 0x600 };
 const HOST_MAX_AGE_MS = 60000;
+const STARTUP_WINDOW_MS = 45000;
+// The Devices host has a 120-second absolute metadata-start budget. Migration
+// begins before Web/host construction; confirmed object progress may bridge
+// that phase, but cannot remove the overall takeover deadline.
+const DEVICES_PROGRESS_ALLOWANCE_MS = 120000;
 const fail = code => Object.assign(new Error(code), { code });
 const record = value => value && typeof value === 'object' && !Array.isArray(value);
 function copy(value) {
@@ -528,7 +533,13 @@ class EosLegacyMigration {
         // Read these live values only after the asynchronous module snapshot.
         const ui = this.owner.eosHostedRuntime?.status?.();
         const license = this.owner.eosLicenseService?.statusView?.();
+        const devices = modules.find(row => row?.id === 'devices');
+        const startup = devices?.details?.startup;
+        const devicesProgress = devices?.reason === 'STARTING' && startup?.pending === true &&
+            Number.isSafeInteger(startup.completedObjects) && startup.completedObjects > 0
+            ? startup.completedObjects : 0;
         return {
+            devicesProgress,
             ready: this.owner.eosOwnership?.canWrite() === true && license?.valid === true && license.coreEnabled === true &&
                 (!rows.some(row => row.id === 'ui' && row.enabled) || (ui?.emsReady === true && ui.canWrite === true)) &&
                 modules.every(row => row?.active === true && row.reason === 'RUNNING'),
@@ -542,10 +553,24 @@ class EosLegacyMigration {
         if (this.phase !== 'TRANSFERRED' || this.stopped || this.startupBlocked)
             return;
         this.monitor = (async () => {
-            const deadline = performance.now() + (this.options.startTimeoutMs || 45000);
+            const configuredWindow = this.options.startTimeoutMs;
+            const startupWindow = Number.isFinite(configuredWindow) && configuredWindow > 0
+                ? Math.min(configuredWindow, STARTUP_WINDOW_MS) : STARTUP_WINDOW_MS;
+            const startedAt = performance.now();
+            let deadline = startedAt + startupWindow;
+            const hasDevices = this.journal.sources.some(row => row.id === 'devices' && row.enabled);
+            const absoluteDeadline = deadline + (hasDevices ? DEVICES_PROGRESS_ALLOWANCE_MS : 0);
+            let completedObjects = 0;
             while (!this.stopped && !this.startupBlocked && performance.now() < deadline) {
                 const rows = this.journal.sources;
                 const readiness = await this.readiness(rows, deadline);
+                // Only new, successful object provisioning from the real Devices
+                // host extends this monitor. READY, transport telemetry and an
+                // unchanged progress count cannot keep a takeover alive.
+                if (hasDevices && readiness.devicesProgress > completedObjects && performance.now() < deadline) {
+                    completedObjects = readiness.devicesProgress;
+                    deadline = Math.min(absoluteDeadline, performance.now() + startupWindow);
+                }
                 if (this.stopped || this.startupBlocked || this.phase !== 'TRANSFERRED')
                     return this.recovery;
                 if (readiness.ready) {

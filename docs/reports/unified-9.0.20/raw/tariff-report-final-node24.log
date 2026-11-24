@@ -1,0 +1,32 @@
+(node:12) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ actual dashboard tooltip draws all 96 supplied quarter-hours, including zero and negative intervals, without hourly averaging (21.207937ms)
+✔ actual dashboard retains all 92/100 quarter-hours on European daylight-saving days and places local clock labels correctly (45.716882ms)
+✔ price card and modal show confirmed Tibber prices while optimization remains off and an unrelated budget price is null (27.651191ms)
+✔ expired, absent, false or null source values clear the visible price rather than turning into zero or reusing budget values (4.892438ms)
+✔ legacy manual mappings remain authoritative, with explicit cent conversion and no connected-provider override (2.745119ms)
+✔ hourly source data stays hourly; missing tomorrow does not remove today or invent quarter-hours (2.50982ms)
+✔ real provider publication feeds the dashboard without enabling a control or fabricating absent values (33.751027ms)
+✔ both shipped dashboard entry pages load the typed price helper before app.js (1.152045ms)
+✔ Tibber requests and normalizes quarter-hours even with an older hourly setting; zero/negative remain valid and null is rejected (17.610839ms)
+✔ local calendar splitting retains 92/96/100 quarter-hours and the next day across DST boundaries (159.067212ms)
+✔ actual provider tick selects each cached quarter-hour without network calls and refreshes before customer freshness expires (99.868977ms)
+✔ provider failures do not extend freshness, do not spin requests and clear expired prices instead of creating zero (102.196752ms)
+✔ other providers retain their resolution and normal jittered cadence, while a shorter customer deadline still bounds refresh (72.928576ms)
+✔ missing tariff and import values remain unknown through interval and whole-period totals (53.202189ms)
+✔ real zero and canonical negative EUR prices retain their value and calculated costs (11.340738ms)
+✔ missing quarters and pre-range samples are not indefinitely carried into report costs (5.565151ms)
+✔ enabled missing network fee keeps its breakdown unknown while recorded total cost remains usable (5.0668ms)
+✔ static zero fallback is explicit and genuine network fees preserve the existing split (4.949723ms)
+✔ an open current quarter is not reported as a complete quarter of imported energy (5.899724ms)
+✔ malformed, reversed and over-730-day report ranges fail before history IO or allocation (86.421225ms)
+✔ 730-day inclusive date ranges remain accepted without using a smaller chart limit (9.644424ms)
+✔ report formatting and CSV leave missing values empty while keeping zero and negative costs (8.365639ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 762.55041

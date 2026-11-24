@@ -34,6 +34,83 @@ function fixture() {
         pause(value) { pause = value; } };
 }
 
+test('module command leases retain other module, host and socket ownership independently', async () => {
+    const f = fixture(); const pattern = 'eos-admin.0.devices.*';
+    const first = await f.manager.acquireHost(pattern);
+    const second = await f.manager.acquireHost(pattern);
+    await f.adapter.subscribeForeignStatesAsync(pattern);
+    await f.socket.subscribeForeignStatesAsync(pattern);
+    assert.equal(f.calls.length, 1, 'one actual controller subscription for four interests');
+    await first(); await first();
+    await f.adapter.unsubscribeForeignStatesAsync(pattern);
+    await f.socket.unsubscribeForeignStatesAsync(pattern);
+    assert(f.active.has(pattern), 'second module lease remains after all other consumers release');
+    await second(); await second();
+    assert.equal(f.active.size, 0);
+    assert.deepEqual(f.calls.map(call => call.slice(0, 2)), [['subscribe', pattern], ['unsubscribe', pattern]]);
+    await f.manager.close();
+});
+
+test('module lease failure is retryable and socket close cannot release device commands', async () => {
+    const f = fixture(); const pattern = 'nexowatt-devices.0.devices.*';
+    f.failures.subscribe = 1;
+    await assert.rejects(f.manager.acquireHost(pattern), /fixture subscribe failed/);
+    const release = await f.manager.acquireHost(pattern);
+    await f.socket.subscribeForeignStatesAsync(pattern);
+    await f.manager.closeSocket();
+    assert(f.active.has(pattern));
+    f.failures.unsubscribe = 1;
+    await assert.rejects(release(), /fixture unsubscribe failed/);
+    assert(f.active.has(pattern));
+    await release();
+    assert.equal(f.active.size, 0);
+    await f.manager.close();
+});
+
+test('close drains pending command lease acquisition and late release is harmless', async () => {
+    const f = fixture(); let resume;
+    f.pause(new Promise(resolve => { resume = resolve; }));
+    const acquiring = f.manager.acquireHost('eos-admin.0.devices.*');
+    await new Promise(resolve => setImmediate(resolve));
+    assert.equal(f.calls.length, 1);
+    let closed = false;
+    const closing = f.manager.close().then(() => { closed = true; });
+    await Promise.resolve(); assert.equal(closed, false);
+    resume(); const release = await acquiring; await closing;
+    assert.equal(f.active.size, 0);
+    const before = f.calls.length; await release();
+    assert.equal(f.calls.length, before);
+    await assert.rejects(f.manager.acquireHost('eos-admin.0.devices.*'), /STOPPED/);
+});
+
+test('module leases reject implicit global coverage and bound concurrent owners', async () => {
+    const f = fixture();
+    for (const pattern of ['', '*', null, ['eos-admin.0.devices.*'], 'x'.repeat(513)]) {
+        await assert.rejects(f.manager.acquireHost(pattern), /PATTERN_INVALID/);
+    }
+    assert.equal(f.calls.length, 0);
+    const releases = [];
+    for (let i = 0; i < 256; i++) releases.push(await f.manager.acquireHost('eos-admin.0.devices.*'));
+    await assert.rejects(f.manager.acquireHost('eos-admin.0.devices.*'), /SUBSCRIPTION_LIMIT/);
+    await f.manager.close();
+    assert.equal(f.active.size, 0);
+    for (const release of releases) await release();
+    assert.equal(f.calls.length, 2);
+});
+
+test('simultaneous module acquisitions cannot bypass the distinct-pattern bound', async () => {
+    const f = fixture(); let resume;
+    f.pause(new Promise(resolve => { resume = resolve; }));
+    const requests = Array.from({ length: 1025 }, (_, index) => f.manager.acquireHost(`eos-admin.0.devices.unit${index}.*`));
+    const resultsPending = Promise.allSettled(requests);
+    await new Promise(resolve => setImmediate(resolve));
+    assert.equal(f.calls.length, 1024);
+    resume(); const results = await resultsPending;
+    assert.equal(results.filter(result => result.status === 'fulfilled').length, 1024);
+    assert.equal(results.at(-1).reason.message, 'EOS_STATE_SUBSCRIPTION_LIMIT');
+    await f.manager.close(); assert.equal(f.active.size, 0);
+});
+
 test('browser threshold unsubscription cannot remove a matching EMS subscription', async () => {
     const f = fixture();
     await f.adapter.subscribeForeignStatesAsync('meter.0.power');

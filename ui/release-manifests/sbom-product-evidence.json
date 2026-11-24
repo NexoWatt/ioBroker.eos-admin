@@ -1,9 +1,9 @@
 {
   "schema": "nexowatt.product-sbom-evidence.v1",
   "package": "nexowatt-eos-ui-internal",
-  "version": "9.0.19",
-  "generatedAt": "2026-11-24T18:46:48.000Z",
-  "sbomSha256": "582d82d1c61fd55422cb77c57f4732dacb30e5ee863976b05d3b96e40c953ab0",
+  "version": "9.0.20",
+  "generatedAt": "2026-11-24T21:06:27.093Z",
+  "sbomSha256": "22e2e4a399e841dd726ae70e12086aeb6740ffb77aabe5728c11a4802976a1b5",
   "packageFiles": [
     {
       "path": "LICENSE",
@@ -36,14 +36,14 @@
       "sha256": "260af3c26c75a9dafd9c94f859f76cd51b7bc4343ff70d660b3893a15446936e"
     },
     {
-      "path": "admin/react/assets/index-Bq5IupDw.js",
-      "size": 313391,
-      "sha256": "f73211150e035e301009925e379ae7746e50c666ee96148f1ba7f5660d0e8baa"
+      "path": "admin/react/assets/index-BJO3q7oe.js",
+      "size": 332738,
+      "sha256": "dd873a53cb80dcb477e155e2bb21934e7a1415d6ffee463ac2da6c7408348d3c"
     },
     {
-      "path": "admin/react/assets/index-CuquHlsY.css",
-      "size": 9139,
-      "sha256": "b0d51266b2e541f5a26c8319dc45cd44a682b02cbc9d96fd001f3793c8c3e459"
+      "path": "admin/react/assets/index-ofLP_Y7y.css",
+      "size": 11095,
+      "sha256": "e662aab237d22b8224e569c9b5b939bae0860ec1bfea1b2364480dd60fe3b363"
     },
     {
       "path": "admin/react/assets/nexowatt-192-43ZwQ44y.png",
@@ -53,7 +53,7 @@
     {
       "path": "admin/react/index.html",
       "size": 4479,
-      "sha256": "99a91528fbf72cb1287d4663756e30055d6bdab5d9f98f30dcb0b47af338e3d2"
+      "sha256": "f2867830c08269195d54790f515c49a284520a2fd19cafcf162acc18bdb95af6"
     },
     {
       "path": "admin/simulation.html",
@@ -837,8 +837,8 @@
     },
     {
       "path": "docs/security/eslint-reviewed-findings.json",
-      "size": 288082,
-      "sha256": "a6a78d4d0676890c301f6570952dc6ce137901cbd6b5976a8d5835e1fc46a4b3"
+      "size": 294502,
+      "sha256": "9639435761fc3051a40631be59cc426635498dce9621d35ac196d53b18110273"
     },
     {
       "path": "ems/charging-budget-helpers.js",
@@ -937,8 +937,8 @@
     },
     {
       "path": "ems/modules/energy-wallet.js",
-      "size": 59241,
-      "sha256": "ed598e87388f30262fa6fc49068070a0008c20a770c115b435e9ce8c6367bfcd"
+      "size": 59766,
+      "sha256": "ec2a5884ec7356c701afba1f2c6d439af0bf5bf4020122da142c413d04bd246f"
     },
     {
       "path": "ems/modules/generator-control.js",
@@ -1022,8 +1022,8 @@
     },
     {
       "path": "ems/modules/storage-control.js",
-      "size": 656442,
-      "sha256": "0de4cdea122e0061c0924d40fa88558694de42f9243627808e29288577964027"
+      "size": 659697,
+      "sha256": "cbb48e92a06b17e05f45a1d8462d7763573fa09357655ca46bcbb76aea57a5ff"
     },
     {
       "path": "ems/modules/storage-mapping.js",
@@ -1383,7 +1383,7 @@
     {
       "path": "io-package.json",
       "size": 22561,
-      "sha256": "41e8995568c4450779298b247fc1a980207589f556d9027ebf2e2cc9c24ade0e"
+      "sha256": "694bddc614234d82fded26655f32636761c2d022efefe2a117596733f0cdb16d"
     },
     {
       "path": "lib/charging-diagnostics-api.js",
@@ -1419,6 +1419,26 @@
       "path": "lib/http-error-boundary.js",
       "size": 5090,
       "sha256": "66f96405a1e83586d78f767b24cd047acce4ca81612a607f81c0a273e6a8a7e0"
+    },
+    {
+      "path": "lib/influx-config.js",
+      "size": 10531,
+      "sha256": "b7e1a3ea56dcd5b5f1fb660d5dbf88b8df504cd65f6947b3d8839d2949818c33"
+    },
+    {
+      "path": "lib/influx-direct.js",
+      "size": 27000,
+      "sha256": "90b2b6ecd17f356de5880679283d59041b702972aa783ce643aabed83a8f5a5c"
+    },
+    {
+      "path": "lib/influx-history-runtime.js",
+      "size": 14489,
+      "sha256": "fa47702e99aa990d9ff03d8ab387c883817faf8797b2fade4520ae21b7bc3b73"
+    },
+    {
+      "path": "lib/influx-network-policy.js",
+      "size": 5725,
+      "sha256": "f967b6edbfed61da24c6277f87bf7212ed93f040fd42f2b7848e082d61f384b1"
     },
     {
       "path": "lib/installer-lifecycle.js",
@@ -1772,8 +1792,8 @@
     },
     {
       "path": "lib/ui-access-policy.js",
-      "size": 20903,
-      "sha256": "e843e73b32b8538e55a75c3a84f858d317a5d3977c186067c51109b887a1edb7"
+      "size": 21018,
+      "sha256": "6adba68fffc2404b73de32c16bad19c5b2ff0905b705f2f7ac1ea80e8adfb104"
     },
     {
       "path": "lib/ui-server-transport.js",
@@ -1782,18 +1802,18 @@
     },
     {
       "path": "main.js",
-      "size": 1794702,
-      "sha256": "d5fb669c939c557d7fef6ffc157a0631a627ca04e5bd9947e133f99254be86b2"
+      "size": 1820132,
+      "sha256": "8dac1fa103d6594f02bf64f70a0c2c53f6af51c8297614ddf616d05f8ff05f19"
     },
     {
       "path": "package.json",
-      "size": 86252,
-      "sha256": "8e3c707d9490c2d7179f65f44a55b0602cf85f95553a55e392e48e01029e8753"
+      "size": 86443,
+      "sha256": "3e51c5b7507b22d26921e64e1e782cab456ef226a8ece68831c496b32927253d"
     },
     {
       "path": "release-manifests/admin-bundle-components.json",
-      "size": 7481,
-      "sha256": "87537564d9762fbdda111c74fecd926948c45bc02c04bd77af54bee3e281ca55"
+      "size": 7790,
+      "sha256": "e0719d20452e7252e6c0576f4f58c4c942e86d6f4dd9f2fe8614e2dc40b9b2c6"
     },
     {
       "path": "release-manifests/release-status.json",
@@ -2252,8 +2272,8 @@
     },
     {
       "path": "www/app.js",
-      "size": 536285,
-      "sha256": "0c6a7f327da0be0ecff74d5357800e7835cb393743f7c429c9983d21c74e9fdb"
+      "size": 536954,
+      "sha256": "f628bba0a64fec79f4c41898cd613c9112cb3c5dcae62b7dbf7046e7b9499805"
     },
     {
       "path": "www/apple-touch-icon.png",
@@ -2392,18 +2412,18 @@
     },
     {
       "path": "www/ems-apps.html",
-      "size": 155923,
-      "sha256": "4f7dba7cd3cb59c27b83375e19eb02a248451c617ae7445a503ab9048a0d726c"
+      "size": 156038,
+      "sha256": "3b4b72f79c0765f5855ba551640a25d687df56f74b4122ebeccd7b7406af36cb"
     },
     {
       "path": "www/ems-apps.js",
-      "size": 987955,
-      "sha256": "c492cf6e527e0d61c8c8c15ccdf9fab35629d84a47c807f26bc9f54bf3627339"
+      "size": 989014,
+      "sha256": "a61a3042f176beec0ed6f2d671388d525db21ebf9a1ca386d6ccfea408f2f090"
     },
     {
       "path": "www/energy-ledger.html",
-      "size": 9913,
-      "sha256": "1e1058631c3bd62e926665e3cc74b7e352bd585077d0d83e4ef8b56345dd5ac5"
+      "size": 9937,
+      "sha256": "6df5dc8e72e0cf6b7a5da6fddf5aaccb2318a95fe5aed4d105e7fe4cdf7c00f6"
     },
     {
       "path": "www/energy-ledger.js",
@@ -2437,8 +2457,8 @@
     },
     {
       "path": "www/evcs.html",
-      "size": 6205,
-      "sha256": "a23e5e98b9bb0487d534a3425c35ac2a84234f580c10ebab139d210443f7f807"
+      "size": 6229,
+      "sha256": "ea7bcae1cca7ac6f0fe9ac9fdcb5ef890353848c00c612ffb149cd28e2e28b5a"
     },
     {
       "path": "www/evcs.js",
@@ -2452,13 +2472,13 @@
     },
     {
       "path": "www/history.html",
-      "size": 15621,
-      "sha256": "e95b22a26838ba99ad5c27d8d48d77ea14387ed663b01321353a490cf6fbfddb"
+      "size": 15645,
+      "sha256": "91819c66ebc6579176934b8dfc391b3243d7e7703e3f89096d3d4bfe63aa8bfa"
     },
     {
       "path": "www/history.js",
-      "size": 157031,
-      "sha256": "70662188a814f41596278292c7f779b73804050020ef2f0e16b07494f8d59332"
+      "size": 160151,
+      "sha256": "8c0c131017a7d9add8c27b0b9f9a4ded19e0d32e87b27571515e5d6eaa613395"
     },
     {
       "path": "www/i18n/de.json",
@@ -2502,8 +2522,8 @@
     },
     {
       "path": "www/index.html",
-      "size": 45764,
-      "sha256": "b69ee5cde230aaa70a81cef0056c37367cf02c49060613eea96c58db2c55b3ab"
+      "size": 45836,
+      "sha256": "b8f8c1d8970672451f02a6e91f184f50ac1a02533c18f1715570d1a9419f9b4b"
     },
     {
       "path": "www/license.html",
@@ -2516,9 +2536,14 @@
       "sha256": "07393a90030adfe40345a6dc69b0b4f2ccd37b1696bb7b0c3207a980836c4299"
     },
     {
+      "path": "www/live-display.js",
+      "size": 5895,
+      "sha256": "1dd46855a7c6759bff8a5904dd26f8714c7dc588224e9acce3b0a6702ccb58ea"
+    },
+    {
       "path": "www/logic.html",
-      "size": 15352,
-      "sha256": "32ace13d0117e5f4a37cbfa81904ecb4a4701d428c033a5b7cebd9e6856546a2"
+      "size": 15376,
+      "sha256": "e09c205e1c7cd8fcd0fead90a49030e8442fa3fecc504bd5bdaad8476b77ed06"
     },
     {
       "path": "www/logic.js",
@@ -2527,13 +2552,13 @@
     },
     {
       "path": "www/login.css",
-      "size": 5958,
-      "sha256": "39230eaa8d092ffc1de11b4400c5ba1086b01b0f634736c5a08c88cede3c8862"
+      "size": 6065,
+      "sha256": "680ff483c4172ce55a927c1d71f75230f1102b77b2393f45c451ff370adb08a2"
     },
     {
       "path": "www/login.html",
-      "size": 4892,
-      "sha256": "3b8960df32996126fb766a3a4360a1f0cd8350d45c6a5a2349d84e1013c76980"
+      "size": 5068,
+      "sha256": "13df403bbcf8ead3cf815c41605620b365e0e005c8b3ff6b585f7f137eaccc23"
     },
     {
       "path": "www/login.js",
@@ -2543,7 +2568,7 @@
     {
       "path": "www/manifest.webmanifest",
       "size": 1335,
-      "sha256": "50d714f92f1211aff1b491b4b94b3e18856556897b23f3910e6c21fbcda7a0ab"
+      "sha256": "52290ef9f6ffcc44282060d680f76b0c5e5e8c08c9428b0352f8840a75801895"
     },
     {
       "path": "www/mesh-microgrid.html",
@@ -2647,13 +2672,13 @@
     },
     {
       "path": "www/settings.html",
-      "size": 67227,
-      "sha256": "57f7af67fc8aba47796f5ca79a4dd9f943549ec83135f5950f13402f5b76f53f"
+      "size": 67299,
+      "sha256": "282749916557495a492d35eb3aca6b74c08c5fd84fbe9b1ce3452f0063243e22"
     },
     {
       "path": "www/simulation.html",
-      "size": 9294,
-      "sha256": "2bef2774c672d381b58f4bdfdd01c6520137c347841b6596a2d83992e2bfbaaa"
+      "size": 9318,
+      "sha256": "9d6d9f9a8ce3a75df9d6c2479f318e182805366fd234e7c568dbfea862c6ec83"
     },
     {
       "path": "www/simulation.js",
@@ -2662,8 +2687,8 @@
     },
     {
       "path": "www/smarthome-config.html",
-      "size": 33832,
-      "sha256": "e1a3b93b74ac5d507e940abdc1eb1a1f18fd56cb5bb3795d01bad82b792afc36"
+      "size": 33856,
+      "sha256": "e3fa7982ecd09a887f9228560a54110a01de0a9a1ac914d97243e49b338fb04b"
     },
     {
       "path": "www/smarthome-config.js",
@@ -2672,8 +2697,8 @@
     },
     {
       "path": "www/smarthome.html",
-      "size": 6984,
-      "sha256": "c0ad0b50dc9dc210a7ec19c02db19d1ad34c3acc827312b71d8b5e196bea30b3"
+      "size": 7008,
+      "sha256": "750c06363df5d48062579f6eef3b693e1d20b7018f0ab355ca6e8c7926e2cdf3"
     },
     {
       "path": "www/smarthome.js",
@@ -2721,9 +2746,14 @@
       "sha256": "37ea32ba612cd17b32ba954add26f7942c7112a530dc71fe0ae92a65f87bd314"
     },
     {
+      "path": "www/storagefarm-dispatch.js",
+      "size": 18681,
+      "sha256": "9df4b91ef445e37dca15cd0295202d575b82b6b3f88bc3b76c0412fe2cced552"
+    },
+    {
       "path": "www/storagefarm-summary.css",
-      "size": 1817,
-      "sha256": "da34c36863ed2e21c3e4040f0c7723a738685ac2980fc78766eefaea261dcb62"
+      "size": 3099,
+      "sha256": "cd231dd619196214c596c12e183845d858538f2990bbefad46cc2082601b74b0"
     },
     {
       "path": "www/storagefarm-summary.js",
@@ -2732,13 +2762,13 @@
     },
     {
       "path": "www/storagefarm.html",
-      "size": 7222,
-      "sha256": "4b83eb4179345145464a9c5210cff9c8452638bc05ac8989d001b4427d940a95"
+      "size": 8487,
+      "sha256": "c38cb61e30ba97ba5f6b1503807562272dfa6bfaae69a9403bdd06b406c99766"
     },
     {
       "path": "www/storagefarm.js",
-      "size": 19268,
-      "sha256": "11610dcb801c5c4ee6db0de3fa2e83c7f569a7c3a31db8b5bdcc9226bf6d3ae3"
+      "size": 17901,
+      "sha256": "ef93756042b96b01c4ffb70e313b8d2dcf3d0b939050f2dbedbe4314c6f498b0"
     },
     {
       "path": "www/styles.css",
@@ -2762,8 +2792,8 @@
     },
     {
       "path": "www/tariff-report.js",
-      "size": 16118,
-      "sha256": "4da4ce87a78be4b27c6a37d1c009e8ab10c0f7cb5bab7be195f7ffc3fd789297"
+      "size": 17333,
+      "sha256": "86cd5d325ce86ff50f4183fa3f94a2aa474f94b99a24b28a77fa63aa6cfd669d"
     },
     {
       "path": "www/year-report.css",
@@ -2784,8 +2814,8 @@
   "sourceFiles": [
     {
       "path": "package-lock.json",
-      "size": 198224,
-      "sha256": "45674eaa27497e9961746c61b4df8b8c847ff6b5998bc75bfc7a175691910c11"
+      "size": 198439,
+      "sha256": "e0187b54732af7f46052560e620b20d0d40f03def78ed209741d813b70e7ec93"
     },
     {
       "path": "scripts/generate-cra-sbom.cjs",
@@ -2800,17 +2830,17 @@
     {
       "path": "src-admin-tab/package-lock.json",
       "size": 64845,
-      "sha256": "0c7e35a5d54138e48f92ab3d219653c0a912021fc77fbed42b5f054f4d11479c"
+      "sha256": "0c7159acf7768657418a1c599587267b021b8a9c5cccd97b22ae2c0d47e72376"
     },
     {
       "path": "src-admin-tab/package.json",
       "size": 613,
-      "sha256": "922c8b0444c548866e819437bc68fe9927645e4c8f65cd2ddda88322a87affd1"
+      "sha256": "1afb29e7365337461357a87107408bb481cc6a561dbc6b967ab33752e87dff5e"
     },
     {
       "path": "src-admin-tab/src/App.tsx",
-      "size": 5630,
-      "sha256": "130004830b352357603184300d09b4308e96773e5e8ba28365b72c56f0c9bbd8"
+      "size": 5929,
+      "sha256": "19da0dd3f2127f39a2cfe190b84d08c4ca6a64264a65e45a619bc802324986f7"
     },
     {
       "path": "src-admin-tab/src/components/DpField.tsx",
@@ -2824,8 +2854,8 @@
     },
     {
       "path": "src-admin-tab/src/lib/adminConnection.ts",
-      "size": 55578,
-      "sha256": "9ce44f4d20f8de67e0ceb1d3cae198e1dc18934bdfbe559d4e766613916cc0dc"
+      "size": 55948,
+      "sha256": "458718f60454255dd86d43efc909c6dc52bf9c8b12afa5cd512e4f9e6806b243"
     },
     {
       "path": "src-admin-tab/src/lib/adminContracts.ts",
@@ -2836,6 +2866,11 @@
       "path": "src-admin-tab/src/lib/dataPointPicker.ts",
       "size": 4858,
       "sha256": "e28946e685fffe198314fe4463459a42c2349a2e4481e9ffe39277e187953da1"
+    },
+    {
+      "path": "src-admin-tab/src/lib/historySetup.ts",
+      "size": 13356,
+      "sha256": "158c75a9fc407e1e15e16d86d9469890c22fa046ed4ddc40bd72eb5ccc97b8bc"
     },
     {
       "path": "src-admin-tab/src/lib/installerNavigation.ts",
@@ -2868,9 +2903,14 @@
       "sha256": "c2ac1f3935c488e780785b0d8b7ea4b3141e7824d56ec0bb6b28b86991668b19"
     },
     {
+      "path": "src-admin-tab/src/pages/HistorySetupPage.tsx",
+      "size": 13890,
+      "sha256": "bc37d6eb192a040955743eacbe385078a1241cc03f84e01bc2131bc9ba305441"
+    },
+    {
       "path": "src-admin-tab/src/pages/InstallerPage.tsx",
-      "size": 6658,
-      "sha256": "64ad8d878443c379448a638c64918043bada8d3bc90e6c3151c3476f356e106a"
+      "size": 6874,
+      "sha256": "873176154f003f59cc2ff8bb9ce9d97453a96aa88fbc0b23cd576f9d622104a6"
     },
     {
       "path": "src-admin-tab/src/pages/LicensePage.tsx",

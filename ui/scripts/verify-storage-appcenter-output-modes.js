@@ -112,7 +112,7 @@ async function verifyTargetPowerAllOutputs() {
   assert.strictEqual(state(adapter, 'speicher.regelung.targetMode'), 'split-charge-discharge');
   assert.strictEqual(state(adapter, 'speicher.regelung.schreibStatus'), 'split-geschrieben');
   assert.strictEqual(state(adapter, 'speicher.regelung.schreibOk'), true);
-  assert.strictEqual(state(adapter, 'speicher.regelung.commandDpReadbackStatus'), 'confirmed');
+  assert.strictEqual(state(adapter, 'speicher.regelung.commandDpReadbackStatus'), 'pending-ack');
 
   const writtenIds = new Set(dp.writes.map((row) => row.objectId));
   for (const id of [
@@ -147,7 +147,7 @@ async function verifySignedOnlyOutput() {
   assert.strictEqual(dp.last('st.targetPowerW').raw, -1200, 'Signed-Invertierung muss im Readbackvertrag berücksichtigt werden');
   assert.strictEqual(state(adapter, 'speicher.regelung.commandFamily'), 'signed');
   assert.strictEqual(state(adapter, 'speicher.regelung.schreibStatus'), 'signed-geschrieben');
-  assert.strictEqual(state(adapter, 'speicher.regelung.commandDpReadbackStatus'), 'confirmed');
+  assert.strictEqual(state(adapter, 'speicher.regelung.commandDpReadbackStatus'), 'pending-ack');
 }
 
 async function verifyLimitsMode() {

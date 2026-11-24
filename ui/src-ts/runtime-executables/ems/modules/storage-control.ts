@@ -9023,7 +9023,7 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
         ], { familyChanged: true });
         this._feneconGridReleasedDirectTarget = release.ok === true;
         await this._setIfChanged('speicher.regelung.feneconGridReleaseStatus', release.ok
-            ? ('direkte Sollwerte neutralisiert' + (reason ? ': ' + String(reason) : ''))
+            ? ((release.pending ? 'Nullvorgaben angefordert; Treiberquittierung ausstehend' : 'Nullvorgaben vom Treiber bestätigt') + (reason ? ': ' + String(reason) : ''))
             : ('Freigabe fehlgeschlagen' + (reason ? ': ' + String(reason) : '')));
         return release;
     }
@@ -9052,7 +9052,9 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
         const verify = await this._verifyStorageCommandDatapoints([
             { key: 'st.feneconGridSetpointW', entry, type: 'number', value: valueW, role: 'fenecon-fems-grid-target' },
         ], { attempts: 3, delayMs: 30 });
-        const ok = writeResult !== false && (!verify.supported || verify.ok === true);
+        const ok = writeResult !== false && (!verify.supported || verify.ok === true || verify.pending === true);
+        const confirmationStatus = verify.pending ? 'pending-ack'
+            : (verify.ok && verify.supported ? 'driver-acknowledged' : 'submitted-unverified');
         if (ok) {
             // Ein idempotent übersprungener Write (`null`) bestätigt den aktuellen
             // DP-Wert, startet den FEMS-API-Watchdog aber nicht neu. Nur ein real
@@ -9071,7 +9073,7 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
         await this._setIfChanged('speicher.regelung.feneconGridSchreibOk', ok);
         await this._setIfChanged(
             'speicher.regelung.feneconGridSchreibStatus',
-            ok ? (writeResult === true ? 'confirmed' : 'confirmed-unchanged') : (verify && verify.status ? String(verify.status) : 'write-failed'),
+            ok ? confirmationStatus : (verify && verify.status ? String(verify.status) : 'write-failed'),
         );
         await this._setIfChanged('speicher.regelung.feneconGridTargetObjId', objectId);
         await this._setIfChanged('speicher.regelung.feneconGridLastWriteRaw', valueW);
@@ -9079,7 +9081,7 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
             ok,
             wrote: writeResult === true,
             skipped: writeResult === null,
-            status: ok ? (writeResult === true ? 'confirmed' : 'confirmed-unchanged') : 'write-failed',
+            status: ok ? confirmationStatus : 'write-failed',
             objectId,
             valueW,
             verify,
@@ -9166,6 +9168,7 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
                     reason: '',
                     ts: Number.isFinite(Number(state.ts)) ? Number(state.ts) : null,
                     ack: typeof state.ack === 'boolean' ? state.ack : null,
+                    q: state.q,
                 };
             } catch (error) {
                 return {
@@ -9227,7 +9230,7 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
                 } else {
                     const actualNumber = typeof actual === 'number'
                         ? actual
-                        : Number(String(actual === null || actual === undefined ? '' : actual).trim().replace(',', '.'));
+                        : (typeof actual === 'string' && actual.trim() ? Number(actual.trim().replace(',', '.')) : Number.NaN);
                     const expectedNumber = Number(expected.raw);
                     const tolerance = Math.max(0.000001, Math.abs(expectedNumber) * 0.000001);
                     ok = Number.isFinite(actualNumber) && Number.isFinite(expectedNumber)
@@ -9236,6 +9239,19 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
                     actual = Number.isFinite(actualNumber) ? actualNumber : current.raw;
                 }
 
+                const matches = ok;
+                // Record dispatch start, not the registry's completion time:
+                // a real driver ack may arrive before writeNumber resolves.
+                const previousWrite = this._storageCommandRequests instanceof Map
+                    ? this._storageCommandRequests.get(String(item.key)) : null;
+                const notBeforeTs = previousWrite && previousWrite.objectId === item.objectId && Number.isFinite(previousWrite.ts) ? previousWrite.ts : 0;
+                const qualityOk = current.q === undefined || current.q === 0;
+                const currentAck = Number.isFinite(current.ts) && current.ts > 0
+                    && current.ts >= notBeforeTs && current.ts <= Date.now() + 1000;
+                ok = matches && qualityOk && current.ack === true && currentAck;
+                const pending = matches && qualityOk && !ok;
+                if (matches && !qualityOk) reason = 'quality-invalid';
+                else if (pending) reason = current.ack === true ? 'ack-not-current' : 'ack-not-received';
                 finalRows.push({
                     key: String(item.key || ''),
                     objectId: item.objectId,
@@ -9246,22 +9262,28 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
                     actualRaw: actual,
                     supported: current.supported === true,
                     ok,
+                    pending,
+                    confirmationLevel: ok ? 'driver-acknowledged' : (pending ? 'requested' : 'none'),
                     reason,
                     ts: current.ts || null,
                     ack: current.ack,
+                    q: current.q === undefined ? null : current.q,
                 });
             }
 
             const supportedRows = finalRows.filter((row) => row.supported);
             const supportedMismatches = supportedRows.filter((row) => !row.ok);
-            if (!supportedMismatches.length) {
+            if (!supportedMismatches.length || supportedMismatches.every(row => row.pending === true)) {
                 const unsupportedRows = finalRows.filter((row) => !row.supported);
+                const pending = supportedMismatches.length > 0 || (supportedRows.length > 0 && unsupportedRows.length > 0);
                 return {
                     supported: supportedRows.length > 0,
-                    ok: true,
+                    ok: !pending,
+                    pending,
+                    confirmationLevel: pending ? 'requested' : (supportedRows.length ? 'driver-acknowledged' : 'none'),
                     status: supportedRows.length === 0
                         ? 'unavailable'
-                        : (unsupportedRows.length ? 'partial-confirmed' : 'confirmed'),
+                        : (pending ? 'pending-ack' : (unsupportedRows.length ? 'partial-driver-acknowledged' : 'driver-acknowledged')),
                     rows: finalRows,
                     attempts: attempt,
                 };
@@ -9274,6 +9296,8 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
         return {
             supported: supportedRows.length > 0,
             ok: supportedRows.every((row) => row.ok),
+            pending: false,
+            confirmationLevel: 'none',
             status: unsupportedRows.length ? 'partial-mismatch' : 'mismatch',
             rows: finalRows,
             attempts,
@@ -9293,9 +9317,17 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
             this._clearStorageCommandWriteCache(entry);
         } else {
             const pre = await this._verifyStorageCommandDatapoints([{ key, entry, type: 'number', value }], { attempts: 1, delayMs: 0 });
-            if (pre.supported && !pre.ok) this._clearStorageCommandWriteCache(entry);
+            if (pre.supported && !pre.ok && !pre.pending) this._clearStorageCommandWriteCache(entry);
         }
-        return this.dp.writeNumber(key, value, false);
+        const startedAt = Date.now();
+        const result = await this.dp.writeNumber(key, value, false);
+        if (result === true) {
+            if (!(this._storageCommandRequests instanceof Map)) this._storageCommandRequests = new Map();
+            // Keys are the fixed storage command roles, not an accumulating
+            // history of object IDs across mapping/configuration changes.
+            this._storageCommandRequests.set(String(key), { objectId: String(entry.objectId), ts: startedAt });
+        }
+        return result;
     }
 
     async _writeStorageCommandBoolean(key, value, options = {}) {
@@ -9305,9 +9337,15 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
             this._clearStorageCommandWriteCache(entry);
         } else {
             const pre = await this._verifyStorageCommandDatapoints([{ key, entry, type: 'boolean', value }], { attempts: 1, delayMs: 0 });
-            if (pre.supported && !pre.ok) this._clearStorageCommandWriteCache(entry);
+            if (pre.supported && !pre.ok && !pre.pending) this._clearStorageCommandWriteCache(entry);
         }
-        return this.dp.writeBoolean(key, value, false);
+        const startedAt = Date.now();
+        const result = await this.dp.writeBoolean(key, value, false);
+        if (result === true) {
+            if (!(this._storageCommandRequests instanceof Map)) this._storageCommandRequests = new Map();
+            this._storageCommandRequests.set(String(key), { objectId: String(entry.objectId), ts: startedAt });
+        }
+        return result;
     }
 
     async _ensureStorageAlternativeTargetsNeutral(entries = [], options = {}) {
@@ -9327,8 +9365,8 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
         for (const item of items) {
             const expectation = { key: item.key, entry: item.entry, type: 'number', value: 0 };
             const before = await this._verifyStorageCommandDatapoints([expectation], { attempts: 1, delayMs: 0 });
-            if (before.supported && before.ok) {
-                rows.push({ key: item.key, objectId: item.entry.objectId, action: 'already-neutral', readback: before });
+            if (before.supported && (before.ok || before.pending)) {
+                rows.push({ key: item.key, objectId: item.entry.objectId, action: before.pending ? 'neutral-requested' : 'already-neutral', readback: before });
                 continue;
             }
             if (!before.supported && !familyChanged) {
@@ -9343,7 +9381,7 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
                 writeResult = false;
             }
             const after = await this._verifyStorageCommandDatapoints([expectation], { attempts: 2, delayMs: 20 });
-            const rowOk = writeResult !== false && (!after.supported || after.ok);
+            const rowOk = writeResult !== false && (!after.supported || after.ok || after.pending);
             if (!rowOk) ok = false;
             rows.push({
                 key: item.key,
@@ -9354,7 +9392,8 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
                 readback: after,
             });
         }
-        return { ok, status: ok ? 'neutral' : 'release-failed', rows };
+        const pending = rows.some(row => row.readback && row.readback.pending === true);
+        return { ok, pending, status: ok ? (pending ? 'neutral-requested' : 'neutral') : 'release-failed', rows };
     }
 
     /**
@@ -9909,6 +9948,8 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
             commandReadback = {
                 supported: farmReadbackSupported,
                 ok: farmReadbackOk,
+                pending: !!(farmDispatchResult && farmDispatchResult.commandDpReadbackPending),
+                confirmationLevel: String((farmDispatchResult && farmDispatchResult.commandConfirmationLevel) || 'none'),
                 status: String((farmDispatchResult && farmDispatchResult.commandDpReadbackStatus) || (farmReadbackSupported ? (farmReadbackOk ? 'confirmed' : 'mismatch') : 'farm-dispatch')),
                 rows: farmDispatchResult && Array.isArray(farmDispatchResult.commandDpReadbackRows)
                     ? farmDispatchResult.commandDpReadbackRows
@@ -10293,7 +10334,7 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
             }
 
             commandReadback = await this._verifyStorageCommandDatapoints(commandExpectations, { attempts: 3, delayMs: 30 });
-            if (commandReadback.supported && !commandReadback.ok) {
+            if (commandReadback.supported && !commandReadback.ok && !commandReadback.pending) {
                 const rawStatus = commandReadback.status;
                 commandFailureStatus = classifyCommandReadbackFailure(commandReadback.rows);
                 commandReadback = { ...commandReadback, rawStatus, status: commandFailureStatus };
@@ -10577,7 +10618,7 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
         await mk('speicher.regelung.dispatcherJson', 'Dispatcher Details (JSON)', 'string', 'text', '');
 
         await mk('speicher.regelung.sollW', 'Angeforderte Sollleistung Speicher (W)', 'number', 'value.power', 0);
-        await mk('speicher.regelung.acceptedSollW', 'Von Hardware akzeptierte Speicher-Sollleistung (W)', 'number', 'value.power', 0);
+        await mk('speicher.regelung.acceptedSollW', 'An Schreibpfad übergebene Speicher-Sollleistung (W)', 'number', 'value.power', 0);
         await mk('speicher.regelung.commandEffective', 'Mindestens ein wirksamer Speicherbefehl akzeptiert', 'boolean', 'indicator', false);
         await mk('speicher.regelung.safetyRequestedW', 'Sollwert vor finaler SafetyEnvelope-Prüfung', 'number', 'value.power', 0);
         await mk('speicher.regelung.safetyAllowedW', 'Final durch SafetyEnvelope freigegebener Sollwert', 'number', 'value.power', 0);

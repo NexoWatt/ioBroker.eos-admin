@@ -24,7 +24,7 @@
  * - Der nächste Schritt ist pro Modul echte Typisierung statt pauschalem No-Check.
  * - Fachliche Kommentare markieren die Abschnitte, die später einzeln migriert werden.
  *
- * Original-Hash: 1b191d054ab30e9a94773f78307547974e0002717dfde01d394a6f4a3da96b79
+ * Original-Hash: e45a6582945b48efa3f2f42fa9523693e4cf79ba2d3d97eed07693c8e79da52f
  */
 
 /**
@@ -668,16 +668,43 @@ async function testFarmContinuousAuto() {
   Module._load = function patchedLoad(request, parent, isMain) {
     if (request === '@iobroker/adapter-core') return { Adapter: FarmAdapterStub };
     if (request === 'express') return expressStub;
-    if (request === '@iobroker/type-detector') {
-      const error = new Error('optional dependency intentionally absent');
-      error.code = 'MODULE_NOT_FOUND';
-      throw error;
-    }
+    // The integrated SmartHome module requires the real packaged detector;
+    // this storage regression must not simulate its removal from the product.
     return originalLoad.call(this, request, parent, isMain);
   };
 
   try {
-    const factory = require(path.join(__dirname, '..', 'main.js'));
+    // Load the real integrated runtime class, using the current hosted API.
+    const filename = path.join(__dirname, '..', 'main.js');
+    const compiled = new Module(filename, module);
+    compiled.filename = filename; compiled.paths = Module._nodeModulePaths(path.dirname(filename));
+    compiled._compile(require('fs').readFileSync(filename, 'utf8') + '\nmodule.exports.TestRuntime = NexoWattVis;\n', filename);
+/**
+ * Code-Teil: factory
+ *
+ * Zweck:
+ * Automatisch markierter Arrow-Funktion-Abschnitt aus der ursprünglichen JavaScript-Datei.
+ * Dieser Kommentar dient als Orientierung für die schrittweise TypeScript-Migration.
+ *
+ * Zusammenhang:
+ * Die produktive Logik liegt aktuell noch in der JS-Datei. Dieser TS-Spiegel zeigt,
+ * welcher konkrete Code-Abschnitt später typisiert, getestet und übernommen werden muss.
+ */
+    const factory = () => {
+      const owner = new FarmAdapterStub({ name: 'eos-admin' });
+      owner.instance = 0; owner.config = { port: 8188, eosUi: {} };
+      const originalWrite = owner.setForeignStateAsync.bind(owner);
+      const originalRead = owner.getForeignStateAsync.bind(owner);
+      const prefix = owner.namespace + '.';
+      owner.setForeignStateAsync = (id, ...args) => id.startsWith(prefix)
+        ? owner.setStateAsync(id.slice(prefix.length), ...args) : originalWrite(id, ...args);
+      owner.getForeignStateAsync = (id, ...args) => id.startsWith(prefix)
+        ? owner.getStateAsync(id.slice(prefix.length), ...args) : originalRead(id, ...args);
+      return new compiled.exports.TestRuntime({ owner, bridge: {
+        canWrite: () => true, originAllowed: () => true, resolveAccess: async () => null,
+        getLicense: () => ({ valid: true, coreEnabled: true, edition: 'pro', features: ['energy', 'wallet', 'smartHome', 'microgridSlave'], limits: { batteries: 10, chargePoints: 10 } }),
+      } });
+    };
     const adapter = factory({});
     adapter._nwLicenseOk = true;
     adapter._nwLicenseInfo = { ok: true, edition: 'eos' };

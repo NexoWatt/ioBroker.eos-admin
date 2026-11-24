@@ -1,0 +1,16 @@
+✔ legacy remains default with retained direct connection; registration is an explicit writer allowlist (2.09223ms)
+✔ invalid point cannot poison valid batch; zero, negative and original timestamps survive (7.012999ms)
+✔ capture/commit fence rejects pre-reconfigure writes and old completions cannot certify the new database (21.308113ms)
+✔ queue includes in-flight points in its 2000-point bound and exposes discarded samples (17.807873ms)
+✔ six active reads reserve transport capacity for writes and bounded queued reads retain their budget (32.81153ms)
+✔ read/write failures recover independently and changesOnly can retry a later real sample (12.593021ms)
+✔ normal close drains valid queued writes, fences new captures and reports timeout loss without hanging (27.046153ms)
+✔ quarantined credential disables only history and legacy duplicate recording is a warning, not a mutation (0.858302ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 389.543543

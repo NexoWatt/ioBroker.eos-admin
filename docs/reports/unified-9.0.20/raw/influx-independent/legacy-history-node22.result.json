@@ -1,0 +1,11 @@
+{
+  "command": [
+    "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node",
+    "--test",
+    "test/eos-history-api-stability.test.cjs",
+    "test/eos-history-deadline.test.cjs"
+  ],
+  "start": "2026-11-24T20:48:37.962832+00:00",
+  "exitCode": 0,
+  "logSha256": "631f8dacd114e5e938c877d06e2c92c21360eee5845fd89986e8765fc06ce22d"
+}

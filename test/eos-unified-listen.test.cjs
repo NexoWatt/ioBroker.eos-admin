@@ -556,6 +556,23 @@ test('operational initialization failure leaves HTTPS recovery up and refuses re
     assert.equal(h.server.listening, true);
 });
 
+test('hosted EMS readiness rejects retained failed, fenced or unscheduled engine references', async t => {
+    const h = await hostedTlsFixture(t, async () => {});
+    const instance = h.instance();
+    instance._hostedStartup = { state: 'ready', error: '' };
+    instance.emsEngine = { _timer: {}, _reconfiguring: false, stop() {} };
+    instance._nwEmsInitError = '';
+    assert.equal(h.runtime.status().emsReady, true);
+    instance._nwEmsInitError = 'TEST_PARTIAL_INIT_FAILURE';
+    assert.equal(h.runtime.status().emsReady, false);
+    instance._nwEmsInitError = '';
+    instance.emsEngine._reconfiguring = true;
+    assert.equal(h.runtime.status().emsReady, false);
+    instance.emsEngine._reconfiguring = false;
+    instance.emsEngine._timer = null;
+    assert.equal(h.runtime.status().emsReady, false);
+});
+
 for (const lost of ['license', 'ownership']) {
     test(`late startup completion after ${lost} loss cannot revive control`, async t => {
         const pending = deferred();

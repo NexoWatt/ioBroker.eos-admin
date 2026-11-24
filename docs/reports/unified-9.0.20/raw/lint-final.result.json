@@ -1,0 +1,14 @@
+{
+  "name": "lint-final",
+  "command": [
+    "npm",
+    "run",
+    "lint-backend"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+  "startedAt": "2026-11-24T21:05:48.592088+00:00",
+  "durationSeconds": 71.253,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-920/lint-final.log",
+  "sha256": "f256bbd802934b1f28c9198556033c1ddc31604ca15904dd041cad3cacdbcef1"
+}

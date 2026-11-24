@@ -22,6 +22,7 @@ Statisch gefundene Imports/require-Aufrufe. Ein Import belegt eine Code-Verknüp
 **Direkt importiert von:**
 
 - [src-admin-tab/src/pages/DynamicGridPage.tsx](../../../../../src-admin-tab/src/pages/DynamicGridPage.tsx)
+- [src-admin-tab/src/pages/HistorySetupPage.tsx](../../../../../src-admin-tab/src/pages/HistorySetupPage.tsx)
 - [src-admin-tab/src/pages/InstallerPage.tsx](../../../../../src-admin-tab/src/pages/InstallerPage.tsx)
 - [src-admin-tab/src/pages/MeshCoordinatorPage.tsx](../../../../../src-admin-tab/src/pages/MeshCoordinatorPage.tsx)
 - [src-admin-tab/src/pages/NotificationMailPage.tsx](../../../../../src-admin-tab/src/pages/NotificationMailPage.tsx)

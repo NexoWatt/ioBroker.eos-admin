@@ -1,0 +1,43 @@
+✔ periodic canonical samples stop holding through outages; legacy sparse mappings still hold (7.679753ms)
+✔ canonical hold follows configured export cadence rather than an arbitrary device TTL (1.294739ms)
+✔ charge-point sum retains an outage when any configured member has no periodic sample (1.495592ms)
+✔ asynchronous malformed History payloads cannot throw out of the callback (4.947478ms)
+✔ valid numeric zero stays zero, null does not create measured zero, supported envelopes agree (27.990633ms)
+✔ one five-second deadline includes fallback rounds and ignores late responses (2.632203ms)
+✔ shutdown cancels History reads and new reads fail without starting transports (1.462733ms)
+✔ thrown and rejected transports become bounded API errors with sibling cleanup (2.190919ms)
+✔ oversized raw response stops processing and cleans all pending branches (1.205215ms)
+✔ invalid and allocation-amplifying ranges are rejected before provider work (3.97844ms)
+✔ day, week, month, leap-year and six-hour annual-report presets preserve finite output bounds (13.525694ms)
+✔ identical requests share work; a fifth distinct computation gets backpressure (2.303808ms)
+✔ completed payload cache retains at most four requests and expires old responses (45.552414ms)
+✔ current counter reads share History deadline instead of leaving request hanging (4.885065ms)
+✔ 200-charge-point fallback uses at most eight simultaneous reads and retains correct sums (19.690787ms)
+✔ four maximum-range payloads stay within measured row and serialized-size budgets (342.755796ms)
+ℹ {"profile":"History-only controlled provider; not customer RSS","gcAvailable":false,"cacheEntries":4,"rowsPerPayload":106496,"largestPayloadBytes":1919024,"heapDeltaBytes":9992080}
+✔ leading missing buckets stay unknown in complete-period energy totals; measured zero remains zero (7.300011ms)
+✔ exact-energy EV fallback is also bounded and cannot swallow its timeout as a complete result (2.024819ms)
+✔ optimized price lookup retains exact last-value and duplicate-timestamp semantics (31.779808ms)
+✔ annual report still requests all ten years with two concurrent requests and original order (10.192235ms)
+✔ History line mapping preserves unknown values and real zero (2.853647ms)
+✔ power and SoC Canvas paths restart after explicit gaps (3.228401ms)
+✔ stacked areas create separate polygons on either side of a gap (1.116932ms)
+✔ integrated energy never bridges or ramps through null outage samples (0.988268ms)
+✔ normalization retains timestamped unknown markers for cost integration (3.081039ms)
+✔ History uses real PV/load fallbacks when derived states are absent or stale; fresh zero stays zero (2.642649ms)
+✔ History never adds DC PV to the already merged canonical derived total (0.432401ms)
+✔ Farm PV fallback merges once and missing/stale farm SoC is not recorded as zero (0.421915ms)
+✔ missing/null/boolean prices never create a free provider price; configured manual fallback is retained (0.53784ms)
+✔ provider price freshness flag, age, quality and timestamp are respected without changing manual tariff mode (0.497049ms)
+✔ zero and negative canonical EUR prices and net-fee decomposition retain exact values (0.610769ms)
+✔ missing grid/battery/PV measurements produce gaps, never fresh invented zeros (0.262325ms)
+✔ stale raw observations and farm aggregate are not re-stamped as new History samples (0.266231ms)
+✔ the History sink rejects invalid data and retains real zero/negative measurements (0.295034ms)
+ℹ tests 34
+ℹ suites 0
+ℹ pass 34
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1973.594644

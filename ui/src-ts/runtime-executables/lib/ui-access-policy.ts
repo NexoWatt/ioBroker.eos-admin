@@ -134,7 +134,7 @@ export function uiRequestPath(req: UiRequest): string {
 
 const AUTH_READ = new Set(['/api/auth/status', '/api/strict-auth/status', '/api/session/me', '/api/locale']);
 const AUTH_WRITE = new Set(['/api/auth/login', '/api/strict-auth/login', '/api/installer/login', '/api/auth/logout', '/api/strict-auth/logout', '/api/installer/logout']);
-const PUBLIC_PAGES = new Set(['/login', '/login.html', '/static/login.html', '/favicon.ico', '/apple-touch-icon.png', '/manifest.webmanifest', '/sw.js']);
+const PUBLIC_PAGES = new Set(['/login', '/login.html', '/static/login.html', '/favicon.ico', '/apple-touch-icon.png', '/apple-touch-icon-precomposed.png', '/apple-touch-icon-180x180.png', '/apple-touch-icon-180x180-precomposed.png', '/manifest.webmanifest', '/sw.js']);
 
 /** Nur öffentliche Programm-Assets; niemals HTML, API-Daten oder Konfiguration. */
 export function isPublicUiRequest(req: UiRequest): boolean {
