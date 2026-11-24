@@ -1,0 +1,5056 @@
+{
+  "scope": "Static construction of all bundled device profiles; no device communication, no hardware qualification",
+  "templateCount": 195,
+  "canonicalAliasCount": 2552,
+  "addedSemanticAliases": 89,
+  "profilesWithAdditionalSemantics": 25,
+  "profiles": [
+    {
+      "templateId": "battery.bmw.BatteryBmwImpl",
+      "deviceClass": "battery",
+      "canonicalAliasCount": 17,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "battery.bydcommercial.BydBatteryBoxCommercialC130Impl",
+      "deviceClass": "battery",
+      "canonicalAliasCount": 13,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "battery.fenecon.BatteryFeneconCommercialImpl",
+      "deviceClass": "battery",
+      "canonicalAliasCount": 11,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "battery.fenecon.BatteryFeneconHomeImpl",
+      "deviceClass": "battery",
+      "canonicalAliasCount": 13,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "battery.pylontech.PylontechPowercubeM2BatteryImpl",
+      "deviceClass": "battery",
+      "canonicalAliasCount": 13,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "battery.sma.SmaBatteryImpl",
+      "deviceClass": "battery",
+      "canonicalAliasCount": 17,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "battery.soltaro.BatterySoltaroClusterVersionBImpl",
+      "deviceClass": "battery",
+      "canonicalAliasCount": 13,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "battery.soltaro.BatterySoltaroClusterVersionCImpl",
+      "deviceClass": "battery",
+      "canonicalAliasCount": 13,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "battery.soltaro.BatterySoltaroSingleRackVersionAImpl",
+      "deviceClass": "battery",
+      "canonicalAliasCount": 15,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "battery.soltaro.BatterySoltaroSingleRackVersionBImpl",
+      "deviceClass": "battery",
+      "canonicalAliasCount": 16,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "battery.soltaro.BatterySoltaroSingleRackVersionCImpl",
+      "deviceClass": "battery",
+      "canonicalAliasCount": 12,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "battery.victron.VictronBatteryImpl",
+      "deviceClass": "battery",
+      "canonicalAliasCount": 15,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "battery_inverter.refu88k.BatteryInverterRefuStore88kImpl",
+      "deviceClass": "batteryInverter",
+      "canonicalAliasCount": 10,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "battery_inverter.sinexcel.BatteryInverterSinexcelImpl",
+      "deviceClass": "batteryInverter",
+      "canonicalAliasCount": 15,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "battery_inverter.victron.VictronBatteryInverterImpl",
+      "deviceClass": "batteryInverter",
+      "canonicalAliasCount": 14,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "charger.goodwe.AbstractGoodWeEtCharger",
+      "deviceClass": "solarCharger",
+      "canonicalAliasCount": 6,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "dc_charger.victron.VictronDcChargerImpl",
+      "deviceClass": "solarCharger",
+      "canonicalAliasCount": 11,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "ess.adstec.EssAdstecStoraxeImpl",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 11,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "ess.fenecon.AbstractEssFeneconCommercial40Pv",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 10,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "ess.fenecon.AbstractFeneconDessCharger",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 7,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "ess.fenecon.EssFeneconCommercial40Impl",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 19,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "ess.fenecon.FeneconDessEssImpl",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 9,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "ess.fenecon.FeneconHomeEssImpl",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 31,
+      "missingRequired": [],
+      "semanticAliases": [
+        {
+          "path": "r.essActivePower",
+          "dpId": "eSS0_ACTIVE_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 604,
+              "length": 2,
+              "dataType": "float32",
+              "nanToNull": true
+            },
+            "scaleFactor": -3
+          }
+        },
+        {
+          "path": "r.nvpPower",
+          "dpId": "gRID_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 4,
+              "address": 315,
+              "length": 2,
+              "dataType": "float32",
+              "nanToNull": true
+            },
+            "scaleFactor": -3
+          }
+        },
+        {
+          "path": "r.consumptionTotal",
+          "dpId": "lOAD_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 4,
+              "address": 343,
+              "length": 2,
+              "dataType": "float32",
+              "nanToNull": true
+            },
+            "scaleFactor": -3
+          }
+        },
+        {
+          "path": "r.minPowerSetpointW",
+          "dpId": "mIN_POWER_SETPOINT",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 702,
+              "length": 2,
+              "dataType": "float32",
+              "nanToNull": true
+            },
+            "scaleFactor": -3
+          }
+        },
+        {
+          "path": "r.maxPowerSetpointW",
+          "dpId": "mAX_POWER_SETPOINT",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 704,
+              "length": 2,
+              "dataType": "float32",
+              "nanToNull": true
+            },
+            "scaleFactor": -3
+          }
+        },
+        {
+          "path": "r.pvPowerDc",
+          "dpId": "pV_DC_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 4,
+              "address": 339,
+              "length": 2,
+              "dataType": "float32",
+              "nanToNull": true
+            },
+            "scaleFactor": -3
+          }
+        },
+        {
+          "path": "r.pvPowerAc",
+          "dpId": "pV_AC_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 4,
+              "address": 331,
+              "length": 2,
+              "dataType": "float32",
+              "nanToNull": true
+            },
+            "scaleFactor": -3
+          }
+        },
+        {
+          "path": "r.pvPowerTotal",
+          "dpId": "pV_POWER_SUM",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 4,
+              "address": 327,
+              "length": 2,
+              "dataType": "float32",
+              "nanToNull": true
+            },
+            "scaleFactor": -3
+          }
+        }
+      ],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "eSS0_ACTIVE_POWER"
+        },
+        "r.nvpPower": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "gRID_POWER"
+        },
+        "r.consumptionTotal": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "lOAD_POWER"
+        },
+        "r.minPowerSetpointW": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "mIN_POWER_SETPOINT"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "mAX_POWER_SETPOINT"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "pV_DC_POWER"
+        },
+        "r.pvPowerAc": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "pV_AC_POWER"
+        },
+        "r.pvPowerTotal": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "pV_POWER_SUM"
+        }
+      }
+    },
+    {
+      "templateId": "ess.fenecon.FeneconMiniEssImpl",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 12,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "ess.fenecon.FeneconProEssImpl",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 18,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "ess.foxess.FoxESSH3Ess",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 28,
+      "missingRequired": [],
+      "semanticAliases": [
+        {
+          "path": "r.consumptionTotal",
+          "dpId": "lOAD_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "fc": 3,
+            "address": 39225,
+            "length": 2,
+            "dataType": "int32"
+          }
+        },
+        {
+          "path": "r.powerSetpointReadbackW",
+          "dpId": "sET_ACTIVE_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 46003,
+              "length": 2,
+              "dataType": "int32"
+            },
+            "write": {
+              "fc": 16,
+              "address": 46003,
+              "length": 2,
+              "dataType": "int32"
+            }
+          }
+        },
+        {
+          "path": "r.pvPowerDc",
+          "dpId": "pV_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "fc": 3,
+            "address": 39118,
+            "length": 2,
+            "dataType": "int32"
+          }
+        },
+        {
+          "path": "r.pvPowerTotal",
+          "dpId": "pV_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "fc": 3,
+            "address": 39118,
+            "length": 2,
+            "dataType": "int32"
+          }
+        }
+      ],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "lOAD_POWER"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "sET_ACTIVE_POWER"
+        },
+        "r.pvPowerDc": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "pV_POWER"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "pV_POWER"
+        }
+      }
+    },
+    {
+      "templateId": "ess.foxess.FoxESSH3ProEss",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 28,
+      "missingRequired": [],
+      "semanticAliases": [
+        {
+          "path": "r.consumptionTotal",
+          "dpId": "lOAD_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "fc": 3,
+            "address": 39225,
+            "length": 2,
+            "dataType": "int32"
+          }
+        },
+        {
+          "path": "r.powerSetpointReadbackW",
+          "dpId": "sET_ACTIVE_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 46003,
+              "length": 2,
+              "dataType": "int32"
+            },
+            "write": {
+              "fc": 16,
+              "address": 46003,
+              "length": 2,
+              "dataType": "int32"
+            }
+          }
+        },
+        {
+          "path": "r.pvPowerDc",
+          "dpId": "pV_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "fc": 3,
+            "address": 39118,
+            "length": 2,
+            "dataType": "int32"
+          }
+        },
+        {
+          "path": "r.pvPowerTotal",
+          "dpId": "pV_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "fc": 3,
+            "address": 39118,
+            "length": 2,
+            "dataType": "int32"
+          }
+        }
+      ],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "lOAD_POWER"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "sET_ACTIVE_POWER"
+        },
+        "r.pvPowerDc": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "pV_POWER"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "pV_POWER"
+        }
+      }
+    },
+    {
+      "templateId": "ess.kaco.gridsave.sunspec.v1",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 10,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "ess.kaco.hybrid10.sunspec.v1",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 10,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "ess.kostal.KostalManagedEssBigEndianImpl",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 21,
+      "missingRequired": [],
+      "semanticAliases": [
+        {
+          "path": "r.powerSetpointReadbackW",
+          "dpId": "sET_ACTIVE_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 1026,
+              "length": 2,
+              "dataType": "float32",
+              "wordOrder": "be"
+            },
+            "write": {
+              "fc": 16,
+              "address": 1026,
+              "length": 2,
+              "dataType": "float32",
+              "wordOrder": "be"
+            }
+          }
+        }
+      ],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "sET_ACTIVE_POWER"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "ess.kostal.KostalManagedEssImpl",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 21,
+      "missingRequired": [],
+      "semanticAliases": [
+        {
+          "path": "r.powerSetpointReadbackW",
+          "dpId": "sET_ACTIVE_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 1026,
+              "length": 2,
+              "dataType": "float32",
+              "wordOrder": "le"
+            },
+            "write": {
+              "fc": 16,
+              "address": 1026,
+              "length": 2,
+              "dataType": "float32",
+              "wordOrder": "le"
+            }
+          }
+        }
+      ],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "sET_ACTIVE_POWER"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "ess.samsung.sdi.http.v1",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 14,
+      "missingRequired": [],
+      "semanticAliases": [
+        {
+          "path": "r.nvpPower",
+          "dpId": "gRID_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "http",
+            "method": "GET",
+            "path": "/R3EMSAPP_REAL.ems?file=ESSRealtimeStatus.json",
+            "jsonPath": "ESSRealtimeStatus.GridPw",
+            "multiplier": 1000,
+            "signFromJsonPath": "ESSRealtimeStatus.GridStusCd",
+            "signMap": {
+              "0": 1,
+              "1": -1
+            }
+          }
+        },
+        {
+          "path": "r.consumptionTotal",
+          "dpId": "lOAD_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "http",
+            "method": "GET",
+            "path": "/R3EMSAPP_REAL.ems?file=ESSRealtimeStatus.json",
+            "jsonPath": "ESSRealtimeStatus.ConsPw"
+          }
+        },
+        {
+          "path": "r.pvPowerTotal",
+          "dpId": "pV_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "http",
+            "method": "GET",
+            "path": "/R3EMSAPP_REAL.ems?file=ESSRealtimeStatus.json",
+            "jsonPath": "ESSRealtimeStatus.PvPw",
+            "multiplier": 1000
+          }
+        }
+      ],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "gRID_POWER"
+        },
+        "r.consumptionTotal": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "lOAD_POWER"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "pV_POWER"
+        }
+      }
+    },
+    {
+      "templateId": "ess.sma.EssSmaSunnyIslandImpl",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 21,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "ess.solax.Ems1000ModbusTcp",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 26,
+      "missingRequired": [],
+      "semanticAliases": [
+        {
+          "path": "r.consumptionTotal",
+          "dpId": "lOAD_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "fc": 4,
+            "address": 97,
+            "length": 2,
+            "dataType": "int32",
+            "scaleFactor": -2
+          }
+        },
+        {
+          "path": "r.minPowerSetpointW",
+          "dpId": "aLLOWED_CHARGE_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "fc": 4,
+            "address": 104,
+            "length": 1,
+            "dataType": "uint16"
+          }
+        },
+        {
+          "path": "r.maxPowerSetpointW",
+          "dpId": "aLLOWED_DISCHARGE_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "fc": 4,
+            "address": 105,
+            "length": 1,
+            "dataType": "uint16"
+          }
+        },
+        {
+          "path": "r.powerSetpointReadbackW",
+          "dpId": "sET_ACTIVE_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 152,
+              "length": 2,
+              "dataType": "int32",
+              "scaleFactor": -3
+            },
+            "write": {
+              "fc": 16,
+              "address": 152,
+              "length": 2,
+              "dataType": "int32",
+              "scaleFactor": -3
+            }
+          }
+        },
+        {
+          "path": "r.pvPowerTotal",
+          "dpId": "pV_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "fc": 4,
+            "address": 91,
+            "length": 2,
+            "dataType": "int32",
+            "scaleFactor": -2
+          }
+        }
+      ],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "lOAD_POWER"
+        },
+        "r.minPowerSetpointW": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "aLLOWED_CHARGE_POWER"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "aLLOWED_DISCHARGE_POWER"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "sET_ACTIVE_POWER"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "pV_POWER"
+        }
+      }
+    },
+    {
+      "templateId": "ess.solax.SolaXHybridX1X3Ess",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 30,
+      "missingRequired": [],
+      "semanticAliases": [
+        {
+          "path": "r.minPowerSetpointW",
+          "dpId": "aLLOWED_CHARGE_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "fc": 4,
+            "address": 162,
+            "length": 2,
+            "dataType": "uint32",
+            "wordOrder": "le"
+          }
+        },
+        {
+          "path": "r.maxPowerSetpointW",
+          "dpId": "aLLOWED_DISCHARGE_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "fc": 4,
+            "address": 164,
+            "length": 2,
+            "dataType": "uint32",
+            "wordOrder": "le"
+          }
+        },
+        {
+          "path": "r.powerSetpointReadbackW",
+          "dpId": "sET_ACTIVE_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 417,
+              "length": 2,
+              "dataType": "int32",
+              "wordOrder": "le"
+            },
+            "write": {
+              "fc": 16,
+              "address": 161,
+              "length": 2,
+              "dataType": "int32",
+              "wordOrder": "le"
+            }
+          }
+        },
+        {
+          "path": "r.pvPowerTotal",
+          "dpId": "pV_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "fc": 4,
+            "address": 50,
+            "length": 2,
+            "dataType": "uint32",
+            "wordOrder": "le"
+          }
+        }
+      ],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "aLLOWED_CHARGE_POWER"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "aLLOWED_DISCHARGE_POWER"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "sET_ACTIVE_POWER"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "pV_POWER"
+        }
+      }
+    },
+    {
+      "templateId": "ess.sunspec.generic.basic124.v1",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 8,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "ess.tesla.powerwall2.gateway.http.v1",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 14,
+      "missingRequired": [],
+      "semanticAliases": [
+        {
+          "path": "r.nvpPower",
+          "dpId": "gRID_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "http",
+            "method": "GET",
+            "path": "/api/meters/aggregates",
+            "jsonPath": "$.site.instant_power",
+            "scaleFactor": 0
+          }
+        },
+        {
+          "path": "r.consumptionTotal",
+          "dpId": "lOAD_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "http",
+            "method": "GET",
+            "path": "/api/meters/aggregates",
+            "jsonPath": "$.load.instant_power",
+            "scaleFactor": 0
+          }
+        },
+        {
+          "path": "r.pvPowerTotal",
+          "dpId": "pV_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "http",
+            "method": "GET",
+            "path": "/api/meters/aggregates",
+            "jsonPath": "$.solar.instant_power",
+            "scaleFactor": 0
+          }
+        }
+      ],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "gRID_POWER"
+        },
+        "r.consumptionTotal": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "lOAD_POWER"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "pV_POWER"
+        }
+      }
+    },
+    {
+      "templateId": "ess.tesvolt.TesvoltEnergyManagerVermarkter",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 26,
+      "missingRequired": [],
+      "semanticAliases": [
+        {
+          "path": "r.nvpPower",
+          "dpId": "gRID_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 4,
+              "address": 0,
+              "length": 2,
+              "dataType": "int32",
+              "wordOrder": "le"
+            }
+          }
+        },
+        {
+          "path": "r.consumptionTotal",
+          "dpId": "lOAD_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 4,
+              "address": 7,
+              "length": 2,
+              "dataType": "int32",
+              "wordOrder": "le"
+            }
+          }
+        },
+        {
+          "path": "r.minPowerSetpointW",
+          "dpId": "aLLOWED_CHARGE_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 4,
+              "address": 32,
+              "length": 2,
+              "dataType": "uint32",
+              "wordOrder": "le"
+            }
+          }
+        },
+        {
+          "path": "r.maxPowerSetpointW",
+          "dpId": "aLLOWED_DISCHARGE_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 4,
+              "address": 34,
+              "length": 2,
+              "dataType": "uint32",
+              "wordOrder": "le"
+            }
+          }
+        },
+        {
+          "path": "r.powerSetpointReadbackW",
+          "dpId": "sET_ACTIVE_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 10,
+              "length": 2,
+              "dataType": "int32",
+              "wordOrder": "le"
+            },
+            "write": {
+              "fc": 16,
+              "address": 10,
+              "length": 2,
+              "dataType": "int32",
+              "wordOrder": "le"
+            }
+          }
+        },
+        {
+          "path": "r.pvPowerTotal",
+          "dpId": "pV_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 4,
+              "address": 5,
+              "length": 2,
+              "dataType": "int32",
+              "wordOrder": "le"
+            }
+          }
+        }
+      ],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "gRID_POWER"
+        },
+        "r.consumptionTotal": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "lOAD_POWER"
+        },
+        "r.minPowerSetpointW": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "aLLOWED_CHARGE_POWER"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "aLLOWED_DISCHARGE_POWER"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "sET_ACTIVE_POWER"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "pV_POWER"
+        }
+      }
+    },
+    {
+      "templateId": "ess.tesvolt.iotGateway.mqttV2",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 21,
+      "missingRequired": [],
+      "semanticAliases": [
+        {
+          "path": "r.essActivePower",
+          "dpId": "aCTIVE_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "mqtt",
+            "topic": "EMS/V2/Inverter/Measurements",
+            "jsonPath": "$.Power",
+            "format": "json",
+            "invert": true,
+            "staleAfterMs": 5000,
+            "staleValue": 0,
+            "zeroOnOffline": true
+          }
+        },
+        {
+          "path": "r.minPowerSetpointW",
+          "dpId": "aLLOWED_CHARGE_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "mqtt",
+            "topic": "EMS/V2/Inverter/Limits",
+            "jsonPath": "$.P_Max_Charge",
+            "format": "json"
+          }
+        },
+        {
+          "path": "r.maxPowerSetpointW",
+          "dpId": "aLLOWED_DISCHARGE_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "mqtt",
+            "topic": "EMS/V2/Inverter/Limits",
+            "jsonPath": "$.P_Max_Discharge",
+            "format": "json"
+          }
+        }
+      ],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "aCTIVE_POWER"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "aLLOWED_CHARGE_POWER"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "aLLOWED_DISCHARGE_POWER"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "ess.victron.VictronEssImpl",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 20,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "evcs.abl.EvcsAblImpl",
+      "deviceClass": "evCharger",
+      "canonicalAliasCount": 12,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "evcs.abl.emh1.evcc2_3.modbusAscii",
+      "deviceClass": "evCharger",
+      "canonicalAliasCount": 24,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "evcs.alpitronic.hypercharger.connector1",
+      "deviceClass": "evCharger",
+      "canonicalAliasCount": 8,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "evcs.alpitronic.hypercharger.connector2",
+      "deviceClass": "evCharger",
+      "canonicalAliasCount": 8,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "evcs.alpitronic.hypercharger.connector3",
+      "deviceClass": "evCharger",
+      "canonicalAliasCount": 8,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "evcs.alpitronic.hypercharger.connector4",
+      "deviceClass": "evCharger",
+      "canonicalAliasCount": 8,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "evcs.alpitronic.hypercharger.station",
+      "deviceClass": "evCharger",
+      "canonicalAliasCount": 6,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "evcs.goe.EvcsGoeModbusImpl",
+      "deviceClass": "evCharger",
+      "canonicalAliasCount": 5,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "evcs.goe.chargerhome.http.v1",
+      "deviceClass": "evCharger",
+      "canonicalAliasCount": 11,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "evcs.goe.gemini.http.v2",
+      "deviceClass": "evCharger",
+      "canonicalAliasCount": 10,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "evcs.goe.gemini.http.v2.legacy",
+      "deviceClass": "evCharger",
+      "canonicalAliasCount": 10,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "evcs.heidelberg.EvcsHeidelbergEnergyImpl",
+      "deviceClass": "evCharger",
+      "canonicalAliasCount": 6,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "evcs.keba.EvcsKebaModbusImpl",
+      "deviceClass": "evCharger",
+      "canonicalAliasCount": 35,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "evcs.keba.udp.KeContactP20P30",
+      "deviceClass": "evCharger",
+      "canonicalAliasCount": 9,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "evcs.mennekes.EvcsMennekesImpl",
+      "deviceClass": "evCharger",
+      "canonicalAliasCount": 9,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "evcs.mennekes.amtron4you500.4business700.modbusTcp",
+      "deviceClass": "evCharger",
+      "canonicalAliasCount": 24,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "evcs.openwb.lp1.mqtt.v1",
+      "deviceClass": "evCharger",
+      "canonicalAliasCount": 6,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "evcs.openwb.lp2.mqtt.v1",
+      "deviceClass": "evCharger",
+      "canonicalAliasCount": 6,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "evcs.solax.SolaXHacG2",
+      "deviceClass": "evCharger",
+      "canonicalAliasCount": 11,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "evcs.spelsberg.EvcsSpelsbergSmartImpl",
+      "deviceClass": "evCharger",
+      "canonicalAliasCount": 9,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "evcs.webasto.EvcsWebastoNextImpl",
+      "deviceClass": "evCharger",
+      "canonicalAliasCount": 12,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "evcs.webasto.EvcsWebastoUniteImpl",
+      "deviceClass": "evCharger",
+      "canonicalAliasCount": 7,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "evse.chargepoint.EvseAlpitronicImpl",
+      "deviceClass": "evCharger",
+      "canonicalAliasCount": 6,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "evse.chargepoint.EvseChargePointHeidelbergConnectImpl",
+      "deviceClass": "evCharger",
+      "canonicalAliasCount": 8,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "evse.chargepoint.EvseKebaModbusImpl",
+      "deviceClass": "evCharger",
+      "canonicalAliasCount": 31,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "generic.canbus.raw.v1",
+      "deviceClass": "generic",
+      "canonicalAliasCount": 3,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "generic.http",
+      "deviceClass": "generic",
+      "canonicalAliasCount": 3,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "generic.modbus",
+      "deviceClass": "generic",
+      "canonicalAliasCount": 3,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "generic.mqtt",
+      "deviceClass": "generic",
+      "canonicalAliasCount": 3,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "heat.askoma.HeatAskomaImpl",
+      "deviceClass": "heat",
+      "canonicalAliasCount": 3,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "heat.lambda.LambdaWpModbus",
+      "deviceClass": "heat",
+      "canonicalAliasCount": 18,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "heat.mypv.HeatMyPvAcThor9sImpl",
+      "deviceClass": "heat",
+      "canonicalAliasCount": 3,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "heat.tecalor.TecalorLwzModbus",
+      "deviceClass": "heat",
+      "canonicalAliasCount": 8,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "heat.tecalor.TecalorWpm3iModbus",
+      "deviceClass": "heat",
+      "canonicalAliasCount": 11,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "io.filipowski.IoFilipowskiMrAo1Impl",
+      "deviceClass": "io",
+      "canonicalAliasCount": 3,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "io.kmtronic.IoKmtronicRelay4PortImpl",
+      "deviceClass": "io",
+      "canonicalAliasCount": 11,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "io.kmtronic.IoKmtronicRelay8PortImpl",
+      "deviceClass": "io",
+      "canonicalAliasCount": 19,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "io.onewire.OneWireDs18b20Temperature.V1",
+      "deviceClass": "io",
+      "canonicalAliasCount": 3,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "io.shelly.plug_gen1",
+      "deviceClass": "io",
+      "canonicalAliasCount": 5,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "io.shelly.plugsg3",
+      "deviceClass": "io",
+      "canonicalAliasCount": 4,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "io.shelly.plus1pm",
+      "deviceClass": "io",
+      "canonicalAliasCount": 4,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "io.shelly.pro4pm",
+      "deviceClass": "io",
+      "canonicalAliasCount": 17,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "io.shelly.shelly1",
+      "deviceClass": "io",
+      "canonicalAliasCount": 3,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "io.shelly.shelly25",
+      "deviceClass": "io",
+      "canonicalAliasCount": 7,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "io.siemenslogo.SiemensLogoRelayImpl",
+      "deviceClass": "io",
+      "canonicalAliasCount": 23,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "io.wut.WebIoDigital4_57733_4xInOutImpl",
+      "deviceClass": "io",
+      "canonicalAliasCount": 19,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "io.wut.WebIoDigital4_57736_16xInOutImpl",
+      "deviceClass": "io",
+      "canonicalAliasCount": 67,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "io.wut.WebIoDigital4_57756_Logger16xInOutImpl",
+      "deviceClass": "io",
+      "canonicalAliasCount": 67,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.abb.b23.mbus.v1",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 6,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.artemes.MeterArtemesAM2Impl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 12,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.bcontrol.MeterBControlEM300Impl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 15,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.bgetech.MeterBgeTechDrt428M2Impl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 13,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.camillebauer.MeterCamillebauerAplusImpl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 13,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.carlo.MeterCarloGavazziEm100Impl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 11,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.carlo.MeterCarloGavazziEm300Impl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 15,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.discovergy.inexogy.http.v1",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 9,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.eastron.MeterEastronSdm120Impl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 9,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.eastron.MeterEastronSdm630Impl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 13,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.fenecon.FeneconDessGridMeterImpl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 12,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.fenecon.FeneconDessPvMeterImpl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 6,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.fenecon.FeneconMiniGridMeterImpl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 6,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.fenecon.FeneconMiniPvMeterImpl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 6,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.fenecon.FeneconProPvMeterImpl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 8,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.hager.ecr380d",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 15,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.janitza.MeterJanitzaUmg104Impl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 12,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.janitza.MeterJanitzaUmg511Impl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 12,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.janitza.MeterJanitzaUmg604Impl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 15,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.janitza.MeterJanitzaUmg604proImpl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 15,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.janitza.MeterJanitzaUmg801Impl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 6,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.janitza.MeterJanitzaUmg806Impl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 12,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.janitza.MeterJanitzaUmg96paImpl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 15,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.janitza.MeterJanitzaUmg96rmeImpl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 12,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.kdk.MeterKdk2puctImpl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 9,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.kostal.KostalGridMeterBigEndianImpl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 14,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.kostal.KostalGridMeterImpl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 14,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.mbus.GenericWiredMbusDevice.V1",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 3,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.phoenixcontact.PhoenixContactMeterImpl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 13,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.plexlog.MeterPlexlogDataloggerImpl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 3,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.pqplus.MeterPqplusUmd96Impl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 10,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.pqplus.MeterPqplusUmd97Impl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 10,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.samsung.ess.grid.http.v1",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 6,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.schneider.MeterSchneiderActi9SmartlinkImpl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 15,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.shelly.3em_gen1",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 12,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.shelly.pro3em",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 12,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.siemens.MeterSiemensPac1600Impl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 12,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.siemens.MeterSiemensPac2200Impl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 11,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.siemens.MeterSiemensSicamt7kg966Impl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 15,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.sma.MeterSmaShm20Impl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 15,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.sma.SmaEnergyMeterSpeedwireImpl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 15,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.socomec.countis_e14_singlephase",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 11,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.socomec.countis_e23_e24_e27_e28",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 15,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.socomec.countis_e34_e44",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 15,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.socomec.diris_a10",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 15,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.socomec.diris_a14",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 15,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.socomec.diris_b30",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 14,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.sunspec.generic.model201.v1",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 3,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.sunspec.generic.model202.v1",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 3,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.sunspec.generic.model203.v1",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 3,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.victron.VictronAcInPowerMeterImpl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 10,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.victron.VictronAcOutPowerMeterImpl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 7,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.victron.VictronMeterImpl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 14,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.weidmueller.MeterWeidmueller525Impl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 12,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "meter.ziehl.MeterZiehlEfr4001IpImpl",
+      "deviceClass": "meter",
+      "canonicalAliasCount": 15,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "pv_inverter.foxess.FoxESSTG3G3PvInverter",
+      "deviceClass": "pvInverter",
+      "canonicalAliasCount": 8,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "pv_inverter.goodwe.AbstractGoodWe",
+      "deviceClass": "pvInverter",
+      "canonicalAliasCount": 6,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "pv_inverter.goodwe.GoodWeEmergencyPowerMeterImpl",
+      "deviceClass": "pvInverter",
+      "canonicalAliasCount": 6,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "pv_inverter.goodwe.GoodWeGridMeterImpl",
+      "deviceClass": "pvInverter",
+      "canonicalAliasCount": 6,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "pv_inverter.kaco.blueplanet.nx3.sunspec.v1",
+      "deviceClass": "pvInverter",
+      "canonicalAliasCount": 12,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "pv_inverter.kostal.KostalPvInverterBigEndianImpl",
+      "deviceClass": "pvInverter",
+      "canonicalAliasCount": 8,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "pv_inverter.kostal.KostalPvInverterImpl",
+      "deviceClass": "pvInverter",
+      "canonicalAliasCount": 8,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "pv_inverter.sma.SmaStp12570ModbusAll",
+      "deviceClass": "pvInverter",
+      "canonicalAliasCount": 12,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "pv_inverter.sma.SmaStp12570SunSpecImpl",
+      "deviceClass": "pvInverter",
+      "canonicalAliasCount": 13,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "pv_inverter.sma.SmaStp12570SunSpecMinimal",
+      "deviceClass": "pvInverter",
+      "canonicalAliasCount": 13,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "pv_inverter.sma.SmaStpxx50Minimal",
+      "deviceClass": "pvInverter",
+      "canonicalAliasCount": 12,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "pv_inverter.sma.SmaStpxxUs41Minimal",
+      "deviceClass": "pvInverter",
+      "canonicalAliasCount": 12,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "pv_inverter.sma.SmaSunnyTripowerXMinimal",
+      "deviceClass": "pvInverter",
+      "canonicalAliasCount": 12,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "pv_inverter.solarlog.PvInverterSolarlogImpl",
+      "deviceClass": "pvInverter",
+      "canonicalAliasCount": 6,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "pv_inverter.solarlog.SolarLogDpmDirectMarketing",
+      "deviceClass": "pvInverter",
+      "canonicalAliasCount": 9,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "pv_inverter.solarlog.SolarLogPmV2PowerManagement",
+      "deviceClass": "pvInverter",
+      "canonicalAliasCount": 8,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "pv_inverter.solax.SolaXX3MegaForthMinimal",
+      "deviceClass": "pvInverter",
+      "canonicalAliasCount": 11,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "pv_inverter.sunspec.generic.model101.v1",
+      "deviceClass": "pvInverter",
+      "canonicalAliasCount": 12,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "pv_inverter.sunspec.generic.model102.v1",
+      "deviceClass": "pvInverter",
+      "canonicalAliasCount": 12,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "pv_inverter.sunspec.generic.model103.v1",
+      "deviceClass": "pvInverter",
+      "canonicalAliasCount": 12,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "pv_inverter.victron.VictronPvInverterImpl",
+      "deviceClass": "pvInverter",
+      "canonicalAliasCount": 6,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "pv_inverter.victron.VictronPvInverterViaDcChargerImpl",
+      "deviceClass": "pvInverter",
+      "canonicalAliasCount": 6,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "evcs.alfen.ng9xx.ace.socket1.modbusTcp",
+      "deviceClass": "evCharger",
+      "canonicalAliasCount": 21,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "evcs.alfen.ng9xx.ace.socket2.modbusTcp",
+      "deviceClass": "evCharger",
+      "canonicalAliasCount": 21,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "evcs.alfen.ng9xx.ace.station.modbusTcp",
+      "deviceClass": "evCharger",
+      "canonicalAliasCount": 24,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "pv_inverter.kostal.PikoModbusSunSpecBigEndianImpl",
+      "deviceClass": "pvInverter",
+      "canonicalAliasCount": 8,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "pv_inverter.kostal.PikoModbusSunSpecImpl",
+      "deviceClass": "pvInverter",
+      "canonicalAliasCount": 8,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "pv_inverter.kostal.Piko1pTcp",
+      "deviceClass": "pvInverter",
+      "canonicalAliasCount": 8,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "pv_inverter.kostal.Piko3pTcp",
+      "deviceClass": "pvInverter",
+      "canonicalAliasCount": 8,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "pv_inverter.kostal.PikoBaTcp",
+      "deviceClass": "pvInverter",
+      "canonicalAliasCount": 8,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "pv_inverter.kostal.Piko1pRs485",
+      "deviceClass": "pvInverter",
+      "canonicalAliasCount": 8,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "pv_inverter.kostal.Piko3pRs485",
+      "deviceClass": "pvInverter",
+      "canonicalAliasCount": 8,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "pv_inverter.kostal.PikoBaRs485",
+      "deviceClass": "pvInverter",
+      "canonicalAliasCount": 8,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "pv_inverter.sungrow.GridConnectedCxRsRtModbus",
+      "deviceClass": "pvInverter",
+      "canonicalAliasCount": 12,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "ess.sungrow.ResidentialHybridV119",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 31,
+      "missingRequired": [],
+      "semanticAliases": [
+        {
+          "path": "r.nvpPower",
+          "dpId": "gRID_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 4,
+              "address": 5600,
+              "length": 2,
+              "dataType": "int32",
+              "wordOrder": "le",
+              "nanToNull": true,
+              "nanValue": 2147483647
+            }
+          }
+        },
+        {
+          "path": "r.consumptionTotal",
+          "dpId": "lOAD_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 4,
+              "address": 13007,
+              "length": 2,
+              "dataType": "int32",
+              "wordOrder": "le",
+              "nanToNull": true,
+              "nanValue": 2147483647
+            }
+          }
+        },
+        {
+          "path": "r.pvPowerDc",
+          "dpId": "pV_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 4,
+              "address": 5016,
+              "length": 2,
+              "dataType": "uint32",
+              "wordOrder": "le",
+              "nanToNull": true
+            }
+          }
+        },
+        {
+          "path": "r.pvPowerTotal",
+          "dpId": "pV_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 4,
+              "address": 5016,
+              "length": 2,
+              "dataType": "uint32",
+              "wordOrder": "le",
+              "nanToNull": true
+            }
+          }
+        }
+      ],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "gRID_POWER"
+        },
+        "r.consumptionTotal": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "lOAD_POWER"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "pV_POWER"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "pV_POWER"
+        }
+      }
+    },
+    {
+      "templateId": "ess.sungrow.Logger1000_3000_4000",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 28,
+      "missingRequired": [],
+      "semanticAliases": [
+        {
+          "path": "r.nvpPower",
+          "dpId": "gRID_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 4,
+              "address": 8156,
+              "length": 2,
+              "dataType": "int32",
+              "scaleFactor": 1,
+              "wordOrder": "le",
+              "nanToNull": true,
+              "nanValue": 2147483647
+            }
+          }
+        },
+        {
+          "path": "r.consumptionTotal",
+          "dpId": "lOAD_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 4,
+              "address": 8158,
+              "length": 2,
+              "dataType": "int32",
+              "scaleFactor": 1,
+              "wordOrder": "le",
+              "nanToNull": true,
+              "nanValue": 2147483647
+            }
+          }
+        },
+        {
+          "path": "r.minPowerSetpointW",
+          "dpId": "MaxBatteryChargePower",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 4,
+              "address": 8150,
+              "length": 1,
+              "dataType": "uint16",
+              "scaleFactor": 2,
+              "nanToNull": true
+            }
+          }
+        },
+        {
+          "path": "r.maxPowerSetpointW",
+          "dpId": "MaxBatteryDischargePower",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 4,
+              "address": 8152,
+              "length": 1,
+              "dataType": "uint16",
+              "scaleFactor": 2,
+              "nanToNull": true
+            }
+          }
+        },
+        {
+          "path": "r.pvPowerTotal",
+          "dpId": "pV_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 4,
+              "address": 8069,
+              "length": 4,
+              "dataType": "uint64",
+              "wordOrder": "be",
+              "nanToNull": true
+            }
+          }
+        }
+      ],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "gRID_POWER"
+        },
+        "r.consumptionTotal": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "lOAD_POWER"
+        },
+        "r.minPowerSetpointW": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "MaxBatteryChargePower"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "MaxBatteryDischargePower"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "pV_POWER"
+        }
+      }
+    },
+    {
+      "templateId": "ess.sungrow.iHomeManagerV101",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 19,
+      "missingRequired": [],
+      "semanticAliases": [
+        {
+          "path": "r.nvpPower",
+          "dpId": "gRID_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 4,
+              "address": 8156,
+              "length": 2,
+              "dataType": "int32",
+              "scaleFactor": 1,
+              "wordOrder": "le",
+              "nanToNull": true,
+              "nanValue": 2147483647
+            }
+          }
+        },
+        {
+          "path": "r.consumptionTotal",
+          "dpId": "lOAD_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 4,
+              "address": 8158,
+              "length": 2,
+              "dataType": "int32",
+              "scaleFactor": 1,
+              "wordOrder": "le",
+              "nanToNull": true,
+              "nanValue": 2147483647
+            }
+          }
+        },
+        {
+          "path": "r.minPowerSetpointW",
+          "dpId": "MaxBatteryChargePower",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 4,
+              "address": 8150,
+              "length": 1,
+              "dataType": "uint16",
+              "scaleFactor": 2,
+              "nanToNull": true
+            }
+          }
+        },
+        {
+          "path": "r.maxPowerSetpointW",
+          "dpId": "MaxBatteryDischargePower",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 4,
+              "address": 8152,
+              "length": 1,
+              "dataType": "uint16",
+              "scaleFactor": 2,
+              "nanToNull": true
+            }
+          }
+        }
+      ],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "gRID_POWER"
+        },
+        "r.consumptionTotal": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "lOAD_POWER"
+        },
+        "r.minPowerSetpointW": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "MaxBatteryChargePower"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "MaxBatteryDischargePower"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "evcs.weidmueller.chargeWallboxBusiness.modbusTcp",
+      "deviceClass": "evCharger",
+      "canonicalAliasCount": 28,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "heat.ta.cmi",
+      "deviceClass": "heat",
+      "canonicalAliasCount": 3,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "evcs.oem.modbusV1003.connector1",
+      "deviceClass": "evCharger",
+      "canonicalAliasCount": 29,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "evcs.oem.modbusV1003.connector2",
+      "deviceClass": "evCharger",
+      "canonicalAliasCount": 29,
+      "missingRequired": [],
+      "semanticAliases": [],
+      "semanticCoverage": {}
+    },
+    {
+      "templateId": "ess.varta.element.modbusTcpV14",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 15,
+      "missingRequired": [],
+      "semanticAliases": [
+        {
+          "path": "r.essActivePower",
+          "dpId": "aCTIVE_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 1066,
+              "length": 1,
+              "dataType": "int16",
+              "byteOrder": "be",
+              "wordOrder": "be"
+            },
+            "disableAddressFallbackOffsets": true
+          }
+        },
+        {
+          "path": "r.nvpPower",
+          "dpId": "gRID_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 1078,
+              "length": 1,
+              "dataType": "int16",
+              "byteOrder": "be",
+              "wordOrder": "be"
+            },
+            "disableAddressFallbackOffsets": true
+          }
+        }
+      ],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "aCTIVE_POWER"
+        },
+        "r.nvpPower": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "gRID_POWER"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "ess.varta.oneL.modbusTcpV14",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 15,
+      "missingRequired": [],
+      "semanticAliases": [
+        {
+          "path": "r.essActivePower",
+          "dpId": "aCTIVE_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 1066,
+              "length": 1,
+              "dataType": "int16",
+              "byteOrder": "be",
+              "wordOrder": "be"
+            },
+            "disableAddressFallbackOffsets": true
+          }
+        },
+        {
+          "path": "r.nvpPower",
+          "dpId": "gRID_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 1078,
+              "length": 1,
+              "dataType": "int16",
+              "byteOrder": "be",
+              "wordOrder": "be"
+            },
+            "disableAddressFallbackOffsets": true
+          }
+        }
+      ],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "aCTIVE_POWER"
+        },
+        "r.nvpPower": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "gRID_POWER"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "ess.varta.oneXL.modbusTcpV14",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 15,
+      "missingRequired": [],
+      "semanticAliases": [
+        {
+          "path": "r.essActivePower",
+          "dpId": "aCTIVE_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 1066,
+              "length": 1,
+              "dataType": "int16",
+              "byteOrder": "be",
+              "wordOrder": "be"
+            },
+            "disableAddressFallbackOffsets": true
+          }
+        },
+        {
+          "path": "r.nvpPower",
+          "dpId": "gRID_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 1078,
+              "length": 1,
+              "dataType": "int16",
+              "byteOrder": "be",
+              "wordOrder": "be"
+            },
+            "disableAddressFallbackOffsets": true
+          }
+        }
+      ],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "aCTIVE_POWER"
+        },
+        "r.nvpPower": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "gRID_POWER"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "ess.varta.elementBackup.modbusTcpV14",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 20,
+      "missingRequired": [],
+      "semanticAliases": [
+        {
+          "path": "r.essActivePower",
+          "dpId": "aCTIVE_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 1066,
+              "length": 1,
+              "dataType": "int16",
+              "byteOrder": "be",
+              "wordOrder": "be"
+            },
+            "disableAddressFallbackOffsets": true
+          }
+        },
+        {
+          "path": "r.nvpPower",
+          "dpId": "gRID_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 1078,
+              "length": 1,
+              "dataType": "int16",
+              "byteOrder": "be",
+              "wordOrder": "be"
+            },
+            "disableAddressFallbackOffsets": true
+          }
+        },
+        {
+          "path": "r.pvPowerAc",
+          "dpId": "pV_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 1102,
+              "length": 1,
+              "dataType": "uint16",
+              "byteOrder": "be",
+              "wordOrder": "be"
+            },
+            "disableAddressFallbackOffsets": true
+          }
+        },
+        {
+          "path": "r.pvPowerTotal",
+          "dpId": "pV_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 1102,
+              "length": 1,
+              "dataType": "uint16",
+              "byteOrder": "be",
+              "wordOrder": "be"
+            },
+            "disableAddressFallbackOffsets": true
+          }
+        }
+      ],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "aCTIVE_POWER"
+        },
+        "r.nvpPower": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "gRID_POWER"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "pV_POWER"
+        },
+        "r.pvPowerTotal": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "pV_POWER"
+        }
+      }
+    },
+    {
+      "templateId": "ess.varta.pulse.modbusTcpV14",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 20,
+      "missingRequired": [],
+      "semanticAliases": [
+        {
+          "path": "r.essActivePower",
+          "dpId": "aCTIVE_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 1066,
+              "length": 1,
+              "dataType": "int16",
+              "byteOrder": "be",
+              "wordOrder": "be"
+            },
+            "disableAddressFallbackOffsets": true
+          }
+        },
+        {
+          "path": "r.nvpPower",
+          "dpId": "gRID_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 1078,
+              "length": 1,
+              "dataType": "int16",
+              "byteOrder": "be",
+              "wordOrder": "be"
+            },
+            "disableAddressFallbackOffsets": true
+          }
+        },
+        {
+          "path": "r.pvPowerAc",
+          "dpId": "pV_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 1102,
+              "length": 1,
+              "dataType": "uint16",
+              "byteOrder": "be",
+              "wordOrder": "be"
+            },
+            "disableAddressFallbackOffsets": true
+          }
+        },
+        {
+          "path": "r.pvPowerTotal",
+          "dpId": "pV_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 1102,
+              "length": 1,
+              "dataType": "uint16",
+              "byteOrder": "be",
+              "wordOrder": "be"
+            },
+            "disableAddressFallbackOffsets": true
+          }
+        }
+      ],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "aCTIVE_POWER"
+        },
+        "r.nvpPower": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "gRID_POWER"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "pV_POWER"
+        },
+        "r.pvPowerTotal": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "pV_POWER"
+        }
+      }
+    },
+    {
+      "templateId": "ess.varta.pulseNeo.modbusTcpV14",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 21,
+      "missingRequired": [],
+      "semanticAliases": [
+        {
+          "path": "r.essActivePower",
+          "dpId": "aCTIVE_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 1066,
+              "length": 1,
+              "dataType": "int16",
+              "byteOrder": "be",
+              "wordOrder": "be",
+              "vartaScaleFactorDpId": "sF_ACTIVE_POWER"
+            },
+            "disableAddressFallbackOffsets": true
+          }
+        },
+        {
+          "path": "r.nvpPower",
+          "dpId": "gRID_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 1078,
+              "length": 1,
+              "dataType": "int16",
+              "byteOrder": "be",
+              "wordOrder": "be",
+              "vartaScaleFactorDpId": "sF_GRID_POWER"
+            },
+            "disableAddressFallbackOffsets": true
+          }
+        },
+        {
+          "path": "r.pvPowerAc",
+          "dpId": "pV_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 1102,
+              "length": 1,
+              "dataType": "uint16",
+              "byteOrder": "be",
+              "wordOrder": "be"
+            },
+            "disableAddressFallbackOffsets": true
+          }
+        },
+        {
+          "path": "r.pvPowerTotal",
+          "dpId": "pV_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 1102,
+              "length": 1,
+              "dataType": "uint16",
+              "byteOrder": "be",
+              "wordOrder": "be"
+            },
+            "disableAddressFallbackOffsets": true
+          }
+        }
+      ],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "aCTIVE_POWER"
+        },
+        "r.nvpPower": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "gRID_POWER"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "pV_POWER"
+        },
+        "r.pvPowerTotal": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "pV_POWER"
+        }
+      }
+    },
+    {
+      "templateId": "ess.varta.link.modbusTcpV14",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 15,
+      "missingRequired": [],
+      "semanticAliases": [
+        {
+          "path": "r.essActivePower",
+          "dpId": "aCTIVE_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 1066,
+              "length": 1,
+              "dataType": "int16",
+              "byteOrder": "be",
+              "wordOrder": "be"
+            },
+            "disableAddressFallbackOffsets": true
+          }
+        },
+        {
+          "path": "r.nvpPower",
+          "dpId": "gRID_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 1078,
+              "length": 1,
+              "dataType": "int16",
+              "byteOrder": "be",
+              "wordOrder": "be"
+            },
+            "disableAddressFallbackOffsets": true
+          }
+        }
+      ],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "aCTIVE_POWER"
+        },
+        "r.nvpPower": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "gRID_POWER"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "ess.varta.flexStorage.modbusTcpV14",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 17,
+      "missingRequired": [],
+      "semanticAliases": [
+        {
+          "path": "r.essActivePower",
+          "dpId": "aCTIVE_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 1066,
+              "length": 1,
+              "dataType": "int16",
+              "byteOrder": "be",
+              "wordOrder": "be",
+              "vartaScaleFactorDpId": "sF_ACTIVE_POWER"
+            },
+            "disableAddressFallbackOffsets": true
+          }
+        },
+        {
+          "path": "r.nvpPower",
+          "dpId": "gRID_POWER",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "modbus",
+            "read": {
+              "fc": 3,
+              "address": 1078,
+              "length": 1,
+              "dataType": "int16",
+              "byteOrder": "be",
+              "wordOrder": "be",
+              "vartaScaleFactorDpId": "sF_GRID_POWER"
+            },
+            "disableAddressFallbackOffsets": true
+          }
+        }
+      ],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "aCTIVE_POWER"
+        },
+        "r.nvpPower": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "gRID_POWER"
+        },
+        "r.consumptionTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        }
+      }
+    },
+    {
+      "templateId": "ess.deye.singlePhase.modbusRtu",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 17,
+      "missingRequired": [],
+      "semanticAliases": [
+        {
+          "path": "r.nvpPower",
+          "dpId": "canonical.gridPower",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "deyeDiagnostic"
+          }
+        },
+        {
+          "path": "r.consumptionTotal",
+          "dpId": "load.power",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "deyeModbus",
+            "read": {
+              "fc": 3,
+              "address": 178,
+              "length": 1,
+              "addresses": [
+                178
+              ],
+              "dataType": "int16",
+              "wordOrder": "le",
+              "byteOrder": "be"
+            },
+            "engineeringExponent": 0,
+            "disableAddressFallbackOffsets": true
+          }
+        },
+        {
+          "path": "r.pvPowerDc",
+          "dpId": "canonical.pvPower",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "deyeDiagnostic"
+          }
+        },
+        {
+          "path": "r.pvPowerTotal",
+          "dpId": "canonical.pvPower",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "deyeDiagnostic"
+          }
+        }
+      ],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "canonical.gridPower"
+        },
+        "r.consumptionTotal": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "load.power"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "canonical.pvPower"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "canonical.pvPower"
+        }
+      }
+    },
+    {
+      "templateId": "ess.deye.threePhaseLv.modbusRtu",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 17,
+      "missingRequired": [],
+      "semanticAliases": [
+        {
+          "path": "r.nvpPower",
+          "dpId": "canonical.gridPower",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "deyeDiagnostic"
+          }
+        },
+        {
+          "path": "r.consumptionTotal",
+          "dpId": "load.power",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "deyeModbus",
+            "read": {
+              "fc": 3,
+              "address": 653,
+              "length": 1,
+              "addresses": [
+                653,
+                659
+              ],
+              "dataType": "int32",
+              "wordOrder": "le",
+              "byteOrder": "be"
+            },
+            "engineeringExponent": 0,
+            "disableAddressFallbackOffsets": true
+          }
+        },
+        {
+          "path": "r.pvPowerDc",
+          "dpId": "canonical.pvPower",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "deyeDiagnostic"
+          }
+        },
+        {
+          "path": "r.pvPowerTotal",
+          "dpId": "canonical.pvPower",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "deyeDiagnostic"
+          }
+        }
+      ],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "canonical.gridPower"
+        },
+        "r.consumptionTotal": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "load.power"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "canonical.pvPower"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "canonical.pvPower"
+        }
+      }
+    },
+    {
+      "templateId": "ess.deye.threePhaseHv.modbusRtu",
+      "deviceClass": "storageSystem",
+      "canonicalAliasCount": 17,
+      "missingRequired": [],
+      "semanticAliases": [
+        {
+          "path": "r.nvpPower",
+          "dpId": "canonical.gridPower",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "deyeDiagnostic"
+          }
+        },
+        {
+          "path": "r.consumptionTotal",
+          "dpId": "load.power",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "deyeModbus",
+            "read": {
+              "fc": 3,
+              "address": 653,
+              "length": 1,
+              "addresses": [
+                653,
+                659
+              ],
+              "dataType": "int32",
+              "wordOrder": "le",
+              "byteOrder": "be"
+            },
+            "engineeringExponent": 0,
+            "disableAddressFallbackOffsets": true
+          }
+        },
+        {
+          "path": "r.pvPowerDc",
+          "dpId": "canonical.pvPower",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "deyeDiagnostic"
+          }
+        },
+        {
+          "path": "r.pvPowerTotal",
+          "dpId": "canonical.pvPower",
+          "unit": "W",
+          "rw": "ro",
+          "source": {
+            "kind": "deyeDiagnostic"
+          }
+        }
+      ],
+      "semanticCoverage": {
+        "r.essActivePower": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.nvpPower": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "canonical.gridPower"
+        },
+        "r.consumptionTotal": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "load.power"
+        },
+        "r.minPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.maxPowerSetpointW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.powerSetpointReadbackW": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerDc": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "canonical.pvPower"
+        },
+        "r.pvPowerAc": {
+          "status": "unavailable",
+          "reason": "noVerifiedSourceBinding"
+        },
+        "r.pvPowerTotal": {
+          "status": "available",
+          "reason": "sourceDescriptorVerified",
+          "dpId": "canonical.pvPower"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,1605 @@
+{
+  "schemaVersion": 1,
+  "description": "Additive source-bound Alias V1 semantics. Exact catalog source descriptor required; no unit, direction, AC/DC or readback inference. Missing entries stay unavailable.",
+  "aliases": {
+    "r.essActivePower": "ESS AC converter active power (+ output / - input)",
+    "r.nvpPower": "Device grid-meter power (+ import / - export; assign M0/M1 explicitly)",
+    "r.consumptionTotal": "Device reported total consumption power",
+    "r.minPowerSetpointW": "Minimum admissible signed active-power target (charge is negative)",
+    "r.maxPowerSetpointW": "Maximum admissible signed active-power target (discharge is positive)",
+    "r.powerSetpointReadbackW": "Device-read active-power target (not measured physical delivery)",
+    "r.pvPowerDc": "PV generation measured on DC side",
+    "r.pvPowerAc": "PV generation measured on AC side",
+    "r.pvPowerTotal": "Device reported total PV generation (do not add AC/DC values again)"
+  },
+  "profiles": {
+    "ess.fenecon.FeneconHomeEssImpl": {
+      "r.essActivePower": {
+        "dpId": "eSS0_ACTIVE_POWER",
+        "type": "number",
+        "unit": "kW",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 3,
+            "address": 604,
+            "length": 2,
+            "dataType": "float32",
+            "nanToNull": true
+          },
+          "scaleFactor": -3
+        },
+        "transform": "identity"
+      },
+      "r.nvpPower": {
+        "dpId": "gRID_POWER",
+        "type": "number",
+        "unit": "kW",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 4,
+            "address": 315,
+            "length": 2,
+            "dataType": "float32",
+            "nanToNull": true
+          },
+          "scaleFactor": -3
+        },
+        "transform": "identity"
+      },
+      "r.consumptionTotal": {
+        "dpId": "lOAD_POWER",
+        "type": "number",
+        "unit": "kW",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 4,
+            "address": 343,
+            "length": 2,
+            "dataType": "float32",
+            "nanToNull": true
+          },
+          "scaleFactor": -3
+        },
+        "transform": "identity"
+      },
+      "r.minPowerSetpointW": {
+        "dpId": "mIN_POWER_SETPOINT",
+        "type": "number",
+        "unit": "kW",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 3,
+            "address": 702,
+            "length": 2,
+            "dataType": "float32",
+            "nanToNull": true
+          },
+          "scaleFactor": -3
+        },
+        "transform": "identity"
+      },
+      "r.maxPowerSetpointW": {
+        "dpId": "mAX_POWER_SETPOINT",
+        "type": "number",
+        "unit": "kW",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 3,
+            "address": 704,
+            "length": 2,
+            "dataType": "float32",
+            "nanToNull": true
+          },
+          "scaleFactor": -3
+        },
+        "transform": "identity"
+      },
+      "r.pvPowerDc": {
+        "dpId": "pV_DC_POWER",
+        "type": "number",
+        "unit": "kW",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 4,
+            "address": 339,
+            "length": 2,
+            "dataType": "float32",
+            "nanToNull": true
+          },
+          "scaleFactor": -3
+        },
+        "transform": "identity"
+      },
+      "r.pvPowerAc": {
+        "dpId": "pV_AC_POWER",
+        "type": "number",
+        "unit": "kW",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 4,
+            "address": 331,
+            "length": 2,
+            "dataType": "float32",
+            "nanToNull": true
+          },
+          "scaleFactor": -3
+        },
+        "transform": "identity"
+      },
+      "r.pvPowerTotal": {
+        "dpId": "pV_POWER_SUM",
+        "type": "number",
+        "unit": "kW",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 4,
+            "address": 327,
+            "length": 2,
+            "dataType": "float32",
+            "nanToNull": true
+          },
+          "scaleFactor": -3
+        },
+        "transform": "identity"
+      }
+    },
+    "ess.solax.Ems1000ModbusTcp": {
+      "r.consumptionTotal": {
+        "dpId": "lOAD_POWER",
+        "type": "number",
+        "unit": "kW",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "fc": 4,
+          "address": 97,
+          "length": 2,
+          "dataType": "int32",
+          "scaleFactor": -2
+        },
+        "transform": "identity"
+      },
+      "r.minPowerSetpointW": {
+        "dpId": "aLLOWED_CHARGE_POWER",
+        "type": "number",
+        "unit": "kW",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "fc": 4,
+          "address": 104,
+          "length": 1,
+          "dataType": "uint16"
+        },
+        "transform": "negativeMagnitude"
+      },
+      "r.maxPowerSetpointW": {
+        "dpId": "aLLOWED_DISCHARGE_POWER",
+        "type": "number",
+        "unit": "kW",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "fc": 4,
+          "address": 105,
+          "length": 1,
+          "dataType": "uint16"
+        },
+        "transform": "positiveMagnitude"
+      },
+      "r.powerSetpointReadbackW": {
+        "dpId": "sET_ACTIVE_POWER",
+        "type": "number",
+        "unit": "kW",
+        "rw": "rw",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 3,
+            "address": 152,
+            "length": 2,
+            "dataType": "int32",
+            "scaleFactor": -3
+          },
+          "write": {
+            "fc": 16,
+            "address": 152,
+            "length": 2,
+            "dataType": "int32",
+            "scaleFactor": -3
+          }
+        },
+        "transform": "identity"
+      },
+      "r.pvPowerTotal": {
+        "dpId": "pV_POWER",
+        "type": "number",
+        "unit": "kW",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "fc": 4,
+          "address": 91,
+          "length": 2,
+          "dataType": "int32",
+          "scaleFactor": -2
+        },
+        "transform": "identity"
+      }
+    },
+    "ess.solax.SolaXHybridX1X3Ess": {
+      "r.minPowerSetpointW": {
+        "dpId": "aLLOWED_CHARGE_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "fc": 4,
+          "address": 162,
+          "length": 2,
+          "dataType": "uint32",
+          "wordOrder": "le"
+        },
+        "transform": "negativeMagnitude"
+      },
+      "r.maxPowerSetpointW": {
+        "dpId": "aLLOWED_DISCHARGE_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "fc": 4,
+          "address": 164,
+          "length": 2,
+          "dataType": "uint32",
+          "wordOrder": "le"
+        },
+        "transform": "positiveMagnitude"
+      },
+      "r.powerSetpointReadbackW": {
+        "dpId": "sET_ACTIVE_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "rw",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 3,
+            "address": 417,
+            "length": 2,
+            "dataType": "int32",
+            "wordOrder": "le"
+          },
+          "write": {
+            "fc": 16,
+            "address": 161,
+            "length": 2,
+            "dataType": "int32",
+            "wordOrder": "le"
+          }
+        },
+        "transform": "identity"
+      },
+      "r.pvPowerTotal": {
+        "dpId": "pV_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "fc": 4,
+          "address": 50,
+          "length": 2,
+          "dataType": "uint32",
+          "wordOrder": "le"
+        },
+        "transform": "identity"
+      }
+    },
+    "ess.foxess.FoxESSH3Ess": {
+      "r.consumptionTotal": {
+        "dpId": "lOAD_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "fc": 3,
+          "address": 39225,
+          "length": 2,
+          "dataType": "int32"
+        },
+        "transform": "identity"
+      },
+      "r.powerSetpointReadbackW": {
+        "dpId": "sET_ACTIVE_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "rw",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 3,
+            "address": 46003,
+            "length": 2,
+            "dataType": "int32"
+          },
+          "write": {
+            "fc": 16,
+            "address": 46003,
+            "length": 2,
+            "dataType": "int32"
+          }
+        },
+        "transform": "identity"
+      },
+      "r.pvPowerTotal": {
+        "dpId": "pV_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "fc": 3,
+          "address": 39118,
+          "length": 2,
+          "dataType": "int32"
+        },
+        "transform": "identity"
+      },
+      "r.pvPowerDc": {
+        "dpId": "pV_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "fc": 3,
+          "address": 39118,
+          "length": 2,
+          "dataType": "int32"
+        },
+        "transform": "identity"
+      }
+    },
+    "ess.foxess.FoxESSH3ProEss": {
+      "r.consumptionTotal": {
+        "dpId": "lOAD_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "fc": 3,
+          "address": 39225,
+          "length": 2,
+          "dataType": "int32"
+        },
+        "transform": "identity"
+      },
+      "r.powerSetpointReadbackW": {
+        "dpId": "sET_ACTIVE_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "rw",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 3,
+            "address": 46003,
+            "length": 2,
+            "dataType": "int32"
+          },
+          "write": {
+            "fc": 16,
+            "address": 46003,
+            "length": 2,
+            "dataType": "int32"
+          }
+        },
+        "transform": "identity"
+      },
+      "r.pvPowerTotal": {
+        "dpId": "pV_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "fc": 3,
+          "address": 39118,
+          "length": 2,
+          "dataType": "int32"
+        },
+        "transform": "identity"
+      },
+      "r.pvPowerDc": {
+        "dpId": "pV_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "fc": 3,
+          "address": 39118,
+          "length": 2,
+          "dataType": "int32"
+        },
+        "transform": "identity"
+      }
+    },
+    "ess.kostal.KostalManagedEssBigEndianImpl": {
+      "r.powerSetpointReadbackW": {
+        "dpId": "sET_ACTIVE_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "rw",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 3,
+            "address": 1026,
+            "length": 2,
+            "dataType": "float32",
+            "wordOrder": "be"
+          },
+          "write": {
+            "fc": 16,
+            "address": 1026,
+            "length": 2,
+            "dataType": "float32",
+            "wordOrder": "be"
+          }
+        },
+        "transform": "identity"
+      }
+    },
+    "ess.kostal.KostalManagedEssImpl": {
+      "r.powerSetpointReadbackW": {
+        "dpId": "sET_ACTIVE_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "rw",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 3,
+            "address": 1026,
+            "length": 2,
+            "dataType": "float32",
+            "wordOrder": "le"
+          },
+          "write": {
+            "fc": 16,
+            "address": 1026,
+            "length": 2,
+            "dataType": "float32",
+            "wordOrder": "le"
+          }
+        },
+        "transform": "identity"
+      }
+    },
+    "ess.samsung.sdi.http.v1": {
+      "r.nvpPower": {
+        "dpId": "gRID_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "http",
+          "method": "GET",
+          "path": "/R3EMSAPP_REAL.ems?file=ESSRealtimeStatus.json",
+          "jsonPath": "ESSRealtimeStatus.GridPw",
+          "multiplier": 1000,
+          "signFromJsonPath": "ESSRealtimeStatus.GridStusCd",
+          "signMap": {
+            "0": 1,
+            "1": -1
+          }
+        },
+        "transform": "identity"
+      },
+      "r.consumptionTotal": {
+        "dpId": "lOAD_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "http",
+          "method": "GET",
+          "path": "/R3EMSAPP_REAL.ems?file=ESSRealtimeStatus.json",
+          "jsonPath": "ESSRealtimeStatus.ConsPw"
+        },
+        "transform": "identity"
+      },
+      "r.pvPowerTotal": {
+        "dpId": "pV_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "http",
+          "method": "GET",
+          "path": "/R3EMSAPP_REAL.ems?file=ESSRealtimeStatus.json",
+          "jsonPath": "ESSRealtimeStatus.PvPw",
+          "multiplier": 1000
+        },
+        "transform": "identity"
+      }
+    },
+    "ess.tesla.powerwall2.gateway.http.v1": {
+      "r.nvpPower": {
+        "dpId": "gRID_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/meters/aggregates",
+          "jsonPath": "$.site.instant_power",
+          "scaleFactor": 0
+        },
+        "transform": "identity"
+      },
+      "r.consumptionTotal": {
+        "dpId": "lOAD_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/meters/aggregates",
+          "jsonPath": "$.load.instant_power",
+          "scaleFactor": 0
+        },
+        "transform": "identity"
+      },
+      "r.pvPowerTotal": {
+        "dpId": "pV_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "http",
+          "method": "GET",
+          "path": "/api/meters/aggregates",
+          "jsonPath": "$.solar.instant_power",
+          "scaleFactor": 0
+        },
+        "transform": "identity"
+      }
+    },
+    "ess.tesvolt.TesvoltEnergyManagerVermarkter": {
+      "r.nvpPower": {
+        "dpId": "gRID_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 4,
+            "address": 0,
+            "length": 2,
+            "dataType": "int32",
+            "wordOrder": "le"
+          }
+        },
+        "transform": "identity"
+      },
+      "r.consumptionTotal": {
+        "dpId": "lOAD_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 4,
+            "address": 7,
+            "length": 2,
+            "dataType": "int32",
+            "wordOrder": "le"
+          }
+        },
+        "transform": "identity"
+      },
+      "r.minPowerSetpointW": {
+        "dpId": "aLLOWED_CHARGE_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 4,
+            "address": 32,
+            "length": 2,
+            "dataType": "uint32",
+            "wordOrder": "le"
+          }
+        },
+        "transform": "negativeMagnitude"
+      },
+      "r.maxPowerSetpointW": {
+        "dpId": "aLLOWED_DISCHARGE_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 4,
+            "address": 34,
+            "length": 2,
+            "dataType": "uint32",
+            "wordOrder": "le"
+          }
+        },
+        "transform": "positiveMagnitude"
+      },
+      "r.powerSetpointReadbackW": {
+        "dpId": "sET_ACTIVE_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "rw",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 3,
+            "address": 10,
+            "length": 2,
+            "dataType": "int32",
+            "wordOrder": "le"
+          },
+          "write": {
+            "fc": 16,
+            "address": 10,
+            "length": 2,
+            "dataType": "int32",
+            "wordOrder": "le"
+          }
+        },
+        "transform": "identity"
+      },
+      "r.pvPowerTotal": {
+        "dpId": "pV_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 4,
+            "address": 5,
+            "length": 2,
+            "dataType": "int32",
+            "wordOrder": "le"
+          }
+        },
+        "transform": "identity"
+      }
+    },
+    "ess.sungrow.ResidentialHybridV119": {
+      "r.nvpPower": {
+        "dpId": "gRID_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 4,
+            "address": 5600,
+            "length": 2,
+            "dataType": "int32",
+            "wordOrder": "le",
+            "nanToNull": true,
+            "nanValue": 2147483647
+          }
+        },
+        "transform": "identity"
+      },
+      "r.consumptionTotal": {
+        "dpId": "lOAD_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 4,
+            "address": 13007,
+            "length": 2,
+            "dataType": "int32",
+            "wordOrder": "le",
+            "nanToNull": true,
+            "nanValue": 2147483647
+          }
+        },
+        "transform": "identity"
+      },
+      "r.pvPowerTotal": {
+        "dpId": "pV_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 4,
+            "address": 5016,
+            "length": 2,
+            "dataType": "uint32",
+            "wordOrder": "le",
+            "nanToNull": true
+          }
+        },
+        "transform": "identity"
+      },
+      "r.pvPowerDc": {
+        "dpId": "pV_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 4,
+            "address": 5016,
+            "length": 2,
+            "dataType": "uint32",
+            "wordOrder": "le",
+            "nanToNull": true
+          }
+        },
+        "transform": "identity"
+      }
+    },
+    "ess.sungrow.Logger1000_3000_4000": {
+      "r.nvpPower": {
+        "dpId": "gRID_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 4,
+            "address": 8156,
+            "length": 2,
+            "dataType": "int32",
+            "scaleFactor": 1,
+            "wordOrder": "le",
+            "nanToNull": true,
+            "nanValue": 2147483647
+          }
+        },
+        "transform": "identity"
+      },
+      "r.consumptionTotal": {
+        "dpId": "lOAD_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 4,
+            "address": 8158,
+            "length": 2,
+            "dataType": "int32",
+            "scaleFactor": 1,
+            "wordOrder": "le",
+            "nanToNull": true,
+            "nanValue": 2147483647
+          }
+        },
+        "transform": "identity"
+      },
+      "r.pvPowerTotal": {
+        "dpId": "pV_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 4,
+            "address": 8069,
+            "length": 4,
+            "dataType": "uint64",
+            "wordOrder": "be",
+            "nanToNull": true
+          }
+        },
+        "transform": "identity"
+      },
+      "r.minPowerSetpointW": {
+        "dpId": "MaxBatteryChargePower",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 4,
+            "address": 8150,
+            "length": 1,
+            "dataType": "uint16",
+            "scaleFactor": 2,
+            "nanToNull": true
+          }
+        },
+        "transform": "negativeMagnitude"
+      },
+      "r.maxPowerSetpointW": {
+        "dpId": "MaxBatteryDischargePower",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 4,
+            "address": 8152,
+            "length": 1,
+            "dataType": "uint16",
+            "scaleFactor": 2,
+            "nanToNull": true
+          }
+        },
+        "transform": "positiveMagnitude"
+      }
+    },
+    "ess.sungrow.iHomeManagerV101": {
+      "r.nvpPower": {
+        "dpId": "gRID_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 4,
+            "address": 8156,
+            "length": 2,
+            "dataType": "int32",
+            "scaleFactor": 1,
+            "wordOrder": "le",
+            "nanToNull": true,
+            "nanValue": 2147483647
+          }
+        },
+        "transform": "identity"
+      },
+      "r.consumptionTotal": {
+        "dpId": "lOAD_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 4,
+            "address": 8158,
+            "length": 2,
+            "dataType": "int32",
+            "scaleFactor": 1,
+            "wordOrder": "le",
+            "nanToNull": true,
+            "nanValue": 2147483647
+          }
+        },
+        "transform": "identity"
+      },
+      "r.minPowerSetpointW": {
+        "dpId": "MaxBatteryChargePower",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 4,
+            "address": 8150,
+            "length": 1,
+            "dataType": "uint16",
+            "scaleFactor": 2,
+            "nanToNull": true
+          }
+        },
+        "transform": "negativeMagnitude"
+      },
+      "r.maxPowerSetpointW": {
+        "dpId": "MaxBatteryDischargePower",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 4,
+            "address": 8152,
+            "length": 1,
+            "dataType": "uint16",
+            "scaleFactor": 2,
+            "nanToNull": true
+          }
+        },
+        "transform": "positiveMagnitude"
+      }
+    },
+    "ess.tesvolt.iotGateway.mqttV2": {
+      "r.minPowerSetpointW": {
+        "dpId": "aLLOWED_CHARGE_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "mqtt",
+          "topic": "EMS/V2/Inverter/Limits",
+          "jsonPath": "$.P_Max_Charge",
+          "format": "json"
+        },
+        "transform": "negativeMagnitude"
+      },
+      "r.maxPowerSetpointW": {
+        "dpId": "aLLOWED_DISCHARGE_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "mqtt",
+          "topic": "EMS/V2/Inverter/Limits",
+          "jsonPath": "$.P_Max_Discharge",
+          "format": "json"
+        },
+        "transform": "positiveMagnitude"
+      },
+      "r.essActivePower": {
+        "dpId": "aCTIVE_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "mqtt",
+          "topic": "EMS/V2/Inverter/Measurements",
+          "jsonPath": "$.Power",
+          "format": "json",
+          "invert": true,
+          "staleAfterMs": 5000,
+          "staleValue": 0,
+          "zeroOnOffline": true
+        },
+        "transform": "identity"
+      }
+    },
+    "ess.varta.element.modbusTcpV14": {
+      "r.essActivePower": {
+        "dpId": "aCTIVE_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 3,
+            "address": 1066,
+            "length": 1,
+            "dataType": "int16",
+            "byteOrder": "be",
+            "wordOrder": "be"
+          },
+          "disableAddressFallbackOffsets": true
+        },
+        "transform": "negate"
+      },
+      "r.nvpPower": {
+        "dpId": "gRID_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 3,
+            "address": 1078,
+            "length": 1,
+            "dataType": "int16",
+            "byteOrder": "be",
+            "wordOrder": "be"
+          },
+          "disableAddressFallbackOffsets": true
+        },
+        "transform": "negate"
+      }
+    },
+    "ess.varta.oneL.modbusTcpV14": {
+      "r.essActivePower": {
+        "dpId": "aCTIVE_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 3,
+            "address": 1066,
+            "length": 1,
+            "dataType": "int16",
+            "byteOrder": "be",
+            "wordOrder": "be"
+          },
+          "disableAddressFallbackOffsets": true
+        },
+        "transform": "negate"
+      },
+      "r.nvpPower": {
+        "dpId": "gRID_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 3,
+            "address": 1078,
+            "length": 1,
+            "dataType": "int16",
+            "byteOrder": "be",
+            "wordOrder": "be"
+          },
+          "disableAddressFallbackOffsets": true
+        },
+        "transform": "negate"
+      }
+    },
+    "ess.varta.oneXL.modbusTcpV14": {
+      "r.essActivePower": {
+        "dpId": "aCTIVE_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 3,
+            "address": 1066,
+            "length": 1,
+            "dataType": "int16",
+            "byteOrder": "be",
+            "wordOrder": "be"
+          },
+          "disableAddressFallbackOffsets": true
+        },
+        "transform": "negate"
+      },
+      "r.nvpPower": {
+        "dpId": "gRID_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 3,
+            "address": 1078,
+            "length": 1,
+            "dataType": "int16",
+            "byteOrder": "be",
+            "wordOrder": "be"
+          },
+          "disableAddressFallbackOffsets": true
+        },
+        "transform": "negate"
+      }
+    },
+    "ess.varta.elementBackup.modbusTcpV14": {
+      "r.essActivePower": {
+        "dpId": "aCTIVE_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 3,
+            "address": 1066,
+            "length": 1,
+            "dataType": "int16",
+            "byteOrder": "be",
+            "wordOrder": "be"
+          },
+          "disableAddressFallbackOffsets": true
+        },
+        "transform": "negate"
+      },
+      "r.nvpPower": {
+        "dpId": "gRID_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 3,
+            "address": 1078,
+            "length": 1,
+            "dataType": "int16",
+            "byteOrder": "be",
+            "wordOrder": "be"
+          },
+          "disableAddressFallbackOffsets": true
+        },
+        "transform": "negate"
+      },
+      "r.pvPowerAc": {
+        "dpId": "pV_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 3,
+            "address": 1102,
+            "length": 1,
+            "dataType": "uint16",
+            "byteOrder": "be",
+            "wordOrder": "be"
+          },
+          "disableAddressFallbackOffsets": true
+        },
+        "transform": "identity"
+      },
+      "r.pvPowerTotal": {
+        "dpId": "pV_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 3,
+            "address": 1102,
+            "length": 1,
+            "dataType": "uint16",
+            "byteOrder": "be",
+            "wordOrder": "be"
+          },
+          "disableAddressFallbackOffsets": true
+        },
+        "transform": "identity"
+      }
+    },
+    "ess.varta.pulse.modbusTcpV14": {
+      "r.essActivePower": {
+        "dpId": "aCTIVE_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 3,
+            "address": 1066,
+            "length": 1,
+            "dataType": "int16",
+            "byteOrder": "be",
+            "wordOrder": "be"
+          },
+          "disableAddressFallbackOffsets": true
+        },
+        "transform": "negate"
+      },
+      "r.nvpPower": {
+        "dpId": "gRID_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 3,
+            "address": 1078,
+            "length": 1,
+            "dataType": "int16",
+            "byteOrder": "be",
+            "wordOrder": "be"
+          },
+          "disableAddressFallbackOffsets": true
+        },
+        "transform": "negate"
+      },
+      "r.pvPowerAc": {
+        "dpId": "pV_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 3,
+            "address": 1102,
+            "length": 1,
+            "dataType": "uint16",
+            "byteOrder": "be",
+            "wordOrder": "be"
+          },
+          "disableAddressFallbackOffsets": true
+        },
+        "transform": "identity"
+      },
+      "r.pvPowerTotal": {
+        "dpId": "pV_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 3,
+            "address": 1102,
+            "length": 1,
+            "dataType": "uint16",
+            "byteOrder": "be",
+            "wordOrder": "be"
+          },
+          "disableAddressFallbackOffsets": true
+        },
+        "transform": "identity"
+      }
+    },
+    "ess.varta.pulseNeo.modbusTcpV14": {
+      "r.essActivePower": {
+        "dpId": "aCTIVE_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 3,
+            "address": 1066,
+            "length": 1,
+            "dataType": "int16",
+            "byteOrder": "be",
+            "wordOrder": "be",
+            "vartaScaleFactorDpId": "sF_ACTIVE_POWER"
+          },
+          "disableAddressFallbackOffsets": true
+        },
+        "transform": "negate"
+      },
+      "r.nvpPower": {
+        "dpId": "gRID_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 3,
+            "address": 1078,
+            "length": 1,
+            "dataType": "int16",
+            "byteOrder": "be",
+            "wordOrder": "be",
+            "vartaScaleFactorDpId": "sF_GRID_POWER"
+          },
+          "disableAddressFallbackOffsets": true
+        },
+        "transform": "negate"
+      },
+      "r.pvPowerAc": {
+        "dpId": "pV_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 3,
+            "address": 1102,
+            "length": 1,
+            "dataType": "uint16",
+            "byteOrder": "be",
+            "wordOrder": "be"
+          },
+          "disableAddressFallbackOffsets": true
+        },
+        "transform": "identity"
+      },
+      "r.pvPowerTotal": {
+        "dpId": "pV_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 3,
+            "address": 1102,
+            "length": 1,
+            "dataType": "uint16",
+            "byteOrder": "be",
+            "wordOrder": "be"
+          },
+          "disableAddressFallbackOffsets": true
+        },
+        "transform": "identity"
+      }
+    },
+    "ess.varta.link.modbusTcpV14": {
+      "r.essActivePower": {
+        "dpId": "aCTIVE_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 3,
+            "address": 1066,
+            "length": 1,
+            "dataType": "int16",
+            "byteOrder": "be",
+            "wordOrder": "be"
+          },
+          "disableAddressFallbackOffsets": true
+        },
+        "transform": "negate"
+      },
+      "r.nvpPower": {
+        "dpId": "gRID_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 3,
+            "address": 1078,
+            "length": 1,
+            "dataType": "int16",
+            "byteOrder": "be",
+            "wordOrder": "be"
+          },
+          "disableAddressFallbackOffsets": true
+        },
+        "transform": "negate"
+      }
+    },
+    "ess.varta.flexStorage.modbusTcpV14": {
+      "r.essActivePower": {
+        "dpId": "aCTIVE_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 3,
+            "address": 1066,
+            "length": 1,
+            "dataType": "int16",
+            "byteOrder": "be",
+            "wordOrder": "be",
+            "vartaScaleFactorDpId": "sF_ACTIVE_POWER"
+          },
+          "disableAddressFallbackOffsets": true
+        },
+        "transform": "negate"
+      },
+      "r.nvpPower": {
+        "dpId": "gRID_POWER",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "modbus",
+          "read": {
+            "fc": 3,
+            "address": 1078,
+            "length": 1,
+            "dataType": "int16",
+            "byteOrder": "be",
+            "wordOrder": "be",
+            "vartaScaleFactorDpId": "sF_GRID_POWER"
+          },
+          "disableAddressFallbackOffsets": true
+        },
+        "transform": "negate"
+      }
+    },
+    "ess.deye.singlePhase.modbusRtu": {
+      "r.nvpPower": {
+        "dpId": "canonical.gridPower",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "deyeDiagnostic"
+        },
+        "transform": "identity"
+      },
+      "r.pvPowerDc": {
+        "dpId": "canonical.pvPower",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "deyeDiagnostic"
+        },
+        "transform": "identity"
+      },
+      "r.pvPowerTotal": {
+        "dpId": "canonical.pvPower",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "deyeDiagnostic"
+        },
+        "transform": "identity"
+      },
+      "r.consumptionTotal": {
+        "dpId": "load.power",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "deyeModbus",
+          "read": {
+            "fc": 3,
+            "address": 178,
+            "length": 1,
+            "addresses": [
+              178
+            ],
+            "dataType": "int16",
+            "wordOrder": "le",
+            "byteOrder": "be"
+          },
+          "engineeringExponent": 0,
+          "disableAddressFallbackOffsets": true
+        },
+        "transform": "identity"
+      }
+    },
+    "ess.deye.threePhaseLv.modbusRtu": {
+      "r.nvpPower": {
+        "dpId": "canonical.gridPower",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "deyeDiagnostic"
+        },
+        "transform": "identity"
+      },
+      "r.pvPowerDc": {
+        "dpId": "canonical.pvPower",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "deyeDiagnostic"
+        },
+        "transform": "identity"
+      },
+      "r.pvPowerTotal": {
+        "dpId": "canonical.pvPower",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "deyeDiagnostic"
+        },
+        "transform": "identity"
+      },
+      "r.consumptionTotal": {
+        "dpId": "load.power",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "deyeModbus",
+          "read": {
+            "fc": 3,
+            "address": 653,
+            "length": 1,
+            "addresses": [
+              653,
+              659
+            ],
+            "dataType": "int32",
+            "wordOrder": "le",
+            "byteOrder": "be"
+          },
+          "engineeringExponent": 0,
+          "disableAddressFallbackOffsets": true
+        },
+        "transform": "identity"
+      }
+    },
+    "ess.deye.threePhaseHv.modbusRtu": {
+      "r.nvpPower": {
+        "dpId": "canonical.gridPower",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "deyeDiagnostic"
+        },
+        "transform": "identity"
+      },
+      "r.pvPowerDc": {
+        "dpId": "canonical.pvPower",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "deyeDiagnostic"
+        },
+        "transform": "identity"
+      },
+      "r.pvPowerTotal": {
+        "dpId": "canonical.pvPower",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "deyeDiagnostic"
+        },
+        "transform": "identity"
+      },
+      "r.consumptionTotal": {
+        "dpId": "load.power",
+        "type": "number",
+        "unit": "W",
+        "rw": "ro",
+        "source": {
+          "kind": "deyeModbus",
+          "read": {
+            "fc": 3,
+            "address": 653,
+            "length": 1,
+            "addresses": [
+              653,
+              659
+            ],
+            "dataType": "int32",
+            "wordOrder": "le",
+            "byteOrder": "be"
+          },
+          "engineeringExponent": 0,
+          "disableAddressFallbackOffsets": true
+        },
+        "transform": "identity"
+      }
+    }
+  }
+}

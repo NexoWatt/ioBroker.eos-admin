@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/datapoints.ts
- * Quell-Hash: sha256:862669409b5b427e3bcd9a53137db81d3008375b8c1e8e555900a84db8d1fef4
+ * Quell-Hash: sha256:f79b81c89eaf0e774cd1a5699994eb1a67bfabb631297a80ad8d55b749f4b17d
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -614,6 +614,22 @@ class DatapointRegistry {
      * sofortige Ereignisse und nachträglich konfigurierte Quellen gelesen werden.
      * Eine zurückkehrende Zuordnung wird erneut aus der States-DB initialisiert.
      */
+    remove(key) {
+        const previous = this.byKey.get(key);
+        if (!previous) return false;
+        this.byKey.delete(key);
+        this._updateCacheStateReferences(previous, null);
+        for (const id of [previous.objectId, previous.srcObjectId].filter(Boolean)) {
+            if (this.keyByObjectId.get(id) !== key) continue;
+            const remaining = [...this.byKey.values()].find(entry => entry.objectId === id || entry.srcObjectId === id);
+            if (remaining) this.keyByObjectId.set(id, remaining.key);
+            else this.keyByObjectId.delete(id);
+        }
+        // Controller subscriptions can be shared by modules outside this
+        // registry. Removing this mapping must not unsubscribe those consumers.
+        return true;
+    }
+
     _updateCacheStateReferences(previous, next) {
         const ids = entry => new Set(entry
             ? [entry.objectId, entry.srcObjectId, entry.aliveConnectedId, entry.infoConnectionId].filter(id => typeof id === 'string' && id.length > 0)
@@ -755,6 +771,11 @@ class DatapointRegistry {
     getRaw(key) {
         const e = this.getEntry(key);
         if (!e) return null;
+        // A completed old DB write can emit its event after the provider began
+        // clearing prices. Fence the exact owned price sources until the whole
+        // clearing publication has succeeded; never convert missing into zero.
+        const tariffFence = this.adapter?._nwTariffInvalidation?.ids;
+        if (tariffFence?.has?.(e.objectId) || tariffFence?.has?.(e.srcObjectId)) return null;
         const c = this.cacheByObjectId.get(e.srcObjectId || e.objectId);
         return c ? c.val : null;
     }

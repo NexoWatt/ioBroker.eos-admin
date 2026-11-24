@@ -3,6 +3,7 @@
 const { join } = require('node:path');
 const { performance } = require('node:perf_hooks');
 const { EosModuleConfigStore } = require('./eosModuleConfigStore');
+const { EosDeviceEmsService } = require('./eosDeviceEmsService');
 const SECRET_MARKER = '__EOS_SECRET_UNCHANGED__';
 const MODULES = Object.freeze({ devices: 'nexowatt-devices', eebus: 'eebus', backup: 'nexowatt-backup' });
 const SECRET_KEY = /password|passwd|^pass$|accessjson|expertmount|secret|token|privatekey|pairingpin|apikey|credential|authorization|cookie/i;
@@ -111,6 +112,7 @@ class EosModuleHost {
         this.bridgeReply = null;
         this.stopped = false;
         this.stopPromise = null;
+        this.deviceEms = null;
         for (const id of Object.keys(MODULES)) {
             this.entries.set(id, { id, module: null, config: { enabled: false }, configLoaded: false, reason: 'DISABLED', lease: 0,
                 generation: 0, blockers: [], loading: false, failed: false, started: false, startup: null, stopEntryPromise: null, pendingWrites: new Set(), timers: new Set(), subscriptions: new Set(), downloads: new Set() });
@@ -121,6 +123,38 @@ class EosModuleHost {
             throw fail('EOS_MODULE_UNKNOWN');
         return this.options.factories?.[id] || require(join(this.options.baseDir, 'modules', id, 'index.js'));
     }
+    /** Bind only the internal hosted runtime, never a URL or browser callback. */
+    bindDeviceEms(handler) {
+        if (this.deviceEms || this.stopped || typeof handler !== 'function')
+            throw fail('EOS_EMS_BRIDGE_INVALID');
+        this.deviceEms = new EosDeviceEmsService({
+            owner: this.owner,
+            getSnapshot: () => {
+                const entry = this.entries.get('devices');
+                return { namespace: this.namespace('devices'), devices: Array.isArray(entry.config.devices) ? entry.config.devices : [],
+                    moduleEnabled: entry.config.enabled === true, generation: entry.generation,
+                    ready: entry.configLoaded && this.initialized && (!entry.config.enabled ||
+                        (entry.started === true && this.canOperate('devices', entry.generation))) };
+            },
+            canRun: () => !this.stopped && !this.mutation && this.licensed('devices') && this.owner.eosOwnership?.canWrite() === true,
+            apply: async (devices) => {
+                // Keep the authoritative device revision stable until the hosted
+                // configuration write completes. Discovery itself holds no lock.
+                if (this.mutation || this.stopped)
+                    throw fail('EOS_MODULE_BUSY');
+                this.mutation = true;
+                try {
+                    return await handler(devices);
+                }
+                finally {
+                    this.mutation = false;
+                }
+            },
+        });
+        this.deviceEms.request('configuration');
+    }
+    requestDeviceEms() { this.deviceEms?.request('apps'); }
+    async flushDeviceEms() { await this.deviceEms?.flush(); }
     readConfig(id) {
         return this.decodeConfig(id, this.owner.config.eosModules?.[id]);
     }
@@ -387,7 +421,12 @@ class EosModuleHost {
                     return Promise.reject(fail('EOS_MODULE_STOPPED'));
                 }
                 const full = resolve(id);
-                return mutate(() => owner.setForeignStateAsync(full, value, ack));
+                return mutate(async () => {
+                    await owner.setForeignStateAsync(full, value, ack);
+                    // Metadata is generated after aliases exist; no discovery on normal telemetry ticks.
+                    if (entry.id === 'devices' && full.endsWith('.aliases.meta.manifest'))
+                        this.deviceEms?.event(full, true);
+                });
             },
             subscribeStatesAsync: async (pattern) => {
                 const full = resolve(pattern);
@@ -551,6 +590,8 @@ class EosModuleHost {
                     else {
                         entry.started = true;
                         entry.reason = 'RUNNING';
+                        if (entry.id === 'devices')
+                            this.deviceEms?.request('started');
                     }
                 }
                 catch {
@@ -624,6 +665,7 @@ class EosModuleHost {
         return this.startPromise;
     }
     onObjectChange(id) {
+        this.deviceEms?.event(id);
         for (const entry of this.entries.values()) {
             if (id.startsWith(`system.adapter.${MODULES[entry.id]}.`)) {
                 this.revoke(entry, 'OWNERSHIP_CHANGED');
@@ -634,6 +676,7 @@ class EosModuleHost {
         void this.reconcile();
     }
     onStateChange(id, state) {
+        this.deviceEms?.event(id, true);
         for (const entry of this.entries.values()) {
             if (id.startsWith(`system.adapter.${MODULES[entry.id]}.`) ||
                 (/^system\.host\..*\.alive$/.test(id) && state?.val !== true)) {
@@ -675,6 +718,7 @@ class EosModuleHost {
         const reason = this.configurationReason(id);
         return { id, config: redact(entry.config), configurationReady: !reason, configurationLoaded: entry.configLoaded,
             configurationReason: reason, status: await this.status(id),
+            ...(id === 'devices' && this.deviceEms ? { emsCommissioning: this.deviceEms.view() } : {}),
             manualImport: this.manualImportStatus(id), migration: entry.loadedEnvelope?.migration || this.owner.config.eosModules?.[id]?.migration || null };
     }
     manualImportStatus(id) {
@@ -700,6 +744,8 @@ class EosModuleHost {
             throw fail('EOS_MODULE_UNKNOWN');
         if (!entry.configLoaded)
             throw fail('EOS_MODULE_NOT_READY');
+        if (id === 'devices')
+            this.deviceEms?.request('configuration');
         this.mutation = true;
         this.configurationSavePromise = this.persistConfig(id, config, migration);
         try {
@@ -740,6 +786,8 @@ class EosModuleHost {
             entry.reason = 'STOP_FAILED_RESTART_REQUIRED';
         }
         this.nextOwnershipCheck = 0;
+        if (id === 'devices')
+            this.deviceEms?.request('configuration');
         void this.reconcile();
         return this.view(id);
     }
@@ -888,7 +936,10 @@ class EosModuleHost {
         this.timer = null;
         for (const entry of this.entries.values())
             this.revoke(entry, entry.stopFailed ? 'STOP_FAILED_RESTART_REQUIRED' : 'STOPPED');
-        this.stopPromise = Promise.allSettled([...this.entries.values()].map(entry => this.stopEntry(entry))).then(results => {
+        this.stopPromise = Promise.allSettled([
+            ...[...this.entries.values()].map(entry => this.stopEntry(entry)),
+            ...(this.deviceEms ? [this.deviceEms.stop()] : []),
+        ]).then(results => {
             if (results.some(result => result.status === 'rejected') || [...this.entries.values()].some(entry => entry.stopFailed)) {
                 throw fail('EOS_MODULE_STOP_UNCONFIRMED');
             }

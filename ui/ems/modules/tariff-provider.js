@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/modules/tariff-provider.ts
- * Quell-Hash: sha256:92f133b4fe74d37e283e5bc6b6b683ebe528f29c6bc672f30413b9789d1e1e17
+ * Quell-Hash: sha256:871a843c9c2da28fce4f0d53a843062d27a0189302f90787442e56987c55add8
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -37,12 +37,42 @@
 'use strict';
 
 const { BaseModule } = require('./base');
+const { createHash } = require('node:crypto');
 const {
     fetchProvider,
     splitTodayTomorrow,
     currentAndAverage,
     publicRegistry,
 } = require('../services/tariff-provider-registry');
+
+// Only configuration changes hash the normalized configuration, including
+// credentials. The digest is private and is never exposed as a diagnostic.
+function stableConfiguration(value) {
+    let nodes = 0;
+    const visit = (item, depth) => {
+        if (++nodes > 4096 || depth > 16) throw new Error('TARIFF_CONFIGURATION_INVALID');
+        if (item === null || ['string', 'boolean', 'number'].includes(typeof item)) return item;
+        if (Array.isArray(item)) return item.map(child => visit(child, depth + 1));
+        if (!item || typeof item !== 'object') return undefined;
+        const entries = [];
+        for (const [key, child] of Object.entries(item).sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0)) {
+            if (['__proto__', 'prototype', 'constructor'].includes(key)) throw new Error('TARIFF_CONFIGURATION_INVALID');
+            entries.push([key, visit(child, depth + 1)]);
+        }
+        return Object.fromEntries(entries);
+    };
+    const serialized = JSON.stringify(visit(value, 0));
+    if (serialized.length > 262144) throw new Error('TARIFF_CONFIGURATION_INVALID');
+    return serialized;
+}
+
+const OPERATIONAL_PRICE_STATES = [
+    ['tariffProvider.currentPriceEurPerKwh', null],
+    ['tariffProvider.averagePriceEurPerKwh', null],
+    ['tariffProvider.pricesTodayJson', '[]'],
+    ['tariffProvider.pricesTomorrowJson', '[]'],
+    ['tariffProvider.normalizedJson', '[]'],
+];
 
 class TariffProviderModule extends BaseModule {
     constructor(adapter, dpRegistry) {
@@ -58,6 +88,112 @@ class TariffProviderModule extends BaseModule {
         this._lastError = '';
         this._consecutiveErrors = 0;
         this._effectiveRefreshMinutes = 0;
+        this._generation = 0;
+        this._stopped = false;
+        this._publicationTail = Promise.resolve();
+        this._invalidationPending = false;
+        this._mappingPromise = null;
+        this._captureConfiguration();
+        this._fencePriceReaders();
+    }
+
+    _fencePriceReaders() {
+        this._priceReaderFence = { ids: new Set(OPERATIONAL_PRICE_STATES.map(([id]) => `${this.adapter.namespace}.${id}`)) };
+        this.adapter._nwTariffInvalidation = this._priceReaderFence;
+    }
+
+    _captureConfiguration() {
+        const serialized = stableConfiguration(this._cfg());
+        const signature = createHash('sha256').update(serialized).digest('hex');
+        this._configurationSource = this.adapter?.config?.tariffProvider;
+        this._configurationCountry = this.adapter?.config?.countryProfile?.country;
+        if (signature === this._configurationSignature) return false;
+        this._configurationSignature = signature;
+        this._configuration = JSON.parse(serialized);
+        return true;
+    }
+
+    _isCurrent(generation) {
+        return !this._stopped && !this.adapter?._nwShuttingDown && generation === this._generation;
+    }
+
+    /** Rebind only the tariff readers, including charging-management's direct
+     * price keys. Unchanged mappings keep their transformations and caches. */
+    async applyTariffMappings() {
+        if (this._stopped || !this.dp) return;
+        if (this._mappingPromise) await this._mappingPromise;
+        const vis = this.adapter.emsEngine?.mm?.modules?.find(entry => entry.key === 'tarifVis')?.instance;
+        const dps = this.adapter.config?.datapoints || {};
+        const trim = value => typeof value === 'string' ? value.trim() : '';
+        const current = vis?._getVisPriceCurrentId?.() || trim(dps.priceCurrent);
+        const average = vis?._getVisPriceAverageId?.() || trim(dps.priceAverage);
+        const today = vis?._getVisPriceTodayJsonId?.() || trim(dps.priceTodayJson);
+        const tomorrow = vis?._getVisPriceTomorrowJsonId?.() || trim(dps.priceTomorrowJson);
+        const mappings = [
+            ['tarif.preisAktuellEurProKwh', current, 'number'], ['priceCurrent', current, 'number'],
+            ['tarif.preisDurchschnittEurProKwh', average, 'number'], ['priceAverage', average, 'number'],
+            ['tarif.pricesTodayJson', today, 'string'], ['tarif.pricesTomorrowJson', tomorrow, 'string'],
+        ];
+        const changed = [];
+        // Drop all obsolete reader bindings synchronously before the first DB
+        // await. A regulation tick can see missing readings, never old curves
+        // combined with the first newly registered price.
+        for (const [key, objectId, dataType] of mappings) {
+            const previous = this.dp.getEntry(key);
+            if (previous?.objectId === objectId) continue;
+            if (previous) this.dp.remove(key);
+            if (objectId) changed.push([key, objectId, dataType]);
+        }
+        const operation = (async () => {
+            for (const [key, objectId, dataType] of changed) {
+                if (this._stopped || this.adapter?._nwShuttingDown) return;
+                // A canonical €/kWh source never inherits a cent/kWh converter.
+                await this.dp.upsert({ key, objectId, dataType, direction: 'in',
+                    ...(dataType === 'number' && objectId.startsWith(`${this.adapter.namespace}.tariffProvider.`)
+                        ? { unit: '€/kWh', scale: 1, offset: 0, invert: false } : {}) });
+            }
+        })();
+        this._mappingPromise = operation;
+        try { await operation; }
+        finally { if (this._mappingPromise === operation) this._mappingPromise = null; }
+    }
+
+    /** Called by the save/apply path, not a second scheduler or an EMS restart. */
+    invalidateConfiguration() {
+        if (this._stopped) return Promise.resolve(false);
+        const changed = this._captureConfiguration();
+        if (!changed && !this._invalidationPending) return Promise.resolve(false);
+        this._invalidationPending = true;
+        this._fencePriceReaders();
+        const generation = ++this._generation;
+        this._intervals = [];
+        this._lastFetchMs = 0;
+        this._lastSuccessMs = 0;
+        this._nextFetchMs = 0;
+        this._lastCurrentKey = '';
+        this._lastPublishedFresh = null;
+        this._lastPublishedSuccessMs = null;
+        this._lastError = '';
+        this._consecutiveErrors = 0;
+        this._effectiveRefreshMinutes = 0;
+        // Remove the old provider from the actual EMS cache immediately. This
+        // also fences any outstanding registry prime read for those exact IDs.
+        const now = Date.now();
+        for (const [id, value] of OPERATIONAL_PRICE_STATES) {
+            const fullId = `${this.adapter.namespace}.${id}`;
+            this.dp?.handleStateChange?.(fullId, null);
+            const key = this.adapter.keyFromId?.(fullId);
+            if (key) this.adapter.updateValue?.(key, value, now);
+        }
+        const cfg = this._configuration;
+        const status = !cfg.enabled ? 'disabled' : cfg.providerId === 'manual-dp' ? 'manual-datapoints' : 'configuration-changed';
+        this.adapter._tariffProviderSnapshot = { ts: now, providerId: cfg.providerId, sourceId: cfg.sourceId,
+            enabled: cfg.enabled, status, quality: 'missing', fresh: false,
+            currentPriceEurPerKwh: null, averagePriceEurPerKwh: null, intervalCount: 0, lastSuccessMs: 0 };
+        return this._publish(cfg, now, status, generation).then(() => {
+            if (this._isCurrent(generation)) this._invalidationPending = false;
+            return true;
+        });
     }
 
     async init() {
@@ -114,8 +250,10 @@ class TariffProviderModule extends BaseModule {
         };
     }
 
-    async _set(id, val) {
-        try { await this.adapter.setStateAsync(id, { val, ack: true }); } catch (_e) {}
+    async _set(id, val, generation = this._generation) {
+        if (!this._isCurrent(generation)) return;
+        try { await this.adapter.setStateAsync(id, { val, ack: true }); }
+        catch (_e) { throw new Error('TARIFF_STATE_WRITE_FAILED'); }
     }
 
     _providerSourceId(cfg) {
@@ -181,16 +319,19 @@ class TariffProviderModule extends BaseModule {
         return this._nextFetchMs;
     }
 
-    async _setTariffSettings(cfg) {
-        if (!cfg.enabled || cfg.providerId === 'manual-dp' || !cfg.activateTariffLogic) return;
+    async _setTariffSettings(cfg, generation = this._generation) {
+        if (!this._isCurrent(generation) || !cfg.enabled || cfg.providerId === 'manual-dp' || !cfg.activateTariffLogic) return;
         const ns = String(this.adapter.namespace || `nexowatt-ui.${this.adapter.instance || 0}`);
         try {
             const dynId = `${ns}.settings.dynamicTariff`;
             const modeId = `${ns}.settings.tariffMode`;
             const dyn = await this.adapter.getForeignStateAsync(dynId).catch(() => null);
+            if (!this._isCurrent(generation)) return;
             if (!dyn || dyn.val !== true) await this.adapter.setForeignStateAsync(dynId, true, true);
+            if (!this._isCurrent(generation)) return;
             if (cfg.automaticMode) {
                 const mode = await this.adapter.getForeignStateAsync(modeId).catch(() => null);
+                if (!this._isCurrent(generation)) return;
                 if (!mode || Number(mode.val) !== 2) await this.adapter.setForeignStateAsync(modeId, 2, true);
             }
         } catch (e) {
@@ -198,11 +339,20 @@ class TariffProviderModule extends BaseModule {
         }
     }
 
-    async _publish(cfg, nowMs, statusOverride = '') {
+    _publish(cfg, nowMs, statusOverride = '', generation = this._generation) {
+        const pending = this._publicationTail.then(() => this._publishCurrent(cfg, nowMs, statusOverride, generation));
+        this._publicationTail = pending.catch(() => {});
+        return pending;
+    }
+
+    async _publishCurrent(cfg, nowMs, statusOverride, generation) {
+        if (!this._isCurrent(generation)) return;
+        const set = (id, val) => this._set(id, val, generation);
         const split = splitTodayTomorrow(this._intervals, nowMs, cfg.timeZone);
         const ca = currentAndAverage(this._intervals, nowMs);
         const staleAge = this._lastSuccessMs ? nowMs - this._lastSuccessMs : Number.POSITIVE_INFINITY;
-        const fresh = this._lastSuccessMs > 0 && staleAge <= cfg.maxStaleMinutes * 60 * 1000 && Number.isFinite(ca.current);
+        const fresh = cfg.enabled && cfg.providerId !== 'manual-dp' && this._lastSuccessMs > 0
+            && staleAge <= cfg.maxStaleMinutes * 60 * 1000 && Number.isFinite(ca.current);
         const status = statusOverride || (fresh ? 'ok' : (this._intervals.length ? 'stale' : 'waiting'));
         const quality = this._intervals[0] ? String(this._intervals[0].quality || 'unknown') : 'missing';
         // Never refresh the tariff-control datapoints with stale provider data.
@@ -217,40 +367,39 @@ class TariffProviderModule extends BaseModule {
         // Ein echter Erfolg, Intervallwechsel oder Ablauf benötigt neue Preisstates.
         const publishPrices = statusOverride === 'ok' || this._lastCurrentKey !== publishedKey || this._lastPublishedFresh !== fresh;
 
-        await this._set('tariffProvider.enabled', cfg.enabled);
-        await this._set('tariffProvider.providerId', cfg.providerId);
-        await this._set('tariffProvider.sourceId', cfg.sourceId);
-        await this._set('tariffProvider.status', status);
-        await this._set('tariffProvider.quality', quality);
-        if (publishPrices) {
-            await this._set('tariffProvider.currentPriceEurPerKwh', current);
-            await this._set('tariffProvider.averagePriceEurPerKwh', average);
+        // Operational prices/curves are cleared before the new provider label.
+        // Consumers inspect numeric values and timestamps, not only fresh=false.
+        if (!fresh && publishPrices) {
+            await set('tariffProvider.fresh', false);
+            for (const [id, value] of OPERATIONAL_PRICE_STATES) await set(id, value);
+        }
+
+        await set('tariffProvider.enabled', cfg.enabled);
+        await set('tariffProvider.providerId', cfg.providerId);
+        await set('tariffProvider.sourceId', cfg.sourceId);
+        await set('tariffProvider.status', status);
+        await set('tariffProvider.quality', quality);
+        if (fresh && publishPrices) {
+            await set('tariffProvider.currentPriceEurPerKwh', current);
+            await set('tariffProvider.averagePriceEurPerKwh', average);
         }
         if (fresh && publishPrices) {
-            await this._set('tariffProvider.pricesTodayJson', JSON.stringify(split.today));
-            await this._set('tariffProvider.pricesTomorrowJson', JSON.stringify(split.tomorrow));
-            await this._set('tariffProvider.normalizedJson', JSON.stringify(this._intervals));
-        } else if (!fresh && publishPrices) {
-            // Explicitly clear the operational curves once their provider freshness
-            // expires. The in-memory cache remains available for diagnostics, but no
-            // new storage/EVCS tariff action may be started from it.
-            await this._set('tariffProvider.pricesTodayJson', '[]');
-            await this._set('tariffProvider.pricesTomorrowJson', '[]');
-            await this._set('tariffProvider.normalizedJson', '[]');
+            await set('tariffProvider.pricesTodayJson', JSON.stringify(split.today));
+            await set('tariffProvider.pricesTomorrowJson', JSON.stringify(split.tomorrow));
+            await set('tariffProvider.normalizedJson', JSON.stringify(this._intervals));
         }
-        this._lastCurrentKey = publishedKey;
-        this._lastPublishedFresh = fresh;
-        await this._set('tariffProvider.lastUpdate', nowMs);
+        if (!this._isCurrent(generation)) return;
+        await set('tariffProvider.lastUpdate', nowMs);
         if (this._lastPublishedSuccessMs !== this._lastSuccessMs) {
-            await this._set('tariffProvider.lastSuccess', this._lastSuccessMs || 0);
-            this._lastPublishedSuccessMs = this._lastSuccessMs;
+            await set('tariffProvider.lastSuccess', this._lastSuccessMs || 0);
+            if (!this._isCurrent(generation)) return;
         }
-        await this._set('tariffProvider.nextUpdate', this._nextFetchMs || 0);
-        await this._set('tariffProvider.fresh', fresh);
-        await this._set('tariffProvider.error', this._lastError || '');
-        await this._set('tariffProvider.intervalCount', this._intervals.length);
-        await this._set('tariffProvider.effectiveRefreshMinutes', this._effectiveRefreshMinutes || 0);
-        await this._set('tariffProvider.consecutiveErrors', this._consecutiveErrors || 0);
+        await set('tariffProvider.nextUpdate', this._nextFetchMs || 0);
+        await set('tariffProvider.fresh', fresh);
+        await set('tariffProvider.error', this._lastError || '');
+        await set('tariffProvider.intervalCount', this._intervals.length);
+        await set('tariffProvider.effectiveRefreshMinutes', this._effectiveRefreshMinutes || 0);
+        await set('tariffProvider.consecutiveErrors', this._consecutiveErrors || 0);
         const snapshot = {
             ts: nowMs,
             enabled: cfg.enabled,
@@ -272,17 +421,24 @@ class TariffProviderModule extends BaseModule {
             consecutiveErrors: this._consecutiveErrors || 0,
             error: this._lastError || '',
         };
-        await this._set('tariffProvider.statusJson', JSON.stringify(snapshot));
+        await set('tariffProvider.statusJson', JSON.stringify(snapshot));
+        if (!this._isCurrent(generation)) return;
+        this._lastCurrentKey = publishedKey;
+        this._lastPublishedFresh = fresh;
+        this._lastPublishedSuccessMs = this._lastSuccessMs;
+        if (this.adapter._nwTariffInvalidation === this._priceReaderFence) delete this.adapter._nwTariffInvalidation;
         try { this.adapter._tariffProviderSnapshot = snapshot; } catch (_e) {}
     }
 
     /** Die Registry validiert alle Intervalle vor der Übernahme. Abruffehler
      * behalten den letzten gültigen Stand und dessen Erfolgszeit; _publish
      * setzt nach Ablauf der vorhandenen Frischegrenze die Preise auf null. */
-    async _refresh(cfg, nowMs) {
+    async _refresh(cfg, nowMs, generation = this._generation) {
+        if (!this._isCurrent(generation)) return;
         this._lastFetchMs = nowMs;
         try {
             const result = await fetchProvider(cfg);
+            if (!this._isCurrent(generation)) return;
             const intervals = Array.isArray(result && result.intervals) ? result.intervals : [];
             if (!intervals.length) throw new Error('provider_returned_no_intervals');
             // Historische Parser bleiben für Diagnose verwendbar. Erst hier an
@@ -295,19 +451,35 @@ class TariffProviderModule extends BaseModule {
             this._lastError = '';
             this._consecutiveErrors = 0;
             this._scheduleNextFetch(cfg, this._lastSuccessMs, true);
-            await this._publish(cfg, this._lastSuccessMs, 'ok');
+            await this._publish(cfg, this._lastSuccessMs, 'ok', generation);
         } catch (e) {
+            if (!this._isCurrent(generation)) return;
+            if (e && e.message === 'TARIFF_STATE_WRITE_FAILED') {
+                this._invalidationPending = true;
+                await this.invalidateConfiguration();
+                return;
+            }
             const failedAt = Date.now();
             this._consecutiveErrors += 1;
             this._lastError = String(e && e.message || e || 'provider_error').slice(0, 500);
             this._scheduleNextFetch(cfg, failedAt, false);
             try { this.adapter.log.warn(`[TariffProvider] ${cfg.providerId}: ${this._lastError}`); } catch (_e) {}
-            await this._publish(cfg, failedAt, this._intervals.length ? 'degraded' : 'error');
+            await this._publish(cfg, failedAt, this._intervals.length ? 'degraded' : 'error', generation);
         }
     }
 
     async tick() {
-        const cfg = this._cfg();
+        if (this._stopped || this.adapter?._nwShuttingDown) return;
+        if (this._mappingPromise) await this._mappingPromise;
+        // The common 1-s path compares references only; secrets are not hashed
+        // on every regulation tick. Save/import explicitly invokes the hook.
+        if (this._invalidationPending || this._configurationSource !== this.adapter?.config?.tariffProvider
+            || this._configurationCountry !== this.adapter?.config?.countryProfile?.country) {
+            await this.invalidateConfiguration();
+        }
+        const cfg = this._configuration;
+        const generation = this._generation;
+        if (!this._isCurrent(generation)) return;
         const nowMs = Date.now();
         if (!cfg.enabled || cfg.providerId === 'manual-dp') {
             this._intervals = [];
@@ -315,26 +487,32 @@ class TariffProviderModule extends BaseModule {
             this._consecutiveErrors = 0;
             this._effectiveRefreshMinutes = 0;
             this._nextFetchMs = 0;
-            await this._set('tariffProvider.enabled', cfg.enabled);
-            await this._set('tariffProvider.providerId', cfg.providerId);
-            await this._set('tariffProvider.sourceId', cfg.sourceId);
-            await this._set('tariffProvider.status', cfg.enabled ? 'manual-datapoints' : 'disabled');
-            await this._set('tariffProvider.fresh', false);
-            await this._set('tariffProvider.currentPriceEurPerKwh', null);
-            await this._set('tariffProvider.averagePriceEurPerKwh', null);
-            await this._set('tariffProvider.pricesTodayJson', '[]');
-            await this._set('tariffProvider.pricesTomorrowJson', '[]');
-            await this._set('tariffProvider.normalizedJson', '[]');
+            this._lastSuccessMs = 0;
+            await this._publish(cfg, nowMs, cfg.enabled ? 'manual-datapoints' : 'disabled', generation);
+            await this._publicationTail;
             return;
         }
 
-        await this._setTariffSettings(cfg);
+        await this._setTariffSettings(cfg, generation);
+        if (!this._isCurrent(generation)) return;
         if (!this._fetchPromise && (!this._lastFetchMs || nowMs >= this._nextFetchMs || !this._intervals.length)) {
-            this._fetchPromise = this._refresh(cfg, nowMs).finally(() => { this._fetchPromise = null; });
+            const operation = this._refresh(cfg, nowMs, generation).finally(() => {
+                if (this._fetchPromise === operation) this._fetchPromise = null;
+            });
+            this._fetchPromise = operation;
             await this._fetchPromise;
+            await this._publicationTail;
             return;
         }
-        await this._publish(cfg, nowMs);
+        await this._publish(cfg, nowMs, '', generation);
+        await this._publicationTail;
+    }
+
+    stop() {
+        this._stopped = true;
+        this._generation++;
+        this._intervals = [];
+        this._lastSuccessMs = 0;
     }
 }
 

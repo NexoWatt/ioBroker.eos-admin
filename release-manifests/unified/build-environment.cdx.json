@@ -2,10 +2,10 @@
   "$schema": "http://cyclonedx.org/schema/bom-1.5.schema.json",
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
-  "serialNumber": "urn:uuid:ce9ba584-b393-4db9-b562-ce0309412055",
+  "serialNumber": "urn:uuid:554f798d-5482-4d26-a9a0-60f3ea68ba98",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-11-24T05:31:17.968Z",
+    "timestamp": "2026-11-24T15:30:22.082Z",
     "lifecycles": [
       {
         "phase": "build"
@@ -19,14 +19,14 @@
       }
     ],
     "component": {
-      "bom-ref": "iobroker.eos-admin@9.0.17",
+      "bom-ref": "iobroker.eos-admin@9.0.18",
       "type": "library",
       "name": "iobroker.eos-admin",
-      "version": "9.0.17",
+      "version": "9.0.18",
       "scope": "required",
       "author": "NexoWatt",
       "description": "NexoWatt EOS: licensed local energy management, dashboard and ioBroker system administration in one adapter.",
-      "purl": "pkg:npm/iobroker.eos-admin@9.0.17",
+      "purl": "pkg:npm/iobroker.eos-admin@9.0.18",
       "properties": [],
       "externalReferences": []
     }
@@ -31852,7 +31852,7 @@
   ],
   "dependencies": [
     {
-      "ref": "iobroker.eos-admin@9.0.17",
+      "ref": "iobroker.eos-admin@9.0.18",
       "dependsOn": [
         "@iobroker/adapter-core@3.4.3",
         "@iobroker/plugin-docker@1.2.1",

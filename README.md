@@ -1,3 +1,5 @@
+> **9.0.18:** Geräte über gemeinsame Alias-V1-Rollen direkt dem EMS und Energiefluss zuordnen; Kundentarif unter Einstellungen verbinden. Bestehende Zuordnungen bleiben erhalten; veraltete App-Center-Formulare werden erkannt. [Anleitung](START_HIER_9.0.18.md) · [Prüfbericht](docs/reports/unified-9.0.18/PRUEFBERICHT.md).
+
 > **9.0.17:** Getrennte EOS-Browsercookies und keine automatischen Änderungen fremder ioBroker-Rechte oder Metadaten. Standard-Admin und Backitup bleiben eigenständige Adapter. [Anleitung](START_HIER_9.0.17.md) · [Prüfbericht](docs/reports/unified-9.0.17/PRUEFBERICHT.md).
 
 > **9.0.16:** Geräte speichern auch vor dem operativen Modulstart; bei ausstehender Übernahme klare Sperranzeige. Nachgewiesene Überschreibungen gespeicherter Einstellungen beim Start korrigiert; alte Installer-Dateien beim Überkopieren für `npm publish` berücksichtigt; Website-Abmeldung nach zehn Minuten ohne Bedienung. [Anleitung](START_HIER_9.0.16.md) · [Prüfbericht](docs/reports/unified-9.0.16/PRUEFBERICHT.md).
@@ -22,16 +24,16 @@
 
 # NexoWatt EOS
 
-**Version 9.0.17 · technisches Paket: `iobroker.eos-admin` · Vertriebskanal: `next`**
+**Version 9.0.18 · technisches Paket: `iobroker.eos-admin` · Vertriebskanal: `next`**
 
 NexoWatt EOS verbindet die Systemverwaltung aus EOS-Admin 8.0.2 mit Dashboard,
 Installer und Energiemanagement aus NexoWatt UI 1.0.38. Eine ioBroker-Instanz betreibt
 die gemeinsamen Module. Die bisherige UI wird im Zielbetrieb nicht zusätzlich gestartet.
 Der technische Paketname bleibt für bestehende Integrationen erhalten.
 
-Version 9.0.17 bleibt ein Integrations-Teststand für `next`. Die Versionsnummer ist
+Version 9.0.18 bleibt ein Integrations-Teststand für `next`. Die Versionsnummer ist
 kein Nachweis einer allgemeinen Produktivfreigabe oder CRA-Konformität. Tatsächliche
-Ergebnisse und Artefakthashes stehen im [Prüfbericht 9.0.17](docs/reports/unified-9.0.17/PRUEFBERICHT.md).
+Ergebnisse und Artefakthashes stehen im [Prüfbericht 9.0.18](docs/reports/unified-9.0.18/PRUEFBERICHT.md).
 Die [Berichte zu 9.0.4](docs/reports/unified-9.0.4/PRUEFBERICHT.md),
 [9.0.3](docs/reports/unified-9.0.3/PRUEFBERICHT.md) und früheren Versionen bleiben
 historische Belege; ihre Ergebnisse bestätigen keine späteren Änderungen.

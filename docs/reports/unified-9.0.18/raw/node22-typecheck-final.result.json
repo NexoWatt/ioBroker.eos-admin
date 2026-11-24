@@ -1,0 +1,14 @@
+{
+  "name": "node22-typecheck-final",
+  "command": [
+    "npm",
+    "run",
+    "typecheck"
+  ],
+  "cwd": ".",
+  "startedAt": "2026-11-24T15:30:05.697377+00:00",
+  "durationSeconds": 35.503,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-918/node22-typecheck-final.log",
+  "sha256": "1cfc51416b45ff3103bf14b8357b1d79b7f4fa07cad4a0f7ff00370c84fa529c"
+}

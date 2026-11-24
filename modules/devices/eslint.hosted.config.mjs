@@ -12,7 +12,7 @@ export default [
         },
     },
     {
-        files: ['**/admin/host-bridge.js'],
+        files: ['**/admin/host-bridge.js', '**/admin/ems-assignment.js'],
         languageOptions: { sourceType: 'script', globals: { ...globals.browser, load: 'readonly', save: 'readonly', sendTo: 'readonly' } },
     },
 ];

@@ -647,3 +647,18 @@ body.eos-module-page {
   .m .nexo-modal .modal-footer { padding: 12px 16px; }
   .m .nexo-modal .card-panel { padding: 16px; }
 }
+
+/* Device→EMS commissioning: native selects, bounded responsive layout. */
+.nexo-ems-config, .nexo-ems-summary { border: 1px solid var(--nexo-border-strong); border-radius: 12px; padding: 16px; margin: 16px 0; background: rgba(0, 190, 145, .045); }
+.nexo-ems-config h6 { font-size: 1.05rem; font-weight: 700; margin: 0 0 16px; }
+.nexo-ems-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 14px; }
+.nexo-ems-fields > div { min-width: 0; }
+.nexo-ems-fields label { display: block; margin-bottom: 8px; color: var(--nexo-text); }
+.nexo-ems-fields select { width: 100%; max-width: 100%; }
+.nexo-ems-fields [hidden] { display: none !important; }
+.nexo-ems-links { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; }
+.nexo-ems-links a { text-decoration: underline; text-underline-offset: 3px; }
+.nexo-ems-cell { min-width: 190px; max-width: 290px; font-size: .85rem; white-space: normal; overflow-wrap: anywhere; }
+.nexo-ems-cell [data-state="mapped"], #eosEmsStatus[data-state="mapped"] { color: #6fe4bc; }
+.nexo-ems-cell [data-state="conflict"], #eosEmsStatus[data-state="conflict"] { color: #ffb0a5; }
+.nexo-ems-cell [data-state="pending"] { color: #f0d594; }

@@ -74,7 +74,6 @@ try {
     const expectedBase = `https://unpkg.com/iobroker.eos-admin@${version}`;
 
     for (const [label, actual] of [
-        ['io top-level', io.version],
         ['io common', io.common.version],
         ['lock', lock.version],
         ['lock root', lock.packages[''].version],
@@ -92,7 +91,7 @@ try {
             fail(`package-lock root ${key} was not synchronized`);
         }
     }
-    if (io.common.meta !== `${expectedBase}/io-package.json`) fail('io-package URL was not synchronized');
+    if (Object.hasOwn(io, 'version') || Object.hasOwn(io.common, 'meta')) fail('repository-only metadata leaked into io-package');
     if (entry.meta !== `${expectedBase}/io-package.json`) fail('repository entry URL was not synchronized');
     if (!fs.existsSync(path.join(temp, build.repositoryEntry))) fail('current repository entry was not created');
 

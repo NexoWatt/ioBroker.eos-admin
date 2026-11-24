@@ -1,0 +1,14 @@
+{
+  "name": "sbom-runtime",
+  "command": [
+    "npm",
+    "run",
+    "sbom"
+  ],
+  "cwd": ".",
+  "startedAt": "2026-11-24T15:30:20.559976+00:00",
+  "durationSeconds": 2.281,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-918/sbom-runtime.log",
+  "sha256": "bc61bdcd3a5c70ce9fb2d4cb35c5d136199131682b8be043cffcc40e74c6df38"
+}

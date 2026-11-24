@@ -110,12 +110,21 @@ function syncReleaseVersion(rootDir) {
         {
             file: 'io-package.json',
             update(json) {
-                setValue(changes, 'io-package.json top-level version', json, 'version', version);
+                // ioBroker metadata has common.version; top-level version and common.meta are repository-only legacy fields.
+                delete json.version;
                 json.common ||= {};
                 setValue(changes, 'io-package.json common.version', json.common, 'version', version);
                 setValue(changes, 'io-package.json common.extIcon', json.common, 'extIcon', `${expectedBase}/admin/admin.svg`);
                 setValue(changes, 'io-package.json common.readme', json.common, 'readme', `${expectedBase}/README.md`);
-                setValue(changes, 'io-package.json common.meta', json.common, 'meta', `${expectedBase}/io-package.json`);
+                delete json.common.meta;
+                if (json.common.news && typeof json.common.news === 'object') {
+                    const semver = require('semver');
+                    const entries = Object.entries(json.common.news).sort(([a], [b]) => semver.valid(a) && semver.valid(b) ? semver.rcompare(a, b) : a.localeCompare(b));
+                    json.common.news = Object.fromEntries(entries.slice(0, 20));
+                }
+                if (json.common.licenseInformation?.link?.startsWith('https://unpkg.com/iobroker.eos-admin@')) {
+                    json.common.licenseInformation.link = `${expectedBase}/LICENSE`;
+                }
             },
         },
         {

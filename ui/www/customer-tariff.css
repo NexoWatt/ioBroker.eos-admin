@@ -1,0 +1,21 @@
+/* Copyright (c) 2026 NexoWatt. Confidential and proprietary. */
+.nw-customer-tariff { margin: 16px 0 24px; padding: 18px; border: 1px solid #235363; border-radius: 14px; background: #09212c; }
+.nw-customer-tariff > summary { cursor: pointer; font-weight: 700; color: #dff8ef; }
+.nw-customer-tariff > summary span { display: block; font-size: .8rem; color: #a4bdca; margin: 6px 0 0 18px; font-weight: 400; }
+.nw-customer-tariff p, .nw-customer-tariff small { color: #acc5d2; line-height: 1.55; }
+.nw-customer-tariff fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+.nw-customer-tariff legend { font-size: 1rem; font-weight: 700; padding: 10px 0; }
+.nw-customer-tariff-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 14px; }
+.nw-customer-tariff label { display: flex; flex-direction: column; min-width: 0; gap: 8px; font-size: .85rem; color: #d5e5ed; }
+.nw-customer-tariff input:not([type="checkbox"]), .nw-customer-tariff select { width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; padding: 10px 12px; border: 1px solid #426879; border-radius: 8px; background: #05131d; color: #e4f5f1; min-height: 44px; font: inherit; }
+.nw-customer-tariff .nw-customer-tariff-check { flex-direction: row; align-items: center; gap: 10px; }
+.nw-customer-tariff input[type="checkbox"] { flex: 0 0 auto; width: 18px; height: 18px; accent-color: #00d69a; }
+.nw-customer-tariff :is(input, select, button, summary):focus-visible { outline: 2px solid #47e7bc; outline-offset: 3px; }
+.nw-customer-tariff [hidden] { display: none !important; }
+.nw-customer-tariff details { margin: 16px 0; padding: 14px; border: 1px solid #254755; border-radius: 10px; }
+.nw-customer-tariff details summary { cursor: pointer; font-weight: 650; }
+.nw-customer-tariff-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.nw-customer-tariff-actions button { white-space: normal; min-height: 44px; }
+#customerTariffStatus[data-error="true"] { color: #ffb2a7; }
+#customerTariffStatus[data-error="false"] { color: #86e5c1; }
+.nw-customer-tariff-hint { border-left: 2px solid #31b99b; padding-left: 12px; }

@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/main.ts
- * Quell-Hash: sha256:943ab11ea87203ba5cb746b4cff421200465a216442283405516f331a92eac0a
+ * Quell-Hash: sha256:bb4b5124812500e994c188d439c7a8137acebc9cbb593c38b109e74134995d18
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -54,6 +54,8 @@ const os = require('os');
 // JSON bleibt unkomprimiert: inflate:false verhindert Dekompressionsfehler auch mit älteren ioBroker-Abhängigkeitsbäumen.
 const bodyParser = express.json({ limit: '5mb', inflate: false });
 const crypto = require('crypto');
+const { installerRevision, assertInstallerRevision, provisionInstallerObjects } = require('./lib/installer-lifecycle');
+const { customerTariffView, prepareCustomerTariffChange } = require('./lib/customer-tariff');
 const https = require('https');
 const pkg = require('./package.json');
 const { defaultEnergyOriginConfig, registerEnergyOriginApi } = require('./lib/energy-origin-api');
@@ -3350,6 +3352,7 @@ class NexoWattVis extends HostedAdapter {
       'settingsConfig',
       'datapoints',
       'installerConfig',
+      'eosDeviceEms', // Server-owned commissioning identities survive updates and app changes.
       'countryProfile',
       'emsApps',
       'schedulerIntervalMs',
@@ -4841,6 +4844,100 @@ class NexoWattVis extends HostedAdapter {
       this._nwDynamicGridSaveInFlight = false;
       if (this._partnerRuntime) void this._partnerRuntime.refresh().catch(() => { this.log.warn('Partnerkanal: sichere Laufzeitübernahme fehlgeschlagen.'); });
     }
+  }
+
+  _nwInstallerConfigRevision() {
+    return installerRevision(this._nwInstallerConfigPatch || {});
+  }
+
+  _nwAssertInstallerConfigRevision(expected) {
+    assertInstallerRevision(expected, this._nwInstallerConfigPatch || {});
+  }
+
+  async _nwProvisionInstallerObjects(nextConfig) {
+    const rows = nextConfig?.settingsConfig?.evcsList;
+    const count = Math.max(Array.isArray(rows) ? rows.length : 0, Number(nextConfig?.settingsConfig?.evcsCount) || 0);
+    await provisionInstallerObjects({
+      canWrite: () => !this._nwShuttingDown && this._bridge.canWrite() === true,
+      steps: [() => this.ensureInstallerStates(), () => this.ensureSettingsStates(),
+        () => this.ensureStorageFarmStates(), () => this.ensureEvcsStates(Math.min(50, Math.max(0, Math.round(count)))),
+        () => this.ensureRfidStates(true)],
+    });
+  }
+
+  async _nwApplyInstallerRuntime(restartEms, reason) {
+    const currentTariffModule = this.emsEngine?.mm?.modules?.find(entry => entry.key === 'tariffProvider')?.instance;
+    if (currentTariffModule && typeof currentTariffModule.invalidateConfiguration === 'function') await currentTariffModule.invalidateConfiguration();
+    if (currentTariffModule && typeof currentTariffModule.applyTariffMappings === 'function') await currentTariffModule.applyTariffMappings();
+    await this._nwProvisionInstallerObjects(this.config);
+    await this.syncInstallerConfigToStates();
+    await this.syncSettingsToStates(reason === 'device-commissioning');
+    await this.syncSettingsConfigToStates();
+    await this.ensureEvcsStates();
+    await this.subscribeEvcsMappedStates();
+    await this.subscribeConfiguredStates();
+    await this.ensureHistorieExportStates();
+    if (this._nwHistoryApiCache instanceof Map) this._nwHistoryApiCache.clear();
+    // In-flight history requests retain their existing deduplication/lifecycle fencing.
+    this.startHistorieExportTimer();
+    await this.syncStorageFarmConfigFromAdmin();
+    if (this._nwStorageFarmTimer) {
+      this._nwClearInterval(this._nwStorageFarmTimer);
+      this._nwStorageFarmTimer = null;
+    }
+    if (this._nwGetStorageFarmRuntimeInfo().active) {
+      const interval = Math.max(250, Math.min(1000, Math.round(Number(this.config?.storageFarm?.schedulerIntervalMs) || 1000)));
+      await this.updateStorageFarmDerived(reason);
+      this._nwStorageFarmTimer = this._nwSetInterval(() => { this.updateStorageFarmDerived('timer').catch(() => {}); }, interval);
+    }
+    if (restartEms) {
+      try { await this.initEmsEngine(true); }
+      catch (_error) {
+        throw createPublicHttpError(503, 'EOS_EMS_APPLY_FAILED', 'Einstellungen sind gespeichert. Die EMS-Laufzeit konnte sie noch nicht übernehmen; Status prüfen und erneut anwenden.');
+      }
+    }
+    await this._meshCoordinator?.syncAppLifecycle();
+  }
+
+  /** Automatic aliases are planned under the same lock as manual AppCenter saves.
+   * Only configuration and missing own objects change; no app/control permission is enabled. */
+  async reconcileDeviceEms(devices) {
+    const assertReady = () => {
+      if (this._nwShuttingDown || this._bridge.canWrite() !== true) throw new Error('EOS_UI_OWNERSHIP_REQUIRED');
+      if (!['ready', 'degraded'].includes(this._hostedStartup?.state)) throw new Error('EOS_UI_STARTING');
+      if (!centralLicenseSnapshot(this._bridge).ok) throw new Error('EOS_LICENSE_REQUIRED');
+    };
+    assertReady();
+    const token = this._nwBeginInstallerConfigMutation();
+    if (!token) throw new Error('EOS_DEVICE_EMS_BUSY');
+    try {
+      assertReady();
+      if (typeof this._bridge.deviceEmsPlan !== 'function') throw new Error('EOS_DEVICE_EMS_UNAVAILABLE');
+      const effective = this.nwApplyInstallerPatchToRuntimeConfig(this.config || {}, this._nwInstallerConfigPatch || {});
+      const plan = await this._bridge.deviceEmsPlan({ config: effective, devices });
+      assertReady();
+      if (!plan.changed && !this._nwDeviceEmsApplyPending) return { changed: false, statuses: plan.statuses };
+      const patch = this.nwDeepMerge(this._nwDeepClone(this._nwInstallerConfigPatch || {}), plan.patch);
+      if (plan.changed) {
+        await prepareDynamicGridInstallerPatch(this, patch, plan.patch, currentDynamicGridConfig(this).configVersion);
+      }
+      const next = this.nwApplyInstallerPatchToRuntimeConfig(this.config || {}, patch);
+      await this._nwProvisionInstallerObjects(next);
+      assertReady();
+      if (plan.changed) {
+        if (await this.persistInstallerConfigToState(patch) === false) throw new Error('EOS_DEVICE_EMS_PERSIST_FAILED');
+        this._nwInstallerConfigPatch = patch;
+        this._nwInstallerConfigRawPatch = this._nwDeepClone(patch);
+      }
+      this._nwDeviceEmsApplyPending = true;
+      assertReady();
+      this.config = next;
+      await this._nwApplyInstallerRuntime(true, 'device-commissioning');
+      this._nwDeviceEmsApplyPending = false;
+      try { await this.nwWriteUserdataBackup(patch, 'device-commissioning'); }
+      catch (_error) { this.log.warn('EOS_DEVICE_EMS_BACKUP_FAILED: Einstellungen gespeichert; zusätzliche Sicherung fehlgeschlagen.'); }
+      return { changed: plan.changed, statuses: plan.statuses };
+    } finally { this._nwEndInstallerConfigMutation(token); }
   }
 
   async persistInstallerConfigToState(patchObj) {
@@ -9237,8 +9334,8 @@ class NexoWattVis extends HostedAdapter {
    * Zusammenhang: Teil von Adapterkern: Lifecycle, Webserver, API, States, EMS-Engine; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
-  async ensureEvcsStates() {
-    const count = Math.max(0, Math.round(Number(this.evcsCount || 0) || 0));
+  async ensureEvcsStates(provisionCount) {
+    const count = Math.max(0, Math.round(Number(provisionCount === undefined ? this.evcsCount : provisionCount) || 0));
 
     await this.setObjectNotExistsAsync('evcs', {
       type: 'channel',
@@ -9322,7 +9419,7 @@ class NexoWattVis extends HostedAdapter {
 
     // write static names/notes from config into local states
     try {
-      if (Array.isArray(this.evcsList)) {
+      if (provisionCount === undefined && Array.isArray(this.evcsList)) {
         for (const wb of this.evcsList) {
           await this.setStateAsync(`evcs.${wb.index}.name`, wb.name, true);
           await this.setStateAsync(`evcs.${wb.index}.note`, wb.note || '', true);
@@ -9338,7 +9435,7 @@ class NexoWattVis extends HostedAdapter {
    * Zusammenhang: Teil von Adapterkern: Lifecycle, Webserver, API, States, EMS-Engine; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
-  async ensureRfidStates() {
+  async ensureRfidStates(provisionOnly = false) {
     // Base RFID states for EVCS access control (Whitelist + Learning)
     await this.setObjectNotExistsAsync('evcs.rfid', {
       type: 'channel',
@@ -9412,9 +9509,10 @@ class NexoWattVis extends HostedAdapter {
       });
     }
 
-    // Seed defaults only if states are missing (do not overwrite existing values)
+    if (provisionOnly) return;
+    // A database read failure must never replace an existing customer whitelist.
     for (const [id, c] of Object.entries(defs)) {
-      const st = await this.getStateAsync(id).catch(() => null);
+      const st = await this.getStateAsync(id);
       if (!st || st.val === undefined || st.val === null) {
         await this.setStateAsync(id, c.def, true);
       }
@@ -11759,9 +11857,8 @@ async onReady() {
         this.log.debug('Live core refresh init failed: ' + (e && e.message ? e.message : e));
       }
 
-      // Cleanup: remove stale/orphaned dynamic objects no longer configured.
-      // This keeps the Objects tree tidy when mappings/counts are reduced.
-      try { await startupStep(() => this.cleanupOrphanedObjects()); } catch (_e) {}
+      // Persisted device/history objects remain available when an app or device is disabled.
+      // Removal requires an explicit maintenance operation, never startup/update.
 
       // Energy totals: if no kWh counters are mapped, derive totals from history/influxdb
       this._hostedStartupPhase = 'history';
@@ -11792,6 +11889,7 @@ async onReady() {
       if (this._nwShuttingDown) return;
       assertStartupAuthority();
       this._hostedStartup = { state: this.emsEngine ? 'ready' : 'degraded', error: this.emsEngine ? '' : 'EOS_EMS_INIT_FAILED' };
+      this._bridge.deviceEmsConfigChanged?.();
       if (this.emsEngine) this.log.info('NexoWatt EOS ist bereit.');
       else this.log.warn('EOS_EMS_INIT_FAILED: Bedienoberfläche verfügbar, Betriebsstart unvollständig.');
     } catch (e) {
@@ -15625,6 +15723,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
     const _nwTariffSecretKeys = new Set(['accessToken','securityToken','clientSecret','bearerToken','apiKey','password','refreshToken']);
     const _nwMaskTariffProviderForUi = (cfg) => {
       const clone = this._nwDeepClone(cfg || {}) || {};
+      if (clone?.tariffProvider) delete clone.tariffProvider.retainedProviderCredentials;
       const creds = clone && clone.tariffProvider && clone.tariffProvider.credentials;
       if (creds && typeof creds === 'object') {
         for (const key of Object.keys(creds)) {
@@ -15632,6 +15731,11 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
         }
       }
       return clone;
+    };
+    const stripRetainedTariffCredentials = (patch) => {
+      const clean = this._nwDeepClone(patch || {}) || {};
+      if (clean.tariffProvider) delete clean.tariffProvider.retainedProviderCredentials;
+      return clean;
     };
     const _nwMergeTariffProviderSecrets = (incoming, existing) => {
       const next = this._nwDeepClone(incoming || {}) || {};
@@ -15676,6 +15780,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
     app.get('/api/installer/config', requireInstaller, async (_req, res) => {
       try {
         sendNoStore(res);
+        const configurationRevision = this._nwInstallerConfigRevision();
         // A license can be saved through the Admin tab while the App-Center is already open.
         // Refresh the runtime license cache here before filtering apps. This also covers the
         // startup edge case where the HTTP gate is open but _nwLicenseInfo has not yet been
@@ -15702,7 +15807,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
         cfgOut.locale = this._nwBuildLocaleInfo();
         cfgOut.countryProfile = Object.assign({}, cfgOut.countryProfile || {}, this._nwBuildCountryProfileInfo());
         cfgOut.regressionSafety = this._nwInstallerRegressionSafetyLastReport || { schema: 'nexowatt.installer-regression-safety.v1', ok: true, checks: [] };
-        res.json({ ok: true, license: cfgOut.license, config: cfgOut });
+        res.json({ ok: true, license: cfgOut.license, config: cfgOut, configurationRevision });
       } catch (e) {
         this.log.warn('Installer config API error: ' + e.message);
         res.status(500).json({ ok: false, error: 'internal error' });
@@ -15716,6 +15821,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
       try {
         sendNoStore(res);
         const body = req.body || {};
+        this._nwAssertInstallerConfigRevision(body.expectedConfigurationRevision);
         const patch = body.patch && typeof body.patch === 'object' ? body.patch : {};
         const restartEms = body.restartEms !== false; // default true
         const tokenError = nwValidateStationTokenChanges(patch);
@@ -15862,6 +15968,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
         try { this._meshCoordinator?.assertAppChange(this.nwApplyInstallerPatchToRuntimeConfig(this.config, mergedPatch)); }
         catch (error) { const failure = safeConfigurationFailure(error); return res.status(failure.status).json(failure.body); }
         // Persist patch to states (no ioBroker restart)
+        await this._nwProvisionInstallerObjects(this.nwApplyInstallerPatchToRuntimeConfig(this.config, mergedPatch));
         if (await this.persistInstallerConfigToState(mergedPatch) === false) throw new Error('Installer-Konfiguration konnte nicht gespeichert werden.');
         this._nwInstallerConfigPatch = mergedPatch;
 
@@ -15871,63 +15978,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
         // Apply patch to runtime config (App-Center SoT: replace installer-managed sections)
         this.config = (this.config && typeof this.config === 'object') ? this.config : {};
         this.config = this.nwApplyInstallerPatchToRuntimeConfig(this.config, mergedPatch);
-        await this._meshCoordinator?.syncAppLifecycle();
-
-        // Apply updated VIS/EVCS configuration to runtime (best-effort)
-
-        try { await this.syncInstallerConfigToStates(); } catch (_e) {}
-        try { await this.syncSettingsToStates(); } catch (_e) {}
-        try { await this.syncSettingsConfigToStates(); } catch (_e) {}
-        try { await this.ensureEvcsStates(); } catch (_e) {}
-        try { await this.ensureRfidStates(); } catch (_e) {}
-        try { await this.subscribeEvcsMappedStates(); } catch (_e) {}
-
-        // Re-subscribe to mapped states so the VIS immediately sees fresh values
-        try {
-          if (typeof this.subscribeConfiguredStates === 'function') {
-            await this.subscribeConfiguredStates();
-          }
-        } catch (_e) {}
-
-        // Historie/Influx: when optional Verbraucher/Erzeuger are added in the App-Center,
-        // create the canonical nexowatt-ui.0.historie.* states immediately. Previously this
-        // only happened on adapter startup, so newly connected producer slots appeared in
-        // the History UI but had no object/influx binding until a restart.
-        try {
-          if (this._nwHistoryApiCache instanceof Map) this._nwHistoryApiCache.clear();
-          if (this._nwHistoryApiInflight instanceof Map) this._nwHistoryApiInflight.clear();
-          await this.ensureHistorieExportStates();
-          await this.updateHistorieExportStates('config-save');
-          this.startHistorieExportTimer();
-        } catch (e) {
-          try { this.log.debug('Historie refresh after config save failed: ' + (e && e.message ? e.message : e)); } catch (_e2) {}
-        }
-
-        // StorageFarm: derived status + scheduler in sync after installer save
-        try { await this.ensureStorageFarmStates(); } catch (_e) {}
-        try { await this.syncStorageFarmDefaultsToStates(); } catch (_e) {}
-        try { await this.syncStorageFarmConfigFromAdmin(); } catch (_e) {}
-        try {
-          if (this._nwStorageFarmTimer) {
-            this._nwClearInterval(this._nwStorageFarmTimer);
-            this._nwStorageFarmTimer = null;
-          }
-
-          const enabledSf = !!this._nwGetStorageFarmRuntimeInfo().active;
-          const sfCfg = (this.config && this.config.storageFarm && typeof this.config.storageFarm === 'object') ? this.config.storageFarm : {};
-          const interval = (sfCfg.schedulerIntervalMs !== undefined && sfCfg.schedulerIntervalMs !== null && Number.isFinite(Number(sfCfg.schedulerIntervalMs)))
-            ? Math.max(250, Math.min(1000, Math.round(Number(sfCfg.schedulerIntervalMs))))
-            : 1000;
-
-          if (enabledSf) {
-            await this.updateStorageFarmDerived('config-save');
-            this._nwStorageFarmTimer = this._nwSetInterval(() => { this.updateStorageFarmDerived('timer').catch(() => {}); }, interval);
-          }
-        } catch (_e) {}
-
-        if (restartEms) {
-          await _nwRestartEms();
-        }
+        await this._nwApplyInstallerRuntime(restartEms, 'config-save');
 
         try { await this._nwInitLicense(); } catch (e) { try { this.log.warn('License refresh after installer config save failed: ' + (e && e.message ? e.message : e)); } catch (_eLog) {} }
         let cfgOut = await _nwHydrateStorageFarmConfigFromRuntimeStates(_nwPickPersistedInstallerConfig());
@@ -15943,7 +15994,8 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
         cfgOut.license = this._nwBuildLicenseFeatureInfo();
         cfgOut.locale = this._nwBuildLocaleInfo();
         cfgOut.countryProfile = Object.assign({}, cfgOut.countryProfile || {}, this._nwBuildCountryProfileInfo());
-        res.json({ ok: true, license: cfgOut.license, config: cfgOut, restarted: !!restartEms });
+        res.json({ ok: true, license: cfgOut.license, config: cfgOut, restarted: !!restartEms, configurationRevision: this._nwInstallerConfigRevision() });
+        this._bridge.deviceEmsConfigChanged?.();
       } catch (e) {
         this.log.warn('Installer config save API error: ' + safeConfigurationFailure(e).body.error);
         // Send a concise message to the frontend to avoid "Speichern fehlgeschlagen" without context.
@@ -15966,7 +16018,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
           adapter: 'nexowatt-ui',
           adapterVersion: (pkg && pkg.version) ? String(pkg.version) : '',
           instance: this.instance,
-          configPatch: patch,
+          configPatch: stripRetainedTariffCredentials(patch),
         };
         res.json({ ok: true, backup });
       } catch (e) {
@@ -15998,7 +16050,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
             reason: backup.reason || '',
             bytes,
           },
-          backup,
+          backup: { ...backup, configPatch: stripRetainedTariffCredentials(backup.configPatch) },
         });
       } catch (e) {
         const msg = (e && e.message) ? String(e.message) : 'internal error';
@@ -16012,6 +16064,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
       if (!meshSaveToken) return res.status(409).json({ error: 'Konfiguration wird bereits gespeichert.' });
       try {
         const body = req.body || {};
+        this._nwAssertInstallerConfigRevision(body.expectedConfigurationRevision);
         const restartEms = body.restartEms !== false; // default true
         const mode = String(body.mode || 'replace').toLowerCase(); // replace | merge
 
@@ -16115,52 +16168,17 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
         if (!storageLicenseValidation.ok) return res.status(400).json(storageLicenseValidation);
         try { this._meshCoordinator?.assertAppChange(this.nwApplyInstallerPatchToRuntimeConfig(baseNative, finalPatch)); }
         catch (error) { const failure = safeConfigurationFailure(error); return res.status(failure.status).json(failure.body); }
+        await this._nwProvisionInstallerObjects(this.nwApplyInstallerPatchToRuntimeConfig(baseNative, finalPatch));
         if (await this.persistInstallerConfigToState(finalPatch) === false) throw new Error('Installer-Import konnte nicht gespeichert werden.');
         this._nwInstallerConfigPatch = finalPatch;
 
         // Apply patch as SoT (replace installer-managed sections)
         this.config = this.nwApplyInstallerPatchToRuntimeConfig(baseNative, finalPatch);
-        await this._meshCoordinator?.syncAppLifecycle();
-
-        // Apply updated config to runtime (best-effort)
-        try { await this.syncInstallerConfigToStates(); } catch (_e) {}
-        try { await this.syncSettingsToStates(); } catch (_e) {}
-        try { await this.syncSettingsConfigToStates(); } catch (_e) {}
-        try { await this.ensureEvcsStates(); } catch (_e) {}
-        try { await this.ensureRfidStates(); } catch (_e) {}
-        try { await this.subscribeEvcsMappedStates(); } catch (_e) {}
-
-        // Re-subscribe to mapped states so the VIS immediately sees fresh values
-        try {
-          if (typeof this.subscribeConfiguredStates === 'function') {
-            await this.subscribeConfiguredStates();
-          }
-        } catch (_e) {}
-
-        // Historie/Influx: provision canonical optional series immediately after import.
-        try {
-          if (this._nwHistoryApiCache instanceof Map) this._nwHistoryApiCache.clear();
-          if (this._nwHistoryApiInflight instanceof Map) this._nwHistoryApiInflight.clear();
-          await this.ensureHistorieExportStates();
-          await this.updateHistorieExportStates('import');
-          this.startHistorieExportTimer();
-        } catch (e) {
-          try { this.log.debug('Historie refresh after import failed: ' + (e && e.message ? e.message : e)); } catch (_e2) {}
-        }
-
-        // StorageFarm: derived status + scheduler in sync after import
-        try { await this.ensureStorageFarmStates(); } catch (_e) {}
-        try { await this.syncStorageFarmDefaultsToStates(); } catch (_e) {}
-        try { await this.syncStorageFarmConfigFromAdmin(); } catch (_e) {}
-
-        // Persist uninstall-proof backup
+        await this._nwApplyInstallerRuntime(restartEms, 'import');
         try { await this.nwWriteUserdataBackup(finalPatch, 'import'); } catch (_e) {}
 
-        if (restartEms) {
-          await _nwRestartEms();
-        }
-
-        res.json({ ok: true, imported: true, restarted: !!restartEms, config: _nwPickPersistedInstallerConfig() });
+        res.json({ ok: true, imported: true, restarted: !!restartEms, config: _nwPickPersistedInstallerConfig(), configurationRevision: this._nwInstallerConfigRevision() });
+        this._bridge.deviceEmsConfigChanged?.();
       } catch (e) {
         const failure = safeConfigurationFailure(e);
         res.status(failure.status).json(failure.body);
@@ -16867,6 +16885,64 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
     // auto-fill App-Center mappings (EVCS / PV‑Regelung / Thermik / §14a).
     //
     // IMPORTANT: This endpoint only discovers; it never writes config.
+    // Der Kundentarif gilt für die gesamte Anlage. Der Kunde kann ausschließlich
+    // Anbieter/Vertragswerte wählen; Anlagenfreigaben und freie DP-Pfade bleiben geschützt.
+    const requireCustomerTariff = async (req, res, next) => {
+      if (!['customer', 'installer', 'admin'].includes(req.nwSession?.role)) return res.status(403).json({ ok: false, error: 'forbidden' });
+      if (!this._nwIsFeatureLicensed('dynamicTariffs')) return res.status(403).json({ ok: false, error: 'EOS_TARIFF_LICENSE_REQUIRED' });
+      return next();
+    };
+    const customerTariffSnapshot = () => {
+      const root = this.nwApplyInstallerPatchToRuntimeConfig(this.config || {}, this._nwInstallerConfigPatch || {});
+      return { ok: true, revision: this._nwInstallerConfigRevision(),
+        ...customerTariffView(root, this.namespace, tariffProviderRegistry.publicRegistry(), this._tariffProviderSnapshot) };
+    };
+    app.get('/api/customer/tariff-provider', requireCustomerWorkspace, requireCustomerTariff, (_req, res) => {
+      try { sendNoStore(res); res.json(customerTariffSnapshot()); }
+      catch (error) { const failure = safeConfigurationFailure(error); res.status(failure.status).json(failure.body); }
+    });
+    app.put('/api/customer/tariff-provider', requireCustomerWorkspace, requireCustomerTariff, async (req, res) => {
+      const token = beginMeshAppSave();
+      if (!token) return res.status(409).json({ ok: false, error: 'EOS_TARIFF_BUSY', message: 'Eine Einstellung wird gerade gespeichert. Bitte kurz warten.' });
+      try {
+        sendNoStore(res);
+        const body = req.body;
+        if (!body || typeof body !== 'object' || Array.isArray(body)
+          || Object.keys(body).some(key => !['expectedRevision', 'config'].includes(key))) {
+          throw createPublicHttpError(422, 'EOS_TARIFF_INVALID', 'Die Tarifanfrage enthält unzulässige Felder.');
+        }
+        // Unlike legacy installer clients, this new API always requires a freshly loaded revision.
+        if (typeof body.expectedRevision !== 'string' || body.expectedRevision !== this._nwInstallerConfigRevision()) {
+          throw createPublicHttpError(409, 'EOS_TARIFF_CONFIG_CHANGED', 'Die Anlageneinstellungen wurden inzwischen geändert. Bitte den Tarif neu laden und deine Eingaben vergleichen.');
+        }
+        if (this._nwShuttingDown || this._bridge.canWrite() !== true) throw createPublicHttpError(409, 'EOS_UI_OWNERSHIP_REQUIRED', 'Die Systemfreigabe ist nicht verfügbar.');
+        const effective = this.nwApplyInstallerPatchToRuntimeConfig(this.config || {}, this._nwInstallerConfigPatch || {});
+        const changed = prepareCustomerTariffChange(effective, body.config, this.namespace, tariffProviderRegistry.publicRegistry());
+        const patch = this._nwDeepClone(this._nwInstallerConfigPatch || {});
+        patch.tariffProvider = changed.tariffProvider;
+        if (changed.datapoints) patch.datapoints = changed.datapoints;
+        if (await this.persistInstallerConfigToState(patch) === false) throw createPublicHttpError(503, 'EOS_TARIFF_SAVE_FAILED', 'Der Tarif konnte nicht gespeichert werden. Bisherige Einstellungen bleiben bestehen.');
+        this._nwInstallerConfigPatch = patch;
+        this._nwInstallerConfigRawPatch = this._nwDeepClone(patch);
+        this.config = this.nwApplyInstallerPatchToRuntimeConfig(this.config || {}, patch);
+        try {
+          const tariffModule = this.emsEngine?.mm?.modules?.find(entry => entry.key === 'tariffProvider')?.instance;
+          if (tariffModule && typeof tariffModule.invalidateConfiguration === 'function') await tariffModule.invalidateConfiguration();
+          if (changed.datapoints && tariffModule && typeof tariffModule.applyTariffMappings === 'function') await tariffModule.applyTariffMappings();
+          // No EMS restart and no actuator activation. Changed read mappings use existing subscriptions.
+          if (changed.datapoints) await this.subscribeConfiguredStates();
+        } catch (_error) {
+          throw createPublicHttpError(503, 'EOS_TARIFF_APPLY_PENDING', 'Der Tarif ist gespeichert. Die Übernahme der neuen Preisquelle ist noch nicht bestätigt; bitte Status neu laden.');
+        }
+        try { await this.nwWriteUserdataBackup(patch, 'customer-tariff'); }
+        catch (_error) { this.log.warn('EOS_TARIFF_BACKUP_FAILED: Tarif gespeichert; zusätzliche Sicherung fehlgeschlagen.'); }
+        res.json(customerTariffSnapshot());
+      } catch (error) {
+        const failure = safeConfigurationFailure(error);
+        res.status(failure.status).json(failure.body);
+      } finally { endMeshAppSave(token); }
+    });
+
     // Dynamische Tarife: Provider-Katalog und Verbindungstest. Die APIs sind
     // installergeschützt und geben niemals Token/Secrets zurück.
     app.get('/api/installer/tariff-provider/providers', requireInstaller, async (_req, res) => {
@@ -16925,16 +17001,20 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
     app.get('/api/nwdevices/discover', requireInstaller, async (_req, res) => {
       try {
         const now = Date.now();
-        const devChannels = await this.getForeignObjectsAsync('nexowatt-devices.*.devices.*', 'channel').catch(() => ({}));
-        const stateObjects = await this.getForeignObjectsAsync('nexowatt-devices.*.devices.*', 'state').catch(() => ({}));
-        const manifestStates = (typeof this.getForeignStatesAsync === 'function')
-          ? await this.getForeignStatesAsync('nexowatt-devices.*.devices.*.aliases.meta.manifest').catch(() => ({}))
-          : {};
+        const patterns = ['nexowatt-devices.*.devices.*', `${this._owner.namespace}.devices.*`];
+        const devChannels = {}; const stateObjects = {}; const manifestStates = {};
+        for (const pattern of patterns) {
+          Object.assign(devChannels, await this.getForeignObjectsAsync(pattern, 'channel'));
+          Object.assign(stateObjects, await this.getForeignObjectsAsync(pattern, 'state'));
+          if (typeof this.getForeignStatesAsync === 'function') {
+            Object.assign(manifestStates, await this.getForeignStatesAsync(`${pattern}.aliases.meta.manifest`));
+          }
+        }
 
         const statesByDev = new Map();
         for (const [stateId, obj] of Object.entries(stateObjects || {})) {
           const sid = String(stateId || '');
-          const match = sid.match(/^(nexowatt-devices\.\d+\.devices\.[^.]+)\./);
+          const match = sid.match(/^((?:nexowatt-devices|eos-admin)\.\d+\.devices\..+)\.aliases\./);
           if (!match) continue;
           if (!statesByDev.has(match[1])) statesByDev.set(match[1], {});
           statesByDev.get(match[1])[sid] = obj;
@@ -16977,13 +17057,15 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
 
         for (const [baseRaw, channelObj] of Object.entries(devChannels || {})) {
           const baseId = String(baseRaw || '');
-          const match = baseId.match(/^(nexowatt-devices\.\d+)\.devices\.([^.]+)$/);
+          const match = baseId.match(/^((?:nexowatt-devices|eos-admin)\.\d+)\.devices\.(.+)$/);
           if (!match) continue;
           const instance = match[1];
           const devId = match[2];
           instances.add(instance);
           const common = channelObj && channelObj.common && typeof channelObj.common === 'object' ? channelObj.common : {};
           const native = channelObj && channelObj.native && typeof channelObj.native === 'object' ? channelObj.native : {};
+          // Alias/group channels are not devices; dotted device IDs retain their full identity.
+          if (!native.category && !Object.hasOwn(manifestStates, `${baseId}.aliases.meta.manifest`)) continue;
           const devStates = statesByDev.get(baseId) || {};
           const manifest = parseManifest(baseId) || {};
           const category = String(native.category || manifest.category || '').trim();
@@ -33935,6 +34017,10 @@ function createHostedRuntime(owner, bridge) {
         });
       }
       await startPromise;
+    },
+    reconcileDeviceEms(devices) {
+      if (stopRequested) return Promise.reject(new Error('EOS_UI_STOPPING'));
+      return runtime.reconcileDeviceEms(devices);
     },
     startOperational() { if (!stopRequested) operationalArmed = true; return startOperational(); },
     handle(req, res, next) {

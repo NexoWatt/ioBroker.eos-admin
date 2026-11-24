@@ -78,6 +78,17 @@ function validateConfig(input = {}) {
         if (typeof device.templateId !== 'string' || !device.templateId || device.templateId.length > 160) throw failure('EOS_DEVICES_CONFIG_TEMPLATE');
         if (!PROTOCOLS.includes(device.protocol)) throw failure('EOS_DEVICES_CONFIG_PROTOCOL');
         if (device.enabled !== undefined && typeof device.enabled !== 'boolean') throw failure('EOS_DEVICES_CONFIG_ENABLED');
+        if (device.ems !== undefined) {
+            if (!record(device.ems) || Object.keys(device.ems).some(key => !['mode', 'scope', 'flowSlot', 'group'].includes(key))) throw failure('EOS_DEVICES_EMS_INTENT');
+            const intent = device.ems;
+            if (typeof intent.mode !== 'string' || !['auto', 'monitor', 'manual', 'singleStorage', 'storageFarm', 'gridMeter', 'generationMeter', 'consumptionMeter', 'pvInverter'].includes(intent.mode)) throw failure('EOS_DEVICES_EMS_INTENT');
+            if (intent.scope !== undefined && (typeof intent.scope !== 'string' || !['M0', 'M1'].includes(intent.scope))) throw failure('EOS_DEVICES_EMS_SCOPE');
+            if (intent.group !== undefined && (typeof intent.group !== 'string' || !/^[A-Za-z0-9_-]{1,80}$/.test(intent.group))) throw failure('EOS_DEVICES_EMS_GROUP');
+            if (intent.flowSlot !== undefined && (typeof intent.flowSlot !== 'number' || !Number.isInteger(intent.flowSlot) || intent.flowSlot < 0 || intent.flowSlot > 10)) throw failure('EOS_DEVICES_EMS_SLOT');
+            if (['generationMeter', 'pvInverter'].includes(intent.mode) && (typeof intent.flowSlot !== 'number' || intent.flowSlot < 0 || intent.flowSlot > 5)) throw failure('EOS_DEVICES_EMS_SLOT');
+            if (intent.mode === 'consumptionMeter' && (typeof intent.flowSlot !== 'number' || intent.flowSlot < 1 || intent.flowSlot > 10)) throw failure('EOS_DEVICES_EMS_SLOT');
+            if (['singleStorage', 'storageFarm', 'gridMeter'].includes(intent.mode) && intent.scope === undefined) throw failure('EOS_DEVICES_EMS_SCOPE');
+        }
         if (device.connection !== undefined && !record(device.connection)) throw failure('EOS_DEVICES_CONFIG_CONNECTION');
         const connection = device.connection || {};
         if (connection.insecureTls === true || connection.insecureTLS === true || connection.allowInsecureTls === true || connection.rejectUnauthorized === false) throw failure('EOS_DEVICES_TLS_VERIFICATION_REQUIRED');

@@ -809,6 +809,69 @@
           "role": "level.power",
           "unit": "W",
           "capability": "write.napSetpointW"
+        },
+        "r.essActivePower": {
+          "type": "number",
+          "role": "value.power",
+          "unit": "W",
+          "capability": "read.essActivePower",
+          "description": "ESS AC converter active power (+ output / - input)"
+        },
+        "r.nvpPower": {
+          "type": "number",
+          "role": "value.power",
+          "unit": "W",
+          "capability": "read.nvpPower",
+          "description": "Device grid-meter power (+ import / - export; assign M0/M1 explicitly)"
+        },
+        "r.consumptionTotal": {
+          "type": "number",
+          "role": "value.power",
+          "unit": "W",
+          "capability": "read.consumptionTotal",
+          "description": "Device reported total consumption power"
+        },
+        "r.minPowerSetpointW": {
+          "type": "number",
+          "role": "value.power",
+          "unit": "W",
+          "capability": "read.minPowerSetpointW",
+          "description": "Minimum admissible signed active-power target (charge is negative)"
+        },
+        "r.maxPowerSetpointW": {
+          "type": "number",
+          "role": "value.power",
+          "unit": "W",
+          "capability": "read.maxPowerSetpointW",
+          "description": "Maximum admissible signed active-power target (discharge is positive)"
+        },
+        "r.powerSetpointReadbackW": {
+          "type": "number",
+          "role": "value.power",
+          "unit": "W",
+          "capability": "read.powerSetpointReadbackW",
+          "description": "Device-read active-power target (not measured physical delivery)"
+        },
+        "r.pvPowerDc": {
+          "type": "number",
+          "role": "value.power",
+          "unit": "W",
+          "capability": "read.pvPowerDc",
+          "description": "PV generation measured on DC side"
+        },
+        "r.pvPowerAc": {
+          "type": "number",
+          "role": "value.power",
+          "unit": "W",
+          "capability": "read.pvPowerAc",
+          "description": "PV generation measured on AC side"
+        },
+        "r.pvPowerTotal": {
+          "type": "number",
+          "role": "value.power",
+          "unit": "W",
+          "capability": "read.pvPowerTotal",
+          "description": "Device reported total PV generation (do not add AC/DC values again)"
         }
       }
     },
@@ -923,6 +986,69 @@
           "type": "number",
           "role": "level",
           "capability": "write.controlMode"
+        },
+        "r.essActivePower": {
+          "type": "number",
+          "role": "value.power",
+          "unit": "W",
+          "capability": "read.essActivePower",
+          "description": "ESS AC converter active power (+ output / - input)"
+        },
+        "r.nvpPower": {
+          "type": "number",
+          "role": "value.power",
+          "unit": "W",
+          "capability": "read.nvpPower",
+          "description": "Device grid-meter power (+ import / - export; assign M0/M1 explicitly)"
+        },
+        "r.consumptionTotal": {
+          "type": "number",
+          "role": "value.power",
+          "unit": "W",
+          "capability": "read.consumptionTotal",
+          "description": "Device reported total consumption power"
+        },
+        "r.minPowerSetpointW": {
+          "type": "number",
+          "role": "value.power",
+          "unit": "W",
+          "capability": "read.minPowerSetpointW",
+          "description": "Minimum admissible signed active-power target (charge is negative)"
+        },
+        "r.maxPowerSetpointW": {
+          "type": "number",
+          "role": "value.power",
+          "unit": "W",
+          "capability": "read.maxPowerSetpointW",
+          "description": "Maximum admissible signed active-power target (discharge is positive)"
+        },
+        "r.powerSetpointReadbackW": {
+          "type": "number",
+          "role": "value.power",
+          "unit": "W",
+          "capability": "read.powerSetpointReadbackW",
+          "description": "Device-read active-power target (not measured physical delivery)"
+        },
+        "r.pvPowerDc": {
+          "type": "number",
+          "role": "value.power",
+          "unit": "W",
+          "capability": "read.pvPowerDc",
+          "description": "PV generation measured on DC side"
+        },
+        "r.pvPowerAc": {
+          "type": "number",
+          "role": "value.power",
+          "unit": "W",
+          "capability": "read.pvPowerAc",
+          "description": "PV generation measured on AC side"
+        },
+        "r.pvPowerTotal": {
+          "type": "number",
+          "role": "value.power",
+          "unit": "W",
+          "capability": "read.pvPowerTotal",
+          "description": "Device reported total PV generation (do not add AC/DC values again)"
         }
       }
     },
@@ -1023,6 +1149,69 @@
           "role": "value.power",
           "unit": "W",
           "capability": "read.allowedDischargePower"
+        },
+        "r.essActivePower": {
+          "type": "number",
+          "role": "value.power",
+          "unit": "W",
+          "capability": "read.essActivePower",
+          "description": "ESS AC converter active power (+ output / - input)"
+        },
+        "r.nvpPower": {
+          "type": "number",
+          "role": "value.power",
+          "unit": "W",
+          "capability": "read.nvpPower",
+          "description": "Device grid-meter power (+ import / - export; assign M0/M1 explicitly)"
+        },
+        "r.consumptionTotal": {
+          "type": "number",
+          "role": "value.power",
+          "unit": "W",
+          "capability": "read.consumptionTotal",
+          "description": "Device reported total consumption power"
+        },
+        "r.minPowerSetpointW": {
+          "type": "number",
+          "role": "value.power",
+          "unit": "W",
+          "capability": "read.minPowerSetpointW",
+          "description": "Minimum admissible signed active-power target (charge is negative)"
+        },
+        "r.maxPowerSetpointW": {
+          "type": "number",
+          "role": "value.power",
+          "unit": "W",
+          "capability": "read.maxPowerSetpointW",
+          "description": "Maximum admissible signed active-power target (discharge is positive)"
+        },
+        "r.powerSetpointReadbackW": {
+          "type": "number",
+          "role": "value.power",
+          "unit": "W",
+          "capability": "read.powerSetpointReadbackW",
+          "description": "Device-read active-power target (not measured physical delivery)"
+        },
+        "r.pvPowerDc": {
+          "type": "number",
+          "role": "value.power",
+          "unit": "W",
+          "capability": "read.pvPowerDc",
+          "description": "PV generation measured on DC side"
+        },
+        "r.pvPowerAc": {
+          "type": "number",
+          "role": "value.power",
+          "unit": "W",
+          "capability": "read.pvPowerAc",
+          "description": "PV generation measured on AC side"
+        },
+        "r.pvPowerTotal": {
+          "type": "number",
+          "role": "value.power",
+          "unit": "W",
+          "capability": "read.pvPowerTotal",
+          "description": "Device reported total PV generation (do not add AC/DC values again)"
         }
       }
     },

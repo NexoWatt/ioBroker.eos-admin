@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "allowJs": true, "checkJs": true, "noEmit": true, "strict": true,
+    "noUncheckedIndexedAccess": true, "exactOptionalPropertyTypes": true,
+    "target": "ES2022", "module": "ESNext", "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": [], "skipLibCheck": true
+  },
+  "files": ["admin/ems-assignment.js", "admin/ems-assignment.d.ts"]
+}

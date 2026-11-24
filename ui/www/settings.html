@@ -34,6 +34,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>NexoWatt EOS – Einstellungen</title>
   <link rel="stylesheet" href="/static/styles.css"/>
+  <link rel="stylesheet" href="/static/customer-tariff.css?v=9.0.18"/>
+  <script src="/static/customer-tariff.js?v=9.0.18" defer></script>
   <script src="/static/nw-i18n.js" defer></script>
 <script defer src="/eos-session-idle.js"></script>
 </head>
@@ -390,6 +392,49 @@
           <div class="nw-settings-note">
             Tarif-Optimierung, zeitvariables Netzentgelt und das PV-Saisonprofil sind hier gebündelt, damit die Regelung schneller auffindbar bleibt.
           </div>
+          <details class="nw-customer-tariff" id="customerTariffPanel">
+            <summary>Stromtarif verbinden <span>Tarifquelle und Zugangsdaten</span></summary>
+            <p>Dieser Tarif gilt gemeinsam für diese EOS-Anlage. Wähle deine Preisquelle oder ein Anbieterprofil; die Regelung und Anlagenlimits werden hier nicht freigegeben.</p>
+            <form id="customerTariffForm" autocomplete="off">
+              <fieldset id="customerTariffFields" disabled>
+                <legend>Tarifanbindung</legend>
+                <div class="nw-customer-tariff-grid">
+                  <label for="customerTariffCountry">Land<select id="customerTariffCountry"><option value="DE">Deutschland</option><option value="NL">Niederlande</option></select></label>
+                  <label for="customerTariffProvider">Tarifquelle<select id="customerTariffProvider" required><option value="">Tarifquelle auswählen</option></select></label>
+                  <label class="nw-customer-tariff-check" for="customerTariffEnabled"><input id="customerTariffEnabled" type="checkbox">Preise direkt abrufen</label>
+                  <label id="customerTariffProfileField" for="customerTariffProfile" hidden>Anbieterprofil<select id="customerTariffProfile"></select></label>
+                  <label id="customerTariffSourceField" for="customerTariffSource" hidden>Marktpreisquelle<select id="customerTariffSource"></select></label>
+                  <label id="customerTariffHomeField" for="customerTariffHome" hidden>Tibber Home-ID (optional)<input id="customerTariffHome" type="text" maxlength="128" autocomplete="off"></label>
+                  <label class="nw-customer-tariff-check" for="customerTariffUse"><input id="customerTariffUse" type="checkbox">Diese Preise im EOS verwenden</label>
+                </div>
+                <p id="customerTariffProviderHint" class="nw-customer-tariff-hint"></p>
+                <div id="customerTariffCredentialField" hidden>
+                  <label for="customerTariffCredential" id="customerTariffCredentialLabel">Zugangsschlüssel</label>
+                  <input id="customerTariffCredential" type="password" maxlength="4096" autocomplete="new-password" spellcheck="false">
+                  <small id="customerTariffCredentialHint">Gespeicherte Zugangsschlüssel werden nicht angezeigt. Leer lassen, um sie zu behalten.</small>
+                </div>
+                <details id="customerTariffFormula" hidden>
+                  <summary>Vertragliche Preisbestandteile</summary>
+                  <p>Börsenpreise sind kein vollständiger Vertragspreis. Übernimm die Bestandteile aus deinem Stromvertrag; es erfolgt kein automatischer Vertragsabgleich.</p>
+                  <div class="nw-customer-tariff-grid">
+                    <label for="customerTariffMultiplier">Marktpreisfaktor<input id="customerTariffMultiplier" type="number" min="0" max="10" step="0.0001"></label>
+                    <label for="customerTariffMarkup">Lieferantenaufschlag (€/kWh)<input id="customerTariffMarkup" type="number" min="-10" max="10" step="0.0001"></label>
+                    <label for="customerTariffGrid">Variables Netzentgelt (€/kWh)<input id="customerTariffGrid" type="number" min="-10" max="10" step="0.0001"></label>
+                    <label for="customerTariffTax">Steuern / Umlagen (€/kWh)<input id="customerTariffTax" type="number" min="-10" max="10" step="0.0001"></label>
+                    <label for="customerTariffOther">Weitere variable Kosten (€/kWh)<input id="customerTariffOther" type="number" min="-10" max="10" step="0.0001"></label>
+                    <label for="customerTariffVat">Mehrwertsteuer (%)<input id="customerTariffVat" type="number" min="0" max="100" step="0.1"></label>
+                    <label class="nw-customer-tariff-check" for="customerTariffIncludesVat"><input id="customerTariffIncludesVat" type="checkbox">Preise enthalten bereits Mehrwertsteuer</label>
+                  </div>
+                </details>
+              </fieldset>
+              <div class="nw-customer-tariff-actions">
+                <button type="submit" class="btn" id="customerTariffSave" disabled>Tarifanbindung speichern</button>
+                <button type="button" class="btn" id="customerTariffReload">Gespeicherten Tarif laden</button>
+              </div>
+              <p id="customerTariffStatus" role="status" aria-live="polite">Zum Einrichten öffnen.</p>
+              <p id="customerTariffFetchStatus" class="nw-customer-tariff-hint"></p>
+            </form>
+          </details>
       <label class="row"><span>Dynamischer Zeittarif</span>
         <div class="nw-evcs-mode-buttons nw-evcs-mode-buttons-2 nw-toggle" data-toggle-for="s_dyn_toggle"><button type="button" data-value="false">Aus</button><button type="button" data-value="true">An</button></div>
         <input type="checkbox" class="nw-toggle-hidden" id="s_dyn_toggle" data-scope="settings" data-key="dynamicTariff">

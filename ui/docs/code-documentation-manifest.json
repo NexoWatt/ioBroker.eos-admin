@@ -553,8 +553,8 @@
     },
     {
       "path": "src-ts/runtime-executables/ems/datapoints.ts",
-      "sourceHash": "862669409b5b427e3bcd9a53137db81d3008375b8c1e8e555900a84db8d1fef4",
-      "codeHash": "dbd05ae2bc42a457abbe13d25998ab32308432d2936a75c9d6502e38c5873230"
+      "sourceHash": "f79b81c89eaf0e774cd1a5699994eb1a67bfabb631297a80ad8d55b749f4b17d",
+      "codeHash": "a085098ac03680c24c67d45e68472b59ad1ae50f9521d0f3003660c94ea02026"
     },
     {
       "path": "src-ts/runtime-executables/ems/engine.ts",
@@ -718,8 +718,8 @@
     },
     {
       "path": "src-ts/runtime-executables/ems/modules/tariff-provider.ts",
-      "sourceHash": "92f133b4fe74d37e283e5bc6b6b683ebe528f29c6bc672f30413b9789d1e1e17",
-      "codeHash": "da6047b80179d6f1a30c05d80fc1a3a4267d6b793f27a62c836aea31b20dcc1e"
+      "sourceHash": "871a843c9c2da28fce4f0d53a843062d27a0189302f90787442e56987c55add8",
+      "codeHash": "4c52ddd890ca4d43add3e61eb0da69ed1cdb96279db0341bcb5d1f2550cfd973"
     },
     {
       "path": "src-ts/runtime-executables/ems/modules/tariff-status.ts",
@@ -987,6 +987,11 @@
       "codeHash": "bfec88b8a7d3566bd5f1069c81249cb76ba08f2b91adc787fa9be2e5bed0a1ff"
     },
     {
+      "path": "src-ts/runtime-executables/lib/customer-tariff.ts",
+      "sourceHash": "c67703360c97d4d9630b72d2809ab1d21c3643d5443de6db3163dfbf80cc4024",
+      "codeHash": "887b42af5780a9b2fb51b9f72394ca7ab3ae00995375a3d9eeb3ec502d11da0a"
+    },
+    {
       "path": "src-ts/runtime-executables/lib/dynamic-grid-config-api.ts",
       "sourceHash": "7161236b3cfd48a4cb98f4ee636001ec1802336105a1ec9454b9ef5fa8f79f7b",
       "codeHash": "9d1207b5519565fc5280154cf0ce6ec0bfe29b3d4ce6a39c7c1d9dc9899bf164"
@@ -1030,6 +1035,11 @@
       "path": "src-ts/runtime-executables/lib/http-error-boundary.ts",
       "sourceHash": "d44e839cda81fd990eab425b2495b02409e43d85697b18831db24de7c12529ec",
       "codeHash": "d0c2f62754728426981bcf27b0af8e0df5715bac4be9ff5c3942a568ad26fe9e"
+    },
+    {
+      "path": "src-ts/runtime-executables/lib/installer-lifecycle.ts",
+      "sourceHash": "970590230a91cc592372ca6da3f1ff8e460c5cd8143345de321bc6eb416cd083",
+      "codeHash": "d118790046af1714f71bff5baa1ed7d6e038ca8b8876f72f8117189d6514076d"
     },
     {
       "path": "src-ts/runtime-executables/lib/iobroker-user-auth.ts",
@@ -1203,8 +1213,8 @@
     },
     {
       "path": "src-ts/runtime-executables/main.ts",
-      "sourceHash": "943ab11ea87203ba5cb746b4cff421200465a216442283405516f331a92eac0a",
-      "codeHash": "7b8fef83c2eeeb4e7f2cf925edbf01877406c106a1dee5fe435eafed9b13c1a3"
+      "sourceHash": "bb4b5124812500e994c188d439c7a8137acebc9cbb593c38b109e74134995d18",
+      "codeHash": "4626d9b53c73ca8d9d1d2cd9be79ce126d0447b590b61177ae65ba8864dee0c7"
     },
     {
       "path": "src-ts/runtime-executables/www/admin-guard.ts",
@@ -1232,6 +1242,11 @@
       "codeHash": "c831dfdfe30a88d9edb5967d111ee2f3268bcdd717256d8ba2cba40bbb14bf00"
     },
     {
+      "path": "src-ts/runtime-executables/www/customer-tariff.ts",
+      "sourceHash": "dab28ef2897dc9e0b884e797fc84e74fce129aabd578c09a08e4e1b461b68d59",
+      "codeHash": "22be840d15731087489c48dfbcadba203aac6b8419f9e2ad7276ea069945f365"
+    },
+    {
       "path": "src-ts/runtime-executables/www/dashboard-lp-status.ts",
       "sourceHash": "0e130b0d3bcb3fadead101a383a1c59542f94131900508e54f2e0ff0195fa390",
       "codeHash": "3100b90a0ec3e58a5a24335f6cbae0a5e4424ee58e0445eb6908ad9b04d657db"
@@ -1248,8 +1263,8 @@
     },
     {
       "path": "src-ts/runtime-executables/www/ems-apps.ts",
-      "sourceHash": "74c581a2b025e8ab8d3a24b3da5ed91082daf524c67a27e866aebcbd9928d2b8",
-      "codeHash": "522af594631455e566f7c6dd9e5b79c9b82c752eacf4cfea81c29dfd93d791b7"
+      "sourceHash": "b4369cfa8be7f9da648a4bc71cfcec49cf2cdced3f79650a1459b3f11ff11d7c",
+      "codeHash": "faf6637a05fa21071ee3cbe7eec46112b4f673b76f85ad599a9ad27986f1b093"
     },
     {
       "path": "src-ts/runtime-executables/www/energy-ledger.ts",
@@ -1945,7 +1960,7 @@
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/ems/datapoints.md",
-      "hash": "e510200e699eed1a003b8c8f71a1eff1072151bbdbd972dba9dd9d5b04981f4f"
+      "hash": "2bb505071dbfd84dd59f04329656cae69f3da8cd8580cfe263d4f3aaf24b6bd8"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/ems/engine.md",
@@ -2077,7 +2092,7 @@
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/tariff-provider.md",
-      "hash": "ad175ef43cb4682e33725e118b9b87b7c5ddf06803f287ecf2d657f0818e9eb0"
+      "hash": "219b17e141703b1bf5d1e7d05e6e113d85814c313d93dd9024d22d3c53321e88"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/ems/modules/tariff-status.md",
@@ -2292,6 +2307,10 @@
       "hash": "098ad9856e0bdc48d46601769713d8f88b4b5e7f75814e7e2e2bee1185be6787"
     },
     {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/customer-tariff.md",
+      "hash": "000c797fdba928e16098978000c69ccb14016dc5e99971b05e4fe3596923f9a2"
+    },
+    {
       "path": "docs/quellcode/src-ts/runtime-executables/lib/dynamic-grid-config-api.md",
       "hash": "abb2aea13388c30ec9afde0bbf5bf9b826bc69f238a47e0104a73956d441d470"
     },
@@ -2325,7 +2344,11 @@
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/lib/http-error-boundary.md",
-      "hash": "7136f95d1ca50d6fd34889faa7a5091edd2cb34ccd978b5be3ba26a264dbc579"
+      "hash": "d5207cc679aa97baee0f6439127645a9e1892d0b62d36ca0304644d97678fad5"
+    },
+    {
+      "path": "docs/quellcode/src-ts/runtime-executables/lib/installer-lifecycle.md",
+      "hash": "cf9b2fb62ea9c392d1b6391bff11881aa08869015caa93d692925f185a64c368"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/lib/iobroker-user-auth.md",
@@ -2465,7 +2488,7 @@
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/main.md",
-      "hash": "407000df2bc05081020b8fefb8d1eef4a86aa2074e19a8b45c96f37a8b195d47"
+      "hash": "c551600bd9b71bcabbba0416c432023fd7a2ac76adc3a02cd57de9825640fe98"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/admin-guard.md",
@@ -2488,6 +2511,10 @@
       "hash": "3e1092743c8fac19d74b3f5e07032b6e56e58457a991bd6756897c9ac9492363"
     },
     {
+      "path": "docs/quellcode/src-ts/runtime-executables/www/customer-tariff.md",
+      "hash": "d67b4c5cbdfb6f667992dd55e47fca998cf4af9c21b03f79019f98564247dca5"
+    },
+    {
       "path": "docs/quellcode/src-ts/runtime-executables/www/dashboard-lp-status.md",
       "hash": "0da9e78e326c6f5765b2f01e63c88bd2690cef13825da891aef9d6ff70e12f5d"
     },
@@ -2501,7 +2528,7 @@
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/ems-apps.md",
-      "hash": "dc05909119288e4b18cfe5eeed0868c8b9f30498d33742d47b0b14a04298acab"
+      "hash": "746843f15eea403c45f1eb24cf61d9cbc62221f0542af3793af004706ae1a4a8"
     },
     {
       "path": "docs/quellcode/src-ts/runtime-executables/www/energy-ledger.md",
@@ -2705,7 +2732,7 @@
     },
     {
       "path": "docs/QUELLCODE_VERKNUEPFUNGEN_DE.md",
-      "hash": "c8c0dc6c7684ee6a0db1811630d008980992020fd917f6219ebfc983679b11db"
+      "hash": "d41f9987812a9cc3a1652bc23655ef81e3ca2693426c54c9035cca45b5f7a863"
     }
   ]
 }

@@ -1,0 +1,13 @@
+{
+  "name": "node22-tests-final",
+  "command": [
+    "npm",
+    "test"
+  ],
+  "cwd": ".",
+  "startedAt": "2026-11-24T15:31:01.916458+00:00",
+  "durationSeconds": 50.424,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-918/node22-tests-final.log",
+  "sha256": "41e3b93512fe3c25f1e639cbc7618e22daecd404aa9fa943301a2313335f593e"
+}

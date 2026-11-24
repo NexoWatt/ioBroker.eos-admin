@@ -1,6 +1,7 @@
 'use strict';
 
 const contract = require('./alias-contract-v1.json');
+const { buildSemanticAliasDefinitions } = require('./deviceAliasSemantics');
 
 const STANDARD_NAMESPACE = String(contract.namespace || 'v1');
 const SCHEMA_VERSION = Number(contract.schemaVersion || 1);
@@ -400,8 +401,11 @@ function buildStandardAliasDefinitions(options) {
   const deviceClass = getDeviceClass(template, cfg);
   const standardDefs = [];
   const seen = new Set();
+  const semantic = buildSemanticAliasDefinitions({ baseId, template, getDpById });
 
-  for (const def of legacyDefs || []) {
+  // The additive semantic profile is source-bound and read-only. Existing v1
+  // paths keep priority; no historic alias or customer mapping is rewritten.
+  for (const def of (legacyDefs || []).concat(semantic.definitions)) {
     const path = legacyAliasPath(def && def.relId);
     if (!path || path.startsWith(`${STANDARD_NAMESPACE}.`) || path.startsWith('meta.')) continue;
     const normalized = cloneStandardDefinition(def, {
@@ -443,6 +447,7 @@ function buildStandardAliasDefinitions(options) {
     definitions: standardDefs,
     capabilities: Array.from(capabilities).sort(),
     missingRequired,
+    semanticCoverage: semantic.coverage,
   };
 }
 
@@ -459,6 +464,7 @@ function buildManifest(info, template, cfg) {
     model: String((template && template.model) || ''),
     capabilities: Array.isArray(safeInfo.capabilities) ? safeInfo.capabilities.slice().sort() : [],
     missingRequired: Array.isArray(safeInfo.missingRequired) ? safeInfo.missingRequired.slice().sort() : [],
+    semanticCoverage: safeInfo.semanticCoverage || {},
   };
 }
 

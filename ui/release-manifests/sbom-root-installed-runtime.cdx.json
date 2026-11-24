@@ -2,10 +2,10 @@
   "$schema": "http://cyclonedx.org/schema/bom-1.5.schema.json",
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
-  "serialNumber": "urn:uuid:619d9d13-1031-4d5f-a594-47cf09c1651a",
+  "serialNumber": "urn:uuid:189b4879-0ef0-4dfe-970c-4383240e8ea2",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-09-29T21:28:02.284Z",
+    "timestamp": "2026-11-24T15:30:24.420Z",
     "lifecycles": [
       {
         "phase": "build"
@@ -15,19 +15,24 @@
       {
         "vendor": "npm",
         "name": "cli",
-        "version": "11.9.0"
+        "version": "11.19.1"
       }
     ],
     "component": {
-      "bom-ref": "iobroker.nexowatt-ui@1.0.22",
+      "bom-ref": "nexowatt-eos-ui-internal@9.0.18",
       "type": "library",
-      "name": "iobroker.nexowatt-ui",
-      "version": "1.0.22",
+      "name": "nexowatt-eos-ui-internal",
+      "version": "9.0.18",
       "scope": "required",
       "author": "NexoWatt",
-      "description": "NexoWatt EOS – local energy, charging and building control platform.. Observed installed dependency tree in the review/build environment. Not proof of the delivered device, OS, ioBroker controller or browser bundle contents. Installation scripts were not run by this generator.",
-      "purl": "pkg:npm/iobroker.nexowatt-ui@1.0.22",
-      "properties": [],
+      "description": "Internal UI and EMS module hosted by iobroker.eos-admin; not an ioBroker adapter entry point.. Observed installed dependency tree in the review/build environment. Not proof of the delivered device, OS, ioBroker controller or browser bundle contents. Installation scripts were not run by this generator.",
+      "purl": "pkg:npm/nexowatt-eos-ui-internal@9.0.18",
+      "properties": [
+        {
+          "name": "cdx:npm:package:private",
+          "value": "true"
+        }
+      ],
       "externalReferences": [
         {
           "type": "vcs",
@@ -58,7 +63,7 @@
       },
       {
         "name": "nexowatt:generator-sha256",
-        "value": "cc91b3f60f38e21f516e041e5e479c0860ac38e99eb782565218b4a723b7d822"
+        "value": "94f7bd20a3fbc1f26cffbb5e677d24f77ee039d06119e6a3e4b70caf53b9b8af"
       },
       {
         "name": "nexowatt:package-json-path",
@@ -66,7 +71,7 @@
       },
       {
         "name": "nexowatt:package-json-sha256",
-        "value": "5dc69eebadecc1231ea06cb9e942bfd34f1769f71e1a889a18bafb74c27b1faa"
+        "value": "fe83cb6ff7e0dd2faf2f8944324683c66ed61b2fab9143172caef1272a43dc75"
       },
       {
         "name": "nexowatt:lockfile-path",
@@ -74,15 +79,15 @@
       },
       {
         "name": "nexowatt:lockfile-sha256",
-        "value": "383db7de2fe2ba1c45e57cdb46ac08f80a5e9b965f0a940098050d28b93e7e08"
+        "value": "e14d3959d83b28807aa9e261f741fa8c5ff3d6892f4a29f40582d9ab6f6c28aa"
       },
       {
         "name": "nexowatt:lockfile-package-entry-count",
-        "value": "273"
+        "value": "371"
       },
       {
         "name": "nexowatt:node-version",
-        "value": "v24.19.0"
+        "value": "v24.22.3"
       },
       {
         "name": "nexowatt:host-platform",
@@ -138,19 +143,19 @@
       ]
     },
     {
-      "bom-ref": "@iobroker/type-detector@5.0.10",
+      "bom-ref": "@iobroker/type-detector@6.2.0",
       "type": "library",
       "name": "@iobroker/type-detector",
-      "version": "5.0.10",
+      "version": "6.2.0",
       "scope": "required",
       "author": "bluefox",
       "description": "Detects devices in ioBroker for Material, Google home, Homekit, ...",
-      "purl": "pkg:npm/%40iobroker/type-detector@5.0.10",
+      "purl": "pkg:npm/%40iobroker/type-detector@6.2.0",
       "properties": [],
       "externalReferences": [
         {
           "type": "distribution",
-          "url": "https://registry.npmjs.org/@iobroker/type-detector/-/type-detector-5.0.10.tgz"
+          "url": "https://registry.npmjs.org/@iobroker/type-detector/-/type-detector-6.2.0.tgz"
         },
         {
           "type": "vcs",
@@ -168,7 +173,7 @@
       "hashes": [
         {
           "alg": "SHA-512",
-          "content": "e70b99e32d6d3a2b8501201806d5d7c116a1422c25208b92699136f1add37ea71d32d7969bbbefd07f7bc5d8c1c20828ea5a2f9d5fb4559d315165f1bd58c3b4"
+          "content": "70487eeedb2a491d6431ab588cd69bd800ad6a1e7fdd378480f95fb52edc292cd9aabe660def4e3a342039a12021be440a2ab666f632a887ef59a7d00e12a9ce"
         }
       ],
       "licenses": [
@@ -284,24 +289,24 @@
       ]
     },
     {
-      "bom-ref": "body-parser@1.20.8",
+      "bom-ref": "body-parser@1.20.9",
       "type": "library",
       "name": "body-parser",
-      "version": "1.20.8",
+      "version": "1.20.9",
       "scope": "required",
       "description": "Node.js body parsing middleware",
-      "purl": "pkg:npm/body-parser@1.20.8",
+      "purl": "pkg:npm/body-parser@1.20.9",
       "properties": [],
       "externalReferences": [
         {
           "type": "distribution",
-          "url": "https://registry.npmjs.org/body-parser/-/body-parser-1.20.8.tgz"
+          "url": "https://registry.npmjs.org/body-parser/-/body-parser-1.20.9.tgz"
         }
       ],
       "hashes": [
         {
           "alg": "SHA-512",
-          "content": "24d732150eb83a28a31243f35014c27be8723d7503ff72c495d190ea21792d1d70d349b1f68ef1b435875c1636888b63742146a2294e2cd41b1fde37badee91c"
+          "content": "148488431579bbdd58f60bee16adeafed03fa93a8b267dc0851704bf2a33ca1253879381145b6ff36ec074753b45bc9cb78afe05ad7ff7da056b5637cae16c77"
         }
       ],
       "licenses": [
@@ -1122,19 +1127,19 @@
       ]
     },
     {
-      "bom-ref": "nodemailer@10.0.10",
+      "bom-ref": "nodemailer@10.1.4",
       "type": "library",
       "name": "nodemailer",
-      "version": "10.0.10",
+      "version": "10.1.4",
       "scope": "required",
       "author": "Andris Reinman",
       "description": "Easy as cake e-mail sending from your Node.js applications",
-      "purl": "pkg:npm/nodemailer@10.0.10",
+      "purl": "pkg:npm/nodemailer@10.1.4",
       "properties": [],
       "externalReferences": [
         {
           "type": "distribution",
-          "url": "https://registry.npmjs.org/nodemailer/-/nodemailer-10.0.10.tgz"
+          "url": "https://registry.npmjs.org/nodemailer/-/nodemailer-10.1.4.tgz"
         },
         {
           "type": "vcs",
@@ -1152,7 +1157,7 @@
       "hashes": [
         {
           "alg": "SHA-512",
-          "content": "1def57b243859aceb64b200a90bbbc09c19c607028f814874ac39123cb383c91fca998196382f89437efc8dd2dc2f99ba721be786af1a72065b248fd77dac9f0"
+          "content": "12c327391da846fe0b1a75af1e0715624910e0eda3f0a3b8593c3a97e3c7478b0e5e8f1202022b6b1b449c60e6a2d8db86fd210ecbb722e0c81599bc897c0ee0"
         }
       ],
       "licenses": [
@@ -1293,25 +1298,25 @@
       ]
     },
     {
-      "bom-ref": "proxy-addr@2.0.7",
+      "bom-ref": "proxy-addr@2.0.8",
       "type": "library",
       "name": "proxy-addr",
-      "version": "2.0.7",
+      "version": "2.0.8",
       "scope": "required",
       "author": "Douglas Christopher Wilson <doug@somethingdoug.com>",
       "description": "Determine address of proxied request",
-      "purl": "pkg:npm/proxy-addr@2.0.7",
+      "purl": "pkg:npm/proxy-addr@2.0.8",
       "properties": [],
       "externalReferences": [
         {
           "type": "distribution",
-          "url": "https://registry.npmjs.org/proxy-addr/-/proxy-addr-2.0.7.tgz"
+          "url": "https://registry.npmjs.org/proxy-addr/-/proxy-addr-2.0.8.tgz"
         }
       ],
       "hashes": [
         {
           "alg": "SHA-512",
-          "content": "96542c30b4940d43d3e388ddad4fcedfbaa59e27e2b433fe670ae699972848ac8b2afb59c69c95d27dbf6c3fcde2d040019fe024475953b28cadaa0ad7e5d802"
+          "content": "e679f1d321b2554718eadf519d6700456b704fd1750fc3bdaedd3c86d3ef9dde3d5b522066d98b921bbd59f333423d5c1718c720ee9ca279d43555b993b015c9"
         }
       ],
       "licenses": [
@@ -1323,18 +1328,18 @@
       ]
     },
     {
-      "bom-ref": "qs@6.16.0",
+      "bom-ref": "qs@6.16.1",
       "type": "library",
       "name": "qs",
-      "version": "6.16.0",
+      "version": "6.16.1",
       "scope": "required",
       "description": "A querystring parser that supports nesting and arrays, with a depth limit",
-      "purl": "pkg:npm/qs@6.16.0",
+      "purl": "pkg:npm/qs@6.16.1",
       "properties": [],
       "externalReferences": [
         {
           "type": "distribution",
-          "url": "https://registry.npmjs.org/qs/-/qs-6.16.0.tgz"
+          "url": "https://registry.npmjs.org/qs/-/qs-6.16.1.tgz"
         },
         {
           "type": "vcs",
@@ -1348,7 +1353,7 @@
       "hashes": [
         {
           "alg": "SHA-512",
-          "content": "87a7e1388691ac80f609b118d9faacfbbb7e517668f8c2c09d4e60448abce6e16d76250f09db00a4c947857a202953381ccd8355b22318d4d3607d8e7263f5bc"
+          "content": "e4fc7a27badf1c1006521350ddeb3863370e741070d120dc56d4e126697845d9cac38b4ab367a903490f67e2bc5fe5a21e4b53f7744755c43fdf29b96930a0b6"
         }
       ],
       "licenses": [
@@ -1912,16 +1917,55 @@
           }
         }
       ]
+    },
+    {
+      "bom-ref": "ws@8.22.0",
+      "type": "library",
+      "name": "ws",
+      "version": "8.22.0",
+      "scope": "required",
+      "author": "Einar Otto Stangvik <einaros@gmail.com> (http://2x.io)",
+      "description": "Simple to use, blazing fast and thoroughly tested websocket client and server for Node.js",
+      "purl": "pkg:npm/ws@8.22.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/ws/-/ws-8.22.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git+https://github.com/websockets/ws.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/websockets/ws"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "61d82073df3bf913b40275ad67fed6abd16d36f72b2f56ff44ed2e77d9968d43e00ebb00030412179d6c9b6866d57a1f6d4ff88e4a4612c2c5b1967153ed433a"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
     }
   ],
   "dependencies": [
     {
-      "ref": "iobroker.nexowatt-ui@1.0.22",
+      "ref": "nexowatt-eos-ui-internal@9.0.18",
       "dependsOn": [
         "@iobroker/adapter-core@3.4.1",
-        "@iobroker/type-detector@5.0.10",
+        "@iobroker/type-detector@6.2.0",
         "express@4.22.3",
-        "nodemailer@10.0.10"
+        "nodemailer@10.1.4",
+        "ws@8.22.0"
       ]
     },
     {
@@ -1931,7 +1975,7 @@
       ]
     },
     {
-      "ref": "@iobroker/type-detector@5.0.10",
+      "ref": "@iobroker/type-detector@6.2.0",
       "dependsOn": []
     },
     {
@@ -1949,7 +1993,7 @@
       "dependsOn": []
     },
     {
-      "ref": "body-parser@1.20.8",
+      "ref": "body-parser@1.20.9",
       "dependsOn": [
         "bytes@3.1.2",
         "content-type@1.0.5",
@@ -1959,7 +2003,7 @@
         "http-errors@2.0.1",
         "iconv-lite@0.4.24",
         "on-finished@2.4.1",
-        "qs@6.16.0",
+        "qs@6.16.1",
         "raw-body@2.5.3",
         "type-is@1.6.18",
         "unpipe@1.0.0"
@@ -2028,7 +2072,7 @@
       "dependsOn": [
         "accepts@1.3.8",
         "array-flatten@1.1.1",
-        "body-parser@1.20.8",
+        "body-parser@1.20.9",
         "content-disposition@0.5.4",
         "content-type@1.0.5",
         "cookie@0.7.2",
@@ -2046,8 +2090,8 @@
         "on-finished@2.4.1",
         "parseurl@1.3.3",
         "path-to-regexp@0.1.13",
-        "proxy-addr@2.0.7",
-        "qs@6.16.0",
+        "proxy-addr@2.0.8",
+        "qs@6.16.1",
         "range-parser@1.2.1",
         "send@0.19.2",
         "serve-static@1.16.3",
@@ -2118,7 +2162,7 @@
       "dependsOn": []
     },
     {
-      "ref": "nodemailer@10.0.10",
+      "ref": "nodemailer@10.1.4",
       "dependsOn": []
     },
     {
@@ -2140,14 +2184,14 @@
       "dependsOn": []
     },
     {
-      "ref": "proxy-addr@2.0.7",
+      "ref": "proxy-addr@2.0.8",
       "dependsOn": [
         "forwarded@0.2.0",
         "ipaddr.js@1.9.1"
       ]
     },
     {
-      "ref": "qs@6.16.0",
+      "ref": "qs@6.16.1",
       "dependsOn": [
         "side-channel@1.1.1"
       ]
@@ -2253,6 +2297,10 @@
     },
     {
       "ref": "vary@1.1.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "ws@8.22.0",
       "dependsOn": []
     }
   ]

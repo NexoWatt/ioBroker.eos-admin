@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/ems-apps.ts
- * Quell-Hash: sha256:74c581a2b025e8ab8d3a24b3da5ed91082daf524c67a27e866aebcbd9928d2b8
+ * Quell-Hash: sha256:b4369cfa8be7f9da648a4bc71cfcec49cf2cdced3f79650a1459b3f11ff11d7c
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -1026,6 +1026,7 @@
   ];
 
   let currentConfig = null;
+  let configurationRevision = null;
   // CAS stammt ausschließlich aus einem vollständig geladenen Gesamtstand.
   // Eine Änderungsmeldung erhöht nur die beobachtete Version, niemals den Save-Token.
   let dynamicGridLoadedVersion = null;
@@ -1749,6 +1750,12 @@ function _collectFlowPowerDpIsWFromUI() {
       const err = (data && data.error) ? data.error : ('HTTP ' + res.status);
       if (data && data.startup && typeof data.message === 'string' && /^EOS_[A-Z0-9_]{1,91}$/.test(String(err))) {
         throw new Error(data.message.slice(0, 512) + ' (' + String(err) + ')');
+      }
+      if (err === 'EOS_INSTALLER_CONFIG_CHANGED') {
+        throw new Error('Die EMS-Zuordnung wurde inzwischen geändert. Deine Eingaben bleiben erhalten. Bitte den aktuellen Stand über „Neu laden“ laden und die Änderungen vor erneutem Speichern vergleichen.');
+      }
+      if (['EOS_EMS_OBJECT_PROVISION_FAILED', 'EOS_EMS_APPLY_FAILED'].includes(err) && typeof data.message === 'string') {
+        throw new Error(data.message.slice(0, 500));
       }
       throw new Error(err === 'DYNAMIC_GRID_VERSION_CONFLICT' ? dynamicGridReloadNotice : err);
     }
@@ -9964,8 +9971,8 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
         grid.appendChild(mkDpField('FENECON gesamte PV (W)', `sf_${idx}_feneconPvTotalId`, s.feneconPvTotalId, (v) => { const sf2 = _ensureStorageFarmCfg(); sf2.storages[i].feneconPvTotalId = v; }, 'ProductionActivePower · typ. 327'));
       }
 
-      grid.appendChild(mkDpField('PV-/WR-Leistung (W)', `sf_${idx}_pvPowerId`, s.pvPowerId, (v) => { const sf2 = _ensureStorageFarmCfg(); sf2.storages[i].pvPowerId = v; }, 'optional · DC wird addiert, AC dient als Anlagen-PV-Fallback'));
-      grid.appendChild(mkGridHelp('PV-/WR-Leistung passend zur Kopplung zuordnen. Derselbe Wechselrichter-DP wird in der Farm nur einmal gezählt. Bei vorhandener Anlagen-PV werden AC-/unbekannte Farmwerte nicht doppelt addiert; DC-/Hybrid-PV wird nur ergänzt, wenn sie noch nicht enthalten ist.'));
+      grid.appendChild(mkDpField('PV-/WR-Leistung – Messwert-Datenpunkt (W)', `sf_${idx}_pvPowerId`, s.pvPowerId, (v) => { const sf2 = _ensureStorageFarmCfg(); sf2.storages[i].pvPowerId = v; }, 'Datenpunkt auswählen · keine feste Wattzahl eingeben'));
+      grid.appendChild(mkGridHelp('Hier den Datenpunkt der gemessenen PV-/WR-Leistung passend zur Kopplung zuordnen, nicht die Nennleistung als Zahl. Derselbe Wechselrichter-DP wird in der Farm nur einmal gezählt. Bei vorhandener Anlagen-PV werden AC-/unbekannte Farmwerte nicht doppelt addiert; DC-/Hybrid-PV wird nur ergänzt, wenn sie noch nicht enthalten ist.'));
 
       // Istwerte (Messwerte)
       grid.appendChild(mkGridDivider('Istwerte (Messwerte)'));
@@ -13334,6 +13341,7 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
   async function loadConfig() {
     setStatus('Lade Konfiguration…');
     const data = await fetchJson('/api/installer/config?t=' + Date.now(), { cache: 'no-store' });
+    configurationRevision = typeof data.configurationRevision === 'string' ? data.configurationRevision : null;
     const cfg = (data && data.config && typeof data.config === 'object') ? data.config : {};
 
     // Runtime-Fallback: Die Lizenzseite nutzt /api/license/info und kann eine Lizenz sofort
@@ -14334,8 +14342,9 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
     if (storageCount > _maxStorageCount()) {
       throw new Error(`Diese Lizenz erlaubt maximal ${_maxStorageCount()} Speichersysteme; konfiguriert sind ${storageCount}. Bitte die Speicherzuordnung anpassen.`);
     }
-    const payload = { patch, restartEms: true, expectedDynamicGridConfigVersion };
+    const payload = { patch, restartEms: true, expectedDynamicGridConfigVersion, expectedConfigurationRevision: configurationRevision };
     const data = await fetchJson('/api/installer/config', { method: 'POST', body: JSON.stringify(payload) });
+    configurationRevision = data.configurationRevision;
     applyConfigToUI(data.config || {});
     clearDirty();
     setStatus('Gespeichert. EMS wurde neu gestartet.', 'ok');
@@ -14390,7 +14399,8 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
     });
     // Der M0-Verweis der eigenen Netzanschluss-App darf direkt die bestehende Zuordnung öffnen.
     const requestedTab = new URLSearchParams(window.location.search || '').get('tab');
-    _showTab(requestedTab === 'mapping' && btns.some(btn => btn.getAttribute('data-tab') === 'mapping') ? 'mapping' : 'apps');
+    const linkedTabs = new Set(['apps', 'mapping', 'flow', 'evcs', 'storageconfig', 'storagefarm']);
+    _showTab(linkedTabs.has(requestedTab) && btns.some(btn => btn.getAttribute('data-tab') === requestedTab) ? requestedTab : 'apps');
   }
 
   // Unter-Reiter im Energiefluss-Tab (Basis/Verbraucher/Erzeuger/Optionen)
@@ -17046,7 +17056,7 @@ if (els.ocppAutoDetect) {
     const expectedDynamicGridConfigVersion = requireDynamicGridSaveVersion();
     const endMutation = beginAppCenterMutation();
     try {
-    const payload = { backup: obj, restartEms: true, mode: 'replace', expectedDynamicGridConfigVersion };
+    const payload = { backup: obj, restartEms: true, mode: 'replace', expectedDynamicGridConfigVersion, expectedConfigurationRevision: configurationRevision };
     await fetchJson('/api/installer/backup/import', { method: 'POST', body: JSON.stringify(payload) });
     setBackupStatus('Import erfolgreich. Konfiguration wurde übernommen (EMS neu gestartet).', 'ok');
     await loadConfig();

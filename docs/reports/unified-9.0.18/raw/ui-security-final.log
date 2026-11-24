@@ -1,0 +1,8 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> nexowatt-eos-ui-internal@9.0.18 lint:security
+> node scripts/verify-eslint-security.cjs
+
+ESLint: 213 sources; 3222 current findings; 3222 inventoried (2951 historical open, 271 individually reviewed); 0 blocked new/forbidden findings; 109 old findings absent.
+Open scanner hotspots: {"security/detect-object-injection":2499,"security/detect-non-literal-fs-filename":50,"@typescript-eslint/ban-ts-comment":72,"security/detect-unsafe-regex":19,"@typescript-eslint/no-explicit-any":563,"security/detect-possible-timing-attacks":14,"security/detect-non-literal-regexp":4,"security/detect-non-literal-require":1}
+This gate prevents new scanner findings. It does not assert a clean security scan or full ASVS conformity.

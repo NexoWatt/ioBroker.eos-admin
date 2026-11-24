@@ -1,0 +1,14 @@
+{
+  "name": "audit-full",
+  "command": [
+    "npm",
+    "audit",
+    "--json"
+  ],
+  "cwd": ".",
+  "startedAt": "2026-11-24T14:39:16.388456+00:00",
+  "durationSeconds": 66.451,
+  "exitCode": 1,
+  "log": "/workspace/scratch/741f792566ea/setup-918/audit-full.log",
+  "sha256": "dfc1eb34a1fbcbea4a235cf71e03aac2d710fe662037f0456a5f7645bc358aab"
+}

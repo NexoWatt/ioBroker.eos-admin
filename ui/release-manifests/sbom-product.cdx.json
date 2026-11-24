@@ -2,10 +2,10 @@
   "$schema": "http://cyclonedx.org/schema/bom-1.5.schema.json",
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
-  "serialNumber": "urn:uuid:2dce3445-dd84-4986-8050-7157cfd47286",
+  "serialNumber": "urn:uuid:b2194145-2c0f-47f7-8ccf-1c6002fdd272",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-11-22T08:21:07.524Z",
+    "timestamp": "2026-11-24T15:30:26.772Z",
     "lifecycles": [
       {
         "phase": "post-build"
@@ -20,10 +20,10 @@
     ],
     "component": {
       "type": "application",
-      "bom-ref": "product:iobroker.nexowatt-ui@1.0.38",
-      "name": "iobroker.nexowatt-ui",
-      "version": "1.0.38",
-      "purl": "pkg:npm/iobroker.nexowatt-ui@1.0.38",
+      "bom-ref": "product:nexowatt-eos-ui-internal@9.0.18",
+      "name": "nexowatt-eos-ui-internal",
+      "version": "9.0.18",
+      "purl": "pkg:npm/nexowatt-eos-ui-internal@9.0.18",
       "description": "Prepared npm product artifact, reference external runtime dependencies and observed bundled Admin JavaScript."
     },
     "properties": [
@@ -33,15 +33,15 @@
       },
       {
         "name": "nexowatt:package-files-sha256",
-        "value": "1ed5c61c40d9a8acf165118c36bb5fa57ae1b2552dab996095cd62759c9ce231"
+        "value": "b6d63ed5b88ca2646195fa5ac8057168d5af1dc42f6e1ac8607539d35a6e5849"
       },
       {
         "name": "nexowatt:source-inputs-sha256",
-        "value": "5a58c83d73b5e9a0e2923d6689667b8baacf13ba195149e49f251c6755316214"
+        "value": "2c9927d98c5d31faa06f1774750c89b92684e6abcf089f2d5db660e142e65eff"
       },
       {
         "name": "nexowatt:bundle-evidence-sha256",
-        "value": "c4adf64e269163317188cc11bdfe9179abf8e9f435d2a6fea2572000375baf38"
+        "value": "5c78cab085f59ffb168b6aa37f2e432bb7131ed7e289dc5c68753a1c2eb3df06"
       },
       {
         "name": "nexowatt:generator-version",
@@ -92,12 +92,12 @@
       ]
     },
     {
-      "bom-ref": "runtime-reference:@iobroker/type-detector@5.0.10",
+      "bom-ref": "runtime-reference:@iobroker/type-detector@6.2.0",
       "type": "library",
       "name": "@iobroker/type-detector",
-      "version": "5.0.10",
+      "version": "6.2.0",
       "scope": "required",
-      "purl": "pkg:npm/%40iobroker/type-detector@5.0.10",
+      "purl": "pkg:npm/%40iobroker/type-detector@6.2.0",
       "properties": [
         {
           "name": "nexowatt:delivery",
@@ -107,13 +107,13 @@
       "externalReferences": [
         {
           "type": "distribution",
-          "url": "https://registry.npmjs.org/@iobroker/type-detector/-/type-detector-5.0.10.tgz"
+          "url": "https://registry.npmjs.org/@iobroker/type-detector/-/type-detector-6.2.0.tgz"
         }
       ],
       "hashes": [
         {
           "alg": "SHA-512",
-          "content": "e70b99e32d6d3a2b8501201806d5d7c116a1422c25208b92699136f1add37ea71d32d7969bbbefd07f7bc5d8c1c20828ea5a2f9d5fb4559d315165f1bd58c3b4"
+          "content": "70487eeedb2a491d6431ab588cd69bd800ad6a1e7fdd378480f95fb52edc292cd9aabe660def4e3a342039a12021be440a2ab666f632a887ef59a7d00e12a9ce"
         }
       ],
       "licenses": [
@@ -1879,12 +1879,12 @@
       ]
     },
     {
-      "bom-ref": "admin-bundle:nexowatt-ui-admin-tab@0.8.8",
+      "bom-ref": "admin-bundle:nexowatt-ui-admin-tab@9.0.18",
       "type": "library",
       "name": "nexowatt-ui-admin-tab",
-      "version": "0.8.8",
+      "version": "9.0.18",
       "scope": "required",
-      "purl": "pkg:npm/nexowatt-ui-admin-tab@0.8.8",
+      "purl": "pkg:npm/nexowatt-ui-admin-tab@9.0.18",
       "properties": [
         {
           "name": "cdx:npm:package:private",
@@ -1904,6 +1904,7 @@
       "name": "react",
       "version": "18.3.1",
       "scope": "required",
+      "description": "React is a JavaScript library for building user interfaces.",
       "purl": "pkg:npm/react@18.3.1",
       "properties": [
         {
@@ -1915,6 +1916,14 @@
         {
           "type": "distribution",
           "url": "https://registry.npmjs.org/react/-/react-18.3.1.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/facebook/react.git"
+        },
+        {
+          "type": "website",
+          "url": "https://reactjs.org/"
         }
       ],
       "hashes": [
@@ -1937,6 +1946,7 @@
       "name": "react-dom",
       "version": "18.3.1",
       "scope": "required",
+      "description": "React package for working with the DOM.",
       "purl": "pkg:npm/react-dom@18.3.1",
       "properties": [
         {
@@ -1948,6 +1958,18 @@
         {
           "type": "distribution",
           "url": "https://registry.npmjs.org/react-dom/-/react-dom-18.3.1.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/facebook/react.git"
+        },
+        {
+          "type": "website",
+          "url": "https://reactjs.org/"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/facebook/react/issues"
         }
       ],
       "hashes": [
@@ -1970,6 +1992,8 @@
       "name": "react-router",
       "version": "7.18.4",
       "scope": "required",
+      "author": "Remix Software <hello@remix.run>",
+      "description": "Declarative routing for React",
       "purl": "pkg:npm/react-router@7.18.4",
       "properties": [
         {
@@ -1981,6 +2005,10 @@
         {
           "type": "distribution",
           "url": "https://registry.npmjs.org/react-router/-/react-router-7.18.4.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/remix-run/react-router"
         }
       ],
       "hashes": [
@@ -2003,6 +2031,7 @@
       "name": "scheduler",
       "version": "0.23.2",
       "scope": "required",
+      "description": "Cooperative scheduler for the browser environment.",
       "purl": "pkg:npm/scheduler@0.23.2",
       "properties": [
         {
@@ -2014,6 +2043,18 @@
         {
           "type": "distribution",
           "url": "https://registry.npmjs.org/scheduler/-/scheduler-0.23.2.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/facebook/react.git"
+        },
+        {
+          "type": "website",
+          "url": "https://reactjs.org/"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/facebook/react/issues"
         }
       ],
       "hashes": [
@@ -2033,14 +2074,14 @@
   ],
   "dependencies": [
     {
-      "ref": "product:iobroker.nexowatt-ui@1.0.38",
+      "ref": "product:nexowatt-eos-ui-internal@9.0.18",
       "dependsOn": [
         "runtime-reference:@iobroker/adapter-core@3.4.1",
-        "runtime-reference:@iobroker/type-detector@5.0.10",
+        "runtime-reference:@iobroker/type-detector@6.2.0",
         "runtime-reference:express@4.22.3",
         "runtime-reference:nodemailer@10.1.4",
         "runtime-reference:ws@8.22.0",
-        "admin-bundle:nexowatt-ui-admin-tab@0.8.8"
+        "admin-bundle:nexowatt-ui-admin-tab@9.0.18"
       ]
     },
     {
@@ -2050,7 +2091,7 @@
       ]
     },
     {
-      "ref": "runtime-reference:@iobroker/type-detector@5.0.10",
+      "ref": "runtime-reference:@iobroker/type-detector@6.2.0",
       "dependsOn": []
     },
     {
@@ -2379,7 +2420,7 @@
       "dependsOn": []
     },
     {
-      "ref": "admin-bundle:nexowatt-ui-admin-tab@0.8.8",
+      "ref": "admin-bundle:nexowatt-ui-admin-tab@9.0.18",
       "dependsOn": [
         "admin-bundle:react@18.3.1",
         "admin-bundle:react-dom@18.3.1",

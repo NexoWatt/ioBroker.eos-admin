@@ -1,0 +1,14 @@
+{
+  "name": "frontend-build",
+  "command": [
+    "npm",
+    "run",
+    "build:frontend"
+  ],
+  "cwd": ".",
+  "startedAt": "2026-11-24T14:37:36.139520+00:00",
+  "durationSeconds": 35.893,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-918/frontend-build.log",
+  "sha256": "5abc2c18867a3f74ed3b8bb35925aa8cfb4c0ec20114da8a602ada3574597ce3"
+}

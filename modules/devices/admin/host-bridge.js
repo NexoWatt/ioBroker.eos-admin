@@ -21,6 +21,9 @@ function translateAll() {
     let busy = false;
     let manualImportAllowed = false;
     let dirty = false;
+    let emsTimer = null;
+    let emsPolls = 0;
+    let pageActive = true;
     /** @type {Readonly<Record<string, string>>} */
     const importMessages = Object.freeze({
         EOS_MODULE_NOT_READY: 'Die gespeicherte Modulkonfiguration ist noch nicht freigegeben oder konnte nicht geladen werden. Bitte den Status der Bestandsübernahme und das ioBroker-Protokoll prüfen; nach einer Lizenzaktivierung kann ein kontrollierter EOS-Neustart nötig sein.',
@@ -34,6 +37,10 @@ function translateAll() {
         EOS_MODULE_IMPORT_UNAVAILABLE: 'Die bisherige Instanz wurde nicht gefunden oder ist nicht deaktiviert. Instanzname und Bestandsstatus prüfen.',
         EOS_MODULE_STOP_UNCONFIRMED: 'Der Stopp des Gerätemoduls ist nicht bestätigt. Vor einer Übernahme bitte den Modulstatus und das ioBroker-Protokoll prüfen.',
         EOS_DEVICES_LEGACY_CONFIG_CONFLICT: 'Die bisherige Instanz enthält unterschiedliche Gerätelisten in devices und devicesJson. Es wurde nichts übernommen. Die ursprüngliche Konfiguration zuerst abgleichen; keine der beiden Listen ungeprüft überschreiben.',
+        EOS_DEVICES_EMS_INTENT: 'Bitte eine gültige EMS-Funktion für das Gerät auswählen.',
+        EOS_DEVICES_EMS_SCOPE: 'Bitte den Regelbereich / Messpunkt M0 oder M1 auswählen.',
+        EOS_DEVICES_EMS_SLOT: 'Bitte einen passenden Platz im Energiefluss auswählen.',
+        EOS_DEVICES_EMS_GROUP: 'Die gespeicherte EMS-Gruppenkennung ist ungültig. Bitte im App-Center prüfen.',
         EOS_MODULE_BUSY: 'Eine Konfigurationsänderung oder ein Stopp läuft bereits. Bitte den Abschluss abwarten und danach neu laden.',
     });
     /** @param {string} code @returns {string} */
@@ -100,6 +107,36 @@ function translateAll() {
         if (!response.ok || result.error) throw new Error(messageFor(String(result.error || `HTTP ${response.status}`)));
         return result;
     }
+    function renderEms(result) {
+        if (window.EosDeviceEms) window.EosDeviceEms.render(result.emsCommissioning);
+    }
+    function stopEmsPolling() {
+        if (emsTimer !== null) window.clearTimeout(emsTimer);
+        emsTimer = null;
+    }
+    function scheduleEmsPolling() {
+        stopEmsPolling();
+        if (!window.EosDeviceEms || !pageActive || emsPolls >= 12) return;
+        emsTimer = window.setTimeout(() => {
+            emsTimer = null;
+            if (!pageActive || document.hidden) return;
+            emsPolls++;
+            if (busy) { scheduleEmsPolling(); return; }
+            void request().then(result => {
+                renderEms(result);
+                if (result.emsCommissioning?.state === 'pending') scheduleEmsPolling();
+            }).catch(() => {
+                const hint = element('eosEmsStatus');
+                if (hint) hint.textContent = 'Zuordnungsstatus konnte nicht aktualisiert werden. Eingaben bleiben erhalten; Status erneut aktualisieren.';
+            });
+        }, 2500);
+    }
+    async function refreshEms() {
+        const result = await request();
+        renderEms(result);
+        emsPolls = 0;
+        if (result.emsCommissioning?.state === 'pending') scheduleEmsPolling();
+    }
     async function reload() {
         const result = await request();
         if (!result.config || typeof result.csrfToken !== 'string') throw new Error('EOS_DEVICES_INVALID_RESPONSE');
@@ -112,6 +149,9 @@ function translateAll() {
         dirty = false;
         editorAvailability();
         importAvailability(result);
+        renderEms(result);
+        emsPolls = 0;
+        if (result.emsCommissioning?.state === 'pending') scheduleEmsPolling();
         element('eosModuleSave').disabled = !ready;
         const moduleState = result.status?.active === true
             ? (result.status?.details?.state || 'running')
@@ -143,6 +183,13 @@ function translateAll() {
             .catch(() => status('Gerätemetadaten konnten nicht verarbeitet werden.', true));
     };
     document.addEventListener('DOMContentLoaded', () => {
+        if (window.EosDeviceEms) {
+            window.addEventListener('pagehide', () => { pageActive = false; stopEmsPolling(); });
+            window.addEventListener('pageshow', () => { pageActive = true; });
+            element('eosEmsRefresh').addEventListener('click', () => {
+                void refreshEms().catch(() => { element('eosEmsStatus').textContent = 'Zuordnungsstatus nicht erreichbar. Geräteeingaben bleiben erhalten.'; });
+            });
+        }
         element('eosModuleEnabled').addEventListener('change', changed);
         element('eosModuleReload').addEventListener('click', () => {
             if (dirty && !window.confirm('Ungespeicherte Änderungen verwerfen und den gespeicherten Gerätestand neu laden?')) return;

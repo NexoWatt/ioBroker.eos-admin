@@ -2,10 +2,10 @@
   "$schema": "http://cyclonedx.org/schema/bom-1.5.schema.json",
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
-  "serialNumber": "urn:uuid:ad1c15ef-3151-4c85-b1e5-7a0ca91f3f41",
+  "serialNumber": "urn:uuid:feb9ac32-a36d-45fe-9644-7bc8bd82807a",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-09-29T21:28:03.326Z",
+    "timestamp": "2026-11-24T15:30:25.757Z",
     "lifecycles": [
       {
         "phase": "build"
@@ -15,16 +15,16 @@
       {
         "vendor": "npm",
         "name": "cli",
-        "version": "11.9.0"
+        "version": "11.19.1"
       }
     ],
     "component": {
-      "bom-ref": "nexowatt-ui-admin-tab@0.8.8",
+      "bom-ref": "nexowatt-ui-admin-tab@9.0.18",
       "type": "library",
       "name": "nexowatt-ui-admin-tab",
-      "version": "0.8.8",
+      "version": "9.0.18",
       "scope": "required",
-      "purl": "pkg:npm/nexowatt-ui-admin-tab@0.8.8",
+      "purl": "pkg:npm/nexowatt-ui-admin-tab@9.0.18",
       "properties": [
         {
           "name": "cdx:npm:package:private",
@@ -49,7 +49,7 @@
       },
       {
         "name": "nexowatt:generator-sha256",
-        "value": "cc91b3f60f38e21f516e041e5e479c0860ac38e99eb782565218b4a723b7d822"
+        "value": "94f7bd20a3fbc1f26cffbb5e677d24f77ee039d06119e6a3e4b70caf53b9b8af"
       },
       {
         "name": "nexowatt:package-json-path",
@@ -57,7 +57,7 @@
       },
       {
         "name": "nexowatt:package-json-sha256",
-        "value": "1187c0e705ee899d6bbab3ae9f8817cf05a51a2618ab33fd8b4fb6b0e589ebb1"
+        "value": "0581529958e6ac51e399f2108e1ccc4b8564d0cbf2b93f5d69a02264d6e4e9f4"
       },
       {
         "name": "nexowatt:lockfile-path",
@@ -65,15 +65,15 @@
       },
       {
         "name": "nexowatt:lockfile-sha256",
-        "value": "2ce40a4838b00f6a4782bd917af76f18b51f98ffe5086113ae1c11b89e64aef7"
+        "value": "c6b7d258690998f12b7da4458bf58975d6e347686e16016fe8cc3b4a46eed61c"
       },
       {
         "name": "nexowatt:lockfile-package-entry-count",
-        "value": "120"
+        "value": "127"
       },
       {
         "name": "nexowatt:node-version",
-        "value": "v24.19.0"
+        "value": "v24.22.3"
       },
       {
         "name": "nexowatt:host-platform",
@@ -1504,6 +1504,174 @@
       ]
     },
     {
+      "bom-ref": "@types/node@22.20.5",
+      "type": "library",
+      "name": "@types/node",
+      "version": "22.20.5",
+      "scope": "required",
+      "description": "TypeScript definitions for node",
+      "purl": "pkg:npm/%40types/node@22.20.5",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@types/node/-/node-22.20.5.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/node"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "536f8336bfb04a3a6c4d2ff0646607abb19cc1fb9298a88abe83ef2b6db3c13951854f75c8e9e2378a914792a1223be27fbcacc3f773fe12a67c31f4462b3868"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@types/prop-types@15.7.15",
+      "type": "library",
+      "name": "@types/prop-types",
+      "version": "15.7.15",
+      "scope": "required",
+      "description": "TypeScript definitions for prop-types",
+      "purl": "pkg:npm/%40types/prop-types@15.7.15",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@types/prop-types/-/prop-types-15.7.15.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/prop-types"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "17a6c4c9a995f632860050449a54277ac44f18e42a4b6f94c22d049b5e717a73b11da7f686fe8bf180959f7acf74f24e8897cf8829cb211cafc156aa318dcc23"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@types/react@18.3.31",
+      "type": "library",
+      "name": "@types/react",
+      "version": "18.3.31",
+      "scope": "required",
+      "description": "TypeScript definitions for react",
+      "purl": "pkg:npm/%40types/react@18.3.31",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@types/react/-/react-18.3.31.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "bdf12aa574efc13f75ca19b075fa2e4ad3768522b04efc91b3caa92df003cababf9310f0d2164ced693d520d4510b8fc8486f2f92ffe910092445177da7bf643"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "@types/react-dom@18.3.7",
+      "type": "library",
+      "name": "@types/react-dom",
+      "version": "18.3.7",
+      "scope": "required",
+      "description": "TypeScript definitions for react-dom",
+      "purl": "pkg:npm/%40types/react-dom@18.3.7",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@types/react-dom/-/react-dom-18.3.7.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
+        },
+        {
+          "type": "website",
+          "url": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/react-dom"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "3047b751ea043585455f3a17116b2f72983a66f96b14d94e43b10eb2f848dc27c05f0ccf7cef10c2ec5de349dea6c60aab2c954274dd11fbfaf2af75c8b70aad"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
       "bom-ref": "@vitejs/plugin-react@5.2.0",
       "type": "library",
       "name": "@vitejs/plugin-react",
@@ -1721,6 +1889,41 @@
         {
           "alg": "SHA-512",
           "content": "7a2f00a2cee36b4c1e469173267100f541c9ffb5d09aa8256d1c277f60138dc07d5aaf3be15287f647e38e2acce94854dbf1397c561a77297284595d72a4a275"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "csstype@3.2.3",
+      "type": "library",
+      "name": "csstype",
+      "version": "3.2.3",
+      "scope": "required",
+      "author": "Fredrik Nicol <fredrik.nicol@gmail.com>",
+      "description": "Strict TypeScript and Flow types for style based on MDN data",
+      "purl": "pkg:npm/csstype@3.2.3",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/csstype/-/csstype-3.2.3.tgz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "cf51c629c632db103c00641fc2b9f43c0cbe3c1ed7fc64a3dd45495bda8aca7e37c566be825e675e6538aaa2cc4735952c50bc2aeb145fc4ffd240a2398a4021"
         }
       ],
       "licenses": [
@@ -2744,14 +2947,14 @@
       ]
     },
     {
-      "bom-ref": "source-map-js@1.2.1",
+      "bom-ref": "source-map-js@1.2.2",
       "type": "library",
       "name": "source-map-js",
-      "version": "1.2.1",
+      "version": "1.2.2",
       "scope": "required",
       "author": "Valentin 7rulnik Semirulnik <v7rulnik@gmail.com>",
       "description": "Generates and consumes source maps",
-      "purl": "pkg:npm/source-map-js@1.2.1",
+      "purl": "pkg:npm/source-map-js@1.2.2",
       "properties": [
         {
           "name": "cdx:npm:package:development",
@@ -2761,7 +2964,7 @@
       "externalReferences": [
         {
           "type": "distribution",
-          "url": "https://registry.npmjs.org/source-map-js/-/source-map-js-1.2.1.tgz"
+          "url": "https://registry.npmjs.org/source-map-js/-/source-map-js-1.2.2.tgz"
         },
         {
           "type": "website",
@@ -2771,7 +2974,7 @@
       "hashes": [
         {
           "alg": "SHA-512",
-          "content": "51758c2a12cec1529bef6f0852d40f5f17d853ebac7726ed52b2bff2e184f0240cbeb84ea70bf30c1c23d108522fb31073bbc8b084811bc550f3e203431a5f40"
+          "content": "2868fff18e37c77e5a6550edb7e27898ad61a0b18750b3187d290e0c93508cd0c2de85b53ea3e8c4cc28d292d4b1633f5041b338dfcdc5e1f2c047cd5cd3f757"
         }
       ],
       "licenses": [
@@ -2830,6 +3033,99 @@
       ]
     },
     {
+      "bom-ref": "typescript@5.8.3",
+      "type": "library",
+      "name": "typescript",
+      "version": "5.8.3",
+      "scope": "required",
+      "author": "Microsoft Corp.",
+      "description": "TypeScript is a language for application scale JavaScript development",
+      "purl": "pkg:npm/typescript@5.8.3",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/typescript/-/typescript-5.8.3.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "https://github.com/microsoft/TypeScript.git"
+        },
+        {
+          "type": "website",
+          "url": "https://www.typescriptlang.org/"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/microsoft/TypeScript/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "a757625ba4ea2fd2f4ee7371bd130cee130cc387395cea3fd626cbe1a0081a6480b7db254c4d57830e4a5aea1fdae4cebc283d058ed9462f86685fbbb1f80f79"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "undici-types@6.21.0",
+      "type": "library",
+      "name": "undici-types",
+      "version": "6.21.0",
+      "scope": "required",
+      "description": "A stand-alone types package for Undici",
+      "purl": "pkg:npm/undici-types@6.21.0",
+      "properties": [
+        {
+          "name": "cdx:npm:package:development",
+          "value": "true"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/undici-types/-/undici-types-6.21.0.tgz"
+        },
+        {
+          "type": "vcs",
+          "url": "git+https://github.com/nodejs/undici.git"
+        },
+        {
+          "type": "website",
+          "url": "https://undici.nodejs.org"
+        },
+        {
+          "type": "issue-tracker",
+          "url": "https://github.com/nodejs/undici/issues"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "8b00d9aa0d10006ae0f516afe47e27d0ceb87379a4479f5c27ac10a7eec2e2723482c984c5a79d6982cd3b8e1e4f802d041c236d38863cc96dd8c7744fd1fd25"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
       "bom-ref": "update-browserslist-db@1.3.3",
       "type": "library",
       "name": "update-browserslist-db",
@@ -2865,14 +3161,14 @@
       ]
     },
     {
-      "bom-ref": "vite@7.3.6",
+      "bom-ref": "vite@7.3.7",
       "type": "library",
       "name": "vite",
-      "version": "7.3.6",
+      "version": "7.3.7",
       "scope": "required",
       "author": "Evan You",
       "description": "Native-ESM powered web dev build tool",
-      "purl": "pkg:npm/vite@7.3.6",
+      "purl": "pkg:npm/vite@7.3.7",
       "properties": [
         {
           "name": "cdx:npm:package:development",
@@ -2882,7 +3178,7 @@
       "externalReferences": [
         {
           "type": "distribution",
-          "url": "https://registry.npmjs.org/vite/-/vite-7.3.6.tgz"
+          "url": "https://registry.npmjs.org/vite/-/vite-7.3.7.tgz"
         },
         {
           "type": "vcs",
@@ -2900,7 +3196,7 @@
       "hashes": [
         {
           "alg": "SHA-512",
-          "content": "e173fad2ca511a349915fd6a607f9d24890adb39cbdf341f97d2a4395f4c924451ff70e5b34771681b103d396811ce412d758f2fdbec3b1a29c722a83260ee7a"
+          "content": "0071334ce44c6e2effeda5e9ef0eca679f8309475278bb09cf482b63cc47a5cf431dd61bd2f42ee83a897e6dad3b0de00c4c4d80f8272535f133ab326051da08"
         }
       ],
       "licenses": [
@@ -2953,13 +3249,17 @@
   ],
   "dependencies": [
     {
-      "ref": "nexowatt-ui-admin-tab@0.8.8",
+      "ref": "nexowatt-ui-admin-tab@9.0.18",
       "dependsOn": [
         "react@18.3.1",
         "react-dom@18.3.1",
         "react-router-dom@7.18.4",
+        "@types/node@22.20.5",
+        "@types/react@18.3.31",
+        "@types/react-dom@18.3.7",
         "@vitejs/plugin-react@5.2.0",
-        "vite@7.3.6"
+        "typescript@5.8.3",
+        "vite@7.3.7"
       ]
     },
     {
@@ -3187,9 +3487,32 @@
       "dependsOn": []
     },
     {
+      "ref": "@types/node@22.20.5",
+      "dependsOn": [
+        "undici-types@6.21.0"
+      ]
+    },
+    {
+      "ref": "@types/prop-types@15.7.15",
+      "dependsOn": []
+    },
+    {
+      "ref": "@types/react@18.3.31",
+      "dependsOn": [
+        "@types/prop-types@15.7.15",
+        "csstype@3.2.3"
+      ]
+    },
+    {
+      "ref": "@types/react-dom@18.3.7",
+      "dependsOn": [
+        "@types/react@18.3.31"
+      ]
+    },
+    {
       "ref": "@vitejs/plugin-react@5.2.0",
       "dependsOn": [
-        "vite@7.3.6",
+        "vite@7.3.7",
         "@babel/core@7.29.7",
         "@babel/plugin-transform-react-jsx-self@7.29.7",
         "@babel/plugin-transform-react-jsx-source@7.29.7",
@@ -3222,6 +3545,10 @@
     },
     {
       "ref": "cookie@1.1.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "csstype@3.2.3",
       "dependsOn": []
     },
     {
@@ -3303,7 +3630,7 @@
       "dependsOn": [
         "nanoid@3.3.19",
         "picocolors@1.1.1",
-        "source-map-js@1.2.1"
+        "source-map-js@1.2.2"
       ]
     },
     {
@@ -3365,7 +3692,7 @@
       "dependsOn": []
     },
     {
-      "ref": "source-map-js@1.2.1",
+      "ref": "source-map-js@1.2.2",
       "dependsOn": []
     },
     {
@@ -3376,6 +3703,14 @@
       ]
     },
     {
+      "ref": "typescript@5.8.3",
+      "dependsOn": []
+    },
+    {
+      "ref": "undici-types@6.21.0",
+      "dependsOn": []
+    },
+    {
       "ref": "update-browserslist-db@1.3.3",
       "dependsOn": [
         "browserslist@4.29.0",
@@ -3384,8 +3719,9 @@
       ]
     },
     {
-      "ref": "vite@7.3.6",
+      "ref": "vite@7.3.7",
       "dependsOn": [
+        "@types/node@22.20.5",
         "esbuild@0.28.2",
         "fdir@6.5.0",
         "picomatch@4.0.7",

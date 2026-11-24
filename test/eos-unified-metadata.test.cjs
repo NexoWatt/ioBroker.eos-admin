@@ -29,6 +29,32 @@ test('ioBroker JSON configuration remains valid', () => {
     const config = JSON5.parse(fs.readFileSync(path.join(root, 'admin/jsonConfig.json5'), 'utf8'));
     assert.ok(validate(config), JSON.stringify(validate.errors));
 });
+test('release version synchronization preserves the ioBroker schema and news limit', t => {
+    const os = require('node:os');
+    const { syncReleaseVersion } = require('../tools/nexowatt-sync-release-version.cjs');
+    const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'eos-version-schema-'));
+    t.after(() => fs.rmSync(temporary, { recursive: true, force: true }));
+    const entry = require('../NEXOWATT_EOS_BUILD_INFO.json').repositoryEntry;
+    for (const relative of ['package.json', 'package-lock.json', 'io-package.json', 'src-admin/package.json',
+        'src-admin/package-lock.json', 'src-admin/src/version.json', 'NEXOWATT_EOS_BUILD_INFO.json', entry]) {
+        fs.mkdirSync(path.dirname(path.join(temporary, relative)), { recursive: true });
+        fs.copyFileSync(path.join(root, relative), path.join(temporary, relative));
+    }
+    const ioFile = path.join(temporary, 'io-package.json');
+    const input = JSON.parse(fs.readFileSync(ioFile, 'utf8'));
+    input.version = '8.0.2'; input.common.meta = 'https://example.test/old/io-package.json';
+    input.common.news['0.0.1'] = { en: 'Historical entry retained in archived reports.' };
+    fs.writeFileSync(ioFile, JSON.stringify(input));
+    syncReleaseVersion(temporary);
+    const result = JSON.parse(fs.readFileSync(ioFile, 'utf8'));
+    const ajv = new Ajv({ allErrors: true, strict: false });
+    ajv.addSchema(require('./schemas/jsonConfig.json'));
+    const validate = ajv.compile(require('./schemas/io-package.json'));
+    assert.ok(validate(result), JSON.stringify(validate.errors));
+    assert.equal(result.common.version, require('../package.json').version);
+    assert.ok(Object.keys(result.common.news).length <= 20);
+    assert.deepEqual(result.native, input.native);
+});
 test('own instance states have meaningful roles without changing existing state types', () => {
     const io = require('../io-package.json');
     const states = io.instanceObjects.filter(object => object.type === 'state');

@@ -1,0 +1,13 @@
+{
+  "name": "node24-tests-final",
+  "command": [
+    "npm",
+    "test"
+  ],
+  "cwd": ".",
+  "startedAt": "2026-11-24T15:31:01.882926+00:00",
+  "durationSeconds": 49.369,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-918/node24-tests-final.log",
+  "sha256": "1d262f25ec5c611a995cda4e695610266f48832c8bf47f2cd91066a24cc8fb83"
+}

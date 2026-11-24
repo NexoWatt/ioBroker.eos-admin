@@ -1,0 +1,331 @@
+{
+  "version": "9.0.18",
+  "date": "2026-11-24",
+  "results": {
+    "node22-tests-final": {
+      "tests": 1574,
+      "pass": 1572,
+      "fail": 0,
+      "skipped": 2,
+      "cancelled": 0
+    },
+    "node24-tests-final": {
+      "tests": 1574,
+      "pass": 1572,
+      "fail": 0,
+      "skipped": 2,
+      "cancelled": 0
+    }
+  },
+  "files": [
+    {
+      "file": "node22-tests-final.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/node22-tests-final.log",
+      "sourceSha256": "41e3b93512fe3c25f1e639cbc7618e22daecd404aa9fa943301a2313335f593e",
+      "deliveredSha256": "41e3b93512fe3c25f1e639cbc7618e22daecd404aa9fa943301a2313335f593e",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "node22-tests-final.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/node22-tests-final.result.json",
+      "sourceSha256": "bbe6ef29b6a66bfa639804b730b3b90cdfb4ff94a62b45fb48093a7e08ab56d0",
+      "deliveredSha256": "bbe6ef29b6a66bfa639804b730b3b90cdfb4ff94a62b45fb48093a7e08ab56d0",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "node24-tests-final.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/node24-tests-final.log",
+      "sourceSha256": "1d262f25ec5c611a995cda4e695610266f48832c8bf47f2cd91066a24cc8fb83",
+      "deliveredSha256": "1d262f25ec5c611a995cda4e695610266f48832c8bf47f2cd91066a24cc8fb83",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "node24-tests-final.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/node24-tests-final.result.json",
+      "sourceSha256": "84c9ab3475fb4ee5d5d1c6b4f6d530321747fb4871f79c5db48484d32d58562f",
+      "deliveredSha256": "84c9ab3475fb4ee5d5d1c6b4f6d530321747fb4871f79c5db48484d32d58562f",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "node22-typecheck-final.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/node22-typecheck-final.log",
+      "sourceSha256": "1cfc51416b45ff3103bf14b8357b1d79b7f4fa07cad4a0f7ff00370c84fa529c",
+      "deliveredSha256": "1cfc51416b45ff3103bf14b8357b1d79b7f4fa07cad4a0f7ff00370c84fa529c",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "node22-typecheck-final.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/node22-typecheck-final.result.json",
+      "sourceSha256": "65ce8e8c387fec884ab2c6612be1cbfd1b321d4ecf57bd03eb8e64160592f041",
+      "deliveredSha256": "65ce8e8c387fec884ab2c6612be1cbfd1b321d4ecf57bd03eb8e64160592f041",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "node24-typecheck-final.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/node24-typecheck-final.log",
+      "sourceSha256": "b32c0f0f7d9a374090016bd663b930a545235fea15a849530f698ace9a21503d",
+      "deliveredSha256": "b32c0f0f7d9a374090016bd663b930a545235fea15a849530f698ace9a21503d",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "node24-typecheck-final.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/node24-typecheck-final.result.json",
+      "sourceSha256": "76084b4512f9abb2cb426af9c2d9687cdb54fb4d955e14df92c59687592178dc",
+      "deliveredSha256": "76084b4512f9abb2cb426af9c2d9687cdb54fb4d955e14df92c59687592178dc",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "frontend-build.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/frontend-build.log",
+      "sourceSha256": "5abc2c18867a3f74ed3b8bb35925aa8cfb4c0ec20114da8a602ada3574597ce3",
+      "deliveredSha256": "5abc2c18867a3f74ed3b8bb35925aa8cfb4c0ec20114da8a602ada3574597ce3",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "frontend-build.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/frontend-build.result.json",
+      "sourceSha256": "e798c86f20caf5f8fec07bb4500852f806b42a9a222b86a7b7f78cb3292c6e13",
+      "deliveredSha256": "e798c86f20caf5f8fec07bb4500852f806b42a9a222b86a7b7f78cb3292c6e13",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "installer-build.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/installer-build.log",
+      "sourceSha256": "c605a666a970bad449001c71545f47759829cd14ac05dbf26ea28204107e5005",
+      "deliveredSha256": "c605a666a970bad449001c71545f47759829cd14ac05dbf26ea28204107e5005",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "installer-build.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/installer-build.result.json",
+      "sourceSha256": "be52f3e7817643900da9ca12542758b3508efea484e8cf9cd52e9914989d90ec",
+      "deliveredSha256": "be52f3e7817643900da9ca12542758b3508efea484e8cf9cd52e9914989d90ec",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "backend-final.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/backend-final.log",
+      "sourceSha256": "56947e6238f3a8deb5141d73491dfa78e1a2ca53db7c5d66fb327fecea261238",
+      "deliveredSha256": "56947e6238f3a8deb5141d73491dfa78e1a2ca53db7c5d66fb327fecea261238",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "backend-final.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/backend-final.result.json",
+      "sourceSha256": "95cafbc3ddd347c0a5fc154ca43945f061df0b0ef9f7fd382f07f2188eac44f1",
+      "deliveredSha256": "95cafbc3ddd347c0a5fc154ca43945f061df0b0ef9f7fd382f07f2188eac44f1",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "ui-runtime-final.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/ui-runtime-final.log",
+      "sourceSha256": "bd2f3949810eb4eb2a0f5fe5f6262e0ac55becc44131061fb3c160e47b14d14f",
+      "deliveredSha256": "bd2f3949810eb4eb2a0f5fe5f6262e0ac55becc44131061fb3c160e47b14d14f",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "ui-runtime-final.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/ui-runtime-final.result.json",
+      "sourceSha256": "d05a5636461bc5a0b5843889a345f151db3bfdcea1b88f871e3f9b68d3ce1040",
+      "deliveredSha256": "d05a5636461bc5a0b5843889a345f151db3bfdcea1b88f871e3f9b68d3ce1040",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "modules-build.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/modules-build.log",
+      "sourceSha256": "1889da84904795973a182b421c1fdef10c1b3d6078fa6554f1fb4fb262b96a4e",
+      "deliveredSha256": "1889da84904795973a182b421c1fdef10c1b3d6078fa6554f1fb4fb262b96a4e",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "modules-build.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/modules-build.result.json",
+      "sourceSha256": "79c64dc72330386f922c273331c872f6d8a813bdde449c4cd11091385abcb2fe",
+      "deliveredSha256": "79c64dc72330386f922c273331c872f6d8a813bdde449c4cd11091385abcb2fe",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "lint-final.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/lint-final.log",
+      "sourceSha256": "1ac22cd960e2ae91246d22e64cd3149dde3ce74c9ab8a962807247342da8ae63",
+      "deliveredSha256": "1ac22cd960e2ae91246d22e64cd3149dde3ce74c9ab8a962807247342da8ae63",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "lint-final.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/lint-final.result.json",
+      "sourceSha256": "559bfd7a180986e780915130038c68d39c985e4eb56b80665afea126e196de1b",
+      "deliveredSha256": "559bfd7a180986e780915130038c68d39c985e4eb56b80665afea126e196de1b",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "ui-docs-check.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/ui-docs-check.log",
+      "sourceSha256": "e8e581b725b6d2ade3beee01b9281dfa030bc2672f4c5fca33488a868f938d4b",
+      "deliveredSha256": "e8e581b725b6d2ade3beee01b9281dfa030bc2672f4c5fca33488a868f938d4b",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "ui-docs-check.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/ui-docs-check.result.json",
+      "sourceSha256": "08d81c04938d2081b433572b36074ae5685e91e46c2b481ae43ebbc55af24ce2",
+      "deliveredSha256": "08d81c04938d2081b433572b36074ae5685e91e46c2b481ae43ebbc55af24ce2",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "ui-runtime-sync.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/ui-runtime-sync.log",
+      "sourceSha256": "69f28c31c2a389b72dee68b67b4d97f5a07ada9ab53bc4f264bad99ec4af0b13",
+      "deliveredSha256": "69f28c31c2a389b72dee68b67b4d97f5a07ada9ab53bc4f264bad99ec4af0b13",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "ui-runtime-sync.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/ui-runtime-sync.result.json",
+      "sourceSha256": "cceaa2c2d89f08af0d19687115000799a1350fa2daa7a4ccd0e84ebb0684c2b0",
+      "deliveredSha256": "cceaa2c2d89f08af0d19687115000799a1350fa2daa7a4ccd0e84ebb0684c2b0",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "ui-secret-final.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/ui-secret-final.log",
+      "sourceSha256": "191ad7dde66bb507769b0694beae7ded084c040dbfeed61f8ab01b6f5b4799f3",
+      "deliveredSha256": "191ad7dde66bb507769b0694beae7ded084c040dbfeed61f8ab01b6f5b4799f3",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "ui-secret-final.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/ui-secret-final.result.json",
+      "sourceSha256": "e90d0b78ea3093550edb838aa9db053dd719de695eab85ce8ee06efe1b042c36",
+      "deliveredSha256": "e90d0b78ea3093550edb838aa9db053dd719de695eab85ce8ee06efe1b042c36",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "ui-security-final.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/ui-security-final.log",
+      "sourceSha256": "815ad6fdbf4667c43f29f662fd885b69cac2cde88b9ccaabe38741571092f7b5",
+      "deliveredSha256": "815ad6fdbf4667c43f29f662fd885b69cac2cde88b9ccaabe38741571092f7b5",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "ui-security-final.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/ui-security-final.result.json",
+      "sourceSha256": "cf5abc1e1824cc39d14b79036bb24759f5f94fe079acf19303f2a1050c4c726c",
+      "deliveredSha256": "cf5abc1e1824cc39d14b79036bb24759f5f94fe079acf19303f2a1050c4c726c",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "audit-runtime.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/audit-runtime.log",
+      "sourceSha256": "e3d83228798e4b10063dbb91f96a84906dc819e094ea794278835a1bf8509a17",
+      "deliveredSha256": "e3d83228798e4b10063dbb91f96a84906dc819e094ea794278835a1bf8509a17",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "audit-runtime.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/audit-runtime.result.json",
+      "sourceSha256": "2891304c7762ca3e7a1055d171bcd9d5e1de5ecfe81d2bf394d5f9fbb9e18b65",
+      "deliveredSha256": "2891304c7762ca3e7a1055d171bcd9d5e1de5ecfe81d2bf394d5f9fbb9e18b65",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "audit-full.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/audit-full.log",
+      "sourceSha256": "dfc1eb34a1fbcbea4a235cf71e03aac2d710fe662037f0456a5f7645bc358aab",
+      "deliveredSha256": "dfc1eb34a1fbcbea4a235cf71e03aac2d710fe662037f0456a5f7645bc358aab",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "audit-full.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/audit-full.result.json",
+      "sourceSha256": "be822b06d5641d721387a3417090a04c1fbfc1affacb9db69080010f2bed4da4",
+      "deliveredSha256": "be822b06d5641d721387a3417090a04c1fbfc1affacb9db69080010f2bed4da4",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "sbom-runtime.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/sbom-runtime.log",
+      "sourceSha256": "bc61bdcd3a5c70ce9fb2d4cb35c5d136199131682b8be043cffcc40e74c6df38",
+      "deliveredSha256": "bc61bdcd3a5c70ce9fb2d4cb35c5d136199131682b8be043cffcc40e74c6df38",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "sbom-runtime.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/sbom-runtime.result.json",
+      "sourceSha256": "712fe2229419eebba73d1a31cd4b6cf8389287a1dd62f31e36e9a993b845b614",
+      "deliveredSha256": "712fe2229419eebba73d1a31cd4b6cf8389287a1dd62f31e36e9a993b845b614",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "sbom-vendor-check.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/sbom-vendor-check.log",
+      "sourceSha256": "433d4c909eb45916d81e3995f44162446881352ea29db0648dcf96b739929cc4",
+      "deliveredSha256": "433d4c909eb45916d81e3995f44162446881352ea29db0648dcf96b739929cc4",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "sbom-vendor-check.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/sbom-vendor-check.result.json",
+      "sourceSha256": "c5386ef95a6ca190441f9c11ba5b8782111a6f7f33aeab23d3b1b258c9e49b0c",
+      "deliveredSha256": "c5386ef95a6ca190441f9c11ba5b8782111a6f7f33aeab23d3b1b258c9e49b0c",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "ui-sbom-final.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/ui-sbom-final.log",
+      "sourceSha256": "eb82903e21a78bb06ddc1e69aa3b6ee141e06cb270b0a8df5321fbc996ee8a26",
+      "deliveredSha256": "eb82903e21a78bb06ddc1e69aa3b6ee141e06cb270b0a8df5321fbc996ee8a26",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "ui-sbom-final.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/ui-sbom-final.result.json",
+      "sourceSha256": "46602002216635f8416d9ed4252aea7e5274e3d7c687c5e84e34644847bb9845",
+      "deliveredSha256": "46602002216635f8416d9ed4252aea7e5274e3d7c687c5e84e34644847bb9845",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "ui-sbom-check.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/ui-sbom-check.log",
+      "sourceSha256": "8a384dd5d44e558d76db5d716c4c433ab211b7c356c3f909d813165813c23e54",
+      "deliveredSha256": "8a384dd5d44e558d76db5d716c4c433ab211b7c356c3f909d813165813c23e54",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "ui-sbom-check.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/ui-sbom-check.result.json",
+      "sourceSha256": "98c056dde1c9a3e5776843b91ea913fb7c123713717c843ff4ff4169011f9e41",
+      "deliveredSha256": "98c056dde1c9a3e5776843b91ea913fb7c123713717c843ff4ff4169011f9e41",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "node22-version.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/node22-version.log",
+      "sourceSha256": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906",
+      "deliveredSha256": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "node24-version.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/node24-version.log",
+      "sourceSha256": "4409d3bfa08b82f385bd424eeda65fc63b756129f0e89e82df77f1fecafccc14",
+      "deliveredSha256": "4409d3bfa08b82f385bd424eeda65fc63b756129f0e89e82df77f1fecafccc14",
+      "formatting": "unchanged bytes"
+    },
+    {
+      "file": "keygen-source.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/setup-918/keygen-source.json",
+      "sourceSha256": "28ea297b87c9ed8e10a89bd96e187d51261b47a5d5abc4fda6e0fdaa5abc043f",
+      "deliveredSha256": "28ea297b87c9ed8e10a89bd96e187d51261b47a5d5abc4fda6e0fdaa5abc043f",
+      "formatting": "unchanged bytes"
+    }
+  ],
+  "environment": {
+    "keygenSource": "Exact existing Keygen 1.0.4 source archive, hash in keygen-source.json; NEXOWATT_KEYGEN_SOURCE set for both final full test commands.",
+    "skips": [
+      "nginx unavailable",
+      "setfacl unavailable"
+    ],
+    "noLiveDevice": true
+  }
+}

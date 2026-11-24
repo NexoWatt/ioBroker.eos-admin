@@ -824,6 +824,71 @@ function summarizeConnection(d) {
   return '';
 }
 
+function emsPresentation(device) {
+  return window.EosDeviceEms.describe(device.id, device.ems, device.enabled);
+}
+
+function updateEmsControls(settings) {
+  const api = window.EosDeviceEms;
+  const current = settings || {
+    mode: document.getElementById('dev_ems_mode').value,
+    scope: document.getElementById('dev_ems_scope').value,
+    flowSlot: Number(document.getElementById('dev_ems_slot').value)
+  };
+  const desired = api.intent(current);
+  const select = document.getElementById('dev_ems_mode');
+  const choices = api.modes($('#dev_category').val());
+  select.replaceChildren();
+  for (const choice of choices) {
+    const option = document.createElement('option');
+    option.value = choice.value; option.textContent = choice.label;
+    select.appendChild(option);
+  }
+  select.value = choices.some(choice => choice.value === desired.mode) ? desired.mode : 'auto';
+  document.getElementById('dev_ems_scope').value = desired.scope || '';
+  updateEmsTargets(settings ? (desired.flowSlot ?? '') : undefined);
+}
+
+function updateEmsTargets(savedSlot) {
+  const mode = document.getElementById('dev_ems_mode').value;
+  const scope = document.getElementById('dev_ems_scope').value;
+  const field = document.getElementById('dev_ems_slot_field');
+  const select = document.getElementById('dev_ems_slot');
+  const previous = savedSlot === '' ? '' : typeof savedSlot === 'number' ? String(savedSlot) : select.value;
+  const targets = window.EosDeviceEms.targets(mode);
+  select.replaceChildren();
+  const placeholder = document.createElement('option');
+  placeholder.value = ''; placeholder.textContent = 'Bitte auswählen'; select.appendChild(placeholder);
+  for (const target of targets) {
+    const option = document.createElement('option'); option.value = String(target.value); option.textContent = target.label; select.appendChild(option);
+  }
+  select.value = targets.some(target => String(target.value) === previous) ? previous : '';
+  field.hidden = targets.length === 0;
+  document.getElementById('dev_ems_scope_field').hidden = !['singleStorage', 'storageFarm', 'gridMeter'].includes(mode);
+  document.getElementById('dev_ems_help').textContent = window.EosDeviceEms.help(String($('#dev_category').val() || ''), mode, scope);
+}
+
+function collectEmsIntent() {
+  const mode = document.getElementById('dev_ems_mode').value;
+  if (!window.EosDeviceEms.modes($('#dev_category').val()).some(choice => choice.value === mode)) throw new Error('EMS-Funktion passt nicht zur Gerätekategorie');
+  const value = { mode };
+  const previous = editIndex >= 0 ? devices[editIndex].ems : null;
+  if (previous && typeof previous.group === 'string') value.group = previous.group;
+  if (['singleStorage', 'storageFarm', 'gridMeter'].includes(mode)) {
+    const scope = document.getElementById('dev_ems_scope').value;
+    if (!['M0', 'M1'].includes(scope)) throw new Error('Regelbereich / Messpunkt für die EMS-Zuordnung auswählen');
+    value.scope = scope;
+  }
+  const targets = window.EosDeviceEms.targets(mode);
+  if (targets.length) {
+    const slot = document.getElementById('dev_ems_slot').value;
+    const chosen = targets.find(target => String(target.value) === slot);
+    if (!chosen) throw new Error('Ziel für die Zuordnung im Energiefluss auswählen');
+    value.flowSlot = chosen.value;
+  }
+  return value;
+}
+
 function renderDevicesTable() {
   const tbody = $('#devicesTable tbody');
   tbody.empty();
@@ -839,6 +904,7 @@ function renderDevicesTable() {
     const manufacturer = tpl ? (tpl.manufacturer || '') : '';
     const tplName = tpl ? (tpl.name || tpl.id) : (d.templateId || '');
 
+    const ems = emsPresentation(d);
     const row = $(`
       <tr>
         <td>${d.enabled ? '✓' : ''}</td>
@@ -848,6 +914,7 @@ function renderDevicesTable() {
         <td>${escapeHtml(manufacturer)}</td>
         <td>${escapeHtml(tplName)}</td>
         <td>${escapeHtml(d.protocol || '')}</td>
+        <td class="nexo-ems-cell"><span data-eos-ems-id="${escapeHtml(d.id)}" data-eos-ems-mode="${escapeHtml(window.EosDeviceEms.intent(d.ems).mode)}" data-eos-ems-enabled="${d.enabled !== false}" data-state="${escapeHtml(ems.status)}">${escapeHtml(ems.label)} · ${escapeHtml(ems.detail)}</span></td>
         <td class="actions">
           <a href="#!" class="btn-small waves-effect" data-action="edit" data-idx="${idx}">${escapeHtml('Gerät bearbeiten')}</a>
           <a href="#!" class="btn-small red waves-effect" data-action="delete" data-idx="${idx}">${escapeHtml('Löschen')}</a>
@@ -1097,6 +1164,7 @@ function openDeviceModal(device, idx) {
   const cat = device.category || categories[0] || 'GENERIC';
   $('#dev_category').val(cat);
   refreshSelect($('#dev_category'));
+  updateEmsControls(device.ems || {});
 
   fillManufacturerSelect(cat);
   const manuList = manufacturersByCategory[cat] || [];
@@ -1314,7 +1382,8 @@ function collectDeviceFromModal() {
     protocol: $('#dev_protocol').val(),
     pollIntervalMs: ($('#dev_poll').val() || '').trim() ? parseInt($('#dev_poll').val(), 10) : undefined,
     heartbeatTimeoutMs: ($('#dev_hbTimeout').val() || '').trim() ? parseInt($('#dev_hbTimeout').val(), 10) : undefined,
-    connection: {}
+    connection: {},
+    ems: collectEmsIntent()
   };
 
   if (tpl && tpl.driverHints && tpl.driverHints.vartaModbus) {
@@ -1558,6 +1627,8 @@ function updateJsonPreview() {
 }
 
 function initEventHandlers() {
+  $('#dev_ems_mode').on('change', () => updateEmsTargets());
+  $('#dev_ems_scope').on('change', () => updateEmsTargets());
   $('#fenecon_ctrl_profile').on('change', function () {
     const profile = $('#fenecon_ctrl_profile').val();
     $('#fenecon_ctrl_custom').toggle(profile === 'custom');
@@ -1678,6 +1749,7 @@ function initEventHandlers() {
 
   // Modal dependent selects
   $('#dev_category').on('change', () => {
+    updateEmsControls();
     const cat = $('#dev_category').val();
     fillManufacturerSelect(cat);
 

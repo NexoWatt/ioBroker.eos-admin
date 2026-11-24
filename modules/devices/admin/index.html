@@ -11,7 +11,8 @@
   <link rel="stylesheet" href="style.css">
   <script defer src="vendor/jquery.js"></script>
   <script defer src="vendor/materialize.js"></script>
-  <script defer src="host-bridge.js?v=9.0.16"></script>
+  <script defer src="ems-assignment.js?v=9.0.18"></script>
+  <script defer src="host-bridge.js?v=9.0.18"></script>
   <script defer src="words.js"></script>
   <script defer src="index_m.js"></script>
 <script defer src="/eos-session-idle.js"></script>
@@ -38,6 +39,11 @@
       <button type="button" class="btn-flat" id="eosModuleReload">Neu laden</button>
     </div>
     <p id="eosModuleStatus" role="status" aria-live="polite">Konfiguration wird geladen …</p>
+    <div class="nexo-ems-summary" aria-label="Automatische EMS-Zuordnung">
+      <p id="eosEmsStatus" role="status" aria-live="polite">EMS-Zuordnung wird geprüft …</p>
+      <p class="nexo-hint">Bei einer Datenpunkt-Zuordnung den passenden Mess- oder Steuerdatenpunkt auswählen. Eine feste Zahl wie 10000 gehört in ein Feld für Leistungsgrenzen, nicht in ein Datenpunkt-Feld.</p>
+      <div class="nexo-ems-links"><a href="/ems-apps.html?nwAdmin=1&amp;tab=evcs">Ladepunkte öffnen</a><a href="/ems-apps.html?nwAdmin=1">EMS App-Center öffnen</a><button type="button" class="btn-flat" id="eosEmsRefresh">Zuordnungsstatus aktualisieren</button></div>
+    </div>
     <a id="eosConfigurationHelp" href="/migration/" hidden>Bestandsübernahme und Freigabestatus öffnen</a>
     <details class="eos-host-import"><summary>Bestehenden Geräteadapter übernehmen</summary>
       <p>EOS prüft die automatische Bestandsübernahme beim Start. Dabei bleiben vorhandene Datenpunkt-IDs erhalten. <a href="/migration/">Status der Bestandsübernahme ansehen</a>. Der folgende manuelle Import ist eine separate Konfigurationsübernahme: alte Instanz vollständig stoppen; die neuen Datenpunkt-Pfade prüfen und EMS-Zuordnungen vor der Aktivierung anpassen. Nach erfolgreicher automatischer Übernahme nicht erneut importieren.</p>
@@ -162,6 +168,7 @@
                     <th class="translate">Hersteller</th>
                     <th class="translate">Template</th>
                     <th class="translate">Protokoll</th>
+                    <th>EMS-Zuordnung</th>
                     <th class="translate">Aktionen</th>
                   </tr>
                 </thead>
@@ -233,6 +240,17 @@
           </div>
         </div>
       </div>
+
+      <section class="nexo-ems-config" aria-labelledby="dev_ems_title">
+        <h6 id="dev_ems_title">EMS-Zuordnung</h6>
+        <div class="nexo-ems-fields">
+          <div><label for="dev_ems_mode">Funktion im Energiesystem</label><select id="dev_ems_mode" class="browser-default" aria-describedby="dev_ems_help"></select></div>
+          <div id="dev_ems_scope_field" hidden><label for="dev_ems_scope">Regelbereich / Messpunkt</label><select id="dev_ems_scope" class="browser-default"><option value="">Bitte auswählen</option><option value="M0">Hauptanschluss / M0</option><option value="M1">Unteranlage / M1</option></select></div>
+          <div id="dev_ems_slot_field" hidden><label for="dev_ems_slot">Zuordnung im Energiefluss</label><select id="dev_ems_slot" class="browser-default"></select></div>
+        </div>
+        <p id="dev_ems_help" class="nexo-muted"></p>
+        <p class="nexo-muted">Die Zuordnung wird zusammen mit dem Gerät über „Speichern und übernehmen“ übernommen. Leistungsgrenzen und Betriebsfreigabe anschließend im App-Center prüfen.</p>
+      </section>
 
       <div class="row">
         <div class="input-field col s12 m4">

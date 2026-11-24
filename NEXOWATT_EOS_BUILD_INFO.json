@@ -1,25 +1,22 @@
 {
-  "version": "9.0.17",
+  "version": "9.0.18",
   "channel": "next",
   "baseFrontend": "Rebuilt from official Admin 8.3.5 sources plus reviewed EOS integration using React 19 and Vite; see source-bound frontend manifest.",
   "runtimeEntry": "vite-manifest",
-  "releaseType": "unified-parallel-admin-backup-isolation",
-  "release": "unified-parallel-admin-backup-isolation",
-  "label": "9.0.17",
+  "releaseType": "unified-device-ems-commissioning",
+  "release": "unified-device-ems-commissioning",
+  "label": "v9-0-18",
   "notes": [
     "Preserves the existing ioBroker Admin and the combined EOS login/runtime.",
     "One central NWL3 activation, private persistence and authorized public-key recovery.",
     "Manufacturer vault/private keys stay on the issuer computer; live-device acceptance remains required."
   ],
   "changes": [
-    "Use instance-specific EOS browser cookies at HTTP and WebSocket boundaries; preserve ioBroker Admin cookies during EOS login and logout",
-    "Strip EOS credentials at instance-proxy boundaries without modifying shared webserver dependencies",
-    "Persist an EOS-only Socket.IO secret under private instance data; keep system.config native secret unchanged",
-    "Stop automatic updates of foreign adapter, global system, enum, user and existing group ACLs or metadata",
-    "Keep existing Administrator group intact when EOS role lists are empty; create only absent dedicated EOS groups",
-    "Preserve standard Backitup instances and archives outside NexoWatt legacy migration",
-    "Retain the 9.0.16 device-saving, settings-preservation, idle-timeout and verified repository-publishing fixes",
-    "Do not rewrite global repository ordering or controller/foreign-adapter automatic upgrade policies; retain historic recovery records and block only EOS-initiated unattended installation"
+    "Automatic identity-based Alias V1 assignment of supported devices to EMS and energy-flow configuration",
+    "Explicit meter and PV roles during device setup; preserve manual mappings and disabled-app configuration",
+    "Preserve 9.0.17 standard ioBroker Admin and Backitup isolation",
+    "Additive cross-vendor Alias V1 semantics with verified profile sources and explicit unavailable capabilities",
+    "Customer settings for the shared site tariff with fixed-source allowlist, guarded revisions and live read-mapping refresh"
   ],
   "brandingCacheVersion": 7110,
   "shellCacheVersion": 7110,
@@ -33,7 +30,7 @@
     "commit": "6f77eedf525813a7a61d79188d1ff05dffd05086"
   },
   "product": "NexoWatt EOS",
-  "status": "9.0.17 integration test release; release evidence and target-device acceptance remain separate",
+  "status": "9.0.18 integration test release; device acceptance remains required",
   "sourceComponents": {
     "admin": "8.0.2",
     "ui": "1.0.38",
@@ -41,5 +38,6 @@
     "devices": "0.5.176",
     "eebus": "0.3.0; 1c0eb410d516b90d60f6e475e6822bf5836bfd66",
     "backup": "1.0.10"
-  }
+  },
+  "repositoryEntry": "nexowatt-eos-admin-repository-entry-v9-0-18.json"
 }

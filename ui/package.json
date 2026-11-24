@@ -1,6 +1,6 @@
 {
   "name": "nexowatt-eos-ui-internal",
-  "version": "9.0.17",
+  "version": "9.0.18",
   "description": "Internal UI and EMS module hosted by iobroker.eos-admin; not an ioBroker adapter entry point.",
   "author": "NexoWatt",
   "license": "UNLICENSED",
@@ -1094,8 +1094,6 @@
     "docs/reports/smarthome-import-2026-11-19/runtime-evidence.json",
     "docs/reports/smarthome-import-2026-11-19/helper-eslint.json",
     "docs/reports/auth-profiles-2026-11-19/ui-contract-evidence.json",
-    "admin/react/assets/nexowatt-192-43ZwQ44y.png",
-    "admin/react/index.html",
     "docs/reports/smarthome-auth-2026-11-19/BESTANDSKOMPATIBILITAET_DE.md",
     "integrations/eos-admin-dev9/README.txt",
     "integrations/eos-admin-dev9/apply-ui-login.cjs",
@@ -1119,8 +1117,14 @@
     "tsconfig.ui-pwa.json",
     "scripts/verify-ui-pwa.cjs",
     "docs/security/UI_PWA_BOOTSTRAP_DE.md",
+    "admin/react/assets/index-Bq5IupDw.js",
     "admin/react/assets/index-CuquHlsY.css",
-    "admin/react/assets/index-CVXL9Oj2.js"
+    "admin/react/assets/nexowatt-192-43ZwQ44y.png",
+    "admin/react/index.html",
+    "lib/installer-lifecycle.js",
+    "lib/customer-tariff.js",
+    "www/customer-tariff.js",
+    "www/customer-tariff.css"
   ],
   "devDependencies": {
     "@iobroker/adapter-dev": "^1.5.0",

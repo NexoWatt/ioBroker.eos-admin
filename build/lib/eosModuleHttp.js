@@ -116,7 +116,7 @@ function registerEosModuleRoutes({ app, host, baseDir, jsonParser, authorize, cs
             res.redirect(308, `/modules/${id}/`);
         });
         app.get(`/modules/${id}/`, guard(false, true), sendFile(join(baseDir, 'modules', id, 'admin', 'index.html')));
-        for (const asset of ['index_m.js', 'style.css', 'words.js', 'host-bridge.js', 'index.js']) {
+        for (const asset of ['index_m.js', 'style.css', 'words.js', 'host-bridge.js', 'index.js', ...(id === 'devices' ? ['ems-assignment.js'] : [])]) {
             app.get(`/modules/${id}/${asset}`, guard(false, true), sendFile(join(baseDir, 'modules', id, 'admin', asset)));
         }
     }

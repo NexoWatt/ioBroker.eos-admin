@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "nexowatt-ui",
-    "version": "9.0.17",
+    "version": "9.0.18",
     "news": {
+      "9.0.18": {
+        "en": "Automatic supported-device commissioning and explicit EMS/energy-flow roles. Existing mappings and data points are preserved; new control targets require commissioning.",
+        "de": "Automatische Zuordnung unterstützter Geräte mit expliziten EMS- und Energiefluss-Rollen. Vorhandene Zuordnungen und Datenpunkte bleiben erhalten; neue Regelziele benötigen eine Inbetriebnahme."
+      },
       "9.0.17": {
         "de": "EOS-Sitzungen vom ioBroker Admin getrennt; automatische Änderungen fremder Rechte und Metadaten entfernt; Parallelbetrieb mit Standard-Backitup abgesichert.",
         "en": "Isolate EOS sessions from ioBroker Admin; remove automatic foreign permission and metadata changes; preserve standard Backitup coexistence."

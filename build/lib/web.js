@@ -67,6 +67,8 @@ const eosFileTransferSecurity_1 = require("./eosFileTransferSecurity");
 const instanceProxy_1 = require("./instanceProxy");
 const eosUnifiedBoundary_1 = require("./eosUnifiedBoundary");
 const eosModuleHost_1 = require("./eosModuleHost");
+const eosDeviceEmsPlan_1 = require("./eosDeviceEmsPlan");
+const eosDeviceEmsService_1 = require("./eosDeviceEmsService");
 const eosModuleHttp_1 = require("./eosModuleHttp");
 const eosDiscovery_1 = require("./eosDiscovery");
 const eosTlsManager_1 = require("./eosTlsManager");
@@ -1818,6 +1820,16 @@ class Web {
             throw new Error('EOS_UI_FACTORY_MISSING');
         }
         const runtime = factory.createHostedRuntime(this.adapter, {
+            deviceEmsPlan: async (input) => {
+                const targets = await (0, eosDeviceEmsService_1.resolveDeviceEmsTargets)({
+                    owner: this.adapter,
+                    references: (0, eosDeviceEmsPlan_1.getDeviceEmsReferences)(input.config),
+                    devices: input.devices,
+                    canRun: () => this.adapter.eosOwnership?.canWrite() === true,
+                });
+                return (0, eosDeviceEmsPlan_1.planDeviceEms)({ ...input, ...targets, limits: this.adapter.eosLicenseService?.statusView().limits || {} });
+            },
+            deviceEmsConfigChanged: () => moduleHost.requestDeviceEms(),
             resolveAccess: (req) => this.unified.status(req),
             getLicense: () => this.adapter.eosLicenseService?.statusView(),
             // Read-only readiness evidence: a blocked handover is not an endlessly
@@ -1840,6 +1852,9 @@ class Web {
             hostedModuleFeedback: (message) => moduleHost.receiveBridge(message),
         });
         this.adapter.eosHostedRuntime = runtime;
+        moduleHost.bindDeviceEms(devices => runtime.reconcileDeviceEms
+            ? runtime.reconcileDeviceEms(devices)
+            : Promise.reject(new Error('EOS_EMS_RUNTIME_PENDING')));
         moduleHost.bindBridge(message => runtime.onHostedEebusMessage
             ? runtime.onHostedEebusMessage(message)
             : Promise.reject(new Error('EOS_MODULE_BRIDGE_UNAVAILABLE')));

@@ -1,8 +1,8 @@
 {
   "schema": "nexowatt.sbom-inventory-index.v1",
-  "generatedAt": "2026-09-29T21:28:04.112Z",
+  "generatedAt": "2026-11-24T15:30:26.832Z",
   "generator": "scripts/generate-cra-sbom.cjs@1.1.0",
-  "generatorSha256": "cc91b3f60f38e21f516e041e5e479c0860ac38e99eb782565218b4a723b7d822",
+  "generatorSha256": "94f7bd20a3fbc1f26cffbb5e677d24f77ee039d06119e6a3e4b70caf53b9b8af",
   "disclaimer": "These inventories do not assert CRA conformity or a complete shipped-system/bundle SBOM.",
   "productEvidence": "sbom-product-evidence.json",
   "inventories": [
@@ -10,50 +10,50 @@
       "filename": "sbom-root-lockfile.cdx.json",
       "scope": "root",
       "kind": "source-lockfile-inventory",
-      "components": 250,
-      "sha256": "cd4e660c682a581870dbb3d35f3e89fc656ec280b1f8b71ef2787443055f8dab"
+      "components": 340,
+      "sha256": "f71296b1bcc7ec5393d5e07c8905e1db075f8b5759f28590f388cfa643e24d12"
     },
     {
       "filename": "sbom-root-installed.cdx.json",
       "scope": "root",
       "kind": "installed-build-environment-inventory",
-      "components": 225,
-      "sha256": "7cae633eccafe93cd9d2cfbea03d9b86235c23748e234b660be15fde088a6d23"
+      "components": 315,
+      "sha256": "1563066a80e4bd31a9d31c41e27fab1b7b410e41cd5a642dc322081a5ac76330"
     },
     {
       "filename": "sbom-root-installed-runtime.cdx.json",
       "scope": "root",
       "kind": "installed-production-dependency-inventory",
-      "components": 55,
-      "sha256": "ad1960518f51070d5d9112098c2a391b284da6f56e1d266bb9c2a398b1790b6a"
+      "components": 56,
+      "sha256": "f3c34bd55c5f819b5b7e5f496ff0073978c135f908f486fecf9d1d094034cad2"
     },
     {
       "filename": "sbom-admin-lockfile.cdx.json",
       "scope": "admin",
       "kind": "source-lockfile-inventory",
-      "components": 120,
-      "sha256": "4ff9bbbc4f33adf1e552090b84b90268aeb73430475d59c7ed676ddfad332fde"
+      "components": 127,
+      "sha256": "136cf26d89a71a1977c6dbaf4ee82d018d620a73b86bed5ff5eccd8afe5cbd15"
     },
     {
       "filename": "sbom-admin-installed.cdx.json",
       "scope": "admin",
       "kind": "installed-build-environment-inventory",
-      "components": 71,
-      "sha256": "0227b73e357339b82d184b03c545b92e5662da7833a9f6cf7b21e4714ed5642f"
+      "components": 78,
+      "sha256": "4ba92cf628b7c723cced0732435821fef010be88d223408525500e60067cc7eb"
     },
     {
       "filename": "sbom-admin-installed-runtime.cdx.json",
       "scope": "admin",
       "kind": "installed-production-dependency-inventory",
       "components": 8,
-      "sha256": "f9f91f81f807480c5cd5c0323c5759743e6690f2a548a0311fce451e50c461b9"
+      "sha256": "ad0e30589f19c908aa72ee58de5f2c24756aaab47d8ad1b2f40c8f5f56c12a66"
     },
     {
       "filename": "sbom-admin-bundle.cdx.json",
       "scope": "admin",
       "kind": "observed-admin-bundle-components",
       "components": 4,
-      "sha256": "49d21ec087be2d153a2c815f053aa63c36a820823f54e8db01b266312d61fdc1"
+      "sha256": "7f0bd05ef939b09875c860ac22966d7d4622915573e8dfea94bdd803ec1c7423"
     }
   ]
 }

@@ -168,7 +168,7 @@ test('all 195 templates satisfy the canonical path, type, role and unit contract
     }
   }
 
-  assert.equal(standardAliasCount, 2463); // 2454 existing + 7 VARTA error codes + 2 temperatures
+  assert.equal(standardAliasCount, 2552); // 2463 existing + 89 source-bound read-only semantic aliases
   assert.deepEqual(Object.fromEntries([...classCounts.entries()].sort()), {
     battery: 12,
     batteryInverter: 3,

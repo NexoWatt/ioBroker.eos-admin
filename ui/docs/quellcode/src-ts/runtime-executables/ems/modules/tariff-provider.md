@@ -15,6 +15,7 @@ Statisch gefundene Imports/require-Aufrufe. Ein Import belegt eine Code-Verknüp
 | Import | Aufgelöste Datei |
 | --- | --- |
 | `./base` | [src-ts/runtime-executables/ems/modules/base.ts](../../../../../../src-ts/runtime-executables/ems/modules/base.ts) |
+| `node:crypto` | Node-Bordmittel oder externe Paketabhängigkeit. |
 | `../services/tariff-provider-registry` | [src-ts/runtime-executables/ems/services/tariff-provider-registry.ts](../../../../../../src-ts/runtime-executables/ems/services/tariff-provider-registry.ts) |
 
 **Direkt importiert von:**
@@ -27,17 +28,28 @@ Parameter sind die Namen aus der Signatur, keine geratenen Datenverträge. Die A
 
 | Funktion / Methode | Parameter | Direkt sichtbare Aufrufe (Auszug) |
 | --- | --- | --- |
-| [`TariffProviderModule.constructor`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L32) | adapter, dpRegistry | super |
-| [`TariffProviderModule.init`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L47) | – | mk, this.adapter.setObjectNotExistsAsync |
-| [`mk`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L53) | id, name, type, role, unit | this.adapter.setObjectNotExistsAsync |
-| [`TariffProviderModule._cfg`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L79) | – | Math.max, Math.min, Math.round, Number, String |
-| [`TariffProviderModule._set`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L101) | id, val | this.adapter.setStateAsync |
-| [`TariffProviderModule._providerSourceId`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L105) | cfg | String |
-| [`TariffProviderModule._localHour`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L112) | nowMs, timeZone | Number, String |
-| [`TariffProviderModule._stableJitterFactor`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L124) | seed | Math.imul, String, text.charCodeAt |
-| [`TariffProviderModule._baseRefreshMinutes`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L137) | cfg, nowMs | Math.max, Math.min, Math.round, Number, splitTodayTomorrow, this._localHour, this._providerSourceId |
-| [`TariffProviderModule._scheduleNextFetch`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L156) | cfg, nowMs, success | Math.floor, Math.max, Math.min, Math.pow, Math.round, Number, this._baseRefreshMinutes, this._providerSourceId, this._stableJitterFactor |
-| [`TariffProviderModule._setTariffSettings`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L168) | cfg | Number, String, this.adapter.getForeignStateAsync, this.adapter.log.debug, this.adapter.setForeignStateAsync |
-| [`TariffProviderModule._publish`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L185) | cfg, nowMs, statusOverride | JSON.stringify, Number.isFinite, String, currentAndAverage, splitTodayTomorrow, this._intervals.find, this._set |
-| [`TariffProviderModule._refresh`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L266) | cfg, nowMs | Array.isArray, Date.now, String, fetchProvider, intervals.some, this._publish, this._scheduleNextFetch, this.adapter.log.warn |
-| [`TariffProviderModule.tick`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L293) | – | Date.now, this._cfg, this._publish, this._refresh, this._set, this._setTariffSettings |
+| [`stableConfiguration`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L34) | value | JSON.stringify, visit |
+| [`visit`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L36) | item, depth | Array.isArray, Object.entries, Object.fromEntries, entries.push, item.map, visit |
+| [`TariffProviderModule.constructor`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L62) | adapter, dpRegistry | Promise.resolve, super, this._captureConfiguration, this._fencePriceReaders |
+| [`TariffProviderModule._fencePriceReaders`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L84) | – | OPERATIONAL_PRICE_STATES.map |
+| [`TariffProviderModule._captureConfiguration`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L89) | – | JSON.parse, createHash, stableConfiguration, this._cfg |
+| [`TariffProviderModule._isCurrent`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L100) | generation | – |
+| [`TariffProviderModule.applyTariffMappings`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L106) | – | changed.push, this.adapter.emsEngine?.mm?.modules?.find, this.dp.getEntry, this.dp.remove, trim, vis?._getVisPriceAverageId, vis?._getVisPriceCurrentId, vis?._getVisPriceTodayJsonId, vis?._getVisPriceTomorrowJsonId |
+| [`trim`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L111) | value | value.trim |
+| [`TariffProviderModule.invalidateConfiguration`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L146) | – | Date.now, Promise.resolve, this._captureConfiguration, this._fencePriceReaders, this._publish, this.adapter.keyFromId, this.adapter.updateValue, this.dp?.handleStateChange |
+| [`TariffProviderModule.init`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L183) | – | mk, this.adapter.setObjectNotExistsAsync |
+| [`mk`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L189) | id, name, type, role, unit | this.adapter.setObjectNotExistsAsync |
+| [`TariffProviderModule._cfg`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L215) | – | Math.max, Math.min, Math.round, Number, String |
+| [`TariffProviderModule._set`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L237) | id, val, generation | this._isCurrent, this.adapter.setStateAsync |
+| [`TariffProviderModule._providerSourceId`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L243) | cfg | String |
+| [`TariffProviderModule._localHour`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L250) | nowMs, timeZone | Number, String |
+| [`TariffProviderModule._stableJitterFactor`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L262) | seed | Math.imul, String, text.charCodeAt |
+| [`TariffProviderModule._baseRefreshMinutes`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L275) | cfg, nowMs | Math.max, Math.min, Math.round, Number, splitTodayTomorrow, this._localHour, this._providerSourceId |
+| [`TariffProviderModule._scheduleNextFetch`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L294) | cfg, nowMs, success | Math.floor, Math.max, Math.min, Math.pow, Math.round, Number, this._baseRefreshMinutes, this._providerSourceId, this._stableJitterFactor |
+| [`TariffProviderModule._setTariffSettings`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L306) | cfg, generation | Number, String, this._isCurrent, this.adapter.getForeignStateAsync, this.adapter.log.debug, this.adapter.setForeignStateAsync |
+| [`TariffProviderModule._publish`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L326) | cfg, nowMs, statusOverride, generation | pending.catch, this._publicationTail.then |
+| [`TariffProviderModule._publishCurrent`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L332) | cfg, nowMs, statusOverride, generation | JSON.stringify, Number.isFinite, String, currentAndAverage, set, splitTodayTomorrow, this._intervals.find, this._isCurrent |
+| [`set`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L334) | id, val | this._set |
+| [`TariffProviderModule._refresh`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L420) | cfg, nowMs, generation | Array.isArray, Date.now, String, fetchProvider, intervals.some, this._isCurrent, this._publish, this._scheduleNextFetch, this.adapter.log.warn, this.invalidateConfiguration |
+| [`TariffProviderModule.tick`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L455) | – | Date.now, this._isCurrent, this._publish, this._refresh, this._setTariffSettings, this.invalidateConfiguration |
+| [`TariffProviderModule.stop`](../../../../../../src-ts/runtime-executables/ems/modules/tariff-provider.ts#L495) | – | – |

@@ -1,0 +1,14 @@
+{
+  "name": "installer-build",
+  "command": [
+    "npm",
+    "run",
+    "build:installer"
+  ],
+  "cwd": ".",
+  "startedAt": "2026-11-24T14:37:36.136789+00:00",
+  "durationSeconds": 11.089,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-918/installer-build.log",
+  "sha256": "c605a666a970bad449001c71545f47759829cd14ac05dbf26ea28204107e5005"
+}

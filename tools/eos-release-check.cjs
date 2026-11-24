@@ -38,7 +38,7 @@ assert.equal(p.publishConfig.tag, 'next');
 assert.match(p.version, /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/);
 assert.ok(!p.dependencies['iobroker.nexowatt-ui'], 'UI must be an internal module');
 for (const rel of [p.main, 'ui/main.js', 'adminWww/index.html', 'ui/www/login.html', 'ui/admin/react/index.html',
-    'build/lib/eosCookieNamespace.js', 'build/lib/eosNewsSecurity.js', 'build/lib/eosSocketSecret.js', 'build/lib/eosRolePolicy.js', 'build/lib/eosUnifiedBoundary.js', 'build/lib/eosLicenseService.js', 'build/lib/eosModuleConfigStore.js',
+    'build/lib/eosCookieNamespace.js', 'build/lib/eosNewsSecurity.js', 'build/lib/eosSocketSecret.js', 'build/lib/eosRolePolicy.js', 'build/lib/eosUnifiedBoundary.js', 'build/lib/eosLicenseService.js', 'build/lib/eosModuleConfigStore.js', 'build/lib/eosDeviceEmsPlan.js', 'build/lib/eosDeviceEmsService.js', 'modules/devices/admin/ems-assignment.js', 'ui/lib/installer-lifecycle.js', 'ui/lib/customer-tariff.js', 'ui/www/customer-tariff.js', 'ui/www/customer-tariff.css',
     'build/lib/eosLegacyMigration.js', 'build/lib/eosTlsManager.js', 'build/lib/eosTlsHttp.js',
     'modules/backup/index.js', 'modules/backup/build/index.js', 'modules/backup/build/worker.js',
     'modules/backup/build/restore-cli.js', 'modules/backup/admin/index.html', 'modules/shared/eos-module.css',

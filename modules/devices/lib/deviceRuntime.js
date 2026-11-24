@@ -9401,6 +9401,9 @@ class DeviceRuntime {
       try {
         if (!isCurrent()) return;
         if (!def || def.kind !== 'dp') continue;
+        // A write acknowledgement is not device feedback. Additive semantic
+        // readback aliases only change when the driver actually reads the source.
+        if (def.deviceReadOnly === true) continue;
         // A Modbus write response confirms transmission, not the charger's
         // applied limit. Keep DEPower readback aliases tied to real polling.
         if (this.template?.driverHints?.oemModbusV1003 && def.rw !== 'rw' && def.rw !== 'wo') continue;

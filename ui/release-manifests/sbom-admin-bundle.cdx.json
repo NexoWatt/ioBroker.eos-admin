@@ -2,10 +2,10 @@
   "$schema": "http://cyclonedx.org/schema/bom-1.5.schema.json",
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
-  "serialNumber": "urn:uuid:6816a8bf-0c41-4aa6-8da1-f34b8d987791",
+  "serialNumber": "urn:uuid:b1f9ae53-a5ba-4c60-906a-7690e75266c1",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-09-29T21:28:03.326Z",
+    "timestamp": "2026-11-24T15:30:25.757Z",
     "lifecycles": [
       {
         "phase": "post-build"
@@ -15,16 +15,16 @@
       {
         "vendor": "npm",
         "name": "cli",
-        "version": "11.9.0"
+        "version": "11.19.1"
       }
     ],
     "component": {
-      "bom-ref": "nexowatt-ui-admin-tab@0.8.8",
+      "bom-ref": "nexowatt-ui-admin-tab@9.0.18",
       "type": "library",
       "name": "nexowatt-ui-admin-tab",
-      "version": "0.8.8",
+      "version": "9.0.18",
       "scope": "required",
-      "purl": "pkg:npm/nexowatt-ui-admin-tab@0.8.8",
+      "purl": "pkg:npm/nexowatt-ui-admin-tab@9.0.18",
       "properties": [
         {
           "name": "cdx:npm:package:private",
@@ -45,7 +45,7 @@
       },
       {
         "name": "nexowatt:generator-sha256",
-        "value": "cc91b3f60f38e21f516e041e5e479c0860ac38e99eb782565218b4a723b7d822"
+        "value": "94f7bd20a3fbc1f26cffbb5e677d24f77ee039d06119e6a3e4b70caf53b9b8af"
       },
       {
         "name": "nexowatt:package-json-path",
@@ -53,7 +53,7 @@
       },
       {
         "name": "nexowatt:package-json-sha256",
-        "value": "1187c0e705ee899d6bbab3ae9f8817cf05a51a2618ab33fd8b4fb6b0e589ebb1"
+        "value": "0581529958e6ac51e399f2108e1ccc4b8564d0cbf2b93f5d69a02264d6e4e9f4"
       },
       {
         "name": "nexowatt:lockfile-path",
@@ -61,15 +61,15 @@
       },
       {
         "name": "nexowatt:lockfile-sha256",
-        "value": "2ce40a4838b00f6a4782bd917af76f18b51f98ffe5086113ae1c11b89e64aef7"
+        "value": "c6b7d258690998f12b7da4458bf58975d6e347686e16016fe8cc3b4a46eed61c"
       },
       {
         "name": "nexowatt:lockfile-package-entry-count",
-        "value": "120"
+        "value": "127"
       },
       {
         "name": "nexowatt:node-version",
-        "value": "v24.19.0"
+        "value": "v24.22.3"
       },
       {
         "name": "nexowatt:host-platform",
@@ -81,7 +81,7 @@
       },
       {
         "name": "nexowatt:bundle-evidence-sha256",
-        "value": "725af47306d732fcff69aafaf59c519fab4a01be6be48edab30d7499fc961323"
+        "value": "5c78cab085f59ffb168b6aa37f2e432bb7131ed7e289dc5c68753a1c2eb3df06"
       },
       {
         "name": "nexowatt:limitations",
@@ -246,7 +246,7 @@
   ],
   "dependencies": [
     {
-      "ref": "nexowatt-ui-admin-tab@0.8.8",
+      "ref": "nexowatt-ui-admin-tab@9.0.18",
       "dependsOn": [
         "react@18.3.1",
         "react-dom@18.3.1",

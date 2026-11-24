@@ -1,6 +1,7 @@
 import type { Adapter } from '@iobroker/adapter-core';
 import type { Readable } from 'node:stream';
 import type { LegacyMigrationStatus } from './eosLegacyMigration';
+import type { DeviceEmsInventory, DeviceEmsPublicView } from './eosDeviceEmsService';
 
 export interface ModuleBridgeMessage {
     from: string;
@@ -14,6 +15,7 @@ export interface ModuleView {
     configurationReady: boolean;
     configurationLoaded: boolean;
     configurationReason: string;
+    emsCommissioning?: DeviceEmsPublicView;
 }
 export class EosModuleHost {
     constructor(
@@ -36,4 +38,7 @@ export class EosModuleHost {
     migrationStatus(): LegacyMigrationStatus;
     bindBridge(handler: (message: ModuleBridgeMessage) => Promise<unknown>): void;
     receiveBridge(message: { command: string; message?: unknown }): boolean;
+    bindDeviceEms(handler: (devices: DeviceEmsInventory[]) => Promise<unknown>): void;
+    requestDeviceEms(): void;
+    flushDeviceEms(): Promise<void>;
 }

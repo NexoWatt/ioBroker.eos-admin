@@ -1,0 +1,14 @@
+{
+  "name": "ui-docs-check",
+  "command": [
+    "npm",
+    "run",
+    "docs:check"
+  ],
+  "cwd": "ui",
+  "startedAt": "2026-11-24T15:30:45.010765+00:00",
+  "durationSeconds": 0.295,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-918/ui-docs-check.log",
+  "sha256": "e8e581b725b6d2ade3beee01b9281dfa030bc2672f4c5fca33488a868f938d4b"
+}

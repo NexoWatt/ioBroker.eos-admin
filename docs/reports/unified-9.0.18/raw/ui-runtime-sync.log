@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> nexowatt-eos-ui-internal@9.0.18 check:ts-runtime-executables
+> node scripts/build-ts-runtime-executables.js --check
+
+[ts-runtime-executables] OK: 191 produktive Runtime-Dateien geprüft; TS ist die kanonische Runtime-Quelle.
