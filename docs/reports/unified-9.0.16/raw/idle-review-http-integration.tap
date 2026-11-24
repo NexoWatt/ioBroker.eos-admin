@@ -1,0 +1,15 @@
+(node:12) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ actual owner HTTP routes: idle polls/new page loads never extend ten minutes; another browser stays active (1123.220655ms)
+✔ actual owner activity HTTP requires same-origin CSRF and cannot revive an expired family (191.05171ms)
+✔ a cached upstream req.user cannot retain EOS authority after idle expiry (175.599471ms)
+✔ actual hosted SSE is closed at idle expiry even without a new data frame, independently per login (160.953152ms)
+✔ pinned upstream log and instance publications cannot send after idle expiry before the prune timer (137.806803ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2069.048133

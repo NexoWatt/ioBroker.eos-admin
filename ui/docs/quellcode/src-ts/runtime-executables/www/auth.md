@@ -45,6 +45,6 @@ Parameter sind die Namen aus der Signatur, keine geratenen Datenverträge. Die A
 | [`centralUrl`](../../../../../src-ts/runtime-executables/www/auth.ts#L261) | value | value.startsWith |
 | [`logout`](../../../../../src-ts/runtime-executables/www/auth.ts#L272) | – | centralUrl, document.createElement, document.querySelector, lockPage, navigator.serviceWorker?.controller?.postMessage, originalFetch, refreshStatus, resetStatus, showLogin, snapshot, window.clearTimeout, window.dispatchEvent, window.location.replace, window.setTimeout |
 | [`ownDataPath`](../../../../../src-ts/runtime-executables/www/auth.ts#L298) | input | path.slice, path.startsWith, runtimeRoot |
-| [`requireCapability`](../../../../../src-ts/runtime-executables/www/auth.ts#L329) | capability, options | hasCapability, lockPage, refreshStatus, showLogin |
-| [`start`](../../../../../src-ts/runtime-executables/www/auth.ts#L338) | – | lockPage, refreshStatus |
-| [`resume`](../../../../../src-ts/runtime-executables/www/auth.ts#L339) | – | lockPage, refreshStatus, resetStatus |
+| [`requireCapability`](../../../../../src-ts/runtime-executables/www/auth.ts#L333) | capability, options | hasCapability, lockPage, refreshStatus, showLogin |
+| [`start`](../../../../../src-ts/runtime-executables/www/auth.ts#L342) | – | lockPage, refreshStatus |
+| [`resume`](../../../../../src-ts/runtime-executables/www/auth.ts#L343) | – | lockPage, refreshStatus, resetStatus |

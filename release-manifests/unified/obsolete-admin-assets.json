@@ -1,63 +1,87 @@
 {
   "schema": 1,
   "algorithm": "SHA-256",
-  "scope": "Previously delivered adminWww bytes only. Presence here never allows modification of a current sealed file.",
+  "scope": "Previously delivered adminWww bytes and compiled ui/admin/react/assets bytes only. Presence here never allows modification of a current sealed file. Installer sources and arbitrary additional files are excluded.",
   "sources": [
     {
       "archive": "NexoWatt_EOS_9.0.10_FULL_REPOSITORY.zip",
       "version": "9.0.10",
       "archiveSha256": "f9b1afb0983ca292d552e6b90dec013b6110330df66fc1658f70860a4e3f1fa0",
       "adminFiles": 348,
-      "matchedSealedFiles": 348
+      "matchedSealedFiles": 348,
+      "installerAssetFiles": 3,
+      "matchedSealedInstallerAssetFiles": 3,
+      "provenance": "Previously delivered user-owned repository/package; SHA-256 hashes derived from archive bytes and checked against that archive's sealed files manifest."
     },
     {
       "archive": "NexoWatt_EOS_9.0.11_FULL_REPOSITORY.zip",
       "version": "9.0.11",
       "archiveSha256": "b3db438a4de3f309cb2901b1f70569afd34c96bd3867774def439f63626845f1",
       "adminFiles": 348,
-      "matchedSealedFiles": 348
+      "matchedSealedFiles": 348,
+      "installerAssetFiles": 3,
+      "matchedSealedInstallerAssetFiles": 3,
+      "provenance": "Previously delivered user-owned repository/package; SHA-256 hashes derived from archive bytes and checked against that archive's sealed files manifest."
     },
     {
       "archive": "NexoWatt_EOS_9.0.12_FULL_REPOSITORY.zip",
       "version": "9.0.12",
       "archiveSha256": "7b066525c9281acb12899f69f74c0cedbcd1ebebbce3d0cf01b840b7974a54a4",
       "adminFiles": 348,
-      "matchedSealedFiles": 348
+      "matchedSealedFiles": 348,
+      "installerAssetFiles": 3,
+      "matchedSealedInstallerAssetFiles": 3,
+      "provenance": "Previously delivered user-owned repository/package; SHA-256 hashes derived from archive bytes and checked against that archive's sealed files manifest."
     },
     {
       "archive": "NexoWatt_EOS_9.0.6_FULL_REPOSITORY.zip",
       "version": "9.0.6",
       "archiveSha256": "bad276534a5482e4f9a716ffc9ba5ba2d811d421f25550f789c0014247fa5fd4",
       "adminFiles": 348,
-      "matchedSealedFiles": 348
+      "matchedSealedFiles": 348,
+      "installerAssetFiles": 3,
+      "matchedSealedInstallerAssetFiles": 3,
+      "provenance": "Previously delivered user-owned repository/package; SHA-256 hashes derived from archive bytes and checked against that archive's sealed files manifest."
     },
     {
       "archive": "NexoWatt_EOS_9.0.7_FULL_REPOSITORY.zip",
       "version": "9.0.7",
       "archiveSha256": "c7bfe92eceb147f202724028ef15d89f5ee680f23841713cab02c8205af238c8",
       "adminFiles": 348,
-      "matchedSealedFiles": 348
+      "matchedSealedFiles": 348,
+      "installerAssetFiles": 3,
+      "matchedSealedInstallerAssetFiles": 3,
+      "provenance": "Previously delivered user-owned repository/package; SHA-256 hashes derived from archive bytes and checked against that archive's sealed files manifest."
     },
     {
       "archive": "NexoWatt_EOS_9.0.8_FULL_REPOSITORY.zip",
       "version": "9.0.8",
       "archiveSha256": "ceb6b18e80eee2c83a1882d342b93952b81d0ef51129a3ab33f89a0f0b76cff4",
       "adminFiles": 348,
-      "matchedSealedFiles": 348
+      "matchedSealedFiles": 348,
+      "installerAssetFiles": 3,
+      "matchedSealedInstallerAssetFiles": 3,
+      "provenance": "Previously delivered user-owned repository/package; SHA-256 hashes derived from archive bytes and checked against that archive's sealed files manifest."
     },
     {
       "archive": "NexoWatt_EOS_9.0.9_FULL_REPOSITORY.zip",
       "version": "9.0.9",
       "archiveSha256": "8b81046c969bb446a02c6489513561adde3df3d81c23840c8b82028f3d7b8b0d",
       "adminFiles": 348,
-      "matchedSealedFiles": 348
+      "matchedSealedFiles": 348,
+      "installerAssetFiles": 3,
+      "matchedSealedInstallerAssetFiles": 3,
+      "provenance": "Previously delivered user-owned repository/package; SHA-256 hashes derived from archive bytes and checked against that archive's sealed files manifest."
     },
     {
       "archive": "NexoWatt_EOS_9.0.5_FULL_REPOSITORY.zip",
       "version": "9.0.5",
       "archiveSha256": "3413166f945ab46ad26519966ee4f4b93aed994dbcdaa9fb9ab471b0cfe02de0",
       "adminFiles": 348,
-      "matchedSealedFiles": 348
+      "matchedSealedFiles": 348,
+      "installerAssetFiles": 3,
+      "matchedSealedInstallerAssetFiles": 3,
+      "provenance": "Previously delivered user-owned repository/package; SHA-256 hashes derived from archive bytes and checked against that archive's sealed files manifest."
     },
     {
       "archive": "NexoWatt_EOS_Admin_8.0.2_SYSTEM_EXPERT_LICENSE_FULL_REPOSITORY.zip",
@@ -65,7 +89,9 @@
       "archiveSha256": "547de57a2d01415dfbd0d2bb8030ce4c2bcb9da6333c4b620cd4d54c4cdb6051",
       "adminFiles": 347,
       "matchedSealedFiles": 0,
-      "provenance": "Previously delivered user-owned repository/package; hashes derived from archive bytes."
+      "provenance": "Previously delivered user-owned repository/package; hashes derived from archive bytes. No sealed manifest in this historical release; no installer assets imported.",
+      "installerAssetFiles": 0,
+      "matchedSealedInstallerAssetFiles": 0
     },
     {
       "archive": "NexoWatt_EOS_9.0.0-alpha.1_FULL_REPOSITORY.zip",
@@ -73,7 +99,9 @@
       "archiveSha256": "df0d1eae8304cf36ff727a798c8a87a6374d6f1a13cd44bb7689e46eb975b643",
       "adminFiles": 347,
       "matchedSealedFiles": 347,
-      "provenance": "Previously delivered user-owned repository/package; hashes derived from archive bytes."
+      "provenance": "Previously delivered user-owned repository/package; SHA-256 hashes derived from archive bytes and checked against that archive's sealed files manifest.",
+      "installerAssetFiles": 3,
+      "matchedSealedInstallerAssetFiles": 3
     },
     {
       "archive": "iobroker.eos-admin-9.0.1.tgz",
@@ -81,7 +109,9 @@
       "archiveSha256": "64e2a31aab1a47e7a6ca61d0588601c11e15255b534802fc81838076f359af89",
       "adminFiles": 347,
       "matchedSealedFiles": 347,
-      "provenance": "Previously delivered user-owned repository/package; hashes derived from archive bytes."
+      "provenance": "Previously delivered user-owned repository/package; SHA-256 hashes derived from archive bytes and checked against that archive's sealed files manifest.",
+      "installerAssetFiles": 3,
+      "matchedSealedInstallerAssetFiles": 3
     },
     {
       "archive": "iobroker.eos-admin-9.0.2.tgz",
@@ -89,7 +119,9 @@
       "archiveSha256": "6f331ac4bdfb76d51a26049f7062ef48a77101aa1d4dc404920e080bab030067",
       "adminFiles": 347,
       "matchedSealedFiles": 347,
-      "provenance": "Previously delivered user-owned repository/package; hashes derived from archive bytes."
+      "provenance": "Previously delivered user-owned repository/package; SHA-256 hashes derived from archive bytes and checked against that archive's sealed files manifest.",
+      "installerAssetFiles": 3,
+      "matchedSealedInstallerAssetFiles": 3
     },
     {
       "archive": "iobroker.eos-admin-9.0.3.tgz",
@@ -97,7 +129,9 @@
       "archiveSha256": "0c3983d39fa1b1ee0eca4ad09a41e5c3ac2600abec0e4aeb9c35b31b2a5f18a6",
       "adminFiles": 347,
       "matchedSealedFiles": 347,
-      "provenance": "Previously delivered user-owned repository/package; hashes derived from archive bytes."
+      "provenance": "Previously delivered user-owned repository/package; SHA-256 hashes derived from archive bytes and checked against that archive's sealed files manifest.",
+      "installerAssetFiles": 3,
+      "matchedSealedInstallerAssetFiles": 3
     },
     {
       "archive": "iobroker.eos-admin-9.0.4.tgz",
@@ -105,7 +139,9 @@
       "archiveSha256": "e41b3b53b6d42247f79a530e305016407ee0a733077722dd687ec3158e31816b",
       "adminFiles": 347,
       "matchedSealedFiles": 347,
-      "provenance": "Previously delivered user-owned repository/package; hashes derived from archive bytes."
+      "provenance": "Previously delivered user-owned repository/package; SHA-256 hashes derived from archive bytes and checked against that archive's sealed files manifest.",
+      "installerAssetFiles": 3,
+      "matchedSealedInstallerAssetFiles": 3
     },
     {
       "archive": "NexoWatt_EOS_9.0.13_FULL_REPOSITORY.zip",
@@ -113,7 +149,9 @@
       "archiveSha256": "bf168552b9d52ae7189cd5c92152f050a40d3bc95be8262d1dd7a864d2ab8b04",
       "adminFiles": 348,
       "matchedSealedFiles": 348,
-      "provenance": "Previously delivered user-owned repository; hashes verified against its sealed manifest."
+      "provenance": "Previously delivered user-owned repository/package; SHA-256 hashes derived from archive bytes and checked against that archive's sealed files manifest.",
+      "installerAssetFiles": 3,
+      "matchedSealedInstallerAssetFiles": 3
     },
     {
       "archive": "NexoWatt_EOS_9.0.14_FULL_REPOSITORY.zip",
@@ -121,7 +159,19 @@
       "archiveSha256": "d44d923e35900a40495bf4eed7cf3d5576b6dcbea7b2a1354a3cc4e7ebd69677",
       "adminFiles": 348,
       "matchedSealedFiles": 348,
-      "provenance": "Previously delivered user-owned repository; hashes verified against its sealed manifest."
+      "provenance": "Previously delivered user-owned repository/package; SHA-256 hashes derived from archive bytes and checked against that archive's sealed files manifest.",
+      "installerAssetFiles": 3,
+      "matchedSealedInstallerAssetFiles": 3
+    },
+    {
+      "archive": "NexoWatt_EOS_9.0.15_FULL_REPOSITORY.zip",
+      "version": "9.0.15",
+      "archiveSha256": "a8d079e3dff1111543ac192b6bb97fc212a63c97fe5d13f01faf61089c6b985f",
+      "adminFiles": 358,
+      "matchedSealedFiles": 358,
+      "installerAssetFiles": 3,
+      "matchedSealedInstallerAssetFiles": 3,
+      "provenance": "Previously delivered user-owned repository/package; SHA-256 hashes derived from archive bytes and checked against that archive's sealed files manifest."
     }
   ],
   "files": {
@@ -137,6 +187,7 @@
       "a22f77f8425572064e52930ef6062577d5004c8701448d561287ce6cb78ef4a0",
       "aa91fbc729f05c82ea847477ff0b990f1a5cf5e82f6c074e4db1872f642b6d82",
       "bc020a9393e3e3628d5b2d94351137a995778367eb38e4d80f0d2a3820833dd8",
+      "c460635b50c92f85f0ba8cf941fb89cdf2d7d6597183d67e9a62a388a99c041f",
       "c9767877178e07365335c780cd8e476f157ec904f7586583e8391c34502cf7c0",
       "d7d5a650a6b67ddab571c51ab2155a4011f01fdc8b8cd47607fd2fd990fb2ae5",
       "d96cce627907931c9e94af3834e01e30ee3a730c3030d543556100842b2d7f96",
@@ -150,6 +201,7 @@
       "0a996d86e1f8f3ac8021a5c7d89107ac2278b4afff2db023c4155d0cb687a540",
       "1109bde4be0c51baa921292e602713dbaa0ba1ef8852ebf9bfacdd2cb024ca2b",
       "151701e19548b0b0464cfe2e2f3b29cf161213bf3c2379ae3d9fae049fee14a7",
+      "1a76a1a0351e1f7e345dcefc05c931c9c1634ac047d0ccccb59cc550f4a24a86",
       "3afc01171f0351243d3c7d2053c7546d0b20d388b12cf40d5050ae1c1a4c3bd9",
       "57cc639f2da7f197bd05d05dec7330a372d1b6642080d39e244232f4d044ff67",
       "6b0db652cdec5408d16491f98b310cc83ed2082806067b47e3973618e14b0df0",
@@ -166,6 +218,9 @@
     ],
     "adminWww/admin.svg": [
       "1167118074ff84d8cef82ad80c38609719dacfde9417126e46966c1ec986534b"
+    ],
+    "adminWww/apple-touch-icon.png": [
+      "952ceb9cef3f7f22a150dd8ea396285f70b9d8c19de8e7c1452bf2ff983ae6bd"
     ],
     "adminWww/assets/AccessTime-5f47qrw7.js": [
       "2e470f20253b0960a330148cd79429d45ce4751311561ba17c06ee32df36aa23"
@@ -184,6 +239,9 @@
     ],
     "adminWww/assets/AdapterUpdateDialog-BFKrf4fF.js": [
       "5d06ada5d2ac896b2bc2ad5858868d46d997cd3cd6c39f22f5f16b311e5cd8d3"
+    ],
+    "adminWww/assets/AdapterUpdateDialog-BJO6M0c4.js": [
+      "bfc4d3166e816f536441151f5d039b16ebb7f55eec0ec846eabbfd8e2c668a1c"
     ],
     "adminWww/assets/AdapterUpdateDialog-D4jWjKyo.js": [
       "1758528ff58e9152d23f368b2f719c048ff87b76845631dc6844dde880c24287"
@@ -211,6 +269,9 @@
     ],
     "adminWww/assets/Adapters-DEEYEoxg.js": [
       "601db2061f21ecb502821fad7f5257472d7d5f06cd3b119e8dc18d26e96c5749"
+    ],
+    "adminWww/assets/Adapters-DrItfmet.js": [
+      "c445f8b6421cfddddb2513851e989b6f8bf863d1a54977825a26b0374f3da7c6"
     ],
     "adminWww/assets/Adapters-gKngfaOu.js": [
       "6f32f16f5253cfe0e4985abacc81f9db57fc81688f59bc25f1e1f0b3bfe1edf1"
@@ -269,6 +330,9 @@
     "adminWww/assets/ConfigManager-DYwC4yq9.js": [
       "9971126f70fbc43745f97e984471aff6dc6cd20c475ba9adf380d99c1dc5198c"
     ],
+    "adminWww/assets/ConfigManager-Dd7xv3Lb.js": [
+      "d72f9b99ca3933defa65f1edfb6bf0977e1f899ce2d524e70b3c83250b4bf847"
+    ],
     "adminWww/assets/ConfigManager-DdgbTda5.js": [
       "10320616b6169992fb7bc5f60a98dca0fd757d49a55c1f7cd9ef3f2f03b2b630"
     ],
@@ -317,6 +381,9 @@
     "adminWww/assets/Enums-D0wJWzfP.js": [
       "0d9f7866267792a0d31f3bbf5b50ed2204a5315d658d0f5fd199e9f72e653831"
     ],
+    "adminWww/assets/Enums-D1imAGfz.js": [
+      "ef63e289fe6762ffb7b80d159b084e6d4717d79669b04cc5485fcfb2f7c33ba3"
+    ],
     "adminWww/assets/Enums-DYt8Nbfy.js": [
       "d0c10676ab75ca789320148ccb2dbcbfafcb58681e15f0b8924d03fdbd1d85d6"
     ],
@@ -347,8 +414,14 @@
     "adminWww/assets/Fields-CQY_bCpS.js": [
       "ef0ed1eb42bb14ae6e795a8e10efcf72018dee40d0369b16f3757ba3fbcc55b8"
     ],
+    "adminWww/assets/Fields-CyehnnBi.js": [
+      "2522e964016f985ba30125e4d24f8b679d94fb82241e6ff565eb75b54c66042d"
+    ],
     "adminWww/assets/Fields-LkLICN-l.js": [
       "c989a516c81e3dc1e3feb710958a1723db3b8bcf206767121073e5d337195929"
+    ],
+    "adminWww/assets/Files-BUpfW787.js": [
+      "89955a10172484c75d7b61a351e8b1d389df484797242a4b3bb270052d03a512"
     ],
     "adminWww/assets/Files-CDo2O-ZL.js": [
       "c3facde373d254d188116cd43c9e53a440b44d70e6a1ee20827a38d9e158325b"
@@ -380,6 +453,9 @@
     "adminWww/assets/Hosts-CanedfFb.js": [
       "377f572acd7b15b80986851062340d7b583bbe5fdb63bd5be8c6a312f9812efa"
     ],
+    "adminWww/assets/Hosts-Cr3bFDw6.js": [
+      "66d5ef76d51438ead057ca0aaf885dcad1acacf9b75f2dff8e4ddea3d7f74da8"
+    ],
     "adminWww/assets/Hosts-CtY6lgFA.js": [
       "b5dba3dc94c45dc83b25cbfa799809333e27d853915b12017981c3803b8a7336"
     ],
@@ -403,6 +479,9 @@
     ],
     "adminWww/assets/Instances-BTu-l4Tk.js": [
       "a00c65c96f3e1be666ba8cfccb1c56a2210e4df064fa9606443cb056afade620"
+    ],
+    "adminWww/assets/Instances-Bj8r7_jI.js": [
+      "f5fca01c11c93f73eb181edee1a6ff164616819aa84cf2e2e6a2bd4b3e27f407"
     ],
     "adminWww/assets/Instances-Cmpcfcgd.js": [
       "22856c6f2bc8c474cc7a65b949da4a8b92db342a7b9f8d78089bb4002cf7c792"
@@ -431,6 +510,9 @@
     "adminWww/assets/Intro-CO34mU11.js": [
       "b3256a826ce0422b422a91e3c1f403758539915c74bfc6c2f597d0bd363f95cd"
     ],
+    "adminWww/assets/Intro-CfjiWTEj.js": [
+      "17ae440ae68f06a22164b670926abe472fadbe0a4004bd51c6ed8019577560f2"
+    ],
     "adminWww/assets/Intro-D31GuOxz.js": [
       "c331852f671b5ce892ae5e848160e6cbf439e1fb843b3044b6763dd2b3e4bb8f"
     ],
@@ -454,6 +536,9 @@
     ],
     "adminWww/assets/Logs-CA0mEMlO.js": [
       "8184bd30623a820df6f9c85ec1c99e775cec2dd9bfe252eef50f216e92c916d6"
+    ],
+    "adminWww/assets/Logs-CEf7gP5Q.js": [
+      "e0db0eb64a51fb945f9df0e369365f08866def6adeec7a6a2aa79441f559db95"
     ],
     "adminWww/assets/Logs-CfTnjH1e.js": [
       "69eaee1e22ee2de0062736b5f5d053995c41be383ff448675b3643e63f7c52a1"
@@ -494,6 +579,9 @@
     "adminWww/assets/Objects-DhW0NzTF.js": [
       "6433add849101c8dc6b29a716e204a3e6a65fecef095919db5510c2e66df0b9c"
     ],
+    "adminWww/assets/Objects-DpGxWk16.js": [
+      "280f56d5335764aa6de619ea5677f235cafcd67def278c81766bdc21a544269d"
+    ],
     "adminWww/assets/Overview-BU27sYd2.js": [
       "cddce2f989fd742ad4df4537b1e268c28b5e051fe894c2b35d33382b63ce73c1"
     ],
@@ -508,6 +596,9 @@
     ],
     "adminWww/assets/Overview-CyT0Nazg.js": [
       "d1f69ecf3a17b4eb52462bfc2c5375a9a73ae2ffa2eadc1f172ff4bca6ccac9b"
+    ],
+    "adminWww/assets/Overview-Dbazo_Hx.js": [
+      "fd07912fd629e0539f00b3b02606f0192a75840e6abf2b83ab25f5c19ccc48b6"
     ],
     "adminWww/assets/Overview-HG8fAMFM.js": [
       "c1f24adbd20d2c02883765ce4b006e2bf628a9b3d0ca60b229ce28d0cbb41248"
@@ -566,6 +657,9 @@
     "adminWww/assets/State-BwdhE6Nd.js": [
       "2dbea80a2dcbe0728e3d6572fa72546ac55cc6d684dd9d72c45a595e11210cb6"
     ],
+    "adminWww/assets/State-CJXFX0FU.js": [
+      "36771473aacca8de57ae7d138c553ce6e4c0d7dfc14caac773ed26b9e6d7c1c2"
+    ],
     "adminWww/assets/State-DNaLbHQw.js": [
       "83cdb4d3ae0fe5c1c6a906e19886d5e003184de412b12d1154f0e5b78f61ee20"
     ],
@@ -617,6 +711,9 @@
     "adminWww/assets/UsedResources-BiMAlgAN.js": [
       "589ea135b0e4451077297f771d69e426dc6200f225d03602637c5b090c2d1afe"
     ],
+    "adminWww/assets/UsedResources-CZF-hCZ-.js": [
+      "7cd53835cc56532a1e15e4f2de0928ffb2f34eba3606f153580e3bb78aeb2db8"
+    ],
     "adminWww/assets/UsedResources-Ch_F3X0O.js": [
       "6756adc708b3f7a2f6e8216aba67985e09e4d11ab30573db6fca73938c9a9bcd"
     ],
@@ -640,6 +737,9 @@
     ],
     "adminWww/assets/Users-BmIMu_yK.js": [
       "61d471afd4aad362b982f7e53bd2d4d98b79fe1f3f2ab09aa22d256c10e4acbb"
+    ],
+    "adminWww/assets/Users-CafIkvjy.js": [
+      "3c378ac6b70221c08d7146c4f98ea5b240fb346bb8c8b05dda463278f74e142e"
     ],
     "adminWww/assets/Users-DFeYuC5y.js": [
       "dce064dc2eb72277c3dc8835e0d28382c4337f4d839a5b4d4406442018d1cec7"
@@ -685,6 +785,9 @@
     ],
     "adminWww/assets/_virtual_mf-localSharedImportMap___mfe_internal__iobroker_admin__mf_owner__1-uaKFfE5p.js": [
       "82fc5c93f09cb9600daa12b73108c8d037f9e533a24a925462e28297fe610710"
+    ],
+    "adminWww/assets/bootstrap-BBQDyvzX.js": [
+      "d8da0a1bb43314d77c5ba719509aec8f0ecaedcdf3ec59b2a46ec418257e3fe4"
     ],
     "adminWww/assets/bootstrap-BCFa62XG.js": [
       "0498c89477c1d69d1659a28586e70fa6b889fc97321f1d3f2d4f583821c79a7f"
@@ -791,6 +894,9 @@
     "adminWww/assets/hostInit-D2d-nEX3.js": [
       "d9d25534eae2396d9bd3f90c5cfafede6644cbb086534ae6804ef160c07ecfd2"
     ],
+    "adminWww/assets/hostInit-DB099Bj7.js": [
+      "70ac51ffe24176b6d54c5e4b5949b57fa470fd38cdca0a7836fbe5d3baa8f150"
+    ],
     "adminWww/assets/hostInit-DT_rjLFY.js": [
       "5a0c4241e593d6e3a04bf6f79149ac66dd3668c69a3a0802745b6db0f4fff2a6"
     ],
@@ -824,6 +930,9 @@
     "adminWww/assets/icons-material-CLHL1F9b.js": [
       "d164e789779390d783d166c2dd8d1dfd353e63c956d750645705ed0e6dbc15bf"
     ],
+    "adminWww/assets/icons-material-DNG3EY-O.js": [
+      "958f2ca69355cc1fbc62df06691cd22906fa03f0a79712f9adb75522f31baac0"
+    ],
     "adminWww/assets/icons-material-DXGwNzPy.js": [
       "2ad0743b8313b094d99a1dce99099dad5f11a09935db6b0ea9fa6d7f9319616a"
     ],
@@ -835,6 +944,30 @@
     ],
     "adminWww/assets/icons-material-HRAGWYGJ.js": [
       "cf9933a5527bec653ff825931363b8767cd3a45313a3ad3a14434c26b77165c2"
+    ],
+    "adminWww/assets/icons/nexowatt-1024.png": [
+      "952ceb9cef3f7f22a150dd8ea396285f70b9d8c19de8e7c1452bf2ff983ae6bd"
+    ],
+    "adminWww/assets/icons/nexowatt-192-maskable.png": [
+      "d2b3962a02689238a3687c02d680fe233144c0251ccd359d15e2a38d92be27d0"
+    ],
+    "adminWww/assets/icons/nexowatt-192.png": [
+      "7f93d65d9e1d795bf127e1af31d88d7468ccb70b026f98351d0abbc3f3bd4df6"
+    ],
+    "adminWww/assets/icons/nexowatt-256.png": [
+      "bbc49706e59a126c8a2ca58b27fbfbe9b9f5207bdc62a94ce4e6ec8f43fa6032"
+    ],
+    "adminWww/assets/icons/nexowatt-32.png": [
+      "6d6c40b3d4b80adc2da0274d02bd1663235de072b53ba1b55a41ef151526b8a3"
+    ],
+    "adminWww/assets/icons/nexowatt-384.png": [
+      "6b4957e27f75a1d6c38905e52dad9d26f3b89fefd47cc7db4cd92417dbbf7c07"
+    ],
+    "adminWww/assets/icons/nexowatt-512-maskable.png": [
+      "4c66852e53790f04f8b06ae0ade57b78940a816461d4c127398706055efcb3a4"
+    ],
+    "adminWww/assets/icons/nexowatt-512.png": [
+      "a7e6375e6f4e1f5e09f167af81eca69626e4baf4762a07e41b838bc4786f0519"
     ],
     "adminWww/assets/index-BCZd5tR_.js": [
       "550d4229137953818ef6170179a3c0119d40f034587ff4d40cef992ef6528a32"
@@ -851,6 +984,9 @@
     "adminWww/assets/index-DCO-DDEs.js": [
       "74826bc1fc932d53d5552ebec3c70f56dfeb2f986902a23b8077b03649e7408a"
     ],
+    "adminWww/assets/index-Do9tAs3_.js": [
+      "12d8260001b9d720212859ab584ead4d1c9d38d623b7b15f686391baf4b660ef"
+    ],
     "adminWww/assets/index-Dp2eyS2X.js": [
       "b9adf6ebe18f419cb1ef205d562aeb29e4ec2e0e3a205a14dd09d6bf6e153c15"
     ],
@@ -865,6 +1001,9 @@
     ],
     "adminWww/assets/installSVGRenderer-BR-zIijZ.js": [
       "94d9712fd46f6a14fe2f2480fa0193388a34a122df15ced81dc5f84d7e803064"
+    ],
+    "adminWww/assets/installSVGRenderer-C5nZI9jm.js": [
+      "f20876b7d1bc386f35c8511309bbd23436d00d04f18291365da55dbc9e72f22c"
     ],
     "adminWww/assets/installSVGRenderer-CdPoZSHq.js": [
       "c46059a2203f99425cfcf98f4abd2185cd61e3fafef885d4f8435b8f6b2b387f"
@@ -946,6 +1085,9 @@
     ],
     "adminWww/assets/mf-entry-bootstrap-0-c25dc02e.js": [
       "c25dc02e3624bdd29e82bad0bde5f655e710dc38b57c1b73cb02e7fd6229accb"
+    ],
+    "adminWww/assets/mf-entry-bootstrap-0-c2eef8d7.js": [
+      "c2eef8d7453bb8b822d12ee3f01d87ee57bf1015f50c6f583b280d1cb90379c3"
     ],
     "adminWww/assets/mf-entry-bootstrap-0-ce1079bb.js": [
       "ce1079bbd481277a68972ae29c1e58ad48324eacf47ab363a53a150a115d668e"
@@ -1153,6 +1295,7 @@
       "8df84c791f4ce94705915aec63bb9b9a8630bde031ccf2212a399d9bb0714fdb",
       "8f9325789fe579ee1e7aab0c91583742b2d7d5cacf632cbd20d26c3054975a21",
       "9787a8c8e4cd8c3afb7880fea7232043a910f8cb7eabad42a1818e91c390e75a",
+      "bc1cf6bab68b3136f89c13d9151afb940803c647e93afc2a00c9015f78b156bd",
       "bc2fc0ce290572e61a20f9ad0b3f61851c6a893120e92906cf827407185675a9",
       "c4ec6b119f4a4ac57c06ba837722e559dff747bfe4cef65c415e7dcb4d1dcd68",
       "c57c2e4149a08eadc8c739df6d49452aa2d40cc547256c13006d8ba59ed5a8e5",
@@ -1732,7 +1875,11 @@
       "a7e6375e6f4e1f5e09f167af81eca69626e4baf4762a07e41b838bc4786f0519"
     ],
     "adminWww/manifest.json": [
-      "15244d5d50f08420fc5d4793e5699e99c7b900b6908cfbc00a7182f4d4db55bd"
+      "15244d5d50f08420fc5d4793e5699e99c7b900b6908cfbc00a7182f4d4db55bd",
+      "c78838b49a038deeeb158da0ffeb530de712e0a5a9bfb4465569972d04137820"
+    ],
+    "adminWww/manifest.webmanifest": [
+      "158ed56a8ccbe6c49319d25439774b304e16fdae2b8fdf0946c56e8213e6b45a"
     ],
     "adminWww/mf-manifest.json": [
       "0d29cb84fce9e1ac0001a6eb9ccc24c4674c9fd3bdf05cdb8335ae9e578e3ad4",
@@ -1742,6 +1889,7 @@
       "63d1e4e08c91810aa8976d8489570964a102449226438ef92ec9e7225cd944ae",
       "659d17312821728b11ba24c95e8dad1f149f94a741251c7d328db2b1bcb99e37",
       "77230316d813f2d7f902ec4c16d47ba10e2d03e106219effc90856b154a18110",
+      "8e76d5a3bf2021004f124c0085f62123ae2105912bd016f8bcdfc54c2ef64f60",
       "aa445c917127047a77dae2dc3ea21cbe88e0d08e0c770147db4782bd87602b3f",
       "c906dad694acf3bc598c647817529ad6caa3bb74def3f58ac21a16312a4cdd6d",
       "cb018f9893d05e8c1dfa477894432d5cc01278686939a21277ff9a2250efb326",
@@ -1764,6 +1912,7 @@
       "5dd3cad19e98fb77a28ee621ab6dc15981497c79acd17f5441dc5ea48c31dfeb",
       "8c5fe95e5dd7020955e7ac17908328a87f18322f90237d807bbda05881610b37",
       "985baca940fe97fb6b1782482fcd0c8a26ab636c7b34e474b304527921ac27ca",
+      "c656dabe76b8c5da1fbacef7e533b656dbb50f5544482ba1231c3f0713cc325b",
       "c673d3d96ae83ee260bf0db192361d287d54754358bb15a28c747ff1b63583f6",
       "d85b85b925530c702be1863c7d8d9d597901b1e5a1e0173d41cef07ce28848ca",
       "e592131c5e19dec4a99abad68f85b9fea3179acf2e89c7cc252e67dfbfff5461",
@@ -1793,6 +1942,9 @@
     ],
     "adminWww/remoteEntry-eos-9.0.14.js": [
       "e7d21607d765faffe0ae295eaabb219bbb105ae2439a81ca916b385a0febb020"
+    ],
+    "adminWww/remoteEntry-eos-9.0.15.js": [
+      "10c9c4433ec5b404ec0801c55ecffd0418bb18591d6d54590adeffaabdeef3da"
     ],
     "adminWww/remoteEntry-eos-9.0.2.js": [
       "97717de9f4180987f5f3f507fb7bac7af6e489727a5381ff1116b1ea9041d79d"
@@ -1832,6 +1984,7 @@
       "b7e011f6ebeed238626fa99e7ad60b93dea5719a14c988fbfc7f13d3c419253a",
       "c06c9b38416c75ad064adbb865344e937d3b474d7dd0d241a51d642d1428e542",
       "c99603337f1ce7193bd8d883f9a1fb7584ea5c45e58d6468b227f10b265ab0e3",
+      "ca2d8648c9a1ef6e310d8350589a5683fbdfd0087ed5b1cf1fa383001c0a2aea",
       "dbb7e2b600add329b1d577e7b44e5e94e1837b30c88b17fc7d50177c102fe56f",
       "e34b48b4f10b8d730b6fd8d7759bb5b5033a107e20f80dbf967ce09c7cd6844b",
       "ea6531a2e67ac94847a453fb89f2484b19645c677f165d620bfefcb4e9a5e69c"
@@ -1871,6 +2024,21 @@
     ],
     "adminWww/static/js/worker-yaml.js": [
       "450a898b84b7b0ba486929722c66c31418d3a200729344f72d5a5c9820bbee04"
+    ],
+    "ui/admin/react/assets/index-Bm4__n5R.js": [
+      "9cd5d39ab4a92133e19c87399b0b22c8f575346df227b693cdcd659520202fe7"
+    ],
+    "ui/admin/react/assets/index-Bq5IupDw.js": [
+      "f73211150e035e301009925e379ae7746e50c666ee96148f1ba7f5660d0e8baa"
+    ],
+    "ui/admin/react/assets/index-CuquHlsY.css": [
+      "b0d51266b2e541f5a26c8319dc45cd44a682b02cbc9d96fd001f3793c8c3e459"
+    ],
+    "ui/admin/react/assets/index-fCXC5Pli.js": [
+      "6bbc2d0d228ef265aaa40193571206ffc113a5e16de1660673c797c75ab1e96a"
+    ],
+    "ui/admin/react/assets/nexowatt-192-43ZwQ44y.png": [
+      "7f93d65d9e1d795bf127e1af31d88d7468ccb70b026f98351d0abbc3f3bd4df6"
     ]
   }
 }

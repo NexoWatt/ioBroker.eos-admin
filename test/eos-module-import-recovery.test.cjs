@@ -176,7 +176,7 @@ test('unreadable persisted target is not replaceable through default config or m
     assert.equal((await f.host.status('devices')).active, false);
     assert.equal((await f.host.view('devices')).configurationReady, false);
     await assert.rejects(f.host.importLegacy('devices', 'nexowatt-devices.0'), /EOS_MODULE_NOT_READY/);
-    await assert.rejects(f.host.save('devices', { enabled: false }), /EOS_MODULE_NOT_READY/);
+    await assert.rejects(f.host.save('devices', { enabled: false }), { code: 'EOS_MODULE_CONFIG_UNAVAILABLE' });
     assert.equal(f.writes.length, 0);
 });
 

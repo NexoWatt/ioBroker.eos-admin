@@ -13,6 +13,7 @@ const crypto = require('node:crypto');
 const { createRequire } = require('node:module');
 const express = require('express');
 const { UnifiedSessions } = require('../src/lib/eosUnifiedBoundary');
+const { installIdleSession } = require('./fixtures/eos-idle-session.cjs');
 const root = path.resolve(__dirname, '..');
 const sourceLogoSha256 = '952ceb9cef3f7f22a150dd8ea396285f70b9d8c19de8e7c1452bf2ff983ae6bd';
 const sha256 = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
@@ -125,12 +126,14 @@ test('actual owner mount serves install metadata publicly while root launch reta
         getForeignObjectAsync: async id => id === fixtureObject._id ? structuredClone(fixtureObject) : null,
         getForeignStateAsync: async () => null,
         setForeignStateAsync: async () => assert.fail('install metadata must not write device states'),
-        setTimeout, clearTimeout, eosSessionSecurity: { epoch: 'pwa-test' },
+        setTimeout, clearTimeout,
         eosLicenseService: { statusView: () => licensed
             ? { valid: true, coreEnabled: true, edition: 'pro', features: [], limits: { chargePoints: 50, batteries: 10 } }
             : { valid: false, coreEnabled: false } },
         eosOwnership: { canWrite: () => false, status: () => ({ allowed: false }) },
     };
+    const sessionFixture = await installIdleSession(owner, { token, user: 'operator' });
+    t.after(() => sessionFixture.cleanup());
     const unified = new UnifiedSessions(owner, {
         secure: false, externalOrigin: '',
         resolveAccess: async req => req.headers.cookie === `access_token=${token}`

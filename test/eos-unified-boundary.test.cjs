@@ -7,8 +7,11 @@ const TOKEN = 'a'.repeat(40);
 function req(extra = {}) { return { headers: { host: 'device.example', origin: 'https://device.example', cookie: `access_token=${TOKEN}`, ...extra }, socket: {remoteAddress:'127.0.0.1'} }; }
 function setup(overrides = {}) {
     const destroyed=[];
-    const adapter = { eosSessionSecurity:{epoch:'epoch-one',revoke(){this.epoch='epoch-two';}}, eosHostedRuntime:{revokeSessions(){adapter.revoked=true;}},
-        getSession(id,cb){ cb(id === `a:${TOKEN}` ? {aToken:TOKEN,rToken:'r'.repeat(40)}:null); }, destroySession(id,cb){destroyed.push(id);cb();} };
+    let familyActive = true;
+    const adapter = { eosSessionSecurity:{epoch:'epoch-one',revoke(){this.epoch='epoch-two';},
+        idleView(session){return {authenticated:!!session&&familyActive,serverNow:Date.now(),idleTimeoutMs:600000,idleExpiresAt:session&&familyActive?Date.now()+600000:null,sessionKey:session&&familyActive?'unit-fixture-family':null};},
+        revokeSession(){familyActive=false;adapter.familyRevoked=true;}}, eosHostedRuntime:{revokeSessions(){adapter.revoked=true;}},
+        getSession(id,cb){ cb(familyActive && id === `a:${TOKEN}` ? {aToken:TOKEN,rToken:'r'.repeat(40)}:null); }, destroySession(id,cb){destroyed.push(id);cb();} };
     const authority=new UnifiedSessions(adapter,{externalOrigin:'https://device.example',secure:false,resolveAccess:async()=>({userId:'system.user.customer',role:'enduser',groups:['system.group.user']}),firstLogin:async()=>({required:false}),getLicense:()=>({valid:true,coreEnabled:true}),...overrides});
     return {authority,adapter,destroyed};
 }
@@ -53,12 +56,13 @@ test('status maps roles and persists activation only when core entitlement is gr
     const {authority:first}=setup({firstLogin:async()=>({required:true}),getLicense:()=>({valid:false})});
     assert.equal((await first.status(req())).nextUrl,'/system/?passwordSetup');
 });
-test('CSRF token is session- and epoch-bound; logout revokes stored pair and open streams',async()=>{
+test('CSRF token is session- and epoch-bound; logout revokes its family without stopping other sessions',async()=>{
     const {authority,adapter,destroyed}=setup(); const request=req();request.headers['x-nw-csrf']=authority.csrf(request);
     assert.equal(authority.csrfAllowed(request),true);
     const other=req({cookie:`access_token=${'b'.repeat(40)}`,'x-nw-csrf':request.headers['x-nw-csrf']});assert.equal(authority.csrfAllowed(other),false);
     const res={clearCookie(){},setHeader(){},status(code){this.code=code;return this;},json(body){this.body=body;return this;}};
-    await authority.logout(request,res);assert.equal(res.code,200);assert.equal(adapter.revoked,true);assert.deepEqual(destroyed,[`a:${TOKEN}`,`r:${'r'.repeat(40)}`]);assert.equal(authority.csrfAllowed(request),false);
+    await authority.logout(request,res);assert.equal(res.code,200);assert.equal(adapter.familyRevoked,true);assert.equal(adapter.revoked,undefined);assert.deepEqual(destroyed,[`a:${TOKEN}`,`r:${'r'.repeat(40)}`]);assert.equal((await authority.status(request)).authenticated,false);
+    adapter.eosSessionSecurity.revoke();assert.equal(authority.csrfAllowed(request),false);
 });
 test('bad CSRF does not revoke another login',async()=>{
     const {authority,adapter,destroyed}=setup();const res={status(code){this.code=code;return this;},json(){return this;}};

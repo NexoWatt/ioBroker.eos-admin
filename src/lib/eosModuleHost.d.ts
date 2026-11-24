@@ -11,6 +11,9 @@ export interface ModuleView {
     id: string;
     config: Record<string, unknown>;
     status: Record<string, unknown>;
+    configurationReady: boolean;
+    configurationLoaded: boolean;
+    configurationReason: string;
 }
 export class EosModuleHost {
     constructor(

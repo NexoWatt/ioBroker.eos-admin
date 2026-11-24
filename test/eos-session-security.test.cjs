@@ -219,7 +219,14 @@ test('socket revocation synchronously blocks commands, clears subscriptions and 
     };
     x.security.bindSockets(socketAdmin);
     const clients = [{ emit() {}, disconnect() { closed++; } }, { emit() {}, close() { closed++; } }];
-    for (const client of clients) { handlers.connect(client); assert.equal(socketAdmin.__updateSession(client), true); }
+    const pair = await x.issue();
+    for (const client of clients) {
+        client.conn = { request: { headers: { cookie: `access_token=${pair.accessToken}` } } };
+        handlers.connect(client);
+        assert.equal(socketAdmin.__updateSession(client), false, 'pending sockets have no authority');
+        await new Promise((resolve, reject) => socketAdmin.__getUserFromSocket(client, error => error ? reject(Error(error)) : resolve()));
+        assert.equal(socketAdmin.__updateSession(client), true);
+    }
     x.security.revoke();
     for (const client of clients) assert.equal(socketAdmin.__updateSession(client), false);
     assert.equal(closed, 2); assert.equal(cleared, 2);
@@ -268,12 +275,156 @@ test('real five-second watchdog closes a socket after a missed credential object
         unsubscribeSocket() {},
     };
     x.security.bindSockets(socketAdmin);
-    const client = { emit() {}, disconnect() { closed = true; } }; handlers.connect(client);
+    const pair = await x.issue();
+    const client = { conn: { request: { headers: { cookie: `access_token=${pair.accessToken}` } } }, emit() {}, disconnect() { closed = true; } }; handlers.connect(client);
     await new Promise((resolve, reject) => socketAdmin.__getUserFromSocket(client, error => error ? reject(Error(error)) : resolve()));
     x.users['system.user.operator'].common.password = 'changed-with-no-event';
     await new Promise(resolve => setTimeout(resolve, 5250));
     assert.equal(closed, true); assert.equal(x.security.isSocketAllowed(client), false);
     x.security.stop();
+});
+
+test('idle deadline rejects access and refresh at ten minutes despite status reads and automatic token rotation', async t => {
+    let now = 0;
+    const x = await setup({ now: () => now }); t.after(() => x.security.stop());
+    const first = await x.issue();
+    const familyId = x.sessions.get(`a:${first.accessToken}`)[STAMP].familyId;
+    now = 540000;
+    for (let i = 0; i < 20; i++) {
+        const session = await x.adapter.getSession(`a:${first.accessToken}`);
+        assert.equal(x.security.idleView(session).authenticated, true);
+    }
+    const refresh = await x.model.getRefreshToken(first.refreshToken);
+    const second = await x.issue(refresh.user);
+    assert.equal(x.sessions.get(`a:${second.accessToken}`)[STAMP].familyId, familyId);
+    now = 599999;
+    assert.ok(await x.model.getAccessToken(second.accessToken));
+    now = 600000;
+    assert.equal(await x.model.getAccessToken(first.accessToken), null);
+    assert.equal(await x.model.getAccessToken(second.accessToken), null);
+    assert.equal(await x.model.getRefreshToken(second.refreshToken), null);
+    assert.equal(x.security.families.size, 0);
+    assert.equal(x.security.activity(x.sessions.get(`a:${first.accessToken}`)), false, 'an old activity request cannot resurrect a family');
+});
+
+test('only explicit activity extends the same family; other independent logins remain isolated', async t => {
+    let now = 0;
+    const x = await setup({ now: () => now }); t.after(() => x.security.stop());
+    const phone = await x.issue(); const desktop = await x.issue();
+    assert.notEqual(x.sessions.get(`a:${phone.accessToken}`)[STAMP].familyId, x.sessions.get(`a:${desktop.accessToken}`)[STAMP].familyId);
+    now = 599999;
+    assert.equal(x.security.activity(await x.adapter.getSession(`a:${desktop.accessToken}`)), true);
+    now = 600000;
+    assert.equal(await x.model.getAccessToken(phone.accessToken), null);
+    assert.ok(await x.model.getAccessToken(desktop.accessToken));
+    const refreshed = await x.issue((await x.model.getRefreshToken(desktop.refreshToken)).user);
+    x.security.revokeSession(await x.adapter.getSession(`a:${desktop.accessToken}`));
+    assert.equal(await x.model.getAccessToken(refreshed.accessToken), null);
+    assert.equal(await x.model.getRefreshToken(refreshed.refreshToken), null);
+    const next = await x.issue();
+    assert.ok(await x.model.getAccessToken(next.accessToken), 'fresh credentials can create a new login');
+});
+
+test('idle read and token-save races recheck after asynchronous work', async t => {
+    let now = 0;
+    const x = await setup({ now: () => now }); t.after(() => x.security.stop());
+    const first = await x.issue();
+    const savedGet = x.adapter.getForeignObjectAsync;
+    x.adapter.getForeignObjectAsync = async id => { const value = await savedGet(id); now = 600000; return value; };
+    assert.equal(await x.model.getAccessToken(first.accessToken), null);
+    x.adapter.getForeignObjectAsync = savedGet;
+    const second = await x.issue();
+    const refresh = await x.model.getRefreshToken(second.refreshToken);
+    now += 600000;
+    await assert.rejects(x.issue(refresh.user), /REAUTHENTICATION/);
+    assert.equal(await x.model.getRefreshToken(second.refreshToken), null);
+});
+
+test('idle expiry uses a monotonic clock and is unchanged by a backwards wall clock', async t => {
+    let now = 0;
+    const x = await setup({ now: () => now }); t.after(() => x.security.stop());
+    const first = await x.issue();
+    const wall = Date.now();
+    t.mock.method(Date, 'now', () => wall - 86400000);
+    now = 599999;
+    assert.ok(await x.model.getAccessToken(first.accessToken));
+    now = 600000;
+    assert.equal(await x.model.getAccessToken(first.accessToken), null);
+    assert.equal(await x.model.getRefreshToken(first.refreshToken), null);
+});
+
+test('bounded families prune expired entries and never evict another still-active login', async t => {
+    let now = 0;
+    const x = await setup({ now: () => now, maxFamilies: 2 }); t.after(() => x.security.stop());
+    const first = await x.issue(); await x.issue();
+    assert.equal(await x.model.getUser('operator', 'test-only-passphrase'), null);
+    assert.ok(await x.model.getAccessToken(first.accessToken));
+    now = 600000;
+    assert.ok(await x.model.getAccessToken((await x.issue()).accessToken));
+    assert.equal(x.security.families.size, 1);
+    x.security.stop();
+    assert.equal(x.security.families.size, 0);
+});
+
+test('idle timer disposes silent SSE and sockets, rejects refreshed old sockets and preserves active other family', async t => {
+    const { EventEmitter } = require('node:events');
+    let now = 0;
+    const x = await setup({ now: () => now }); t.after(() => x.security.stop());
+    const idle = await x.issue(); const active = await x.issue();
+    const handlers = {}; let rotations = 0;
+    const socketAdmin = {
+        addEventHandler(name, handler) { handlers[name] = handler; },
+        __updateSession() { return true; },
+        __getUserFromSocket(client, callback) { callback(null, 'system.user.operator', Date.now() + 60000); },
+        unsubscribeSocket(client) { client.unsubscribed = true; },
+        commands: { commands: { updateTokenExpiration(client, token, callback) { rotations++; callback(null, true); } } },
+    };
+    x.security.bindSockets(socketAdmin);
+    const client = new EventEmitter(); client.conn = { request: { headers: { cookie: `access_token=${idle.accessToken}` } } };
+    client.disconnect = () => { client.closed = true; client.emit('disconnect'); };
+    handlers.connect(client);
+    await new Promise((resolve, reject) => socketAdmin.__getUserFromSocket(client, error => error ? reject(Error(error)) : resolve()));
+    const response = new EventEmitter(); response.end = () => { response.ended = true; response.emit('finish'); };
+    assert.equal(await x.security.bindStream(idle.accessToken, response), true);
+    now = 599999;
+    x.security.activity(await x.adapter.getSession(`a:${active.accessToken}`));
+    const refreshed = await x.issue((await x.model.getRefreshToken(idle.refreshToken)).user);
+    await new Promise(resolve => socketAdmin.commands.commands.updateTokenExpiration(client, refreshed.accessToken, (error, allowed) => { assert.equal(error, null); assert.equal(allowed, true); resolve(); }));
+    now = 600000;
+    // A real server timer must dispose even when neither browser nor data source sends anything.
+    await new Promise(resolve => setTimeout(resolve, 1100));
+    assert.equal(response.ended, true); assert.equal(client.closed, true); assert.equal(client.unsubscribed, true);
+    assert.equal(x.security.streams.size, 0); assert.equal(x.security.isSocketAllowed(client), false);
+    await new Promise(resolve => socketAdmin.commands.commands.updateTokenExpiration(client, active.accessToken, (error, allowed) => { assert.ok(error); assert.equal(allowed, false); resolve(); }));
+    assert.equal(rotations, 1); assert.ok(await x.model.getAccessToken(active.accessToken));
+});
+
+test('throwing authentication callbacks and upstream token rotation do not cause unhandled promise rejection', async t => {
+    const x = await setup(); t.after(() => x.security.stop());
+    const pair = await x.issue(); let warnings = 0;
+    x.adapter.log.warn = () => { warnings++; };
+    const handlers = {};
+    const socketAdmin = {
+        addEventHandler(name, handler) { handlers[name] = handler; },
+        __updateSession() { return true; },
+        __getUserFromSocket(client, callback) { callback(null, 'system.user.operator', Date.now() + 60000); },
+        unsubscribeSocket() {},
+        commands: { commands: { updateTokenExpiration() { throw new Error('simulated upstream failure'); } } },
+    };
+    x.security.bindSockets(socketAdmin);
+    const client = () => ({ conn: { request: { headers: { cookie: `access_token=${pair.accessToken}` } } }, emit() {}, disconnect() { this.closed = true; } });
+    const throwing = client(); handlers.connect(throwing);
+    socketAdmin.__getUserFromSocket(throwing, () => { throw new Error('simulated callback failure'); });
+    await new Promise(resolve => setImmediate(resolve));
+    assert.equal(throwing.closed, true);
+    const rotating = client(); handlers.connect(rotating);
+    await new Promise((resolve, reject) => socketAdmin.__getUserFromSocket(rotating, error => error ? reject(Error(error)) : resolve()));
+    socketAdmin.commands.commands.updateTokenExpiration(rotating, pair.accessToken, () => { throw new Error('simulated error callback failure'); });
+    x.adapter.getSession(`a:${pair.accessToken}`, () => { throw new Error('simulated stored-session callback failure'); });
+    await new Promise(resolve => setImmediate(resolve));
+    assert.equal(rotating.closed, true);
+    assert.equal(warnings, 3);
+    assert.ok(await x.model.getAccessToken(pair.accessToken), 'transport callback failure does not stop another connection in the family');
 });
 
 test('TOTP account contract never falls back to password-only issuance or cached/refresh tokens', async()=>{

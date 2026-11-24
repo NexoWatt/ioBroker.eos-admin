@@ -5,6 +5,7 @@ const http = require('node:http');
 const express = require('express');
 const { UnifiedSessions } = require('../src/lib/eosUnifiedBoundary');
 const { createHostedRuntime } = require('../ui/main');
+const { installIdleSession } = require('./fixtures/eos-idle-session.cjs');
 
 // Exercise both production sides of the bridge. The adapter database and license
 // are fixtures; no controller, hardware writer, or second runtime listener starts.
@@ -21,8 +22,9 @@ test('real hosted HTTP accepts normal navigation through the owner origin policy
         getForeignStateAsync: async () => null,
         sendTo: (_instance, _command, _message, callback) => callback({ result: [] }),
         setTimeout, clearTimeout,
-        eosSessionSecurity: { epoch: 'test-epoch' },
     };
+    const sessionFixture = await installIdleSession(owner, { token, user: 'operator' });
+    t.after(() => sessionFixture.cleanup());
     const license = { valid: true, coreEnabled: true, edition: 'pro', features: [], limits: { chargePoints: 50, batteries: 10 } };
     const authority = new UnifiedSessions(owner, {
         secure: false, externalOrigin: '',

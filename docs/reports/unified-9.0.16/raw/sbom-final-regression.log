@@ -1,0 +1,14 @@
+✔ enrichment preserves original metadata/components/dependency edges and records real ancestry (1.993072ms)
+✔ second enrichment is identical and does not increment the BOM version again (0.487998ms)
+✔ wrong BOM scope, missing dependencies and conflicting owned records are rejected (0.726609ms)
+✔ runtime graph closure retains dual-use production/development nodes and removes dev-only roots (0.533285ms)
+✔ missing locked roots or missing transitive graph nodes fail closed (0.40834ms)
+✔ npm alias components are linked through their upstream identity without inventing a registry release (0.275445ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 102.030343

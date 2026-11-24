@@ -1,0 +1,29 @@
+(node:12) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ real module pages and vendor assets are available through the guarded same-origin routes (90.489158ms)
+✔ backup download uses authenticated bounded binary streaming and refuses untrusted names (13.176746ms)
+✔ slow backup downloads have bounded admission and release their stream after client disconnect (17.480327ms)
+✔ backup byte-count mismatches abort the response without exposing an unbounded stream (8.921956ms)
+✔ read-only migration page and status require fresh administrator authentication and expose no private journal fields (17.31886ms)
+✔ fresh admin role, same origin and session-bound CSRF are required for every module mutation (21.676931ms)
+✔ first-login password requirement and invalid expired sessions do not expose configuration (4.688228ms)
+✔ invalid and oversized module JSON and internal exceptions are contained without leaking bodies (16.059588ms)
+✔ issuer creates encrypted offline CA; device CSR and public downloads never reveal either private key (308.731328ms)
+✔ actual EOS HTTPS startup, SNI and IP use trusted identity; renewal preserves listener and survives restart (1273.745118ms)
+✔ wrong SAN, root fingerprint, request ID, key, expiry and CA are refused without changing active certificate (624.687274ms)
+✔ failed atomic activation and failed live context retain the previous identity and pending request (422.516955ms)
+✔ concurrent requests are bounded; pending requests require explicit replacement and consumed requests cannot replay (349.094024ms)
+✔ committed certificate reports cleanup and directory-sync warnings without claiming a failed activation (251.11642ms)
+✔ chain status and renewal warning include an intermediate that expires before the leaf (159.08045ms)
+✔ invalid names and unsafe storage are rejected, not used as command/config fragments (131.916332ms)
+(node:13) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ HTTP routes enforce real unified session, role, CSRF and same-origin for certificate actions (362.058033ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4271.008739

@@ -15,6 +15,7 @@ async function flushUntil(predicate) {
 async function fixture(settings = {}) {
     const nodes = new Map(); const domEvents = new Map(); const requests = [];
     let token = 'initial-csrf'; let authenticated = true; let loads = 0; let denyPut = false;
+    let onChange = () => {}; let confirmations = 0;
     let stored = { enabled: settings.enabled === true, devices: [{ id: 'ess1', name: 'Existing ESS', connection: { password: '__EOS_SECRET_UNCHANGED__' } }] };
     let edited = structuredClone(stored);
     const node = id => {
@@ -22,10 +23,10 @@ async function fixture(settings = {}) {
             addEventListener(name, handler) { this.events[name] = handler; }, append(child) { this.children.push(child); } });
         return nodes.get(id);
     };
-    const context = { Error, AbortSignal, Promise, console, window: {}, document: {
+    const context = { Error, AbortSignal, Promise, console, window: { confirm() { confirmations++; return settings.confirmDiscard === true; } }, document: {
         getElementById: node, querySelectorAll: () => [], createElement: () => ({}),
         addEventListener: (name, handler) => domEvents.set(name, handler),
-    }, async load(config) { loads++; edited = structuredClone(config); }, save(callback) { callback(edited); },
+    }, async load(config, changed) { loads++; onChange = changed; edited = structuredClone(config); changed(false); }, save(callback) { callback(edited); },
     async fetch(url, options) {
         const method = options.method || 'GET'; requests.push({ url, ...options, method });
         if (!authenticated) return { status: 401, ok: false };
@@ -36,14 +37,18 @@ async function fixture(settings = {}) {
             stored = JSON.parse(options.body).config;
         }
         return { status: 200, ok: true, json: async () => ({ config: structuredClone(stored), configurationReady: settings.configurationReady !== false,
+            configurationReason: settings.configurationReason,
             manualImport: settings.manualImport, csrfToken: token, migration: settings.migration || null, status: { active: false, reason: settings.reason || 'DISABLED' } }) };
     } };
     vm.runInNewContext(source, context, { filename: 'host-bridge.js' }); domEvents.get('DOMContentLoaded')();
     await flushUntil(() => node('eosModuleStatus').textContent.startsWith('Gerätemodul:'));
     return { node, requests, draft: () => edited, stored: () => stored, loads: () => loads,
+        changed() { onChange(true); }, confirmations: () => confirmations,
+        readiness(value, reason = '') { settings.configurationReady = value; settings.configurationReason = reason; },
         authenticate(value, nextToken = token) { authenticated = value; token = nextToken; }, denyPut(value) { denyPut = value; },
         async import() { node('eosLegacyInstance').value = 'nexowatt-devices.0'; node('eosModuleImport').events.click(); await flushUntil(() => node('eosModuleReload').disabled === false); },
         async save() { node('eosModuleSave').events.click(); await flushUntil(() => node('eosModuleReload').disabled === false); },
+        async reload() { node('eosModuleReload').events.click(); await flushUntil(() => node('eosModuleReload').disabled === false); },
     };
 }
 
@@ -123,7 +128,46 @@ test('uninitialized module configuration stays readable but cannot be saved or m
     assert.equal(f.node('eosModuleImport').disabled, true);
     assert.equal(f.node('eosModuleSave').disabled, true);
     assert.equal(f.node('eosModuleReload').disabled, false);
+    assert.equal(f.node('eosDeviceEditor').inert, true);
+    assert.equal(f.node('eosModuleEnabled').disabled, true);
+    assert.equal(f.node('eosConfigurationHelp').hidden, false);
+    assert.match(f.node('eosModuleStatus').textContent, /Konfiguration gesperrt/);
     assert.match(f.node('eosImportHint').textContent, /kontrollierter EOS-Neustart/);
     await f.import();
     assert.equal(f.requests.some(request => request.method === 'POST'), false);
+    await f.save();
+    assert.equal(f.requests.some(request => request.method === 'PUT'), false);
+});
+
+test('migration-blocked editor explains the prerequisite and unlocks after a fresh released configuration load', async () => {
+    const f = await fixture({ configurationReady: false, configurationReason: 'EOS_MODULE_MIGRATION_BLOCKED',
+        manualImport: { allowed: false, reason: 'EOS_MODULE_NOT_READY' } });
+    assert.equal(f.node('eosDeviceEditor').inert, true);
+    assert.match(f.node('eosModuleStatus').textContent, /Bestandsübernahme ist noch nicht freigegeben/);
+    assert.equal(f.node('eosModuleSave').disabled, true);
+    f.readiness(true); await f.reload();
+    assert.equal(f.node('eosDeviceEditor').inert, false);
+    assert.equal(f.node('eosModuleEnabled').disabled, false);
+    assert.equal(f.node('eosModuleSave').disabled, false);
+    assert.equal(f.node('eosConfigurationHelp').hidden, true);
+    f.draft().devices.push({ id: 'meter1', templateId: 'meter.sma.SmaEnergyMeterSpeedwireImpl', protocol: 'speedwire' });
+    f.changed(); f.node('eosModuleEnabled').checked = true; f.node('eosModuleEnabled').events.change();
+    await f.save();
+    assert.equal(f.stored().devices.length, 2);
+    assert.equal(f.stored().devices[1].id, 'meter1');
+    assert.equal(f.stored().enabled, true);
+    assert.equal(f.stored().devices[0].connection.password, '__EOS_SECRET_UNCHANGED__');
+});
+
+test('reload does not silently discard the pending device draft', async () => {
+    const f = await fixture();
+    f.draft().devices[0].name = 'Pending customer device'; f.changed();
+    const requests = f.requests.length;
+    await f.reload();
+    assert.equal(f.confirmations(), 1);
+    assert.equal(f.requests.length, requests);
+    assert.equal(f.loads(), 1);
+    assert.equal(f.draft().devices[0].name, 'Pending customer device');
+    await f.save();
+    assert.equal(f.stored().devices[0].name, 'Pending customer device');
 });

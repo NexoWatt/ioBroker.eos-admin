@@ -20,9 +20,14 @@ function translateAll() {
     let ready = false;
     let busy = false;
     let manualImportAllowed = false;
+    let dirty = false;
     /** @type {Readonly<Record<string, string>>} */
     const importMessages = Object.freeze({
         EOS_MODULE_NOT_READY: 'Die gespeicherte Modulkonfiguration ist noch nicht freigegeben oder konnte nicht geladen werden. Bitte den Status der Bestandsübernahme und das ioBroker-Protokoll prüfen; nach einer Lizenzaktivierung kann ein kontrollierter EOS-Neustart nötig sein.',
+        EOS_MODULE_MIGRATION_BLOCKED: 'Die Bestandsübernahme ist noch nicht freigegeben. Die vorhandenen Einstellungen bleiben geschützt. Bitte den Bestandsstatus öffnen, die dort genannte Ursache beheben und anschließend hier „Neu laden“ wählen.',
+        EOS_MODULE_CONFIG_UNAVAILABLE: 'Die gespeicherten Geräteeinstellungen konnten nicht gelesen werden. Es wird kein leerer Ersatz gespeichert. Verbindung und ioBroker-Protokoll prüfen und anschließend „Neu laden“ wählen.',
+        EOS_MODULE_CONFIG_STORE_INVALID: 'Der gespeicherte Gerätestand konnte nicht sicher geprüft werden. Die Bearbeitung ist gesperrt; bestehende Einstellungen bleiben erhalten. Bitte das ioBroker-Protokoll und die Sicherung prüfen.',
+        EOS_MODULE_CONFIG_DECRYPTION: 'Der gespeicherte Gerätestand konnte nicht entschlüsselt werden. Die Bearbeitung ist gesperrt; bestehende Einstellungen bleiben erhalten. Bitte den ursprünglichen ioBroker-Systemschlüssel und die Sicherung prüfen.',
         EOS_MODULE_IMPORT_REQUIRES_DISABLED: 'Für den manuellen Import muss das gespeicherte Gerätemodul deaktiviert sein. Haken bei „Gerätemodul aktivieren“ entfernen und „Speichern und übernehmen“ wählen. Für eine 1:1-Bestandsübernahme zuerst deren Status prüfen.',
         EOS_MODULE_IMPORT_ALREADY_MIGRATED: 'Die automatische Bestandsübernahme erhält bereits die ursprünglichen Datenpunkt-IDs. Ein erneuter manueller Import ist gesperrt. Bitte den Status der Bestandsübernahme prüfen.',
         EOS_MODULE_LEGACY_RUNNING: 'Der bisherige Geräteadapter läuft noch oder sein vollständiger Stopp ist nicht bestätigt. Für die 1:1-Übernahme bitte den Bestandsstatus prüfen; ein manueller Import benötigt eine bestätigte, deaktivierte alte Instanz.',
@@ -61,9 +66,15 @@ function translateAll() {
     }
     function changed() {
         if (ready && !busy) {
+            dirty = true;
             element('eosModuleSave').disabled = false;
             status('Ungespeicherte Änderungen.');
         }
+    }
+    function editorAvailability() {
+        element('eosModuleEnabled').disabled = busy || !ready;
+        element('eosDeviceEditor').inert = busy || !ready;
+        element('eosConfigurationHelp').hidden = ready;
     }
     async function request(suffix = '', options = {}) {
         // A login in another tab can legitimately rotate the HttpOnly session
@@ -72,6 +83,9 @@ function translateAll() {
         if (options.method && !['GET', 'HEAD'].includes(options.method)) {
             const session = await request();
             if (typeof session.csrfToken !== 'string' || !session.csrfToken) throw new Error('EOS_DEVICES_INVALID_RESPONSE');
+            if (options.method === 'PUT' && session.configurationReady === false) {
+                throw new Error(messageFor(session.configurationReason || 'EOS_MODULE_NOT_READY'));
+            }
             csrfToken = session.csrfToken;
         }
         const response = await fetch(endpoint + suffix, {
@@ -95,21 +109,26 @@ function translateAll() {
         ready = false;
         await load(result.config, value => { if (value) changed(); });
         ready = result.configurationReady !== false;
+        dirty = false;
+        editorAvailability();
         importAvailability(result);
         element('eosModuleSave').disabled = !ready;
         const moduleState = result.status?.active === true
             ? (result.status?.details?.state || 'running')
             : (result.status?.reason && result.status.reason !== 'RUNNING' ? result.status.reason : 'nicht aktiv');
-        status(`Gerätemodul: ${moduleState}. Gerätevorlagen werden lokal geladen.`);
+        status(ready ? `Gerätemodul: ${moduleState}. Gerätevorlagen werden lokal geladen.`
+            : `Gerätemodul: Konfiguration gesperrt. ${messageFor(result.configurationReason || 'EOS_MODULE_NOT_READY')}`, !ready);
     }
     async function action(callback) {
         if (busy) return;
         busy = true;
+        editorAvailability();
         for (const id of ['eosModuleSave', 'eosModuleReload', 'eosModuleImport']) element(id).disabled = true;
         try { await callback(); }
         catch (error) { status(error instanceof Error ? error.message : 'EOS_DEVICES_REQUEST_FAILED', true, error?.reauthenticate === true); }
         finally {
             busy = false;
+            editorAvailability();
             element('eosModuleReload').disabled = false;
             element('eosModuleSave').disabled = !ready;
             element('eosModuleImport').disabled = !ready || !manualImportAllowed;
@@ -125,13 +144,18 @@ function translateAll() {
     };
     document.addEventListener('DOMContentLoaded', () => {
         element('eosModuleEnabled').addEventListener('change', changed);
-        element('eosModuleReload').addEventListener('click', () => void action(reload));
+        element('eosModuleReload').addEventListener('click', () => {
+            if (dirty && !window.confirm('Ungespeicherte Änderungen verwerfen und den gespeicherten Gerätestand neu laden?')) return;
+            void action(reload);
+        });
         element('eosModuleSave').addEventListener('click', () => void action(async () => {
+            if (!ready) throw new Error(messageFor('EOS_MODULE_NOT_READY'));
             const edited = await new Promise(resolve => save(resolve));
             const config = { ...originalConfig, ...edited, enabled: element('eosModuleEnabled').checked };
             delete config.devicesJson;
             status('Konfiguration wird sicher gespeichert und übernommen …');
             await request('', { method: 'PUT', body: JSON.stringify({ config }) });
+            dirty = false;
             await reload();
         }));
         element('eosModuleImport').addEventListener('click', () => void action(async () => {

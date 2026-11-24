@@ -62,6 +62,7 @@ interface Window { NW_RUNTIME?: NexoWattRuntimeBase }
     let parsed: URL;
     try { parsed = new URL(value, document.baseURI || window.location.href); } catch { return value; }
     if (parsed.origin !== origin || parsed.username || parsed.password || !['http:', 'https:'].includes(parsed.protocol)) return value;
+    if (/^\/api\/auth\/(?:idle|activity|expire)$/.test(parsed.pathname)) return value;
     if (parsed.pathname === prefix || parsed.pathname.startsWith(prefix + '/')) return value;
     if (parsed.pathname === '/' && parsed.hash.startsWith('#tab-')) return origin + publicPath + parsed.search + parsed.hash;
     if (!runtimePath(parsed.pathname)) return value;

@@ -1,0 +1,329 @@
+[
+  {
+    "archive": "NexoWatt_EOS_9.0.10_FULL_REPOSITORY.zip",
+    "version": "9.0.10",
+    "archiveSha256": "f9b1afb0983ca292d552e6b90dec013b6110330df66fc1658f70860a4e3f1fa0",
+    "adminFiles": 348,
+    "installerAssets": [
+      {
+        "path": "ui/admin/react/assets/index-Bq5IupDw.js",
+        "sha256": "f73211150e035e301009925e379ae7746e50c666ee96148f1ba7f5660d0e8baa"
+      },
+      {
+        "path": "ui/admin/react/assets/index-CuquHlsY.css",
+        "sha256": "b0d51266b2e541f5a26c8319dc45cd44a682b02cbc9d96fd001f3793c8c3e459"
+      },
+      {
+        "path": "ui/admin/react/assets/nexowatt-192-43ZwQ44y.png",
+        "sha256": "7f93d65d9e1d795bf127e1af31d88d7468ccb70b026f98351d0abbc3f3bd4df6"
+      }
+    ]
+  },
+  {
+    "archive": "NexoWatt_EOS_9.0.11_FULL_REPOSITORY.zip",
+    "version": "9.0.11",
+    "archiveSha256": "b3db438a4de3f309cb2901b1f70569afd34c96bd3867774def439f63626845f1",
+    "adminFiles": 348,
+    "installerAssets": [
+      {
+        "path": "ui/admin/react/assets/index-Bq5IupDw.js",
+        "sha256": "f73211150e035e301009925e379ae7746e50c666ee96148f1ba7f5660d0e8baa"
+      },
+      {
+        "path": "ui/admin/react/assets/index-CuquHlsY.css",
+        "sha256": "b0d51266b2e541f5a26c8319dc45cd44a682b02cbc9d96fd001f3793c8c3e459"
+      },
+      {
+        "path": "ui/admin/react/assets/nexowatt-192-43ZwQ44y.png",
+        "sha256": "7f93d65d9e1d795bf127e1af31d88d7468ccb70b026f98351d0abbc3f3bd4df6"
+      }
+    ]
+  },
+  {
+    "archive": "NexoWatt_EOS_9.0.12_FULL_REPOSITORY.zip",
+    "version": "9.0.12",
+    "archiveSha256": "7b066525c9281acb12899f69f74c0cedbcd1ebebbce3d0cf01b840b7974a54a4",
+    "adminFiles": 348,
+    "installerAssets": [
+      {
+        "path": "ui/admin/react/assets/index-Bq5IupDw.js",
+        "sha256": "f73211150e035e301009925e379ae7746e50c666ee96148f1ba7f5660d0e8baa"
+      },
+      {
+        "path": "ui/admin/react/assets/index-CuquHlsY.css",
+        "sha256": "b0d51266b2e541f5a26c8319dc45cd44a682b02cbc9d96fd001f3793c8c3e459"
+      },
+      {
+        "path": "ui/admin/react/assets/nexowatt-192-43ZwQ44y.png",
+        "sha256": "7f93d65d9e1d795bf127e1af31d88d7468ccb70b026f98351d0abbc3f3bd4df6"
+      }
+    ]
+  },
+  {
+    "archive": "NexoWatt_EOS_9.0.6_FULL_REPOSITORY.zip",
+    "version": "9.0.6",
+    "archiveSha256": "bad276534a5482e4f9a716ffc9ba5ba2d811d421f25550f789c0014247fa5fd4",
+    "adminFiles": 348,
+    "installerAssets": [
+      {
+        "path": "ui/admin/react/assets/index-Bm4__n5R.js",
+        "sha256": "9cd5d39ab4a92133e19c87399b0b22c8f575346df227b693cdcd659520202fe7"
+      },
+      {
+        "path": "ui/admin/react/assets/index-CuquHlsY.css",
+        "sha256": "b0d51266b2e541f5a26c8319dc45cd44a682b02cbc9d96fd001f3793c8c3e459"
+      },
+      {
+        "path": "ui/admin/react/assets/nexowatt-192-43ZwQ44y.png",
+        "sha256": "7f93d65d9e1d795bf127e1af31d88d7468ccb70b026f98351d0abbc3f3bd4df6"
+      }
+    ]
+  },
+  {
+    "archive": "NexoWatt_EOS_9.0.7_FULL_REPOSITORY.zip",
+    "version": "9.0.7",
+    "archiveSha256": "c7bfe92eceb147f202724028ef15d89f5ee680f23841713cab02c8205af238c8",
+    "adminFiles": 348,
+    "installerAssets": [
+      {
+        "path": "ui/admin/react/assets/index-Bq5IupDw.js",
+        "sha256": "f73211150e035e301009925e379ae7746e50c666ee96148f1ba7f5660d0e8baa"
+      },
+      {
+        "path": "ui/admin/react/assets/index-CuquHlsY.css",
+        "sha256": "b0d51266b2e541f5a26c8319dc45cd44a682b02cbc9d96fd001f3793c8c3e459"
+      },
+      {
+        "path": "ui/admin/react/assets/nexowatt-192-43ZwQ44y.png",
+        "sha256": "7f93d65d9e1d795bf127e1af31d88d7468ccb70b026f98351d0abbc3f3bd4df6"
+      }
+    ]
+  },
+  {
+    "archive": "NexoWatt_EOS_9.0.8_FULL_REPOSITORY.zip",
+    "version": "9.0.8",
+    "archiveSha256": "ceb6b18e80eee2c83a1882d342b93952b81d0ef51129a3ab33f89a0f0b76cff4",
+    "adminFiles": 348,
+    "installerAssets": [
+      {
+        "path": "ui/admin/react/assets/index-Bq5IupDw.js",
+        "sha256": "f73211150e035e301009925e379ae7746e50c666ee96148f1ba7f5660d0e8baa"
+      },
+      {
+        "path": "ui/admin/react/assets/index-CuquHlsY.css",
+        "sha256": "b0d51266b2e541f5a26c8319dc45cd44a682b02cbc9d96fd001f3793c8c3e459"
+      },
+      {
+        "path": "ui/admin/react/assets/nexowatt-192-43ZwQ44y.png",
+        "sha256": "7f93d65d9e1d795bf127e1af31d88d7468ccb70b026f98351d0abbc3f3bd4df6"
+      }
+    ]
+  },
+  {
+    "archive": "NexoWatt_EOS_9.0.9_FULL_REPOSITORY.zip",
+    "version": "9.0.9",
+    "archiveSha256": "8b81046c969bb446a02c6489513561adde3df3d81c23840c8b82028f3d7b8b0d",
+    "adminFiles": 348,
+    "installerAssets": [
+      {
+        "path": "ui/admin/react/assets/index-Bq5IupDw.js",
+        "sha256": "f73211150e035e301009925e379ae7746e50c666ee96148f1ba7f5660d0e8baa"
+      },
+      {
+        "path": "ui/admin/react/assets/index-CuquHlsY.css",
+        "sha256": "b0d51266b2e541f5a26c8319dc45cd44a682b02cbc9d96fd001f3793c8c3e459"
+      },
+      {
+        "path": "ui/admin/react/assets/nexowatt-192-43ZwQ44y.png",
+        "sha256": "7f93d65d9e1d795bf127e1af31d88d7468ccb70b026f98351d0abbc3f3bd4df6"
+      }
+    ]
+  },
+  {
+    "archive": "NexoWatt_EOS_9.0.5_FULL_REPOSITORY.zip",
+    "version": "9.0.5",
+    "archiveSha256": "3413166f945ab46ad26519966ee4f4b93aed994dbcdaa9fb9ab471b0cfe02de0",
+    "adminFiles": 348,
+    "installerAssets": [
+      {
+        "path": "ui/admin/react/assets/index-CuquHlsY.css",
+        "sha256": "b0d51266b2e541f5a26c8319dc45cd44a682b02cbc9d96fd001f3793c8c3e459"
+      },
+      {
+        "path": "ui/admin/react/assets/index-fCXC5Pli.js",
+        "sha256": "6bbc2d0d228ef265aaa40193571206ffc113a5e16de1660673c797c75ab1e96a"
+      },
+      {
+        "path": "ui/admin/react/assets/nexowatt-192-43ZwQ44y.png",
+        "sha256": "7f93d65d9e1d795bf127e1af31d88d7468ccb70b026f98351d0abbc3f3bd4df6"
+      }
+    ]
+  },
+  {
+    "archive": "NexoWatt_EOS_Admin_8.0.2_SYSTEM_EXPERT_LICENSE_FULL_REPOSITORY.zip",
+    "version": "8.0.2",
+    "archiveSha256": "547de57a2d01415dfbd0d2bb8030ce4c2bcb9da6333c4b620cd4d54c4cdb6051",
+    "adminFiles": 347,
+    "installerAssets": []
+  },
+  {
+    "archive": "NexoWatt_EOS_9.0.0-alpha.1_FULL_REPOSITORY.zip",
+    "version": "9.0.0-alpha.1",
+    "archiveSha256": "df0d1eae8304cf36ff727a798c8a87a6374d6f1a13cd44bb7689e46eb975b643",
+    "adminFiles": 347,
+    "installerAssets": [
+      {
+        "path": "ui/admin/react/assets/index-CuquHlsY.css",
+        "sha256": "b0d51266b2e541f5a26c8319dc45cd44a682b02cbc9d96fd001f3793c8c3e459"
+      },
+      {
+        "path": "ui/admin/react/assets/index-fCXC5Pli.js",
+        "sha256": "6bbc2d0d228ef265aaa40193571206ffc113a5e16de1660673c797c75ab1e96a"
+      },
+      {
+        "path": "ui/admin/react/assets/nexowatt-192-43ZwQ44y.png",
+        "sha256": "7f93d65d9e1d795bf127e1af31d88d7468ccb70b026f98351d0abbc3f3bd4df6"
+      }
+    ]
+  },
+  {
+    "archive": "iobroker.eos-admin-9.0.1.tgz",
+    "version": "9.0.1",
+    "archiveSha256": "64e2a31aab1a47e7a6ca61d0588601c11e15255b534802fc81838076f359af89",
+    "adminFiles": 347,
+    "installerAssets": [
+      {
+        "path": "ui/admin/react/assets/index-CuquHlsY.css",
+        "sha256": "b0d51266b2e541f5a26c8319dc45cd44a682b02cbc9d96fd001f3793c8c3e459"
+      },
+      {
+        "path": "ui/admin/react/assets/index-fCXC5Pli.js",
+        "sha256": "6bbc2d0d228ef265aaa40193571206ffc113a5e16de1660673c797c75ab1e96a"
+      },
+      {
+        "path": "ui/admin/react/assets/nexowatt-192-43ZwQ44y.png",
+        "sha256": "7f93d65d9e1d795bf127e1af31d88d7468ccb70b026f98351d0abbc3f3bd4df6"
+      }
+    ]
+  },
+  {
+    "archive": "iobroker.eos-admin-9.0.2.tgz",
+    "version": "9.0.2",
+    "archiveSha256": "6f331ac4bdfb76d51a26049f7062ef48a77101aa1d4dc404920e080bab030067",
+    "adminFiles": 347,
+    "installerAssets": [
+      {
+        "path": "ui/admin/react/assets/index-CuquHlsY.css",
+        "sha256": "b0d51266b2e541f5a26c8319dc45cd44a682b02cbc9d96fd001f3793c8c3e459"
+      },
+      {
+        "path": "ui/admin/react/assets/index-fCXC5Pli.js",
+        "sha256": "6bbc2d0d228ef265aaa40193571206ffc113a5e16de1660673c797c75ab1e96a"
+      },
+      {
+        "path": "ui/admin/react/assets/nexowatt-192-43ZwQ44y.png",
+        "sha256": "7f93d65d9e1d795bf127e1af31d88d7468ccb70b026f98351d0abbc3f3bd4df6"
+      }
+    ]
+  },
+  {
+    "archive": "iobroker.eos-admin-9.0.3.tgz",
+    "version": "9.0.3",
+    "archiveSha256": "0c3983d39fa1b1ee0eca4ad09a41e5c3ac2600abec0e4aeb9c35b31b2a5f18a6",
+    "adminFiles": 347,
+    "installerAssets": [
+      {
+        "path": "ui/admin/react/assets/index-CuquHlsY.css",
+        "sha256": "b0d51266b2e541f5a26c8319dc45cd44a682b02cbc9d96fd001f3793c8c3e459"
+      },
+      {
+        "path": "ui/admin/react/assets/index-fCXC5Pli.js",
+        "sha256": "6bbc2d0d228ef265aaa40193571206ffc113a5e16de1660673c797c75ab1e96a"
+      },
+      {
+        "path": "ui/admin/react/assets/nexowatt-192-43ZwQ44y.png",
+        "sha256": "7f93d65d9e1d795bf127e1af31d88d7468ccb70b026f98351d0abbc3f3bd4df6"
+      }
+    ]
+  },
+  {
+    "archive": "iobroker.eos-admin-9.0.4.tgz",
+    "version": "9.0.4",
+    "archiveSha256": "e41b3b53b6d42247f79a530e305016407ee0a733077722dd687ec3158e31816b",
+    "adminFiles": 347,
+    "installerAssets": [
+      {
+        "path": "ui/admin/react/assets/index-CuquHlsY.css",
+        "sha256": "b0d51266b2e541f5a26c8319dc45cd44a682b02cbc9d96fd001f3793c8c3e459"
+      },
+      {
+        "path": "ui/admin/react/assets/index-fCXC5Pli.js",
+        "sha256": "6bbc2d0d228ef265aaa40193571206ffc113a5e16de1660673c797c75ab1e96a"
+      },
+      {
+        "path": "ui/admin/react/assets/nexowatt-192-43ZwQ44y.png",
+        "sha256": "7f93d65d9e1d795bf127e1af31d88d7468ccb70b026f98351d0abbc3f3bd4df6"
+      }
+    ]
+  },
+  {
+    "archive": "NexoWatt_EOS_9.0.13_FULL_REPOSITORY.zip",
+    "version": "9.0.13",
+    "archiveSha256": "bf168552b9d52ae7189cd5c92152f050a40d3bc95be8262d1dd7a864d2ab8b04",
+    "adminFiles": 348,
+    "installerAssets": [
+      {
+        "path": "ui/admin/react/assets/index-Bq5IupDw.js",
+        "sha256": "f73211150e035e301009925e379ae7746e50c666ee96148f1ba7f5660d0e8baa"
+      },
+      {
+        "path": "ui/admin/react/assets/index-CuquHlsY.css",
+        "sha256": "b0d51266b2e541f5a26c8319dc45cd44a682b02cbc9d96fd001f3793c8c3e459"
+      },
+      {
+        "path": "ui/admin/react/assets/nexowatt-192-43ZwQ44y.png",
+        "sha256": "7f93d65d9e1d795bf127e1af31d88d7468ccb70b026f98351d0abbc3f3bd4df6"
+      }
+    ]
+  },
+  {
+    "archive": "NexoWatt_EOS_9.0.14_FULL_REPOSITORY.zip",
+    "version": "9.0.14",
+    "archiveSha256": "d44d923e35900a40495bf4eed7cf3d5576b6dcbea7b2a1354a3cc4e7ebd69677",
+    "adminFiles": 348,
+    "installerAssets": [
+      {
+        "path": "ui/admin/react/assets/index-Bq5IupDw.js",
+        "sha256": "f73211150e035e301009925e379ae7746e50c666ee96148f1ba7f5660d0e8baa"
+      },
+      {
+        "path": "ui/admin/react/assets/index-CuquHlsY.css",
+        "sha256": "b0d51266b2e541f5a26c8319dc45cd44a682b02cbc9d96fd001f3793c8c3e459"
+      },
+      {
+        "path": "ui/admin/react/assets/nexowatt-192-43ZwQ44y.png",
+        "sha256": "7f93d65d9e1d795bf127e1af31d88d7468ccb70b026f98351d0abbc3f3bd4df6"
+      }
+    ]
+  },
+  {
+    "archive": "NexoWatt_EOS_9.0.15_FULL_REPOSITORY.zip",
+    "version": "9.0.15",
+    "archiveSha256": "a8d079e3dff1111543ac192b6bb97fc212a63c97fe5d13f01faf61089c6b985f",
+    "adminFiles": 358,
+    "installerAssets": [
+      {
+        "path": "ui/admin/react/assets/index-Bq5IupDw.js",
+        "sha256": "f73211150e035e301009925e379ae7746e50c666ee96148f1ba7f5660d0e8baa"
+      },
+      {
+        "path": "ui/admin/react/assets/index-CuquHlsY.css",
+        "sha256": "b0d51266b2e541f5a26c8319dc45cd44a682b02cbc9d96fd001f3793c8c3e459"
+      },
+      {
+        "path": "ui/admin/react/assets/nexowatt-192-43ZwQ44y.png",
+        "sha256": "7f93d65d9e1d795bf127e1af31d88d7468ccb70b026f98351d0abbc3f3bd4df6"
+      }
+    ]
+  }
+]

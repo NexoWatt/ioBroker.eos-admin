@@ -58,6 +58,8 @@ export function isHttpsRuntimeProxy(req: ProxyHtmlRequest, namespace: string): b
 }
 
 function rewriteUrl(value: string, prefix: string): string {
+  // The unified owner serves one idle client for every page, outside the UI proxy.
+  if (value === '/eos-session-idle.js' || (value.startsWith('/eos-session-idle.js?') && !value.includes('#'))) return value;
   if (!value.startsWith('/') || value.startsWith('//') || value === prefix || value.startsWith(prefix + '/')) return value;
   if (value.startsWith('/#tab-nexowatt-ui-')) return prefix.slice(0, prefix.lastIndexOf('/proxy/')) + value;
   return prefix + value;

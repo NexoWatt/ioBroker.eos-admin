@@ -30,8 +30,8 @@ Parameter sind die Namen aus der Signatur, keine geratenen Datenverträge. Die A
 | --- | --- | --- |
 | [`runtimeProxyPrefix`](../../../../../src-ts/runtime-executables/lib/runtime-proxy-html.ts#L40) | req, namespace | publicPath.slice, segments.some, value.endsWith, value.slice, value.startsWith |
 | [`isHttpsRuntimeProxy`](../../../../../src-ts/runtime-executables/lib/runtime-proxy-html.ts#L56) | req, namespace | runtimeProxyPrefix |
-| [`rewriteUrl`](../../../../../src-ts/runtime-executables/lib/runtime-proxy-html.ts#L60) | value, prefix | prefix.lastIndexOf, prefix.slice, value.startsWith |
-| [`rewriteTag`](../../../../../src-ts/runtime-executables/lib/runtime-proxy-html.ts#L66) | tag, prefix | tag.replace |
-| [`rewriteRuntimeProxyHtml`](../../../../../src-ts/runtime-executables/lib/runtime-proxy-html.ts#L72) | html, prefix, wwwBase | Buffer.byteLength, chunks.join, chunks.push, chunks.splice, html.charAt, html.indexOf, html.slice, html.startsWith, html.toLowerCase, lower.charAt, lower.indexOf, prefix.lastIndexOf, prefix.slice, rewriteTag (weitere in der Quelle) |
-| [`createRuntimeFileSender`](../../../../../src-ts/runtime-executables/lib/runtime-proxy-html.ts#L122) | root, namespace | path.resolve |
-| [`contained`](../../../../../src-ts/runtime-executables/lib/runtime-proxy-html.ts#L126) | file, directory | file.startsWith |
+| [`rewriteUrl`](../../../../../src-ts/runtime-executables/lib/runtime-proxy-html.ts#L60) | value, prefix | prefix.lastIndexOf, prefix.slice, value.includes, value.startsWith |
+| [`rewriteTag`](../../../../../src-ts/runtime-executables/lib/runtime-proxy-html.ts#L68) | tag, prefix | tag.replace |
+| [`rewriteRuntimeProxyHtml`](../../../../../src-ts/runtime-executables/lib/runtime-proxy-html.ts#L74) | html, prefix, wwwBase | Buffer.byteLength, chunks.join, chunks.push, chunks.splice, html.charAt, html.indexOf, html.slice, html.startsWith, html.toLowerCase, lower.charAt, lower.indexOf, prefix.lastIndexOf, prefix.slice, rewriteTag (weitere in der Quelle) |
+| [`createRuntimeFileSender`](../../../../../src-ts/runtime-executables/lib/runtime-proxy-html.ts#L124) | root, namespace | path.resolve |
+| [`contained`](../../../../../src-ts/runtime-executables/lib/runtime-proxy-html.ts#L128) | file, directory | file.startsWith |

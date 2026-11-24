@@ -29,5 +29,5 @@ Parameter sind die Namen aus der Signatur, keine geratenen Datenverträge. Die A
 | [`proxyContext`](../../../../../src-ts/runtime-executables/www/runtime-base.ts#L32) | – | initialPath.match, initialPath.split, initialPath.startsWith, segments.at, segments.slice |
 | [`runtimePath`](../../../../../src-ts/runtime-executables/www/runtime-base.ts#L56) | path | – |
 | [`url`](../../../../../src-ts/runtime-executables/www/runtime-base.ts#L59) | value | parsed.hash.startsWith, parsed.pathname.startsWith, runtimePath, value.includes, value.startsWith |
-| [`pathname`](../../../../../src-ts/runtime-executables/www/runtime-base.ts#L75) | – | current.slice, current.startsWith |
-| [`adminBase`](../../../../../src-ts/runtime-executables/www/runtime-base.ts#L79) | – | – |
+| [`pathname`](../../../../../src-ts/runtime-executables/www/runtime-base.ts#L76) | – | current.slice, current.startsWith |
+| [`adminBase`](../../../../../src-ts/runtime-executables/www/runtime-base.ts#L80) | – | – |

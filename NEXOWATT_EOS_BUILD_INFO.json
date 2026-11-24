@@ -1,22 +1,23 @@
 {
-  "version": "9.0.15",
+  "version": "9.0.16",
   "channel": "next",
   "baseFrontend": "Rebuilt from official Admin 8.3.5 sources plus reviewed EOS integration using React 19 and Vite; see source-bound frontend manifest.",
   "runtimeEntry": "vite-manifest",
-  "releaseType": "unified-smartphone-icon-and-migration-navigation",
-  "release": "unified-smartphone-icon-and-migration-navigation",
-  "label": "9.0.15",
+  "releaseType": "unified-device-save-settings-preservation-publish-idle",
+  "release": "unified-device-save-settings-preservation-publish-idle",
+  "label": "9.0.16",
   "notes": [
     "Preserves the existing ioBroker Admin and the combined EOS login/runtime.",
     "One central NWL3 activation, private persistence and authorized public-key recovery.",
     "Manufacturer vault/private keys stay on the issuer computer; live-device acceptance remains required."
   ],
   "changes": [
-    "Use the supplied original PNG as the Apple home-screen icon and 1024px manifest icon",
-    "Unify manifest discovery and app identity across the EOS dashboard, login and system console",
-    "Remove duplicate icon references and retain existing Android-sized and maskable icons",
-    "Preserve existing authentication, license, migration, EMS and network-only behavior",
-    "Expose clearly named administrator-only legacy migration entry in console and settings"
+    "Recognize byte-verified obsolete Installer assets when a delivered repository ZIP is copied over earlier versions",
+    "Preserve current source integrity and quarantine all recognized extras only after complete validation",
+    "Expire inactive website sessions after ten minutes; background polling and status updates do not renew activity",
+    "Preserve app icon, migration navigation, central licensing and autonomous EMS operation",
+    "Preserve valid saved Installer/EMS configuration, StorageFarm assignments, disabled PV AI and flow display states during startup; reject read failures without writing defaults",
+    "Load protected device configuration before editing independently of operational startup; preserve drafts, explain blocked migration and retain existing device configuration across restart"
   ],
   "brandingCacheVersion": 7110,
   "shellCacheVersion": 7110,
@@ -30,7 +31,7 @@
     "commit": "6f77eedf525813a7a61d79188d1ff05dffd05086"
   },
   "product": "NexoWatt EOS",
-  "status": "9.0.15 integration test release; physical smartphone acceptance remains required",
+  "status": "9.0.16 integration test release; release evidence and target-device acceptance remain separate",
   "sourceComponents": {
     "admin": "8.0.2",
     "ui": "1.0.38",

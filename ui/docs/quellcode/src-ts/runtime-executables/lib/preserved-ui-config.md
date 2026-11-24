@@ -31,4 +31,5 @@ Parameter sind die Namen aus der Signatur, keine geratenen Datenverträge. Die A
 | [`parseState`](../../../../../src-ts/runtime-executables/lib/preserved-ui-config.ts#L31) | id, object, state, required | Buffer.byteLength, JSON.parse, arrayFields, failure, record, state.val.trim, visit |
 | [`visit`](../../../../../src-ts/runtime-executables/lib/preserved-ui-config.ts#L44) | value, depth | Object.entries, failure, visit |
 | [`arrayFields`](../../../../../src-ts/runtime-executables/lib/preserved-ui-config.ts#L53) | value, fields | Array.isArray, failure |
-| [`readPreservedUiStates`](../../../../../src-ts/runtime-executables/lib/preserved-ui-config.ts#L70) | reader, namespace, requiredStates | Array.isArray, Object.fromEntries, PRESERVED_UI_STATE_IDS.map, Promise.all, Promise.race, clearTimeout, failure, requiredStates.some, rows.filter |
+| [`parseInstallerConfigState`](../../../../../src-ts/runtime-executables/lib/preserved-ui-config.ts#L72) | state | failure, parseState |
+| [`readPreservedUiStates`](../../../../../src-ts/runtime-executables/lib/preserved-ui-config.ts#L80) | reader, namespace, requiredStates | Array.isArray, Object.fromEntries, PRESERVED_UI_STATE_IDS.map, Promise.all, Promise.race, clearTimeout, failure, requiredStates.some, rows.filter |

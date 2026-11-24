@@ -1,0 +1,28 @@
+✔ restart/update preserves valid saved assignments including intentional empty values: {} (59.999343ms)
+✔ restart/update preserves valid saved assignments including intentional empty values: datapoints,settingsConfig,smartHomeConfig (11.508151ms)
+✔ restart/update preserves valid saved assignments including intentional empty values: datapoints,settingsConfig,storageFarm (11.064929ms)
+✔ unavailable or invalid saved installer data cannot become defaults or overwrite a backup (19.418649ms)
+✔ only a confirmed missing installer state permits matching-instance recovery; failed writes do not update backups (14.317274ms)
+✔ customer flow settings and disabled PV AI survive startup defaults; explicit settings saves still apply (7.881486ms)
+✔ unreadable StorageFarm assignments never get replaced by empty defaults (4.895873ms)
+✔ automatic missing-state recovery prefers current backup and rejects corrupt existing backups or unreadable storage (4.618134ms)
+✔ configuration startup failures close the hosted runtime rather than leave writable default configuration (4.608691ms)
+✔ new flow states initialize from the saved installer settings after hydration, not earlier package defaults (12.943492ms)
+✔ migrated UI keeps original name/instance0 and state IDs; revoked localwrites cannot bypass shared ownership (8.656415ms)
+✔ migrated UI protects original credential states without widening its exact ID allowlist (815.580703ms)
+✔ migrated SmartHome hydrates current building, assignments, scenes, timers and logic without changing native enabled (50.491595ms)
+✔ migrated SmartHome hydrates current building, assignments, scenes, timers and logic without changing native disabled (8.182388ms)
+✔ migrated UI accepts only its owner private EEBus capability, never a foreign owner source (2.182481ms)
+✔ preserved UI rejects damaged, unsafe and oversized JSON without reflecting values (6.719456ms)
+✔ absent optional timers and their original empty defaults remain valid; known lost data blocks (2.226776ms)
+✔ unavailable database and timeout fail with fixed errors before a migration can continue (5002.582211ms)
+✔ migrated runtime never hydrates global userdata from a different old UI instance (77.608765ms)
+✔ migrated runtime rejects damaged installer, timer and clock data before replacing active configuration (18.69186ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5987.315186

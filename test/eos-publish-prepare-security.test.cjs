@@ -101,6 +101,46 @@ for (const invalid of ['../outside.js', '/absolute.js', 'adminWww/assets/../outs
     });
 }
 
+for (const outsideScope of ['ui/admin/react/local-settings.json', 'ui/src-admin-tab/src/customer.js', 'ui/admin/react/assets-other/file.js', 'admin/custom/assets/customer.js']) {
+    test('extending installer support does not authorize other catalogue paths: ' + outsideScope, t => {
+        const f = fixture(t); f.inventory.files[outsideScope] = [sha('custom data')]; f.seal();
+        f.write(oldName, f.oldBytes); f.write(outsideScope, 'custom data');
+        refusesWithoutMutation(f, f.prepare);
+        assert.deepEqual(fs.readFileSync(path.join(f.root, oldName)), f.oldBytes);
+        assert.equal(fs.readFileSync(path.join(f.root, outsideScope), 'utf8'), 'custom data');
+    });
+}
+
+test('dangling installer symlinks are rejected before a known old admin file is moved', t => {
+    const f = fixture(t); f.write(oldName, f.oldBytes);
+    fs.mkdirSync(path.join(f.root, 'ui/admin/react/assets'), { recursive: true });
+    const link = path.join(f.root, 'ui/admin/react/assets/unlisted.js');
+    try { fs.symlinkSync(path.join(f.parent, 'absent-target'), link); } catch (error) { if (error.code === 'EPERM') { t.skip('symlink creation not permitted on this platform'); return; } throw error; }
+    refusesWithoutMutation(f, f.prepare);
+    assert.equal(fs.lstatSync(link).isSymbolicLink(), true);
+    assert.deepEqual(fs.readFileSync(path.join(f.root, oldName)), f.oldBytes);
+});
+
+test('an installer parent link cannot hide behind an absent compiled build directory', t => {
+    const f = fixture(t); f.write(oldName, f.oldBytes);
+    const external = path.join(f.parent, 'external-ui'); fs.mkdirSync(external);
+    try { fs.symlinkSync(external, path.join(f.root, 'ui'), 'junction'); } catch (error) { if (error.code === 'EPERM') { t.skip('directory symlink creation not permitted on this platform'); return; } throw error; }
+    const before = f.siblings();
+    refusesWithoutMutation(f, f.prepare);
+    assert.deepEqual(f.siblings(), before);
+    assert.deepEqual(fs.readFileSync(path.join(f.root, oldName)), f.oldBytes);
+});
+
+test('known installer hardlinks are rejected without moving any admin files', t => {
+    const f = fixture(t); const installerName = 'ui/admin/react/assets/index-Bm4__n5R.js';
+    f.inventory.files[installerName] = [sha(f.oldBytes)]; f.seal();
+    f.write(oldName, f.oldBytes); f.write(installerName, f.oldBytes);
+    const other = path.join(f.parent, 'external-installer.js'); fs.linkSync(path.join(f.root, installerName), other);
+    refusesWithoutMutation(f, f.prepare);
+    assert.deepEqual(fs.readFileSync(path.join(f.root, oldName)), f.oldBytes);
+    assert.deepEqual(fs.readFileSync(other), f.oldBytes);
+});
+
 test('dangling obsolete symlink is rejected instead of becoming an invisible extra', t => {
     const f = fixture(t); const file = path.join(f.root, oldName);
     try { fs.symlinkSync(path.join(f.parent, 'absent-target'), file); } catch (error) { if (error.code === 'EPERM') { t.skip('symlink creation not permitted on this platform'); return; } throw error; }

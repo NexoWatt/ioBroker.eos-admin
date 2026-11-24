@@ -12,7 +12,7 @@ const project = path.resolve(__dirname, '..');
 const SEAL = 'release-manifests/unified/files.json';
 const CATALOG = 'release-manifests/unified/obsolete-admin-assets.json';
 const hash = data => crypto.createHash('sha256').update(data).digest('hex');
-function fixture(t, extra = { 'adminWww/assets/old-001.js': 'console.log("old one");\n' }) {
+function fixture(t, extra = { 'adminWww/assets/old-001.js': 'console.log("old one");\n' }, currentOverrides = {}) {
     const parent = fs.mkdtempSync(path.join(os.tmpdir(), 'eos-publish-prepare-'));
     const root = path.join(parent, 'Repo mit Leerzeichen'); fs.mkdirSync(root);
     t.after(() => fs.rmSync(parent, { recursive: true, force: true }));
@@ -23,9 +23,12 @@ function fixture(t, extra = { 'adminWww/assets/old-001.js': 'console.log("old on
         'package.json': JSON.stringify({ name: 'iobroker.eos-admin', version: '9.0.13' }),
         'adminWww/index.html': '<script src="./assets/current-CURRENT.js"></script>',
         'adminWww/assets/current-CURRENT.js': 'console.log("current");\n',
+        'ui/admin/react/index.html': '<script src="./assets/installer-CURRENT.js"></script>',
+        'ui/admin/react/assets/installer-CURRENT.js': 'console.log("current installer");\n',
         'tools/eos-prepare-publish.cjs': fs.readFileSync(path.join(project, 'tools/eos-prepare-publish.cjs')),
         'tools/eos-release-manifest.cjs': manifestSource,
         [CATALOG]: JSON.stringify({ schema: 1, algorithm: 'SHA-256', files: Object.fromEntries(Object.entries(extra).map(([name, data]) => [name, [hash(data)]])) }),
+        ...currentOverrides,
     };
     for (const [name, data] of Object.entries(current)) write(name, data);
     write(SEAL, JSON.stringify({ schema: 1, algorithm: 'SHA-256', version: '9.0.13', files: Object.fromEntries(Object.entries(current).map(([name, data]) => [name, hash(data)])) }));
@@ -69,6 +72,74 @@ test('repeating npm preparation is a no-op and does not create more backups', t 
     const f = fixture(t); f.copyExtras(); const first = preparePublish({ root: f.root }); const second = preparePublish({ root: f.root });
     assert.equal(f.backups().length, 1); assert.equal(second.backupDir, null); assert.deepEqual(second.quarantined, []);
     assert.ok(fs.existsSync(first.backupDir)); sameCurrent(f);
+});
+
+test('copying over older admin and installer bundles quarantines every known extra together', t => {
+    // Dateinamen des gemeldeten 9.0.6-Rests und des 9.0.0–9.0.5-Rests;
+    // synthetische Inhalte für den isolierten Dateisystemtest, keine echten UI-Bundles.
+    const f = fixture(t, {
+        'adminWww/assets/old-001.js': 'old admin',
+        'ui/admin/react/assets/index-Bm4__n5R.js': 'old installer 9.0.6',
+        'ui/admin/react/assets/index-fCXC5Pli.js': 'old installer before 9.0.6',
+    });
+    f.copyExtras(); const result = preparePublish({ root: f.root });
+    assert.deepEqual(result.quarantined.sort(), Object.keys(f.extra).sort());
+    assert.equal(path.dirname(result.backupDir), f.parent);
+    for (const [relative, data] of Object.entries(f.extra)) {
+        assert.equal(fs.existsSync(path.join(f.root, relative)), false);
+        assert.equal(fs.readFileSync(path.join(result.backupDir, relative), 'utf8'), data);
+    }
+    sameCurrent(f);
+    assert.equal(preparePublish({ root: f.root }).backupDir, null);
+});
+
+test('delivered catalogue records the reported installer bytes and their sealed archive provenance', () => {
+    const catalogue = JSON.parse(fs.readFileSync(path.join(project, CATALOG), 'utf8'));
+    assert.deepEqual(catalogue.files['ui/admin/react/assets/index-Bm4__n5R.js'], ['9cd5d39ab4a92133e19c87399b0b22c8f575346df227b693cdcd659520202fe7']);
+    const release6 = catalogue.sources.find(item => item.version === '9.0.6');
+    assert.equal(release6.archive, 'NexoWatt_EOS_9.0.6_FULL_REPOSITORY.zip');
+    assert.equal(release6.archiveSha256, 'bad276534a5482e4f9a716ffc9ba5ba2d811d421f25550f789c0014247fa5fd4');
+    assert.equal(release6.installerAssetFiles, 3);
+    assert.equal(release6.matchedSealedInstallerAssetFiles, 3);
+    const release15 = catalogue.sources.find(item => item.version === '9.0.15');
+    assert.equal(release15.archiveSha256, 'a8d079e3dff1111543ac192b6bb97fc212a63c97fe5d13f01faf61089c6b985f');
+    assert.equal(release15.adminFiles, release15.matchedSealedFiles);
+    assert.equal(release15.installerAssetFiles, release15.matchedSealedInstallerAssetFiles);
+    assert.equal(Object.keys(catalogue.files).filter(name => !name.startsWith('adminWww/') && !name.startsWith('ui/admin/react/assets/')).length, 0);
+});
+
+test('a known obsolete installer with changed bytes blocks all admin and installer cleanup', t => {
+    const f = fixture(t, { 'adminWww/assets/old-001.js': 'old admin', 'ui/admin/react/assets/index-Bm4__n5R.js': 'known installer' });
+    f.copyExtras(); f.write('ui/admin/react/assets/index-Bm4__n5R.js', 'unreviewed installer');
+    assert.throws(() => preparePublish({ root: f.root }), { code: 'EOS_PUBLISH_EXTRA_CHANGED' });
+    assert.equal(f.backups().length, 0); assert.equal(f.read('adminWww/assets/old-001.js'), 'old admin');
+    assert.equal(f.read('ui/admin/react/assets/index-Bm4__n5R.js'), 'unreviewed installer'); sameCurrent(f);
+});
+
+test('unknown installer assets are preserved and reject the entire preparation before backups', t => {
+    const f = fixture(t, { 'adminWww/assets/old-001.js': 'old admin', 'ui/admin/react/assets/index-Bm4__n5R.js': 'known installer' });
+    f.copyExtras(); f.write('ui/admin/react/assets/zz-customer.js', 'customer code');
+    assert.throws(() => preparePublish({ root: f.root }), { code: 'EOS_PUBLISH_EXTRA_UNKNOWN' });
+    assert.equal(f.backups().length, 0);
+    for (const [relative, data] of Object.entries(f.extra)) assert.equal(f.read(relative), data);
+    assert.equal(f.read('ui/admin/react/assets/zz-customer.js'), 'customer code'); sameCurrent(f);
+});
+
+test('a changed current installer prevents cleanup even when the old installer matches its catalogue', t => {
+    const f = fixture(t, { 'ui/admin/react/assets/index-Bm4__n5R.js': 'known installer' });
+    f.copyExtras(); f.write('ui/admin/react/assets/installer-CURRENT.js', 'changed current installer');
+    assert.throws(() => preparePublish({ root: f.root }), { code: 'EOS_PUBLISH_CURRENT_CHANGED' });
+    assert.equal(f.backups().length, 0); assert.equal(f.read('ui/admin/react/assets/index-Bm4__n5R.js'), 'known installer');
+    assert.deepEqual(f.seal(), f.originalSeal);
+});
+
+test('a current installer HTML reference prevents removal of the referenced historical bundle', t => {
+    const f = fixture(t, { 'ui/admin/react/assets/index-Bm4__n5R.js': 'known installer' }, {
+        'ui/admin/react/index.html': '<script src="./assets/index-Bm4__n5R.js"></script>',
+    });
+    f.copyExtras();
+    assert.throws(() => preparePublish({ root: f.root }), { code: 'EOS_PUBLISH_ASSET_REFERENCED' });
+    assert.equal(f.backups().length, 0); assert.equal(f.read('ui/admin/react/assets/index-Bm4__n5R.js'), 'known installer'); sameCurrent(f);
 });
 
 test('all extras are classified before any mutation, including unrelated tracked source additions', t => {
@@ -127,7 +198,7 @@ test('a current source changed after backup makes the final gate fail and rolls 
 test('CLI works offline from a copied directory containing spaces and rejects flags', t => {
     const f = fixture(t); f.copyExtras(); const helper = path.join(f.root, 'tools/eos-prepare-publish.cjs');
     const result = spawnSync(process.execPath, [helper], { cwd: f.root, encoding: 'utf8' });
-    assert.equal(result.status, 0, result.stderr); assert.match(result.stdout, /1 bestätigte alte Admin-Dateien gesichert/);
+    assert.equal(result.status, 0, result.stderr); assert.match(result.stdout, /1 bestätigte alte Admin-\/Installer-Dateien gesichert/);
     const rejected = spawnSync(process.execPath, [helper, '--force'], { cwd: f.root, encoding: 'utf8' });
     assert.equal(rejected.status, 1); assert.match(rejected.stderr, /EOS_PUBLISH_ARGUMENTS/); sameCurrent(f);
 });

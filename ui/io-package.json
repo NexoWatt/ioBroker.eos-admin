@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "nexowatt-ui",
-    "version": "9.0.15",
+    "version": "9.0.16",
     "news": {
+      "9.0.16": {
+        "de": "Geräte speichern und vorhandene Einstellungen beim Start erhalten; alte Installer-Dateien für npm-Publish sichern; Abmeldung nach zehn Minuten ohne Bedienung.",
+        "en": "Fix device saving and preserve settings during startup; quarantine old Installer files for npm publishing; log out after ten idle minutes."
+      },
       "9.0.11": {
         "en": "Bounded startup recovery for legacy handover; confirmed shutdown before rollback and blocked late operational starts. Verified tarball publishing workflow for Windows.",
         "de": "Übernahme mit begrenzter Startüberwachung und bestätigtem Stopp vor dem Rückfall; verspätete Betriebsstarts gesperrt. Geprüfter TGZ-Veröffentlichungsweg für Windows."

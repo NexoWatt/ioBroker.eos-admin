@@ -67,6 +67,16 @@ function parseState(id: StateId, object: unknown, state: unknown, required: bool
     return parsed;
 }
 
+/** Validiert den vorhandenen eigenen Installer-State vor jeder Start-Hydration.
+ * Der Aufrufer behandelt ausschließlich fehlende States als Erstinitialisierung. */
+export function parseInstallerConfigState(state: unknown): JsonRecord {
+    try {
+        const parsed = parseState('installer.configJson', null, state, true);
+        if (!parsed) throw failure('EOS_UI_CONFIG_INVALID');
+        return parsed;
+    } catch { throw failure('EOS_UI_CONFIG_INVALID'); }
+}
+
 export async function readPreservedUiStates(reader: Reader, namespace: string, requiredStates: unknown = []): Promise<{
     values: Record<StateId, JsonRecord | null>; requiredStates: StateId[];
 }> {

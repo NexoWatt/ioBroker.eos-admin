@@ -100,6 +100,8 @@ class EosModuleHost {
         this.running = false;
         this.initialized = false;
         this.startPromise = null;
+        this.configurationLoadPromise = null;
+        this.configurationSavePromise = null;
         this.entries = new Map();
         this.pending = null;
         this.mutation = false;
@@ -120,7 +122,9 @@ class EosModuleHost {
         return this.options.factories?.[id] || require(join(this.options.baseDir, 'modules', id, 'index.js'));
     }
     readConfig(id) {
-        const envelope = this.owner.config.eosModules?.[id];
+        return this.decodeConfig(id, this.owner.config.eosModules?.[id]);
+    }
+    decodeConfig(id, envelope) {
         if (envelope == null)
             return this.factory(id).validateConfig({ enabled: false });
         if (!isRecord(envelope) || envelope.v !== 1 || typeof envelope.encrypted !== 'string') {
@@ -129,8 +133,66 @@ class EosModuleHost {
         const config = assertJson(JSON.parse(this.owner.decrypt(envelope.encrypted)));
         return this.factory(id).validateConfig(config);
     }
+    // The authenticated configuration shell must read the real saved settings even
+    // while operational startup is fenced. This does not subscribe, start modules,
+    // claim ownership or write the instance/configuration objects.
+    async loadForEditing(id) {
+        if (this.configurationLoadPromise)
+            await this.configurationLoadPromise;
+        const entry = this.entries.get(id);
+        if (!entry)
+            throw fail('EOS_MODULE_UNKNOWN');
+        const startupAllowed = this.owner.eosMigration?.allowsStartup?.();
+        if ((entry.configLoaded && entry.configurationStartupAllowed === startupAllowed) ||
+            this.initialized || this.stopped || this.mutation || this.startPromise)
+            return;
+        this.mutation = true;
+        this.configurationLoadPromise = (async () => {
+            try {
+                const envelope = await bounded(this.configStore.load(id));
+                if (this.stopped)
+                    return;
+                const config = this.decodeConfig(id, envelope);
+                entry.config = config;
+                entry.loadedEnvelope = envelope;
+                entry.configLoaded = true;
+                entry.configurationStartupAllowed = startupAllowed;
+                entry.configurationError = '';
+            }
+            catch (error) {
+                entry.configLoaded = false;
+                entry.configurationError = typeof error?.code === 'string' ? error.code : 'EOS_MODULE_CONFIG_UNAVAILABLE';
+            }
+            finally {
+                this.mutation = false;
+            }
+        })();
+        try {
+            await this.configurationLoadPromise;
+        }
+        finally {
+            this.configurationLoadPromise = null;
+        }
+    }
+    configurationReason(id) {
+        const entry = this.entries.get(id);
+        if (!entry)
+            throw fail('EOS_MODULE_UNKNOWN');
+        if (this.stopped)
+            return 'EOS_MODULE_BUSY';
+        if (!entry?.configLoaded)
+            return entry?.configurationError || 'EOS_MODULE_NOT_READY';
+        const migration = this.owner.eosMigration;
+        // An unfinished handover may still write its target. Never accept a draft
+        // into that target before the coordinator has released startup.
+        if (migration?.allowsStartup?.() === false)
+            return 'EOS_MODULE_MIGRATION_BLOCKED';
+        if (!this.initialized && migration?.allowsStartup?.() !== true)
+            return 'EOS_MODULE_NOT_READY';
+        return '';
+    }
     namespace(id) {
-        const migrated = this.owner.config.eosModules?.[id]?.migration;
+        const migrated = this.entries.get(id)?.loadedEnvelope?.migration || this.owner.config.eosModules?.[id]?.migration;
         if (migrated?.preserveNamespace === true &&
             typeof migrated.source === 'string' && new RegExp(`^${MODULES[id]}\\.\\d+$`).test(migrated.source)) {
             return migrated.source;
@@ -505,6 +567,13 @@ class EosModuleHost {
     async start() {
         if (this.startPromise)
             return this.startPromise;
+        while (this.configurationLoadPromise || this.configurationSavePromise) {
+            // The accepted save owns its error response. Startup independently
+            // loads the authoritative store afterwards, including after rejection.
+            await (this.configurationLoadPromise || this.configurationSavePromise).then(() => undefined, () => undefined);
+        }
+        if (this.startPromise)
+            return this.startPromise;
         if (this.stopped)
             return;
         if (this.mutation)
@@ -523,11 +592,15 @@ class EosModuleHost {
                         if (envelope)
                             this.owner.config.eosModules = { ...this.owner.config.eosModules, [entry.id]: envelope };
                         entry.config = this.readConfig(entry.id);
+                        entry.loadedEnvelope = envelope;
                         entry.configLoaded = true;
+                        entry.configurationError = '';
                     }
-                    catch {
+                    catch (error) {
                         entry.failed = true;
+                        entry.configLoaded = false;
                         entry.reason = 'CONFIG_INVALID';
+                        entry.configurationError = typeof error?.code === 'string' ? error.code : 'EOS_MODULE_CONFIG_UNAVAILABLE';
                     }
                     const name = MODULES[entry.id];
                     await bounded(this.owner.subscribeForeignObjectsAsync(`system.adapter.${name}.*`));
@@ -595,17 +668,20 @@ class EosModuleHost {
             namespace: id === 'devices' ? `${this.namespace(id)}.devices` : this.namespace(id) };
     }
     async view(id) {
+        await this.loadForEditing(id);
         const entry = this.entries.get(id);
         if (!entry)
             throw fail('EOS_MODULE_UNKNOWN');
-        return { id, config: redact(entry.config), configurationReady: this.initialized && entry.configLoaded && !this.stopped, status: await this.status(id),
-            manualImport: this.manualImportStatus(id), migration: this.owner.config.eosModules?.[id]?.migration || null };
+        const reason = this.configurationReason(id);
+        return { id, config: redact(entry.config), configurationReady: !reason, configurationLoaded: entry.configLoaded,
+            configurationReason: reason, status: await this.status(id),
+            manualImport: this.manualImportStatus(id), migration: entry.loadedEnvelope?.migration || this.owner.config.eosModules?.[id]?.migration || null };
     }
     manualImportStatus(id) {
         const entry = this.entries.get(id);
         if (!entry)
             throw fail('EOS_MODULE_UNKNOWN');
-        const migration = this.owner.config.eosModules?.[id]?.migration;
+        const migration = entry.loadedEnvelope?.migration || this.owner.config.eosModules?.[id]?.migration;
         const reason = this.stopped ? 'EOS_MODULE_BUSY'
             : !this.initialized || !entry.configLoaded ? 'EOS_MODULE_NOT_READY'
                 : migration?.preserveNamespace === true ? 'EOS_MODULE_IMPORT_ALREADY_MIGRATED'
@@ -614,8 +690,9 @@ class EosModuleHost {
         return { allowed: !reason, reason };
     }
     async save(id, config, migration) {
-        if (!this.initialized && !this.stopped)
-            throw fail('EOS_MODULE_NOT_READY');
+        const reason = this.configurationReason(id);
+        if (reason)
+            throw fail(reason);
         if (this.mutation || this.stopped)
             throw fail('EOS_MODULE_BUSY');
         const entry = this.entries.get(id);
@@ -624,11 +701,13 @@ class EosModuleHost {
         if (!entry.configLoaded)
             throw fail('EOS_MODULE_NOT_READY');
         this.mutation = true;
+        this.configurationSavePromise = this.persistConfig(id, config, migration);
         try {
-            return await this.persistConfig(id, config, migration);
+            return await this.configurationSavePromise;
         }
         finally {
             this.mutation = false;
+            this.configurationSavePromise = null;
         }
     }
     /** Internal commit shared by save/import; the entire caller operation owns the mutation lock. */
@@ -643,7 +722,7 @@ class EosModuleHost {
         if (typeof encrypted !== 'string' || encrypted === JSON.stringify(normalized))
             throw fail('EOS_MODULE_ENCRYPTION');
         const envelope = { v: 1, encrypted,
-            migration: migration || this.owner.config.eosModules?.[id]?.migration || null };
+            migration: migration || entry.loadedEnvelope?.migration || this.owner.config.eosModules?.[id]?.migration || null };
         // Commit before interrupting the old runtime. Failed/conflicting writes
         // leave its validated settings and transport generation untouched.
         await bounded(this.configStore.save(id, envelope));
@@ -651,6 +730,7 @@ class EosModuleHost {
         await this.stopEntry(entry);
         this.owner.config.eosModules = { ...this.owner.config.eosModules, [id]: envelope };
         entry.config = normalized;
+        entry.loadedEnvelope = envelope;
         if (!entry.stopFailed) {
             entry.failed = false;
             entry.reason = normalized.enabled ? 'STARTING' : 'DISABLED';

@@ -29,6 +29,7 @@ import { createUploadMiddleware, getUploadDirectory, retainUpload, storeRestoreU
 import { parseDbFileRequest, serveDbFile } from './eosFileTransferSecurity';
 import { InstanceProxy } from './instanceProxy';
 import { UnifiedSessions, transportAllowed, sameOrigin as unifiedSameOrigin } from './eosUnifiedBoundary';
+import type { EosSessionSecurity } from './eosSessionSecurity';
 import type { OwnershipGuard } from './eosUnifiedOwnership';
 import type { EosHostedRuntime } from './eosUnifiedRuntime';
 import { EosModuleHost } from './eosModuleHost';
@@ -173,7 +174,7 @@ interface WebOptions {
 
 interface AdminAdapter extends ioBroker.Adapter {
     secret: string;
-    eosSessionSecurity?: { bindOAuthModel(model: unknown): void; revoke(): void };
+    eosSessionSecurity?: EosSessionSecurity;
     eosLicenseService?: EosLicenseService;
     eosHostedRuntime?: EosHostedRuntime;
     eosModuleHost?: EosModuleHost;
@@ -1028,10 +1029,8 @@ export default class Web {
                 .catch(() => null)) as ioBroker.UserObject | null;
             return user?.type === 'user' && user.common?.enabled !== false ? userId : null;
         };
-        // req.user is set only by the upstream authenticated middleware, never by body/query input.
-        if ((req as Request & { user?: unknown }).user) {
-            return enabledUser((req as Request & { user?: unknown }).user);
-        }
+        // req.user may be retained by a long-lived SSE request. Always re-read the
+        // actual access capability; a once authenticated request cannot outlive idle expiry.
         const token = this.readAccessTokenFromRequest(req);
         if (!token || token.length < 16 || token.length > 4096) {
             return null;
@@ -1048,7 +1047,8 @@ export default class Web {
         ) {
             return null;
         }
-        return enabledUser(session.user);
+        const user = await enabledUser(session.user);
+        return this.adapter.eosSessionSecurity?.idleView(session).authenticated ? user : null;
     }
 
     private getEosConfiguredRoleGroups(...keys: string[]): string[] {
@@ -2063,6 +2063,33 @@ export default class Web {
         if (!app) {
             throw new Error('EOS_HTTP_UNAVAILABLE');
         }
+        // One small public script observes genuine interaction on every EOS page.
+        // Authentication and expiry remain server-enforced when JavaScript is absent.
+        app.get('/eos-session-idle.js', (_req: Request, res: Response): void => {
+            res.setHeader('Cache-Control', 'no-store');
+            res.setHeader('X-Content-Type-Options', 'nosniff');
+            res.sendFile(join(this.baseDir, 'ui', 'www', 'eos-session-idle.js'));
+        });
+        app.get('/api/auth/idle', (req: Request, res: Response): void => {
+            res.setHeader('Cache-Control', 'no-store');
+            if (!this.unified.requestAllowed(req)) {
+                res.status(403).json({ error: 'AUTH_ORIGIN' });
+                return;
+            }
+            void this.unified.idle(req).then(
+                value => res.json(value),
+                () => res.status(503).json({ error: 'AUTH_UNAVAILABLE' }),
+            );
+        });
+        app.post(
+            ['/api/auth/activity', '/api/auth/expire'],
+            bodyParser.json({ limit: '1kb', strict: true }),
+            (req: Request, res: Response): void => {
+                const task =
+                    req.path === '/api/auth/activity' ? this.unified.activity(req, res) : this.unified.expire(req, res);
+                void task.catch(() => res.status(503).json({ error: 'AUTH_UNAVAILABLE' }));
+            },
+        );
         const tlsManager = new EosTlsManager(
             join(getAbsoluteInstanceDataDir(this.adapter), 'tls'),
             this.settings.eosMdnsHostname || 'nexowatt',
@@ -2225,6 +2252,19 @@ export default class Web {
                         } else {
                             res.status(402).json({ error: 'LICENSE_REQUIRED', url: '/nexowatt/license' });
                         }
+                        return;
+                    }
+                    if (path === '/events') {
+                        void this.unified.bindStream(req, res).then(
+                            allowed => {
+                                if (allowed) {
+                                    runtime.handle(req, res, next);
+                                } else {
+                                    res.status(401).json({ error: 'AUTH_IDLE_EXPIRED' });
+                                }
+                            },
+                            () => res.status(503).json({ error: 'AUTH_UNAVAILABLE' }),
+                        );
                         return;
                     }
                     runtime.handle(req, res, next);

@@ -100,6 +100,22 @@ async function main() {
     assert.equal(f.calls.find(call => call.origin === 'https://camera.test').csrf, null);
     assert.equal(f.calls.filter(call => call.path === '/api/set').length, 2);
   });
+  await check('Zentrale Idle-Sitzungsprüfung bleibt vor dem Seiten-Bootstrap erreichbar und behält ihren CSRF-Nachweis', async () => {
+    const f = fixture('auth', signedOut());
+    const idleToken = crypto.randomBytes(32).toString('hex');
+    for (const endpoint of ['idle', 'activity', 'expire']) {
+      await f.window.fetch('/api/auth/' + endpoint, endpoint === 'idle' ? {} : {
+        method: 'POST', headers: { 'X-NW-CSRF': idleToken }, body: '{}',
+      });
+    }
+    const calls = f.calls.filter(call => /^\/api\/auth\/(?:idle|activity|expire)$/.test(call.path));
+    assert.equal(calls.length, 3);
+    assert.ok(calls.filter(call => call.method === 'POST').every(call => call.csrf === idleToken));
+    await f.window.fetch('/api/set', { method: 'POST', body: '{}' });
+    await f.window.fetch('/api/auth/activity/extra', { method: 'POST', body: '{}' });
+    assert.equal(f.calls.filter(call => ['/api/set', '/api/auth/activity/extra'].includes(call.path)).length, 0,
+      'only the three exact central routes bypass the page bootstrap, not business mutations or suffixes');
+  });
   await check('Fachlicher 403 erhält bestätigten Zugang; echter Sitzungsverlust sperrt', async () => {
     const f = fixture('auth', signedIn('admin')); await f.settle(); f.env.businessDenied = true;
     await f.window.fetch('/api/licensed-feature'); assert.equal(f.content.inert, false);

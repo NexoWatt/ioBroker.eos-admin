@@ -27,6 +27,13 @@ const MAX_FILE = 128 * 1024 * 1024;
 const MAX_JSON = 16 * 1024 * 1024;
 const MAX_TOTAL = 1024 * 1024 * 1024;
 const DIGEST = /^[a-f0-9]{64}$/;
+// Nur diese ausgelieferten Buildbereiche dürfen bekannte Altdateien enthalten.
+// Der Installer-Quellbaum und andere Zusatzdateien bleiben ausdrücklich gesperrt.
+const FRONTEND_TREES = ['adminWww', 'ui/admin/react'];
+/** @param {string} relative */
+function historicalAssetPath(relative) {
+    return relative.startsWith('adminWww/') || relative.startsWith('ui/admin/react/assets/');
+}
 /** @typedef {{sha256:string, bytes:number, identity:import('node:fs').Stats, data:Buffer|null}} Snapshot */
 /** @typedef {{version:string, files:Map<string,string>, snapshot:Snapshot}} Seal */
 /** @typedef {{relative:string, snapshot:Snapshot, state:string}} Candidate */
@@ -154,19 +161,19 @@ function loadCatalog(root) {
     const catalog = new Map();
     for (const [relative, hashes] of entries) {
         validPath(relative);
-        if (!relative.startsWith('adminWww/') || !Array.isArray(hashes) || !hashes.length || hashes.length > 100
+        if (!historicalAssetPath(relative) || !Array.isArray(hashes) || !hashes.length || hashes.length > 100
             || hashes.some(digest => typeof digest !== 'string' || !DIGEST.test(digest))) stop('EOS_PUBLISH_METADATA', 'Ungültiger Eintrag im Altdateikatalog.');
         catalog.set(relative, new Set(/** @type {string[]} */ (hashes)));
     }
     return catalog;
 }
-/** Gesamten Adminbaum vor der Mutation lstat-prüfen, auch nicht gelistete Links.
+/** Sämtliche betroffenen Buildbäume vor der Mutation prüfen, auch nicht gelistete Links.
  * @param {string} root */
-function checkAdminTree(root) {
+function checkFrontendTrees(root) {
     let count = 0;
     /** @param {string} relative */
     function walk(relative) {
-        if (++count > MAX_FILES * 3) stop('EOS_PUBLISH_LIMIT', 'Admin-Dateibaum ist zu groß.');
+        if (++count > MAX_FILES * 3) stop('EOS_PUBLISH_LIMIT', 'Frontend-Dateibäume sind zu groß.');
         const stat = noLinks(root, relative);
         if (stat.isFile()) {
             if (stat.nlink !== 1) stop('EOS_PUBLISH_FILE', `Hartverknüpfte Datei: ${relative}`);
@@ -176,7 +183,16 @@ function checkAdminTree(root) {
         const names = fs.readdirSync(path.join(root, relative)); uniqueWindowsPaths(names);
         for (const name of names) walk(`${relative}/${name}`);
     }
-    walk('adminWww');
+    for (const relative of FRONTEND_TREES) {
+        try { noLinks(root, relative); }
+        catch (error) {
+            // Ältere/isolierte Releases müssen keinen Installer-Build enthalten.
+            // Existierende Elternverknüpfungen werden vorher von noLinks abgelehnt.
+            if (record(error) && error.code === 'ENOENT') continue;
+            throw error;
+        }
+        walk(relative);
+    }
 }
 /** @param {string} root @returns {{listFiles:()=>string[],check:()=>number}} */
 function manifestApi(root) {
@@ -201,13 +217,13 @@ function manifestApi(root) {
 function verifyUnreferenced(root, seal, candidates) {
     const basenames = new Set(candidates.map(item => path.posix.basename(item.relative)));
     for (const relative of seal.files.keys()) {
-        if (!relative.startsWith('adminWww/') || !/\.(?:js|mjs|cjs|html|json|css|map)$/.test(relative)) continue;
+        if (!FRONTEND_TREES.some(tree => relative.startsWith(`${tree}/`)) || !/\.(?:js|mjs|cjs|html|json|css|map)$/.test(relative)) continue;
         const text = /** @type {Buffer} */ (readSnapshot(root, relative, true).data);
         const content = text.toString('utf8');
         for (const match of content.matchAll(/[A-Za-z0-9_.-]+\.[A-Za-z0-9]{1,12}/g)) {
-            if (basenames.has(match[0])) stop('EOS_PUBLISH_ASSET_REFERENCED', `Aktueller Admin-Build verweist noch auf eine Altdatei: ${match[0]}`);
+            if (basenames.has(match[0])) stop('EOS_PUBLISH_ASSET_REFERENCED', `Aktueller Frontend-Build verweist noch auf eine Altdatei: ${match[0]}`);
         }
-        for (const name of basenames) if (/[^A-Za-z0-9_.-]/.test(name) && content.includes(name)) stop('EOS_PUBLISH_ASSET_REFERENCED', 'Aktueller Admin-Build verweist auf eine Altdatei.');
+        for (const name of basenames) if (/[^A-Za-z0-9_.-]/.test(name) && content.includes(name)) stop('EOS_PUBLISH_ASSET_REFERENCED', 'Aktueller Frontend-Build verweist auf eine Altdatei.');
     }
 }
 /** @param {string} root @param {string} relative */
@@ -238,7 +254,7 @@ function preparePublish(options = {}) {
     const seal = loadSeal(root); verifyCurrent(root, seal);
     const pkg = readJson(root, 'package.json').value;
     if (!record(pkg) || pkg.name !== 'iobroker.eos-admin' || pkg.version !== seal.version) stop('EOS_PUBLISH_VERSION', 'Paketname oder Version passt nicht zur Versiegelung.');
-    const catalog = loadCatalog(root); checkAdminTree(root);
+    const catalog = loadCatalog(root); checkFrontendTrees(root);
     const api = manifestApi(root); const currentPaths = api.listFiles();
     const foldedSealed = new Set([...seal.files.keys()].map(relative => relative.toLowerCase()));
     /** @type {Candidate[]} */ const candidates = [];
@@ -247,7 +263,7 @@ function preparePublish(options = {}) {
         if (seal.files.has(relative)) continue;
         if (foldedSealed.has(relative.toLowerCase())) stop('EOS_PUBLISH_CASE_COLLISION', `Zusatzdatei kollidiert mit aktueller Datei: ${relative}`);
         const hashes = catalog.get(relative);
-        if (!relative.startsWith('adminWww/') || !hashes) stop('EOS_PUBLISH_EXTRA_UNKNOWN', `Unbekannte Zusatzdatei bleibt erhalten: ${relative}. Vollständigen Lieferstand und eigene Änderungen prüfen.`);
+        if (!historicalAssetPath(relative) || !hashes) stop('EOS_PUBLISH_EXTRA_UNKNOWN', `Unbekannte Zusatzdatei bleibt erhalten: ${relative}. Vollständigen Lieferstand und eigene Änderungen prüfen.`);
         const snapshot = readSnapshot(root, relative); bytes += snapshot.bytes;
         if (!hashes.has(snapshot.sha256)) stop('EOS_PUBLISH_EXTRA_CHANGED', `Altdatei hat unbekannten Inhalt und bleibt erhalten: ${relative}`);
         if (bytes > MAX_TOTAL) stop('EOS_PUBLISH_LIMIT', 'Altdateibestand ist zu groß.');
@@ -277,7 +293,7 @@ function preparePublish(options = {}) {
             if (readSnapshot(backupDir, item.relative).sha256 !== item.snapshot.sha256) stop('EOS_PUBLISH_BACKUP', 'Sicherung konnte nicht bestätigt werden.');
             item.state = 'copied'; receipt('backing-up');
         }
-        verifyCurrent(root, seal); checkAdminTree(root);
+        verifyCurrent(root, seal); checkFrontendTrees(root);
         for (const item of candidates) {
             unchangedCandidate(root, item);
             fs.unlinkSync(path.join(root, item.relative)); item.state = 'removed'; receipt('removing');
@@ -308,7 +324,7 @@ if (require.main === module) {
     try {
         if (process.argv.length > 2) stop('EOS_PUBLISH_ARGUMENTS', 'Aufruf ohne Zusatzparameter; im Repository npm publish verwenden.');
         const result = preparePublish();
-        if (result.quarantined.length) console.log(`[EOS npm] ${result.quarantined.length} bestätigte alte Admin-Dateien gesichert. Sicherung: ${result.backupDir}`);
+        if (result.quarantined.length) console.log(`[EOS npm] ${result.quarantined.length} bestätigte alte Admin-/Installer-Dateien gesichert. Sicherung: ${result.backupDir}`);
         console.log(`[EOS npm] ${result.version}: ${result.verifiedFiles} aktuelle Release-Dateien unverändert geprüft; Veröffentlichung wird fortgesetzt.`);
     } catch (error) {
         console.error(`[EOS npm] ${error instanceof PublishPreparationError ? error.message : 'Vorbereitung fehlgeschlagen; keine Veröffentlichung. Repository und Schreibrechte prüfen.'}`);

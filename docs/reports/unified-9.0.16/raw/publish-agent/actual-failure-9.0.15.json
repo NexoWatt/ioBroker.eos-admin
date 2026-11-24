@@ -1,0 +1,11 @@
+{
+  "sourceVersion": "9.0.15",
+  "extraSourceVersion": "9.0.6",
+  "file": "ui/admin/react/assets/index-Bm4__n5R.js",
+  "sha256": "9cd5d39ab4a92133e19c87399b0b22c8f575346df227b693cdcd659520202fe7",
+  "exitCode": 1,
+  "stdout": "",
+  "stderr": "[EOS npm] EOS_PUBLISH_EXTRA_UNKNOWN: Unbekannte Zusatzdatei bleibt erhalten: ui/admin/react/assets/index-Bm4__n5R.js. Vollst\u00e4ndigen Lieferstand und eigene \u00c4nderungen pr\u00fcfen.\n",
+  "extraRemains": true,
+  "backupDirectories": 0
+}

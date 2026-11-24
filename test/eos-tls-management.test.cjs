@@ -229,7 +229,10 @@ test('invalid names and unsafe storage are rejected, not used as command/config 
 
 test('HTTP routes enforce real unified session, role, CSRF and same-origin for certificate actions', async t => {
     const f = await fixture(t); let role = 'admin'; let authenticated = true;
-    const token = 'b'.repeat(40); const adapter = { eosSessionSecurity: { epoch: 'tls-http' } };
+    const token = 'b'.repeat(40);
+    const adapter = {};
+    const session = await require('./fixtures/eos-idle-session.cjs').installIdleSession(adapter, { token, user: 'admin' });
+    t.after(() => session.cleanup());
     const authority = new UnifiedSessions(adapter, { secure: true, externalOrigin: '',
         resolveAccess: async req => authenticated && req.headers.cookie === `access_token=${token}` ? { userId: 'system.user.admin', role, groups: [] } : { userId: null, role: 'enduser', groups: [] },
         firstLogin: async () => ({ required: false }), getLicense: () => ({ valid: true, coreEnabled: true }) });

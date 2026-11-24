@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/lib/preserved-ui-config.ts
- * Quell-Hash: sha256:3ef028b6f9f4365eda068c17a5d205553487179afe064764e8a721d0aee292c6
+ * Quell-Hash: sha256:21518d2a4293ebf1ae54e9ec44b0945e7d3bdac5b96d81ae68e1fe78e3ddafc7
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -23,6 +23,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PRESERVED_UI_STATE_IDS = void 0;
+exports.parseInstallerConfigState = parseInstallerConfigState;
 exports.readPreservedUiStates = readPreservedUiStates;
 exports.PRESERVED_UI_STATE_IDS = ['installer.configJson', 'smarthome.timersJson', 'smarthome.logicClocksJson'];
 function record(value) {
@@ -85,6 +86,19 @@ function parseState(id, object, state, required) {
     else
         arrayFields(parsed, id === 'smarthome.timersJson' ? ['timers'] : ['clocks']);
     return parsed;
+}
+/** Validiert den vorhandenen eigenen Installer-State vor jeder Start-Hydration.
+ * Der Aufrufer behandelt ausschließlich fehlende States als Erstinitialisierung. */
+function parseInstallerConfigState(state) {
+    try {
+        const parsed = parseState('installer.configJson', null, state, true);
+        if (!parsed)
+            throw failure('EOS_UI_CONFIG_INVALID');
+        return parsed;
+    }
+    catch {
+        throw failure('EOS_UI_CONFIG_INVALID');
+    }
 }
 async function readPreservedUiStates(reader, namespace, requiredStates = []) {
     if (!/^nexowatt-ui\.\d+$/.test(namespace) || !Array.isArray(requiredStates)

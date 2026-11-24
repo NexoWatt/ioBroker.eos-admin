@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/auth.ts
- * Quell-Hash: sha256:3d3c196cb55ebe6a52535cb2c16909a0b58058fa46826605716710551963df0b
+ * Quell-Hash: sha256:61bb87d24d27530605658bd13e1b5ea8897a187df3babdb3391ef660d651c116
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -437,7 +437,11 @@
     if (originalFetch)
         window.fetch = async function (input, init) {
             const path = ownDataPath(input);
-            if (!path || /^\/api\/(?:auth|strict-auth)\/(?:status|login)$/.test(path))
+            // The common idle client must read its session before this page's role
+            // bootstrap completes. Its own activity POST keeps the server-issued CSRF;
+            // all three endpoints remain authenticated and validated by the owner.
+            if (!path || /^\/api\/(?:auth|strict-auth)\/(?:status|login)$/.test(path) ||
+                /^\/api\/auth\/(?:idle|activity|expire)$/.test(path))
                 return originalFetch(input, init);
             const method = String(init?.method || (input instanceof Request ? input.method : 'GET')).toUpperCase();
             const mutation = !['GET', 'HEAD', 'OPTIONS'].includes(method);

@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/lib/runtime-proxy-html.ts
- * Quell-Hash: sha256:b32c28ba952ef6f065216cb3d556f42c8ab5332a7f7de042edf5fc37d235b524
+ * Quell-Hash: sha256:3809bd6875af65f6e9f6e05eebd1987188187af5ba423677a951a419367954d2
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -69,6 +69,9 @@ function isHttpsRuntimeProxy(req, namespace) {
     return runtimeProxyPrefix(req, namespace) !== null && req.headers['x-forwarded-proto'] === 'https';
 }
 function rewriteUrl(value, prefix) {
+    // The unified owner serves one idle client for every page, outside the UI proxy.
+    if (value === '/eos-session-idle.js' || (value.startsWith('/eos-session-idle.js?') && !value.includes('#')))
+        return value;
     if (!value.startsWith('/') || value.startsWith('//') || value === prefix || value.startsWith(prefix + '/'))
         return value;
     if (value.startsWith('/#tab-nexowatt-ui-'))

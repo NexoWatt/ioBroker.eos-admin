@@ -144,11 +144,58 @@ class UnifiedSessions {
             timingSafeEqual(Buffer.from(supplied), Buffer.from(expected))
         );
     }
+    readSession(req) {
+        const token = readAccessToken(req);
+        return token ? new Promise(resolve => this.adapter.getSession(`a:${token}`, resolve)) : Promise.resolve(null);
+    }
+    idleView(req, session) {
+        const value = this.adapter.eosSessionSecurity.idleView(session);
+        return { ...value, csrfToken: value.authenticated ? this.csrf(req) : '' };
+    }
+    async idle(req) {
+        return this.idleView(req, await this.readSession(req));
+    }
+    async activity(req, res) {
+        res.setHeader('Cache-Control', 'no-store');
+        if (!this.csrfAllowed(req)) {
+            return res.status(403).json({ error: 'AUTH_CSRF' });
+        }
+        if (!req.body || Array.isArray(req.body) || typeof req.body !== 'object' || Object.keys(req.body).length) {
+            return res.status(400).json({ error: 'AUTH_REQUEST' });
+        }
+        const session = await this.readSession(req);
+        if (!this.adapter.eosSessionSecurity.activity(session)) {
+            return res.status(401).json({ ...this.idleView(req, null), error: 'AUTH_IDLE_EXPIRED' });
+        }
+        return res.status(200).json(this.idleView(req, session));
+    }
+    async expire(req, res) {
+        res.setHeader('Cache-Control', 'no-store');
+        if (!this.csrfAllowed(req)) {
+            return res.status(403).json({ error: 'AUTH_CSRF' });
+        }
+        if (!req.body || Array.isArray(req.body) || typeof req.body !== 'object' || Object.keys(req.body).length) {
+            return res.status(400).json({ error: 'AUTH_REQUEST' });
+        }
+        const status = await this.idle(req);
+        // A stale timer in one tab cannot end another tab's still-active session.
+        if (!status.authenticated) {
+            res.clearCookie('access_token', { path: '/' });
+            res.clearCookie('refresh_token', { path: '/' });
+        }
+        return res.status(200).json({ ...status, expired: !status.authenticated });
+    }
+    /** @returns {Promise<boolean>} */
+    bindStream(req, res) {
+        return this.adapter.eosSessionSecurity.bindStream(readAccessToken(req), res);
+    }
     async status(req) {
         const access = await this.options.resolveAccess(req);
         const first = access.userId ? await this.options.firstLogin(access.userId, access.role) : { required: false };
         const license = this.options.getLicense();
-        const authenticated = !!access.userId;
+        // Recheck after asynchronous role/password reads; req.user is not a lasting session proof.
+        const idle = await this.idle(req);
+        const authenticated = !!access.userId && idle.authenticated;
         const role = authenticated ? (access.role === 'enduser' ? 'customer' : access.role) : 'none';
         const activationRequired = authenticated && (!license?.valid || license?.coreEnabled !== true);
         return {
@@ -158,10 +205,14 @@ class UnifiedSessions {
             protectWrites: true,
             authed: authenticated,
             authenticated,
-            user: access.userId || null,
-            userId: access.userId || null,
+            serverNow: idle.serverNow,
+            idleTimeoutMs: idle.idleTimeoutMs,
+            idleExpiresAt: authenticated ? idle.idleExpiresAt : null,
+            sessionKey: authenticated ? idle.sessionKey : null,
+            user: authenticated ? access.userId : null,
+            userId: authenticated ? access.userId : null,
             role,
-            groups: access.groups || [],
+            groups: authenticated ? access.groups || [] : [],
             capabilities:
                 role === 'admin'
                     ? ['*']
@@ -183,13 +234,14 @@ class UnifiedSessions {
                         : [],
             csrfToken: authenticated ? this.csrf(req) : '',
             credentialKey: authenticated ? this.csrf(req) : '',
-            mustChangePassword: !!first.required,
+            mustChangePassword: authenticated && !!first.required,
             activationRequired,
-            nextUrl: first.required
-                ? '/system/?passwordSetup'
-                : activationRequired && role === 'admin'
-                  ? '/nexowatt/license'
-                  : '/',
+            nextUrl:
+                authenticated && first.required
+                    ? '/system/?passwordSetup'
+                    : activationRequired && role === 'admin'
+                      ? '/nexowatt/license'
+                      : '/',
             loginUrl: '/login.html',
             logoutUrl: '/api/auth/logout',
         };
@@ -256,9 +308,8 @@ class UnifiedSessions {
         }
         const token = readAccessToken(req);
         const session = token ? await new Promise(resolve => this.adapter.getSession(`a:${token}`, resolve)) : null;
-        // Epoch revocation is deliberately immediate: all open transports lose stale authority.
-        this.adapter.eosSessionSecurity?.revoke();
-        this.adapter.eosHostedRuntime?.revokeSessions?.();
+        // Explicit logout and idle expiry affect this login family, not other devices or EMS.
+        this.adapter.eosSessionSecurity.revokeSession(session);
         const ids = session ? [`a:${session.aToken}`, `r:${session.rToken}`] : token ? [`a:${token}`] : [];
         await Promise.all(ids.map(id => new Promise(resolve => this.adapter.destroySession(id, resolve))));
         res.clearCookie('access_token', { path: '/' });

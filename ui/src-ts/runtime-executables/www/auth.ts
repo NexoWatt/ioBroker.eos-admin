@@ -308,7 +308,11 @@
   /** Schalt-/Speicherbefehle werden nach Anmeldung oder Fehlern niemals wiederholt. */
   if (originalFetch) window.fetch = async function (input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
     const path = ownDataPath(input);
-    if (!path || /^\/api\/(?:auth|strict-auth)\/(?:status|login)$/.test(path)) return originalFetch(input, init);
+    // The common idle client must read its session before this page's role
+    // bootstrap completes. Its own activity POST keeps the server-issued CSRF;
+    // all three endpoints remain authenticated and validated by the owner.
+    if (!path || /^\/api\/(?:auth|strict-auth)\/(?:status|login)$/.test(path) ||
+      /^\/api\/auth\/(?:idle|activity|expire)$/.test(path)) return originalFetch(input, init);
     const method = String(init?.method || (input instanceof Request ? input.method : 'GET')).toUpperCase();
     const mutation = !['GET', 'HEAD', 'OPTIONS'].includes(method);
     if (!state._loaded || state.statusError || (mutation && Date.now() - lastCheck > 10000)) await refreshStatus();

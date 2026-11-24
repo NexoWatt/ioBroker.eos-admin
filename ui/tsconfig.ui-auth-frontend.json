@@ -11,13 +11,18 @@
     "moduleResolution": "bundler",
     "moduleDetection": "legacy",
     "resolveJsonModule": false,
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "types": []
   },
   "files": [
     "src-ts/runtime-executables/www/auth.ts",
     "src-ts/runtime-executables/www/login.ts",
     "src-ts/runtime-executables/www/runtime-base.ts",
-    "src-ts/runtime-executables/www/smarthome-activation.ts"
+    "src-ts/runtime-executables/www/smarthome-activation.ts",
+    "src-ts/runtime-executables/www/eos-session-idle.ts"
   ]
 }

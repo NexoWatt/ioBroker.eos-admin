@@ -1,0 +1,74 @@
+(node:45) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:52) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: restart/update preserves valid saved assignments including intentional empty values: {}
+ok 1 - restart/update preserves valid saved assignments including intentional empty values: {}
+  ---
+  duration_ms: 62.79727
+  type: 'test'
+  ...
+# Subtest: restart/update preserves valid saved assignments including intentional empty values: datapoints,settingsConfig,smartHomeConfig
+ok 2 - restart/update preserves valid saved assignments including intentional empty values: datapoints,settingsConfig,smartHomeConfig
+  ---
+  duration_ms: 10.520768
+  type: 'test'
+  ...
+# Subtest: restart/update preserves valid saved assignments including intentional empty values: datapoints,settingsConfig,storageFarm
+ok 3 - restart/update preserves valid saved assignments including intentional empty values: datapoints,settingsConfig,storageFarm
+  ---
+  duration_ms: 10.055524
+  type: 'test'
+  ...
+# Subtest: unavailable or invalid saved installer data cannot become defaults or overwrite a backup
+ok 4 - unavailable or invalid saved installer data cannot become defaults or overwrite a backup
+  ---
+  duration_ms: 5.99498
+  type: 'test'
+  ...
+# Subtest: only a confirmed missing installer state permits matching-instance recovery; failed writes do not update backups
+ok 5 - only a confirmed missing installer state permits matching-instance recovery; failed writes do not update backups
+  ---
+  duration_ms: 26.761793
+  type: 'test'
+  ...
+# Subtest: customer flow settings and disabled PV AI survive startup defaults; explicit settings saves still apply
+ok 6 - customer flow settings and disabled PV AI survive startup defaults; explicit settings saves still apply
+  ---
+  duration_ms: 11.456696
+  type: 'test'
+  ...
+# Subtest: unreadable StorageFarm assignments never get replaced by empty defaults
+ok 7 - unreadable StorageFarm assignments never get replaced by empty defaults
+  ---
+  duration_ms: 6.119423
+  type: 'test'
+  ...
+# Subtest: automatic missing-state recovery prefers current backup and rejects corrupt existing backups or unreadable storage
+ok 8 - automatic missing-state recovery prefers current backup and rejects corrupt existing backups or unreadable storage
+  ---
+  duration_ms: 9.84245
+  type: 'test'
+  ...
+# Subtest: configuration startup failures close the hosted runtime rather than leave writable default configuration
+ok 9 - configuration startup failures close the hosted runtime rather than leave writable default configuration
+  ---
+  duration_ms: 10.80752
+  type: 'test'
+  ...
+# Subtest: new flow states initialize from the saved installer settings after hydration, not earlier package defaults
+ok 10 - new flow states initialize from the saved installer settings after hydration, not earlier package defaults
+  ---
+  duration_ms: 29.099402
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 558.109558

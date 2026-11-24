@@ -7,13 +7,16 @@ const express = require('express');
 const { Readable } = require('node:stream');
 const { UnifiedSessions } = require('../src/lib/eosUnifiedBoundary');
 const { registerEosModuleRoutes } = require('../src/lib/eosModuleHttp');
+const { installIdleSession } = require('./fixtures/eos-idle-session.cjs');
 
 async function fixture(t) {
     const token = 'a'.repeat(40); let role = 'admin'; let active = true; let first = false; let writes = 0; let downloads = 0;
     let archiveName = 'eos-backup-fixture.nwb';
     let holdDownloads = false; let archiveSize = 14; const streams = [];
     let migration = { phase: 'NOT_NEEDED', code: '', sources: [], updatedAt: null };
-    const adapter = { eosSessionSecurity: { epoch: 'test-one' } };
+    const adapter = {};
+    const session = await installIdleSession(adapter, { token, user: 'operator' });
+    t.after(() => session.cleanup());
     const authority = new UnifiedSessions(adapter, { secure: true, externalOrigin: '',
         resolveAccess: async req => active && req.headers.cookie === `access_token=${token}`
             ? { userId: 'system.user.operator', role, groups: [] } : { userId: null, role: 'enduser', groups: [] },
@@ -153,7 +156,8 @@ test('fresh admin role, same origin and session-bound CSRF are required for ever
     assert.equal((await f.request('/api/eos/modules/devices', { ...options, headers: { ...options.headers, origin: 'https://foreign.invalid' } })).status, 403);
     f.role('installer'); assert.equal((await f.request('/api/eos/modules/devices', options)).status, 403);
     f.role('admin'); f.adapter.eosSessionSecurity.epoch = 'revoked-csrf';
-    assert.equal((await f.request('/api/eos/modules/devices', options)).status, 403);
+    assert.equal((await f.request('/api/eos/modules/devices', options)).status, 401,
+        'epoch change invalidates the actual session before the later CSRF check');
     f.revoke(); assert.equal((await f.request('/api/eos/modules/devices', options)).status, 401); assert.equal(f.writes(), 1);
 });
 

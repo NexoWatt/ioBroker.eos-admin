@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/runtime-base.ts
- * Quell-Hash: sha256:f7f321856fce4f5da11f8cc1784e349058199151cd3777b97cfcfd1c519da1f8
+ * Quell-Hash: sha256:f514c7b6601b7eaa7522b3dd8316d2d05041cd2ddbfd553442baac5678d2f0a5
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -68,6 +68,8 @@
             return value;
         }
         if (parsed.origin !== origin || parsed.username || parsed.password || !['http:', 'https:'].includes(parsed.protocol))
+            return value;
+        if (/^\/api\/auth\/(?:idle|activity|expire)$/.test(parsed.pathname))
             return value;
         if (parsed.pathname === prefix || parsed.pathname.startsWith(prefix + '/'))
             return value;

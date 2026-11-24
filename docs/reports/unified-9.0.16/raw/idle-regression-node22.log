@@ -1,0 +1,408 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:12) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# Subtest: actual owner HTTP routes: idle polls/new page loads never extend ten minutes; another browser stays active
+ok 1 - actual owner HTTP routes: idle polls/new page loads never extend ten minutes; another browser stays active
+  ---
+  duration_ms: 666.608294
+  type: 'test'
+  ...
+# Subtest: actual owner activity HTTP requires same-origin CSRF and cannot revive an expired family
+ok 2 - actual owner activity HTTP requires same-origin CSRF and cannot revive an expired family
+  ---
+  duration_ms: 53.768373
+  type: 'test'
+  ...
+# Subtest: a cached upstream req.user cannot retain EOS authority after idle expiry
+ok 3 - a cached upstream req.user cannot retain EOS authority after idle expiry
+  ---
+  duration_ms: 11.333226
+  type: 'test'
+  ...
+# Subtest: actual hosted SSE is closed at idle expiry even without a new data frame, independently per login
+ok 4 - actual hosted SSE is closed at idle expiry even without a new data frame, independently per login
+  ---
+  duration_ms: 35.223497
+  type: 'test'
+  ...
+# Subtest: pinned upstream log and instance publications cannot send after idle expiry before the prune timer
+ok 5 - pinned upstream log and instance publications cannot send after idle expiry before the prune timer
+  ---
+  duration_ms: 15.420679
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:13) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# Subtest: pinned upstream password login, token pair and refresh work with security binding
+ok 6 - pinned upstream password login, token pair and refresh work with security binding
+  ---
+  duration_ms: 17.879016
+  type: 'test'
+  ...
+# Subtest: real controller group view accepts string and translated display keys using canonical object IDs
+ok 7 - real controller group view accepts string and translated display keys using canonical object IDs
+  ---
+  duration_ms: 18.919838
+  type: 'test'
+  ...
+# Subtest: group display names, metadata and row order do not change credential proofs
+ok 8 - group display names, metadata and row order do not change credential proofs
+  ---
+  duration_ms: 5.279448
+  type: 'test'
+  ...
+# Subtest: missing, foreign, empty and duplicate canonical group IDs fail closed despite valid view keys
+ok 9 - missing, foreign, empty and duplicate canonical group IDs fail closed despite valid view keys
+  ---
+  duration_ms: 32.314362
+  type: 'test'
+  ...
+# Subtest: canonical group identity and ACL mutations revoke established capabilities
+ok 10 - canonical group identity and ACL mutations revoke established capabilities
+  ---
+  duration_ms: 9.869491
+  type: 'test'
+  ...
+# Subtest: all devices access and refresh tokens reject changed password without waiting for object event
+ok 11 - all devices access and refresh tokens reject changed password without waiting for object event
+  ---
+  duration_ms: 7.805445
+  type: 'test'
+  ...
+# Subtest: disable, deletion and changed group ACL independently invalidate both token classes
+ok 12 - disable, deletion and changed group ACL independently invalidate both token classes
+  ---
+  duration_ms: 20.174955
+  type: 'test'
+  ...
+# Subtest: observed disable then re-enable cannot resurrect old token after snapshot returns to original
+ok 13 - observed disable then re-enable cannot resurrect old token after snapshot returns to original
+  ---
+  duration_ms: 7.558501
+  type: 'test'
+  ...
+# Subtest: legacy and unbound external tokens are rejected and direct internal minting is denied
+ok 14 - legacy and unbound external tokens are rejected and direct internal minting is denied
+  ---
+  duration_ms: 3.923322
+  type: 'test'
+  ...
+# Subtest: proof cannot be forged by passing a user-shaped object or copied authenticated identity
+ok 15 - proof cannot be forged by passing a user-shaped object or copied authenticated identity
+  ---
+  duration_ms: 3.82586
+  type: 'test'
+  ...
+# Subtest: password mutation during credential verification and before token save fails closed
+ok 16 - password mutation during credential verification and before token save fails closed
+  ---
+  duration_ms: 3.876303
+  type: 'test'
+  ...
+# Subtest: refresh credential cannot cross revocation between lookup and save
+ok 17 - refresh credential cannot cross revocation between lookup and save
+  ---
+  duration_ms: 5.574041
+  type: 'test'
+  ...
+# Subtest: restart generation does not accept previously saved capabilities
+ok 18 - restart generation does not accept previously saved capabilities
+  ---
+  duration_ms: 4.668429
+  type: 'test'
+  ...
+# Subtest: session database failures and bounded stalled reads fail closed without unbounded backlog
+ok 19 - session database failures and bounded stalled reads fail closed without unbounded backlog
+  ---
+  duration_ms: 82.297223
+  type: 'test'
+  ...
+# Subtest: socket revocation synchronously blocks commands, clears subscriptions and closes every connection
+ok 20 - socket revocation synchronously blocks commands, clears subscriptions and closes every connection
+  ---
+  duration_ms: 3.729137
+  type: 'test'
+  ...
+# Subtest: metadata-only account updates do not revoke established capabilities
+ok 21 - metadata-only account updates do not revoke established capabilities
+  ---
+  duration_ms: 4.244606
+  type: 'test'
+  ...
+# Subtest: expired access and refresh capabilities fail closed in the common session reader
+ok 22 - expired access and refresh capabilities fail closed in the common session reader
+  ---
+  duration_ms: 2.701083
+  type: 'test'
+  ...
+# Subtest: late socket authentication cannot reopen a connection after revocation
+ok 23 - late socket authentication cannot reopen a connection after revocation
+  ---
+  duration_ms: 2.645533
+  type: 'test'
+  ...
+# Subtest: real five-second watchdog closes a socket after a missed credential object event
+ok 24 - real five-second watchdog closes a socket after a missed credential object event
+  ---
+  duration_ms: 5253.372844
+  type: 'test'
+  ...
+# Subtest: idle deadline rejects access and refresh at ten minutes despite status reads and automatic token rotation
+ok 25 - idle deadline rejects access and refresh at ten minutes despite status reads and automatic token rotation
+  ---
+  duration_ms: 8.737531
+  type: 'test'
+  ...
+# Subtest: only explicit activity extends the same family; other independent logins remain isolated
+ok 26 - only explicit activity extends the same family; other independent logins remain isolated
+  ---
+  duration_ms: 6.474036
+  type: 'test'
+  ...
+# Subtest: idle read and token-save races recheck after asynchronous work
+ok 27 - idle read and token-save races recheck after asynchronous work
+  ---
+  duration_ms: 2.92892
+  type: 'test'
+  ...
+# Subtest: idle expiry uses a monotonic clock and is unchanged by a backwards wall clock
+ok 28 - idle expiry uses a monotonic clock and is unchanged by a backwards wall clock
+  ---
+  duration_ms: 2.544964
+  type: 'test'
+  ...
+# Subtest: bounded families prune expired entries and never evict another still-active login
+ok 29 - bounded families prune expired entries and never evict another still-active login
+  ---
+  duration_ms: 3.556313
+  type: 'test'
+  ...
+# Subtest: idle timer disposes silent SSE and sockets, rejects refreshed old sockets and preserves active other family
+ok 30 - idle timer disposes silent SSE and sockets, rejects refreshed old sockets and preserves active other family
+  ---
+  duration_ms: 1107.049885
+  type: 'test'
+  ...
+# Subtest: throwing authentication callbacks and upstream token rotation do not cause unhandled promise rejection
+ok 31 - throwing authentication callbacks and upstream token rotation do not cause unhandled promise rejection
+  ---
+  duration_ms: 5.157749
+  type: 'test'
+  ...
+# Subtest: TOTP account contract never falls back to password-only issuance or cached/refresh tokens
+ok 32 - TOTP account contract never falls back to password-only issuance or cached/refresh tokens
+  ---
+  duration_ms: 8.466598
+  type: 'test'
+  ...
+# (node:14) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: explicit external origin is HTTPS-only, canonical and rejects userinfo/path
+ok 33 - explicit external origin is HTTPS-only, canonical and rejects userinfo/path
+  ---
+  duration_ms: 2.293214
+  type: 'test'
+  ...
+# Subtest: transport rejects remote plaintext and spoofed Host/Origin regardless forwarding headers
+ok 34 - transport rejects remote plaintext and spoofed Host/Origin regardless forwarding headers
+  ---
+  duration_ms: 0.637488
+  type: 'test'
+  ...
+# Subtest: TLS Host authorities canonicalize default port and DNS case without trusting forwarding headers
+ok 35 - TLS Host authorities canonicalize default port and DNS case without trusting forwarding headers
+  ---
+  duration_ms: 0.340942
+  type: 'test'
+  ...
+# Subtest: TLS rejects missing, malformed and ambiguous Host authorities before serving any page
+ok 36 - TLS rejects missing, malformed and ambiguous Host authorities before serving any page
+  ---
+  duration_ms: 0.343355
+  type: 'test'
+  ...
+# Subtest: session token parsing rejects duplicate cookies and encoded/unsigned aliases
+ok 37 - session token parsing rejects duplicate cookies and encoded/unsigned aliases
+  ---
+  duration_ms: 0.241526
+  type: 'test'
+  ...
+# Subtest: status maps roles and persists activation only when core entitlement is granted
+ok 38 - status maps roles and persists activation only when core entitlement is granted
+  ---
+  duration_ms: 3.897715
+  type: 'test'
+  ...
+# Subtest: CSRF token is session- and epoch-bound; logout revokes its family without stopping other sessions
+ok 39 - CSRF token is session- and epoch-bound; logout revokes its family without stopping other sessions
+  ---
+  duration_ms: 2.026683
+  type: 'test'
+  ...
+# Subtest: bad CSRF does not revoke another login
+ok 40 - bad CSRF does not revoke another login
+  ---
+  duration_ms: 0.373249
+  type: 'test'
+  ...
+# Subtest: real HTTP login delegates to existing OAuth route and returns only opaque-cookie success
+ok 41 - real HTTP login delegates to existing OAuth route and returns only opaque-cookie success
+  ---
+  duration_ms: 74.942743
+  type: 'test'
+  ...
+# Subtest: login rate map is bounded and fails closed before issuer
+ok 42 - login rate map is bounded and fails closed before issuer
+  ---
+  duration_ms: 0.646381
+  type: 'test'
+  ...
+# Subtest: normal navigation GET/HEAD requires trusted transport but no Origin; writes still require Origin
+ok 43 - normal navigation GET/HEAD requires trusted transport but no Origin; writes still require Origin
+  ---
+  duration_ms: 0.409924
+  type: 'test'
+  ...
+# Subtest: cross-site top-level links reach only known entry pages, without granting an Origin write exemption
+ok 44 - cross-site top-level links reach only known entry pages, without granting an Origin write exemption
+  ---
+  duration_ms: 0.840456
+  type: 'test'
+  ...
+# Subtest: cross-site entry exception never accepts APIs, assets, writes, frames or WebSocket handshakes
+ok 45 - cross-site entry exception never accepts APIs, assets, writes, frames or WebSocket handshakes
+  ---
+  duration_ms: 0.49638
+  type: 'test'
+  ...
+# Subtest: independent machine transport cannot borrow browser cookie or Origin authority
+ok 46 - independent machine transport cannot borrow browser cookie or Origin authority
+  ---
+  duration_ms: 0.356154
+  type: 'test'
+  ...
+# (node:20) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: an untouched page logs out at ten minutes; background status reads do not renew
+ok 47 - an untouched page logs out at ten minutes; background status reads do not renew
+  ---
+  duration_ms: 17.591614
+  type: 'test'
+  ...
+# Subtest: trusted pointerdown extends idle exactly from the last submitted input
+ok 48 - trusted pointerdown extends idle exactly from the last submitted input
+  ---
+  duration_ms: 6.473004
+  type: 'test'
+  ...
+# Subtest: trusted keydown extends idle exactly from the last submitted input
+ok 49 - trusted keydown extends idle exactly from the last submitted input
+  ---
+  duration_ms: 6.122468
+  type: 'test'
+  ...
+# Subtest: trusted touchstart extends idle exactly from the last submitted input
+ok 50 - trusted touchstart extends idle exactly from the last submitted input
+  ---
+  duration_ms: 8.209138
+  type: 'test'
+  ...
+# Subtest: trusted wheel extends idle exactly from the last submitted input
+ok 51 - trusted wheel extends idle exactly from the last submitted input
+  ---
+  duration_ms: 3.592225
+  type: 'test'
+  ...
+# Subtest: synthetic events, passive pointer motion, polling and visibility never count as input
+ok 52 - synthetic events, passive pointer motion, polling and visibility never count as input
+  ---
+  duration_ms: 3.48621
+  type: 'test'
+  ...
+# Subtest: a burst is bounded and its final gesture still gets a trailing update
+ok 53 - a burst is bounded and its final gesture still gets a trailing update
+  ---
+  duration_ms: 4.796467
+  type: 'test'
+  ...
+# Subtest: an active sibling tab keeps the same family open without the idle tab renewing
+ok 54 - an active sibling tab keeps the same family open without the idle tab renewing
+  ---
+  duration_ms: 8.084144
+  type: 'test'
+  ...
+# Subtest: unrelated sessions and fabricated cross-tab deadlines cannot extend or end a page
+ok 55 - unrelated sessions and fabricated cross-tab deadlines cannot extend or end a page
+  ---
+  duration_ms: 5.25362
+  type: 'test'
+  ...
+# Subtest: sleep and BFCache resume checks the server before accepting a late gesture
+ok 56 - sleep and BFCache resume checks the server before accepting a late gesture
+  ---
+  duration_ms: 3.05197
+  type: 'test'
+  ...
+# Subtest: offline timeout hides the old page and does not stop devices or EMS
+ok 57 - offline timeout hides the old page and does not stop devices or EMS
+  ---
+  duration_ms: 2.972083
+  type: 'test'
+  ...
+# Subtest: refresh changes CSRF without losing a fresh real gesture or creating periodic writes
+ok 58 - refresh changes CSRF without losing a fresh real gesture or creating periodic writes
+  ---
+  duration_ms: 3.69077
+  type: 'test'
+  ...
+# Subtest: CSRF rotation just before expiry never delays the real gesture beyond the server deadline
+ok 59 - CSRF rotation just before expiry never delays the real gesture beyond the server deadline
+  ---
+  duration_ms: 2.97719
+  type: 'test'
+  ...
+# Subtest: same-origin Admin frame interactions count; frame reload listeners bind the new document
+ok 60 - same-origin Admin frame interactions count; frame reload listeners bind the new document
+  ---
+  duration_ms: 2.814462
+  type: 'test'
+  ...
+# Subtest: login page is excluded and duplicate loading never registers a second timer or API request
+ok 61 - login page is excluded and duplicate loading never registers a second timer or API request
+  ---
+  duration_ms: 3.444568
+  type: 'test'
+  ...
+# Subtest: blocked cross-tab transport keeps server checks and inactivity logout working
+ok 62 - blocked cross-tab transport keeps server checks and inactivity logout working
+  ---
+  duration_ms: 2.838166
+  type: 'test'
+  ...
+# Subtest: all canonical EOS screens include the shared root client, including recovery and module pages
+ok 63 - all canonical EOS screens include the shared root client, including recovery and module pages
+  ---
+  duration_ms: 11.354066
+  type: 'test'
+  ...
+# Subtest: instance proxy rendering and fetch mapping preserve the shared owner idle routes
+ok 64 - instance proxy rendering and fetch mapping preserve the shared owner idle routes
+  ---
+  duration_ms: 294.417515
+  type: 'test'
+  ...
+# (node:20) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+1..64
+# tests 64
+# suites 0
+# pass 64
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6951.624935

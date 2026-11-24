@@ -1,11 +1,11 @@
 {
   "schema": "nexowatt.admin-bundle-components.v1",
-  "generatedAt": "2026-11-23T19:20:32.190Z",
+  "generatedAt": "2026-11-23T20:22:28.546Z",
   "provenance": "Rollup writeBundle module graph; npm modules with renderedLength > 0; hashes of final files",
   "limitations": "Lists npm packages contributing rendered JavaScript. Not a source code review, OS inventory or vulnerability clearance.",
-  "packageLockSha256": "93ab5f6ff32e4dfa59d1bf9acf5ff322ca87f828e670063ef0398e9cb5841f75",
+  "packageLockSha256": "49081c5bd8897e187c00256f2af83ebff60c67f1dfdc82a83084154924d088b9",
   "viteConfigSha256": "f59d3db711ab3bff7de7b2b2e8cbc1066375df69ecbe5b5476ef1c54aabe0986",
-  "entryHtmlSha256": "3bff4f192b50cd550ae0b60e8006e6028cef9b7224d64a84d8e69bac08910d01",
+  "entryHtmlSha256": "e4eafa219c5154ae588b73b6f8f5673b976e6da239e620a99b9dda7c83f1685a",
   "projectModules": [
     {
       "path": "src-admin-tab/src/App.tsx",
@@ -187,7 +187,7 @@
     },
     {
       "path": "admin/react/index.html",
-      "sha256": "e5c3444627eeffffd8f911c26aa08ac3b49826fa0f55c4ecb225f42ce91660f0"
+      "sha256": "99a91528fbf72cb1287d4663756e30055d6bdab5d9f98f30dcb0b47af338e3d2"
     }
   ]
 }

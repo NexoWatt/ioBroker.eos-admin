@@ -936,10 +936,8 @@ class Web {
                 .catch(() => null));
             return user?.type === 'user' && user.common?.enabled !== false ? userId : null;
         };
-        // req.user is set only by the upstream authenticated middleware, never by body/query input.
-        if (req.user) {
-            return enabledUser(req.user);
-        }
+        // req.user may be retained by a long-lived SSE request. Always re-read the
+        // actual access capability; a once authenticated request cannot outlive idle expiry.
         const token = this.readAccessTokenFromRequest(req);
         if (!token || token.length < 16 || token.length > 4096) {
             return null;
@@ -954,7 +952,8 @@ class Web {
             session.aExp <= Date.now()) {
             return null;
         }
-        return enabledUser(session.user);
+        const user = await enabledUser(session.user);
+        return this.adapter.eosSessionSecurity?.idleView(session).authenticated ? user : null;
     }
     getEosConfiguredRoleGroups(...keys) {
         const groups = new Set();
@@ -1828,6 +1827,25 @@ class Web {
         if (!app) {
             throw new Error('EOS_HTTP_UNAVAILABLE');
         }
+        // One small public script observes genuine interaction on every EOS page.
+        // Authentication and expiry remain server-enforced when JavaScript is absent.
+        app.get('/eos-session-idle.js', (_req, res) => {
+            res.setHeader('Cache-Control', 'no-store');
+            res.setHeader('X-Content-Type-Options', 'nosniff');
+            res.sendFile((0, node_path_1.join)(this.baseDir, 'ui', 'www', 'eos-session-idle.js'));
+        });
+        app.get('/api/auth/idle', (req, res) => {
+            res.setHeader('Cache-Control', 'no-store');
+            if (!this.unified.requestAllowed(req)) {
+                res.status(403).json({ error: 'AUTH_ORIGIN' });
+                return;
+            }
+            void this.unified.idle(req).then(value => res.json(value), () => res.status(503).json({ error: 'AUTH_UNAVAILABLE' }));
+        });
+        app.post(['/api/auth/activity', '/api/auth/expire'], bodyParser.json({ limit: '1kb', strict: true }), (req, res) => {
+            const task = req.path === '/api/auth/activity' ? this.unified.activity(req, res) : this.unified.expire(req, res);
+            void task.catch(() => res.status(503).json({ error: 'AUTH_UNAVAILABLE' }));
+        });
         const tlsManager = new eosTlsManager_1.EosTlsManager((0, node_path_1.join)((0, adapter_core_1.getAbsoluteInstanceDataDir)(this.adapter), 'tls'), this.settings.eosMdnsHostname || 'nexowatt');
         this.tlsManager = tlsManager;
         try {
@@ -1969,6 +1987,17 @@ class Web {
                     else {
                         res.status(402).json({ error: 'LICENSE_REQUIRED', url: '/nexowatt/license' });
                     }
+                    return;
+                }
+                if (path === '/events') {
+                    void this.unified.bindStream(req, res).then(allowed => {
+                        if (allowed) {
+                            runtime.handle(req, res, next);
+                        }
+                        else {
+                            res.status(401).json({ error: 'AUTH_IDLE_EXPIRED' });
+                        }
+                    }, () => res.status(503).json({ error: 'AUTH_UNAVAILABLE' }));
                     return;
                 }
                 runtime.handle(req, res, next);

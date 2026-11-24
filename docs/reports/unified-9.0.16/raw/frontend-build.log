@@ -1,0 +1,152 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> iobroker.eos-admin@9.0.16 build:frontend
+> node --import tsx tasks.mts
+
+vite v8.3.5 building client environment for production...
+transforming...
+<script src="js/eos-manual-write-policy.js?v=7109"> in "/index.html" can't be bundled without type="module" attribute
+<script src="/eos-session-idle.js"> in "/index.html" can't be bundled without type="module" attribute
+<script src="js/eos-role-bootstrap.js?v=7109&security=20260930"> in "/index.html" can't be bundled without type="module" attribute
+<script src="js/eos-policy-client.js?v=7109"> in "/index.html" can't be bundled without type="module" attribute
+<script src="js/eos-branding-sanitizer.js?v=7109"> in "/index.html" can't be bundled without type="module" attribute
+<script src="js/nexowatt-native-shell.js?v=7110"> in "/index.html" can't be bundled without type="module" attribute
+<script src="js/eos-native-security.js?v=7109"> in "/index.html" can't be bundled without type="module" attribute
+<script src="js/eos-basic-settings.js?v=7109"> in "/index.html" can't be bundled without type="module" attribute
+<script src="js/eos-role-ui.js?v=7109"> in "/index.html" can't be bundled without type="module" attribute
+<script src="./js/eos-auto-update.js?v=7103"> in "/index.html" can't be bundled without type="module" attribute
+<script src="js/eos-account-management.js?v=7109&security=20260930"> in "/index.html" can't be bundled without type="module" attribute
+<script src="js/eos-ems-overview.js?v=7109"> in "/index.html" can't be bundled without type="module" attribute
+<script src="js/eos-assistant.js?v=7109"> in "/index.html" can't be bundled without type="module" attribute
+<script src="static/js/nexowatt-stable-login.js?v=7109"> in "/index.html" can't be bundled without type="module" attribute
+<script src="static/js/nexowatt-stable-v7109.js?v=7109"> in "/index.html" can't be bundled without type="module" attribute
+<script src="js/eos-license-link.js?v=7110"> in "/index.html" can't be bundled without type="module" attribute
+
+css/leaflet.css doesn't exist at build time, it will remain unchanged to be resolved at runtime
+
+css/nexowatt-native-shell.css?v=7110 doesn't exist at build time, it will remain unchanged to be resolved at runtime
+
+css/eos-boot-loader.css doesn't exist at build time, it will remain unchanged to be resolved at runtime
+
+css/eos-ems-overview.css?v=7109 doesn't exist at build time, it will remain unchanged to be resolved at runtime
+
+./css/eos-auto-update.css?v=7103 doesn't exist at build time, it will remain unchanged to be resolved at runtime
+✓ 14845 modules transformed.
+rendering chunks...
+computing gzip size...
+build/remoteEntry.js                                                                                       0.04 kB
+build/eos-object-browser-guards.json                                                                       0.18 kB │ gzip:     0.15 kB
+build/assets/mf-entry-bootstrap-0-01598488.js                                                              2.16 kB
+build/assets/user5-DwFpzcW1.svg                                                                            4.19 kB │ gzip:     1.56 kB
+build/assets/user2-kVvfO6hI.svg                                                                            4.90 kB │ gzip:     2.00 kB
+build/assets/user7-DkJFgUmb.svg                                                                            5.15 kB │ gzip:     1.67 kB
+build/assets/user10-DvWuZ_uc.svg                                                                           5.30 kB │ gzip:     1.74 kB
+build/assets/user3-B1MPu8jB.svg                                                                            5.30 kB │ gzip:     2.27 kB
+build/mf-manifest.json                                                                                     5.37 kB │ gzip:     0.71 kB
+build/assets/user4-DmVDIOoi.svg                                                                            5.49 kB │ gzip:     1.95 kB
+build/assets/echarts-BDq-rBJC.png                                                                          5.81 kB
+build/assets/user8-BZA6Afc4.svg                                                                            6.52 kB │ gzip:     2.05 kB
+build/assets/user9-BLdaSIG0.svg                                                                            6.87 kB │ gzip:     2.22 kB
+build/assets/user11-Ch5DvO34.svg                                                                           7.04 kB │ gzip:     2.00 kB
+build/assets/group5-T3CGkJFm.svg                                                                           7.55 kB │ gzip:     1.79 kB
+build/assets/user12-DEiNnJWd.svg                                                                           7.88 kB │ gzip:     2.14 kB
+build/assets/user6-DHgFm0fc.svg                                                                            7.89 kB │ gzip:     2.19 kB
+build/assets/group4-D4IM6-jV.svg                                                                           8.26 kB │ gzip:     2.23 kB
+build/assets/group1-CmFsZszo.svg                                                                           8.78 kB │ gzip:     3.36 kB
+build/assets/user1-D1GAYfim.svg                                                                            9.64 kB │ gzip:     4.06 kB
+build/assets/group7-D-h4KR6w.svg                                                                          10.35 kB │ gzip:     2.75 kB
+build/index.html                                                                                          10.55 kB │ gzip:     2.52 kB
+build/assets/group6-CLVorg7G.svg                                                                          11.44 kB │ gzip:     2.18 kB
+build/assets/group3-CRAMNPrf.svg                                                                          11.75 kB │ gzip:     3.55 kB
+build/assets/group2-CuvSswwx.svg                                                                          12.06 kB │ gzip:     3.38 kB
+build/assets/group10-Dp9tRs6I.svg                                                                         14.68 kB │ gzip:     4.87 kB
+build/mf-stats.json                                                                                       17.52 kB │ gzip:     2.79 kB
+build/assets/group8-BXzJmR7Y.svg                                                                          24.17 kB │ gzip:     6.34 kB
+build/.vite/manifest.json                                                                                 24.69 kB │ gzip:     3.44 kB
+build/assets/logo-vO-KvdxW.svg                                                                            40.08 kB │ gzip:    30.10 kB
+build/assets/material-peAUziEw.woff2                                                                      60.83 kB
+build/assets/material-nACPaH8J.woff                                                                       64.00 kB
+build/assets/wizard-finish-B2y4teLv.jpg                                                                  195.74 kB
+build/NEXOWATT_EOS_FRONTEND_MANIFEST.json                                                                981.10 kB │ gzip:    89.47 kB
+build/assets/wizard-welcome-BhniCBF1.jpg                                                               1,096.89 kB
+build/assets/bootstrap-BxGG6BRn.css                                                                        9.73 kB │ gzip:     2.70 kB
+build/assets/helpers-C0aN90O2.js                                                                           0.09 kB │ gzip:     0.11 kB
+build/assets/Remove-IN7ZNaCF.js                                                                            0.12 kB │ gzip:     0.13 kB
+build/assets/isSameWeek-WMSJR5Qs.js                                                                        0.13 kB │ gzip:     0.14 kB
+build/assets/ctrlEnter-CruFIPb_.js                                                                         0.17 kB │ gzip:     0.15 kB
+build/assets/Storage-B44xXFFu.js                                                                           0.18 kB │ gzip:     0.16 kB
+build/assets/ViewList-DVj9ENkU.js                                                                          0.18 kB │ gzip:     0.17 kB
+build/assets/Book-Cq8bkU2t.js                                                                              0.20 kB │ gzip:     0.18 kB
+build/assets/Computer-BBU3Cm9-.js                                                                          0.21 kB │ gzip:     0.19 kB
+build/assets/Apps-BZHXIYjq.js                                                                              0.22 kB │ gzip:     0.17 kB
+build/assets/VpnKey-BbZdswcd.js                                                                            0.25 kB │ gzip:     0.22 kB
+build/assets/InfoOutlined-Bggo2-pX.js                                                                      0.26 kB │ gzip:     0.21 kB
+build/assets/TextSnippet-C9R3EbZy.js                                                                       0.28 kB │ gzip:     0.23 kB
+build/assets/DeleteForever-CioJt3X3.js                                                                     0.30 kB │ gzip:     0.23 kB
+build/assets/Schedule-vdojlve9.js                                                                          0.31 kB │ gzip:     0.24 kB
+build/assets/AccessTime-CuR73YC3.js                                                                        0.32 kB │ gzip:     0.24 kB
+build/assets/Cached-DXXpEqUN.js                                                                            0.32 kB │ gzip:     0.25 kB
+build/assets/KeyboardArrowRight-ifvmV1ZL.js                                                                0.32 kB │ gzip:     0.26 kB
+build/assets/UnfoldMore-DOHSVdRn.js                                                                        0.35 kB │ gzip:     0.24 kB
+build/assets/Extension-DIV5Bi1u.js                                                                         0.39 kB │ gzip:     0.27 kB
+build/assets/PushPinOutlined-BCUm5DLR.js                                                                   0.48 kB │ gzip:     0.28 kB
+build/assets/State-CJXFX0FU.js                                                                             0.53 kB │ gzip:     0.34 kB
+build/assets/Timeline-BtOuO808.js                                                                          0.65 kB │ gzip:     0.37 kB
+build/assets/ViewCompact-D7bHgn99.js                                                                       0.81 kB │ gzip:     0.46 kB
+build/assets/classPrivateFieldGet2-DZ8s9-Td.js                                                             0.82 kB │ gzip:     0.48 kB
+build/assets/PersonOff-YtHcY0sV.js                                                                         0.88 kB │ gzip:     0.49 kB
+build/assets/Usb-C8HitPqx.js                                                                               1.03 kB │ gzip:     0.62 kB
+build/assets/MoreHoriz-CS7nODK8.js                                                                         1.04 kB │ gzip:     0.55 kB
+build/assets/Pageview-wzrLQZ-j.js                                                                          1.16 kB │ gzip:     0.60 kB
+build/assets/Timer-vc3BIs4y.js                                                                             1.17 kB │ gzip:     0.66 kB
+build/assets/rolldown-runtime-sJBDdmOt.js                                                                  1.20 kB │ gzip:     0.67 kB
+build/assets/index-Do9tAs3_.js                                                                             1.24 kB │ gzip:     0.72 kB
+build/assets/ViewSidebar-CjClbCI5.js                                                                       1.30 kB │ gzip:     0.70 kB
+build/assets/pendingShares-QmYNLpPy.js                                                                     1.55 kB │ gzip:     0.87 kB
+build/assets/vite-preload-helper-BbbETgeG.js                                                               1.56 kB │ gzip:     0.81 kB
+build/assets/CustomModal-Do2qVZr7.js                                                                       2.08 kB │ gzip:     1.15 kB
+build/assets/Fields-CyehnnBi.js                                                                            2.38 kB │ gzip:     1.09 kB
+build/assets/ConfigManager-Dd7xv3Lb.js                                                                     2.40 kB │ gzip:     1.18 kB
+build/assets/Star-D8VNXawT.js                                                                              2.82 kB │ gzip:     1.42 kB
+build/assets/sentry-CPzCHrwe.js                                                                            4.08 kB │ gzip:     2.29 kB
+build/assets/EasyMode-A2E3hSMo.js                                                                          4.57 kB │ gzip:     1.96 kB
+build/assets/CustomTab-B4ywHrnT.js                                                                         6.08 kB │ gzip:     2.22 kB
+build/assets/hostInit-C1ZGwHLZ.js                                                                          6.19 kB │ gzip:     2.52 kB
+build/assets/UsedResources-CZF-hCZ-.js                                                                     6.69 kB │ gzip:     2.78 kB
+build/assets/WifiTethering-DJ9VO12W.js                                                                     7.29 kB │ gzip:     3.25 kB
+build/assets/en-US-BjjaEI6N.js                                                                             7.89 kB │ gzip:     2.80 kB
+build/assets/_virtual_mf-localSharedImportMap___mfe_internal__iobroker_admin__mf_owner__1-DMV_e2iP.js     12.80 kB │ gzip:     2.60 kB
+build/assets/Config-C4k51ggG.js                                                                           13.31 kB │ gzip:     3.86 kB
+build/assets/AdminUtils-Dc1eHsx5.js                                                                       16.34 kB │ gzip:     5.66 kB
+build/remoteEntry-eos-9.0.16.js                                                                           22.98 kB │ gzip:     7.49 kB
+build/assets/lib-CMbRq-7p.js                                                                              23.20 kB │ gzip:     8.17 kB
+build/assets/Logs-CEf7gP5Q.js                                                                             25.07 kB │ gzip:     7.62 kB
+build/assets/Users-CafIkvjy.js                                                                            29.77 kB │ gzip:     8.09 kB
+build/assets/date-fns-BtR4dG_j.js                                                                         32.87 kB │ gzip:     9.42 kB
+build/assets/Overview-Dbazo_Hx.js                                                                         35.02 kB │ gzip:    11.64 kB
+build/assets/setYear-DDSuW45e.js                                                                          38.81 kB │ gzip:     8.10 kB
+build/assets/Files-BUpfW787.js                                                                            44.16 kB │ gzip:    15.26 kB
+build/assets/AdapterUpdateDialog-BJO6M0c4.js                                                              49.74 kB │ gzip:    15.08 kB
+build/assets/Intro-CfjiWTEj.js                                                                            57.90 kB │ gzip:    17.00 kB
+build/assets/Enums-D1imAGfz.js                                                                            83.46 kB │ gzip:    25.56 kB
+build/assets/prod-ChPGnyiA.js                                                                             92.19 kB │ gzip:    31.54 kB
+build/assets/Hosts-Cr3bFDw6.js                                                                           136.94 kB │ gzip:    31.09 kB
+build/assets/Adapters-DrItfmet.js                                                                        137.04 kB │ gzip:    34.28 kB
+build/assets/zh-cn-B6dBxOyw.js                                                                           148.00 kB │ gzip:    46.29 kB
+build/assets/AceEditor-BgLZBrSD.js                                                                       153.33 kB │ gzip:    41.00 kB
+build/assets/Instances-Bj8r7_jI.js                                                                       199.90 kB │ gzip:    55.30 kB
+build/assets/iconLibraryData-B5fiyl1C.js                                                                 264.14 kB │ gzip:   101.95 kB
+build/assets/Objects-DpGxWk16.js                                                                         374.57 kB │ gzip:   104.66 kB
+build/assets/installSVGRenderer-C5nZI9jm.js                                                              525.23 kB │ gzip:   179.11 kB
+build/assets/locale-DN6Bdkdt.js                                                                          608.59 kB │ gzip:   107.66 kB
+build/assets/bootstrap-BBQDyvzX.js                                                                     2,029.17 kB │ gzip:   664.03 kB
+build/assets/icons-material-DNG3EY-O.js                                                                3,815.27 kB │ gzip:   687.92 kB
+build/assets/loadShare-eager-dmdYQhAl.js                                                               4,268.11 kB │ gzip: 1,223.59 kB
+
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 19.96s
+[NexoWatt EOS post-build guard] OK: reviewed Admin 8 source guards, unchanged emitted modules

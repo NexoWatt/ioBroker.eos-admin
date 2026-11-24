@@ -6,6 +6,7 @@ const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
 const root=path.resolve(__dirname,'..');
 const security=require('../build/lib/eosRequestSecurity');
 const {UnifiedSessions}=require('../src/lib/eosUnifiedBoundary');
+const {installIdleSession}=require('./fixtures/eos-idle-session.cjs');
 const code=fs.readFileSync(path.join(root,'build/lib/web.js'),'utf8');
 const exportsObject={};
 vm.runInNewContext(code,{exports:exportsObject,module:{exports:exportsObject},__dirname:path.join(root,'build/lib'),Buffer,URL,console,process:{env:{}},require:name=>name.startsWith('node:')?require(name):name==='./eosRequestSecurity'?security:{}},{filename:'shipped-build/lib/web.js',timeout:5000});
@@ -66,14 +67,22 @@ test('HTTP credential query guard rejects bearer/password forms and preserves no
  assert.ok(guard && guard.index < code.indexOf('this.oauth2Model ='), 'shipped URL credential rejection precedes OAuth registration');
 });
 
-test('EOS token readers no longer accept query credentials but preserve cookie and Authorization',async()=>{
- const web=makeWeb();let reads=0;
- web.adapter={getSession(id,cb){reads++;cb({user:'operator',aExp:Date.now()+60000});},async getForeignObjectAsync(){return{type:'user',common:{enabled:true}};}};
+test('EOS token readers no longer accept query credentials but preserve cookie and Authorization',async t=>{
+ const web=makeWeb();let reads=0,now=0;
+ web.adapter={config:{},log:{warn(){},info(){},debug(){},error(){}}};
+ const session=await installIdleSession(web.adapter,{token:'audit-placeholder-session',user:'operator',now:()=>now});
+ t.after(()=>session.cleanup());
+ const read=web.adapter.getSession.bind(web.adapter);
+ web.adapter.getSession=(...args)=>{reads++;return read(...args);};
  const query={headers:{},query:{token:'audit-placeholder-session'}};
  assert.equal(web.readAccessTokenFromRequest(query),null);assert.equal(web.extractAccessToken(query),null);assert.equal(await web.readEosCurrentUser(query),null);assert.equal(reads,0);
  for(const headers of [{cookie:'access_token=audit-placeholder-session'},{authorization:'Bearer audit-placeholder-session'}]){
   assert.equal(await web.readEosCurrentUser({headers,query:{}}),'system.user.operator');
  }
+ assert.equal(await web.readEosCurrentUser({headers:{authorization:'Bearer refresh-audit-placeholder-session'},query:{}}),null,'refresh token cannot authenticate an access request');
+ assert.equal(await web.readEosCurrentUser({user:'operator',headers:{},query:{}}),null,'upstream identity alone is not a session capability');
+ now=600000;
+ assert.equal(await web.readEosCurrentUser({user:'operator',headers:{cookie:'access_token=audit-placeholder-session'},query:{}}),null,'cached upstream identity cannot survive the idle deadline');
 });
 
 test('file identity guard rejects anonymous and pending-password users and passes normalized caller',async()=>{

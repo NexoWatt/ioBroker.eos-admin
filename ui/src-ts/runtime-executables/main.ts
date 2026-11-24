@@ -27,7 +27,7 @@ const { normalizeDeviceControls, getControlProfiles } = require('./lib/smarthome
 const { registerSmartHomeDeviceApi, createDeviceSnapshotReader, buildDeviceControls } = require('./lib/smarthome-device-api');
 const { cleanControls, extendSuggestion, DetectionError, DetectionScan, DETECTION_LIMITS, detectionNow, detectionSnapshot } = require('./lib/smarthome-device-detection');
 const { smartHomeEnabled, registerSmartHomeActivationApi } = require('./lib/smarthome-activation');
-const { readPreservedUiStates } = require('./lib/preserved-ui-config');
+const { readPreservedUiStates, parseInstallerConfigState } = require('./lib/preserved-ui-config');
 const { createRuntimeFileSender, runtimeProxyPrefix, rewriteRuntimeProxyHtml, isHttpsRuntimeProxy } = require('./lib/runtime-proxy-html');
 const { parseUiCookies, isPublicUiRequest, isIndependentMachineRequest, uiRequestPath, constantTimeToken } = require('./lib/ui-access-policy');
 const { resolveUiTlsOptions, UiTlsConfigurationError } = require('./lib/ui-server-transport');
@@ -2736,6 +2736,9 @@ class NexoWattVis extends HostedAdapter {
       flowInvertConsumers: { type: 'boolean', role: 'state', def: false },
     };
 
+    // Diese sechs Werte werden nach der Installer-Hydration initialisiert.
+    // Vorher gesetzte Defaults würden gespeicherte Installer-Vorgaben verdecken.
+    const flowConfigKeys = new Set(['flowSubtractEvFromBuilding', 'flowInvertGrid', 'flowInvertBattery', 'flowInvertPv', 'flowInvertEv', 'flowGridShowNet']);
     for (const [key, c] of Object.entries(defs)) {
       const id = `settings.${key}`;
       const weatherCredential = key === 'weatherApiKey';
@@ -2758,7 +2761,7 @@ class NexoWattVis extends HostedAdapter {
       // This keeps existing user preferences intact across updates.
       try {
         const st = await this.getStateAsync(id);
-        if (!st) {
+        if (!st && !flowConfigKeys.has(key)) {
           await this.setStateAsync(id, { val: c.def, ack: true });
         }
       } catch (_e) {}
@@ -4712,6 +4715,7 @@ class NexoWattVis extends HostedAdapter {
 
   async loadInstallerConfigFromState() {
     const preservedMode = this.namespace !== this.hostNamespace && /^nexowatt-ui\.\d+$/.test(this.namespace);
+    const previous = { config: this.config, native: this._nwNativeConfigBase, patch: this._nwInstallerConfigPatch, rawPatch: this._nwInstallerConfigRawPatch };
     try {
       const baseNative = (this.config && typeof this.config === 'object') ? this.config : {};
       // Kunden-Navigation: Admin-native Schalter dürfen nicht durch alte Installer-Patches
@@ -4729,59 +4733,27 @@ class NexoWattVis extends HostedAdapter {
         : null;
       const st = preserved ? (preserved.values['installer.configJson'] === null ? null : { val: JSON.stringify(preserved.values['installer.configJson']) })
         : await this.getStateAsync('installer.configJson');
-      const raw = st && st.val;
-
-      if (typeof raw === 'string' && raw.trim()) {
-        try {
-          const parsed = JSON.parse(raw);
-          if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
-            patch = parsed;
-          } else {
-            needPersist = true;
-          }
-        } catch (e) {
-          needPersist = true;
-          try {
-            this.log.warn('installer.configJson: invalid JSON, trying userdata backup.');
-          } catch (_e2) {}
-        }
+      // Ein vorhandener Kundenstand ist maßgeblich, auch {} und bewusst leere
+      // Geräte-/DP-Listen. Ein größeres/älteres Backup darf ihn nie ersetzen.
+      if (st !== null && st !== undefined) {
+        patch = parseInstallerConfigState(st);
       } else {
-        // Empty state → seed from native defaults and persist for App‑Center use
+        // Nur ein bestätigter fehlender State erlaubt Erstinitialisierung/Recovery.
+        // Lesefehler und beschädigte vorhandene Daten verlassen diesen Pfad vor Writes.
         needPersist = true;
-      }
-
-      // Extra safety: even if the state contains *valid* JSON (e.g. an empty patch), it may still be
-      // a reset after an update. In that case, prefer the uninstall-proof userdata backup when it
-      // contains a more complete configuration (e.g. mapped datapoints).
-      if (!preservedMode) try {
-        const stateScore = this._nwPatchScore ? this._nwPatchScore(patch) : 0;
-        const b = await this.nwReadUserdataBackup();
-        const bPatch = (b && typeof b === 'object') ? b.configPatch : null;
-        const backupScore = this._nwPatchScore ? this._nwPatchScore(bPatch) : 0;
-        if (backupScore > 0 && stateScore < backupScore && stateScore <= 1) {
-          patch = (bPatch && typeof bPatch === 'object') ? bPatch : patch;
-          needPersist = true;
-          source = 'userdata';
-          try { this.log && this.log.warn && this.log.warn('installer.configJson looks empty – restoring installer config from userdata backup'); } catch (_e) {}
-        }
-      } catch (_e) {}
-// Fallback: read uninstall-proof backup from 0_userdata.0 when state is empty/invalid
-      if (needPersist && !preservedMode) {
-        try {
-          const b = await this.nwReadUserdataBackup();
-          if (b && b.configPatch && typeof b.configPatch === 'object' && !Array.isArray(b.configPatch)) {
-            patch = b.configPatch;
+        if (!preservedMode) {
+          const backup = await this.nwReadUserdataBackup({ strict: true });
+          if (backup && backup.configPatch && backup.instance === this.instance) {
+            patch = parseInstallerConfigState({ val: JSON.stringify(backup.configPatch) });
             source = 'userdata';
           }
-        } catch (_e3) {
-          // ignore
         }
       }
 
-      // Normalize patch (fills missing keys from native config; canonicalizes emsApps)
+      // Neue Laufzeitfelder werden ausschließlich im Speicher ergänzt. Ein normales
+      // Update/Neustart schreibt keine normalisierte Fassung über vorhandene Kundendaten.
       const norm = this.nwNormalizeInstallerPatch(patch, baseNative);
       patch = norm.patch;
-      if (norm.changed) needPersist = true;
 
       this._nwInstallerConfigPatch = patch;
       // Roh-Patch separat merken: Sichtbarkeitsentscheidungen sollen nicht durch
@@ -4797,11 +4769,9 @@ class NexoWattVis extends HostedAdapter {
       try { await this._nwValidateDynamicGridConfig(); }
       catch (_dynamicError) { this._nwDynamicGridValidation = { validation: { valid: false, errors: [{ code: 'DYNAMIC_GRID_SOURCE_VALIDATION_FAILED', message: 'Objektprüfung fehlgeschlagen.' }] } }; }
 
-      // Persist normalized/seeded patch back to state (migration / first-run bootstrap)
+      // Nur Erstinitialisierung bzw. fehlenden State sichern, nie bestehende Konfiguration.
       if (needPersist) {
-        try {
-          await this.persistInstallerConfigToState(patch);
-        } catch (_e4) {}
+        if (await this.persistInstallerConfigToState(patch) === false) throw new Error('EOS_UI_CONFIG_WRITE_FAILED');
 
         // Keep userdata backup in sync (best-effort)
         try {
@@ -4810,8 +4780,13 @@ class NexoWattVis extends HostedAdapter {
       }
 
     } catch (e) {
-      this.log.warn('loadInstallerConfigFromState failed: credential-config-load-failed');
-      if (preservedMode) throw e;
+      this.config = previous.config;
+      this._nwNativeConfigBase = previous.native;
+      this._nwInstallerConfigPatch = previous.patch;
+      this._nwInstallerConfigRawPatch = previous.rawPatch;
+      this.log.warn('loadInstallerConfigFromState failed: EOS_UI_CONFIG_LOAD_FAILED; saved configuration unchanged');
+      if (preservedMode || /^EOS_UI_(CONFIG_(INVALID|WRITE_FAILED)|BACKUP_READ_FAILED)$/.test(String(e?.message || ''))) throw e;
+      throw new Error('EOS_UI_CONFIG_LOAD_FAILED');
     }
   }
   /**
@@ -5041,8 +5016,11 @@ class NexoWattVis extends HostedAdapter {
    * Zusammenhang: Teil von Adapterkern: Lifecycle, Webserver, API, States, EMS-Engine; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
-  async nwReadUserdataBackup() {
-    if (!await this.nwEnsureUserdataBackupObjects()) return null;
+  async nwReadUserdataBackup({ strict = false } = {}) {
+    if (!await this.nwEnsureUserdataBackupObjects()) {
+      if (strict) throw new Error('EOS_UI_BACKUP_READ_FAILED');
+      return null;
+    }
     const base = '0_userdata.0.nexowattVis';
     const candidates = ['backupJson', 'backupJsonPrev'];
 
@@ -5053,9 +5031,19 @@ class NexoWattVis extends HostedAdapter {
       try {
         const st = await this.getForeignStateAsync(`${base}.${k}`);
         const raw = st && st.val;
+        if (strict && st !== null && st !== undefined && (typeof raw !== 'string' || !raw.trim())) throw new Error('EOS_UI_BACKUP_READ_FAILED');
         if (typeof raw === 'string' && raw.trim()) {
           const parsed = JSON.parse(raw);
+          if (strict) {
+            // Historischer Objekt-Default vor der ersten Sicherung ist {}.
+            if (parsed && typeof parsed === 'object' && !Array.isArray(parsed) && Object.keys(parsed).length === 0) continue;
+            if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed) || !Number.isInteger(parsed.instance) || parsed.instance < 0) throw new Error('EOS_UI_BACKUP_READ_FAILED');
+            parseInstallerConfigState({ val: JSON.stringify(parsed.configPatch) });
+          }
           if (parsed && typeof parsed === 'object') {
+            // Automatische Erst-Recovery nimmt die aktuelle Sicherung; ein älterer
+            // Stand mit mehr Geräten ist kein besserer Kundenstand.
+            if (strict) return parsed;
             const patch = parsed.configPatch;
             const score = this._nwPatchScore ? this._nwPatchScore(patch) : 0;
             if (score > bestScore) {
@@ -5064,7 +5052,9 @@ class NexoWattVis extends HostedAdapter {
             }
           }
         }
-      } catch (_e) {}
+      } catch (_e) {
+        if (strict) throw new Error('EOS_UI_BACKUP_READ_FAILED');
+      }
     }
 
     return best;
@@ -6093,7 +6083,7 @@ class NexoWattVis extends HostedAdapter {
           await this.setStateAsync(id, { val: defVal, ack: true });
         }
       } catch (_e) {
-        try { await this.setStateAsync(id, { val: defVal, ack: true }); } catch (_e2) {}
+        throw new Error('EOS_STORAGE_FARM_STATE_INIT_FAILED');
       }
     }
   }
@@ -6146,10 +6136,9 @@ class NexoWattVis extends HostedAdapter {
       if (!shouldWriteList) {
         try {
           const st = await this.getStateAsync('storageFarm.configJson');
-          const v = st && typeof st.val === 'string' ? st.val : '';
-          shouldWriteList = !v || v === '[]' || v === 'null';
+          shouldWriteList = st === null || st === undefined;
         } catch (_e2) {
-          shouldWriteList = true;
+          throw new Error('EOS_STORAGE_FARM_CONFIG_READ_FAILED');
         }
       }
 
@@ -8688,7 +8677,7 @@ class NexoWattVis extends HostedAdapter {
    * Zusammenhang: Teil von Adapterkern: Lifecycle, Webserver, API, States, EMS-Engine; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
-  async syncSettingsToStates() {
+  async syncSettingsToStates(preserveExisting = false) {
     // Mirror selected native.settings values into adapter states (used by VIS)
     const s = (this.config && this.config.settings && typeof this.config.settings === 'object') ? this.config.settings : {};
     /**
@@ -8714,8 +8703,9 @@ class NexoWattVis extends HostedAdapter {
 
     for (const [k, v] of Object.entries(toSet)) {
       try {
+        if (preserveExisting && await this.getStateAsync(`settings.${k}`)) continue;
         await this.setStateAsync(`settings.${k}`, { val: v, ack: true });
-      } catch (_e) {}
+      } catch (_e) { /* Ein Lesefehler ist kein Auftrag, Kundeneinstellungen zu ersetzen. */ }
     }
   }
   /**
@@ -11631,9 +11621,8 @@ async onReady() {
         // SmartHome: Endkunden-Zeitschaltuhren (persisted in adapter states)
         try { await startupStep(() => this.ensureSmartHomeUserStates()); } catch (_e) {}
 
-        // PV Saisonprofil: KI ist immer aktiv.
-        // Ältere Installationen könnten den Schalter noch auf false haben – wir setzen ihn beim Startup wieder auf true.
-        try { await startupStep(() => this.setStateAsync('settings.tariffPvSeasonAiEnabled', { val: true, ack: true })); } catch (_e) {}
+        // ensureSettingsStates initialisiert PV-KI nur beim ersten Start. Eine
+        // gespeicherte Deaktivierung bleibt auch bei Updates/Neustarts erhalten.
 
         // Simulation (optional): Admin-startable test mode using nexowatt-sim adapter.
         try { await startupStep(() => this.ensureSimulationStates()); } catch (_e) {}
@@ -11669,7 +11658,7 @@ async onReady() {
       await startupStep(() => this.syncStorageFarmDefaultsToStates());
       await startupStep(() => this.syncStorageFarmConfigFromAdmin());
       await startupStep(() => this.syncInstallerConfigToStates());
-      await startupStep(() => this.syncSettingsToStates());
+      await startupStep(() => this.syncSettingsToStates(true));
 
       // write settings-config defaults
       await startupStep(() => this.syncSettingsConfigToStates());
@@ -11792,6 +11781,8 @@ async onReady() {
     } catch (e) {
       if (this._nwShuttingDown) return;
       const fatalStartupCodes = ['EOS_UI_OWNERSHIP_LOST', 'EOS_UI_LICENSE_LOST',
+        'EOS_UI_CONFIG_INVALID', 'EOS_UI_CONFIG_LOAD_FAILED', 'EOS_UI_CONFIG_WRITE_FAILED',
+        'EOS_UI_BACKUP_READ_FAILED', 'EOS_STORAGE_FARM_STATE_INIT_FAILED',
         'EOS_MIGRATION_UI_STATE_INVALID', 'EOS_MIGRATION_UI_STATE_UNAVAILABLE', 'EOS_MIGRATION_UI_STATE_TIMEOUT'];
       const fatalStartupCode = e && (fatalStartupCodes.includes(e.code) ? e.code
         : (fatalStartupCodes.includes(e.message) ? e.message : ''));
@@ -12544,6 +12535,7 @@ async onReady() {
             <meta charset="utf-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1" />
             <title>NexoWatt EOS – Lizenz</title>
+            <script defer src="/eos-session-idle.js"></script>
             <style>
               body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0b1020;color:#fff;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
               .card{width:min(720px,92vw);background:rgba(2,6,23,0.55);border:1px solid rgba(148,163,184,0.22);border-radius:16px;padding:20px 18px;box-shadow:0 20px 80px rgba(0,0,0,0.55)}
@@ -12774,7 +12766,7 @@ app.use('/assets', express.static(path.join(__dirname, 'www', 'assets')));
      */
     const renderRuntimeAccessPage = (title, capability, requiredRole) => `<!doctype html>
 <html lang="de"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>NexoWatt EOS – Zugriff geschützt</title><link href="/static/styles.css" rel="stylesheet"/></head>
+<title>NexoWatt EOS – Zugriff geschützt</title><link href="/static/styles.css" rel="stylesheet"/><script defer src="/eos-session-idle.js"></script></head>
 <body class="nw-cockpit-page nw-cockpit-skin" data-nw-required-capability="${String(capability || '')}" data-nw-page-name="${String(title || 'geschützte Seite')}" data-nw-required-role="${String(requiredRole || 'passende Rolle')}">
 <main><section class="nw-config-card" style="max-width:760px;margin:48px auto;padding:22px">
 <div class="nw-config-card__title">${String(title || 'Zugriff geschützt')}</div>

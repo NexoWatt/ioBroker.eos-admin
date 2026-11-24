@@ -34,7 +34,8 @@ export function versionPublicAssetUrls(html, release) {
  * restore only these explicit webapp assets after bundling, without rebasing scripts.
  */
 export function rootWebappAssetUrls(html) {
-    return html.replace(/<link\b[^>]*>/gi, tag => {
+    const rootIdleClient = html.replace(/(<script\b[^>]*\bsrc=")\.\/eos-session-idle\.js(?=[?"])/gi, '$1/eos-session-idle.js');
+    return rootIdleClient.replace(/<link\b[^>]*>/gi, tag => {
         const rel = tag.match(/\brel="([^"]+)"/i)?.[1];
         if (!['manifest', 'icon', 'apple-touch-icon'].includes(rel)) return tag;
         return tag.replace(/\bhref="([^"]+)"/i, (attribute, value) => {
