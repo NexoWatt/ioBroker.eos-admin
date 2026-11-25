@@ -1,0 +1,13 @@
+{
+  "testedAt": "2026-11-25T12:57:40.114274+00:00",
+  "node": "24.22.3",
+  "files": {
+    "ui/src-ts/runtime-executables/www/power-measurements.ts": "8871d05c6b55b6d10e7f9f65a1554d1b2ddc1d97cefe93096782149e721576a5",
+    "ui/src-ts/runtime-executables/www/live-display.ts": "076081f5b636a8be967f074d8dbe4360e6e762c520d640f373895335bbc58d9d",
+    "ui/src-ts/runtime-executables/www/app.ts": "3fc11e0830a6c08b4799db2b12aa3f331e0a42c4953aa0de55975e252d033a92",
+    "ui/www/index.html": "9c319554fac830a452333937c96a4d0384ad73115de384ea959bcb0d74535579",
+    "test/eos-power-measurements.test.cjs": "254f6e4625f9cf3666e2a4c63bff4e2fd3b69a763ef64f2ab7d574433aa87103",
+    "test/eos-live-display-regression.test.cjs": "b7231d7f62e76495bce1b0208dd14d28bd48e2eded6fa386429e613c354e8272",
+    "test/eos-energyflow-cadence.test.cjs": "c3cec957e45df917f208588dbbf2ed6cc85eedbe255530e0f099b2f1fa165fae"
+  }
+}

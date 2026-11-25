@@ -2756,8 +2756,10 @@ class SpeicherRegelungModule extends BaseModule {
             }
             try {
                 const rec = this.adapter && this.adapter.stateCache ? this.adapter.stateCache[sid] : null;
-                const n = Number(rec && rec.value);
-                if (Number.isFinite(n)) return n;
+                // Unbekannte abgeleitete Last bleibt unbekannt. Number(null)
+                // würde hier eine falsche gemessene Null vor den Fallback setzen.
+                const n = strictFiniteNumber(rec && rec.value, null);
+                if (n !== null) return n;
             } catch {
                 // ignore
             }
@@ -7263,7 +7265,7 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
      *   die Wallbox bereits enthaelt. Der NVP-Regelkreis bleibt dann fuehrend.
      */
     _buildIndependentPvLoadFeedForward(ctx = {}) {
-        const finite = (v) => v !== null && v !== undefined && v !== '' && Number.isFinite(Number(v));
+        const finite = (v) => strictFiniteNumber(v, null) !== null;
         const now = finite(ctx.nowMs) ? Number(ctx.nowMs) : Date.now();
         const staleMs = Math.max(1000, finite(ctx.staleMs) ? Number(ctx.staleMs) : 15000);
         const maxSkewMs = Math.max(0, finite(ctx.maxSkewMs) ? Number(ctx.maxSkewMs) : 15000);
@@ -7303,9 +7305,9 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
                 // Fallback auf den lokalen State-Cache.
             }
             const rec = getCacheRecord(key);
-            const value = Number(rec && rec.value);
+            const value = strictFiniteNumber(rec && rec.value, null);
             const age = getCacheAgeMs(key);
-            if (!Number.isFinite(value)) return fallback;
+            if (value === null) return fallback;
             if (age !== null && age > staleMs) return fallback;
             return value;
         };

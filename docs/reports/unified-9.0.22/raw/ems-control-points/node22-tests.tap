@@ -1,0 +1,124 @@
+TAP version 13
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: new multi-connector EVCS creates every mapped mirror before its first real subscription read
+ok 1 - new multi-connector EVCS creates every mapped mirror before its first real subscription read
+  ---
+  duration_ms: 76.782646
+  type: 'test'
+  ...
+# Subtest: upgrade repairs missing metadata without resetting saved values and restart remains idempotent
+ok 2 - upgrade repairs missing metadata without resetting saved values and restart remains idempotent
+  ---
+  duration_ms: 13.351466
+  type: 'test'
+  ...
+# Subtest: later installer row provisioning precedes new connector mirroring and own ack events never freshen old false data
+ok 3 - later installer row provisioning precedes new connector mirroring and own ack events never freshen old false data
+  ---
+  duration_ms: 33.134457
+  type: 'test'
+  ...
+# (node:14) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: ordinary control contract accepts false/zero and daily deadline, rejects malformed values without coercion
+ok 4 - ordinary control contract accepts false/zero and daily deadline, rejects malformed values without coercion
+  ---
+  duration_ms: 2.709476
+  type: 'test'
+  ...
+# Subtest: invalid ordinary persisted control fences affected station without overwriting request (DB)
+ok 5 - invalid ordinary persisted control fences affected station without overwriting request (DB)
+  ---
+  duration_ms: 47.849518
+  type: 'test'
+  ...
+# Subtest: invalid ordinary persisted control fences affected station without overwriting request (cache)
+ok 6 - invalid ordinary persisted control fences affected station without overwriting request (cache)
+  ---
+  duration_ms: 9.10566
+  type: 'test'
+  ...
+# Subtest: ordinary station off keeps the EMS regulation choice; valid correction clears diagnostic fence
+ok 7 - ordinary station off keeps the EMS regulation choice; valid correction clears diagnostic fence
+  ---
+  duration_ms: 22.519847
+  type: 'test'
+  ...
+# Subtest: actual ordinary state handler accepts controller commands without integration auth; compatibility values checked
+ok 8 - actual ordinary state handler accepts controller commands without integration auth; compatibility values checked
+  ---
+  duration_ms: 67.587058
+  type: 'test'
+  ...
+# Subtest: invalid first station does not mark healthy second station unavailable
+ok 9 - invalid first station does not mark healthy second station unavailable
+  ---
+  duration_ms: 26.122622
+  type: 'test'
+  ...
+# (node:15) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: all four local write aliases are tracked with correct IDs (same namespace)
+ok 10 - all four local write aliases are tracked with correct IDs (same namespace)
+  ---
+  duration_ms: 9.026834
+  type: 'test'
+  ...
+# Subtest: all four local write aliases are tracked with correct IDs (migrated namespace)
+ok 11 - all four local write aliases are tracked with correct IDs (migrated namespace)
+  ---
+  duration_ms: 2.282393
+  type: 'test'
+  ...
+# Subtest: both foreign async methods preserve original promise and wait fulfilled/rejected completion
+ok 12 - both foreign async methods preserve original promise and wait fulfilled/rejected completion
+  ---
+  duration_ms: 1.720613
+  type: 'test'
+  ...
+# Subtest: callback API preserves synchronous return, callback context, errors and extra callback values
+ok 13 - callback API preserves synchronous return, callback context, errors and extra callback values
+  ---
+  duration_ms: 0.799081
+  type: 'test'
+  ...
+# Subtest: callback API can be observed without caller callback and preserves returned Promise completion
+ok 14 - callback API can be observed without caller callback and preserves returned Promise completion
+  ---
+  duration_ms: 5.123664
+  type: 'test'
+  ...
+# Subtest: a callback-method returned promise alone cannot confirm a still pending callback
+ok 15 - a callback-method returned promise alone cannot confirm a still pending callback
+  ---
+  duration_ms: 1.108057
+  type: 'test'
+  ...
+# Subtest: pending capacity rejects without queueing or sending and frees completed slots
+ok 16 - pending capacity rejects without queueing or sending and frees completed slots
+  ---
+  duration_ms: 8.386136
+  type: 'test'
+  ...
+# Subtest: unknown completion or synchronous owner failure cannot become confirmed shutdown
+ok 17 - unknown completion or synchronous owner failure cannot become confirmed shutdown
+  ---
+  duration_ms: 63.073271
+  type: 'test'
+  ...
+# Subtest: closing admission remains permanent even if external ownership later returns
+ok 18 - closing admission remains permanent even if external ownership later returns
+  ---
+  duration_ms: 1.473608
+  type: 'test'
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 18
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 816.780171

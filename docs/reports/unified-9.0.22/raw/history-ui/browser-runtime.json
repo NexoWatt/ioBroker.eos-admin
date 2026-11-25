@@ -1,0 +1,11 @@
+{
+  "purpose": "Temporary UI test executable only, outside product repository and release bundle",
+  "package": "@sparticuz/chromium",
+  "version": "158.0.0",
+  "registryIntegrity": "sha512-Rm/Jg2u7SVYAz/GTqAg4IqGoa1VDZEuqW8OPIe92T/vUa32r+Y5nIM7MnkFIXmjkBBEj/4OezoUnU+rsLxYz/g==",
+  "tarballSHA256": "216d1badc4df6595fd12a5fc4553f78e041a5c24eee313a251d35b63a1737ed4",
+  "browserVersion": "HeadlessChrome/158.0.8127.0",
+  "installation": "npm pack exact version with --ignore-scripts; Brotli binary extracted using Node builtins; no product dependency or installation scripts",
+  "reason": "System chromium wrapper and cached Puppeteer binary absent; official browser download blocked by proxy timeout",
+  "scope": "Fresh throwaway browser profile; only loopback fixture routes permitted; API responses simulated. No production authentication, live database or device. Screenshots internal only."
+}

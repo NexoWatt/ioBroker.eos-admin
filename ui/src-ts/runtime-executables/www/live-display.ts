@@ -39,7 +39,8 @@
     }
     function current(row: RecordValue | null, now: number, maxAge: number, online: boolean): boolean {
         const ts = row ? number(row.ts) : null;
-        return online && ts !== null && ts > 0 && ts <= now + 5000 && now - ts <= maxAge;
+        const quality = row?.q;
+        return online && (quality === undefined || quality === 0) && ts !== null && ts > 0 && ts <= now + 5000 && now - ts <= maxAge;
     }
     function read(snapshot: unknown, key: string, now: number, maxAge: number, online: boolean): number | null {
         const row = entry(snapshot, key);

@@ -1,0 +1,1 @@
+[storage-pv-load-feedforward-zero-stop] OK: PV/Last dienen nur als unabhaengiger Feed-forward; alle Schreibpfade vermeiden unberechtigte 0-W-Stopps ohne PV-Doppelzaehlung.

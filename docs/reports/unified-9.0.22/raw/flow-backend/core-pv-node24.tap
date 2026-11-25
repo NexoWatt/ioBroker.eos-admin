@@ -1,0 +1,11 @@
+✔ central PV budget rejects null, bad quality, future/missing timestamps and recovers from a real measurement (32.556948ms)
+✔ fresh canonical PV including zero cannot be overruled by a higher parallel alias (0.947329ms)
+✔ trusted PV hold expires even under repeated snapshots, then real evidence can restore the budget (2.003731ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 231.978428

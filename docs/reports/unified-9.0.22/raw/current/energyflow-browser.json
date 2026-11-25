@@ -1,0 +1,244 @@
+{
+  "scope": "Chromium presentation smoke using shipped HTML/CSS and actual canonical renderer/helper sources; deterministic snapshots; no auth, transport, backend or physical devices",
+  "browser": "HeadlessChrome/158.0.8127.0",
+  "node": "v24.22.3",
+  "runAt": "2026-11-25T13:07:05.406Z",
+  "results": [
+    {
+      "scenario": "coherent-balance-and-visible-tariff-desktop",
+      "result": "passed",
+      "values": {
+        "centerPower": "2.3 kW",
+        "pvVal": "2.5 kW",
+        "gridVal": "3.8 kW",
+        "restVal": "2.8 kW",
+        "c2Val": "6.8 kW",
+        "batterySocIn": "90 %",
+        "energyFlowQuality": "",
+        "emsStatusText": "Tarif Automatik günstig (0.200 €/kWh): Speicher lädt"
+      },
+      "geometry": {
+        "viewport": 1440,
+        "documentWidth": 1440,
+        "cardWidth": 770,
+        "cardLeft": 330,
+        "cardRight": 1100,
+        "statusWidth": 577.171875,
+        "statusHeight": 17.546875,
+        "statusLeft": 362,
+        "statusRight": 939.171875,
+        "statusHidden": false,
+        "statusDisplay": "block",
+        "cardScrollWidth": 769,
+        "cardClientWidth": 768
+      }
+    },
+    {
+      "scenario": "reported-incoherent-values-diagnosed-desktop",
+      "result": "passed",
+      "values": {
+        "centerPower": "2.3 kW",
+        "pvVal": "2.5 kW",
+        "gridVal": "3.8 kW",
+        "restVal": "2.8 kW",
+        "c2Val": "10.7 kW",
+        "batterySocIn": "90 %",
+        "energyFlowQuality": "Bilanzabweichung 3.9 kW – Messpunkte, Vorzeichen und Zeitstempel prüfen",
+        "emsStatusText": "Tarif Automatik günstig (0.200 €/kWh): Speicher lädt"
+      }
+    },
+    {
+      "scenario": "stale-ev-stays-unknown-desktop",
+      "result": "passed",
+      "values": {
+        "centerPower": "--",
+        "pvVal": "2.5 kW",
+        "gridVal": "3.8 kW",
+        "restVal": "2.8 kW",
+        "c2Val": "--",
+        "batterySocIn": "90 %",
+        "energyFlowQuality": "Gebäudeaufteilung: Verbrauchermessung fehlt oder ist veraltet",
+        "emsStatusText": "Tarif Automatik günstig (0.200 €/kWh): Speicher lädt"
+      }
+    },
+    {
+      "scenario": "invalid-quality-ev-stays-unknown-desktop",
+      "result": "passed",
+      "values": {
+        "centerPower": "--",
+        "pvVal": "2.5 kW",
+        "gridVal": "3.8 kW",
+        "restVal": "2.8 kW",
+        "c2Val": "--",
+        "batterySocIn": "90 %",
+        "energyFlowQuality": "Gebäudeaufteilung: Verbrauchermessung fehlt oder ist veraltet",
+        "emsStatusText": "Tarif Automatik günstig (0.200 €/kWh): Speicher lädt"
+      }
+    },
+    {
+      "scenario": "real-small-load-not-suppressed-desktop",
+      "result": "passed",
+      "values": {
+        "centerPower": "0.1 kW",
+        "pvVal": "0.1 kW",
+        "gridVal": "0.0 kW",
+        "restVal": "0.0 kW",
+        "c2Val": "0.0 kW",
+        "batterySocIn": "90 %",
+        "energyFlowQuality": "",
+        "emsStatusText": "Tarif Automatik aktiv – warte auf aktuellen Regelungsstatus"
+      }
+    },
+    {
+      "scenario": "confirmed-zero-and-tariff-awaiting-status-desktop",
+      "result": "passed",
+      "values": {
+        "centerPower": "0.0 kW",
+        "pvVal": "0.0 kW",
+        "gridVal": "0.0 kW",
+        "restVal": "0.0 kW",
+        "c2Val": "0.0 kW",
+        "batterySocIn": "0 %",
+        "energyFlowQuality": "",
+        "emsStatusText": "Tarif Automatik aktiv – warte auf aktuellen Regelungsstatus"
+      }
+    },
+    {
+      "scenario": "offline-removes-charging-claim-desktop",
+      "result": "passed",
+      "values": {
+        "centerPower": "--",
+        "pvVal": "--",
+        "gridVal": "--",
+        "restVal": "--",
+        "c2Val": "6.8 kW",
+        "batterySocIn": "-- %",
+        "energyFlowQuality": "",
+        "emsStatusText": "Tarif Automatik aktiv – Verbindung unterbrochen; Regelungsstatus nicht bestätigt"
+      }
+    },
+    {
+      "scenario": "coherent-balance-and-visible-tariff-mobile",
+      "result": "passed",
+      "values": {
+        "centerPower": "2.3 kW",
+        "pvVal": "2.5 kW",
+        "gridVal": "3.8 kW",
+        "restVal": "2.8 kW",
+        "c2Val": "6.8 kW",
+        "batterySocIn": "90 %",
+        "energyFlowQuality": "",
+        "emsStatusText": "Tarif Automatik günstig (0.200 €/kWh): Speicher lädt"
+      },
+      "geometry": {
+        "viewport": 390,
+        "documentWidth": 390,
+        "cardWidth": 374,
+        "cardLeft": 8,
+        "cardRight": 382,
+        "statusWidth": 322,
+        "statusHeight": 35.09375,
+        "statusLeft": 34,
+        "statusRight": 356,
+        "statusHidden": false,
+        "statusDisplay": "block",
+        "cardScrollWidth": 373,
+        "cardClientWidth": 372
+      }
+    },
+    {
+      "scenario": "reported-incoherent-values-diagnosed-mobile",
+      "result": "passed",
+      "values": {
+        "centerPower": "2.3 kW",
+        "pvVal": "2.5 kW",
+        "gridVal": "3.8 kW",
+        "restVal": "2.8 kW",
+        "c2Val": "10.7 kW",
+        "batterySocIn": "90 %",
+        "energyFlowQuality": "Bilanzabweichung 3.9 kW – Messpunkte, Vorzeichen und Zeitstempel prüfen",
+        "emsStatusText": "Tarif Automatik günstig (0.200 €/kWh): Speicher lädt"
+      }
+    },
+    {
+      "scenario": "stale-ev-stays-unknown-mobile",
+      "result": "passed",
+      "values": {
+        "centerPower": "--",
+        "pvVal": "2.5 kW",
+        "gridVal": "3.8 kW",
+        "restVal": "2.8 kW",
+        "c2Val": "--",
+        "batterySocIn": "90 %",
+        "energyFlowQuality": "Gebäudeaufteilung: Verbrauchermessung fehlt oder ist veraltet",
+        "emsStatusText": "Tarif Automatik günstig (0.200 €/kWh): Speicher lädt"
+      }
+    },
+    {
+      "scenario": "invalid-quality-ev-stays-unknown-mobile",
+      "result": "passed",
+      "values": {
+        "centerPower": "--",
+        "pvVal": "2.5 kW",
+        "gridVal": "3.8 kW",
+        "restVal": "2.8 kW",
+        "c2Val": "--",
+        "batterySocIn": "90 %",
+        "energyFlowQuality": "Gebäudeaufteilung: Verbrauchermessung fehlt oder ist veraltet",
+        "emsStatusText": "Tarif Automatik günstig (0.200 €/kWh): Speicher lädt"
+      }
+    },
+    {
+      "scenario": "real-small-load-not-suppressed-mobile",
+      "result": "passed",
+      "values": {
+        "centerPower": "0.1 kW",
+        "pvVal": "0.1 kW",
+        "gridVal": "0.0 kW",
+        "restVal": "0.0 kW",
+        "c2Val": "0.0 kW",
+        "batterySocIn": "90 %",
+        "energyFlowQuality": "",
+        "emsStatusText": "Tarif Automatik aktiv – warte auf aktuellen Regelungsstatus"
+      }
+    },
+    {
+      "scenario": "confirmed-zero-and-tariff-awaiting-status-mobile",
+      "result": "passed",
+      "values": {
+        "centerPower": "0.0 kW",
+        "pvVal": "0.0 kW",
+        "gridVal": "0.0 kW",
+        "restVal": "0.0 kW",
+        "c2Val": "0.0 kW",
+        "batterySocIn": "0 %",
+        "energyFlowQuality": "",
+        "emsStatusText": "Tarif Automatik aktiv – warte auf aktuellen Regelungsstatus"
+      }
+    },
+    {
+      "scenario": "offline-removes-charging-claim-mobile",
+      "result": "passed",
+      "values": {
+        "centerPower": "--",
+        "pvVal": "--",
+        "gridVal": "--",
+        "restVal": "--",
+        "c2Val": "6.8 kW",
+        "batterySocIn": "-- %",
+        "energyFlowQuality": "",
+        "emsStatusText": "Tarif Automatik aktiv – Verbindung unterbrochen; Regelungsstatus nicht bestätigt"
+      }
+    }
+  ],
+  "pageErrors": [],
+  "rejectedRequests": [],
+  "sourceHashes": {
+    "ui/src-ts/runtime-executables/www/power-measurements.ts": "8871d05c6b55b6d10e7f9f65a1554d1b2ddc1d97cefe93096782149e721576a5",
+    "ui/src-ts/runtime-executables/www/live-display.ts": "076081f5b636a8be967f074d8dbe4360e6e762c520d640f373895335bbc58d9d",
+    "ui/src-ts/runtime-executables/www/tariff-display.ts": "d22fceb5cc908b49ff5dcf842d87459cf0d094d12784694627cc19d759aa351f",
+    "ui/src-ts/runtime-executables/www/app.ts": "3fc11e0830a6c08b4799db2b12aa3f331e0a42c4953aa0de55975e252d033a92",
+    "ui/www/index.html": "9c319554fac830a452333937c96a4d0384ad73115de384ea959bcb0d74535579",
+    "ui/www/styles.css": "3bf5d8a859eb8648ecb52834fe4f4f8ab3dfc08d342d8cf270df1d4d1ac410b1"
+  }
+}

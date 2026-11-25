@@ -9,7 +9,10 @@ const digest = value => createHash('sha256').update(value).digest('hex');
 const { createRequire } = require('node:module');
 const repo = path.resolve(__dirname, '../..');
 const adminRequire = createRequire(path.join(repo, 'src-admin/package.json'));
-const esbuild = require('esbuild');
+// Use the maintained compiler from the installed installer lockfile. The root
+// transitive esbuild belongs to legacy tooling and is not this browser builder.
+const installerRequire = createRequire(path.join(repo, 'ui/src-admin-tab/package.json'));
+const esbuild = installerRequire('esbuild');
 const source = `import { fromMarkdown } from 'mdast-util-from-markdown';
 import { gfm } from 'micromark-extension-gfm';
 import { gfmFromMarkdown } from 'mdast-util-gfm';

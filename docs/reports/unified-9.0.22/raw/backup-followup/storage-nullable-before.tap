@@ -1,0 +1,96 @@
+✖ Fenecon AC load uses the next real measurement when derived load is unknown, preserving actual zero (2.561587ms)
+✖ Fenecon missing derived, mapped and rest demand reaches existing NVP/battery fallback instead of invented zero (0.447724ms)
+✖ independent feed-forward rejects missing, empty and boolean load/PV through cache and fresh-helper paths (1.286787ms)
+✖ independent derived mirror remains ineligible when source says mapped but measurement is unknown (0.539209ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 0
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 20.700689
+
+✖ failing tests:
+
+test at test/eos-storage-nullable-flow.test.cjs:35:1
+✖ Fenecon AC load uses the next real measurement when derived load is unknown, preserving actual zero (2.561587ms)
+  AssertionError [ERR_ASSERTION]: null
+  
+  0 !== 1700
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work/iobroker.eos-admin/test/eos-storage-nullable-flow.test.cjs:38:16)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1700,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-storage-nullable-flow.test.cjs:46:1
+✖ Fenecon missing derived, mapped and rest demand reaches existing NVP/battery fallback instead of invented zero (0.447724ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 500
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work/iobroker.eos-admin/test/eos-storage-nullable-flow.test.cjs:49:16)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 500,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-storage-nullable-flow.test.cjs:54:1
+✖ independent feed-forward rejects missing, empty and boolean load/PV through cache and fresh-helper paths (1.286787ms)
+  AssertionError [ERR_ASSERTION]: false/consumptionTotal/null
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work/iobroker.eos-admin/test/eos-storage-nullable-flow.test.cjs:65:24)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-storage-nullable-flow.test.cjs:78:1
+✖ independent derived mirror remains ineligible when source says mapped but measurement is unknown (0.539209ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work/iobroker.eos-admin/test/eos-storage-nullable-flow.test.cjs:82:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

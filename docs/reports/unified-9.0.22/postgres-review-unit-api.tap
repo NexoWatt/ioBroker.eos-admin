@@ -1,0 +1,25 @@
+✔ PG selection fails closed on existing history, missing explicit intent and missing setup (130.556847ms)
+✔ installed historian and unreadable instance inventory prevent new-install selection; no guessed eligibility (5.734956ms)
+✔ PG authenticated save/read/dispatch retains device mappings, original export IDs and scoped backup identity (37.651384ms)
+✔ PG installer API inherits authentication, role, CSRF, revision and ownership checks (25.028639ms)
+✔ protected explicit new-site setup may follow empty first initialization but never bypass saved history (5.692593ms)
+✔ actual bundled native history defaults do not block an explicitly new site; any customer change does (6.470918ms)
+✔ fixed protected per-instance profile rejects remote endpoints, wrong role and unprovisioned values (5.200896ms)
+✔ explicit PG first selection retains unrelated mappings and prevents existing provider migration (3.125879ms)
+✔ query SQL binds hostile IDs and applies range/rows/aggregation bounds without gap filling (1.66461ms)
+✔ writes preserve zeros, negatives, booleans and text; duplicate millisecond is last-value-wins (1.880589ms)
+✔ total deadline destroys active connection and suppresses late results (36.185888ms)
+✔ slow profile cannot create a connection after its job expires; close cancels outstanding reads (16.988026ms)
+✔ checked row parser rejects corrupt data and idle errors stay visible without secret text (2.255934ms)
+✔ PG writes retry boundedly, keep original sample and report failed losses; EMS capture remains synchronous (3007.229382ms)
+✔ PG read concurrency reserves one of four pool slots for record writes (22.85719ms)
+✔ disk-full write failure is explicit, does not retry or block later successful recording (25.150064ms)
+✔ PG startup probe reports unavailable database without waiting for first measurement or blocking configure (10.642108ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3633.673245

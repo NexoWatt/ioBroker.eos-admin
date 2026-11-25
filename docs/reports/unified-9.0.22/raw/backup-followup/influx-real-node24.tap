@@ -1,0 +1,11 @@
+✔ real InfluxDB2: actual export, active bucket proof, isolated restore, empty and missing buckets (1458.818212ms)
+ℹ InfluxDB v2.10.1 (git: db5102ec64) build_date: 2026-11-17T20:47:46Z
+ℹ Actual source/target services, real CLI, exact six typed field rows after isolated restore; existing empty bucket accepted, nonexistent rejected before backup; full-server inventory checked.
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1667.294097

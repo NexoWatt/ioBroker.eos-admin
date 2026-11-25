@@ -11,11 +11,13 @@
  * Verknüpfungen: docs/quellcode/src-admin-tab/src/lib/historySetup.md
  * Einstieg: docs/QUELLCODE_WEGWEISER_DE.md; Pflege: docs/DOKUMENTATIONSSTANDARD_DE.md
  */
-export type HistoryProvider = 'adapter' | 'influxdb2';
+export type HistoryProvider = 'adapter' | 'influxdb2' | 'postgresql';
 export interface HistoryConfig {
   provider: HistoryProvider;
   instance: string;
+  newInstallationAllowed: boolean;
   influxdb2: { url: string; organization: string; bucket: string; hasToken: boolean; hasCaCertificate: boolean };
+  postgresql: { profile: 'local'; provisioned: boolean };
 }
 export interface HistoryStatus {
   provider: HistoryProvider;
@@ -34,6 +36,7 @@ export interface HistoryResponse { config: HistoryConfig; configurationRevision:
 export interface HistoryDraft {
   provider: HistoryProvider; instance: string; url: string; organization: string; bucket: string;
   token: string; caCertificate: string; clearCaCertificate: boolean;
+  newInstallation: boolean;
 }
 export interface HistoryCheck { reachable: boolean; readable: boolean }
 function record(value: unknown): value is Record<string, unknown> { return value !== null && typeof value === 'object' && !Array.isArray(value); }
@@ -45,7 +48,7 @@ function text(value: unknown, max = 2048): string {
 function count(value: unknown): number | null { return typeof value === 'number' && Number.isFinite(value) && value >= 0 ? value : null; }
 function provider(value: unknown): HistoryProvider {
   if (value === undefined || value === '' || value === 'adapter') return 'adapter';
-  if (value === 'influxdb2') return value;
+  if (value === 'influxdb2' || value === 'postgresql') return value;
   throw new Error('EOS_HISTORY_RESPONSE_INVALID');
 }
 /** Nur bekannte öffentliche Felder werden übernommen; eine unvollständige Antwort darf Speichern nicht freigeben. */
@@ -53,14 +56,19 @@ export function parseHistoryResponse(value: unknown): HistoryResponse {
   if (!record(value) || value.ok !== true || !record(value.config) || !record(value.status)) throw new Error('EOS_HISTORY_RESPONSE_INVALID');
   const direct = value.config.influxdb2;
   if (direct !== undefined && !record(direct)) throw new Error('EOS_HISTORY_RESPONSE_INVALID');
+  const postgres = value.config.postgresql;
+  const selectedProvider = provider(value.config.provider);
+  if (value.config.newInstallationAllowed !== undefined && typeof value.config.newInstallationAllowed !== 'boolean') throw new Error('EOS_HISTORY_RESPONSE_INVALID');
+  if (postgres !== undefined && (!record(postgres) || postgres.profile !== 'local' || typeof postgres.provisioned !== 'boolean')) throw new Error('EOS_HISTORY_RESPONSE_INVALID');
+  if (selectedProvider === 'postgresql' && !record(postgres)) throw new Error('EOS_HISTORY_RESPONSE_INVALID');
   const revision = text(value.configurationRevision, 128);
   if (!revision) throw new Error('EOS_HISTORY_RESPONSE_INVALID');
   return {
     configurationRevision: revision,
-    config: { provider: provider(value.config.provider), instance: text(value.config.instance, 256), influxdb2: {
+    config: { provider: selectedProvider, instance: text(value.config.instance, 256), newInstallationAllowed: value.config.newInstallationAllowed === true, influxdb2: {
       url: text(direct?.url), organization: text(direct?.organization, 256), bucket: text(direct?.bucket, 256),
       hasToken: direct?.hasToken === true, hasCaCertificate: direct?.hasCaCertificate === true,
-    } },
+    }, postgresql: { profile: 'local', provisioned: postgres?.provisioned === true } },
     status: { provider: provider(value.status.provider), state: text(value.status.state, 64),
       queueDepth: count(value.status.queueDepth), droppedPoints: count(value.status.droppedPoints),
       lastWriteAt: count(value.status.lastWriteAt), lastReadAt: count(value.status.lastReadAt),
@@ -72,7 +80,15 @@ export function parseHistoryResponse(value: unknown): HistoryResponse {
 export function historyDraft(config: HistoryConfig): HistoryDraft {
   return { provider: config.provider, instance: config.instance, url: config.influxdb2.url,
     organization: config.influxdb2.organization, bucket: config.influxdb2.bucket,
-    token: '', caCertificate: '', clearCaCertificate: false };
+    token: '', caCertificate: '', clearCaCertificate: false, newInstallation: false };
+}
+/** Eine leere Konfiguration ist keine Neuanlage. Diese Prüfung erlaubt nur die ausdrückliche Auswahl; das Backend prüft den Anlagenbestand. */
+export function canSelectNewPostgresql(config: HistoryConfig): boolean {
+  return config.provider === 'adapter' && config.newInstallationAllowed === true;
+}
+export function historyProviderName(value: HistoryProvider): string {
+  if (value === 'postgresql') return 'PostgreSQL lokal';
+  return value === 'influxdb2' ? 'InfluxDB 2 direkt' : 'ioBroker-Historieadapter';
 }
 function directUrl(value: string): URL {
   let url: URL;
@@ -85,6 +101,14 @@ function directUrl(value: string): URL {
  */
 export function historyPayload(draft: HistoryDraft, saved: HistoryConfig): Record<string, unknown> {
   if (draft.provider === 'adapter') return { provider: 'adapter', instance: draft.instance.trim() };
+  if (draft.provider === 'postgresql') {
+    if (saved.provider !== 'postgresql') {
+      if (!canSelectNewPostgresql(saved)) throw new Error('EOS_POSTGRES_EXISTING_HISTORY');
+      if (draft.newInstallation !== true) throw new Error('EOS_POSTGRES_NEW_INSTALLATION_REQUIRED');
+    }
+    return { provider: 'postgresql', postgresql: { profile: 'local' },
+      ...(saved.provider !== 'postgresql' ? { newInstallation: true } : {}) };
+  }
   const url = directUrl(draft.url);
   if (!draft.organization.trim() || !draft.bucket.trim() || draft.organization.length > 256 || draft.bucket.length > 256) throw new Error('EOS_INFLUX_CONFIG_INVALID');
   if (!draft.token.trim()) {
@@ -105,6 +129,32 @@ export function parseHistoryCheck(value: unknown): HistoryCheck {
   return { reachable: value.check.reachable, readable: value.check.readable };
 }
 const errors = new Map<string, string>([
+  ['EOS_POSTGRES_NEW_INSTALLATION_REQUIRED', 'PostgreSQL ist für ausdrücklich eingerichtete Neuanlagen vorgesehen. Die Neuanlage bestätigen; bestehende Historien bleiben erhalten.'],
+  ['EOS_POSTGRES_EXISTING_HISTORY', 'Eine bestehende Historie ist eingerichtet. Die Umstellung auf PostgreSQL wird nicht durchgeführt. Den bisherigen Anbieter weiterverwenden.'],
+  ['EOS_POSTGRES_NOT_PROVISIONED', 'Die geschützte lokale PostgreSQL-Umgebung ist noch nicht eingerichtet. Ein Installer muss zuerst das EOS-Systemsetup ausführen. Danach den Status neu laden und die Verbindung prüfen.'],
+  ['EOS_POSTGRES_SETUP_REQUIRED', 'Die geschützte lokale PostgreSQL-Umgebung ist noch nicht eingerichtet. Ein Installer muss zuerst das EOS-Systemsetup ausführen. Danach den Status neu laden und die Verbindung prüfen.'],
+  ['EOS_POSTGRES_NOT_CONFIGURED', 'Die lokale PostgreSQL-Historie ist noch nicht eingerichtet. Systemsetup und gespeicherte Historie-Auswahl prüfen.'],
+  ['EOS_POSTGRES_CONFIG_INVALID', 'Die geschützte PostgreSQL-Konfiguration ist ungültig. Ein Installer muss das EOS-Systemsetup prüfen. Zugangsdaten werden hier nicht angezeigt.'],
+  ['EOS_POSTGRES_PROFILE_INVALID', 'Das lokale PostgreSQL-Verbindungsprofil ist ungültig. Ein Installer muss das EOS-Systemsetup prüfen.'],
+  ['EOS_POSTGRES_PROFILE_PERMISSIONS', 'Die Dateirechte des geschützten Datenbankprofils sind nicht zulässig. Ein Installer muss das EOS-Systemsetup prüfen; Rechte nicht pauschal erweitern.'],
+  ['EOS_POSTGRES_CA_INVALID', 'Das öffentliche PostgreSQL-CA-Zertifikat ist ungültig. Ein Installer muss die Zertifikate des EOS-Systemsetups prüfen.'],
+  ['EOS_POSTGRES_SCHEMA_MISSING', 'Die benötigte EOS-Historienstruktur fehlt in PostgreSQL. Ein Installer muss das EOS-Systemsetup vervollständigen.'],
+  ['EOS_POSTGRES_TLS_FAILED', 'Das PostgreSQL-Zertifikat konnte nicht geprüft werden. Das EOS-Systemsetup muss Zertifikatskette, Servername und Gültigkeit prüfen. Ein unverschlüsselter Ersatzweg wird nicht verwendet.'],
+  ['EOS_POSTGRES_AUTHORIZATION_FAILED', 'PostgreSQL lehnt den Datenbankzugang ab. Ein Installer muss die geschützten Datenbankrollen und Rechte prüfen.'],
+  ['EOS_POSTGRES_CONNECTION_FAILED', 'Die lokale PostgreSQL-Datenbank ist nicht erreichbar. Dienststatus und EOS-Systemsetup prüfen.'],
+  ['EOS_POSTGRES_TIMEOUT', 'Die lokale Datenbank antwortet nicht rechtzeitig. Dienststatus und Auslastung prüfen.'],
+  ['EOS_POSTGRES_QUERY_FAILED', 'Die Historienabfrage konnte nicht abgeschlossen werden. Datenbankstatus und EOS-Protokoll prüfen.'],
+  ['EOS_POSTGRES_DISK_FULL', 'PostgreSQL meldet einen vollen Datenträger. Die Historie kann nicht vollständig gespeichert werden. Speicherplatz und Aufbewahrungsregeln prüfen.'],
+  ['EOS_POSTGRES_RESOURCE_LIMIT', 'PostgreSQL hat eine Ressourcenbegrenzung erreicht. Datenbankstatus, Arbeitsspeicher und Auslastung prüfen.'],
+  ['EOS_POSTGRES_WRITE_FAILED', 'Messwerte konnten nicht in PostgreSQL gespeichert werden. Dienststatus und Speicherplatz prüfen.'],
+  ['EOS_POSTGRES_QUEUE_FULL', 'Die Historie-Warteschlange ist voll; Messwerte wurden verworfen. Datenbankverbindung und Schreibzugriff prüfen.'],
+  ['EOS_POSTGRES_RESPONSE_INVALID', 'Die Datenbank hat ungültige Historienwerte geliefert. EOS übernimmt diese Werte nicht. Datenbankstatus und EOS-Protokoll prüfen.'],
+  ['EOS_POSTGRES_RESPONSE_LIMIT', 'Die Historienantwort überschreitet die zulässige Größe. Einen kleineren Zeitraum wählen.'],
+  ['EOS_POSTGRES_QUERY_INVALID', 'Die Historienabfrage ist ungültig. Zeitraum und Datenpunkt auswählen und erneut prüfen.'],
+  ['EOS_POSTGRES_QUERY_LIMIT', 'Die Historienabfrage überschreitet die zulässige Größe. Einen kleineren Zeitraum wählen.'],
+  ['EOS_POSTGRES_AGGREGATE_UNSUPPORTED', 'Diese Zusammenfassung der Historienwerte wird nicht unterstützt. Eine verfügbare Darstellung auswählen.'],
+  ['EOS_POSTGRES_BUSY', 'Die Historien-Datenbank ist momentan ausgelastet. Später erneut prüfen.'],
+  ['EOS_POSTGRES_CLOSED', 'Die PostgreSQL-Verbindung ist beendet. EOS-Betriebsstatus prüfen und den Status erneut laden.'],
   ['EOS_INFLUX_AUTHORIZATION_FAILED', 'InfluxDB lehnt den Zugriff ab (401/403). Token sowie Lese- und Schreibrechte für den Bucket prüfen.'],
   ['EOS_INFLUX_NOT_FOUND', 'InfluxDB-Endpunkt oder Bucket nicht gefunden. Serveradresse, Organisation und Bucket prüfen.'],
   ['EOS_INFLUX_TLS_FAILED', 'Das TLS-Zertifikat konnte nicht geprüft werden. Servername, Zertifikatsgültigkeit und gegebenenfalls das CA-Zertifikat prüfen.'],

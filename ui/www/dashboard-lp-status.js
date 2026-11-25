@@ -20,6 +20,7 @@
  * 2. npm run sync:ts-runtime-executables ausführen.
  * 3. npm run test:runtime-executables prüfen.
  */
+"use strict";
 /**
  * NexoWatt Quellcode-Erklärung (DE)
  * Aufgabe: Übersetzt Ladepunkt-Diagnosen und Betriebszustände in die Kundenanzeige des Dashboards.

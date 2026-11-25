@@ -42,5 +42,30 @@
         return null;
     }
 
-    Reflect.set(window, 'NexoWattPowerMeasurements', Object.freeze({ resolveEvcsPower, validatePowerReference }));
+    type FlowInput = {
+        load: unknown; ev: unknown; consumers: unknown; pv: unknown; producers: unknown;
+        grid: unknown; battery: unknown; subtractEv: boolean; evAvailable: boolean;
+    };
+    type FlowView = { buildingW: number | null; mismatchW: number | null; status: string };
+    /** Nur Anzeige/Diagnose: keine Stellwerte, keine erfundene Mindestlast. */
+    function resolveFlowBalance(input: FlowInput): FlowView {
+        const load = number(input.load), consumers = number(input.consumers);
+        const ev = input.evAvailable ? number(input.ev) : 0;
+        if (load === null || load < 0) return { buildingW: null, mismatchW: null, status: 'Gebäudeverbrauch: Messung fehlt oder ist veraltet' };
+        if (consumers === null || (input.subtractEv && ev === null)) return { buildingW: null, mismatchW: null, status: 'Gebäudeaufteilung: Verbrauchermessung fehlt oder ist veraltet' };
+        const residual = load - Math.abs(consumers) - (input.subtractEv ? Math.abs(ev ?? 0) : 0);
+        if (residual < 0) return { buildingW: null, mismatchW: null, status: 'Gebäudeaufteilung unplausibel: Teilverbrauch größer als Gesamtverbrauch – Zuordnung und Zeitstempel prüfen' };
+        const pv = number(input.pv), producers = number(input.producers), grid = number(input.grid), battery = number(input.battery);
+        if (pv === null || producers === null || grid === null || battery === null) return { buildingW: residual, mismatchW: null, status: 'Energiebilanz unvollständig: Messwerte fehlen oder sind veraltet' };
+        // Bei deaktiviertem EV-Abzug ist die Zählergrenze kundenspezifisch; keine
+        // erfundene Annahme, ob der Gebäudemesswert die Ladestation einschließt.
+        if (input.evAvailable && !input.subtractEv) return { buildingW: residual, mismatchW: null, status: 'EV-Abzug deaktiviert – Zählergrenze von Gebäude und Ladestation beachten' };
+        const mismatch = pv + producers + grid + battery - load;
+        const activity = Math.max(Math.abs(load), Math.abs(pv) + Math.abs(producers) + Math.abs(grid) + Math.abs(battery));
+        // Diagnoseband für asynchrone Messungen/Verluste; verändert keinen Wert.
+        const tolerance = Math.max(150, activity * 0.03);
+        return { buildingW: residual, mismatchW: Math.abs(mismatch) > tolerance ? mismatch : null, status: '' };
+    }
+
+    Reflect.set(window, 'NexoWattPowerMeasurements', Object.freeze({ resolveEvcsPower, validatePowerReference, resolveFlowBalance }));
 })();

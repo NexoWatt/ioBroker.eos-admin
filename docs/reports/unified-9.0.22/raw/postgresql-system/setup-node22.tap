@@ -1,0 +1,72 @@
+TAP version 13
+# (node:39) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: namespace and SQL identifier derivation reject injection and aliases
+ok 1 - namespace and SQL identifier derivation reject injection and aliases
+  ---
+  duration_ms: 1.529089
+  type: 'test'
+  ...
+# Subtest: local TLS-only policy rejects cleartext and non-maintenance Unix socket
+ok 2 - local TLS-only policy rejects cleartext and non-maintenance Unix socket
+  ---
+  duration_ms: 0.415805
+  type: 'test'
+  ...
+# Subtest: unprivileged service and independent data paths avoid existing PostgreSQL
+ok 3 - unprivileged service and independent data paths avoid existing PostgreSQL
+  ---
+  duration_ms: 0.293393
+  type: 'test'
+  ...
+# Subtest: role grants separate runtime and backup and prohibit DDL for both
+ok 4 - role grants separate runtime and backup and prohibit DDL for both
+  ---
+  duration_ms: 0.864767
+  type: 'test'
+  ...
+# Subtest: protected provisioning contract requires explicit new-site and both credentials
+ok 5 - protected provisioning contract requires explicit new-site and both credentials
+  ---
+  duration_ms: 0.796947
+  type: 'test'
+  ...
+# Subtest: plan mode is read-only and exposes no generated credential
+ok 6 - plan mode is read-only and exposes no generated credential
+  ---
+  duration_ms: 64.904815
+  type: 'test'
+  ...
+# Subtest: regular adapter user cannot bootstrap or elevate its privileges
+ok 7 - regular adapter user cannot bootstrap or elevate its privileges
+  ---
+  duration_ms: 0.980368
+  type: 'test'
+  ...
+# Subtest: package bootstrap rejects unsupported OS and unknown cluster policy
+ok 8 - package bootstrap rejects unsupported OS and unknown cluster policy
+  ---
+  duration_ms: 0.440811
+  type: 'test'
+  ...
+# Subtest: temporary package policy cleanup cannot remove replaced or edited administrator file
+ok 9 - temporary package policy cleanup cannot remove replaced or edited administrator file
+  ---
+  duration_ms: 0.671151
+  type: 'test'
+  ...
+# Subtest: missing or invalid prerequisite reports no database connection success or credentials
+ok 10 - missing or invalid prerequisite reports no database connection success or credentials
+  ---
+  duration_ms: 6.890261
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 504.909411

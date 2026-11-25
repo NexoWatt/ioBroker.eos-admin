@@ -13,6 +13,11 @@ import { archiveDirectory, copyPrivate, collectFiles, hashFile } from './files';
 import { controllerCli, executable, run } from './command';
 import { flag, str, num, record, fail, type JobContext } from './types';
 import { safeSourcePath } from './config';
+import { influxTargets } from './databaseTargets';
+import { exportInflux2 } from './influxIntegrity';
+import { coversInfluxTarget } from './coverage';
+import { archivePublicTrust } from './publicTrust';
+import { exportPostgresHistory } from './postgresHistory';
 const mappings: readonly [string, string, string][] = [
     ['zigbeeEnabled', 'zigbee', 'zigbee.'],
     ['noderedEnabled', 'nodered', 'node-red.'],
@@ -89,6 +94,7 @@ export async function createArchives(ctx: JobContext): Promise<{ file: string; k
                 }
             }
         }
+        await archivePublicTrust(privateProfile, ctx.publicTrust);
         const profileFiles = await collectFiles(privateProfile);
         const manifestFiles = [];
         for (const rel of profileFiles)
@@ -213,29 +219,26 @@ export async function createArchives(ctx: JobContext): Promise<{ file: string; k
                 }
             }
             if (type === 'influxDB') {
-                const version = value('Version', 'dbversion', str(c, 'influxDBVersion', '1.x')),
-                    host = value('Host', 'host', 'localhost'),
-                    port = value('Port', 'port', version === '2.x' ? '8086' : '8088'),
-                    database = value('Name', 'dbName');
-                if (version === '2.x') {
-                    const proto = value('Protocol', 'protocol', 'http');
-                    if (!['http', 'https'].includes(proto)) throw fail('EOS_BACKUP_INFLUX_PROTOCOL');
-                    const args = ['backup', '--host', `${proto}://${host}:${port}`];
-                    if (database) args.push('--bucket', database);
-                    args.push(folder);
-                    await run(await executable('influx'), args, {
-                        cwd: ctx.workDir,
-                        environment: { INFLUX_TOKEN: value('Token', 'token') },
-                    });
-                } else {
-                    const args = ['backup', '-portable', '-host', `${host}:${port}`];
-                    if (database) args.push('-database', database);
+                const selected = influxTargets(c)[i];
+                if (!selected) throw fail('EOS_BACKUP_EVENTS');
+                if (selected.version === '2.x') await exportInflux2(selected, folder, ctx.workDir, i,
+                    ctx.historyRequirement?.provider === 'influxdb2' && coversInfluxTarget(selected, ctx.historyRequirement) ? ctx.historyRequirement : undefined);
+                else {
+                    const args = ['backup', '-portable', '-host', `${selected.host}:${selected.port}`];
+                    if (selected.bucket) args.push('-database', selected.bucket);
                     args.push(folder);
                     await run(await executable('influxd'), args, { cwd: ctx.workDir });
+                    if ((await readdir(folder)).length === 0) throw fail('EOS_BACKUP_INFLUX_MANIFEST_MISSING');
                 }
             }
             files.push({ file: await directory(ctx, folder, type + '-' + i), kind: type });
         }
+    }
+    if (ctx.historyRequirement?.provider === 'postgresql') {
+        const folder = join(ctx.workDir, 'postgresql-history');
+        await mkdir(folder, { mode: 0o700 });
+        await exportPostgresHistory(ctx.historyRequirement.namespace, folder);
+        files.push({ file: await directory(ctx, folder, 'postgresql-history'), kind: 'postgresql-history' });
     }
     files.push(...(await createExtraArchives(ctx)));
     return files;

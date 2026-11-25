@@ -1,0 +1,37 @@
+✔ 100 ms SSE bursts render latest buffered values once per 5000 ms; source timestamps remain unchanged (4.538087ms)
+✔ quiet connections still re-evaluate every 5 s and only a real upstream timestamp refresh changes source age (0.990393ms)
+✔ wall-clock jumps cannot postpone or burst the monotonic 5 s rendering cadence (0.972247ms)
+✔ hidden tabs buffer SSE values without rendering; return immediately projects latest data and resumes exactly one timer (0.906649ms)
+✔ pagehide clears pending UI work; repeated pageshow does not duplicate periodic timers or rendering (0.818479ms)
+✔ actual backend polling delivers newly confirmed constant values and preserves upstream timestamps instead of manufacturing freshness (1403.451224ms)
+✔ actual flow keeps measured zero during export and never invents 100 W or indefinitely holds a previous load (59.389696ms)
+✔ actual flow differentiates null, missing, bool and zero SoC and does not suppress valid raw PV behind null derived PV (28.355584ms)
+✔ stale, future, absent or offline measurements stay unknown in the same flow and sidebar; fresh unchanged zero recovers (27.421844ms)
+✔ no measurement/engine data never claims active engine, stable grid or healthy system (25.56467ms)
+✔ canonical NVP-invalid signal prevents a stale fallback from appearing as import/export or 100 percent self-sufficiency (14.001612ms)
+✔ farm flow uses complete atomic gross sums and arithmetic SoC; partial and stale overview do not revive old aggregate values (29.365387ms)
+✔ strict read rejects malformed values, absent timestamps and future samples but accepts newly confirmed constant zero (16.468607ms)
+✔ both shipped entry pages load the strict live helper before the actual dashboard renderer (1.60389ms)
+✔ missing split-meter sides and missing NVP cannot manufacture a complete flow or a balance-derived battery (19.860351ms)
+✔ extra producer and consumer nodes never display command power or missing measurements as measured zero (27.077856ms)
+✔ visible dashboard ages measurements even without a new SSE event; hidden and non-dashboard pages do not rerender (10.272992ms)
+✔ real flow does not suppress 80 W or retain separately smoothed previous powers (10.985394ms)
+✔ EV freshness, offline, bad-quality and future timestamp use the same measured-data contract as the rest of the flow (15.441339ms)
+✔ consumer greater than total is reported as inconsistent, and fresh balance can recover stale total without fabricating zero (43.656597ms)
+✔ signed split flows retain conservation for simultaneous import/export and battery charge/discharge (21.797322ms)
+✔ second field screenshot rejects impossible negative building remainder instead of clamping it to 0 W (17.388758ms)
+✔ negative load and out-of-range state of charge cannot masquerade as measured zero or valid percent (29.649657ms)
+✔ backend deduplicated extra production is authoritative and invalid published totals cannot be revived by browser sums (15.986044ms)
+✔ EV card, sidebar, modal and flow use one source model; valid manual override wins, booleans never become watts (1028.515858ms)
+✔ actual App-Center validator rejects boolean/energy/invalid power states and accepts numeric W/kW (278.370436ms)
+✔ every shipped entry point loads the measurement helper before its consuming script (1.174126ms)
+✔ App-Center recovery and save roundtrip preserve separate battery-flow feedback without replacing controller feedback (537.094022ms)
+✔ energy balance reports screenshot mismatch, preserves real zero and existing consumer magnitude semantics, and never invents negative residual (9.211943ms)
+ℹ tests 29
+ℹ suites 0
+ℹ pass 29
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2257.377627

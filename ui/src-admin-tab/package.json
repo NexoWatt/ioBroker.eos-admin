@@ -1,7 +1,7 @@
 {
   "name": "nexowatt-ui-admin-tab",
   "private": true,
-  "version": "9.0.21",
+  "version": "9.0.22",
   "type": "module",
   "scripts": {
     "dev": "vite",

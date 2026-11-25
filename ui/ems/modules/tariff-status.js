@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/modules/tariff-status.ts
- * Quell-Hash: sha256:f612efc9a680f8dddbc28c42ebd19ce427d9be25e429cc62398b455607b96507
+ * Quell-Hash: sha256:dd07fa87047c1a7b92a94f2c64903559727d6e1ccefd8ef281a8ffdbb5ca256b
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -564,7 +564,24 @@ class TariffStatusModule extends BaseModule {
                 'storageFarm.lastDispatchJson',
             ];
             const states = await this._readValues(ids);
+            // PV-Reserve-Flags werden bei unverändertem Wert nicht neu gestempelt.
+            // Nur der atomare Policy-Snapshot des Speicherreglers belegt ihre aktuelle
+            // Auswertung; ein neuer Tarif-Heartbeat allein darf alte Flags nicht erneuern.
+            const policyState = await this.adapter.getStateAsync('speicher.regelung.policyJson').catch(() => null);
             const now = Date.now();
+            const storagePolicy = safeParseJson(policyState?.val, {});
+            const policyTs = finiteOrNull(storagePolicy.ts);
+            const policyStateTs = finiteOrNull(policyState?.ts);
+            const policyFresh = (policyState?.q === undefined || policyState.q === 0)
+                && policyTs !== null && policyTs > 0 && policyTs <= now + 5000 && now - policyTs <= 30000
+                && policyStateTs !== null && policyStateTs > 0 && policyStateTs <= now + 5000 && now - policyStateTs <= 30000;
+            const pvPolicy = policyFresh && storagePolicy.pvAwareTarifNetzladen && typeof storagePolicy.pvAwareTarifNetzladen === 'object'
+                ? storagePolicy.pvAwareTarifNetzladen : {};
+            const reserveCap = typeof pvPolicy.capSocPct === 'number' && Number.isFinite(pvPolicy.capSocPct)
+                && pvPolicy.capSocPct >= 0 && pvPolicy.capSocPct <= 100 ? pvPolicy.capSocPct : null;
+            const pvReserve = { fresh: policyFresh, snapshotTs: policyTs,
+                blocked: policyFresh && pvPolicy.blocked === true,
+                capSocPct: reserveCap, reason: policyFresh ? cleanText(pvPolicy.reason, 240) : '' };
             const statusCfg = this._getStatusConfig();
             const tariffSnapshotTs = roundedOrNull(tariff.ts);
             const tariffSnapshotAgeMs = tariffSnapshotTs === null ? null : Math.max(0, now - tariffSnapshotTs);
@@ -718,6 +735,7 @@ class TariffStatusModule extends BaseModule {
             await this._setIfChanged('tarif.detailStatusText', detailStatusText);
             const statusJson = {
                 ts: now,
+                pvReserve,
                 active,
                 baseText,
                 intent: {

@@ -1,0 +1,144 @@
+TAP version 13
+# (node:28) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: public contract discards secrets and invalid success responses cannot unlock saves
+ok 1 - public contract discards secrets and invalid success responses cannot unlock saves
+  ---
+  duration_ms: 1.928361
+  type: 'test'
+  ...
+# Subtest: draft payload preserves adapter mode and does not send public flags or unrelated history settings
+ok 2 - draft payload preserves adapter mode and does not send public flags or unrelated history settings
+  ---
+  duration_ms: 1.247284
+  type: 'test'
+  ...
+# Subtest: saved token cannot be reused at another origin; explicit new token permits a new valid URL
+ok 3 - saved token cannot be reused at another origin; explicit new token permits a new valid URL
+  ---
+  duration_ms: 1.062591
+  type: 'test'
+  ...
+# Subtest: custom CA preserve/remove and HTTPS rules are explicit; read check never establishes write permission
+ok 4 - custom CA preserve/remove and HTTPS rules are explicit; read check never establishes write permission
+  ---
+  duration_ms: 0.416145
+  type: 'test'
+  ...
+# Subtest: errors translate auth/network/TLS/bucket/conflict without leaking raw upstream details
+ok 5 - errors translate auth/network/TLS/bucket/conflict without leaking raw upstream details
+  ---
+  duration_ms: 0.564294
+  type: 'test'
+  ...
+# Subtest: actual React mode change is local; draft check and explicit revision save use separate API operations
+ok 6 - actual React mode change is local; draft check and explicit revision save use separate API operations
+  ---
+  duration_ms: 79.12893
+  type: 'test'
+  ...
+# Subtest: failed/conflicting saves keep draft secrets and revision; status refresh cannot replace the unsaved draft
+ok 7 - failed/conflicting saves keep draft secrets and revision; status refresh cannot replace the unsaved draft
+  ---
+  duration_ms: 176.419449
+  type: 'test'
+  ...
+# Subtest: draft edits invalidate old check results; transport ready cannot fake read/write success
+ok 8 - draft edits invalidate old check results; transport ready cannot fake read/write success
+  ---
+  duration_ms: 31.160507
+  type: 'test'
+  ...
+# Subtest: failed initial load leaves write actions disabled and explicit retry can recover
+ok 9 - failed initial load leaves write actions disabled and explicit retry can recover
+  ---
+  duration_ms: 28.786486
+  type: 'test'
+  ...
+# Subtest: late initial response after unmount cannot expose data or unlock controls
+ok 10 - late initial response after unmount cannot expose data or unlock controls
+  ---
+  duration_ms: 21.986894
+  type: 'test'
+  ...
+# Subtest: installer action is admin/installer only and uses confirmed runtime/proxy origin in the same tab
+ok 11 - installer action is admin/installer only and uses confirmed runtime/proxy origin in the same tab
+  ---
+  duration_ms: 46.549727
+  type: 'test'
+  ...
+# Subtest: actual route retains protected capability and explicit roles; responsive history section is scoped
+ok 12 - actual route retains protected capability and explicit roles; responsive history section is scoped
+  ---
+  duration_ms: 1.157
+  type: 'test'
+  ...
+# Subtest: saved read/write errors and duplicate recording warning stay independent of a successful opposite operation
+ok 13 - saved read/write errors and duplicate recording warning stay independent of a successful opposite operation
+  ---
+  duration_ms: 41.278044
+  type: 'test'
+  ...
+# Subtest: concrete backend error codes distinguish busy/config/save/address and post-save activation failures
+ok 14 - concrete backend error codes distinguish busy/config/save/address and post-save activation failures
+  ---
+  duration_ms: 0.496294
+  type: 'test'
+  ...
+# Subtest: actual dedicated transport wrapper retains single same-origin API boundary and rejects unplanned suffixes
+ok 15 - actual dedicated transport wrapper retains single same-origin API boundary and rejects unplanned suffixes
+  ---
+  duration_ms: 24.733424
+  type: 'test'
+  ...
+# Subtest: PostgreSQL public response accepts only local provision status and discards all database secrets
+ok 16 - PostgreSQL public response accepts only local provision status and discards all database secrets
+  ---
+  duration_ms: 0.437897
+  type: 'test'
+  ...
+# Subtest: empty legacy config is never automatically classified as new; PostgreSQL requires explicit intent and preserves active history
+ok 17 - empty legacy config is never automatically classified as new; PostgreSQL requires explicit intent and preserves active history
+  ---
+  duration_ms: 0.346252
+  type: 'test'
+  ...
+# Subtest: explicit server new-site eligibility handles factory adapter defaults without converting saved configurations
+ok 18 - explicit server new-site eligibility handles factory adapter defaults without converting saved configurations
+  ---
+  duration_ms: 0.523664
+  type: 'test'
+  ...
+# Subtest: new-installation UI is explicit and PostgreSQL test remains read-only with no system command or exposed credentials
+ok 19 - new-installation UI is explicit and PostgreSQL test remains read-only with no system command or exposed credentials
+  ---
+  duration_ms: 19.763979
+  type: 'test'
+  ...
+# Subtest: PostgreSQL direct selection cannot save before confirmation and existing Influx UI never offers a new-site action
+ok 20 - PostgreSQL direct selection cannot save before confirmation and existing Influx UI never offers a new-site action
+  ---
+  duration_ms: 46.747228
+  type: 'test'
+  ...
+# Subtest: PostgreSQL prerequisite refresh leaves pending new-installation intent and revision untouched
+ok 21 - PostgreSQL prerequisite refresh leaves pending new-installation intent and revision untouched
+  ---
+  duration_ms: 16.695021
+  type: 'test'
+  ...
+# Subtest: PostgreSQL failure codes distinguish setup, TLS, credentials and queue failures without upstream leakage
+ok 22 - PostgreSQL failure codes distinguish setup, TLS, credentials and queue failures without upstream leakage
+  ---
+  duration_ms: 0.399631
+  type: 'test'
+  ...
+1..22
+# tests 22
+# suites 0
+# pass 22
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1002.764465

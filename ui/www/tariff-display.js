@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/tariff-display.ts
- * Quell-Hash: sha256:452005ed20fb9bbb6e0c73b4175e857fd34a9a3412714a5da8d049878ad80fb6
+ * Quell-Hash: sha256:d22fceb5cc908b49ff5dcf842d87459cf0d094d12784694627cc19d759aa351f
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -20,6 +20,7 @@
  * 2. npm run sync:ts-runtime-executables ausführen.
  * 3. npm run test:runtime-executables prüfen.
  */
+"use strict";
 /**
  * NexoWatt Quellcode-Erklärung (DE)
  * Aufgabe: Stellt echte Tarifintervalle und bestätigte Preise im Dashboard dar.
@@ -157,5 +158,64 @@
         const current = price(false), average = price(true);
         return { current, average, status: current === null ? 'Aktuell kein bestätigter Preis verfügbar' : 'Preis verfügbar; Optimierung separat einstellbar' };
     }
-    Reflect.set(window, 'NexoWattTariffDisplay', Object.freeze({ euro, format, parseCurve, dayRange, resolution, display }));
+    function flowStatus(snapshot, now = Date.now(), connected = true) {
+        const states = rec(snapshot);
+        const entry = (key) => rec(own(states, key));
+        const value = (key) => entry(key).value;
+        const enabled = (key) => value(key) === true || value(key) === 1 || value(key) === 'true';
+        const tariffOn = enabled('settings.dynamicTariff'), netFeeOn = enabled('settings.netFeeEnabled');
+        if (!tariffOn && !netFeeOn)
+            return { text: '', title: '' };
+        const mode = finite(value('settings.tariffMode')) === 2 ? 'Automatik' : 'Manuell';
+        const label = tariffOn ? `Tarif ${mode} aktiv` : 'Zeitvariables Netzentgelt aktiv';
+        if (!connected)
+            return { text: `${label} – Verbindung unterbrochen; Regelungsstatus nicht bestätigt`, title: '' };
+        const validQuality = (row) => row.q === undefined || row.q === 0;
+        const recent = (row) => {
+            const time = finite(row.ts);
+            return validQuality(row) && time !== null && time > 0 && time <= now + 5000 && now - time <= 30000;
+        };
+        const statusRow = entry('tarif.statusJson');
+        const status = rec(decoded(statusRow.value));
+        const stamp = finite(status.ts);
+        const fresh = stamp !== null && stamp > 0 && stamp <= now + 5000 && now - stamp <= 30000 && recent(statusRow);
+        const intent = rec(status.intent), effective = rec(status.effective);
+        const text = (input) => typeof input === 'string' ? input.trim().slice(0, 1600) : '';
+        if (!validQuality(statusRow))
+            return { text: `${label} – Regelungsstatus nicht bestätigt`, title: '' };
+        if (stamp !== null && !fresh)
+            return { text: `${label} – Regelungsstatus veraltet`, title: '' };
+        if (fresh && (status.active !== true || intent.snapshotFresh === false)) {
+            return { text: `${label} – Regelung noch nicht bestätigt`, title: text(intent.reason) };
+        }
+        // Der JSON-Snapshot ist der Heartbeat: Ein unveränderter statusText-State
+        // behält absichtlich seinen alten Zeitstempel. Nicht allein daran verwerfen.
+        let message = fresh ? text(effective.statusText) : '';
+        let title = fresh ? text(effective.detailStatusText) : '';
+        if (!message && !Object.keys(status).length) {
+            const legacy = entry('tarif.statusText');
+            if (recent(legacy))
+                message = text(legacy.value);
+        }
+        if (!message)
+            return { text: `${label} – warte auf aktuellen Regelungsstatus`, title: '' };
+        if (tariffOn && mode === 'Manuell' && !/manuell/i.test(message))
+            message += ' — Modus: Manuell';
+        const reserve = rec(status.pvReserve);
+        const legacyReserve = !Object.hasOwn(status, 'pvReserve') && recent(entry('speicher.regelung.tarifPvBlock'));
+        const reserveBlocked = Object.hasOwn(status, 'pvReserve')
+            ? reserve.fresh === true && reserve.blocked === true
+            : legacyReserve && enabled('speicher.regelung.tarifPvBlock');
+        if (fresh && reserveBlocked) {
+            const capRow = entry('speicher.regelung.tarifPvCapSocPct');
+            const cap = Object.hasOwn(status, 'pvReserve') ? finite(reserve.capSocPct)
+                : validQuality(capRow) ? finite(capRow.value) : null;
+            message += ` — PV-Reserve: Netzladen gesperrt${cap !== null && cap >= 0 && cap <= 100 ? ` (max ${cap.toFixed(1)}%)` : ''}`;
+            const reason = text(Object.hasOwn(status, 'pvReserve') ? reserve.reason : value('speicher.regelung.tarifPvBlockGrund'));
+            if (reason)
+                title = title ? `${title} | ${reason}` : reason;
+        }
+        return { text: message, title };
+    }
+    Reflect.set(window, 'NexoWattTariffDisplay', Object.freeze({ euro, format, parseCurve, dayRange, resolution, display, flowStatus }));
 })();

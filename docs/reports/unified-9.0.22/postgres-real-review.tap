@@ -1,0 +1,21 @@
+▶ real PostgreSQL: protected role/schema templates, TLS, historian and dump/restore
+  ✔ runtime negotiates verified TLS and has no administrative privilege (11.930942ms)
+  ✔ plaintext, untrusted CA, wrong hostname, bad password and other instance are rejected (65.235799ms)
+  ✔ historian writes/query values, extrema, aggregates and upsert without injection (28.156891ms)
+  ✔ query deadline destroys blocked connection and subsequent requests recover (95.200111ms)
+  ✔ backup role is read-only; verified TLS dump restores actual typed samples (372.339881ms)
+  ✔ reapplying schema templates preserves saved measurements and runtime grants (27.469718ms)
+  ✔ database restart preserves historian points and fresh clients can continue recording (234.205663ms)
+  ✔ an expired server certificate is rejected by the actual PostgreSQL TLS connection (16.401961ms)
+✔ real PostgreSQL: protected role/schema templates, TLS, historian and dump/restore (2442.344538ms)
+ℹ postgres (PostgreSQL) 17.12 (Debian 17.12-0+deb13u1)
+ℹ Workspace prohibits interface inventory; no external-interface connection probe performed.
+ℹ No non-loopback local IPv4 available; bind policy verified by SHOW only.
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2949.375958

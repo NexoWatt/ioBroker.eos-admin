@@ -1,0 +1,37 @@
+✔ changing tariff provider invalidates old direct and curve inputs before delayed database writes finish (32.332564ms)
+✔ late old-provider database write cannot revive tariff control while replacement clearing is pending (3.075093ms)
+✔ actual provider publication → TarifVis → CoreLimits → Wallet keeps EUR/kWh including high, zero and negative prices (71.781744ms)
+✔ structured EUR curves keep their prices while untyped legacy cents and explicit units retain their conversions (0.280244ms)
+✔ actual manual mapping preserves cent conversion and supports explicit EUR unit without changing freshness (5.100738ms)
+(node:23) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ actual dashboard tooltip draws all 96 supplied quarter-hours, including zero and negative intervals, without hourly averaging (12.663562ms)
+✔ actual dashboard retains all 92/100 quarter-hours on European daylight-saving days and places local clock labels correctly (9.734754ms)
+✔ price card and modal show confirmed Tibber prices while optimization remains off and an unrelated budget price is null (2.320418ms)
+✔ expired, absent, false or null source values clear the visible price rather than turning into zero or reusing budget values (2.616246ms)
+✔ legacy manual mappings remain authoritative, with explicit cent conversion and no connected-provider override (1.82048ms)
+✔ hourly source data stays hourly; missing tomorrow does not remove today or invent quarter-hours (3.015916ms)
+✔ real provider publication feeds the dashboard without enabling a control or fabricating absent values (36.813155ms)
+✔ both shipped dashboard entry pages load the typed price helper before app.js (1.213634ms)
+✔ energy flow always exposes enabled tariff or grid-fee control when its backend status is missing (2.185789ms)
+✔ live flow status uses current policy snapshot, keeps unchanged text, and exposes inactive or stale runtime (3.441856ms)
+✔ SSE disconnect clears stale actuator claims in the energy flow immediately and reconnect restores confirmed status (2.041156ms)
+✔ invalid quality and expired source states cannot confirm charging or append a stale PV block (2.000646ms)
+✔ atomic storage reserve snapshot keeps a constant block visible without recycling old standalone flags (1.941298ms)
+✔ Tibber requests and normalizes quarter-hours even with an older hourly setting; zero/negative remain valid and null is rejected (18.118571ms)
+✔ local calendar splitting retains 92/96/100 quarter-hours and the next day across DST boundaries (172.346632ms)
+✔ actual provider tick selects each cached quarter-hour without network calls and refreshes before customer freshness expires (266.430355ms)
+✔ provider failures do not extend freshness, do not spin requests and clear expired prices instead of creating zero (167.61155ms)
+✔ other providers retain their resolution and normal jittered cadence, while a shorter customer deadline still bounds refresh (49.908124ms)
+✔ new EOS installations read active tariff settings from their actual runtime and produce a live status (25.221186ms)
+✔ explicit legacy VIS namespace remains authoritative and cannot be overridden by local settings (1.847469ms)
+✔ runtime namespace default preserves tariff freshness and AppCenter blocking (3.956837ms)
+✔ tariff status preserves a constant PV reserve through fresh storage policy and invalidates a stopped writer (6.057481ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 832.528432

@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/main.ts
- * Quell-Hash: sha256:f61d808e29a1884d6fe6d80783d784beef53f7053fedd14fd49a0b661e04dd52
+ * Quell-Hash: sha256:f5e91cd2a619157494e2231b1957a6c5db2c49035c9aa584d3715e7781ea652c
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -30,6 +30,7 @@
  */
 // Canonical main.js runtime source; generate with `npm run sync:ts-runtime-executables`.
 'use strict';
+const { emsControlField, validEmsControlValue } = require('./lib/ems-control-values');
 const { HostedAdapter, centralLicenseSnapshot, centralAccess } = require('./lib/hosted-adapter');
 const { stopHostedRuntime, createHostedCleanup } = require('./lib/hosted-runtime-stop');
 const { readHostedStartup } = require('./lib/hosted-startup-status');
@@ -56,11 +57,14 @@ const bodyParser = express.json({ limit: '5mb', inflate: false });
 const crypto = require('crypto');
 const { installerRevision, assertInstallerRevision, provisionInstallerObjects, assertDeviceAppActivations, numericMeasurement, activeDeviceProfileReferences, awaitEmsTransition } = require('./lib/installer-lifecycle');
 const { buildFarmOverview } = require('./lib/storage-farm-overview');
+const { readFlowMeasurement, sumFlowMeasurements } = require('./lib/flow-measurement');
 const { tariffDisplayConfig, tariffPriceNumber } = require('./lib/tariff-price');
 const { customerTariffView, prepareCustomerTariffChange } = require('./lib/customer-tariff');
 const { InfluxDirectClient } = require('./lib/influx-direct');
 const { InfluxHistoryRuntime } = require('./lib/influx-history-runtime');
-const { prepareInfluxHistoryChange, protectInfluxHistoryConfig, restoreInfluxHistoryConfig, redactInfluxHistoryConfig } = require('./lib/influx-config');
+const { PostgresHistoryClient, loadPostgresProfile } = require('./lib/postgres-history');
+const { prepareHistoryChange, isUntouchedHistoryDefault } = require('./lib/postgres-history-config');
+const { protectInfluxHistoryConfig, restoreInfluxHistoryConfig, redactInfluxHistoryConfig } = require('./lib/influx-config');
 const https = require('https');
 const pkg = require('./package.json');
 const { defaultEnergyOriginConfig, registerEnergyOriginApi } = require('./lib/energy-origin-api');
@@ -394,7 +398,7 @@ class NexoWattVis extends HostedAdapter {
     // responsive and avoids unnecessary InfluxDB round-trips.
     this._nwHistoryApiCache = new EphemeralMap(5000, 4);
     this._nwHistoryApiInflight = new Map();
-    this._nwDirectHistory = new InfluxHistoryRuntime(this.namespace);
+    this._nwDirectHistory = new InfluxHistoryRuntime(this.namespace, undefined, undefined, this.hostNamespace);
     // Only fulfilled ioBroker writes may enter the historian. Capture the event's
     // timestamp before awaiting persistence; never await network I/O in an EMS tick.
     const writeHistoryState = this.setStateAsync.bind(this);
@@ -4786,6 +4790,7 @@ class NexoWattVis extends HostedAdapter {
         }
       }
 
+      this._nwHistoryExistingInstallation = st !== null && st !== undefined || source === 'userdata';
       // Neue Laufzeitfelder werden ausschließlich im Speicher ergänzt. Ein normales
       // Update/Neustart schreibt keine normalisierte Fassung über vorhandene Kundendaten.
       patch = restoreInfluxHistoryConfig(patch, this._nwHistorySecretCodec());
@@ -9528,11 +9533,11 @@ class NexoWattVis extends HostedAdapter {
     const configuredId = String(binding.configuredId || sourceId || '').trim();
     const ts = (typeof state.ts === 'number' && Number.isFinite(state.ts))
       ? state.ts
-      : ((typeof state.lc === 'number' && Number.isFinite(state.lc)) ? state.lc : Date.now());
+      : ((typeof state.lc === 'number' && Number.isFinite(state.lc)) ? state.lc : null);
     const normalized = this._nwScaleMappedValue(binding.key, configuredId, state.val);
     const prev = (this.stateCache && this.stateCache[binding.key]) ? this.stateCache[binding.key] : null;
-    const cacheChanged = !(prev && prev.ts === ts && Object.is(prev.value, normalized));
-    if (cacheChanged) this.updateValue(binding.key, normalized, ts);
+    const cacheChanged = !(prev && prev.ts === ts && Object.is(prev.value, normalized) && prev.q === state.q);
+    if (cacheChanged) this.updateValue(binding.key, normalized, ts, { q: state.q });
 
     const localId = this.namespace ? `${this.namespace}.${binding.key}` : '';
     const shouldMirror = binding.key.startsWith('evcs.')
@@ -9544,14 +9549,14 @@ class NexoWattVis extends HostedAdapter {
     const mirrorValue = this._nwEvcsMirrorValue(binding, normalized);
     let stampValue = '';
     try { stampValue = (mirrorValue && typeof mirrorValue === 'object') ? JSON.stringify(mirrorValue) : String(mirrorValue); } catch (_e) { stampValue = String(mirrorValue); }
-    const stamp = `${ts}|${typeof mirrorValue}|${stampValue}`;
+    const stamp = `${ts}|${state.q}|${typeof mirrorValue}|${stampValue}`;
     if (!this._nwEvcsMirrorStampByKey || typeof this._nwEvcsMirrorStampByKey.get !== 'function') {
       this._nwEvcsMirrorStampByKey = new Map();
     }
     if (this._nwEvcsMirrorStampByKey.get(binding.key) === stamp) return cacheChanged;
 
     try {
-      await this.setStateAsync(binding.key, { val: mirrorValue, ack: true });
+      await this.setStateAsync(binding.key, { val: mirrorValue, ack: true, q: ts === null ? 64 : (state.q ?? 0), ...(ts !== null ? { ts } : {}) });
       this._nwEvcsMirrorStampByKey.set(binding.key, stamp);
       return true;
     } catch (e) {
@@ -12097,6 +12102,7 @@ async onReady() {
       // Historie (Influx): canonical export states under 'nexowatt-ui.0.historie.*'
       // This avoids double-mapping of device datapoints for dashboards/history.
       try {
+        await startupStep(() => this._nwActivateProvisionedHistory());
         await startupStep(() => this.ensureHistorieExportStates());
         await startupStep(() => this.updateHistorieExportStates('startup'));
         this.startHistorieExportTimer();
@@ -16104,26 +16110,26 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
       if (!['admin', 'installer'].includes(req.nwSession?.role)) return sendForbidden(res);
       return next();
     };
-    const historyResponse = () => ({ ok: true, config: redactInfluxHistoryConfig({ history: this.config?.history || { provider: 'adapter' } }).history, configurationRevision: this._nwInstallerConfigRevision(), status: this._nwDirectHistory.status() });
+    const historyResponse = async () => ({ ok: true, config: { ...redactInfluxHistoryConfig({ history: this.config?.history || { provider: 'adapter' } }).history, postgresql: { profile: 'local', provisioned: await this._nwPostgresProfileAvailable() }, newInstallationAllowed: await this._nwHistoryNewInstallationAllowed() }, configurationRevision: this._nwInstallerConfigRevision(), status: this._nwDirectHistory.status() });
     const historyFailure = (res, error) => {
       const rawCode = error?.code;
-      const code = typeof rawCode === 'string' && /^EOS_INFLUX_[A-Z_]{1,64}$/.test(rawCode) ? rawCode : 'EOS_INFLUX_REQUEST_FAILED';
-      const invalid = ['EOS_INFLUX_CONFIG_INVALID', 'EOS_INFLUX_PROVIDER_INVALID', 'EOS_INFLUX_TOKEN_INVALID', 'EOS_INFLUX_CA_INVALID', 'EOS_INFLUX_URL_INVALID', 'EOS_INFLUX_NEW_DESTINATION_REQUIRES_TOKEN'].includes(code);
+      const code = typeof rawCode === 'string' && /^EOS_(?:INFLUX|POSTGRES)_[A-Z_]{1,64}$/.test(rawCode) ? rawCode : 'EOS_INFLUX_REQUEST_FAILED';
+      const invalid = ['EOS_INFLUX_CONFIG_INVALID', 'EOS_INFLUX_PROVIDER_INVALID', 'EOS_INFLUX_TOKEN_INVALID', 'EOS_INFLUX_CA_INVALID', 'EOS_INFLUX_URL_INVALID', 'EOS_INFLUX_NEW_DESTINATION_REQUIRES_TOKEN', 'EOS_POSTGRES_PROFILE_INVALID', 'EOS_POSTGRES_EXISTING_HISTORY', 'EOS_POSTGRES_NEW_INSTALLATION_REQUIRED'].includes(code);
       return res.status(invalid ? 400 : 503).json({ ok: false, error: code });
     };
-    app.get('/api/installer/history', requireInstaller, requireHistoryInstaller, (_req, res) => {
-      sendNoStore(res); this._nwConfigureHistory(); return res.json(historyResponse());
+    app.get('/api/installer/history', requireInstaller, requireHistoryInstaller, async (_req, res) => {
+      sendNoStore(res); this._nwConfigureHistory(); return res.json(await historyResponse());
     });
     app.post('/api/installer/history/check', requireInstaller, requireHistoryInstaller, async (req, res) => {
       sendNoStore(res);
       if (this._nwShuttingDown || this._bridge.canWrite() !== true) return res.status(503).json({ ok: false, error: 'EOS_UI_OWNERSHIP_REQUIRED' });
-      if (this._nwHistoryCheckInFlight) return res.status(409).json({ ok: false, error: 'EOS_INFLUX_CHECK_BUSY' });
+      if (this._nwHistoryCheckInFlight) return res.status(409).json({ ok: false, error: req.body?.history?.provider === 'postgresql' ? 'EOS_POSTGRES_BUSY' : 'EOS_INFLUX_CHECK_BUSY' });
       this._nwHistoryCheckInFlight = true;
       let client = null;
       try {
-        const candidate = prepareInfluxHistoryChange(this.config?.history, req.body?.history || { provider: 'influxdb2' });
-        if (candidate.provider !== 'influxdb2') return res.status(400).json({ ok: false, error: 'EOS_INFLUX_PROVIDER_INVALID' });
-        client = new InfluxDirectClient(candidate.influxdb2);
+        const candidate = prepareHistoryChange(this.config?.history, req.body?.history || { provider: 'influxdb2' }, await this._nwHistoryNewInstallationAllowed());
+        if (!['influxdb2', 'postgresql'].includes(candidate.provider)) return res.status(400).json({ ok: false, error: 'EOS_INFLUX_PROVIDER_INVALID' });
+        client = candidate.provider === 'postgresql' ? new PostgresHistoryClient(this.hostNamespace) : new InfluxDirectClient(candidate.influxdb2);
         this._nwHistoryCheckClient = client;
         const check = await client.check();
         return res.json({ ok: true, check });
@@ -16134,14 +16140,18 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
       sendNoStore(res);
       if (this._nwShuttingDown || this._bridge.canWrite() !== true) return res.status(503).json({ ok: false, error: 'EOS_UI_OWNERSHIP_REQUIRED' });
       const mutation = beginMeshAppSave();
-      if (!mutation) return res.status(409).json({ ok: false, error: 'EOS_INFLUX_CONFIG_BUSY' });
+      if (!mutation) return res.status(409).json({ ok: false, error: req.body?.history?.provider === 'postgresql' ? 'EOS_POSTGRES_BUSY' : 'EOS_INFLUX_CONFIG_BUSY' });
       try {
         if (typeof req.body?.expectedConfigurationRevision !== 'string' || req.body.expectedConfigurationRevision !== this._nwInstallerConfigRevision()) {
           return res.status(409).json({ ok: false, error: 'EOS_INSTALLER_CONFIG_CONFLICT' });
         }
-        const history = prepareInfluxHistoryChange(this.config?.history, req.body?.history);
+        const history = prepareHistoryChange(this.config?.history, req.body?.history, await this._nwHistoryNewInstallationAllowed());
+        if (history.provider === 'postgresql') {
+          const postgres = new PostgresHistoryClient(this.hostNamespace);
+          try { await postgres.check(); } finally { postgres.close(); }
+        }
         const patch = { ...this._nwDeepClone(this._nwInstallerConfigPatch || {}), history };
-        if (await this.persistInstallerConfigToState(patch) === false) return res.status(503).json({ ok: false, error: 'EOS_INFLUX_CONFIG_SAVE_FAILED' });
+        if (await this.persistInstallerConfigToState(patch) === false) return res.status(503).json({ ok: false, error: history.provider === 'postgresql' ? 'EOS_POSTGRES_CONFIG_SAVE_FAILED' : 'EOS_INFLUX_CONFIG_SAVE_FAILED' });
         this._nwInstallerConfigPatch = patch;
         this.config = this.nwApplyInstallerPatchToRuntimeConfig(this.config, patch);
         if (this._nwShuttingDown || this._bridge.canWrite() !== true) return res.status(503).json({ ok: false, saved: true, error: 'EOS_UI_OWNERSHIP_REQUIRED' });
@@ -16151,7 +16161,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
           void this.updateHistorieExportStates('history-save').catch(() => {});
         }
         try { await this.nwWriteUserdataBackup(patch, 'history-save'); } catch (_error) {}
-        return res.json(historyResponse());
+        return res.json(await historyResponse());
       } catch (error) { return historyFailure(res, error); }
       finally { endMeshAppSave(mutation); }
     });
@@ -27168,14 +27178,14 @@ return res.json(out);
 
         const ts = (typeof st.ts === 'number' && Number.isFinite(st.ts))
           ? st.ts
-          : ((typeof st.lc === 'number' && Number.isFinite(st.lc)) ? st.lc : now);
+          : ((typeof st.lc === 'number' && Number.isFinite(st.lc)) ? st.lc : null);
 
         if (emsDp) {
           try {
             const prev = (emsDp.cacheByObjectId && typeof emsDp.cacheByObjectId.get === 'function')
               ? emsDp.cacheByObjectId.get(entry.id)
               : null;
-            const sameRaw = !!(prev && prev.ts === ts && Object.is(prev.val, st.val));
+            const sameRaw = !!(prev && prev.ts === ts && Object.is(prev.val, st.val) && prev.q === st.q);
             if (!sameRaw) emsDp.handleStateChange(entry.id, st);
           } catch (_e) {}
         }
@@ -27195,9 +27205,9 @@ return res.json(out);
           if (!key || handledEvcsKeys.has(key)) continue;
           const scaled = this._nwScaleMappedValue(key, entry.id, st.val);
           const prev = (this.stateCache && this.stateCache[key]) ? this.stateCache[key] : null;
-          const sameScaled = !!(prev && prev.ts === ts && Object.is(prev.value, scaled));
+          const sameScaled = !!(prev && prev.ts === ts && Object.is(prev.value, scaled) && prev.q === st.q);
           if (sameScaled) continue;
-          this.updateValue(key, scaled, ts);
+          this.updateValue(key, scaled, ts, { q: st.q });
         }
       };
 
@@ -27471,7 +27481,7 @@ return res.json(out);
         await this._nwPrimeForeignPowerScale(id);
         const state = await this.getForeignStateAsync(id);
         if (state && state.val !== undefined) {
-          this.updateValue(key, this._nwScaleMappedValue(key, id, state.val), state.ts);
+          this.updateValue(key, this._nwScaleMappedValue(key, id, state.val), state.ts, { q: state.q });
         }
       } catch (e) {
         this.log.warn(`Cannot read initial state for ${key} (${id}): ${e.message}`);
@@ -27502,7 +27512,7 @@ return res.json(out);
           await this._nwPrimeForeignPowerScale(id);
           const st = await this.getForeignStateAsync(id);
           if (st && st.val !== undefined) {
-            this.updateValue(slot.stateKey, this._nwScaleMappedValue(slot.stateKey, id, st.val), st.ts);
+            this.updateValue(slot.stateKey, this._nwScaleMappedValue(slot.stateKey, id, st.val), st.ts, { q: st.q });
           }
         } catch (e) {
           this.log.warn(`Cannot read initial flow slot state for ${slot.stateKey} (${id}): ${e.message}`);
@@ -27590,6 +27600,24 @@ return res.json(out);
     if (this._nwShuttingDown) return;
     if (state && state.ack === false && String(id).startsWith(this.namespace + '.')
       && !centralLicenseSnapshot(this._bridge).ok) return;
+    // Ordinary ioBroker controls remain usable without a separate token or
+    // permission layer. Validate values before caches/compatibility translation.
+    if (state && String(id).startsWith(this.namespace + '.')) {
+      const relative = String(id).slice(this.namespace.length + 1);
+      const field = emsControlField(relative);
+      if (field && !validEmsControlValue(field, state.val)) {
+        if (field !== 'legacyMode') {
+          this.stateCache[relative] = { value: 'EOS_INVALID_CONTROL_VALUE', ts: Number(state.ts) || Date.now() };
+          this._nwRequestImmediateEmsTick(`invalid-control:${relative}`);
+        }
+        const now = Date.now();
+        if (!this._nwInvalidControlWarnAt || now - this._nwInvalidControlWarnAt >= 30000) {
+          this._nwInvalidControlWarnAt = now;
+          this.log.warn(`EOS_INVALID_CONTROL_VALUE: ${relative}; Bedienwert im Datenpunkt prüfen.`);
+        }
+        return;
+      }
+    }
     // Feed EMS datapoint cache (for embedded charging engine)
     try {
       if (this.emsEngine && this.emsEngine.dp && typeof this.emsEngine.dp.handleStateChange === 'function') {
@@ -27625,7 +27653,7 @@ return res.json(out);
       let normalizedMappedValue = state.val;
       if (key && !evcsMappedAlreadyHandled && !ownReadOnlyEvcsMirrorAck) {
         normalizedMappedValue = this._nwScaleMappedValue(key, id, state.val);
-        this.updateValue(key, normalizedMappedValue, state.ts);
+        this.updateValue(key, normalizedMappedValue, state.ts, { q: state.q });
 
         // Bedienzustände der Ladepunkte werden sofort im stateCache sichtbar und
         // lösen einen debouncten zentralen EMS-Tick aus. Das gilt auch für externe
@@ -27656,8 +27684,8 @@ return res.json(out);
       try {
         const pvAuto = this._derivedFlow?.auto?.pvInverters;
         if (pvAuto && pvAuto.ids && pvAuto.ids.has(id)) {
-          const tsMs = Number(state.ts) || Date.now();
-          pvAuto.cache.set(id, { val: state.val, ts: tsMs });
+          const tsMs = numericMeasurement(state.ts);
+          pvAuto.cache.set(id, { val: state.val, ts: tsMs, q: state.q });
           this.scheduleDerivedFlowUpdate('autoPv');
         }
       } catch (_e) {}
@@ -28317,7 +28345,7 @@ return res.json(out);
       if (enableInfluxCustom) await this._nwEnsureInfluxCustom(id, inst, influxOpts);
     };
 
-    await ensureChannel('historie', 'Historie (Influx)');
+    await ensureChannel('historie', this.config?.history?.provider === 'postgresql' ? 'EOS Historie' : 'Historie (Influx)');
     await ensureChannel('historie.core', 'Kernwerte');
 
     await ensureChannel('historie.core.grid', 'Netz');
@@ -28481,7 +28509,7 @@ return res.json(out);
   async _nwEnsureInfluxCustom(localId, inst, opts = null) {
     this._nwConfigureHistory();
     this._nwDirectHistory.register(localId, opts?.changesOnly === true);
-    if (this.config?.history?.provider === 'influxdb2') {
+    if (['influxdb2', 'postgresql'].includes(this.config?.history?.provider)) {
       const object = await this.getObjectAsync(localId).catch(() => null);
       const custom = object?.common?.custom;
       const active = custom && typeof custom === 'object' && Object.entries(custom).some(([id, entry]) => /^influxdb\.\d+$/.test(id) && entry?.enabled === true);
@@ -30865,6 +30893,13 @@ return res.json(out);
       native: {},
     });
 
+    await this.setObjectNotExistsAsync('derived.core.production', {
+      type: 'channel', common: { name: 'Zusätzliche Erzeugung (berechnet)' }, native: {},
+    });
+    await this.setObjectNotExistsAsync('derived.core.production.extraW', {
+      type: 'state', common: { name: 'Zusätzliche Erzeugung ohne PV-Duplikate', type: 'number', role: 'value.power', unit: 'W', read: true, write: false }, native: {},
+    });
+
     await this.setObjectNotExistsAsync('derived.core.building', {
       type: 'channel',
       common: { name: 'Gebäude (berechnet)' },
@@ -31809,9 +31844,64 @@ return res.json(out);
     return { encrypt: value => this._owner.encrypt(value), decrypt: value => this._owner.decrypt(value) };
   }
 
+  async _nwPostgresProfileAvailable() {
+    try { await loadPostgresProfile(this.hostNamespace); return true; }
+    catch (_error) { return false; }
+  }
+
+  /** No implicit migration: any saved installer history or installed historian blocks PG first selection. */
+  async _nwHistoryNewInstallationAllowed() {
+    if (this.namespace !== this.hostNamespace || this.config?.history?.provider === 'postgresql' || typeof this._nwHistoryExistingInstallation !== 'boolean' ||
+        this._nwInstallerConfigPatch?.history || !isUntouchedHistoryDefault(this._owner.config?.eosUi?.history, require('./io-package.json').native.history) || this.config?.history?.provider === 'influxdb2' ||
+        this.config?.history?.instance && this.config.history.instance !== 'influxdb.0') return false;
+    // A system installer may explicitly provision a new site after EOS's first
+    // empty initialization. Only its protected newInstallation profile can
+    // authorize this case; absent history fields alone never do.
+    if (this._nwHistoryExistingInstallation && !await this._nwPostgresProfileAvailable()) return false;
+    try {
+      for (const name of ['influxdb', 'sql', 'history']) {
+        const objects = await this.getForeignObjectsAsync(`system.adapter.${name}.*`, 'instance');
+        if (!objects || typeof objects !== 'object' || Object.keys(objects).length) return false;
+      }
+      return true;
+    } catch (_error) { return false; }
+  }
+
+  /** The protected profile is an explicit system-installer decision, never an npm/postinstall side effect. */
+  async _nwActivateProvisionedHistory() {
+    if (!await this._nwHistoryNewInstallationAllowed()) return;
+    try { await loadPostgresProfile(this.hostNamespace); }
+    catch (error) {
+      if (error?.code !== 'EOS_POSTGRES_SETUP_REQUIRED') this.log.warn(error?.code || 'EOS_POSTGRES_PROFILE_INVALID');
+      return;
+    }
+    if (this._nwShuttingDown || this._bridge.canWrite() !== true) return;
+    const history = prepareHistoryChange(this.config?.history, { provider: 'postgresql', postgresql: { profile: 'local' }, newInstallation: true }, true);
+    const patch = { ...this._nwDeepClone(this._nwInstallerConfigPatch || {}), history };
+    if (await this.persistInstallerConfigToState(patch) === false) {
+      this.log.warn('EOS_POSTGRES_CONFIG_SAVE_FAILED'); return;
+    }
+    this._nwInstallerConfigPatch = patch;
+    this.config = this.nwApplyInstallerPatchToRuntimeConfig(this.config, patch);
+    this._nwConfigureHistory();
+  }
+
+  getHistoryBackupRequirement() {
+    const history = this.config?.history;
+    if (!history || typeof history !== 'object') return { provider: 'unknown' };
+    if (history.provider === 'postgresql') return { provider: 'postgresql', namespace: this.hostNamespace };
+    if (history.provider === 'influxdb2') {
+      const direct = history.influxdb2;
+      if (!direct || typeof direct.url !== 'string' || typeof direct.bucket !== 'string' || typeof direct.organization !== 'string') return { provider: 'unknown' };
+      return { provider: 'influxdb2', url: direct.url, bucket: direct.bucket, org: direct.organization };
+    }
+    const instance = this._nwGetHistoryInstance();
+    return /^[a-z][a-z0-9_-]*\.\d+$/.test(instance) ? { provider: 'adapter', instance } : { provider: 'unknown' };
+  }
+
   _nwConfigureHistory() {
     if (this._nwShuttingDown) return;
-    if (!this._nwDirectHistory) this._nwDirectHistory = new InfluxHistoryRuntime(this.namespace);
+    if (!this._nwDirectHistory) this._nwDirectHistory = new InfluxHistoryRuntime(this.namespace, undefined, undefined, this.hostNamespace);
     this._nwDirectHistory.configure(this.config?.history);
     if (this._nwHistoryProviderSignature !== JSON.stringify(this.config?.history || {})) {
       this._nwHistoryProviderSignature = JSON.stringify(this.config?.history || {});
@@ -31821,7 +31911,7 @@ return res.json(out);
   }
 
   _nwDispatchHistory(instance, payload, callback) {
-    if (this.config?.history?.provider !== 'influxdb2') return this.sendTo(instance, 'getHistory', payload, callback);
+    if (!['influxdb2', 'postgresql'].includes(this.config?.history?.provider)) return this.sendTo(instance, 'getHistory', payload, callback);
     this._nwConfigureHistory();
     return this._nwDirectHistory.query(payload.id, payload.options).then(
       result => callback(result),
@@ -31830,7 +31920,7 @@ return res.json(out);
   }
 
   async _nwDetectInfluxInstance() {
-    if (this.config?.history?.provider === 'influxdb2') return 'eos-direct-influxdb2';
+    if (['influxdb2', 'postgresql'].includes(this.config?.history?.provider)) return `eos-direct-${this.config.history.provider}`;
     try {
       // If user did not specify a history instance, try to detect an installed influxdb.X instance.
       if (this._nwTrimId((this.config && this.config.history && this.config.history.instance) || '')) return this._nwTrimId(this.config.history.instance);
@@ -31853,7 +31943,7 @@ return res.json(out);
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
   _nwGetHistoryInstance() {
-    if (this.config?.history?.provider === 'influxdb2') return 'eos-direct-influxdb2';
+    if (['influxdb2', 'postgresql'].includes(this.config?.history?.provider)) return `eos-direct-${this.config.history.provider}`;
     const hcfg = (this.config && this.config.history) || {};
     const inst = this._nwTrimId(hcfg.instance) || this._nwTrimId(this._nwDetectedInfluxInstance) || 'influxdb.0';
     return inst;
@@ -32007,10 +32097,10 @@ return res.json(out);
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
   async _nwEnsurePara14aInfluxInstance(force = false) {
-    if (this.config?.history?.provider === 'influxdb2') {
+    if (['influxdb2', 'postgresql'].includes(this.config?.history?.provider)) {
       this._nwConfigureHistory();
       const status = this._nwDirectHistory.status();
-      return { instance: 'eos-direct-influxdb2', ready: status.state === 'ready', dedicated: false, autoProvisioned: false, provisionState: 'direct', provisionError: status.lastError };
+      return { instance: `eos-direct-${this.config.history.provider}`, ready: status.state === 'ready', dedicated: false, autoProvisioned: false, provisionState: 'direct', provisionError: status.lastError };
     }
     const now = Date.now();
     const cached = this._nwPara14aInfluxProvision;
@@ -32458,7 +32548,7 @@ return res.json(out);
           try { await this.subscribeForeignStatesAsync(nid); } catch (_e) {}
           try {
             const st = await this.getForeignStateAsync(nid);
-            if (st && st.val !== undefined) cache.cache.set(nid, { val: st.val, ts: st.ts || now });
+            if (st && st.val !== undefined) cache.cache.set(nid, { val: st.val, ts: st.ts, q: st.q });
           } catch (_e) {}
         }
       }
@@ -32509,6 +32599,19 @@ return res.json(out);
     // If no direct house meter (consumptionTotal) is configured, we use this as fallback for the UI.
 
     const ts = Date.now();
+    const configuredAgeSec = numericMeasurement(this.config?.settings?.deviceStaleTimeoutSec);
+    const liveMaxAgeMs = Math.max(10000, (configuredAgeSec !== null && configuredAgeSec > 0 ? configuredAgeSec : 60) * 1000);
+    const inputTimes = [];
+    const pvTimes = [];
+    const producerTimes = [];
+    const gridTimes = [];
+    const storageTimes = [];
+    const readLive = (key, times = inputTimes) => {
+      const sample = readFlowMeasurement(this.stateCache, key, ts, liveMaxAgeMs);
+      if (sample) times.push(sample.ts);
+      return sample ? sample.value : null;
+    };
+    const oldestTime = (times) => times.length ? Math.min(...times) : ts;
 
     // Keep PV-inverter auto-cache reasonably fresh (cheap no-op when not due)
     await this._derivedRefreshPvInvertersCache(false);
@@ -32534,7 +32637,7 @@ return res.json(out);
     //   settings.flowInvertBattery flips that signed value before splitting.
     // Separate charge/discharge datapoints remain supported, but stale/legacy mirrored
     // values must not make the UI or derived balance show both directions at once.
-    const storageFlow = this._nwResolveBatteryFlowFromCache({ now: ts });
+    const storageFlow = this._nwResolveBatteryFlowFromCache({ now: ts, strictStale: true, maxAgeMs: liveMaxAgeMs });
     const chargeW = Math.max(0, Number(storageFlow.chargeW) || 0);
     const dischargeW = Math.max(0, Number(storageFlow.dischargeW) || 0);
     const storageSrc = storageFlow.src || 'missing';
@@ -32544,14 +32647,27 @@ return res.json(out);
     // --- Producer slots (optional extra production) ---
     let producerSumW = 0;
     let producerCount = 0;
+    let missingProducer = false;
+    const producerInputs = [];
     for (let i = 1; i <= 5; i++) {
-      const p = this._nwGetNumberFromCache(`producer${i}Power`);
-      if (p !== null) {
-        const n = Number(p);
-        if (Number.isFinite(n)) {
-          producerSumW += Math.abs(n);
-          producerCount++;
-        }
+      const key = `producer${i}Power`;
+      const slot = typeof this._nwGetFlowSlotInfo === 'function' ? this._nwGetFlowSlotInfo('producers', i) : null;
+      const id = String(slot?.objectId || this.config?.datapoints?.[key] || '').trim();
+      if (id) producerInputs.push({ key: String(slot?.stateKey || key), id });
+    }
+
+    for (const [kind, prefix] of [['bhkw', 'b'], ['generator', 'g']]) {
+      const devices = this.config?.[kind]?.devices;
+      if (!Array.isArray(devices)) continue;
+      const indexes = new Set();
+      for (let i = 0; i < Math.min(devices.length, 10); i++) {
+        const row = devices[i];
+        if (!row || row.enabled !== true) continue;
+        const idx = Math.max(1, Math.min(10, Math.round(Number(row.idx ?? row.index ?? (i + 1)) || (i + 1))));
+        if (indexes.has(idx)) continue;
+        indexes.add(idx);
+        const id = String(row.powerReadId || row.powerObjectId || row.powerId || '').trim();
+        if (id) producerInputs.push({ key: `${kind}.devices.${prefix}${idx}.powerW`, id });
       }
     }
 
@@ -32561,12 +32677,12 @@ return res.json(out);
     let pvBaseSourceId = '';
     let pvBaseSourceIds = [];
     if (pvPowerMapped) {
-      pvAcRaw = this._nwGetNumberFromCache('pvPower');
+      pvAcRaw = readLive('pvPower', pvTimes);
       pvSource = 'mapped:pvPower';
       pvBaseSourceId = String(this.config?.datapoints?.pvPower || '').trim();
       pvBaseSourceIds = pvBaseSourceId ? [pvBaseSourceId] : [];
     } else if (prodTotalMapped) {
-      pvAcRaw = this._nwGetNumberFromCache('productionTotal');
+      pvAcRaw = readLive('productionTotal', pvTimes);
       pvSource = 'mapped:productionTotal';
       pvBaseSourceId = String(this.config?.datapoints?.productionTotal || '').trim();
       pvBaseSourceIds = pvBaseSourceId ? [pvBaseSourceId] : [];
@@ -32594,13 +32710,14 @@ return res.json(out);
         const isOffline = (oRec && oRec.val !== undefined) ? !!oRec.val : false;
         const ageOk = (pRec && Number.isFinite(Number(pRec.ts))) ? ((ts - Number(pRec.ts)) <= staleMs) : false;
 
-        if (!connected || isOffline || !ageOk) {
+        if (!connected || isOffline || !ageOk || (pRec?.q !== undefined && pRec.q !== 0)) {
           offline++;
           continue;
         }
 
-        const v = Number(pRec?.val);
-        if (!Number.isFinite(v)) continue;
+        const v = numericMeasurement(pRec?.val);
+        if (v === null || Number(pRec.ts) <= 0 || Number(pRec.ts) > ts) { offline++; continue; }
+        pvTimes.push(Number(pRec.ts));
         sum += Math.abs(v);
         used++;
         const sourceId = String(dev && dev.powerId || '').trim();
@@ -32609,7 +32726,7 @@ return res.json(out);
 
       if (used > 0) {
         pvAcW = Math.max(0, sum);
-        pvSource = 'auto:pvSources';
+        pvSource = offline > 0 ? 'auto:pvSources-incomplete' : 'auto:pvSources';
       } else {
         // No PV sources configured/available.
         // IMPORTANT: Do NOT fall back to producer-slots here. Producer slots are always optional and
@@ -32656,7 +32773,7 @@ return res.json(out);
       if (pvFarmMerge.farmFallbackUsed && pvSource === 'missing') pvSource = 'farm:pv-sources';
       else if (pvFarmMerge.farmAddedW > 0) pvSource = pvSource === 'missing' ? 'farm:pv-sources' : `${pvSource}+farm`;
     } else if (singleStorageDcEnabled) {
-      const dc = this._nwGetNumberFromCache('speicher.dcPvPowerW');
+      const dc = readLive('speicher.dcPvPowerW', pvTimes);
       if (dc !== null && Number.isFinite(Number(dc))) {
         pvDcW = Math.max(0, Math.abs(Number(dc)));
         pvDcSource = 'storage:dc';
@@ -32707,7 +32824,17 @@ return res.json(out);
       + (Number(pvPlausibility.suppressedW) || 0),
     );
 
-    // Total production = PV(total) + extra producers
+    // Only distinct physical sources are additional production. An alias of the
+    // already mapped PV source must not be added for a second display slot.
+    const producerSources = new Set(pvBaseSourceIds.map(id => nwPhysicalPvSourceKey(id) || id));
+    for (const input of producerInputs) {
+      const identity = input.id ? (nwPhysicalPvSourceKey(input.id) || input.id) : input.key;
+      if (producerSources.has(identity)) continue;
+      producerSources.add(identity);
+      const value = readLive(input.key, producerTimes);
+      if (value !== null) { producerSumW += Math.abs(value); producerCount++; }
+      else missingProducer = true;
+    }
     const productionW = pvTotalW + producerSumW;
 
     // --- Derived loads ---
@@ -32718,104 +32845,77 @@ return res.json(out);
     // LIVE, Sungrow/FENECON-Deckungslogik und Diagnose die stabilere Quelle als die
     // Bilanzgleichung aus PV + NVP + Speicher. Die Bilanz bleibt als Fallback und
     // Kontrollwert erhalten, weil Einzelwerte zeitlich versetzt eintreffen koennen.
-    const directLoadMaxAgeMs = Math.max(10 * 1000, Number(this.config?.settings?.deviceStaleTimeoutSec || 60) * 1000);
-    const directLoadTotalRaw = consumptionMapped
-      ? this._nwGetNumberFromCacheFresh('consumptionTotal', directLoadMaxAgeMs, null, ts)
-      : null;
+    const directTimes = [];
+    const directLoadTotalRaw = consumptionMapped ? readLive('consumptionTotal', directTimes) : null;
     const directLoadTotalW = (typeof directLoadTotalRaw === 'number' && Number.isFinite(directLoadTotalRaw) && directLoadTotalRaw >= 0)
       ? Math.max(0, directLoadTotalRaw)
       : null;
     const directLoadAgeMs = consumptionMapped ? this._nwGetCacheAgeMs('consumptionTotal', ts) : null;
     let loadTotalSource = directLoadTotalW !== null ? 'mapped:consumptionTotal' : 'balance:pv+nvp+storage';
 
-    // Some meters/adapters update asynchronously (grid/PV/battery).
-    // This can temporarily yield an impossible negative power balance.
-    // To avoid 0 W spikes in the VIS, we hold the last plausible value for a short time.
-    let loadTotalW = directLoadTotalW !== null ? directLoadTotalW : rawLoadTotalW;
-
-    const activityW = (Math.abs(productionW) + Math.abs(gridBuyW) + Math.abs(gridSellW) + Math.abs(chargeW) + Math.abs(dischargeW));
-    const hasActivity = activityW > 200;
-
-    // Timestamp skew between inputs (debug only)
-    const tsList = [];
-    /**
-     * Code-Teil: pushTs
-     * Zweck: Kapselt einen lokalen Verarbeitungsschritt, damit Aufrufer nicht direkt in Detaildaten eingreifen.
-     * Zusammenhang: Teil von Adapterkern: Lifecycle, Webserver, API, States, EMS-Engine; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
-     * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
-     */
-    const pushTs = (k) => {
-      const rec = this.stateCache && this.stateCache[k];
-      const t = rec && rec.ts;
-      if (typeof t === 'number' && Number.isFinite(t)) tsList.push(t);
-    };
-    pushTs('gridBuyPower'); pushTs('gridSellPower'); pushTs('gridPointPower');
-    pushTs('storageChargePower'); pushTs('storageDischargePower'); pushTs('batteryPower');
-    pushTs('pvPower'); pushTs('productionTotal');
-    if (sfEnabled) {
-      pushTs('storageFarm.totalPvPowerW');
-      pushTs('storageFarm.totalPvAcPowerW');
-      pushTs('storageFarm.totalPvDcPowerW');
-      pushTs('storageFarm.totalPowerW');
-      pushTs('storageFarm.totalChargePowerW');
-      pushTs('storageFarm.totalDischargePowerW');
+    // A balance is usable only with all configured contributors observed.
+    // Never refresh an old measurement through this periodic calculation.
+    let gridObserved = false;
+    if (hasGrid) {
+      if (gridSrc === 'net-fresh') gridObserved = readLive('gridPointPower', gridTimes) !== null;
+      else if (String(gridSrc).startsWith('split-')) {
+        const buyRequired = this._nwHasMappedDatapoint('gridBuyPower');
+        const sellRequired = this._nwHasMappedDatapoint('gridSellPower');
+        const buy = buyRequired ? readLive('gridBuyPower', gridTimes) : 0;
+        const sell = sellRequired ? readLive('gridSellPower', gridTimes) : 0;
+        gridObserved = (buyRequired || sellRequired) && buy !== null && sell !== null;
+      } else gridObserved = readLive('ems.gridPowerRawW', gridTimes) !== null;
     }
-    if (singleStorageDcEnabled) {
-      pushTs('speicher.dcPvPowerW');
+    const storageConfigured = selectedStorageTopologyLive !== 'none'
+      || ['batteryPower', 'storageChargePower', 'storageDischargePower', 'storageSoc'].some(key => this._nwHasMappedDatapoint(key));
+    let storageObserved = !storageConfigured;
+    if (String(storageSrc).startsWith('storageFarm') && !String(storageSrc).includes('missing') && !String(storageSrc).includes('unavailable')) {
+      storageObserved = readLive('storageFarm.totalPowerW', storageTimes) !== null;
+    } else if (storageSrc === 'batterySigned') storageObserved = readLive('batteryPower', storageTimes) !== null;
+    else if (storageSrc === 'sameChargeDischargeSigned') storageObserved = readLive('storageChargePower', storageTimes) !== null;
+    else if (String(storageSrc).startsWith('chargeDischarge')) {
+      storageObserved = ['storageChargePower', 'storageDischargePower'].every(key => !this._nwHasMappedDatapoint(key) || readLive(key, storageTimes) !== null);
     }
-    const inputSkewMs = (tsList.length >= 2) ? (Math.max(...tsList) - Math.min(...tsList)) : null;
-
+    const autoPvConfigured = (this._derivedFlow?.auto?.pvInverters?.list || []).length > 0;
+    const pvConfigured = pvPowerMapped || prodTotalMapped || autoPvConfigured || sfEnabled || singleStorageDcEnabled;
+    let pvObserved = !pvConfigured || (pvSource !== 'missing' && !pvSource.includes('incomplete'));
+    if (sfEnabled && (pvFarmMerge?.farmAddedW > 0 || pvFarmMerge?.farmFallbackUsed)) {
+      pvObserved = pvObserved && readLive('storageFarm.totalPvPowerW', pvTimes) !== null;
+    }
+    inputTimes.push(...pvTimes, ...producerTimes, ...gridTimes, ...storageTimes);
+    const balanceObserved = gridObserved && storageObserved && pvObserved && !missingProducer;
+    const loadTotalW = directLoadTotalW !== null ? directLoadTotalW
+      : (balanceObserved && Number.isFinite(rawLoadTotalW) && rawLoadTotalW >= 0 ? rawLoadTotalW : null);
+    if (loadTotalW === null) loadTotalSource = balanceObserved ? 'invalid:negative-balance' : 'invalid:missing-input';
+    const loadTimestamp = directLoadTotalW !== null ? oldestTime(directTimes) : oldestTime(inputTimes);
+    const activityW = Math.abs(productionW) + Math.abs(gridBuyW) + Math.abs(gridSellW) + chargeW + dischargeW;
+    const inputSkewMs = inputTimes.length >= 2 ? Math.max(...inputTimes) - Math.min(...inputTimes) : null;
+    const usedFallback = false;
     if (!this._derivedFlow) this._derivedFlow = {};
-    if (!this._derivedFlow.good) this._derivedFlow.good = { loadTotalW: null, loadRestW: null, ts: 0 };
-    const good = this._derivedFlow.good;
-    const goodLoad = (typeof good.loadTotalW === 'number' && Number.isFinite(good.loadTotalW)) ? good.loadTotalW : null;
-    const goodRest = (typeof good.loadRestW === 'number' && Number.isFinite(good.loadRestW)) ? good.loadRestW : null;
-    const goodAgeMs = (good && typeof good.ts === 'number' && Number.isFinite(good.ts)) ? (ts - good.ts) : Infinity;
+    if (!this._derivedFlow.last) this._derivedFlow.last = {};
 
-    const holdMaxAgeMs = 60 * 1000;
-    let usedFallback = false;
-
-    // Clamp to plausible range + anti-spike
-    if (!Number.isFinite(loadTotalW)) loadTotalW = 0;
-    if (loadTotalW < 0 || (loadTotalW === 0 && hasActivity)) {
-      if (goodLoad !== null && goodAgeMs <= holdMaxAgeMs) {
-        loadTotalW = goodLoad;
-        loadTotalSource = `${loadTotalSource}:hold-last-good`;
-        usedFallback = true;
-      } else if (hasActivity) {
-        // Minimal plausible base-load to avoid "0.00 kW" optics while there is clearly energy activity.
-        loadTotalW = 100;
-        loadTotalSource = `${loadTotalSource}:minimal-plausible`;
-        usedFallback = true;
-      } else {
-        loadTotalW = 0;
-      }
-    }
-    if (loadTotalW < 0) loadTotalW = 0;
-
-    // Rest-load: subtract EV and configured extra consumers (for convenience / mapping)
-    const evW = Math.max(0, Math.abs(this._nwGetNumberFromCache('evcs.totalPowerW') ?? 0));
+    const restTimes = [];
+    const evAbsent = Number(this.evcsCount) === 0 && !this._nwHasMappedDatapoint('consumptionEvcs');
+    const evRaw = this._nwHasMappedDatapoint('consumptionEvcs') ? readLive('consumptionEvcs', restTimes) : readLive('evcs.totalPowerW', restTimes);
+    const evW = evRaw !== null ? Math.abs(evRaw) : (evAbsent ? 0 : null);
     let consumersW = 0;
+    let consumersObserved = true;
+    const consumerSources = new Set([String(this.config?.datapoints?.consumptionEvcs || '').trim()].filter(Boolean));
     for (let i = 1; i <= 10; i++) {
-      const c = this._nwGetNumberFromCache(`consumer${i}Power`);
-      if (c !== null) {
-        const n = Number(c);
-        if (Number.isFinite(n)) consumersW += Math.abs(n);
-      }
+      const key = `consumer${i}Power`;
+      const slot = typeof this._nwGetFlowSlotInfo === 'function' ? this._nwGetFlowSlotInfo('consumers', i) : null;
+      const id = String(slot?.objectId || this.config?.datapoints?.[key] || '').trim();
+      if (!id || consumerSources.has(id)) continue;
+      consumerSources.add(id);
+      const c = readLive(String(slot?.stateKey || key), restTimes);
+      if (c !== null) consumersW += Math.abs(c);
+      else consumersObserved = false;
     }
-
-    const rawLoadRestW = loadTotalW - evW - consumersW;
-
-    let loadRestW = loadTotalW - evW - consumersW;
-    // If we had to hold/fallback the total load, prefer holding the last plausible rest-load as well.
-    if (usedFallback && goodRest !== null && goodAgeMs <= holdMaxAgeMs) {
-      loadRestW = goodRest;
-    }
-    if (!Number.isFinite(loadRestW)) loadRestW = 0;
-    if (loadRestW < 0) loadRestW = 0;
-
-    const loadTotalRound = Math.round(loadTotalW);
-    const loadRestRound = Math.round(loadRestW);
+    const rawLoadRestW = loadTotalW !== null && evW !== null && consumersObserved ? loadTotalW - evW - consumersW : null;
+    const loadRestW = rawLoadRestW !== null && rawLoadRestW >= 0 ? rawLoadRestW : null;
+    const loadTotalRound = loadTotalW !== null ? Math.round(loadTotalW) : null;
+    const loadRestRound = loadRestW !== null ? Math.round(loadRestW) : null;
+    const restTimestamp = Math.min(loadTimestamp, oldestTime(restTimes));
 
     const tsShadow = this._nwRunEnergyFlowTsShadowComparison({
       ts,
@@ -32863,8 +32963,10 @@ return res.json(out);
     const publishGridSellRound = Math.round(Number(effectiveEnergyFlow.gridSellW) || 0);
     const publishChargeRound = Math.round(Number(effectiveEnergyFlow.storageChargeW) || 0);
     const publishDischargeRound = Math.round(Number(effectiveEnergyFlow.storageDischargeW) || 0);
-    const publishLoadTotalRound = Math.round(Number(effectiveEnergyFlow.buildingLoadW) || 0);
-    const publishLoadRestRound = Math.max(0, Math.round(publishLoadTotalRound - evW - consumersW));
+    const selectedLoad = numericMeasurement(effectiveEnergyFlow.buildingLoadW);
+    const publishLoadTotalRound = loadTotalRound === null ? null : (directLoadTotalW !== null ? loadTotalRound : (selectedLoad !== null && selectedLoad >= 0 ? Math.round(selectedLoad) : null));
+    const selectedRest = publishLoadTotalRound !== null && evW !== null && consumersObserved ? publishLoadTotalRound - evW - consumersW : null;
+    const publishLoadRestRound = selectedRest !== null && selectedRest >= 0 ? Math.round(selectedRest) : null;
 
     /**
      * Code-Teil: Energiefluss-TS-Liveteststatus veröffentlichen
@@ -32902,31 +33004,16 @@ return res.json(out);
       }
     } catch (_eTsLiveState) {}
 
-    // Update last-plausible cache from the selected building-load source.
-    // Direkte Verbrauchs-DPs sind dabei bevorzugt; die Bilanz bleibt Fallback. So
-    // halten wir bei asynchronen PV/NVP/Speicher-Ticks keinen alten Bilanzwert fest,
-    // wenn ein frischer Gebäudeverbrauch bereits vorhanden ist.
-    try {
-      if (Number.isFinite(loadTotalW) && loadTotalW >= 0) {
-        const selectedRound = Math.round(loadTotalW);
-        const selectedRestRound = Math.round(Math.max(0, rawLoadRestW));
-        const goodCandidateOk = (selectedRound > 10) || !hasActivity;
-        if (goodCandidateOk) {
-          good.loadTotalW = selectedRound;
-          good.loadRestW = selectedRestRound;
-          good.ts = ts;
-        }
-      }
-    } catch (_eHold) {}
-
     // --- Update adapter states (for App-Center mapping / debugging) ---
-    if (this._derivedFlow?.last?.loadTotalW !== publishLoadTotalRound) {
+    if (this._derivedFlow?.last?.loadTotalW !== publishLoadTotalRound || this._derivedFlow?.last?.loadTimestamp !== loadTimestamp) {
+      this._derivedFlow.last.loadTimestamp = loadTimestamp;
       this._derivedFlow.last.loadTotalW = publishLoadTotalRound;
-      await this.setStateAsync('derived.core.building.loadTotalW', { val: publishLoadTotalRound, ack: true });
+      await this.setStateAsync('derived.core.building.loadTotalW', { val: publishLoadTotalRound, ack: true, ts: loadTimestamp });
     }
-    if (this._derivedFlow?.last?.loadRestW !== publishLoadRestRound) {
+    if (this._derivedFlow?.last?.loadRestW !== publishLoadRestRound || this._derivedFlow?.last?.restTimestamp !== restTimestamp) {
+      this._derivedFlow.last.restTimestamp = restTimestamp;
       this._derivedFlow.last.loadRestW = publishLoadRestRound;
-      await this.setStateAsync('derived.core.building.loadRestW', { val: publishLoadRestRound, ack: true });
+      await this.setStateAsync('derived.core.building.loadRestW', { val: publishLoadRestRound, ack: true, ts: restTimestamp });
     }
     if (this._derivedFlow?.last?.loadSource !== loadTotalSource) {
       this._derivedFlow.last.loadSource = loadTotalSource;
@@ -32937,18 +33024,31 @@ return res.json(out);
     const pvDcRound = Math.round(pvDcW);
     const pvTotalRound = Math.round(pvTotalW);
 
-    if (this._derivedFlow?.last?.pvAcW !== pvAcRound) {
-      this._derivedFlow.last.pvAcW = pvAcRound;
-      await this.setStateAsync('derived.core.pv.acW', { val: pvAcRound, ack: true });
+    const publishPvAcW = pvObserved ? pvAcRound : null;
+    if (this._derivedFlow?.last?.pvAcW !== publishPvAcW || this._derivedFlow?.last?.pvTimestamp !== oldestTime(pvTimes)) {
+      this._derivedFlow.last.pvAcW = publishPvAcW;
+      await this.setStateAsync('derived.core.pv.acW', { val: publishPvAcW, ack: true, ts: oldestTime(pvTimes) });
     }
-    if (this._derivedFlow?.last?.pvDcW !== pvDcRound) {
-      this._derivedFlow.last.pvDcW = pvDcRound;
-      await this.setStateAsync('derived.core.pv.dcW', { val: pvDcRound, ack: true });
+    const publishPvDcW = pvObserved ? pvDcRound : null;
+    if (this._derivedFlow?.last?.pvDcW !== publishPvDcW || this._derivedFlow?.last?.pvTimestamp !== oldestTime(pvTimes)) {
+      this._derivedFlow.last.pvDcW = publishPvDcW;
+      await this.setStateAsync('derived.core.pv.dcW', { val: publishPvDcW, ack: true, ts: oldestTime(pvTimes) });
     }
-    if (this._derivedFlow?.last?.pvTotalW !== pvTotalRound) {
-      this._derivedFlow.last.pvTotalW = pvTotalRound;
-      await this.setStateAsync('derived.core.pv.totalW', { val: pvTotalRound, ack: true });
+    const publishPvTotalW = pvObserved ? pvTotalRound : null;
+    if (this._derivedFlow?.last?.pvTotalW !== publishPvTotalW || this._derivedFlow?.last?.pvTimestamp !== oldestTime(pvTimes)) {
+      this._derivedFlow.last.pvTotalW = publishPvTotalW;
+      await this.setStateAsync('derived.core.pv.totalW', { val: publishPvTotalW, ack: true, ts: oldestTime(pvTimes) });
     }
+
+    this._derivedFlow.last.pvTimestamp = oldestTime(pvTimes);
+    const publishExtraW = missingProducer ? null : Math.round(producerSumW);
+    const producerTimestamp = oldestTime(producerTimes);
+    if (this._derivedFlow.last.extraProductionW !== publishExtraW || this._derivedFlow.last.extraTimestamp !== producerTimestamp) {
+      this._derivedFlow.last.extraProductionW = publishExtraW;
+      this._derivedFlow.last.extraTimestamp = producerTimestamp;
+      await this.setStateAsync('derived.core.production.extraW', { val: publishExtraW, ack: true, ts: producerTimestamp });
+    }
+    this.updateValue('derived.core.production.extraW', publishExtraW, producerTimestamp, { raw: false });
 
     const pvRawTotalRound = Math.round(pvRawTotalW);
     const pvCapacityLimitRound = Math.round(pvPlausibility.capacityLimitW);
@@ -32977,12 +33077,12 @@ return res.json(out);
     // Die abgeleiteten Kernwerte werden zusätzlich in den API-/SSE-Cache gespiegelt.
     // Das Kundenfrontend verwendet dadurch exakt denselben kanonischen Energiefluss wie
     // Historie und EMS und muss Farm-PV/-Leistung nicht noch einmal lokal rekonstruieren.
-    this.updateValue('derived.core.building.loadTotalW', publishLoadTotalRound, ts, { raw: false });
-    this.updateValue('derived.core.building.loadRestW', publishLoadRestRound, ts, { raw: false });
+    this.updateValue('derived.core.building.loadTotalW', publishLoadTotalRound, loadTimestamp, { raw: false });
+    this.updateValue('derived.core.building.loadRestW', publishLoadRestRound, restTimestamp, { raw: false });
     this.updateValue('derived.core.building.loadSource', loadTotalSource, ts, { raw: false });
-    this.updateValue('derived.core.pv.acW', pvAcRound, ts, { raw: false });
-    this.updateValue('derived.core.pv.dcW', pvDcRound, ts, { raw: false });
-    this.updateValue('derived.core.pv.totalW', pvTotalRound, ts, { raw: false });
+    this.updateValue('derived.core.pv.acW', pvObserved ? pvAcRound : null, oldestTime(pvTimes), { raw: false });
+    this.updateValue('derived.core.pv.dcW', pvObserved ? pvDcRound : null, oldestTime(pvTimes), { raw: false });
+    this.updateValue('derived.core.pv.totalW', pvObserved ? pvTotalRound : null, oldestTime(pvTimes), { raw: false });
     this.updateValue('derived.core.pv.rawTotalW', pvRawTotalRound, ts, { raw: false });
     this.updateValue('derived.core.pv.capacityLimitW', pvCapacityLimitRound, ts, { raw: false });
     this.updateValue('derived.core.pv.duplicateSuppressedW', pvDuplicateSuppressedRound, ts, { raw: false });
@@ -32991,14 +33091,14 @@ return res.json(out);
 
     // --- Quality indicator ---
     let quality = 'ok';
-    if (!hasGrid) quality = 'missing-grid';
-    else if (pvSource === 'missing') quality = 'missing-pv';
-    else if (storageSrc === 'missing') quality = 'missing-storage';
-
-    if (usedFallback) {
-      if (quality === 'ok') quality = 'degraded-balance';
-      else quality = String(quality) + '+degraded';
-    }
+    if (!gridObserved) quality = 'missing-grid';
+    else if (!pvObserved) quality = 'missing-pv';
+    else if (!storageObserved) quality = 'missing-storage';
+    else if (missingProducer) quality = 'missing-producer';
+    else if (publishLoadTotalRound === null) quality = 'invalid-balance';
+    else if (evW === null || !consumersObserved) quality = 'missing-consumer';
+    else if (publishLoadRestRound === null) quality = 'invalid-rest-balance';
+    this.updateValue('derived.core.building.quality', quality, ts, { raw: false });
 
     if (this._derivedFlow?.last?.quality !== quality) {
       this._derivedFlow.last.quality = quality;
@@ -33048,7 +33148,7 @@ return res.json(out);
           },
           extraProductionW: Math.round(producerSumW),
           consumersW: Math.round(consumersW),
-          evW: Math.round(evW),
+          evW: evW !== null ? Math.round(evW) : null,
           building: {
             loadTotalW: publishLoadTotalRound,
             loadRestW: publishLoadRestRound,
@@ -33061,7 +33161,7 @@ return res.json(out);
           balance: {
             rawLoadTotalW: Math.round(rawLoadTotalW),
             selectedLoadTotalW: loadTotalRound,
-            rawLoadRestW: Math.round(Math.max(0, rawLoadRestW)),
+            rawLoadRestW: rawLoadRestW !== null ? Math.round(rawLoadRestW) : null,
             usedFallback: !!usedFallback,
             inputSkewMs: inputSkewMs,
             activityW: Math.round(activityW),
@@ -33076,6 +33176,7 @@ return res.json(out);
         };
         const json = JSON.stringify(payload);
         await this.setStateAsync('derived.core.building.inputsJson', { val: json, ack: true });
+        this.updateValue('derived.core.building.inputsJson', json, ts, { raw: false });
         await this.setStateAsync('derived.core.building.tsSwitchJson', { val: tsSwitchJsonText, ack: true });
         await this.setStateAsync('derived.core.building.tsCandidateJson', { val: tsCandidateJsonText, ack: true });
         await this.setStateAsync('derived.core.building.tsFixedSourceJson', { val: tsFixedSourceJsonText, ack: true });
@@ -33087,29 +33188,29 @@ return res.json(out);
     //    derive them from the signed NVP datapoint (Import + / Export -).
     const gridBuyMapped = this._nwHasMappedDatapoint('gridBuyPower');
     const gridSellMapped = this._nwHasMappedDatapoint('gridSellPower');
-    if (gridNetRaw !== null && (!gridBuyMapped || gridBuyRaw === null)) {
+    if (gridObserved && gridNetRaw !== null && (!gridBuyMapped || gridBuyRaw === null)) {
       const cur = Number(this.stateCache?.gridBuyPower?.value);
-      if (!Number.isFinite(cur) || cur !== gridBuyRound) {
-        this.updateValue('gridBuyPower', publishGridBuyRound, ts);
+      if (!Number.isFinite(cur) || cur !== gridBuyRound || this.stateCache?.gridBuyPower?.ts !== oldestTime(gridTimes)) {
+        this.updateValue('gridBuyPower', publishGridBuyRound, oldestTime(gridTimes), { raw: false });
       }
     }
-    if (gridNetRaw !== null && (!gridSellMapped || gridSellRaw === null)) {
+    if (gridObserved && gridNetRaw !== null && (!gridSellMapped || gridSellRaw === null)) {
       const cur = Number(this.stateCache?.gridSellPower?.value);
-      if (!Number.isFinite(cur) || cur !== gridSellRound) {
-        this.updateValue('gridSellPower', publishGridSellRound, ts);
+      if (!Number.isFinite(cur) || cur !== gridSellRound || this.stateCache?.gridSellPower?.ts !== oldestTime(gridTimes)) {
+        this.updateValue('gridSellPower', publishGridSellRound, oldestTime(gridTimes), { raw: false });
       }
     }
 
     // 2) If no direct house meter is mapped, publish as "consumptionTotal" so the energyflow can render it.
     if (!consumptionMapped) {
-      this.updateValue('consumptionTotal', publishLoadTotalRound, ts);
+      this.updateValue('consumptionTotal', publishLoadTotalRound, loadTimestamp, { raw: false });
     }
 
     // 3) If PV is not mapped, publish PV total as "pvPower" so the energyflow can render PV without mapping.
     if (!pvPowerMapped && !prodTotalMapped) {
       const cur = this.stateCache?.pvPower?.value;
       if (cur !== pvTotalRound) {
-        this.updateValue('pvPower', pvTotalRound, ts);
+        this.updateValue('pvPower', pvObserved ? pvTotalRound : null, oldestTime(pvTimes), { raw: false });
       }
     }
 
@@ -33128,8 +33229,8 @@ return res.json(out);
       const fromSignedOnly = !!(storageFlow && storageFlow.fromSigned && !chargeMapped && !dischargeMapped);
       const fromFarmOrBalance = !!(storageFlow && (src.indexOf('storageFarm') === 0 || src.indexOf('balanceDerived') === 0));
       const noSplitMapped = !chargeMapped && !dischargeMapped;
-      const shouldMirrorBoth = !!(samePair || fromSignedOnly || (noSplitMapped && fromFarmOrBalance));
-      const shouldZeroMissingSide = !!(storageFlow && !storageFlow.derived && (chargeMapped !== dischargeMapped));
+      const shouldMirrorBoth = storageObserved && !!(samePair || fromSignedOnly || (noSplitMapped && fromFarmOrBalance));
+      const shouldZeroMissingSide = storageObserved && !!(storageFlow && !storageFlow.derived && (chargeMapped !== dischargeMapped));
       const chargeRound = publishChargeRound;
       const dischargeRound = publishDischargeRound;
       /**
@@ -33140,7 +33241,7 @@ return res.json(out);
        */
       const updateLocal = (k, v) => {
         const cur = Number(this.stateCache?.[k]?.value);
-        if (!Number.isFinite(cur) || cur !== v) this.updateValue(k, v, ts, { raw: false });
+        if (!Number.isFinite(cur) || cur !== v || this.stateCache?.[k]?.ts !== oldestTime(storageTimes)) this.updateValue(k, v, oldestTime(storageTimes), { raw: false });
       };
       if (shouldMirrorBoth) {
         updateLocal('storageChargePower', chargeRound);
@@ -33152,7 +33253,7 @@ return res.json(out);
       // batteryPower is an internal signed convenience value when no signed DP is mapped.
       // It may be derived from valid split DPs, farm totals or a calculated fallback, but
       // it must never overwrite a configured signed battery DP.
-      if (!batteryMapped) {
+      if (!batteryMapped && storageObserved) {
         /**
          * Code-Teil: batteryPower aus effektiven Publish-Werten spiegeln
          *
@@ -34117,7 +34218,7 @@ return res.json(out);
       const keepRaw = !(opts && opts.raw === false);
       if (keepRaw) {
         if (!this._nwRawValueCache || typeof this._nwRawValueCache !== 'object') this._nwRawValueCache = {};
-        this._nwRawValueCache[key] = { value: rawValue, ts };
+        this._nwRawValueCache[key] = { value: rawValue, ts, ...(opts.q !== undefined ? { q: opts.q } : {}) };
       }
     } catch (_e0) {}
 
@@ -34134,7 +34235,7 @@ return res.json(out);
       value = Math.abs(value);
     }
 
-    this.stateCache[key] = { value, ts };
+    this.stateCache[key] = { value, ts, ...(opts.q !== undefined ? { q: opts.q } : {}) };
 
     const payload = { [key]: this.stateCache[key] };
 
@@ -34142,15 +34243,13 @@ return res.json(out);
     try {
       if (/^evcs\.\d+\.powerW$/.test(key)) {
         const count = Math.max(0, Math.round(Number(this.evcsCount || 0) || 0));
-        let sum = 0;
-        for (let i = 1; i <= count; i++) {
-          const v = this.stateCache[`evcs.${i}.powerW`]?.value;
-          sum += Number(v || 0) || 0;
-        }
-        this.stateCache['evcs.totalPowerW'] = { value: sum, ts };
-        payload['evcs.totalPowerW'] = this.stateCache['evcs.totalPowerW'];
-        // persist as adapter state for other consumers
-        this.setStateAsync('evcs.totalPowerW', sum, true).catch(()=>{});
+        const maxAgeMs = Math.max(10000, (numericMeasurement(this.config?.settings?.deviceStaleTimeoutSec) || 60) * 1000);
+        const keys = Array.from({ length: Math.min(count, 1024) }, (_, index) => `evcs.${index + 1}.powerW`);
+        const observation = sumFlowMeasurements(this.stateCache, keys, Date.now(), maxAgeMs);
+        const aggregate = observation || { value: null, ts: Date.now() };
+        this.stateCache['evcs.totalPowerW'] = aggregate;
+        payload['evcs.totalPowerW'] = aggregate;
+        this.setStateAsync('evcs.totalPowerW', { val: aggregate.value, ts: aggregate.ts, ack: true }).catch(() => {});
       }
     
       const mEnergy = key.match(/^evcs\.(\d+)\.energyTotalKwh$/);
@@ -34524,6 +34623,7 @@ function createHostedRuntime(owner, bridge) {
       }
       await startPromise;
     },
+    getHistoryBackupRequirement() { return runtime.getHistoryBackupRequirement(); },
     reserveDeviceProfileChange(input) {
       if (stopRequested) return Promise.reject(Object.assign(new Error('EOS_DEVICES_PROFILE_CHECK_UNAVAILABLE'), { code: 'EOS_DEVICES_PROFILE_CHECK_UNAVAILABLE' }));
       return runtime.reserveDeviceProfileChange(input);

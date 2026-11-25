@@ -3,6 +3,9 @@
  * Retained upstream MIT rights and notices remain applicable; see ../upstream/LICENSE.
  */
 import { BackupNotifier, validateNotificationPlan } from './notifications';
+import { assertBackupCoverage, backupCoverage, historyRequirement, type HistoryBackupRequirement } from './coverage';
+import { capturePublicTrust } from './publicTrust';
+import { archiveKind, retentionCandidates, type RemoteEntry } from './storageRetention';
 import { fork, type ChildProcess } from 'node:child_process';
 import { constants } from 'node:fs';
 import { lstat, open, readdir, writeFile, rename, rm } from 'node:fs/promises';
@@ -67,6 +70,11 @@ class HostedBackup {
     private notifier: BackupNotifier | null = null;
     private starting: Promise<void> | null = null;
     private subscribed = false;
+    private historyRequirement: HistoryBackupRequirement = { provider: 'unknown' };
+    private async refreshCoverage(): Promise<void> {
+        try { this.historyRequirement = historyRequirement(await this.options.getHistoryBackupRequirement?.()); }
+        catch { this.historyRequirement = { provider: 'unknown' }; }
+    }
     private stopPromise: Promise<void> | null = null;
     constructor(options: Options) {
         this.options = options;
@@ -159,6 +167,7 @@ class HostedBackup {
                 code => this.options.adapter.log.warn(code),
             );
         }
+        await this.refreshCoverage();
         this.started = true;
         await this.state('info.connection', true);
         if (this.stopping) throw fail('EOS_BACKUP_STOPPING');
@@ -228,6 +237,14 @@ class HostedBackup {
             this.guard();
             if (this.current || this.child) throw fail('EOS_BACKUP_BUSY');
         }
+        let publicTrust: Record<string, string> | null = null;
+        if (!remote && kind === 'iobroker') {
+            await this.refreshCoverage();
+            assertBackupCoverage(this.config, this.historyRequirement);
+            publicTrust = await capturePublicTrust();
+            this.guard();
+            if (this.current || this.child) throw fail('EOS_BACKUP_BUSY');
+        }
         const id = randomUUID(),
             workDir = join(this.options.dataDir, 'jobs', id);
         await privateDir(workDir);
@@ -249,6 +266,8 @@ class HostedBackup {
             kind,
             key: this.key.toString('base64'),
             retentionEnabled: scheduled,
+            historyRequirement: this.historyRequirement,
+            publicTrust,
             ...(this.options.preservedUiNamespace ? { preservedUiNamespace: this.options.preservedUiNamespace } : {}),
             ...(remote ?? {}),
         };
@@ -304,7 +323,7 @@ class HostedBackup {
                             await this.state('info.lastBackup', final.finishedAt ?? '');
                         await rm(workDir, { recursive: true, force: true });
                         if (final.state === 'succeeded' && scheduled)
-                            await this.retention(final.files.map(file => file.kind));
+                            await this.retention(final.files.map(file => file.name));
                         if (!remote) this.notifier?.enqueue(this.config, final);
                     } catch {
                         this.options.adapter.log.warn('EOS_BACKUP_FINALIZE_FAILED');
@@ -356,10 +375,22 @@ class HostedBackup {
             this.killTimer.unref();
         }
     }
-    private async retention(kinds: readonly string[]): Promise<void> {
+    private async retention(currentNames: readonly string[]): Promise<void> {
         const directory = join(this.options.dataDir, 'archives');
         const entries = await readdir(directory);
         if (entries.length > 100000) throw fail('EOS_BACKUP_ARCHIVE_COUNT');
+        if (currentNames.some(name => archiveKind(name) === 'recovery-set')) {
+            const candidates: RemoteEntry[] = [];
+            for (const name of entries) {
+                if (!ARCHIVE_NAME.test(name)) continue;
+                const s = await lstat(join(directory, name));
+                if (s.isFile() && !s.isSymbolicLink()) candidates.push({ name, id: name, size: s.size, mtime: s.mtimeMs });
+            }
+            for (const entry of retentionCandidates({ ...this.config, localDeleteOldBackup: true, advancedDelete: false }, 'local', 'iobroker', candidates, currentNames))
+                await rm(join(directory, entry.name), { force: true });
+            return;
+        }
+        const kinds = currentNames.map(archiveKind);
         const groups = new Map<string, { path: string; time: number }[]>();
         for (const name of entries) {
             if (!ARCHIVE_NAME.test(name)) continue;
@@ -422,6 +453,7 @@ class HostedBackup {
     getStatus(): Record<string, unknown> {
         return {
             running: !!this.current,
+            coverage: backupCoverage(this.config, this.historyRequirement),
             current: this.current,
             history: this.jobs
                 .slice(0, 10)
@@ -549,6 +581,7 @@ class HostedBackup {
                 ...(typeof payload.name === 'string' ? { remoteName: payload.name } : {}),
             });
         }
+        if (command === 'coverage') { await this.refreshCoverage(); return backupCoverage(this.config, this.historyRequirement); }
         if (command === 'start') return this.startJob(payload.kind === 'ccu' ? 'ccu' : 'iobroker');
         if (command === 'cancel') {
             this.cancel();
@@ -605,7 +638,7 @@ class HostedBackup {
                 command: [
                     'node',
                     'modules/backup/build/restore-cli.js',
-                    '--archive',
+                    /-recovery-set-\d+\.nwb$/.test(name) ? '--set' : '--archive',
                     name,
                     '--key-file',
                     '<Wiederherstellungsschluessel.json>',
@@ -613,7 +646,7 @@ class HostedBackup {
                     '<leeres-Wiederherstellungsverzeichnis>',
                 ],
                 message:
-                    'Archiv offline entschlüsseln und prüfen. ioBroker und EOS vor der Wiederherstellung kontrolliert stoppen. Erst dann Controller-Archiv und EOS-Geräteidentitäten gemeinsam zurückspielen.',
+                    'Für die Gesamtsicherung alle Dateien desselben Auftrags zusammen herunterladen und das recovery-set auswählen. Die Vorbereitung prüft zusammengehörige Archive und entschlüsselt sie. Controller, EOS-Profil und aktive Historie anschließend auf einer getrennten Installation wiederherstellen; keine Produktionsdaten überschreiben.',
             };
         }
         if (command === 'getSdCardTargets') return this.scanTargets();

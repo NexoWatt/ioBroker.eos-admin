@@ -1,14 +1,14 @@
 {
-  "../../../source-918/iobroker.eos-admin/src-admin/node_modules/@iobroker/gui-components/build/Components/IconLibrary/iconLibraryData.js": {
+  "../../../../741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/gui-components/build/Components/IconLibrary/iconLibraryData.js": {
     "file": "assets/iconLibraryData-B5fiyl1C.js",
     "name": "iconLibraryData",
-    "src": "../../../source-918/iobroker.eos-admin/src-admin/node_modules/@iobroker/gui-components/build/Components/IconLibrary/iconLibraryData.js",
+    "src": "../../../../741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/gui-components/build/Components/IconLibrary/iconLibraryData.js",
     "isDynamicEntry": true
   },
-  "../../../source-918/iobroker.eos-admin/src-admin/node_modules/@mui/icons-material/index.mjs": {
+  "../../../../741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/icons-material/index.mjs": {
     "file": "assets/icons-material-DVbdXNgr.js",
     "name": "icons-material",
-    "src": "../../../source-918/iobroker.eos-admin/src-admin/node_modules/@mui/icons-material/index.mjs",
+    "src": "../../../../741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/icons-material/index.mjs",
     "isDynamicEntry": true,
     "imports": [
       "_loadShare-eager-dmdYQhAl.js",
@@ -42,16 +42,16 @@
       "src/bootstrap.tsx"
     ]
   },
-  "../../../source-918/iobroker.eos-admin/src-admin/node_modules/@sentry/browser/build/npm/esm/prod/index.js": {
+  "../../../../741f792566ea/iobroker.eos-admin/src-admin/node_modules/@sentry/browser/build/npm/esm/prod/index.js": {
     "file": "assets/prod-ChPGnyiA.js",
     "name": "prod",
-    "src": "../../../source-918/iobroker.eos-admin/src-admin/node_modules/@sentry/browser/build/npm/esm/prod/index.js",
+    "src": "../../../../741f792566ea/iobroker.eos-admin/src-admin/node_modules/@sentry/browser/build/npm/esm/prod/index.js",
     "isDynamicEntry": true
   },
-  "../../../source-918/iobroker.eos-admin/src-admin/node_modules/date-fns/index.js": {
+  "../../../../741f792566ea/iobroker.eos-admin/src-admin/node_modules/date-fns/index.js": {
     "file": "assets/date-fns-BtR4dG_j.js",
     "name": "date-fns",
-    "src": "../../../source-918/iobroker.eos-admin/src-admin/node_modules/date-fns/index.js",
+    "src": "../../../../741f792566ea/iobroker.eos-admin/src-admin/node_modules/date-fns/index.js",
     "isDynamicEntry": true,
     "imports": [
       "_en-US-BjjaEI6N.js",
@@ -59,10 +59,10 @@
       "_isSameWeek-WMSJR5Qs.js"
     ]
   },
-  "../../../source-918/iobroker.eos-admin/src-admin/node_modules/react-qr-code/lib/index.mjs": {
+  "../../../../741f792566ea/iobroker.eos-admin/src-admin/node_modules/react-qr-code/lib/index.mjs": {
     "file": "assets/lib-CMbRq-7p.js",
     "name": "lib",
-    "src": "../../../source-918/iobroker.eos-admin/src-admin/node_modules/react-qr-code/lib/index.mjs",
+    "src": "../../../../741f792566ea/iobroker.eos-admin/src-admin/node_modules/react-qr-code/lib/index.mjs",
     "isDynamicEntry": true,
     "imports": [
       "_rolldown-runtime-sJBDdmOt.js",
@@ -373,9 +373,9 @@
       "_vite-preload-helper-BbbETgeG.js"
     ],
     "dynamicImports": [
-      "../../../source-918/iobroker.eos-admin/src-admin/node_modules/@sentry/browser/build/npm/esm/prod/index.js",
-      "../../../source-918/iobroker.eos-admin/src-admin/node_modules/@iobroker/gui-components/build/Components/IconLibrary/iconLibraryData.js",
-      "../../../source-918/iobroker.eos-admin/src-admin/node_modules/react-qr-code/lib/index.mjs"
+      "../../../../741f792566ea/iobroker.eos-admin/src-admin/node_modules/@sentry/browser/build/npm/esm/prod/index.js",
+      "../../../../741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/gui-components/build/Components/IconLibrary/iconLibraryData.js",
+      "../../../../741f792566ea/iobroker.eos-admin/src-admin/node_modules/react-qr-code/lib/index.mjs"
     ]
   },
   "_locale-DN6Bdkdt.js": {
@@ -544,7 +544,7 @@
       "_vite-preload-helper-BbbETgeG.js",
       "_loadShare-eager-dmdYQhAl.js",
       "_AccessTime-CuR73YC3.js",
-      "../../../source-918/iobroker.eos-admin/src-admin/node_modules/@sentry/browser/build/npm/esm/prod/index.js",
+      "../../../../741f792566ea/iobroker.eos-admin/src-admin/node_modules/@sentry/browser/build/npm/esm/prod/index.js",
       "_en-US-BjjaEI6N.js",
       "_setYear-DDSuW45e.js",
       "_AdminUtils-Dc1eHsx5.js",
@@ -552,8 +552,8 @@
       "_ctrlEnter-CruFIPb_.js"
     ],
     "dynamicImports": [
-      "../../../source-918/iobroker.eos-admin/src-admin/node_modules/@mui/icons-material/index.mjs",
-      "../../../source-918/iobroker.eos-admin/src-admin/node_modules/date-fns/index.js",
+      "../../../../741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/icons-material/index.mjs",
+      "../../../../741f792566ea/iobroker.eos-admin/src-admin/node_modules/date-fns/index.js",
       "_locale-DN6Bdkdt.js",
       "src/tabs/Overview.tsx",
       "src/tabs/Adapters.tsx",
@@ -825,10 +825,10 @@
       "assets/group10-Dp9tRs6I.svg"
     ]
   },
-  "virtual:mf-REMOTE_ENTRY_ID:__mfe_internal__iobroker_admin__remoteEntry-eos-9_0_21_js": {
-    "file": "remoteEntry-eos-9.0.21.js",
+  "virtual:mf-REMOTE_ENTRY_ID:__mfe_internal__iobroker_admin__remoteEntry-eos-9_0_22_js": {
+    "file": "remoteEntry-eos-9.0.22.js",
     "name": "remoteEntry",
-    "src": "virtual:mf-REMOTE_ENTRY_ID:__mfe_internal__iobroker_admin__remoteEntry-eos-9_0_21_js",
+    "src": "virtual:mf-REMOTE_ENTRY_ID:__mfe_internal__iobroker_admin__remoteEntry-eos-9_0_22_js",
     "imports": [
       "_vite-preload-helper-BbbETgeG.js",
       "_loadShare-eager-dmdYQhAl.js",
@@ -849,7 +849,7 @@
     ]
   },
   "virtual:mf:__mfe_internal__iobroker_admin__mf_owner__1__H_A_I__hostAutoInit__H_A_I__.js": {
-    "file": "assets/hostInit-BNFIx0-f.js",
+    "file": "assets/hostInit-Ccr1Du3G.js",
     "name": "hostInit",
     "src": "virtual:mf:__mfe_internal__iobroker_admin__mf_owner__1__H_A_I__hostAutoInit__H_A_I__.js",
     "imports": [
@@ -857,7 +857,7 @@
       "_helpers-C0aN90O2.js"
     ],
     "dynamicImports": [
-      "virtual:mf-REMOTE_ENTRY_ID:__mfe_internal__iobroker_admin__remoteEntry-eos-9_0_21_js",
+      "virtual:mf-REMOTE_ENTRY_ID:__mfe_internal__iobroker_admin__remoteEntry-eos-9_0_22_js",
       "virtual:mf-localSharedImportMap:__mfe_internal__iobroker_admin__mf_owner__1"
     ]
   },

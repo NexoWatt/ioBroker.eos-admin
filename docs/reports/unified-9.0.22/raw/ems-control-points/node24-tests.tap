@@ -1,0 +1,26 @@
+✔ new multi-connector EVCS creates every mapped mirror before its first real subscription read (103.891708ms)
+✔ upgrade repairs missing metadata without resetting saved values and restart remains idempotent (13.168651ms)
+✔ later installer row provisioning precedes new connector mirroring and own ack events never freshen old false data (35.01166ms)
+✔ ordinary control contract accepts false/zero and daily deadline, rejects malformed values without coercion (4.034082ms)
+✔ invalid ordinary persisted control fences affected station without overwriting request (DB) (55.722247ms)
+✔ invalid ordinary persisted control fences affected station without overwriting request (cache) (7.482168ms)
+✔ ordinary station off keeps the EMS regulation choice; valid correction clears diagnostic fence (32.994901ms)
+✔ actual ordinary state handler accepts controller commands without integration auth; compatibility values checked (99.289346ms)
+✔ invalid first station does not mark healthy second station unavailable (31.446612ms)
+✔ all four local write aliases are tracked with correct IDs (same namespace) (9.847723ms)
+✔ all four local write aliases are tracked with correct IDs (migrated namespace) (2.007447ms)
+✔ both foreign async methods preserve original promise and wait fulfilled/rejected completion (1.548138ms)
+✔ callback API preserves synchronous return, callback context, errors and extra callback values (0.842295ms)
+✔ callback API can be observed without caller callback and preserves returned Promise completion (1.718941ms)
+✔ a callback-method returned promise alone cannot confirm a still pending callback (1.601787ms)
+✔ pending capacity rejects without queueing or sending and frees completed slots (20.556663ms)
+✔ unknown completion or synchronous owner failure cannot become confirmed shutdown (68.492169ms)
+✔ closing admission remains permanent even if external ownership later returns (1.051945ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 929.309399

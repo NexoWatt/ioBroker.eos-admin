@@ -1,0 +1,38 @@
+{
+  "scope": "History React/UI contract with deterministic API harness plus real isolated Chromium; backend responses simulated; no actual EOS/database",
+  "time": "2026-11-25T12:04:25.667890+00:00",
+  "files": {
+    "ui/src-admin-tab/src/lib/historySetup.ts": "f618f1135da3cc26c0baea9b867e0fe8b9ac243f65d1834c7054afb491e93604",
+    "ui/src-admin-tab/src/pages/HistorySetupPage.tsx": "df2309c0d4078ac333424c0005349e59328c5fa76a425da629fe645335b0ae69",
+    "test/eos-history-setup-ui.test.cjs": "5fa3cda42fd470b1829207da961d009cfef94fb8d2f508879be8349e53c045ff",
+    "test/eos-history-setup-browser-smoke.cjs": "4e73017289824e78fb54a537f14545ddeaee4c5ec629a727d9211208a7260ba7"
+  },
+  "nodes": {
+    "node24": "v24.22.3",
+    "node22": "v22.23.4"
+  },
+  "results": {
+    "node24": {
+      "tests": 22,
+      "pass": 22,
+      "fail": 0
+    },
+    "node22": {
+      "tests": 22,
+      "pass": 22,
+      "fail": 0
+    },
+    "scoped_type_aware_eslint": "passed, zero warnings",
+    "frontend_typecheck": "passed",
+    "frontend_vite_build": "passed; existing non-module eos-session-idle.js external script warning",
+    "browser_smoke": "passed desktop1440/mobile375, selection/save, existing Influx preservation, setup/TLS messages, no overflow/browser errors"
+  },
+  "commands": [
+    "node --test test/eos-history-setup-ui.test.cjs",
+    "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node --test test/eos-history-setup-ui.test.cjs",
+    "node node_modules/eslint/bin/eslint.js -c ui/eslint.history-setup-ui.config.mjs ui/src-admin-tab/src/lib/historySetup.ts ui/src-admin-tab/src/pages/HistorySetupPage.tsx --max-warnings 0",
+    "npm --prefix ui/src-admin-tab run build"
+  ],
+  "browser": "HeadlessChrome/158.0.8127.0",
+  "notes": "Final UI code additionally maps PostgreSQL disk-full/resource-limit diagnostics; error mapping covered by the 22-test suite. Browser smoke covers UI flow; no actual database."
+}

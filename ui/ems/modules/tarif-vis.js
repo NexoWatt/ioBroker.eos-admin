@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/modules/tarif-vis.ts
- * Quell-Hash: sha256:2059a2f9ed5bc8d2350a4885ae37d34153bc6825549fc50d562d59470c5d9ace
+ * Quell-Hash: sha256:0b23f5257106c1900c5a001c8b7697dc1db059138d3443a6f34566b0a61bf8fc
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -353,7 +353,12 @@ class TarifVisModule extends BaseModule {
     _getVisInstance() {
         const cfg = (this.adapter && this.adapter.config && this.adapter.config.vis) ? this.adapter.config.vis : null;
         const inst = (cfg && typeof cfg.instance === 'string') ? cfg.instance.trim() : '';
-        return inst || 'nexowatt-ui.0';
+        // Die eingebettete UI läuft bei Neuanlagen unter eos-admin.N; bei einer
+        // bestätigten Altübernahme bereits unter dem erhaltenen Runtime-Namespace.
+        // Ein fester nexowatt-ui.0-Fallback liest sonst fremde/fehlende Settings
+        // und lässt eine in der EOS-Oberfläche aktivierte Tarifregelung aus.
+        const runtime = typeof this.adapter?.namespace === 'string' ? this.adapter.namespace.trim() : '';
+        return inst || runtime || 'nexowatt-ui.0';
     }
     /**
      * Code-Teil: _getTariffHomePath

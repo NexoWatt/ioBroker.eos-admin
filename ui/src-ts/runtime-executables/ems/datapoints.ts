@@ -1083,19 +1083,23 @@ class DatapointRegistry {
      * @param {string} key
      * @param {number} value
      * @param {boolean} [ack=false]
+     * @param {{zeroIsStop?:boolean}} [options] Expliziter EVCS-Vertrag: 0 pausiert die Ladung auch bei konfiguriertem Laufminimum.
      */
     /**
      * Ablauf und Zusammenhang: Schreibt einen numerischen Sollwert auf den zugeordneten Datenpunkt und berücksichtigt die konfigurierte Einheit/Skalierung. Beim Alias zählt die Schreibseite; eine W/kW-Umrechnung darf nicht doppelt erfolgen.
      */
-    async writeNumber(key, value, ack = false) {
+    async writeNumber(key, value, ack = false, options = {}) {
         const e = this.getEntry(key);
         if (!e) return false;
 
         let v = Number(value);
         if (!Number.isFinite(v)) return false;
 
-        // clamp in physical space
-        if (typeof e.min === 'number' && Number.isFinite(e.min)) v = Math.max(e.min, v);
+        // Nur der EVCS-Writer kennzeichnet 0 ausdrücklich als Stopp. Ein
+        // technisches Laufminimum darf daraus keine weitere Ladung machen.
+        // Positive Sollwerte und alle anderen Zahlen-DPs behalten ihre Grenzen.
+        const zeroIsStop = options && options.zeroIsStop === true;
+        if (!(zeroIsStop && v === 0) && typeof e.min === 'number' && Number.isFinite(e.min)) v = Math.max(e.min, v);
         if (typeof e.max === 'number' && Number.isFinite(e.max)) v = Math.min(e.max, v);
 
         // Mesh wird NACH Geräte-Minimum/Maximum erneut geprüft. Ein Minimum darf
@@ -1113,7 +1117,10 @@ class DatapointRegistry {
 
         // deadband in physical space against last written value
         const last = this.lastWriteByObjectId.get(e.objectId);
-        if (last && Number.isFinite(last.val) && e.deadband > 0 && Math.abs(v - last.val) < e.deadband) {
+        // Stopp/Neustart sind Zustandswechsel, keine Messwertschwankung. Gleiche
+        // 0 bleibt hingegen bis zum bestehenden Keepalive-Intervall dedupliziert.
+        const zeroTransition = zeroIsStop && last && Number.isFinite(last.val) && ((v === 0) !== (last.val === 0));
+        if (!zeroTransition && last && Number.isFinite(last.val) && e.deadband > 0 && Math.abs(v - last.val) < e.deadband) {
             // No write needed (idempotent) unless a periodic refresh is configured.
             const maxAge = Number(e.maxWriteIntervalMs);
             const ageOk = Number.isFinite(maxAge) && maxAge > 0 && Number.isFinite(last.ts) && (Date.now() - last.ts) >= maxAge;

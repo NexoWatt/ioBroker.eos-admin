@@ -30,7 +30,7 @@ function fixture(now) {
         }
         return elements.get(id);
     }
-    const ids = new Set(['tariffCard', 'tariffForecastBtn', 'tariffForecastTip', 'priceCurrent', 'priceAverage', 'emsModal', 'emsPriceCurrent', 'emsPriceAvg', 'emsTariffToggle', 'emsTariffStatus', 'emsTariffHint']);
+    const ids = new Set(['tariffCard', 'tariffForecastBtn', 'tariffForecastTip', 'priceCurrent', 'priceAverage', 'emsModal', 'emsPriceCurrent', 'emsPriceAvg', 'emsTariffToggle', 'emsTariffStatus', 'emsTariffHint', 'emsStatusText', 'emsStatusWrap']);
     for (const id of ids) { if (id !== 'tariffForecastTip') assert.ok(html.includes(`id="${id}"`), `Shipped HTML contains ${id}`); element(id); }
     class Clock extends Date { constructor(...args) { super(...(args.length ? args : [now])); } static now() { return now; } }
     const window = { latestState: {}, __nwCfg: { tariffDisplay: publicMetadata }, innerWidth: 1200, innerHeight: 900, devicePixelRatio: 1, addEventListener() {} };
@@ -136,4 +136,82 @@ test('real provider publication feeds the dashboard without enabling a control o
 
 test('both shipped dashboard entry pages load the typed price helper before app.js', () => {
     for (const name of ['index.html', 'settings.html']) { const source = fs.readFileSync(path.join(root, 'ui/www', name), 'utf8'); assert.ok(source.indexOf('/static/tariff-display.js') > 0); assert.ok(source.indexOf('/static/tariff-display.js') < source.indexOf('<script src="/static/app.js">')); }
+});
+
+
+test('energy flow always exposes enabled tariff or grid-fee control when its backend status is missing', () => {
+    const now = Date.now(), f = fixture(now);
+    f.window.latestState = { 'settings.dynamicTariff': { value: true }, 'settings.tariffMode': { value: 2 } };
+    f.render();
+    assert.match(f.element('emsStatusText').textContent, /Tarif Automatik aktiv.*warte auf aktuellen Regelungsstatus/);
+    assert.equal(f.element('emsStatusWrap').classList.contains('hidden'), false);
+    f.window.latestState = { 'settings.dynamicTariff': { value: false }, 'settings.netFeeEnabled': { value: true } };
+    f.render(); assert.match(f.element('emsStatusText').textContent, /Zeitvariables Netzentgelt aktiv/);
+    f.window.latestState = { 'settings.dynamicTariff': { value: false }, 'settings.netFeeEnabled': { value: false } };
+    f.render(); assert.equal(f.element('emsStatusWrap').classList.contains('hidden'), true);
+});
+
+test('live flow status uses current policy snapshot, keeps unchanged text, and exposes inactive or stale runtime', () => {
+    const now = Date.now(), f = fixture(now);
+    const base = { 'settings.dynamicTariff': { value: true }, 'settings.tariffMode': { value: 2 },
+        'tarif.statusText': { value: 'Tarif günstig: Speicher lädt', ts: now - 86400000 } };
+    const status = { ts: now, active: true, intent: { snapshotFresh: true },
+        effective: { statusText: 'Tarif günstig: Speicher lädt', detailStatusText: 'Readback bestätigt' } };
+    f.window.latestState = { ...base, 'tarif.statusJson': { value: JSON.stringify(status), ts: now } };
+    f.render(); assert.equal(f.element('emsStatusText').textContent, status.effective.statusText);
+    assert.equal(f.element('emsStatusText').title, 'Readback bestätigt');
+    status.active = false; f.window.latestState['tarif.statusJson'].value = JSON.stringify(status); f.render();
+    assert.match(f.element('emsStatusText').textContent, /Regelung noch nicht bestätigt/);
+    status.active = true; status.ts = now - 30001;
+    f.window.latestState['tarif.statusJson'].value = JSON.stringify(status); f.render();
+    assert.match(f.element('emsStatusText').textContent, /Regelungsstatus veraltet/);
+    assert.equal(f.element('emsStatusText').textContent.includes('Speicher lädt'), false);
+});
+
+test('SSE disconnect clears stale actuator claims in the energy flow immediately and reconnect restores confirmed status', () => {
+    const now = Date.now(), f = fixture(now);
+    f.window.latestState = { 'settings.dynamicTariff': { value: true }, 'settings.tariffMode': { value: 1 },
+        'tarif.statusJson': { value: JSON.stringify({ ts: now, active: true, intent: { snapshotFresh: true },
+            effective: { statusText: 'Tarif günstig: Speicher lädt' } }), ts: now } };
+    f.render(); assert.match(f.element('emsStatusText').textContent, /Speicher lädt.*Modus: Manuell/);
+    f.context.nwSetLiveOnline(false);
+    assert.match(f.element('emsStatusText').textContent, /Verbindung unterbrochen/);
+    assert.equal(f.element('emsStatusText').textContent.includes('Speicher lädt'), false);
+    f.context.nwSetLiveOnline(true); assert.match(f.element('emsStatusText').textContent, /Speicher lädt/);
+});
+
+
+test('invalid quality and expired source states cannot confirm charging or append a stale PV block', () => {
+    const now = Date.now(), f = fixture(now);
+    const status = { ts: now, active: true, intent: { snapshotFresh: true }, effective: { statusText: 'Tarif günstig: Speicher lädt' } };
+    const base = { 'settings.dynamicTariff': { value: true }, 'settings.tariffMode': { value: 2 },
+        'tarif.statusJson': { value: JSON.stringify(status), ts: now, q: 128 },
+        'tarif.statusText': { value: status.effective.statusText, ts: now, q: 128 } };
+    f.window.latestState = base; f.render();
+    assert.match(f.element('emsStatusText').textContent, /nicht bestätigt/);
+    assert.equal(f.element('emsStatusText').textContent.includes('Speicher lädt'), false);
+    f.window.latestState = { ...base, 'tarif.statusJson': undefined }; f.render();
+    assert.equal(f.element('emsStatusText').textContent.includes('Speicher lädt'), false);
+    f.window.latestState = { ...base, 'tarif.statusJson': { value: JSON.stringify(status), ts: now - 30001 } }; f.render();
+    assert.match(f.element('emsStatusText').textContent, /veraltet/);
+    f.window.latestState = { ...base, 'tarif.statusJson': { value: JSON.stringify(status), ts: now, q: 0 },
+        'speicher.regelung.tarifPvBlock': { value: true, ts: now - 30001 } };
+    f.render(); assert.equal(f.element('emsStatusText').textContent.includes('PV-Reserve'), false);
+    f.window.latestState['speicher.regelung.tarifPvBlock'] = { value: true, ts: now, q: 0 };
+    f.render(); assert.match(f.element('emsStatusText').textContent, /PV-Reserve: Netzladen gesperrt/);
+});
+
+
+test('atomic storage reserve snapshot keeps a constant block visible without recycling old standalone flags', () => {
+    const now = Date.now(), f = fixture(now);
+    const status = { ts: now, active: true, intent: { snapshotFresh: true }, effective: { statusText: 'Tarif günstig: Speicher wartet' },
+        pvReserve: { fresh: true, snapshotTs: now, blocked: true, capSocPct: 75, reason: 'PV erwartet' } };
+    f.window.latestState = { 'settings.dynamicTariff': { value: true },
+        'tarif.statusJson': { value: JSON.stringify(status), ts: now },
+        'speicher.regelung.tarifPvBlock': { value: true, ts: now - 86400000 } };
+    f.render(); assert.match(f.element('emsStatusText').textContent, /PV-Reserve: Netzladen gesperrt \(max 75.0%\)/);
+    status.pvReserve = { ...status.pvReserve, fresh: false, blocked: false };
+    f.window.latestState['tarif.statusJson'].value = JSON.stringify(status);
+    f.window.latestState['speicher.regelung.tarifPvBlock'].ts = now;
+    f.render(); assert.equal(f.element('emsStatusText').textContent.includes('PV-Reserve'), false);
 });

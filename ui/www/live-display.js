@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/live-display.ts
- * Quell-Hash: sha256:d06eaaad6b89814a35b421faebba5bd1f9c61488edc91bcc28a80d004eb48c5c
+ * Quell-Hash: sha256:076081f5b636a8be967f074d8dbe4360e6e762c520d640f373895335bbc58d9d
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -20,6 +20,7 @@
  * 2. npm run sync:ts-runtime-executables ausführen.
  * 3. npm run test:runtime-executables prüfen.
  */
+"use strict";
 /**
  * NexoWatt Quellcode-Erklärung (DE)
  * Aufgabe: Validiert ausschließlich sichtbare LIVE-Messwerte und Betriebsstatus.
@@ -64,7 +65,8 @@
     }
     function current(row, now, maxAge, online) {
         const ts = row ? number(row.ts) : null;
-        return online && ts !== null && ts > 0 && ts <= now + 5000 && now - ts <= maxAge;
+        const quality = row?.q;
+        return online && (quality === undefined || quality === 0) && ts !== null && ts > 0 && ts <= now + 5000 && now - ts <= maxAge;
     }
     function read(snapshot, key, now, maxAge, online) {
         const row = entry(snapshot, key);

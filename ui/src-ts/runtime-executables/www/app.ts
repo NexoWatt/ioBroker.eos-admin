@@ -458,7 +458,7 @@ function scheduleRender(force = false){
   if (_renderScheduled && !force) return;
   _renderScheduled = true;
 
-  const now = Date.now();
+  const now = performance.now();
   const wait = force ? 0 : Math.max(0, _RENDER_MIN_INTERVAL_MS - (now - _lastRenderTs));
 
   if (_renderTimer) {
@@ -467,8 +467,10 @@ function scheduleRender(force = false){
   }
 
   _renderTimer = setTimeout(() => {
+    _renderTimer = null;
     _renderScheduled = false;
-    _lastRenderTs = Date.now();
+    if (document.visibilityState !== 'visible' || _liveTelemetryPaused) return;
+    _lastRenderTs = performance.now();
     try{ render(); }catch(_e){}
   }, wait);
 }
@@ -479,7 +481,8 @@ function scheduleRender(force = false){
 // NVP-/Speicher-Messversätze nicht als hektisches Springen erscheinen.
 const LIVE_TELEMETRY_RENDER_INTERVAL_MS = 5000;
 let _liveTelemetryRenderTimer = null;
-let _lastLiveTelemetryRenderTs = 0;
+let _lastLiveTelemetryRenderTs = null;
+let _liveTelemetryPaused = false;
 
 /**
  * Code-Teil: scheduleLiveTelemetryRender
@@ -489,12 +492,15 @@ let _lastLiveTelemetryRenderTs = 0;
  * weiterhin sofort gerendert werden.
  */
 function scheduleLiveTelemetryRender(force = false){
-  const now = Date.now();
-  const elapsed = now - (_lastLiveTelemetryRenderTs || 0);
+  // Eine monotone Zeitbasis verhindert Verzögerungen bei NTP-/Uhrzeitkorrekturen.
+  // Eingehende SSE-Werte werden auch verborgen gepuffert, nur die Anzeige pausiert.
+  if (_liveTelemetryPaused || document.visibilityState !== 'visible') return;
+  const now = performance.now();
+  const elapsed = _lastLiveTelemetryRenderTs === null ? Infinity : now - _lastLiveTelemetryRenderTs;
 
-  if (force || !_lastLiveTelemetryRenderTs || elapsed >= LIVE_TELEMETRY_RENDER_INTERVAL_MS) {
-    if (_liveTelemetryRenderTimer) {
-      try { clearTimeout(_liveTelemetryRenderTimer); } catch(_e) {}
+  if (force || elapsed >= LIVE_TELEMETRY_RENDER_INTERVAL_MS) {
+    if (_liveTelemetryRenderTimer !== null) {
+      clearTimeout(_liveTelemetryRenderTimer);
       _liveTelemetryRenderTimer = null;
     }
     _lastLiveTelemetryRenderTs = now;
@@ -502,30 +508,46 @@ function scheduleLiveTelemetryRender(force = false){
     return;
   }
 
-  if (_liveTelemetryRenderTimer) return;
+  if (_liveTelemetryRenderTimer !== null) return;
   const wait = Math.max(0, LIVE_TELEMETRY_RENDER_INTERVAL_MS - elapsed);
   _liveTelemetryRenderTimer = setTimeout(() => {
     _liveTelemetryRenderTimer = null;
-    _lastLiveTelemetryRenderTs = Date.now();
+    if (_liveTelemetryPaused || document.visibilityState !== 'visible') return;
+    _lastLiveTelemetryRenderTs = performance.now();
     scheduleRender(true);
   }, wait);
 }
 
-// Nach Rückkehr in einen sichtbaren Tab sofort den neuesten gepufferten Stand zeigen.
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible') scheduleLiveTelemetryRender(true);
-});
-// Auch bei einer offenen, aber stillstehenden SSE-Verbindung müssen Messungen
-// sichtbar altern. Nur die sichtbare LIVE-Seite neu projizieren, ohne Datenabruf.
+// Auch ohne neue SSE-Werte alle 5 s den aktuellen Snapshot neu bewerten. Dadurch
+// altern echte Messzeitstempel sichtbar; das Rendering erzeugt keine neue Messung.
 function refreshLiveMeasurementAge() {
   if (document.visibilityState === 'visible' && document.getElementById('energyWebSvg')) scheduleLiveTelemetryRender(false);
 }
 let liveMeasurementAgeTimer = setInterval(refreshLiveMeasurementAge, LIVE_TELEMETRY_RENDER_INTERVAL_MS);
-window.addEventListener('pagehide', () => { clearInterval(liveMeasurementAgeTimer); liveMeasurementAgeTimer = null; });
-window.addEventListener('pageshow', () => {
+function pauseLiveTelemetryRendering() {
+  _liveTelemetryPaused = true;
+  if (_liveTelemetryRenderTimer !== null) clearTimeout(_liveTelemetryRenderTimer);
+  if (_renderTimer !== null) clearTimeout(_renderTimer);
+  if (liveMeasurementAgeTimer !== null) clearInterval(liveMeasurementAgeTimer);
+  _liveTelemetryRenderTimer = null;
+  _renderTimer = null;
+  _renderScheduled = false;
+  liveMeasurementAgeTimer = null;
+}
+function resumeLiveTelemetryRendering() {
+  if (document.visibilityState !== 'visible') return;
+  _liveTelemetryPaused = false;
   if (liveMeasurementAgeTimer === null) liveMeasurementAgeTimer = setInterval(refreshLiveMeasurementAge, LIVE_TELEMETRY_RENDER_INTERVAL_MS);
-  refreshLiveMeasurementAge();
+  scheduleLiveTelemetryRender(true);
+}
+// Nach Tab-Rückkehr / BFcache sofort den neuesten gepufferten Stand zeigen,
+// danach einen einzigen 5-s-Takt. Kein Hintergrundrender und keine Timer-Duplikate.
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') resumeLiveTelemetryRendering();
+  else pauseLiveTelemetryRendering();
 });
+window.addEventListener('pagehide', pauseLiveTelemetryRendering);
+window.addEventListener('pageshow', resumeLiveTelemetryRendering);
 /**
  * Code-Teil: formatPower
  * Zweck: Formatiert Daten für Anzeige oder Logs.
@@ -1875,13 +1897,10 @@ function nwSetLiveOnline(isOnline) {
  * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
  */
 function getEvcsPowerW(readValue) {
-  const d = typeof readValue === 'function' ? readValue : (key => {
-    const snapshot = window.latestState || state || {};
-    return typeof snapshot === 'object' && Object.hasOwn(snapshot, key) ? Reflect.get(snapshot, key)?.value : undefined;
-  });
-  const mapped = window.__nwCfg?.datapoints?.consumptionEvcs;
+  // Gleiche Zeit-/Qualitätsprüfung wie Netz, PV und Speicher, auch bei expliziter Zuordnung.
+  const d = key => getFreshFlowNumber(key);
   return window.NexoWattPowerMeasurements?.resolveEvcsPower({
-    overrideConfigured: typeof mapped === 'string' && mapped.trim().length > 0,
+    overrideConfigured: isMappedDatapoint('consumptionEvcs'),
     override: d('consumptionEvcs'), aggregate: d('evcs.totalPowerW'), legacy: d('evcsPower'),
   }) ?? null;
 }
@@ -2655,6 +2674,8 @@ function resolveHeatingRodFlowPower(it, d, fallbackRaw){
 function updateEnergyWebExtras(d){
   let consumersSum = 0;
   let consumersComplete = true;
+  let producersSum = 0;
+  let producersComplete = true;
   /**
    * Code-Teil: show
    * Zweck: Kapselt einen lokalen Verarbeitungsschritt, damit Aufrufer nicht direkt in Detaildaten eingreifen.
@@ -2702,7 +2723,9 @@ function updateEnergyWebExtras(d){
   if (flowExtras && Array.isArray(flowExtras.producers)) {
     for (const it of flowExtras.producers) {
       const raw = coerceNumber(d(it.stateKey));
-      const abs = stabilizeFlowAbs(`extra:producer:${it.stateKey || it.lineId || it.nodeId}`, raw === null ? 0 : Math.abs(raw));
+      const abs = raw === null ? 0 : Math.abs(raw);
+      if (raw === null) producersComplete = false;
+      else producersSum += abs;
       setText(it.valId, raw === null ? '--' : formatFlowPower(abs));
       show(it.lineId, abs);
       // Erzeugung soll optisch immer "zum Gebäude" laufen (keine Richtungsumschaltung).
@@ -2745,7 +2768,9 @@ const sumSpecialPower = (role, devices) => {
 if (flowExtras && Array.isArray(flowExtras.special)) {
   for (const it of flowExtras.special) {
     const raw = sumSpecialPower(it.role, it.devices);
-    const abs = stabilizeFlowAbs(`extra:special:${it.role}:${it.lineId || it.nodeId}`, raw === null ? 0 : Math.abs(raw));
+    const abs = raw === null ? 0 : Math.abs(raw);
+    if (raw === null) producersComplete = false;
+    else producersSum += abs;
     setText(it.valId, raw === null ? '--' : formatFlowPower(abs));
     show(it.lineId, abs);
     // BHKW/Generator: Erzeugung immer zum Gebäude (keine Richtungsumschaltung)
@@ -2764,7 +2789,7 @@ if (flowExtras && Array.isArray(flowExtras.special)) {
       if (isHeatingRodFlowItem(it)) {
         const rodPower = resolveHeatingRodFlowPower(it, d, rawBase);
         const valid = Number.isFinite(rodPower.valueW);
-        const abs = stabilizeFlowAbs(`extra:consumer:heatingRod:c${it.idx || it.stateKey || it.lineId || it.nodeId}`, valid ? Math.abs(rodPower.valueW) : 0);
+        const abs = valid ? Math.abs(rodPower.valueW) : 0;
         if (!valid) consumersComplete = false;
         consumersSum += abs;
         setText(it.valId, valid ? formatFlowPower(abs) : '--');
@@ -2778,9 +2803,9 @@ if (flowExtras && Array.isArray(flowExtras.special)) {
       const raw = rawBase;
       const valid = Number.isFinite(raw);
       if (!valid) consumersComplete = false;
-      const val = stabilizeFlowSigned(`extra:consumer:${it.stateKey || it.lineId || it.nodeId}`, valid ? raw : 0);
+      const val = valid ? raw : 0;
       const abs = Math.abs(val);
-      consumersSum += abs;
+      consumersSum += abs; // Bestehender Verbrauchsvertrag: positive Beträge, kein V2G-Regelpfad.
       setText(it.valId, valid ? formatFlowPower(abs) : '--');
       show(it.lineId, abs);
       setRev(it.lineId, val < 0);
@@ -2788,6 +2813,7 @@ if (flowExtras && Array.isArray(flowExtras.special)) {
     }
   }
 
+  window.__nwFlowExtraProductionW = producersComplete ? producersSum : null;
   return consumersComplete ? consumersSum : null;
 }
 /**
@@ -3220,12 +3246,17 @@ function getLiveMeasurementView() {
   const batteryAvailable = !['missing', 'mapped-missing', 'storageFarm-missing-power', 'storageFarm-unavailable', 'stale-or-missing'].includes(String(battery.src)) && battery.incomplete !== true;
   const farm = nwStorageFarmFeatureFromConfig(window.__nwCfg || {}, state || {});
   const farmView = farm ? window.NexoWattLiveDisplay?.farm(state, Date.now(), window.__nwTariffLiveOnline !== false) : null;
+  const directLoad = fresh('consumptionTotal');
+  const derivedLoad = fresh('derived.core.building.loadTotalW');
+  const load = directLoad !== null && directLoad >= 0 ? directLoad : derivedLoad !== null && derivedLoad >= 0 ? derivedLoad : null;
+  const soc = farmView ? farmView.soc : farm ? fresh('storageFarm.totalSoc') ?? fresh('storageFarm.medianSoc') : fresh('storageSoc');
   return {
-    pv: getCanonicalPvPowerW(fresh), load: fresh('consumptionTotal'),
+    pv: getCanonicalPvPowerW(fresh), load,
     buy: gridAvailable ? grid.buy : null, sell: gridAvailable ? grid.sell : null,
     charge: farmView ? farmView.charge : batteryAvailable ? battery.chargeW : null,
     discharge: farmView ? farmView.discharge : batteryAvailable ? battery.dischargeW : null,
-    soc: farmView ? farmView.soc : farm ? fresh('storageFarm.totalSoc') ?? fresh('storageFarm.medianSoc') : fresh('storageSoc'),
+    soc: soc !== null && soc >= 0 && soc <= 100 ? soc : null,
+    batteryDerived: !farmView && battery.derived === true,
   };
 }
 
@@ -3676,8 +3707,7 @@ const refreshConfig = async () => {
   // globalen /api/state-Snapshot. Sie werden nur für die Kunden-Einstellseite
   // über den kontrollierten RFID-Endpunkt nachgeladen.
   try { await loadRfidCustomerState(); } catch (_e) {}
-  _lastLiveTelemetryRenderTs = Date.now();
-  scheduleRender(true);
+  scheduleLiveTelemetryRender(true);
 
   try { if (typeof setupSettings === 'function') setupSettings(); } catch (e) {}
   // Settings-UI muss nach dem Hydrate der Inputs erneut aktualisiert werden
@@ -6360,6 +6390,19 @@ function updateEmsControlUi() {
     setText('priceAverage', formatPricePerKwh(priceAvg));
     if (card) card.title = tariffDisplay.status;
 
+    // Auch ohne frischen Reglerstatus bleibt eine aktivierte Optimierung sichtbar.
+    // Bei Verbindungsabbruch darf kein alter 'Speicher lädt'-Text stehenbleiben.
+    const flowStatus = window.NexoWattTariffDisplay.flowStatus(st, Date.now(), window.__nwTariffLiveOnline !== false);
+    const flowStatusElement = document.getElementById('emsStatusText');
+    if (flowStatusElement) {
+      flowStatusElement.textContent = flowStatus.text;
+      flowStatusElement.title = flowStatus.title;
+      flowStatusElement.classList.toggle('hidden', !flowStatus.text);
+    }
+    const flowStatusWrap = document.getElementById('emsStatusWrap');
+    if (flowStatusWrap) flowStatusWrap.classList.toggle('hidden', !flowStatus.text);
+
+
     // Peak short status (Netzschutz – nur Installateur konfigurierbar)
     const peakStatus = String(v('peakShaving.control.status') || '').trim();
 
@@ -8572,10 +8615,18 @@ function updateEnergyWeb() {
   // Optionale Extra-Kreise aktualisieren (Rückgabe = Summe der optionalen Verbraucher)
   const extrasConsumersSum = updateEnergyWebExtras(key => getFreshFlowNumber(key));
 
-  // Gebäudeanzeige: EV (optional) + optionale Verbraucher abziehen, damit der Energiefluss optisch sauber aufgeht
-  const evAbs = Math.max(0, Math.abs(c2));
-  const loadDisplayBase = Math.max(0, subEvFromLoad ? (load - evAbs) : load);
-  let loadDisplay = Math.max(0, loadDisplayBase - (extrasConsumersSum ?? 0));
+  // Ein Snapshot für alle Zahlen; negative Restlast ist ein Mess-/Zuordnungsfehler,
+  // keine echte Null. Die vorhandene EV-/Verbraucher-Betragskonvention bleibt erhalten.
+  const flowBalance = window.NexoWattPowerMeasurements?.resolveFlowBalance({
+    load: measurements.load, ev: evcsPowerW === null ? null : c2,
+    consumers: extrasConsumersSum, pv: measurements.pv,
+    producers: state && Object.hasOwn(state, 'derived.core.production.extraW') ? getFreshFlowNumber('derived.core.production.extraW')
+      : window.__nwFlowExtraProductionW ?? (flowExtras?.producers?.length || flowExtras?.special?.length ? null : 0),
+    grid: measurements.buy === null || measurements.sell === null ? null : buy - sell,
+    battery: measurements.charge === null || measurements.discharge === null ? null : batDischarge - batCharge,
+    subtractEv: subEvFromLoad, evAvailable: evAvail,
+  }) ?? { buildingW: null, mismatchW: null, status: 'Messwertprüfung nicht verfügbar' };
+  const loadDisplay = flowBalance.buildingW;
 
   // Echte 0 W bleiben 0 W. Fehlende Messung wird unten als unbekannt gezeigt;
   // Anzeige-Glättung darf keinen Ersatzverbrauch erfinden oder Zeitstempel erneuern.
@@ -8584,15 +8635,11 @@ function updateEnergyWeb() {
   // PV: immer Richtung Gebäude (keine Richtungsumschaltung); Wert = |pv|
   // Hintergrund: Einige Zähler/Adapter liefern Vorzeichen-Schwankungen um 0W oder invertierte Vorzeichen.
   // Für die VIS soll die Erzeugung optisch immer "zum Gebäude" laufen.
-  const pvValNum = stabilizeFlowAbs('pv', Math.abs(pv));
+  const pvValNum = Math.abs(pv);
   const pvRev = false;
 
-  // GRID: bevorzugt Bezug (buy). Nur wenn buy==0 und sell>0, zeige Einspeisung.
-  let gridSignedRaw = 0;
-  if (buy > 0) gridSignedRaw = Math.abs(buy);
-  else if (sell !== 0 && !isNaN(sell)) gridSignedRaw = -Math.abs(sell);
-
-  const gridSigned = stabilizeFlowSigned('grid', gridSignedRaw, { signSwitchW: 220 });
+  // Ein Netz-Zweig zeigt den Nettofluss am Anschlusspunkt, auch bei zwei Split-Werten.
+  const gridSigned = buy - sell;
   let gridShowVal = Math.abs(gridSigned);
   let gridRev = gridSigned < 0; // rev = vom Gebäude weg
   let gridSellMode = gridSigned < 0;
@@ -8601,41 +8648,12 @@ function updateEnergyWeb() {
 // removed stray block
 // removed stray block
 
-  // BATTERIE:
-  // Standard (Einzel‑Speicher): wähle vorhandenen Strom (kein Netto)
-  // Farm‑Modus: wenn gleichzeitig Laden & Entladen vorkommt, zeigen wir den dominanten Netto‑Fluss
-  //             (|Entladen − Laden|) und bestimmen die Richtung über den höheren Wert.
-  let batShowVal = 0;
-  let batRev = false;
-
-  if (sfEnabled) {
-    const ch = Math.max(0, Number(batCharge) || 0);
-    const dch = Math.max(0, Number(batDischarge) || 0);
-    if (ch > 0 || dch > 0) {
-      if (dch >= ch) { batShowVal = dch - ch; batRev = false; }
-      else { batShowVal = ch - dch; batRev = true; }
-    }
-  } else {
-    // - Entladen (batDischarge>0) -> zur Mitte; Anzeige +batDischarge
-    // - Laden (batCharge>0) -> von Mitte zur Batterie; Anzeige -batCharge
-    if (batDischarge > 0 && batCharge <= 0) { batShowVal = batDischarge; batRev = false; }
-    else if (batCharge > 0 && batDischarge <= 0) { batShowVal = batCharge; batRev = true; }
-    else if (batCharge > 0 || batDischarge > 0) {
-      if (batCharge >= batDischarge) { batShowVal = batCharge; batRev = true; }
-      else { batShowVal = batDischarge; batRev = false; }
-    }
-  }
-
-  const evSigned = stabilizeFlowSigned('ev', evAvail ? c2 : 0, { signSwitchW: 220 });
+  // Auch bei gleichzeitigen Split-Werten zeigt ein Zweig den Nettofluss.
+  const batSigned = batDischarge - batCharge;
+  let batShowVal = Math.abs(batSigned);
+  let batRev = batSigned < 0;
+  const evSigned = evAvail ? c2 : 0;
   const evShowVal = Math.abs(evSigned);
-
-  const batSignedRaw = batRev ? -Math.abs(batShowVal) : Math.abs(batShowVal);
-  const batSigned = stabilizeFlowSigned('battery', batSignedRaw, { signSwitchW: 220 });
-  batShowVal = Math.abs(batSigned);
-  batRev = batSigned < 0;
-
-  loadDisplay = stabilizeFlowAbs('building', Math.max(0, loadDisplay));
-
 
 // ---------- Ausgabe ----------
   /**
@@ -8658,7 +8676,12 @@ function updateEnergyWeb() {
   // EV & Batterie Texte
   T('c2Val', evcsPowerW === null ? '--' : formatFlowPower(evShowVal));
   T('restVal', measurements.charge === null || measurements.discharge === null ? '--' : batShowVal ? (batRev ? ('-'+formatFlowPower(batShowVal)) : formatFlowPower(batShowVal)) : formatFlowPower(0));
-  T('centerPower', measurements.load === null || extrasConsumersSum === null || (evAvail && subEvFromLoad && evcsPowerW === null) ? '--' : formatFlowPower(Math.max(0, loadDisplay)));
+  T('centerPower', loadDisplay === null ? '--' : formatFlowPower(loadDisplay));
+  const balanceStatus = flowBalance.mismatchW === null ? (flowBalance.status || (measurements.batteryDerived ? 'Batterieleistung aus Energiebilanz berechnet' : ''))
+    : `Bilanzabweichung ${formatFlowPower(Math.abs(flowBalance.mismatchW))} – Messpunkte, Vorzeichen und Zeitstempel prüfen`;
+  T('energyFlowQuality', balanceStatus);
+  const qualityNote = document.getElementById('energyFlowQuality');
+  if (qualityNote) qualityNote.hidden = !balanceStatus;
   if (soc===undefined || soc===null || typeof soc === 'boolean' || !Number.isFinite(Number(soc))) { T('batterySocIn','-- %'); } else { T('batterySocIn', Number(soc).toFixed(0)+' %'); }
 
   for (const id of ['pvLbl', 'pvPowerBig']) T(id, measurements.pv === null ? '--' : formatPower(measurements.pv));
@@ -8727,76 +8750,7 @@ function updateEnergyWeb() {
   try { updateGeneratorUi(); } catch(_e) {}
   try { updateThermalConsumerUi(); } catch(_e) {}
 
-  // Statusmeldung direkt in der Energiefluss-Kachel (VIS)
-  // z.B. "Tarif günstig: Speicher lädt" / "Tarif teuer: Speicher entlädt"
-  const statusEl = document.getElementById('emsStatusText');
-  if (statusEl) {
-    // Prefer the explicit status text computed by the Tarife/Optimierung app.
-    let msg = (s['tarif.statusText'] && s['tarif.statusText'].value !== undefined && s['tarif.statusText'].value !== null)
-      ? String(s['tarif.statusText'].value)
-      : '';
-
-    // Fallback: If Tarife/Optimierung has not produced a message yet, do NOT show a placeholder.
-    // The status line should only appear when there is actually something meaningful to show.
-    if (!msg) {
-      const st = (s['tarif.state'] && s['tarif.state'].value !== undefined && s['tarif.state'].value !== null)
-        ? String(s['tarif.state'].value)
-        : '';
-      const pRaw = (s['tarif.preisAktuellEurProKwh'] && s['tarif.preisAktuellEurProKwh'].value !== undefined && s['tarif.preisAktuellEurProKwh'].value !== null)
-        ? Number(s['tarif.preisAktuellEurProKwh'].value)
-        : NaN;
-      const pTxt = Number.isFinite(pRaw) ? (pRaw.toFixed(3) + ' €/kWh') : '';
-      // Only show fallback text if the tariff logic is actually active.
-      // If tarif.state is "aus" (or empty), we hide the line.
-      if (st && st !== 'aus') msg = `Tarif ${st}${pTxt ? ` (${pTxt})` : ''}`;
-      else msg = '';
-    }
-
-    // PV‑Reserve (Forecast) kann das Netzladen bewusst blockieren.
-    // Damit der Kunde nicht "Speicher lädt" liest, obwohl das Netzladen
-    // wegen erwarteter PV-Erzeugung absichtlich gestoppt wurde, ergänzen
-    // wir die Statuszeile entsprechend.
-    try {
-      const pvBlocked = !!(s['speicher.regelung.tarifPvBlock'] && s['speicher.regelung.tarifPvBlock'].value);
-      if (pvBlocked) {
-        const pvCapSocRaw = (s['speicher.regelung.tarifPvCapSocPct'] && s['speicher.regelung.tarifPvCapSocPct'].value !== undefined)
-          ? Number(s['speicher.regelung.tarifPvCapSocPct'].value)
-          : NaN;
-        const capTxt = Number.isFinite(pvCapSocRaw) ? ` (max ${pvCapSocRaw.toFixed(1)}%)` : '';
-        msg = msg ? `${msg} — PV‑Reserve: Netzladen gesperrt${capTxt}` : `PV‑Reserve: Netzladen gesperrt${capTxt}`;
-
-        const pvReason = (s['speicher.regelung.tarifPvBlockGrund'] && s['speicher.regelung.tarifPvBlockGrund'].value !== undefined && s['speicher.regelung.tarifPvBlockGrund'].value !== null)
-          ? String(s['speicher.regelung.tarifPvBlockGrund'].value)
-          : '';
-        statusEl.title = pvReason;
-      } else {
-        statusEl.title = '';
-      }
-    } catch(_e) {
-      statusEl.title = '';
-    }
-
-    
-
-    // Tariff UX: Make it immediately visible when the tariff logic runs in MANUAL mode.
-    // This prevents confusion when charging is blocked by a manually set price limit.
-    try {
-      const dyn = !!(s['settings.dynamicTariff'] && s['settings.dynamicTariff'].value);
-      const tm = (s['settings.tariffMode'] && s['settings.tariffMode'].value !== undefined && s['settings.tariffMode'].value !== null)
-        ? Number(s['settings.tariffMode'].value)
-        : NaN;
-      const isManual = !Number.isFinite(tm) ? true : (tm !== 2);
-      if (dyn && isManual) {
-        msg = msg ? `${msg} — Modus: Manuell` : 'Tarif Modus: Manuell';
-      }
-    } catch(_e) {
-      // ignore
-    }
-statusEl.textContent = msg;
-    statusEl.classList.toggle('hidden', !msg);
-    const statusWrap = document.getElementById('emsStatusWrap');
-    if (statusWrap) statusWrap.classList.toggle('hidden', !msg);
-  }
+  // Tarifstatus wird in updateEmsControlUi einschließlich Verbindungsstatus aktualisiert.
 
 }
 

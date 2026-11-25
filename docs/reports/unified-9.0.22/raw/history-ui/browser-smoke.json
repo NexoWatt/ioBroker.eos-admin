@@ -1,0 +1,49 @@
+{
+  "scope": "Actual React sources in fresh Chromium; API simulated, no actual EOS or database",
+  "browser": "HeadlessChrome/158.0.8127.0",
+  "node": "v24.22.3",
+  "results": [
+    {
+      "scenario": "new-postgres-desktop",
+      "viewport": 1440,
+      "scroll": 1440,
+      "body": 1440,
+      "result": "passed"
+    },
+    {
+      "scenario": "new-postgres-mobile",
+      "viewport": 375,
+      "scroll": 375,
+      "body": 375,
+      "result": "passed"
+    },
+    {
+      "scenario": "postgres-tls-error-mobile",
+      "viewport": 375,
+      "scroll": 375,
+      "body": 375,
+      "result": "passed"
+    },
+    {
+      "scenario": "explicit-new-site-check-save",
+      "result": "passed",
+      "runtimeNetwork": "stubbed only; no database setup invoked"
+    },
+    {
+      "scenario": "existing-influx-mobile",
+      "viewport": 375,
+      "scroll": 375,
+      "body": 375,
+      "result": "passed"
+    },
+    {
+      "scenario": "existing-influx-desktop",
+      "viewport": 1440,
+      "scroll": 1440,
+      "body": 1440,
+      "result": "passed"
+    }
+  ],
+  "pageErrors": [],
+  "rejectedRequests": []
+}

@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/modules/storage-control.ts
- * Quell-Hash: sha256:2b2fc6d9dc48f7d669636c365bf7645ffa4d9b68c7e706f6df02ebc4a412a1e2
+ * Quell-Hash: sha256:3267de75713412a0052817f258d707f19195cd213c23c5e11ebfc8b2989eb816
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -2772,8 +2772,10 @@ class SpeicherRegelungModule extends BaseModule {
             }
             try {
                 const rec = this.adapter && this.adapter.stateCache ? this.adapter.stateCache[sid] : null;
-                const n = Number(rec && rec.value);
-                if (Number.isFinite(n)) return n;
+                // Unbekannte abgeleitete Last bleibt unbekannt. Number(null)
+                // würde hier eine falsche gemessene Null vor den Fallback setzen.
+                const n = strictFiniteNumber(rec && rec.value, null);
+                if (n !== null) return n;
             } catch {
                 // ignore
             }
@@ -7279,7 +7281,7 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
      *   die Wallbox bereits enthaelt. Der NVP-Regelkreis bleibt dann fuehrend.
      */
     _buildIndependentPvLoadFeedForward(ctx = {}) {
-        const finite = (v) => v !== null && v !== undefined && v !== '' && Number.isFinite(Number(v));
+        const finite = (v) => strictFiniteNumber(v, null) !== null;
         const now = finite(ctx.nowMs) ? Number(ctx.nowMs) : Date.now();
         const staleMs = Math.max(1000, finite(ctx.staleMs) ? Number(ctx.staleMs) : 15000);
         const maxSkewMs = Math.max(0, finite(ctx.maxSkewMs) ? Number(ctx.maxSkewMs) : 15000);
@@ -7319,9 +7321,9 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
                 // Fallback auf den lokalen State-Cache.
             }
             const rec = getCacheRecord(key);
-            const value = Number(rec && rec.value);
+            const value = strictFiniteNumber(rec && rec.value, null);
             const age = getCacheAgeMs(key);
-            if (!Number.isFinite(value)) return fallback;
+            if (value === null) return fallback;
             if (age !== null && age > staleMs) return fallback;
             return value;
         };

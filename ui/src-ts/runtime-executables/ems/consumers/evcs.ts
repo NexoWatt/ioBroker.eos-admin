@@ -146,16 +146,20 @@ async function applyEvcsSetpoint(ctx, consumer, target) {
     /** @type {true|false|null} */
     let wroteEnable = null;
 
+    // EVCS: 0 ist ein ausdrücklicher Ladestopp. Die Registry darf diesen weder
+    // auf ein Laufminimum anheben noch beim Wechsel durch Deadband unterdrücken.
+    // Freigabe und positive Leistungsgrenzen bleiben getrennt davon unverändert.
+    const writeOptions = { zeroIsStop: true };
     // Apply setpoint
     if (resolvedBasis === 'currentA') {
-        if (hasSetA) wroteA = await dp.writeNumber(setAKey, (targetA > 0 ? targetA : 0), false);
-        else if (hasSetW) wroteW = await dp.writeNumber(setWKey, Math.round(targetW > 0 ? targetW : 0), false);
+        if (hasSetA) wroteA = await dp.writeNumber(setAKey, (targetA > 0 ? targetA : 0), false, writeOptions);
+        else if (hasSetW) wroteW = await dp.writeNumber(setWKey, Math.round(targetW > 0 ? targetW : 0), false, writeOptions);
     } else if (resolvedBasis === 'powerW') {
-        if (hasSetW) wroteW = await dp.writeNumber(setWKey, Math.round(targetW > 0 ? targetW : 0), false);
-        else if (hasSetA) wroteA = await dp.writeNumber(setAKey, (targetA > 0 ? targetA : 0), false);
+        if (hasSetW) wroteW = await dp.writeNumber(setWKey, Math.round(targetW > 0 ? targetW : 0), false, writeOptions);
+        else if (hasSetA) wroteA = await dp.writeNumber(setAKey, (targetA > 0 ? targetA : 0), false, writeOptions);
     } else { // fallback
-        if (hasSetW) wroteW = await dp.writeNumber(setWKey, Math.round(targetW > 0 ? targetW : 0), false);
-        else if (hasSetA) wroteA = await dp.writeNumber(setAKey, (targetA > 0 ? targetA : 0), false);
+        if (hasSetW) wroteW = await dp.writeNumber(setWKey, Math.round(targetW > 0 ? targetW : 0), false, writeOptions);
+        else if (hasSetA) wroteA = await dp.writeNumber(setAKey, (targetA > 0 ? targetA : 0), false, writeOptions);
     }
 
     // Enable handling:

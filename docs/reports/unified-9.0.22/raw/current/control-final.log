@@ -1,0 +1,25 @@
+✔ explicit pure PV cannot become grid charging under a negative-price preference (77.038585ms)
+✔ Min+PV retains its grid minimum and PV-only extra; Auto retains deliberate negative-price grid permission (24.643324ms)
+✔ real pure-PV OCPP control requests stop after lost surplus, observes stopped telemetry and resumes with surplus (43.916979ms)
+✔ central PV budget rejects null, bad quality, future/missing timestamps and recovers from a real measurement (26.654666ms)
+✔ fresh canonical PV including zero cannot be overruled by a higher parallel alias (0.991394ms)
+✔ trusted PV hold expires even under repeated snapshots, then real evidence can restore the budget (1.666202ms)
+✔ 100 ms SSE bursts render latest buffered values once per 5000 ms; source timestamps remain unchanged (4.648919ms)
+✔ quiet connections still re-evaluate every 5 s and only a real upstream timestamp refresh changes source age (1.414119ms)
+✔ wall-clock jumps cannot postpone or burst the monotonic 5 s rendering cadence (1.061408ms)
+✔ hidden tabs buffer SSE values without rendering; return immediately projects latest data and resumes exactly one timer (1.091493ms)
+✔ pagehide clears pending UI work; repeated pageshow does not duplicate periodic timers or rendering (0.903395ms)
+✔ actual backend polling delivers newly confirmed constant values and preserves upstream timestamps instead of manufacturing freshness (726.807473ms)
+✔ OCPP power commands go through the real consumer and registry: 5700W, stop, keepalive, resume (5.497895ms)
+✔ explicit EVCS stop bypasses a configured minimum in W and A, retaining positive minimum and maximum (1.203359ms)
+✔ EVCS zero transitions are not swallowed by deadband in either direction (0.948682ms)
+✔ a failed stop is retried, and W-to-kW conversion preserves zero (0.775145ms)
+﹣ provided OCPP21 source receives zero unchanged; RPC acceptance remains separate from local ack (0.112006ms) # SKIP
+ℹ tests 17
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 1
+ℹ todo 0
+ℹ duration_ms 898.106621

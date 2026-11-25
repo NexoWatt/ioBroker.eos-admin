@@ -337,7 +337,12 @@ class TarifVisModule extends BaseModule {
     _getVisInstance() {
         const cfg = (this.adapter && this.adapter.config && this.adapter.config.vis) ? this.adapter.config.vis : null;
         const inst = (cfg && typeof cfg.instance === 'string') ? cfg.instance.trim() : '';
-        return inst || 'nexowatt-ui.0';
+        // Die eingebettete UI läuft bei Neuanlagen unter eos-admin.N; bei einer
+        // bestätigten Altübernahme bereits unter dem erhaltenen Runtime-Namespace.
+        // Ein fester nexowatt-ui.0-Fallback liest sonst fremde/fehlende Settings
+        // und lässt eine in der EOS-Oberfläche aktivierte Tarifregelung aus.
+        const runtime = typeof this.adapter?.namespace === 'string' ? this.adapter.namespace.trim() : '';
+        return inst || runtime || 'nexowatt-ui.0';
     }
     /**
      * Code-Teil: _getTariffHomePath

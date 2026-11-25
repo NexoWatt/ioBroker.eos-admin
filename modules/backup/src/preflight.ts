@@ -6,8 +6,9 @@ import { constants } from 'node:fs';
 import { access, lstat, realpath, statfs } from 'node:fs/promises';
 import { join, resolve, relative, isAbsolute, sep } from 'node:path';
 import { controllerCli, executable } from './command';
+import { influxTargets } from './databaseTargets';
 import { safeSourcePath } from './config';
-import { fail, flag, str, record, type Config } from './types';
+import { fail, flag, str, type Config } from './types';
 
 async function source(path: string, directory = true): Promise<void> {
     const full = safeSourcePath(path),
@@ -27,15 +28,7 @@ export async function preflightInstallation(c: Config, installationDir: string, 
         ['redisEnabled', 'redis-cli'],
     ] as const)
         if (flag(c, field)) await executable(program);
-    if (flag(c, 'influxDBEnabled')) {
-        const targets = flag(c, 'influxDBMulti') && Array.isArray(c.influxDBEvents) ? c.influxDBEvents : [c];
-        for (const target of targets) {
-            if (!record(target)) throw fail('EOS_BACKUP_EVENTS');
-            await executable(
-                str(target, target === c ? 'influxDBVersion' : 'dbversion', '1.x') === '2.x' ? 'influx' : 'influxd',
-            );
-        }
-    }
+    for (const target of influxTargets(c)) await executable(target.version === '2.x' ? 'influx' : 'influxd');
     if (flag(c, 'historyEnabled')) await source(str(c, 'historyPath'));
     if (flag(c, 'sqliteEnabled')) await source(str(c, 'sqlitePath'), false);
     if (flag(c, 'zigbee2mqttEnabled') && str(c, 'zigbee2mqttType') === 'local') await source(str(c, 'zigbee2mqttPath'));

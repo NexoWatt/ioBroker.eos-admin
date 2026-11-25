@@ -20,6 +20,7 @@
  * 2. npm run sync:ts-runtime-executables ausführen.
  * 3. npm run test:runtime-executables prüfen.
  */
+"use strict";
 /**
  * NexoWatt Quellcode-Erklärung (DE)
  * Aufgabe: Zeigt die atomare Speicherfarm-Gesamtübersicht in der Kundenansicht.

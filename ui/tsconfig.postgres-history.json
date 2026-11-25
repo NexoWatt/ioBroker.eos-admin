@@ -1,0 +1,4 @@
+{
+  "extends": "./tsconfig.influx-history-runtime.json",
+  "files": ["src-ts/runtime-executables/lib/postgres-history.ts", "src-ts/runtime-executables/lib/postgres-history-config.ts"]
+}

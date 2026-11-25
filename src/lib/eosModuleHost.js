@@ -6,6 +6,7 @@ const { performance } = require('node:perf_hooks');
 const { randomUUID } = require('node:crypto');
 const { EosModuleConfigStore } = require('./eosModuleConfigStore');
 const { EosDeviceEmsService } = require('./eosDeviceEmsService');
+const { resolveHistoryBackupRequirement } = require('./eosHistoryBackupScope');
 
 const SECRET_MARKER = '__EOS_SECRET_UNCHANGED__';
 const MODULES = Object.freeze({ devices: 'nexowatt-devices', eebus: 'eebus', backup: 'nexowatt-backup' });
@@ -580,6 +581,7 @@ class EosModuleHost {
                         dataDir: join(this.options.dataDir, entry.id),
                         ...(entry.id === 'backup' ? {
                             installationDir: this.options.installationDir, eosDataDir: this.options.eosDataDir,
+                            getHistoryBackupRequirement: () => bounded(resolveHistoryBackupRequirement(this.owner), 5000),
                             preservedUiNamespace: this.owner.config.eosUiMigration?.preserveNamespace === true &&
                                 /^nexowatt-ui\.\d+$/.test(this.owner.config.eosUiMigration.source || '')
                                 ? this.owner.config.eosUiMigration.source : undefined,

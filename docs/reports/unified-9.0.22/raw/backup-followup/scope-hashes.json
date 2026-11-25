@@ -1,0 +1,51 @@
+{
+  "checkedAt": "2026-11-25T12:44:28.717124+00:00",
+  "node": "v24.22.3",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "scope": [
+    {
+      "file": "tools/system/eos-postgresql-setup.cjs",
+      "sha256": "6095df4f8008d4382c436b41f36f6f94cca9d2b999fd9e5351c8650881ba8b60"
+    },
+    {
+      "file": "src/lib/eosHistoryBackupScope.js",
+      "sha256": "108fc11b90be2b697d0a2472cc00b82228279fcb0332b99a1ad80d7dce469b76"
+    },
+    {
+      "file": "src/lib/eosPostgresProvisioning.ts",
+      "sha256": "5c1e4d13f9d30a08f64c6bd143a7ffa75c188e1810ea68b81953a32198ddc417"
+    },
+    {
+      "file": "modules/backup/src/coverage.ts",
+      "sha256": "6a1415c812ff27beaca5faf24abbf5dc56e6ec5fd85935b71dfc05a6e66efca5"
+    },
+    {
+      "file": "modules/backup/src/creators.ts",
+      "sha256": "9b0e7b3392448f11626d9d91dad8aaa70e619a122a79e9e267e76bd0967ad4a8"
+    },
+    {
+      "file": "modules/backup/src/influxIntegrity.ts",
+      "sha256": "d9e076b44468577f4dbf409221aaf97305dd9846e5021158b0f85155e6ffb22d"
+    },
+    {
+      "file": "modules/backup/src/postgresHistory.ts",
+      "sha256": "fc680dbbc5c97be1fe95afce9991977706400945026a9cb019e270769c270066"
+    },
+    {
+      "file": "modules/backup/src/publicTrust.ts",
+      "sha256": "106883cfee279177f1166d7c862e1f30655b1a3cf9fbd0c651a02ed7f8c9ab55"
+    },
+    {
+      "file": "modules/backup/src/restore-cli.ts",
+      "sha256": "a65414f7ead53ce3d92e21c2b699bc2e1967fffac5bafeea4c18dec3f961d543"
+    },
+    {
+      "file": "modules/backup/src/worker.ts",
+      "sha256": "049a27707f322ef46240927d30d78ddd4a847d29b84fb329efd4684686c3f468"
+    },
+    {
+      "file": "modules/backup/src/storageRetention.ts",
+      "sha256": "5f0c2a013f50317c0bb22ca2760ce0603d90dd1adaeada17f14451f726b74e9f"
+    }
+  ]
+}

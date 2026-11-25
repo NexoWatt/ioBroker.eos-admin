@@ -544,7 +544,25 @@ class TariffStatusModule extends BaseModule {
         'storageFarm.lastDispatchJson',
       ];
       const states = await this._readValues(ids);
+      // PV-Reserve-Flags werden bei unverändertem Wert nicht neu gestempelt.
+      // Nur der atomare Policy-Snapshot des Speicherreglers belegt ihre aktuelle
+      // Auswertung; ein neuer Tarif-Heartbeat allein darf alte Flags nicht erneuern.
+      const policyState = await this.adapter.getStateAsync('speicher.regelung.policyJson').catch(() => null);
       const now = Date.now();
+      const storagePolicy = safeParseJson(policyState?.val, {});
+      const policyTs = finiteOrNull(storagePolicy.ts);
+      const policyStateTs = finiteOrNull(policyState?.ts);
+      const policyFresh = (policyState?.q === undefined || policyState.q === 0)
+        && policyTs !== null && policyTs > 0 && policyTs <= now + 5000 && now - policyTs <= 30000
+        && policyStateTs !== null && policyStateTs > 0 && policyStateTs <= now + 5000 && now - policyStateTs <= 30000;
+      const pvPolicy = policyFresh && storagePolicy.pvAwareTarifNetzladen && typeof storagePolicy.pvAwareTarifNetzladen === 'object'
+        ? storagePolicy.pvAwareTarifNetzladen : {};
+      const reserveCap = typeof pvPolicy.capSocPct === 'number' && Number.isFinite(pvPolicy.capSocPct)
+        && pvPolicy.capSocPct >= 0 && pvPolicy.capSocPct <= 100 ? pvPolicy.capSocPct : null;
+      const pvReserve = { fresh: policyFresh, snapshotTs: policyTs,
+        blocked: policyFresh && pvPolicy.blocked === true,
+        capSocPct: reserveCap, reason: policyFresh ? cleanText(pvPolicy.reason, 240) : '' };
+
       const statusCfg = this._getStatusConfig();
       const tariffSnapshotTs = roundedOrNull(tariff.ts);
       const tariffSnapshotAgeMs = tariffSnapshotTs === null ? null : Math.max(0, now - tariffSnapshotTs);
@@ -705,6 +723,7 @@ class TariffStatusModule extends BaseModule {
 
       const statusJson = {
         ts: now,
+        pvReserve,
         active,
         baseText,
         intent: {

@@ -3,6 +3,7 @@
  * Retained upstream MIT rights and notices remain applicable; see ../upstream/LICENSE.
  */
 import type { NotificationPlan } from './notifications';
+import type { HistoryBackupRequirement, BackupCoverage } from './coverage';
 import type { Readable } from 'node:stream';
 export type Config = Record<string, unknown> & { enabled: boolean };
 export interface Adapter {
@@ -30,6 +31,7 @@ export interface Options {
     eosDataDir?: string;
     preservedUiNamespace?: string;
     workerPath?: string;
+    getHistoryBackupRequirement?: () => Promise<HistoryBackupRequirement> | HistoryBackupRequirement;
 }
 export interface JobContext {
     config: Config;
@@ -41,6 +43,8 @@ export interface JobContext {
     kind: 'iobroker' | 'ccu';
     key: string;
     retentionEnabled?: boolean;
+    historyRequirement?: HistoryBackupRequirement;
+    publicTrust?: Record<string, string> | null;
     preservedUiNamespace?: string;
     operation?: 'backup' | 'remoteList' | 'remoteFetch' | 'legacyList' | 'legacyImport';
     provider?: string;
@@ -61,6 +65,7 @@ export interface JobResult {
     files: ArchiveInfo[];
     error?: string;
     remote?: Record<string, unknown>;
+    coverage?: BackupCoverage;
     operation?: string;
 }
 export interface Download {

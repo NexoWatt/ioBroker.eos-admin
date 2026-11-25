@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/modules/charging-management.ts
- * Quell-Hash: sha256:e3a3284d4a0001dec5511a7573ee7afddae55626c42e0c0508ca010cc163652c
+ * Quell-Hash: sha256:526026901f20e1f0bfc3408327fc0200f30d8e4d74b35c7a9d0bf6299e210785
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -35,6 +35,8 @@
 'use strict';
 
 const { BaseModule } = require('./base');
+const { EMS_CONTROL_FIELDS, checkedEmsControlState } = require('../../lib/ems-control-values');
+const { readFlowMeasurement } = require('../../lib/flow-measurement');
 const { resolveCurrentNvpSnapshot } = require('../services/measurement-freshness');
 const { confirmedZeroExportPvW, measuredFlexibleLoadW, requestZeroExportProbe, requestZeroExportHold, zeroExportEvcsPauseUntil, noteZeroExportEvcsCommand, readZeroExportMode, isZeroExportGrantValid } = require('../services/zero-export-pv-coordinator');
 const { resolveZeroExportStorageCredit } = require('../services/zero-export-storage-credit');
@@ -4863,25 +4865,10 @@ class ChargingManagementModule extends BaseModule {
     _getAdapterNumberFromCache(key, fallback = null) {
         const sid = String(key || '').trim();
         if (!sid) return fallback;
-
-        try {
-            if (this.adapter && typeof this.adapter._nwGetNumberFromCache === 'function') {
-                const n = this.adapter._nwGetNumberFromCache(sid);
-                if (typeof n === 'number' && Number.isFinite(n)) return n;
-            }
-        } catch {
-            // ignore
-        }
-
-        try {
-            const rec = this.adapter && this.adapter.stateCache ? this.adapter.stateCache[sid] : null;
-            const n = Number(rec && rec.value);
-            if (Number.isFinite(n)) return n;
-        } catch {
-            // ignore
-        }
-
-        return fallback;
+        const configuredSeconds = Number(this.adapter?.config?.settings?.deviceStaleTimeoutSec);
+        const maxAgeMs = Math.max(10000, (Number.isFinite(configuredSeconds) && configuredSeconds > 0 ? configuredSeconds : 60) * 1000);
+        const sample = readFlowMeasurement(this.adapter?.stateCache, sid, Date.now(), maxAgeMs);
+        return sample ? sample.value : fallback;
     }
 
     /**
@@ -4956,6 +4943,8 @@ class ChargingManagementModule extends BaseModule {
 
         const a = this.adapter;
         const now = Date.now();
+        const relative = typeof a?.namespace === 'string' && sid.startsWith(a.namespace + '.') ? sid.slice(a.namespace.length + 1) : sid;
+        const checked = value => checkedEmsControlState(relative, value, now);
 
         // Fast path: in-memory stateCache (maintained by main.js onStateChange)
         try {
@@ -4964,7 +4953,7 @@ class ChargingManagementModule extends BaseModule {
                 const e = sc[sid];
                 if (e && Object.prototype.hasOwnProperty.call(e, 'value')) {
                     const ts = (typeof e.ts === 'number' && Number.isFinite(e.ts)) ? e.ts : now;
-                    return { val: e.value, ts, lc: ts, ack: true };
+                    return checked({ val: e.value, ts, lc: ts, ack: true });
                 }
 
                 // If called with full id, attempt keyFromId mapping
@@ -4974,7 +4963,7 @@ class ChargingManagementModule extends BaseModule {
                         const k = a.keyFromId(sid);
                         if (k && sc[k] && Object.prototype.hasOwnProperty.call(sc[k], 'value')) {
                             const ts = (typeof sc[k].ts === 'number' && Number.isFinite(sc[k].ts)) ? sc[k].ts : now;
-                            return { val: sc[k].value, ts, lc: ts, ack: true };
+                            return checked({ val: sc[k].value, ts, lc: ts, ack: true });
                         }
                     }
                 }
@@ -4996,9 +4985,10 @@ class ChargingManagementModule extends BaseModule {
             } catch {
                 // ignore
             }
-            return st || null;
+            return checked(st || null);
         } catch {
-            return null;
+            const failed = checked({ val: null, ts: now, eosControlReadFailed: true });
+            return failed?.eosInvalidControl === true ? failed : null;
         }
     }
 
@@ -5494,6 +5484,8 @@ class ChargingManagementModule extends BaseModule {
         await mk('availabilityRequested', 'Angeforderte Stationsfreigabe', 'boolean', 'indicator');
         await mk('availabilityRequestReason', 'Grund der Stationsfreigabe', 'string', 'text');
         await mk('userEnabled', 'Regelung aktiv (User)', 'boolean', 'switch.enable', true, { def: true, states: { true: 'Aktiv', false: 'Aus' } });
+        await mk('controlInputsValid', 'Bedienwerte gültig', 'boolean', 'indicator');
+        await mk('controlInputError', 'Ungültige Bedienwerte (Felder)', 'string', 'text');
         await mk('enabled', 'Enabled (effective)', 'boolean', 'indicator');
         await mk('online', 'Online', 'boolean', 'indicator');
 
@@ -6361,6 +6353,17 @@ class ChargingManagementModule extends BaseModule {
 
             const safe = toSafeIdPart(key);
             const ch = await this._ensureWallboxChannel(key);
+            // Validate all ordinary wishes before deriving availability. This
+            // covers both live state events and persisted values after restart.
+            const invalidControlFields = [];
+            for (const field of EMS_CONTROL_FIELDS) {
+                const input = await this._getStateCached(`${ch}.${field}`);
+                if (input?.eosInvalidControl === true) invalidControlFields.push(field);
+            }
+            const controlInputsValid = invalidControlFields.length === 0;
+            await this._queueState(`${ch}.controlInputsValid`, controlInputsValid, true);
+            await this._queueState(`${ch}.controlInputError`, invalidControlFields.join(', '), true);
+
 
             // Serienreife/Robustheit: restore persisted runtime timers after adapter restart.
             // This keeps Boost timeouts + "first-started" charging order stable across restarts.
@@ -7017,13 +7020,13 @@ class ChargingManagementModule extends BaseModule {
                 : (statusTimestampFresh || statusAgePolicy.persistentReady);
             const classifiedStatus = classifyEvcsConnectorStatus(statusRawText, safetyStatusFresh);
             const faultActive = !!classifiedStatus.faultActive;
-            const unavailableActive = !!classifiedStatus.unavailableActive;
-            let operationalBlocked = !!classifiedStatus.operationalBlocked;
+            const unavailableActive = !!classifiedStatus.unavailableActive || !controlInputsValid;
+            let operationalBlocked = !!classifiedStatus.operationalBlocked || !controlInputsValid;
             const rawStatusClass = classifyEvcsConnectorStatus(statusRawText, true);
             const faultReason = faultActive
                 ? statusRawText
                 : (rawStatusClass.faultActive && statusIgnoredReason ? `${statusIgnoredReason}:${statusRawText}` : '');
-            const unavailableReason = unavailableActive
+            const unavailableReason = !controlInputsValid ? `invalid_control: ${invalidControlFields.join(', ')}` : unavailableActive
                 ? statusRawText
                 : (rawStatusClass.unavailableActive && statusIgnoredReason ? `${statusIgnoredReason}:${statusRawText}` : '');
 
@@ -8573,15 +8576,14 @@ class ChargingManagementModule extends BaseModule {
                 // (Hard limits like §14a / Grid caps / Phase caps still apply later in the pipeline.)
                 eff = 'boost';
             } else if (override === 'pv') {
-                // Gate E: Bei negativem dynamischem Tarif wird Netzbezug bewusst bevorzugt.
-                // Dann heben wir auch den PV-Modus temporär auf, damit die Ladepunkte
-                // wirtschaftlich Netzstrom abnehmen können. Harte Netz-/Phasen-/§14a-
-                // Grenzen bleiben weiter aktiv.
-                eff = tariffGridImportPreferred ? 'normal' : 'pv';
+                // Explizit gewähltes reines PV-Laden bleibt auch bei Negativpreis
+                // an den PV-Überschuss gebunden. Die wirtschaftliche Netzfreigabe
+                // darf ausschließlich Auto/Global-Modi beeinflussen.
+                eff = 'pv';
             } else if (override === 'minpv') {
-                // "Min+PV" hält normalerweise die Mindestladung und begrenzt Mehrleistung auf PV.
-                // Bei Negativpreis wird daraus temporär ein normaler netzfreigegebener Modus.
-                eff = tariffGridImportPreferred ? 'normal' : 'minpv';
+                // Min+PV erlaubt den Netzanteil nur für die technische Mindestladung;
+                // zusätzliche Leistung bleibt auch bei Negativpreis PV-gebunden.
+                eff = 'minpv';
             } else {
                 // auto: follow global defaults. Nur wenn der Ladepunkt ausdrücklich
                 // "Auto → EOS Betriebsstrategie" gewählt hat und eine frische,
@@ -9475,17 +9477,16 @@ if (components.length) {
                 ];
                 for (const [id, source] of candidates) {
                     const st = await this._getStateCached(id);
-                    const ts = st && Number(st.ts || st.lc || 0);
-                    const fresh = !Number.isFinite(ts) || ts <= 0 || (Date.now() - ts) <= Math.max(staleTimeoutMs, 120000);
-                    const v = st ? Number(st.val) : NaN;
-                    if (fresh && Number.isFinite(v) && v >= 0) {
-                        derivedBaseLoadW = Math.max(0, v);
+                    const sample = readFlowMeasurement({ candidate: st ? { value: st.val, ts: st.ts, q: st.q } : null },
+                        'candidate', Date.now(), Math.max(staleTimeoutMs, 120000));
+                    if (sample && sample.value >= 0) {
+                        derivedBaseLoadW = sample.value;
                         derivedBaseLoadSource = source;
                         break;
                     }
                 }
             } catch (_eBaseLoad) {}
-            gridBaseLoadW = Number.isFinite(Number(derivedBaseLoadW)) ? Math.max(0, Number(derivedBaseLoadW)) : Math.max(0, gridBaseLoadRawW);
+            gridBaseLoadW = typeof derivedBaseLoadW === 'number' && Number.isFinite(derivedBaseLoadW) ? Math.max(0, derivedBaseLoadW) : Math.max(0, gridBaseLoadRawW);
             gridLocalSupportW = Math.max(0, gridBaseLoadW - gridBaseLoadRawW);
 
             const gridEnvelope = rc85GridEnvelope({

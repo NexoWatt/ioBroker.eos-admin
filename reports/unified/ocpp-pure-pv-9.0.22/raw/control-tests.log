@@ -1,0 +1,11 @@
+✔ explicit pure PV cannot become grid charging under a negative-price preference (76.075733ms)
+✔ Min+PV retains its grid minimum and PV-only extra; Auto retains deliberate negative-price grid permission (32.17659ms)
+✔ real pure-PV OCPP control requests stop after lost surplus, observes stopped telemetry and resumes with surplus (58.910763ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 432.97865

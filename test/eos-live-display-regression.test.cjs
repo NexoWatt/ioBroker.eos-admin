@@ -17,7 +17,8 @@ function fixture(){
   stabilizeFlowAbs:(_,n)=>n,stabilizeFlowSigned:(_,n)=>n,formatFlowPower:n=>`${n} W`,formatPower:n=>`${n} W`,
   setText:(id,v)=>element(id).textContent=v,nwApplyCustomerFeatureVisibility(){},nwLatestStateTimestamp:()=>now,nwFormatDashboardTimestamp:String,updateEmsControlUi(){}});
  vm.runInContext(helper,ctx);
- for(const name of ['coerceNumber','isMappedDatapoint','getGridImportExport','getStateAgeMs','getFlowFreshMaxAgeMs','getFreshFlowNumber','getStableFlowNumber','getConfiguredDatapointId','getBalanceDerivedBatteryFlow','getNormalizedBatteryFlow','getCanonicalPvPowerW','getLiveMeasurementView','computeDerived','updateEnergyWeb','updateDashboardShellUi','nwSetLiveOnline'])vm.runInContext(functions.get(name),ctx);
+ vm.runInContext(ts.transpileModule(fs.readFileSync(path.join(root,'ui/src-ts/runtime-executables/www/power-measurements.ts'),'utf8'),{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.None}}).outputText,ctx);
+ for(const name of ['coerceNumber','isMappedDatapoint','getGridImportExport','getStateAgeMs','getFlowFreshMaxAgeMs','getFreshFlowNumber','getEvcsPowerW','getStableFlowNumber','getConfiguredDatapointId','getBalanceDerivedBatteryFlow','getNormalizedBatteryFlow','getCanonicalPvPowerW','getLiveMeasurementView','computeDerived','updateEnergyWeb','updateDashboardShellUi','nwSetLiveOnline'])vm.runInContext(functions.get(name),ctx);
  function state(values){ctx.state=Object.fromEntries(Object.entries(values).map(([k,value])=>[k,{value,ts:now}]));ctx.window.latestState=ctx.state;}
  return {ctx,element,state,now:()=>now,advance:ms=>now+=ms,flow(){ctx.updateEnergyWeb()},side(){ctx.updateDashboardShellUi({})},text:id=>element(id).textContent};
 }
@@ -92,4 +93,53 @@ test('visible dashboard ages measurements even without a new SSE event; hidden a
  f.ctx.document.visibilityState='visible';f.ctx.refreshLiveMeasurementAge();assert.equal(calls,1);
  f.ctx.document.visibilityState='hidden';f.ctx.refreshLiveMeasurementAge();assert.equal(calls,1);
  f.ctx.document.visibilityState='visible';f.ctx.document.getElementById=()=>null;f.ctx.refreshLiveMeasurementAge();assert.equal(calls,1);
+});
+
+test('real flow does not suppress 80 W or retain separately smoothed previous powers',()=>{
+ const f=fixture();
+ f.ctx.stabilizeFlowAbs=()=>{throw Error('numeric display must not smooth independently')};
+ f.ctx.stabilizeFlowSigned=f.ctx.stabilizeFlowAbs;
+ f.state({...valid,'derived.core.pv.totalW':80,consumptionTotal:80,gridPointPower:0});f.flow();
+ assert.equal(f.text('centerPower'),'80 W');assert.equal(f.text('pvVal'),'80 W');
+ f.state({...valid,'derived.core.pv.totalW':0,consumptionTotal:0,gridPointPower:0});f.flow();
+ assert.equal(f.text('centerPower'),'0 W');assert.equal(f.text('pvVal'),'0 W');
+});
+test('EV freshness, offline, bad-quality and future timestamp use the same measured-data contract as the rest of the flow',()=>{
+ const f=fixture();f.ctx.nwEvcsFeatureFromConfig=()=>true;f.ctx.flowExtras.meta.evcsAvailable=true;
+ f.state({...valid,consumptionTotal:13000,'evcs.totalPowerW':10700,gridPointPower:3800,'derived.core.pv.totalW':2500,batteryPower:2800});f.flow();
+ assert.equal(f.text('centerPower'),'2300 W');assert.match(f.text('energyFlowQuality'),/Bilanzabweichung 3900 W/);
+ f.ctx.state['evcs.totalPowerW'].ts=f.now()-31000;f.flow();assert.equal(f.text('c2Val'),'--');assert.equal(f.text('centerPower'),'--');
+ f.ctx.state['evcs.totalPowerW'].ts=f.now();f.ctx.state['evcs.totalPowerW'].q=64;f.flow();assert.equal(f.text('c2Val'),'--');
+ delete f.ctx.state['evcs.totalPowerW'].q;f.ctx.state['evcs.totalPowerW'].ts=f.now()+6000;f.flow();assert.equal(f.text('c2Val'),'--');
+ f.ctx.state['evcs.totalPowerW'].ts=f.now();f.ctx.window.__nwTariffLiveOnline=false;f.flow();assert.equal(f.text('c2Val'),'--');
+});
+test('consumer greater than total is reported as inconsistent, and fresh balance can recover stale total without fabricating zero',()=>{
+ const f=fixture();f.ctx.nwEvcsFeatureFromConfig=()=>true;f.ctx.flowExtras.meta.evcsAvailable=true;
+ f.state({...valid,consumptionTotal:3000,'evcs.totalPowerW':10000});f.flow();assert.equal(f.text('centerPower'),'--');assert.match(f.text('energyFlowQuality'),/Teilverbrauch größer/);
+ f.state({...valid,consumptionTotal:null,'derived.core.building.loadTotalW':12000,'evcs.totalPowerW':10000});f.flow();assert.equal(f.text('centerPower'),'2000 W');
+ f.ctx.state['derived.core.building.loadTotalW'].ts=f.now()-31000;f.flow();assert.equal(f.text('centerPower'),'--');
+});
+test('signed split flows retain conservation for simultaneous import/export and battery charge/discharge',()=>{
+ const f=fixture();f.ctx.window.__nwCfg.datapoints={gridBuyPower:'grid.buy',gridSellPower:'grid.sell',storageChargePower:'bat.charge',storageDischargePower:'bat.discharge'};
+ f.state({...valid,'derived.core.pv.totalW':0,consumptionTotal:2500,gridBuyPower:5000,gridSellPower:1500,storageChargePower:3000,storageDischargePower:2000});f.flow();
+ assert.equal(f.text('gridVal'),'3500 W');assert.equal(f.text('restVal'),'-1000 W');assert.equal(f.text('centerPower'),'2500 W');
+});
+
+test('second field screenshot rejects impossible negative building remainder instead of clamping it to 0 W',()=>{
+ const f=fixture();f.ctx.nwEvcsFeatureFromConfig=()=>true;f.ctx.flowExtras.meta.evcsAvailable=true;
+ f.state({...valid,'derived.core.pv.totalW':2100,consumptionTotal:4400,gridPointPower:4500,batteryPower:-2200,'evcs.totalPowerW':5700,storageSoc:92});f.flow();
+ assert.equal(f.text('pvVal'),'2100 W');assert.equal(f.text('gridVal'),'4500 W');assert.equal(f.text('restVal'),'-2200 W');
+ assert.equal(f.text('c2Val'),'5700 W');assert.equal(f.text('centerPower'),'--');assert.match(f.text('energyFlowQuality'),/Teilverbrauch größer/);
+});
+
+test('negative load and out-of-range state of charge cannot masquerade as measured zero or valid percent',()=>{
+ const f=fixture();f.state({...valid,consumptionTotal:-500,storageSoc:101});f.flow();f.side();
+ assert.equal(f.text('centerPower'),'--');assert.equal(f.text('sideBuildingPower'),'--');assert.equal(f.text('batterySocIn'),'-- %');
+ f.state({...valid,storageSoc:-1});f.flow();assert.equal(f.text('batterySocIn'),'-- %');
+});
+
+test('backend deduplicated extra production is authoritative and invalid published totals cannot be revived by browser sums',()=>{
+ const f=fixture();f.ctx.flowExtras.producers=[{stateKey:'producer1Power'}];f.ctx.window.__nwFlowExtraProductionW=5000;
+ f.state({...valid,'derived.core.pv.totalW':5000,consumptionTotal:5000,gridPointPower:0,'derived.core.production.extraW':0});f.flow();assert.equal(f.text('energyFlowQuality'),'');
+ f.ctx.state['derived.core.production.extraW'].value=null;f.flow();assert.match(f.text('energyFlowQuality'),/unvollständig/);
 });

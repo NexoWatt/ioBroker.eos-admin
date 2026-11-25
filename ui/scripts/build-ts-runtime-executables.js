@@ -123,6 +123,7 @@ function transpileMarkedRuntimeSource(sourceAbs, body) {
     compilerOptions: {
       target: ts.ScriptTarget.ES2020,
       module: ts.ModuleKind.CommonJS,
+      esModuleInterop: true,
       removeComments: false,
       sourceMap: false,
       inlineSourceMap: false,

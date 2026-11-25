@@ -1,0 +1,18 @@
+
+> nexowatt-ui-admin-tab@9.0.22 build
+> npm run typecheck && vite build
+
+
+> nexowatt-ui-admin-tab@9.0.22 typecheck
+> tsc -p tsconfig.json && tsc -p tsconfig.build-tools.json
+
+vite v7.3.7 building client environment for production...
+transforming...
+✓ 61 modules transformed.
+rendering chunks...
+computing gzip size...
+../admin/react/index.html                          4.48 kB │ gzip:   1.81 kB
+../admin/react/assets/nexowatt-192-43ZwQ44y.png   29.88 kB
+../admin/react/assets/index-ofLP_Y7y.css          11.10 kB │ gzip:   2.92 kB
+../admin/react/assets/index-wHWXfD_g.js          339.85 kB │ gzip: 104.90 kB
+✓ built in 1.30s

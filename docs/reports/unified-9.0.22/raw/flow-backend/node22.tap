@@ -1,0 +1,164 @@
+TAP version 13
+# (node:36) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: derived balance preserves observation age and valid zero during activity
+ok 1 - derived balance preserves observation age and valid zero during activity
+  ---
+  duration_ms: 5.333131
+  type: 'test'
+  ...
+# Subtest: impossible negative balance is unknown, never fabricated 100W or retained load
+ok 2 - impossible negative balance is unknown, never fabricated 100W or retained load
+  ---
+  duration_ms: 0.640016
+  type: 'test'
+  ...
+# Subtest: fresh direct consumption is authoritative, including a measured zero
+ok 3 - fresh direct consumption is authoritative, including a measured zero
+  ---
+  duration_ms: 0.789096
+  type: 'test'
+  ...
+# Subtest: missing, stale, future, invalid and bad quality sources cannot produce fresh building demand
+ok 4 - missing, stale, future, invalid and bad quality sources cannot produce fresh building demand
+  ---
+  duration_ms: 6.811796
+  type: 'test'
+  ...
+# Subtest: negative remaining demand and missing consumers remain distinct from zero
+ok 5 - negative remaining demand and missing consumers remain distinct from zero
+  ---
+  duration_ms: 0.868954
+  type: 'test'
+  ...
+# Subtest: configured missing extra producers/consumers do not silently disappear
+ok 6 - configured missing extra producers/consumers do not silently disappear
+  ---
+  duration_ms: 1.532415
+  type: 'test'
+  ...
+# Subtest: duplicate physical PV aliases are counted once in the backend balance
+ok 7 - duplicate physical PV aliases are counted once in the backend balance
+  ---
+  duration_ms: 1.305419
+  type: 'test'
+  ...
+# Subtest: EV aggregate becomes unknown if a configured member is unavailable, and retains oldest source time
+ok 8 - EV aggregate becomes unknown if a configured member is unavailable, and retains oldest source time
+  ---
+  duration_ms: 0.421683
+  type: 'test'
+  ...
+# Subtest: measurement reader does not evaluate accessors or inherited cache records
+ok 9 - measurement reader does not evaluate accessors or inherited cache records
+  ---
+  duration_ms: 0.689589
+  type: 'test'
+  ...
+# Subtest: Auto PV rejects bad quality and missing timestamps; persistent PV agrees with API snapshot
+ok 10 - Auto PV rejects bad quality and missing timestamps; persistent PV agrees with API snapshot
+  ---
+  duration_ms: 1.963292
+  type: 'test'
+  ...
+# Subtest: TS candidate cannot resurrect an invalid balance or overwrite a fresh direct observation
+ok 11 - TS candidate cannot resurrect an invalid balance or overwrite a fresh direct observation
+  ---
+  duration_ms: 0.851238
+  type: 'test'
+  ...
+# Subtest: extra production adds distinct configured BHKW and generator sources once with shared snapshot contract
+ok 12 - extra production adds distinct configured BHKW and generator sources once with shared snapshot contract
+  ---
+  duration_ms: 1.27927
+  type: 'test'
+  ...
+# Subtest: source timestamps include only selected contributors and numeric text has bounded decimal syntax
+ok 13 - source timestamps include only selected contributors and numeric text has bounded decimal syntax
+  ---
+  duration_ms: 1.233994
+  type: 'test'
+  ...
+# Subtest: legacy flow-slot aliases remain part of the balance and duplicate consumer mappings subtract once
+ok 14 - legacy flow-slot aliases remain part of the balance and duplicate consumer mappings subtract once
+  ---
+  duration_ms: 1.014589
+  type: 'test'
+  ...
+# Subtest: EV mirror carries source quality and timestamp through actual updateValue aggregation
+ok 15 - EV mirror carries source quality and timestamp through actual updateValue aggregation
+  ---
+  duration_ms: 0.912759
+  type: 'test'
+  ...
+# (node:37) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: History reads only own data cache records and never invokes configured cache accessors
+ok 16 - History reads only own data cache records and never invokes configured cache accessors
+  ---
+  duration_ms: 4.14738
+  type: 'test'
+  ...
+# Subtest: History uses real PV/load fallbacks when derived states are absent or stale; fresh zero stays zero
+ok 17 - History uses real PV/load fallbacks when derived states are absent or stale; fresh zero stays zero
+  ---
+  duration_ms: 0.562221
+  type: 'test'
+  ...
+# Subtest: History never adds DC PV to the already merged canonical derived total
+ok 18 - History never adds DC PV to the already merged canonical derived total
+  ---
+  duration_ms: 0.470235
+  type: 'test'
+  ...
+# Subtest: Farm PV fallback merges once and missing/stale farm SoC is not recorded as zero
+ok 19 - Farm PV fallback merges once and missing/stale farm SoC is not recorded as zero
+  ---
+  duration_ms: 0.576782
+  type: 'test'
+  ...
+# Subtest: missing/null/boolean prices never create a free provider price; configured manual fallback is retained
+ok 20 - missing/null/boolean prices never create a free provider price; configured manual fallback is retained
+  ---
+  duration_ms: 0.67004
+  type: 'test'
+  ...
+# Subtest: provider price freshness flag, age, quality and timestamp are respected without changing manual tariff mode
+ok 21 - provider price freshness flag, age, quality and timestamp are respected without changing manual tariff mode
+  ---
+  duration_ms: 0.752742
+  type: 'test'
+  ...
+# Subtest: zero and negative canonical EUR prices and net-fee decomposition retain exact values
+ok 22 - zero and negative canonical EUR prices and net-fee decomposition retain exact values
+  ---
+  duration_ms: 0.567529
+  type: 'test'
+  ...
+# Subtest: missing grid/battery/PV measurements produce gaps, never fresh invented zeros
+ok 23 - missing grid/battery/PV measurements produce gaps, never fresh invented zeros
+  ---
+  duration_ms: 0.329307
+  type: 'test'
+  ...
+# Subtest: stale raw observations and farm aggregate are not re-stamped as new History samples
+ok 24 - stale raw observations and farm aggregate are not re-stamped as new History samples
+  ---
+  duration_ms: 0.605164
+  type: 'test'
+  ...
+# Subtest: the History sink rejects invalid data and retains real zero/negative measurements
+ok 25 - the History sink rejects invalid data and retains real zero/negative measurements
+  ---
+  duration_ms: 0.557094
+  type: 'test'
+  ...
+1..25
+# tests 25
+# suites 0
+# pass 25
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1590.531676

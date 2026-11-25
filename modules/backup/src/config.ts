@@ -3,6 +3,7 @@
  * Retained upstream MIT rights and notices remain applicable; see ../upstream/LICENSE.
  */
 import { validateExtraConfig } from './extras';
+import { influxTargets } from './databaseTargets';
 import { validateNotificationConfig } from './notifications';
 import { readFileSync } from 'node:fs';
 import { join, isAbsolute, resolve } from 'node:path';
@@ -94,6 +95,7 @@ export function validateConfig(input: unknown): Config {
 }
 /** Fail before changing a legacy instance when its operating mode cannot be preserved safely. */
 export function preflight(c: Config): void {
+    influxTargets(c);
     for (const kind of ['iobroker', 'ccu'] as const) {
         if (flag(c, kind === 'iobroker' ? 'minimalEnabled' : 'ccuEnabled'))
             nextCronInvocation(backupCronExpression(c, kind), Date.now());

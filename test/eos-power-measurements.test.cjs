@@ -33,14 +33,18 @@ function context(extra = {}) {
 
 test('EV card, sidebar, modal and flow use one source model; valid manual override wins, booleans never become watts', () => {
     const ctx = context();
+    vm.runInContext(functionText(app, 'isMappedDatapoint'), ctx);
     vm.runInContext(functionText(app, 'getEvcsPowerW'), ctx);
     ctx.window.__nwCfg = { datapoints: { consumptionEvcs: 'ocpp.transactionActive' } };
     let states = { consumptionEvcs: true, 'evcs.totalPowerW': 10400 };
+    ctx.getFreshFlowNumber = key => states[key];
     assert.equal(ctx.getEvcsPowerW(key => states[key]), 10400);
     states = { consumptionEvcs: 6000, 'evcs.totalPowerW': 10400 };
     assert.equal(ctx.getEvcsPowerW(key => states[key]), 6000, 'preserve a genuine explicitly mapped meter');
     states = { consumptionEvcs: 0, 'evcs.totalPowerW': 10400 };
     assert.equal(ctx.getEvcsPowerW(key => states[key]), 0, 'zero is a valid explicit measurement');
+    ctx.window.__nwCfg = { datapointFlags: { consumptionEvcs: true } };
+    assert.equal(ctx.getEvcsPowerW(key => states[key]), 0, 'redacted customer config preserves mapped power authority');
     ctx.window.__nwCfg = { datapoints: {} };
     assert.equal(ctx.getEvcsPowerW(key => states[key]), 10400, 'no override: use actual connector aggregate');
     for (const value of [true, false, null, undefined, NaN, Infinity, '10400', {}]) {
@@ -131,4 +135,20 @@ test('App-Center recovery and save roundtrip preserve separate battery-flow feed
     assert.equal(edited.storages[1].batteryFlowPowerId, row.batteryFlowPowerId);
     ctx.i = 5;
     assert.doesNotThrow(() => onChange('fixture.0.discarded'), 'a stale row index does not change another storage');
+});
+
+test('energy balance reports screenshot mismatch, preserves real zero and existing consumer magnitude semantics, and never invents negative residual',()=>{
+ const f=context().window.NexoWattPowerMeasurements.resolveFlowBalance;
+ const valid={load:9100,ev:6800,consumers:0,pv:2500,producers:0,grid:3800,battery:2800,subtractEv:true,evAvailable:true};
+ assert.equal(f(valid).buildingW,2300);assert.equal(f(valid).mismatchW,null);
+ const screenshot=f({...valid,load:13000,ev:10700});assert.equal(screenshot.buildingW,2300);assert.equal(screenshot.mismatchW,-3900);
+ for(const value of [null,undefined,false,'13000',NaN,Infinity])assert.equal(f({...valid,load:value}).buildingW,null);
+ assert.equal(f({...valid,load:1000,ev:4000}).buildingW,null);
+ const zero=f({...valid,load:0,ev:0,pv:0,grid:0,battery:0});assert.equal(zero.buildingW,0);assert.equal(zero.mismatchW,null);
+ assert.equal(f({...valid,load:5000,ev:-3000,consumers:1000}).buildingW,1000);
+ assert.equal(f({...valid,consumers:null}).buildingW,null);
+ assert.equal(f({...valid,ev:null}).buildingW,null);
+ assert.equal(f({...valid,ev:null,evAvailable:false}).buildingW,9100);
+ assert.equal(f({...valid,battery:null}).buildingW,2300);assert.match(f({...valid,battery:null}).status,/unvollständig/);
+ assert.equal(f({...valid,ev:null,subtractEv:false}).buildingW,9100);
 });

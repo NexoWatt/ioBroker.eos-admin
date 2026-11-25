@@ -1,0 +1,30 @@
+✔ public contract discards secrets and invalid success responses cannot unlock saves (1.880019ms)
+✔ draft payload preserves adapter mode and does not send public flags or unrelated history settings (1.142259ms)
+✔ saved token cannot be reused at another origin; explicit new token permits a new valid URL (0.779192ms)
+✔ custom CA preserve/remove and HTTPS rules are explicit; read check never establishes write permission (0.43979ms)
+✔ errors translate auth/network/TLS/bucket/conflict without leaking raw upstream details (0.48028ms)
+✔ actual React mode change is local; draft check and explicit revision save use separate API operations (60.291631ms)
+✔ failed/conflicting saves keep draft secrets and revision; status refresh cannot replace the unsaved draft (38.625923ms)
+✔ draft edits invalidate old check results; transport ready cannot fake read/write success (34.278931ms)
+✔ failed initial load leaves write actions disabled and explicit retry can recover (27.321044ms)
+✔ late initial response after unmount cannot expose data or unlock controls (23.440536ms)
+✔ installer action is admin/installer only and uses confirmed runtime/proxy origin in the same tab (42.222435ms)
+✔ actual route retains protected capability and explicit roles; responsive history section is scoped (2.709636ms)
+✔ saved read/write errors and duplicate recording warning stay independent of a successful opposite operation (39.54068ms)
+✔ concrete backend error codes distinguish busy/config/save/address and post-save activation failures (0.363868ms)
+✔ actual dedicated transport wrapper retains single same-origin API boundary and rejects unplanned suffixes (23.853778ms)
+✔ PostgreSQL public response accepts only local provision status and discards all database secrets (0.474662ms)
+✔ empty legacy config is never automatically classified as new; PostgreSQL requires explicit intent and preserves active history (0.382485ms)
+✔ explicit server new-site eligibility handles factory adapter defaults without converting saved configurations (0.190231ms)
+✔ new-installation UI is explicit and PostgreSQL test remains read-only with no system command or exposed credentials (25.469396ms)
+✔ PostgreSQL direct selection cannot save before confirmation and existing Influx UI never offers a new-site action (51.51252ms)
+✔ PostgreSQL prerequisite refresh leaves pending new-installation intent and revision untouched (21.716347ms)
+✔ PostgreSQL failure codes distinguish setup, TLS, credentials and queue failures without upstream leakage (0.287164ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 884.318776

@@ -1,0 +1,32 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> iobroker.eos-admin@9.0.22 build:ui-runtime
+> node ui/scripts/build-smarthome-markdown.cjs && node ui/scripts/build-ts-runtime-executables.js
+
+/workspace/scratch/741f792566ea/implementation-922/iobroker.eos-admin/node_modules/esbuild/bin/esbuild:2
+throw new Error(`esbuild: Failed to install correctly
+^
+
+Error: esbuild: Failed to install correctly
+
+Make sure you don't have "ignore-scripts" set to true. You can check this with
+"npm config get ignore-scripts". If that returns true you can reset it back to
+false using "npm config set ignore-scripts false" and then reinstall esbuild.
+
+If you're using npm v7, make sure your package-lock.json file contains either
+"lockfileVersion": 1 or the code "hasInstallScript": true. If it doesn't have
+either of those, then it is likely the case that a known bug in npm v7 has
+corrupted your package-lock.json file. Regenerating your package-lock.json file
+should fix this issue.
+
+    at Object.<anonymous> (/workspace/scratch/741f792566ea/implementation-922/iobroker.eos-admin/node_modules/esbuild/bin/esbuild:2:7)
+    at Module._compile (node:internal/modules/cjs/loader:1929:14)
+    at Object..js (node:internal/modules/cjs/loader:2060:10)
+    at Module.load (node:internal/modules/cjs/loader:1651:32)
+    at Module._load (node:internal/modules/cjs/loader:1443:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47
+
+Node.js v24.22.3
+The service was stopped

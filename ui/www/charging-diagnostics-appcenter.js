@@ -20,6 +20,7 @@
  * 2. npm run sync:ts-runtime-executables ausführen.
  * 3. npm run test:runtime-executables prüfen.
  */
+"use strict";
 /**
  * NexoWatt Quellcode-Erklärung (DE)
  * Aufgabe: Zeigt Ladeentscheidungen und Auditinformationen im Diagnosebereich des App-Centers an.

@@ -1,0 +1,33 @@
+✔ derived balance preserves observation age and valid zero during activity (8.658326ms)
+✔ impossible negative balance is unknown, never fabricated 100W or retained load (1.018816ms)
+✔ fresh direct consumption is authoritative, including a measured zero (1.398678ms)
+✔ missing, stale, future, invalid and bad quality sources cannot produce fresh building demand (8.141962ms)
+✔ negative remaining demand and missing consumers remain distinct from zero (1.053016ms)
+✔ configured missing extra producers/consumers do not silently disappear (1.252882ms)
+✔ duplicate physical PV aliases are counted once in the backend balance (0.75857ms)
+✔ EV aggregate becomes unknown if a configured member is unavailable, and retains oldest source time (0.563012ms)
+✔ measurement reader does not evaluate accessors or inherited cache records (0.342967ms)
+✔ Auto PV rejects bad quality and missing timestamps; persistent PV agrees with API snapshot (1.965926ms)
+✔ TS candidate cannot resurrect an invalid balance or overwrite a fresh direct observation (0.626696ms)
+✔ extra production adds distinct configured BHKW and generator sources once with shared snapshot contract (0.795566ms)
+✔ source timestamps include only selected contributors and numeric text has bounded decimal syntax (0.801104ms)
+✔ legacy flow-slot aliases remain part of the balance and duplicate consumer mappings subtract once (0.667577ms)
+✔ EV mirror carries source quality and timestamp through actual updateValue aggregation (0.759012ms)
+✔ History reads only own data cache records and never invokes configured cache accessors (6.576168ms)
+✔ History uses real PV/load fallbacks when derived states are absent or stale; fresh zero stays zero (1.216427ms)
+✔ History never adds DC PV to the already merged canonical derived total (0.909324ms)
+✔ Farm PV fallback merges once and missing/stale farm SoC is not recorded as zero (1.082529ms)
+✔ missing/null/boolean prices never create a free provider price; configured manual fallback is retained (1.82008ms)
+✔ provider price freshness flag, age, quality and timestamp are respected without changing manual tariff mode (1.608758ms)
+✔ zero and negative canonical EUR prices and net-fee decomposition retain exact values (1.473768ms)
+✔ missing grid/battery/PV measurements produce gaps, never fresh invented zeros (0.603371ms)
+✔ stale raw observations and farm aggregate are not re-stamped as new History samples (0.740093ms)
+✔ the History sink rejects invalid data and retains real zero/negative measurements (0.571664ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1046.253895

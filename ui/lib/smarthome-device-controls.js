@@ -21,6 +21,9 @@
  * 3. npm run test:runtime-executables prüfen.
  */
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DeviceControlError = void 0;
 exports.getControlProfiles = getControlProfiles;
@@ -36,7 +39,7 @@ exports.executeDeviceControlBatch = executeDeviceControlBatch;
  * Daten und Wirkung: Liest nur gespeicherte Zuordnungen; schreibt erst nach Katalog-, Objekt-, Werte- und Schutzprüfung.
  * Bei Änderungen: Katalogabdeckung, Schreibgrenzen, unbekannte Werte, Schutzmeldungen und Zeitüberschreitungen prüfen.
  */
-const type_detector_1 = require("@iobroker/type-detector");
+const type_detector_1 = __importDefault(require("@iobroker/type-detector"));
 const smarthome_custom_contract_1 = require("./smarthome-custom-contract");
 /** Fehler enthalten ausschließlich feste Codes; weder Datenpunkt-ID noch fremde Fehlermeldungen werden ausgegeben. */
 class DeviceControlError extends Error {

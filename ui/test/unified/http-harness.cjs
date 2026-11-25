@@ -27,6 +27,7 @@ async function createHarness(options = {}) {
     setForeignStateAsync: async (id, value, ack) => write(id, value, ack),
     getForeignObjectAsync: async id => objects.get(id) || null,
     setForeignObjectAsync: async (id, obj) => objects.set(id, structuredClone(obj)),
+    setForeignObjectNotExistsAsync: async (id, obj) => { if (!objects.has(id)) objects.set(id, structuredClone(obj)); },
     extendForeignObjectAsync: async (id, patch) => { const old = objects.get(id) || {}; objects.set(id, { ...old, ...patch, common: { ...old.common, ...patch.common } }); },
     getObjectAsync: async id => objects.get(qualified(id)) || null,
     setObjectNotExistsAsync: async (id, obj) => { if (!objects.has(qualified(id))) objects.set(qualified(id), structuredClone(obj)); },

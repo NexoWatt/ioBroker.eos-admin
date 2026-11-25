@@ -57,6 +57,7 @@
 
 'use strict';
 const { readTariffPriceState } = require('../../lib/tariff-price');
+const { readFlowMeasurement } = require('../../lib/flow-measurement');
 
 
 /**
@@ -1389,21 +1390,10 @@ class CoreLimitsModule extends BaseModule {
         const cache = this.adapter && this.adapter.stateCache ? this.adapter.stateCache : null;
         if (!cache || !Array.isArray(keys)) return fallback;
         const now = Date.now();
-        const maxAge = Number(maxAgeMs);
-        for (const k of keys) {
-            if (!k) continue;
-            try {
-                const rec = cache[String(k)];
-                if (!rec) continue;
-                const raw = rec && typeof rec === 'object' && Object.prototype.hasOwnProperty.call(rec, 'value') ? rec.value : rec;
-                const v = Number(raw);
-                if (!Number.isFinite(v)) continue;
-                if (Number.isFinite(maxAge) && maxAge > 0 && rec && typeof rec === 'object') {
-                    const ts = Number(rec.ts);
-                    if (Number.isFinite(ts) && ts > 0 && Math.max(0, now - ts) > maxAge) continue;
-                }
-                return v;
-            } catch (_e) {}
+        for (const key of keys) {
+            if (typeof key !== 'string' || !key) continue;
+            const observation = readFlowMeasurement(cache, key, now, Number(maxAgeMs));
+            if (observation) return observation.value;
         }
         return fallback;
     }
@@ -1411,9 +1401,9 @@ class CoreLimitsModule extends BaseModule {
     /**
      * Code-Teil: _resolveDirectPvPower
      * Zweck: Vergleicht alle frischen direkten PV-Quellen und verwendet die
-     * höchste plausible Messung. Ein vorhandener, aber 0 W meldender Alias darf
+     * kanonische Gesamtsumme vorrangig; nur ohne diese den höchsten Fallback. Ein vorhandener, aber 0 W meldender Alias darf
      * dadurch eine gleichzeitig frische `derived.core.pv.totalW`-Messung nicht
-     * mehr verdecken. Es wird bewusst nicht summiert, damit dieselbe PV-Anlage
+     * mehr verdecken. Auch die frische kanonische Null bleibt gültig. Es wird nicht summiert, damit dieselbe PV-Anlage
      * über mehrere Aliase niemals doppelt gezählt wird.
      */
     _resolveDirectPvPower(maxAgeMs) {
@@ -1441,6 +1431,11 @@ class CoreLimitsModule extends BaseModule {
             'speicher.dcPvPowerW',
         ]) {
             push(key, this._readCacheNumberFresh([key], maxAgeMs, null), 'adapter-cache');
+        }
+
+        const canonical = candidates.find(row => row.key === 'derived.core.pv.totalW' && row.sourceType === 'adapter-cache');
+        if (canonical) {
+            return { powerW: canonical.valueW, fresh: true, source: 'adapter-cache:derived.core.pv.totalW', candidates };
         }
 
         if (!candidates.length) {
@@ -1913,7 +1908,7 @@ class CoreLimitsModule extends BaseModule {
         let usedCentralStorageFlow = false;
         try {
             const flow = (this.adapter && typeof this.adapter._nwResolveBatteryFlowFromCache === 'function')
-                ? this.adapter._nwResolveBatteryFlowFromCache({ maxAgeMs: staleMs, deadbandW: 25 })
+                ? this.adapter._nwResolveBatteryFlowFromCache({ now, maxAgeMs: staleMs, deadbandW: 25, strictStale: true })
                 : null;
             if (flow && typeof flow === 'object') {
                 usedCentralStorageFlow = true;
@@ -2012,7 +2007,7 @@ class CoreLimitsModule extends BaseModule {
             holdMs: Math.max(30000, pvSourceMaxAgeMs),
         });
         const pvPhysicalCapW = Math.max(0, Number(pvPhysicalResolution.capW) || 0);
-        if (pvPhysicalResolution.trusted === true && pvPhysicalCapW > 0) {
+        if (pvPhysicalResolution.trusted === true && pvPhysicalResolution.held !== true && pvPhysicalCapW > 0) {
             this._lastTrustedPvPhysicalCapW = pvPhysicalCapW;
             this._lastTrustedPvPhysicalCapTs = now;
         }

@@ -2,7 +2,9 @@
  * Copyright (c) 2026 NexoWatt. Proprietary EOS integration.
  * Retained upstream MIT rights and notices remain applicable; see ../upstream/LICENSE.
  */
-import { rm } from 'node:fs/promises';
+import { rm, writeFile } from 'node:fs/promises';
+import { assertBackupCoverage, historyRequirement } from './coverage';
+import { validatePublicTrust } from './publicTrust';
 import { join } from 'node:path';
 import { storageList, storageFetch } from './storageDownload';
 import { wakeTarget } from './wake';
@@ -52,11 +54,12 @@ async function execute(ctx: JobContext): Promise<JobResult> {
             result.state = 'succeeded';
             return result;
         }
+        if (ctx.kind === 'iobroker') result.coverage = assertBackupCoverage(ctx.config, historyRequirement(ctx.historyRequirement));
         await assertFreeSpace(ctx.workDir, Math.max(64, num(ctx.config, 'fileSizeError', 512)) * 1024 ** 2);
         await wakeTarget(ctx.config);
         const raw = await createArchives(ctx),
             key = Buffer.from(ctx.key, 'base64');
-        if (raw.length > 512) throw fail('EOS_BACKUP_ARCHIVE_COUNT');
+        if (raw.length > (ctx.kind === 'iobroker' ? 511 : 512)) throw fail('EOS_BACKUP_ARCHIVE_COUNT');
         const max = num(ctx.config, 'maxArchiveGiB', 10) * 1024 ** 3;
         for (let i = 0; i < raw.length; i++) {
             const item = raw[i];
@@ -66,6 +69,17 @@ async function execute(ctx: JobContext): Promise<JobResult> {
             await encryptFile(item.file, path, key, max);
             await decryptFile(path, undefined, key, max);
             result.files.push(await archiveInfo(path, item.kind));
+        }
+        if (ctx.kind === 'iobroker') {
+            const descriptor = join(ctx.workDir, 'recovery-set.json');
+            await writeFile(descriptor, JSON.stringify({ format: 'nexowatt-eos-recovery-set/v1', jobId: ctx.jobId,
+                startedAt, completedAt: new Date().toISOString(), coverage: result.coverage, files: result.files,
+                consistency: 'Controller and database snapshots are taken sequentially; this is not a globally atomic live-system snapshot.',
+                requiresControllerStopped: true, automaticTrustInstallation: false }, null, 2), { flag: 'wx', mode: 0o600 });
+            const path = join(outputs, `eos-backup-${ctx.jobId}-recovery-set-${raw.length}.nwb`);
+            await encryptFile(descriptor, path, key, 1024 ** 2);
+            await decryptFile(path, undefined, key, 1024 ** 2);
+            result.files.push(await archiveInfo(path, 'recovery-set'));
         }
         await uploadArchives(
             ctx.config,
@@ -111,6 +125,8 @@ function parseContext(value: unknown): JobContext {
         key: value.key,
         kind: value.kind === 'ccu' ? 'ccu' : 'iobroker',
         retentionEnabled: value.retentionEnabled === true,
+        historyRequirement: historyRequirement(value.historyRequirement),
+        publicTrust: value.publicTrust === null || value.publicTrust === undefined ? null : validatePublicTrust(value.publicTrust),
         ...(typeof value.preservedUiNamespace === 'string' && /^nexowatt-ui\.\d+$/.test(value.preservedUiNamespace)
             ? { preservedUiNamespace: value.preservedUiNamespace }
             : {}),

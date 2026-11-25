@@ -6,7 +6,8 @@
         configurationRevision = '',
         csrf = '',
         busy = false,
-        poll = null;
+        poll = null,
+        lastCoverage = null;
     const byId = id => document.getElementById(id);
     function message(text, error = false) {
         byId('message').textContent = text;
@@ -117,6 +118,21 @@
         byId('status').textContent =
             (view.status?.active ? 'Bereit' : view.status?.reason || 'Nicht aktiv') +
             (view.status?.details?.current ? ' · Sicherung läuft' : '');
+        const coverage = view.status?.details?.coverage || lastCoverage;
+        if (coverage) lastCoverage = coverage;
+        const coverageLabels = {
+            iobroker: 'ioBroker', 'eos-profile': 'EOS einschließlich Geräteeinstellungen', influxDB: 'InfluxDB-Historie', 'postgresql-history': 'PostgreSQL-Historie',
+            EOS_BACKUP_EOS_PROFILE_REQUIRED: 'EOS-Profil in der Sicherung aktivieren',
+            EOS_BACKUP_ACTIVE_INFLUX_NOT_COVERED: 'Die aktive InfluxDB-Historie ist noch nicht als Sicherungsziel eingerichtet (Server, Organisation und Bucket prüfen)',
+            EOS_BACKUP_HISTORY_SCOPE_UNRESOLVED: 'Aktive Historienquelle noch nicht eindeutig ermittelt oder nicht als Gesamtsicherung unterstützt',
+        };
+        const coverageText = coverage
+            ? (coverage.complete ? 'Sicherungsumfang eingerichtet: ' : 'Gesamtsicherung unvollständig: ') +
+              (coverage.complete ? coverage.required.map(item => coverageLabels[item] || item).join(' + ') : coverage.missing.map(item => coverageLabels[item] || item).join('; ')) +
+              (coverage.externalTargetConfigured ? ' · Zusätzliches Sicherungsziel eingerichtet; tatsächliche Ablage nach dem Lauf prüfen.' : ' · Nur lokale Ablage: kein Schutz vor Verlust des Systemdatenträgers.')
+            : 'Sicherungsumfang noch nicht ermittelt.';
+        byId('coverage').textContent = coverageText;
+        byId('coverage').classList.toggle('error', !coverage?.complete);
         const history = view.status?.details?.history || [];
         const latestRemote = history.find(job => job.remote && Array.isArray(job.remote.entries));
         if (latestRemote) {

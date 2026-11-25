@@ -20,6 +20,7 @@
  * 2. npm run sync:ts-runtime-executables ausführen.
  * 3. npm run test:runtime-executables prüfen.
  */
+"use strict";
 /**
  * NexoWatt Quellcode-Erklärung (DE)
  * Aufgabe: Bindet Lizenzanzeige und Aktivierung an den ausschließlich für Admins freigegebenen Backend-Bereich an.

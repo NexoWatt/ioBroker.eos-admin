@@ -1,9 +1,9 @@
 {
   "schema": "nexowatt.admin-bundle-components.v1",
-  "generatedAt": "2026-11-24T22:05:30.371Z",
+  "generatedAt": "2026-11-25T12:04:07.025Z",
   "provenance": "Rollup writeBundle module graph; npm modules with renderedLength > 0; hashes of final files",
   "limitations": "Lists npm packages contributing rendered JavaScript. Not a source code review, OS inventory or vulnerability clearance.",
-  "packageLockSha256": "efa444122831505886a89ed46e9ae8da1a3c5c5f34febce66efbee8dd11c91b6",
+  "packageLockSha256": "24fb1c2c0afdc2e4f00b531014e5896ba9eb68f607c3527b904d6949a10ebca2",
   "viteConfigSha256": "f59d3db711ab3bff7de7b2b2e8cbc1066375df69ecbe5b5476ef1c54aabe0986",
   "entryHtmlSha256": "e4eafa219c5154ae588b73b6f8f5673b976e6da239e620a99b9dda7c83f1685a",
   "projectModules": [
@@ -33,7 +33,7 @@
     },
     {
       "path": "src-admin-tab/src/lib/historySetup.ts",
-      "sha256": "158c75a9fc407e1e15e16d86d9469890c22fa046ed4ddc40bd72eb5ccc97b8bc"
+      "sha256": "f618f1135da3cc26c0baea9b867e0fe8b9ac243f65d1834c7054afb491e93604"
     },
     {
       "path": "src-admin-tab/src/lib/installerNavigation.ts",
@@ -61,7 +61,7 @@
     },
     {
       "path": "src-admin-tab/src/pages/HistorySetupPage.tsx",
-      "sha256": "bc37d6eb192a040955743eacbe385078a1241cc03f84e01bc2131bc9ba305441"
+      "sha256": "df2309c0d4078ac333424c0005349e59328c5fa76a425da629fe645335b0ae69"
     },
     {
       "path": "src-admin-tab/src/pages/InstallerPage.tsx",
@@ -182,12 +182,12 @@
   ],
   "artifacts": [
     {
-      "path": "admin/react/assets/index-BJO3q7oe.js",
-      "sha256": "dd873a53cb80dcb477e155e2bb21934e7a1415d6ffee463ac2da6c7408348d3c"
-    },
-    {
       "path": "admin/react/assets/index-ofLP_Y7y.css",
       "sha256": "e662aab237d22b8224e569c9b5b939bae0860ec1bfea1b2364480dd60fe3b363"
+    },
+    {
+      "path": "admin/react/assets/index-wHWXfD_g.js",
+      "sha256": "63479b8e44db8a4c441e531c4a54c8507141d46c98918a03370584a1945c5484"
     },
     {
       "path": "admin/react/assets/nexowatt-192-43ZwQ44y.png",
@@ -195,7 +195,7 @@
     },
     {
       "path": "admin/react/index.html",
-      "sha256": "f2867830c08269195d54790f515c49a284520a2fd19cafcf162acc18bdb95af6"
+      "sha256": "554c940d54f91977655250b97f092fde62636fe26cc931593442025585e19676"
     }
   ]
 }

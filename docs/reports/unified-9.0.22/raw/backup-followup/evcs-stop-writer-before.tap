@@ -1,0 +1,54 @@
+✔ OCPP power commands go through the real consumer and registry: 5700W, stop, keepalive, resume (6.690276ms)
+✖ explicit EVCS stop bypasses a configured minimum in W and A, retaining positive minimum and maximum (2.08404ms)
+✖ EVCS zero transitions are not swallowed by deadband in either direction (1.578412ms)
+✔ a failed stop is retried, and W-to-kW conversion preserves zero (1.186463ms)
+﹣ provided OCPP21 source receives zero unchanged; RPC acceptance remains separate from local ack (0.231041ms) # SKIP
+ℹ tests 5
+ℹ suites 0
+ℹ pass 2
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 1
+ℹ todo 0
+ℹ duration_ms 765.002421
+
+✖ failing tests:
+
+test at test/eos-evcs-stop-writer.test.cjs:68:1
+✖ explicit EVCS stop bypasses a configured minimum in W and A, retaining positive minimum and maximum (2.08404ms)
+  AssertionError [ERR_ASSERTION]: technical running minimum must never turn stop into charging
+  
+  4140 !== 0
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work/iobroker.eos-admin/test/eos-evcs-stop-writer.test.cjs:75:16)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 4140,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-evcs-stop-writer.test.cjs:85:1
+✖ EVCS zero transitions are not swallowed by deadband in either direction (1.578412ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+      20,
+  -   0,
+  -   20
+    ]
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work/iobroker.eos-admin/test/eos-evcs-stop-writer.test.cjs:90:16)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 20 ],
+    expected: [ 20, 0, 20 ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

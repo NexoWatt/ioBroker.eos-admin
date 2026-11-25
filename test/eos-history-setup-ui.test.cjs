@@ -181,3 +181,86 @@ test('actual dedicated transport wrapper retains single same-origin API boundary
   await module.exports.historySetupRequest('/check', payload); assert.deepEqual(plain(calls), [['/api/installer/history/check', payload, 15000]]);
   await assert.rejects(module.exports.historySetupRequest('/../../other', payload)); assert.equal(calls.length, 1);
 });
+
+function newInstallation() {
+  const value = sample('adapter');
+  value.config.instance = '';
+  value.config.newInstallationAllowed = true;
+  value.config.influxdb2 = { url: '', organization: '', bucket: '', hasToken: false, hasCaCertificate: false };
+  value.config.postgresql = { profile: 'local', provisioned: false };
+  return value;
+}
+test('PostgreSQL public response accepts only local provision status and discards all database secrets', () => {
+  const value = newInstallation(); value.config.provider = 'postgresql'; value.status.provider = 'postgresql';
+  value.config.postgresql = { profile: 'local', provisioned: true, password: 'fixture-secret', connectionString: 'fixture-secret', caCertificate: 'fixture-secret', privateKey: 'fixture-secret' };
+  const result = contracts.parseHistoryResponse(value);
+  assert.deepEqual(plain(result.config.postgresql), { profile: 'local', provisioned: true });
+  assert.doesNotMatch(JSON.stringify(result), /fixture-secret|privateKey|connectionString/);
+  for (const bad of [undefined, { profile: 'remote', provisioned: true }, { profile: 'local', provisioned: 'true' }]) {
+    value.config.postgresql = bad;
+    assert.throws(() => contracts.parseHistoryResponse(value), /RESPONSE_INVALID/);
+  }
+});
+test('empty legacy config is never automatically classified as new; PostgreSQL requires explicit intent and preserves active history', () => {
+  const saved = contracts.parseHistoryResponse(newInstallation()).config;
+  const draft = contracts.historyDraft(saved);
+  assert.equal(draft.provider, 'adapter'); assert.equal(draft.newInstallation, false);
+  const unconfirmed = { ...saved, newInstallationAllowed: false };
+  assert.equal(contracts.canSelectNewPostgresql(unconfirmed), false, 'absence of config alone is not server approval');
+  draft.provider = 'postgresql'; assert.throws(() => contracts.historyPayload(draft, saved), /NEW_INSTALLATION_REQUIRED/);
+  draft.newInstallation = true; draft.token = 'unsaved-influx-token'; draft.caCertificate = 'unsaved-influx-ca';
+  assert.deepEqual(plain(contracts.historyPayload(draft, saved)), { provider: 'postgresql', postgresql: { profile: 'local' }, newInstallation: true });
+  for (const provider of ['adapter', 'influxdb2']) {
+    const existing = contracts.parseHistoryResponse(sample(provider)).config;
+    assert.equal(contracts.canSelectNewPostgresql(existing), false);
+    assert.throws(() => contracts.historyPayload(draft, existing), /EXISTING_HISTORY/);
+  }
+  const existingPg = { ...saved, provider: 'postgresql' };
+  assert.deepEqual(plain(contracts.historyPayload(contracts.historyDraft(existingPg), existingPg)), { provider: 'postgresql', postgresql: { profile: 'local' } });
+});
+test('explicit server new-site eligibility handles factory adapter defaults without converting saved configurations', () => {
+  const value = newInstallation(); value.config.instance = 'influxdb.0';
+  const saved = contracts.parseHistoryResponse(value).config;
+  assert.equal(contracts.canSelectNewPostgresql(saved), true);
+  assert.equal(contracts.historyDraft(saved).provider, 'adapter');
+  const draft = { ...contracts.historyDraft(saved), provider: 'postgresql', newInstallation: true };
+  assert.equal(contracts.historyPayload(draft, saved).newInstallation, true);
+  delete value.config.newInstallationAllowed;
+  assert.equal(contracts.canSelectNewPostgresql(contracts.parseHistoryResponse(value).config), false);
+  value.config.newInstallationAllowed = 'true'; assert.throws(() => contracts.parseHistoryResponse(value), /RESPONSE_INVALID/);
+});
+test('new-installation UI is explicit and PostgreSQL test remains read-only with no system command or exposed credentials', async () => {
+  const f = fixture(newInstallation()); await f.ready();
+  assert.equal(f.get('historyProvider').props.value, 'adapter'); assert.equal(f.requests.length, 1);
+  f.click('Neue Anlage mit PostgreSQL einrichten'); f.render();
+  assert.equal(f.get('historyProvider').props.value, 'postgresql'); assert.equal(f.get('historyNewInstallation').props.checked, true);
+  assert.equal(f.get('historyToken'), undefined); assert.equal(f.get('historyUrl'), undefined);
+  assert.match(f.text(), /Systemeinrichtung erforderlich/); assert.match(f.text(), /TLS mit Zertifikatsprüfung/);
+  assert.equal(f.requests.length, 1, 'the action only changes draft and does not provision system');
+  f.click('Verbindung prüfen'); assert.deepEqual(plain(f.requests[1].args), ['/check', { history: { provider: 'postgresql', postgresql: { profile: 'local' }, newInstallation: true } }]);
+  f.requests[1].resolve({ ok: true, check: { reachable: true, readable: true, writeVerified: true } }); await settle(); f.render();
+  assert.match(f.text(), /Schreibzugriff Nicht durch diesen Test geprüft/);
+  f.save(); assert.equal(f.requests[2].args[1].expectedConfigurationRevision, 'r1');
+});
+test('PostgreSQL direct selection cannot save before confirmation and existing Influx UI never offers a new-site action', async () => {
+  const fresh = fixture(newInstallation()); await fresh.ready(); fresh.change('historyProvider', 'postgresql');
+  const save = nodes(fresh.tree()).find(node => node.type === 'button' && text(node) === 'Speichern'); assert.equal(save.props.disabled, true);
+  fresh.save(); await settle(); fresh.render(); assert.equal(fresh.requests.length, 1); assert.match(fresh.text(), /Neuanlage bestätigen/);
+  const existing = fixture(sample()); await existing.ready();
+  assert.equal(nodes(existing.tree()).some(node => node.type === 'button' && text(node) === 'Neue Anlage mit PostgreSQL einrichten'), false);
+  assert.equal(nodes(existing.tree()).find(node => node.type === 'option' && node.props.value === 'postgresql').props.disabled, true);
+});
+test('PostgreSQL prerequisite refresh leaves pending new-installation intent and revision untouched', async () => {
+  const f = fixture(newInstallation()); await f.ready(); f.click('Neue Anlage mit PostgreSQL einrichten'); f.render();
+  f.click('Status aktualisieren'); const updated = newInstallation(); updated.config.postgresql.provisioned = true; updated.configurationRevision = 'r9';
+  f.requests[1].resolve(updated); await settle(); f.render();
+  assert.match(f.text(), /Geschütztes Verbindungsprofil vorhanden/); assert.equal(f.get('historyNewInstallation').props.checked, true);
+  f.save(); assert.equal(f.requests[2].args[1].expectedConfigurationRevision, 'r1');
+});
+test('PostgreSQL failure codes distinguish setup, TLS, credentials and queue failures without upstream leakage', () => {
+  for (const [code, expected] of [['EOS_POSTGRES_NOT_PROVISIONED', /Systemsetup/], ['EOS_POSTGRES_TLS_FAILED', /Zertifikat/],
+    ['EOS_POSTGRES_AUTHORIZATION_FAILED', /Datenbankrollen/], ['EOS_POSTGRES_QUEUE_FULL', /verworfen/], ['EOS_POSTGRES_DISK_FULL', /vollen Datenträger/], ['EOS_POSTGRES_RESOURCE_LIMIT', /Ressourcenbegrenzung/], ['EOS_POSTGRES_EXISTING_HISTORY', /nicht durchgeführt/]]) {
+    assert.match(contracts.historyError({ payload: { error: code, detail: 'private-secret' } }), expected);
+    assert.doesNotMatch(contracts.historyError({ payload: { error: code, detail: 'private-secret' } }), /private-secret/);
+  }
+});
