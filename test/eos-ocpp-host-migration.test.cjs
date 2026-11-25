@@ -120,9 +120,22 @@ test('manual preserved import refuses a source changed during asynchronous conve
     assert.equal(f.runtimes.length, 0);
 });
 
-test('automatic OCPP handover journals stop/readback and rollback retains source data', async t => {
+async function priorOcppHandover(f, phase = 'TRANSFERRED') {
+    // Represent an already transferred 9.0.24 handover. New startups no longer
+    // choose external OCPP automatically, but existing journals remain binding.
+    const candidate = await f.migration.candidate('ocpp', f.objects.get('system.adapter.ocpp21.3'));
+    const { id, source, enabled, nativeHash, sourceVersion, host } = candidate;
+    f.migration.journal = { sources: [{ id, source, enabled, nativeHash, sourceVersion, host }] };
+    await f.migration.persist('PREPARED');
+    await f.owner.extendForeignObjectAsync('system.adapter.ocpp21.3', { common: { enabled: false } });
+    await f.migration.store.save('ocpp', candidate.envelope);
+    await f.migration.persist(phase);
+}
+
+test('persisted earlier OCPP handover still loads and rollback retains source data', async t => {
     const f = setup(t, { source: true, sourceEnabled: true }); f.owner.eosMigration = f.migration;
     const retained = structuredClone(f.states.get('ocpp21.3.DOUSIDA.connector1.power'));
+    await priorOcppHandover(f);
     await f.migration.start(); assert.equal(f.migration.phase, 'TRANSFERRED');
     const envelope = f.owner.config.eosModules.ocpp;
     assert.equal(envelope.migration.preserveNamespace, true); assert.equal(envelope.migration.source, 'ocpp21.3');
@@ -136,6 +149,27 @@ test('automatic OCPP handover journals stop/readback and rollback retains source
     assert.equal(f.migration.phase, 'ROLLED_BACK'); assert.equal(f.objects.get('system.adapter.ocpp21.3').common.enabled, true);
     assert.equal(f.states.get('ocpp21.3.info.eosHostedRuntime').val, false, 'marker clears only after stopped target and confirmed restored source');
     assert.deepEqual(f.states.get('ocpp21.3.DOUSIDA.connector1.power'), retained);
+});
+
+test('committed earlier OCPP journal retains preserved ownership and validated destination', async t => {
+    const f = setup(t, { source: true, sourceEnabled: true });
+    await priorOcppHandover(f, 'COMMITTED');
+    await f.migration.start();
+    assert.equal(f.migration.phase, 'COMMITTED');
+    assert.equal(f.migration.allowsStartup(), true);
+    await f.host.start();
+    assert.equal((await f.host.status('ocpp')).active, true);
+    assert.equal((await f.host.status('ocpp')).namespace, 'ocpp21.3');
+    assert.equal(f.objects.get('system.adapter.ocpp21.3').common.enabled, false);
+});
+
+test('missing destination in an earlier OCPP journal still blocks unsafe startup', async t => {
+    const f = setup(t, { source: true, sourceEnabled: true });
+    await priorOcppHandover(f, 'COMMITTED');
+    f.objects.delete(f.migration.store.objectId('ocpp'));
+    await assert.rejects(f.migration.start(), { code: 'EOS_MIGRATION_DESTINATION_MISSING' });
+    assert.equal(f.migration.allowsStartup(), false);
+    assert.equal(f.objects.get('system.adapter.ocpp21.3').common.enabled, false);
 });
 
 test('existing committed migration never silently stops a newly discovered OCPP source', async t => {

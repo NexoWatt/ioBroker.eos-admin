@@ -70,6 +70,7 @@ const instanceProxy_1 = require("./instanceProxy");
 const eosUnifiedBoundary_1 = require("./eosUnifiedBoundary");
 const eosUiProcess_1 = require("./eosUiProcess");
 const eosModuleHost_1 = require("./eosModuleHost");
+const eosRuntimeControl_1 = require("./eosRuntimeControl");
 const eosDeviceEmsPlan_1 = require("./eosDeviceEmsPlan");
 const eosDeviceEmsService_1 = require("./eosDeviceEmsService");
 const eosModuleHttp_1 = require("./eosModuleHttp");
@@ -365,6 +366,7 @@ class Web {
     startupFailed = false;
     closed = false;
     moduleHost;
+    runtimeControl;
     discovery;
     tlsManager;
     /**
@@ -451,6 +453,7 @@ class Web {
         return page404.replace(/%(LANGUAGE|TITLE|MESSAGE|DETAIL|HOME|BACK)%/g, (_match, name) => values[name]);
     }
     close() {
+        void this.runtimeControl?.close();
         this.discovery?.stop();
         void this.moduleHost?.stop().catch(() => this.adapter.log.warn('EOS_MODULE_STOP_FAILED'));
         this.closed = true;
@@ -1759,6 +1762,52 @@ class Web {
             }
             next();
         });
+        // The existing sign-in screen belongs to the recovery host. A paused or
+        // unavailable UI/EMS child must not prevent a fresh administrator login.
+        // Fixed public assets only; no directory mount or separate auth system.
+        const loginAssets = {
+            '/login.html': 'login.html',
+            '/static/login.html': 'login.html',
+            '/static/login.css': 'login.css',
+            '/static/runtime-base.js': 'runtime-base.js',
+            '/static/pwa.js': 'pwa.js',
+            '/static/login.js': 'login.js',
+            '/static/nexowatt-eos-logo.png': 'nexowatt-eos-logo.png',
+            '/manifest.webmanifest': 'manifest.webmanifest',
+            '/sw.js': 'sw.js',
+        };
+        for (const name of [
+            'nexowatt-32.png',
+            'nexowatt-180.png',
+            'nexowatt-192.png',
+            'nexowatt-192-maskable.png',
+            'nexowatt-256.png',
+            'nexowatt-384.png',
+            'nexowatt-512.png',
+            'nexowatt-512-maskable.png',
+            'nexowatt-1024.png',
+        ]) {
+            loginAssets[`/assets/icons/${name}`] = `assets/icons/${name}`;
+        }
+        for (const [route, filename] of Object.entries(loginAssets)) {
+            app.get(route, (req, res) => {
+                res.setHeader('Cache-Control', 'no-store');
+                res.setHeader('X-Content-Type-Options', 'nosniff');
+                res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+                res.setHeader('Referrer-Policy', 'no-referrer');
+                res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=(), usb=()');
+                res.setHeader('Content-Security-Policy', "base-uri 'self'; object-src 'none'; frame-ancestors 'self'");
+                if (!this.unified.requestAllowed(req)) {
+                    res.status(403).json({ error: 'AUTH_ORIGIN' });
+                    return;
+                }
+                res.sendFile((0, node_path_1.join)(this.baseDir, 'ui', 'www', filename), { cacheControl: false }, error => {
+                    if (error && !res.headersSent) {
+                        res.status(404).json({ error: 'EOS_LOGIN_ASSET_UNAVAILABLE' });
+                    }
+                });
+            });
+        }
         const kioskAdmin = async (req) => {
             if (!this.unified.requestAllowed(req)) {
                 return false;
@@ -1958,21 +2007,12 @@ class Web {
         const moduleHost = new eosModuleHost_1.EosModuleHost(this.adapter, {
             baseDir: this.baseDir,
             dataDir: (0, node_path_1.join)((0, adapter_core_1.getAbsoluteInstanceDataDir)(this.adapter), 'modules'),
+            processEnabled: id => this.runtimeControl?.isEnabled(id) === true,
             eosDataDir: (0, adapter_core_1.getAbsoluteInstanceDataDir)(this.adapter),
             installationDir: (0, node_path_1.join)(adapter_core_1.controllerDir, '..', '..'),
         });
         this.adapter.eosModuleHost = moduleHost;
         this.moduleHost = moduleHost;
-        (0, eosModuleHttp_1.registerEosModuleRoutes)({
-            app,
-            host: moduleHost,
-            baseDir: this.baseDir,
-            jsonParser: bodyParser.json({ limit: '512kb', strict: true }),
-            authorize: (req) => this.unified.status(req),
-            csrfAllowed: (req) => this.unified.csrfAllowed(req),
-            requestAllowed: (req) => this.unified.requestAllowed(req),
-            runtimeStatus: () => this.adapter.eosHostedRuntime?.status?.(),
-        });
         const runtime = (0, eosUiProcess_1.createEosUiProcess)(this.adapter, {
             deviceEmsPlan: async (input) => {
                 const config = (0, eosDeviceEmsService_1.projectDeviceEmsConfig)(input.config);
@@ -2013,7 +2053,7 @@ class Web {
             },
             originAllowed: (req) => this.unified.requestAllowed(req),
             machineRequestAllowed: (req) => this.unified.machineRequestAllowed(req),
-            canWrite: () => this.adapter.eosOwnership?.canWrite() === true,
+            canWrite: () => this.runtimeControl?.isEnabled('ui') === true && this.adapter.eosOwnership?.canWrite() === true,
             isListening: () => !this.closed && !this.startupFailed && this.server.server?.listening === true,
             hostedModuleFeedback: (message) => moduleHost.receiveBridge(message),
         }, { baseDir: this.baseDir });
@@ -2028,7 +2068,27 @@ class Web {
         moduleHost.bindBridge(message => runtime.onHostedEebusMessage
             ? runtime.onHostedEebusMessage(message)
             : Promise.reject(new Error('EOS_MODULE_BRIDGE_UNAVAILABLE')));
-        await runtime.start();
+        const runtimeControl = new eosRuntimeControl_1.EosRuntimeControl({ owner: this.adapter, host: moduleHost, runtime });
+        this.runtimeControl = runtimeControl;
+        this.adapter.eosRuntimeControl = runtimeControl;
+        await runtimeControl.initialize();
+        (0, eosModuleHttp_1.registerEosModuleRoutes)({
+            app,
+            host: moduleHost,
+            baseDir: this.baseDir,
+            jsonParser: bodyParser.json({ limit: '512kb', strict: true }),
+            authorize: (req) => this.unified.status(req),
+            csrfAllowed: (req) => this.unified.csrfAllowed(req),
+            requestAllowed: (req) => this.unified.requestAllowed(req),
+            runtimeControl,
+            runtimeStatus: () => this.adapter.eosHostedRuntime?.status?.(),
+        });
+        if (runtimeControl.isEnabled('ui')) {
+            await runtime.start();
+        }
+        else {
+            await runtime.pause();
+        }
         app.use((req, res, next) => {
             if (!this.isUnifiedRequest(req)) {
                 next();

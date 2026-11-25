@@ -1,0 +1,19 @@
+{
+  "response": {
+    "persisted": false,
+    "runtimeEnabled": false,
+    "patchEnabled": false
+  },
+  "writeIssued": true,
+  "ackDelayMs": 2200,
+  "responseDelayFromWriteMs": 2013,
+  "committedBeforeResponse": false,
+  "committedEnabled": true,
+  "runtimeRestartedBeforeStop": false,
+  "processStateAtResponse": "running",
+  "stopWaitMs": 187,
+  "stopAfterCommit": true,
+  "logCodes": [
+    "credential-state-write-failed"
+  ]
+}

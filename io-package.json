@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "eos-admin",
-    "version": "9.0.24",
+    "version": "9.0.25",
     "titleLang": {
       "en": "NexoWatt EOS",
       "de": "NexoWatt EOS",
@@ -18,6 +18,10 @@
     "connectionType": "local",
     "dataSource": "push",
     "news": {
+      "9.0.25": {
+        "en": "Fix startup blocked by optional external OCPP migration; add persistent runtime process controls.",
+        "de": "Startsperre durch optionale externe OCPP-Übernahme behoben; dauerhafte Prozesssteuerung ergänzt."
+      },
       "9.0.24": {
         "en": "Integrated OCPP, EEBUS and Devices in independent processes within one EOS adapter; dashboard kiosk with protected Admin login; verified cleanup of obsolete npm publish assets.",
         "de": "OCPP, EEBUS und Devices in eigenen Prozessen innerhalb eines EOS-Adapters; Dashboard-Kioskmodus mit geschütztem Admin-Zugang; geprüfte Bereinigung alter Dateien vor npm-Publish."
@@ -94,11 +98,6 @@
         "de": "Integrierte Geräte- und EEBus-Module mit zentraler EOS-Lizenz, geschützter Übergabe bestehender Instanzen, Installer-Rückweg und mehrzeiliger Admin-Navigation. Lokale Geräteankündigung und vorbereiteter HTTPS-Zugang ohne Port. Prüfumfang und offene Hardware-Abnahme siehe Prüfbericht.",
         "en": "Integrated Devices and EEBus modules with the central EOS license, guarded legacy handover, installer return navigation and wrapping admin navigation. Local discovery and prepared portless HTTPS access. See the report for validation scope and remaining hardware acceptance.",
         "nl": "Geïntegreerde Devices- en EEBus-modules met centrale EOS-licentie, beveiligde overdracht, terugkeer vanuit de installer en navigatie op meerdere regels. Lokale detectie en voorbereide HTTPS-toegang zonder poort. Zie het testrapport voor de resterende hardwarecontrole."
-      },
-      "9.0.5": {
-        "de": "9.0.5 korrigiert den History-Absturz an der Übergabe zwischen Verwaltungsserver und eingebetteter UI. History-Anfragen erhalten begrenzte Ressourcen und kontrollierte Fehlerantworten; die EOS-Systemverwaltung verwendet das NexoWatt-Startlogo. Zentrale Lizenz, HTTPS auf 8188 und vorhandener Adminzugang bleiben erhalten. Teststand für next; tatsächliche Nachweise und offene Zielgeräteprüfung siehe Prüfbericht.",
-        "en": "9.0.5 fixes the History crash at the boundary between the administration server and embedded UI. History requests have bounded resources and controlled error responses; EOS system administration uses the NexoWatt startup logo. The central license, HTTPS on 8188 and existing admin access are preserved. Test release for next; see the report for actual evidence and outstanding target-device acceptance.",
-        "nl": "9.0.5 corrigeert de History-crash bij de overdracht tussen beheerserver en ingebedde UI. History-aanvragen krijgen begrensde bronnen en gecontroleerde foutantwoorden; EOS-systeembeheer gebruikt het NexoWatt-startlogo. Centrale licentie, HTTPS op 8188 en bestaande admintoegang blijven behouden. Testversie voor next; zie het rapport voor bewijs en openstaande apparaatcontrole."
       }
     },
     "desc": {
@@ -136,7 +135,7 @@
     "icon": "admin.svg",
     "messagebox": true,
     "enabled": true,
-    "extIcon": "https://unpkg.com/iobroker.eos-admin@9.0.24/admin/admin.svg",
+    "extIcon": "https://unpkg.com/iobroker.eos-admin@9.0.25/admin/admin.svg",
     "keywords": [
       "NexoWatt",
       "EOS",
@@ -147,7 +146,7 @@
       "licensed"
     ],
     "compact": false,
-    "readme": "https://unpkg.com/iobroker.eos-admin@9.0.24/README.md",
+    "readme": "https://unpkg.com/iobroker.eos-admin@9.0.25/README.md",
     "authors": [
       "NexoWatt"
     ],
@@ -159,7 +158,7 @@
     "type": "general",
     "licenseInformation": {
       "type": "paid",
-      "link": "https://unpkg.com/iobroker.eos-admin@9.0.24/LICENSE"
+      "link": "https://unpkg.com/iobroker.eos-admin@9.0.25/LICENSE"
     },
     "logTransporter": true,
     "stopBeforeUpdate": true,

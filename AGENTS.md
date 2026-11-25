@@ -89,6 +89,12 @@ Ergänzung auf ausdrückliche Nutzerentscheidung vom 05.11.2026: EOS Admin unter
 6. **Dokumentieren:** Änderung, Sicherheitswirkung, tatsächliche Tests, offene Punkte und betroffene Unterlagen im gleichen Stand aktualisieren.
 7. **Ehrlich übergeben:** Lieferstand und Prüfstand eindeutig zuordnen. Fehlende Hardware- oder Integrationstests als offen ausweisen und eine passende Testanleitung mitliefern.
 
+### Ergänzung vom 25.11.2026: Ressourcen und Ausfallsicherheit
+
+Bei jeder Änderung RAM, CPU, Timer, Abonnements, Datenübertragungen und Warteschlangen im betroffenen Pfad prüfen. Nachweisbar unnötige Arbeit gezielt reduzieren; bestehende Funktionen, Regelzeiten und Schutzlogiken erhalten. Vergleichbare Vorher-/Nachher-Messungen oder begrenzte lokale Nachweise dokumentieren. Ohne Messung keine RAM-Einsparung behaupten; größere Optimierungen getrennt und rückfallfähig umsetzen.
+
+Teilfehler, Neustarts, veraltete Daten und ausstehende Schreibbefehle prüfen. Keine doppelte Geräteeigentümerschaft und keine Wiederholung alter Stellbefehle nach einem Prozesswechsel zulassen. Prozessfreigabe, tatsächlichen Prozesslauf und fachliche Bereitschaft getrennt ausweisen. Bei neuen Installationen sind die fünf integrierten Prozessfreigaben standardmäßig aktiviert; eine bewusst gespeicherte Deaktivierung bleibt erhalten. Gerätekonfiguration, Lizenz und Eigentumsprüfungen gelten zusätzlich.
+
 Ein Fehlerfix MUSS einen reproduzierenden Test erhalten, wenn sich das Fehlerbild sinnvoll automatisiert prüfen lässt. Tests sollen gefordertes Verhalten und relevante Fehlerfälle prüfen; sie dürfen nicht lediglich die Implementierung abschreiben.
 
 ## 4. Architektur und Vertrauensgrenzen

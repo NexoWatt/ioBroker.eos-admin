@@ -65,6 +65,36 @@ function localId(namespace, id) {
 }
 function makeOwner(input) {
     const namespace = String(input.namespace);
+    const config = (0, eosUiProcessRpc_1.processRecord)(input.config) ? input.config : {};
+    const migration = (0, eosUiProcessRpc_1.processRecord)(config.eosUiMigration) ? config.eosUiMigration : {};
+    const uiNamespace = migration.preserveNamespace === true &&
+        typeof migration.source === 'string' &&
+        /^nexowatt-ui\.\d+$/.test(migration.source)
+        ? migration.source
+        : namespace;
+    // Only fixed protected configuration stores receive a longer commit ACK
+    // window. In particular, ack:true alone is never sufficient for a state.
+    const configStateIds = new Set([
+        `${uiNamespace}.installer.configJson`,
+        `${uiNamespace}.simulation.backupConfigJson`,
+        '0_userdata.0.nexowattVis.backupJson',
+        '0_userdata.0.nexowattVis.backupJsonPrev',
+    ]);
+    const configCommit = (method, args) => {
+        if (method === 'saveUi') {
+            return true;
+        }
+        if (typeof args[0] !== 'string' || !configStateIds.has(args[0])) {
+            return false;
+        }
+        if (['setForeignObjectAsync', 'setForeignObjectNotExistsAsync', 'extendForeignObjectAsync'].includes(method)) {
+            return true;
+        }
+        return (['setForeignStateAsync', 'setForeignStateChangedAsync'].includes(method) &&
+            (0, eosUiProcessRpc_1.processRecord)(args[1]) &&
+            args[1].ack === true &&
+            typeof args[1].val === 'string');
+    };
     const owner = {
         namespace,
         instance: input.instance,
@@ -78,10 +108,24 @@ function makeOwner(input) {
         if (mutating && !canWrite()) {
             return Promise.reject((0, eosUiProcessRpc_1.processError)('EOS_UI_PROCESS_WRITE_FENCED'));
         }
-        // An admin event-loop stall must not replay an old physical setpoint after recovery.
+        if (!rpc) {
+            return Promise.reject((0, eosUiProcessRpc_1.processError)('EOS_UI_PROCESS_DISCONNECTED'));
+        }
+        const committing = configCommit(method, args);
+        // Admission stays at two seconds for every mutation, including config.
+        // Await a timely admitted config commit instead of falsely reporting a
+        // rollback after two seconds while its controller write still completes.
         return rpc
-            ? rpc.call(`owner.${method}`, args, mutating ? 2000 : 30_000)
-            : Promise.reject((0, eosUiProcessRpc_1.processError)('EOS_UI_PROCESS_DISCONNECTED'));
+            .call(`owner.${method}`, args, committing || !mutating ? 30_000 : 2000, mutating ? 2000 : 30_000)
+            .catch((error) => {
+            if (committing && error instanceof Error && error.message === 'EOS_UI_PROCESS_TIMEOUT') {
+                // Completion is unknown: do not continue regulating with stale
+                // in-memory configuration. Parent pendingWrites blocks a new
+                // generation until the accepted controller work has settled.
+                fail();
+            }
+            throw error;
+        });
     };
     for (const name of eosUiProcessRpc_1.UI_OWNER_ASYNC) {
         owner[name] = (...args) => invoke(name, args);

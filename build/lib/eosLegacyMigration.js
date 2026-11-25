@@ -399,6 +399,13 @@ class EosLegacyMigration {
         const observed = [];
         try {
             for (const [id, name] of Object.entries(SOURCES)) {
+                // An existing OCPP adapter is independent unless the installer
+                // explicitly imports it through the OCPP module page. Merely
+                // discovering it must not gate already configured Devices/EMS.
+                // Keep OCPP in SOURCES for persisted handover journals, recovery
+                // and namespace validation from earlier releases.
+                if (id === 'ocpp')
+                    continue;
                 const found = await this.reader.getObjectViewAsync('system', 'instance', { startkey: `system.adapter.${name}.`, endkey: `system.adapter.${name}.\u9999` });
                 if (!Array.isArray(found?.rows) || found.rows.length > 64)
                     throw fail('EOS_MIGRATION_INVENTORY');
@@ -424,6 +431,9 @@ class EosLegacyMigration {
             }
             if (!candidates.length) {
                 this.phase = 'NOT_NEEDED';
+                // Replace a previous diagnostic-only BLOCKED state after the
+                // next successful inventory; do not persist a cutover journal.
+                await this.publish();
                 return;
             }
             await this.checkLegacyRpc(candidates);

@@ -31,12 +31,19 @@ export interface ModuleView {
 export class EosModuleHost {
     constructor(
         owner: Adapter,
-        options: { baseDir: string; dataDir: string; installationDir?: string; eosDataDir?: string },
+        options: {
+            baseDir: string;
+            dataDir: string;
+            installationDir?: string;
+            eosDataDir?: string;
+            processEnabled?: (id: string) => boolean;
+        },
     );
     readonly mutation: boolean;
     readonly configurationSavePromise: Promise<unknown> | null;
     start(): Promise<void>;
     stop(): Promise<void>;
+    controlProcess(id: string, action: 'stop' | 'start'): Promise<void>;
     onObjectChange(id: string, object?: unknown): void;
     onStateChange(id: string, state?: ioBroker.State | null): void;
     view(id: string): Promise<ModuleView>;

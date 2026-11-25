@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>NexoWatt EOS · Prozessdiagnose</title>
+  <title>NexoWatt EOS · Prozesse</title>
   <link rel="stylesheet" href="/modules/shared/eos-module.css">
   <link rel="stylesheet" href="/runtime/style.css">
   <script defer src="/runtime/index.js"></script>
@@ -14,20 +14,21 @@
   <header class="eos-page-header">
     <a class="eos-brand" href="/" aria-label="NexoWatt EOS Dashboard"><img src="/system/img/eos/nexowatt-eos-brand-wide.png" width="190" height="52" alt="NexoWatt EOS"></a>
     <nav class="eos-module-nav" aria-label="EOS Navigation">
-      <a href="/">EOS Dashboard</a><a href="/system/">EOS Administration</a><a href="/modules/devices/">Geräte</a><a href="/modules/eebus/">EEBus</a><a href="/modules/backup/">Sicherung</a><a href="/modules/ocpp/">OCPP-Ladestationen</a><a href="/runtime/" aria-current="page">Prozessdiagnose</a>
+      <a href="/">EOS Dashboard</a><a href="/system/">EOS Administration</a><a href="/modules/devices/">Geräte</a><a href="/modules/eebus/">EEBus</a><a href="/modules/backup/">Sicherung</a><a href="/modules/ocpp/">OCPP-Ladestationen</a><a href="/runtime/" aria-current="page">Prozesse</a>
     </nav>
   </header>
   <section class="eos-module-hero" aria-labelledby="page-title">
-    <div><small>NexoWatt EOS · Administration</small><h1 id="page-title">Prozessdiagnose</h1>
-      <p>Laufzustand der Administration, der getrennten EOS-Prozesse und vorhandener OCPP-Adapter.</p></div>
-    <span class="eos-module-badge">Nur lesen</span>
+    <div><small>NexoWatt EOS · Administration</small><h1 id="page-title">Prozesse</h1>
+      <p>EOS-Prozesse aktivieren, deaktivieren und neu starten. Deine Auswahl bleibt auch nach einem EOS-Neustart gespeichert.</p></div>
+    <span class="eos-module-badge">Administration</span>
   </section>
   <section class="eos-panel runtime-summary" aria-label="Aktualisierung">
     <div><p id="request-message" role="status" aria-live="polite">Prozessstatus wird geprüft …</p>
       <p id="observed-at">Noch keine bestätigte Abfrage</p></div>
     <button id="refresh" type="button" class="btn">Jetzt aktualisieren</button>
   </section>
-  <p class="runtime-note">Bei sichtbarer Seite automatisch alle 5 Sekunden. Ein laufender Prozess bestätigt seine Erreichbarkeit; Geräteverbindung und EMS-Bereitschaft werden getrennt angezeigt. Diese Ansicht startet oder beendet keine Prozesse.</p>
+  <p id="control-message" class="runtime-control-message" role="status" aria-live="polite"></p>
+  <p class="runtime-note">Bei sichtbarer Seite automatisch alle 5 Sekunden. Ein laufender Prozess bestätigt seine Erreichbarkeit; Geräteverbindung und EMS-Bereitschaft werden getrennt angezeigt. Die Administration bleibt für die Bedienung erreichbar.</p>
   <div id="processes" class="runtime-grid" aria-label="EOS Prozesse"></div>
   <p id="external-note" class="runtime-note">OCPP läuft integriert als eigener EOS-Prozess. Zusätzlich vorhandene externe Adapter werden getrennt angezeigt.</p>
 </main>

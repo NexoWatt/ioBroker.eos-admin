@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/login.ts
- * Quell-Hash: sha256:ead3632f79ef1ef7052cd37d39ca449b69d208279188013d6a349a76fd522eaf
+ * Quell-Hash: sha256:62816adc56165924d31e7b98d1dc547d34f0e2f90505e8527fa21d8d29281a77
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -148,6 +148,9 @@
             if (target.origin === window.location.origin && !target.username && !target.password
                 && target.pathname === '/system/' && status.role === 'admin')
                 return '/system/';
+            if (target.origin === window.location.origin && !target.username && !target.password
+                && target.pathname === '/runtime/' && status.role === 'admin')
+                return '/runtime/';
             if (target.origin !== window.location.origin || target.username || target.password || !target.pathname.startsWith(root))
                 return fallback;
             const path = '/' + target.pathname.slice(root.length);
@@ -262,7 +265,7 @@
         elements.form.setAttribute('aria-busy', String(active));
     }
     /** Passwort exakt übernehmen, nicht trimmen/persistieren und keinen Login automatisch wiederholen. */
-    elements.form.addEventListener('submit', async (event) => {
+    async function submitLogin(event) {
         event.preventDefault();
         if (busy || Date.now() < retryAt || current?.mode !== 'iobroker' || framed() || !secureBrowser())
             return;
@@ -330,7 +333,8 @@
             window.clearTimeout(timer);
             setBusy(false);
         }
-    });
+    }
+    elements.form.addEventListener('submit', event => { void submitLogin(event); });
     elements.toggle.addEventListener('click', () => {
         const visible = elements.passwordInput.type === 'password';
         elements.passwordInput.type = visible ? 'text' : 'password';

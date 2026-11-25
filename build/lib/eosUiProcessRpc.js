@@ -139,12 +139,17 @@ class UiProcessRpc {
             typeof raw.id !== 'number' ||
             raw.id <= this.lastRequestId ||
             typeof raw.deadline !== 'number' ||
-            raw.deadline < Date.now() ||
+            !Number.isFinite(raw.deadline) ||
             raw.deadline > Date.now() + 180_000) {
             return;
         }
         const id = raw.id;
         this.lastRequestId = id;
+        if (raw.deadline < Date.now()) {
+            // A longer confirmation window must never admit a stale command.
+            this.respond(id, undefined, 'EOS_UI_PROCESS_CALL_EXPIRED');
+            return;
+        }
         if (this.incoming >= MAX_PENDING) {
             this.respond(id, undefined, 'EOS_UI_PROCESS_BUSY');
             return;
@@ -203,7 +208,7 @@ class UiProcessRpc {
             throw error;
         }
     }
-    call(method, args = [], timeout = 30_000) {
+    call(method, args = [], timeout = 30_000, admissionTimeout = timeout) {
         if (this.pending.size >= MAX_PENDING) {
             return Promise.reject(processError('EOS_UI_PROCESS_BUSY'));
         }
@@ -216,7 +221,15 @@ class UiProcessRpc {
             timer.unref();
             this.pending.set(id, { resolve, reject, timer });
             try {
-                this.send({ kind: 'call', id, method, args, deadline: Date.now() + timeout });
+                // Admission and completion are distinct: an already accepted
+                // controller commit can take longer than the command freshness budget.
+                this.send({
+                    kind: 'call',
+                    id,
+                    method,
+                    args,
+                    deadline: Date.now() + Math.min(timeout, admissionTimeout),
+                });
             }
             catch (error) {
                 clearTimeout(timer);

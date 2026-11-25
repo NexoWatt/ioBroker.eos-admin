@@ -1,0 +1,28 @@
+(node:12) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ real module pages and vendor assets are available through the guarded same-origin routes (149.962565ms)
+✔ backup download uses authenticated bounded binary streaming and refuses untrusted names (21.974595ms)
+✔ slow backup downloads have bounded admission and release their stream after client disconnect (28.884376ms)
+✔ backup byte-count mismatches abort the response without exposing an unbounded stream (10.913398ms)
+✔ read-only migration page and status require fresh administrator authentication and expose no private journal fields (29.722385ms)
+✔ fresh admin role, same origin and session-bound CSRF are required for every module mutation (18.458338ms)
+✔ first-login password requirement and invalid expired sessions do not expose configuration (11.080566ms)
+✔ invalid and oversized module JSON and internal exceptions are contained without leaking bodies (9.900791ms)
+(node:13) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ process health projects bounded fields and distinguishes process, EMS and absent status (2.919174ms)
+✔ OCPP only reads inventoried exact namespaces and shows a PID confirmed for the current run (5.7443ms)
+✔ OCPP invalid, stale, unacknowledged and failed reads never claim a running process or invented PID (1.72537ms)
+✔ OCPP enumeration is bounded and does not call state methods if inventory is invalid (0.938357ms)
+✔ hosted OCPP appears once after migration while a running external duplicate remains visible (2.494036ms)
+✔ parallel diagnosis calls share bounded reads and timed-out sources cannot accumulate work (61.224159ms)
+✔ runtime page, assets and API reuse fresh administrator, first-login and origin protection (62.433937ms)
+✔ runtime endpoint is read-only and never publishes raw configuration, exceptions or secrets (19.901301ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 682.481011

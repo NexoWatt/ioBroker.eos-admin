@@ -158,7 +158,7 @@ test('runtime page, assets and API reuse fresh administrator, first-login and or
     assert.equal(f.reads(), 0, 'denied reads do not touch process or controller state');
     for (const path of ['/runtime/', '/runtime/index.js', '/runtime/style.css']) {
         const anonymous = await f.request(path, { headers: { cookie: '' } });
-        assert.equal(anonymous.status, 302); assert.equal(anonymous.headers.location, '/login.html');
+        assert.equal(anonymous.status, 302); assert.equal(anonymous.headers.location, '/login.html?admin=1&returnTo=%2Fruntime%2F');
         assert.equal((await f.request(path)).status, 200);
     }
     const page = await f.request('/runtime/'); assert.match(page.headers['content-security-policy'], /script-src 'self'/);

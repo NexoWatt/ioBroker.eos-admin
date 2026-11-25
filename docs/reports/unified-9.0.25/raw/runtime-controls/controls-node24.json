@@ -1,0 +1,70 @@
+{
+  "result": "passed",
+  "runAt": "2026-11-25T18:33:26.173Z",
+  "node": "v24.22.3",
+  "browser": "HeadlessChrome/158.0.8127.0",
+  "scope": "Real Chromium, production runtime UI, routes, control service and protected config-store logic. Synthetic DB, auth source and process lifecycle; no live ioBroker controller or physical devices.",
+  "checks": [
+    {
+      "name": "five hosted controls; parent and external OCPP remain read-only; unconfigured modules link to setup",
+      "result": "passed"
+    },
+    {
+      "name": "production mutation route rejects missing CSRF without touching lifecycle",
+      "result": "passed"
+    },
+    {
+      "name": "disable persists desired state; accepted job stays busy until confirmed stop; no early stopped badge",
+      "result": "passed"
+    },
+    {
+      "name": "disabled choice survives page reload and a fresh production config-service read",
+      "result": "passed"
+    },
+    {
+      "name": "enable waits for lifecycle readiness and displays green only after confirmed running state",
+      "result": "passed"
+    },
+    {
+      "name": "restart uses confirmed stop before start through the production control service",
+      "result": "passed"
+    },
+    {
+      "name": "migration blocks starts with explanation and status link while stop remains available",
+      "result": "passed"
+    },
+    {
+      "name": "stale revision fails without lifecycle change and refreshes current controls",
+      "result": "passed"
+    },
+    {
+      "name": "unconfirmed stop remains visibly unconfirmed and never claims successful deactivation",
+      "result": "passed"
+    },
+    {
+      "name": "UI/EMS pause remains controllable from parent runtime page and can be reactivated",
+      "result": "passed"
+    },
+    {
+      "name": "missing command response is reported as unconfirmed; no automatic command replay",
+      "result": "passed"
+    },
+    {
+      "name": "mobile 390px has usable buttons without horizontal overflow",
+      "result": "passed"
+    },
+    {
+      "name": "lost administrator role denies mutation and removes all actionable status",
+      "result": "passed"
+    }
+  ],
+  "pageErrors": [],
+  "sourceHashes": {
+    "src/lib/eosRuntimeControl.js": "05ca64f2ada7b9ab3baa631f74faab63a25ebf67fb40c0d4b1c26aa8c741a691",
+    "src/lib/eosModuleHttp.js": "003efa7c5154d35c3af8e954da3203801e8a8336f042ecef571c7b4bf2ba0335",
+    "src/lib/eosRuntimeHealth.js": "7b7724eacac3a7c913eb2ee40dceb37329f0d960ffc7b4c0728c85a55e35ab5d",
+    "public/eos-runtime/index.js": "45ccc5f75045cc216453c945f26e128173beae8e01067a8fe100ed21dc03c5e7",
+    "public/eos-runtime/index.html": "ec1977198e774dbf5a360334028365bcb4b457b33ec1a9a303c3d848bdd8232d",
+    "public/eos-runtime/style.css": "55dd55b29ba0ef541b840b72f14f967a23049397ee51b100557952a0f87d7d9c"
+  }
+}

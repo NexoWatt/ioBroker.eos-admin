@@ -1,0 +1,43 @@
+✔ default permits existing startup without writes; pause survives a fresh service and preserves device configuration (8.366222ms)
+✔ restart commits a durable pause before confirmed shutdown and only then persists enable (8.934411ms)
+✔ an unconfirmed stop remains durably disabled and never starts a replacement (1.871525ms)
+✔ disable remains available behind startup gates, while enable and restart cannot bypass them (2.671627ms)
+✔ paused process cannot be enabled while its module configuration is disabled (1.021499ms)
+✔ persistence failure does not stop a live process or falsely claim its activation changed (12.523248ms)
+✔ invalid IDs, arbitrary commands, stale revision and replay do not change process state (7.93224ms)
+✔ a hanging startup configuration read is bounded and its late completion cannot activate processes (71.161066ms)
+✔ invalid stored configuration never silently falls back to all enabled (1.124451ms)
+✔ shutdown during an accepted restart never starts a replacement even if stop settles later (1.918955ms)
+✔ unconfirmed stop cannot become enabled again by reconstructing the control service (6.610808ms)
+✔ accepted restart stays busy until stop really settles and does not resume after close (2.837112ms)
+✔ late database write after close cannot dispatch stop or start into a replacement lifecycle (1.864806ms)
+✔ persisted UI pause survives initialization while other process flags remain separate (0.793742ms)
+✔ closing initialization before a late database response cannot grant process authority (0.688647ms)
+✔ bounded initialization returns a visible blocker and a late read cannot reopen process gates (47.78987ms)
+✔ real hosted UI child starts the actual EMS and charging module through the IPC owner (3766.7387ms)
+✔ late object-subscription acknowledgement is drained before stop can confirm (168.297044ms)
+✔ real UI worker rejects expired and reordered authority leases (102.255828ms)
+✔ controller checkPassword callback preserves the canonical returned user (165.786586ms)
+✔ history adapter responses beyond physical-command TTL retain their read-only callback (2376.452201ms)
+✔ an expired physical command is not replayed when the parent event loop recovers (2669.386386ms)
+✔ completion from an old RPC generation cannot kill its replacement process (399.500327ms)
+✔ oversized controller response fails its read without killing the control process (274.096173ms)
+✔ SIGKILL of the supervising parent terminates the real runtime child (222.234701ms)
+✔ actual OS child preserves source timestamps/quality and HTTP identity is parent-bound (116.9173ms)
+✔ each write rechecks live parent ownership; shutdown releases only owned subscriptions (91.281293ms)
+✔ child exit is contained and restart uses new PID/generation without replaying measurements (184.265928ms)
+✔ blocked child event loop does not block parent and is killed before restart (5615.660688ms)
+✔ real hosted UI shell retains login, origin and CSRF/role admission across private HTTP bridge (393.744492ms)
+✔ HTTP body streaming, fallthrough and SSE disconnect keep the public connection usable (101.350191ms)
+✔ private loopback rejects direct requests, spoofed capabilities and replay while a legitimate stream stays open (81.205957ms)
+✔ process diagnostics remove complete configured secrets before shortening (4.084295ms)
+✔ explicit pause and resume use a new OS child while terminal stop cannot resurrect it (305.643958ms)
+✔ pause drains an accepted controller write before an explicit resume may create another child (274.704303ms)
+ℹ tests 35
+ℹ suites 0
+ℹ pass 35
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12869.3055

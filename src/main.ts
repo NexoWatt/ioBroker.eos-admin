@@ -38,6 +38,7 @@ import { getEosRoleGroups } from './lib/eosRolePolicy';
 import { createOwnershipGuard } from './lib/eosUnifiedOwnership';
 import type { EosHostedRuntime } from './lib/eosUnifiedRuntime';
 import type { EosModuleHost } from './lib/eosModuleHost';
+import type { EosRuntimeControl } from './lib/eosRuntimeControl';
 import { EosLegacyMigration } from './lib/eosLegacyMigration';
 import type { EosDiscovery } from './lib/eosDiscovery';
 import { EosUiSessionRegistry, type EosUiIdentity, type EosUiSession } from './lib/eosUiSessionRegistry';
@@ -321,6 +322,7 @@ class Admin extends Adapter {
     /** Local license authority; management/recovery is never license-gated. */
     public eosHostedRuntime: EosHostedRuntime | undefined;
     public eosModuleHost: EosModuleHost | undefined;
+    public eosRuntimeControl: EosRuntimeControl | undefined;
     public eosMigration: EosLegacyMigration | undefined;
     public eosDiscovery: EosDiscovery | undefined;
     public eosOwnership: ReturnType<typeof createOwnershipGuard> | undefined;
@@ -1138,6 +1140,9 @@ class Admin extends Adapter {
         // A stuck hosted runtime must not leave the controller waiting forever on unload.
         deadline = setTimeout(finish, 2000);
         deadline.unref?.();
+        // Revoke new control jobs synchronously; drain an already-issued commit
+        // together with the worker shutdowns before completing normal unload.
+        const controlsStopped = this.eosRuntimeControl?.close() || Promise.resolve();
         cleanup(() => this.eosOwnership?.stop());
         cleanup(() => this.eosMigration?.stop());
         cleanup(() => this.eosDiscovery?.stop());
@@ -1177,11 +1182,11 @@ class Admin extends Adapter {
             });
         };
         if (!this.eosHostedRuntime) {
-            void modulesStopped.then(finishSubscriptions, finishSubscriptions);
+            void Promise.allSettled([modulesStopped, controlsStopped]).then(finishSubscriptions, finishSubscriptions);
             return;
         }
         try {
-            void Promise.allSettled([this.eosHostedRuntime.stop(), modulesStopped]).then(
+            void Promise.allSettled([this.eosHostedRuntime.stop(), modulesStopped, controlsStopped]).then(
                 finishSubscriptions,
                 finishSubscriptions,
             );

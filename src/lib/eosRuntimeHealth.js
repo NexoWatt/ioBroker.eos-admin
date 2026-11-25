@@ -97,9 +97,9 @@ function within(promise, milliseconds) {
 
 /** Single-flight per source remains occupied until the underlying read settles, even after its deadline.
  * This bounds unresolved ioBroker/IPC work across tabs and polling retries.
- * @param {{host:HealthHost,runtimeStatus?:()=>unknown,timeoutMs?:number}} options
+ * @param {{host:HealthHost,runtimeStatus?:()=>unknown,timeoutMs?:number,runtimeControl?:{view:(id:string,configured?:boolean)=>unknown,isEnabled:(id:string)=>boolean}}} options
  */
-function createRuntimeHealthReader({ host, runtimeStatus, timeoutMs = 2500 }) {
+function createRuntimeHealthReader({ host, runtimeStatus, timeoutMs = 2500, runtimeControl }) {
     /** @type {Map<string, Promise<unknown>>} */ const pending = new Map();
     /** @param {string} id @param {()=>unknown} read */
     const source = (id, read) => {
@@ -123,6 +123,18 @@ function createRuntimeHealthReader({ host, runtimeStatus, timeoutMs = 2500 }) {
             parent.state = 'running'; parent.pid = parentPid; parent.active = true;
             const processes = [parent, processRow('ui', 'Oberfläche und EMS', ui, true),
                 ...ids.map((id, index) => processRow(id, MODULE_LABELS[id], values[index]))];
+            for (const row of processes) {
+                if (row.kind !== 'child' || !runtimeControl) continue;
+                const configured = row.id === 'ui' || record(values[ids.indexOf(/** @type {'devices'|'eebus'|'backup'|'ocpp'} */(row.id))]).enabled === true;
+                const controls = runtimeControl.view(row.id, configured);
+                Object.assign(row, { controls });
+                if (!runtimeControl.isEnabled(row.id)) {
+                    row.active = false;
+                    if (row.id === 'ui') row.emsReady = false;
+                    if (['unknown', 'stopped'].includes(row.state)) row.state = 'disabled';
+                    row.reason = reason(record(controls).reason) || 'EOS_RUNTIME_DISABLED';
+                }
+            }
             const hostedNamespace = record(values[ids.indexOf('ocpp')]).namespace;
             if (Array.isArray(external)) processes.push(.../** @type {ProcessRow[]} */(external)
                 .filter(row => row.id !== hostedNamespace || row.state !== 'stopped'));

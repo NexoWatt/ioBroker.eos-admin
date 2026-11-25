@@ -30,13 +30,15 @@ function publicMigrationStatus(value) {
 }
 
 /** Fixed same-origin module routes; no arbitrary file or ioBroker-command proxy. */
-function registerEosModuleRoutes({ app, host, baseDir, jsonParser, authorize, csrfAllowed, requestAllowed, runtimeStatus }) {
+function registerEosModuleRoutes({ app, host, baseDir, jsonParser, authorize, csrfAllowed, requestAllowed, runtimeStatus, runtimeControl }) {
     const guard = (write = false, page = false) => (req, res, next) => {
         res.setHeader('Cache-Control', 'no-store');
         if (!requestAllowed(req)) { res.status(403).json({ error: 'AUTH_ORIGIN' }); return; }
         void bounded(Promise.resolve().then(() => authorize(req)), 5000).then(status => {
-            if (!status?.authenticated) {
-                if (page) res.redirect('/login.html');
+            const runtimePage = page && /^\/runtime(?:\/|$)/.test(req.path || '');
+            if (!status?.authenticated || (runtimePage && status.kiosk === true)) {
+                if (page) res.redirect(runtimePage
+                    ? '/login.html?admin=1&returnTo=%2Fruntime%2F' : '/login.html');
                 else res.status(401).json({ error: 'AUTHENTICATION_REQUIRED' });
                 return;
             }
@@ -66,15 +68,37 @@ function registerEosModuleRoutes({ app, host, baseDir, jsonParser, authorize, cs
         'jquery.js': 'lib/js/jquery-3.2.1.min.js', 'materialize.js': 'lib/js/materialize.js',
         'materialize.css': 'lib/css/materialize.css', 'adapter.css': 'css/adapter.css',
     };
-    const runtimeHealth = createRuntimeHealthReader({ host, runtimeStatus });
+    const runtimeHealth = createRuntimeHealthReader({ host, runtimeStatus, runtimeControl });
     app.get('/api/eos/runtime', guard(), (_req, res) => {
         void runtimeHealth().then(value => {
-            if (!res.destroyed && !res.headersSent) res.json(value);
+            if (!res.destroyed && !res.headersSent) res.json({ ...value, csrfToken: res.locals.eosModuleCsrf });
         }, () => {
             if (!res.destroyed && !res.headersSent) res.status(503).json({ error: 'EOS_RUNTIME_STATUS_UNAVAILABLE' });
         });
     });
     app.all('/api/eos/runtime', guard(), (_req, res) => res.setHeader('Allow', 'GET').status(405).json({ error: 'METHOD_NOT_ALLOWED' }));
+    // A body may arrive slowly: resolve current authority again after parsing,
+    // immediately before accepting a process mutation.
+    app.post('/api/eos/runtime/:id/control', guard(true), jsonParser, guard(true), (req, res) => {
+        try {
+            if (!runtimeControl) throw Object.assign(new Error('EOS_RUNTIME_NOT_READY'), { code: 'EOS_RUNTIME_NOT_READY' });
+            const body = req.body;
+            if (!body || typeof body !== 'object' || Array.isArray(body) ||
+                Object.keys(body).some(key => !['action', 'expectedRevision'].includes(key))) {
+                throw Object.assign(new Error('EOS_RUNTIME_REQUEST_INVALID'), { code: 'EOS_RUNTIME_REQUEST_INVALID' });
+            }
+            const value = runtimeControl.request(req.params.id, body.action, body.expectedRevision);
+            res.status(202).json(value);
+        } catch (error) {
+            const code = typeof error?.code === 'string' && /^EOS_[A-Z0-9_]{1,72}$/.test(error.code) ? error.code : 'EOS_RUNTIME_CONTROL_FAILED';
+            res.status(code === 'EOS_RUNTIME_BUSY' || code === 'EOS_RUNTIME_CONFIG_CONFLICT' ? 409 : 400).json({ error: code });
+        }
+    });
+    app.all('/api/eos/runtime/:id/control', guard(), (_req, res) => res.setHeader('Allow', 'POST').status(405).json({ error: 'METHOD_NOT_ALLOWED' }));
+    app.use('/api/eos/runtime', (error, _req, res, next) => {
+        if (res.headersSent) { next(error); return; }
+        res.status(error?.type === 'entity.too.large' ? 413 : 400).json({ error: 'EOS_RUNTIME_INVALID_JSON' });
+    });
     app.get('/runtime', guard(false, true), (req, res, next) => {
         if (req.path.endsWith('/')) { next(); return; }
         res.redirect(308, '/runtime/');

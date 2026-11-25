@@ -1,0 +1,44 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: only exact configuration IDs/methods and acknowledged string values receive the longer reply window
+ok 1 - only exact configuration IDs/methods and acknowledged string values receive the longer reply window
+  ---
+  duration_ms: 2413.290771
+  type: 'test'
+  ...
+# Subtest: preserved UI namespace grants the longer ACK only to its bound instance
+ok 2 - preserved UI namespace grants the longer ACK only to its bound instance
+  ---
+  duration_ms: 2357.20499
+  type: 'test'
+  ...
+# Subtest: unvalidated namespace text cannot widen the protected configuration ID set
+ok 3 - unvalidated namespace text cannot widen the protected configuration ID set
+  ---
+  duration_ms: 2478.010086
+  type: 'test'
+  ...
+# Subtest: configuration IPC delivered after two seconds is explicitly expired before any database mutation
+ok 4 - configuration IPC delivered after two seconds is explicitly expired before any database mutation
+  ---
+  duration_ms: 2185.5279
+  type: 'test'
+  ...
+# Subtest: late or foreign-generation RPC results cannot satisfy a newer pending call
+ok 5 - late or foreign-generation RPC results cannot satisfy a newer pending call
+  ---
+  duration_ms: 87.310762
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 10132.141565

@@ -1,0 +1,68 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: unconfirmed stop cannot become enabled again by reconstructing the control service
+ok 1 - unconfirmed stop cannot become enabled again by reconstructing the control service
+  ---
+  duration_ms: 6.867858
+  type: 'test'
+  ...
+# Subtest: accepted restart stays busy until stop really settles and does not resume after close
+ok 2 - accepted restart stays busy until stop really settles and does not resume after close
+  ---
+  duration_ms: 1.784587
+  type: 'test'
+  ...
+# Subtest: late database write after close cannot dispatch stop or start into a replacement lifecycle
+ok 3 - late database write after close cannot dispatch stop or start into a replacement lifecycle
+  ---
+  duration_ms: 1.098783
+  type: 'test'
+  ...
+# Subtest: persisted UI pause survives initialization while other process flags remain separate
+ok 4 - persisted UI pause survives initialization while other process flags remain separate
+  ---
+  duration_ms: 0.962883
+  type: 'test'
+  ...
+# Subtest: closing initialization before a late database response cannot grant process authority
+ok 5 - closing initialization before a late database response cannot grant process authority
+  ---
+  duration_ms: 0.532457
+  type: 'test'
+  ...
+# Subtest: bounded initialization returns a visible blocker and a late read cannot reopen process gates
+ok 6 - bounded initialization returns a visible blocker and a late read cannot reopen process gates
+  ---
+  duration_ms: 21.360733
+  type: 'test'
+  ...
+# Subtest: slow HTTP body cannot retain control authority after session revocation
+ok 7 - slow HTTP body cannot retain control authority after session revocation
+  ---
+  duration_ms: 37.777169
+  type: 'test'
+  ...
+# Subtest: slow HTTP body cannot retain control authority after role revocation
+ok 8 - slow HTTP body cannot retain control authority after role revocation
+  ---
+  duration_ms: 9.261715
+  type: 'test'
+  ...
+# Subtest: slow HTTP body cannot retain control authority after csrf revocation
+ok 9 - slow HTTP body cannot retain control authority after csrf revocation
+  ---
+  duration_ms: 9.656067
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 302.23501

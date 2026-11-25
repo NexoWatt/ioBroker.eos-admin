@@ -1,0 +1,13 @@
+✔ only exact configuration IDs/methods and acknowledged string values receive the longer reply window (2403.259769ms)
+✔ preserved UI namespace grants the longer ACK only to its bound instance (2374.73518ms)
+✔ unvalidated namespace text cannot widen the protected configuration ID set (2533.517384ms)
+✔ configuration IPC delivered after two seconds is explicitly expired before any database mutation (2215.586453ms)
+✔ late or foreign-generation RPC results cannot satisfy a newer pending call (87.24791ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10171.398671

@@ -1,0 +1,44 @@
+✔ actual Devices disable, enable and restart replace only its PID/generation and preserve the OCPP socket (2105.327612ms)
+✔ actual OCPP process controls preserve native namespace and never replay a command from the old child (2279.638892ms)
+✔ actual OCPP process controls preserve imported namespace and never replay a command from the old child (2702.690083ms)
+✔ persisted Devices process disable survives a fresh Host and RuntimeControl without altering module configuration (1637.121329ms)
+✔ process enable cannot activate a Devices module whose own configuration is disabled (661.131904ms)
+✔ default permits existing startup without writes; pause survives a fresh service and preserves device configuration (14.651238ms)
+✔ restart commits a durable pause before confirmed shutdown and only then persists enable (10.70695ms)
+✔ an unconfirmed stop remains durably disabled and never starts a replacement (5.297037ms)
+✔ disable remains available behind startup gates, while enable and restart cannot bypass them (1.478084ms)
+✔ paused process cannot be enabled while its module configuration is disabled (0.783597ms)
+✔ persistence failure does not stop a live process or falsely claim its activation changed (4.867452ms)
+✔ invalid IDs, arbitrary commands, stale revision and replay do not change process state (0.633486ms)
+✔ a hanging startup configuration read is bounded and its late completion cannot activate processes (49.411997ms)
+✔ invalid stored configuration never silently falls back to all enabled (1.306481ms)
+✔ shutdown during an accepted restart never starts a replacement even if stop settles later (4.709228ms)
+✔ close immediately revokes authority but drains an already-issued configuration write (21.374972ms)
+✔ unconfirmed stop cannot become enabled again by reconstructing the control service (21.545924ms)
+✔ accepted restart stays busy until stop really settles and does not resume after close (1.90167ms)
+✔ late database write after close cannot dispatch stop or start into a replacement lifecycle (0.816296ms)
+✔ persisted UI pause survives initialization while other process flags remain separate (0.593627ms)
+✔ closing initialization before a late database response cannot grant process authority (0.41912ms)
+✔ bounded initialization returns a visible blocker and a late read cannot reopen process gates (20.809246ms)
+✔ slow HTTP body cannot retain control authority after session revocation (95.139471ms)
+✔ slow HTTP body cannot retain control authority after role revocation (25.528479ms)
+✔ slow HTTP body cannot retain control authority after csrf revocation (39.568734ms)
+✔ actual OS child preserves source timestamps/quality and HTTP identity is parent-bound (193.48012ms)
+✔ each write rechecks live parent ownership; shutdown releases only owned subscriptions (304.944888ms)
+✔ child exit is contained and restart uses new PID/generation without replaying measurements (328.006861ms)
+✔ blocked child event loop does not block parent and is killed before restart (5713.72228ms)
+✔ real hosted UI shell retains login, origin and CSRF/role admission across private HTTP bridge (623.29201ms)
+✔ HTTP body streaming, fallthrough and SSE disconnect keep the public connection usable (245.762971ms)
+✔ private loopback rejects direct requests, spoofed capabilities and replay while a legitimate stream stays open (242.621359ms)
+✔ process diagnostics remove complete configured secrets before shortening (8.178138ms)
+✔ explicit pause and resume use a new OS child while terminal stop cannot resurrect it (425.660995ms)
+✔ pause drains an accepted controller write before an explicit resume may create another child (347.644063ms)
+✔ pause during initialization drains a late subscription acquisition before creating the next child (298.260627ms)
+ℹ tests 36
+ℹ suites 0
+ℹ pass 36
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9996.064288

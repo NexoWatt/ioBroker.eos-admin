@@ -1,0 +1,44 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: real child awaits 2.2s config ACK before runtime commit (preserved namespace=false)
+ok 1 - real child awaits 2.2s config ACK before runtime commit (preserved namespace=false)
+  ---
+  duration_ms: 2802.729717
+  type: 'test'
+  ...
+# Subtest: real child awaits 2.2s config ACK before runtime commit (preserved namespace=true)
+ok 2 - real child awaits 2.2s config ACK before runtime commit (preserved namespace=true)
+  ---
+  duration_ms: 2562.53588
+  type: 'test'
+  ...
+# Subtest: a definite controller rejection reports failure without restarting or changing saved config
+ok 3 - a definite controller rejection reports failure without restarting or changing saved config
+  ---
+  duration_ms: 327.762897
+  type: 'test'
+  ...
+# Subtest: pause drains a late accepted config ACK and resume reloads the committed state without replay
+ok 4 - pause drains a late accepted config ACK and resume reloads the committed state without replay
+  ---
+  duration_ms: 1040.509977
+  type: 'test'
+  ...
+# Subtest: unknown config completion at the real 30s deadline fences the child until drain and explicit recovery
+ok 5 - unknown config completion at the real 30s deadline fences the child until drain and explicit recovery
+  ---
+  duration_ms: 30894.10691
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 38179.115527

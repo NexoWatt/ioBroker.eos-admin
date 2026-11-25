@@ -26,6 +26,7 @@ const compiled = emitted ? source : require('typescript').transpileModule(source
 }).outputText;
 const exportsValue = {};
 const processOwners = new WeakSet();
+const processRuntimePaths = new WeakMap();
 vm.runInNewContext(compiled, {
     exports: exportsValue, module: { exports: exportsValue }, __dirname: path.dirname(webFile), __filename: webFile,
     Buffer, URL, Error, console, process, setTimeout, clearTimeout,
@@ -37,7 +38,8 @@ vm.runInNewContext(compiled, {
         };
         if (name === './eosUiProcess') return {
             createEosUiProcess(owner, bridge, options) {
-                if (processOwners.has(owner)) return require('../build/lib/eosUiProcess').createEosUiProcess(owner, bridge, options);
+                if (processOwners.has(owner)) return require('../build/lib/eosUiProcess').createEosUiProcess(owner, bridge,
+                    { ...options, ...(processRuntimePaths.has(owner) ? { runtimePath: processRuntimePaths.get(owner) } : {}) });
                 // Test-only preservation of the existing deep startup/failure assertions.
                 // The dynamically cached module is the fixture's original hosted runtime.
                 return webRequire(path.resolve(__dirname, '../ui/main.js')).createHostedRuntime(owner, bridge);
@@ -404,11 +406,12 @@ async function hostedTlsFixture(t, migrate, options = {}) {
         isUnifiedRequest: req => !req.path.startsWith('/system/'),
     });
     const oldCached = require.cache[filename];
+    if (options.configure) await options.configure({ owner, web, app, harness });
     require.cache[filename] = isolated;
     let mountTimer;
     try {
         await Promise.race([web.mountUnifiedRuntime(), new Promise((_, reject) => {
-            mountTimer = setTimeout(() => reject(new Error('licensed runtime held HTTPS mount hostage')), 1500);
+            mountTimer = setTimeout(() => reject(new Error('licensed runtime held HTTPS mount hostage')), options.mountTimeout || 1500);
         })]);
     } finally {
         clearTimeout(mountTimer);
@@ -423,13 +426,13 @@ async function hostedTlsFixture(t, migrate, options = {}) {
     web.server.server = server;
     await listenEosServer(server, { port: await freePort(), bind: '127.0.0.1' });
     const runtime = owner.eosHostedRuntime;
-    t.after(async () => { try { await runtime?.stop(); } finally { await close(server); } });
+    t.after(async () => { try { await owner.eosRuntimeControl?.close(); await runtime?.stop(); } finally { await close(server); } });
     const host = `127.0.0.1:${server.address().port}`;
     const request = (url, { method = 'GET', auth = true, csrf = true, origin = `https://${host}` } = {}) =>
         tlsRequest(server, cert.cert, { host, origin, ...(auth ? { cookie: 'fixture=admin' } : {}),
             ...(csrf ? { 'x-nw-csrf': 'c'.repeat(32) } : {}), 'content-type': 'application/json' }, method, url,
         method === 'POST' ? { id: 'device.0.control', value: true } : undefined);
-    return { runtime, request, logs, server, owner, cert: cert.cert, instance: () => runtimeObject,
+    return { runtime, request, logs, server, owner, web, cert: cert.cert, instance: () => runtimeObject,
         migrationCalls: () => migrationCalls, foreignWrites: () => foreignWriteCalls.length, foreignWriteCalls: () => foreignWriteCalls,
         setSessionActive(value) { sessionActive = value; }, setSessionRole(value) { sessionRole = value; },
         setLicensed(value) { licensed = value; }, setWritable(value) { writable = value; } };
@@ -718,4 +721,124 @@ test('the explicit HTTPS-ready diagnostic requires a live listener and is suppre
     web.closed = true;
     assert.equal(web.logListenerReady(address), false);
     assert.equal(logs.length, 1);
+});
+
+// Actual parent Web mount, bundled OAuth issuer/session security and a fresh
+// cookie jar; only the controller DB/password backend is synthetic.
+async function pausedRecoveryFixture(t, readTimeout = false) {
+    const { EosModuleConfigStore } = require('../src/lib/eosModuleConfigStore');
+    const { EosSessionSecurity } = require('../src/lib/eosSessionSecurity');
+    const { createEosCookieNamespace } = require('../src/lib/eosCookieNamespace');
+    const { createOAuth2Server } = require('../src/lib/vendor/webserver');
+    const h = await hostedTlsFixture(t, async () => {}, { realProcess: true, mountTimeout: 7000,
+        configure: async ({ owner, web, app, harness }) => {
+            // No installed controller exists in this fixture. Keep the actual UI,
+            // EMS and IPC, and replace only adapter-core's filesystem locator.
+            const temp = fs.mkdtempSync(path.join(require('node:os').tmpdir(), 'eos-recovery-login-'));
+            const runtimePath = path.join(temp, 'actual-ui.cjs');
+            const core = require.resolve('@iobroker/adapter-core');
+            fs.writeFileSync(runtimePath, `const id=${JSON.stringify(core)}; require.cache[id]={id,filename:id,loaded:true,exports:{getAbsoluteInstanceDataDir:()=>${JSON.stringify(temp)}}}; module.exports=require(${JSON.stringify(path.resolve(__dirname, '../ui/main.js'))});`);
+            processRuntimePaths.set(owner, runtimePath);
+            t.after(async () => { await owner.eosHostedRuntime?.stop(); fs.rmSync(temp, { recursive: true, force: true }); });
+            owner.config.auth = true; web.settings.auth = true;
+            owner.unsubscribeForeignStatesAsync = async () => {};
+            owner.unsubscribeForeignObjectsAsync = async () => {};
+            owner.encrypt = value => 'fixture:' + Buffer.from(value).toString('base64');
+            owner.decrypt = value => Buffer.from(value.slice(8), 'base64').toString();
+            if (!readTimeout) {
+                const store = new EosModuleConfigStore(owner, { moduleIds: ['runtime'] });
+                await store.save('runtime', { v: 1, encrypted: owner.encrypt(JSON.stringify({ v: 1,
+                    enabled: { ui: false, devices: true, eebus: true, backup: true, ocpp: true } })) });
+            } else {
+                const read = owner.getForeignObjectAsync;
+                owner.getForeignObjectAsync = id => id === 'eos-admin.0.modules.runtime.configuration'
+                    ? new Promise(() => {}) : read(id);
+            }
+            harness.objects.set('system.user.operator', { _id: 'system.user.operator', type: 'user',
+                common: { enabled: true, password: 'synthetic-hash' }, native: { nexowattEosAccount: { passwordInitialized: true } } });
+            const group = { _id: 'system.group.administrator', type: 'group',
+                common: { name: 'Administrators', members: ['system.user.operator'], acl: {} } };
+            owner.getObjectViewAsync = async (_design, search) => ({ rows: search === 'group' ? [{ id: group._id, value: group }] : [] });
+            const sessions = new Map();
+            owner.getSession = (id, done) => done(sessions.get(id) == null ? null : structuredClone(sessions.get(id)));
+            owner.setSession = (id, _ttl, value, done) => { sessions.set(id, structuredClone(value)); done?.(null); };
+            owner.destroySession = async id => { sessions.delete(id); };
+            owner.checkPassword = (name, password, done) => done(name === 'operator' && password === 'fixture-passphrase', 'system.user.' + name);
+            owner.eosSessionSecurity = new EosSessionSecurity(owner);
+            t.after(() => owner.eosSessionSecurity.stop());
+            const boundary = new UnifiedSessions(owner, { secure: true, externalOrigin: '',
+                resolveAccess: req => web.getEosRequestAccess(req),
+                firstLogin: (user, role) => web.getEosFirstLoginPasswordState(user, role),
+                getLicense: () => owner.eosLicenseService.statusView() });
+            web.unified = boundary;
+            const cookies = createEosCookieNamespace(owner.namespace);
+            app.use(cookies.middleware);
+            app.use(express.json({ limit: '20kb' }));
+            app.post('/api/auth/login', (req, res, next) => boundary.prepareLogin(req, res, next));
+            const model = createOAuth2Server(owner, { app, secure: true, accessLifetime: 60, refreshLifetime: 120,
+                noBasicAuth: true, authorizationCode: false, dynamicClientRegistration: false, loginPage: '/login.html' });
+            owner.eosSessionSecurity.bindOAuthModel(model);
+        } });
+    const jar = new Map();
+    const origin = `https://127.0.0.1:${h.server.address().port}`;
+    const browser = (pathname, options = {}) => new Promise((resolve, reject) => {
+        const req = https.request(origin + pathname, { ca: h.cert, method: options.method || 'GET', headers: {
+            origin, cookie: [...jar].map(([name, value]) => `${name}=${value}`).join('; '),
+            ...(options.body ? { 'content-type': 'application/json' } : {}), ...options.headers,
+        } }, res => {
+            const chunks = []; res.on('data', data => chunks.push(data)); res.on('error', reject);
+            res.on('end', () => {
+                for (const cookie of res.headers['set-cookie'] || []) {
+                    const pair = cookie.split(';')[0]; const index = pair.indexOf('=');
+                    jar.set(pair.slice(0, index), pair.slice(index + 1));
+                }
+                const text = Buffer.concat(chunks).toString(); let json;
+                try { json = JSON.parse(text); } catch {}
+                resolve({ status: res.statusCode, headers: res.headers, text, json });
+            });
+        });
+        req.setTimeout(5000, () => req.destroy(new Error('recovery request timeout')));
+        req.on('error', reject); req.end(options.body ? JSON.stringify(options.body) : undefined);
+    });
+    return { ...h, browser };
+}
+
+for (const readTimeout of [false, true]) test(`parent login remains usable with ${readTimeout ? 'timed-out runtime configuration' : 'persisted UI pause'} and a fresh admin session`, { timeout: 20000 }, async t => {
+    const h = await pausedRecoveryFixture(t, readTimeout);
+    assert.equal(h.runtime.status().process.pid, null);
+    const redirect = await h.browser('/runtime/');
+    assert.equal(redirect.status, 302);
+    assert.equal(redirect.headers.location, '/login.html?admin=1&returnTo=%2Fruntime%2F');
+    const login = await h.browser(redirect.headers.location);
+    assert.equal(login.status, 200, login.text);
+    assert.match(login.text, /id="loginForm"/);
+    for (const asset of ['/static/login.css', '/static/runtime-base.js', '/static/pwa.js', '/static/login.js',
+        '/static/nexowatt-eos-logo.png', '/manifest.webmanifest', '/assets/icons/nexowatt-192.png', '/sw.js']) {
+        const response = await h.browser(asset);
+        assert.equal(response.status, 200, asset);
+        assert.equal(response.headers['x-content-type-options'], 'nosniff', asset);
+        assert.match(response.headers['cache-control'], /no-store/, asset);
+    }
+    assert.equal((await h.browser('/static/login.js', { headers: { origin: 'https://foreign.invalid' } })).status, 403);
+    assert.equal((await h.browser('/api/eos/runtime')).status, 401);
+    const signedIn = await h.browser('/api/auth/login', { method: 'POST', body: { user: 'operator', password: 'fixture-passphrase' } });
+    assert.equal(signedIn.status, 200, signedIn.text); assert.deepEqual(signedIn.json, { ok: true });
+    assert.equal((await h.browser('/runtime/')).status, 200);
+    const state = await h.browser('/api/eos/runtime');
+    assert.equal(state.status, 200, state.text);
+    const ui = state.json.processes.find(row => row.id === 'ui');
+    assert.equal(ui.controls.enabled, !readTimeout ? false : true);
+    assert.equal(ui.pid, null); assert.equal(ui.active, false);
+    if (readTimeout) {
+        assert.equal(ui.controls.reason, 'EOS_RUNTIME_CONFIG_TIMEOUT');
+        assert.equal(ui.controls.canEnable, false);
+    } else {
+        const resume = h.runtime.resume;
+        h.runtime.resume = async () => { try { await resume(); } catch (error) { h.logs.push(String(error?.stack || error)); throw error; } };
+        const action = await h.browser('/api/eos/runtime/ui/control', { method: 'POST', headers: { 'x-nw-csrf': state.json.csrfToken },
+            body: { action: 'enable', expectedRevision: ui.controls.revision } });
+        assert.equal(action.status, 202, action.text);
+        await h.owner.eosRuntimeControl.whenIdle();
+        assert.ok(h.runtime.status().process.pid > 0, JSON.stringify({ state: h.runtime.status(), controls: h.owner.eosRuntimeControl.view('ui'), logs: h.logs }));
+    }
 });

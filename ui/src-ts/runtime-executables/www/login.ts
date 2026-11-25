@@ -110,6 +110,8 @@
       const target = new URL(requested, window.location.origin);
       if (target.origin === window.location.origin && !target.username && !target.password
         && target.pathname === '/system/' && status.role === 'admin') return '/system/';
+      if (target.origin === window.location.origin && !target.username && !target.password
+        && target.pathname === '/runtime/' && status.role === 'admin') return '/runtime/';
       if (target.origin !== window.location.origin || target.username || target.password || !target.pathname.startsWith(root)) return fallback;
       const path = '/' + target.pathname.slice(root.length);
       const canonical = path.length > 1 && path.endsWith('/') ? path.slice(0, -1) : path;
@@ -186,7 +188,7 @@
   }
 
   /** Passwort exakt übernehmen, nicht trimmen/persistieren und keinen Login automatisch wiederholen. */
-  elements.form.addEventListener('submit', async event => {
+  async function submitLogin(event: Event): Promise<void> {
     event.preventDefault();
     if (busy || Date.now() < retryAt || current?.mode !== 'iobroker' || framed() || !secureBrowser()) return;
     const user = elements.userInput.value.trim(); let password = elements.passwordInput.value;
@@ -219,7 +221,8 @@
       render(status);
     } catch { if (ticket === generation) { current = null; closeForms(); message('Die Anmeldung konnte nicht bestätigt werden. Bitte die Verbindung erneut prüfen.', true); elements.retry.hidden = false; } }
     finally { password = ''; elements.passwordInput.value = ''; window.clearTimeout(timer); setBusy(false); }
-  });
+  }
+  elements.form.addEventListener('submit', event => { void submitLogin(event); });
 
   elements.toggle.addEventListener('click', () => {
     const visible = elements.passwordInput.type === 'password'; elements.passwordInput.type = visible ? 'text' : 'password';

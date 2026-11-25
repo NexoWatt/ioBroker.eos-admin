@@ -53,6 +53,8 @@ interface UiProcessRuntime {
     start(): Promise<void>;
     startOperational(): Promise<void>;
     stop(): Promise<void>;
+    pause(): Promise<void>;
+    resume(): Promise<void>;
     status(): Record<string, unknown>;
     getHistoryBackupRequirement(): Promise<unknown>;
     reconcileDeviceEms(devices: unknown[]): Promise<unknown>;
@@ -109,6 +111,7 @@ export function createEosUiProcess(owner: UiOwner, bridge: UiBridge, options: Pr
     let peer: UiProcessRpc | null = null;
     let generation = '';
     let stopped = false;
+    let paused = false;
     let writeFenced = true;
     let armed = false;
     let starting: Promise<void> | null = null;
@@ -136,7 +139,12 @@ export function createEosUiProcess(owner: UiOwner, bridge: UiBridge, options: Pr
     };
 
     const current = (token: string): boolean =>
-        !stopped && token === generation && child !== null && child.exitCode === null && child.signalCode === null;
+        !stopped &&
+        !paused &&
+        token === generation &&
+        child !== null &&
+        child.exitCode === null &&
+        child.signalCode === null;
     const writable = (token: string): boolean =>
         current(token) && !writeFenced && bridge.canWrite() === true && performance.now() - lastHealth < 5000;
     const snapshot = (): Record<string, unknown> => ({
@@ -144,7 +152,7 @@ export function createEosUiProcess(owner: UiOwner, bridge: UiBridge, options: Pr
         expiresAt: Date.now() + 3000,
         license: bridge.getLicense(),
         readiness: bridge.getRuntimeReadiness?.(),
-        canWrite: !stopped && !writeFenced && bridge.canWrite() === true,
+        canWrite: !stopped && !paused && !writeFenced && bridge.canWrite() === true,
         listening: bridge.isListening?.() === true,
     });
     const closeRequests = (): void => {
@@ -156,7 +164,7 @@ export function createEosUiProcess(owner: UiOwner, bridge: UiBridge, options: Pr
     const fault = (code: string): void => {
         writeFenced = true;
         health.lastError = code;
-        health.state = stopped ? 'stopping' : 'failed';
+        health.state = stopped || paused ? 'stopping' : 'failed';
         closeRequests();
         // No replacement until the old process has emitted exit and every dispatched write has completed.
         child?.kill('SIGKILL');
@@ -388,7 +396,7 @@ export function createEosUiProcess(owner: UiOwner, bridge: UiBridge, options: Pr
         }
     };
     const scheduleRestart = (): void => {
-        if (stopped || retry) {
+        if (stopped || paused || retry) {
             return;
         }
         if (pendingWrites.size) {
@@ -414,7 +422,7 @@ export function createEosUiProcess(owner: UiOwner, bridge: UiBridge, options: Pr
         retry.unref();
     };
     async function launch(): Promise<void> {
-        if (stopped) {
+        if (stopped || paused) {
             throw processError('EOS_UI_PROCESS_STOPPED');
         }
         if (starting) {
@@ -475,8 +483,8 @@ export function createEosUiProcess(owner: UiOwner, bridge: UiBridge, options: Pr
                     child = null;
                     peer = null;
                     health.pid = null;
-                    health.state = stopped ? 'stopping' : 'failed';
-                    if (!stopped && !health.lastError) {
+                    health.state = stopped || paused ? 'stopping' : 'failed';
+                    if (!stopped && !paused && !health.lastError) {
                         health.lastError = 'EOS_UI_PROCESS_EXIT';
                     }
                     latestStatus = { ...latestStatus, emsReady: false, active: false, canWrite: false };
@@ -485,7 +493,7 @@ export function createEosUiProcess(owner: UiOwner, bridge: UiBridge, options: Pr
                 }
                 void cleanupSubscriptions().then(
                     () => {
-                        if (!stopped) {
+                        if (!stopped && !paused) {
                             scheduleRestart();
                         }
                     },
@@ -550,14 +558,73 @@ export function createEosUiProcess(owner: UiOwner, bridge: UiBridge, options: Pr
         return starting;
     }
     const remote = (method: string, args: unknown[] = [], timeout?: number): Promise<unknown> =>
-        peer && !stopped
+        peer && !stopped && !paused
             ? peer.call(method, args, timeout)
             : Promise.reject(processError('EOS_UI_PROCESS_UNAVAILABLE'));
+    const shutdown = (permanent: boolean): Promise<void> => {
+        if (permanent) {
+            stopped = true;
+        }
+        paused = true;
+        if (stopping) {
+            return stopping;
+        }
+        writeFenced = true;
+        armed = false;
+        health.state = 'stopping';
+        if (retry) {
+            clearTimeout(retry);
+        }
+        retry = null;
+        if (heartbeat) {
+            clearInterval(heartbeat);
+        }
+        heartbeat = null;
+        closeRequests();
+        const active = child;
+        const rpc = peer;
+        const initializing = starting;
+        stopping = (async () => {
+            if (active) {
+                try {
+                    await rpc?.call('stop', [], 10_000);
+                } catch {
+                    /* process exit below is the required boundary */
+                }
+                if (active.exitCode === null && active.signalCode === null) {
+                    await new Promise<void>((resolve, reject) => {
+                        const timer = setTimeout(() => reject(processError('EOS_UI_PROCESS_STOP_UNCONFIRMED')), 5000);
+                        active.once('exit', () => {
+                            clearTimeout(timer);
+                            resolve();
+                        });
+                        active.kill('SIGKILL');
+                    });
+                }
+            }
+            await initializing?.catch(() => undefined);
+            await Promise.all([...pendingWrites]);
+            await cleanupSubscriptions();
+            health.state = 'stopped';
+            health.pid = null;
+        })().catch(error => {
+            health.state = 'failed';
+            health.lastError = 'EOS_UI_PROCESS_STOP_UNCONFIRMED';
+            throw error;
+        });
+        return stopping;
+    };
     return {
         async start(): Promise<void> {
+            if (paused) {
+                return;
+            }
             await launch();
         },
         async startOperational(): Promise<void> {
+            if (paused) {
+                return;
+            }
             armed = true;
             peer?.notify('lease', [snapshot()]);
             await remote('startOperational', [], 120_000);
@@ -566,7 +633,7 @@ export function createEosUiProcess(owner: UiOwner, bridge: UiBridge, options: Pr
             return {
                 ...latestStatus,
                 ...(health.state !== 'running'
-                    ? { state: stopped ? health.state : 'degraded', error: health.lastError }
+                    ? { state: stopped || paused ? health.state : 'degraded', error: health.lastError }
                     : {}),
                 active: health.state === 'running' && current(generation),
                 emsReady: health.state === 'running' && current(generation) && latestStatus.emsReady === true,
@@ -712,56 +779,27 @@ export function createEosUiProcess(owner: UiOwner, bridge: UiBridge, options: Pr
                 req.pipe(request);
             }
         },
-        stop(): Promise<void> {
+        pause(): Promise<void> {
+            return shutdown(false);
+        },
+        async resume(): Promise<void> {
+            if (stopped) {
+                throw processError('EOS_UI_PROCESS_STOPPED');
+            }
             if (stopping) {
-                return stopping;
+                await stopping;
             }
-            stopped = true;
-            writeFenced = true;
-            armed = false;
-            health.state = 'stopping';
-            if (retry) {
-                clearTimeout(retry);
+            if (pendingWrites.size || child || subscriptionCleanup || starting) {
+                throw processError('EOS_UI_PROCESS_STOP_UNCONFIRMED');
             }
-            retry = null;
-            if (heartbeat) {
-                clearInterval(heartbeat);
-            }
-            heartbeat = null;
-            closeRequests();
-            const active = child;
-            const rpc = peer;
-            stopping = (async () => {
-                if (active) {
-                    try {
-                        await rpc?.call('stop', [], 10_000);
-                    } catch {
-                        /* process exit below is the required boundary */
-                    }
-                    if (active.exitCode === null && active.signalCode === null) {
-                        await new Promise<void>((resolve, reject) => {
-                            const timer = setTimeout(
-                                () => reject(processError('EOS_UI_PROCESS_STOP_UNCONFIRMED')),
-                                5000,
-                            );
-                            active.once('exit', () => {
-                                clearTimeout(timer);
-                                resolve();
-                            });
-                            active.kill('SIGKILL');
-                        });
-                    }
-                }
-                await Promise.all([...pendingWrites]);
-                await cleanupSubscriptions();
-                health.state = 'stopped';
-                health.pid = null;
-            })().catch(error => {
-                health.state = 'failed';
-                health.lastError = 'EOS_UI_PROCESS_STOP_UNCONFIRMED';
-                throw error;
-            });
-            return stopping;
+            stopping = null;
+            paused = false;
+            armed = true;
+            health.restarts = 0;
+            await launch();
+        },
+        stop(): Promise<void> {
+            return shutdown(true);
         },
     };
 }

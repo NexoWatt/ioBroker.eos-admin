@@ -7,7 +7,8 @@ export default [
         // These boundaries are checked by lint:unified with their existing dedicated
         // executable rules and strict TS configurations, not upstream TS style rules.
         'src/lib/eosHistoryBackupScope.js', 'src/lib/eosModuleProcess.js', 'src/lib/eosModuleProcessProtocol.js',
-        'src/lib/eosModuleProcessWorker.js', 'src/lib/eosRuntimeHealth.js'] },
+        'src/lib/eosModuleProcessWorker.js', 'src/lib/eosRuntimeHealth.js',
+        'src/lib/eosModuleConfigStore.js', 'src/lib/eosRuntimeControl.js'] },
     ...config,
     {
         languageOptions: {

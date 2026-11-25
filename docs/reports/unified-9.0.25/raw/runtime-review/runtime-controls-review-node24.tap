@@ -1,0 +1,17 @@
+✔ unconfirmed stop cannot become enabled again by reconstructing the control service (4.230531ms)
+✔ accepted restart stays busy until stop really settles and does not resume after close (1.12986ms)
+✔ late database write after close cannot dispatch stop or start into a replacement lifecycle (0.865009ms)
+✔ persisted UI pause survives initialization while other process flags remain separate (0.536583ms)
+✔ closing initialization before a late database response cannot grant process authority (0.345901ms)
+✔ bounded initialization returns a visible blocker and a late read cannot reopen process gates (20.394975ms)
+✔ slow HTTP body cannot retain control authority after session revocation (39.674703ms)
+✔ slow HTTP body cannot retain control authority after role revocation (11.960343ms)
+✔ slow HTTP body cannot retain control authority after csrf revocation (12.224062ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 298.605102

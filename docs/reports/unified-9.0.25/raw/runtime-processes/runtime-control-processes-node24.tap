@@ -1,0 +1,13 @@
+✔ actual Devices disable, enable and restart replace only its PID/generation and preserve the OCPP socket (1466.8136ms)
+✔ actual OCPP process controls preserve native namespace and never replay a command from the old child (2848.097689ms)
+✔ actual OCPP process controls preserve imported namespace and never replay a command from the old child (2842.962261ms)
+✔ persisted Devices process disable survives a fresh Host and RuntimeControl without altering module configuration (1756.645414ms)
+✔ process enable cannot activate a Devices module whose own configuration is disabled (943.794484ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9999.225613

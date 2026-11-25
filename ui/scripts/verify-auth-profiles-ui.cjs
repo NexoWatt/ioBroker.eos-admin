@@ -205,6 +205,36 @@ async function main() {
       assert.equal(f.window.NW_AUTH.getState().authed, false, JSON.stringify(patch)); assert.equal(f.content.inert, true);
     }
   });
+  await check('Prozessverwaltung als Rücksprung nur nach bestätigter Administratoranmeldung; Kunde, Installer und Kiosk bleiben ausgeschlossen', async () => {
+    const url = 'https://nexowatt.test/login.html?admin=1&returnTo=%2Fruntime%2F';
+    for (const initial of [signedOut(), signedIn('admin')]) {
+      const f = fixture('login', initial, { url, loginRole: 'admin' }); await f.settle();
+      assert.deepEqual(f.redirects, []); assert.equal(f.nodes.get('loginForm').hidden, false);
+      f.nodes.get('loginUser').value = 'fixture'; f.nodes.get('loginPassword').value = 'fixture-only-password';
+      await f.nodes.get('loginForm').handlers.get('submit')({ preventDefault() {} }); await f.settle();
+      assert.deepEqual(f.redirects, ['/runtime/']);
+      assert.equal(f.calls.filter(c => c.path === '/api/auth/login').length, 1);
+      assert.ok(f.calls.filter(c => c.path === '/api/auth/status').every(c => c.search === '?admin=1'));
+      assert.equal(f.nodes.get('loginPassword').value, '');
+    }
+    for (const role of ['customer', 'installer']) {
+      const f = fixture('login', signedIn(role), { url, loginRole: role }); await f.settle();
+      f.nodes.get('loginUser').value = 'fixture'; f.nodes.get('loginPassword').value = 'fixture-only-password';
+      await f.nodes.get('loginForm').handlers.get('submit')({ preventDefault() {} }); await f.settle();
+      assert.deepEqual(f.redirects, []); assert.match(f.nodes.get('loginStatus').textContent, /keine Administratorrechte/);
+      const ordinary = fixture('login', signedIn(role), { url: url.replace('admin=1&', '') });
+      await ordinary.settle(); assert.deepEqual(ordinary.redirects, ['/']);
+    }
+    const kiosk = { ...signedIn('customer'), mode: 'kiosk', kiosk: true, kioskEnabled: true, user: null, userId: null, capabilities: ['frontend.open'] };
+    const tablet = fixture('login', kiosk, { url: url.replace('admin=1&', '') });
+    await tablet.settle(); assert.deepEqual(tablet.redirects, ['/']);
+    for (const target of ['//foreign.test/runtime/', '/api/eos/runtime', '/runtime/child', '/admin/proxy/nexowatt-ui.3/runtime/']) {
+      const f = fixture('login', signedIn('admin'), { url: 'https://nexowatt.test/login.html?returnTo=' + encodeURIComponent(target) });
+      await f.settle(); assert.deepEqual(f.redirects, ['/']);
+    }
+    const canonical = fixture('login', signedIn('admin'), { url: 'https://nexowatt.test/login.html?returnTo=' + encodeURIComponent('/runtime/?next=//foreign.test/#section') });
+    await canonical.settle(); assert.deepEqual(canonical.redirects, ['/runtime/']);
+  });
   await check('Alle geschützten HTML-Einstiege laden Runtime und Auth vor ihrer Bedienlogik', async () => {
     const publicPages = new Set(['login.html', 'dc-station-display.html']);
     const protectedPages = fs.readdirSync(path.join(root, 'www')).filter(name => name.endsWith('.html') && !publicPages.has(name));

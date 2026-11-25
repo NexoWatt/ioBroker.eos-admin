@@ -1,0 +1,42 @@
+{
+  "version": "9.0.25",
+  "source": "lockfile graphs; installed build dependencies are symlinked in this isolated workspace",
+  "npmRuns": [
+    {
+      "cwd": ".",
+      "command": "npm sbom --package-lock-only --sbom-format=cyclonedx",
+      "exitCode": 0,
+      "lockSha256": "cbd2bb12140eda3d9069b31fa00afdf44a0544f80d5935300847123dd9473771",
+      "artifact": "release-manifests/unified/build-environment.cdx.json",
+      "sha256": "94cadb8f7377fd7c32c47b5de6ef6f0bdcc5c1227339945ac90e6a8da1d16fae",
+      "componentVersion": "9.0.25",
+      "components": 866
+    },
+    {
+      "cwd": "src-admin",
+      "command": "npm sbom --package-lock-only --sbom-format=cyclonedx",
+      "exitCode": 0,
+      "lockSha256": "3cd85936399ea68be1cc395ac166db6dd6b476c74af49da78617402f9f62e22d",
+      "artifact": "release-manifests/unified/frontend.cdx.json",
+      "sha256": "8c40dc7a12f73b678609fe46df14d807bbc0728086c621874041865fc3377df2",
+      "componentVersion": "9.0.25",
+      "components": 574
+    },
+    {
+      "cwd": "ui/src-admin-tab",
+      "command": "npm sbom --package-lock-only --sbom-format=cyclonedx",
+      "exitCode": 0,
+      "lockSha256": "1b64e751de92f7ad38e839d45130658024c2b357af5eedbbfa4295c6093d8753",
+      "artifact": "release-manifests/unified/installer.cdx.json",
+      "sha256": "af2a46d81a22355ba3ef9f930df8a30ce997cc877cdbfe6700c3a2e9ff03862e",
+      "componentVersion": "9.0.24",
+      "components": 127
+    }
+  ],
+  "runtimeEnrichment": {
+    "command": "node tools/eos-sbom-vendored.cjs",
+    "exitCode": 0,
+    "checkCommand": "node tools/eos-sbom-vendored.cjs --check",
+    "checkExitCode": 0
+  }
+}

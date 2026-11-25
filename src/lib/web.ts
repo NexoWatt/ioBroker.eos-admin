@@ -38,6 +38,7 @@ import type { OwnershipGuard } from './eosUnifiedOwnership';
 import type { EosHostedRuntime } from './eosUnifiedRuntime';
 import { createEosUiProcess } from './eosUiProcess';
 import { EosModuleHost } from './eosModuleHost';
+import { EosRuntimeControl } from './eosRuntimeControl';
 import { getDeviceEmsReferences, planDeviceEms } from './eosDeviceEmsPlan';
 import { resolveDeviceEmsTargets, projectDeviceEmsConfig, type DeviceEmsInventory } from './eosDeviceEmsService';
 import { registerEosModuleRoutes } from './eosModuleHttp';
@@ -186,6 +187,7 @@ interface AdminAdapter extends ioBroker.Adapter {
     eosLicenseService?: EosLicenseService;
     eosHostedRuntime?: EosHostedRuntime;
     eosModuleHost?: EosModuleHost;
+    eosRuntimeControl?: EosRuntimeControl;
     eosMigration?: EosLegacyMigration;
     eosDiscovery?: EosDiscovery;
     eosOwnership?: OwnershipGuard;
@@ -401,6 +403,7 @@ export default class Web {
     private startupFailed = false;
     private closed = false;
     private moduleHost: EosModuleHost | undefined;
+    private runtimeControl: EosRuntimeControl | undefined;
     private discovery: EosDiscovery | undefined;
     private tlsManager: EosTlsManager | undefined;
 
@@ -504,6 +507,7 @@ export default class Web {
     }
 
     close(): void {
+        void this.runtimeControl?.close();
         this.discovery?.stop();
         void this.moduleHost?.stop().catch(() => this.adapter.log.warn('EOS_MODULE_STOP_FAILED'));
         this.closed = true;
@@ -1977,6 +1981,52 @@ export default class Web {
             }
             next();
         });
+        // The existing sign-in screen belongs to the recovery host. A paused or
+        // unavailable UI/EMS child must not prevent a fresh administrator login.
+        // Fixed public assets only; no directory mount or separate auth system.
+        const loginAssets: Record<string, string> = {
+            '/login.html': 'login.html',
+            '/static/login.html': 'login.html',
+            '/static/login.css': 'login.css',
+            '/static/runtime-base.js': 'runtime-base.js',
+            '/static/pwa.js': 'pwa.js',
+            '/static/login.js': 'login.js',
+            '/static/nexowatt-eos-logo.png': 'nexowatt-eos-logo.png',
+            '/manifest.webmanifest': 'manifest.webmanifest',
+            '/sw.js': 'sw.js',
+        };
+        for (const name of [
+            'nexowatt-32.png',
+            'nexowatt-180.png',
+            'nexowatt-192.png',
+            'nexowatt-192-maskable.png',
+            'nexowatt-256.png',
+            'nexowatt-384.png',
+            'nexowatt-512.png',
+            'nexowatt-512-maskable.png',
+            'nexowatt-1024.png',
+        ]) {
+            loginAssets[`/assets/icons/${name}`] = `assets/icons/${name}`;
+        }
+        for (const [route, filename] of Object.entries(loginAssets)) {
+            app.get(route, (req: Request, res: Response): void => {
+                res.setHeader('Cache-Control', 'no-store');
+                res.setHeader('X-Content-Type-Options', 'nosniff');
+                res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+                res.setHeader('Referrer-Policy', 'no-referrer');
+                res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=(), usb=()');
+                res.setHeader('Content-Security-Policy', "base-uri 'self'; object-src 'none'; frame-ancestors 'self'");
+                if (!this.unified.requestAllowed(req)) {
+                    res.status(403).json({ error: 'AUTH_ORIGIN' });
+                    return;
+                }
+                res.sendFile(join(this.baseDir, 'ui', 'www', filename), { cacheControl: false }, error => {
+                    if (error && !res.headersSent) {
+                        res.status(404).json({ error: 'EOS_LOGIN_ASSET_UNAVAILABLE' });
+                    }
+                });
+            });
+        }
         const kioskAdmin = async (req: Request): Promise<boolean> => {
             if (!this.unified.requestAllowed(req)) {
                 return false;
@@ -2216,21 +2266,13 @@ export default class Web {
         const moduleHost = new EosModuleHost(this.adapter, {
             baseDir: this.baseDir,
             dataDir: join(getAbsoluteInstanceDataDir(this.adapter), 'modules'),
+            processEnabled: id => this.runtimeControl?.isEnabled(id) === true,
             eosDataDir: getAbsoluteInstanceDataDir(this.adapter),
             installationDir: join(controllerDir, '..', '..'),
         });
         this.adapter.eosModuleHost = moduleHost;
         this.moduleHost = moduleHost;
-        registerEosModuleRoutes({
-            app,
-            host: moduleHost,
-            baseDir: this.baseDir,
-            jsonParser: bodyParser.json({ limit: '512kb', strict: true }),
-            authorize: (req: Request) => this.unified.status(req),
-            csrfAllowed: (req: Request) => this.unified.csrfAllowed(req),
-            requestAllowed: (req: Request) => this.unified.requestAllowed(req),
-            runtimeStatus: () => this.adapter.eosHostedRuntime?.status?.(),
-        });
+
         const runtime = createEosUiProcess(
             this.adapter,
             {
@@ -2278,7 +2320,8 @@ export default class Web {
                 },
                 originAllowed: (req: Request) => this.unified.requestAllowed(req),
                 machineRequestAllowed: (req: Request) => this.unified.machineRequestAllowed(req),
-                canWrite: () => this.adapter.eosOwnership?.canWrite() === true,
+                canWrite: () =>
+                    this.runtimeControl?.isEnabled('ui') === true && this.adapter.eosOwnership?.canWrite() === true,
                 isListening: () => !this.closed && !this.startupFailed && this.server.server?.listening === true,
                 hostedModuleFeedback: (message: { command: string; message?: unknown }) =>
                     moduleHost.receiveBridge(message),
@@ -2305,7 +2348,26 @@ export default class Web {
                 ? runtime.onHostedEebusMessage(message)
                 : Promise.reject(new Error('EOS_MODULE_BRIDGE_UNAVAILABLE')),
         );
-        await runtime.start();
+        const runtimeControl = new EosRuntimeControl({ owner: this.adapter, host: moduleHost, runtime });
+        this.runtimeControl = runtimeControl;
+        this.adapter.eosRuntimeControl = runtimeControl;
+        await runtimeControl.initialize();
+        registerEosModuleRoutes({
+            app,
+            host: moduleHost,
+            baseDir: this.baseDir,
+            jsonParser: bodyParser.json({ limit: '512kb', strict: true }),
+            authorize: (req: Request) => this.unified.status(req),
+            csrfAllowed: (req: Request) => this.unified.csrfAllowed(req),
+            requestAllowed: (req: Request) => this.unified.requestAllowed(req),
+            runtimeControl,
+            runtimeStatus: () => this.adapter.eosHostedRuntime?.status?.(),
+        });
+        if (runtimeControl.isEnabled('ui')) {
+            await runtime.start();
+        } else {
+            await runtime.pause();
+        }
         app.use((req: Request, res: Response, next: NextFunction): void => {
             if (!this.isUnifiedRequest(req)) {
                 next();

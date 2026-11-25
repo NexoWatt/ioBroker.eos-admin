@@ -1,6 +1,8 @@
-> **9.0.24:** OCPP ist jetzt zusammen mit Devices, EEBUS, UI/EMS und Backup Bestandteil eines EOS-Adapters und läuft als eigener Prozess. Kiosk-Dashboard ohne automatische Abmeldung, technische Einstellungen mit erneuter Administratoranmeldung; bestehende Stations-Displaylinks bleiben separat nutzbar. Bekannte Frontend-Reste beim npm-Veröffentlichen werden anhand belegter Hashes gesichert bereinigt. [Anleitung](START_HIER_9.0.24.md) · [Prüfbericht](docs/reports/unified-9.0.24/PRUEFBERICHT.md).
+> **9.0.25:** Die optionale Übernahme eines separaten OCPP-Adapters blockiert den bestehenden Geräte-/EMS-Start nicht mehr. Die Prozessseite bietet gespeichertes Aktivieren, Deaktivieren und Neustarten für die EOS-Kindprozesse. Gemeinsames Paket und getrennte Prozesse bleiben erhalten. [Anleitung](START_HIER_9.0.25.md) · [Prüfbericht](docs/reports/unified-9.0.25/PRUEFBERICHT.md).
 
 Die folgenden Versionshinweise beschreiben frühere Lieferstände.
+
+> **9.0.24:** OCPP ist zusammen mit Devices, EEBUS, UI/EMS und Backup Bestandteil eines EOS-Adapters und läuft als eigener Prozess. Kiosk-Dashboard und geschützte Administration. Die nach Auslieferung gemeldete globale OCPP-Startsperre wird in 9.0.25 korrigiert. [Historischer Prüfbericht](docs/reports/unified-9.0.24/PRUEFBERICHT.md).
 
 > **9.0.23:** Getrennte Prozesse für UI/EMS, Geräte, EEBUS und Backup; OCPP bleibt separat. Automatische Stationszuordnung, Prozessdiagnose und unabhängige OCPP-Ausfallfreigabe. [Anleitung](START_HIER_9.0.23.md) · [Prüfbericht](docs/reports/unified-9.0.23/PRUEFBERICHT.md).
 
@@ -36,7 +38,7 @@ Die folgenden Versionshinweise beschreiben frühere Lieferstände.
 
 # NexoWatt EOS
 
-**Version 9.0.24 · technisches Paket: `iobroker.eos-admin` · Vertriebskanal: `next`**
+**Version 9.0.25 · technisches Paket: `iobroker.eos-admin` · Vertriebskanal: `next`**
 
 NexoWatt EOS verbindet die Systemverwaltung aus EOS-Admin 8.0.2 mit Dashboard,
 Installer und Energiemanagement aus NexoWatt UI 1.0.38. Eine ioBroker-Instanz betreibt
@@ -46,10 +48,12 @@ der bisherigen 0.4.3 ist integriert; im Zielbetrieb wird dafür kein zusätzlich
 `ocpp21`-Adapter benötigt. Admin/HTTPS, UI/EMS, Devices, EEBUS, OCPP und Backup haben
 getrennte Betriebssystemprozesse. UI und EMS bleiben innerhalb ihres gemeinsamen
 Kindprozesses. Kontrollierte Bestandsübernahmen erhalten vorhandene OCPP-Datenpunkt-IDs.
+Ein separat betriebener OCPP-Adapter wird ausschließlich nach ausdrücklicher Auswahl
+übernommen. Seine bloße Existenz löst keine automatische Übernahme mehr aus.
 
-Version 9.0.24 bleibt ein Integrations-Teststand für `next`. Die Versionsnummer ist
+Version 9.0.25 bleibt ein Integrations-Teststand für `next`. Die Versionsnummer ist
 kein Nachweis einer allgemeinen Produktivfreigabe oder CRA-Konformität. Tatsächliche
-Ergebnisse und Artefakthashes stehen im [Prüfbericht 9.0.24](docs/reports/unified-9.0.24/PRUEFBERICHT.md).
+Ergebnisse und Artefakthashes stehen im [Prüfbericht 9.0.25](docs/reports/unified-9.0.25/PRUEFBERICHT.md).
 Die [Berichte zu 9.0.4](docs/reports/unified-9.0.4/PRUEFBERICHT.md),
 [9.0.3](docs/reports/unified-9.0.3/PRUEFBERICHT.md) und früheren Versionen bleiben
 historische Belege; ihre Ergebnisse bestätigen keine späteren Änderungen.

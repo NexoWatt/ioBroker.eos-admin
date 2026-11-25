@@ -255,6 +255,7 @@ class Admin extends adapter_core_1.Adapter {
     /** Local license authority; management/recovery is never license-gated. */
     eosHostedRuntime;
     eosModuleHost;
+    eosRuntimeControl;
     eosMigration;
     eosDiscovery;
     eosOwnership;
@@ -948,6 +949,9 @@ class Admin extends adapter_core_1.Adapter {
         // A stuck hosted runtime must not leave the controller waiting forever on unload.
         deadline = setTimeout(finish, 2000);
         deadline.unref?.();
+        // Revoke new control jobs synchronously; drain an already-issued commit
+        // together with the worker shutdowns before completing normal unload.
+        const controlsStopped = this.eosRuntimeControl?.close() || Promise.resolve();
         cleanup(() => this.eosOwnership?.stop());
         cleanup(() => this.eosMigration?.stop());
         cleanup(() => this.eosDiscovery?.stop());
@@ -987,11 +991,11 @@ class Admin extends adapter_core_1.Adapter {
             });
         };
         if (!this.eosHostedRuntime) {
-            void modulesStopped.then(finishSubscriptions, finishSubscriptions);
+            void Promise.allSettled([modulesStopped, controlsStopped]).then(finishSubscriptions, finishSubscriptions);
             return;
         }
         try {
-            void Promise.allSettled([this.eosHostedRuntime.stop(), modulesStopped]).then(finishSubscriptions, finishSubscriptions);
+            void Promise.allSettled([this.eosHostedRuntime.stop(), modulesStopped, controlsStopped]).then(finishSubscriptions, finishSubscriptions);
         }
         catch {
             finishSubscriptions();

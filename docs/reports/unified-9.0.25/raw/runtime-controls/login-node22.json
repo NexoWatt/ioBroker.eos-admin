@@ -1,0 +1,32 @@
+{
+  "result": "passed",
+  "runAt": "2026-11-25T18:33:22.341Z",
+  "node": "v22.23.4",
+  "browser": "HeadlessChrome/158.0.8127.0",
+  "scope": "Real Chromium, production login artifacts, Web mount, runtime routes and OAuth/session model; synthetic controller identity/storage and explicitly stopped in-process hosted UI. No OS child stop or physical-device claim.",
+  "checks": [
+    {
+      "name": "stopped UI runtime: anonymous process-page request reaches parent-held credential form with exact admin return target",
+      "result": "passed"
+    },
+    {
+      "name": "actual password login and session confirmation return administrator to live parent process page while UI remains stopped",
+      "result": "passed"
+    },
+    {
+      "name": "explicit admin intent still requires credentials even with an existing administrator session",
+      "result": "passed"
+    },
+    {
+      "name": "successful customer password cannot enter runtime administration and protected status API returns 403",
+      "result": "passed"
+    }
+  ],
+  "pageErrors": [],
+  "sourceHashes": {
+    "src/lib/web.ts": "f811b42653c0a1a71acb41bf8a4ba1164b0c8cbb016be68b79f47d1f923b1038",
+    "src/lib/eosModuleHttp.js": "003efa7c5154d35c3af8e954da3203801e8a8336f042ecef571c7b4bf2ba0335",
+    "ui/src-ts/runtime-executables/www/login.ts": "62816adc56165924d31e7b98d1dc547d34f0e2f90505e8527fa21d8d29281a77",
+    "ui/www/login.js": "61852a05250e383f60fbce845e1b0cc02e17360df3f721adf545c3f2ee2ee956"
+  }
+}

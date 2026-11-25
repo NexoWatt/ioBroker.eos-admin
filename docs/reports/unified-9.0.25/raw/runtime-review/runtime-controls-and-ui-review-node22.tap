@@ -1,0 +1,232 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: default permits existing startup without writes; pause survives a fresh service and preserves device configuration
+ok 1 - default permits existing startup without writes; pause survives a fresh service and preserves device configuration
+  ---
+  duration_ms: 5.490151
+  type: 'test'
+  ...
+# Subtest: restart commits a durable pause before confirmed shutdown and only then persists enable
+ok 2 - restart commits a durable pause before confirmed shutdown and only then persists enable
+  ---
+  duration_ms: 5.033296
+  type: 'test'
+  ...
+# Subtest: an unconfirmed stop remains durably disabled and never starts a replacement
+ok 3 - an unconfirmed stop remains durably disabled and never starts a replacement
+  ---
+  duration_ms: 1.103691
+  type: 'test'
+  ...
+# Subtest: disable remains available behind startup gates, while enable and restart cannot bypass them
+ok 4 - disable remains available behind startup gates, while enable and restart cannot bypass them
+  ---
+  duration_ms: 2.346527
+  type: 'test'
+  ...
+# Subtest: paused process cannot be enabled while its module configuration is disabled
+ok 5 - paused process cannot be enabled while its module configuration is disabled
+  ---
+  duration_ms: 0.864577
+  type: 'test'
+  ...
+# Subtest: persistence failure does not stop a live process or falsely claim its activation changed
+ok 6 - persistence failure does not stop a live process or falsely claim its activation changed
+  ---
+  duration_ms: 0.654737
+  type: 'test'
+  ...
+# Subtest: invalid IDs, arbitrary commands, stale revision and replay do not change process state
+ok 7 - invalid IDs, arbitrary commands, stale revision and replay do not change process state
+  ---
+  duration_ms: 0.7309
+  type: 'test'
+  ...
+# Subtest: a hanging startup configuration read is bounded and its late completion cannot activate processes
+ok 8 - a hanging startup configuration read is bounded and its late completion cannot activate processes
+  ---
+  duration_ms: 63.20864
+  type: 'test'
+  ...
+# Subtest: invalid stored configuration never silently falls back to all enabled
+ok 9 - invalid stored configuration never silently falls back to all enabled
+  ---
+  duration_ms: 15.643804
+  type: 'test'
+  ...
+# Subtest: shutdown during an accepted restart never starts a replacement even if stop settles later
+ok 10 - shutdown during an accepted restart never starts a replacement even if stop settles later
+  ---
+  duration_ms: 5.477253
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: unconfirmed stop cannot become enabled again by reconstructing the control service
+ok 11 - unconfirmed stop cannot become enabled again by reconstructing the control service
+  ---
+  duration_ms: 5.701163
+  type: 'test'
+  ...
+# Subtest: accepted restart stays busy until stop really settles and does not resume after close
+ok 12 - accepted restart stays busy until stop really settles and does not resume after close
+  ---
+  duration_ms: 1.343435
+  type: 'test'
+  ...
+# Subtest: late database write after close cannot dispatch stop or start into a replacement lifecycle
+ok 13 - late database write after close cannot dispatch stop or start into a replacement lifecycle
+  ---
+  duration_ms: 0.669369
+  type: 'test'
+  ...
+# Subtest: persisted UI pause survives initialization while other process flags remain separate
+ok 14 - persisted UI pause survives initialization while other process flags remain separate
+  ---
+  duration_ms: 0.777569
+  type: 'test'
+  ...
+# Subtest: closing initialization before a late database response cannot grant process authority
+ok 15 - closing initialization before a late database response cannot grant process authority
+  ---
+  duration_ms: 0.465708
+  type: 'test'
+  ...
+# Subtest: bounded initialization returns a visible blocker and a late read cannot reopen process gates
+ok 16 - bounded initialization returns a visible blocker and a late read cannot reopen process gates
+  ---
+  duration_ms: 20.973308
+  type: 'test'
+  ...
+# (node:28) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: real hosted UI child starts the actual EMS and charging module through the IPC owner
+ok 17 - real hosted UI child starts the actual EMS and charging module through the IPC owner
+  ---
+  duration_ms: 4429.62121
+  type: 'test'
+  ...
+# Subtest: late object-subscription acknowledgement is drained before stop can confirm
+ok 18 - late object-subscription acknowledgement is drained before stop can confirm
+  ---
+  duration_ms: 146.387012
+  type: 'test'
+  ...
+# Subtest: real UI worker rejects expired and reordered authority leases
+ok 19 - real UI worker rejects expired and reordered authority leases
+  ---
+  duration_ms: 81.338107
+  type: 'test'
+  ...
+# (node:35) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: controller checkPassword callback preserves the canonical returned user
+ok 20 - controller checkPassword callback preserves the canonical returned user
+  ---
+  duration_ms: 128.27105
+  type: 'test'
+  ...
+# Subtest: history adapter responses beyond physical-command TTL retain their read-only callback
+ok 21 - history adapter responses beyond physical-command TTL retain their read-only callback
+  ---
+  duration_ms: 2406.148888
+  type: 'test'
+  ...
+# Subtest: an expired physical command is not replayed when the parent event loop recovers
+ok 22 - an expired physical command is not replayed when the parent event loop recovers
+  ---
+  duration_ms: 2636.610274
+  type: 'test'
+  ...
+# Subtest: completion from an old RPC generation cannot kill its replacement process
+ok 23 - completion from an old RPC generation cannot kill its replacement process
+  ---
+  duration_ms: 392.81743
+  type: 'test'
+  ...
+# Subtest: oversized controller response fails its read without killing the control process
+ok 24 - oversized controller response fails its read without killing the control process
+  ---
+  duration_ms: 486.756001
+  type: 'test'
+  ...
+# Subtest: SIGKILL of the supervising parent terminates the real runtime child
+ok 25 - SIGKILL of the supervising parent terminates the real runtime child
+  ---
+  duration_ms: 140.414837
+  type: 'test'
+  ...
+# (node:91) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual OS child preserves source timestamps/quality and HTTP identity is parent-bound
+ok 26 - actual OS child preserves source timestamps/quality and HTTP identity is parent-bound
+  ---
+  duration_ms: 109.801401
+  type: 'test'
+  ...
+# Subtest: each write rechecks live parent ownership; shutdown releases only owned subscriptions
+ok 27 - each write rechecks live parent ownership; shutdown releases only owned subscriptions
+  ---
+  duration_ms: 85.228454
+  type: 'test'
+  ...
+# Subtest: child exit is contained and restart uses new PID/generation without replaying measurements
+ok 28 - child exit is contained and restart uses new PID/generation without replaying measurements
+  ---
+  duration_ms: 189.195088
+  type: 'test'
+  ...
+# Subtest: blocked child event loop does not block parent and is killed before restart
+ok 29 - blocked child event loop does not block parent and is killed before restart
+  ---
+  duration_ms: 5617.0494
+  type: 'test'
+  ...
+# Subtest: real hosted UI shell retains login, origin and CSRF/role admission across private HTTP bridge
+ok 30 - real hosted UI shell retains login, origin and CSRF/role admission across private HTTP bridge
+  ---
+  duration_ms: 378.934399
+  type: 'test'
+  ...
+# Subtest: HTTP body streaming, fallthrough and SSE disconnect keep the public connection usable
+ok 31 - HTTP body streaming, fallthrough and SSE disconnect keep the public connection usable
+  ---
+  duration_ms: 74.370186
+  type: 'test'
+  ...
+# Subtest: private loopback rejects direct requests, spoofed capabilities and replay while a legitimate stream stays open
+ok 32 - private loopback rejects direct requests, spoofed capabilities and replay while a legitimate stream stays open
+  ---
+  duration_ms: 62.897055
+  type: 'test'
+  ...
+# Subtest: process diagnostics remove complete configured secrets before shortening
+ok 33 - process diagnostics remove complete configured secrets before shortening
+  ---
+  duration_ms: 2.487035
+  type: 'test'
+  ...
+# Subtest: explicit pause and resume use a new OS child while terminal stop cannot resurrect it
+ok 34 - explicit pause and resume use a new OS child while terminal stop cannot resurrect it
+  ---
+  duration_ms: 266.619442
+  type: 'test'
+  ...
+# Subtest: pause drains an accepted controller write before an explicit resume may create another child
+ok 35 - pause drains an accepted controller write before an explicit resume may create another child
+  ---
+  duration_ms: 245.991513
+  type: 'test'
+  ...
+1..35
+# tests 35
+# suites 0
+# pass 35
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 13218.870755

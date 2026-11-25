@@ -9,5 +9,5 @@ export default [
             'no-proto': 'error', 'no-extend-native': 'error', 'no-unused-vars': ['error', { argsIgnorePattern: '^_', caughtErrors: 'none' }] },
     },
     { files: ['public/eos-runtime/*.js'], languageOptions: { sourceType: 'script', globals: globals.browser } },
-    { files: ['test/eos-runtime-health-browser.cjs'], languageOptions: { globals: { ...globals.node, ...globals.browser } } },
+    { files: ['test/eos-runtime-health-browser.cjs', 'test/eos-runtime-controls-browser.cjs', 'test/eos-runtime-login-browser.cjs'], languageOptions: { globals: { ...globals.node, ...globals.browser } } },
 ];

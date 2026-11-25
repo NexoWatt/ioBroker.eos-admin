@@ -1,0 +1,49 @@
+{
+  "version": "9.0.25",
+  "recordedAt": "2026-11-25T18:41:31.066789+00:00",
+  "node": "24.22.3",
+  "checks": [
+    {
+      "command": "npm run build:frontend",
+      "exitCode": 0,
+      "log": "build-frontend.log",
+      "sha256": "4a9eda8da440bdeff0419677c4ddead03dc958b78079a306b0c2306d0324f6f1"
+    },
+    {
+      "command": "npm run build:installer",
+      "exitCode": 0,
+      "log": "build-installer.log",
+      "sha256": "5dcc1c0eb776db34c52d4f88447c0bf848b7b879bb5fae51c36bb42374f35e0f"
+    },
+    {
+      "command": "npm run build:unified-backend",
+      "exitCode": 0,
+      "log": "build-backend.log",
+      "sha256": "b6c7400ee804a324c0646754b19d9c014afd7dc1a3ecf4ae6542cdaf0a73284c"
+    },
+    {
+      "command": "npm run build:ui-runtime",
+      "exitCode": 0,
+      "log": "build-ui-runtime.log",
+      "sha256": "d4ecf242878e7ff904b8c8f76ccff4c7ebe5d131c48b6221f9d6ddbef65ab17d"
+    },
+    {
+      "command": "npm run build:modules",
+      "exitCode": 0,
+      "log": "build-modules.log",
+      "sha256": "d86640857cb28f0c743f7690159c23b6eb95c54363e8462be198e9f4566956ce"
+    },
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "typecheck.log",
+      "sha256": "3ad6f916a3907c94321085a8dffb6c758ddfc4845b94ac4f2529cce9d8cf451a"
+    },
+    {
+      "command": "npm run lint",
+      "exitCode": 0,
+      "log": "lint.log",
+      "sha256": "64dd4916f94f952908fe67f5f1113f16f8a42c11757be0423f042eb7536159b7"
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "runAt": "2026-11-25T18:33:40.933Z",
+  "result": "passed",
+  "node": "v22.23.4",
+  "browser": "HeadlessChrome/158.0.8127.0",
+  "scope": "Real Chromium, production runtime diagnostic page and HTTP routes; simulated controller/module status and admin role; no real ioBroker plant or physical device. Visibility and BFcache events simulated.",
+  "checks": [
+    {
+      "name": "desktop production markup, seven distinct processes including hosted and external OCPP, explicit EMS not ready",
+      "result": "passed"
+    },
+    {
+      "name": "mobile 390px, no horizontal page overflow",
+      "result": "passed"
+    },
+    {
+      "name": "single request and five-second cadence with real timers",
+      "result": "passed",
+      "gapsMs": [
+        5021.199999999255,
+        4999.39999999851
+      ]
+    },
+    {
+      "name": "HTTP failure removes previously green process state",
+      "result": "passed"
+    },
+    {
+      "name": "recovery restores confirmed process snapshot",
+      "result": "passed"
+    },
+    {
+      "name": "hidden aborts fetch and polling; visible/BFcache events produce one immediate refresh",
+      "result": "passed"
+    },
+    {
+      "name": "permission loss clears status and stops automatic polling",
+      "result": "passed"
+    }
+  ],
+  "pageErrors": [],
+  "sourceHashes": {
+    "src/lib/eosRuntimeHealth.js": "7b7724eacac3a7c913eb2ee40dceb37329f0d960ffc7b4c0728c85a55e35ab5d",
+    "src/lib/eosModuleHttp.js": "003efa7c5154d35c3af8e954da3203801e8a8336f042ecef571c7b4bf2ba0335",
+    "public/eos-runtime/index.js": "45ccc5f75045cc216453c945f26e128173beae8e01067a8fe100ed21dc03c5e7",
+    "public/eos-runtime/index.html": "ec1977198e774dbf5a360334028365bcb4b457b33ec1a9a303c3d848bdd8232d",
+    "public/eos-runtime/style.css": "55dd55b29ba0ef541b840b72f14f967a23049397ee51b100557952a0f87d7d9c"
+  }
+}

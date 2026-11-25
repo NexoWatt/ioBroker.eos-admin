@@ -34,7 +34,7 @@ async function main() {
             authorize: async () => ({ authenticated: true, role: 'admin' }), requestAllowed: () => true, csrfAllowed: () => false,
             runtimeStatus: () => ({ active: true, emsReady: false, process: processHealth('running') }) });
         server = app.listen(0, '127.0.0.1'); await new Promise(resolve => server.once('listening', resolve));
-        browser = await puppeteer.launch({ executablePath: process.env.EOS_CHROMIUM_PATH || puppeteer.executablePath(),
+        browser = await puppeteer.launch({ executablePath: process.env.EOS_CHROMIUM_PATH || await puppeteer.executablePath(),
             headless: true, userDataDir: path.join(temp, 'profile'), args: ['--no-sandbox', '--disable-dev-shm-usage'] });
         const page = await browser.newPage(); page.on('pageerror', error => pageErrors.push(error.message));
         await page.evaluateOnNewDocument(() => {

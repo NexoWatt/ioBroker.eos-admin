@@ -120,3 +120,73 @@ test('process diagnostics remove complete configured secrets before shortening',
   assert.equal(sanitizeUiProcessLog('x'.repeat(4090) + token, { eosUi: { apiToken: token } }), 'EOS_UI_PROCESS_LOG_REDACTED');
   assert.ok(!sanitizeUiProcessLog('target=https://operator:secret@host Bearer abc123', {}).includes('secret'));
 });
+
+test('explicit pause and resume use a new OS child while terminal stop cannot resurrect it', async t => {
+  const f = await fixture(t); await f.runtime.startOperational();
+  const first = f.runtime.status().process;
+  await f.runtime.pause();
+  assert.equal(f.runtime.status().process.state, 'stopped');
+  assert.equal(f.runtime.status().process.pid, null); assert.equal(f.leases.size, 0);
+  assert.throws(() => process.kill(first.pid, 0), { code: 'ESRCH' });
+  await f.runtime.start(); await f.runtime.startOperational(); await delay(150);
+  assert.equal(f.runtime.status().process.pid, null, 'normal startup callbacks cannot undo an explicit pause');
+  await f.runtime.resume();
+  const second = f.runtime.status().process;
+  assert.equal(second.state, 'running'); assert.notEqual(second.pid, first.pid);
+  assert.ok(second.generation > first.generation); assert.equal(f.leases.size, 1);
+  assert.equal((await fetch(f.base + '/identity')).status, 200);
+  await f.runtime.stop();
+  await assert.rejects(f.runtime.resume(), /EOS_UI_PROCESS_STOPPED/);
+});
+
+test('pause drains an accepted controller write before an explicit resume may create another child', async t => {
+  let release; let entered = false;
+  const pending = new Promise(resolve => { release = resolve; });
+  const f = await fixture(t, false, { setForeignStateAsync: async () => { entered = true; await pending; } });
+  await f.runtime.startOperational(); const first = f.runtime.status().process;
+  const request = fetch(f.base + '/write').catch(() => undefined);
+  await eventually(() => entered);
+  let stopped = false; let resumed = false;
+  const pause = f.runtime.pause().then(() => { stopped = true; });
+  const resume = f.runtime.resume().then(() => { resumed = true; });
+  await eventually(() => f.runtime.status().process.pid === null);
+  await delay(100);
+  assert.equal(stopped, false); assert.equal(resumed, false);
+  assert.equal(f.runtime.status().process.generation, first.generation);
+  release(); await pause; await resume; await request;
+  assert.notEqual(f.runtime.status().process.pid, first.pid);
+  assert.equal(f.leases.size, 1);
+});
+
+test('pause during initialization drains a late subscription acquisition before creating the next child', async t => {
+  let release, entered = false, acquisitions = 0;
+  const leases = new Set();
+  const pending = new Promise(resolve => { release = resolve; });
+  const owner = { namespace: 'eos-admin.0', instance: 0, config: { eosUi: {} },
+    log: { info() {}, warn() {}, error() {}, debug() {} },
+    getForeignObjectAsync: async () => ({ native: {} }),
+    getForeignStateAsync: async () => ({ val: 20, ts: 123, q: 0 }),
+    eosStateSubscriptions: { async acquireHost(pattern) {
+      acquisitions++; if (acquisitions === 1) { entered = true; await pending; }
+      const lease = { pattern }; leases.add(lease); return async () => { leases.delete(lease); };
+    } } };
+  const bridge = { canWrite: () => true, originAllowed: () => true, isListening: () => true,
+    getLicense: () => ({ valid: true, coreEnabled: true }), resolveAccess: async () => ({ authenticated: false }) };
+  const runtime = createEosUiProcess(owner, bridge, { baseDir, workerPath: path.join(compiled, 'eosUiProcessWorker.js'),
+    runtimePath: path.join(__dirname, 'fixtures/eos-ui-process-runtime.cjs'), restartDelayMs: 25 });
+  t.after(async () => { release(); await runtime.stop(); });
+  const initialization = runtime.start().catch(error => error);
+  await eventually(() => entered);
+  const first = runtime.status().process;
+  let stopped = false, resumed = false;
+  const pause = runtime.pause().then(() => { stopped = true; });
+  const resume = runtime.resume().then(() => { resumed = true; });
+  await eventually(() => runtime.status().process.pid === null);
+  await delay(100);
+  assert.equal(stopped, false); assert.equal(resumed, false);
+  assert.equal(runtime.status().process.generation, first.generation);
+  release(); await initialization; await pause; await resume;
+  assert.notEqual(runtime.status().process.pid, first.pid);
+  assert.ok(runtime.status().process.generation > first.generation);
+  assert.equal(leases.size, 1, 'late old lease is released before the replacement subscribes');
+});

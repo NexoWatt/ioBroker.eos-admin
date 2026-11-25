@@ -1,5 +1,6 @@
 import type { Express, Request, RequestHandler } from 'express';
 import type { EosModuleHost } from './eosModuleHost';
+import type { EosRuntimeControl } from './eosRuntimeControl';
 export function registerEosModuleRoutes(options: {
     app: Express;
     host: EosModuleHost;
@@ -9,4 +10,5 @@ export function registerEosModuleRoutes(options: {
     csrfAllowed: (request: Request) => boolean;
     requestAllowed: (request: Request) => boolean;
     runtimeStatus?: () => unknown;
+    runtimeControl?: EosRuntimeControl;
 }): void;
