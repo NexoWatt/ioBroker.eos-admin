@@ -1,0 +1,12 @@
+{
+  "at": "2026-11-25T16:20:05.869Z",
+  "node": "v24.22.3",
+  "files": {
+    "src/lib/eosUpdateSnapshot.ts": "f4b1093fc2980c07390fe84174ad89f651ffe42d22fdecce0677f29bb1995557",
+    "test/eos-customer-update-snapshot.test.cjs": "913559fe8d6b0bc81ebfa57f29cdae4ba87a852f8d5a1d655dc19c6994e646e8",
+    "modules/backup/test/ocpp-coverage.test.cjs": "d820d1a4dd9f6e2e5ce8fb58a90a29b7c531db65cc635c796c97d709ef990feb",
+    "test/eos-module-ems-independence.test.cjs": "60c97f82dacd23a0593f907a67d9faa98863fcea396beb8325633bc25d1ca09a",
+    "test/eos-kiosk-independent-review.test.cjs": "04c6866b23b6aeafb623889e33e7c2b1ba0f29d6892aec2d271011f50a072da0",
+    "modules/backup/README.md": "55ebc1e36d6c797fb0d3cb55f25ecae91e9bd3aeed871c9990a738906ed6e0df"
+  }
+}

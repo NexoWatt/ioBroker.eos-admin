@@ -1,0 +1,105 @@
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: OCPP uses the existing central grant and preserves explicit legacy adapter scope
+ok 1 - OCPP uses the existing central grant and preserves explicit legacy adapter scope
+  ---
+  duration_ms: 1.591311
+  type: 'test'
+  ...
+# Subtest: native OCPP root command lease precedes startup and is released exactly once
+ok 2 - native OCPP root command lease precedes startup and is released exactly once
+  ---
+  duration_ms: 9.999505
+  type: 'test'
+  ...
+# Subtest: active or unconfirmed standalone OCPP blocks the new listener
+ok 3 - active or unconfirmed standalone OCPP blocks the new listener
+  ---
+  duration_ms: 4.871077
+  type: 'test'
+  ...
+# Subtest: manual OCPP import retains original IDs and stays disabled until reviewed enable
+ok 4 - manual OCPP import retains original IDs and stays disabled until reviewed enable
+  ---
+  duration_ms: 8.618534
+  type: 'test'
+  ...
+# Subtest: manual preserved import refuses a source changed during asynchronous conversion
+ok 5 - manual preserved import refuses a source changed during asynchronous conversion
+  ---
+  duration_ms: 3.08608
+  type: 'test'
+  ...
+# Subtest: automatic OCPP handover journals stop/readback and rollback retains source data
+ok 6 - automatic OCPP handover journals stop/readback and rollback retains source data
+  ---
+  duration_ms: 10.753319
+  type: 'test'
+  ...
+# Subtest: existing committed migration never silently stops a newly discovered OCPP source
+ok 7 - existing committed migration never silently stops a newly discovered OCPP source
+  ---
+  duration_ms: 1.5226
+  type: 'test'
+  ...
+# Subtest: real OCPP worker retains lease revocation history across immediate regrant and expiry
+ok 8 - real OCPP worker retains lease revocation history across immediate regrant and expiry
+  ---
+  duration_ms: 1596.672705
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: hosted OCPP facade writes local states in only its current or explicitly preserved namespace
+    # Subtest: embedded namespace
+    ok 1 - embedded namespace
+      ---
+      duration_ms: 6.367939
+      type: 'test'
+      ...
+    # Subtest: preserved standalone namespace
+    ok 2 - preserved standalone namespace
+      ---
+      duration_ms: 2.214862
+      type: 'test'
+      ...
+    1..2
+ok 9 - hosted OCPP facade writes local states in only its current or explicitly preserved namespace
+  ---
+  duration_ms: 10.107364
+  type: 'test'
+  ...
+# Subtest: hosted OCPP scans reject foreign, oversized and malformed controller inventories without partial success
+ok 10 - hosted OCPP scans reject foreign, oversized and malformed controller inventories without partial success
+  ---
+  duration_ms: 57.788289
+  type: 'test'
+  ...
+# Subtest: hosted OCPP configuration views accept only bounded own-station ranges and validate both value and doc identifiers
+ok 11 - hosted OCPP configuration views accept only bounded own-station ranges and validate both value and doc identifiers
+  ---
+  duration_ms: 2.499614
+  type: 'test'
+  ...
+# Subtest: hosted OCPP cannot publish a late inventory or dispatch a queued write after its generation is revoked
+ok 12 - hosted OCPP cannot publish a late inventory or dispatch a queued write after its generation is revoked
+  ---
+  duration_ms: 1.428561
+  type: 'test'
+  ...
+# Subtest: OCPP acknowledged telemetry bursts never re-enter IPC, while the original command event is preserved
+ok 13 - OCPP acknowledged telemetry bursts never re-enter IPC, while the original command event is preserved
+  ---
+  duration_ms: 11.587131
+  type: 'test'
+  ...
+1..13
+# tests 15
+# suites 0
+# pass 15
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1765.252836

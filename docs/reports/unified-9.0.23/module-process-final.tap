@@ -1,0 +1,27 @@
+✔ real worker retains EEBUS callback reply, original message and acknowledged trust revocation (78.414872ms)
+✔ real worker preserves third-argument ACK and per-job backup history RPC (55.302486ms)
+✔ backup stream cancellation before first byte closes the worker stream (158.264439ms)
+✔ backup download applies byte backpressure instead of buffering thousands of chunks (254.727219ms)
+✔ late backup open after RPC deadline cannot leak an orphan stream (5766.54389ms)
+✔ backup byte stream delivers all bytes across many IPC chunks without truncation (910.769453ms)
+✔ expired and out-of-order worker leases cannot renew authority (311.069225ms)
+✔ production Devices empty configuration starts and stops in real process without hardware (97.85378ms)
+✔ production EEBUS starts identity and subscriptions with all network functions disabled (116.543702ms)
+✔ production Backup starts with protected local identity and history coverage RPC (100.730471ms)
+✔ real backup job and its controller subprocess terminate when module supervisor dies (244.507257ms)
+✔ worker log sanitization covers MQTT URL credentials and long configured secrets before truncation (0.78559ms)
+✔ production worker has its own PID, narrow facade and filtered environment (63.716463ms)
+✔ a blocked child event loop cannot block another module or parent and is killed (2364.001292ms)
+✔ stop confirms OS exit even when the module shutdown blocks forever (1654.11592ms)
+✔ protocol rejects oversized payload, expired dispatch and stale generation replies (42.401292ms)
+✔ protocol caps concurrent unresolved requests and releases them on channel close (2.281762ms)
+✔ real host production default restarts only the crashed module with a new generation and PID (1146.55388ms)
+✔ parent drains an already accepted write before starting a replacement process (1242.279046ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8225.297789

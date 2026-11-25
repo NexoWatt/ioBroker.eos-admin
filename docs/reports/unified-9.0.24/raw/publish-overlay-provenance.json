@@ -1,0 +1,19 @@
+{
+  "source": {
+    "archive": "NexoWatt_EOS_9.0.21_FULL_REPOSITORY.zip",
+    "version": "9.0.21",
+    "archiveSha256": "2e6379843392fbf682670fe05039459fea93c3f702d956cc7edb3e0415d89c7a",
+    "manifestSha256": "feb1d213fe699a635457f7be609b7a40816ffe26c094b419be27d6a7d47efa3f",
+    "adminFiles": 359,
+    "matchedSealedFiles": 359,
+    "installerAssetFiles": 3,
+    "matchedSealedInstallerAssetFiles": 3,
+    "provenance": "Exact delivered 9.0.21 archive bytes verified individually against its sealed files manifest; reported hostInit-BNFIx0-f.js retained as regression fixture. Only historical compiled frontend files; current sealed files remain immutable."
+  },
+  "verifiedFiles": 362,
+  "reportedAsset": {
+    "path": "adminWww/assets/hostInit-BNFIx0-f.js",
+    "sha256": "f536222133dab1acf78d72aebdbfc75d163db120b4253248171dfa99bf6887c1",
+    "bytes": 6199
+  }
+}

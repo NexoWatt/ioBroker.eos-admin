@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/engine.ts
- * Quell-Hash: sha256:837933eeb666cfed0334fe6c8de0d54e98fb6fac0149e68a406e33b55aa8aac5
+ * Quell-Hash: sha256:b6498fc2692e094223cfecef303b18660faf85442c82fb364ce38a5db8ccc119
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -73,6 +73,7 @@
 const { DatapointRegistry } = require('./datapoints');
 const { ModuleManager } = require('./module-manager');
 const { awaitEmsTransition } = require('../lib/installer-lifecycle');
+const { normalizeOcppDiscovery } = require('../lib/ocpp-auto-discovery');
 const { applyStorageMeasurementOverrides } = require('./services/storage-override-bridge');
 const { buildNvpSnapshotFromRegistry } = require('./services/measurement-freshness');
 const { installActuatorShadowArbiter } = require('./services/actuator-shadow-arbiter');
@@ -755,6 +756,7 @@ class EmsEngine {
             const storageAssistCustomerAllowed = wb.storageAssistCustomerAllowed === true;
             // Aktivierung & Priorität (Installateur-Konfiguration)
             const enabled = (wb && typeof wb.enabled === 'boolean') ? !!wb.enabled : true;
+            const ocppDiscovery = normalizeOcppDiscovery(wb.ocppDiscovery);
             const prioRaw = Number(wb && wb.priority !== undefined ? wb.priority : NaN);
             const priority = (Number.isFinite(prioRaw) ? Math.max(1, Math.min(999, Math.round(prioRaw))) : 999);
             wallboxes.push({
@@ -762,6 +764,7 @@ class EmsEngine {
                 name: wb.name || key,
                 enabled,
                 priority,
+                ...(ocppDiscovery ? { ocppDiscovery } : {}),
                 // Stable mapping to EVCS index (lp1 -> 1, ...) regardless of safe key renaming
                 evcsIndex: idx,
                 chargerType,

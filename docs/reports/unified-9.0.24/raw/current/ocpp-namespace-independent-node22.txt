@@ -1,0 +1,302 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: registered stations persist complete native mappings; unknown electrical limits never enable a writer
+ok 1 - registered stations persist complete native mappings; unknown electrical limits never enable a writer
+  ---
+  duration_ms: 149.629478
+  type: 'test'
+  ...
+# Subtest: partial contract registration is explicit and completes; invalid directions, units and metadata stay untrusted
+ok 2 - partial contract registration is explicit and completes; invalid directions, units and metadata stay untrusted
+  ---
+  duration_ms: 0.648228
+  type: 'test'
+  ...
+# Subtest: real configuration pipeline retains validated contract failure metadata and never enables an uncommissioned row
+ok 3 - real configuration pipeline retains validated contract failure metadata and never enables an uncommissioned row
+  ---
+  duration_ms: 24.193399
+  type: 'test'
+  ...
+# Subtest: existing aliases deduplicate to one station and manual limits/mappings survive; duplicate control groups are reported
+ok 4 - existing aliases deduplicate to one station and manual limits/mappings survive; duplicate control groups are reported
+  ---
+  duration_ms: 1.411295
+  type: 'test'
+  ...
+# Subtest: multi EVSE topology remains one station aggregate writer; connector controls are never invented
+ok 5 - multi EVSE topology remains one station aggregate writer; connector controls are never invented
+  ---
+  duration_ms: 0.826922
+  type: 'test'
+  ...
+# Subtest: an existing active manual monitor does not gain its first writer from discovery, including later rescans
+ok 6 - an existing active manual monitor does not gain its first writer from discovery, including later rescans
+  ---
+  duration_ms: 0.97448
+  type: 'test'
+  ...
+# Subtest: existing manual monitor crosses real normalization, engine and CM tick without inferred hardware commands
+ok 7 - existing manual monitor crosses real normalization, engine and CM tick without inferred hardware commands
+  ---
+  duration_ms: 179.10656
+  type: 'test'
+  ...
+# Subtest: license capacity exposes pending stations, retains existing mappings and fills a newly available slot
+ok 8 - license capacity exposes pending stations, retains existing mappings and fills a newly available slot
+  ---
+  duration_ms: 0.576351
+  type: 'test'
+  ...
+# Subtest: registration bursts, offline and restart are idempotent; concurrent manual saves share the mutation fence
+ok 9 - registration bursts, offline and restart are idempotent; concurrent manual saves share the mutation fence
+  ---
+  duration_ms: 96.51842
+  type: 'test'
+  ...
+# Subtest: persist failures keep prior configuration; failed runtime apply is retried without creating a second row
+ok 10 - persist failures keep prior configuration; failed runtime apply is retried without creating a second row
+  ---
+  duration_ms: 138.63345
+  type: 'test'
+  ...
+# Subtest: stop during discovery cannot commit a late scan
+ok 11 - stop during discovery cannot commit a late scan
+  ---
+  duration_ms: 23.760059
+  type: 'test'
+  ...
+# Subtest: ownership loss after a database read prevents reconciliation and leaves existing configuration untouched
+ok 12 - ownership loss after a database read prevents reconciliation and leaves existing configuration untouched
+  ---
+  duration_ms: 0.594448
+  type: 'test'
+  ...
+# Subtest: actual supplied OCPP adapter registration and station telemetry map through the real EOS persistence path
+ok 13 - actual supplied OCPP adapter registration and station telemetry map through the real EOS persistence path
+  ---
+  duration_ms: 546.534763
+  type: 'test'
+  ...
+# Subtest: embedded OCPP station registration persists hosted mappings and retains them across bursts and runtime restart
+ok 14 - embedded OCPP station registration persists hosted mappings and retains them across bursts and runtime restart
+  ---
+  duration_ms: 744.683631
+  type: 'test'
+  ...
+# Subtest: discovery scopes hosted trees to the owning EOS and retains legacy migration identities
+ok 15 - discovery scopes hosted trees to the owning EOS and retains legacy migration identities
+  ---
+  duration_ms: 11.781428
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: manual hosted/native OCPP detection cannot pre-enable a new station or assume AC electrical settings
+ok 16 - manual hosted/native OCPP detection cannot pre-enable a new station or assume AC electrical settings
+  ---
+  duration_ms: 2.410006
+  type: 'test'
+  ...
+# Subtest: mapping a known native station preserves the installer-approved activation and electrical settings
+ok 17 - mapping a known native station preserves the installer-approved activation and electrical settings
+  ---
+  duration_ms: 2.871863
+  type: 'test'
+  ...
+# Subtest: station identities retain exact hosted namespace and legacy aliases without conflating equal station names
+ok 18 - station identities retain exact hosted namespace and legacy aliases without conflating equal station names
+  ---
+  duration_ms: 0.942933
+  type: 'test'
+  ...
+# (node:19) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: atomic profile uses confirmed watts, not raw wire amperes or unrelated command success
+ok 19 - atomic profile uses confirmed watts, not raw wire amperes or unrelated command success
+  ---
+  duration_ms: 9.983632
+  type: 'test'
+  ...
+# Subtest: current atomic response confirms zero and a conservative lower ceiling without inventing physical power
+ok 20 - current atomic response confirms zero and a conservative lower ceiling without inventing physical power
+  ---
+  duration_ms: 0.79178
+  type: 'test'
+  ...
+# Subtest: reconnect, pending/rejected, source quality and missing timestamps cannot fall back to old successful fields
+ok 21 - reconnect, pending/rejected, source quality and missing timestamps cannot fall back to old successful fields
+  ---
+  duration_ms: 15.344704
+  type: 'test'
+  ...
+# Subtest: 0.4.2 watt tuple requires last validity publication and does not confuse amperes with watts
+ok 22 - 0.4.2 watt tuple requires last validity publication and does not confuse amperes with watts
+  ---
+  duration_ms: 0.775806
+  type: 'test'
+  ...
+# Subtest: legacy result requires an actual successful profile response in watts
+ok 23 - legacy result requires an actual successful profile response in watts
+  ---
+  duration_ms: 9.588369
+  type: 'test'
+  ...
+# Subtest: invalid session and future response never become confirmed merely through matching old numeric values
+ok 24 - invalid session and future response never become confirmed merely through matching old numeric values
+  ---
+  duration_ms: 1.18445
+  type: 'test'
+  ...
+# (node:25) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: real CM reads atomic 0.4.3 feedback through source-metadata cache and writes native watts only
+ok 25 - real CM reads atomic 0.4.3 feedback through source-metadata cache and writes native watts only
+  ---
+  duration_ms: 279.344321
+  type: 'test'
+  ...
+# Subtest: real CM atomic pending/rejected feedback cannot be confirmed by old command-success fields
+ok 26 - real CM atomic pending/rejected feedback cannot be confirmed by old command-success fields
+  ---
+  duration_ms: 62.215872
+  type: 'test'
+  ...
+# Subtest: real CM rejects old-session, stale, bad quality and missing-source-timestamp feedback
+ok 27 - real CM rejects old-session, stale, bad quality and missing-source-timestamp feedback
+  ---
+  duration_ms: 79.736943
+  type: 'test'
+  ...
+# Subtest: real CM treats valid zero as a confirmed requested profile and keeps measured charging power separate
+ok 28 - real CM treats valid zero as a confirmed requested profile and keeps measured charging power separate
+  ---
+  duration_ms: 15.317763
+  type: 'test'
+  ...
+# Subtest: duplicate native station rows cannot send positive limits or race the single conservative zero writer
+ok 29 - duplicate native station rows cannot send positive limits or race the single conservative zero writer
+  ---
+  duration_ms: 33.599328
+  type: 'test'
+  ...
+# Subtest: incomplete native commissioning contract blocks positive power at the actual CM writer
+ok 30 - incomplete native commissioning contract blocks positive power at the actual CM writer
+  ---
+  duration_ms: 30.841242
+  type: 'test'
+  ...
+# Subtest: two independently controlled legacy OCPP connectors are not mistaken for a native station aggregate
+ok 31 - two independently controlled legacy OCPP connectors are not mistaken for a native station aggregate
+  ---
+  duration_ms: 15.303273
+  type: 'test'
+  ...
+# Subtest: native lease write failure or rejection blocks positive power in the real CM final writer
+ok 32 - native lease write failure or rejection blocks positive power in the real CM final writer
+  ---
+  duration_ms: 39.766912
+  type: 'test'
+  ...
+# Subtest: native positive command awaits the lease transport promise, not just an attempted write
+ok 33 - native positive command awaits the lease transport promise, not just an attempted write
+  ---
+  duration_ms: 41.105338
+  type: 'test'
+  ...
+# Subtest: atomic native contract cannot bypass its lease using missing, false or invalid support metadata
+ok 34 - atomic native contract cannot bypass its lease using missing, false or invalid support metadata
+  ---
+  duration_ms: 52.092084
+  type: 'test'
+  ...
+# Subtest: real CM renews its station lease after five seconds and immediately after an OCPP session change
+ok 35 - real CM renews its station lease after five seconds and immediately after an OCPP session change
+  ---
+  duration_ms: 39.540457
+  type: 'test'
+  ...
+# Subtest: hosted runtime eos-admin.0.ocpp.CP_01 retains native watts, atomic feedback, zero and ordered leases
+ok 36 - hosted runtime eos-admin.0.ocpp.CP_01 retains native watts, atomic feedback, zero and ordered leases
+  ---
+  duration_ms: 54.04521
+  type: 'test'
+  ...
+# Subtest: hosted runtime ocpp21.0.CP_01 retains native watts, atomic feedback, zero and ordered leases
+ok 37 - hosted runtime ocpp21.0.CP_01 retains native watts, atomic feedback, zero and ordered leases
+  ---
+  duration_ms: 20.295734
+  type: 'test'
+  ...
+# Subtest: live Admin parent never replaces missing, stale, future, bad-quality or unacknowledged OCPP worker heartbeat
+ok 38 - live Admin parent never replaces missing, stale, future, bad-quality or unacknowledged OCPP worker heartbeat
+  ---
+  duration_ms: 74.916229
+  type: 'test'
+  ...
+# Subtest: invalid migrated hosted marker cannot fall back to live legacy adapter
+ok 39 - invalid migrated hosted marker cannot fall back to live legacy adapter
+  ---
+  duration_ms: 3.683193
+  type: 'test'
+  ...
+# Subtest: another EOS owner cannot become a reader or writer through manual native mapping
+ok 40 - another EOS owner cannot become a reader or writer through manual native mapping
+  ---
+  duration_ms: 2.431673
+  type: 'test'
+  ...
+# Subtest: hosted aggregate duplicates still have only one conservative zero writer and no lease
+ok 41 - hosted aggregate duplicates still have only one conservative zero writer and no lease
+  ---
+  duration_ms: 36.834628
+  type: 'test'
+  ...
+# Subtest: hosted connection flags with invalid source metadata cannot authorize loading via fresh status or meter fallback
+ok 42 - hosted connection flags with invalid source metadata cannot authorize loading via fresh status or meter fallback
+  ---
+  duration_ms: 50.87861
+  type: 'test'
+  ...
+# Subtest: manual mixed native stations cannot pair one station lease with another station actuator
+ok 43 - manual mixed native stations cannot pair one station lease with another station actuator
+  ---
+  duration_ms: 3.917769
+  type: 'test'
+  ...
+# Subtest: only an explicitly valid false migration marker restores external adapter liveness after confirmed rollback
+ok 44 - only an explicitly valid false migration marker restores external adapter liveness after confirmed rollback
+  ---
+  duration_ms: 55.409936
+  type: 'test'
+  ...
+# Subtest: hosted OCPP never sends a first positive profile before lease capability arrives in the source cache
+ok 45 - hosted OCPP never sends a first positive profile before lease capability arrives in the source cache
+  ---
+  duration_ms: 23.936259
+  type: 'test'
+  ...
+# Subtest: external pre-lease OCPP retains its confirmed adapter path without inventing a hosted capability
+ok 46 - external pre-lease OCPP retains its confirmed adapter path without inventing a hosted capability
+  ---
+  duration_ms: 10.26627
+  type: 'test'
+  ...
+# Subtest: generic telemetry selection cannot bypass the native hosted OCPP process and lease contract
+ok 47 - generic telemetry selection cannot bypass the native hosted OCPP process and lease contract
+  ---
+  duration_ms: 285.086095
+  type: 'test'
+  ...
+1..47
+# tests 47
+# suites 0
+# pass 47
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2896.738761

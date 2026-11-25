@@ -16,7 +16,7 @@ export interface EosUpdateSnapshotReader {
     isBusy(): boolean;
 }
 const record = (value: unknown): value is Data => value !== null && typeof value === 'object' && !Array.isArray(value);
-const modules = ['devices', 'eebus', 'backup', 'ui', 'migration'];
+const modules = ['devices', 'eebus', 'ocpp', 'backup', 'ui', 'migration'];
 const configStates = [
     'installer.configJson',
     'smarthome.timersJson',
@@ -206,6 +206,42 @@ export async function readEosUpdateConfiguration(reader: EosUpdateSnapshotReader
         }
         const native: Data = { ...instance.native };
         delete native.eosModules; // The actual module store below supersedes these legacy envelopes.
+        const kioskId = `${reader.namespace}.kiosk.configuration`;
+        const kioskObject = await reader.getForeignObjectAsync(kioskId);
+        let kioskConfiguration: Data | null = null;
+        if (kioskObject != null) {
+            if (
+                !record(kioskObject) ||
+                kioskObject._id !== kioskId ||
+                kioskObject.type !== 'config' ||
+                !record(kioskObject.acl) ||
+                kioskObject.acl.owner !== 'system.user.admin' ||
+                kioskObject.acl.ownerGroup !== 'system.group.administrator' ||
+                kioskObject.acl.object !== 0x600 ||
+                !record(kioskObject.native) ||
+                Object.keys(kioskObject.native).some(
+                    key => !['schemaVersion', 'enabled', 'revision', 'enabledBy'].includes(key),
+                ) ||
+                kioskObject.native.schemaVersion !== 1 ||
+                typeof kioskObject.native.enabled !== 'boolean' ||
+                !Number.isSafeInteger(kioskObject.native.revision) ||
+                Number(kioskObject.native.revision) < 0 ||
+                !(
+                    kioskObject.native.enabledBy === null ||
+                    (typeof kioskObject.native.enabledBy === 'string' &&
+                        /^system\.user\.[A-Za-z0-9_.@-]{1,128}$/.test(kioskObject.native.enabledBy))
+                ) ||
+                (kioskObject.native.enabled && kioskObject.native.enabledBy === null)
+            ) {
+                throw fail();
+            }
+            kioskConfiguration = {
+                schemaVersion: 1,
+                enabled: kioskObject.native.enabled,
+                revision: kioskObject.native.revision,
+                enabledBy: kioskObject.native.enabledBy,
+            };
+        }
         const moduleValues: Data = {};
         const moduleMigrations: Data = {};
         let uiMigration: unknown = native.eosUiMigration;
@@ -290,6 +326,7 @@ export async function readEosUpdateConfiguration(reader: EosUpdateSnapshotReader
             instanceNative: native,
             modules: moduleValues,
             moduleMigrations,
+            ...(kioskConfiguration ? { kioskConfiguration } : {}),
             uiNamespace,
             values,
         });

@@ -1,0 +1,32 @@
+[
+  {
+    "source": {
+      "archive": "NexoWatt_EOS_9.0.22_FULL_REPOSITORY.zip",
+      "version": "9.0.22",
+      "archiveSha256": "460ddbf6c571997739433633ac12d07f129d1f8930dddac63ca069729b09d022",
+      "manifestSha256": "33e4d266172e3bcd228ff0afa6178ec28793582287b146a99167a6d83b3d7d4b",
+      "adminFiles": 359,
+      "matchedSealedFiles": 359,
+      "installerAssetFiles": 3,
+      "matchedSealedInstallerAssetFiles": 3,
+      "provenance": "Exact delivered archive compiled frontend bytes verified individually against its sealed files manifest. Historical overlay cleanup only; no current sealed files can be modified."
+    },
+    "verifiedFiles": 362,
+    "addedHashes": 10
+  },
+  {
+    "source": {
+      "archive": "NexoWatt_EOS_9.0.23_OCPP_0.4.3_FULL_REPOSITORIES.zip",
+      "version": "9.0.23",
+      "archiveSha256": "d354e17adf20728bee0c442179b00365b0d0bc518105ab47e8f39edcbced2000",
+      "manifestSha256": "cc9c608a733e20baf438da6ed9a8de64820452b8f2a49c5cd6953f9baf7759d2",
+      "adminFiles": 359,
+      "matchedSealedFiles": 359,
+      "installerAssetFiles": 3,
+      "matchedSealedInstallerAssetFiles": 3,
+      "provenance": "Exact delivered archive compiled frontend bytes verified individually against its sealed files manifest. Historical overlay cleanup only; no current sealed files can be modified."
+    },
+    "verifiedFiles": 362,
+    "addedHashes": 28
+  }
+]

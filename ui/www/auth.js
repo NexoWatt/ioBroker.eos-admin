@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/auth.ts
- * Quell-Hash: sha256:61bb87d24d27530605658bd13e1b5ea8897a187df3babdb3391ef660d651c116
+ * Quell-Hash: sha256:df79aa5b7344d9dace7a58ba8d696382aa3e6f11f33a9aa5be25b0868daff470
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -42,6 +42,7 @@
         mode: null, user: null, role: 'none', capabilities: [], isAdmin: false,
         isInstaller: false, isCustomer: false, loginUrl: '', logoutUrl: '',
         _loaded: false, statusError: false,
+        kiosk: false, kioskEnabled: false,
     };
     let csrfToken = '';
     let statusPromise = null;
@@ -165,6 +166,8 @@
     function resetStatus(error) {
         Object.assign(state, { authed: false, authenticated: false, role: 'none', user: null,
             capabilities: [], isAdmin: false, isInstaller: false, isCustomer: false, _loaded: true, statusError: error });
+        state.kiosk = false;
+        state.kioskEnabled = false;
         csrfToken = '';
         updateNavigation();
     }
@@ -206,7 +209,7 @@
         if (!value || typeof value !== 'object' || Array.isArray(value))
             throw new Error('auth_status_invalid');
         const data = value;
-        if (!['iobroker', 'eos'].includes(String(data.mode)) || data.configured !== true || data.enabled !== true || data.protectWrites !== true
+        if (!['iobroker', 'eos', 'kiosk'].includes(String(data.mode)) || data.configured !== true || data.enabled !== true || data.protectWrites !== true
             || typeof data.authed !== 'boolean' || (data.authenticated !== undefined && data.authenticated !== data.authed)
             || !['none', 'customer', 'installer', 'admin'].includes(String(data.role))
             || !Array.isArray(data.capabilities) || data.capabilities.length > 128
@@ -214,14 +217,24 @@
             || (data.user !== null && data.user !== undefined && (typeof data.user !== 'string' || data.user.length > 512)))
             throw new Error('auth_status_invalid');
         const token = typeof data.csrfToken === 'string' ? data.csrfToken : '';
-        if (data.authed && (data.role === 'none' || typeof data.user !== 'string' || !data.user
+        const kioskIdentity = data.kiosk === true && data.mode === 'kiosk' && data.role === 'customer'
+            && data.user === null && data.userId === null && data.capabilities.length === 1 && data.capabilities[0] === 'frontend.open';
+        if (data.authed && !kioskIdentity && (data.role === 'none' || typeof data.user !== 'string' || !data.user
             || !/^[A-Za-z0-9+/_=-]{16,1024}$/.test(token)))
             throw new Error('auth_session_invalid');
+        if ((data.kiosk !== undefined && typeof data.kiosk !== 'boolean')
+            || (data.kioskEnabled !== undefined && typeof data.kioskEnabled !== 'boolean')
+            || (data.mode === 'kiosk' && !kioskIdentity)
+            || (data.kiosk === true && (!kioskIdentity || data.kioskEnabled !== true || !data.authed
+                || !/^[a-f0-9]{64}$/.test(token))))
+            throw new Error('auth_kiosk_invalid');
+        state.kiosk = data.kiosk === true;
+        state.kioskEnabled = data.kioskEnabled === true;
         state.mode = data.mode;
         state.authed = data.authed;
         state.authenticated = data.authed;
         state.role = data.authed ? data.role : 'none';
-        state.user = data.authed ? data.user : null;
+        state.user = data.authed && !kioskIdentity ? data.user : null;
         state.capabilities = data.authed ? data.capabilities.slice() : [];
         state.isAdmin = state.role === 'admin';
         state.isInstaller = state.role === 'installer';
@@ -262,15 +275,21 @@
         box.replaceChildren();
         const user = document.createElement('span');
         user.className = 'nw-auth-user';
-        user.textContent = state.authed ? state.user : 'Anmeldung erforderlich';
+        user.textContent = state.kiosk ? 'Kioskmodus' : state.authed ? state.user : 'Anmeldung erforderlich';
         const button = document.createElement('button');
         button.type = 'button';
         button.className = 'btn small nw-auth-btn';
-        button.textContent = state.authed ? 'Abmelden' : 'Anmelden';
-        button.addEventListener('click', () => { if (state.authed)
-            void logout();
-        else
-            showLogin(); });
+        button.textContent = state.kiosk ? 'Admin öffnen' : state.authed ? 'Abmelden' : 'Anmelden';
+        button.addEventListener('click', () => {
+            if (state.kiosk) {
+                window.location.assign('/login.html?admin=1&returnTo=/system/');
+                return;
+            }
+            if (state.authed)
+                void logout();
+            else
+                showLogin();
+        });
         box.append(user, button);
     }
     /** Ein Frame fragt keine Kennwörter ab; die Anmeldung wird separat geöffnet. */
@@ -279,6 +298,8 @@
         if (state.statusError || !state._loaded || !state.mode || redirecting)
             return;
         const target = new URL(runtimeRoot() + 'login.html', window.location.origin);
+        if (state.kiosk)
+            target.searchParams.set('admin', '1');
         target.searchParams.set('returnTo', window.location.pathname + window.location.search + window.location.hash);
         if (window.self !== window.top) {
             const link = document.createElement('a');
@@ -306,6 +327,10 @@
         }
         if (!state.authed) {
             showLogin();
+            return;
+        }
+        if (state.kiosk && /^\/settings(?:\.html)?\/?$/.test(currentPath())) {
+            showLogin('Für die Einstellungen bitte mit einem Administratorkonto anmelden.');
             return;
         }
         const capability = requiredPageCapability();

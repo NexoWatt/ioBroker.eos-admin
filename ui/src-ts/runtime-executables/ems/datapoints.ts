@@ -709,6 +709,8 @@ class DatapointRegistry {
         const changeTs = Number(state.lc);
         this.cacheByObjectId.set(id, {
             val: state.val,
+            q: state.q,
+            sourceTs: Number.isFinite(stateTs) && stateTs > 0 ? stateTs : 0,
             ts: Number.isFinite(stateTs) && stateTs > 0 ? stateTs : receivedTs,
             lc: Number.isFinite(changeTs) && changeTs > 0 ? changeTs : (Number.isFinite(stateTs) && stateTs > 0 ? stateTs : receivedTs),
             receivedTs,

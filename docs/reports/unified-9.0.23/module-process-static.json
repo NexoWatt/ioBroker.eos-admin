@@ -1,0 +1,57 @@
+{
+  "at": "2026-11-25T13:52:55.968160+00:00",
+  "node": "v24.22.3",
+  "checks": [
+    {
+      "command": [
+        "node_modules/.bin/tsc",
+        "-p",
+        "tsconfig.eos-module-process.json",
+        "--pretty",
+        "false"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 1.101,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node_modules/.bin/tsc",
+        "-p",
+        "tsconfig.build.json",
+        "--noEmit"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 4.388,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node_modules/.bin/eslint",
+        "-c",
+        "eslint.unified.config.mjs",
+        "src/lib/eosModuleHost.js",
+        "src/lib/eosModuleProcess.js",
+        "src/lib/eosModuleProcessProtocol.js",
+        "src/lib/eosModuleProcessWorker.js"
+      ],
+      "exitCode": 0,
+      "durationSeconds": 0.532,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "sha256": {
+    "src/lib/eosModuleHost.js": "e44b6c8ed0b8d34a079677c78f0f8411483408b878719e18cbb55bb87b06fadc",
+    "src/lib/eosModuleProcess.js": "c110f3f0c11f68b3cc6b7e29782df874b10d0e50377fa27bdf412dacc6b99d94",
+    "src/lib/eosModuleProcess.d.ts": "ef8f71dc6404c809885b1082f0ebeb4b3dec81e896bbc5f69bc03fd6af39a7fe",
+    "src/lib/eosModuleProcessTypes.d.ts": "a8752384f6f1aba101c415256333d435fbb78953f08159d1d940d5f92ac3f356",
+    "src/lib/eosModuleProcessProtocol.js": "55e95aa67f2c9dccdb3cc80e5bb89da36927fe59f54206c1d4c8b076cfbd0615",
+    "src/lib/eosModuleProcessWorker.js": "76975d1836b2008218b7eecb19adeb4d20a84b7dd8e7b4ee38442ff2b6f4fdf7",
+    "tsconfig.eos-module-process.json": "17889f015447c456c00d7b32011c1036e36f51bad960e1fc70d14ac3e3d9e1d4",
+    "test/eos-module-process.test.cjs": "9877f6788fa27f311121e16cdcf0fad31e19f474fb28e5246b97567f5705d023",
+    "test/eos-module-process-contract-review.test.cjs": "e2c44baa0516225065df6fcd4dca2096eed00618c7f695cb7895df387a80ec97"
+  }
+}

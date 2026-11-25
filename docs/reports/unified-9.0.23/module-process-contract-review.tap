@@ -1,0 +1,20 @@
+✔ real worker retains EEBUS callback reply, original message and acknowledged trust revocation (128.454619ms)
+✔ real worker preserves third-argument ACK and per-job backup history RPC (48.279041ms)
+✔ backup stream cancellation before first byte closes the worker stream (200.696583ms)
+✔ backup download applies byte backpressure instead of buffering thousands of chunks (252.285431ms)
+✔ late backup open after RPC deadline cannot leak an orphan stream (5759.205683ms)
+✔ backup byte stream delivers all bytes across many IPC chunks without truncation (679.747114ms)
+✔ expired and out-of-order worker leases cannot renew authority (291.85408ms)
+✔ production Devices empty configuration starts and stops in real process without hardware (95.611335ms)
+✔ production EEBUS starts identity and subscriptions with all network functions disabled (108.488015ms)
+✔ production Backup starts with protected local identity and history coverage RPC (92.148012ms)
+✔ real backup job and its controller subprocess terminate when module supervisor dies (247.760398ms)
+✔ worker log sanitization covers MQTT URL credentials and long configured secrets before truncation (0.831619ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8030.809058

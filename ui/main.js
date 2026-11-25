@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/main.ts
- * Quell-Hash: sha256:f5e91cd2a619157494e2231b1957a6c5db2c49035c9aa584d3715e7781ea652c
+ * Quell-Hash: sha256:ad361d2b7b0b927a9644e599c04682b4af2895a775374ecad364a37576534a05
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -81,6 +81,7 @@ const { buildStationDisplayPresentation } = require('./lib/station-display-prese
 const tariffProviderRegistry = require('./ems/services/tariff-provider-registry');
 const { normalizeEvcsEnergyTotalKwh } = require('./ems/services/evcs-unit-conversion');
 const { validateEvcsElectricalConfig } = require('./lib/evcs-electrical-limits');
+const { OcppAutoDiscovery, planOcppDiscovery, normalizeOcppDiscovery, ocppDiscoveryPatterns, ocppStationRoot, ocppRootInScope, ocppNamespace } = require('./lib/ocpp-auto-discovery');
 const { NotificationMail, validAddress } = require('./lib/notification-mail');
 const { startOpenMeteoPvForecastRuntime, requestOpenMeteoJson, validateOpenMeteoWeather, safeOpenMeteoError, configuredOpenMeteoApiKey } = require('./ems/services/open-meteo-pv-forecast'), { AdminOverviewPublisher } = require('./ems/services/admin-overview-publisher');
 /**
@@ -4973,6 +4974,60 @@ class NexoWattVis extends HostedAdapter {
     } finally { this._nwEndInstallerConfigMutation(token); }
   }
 
+  /** Native OCPP registration changes mappings only, never app activation or installation limits. */
+  async reconcileOcppDiscovery(stations) {
+    const assertReady = () => {
+      if (this._nwShuttingDown || this._bridge.canWrite() !== true) throw new Error('EOS_UI_OWNERSHIP_REQUIRED');
+      if (!['ready', 'degraded'].includes(this._hostedStartup?.state)) throw new Error('EOS_UI_STARTING');
+      if (!centralLicenseSnapshot(this._bridge).ok) throw new Error('EOS_LICENSE_REQUIRED');
+    };
+    assertReady();
+    const token = this._nwBeginInstallerConfigMutation();
+    if (!token) throw new Error('EOS_OCPP_DISCOVERY_BUSY');
+    try {
+      assertReady();
+      const effective = this.nwApplyInstallerPatchToRuntimeConfig(this.config || {}, this._nwInstallerConfigPatch || {});
+      const plan = planOcppDiscovery(effective, stations, { maxRows: this._nwLicenseMaxWallboxes() });
+      if (!plan.changed && !this._nwOcppApplyPending) return plan;
+      const patch = this.nwDeepMerge(this._nwDeepClone(this._nwInstallerConfigPatch || {}), plan.patch);
+      const next = this.nwApplyInstallerPatchToRuntimeConfig(this.config || {}, patch);
+      await this._nwProvisionInstallerObjects(next);
+      assertReady();
+      if (plan.changed) {
+        if (await this.persistInstallerConfigToState(patch) === false) throw new Error('EOS_OCPP_DISCOVERY_PERSIST_FAILED');
+        this._nwInstallerConfigPatch = patch;
+        this._nwInstallerConfigRawPatch = this._nwDeepClone(patch);
+      }
+      this._nwOcppApplyPending = true;
+      this._nwEmsInitError = 'EOS_EMS_CONFIG_APPLY_PENDING';
+      assertReady();
+      if (this.emsEngine?.stopForReconfigure) await awaitEmsTransition(this.emsEngine.stopForReconfigure());
+      assertReady();
+      this.config = next;
+      await this._nwApplyInstallerRuntime(true, 'ocpp-discovery');
+      this._nwOcppApplyPending = false;
+      try { await this.nwWriteUserdataBackup(patch, 'ocpp-discovery'); }
+      catch (_error) { this.log.warn('EOS_OCPP_DISCOVERY_BACKUP_FAILED: Zuordnung gespeichert; zusätzliche Sicherung fehlgeschlagen.'); }
+      return plan;
+    } finally { this._nwEndInstallerConfigMutation(token); }
+  }
+
+  _nwStartOcppAutoDiscovery() {
+    if (this._nwShuttingDown || this._ocppAutoDiscovery) return;
+    this._ocppAutoDiscovery = new OcppAutoDiscovery({
+      hostNamespace: this.hostNamespace,
+      readObjects: async () => Object.assign({}, ...await Promise.all(ocppDiscoveryPatterns(this.hostNamespace).map(pattern => this.getForeignObjectsAsync(pattern, 'state')))),
+      readMetadata: async () => Object.assign({}, ...await Promise.all(ocppDiscoveryPatterns(this.hostNamespace).map(pattern => this.getForeignStatesAsync(`${pattern}.info.*`)))),
+      subscribe: () => Promise.all(ocppDiscoveryPatterns(this.hostNamespace).map(pattern => this.subscribeForeignStatesAsync(`${pattern}.info.*`))),
+      reconcile: stations => this.reconcileOcppDiscovery(stations),
+      canRun: () => !this._nwShuttingDown && this._bridge.canWrite() === true
+        && centralLicenseSnapshot(this._bridge).ok && ['ready', 'degraded'].includes(this._hostedStartup?.state),
+      warn: code => this.log.warn(`${code}: Automatische OCPP-Zuordnung wird erneut geprüft.`),
+    });
+    // Bounded discovery must not hold up the operational startup or local control loop.
+    void this._ocppAutoDiscovery.start().catch(() => this.log.warn('EOS_OCPP_DISCOVERY_FAILED'));
+  }
+
   /** Profil-/Protokollwechsel darf eine laufende Regelung nicht unter unveränderten
    * Geräte-DP-IDs auf andere Register umlenken. Derselbe Save-Token bleibt bis zum
    * abgeschlossenen Geräte-Commit beim Host; reine Umbenennungen rufen diesen Pfad nicht auf. */
@@ -9200,7 +9255,13 @@ class NexoWattVis extends HostedAdapter {
       let controlMappingAutoResolvedOnline = false;
       let controlMappingAutoResolvedHeartbeat = false;
       try {
-        const resolved = await resolveEvcsControlMapping(row, canUseEvcsControlDp, canUseEvcsReadDp);
+        const discovery = normalizeOcppDiscovery(row.ocppDiscovery);
+        const existingControlIds = new Set([row.setCurrentAId, row.setPowerWId, row.enableWriteId]
+          .filter(id => typeof id === 'string' && id.trim()).map(id => id.trim()));
+        const writeExists = discovery?.code === 'MANUAL_MAPPING_REVIEW_REQUIRED'
+          ? id => existingControlIds.has(String(id)) ? canUseEvcsControlDp(id) : Promise.resolve(false)
+          : canUseEvcsControlDp;
+        const resolved = await resolveEvcsControlMapping(row, writeExists, canUseEvcsReadDp);
         if (resolved && resolved.row) row = resolved.row;
         controlMappingAutoResolved = !!(resolved && resolved.changed);
         controlMappingAutoResolvedCurrent = !!(resolved && resolved.inferredCurrent);
@@ -9341,6 +9402,10 @@ class NexoWattVis extends HostedAdapter {
         || ((row && row.storageAssistCustomerAllowed !== undefined && row.storageAssistCustomerAllowed !== null) ? !!row.storageAssistCustomerAllowed : false);
       const storageAssistControlScope = globalStorageAssistCustomerAllowed ? 'global' : 'per-lp';
       evcsList.push({ index: i+1, enabled, priority, name, note, powerId, energyTotalId, energyTotalInputIsWh, statusId, chargingStateId, activeId, vehicleConnectedId, chargeDemandId, heartbeatId, vehicleConnectedTrueValues, vehicleConnectedFalseValues, chargeDemandTrueValues, chargeDemandFalseValues, statusDemandValues, statusReadyValues, statusConnectedValues, statusDisconnectedValues, statusNoDemandValues, modeId, lockWriteId, rfidReadId, setCurrentAId, setPowerWId, onlineId, dataFreshId, enableWriteId, telemetryProfile, chargerType, phases, voltageV, controlPreference, minCurrentA, maxCurrentA, minPowerW, maxPowerW, dcCurrentReference, dcVoltageId, stepA, stepW, userMode, stationKey, connectorNo, allowBoost, boostTimeoutMin, boostMaxPowerW, vehicleSocId, phaseMode, phaseSwitchId, phaseFeedbackId, phaseSwitchValue1p, phaseSwitchValue3p, stopBeforePhaseSwitch, phaseSwitchUpThresholdW, phaseSwitchDownThresholdW, phaseSwitchUpStableSec, phaseSwitchDownStableSec, phaseSwitchCooldownSec, phaseSwitchSettleSec, storageAssistCustomerAllowed, storageAssistControlScope, controlMappingAutoResolved, controlMappingAutoResolvedCurrent, controlMappingAutoResolvedPower, controlMappingAutoResolvedEnable, controlMappingAutoResolvedPowerRead, controlMappingAutoResolvedEnergyTotal, controlMappingAutoResolvedStatus, controlMappingAutoResolvedVehicleConnected, controlMappingAutoResolvedOnline, controlMappingAutoResolvedHeartbeat });
+    }
+    for (const normalized of evcsList) {
+      const discovery = normalizeOcppDiscovery(rawList[normalized.index - 1]?.ocppDiscovery);
+      if (discovery) normalized.ocppDiscovery = discovery;
     }
     this.evcsList = evcsList;
     // Stationsgruppen (für DC-Stationen mit mehreren Ladepunkten)
@@ -12187,6 +12252,7 @@ async onReady() {
       const emsReady = this._nwIsEmsReady();
       this._hostedStartup = { state: emsReady ? 'ready' : 'degraded', error: emsReady ? '' : 'EOS_EMS_INIT_FAILED' };
       this._bridge.deviceEmsConfigChanged?.();
+      this._nwStartOcppAutoDiscovery();
       if (emsReady) this.log.info('NexoWatt EOS ist bereit.');
       else this.log.warn('EOS_EMS_INIT_FAILED: Bedienoberfläche verfügbar, Betriebsstart unvollständig.');
     } catch (e) {
@@ -16196,6 +16262,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
         cfgOut.locale = this._nwBuildLocaleInfo();
         cfgOut.countryProfile = Object.assign({}, cfgOut.countryProfile || {}, this._nwBuildCountryProfileInfo());
         cfgOut.regressionSafety = this._nwInstallerRegressionSafetyLastReport || { schema: 'nexowatt.installer-regression-safety.v1', ok: true, checks: [] };
+        cfgOut.ocppAutoDiscovery = this._ocppAutoDiscovery?.status() || { state: 'idle', error: '', ts: 0, stations: [] };
         res.json({ ok: true, license: cfgOut.license, config: cfgOut, configurationRevision });
       } catch (e) {
         this.log.warn('Installer config API error: ' + e.message);
@@ -16820,24 +16887,23 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
         // by ChargingManagement/UI to these native IDs.
         let compactObjects = {};
         try {
-          compactObjects = await this.getForeignObjectsAsync('ocpp21.*', 'state') || {};
+          compactObjects = Object.assign({}, ...await Promise.all(ocppDiscoveryPatterns(this.hostNamespace).map(pattern => this.getForeignObjectsAsync(pattern, 'state'))));
         } catch (_compactScanError) {
           compactObjects = {};
         }
 
         const compactGroups = new Map();
         for (const id of Object.keys(compactObjects)) {
-          const match = String(id).match(/^ocpp21\.(\d+)\.([^.]+)\./);
-          if (!match) continue;
-          const key = `${match[1]}|${match[2]}`;
-          if (!compactGroups.has(key)) compactGroups.set(key, { instance: String(match[1]), station: String(match[2]) });
+          const root = ocppStationRoot(id);
+          if (!ocppRootInScope(root, this.hostNamespace)) continue;
+          if (!compactGroups.has(root)) compactGroups.set(root, { root, station: root.slice(root.lastIndexOf('.') + 1) });
         }
 
         const compactHas = (id) => !!(id && compactObjects[id]);
         const compactPick = (...ids) => ids.flat().map(id => String(id || '').trim()).find(compactHas) || '';
         const compactConnectors = [];
         for (const group of compactGroups.values()) {
-          const nativeRoot = `ocpp21.${group.instance}.${group.station}`;
+          const nativeRoot = group.root;
           const nativeId = (suffix) => `${nativeRoot}.${suffix}`;
           const powerId = compactPick(nativeId('measurements.powerW'));
           const energyKWhId = compactPick(nativeId('measurements.energyKWh'));
@@ -16863,7 +16929,8 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
           };
           if (!Object.values(ids).some(value => String(value || '').trim())) continue;
           compactConnectors.push({
-            stationKey: group.station,
+            stationKey: nativeRoot,
+            adapterInstance: ocppNamespace(nativeRoot),
             connectorNo: 1,
             base: nativeRoot,
             name: group.station,
@@ -27598,6 +27665,7 @@ return res.json(out);
    */
   onStateChange(id, state) {
     if (this._nwShuttingDown) return;
+    this._ocppAutoDiscovery?.onStateChange(id, state);
     if (state && state.ack === false && String(id).startsWith(this.namespace + '.')
       && !centralLicenseSnapshot(this._bridge).ok) return;
     // Ordinary ioBroker controls remain usable without a separate token or
@@ -34472,6 +34540,7 @@ return res.json(out);
     this._hostedOperational = false;
     this._nwSmartHomeHydrating = false;
     this._nwPreservedUiStates = null;
+    cleanup.capture(() => this._ocppAutoDiscovery?.stop());
     cleanup.capture(() => this._nwCancelHistoryRequests?.());
     cleanup.capture(() => this._nwDirectHistory?.drainAndClose(3000));
     cleanup.capture(() => this._nwHistoryCheckClient?.close());
@@ -34649,7 +34718,8 @@ function createHostedRuntime(owner, bridge) {
     revokeSessions() { runtime._nwCloseSseClients(); },
     status() { return { ...(stopUnconfirmed ? { state: 'stop-unconfirmed', error: 'EOS_UI_STOP_UNCONFIRMED' }
       : stopRequested ? { state: stopConfirmed ? 'stopped' : 'stopping', error: '' } : runtime._hostedStartup || { state: 'stopped', error: '' }),
-      active: started && !stopRequested, emsReady: !stopRequested && runtime._hostedStartup?.state === 'ready' && runtime._nwIsEmsReady(), canWrite: guardedBridge.canWrite() === true }; },
+      active: started && !stopRequested, emsReady: !stopRequested && runtime._hostedStartup?.state === 'ready' && runtime._nwIsEmsReady(), canWrite: guardedBridge.canWrite() === true,
+      ocppDiscovery: runtime._ocppAutoDiscovery?.status() || { state: 'idle', error: '', ts: 0, stations: [] } }; },
     stop() {
       if (!stopping) {
         // Sofortige, dauerhafte Sperre vor jedem await und jedem Cleanup-Callback.

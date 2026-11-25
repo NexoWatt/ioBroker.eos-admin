@@ -1,7 +1,9 @@
 /** Copyright (c) 2026 NexoWatt. All rights reserved. Confidential and Proprietary. */
 'use strict';
 // Actual shared-origin Web mount and hosted router. Controller identity/database
-// are fixtures; this is not a smartphone install or certificate-trust claim.
+// are fixtures, with an explicit in-process UI factory seam so the actual router
+// sees those fixture identities. Child isolation is tested separately. This is
+// not a smartphone install or certificate-trust claim.
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
@@ -107,6 +109,9 @@ function loadWeb(dataDir) {
         exports: exportsValue, module: { exports: exportsValue }, __dirname: path.dirname(file), __filename: file,
         Buffer, URL, Error, console, process, setTimeout, clearTimeout,
         require(name) {
+            if (name === './eosUiProcess') return {
+                createEosUiProcess: (adapter, bridge) => localRequire(path.join(root, 'ui/main.js')).createHostedRuntime(adapter, bridge),
+            };
             if (name === '@iobroker/adapter-core') return {
                 EXIT_CODES: { ADAPTER_REQUESTED_TERMINATION: 11 }, I18n: {},
                 controllerDir: path.join(root, 'node_modules/iobroker.js-controller'), getAbsoluteInstanceDataDir: () => dataDir,

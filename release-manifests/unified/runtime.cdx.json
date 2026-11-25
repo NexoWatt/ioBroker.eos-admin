@@ -2,10 +2,10 @@
   "$schema": "http://cyclonedx.org/schema/bom-1.5.schema.json",
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
-  "serialNumber": "urn:uuid:e1ad60df-d46e-4710-bc1a-06ef587b0047",
+  "serialNumber": "urn:uuid:1f261513-947a-4c57-9a04-6a30808d170d",
   "version": 2,
   "metadata": {
-    "timestamp": "2026-11-25T12:48:09.715Z",
+    "timestamp": "2026-11-25T16:30:46.144Z",
     "lifecycles": [
       {
         "phase": "pre-build"
@@ -19,14 +19,14 @@
       }
     ],
     "component": {
-      "bom-ref": "iobroker.eos-admin@9.0.22",
+      "bom-ref": "iobroker.eos-admin@9.0.24",
       "type": "library",
       "name": "iobroker.eos-admin",
-      "version": "9.0.22",
+      "version": "9.0.24",
       "scope": "required",
       "author": "NexoWatt",
       "description": "NexoWatt EOS: licensed local energy management, dashboard and ioBroker system administration in one adapter.",
-      "purl": "pkg:npm/iobroker.eos-admin@9.0.22",
+      "purl": "pkg:npm/iobroker.eos-admin@9.0.24",
       "properties": [],
       "externalReferences": []
     }
@@ -1797,6 +1797,34 @@
       ]
     },
     {
+      "bom-ref": "ajv-formats@2.1.1",
+      "type": "library",
+      "name": "ajv-formats",
+      "version": "2.1.1",
+      "scope": "required",
+      "purl": "pkg:npm/ajv-formats@2.1.1",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/ajv-formats/-/ajv-formats-2.1.1.tgz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "5b1d0ac79da1c44ec2d7c8643048206251227ea599b58691828b89a2bf9631d3e743210ad77be0116c9536ea7b4a879ea0b32caf891fe61e9d396d75235e4c50"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
       "bom-ref": "ansi-regex@5.0.1",
       "type": "library",
       "name": "ansi-regex",
@@ -2156,6 +2184,34 @@
         {
           "license": {
             "id": "Apache-2.0"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "backoff@2.5.0",
+      "type": "library",
+      "name": "backoff",
+      "version": "2.5.0",
+      "scope": "required",
+      "purl": "pkg:npm/backoff@2.5.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/backoff/-/backoff-2.5.0.tgz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "c02e6286b9d45e6476768b979972c27b93b7ce0dc6288caf462fe18b9f1afd7c91c5523edffc8cd0f62e7903995cf5d0f69c418ac958930fac17d6fb0bf46e30"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
           }
         }
       ]
@@ -8527,6 +8583,62 @@
       ]
     },
     {
+      "bom-ref": "ocpp-rpc@2.2.1",
+      "type": "library",
+      "name": "ocpp-rpc",
+      "version": "2.2.1",
+      "scope": "required",
+      "purl": "pkg:npm/ocpp-rpc@2.2.1",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/ocpp-rpc/-/ocpp-rpc-2.2.1.tgz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "084cd8addbfc53ad9ced22dca04863b349364af4d42de01857355fa10804f41e63473e5078240c4e6f39e0dbdaeb180d7cd70e557f6a3ca700a168529908fab0"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "ajv@8.14.0",
+      "type": "library",
+      "name": "ajv",
+      "version": "8.14.0",
+      "scope": "required",
+      "purl": "pkg:npm/ajv@8.14.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/ajv/-/ajv-8.14.0.tgz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "a18b35514b4ef7b64eda52786f09d67905bcff3bce2102c629cbcf4ec5a6bdcd9262005bfaea6e352e4dc682da314e21f09bb735b8fa0aaf260f62d0a2a54a14"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
       "bom-ref": "on-finished@2.4.1",
       "type": "library",
       "name": "on-finished",
@@ -9206,6 +9318,27 @@
       ]
     },
     {
+      "bom-ref": "precond@0.2.3",
+      "type": "library",
+      "name": "precond",
+      "version": "0.2.3",
+      "scope": "required",
+      "purl": "pkg:npm/precond@0.2.3",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/precond/-/precond-0.2.3.tgz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "402606f384a01b21b3a89fef94cb3179777fa602ff23de22c5d345ca1d4fbac5a64c2c957cf2636752b58ef1edb1b7e75d0b364d29043f67d1ed088c6409ca15"
+        }
+      ]
+    },
+    {
       "bom-ref": "process@0.11.10",
       "type": "library",
       "name": "process",
@@ -9363,6 +9496,34 @@
         {
           "alg": "SHA-512",
           "content": "552eec8dce8a47b7b5ba4445850498e4b336b8158050f88e3dafc0de690a9a23304a64455084edd31ba3fbf95eb209c2bfe74f204625933adcc9782ab881cc70"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "punycode@2.3.1",
+      "type": "library",
+      "name": "punycode",
+      "version": "2.3.1",
+      "scope": "required",
+      "purl": "pkg:npm/punycode@2.3.1",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/punycode/-/punycode-2.3.1.tgz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "bd8b7b503d54f5683ad77f2c84bb4b3af740bbef03b02fe2945b44547707fb0c9d712a4d136d007d239db9fe8c91115a84be4563b5f5a14ee7295645b5fabc16"
         }
       ],
       "licenses": [
@@ -11173,6 +11334,34 @@
       ]
     },
     {
+      "bom-ref": "uri-js@4.4.1",
+      "type": "library",
+      "name": "uri-js",
+      "version": "4.4.1",
+      "scope": "required",
+      "purl": "pkg:npm/uri-js@4.4.1",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/uri-js/-/uri-js-4.4.1.tgz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "eeb294cb2df7435c9cf7ca50d430262edc17d74f45ed321f5a55b561da3c5a5d628b549e1e279e8741c77cf78bd9f3172bacf4b3c79c2acf5fac2b8b26f9dd06"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-2-Clause"
+          }
+        }
+      ]
+    },
+    {
       "bom-ref": "util-deprecate@1.0.2",
       "type": "library",
       "name": "util-deprecate",
@@ -11733,10 +11922,10 @@
       ]
     },
     {
-      "bom-ref": "nexowatt:vendored:webserver@3.4.0+nexowatt.9.0.22",
+      "bom-ref": "nexowatt:vendored:webserver@3.4.0+nexowatt.9.0.24",
       "type": "library",
       "name": "@iobroker/webserver",
-      "version": "3.4.0+nexowatt.9.0.22",
+      "version": "3.4.0+nexowatt.9.0.24",
       "scope": "required",
       "description": "Locally vendored @iobroker/webserver 3.4.0 with two reviewed certificate-material logging replacements; not an unmodified registry release.",
       "licenses": [
@@ -11813,9 +12002,9 @@
     },
     {
       "type": "library",
-      "bom-ref": "nexowatt:integrated:devices@9.0.22",
+      "bom-ref": "nexowatt:integrated:devices@9.0.24",
       "name": "NexoWatt EOS integrated devices",
-      "version": "9.0.22",
+      "version": "9.0.24",
       "scope": "required",
       "licenses": [
         {
@@ -11827,7 +12016,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "e5d52b8c2ebe8338f799b32ddde3ecc01924b864288aded8c4fb3af9013e26d4"
+          "content": "d62b16dc298f7eb0c0b98967e920a380badd2405641be651da32ea0d275a1b8a"
         }
       ],
       "pedigree": {
@@ -11857,9 +12046,9 @@
     },
     {
       "type": "library",
-      "bom-ref": "nexowatt:integrated:eebus@9.0.22",
+      "bom-ref": "nexowatt:integrated:eebus@9.0.24",
       "name": "NexoWatt EOS integrated eebus",
-      "version": "9.0.22",
+      "version": "9.0.24",
       "scope": "required",
       "licenses": [
         {
@@ -11871,7 +12060,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "f18ec98d2f89de355f4d242dd853f6864b285c521706b33aeb5671b29bf70022"
+          "content": "670167d9dc10026948da7e3e75f67a749220388d5e000b4ce4ab97baf8a826d2"
         }
       ],
       "pedigree": {
@@ -11901,9 +12090,9 @@
     },
     {
       "type": "library",
-      "bom-ref": "nexowatt:integrated:backup@9.0.22",
+      "bom-ref": "nexowatt:integrated:backup@9.0.24",
       "name": "NexoWatt EOS integrated backup",
-      "version": "9.0.22",
+      "version": "9.0.24",
       "scope": "required",
       "licenses": [
         {
@@ -11915,7 +12104,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "9b94f90e3bf6464b0fa67294d899c9608f2224a1185910ee124460c3c59272c3"
+          "content": "1cbc4047a44bb1373ee1e268632beb81def7900d2df09cebc7393ac53b8538fa"
         }
       ],
       "pedigree": {
@@ -11949,11 +12138,62 @@
           "value": "SHA-256 of sorted relative path / SHA-256 JSON pairs"
         }
       ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "nexowatt:integrated:ocpp@9.0.24",
+      "name": "NexoWatt EOS integrated ocpp",
+      "version": "9.0.24",
+      "scope": "required",
+      "licenses": [
+        {
+          "license": {
+            "name": "NexoWatt Proprietary License"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "3b57da681edc240f2e3fcea5c90647ea1ce4e2e82cec3c528764eec9096fe9d0"
+        }
+      ],
+      "pedigree": {
+        "ancestors": [
+          {
+            "type": "library",
+            "name": "iobroker.ocpp21",
+            "version": "0.4.3",
+            "licenses": [
+              {
+                "license": {
+                  "id": "MIT"
+                }
+              }
+            ]
+          }
+        ],
+        "notes": "Modified integrated source; upstream license notices remain applicable. Target-device commissioning and backup recovery acceptance are separate from software tests."
+      },
+      "properties": [
+        {
+          "name": "nexowatt:source-root",
+          "value": "modules/ocpp"
+        },
+        {
+          "name": "nexowatt:provenance:sha256",
+          "value": "08c7cda2d76398f60c058fb84cb6468f87468f5001d0d25ea8cbbe65e932949a"
+        },
+        {
+          "name": "nexowatt:tree-hash-format",
+          "value": "SHA-256 of sorted relative path / SHA-256 JSON pairs"
+        }
+      ]
     }
   ],
   "dependencies": [
     {
-      "ref": "iobroker.eos-admin@9.0.22",
+      "ref": "iobroker.eos-admin@9.0.24",
       "dependsOn": [
         "@iobroker/adapter-core@3.4.3",
         "@iobroker/plugin-docker@1.2.1",
@@ -11989,10 +12229,12 @@
         "serialport@12.0.0",
         "tar-fs@3.1.3",
         "ws@8.22.0",
-        "nexowatt:vendored:webserver@3.4.0+nexowatt.9.0.22",
-        "nexowatt:integrated:devices@9.0.22",
-        "nexowatt:integrated:eebus@9.0.22",
-        "nexowatt:integrated:backup@9.0.22"
+        "ocpp-rpc@2.2.1",
+        "nexowatt:vendored:webserver@3.4.0+nexowatt.9.0.24",
+        "nexowatt:integrated:devices@9.0.24",
+        "nexowatt:integrated:eebus@9.0.24",
+        "nexowatt:integrated:backup@9.0.24",
+        "nexowatt:integrated:ocpp@9.0.24"
       ]
     },
     {
@@ -12369,6 +12611,12 @@
       ]
     },
     {
+      "ref": "ajv-formats@2.1.1",
+      "dependsOn": [
+        "ajv@8.20.0"
+      ]
+    },
+    {
       "ref": "ansi-regex@5.0.1",
       "dependsOn": []
     },
@@ -12433,6 +12681,12 @@
     {
       "ref": "b4a@1.9.0",
       "dependsOn": []
+    },
+    {
+      "ref": "backoff@2.5.0",
+      "dependsOn": [
+        "precond@0.2.3"
+      ]
     },
     {
       "ref": "bare-buffer@3.7.3",
@@ -13827,6 +14081,24 @@
       "dependsOn": []
     },
     {
+      "ref": "ocpp-rpc@2.2.1",
+      "dependsOn": [
+        "ajv@8.14.0",
+        "ajv-formats@2.1.1",
+        "backoff@2.5.0",
+        "ws@8.22.0"
+      ]
+    },
+    {
+      "ref": "ajv@8.14.0",
+      "dependsOn": [
+        "fast-deep-equal@3.1.3",
+        "json-schema-traverse@1.0.0",
+        "require-from-string@2.0.2",
+        "uri-js@4.4.1"
+      ]
+    },
+    {
       "ref": "on-finished@2.4.1",
       "dependsOn": [
         "ee-first@1.1.1"
@@ -13960,6 +14232,10 @@
       ]
     },
     {
+      "ref": "precond@0.2.3",
+      "dependsOn": []
+    },
+    {
       "ref": "process@0.11.10",
       "dependsOn": []
     },
@@ -14000,6 +14276,10 @@
         "end-of-stream@1.4.5",
         "once@1.4.0"
       ]
+    },
+    {
+      "ref": "punycode@2.3.1",
+      "dependsOn": []
     },
     {
       "ref": "qs@6.16.1",
@@ -14392,6 +14672,12 @@
       "dependsOn": []
     },
     {
+      "ref": "uri-js@4.4.1",
+      "dependsOn": [
+        "punycode@2.3.1"
+      ]
+    },
+    {
       "ref": "util-deprecate@1.0.2",
       "dependsOn": []
     },
@@ -14529,7 +14815,7 @@
       "dependsOn": []
     },
     {
-      "ref": "nexowatt:vendored:webserver@3.4.0+nexowatt.9.0.22",
+      "ref": "nexowatt:vendored:webserver@3.4.0+nexowatt.9.0.24",
       "dependsOn": [
         "@node-oauth/oauth2-server@5.3.1",
         "jsonwebtoken@9.0.3",
@@ -14537,7 +14823,7 @@
       ]
     },
     {
-      "ref": "nexowatt:integrated:devices@9.0.22",
+      "ref": "nexowatt:integrated:devices@9.0.24",
       "dependsOn": [
         "axios@1.20.0",
         "modbus-serial@8.0.25",
@@ -14546,14 +14832,14 @@
       ]
     },
     {
-      "ref": "nexowatt:integrated:eebus@9.0.22",
+      "ref": "nexowatt:integrated:eebus@9.0.24",
       "dependsOn": [
         "ws@8.22.0",
         "bonjour-service@1.4.4"
       ]
     },
     {
-      "ref": "nexowatt:integrated:backup@9.0.22",
+      "ref": "nexowatt:integrated:backup@9.0.24",
       "dependsOn": [
         "tar-fs@3.1.3",
         "cron-parser@5.10.6",
@@ -14562,6 +14848,12 @@
         "fast-xml-parser@5.12.1",
         "axios@1.20.0",
         "mqtt@5.16.1"
+      ]
+    },
+    {
+      "ref": "nexowatt:integrated:ocpp@9.0.24",
+      "dependsOn": [
+        "ocpp-rpc@2.2.1"
       ]
     }
   ]

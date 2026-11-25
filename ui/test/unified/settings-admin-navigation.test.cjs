@@ -24,15 +24,9 @@ test('Settings Admin link uses normal same-tab navigation without a popup click 
     'unrelated external documentation still opens separately');
 });
 
-test('Settings migration entry is initially hidden, explicitly admin-only and opens in the same tab', () => {
-  const link = /<a\b[^>]*\bid="openMigrationBtn"[^>]*>Bestandsübernahme<\/a>/.exec(html)?.[0];
-  assert.ok(link, 'Bestandsübernahme entry must exist beside Admin öffnen');
-  assert.match(link, /\bhref="\/migration\/"/);
-  assert.match(link, /\btarget="_self"/);
-  assert.match(link, /\sdata-nw-admin-link(?:\s|>)/);
-  assert.match(link, /\shidden(?:\s|>)/);
-  assert.match(link, /\bstyle="display:none"/);
-  assert.doesNotMatch(link, /\bonclick\s*=/);
+test('Customer settings keep Admin but expose no migration entry', () => {
+  assert.doesNotMatch(html, /openMigrationBtn|Bestandsübernahme|href="\/migration\//);
+  assert.match(html, /id="openInstallerBtn"/);
 });
 
 test('Admin and migration URLs remain on the TLS origin and outside the UI proxy for direct and proxied settings', () => {

@@ -1,0 +1,43 @@
+{
+  "version": "9.0.23",
+  "generatedAt": "2026-11-25T14:29:59.127714+00:00",
+  "results": {
+    "node22-tests-final": {
+      "tests": 2331,
+      "pass": 2329,
+      "fail": 0,
+      "skipped": 2,
+      "cancelled": 0
+    },
+    "node24-tests-final": {
+      "tests": 2331,
+      "pass": 2329,
+      "fail": 0,
+      "skipped": 2,
+      "cancelled": 0
+    }
+  },
+  "files": [
+    {
+      "file": "node22-tests-final.log",
+      "deliveredSha256": "7d6583c0f91f2f7f4862728b89e23ec5e91b9c38694e46341bc54bbbd2ad8dbd"
+    },
+    {
+      "file": "node22-version.log",
+      "deliveredSha256": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906"
+    },
+    {
+      "file": "node24-tests-final.log",
+      "deliveredSha256": "ca66ade6a33fb9c1a3916cce44a2db6f8733cd876f4ebdc01ae6d618e67ed2d3"
+    },
+    {
+      "file": "node24-version.log",
+      "deliveredSha256": "4409d3bfa08b82f385bd424eeda65fc63b756129f0e89e82df77f1fecafccc14"
+    }
+  ],
+  "environment": {
+    "uid": 1000,
+    "hardware": "isolated x86_64; no customer devices",
+    "optionalChecks": "Reviewed Keygen 1.0.4, real isolated InfluxDB 2.10.1 and actual OCPP 0.4.3 source supplied explicitly; nginx and POSIX ACL tools unavailable"
+  }
+}

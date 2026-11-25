@@ -7,11 +7,13 @@ export interface EosHostedRuntime {
     startOperational(): Promise<void>;
     handle(req: Request, res: Response, next: NextFunction): void;
     stop(): Promise<void>;
+    status?(): Record<string, unknown>;
     getHistoryBackupRequirement?():
         | { provider: 'influxdb2'; url: string; bucket: string; org: string }
         | { provider: 'postgresql'; namespace: string }
         | { provider: 'adapter'; instance: string }
-        | { provider: 'none' | 'unknown' };
+        | { provider: 'none' | 'unknown' }
+        | Promise<unknown>;
     revokeSessions?(): void;
     onStateChange?(id: string, state: ioBroker.State | null | undefined): void;
     onObjectChange?(id: string, object: ioBroker.Object | null | undefined): void;

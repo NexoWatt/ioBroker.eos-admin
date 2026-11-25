@@ -1,0 +1,22 @@
+(node:12) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ actual owner HTTP routes: idle polls/new page loads never extend ten minutes; another browser stays active (2345.930407ms)
+✔ actual owner activity HTTP requires same-origin CSRF and cannot revive an expired family (339.031049ms)
+✔ a cached upstream req.user cannot retain EOS authority after idle expiry (150.28119ms)
+✔ actual hosted SSE is closed at idle expiry even without a new data frame, independently per login (205.859081ms)
+✔ pinned upstream log and instance publications cannot send after idle expiry before the prune timer (347.889096ms)
+(node:18) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ fresh anonymous HTTPS launch exposes actual login branding and PWA icons while configuration remains protected (2623.015869ms)
+(node:19) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ one root app identity and the exact uploaded icon are shared by dashboard, login and system console (16.799537ms)
+✔ actual owner mount serves install metadata publicly while root launch retains session, password and license gates (2385.103776ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3998.636986

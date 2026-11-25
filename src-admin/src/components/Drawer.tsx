@@ -1076,6 +1076,13 @@ class Drawer extends Component<DrawerProps, DrawerState> {
                         <DrawerItem
                             theme={this.props.theme}
                             compact={false}
+                            onClick={() => window.location.assign('/modules/ocpp/')}
+                            text="OCPP-Ladestationen"
+                            icon={<DeviceManagerIcon />}
+                        />
+                        <DrawerItem
+                            theme={this.props.theme}
+                            compact={false}
                             onClick={() => window.location.assign('/modules/backup/')}
                             text="Sicherung"
                             icon={<BackupIcon />}

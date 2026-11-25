@@ -1,0 +1,13 @@
+(node:12) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ actual HTTP kiosk cannot inherit admin authority, expose protected settings or mutate module/token configuration (1532.550932ms)
+✔ actual HTTP kiosk requires its own same-origin CSRF and disable revokes old cookies immediately (365.678048ms)
+✔ pending kiosk readiness cannot revive a bootstrap request after token rotation or account revocation (335.413003ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2658.228885

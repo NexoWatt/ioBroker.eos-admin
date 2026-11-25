@@ -101,37 +101,108 @@ test('a failed stop is retried, and W-to-kW conversion preserves zero', async ()
     assert.deepEqual(h.writes.filter(w => w.id === setId).map(w => w.val), [5.7, 0, 0]);
 });
 
-// Optional integration against the separately supplied historical OCPP21 source.
-// No server/network/hardware is created; only the actual onStateChange is run.
+// Optional integration against the separately supplied current OCPP21 source.
+// Its private contract/normalisation modules are real. Only adapter-core and the
+// server constructor are replaced; onReady/listen is never called.
 test('provided OCPP21 source receives zero unchanged; RPC acceptance remains separate from local ack',
-    { skip: !process.env.EOS_TEST_OCPP21_MAIN }, async () => {
+    { skip: !process.env.EOS_TEST_OCPP21_MAIN }, async t => {
         const file = path.resolve(process.env.EOS_TEST_OCPP21_MAIN);
+        class StubAdapter {
+            constructor() {
+                this.namespace = 'ocpp21.0'; this.instance = 0;
+                this.config = { connectorDetails: false, createTechnicalAliases: false, cleanupLegacyObjects: false,
+                    cleanupLegacySubfolders: false, autoConfigurationRefresh: false, captureRawMessages: false,
+                    callTimeoutSec: 5, heartbeatIntervalSec: 300, configurationRefreshDelaySec: 15,
+                    smartChargingMinIntervalMs: 1000, smartChargingDeadbandW: 100, smartChargingDeadbandA: 0.2,
+                    smartChargingConnectorId: 1, minimumChargingCurrentA: 6, nominalVoltageV: 230,
+                    zeroLimitBehavior: 'keepLast' };
+                this.log = { debug() {}, info() {}, warn() {}, error() {} };
+                this.objects = new Map(); this.states = new Map(); this.acknowledgements = [];
+            }
+            on() {}
+            async setObjectNotExistsAsync(id, object) { if (!this.objects.has(id)) this.objects.set(id, structuredClone(object)); }
+            async extendObjectAsync(id, patch) {
+                const previous = this.objects.get(id) || {};
+                this.objects.set(id, { ...previous, ...structuredClone(patch),
+                    common: { ...previous.common, ...structuredClone(patch.common || {}) },
+                    native: { ...previous.native, ...structuredClone(patch.native || {}) } });
+            }
+            async getObjectAsync(id) { return this.objects.get(id); }
+            async getObjectViewAsync(_design, _search, options = {}) {
+                const rows = [];
+                for (const [id, value] of this.objects) {
+                    const fullId = id.startsWith(`${this.namespace}.`) ? id : `${this.namespace}.${id}`;
+                    if (fullId >= String(options.startkey || '') && fullId <= String(options.endkey || '\uffff')) rows.push({ id: fullId, value: structuredClone(value) });
+                }
+                return { rows };
+            }
+            async setStateAsync(id, state) {
+                const relative = id.startsWith(`${this.namespace}.`) ? id.slice(this.namespace.length + 1) : id;
+                const written = { ...state, ts: Date.now() };
+                this.states.set(relative, written); this.acknowledgements.push({ id: relative, state: written });
+            }
+            async getStateAsync(id) { return this.states.get(id.startsWith(`${this.namespace}.`) ? id.slice(this.namespace.length + 1) : id); }
+            async delObjectAsync() {}
+            async delForeignObjectAsync() {}
+            async setForeignObjectNotExistsAsync() {}
+            async getForeignObjectAsync() { return undefined; }
+        }
         const subject = new Module(file, module);
         subject.filename = file;
+        subject.paths = Module._nodeModulePaths(path.dirname(file));
+        const requireSource = Module.createRequire(file);
         subject.require = id => {
-            if (id === '@iobroker/adapter-core') return { Adapter: class { on() {} } };
-            if (id === './ocpp/server') return { OcppRpcServer: class {} };
-            throw new Error(`Unexpected OCPP21 source dependency: ${id}`);
+            if (id === '@iobroker/adapter-core') return { Adapter: StubAdapter };
+            if (id === './ocpp/server') return { OcppRpcServer: class { constructor() { throw new Error('NETWORK_SERVER_NOT_ALLOWED_IN_TEST'); } } };
+            return requireSource(id);
         };
         subject._compile(fs.readFileSync(file, 'utf8'), file);
         for (const proto of ['ocpp1.6', 'ocpp2.0.1', 'ocpp2.1']) {
-            const device = subject.exports({});
-            const commands = [], acknowledgements = [];
-            device.namespace = 'ocpp21.0';
-            device.log = { info() {}, warn() {}, error() {} };
-            device.captureOcppPayload = async () => {};
-            device.getStateAsync = async id => ({ val: id.endsWith('chargeLimitType') ? 'W' : 3 });
-            device.setStateAsync = async (id, state) => acknowledgements.push({ id, state });
-            device.runtimeIndex.set('CP_01', { proto, client: { async call(method, payload) { commands.push({ method, payload }); return { status: 'Rejected' }; } } });
-            const h = await fixture({ dispatch: (id, val, ack) => device.onStateChange(id, { val, ack }) });
-            await h.apply(5700); await h.apply(0);
-            const profiles = commands.filter(c => c.method === 'SetChargingProfile');
-            assert.equal(profiles.length, 2);
-            const limits = profiles.map(c => proto === 'ocpp1.6'
-                ? c.payload.csChargingProfiles.chargingSchedule.chargingSchedulePeriod[0].limit
-                : c.payload.chargingProfile.chargingSchedule[0].chargingSchedulePeriod[0].limit);
-            assert.deepEqual(limits, [5700, 0]);
-            assert.ok(acknowledgements.some(a => a.id === setId && a.state.val === 0 && a.state.ack === true),
-                'historical 0.2.2 acks the state despite Rejected: this is not hardware confirmation');
+            for (const responseStatus of ['Accepted', 'Rejected']) await t.test(`${proto}: ${responseStatus}`, async () => {
+                const device = subject.exports({}); const commands = [];
+                assert.equal(typeof device._indexClient, 'function', 'provided source must implement the current OCPP session contract');
+                device._identityStructureReady.add('CP_01'); device._connectorCleanupDone.add('CP_01'); device._aliasDone.add('CP_01');
+                device._stateToRawIdentity.set('CP_01', 'CP_01');
+                const client = { async close() {}, async call(method, payload) {
+                    commands.push({ method, payload: structuredClone(payload) }); return { status: responseStatus };
+                } };
+                device._indexClient('CP_01', proto, client, 'CP_01');
+                const entry = device.runtimeIndex.get('CP_01');
+                await entry.sessionPublication; await device._ensureEosLease('CP_01');
+                await device._chargeLimitPublications.get('CP_01');
+                await device.setStateAsync('CP_01.control.chargeLimitType', { val: 'W', ack: true });
+                await device.setStateAsync('CP_01.control.numberOfPhases', { val: 3, ack: true });
+                await device.setStateAsync('CP_01.measurements.powerW', { val: 5700, ack: true });
+                const h = await fixture({ dispatch: async (id, val, ack) => {
+                    // ioBroker stores the incoming unacknowledged state before
+                    // delivering it; the actual adapter checks that exact value
+                    // and timestamp before acknowledging a handled command.
+                    await device.setStateAsync(id, { val, ack });
+                    return device.onStateChange(id, { ...(await device.getStateAsync(id)) });
+                } });
+                await h.apply(5700); await h.apply(0);
+                const profiles = commands.filter(c => c.method === 'SetChargingProfile');
+                assert.equal(profiles.length, 2);
+                const schedules = profiles.map(c => proto === 'ocpp1.6'
+                    ? c.payload.csChargingProfiles.chargingSchedule : c.payload.chargingProfile.chargingSchedule[0]);
+                assert.deepEqual(schedules.map(schedule => schedule.chargingSchedulePeriod[0].limit), [5700, 0]);
+                assert.ok(schedules.every(schedule => schedule.chargingRateUnit === 'W'));
+                assert.equal(commands.some(command => command.method === 'ClearChargingProfile'), false,
+                    'explicit stop remains a zero ceiling even with the old keepLast setting');
+                assert.ok(device.acknowledgements.some(a => a.id === 'CP_01.control.chargeLimit' && a.state.val === 0 && a.state.ack === true),
+                    'local handling acknowledgement does not assert protocol or physical acceptance');
+                const atomicStatus = JSON.parse((await device.getStateAsync('CP_01.control.chargeLimitStatus')).val);
+                assert.equal(atomicStatus.valid, responseStatus === 'Accepted');
+                assert.equal((await device.getStateAsync('CP_01.control.appliedChargeLimitValid')).val, responseStatus === 'Accepted');
+                assert.equal(atomicStatus.sessionId, entry.sessionId);
+                if (responseStatus === 'Rejected') {
+                    assert.equal(atomicStatus.appliedW, null); assert.equal(atomicStatus.error, 'rejected');
+                    assert.ok(device.acknowledgements.some(a => a.id === 'CP_01.control.lastSuccess' && a.state.val === false));
+                } else {
+                    assert.equal(atomicStatus.requestedW, 0); assert.equal(atomicStatus.appliedW, 0);
+                }
+                assert.equal((await device.getStateAsync('CP_01.measurements.powerW')).val, 5700,
+                    'an accepted profile never fabricates a physical zero-power measurement');
+            });
         }
     });

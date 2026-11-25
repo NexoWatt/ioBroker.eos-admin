@@ -1,0 +1,46 @@
+TAP version 13
+# Subtest: controller checkPassword callback preserves the canonical returned user
+ok 1 - controller checkPassword callback preserves the canonical returned user
+  ---
+  duration_ms: 76.110608
+  type: 'test'
+  ...
+# Subtest: history adapter responses beyond physical-command TTL retain their read-only callback
+ok 2 - history adapter responses beyond physical-command TTL retain their read-only callback
+  ---
+  duration_ms: 2357.198302
+  type: 'test'
+  ...
+# Subtest: an expired physical command is not replayed when the parent event loop recovers
+ok 3 - an expired physical command is not replayed when the parent event loop recovers
+  ---
+  duration_ms: 2608.052202
+  type: 'test'
+  ...
+# Subtest: completion from an old RPC generation cannot kill its replacement process
+ok 4 - completion from an old RPC generation cannot kill its replacement process
+  ---
+  duration_ms: 385.672421
+  type: 'test'
+  ...
+# Subtest: oversized controller response fails its read without killing the control process
+ok 5 - oversized controller response fails its read without killing the control process
+  ---
+  duration_ms: 234.979874
+  type: 'test'
+  ...
+# Subtest: SIGKILL of the supervising parent terminates the real runtime child
+ok 6 - SIGKILL of the supervising parent terminates the real runtime child
+  ---
+  duration_ms: 167.191871
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6398.511534

@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/login.ts
- * Quell-Hash: sha256:fd037d17f5e51c5aeb98e3bcfc64afb9722f39a50aca43c67d49eaa48a3c8570
+ * Quell-Hash: sha256:ead3632f79ef1ef7052cd37d39ca449b69d208279188013d6a349a76fd522eaf
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -49,11 +49,13 @@
     if (!form || !userInput || !passwordInput || !submit || !toggle || !statusNode || !description || !central || !frame || !retry)
         return;
     const elements = { form, userInput, passwordInput, submit, toggle, statusNode, description, central, frame, retry };
+    const adminIntent = new URLSearchParams(window.location.search).get('admin') === '1';
     let current = null;
     let busy = false;
     let generation = 0;
     let retryAt = 0;
     let retryTimer;
+    let credentialsConfirmed = false;
     const rootPath = () => new URL(window.NW_RUNTIME?.url('/') ?? '/', window.location.href).pathname.replace(/\/?$/, '/');
     const framed = () => window.self !== window.top;
     const secureBrowser = () => window.location.protocol === 'https:'
@@ -76,7 +78,7 @@
         const controller = new AbortController();
         const timer = window.setTimeout(() => controller.abort(), 6000);
         try {
-            const response = await fetch('/api/auth/status', { credentials: 'same-origin', cache: 'no-store', redirect: 'error', signal: controller.signal });
+            const response = await fetch('/api/auth/status' + (adminIntent ? '?admin=1' : ''), { credentials: 'same-origin', cache: 'no-store', redirect: 'error', signal: controller.signal });
             if (!response.ok || !/^application\/json(?:\s*;|$)/i.test(response.headers.get('content-type') || ''))
                 throw new Error('status_unavailable');
             const reader = response.body?.getReader();
@@ -110,12 +112,16 @@
             if (!value || typeof value !== 'object' || Array.isArray(value))
                 throw new Error('status_invalid');
             const data = value;
-            if (!['iobroker', 'eos'].includes(String(data.mode)) || data.configured !== true || data.enabled !== true || data.protectWrites !== true
+            const kioskIdentity = !adminIntent && data.kiosk === true && data.kioskEnabled === true && data.mode === 'kiosk'
+                && data.role === 'customer' && data.user === null && data.userId === null && data.authed === true
+                && Array.isArray(data.capabilities) && data.capabilities.length === 1 && data.capabilities[0] === 'frontend.open';
+            if (!['iobroker', 'eos', 'kiosk'].includes(String(data.mode)) || (data.mode === 'kiosk' && !kioskIdentity)
+                || (data.kiosk === true && !kioskIdentity) || data.configured !== true || data.enabled !== true || data.protectWrites !== true
                 || typeof data.authed !== 'boolean' || (data.authenticated !== undefined && data.authenticated !== data.authed)
                 || !['none', 'customer', 'installer', 'admin'].includes(String(data.role))
                 || !Array.isArray(data.capabilities) || data.capabilities.length > 128
                 || !data.capabilities.every(cap => typeof cap === 'string' && cap.length <= 128)
-                || (data.authed && (typeof data.user !== 'string' || !data.user || data.user.length > 512 || data.role === 'none')))
+                || (data.authed && !kioskIdentity && (typeof data.user !== 'string' || !data.user || data.user.length > 512 || data.role === 'none')))
                 throw new Error('status_invalid');
             return { mode: data.mode, authed: data.authed, role: data.role,
                 user: typeof data.user === 'string' ? data.user : null, capabilities: data.capabilities,
@@ -139,6 +145,9 @@
             return fallback;
         try {
             const target = new URL(requested, window.location.origin);
+            if (target.origin === window.location.origin && !target.username && !target.password
+                && target.pathname === '/system/' && status.role === 'admin')
+                return '/system/';
             if (target.origin !== window.location.origin || target.username || target.password || !target.pathname.startsWith(root))
                 return fallback;
             const path = '/' + target.pathname.slice(root.length);
@@ -189,7 +198,7 @@
             message('In eingebetteten Ansichten werden keine Passwörter abgefragt.');
             return;
         }
-        if (status.authed) {
+        if (status.authed && (!adminIntent || (credentialsConfirmed && status.role === 'admin'))) {
             message('Angemeldet. Deine Oberfläche wird geöffnet …');
             window.location.replace(returnTarget(status));
             return;
@@ -207,13 +216,14 @@
             message('');
             return;
         }
-        elements.description.textContent = 'Melde dich an, um deine Energie- und SmartHome-Oberfläche zu öffnen.';
+        elements.description.textContent = adminIntent ? 'Melde dich mit Benutzername und Passwort eines Administratorkontos an, um den Admin und die Einstellungen zu öffnen.' : 'Melde dich an, um deine Energie- und SmartHome-Oberfläche zu öffnen.';
         if (!secureBrowser()) {
             message('Bitte die HTTPS-Adresse deiner Oberfläche öffnen. Über diese unverschlüsselte Verbindung werden keine Passwörter gesendet.', true);
             return;
         }
         elements.form.hidden = false;
-        message('');
+        const wrongRole = adminIntent && status.authed && status.role !== 'admin';
+        message(wrongRole ? 'Dieses Konto besitzt keine Administratorrechte. Bitte ein Administratorkonto verwenden.' : '', wrongRole);
         if (!elements.userInput.value)
             elements.userInput.focus();
     }
@@ -303,6 +313,7 @@
                 message('Die Sitzung konnte nicht bestätigt werden. Bitte den vorgesehenen HTTPS-Zugang verwenden.', true);
                 return;
             }
+            credentialsConfirmed = true;
             render(status);
         }
         catch {

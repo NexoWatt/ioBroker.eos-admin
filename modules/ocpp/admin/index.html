@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>NexoWatt EOS · OCPP-Ladestationen</title>
+  <link rel="stylesheet" href="/modules/shared/eos-module.css">
+  <link rel="stylesheet" href="/modules/ocpp/style.css">
+  <script defer src="/modules/ocpp/index.js"></script>
+  <script defer src="/eos-session-idle.js"></script>
+</head>
+<body class="eos-module-page"><main class="eos-module-main">
+  <header class="eos-page-header">
+    <a class="eos-brand" href="/" aria-label="NexoWatt EOS Dashboard"><img src="/system/img/eos/nexowatt-eos-brand-wide.png" width="190" height="52" alt="NexoWatt EOS"></a>
+    <nav class="eos-module-nav" aria-label="EOS Navigation">
+      <a href="/">EOS Dashboard</a><a href="/installer/">Installer</a><a href="/system/">EOS Administration</a>
+      <a href="/modules/devices/">Geräte</a><a href="/modules/eebus/">EEBus</a><a href="/modules/ocpp/" aria-current="page">OCPP-Ladestationen</a><a href="/modules/backup/">Sicherung</a><a href="/runtime/">Prozessdiagnose</a>
+    </nav>
+  </header>
+  <section class="eos-module-hero" aria-labelledby="page-title">
+    <div><small>NexoWatt EOS · Ladeinfrastruktur</small><h1 id="page-title">OCPP-Ladestationen</h1>
+      <p>Ladestationen direkt mit EOS verbinden. OCPP läuft innerhalb des gemeinsamen EOS-Adapters als eigener Prozess.</p></div>
+    <span class="eos-module-badge">Integriertes EOS-Modul</span>
+  </section>
+  <p id="message" class="eos-message" role="status" aria-live="polite">OCPP-Konfiguration wird geladen …</p>
+  <div class="ocpp-overview">
+    <section class="eos-panel"><small class="eos-eyebrow">Verbindung</small><h2>Betriebsstatus</h2>
+      <dl id="status" class="eos-detail-list"><dt>Modul</dt><dd>Wird geprüft …</dd></dl>
+      <button id="refresh" type="button">Status aktualisieren</button><a class="eos-button" href="/runtime/">Prozessdiagnose</a>
+    </section>
+    <section class="eos-panel"><small class="eos-eyebrow">Ladestationen einrichten</small><h2>OCPP-Verbindungsadresse</h2>
+      <p>In der Ladestation die EOS-Adresse, den gespeicherten WebSocket-Port und ihre eindeutige Stationskennung eintragen.</p>
+      <code id="connection-address">Noch kein bestätigter Konfigurationsstand</code>
+      <p>OCPP 1.6J, 2.0.1 und 2.1 nutzen denselben Port, sofern die jeweilige Version aktiviert ist. Das Modul nimmt lokale WebSocket-Verbindungen an.</p>
+      <a class="eos-button" href="/ems-apps.html?nwAdmin=1&amp;tab=evcs">Ladepunkte und elektrische Grenzen</a>
+    </section>
+  </div>
+  <section class="eos-panel"><small class="eos-eyebrow">Live-Status</small><h2>Erkannte Ladestationen</h2>
+    <p>Aktualisierung alle 5 Sekunden bei sichtbarer Seite. Neue Ladepunkte im App-Center prüfen und nach Kontrolle der elektrischen Grenzen aktivieren.</p>
+    <div id="stations"><p>Noch keine bestätigte Abfrage.</p></div>
+  </section>
+  <section class="eos-panel"><small class="eos-eyebrow">OCPP einrichten</small><h2>Modulkonfiguration</h2>
+    <p>Aktivieren und Speichern startet das OCPP-Modul nach der serverseitigen Prüfung. Änderungen starten nur dieses Modul neu; dabei verbinden sich die Ladestationen erneut.</p>
+    <p id="draft-status" class="ocpp-muted" role="status"></p>
+    <form id="config-form"><fieldset id="editor" disabled><legend class="ocpp-visually-hidden">OCPP-Einstellungen</legend><div id="config-fields"></div></fieldset></form>
+    <div class="ocpp-actions"><button id="reload" type="button" disabled>Gespeicherten Stand laden</button><button id="save" type="button" class="eos-primary" disabled>Konfiguration speichern</button></div>
+  </section>
+  <section class="eos-panel"><small class="eos-eyebrow">Bestehende Anlage</small><h2>Vorhandenen OCPP-Adapter übernehmen</h2>
+    <p>Die vorhandene <code>ocpp21.N</code>-Instanz zuerst deaktivieren und vollständig stoppen. EOS erhält bei bestätigter Übernahme deren Datenpunktnamen und übernimmt die Konfiguration zunächst deaktiviert. Anschließend Port, Stationen und Ladepunktzuordnungen prüfen und das integrierte Modul aktivieren. <a href="/migration/">Status der Bestandsübernahme</a></p>
+    <div class="ocpp-import"><label for="legacy">Bisherige Instanz<input id="legacy" value="ocpp21.0" pattern="ocpp21\.[0-9]{1,8}" maxlength="16" autocomplete="off"></label><button id="import" type="button" disabled>Gestoppte Instanz übernehmen</button></div>
+    <p id="import-status" class="ocpp-muted" role="status">Verfügbarkeit wird geprüft …</p>
+  </section>
+</main></body></html>

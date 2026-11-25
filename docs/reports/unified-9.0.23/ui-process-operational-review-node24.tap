@@ -1,0 +1,11 @@
+✔ real hosted UI child starts the actual EMS and charging module through the IPC owner (3133.534235ms)
+✔ late object-subscription acknowledgement is drained before stop can confirm (164.661602ms)
+✔ real UI worker rejects expired and reordered authority leases (106.810351ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4153.925229

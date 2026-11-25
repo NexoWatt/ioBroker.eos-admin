@@ -1,0 +1,42 @@
+(node:13) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ actual owner HTTP routes: idle polls/new page loads never extend ten minutes; another browser stays active (1509.818963ms)
+✔ actual owner activity HTTP requires same-origin CSRF and cannot revive an expired family (327.950477ms)
+✔ a cached upstream req.user cannot retain EOS authority after idle expiry (342.011579ms)
+✔ actual hosted SSE is closed at idle expiry even without a new data frame, independently per login (283.816771ms)
+✔ pinned upstream log and instance publications cannot send after idle expiry before the prune timer (410.407083ms)
+✔ existing 180px branding is reused byte-for-byte; uploaded 1024px logo and root fallback remain unchanged (6.285961ms)
+✔ all actual shared page heads declare the same public iPhone icon with a content-specific cache key (5.237961ms)
+✔ login form has the supplied uncropped emblem before its heading, independent of the story wordmark (1.372459ms)
+✔ actual console build rebasing keeps the new touch icon at the public EOS root and leaves scripts untouched (2.069289ms)
+✔ existing validated hosted-prefix HTML projection keeps anonymous logo and installation links in that instance (102.991614ms)
+✔ an untouched page logs out at ten minutes; background status reads do not renew (15.404196ms)
+✔ trusted pointerdown extends idle exactly from the last submitted input (2.731146ms)
+✔ trusted keydown extends idle exactly from the last submitted input (2.987325ms)
+✔ trusted touchstart extends idle exactly from the last submitted input (2.128465ms)
+✔ trusted wheel extends idle exactly from the last submitted input (2.24578ms)
+✔ synthetic events, passive pointer motion, polling and visibility never count as input (1.901901ms)
+✔ a burst is bounded and its final gesture still gets a trailing update (4.218124ms)
+✔ an active sibling tab keeps the same family open without the idle tab renewing (6.31282ms)
+✔ unrelated sessions and fabricated cross-tab deadlines cannot extend or end a page (3.277364ms)
+✔ sleep and BFCache resume checks the server before accepting a late gesture (2.940115ms)
+✔ offline timeout hides the old page and does not stop devices or EMS (2.502418ms)
+✔ refresh changes CSRF without losing a fresh real gesture or creating periodic writes (3.1871ms)
+✔ CSRF rotation just before expiry never delays the real gesture beyond the server deadline (3.239047ms)
+✔ same-origin Admin frame interactions count; frame reload listeners bind the new document (3.148403ms)
+✔ login page is excluded and duplicate loading never registers a second timer or API request (4.61446ms)
+✔ blocked cross-tab transport keeps server checks and inactivity logout working (3.025361ms)
+✔ all canonical EOS screens include the shared root client, including recovery and module pages (10.625013ms)
+✔ instance proxy rendering and fetch mapping preserve the shared owner idle routes (301.190139ms)
+✔ public kiosk remains available for thirty minutes without expiry or activity writes (30.756726ms)
+✔ disabling kiosk or losing its API locks the public page at the next read-only check (4.57373ms)
+✔ kiosk cannot unlock protected or cached Admin DOM and protected idle checks explicitly suppress fallback (6.08315ms)
+✔ a real admin session keeps ordinary ten-minute expiry even while kiosk capability exists elsewhere (2.269584ms)
+ℹ tests 32
+ℹ suites 0
+ℹ pass 32
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3203.233765

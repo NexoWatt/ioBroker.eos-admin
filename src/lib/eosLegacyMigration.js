@@ -7,8 +7,8 @@ const { performance } = require('node:perf_hooks');
 const { isDeepStrictEqual } = require('node:util');
 const { EosModuleConfigStore } = require('./eosModuleConfigStore');
 
-const SOURCES = Object.freeze({ ui: 'nexowatt-ui', devices: 'nexowatt-devices', eebus: 'eebus', backup: 'nexowatt-backup' });
-const VERSIONS = Object.freeze({ ui: ['1.0.35', '1.0.36', '1.0.37', '1.0.38'], devices: ['0.5.176'], eebus: ['0.3.0'], backup: ['1.0.10'] });
+const SOURCES = Object.freeze({ ui: 'nexowatt-ui', devices: 'nexowatt-devices', eebus: 'eebus', backup: 'nexowatt-backup', ocpp: 'ocpp21' });
+const VERSIONS = Object.freeze({ ui: ['1.0.35', '1.0.36', '1.0.37', '1.0.38'], devices: ['0.5.176'], eebus: ['0.3.0'], backup: ['1.0.10'], ocpp: ['0.4.2', '0.4.3'] });
 const ACL = { owner: 'system.user.admin', ownerGroup: 'system.group.administrator', object: 0x600, state: 0x600 };
 const HOST_MAX_AGE_MS = 60000;
 const STARTUP_WINDOW_MS = 45000;
@@ -239,6 +239,15 @@ class EosLegacyMigration {
             if (Date.now() >= deadline) { await this.persist('ROLLBACK_REQUIRED'); throw fail('EOS_MIGRATION_ROLLBACK_UNCONFIRMED'); }
             await delay(100);
         }
+        for (const row of this.journal.sources || []) {
+            if (row.id !== 'ocpp' || !row.enabled) continue;
+            // Only the confirmed, journaled rollback may remove the hosted
+            // lifecycle marker. A child crash must keep stale hosted telemetry
+            // distinguishable from a running standalone OCPP adapter.
+            const markerId = `${row.source}.info.eosHostedRuntime`;
+            const marker = await this.reader.getForeignStateAsync(markerId);
+            if (marker?.val === true) await this.owner.setForeignStateAsync(markerId, { val: false, ack: true });
+        }
         await this.persist('ROLLED_BACK');
     }
     async start() {
@@ -278,7 +287,7 @@ class EosLegacyMigration {
             const journal = this.decode(prior);
             if (journal.v !== 1 || journal.owner !== this.owner.namespace || !['PREPARED', 'STOPPING', 'TRANSFERRED', 'COMMITTED', 'ROLLING_BACK', 'ROLLBACK_REQUIRED', 'ROLLED_BACK'].includes(journal.phase) ||
                 (journal.runtimeStopConfirmed !== undefined && typeof journal.runtimeStopConfirmed !== 'boolean') ||
-                !Array.isArray(journal.sources) || journal.sources.length > 4 || new Set(journal.sources.map(row => row.id)).size !== journal.sources.length || journal.sources.some(row => !SOURCES[row.id] || !new RegExp(`^${SOURCES[row.id]}\\.\\d+$`).test(row.source) || !/^[a-f0-9]{64}$/.test(row.nativeHash) || typeof row.enabled !== 'boolean' || typeof row.host !== 'string' || !row.host || row.host.length > 255 || !VERSIONS[row.id].includes(row.sourceVersion))) throw fail('EOS_MIGRATION_JOURNAL_INVALID');
+                !Array.isArray(journal.sources) || journal.sources.length > Object.keys(SOURCES).length || new Set(journal.sources.map(row => row.id)).size !== journal.sources.length || journal.sources.some(row => !SOURCES[row.id] || !new RegExp(`^${SOURCES[row.id]}\\.\\d+$`).test(row.source) || !/^[a-f0-9]{64}$/.test(row.nativeHash) || typeof row.enabled !== 'boolean' || typeof row.host !== 'string' || !row.host || row.host.length > 255 || !VERSIONS[row.id].includes(row.sourceVersion))) throw fail('EOS_MIGRATION_JOURNAL_INVALID');
             this.journal = journal; this.phase = journal.phase;
             if (['TRANSFERRED', 'COMMITTED'].includes(this.phase)) await this.verifyDestinations();
             // PREPARED/STOPPING precede any new runtime construction. Recovery

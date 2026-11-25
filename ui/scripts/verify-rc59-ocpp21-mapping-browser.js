@@ -14,6 +14,8 @@ const { spawn } = require('node:child_process');
 
 const ROOT = path.resolve(__dirname, '..');
 const WWW = path.join(ROOT, 'www');
+const HOSTED = process.env.EOS_TEST_HOSTED_OCPP === '1';
+const NATIVE_NAMESPACE = HOSTED ? 'eos-admin.0.ocpp' : 'ocpp21.0';
 const CHROMIUM = [
   process.env.CHROMIUM_BIN,
   '/usr/bin/chromium',
@@ -81,7 +83,7 @@ class CdpClient {
 }
 
 function discoveryConnector(station) {
-  const root = `ocpp21.0.${station}`;
+  const root = `${NATIVE_NAMESPACE}.${station}`;
   return {
     stationKey: station,
     connectorNo: 1,
@@ -149,6 +151,7 @@ function inlineHtml() {
     },
     chargingManagement: { enabled: true, mode: 'auto' },
   };
+  if (HOSTED) Object.assign(config.settingsConfig.evcsList[1], discoveryConnector('CP_01').ids);
   const discovery = {
     ok: true,
     discoveryContract: 'nexowatt-ocpp21-0.4-native',
@@ -163,7 +166,7 @@ const __config=${JSON.stringify(config)};
 const __discovery=${JSON.stringify(discovery)};
 window.fetch=async function(url, options){
   const p=String(url||'');
-  if(p.includes('/api/ocpp/discover')) return {ok:true,status:200,json:async()=>JSON.parse(JSON.stringify(__discovery))};
+  if(p.includes('/api/ocpp/discover')) { window.__discoveryCalls=(window.__discoveryCalls||0)+1; return {ok:true,status:200,json:async()=>JSON.parse(JSON.stringify(__discovery))}; }
   if(p.includes('/api/installer/config')) return {ok:true,status:200,json:async()=>({ok:true,config:JSON.parse(JSON.stringify(__config)),license:__config.license})};
   if(p.includes('/api/license/info')) return {ok:true,status:200,json:async()=>({ok:true,...__config.license})};
   if(p.includes('/api/session/me')) return {ok:true,status:200,json:async()=>({ok:true,authed:true,role:'installer',capabilities:['*','appcenter.open']})};
@@ -217,7 +220,7 @@ window.fetch=async function(url, options){
     }))()`);
     assert.equal(before.count, '2');
     assert.equal(before.modbus, 'modbus.0.holdingRegisters.wallboxPower');
-    assert.equal(before.ocpp, 'alias.0.nexowatt.ocpp.0.CP_01.powerW');
+    assert.equal(before.ocpp, HOSTED ? `${NATIVE_NAMESPACE}.CP_01.measurements.powerW` : 'alias.0.nexowatt.ocpp.0.CP_01.powerW');
 
     await cdp.eval(`document.getElementById('ocppMapExisting').click(); true`);
     const after = await waitFor(async () => {
@@ -238,14 +241,18 @@ window.fetch=async function(url, options){
 
     assert.equal(after.modbusPower, 'modbus.0.holdingRegisters.wallboxPower');
     assert.equal(after.modbusSet, 'modbus.0.holdingRegisters.wallboxSetPower');
-    assert.equal(after.cp1Power, 'ocpp21.0.CP_01.measurements.powerW');
-    assert.equal(after.cp1Online, 'ocpp21.0.CP_01.info.socketConnected');
-    assert.equal(after.cp1Fresh, 'ocpp21.0.CP_01.health.dataFresh');
-    assert.equal(after.cp1Set, 'ocpp21.0.CP_01.control.chargeLimit');
-    assert.equal(after.cp2Power, 'ocpp21.0.CP_02.measurements.powerW');
-    assert.equal(after.cp2Set, 'ocpp21.0.CP_02.control.chargeLimit');
+    assert.equal(after.cp1Power, `${NATIVE_NAMESPACE}.CP_01.measurements.powerW`);
+    assert.equal(after.cp1Online, `${NATIVE_NAMESPACE}.CP_01.info.socketConnected`);
+    assert.equal(after.cp1Fresh, `${NATIVE_NAMESPACE}.CP_01.health.dataFresh`);
+    assert.equal(after.cp1Set, `${NATIVE_NAMESPACE}.CP_01.control.chargeLimit`);
+    assert.equal(after.cp2Power, `${NATIVE_NAMESPACE}.CP_02.measurements.powerW`);
+    assert.equal(after.cp2Set, `${NATIVE_NAMESPACE}.CP_02.control.chargeLimit`);
     assert.match(after.status, /Fremde Ladepunkte wurden nicht überschrieben/);
 
+    await cdp.eval(`document.getElementById('ocppMapExisting').click(); true`);
+    await waitFor(async () => cdp.eval(`window.__discoveryCalls >= 2 && document.body.innerText.includes('Bitte speichern')`), 5000, 'wiederholte Zuordnung');
+    assert.equal(await cdp.eval(`document.getElementById('evcsCount').value`), '3');
+    console.log(`[rc59-ocpp21-mapping-browser] namespace=${NATIVE_NAMESPACE}`);
     console.log('[rc59-ocpp21-mapping-browser] OK: Alias-Migration ist nativ, stationsgebunden und überschreibt keine fremden Ladepunkte.');
   } finally {
     if (cdp) cdp.close();

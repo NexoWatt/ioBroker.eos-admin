@@ -1,0 +1,33 @@
+{
+  "component": "NexoWatt EOS embedded OCPP",
+  "integrationVersion": "9.0.24",
+  "moduleVersion": "0.4.4",
+  "name": "iobroker.ocpp21",
+  "version": "0.4.3",
+  "upstream": {
+    "name": "iobroker.ocpp21",
+    "version": "0.4.3",
+    "license": "MIT",
+    "licenseFile": "LICENSE",
+    "repository": "https://github.com/NexoWatt/iobroker.ocpp21",
+    "source": "User-provided standalone0.4.2, reviewed0.4.3 source delivered in this session",
+    "sourceMainSha256": "a1de59833166b8c38b83048e4c109694ec763cfeedf9edae8903b6c1170bf8cf",
+    "packageSha256": "0fa79f872c29ac7ae80cd3395cdff6dc288e5528541280a6819075f2e7b8a54d"
+  },
+  "changes": [
+    "Explicit base-class dependency injection; no second ioBroker adapter instance/controller in child",
+    "StrictTypeScript hosted lifecycle/configuration/dispatch boundary under MIT",
+    "Independent OCPP worker heartbeat and per-station EOS lease preserved",
+    "Bounded network admission/frames, authorization and generation fences, scoped aliases",
+    "Native configurations, units and station controls preserved; hosted namespaces plus legacy handover"
+  ],
+  "excludedUpstreamFiles": [
+    "node_modules",
+    "standalone adapter entry point",
+    "standalone package-lock and installer"
+  ],
+  "runtimeDependencies": {
+    "ocpp-rpc": "2.2.1 in root package-lock.json"
+  },
+  "supportStatus": "Software-tested local loopback; physical-device interoperability and certification remain unverified"
+}

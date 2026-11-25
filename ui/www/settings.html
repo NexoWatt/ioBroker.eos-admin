@@ -40,6 +40,7 @@
 <script defer src="/eos-session-idle.js"></script>
 <link rel="stylesheet" href="/static/eos-updates.css">
 <script src="/static/eos-updates.js" defer></script>
+<script src="/static/eos-kiosk-settings.js" defer></script>
 </head>
 <!-- NexoWatt Detail-Kommentar (DE) -->
 <!-- Kundeneinstellungen. data-scope/data-key-Felder werden generisch von www/app.js an /api/set gebunden und in main.js als States geführt. -->
@@ -169,12 +170,23 @@
              Native Navigation erhält die Sitzung und bleibt im aktuellen Tab;
              die serverseitige Rollenprüfung entscheidet über den Zugang. -->
         <a class="btn" id="openInstallerBtn" href="/system/" target="_self">Admin öffnen</a>
-        <a class="btn" id="openMigrationBtn" href="/migration/" target="_self" data-nw-admin-link hidden style="display:none">Bestandsübernahme</a>
       </div>
     </div>
 
           <div class="nw-settings-note">
             Hier liegen allgemeine Frontend-Einstellungen und die Wetter-App. Weitere Themen findest du links sauber in eigenen Seiten.
+          </div>
+
+          <div class="nw-settings-section-title">Kioskmodus für Wandtablets</div>
+          <div class="nw-settings-note">
+            Im Kioskmodus lässt sich das Dashboard dauerhaft ohne Anmeldung bedienen.
+            Admin und Einstellungen bleiben durch Benutzername und Passwort geschützt.
+            Stationsanzeigen sind weiterhin über ihren eigenen Link erreichbar.
+          </div>
+          <div class="row" style="align-items:center;gap:12px;flex-wrap:wrap">
+            <span id="eosKioskStatus" role="status" aria-live="polite">Kioskmodus wird geprüft …</span>
+            <button class="btn" id="eosKioskToggle" type="button" disabled>Kioskmodus ändern</button>
+            <a class="btn" id="eosKioskAdmin" href="/login.html?admin=1&amp;returnTo=/settings.html" hidden>Als Administrator anmelden</a>
           </div>
 
           <div class="nw-settings-section-title">KI‑Energieberater</div>

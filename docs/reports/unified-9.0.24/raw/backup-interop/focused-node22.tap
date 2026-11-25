@@ -1,0 +1,132 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: encrypted backup retains native EOS OCPP config, original state IDs and module files
+ok 1 - encrypted backup retains native EOS OCPP config, original state IDs and module files
+  ---
+  duration_ms: 496.162428
+  type: 'test'
+  ...
+# Subtest: encrypted backup retains imported ocpp21.3 config, original state IDs and module files
+ok 2 - encrypted backup retains imported ocpp21.3 config, original state IDs and module files
+  ---
+  duration_ms: 307.911173
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: snapshot preserves every configured module and false/zero/empty customer values without any write API
+ok 3 - snapshot preserves every configured module and false/zero/empty customer values without any write API
+  ---
+  duration_ms: 6.351997
+  type: 'test'
+  ...
+# Subtest: OCPP update snapshot retains protected station config and original namespace without replaying live control states
+ok 4 - OCPP update snapshot retains protected station config and original namespace without replaying live control states
+  ---
+  duration_ms: 1.284895
+  type: 'test'
+  ...
+# Subtest: changing or damaged OCPP config blocks update capture and never falls back to an old native envelope
+ok 5 - changing or damaged OCPP config blocks update capture and never falls back to an old native envelope
+  ---
+  duration_ms: 1.518972
+  type: 'test'
+  ...
+# Subtest: protected UI-store migration selects the real legacy installer and customer namespace
+ok 6 - protected UI-store migration selects the real legacy installer and customer namespace
+  ---
+  duration_ms: 0.949197
+  type: 'test'
+  ...
+# Subtest: old native module envelope remains supported only in the absence of its authoritative store
+ok 7 - old native module envelope remains supported only in the absence of its authoritative store
+  ---
+  duration_ms: 2.114245
+  type: 'test'
+  ...
+# Subtest: legacy namespace and protected store identity are validated before reading unrelated data
+ok 8 - legacy namespace and protected store identity are validated before reading unrelated data
+  ---
+  duration_ms: 1.017369
+  type: 'test'
+  ...
+# Subtest: configured legacy required states cannot silently disappear from the update snapshot
+ok 9 - configured legacy required states cannot silently disappear from the update snapshot
+  ---
+  duration_ms: 1.684537
+  type: 'test'
+  ...
+# Subtest: busy and changing customer configuration fail closed rather than returning a mixed snapshot
+ok 10 - busy and changing customer configuration fail closed rather than returning a mixed snapshot
+  ---
+  duration_ms: 1.081754
+  type: 'test'
+  ...
+# Subtest: bounded decoder refuses nested v2 chains and malformed ciphertext without exposing plaintext errors
+ok 11 - bounded decoder refuses nested v2 chains and malformed ciphertext without exposing plaintext errors
+  ---
+  duration_ms: 0.857281
+  type: 'test'
+  ...
+# Subtest: normalization bounds size/depth/node count and rejects dangerous keys or non-JSON values
+ok 12 - normalization bounds size/depth/node count and rejects dangerous keys or non-JSON values
+  ---
+  duration_ms: 42.774855
+  type: 'test'
+  ...
+# Subtest: settings scope and count are bounded without an all-state database scan
+ok 13 - settings scope and count are bounded without an all-state database scan
+  ---
+  duration_ms: 2.900781
+  type: 'test'
+  ...
+# Subtest: cumulative encoded JSON bytes are bounded before serialization or configuration JSON parsing
+ok 14 - cumulative encoded JSON bytes are bounded before serialization or configuration JSON parsing
+  ---
+  duration_ms: 204.617512
+  type: 'test'
+  ...
+# (node:19) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: saved direct Influx identity is kept without copying credentials
+ok 15 - saved direct Influx identity is kept without copying credentials
+  ---
+  duration_ms: 3.253603
+  type: 'test'
+  ...
+# Subtest: unknown runtime and foreign PostgreSQL instance cannot claim backup coverage
+ok 16 - unknown runtime and foreign PostgreSQL instance cannot claim backup coverage
+  ---
+  duration_ms: 2.431105
+  type: 'test'
+  ...
+# Subtest: existing influx adapter resolves exact saved organization and bucket, not backup defaults
+ok 17 - existing influx adapter resolves exact saved organization and bucket, not backup defaults
+  ---
+  duration_ms: 0.518809
+  type: 'test'
+  ...
+# Subtest: unsupported adapter and malformed or credential-bearing endpoint stay incomplete
+ok 18 - unsupported adapter and malformed or credential-bearing endpoint stay incomplete
+  ---
+  duration_ms: 0.785665
+  type: 'test'
+  ...
+# Subtest: provider absence is explicit, never inferred from missing configuration
+ok 19 - provider absence is explicit, never inferred from missing configuration
+  ---
+  duration_ms: 0.265634
+  type: 'test'
+  ...
+1..19
+# tests 19
+# suites 0
+# pass 19
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1550.858619

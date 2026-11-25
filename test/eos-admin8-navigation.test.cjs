@@ -29,12 +29,14 @@ const drawerMethods = actualMethods('src-admin/src/components/Drawer.tsx', 'Draw
 function fixture(role = 'admin', permanent = false) {
     const values = new Map();
     const storage = { getItem: name => values.get(name) ?? null, setItem: (name, value) => values.set(name, value), removeItem: name => values.delete(name) };
-    const window = { NEXOWATT_EOS_ACCESS_ROLE: role, sessionStorage: storage };
+    const locations = [];
+    const window = { NEXOWATT_EOS_ACCESS_ROLE: role, sessionStorage: storage, location: { assign: value => locations.push(value) } };
     const navigations = [];
     class CustomEvent extends Event { constructor(name, options) { super(name); this.detail = options.detail; } }
     class Base { setState(update) { this.state = { ...this.state, ...update }; } }
     class Router extends Base { static doNavigate(...args) { navigations.push(args); } }
-    const componentNames = ['IsVisible', 'Tooltip', 'Badge', 'IconButton', 'IconExpert', 'ExpertModeDialog', 'SystemSettingsDialog', 'Box', 'DrawerItem', 'SystemSettingsIcon'];
+    const componentNames = ['IsVisible', 'Tooltip', 'Badge', 'IconButton', 'IconExpert', 'ExpertModeDialog', 'SystemSettingsDialog', 'Box', 'DrawerItem', 'SystemSettingsIcon',
+        'DashboardIcon', 'DeviceManagerIcon', 'EebusIcon', 'BackupIcon', 'HttpsIcon', 'MigrationIcon'];
     const components = Object.fromEntries(componentNames.map(name => [name, name]));
     const module = { exports: {} };
     const compiled = ts.transpileModule(`class App extends Router { ${appMethods} }\nclass Drawer extends Router { ${drawerMethods} }\nmodule.exports = {App, Drawer};`, {
@@ -55,7 +57,7 @@ function fixture(role = 'admin', permanent = false) {
     let opened = 0;
     drawer.props = { eosAccessRole: role, theme: app.state.theme, adminGuiConfig: {}, t: text => text, onSystemSettings: () => opened++, expertModeControl: app.renderExpertModeButton() };
     const emitPolicy = policy => app.onEosPolicyChanged(new CustomEvent('nexowatt-eos-policy', { detail: { policy, kind: 'policy' } }));
-    return { app, drawer, storage, window, emitPolicy, navigations, opened: () => opened };
+    return { app, drawer, storage, window, emitPolicy, navigations, locations, opened: () => opened };
 }
 function find(element, predicate) {
     if (!React.isValidElement(element)) return null;
@@ -70,7 +72,12 @@ const expert = app => find(app.renderExpertModeButton(), node => node.props['dat
 test('System and expert controls are rendered for administrative policy only', () => {
     for (const role of ['unknown', 'installer', 'enduser']) {
         const f = fixture(role);
-        assert.equal(f.drawer.renderSystemNavigation(), null);
+        const navigation = f.drawer.renderSystemNavigation();
+        if (role === 'unknown') assert.equal(navigation, null);
+        else assert.ok(find(navigation, node => node.props.text === 'EOS Dashboard'));
+        assert.equal(find(navigation, node => node.props.tabName === 'tab-system'), null);
+        assert.equal(find(navigation, node => node.props.text === 'OCPP-Ladestationen'), null);
+        assert.equal(find(navigation, node => node.props['data-eos-expert-control'] === '1'), null);
         assert.equal(f.app.renderExpertModeButton(), null);
         assert.equal(f.app.getSystemSettingsDialog(), null);
     }
@@ -82,6 +89,14 @@ test('System and expert controls are rendered for administrative policy only', (
         assert.ok(find(f.drawer.renderSystemNavigation(), element => element.props['data-eos-expert-control'] === '1'));
         assert.equal(f.app.getSystemSettingsDialog().props.eosAccessRole, role);
     }
+});
+
+test('OCPP module configuration navigation is administrator-only and targets the guarded hosted page', () => {
+    for (const role of ['unknown', 'installer', 'enduser', 'service']) {
+        const f = fixture(role); assert.equal(find(f.drawer.renderSystemNavigation(), node => node.props.text === 'OCPP-Ladestationen'), null);
+    }
+    const f = fixture('admin'); const item = find(f.drawer.renderSystemNavigation(), node => node.props.text === 'OCPP-Ladestationen');
+    assert.ok(item); item.props.onClick(); assert.deepEqual(f.locations, ['/modules/ocpp/']);
 });
 
 test('expert mode keeps confirmation and toggles both directions within the browser session', () => {

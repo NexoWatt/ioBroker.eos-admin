@@ -1,7 +1,8 @@
 'use strict';
-// Production Web.mountUnifiedRuntime wiring, actual hosted startup and actual
-// module HTTP saves. Only controller persistence/authentication and physical
-// device transports are test boundaries. No manual bridge, ready flag or flush.
+// Legacy business-pipeline cases intentionally retain an in-process UI seam so
+// their deep runtime assertions remain meaningful. A separate case below mounts
+// the production Web wiring with the real UI/EMS child and uses only public
+// status, HTTP and controller-state observations. Controller/auth/device IO are fixtures.
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
@@ -141,12 +142,25 @@ async function pipeline(t, options = {}) {
   const ready = uiModule.exports.TestRuntime.prototype.onReady;
   uiModule.exports.TestRuntime.prototype.onReady = function (...args) { actualRuntime = this; return ready.apply(this, args); };
   const webFile = path.join(root, 'build/lib/web.js'); const nativeRequire = Module.createRequire(webFile);
+  const processLibrary = nativeRequire('./eosUiProcess');
+  const childRuntimeFile = path.join(directory, 'child-runtime.cjs');
+  if (options.realProcess) {
+    // The installed controller is absent in this executor. Replace only its
+    // filesystem locator inside the child; the real UI/EMS methods remain intact.
+    fs.writeFileSync(childRuntimeFile, `const id=require.resolve('@iobroker/adapter-core',{paths:[${JSON.stringify(root)}]});
+require.cache[id]={id,filename:id,loaded:true,exports:{getAbsoluteInstanceDataDir:()=>${JSON.stringify(directory)}}};
+module.exports=require(${JSON.stringify(uiFile)});\n`);
+  }
   const exports = {};
   vm.runInNewContext(fs.readFileSync(webFile, 'utf8'), {
     exports, module: { exports }, __dirname: path.dirname(webFile), __filename: webFile,
     Buffer, URL, console, process, setTimeout, clearTimeout, setInterval, clearInterval,
     require: name => name === '@iobroker/adapter-core' ? controller
       : name === './eosModuleHost' ? { ...hostLibrary, EosModuleHost: HostWithTransportBoundary }
+        : name === './eosUiProcess' ? { ...processLibrary,
+          createEosUiProcess: (adapter, bridge, supplied) => options.realProcess
+            ? processLibrary.createEosUiProcess(adapter, bridge, { ...supplied, runtimePath: childRuntimeFile })
+            : uiModule.exports.createHostedRuntime(adapter, bridge) }
         : name === 'node:module' ? { ...Module, createRequire: file => {
           const load = Module.createRequire(file); return id => id === uiFile ? uiModule.exports : load(id);
         } } : nativeRequire(name),
@@ -163,18 +177,19 @@ async function pipeline(t, options = {}) {
       requestAllowed: req => !req.headers.origin || req.headers.origin === `http://${req.headers.host}`,
       machineRequestAllowed: () => false },
   });
+  let server;
+  t.after(async () => {
+    ownership = false;
+    await owner.eosModuleHost?.stop(); await owner.eosHostedRuntime?.stop().catch(() => {});
+    if (server) { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); }
+    fs.rmSync(directory, { recursive: true, force: true });
+  });
   await web.mountUnifiedRuntime();
   app.use((_req, res) => res.status(404).end());
-  const server = http.createServer(app); web.server.server = server;
+  server = http.createServer(app); web.server.server = server;
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   const origin = `http://127.0.0.1:${server.address().port}`;
   const startup = Promise.all([owner.eosModuleHost.start(), owner.eosHostedRuntime.startOperational()]);
-  t.after(async () => {
-    ownership = false;
-    await owner.eosModuleHost.stop(); await owner.eosHostedRuntime.stop().catch(() => {});
-    server.closeAllConnections(); await new Promise(resolve => server.close(resolve));
-    fs.rmSync(directory, { recursive: true, force: true });
-  });
   const request = async (url, method = 'GET', body) => {
     if (method === 'PUT' && /^\/api\/eos\/modules\/[^/]+$/.test(url) && body && !Object.hasOwn(body, 'expectedConfigurationRevision')) {
       const loaded = await request(url);
@@ -202,6 +217,31 @@ async function waitForView(x, predicate, attempts = 160) {
 }
 const wallboxConfig = () => ({ enabled: true, devices: [{ id: 'wallbox', name: 'Wallbox', enabled: true,
   templateId: 'evcs.abl.emh1.evcc2_3.modbusAscii', protocol: 'modbusAscii', connection: {}, ems: { mode: 'auto' } }] });
+
+test('production Web mount reaches the real UI/EMS child and reconciles a device HTTP save through IPC', { timeout: 45000 }, async t => {
+  const x = await pipeline(t, { realProcess: true });
+  await x.startup;
+  for (let attempt = 0; attempt < 100 && !x.owner.eosHostedRuntime.status().emsReady; attempt++) await sleep(50);
+  const status = x.owner.eosHostedRuntime.status();
+  assert.equal(status.process.mode, 'process'); assert.notEqual(status.process.pid, process.pid);
+  assert.equal(status.emsReady, true, JSON.stringify({ status, logs: x.logs.slice(-20) }));
+  assert.equal(x.runtime(), undefined, 'the real child exposes no mutable parent runtime instance');
+  const live = await x.request('/api/state'); assert.equal(live.status, 200, live.text);
+  const answer = await x.request('/api/eos/modules/devices', 'PUT', { config: wallboxConfig() });
+  assert.equal(answer.status, 200, answer.text);
+  const ready = await waitForView(x, view => view?.status?.active === true
+    && view.emsCommissioning?.state === 'ready' && view.emsCommissioning?.statuses?.length === 1);
+  assert.equal(ready.emsCommissioning.statuses.length, 1);
+  const committed = JSON.parse(x.states.get('eos-admin.0.installer.configJson').val);
+  assert.equal(committed.settingsConfig.evcsList.length, 1);
+  assert.equal(committed.settingsConfig.evcsList[0].powerId, 'eos-admin.0.devices.wallbox.aliases.v1.r.power');
+  const installer = await x.request('/api/installer/config'); assert.equal(installer.status, 200, installer.text);
+  const heartbeat = x.states.get('eos-admin.0.ems.core.schedulerHeartbeatSequence')?.val;
+  for (let attempt = 0; attempt < 100 && !(x.states.get('eos-admin.0.ems.core.schedulerHeartbeatSequence')?.val > heartbeat); attempt++) await sleep(50);
+  assert.ok(x.states.get('eos-admin.0.ems.core.schedulerHeartbeatSequence')?.val > heartbeat, 'the actual EMS scheduler continues across IPC after reconciliation');
+  assert.equal(x.writes.some(row => row.id.includes('.devices.') && row.state.ack === false), false,
+    'commissioning offline telemetry must not emit physical device commands');
+});
 
 function profileGuardSetup(enabled = true, manualAlias = false) {
   const base = 'eos-admin.0.devices.customer.storage';
@@ -232,7 +272,7 @@ async function setFarmEnabled(x, enabled) {
     patch: { emsApps: { apps: { storagefarm: { installed: true, enabled } } } }, restartEms: true });
 }
 
-test('actual module HTTP rejects a live profile replacement before persistence and allows it after AppCenter deactivation', async t => {
+test('legacy in-process business pipeline: actual module HTTP rejects a live profile replacement before persistence and allows it after AppCenter deactivation', { timeout: 90000 }, async t => {
   for (const manualAlias of [false, true]) await t.test(manualAlias ? 'external split ioBroker alias' : 'direct Devices alias', async child => {
     const setup = profileGuardSetup(true, manualAlias);
     const x = await pipeline(child, setup.options); await x.startup;
@@ -258,7 +298,7 @@ test('actual module HTTP rejects a live profile replacement before persistence a
   });
 });
 
-test('actual profile HTTP reservation blocks concurrent AppCenter activation and releases after a failed controller commit', async t => {
+test('legacy in-process business pipeline: actual profile HTTP reservation blocks concurrent AppCenter activation and releases after a failed controller commit', { timeout: 90000 }, async t => {
   const setup = profileGuardSetup(false);
   const x = await pipeline(t, setup.options); await x.startup;
   await waitForView(x, view => view?.status?.active === true && view.emsCommissioning.state === 'ready');
@@ -293,7 +333,7 @@ test('actual profile HTTP reservation blocks concurrent AppCenter activation and
   assert.equal(afterRelease.status, 200, afterRelease.text);
 });
 
-test('removing and reintroducing a device ID cannot reuse its still-active EMS references with another profile', async t => {
+test('legacy in-process business pipeline: removing and reintroducing a device ID cannot reuse its still-active EMS references with another profile', { timeout: 90000 }, async t => {
   const setup = profileGuardSetup(true);
   const x = await pipeline(t, setup.options); await x.startup;
   await waitForView(x, view => view?.status?.active === true && view.emsCommissioning.state === 'ready');
@@ -323,7 +363,7 @@ async function waitForState(x, id, value) {
     logs: x.logs.slice(-10) }));
 }
 
-test('production Web bridge and actual hosted startup process device-save HTTP without manual reconciliation', async t => {
+test('legacy in-process business pipeline: production Web bridge and actual hosted startup process device-save HTTP without manual reconciliation', { timeout: 90000 }, async t => {
   let measurement = { aCTIVE_POWER: 1.23, aCTIVE_CONSUMPTION_POWER: 1.23, aCTIVE_PRODUCTION_POWER: 0 };
   let disconnected = false;
   const x = await pipeline(t, { driverFactory: cfg => {
@@ -371,7 +411,7 @@ test('production Web bridge and actual hosted startup process device-save HTTP w
   assert.equal(x.writes.some(row => row.id.includes('.devices.') && row.state.ack === false), false);
 });
 
-test('one device HTTP save adopts the manual farm row, adds SolaX and SMA M0, and activates the corresponding app atomically', async t => {
+test('legacy in-process business pipeline: one device HTTP save adopts the manual farm row, adds SolaX and SMA M0, and activates the corresponding app atomically', { timeout: 90000 }, async t => {
   const home = 'eos-admin.0.devices.storage.home';
   const manual = { id: 'customer-existing-storage', name: 'Kundenname beibehalten', enabled: true,
     vendorProfile: 'fenecon-openems', feneconControlMode: 'direct-ess', coupling: 'dc', maxChargeW: 4321,
@@ -446,7 +486,7 @@ test('one device HTTP save adopts the manual farm row, adds SolaX and SMA M0, an
   assert.equal(afterReplay.storageFarm.storages.length, 2);
   assert.equal(afterReplay.storageFarm.storages.find(row => row.id === manual.id).customerMemo, 'retain');
   await x.owner.eosModuleHost.stop(); await x.owner.eosHostedRuntime.stop();
-  await t.test('fresh hosted instance rehydrates the persisted device and EMS configuration without another setup call', async child => {
+  await t.test('legacy in-process business pipeline: fresh hosted instance rehydrates the persisted device and EMS configuration without another setup call', async child => {
     const restarted = await pipeline(child, { persistedObjects: [...x.objects], persistedStates: [...x.states] });
     await restarted.startup;
     await waitForView(restarted, current => current?.status?.active === true && current.emsCommissioning.state === 'ready');
@@ -458,7 +498,7 @@ test('one device HTTP save adopts the manual farm row, adds SolaX and SMA M0, an
   });
 });
 
-test('HTTP rejects a new device ID during unknown hosted configuration hydration, then accepts the retained draft after readiness', async t => {
+test('legacy in-process business pipeline: HTTP rejects a new device ID during unknown hosted configuration hydration, then accepts the retained draft after readiness', { timeout: 90000 }, async t => {
   let release; let observed;
   const held = new Promise(resolve => { release = resolve; });
   const loading = new Promise(resolve => { observed = resolve; });
@@ -479,7 +519,7 @@ test('HTTP rejects a new device ID during unknown hosted configuration hydration
   assert.equal(JSON.parse(x.states.get('eos-admin.0.installer.configJson').val).settingsConfig.evcsList.length, 1);
 });
 
-test('late actual manifest event completes commissioning; telemetry bursts do not restart inventory scans', async t => {
+test('legacy in-process business pipeline: late actual manifest event completes commissioning; telemetry bursts do not restart inventory scans', { timeout: 90000 }, async t => {
   const x = await pipeline(t, { aliasesVisible: false }); await x.startup;
   const saved = await x.request('/api/eos/modules/devices', 'PUT', { config: wallboxConfig() });
   assert.equal(saved.status, 200, saved.text);
@@ -494,7 +534,7 @@ test('late actual manifest event completes commissioning; telemetry bursts do no
   assert.equal(x.aliasReads.length, count, 'normal telemetry must not rebuild the alias inventory');
 });
 
-test('running Devices retain an ownership lease while other modules initialize slowly', async t => {
+test('legacy in-process business pipeline: running Devices retain an ownership lease while other modules initialize slowly', { timeout: 90000 }, async t => {
   const starts = [];
   const slowFactory = id => ({ validateConfig: config => config,
     createHostedModule: () => ({ async start() { starts.push(id); await sleep(7500); }, async stop() {}, async getStatus() { return {}; } }) });
@@ -513,7 +553,7 @@ test('running Devices retain an ownership lease while other modules initialize s
   assert.equal((await x.request('/api/eos/modules/devices')).data.status.active, true);
 });
 
-test('real device polling keeps FENECON PV, converter feedback and battery flow distinct in an activated mixed farm', async t => {
+test('legacy in-process business pipeline: real device polling keeps FENECON PV, converter feedback and battery flow distinct in an activated mixed farm', { timeout: 90000 }, async t => {
   // These are driver-decoded samples, not real Modbus frames or simulated physics.
   // The transport never changes measured power in response to a command acknowledgement.
   const measurements = {

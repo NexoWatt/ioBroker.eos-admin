@@ -1,0 +1,48 @@
+✔ profile admission sees enabled controllers but excludes disabled rows and pure display mappings (3.603314ms)
+✔ profile guard shares installer reservation and rejects active dotted-device readers/writers before any profile commit (50.025878ms)
+✔ profile guard resolves manual alias chains under the same reservation and fails closed on unavailable checks or lost ownership (16.264543ms)
+✔ profile admission includes actual split NVP and legacy peak/atypical actuator references (0.609961ms)
+✔ consumed activation never grants control to a replacement profile or device class under the same alias base (23.620752ms)
+✔ unchanged profile and semantic aliases retain their consumed activation across controller-address adjustment (2.348731ms)
+✔ a consumed token cannot turn an unavailable current alias inventory into a successful commissioning status (2.157388ms)
+✔ installing a shared app cannot silently start its previously dormant enabled manual controller (1.383194ms)
+✔ profile replacement guard includes real split-NVP readers and both peak-shaving activation paths (1.238821ms)
+✔ a persisted activation is not returned as successful until a failed runtime apply is retried (363.057007ms)
+✔ real apply waits old tick and async module stop before config replacement, then rebinds all engine readers without losing session (581.504786ms)
+✔ bounded reconfiguration timeout leaves old engine fenced and cannot create another actuator cycle (43.742299ms)
+✔ numeric cache readers reject boolean, missing and collection values while retaining real zero (11.399694ms)
+✔ one configured active storage-farm member contributes real farm metrics to energy flow (12.186827ms)
+✔ FENECON farm keeps converter feedback for control while flow shows only battery power and separate DC PV (180.764569ms)
+✔ energy-flow shadow comparison produces a result rather than referencing undefined unrelated UI variables (19.965801ms)
+✔ a module task that timed out remains awaited before engine replacement and its late write uses only the old mapping (2072.93631ms)
+✔ a disabled commissioned single-storage row cannot acquire authority from an otherwise enabled app (11.937029ms)
+✔ revision is key-order independent and detects nonempty replacement lists (15.960423ms)
+✔ stale AppCenter HTTP save/import cannot overwrite new automatic rows or persist anything (149.831488ms)
+✔ object preparation retries once, fails visibly and stops on ownership loss (1.088698ms)
+✔ new EVCS objects are provisioned without fabricated measurements or resetting existing values (11.4177ms)
+✔ an RFID database read error cannot clear saved whitelist (3.373635ms)
+✔ startup does not delete device/history objects and UI deep links match existing panels (22.66457ms)
+✔ app activate/deactivate/re-enable provisions before engine init and preserves existing telemetry and mappings (121.672654ms)
+✔ AppCenter discovery includes integrated and retained dotted IDs without alias-group phantom devices (45.428746ms)
+✔ full hosted onReady initializes EMS with controller-shaped fixture and no device mappings (288.367229ms)
+✔ EMS startup failure remains visible as degraded while authenticated shell survives (185.767948ms)
+✔ full startup with rejected partial-engine cleanup retains its fence and never advertises ready (131.262651ms)
+✔ stop coordinator waits every pending startup and final cleanup before confirming quiescence (6.84275ms)
+✔ failed startup is drained and cleaned rather than reported as failed shutdown (0.579206ms)
+✔ timeout is unconfirmed and late startup still gets final cleanup without changing its rejected result (21.12184ms)
+✔ cleanup throws, rejects or never confirms never produce a successful stop (22.022416ms)
+✔ shell scheduled in a microtask cannot start after stop has already fenced the runtime (2170.906035ms)
+✔ operational start cannot outlive a successful stop or revive writes/readiness (1135.383183ms)
+✔ active shell bootstrap is joined and its late resource receives final cleanup (1093.943044ms)
+✔ actual hosted stop rejects a hung startup and keeps rejection/status after late cleanup (1119.148182ms)
+✔ actual runtime stop joins accepted host writes before confirming shutdown (1058.672688ms)
+✔ real onUnload waits returned service-stop promises and propagates stop failure (2234.62132ms)
+✔ hung actual service stop and hung host write both keep shutdown unconfirmed (2187.969395ms)
+ℹ tests 40
+ℹ suites 0
+ℹ pass 40
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11895.30113

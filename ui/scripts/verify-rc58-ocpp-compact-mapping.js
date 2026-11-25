@@ -110,7 +110,7 @@ for (const marker of [
 ]) assert(chargingSource.includes(marker), `Charging source marker missing: ${marker}`);
 
 for (const marker of [
-  "getForeignObjectsAsync('ocpp21.*', 'state')",
+  "ocppDiscoveryPatterns(this.hostNamespace).map(pattern => this.getForeignObjectsAsync(pattern, 'state'))",
   "discoveryContract: 'nexowatt-ocpp21-0.4-native'",
   "vehicleSocId: compactPick(nativeId('measurements.socPercent')",
   "rfidReadId: compactPick(nativeId('info.rfid'))",

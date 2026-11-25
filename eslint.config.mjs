@@ -3,7 +3,11 @@ import config from '@iobroker/eslint-config';
 export default [
     // Vendored upstream bytes are verified by the pinned provenance gate, never reformatted.
     // Declaration-adjacent JS boundaries use the executable rules in lint:unified.
-    { ignores: ['src/lib/vendor/webserver/**', 'src/lib/eosModuleHost.js', 'src/lib/eosDeviceEmsPlan.js', 'src/lib/eosDeviceEmsService.js', 'src/lib/eosModuleHttp.js', 'src/lib/eosUnifiedOwnership.js', 'src/lib/eosLegacyMigration.js'] },
+    { ignores: ['src/lib/vendor/webserver/**', 'src/lib/eosModuleHost.js', 'src/lib/eosDeviceEmsPlan.js', 'src/lib/eosDeviceEmsService.js', 'src/lib/eosModuleHttp.js', 'src/lib/eosUnifiedOwnership.js', 'src/lib/eosLegacyMigration.js',
+        // These boundaries are checked by lint:unified with their existing dedicated
+        // executable rules and strict TS configurations, not upstream TS style rules.
+        'src/lib/eosHistoryBackupScope.js', 'src/lib/eosModuleProcess.js', 'src/lib/eosModuleProcessProtocol.js',
+        'src/lib/eosModuleProcessWorker.js', 'src/lib/eosRuntimeHealth.js'] },
     ...config,
     {
         languageOptions: {

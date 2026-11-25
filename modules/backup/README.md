@@ -12,6 +12,16 @@ Archive werden streamend mit AES-256-GCM verschlüsselt und vor Abschluss authen
 
 Das standardmäßig aktivierte EOS-Zusatzarchiv enthält HTTPS-/EEBus-Geräteidentitäten, aktuelle private EOS-Daten und bei übernommener UI deren erhaltenes Instanzverzeichnis. Aktivierte Herstellerdateien, verschlüsselte OAuth-Aktualisierungen und das verschlüsselte Verzeichnis eigener Aufräumrechte sind enthalten. `eosProfileEnabled=false` bleibt erhalten: In diesem Fall fehlen diese Zusatzdaten bewusst. Ein privater NexoWatt-CA-Herstellerschlüssel gehört nicht auf das Gerät und wird nicht erzeugt oder ausgeliefert.
 
+### Integriertes OCPP ab EOS 9.0.24
+
+Die verschlüsselte OCPP-Konfiguration unter `eos-admin.N.modules.ocpp.configuration` gehört wie die anderen Modulkonfigurationen zum Controller-Archiv. Dabei bleibt auch der zugehörige ioBroker-Systemschlüssel erhalten; ein einzelner kopierter Konfigurationswert ohne den richtigen Schlüssel genügt nicht zur Wiederherstellung. Native Stationsobjekte unter `eos-admin.N.ocpp` und übernommene Originalobjekte unter `ocpp21.N` werden mit ihren bestehenden IDs, Metadaten und Zuständen gesichert. Das private EOS-Profil erfasst außerdem das Modulverzeichnis `modules/ocpp`, falls dort lokale Daten vorhanden sind; der aktuelle OCPP-Laufzeitstand benötigt dort keine persistenten Dateien.
+
+Das Controller-Archiv bewahrt insbesondere die dauerhafte Watchdog-Aktivierung `control.eosLeaseArmed`, Phasenzahl, Einheit der Leistungsgrenze sowie bestätigte Stationskonfiguration. Gespeicherte Sollwerte, Sitzungskennungen und Lease-Fristen sind dagegen historische Zustände und keine Wiederanlauf-Freigabe. Ein Restore führt keine dieser Vorgaben aus. Vor erneuter Regelung sind eine aktuelle Verbindung, eine neue EOS-Freigabe und eine neue Sollwertanforderung erforderlich; vorhandene Schutzlatches dürfen dabei nicht gelöscht werden.
+
+Die separate verschlüsselte Konfigurationssicherung vor einem EOS-Update enthält auch OCPP-Modulkonfiguration und Namespace-Migrationsdaten. Sie ersetzt keine vollständige Controller-/EOS-/Historien-Sicherung. Ein übernommener `ocpp21.N`-Namensraum kann weiterhin die autoritativen Stationsdaten enthalten, obwohl kein eigener OCPP-Adapterprozess mehr läuft. Deshalb bei Adapterbereinigung oder Rückfall keine pauschale Löschung dieses Namensraums ausführen und niemals alten und integrierten Stationsserver gleichzeitig aktivieren. Für ein Entfernen oder Zurücksetzen zuerst Zuordnung, Sicherung und tatsächliche Datenhoheit prüfen.
+
+Die geschützte Kioskkonfiguration `eos-admin.N.kiosk.configuration` wird ebenfalls in Vollsicherung und Update-Konfigurationssnapshot erhalten. Gesichert werden Aktivierung, Revision und freischaltendes Konto; flüchtige Browser-Cookies und Sitzungsschlüssel werden nicht exportiert. Nach einer Wiederherstellung bleiben Konto-, Lizenz- und Passwortvoraussetzungen maßgeblich.
+
 ## Funktionsumfang und Grenzen
 
 | Funktion | Umsetzung |

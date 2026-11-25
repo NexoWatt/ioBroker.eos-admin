@@ -202,3 +202,53 @@ test('CLI works offline from a copied directory containing spaces and rejects fl
     const rejected = spawnSync(process.execPath, [helper, '--force'], { cwd: f.root, encoding: 'utf8' });
     assert.equal(rejected.status, 1); assert.match(rejected.stderr, /EOS_PUBLISH_ARGUMENTS/); sameCurrent(f);
 });
+
+const reported921Asset = 'adminWww/assets/hostInit-BNFIx0-f.js';
+const reported921Bytes = () => fs.readFileSync(path.join(__dirname, 'fixtures/publish-overlay-9.0.21/hostInit-BNFIx0-f.js.fixture'));
+const deliveredCatalogue = () => fs.readFileSync(path.join(project, CATALOG));
+
+test('reported Windows overlay asset from sealed 9.0.21 is backed up using the delivered catalogue', t => {
+    const bytes = reported921Bytes();
+    assert.equal(bytes.length, 6199);
+    assert.equal(hash(bytes), 'f536222133dab1acf78d72aebdbfc75d163db120b4253248171dfa99bf6887c1');
+    const catalogue = JSON.parse(deliveredCatalogue());
+    assert.ok(catalogue.files[reported921Asset].includes(hash(bytes)));
+    const provenance = catalogue.sources.find(source => source.version === '9.0.21');
+    assert.equal(provenance.archiveSha256, '2e6379843392fbf682670fe05039459fea93c3f702d956cc7edb3e0415d89c7a');
+    assert.equal(provenance.manifestSha256, 'feb1d213fe699a635457f7be609b7a40816ffe26c094b419be27d6a7d47efa3f');
+    assert.equal(provenance.matchedSealedFiles, 359);
+    assert.equal(provenance.matchedSealedInstallerAssetFiles, 3);
+    for (const [version, archiveSha256] of [
+        ['9.0.22', '460ddbf6c571997739433633ac12d07f129d1f8930dddac63ca069729b09d022'],
+        ['9.0.23', 'd354e17adf20728bee0c442179b00365b0d0bc518105ab47e8f39edcbced2000'],
+    ]) {
+        const source = catalogue.sources.find(item => item.version === version);
+        assert.equal(source.archiveSha256, archiveSha256);
+        assert.equal(source.matchedSealedFiles, 359);
+        assert.equal(source.matchedSealedInstallerAssetFiles, 3);
+    }
+    const f = fixture(t, { [reported921Asset]: bytes }, { [CATALOG]: deliveredCatalogue() });
+    f.copyExtras(); const result = preparePublish({ root: f.root });
+    assert.deepEqual(result.quarantined, [reported921Asset]);
+    assert.equal(fs.existsSync(path.join(f.root, reported921Asset)), false);
+    assert.deepEqual(fs.readFileSync(path.join(result.backupDir, reported921Asset)), bytes);
+    sameCurrent(f);
+    assert.equal(preparePublish({ root: f.root }).backupDir, null);
+});
+
+test('the exact reported filename with changed bytes remains untouched and fails before any backup', t => {
+    const f = fixture(t, { [reported921Asset]: reported921Bytes() }, { [CATALOG]: deliveredCatalogue() });
+    f.copyExtras(); const changed = Buffer.concat([reported921Bytes(), Buffer.from('\n/* customer edit */\n')]);
+    f.write(reported921Asset, changed);
+    assert.throws(() => preparePublish({ root: f.root }), { code: 'EOS_PUBLISH_EXTRA_CHANGED' });
+    assert.deepEqual(fs.readFileSync(path.join(f.root, reported921Asset)), changed);
+    assert.equal(f.backups().length, 0); sameCurrent(f);
+});
+
+test('a reported historical asset that is part of the current seal is never removed', t => {
+    const f = fixture(t, {}, { [CATALOG]: deliveredCatalogue(), [reported921Asset]: reported921Bytes() });
+    const result = preparePublish({ root: f.root });
+    assert.deepEqual(result.quarantined, []); assert.equal(result.backupDir, null);
+    assert.deepEqual(fs.readFileSync(path.join(f.root, reported921Asset)), reported921Bytes());
+    sameCurrent(f);
+});

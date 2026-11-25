@@ -61,6 +61,7 @@
 const { DatapointRegistry } = require('./datapoints');
 const { ModuleManager } = require('./module-manager');
 const { awaitEmsTransition } = require('../lib/installer-lifecycle');
+const { normalizeOcppDiscovery } = require('../lib/ocpp-auto-discovery');
 const { applyStorageMeasurementOverrides } = require('./services/storage-override-bridge');
 const { buildNvpSnapshotFromRegistry } = require('./services/measurement-freshness');
 const { installActuatorShadowArbiter } = require('./services/actuator-shadow-arbiter');
@@ -776,6 +777,7 @@ class EmsEngine {
 
       // Aktivierung & Priorität (Installateur-Konfiguration)
       const enabled = (wb && typeof wb.enabled === 'boolean') ? !!wb.enabled : true;
+      const ocppDiscovery = normalizeOcppDiscovery(wb.ocppDiscovery);
       const prioRaw = Number(wb && wb.priority !== undefined ? wb.priority : NaN);
       const priority = (Number.isFinite(prioRaw) ? Math.max(1, Math.min(999, Math.round(prioRaw))) : 999);
 
@@ -786,6 +788,7 @@ class EmsEngine {
         name: wb.name || key,
         enabled,
         priority,
+        ...(ocppDiscovery ? { ocppDiscovery } : {}),
 
         // Stable mapping to EVCS index (lp1 -> 1, ...) regardless of safe key renaming
         evcsIndex: idx,

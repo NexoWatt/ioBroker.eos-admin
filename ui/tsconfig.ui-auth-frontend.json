@@ -23,6 +23,7 @@
     "src-ts/runtime-executables/www/login.ts",
     "src-ts/runtime-executables/www/runtime-base.ts",
     "src-ts/runtime-executables/www/smarthome-activation.ts",
-    "src-ts/runtime-executables/www/eos-session-idle.ts"
+    "src-ts/runtime-executables/www/eos-session-idle.ts",
+    "src-ts/runtime-executables/www/eos-kiosk-settings.ts"
   ]
 }

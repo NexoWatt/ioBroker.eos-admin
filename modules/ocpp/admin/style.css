@@ -1,0 +1,27 @@
+.ocpp-overview { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+.ocpp-overview .eos-panel { margin:0; }
+.ocpp-overview button, .ocpp-overview .eos-button { margin:8px 8px 0 0; }
+.ocpp-fields { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px 24px; margin:22px 0; }
+.ocpp-field { display:flex; flex-direction:column; gap:8px; font-size:14px; min-width:0; }
+.ocpp-field input, .ocpp-field textarea { width:100%; }
+.ocpp-field small, .ocpp-muted { color:var(--eos-muted); font-size:13px; }
+.ocpp-field textarea { min-height:110px; resize:vertical; }
+.ocpp-check { flex-direction:row-reverse; justify-content:flex-end; align-items:center; padding:14px; border:1px solid var(--eos-border); border-radius:10px; background:#0b2633; }
+.ocpp-check input { margin:0; }
+.ocpp-check span { flex:1; }
+.ocpp-group { border-top:1px solid var(--eos-border); padding-top:18px; margin-top:20px; }
+#editor { margin:0; padding:0; border:0; min-width:0; }
+.ocpp-actions { display:flex; justify-content:flex-end; flex-wrap:wrap; gap:12px; border-top:1px solid var(--eos-border); padding-top:18px; }
+.ocpp-import { display:flex; align-items:flex-end; gap:16px; flex-wrap:wrap; }
+.ocpp-import label { display:flex; flex-direction:column; gap:6px; }
+.ocpp-station { padding:18px; margin:16px 0; border:1px solid var(--eos-border); border-radius:12px; background:#041622; min-width:0; }
+.ocpp-station header { display:flex; justify-content:space-between; gap:12px; align-items:baseline; }
+.ocpp-station h3 { margin:0; font-size:18px; overflow-wrap:anywhere; }
+.ocpp-station summary { font-size:13px; }
+.ocpp-station p, #connection-address { overflow-wrap:anywhere; }
+.ocpp-station .eos-detail-list { margin:14px 0; }
+.ocpp-badge { border-radius:6px; padding:4px 8px; font-size:12px; background:#283746; color:#c2d1db; white-space:nowrap; }
+.ocpp-badge.is-online { background:#123d32; color:#95eac7; }
+.ocpp-visually-hidden { position:absolute; width:1px; height:1px; padding:0; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; }
+@media(max-width:950px) { .ocpp-overview { grid-template-columns:1fr; } }
+@media(max-width:650px) { .ocpp-fields { grid-template-columns:1fr; } .ocpp-actions button, .ocpp-import, .ocpp-import label, .ocpp-import button { width:100%; } }

@@ -1,0 +1,86 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: real worker retains EEBUS callback reply, original message and acknowledged trust revocation
+ok 1 - real worker retains EEBUS callback reply, original message and acknowledged trust revocation
+  ---
+  duration_ms: 90.953536
+  type: 'test'
+  ...
+# Subtest: real worker preserves third-argument ACK and per-job backup history RPC
+ok 2 - real worker preserves third-argument ACK and per-job backup history RPC
+  ---
+  duration_ms: 56.119928
+  type: 'test'
+  ...
+# Subtest: backup stream cancellation before first byte closes the worker stream
+ok 3 - backup stream cancellation before first byte closes the worker stream
+  ---
+  duration_ms: 170.959427
+  type: 'test'
+  ...
+# Subtest: backup download applies byte backpressure instead of buffering thousands of chunks
+ok 4 - backup download applies byte backpressure instead of buffering thousands of chunks
+  ---
+  duration_ms: 244.545511
+  type: 'test'
+  ...
+# Subtest: late backup open after RPC deadline cannot leak an orphan stream
+ok 5 - late backup open after RPC deadline cannot leak an orphan stream
+  ---
+  duration_ms: 5743.290567
+  type: 'test'
+  ...
+# Subtest: backup byte stream delivers all bytes across many IPC chunks without truncation
+ok 6 - backup byte stream delivers all bytes across many IPC chunks without truncation
+  ---
+  duration_ms: 1232.579453
+  type: 'test'
+  ...
+# Subtest: expired and out-of-order worker leases cannot renew authority
+ok 7 - expired and out-of-order worker leases cannot renew authority
+  ---
+  duration_ms: 282.723361
+  type: 'test'
+  ...
+# Subtest: production Devices empty configuration starts and stops in real process without hardware
+ok 8 - production Devices empty configuration starts and stops in real process without hardware
+  ---
+  duration_ms: 110.053487
+  type: 'test'
+  ...
+# Subtest: production EEBUS starts identity and subscriptions with all network functions disabled
+ok 9 - production EEBUS starts identity and subscriptions with all network functions disabled
+  ---
+  duration_ms: 122.377051
+  type: 'test'
+  ...
+# Subtest: production Backup starts with protected local identity and history coverage RPC
+ok 10 - production Backup starts with protected local identity and history coverage RPC
+  ---
+  duration_ms: 85.88363
+  type: 'test'
+  ...
+# Subtest: real backup job and its controller subprocess terminate when module supervisor dies
+ok 11 - real backup job and its controller subprocess terminate when module supervisor dies
+  ---
+  duration_ms: 250.984362
+  type: 'test'
+  ...
+# Subtest: worker log sanitization covers MQTT URL credentials and long configured secrets before truncation
+ok 12 - worker log sanitization covers MQTT URL credentials and long configured secrets before truncation
+  ---
+  duration_ms: 1.043142
+  type: 'test'
+  ...
+1..12
+# tests 12
+# suites 0
+# pass 12
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 8532.210117

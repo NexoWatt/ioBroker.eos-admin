@@ -103,6 +103,8 @@ class UnifiedSessions {
         this.origin = publicOrigin(options.externalOrigin);
         this.secret = randomBytes(32);
         this.rates = new Map();
+        this.kiosk = null;
+        this.kioskRequests = new WeakSet();
     }
     originAllowed(req) {
         return sameOrigin(req, this.origin, this.options.secure);
@@ -135,7 +137,7 @@ class UnifiedSessions {
     }
     csrfAllowed(req) {
         const supplied = req.headers['x-nw-csrf'];
-        const expected = this.csrf(req);
+        const expected = this.kioskRequests.has(req) ? this.kiosk?.csrf(req) || '' : this.csrf(req);
         return (
             this.originAllowed(req) &&
             typeof supplied === 'string' &&
@@ -153,7 +155,12 @@ class UnifiedSessions {
         return { ...value, csrfToken: value.authenticated ? this.csrf(req) : '' };
     }
     async idle(req) {
-        return this.idleView(req, await this.readSession(req));
+        const normal = this.idleView(req, await this.readSession(req));
+        if (normal.authenticated) {
+            return { ...normal, kiosk: false, kioskEnabled: this.kiosk?.view().enabled === true };
+        }
+        const kiosk = this.requestAllowed(req) ? await this.kiosk?.access(req) : null;
+        return kiosk || { ...normal, kiosk: false, kioskEnabled: this.kiosk?.view().enabled === true };
     }
     async activity(req, res) {
         res.setHeader('Cache-Control', 'no-store');
@@ -186,15 +193,32 @@ class UnifiedSessions {
         return res.status(200).json({ ...status, expired: !status.authenticated });
     }
     /** @returns {Promise<boolean>} */
-    bindStream(req, res) {
+    async bindStream(req, res) {
+        const access = await this.status(req);
+        if (access.kiosk === true) {
+            return this.kiosk?.bindStream(req, res) === true;
+        }
         return this.adapter.eosSessionSecurity.bindStream(readAccessToken(req), res);
     }
     async status(req) {
+        this.kioskRequests.delete(req);
+        const normal = await this.accountStatus(req);
+        const enabled = this.kiosk?.view().enabled === true;
+        if (!normal.authenticated && enabled && this.requestAllowed(req)) {
+            const kiosk = await this.kiosk.access(req);
+            if (kiosk) {
+                this.kioskRequests.add(req);
+                return kiosk;
+            }
+        }
+        return { ...normal, kiosk: false, kioskEnabled: enabled };
+    }
+    async accountStatus(req) {
         const access = await this.options.resolveAccess(req);
         const first = access.userId ? await this.options.firstLogin(access.userId, access.role) : { required: false };
         const license = this.options.getLicense();
         // Recheck after asynchronous role/password reads; req.user is not a lasting session proof.
-        const idle = await this.idle(req);
+        const idle = this.idleView(req, await this.readSession(req));
         const authenticated = !!access.userId && idle.authenticated;
         const role = authenticated ? (access.role === 'enduser' ? 'customer' : access.role) : 'none';
         const activationRequired = authenticated && (!license?.valid || license?.coreEnabled !== true);

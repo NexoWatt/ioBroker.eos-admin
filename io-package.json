@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "eos-admin",
-    "version": "9.0.22",
+    "version": "9.0.24",
     "titleLang": {
       "en": "NexoWatt EOS",
       "de": "NexoWatt EOS",
@@ -18,6 +18,14 @@
     "connectionType": "local",
     "dataSource": "push",
     "news": {
+      "9.0.24": {
+        "en": "Integrated OCPP, EEBUS and Devices in independent processes within one EOS adapter; dashboard kiosk with protected Admin login; verified cleanup of obsolete npm publish assets.",
+        "de": "OCPP, EEBUS und Devices in eigenen Prozessen innerhalb eines EOS-Adapters; Dashboard-Kioskmodus mit geschütztem Admin-Zugang; geprüfte Bereinigung alter Dateien vor npm-Publish."
+      },
+      "9.0.23": {
+        "en": "Separate supervised module and UI/EMS processes; automatic native OCPP station assignment, connection-bound profile feedback and process diagnostics.",
+        "de": "Getrennte überwachte Modul- und UI/EMS-Prozesse; automatische native OCPP-Stationszuordnung, verbindungsgebundene Sollwertrückmeldung und Prozessdiagnose."
+      },
       "9.0.22": {
         "de": "Energiefluss-Bilanz und Messwertalter korrigiert, Tarifstatus wiederhergestellt und Tarif-Namespace für gemeinsamen EOS-Adapter korrigiert. PostgreSQL für ausdrücklich eingerichtete Neuanlagen, geprüfte Sicherungsabdeckung und normale EMS-Bediendatenpunkte. InfluxDB-Bestand bleibt erhalten. Kontrollierter Teststand.",
         "en": "Correct energy-flow balance and measurement freshness; restore tariff status and fix tariff namespace in unified EOS. PostgreSQL for explicitly commissioned new sites, checked backup coverage and normal EMS operating datapoints. Existing InfluxDB retained. Controlled test release."
@@ -91,15 +99,6 @@
         "de": "9.0.5 korrigiert den History-Absturz an der Übergabe zwischen Verwaltungsserver und eingebetteter UI. History-Anfragen erhalten begrenzte Ressourcen und kontrollierte Fehlerantworten; die EOS-Systemverwaltung verwendet das NexoWatt-Startlogo. Zentrale Lizenz, HTTPS auf 8188 und vorhandener Adminzugang bleiben erhalten. Teststand für next; tatsächliche Nachweise und offene Zielgeräteprüfung siehe Prüfbericht.",
         "en": "9.0.5 fixes the History crash at the boundary between the administration server and embedded UI. History requests have bounded resources and controlled error responses; EOS system administration uses the NexoWatt startup logo. The central license, HTTPS on 8188 and existing admin access are preserved. Test release for next; see the report for actual evidence and outstanding target-device acceptance.",
         "nl": "9.0.5 corrigeert de History-crash bij de overdracht tussen beheerserver en ingebedde UI. History-aanvragen krijgen begrensde bronnen en gecontroleerde foutantwoorden; EOS-systeembeheer gebruikt het NexoWatt-startlogo. Centrale licentie, HTTPS op 8188 en bestaande admintoegang blijven behouden. Testversie voor next; zie het rapport voor bewijs en openstaande apparaatcontrole."
-      },
-      "9.0.4": {
-        "de": "9.0.4 korrigiert den Socket-Absturz beim Start unter hoher Ereignislast, auch ohne geöffneten Browser. Die Begrenzung der Oberflächenereignisse darf keine Messwert-Abonnements der gemeinsamen EMS-Laufzeit entfernen. HTTPS auf 8188, bestehender Adminzugang und die zentrale Lizenz bleiben erhalten. Teststand für next; Nachweise und Zielgeräteprüfung siehe Prüfbericht.",
-        "en": "9.0.4 fixes the socket startup crash under high event load, including before any browser connects. UI event throttling must not remove measurement subscriptions of the shared EMS runtime. HTTPS on 8188, the existing admin access and the central license are preserved. Test release for next; see the report for evidence and target-device acceptance.",
-        "nl": "9.0.4 corrigeert de socketcrash tijdens het opstarten bij veel gebeurtenissen, ook zonder geopende browser. Begrenzing van interfacegebeurtenissen mag geen meetwaarde-abonnementen van de gedeelde EMS-runtime verwijderen. HTTPS op 8188, bestaande admintoegang en centrale licentie blijven behouden. Testversie voor next; zie het rapport voor bewijs en controle op het doelapparaat."
-      },
-      "9.0.3": {
-        "en": "Keep HTTPS access available during licensed EMS startup; bound history replies and create MultiUse diagnostics before writes.",
-        "de": "HTTPS-Zugang beim lizenzierten EMS-Start erhalten; Historienantworten begrenzen und MultiUse-Diagnoseobjekte vor dem Schreiben anlegen."
       }
     },
     "desc": {
@@ -137,7 +136,7 @@
     "icon": "admin.svg",
     "messagebox": true,
     "enabled": true,
-    "extIcon": "https://unpkg.com/iobroker.eos-admin@9.0.21/admin/admin.svg",
+    "extIcon": "https://unpkg.com/iobroker.eos-admin@9.0.24/admin/admin.svg",
     "keywords": [
       "NexoWatt",
       "EOS",
@@ -148,7 +147,7 @@
       "licensed"
     ],
     "compact": false,
-    "readme": "https://unpkg.com/iobroker.eos-admin@9.0.21/README.md",
+    "readme": "https://unpkg.com/iobroker.eos-admin@9.0.24/README.md",
     "authors": [
       "NexoWatt"
     ],
@@ -160,7 +159,7 @@
     "type": "general",
     "licenseInformation": {
       "type": "paid",
-      "link": "https://unpkg.com/iobroker.eos-admin@9.0.22/LICENSE"
+      "link": "https://unpkg.com/iobroker.eos-admin@9.0.24/LICENSE"
     },
     "logTransporter": true,
     "stopBeforeUpdate": true,

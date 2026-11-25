@@ -45,10 +45,11 @@ function backend(time, key = 'session_1234567890abcdef') {
     value.status = () => ({ authenticated: time.now() < value.expires, serverNow: 1000000 + time.now(), idleTimeoutMs: IDLE,
         idleExpiresAt: 1000000 + value.expires, sessionKey: value.sessionKey, csrfToken: value.csrf });
     value.fetch = async (url, init) => {
-        value.calls.push({ url, init });
+        const pathname = new URL(url, 'https://nexowatt.local').pathname;
+        value.calls.push({ url, path: pathname, init });
         if (value.offline) throw Error('offline');
         if (init.method === 'POST' && init.headers['X-NW-CSRF'] !== value.csrf) return new Response('{}', { status: 403, headers: { 'Content-Type': 'application/json' } });
-        if (url === '/api/auth/activity' && time.now() < value.expires) { value.expires = time.now() + IDLE; value.renewals++; }
+        if (pathname === '/api/auth/activity' && time.now() < value.expires) { value.expires = time.now() + IDLE; value.renewals++; }
         return new Response(JSON.stringify(value.status()), { headers: { 'Content-Type': 'application/json' } });
     };
     return value;
@@ -96,7 +97,7 @@ test('an untouched page logs out at ten minutes; background status reads do not 
     for (let i = 0; i < 9; i++) { await ui.time.advance(60000); ui.window.emit('focus'); await ui.ready(); }
     assert.equal(ui.server.renewals, 0); assert.deepEqual(ui.redirects, []);
     await ui.time.advance(59999); assert.deepEqual(ui.redirects, []);
-    await ui.time.advance(1); assert.deepEqual(ui.redirects, ['/login.html?reason=idle']);
+    await ui.time.advance(1); assert.deepEqual(ui.redirects, ['/login.html?reason=idle&admin=1&returnTo=%2Fsystem%2F']);
     assert.ok(ui.classes.has('nw-session-idle-locked'));
     assert.ok(ui.server.calls.every(call => ['GET', 'POST'].includes(call.init.method)));
 });
@@ -106,7 +107,7 @@ for (const event of ['pointerdown', 'keydown', 'touchstart', 'wheel']) {
         const ui = browser(); await ui.ready(); await ui.time.advance(300000);
         ui.gesture(event); await ui.time.advance(0);
         assert.equal(ui.server.expires, 900000); assert.equal(ui.server.renewals, 1);
-        const write = ui.server.calls.find(call => call.url === '/api/auth/activity');
+        const write = ui.server.calls.find(call => call.path === '/api/auth/activity');
         assert.equal(write.init.headers['X-NW-CSRF'], ui.server.csrf);
         assert.equal(write.init.credentials, 'same-origin'); assert.equal(write.init.body, '{}');
         await ui.time.advance(599999); assert.deepEqual(ui.redirects, []);
@@ -121,7 +122,7 @@ test('synthetic events, passive pointer motion, polling and visibility never cou
     ui.document.emit('visibilitychange'); ui.window.emit('pageshow', { persisted: true });
     await ui.time.advance(10000);
     assert.equal(ui.server.renewals, 0);
-    assert.ok(ui.server.calls.every(call => call.url === '/api/auth/idle'));
+    assert.ok(ui.server.calls.every(call => call.path === '/api/auth/idle'));
 });
 
 test('a burst is bounded and its final gesture still gets a trailing update', async () => {
@@ -169,14 +170,14 @@ test('offline timeout hides the old page and does not stop devices or EMS', asyn
     const ui = browser(); await ui.ready(); ui.server.offline = true;
     await ui.time.advance(IDLE); assert.equal(ui.redirects.length, 1);
     assert.ok(ui.classes.has('nw-session-idle-locked'));
-    assert.ok(ui.server.calls.every(call => /^\/api\/auth\/(idle|activity|expire)$/.test(call.url)));
+    assert.ok(ui.server.calls.every(call => /^\/api\/auth\/(idle|activity|expire)$/.test(call.path)));
 });
 
 test('refresh changes CSRF without losing a fresh real gesture or creating periodic writes', async () => {
     const ui = browser(); await ui.ready(); await ui.time.advance(1000);
     ui.server.csrf = 'b'.repeat(64); ui.gesture(); await ui.time.advance(1000);
     assert.equal(ui.server.renewals, 1);
-    assert.equal(ui.server.calls.filter(call => call.url === '/api/auth/activity').length, 2);
+    assert.equal(ui.server.calls.filter(call => call.path === '/api/auth/activity').length, 2);
     await ui.time.advance(10000); assert.equal(ui.server.renewals, 1);
 });
 
@@ -241,4 +242,42 @@ test('instance proxy rendering and fetch mapping preserve the shared owner idle 
     for (const endpoint of ['idle', 'activity', 'expire']) await window.fetch('/api/auth/' + endpoint);
     await window.fetch('/api/set');
     assert.deepEqual(calls, ['/api/auth/idle', '/api/auth/activity', '/api/auth/expire', '/admin/proxy/nexowatt-ui.2/api/set']);
+});
+
+function kioskBackend(time) {
+    const server = backend(time);
+    server.status = () => ({ authenticated: true, kiosk: true, serverNow: 1000000 + time.now(), idleTimeoutMs: 0,
+        idleExpiresAt: null, sessionKey: 'kiosk:' + 'b'.repeat(48), csrfToken: server.csrf });
+    return server;
+}
+test('public kiosk remains available for thirty minutes without expiry or activity writes', async () => {
+    const time = clock(), server = kioskBackend(time), ui = browser({ pathname: '/', time, server }); await ui.ready();
+    for (let i = 0; i < 30; i++) { await time.advance(60000); ui.gesture(); await ui.ready(); }
+    assert.deepEqual(ui.redirects, []); assert.equal(ui.classes.has('nw-session-idle-locked'), false);
+    assert.ok(server.calls.length >= 60); assert.ok(server.calls.every(call => call.init.method === 'GET' && call.url === '/api/auth/idle'));
+    assert.equal(server.renewals, 0);
+});
+test('disabling kiosk or losing its API locks the public page at the next read-only check', async () => {
+    for (const variant of ['disabled', 'offline']) {
+        const time = clock(), server = kioskBackend(time), ui = browser({ pathname: '/', time, server }); await ui.ready();
+        if (variant === 'disabled') server.status = () => ({ authenticated: false, serverNow: 1000000 + time.now(), idleTimeoutMs: IDLE, idleExpiresAt: null, sessionKey: null, csrfToken: '' });
+        else server.offline = true;
+        await time.advance(30000); assert.deepEqual(ui.redirects, ['/login.html?reason=idle'], variant);
+        assert.equal(ui.classes.has('nw-session-idle-locked'), true, variant);
+        assert.ok(server.calls.every(call => call.init.method === 'GET'));
+    }
+});
+test('kiosk cannot unlock protected or cached Admin DOM and protected idle checks explicitly suppress fallback', async () => {
+    for (const pathname of ['/system/', '/settings.html', '/migration/', '/modules/ocpp/']) {
+        const time = clock(), server = kioskBackend(time), ui = browser({ pathname, time, server }); await ui.ready();
+        assert.deepEqual(ui.redirects, ['/login.html?reason=idle&admin=1&returnTo=' + encodeURIComponent(pathname)]);
+        assert.equal(ui.classes.has('nw-session-idle-locked'), true);
+        assert.ok(server.calls.every(call => call.url === '/api/auth/idle?admin=1'));
+    }
+});
+test('a real admin session keeps ordinary ten-minute expiry even while kiosk capability exists elsewhere', async () => {
+    const ui = browser({ pathname: '/settings.html' }); await ui.ready();
+    assert.ok(ui.server.calls.every(call => call.url.endsWith('?admin=1')));
+    await ui.time.advance(IDLE);
+    assert.deepEqual(ui.redirects, ['/login.html?reason=idle&admin=1&returnTo=%2Fsettings.html']);
 });

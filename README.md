@@ -1,3 +1,9 @@
+> **9.0.24:** OCPP ist jetzt zusammen mit Devices, EEBUS, UI/EMS und Backup Bestandteil eines EOS-Adapters und läuft als eigener Prozess. Kiosk-Dashboard ohne automatische Abmeldung, technische Einstellungen mit erneuter Administratoranmeldung; bestehende Stations-Displaylinks bleiben separat nutzbar. Bekannte Frontend-Reste beim npm-Veröffentlichen werden anhand belegter Hashes gesichert bereinigt. [Anleitung](START_HIER_9.0.24.md) · [Prüfbericht](docs/reports/unified-9.0.24/PRUEFBERICHT.md).
+
+Die folgenden Versionshinweise beschreiben frühere Lieferstände.
+
+> **9.0.23:** Getrennte Prozesse für UI/EMS, Geräte, EEBUS und Backup; OCPP bleibt separat. Automatische Stationszuordnung, Prozessdiagnose und unabhängige OCPP-Ausfallfreigabe. [Anleitung](START_HIER_9.0.23.md) · [Prüfbericht](docs/reports/unified-9.0.23/PRUEFBERICHT.md).
+
 > **9.0.21:** MQTT-Reconnects und Warteschlangen, EMS-Messwertwiederkehr sowie konkurrierendes Speichern abgesichert. Neue EOS-Updateanzeige und ausdrücklich gestartete Updates auch für angemeldete Kunden. [Anleitung](START_HIER_9.0.21.md) · [Prüfbericht](docs/reports/unified-9.0.21/PRUEFBERICHT.md).
 
 > **9.0.20:** Gerätebefehle unabhängig vom Browser, korrekte Farm-/Schreibdiagnose, dynamische Speichergrenzen und direkte InfluxDB-2-Historie; weitere Lebenszyklus- und Live-/History-Fehler korrigiert. NexoWatt-Symbol am Login und Apple-Home-Bildschirm-Verweise ergänzt. [Anleitung](START_HIER_9.0.20.md) · [Prüfbericht](docs/reports/unified-9.0.20/PRUEFBERICHT.md).
@@ -30,16 +36,20 @@
 
 # NexoWatt EOS
 
-**Version 9.0.21 · technisches Paket: `iobroker.eos-admin` · Vertriebskanal: `next`**
+**Version 9.0.24 · technisches Paket: `iobroker.eos-admin` · Vertriebskanal: `next`**
 
 NexoWatt EOS verbindet die Systemverwaltung aus EOS-Admin 8.0.2 mit Dashboard,
 Installer und Energiemanagement aus NexoWatt UI 1.0.38. Eine ioBroker-Instanz betreibt
 die gemeinsamen Module. Die bisherige UI wird im Zielbetrieb nicht zusätzlich gestartet.
-Der technische Paketname bleibt für bestehende Integrationen erhalten.
+Der technische Paketname bleibt für bestehende Integrationen erhalten. OCPP 0.4.4 auf Basis
+der bisherigen 0.4.3 ist integriert; im Zielbetrieb wird dafür kein zusätzlicher
+`ocpp21`-Adapter benötigt. Admin/HTTPS, UI/EMS, Devices, EEBUS, OCPP und Backup haben
+getrennte Betriebssystemprozesse. UI und EMS bleiben innerhalb ihres gemeinsamen
+Kindprozesses. Kontrollierte Bestandsübernahmen erhalten vorhandene OCPP-Datenpunkt-IDs.
 
-Version 9.0.21 bleibt ein Integrations-Teststand für `next`. Die Versionsnummer ist
+Version 9.0.24 bleibt ein Integrations-Teststand für `next`. Die Versionsnummer ist
 kein Nachweis einer allgemeinen Produktivfreigabe oder CRA-Konformität. Tatsächliche
-Ergebnisse und Artefakthashes stehen im [Prüfbericht 9.0.21](docs/reports/unified-9.0.21/PRUEFBERICHT.md).
+Ergebnisse und Artefakthashes stehen im [Prüfbericht 9.0.24](docs/reports/unified-9.0.24/PRUEFBERICHT.md).
 Die [Berichte zu 9.0.4](docs/reports/unified-9.0.4/PRUEFBERICHT.md),
 [9.0.3](docs/reports/unified-9.0.3/PRUEFBERICHT.md) und früheren Versionen bleiben
 historische Belege; ihre Ergebnisse bestätigen keine späteren Änderungen.
@@ -72,10 +82,11 @@ Die Meldungen „Unsubscribe from all states …“ und „Subscribe to all stat
 kennzeichnen den Lastwechsel der Oberfläche; allein beweisen sie keinen Neustart.
 Für einen Absturz sind die erste Fehlerzeile, Stacktrace und Prozess-/Exitmeldung maßgeblich.
 
-Die gemeinsame Laufzeit verwendet weiterhin einen Prozess. Last-, Dauerlauf- und
-Anlagenabnahme bleiben eigene Nachweise. Details: [Architektur](docs/unified/ARCHITECTURE.md),
+Der hier beschriebene historische Stand 9.0.5 verwendete eine gemeinsame Laufzeit.
+Seit 9.0.23 bestehen getrennte Modulprozesse; 9.0.24 ergänzt OCPP. Last-, Dauerlauf-
+und Anlagenabnahme bleiben eigene Nachweise. Details: [Architektur](docs/unified/ARCHITECTURE.md),
 [Prüfplan](docs/unified/COMMISSIONING.md) und
-[aktueller Prüfbericht](docs/reports/unified-9.0.10/PRUEFBERICHT.md).
+[historischer Prüfbericht 9.0.10](docs/reports/unified-9.0.10/PRUEFBERICHT.md).
 
 ## Anmeldung und einmalige Aktivierung
 
@@ -133,9 +144,22 @@ NWL2 wird mit seinen signierten Bestandsrechten unterstützt; eine alte UI-Einze
 ist keine automatische neue EOS-Systemlizenz. Details: [Lizenzbetrieb](docs/unified/LICENSING.md) und
 [Grenzen der laufenden Regelung](docs/unified/LICENSING_RUNTIME_LIMITS.md).
 
+## Kiosk und Stationsanzeigen
+
+Ein bewusst aktivierter Kiosk zeigt das Kundendashboard ohne automatische
+Sitzungsabmeldung. Administration und geschützte Einstellungen benötigen weiterhin
+eine frische Anmeldung mit Administrator-Benutzername und Passwort; ein offener
+Kiosk erteilt keine technischen Rechte. Der allgemeine Migrationsbutton entfällt
+aus dem Dashboard. Die kontrollierte OCPP-Bestandsübernahme erfolgt im geschützten
+OCPP-Einrichtungsbereich.
+
+Stations-Anzeigeseiten bleiben über ihren vorhandenen separaten Display-Link
+ohne Login- oder Inaktivitätssperre nutzbar. Dieser Display-Zugang ist keine
+OCPP-Protokollauthentifizierung und schaltet keine Administration frei.
+
 ## Entwicklung und Prüfpaket
 
-Node.js: `>=22.23.4 <23 || >=24.22.1 <25`. Der Prüfbericht benennt die tatsächliche Laufzeit für 9.0.5; nicht geprüfte Plattformen sind nicht freigegeben.
+Node.js: `>=22.23.4 <23 || >=24.22.1 <25`. Der versionsgebundene Prüfbericht benennt die tatsächlich verwendeten Laufzeiten; nicht geprüfte Plattformen sind dadurch nicht freigegeben.
 
 ```sh
 npm ci --ignore-scripts

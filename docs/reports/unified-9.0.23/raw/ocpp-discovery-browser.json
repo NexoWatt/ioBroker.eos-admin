@@ -1,0 +1,55 @@
+{
+  "ok": true,
+  "results": [
+    {
+      "viewport": "desktop",
+      "notices": [
+        {
+          "code": "COMMISSIONING_REQUIRED",
+          "text": "Automatisch erkannt und zugeordnet. Typ, Phasen und elektrische Grenzen prüfen, danach die Regelung aktivieren. Ein gemeinsames Leistungslimit für die gesamte Station. 2 Anschluss/Anschlüsse gemeldet."
+        },
+        {
+          "code": "MANUAL_MAPPING_REVIEW_REQUIRED",
+          "text": "Vorhandene manuelle Messzuordnung erkannt. Ein neuer Stellpfad wird erst nach bewusster Zuordnung durch den Installateur verwendet. Ein gemeinsames Leistungslimit für die gesamte Station. 2 Anschluss/Anschlüsse gemeldet."
+        },
+        {
+          "code": "CONTRACT_INCOMPLETE",
+          "text": "Automatisch erkannt; die Datenpunktregistrierung ist noch unvollständig und wird erneut geprüft. Ein gemeinsames Leistungslimit für die gesamte Station. 2 Anschluss/Anschlüsse gemeldet."
+        }
+      ],
+      "pending": "ocpp21.0.CP_4: Erkannt; für die automatische Zuordnung ist ein freier lizenzierter Ladepunkt erforderlich.",
+      "titles": [
+        "Unzugeordnet",
+        "OCPP-Station · LP 1",
+        "OCPP-Station · LP 2",
+        "OCPP-Station · LP 3"
+      ],
+      "count": "3"
+    },
+    {
+      "viewport": "mobile",
+      "notices": [
+        {
+          "code": "COMMISSIONING_REQUIRED",
+          "text": "Automatisch erkannt und zugeordnet. Typ, Phasen und elektrische Grenzen prüfen, danach die Regelung aktivieren. Ein gemeinsames Leistungslimit für die gesamte Station. 2 Anschluss/Anschlüsse gemeldet."
+        },
+        {
+          "code": "MANUAL_MAPPING_REVIEW_REQUIRED",
+          "text": "Vorhandene manuelle Messzuordnung erkannt. Ein neuer Stellpfad wird erst nach bewusster Zuordnung durch den Installateur verwendet. Ein gemeinsames Leistungslimit für die gesamte Station. 2 Anschluss/Anschlüsse gemeldet."
+        },
+        {
+          "code": "CONTRACT_INCOMPLETE",
+          "text": "Automatisch erkannt; die Datenpunktregistrierung ist noch unvollständig und wird erneut geprüft. Ein gemeinsames Leistungslimit für die gesamte Station. 2 Anschluss/Anschlüsse gemeldet."
+        }
+      ],
+      "pending": "ocpp21.0.CP_4: Erkannt; für die automatische Zuordnung ist ein freier lizenzierter Ladepunkt erforderlich.",
+      "titles": [
+        "Unzugeordnet",
+        "OCPP-Station · LP 1",
+        "OCPP-Station · LP 2",
+        "OCPP-Station · LP 3"
+      ],
+      "count": "3"
+    }
+  ]
+}

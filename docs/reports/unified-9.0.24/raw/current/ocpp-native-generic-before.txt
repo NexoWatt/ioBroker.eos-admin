@@ -1,0 +1,25 @@
+✖ generic telemetry selection cannot bypass the native hosted OCPP process and lease contract (59.299906ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 217.669244
+
+✖ failing tests:
+
+test at test/eos-ocpp-runtime-feedback.test.cjs:392:1
+✖ generic telemetry selection cannot bypass the native hosted OCPP process and lease contract (59.299906ms)
+  AssertionError [ERR_ASSERTION]: eos-admin.0.ocpp.CP_01: native contract must write lease before positive power even with generic profile
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-924/iobroker.eos-admin/test/eos-ocpp-runtime-feedback.test.cjs:404:20)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

@@ -20,12 +20,13 @@
   'use strict';
 
   type Role = 'none' | 'customer' | 'installer' | 'admin';
-  type Mode = 'iobroker' | 'eos';
+  type Mode = 'iobroker' | 'eos' | 'kiosk';
   interface AuthState {
     enabled: boolean; protectWrites: boolean; authed: boolean; authenticated: boolean;
     mode: Mode | null; user: string | null; role: Role; capabilities: string[];
     isAdmin: boolean; isInstaller: boolean; isCustomer: boolean;
     loginUrl: string; logoutUrl: string; _loaded: boolean; statusError: boolean;
+    kiosk: boolean; kioskEnabled: boolean;
   }
   interface AuthOptions { pageName?: string; requiredRole?: string; mandatory?: boolean; reason?: string }
   interface AuthApi {
@@ -44,6 +45,7 @@
     mode: null, user: null, role: 'none', capabilities: [], isAdmin: false,
     isInstaller: false, isCustomer: false, loginUrl: '', logoutUrl: '',
     _loaded: false, statusError: false,
+    kiosk: false, kioskEnabled: false,
   };
   let csrfToken = '';
   let statusPromise: Promise<AuthState> | null = null;
@@ -148,6 +150,7 @@
   function resetStatus(error: boolean): void {
     Object.assign(state, { authed: false, authenticated: false, role: 'none', user: null,
       capabilities: [], isAdmin: false, isInstaller: false, isCustomer: false, _loaded: true, statusError: error });
+    state.kiosk = false; state.kioskEnabled = false;
     csrfToken = ''; updateNavigation();
   }
 
@@ -173,17 +176,25 @@
   function applyStatus(value: unknown): void {
     if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('auth_status_invalid');
     const data = value as Record<string, unknown>;
-    if (!['iobroker', 'eos'].includes(String(data.mode)) || data.configured !== true || data.enabled !== true || data.protectWrites !== true
+    if (!['iobroker', 'eos', 'kiosk'].includes(String(data.mode)) || data.configured !== true || data.enabled !== true || data.protectWrites !== true
       || typeof data.authed !== 'boolean' || (data.authenticated !== undefined && data.authenticated !== data.authed)
       || !['none', 'customer', 'installer', 'admin'].includes(String(data.role))
       || !Array.isArray(data.capabilities) || data.capabilities.length > 128
       || !data.capabilities.every(cap => typeof cap === 'string' && cap.length <= 128)
       || (data.user !== null && data.user !== undefined && (typeof data.user !== 'string' || data.user.length > 512))) throw new Error('auth_status_invalid');
     const token = typeof data.csrfToken === 'string' ? data.csrfToken : '';
-    if (data.authed && (data.role === 'none' || typeof data.user !== 'string' || !data.user
+    const kioskIdentity = data.kiosk === true && data.mode === 'kiosk' && data.role === 'customer'
+      && data.user === null && data.userId === null && data.capabilities.length === 1 && data.capabilities[0] === 'frontend.open';
+    if (data.authed && !kioskIdentity && (data.role === 'none' || typeof data.user !== 'string' || !data.user
       || !/^[A-Za-z0-9+/_=-]{16,1024}$/.test(token))) throw new Error('auth_session_invalid');
+    if ((data.kiosk !== undefined && typeof data.kiosk !== 'boolean')
+      || (data.kioskEnabled !== undefined && typeof data.kioskEnabled !== 'boolean')
+      || (data.mode === 'kiosk' && !kioskIdentity)
+      || (data.kiosk === true && (!kioskIdentity || data.kioskEnabled !== true || !data.authed
+        || !/^[a-f0-9]{64}$/.test(token)))) throw new Error('auth_kiosk_invalid');
+    state.kiosk = data.kiosk === true; state.kioskEnabled = data.kioskEnabled === true;
     state.mode = data.mode as Mode; state.authed = data.authed; state.authenticated = data.authed;
-    state.role = data.authed ? data.role as Role : 'none'; state.user = data.authed ? data.user as string : null;
+    state.role = data.authed ? data.role as Role : 'none'; state.user = data.authed && !kioskIdentity ? data.user as string : null;
     state.capabilities = data.authed ? (data.capabilities as string[]).slice() : [];
     state.isAdmin = state.role === 'admin'; state.isInstaller = state.role === 'installer'; state.isCustomer = state.role === 'customer';
     state.loginUrl = typeof data.loginUrl === 'string' && data.loginUrl.length <= 4096 ? data.loginUrl : '';
@@ -206,10 +217,13 @@
     let box = document.getElementById('nwAuthHeader');
     if (!box) { box = document.createElement('div'); box.id = 'nwAuthHeader'; box.className = 'nw-auth-header'; header.appendChild(box); }
     box.replaceChildren();
-    const user = document.createElement('span'); user.className = 'nw-auth-user'; user.textContent = state.authed ? state.user : 'Anmeldung erforderlich';
+    const user = document.createElement('span'); user.className = 'nw-auth-user'; user.textContent = state.kiosk ? 'Kioskmodus' : state.authed ? state.user : 'Anmeldung erforderlich';
     const button = document.createElement('button'); button.type = 'button'; button.className = 'btn small nw-auth-btn';
-    button.textContent = state.authed ? 'Abmelden' : 'Anmelden';
-    button.addEventListener('click', () => { if (state.authed) void logout(); else showLogin(); }); box.append(user, button);
+    button.textContent = state.kiosk ? 'Admin öffnen' : state.authed ? 'Abmelden' : 'Anmelden';
+    button.addEventListener('click', () => {
+      if (state.kiosk) { window.location.assign('/login.html?admin=1&returnTo=/system/'); return; }
+      if (state.authed) void logout(); else showLogin();
+    }); box.append(user, button);
   }
 
   /** Ein Frame fragt keine Kennwörter ab; die Anmeldung wird separat geöffnet. */
@@ -217,6 +231,7 @@
     lockPage(message);
     if (state.statusError || !state._loaded || !state.mode || redirecting) return;
     const target = new URL(runtimeRoot() + 'login.html', window.location.origin);
+    if (state.kiosk) target.searchParams.set('admin', '1');
     target.searchParams.set('returnTo', window.location.pathname + window.location.search + window.location.hash);
     if (window.self !== window.top) {
       const link = document.createElement('a'); link.href = target.href; link.target = '_blank';
@@ -231,6 +246,9 @@
     if (document.hidden) { lockPage(); return; }
     if (state.statusError) { lockPage('Die Anmeldung kann gerade nicht geprüft werden. Bitte Verbindung prüfen.'); return; }
     if (!state.authed) { showLogin(); return; }
+    if (state.kiosk && /^\/settings(?:\.html)?\/?$/.test(currentPath())) {
+      showLogin('Für die Einstellungen bitte mit einem Administratorkonto anmelden.'); return;
+    }
     const capability = requiredPageCapability();
     if (capability && !hasCapability(capability)) { lockPage('Das angemeldete Konto hat keine Berechtigung für diese Einrichtung.'); return; }
     unlockPage();

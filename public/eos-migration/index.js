@@ -52,8 +52,8 @@
         EOS_BACKUP_MIGRATION_NOTIFICATIONS_REVIEW: 'Die vorhandenen Sicherungsbenachrichtigungen benötigen vor der Übernahme eine Prüfung.',
         EOS_BACKUP_MIGRATION_ZIGBEE_MQTT_REVIEW: 'Die vorhandene Zigbee2MQTT-Sicherung muss vor der Übernahme anhand ihres Datenverzeichnisses geprüft werden.',
     };
-    const labels = { ui: 'EOS Oberfläche und Regelung', devices: 'Geräte', eebus: 'EEBus', backup: 'Sicherung' };
-    const sourceNames = { ui: 'nexowatt-ui', devices: 'nexowatt-devices', eebus: 'eebus', backup: 'nexowatt-backup' };
+    const labels = { ui: 'EOS Oberfläche und Regelung', devices: 'Geräte', eebus: 'EEBus', backup: 'Sicherung', ocpp: 'OCPP-Ladestationen' };
+    const sourceNames = { ui: 'nexowatt-ui', devices: 'nexowatt-devices', eebus: 'eebus', backup: 'nexowatt-backup', ocpp: 'ocpp21' };
     const element = id => document.getElementById(id);
     let busy = false;
     function render(value) {

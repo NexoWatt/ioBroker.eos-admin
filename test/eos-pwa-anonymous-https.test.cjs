@@ -1,5 +1,7 @@
 'use strict';
 /** Actual EOS owner mount and TLS creator; only controller identity/database are fixtures.
+ * The UI factory explicitly stays in-process for this controller fixture; actual
+ * hosted assets and auth routes remain real. Child isolation has separate tests.
  * Verifies anonymous metadata transport, not iOS installation or customer CA trust. */
 const test = require('node:test');
 const assert = require('node:assert/strict');
@@ -24,6 +26,9 @@ function loadWeb(dataDir) {
     vm.runInNewContext(code, { exports, module: { exports }, __dirname: path.dirname(file), __filename: file,
         Buffer, URL, Error, console, process, setTimeout, clearTimeout,
         require(name) {
+            if (name === './eosUiProcess') return {
+                createEosUiProcess: (adapter, bridge) => localRequire(path.join(root, 'ui/main.js')).createHostedRuntime(adapter, bridge),
+            };
             if (name === '@iobroker/adapter-core') return { EXIT_CODES: { ADAPTER_REQUESTED_TERMINATION: 11 }, I18n: {}, controllerDir: path.join(root, 'node_modules/iobroker.js-controller'), getAbsoluteInstanceDataDir: () => dataDir };
             if (!emitted && name.startsWith('.') && fs.existsSync(path.resolve(path.dirname(file), `${name}.ts`))) return require('tsx/cjs/api').require(path.resolve(path.dirname(file), `${name}.ts`), file);
             return localRequire(name);

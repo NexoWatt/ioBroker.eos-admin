@@ -1,0 +1,24 @@
+✔ OCPP uses the existing central grant and preserves explicit legacy adapter scope (1.388251ms)
+✔ native OCPP root command lease precedes startup and is released exactly once (11.513222ms)
+✔ active or unconfirmed standalone OCPP blocks the new listener (3.651946ms)
+✔ manual OCPP import retains original IDs and stays disabled until reviewed enable (12.184954ms)
+✔ manual preserved import refuses a source changed during asynchronous conversion (2.677336ms)
+✔ automatic OCPP handover journals stop/readback and rollback retains source data (8.107229ms)
+✔ existing committed migration never silently stops a newly discovered OCPP source (1.222757ms)
+✔ real OCPP worker retains lease revocation history across immediate regrant and expiry (1584.988098ms)
+▶ hosted OCPP facade writes local states in only its current or explicitly preserved namespace
+  ✔ embedded namespace (6.558211ms)
+  ✔ preserved standalone namespace (1.597169ms)
+✔ hosted OCPP facade writes local states in only its current or explicitly preserved namespace (9.682797ms)
+✔ hosted OCPP scans reject foreign, oversized and malformed controller inventories without partial success (52.241126ms)
+✔ hosted OCPP configuration views accept only bounded own-station ranges and validate both value and doc identifiers (1.92899ms)
+✔ hosted OCPP cannot publish a late inventory or dispatch a queued write after its generation is revoked (0.931657ms)
+✔ OCPP acknowledged telemetry bursts never re-enter IPC, while the original command event is preserved (7.048024ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1811.914356

@@ -1,0 +1,20 @@
+✔ OCPP power commands go through the real consumer and registry: 5700W, stop, keepalive, resume (6.664451ms)
+✔ explicit EVCS stop bypasses a configured minimum in W and A, retaining positive minimum and maximum (1.930764ms)
+✔ EVCS zero transitions are not swallowed by deadband in either direction (1.777057ms)
+✔ a failed stop is retried, and W-to-kW conversion preserves zero (1.077633ms)
+▶ provided OCPP21 source receives zero unchanged; RPC acceptance remains separate from local ack
+  ✔ ocpp1.6: Accepted (15.554473ms)
+  ✔ ocpp1.6: Rejected (3.479624ms)
+  ✔ ocpp2.0.1: Accepted (2.846087ms)
+  ✔ ocpp2.0.1: Rejected (3.185719ms)
+  ✔ ocpp2.1: Accepted (2.881329ms)
+  ✔ ocpp2.1: Rejected (2.511673ms)
+✔ provided OCPP21 source receives zero unchanged; RPC acceptance remains separate from local ack (41.758908ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 573.704957

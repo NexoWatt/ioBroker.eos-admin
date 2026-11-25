@@ -1,6 +1,8 @@
 'use strict';
 // Execute the production Web startup helpers, using real HTTP/TLS sockets.
-// Only controller bootstrap/database calls are fixtures. No adapter objects are mutated.
+// Controller bootstrap/database calls are fixtures. Deep hosted-startup cases
+// explicitly retain an in-process factory seam; a separate TLS case below uses
+// the real UI/EMS child and only public HTTP/status observations.
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const http = require('node:http');
@@ -23,6 +25,7 @@ const compiled = emitted ? source : require('typescript').transpileModule(source
     compilerOptions: { target: 9, module: 1, esModuleInterop: true },
 }).outputText;
 const exportsValue = {};
+const processOwners = new WeakSet();
 vm.runInNewContext(compiled, {
     exports: exportsValue, module: { exports: exportsValue }, __dirname: path.dirname(webFile), __filename: webFile,
     Buffer, URL, Error, console, process, setTimeout, clearTimeout,
@@ -31,6 +34,14 @@ vm.runInNewContext(compiled, {
             EXIT_CODES: { ADAPTER_REQUESTED_TERMINATION: 11 }, I18n: {},
             controllerDir: path.resolve(__dirname, '..', 'node_modules', 'iobroker.js-controller'),
             getAbsoluteInstanceDataDir: () => path.join(require('node:os').tmpdir(), 'eos-listen-module-fixture'),
+        };
+        if (name === './eosUiProcess') return {
+            createEosUiProcess(owner, bridge, options) {
+                if (processOwners.has(owner)) return require('../build/lib/eosUiProcess').createEosUiProcess(owner, bridge, options);
+                // Test-only preservation of the existing deep startup/failure assertions.
+                // The dynamically cached module is the fixture's original hosted runtime.
+                return webRequire(path.resolve(__dirname, '../ui/main.js')).createHostedRuntime(owner, bridge);
+            },
         };
         if (!emitted && name.startsWith('.') && fs.existsSync(path.resolve(path.dirname(webFile), `${name}.ts`))) {
             return require('tsx/cjs/api').require(path.resolve(path.dirname(webFile), `${name}.ts`), webFile);
@@ -349,22 +360,24 @@ test('already closed Web cannot initiate another migration recovery or terminate
     assert.equal(web.startupFailed, false);
 });
 
-// Real HTTPS + production Web mount + production hosted factory/router. Only the
-// controller DB/session identity and the delayed operational dependency are fixtures.
+// Real HTTPS and Web mount/router. Legacy cases inject the original in-process
+// hosted factory to observe/mutate startup dependencies; realProcess opts into
+// the actual process supervisor and exposes no mutable runtime instance.
 async function hostedTlsFixture(t, migrate, options = {}) {
     const Module = require('node:module');
     const { createHarness } = require('../ui/test/unified/http-harness.cjs');
     const harness = await createHarness();
     await harness.close();
     const owner = harness.owner;
+    if (options.realProcess) processOwners.add(owner);
     owner.config.secure = true;
-    if (options.migration) owner.eosMigration = options.migration;
+    if (options.migration) owner.eosMigration = { status: () => ({ phase: 'TEST_BLOCKED' }), ...options.migration };
     const logs = [];
     owner.log = Object.fromEntries(Object.keys(quiet).map(level => [level, value => logs.push(String(value))]));
     let licensed = true; let writable = options.writable !== false; let runtimeObject; let migrationCalls = 0;
     const validLicense = harness.bridge.getLicense();
     owner.eosLicenseService = { statusView: () => licensed ? validLicense : { valid: false, coreEnabled: false } };
-    owner.eosOwnership = { canWrite: () => writable };
+    owner.eosOwnership = { canWrite: () => writable, status: () => ({ state: writable ? 'owned' : 'blocked' }) };
     const foreignWriteCalls = [];
     owner.setForeignStateAsync = async (...args) => { foreignWriteCalls.push(args); };
     const filename = path.resolve(__dirname, '../ui/main.js');
@@ -422,6 +435,25 @@ async function hostedTlsFixture(t, migrate, options = {}) {
         setLicensed(value) { licensed = value; }, setWritable(value) { writable = value; } };
 }
 function deferred() { let resolve; const promise = new Promise(done => { resolve = done; }); return { promise, resolve }; }
+
+test('real UI child preserves HTTPS session/origin checks and leaves recovery outside its process', { timeout: 15000 }, async t => {
+    const h = await hostedTlsFixture(t, async () => {}, { realProcess: true });
+    assert.equal(h.runtime.status().process.mode, 'process');
+    assert.notEqual(h.runtime.status().process.pid, process.pid);
+    assert.equal(h.instance(), undefined, 'child runtime internals are not exposed to the parent fixture');
+    assert.equal(await h.request('/login.html', { auth: false }), 200);
+    assert.equal(await h.request('/api/state'), 200);
+    assert.equal(await h.request('/api/state', { auth: false }), 401);
+    assert.equal(await h.request('/api/state', { origin: 'https://foreign.invalid' }), 403);
+    assert.equal(await h.request('/api/smarthome/toggle', { method: 'POST', csrf: false }), 403);
+    h.setSessionActive(false);
+    assert.equal(await h.request('/api/state'), 401);
+    h.setSessionActive(true);
+    await h.runtime.stop();
+    assert.equal(h.runtime.status().process.pid, null);
+    assert.equal(await h.request('/system/recovery'), 200);
+    assert.equal(h.server.listening, true);
+});
 
 test('migration startup fence keeps login and authenticated recovery reachable without operational startup', async t => {
     const h = await hostedTlsFixture(t, async () => assert.fail('blocked migration must not initialize devices'), {

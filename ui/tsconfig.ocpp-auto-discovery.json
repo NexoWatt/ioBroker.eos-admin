@@ -1,0 +1,4 @@
+{
+  "extends": "./tsconfig.installer-lifecycle.json",
+  "files": ["src-ts/runtime-executables/lib/ocpp-auto-discovery.ts"]
+}

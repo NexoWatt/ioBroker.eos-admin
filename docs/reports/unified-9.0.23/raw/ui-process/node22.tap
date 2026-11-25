@@ -1,0 +1,118 @@
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: controller checkPassword callback preserves the canonical returned user
+ok 1 - controller checkPassword callback preserves the canonical returned user
+  ---
+  duration_ms: 91.094011
+  type: 'test'
+  ...
+# Subtest: history adapter responses beyond physical-command TTL retain their read-only callback
+ok 2 - history adapter responses beyond physical-command TTL retain their read-only callback
+  ---
+  duration_ms: 2353.35777
+  type: 'test'
+  ...
+# Subtest: an expired physical command is not replayed when the parent event loop recovers
+ok 3 - an expired physical command is not replayed when the parent event loop recovers
+  ---
+  duration_ms: 2633.299412
+  type: 'test'
+  ...
+# Subtest: completion from an old RPC generation cannot kill its replacement process
+ok 4 - completion from an old RPC generation cannot kill its replacement process
+  ---
+  duration_ms: 365.265246
+  type: 'test'
+  ...
+# Subtest: oversized controller response fails its read without killing the control process
+ok 5 - oversized controller response fails its read without killing the control process
+  ---
+  duration_ms: 294.965305
+  type: 'test'
+  ...
+# Subtest: SIGKILL of the supervising parent terminates the real runtime child
+ok 6 - SIGKILL of the supervising parent terminates the real runtime child
+  ---
+  duration_ms: 146.971147
+  type: 'test'
+  ...
+# (node:77) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual OS child preserves source timestamps/quality and HTTP identity is parent-bound
+ok 7 - actual OS child preserves source timestamps/quality and HTTP identity is parent-bound
+  ---
+  duration_ms: 110.823345
+  type: 'test'
+  ...
+# Subtest: each write rechecks live parent ownership; shutdown releases only owned subscriptions
+ok 8 - each write rechecks live parent ownership; shutdown releases only owned subscriptions
+  ---
+  duration_ms: 76.366356
+  type: 'test'
+  ...
+# Subtest: child exit is contained and restart uses new PID/generation without replaying measurements
+ok 9 - child exit is contained and restart uses new PID/generation without replaying measurements
+  ---
+  duration_ms: 148.784067
+  type: 'test'
+  ...
+# Subtest: blocked child event loop does not block parent and is killed before restart
+ok 10 - blocked child event loop does not block parent and is killed before restart
+  ---
+  duration_ms: 5607.475316
+  type: 'test'
+  ...
+# Subtest: real hosted UI shell retains login, origin and CSRF/role admission across private HTTP bridge
+ok 11 - real hosted UI shell retains login, origin and CSRF/role admission across private HTTP bridge
+  ---
+  duration_ms: 443.951222
+  type: 'test'
+  ...
+# Subtest: HTTP body streaming, fallthrough and SSE disconnect keep the public connection usable
+ok 12 - HTTP body streaming, fallthrough and SSE disconnect keep the public connection usable
+  ---
+  duration_ms: 90.756289
+  type: 'test'
+  ...
+# Subtest: private loopback rejects direct requests, spoofed capabilities and replay while a legitimate stream stays open
+ok 13 - private loopback rejects direct requests, spoofed capabilities and replay while a legitimate stream stays open
+  ---
+  duration_ms: 88.982023
+  type: 'test'
+  ...
+# Subtest: process diagnostics remove complete configured secrets before shortening
+ok 14 - process diagnostics remove complete configured secrets before shortening
+  ---
+  duration_ms: 2.399046
+  type: 'test'
+  ...
+# (node:153) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: AES and legacy envelopes round-trip in both directions against the actual controller SDK
+ok 15 - AES and legacy envelopes round-trip in both directions against the actual controller SDK
+  ---
+  duration_ms: 35.919127
+  type: 'test'
+  ...
+# Subtest: missing system secret and malformed ciphertext fail without plaintext fallback
+ok 16 - missing system secret and malformed ciphertext fail without plaintext fallback
+  ---
+  duration_ms: 0.586697
+  type: 'test'
+  ...
+# Subtest: existing encrypted Influx config works through the actual child owner codec; absent secret quarantines credentials
+ok 17 - existing encrypted Influx config works through the actual child owner codec; absent secret quarantines credentials
+  ---
+  duration_ms: 133.602453
+  type: 'test'
+  ...
+1..17
+# tests 17
+# suites 0
+# pass 17
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 14889.003535

@@ -1,0 +1,278 @@
+TAP version 13
+# (node:51) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: control fixture preserves current bytes and backs up a verified obsolete asset outside the package
+ok 1 - control fixture preserves current bytes and backs up a verified obsolete asset outside the package
+  ---
+  duration_ms: 29.584831
+  type: 'test'
+  ...
+# Subtest: modified current bytes block cleanup of simultaneously present known old assets
+ok 2 - modified current bytes block cleanup of simultaneously present known old assets
+  ---
+  duration_ms: 4.564636
+  type: 'test'
+  ...
+# Subtest: missing current file blocks cleanup before a backup is created
+ok 3 - missing current file blocks cleanup before a backup is created
+  ---
+  duration_ms: 5.06862
+  type: 'test'
+  ...
+# Subtest: a known obsolete filename with unknown bytes remains untouched and blocks preparation
+ok 4 - a known obsolete filename with unknown bytes remains untouched and blocks preparation
+  ---
+  duration_ms: 8.235211
+  type: 'test'
+  ...
+# Subtest: unknown extra files are not silently removed along with known old assets
+ok 5 - unknown extra files are not silently removed along with known old assets
+  ---
+  duration_ms: 9.604944
+  type: 'test'
+  ...
+# Subtest: edited obsolete inventory does not become an authorization to move arbitrary files
+ok 6 - edited obsolete inventory does not become an authorization to move arbitrary files
+  ---
+  duration_ms: 5.200846
+  type: 'test'
+  ...
+# Subtest: invalid inventory path fails closed without changing anything: ../outside.js
+ok 7 - invalid inventory path fails closed without changing anything: ../outside.js
+  ---
+  duration_ms: 7.552901
+  type: 'test'
+  ...
+# Subtest: invalid inventory path fails closed without changing anything: /absolute.js
+ok 8 - invalid inventory path fails closed without changing anything: /absolute.js
+  ---
+  duration_ms: 8.599509
+  type: 'test'
+  ...
+# Subtest: invalid inventory path fails closed without changing anything: adminWww/assets/../outside.js
+ok 9 - invalid inventory path fails closed without changing anything: adminWww/assets/../outside.js
+  ---
+  duration_ms: 8.31607
+  type: 'test'
+  ...
+# Subtest: invalid inventory path fails closed without changing anything: adminWww/assets/a\\b.js
+ok 10 - invalid inventory path fails closed without changing anything: adminWww/assets/a\\b.js
+  ---
+  duration_ms: 10.574197
+  type: 'test'
+  ...
+# Subtest: invalid inventory path fails closed without changing anything: adminWww/assets/a.js:stream
+ok 11 - invalid inventory path fails closed without changing anything: adminWww/assets/a.js:stream
+  ---
+  duration_ms: 8.409297
+  type: 'test'
+  ...
+# Subtest: invalid inventory path fails closed without changing anything: adminWww/assets/CON.js
+ok 12 - invalid inventory path fails closed without changing anything: adminWww/assets/CON.js
+  ---
+  duration_ms: 7.893355
+  type: 'test'
+  ...
+# Subtest: extending installer support does not authorize other catalogue paths: ui/admin/react/local-settings.json
+ok 13 - extending installer support does not authorize other catalogue paths: ui/admin/react/local-settings.json
+  ---
+  duration_ms: 9.138755
+  type: 'test'
+  ...
+# Subtest: extending installer support does not authorize other catalogue paths: ui/src-admin-tab/src/customer.js
+ok 14 - extending installer support does not authorize other catalogue paths: ui/src-admin-tab/src/customer.js
+  ---
+  duration_ms: 8.262131
+  type: 'test'
+  ...
+# Subtest: extending installer support does not authorize other catalogue paths: ui/admin/react/assets-other/file.js
+ok 15 - extending installer support does not authorize other catalogue paths: ui/admin/react/assets-other/file.js
+  ---
+  duration_ms: 9.143732
+  type: 'test'
+  ...
+# Subtest: extending installer support does not authorize other catalogue paths: admin/custom/assets/customer.js
+ok 16 - extending installer support does not authorize other catalogue paths: admin/custom/assets/customer.js
+  ---
+  duration_ms: 9.977595
+  type: 'test'
+  ...
+# Subtest: dangling installer symlinks are rejected before a known old admin file is moved
+ok 17 - dangling installer symlinks are rejected before a known old admin file is moved
+  ---
+  duration_ms: 7.090838
+  type: 'test'
+  ...
+# Subtest: an installer parent link cannot hide behind an absent compiled build directory
+ok 18 - an installer parent link cannot hide behind an absent compiled build directory
+  ---
+  duration_ms: 6.538173
+  type: 'test'
+  ...
+# Subtest: known installer hardlinks are rejected without moving any admin files
+ok 19 - known installer hardlinks are rejected without moving any admin files
+  ---
+  duration_ms: 10.843259
+  type: 'test'
+  ...
+# Subtest: dangling obsolete symlink is rejected instead of becoming an invisible extra
+ok 20 - dangling obsolete symlink is rejected instead of becoming an invisible extra
+  ---
+  duration_ms: 5.390687
+  type: 'test'
+  ...
+# Subtest: a symlinked assets directory cannot redirect preparation outside the package
+ok 21 - a symlinked assets directory cannot redirect preparation outside the package
+  ---
+  duration_ms: 5.229708
+  type: 'test'
+  ...
+# Subtest: hardlinked obsolete files are rejected while the external link remains unchanged
+ok 22 - hardlinked obsolete files are rejected while the external link remains unchanged
+  ---
+  duration_ms: 5.558284
+  type: 'test'
+  ...
+# Subtest: casefold collision with a current sealed asset is never treated as removable old data
+ok 23 - casefold collision with a current sealed asset is never treated as removable old data
+  ---
+  duration_ms: 8.549855
+  type: 'test'
+  ...
+# Subtest: current page references prevent removing an otherwise known obsolete asset
+ok 24 - current page references prevent removing an otherwise known obsolete asset
+  ---
+  duration_ms: 11.220211
+  type: 'test'
+  ...
+# Subtest: failure after the first unlink restores original files and retains a recoverable backup
+ok 25 - failure after the first unlink restores original files and retains a recoverable backup
+  ---
+  duration_ms: 15.063982
+  type: 'test'
+  ...
+# Subtest: rollback never overwrites a file created after the original was removed
+ok 26 - rollback never overwrites a file created after the original was removed
+  ---
+  duration_ms: 11.971562
+  type: 'test'
+  ...
+# (node:52) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: fresh extraction passes without writing a backup or changing the seal
+ok 27 - fresh extraction passes without writing a backup or changing the seal
+  ---
+  duration_ms: 17.036366
+  type: 'test'
+  ...
+# Subtest: known overlay assets are verified, retained outside the repository and absent from the prepared source
+ok 28 - known overlay assets are verified, retained outside the repository and absent from the prepared source
+  ---
+  duration_ms: 17.394987
+  type: 'test'
+  ...
+# Subtest: repeating npm preparation is a no-op and does not create more backups
+ok 29 - repeating npm preparation is a no-op and does not create more backups
+  ---
+  duration_ms: 17.629073
+  type: 'test'
+  ...
+# Subtest: copying over older admin and installer bundles quarantines every known extra together
+ok 30 - copying over older admin and installer bundles quarantines every known extra together
+  ---
+  duration_ms: 17.661981
+  type: 'test'
+  ...
+# Subtest: delivered catalogue records the reported installer bytes and their sealed archive provenance
+ok 31 - delivered catalogue records the reported installer bytes and their sealed archive provenance
+  ---
+  duration_ms: 1.229257
+  type: 'test'
+  ...
+# Subtest: a known obsolete installer with changed bytes blocks all admin and installer cleanup
+ok 32 - a known obsolete installer with changed bytes blocks all admin and installer cleanup
+  ---
+  duration_ms: 6.533415
+  type: 'test'
+  ...
+# Subtest: unknown installer assets are preserved and reject the entire preparation before backups
+ok 33 - unknown installer assets are preserved and reject the entire preparation before backups
+  ---
+  duration_ms: 5.898196
+  type: 'test'
+  ...
+# Subtest: a changed current installer prevents cleanup even when the old installer matches its catalogue
+ok 34 - a changed current installer prevents cleanup even when the old installer matches its catalogue
+  ---
+  duration_ms: 1.719441
+  type: 'test'
+  ...
+# Subtest: a current installer HTML reference prevents removal of the referenced historical bundle
+ok 35 - a current installer HTML reference prevents removal of the referenced historical bundle
+  ---
+  duration_ms: 6.877594
+  type: 'test'
+  ...
+# Subtest: all extras are classified before any mutation, including unrelated tracked source additions
+ok 36 - all extras are classified before any mutation, including unrelated tracked source additions
+  ---
+  duration_ms: 6.913477
+  type: 'test'
+  ...
+# Subtest: a backup write failure occurs before deleting any original
+ok 37 - a backup write failure occurs before deleting any original
+  ---
+  duration_ms: 6.749534
+  type: 'test'
+  ...
+# Subtest: an interrupted remove restores every previously removed source without changing current files
+ok 38 - an interrupted remove restores every previously removed source without changing current files
+  ---
+  duration_ms: 7.893606
+  type: 'test'
+  ...
+# Subtest: rollback never overwrites a concurrently created replacement and retains its recovery copy
+ok 39 - rollback never overwrites a concurrently created replacement and retains its recovery copy
+  ---
+  duration_ms: 7.810953
+  type: 'test'
+  ...
+# Subtest: a current source changed after backup makes the final gate fail and rolls obsolete removals back
+ok 40 - a current source changed after backup makes the final gate fail and rolls obsolete removals back
+  ---
+  duration_ms: 9.761357
+  type: 'test'
+  ...
+# Subtest: CLI works offline from a copied directory containing spaces and rejects flags
+ok 41 - CLI works offline from a copied directory containing spaces and rejects flags
+  ---
+  duration_ms: 166.050391
+  type: 'test'
+  ...
+# Subtest: reported Windows overlay asset from sealed 9.0.21 is backed up using the delivered catalogue
+ok 42 - reported Windows overlay asset from sealed 9.0.21 is backed up using the delivered catalogue
+  ---
+  duration_ms: 30.138649
+  type: 'test'
+  ...
+# Subtest: the exact reported filename with changed bytes remains untouched and fails before any backup
+ok 43 - the exact reported filename with changed bytes remains untouched and fails before any backup
+  ---
+  duration_ms: 9.820082
+  type: 'test'
+  ...
+# Subtest: a reported historical asset that is part of the current seal is never removed
+ok 44 - a reported historical asset that is part of the current seal is never removed
+  ---
+  duration_ms: 12.963578
+  type: 'test'
+  ...
+1..44
+# tests 44
+# suites 0
+# pass 44
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 472.456464

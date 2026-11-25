@@ -1,0 +1,11 @@
+{
+  "name": "@nexowatt/eos-ocpp",
+  "version": "0.4.4",
+  "private": true,
+  "license": "MIT",
+  "main": "index.js",
+  "description": "Hosted native OCPP station runtime for NexoWatt EOS",
+  "dependencies": {
+    "ocpp-rpc": "2.2.1"
+  }
+}

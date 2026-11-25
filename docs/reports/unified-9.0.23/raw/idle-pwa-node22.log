@@ -1,0 +1,75 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:12) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual owner HTTP routes: idle polls/new page loads never extend ten minutes; another browser stays active
+ok 1 - actual owner HTTP routes: idle polls/new page loads never extend ten minutes; another browser stays active
+  ---
+  duration_ms: 2778.770911
+  type: 'test'
+  ...
+# Subtest: actual owner activity HTTP requires same-origin CSRF and cannot revive an expired family
+ok 2 - actual owner activity HTTP requires same-origin CSRF and cannot revive an expired family
+  ---
+  duration_ms: 519.847795
+  type: 'test'
+  ...
+# Subtest: a cached upstream req.user cannot retain EOS authority after idle expiry
+ok 3 - a cached upstream req.user cannot retain EOS authority after idle expiry
+  ---
+  duration_ms: 179.927054
+  type: 'test'
+  ...
+# Subtest: actual hosted SSE is closed at idle expiry even without a new data frame, independently per login
+ok 4 - actual hosted SSE is closed at idle expiry even without a new data frame, independently per login
+  ---
+  duration_ms: 283.501808
+  type: 'test'
+  ...
+# Subtest: pinned upstream log and instance publications cannot send after idle expiry before the prune timer
+ok 5 - pinned upstream log and instance publications cannot send after idle expiry before the prune timer
+  ---
+  duration_ms: 239.621238
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:13) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: fresh anonymous HTTPS launch exposes actual login branding and PWA icons while configuration remains protected
+ok 6 - fresh anonymous HTTPS launch exposes actual login branding and PWA icons while configuration remains protected
+  ---
+  duration_ms: 3123.98199
+  type: 'test'
+  ...
+# (node:14) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:14) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# Subtest: one root app identity and the exact uploaded icon are shared by dashboard, login and system console
+ok 7 - one root app identity and the exact uploaded icon are shared by dashboard, login and system console
+  ---
+  duration_ms: 37.944595
+  type: 'test'
+  ...
+# (node:14) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual owner mount serves install metadata publicly while root launch retains session, password and license gates
+ok 8 - actual owner mount serves install metadata publicly while root launch retains session, password and license gates
+  ---
+  duration_ms: 2638.783508
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4708.885876

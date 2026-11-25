@@ -1,0 +1,18 @@
+.runtime-summary { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:20px; }
+.runtime-summary p { margin:0 0 7px; }
+#observed-at, .runtime-note, .runtime-kind { color:#aebdca; font-size:.9rem; line-height:1.55; }
+.runtime-note { margin:18px 0; }
+.runtime-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr)); gap:16px; }
+.runtime-card { padding:22px; min-width:0; }
+.runtime-card header { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+.runtime-card h2 { font-size:1.15rem; margin:0 0 6px; }
+.runtime-kind { margin:0 0 18px; }
+.runtime-badge { padding:5px 9px; border-radius:6px; background:#233747; color:#d3dfe9; font-size:.83rem; white-space:nowrap; }
+.runtime-badge.is-running { background:#123d32; color:#95eac7; }
+.runtime-badge.is-error { background:#472c22; color:#ffc0a2; }
+.runtime-card dl { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.4fr); gap:9px 14px; margin:0; font-size:.9rem; }
+.runtime-card dt { color:#aebdca; }
+.runtime-card dd { margin:0; overflow-wrap:anywhere; }
+.runtime-empty { padding:24px; border:1px solid #5b4938; border-radius:10px; color:#ffcf9c; }
+#request-message.is-error { color:#ffbf9c; }
+@media(max-width:600px) { .runtime-summary { align-items:stretch; flex-direction:column; } .runtime-card { padding:18px; } }

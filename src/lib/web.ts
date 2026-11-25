@@ -9,7 +9,6 @@ import { join, normalize, parse, dirname, relative, isAbsolute, resolve } from '
 import compression from 'compression';
 import { lookup as getMimeType } from 'mime-types';
 import { randomBytes } from 'node:crypto';
-import { createRequire } from 'node:module';
 import { Ajv, type ValidateFunction } from 'ajv';
 import { parse as JSON5 } from 'json5';
 import fileUpload from 'express-fileupload';
@@ -37,12 +36,14 @@ import { UnifiedSessions, transportAllowed, sameOrigin as unifiedSameOrigin } fr
 import type { EosSessionSecurity } from './eosSessionSecurity';
 import type { OwnershipGuard } from './eosUnifiedOwnership';
 import type { EosHostedRuntime } from './eosUnifiedRuntime';
+import { createEosUiProcess } from './eosUiProcess';
 import { EosModuleHost } from './eosModuleHost';
 import { getDeviceEmsReferences, planDeviceEms } from './eosDeviceEmsPlan';
 import { resolveDeviceEmsTargets, projectDeviceEmsConfig, type DeviceEmsInventory } from './eosDeviceEmsService';
 import { registerEosModuleRoutes } from './eosModuleHttp';
 import { createEosDiscovery, type EosDiscovery } from './eosDiscovery';
 import { EosTlsManager } from './eosTlsManager';
+import { EosKiosk, kioskRouteAllowed, kioskSetAllowed } from './eosKiosk';
 import { registerEosTlsRoutes } from './eosTlsHttp';
 import type { EosLegacyMigration } from './eosLegacyMigration';
 
@@ -1945,6 +1946,94 @@ export default class Web {
         if (!app) {
             throw new Error('EOS_HTTP_UNAVAILABLE');
         }
+        const kiosk = new EosKiosk({
+            namespace: this.adapter.namespace,
+            secure: this.settings.secure === true,
+            read: id => this.adapter.getForeignObjectAsync(id),
+            write: (id, value) => this.adapter.setForeignObjectAsync(id, value as ioBroker.Object),
+            ready: async userId => {
+                const license = this.adapter.eosLicenseService?.statusView();
+                if (!license?.valid || license.coreEnabled !== true) {
+                    return false;
+                }
+                const user = await this.adapter.getForeignObjectAsync(userId);
+                if (user?.type !== 'user' || user.common.enabled === false) {
+                    return false;
+                }
+                return !(await this.getEosFirstLoginPasswordState(userId, 'admin')).required;
+            },
+            revoke: enabling => {
+                if (enabling) {
+                    this.adapter.eosSessionSecurity?.revoke();
+                }
+                this.adapter.eosHostedRuntime?.revokeSessions?.();
+            },
+        });
+        await kiosk.initialize();
+        this.unified.kiosk = kiosk;
+        app.use((req: Request, res: Response, next: NextFunction): void => {
+            if (this.unified.requestAllowed(req)) {
+                kiosk.bootstrap(req, res);
+            }
+            next();
+        });
+        const kioskAdmin = async (req: Request): Promise<boolean> => {
+            if (!this.unified.requestAllowed(req)) {
+                return false;
+            }
+            const access = await this.unified.status(req);
+            return access.authenticated && !access.kiosk && access.role === 'admin' && !access.mustChangePassword;
+        };
+        app.get('/api/eos/kiosk', (req: Request, res: Response): void => {
+            res.setHeader('Cache-Control', 'no-store');
+            void kioskAdmin(req).then(
+                allowed => {
+                    if (!allowed) {
+                        res.status(403).json({ error: 'KIOSK_ADMIN_REQUIRED' });
+                    } else {
+                        res.json(kiosk.view());
+                    }
+                },
+                () => res.status(503).json({ error: 'KIOSK_UNAVAILABLE' }),
+            );
+        });
+        app.put(
+            '/api/eos/kiosk',
+            bodyParser.json({ limit: '2kb', strict: true }),
+            (req: Request, res: Response): void => {
+                res.setHeader('Cache-Control', 'no-store');
+                void (async (): Promise<void> => {
+                    if (!(await kioskAdmin(req)) || !this.unified.csrfAllowed(req)) {
+                        res.status(403).json({ error: 'KIOSK_ADMIN_REQUIRED' });
+                        return;
+                    }
+                    const access = await this.unified.status(req);
+                    const result = await kiosk.save(
+                        req.body,
+                        String(access.userId || ''),
+                        async () => (await kioskAdmin(req)) && this.unified.csrfAllowed(req),
+                    );
+                    // The setting lives in the parent, so revoking UI requests does not
+                    // interrupt this response; enabling also revokes the old admin login.
+                    if (result.reauthenticate) {
+                        res.clearCookie('access_token', { path: '/' });
+                        res.clearCookie('refresh_token', { path: '/' });
+                    }
+                    res.json(result);
+                })().catch(error => {
+                    const code = error instanceof Error ? error.message : '';
+                    res.status(
+                        code === 'KIOSK_CONFLICT'
+                            ? 409
+                            : code === 'KIOSK_REQUEST'
+                              ? 400
+                              : code === 'KIOSK_AUTH'
+                                ? 403
+                                : 503,
+                    ).json({ error: /^KIOSK_[A-Z_]+$/.test(code) ? code : 'KIOSK_UNAVAILABLE' });
+                });
+            },
+        );
         // One small public script observes genuine interaction on every EOS page.
         // Authentication and expiry remain server-enforced when JavaScript is absent.
         app.get('/eos-session-idle.js', (_req: Request, res: Response): void => {
@@ -2140,63 +2229,62 @@ export default class Web {
             authorize: (req: Request) => this.unified.status(req),
             csrfAllowed: (req: Request) => this.unified.csrfAllowed(req),
             requestAllowed: (req: Request) => this.unified.requestAllowed(req),
+            runtimeStatus: () => this.adapter.eosHostedRuntime?.status?.(),
         });
-        const factory = createRequire(__filename)(join(this.baseDir, 'ui', 'main.js')) as {
-            createHostedRuntime: (owner: AdminAdapter, bridge: Record<string, unknown>) => EosHostedRuntime;
-        };
-        if (typeof factory.createHostedRuntime !== 'function') {
-            throw new Error('EOS_UI_FACTORY_MISSING');
-        }
-        const runtime = factory.createHostedRuntime(this.adapter, {
-            deviceEmsPlan: async (input: {
-                config: unknown;
-                devices: DeviceEmsInventory[];
-                allowedApps?: string[];
-            }) => {
-                const config = projectDeviceEmsConfig(input.config);
-                const targets = await resolveDeviceEmsTargets({
-                    owner: this.adapter,
-                    references: getDeviceEmsReferences(config),
-                    devices: input.devices,
-                    canRun: () => this.adapter.eosOwnership?.canWrite() === true,
-                });
-                return planDeviceEms({
-                    ...input,
-                    config,
-                    ...targets,
-                    limits: this.adapter.eosLicenseService?.statusView().limits || {},
-                });
+        const runtime = createEosUiProcess(
+            this.adapter,
+            {
+                deviceEmsPlan: async (input: {
+                    config: unknown;
+                    devices: DeviceEmsInventory[];
+                    allowedApps?: string[];
+                }) => {
+                    const config = projectDeviceEmsConfig(input.config);
+                    const targets = await resolveDeviceEmsTargets({
+                        owner: this.adapter,
+                        references: getDeviceEmsReferences(config),
+                        devices: input.devices,
+                        canRun: () => this.adapter.eosOwnership?.canWrite() === true,
+                    });
+                    return planDeviceEms({
+                        ...input,
+                        config,
+                        ...targets,
+                        limits: this.adapter.eosLicenseService?.statusView().limits || {},
+                    });
+                },
+                deviceEmsConfigChanged: () => moduleHost.requestDeviceEms(),
+                resolveDeviceProfileReferences: async (config: unknown) =>
+                    resolveDeviceEmsTargets({
+                        owner: this.adapter,
+                        references: getDeviceEmsReferences(projectDeviceEmsConfig(config)),
+                        devices: [],
+                        canRun: () => !this.closed && this.adapter.eosOwnership?.canWrite() === true,
+                    }),
+                resolveAccess: (req: Request) => this.unified.status(req),
+                getLicense: () => this.adapter.eosLicenseService?.statusView(),
+                // Read-only readiness evidence: a blocked handover is not an endlessly
+                // starting UI. The hosted API validates and role-filters this snapshot.
+                getRuntimeReadiness: () => {
+                    const migration = this.adapter.eosMigration?.status();
+                    return {
+                        migration: {
+                            phase: migration?.phase || 'NOT_AVAILABLE',
+                            code: migration?.code || '',
+                            allowsStartup: this.adapter.eosMigration?.allowsStartup() === true,
+                        },
+                        ownership: this.adapter.eosOwnership?.status(),
+                    };
+                },
+                originAllowed: (req: Request) => this.unified.requestAllowed(req),
+                machineRequestAllowed: (req: Request) => this.unified.machineRequestAllowed(req),
+                canWrite: () => this.adapter.eosOwnership?.canWrite() === true,
+                isListening: () => !this.closed && !this.startupFailed && this.server.server?.listening === true,
+                hostedModuleFeedback: (message: { command: string; message?: unknown }) =>
+                    moduleHost.receiveBridge(message),
             },
-            deviceEmsConfigChanged: () => moduleHost.requestDeviceEms(),
-            resolveDeviceProfileReferences: async (config: unknown) =>
-                resolveDeviceEmsTargets({
-                    owner: this.adapter,
-                    references: getDeviceEmsReferences(projectDeviceEmsConfig(config)),
-                    devices: [],
-                    canRun: () => !this.closed && this.adapter.eosOwnership?.canWrite() === true,
-                }),
-            resolveAccess: (req: Request) => this.unified.status(req),
-            getLicense: () => this.adapter.eosLicenseService?.statusView(),
-            // Read-only readiness evidence: a blocked handover is not an endlessly
-            // starting UI. The hosted API validates and role-filters this snapshot.
-            getRuntimeReadiness: () => {
-                const migration = this.adapter.eosMigration?.status();
-                return {
-                    migration: {
-                        phase: migration?.phase || 'NOT_AVAILABLE',
-                        code: migration?.code || '',
-                        allowsStartup: this.adapter.eosMigration?.allowsStartup() === true,
-                    },
-                    ownership: this.adapter.eosOwnership?.status(),
-                };
-            },
-            originAllowed: (req: Request) => this.unified.requestAllowed(req),
-            machineRequestAllowed: (req: Request) => this.unified.machineRequestAllowed(req),
-            canWrite: () => this.adapter.eosOwnership?.canWrite() === true,
-            isListening: () => !this.closed && !this.startupFailed && this.server.server?.listening === true,
-            hostedModuleFeedback: (message: { command: string; message?: unknown }) =>
-                moduleHost.receiveBridge(message),
-        });
+            { baseDir: this.baseDir },
+        );
         this.adapter.eosHostedRuntime = runtime;
         moduleHost.bindDeviceEms(
             devices =>
@@ -2227,6 +2315,29 @@ export default class Web {
             void this.unified.status(req).then(
                 status => {
                     const path = req.path || req.url.split('?')[0];
+                    if (status.kiosk === true) {
+                        if (!kioskRouteAllowed(req) || !this.unified.requestAllowed(req)) {
+                            res.status(403).json({ error: 'KIOSK_ROUTE_FORBIDDEN' });
+                            return;
+                        }
+                        if (!['GET', 'HEAD'].includes(req.method)) {
+                            if (!this.unified.csrfAllowed(req)) {
+                                res.status(403).json({ error: 'AUTH_CSRF' });
+                                return;
+                            }
+                            if (path === '/api/set') {
+                                bodyParser.json({ limit: '4kb', strict: true })(req, res, error => {
+                                    if (error || !kioskSetAllowed(req.body)) {
+                                        res.status(error ? 400 : 403).json({ error: 'KIOSK_CONTROL_FORBIDDEN' });
+                                        return;
+                                    }
+                                    // Child resolves the same parent request again after body parsing.
+                                    runtime.handle(req, res, next);
+                                });
+                                return;
+                            }
+                        }
+                    }
                     const bootstrapAsset =
                         [
                             '/login.html',

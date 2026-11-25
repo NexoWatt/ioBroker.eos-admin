@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/lib/installer-lifecycle.ts
- * Quell-Hash: sha256:df3487fcf381e39bedfa5d78a6ba0f47de44caa51e7e9aae0ab0cb7b420e550b
+ * Quell-Hash: sha256:d663f11e31c885760fe9a0d4e9be7b8d2b41c83f47ecf281ec37e450cafd3ef2
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -64,7 +64,9 @@ function installerRevision(patch) {
  * Once present, a missing or stale token must never replace a newer nonempty row list. */
 function assertInstallerRevision(expected, patch) {
     const bindings = record(record(record(patch).eosDeviceEms).bindings);
-    const required = Object.keys(bindings).length > 0;
+    const ocppRows = record(record(patch).settingsConfig).evcsList;
+    const required = Object.keys(bindings).length > 0 || (Array.isArray(ocppRows)
+        && ocppRows.some(row => record(record(row).ocppDiscovery).source === 'nexowatt-ocpp21'));
     if ((expected === undefined || expected === null) && !required)
         return;
     if (typeof expected !== 'string' || !/^[a-f0-9]{64}$/.test(expected) || expected !== installerRevision(patch)) {

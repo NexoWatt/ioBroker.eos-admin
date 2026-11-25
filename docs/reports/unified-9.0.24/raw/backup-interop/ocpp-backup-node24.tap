@@ -1,0 +1,10 @@
+✔ encrypted backup retains native EOS OCPP config, original state IDs and module files (396.133927ms)
+✔ encrypted backup retains imported ocpp21.3 config, original state IDs and module files (355.777332ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1419.893649

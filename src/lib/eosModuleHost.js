@@ -4,12 +4,14 @@
 const { join } = require('node:path');
 const { performance } = require('node:perf_hooks');
 const { randomUUID } = require('node:crypto');
+const { isDeepStrictEqual } = require('node:util');
 const { EosModuleConfigStore } = require('./eosModuleConfigStore');
 const { EosDeviceEmsService } = require('./eosDeviceEmsService');
 const { resolveHistoryBackupRequirement } = require('./eosHistoryBackupScope');
+const { EosModuleProcess } = require('./eosModuleProcess');
 
 const SECRET_MARKER = '__EOS_SECRET_UNCHANGED__';
-const MODULES = Object.freeze({ devices: 'nexowatt-devices', eebus: 'eebus', backup: 'nexowatt-backup' });
+const MODULES = Object.freeze({ devices: 'nexowatt-devices', eebus: 'eebus', backup: 'nexowatt-backup', ocpp: 'ocpp21' });
 const SECRET_KEY = /password|passwd|^pass$|accessjson|expertmount|secret|token|privatekey|pairingpin|apikey|credential|authorization|cookie/i;
 const MAX_CONFIG_BYTES = 512 * 1024;
 const MAX_LEGACY_INSTANCES = 64;
@@ -117,7 +119,9 @@ class EosModuleHost {
         for (const id of Object.keys(MODULES)) {
             this.entries.set(id, { id, module: null, config: { enabled: false }, configLoaded: false, reason: 'DISABLED', lease: 0,
                 configurationRevision: randomUUID(),
-                generation: 0, blockers: [], loading: false, failed: false, started: false, startup: null, stopEntryPromise: null, pendingWrites: new Set(), timers: new Set(), subscriptions: new Set(), downloads: new Set() });
+                generation: 0, blockers: [], loading: false, failed: false, started: false, startup: null, stopEntryPromise: null,
+                processFailure: '', processHealth: null, processRestarts: 0, restartAt: 0, consecutiveFailures: 0,
+                pendingWrites: new Set(), timers: new Set(), subscriptions: new Set(), downloads: new Set() });
         }
     }
 
@@ -282,11 +286,13 @@ class EosModuleHost {
     revoke(entry, reason) {
         entry.lease = 0;
         entry.reason = reason;
+        entry.module?.revoke?.();
     }
 
     async stopEntry(entry) {
         if (entry.stopEntryPromise) return entry.stopEntryPromise;
         const module = entry.module;
+        if (typeof module?.health === 'function') entry.processHealth = module.health();
         const startup = entry.startup;
         const commandSubscription = entry.commandSubscriptionPending;
         const wasStarting = startup?.module === module && startup.settled !== true;
@@ -320,6 +326,7 @@ class EosModuleHost {
             } else if (module) {
                 await module.stop();
             }
+            if (typeof module?.health === 'function') entry.processHealth = module.health();
             clearResources();
             // Controller API completion is distinct from physical device feedback.
             // Do not restore the old owner while an accepted mutation may still
@@ -346,15 +353,66 @@ class EosModuleHost {
     facade(entry, generation) {
         const owner = this.owner;
         const namespace = this.namespace(entry.id);
-        const resolve = id => {
+        const resolve = (id, pattern = false) => {
             if (typeof id !== 'string' || id.length > 512) throw fail('EOS_MODULE_STATE_ID');
             const local = id.startsWith(`${namespace}.`) ? id.slice(namespace.length + 1) : id;
             const valid = entry.id === 'devices'
                 ? /^(?:devices(?:\.|$)|modules\.devices(?:\.|$))/.test(local)
                 : entry.id === 'backup' ? /^(?:info|backup|history|restore|schedule|oneClick|historyJSON)(?:\.|$)/.test(local)
+                : entry.id === 'ocpp' ? (pattern ? /^[A-Za-z0-9_.*-]+$/ : /^[A-Za-z0-9_-][A-Za-z0-9_.-]*$/).test(local) &&
+                    !local.split('.').some(part => !part || ['__proto__', 'prototype', 'constructor'].includes(part))
                 : /^(?:devices|info|identity|bridge|discovery|pairing|cls)(?:\.|$)/.test(local);
             if (!valid || [...local].some(character => character.charCodeAt(0) < 32)) throw fail('EOS_MODULE_STATE_SCOPE');
             return `${namespace}.${local}`;
+        };
+        const requireOcpp = () => {
+            if (entry.id !== 'ocpp') throw fail('EOS_MODULE_STATE_SCOPE');
+            if (!this.canOperate(entry.id, generation)) throw fail('EOS_MODULE_INACTIVE');
+        };
+        const ocppRead = async operation => {
+            requireOcpp();
+            const result = await bounded(operation());
+            requireOcpp();
+            return result;
+        };
+        const ocppResult = value => {
+            // Keep controller scans below the IPC frame bound; never return a
+            // partially truncated inventory that could drive alias deletion.
+            if (Buffer.byteLength(JSON.stringify(value ?? null)) > 1024 * 1024) throw fail('EOS_MODULE_RESULT_SIZE');
+            return value;
+        };
+        const metadataObject = (full, object) => {
+            if (entry.id !== 'ocpp') return object;
+            requireOcpp();
+            const value = assertJson(object);
+            if (!isRecord(value) || (value._id !== undefined && value._id !== full) ||
+                (value.common?.alias !== undefined)) throw fail('EOS_MODULE_STATE_SCOPE');
+            return value;
+        };
+        const aliasRoots = namespace.startsWith('ocpp21.')
+            ? { public: `alias.0.nexowatt.ocpp.${namespace.split('.')[1]}`, technical: `alias.0.${namespace}` }
+            : { public: `alias.0.nexowatt.${namespace}`, technical: `alias.0.${namespace}` };
+        const aliasObject = (id, object, createOnly) => {
+            requireOcpp();
+            if (entry.config.createPublicAliases !== true && entry.config.createTechnicalAliases !== true) throw fail('EOS_MODULE_ALIAS_SCOPE');
+            const roots = [aliasRoots.public, ...(entry.config.createTechnicalAliases === true ? [aliasRoots.technical] : [])];
+            if (typeof id !== 'string' || id.length > 512 || !/^[A-Za-z0-9_-]+(?:\.[A-Za-z0-9_-]+)*$/.test(id)) throw fail('EOS_MODULE_ALIAS_SCOPE');
+            const ancestor = roots.some(root => root === id || root.startsWith(`${id}.`));
+            const descendant = roots.some(root => id.startsWith(`${root}.`));
+            const value = assertJson(object);
+            if ((!ancestor && !descendant) || !isRecord(value) || Object.keys(value).some(key => !['type', 'common', 'native'].includes(key)) ||
+                !isRecord(value.native) || Object.keys(value.native).length || !isRecord(value.common)) throw fail('EOS_MODULE_ALIAS_SCOPE');
+            const common = value.common;
+            if (value.type === 'channel') {
+                if (!createOnly || Object.keys(common).some(key => key !== 'name') || typeof common.name !== 'string' || common.name.length > 512) throw fail('EOS_MODULE_ALIAS_SCOPE');
+            } else if (value.type === 'state') {
+                if (!descendant || Object.keys(common).some(key => !['name', 'type', 'role', 'read', 'write', 'alias', 'unit', 'min', 'max', 'def', 'states'].includes(key)) ||
+                    typeof common.name !== 'string' || common.name.length > 512 || !['boolean', 'number', 'string'].includes(common.type) ||
+                    typeof common.role !== 'string' || common.role.length > 128 || common.read !== true || typeof common.write !== 'boolean' ||
+                    !isRecord(common.alias) || Object.keys(common.alias).length !== 1 || typeof common.alias.id !== 'string' ||
+                    !common.alias.id.startsWith(`${namespace}.`) || resolve(common.alias.id) !== common.alias.id) throw fail('EOS_MODULE_ALIAS_SCOPE');
+            } else throw fail('EOS_MODULE_ALIAS_SCOPE');
+            return value;
         };
         const timer = (repeat, callback, ms, ...args) => {
             if (this.stopped || entry.generation !== generation || entry.timers.size >= 256 || typeof callback !== 'function' || !Number.isFinite(ms) || ms < (repeat ? 1 : 0)) {
@@ -379,6 +437,7 @@ class EosModuleHost {
             if (entry.pendingWrites.size >= 4096) return Promise.reject(fail('EOS_MODULE_WRITE_LIMIT'));
             const pending = Promise.resolve().then(() => {
                 if (this.stopped || entry.generation !== generation) throw fail('EOS_MODULE_STOPPED');
+                if (entry.id === 'ocpp') requireOcpp();
                 return operation();
             });
             entry.pendingWrites.add(pending);
@@ -401,17 +460,38 @@ class EosModuleHost {
             namespace, hostNamespace: owner.namespace,
             eosTargetNamespace: owner.config.eosUiMigration?.preserveNamespace ? owner.config.eosUiMigration.source : owner.namespace,
             instance: /^\w[\w-]*\.\d+$/.test(namespace) ? Number(namespace.split('.').at(-1)) : owner.instance, config: entry.config, log: owner.log,
-            getObjectAsync: id => owner.getForeignObjectAsync(resolve(id)),
-            getStateAsync: id => owner.getForeignStateAsync(resolve(id)),
+            getObjectAsync: id => entry.id === 'ocpp' ? ocppRead(() => owner.getForeignObjectAsync(resolve(id))) : owner.getForeignObjectAsync(resolve(id)),
+            getStateAsync: id => entry.id === 'ocpp' ? ocppRead(() => owner.getForeignStateAsync(resolve(id))) : owner.getForeignStateAsync(resolve(id)),
+            getStatesAsync: pattern => ocppRead(async () => {
+                const full = resolve(pattern, true);
+                const values = await owner.getForeignStatesAsync(full);
+                if (!isRecord(values) || Object.keys(values).length > 10000 || Object.keys(values).some(id => !id.startsWith(`${namespace}.`) || resolve(id) !== id)) throw fail('EOS_MODULE_RESULT_SCOPE');
+                return ocppResult(values);
+            }),
+            getObjectViewAsync: (design, type, range) => ocppRead(async () => {
+                if (design !== 'system' || type !== 'state' || !isRecord(range) ||
+                    Object.keys(range).some(key => !['startkey', 'endkey'].includes(key)) ||
+                    typeof range.startkey !== 'string' || !range.startkey.startsWith(`${namespace}.`) ||
+                    !range.startkey.endsWith('.configuration.') || range.endkey !== `${range.startkey}\u9999`) throw fail('EOS_MODULE_STATE_SCOPE');
+                resolve(range.startkey.slice(0, -1));
+                const result = await owner.getObjectViewAsync('system', 'state', { ...range, limit: 10001 });
+                if (!Array.isArray(result?.rows) || result.rows.length > 10000 || result.rows.some(row => {
+                    const id = row?.id || row?.value?._id;
+                    return typeof id !== 'string' || !id.startsWith(range.startkey) || (row.value?._id && row.value._id !== id) || (row.doc?._id && row.doc._id !== id);
+                })) throw fail('EOS_MODULE_RESULT_SCOPE');
+                return ocppResult(result);
+            }),
             setObjectNotExistsAsync: (id, object) => {
                 if (entry.generation !== generation) return Promise.reject(fail('EOS_MODULE_STOPPED'));
                 const full = resolve(id);
-                return metadata(() => owner.setForeignObjectNotExistsAsync(full, object));
+                const value = metadataObject(full, object);
+                return metadata(() => owner.setForeignObjectNotExistsAsync(full, value));
             },
             extendObjectAsync: (id, object) => {
                 if (entry.generation !== generation) return Promise.reject(fail('EOS_MODULE_STOPPED'));
                 const full = resolve(id);
-                return metadata(() => owner.extendForeignObjectAsync(full, object));
+                const value = metadataObject(full, object);
+                return metadata(() => owner.extendForeignObjectAsync(full, value));
             },
             setStateAsync: (id, value, ack) => {
                 if (entry.generation !== generation) {
@@ -427,8 +507,45 @@ class EosModuleHost {
                     if (entry.id === 'devices' && full.endsWith('.aliases.meta.manifest')) this.deviceEms?.event(full, true);
                 });
             },
+            setStateChangedAsync: (id, value, ack) => {
+                requireOcpp();
+                const full = resolve(id);
+                return mutate(() => owner.setForeignStateChangedAsync(full, value, ack));
+            },
+            delObjectAsync: (id, options) => {
+                requireOcpp();
+                const full = resolve(id);
+                if (options != null && (!isRecord(options) || Object.keys(options).some(key => key !== 'recursive') ||
+                    (options.recursive !== undefined && typeof options.recursive !== 'boolean'))) throw fail('EOS_MODULE_STATE_SCOPE');
+                return mutate(() => owner.delForeignObjectAsync(full, options));
+            },
+            setForeignObjectNotExistsAsync: (id, object) => {
+                const value = aliasObject(id, object, true);
+                return metadata(() => owner.setForeignObjectNotExistsAsync(id, value));
+            },
+            extendForeignObjectAsync: (id, object) => {
+                const value = aliasObject(id, object, false);
+                return metadata(() => owner.extendForeignObjectAsync(id, value));
+            },
+            delForeignObjectAsync: (id, options) => {
+                requireOcpp();
+                if (entry.config.cleanupLegacyObjects !== true || entry.config.createTechnicalAliases === true ||
+                    typeof id !== 'string' || !id.startsWith(`${aliasRoots.technical}.`) || id.length > 512 ||
+                    !/^[A-Za-z0-9_-]+(?:\.[A-Za-z0-9_-]+)*$/.test(id) ||
+                    !isRecord(options) || options.recursive !== true || Object.keys(options).length !== 1) throw fail('EOS_MODULE_ALIAS_SCOPE');
+                return mutate(() => owner.delForeignObjectAsync(id, { recursive: true }));
+            },
             subscribeStatesAsync: async pattern => {
-                const full = resolve(pattern);
+                if (entry.id === 'ocpp') {
+                    requireOcpp();
+                    if (resolve(pattern, true) !== `${namespace}.*`) throw fail('EOS_MODULE_SUBSCRIPTION');
+                    // The host owns the root command lease before the runtime
+                    // can open its listener; the child never duplicates it.
+                    await entry.commandSubscriptionPending;
+                    requireOcpp();
+                    return;
+                }
+                const full = resolve(pattern, true);
                 if (entry.generation !== generation || entry.subscriptions.size >= 32) throw fail('EOS_MODULE_SUBSCRIPTION');
                 await owner.subscribeForeignStatesAsync(full);
                 if (this.stopped || entry.generation !== generation) {
@@ -438,7 +555,11 @@ class EosModuleHost {
                 entry.subscriptions.add(full);
             },
             unsubscribeStatesAsync: async pattern => {
-                const full = resolve(pattern);
+                if (entry.id === 'ocpp') {
+                    if (resolve(pattern, true) !== `${namespace}.*`) throw fail('EOS_MODULE_SUBSCRIPTION');
+                    return; // stopEntry drains and releases the exact host lease.
+                }
+                const full = resolve(pattern, true);
                 await owner.unsubscribeForeignStatesAsync(full); entry.subscriptions.delete(full);
             },
             setTimeout: (callback, ms, ...args) => timer(false, callback, ms, ...args),
@@ -507,7 +628,7 @@ class EosModuleHost {
         if (performance.now() < this.nextOwnershipCheck) return;
         this.nextOwnershipCheck = performance.now() + 4000;
         // Lease renewal cannot wait behind another module's initial connection or
-        // shutdown. The fixed three-module inventory remains bounded and fenced.
+        // shutdown. The fixed module inventory remains bounded and fenced.
         this.leasePending = Promise.all([...this.entries.values()].map(async entry => {
             if (!entry.config.enabled || entry.failed) return;
             const generation = entry.generation;
@@ -533,6 +654,22 @@ class EosModuleHost {
         this.pending = (async () => {
             for (const entry of this.entries.values()) {
                 if (!this.running || this.stopped) break;
+                if (entry.started && entry.processRunningSince && performance.now() - entry.processRunningSince > 60000) entry.consecutiveFailures = 0;
+                if (entry.processFailure) {
+                    const code = entry.processFailure;
+                    await this.stopEntry(entry);
+                    entry.processFailure = '';
+                    if (!entry.stopFailed) {
+                        entry.failed = false;
+                        entry.consecutiveFailures++;
+                        // A crash loop remains isolated and retries at most once
+                        // per minute after the initial bounded exponential ramp.
+                        entry.restartAt = performance.now() + Math.min(60000, 1000 * 2 ** Math.min(entry.consecutiveFailures - 1, 6));
+                        entry.reason = 'PROCESS_BACKOFF';
+                        entry.processHealth = { ...entry.processHealth, state: 'backoff', lastError: code };
+                        this.nextOwnershipCheck = 0;
+                    }
+                }
                 if (!entry.config.enabled) this.revoke(entry, 'DISABLED');
                 else if (!this.licensed(entry.id)) this.revoke(entry, 'LICENSE_REQUIRED');
                 else if (this.owner.eosOwnership?.canWrite() !== true) this.revoke(entry, 'EOS_OWNERSHIP_REQUIRED');
@@ -542,15 +679,17 @@ class EosModuleHost {
                     continue;
                 }
                 if (entry.module || entry.failed) continue;
+                if (entry.restartAt > performance.now()) { entry.reason = 'PROCESS_BACKOFF'; continue; }
                 const generation = entry.generation;
                 // A completed previous stop belongs to its old startup attempt.
                 // New acquisition/factory failures must run their own cleanup.
                 entry.stopEntryPromise = null;
                 try {
-                    if (entry.id === 'devices') {
+                    if (entry.id === 'devices' || entry.id === 'ocpp') {
                         const namespace = this.namespace(entry.id);
-                        if (!/^(?:eos-admin|nexowatt-devices)\.\d+$/.test(namespace)) throw fail('EOS_MODULE_STATE_SCOPE');
-                        const pattern = `${namespace}.devices.*`;
+                        if (entry.id === 'devices' ? !/^(?:eos-admin|nexowatt-devices)\.\d+$/.test(namespace)
+                            : !/^(?:eos-admin\.\d+\.ocpp|ocpp21\.\d+)$/.test(namespace)) throw fail('EOS_MODULE_STATE_SCOPE');
+                        const pattern = entry.id === 'devices' ? `${namespace}.devices.*` : `${namespace}.*`;
                         // Raw control states, legacy aliases and AliasV1 all need
                         // delivery independently of browser subscriptions and EMS
                         // mappings. Acquire before factory/start can open hardware.
@@ -575,7 +714,7 @@ class EosModuleHost {
                         }
                     }
                     const factory = this.factory(entry.id);
-                    const module = factory.createHostedModule({
+                    const moduleOptions = {
                         adapter: this.facade(entry, generation), config: entry.config,
                         canOperate: () => this.canOperate(entry.id, generation),
                         dataDir: join(this.options.dataDir, entry.id),
@@ -586,7 +725,19 @@ class EosModuleHost {
                                 /^nexowatt-ui\.\d+$/.test(this.owner.config.eosUiMigration.source || '')
                                 ? this.owner.config.eosUiMigration.source : undefined,
                         } : {}),
-                    });
+                    };
+                    const module = this.options.factories?.[entry.id]
+                        ? factory.createHostedModule(moduleOptions)
+                        : new EosModuleProcess({ id: entry.id, baseDir: this.options.baseDir,
+                            generation, moduleOptions, canOperate: moduleOptions.canOperate,
+                            onFailure: code => {
+                                if (this.stopped || entry.moduleGeneration !== generation || entry.generation !== generation) return;
+                                entry.processFailure = code; entry.failed = true;
+                                this.revoke(entry, code);
+                                void this.reconcile();
+                            } });
+                    if (!this.options.factories?.[entry.id] && entry.restartAt) entry.processRestarts++;
+                    entry.restartAt = 0;
                     entry.module = module;
                     entry.moduleGeneration = generation;
                     entry.started = false;
@@ -603,6 +754,7 @@ class EosModuleHost {
                     if (!this.canOperate(entry.id, generation)) await this.stopEntry(entry);
                     else {
                         entry.started = true; entry.reason = 'RUNNING';
+                        entry.processRunningSince = performance.now();
                         if (entry.id === 'devices') this.deviceEms?.request('started');
                     }
                 } catch (error) {
@@ -611,6 +763,12 @@ class EosModuleHost {
                     if (!entry.stopFailed) this.revoke(entry, 'START_FAILED_RESTART_REQUIRED');
                     entry.failed = true;
                     await this.stopEntry(entry);
+                    // Real process failures can be recovered only after the
+                    // old PID and accepted parent mutations have been drained.
+                    // Injected legacy tests retain their original failure policy.
+                    if (!this.options.factories?.[entry.id] && !entry.stopFailed && !this.stopped) {
+                        entry.processFailure ||= error?.code || 'EOS_MODULE_PROCESS_START_FAILED';
+                    }
                     this.owner.log.warn(`EOS_MODULE_START_FAILED: ${entry.id}; ${entry.startupError}; HTTPS remains available`);
                 }
             }
@@ -715,6 +873,13 @@ class EosModuleHost {
             details = { ...details, startup: { completedObjects: entry.startup.completedObjects,
                 pending: !!entry.module && !entry.started && !entry.startup.settled,
                 error: entry.startupError || '' } };
+        }
+        if (!this.options.factories?.[id]) {
+            const processHealth = entry.module?.health?.() || entry.processHealth || {
+                mode: 'process', state: 'stopped', pid: null, generation: entry.generation, lastError: '', lastHeartbeatAt: 0,
+            };
+            details = { ...details, process: { ...processHealth, restarts: entry.processRestarts,
+                nextRestartAt: entry.restartAt ? Date.now() + Math.max(0, entry.restartAt - performance.now()) : 0 } };
         }
         return { id, enabled: entry.config.enabled === true, active: !!entry.module && entry.started === true && entry.moduleGeneration === entry.generation && this.canOperate(id, entry.generation),
             reason: entry.reason, blockers: entry.blockers, details: redact(assertJson(details)),
@@ -845,9 +1010,12 @@ class EosModuleHost {
             if (!(await bounded(this.inspectOwnership(entry)))) throw fail('EOS_MODULE_LEGACY_RUNNING');
             const object = await bounded(this.owner.getForeignObjectAsync(`system.adapter.${instance}`));
             if (!object?.native || object.common?.enabled !== false) throw fail('EOS_MODULE_IMPORT_UNAVAILABLE');
+            if (id === 'ocpp' && (object._id !== `system.adapter.${instance}` || object.type !== 'instance' ||
+                !['0.4.2', '0.4.3'].includes(object.common.version))) throw fail('EOS_MODULE_IMPORT_VERSION');
             let config = id === 'eebus' ? assertJson(object.native) : require('./eosLegacyMigration').decryptNative(this.owner, object);
-            // Existing private keys are never copied out of legacy native storage.
-            delete config.privateKey; delete config.certificate; delete config.cert;
+            // Existing EEBUS/backup identity import keeps its established policy.
+            // OCPP preflight validates its complete native schema explicitly.
+            if (id !== 'ocpp') { delete config.privateKey; delete config.certificate; delete config.cert; }
             if (id === 'eebus') {
                 // Legacy EEBus encryptedNative values are ciphertext in the object DB.
                 // Pairing identity/PIN require deliberate fresh pairing after import.
@@ -863,10 +1031,26 @@ class EosModuleHost {
             const report = { source: instance, importedAt: new Date().toISOString(),
                 oldPrefix: `${instance}.`, newPrefix: id === 'devices' ? `${this.owner.namespace}.` : `${this.owner.namespace}.${id}.`,
                 statesCopied: false, mappingsRewritten: false, identityImported: false,
-                omittedFields: migration?.omittedFields || [], requiresPairing: id === 'eebus' };
+                omittedFields: migration?.omittedFields || [], requiresPairing: id === 'eebus',
+                ...(id === 'ocpp' ? { sourceVersion: object.common.version, preserveNamespace: true, newPrefix: `${instance}.` } : {}) };
             // Recheck ownership after asynchronous conversion; imports never start a source or target.
             if (this.stopped) throw fail('EOS_MODULE_BUSY');
             if (!(await bounded(this.inspectOwnership(entry)))) throw fail('EOS_MODULE_LEGACY_RUNNING');
+            if (id === 'ocpp') {
+                // Bind preserved IDs to the exact stopped source, including its
+                // native settings. A completed inventory is not a compare/swap.
+                const current = await bounded(this.owner.getForeignObjectAsync(`system.adapter.${instance}`));
+                const [alive, hostAlive] = await bounded(Promise.all([
+                    this.owner.getForeignStateAsync(`system.adapter.${instance}.alive`),
+                    this.owner.getForeignStateAsync(`system.host.${current?.common?.host}.alive`),
+                ]));
+                const age = Date.now() - hostAlive?.ts;
+                if (current?._id !== object._id || current?.common?.enabled !== false || current.common.host !== object.common.host ||
+                    current.common.version !== object.common.version || !isDeepStrictEqual(current.native, object.native) ||
+                    !isDeepStrictEqual(current.encryptedNative, object.encryptedNative) || !isDeepStrictEqual(current.protectedNative, object.protectedNative) ||
+                    !Number.isSafeInteger(current.ts) || alive?.val !== false || alive.ack !== true || !(alive.ts >= current.ts) ||
+                    hostAlive?.val !== true || hostAlive.ack !== true || !Number.isFinite(age) || age < -5000 || age > 60000) throw fail('EOS_MODULE_IMPORT_SOURCE_CHANGED');
+            }
             const currentEligibility = this.manualImportStatus(id);
             if (!currentEligibility.allowed) throw fail(currentEligibility.reason);
             const result = await this.waitConfigurationSave(this.persistConfig(id, config, report));

@@ -39,7 +39,9 @@ export function installerRevision(patch: unknown): string {
  * Once present, a missing or stale token must never replace a newer nonempty row list. */
 export function assertInstallerRevision(expected: unknown, patch: unknown): void {
     const bindings = record(record(record(patch).eosDeviceEms).bindings);
-    const required = Object.keys(bindings).length > 0;
+    const ocppRows = record(record(patch).settingsConfig).evcsList;
+    const required = Object.keys(bindings).length > 0 || (Array.isArray(ocppRows)
+        && ocppRows.some(row => record(record(row).ocppDiscovery).source === 'nexowatt-ocpp21'));
     if ((expected === undefined || expected === null) && !required) return;
     if (typeof expected !== 'string' || !/^[a-f0-9]{64}$/.test(expected) || expected !== installerRevision(patch)) {
         throw createPublicHttpError(409, 'EOS_INSTALLER_CONFIG_CHANGED',

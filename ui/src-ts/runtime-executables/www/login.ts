@@ -20,7 +20,7 @@
 (function () {
   'use strict';
   interface LoginStatus {
-    mode: 'iobroker' | 'eos'; authed: boolean; role: 'none' | 'customer' | 'installer' | 'admin';
+    mode: 'iobroker' | 'eos' | 'kiosk'; authed: boolean; role: 'none' | 'customer' | 'installer' | 'admin';
     user: string | null; capabilities: string[]; loginUrl: string; nextUrl: string;
   }
   const form = document.getElementById('loginForm') as HTMLFormElement | null;
@@ -36,11 +36,13 @@
   if (!form || !userInput || !passwordInput || !submit || !toggle || !statusNode || !description || !central || !frame || !retry) return;
 
   const elements = { form, userInput, passwordInput, submit, toggle, statusNode, description, central, frame, retry };
+  const adminIntent = new URLSearchParams(window.location.search).get('admin') === '1';
   let current: LoginStatus | null = null;
   let busy = false;
   let generation = 0;
   let retryAt = 0;
   let retryTimer: number | undefined;
+  let credentialsConfirmed = false;
   const rootPath = (): string => new URL(window.NW_RUNTIME?.url('/') ?? '/', window.location.href).pathname.replace(/\/?$/, '/');
   const framed = (): boolean => window.self !== window.top;
   const secureBrowser = (): boolean => window.location.protocol === 'https:'
@@ -62,7 +64,7 @@
   async function requestStatus(): Promise<LoginStatus> {
     const controller = new AbortController(); const timer = window.setTimeout(() => controller.abort(), 6000);
     try {
-      const response = await fetch('/api/auth/status', { credentials: 'same-origin', cache: 'no-store', redirect: 'error', signal: controller.signal });
+      const response = await fetch('/api/auth/status' + (adminIntent ? '?admin=1' : ''), { credentials: 'same-origin', cache: 'no-store', redirect: 'error', signal: controller.signal });
       if (!response.ok || !/^application\/json(?:\s*;|$)/i.test(response.headers.get('content-type') || '')) throw new Error('status_unavailable');
       const reader = response.body?.getReader(); if (!reader) throw new Error('status_body_missing');
       const parts: Uint8Array[] = []; let count = 0;
@@ -78,12 +80,16 @@
       const value: unknown = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes));
       if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('status_invalid');
       const data = value as Record<string, unknown>;
-      if (!['iobroker', 'eos'].includes(String(data.mode)) || data.configured !== true || data.enabled !== true || data.protectWrites !== true
+      const kioskIdentity = !adminIntent && data.kiosk === true && data.kioskEnabled === true && data.mode === 'kiosk'
+        && data.role === 'customer' && data.user === null && data.userId === null && data.authed === true
+        && Array.isArray(data.capabilities) && data.capabilities.length === 1 && data.capabilities[0] === 'frontend.open';
+      if (!['iobroker', 'eos', 'kiosk'].includes(String(data.mode)) || (data.mode === 'kiosk' && !kioskIdentity)
+        || (data.kiosk === true && !kioskIdentity) || data.configured !== true || data.enabled !== true || data.protectWrites !== true
         || typeof data.authed !== 'boolean' || (data.authenticated !== undefined && data.authenticated !== data.authed)
         || !['none', 'customer', 'installer', 'admin'].includes(String(data.role))
         || !Array.isArray(data.capabilities) || data.capabilities.length > 128
         || !data.capabilities.every(cap => typeof cap === 'string' && cap.length <= 128)
-        || (data.authed && (typeof data.user !== 'string' || !data.user || data.user.length > 512 || data.role === 'none'))) throw new Error('status_invalid');
+        || (data.authed && !kioskIdentity && (typeof data.user !== 'string' || !data.user || data.user.length > 512 || data.role === 'none'))) throw new Error('status_invalid');
       return { mode: data.mode as LoginStatus['mode'], authed: data.authed, role: data.role as LoginStatus['role'],
         user: typeof data.user === 'string' ? data.user : null, capabilities: data.capabilities as string[],
         loginUrl: typeof data.loginUrl === 'string' && data.loginUrl.length <= 4096 ? data.loginUrl : '', nextUrl: ['/nexowatt/license', '/system/?passwordSetup', '/'].includes(String(data.nextUrl)) ? String(data.nextUrl) : '/' };
@@ -102,6 +108,8 @@
     if (!requested || requested.length > 2048 || !requested.startsWith('/') || requested.startsWith('//') || /[\\\u0000-\u0020\u007f]/.test(requested)) return fallback;
     try {
       const target = new URL(requested, window.location.origin);
+      if (target.origin === window.location.origin && !target.username && !target.password
+        && target.pathname === '/system/' && status.role === 'admin') return '/system/';
       if (target.origin !== window.location.origin || target.username || target.password || !target.pathname.startsWith(root)) return fallback;
       const path = '/' + target.pathname.slice(root.length);
       const canonical = path.length > 1 && path.endsWith('/') ? path.slice(0, -1) : path;
@@ -140,7 +148,7 @@
       elements.description.textContent = 'Öffne die Anmeldung in einem eigenen Fenster. Danach kannst du hier fortfahren.';
       message('In eingebetteten Ansichten werden keine Passwörter abgefragt.'); return;
     }
-    if (status.authed) { message('Angemeldet. Deine Oberfläche wird geöffnet …'); window.location.replace(returnTarget(status)); return; }
+    if (status.authed && (!adminIntent || (credentialsConfirmed && status.role === 'admin'))) { message('Angemeldet. Deine Oberfläche wird geöffnet …'); window.location.replace(returnTarget(status)); return; }
     if (status.mode === 'eos') {
       elements.description.textContent = 'Melde dich mit deinem zentralen EOS-Konto an. Dein Konto führt dich zu deinen freigegebenen Bereichen.';
       const destination = centralTarget(status.loginUrl);
@@ -148,9 +156,11 @@
       elements.central.href = destination; elements.central.hidden = false;
       message(''); return;
     }
-    elements.description.textContent = 'Melde dich an, um deine Energie- und SmartHome-Oberfläche zu öffnen.';
+    elements.description.textContent = adminIntent ? 'Melde dich mit Benutzername und Passwort eines Administratorkontos an, um den Admin und die Einstellungen zu öffnen.' : 'Melde dich an, um deine Energie- und SmartHome-Oberfläche zu öffnen.';
     if (!secureBrowser()) { message('Bitte die HTTPS-Adresse deiner Oberfläche öffnen. Über diese unverschlüsselte Verbindung werden keine Passwörter gesendet.', true); return; }
-    elements.form.hidden = false; message('');
+    elements.form.hidden = false;
+    const wrongRole = adminIntent && status.authed && status.role !== 'admin';
+    message(wrongRole ? 'Dieses Konto besitzt keine Administratorrechte. Bitte ein Administratorkonto verwenden.' : '', wrongRole);
     if (!elements.userInput.value) elements.userInput.focus();
   }
 
@@ -205,6 +215,7 @@
       const status = await requestStatus(); if (ticket !== generation) return;
       current = status;
       if (!status.authed) { message('Die Sitzung konnte nicht bestätigt werden. Bitte den vorgesehenen HTTPS-Zugang verwenden.', true); return; }
+      credentialsConfirmed = true;
       render(status);
     } catch { if (ticket === generation) { current = null; closeForms(); message('Die Anmeldung konnte nicht bestätigt werden. Bitte die Verbindung erneut prüfen.', true); elements.retry.hidden = false; } }
     finally { password = ''; elements.passwordInput.value = ''; window.clearTimeout(timer); setBusy(false); }

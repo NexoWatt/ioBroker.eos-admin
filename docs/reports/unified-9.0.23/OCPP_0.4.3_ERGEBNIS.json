@@ -1,0 +1,24 @@
+{
+  "package": "iobroker.ocpp21",
+  "version": "0.4.3",
+  "sourceMainSha256": "a1de59833166b8c38b83048e4c109694ec763cfeedf9edae8903b6c1170bf8cf",
+  "installedIntegrationSourceMatches": true,
+  "runtimes": [
+    "22.23.4",
+    "24.22.3"
+  ],
+  "corePassEach": 74,
+  "packagePassEach": 46,
+  "deprecatedUnitMarkerEach": 1,
+  "integrationPassEach": 2,
+  "integrationHostFixture": "test/host-network-fixture.cjs (network interface enumeration only)",
+  "stationHardware": "none; actual loopback RPC simulator",
+  "audit": {
+    "info": 0,
+    "low": 0,
+    "moderate": 2,
+    "high": 0,
+    "critical": 0,
+    "total": 2
+  }
+}

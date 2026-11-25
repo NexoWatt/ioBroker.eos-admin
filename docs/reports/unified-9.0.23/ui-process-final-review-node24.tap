@@ -1,0 +1,14 @@
+✔ real hosted UI child starts the actual EMS and charging module through the IPC owner (3062.253391ms)
+✔ late object-subscription acknowledgement is drained before stop can confirm (156.427882ms)
+✔ real UI worker rejects expired and reordered authority leases (79.100872ms)
+✔ AES and legacy envelopes round-trip in both directions against the actual controller SDK (26.775445ms)
+✔ missing system secret and malformed ciphertext fail without plaintext fallback (0.382916ms)
+✔ existing encrypted Influx config works through the actual child owner codec; absent secret quarantines credentials (183.526895ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3899.508711

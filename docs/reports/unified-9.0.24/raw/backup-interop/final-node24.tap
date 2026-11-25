@@ -1,0 +1,35 @@
+✔ encrypted backup retains native EOS OCPP config, original state IDs and module files (856.007934ms)
+✔ encrypted backup retains imported ocpp21.3 config, original state IDs and module files (691.242854ms)
+✔ snapshot preserves every configured module and false/zero/empty customer values without any write API (7.671928ms)
+✔ OCPP update snapshot retains protected station config and original namespace without replaying live control states (5.420928ms)
+✔ changing or damaged OCPP config blocks update capture and never falls back to an old native envelope (5.347861ms)
+✔ protected kiosk activation, enabling account and revision survive the update snapshot (2.34532ms)
+✔ invalid or concurrently changed kiosk authority blocks the update snapshot (3.496902ms)
+✔ protected UI-store migration selects the real legacy installer and customer namespace (1.509803ms)
+✔ old native module envelope remains supported only in the absence of its authoritative store (2.408903ms)
+✔ legacy namespace and protected store identity are validated before reading unrelated data (1.779322ms)
+✔ configured legacy required states cannot silently disappear from the update snapshot (3.02927ms)
+✔ busy and changing customer configuration fail closed rather than returning a mixed snapshot (1.647818ms)
+✔ bounded decoder refuses nested v2 chains and malformed ciphertext without exposing plaintext errors (0.55399ms)
+✔ normalization bounds size/depth/node count and rejects dangerous keys or non-JSON values (66.570518ms)
+✔ settings scope and count are bounded without an all-state database scan (3.796416ms)
+✔ cumulative encoded JSON bytes are bounded before serialization or configuration JSON parsing (312.03789ms)
+✔ saved direct Influx identity is kept without copying credentials (3.089695ms)
+✔ unknown runtime and foreign PostgreSQL instance cannot claim backup coverage (0.332902ms)
+✔ existing influx adapter resolves exact saved organization and bucket, not backup defaults (4.321421ms)
+✔ unsupported adapter and malformed or credential-bearing endpoint stay incomplete (0.826362ms)
+✔ provider absence is explicit, never inferred from missing configuration (0.324019ms)
+(node:21) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ actual HTTP kiosk cannot inherit admin authority, expose protected settings or mutate module/token configuration (2487.722243ms)
+✔ actual HTTP kiosk requires its own same-origin CSRF and disable revokes old cookies immediately (372.977669ms)
+✔ pending kiosk readiness cannot revive a bootstrap request after token rotation or account revocation (395.843145ms)
+✔ UI/EMS crash, automatic restart and stop preserve Devices, EEBUS and OCPP PIDs plus the live OCPP session (6779.84275ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7479.637961

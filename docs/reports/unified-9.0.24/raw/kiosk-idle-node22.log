@@ -1,0 +1,215 @@
+(node:6) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:13) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual owner HTTP routes: idle polls/new page loads never extend ten minutes; another browser stays active
+ok 1 - actual owner HTTP routes: idle polls/new page loads never extend ten minutes; another browser stays active
+  ---
+  duration_ms: 2034.353406
+  type: 'test'
+  ...
+# Subtest: actual owner activity HTTP requires same-origin CSRF and cannot revive an expired family
+ok 2 - actual owner activity HTTP requires same-origin CSRF and cannot revive an expired family
+  ---
+  duration_ms: 270.19149
+  type: 'test'
+  ...
+# Subtest: a cached upstream req.user cannot retain EOS authority after idle expiry
+ok 3 - a cached upstream req.user cannot retain EOS authority after idle expiry
+  ---
+  duration_ms: 215.259987
+  type: 'test'
+  ...
+# Subtest: actual hosted SSE is closed at idle expiry even without a new data frame, independently per login
+ok 4 - actual hosted SSE is closed at idle expiry even without a new data frame, independently per login
+  ---
+  duration_ms: 224.946039
+  type: 'test'
+  ...
+# Subtest: pinned upstream log and instance publications cannot send after idle expiry before the prune timer
+ok 5 - pinned upstream log and instance publications cannot send after idle expiry before the prune timer
+  ---
+  duration_ms: 201.365353
+  type: 'test'
+  ...
+# (node:14) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: existing 180px branding is reused byte-for-byte; uploaded 1024px logo and root fallback remain unchanged
+ok 6 - existing 180px branding is reused byte-for-byte; uploaded 1024px logo and root fallback remain unchanged
+  ---
+  duration_ms: 8.47345
+  type: 'test'
+  ...
+# Subtest: all actual shared page heads declare the same public iPhone icon with a content-specific cache key
+ok 7 - all actual shared page heads declare the same public iPhone icon with a content-specific cache key
+  ---
+  duration_ms: 30.824725
+  type: 'test'
+  ...
+# Subtest: login form has the supplied uncropped emblem before its heading, independent of the story wordmark
+ok 8 - login form has the supplied uncropped emblem before its heading, independent of the story wordmark
+  ---
+  duration_ms: 1.533125
+  type: 'test'
+  ...
+# Subtest: actual console build rebasing keeps the new touch icon at the public EOS root and leaves scripts untouched
+ok 9 - actual console build rebasing keeps the new touch icon at the public EOS root and leaves scripts untouched
+  ---
+  duration_ms: 10.818625
+  type: 'test'
+  ...
+# Subtest: existing validated hosted-prefix HTML projection keeps anonymous logo and installation links in that instance
+ok 10 - existing validated hosted-prefix HTML projection keeps anonymous logo and installation links in that instance
+  ---
+  duration_ms: 199.581327
+  type: 'test'
+  ...
+# (node:15) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: an untouched page logs out at ten minutes; background status reads do not renew
+ok 11 - an untouched page logs out at ten minutes; background status reads do not renew
+  ---
+  duration_ms: 29.419858
+  type: 'test'
+  ...
+# Subtest: trusted pointerdown extends idle exactly from the last submitted input
+ok 12 - trusted pointerdown extends idle exactly from the last submitted input
+  ---
+  duration_ms: 7.039121
+  type: 'test'
+  ...
+# Subtest: trusted keydown extends idle exactly from the last submitted input
+ok 13 - trusted keydown extends idle exactly from the last submitted input
+  ---
+  duration_ms: 13.461279
+  type: 'test'
+  ...
+# Subtest: trusted touchstart extends idle exactly from the last submitted input
+ok 14 - trusted touchstart extends idle exactly from the last submitted input
+  ---
+  duration_ms: 4.509954
+  type: 'test'
+  ...
+# Subtest: trusted wheel extends idle exactly from the last submitted input
+ok 15 - trusted wheel extends idle exactly from the last submitted input
+  ---
+  duration_ms: 5.92868
+  type: 'test'
+  ...
+# Subtest: synthetic events, passive pointer motion, polling and visibility never count as input
+ok 16 - synthetic events, passive pointer motion, polling and visibility never count as input
+  ---
+  duration_ms: 4.325221
+  type: 'test'
+  ...
+# Subtest: a burst is bounded and its final gesture still gets a trailing update
+ok 17 - a burst is bounded and its final gesture still gets a trailing update
+  ---
+  duration_ms: 7.17413
+  type: 'test'
+  ...
+# Subtest: an active sibling tab keeps the same family open without the idle tab renewing
+ok 18 - an active sibling tab keeps the same family open without the idle tab renewing
+  ---
+  duration_ms: 9.140887
+  type: 'test'
+  ...
+# Subtest: unrelated sessions and fabricated cross-tab deadlines cannot extend or end a page
+ok 19 - unrelated sessions and fabricated cross-tab deadlines cannot extend or end a page
+  ---
+  duration_ms: 4.43952
+  type: 'test'
+  ...
+# Subtest: sleep and BFCache resume checks the server before accepting a late gesture
+ok 20 - sleep and BFCache resume checks the server before accepting a late gesture
+  ---
+  duration_ms: 4.551945
+  type: 'test'
+  ...
+# Subtest: offline timeout hides the old page and does not stop devices or EMS
+ok 21 - offline timeout hides the old page and does not stop devices or EMS
+  ---
+  duration_ms: 3.742549
+  type: 'test'
+  ...
+# Subtest: refresh changes CSRF without losing a fresh real gesture or creating periodic writes
+ok 22 - refresh changes CSRF without losing a fresh real gesture or creating periodic writes
+  ---
+  duration_ms: 4.297309
+  type: 'test'
+  ...
+# Subtest: CSRF rotation just before expiry never delays the real gesture beyond the server deadline
+ok 23 - CSRF rotation just before expiry never delays the real gesture beyond the server deadline
+  ---
+  duration_ms: 5.319991
+  type: 'test'
+  ...
+# Subtest: same-origin Admin frame interactions count; frame reload listeners bind the new document
+ok 24 - same-origin Admin frame interactions count; frame reload listeners bind the new document
+  ---
+  duration_ms: 5.125963
+  type: 'test'
+  ...
+# Subtest: login page is excluded and duplicate loading never registers a second timer or API request
+ok 25 - login page is excluded and duplicate loading never registers a second timer or API request
+  ---
+  duration_ms: 6.633291
+  type: 'test'
+  ...
+# Subtest: blocked cross-tab transport keeps server checks and inactivity logout working
+ok 26 - blocked cross-tab transport keeps server checks and inactivity logout working
+  ---
+  duration_ms: 7.570936
+  type: 'test'
+  ...
+# Subtest: all canonical EOS screens include the shared root client, including recovery and module pages
+ok 27 - all canonical EOS screens include the shared root client, including recovery and module pages
+  ---
+  duration_ms: 8.025508
+  type: 'test'
+  ...
+# Subtest: instance proxy rendering and fetch mapping preserve the shared owner idle routes
+ok 28 - instance proxy rendering and fetch mapping preserve the shared owner idle routes
+  ---
+  duration_ms: 332.387676
+  type: 'test'
+  ...
+# Subtest: public kiosk remains available for thirty minutes without expiry or activity writes
+ok 29 - public kiosk remains available for thirty minutes without expiry or activity writes
+  ---
+  duration_ms: 34.411204
+  type: 'test'
+  ...
+# Subtest: disabling kiosk or losing its API locks the public page at the next read-only check
+ok 30 - disabling kiosk or losing its API locks the public page at the next read-only check
+  ---
+  duration_ms: 11.458746
+  type: 'test'
+  ...
+# Subtest: kiosk cannot unlock protected or cached Admin DOM and protected idle checks explicitly suppress fallback
+ok 31 - kiosk cannot unlock protected or cached Admin DOM and protected idle checks explicitly suppress fallback
+  ---
+  duration_ms: 9.573285
+  type: 'test'
+  ...
+# Subtest: a real admin session keeps ordinary ten-minute expiry even while kiosk capability exists elsewhere
+ok 32 - a real admin session keeps ordinary ten-minute expiry even while kiosk capability exists elsewhere
+  ---
+  duration_ms: 8.732233
+  type: 'test'
+  ...
+# (node:15) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+1..32
+# tests 32
+# suites 0
+# pass 32
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3503.843313

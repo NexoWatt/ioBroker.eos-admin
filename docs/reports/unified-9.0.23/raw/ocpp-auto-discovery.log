@@ -1,0 +1,21 @@
+✔ registered stations persist complete native mappings; unknown electrical limits never enable a writer (60.069238ms)
+✔ partial contract registration is explicit and completes; invalid directions, units and metadata stay untrusted (0.559697ms)
+✔ real configuration pipeline retains validated contract failure metadata and never enables an uncommissioned row (15.974043ms)
+✔ existing aliases deduplicate to one station and manual limits/mappings survive; duplicate control groups are reported (0.756438ms)
+✔ multi EVSE topology remains one station aggregate writer; connector controls are never invented (0.622831ms)
+✔ an existing active manual monitor does not gain its first writer from discovery, including later rescans (0.498877ms)
+✔ existing manual monitor crosses real normalization, engine and CM tick without inferred hardware commands (58.375401ms)
+✔ license capacity exposes pending stations, retains existing mappings and fills a newly available slot (0.815645ms)
+✔ registration bursts, offline and restart are idempotent; concurrent manual saves share the mutation fence (40.722712ms)
+✔ persist failures keep prior configuration; failed runtime apply is retried without creating a second row (15.586081ms)
+✔ stop during discovery cannot commit a late scan (7.571027ms)
+✔ ownership loss after a database read prevents reconciliation and leaves existing configuration untouched (0.556162ms)
+✔ actual supplied OCPP adapter registration and station telemetry map through the real EOS persistence path (530.212813ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1080.242337

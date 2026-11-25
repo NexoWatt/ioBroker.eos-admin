@@ -64,14 +64,14 @@ function fixture(name, initialStatus, options = {}) {
   }
   const location = new URL(options.url || 'https://nexowatt.test/' + (name === 'login' ? 'login.html' : ''));
   location.replace = target => redirects.push(String(target));
-  const env = { status: initialStatus, fail: false, businessDenied: false };
+  const env = { status: initialStatus, fail: false, businessDenied: false, loginRole: options.loginRole || 'customer' };
   const nativeFetch = async (input, init = {}) => {
     const raw = input instanceof Request ? input.url : input instanceof URL ? input.href : input;
     const target = new URL(raw, location.href); const headers = new Headers(init.headers);
-    calls.push({ path: target.pathname, origin: target.origin, method: init.method || 'GET', csrf: headers.get('X-NW-CSRF'), body: init.body });
+    calls.push({ path: target.pathname, search: target.search, origin: target.origin, method: init.method || 'GET', csrf: headers.get('X-NW-CSRF'), body: init.body });
     if (env.fail) throw new Error('fixture_unavailable');
     if (target.pathname.endsWith('/api/auth/status')) return Response.json(env.status);
-    if (target.pathname.endsWith('/api/auth/login')) { env.status = signedIn('customer'); return Response.json(env.status); }
+    if (target.pathname.endsWith('/api/auth/login')) { env.status = signedIn(env.loginRole); return Response.json(env.status); }
     return Response.json({ ok: !env.businessDenied }, { status: env.businessDenied ? 403 : 200 });
   };
   const navigator = { onLine: true, serviceWorker: { controller: { postMessage: value => messages.push(value) } } };
@@ -122,7 +122,7 @@ async function main() {
     f.env.status = signedOut(); await f.window.NW_AUTH.refreshStatus(); assert.equal(f.content.inert, true);
     assert.ok(f.redirects[0].includes('/login.html?returnTo='));
   });
-  await check('Bestandsübernahme erscheint nur für bestätigte Admins und verschwindet nach Rollenentzug, Statusfehler oder Abmeldung', async () => {
+  await check('Technische Adminlinks erscheinen nur für bestätigte Admins und verschwinden nach Rollenentzug, Statusfehler oder Abmeldung', async () => {
     for (const status of [signedOut(), signedIn('customer'), signedIn('installer')]) {
       const f = fixture('auth', status, { url: 'https://nexowatt.test/settings.html' });
       assert.equal(f.nodes.get('openMigrationBtn').hidden, true, 'before the server response');
@@ -182,6 +182,28 @@ async function main() {
     await installerReturn.settle(); assert.equal(installerReturn.redirects[0], '/ems-apps.html');
     const proxy = fixture('login', signedIn('customer'), { proxy: true, url: 'https://nexowatt.test/admin/proxy/nexowatt-ui.2/login.html?returnTo=%2Fadmin%2Fproxy%2Fnexowatt-ui.3%2Fsmarthome.html' });
     await proxy.settle(); assert.equal(proxy.redirects[0], '/admin/proxy/nexowatt-ui.2/');
+  });
+  await check('Adminabsicht zeigt auch bei vorhandener Sitzung die Passwortmaske; erst bestätigter Admin-POST öffnet System', async () => {
+    const f = fixture('login', signedIn('admin'), { url: 'https://nexowatt.test/login.html?admin=1&returnTo=%2Fsystem%2F', loginRole: 'admin' });
+    await f.settle(); assert.deepEqual(f.redirects, []); assert.equal(f.nodes.get('loginForm').hidden, false);
+    assert.ok(f.calls.filter(c => c.path === '/api/auth/status').every(c => c.search === '?admin=1'));
+    f.nodes.get('loginUser').value = 'fixture'; f.nodes.get('loginPassword').value = 'fixture-only-password';
+    await f.nodes.get('loginForm').handlers.get('submit')({ preventDefault() {} }); await f.settle();
+    assert.equal(f.calls.filter(c => c.path === '/api/auth/login').length, 1);
+    assert.deepEqual(f.redirects, ['/system/']); assert.equal(f.nodes.get('loginPassword').value, '');
+    const customer = fixture('login', signedIn('customer'), { url: 'https://nexowatt.test/login.html?admin=1&returnTo=%2Fsystem%2F' });
+    await customer.settle(); assert.deepEqual(customer.redirects, []); assert.equal(customer.nodes.get('loginForm').hidden, false);
+    customer.nodes.get('loginUser').value = 'fixture'; customer.nodes.get('loginPassword').value = 'fixture-only-password';
+    await customer.nodes.get('loginForm').handlers.get('submit')({ preventDefault() {} }); await customer.settle();
+    assert.deepEqual(customer.redirects, [], 'a successful customer password is not an admin credential');
+  });
+  await check('Nur explizite Kiosk-Kundenidentität ohne Konto und ohne technische Capabilities öffnet das Dashboard', async () => {
+    const kiosk = { ...signedIn('customer'), mode: 'kiosk', kiosk: true, kioskEnabled: true, user: null, userId: null, capabilities: ['frontend.open'] };
+    const valid = fixture('auth', kiosk); await valid.settle(); assert.equal(valid.window.NW_AUTH.getState().kiosk, true); assert.equal(valid.content.inert, false);
+    for (const patch of [{ user: 'system.user.admin' }, { role: 'admin' }, { mode: 'iobroker' }, { capabilities: ['*'] }, { kioskEnabled: false }]) {
+      const f = fixture('auth', { ...kiosk, ...patch }); await f.settle();
+      assert.equal(f.window.NW_AUTH.getState().authed, false, JSON.stringify(patch)); assert.equal(f.content.inert, true);
+    }
   });
   await check('Alle geschützten HTML-Einstiege laden Runtime und Auth vor ihrer Bedienlogik', async () => {
     const publicPages = new Set(['login.html', 'dc-station-display.html']);

@@ -1,0 +1,27 @@
+(node:12) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ real module pages and vendor assets are available through the guarded same-origin routes (98.611057ms)
+✔ backup download uses authenticated bounded binary streaming and refuses untrusted names (15.162844ms)
+✔ slow backup downloads have bounded admission and release their stream after client disconnect (17.836545ms)
+✔ backup byte-count mismatches abort the response without exposing an unbounded stream (13.135649ms)
+✔ read-only migration page and status require fresh administrator authentication and expose no private journal fields (16.910297ms)
+✔ fresh admin role, same origin and session-bound CSRF are required for every module mutation (19.694951ms)
+✔ first-login password requirement and invalid expired sessions do not expose configuration (5.40053ms)
+✔ invalid and oversized module JSON and internal exceptions are contained without leaking bodies (9.221196ms)
+(node:13) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ process health projects bounded fields and distinguishes process, EMS and absent status (2.239229ms)
+✔ OCPP only reads inventoried exact namespaces and shows a PID confirmed for the current run (5.997993ms)
+✔ OCPP invalid, stale, unacknowledged and failed reads never claim a running process or invented PID (1.265269ms)
+✔ OCPP enumeration is bounded and does not call state methods if inventory is invalid (0.658573ms)
+✔ parallel diagnosis calls share bounded reads and timed-out sources cannot accumulate work (63.048179ms)
+✔ runtime page, assets and API reuse fresh administrator, first-login and origin protection (61.632348ms)
+✔ runtime endpoint is read-only and never publishes raw configuration, exceptions or secrets (13.067259ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 472.551946

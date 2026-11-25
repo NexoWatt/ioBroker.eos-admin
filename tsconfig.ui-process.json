@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "allowJs": false,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "useUnknownInCatchVariables": true
+  },
+  "files": ["src/lib/eosUiProcess.ts", "src/lib/eosUiProcessWorker.ts", "src/lib/eosUiProcessRpc.ts", "src/lib/eosUiSecretCodec.ts"],
+  "include": []
+}

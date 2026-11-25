@@ -2,10 +2,10 @@
   "$schema": "http://cyclonedx.org/schema/bom-1.5.schema.json",
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
-  "serialNumber": "urn:uuid:e1ad60df-d46e-4710-bc1a-06ef587b0047",
+  "serialNumber": "urn:uuid:1f261513-947a-4c57-9a04-6a30808d170d",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-11-25T12:48:09.715Z",
+    "timestamp": "2026-11-25T16:30:46.144Z",
     "lifecycles": [
       {
         "phase": "pre-build"
@@ -19,14 +19,14 @@
       }
     ],
     "component": {
-      "bom-ref": "iobroker.eos-admin@9.0.22",
+      "bom-ref": "iobroker.eos-admin@9.0.24",
       "type": "library",
       "name": "iobroker.eos-admin",
-      "version": "9.0.22",
+      "version": "9.0.24",
       "scope": "required",
       "author": "NexoWatt",
       "description": "NexoWatt EOS: licensed local energy management, dashboard and ioBroker system administration in one adapter.",
-      "purl": "pkg:npm/iobroker.eos-admin@9.0.22",
+      "purl": "pkg:npm/iobroker.eos-admin@9.0.24",
       "properties": [],
       "externalReferences": []
     }
@@ -6825,6 +6825,34 @@
       ]
     },
     {
+      "bom-ref": "ajv-formats@2.1.1",
+      "type": "library",
+      "name": "ajv-formats",
+      "version": "2.1.1",
+      "scope": "required",
+      "purl": "pkg:npm/ajv-formats@2.1.1",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/ajv-formats/-/ajv-formats-2.1.1.tgz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "5b1d0ac79da1c44ec2d7c8643048206251227ea599b58691828b89a2bf9631d3e743210ad77be0116c9536ea7b4a879ea0b32caf891fe61e9d396d75235e4c50"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
       "bom-ref": "alcalzone-shared@5.0.0",
       "type": "library",
       "name": "alcalzone-shared",
@@ -7646,6 +7674,34 @@
         {
           "license": {
             "id": "Apache-2.0"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "backoff@2.5.0",
+      "type": "library",
+      "name": "backoff",
+      "version": "2.5.0",
+      "scope": "required",
+      "purl": "pkg:npm/backoff@2.5.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/backoff/-/backoff-2.5.0.tgz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "c02e6286b9d45e6476768b979972c27b93b7ce0dc6288caf462fe18b9f1afd7c91c5523edffc8cd0f62e7903995cf5d0f69c418ac958930fac17d6fb0bf46e30"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
           }
         }
       ]
@@ -19660,6 +19716,62 @@
       ]
     },
     {
+      "bom-ref": "ocpp-rpc@2.2.1",
+      "type": "library",
+      "name": "ocpp-rpc",
+      "version": "2.2.1",
+      "scope": "required",
+      "purl": "pkg:npm/ocpp-rpc@2.2.1",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/ocpp-rpc/-/ocpp-rpc-2.2.1.tgz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "084cd8addbfc53ad9ced22dca04863b349364af4d42de01857355fa10804f41e63473e5078240c4e6f39e0dbdaeb180d7cd70e557f6a3ca700a168529908fab0"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
+      "bom-ref": "ajv@8.14.0",
+      "type": "library",
+      "name": "ajv",
+      "version": "8.14.0",
+      "scope": "required",
+      "purl": "pkg:npm/ajv@8.14.0",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/ajv/-/ajv-8.14.0.tgz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "a18b35514b4ef7b64eda52786f09d67905bcff3bce2102c629cbcf4ec5a6bdcd9262005bfaea6e352e4dc682da314e21f09bb735b8fa0aaf260f62d0a2a54a14"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ]
+    },
+    {
       "bom-ref": "on-finished@2.4.1",
       "type": "library",
       "name": "on-finished",
@@ -20867,6 +20979,27 @@
       ]
     },
     {
+      "bom-ref": "precond@0.2.3",
+      "type": "library",
+      "name": "precond",
+      "version": "0.2.3",
+      "scope": "required",
+      "purl": "pkg:npm/precond@0.2.3",
+      "properties": [],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/precond/-/precond-0.2.3.tgz"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "402606f384a01b21b3a89fef94cb3179777fa602ff23de22c5d345ca1d4fbac5a64c2c957cf2636752b58ef1edb1b7e75d0b364d29043f67d1ed088c6409ca15"
+        }
+      ]
+    },
+    {
       "bom-ref": "prelude-ls@1.2.1",
       "type": "library",
       "name": "prelude-ls",
@@ -21303,14 +21436,9 @@
       "type": "library",
       "name": "punycode",
       "version": "2.3.1",
-      "scope": "optional",
+      "scope": "required",
       "purl": "pkg:npm/punycode@2.3.1",
-      "properties": [
-        {
-          "name": "cdx:npm:package:development",
-          "value": "true"
-        }
-      ],
+      "properties": [],
       "externalReferences": [
         {
           "type": "distribution",
@@ -25245,14 +25373,9 @@
       "type": "library",
       "name": "uri-js",
       "version": "4.4.1",
-      "scope": "optional",
+      "scope": "required",
       "purl": "pkg:npm/uri-js@4.4.1",
-      "properties": [
-        {
-          "name": "cdx:npm:package:development",
-          "value": "true"
-        }
-      ],
+      "properties": [],
       "externalReferences": [
         {
           "type": "distribution",
@@ -26232,7 +26355,7 @@
   ],
   "dependencies": [
     {
-      "ref": "iobroker.eos-admin@9.0.22",
+      "ref": "iobroker.eos-admin@9.0.24",
       "dependsOn": [
         "@iobroker/adapter-core@3.4.3",
         "@iobroker/plugin-docker@1.2.1",
@@ -26268,6 +26391,7 @@
         "serialport@12.0.0",
         "tar-fs@3.1.3",
         "ws@8.22.0",
+        "ocpp-rpc@2.2.1",
         "@alcalzone/release-script@5.2.1",
         "@alcalzone/release-script-plugin-iobroker@5.2.0",
         "@alcalzone/release-script-plugin-license@5.2.2",
@@ -27638,6 +27762,12 @@
       ]
     },
     {
+      "ref": "ajv-formats@2.1.1",
+      "dependsOn": [
+        "ajv@8.20.0"
+      ]
+    },
+    {
       "ref": "alcalzone-shared@5.0.0",
       "dependsOn": []
     },
@@ -27811,6 +27941,12 @@
     {
       "ref": "b4a@1.9.0",
       "dependsOn": []
+    },
+    {
+      "ref": "backoff@2.5.0",
+      "dependsOn": [
+        "precond@0.2.3"
+      ]
     },
     {
       "ref": "balanced-match@1.0.2",
@@ -30392,6 +30528,24 @@
       ]
     },
     {
+      "ref": "ocpp-rpc@2.2.1",
+      "dependsOn": [
+        "ajv@8.14.0",
+        "ajv-formats@2.1.1",
+        "backoff@2.5.0",
+        "ws@8.22.0"
+      ]
+    },
+    {
+      "ref": "ajv@8.14.0",
+      "dependsOn": [
+        "fast-deep-equal@3.1.3",
+        "json-schema-traverse@1.0.0",
+        "require-from-string@2.0.2",
+        "uri-js@4.4.1"
+      ]
+    },
+    {
       "ref": "on-finished@2.4.1",
       "dependsOn": [
         "ee-first@1.1.1"
@@ -30609,6 +30763,10 @@
       "dependsOn": [
         "xtend@4.0.2"
       ]
+    },
+    {
+      "ref": "precond@0.2.3",
+      "dependsOn": []
     },
     {
       "ref": "prelude-ls@1.2.1",

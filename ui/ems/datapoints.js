@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/datapoints.ts
- * Quell-Hash: sha256:478fb84a3ecacb5e0a6c06a2994f48a8a32ce3f4b845acfa4bbf144502ae7dbc
+ * Quell-Hash: sha256:a7d76e01798e64eabbd9228a24fbf096ee890867918a91f9433c71b6540a47af
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -725,6 +725,8 @@ class DatapointRegistry {
         const changeTs = Number(state.lc);
         this.cacheByObjectId.set(id, {
             val: state.val,
+            q: state.q,
+            sourceTs: Number.isFinite(stateTs) && stateTs > 0 ? stateTs : 0,
             ts: Number.isFinite(stateTs) && stateTs > 0 ? stateTs : receivedTs,
             lc: Number.isFinite(changeTs) && changeTs > 0 ? changeTs : (Number.isFinite(stateTs) && stateTs > 0 ? stateTs : receivedTs),
             receivedTs,

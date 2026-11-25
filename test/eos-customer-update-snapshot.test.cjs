@@ -34,7 +34,7 @@ function fixture() {
 
 test('snapshot preserves every configured module and false/zero/empty customer values without any write API', async () => {
     const f = fixture();
-    for (const id of ['devices', 'eebus', 'backup', 'ui', 'migration']) f.setModule(id, { enabled: false, customer: id, zero: 0, empty: '' });
+    for (const id of ['devices', 'eebus', 'ocpp', 'backup', 'ui', 'migration']) f.setModule(id, { enabled: false, customer: id, zero: 0, empty: '' });
     f.states.set(`${namespace}.installer.configJson`, { val: JSON.stringify({ datapoints: {}, settingsConfig: { evcsList: [] }, history: { credentialEnvelope: 'opaque' } }), ack: true });
     f.states.set(`${namespace}.settings.flowInvertGrid`, { val: false });
     f.states.set(`${namespace}.settings.limit`, { val: 0 });
@@ -43,7 +43,7 @@ test('snapshot preserves every configured module and false/zero/empty customer v
     const before = structuredClone([...f.objects]);
     const result = view(await readEosUpdateConfiguration(f.reader));
     assert.equal(result.modules.devices.customer, 'devices');
-    assert.equal(Object.keys(result.modules).length, 5);
+    assert.equal(Object.keys(result.modules).length, 6);
     assert.equal(result.instanceNative.enabledFeature, false);
     assert.equal(result.values['settings.flowInvertGrid'], false);
     assert.equal(result.values['settings.limit'], 0);
@@ -53,6 +53,84 @@ test('snapshot preserves every configured module and false/zero/empty customer v
     assert.deepEqual([...f.objects], before);
     assert.ok(f.reads.every(id => id === `system.adapter.${namespace}` || id.startsWith(`${namespace}.`)));
     assert.equal(f.reads.filter(id => id.endsWith('.settings.*')).length, 2);
+});
+
+test('OCPP update snapshot retains protected station config and original namespace without replaying live control states', async () => {
+    const f = fixture();
+    const migration = { source: 'ocpp21.3', preserveNamespace: true, sourceVersion: '0.4.3' };
+    const config = { enabled: true, port: 8095, identityAllowlist: ['station-01'], customerLimitW: 0, password: 'fixture-secret-only' };
+    f.setModule('ocpp', config, migration);
+    f.states.set('ocpp21.3.station-01.control.eosLeaseArmed', { val: true, ack: true });
+    f.states.set('ocpp21.3.station-01.control.eosLeaseUntilMs', { val: Date.now() + 15000, ack: true });
+    f.states.set('ocpp21.3.station-01.control.chargeLimit', { val: 5700, ack: true });
+    const before = structuredClone([...f.objects]);
+    const result = view(await readEosUpdateConfiguration(f.reader));
+    assert.deepEqual(result.modules.ocpp, config);
+    assert.deepEqual(result.moduleMigrations.ocpp, migration);
+    assert.equal(f.reads.filter(id => id === `${namespace}.modules.ocpp.configuration`).length, 2);
+    assert.equal(f.reads.some(id => id.startsWith('ocpp21.')), false, 'configuration snapshot must not read live setpoints or leases for replay');
+    assert.deepEqual([...f.objects], before, 'reading a snapshot must not migrate or modify the authoritative store');
+    assert.equal(JSON.stringify(result).includes('eosLeaseUntilMs'), false);
+});
+
+test('changing or damaged OCPP config blocks update capture and never falls back to an old native envelope', async () => {
+    const f = fixture();
+    f.objects.get(`system.adapter.${namespace}`).native.eosModules = { ocpp: { v: 1, encrypted: encoded({ port: 8080 }) } };
+    f.setModule('ocpp', { port: 8095 });
+    let passes = 0;
+    const read = f.reader.getForeignObjectAsync;
+    f.reader.getForeignObjectAsync = async id => {
+        if (id === `${namespace}.modules.ocpp.configuration` && ++passes === 2) f.setModule('ocpp', { port: 8096 });
+        return read(id);
+    };
+    await assert.rejects(readEosUpdateConfiguration(f.reader), /EOS_UPDATE_CONFIGURATION_CHANGED/);
+    f.reader.getForeignObjectAsync = read;
+    f.objects.get(`${namespace}.modules.ocpp.configuration`).native.encrypted = 'damaged-fixture-only';
+    await assert.rejects(readEosUpdateConfiguration(f.reader), /EOS_UPDATE_CONFIGURATION_INVALID/);
+});
+
+test('protected kiosk activation, enabling account and revision survive the update snapshot', async () => {
+    const f = fixture();
+    const id = `${namespace}.kiosk.configuration`;
+    f.objects.set(id, { _id: id, type: 'config', acl: { ...acl }, native: {
+        schemaVersion: 1, enabled: false, revision: 0, enabledBy: null,
+    } });
+    const before = structuredClone(f.objects.get(id));
+    const result = view(await readEosUpdateConfiguration(f.reader));
+    assert.deepEqual(result.kioskConfiguration, { schemaVersion: 1, enabled: false, revision: 0, enabledBy: null });
+    assert.deepEqual(f.objects.get(id), before);
+    assert.equal(f.reads.filter(value => value === id).length, 2);
+    f.objects.get(id).native = { schemaVersion: 1, enabled: true, revision: 1, enabledBy: 'system.user.admin' };
+    assert.equal((await readEosUpdateConfiguration(f.reader)).kioskConfiguration.enabled, true);
+});
+
+test('invalid or concurrently changed kiosk authority blocks the update snapshot', async () => {
+    const id = `${namespace}.kiosk.configuration`;
+    const create = () => {
+        const f = fixture();
+        f.objects.set(id, { _id: id, type: 'config', acl: { ...acl }, native: { schemaVersion: 1, enabled: true, revision: 1, enabledBy: 'system.user.admin' } });
+        return f;
+    };
+    for (const change of [
+        object => { object._id = 'eos-admin.1.kiosk.configuration'; },
+        object => { object.acl.object = 0x664; },
+        object => { object.native.schemaVersion = 2; },
+        object => { object.native.enabled = 'true'; },
+        object => { object.native.revision = -1; },
+        object => { object.native.enabledBy = 'system.group.administrator'; },
+        object => { object.native.enabledBy = null; },
+        object => { object.native.enabledBy = 'system.user.admin☃'; },
+        object => { object.native.unexpected = true; },
+    ]) {
+        const f = create(); change(f.objects.get(id));
+        await assert.rejects(readEosUpdateConfiguration(f.reader), /EOS_UPDATE_CONFIGURATION_INVALID/);
+    }
+    const f = create(); let reads = 0; const read = f.reader.getForeignObjectAsync;
+    f.reader.getForeignObjectAsync = async value => {
+        if (value === id && ++reads === 2) f.objects.get(id).native.revision++;
+        return read(value);
+    };
+    await assert.rejects(readEosUpdateConfiguration(f.reader), /EOS_UPDATE_CONFIGURATION_CHANGED/);
 });
 
 test('protected UI-store migration selects the real legacy installer and customer namespace', async () => {

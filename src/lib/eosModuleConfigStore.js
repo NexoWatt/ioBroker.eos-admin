@@ -4,7 +4,7 @@
 const { randomUUID } = require('node:crypto');
 const MAX_ENVELOPE_BYTES = 1024 * 1024;
 const MAX_CIPHERTEXT_BYTES = 2 * MAX_ENVELOPE_BYTES;
-const DEFAULT_MODULE_IDS = Object.freeze(['devices', 'eebus', 'backup']);
+const DEFAULT_MODULE_IDS = Object.freeze(['devices', 'eebus', 'backup', 'ocpp']);
 const ALLOWED_STORE_IDS = Object.freeze([...DEFAULT_MODULE_IDS, 'ui', 'migration']);
 const locks = new WeakMap();
 const fail = code => Object.assign(new Error(code), { code });

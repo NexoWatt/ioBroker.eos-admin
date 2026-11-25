@@ -1,0 +1,20 @@
+✔ snapshot preserves every configured module and false/zero/empty customer values without any write API (5.922682ms)
+✔ OCPP update snapshot retains protected station config and original namespace without replaying live control states (1.204941ms)
+✔ changing or damaged OCPP config blocks update capture and never falls back to an old native envelope (1.444494ms)
+✔ protected UI-store migration selects the real legacy installer and customer namespace (1.569098ms)
+✔ old native module envelope remains supported only in the absence of its authoritative store (2.379967ms)
+✔ legacy namespace and protected store identity are validated before reading unrelated data (1.27892ms)
+✔ configured legacy required states cannot silently disappear from the update snapshot (2.365736ms)
+✔ busy and changing customer configuration fail closed rather than returning a mixed snapshot (2.007647ms)
+✔ bounded decoder refuses nested v2 chains and malformed ciphertext without exposing plaintext errors (0.668678ms)
+✔ normalization bounds size/depth/node count and rejects dangerous keys or non-JSON values (38.868207ms)
+✔ settings scope and count are bounded without an all-state database scan (2.743094ms)
+✔ cumulative encoded JSON bytes are bounded before serialization or configuration JSON parsing (190.799619ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 766.040599

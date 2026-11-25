@@ -154,7 +154,7 @@ function enrichModules(bom, pkg, root = ROOT) {
     const result = structuredClone(bom);
     const rootRow = result.dependencies.find(row => row.ref === result.metadata.component['bom-ref']);
     if (!rootRow) throw new Error('SBOM_MODULE_ROOT_MISSING');
-    for (const id of ['devices', 'eebus', 'backup']) {
+    for (const id of ['devices', 'eebus', 'backup', 'ocpp']) {
         const directory = `modules/${id}`;
         const file = path.join(root, directory, 'provenance.json');
         const bytes = fs.readFileSync(file);
@@ -188,6 +188,7 @@ function enrichModules(bom, pkg, root = ROOT) {
         rootRow.dependsOn.push(ref);
         const names = id === 'devices' ? ['axios', 'modbus-serial', 'mqtt', 'serialport']
             : id === 'eebus' ? ['ws', 'bonjour-service']
+                : id === 'ocpp' ? ['ocpp-rpc']
                 : ['tar-fs', 'cron-parser', 'ftp', 'dropbox', 'fast-xml-parser', 'axios', 'mqtt'];
         const dependsOn = names.map(name => {
             const item = result.components.find(row => row.name === name && row.version === require(path.join(root, 'package-lock.json')).packages[`node_modules/${name}`].version);

@@ -1,0 +1,36 @@
+{
+  "checkedAt": "2026-11-25T16:23:37.532971+00:00",
+  "moduleVersion": "0.4.4",
+  "strictTypeScript": true,
+  "boundaryLint": true,
+  "tests": [
+    {
+      "node": "22.23.4",
+      "passed": 84,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "node": "24.22.3",
+      "passed": 84,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "runtimeDependencies": {
+    "ocpp-rpc": "2.2.1",
+    "ocpp-rpc/ajv": "8.14.0"
+  },
+  "scope": "Actual embedded runtime and loopback WebSocket; physical hardware not connected",
+  "sha256": {
+    "src/index.ts": "8bdd59dd3cec8287cff371ccfa026bb9547b8d6e3a1934f099ca05273c4c6f22",
+    "src/server.ts": "f94b97ae23385dbc7af972713c615a2ca51c0a9ba902949eb498f5a608534e49",
+    "src/operationGuard.ts": "96648c60e18e2474a071323450573d730cf49df488f87a59b0985002e52469db",
+    "runtime.js": "c0a091b0d6f8cc0e265981852ffd1329c89d95ff12b9dc822939e8cd4f5f586c",
+    "build/index.js": "fd81dac20189fff07e3e39fda03bce0d45a04ec2bfc5652ae39c9a79ec0a96ea",
+    "build/server.js": "76f4c94903dba3be176d764235d46a9104d2dbb5ac06db69dbb827add2580a7e",
+    "build/operationGuard.js": "6af1bfaff358a5a3b625ce4f14ec4a7510c105425ba6c3327308af7c87abc55c",
+    "test/hosted.test.cjs": "a3cfd9eee0bd679a3eb17967a0c521122c25ab8f1bb113a399e0269db439864d",
+    "native-defaults.json": "e2638dc5ed4b6fc2c541e1e57e16e152ad903a567fd1949d53c75ede83d5ed71"
+  }
+}

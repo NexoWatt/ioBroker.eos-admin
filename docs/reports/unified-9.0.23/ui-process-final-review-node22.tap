@@ -1,0 +1,50 @@
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: real hosted UI child starts the actual EMS and charging module through the IPC owner
+ok 1 - real hosted UI child starts the actual EMS and charging module through the IPC owner
+  ---
+  duration_ms: 3252.212706
+  type: 'test'
+  ...
+# Subtest: late object-subscription acknowledgement is drained before stop can confirm
+ok 2 - late object-subscription acknowledgement is drained before stop can confirm
+  ---
+  duration_ms: 146.425278
+  type: 'test'
+  ...
+# Subtest: real UI worker rejects expired and reordered authority leases
+ok 3 - real UI worker rejects expired and reordered authority leases
+  ---
+  duration_ms: 49.675229
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: AES and legacy envelopes round-trip in both directions against the actual controller SDK
+ok 4 - AES and legacy envelopes round-trip in both directions against the actual controller SDK
+  ---
+  duration_ms: 66.838693
+  type: 'test'
+  ...
+# Subtest: missing system secret and malformed ciphertext fail without plaintext fallback
+ok 5 - missing system secret and malformed ciphertext fail without plaintext fallback
+  ---
+  duration_ms: 0.545146
+  type: 'test'
+  ...
+# Subtest: existing encrypted Influx config works through the actual child owner codec; absent secret quarantines credentials
+ok 6 - existing encrypted Influx config works through the actual child owner codec; absent secret quarantines credentials
+  ---
+  duration_ms: 215.675899
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4096.494415

@@ -1,7 +1,10 @@
 /** Copyright (c) 2026 NexoWatt. All rights reserved. Confidential and Proprietary. */
 'use strict';
 // Real Web.mountUnifiedRuntime, UnifiedSessions, OAuth model and session-security
-// boundary with an in-memory controller. No live controller or device is contacted.
+// boundary with an in-memory controller. The UI process factory is an explicit
+// in-process test seam: actual hosted routes/SSE remain real, while fake controller
+// sessions and the deterministic idle clock stay in this fixture. Child isolation
+// is covered by eos-ui-process*.test.cjs. No live controller or device is contacted.
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
@@ -33,6 +36,9 @@ function loadWeb(dataDir) {
         exports: exportsValue, module: { exports: exportsValue }, __dirname: path.dirname(file), __filename: file,
         Buffer, URL, Error, console, process, setTimeout, clearTimeout,
         require(name) {
+            if (name === './eosUiProcess') return {
+                createEosUiProcess: (adapter, bridge) => localRequire(path.join(root, 'ui/main.js')).createHostedRuntime(adapter, bridge),
+            };
             if (name === '@iobroker/adapter-core') return {
                 EXIT_CODES: { ADAPTER_REQUESTED_TERMINATION: 11 }, I18n: {},
                 controllerDir: path.join(root, 'node_modules/iobroker.js-controller'), getAbsoluteInstanceDataDir: () => dataDir,

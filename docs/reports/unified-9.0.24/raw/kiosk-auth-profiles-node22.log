@@ -1,0 +1,16 @@
+(node:14) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS Statusprofil/CSRF erforderlich; fehlender Status sperrt die UI
+PASS Eigene Mutationen mit CSRF, fremde Kamera unverändert, kein Replay
+PASS Zentrale Idle-Sitzungsprüfung bleibt vor dem Seiten-Bootstrap erreichbar und behält ihren CSRF-Nachweis
+PASS Fachlicher 403 erhält bestätigten Zugang; echter Sitzungsverlust sperrt
+PASS Technische Adminlinks erscheinen nur für bestätigte Admins und verschwinden nach Rollenentzug, Statusfehler oder Abmeldung
+PASS Offline und BFCache sperren vor erneuter Bestätigung
+PASS EOS-Logout trägt CSRF und öffnet das zentrale Ziel
+PASS EOS/Frame/HTTP/Fehlkonfiguration ohne Passwortmaske
+PASS Passwort exakt einmal gesendet und Formular danach geleert
+PASS Sichere Rücksprünge und rollenabhängiger Einstieg
+PASS Adminabsicht zeigt auch bei vorhandener Sitzung die Passwortmaske; erst bestätigter Admin-POST öffnet System
+PASS Nur explizite Kiosk-Kundenidentität ohne Konto und ohne technische Capabilities öffnet das Dashboard
+PASS Alle geschützten HTML-Einstiege laden Runtime und Auth vor ihrer Bedienlogik
+[auth-profiles-ui] 13 Prüfgruppen bestanden; kein Browser-/Anlagenversuch.

@@ -3,9 +3,10 @@
 const { join } = require('node:path');
 const { Transform } = require('node:stream');
 const { bounded } = require('./eosModuleHost');
+const { createRuntimeHealthReader } = require('./eosRuntimeHealth');
 const MIGRATION_PHASES = new Set(['IDLE', 'DISABLED', 'LICENSE_REQUIRED', 'NOT_NEEDED', 'BLOCKED', 'PREPARED',
     'STOPPING', 'TRANSFERRED', 'COMMITTED', 'ROLLING_BACK', 'ROLLED_BACK', 'ROLLBACK_REQUIRED', 'NOT_AVAILABLE']);
-const MIGRATION_SOURCES = Object.freeze({ ui: 'nexowatt-ui', devices: 'nexowatt-devices', eebus: 'eebus', backup: 'nexowatt-backup' });
+const MIGRATION_SOURCES = Object.freeze({ ui: 'nexowatt-ui', devices: 'nexowatt-devices', eebus: 'eebus', backup: 'nexowatt-backup', ocpp: 'ocpp21' });
 
 /** Never expose a journal/config object through the public migration status API. */
 function publicMigrationStatus(value) {
@@ -29,7 +30,7 @@ function publicMigrationStatus(value) {
 }
 
 /** Fixed same-origin module routes; no arbitrary file or ioBroker-command proxy. */
-function registerEosModuleRoutes({ app, host, baseDir, jsonParser, authorize, csrfAllowed, requestAllowed }) {
+function registerEosModuleRoutes({ app, host, baseDir, jsonParser, authorize, csrfAllowed, requestAllowed, runtimeStatus }) {
     const guard = (write = false, page = false) => (req, res, next) => {
         res.setHeader('Cache-Control', 'no-store');
         if (!requestAllowed(req)) { res.status(403).json({ error: 'AUTH_ORIGIN' }); return; }
@@ -65,6 +66,27 @@ function registerEosModuleRoutes({ app, host, baseDir, jsonParser, authorize, cs
         'jquery.js': 'lib/js/jquery-3.2.1.min.js', 'materialize.js': 'lib/js/materialize.js',
         'materialize.css': 'lib/css/materialize.css', 'adapter.css': 'css/adapter.css',
     };
+    const runtimeHealth = createRuntimeHealthReader({ host, runtimeStatus });
+    app.get('/api/eos/runtime', guard(), (_req, res) => {
+        void runtimeHealth().then(value => {
+            if (!res.destroyed && !res.headersSent) res.json(value);
+        }, () => {
+            if (!res.destroyed && !res.headersSent) res.status(503).json({ error: 'EOS_RUNTIME_STATUS_UNAVAILABLE' });
+        });
+    });
+    app.all('/api/eos/runtime', guard(), (_req, res) => res.setHeader('Allow', 'GET').status(405).json({ error: 'METHOD_NOT_ALLOWED' }));
+    app.get('/runtime', guard(false, true), (req, res, next) => {
+        if (req.path.endsWith('/')) { next(); return; }
+        res.redirect(308, '/runtime/');
+    });
+    app.get('/runtime/', guard(false, true), (req, res) => {
+        res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; object-src 'none'; frame-ancestors 'self'");
+        res.setHeader('X-Content-Type-Options', 'nosniff');
+        sendFile(join(baseDir, 'public', 'eos-runtime', 'index.html'))(req, res);
+    });
+    for (const asset of ['index.js', 'style.css']) {
+        app.get(`/runtime/${asset}`, guard(false, true), sendFile(join(baseDir, 'public', 'eos-runtime', asset)));
+    }
     app.get('/api/eos/migration', guard(), (_req, res) => {
         void bounded(Promise.resolve().then(() => host.migrationStatus())).then(value => res.json(publicMigrationStatus(value)),
             () => res.status(503).json({ error: 'EOS_MIGRATION_STATUS_UNAVAILABLE' }));
@@ -80,7 +102,7 @@ function registerEosModuleRoutes({ app, host, baseDir, jsonParser, authorize, cs
         sendFile(join(baseDir, 'public', 'eos-migration', 'index.html'))(req, res);
     });
     app.get('/migration/index.js', guard(false, true), sendFile(join(baseDir, 'public', 'eos-migration', 'index.js')));
-    for (const id of ['devices', 'eebus', 'backup']) {
+    for (const id of ['devices', 'eebus', 'backup', 'ocpp']) {
         const api = `/api/eos/modules/${id}`;
         app.get(api, guard(), (req, res) => {
             void host.view(id).then(value => res.json({ ...value, csrfToken: res.locals.eosModuleCsrf }),
@@ -94,15 +116,21 @@ function registerEosModuleRoutes({ app, host, baseDir, jsonParser, authorize, cs
             return host.save(id, req.body?.config, undefined, revision);
         }));
         app.post(`${api}/import`, guard(true), jsonParser, action(req => host.importLegacy(id, req.body?.instance)));
-        app.post(`${api}/command`, guard(true), jsonParser, action(req => host.command(id, req.body?.command, req.body?.payload)));
+        if (id !== 'ocpp') app.post(`${api}/command`, guard(true), jsonParser, action(req => host.command(id, req.body?.command, req.body?.payload)));
         app.get(`/modules/${id}`, guard(false, true), (req, res, next) => {
             // Express is non-strict by default: only the actual slashless URL
             // redirects, so relative scripts/vendor assets keep their module base.
             if (req.path.endsWith('/')) { next(); return; }
             res.redirect(308, `/modules/${id}/`);
         });
-        app.get(`/modules/${id}/`, guard(false, true), sendFile(join(baseDir, 'modules', id, 'admin', 'index.html')));
-        for (const asset of ['index_m.js', 'style.css', 'words.js', 'host-bridge.js', 'index.js', ...(id === 'devices' ? ['ems-assignment.js'] : [])]) {
+        app.get(`/modules/${id}/`, guard(false, true), (req, res) => {
+            if (id === 'ocpp') {
+                res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; object-src 'none'; frame-ancestors 'self'");
+                res.setHeader('X-Content-Type-Options', 'nosniff');
+            }
+            sendFile(join(baseDir, 'modules', id, 'admin', 'index.html'))(req, res);
+        });
+        for (const asset of ['index_m.js', 'style.css', 'words.js', 'host-bridge.js', 'index.js', ...(id === 'devices' ? ['ems-assignment.js'] : []), ...(id === 'ocpp' ? ['config-fields.json'] : [])]) {
             app.get(`/modules/${id}/${asset}`, guard(false, true), sendFile(join(baseDir, 'modules', id, 'admin', asset)));
         }
     }

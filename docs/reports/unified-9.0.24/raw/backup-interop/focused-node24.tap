@@ -1,0 +1,27 @@
+✔ encrypted backup retains native EOS OCPP config, original state IDs and module files (417.467174ms)
+✔ encrypted backup retains imported ocpp21.3 config, original state IDs and module files (303.558034ms)
+✔ snapshot preserves every configured module and false/zero/empty customer values without any write API (5.980236ms)
+✔ OCPP update snapshot retains protected station config and original namespace without replaying live control states (1.203885ms)
+✔ changing or damaged OCPP config blocks update capture and never falls back to an old native envelope (1.40982ms)
+✔ protected UI-store migration selects the real legacy installer and customer namespace (1.206628ms)
+✔ old native module envelope remains supported only in the absence of its authoritative store (5.668573ms)
+✔ legacy namespace and protected store identity are validated before reading unrelated data (1.379916ms)
+✔ configured legacy required states cannot silently disappear from the update snapshot (2.127994ms)
+✔ busy and changing customer configuration fail closed rather than returning a mixed snapshot (3.279652ms)
+✔ bounded decoder refuses nested v2 chains and malformed ciphertext without exposing plaintext errors (0.787678ms)
+✔ normalization bounds size/depth/node count and rejects dangerous keys or non-JSON values (45.301602ms)
+✔ settings scope and count are bounded without an all-state database scan (2.703408ms)
+✔ cumulative encoded JSON bytes are bounded before serialization or configuration JSON parsing (242.988107ms)
+✔ saved direct Influx identity is kept without copying credentials (2.910105ms)
+✔ unknown runtime and foreign PostgreSQL instance cannot claim backup coverage (0.350099ms)
+✔ existing influx adapter resolves exact saved organization and bucket, not backup defaults (0.576164ms)
+✔ unsupported adapter and malformed or credential-bearing endpoint stay incomplete (0.540521ms)
+✔ provider absence is explicit, never inferred from missing configuration (0.606049ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1452.349585

@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/eos-session-idle.ts
- * Quell-Hash: sha256:97d276f965691fe24eda0ec7156d0682ec32dae33a625cc377daac77a268b675
+ * Quell-Hash: sha256:25e7d4bad04012ffa632878fe496e36a878305dfb3486cf0d6462fda39cf721c
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -43,9 +43,13 @@
     const IDLE_MS = 600000;
     const SEND_INTERVAL_MS = 1000;
     const NETWORK_MS = 5000;
+    const pagePath = window.NW_RUNTIME?.pathname() ?? window.location.pathname;
+    const credentialRequired = !/^\/(?:index\.html|evcs\.html|storagefarm\.html|history\.html|smarthome\.html)?$/.test(pagePath);
     let sessionKey = '';
     let csrfToken = '';
     let deadline = 0;
+    let kiosk = false;
+    let kioskTimer;
     let lastGesture = -Infinity;
     let lastSent = -Infinity;
     let pendingGesture = false;
@@ -89,6 +93,15 @@
         if (!value || typeof value !== 'object')
             throw new Error('idle_status');
         const data = value;
+        if (data.kiosk === true) {
+            if (credentialRequired)
+                throw new Error('idle_credentials_required');
+            if (data.authenticated !== true || !Number.isFinite(data.serverNow) || data.idleTimeoutMs !== 0
+                || data.idleExpiresAt !== null || typeof data.sessionKey !== 'string' || !/^kiosk:[A-Za-z0-9_-]{16,128}$/.test(data.sessionKey)
+                || typeof data.csrfToken !== 'string' || !/^[a-f0-9]{64}$/.test(data.csrfToken))
+                throw new Error('idle_kiosk_status');
+            return data;
+        }
         if (typeof data.authenticated !== 'boolean' || !Number.isFinite(data.serverNow) || data.idleTimeoutMs !== IDLE_MS)
             throw new Error('idle_status');
         if (data.authenticated && (typeof data.idleExpiresAt !== 'number' || !Number.isFinite(data.idleExpiresAt) ||
@@ -127,6 +140,7 @@
         clear(expiryTimer);
         clear(activityTimer);
         clear(retryTimer);
+        clear(kioskTimer);
         try {
             channel?.close();
         }
@@ -135,7 +149,7 @@
         observer?.disconnect();
         observer = null;
         // Only this EOS origin is a navigation target; no server-supplied redirect URL.
-        const target = '/login.html?reason=idle';
+        const target = '/login.html?reason=idle' + (credentialRequired ? '&admin=1&returnTo=' + encodeURIComponent(window.location.pathname) : '');
         try {
             if (window.top && window.top !== window && window.top.location.origin === window.location.origin) {
                 window.top.location.replace(target);
@@ -153,6 +167,21 @@
         }, Math.max(0, deadline - now()));
     }
     function accept(status, started) {
+        clear(kioskTimer);
+        kiosk = status.kiosk === true;
+        if (kiosk) {
+            clear(expiryTimer);
+            clear(activityTimer);
+            clear(retryTimer);
+            pendingGesture = false;
+            deadline = 0;
+            sessionKey = status.sessionKey || '';
+            csrfToken = status.csrfToken;
+            unlock();
+            // Read-only verification detects disabling kiosk without inventing activity.
+            kioskTimer = setTimeout(() => { void synchronize('status'); }, 30000);
+            return;
+        }
         if (!status.authenticated || status.idleExpiresAt === null || status.idleExpiresAt <= status.serverNow) {
             login();
             return;
@@ -175,6 +204,8 @@
             return Promise.resolve();
         if (busy)
             return busy;
+        if (kiosk)
+            kind = 'status';
         if (kind === 'activity' && (!pendingGesture || now() - lastGesture > NETWORK_MS))
             return Promise.resolve();
         if (kind === 'activity' && deadline && now() >= deadline) {
@@ -193,7 +224,7 @@
         const timer = setTimeout(() => controller.abort(), NETWORK_MS);
         busy = (async () => {
             try {
-                const response = await request('/api/auth/' + (operation === 'status' ? 'idle' : operation), {
+                const response = await request('/api/auth/' + (operation === 'status' ? 'idle' : operation) + (credentialRequired ? '?admin=1' : ''), {
                     method: operation === 'status' ? 'GET' : 'POST', credentials: 'same-origin', cache: 'no-store',
                     redirect: 'error', signal: controller.signal,
                     headers: operation === 'status' ? { Accept: 'application/json' } : {
@@ -246,6 +277,8 @@
         return busy;
     }
     function scheduleActivity() {
+        if (kiosk)
+            return;
         clear(activityTimer);
         const delay = Math.max(0, lastSent + SEND_INTERVAL_MS - now());
         // A token refresh near the old deadline must not push a genuine final
@@ -253,7 +286,7 @@
         activityTimer = setTimeout(() => { void synchronize('activity'); }, deadline - now() <= delay + 250 ? 0 : delay);
     }
     function interaction(event) {
-        if (stopped || !event.isTrusted || document.visibilityState === 'hidden')
+        if (stopped || kiosk || !event.isTrusted || document.visibilityState === 'hidden')
             return;
         if (event.type === 'pointermove' && (!('buttons' in event) || typeof event.buttons !== 'number' || event.buttons <= 0))
             return;
@@ -308,7 +341,7 @@
     const recheck = () => {
         if (stopped || document.visibilityState === 'hidden')
             return;
-        if (!deadline || now() >= deadline)
+        if (!kiosk && (!deadline || now() >= deadline))
             privacyLock();
         void synchronize('status');
     };
@@ -316,7 +349,7 @@
     window.addEventListener('pageshow', recheck);
     window.addEventListener('focus', recheck);
     window.addEventListener('online', recheck);
-    window.addEventListener('pagehide', () => { clear(activityTimer); pendingGesture = false; });
+    window.addEventListener('pagehide', () => { clear(activityTimer); clear(kioskTimer); pendingGesture = false; });
     if (typeof BroadcastChannel === 'function') {
         try {
             channel = new BroadcastChannel('nexowatt-eos-idle-v1');

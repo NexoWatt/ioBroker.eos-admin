@@ -8,4 +8,5 @@ export function registerEosModuleRoutes(options: {
     authorize: (request: Request) => Promise<Record<string, unknown>>;
     csrfAllowed: (request: Request) => boolean;
     requestAllowed: (request: Request) => boolean;
+    runtimeStatus?: () => unknown;
 }): void;

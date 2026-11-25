@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/lib/hosted-adapter.ts
- * Quell-Hash: sha256:6f988d70be6131e68e6990fdbbbdce0c05006cdf00901e08203ad0cb1f7a541e
+ * Quell-Hash: sha256:b17e810e87a0c223a1a906b5d68ddbdde7be60bbb67546b8c1f8690e96d2f654
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -305,6 +305,17 @@ async function centralAccess(bridge, req) {
     const none = { authenticated: false, user: null, role: 'none', roles: [], groups: [], capabilities: [],
         isAdmin: false, isInstaller: false, isCustomer: false };
     const value = await bridge.resolveAccess(req);
+    // Only the parent IPC authority can supply this identity. It has no ioBroker
+    // account and cannot inherit technical/customer-settings capabilities.
+    if (record(value) && value.kiosk === true && value.authenticated === true
+        && value.user === null && value.userId === null && value.role === 'customer'
+        && value.mustChangePassword === false && value.activationRequired === false
+        && typeof value.csrfToken === 'string' && /^[a-f0-9]{64}$/.test(value.csrfToken)
+        && value.credentialKey === value.csrfToken
+        && Array.isArray(value.capabilities) && value.capabilities.length === 1 && value.capabilities[0] === 'frontend.open') {
+        return { ...value, capabilities: ['frontend.open'], roles: ['customer'], groups: [],
+            isAdmin: false, isInstaller: false, isCustomer: true };
+    }
     if (!record(value) || value.authenticated !== true || value.mustChangePassword === true
         || typeof value.user !== 'string' || !/^system\.user\.[A-Za-z0-9_.@-]{1,128}$/.test(value.user)
         || typeof value.role !== 'string' || !ROLE_CAPABILITIES.has(value.role) || typeof value.csrfToken !== 'string'

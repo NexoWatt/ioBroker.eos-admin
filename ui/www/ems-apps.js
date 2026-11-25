@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/ems-apps.ts
- * Quell-Hash: sha256:16957513881167c7ea26b109d6c49bf5ee9008d776ffd4f2d6f2a3e5a2c1f160
+ * Quell-Hash: sha256:1cf0f87852c1fc5d3e72528f777843f626a4fc561c3a41719ed8cc0609f83103
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -10558,6 +10558,21 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
 
     els.evcsList.innerHTML = '';
 
+    const ocppStatus = currentConfig && currentConfig.ocppAutoDiscovery;
+    const ocppPending = ocppStatus && Array.isArray(ocppStatus.stations)
+      ? ocppStatus.stations.filter(row => ['LICENSE_LIMIT', 'ROW_LIMIT', 'CONTROL_GROUP_CONFLICT', 'MIXED_MANUAL_MAPPING'].includes(row.code)) : [];
+    if (ocppPending.length || (ocppStatus && ocppStatus.error)) {
+      const notice = document.createElement('div');
+      notice.className = 'nw-help';
+      notice.dataset.ocppDiscoveryPending = '1';
+      notice.textContent = ocppPending.map(row => `${row.root}: ${row.code === 'LICENSE_LIMIT'
+        ? 'Erkannt; für die automatische Zuordnung ist ein freier lizenzierter Ladepunkt erforderlich.'
+        : row.code === 'ROW_LIMIT' ? 'Erkannt; das Ladepunktlimit ist erreicht.'
+          : 'Erkannt; vorhandene Datenpunktzuordnungen widersprechen sich. Die Stationszuordnung prüfen.'}`).join(' ')
+        || 'Die automatische OCPP-Zuordnung ist noch nicht abgeschlossen und wird erneut geprüft.';
+      els.evcsList.appendChild(notice);
+    }
+
     if (count <= 0) {
       const empty = document.createElement('div');
       empty.className = 'nw-help';
@@ -10877,7 +10892,10 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
         ? Math.round(Number(rowCfg.connectorNo))
         : 0;
 
-      title.textContent = connNo > 0 ? `Port ${connNo} · LP ${i}` : `Ladepunkt ${i}`;
+      const ocppDiscovery = rowCfg && rowCfg.ocppDiscovery && rowCfg.ocppDiscovery.source === 'nexowatt-ocpp21'
+        ? rowCfg.ocppDiscovery : null;
+      title.textContent = ocppDiscovery && ocppDiscovery.controlScope === 'station'
+        ? `OCPP-Station · LP ${i}` : connNo > 0 ? `Port ${connNo} · LP ${i}` : `Ladepunkt ${i}`;
 
       const actions = document.createElement('div');
       actions.className = 'nw-config-card__header-actions';
@@ -10912,6 +10930,23 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
 
       const body = document.createElement('div');
       body.className = 'nw-config-card__body';
+
+      if (ocppDiscovery) {
+        const notice = document.createElement('div');
+        notice.className = 'nw-help';
+        notice.dataset.ocppDiscovery = String(ocppDiscovery.code || 'MAPPED');
+        const count = Number.isInteger(ocppDiscovery.connectorCount) && ocppDiscovery.connectorCount > 0
+          ? ` ${ocppDiscovery.connectorCount} Anschluss/Anschlüsse gemeldet.` : '';
+        const status = ocppDiscovery.code === 'MANUAL_MAPPING_REVIEW_REQUIRED'
+          ? 'Vorhandene manuelle Messzuordnung erkannt. Ein neuer Stellpfad wird erst nach bewusster Zuordnung durch den Installateur verwendet.'
+          : ocppDiscovery.code === 'CONTRACT_INCOMPLETE'
+          ? 'Automatisch erkannt; die Datenpunktregistrierung ist noch unvollständig und wird erneut geprüft.'
+          : rowCfg.enabled === false
+            ? 'Automatisch erkannt und zugeordnet. Typ, Phasen und elektrische Grenzen prüfen, danach die Regelung aktivieren.'
+            : 'Automatisch mit dem nativen OCPP21-Vertrag verknüpft.';
+        notice.textContent = `${status} Ein gemeinsames Leistungslimit für die gesamte Station.${count}`;
+        body.appendChild(notice);
+      }
 
       // Name
       const nameInput = document.createElement('input');
@@ -12034,6 +12069,8 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
    */
   function _ocppStationIdentityFromDp(id) {
     const value = String(id || '').trim();
+    const hosted = value.match(/^(eos-admin\.\d+\.ocpp)\.([A-Za-z0-9_-]+)(?:\.|$)/);
+    if (hosted) return `${hosted[1]}|${hosted[2]}`;
     let m = value.match(/^ocpp21\.(\d+)\.([^.]+)(?:\.|$)/i);
     if (m) return `${m[1]}|${m[2]}`;
     m = value.match(/^alias\.0\.nexowatt\.ocpp\.(\d+)\.([^.]+)(?:\.|$)/i);
@@ -12055,6 +12092,10 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
     }
     const stationKey = String(r.stationKey || '').trim();
     if (stationKey) {
+      const nativeIdentity = _ocppStationIdentityFromDp(stationKey);
+      if (nativeIdentity) return nativeIdentity;
+      const hostedInstance = String(r.ocppAdapterInstance || r.adapterInstance || '').match(/^eos-admin\.\d+\.ocpp$/);
+      if (hostedInstance && /^[A-Za-z0-9_-]+$/.test(stationKey)) return `${hostedInstance[0]}|${stationKey}`;
       const instanceMatch = String(r.ocppAdapterInstance || r.adapterInstance || '').match(/(?:^|\.)ocpp21\.(\d+)(?:\.|$)/i);
       if (instanceMatch) return `${instanceMatch[1]}|${stationKey}`;
     }
@@ -12194,12 +12235,11 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
     }
     if (c && c.contractVersion) out.ocppDatapointContract = String(c.contractVersion);
 
-    // Defaults
-    if (overwrite || onlyEmpty) {
-      if (out.enabled === undefined) out.enabled = true;
-      if (!out.chargerType) out.chargerType = 'ac';
-      if (!Number.isFinite(Number(out.minCurrentA)) || Number(out.minCurrentA) <= 0) out.minCurrentA = 6;
-    }
+    // Discovery identifies data points, not commissioned electrical limits.
+    // The native contract does not attest AC/DC type, phases or minimum current.
+    // A new row therefore waits disabled for commissioning; explicit existing
+    // enable/type/limit choices survive both native mapping actions unchanged.
+    if ((overwrite || onlyEmpty) && out.enabled === undefined) out.enabled = false;
 
     return out;
   }

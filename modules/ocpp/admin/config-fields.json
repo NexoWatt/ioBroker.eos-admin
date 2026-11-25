@@ -1,0 +1,353 @@
+{
+  "schema": 1,
+  "groups": [
+    {
+      "id": "general",
+      "title": "Verbindung und Protokolle",
+      "fields": [
+        {
+          "key": "enabled",
+          "label": "OCPP-Modul aktivieren",
+          "type": "checkbox",
+          "default": false
+        },
+        {
+          "key": "port",
+          "label": "WebSocket-Port",
+          "type": "number",
+          "default": 9220,
+          "min": 1024.0,
+          "max": 65535.0,
+          "step": 1,
+          "help": "Ladestationen verbinden sich mit ws://EOS-IP:Port/Identity."
+        },
+        {
+          "key": "enable16",
+          "label": "OCPP 1.6J aktivieren",
+          "type": "checkbox",
+          "default": true
+        },
+        {
+          "key": "enable201",
+          "label": "OCPP 2.0.1 aktivieren",
+          "type": "checkbox",
+          "default": true
+        },
+        {
+          "key": "enable21",
+          "label": "OCPP 2.1 aktivieren",
+          "type": "checkbox",
+          "default": true
+        },
+        {
+          "key": "heartbeatIntervalSec",
+          "label": "Angefordertes Heartbeat-Intervall (Sekunden)",
+          "type": "number",
+          "default": 300,
+          "min": 10.0,
+          "max": 86400.0,
+          "step": "any",
+          "help": "Wird in der BootNotification-Antwort zurückgegeben und als Grundlage für die Verbindungsüberwachung genutzt."
+        },
+        {
+          "key": "identityAllowlist",
+          "label": "Whitelist der Ladestations-Identitäten",
+          "type": "list",
+          "default": [],
+          "help": "Leer bedeutet, dass alle Identitäten angenommen werden."
+        },
+        {
+          "key": "callTimeoutSec",
+          "label": "Zeitüberschreitung für OCPP-Befehle (Sekunden)",
+          "type": "number",
+          "default": 20,
+          "min": 5.0,
+          "max": 120.0,
+          "step": "any"
+        }
+      ]
+    },
+    {
+      "id": "freshness",
+      "title": "EOS-Datenaktualität",
+      "fields": [
+        {
+          "key": "healthCheckIntervalSec",
+          "label": "Prüfintervall der Zustandsüberwachung (Sekunden)",
+          "type": "number",
+          "default": 5,
+          "min": 2.0,
+          "max": 60.0,
+          "step": "any"
+        },
+        {
+          "key": "activityTimeoutSec",
+          "label": "Mindestzeitfenster für OCPP-Aktivität (Sekunden)",
+          "type": "number",
+          "default": 90,
+          "min": 15.0,
+          "max": 3600.0,
+          "step": "any",
+          "help": "health.activityFresh bleibt wahr, wenn innerhalb dieses Mindestzeitfensters irgendeine OCPP-Anfrage oder -Antwort empfangen wurde. Das wirksame Zeitfenster ist niemals kürzer als die konfigurierte Heartbeat-Toleranz."
+        },
+        {
+          "key": "stateRefreshIntervalSec",
+          "label": "Unveränderte Datenpunkte erneut veröffentlichen (Sekunden)",
+          "type": "number",
+          "default": 10,
+          "min": 1.0,
+          "max": 3600.0,
+          "step": "any",
+          "help": "Aktualisiert bei einer online befindlichen Station die Zeitstempel zwischengespeicherter Status-, Meta-, Transaktions- und Zählerdatenpunkte. Echtzeit- und SoC-Datenpunkte werden einzeln nur so lange aktualisiert, wie ihr jeweiliger Quellwert noch aktuell ist; große Datenpunktmengen werden fair über mehrere Zyklen verteilt."
+        },
+        {
+          "key": "telemetryMaxAgeSec",
+          "label": "Maximales Alter der Messwerte (Sekunden)",
+          "type": "number",
+          "default": 90,
+          "min": 15.0,
+          "max": 3600.0,
+          "step": "any",
+          "help": "Nach diesem Alter wird health.powerFresh auf false gesetzt. health.dataFresh wird ebenfalls false, sofern kein protokollseitig sicher abgeleiteter Nullwert aktiv ist; Heartbeat oder andere Messwerte verlängern die Leistungsaktualität nicht."
+        },
+        {
+          "key": "socMaxAgeSec",
+          "label": "Maximales SoC-Alter (Sekunden)",
+          "type": "number",
+          "default": 300,
+          "min": 30.0,
+          "max": 86400.0,
+          "step": "any",
+          "help": "Steuert health.socFresh unabhängig von der Aktualität von Leistung und Strom."
+        },
+        {
+          "key": "heartbeatTimeoutFactor",
+          "label": "Heartbeat-Zeitüberschreitungsfaktor",
+          "type": "number",
+          "default": 2.5,
+          "min": 1.2,
+          "max": 10.0,
+          "step": "any",
+          "help": "Online-Zeitüberschreitung = angefordertes Heartbeat-Intervall × Faktor."
+        },
+        {
+          "key": "activeRefresh",
+          "label": "Aktuelle Telemetrie aktiv anfordern",
+          "type": "checkbox",
+          "default": true,
+          "help": "Wenn Messwerte veralten, fordert der Adapter MeterValues an. Die Anfragen sind begrenzt und verzögern niemals die OCPP-Antwort."
+        },
+        {
+          "key": "activeRefreshIntervalSec",
+          "label": "Intervall der aktiven Aktualisierung (Sekunden)",
+          "type": "number",
+          "default": 60,
+          "min": 30.0,
+          "max": 86400.0,
+          "step": "any",
+          "help": "Mindestintervall der aktiven Aktualisierung. Für Ladestationen mit empfindlicher Firmware werden 60 Sekunden empfohlen."
+        },
+        {
+          "key": "refreshMeterValues",
+          "label": "MeterValues anfordern",
+          "type": "checkbox",
+          "default": true
+        },
+        {
+          "key": "refreshStatusNotification",
+          "label": "StatusNotification anfordern",
+          "type": "checkbox",
+          "default": false,
+          "help": "Standardmäßig deaktiviert, da wiederholte StatusNotification-Trigger bei manchen Stations-Firmwares Probleme verursachen können."
+        },
+        {
+          "key": "zeroPowerWhenIdle",
+          "label": "Gemessene Leistung/Strom bei eindeutigem Leerlauf/Ladeende auf null setzen",
+          "type": "checkbox",
+          "default": true,
+          "help": "Es werden nur Protokollzustände verwendet, die eindeutig keine Energieübertragung bedeuten. Veraltete Werte während eines aktiven Ladevorgangs werden niemals stillschweigend auf null gesetzt."
+        },
+        {
+          "key": "maxConnectorsPerRefresh",
+          "label": "Maximale Anschlüsse je Aktualisierungszyklus",
+          "type": "number",
+          "default": 2,
+          "min": 1.0,
+          "max": 128.0,
+          "step": 1,
+          "help": "Begrenzt die TriggerMessage-Anfragen je Zyklus. Bei mehr Anschlüssen wechselt der Adapter fair durch alle Anschlüsse."
+        },
+        {
+          "key": "maxRepublishedStates",
+          "label": "Maximale erneut veröffentlichte Datenpunkte je Station/Zyklus",
+          "type": "number",
+          "default": 100,
+          "min": 25.0,
+          "max": 10000.0,
+          "step": 1,
+          "help": "Begrenzt die State-Schreibvorgänge je Zyklus. Datenpunkte oberhalb des Limits werden nicht ausgelassen, sondern in den folgenden Zyklen rotierend aktualisiert."
+        }
+      ]
+    },
+    {
+      "id": "structure",
+      "title": "Datenpunktstruktur",
+      "fields": [
+        {
+          "key": "connectorDetails",
+          "label": "Flache Messwerte je Ladeanschluss anlegen",
+          "type": "checkbox",
+          "default": false,
+          "help": "Für Wallboxen mit nur einem Ladeanschluss standardmäßig deaktiviert. Nur aktivieren, wenn eine Mehrfach-Ladestation getrennte Anschlussdiagnosen benötigt; das EOS-Lademanagement nutzt die kompakten Messwerte auf Stationsebene."
+        },
+        {
+          "key": "captureRawMessages",
+          "label": "Letzte rohe OCPP-Nachrichten speichern",
+          "type": "checkbox",
+          "default": false,
+          "help": "Erzeugt einen kompakten Diagnoseordner advanced. Standardmäßig deaktiviert, um Objektzahl und Schreiblast zu reduzieren."
+        },
+        {
+          "key": "captureDeviceModelReport",
+          "label": "Letzten Device-Model-Bericht als JSON speichern",
+          "type": "checkbox",
+          "default": false
+        },
+        {
+          "key": "maxRawPayloadBytes",
+          "label": "Maximale Größe roher Nutzdaten (Byte)",
+          "type": "number",
+          "default": 65536,
+          "min": 4096.0,
+          "max": 1048576.0,
+          "step": "any"
+        }
+      ]
+    },
+    {
+      "id": "configuration",
+      "title": "OCPP-Gerätekonfiguration",
+      "fields": [
+        {
+          "key": "configurationWriteEnabled",
+          "label": "Schreiben unterstützter OCPP-Konfigurationswerte erlauben",
+          "type": "checkbox",
+          "default": true,
+          "help": "Nur ein ausdrückliches Schreiben auf einen Datenpunkt unter station.configuration sendet ChangeConfiguration (OCPP 1.6) oder SetVariables (OCPP 2.x). Es wird keine Geräteeinstellung automatisch verändert."
+        },
+        {
+          "key": "allowConfigurationDuringCharging",
+          "label": "Konfigurationsvorgänge während eines aktiven Ladevorgangs erlauben",
+          "type": "checkbox",
+          "default": false,
+          "help": "Standardmäßig deaktiviert. Das Lesen oder Ändern eines großen Konfigurationsinventars kann empfindliche Stations-Firmware stören. Konfigurationsarbeiten nur im Leerlauf ausführen, sofern Modell und Firmware nicht ausdrücklich im Feld getestet wurden."
+        },
+        {
+          "key": "autoConfigurationRefresh",
+          "label": "Konfiguration nach Stationsstart automatisch lesen",
+          "type": "checkbox",
+          "default": false,
+          "help": "Für maximale Ladestabilität standardmäßig deaktiviert. Eine manuelle Abfrage ist jederzeit über station.configuration.refresh möglich."
+        },
+        {
+          "key": "configurationRefreshDelaySec",
+          "label": "Verzögerung vor automatischer Konfigurationsabfrage (Sekunden)",
+          "type": "number",
+          "default": 15,
+          "min": 5.0,
+          "max": 3600.0,
+          "step": "any"
+        },
+        {
+          "key": "configurationReportTimeoutSec",
+          "label": "Zeitlimit für OCPP-2.x-Konfigurationsberichte (Sekunden)",
+          "type": "number",
+          "default": 120,
+          "min": 5.0,
+          "max": 3600.0,
+          "step": "any",
+          "help": "OCPP 2.x liefert die Konfiguration asynchron in einer oder mehreren NotifyReport-Nachrichten."
+        }
+      ]
+    },
+    {
+      "id": "stability",
+      "title": "Ladestabilität",
+      "fields": [
+        {
+          "key": "minimumChargingCurrentA",
+          "label": "Mindestladestrom je Phase (A)",
+          "type": "number",
+          "default": 6,
+          "min": 0.0,
+          "max": 1000.0,
+          "step": "any"
+        },
+        {
+          "key": "nominalVoltageV",
+          "label": "Nennspannung je Phase für W-Grenzen (V)",
+          "type": "number",
+          "default": 230,
+          "min": 1.0,
+          "max": 1000.0,
+          "step": "any"
+        },
+        {
+          "key": "smartChargingMinIntervalMs",
+          "label": "Mindestabstand zwischen Ladeprofilen (ms)",
+          "type": "number",
+          "default": 5000,
+          "min": 1000.0,
+          "max": 300000.0,
+          "step": "any"
+        },
+        {
+          "key": "smartChargingDeadbandW",
+          "label": "Totband für Ladeprofile (W)",
+          "type": "number",
+          "default": 100,
+          "min": 0.0,
+          "max": 100000.0,
+          "step": "any"
+        },
+        {
+          "key": "smartChargingDeadbandA",
+          "label": "Totband für Ladeprofile (A)",
+          "type": "number",
+          "default": 0.2,
+          "min": 0.0,
+          "max": 1000.0,
+          "step": "any"
+        },
+        {
+          "key": "smartChargingConnectorId",
+          "label": "OCPP-1.6-Anschluss für Smart Charging",
+          "type": "number",
+          "default": 1,
+          "min": 0.0,
+          "max": 65535.0,
+          "step": 1
+        },
+        {
+          "key": "maxDeferredTasks",
+          "label": "Maximale nachgelagerte Verarbeitungswarteschlange",
+          "type": "number",
+          "default": 250,
+          "min": 25.0,
+          "max": 10000.0,
+          "step": 1,
+          "help": "OCPP-Antworten werden sofort gesendet; die Datenpunktverarbeitung läuft nachgelagert. Verwerfbare Telemetrie oberhalb des Limits wird unter health.queueDropped gezählt."
+        },
+        {
+          "key": "maximumPhaseVoltageV",
+          "label": "Maximale AC-Phasenspannung für W-A-Umrechnung",
+          "type": "number",
+          "default": 253,
+          "min": 1.0,
+          "max": 1000.0,
+          "step": "any"
+        }
+      ]
+    }
+  ]
+}

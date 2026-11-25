@@ -1,0 +1,52 @@
+✔ System and expert controls are rendered for administrative policy only (171.887133ms)
+✔ OCPP module configuration navigation is administrator-only and targets the guarded hosted page (81.554024ms)
+✔ expert mode keeps confirmation and toggles both directions within the browser session (23.101575ms)
+✔ cancelling expert confirmation preserves mode; settings link opens native System dialog (15.126661ms)
+✔ saved expert default and suppressed confirmation still allow disabling and reenabling (12.950386ms)
+✔ policy arriving after launch updates React controls and restores session preference (24.458811ms)
+✔ revoked, unresolved and first-login policies cannot retain expert or system controls (63.06178ms)
+✔ a later legacy global role write cannot restore revoked React controls or an old click handler (10.505684ms)
+✔ device save refreshes rotated session CSRF without discarding the edited device (9.725089ms)
+✔ CSRF refresh does not replace the draft revision and a conflict preserves all unsaved device inputs (2.160642ms)
+✔ expired session preserves the unsaved form and allows explicit retry after a separate login (4.837107ms)
+✔ forbidden mutation is never replayed and preserves its draft for correction (2.327439ms)
+✔ enabled stored module exposes the exact import prerequisite and never posts a manual import (2.044861ms)
+✔ preserved automatic migration cannot be replaced by a manual import from the editor (1.447379ms)
+✔ manual import explains a newly blocked server state without losing the draft or replaying writes (4.518657ms)
+✔ unconfirmed module stop blocks the editor import without instructing an unsafe retry (1.514688ms)
+✔ uninitialized module configuration stays readable but cannot be saved or manually imported (1.706862ms)
+✔ migration-blocked editor explains the prerequisite and unlocks after a fresh released configuration load (2.193671ms)
+✔ reload does not silently discard the pending device draft (1.513777ms)
+(node:14) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ real module pages and vendor assets are available through the guarded same-origin routes (124.861456ms)
+✔ backup download uses authenticated bounded binary streaming and refuses untrusted names (19.215813ms)
+✔ slow backup downloads have bounded admission and release their stream after client disconnect (29.773664ms)
+✔ backup byte-count mismatches abort the response without exposing an unbounded stream (24.433132ms)
+✔ read-only migration page and status require fresh administrator authentication and expose no private journal fields (27.570859ms)
+✔ fresh admin role, same origin and session-bound CSRF are required for every module mutation (32.797117ms)
+✔ first-login password requirement and invalid expired sessions do not expose configuration (5.891846ms)
+✔ invalid and oversized module JSON and internal exceptions are contained without leaking bodies (12.15498ms)
+(node:20) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ OCPP production page and assets require fresh administrator access and expose only fixed paths (121.634393ms)
+✔ OCPP saves use same-origin session CSRF and expected revision; conflicts preserve saved configuration (62.718294ms)
+✔ OCPP import forwards only guarded legacy instance and exposes safe migration namespace result (42.26366ms)
+(node:31) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ process health projects bounded fields and distinguishes process, EMS and absent status (1.941248ms)
+✔ OCPP only reads inventoried exact namespaces and shows a PID confirmed for the current run (2.5787ms)
+✔ OCPP invalid, stale, unacknowledged and failed reads never claim a running process or invented PID (7.408677ms)
+✔ OCPP enumeration is bounded and does not call state methods if inventory is invalid (6.735572ms)
+✔ hosted OCPP appears once after migration while a running external duplicate remains visible (4.999337ms)
+✔ parallel diagnosis calls share bounded reads and timed-out sources cannot accumulate work (63.728776ms)
+✔ runtime page, assets and API reuse fresh administrator, first-login and origin protection (104.365822ms)
+✔ runtime endpoint is read-only and never publishes raw configuration, exceptions or secrets (22.149878ms)
+ℹ tests 38
+ℹ suites 0
+ℹ pass 38
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1421.88507

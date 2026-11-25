@@ -48,7 +48,6 @@ const node_path_1 = require("node:path");
 const compression_1 = __importDefault(require("compression"));
 const mime_types_1 = require("mime-types");
 const node_crypto_1 = require("node:crypto");
-const node_module_1 = require("node:module");
 const ajv_1 = require("ajv");
 const json5_1 = require("json5");
 const express_fileupload_1 = __importDefault(require("express-fileupload"));
@@ -69,12 +68,14 @@ const eosUploadGuard_1 = require("./eosUploadGuard");
 const eosFileTransferSecurity_1 = require("./eosFileTransferSecurity");
 const instanceProxy_1 = require("./instanceProxy");
 const eosUnifiedBoundary_1 = require("./eosUnifiedBoundary");
+const eosUiProcess_1 = require("./eosUiProcess");
 const eosModuleHost_1 = require("./eosModuleHost");
 const eosDeviceEmsPlan_1 = require("./eosDeviceEmsPlan");
 const eosDeviceEmsService_1 = require("./eosDeviceEmsService");
 const eosModuleHttp_1 = require("./eosModuleHttp");
 const eosDiscovery_1 = require("./eosDiscovery");
 const eosTlsManager_1 = require("./eosTlsManager");
+const eosKiosk_1 = require("./eosKiosk");
 const eosTlsHttp_1 = require("./eosTlsHttp");
 let AdapterStore;
 /** Content of a socket-io file */
@@ -1727,6 +1728,82 @@ class Web {
         if (!app) {
             throw new Error('EOS_HTTP_UNAVAILABLE');
         }
+        const kiosk = new eosKiosk_1.EosKiosk({
+            namespace: this.adapter.namespace,
+            secure: this.settings.secure === true,
+            read: id => this.adapter.getForeignObjectAsync(id),
+            write: (id, value) => this.adapter.setForeignObjectAsync(id, value),
+            ready: async (userId) => {
+                const license = this.adapter.eosLicenseService?.statusView();
+                if (!license?.valid || license.coreEnabled !== true) {
+                    return false;
+                }
+                const user = await this.adapter.getForeignObjectAsync(userId);
+                if (user?.type !== 'user' || user.common.enabled === false) {
+                    return false;
+                }
+                return !(await this.getEosFirstLoginPasswordState(userId, 'admin')).required;
+            },
+            revoke: enabling => {
+                if (enabling) {
+                    this.adapter.eosSessionSecurity?.revoke();
+                }
+                this.adapter.eosHostedRuntime?.revokeSessions?.();
+            },
+        });
+        await kiosk.initialize();
+        this.unified.kiosk = kiosk;
+        app.use((req, res, next) => {
+            if (this.unified.requestAllowed(req)) {
+                kiosk.bootstrap(req, res);
+            }
+            next();
+        });
+        const kioskAdmin = async (req) => {
+            if (!this.unified.requestAllowed(req)) {
+                return false;
+            }
+            const access = await this.unified.status(req);
+            return access.authenticated && !access.kiosk && access.role === 'admin' && !access.mustChangePassword;
+        };
+        app.get('/api/eos/kiosk', (req, res) => {
+            res.setHeader('Cache-Control', 'no-store');
+            void kioskAdmin(req).then(allowed => {
+                if (!allowed) {
+                    res.status(403).json({ error: 'KIOSK_ADMIN_REQUIRED' });
+                }
+                else {
+                    res.json(kiosk.view());
+                }
+            }, () => res.status(503).json({ error: 'KIOSK_UNAVAILABLE' }));
+        });
+        app.put('/api/eos/kiosk', bodyParser.json({ limit: '2kb', strict: true }), (req, res) => {
+            res.setHeader('Cache-Control', 'no-store');
+            void (async () => {
+                if (!(await kioskAdmin(req)) || !this.unified.csrfAllowed(req)) {
+                    res.status(403).json({ error: 'KIOSK_ADMIN_REQUIRED' });
+                    return;
+                }
+                const access = await this.unified.status(req);
+                const result = await kiosk.save(req.body, String(access.userId || ''), async () => (await kioskAdmin(req)) && this.unified.csrfAllowed(req));
+                // The setting lives in the parent, so revoking UI requests does not
+                // interrupt this response; enabling also revokes the old admin login.
+                if (result.reauthenticate) {
+                    res.clearCookie('access_token', { path: '/' });
+                    res.clearCookie('refresh_token', { path: '/' });
+                }
+                res.json(result);
+            })().catch(error => {
+                const code = error instanceof Error ? error.message : '';
+                res.status(code === 'KIOSK_CONFLICT'
+                    ? 409
+                    : code === 'KIOSK_REQUEST'
+                        ? 400
+                        : code === 'KIOSK_AUTH'
+                            ? 403
+                            : 503).json({ error: /^KIOSK_[A-Z_]+$/.test(code) ? code : 'KIOSK_UNAVAILABLE' });
+            });
+        });
         // One small public script observes genuine interaction on every EOS page.
         // Authentication and expiry remain server-enforced when JavaScript is absent.
         app.get('/eos-session-idle.js', (_req, res) => {
@@ -1894,12 +1971,9 @@ class Web {
             authorize: (req) => this.unified.status(req),
             csrfAllowed: (req) => this.unified.csrfAllowed(req),
             requestAllowed: (req) => this.unified.requestAllowed(req),
+            runtimeStatus: () => this.adapter.eosHostedRuntime?.status?.(),
         });
-        const factory = (0, node_module_1.createRequire)(__filename)((0, node_path_1.join)(this.baseDir, 'ui', 'main.js'));
-        if (typeof factory.createHostedRuntime !== 'function') {
-            throw new Error('EOS_UI_FACTORY_MISSING');
-        }
-        const runtime = factory.createHostedRuntime(this.adapter, {
+        const runtime = (0, eosUiProcess_1.createEosUiProcess)(this.adapter, {
             deviceEmsPlan: async (input) => {
                 const config = (0, eosDeviceEmsService_1.projectDeviceEmsConfig)(input.config);
                 const targets = await (0, eosDeviceEmsService_1.resolveDeviceEmsTargets)({
@@ -1942,7 +2016,7 @@ class Web {
             canWrite: () => this.adapter.eosOwnership?.canWrite() === true,
             isListening: () => !this.closed && !this.startupFailed && this.server.server?.listening === true,
             hostedModuleFeedback: (message) => moduleHost.receiveBridge(message),
-        });
+        }, { baseDir: this.baseDir });
         this.adapter.eosHostedRuntime = runtime;
         moduleHost.bindDeviceEms(devices => runtime.reconcileDeviceEms
             ? runtime.reconcileDeviceEms(devices)
@@ -1963,6 +2037,29 @@ class Web {
             // The UI applies per-route permission/CSRF checks; this prerequisite cannot be bypassed by direct APIs.
             void this.unified.status(req).then(status => {
                 const path = req.path || req.url.split('?')[0];
+                if (status.kiosk === true) {
+                    if (!(0, eosKiosk_1.kioskRouteAllowed)(req) || !this.unified.requestAllowed(req)) {
+                        res.status(403).json({ error: 'KIOSK_ROUTE_FORBIDDEN' });
+                        return;
+                    }
+                    if (!['GET', 'HEAD'].includes(req.method)) {
+                        if (!this.unified.csrfAllowed(req)) {
+                            res.status(403).json({ error: 'AUTH_CSRF' });
+                            return;
+                        }
+                        if (path === '/api/set') {
+                            bodyParser.json({ limit: '4kb', strict: true })(req, res, error => {
+                                if (error || !(0, eosKiosk_1.kioskSetAllowed)(req.body)) {
+                                    res.status(error ? 400 : 403).json({ error: 'KIOSK_CONTROL_FORBIDDEN' });
+                                    return;
+                                }
+                                // Child resolves the same parent request again after body parsing.
+                                runtime.handle(req, res, next);
+                            });
+                            return;
+                        }
+                    }
+                }
                 const bootstrapAsset = [
                     '/login.html',
                     '/login.js',

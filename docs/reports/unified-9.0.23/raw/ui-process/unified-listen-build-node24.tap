@@ -1,0 +1,196 @@
+TAP version 13
+# Subtest: only a complete configured port is accepted, without a fallback or ephemeral port
+ok 1 - only a complete configured port is accepted, without a fallback or ephemeral port
+  ---
+  duration_ms: 2.56394
+  type: 'test'
+  ...
+# Subtest: configured port is used exactly once and readiness follows successful bind
+ok 2 - configured port is used exactly once and readiness follows successful bind
+  ---
+  duration_ms: 53.234682
+  type: 'test'
+  ...
+# Subtest: occupied port fails once with EADDRINUSE and leaves the existing service intact
+ok 3 - occupied port fails once with EADDRINUSE and leaves the existing service intact
+  ---
+  duration_ms: 8.833903
+  type: 'test'
+  ...
+# Subtest: unavailable local interface fails once with EADDRNOTAVAIL instead of searching ports
+ok 4 - unavailable local interface fails once with EADDRNOTAVAIL instead of searching ports
+  ---
+  duration_ms: 1.266907
+  type: 'test'
+  ...
+# Subtest: TLS configuration cannot silently become a cleartext listener when certificates are absent
+ok 5 - TLS configuration cannot silently become a cleartext listener when certificates are absent
+  ---
+  duration_ms: 1.304544
+  type: 'test'
+  ...
+# Subtest: controller certificate read failures remain diagnosed TLS startup failures
+ok 6 - controller certificate read failures remain diagnosed TLS startup failures
+  ---
+  duration_ms: 0.521193
+  type: 'test'
+  ...
+# Subtest: collection TLS uses configured default for IP without SNI and retains a distinct hostname collection
+ok 7 - collection TLS uses configured default for IP without SNI and retains a distinct hostname collection
+  ---
+  duration_ms: 228.275389
+  type: 'test'
+  ...
+# Subtest: collection IP context sends the configured intermediate chain and accepts only the explicit root CA
+ok 8 - collection IP context sends the configured intermediate chain and accepts only the explicit root CA
+  ---
+  duration_ms: 495.731549
+  type: 'test'
+  ...
+# Subtest: a valid named collection cannot hide the absence of a default certificate for IP access
+ok 9 - a valid named collection cannot hide the absence of a default certificate for IP access
+  ---
+  duration_ms: 58.379287
+  type: 'test'
+  ...
+# Subtest: native TLS without a fixed origin serves IP/8188 and HTTPS/443 alias Host contracts
+ok 10 - native TLS without a fixed origin serves IP/8188 and HTTPS/443 alias Host contracts
+  ---
+  duration_ms: 151.763471
+  type: 'test'
+  ...
+# Subtest: invalid external origin is caught by Web startup and terminates once without controller mutations
+ok 11 - invalid external origin is caught by Web startup and terminates once without controller mutations
+  ---
+  duration_ms: 2.256214
+  type: 'test'
+  ...
+# Subtest: password/setup write guard uses canonical browser Origin and preserves explicit bearer compatibility
+ok 12 - password/setup write guard uses canonical browser Origin and preserves explicit bearer compatibility
+  ---
+  duration_ms: 0.435044
+  type: 'test'
+  ...
+# Subtest: actual TLS activation accepts Host443 normalization and rejects malformed Host before its service
+ok 13 - actual TLS activation accepts Host443 normalization and rejects malformed Host before its service
+  ---
+  duration_ms: 153.859113
+  type: 'test'
+  ...
+# Subtest: startup abort closes a bound listener and never mutates another adapter
+ok 14 - startup abort closes a bound listener and never mutates another adapter
+  ---
+  duration_ms: 1.34952
+  type: 'test'
+  ...
+# Subtest: startup failure closes admission immediately and awaits migration recovery before terminating once
+ok 15 - startup failure closes admission immediately and awaits migration recovery before terminating once
+  ---
+  duration_ms: 1.674492
+  type: 'test'
+  ...
+# Subtest: startup recovery rejection fences migration before termination and does not leak its promise
+ok 16 - startup recovery rejection fences migration before termination and does not leak its promise
+  ---
+  duration_ms: 0.424499
+  type: 'test'
+  ...
+# Subtest: already closed Web cannot initiate another migration recovery or terminate again
+ok 17 - already closed Web cannot initiate another migration recovery or terminate again
+  ---
+  duration_ms: 0.150764
+  type: 'test'
+  ...
+# Subtest: real UI child preserves HTTPS session/origin checks and leaves recovery outside its process
+ok 18 - real UI child preserves HTTPS session/origin checks and leaves recovery outside its process
+  ---
+  duration_ms: 1148.46816
+  type: 'test'
+  ...
+# Subtest: migration startup fence keeps login and authenticated recovery reachable without operational startup
+ok 19 - migration startup fence keeps login and authenticated recovery reachable without operational startup
+  ---
+  duration_ms: 115.499598
+  type: 'test'
+  ...
+# Subtest: verified nexowatt TLS authority opens login for anonymous/expired sessions and dashboard for an active session
+ok 20 - verified nexowatt TLS authority opens login for anonymous/expired sessions and dashboard for an active session
+  ---
+  duration_ms: 189.720579
+  type: 'test'
+  ...
+# Subtest: module host crosses the actual private hosted UI bridge and returns implementation feedback
+ok 21 - module host crosses the actual private hosted UI bridge and returns implementation feedback
+  ---
+  duration_ms: 242.221919
+  type: 'test'
+  ...
+# Subtest: valid license and stalled operational startup cannot hold the HTTPS login or recovery console hostage
+ok 22 - valid license and stalled operational startup cannot hold the HTTPS login or recovery console hostage
+  ---
+  duration_ms: 203.02139
+  type: 'test'
+  ...
+# Subtest: operational initialization failure leaves HTTPS recovery up and refuses real UI commands
+ok 23 - operational initialization failure leaves HTTPS recovery up and refuses real UI commands
+  ---
+  duration_ms: 107.910002
+  type: 'test'
+  ...
+# Subtest: hosted EMS readiness rejects retained failed, fenced or unscheduled engine references
+ok 24 - hosted EMS readiness rejects retained failed, fenced or unscheduled engine references
+  ---
+  duration_ms: 81.711738
+  type: 'test'
+  ...
+# Subtest: late startup completion after license loss cannot revive control
+ok 25 - late startup completion after license loss cannot revive control
+  ---
+  duration_ms: 151.929572
+  type: 'test'
+  ...
+# Subtest: late startup completion after ownership loss cannot revive control
+ok 26 - late startup completion after ownership loss cannot revive control
+  ---
+  duration_ms: 173.670449
+  type: 'test'
+  ...
+# Subtest: an unexpected operational promise rejection is contained without closing HTTPS
+ok 27 - an unexpected operational promise rejection is contained without closing HTTPS
+  ---
+  duration_ms: 172.956143
+  type: 'test'
+  ...
+# Subtest: optional startup catch cannot erase observed license loss after authority returns
+ok 28 - optional startup catch cannot erase observed license loss after authority returns
+  ---
+  duration_ms: 90.993605
+  type: 'test'
+  ...
+# Subtest: optional startup catch cannot erase observed ownership loss after authority returns
+ok 29 - optional startup catch cannot erase observed ownership loss after authority returns
+  ---
+  duration_ms: 80.408182
+  type: 'test'
+  ...
+# Subtest: optional startup catch cannot erase observed ownership loss after authority returns (rejected operation)
+ok 30 - optional startup catch cannot erase observed ownership loss after authority returns (rejected operation)
+  ---
+  duration_ms: 139.03101
+  type: 'test'
+  ...
+# Subtest: the explicit HTTPS-ready diagnostic requires a live listener and is suppressed after close
+ok 31 - the explicit HTTPS-ready diagnostic requires a live listener and is suppressed after close
+  ---
+  duration_ms: 75.961241
+  type: 'test'
+  ...
+1..31
+# tests 31
+# suites 0
+# pass 31
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4659.306705

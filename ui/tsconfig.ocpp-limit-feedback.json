@@ -1,0 +1,5 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": { "noEmit": true, "noCheck": false, "module": "ESNext", "moduleResolution": "bundler", "resolveJsonModule": false, "types": [] },
+  "files": ["src-ts/runtime-executables/lib/ocpp-limit-feedback.ts"], "include": []
+}

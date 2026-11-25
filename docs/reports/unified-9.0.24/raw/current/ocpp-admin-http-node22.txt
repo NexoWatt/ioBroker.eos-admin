@@ -1,0 +1,253 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: System and expert controls are rendered for administrative policy only
+ok 1 - System and expert controls are rendered for administrative policy only
+  ---
+  duration_ms: 280.706099
+  type: 'test'
+  ...
+# Subtest: OCPP module configuration navigation is administrator-only and targets the guarded hosted page
+ok 2 - OCPP module configuration navigation is administrator-only and targets the guarded hosted page
+  ---
+  duration_ms: 119.162186
+  type: 'test'
+  ...
+# Subtest: expert mode keeps confirmation and toggles both directions within the browser session
+ok 3 - expert mode keeps confirmation and toggles both directions within the browser session
+  ---
+  duration_ms: 20.271032
+  type: 'test'
+  ...
+# Subtest: cancelling expert confirmation preserves mode; settings link opens native System dialog
+ok 4 - cancelling expert confirmation preserves mode; settings link opens native System dialog
+  ---
+  duration_ms: 14.627173
+  type: 'test'
+  ...
+# Subtest: saved expert default and suppressed confirmation still allow disabling and reenabling
+ok 5 - saved expert default and suppressed confirmation still allow disabling and reenabling
+  ---
+  duration_ms: 33.018668
+  type: 'test'
+  ...
+# Subtest: policy arriving after launch updates React controls and restores session preference
+ok 6 - policy arriving after launch updates React controls and restores session preference
+  ---
+  duration_ms: 24.624686
+  type: 'test'
+  ...
+# Subtest: revoked, unresolved and first-login policies cannot retain expert or system controls
+ok 7 - revoked, unresolved and first-login policies cannot retain expert or system controls
+  ---
+  duration_ms: 97.922411
+  type: 'test'
+  ...
+# Subtest: a later legacy global role write cannot restore revoked React controls or an old click handler
+ok 8 - a later legacy global role write cannot restore revoked React controls or an old click handler
+  ---
+  duration_ms: 11.379805
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: device save refreshes rotated session CSRF without discarding the edited device
+ok 9 - device save refreshes rotated session CSRF without discarding the edited device
+  ---
+  duration_ms: 19.795541
+  type: 'test'
+  ...
+# Subtest: CSRF refresh does not replace the draft revision and a conflict preserves all unsaved device inputs
+ok 10 - CSRF refresh does not replace the draft revision and a conflict preserves all unsaved device inputs
+  ---
+  duration_ms: 19.792696
+  type: 'test'
+  ...
+# Subtest: expired session preserves the unsaved form and allows explicit retry after a separate login
+ok 11 - expired session preserves the unsaved form and allows explicit retry after a separate login
+  ---
+  duration_ms: 11.132069
+  type: 'test'
+  ...
+# Subtest: forbidden mutation is never replayed and preserves its draft for correction
+ok 12 - forbidden mutation is never replayed and preserves its draft for correction
+  ---
+  duration_ms: 6.184788
+  type: 'test'
+  ...
+# Subtest: enabled stored module exposes the exact import prerequisite and never posts a manual import
+ok 13 - enabled stored module exposes the exact import prerequisite and never posts a manual import
+  ---
+  duration_ms: 4.717451
+  type: 'test'
+  ...
+# Subtest: preserved automatic migration cannot be replaced by a manual import from the editor
+ok 14 - preserved automatic migration cannot be replaced by a manual import from the editor
+  ---
+  duration_ms: 4.285703
+  type: 'test'
+  ...
+# Subtest: manual import explains a newly blocked server state without losing the draft or replaying writes
+ok 15 - manual import explains a newly blocked server state without losing the draft or replaying writes
+  ---
+  duration_ms: 9.076711
+  type: 'test'
+  ...
+# Subtest: unconfirmed module stop blocks the editor import without instructing an unsafe retry
+ok 16 - unconfirmed module stop blocks the editor import without instructing an unsafe retry
+  ---
+  duration_ms: 6.940445
+  type: 'test'
+  ...
+# Subtest: uninitialized module configuration stays readable but cannot be saved or manually imported
+ok 17 - uninitialized module configuration stays readable but cannot be saved or manually imported
+  ---
+  duration_ms: 8.068142
+  type: 'test'
+  ...
+# Subtest: migration-blocked editor explains the prerequisite and unlocks after a fresh released configuration load
+ok 18 - migration-blocked editor explains the prerequisite and unlocks after a fresh released configuration load
+  ---
+  duration_ms: 7.025421
+  type: 'test'
+  ...
+# Subtest: reload does not silently discard the pending device draft
+ok 19 - reload does not silently discard the pending device draft
+  ---
+  duration_ms: 6.075777
+  type: 'test'
+  ...
+# (node:14) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:14) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# Subtest: real module pages and vendor assets are available through the guarded same-origin routes
+ok 20 - real module pages and vendor assets are available through the guarded same-origin routes
+  ---
+  duration_ms: 212.998528
+  type: 'test'
+  ...
+# Subtest: backup download uses authenticated bounded binary streaming and refuses untrusted names
+ok 21 - backup download uses authenticated bounded binary streaming and refuses untrusted names
+  ---
+  duration_ms: 58.734638
+  type: 'test'
+  ...
+# Subtest: slow backup downloads have bounded admission and release their stream after client disconnect
+ok 22 - slow backup downloads have bounded admission and release their stream after client disconnect
+  ---
+  duration_ms: 34.458377
+  type: 'test'
+  ...
+# Subtest: backup byte-count mismatches abort the response without exposing an unbounded stream
+ok 23 - backup byte-count mismatches abort the response without exposing an unbounded stream
+  ---
+  duration_ms: 30.856864
+  type: 'test'
+  ...
+# Subtest: read-only migration page and status require fresh administrator authentication and expose no private journal fields
+ok 24 - read-only migration page and status require fresh administrator authentication and expose no private journal fields
+  ---
+  duration_ms: 34.564703
+  type: 'test'
+  ...
+# Subtest: fresh admin role, same origin and session-bound CSRF are required for every module mutation
+ok 25 - fresh admin role, same origin and session-bound CSRF are required for every module mutation
+  ---
+  duration_ms: 44.884151
+  type: 'test'
+  ...
+# Subtest: first-login password requirement and invalid expired sessions do not expose configuration
+ok 26 - first-login password requirement and invalid expired sessions do not expose configuration
+  ---
+  duration_ms: 13.084804
+  type: 'test'
+  ...
+# Subtest: invalid and oversized module JSON and internal exceptions are contained without leaking bodies
+ok 27 - invalid and oversized module JSON and internal exceptions are contained without leaking bodies
+  ---
+  duration_ms: 35.305909
+  type: 'test'
+  ...
+# (node:20) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:20) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# Subtest: OCPP production page and assets require fresh administrator access and expose only fixed paths
+ok 28 - OCPP production page and assets require fresh administrator access and expose only fixed paths
+  ---
+  duration_ms: 128.296456
+  type: 'test'
+  ...
+# Subtest: OCPP saves use same-origin session CSRF and expected revision; conflicts preserve saved configuration
+ok 29 - OCPP saves use same-origin session CSRF and expected revision; conflicts preserve saved configuration
+  ---
+  duration_ms: 63.523243
+  type: 'test'
+  ...
+# Subtest: OCPP import forwards only guarded legacy instance and exposes safe migration namespace result
+ok 30 - OCPP import forwards only guarded legacy instance and exposes safe migration namespace result
+  ---
+  duration_ms: 27.086572
+  type: 'test'
+  ...
+# (node:22) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:22) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# Subtest: process health projects bounded fields and distinguishes process, EMS and absent status
+ok 31 - process health projects bounded fields and distinguishes process, EMS and absent status
+  ---
+  duration_ms: 1.871305
+  type: 'test'
+  ...
+# Subtest: OCPP only reads inventoried exact namespaces and shows a PID confirmed for the current run
+ok 32 - OCPP only reads inventoried exact namespaces and shows a PID confirmed for the current run
+  ---
+  duration_ms: 1.840019
+  type: 'test'
+  ...
+# Subtest: OCPP invalid, stale, unacknowledged and failed reads never claim a running process or invented PID
+ok 33 - OCPP invalid, stale, unacknowledged and failed reads never claim a running process or invented PID
+  ---
+  duration_ms: 8.346544
+  type: 'test'
+  ...
+# Subtest: OCPP enumeration is bounded and does not call state methods if inventory is invalid
+ok 34 - OCPP enumeration is bounded and does not call state methods if inventory is invalid
+  ---
+  duration_ms: 0.657842
+  type: 'test'
+  ...
+# Subtest: hosted OCPP appears once after migration while a running external duplicate remains visible
+ok 35 - hosted OCPP appears once after migration while a running external duplicate remains visible
+  ---
+  duration_ms: 2.332206
+  type: 'test'
+  ...
+# Subtest: parallel diagnosis calls share bounded reads and timed-out sources cannot accumulate work
+ok 36 - parallel diagnosis calls share bounded reads and timed-out sources cannot accumulate work
+  ---
+  duration_ms: 75.452449
+  type: 'test'
+  ...
+# Subtest: runtime page, assets and API reuse fresh administrator, first-login and origin protection
+ok 37 - runtime page, assets and API reuse fresh administrator, first-login and origin protection
+  ---
+  duration_ms: 139.376474
+  type: 'test'
+  ...
+# Subtest: runtime endpoint is read-only and never publishes raw configuration, exceptions or secrets
+ok 38 - runtime endpoint is read-only and never publishes raw configuration, exceptions or secrets
+  ---
+  duration_ms: 57.143245
+  type: 'test'
+  ...
+1..38
+# tests 38
+# suites 0
+# pass 38
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1270.652708

@@ -2,7 +2,7 @@
 import tseslint from 'typescript-eslint';
 import globals from 'globals';
 export default tseslint.config({
-  files: ['ui/src-ts/runtime-executables/www/eos-session-idle.ts'],
+  files: ['ui/src-ts/runtime-executables/www/eos-session-idle.ts', 'ui/src-ts/runtime-executables/www/eos-kiosk-settings.ts'],
   extends: tseslint.configs.recommendedTypeChecked,
   languageOptions: {
     globals: globals.browser,

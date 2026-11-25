@@ -1,0 +1,28 @@
+✔ explicit pure PV cannot become grid charging under a negative-price preference (65.788841ms)
+✔ Min+PV retains its grid minimum and PV-only extra; Auto retains deliberate negative-price grid permission (38.107258ms)
+✔ real pure-PV OCPP control requests stop after lost surplus, observes stopped telemetry and resumes with surplus (51.86766ms)
+✔ atomic profile uses confirmed watts, not raw wire amperes or unrelated command success (2.584309ms)
+✔ current atomic response confirms zero and a conservative lower ceiling without inventing physical power (0.772852ms)
+✔ reconnect, pending/rejected, source quality and missing timestamps cannot fall back to old successful fields (2.036118ms)
+✔ 0.4.2 watt tuple requires last validity publication and does not confuse amperes with watts (0.510715ms)
+✔ legacy result requires an actual successful profile response in watts (1.41395ms)
+✔ invalid session and future response never become confirmed merely through matching old numeric values (0.389576ms)
+✔ real CM reads atomic 0.4.3 feedback through source-metadata cache and writes native watts only (66.27164ms)
+✔ real CM atomic pending/rejected feedback cannot be confirmed by old command-success fields (32.409269ms)
+✔ real CM rejects old-session, stale, bad quality and missing-source-timestamp feedback (65.624883ms)
+✔ real CM treats valid zero as a confirmed requested profile and keeps measured charging power separate (10.452113ms)
+✔ duplicate native station rows cannot send positive limits or race the single conservative zero writer (13.545731ms)
+✔ incomplete native commissioning contract blocks positive power at the actual CM writer (5.308484ms)
+✔ two independently controlled legacy OCPP connectors are not mistaken for a native station aggregate (11.224756ms)
+✔ native lease write failure or rejection blocks positive power in the real CM final writer (8.939629ms)
+✔ native positive command awaits the lease transport promise, not just an attempted write (12.86468ms)
+✔ atomic native contract cannot bypass its lease using missing, false or invalid support metadata (27.413902ms)
+✔ real CM renews its station lease after five seconds and immediately after an OCPP session change (19.301109ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 438.431675

@@ -1,80 +1,84 @@
 {
   "common": {
     "name": "nexowatt-ui",
-    "version": "9.0.22",
+    "version": "9.0.24",
     "news": {
+      "9.0.24": {
+        "en": "Integrated OCPP, EEBUS and Devices in independent processes within one EOS adapter; dashboard kiosk with protected Admin login; verified cleanup of obsolete npm publish assets.",
+        "de": "OCPP, EEBUS und Devices in eigenen Prozessen innerhalb eines EOS-Adapters; Dashboard-Kioskmodus mit geschütztem Admin-Zugang; geprüfte Bereinigung alter Dateien vor npm-Publish."
+      },
       "9.0.18": {
         "en": "Automatic supported-device commissioning and explicit EMS/energy-flow roles. Existing mappings and data points are preserved; new control targets require commissioning.",
-        "de": "Automatische Zuordnung unterst\u00fctzter Ger\u00e4te mit expliziten EMS- und Energiefluss-Rollen. Vorhandene Zuordnungen und Datenpunkte bleiben erhalten; neue Regelziele ben\u00f6tigen eine Inbetriebnahme."
+        "de": "Automatische Zuordnung unterstützter Geräte mit expliziten EMS- und Energiefluss-Rollen. Vorhandene Zuordnungen und Datenpunkte bleiben erhalten; neue Regelziele benötigen eine Inbetriebnahme."
       },
       "9.0.17": {
-        "de": "EOS-Sitzungen vom ioBroker Admin getrennt; automatische \u00c4nderungen fremder Rechte und Metadaten entfernt; Parallelbetrieb mit Standard-Backitup abgesichert.",
+        "de": "EOS-Sitzungen vom ioBroker Admin getrennt; automatische Änderungen fremder Rechte und Metadaten entfernt; Parallelbetrieb mit Standard-Backitup abgesichert.",
         "en": "Isolate EOS sessions from ioBroker Admin; remove automatic foreign permission and metadata changes; preserve standard Backitup coexistence."
       },
       "9.0.16": {
-        "de": "Ger\u00e4te speichern und vorhandene Einstellungen beim Start erhalten; alte Installer-Dateien f\u00fcr npm-Publish sichern; Abmeldung nach zehn Minuten ohne Bedienung.",
+        "de": "Geräte speichern und vorhandene Einstellungen beim Start erhalten; alte Installer-Dateien für npm-Publish sichern; Abmeldung nach zehn Minuten ohne Bedienung.",
         "en": "Fix device saving and preserve settings during startup; quarantine old Installer files for npm publishing; log out after ten idle minutes."
       },
       "9.0.11": {
         "en": "Bounded startup recovery for legacy handover; confirmed shutdown before rollback and blocked late operational starts. Verified tarball publishing workflow for Windows.",
-        "de": "\u00dcbernahme mit begrenzter Start\u00fcberwachung und best\u00e4tigtem Stopp vor dem R\u00fcckfall; versp\u00e4tete Betriebsstarts gesperrt. Gepr\u00fcfter TGZ-Ver\u00f6ffentlichungsweg f\u00fcr Windows."
+        "de": "Übernahme mit begrenzter Startüberwachung und bestätigtem Stopp vor dem Rückfall; verspätete Betriebsstarts gesperrt. Geprüfter TGZ-Veröffentlichungsweg für Windows."
       },
       "9.0.8": {
         "en": "Explicit SmartHome activation, protected legacy configuration loading, same-tab administration and maintained backup scheduling. Node.js 22 and 24 supported; test channel with documented migration limits.",
-        "de": "SmartHome direkt aktivieren, gesch\u00fctzte Bestandskonfiguration laden, Administration im selben Tab und gepflegte Backup-Zeitplanung. Node.js 22 und 24 unterst\u00fctzt; Pr\u00fcfkanal mit dokumentierten Migrationsgrenzen."
+        "de": "SmartHome direkt aktivieren, geschützte Bestandskonfiguration laden, Administration im selben Tab und gepflegte Backup-Zeitplanung. Node.js 22 und 24 unterstützt; Prüfkanal mit dokumentierten Migrationsgrenzen."
       },
       "9.0.7": {
-        "de": "Ger\u00e4tekonfiguration ohne Sitzungsabbruch, gepr\u00fcfte Bestands\u00fcbernahme, integrierte Sicherung und lokale Zertifikatsverwaltung. Einheitliche Moduloberfl\u00e4chen und begrenzte Caches. Umfang und Abnahmegrenzen siehe Pr\u00fcfbericht.",
+        "de": "Gerätekonfiguration ohne Sitzungsabbruch, geprüfte Bestandsübernahme, integrierte Sicherung und lokale Zertifikatsverwaltung. Einheitliche Moduloberflächen und begrenzte Caches. Umfang und Abnahmegrenzen siehe Prüfbericht.",
         "en": "Device configuration without session interruption, guarded legacy migration, integrated backup and local certificate management. Consistent module interfaces and bounded caches. See the report for scope and acceptance limitations."
       },
       "9.0.6": {
-        "de": "Integrierte Ger\u00e4te- und EEBus-Module mit zentraler EOS-Lizenz, gesch\u00fctzter \u00dcbergabe bestehender Instanzen, Installer-R\u00fcckweg und mehrzeiliger Admin-Navigation. Lokale Ger\u00e4teank\u00fcndigung und vorbereiteter HTTPS-Zugang ohne Port. Pr\u00fcfumfang und offene Hardware-Abnahme siehe Pr\u00fcfbericht.",
+        "de": "Integrierte Geräte- und EEBus-Module mit zentraler EOS-Lizenz, geschützter Übergabe bestehender Instanzen, Installer-Rückweg und mehrzeiliger Admin-Navigation. Lokale Geräteankündigung und vorbereiteter HTTPS-Zugang ohne Port. Prüfumfang und offene Hardware-Abnahme siehe Prüfbericht.",
         "en": "Integrated Devices and EEBus modules with the central EOS license, guarded legacy handover, installer return navigation and wrapping admin navigation. Local discovery and prepared portless HTTPS access. See the report for validation scope and remaining hardware acceptance.",
-        "nl": "Ge\u00efntegreerde Devices- en EEBus-modules met centrale EOS-licentie, beveiligde overdracht, terugkeer vanuit de installer en navigatie op meerdere regels. Lokale detectie en voorbereide HTTPS-toegang zonder poort. Zie het testrapport voor de resterende hardwarecontrole."
+        "nl": "Geïntegreerde Devices- en EEBus-modules met centrale EOS-licentie, beveiligde overdracht, terugkeer vanuit de installer en navigatie op meerdere regels. Lokale detectie en voorbereide HTTPS-toegang zonder poort. Zie het testrapport voor de resterende hardwarecontrole."
       },
       "9.0.5": {
-        "de": "9.0.5 korrigiert den History-Absturz an der \u00dcbergabe zwischen Verwaltungsserver und eingebetteter UI. History-Anfragen erhalten begrenzte Ressourcen und kontrollierte Fehlerantworten; die EOS-Systemverwaltung verwendet das NexoWatt-Startlogo. Zentrale Lizenz, HTTPS auf 8188 und vorhandener Adminzugang bleiben erhalten. Teststand f\u00fcr next; tats\u00e4chliche Nachweise und offene Zielger\u00e4tepr\u00fcfung siehe Pr\u00fcfbericht.",
+        "de": "9.0.5 korrigiert den History-Absturz an der Übergabe zwischen Verwaltungsserver und eingebetteter UI. History-Anfragen erhalten begrenzte Ressourcen und kontrollierte Fehlerantworten; die EOS-Systemverwaltung verwendet das NexoWatt-Startlogo. Zentrale Lizenz, HTTPS auf 8188 und vorhandener Adminzugang bleiben erhalten. Teststand für next; tatsächliche Nachweise und offene Zielgeräteprüfung siehe Prüfbericht.",
         "en": "9.0.5 fixes the History crash at the boundary between the administration server and embedded UI. History requests have bounded resources and controlled error responses; EOS system administration uses the NexoWatt startup logo. The central license, HTTPS on 8188 and existing admin access are preserved. Test release for next; see the report for actual evidence and outstanding target-device acceptance.",
         "nl": "9.0.5 corrigeert de History-crash bij de overdracht tussen beheerserver en ingebedde UI. History-aanvragen krijgen begrensde bronnen en gecontroleerde foutantwoorden; EOS-systeembeheer gebruikt het NexoWatt-startlogo. Centrale licentie, HTTPS op 8188 en bestaande admintoegang blijven behouden. Testversie voor next; zie het rapport voor bewijs en openstaande apparaatcontrole."
       },
       "9.0.4": {
-        "de": "9.0.4 korrigiert den Socket-Absturz beim Start unter hoher Ereignislast, auch ohne ge\u00f6ffneten Browser. Die Begrenzung der Oberfl\u00e4chenereignisse darf keine Messwert-Abonnements der gemeinsamen EMS-Laufzeit entfernen. HTTPS auf 8188, bestehender Adminzugang und die zentrale Lizenz bleiben erhalten. Teststand f\u00fcr next; Nachweise und Zielger\u00e4tepr\u00fcfung siehe Pr\u00fcfbericht.",
+        "de": "9.0.4 korrigiert den Socket-Absturz beim Start unter hoher Ereignislast, auch ohne geöffneten Browser. Die Begrenzung der Oberflächenereignisse darf keine Messwert-Abonnements der gemeinsamen EMS-Laufzeit entfernen. HTTPS auf 8188, bestehender Adminzugang und die zentrale Lizenz bleiben erhalten. Teststand für next; Nachweise und Zielgeräteprüfung siehe Prüfbericht.",
         "en": "9.0.4 fixes the socket startup crash under high event load, including before any browser connects. UI event throttling must not remove measurement subscriptions of the shared EMS runtime. HTTPS on 8188, the existing admin access and the central license are preserved. Test release for next; see the report for evidence and target-device acceptance.",
         "nl": "9.0.4 corrigeert de socketcrash tijdens het opstarten bij veel gebeurtenissen, ook zonder geopende browser. Begrenzing van interfacegebeurtenissen mag geen meetwaarde-abonnementen van de gedeelde EMS-runtime verwijderen. HTTPS op 8188, bestaande admintoegang en centrale licentie blijven behouden. Testversie voor next; zie het rapport voor bewijs en controle op het doelapparaat."
       },
       "1.0.38": {
         "en": "NexoWatt EOS logo and neutral UI branding. Direct HTTPS with explicitly selected certificates, corrected secure login routes and restored PWA startup/update metadata. Existing EMS configuration and independent authentication profiles remain intact. Test release; device acceptance required.",
-        "de": "NexoWatt-EOS-Logo und neutrale UI-Texte. Direktes HTTPS mit ausdr\u00fccklich gew\u00e4hlten Zertifikaten, korrigierte sichere Login-Wege und wiederhergestellte PWA-Start-/Update-Metadaten. Bestehende EMS-Konfiguration und getrennte Anmeldeprofile bleiben erhalten. Teststand; Ger\u00e4teabnahme erforderlich.",
+        "de": "NexoWatt-EOS-Logo und neutrale UI-Texte. Direktes HTTPS mit ausdrücklich gewählten Zertifikaten, korrigierte sichere Login-Wege und wiederhergestellte PWA-Start-/Update-Metadaten. Bestehende EMS-Konfiguration und getrennte Anmeldeprofile bleiben erhalten. Teststand; Geräteabnahme erforderlich.",
         "nl": "NexoWatt EOS-logo en neutrale UI-teksten. Direct HTTPS met expliciet geselecteerde certificaten, gecorrigeerde beveiligde aanmeldroutes en PWA-start-/updatemetadata. Bestaande EMS-configuratie en afzonderlijke aanmeldprofielen blijven behouden. Testversie; apparaatcontrole vereist."
       },
       "1.0.37": {
         "en": "Modern EOS SmartHome cards and accessible details; reviewed alias/device import; mandatory separate EOS/ioBroker login profiles with CSRF and session revocation. Test package; verify configuration and HTTPS access before update.",
-        "de": "Moderne EOS-Smarthome-Karten und zug\u00e4ngliche Detailansichten; gepr\u00fcfter Alias-/Ger\u00e4teimport; verpflichtende getrennte EOS-/ioBroker-Anmeldeprofile mit CSRF und Sitzungswiderruf. Testpaket; Konfiguration und HTTPS-Zugang vor Update pr\u00fcfen.",
+        "de": "Moderne EOS-Smarthome-Karten und zugängliche Detailansichten; geprüfter Alias-/Geräteimport; verpflichtende getrennte EOS-/ioBroker-Anmeldeprofile mit CSRF und Sitzungswiderruf. Testpaket; Konfiguration und HTTPS-Zugang vor Update prüfen.",
         "nl": "Moderne EOS SmartHome-kaarten en detailweergave; gecontroleerde alias-/apparaatimport; afzonderlijke verplichte EOS-/ioBroker-aanmelding met CSRF en sessie-intrekking. Testpakket."
       },
       "1.0.36": {
         "en": "Confirm charging modes from backend state, correct cheap-grid Auto and vehicle status parsing, and export clearer charging diagnostics. Site commissioning remains required.",
-        "de": "Lademodi anhand des Backendzustands best\u00e4tigen, g\u00fcnstige Auto-Tariffenster und Fahrzeugstatus korrigieren sowie die Ladediagnose erweitern. Anlagenabnahme bleibt erforderlich."
+        "de": "Lademodi anhand des Backendzustands bestätigen, günstige Auto-Tariffenster und Fahrzeugstatus korrigieren sowie die Ladediagnose erweitern. Anlagenabnahme bleibt erforderlich."
       },
       "1.0.35": {
         "en": "Use Admin 8.3+ HTTPS instance proxy for EOS login and runtime pages; bind requests to the selected instance and clarify login errors.",
-        "de": "EOS-Anmeldung und Laufzeitseiten \u00fcber den HTTPS-Instanzproxy ab Admin 8.3; Anfragen an ausgew\u00e4hlte Instanz binden und Anmeldefehler verst\u00e4ndlich anzeigen."
+        "de": "EOS-Anmeldung und Laufzeitseiten über den HTTPS-Instanzproxy ab Admin 8.3; Anfragen an ausgewählte Instanz binden und Anmeldefehler verständlich anzeigen."
       },
       "1.0.34": {
-        "en": "Authorize arbitrary ioBroker usernames by verified group membership; use each account\u2019s own password and support custom group mappings.",
-        "de": "Beliebige ioBroker-Benutzer anhand gepr\u00fcfter Gruppen berechtigen; eigenes Kontopasswort und konfigurierbare Gruppenzuordnung."
+        "en": "Authorize arbitrary ioBroker usernames by verified group membership; use each account’s own password and support custom group mappings.",
+        "de": "Beliebige ioBroker-Benutzer anhand geprüfter Gruppen berechtigen; eigenes Kontopasswort und konfigurierbare Gruppenzuordnung."
       },
       "1.0.33": {
         "en": "Fix EMS login with ioBroker user names and IDs; bind password verification and roles to the same canonical account.",
-        "de": "EMS-Anmeldung mit ioBroker-Benutzernamen und IDs korrigiert; Passwortpr\u00fcfung und Rollen an dasselbe kanonische Konto gebunden."
+        "de": "EMS-Anmeldung mit ioBroker-Benutzernamen und IDs korrigiert; Passwortprüfung und Rollen an dasselbe kanonische Konto gebunden."
       },
       "1.0.32": {
-        "de": "Eigenst\u00e4ndige Arbitrage-App und gesch\u00fctzte ausgehende WSS-Partneranbindung mit getrennten Datenrechten, kurzlebigen Speicheranforderungen und Widerruf. Aufbau auf 1.0.31; Anlagenabnahme bleibt erforderlich.",
+        "de": "Eigenständige Arbitrage-App und geschützte ausgehende WSS-Partneranbindung mit getrennten Datenrechten, kurzlebigen Speicheranforderungen und Widerruf. Aufbau auf 1.0.31; Anlagenabnahme bleibt erforderlich.",
         "en": "Independent arbitrage app and secured outbound WSS partner integration with scoped data access, short-lived storage requests and revocation. Based on 1.0.31; site commissioning remains required."
       },
       "9.0.10": {
         "en": "Device profiles, linked aliases and TypeDetector 6.2 with preserved mappings; full-width SmartHome configuration, sortable tiles and colorful category controls.",
-        "de": "Ger\u00e4teprofile, verkn\u00fcpfte Aliase und TypeDetector 6.2 mit Erhalt bestehender Zuordnungen; SmartHome-Konfiguration \u00fcber die volle Breite, sortierbare Kacheln und farbige Kategoriebedienung."
+        "de": "Geräteprofile, verknüpfte Aliase und TypeDetector 6.2 mit Erhalt bestehender Zuordnungen; SmartHome-Konfiguration über die volle Breite, sortierbare Kacheln und farbige Kategoriebedienung."
       }
     },
     "title": "NexoWatt EOS",
@@ -83,8 +87,8 @@
       "de": "NexoWatt EOS"
     },
     "desc": {
-      "en": "NexoWatt EOS \u2013 local energy, charging and building control platform.",
-      "de": "NexoWatt EOS \u2013 lokale Plattform f\u00fcr Energie, Laden und Geb\u00e4udesteuerung."
+      "en": "NexoWatt EOS – local energy, charging and building control platform.",
+      "de": "NexoWatt EOS – lokale Plattform für Energie, Laden und Gebäudesteuerung."
     },
     "authors": [
       "NexoWatt"
@@ -329,7 +333,7 @@
     "countryProfile": {
       "country": "DE",
       "languageMode": "system",
-      "note": "Sprache wird standardm\u00e4\u00dfig aus der NexoWatt-EOS-Systemeinstellung \u00fcbernommen."
+      "note": "Sprache wird standardmäßig aus der NexoWatt-EOS-Systemeinstellung übernommen."
     },
     "energyWallet": {
       "enabled": true,

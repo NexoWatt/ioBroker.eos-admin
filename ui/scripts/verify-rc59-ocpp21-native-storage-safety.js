@@ -248,7 +248,7 @@ function makeTickHarness() {
 
   assert(chargingSource.includes('ocppDatapointMappingMigrations: Array.isArray(ocppDatapointMigrations)'));
   assert(!/^\s*ocppDatapointMappingMigrations,\s*$/m.test(chargingSource), 'Undefined shorthand must never return');
-  assert(mainSource.includes("getForeignObjectsAsync('ocpp21.*', 'state')"));
+  assert(mainSource.includes("ocppDiscoveryPatterns(this.hostNamespace).map(pattern => this.getForeignObjectsAsync(pattern, 'state'))"));
   const discoveryBlock = mainSource.slice(mainSource.indexOf('// --- OCPP discovery'), mainSource.indexOf('let objects = {};', mainSource.indexOf('// --- OCPP discovery')));
   assert(!discoveryBlock.includes("'alias.0.nexowatt.ocpp.*'"));
   assert(!discoveryBlock.includes("'alias.0.ocpp21.*'"));
