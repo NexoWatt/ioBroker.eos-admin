@@ -20,6 +20,7 @@ const { getDeyeProfile, buildDeyeAliases } = require('./deyeProtocol');
 const { getVartaProfile, registersForProfile, buildVartaAliases } = require('./vartaProtocol');
 const { extendedRegistersForProfile, buildVartaExtendedAliases } = require('./vartaExtendedProtocol');
 const { MqttDriver } = require('./drivers/mqtt');
+const { MqttCallbackQueue, assertMqttMessageSession } = require('./drivers/mqttPendingOperations');
 const { CanbusDriver } = require('./drivers/canbus');
 const { HttpDriver } = require('./drivers/http');
 const { UdpDriver } = require('./drivers/udp');
@@ -83,6 +84,7 @@ const MAX_EV_CHARGER_FRESHNESS_REFRESH_MS = 10000;
 class DeviceRuntime {
   constructor(adapter, deviceConfig, template, globalConfig) {
     this.adapter = adapter;
+    this._mqttCallbacks = new MqttCallbackQueue();
     this.cfg = deviceConfig;
     this.template = template;
     this.global = globalConfig || {};
@@ -674,6 +676,7 @@ class DeviceRuntime {
   }
 
   async _setStateCached(relId, val, ack = true, options = undefined) {
+    assertMqttMessageSession();
     if (!relId) return false;
     const key = String(relId);
     const nextAck = !!ack;
@@ -695,10 +698,14 @@ class DeviceRuntime {
     try {
       await this.adapter.setStateAsync(key, { val: nextVal, ack: nextAck });
       this._stateCache.set(key, { val: nextVal, ack: nextAck, writtenAt: now });
-      return true;
     } catch (_) {
+      assertMqttMessageSession();
       return false;
     }
+    // The DB write already submitted cannot be recalled. Stop this old callback
+    // here; the queued offline barrier follows its completion and wins last.
+    assertMqttMessageSession();
+    return true;
   }
 
   _computeLiveAliasRefreshMs({ fastIntervalMs, isEventDriven } = {}) {
@@ -983,6 +990,7 @@ class DeviceRuntime {
   }
 
   async _tickHeartbeatFromIncomingData(sourceStamp) {
+    assertMqttMessageSession();
     // sourceStamp: optional monotonic marker that only changes when *new* data arrived
     // (e.g., Speedwire lastSeen timestamp). If provided, we only tick when it changes.
     if (!this.started) return;
@@ -6612,7 +6620,12 @@ class DeviceRuntime {
     try { await pending; } finally { this._qualifiedAliasPendingWrites.delete(pending); }
   }
 
-  async _handleMqttSnapshot(values, meta) {
+  _handleMqttSnapshot(values, meta) {
+    return this._mqttCallbacks.run(() => this._applyMqttSnapshot(values, meta));
+  }
+
+  async _applyMqttSnapshot(values, meta) {
+    assertMqttMessageSession();
     const context = meta || {};
     if (context.diagnosticsOnly === true) {
       // Metadata and error envelopes can change aliases without proving live
@@ -6638,7 +6651,11 @@ class DeviceRuntime {
     await this._updateAliases(values || {}, { connected, lastError }).catch(() => {});
   }
 
-  async _handleMqttConnectionState(connected, errorMessage) {
+  _handleMqttConnectionState(connected, errorMessage) {
+    return this._mqttCallbacks.run(() => this._applyMqttConnectionState(connected, errorMessage), 'barrier');
+  }
+
+  async _applyMqttConnectionState(connected, errorMessage) {
     const isConnected = !!connected;
     if (isConnected) {
       await this._setStateCached(`${this.baseId}.info.connection`, true, true);
@@ -6683,7 +6700,7 @@ class DeviceRuntime {
         this.global,
         (dp) => this.relStateId(dp),
         (dp) => this._getRoundingDecimals(dp),
-        () => { this._tickHeartbeatFromIncomingData().catch(() => {}); },
+        () => this._mqttCallbacks.run(() => this._tickHeartbeatFromIncomingData()),
         (values, meta) => this._handleMqttSnapshot(values, meta),
         (connected, errorMessage) => this._handleMqttConnectionState(connected, errorMessage)
       );
@@ -7422,6 +7439,12 @@ class DeviceRuntime {
     if (this._aliasMetadataRefreshTimer) {
       try { clearTimeout(this._aliasMetadataRefreshTimer); } catch (_) {}
       this._aliasMetadataRefreshTimer = null;
+    }
+    // Invalidate the MQTT session before the final offline states. A submitted
+    // DB write must settle first; an unresolved drain is not a confirmed stop.
+    if (this.cfg.protocol === 'mqtt') {
+      if (this.driver) await this.driver.disconnect();
+      await this._mqttCallbacks.drain();
     }
     // Mark offline on stop (fail-safe)
     for (const relId of this._hbRelIds('online')) {

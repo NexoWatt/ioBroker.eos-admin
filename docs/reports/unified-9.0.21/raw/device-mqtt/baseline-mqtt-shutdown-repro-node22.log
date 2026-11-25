@@ -1,0 +1,16 @@
+(node:15) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"stoppedAfter1500ms":false,"actualOpenSockets":1,"safePublishes":1}
+AssertionError [ERR_ASSERTION]: missing safe-command PUBACK must not block stop indefinitely
+
+false !== true
+
+    at /workspace/scratch/741f792566ea/audit-921/devices/mqtt-shutdown-repro.cjs:29:10
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: 'strictEqual',
+  diff: 'simple'
+}

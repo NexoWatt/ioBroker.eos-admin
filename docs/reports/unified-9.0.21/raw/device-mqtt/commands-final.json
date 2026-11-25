@@ -1,0 +1,275 @@
+[
+  {
+    "name": "baseline-resources-node22",
+    "startedUtc": "2026-11-24T21:53:13.140289+00:00",
+    "durationSeconds": 10.689,
+    "command": [
+      "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node",
+      "--test",
+      "modules/devices/test/mqttResourceBounds.test.js"
+    ],
+    "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+    "exitCode": 1,
+    "expectedBaselineFailure": true,
+    "environmentOverrides": {
+      "EOS_TEST_ROOT": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin"
+    }
+  },
+  {
+    "name": "all-devices-final-node22",
+    "startedUtc": "2026-11-24T21:53:23.829482+00:00",
+    "durationSeconds": 13.234,
+    "command": [
+      "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node",
+      "--test",
+      "modules/devices/test/aliasContractV1.test.js",
+      "modules/devices/test/deviceAliasFreshness.test.js",
+      "modules/devices/test/deviceAliasSemantics.test.js",
+      "modules/devices/test/deyeModbus.test.js",
+      "modules/devices/test/emsAssignmentUi.test.js",
+      "modules/devices/test/hostedModule.test.js",
+      "modules/devices/test/http-security.test.js",
+      "modules/devices/test/modbusAuthorizationReads.test.js",
+      "modules/devices/test/modbusConnectLifecycle.test.js",
+      "modules/devices/test/modbusReadIntegrity.test.js",
+      "modules/devices/test/modbusSerialLifecycle.test.js",
+      "modules/devices/test/mqttCommandLifecycle.test.js",
+      "modules/devices/test/mqttResourceBounds.test.js",
+      "modules/devices/test/mqttRuntimeSession.test.js",
+      "modules/devices/test/runtimeLiveness.test.js",
+      "modules/devices/test/serialOperationGate.test.js",
+      "modules/devices/test/solaxReadbackContext.test.js",
+      "modules/devices/test/speedwireLifecycle.test.js",
+      "modules/devices/test/sungrowFastFeedbackPatch.test.js",
+      "modules/devices/test/taCmi.test.js",
+      "modules/devices/test/tesvoltMqttTransport.test.js",
+      "modules/devices/test/vartaExtendedDriver.test.js",
+      "modules/devices/test/vartaModbus.test.js",
+      "modules/devices/test/writeErrorHandling.test.js"
+    ],
+    "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+    "exitCode": 0,
+    "expectedBaselineFailure": false,
+    "environmentOverrides": {}
+  },
+  {
+    "name": "types-final-node22",
+    "startedUtc": "2026-11-24T21:53:37.063718+00:00",
+    "durationSeconds": 0.98,
+    "command": [
+      "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node",
+      "node_modules/typescript/bin/tsc",
+      "-p",
+      "modules/devices/tsconfig.mqtt-lifecycle.json"
+    ],
+    "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+    "exitCode": 0,
+    "expectedBaselineFailure": false,
+    "environmentOverrides": {}
+  },
+  {
+    "name": "lint-final-node22",
+    "startedUtc": "2026-11-24T21:53:38.043983+00:00",
+    "durationSeconds": 0.507,
+    "command": [
+      "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node",
+      "node_modules/eslint/bin/eslint.js",
+      "-c",
+      "modules/devices/eslint.hosted.config.mjs",
+      "modules/devices/lib/drivers/mqtt.js",
+      "modules/devices/lib/drivers/mqttPendingOperations.js",
+      "modules/devices/test/mqttCommandLifecycle.test.js",
+      "modules/devices/test/mqttResourceBounds.test.js",
+      "modules/devices/test/mqttRuntimeSession.test.js"
+    ],
+    "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+    "exitCode": 0,
+    "expectedBaselineFailure": false,
+    "environmentOverrides": {}
+  },
+  {
+    "name": "env-node22",
+    "startedUtc": "2026-11-24T21:53:38.551641+00:00",
+    "durationSeconds": 0.053,
+    "command": [
+      "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node",
+      "-e",
+      "console.log(JSON.stringify({node:process.version,platform:process.platform,arch:process.arch,uid:process.getuid(),mqtt:require('mqtt/package.json').version,typescript:require('typescript/package.json').version}))"
+    ],
+    "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+    "exitCode": 0,
+    "expectedBaselineFailure": false,
+    "environmentOverrides": {}
+  },
+  {
+    "name": "baseline-resources-node24",
+    "startedUtc": "2026-11-24T21:53:38.605358+00:00",
+    "durationSeconds": 11.103,
+    "command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "--test",
+      "modules/devices/test/mqttResourceBounds.test.js"
+    ],
+    "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+    "exitCode": 1,
+    "expectedBaselineFailure": true,
+    "environmentOverrides": {
+      "EOS_TEST_ROOT": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin"
+    }
+  },
+  {
+    "name": "all-devices-final-node24",
+    "startedUtc": "2026-11-24T21:53:49.709284+00:00",
+    "durationSeconds": 13.444,
+    "command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "--test",
+      "modules/devices/test/aliasContractV1.test.js",
+      "modules/devices/test/deviceAliasFreshness.test.js",
+      "modules/devices/test/deviceAliasSemantics.test.js",
+      "modules/devices/test/deyeModbus.test.js",
+      "modules/devices/test/emsAssignmentUi.test.js",
+      "modules/devices/test/hostedModule.test.js",
+      "modules/devices/test/http-security.test.js",
+      "modules/devices/test/modbusAuthorizationReads.test.js",
+      "modules/devices/test/modbusConnectLifecycle.test.js",
+      "modules/devices/test/modbusReadIntegrity.test.js",
+      "modules/devices/test/modbusSerialLifecycle.test.js",
+      "modules/devices/test/mqttCommandLifecycle.test.js",
+      "modules/devices/test/mqttResourceBounds.test.js",
+      "modules/devices/test/mqttRuntimeSession.test.js",
+      "modules/devices/test/runtimeLiveness.test.js",
+      "modules/devices/test/serialOperationGate.test.js",
+      "modules/devices/test/solaxReadbackContext.test.js",
+      "modules/devices/test/speedwireLifecycle.test.js",
+      "modules/devices/test/sungrowFastFeedbackPatch.test.js",
+      "modules/devices/test/taCmi.test.js",
+      "modules/devices/test/tesvoltMqttTransport.test.js",
+      "modules/devices/test/vartaExtendedDriver.test.js",
+      "modules/devices/test/vartaModbus.test.js",
+      "modules/devices/test/writeErrorHandling.test.js"
+    ],
+    "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+    "exitCode": 0,
+    "expectedBaselineFailure": false,
+    "environmentOverrides": {}
+  },
+  {
+    "name": "types-final-node24",
+    "startedUtc": "2026-11-24T21:54:03.153954+00:00",
+    "durationSeconds": 0.708,
+    "command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "node_modules/typescript/bin/tsc",
+      "-p",
+      "modules/devices/tsconfig.mqtt-lifecycle.json"
+    ],
+    "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+    "exitCode": 0,
+    "expectedBaselineFailure": false,
+    "environmentOverrides": {}
+  },
+  {
+    "name": "lint-final-node24",
+    "startedUtc": "2026-11-24T21:54:03.861977+00:00",
+    "durationSeconds": 0.423,
+    "command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "node_modules/eslint/bin/eslint.js",
+      "-c",
+      "modules/devices/eslint.hosted.config.mjs",
+      "modules/devices/lib/drivers/mqtt.js",
+      "modules/devices/lib/drivers/mqttPendingOperations.js",
+      "modules/devices/test/mqttCommandLifecycle.test.js",
+      "modules/devices/test/mqttResourceBounds.test.js",
+      "modules/devices/test/mqttRuntimeSession.test.js"
+    ],
+    "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+    "exitCode": 0,
+    "expectedBaselineFailure": false,
+    "environmentOverrides": {}
+  },
+  {
+    "name": "env-node24",
+    "startedUtc": "2026-11-24T21:54:04.284981+00:00",
+    "durationSeconds": 0.055,
+    "command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "-e",
+      "console.log(JSON.stringify({node:process.version,platform:process.platform,arch:process.arch,uid:process.getuid(),mqtt:require('mqtt/package.json').version,typescript:require('typescript/package.json').version}))"
+    ],
+    "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+    "exitCode": 0,
+    "expectedBaselineFailure": false,
+    "environmentOverrides": {}
+  },
+  {
+    "name": "all-devices-final-node22-after-last-product-edit",
+    "startedUtc": "2026-11-24T21:55:42.838795+00:00",
+    "durationSeconds": 13.413,
+    "command": [
+      "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node",
+      "--test",
+      "modules/devices/test/aliasContractV1.test.js",
+      "modules/devices/test/deviceAliasFreshness.test.js",
+      "modules/devices/test/deviceAliasSemantics.test.js",
+      "modules/devices/test/deyeModbus.test.js",
+      "modules/devices/test/emsAssignmentUi.test.js",
+      "modules/devices/test/hostedModule.test.js",
+      "modules/devices/test/http-security.test.js",
+      "modules/devices/test/modbusAuthorizationReads.test.js",
+      "modules/devices/test/modbusConnectLifecycle.test.js",
+      "modules/devices/test/modbusReadIntegrity.test.js",
+      "modules/devices/test/modbusSerialLifecycle.test.js",
+      "modules/devices/test/mqttCommandLifecycle.test.js",
+      "modules/devices/test/mqttResourceBounds.test.js",
+      "modules/devices/test/mqttRuntimeSession.test.js",
+      "modules/devices/test/runtimeLiveness.test.js",
+      "modules/devices/test/serialOperationGate.test.js",
+      "modules/devices/test/solaxReadbackContext.test.js",
+      "modules/devices/test/speedwireLifecycle.test.js",
+      "modules/devices/test/sungrowFastFeedbackPatch.test.js",
+      "modules/devices/test/taCmi.test.js",
+      "modules/devices/test/tesvoltMqttTransport.test.js",
+      "modules/devices/test/vartaExtendedDriver.test.js",
+      "modules/devices/test/vartaModbus.test.js",
+      "modules/devices/test/writeErrorHandling.test.js"
+    ],
+    "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+    "exitCode": 0
+  },
+  {
+    "name": "baseline-final-message-test-node22",
+    "startedUtc": "2026-11-24T21:55:56.252549+00:00",
+    "durationSeconds": 0.505,
+    "command": [
+      "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node",
+      "--test",
+      "--test-name-pattern=delayed old",
+      "modules/devices/test/mqttCommandLifecycle.test.js"
+    ],
+    "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+    "exitCode": 1,
+    "environmentOverrides": {
+      "EOS_TEST_ROOT": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin"
+    },
+    "expectedBaselineFailure": true
+  },
+  {
+    "name": "baseline-final-message-test-node24",
+    "startedUtc": "2026-11-24T21:55:56.758243+00:00",
+    "durationSeconds": 0.398,
+    "command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "--test",
+      "--test-name-pattern=delayed old",
+      "modules/devices/test/mqttCommandLifecycle.test.js"
+    ],
+    "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+    "exitCode": 1,
+    "environmentOverrides": {
+      "EOS_TEST_ROOT": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin"
+    },
+    "expectedBaselineFailure": true
+  }
+]

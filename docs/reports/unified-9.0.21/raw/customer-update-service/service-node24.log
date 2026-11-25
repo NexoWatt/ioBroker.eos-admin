@@ -1,0 +1,24 @@
+✔ metadata and registry signatures accept the exact stable package and reject tampering (10.230315ms)
+✔ expired, wrong-curve, missing and malformed registry keys fail closed (1.21542ms)
+✔ archive identity, member hashes, path traversal, links, duplicate and incomplete streams (98.769176ms)
+✔ npm PAX long paths and matching sizes are supported, dangling or conflicting overrides rejected (48.985761ms)
+✔ archive read errors and cancellation reject without leaving source streams running (80.091106ms)
+✔ availability is cached, preparation verifies and encrypts without starting a process (42.341315ms)
+✔ signature and integrity failures cannot produce an installable plan (88.162485ms)
+✔ authorization, one host instance, controller contract and configuration changes are enforced before launch (277.631633ms)
+✔ one-use start launches only the fixed worker, survives loss of response and never replays after restart (62.184975ms)
+✔ only known pre-install failures allow a new explicit preparation; uncertainty stays locked across restart (166.140846ms)
+✔ revocation at final start fence does not spawn or leave an executable retry marker (24.425478ms)
+✔ slow snapshot keeps a single admission slot; stop prevents a late preparation from becoming executable (20.555843ms)
+✔ configuration comparison preserves existing values while allowing added defaults only (16.569849ms)
+✔ a verified worker result requires new running version and preserved configuration before success (95.693139ms)
+✔ failed private storage remains closed and does not turn into an apparently available update (20.662923ms)
+✔ real HTTPS transport rejects redirects, invalid TLS and oversized bodies and aborts a stalled body (218.799506ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1707.851729

@@ -1,0 +1,74 @@
+(node:30) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:37) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: real MQTT backpressure bounds message count and reconnects only after the old DB write drains
+not ok 1 - real MQTT backpressure bounds message count and reconnects only after the old DB write drains
+  ---
+  duration_ms: 2630.241327
+  type: 'test'
+  location: '/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/modules/devices/test/mqttResourceBounds.test.js:56:3'
+  failureType: 'testCodeFailure'
+  error: 'MQTT backlog was not bounded'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    until (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/modules/devices/test/mqttResourceBounds.test.js:14:39)
+    async TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/modules/devices/test/mqttResourceBounds.test.js:61:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: real MQTT backpressure bounds queued payload bytes and reconnects only after the old DB write drains
+not ok 2 - real MQTT backpressure bounds queued payload bytes and reconnects only after the old DB write drains
+  ---
+  duration_ms: 2644.58513
+  type: 'test'
+  location: '/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/modules/devices/test/mqttResourceBounds.test.js:56:3'
+  failureType: 'testCodeFailure'
+  error: 'MQTT backlog was not bounded'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    until (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/modules/devices/test/mqttResourceBounds.test.js:14:39)
+    async TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/modules/devices/test/mqttResourceBounds.test.js:61:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: MQTT single payload exceeding one MiB is rejected visibly before application state writes
+not ok 3 - MQTT single payload exceeding one MiB is rejected visibly before application state writes
+  ---
+  duration_ms: 2529.5405
+  type: 'test'
+  location: '/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/modules/devices/test/mqttResourceBounds.test.js:77:1'
+  failureType: 'testCodeFailure'
+  error: 'oversized payload was not rejected'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    until (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/modules/devices/test/mqttResourceBounds.test.js:14:39)
+    async TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/modules/devices/test/mqttResourceBounds.test.js:80:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: MQTT wildcard topic discovery is capped per session with an explicit transport error
+not ok 4 - MQTT wildcard topic discovery is capped per session with an explicit transport error
+  ---
+  duration_ms: 2725.443519
+  type: 'test'
+  location: '/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/modules/devices/test/mqttResourceBounds.test.js:86:1'
+  failureType: 'testCodeFailure'
+  error: 'wildcard discovery grows without bound'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    until (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/modules/devices/test/mqttResourceBounds.test.js:14:39)
+    async TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/modules/devices/test/mqttResourceBounds.test.js:94:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 0
+# fail 4
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 10641.07777

@@ -3,6 +3,7 @@
 (() => {
     const api = '/api/eos/modules/backup';
     let config = {},
+        configurationRevision = '',
         csrf = '',
         busy = false,
         poll = null;
@@ -25,6 +26,7 @@
             throw new Error('EOS antwortet derzeit nicht. Bitte Status erneut laden.');
         }
         if (!r.ok) {
+            if (v.error === 'EOS_MODULE_CONFIG_CONFLICT') throw new Error('Die Sicherungseinstellungen wurden inzwischen geändert. Deine Eingaben bleiben erhalten. Seite neu laden und Änderungen mit dem gespeicherten Stand abgleichen.');
             if (r.status === 401)
                 throw new Error(
                     'Sitzung abgelaufen. Bitte erneut bei EOS anmelden; ungespeicherte Eingaben bleiben hier erhalten.',
@@ -179,6 +181,7 @@
         csrf = v.csrfToken || csrf;
         if (replace) {
             config = v.config || {};
+            configurationRevision = typeof v.configurationRevision === 'string' ? v.configurationRevision : '';
             fill();
         }
         render(v);
@@ -207,7 +210,7 @@
                         ? JSON.parse(e.value)
                         : e.value;
         }
-        const v = await request('', 'PUT', { config: next });
+        const v = await request('', 'PUT', { config: next, expectedConfigurationRevision: configurationRevision });
         config = v.config;
         message('Einstellungen gespeichert.');
         await load(true);

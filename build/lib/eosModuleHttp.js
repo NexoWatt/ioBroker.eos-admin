@@ -70,7 +70,7 @@ function registerEosModuleRoutes({ app, host, baseDir, jsonParser, authorize, cs
         }, error => {
             const code = typeof error?.code === 'string' && /^[A-Z0-9_]{1,80}$/.test(error.code) ? error.code : 'EOS_MODULE_REQUEST_FAILED';
             if (!res.headersSent)
-                res.status(code.includes('TIMEOUT') ? 504 : 400).json({ error: code });
+                res.status(code === 'EOS_MODULE_CONFIG_CONFLICT' ? 409 : code.includes('TIMEOUT') ? 504 : 400).json({ error: code });
         });
     };
     const sendFile = file => (_req, res) => res.sendFile(file, error => {
@@ -103,7 +103,13 @@ function registerEosModuleRoutes({ app, host, baseDir, jsonParser, authorize, cs
         app.get(api, guard(), (req, res) => {
             void host.view(id).then(value => res.json({ ...value, csrfToken: res.locals.eosModuleCsrf }), () => res.status(503).json({ error: 'EOS_MODULE_STATUS_UNAVAILABLE' }));
         });
-        app.put(api, guard(true), jsonParser, action(req => host.save(id, req.body?.config)));
+        app.put(api, guard(true), jsonParser, action(req => {
+            const revision = req.body?.expectedConfigurationRevision;
+            if (typeof revision !== 'string' || !/^[a-f0-9-]{36}$/.test(revision)) {
+                throw Object.assign(new Error('EOS_MODULE_CONFIG_CONFLICT'), { code: 'EOS_MODULE_CONFIG_CONFLICT' });
+            }
+            return host.save(id, req.body?.config, undefined, revision);
+        }));
         app.post(`${api}/import`, guard(true), jsonParser, action(req => host.importLegacy(id, req.body?.instance)));
         app.post(`${api}/command`, guard(true), jsonParser, action(req => host.command(id, req.body?.command, req.body?.payload)));
         app.get(`/modules/${id}`, guard(false, true), (req, res, next) => {

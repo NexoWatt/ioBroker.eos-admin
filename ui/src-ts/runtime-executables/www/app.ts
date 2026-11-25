@@ -4765,7 +4765,8 @@ function initSettingsPageTabs(){
   });
 
   try { window.__nwActivateSettingsPage = activatePage; } catch (_e) {}
-  activatePage(wrap.dataset.settingsPage || (() => {
+  window.addEventListener('hashchange', () => { if (window.location.hash === '#updates') activatePage('updates'); });
+  activatePage(window.location.hash === '#updates' ? 'updates' : wrap.dataset.settingsPage || (() => {
     try { return sessionStorage.getItem('nexowatt.settings.page') || 'general'; } catch (_e) { return 'general'; }
   })());
 }

@@ -1,0 +1,28 @@
+✖ an inherited async context from a completed callback cannot bypass the current FIFO owner (6.398185ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 615.40144
+
+✖ failing tests:
+
+test at modules/devices/test/mqttRuntimeSession.test.js:74:1
+✖ an inherited async context from a completed callback cannot bypass the current FIFO owner (6.398185ms)
+  AssertionError [ERR_ASSERTION]: a stale ALS token must not admit concurrent callbacks
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/modules/devices/test/mqttRuntimeSession.test.js:89:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

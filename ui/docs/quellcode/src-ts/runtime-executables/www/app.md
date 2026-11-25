@@ -185,206 +185,206 @@ Parameter sind die Namen aus der Signatur, keine geratenen Datenverträge. Die A
 | [`bindInputValue`](../../../../../src-ts/runtime-executables/www/app.ts#L4602) | el, stateKey | String, el.addEventListener, sk.slice, sk.startsWith, v.trim |
 | [`updatePvSurplusSettingsUi`](../../../../../src-ts/runtime-executables/www/app.ts#L4681) | – | String, block.classList.toggle, document.getElementById, row.classList.toggle |
 | [`setupPvSurplusSettingsUi`](../../../../../src-ts/runtime-executables/www/app.ts#L4698) | – | document.getElementById, enabled.addEventListener, select.addEventListener, updatePvSurplusSettingsUi |
-| [`initSettingsPageTabs`](../../../../../src-ts/runtime-executables/www/app.ts#L4715) | – | Array.from, activatePage, buttons.forEach, document.querySelector, wrap.querySelectorAll |
+| [`initSettingsPageTabs`](../../../../../src-ts/runtime-executables/www/app.ts#L4715) | – | Array.from, activatePage, buttons.forEach, document.querySelector, window.addEventListener, wrap.querySelectorAll |
 | [`normalizePage`](../../../../../src-ts/runtime-executables/www/app.ts#L4726) | value | String, allowed.includes, buttons.map |
 | [`activatePage`](../../../../../src-ts/runtime-executables/www/app.ts#L4745) | value | buttons.forEach, normalizePage, renderSettingsLogPanel, sessionStorage.setItem, wrap.querySelectorAll |
-| [`_nwSettingsStateValue`](../../../../../src-ts/runtime-executables/www/app.ts#L4778) | key | – |
-| [`_nwSettingsText`](../../../../../src-ts/runtime-executables/www/app.ts#L4788) | value, fallback | String |
-| [`_nwSettingsBool`](../../../../../src-ts/runtime-executables/www/app.ts#L4799) | value | String |
-| [`_nwSettingsCount`](../../../../../src-ts/runtime-executables/www/app.ts#L4813) | value | Math.round, Number, Number.isFinite, String |
-| [`_nwSettingsTs`](../../../../../src-ts/runtime-executables/www/app.ts#L4823) | value | Number, Number.isFinite, nwUiLocaleTag |
-| [`_nwSettingsPower`](../../../../../src-ts/runtime-executables/www/app.ts#L4834) | value | Number, Number.isFinite, formatPower |
-| [`_nwSettingsDays`](../../../../../src-ts/runtime-executables/www/app.ts#L4844) | value | Math.round, Number, Number.isFinite |
-| [`_nwSettingsJson`](../../../../../src-ts/runtime-executables/www/app.ts#L4854) | value | JSON.parse, JSON.stringify, _nwSettingsText |
-| [`renderSettingsLogPanel`](../../../../../src-ts/runtime-executables/www/app.ts#L4865) | – | String, _nwSettingsBool, _nwSettingsCount, _nwSettingsDays, _nwSettingsJson, _nwSettingsPower, _nwSettingsStateValue, _nwSettingsText, _nwSettingsTs, document.getElementById, document.querySelector, set |
-| [`set`](../../../../../src-ts/runtime-executables/www/app.ts#L4892) | id, value | document.getElementById |
-| [`setupSettingsReportButtons`](../../../../../src-ts/runtime-executables/www/app.ts#L4976) | – | btn.addEventListener, document.getElementById |
-| [`setupSettings`](../../../../../src-ts/runtime-executables/www/app.ts#L4995) | – | document.querySelectorAll, initSettingsPageTabs, renderSettingsLogPanel, setupPvSurplusSettingsUi, setupRfidBillingUi, setupRfidLearningUi, setupRfidWhitelistUi, setupSettingsReportButtons |
-| [`parseJsonSafe`](../../../../../src-ts/runtime-executables/www/app.ts#L5018) | raw, fallback | JSON.parse, JSON.stringify |
-| [`storageFarmGetStatusList`](../../../../../src-ts/runtime-executables/www/app.ts#L5031) | – | Array.isArray, parseJsonSafe |
-| [`storageFarmUpdateModeLabel`](../../../../../src-ts/runtime-executables/www/app.ts#L5043) | – | String, document.getElementById |
-| [`storageFarmUpdateSummary`](../../../../../src-ts/runtime-executables/www/app.ts#L5056) | – | Number, document.getElementById, formatPower |
-| [`storageFarmRenderStatusRows`](../../../../../src-ts/runtime-executables/www/app.ts#L5075) | list | Array.isArray, document.getElementById, list.forEach |
-| [`mkCell`](../../../../../src-ts/runtime-executables/www/app.ts#L5100) | txt, label | String, d.setAttribute, document.createElement |
-| [`storageFarmApply`](../../../../../src-ts/runtime-executables/www/app.ts#L5163) | – | storageFarmGetStatusList, storageFarmRenderStatusRows, storageFarmUpdateModeLabel, storageFarmUpdateSummary |
-| [`initStorageFarmPanel`](../../../../../src-ts/runtime-executables/www/app.ts#L5177) | – | btnReload.addEventListener, document.getElementById, storageFarmApply |
-| [`loadRfidCustomerState`](../../../../../src-ts/runtime-executables/www/app.ts#L5193) | – | Array.isArray, Date.now, JSON.stringify, Number, Object.assign, String, fetch, response.json |
-| [`setupRfidWhitelistUi`](../../../../../src-ts/runtime-executables/www/app.ts#L5218) | – | btnAdd.addEventListener, btnReload.addEventListener, btnSave.addEventListener, document.getElementById, readWhitelistFromState, render |
-| [`normRfid`](../../../../../src-ts/runtime-executables/www/app.ts#L5231) | v | String |
-| [`safeText`](../../../../../src-ts/runtime-executables/www/app.ts#L5238) | v | String |
-| [`readWhitelistFromState`](../../../../../src-ts/runtime-executables/www/app.ts#L5245) | – | Array.isArray, JSON.parse, String, arr.map |
-| [`setMsg`](../../../../../src-ts/runtime-executables/www/app.ts#L5271) | t | – |
-| [`render`](../../../../../src-ts/runtime-executables/www/app.ts#L5278) | – | setMsg |
-| [`save`](../../../../../src-ts/runtime-executables/www/app.ts#L5328) | – | JSON.stringify, cleaned.push, fetch, normRfid, render, safeText, seen.add, seen.has, setMsg |
-| [`reload`](../../../../../src-ts/runtime-executables/www/app.ts#L5361) | – | loadRfidCustomerState, readWhitelistFromState, render, setMsg |
-| [`setupRfidLearningUi`](../../../../../src-ts/runtime-executables/www/app.ts#L5434) | – | applyUi, btnAdd.addEventListener, btnLearn.addEventListener, document.getElementById, loadRfidCustomerState |
-| [`setMsg`](../../../../../src-ts/runtime-executables/www/app.ts#L5448) | t | – |
-| [`setLearningActive`](../../../../../src-ts/runtime-executables/www/app.ts#L5455) | active | JSON.stringify, fetch |
-| [`readStateVal`](../../../../../src-ts/runtime-executables/www/app.ts#L5472) | key | – |
-| [`stopLearningPoll`](../../../../../src-ts/runtime-executables/www/app.ts#L5478) | – | clearTimeout |
-| [`pollLearningState`](../../../../../src-ts/runtime-executables/www/app.ts#L5482) | – | Date.now, applyUi, loadRfidCustomerState, readStateVal, setTimeout, stopLearningPoll |
-| [`startLearningPoll`](../../../../../src-ts/runtime-executables/www/app.ts#L5491) | – | Date.now, pollLearningState |
-| [`applyUi`](../../../../../src-ts/runtime-executables/www/app.ts#L5501) | – | Number, String, nwUiLocaleTag, readStateVal, setMsg |
-| [`setupRfidBillingUi`](../../../../../src-ts/runtime-executables/www/app.ts#L5574) | – | String, applyMode, btnOpen.addEventListener, document.getElementById, modeWrap.querySelectorAll, now.getFullYear, now.getMonth, pad2, renderOptions |
-| [`pad2`](../../../../../src-ts/runtime-executables/www/app.ts#L5591) | n | Number, String |
-| [`setMsg`](../../../../../src-ts/runtime-executables/www/app.ts#L5598) | t | – |
-| [`getWhitelist`](../../../../../src-ts/runtime-executables/www/app.ts#L5605) | – | Array.isArray, JSON.parse, window.__nwRfidWhitelist.get |
-| [`renderOptions`](../../../../../src-ts/runtime-executables/www/app.ts#L5631) | – | Array.isArray, String, document.createElement, getWhitelist, sel.appendChild |
-| [`applyMode`](../../../../../src-ts/runtime-executables/www/app.ts#L5681) | m | modeWrap.querySelectorAll, monthRow.classList.toggle, setMsg, yearRow.classList.toggle |
-| [`setupInstaller`](../../../../../src-ts/runtime-executables/www/app.ts#L5768) | – | btn.addEventListener, cancel.addEventListener, document.getElementById, form.addEventListener, refreshLock |
-| [`refreshLock`](../../../../../src-ts/runtime-executables/www/app.ts#L5781) | – | fetch, formBox.classList.toggle, formBox.querySelectorAll, loginBox.classList.toggle, r.json |
-| [`doLogin`](../../../../../src-ts/runtime-executables/www/app.ts#L5801) | – | JSON.stringify, String, alert, fetch, refreshLock |
-| [`initInstallerPanel`](../../../../../src-ts/runtime-executables/www/app.ts#L5845) | – | document.getElementById, document.querySelectorAll, window.NW_RUNTIME?.url |
-| [`initTabs`](../../../../../src-ts/runtime-executables/www/app.ts#L5861) | – | buttons.forEach, document.querySelectorAll |
-| [`renderSmartHome`](../../../../../src-ts/runtime-executables/www/app.ts#L5880) | – | Number, document.getElementById, get, onTxt |
-| [`onTxt`](../../../../../src-ts/runtime-executables/www/app.ts#L5887) | v | – |
-| [`d`](../../../../../src-ts/runtime-executables/www/app.ts#L5894) | k | – |
-| [`get`](../../../../../src-ts/runtime-executables/www/app.ts#L5901) | path | d |
-| [`d`](../../../../../src-ts/runtime-executables/www/app.ts#L5933) | k | – |
-| [`pctDeg`](../../../../../src-ts/runtime-executables/www/app.ts#L5958) | val, maxDeg | Math.max, Math.min |
-| [`setText`](../../../../../src-ts/runtime-executables/www/app.ts#L5977) | id, t | document.getElementById |
-| [`d`](../../../../../src-ts/runtime-executables/www/app.ts#L6017) | k | – |
-| [`setText`](../../../../../src-ts/runtime-executables/www/app.ts#L6040) | id, t | document.getElementById |
-| [`pct`](../../../../../src-ts/runtime-executables/www/app.ts#L6078) | v | Math.max, Math.min |
-| [`d`](../../../../../src-ts/runtime-executables/www/app.ts#L6109) | k | – |
-| [`pctDeg`](../../../../../src-ts/runtime-executables/www/app.ts#L6134) | val, maxDeg | Math.max, Math.min |
-| [`setText`](../../../../../src-ts/runtime-executables/www/app.ts#L6153) | id, t | document.getElementById |
-| [`d`](../../../../../src-ts/runtime-executables/www/app.ts#L6193) | k | – |
-| [`setText`](../../../../../src-ts/runtime-executables/www/app.ts#L6216) | id, t | document.getElementById |
-| [`pct`](../../../../../src-ts/runtime-executables/www/app.ts#L6254) | v | Math.max, Math.min |
-| [`d`](../../../../../src-ts/runtime-executables/www/app.ts#L6277) | k | – |
-| [`setText`](../../../../../src-ts/runtime-executables/www/app.ts#L6286) | id, txt | document.getElementById |
-| [`setSideValue`](../../../../../src-ts/runtime-executables/www/app.ts#L6301) | id, val | document.getElementById |
-| [`updateEmsControlUi`](../../../../../src-ts/runtime-executables/www/app.ts#L6311) | – | Date.now, Number, Number.isFinite, String, card.classList.toggle, document.getElementById, formatPower, formatPricePerKwh, modal.classList.contains, modeWrap.querySelectorAll, prioWrap.querySelectorAll, setText, v, window.NexoWattTariffDisplay.display (weitere in der Quelle) |
-| [`v`](../../../../../src-ts/runtime-executables/www/app.ts#L6326) | k | – |
-| [`setText`](../../../../../src-ts/runtime-executables/www/app.ts#L6355) | id, txt | document.getElementById |
-| [`initEmsControlModal`](../../../../../src-ts/runtime-executables/www/app.ts#L6516) | – | closeBtn.addEventListener, document.getElementById, energyDetailsBtn.addEventListener, modal.addEventListener, modeWrap.querySelectorAll, openBtn.addEventListener, openSettingsBtn.addEventListener, prioWrap.querySelectorAll, tariffToggle.addEventListener |
-| [`setSetting`](../../../../../src-ts/runtime-executables/www/app.ts#L6537) | key, value | JSON.stringify, fetch |
-| [`open`](../../../../../src-ts/runtime-executables/www/app.ts#L6560) | e | e.preventDefault, modal.classList.remove, updateEmsControlUi |
-| [`close`](../../../../../src-ts/runtime-executables/www/app.ts#L6571) | – | modal.classList.add |
-| [`initThresholdModal`](../../../../../src-ts/runtime-executables/www/app.ts#L6631) | – | card.addEventListener, closeBtn.addEventListener, document.addEventListener, document.getElementById, modal.addEventListener |
-| [`setHint`](../../../../../src-ts/runtime-executables/www/app.ts#L6648) | msg, isError | String |
-| [`apiSet`](../../../../../src-ts/runtime-executables/www/app.ts#L6659) | key, value | JSON.stringify, fetch, resp.json, setHint |
-| [`renderModal`](../../../../../src-ts/runtime-executables/www/app.ts#L6691) | – | Array.isArray, configured.forEach, document.createElement, listEl.appendChild, setHint |
-| [`v`](../../../../../src-ts/runtime-executables/www/app.ts#L6702) | k | – |
-| [`mkRow`](../../../../../src-ts/runtime-executables/www/app.ts#L6730) | r | Math.max, Math.min, Math.round, Number, Number.isFinite, String, body.appendChild, box.appendChild, btnWrap.appendChild, ctl.appendChild, document.createElement, head.appendChild, inp.addEventListener, mkBtn (weitere in der Quelle) |
-| [`prettyStatus`](../../../../../src-ts/runtime-executables/www/app.ts#L6765) | raw | String |
-| [`mkKpi`](../../../../../src-ts/runtime-executables/www/app.ts#L6810) | label, valueText | box.appendChild, document.createElement |
-| [`setActive`](../../../../../src-ts/runtime-executables/www/app.ts#L6867) | uiVal | Array.from, btnWrap.querySelectorAll |
-| [`mkBtn`](../../../../../src-ts/runtime-executables/www/app.ts#L6886) | label, uiVal, sendMode | String, b.addEventListener, b.classList.add, document.createElement |
-| [`open`](../../../../../src-ts/runtime-executables/www/app.ts#L7029) | e | e.preventDefault, modal.classList.remove, renderModal |
-| [`close`](../../../../../src-ts/runtime-executables/www/app.ts#L7040) | – | modal.classList.add |
-| [`initRelayModal`](../../../../../src-ts/runtime-executables/www/app.ts#L7065) | – | card.addEventListener, closeBtn.addEventListener, document.addEventListener, document.getElementById, modal.addEventListener |
-| [`setHint`](../../../../../src-ts/runtime-executables/www/app.ts#L7084) | msg, isError | String |
-| [`apiSet`](../../../../../src-ts/runtime-executables/www/app.ts#L7095) | idx, prop, value | JSON.stringify, fetch, resp.json, setHint |
-| [`fetchSnapshot`](../../../../../src-ts/runtime-executables/www/app.ts#L7127) | – | fetch, r.json |
-| [`renderModal`](../../../../../src-ts/runtime-executables/www/app.ts#L7150) | – | Array.isArray, document.createElement, fetchSnapshot, listEl.appendChild, relays.filter, setHint, shown.forEach |
-| [`mkRow`](../../../../../src-ts/runtime-executables/www/app.ts#L7189) | r | Number, Number.isFinite, String, body.appendChild, box.appendChild, btnWrap.appendChild, ctl.appendChild, document.createElement, head.appendChild, inp.addEventListener, mkBtn, mkKpi, row.appendChild |
-| [`mkKpi`](../../../../../src-ts/runtime-executables/www/app.ts#L7233) | label, valueText | box.appendChild, document.createElement |
-| [`mkBtn`](../../../../../src-ts/runtime-executables/www/app.ts#L7278) | label, val | b.addEventListener, document.createElement |
-| [`open`](../../../../../src-ts/runtime-executables/www/app.ts#L7357) | e | clearInterval, e.preventDefault, modal.classList.remove, renderModal, setInterval |
-| [`close`](../../../../../src-ts/runtime-executables/www/app.ts#L7380) | – | clearInterval, modal.classList.add |
-| [`initBhkwModal`](../../../../../src-ts/runtime-executables/www/app.ts#L7407) | – | card.addEventListener, closeBtn.addEventListener, document.addEventListener, document.getElementById, modal.addEventListener |
-| [`setHint`](../../../../../src-ts/runtime-executables/www/app.ts#L7426) | msg, isError | String |
-| [`apiSet`](../../../../../src-ts/runtime-executables/www/app.ts#L7437) | idx, prop, value | JSON.stringify, fetch, resp.json, setHint |
-| [`fetchSnapshot`](../../../../../src-ts/runtime-executables/www/app.ts#L7469) | – | fetch, r.json |
-| [`renderModal`](../../../../../src-ts/runtime-executables/www/app.ts#L7492) | – | Array.isArray, devices.filter, document.createElement, fetchSnapshot, listEl.appendChild, setHint, shown.forEach |
-| [`mkKpi`](../../../../../src-ts/runtime-executables/www/app.ts#L7533) | label, valueText | box.appendChild, document.createElement |
-| [`mkRow`](../../../../../src-ts/runtime-executables/www/app.ts#L7559) | d | Math.round, Number, Number.isNaN, String, addBtn, body.appendChild, cmdRow.appendChild, ctl.appendChild, document.createElement, head.appendChild, mkKpi, modeBox.appendChild, row.appendChild, startBtn.addEventListener (weitere in der Quelle) |
-| [`addBtn`](../../../../../src-ts/runtime-executables/www/app.ts#L7630) | val, label | b.addEventListener, b.classList.toggle, document.createElement, grp.appendChild |
-| [`open`](../../../../../src-ts/runtime-executables/www/app.ts#L7706) | e | clearInterval, e.preventDefault, modal.classList.remove, renderModal, setInterval |
-| [`close`](../../../../../src-ts/runtime-executables/www/app.ts#L7728) | – | clearInterval, modal.classList.add |
-| [`initGeneratorModal`](../../../../../src-ts/runtime-executables/www/app.ts#L7751) | – | card.addEventListener, closeBtn.addEventListener, document.addEventListener, document.getElementById, modal.addEventListener |
-| [`setHint`](../../../../../src-ts/runtime-executables/www/app.ts#L7770) | msg, isError | String |
-| [`apiSet`](../../../../../src-ts/runtime-executables/www/app.ts#L7781) | idx, prop, value | JSON.stringify, fetch, resp.json, setHint |
-| [`fetchSnapshot`](../../../../../src-ts/runtime-executables/www/app.ts#L7813) | – | fetch, r.json |
-| [`renderModal`](../../../../../src-ts/runtime-executables/www/app.ts#L7836) | – | Array.isArray, devices.filter, document.createElement, fetchSnapshot, listEl.appendChild, setHint, shown.forEach |
-| [`mkKpi`](../../../../../src-ts/runtime-executables/www/app.ts#L7877) | label, valueText | box.appendChild, document.createElement |
-| [`mkRow`](../../../../../src-ts/runtime-executables/www/app.ts#L7903) | d | Math.round, Number, Number.isNaN, String, addBtn, body.appendChild, cmdRow.appendChild, ctl.appendChild, document.createElement, head.appendChild, mkKpi, modeBox.appendChild, row.appendChild, startBtn.addEventListener (weitere in der Quelle) |
-| [`addBtn`](../../../../../src-ts/runtime-executables/www/app.ts#L7974) | val, label | b.addEventListener, b.classList.toggle, document.createElement, grp.appendChild |
-| [`open`](../../../../../src-ts/runtime-executables/www/app.ts#L8050) | e | clearInterval, e.preventDefault, modal.classList.remove, renderModal, setInterval |
-| [`close`](../../../../../src-ts/runtime-executables/www/app.ts#L8072) | – | clearInterval, modal.classList.add |
-| [`updateRelayUi`](../../../../../src-ts/runtime-executables/www/app.ts#L8095) | – | Array.isArray, String, card.classList.add, card.classList.remove, document.getElementById, relays.filter, setText, visible.filter |
-| [`updateThresholdUi`](../../../../../src-ts/runtime-executables/www/app.ts#L8134) | – | Array.isArray, String, card.classList.add, card.classList.remove, configured.filter, document.getElementById, rules.filter, setText |
-| [`updateBhkwUi`](../../../../../src-ts/runtime-executables/www/app.ts#L8173) | – | Array.isArray, Number, String, card.classList.add, card.classList.remove, devs.filter, document.getElementById, setText, sv |
-| [`sv`](../../../../../src-ts/runtime-executables/www/app.ts#L8216) | k | – |
-| [`updateGeneratorUi`](../../../../../src-ts/runtime-executables/www/app.ts#L8236) | – | Array.isArray, Number, String, card.classList.add, card.classList.remove, devs.filter, document.getElementById, setText, sv |
-| [`sv`](../../../../../src-ts/runtime-executables/www/app.ts#L8278) | k | – |
-| [`_ensureThermalConsumerTiles`](../../../../../src-ts/runtime-executables/www/app.ts#L8303) | – | _thermalConsTiles.set, document.createElement, document.getElementById, grid.appendChild, tile.addEventListener, tile.setAttribute |
-| [`open`](../../../../../src-ts/runtime-executables/www/app.ts#L8351) | – | console.warn, openFlowQc |
-| [`_labelThermalMode`](../../../../../src-ts/runtime-executables/www/app.ts#L8385) | mode | String, m.toLowerCase |
-| [`updateThermalConsumerUi`](../../../../../src-ts/runtime-executables/www/app.ts#L8406) | – | Array.isArray, Math.abs, Math.max, Number, Number.isFinite, String, _ensureThermalConsumerTiles, _labelThermalMode, _thermalConsTiles.get, document.getElementById, formatPower, normalizeConsumerType, sv |
-| [`normalizeConsumerType`](../../../../../src-ts/runtime-executables/www/app.ts#L8433) | raw | String |
-| [`sv`](../../../../../src-ts/runtime-executables/www/app.ts#L8454) | k | – |
-| [`updateEnergyWeb`](../../../../../src-ts/runtime-executables/www/app.ts#L8537) | – | Math.abs, Math.max, Number, Number.isFinite, String, T, document.getElementById, formatFlowPower, formatPower, getEvcsPowerW, getLiveMeasurementView, isNaN, lg.classList.add, lg.classList.remove (weitere in der Quelle) |
-| [`d`](../../../../../src-ts/runtime-executables/www/app.ts#L8544) | k | – |
-| [`T`](../../../../../src-ts/runtime-executables/www/app.ts#L8652) | id, t | document.getElementById |
-| [`show`](../../../../../src-ts/runtime-executables/www/app.ts#L8687) | id, on | document.getElementById |
-| [`toggleRev`](../../../../../src-ts/runtime-executables/www/app.ts#L8710) | id, on | document.getElementById, el.classList.toggle |
-| [`_nwAiAdvisorStateValue`](../../../../../src-ts/runtime-executables/www/app.ts#L8812) | key, fallback | – |
-| [`_nwAiAdvisorBool`](../../../../../src-ts/runtime-executables/www/app.ts#L8827) | key, fallback | String, _nwAiAdvisorStateValue |
-| [`_nwAiAdvisorPriorityLabel`](../../../../../src-ts/runtime-executables/www/app.ts#L8842) | p | Number, Number.isFinite, String |
-| [`_nwAiAdvisorCategoryLabel`](../../../../../src-ts/runtime-executables/www/app.ts#L8862) | c | String |
-| [`_nwEnergyWalletStateValue`](../../../../../src-ts/runtime-executables/www/app.ts#L8888) | key, fallback | Object.prototype.hasOwnProperty.call |
-| [`_nwEnergyWalletNum`](../../../../../src-ts/runtime-executables/www/app.ts#L8897) | key, fallback | Number, Number.isFinite, _nwEnergyWalletStateValue |
-| [`_nwEnergyWalletMoney`](../../../../../src-ts/runtime-executables/www/app.ts#L8902) | value | Number, Number.isFinite, n.toFixed, n.toLocaleString, nwUiLocaleTag |
-| [`_nwEnergyWalletKwh`](../../../../../src-ts/runtime-executables/www/app.ts#L8909) | value | Number, Number.isFinite, n.toFixed, n.toLocaleString, nwUiLocaleTag |
-| [`_nwEnergyWalletPricePerKwh`](../../../../../src-ts/runtime-executables/www/app.ts#L8915) | value | Number, Number.isFinite, n.toFixed, n.toLocaleString, nwUiLocaleTag |
-| [`_nwEnergyWalletAgeLabel`](../../../../../src-ts/runtime-executables/www/app.ts#L8921) | seconds | Math.max, Math.round, Number |
-| [`_nwEnergyWalletEnsureExtendedUi`](../../../../../src-ts/runtime-executables/www/app.ts#L8930) | card | card.appendChild, document.createElement, document.getElementById |
-| [`updateEnergyWalletLiveUi`](../../../../../src-ts/runtime-executables/www/app.ts#L8967) | – | Math.round, String, _nwEnergyWalletAgeLabel, _nwEnergyWalletEnsureExtendedUi, _nwEnergyWalletKwh, _nwEnergyWalletMoney, _nwEnergyWalletNum, _nwEnergyWalletPricePerKwh, _nwEnergyWalletStateValue, card.classList.toggle, document.getElementById, eg.classList.toggle, priceEl.classList.toggle, setText (weitere in der Quelle) |
-| [`setText`](../../../../../src-ts/runtime-executables/www/app.ts#L8982) | id, text | document.getElementById |
-| [`_nwAiAdvisorParseSuggestions`](../../../../../src-ts/runtime-executables/www/app.ts#L9033) | – | Array.isArray, JSON.parse, String, _nwAiAdvisorStateValue, arr.filter |
-| [`updateAiAdvisorLiveUi`](../../../../../src-ts/runtime-executables/www/app.ts#L9048) | – | String, _nwAiAdvisorBool, _nwAiAdvisorCategoryLabel, _nwAiAdvisorParseSuggestions, _nwAiAdvisorPriorityLabel, _nwAiAdvisorStateValue, badgeEl.setAttribute, card.classList.toggle, document.createElement, document.getElementById, item.appendChild, listEl.appendChild, suggestions.slice, toggleBtn.addEventListener (weitere in der Quelle) |
-| [`openSettings`](../../../../../src-ts/runtime-executables/www/app.ts#L9170) | – | bindToggleButtonGroups, document.getElementById, document.querySelector, initSettingsPanel, sbtn.click, sec.classList.remove, setupSettings |
-| [`qs`](../../../../../src-ts/runtime-executables/www/app.ts#L9209) | id | document.getElementById |
-| [`apiSet`](../../../../../src-ts/runtime-executables/www/app.ts#L9244) | scope, key, value | JSON.stringify, fetch, r.text |
-| [`renderModeWriteStatus`](../../../../../src-ts/runtime-executables/www/app.ts#L9306) | – | buttons.insertAdjacentElement, buttons.querySelectorAll, buttons.setAttribute, document.createElement, modeStatus.insertAdjacentElement, modeStatus.setAttribute |
-| [`observeConfirmedMode`](../../../../../src-ts/runtime-executables/www/app.ts#L9332) | key, entry | Array.isArray, Number.isFinite, Number.isInteger, legacyNumToMode, normalizeEmsMode, raw.trim |
-| [`modeEntry`](../../../../../src-ts/runtime-executables/www/app.ts#L9349) | snapshot, key | Array.isArray |
-| [`fetchModeJson`](../../../../../src-ts/runtime-executables/www/app.ts#L9358) | url, options | clearTimeout, fetch, response.headers.get, response.json, setTimeout |
-| [`modeRequestFailed`](../../../../../src-ts/runtime-executables/www/app.ts#L9378) | error, readback | – |
-| [`touchGoalEdit`](../../../../../src-ts/runtime-executables/www/app.ts#L9399) | ms | Date.now |
-| [`goalEditLocked`](../../../../../src-ts/runtime-executables/www/app.ts#L9409) | – | Date.now |
-| [`bindGoalLock`](../../../../../src-ts/runtime-executables/www/app.ts#L9418) | el, ms | el.addEventListener |
-| [`bump`](../../../../../src-ts/runtime-executables/www/app.ts#L9426) | – | touchGoalEdit |
-| [`clampUiMode`](../../../../../src-ts/runtime-executables/www/app.ts#L9444) | v | Math.max, Math.min, Math.round, Number, isFinite |
-| [`normalizeEmsMode`](../../../../../src-ts/runtime-executables/www/app.ts#L9455) | raw | String |
-| [`normalizeEvcsPhaseMode`](../../../../../src-ts/runtime-executables/www/app.ts#L9466) | raw | String, s.replace |
-| [`phaseModeLabel`](../../../../../src-ts/runtime-executables/www/app.ts#L9475) | mode | normalizeEvcsPhaseMode |
-| [`evcsConfigRow`](../../../../../src-ts/runtime-executables/www/app.ts#L9490) | index | Array.isArray, Math.max, Math.round, Number |
-| [`evcsPhaseSwitchDpAssigned`](../../../../../src-ts/runtime-executables/www/app.ts#L9501) | index | String, evcsConfigRow |
-| [`evcsStorageAssistCustomerAllowed`](../../../../../src-ts/runtime-executables/www/app.ts#L9506) | index | evcsConfigRow |
-| [`applyStorageAssistUi`](../../../../../src-ts/runtime-executables/www/app.ts#L9511) | enabled | btns.forEach, storageAssistButtons.querySelectorAll |
-| [`evcsConfiguredPhaseMode`](../../../../../src-ts/runtime-executables/www/app.ts#L9522) | index, fallbackPhases | Number, String, evcsConfigRow, normalizeEvcsPhaseMode |
-| [`applyPhaseModeUi`](../../../../../src-ts/runtime-executables/www/app.ts#L9529) | mode | btns.forEach, normalizeEvcsPhaseMode, phaseButtons.querySelectorAll |
-| [`legacyNumToMode`](../../../../../src-ts/runtime-executables/www/app.ts#L9541) | n | clampUiMode |
-| [`nextTsFromTimeInput`](../../../../../src-ts/runtime-executables/www/app.ts#L9553) | hhmm | Number, String, d.getDate, d.getTime, d.setDate, d.setHours, isFinite, now.getTime, s.split, snapHhmmTo15Min |
-| [`snapHhmmTo15Min`](../../../../../src-ts/runtime-executables/www/app.ts#L9577) | hhmm | Math.floor, Math.max, Math.min, Math.round, Number, String, isFinite, s.split |
-| [`clockValueFromTs`](../../../../../src-ts/runtime-executables/www/app.ts#L9598) | ts | Number, Number.isFinite, String, dt.getHours, dt.getMinutes |
-| [`modeToLegacyNum`](../../../../../src-ts/runtime-executables/www/app.ts#L9616) | mode | normalizeEmsMode |
-| [`ensureAutoVisibility`](../../../../../src-ts/runtime-executables/www/app.ts#L9628) | – | autoBtn.classList.toggle, buttons.querySelector |
-| [`applyModeUi`](../../../../../src-ts/runtime-executables/www/app.ts#L9639) | mode | btns.forEach, buttons.querySelectorAll, normalizeEmsMode |
-| [`fmtP`](../../../../../src-ts/runtime-executables/www/app.ts#L9912) | val | Math.abs, Number, n.toFixed |
-| [`nwHeatingRodNightStatus`](../../../../../src-ts/runtime-executables/www/app.ts#L10196) | ctl | Number, String, status.replace |
-| [`openFlowQc`](../../../../../src-ts/runtime-executables/www/app.ts#L10224) | kind, idx | window.__nwFlowQcOpen |
-| [`resetGaugeSmoothing`](../../../../../src-ts/runtime-executables/www/app.ts#L10285) | – | – |
-| [`smoothGaugePower`](../../../../../src-ts/runtime-executables/www/app.ts#L10298) | valueW, maxW, opts | Math.abs, Math.max, Math.round, Number |
-| [`showMsg`](../../../../../src-ts/runtime-executables/www/app.ts#L10332) | t, kind | – |
-| [`modeLabel`](../../../../../src-ts/runtime-executables/www/app.ts#L10343) | m | String, s.toLowerCase |
-| [`getSlotMeta`](../../../../../src-ts/runtime-executables/www/app.ts#L10362) | k, i | Number, arr.find |
-| [`getEntry`](../../../../../src-ts/runtime-executables/www/app.ts#L10374) | k, i | Number, arr.find |
-| [`readStateNumber`](../../../../../src-ts/runtime-executables/www/app.ts#L10386) | key, fallback | Number, Number.isFinite |
-| [`getHeatingRodDeviceCfg`](../../../../../src-ts/runtime-executables/www/app.ts#L10403) | idx | Array.isArray, Math.round, Number, devices.find |
-| [`setFlowGaugeFill`](../../../../../src-ts/runtime-executables/www/app.ts#L10418) | valueW, maxW | Math.abs, Math.max, Math.min, Number, formatPower |
-| [`resolveFlowPower`](../../../../../src-ts/runtime-executables/www/app.ts#L10438) | readbackData | Math.abs, Math.max, Number, Number.isFinite, String, getEntry, getHeatingRodDeviceCfg, getSlotMeta, readStateNumber |
-| [`updatePower`](../../../../../src-ts/runtime-executables/www/app.ts#L10477) | readbackData | Math.abs, Number, String, formatPower, formatPowerSigned, resolveFlowPower, setFlowGaugeFill, smoothGaugePower |
-| [`renderModeButtons`](../../../../../src-ts/runtime-executables/www/app.ts#L10495) | modes, activeMode | Array.isArray, list.forEach |
-| [`readback`](../../../../../src-ts/runtime-executables/www/app.ts#L10517) | – | Array.isArray, Date.now, Math.ceil, Math.max, Number, Number.isFinite, String, fetch, formatPower, modeLabel, nwHeatingRodNightStatus, qp.toString, r.json, renderModeButtons (weitere in der Quelle) |
-| [`setSwitch`](../../../../../src-ts/runtime-executables/www/app.ts#L10650) | v | JSON.stringify, fetch, setTimeout, showMsg |
-| [`setSetpoint`](../../../../../src-ts/runtime-executables/www/app.ts#L10674) | v | JSON.stringify, Number, Number.isFinite, fetch, setTimeout, showMsg |
-| [`setRegEnabled`](../../../../../src-ts/runtime-executables/www/app.ts#L10700) | enable | JSON.stringify, fetch, setTimeout, showMsg |
-| [`setMode`](../../../../../src-ts/runtime-executables/www/app.ts#L10725) | mode | JSON.stringify, String, fetch, setTimeout, showMsg |
-| [`setBoost`](../../../../../src-ts/runtime-executables/www/app.ts#L10752) | enable | JSON.stringify, fetch, setTimeout, showMsg |
-| [`open`](../../../../../src-ts/runtime-executables/www/app.ts#L10777) | kind, idx | Number, String, clearInterval, getSlotMeta, isFinite, modal.classList.remove, readback, renderModeButtons, resetGaugeSmoothing, setInterval, showMsg, updatePower, window.nwSyncToggleButtons |
-| [`close`](../../../../../src-ts/runtime-executables/www/app.ts#L10872) | – | clearInterval, modal.classList.add, resetGaugeSmoothing, showMsg |
+| [`_nwSettingsStateValue`](../../../../../src-ts/runtime-executables/www/app.ts#L4779) | key | – |
+| [`_nwSettingsText`](../../../../../src-ts/runtime-executables/www/app.ts#L4789) | value, fallback | String |
+| [`_nwSettingsBool`](../../../../../src-ts/runtime-executables/www/app.ts#L4800) | value | String |
+| [`_nwSettingsCount`](../../../../../src-ts/runtime-executables/www/app.ts#L4814) | value | Math.round, Number, Number.isFinite, String |
+| [`_nwSettingsTs`](../../../../../src-ts/runtime-executables/www/app.ts#L4824) | value | Number, Number.isFinite, nwUiLocaleTag |
+| [`_nwSettingsPower`](../../../../../src-ts/runtime-executables/www/app.ts#L4835) | value | Number, Number.isFinite, formatPower |
+| [`_nwSettingsDays`](../../../../../src-ts/runtime-executables/www/app.ts#L4845) | value | Math.round, Number, Number.isFinite |
+| [`_nwSettingsJson`](../../../../../src-ts/runtime-executables/www/app.ts#L4855) | value | JSON.parse, JSON.stringify, _nwSettingsText |
+| [`renderSettingsLogPanel`](../../../../../src-ts/runtime-executables/www/app.ts#L4866) | – | String, _nwSettingsBool, _nwSettingsCount, _nwSettingsDays, _nwSettingsJson, _nwSettingsPower, _nwSettingsStateValue, _nwSettingsText, _nwSettingsTs, document.getElementById, document.querySelector, set |
+| [`set`](../../../../../src-ts/runtime-executables/www/app.ts#L4893) | id, value | document.getElementById |
+| [`setupSettingsReportButtons`](../../../../../src-ts/runtime-executables/www/app.ts#L4977) | – | btn.addEventListener, document.getElementById |
+| [`setupSettings`](../../../../../src-ts/runtime-executables/www/app.ts#L4996) | – | document.querySelectorAll, initSettingsPageTabs, renderSettingsLogPanel, setupPvSurplusSettingsUi, setupRfidBillingUi, setupRfidLearningUi, setupRfidWhitelistUi, setupSettingsReportButtons |
+| [`parseJsonSafe`](../../../../../src-ts/runtime-executables/www/app.ts#L5019) | raw, fallback | JSON.parse, JSON.stringify |
+| [`storageFarmGetStatusList`](../../../../../src-ts/runtime-executables/www/app.ts#L5032) | – | Array.isArray, parseJsonSafe |
+| [`storageFarmUpdateModeLabel`](../../../../../src-ts/runtime-executables/www/app.ts#L5044) | – | String, document.getElementById |
+| [`storageFarmUpdateSummary`](../../../../../src-ts/runtime-executables/www/app.ts#L5057) | – | Number, document.getElementById, formatPower |
+| [`storageFarmRenderStatusRows`](../../../../../src-ts/runtime-executables/www/app.ts#L5076) | list | Array.isArray, document.getElementById, list.forEach |
+| [`mkCell`](../../../../../src-ts/runtime-executables/www/app.ts#L5101) | txt, label | String, d.setAttribute, document.createElement |
+| [`storageFarmApply`](../../../../../src-ts/runtime-executables/www/app.ts#L5164) | – | storageFarmGetStatusList, storageFarmRenderStatusRows, storageFarmUpdateModeLabel, storageFarmUpdateSummary |
+| [`initStorageFarmPanel`](../../../../../src-ts/runtime-executables/www/app.ts#L5178) | – | btnReload.addEventListener, document.getElementById, storageFarmApply |
+| [`loadRfidCustomerState`](../../../../../src-ts/runtime-executables/www/app.ts#L5194) | – | Array.isArray, Date.now, JSON.stringify, Number, Object.assign, String, fetch, response.json |
+| [`setupRfidWhitelistUi`](../../../../../src-ts/runtime-executables/www/app.ts#L5219) | – | btnAdd.addEventListener, btnReload.addEventListener, btnSave.addEventListener, document.getElementById, readWhitelistFromState, render |
+| [`normRfid`](../../../../../src-ts/runtime-executables/www/app.ts#L5232) | v | String |
+| [`safeText`](../../../../../src-ts/runtime-executables/www/app.ts#L5239) | v | String |
+| [`readWhitelistFromState`](../../../../../src-ts/runtime-executables/www/app.ts#L5246) | – | Array.isArray, JSON.parse, String, arr.map |
+| [`setMsg`](../../../../../src-ts/runtime-executables/www/app.ts#L5272) | t | – |
+| [`render`](../../../../../src-ts/runtime-executables/www/app.ts#L5279) | – | setMsg |
+| [`save`](../../../../../src-ts/runtime-executables/www/app.ts#L5329) | – | JSON.stringify, cleaned.push, fetch, normRfid, render, safeText, seen.add, seen.has, setMsg |
+| [`reload`](../../../../../src-ts/runtime-executables/www/app.ts#L5362) | – | loadRfidCustomerState, readWhitelistFromState, render, setMsg |
+| [`setupRfidLearningUi`](../../../../../src-ts/runtime-executables/www/app.ts#L5435) | – | applyUi, btnAdd.addEventListener, btnLearn.addEventListener, document.getElementById, loadRfidCustomerState |
+| [`setMsg`](../../../../../src-ts/runtime-executables/www/app.ts#L5449) | t | – |
+| [`setLearningActive`](../../../../../src-ts/runtime-executables/www/app.ts#L5456) | active | JSON.stringify, fetch |
+| [`readStateVal`](../../../../../src-ts/runtime-executables/www/app.ts#L5473) | key | – |
+| [`stopLearningPoll`](../../../../../src-ts/runtime-executables/www/app.ts#L5479) | – | clearTimeout |
+| [`pollLearningState`](../../../../../src-ts/runtime-executables/www/app.ts#L5483) | – | Date.now, applyUi, loadRfidCustomerState, readStateVal, setTimeout, stopLearningPoll |
+| [`startLearningPoll`](../../../../../src-ts/runtime-executables/www/app.ts#L5492) | – | Date.now, pollLearningState |
+| [`applyUi`](../../../../../src-ts/runtime-executables/www/app.ts#L5502) | – | Number, String, nwUiLocaleTag, readStateVal, setMsg |
+| [`setupRfidBillingUi`](../../../../../src-ts/runtime-executables/www/app.ts#L5575) | – | String, applyMode, btnOpen.addEventListener, document.getElementById, modeWrap.querySelectorAll, now.getFullYear, now.getMonth, pad2, renderOptions |
+| [`pad2`](../../../../../src-ts/runtime-executables/www/app.ts#L5592) | n | Number, String |
+| [`setMsg`](../../../../../src-ts/runtime-executables/www/app.ts#L5599) | t | – |
+| [`getWhitelist`](../../../../../src-ts/runtime-executables/www/app.ts#L5606) | – | Array.isArray, JSON.parse, window.__nwRfidWhitelist.get |
+| [`renderOptions`](../../../../../src-ts/runtime-executables/www/app.ts#L5632) | – | Array.isArray, String, document.createElement, getWhitelist, sel.appendChild |
+| [`applyMode`](../../../../../src-ts/runtime-executables/www/app.ts#L5682) | m | modeWrap.querySelectorAll, monthRow.classList.toggle, setMsg, yearRow.classList.toggle |
+| [`setupInstaller`](../../../../../src-ts/runtime-executables/www/app.ts#L5769) | – | btn.addEventListener, cancel.addEventListener, document.getElementById, form.addEventListener, refreshLock |
+| [`refreshLock`](../../../../../src-ts/runtime-executables/www/app.ts#L5782) | – | fetch, formBox.classList.toggle, formBox.querySelectorAll, loginBox.classList.toggle, r.json |
+| [`doLogin`](../../../../../src-ts/runtime-executables/www/app.ts#L5802) | – | JSON.stringify, String, alert, fetch, refreshLock |
+| [`initInstallerPanel`](../../../../../src-ts/runtime-executables/www/app.ts#L5846) | – | document.getElementById, document.querySelectorAll, window.NW_RUNTIME?.url |
+| [`initTabs`](../../../../../src-ts/runtime-executables/www/app.ts#L5862) | – | buttons.forEach, document.querySelectorAll |
+| [`renderSmartHome`](../../../../../src-ts/runtime-executables/www/app.ts#L5881) | – | Number, document.getElementById, get, onTxt |
+| [`onTxt`](../../../../../src-ts/runtime-executables/www/app.ts#L5888) | v | – |
+| [`d`](../../../../../src-ts/runtime-executables/www/app.ts#L5895) | k | – |
+| [`get`](../../../../../src-ts/runtime-executables/www/app.ts#L5902) | path | d |
+| [`d`](../../../../../src-ts/runtime-executables/www/app.ts#L5934) | k | – |
+| [`pctDeg`](../../../../../src-ts/runtime-executables/www/app.ts#L5959) | val, maxDeg | Math.max, Math.min |
+| [`setText`](../../../../../src-ts/runtime-executables/www/app.ts#L5978) | id, t | document.getElementById |
+| [`d`](../../../../../src-ts/runtime-executables/www/app.ts#L6018) | k | – |
+| [`setText`](../../../../../src-ts/runtime-executables/www/app.ts#L6041) | id, t | document.getElementById |
+| [`pct`](../../../../../src-ts/runtime-executables/www/app.ts#L6079) | v | Math.max, Math.min |
+| [`d`](../../../../../src-ts/runtime-executables/www/app.ts#L6110) | k | – |
+| [`pctDeg`](../../../../../src-ts/runtime-executables/www/app.ts#L6135) | val, maxDeg | Math.max, Math.min |
+| [`setText`](../../../../../src-ts/runtime-executables/www/app.ts#L6154) | id, t | document.getElementById |
+| [`d`](../../../../../src-ts/runtime-executables/www/app.ts#L6194) | k | – |
+| [`setText`](../../../../../src-ts/runtime-executables/www/app.ts#L6217) | id, t | document.getElementById |
+| [`pct`](../../../../../src-ts/runtime-executables/www/app.ts#L6255) | v | Math.max, Math.min |
+| [`d`](../../../../../src-ts/runtime-executables/www/app.ts#L6278) | k | – |
+| [`setText`](../../../../../src-ts/runtime-executables/www/app.ts#L6287) | id, txt | document.getElementById |
+| [`setSideValue`](../../../../../src-ts/runtime-executables/www/app.ts#L6302) | id, val | document.getElementById |
+| [`updateEmsControlUi`](../../../../../src-ts/runtime-executables/www/app.ts#L6312) | – | Date.now, Number, Number.isFinite, String, card.classList.toggle, document.getElementById, formatPower, formatPricePerKwh, modal.classList.contains, modeWrap.querySelectorAll, prioWrap.querySelectorAll, setText, v, window.NexoWattTariffDisplay.display (weitere in der Quelle) |
+| [`v`](../../../../../src-ts/runtime-executables/www/app.ts#L6327) | k | – |
+| [`setText`](../../../../../src-ts/runtime-executables/www/app.ts#L6356) | id, txt | document.getElementById |
+| [`initEmsControlModal`](../../../../../src-ts/runtime-executables/www/app.ts#L6517) | – | closeBtn.addEventListener, document.getElementById, energyDetailsBtn.addEventListener, modal.addEventListener, modeWrap.querySelectorAll, openBtn.addEventListener, openSettingsBtn.addEventListener, prioWrap.querySelectorAll, tariffToggle.addEventListener |
+| [`setSetting`](../../../../../src-ts/runtime-executables/www/app.ts#L6538) | key, value | JSON.stringify, fetch |
+| [`open`](../../../../../src-ts/runtime-executables/www/app.ts#L6561) | e | e.preventDefault, modal.classList.remove, updateEmsControlUi |
+| [`close`](../../../../../src-ts/runtime-executables/www/app.ts#L6572) | – | modal.classList.add |
+| [`initThresholdModal`](../../../../../src-ts/runtime-executables/www/app.ts#L6632) | – | card.addEventListener, closeBtn.addEventListener, document.addEventListener, document.getElementById, modal.addEventListener |
+| [`setHint`](../../../../../src-ts/runtime-executables/www/app.ts#L6649) | msg, isError | String |
+| [`apiSet`](../../../../../src-ts/runtime-executables/www/app.ts#L6660) | key, value | JSON.stringify, fetch, resp.json, setHint |
+| [`renderModal`](../../../../../src-ts/runtime-executables/www/app.ts#L6692) | – | Array.isArray, configured.forEach, document.createElement, listEl.appendChild, setHint |
+| [`v`](../../../../../src-ts/runtime-executables/www/app.ts#L6703) | k | – |
+| [`mkRow`](../../../../../src-ts/runtime-executables/www/app.ts#L6731) | r | Math.max, Math.min, Math.round, Number, Number.isFinite, String, body.appendChild, box.appendChild, btnWrap.appendChild, ctl.appendChild, document.createElement, head.appendChild, inp.addEventListener, mkBtn (weitere in der Quelle) |
+| [`prettyStatus`](../../../../../src-ts/runtime-executables/www/app.ts#L6766) | raw | String |
+| [`mkKpi`](../../../../../src-ts/runtime-executables/www/app.ts#L6811) | label, valueText | box.appendChild, document.createElement |
+| [`setActive`](../../../../../src-ts/runtime-executables/www/app.ts#L6868) | uiVal | Array.from, btnWrap.querySelectorAll |
+| [`mkBtn`](../../../../../src-ts/runtime-executables/www/app.ts#L6887) | label, uiVal, sendMode | String, b.addEventListener, b.classList.add, document.createElement |
+| [`open`](../../../../../src-ts/runtime-executables/www/app.ts#L7030) | e | e.preventDefault, modal.classList.remove, renderModal |
+| [`close`](../../../../../src-ts/runtime-executables/www/app.ts#L7041) | – | modal.classList.add |
+| [`initRelayModal`](../../../../../src-ts/runtime-executables/www/app.ts#L7066) | – | card.addEventListener, closeBtn.addEventListener, document.addEventListener, document.getElementById, modal.addEventListener |
+| [`setHint`](../../../../../src-ts/runtime-executables/www/app.ts#L7085) | msg, isError | String |
+| [`apiSet`](../../../../../src-ts/runtime-executables/www/app.ts#L7096) | idx, prop, value | JSON.stringify, fetch, resp.json, setHint |
+| [`fetchSnapshot`](../../../../../src-ts/runtime-executables/www/app.ts#L7128) | – | fetch, r.json |
+| [`renderModal`](../../../../../src-ts/runtime-executables/www/app.ts#L7151) | – | Array.isArray, document.createElement, fetchSnapshot, listEl.appendChild, relays.filter, setHint, shown.forEach |
+| [`mkRow`](../../../../../src-ts/runtime-executables/www/app.ts#L7190) | r | Number, Number.isFinite, String, body.appendChild, box.appendChild, btnWrap.appendChild, ctl.appendChild, document.createElement, head.appendChild, inp.addEventListener, mkBtn, mkKpi, row.appendChild |
+| [`mkKpi`](../../../../../src-ts/runtime-executables/www/app.ts#L7234) | label, valueText | box.appendChild, document.createElement |
+| [`mkBtn`](../../../../../src-ts/runtime-executables/www/app.ts#L7279) | label, val | b.addEventListener, document.createElement |
+| [`open`](../../../../../src-ts/runtime-executables/www/app.ts#L7358) | e | clearInterval, e.preventDefault, modal.classList.remove, renderModal, setInterval |
+| [`close`](../../../../../src-ts/runtime-executables/www/app.ts#L7381) | – | clearInterval, modal.classList.add |
+| [`initBhkwModal`](../../../../../src-ts/runtime-executables/www/app.ts#L7408) | – | card.addEventListener, closeBtn.addEventListener, document.addEventListener, document.getElementById, modal.addEventListener |
+| [`setHint`](../../../../../src-ts/runtime-executables/www/app.ts#L7427) | msg, isError | String |
+| [`apiSet`](../../../../../src-ts/runtime-executables/www/app.ts#L7438) | idx, prop, value | JSON.stringify, fetch, resp.json, setHint |
+| [`fetchSnapshot`](../../../../../src-ts/runtime-executables/www/app.ts#L7470) | – | fetch, r.json |
+| [`renderModal`](../../../../../src-ts/runtime-executables/www/app.ts#L7493) | – | Array.isArray, devices.filter, document.createElement, fetchSnapshot, listEl.appendChild, setHint, shown.forEach |
+| [`mkKpi`](../../../../../src-ts/runtime-executables/www/app.ts#L7534) | label, valueText | box.appendChild, document.createElement |
+| [`mkRow`](../../../../../src-ts/runtime-executables/www/app.ts#L7560) | d | Math.round, Number, Number.isNaN, String, addBtn, body.appendChild, cmdRow.appendChild, ctl.appendChild, document.createElement, head.appendChild, mkKpi, modeBox.appendChild, row.appendChild, startBtn.addEventListener (weitere in der Quelle) |
+| [`addBtn`](../../../../../src-ts/runtime-executables/www/app.ts#L7631) | val, label | b.addEventListener, b.classList.toggle, document.createElement, grp.appendChild |
+| [`open`](../../../../../src-ts/runtime-executables/www/app.ts#L7707) | e | clearInterval, e.preventDefault, modal.classList.remove, renderModal, setInterval |
+| [`close`](../../../../../src-ts/runtime-executables/www/app.ts#L7729) | – | clearInterval, modal.classList.add |
+| [`initGeneratorModal`](../../../../../src-ts/runtime-executables/www/app.ts#L7752) | – | card.addEventListener, closeBtn.addEventListener, document.addEventListener, document.getElementById, modal.addEventListener |
+| [`setHint`](../../../../../src-ts/runtime-executables/www/app.ts#L7771) | msg, isError | String |
+| [`apiSet`](../../../../../src-ts/runtime-executables/www/app.ts#L7782) | idx, prop, value | JSON.stringify, fetch, resp.json, setHint |
+| [`fetchSnapshot`](../../../../../src-ts/runtime-executables/www/app.ts#L7814) | – | fetch, r.json |
+| [`renderModal`](../../../../../src-ts/runtime-executables/www/app.ts#L7837) | – | Array.isArray, devices.filter, document.createElement, fetchSnapshot, listEl.appendChild, setHint, shown.forEach |
+| [`mkKpi`](../../../../../src-ts/runtime-executables/www/app.ts#L7878) | label, valueText | box.appendChild, document.createElement |
+| [`mkRow`](../../../../../src-ts/runtime-executables/www/app.ts#L7904) | d | Math.round, Number, Number.isNaN, String, addBtn, body.appendChild, cmdRow.appendChild, ctl.appendChild, document.createElement, head.appendChild, mkKpi, modeBox.appendChild, row.appendChild, startBtn.addEventListener (weitere in der Quelle) |
+| [`addBtn`](../../../../../src-ts/runtime-executables/www/app.ts#L7975) | val, label | b.addEventListener, b.classList.toggle, document.createElement, grp.appendChild |
+| [`open`](../../../../../src-ts/runtime-executables/www/app.ts#L8051) | e | clearInterval, e.preventDefault, modal.classList.remove, renderModal, setInterval |
+| [`close`](../../../../../src-ts/runtime-executables/www/app.ts#L8073) | – | clearInterval, modal.classList.add |
+| [`updateRelayUi`](../../../../../src-ts/runtime-executables/www/app.ts#L8096) | – | Array.isArray, String, card.classList.add, card.classList.remove, document.getElementById, relays.filter, setText, visible.filter |
+| [`updateThresholdUi`](../../../../../src-ts/runtime-executables/www/app.ts#L8135) | – | Array.isArray, String, card.classList.add, card.classList.remove, configured.filter, document.getElementById, rules.filter, setText |
+| [`updateBhkwUi`](../../../../../src-ts/runtime-executables/www/app.ts#L8174) | – | Array.isArray, Number, String, card.classList.add, card.classList.remove, devs.filter, document.getElementById, setText, sv |
+| [`sv`](../../../../../src-ts/runtime-executables/www/app.ts#L8217) | k | – |
+| [`updateGeneratorUi`](../../../../../src-ts/runtime-executables/www/app.ts#L8237) | – | Array.isArray, Number, String, card.classList.add, card.classList.remove, devs.filter, document.getElementById, setText, sv |
+| [`sv`](../../../../../src-ts/runtime-executables/www/app.ts#L8279) | k | – |
+| [`_ensureThermalConsumerTiles`](../../../../../src-ts/runtime-executables/www/app.ts#L8304) | – | _thermalConsTiles.set, document.createElement, document.getElementById, grid.appendChild, tile.addEventListener, tile.setAttribute |
+| [`open`](../../../../../src-ts/runtime-executables/www/app.ts#L8352) | – | console.warn, openFlowQc |
+| [`_labelThermalMode`](../../../../../src-ts/runtime-executables/www/app.ts#L8386) | mode | String, m.toLowerCase |
+| [`updateThermalConsumerUi`](../../../../../src-ts/runtime-executables/www/app.ts#L8407) | – | Array.isArray, Math.abs, Math.max, Number, Number.isFinite, String, _ensureThermalConsumerTiles, _labelThermalMode, _thermalConsTiles.get, document.getElementById, formatPower, normalizeConsumerType, sv |
+| [`normalizeConsumerType`](../../../../../src-ts/runtime-executables/www/app.ts#L8434) | raw | String |
+| [`sv`](../../../../../src-ts/runtime-executables/www/app.ts#L8455) | k | – |
+| [`updateEnergyWeb`](../../../../../src-ts/runtime-executables/www/app.ts#L8538) | – | Math.abs, Math.max, Number, Number.isFinite, String, T, document.getElementById, formatFlowPower, formatPower, getEvcsPowerW, getLiveMeasurementView, isNaN, lg.classList.add, lg.classList.remove (weitere in der Quelle) |
+| [`d`](../../../../../src-ts/runtime-executables/www/app.ts#L8545) | k | – |
+| [`T`](../../../../../src-ts/runtime-executables/www/app.ts#L8653) | id, t | document.getElementById |
+| [`show`](../../../../../src-ts/runtime-executables/www/app.ts#L8688) | id, on | document.getElementById |
+| [`toggleRev`](../../../../../src-ts/runtime-executables/www/app.ts#L8711) | id, on | document.getElementById, el.classList.toggle |
+| [`_nwAiAdvisorStateValue`](../../../../../src-ts/runtime-executables/www/app.ts#L8813) | key, fallback | – |
+| [`_nwAiAdvisorBool`](../../../../../src-ts/runtime-executables/www/app.ts#L8828) | key, fallback | String, _nwAiAdvisorStateValue |
+| [`_nwAiAdvisorPriorityLabel`](../../../../../src-ts/runtime-executables/www/app.ts#L8843) | p | Number, Number.isFinite, String |
+| [`_nwAiAdvisorCategoryLabel`](../../../../../src-ts/runtime-executables/www/app.ts#L8863) | c | String |
+| [`_nwEnergyWalletStateValue`](../../../../../src-ts/runtime-executables/www/app.ts#L8889) | key, fallback | Object.prototype.hasOwnProperty.call |
+| [`_nwEnergyWalletNum`](../../../../../src-ts/runtime-executables/www/app.ts#L8898) | key, fallback | Number, Number.isFinite, _nwEnergyWalletStateValue |
+| [`_nwEnergyWalletMoney`](../../../../../src-ts/runtime-executables/www/app.ts#L8903) | value | Number, Number.isFinite, n.toFixed, n.toLocaleString, nwUiLocaleTag |
+| [`_nwEnergyWalletKwh`](../../../../../src-ts/runtime-executables/www/app.ts#L8910) | value | Number, Number.isFinite, n.toFixed, n.toLocaleString, nwUiLocaleTag |
+| [`_nwEnergyWalletPricePerKwh`](../../../../../src-ts/runtime-executables/www/app.ts#L8916) | value | Number, Number.isFinite, n.toFixed, n.toLocaleString, nwUiLocaleTag |
+| [`_nwEnergyWalletAgeLabel`](../../../../../src-ts/runtime-executables/www/app.ts#L8922) | seconds | Math.max, Math.round, Number |
+| [`_nwEnergyWalletEnsureExtendedUi`](../../../../../src-ts/runtime-executables/www/app.ts#L8931) | card | card.appendChild, document.createElement, document.getElementById |
+| [`updateEnergyWalletLiveUi`](../../../../../src-ts/runtime-executables/www/app.ts#L8968) | – | Math.round, String, _nwEnergyWalletAgeLabel, _nwEnergyWalletEnsureExtendedUi, _nwEnergyWalletKwh, _nwEnergyWalletMoney, _nwEnergyWalletNum, _nwEnergyWalletPricePerKwh, _nwEnergyWalletStateValue, card.classList.toggle, document.getElementById, eg.classList.toggle, priceEl.classList.toggle, setText (weitere in der Quelle) |
+| [`setText`](../../../../../src-ts/runtime-executables/www/app.ts#L8983) | id, text | document.getElementById |
+| [`_nwAiAdvisorParseSuggestions`](../../../../../src-ts/runtime-executables/www/app.ts#L9034) | – | Array.isArray, JSON.parse, String, _nwAiAdvisorStateValue, arr.filter |
+| [`updateAiAdvisorLiveUi`](../../../../../src-ts/runtime-executables/www/app.ts#L9049) | – | String, _nwAiAdvisorBool, _nwAiAdvisorCategoryLabel, _nwAiAdvisorParseSuggestions, _nwAiAdvisorPriorityLabel, _nwAiAdvisorStateValue, badgeEl.setAttribute, card.classList.toggle, document.createElement, document.getElementById, item.appendChild, listEl.appendChild, suggestions.slice, toggleBtn.addEventListener (weitere in der Quelle) |
+| [`openSettings`](../../../../../src-ts/runtime-executables/www/app.ts#L9171) | – | bindToggleButtonGroups, document.getElementById, document.querySelector, initSettingsPanel, sbtn.click, sec.classList.remove, setupSettings |
+| [`qs`](../../../../../src-ts/runtime-executables/www/app.ts#L9210) | id | document.getElementById |
+| [`apiSet`](../../../../../src-ts/runtime-executables/www/app.ts#L9245) | scope, key, value | JSON.stringify, fetch, r.text |
+| [`renderModeWriteStatus`](../../../../../src-ts/runtime-executables/www/app.ts#L9307) | – | buttons.insertAdjacentElement, buttons.querySelectorAll, buttons.setAttribute, document.createElement, modeStatus.insertAdjacentElement, modeStatus.setAttribute |
+| [`observeConfirmedMode`](../../../../../src-ts/runtime-executables/www/app.ts#L9333) | key, entry | Array.isArray, Number.isFinite, Number.isInteger, legacyNumToMode, normalizeEmsMode, raw.trim |
+| [`modeEntry`](../../../../../src-ts/runtime-executables/www/app.ts#L9350) | snapshot, key | Array.isArray |
+| [`fetchModeJson`](../../../../../src-ts/runtime-executables/www/app.ts#L9359) | url, options | clearTimeout, fetch, response.headers.get, response.json, setTimeout |
+| [`modeRequestFailed`](../../../../../src-ts/runtime-executables/www/app.ts#L9379) | error, readback | – |
+| [`touchGoalEdit`](../../../../../src-ts/runtime-executables/www/app.ts#L9400) | ms | Date.now |
+| [`goalEditLocked`](../../../../../src-ts/runtime-executables/www/app.ts#L9410) | – | Date.now |
+| [`bindGoalLock`](../../../../../src-ts/runtime-executables/www/app.ts#L9419) | el, ms | el.addEventListener |
+| [`bump`](../../../../../src-ts/runtime-executables/www/app.ts#L9427) | – | touchGoalEdit |
+| [`clampUiMode`](../../../../../src-ts/runtime-executables/www/app.ts#L9445) | v | Math.max, Math.min, Math.round, Number, isFinite |
+| [`normalizeEmsMode`](../../../../../src-ts/runtime-executables/www/app.ts#L9456) | raw | String |
+| [`normalizeEvcsPhaseMode`](../../../../../src-ts/runtime-executables/www/app.ts#L9467) | raw | String, s.replace |
+| [`phaseModeLabel`](../../../../../src-ts/runtime-executables/www/app.ts#L9476) | mode | normalizeEvcsPhaseMode |
+| [`evcsConfigRow`](../../../../../src-ts/runtime-executables/www/app.ts#L9491) | index | Array.isArray, Math.max, Math.round, Number |
+| [`evcsPhaseSwitchDpAssigned`](../../../../../src-ts/runtime-executables/www/app.ts#L9502) | index | String, evcsConfigRow |
+| [`evcsStorageAssistCustomerAllowed`](../../../../../src-ts/runtime-executables/www/app.ts#L9507) | index | evcsConfigRow |
+| [`applyStorageAssistUi`](../../../../../src-ts/runtime-executables/www/app.ts#L9512) | enabled | btns.forEach, storageAssistButtons.querySelectorAll |
+| [`evcsConfiguredPhaseMode`](../../../../../src-ts/runtime-executables/www/app.ts#L9523) | index, fallbackPhases | Number, String, evcsConfigRow, normalizeEvcsPhaseMode |
+| [`applyPhaseModeUi`](../../../../../src-ts/runtime-executables/www/app.ts#L9530) | mode | btns.forEach, normalizeEvcsPhaseMode, phaseButtons.querySelectorAll |
+| [`legacyNumToMode`](../../../../../src-ts/runtime-executables/www/app.ts#L9542) | n | clampUiMode |
+| [`nextTsFromTimeInput`](../../../../../src-ts/runtime-executables/www/app.ts#L9554) | hhmm | Number, String, d.getDate, d.getTime, d.setDate, d.setHours, isFinite, now.getTime, s.split, snapHhmmTo15Min |
+| [`snapHhmmTo15Min`](../../../../../src-ts/runtime-executables/www/app.ts#L9578) | hhmm | Math.floor, Math.max, Math.min, Math.round, Number, String, isFinite, s.split |
+| [`clockValueFromTs`](../../../../../src-ts/runtime-executables/www/app.ts#L9599) | ts | Number, Number.isFinite, String, dt.getHours, dt.getMinutes |
+| [`modeToLegacyNum`](../../../../../src-ts/runtime-executables/www/app.ts#L9617) | mode | normalizeEmsMode |
+| [`ensureAutoVisibility`](../../../../../src-ts/runtime-executables/www/app.ts#L9629) | – | autoBtn.classList.toggle, buttons.querySelector |
+| [`applyModeUi`](../../../../../src-ts/runtime-executables/www/app.ts#L9640) | mode | btns.forEach, buttons.querySelectorAll, normalizeEmsMode |
+| [`fmtP`](../../../../../src-ts/runtime-executables/www/app.ts#L9913) | val | Math.abs, Number, n.toFixed |
+| [`nwHeatingRodNightStatus`](../../../../../src-ts/runtime-executables/www/app.ts#L10197) | ctl | Number, String, status.replace |
+| [`openFlowQc`](../../../../../src-ts/runtime-executables/www/app.ts#L10225) | kind, idx | window.__nwFlowQcOpen |
+| [`resetGaugeSmoothing`](../../../../../src-ts/runtime-executables/www/app.ts#L10286) | – | – |
+| [`smoothGaugePower`](../../../../../src-ts/runtime-executables/www/app.ts#L10299) | valueW, maxW, opts | Math.abs, Math.max, Math.round, Number |
+| [`showMsg`](../../../../../src-ts/runtime-executables/www/app.ts#L10333) | t, kind | – |
+| [`modeLabel`](../../../../../src-ts/runtime-executables/www/app.ts#L10344) | m | String, s.toLowerCase |
+| [`getSlotMeta`](../../../../../src-ts/runtime-executables/www/app.ts#L10363) | k, i | Number, arr.find |
+| [`getEntry`](../../../../../src-ts/runtime-executables/www/app.ts#L10375) | k, i | Number, arr.find |
+| [`readStateNumber`](../../../../../src-ts/runtime-executables/www/app.ts#L10387) | key, fallback | Number, Number.isFinite |
+| [`getHeatingRodDeviceCfg`](../../../../../src-ts/runtime-executables/www/app.ts#L10404) | idx | Array.isArray, Math.round, Number, devices.find |
+| [`setFlowGaugeFill`](../../../../../src-ts/runtime-executables/www/app.ts#L10419) | valueW, maxW | Math.abs, Math.max, Math.min, Number, formatPower |
+| [`resolveFlowPower`](../../../../../src-ts/runtime-executables/www/app.ts#L10439) | readbackData | Math.abs, Math.max, Number, Number.isFinite, String, getEntry, getHeatingRodDeviceCfg, getSlotMeta, readStateNumber |
+| [`updatePower`](../../../../../src-ts/runtime-executables/www/app.ts#L10478) | readbackData | Math.abs, Number, String, formatPower, formatPowerSigned, resolveFlowPower, setFlowGaugeFill, smoothGaugePower |
+| [`renderModeButtons`](../../../../../src-ts/runtime-executables/www/app.ts#L10496) | modes, activeMode | Array.isArray, list.forEach |
+| [`readback`](../../../../../src-ts/runtime-executables/www/app.ts#L10518) | – | Array.isArray, Date.now, Math.ceil, Math.max, Number, Number.isFinite, String, fetch, formatPower, modeLabel, nwHeatingRodNightStatus, qp.toString, r.json, renderModeButtons (weitere in der Quelle) |
+| [`setSwitch`](../../../../../src-ts/runtime-executables/www/app.ts#L10651) | v | JSON.stringify, fetch, setTimeout, showMsg |
+| [`setSetpoint`](../../../../../src-ts/runtime-executables/www/app.ts#L10675) | v | JSON.stringify, Number, Number.isFinite, fetch, setTimeout, showMsg |
+| [`setRegEnabled`](../../../../../src-ts/runtime-executables/www/app.ts#L10701) | enable | JSON.stringify, fetch, setTimeout, showMsg |
+| [`setMode`](../../../../../src-ts/runtime-executables/www/app.ts#L10726) | mode | JSON.stringify, String, fetch, setTimeout, showMsg |
+| [`setBoost`](../../../../../src-ts/runtime-executables/www/app.ts#L10753) | enable | JSON.stringify, fetch, setTimeout, showMsg |
+| [`open`](../../../../../src-ts/runtime-executables/www/app.ts#L10778) | kind, idx | Number, String, clearInterval, getSlotMeta, isFinite, modal.classList.remove, readback, renderModeButtons, resetGaugeSmoothing, setInterval, showMsg, updatePower, window.nwSyncToggleButtons |
+| [`close`](../../../../../src-ts/runtime-executables/www/app.ts#L10873) | – | clearInterval, modal.classList.add, resetGaugeSmoothing, showMsg |

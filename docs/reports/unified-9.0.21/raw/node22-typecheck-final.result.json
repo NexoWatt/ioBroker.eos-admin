@@ -1,0 +1,14 @@
+{
+  "name": "node22-typecheck-final",
+  "command": [
+    "npm",
+    "run",
+    "typecheck"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+  "startedAt": "2026-11-24T22:08:40.079781+00:00",
+  "durationSeconds": 55.049,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-921/node22-typecheck-final.log",
+  "sha256": "1d383a52f7a48a19d815f3cfa6b467a2f5d0b6bf70e953a4b83162471b712c03"
+}

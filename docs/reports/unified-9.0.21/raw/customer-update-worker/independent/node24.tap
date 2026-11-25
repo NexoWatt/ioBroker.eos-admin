@@ -1,0 +1,20 @@
+✔ worker refuses unsafe scope, paths, versions, duplicate files and mutable manifests before commands (162.578123ms)
+✔ confirmed stop precedes install; exact artifact and actual restart precede success (457.57372ms)
+✔ copied standalone worker uses only built-in dependencies and exits after its durable receipt (367.778932ms)
+✔ changed staging content never reaches a stop or install command (19.205528ms)
+✔ pre-install storage failure restores only the confirmed-stopped unchanged old code (617.92261ms)
+✔ bounded encrypted configuration larger than 2 MiB is supported (440.186198ms)
+✔ controller success without new package or with changed runtime never starts EOS (514.238986ms)
+✔ missing controller state is not treated as a confirmed stop (320.961971ms)
+✔ unconfirmed stop never installs and unconfirmed restart never reports success (2942.914349ms)
+✔ timed-out install kills its process group, leaves receipt uncertain and never retries (1672.193222ms)
+✔ worker abort during install kills descendants and records uncertainty without restart (231.015747ms)
+✔ nonprivate job directory and symlinked archive are refused (12.298123ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8124.943048

@@ -1,0 +1,30 @@
+{
+  "files": [
+    {
+      "path": "ui/src-ts/runtime-executables/www/eos-updates.ts",
+      "sha256": "16ab556c7e39a93cc782f2d78a7d8fd74f30d864ef0e7aa375bccc710516db84"
+    },
+    {
+      "path": "ui/www/eos-updates.css",
+      "sha256": "978f9e71ed6e5929944ca2c44606bc253ac2f0f3cae06eaed512619ccdcdd543"
+    },
+    {
+      "path": "ui/www/settings.html",
+      "sha256": "d2cbe806f3088c75a2a26afef29172bf3feb3673549bdb144d2e4c177d3c16d6"
+    },
+    {
+      "path": "test/eos-customer-update-ui.test.cjs",
+      "sha256": "bd21ac8f5691569adee923de9920979d2675f65dfa0a82cf610adbcca72a7707"
+    },
+    {
+      "path": "ui/tsconfig.eos-updates-ui.json",
+      "sha256": "074418416b6870a329d91a92633232e62546e03b1b574b363cf01bc53edc31a6"
+    },
+    {
+      "path": "ui/eslint.eos-updates-ui.config.mjs",
+      "sha256": "7ef4ce52611004953ca77e92988cd1b829fdad0924ce526ff985877810715e48"
+    }
+  ],
+  "draftComparison": "Initial 9.0.21 implementation, not a released 9.0.20 regression.",
+  "browser": "Chromium 156 executable available but launch failed before page creation: socket() failed Operation not permitted; no screenshots or rendered viewport result."
+}

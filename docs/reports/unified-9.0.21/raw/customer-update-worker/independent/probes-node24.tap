@@ -1,0 +1,13 @@
+✔ independent: competing copies admit exactly one installation (725.27482ms)
+✔ independent: preexisting claim does not replay or replace the old result (7.958865ms)
+✔ independent: CLI output bound fails before install and redacts payload (195.976905ms)
+✔ independent: oversized sparse archive and snapshot are refused before stop (18.025997ms)
+✔ independent: OS SIGTERM to copied worker retires installation descendants (244.406362ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1334.670612

@@ -1,0 +1,14 @@
+{
+  "name": "audit-full",
+  "command": [
+    "npm",
+    "audit",
+    "--json"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+  "startedAt": "2026-11-24T21:53:34.965523+00:00",
+  "durationSeconds": 13.413,
+  "exitCode": 1,
+  "log": "/workspace/scratch/741f792566ea/setup-921/audit-full.log",
+  "sha256": "5a9a06312d0f8d241b8f4e769d3b07d528e6b59489cf5fad1f52c0a2a27de180"
+}

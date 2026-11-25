@@ -597,9 +597,15 @@ tests.integration(path.resolve(__dirname, '..'), {
                 const saved = await request('/api/eos/modules/devices', {
                     method: 'PUT',
                     headers: { cookie, origin: base, 'content-type': 'application/json', 'x-nw-csrf': view.csrfToken },
-                    body: JSON.stringify({ config: configuration }),
+                    body: JSON.stringify({ config: configuration, expectedConfigurationRevision: view.configurationRevision }),
                 });
                 assert.equal(saved.status, 200, `Configuration save failed; error=${await responseErrorCode(saved)}`);
+                const stale = await request('/api/eos/modules/devices', {
+                    method: 'PUT',
+                    headers: { cookie, origin: base, 'content-type': 'application/json', 'x-nw-csrf': view.csrfToken },
+                    body: JSON.stringify({ config: { ...configuration, pollIntervalMs: 1234 }, expectedConfigurationRevision: view.configurationRevision }),
+                });
+                assert.equal(stale.status, 409, 'a stale browser draft must not replace a newer device configuration');
                 // Controller7.2.5 schedules an instance restart after2500ms on instance-object changes.
                 // Checking beyond that boundary catches the original customer regression.
                 await wait(3500);

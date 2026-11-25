@@ -1,0 +1,56 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: one hundred timer requests do not create overlapping farm aggregations or stale final publication
+ok 1 - one hundred timer requests do not create overlapping farm aggregations or stale final publication
+  ---
+  duration_ms: 54.86566
+  type: 'test'
+  ...
+# Subtest: explicit refresh waits for an active aggregation and then reads the latest measurement
+ok 2 - explicit refresh waits for an active aggregation and then reads the latest measurement
+  ---
+  duration_ms: 14.502587
+  type: 'test'
+  ...
+# Subtest: delayed old aggregation publishes nothing after shutdown
+ok 3 - delayed old aggregation publishes nothing after shutdown
+  ---
+  duration_ms: 11.070087
+  type: 'test'
+  ...
+# Subtest: delayed old aggregation publishes nothing after configuration
+ok 4 - delayed old aggregation publishes nothing after configuration
+  ---
+  duration_ms: 12.48631
+  type: 'test'
+  ...
+# Subtest: failed publication releases the aggregation flight and a later refresh succeeds
+ok 5 - failed publication releases the aggregation flight and a later refresh succeeds
+  ---
+  duration_ms: 15.125565
+  type: 'test'
+  ...
+# Subtest: publication stops after an in-flight database write during shutdown
+ok 6 - publication stops after an in-flight database write during shutdown
+  ---
+  duration_ms: 14.128974
+  type: 'test'
+  ...
+# Subtest: publication stops after an in-flight database write during configuration
+ok 7 - publication stops after an in-flight database write during configuration
+  ---
+  duration_ms: 6.44163
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 632.875494

@@ -1,0 +1,214 @@
+✖ update notice performs no automatic action and links directly to the update settings (19.118969ms)
+✖ failed check keeps its error and restores explicit retry controls (3.120438ms)
+✔ prepare and start need separate clicks, fresh CSRF and the exact version/plan; duplicate clicks cannot start twice (3.371306ms)
+✖ lost start response stays indeterminate, blocks repeats and recovers only from an authoritative status (2.411951ms)
+✖ expired authentication before sending the start issues no order and keeps an explicit sign-in notice (2.312402ms)
+✖ expired session after lost start never falsely declares the earlier order unissued (2.342678ms)
+✖ repeated visibility events cannot overlap status reads or actions (1.927633ms)
+✖ pagehide aborts outstanding work and pageshow resumes; stale responses cannot overwrite the new page state (1.63392ms)
+✖ malformed metadata and executable-looking versions never enter HTML or authorize starts (2.054163ms)
+✖ conflicting plans and expired plan timestamps cannot be submitted again (2.174214ms)
+✔ offline/current states do not advertise installation and modal cancellation never mutates the system (2.471882ms)
+✔ mobile markup and stylesheet retain explicit containment and live status semantics (0.549918ms)
+✖ password-change requirement and missing or malformed CSRF prevent every mutating request (2.082926ms)
+✖ hidden document stops polling until visibility returns and an in-flight action remains single (1.579509ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 3
+ℹ fail 11
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 315.270374
+
+✖ failing tests:
+
+test at test/eos-customer-update-ui.test.cjs:76:1
+✖ update notice performs no automatic action and links directly to the update settings (19.118969ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'settings.html'
+  - 'settings.html#updates'
+                  ^
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-customer-update-ui.test.cjs:79:53)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'settings.html',
+    expected: 'settings.html#updates',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-customer-update-ui.test.cjs:82:1
+✖ failed check keeps its error and restores explicit retry controls (3.120438ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-customer-update-ui.test.cjs:87:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-customer-update-ui.test.cjs:106:1
+✖ lost start response stays indeterminate, blocks repeats and recovers only from an authoritative status (2.411951ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  2 !== 1
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-customer-update-ui.test.cjs:110:51)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-customer-update-ui.test.cjs:116:1
+✖ expired authentication before sending the start issues no order and keeps an explicit sign-in notice (2.312402ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-customer-update-ui.test.cjs:120:105)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-customer-update-ui.test.cjs:122:1
+✖ expired session after lost start never falsely declares the earlier order unissued (2.342678ms)
+  AssertionError [ERR_ASSERTION]: The input was expected to not match the regular expression /kein.*Auftrag.*erteilt/i. Input:
+  
+  'Bitte erneut bei EOS anmelden. Es wurde kein neuer Updateauftrag erteilt.'
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-customer-update-ui.test.cjs:128:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'Bitte erneut bei EOS anmelden. Es wurde kein neuer Updateauftrag erteilt.',
+    expected: /kein.*Auftrag.*erteilt/i,
+    operator: 'doesNotMatch',
+    diff: 'simple'
+  }
+
+test at test/eos-customer-update-ui.test.cjs:132:1
+✖ repeated visibility events cannot overlap status reads or actions (1.927633ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  9 !== 1
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-customer-update-ui.test.cjs:135:27)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 9,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-customer-update-ui.test.cjs:139:1
+✖ pagehide aborts outstanding work and pageshow resumes; stale responses cannot overwrite the new page state (1.63392ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-customer-update-ui.test.cjs:143:43)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-customer-update-ui.test.cjs:150:1
+✖ malformed metadata and executable-looking versions never enter HTML or authorize starts (2.054163ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  'false' !== 'true'
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-customer-update-ui.test.cjs:155:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'false',
+    expected: 'true',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-customer-update-ui.test.cjs:157:1
+✖ conflicting plans and expired plan timestamps cannot be submitted again (2.174214ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-customer-update-ui.test.cjs:161:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-customer-update-ui.test.cjs:182:1
+✖ password-change requirement and missing or malformed CSRF prevent every mutating request (2.082926ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-customer-update-ui.test.cjs:193:16)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-customer-update-ui.test.cjs:196:1
+✖ hidden document stops polling until visibility returns and an in-flight action remains single (1.579509ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-customer-update-ui.test.cjs:199:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

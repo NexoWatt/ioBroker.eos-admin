@@ -59,6 +59,9 @@ const eosCookieNamespace_1 = require("./eosCookieNamespace");
 const eosRolePolicy_1 = require("./eosRolePolicy");
 const eosRequestSecurity_1 = require("./eosRequestSecurity");
 const eosAutoUpdate_1 = require("./eosAutoUpdate");
+const eosCustomerUpdates_1 = require("./eosCustomerUpdates");
+const eosCustomerUpdateHttp_1 = require("./eosCustomerUpdateHttp");
+const eosUpdateSnapshot_1 = require("./eosUpdateSnapshot");
 const eosLicenseHttp_1 = require("./eosLicenseHttp");
 const eosHttpsClient_1 = require("./eosHttpsClient");
 const eosWebResources_1 = require("./eosWebResources");
@@ -318,6 +321,7 @@ async function createEosServer(app, adapter, settings, managedTls) {
 /** Webserver class */
 class Web {
     nexowattStableUpdateManager;
+    eosCustomerUpdates;
     server = {
         app: null,
         server: null,
@@ -454,6 +458,7 @@ class Web {
             this.checkTimeout = undefined;
         }
         this.nexowattStableUpdateManager?.stop();
+        this.eosCustomerUpdates?.stop();
         this.detachCookieNamespace?.();
         this.detachCookieNamespace = undefined;
         this.instanceProxy.close();
@@ -1781,6 +1786,81 @@ class Web {
             void this.unified.status(req).then(value => res.json(value), () => res.status(503).json({ error: 'AUTH_UNAVAILABLE' }));
         });
         app.get('/license.html', (_req, res) => res.redirect('/nexowatt/license'));
+        try {
+            this.eosCustomerUpdates = new eosCustomerUpdates_1.EosCustomerUpdates({
+                namespace: this.adapter.namespace,
+                currentVersion: this.adapter.version ?? '',
+                nodeVersion: process.versions.node,
+                packageDir: (0, node_path_1.resolve)(this.baseDir),
+                controllerDir: (0, node_path_1.resolve)(adapter_core_1.controllerDir),
+                dataDir: (0, node_path_1.resolve)((0, adapter_core_1.getAbsoluteInstanceDataDir)(this.adapter)),
+                encryptSnapshot: value => this.adapter.encrypt(value),
+                decryptSnapshot: value => this.adapter.decrypt(value),
+                readConfigurationSnapshot: () => (0, eosUpdateSnapshot_1.readEosUpdateConfiguration)({
+                    namespace: this.adapter.namespace,
+                    getForeignObjectAsync: id => this.adapter.getForeignObjectAsync(id),
+                    getForeignStateAsync: id => this.adapter.getForeignStateAsync(id),
+                    getForeignStatesAsync: pattern => this.adapter.getForeignStatesAsync(pattern),
+                    decrypt: value => this.adapter.decrypt(value),
+                    isBusy: () => {
+                        const phase = this.adapter.eosMigration?.status().phase;
+                        return (this.closed ||
+                            !this.moduleHost ||
+                            this.moduleHost.mutation ||
+                            !!this.moduleHost.configurationSavePromise ||
+                            (!!phase &&
+                                ![
+                                    'DISABLED',
+                                    'NOT_NEEDED',
+                                    'COMMITTED',
+                                    'LICENSE_REQUIRED',
+                                    'BLOCKED',
+                                    'ROLLBACK_REQUIRED',
+                                ].includes(phase)));
+                    },
+                }),
+                readHostInstances: async () => {
+                    const own = await this.adapter.getForeignObjectAsync(`system.adapter.${this.adapter.namespace}`);
+                    if (own?.type !== 'instance' || typeof own.common.host !== 'string' || !own.common.host) {
+                        throw new Error('UPDATE_HOST_INVALID');
+                    }
+                    const view = await this.adapter.getObjectViewAsync('system', 'instance', {
+                        startkey: 'system.adapter.eos-admin.',
+                        endkey: 'system.adapter.eos-admin.\u9999',
+                    });
+                    if (view.rows.length > 128) {
+                        throw new Error('UPDATE_HOST_INVALID');
+                    }
+                    return view.rows
+                        .filter(row => row.value?.common?.host === own.common.host)
+                        .map(row => {
+                        if (!/^system\.adapter\.eos-admin\.\d{1,6}$/.test(row.id) ||
+                            typeof row.value.common.enabled !== 'boolean') {
+                            throw new Error('UPDATE_HOST_INVALID');
+                        }
+                        return {
+                            namespace: row.id.slice('system.adapter.'.length),
+                            enabled: row.value.common.enabled,
+                        };
+                    });
+                },
+            });
+        }
+        catch {
+            this.adapter.log.warn('EOS_UPDATE_INITIALIZATION_FAILED: Update service unavailable; EOS continues.');
+        }
+        const unavailableUpdate = () => Promise.reject(new Error('UPDATE_UNAVAILABLE'));
+        (0, eosCustomerUpdateHttp_1.registerEosCustomerUpdateRoutes)(app, {
+            service: this.eosCustomerUpdates ?? {
+                status: unavailableUpdate,
+                check: unavailableUpdate,
+                prepare: unavailableUpdate,
+                start: unavailableUpdate,
+            },
+            requestAllowed: req => this.unified.requestAllowed(req),
+            csrfAllowed: req => this.unified.csrfAllowed(req),
+            access: req => this.unified.status(req),
+        });
         app.get('/api/license/info', (req, res) => {
             void this.getEosRequestAccess(req).then(access => {
                 if (!access.userId) {

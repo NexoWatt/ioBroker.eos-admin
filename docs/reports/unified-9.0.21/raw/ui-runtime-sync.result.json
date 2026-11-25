@@ -1,0 +1,14 @@
+{
+  "name": "ui-runtime-sync",
+  "command": [
+    "node",
+    "scripts/build-ts-runtime-executables.js",
+    "--check"
+  ],
+  "cwd": "source-921/iobroker.eos-admin/ui",
+  "startedAt": "2026-11-24T22:03:56.338248+00:00",
+  "durationSeconds": 5.698,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-921/ui-runtime-sync.log",
+  "sha256": "e72e753cd490f188f609f8c1c6a533adbacf5b5c53bd0a0c5d3ef6a7ee4f5305"
+}

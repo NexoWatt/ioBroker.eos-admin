@@ -17,6 +17,7 @@ function translateAll() {
     const endpoint = '/api/eos/modules/devices';
     let csrfToken = '';
     let originalConfig = {};
+    let configurationRevision = '';
     let ready = false;
     let busy = false;
     let manualImportAllowed = false;
@@ -33,6 +34,8 @@ function translateAll() {
         EOS_MODULE_CONFIG_UNAVAILABLE: 'Die gespeicherten Geräteeinstellungen konnten nicht gelesen werden. Es wird kein leerer Ersatz gespeichert. Verbindung und ioBroker-Protokoll prüfen und anschließend „Neu laden“ wählen.',
         EOS_MODULE_CONFIG_STORE_INVALID: 'Der gespeicherte Gerätestand konnte nicht sicher geprüft werden. Die Bearbeitung ist gesperrt; bestehende Einstellungen bleiben erhalten. Bitte das ioBroker-Protokoll und die Sicherung prüfen.',
         EOS_MODULE_CONFIG_DECRYPTION: 'Der gespeicherte Gerätestand konnte nicht entschlüsselt werden. Die Bearbeitung ist gesperrt; bestehende Einstellungen bleiben erhalten. Bitte den ursprünglichen ioBroker-Systemschlüssel und die Sicherung prüfen.',
+        EOS_MODULE_CONFIG_CONFLICT: 'Die Geräteeinstellungen wurden inzwischen geändert. Deine Eingaben bleiben im Formular; vor erneutem Speichern den aktuellen Stand neu laden und die Änderungen abgleichen.',
+        EOS_MODULE_TIMEOUT: 'Die Speicherbestätigung dauert länger. Der Auftrag kann noch abgeschlossen werden. Deine Eingaben bleiben erhalten; zunächst den gespeicherten Stand neu laden und prüfen.',
         EOS_MODULE_IMPORT_REQUIRES_DISABLED: 'Für den manuellen Import muss das gespeicherte Gerätemodul deaktiviert sein. Haken bei „Gerätemodul aktivieren“ entfernen und „Speichern und übernehmen“ wählen. Für eine 1:1-Bestandsübernahme zuerst deren Status prüfen.',
         EOS_MODULE_IMPORT_ALREADY_MIGRATED: 'Die automatische Bestandsübernahme erhält bereits die ursprünglichen Datenpunkt-IDs. Ein erneuter manueller Import ist gesperrt. Bitte den Status der Bestandsübernahme prüfen.',
         EOS_MODULE_LEGACY_RUNNING: 'Der bisherige Geräteadapter läuft noch oder sein vollständiger Stopp ist nicht bestätigt. Für die 1:1-Übernahme bitte den Bestandsstatus prüfen; ein manueller Import benötigt eine bestätigte, deaktivierte alte Instanz.',
@@ -167,6 +170,7 @@ function translateAll() {
         if (!result.config || typeof result.csrfToken !== 'string') throw new Error('EOS_DEVICES_INVALID_RESPONSE');
         csrfToken = result.csrfToken;
         originalConfig = result.config;
+        configurationRevision = typeof result.configurationRevision === 'string' ? result.configurationRevision : '';
         window.EosDeviceEms?.setDevices?.(result.config.devices);
         element('eosModuleEnabled').checked = result.config.enabled === true;
         ready = false;
@@ -226,7 +230,7 @@ function translateAll() {
             if (window.EosDeviceEms?.prepareSave) config.devices = window.EosDeviceEms.prepareSave(config.devices, originalConfig.devices);
             delete config.devicesJson;
             status('Konfiguration wird sicher gespeichert und übernommen …');
-            await request('', { method: 'PUT', body: JSON.stringify({ config }) });
+            await request('', { method: 'PUT', body: JSON.stringify({ config, expectedConfigurationRevision: configurationRevision }) });
             dirty = false;
             await reload();
         }));

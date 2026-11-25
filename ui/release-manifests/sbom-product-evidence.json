@@ -1,9 +1,9 @@
 {
   "schema": "nexowatt.product-sbom-evidence.v1",
   "package": "nexowatt-eos-ui-internal",
-  "version": "9.0.20",
-  "generatedAt": "2026-11-24T21:06:27.093Z",
-  "sbomSha256": "22e2e4a399e841dd726ae70e12086aeb6740ffb77aabe5728c11a4802976a1b5",
+  "version": "9.0.21",
+  "generatedAt": "2026-11-24T22:08:42.830Z",
+  "sbomSha256": "1bbbd1cad541d1d7eda13c9a9d218dd7b84ec1c2669910724b48dc9ec81045dd",
   "packageFiles": [
     {
       "path": "LICENSE",
@@ -837,8 +837,8 @@
     },
     {
       "path": "docs/security/eslint-reviewed-findings.json",
-      "size": 294502,
-      "sha256": "9639435761fc3051a40631be59cc426635498dce9621d35ac196d53b18110273"
+      "size": 305868,
+      "sha256": "b6a69c80884a115a0bb14adf5f9186285ea391d145550200df0f0ca41ab6c60b"
     },
     {
       "path": "ems/charging-budget-helpers.js",
@@ -877,8 +877,8 @@
     },
     {
       "path": "ems/engine.js",
-      "size": 88262,
-      "sha256": "6a476992ab9da4eba93c7007c7cd4f2939ee55f1b550c30fd8a3f5bbca885241"
+      "size": 88942,
+      "sha256": "8154250d759f95ef5219f5ad913e794755ad246388dd7f52760cf50aef33dee5"
     },
     {
       "path": "ems/evcs-control-mapping.js",
@@ -1037,8 +1037,8 @@
     },
     {
       "path": "ems/modules/tariff-provider.js",
-      "size": 29167,
-      "sha256": "b9cf1a6d49da505fdff38cfb31c820049d7b0958c2e2b5f57c34c6fc6712b7de"
+      "size": 30870,
+      "sha256": "7f797db5f8eca327e80d34a2ad62e9e2a4f521fd80cba17da1b9930a201f9ea4"
     },
     {
       "path": "ems/modules/tariff-status.js",
@@ -1332,8 +1332,8 @@
     },
     {
       "path": "ems/services/tariff-provider-registry.js",
-      "size": 42116,
-      "sha256": "b83a183476cf86c8702032c2c5640d004785ef51a23cc380dde03fd6ffd51f67"
+      "size": 42640,
+      "sha256": "b18396e88c7b623e3fa7d14c9871837b6135f2d780c14ae7444d45c778ba6155"
     },
     {
       "path": "ems/services/zero-export-pv-coordinator.js",
@@ -1383,7 +1383,7 @@
     {
       "path": "io-package.json",
       "size": 22561,
-      "sha256": "694bddc614234d82fded26655f32636761c2d022efefe2a117596733f0cdb16d"
+      "sha256": "d7c3b82f464b0f2ec079d9598983e2cde62cb94af43aec33ce096a61d01608d1"
     },
     {
       "path": "lib/charging-diagnostics-api.js",
@@ -1802,18 +1802,18 @@
     },
     {
       "path": "main.js",
-      "size": 1820132,
-      "sha256": "8dac1fa103d6594f02bf64f70a0c2c53f6af51c8297614ddf616d05f8ff05f19"
+      "size": 1821322,
+      "sha256": "6b5ccbf8c72b5895dba4e0dddecaf419c8d3f28e2a9663f348b3a9b2d2fe95b1"
     },
     {
       "path": "package.json",
       "size": 86443,
-      "sha256": "3e51c5b7507b22d26921e64e1e782cab456ef226a8ece68831c496b32927253d"
+      "sha256": "96cae5eda40fab9bc355333e557e8eb94dc19bb0b26dabaf361b817ec2b8c79a"
     },
     {
       "path": "release-manifests/admin-bundle-components.json",
       "size": 7790,
-      "sha256": "e0719d20452e7252e6c0576f4f58c4c942e86d6f4dd9f2fe8614e2dc40b9b2c6"
+      "sha256": "e608c393a4cc2f2db20b5790c6fb74b3013388afb83ef7eaa516ca9c0b00b345"
     },
     {
       "path": "release-manifests/release-status.json",
@@ -2272,8 +2272,8 @@
     },
     {
       "path": "www/app.js",
-      "size": 536954,
-      "sha256": "f628bba0a64fec79f4c41898cd613c9112cb3c5dcae62b7dbf7046e7b9499805"
+      "size": 537122,
+      "sha256": "f5dade79cf25604a8e8539d690c7d92fc71a2180ec157b2407a69f86ef559eba"
     },
     {
       "path": "www/apple-touch-icon.png",
@@ -2522,8 +2522,8 @@
     },
     {
       "path": "www/index.html",
-      "size": 45836,
-      "sha256": "b8f8c1d8970672451f02a6e91f184f50ac1a02533c18f1715570d1a9419f9b4b"
+      "size": 45944,
+      "sha256": "54257313a452161822e6ed07edad94a38aede8a17800921b7b77514b9f95d2c7"
     },
     {
       "path": "www/license.html",
@@ -2567,8 +2567,8 @@
     },
     {
       "path": "www/manifest.webmanifest",
-      "size": 1335,
-      "sha256": "52290ef9f6ffcc44282060d680f76b0c5e5e8c08c9428b0352f8840a75801895"
+      "size": 1342,
+      "sha256": "abddece091da785ba30b77e5c296a9dc5074a593a2acbbf1138547fa90a55c3a"
     },
     {
       "path": "www/mesh-microgrid.html",
@@ -2672,8 +2672,8 @@
     },
     {
       "path": "www/settings.html",
-      "size": 67299,
-      "sha256": "282749916557495a492d35eb3aca6b74c08c5fd84fbe9b1ce3452f0063243e22"
+      "size": 69773,
+      "sha256": "d2cbe806f3088c75a2a26afef29172bf3feb3673549bdb144d2e4c177d3c16d6"
     },
     {
       "path": "www/simulation.html",
@@ -2815,7 +2815,7 @@
     {
       "path": "package-lock.json",
       "size": 198439,
-      "sha256": "e0187b54732af7f46052560e620b20d0d40f03def78ed209741d813b70e7ec93"
+      "sha256": "c39263a44a6c8f27b6cc2c65cf4400b085cd27ca7548ce9c1516e6fe87e6e81e"
     },
     {
       "path": "scripts/generate-cra-sbom.cjs",
@@ -2830,12 +2830,12 @@
     {
       "path": "src-admin-tab/package-lock.json",
       "size": 64845,
-      "sha256": "0c7159acf7768657418a1c599587267b021b8a9c5cccd97b22ae2c0d47e72376"
+      "sha256": "efa444122831505886a89ed46e9ae8da1a3c5c5f34febce66efbee8dd11c91b6"
     },
     {
       "path": "src-admin-tab/package.json",
       "size": 613,
-      "sha256": "1afb29e7365337461357a87107408bb481cc6a561dbc6b967ab33752e87dff5e"
+      "sha256": "c6f311ba6d5bc3e1fa6936206168c969403fd49b4080148ae5c33b61eab260bd"
     },
     {
       "path": "src-admin-tab/src/App.tsx",

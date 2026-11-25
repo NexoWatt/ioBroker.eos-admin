@@ -1,0 +1,44 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: independent: competing copies admit exactly one installation
+ok 1 - independent: competing copies admit exactly one installation
+  ---
+  duration_ms: 655.536503
+  type: 'test'
+  ...
+# Subtest: independent: preexisting claim does not replay or replace the old result
+ok 2 - independent: preexisting claim does not replay or replace the old result
+  ---
+  duration_ms: 10.32086
+  type: 'test'
+  ...
+# Subtest: independent: CLI output bound fails before install and redacts payload
+ok 3 - independent: CLI output bound fails before install and redacts payload
+  ---
+  duration_ms: 239.272768
+  type: 'test'
+  ...
+# Subtest: independent: oversized sparse archive and snapshot are refused before stop
+ok 4 - independent: oversized sparse archive and snapshot are refused before stop
+  ---
+  duration_ms: 19.944306
+  type: 'test'
+  ...
+# Subtest: independent: OS SIGTERM to copied worker retires installation descendants
+ok 5 - independent: OS SIGTERM to copied worker retires installation descendants
+  ---
+  duration_ms: 221.519621
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1244.651933

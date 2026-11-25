@@ -1,0 +1,63 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: upload admission has no unbounded queue behind a stalled filesystem
+not ok 1 - upload admission has no unbounded queue behind a stalled filesystem
+  ---
+  duration_ms: 63.6886
+  type: 'test'
+  location: '/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-upload-admission.test.cjs:70:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    excess work must fail before stalled admission can resume
+    
+    undefined !== 503
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 503
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-upload-admission.test.cjs:79:16)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: total upload deadline includes admission and late filesystem completion never starts a parser
+not ok 2 - total upload deadline includes admission and late filesystem completion never starts a parser
+  ---
+  duration_ms: 55.315102
+  type: 'test'
+  location: '/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-upload-admission.test.cjs:84:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    both deadlines begin before filesystem admission
+    
+    0 !== 2
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 2
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-upload-admission.test.cjs:88:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: client abort during admission retires its deadline and never parses later
+ok 3 - client abort during admission retires its deadline and never parses later
+  ---
+  duration_ms: 56.843097
+  type: 'test'
+  ...
+1..3
+# tests 3
+# suites 0
+# pass 1
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 253.777355

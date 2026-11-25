@@ -1,0 +1,14 @@
+{
+  "name": "ui-sbom-check",
+  "command": [
+    "npm",
+    "run",
+    "sbom:check"
+  ],
+  "cwd": "source-921/iobroker.eos-admin/ui",
+  "startedAt": "2026-11-24T22:09:10.525222+00:00",
+  "durationSeconds": 0.432,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-921/ui-sbom-check.log",
+  "sha256": "a4c497394efcadfc5909c9f27ba11fc1f52ffb131d9f458a84b8a5c2d204f28e"
+}

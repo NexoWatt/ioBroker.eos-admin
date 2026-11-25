@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> nexowatt-eos-ui-internal@9.0.21 lint:security
+> node scripts/verify-eslint-security.cjs
+
+ESLint gate failed: Reviewed source changed; re-review required: src-ts/runtime-executables/main.ts

@@ -1,0 +1,21 @@
+{
+  "startedAt": "2026-11-24T22:06:10.175938+00:00",
+  "durationSeconds": 0.887261979001778,
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+    "--test",
+    "test/eos-customer-update-snapshot.test.cjs",
+    "test/eos-customer-update-http.test.cjs"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+  "node": "v24.22.3",
+  "exitCode": 0,
+  "sha256": "dbce377a227da3f94650035fcf36e48bba08cd8cdb8a2b22998399b5fba6620d",
+  "sourceHashes": {
+    "src/lib/eosUpdateSnapshot.ts": "bf09e7b7044ad2c7c7bdd7e2586a77a695bc425a26799ebe49165764e5759a8d",
+    "src/lib/eosCustomerUpdateHttp.ts": "5e5338316a96756266b8d176101c3962a9b20254c3a604767d818a38967c5b38",
+    "test/eos-customer-update-snapshot.test.cjs": "a962055501b6e2d00fc1f4a4ddb851eb4ff82aac0b39165f7886bef9306faab4",
+    "test/eos-customer-update-http.test.cjs": "ee7ffc7a271c18aec1342c857dc406360d7c5d19f5ea8c971d48042755c2778c",
+    "tsconfig.eos-customer-updates.json": "6693d33c58274363a59bfb250fd91b43d3737af8cbd61a4abe1d6035a67479cb"
+  }
+}

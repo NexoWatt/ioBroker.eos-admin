@@ -6,8 +6,9 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const path = require('node:path');
 const express = require('express');
-const { EosModuleHost } = require('../src/lib/eosModuleHost');
-const { registerEosModuleRoutes } = require('../src/lib/eosModuleHttp');
+const auditedRoot = process.env.EOS_PERSISTENCE_BASELINE || path.resolve(__dirname, '..');
+const { EosModuleHost } = require(path.join(auditedRoot, 'src/lib/eosModuleHost'));
+const { registerEosModuleRoutes } = require(path.join(auditedRoot, 'src/lib/eosModuleHttp'));
 const { UnifiedSessions } = require('../src/lib/eosUnifiedBoundary');
 const { installIdleSession } = require('./fixtures/eos-idle-session.cjs');
 const realDevices = require('../modules/devices');
@@ -59,13 +60,14 @@ async function fixture(t, initial = {}, allowed = true) {
     const server = app.listen(0, '127.0.0.1'); await new Promise(resolve => server.once('listening', resolve));
     const origin = `http://127.0.0.1:${server.address().port}`;
     t.after(async () => { await host.stop(); session.cleanup(); server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); });
+    let loadedRevision;
     const get = async () => {
         const response = await fetch(`${origin}/api/eos/modules/devices`, { headers: { cookie: `access_token=${session.token}` } });
-        assert.equal(response.status, 200); return response.json();
+        assert.equal(response.status, 200); const view = await response.json(); loadedRevision = view.configurationRevision; return view;
     };
-    const put = async (config, csrfToken) => {
+    const put = async (config, csrfToken, expectedConfigurationRevision = loadedRevision) => {
         const response = await fetch(`${origin}/api/eos/modules/devices`, { method: 'PUT',
-            headers: { cookie: `access_token=${session.token}`, origin, 'content-type': 'application/json', 'x-nw-csrf': csrfToken }, body: JSON.stringify({ config }) });
+            headers: { cookie: `access_token=${session.token}`, origin, 'content-type': 'application/json', 'x-nw-csrf': csrfToken }, body: JSON.stringify({ config, expectedConfigurationRevision }) });
         return { status: response.status, body: await response.json() };
     };
     return { owner, objects, writes, runtimes, get, put, host: () => host,
@@ -73,6 +75,38 @@ async function fixture(t, initial = {}, allowed = true) {
         allowed(value) { allowStartup = value; }, failRead(value) { failRead = value; },
         async restart() { await host.stop(); owner.config = { eosModules: {} }; host = newHost(); return host; } };
 }
+
+test('two browser drafts cannot silently overwrite a newer module configuration through real HTTP', async t => {
+    const f = await fixture(t, { devices: [meter], futureModuleOption: 'initial' });
+    const firstDraft = await f.get(); const secondDraft = await f.get();
+    assert.equal(firstDraft.configurationRevision, secondDraft.configurationRevision);
+    const changed = { ...firstDraft.config, futureModuleOption: 'confirmed-newer-value' };
+    assert.equal((await f.put(changed, firstDraft.csrfToken, firstDraft.configurationRevision)).status, 200);
+    const stale = await f.put({ ...secondDraft.config, pollIntervalMs: 2500 }, secondDraft.csrfToken, secondDraft.configurationRevision);
+    assert.equal(stale.status, 409);
+    assert.equal(stale.body.error, 'EOS_MODULE_CONFIG_CONFLICT');
+    const loaded = await f.get();
+    assert.equal(loaded.config.futureModuleOption, 'confirmed-newer-value');
+    assert.notEqual(loaded.configurationRevision, firstDraft.configurationRevision);
+    assert.equal(f.writes.length, 1);
+    await f.restart();
+    assert.equal((await f.get()).config.futureModuleOption, 'confirmed-newer-value');
+});
+
+test('missing or malformed HTTP draft revision cannot authorize a replacement', async t => {
+    const f = await fixture(t, { devices: [meter] }); const view = await f.get();
+    for (const expected of [null, '', [], {}, 'not-a-revision']) {
+        const response = await f.put({ enabled: false, devices: [] }, view.csrfToken, expected);
+        assert.equal(response.status, 409);
+        assert.equal(response.body.error, 'EOS_MODULE_CONFIG_CONFLICT');
+    }
+    const missing = await f.browserFetch('/api/eos/modules/devices', { method: 'PUT',
+        headers: { 'content-type': 'application/json', 'x-nw-csrf': view.csrfToken }, body: JSON.stringify({ config: { enabled: false, devices: [] } }) });
+    assert.equal(missing.status, 409);
+    assert.equal((await missing.json()).error, 'EOS_MODULE_CONFIG_CONFLICT');
+    assert.equal(f.writes.length, 0);
+    assert.equal((await f.get()).config.devices[0].id, meter.id);
+});
 
 test('SMA device create/save/reload and enable toggle survive a new host with packaged defaults', async t => {
     const f = await fixture(t, { futureModuleOption: { retain: true } });
@@ -182,9 +216,10 @@ test('operational start joins an accepted pre-start save, preserving commit erro
         const starting = f.host().start().then(() => { startSettled = true; return null; }, error => { startSettled = true; return error; });
         await new Promise(resolve => setImmediate(resolve));
         const settledBeforeCommit = startSettled;
-        if (outcome === 'stop') await f.host().stop();
+        const stopping = outcome === 'stop' ? f.host().stop() : Promise.resolve();
         release();
         const [saveResult, startError] = await Promise.all([saving, starting]);
+        await stopping;
         assert.equal(settledBeforeCommit, false, 'startup must join the accepted configuration mutation instead of returning BUSY');
         assert.equal(startError, null);
         if (outcome === 'error') {
@@ -192,6 +227,10 @@ test('operational start joins an accepted pre-start save, preserving commit erro
             assert.equal(f.writes.length, 0);
             assert.equal(f.runtimes.length, 1);
             assert.deepEqual(f.runtimes[0].config.devices, [meter], 'startup uses the retained authoritative configuration after the rejected save');
+        } else if (outcome === 'stop') {
+            assert.equal(saveResult.error?.code, 'EOS_MODULE_STOPPED');
+            assert.equal(f.writes.length, 0, 'a paused pre-write must not issue a persistent write after shutdown');
+            assert.equal(f.runtimes.length, 0);
         } else {
             assert.equal(saveResult.error, undefined);
             assert.deepEqual(f.writes, [configurationId]);

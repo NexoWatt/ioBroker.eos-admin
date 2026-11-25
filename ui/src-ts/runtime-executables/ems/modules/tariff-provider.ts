@@ -7,7 +7,7 @@
 /**
  * NexoWatt Quellcode-Erklärung (DE)
  * Aufgabe: Lädt Tarifdaten über die registrierten Anbieter und stellt sie der weiteren Tarifverarbeitung bereit.
- * Daten und Wirkung: Liest HTTPS-Tarife mit höchstens 5 s Gesamtabrufbudget. Erst vollständig validierte Intervalle aktualisieren Preis-States und Erfolgszeit. Bei Fehlern verbleibt der letzte gültige Stand bis zur konfigurierten Frischegrenze; danach werden Preise null und Kurven leer.
+ * Daten und Wirkung: Liest HTTPS-Tarife außerhalb des lokalen Regelticks mit höchstens einem Abruf und 5 s Gesamtabrufbudget; Stop und Quellwechsel brechen den Abruf ab. Auch ein leerer Cache hält nach Fehlern den geplanten Wiederholabstand ein. Erst vollständig validierte Intervalle aktualisieren Preis-States und Erfolgszeit. Bei Fehlern verbleibt der letzte gültige Stand bis zur konfigurierten Frischegrenze; danach werden Preise null und Kurven leer.
  * Bei Änderungen: Einheiten, Vorzeichen, Gültigkeit und Aufrufer mitprüfen; Kommentare und docs:build nach fachlichen Änderungen aktualisieren.
  * Verknüpfungen: docs/quellcode/src-ts/runtime-executables/ems/modules/tariff-provider.md
  * Einstieg: docs/QUELLCODE_WEGWEISER_DE.md; Pflege: docs/DOKUMENTATIONSSTANDARD_DE.md
@@ -69,6 +69,7 @@ class TariffProviderModule extends BaseModule {
         this._lastPublishedFresh = null;
         this._lastPublishedSuccessMs = null;
         this._fetchPromise = null;
+        this._fetchAbort = null;
         this._lastError = '';
         this._consecutiveErrors = 0;
         this._effectiveRefreshMinutes = 0;
@@ -150,6 +151,7 @@ class TariffProviderModule extends BaseModule {
         this._invalidationPending = true;
         this._fencePriceReaders();
         const generation = ++this._generation;
+        this._fetchAbort?.abort();
         this._intervals = [];
         this._lastFetchMs = 0;
         this._lastSuccessMs = 0;
@@ -359,7 +361,8 @@ class TariffProviderModule extends BaseModule {
         const staleAge = this._lastSuccessMs ? nowMs - this._lastSuccessMs : Number.POSITIVE_INFINITY;
         const fresh = cfg.enabled && cfg.providerId !== 'manual-dp' && this._lastSuccessMs > 0
             && staleAge <= cfg.maxStaleMinutes * 60 * 1000 && Number.isFinite(ca.current);
-        const status = statusOverride || (fresh ? 'ok' : (this._intervals.length ? 'stale' : 'waiting'));
+        const status = statusOverride || (this._lastError ? (this._intervals.length ? 'degraded' : 'error')
+            : fresh ? 'ok' : (this._intervals.length ? 'stale' : 'waiting'));
         const quality = this._intervals[0] ? String(this._intervals[0].quality || 'unknown') : 'missing';
         // Never refresh the tariff-control datapoints with stale provider data.
         // tariff-vis uses state timestamps as its safety/freshness contract; writing
@@ -439,11 +442,11 @@ class TariffProviderModule extends BaseModule {
     /** Die Registry validiert alle Intervalle vor der Übernahme. Abruffehler
      * behalten den letzten gültigen Stand und dessen Erfolgszeit; _publish
      * setzt nach Ablauf der vorhandenen Frischegrenze die Preise auf null. */
-    async _refresh(cfg, nowMs, generation = this._generation) {
+    async _refresh(cfg, nowMs, generation = this._generation, signal) {
         if (!this._isCurrent(generation)) return;
         this._lastFetchMs = nowMs;
         try {
-            const result = await fetchProvider(cfg);
+            const result = await fetchProvider(cfg, signal);
             if (!this._isCurrent(generation)) return;
             const intervals = Array.isArray(result && result.intervals) ? result.intervals : [];
             if (!intervals.length) throw new Error('provider_returned_no_intervals');
@@ -501,13 +504,33 @@ class TariffProviderModule extends BaseModule {
 
         await this._setTariffSettings(cfg, generation);
         if (!this._isCurrent(generation)) return;
-        if (!this._fetchPromise && (!this._lastFetchMs || nowMs >= this._nextFetchMs || !this._intervals.length)) {
-            const operation = this._refresh(cfg, nowMs, generation).finally(() => {
-                if (this._fetchPromise === operation) this._fetchPromise = null;
+        if (!this._fetchPromise && (!this._lastFetchMs || nowMs >= this._nextFetchMs)) {
+            // Remote tariff I/O must not hold the local regulation cycle. Keep
+            // one bounded request; an empty cache after failure still observes
+            // the existing backoff. Configuration changes reset the schedule.
+            const abort = new AbortController();
+            this._fetchAbort = abort;
+            const operation = this._refresh(cfg, nowMs, generation, abort.signal).catch(() => {
+                if (this._stopped || this.adapter?._nwShuttingDown) return;
+                // A failed publication starts invalidation, which deliberately
+                // advances the generation. Keep that failed clearing visible;
+                // unrelated completed generations still cannot change status.
+                if (!this._isCurrent(generation) && !this._invalidationPending) return;
+                // _refresh handles provider failures. A rejected publication or
+                // clearing remains fenced and is retried by the next local tick.
+                this._lastError = 'TARIFF_STATE_WRITE_FAILED';
+                this._invalidationPending = true;
+                this._fencePriceReaders();
+                this.adapter._tariffProviderSnapshot = { ...this.adapter._tariffProviderSnapshot,
+                    status: 'error', fresh: false, error: this._lastError };
+                this.adapter?.log?.warn?.('[TariffProvider] TARIFF_STATE_WRITE_FAILED');
+            }).finally(() => {
+                if (this._fetchPromise === operation) {
+                    this._fetchPromise = null;
+                    this._fetchAbort = null;
+                }
             });
             this._fetchPromise = operation;
-            await this._fetchPromise;
-            await this._publicationTail;
             return;
         }
         await this._publish(cfg, nowMs, '', generation);
@@ -517,6 +540,7 @@ class TariffProviderModule extends BaseModule {
     stop() {
         this._stopped = true;
         this._generation++;
+        this._fetchAbort?.abort();
         this._intervals = [];
         this._lastSuccessMs = 0;
     }

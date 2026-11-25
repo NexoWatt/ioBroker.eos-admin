@@ -7,7 +7,7 @@
 /**
  * NexoWatt Quellcode-Erklärung (DE)
  * Aufgabe: Registriert unterstützte Tarifquellen und deren Aufruf-/Normalisierungsschnittstellen.
- * Daten und Wirkung: Optional konfigurierte Provider liefern EUR/kWh-Zeitreihen; Tarifregelung behält ihre vorhandene Frische-/Ausfallbehandlung. HTTPS-Gesamtabrufe einschließlich OAuth, DNS und Antwortkörper sind auf höchstens 5 s, 64 KiB Request und 2 MiB dekodierte Antwort begrenzt. Keine Redirects. Eine fehlerhafte Preiszeile verwirft die gesamte Antwort vor der Übergabe an ioBroker.
+ * Daten und Wirkung: Optional konfigurierte Provider liefern EUR/kWh-Zeitreihen; Tarifregelung behält ihre vorhandene Frische-/Ausfallbehandlung. HTTPS-Gesamtabrufe einschließlich OAuth, DNS und Antwortkörper sind auf höchstens 5 s, 64 KiB Request und 2 MiB dekodierte Antwort begrenzt. Keine Redirects. Ein Lebenszyklus-Abbruch beendet den aktiven Transport und entfernt den Abbruchlistener. Eine fehlerhafte Preiszeile verwirft die gesamte Antwort vor der Übergabe an ioBroker.
  * Bei Änderungen: Einheiten, Vorzeichen, Frische und Aufrufer mitprüfen; Netzwerkvertrag mit scripts/verify-cra-tariff.cjs testen. Anbieter-Fehlertexte nicht protokollieren; keine Zugangsdaten in Fehlermeldungen übernehmen. docs:build nach fachlichen Änderungen aktualisieren.
  * Verknüpfungen: docs/quellcode/src-ts/runtime-executables/ems/services/tariff-provider-registry.md
  * Einstieg: docs/QUELLCODE_WEGWEISER_DE.md; Pflege: docs/DOKUMENTATIONSSTANDARD_DE.md
@@ -519,20 +519,30 @@ const MAX_PROVIDER_TIMEOUT_MS = 5000;
  * Fristen bleiben möglich; lange/ungültige Werte erhöhen niemals das Maximum.
  * Nach dem Parsing wird die monotone Frist erneut geprüft. Node.js-Timer sind
  * keine Echtzeitgarantie bei blockiertem Betriebssystem/Event-Loop. */
-function withTimeout(timeoutMs, fn) {
+function withTimeout(timeoutMs, fn, parentSignal) {
     const requested = Number(timeoutMs);
     const budget = Number.isFinite(requested) && requested > 0 ? Math.min(MAX_PROVIDER_TIMEOUT_MS, requested) : MAX_PROVIDER_TIMEOUT_MS;
     const deadline = performance.now() + budget;
     const ctrl = new AbortController();
     let timer;
+    let cancel;
     const timeout = new Promise((_resolve, reject) => {
         timer = setTimeout(() => { ctrl.abort(); reject(new Error('provider_timeout')); }, budget);
+        cancel = () => { ctrl.abort(); reject(new Error('provider_cancelled')); };
+        if (parentSignal?.aborted) cancel();
+        else parentSignal?.addEventListener('abort', cancel, { once: true });
     });
-    const operation = Promise.resolve().then(() => fn(ctrl.signal)).then(result => {
+    const operation = Promise.resolve().then(() => {
+        if (ctrl.signal.aborted) throw new Error('provider_cancelled');
+        return fn(ctrl.signal);
+    }).then(result => {
         if (ctrl.signal.aborted || performance.now() >= deadline) { ctrl.abort(); throw new Error('provider_timeout'); }
         return result;
     });
-    return Promise.race([operation, timeout]).finally(() => clearTimeout(timer));
+    return Promise.race([operation, timeout]).finally(() => {
+        clearTimeout(timer);
+        parentSignal?.removeEventListener('abort', cancel);
+    });
 }
 
 /** Jeder externe Tarifabruf verlangt HTTPS mit der Node.js-Standardprüfung des
@@ -756,7 +766,7 @@ async function fetchOstrom(config = {}, signal) {
 /** Öffentlicher Abrufvertrag: erst die gesamte validierte Antwort zurückgeben;
  * nie States schreiben. Alle Fehler sind feste Codes ohne URLs/Token/Antworttext.
  * Tarifmodul und Installer-API fangen diese Rejection bereits asynchron ab. */
-async function fetchProvider(config = {}) {
+async function fetchProvider(config = {}, signal) {
     return withTimeout(config.timeoutMs, async signal => {
         let providerId = String(config.providerId || 'manual-dp');
         if (providerId === 'market-profile') providerId = String(config.sourceId || (config.country === 'NL' ? 'energyzero' : 'entsoe'));
@@ -767,9 +777,9 @@ async function fetchProvider(config = {}) {
         if (providerId === 'ostrom') return fetchOstrom(resolvedConfig, signal);
         if (providerId === 'custom-rest') return fetchCustomRest(resolvedConfig, '', signal);
         throw new Error(providerId === 'manual-dp' ? 'manual_dp_has_no_fetch' : 'unknown_provider');
-    }).catch(error => {
+    }, signal).catch(error => {
         const message = String(error && error.message || '');
-        if (/^(?:provider_(?:timeout|https_required|url_invalid|request_too_large|response_too_large|request_failed|prices_invalid|http_\d{3})|invalid_json_response|tibber_(?:token_missing|graphql_error|invalid_response|no_homes|home_invalid|no_price_info)|energyzero_no_prices|entsoe_(?:token_missing|invalid_response|no_prices)|oauth_(?:credentials_missing|token_invalid)|custom_rest_(?:url_missing|no_prices)|manual_dp_has_no_fetch|unknown_provider)$/.test(message)) throw error;
+        if (/^(?:provider_(?:timeout|cancelled|https_required|url_invalid|request_too_large|response_too_large|request_failed|prices_invalid|http_\d{3})|invalid_json_response|tibber_(?:token_missing|graphql_error|invalid_response|no_homes|home_invalid|no_price_info)|energyzero_no_prices|entsoe_(?:token_missing|invalid_response|no_prices)|oauth_(?:credentials_missing|token_invalid)|custom_rest_(?:url_missing|no_prices)|manual_dp_has_no_fetch|unknown_provider)$/.test(message)) throw error;
         throw new Error('provider_request_failed');
     });
 }

@@ -1,0 +1,121 @@
+✖ first valid 600W NVP initializes filter from the measurement (5.298248ms)
+✖ first valid -600W NVP initializes filter from the measurement (0.565892ms)
+✔ first valid 0W NVP initializes filter from the measurement (0.447854ms)
+✔ a genuine previous0W remains a valid averaging baseline (0.847205ms)
+✖ fresh recovery after disconnected discards obsolete opposite-sign smoothing (0.928108ms)
+✖ fresh recovery after stale discards obsolete opposite-sign smoothing (0.515116ms)
+✖ fresh recovery after missing discards obsolete opposite-sign smoothing (0.445721ms)
+✖ fresh recovery after resolver-error discards obsolete opposite-sign smoothing (0.765402ms)
+✔ overlapping requests retain one actual control cycle and release after rejected work (1.04273ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 3
+ℹ fail 6
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 591.035027
+
+✖ failing tests:
+
+test at test/eos-ems-nvp-recovery.test.cjs:40:37
+✖ first valid 600W NVP initializes filter from the measurement (5.298248ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  55 !== 600
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-ems-nvp-recovery.test.cjs:43:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 55,
+    expected: 600,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-ems-nvp-recovery.test.cjs:40:37
+✖ first valid -600W NVP initializes filter from the measurement (0.565892ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  -55 !== -600
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-ems-nvp-recovery.test.cjs:43:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: -55,
+    expected: -600,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-ems-nvp-recovery.test.cjs:55:79
+✖ fresh recovery after disconnected discards obsolete opposite-sign smoothing (0.928108ms)
+  AssertionError [ERR_ASSERTION]: fresh import must not continue an obsolete export average
+  
+  -4972 !== 600
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-ems-nvp-recovery.test.cjs:72:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: -4972,
+    expected: 600,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-ems-nvp-recovery.test.cjs:55:79
+✖ fresh recovery after stale discards obsolete opposite-sign smoothing (0.515116ms)
+  AssertionError [ERR_ASSERTION]: fresh import must not continue an obsolete export average
+  
+  -4972 !== 600
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-ems-nvp-recovery.test.cjs:72:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: -4972,
+    expected: 600,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-ems-nvp-recovery.test.cjs:55:79
+✖ fresh recovery after missing discards obsolete opposite-sign smoothing (0.445721ms)
+  AssertionError [ERR_ASSERTION]: fresh import must not continue an obsolete export average
+  
+  -4972 !== 600
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-ems-nvp-recovery.test.cjs:72:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: -4972,
+    expected: 600,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-ems-nvp-recovery.test.cjs:55:79
+✖ fresh recovery after resolver-error discards obsolete opposite-sign smoothing (0.765402ms)
+  AssertionError [ERR_ASSERTION]: fresh import must not continue an obsolete export average
+  
+  -4972 !== 600
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-ems-nvp-recovery.test.cjs:72:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: -4972,
+    expected: 600,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

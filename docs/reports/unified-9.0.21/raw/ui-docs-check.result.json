@@ -1,0 +1,14 @@
+{
+  "name": "ui-docs-check",
+  "command": [
+    "npm",
+    "run",
+    "docs:check"
+  ],
+  "cwd": "source-921/iobroker.eos-admin/ui",
+  "startedAt": "2026-11-24T22:03:56.326184+00:00",
+  "durationSeconds": 0.484,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-921/ui-docs-check.log",
+  "sha256": "c5ca2544f0b9d55440c8d0806970c7f4fe635d49c0587f9db2f0213ced698293"
+}

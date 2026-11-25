@@ -38,6 +38,8 @@
   <script src="/static/customer-tariff.js?v=9.0.18" defer></script>
   <script src="/static/nw-i18n.js" defer></script>
 <script defer src="/eos-session-idle.js"></script>
+<link rel="stylesheet" href="/static/eos-updates.css">
+<script src="/static/eos-updates.js" defer></script>
 </head>
 <!-- NexoWatt Detail-Kommentar (DE) -->
 <!-- Kundeneinstellungen. data-scope/data-key-Felder werden generisch von www/app.js an /api/set gebunden und in main.js als States geführt. -->
@@ -98,6 +100,10 @@
           <span class="nw-settings-nav__title">Allgemein</span>
           <small>Admin-Zugang &amp; Wetter</small>
         </button>
+        <button class="nw-settings-nav__item" type="button" data-settings-page-target="updates">
+          <span class="nw-settings-nav__title">EOS-Updates</span>
+          <small>Neue Version prüfen und installieren</small>
+        </button>
         <button class="nw-settings-nav__item" type="button" data-settings-page-target="notify">
           <span class="nw-settings-nav__title">Benachrichtigungen</span>
           <small>E-Mail, Überwachung, Tests</small>
@@ -122,6 +128,34 @@
     </aside>
 
     <div class="nw-settings-main">
+      <section class="card nw-settings-page hidden" data-settings-panel="updates" id="eosUpdatesPanel">
+        <div class="card-header"><span>EOS-Updates</span></div>
+        <div class="form">
+          <p>Hier kannst du eine neue stabile EOS-Version vorbereiten und selbst starten. Deine gespeicherten Geräteeinstellungen und EMS-Zuordnungen bleiben erhalten.</p>
+          <dl class="nw-update-values">
+            <div><dt>Installiert</dt><dd id="eosUpdateInstalled">—</dd></div>
+            <div><dt>Verfügbar</dt><dd id="eosUpdateAvailable">—</dd></div>
+            <div><dt>Letzte Prüfung</dt><dd id="eosUpdateChecked">Noch nicht geprüft</dd></div>
+          </dl>
+          <p id="eosUpdateStatus" role="status" aria-live="polite">Updatestatus wird geladen …</p>
+          <div class="nw-update-actions">
+            <button type="button" class="btn" id="eosUpdateCheck">Update prüfen</button>
+            <button type="button" class="btn" id="eosUpdatePrepare" hidden>Update vorbereiten</button>
+          </div>
+          <small>Quelle: die als stabil veröffentlichte Version von NexoWatt EOS auf npm. Vorabversionen werden hier nicht automatisch angeboten.</small>
+          <dialog id="eosUpdateConfirm" aria-labelledby="eosUpdateConfirmTitle">
+            <h2 id="eosUpdateConfirmTitle">EOS aktualisieren</h2>
+            <p>Version <strong id="eosUpdateConfirmVersion">—</strong> ist vorbereitet.</p>
+            <p>EOS wird für die Installation beendet und anschließend neu gestartet. Währenddessen sind die Bedienoberfläche und die EOS-Regelung unterbrochen. Wähle dafür einen passenden Wartungszeitpunkt.</p>
+            <p>Die Vorbereitung legt eine verschlüsselte Sicherung der EOS-Konfiguration an. Diese ersetzt keine vollständige Sicherung deines ioBroker-Systems.</p>
+            <div class="nw-update-actions">
+              <button type="button" class="btn" id="eosUpdateCancel">Später</button>
+              <button type="button" class="btn" id="eosUpdateStart" disabled>Jetzt aktualisieren</button>
+            </div>
+          </dialog>
+        </div>
+      </section>
+
       <section class="card nw-settings-page" data-settings-panel="general">
         <div class="card-header"><span>Allgemein</span></div>
         <div class="form">

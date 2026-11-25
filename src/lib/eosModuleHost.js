@@ -3,6 +3,7 @@
 
 const { join } = require('node:path');
 const { performance } = require('node:perf_hooks');
+const { randomUUID } = require('node:crypto');
 const { EosModuleConfigStore } = require('./eosModuleConfigStore');
 const { EosDeviceEmsService } = require('./eosDeviceEmsService');
 
@@ -114,6 +115,7 @@ class EosModuleHost {
         this.reserveDeviceProfileChange = null;
         for (const id of Object.keys(MODULES)) {
             this.entries.set(id, { id, module: null, config: { enabled: false }, configLoaded: false, reason: 'DISABLED', lease: 0,
+                configurationRevision: randomUUID(),
                 generation: 0, blockers: [], loading: false, failed: false, started: false, startup: null, stopEntryPromise: null, pendingWrites: new Set(), timers: new Set(), subscriptions: new Set(), downloads: new Set() });
         }
     }
@@ -195,6 +197,7 @@ class EosModuleHost {
                 const config = this.decodeConfig(id, envelope);
                 entry.config = config;
                 entry.loadedEnvelope = envelope;
+                entry.configurationRevision = this.configStore.revisions.get(id) || randomUUID();
                 entry.configLoaded = true;
                 entry.configurationStartupAllowed = startupAllowed;
                 entry.configurationError = '';
@@ -651,6 +654,7 @@ class EosModuleHost {
                         if (envelope) this.owner.config.eosModules = { ...this.owner.config.eosModules, [entry.id]: envelope };
                         entry.config = this.readConfig(entry.id);
                         entry.loadedEnvelope = envelope;
+                        entry.configurationRevision = this.configStore.revisions.get(entry.id) || randomUUID();
                         entry.configLoaded = true;
                         entry.configurationError = '';
                     }
@@ -721,6 +725,7 @@ class EosModuleHost {
         if (!entry) throw fail('EOS_MODULE_UNKNOWN');
         const reason = this.configurationReason(id);
         return { id, config: redact(entry.config), configurationReady: !reason, configurationLoaded: entry.configLoaded,
+            configurationRevision: entry.configurationRevision,
             configurationReason: reason, status: await this.status(id),
             ...(id === 'devices' ? { emsCommissioning: this.deviceEmsView() } : {}),
             manualImport: this.manualImportStatus(id), migration: entry.loadedEnvelope?.migration || this.owner.config.eosModules?.[id]?.migration || null };
@@ -738,18 +743,35 @@ class EosModuleHost {
         return { allowed: !reason, reason };
     }
 
-    async save(id, config, migration) {
+    async save(id, config, migration, expectedConfigurationRevision) {
         const reason = this.configurationReason(id);
         if (reason) throw fail(reason);
         if (this.mutation || this.stopped) throw fail('EOS_MODULE_BUSY');
         const entry = this.entries.get(id);
         if (!entry) throw fail('EOS_MODULE_UNKNOWN');
         if (!entry.configLoaded) throw fail('EOS_MODULE_NOT_READY');
+        // HTTP supplies the revision of the displayed draft. A new CSRF token or
+        // a background status refresh must never bless an older configuration.
+        if (expectedConfigurationRevision !== undefined && expectedConfigurationRevision !== entry.configurationRevision) {
+            throw fail('EOS_MODULE_CONFIG_CONFLICT');
+        }
         if (id === 'devices') this.deviceEms?.request('configuration');
         this.mutation = true;
-        this.configurationSavePromise = this.persistConfig(id, config, migration);
-        try { return await this.configurationSavePromise; }
-        finally { this.mutation = false; this.configurationSavePromise = null; }
+        return this.waitConfigurationSave(this.persistConfig(id, config, migration));
+    }
+
+    /** Eine HTTP-Deadline beendet keinen Datenbankauftrag. Die tatsächliche
+     * Transaktion hält die Speichersperre bis Commit und Laufzeitübernahme fest;
+     * ein später Erfolg wird vor der nächsten Bearbeitung im Konfigurationsbild sichtbar. */
+    async waitConfigurationSave(operation) {
+        const pending = Promise.resolve(operation).finally(() => {
+            if (this.configurationSavePromise === pending) {
+                this.mutation = false;
+                this.configurationSavePromise = null;
+            }
+        });
+        this.configurationSavePromise = pending;
+        return bounded(pending);
     }
 
     /** Internal commit shared by save/import; the entire caller operation owns the mutation lock. */
@@ -775,8 +797,6 @@ class EosModuleHost {
             releaseProfileChange = await this.reserveDeviceProfileChange({ namespace: this.namespace('devices'), changes });
             if (typeof releaseProfileChange !== 'function') throw fail('EOS_DEVICES_PROFILE_CHECK_UNAVAILABLE');
         }
-        let commit;
-        let commitSettled = true;
         try {
             if (this.stopped) throw fail('EOS_MODULE_BUSY');
             const encrypted = this.owner.encrypt(JSON.stringify(normalized));
@@ -785,15 +805,15 @@ class EosModuleHost {
                 migration: migration || entry.loadedEnvelope?.migration || this.owner.config.eosModules?.[id]?.migration || null };
             // Commit before interrupting the old runtime. Failed/conflicting writes
             // leave its validated settings and transport generation untouched.
-            commitSettled = false;
-            commit = this.configStore.save(id, envelope);
-            void commit.then(() => { commitSettled = true; }, () => { commitSettled = true; });
-            await bounded(commit);
+            await this.configStore.save(id, envelope, () => !this.stopped);
+            if (this.stopped) throw fail('EOS_MODULE_STOPPED');
             this.revoke(entry, 'CONFIG_CHANGED');
             await this.stopEntry(entry);
+            if (this.stopped) throw fail('EOS_MODULE_STOPPED');
             this.owner.config.eosModules = { ...this.owner.config.eosModules, [id]: envelope };
             entry.config = normalized;
             entry.loadedEnvelope = envelope;
+            entry.configurationRevision = this.configStore.revisions.get(id);
             if (!entry.stopFailed) {
                 entry.failed = false; entry.reason = normalized.enabled ? 'STARTING' : 'DISABLED';
             } else {
@@ -804,13 +824,9 @@ class EosModuleHost {
             void this.reconcile();
             return await this.view(id);
         } finally {
-            // A timeout never proves that a persistent write was cancelled. Keep
-            // the shared installer reservation until that original commit settles.
-            if (releaseProfileChange) {
-                if (commit && !commitSettled) void commit.then(releaseProfileChange, releaseProfileChange)
-                    .catch(() => this.owner.log.warn('EOS_DEVICES_PROFILE_RESERVATION_RELEASE_FAILED'));
-                else releaseProfileChange();
-            }
+            // waitConfigurationSave bounds the response, not this transaction.
+            // The reservation therefore also survives a slow database commit.
+            if (releaseProfileChange) releaseProfileChange();
         }
     }
 
@@ -851,9 +867,9 @@ class EosModuleHost {
             if (!(await bounded(this.inspectOwnership(entry)))) throw fail('EOS_MODULE_LEGACY_RUNNING');
             const currentEligibility = this.manualImportStatus(id);
             if (!currentEligibility.allowed) throw fail(currentEligibility.reason);
-            const result = await this.persistConfig(id, config, report);
+            const result = await this.waitConfigurationSave(this.persistConfig(id, config, report));
             return { ...result, migration: report };
-        } finally { this.mutation = false; }
+        } finally { if (!this.configurationSavePromise) this.mutation = false; }
     }
 
     async command(id, command, payload) {
@@ -931,6 +947,9 @@ class EosModuleHost {
         this.stopPromise = Promise.allSettled([
             ...[...this.entries.values()].map(entry => this.stopEntry(entry)),
             ...(this.deviceEms ? [this.deviceEms.stop()] : []),
+            // Issued configuration writes are not cancelled by an HTTP timeout
+            // or by closing transports. Confirm their outcome before stop succeeds.
+            ...(this.configurationSavePromise ? [bounded(this.configurationSavePromise.then(() => undefined, () => undefined))] : []),
         ]).then(results => {
             if (results.some(result => result.status === 'rejected') || [...this.entries.values()].some(entry => entry.stopFailed)) {
                 throw fail('EOS_MODULE_STOP_UNCONFIRMED');

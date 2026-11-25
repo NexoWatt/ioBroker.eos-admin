@@ -1,0 +1,16 @@
+{
+  "createdUtc": "2026-11-24T21:55:57.157352+00:00",
+  "candidate": {
+    "modules/devices/lib/drivers/mqtt.js": "3906fbf6e393f35a13124383d70819c702e8fe439cc4e3141d75235148e96d91",
+    "modules/devices/lib/drivers/mqttPendingOperations.js": "62fd8fc683475fcd71604819f0f047134cc3d09275827a4a3f895dfc1e00fbf7",
+    "modules/devices/lib/deviceRuntime.js": "9c8373fe1918435a1f734fb19605e0e4e0f5d5f9602efc2b0e963ea9d884c8bb",
+    "modules/devices/tsconfig.mqtt-lifecycle.json": "72400dd41cefdb14cb2282f94dd7e79d7faabd68d407c2695436e897fabe320c",
+    "modules/devices/test/mqttCommandLifecycle.test.js": "ff7e387a8a291aa21751afd399d5450f9d0511be9acb6320db9bd260d866328e",
+    "modules/devices/test/mqttResourceBounds.test.js": "896eb67247a25be2845172d1ac3260a186dbdfec97ddbee5701837e3a7ddb6c4",
+    "modules/devices/test/mqttRuntimeSession.test.js": "cf34c8a6436b7bea9bc448232cc5dd58b8fe2f7b1942d3aeef050e4ab9821046"
+  },
+  "baseline920": {
+    "modules/devices/lib/drivers/mqtt.js": "fe720bab644c60f96e889ff750739b42a0480afe0681c72c655ed3365c622e2c",
+    "modules/devices/lib/deviceRuntime.js": "cde164a1f7bf2e37a8d03975aec827c2345d4afbaed69b8075d43675233e1a9b"
+  }
+}

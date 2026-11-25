@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/app.ts
- * Quell-Hash: sha256:f2f7f5a629acb3fa794938ab6fca2a76d6c03c423e427123135f09f900efe9dc
+ * Quell-Hash: sha256:d5eb4cd56ae843c0fada1f08e218447907600b2ba32413ae275ceb3595302282
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -4781,7 +4781,8 @@ function initSettingsPageTabs(){
   });
 
   try { window.__nwActivateSettingsPage = activatePage; } catch (_e) {}
-  activatePage(wrap.dataset.settingsPage || (() => {
+  window.addEventListener('hashchange', () => { if (window.location.hash === '#updates') activatePage('updates'); });
+  activatePage(window.location.hash === '#updates' ? 'updates' : wrap.dataset.settingsPage || (() => {
     try { return sessionStorage.getItem('nexowatt.settings.page') || 'general'; } catch (_e) { return 'general'; }
   })());
 }

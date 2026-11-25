@@ -1,0 +1,42 @@
+{
+  "timestampUtc": "2026-11-24T22:05:17.829101+00:00",
+  "scope": "Isolated delegated customer update worker; fake controller CLI with real OS processes; actual controller integration separate",
+  "sourceHashes": {
+    "src/lib/eosCustomerUpdateWorker.ts": "c1b0df8a310449973290ea4fe2bff1d4babea6ae51aace59f4fb3f0657cb7b91",
+    "test/eos-customer-update-worker.test.cjs": "4c40e877ecc33d0da95284da7b18a12ccf3c6b4e76b6be9f021b4e2aac6682e0",
+    "tsconfig.eos-customer-updates.json": "6693d33c58274363a59bfb250fd91b43d3737af8cbd61a4abe1d6035a67479cb"
+  },
+  "runs": [
+    {
+      "log": "customer-worker-node22.tap",
+      "sha256": "1afc2f9a5cddca2736eaf8568ece34cd9cb6c6edc9ae8aada3ab4cc94c1df5f9",
+      "exitCode": 0,
+      "note": "12/12 worker tests where TAP; independent exact final source runs also copied"
+    },
+    {
+      "log": "customer-worker-node24.tap",
+      "sha256": "c9b53652188326769a77c1f4732b671ac3849bf4a8d50e7f2b69b63c92915fa5",
+      "exitCode": 0,
+      "note": "12/12 worker tests where TAP; independent exact final source runs also copied"
+    },
+    {
+      "log": "customer-worker-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exitCode": 0,
+      "note": "12/12 worker tests where TAP; independent exact final source runs also copied"
+    },
+    {
+      "log": "customer-worker-typecheck.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exitCode": 0,
+      "note": "12/12 worker tests where TAP; independent exact final source runs also copied"
+    },
+    {
+      "log": "customer-worker-strict-typecheck.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exitCode": 0,
+      "note": "12/12 worker tests where TAP; independent exact final source runs also copied"
+    }
+  ],
+  "independentReceipt": "independent/receipt.json"
+}

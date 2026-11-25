@@ -24,6 +24,7 @@ export interface ModuleView {
     status: Record<string, unknown>;
     configurationReady: boolean;
     configurationLoaded: boolean;
+    configurationRevision: string;
     configurationReason: string;
     emsCommissioning?: DeviceEmsPublicView;
 }
@@ -32,13 +33,20 @@ export class EosModuleHost {
         owner: Adapter,
         options: { baseDir: string; dataDir: string; installationDir?: string; eosDataDir?: string },
     );
+    readonly mutation: boolean;
+    readonly configurationSavePromise: Promise<unknown> | null;
     start(): Promise<void>;
     stop(): Promise<void>;
     onObjectChange(id: string, object?: unknown): void;
     onStateChange(id: string, state?: ioBroker.State | null): void;
     view(id: string): Promise<ModuleView>;
     status(id: string): Promise<Record<string, unknown>>;
-    save(id: string, config: unknown): Promise<ModuleView>;
+    save(
+        id: string,
+        config: unknown,
+        migration?: Record<string, unknown>,
+        expectedConfigurationRevision?: string,
+    ): Promise<ModuleView>;
     importLegacy(id: string, instance: unknown): Promise<ModuleView & { migration: Record<string, unknown> }>;
     command(id: string, command: unknown, payload: unknown): Promise<unknown>;
     download(

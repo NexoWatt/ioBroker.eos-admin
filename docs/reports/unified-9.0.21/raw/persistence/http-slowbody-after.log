@@ -1,0 +1,3 @@
+incomplete-body responses: [{"status":504,"body":"{\"error\":\"UPDATE_TIMEOUT\"}"},{"status":504,"body":"{\"error\":\"UPDATE_TIMEOUT\"}"},{"status":504,"body":"{\"error\":\"UPDATE_TIMEOUT\"}"},{"status":504,"body":"{\"error\":\"UPDATE_TIMEOUT\"}"},{"status":504,"body":"{\"error\":\"UPDATE_TIMEOUT\"}"},{"status":504,"body":"{\"error\":\"UPDATE_TIMEOUT\"}"},{"status":504,"body":"{\"error\":\"UPDATE_TIMEOUT\"}"},{"status":504,"body":"{\"error\":\"UPDATE_TIMEOUT\"}"}]
+next legitimate check: {"status":200,"body":"{\"state\":\"available\"}"}
+service calls: 1

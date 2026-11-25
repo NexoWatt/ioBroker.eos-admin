@@ -1,0 +1,24 @@
+{
+  "reviewedAt": "2026-11-24T22:12:47.677010+00:00",
+  "scope": "Exactly two root ESLint formatting changes. No behavior or type contract change. Prior source identity reconstructed by reversing only the documented whitespace/braces change. No repeated full suite by this reviewer.",
+  "files": [
+    {
+      "file": "src/lib/eosModuleConfigStore.js",
+      "priorSha256": "c8db28f955064db678b8271d48a7bad50f91ba8562e0f58978180bcd4cd20a89",
+      "finalSha256": "4a5e68807264e16a2a96a32ab88793fb209bceb9111979903ad1e34a46164f3d",
+      "inverseFormattingSha256": "c8db28f955064db678b8271d48a7bad50f91ba8562e0f58978180bcd4cd20a89",
+      "inverseFormattingMatchesPrior": true,
+      "formattingAfter": "            if (canSave && canSave() !== true) {\n                throw fail('EOS_MODULE_STOPPED');\n            }",
+      "formattingBefore": "            if (canSave && canSave() !== true) throw fail('EOS_MODULE_STOPPED');"
+    },
+    {
+      "file": "src/lib/eosModuleHost.d.ts",
+      "priorSha256": "56a33c8182a5a70707988ef3d386dfe2b524e704461353658d9bc75ef1a78a57",
+      "finalSha256": "dc0f986010cfdac5ab197613707045af0c17f20863a0e44d30b1683a559c1580",
+      "inverseFormattingSha256": "56a33c8182a5a70707988ef3d386dfe2b524e704461353658d9bc75ef1a78a57",
+      "inverseFormattingMatchesPrior": true,
+      "formattingAfter": "    save(\n        id: string,\n        config: unknown,\n        migration?: Record<string, unknown>,\n        expectedConfigurationRevision?: string,\n    ): Promise<ModuleView>;",
+      "formattingBefore": "    save(id: string, config: unknown, migration?: Record<string, unknown>, expectedConfigurationRevision?: string): Promise<ModuleView>;"
+    }
+  ]
+}

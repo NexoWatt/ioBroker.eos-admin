@@ -1,0 +1,15 @@
+✔ one hundred timer requests do not create overlapping farm aggregations or stale final publication (55.784563ms)
+✔ explicit refresh waits for an active aggregation and then reads the latest measurement (16.859264ms)
+✔ delayed old aggregation publishes nothing after shutdown (17.052946ms)
+✔ delayed old aggregation publishes nothing after configuration (7.07348ms)
+✔ failed publication releases the aggregation flight and a later refresh succeeds (8.58059ms)
+✔ publication stops after an in-flight database write during shutdown (8.183152ms)
+✔ publication stops after an in-flight database write during configuration (8.770516ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 618.893221

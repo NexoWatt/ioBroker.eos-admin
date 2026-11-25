@@ -1,0 +1,90 @@
+[
+  {
+    "check": "ui-node24",
+    "command": [
+      "node",
+      "--test",
+      "test/eos-customer-update-ui.test.cjs"
+    ],
+    "sourceOverride": null,
+    "startedUtc": "2026-11-24T21:54:05.964502+00:00",
+    "durationSeconds": 0.559,
+    "exitCode": 0,
+    "log": "ui-node24.log",
+    "logSha256": "bf7dfa0165e74b7469c3f5e99f7969202d86b59c1697310f12d24e24969493bb"
+  },
+  {
+    "check": "ui-node22",
+    "command": [
+      "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node",
+      "--test",
+      "test/eos-customer-update-ui.test.cjs"
+    ],
+    "sourceOverride": null,
+    "startedUtc": "2026-11-24T21:54:06.524062+00:00",
+    "durationSeconds": 0.449,
+    "exitCode": 0,
+    "log": "ui-node22.log",
+    "logSha256": "5cf91ed825a0c4a1a6d4df1b047d4a4c7519eb1bd95f5098bf207a0f28735f97"
+  },
+  {
+    "check": "type-node24",
+    "command": [
+      "node",
+      "node_modules/typescript/bin/tsc",
+      "-p",
+      "ui/tsconfig.eos-updates-ui.json"
+    ],
+    "sourceOverride": null,
+    "startedUtc": "2026-11-24T21:54:06.973189+00:00",
+    "durationSeconds": 0.635,
+    "exitCode": 0,
+    "log": "type-node24.log",
+    "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "check": "type-node22",
+    "command": [
+      "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node",
+      "node_modules/typescript/bin/tsc",
+      "-p",
+      "ui/tsconfig.eos-updates-ui.json"
+    ],
+    "sourceOverride": null,
+    "startedUtc": "2026-11-24T21:54:07.608281+00:00",
+    "durationSeconds": 0.516,
+    "exitCode": 0,
+    "log": "type-node22.log",
+    "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "check": "lint",
+    "command": [
+      "node",
+      "node_modules/eslint/bin/eslint.js",
+      "-c",
+      "ui/eslint.eos-updates-ui.config.mjs",
+      "ui/src-ts/runtime-executables/www/eos-updates.ts"
+    ],
+    "sourceOverride": null,
+    "startedUtc": "2026-11-24T21:54:08.123966+00:00",
+    "durationSeconds": 1.315,
+    "exitCode": 0,
+    "log": "lint.log",
+    "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "check": "draft-regression",
+    "command": [
+      "node",
+      "--test",
+      "test/eos-customer-update-ui.test.cjs"
+    ],
+    "sourceOverride": "/workspace/scratch/741f792566ea/audit-921/update-ui/eos-updates-before.ts",
+    "startedUtc": "2026-11-24T21:54:09.438876+00:00",
+    "durationSeconds": 0.384,
+    "exitCode": 1,
+    "log": "draft-regression.log",
+    "logSha256": "198984e07f2a0dc5ca2e00baa5c1243aebb3f58367574b018faafaf31e57a35d"
+  }
+]

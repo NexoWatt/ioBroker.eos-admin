@@ -1,0 +1,34 @@
+(node:12) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ actual UnifiedSessions permits the explicit customer update capability without general administrator rights (56.118128ms)
+✔ anonymous, cross-origin, CSRF, initial-password and unapproved roles never reach update actions (12.052738ms)
+✔ no update route accepts arbitrary URLs, paths, commands, alternate versions or extra fields (15.331585ms)
+✔ malformed and oversized JSON have bounded JSON errors without stack paths or request secrets (5.691009ms)
+✔ fresh session revocation, role changes and mandatory password changes are checked at the final service fence (28.616769ms)
+✔ status is reauthorized after a slow service read and internal error details never enter responses (8.114198ms)
+✔ HTTP timeout revokes late prepare/start authority even when the service operation cannot be cancelled (54.779111ms)
+✔ client disconnect revokes the callback before any later prepare/start effect (47.265939ms)
+✔ pending auth database work retains bounded admission after HTTP timeout until it really settles (53.000454ms)
+✔ incomplete JSON bodies are cancelled on timeout or disconnect and cannot retain every admission slot (83.518124ms)
+✔ update notice performs no automatic action and links directly to the update settings (22.109791ms)
+✔ failed check keeps its error and restores explicit retry controls (4.515809ms)
+✔ prepare and start need separate clicks, fresh CSRF and the exact version/plan; duplicate clicks cannot start twice (5.256415ms)
+✔ lost start response stays indeterminate, blocks repeats and recovers only from an authoritative status (4.132252ms)
+✔ expired authentication before sending the start issues no order and keeps an explicit sign-in notice (3.742105ms)
+✔ expired session after lost start never falsely declares the earlier order unissued (3.917208ms)
+✔ repeated visibility events cannot overlap status reads or actions (2.995801ms)
+✔ pagehide aborts outstanding work and pageshow resumes; stale responses cannot overwrite the new page state (3.152357ms)
+✔ malformed metadata and executable-looking versions never enter HTML or authorize starts (3.206588ms)
+✔ conflicting plans and expired plan timestamps cannot be submitted again (3.622684ms)
+✔ offline/current states do not advertise installation and modal cancellation never mutates the system (4.397171ms)
+✔ mobile markup and stylesheet retain explicit containment and live status semantics (1.074558ms)
+✔ password-change requirement and missing or malformed CSRF prevent every mutating request (12.318098ms)
+✔ hidden document stops polling until visibility returns and an in-flight action remains single (5.82456ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1085.521711

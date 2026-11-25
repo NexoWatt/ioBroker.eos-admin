@@ -1,0 +1,460 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: failed startup waits for actual module drain, and concurrent callers cannot create a replacement
+ok 1 - failed startup waits for actual module drain, and concurrent callers cannot create a replacement
+  ---
+  duration_ms: 193.468205
+  type: 'test'
+  ...
+# Subtest: rejected failed-start cleanup retains the fenced engine and blocks nonforced and forced replacements
+ok 2 - rejected failed-start cleanup retains the fenced engine and blocks nonforced and forced replacements
+  ---
+  duration_ms: 74.01971
+  type: 'test'
+  ...
+# Subtest: bounded failed-start drain timeout retains ownership and allows a later confirmed cleanup to recover
+ok 3 - bounded failed-start drain timeout retains ownership and allows a later confirmed cleanup to recover
+  ---
+  duration_ms: 127.553316
+  type: 'test'
+  ...
+# Subtest: retained or stopped engine references cannot admit immediate EMS work or advertise running
+ok 4 - retained or stopped engine references cannot admit immediate EMS work or advertise running
+  ---
+  duration_ms: 37.187402
+  type: 'test'
+  ...
+# (node:20) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: real apply waits old tick and async module stop before config replacement, then rebinds all engine readers without losing session
+ok 5 - real apply waits old tick and async module stop before config replacement, then rebinds all engine readers without losing session
+  ---
+  duration_ms: 310.725987
+  type: 'test'
+  ...
+# Subtest: bounded reconfiguration timeout leaves old engine fenced and cannot create another actuator cycle
+ok 6 - bounded reconfiguration timeout leaves old engine fenced and cannot create another actuator cycle
+  ---
+  duration_ms: 26.940194
+  type: 'test'
+  ...
+# Subtest: numeric cache readers reject boolean, missing and collection values while retaining real zero
+ok 7 - numeric cache readers reject boolean, missing and collection values while retaining real zero
+  ---
+  duration_ms: 16.08583
+  type: 'test'
+  ...
+# Subtest: one configured active storage-farm member contributes real farm metrics to energy flow
+ok 8 - one configured active storage-farm member contributes real farm metrics to energy flow
+  ---
+  duration_ms: 18.060259
+  type: 'test'
+  ...
+# Subtest: FENECON farm keeps converter feedback for control while flow shows only battery power and separate DC PV
+ok 9 - FENECON farm keeps converter feedback for control while flow shows only battery power and separate DC PV
+  ---
+  duration_ms: 21.955488
+  type: 'test'
+  ...
+# Subtest: energy-flow shadow comparison produces a result rather than referencing undefined unrelated UI variables
+ok 10 - energy-flow shadow comparison produces a result rather than referencing undefined unrelated UI variables
+  ---
+  duration_ms: 11.276579
+  type: 'test'
+  ...
+# Subtest: a module task that timed out remains awaited before engine replacement and its late write uses only the old mapping
+ok 11 - a module task that timed out remains awaited before engine replacement and its late write uses only the old mapping
+  ---
+  duration_ms: 2067.810781
+  type: 'test'
+  ...
+# Subtest: a disabled commissioned single-storage row cannot acquire authority from an otherwise enabled app
+ok 12 - a disabled commissioned single-storage row cannot acquire authority from an otherwise enabled app
+  ---
+  duration_ms: 10.605789
+  type: 'test'
+  ...
+# (node:28) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: farm own ack:false echo stays pending and idempotent; later ack only confirms the driver
+ok 13 - farm own ack:false echo stays pending and idempotent; later ack only confirms the driver
+  ---
+  duration_ms: 30.261295
+  type: 'test'
+  ...
+# Subtest: farm delayed acknowledgment cannot confirm a newer request; invalid quality remains a failure
+ok 14 - farm delayed acknowledgment cannot confirm a newer request; invalid quality remains a failure
+  ---
+  duration_ms: 4.272443
+  type: 'test'
+  ...
+# Subtest: farm missing/null/blank/boolean values never confirm a zero command
+ok 15 - farm missing/null/blank/boolean values never confirm a zero command
+  ---
+  duration_ms: 3.478778
+  type: 'test'
+  ...
+# Subtest: farm real mismatch, write failure and authority revocation are not pending successes
+ok 16 - farm real mismatch, write failure and authority revocation are not pending successes
+  ---
+  duration_ms: 64.672518
+  type: 'test'
+  ...
+# Subtest: actual single-storage command path keeps run enabled while matching command acknowledgments are pending
+ok 17 - actual single-storage command path keeps run enabled while matching command acknowledgments are pending
+  ---
+  duration_ms: 6.086885
+  type: 'test'
+  ...
+# Subtest: single-storage real mismatch still clears run; pending cannot hide a rejected primary write
+ok 18 - single-storage real mismatch still clears run; pending cannot hide a rejected primary write
+  ---
+  duration_ms: 124.940577
+  type: 'test'
+  ...
+# Subtest: single-storage actual ack is driver-only and late/invalid acknowledgment is not confirmed
+ok 19 - single-storage actual ack is driver-only and late/invalid acknowledgment is not confirmed
+  ---
+  duration_ms: 0.490239
+  type: 'test'
+  ...
+# Subtest: farm keepalive renews a pending request without inventing confirmation or writing zero
+ok 20 - farm keepalive renews a pending request without inventing confirmation or writing zero
+  ---
+  duration_ms: 4.251472
+  type: 'test'
+  ...
+# Subtest: pending neutralization reports requested and retains the native FEMS watchdog handoff
+ok 21 - pending neutralization reports requested and retains the native FEMS watchdog handoff
+  ---
+  duration_ms: 1.101408
+  type: 'test'
+  ...
+# Subtest: actual farm diagnostic projection preserves missing command readback as null instead of zero
+ok 22 - actual farm diagnostic projection preserves missing command readback as null instead of zero
+  ---
+  duration_ms: 87.425298
+  type: 'test'
+  ...
+# (node:36) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: farm overview retains both physical gross directions, zero net and arithmetic rather than capacity-weighted SoC
+ok 23 - farm overview retains both physical gross directions, zero net and arithmetic rather than capacity-weighted SoC
+  ---
+  duration_ms: 1.266107
+  type: 'test'
+  ...
+# Subtest: partial measurements never masquerade as full sums, while fresh SoC subset and known configured capacity stay explicitly labelled
+ok 24 - partial measurements never masquerade as full sums, while fresh SoC subset and known configured capacity stay explicitly labelled
+  ---
+  duration_ms: 0.257347
+  type: 'test'
+  ...
+# Subtest: identical duplicate sources count once and conflicting duplicate readings are unavailable
+ok 25 - identical duplicate sources count once and conflicting duplicate readings are unavailable
+  ---
+  duration_ms: 0.288424
+  type: 'test'
+  ...
+# Subtest: real farm state/API snapshot excludes stale SoC and power, preserves existing controller semantics and never seeds display telemetry
+ok 26 - real farm state/API snapshot excludes stale SoC and power, preserves existing controller semantics and never seeds display telemetry
+  ---
+  duration_ms: 53.963004
+  type: 'test'
+  ...
+# Subtest: license normalization preserves absent optional limits and explicit zero/null without poisoning next device plan
+ok 27 - license normalization preserves absent optional limits and explicit zero/null without poisoning next device plan
+  ---
+  duration_ms: 4.543852
+  type: 'test'
+  ...
+# (node:44) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual farm controller dispatches600W to eligible member at SoCs1/98
+ok 28 - actual farm controller dispatches600W to eligible member at SoCs1/98
+  ---
+  duration_ms: 92.787021
+  type: 'test'
+  ...
+# Subtest: actual farm controller dispatches600W to eligible member at SoCs98/1
+ok 29 - actual farm controller dispatches600W to eligible member at SoCs98/1
+  ---
+  duration_ms: 37.059011
+  type: 'test'
+  ...
+# Subtest: both members below configured minimum receive no discharge command
+ok 30 - both members below configured minimum receive no discharge command
+  ---
+  duration_ms: 27.391945
+  type: 'test'
+  ...
+# Subtest: eligible member's explicit0W limit remains binding
+ok 31 - eligible member's explicit0W limit remains binding
+  ---
+  duration_ms: 14.75735
+  type: 'test'
+  ...
+# Subtest: eligible member's explicit250W limit remains binding
+ok 32 - eligible member's explicit250W limit remains binding
+  ---
+  duration_ms: 16.389678
+  type: 'test'
+  ...
+# Subtest: eligible full member blocked bystaleMember cannot discharge
+ok 33 - eligible full member blocked bystaleMember cannot discharge
+  ---
+  duration_ms: 54.513232
+  type: 'test'
+  ...
+# Subtest: empty member'sstaleMember does not block healthy full member
+ok 34 - empty member'sstaleMember does not block healthy full member
+  ---
+  duration_ms: 26.659742
+  type: 'test'
+  ...
+# Subtest: eligible full member blocked byfaultMember cannot discharge
+ok 35 - eligible full member blocked byfaultMember cannot discharge
+  ---
+  duration_ms: 12.900705
+  type: 'test'
+  ...
+# Subtest: empty member'sfaultMember does not block healthy full member
+ok 36 - empty member'sfaultMember does not block healthy full member
+  ---
+  duration_ms: 21.500213
+  type: 'test'
+  ...
+# Subtest: eligible full member blocked bydeniedMember cannot discharge
+ok 37 - eligible full member blocked bydeniedMember cannot discharge
+  ---
+  duration_ms: 12.447473
+  type: 'test'
+  ...
+# Subtest: empty member'sdeniedMember does not block healthy full member
+ok 38 - empty member'sdeniedMember does not block healthy full member
+  ---
+  duration_ms: 18.966268
+  type: 'test'
+  ...
+# Subtest: global admission remains binding:{"staleGrid":true}
+ok 39 - global admission remains binding:{"staleGrid":true}
+  ---
+  duration_ms: 8.953311
+  type: 'test'
+  ...
+# Subtest: global admission remains binding:{"tariffBlock":true}
+ok 40 - global admission remains binding:{"tariffBlock":true}
+  ---
+  duration_ms: 10.292718
+  type: 'test'
+  ...
+# Subtest: global admission remains binding:{"enabled":false}
+ok 41 - global admission remains binding:{"enabled":false}
+  ---
+  duration_ms: 10.585949
+  type: 'test'
+  ...
+# Subtest: explicit global MultiUse50% reserve blocks49.5% mean without silently overriding operator policy
+ok 42 - explicit global MultiUse50% reserve blocks49.5% mean without silently overriding operator policy
+  ---
+  duration_ms: 10.492458
+  type: 'test'
+  ...
+# Subtest: farm write acceptance does not masquerade as measured response: 63W actual versus673W target times out
+ok 43 - farm write acceptance does not masquerade as measured response: 63W actual versus673W target times out
+  ---
+  duration_ms: 15.583064
+  type: 'test'
+  ...
+# Subtest: fresh device discharge capability 0W caps real controller allocation to 0W
+ok 44 - fresh device discharge capability 0W caps real controller allocation to 0W
+  ---
+  duration_ms: 18.092853
+  type: 'test'
+  ...
+# Subtest: fresh device discharge capability 250W caps real controller allocation to 250W
+ok 45 - fresh device discharge capability 250W caps real controller allocation to 250W
+  ---
+  duration_ms: 9.998244
+  type: 'test'
+  ...
+# Subtest: fresh device discharge capability 9566W caps real controller allocation to 600W
+ok 46 - fresh device discharge capability 9566W caps real controller allocation to 600W
+  ---
+  duration_ms: 14.880415
+  type: 'test'
+  ...
+# Subtest: numeric hardware capability cannot raise an installer limit
+ok 47 - numeric hardware capability cannot raise an installer limit
+  ---
+  duration_ms: 10.939032
+  type: 'test'
+  ...
+# Subtest: bound missing device capability blocks only its own direction without erasing mapping
+ok 48 - bound missing device capability blocks only its own direction without erasing mapping
+  ---
+  duration_ms: 9.249096
+  type: 'test'
+  ...
+# Subtest: bound stale device capability blocks only its own direction without erasing mapping
+ok 49 - bound stale device capability blocks only its own direction without erasing mapping
+  ---
+  duration_ms: 17.172136
+  type: 'test'
+  ...
+# Subtest: bound unacknowledged device capability blocks only its own direction without erasing mapping
+ok 50 - bound unacknowledged device capability blocks only its own direction without erasing mapping
+  ---
+  duration_ms: 9.486734
+  type: 'test'
+  ...
+# Subtest: bound bad quality device capability blocks only its own direction without erasing mapping
+ok 51 - bound bad quality device capability blocks only its own direction without erasing mapping
+  ---
+  duration_ms: 10.569775
+  type: 'test'
+  ...
+# Subtest: bound negative device capability blocks only its own direction without erasing mapping
+ok 52 - bound negative device capability blocks only its own direction without erasing mapping
+  ---
+  duration_ms: 14.609558
+  type: 'test'
+  ...
+# Subtest: bound string device capability blocks only its own direction without erasing mapping
+ok 53 - bound string device capability blocks only its own direction without erasing mapping
+  ---
+  duration_ms: 8.979851
+  type: 'test'
+  ...
+# Subtest: bound wrong unit device capability blocks only its own direction without erasing mapping
+ok 54 - bound wrong unit device capability blocks only its own direction without erasing mapping
+  ---
+  duration_ms: 15.984018
+  type: 'test'
+  ...
+# Subtest: capability block of empty member does not suppress eligible full member
+ok 55 - capability block of empty member does not suppress eligible full member
+  ---
+  duration_ms: 9.299793
+  type: 'test'
+  ...
+# Subtest: charge capability independently clamps charging while discharge admission remains intact
+ok 56 - charge capability independently clamps charging while discharge admission remains intact
+  ---
+  duration_ms: 10.094108
+  type: 'test'
+  ...
+# Subtest: exclusive native FEMS path honors bound capability: zero discharge
+ok 57 - exclusive native FEMS path honors bound capability: zero discharge
+  ---
+  duration_ms: 12.277096
+  type: 'test'
+  ...
+# Subtest: exclusive native FEMS path honors bound capability: 250W discharge
+ok 58 - exclusive native FEMS path honors bound capability: 250W discharge
+  ---
+  duration_ms: 6.111272
+  type: 'test'
+  ...
+# Subtest: exclusive native FEMS path honors bound capability: stale discharge
+ok 59 - exclusive native FEMS path honors bound capability: stale discharge
+  ---
+  duration_ms: 6.453227
+  type: 'test'
+  ...
+# Subtest: exclusive native FEMS path honors bound capability: 250W charge
+ok 60 - exclusive native FEMS path honors bound capability: 250W charge
+  ---
+  duration_ms: 5.69811
+  type: 'test'
+  ...
+# Subtest: exclusive native FEMS path honors bound capability: opposite direction stays available
+ok 61 - exclusive native FEMS path honors bound capability: opposite direction stays available
+  ---
+  duration_ms: 11.262188
+  type: 'test'
+  ...
+# (node:52) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: 1%/98% pool dispatch preserves redistribution and explains only the actual per-member floor exclusion
+    # Subtest: 1/98
+    ok 1 - 1/98
+      ---
+      duration_ms: 82.757014
+      type: 'test'
+      ...
+    # Subtest: 98/1
+    ok 2 - 98/1
+      ---
+      duration_ms: 11.922222
+      type: 'test'
+      ...
+    1..2
+ok 62 - 1%/98% pool dispatch preserves redistribution and explains only the actual per-member floor exclusion
+  ---
+  duration_ms: 95.697539
+  type: 'test'
+  ...
+# Subtest: missing member SoC remains unknown in diagnostics and does not block the other member
+ok 63 - missing member SoC remains unknown in diagnostics and does not block the other member
+  ---
+  duration_ms: 10.507341
+  type: 'test'
+  ...
+# Subtest: explicit zero limit and discharge prohibition remain blocking and are not relabelled as a SoC error
+    # Subtest: discharge_limit_zero
+    ok 1 - discharge_limit_zero
+      ---
+      duration_ms: 10.391677
+      type: 'test'
+      ...
+    # Subtest: discharge_not_allowed
+    ok 2 - discharge_not_allowed
+      ---
+      duration_ms: 12.132268
+      type: 'test'
+      ...
+    1..2
+ok 64 - explicit zero limit and discharge prohibition remain blocking and are not relabelled as a SoC error
+  ---
+  duration_ms: 23.01875
+  type: 'test'
+  ...
+# Subtest: idle and charge reports do not pretend that a discharge floor was applied to the current request
+ok 65 - idle and charge reports do not pretend that a discharge floor was applied to the current request
+  ---
+  duration_ms: 9.157778
+  type: 'test'
+  ...
+# (node:60) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: independent dotted device identities retain both PV sources in the real overview
+ok 66 - independent dotted device identities retain both PV sources in the real overview
+  ---
+  duration_ms: 49.283939
+  type: 'test'
+  ...
+# Subtest: two owner labels cannot duplicate one physical battery measurement in the real overview
+ok 67 - two owner labels cannot duplicate one physical battery measurement in the real overview
+  ---
+  duration_ms: 13.326326
+  type: 'test'
+  ...
+# Subtest: explicit energy units cannot become valid watt measurements in the new farm display
+ok 68 - explicit energy units cannot become valid watt measurements in the new farm display
+  ---
+  duration_ms: 9.866125
+  type: 'test'
+  ...
+1..68
+# tests 72
+# suites 0
+# pass 72
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6114.714045

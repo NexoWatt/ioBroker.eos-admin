@@ -1,0 +1,98 @@
+(node:21) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:28) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: update notice performs no automatic action and links directly to the update settings
+ok 1 - update notice performs no automatic action and links directly to the update settings
+  ---
+  duration_ms: 32.251102
+  type: 'test'
+  ...
+# Subtest: failed check keeps its error and restores explicit retry controls
+ok 2 - failed check keeps its error and restores explicit retry controls
+  ---
+  duration_ms: 6.445785
+  type: 'test'
+  ...
+# Subtest: prepare and start need separate clicks, fresh CSRF and the exact version/plan; duplicate clicks cannot start twice
+ok 3 - prepare and start need separate clicks, fresh CSRF and the exact version/plan; duplicate clicks cannot start twice
+  ---
+  duration_ms: 8.292636
+  type: 'test'
+  ...
+# Subtest: lost start response stays indeterminate, blocks repeats and recovers only from an authoritative status
+ok 4 - lost start response stays indeterminate, blocks repeats and recovers only from an authoritative status
+  ---
+  duration_ms: 2.9158
+  type: 'test'
+  ...
+# Subtest: expired authentication before sending the start issues no order and keeps an explicit sign-in notice
+ok 5 - expired authentication before sending the start issues no order and keeps an explicit sign-in notice
+  ---
+  duration_ms: 2.382287
+  type: 'test'
+  ...
+# Subtest: expired session after lost start never falsely declares the earlier order unissued
+ok 6 - expired session after lost start never falsely declares the earlier order unissued
+  ---
+  duration_ms: 2.332421
+  type: 'test'
+  ...
+# Subtest: repeated visibility events cannot overlap status reads or actions
+ok 7 - repeated visibility events cannot overlap status reads or actions
+  ---
+  duration_ms: 1.690405
+  type: 'test'
+  ...
+# Subtest: pagehide aborts outstanding work and pageshow resumes; stale responses cannot overwrite the new page state
+ok 8 - pagehide aborts outstanding work and pageshow resumes; stale responses cannot overwrite the new page state
+  ---
+  duration_ms: 1.900832
+  type: 'test'
+  ...
+# Subtest: malformed metadata and executable-looking versions never enter HTML or authorize starts
+ok 9 - malformed metadata and executable-looking versions never enter HTML or authorize starts
+  ---
+  duration_ms: 1.719038
+  type: 'test'
+  ...
+# Subtest: conflicting plans and expired plan timestamps cannot be submitted again
+ok 10 - conflicting plans and expired plan timestamps cannot be submitted again
+  ---
+  duration_ms: 2.097218
+  type: 'test'
+  ...
+# Subtest: offline/current states do not advertise installation and modal cancellation never mutates the system
+ok 11 - offline/current states do not advertise installation and modal cancellation never mutates the system
+  ---
+  duration_ms: 2.68292
+  type: 'test'
+  ...
+# Subtest: mobile markup and stylesheet retain explicit containment and live status semantics
+ok 12 - mobile markup and stylesheet retain explicit containment and live status semantics
+  ---
+  duration_ms: 0.603489
+  type: 'test'
+  ...
+# Subtest: password-change requirement and missing or malformed CSRF prevent every mutating request
+ok 13 - password-change requirement and missing or malformed CSRF prevent every mutating request
+  ---
+  duration_ms: 4.910934
+  type: 'test'
+  ...
+# Subtest: hidden document stops polling until visibility returns and an in-flight action remains single
+ok 14 - hidden document stops polling until visibility returns and an in-flight action remains single
+  ---
+  duration_ms: 2.072191
+  type: 'test'
+  ...
+1..14
+# tests 14
+# suites 0
+# pass 14
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 392.334681

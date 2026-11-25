@@ -108,9 +108,17 @@ class EosModuleConfigStore {
         }
     }
 
-    async save(id, envelope) {
+    async save(id, envelope, canSave) {
         const objectId = this.objectId(id);
         const snapshot = copyEnvelope(envelope);
+        // A host stop may happen while a database read is pending. Only a write
+        // already issued to the database may finish after that lifecycle boundary.
+        const assertWritable = () => {
+            if (canSave && canSave() !== true) {
+                throw fail('EOS_MODULE_STOPPED');
+            }
+        };
+        assertWritable();
         const locked = locks.get(this.owner);
         if (locked.has(id)) {
             throw fail('EOS_MODULE_CONFIG_BUSY');
@@ -120,7 +128,9 @@ class EosModuleConfigStore {
             if (!this.revisions.has(id)) {
                 await this.load(id);
             }
+            assertWritable();
             const current = await this.owner.getForeignObjectAsync(objectId);
+            assertWritable();
             const native = this.inspect(current, id);
             if ((native?.revision || null) !== this.revisions.get(id)) {
                 throw fail('EOS_MODULE_CONFIG_CONFLICT');
@@ -144,6 +154,7 @@ class EosModuleConfigStore {
                 acl: { owner: 'system.user.admin', ownerGroup: 'system.group.administrator', object: 0x600 },
                 ...(typeof current?._rev === 'string' ? { _rev: current._rev } : {}),
             };
+            assertWritable();
             await this.owner.setForeignObjectAsync(objectId, object);
             const persisted = this.inspect(await this.owner.getForeignObjectAsync(objectId), id);
             if (persisted?.revision !== revision || persisted.encrypted !== encrypted) {

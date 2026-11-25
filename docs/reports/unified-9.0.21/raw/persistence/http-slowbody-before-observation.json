@@ -1,0 +1,25 @@
+{
+  "kind": "tool-console-observation",
+  "description": "Exact console content observed from the independent real HTTP reproducer before the owner changed the helper. This records tool stdout; it is not a later re-execution of the pre-fix helper.",
+  "command": "node /workspace/scratch/741f792566ea/audit-921/security/http-slowbody-repro.cjs",
+  "exitCode": 0,
+  "responseTimeoutMs": 50,
+  "partialRequests": 8,
+  "partialResponseStatuses": [
+    504,
+    504,
+    504,
+    504,
+    504,
+    504,
+    504,
+    504
+  ],
+  "nextLegitimateResponse": {
+    "status": 429,
+    "body": {
+      "error": "UPDATE_BUSY"
+    }
+  },
+  "serviceCalls": 0
+}

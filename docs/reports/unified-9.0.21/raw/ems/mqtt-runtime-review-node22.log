@@ -1,0 +1,44 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: old MQTT callback cannot publish aliases beyond offline
+ok 1 - old MQTT callback cannot publish aliases beyond offline
+  ---
+  duration_ms: 18.67594
+  type: 'test'
+  ...
+# Subtest: old MQTT callback cannot publish aliases beyond offline and a following connection
+ok 2 - old MQTT callback cannot publish aliases beyond offline and a following connection
+  ---
+  duration_ms: 3.862406
+  type: 'test'
+  ...
+# Subtest: nested offline callback can publish diagnostic aliases without a FIFO deadlock
+ok 3 - nested offline callback can publish diagnostic aliases without a FIFO deadlock
+  ---
+  duration_ms: 1.877718
+  type: 'test'
+  ...
+# Subtest: telemetry backlog is bounded while the final offline barrier remains ordered and observable
+ok 4 - telemetry backlog is bounded while the final offline barrier remains ordered and observable
+  ---
+  duration_ms: 1.809264
+  type: 'test'
+  ...
+# Subtest: runtime stop invalidates MQTT first and awaits the callback DB write before reporting stopped
+ok 5 - runtime stop invalidates MQTT first and awaits the callback DB write before reporting stopped
+  ---
+  duration_ms: 3.419348
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 300.266123

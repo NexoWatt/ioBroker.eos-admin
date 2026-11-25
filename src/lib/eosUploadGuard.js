@@ -12,6 +12,7 @@ const RETENTION = 60 * 60 * 1000;
 const leaseSymbol = Symbol('eos-upload-lease');
 // Shared by both routes and every Web instance in this Node process.
 let active = 0;
+let admitting = 0;
 let serialized = Promise.resolve();
 const live = new Set();
 const root = path.join(
@@ -76,94 +77,133 @@ async function poolSize() {
     }
     return size;
 }
-async function acquire() {
-    return exclusive(async () => {
-        await ensureRoot();
-        if (active >= 2) {
-            throw new Error('EOS_UPLOAD_BUSY');
+async function acquire(isCancelled) {
+    // Include admission itself in the process-wide budget. Filesystem checks can
+    // stall; putting unlimited requests behind the serialization promise is a queue too.
+    if (active + admitting >= 2) {
+        throw new Error('EOS_UPLOAD_BUSY');
+    }
+    admitting++;
+    const assertLive = () => {
+        if (isCancelled()) {
+            throw new Error('EOS_UPLOAD_ABORTED');
         }
-        const retained = await poolSize();
-        if (retained + (active + 1) * MAX_FILE > MAX_POOL) {
-            throw new Error('EOS_UPLOAD_QUOTA');
-        }
-        const free = await fs.statfs(root);
-        if (Number(free.bavail) * Number(free.bsize) < MIN_FREE + (active + 1) * 2 * MAX_FILE) {
-            throw new Error('EOS_UPLOAD_SPACE');
-        }
-        const dir = path.join(root, `request-${randomBytes(16).toString('hex')}`);
-        await fs.mkdir(dir, { mode: 0o700 });
-        active++;
-        live.add(dir);
-        let released = false;
-        let keep = false;
-        let cancelled = false;
-        return {
-            directory: dir,
-            keep() {
-                if (cancelled) {
-                    throw new Error('EOS_UPLOAD_ABORTED');
-                }
-                keep = true;
-            },
-            cancel() {
-                cancelled = true;
-            },
-            isCancelled() {
-                return cancelled;
-            },
-            async release(aborted) {
-                return exclusive(async () => {
-                    if (released) {
-                        return;
+    };
+    try {
+        return await exclusive(async () => {
+            assertLive();
+            await ensureRoot();
+            assertLive();
+            if (active >= 2) {
+                throw new Error('EOS_UPLOAD_BUSY');
+            }
+            const retained = await poolSize();
+            assertLive();
+            if (retained + (active + 1) * MAX_FILE > MAX_POOL) {
+                throw new Error('EOS_UPLOAD_QUOTA');
+            }
+            const free = await fs.statfs(root);
+            assertLive();
+            if (Number(free.bavail) * Number(free.bsize) < MIN_FREE + (active + 1) * 2 * MAX_FILE) {
+                throw new Error('EOS_UPLOAD_SPACE');
+            }
+            const dir = path.join(root, `request-${randomBytes(16).toString('hex')}`);
+            await fs.mkdir(dir, { mode: 0o700 });
+            active++;
+            live.add(dir);
+            let released = false;
+            let keep = false;
+            let cancelled = false;
+            return {
+                directory: dir,
+                keep() {
+                    if (cancelled) {
+                        throw new Error('EOS_UPLOAD_ABORTED');
                     }
-                    released = true;
-                    try {
-                        if (!keep || aborted) {
-                            await fs.rm(dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
+                    keep = true;
+                },
+                cancel() {
+                    cancelled = true;
+                },
+                isCancelled() {
+                    return cancelled;
+                },
+                async release(aborted) {
+                    return exclusive(async () => {
+                        if (released) {
+                            return;
                         }
-                        live.delete(dir);
-                        active--;
-                    } catch {
-                        // Fail closed: retain this reservation if cleanup did not complete.
-                        throw new Error('EOS_UPLOAD_CLEANUP');
-                    }
-                });
-            },
-        };
-    });
+                        released = true;
+                        try {
+                            if (!keep || aborted) {
+                                await fs.rm(dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
+                            }
+                            live.delete(dir);
+                            active--;
+                        } catch {
+                            // Fail closed: retain this reservation if cleanup did not complete.
+                            throw new Error('EOS_UPLOAD_CLEANUP');
+                        }
+                    });
+                },
+            };
+        });
+    } finally {
+        // A timed-out request retains this slot until its real FS work settles.
+        admitting--;
+    }
 }
 function createUploadMiddleware(parserFactory, logger) {
     return (req, res, next) => {
-        void acquire()
-            .then(lease => {
-                if (req.aborted || res.destroyed || res.writableEnded) {
-                    void lease.release(true).catch(() => logger?.warn('EOS upload cleanup failed'));
+        let lease;
+        let done = false;
+        const release = aborted => {
+            if (lease) {
+                void lease.release(aborted).catch(() => logger?.warn('EOS upload cleanup failed'));
+            }
+        };
+        const finish = aborted => {
+            if (done) {
+                return;
+            }
+            done = true;
+            if (aborted) {
+                lease?.cancel();
+            }
+            clearTimeout(timer);
+            req.removeListener('aborted', onAbort);
+            res.removeListener('finish', onFinish);
+            res.removeListener('close', onClose);
+            release(aborted);
+        };
+        const onAbort = () => finish(true);
+        const onFinish = () => finish(false);
+        const onClose = () => finish(!res.writableFinished);
+        // The total deadline covers admission, parser and storage, not just the parser.
+        const timer = setTimeout(() => {
+            lease?.cancel();
+            if (!res.headersSent && !res.writableEnded && !res.destroyed) {
+                res.status(408).json({ error: 'uploadDeadlineExceeded' });
+            }
+            req.destroy();
+            finish(true);
+        }, DEADLINE);
+        req.once('aborted', onAbort);
+        res.once('finish', onFinish);
+        res.once('close', onClose);
+        if (req.aborted || res.destroyed || res.writableEnded) {
+            finish(true);
+            return;
+        }
+        void acquire(() => done || req.aborted)
+            .then(value => {
+                lease = value;
+                if (done || req.aborted || res.destroyed || res.writableEnded) {
+                    lease.cancel();
+                    release(true);
                     return;
                 }
                 req[leaseSymbol] = lease;
-                let done = false;
-                const finish = aborted => {
-                    if (done) {
-                        return;
-                    }
-                    done = true;
-                    if (aborted) {
-                        lease.cancel();
-                    }
-                    clearTimeout(timer);
-                    void lease.release(aborted).catch(() => logger?.warn('EOS upload cleanup failed'));
-                };
-                const timer = setTimeout(() => {
-                    lease.cancel();
-                    if (!res.headersSent && !res.writableEnded) {
-                        res.status(408).json({ error: 'uploadDeadlineExceeded' });
-                    }
-                    req.destroy();
-                    finish(true);
-                }, DEADLINE);
-                req.once('aborted', () => finish(true));
-                res.once('finish', () => finish(false));
-                res.once('close', () => finish(!res.writableFinished));
                 try {
                     parserFactory({
                         useTempFiles: true,
@@ -188,7 +228,9 @@ function createUploadMiddleware(parserFactory, logger) {
                 }
             })
             .catch(() => {
-                if (!res.headersSent && !res.writableEnded) {
+                const respond = !done && !req.aborted && !res.destroyed && !res.headersSent && !res.writableEnded;
+                finish(true);
+                if (respond) {
                     res.status(503).json({ error: 'uploadCapacityUnavailable' });
                 }
             });

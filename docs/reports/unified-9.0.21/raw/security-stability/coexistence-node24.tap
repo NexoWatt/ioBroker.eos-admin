@@ -1,0 +1,36 @@
+✔ recovery defaults to check and rejects all writes and unknown target paths (2.153523ms)
+✔ valid saved ACL with exact old EOS target produces only a conditional review proposal (1.530635ms)
+✔ changed current ACL including preserved state bits never gets a restore proposal (0.366201ms)
+✔ missing, corrupt and non-ACL preimages are preserved without invented defaults (0.586784ms)
+✔ unmanaged or unreadable objects never become write candidates (0.35256ms)
+✔ only bounded ordinary ACLs and JSON values can be reported (0.361394ms)
+✔ reader executes only fixed property gets without shell or inherited Node injection (0.657359ms)
+✔ child failures never expose stderr or sensitive output (0.327182ms)
+✔ administrator capability damage without preimage is diagnosed but not reset (1.288991ms)
+✔ standalone fake-controller run works after EOS removal and never writes live configuration (1250.928646ms)
+✔ controller identity and report-file protections reject substitution or overwrite (1.67357ms)
+(node:13) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ Admin8 proxy forwards selected instance request body and target authorization, never Admin credentials or caller forwarding headers (47.444749ms)
+✔ missing/expired/resource-scoped sessions and disabled/forced-reset users fail closed; names grant no administrator membership (19.329565ms)
+✔ each request rechecks actual administrator membership and instance opt-in without a stale decision cache (9.164359ms)
+✔ encoded separators, traversal, credentials in query and cross-origin mutations never reach a target (17.04171ms)
+✔ local redirects and cookies without Path remain inside the selected instance (7.046149ms)
+✔ HTTPS target rejects an untrusted certificate and accepts an explicitly trusted certificate without disabling verification (178.271254ms)
+✔ SSE stays streamed and is closed immediately when proxy sessions are invalidated (15.495803ms)
+✔ WebSocket upgrades use the proxy before unrelated Admin websocket listeners and revoke active tunnels (7.161093ms)
+✔ HTTPS Admin entry forwards to a local HTTP adapter and marks the scoped application cookie Secure (104.803366ms)
+✔ trusted HTTPS certificate with a mismatched hostname is rejected (127.357196ms)
+✔ a stalled authorization database times out without forwarding and a subsequent request recovers (2021.086306ms)
+✔ EOS news subscribes, reads and acknowledges its serving instance without standard Admin (4.938837ms)
+✔ news switching unsubscribes the previous EOS instance without scanning other instances (1.517986ms)
+✔ an unresolved or foreign serving instance never falls back to admin.0 or eos-admin.0 (5.285939ms)
+✔ EOS update manager leaves shared policies and recovery evidence intact through start, enable, refresh and stop (182.251362ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2913.59394

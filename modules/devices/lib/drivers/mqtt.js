@@ -1,7 +1,16 @@
 'use strict';
 
+/**
+ * NexoWatt Quellcode-Erklärung (DE)
+ * Aufgabe: Gerätewerte und freigegebene Befehle über MQTT transportieren.
+ * Daten und Wirkung: Jede Verbindung besitzt eigene offene Aufträge; alte Befehle werden nicht erneut gesendet.
+ * Bei Änderungen: Sitzungsgrenzen, Bestätigungen, Fristen und TESVOLT-Grenzwerte zusammen prüfen.
+ */
+
 const fs = require('node:fs');
+const { performance } = require('node:perf_hooks');
 const mqtt = require('mqtt');
+const { MqttPendingOperations, MqttMessageBacklog, runMqttMessageSession, assertMqttMessageSession } = require('./mqttPendingOperations');
 const { getByJsonPath, applyNumericTransforms, coerceBoolean } = require('../utils');
 
 let ADAPTER_VERSION = 'unknown';
@@ -93,7 +102,6 @@ function mqttReasonLabel(reasonCode) {
 
 function classifyMqttError(error) {
   const originalMessage = error && error.message ? String(error.message) : String(error || 'Unknown MQTT error');
-  const lower = originalMessage.toLowerCase();
   const reasonCode = numericMqttReasonCode(error);
   const code = (error && typeof error.code === 'string') ? error.code : '';
   const badCredentials = reasonCode === 4 || reasonCode === 134 ||
@@ -159,6 +167,7 @@ class MqttDriver {
       : this.tesvoltTopicMode === 'v2' ? 'EMS/V2/' : '';
     this._lastSelectedTesvoltPrefix = this.activeTopicPrefix;
     this._messageQueue = Promise.resolve();
+    this._messageBacklog = new MqttMessageBacklog();
     this._pendingTesvoltMessages = new Map();
     this._pendingTesvoltRawPrefixes = new Map();
 
@@ -187,6 +196,12 @@ class MqttDriver {
     this.writeGroupStates = new Map();
     this.writeGroupTimers = new Map();
     this._disconnecting = false;
+    this._disconnectPromise = null;
+    this._disconnectDeadline = 0;
+    this._transportEpoch = 0;
+    this._reconnectTimer = null;
+    this._reconnectDelayMs = 5000;
+    this._pendingOperations = new MqttPendingOperations();
 
     // Connection diagnostics. TESVOLT gateways can restrict both credentials
     // and MQTT Client-ID through their local broker ACL. Keep the effective
@@ -305,6 +320,7 @@ class MqttDriver {
   }
 
   async _setDiagnostic(dpId, value, forceWrite) {
+    assertMqttMessageSession();
     const dp = this._diagnosticDatapoint(dpId);
     if (!dp) return false;
     return this._setDatapointValue(dp, value, Date.now(), {
@@ -399,34 +415,23 @@ class MqttDriver {
     };
   }
 
-  _subscribeOne(definition) {
+  async _subscribeOne(definition, client = this.client) {
     const topic = String(definition && definition.topic || '');
     const qos = Number.isFinite(Number(definition && definition.qos))
-      ? Math.max(0, Math.min(2, Number(definition.qos)))
-      : 0;
-
-    return new Promise((resolve) => {
-      if (!this.client || !topic) {
-        resolve({ ...definition, ok: false, error: 'MQTT client/topic missing' });
-        return;
-      }
-
-      try {
-        this.client.subscribe(topic, { qos }, (error, granted) => {
-          const grant = this._subscriptionGrant(granted, topic);
-          if (error || grant.denied) {
-            const message = error
-              ? String(error.message || error)
-              : `broker denied subscription${grant.code === null ? '' : ` (reason/qos=${grant.code})`}`;
-            resolve({ ...definition, qos, ok: false, error: message, grant });
-            return;
-          }
-          resolve({ ...definition, qos, ok: true, grant });
-        });
-      } catch (error) {
-        resolve({ ...definition, qos, ok: false, error: String(error && error.message || error) });
-      }
-    });
+      ? Math.max(0, Math.min(2, Number(definition.qos))) : 0;
+    if (!client || this.client !== client || !topic) {
+      return { ...definition, ok: false, error: 'MQTT client/topic missing' };
+    }
+    try {
+      const granted = await this._pendingOperations.run(client, 'subscribe', 5000,
+        finish => client.subscribe(topic, { qos }, finish),
+        () => this._retireTransport(client, 'E_MQTT_SUBSCRIBE_TIMEOUT'));
+      const grant = this._subscriptionGrant(granted, topic);
+      const message = grant.denied ? `broker denied subscription${grant.code === null ? '' : ` (reason/qos=${grant.code})`}` : '';
+      return { ...definition, qos, ok: !grant.denied, error: message, grant };
+    } catch (error) {
+      return { ...definition, qos, ok: false, error: String(error && error.message || error) };
+    }
   }
 
   async _setSubscriptionDiagnostics(results) {
@@ -530,7 +535,7 @@ class MqttDriver {
 
   _stopNoDataWatch() {
     if (!this._noDataTimer) return;
-    try { clearTimeout(this._noDataTimer); } catch (_) {}
+    clearTimeout(this._noDataTimer);
     this._noDataTimer = null;
   }
 
@@ -573,6 +578,7 @@ class MqttDriver {
     const normalized = String(topic || '');
     const outboundOnly = this._isOutboundOnlyTopic(normalized);
     const isNew = !this.discoveredTopics.has(normalized);
+    if (isNew && this.discoveredTopics.size >= 512) throw new Error('E_MQTT_DISCOVERED_TOPIC_LIMIT');
     this.discoveredTopics.add(normalized);
     this.messageCount += 1;
     if (!outboundOnly) this.gatewayMessageCount += 1;
@@ -593,6 +599,11 @@ class MqttDriver {
   }
 
   async connect() {
+    if (this._disconnectPromise) await this._disconnectPromise;
+    if (this.client) return;
+    if (this._reconnectTimer) clearTimeout(this._reconnectTimer);
+    this._reconnectTimer = null;
+    this._disconnecting = false;
     const connection = this.device.connection || {};
     const url = String(connection.url || '').trim();
     if (!url) throw new Error('Missing MQTT url');
@@ -615,6 +626,12 @@ class MqttDriver {
         : 30,
       clean: connection.cleanSession !== false,
     };
+
+    this._reconnectDelayMs = options.reconnectPeriod;
+    // A previous actuator command must never be replayed by MQTT.js after a
+    // reconnect. Each connection owns a new client and empty outgoing store.
+    options.reconnectPeriod = 0;
+    options.queueQoSZero = false;
 
     // mqtts:// works with the normal mqtt package. Username/password provide
     // authentication; transport encryption is provided only by mqtts/TLS.
@@ -644,13 +661,22 @@ class MqttDriver {
       `verifyCertificate=${verifyCertificate}`,
     );
 
-    this.client = mqtt.connect(url, options);
+    const client = mqtt.connect(url, options);
+    this.client = client;
+    const epoch = ++this._transportEpoch;
+    const current = () => this.client === client && this._transportEpoch === epoch && !this._disconnecting;
 
-    this.client.on('connect', (connack) => {
+    client.on('connect', (connack) => {
+      if (!current()) return;
+      if (typeof this.canOperate === 'function' && this.canOperate() !== true) {
+        this._retireTransport(client, 'EOS_DEVICES_NOT_AUTHORIZED');
+        return;
+      }
       this.connected = true;
       this._disconnecting = false;
       this._offlineApplied = false;
       this._clearPrimaryConnectionError();
+      this.discoveredTopics.clear();
       if (this.isTesvolt) {
         // Retained samples and capabilities from a previous session must not
         // authorize a new command or mix two protocol namespaces.
@@ -667,30 +693,34 @@ class MqttDriver {
         `[${this.device.id}] MQTT connected: broker=${this.safeConnectionUrl}; clientId="${this.effectiveClientId}"; ` +
         `sessionPresent=${sessionPresent}`,
       );
-      const subscriptionPromise = this._subscribeAll();
-      this._markWriteGroupsConnected();
+      const subscriptionPromise = runMqttMessageSession(current, () => this._subscribeAll());
+      runMqttMessageSession(current, () => this._markWriteGroupsConnected());
       this._notifyConnection(true, '');
       Promise.resolve(subscriptionPromise)
         .then(async (subscriptionStatus) => {
-          const bootstrapStatus = await this._publishBootstrapMessages();
+          if (!current()) return;
+          const bootstrapStatus = await runMqttMessageSession(current, () => this._publishBootstrapMessages());
           // Do not replace a precise subscription/bootstrap error with the
           // secondary generic no-data warning.
-          if (subscriptionStatus && subscriptionStatus.ok && (!bootstrapStatus || bootstrapStatus.ok !== false)) {
+          if (current() && subscriptionStatus && subscriptionStatus.ok && (!bootstrapStatus || bootstrapStatus.ok !== false)) {
             this._startNoDataWatch();
           }
         })
         .catch((error) => {
+          if (!current()) return;
           const message = `MQTT subscription/bootstrap failed: ${error && error.message ? error.message : error}`;
           this._logConnectionError(message);
           this._notifyValues({ connected: true, error: message, subscriptionError: true }).catch(() => {});
         });
     });
 
-    this.client.on('reconnect', () => {
+    client.on('reconnect', () => {
+      if (!current()) return;
       this.adapter.log.debug(`[${this.device.id}] MQTT reconnecting`);
     });
 
-    this.client.on('offline', () => {
+    client.on('offline', () => {
+      if (!current()) return;
       this.connected = false;
       this._stopNoDataWatch();
       const reason = this._effectiveOfflineReason('MQTT offline');
@@ -698,27 +728,39 @@ class MqttDriver {
       this._notifyConnection(false, reason);
     });
 
-    this.client.on('close', () => {
-      this.connected = false;
-      this._stopNoDataWatch();
-      const reason = this._effectiveOfflineReason('MQTT connection closed');
-      if (!this._disconnecting) this._markWriteGroupsDisconnected(reason);
-      this._notifyConnection(false, reason);
+    client.on('close', () => {
+      if (!current()) return;
+      this._retireTransport(client, this._effectiveOfflineReason('MQTT connection closed'));
     });
 
-    this.client.on('error', (error) => {
+    client.on('error', (error) => {
+      if (!current()) return;
       const message = this._formatConnectionError(error);
       if (!this.connected) this._rememberPrimaryConnectionError(message);
       this._logConnectionError(message);
       if (!this.connected) this._notifyConnection(false, message);
     });
 
-    this.client.on('message', (topic, payload, packet) => {
+    client.on('message', (topic, payload, packet) => {
+      if (!current()) return;
+      let release;
+      try { release = this._messageBacklog.reserve(payload.length); } catch (error) {
+        const reason = error.message || String(error);
+        this._rememberPrimaryConnectionError(reason);
+        this._logConnectionError(reason);
+        this._retireTransport(client, reason);
+        return;
+      }
       // Preserve broker arrival order across asynchronous state writes.
-      this._messageQueue = this._messageQueue.then(() => this._handleMessage(topic, payload, packet)).catch((error) => {
+      this._messageQueue = this._messageQueue.then(() => current() ? runMqttMessageSession(current, () => this._handleMessage(topic, payload, packet)) : undefined).catch((error) => {
         const message = error && error.message ? error.message : String(error);
+        if (message === 'E_MQTT_MESSAGE_SESSION_ENDED') return;
         this.adapter.log.warn(`[${this.device.id}] MQTT message handling failed for ${topic}: ${message}`);
-      });
+        if (message === 'E_MQTT_DISCOVERED_TOPIC_LIMIT' && current()) {
+          this._rememberPrimaryConnectionError(message);
+          this._retireTransport(client, message);
+        }
+      }).finally(release);
     });
   }
 
@@ -729,14 +771,17 @@ class MqttDriver {
     this._lastConnectionNotification = next;
     try {
       const result = this.onConnection(next, errorMessage || '');
-      if (result && typeof result.catch === 'function') result.catch(() => {});
+      if (result && typeof result.catch === 'function') return result.catch((error) => {
+        this.adapter.log.debug(`[${this.device.id}] MQTT connection callback failed: ${error.message || error}`);
+      });
     } catch (_) {
       // Connection notifications must never crash the MQTT client.
     }
   }
 
   async _subscribeAll() {
-    if (!this.client) return { ok: false, status: 'MQTT client missing' };
+    const client = this.client;
+    if (!client) return { ok: false, status: 'MQTT client missing' };
 
     this.dpsByTopic.clear();
     this.dpById.clear();
@@ -770,9 +815,11 @@ class MqttDriver {
     // existing event-driven tests and runtimes.
     this._initializeWriteGroupStates();
     await this._updateTesvoltDiagnostics();
+    if (this.client !== client) return { ok: false, status: 'MQTT session ended' };
 
     const definitions = this._subscriptionDefinitions();
-    const primaryResults = await Promise.all(definitions.map((definition) => this._subscribeOne(definition)));
+    const primaryResults = await Promise.all(definitions.map((definition) => this._subscribeOne(definition, client)));
+    if (this.client !== client) return { ok: false, status: 'MQTT session ended' };
     const allResults = [...primaryResults];
 
     // Some broker ACLs reject wildcard subscription filters even though the
@@ -790,7 +837,8 @@ class MqttDriver {
       this.adapter.log.info(
         `[${this.device.id}] MQTT wildcard subscription ${result.topic} was not granted; trying ${exactDefinitions.length} exact TESVOLT topics`,
       );
-      const exactResults = await Promise.all(exactDefinitions.map((definition) => this._subscribeOne(definition)));
+      const exactResults = await Promise.all(exactDefinitions.map((definition) => this._subscribeOne(definition, client)));
+      if (this.client !== client) return { ok: false, status: 'MQTT session ended' };
       allResults.push(...exactResults);
       const fallbackOk = this.isTesvolt
         ? exactResults.some((entry) => entry.ok && /\/(?:Inverter|Battery)\//.test(entry.topic) && !entry.topic.endsWith('/Control'))
@@ -809,33 +857,93 @@ class MqttDriver {
     return this._setSubscriptionDiagnostics(allResults);
   }
 
-  async disconnect() {
-    this._disconnecting = true;
+  _scheduleReconnect() {
+    if (this._disconnecting || this._reconnectTimer || this._reconnectDelayMs <= 0) return;
+    this._reconnectTimer = setTimeout(() => {
+      this._reconnectTimer = null;
+      if (this._disconnecting || this.client) return;
+      // The hosted connect wrapper checks the current ownership/license gate.
+      this.connect().catch(() => this._scheduleReconnect());
+    }, this._reconnectDelayMs);
+    this._reconnectTimer.unref?.();
+  }
+
+  _cancelOperations(client, reason) {
+    this._pendingOperations.cancel(client, reason);
+  }
+
+  _retireTransport(client, reason) {
+    if (this.client !== client) return;
+    this.connected = false;
+    this.client = null;
+    this._transportEpoch += 1;
     this._stopNoDataWatch();
-    // Always stop periodic writers and close transport, including when the central
-    // EOS operation gate rejects the source driver's optional final safe publish.
     this._stopWriteGroupTimers();
-    try {
-      if (this.client && this.connected) {
-        try { await this._sendSafeWriteGroupsOnDisconnect(); } catch (_) { /* Gate closed or broker unavailable. */ }
-      }
-      if (this.client) {
-        const client = this.client;
-        await new Promise((resolve) => {
-          let settled = false;
-          const finish = () => { if (!settled) { settled = true; clearTimeout(timeout); resolve(); } };
-          const timeout = setTimeout(() => { try { client.end(true); } catch (_) {} finish(); }, 2000);
-          try { client.end(false, {}, finish); } catch (_) { finish(); }
-        });
-      }
-    } finally {
-      this.connected = false;
-      this.client = null;
-      this._pendingTesvoltMessages.clear();
-      this._pendingTesvoltRawPrefixes.clear();
-      this._disconnecting = false;
-      this._notifyConnection(false, 'MQTT disconnected');
+    this._markWriteGroupsDisconnected(reason);
+    this._cancelOperations(client, reason);
+    // Force close also discards MQTT.js QoS stores; retries use a new client.
+    try { client.end(true); } catch (error) {
+      // Keep the unconfirmed client reachable for an explicit stop retry. A
+      // second client must not race an old transport whose closure is unknown.
+      this.client = client;
+      this._disconnecting = true;
+      const failure = `E_MQTT_STOP_UNCONFIRMED: ${error.message || error}`;
+      this._rememberPrimaryConnectionError(failure);
+      this.adapter.log.warn(`[${this.device.id}] ${failure}`);
+      this._notifyConnection(false, failure);
+      return;
     }
+    // Wait for runtime state/alias cleanup before opening a replacement. This
+    // also bounds connection barriers while a database operation is stalled.
+    this._messageQueue.then(() => this._notifyConnection(false, reason)).then(() => this._scheduleReconnect()).catch(() => {
+      this.adapter.log.warn(`[${this.device.id}] E_MQTT_STATE_DRAIN_FAILED: reconnect paused`);
+    });
+  }
+
+  async disconnect() {
+    if (this._disconnectPromise) return this._disconnectPromise;
+    this._disconnecting = true;
+    this._disconnectDeadline = performance.now() + 1000;
+    this._transportEpoch += 1;
+    if (this._reconnectTimer) clearTimeout(this._reconnectTimer);
+    this._reconnectTimer = null;
+    this._stopNoDataWatch();
+    this._stopWriteGroupTimers();
+    const client = this.client;
+    this._cancelOperations(client, 'MQTT disconnected');
+    this._disconnectPromise = (async () => {
+      try {
+        if (client && this.connected) {
+          try { await this._sendSafeWriteGroupsOnDisconnect(); } catch (_) { /* Best effort; publish has its own deadline. */ }
+        }
+        if (client) {
+          await new Promise((resolve, reject) => {
+            let settled = false;
+            const finish = (error) => {
+              if (settled) return;
+              settled = true;
+              clearTimeout(timeout);
+              client.removeListener('close', closed);
+              if (error) reject(error); else resolve();
+            };
+            const closed = () => finish();
+            const timeout = setTimeout(() => finish(new Error('E_MQTT_STOP_TIMEOUT')), 2000);
+            client.once('close', closed);
+            try { client.end(true, {}, () => finish()); } catch (error) { finish(error); }
+          });
+        }
+      } finally {
+        this.connected = false;
+        if (this.client === client) this.client = null;
+        this._pendingTesvoltMessages.clear();
+        this._pendingTesvoltRawPrefixes.clear();
+        this._cancelOperations(client, 'MQTT disconnected');
+        await this._messageQueue;
+        await this._notifyConnection(false, 'MQTT disconnected');
+      }
+    })();
+    try { await this._disconnectPromise; }
+    finally { this._disconnectPromise = null; }
   }
 
   _extractSourceTimestamp(parsedJson) {
@@ -868,8 +976,10 @@ class MqttDriver {
   }
 
   async _handleMessage(topic, payload, packet, replay) {
+    assertMqttMessageSession();
     const receivedAt = replay ? replay.receivedAt : Date.now();
     const incoming = replay ? replay.incoming : await this._recordIncomingTopic(topic);
+    assertMqttMessageSession();
     const datapoints = this.dpsByTopic.get(topic);
     if (!datapoints || !datapoints.length) {
       if (!incoming.outboundOnly) {
@@ -882,7 +992,9 @@ class MqttDriver {
           try {
             const alive = this.onAlive && this.onAlive();
             if (alive && typeof alive.catch === 'function') alive.catch(() => {});
-          } catch (_) {}
+          } catch (error) {
+            this.adapter.log.debug(`[${this.device.id}] MQTT heartbeat callback failed: ${error.message || error}`);
+          }
         }
         await this._notifyValues({ connected: true, topic, receivedAt, unknownTopic: true, diagnosticsOnly: this.isTesvolt });
       }
@@ -1031,6 +1143,7 @@ class MqttDriver {
   }
 
   async _notifyValues(meta) {
+    assertMqttMessageSession();
     if (!this.onValues) return;
     try {
       await this.onValues({ ...this.valueCache }, meta || {});
@@ -1112,6 +1225,7 @@ class MqttDriver {
   }
 
   async _setDatapointValue(dp, value, timestamp, options) {
+    assertMqttMessageSession();
     if (!dp || !dp.id) return false;
     const id = String(dp.id);
     const opts = options || {};
@@ -1125,6 +1239,7 @@ class MqttDriver {
 
     const stateId = this.relStateId ? this.relStateId(dp) : dp.id;
     await this.adapter.setStateAsync(stateId, { val: value, ack: true }).catch(() => {});
+    assertMqttMessageSession();
     return true;
   }
 
@@ -1288,7 +1403,7 @@ class MqttDriver {
     }
   }
 
-  _scheduleWriteGroupRefresh(groupName, group, state) {
+  _scheduleWriteGroupRefresh(groupName, group, _state) {
     const intervalMs = this._groupRefreshIntervalMs(group);
     if (intervalMs <= 0 || this.writeGroupTimers.has(groupName)) return;
     const timer = setInterval(() => {
@@ -1304,7 +1419,7 @@ class MqttDriver {
 
   _stopWriteGroupTimers() {
     for (const timer of this.writeGroupTimers.values()) {
-      try { clearInterval(timer); } catch (_) {}
+      clearInterval(timer);
     }
     this.writeGroupTimers.clear();
   }
@@ -1349,6 +1464,7 @@ class MqttDriver {
 
   async _sendSafeWriteGroupsOnDisconnect() {
     for (const [groupName, state] of this.writeGroupStates.entries()) {
+      if (this._disconnecting && performance.now() >= this._disconnectDeadline) break;
       const group = this._writeGroups()[groupName] || {};
       if (group.safeOnDisconnect !== true) continue;
       try {
@@ -1422,7 +1538,7 @@ class MqttDriver {
     if (!topic) throw new Error(`Missing MQTT write-group topic for ${state.groupName}`);
     const qos = Number.isFinite(Number(group.qos)) ? Math.max(0, Math.min(2, Number(group.qos))) : 0;
     const retain = group.retain === true;
-    await this._publish(topic, JSON.stringify(payloadObject), { qos, retain }, true);
+    await this._publish(topic, JSON.stringify(payloadObject), { qos, retain }, true, origin === 'safe_disconnect');
 
     const now = Date.now();
     const commandChanged = !sameStateValue(state.lastSentValue, effectiveValue);
@@ -1681,7 +1797,8 @@ class MqttDriver {
     return payload;
   }
 
-  async _publish(topic, payload, options, requireConnected) {
+  async _publish(topic, payload, options, requireConnected, allowDuringDisconnect = false) {
+    assertMqttMessageSession();
     if (this.isTesvolt) {
       this._assertTesvoltWriteEnabled();
       const controlTopic = this._resolveWriteTopic('EMS/V2/Inverter/Control');
@@ -1689,11 +1806,16 @@ class MqttDriver {
         throw new Error(`TESVOLT publish topic is not enabled: ${topic}`);
       }
     }
-    if (!this.client) throw new Error('MQTT not connected');
-    if (requireConnected && !this.connected) throw new Error('MQTT not connected');
-    await new Promise((resolve, reject) => {
-      this.client.publish(topic, payload, options, (error) => error ? reject(error) : resolve());
-    });
+    const client = this.client;
+    if (!client || !this.connected || (this._disconnecting && !allowDuringDisconnect)) {
+      throw new Error('MQTT not connected');
+    }
+    if (this._pendingOperations.count('publish') >= 64) throw new Error('E_MQTT_PENDING_LIMIT');
+    const remainingMs = allowDuringDisconnect ? Math.floor(this._disconnectDeadline - performance.now()) : 5000;
+    if (remainingMs <= 0) throw new Error('E_MQTT_SHUTDOWN_DEADLINE');
+    await this._pendingOperations.run(client, 'publish', remainingMs,
+      finish => client.publish(topic, payload, options, finish),
+      () => this._retireTransport(client, 'E_MQTT_PUBLISH_TIMEOUT'));
   }
 
   async readDatapoints(/* datapoints */) {

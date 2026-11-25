@@ -1,0 +1,322 @@
+(node:38) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:45) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: constant SMA grid samples stay fresh for 30 minutes; cached telegrams, failed polls and counters do not
+ok 1 - constant SMA grid samples stay fresh for 30 minutes; cached telegrams, failed polls and counters do not
+  ---
+  duration_ms: 374.047114
+  type: 'test'
+  ...
+# Subtest: FENECON real battery, SOC, PV, converter and grid samples refresh within bound while commands remain change-only
+ok 2 - FENECON real battery, SOC, PV, converter and grid samples refresh within bound while commands remain change-only
+  ---
+  duration_ms: 4.965357
+  type: 'test'
+  ...
+# Subtest: SolaX applied-target readback refreshes only from actual poll, never write acknowledgement or unrelated packet
+ok 3 - SolaX applied-target readback refreshes only from actual poll, never write acknowledgement or unrelated packet
+  ---
+  duration_ms: 2.613916
+  type: 'test'
+  ...
+# Subtest: MQTT full caches and diagnostic packets cannot refresh an old source or a partially updated computed alias
+ok 4 - MQTT full caches and diagnostic packets cannot refresh an old source or a partially updated computed alias
+  ---
+  duration_ms: 1.66732
+  type: 'test'
+  ...
+# Subtest: FENECON 780 controller block / 882 target changes only controller route and retains all verified read aliases
+ok 5 - FENECON 780 controller block / 882 target changes only controller route and retains all verified read aliases
+  ---
+  duration_ms: 1.989215
+  type: 'test'
+  ...
+# (node:46) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: all 195 profiles retain existing aliases; new semantics are additive, source-bound and read-only
+ok 6 - all 195 profiles retain existing aliases; new semantics are additive, source-bound and read-only
+  ---
+  duration_ms: 90.315999
+  type: 'test'
+  ...
+# Subtest: FENECON keeps battery power separate from ESS converter/DC PV and does not fabricate 706 readback
+ok 7 - FENECON keeps battery power separate from ESS converter/DC PV and does not fabricate 706 readback
+  ---
+  duration_ms: 1.316643
+  type: 'test'
+  ...
+# Subtest: both SolaX profiles share W units and signed limits, with genuine readable target and no invented grid target
+ok 8 - both SolaX profiles share W units and signed limits, with genuine readable target and no invented grid target
+  ---
+  duration_ms: 0.988839
+  type: 'test'
+  ...
+# Subtest: readback is actual polling data and cannot acknowledge queued or failed commands
+ok 9 - readback is actual polling data and cannot acknowledge queued or failed commands
+  ---
+  duration_ms: 2.348837
+  type: 'test'
+  ...
+# Subtest: VARTA sign conversion and DEYE MPPT aggregation remain canonical without new control capability
+ok 10 - VARTA sign conversion and DEYE MPPT aggregation remain canonical without new control capability
+  ---
+  duration_ms: 0.540764
+  type: 'test'
+  ...
+# Subtest: unknown, write-only, missing, remapped and differently scaled sources remain unavailable
+ok 11 - unknown, write-only, missing, remapped and differently scaled sources remain unavailable
+  ---
+  duration_ms: 2.129367
+  type: 'test'
+  ...
+# (node:47) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: configuration rejects invalid identifiers, duplicate IDs, dangerous keys and CAN binary overrides
+ok 12 - configuration rejects invalid identifiers, duplicate IDs, dangerous keys and CAN binary overrides
+  ---
+  duration_ms: 2.177238
+  type: 'test'
+  ...
+# Subtest: legacy JSON config imports without changing per-device IDs/settings or activating
+ok 13 - legacy JSON config imports without changing per-device IDs/settings or activating
+  ---
+  duration_ms: 0.728857
+  type: 'test'
+  ...
+# Subtest: disabled module never creates objects, runtimes, transport, or root connection state
+ok 14 - disabled module never creates objects, runtimes, transport, or root connection state
+  ---
+  duration_ms: 0.676248
+  type: 'test'
+  ...
+# Subtest: one hosted runtime routes only its namespace and unacknowledged commands; stop is idempotent
+ok 15 - one hosted runtime routes only its namespace and unacknowledged commands; stop is idempotent
+  ---
+  duration_ms: 320.602705
+  type: 'test'
+  ...
+# Subtest: central license refusal prevents transport; revocation blocks all subsequent writes
+ok 16 - central license refusal prevents transport; revocation blocks all subsequent writes
+  ---
+  duration_ms: 1.014728
+  type: 'test'
+  ...
+# Subtest: unknown profile and incompatible protocol fail before any I/O
+ok 17 - unknown profile and incompatible protocol fail before any I/O
+  ---
+  duration_ms: 0.598281
+  type: 'test'
+  ...
+# Subtest: queued Modbus and periodic MQTT publish recheck ownership at the final dispatch
+ok 18 - queued Modbus and periodic MQTT publish recheck ownership at the final dispatch
+  ---
+  duration_ms: 1.117632
+  type: 'test'
+  ...
+# Subtest: metadata commands work while runtime is disabled and reject unknown commands
+ok 19 - metadata commands work while runtime is disabled and reject unknown commands
+  ---
+  duration_ms: 0.98971
+  type: 'test'
+  ...
+# Subtest: startup failure cleans a partially initialized runtime without exposing error secrets
+ok 20 - startup failure cleans a partially initialized runtime without exposing error secrets
+  ---
+  duration_ms: 0.712753
+  type: 'test'
+  ...
+# Subtest: state cleanup failure still closes the captured driver; a failed close remains visible to the host
+ok 21 - state cleanup failure still closes the captured driver; a failed close remains visible to the host
+  ---
+  duration_ms: 1.283413
+  type: 'test'
+  ...
+# Subtest: legacy preflight preserves 0.5.176 devicesJson when the native array is only its empty default
+ok 22 - legacy preflight preserves 0.5.176 devicesJson when the native array is only its empty default
+  ---
+  duration_ms: 0.697571
+  type: 'test'
+  ...
+# Subtest: two filled legacy sources must agree and neither conflicting source is silently selected
+ok 23 - two filled legacy sources must agree and neither conflicting source is silently selected
+  ---
+  duration_ms: 0.493714
+  type: 'test'
+  ...
+# Subtest: normal explicit empty-device save never resurrects a leftover legacy JSON list
+ok 24 - normal explicit empty-device save never resurrects a leftover legacy JSON list
+  ---
+  duration_ms: 0.145649
+  type: 'test'
+  ...
+# Subtest: legacy preflight rejects malformed, unsafe and unknown JSON devices before any hosted runtime
+ok 25 - legacy preflight rejects malformed, unsafe and unknown JSON devices before any hosted runtime
+  ---
+  duration_ms: 0.418751
+  type: 'test'
+  ...
+# (node:48) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: unacknowledged MQTT power command is not replayed on reconnect
+ok 26 - unacknowledged MQTT power command is not replayed on reconnect
+  ---
+  duration_ms: 327.510126
+  type: 'test'
+  ...
+# Subtest: unacknowledged MQTT power command is not replayed on reconnect after authorization revocation
+ok 27 - unacknowledged MQTT power command is not replayed on reconnect after authorization revocation
+  ---
+  duration_ms: 283.884687
+  type: 'test'
+  ...
+# Subtest: offline commands fail instead of being queued for a later MQTT session
+ok 28 - offline commands fail instead of being queued for a later MQTT session
+  ---
+  duration_ms: 317.75393
+  type: 'test'
+  ...
+# Subtest: missing PUBACK reaches deadline and closes actual transport before fresh reconnect
+ok 29 - missing PUBACK reaches deadline and closes actual transport before fresh reconnect
+  ---
+  duration_ms: 5125.217303
+  type: 'test'
+  ...
+# Subtest: missing SUBACK is bounded and does not block stop or next session
+not ok 30 - missing SUBACK is bounded and does not block stop or next session
+  ---
+  duration_ms: 5061.199458
+  type: 'test'
+  location: '/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/modules/devices/test/mqttCommandLifecycle.test.js:141:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    old subscription remains pending
+    
+    0 !== 1
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/modules/devices/test/mqttCommandLifecycle.test.js:147:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: controlled stop remains bounded when safe QoS1 shutdown command is never acknowledged
+ok 31 - controlled stop remains bounded when safe QoS1 shutdown command is never acknowledged
+  ---
+  duration_ms: 1175.87692
+  type: 'test'
+  ...
+# Subtest: parallel connect calls share one MQTT client
+ok 32 - parallel connect calls share one MQTT client
+  ---
+  duration_ms: 11.411723
+  type: 'test'
+  ...
+# Subtest: a delayed old MQTT sample cannot revive aliases or finish multi-value updates in a new session
+ok 33 - a delayed old MQTT sample cannot revive aliases or finish multi-value updates in a new session
+  ---
+  duration_ms: 146.289276
+  type: 'test'
+  ...
+# (node:58) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: poll without usable measurements does not manufacture liveness: empty response
+ok 34 - poll without usable measurements does not manufacture liveness: empty response
+  ---
+  duration_ms: 6.757715
+  type: 'test'
+  ...
+# Subtest: poll without usable measurements does not manufacture liveness: undefined
+ok 35 - poll without usable measurements does not manufacture liveness: undefined
+  ---
+  duration_ms: 0.556398
+  type: 'test'
+  ...
+# Subtest: poll without usable measurements does not manufacture liveness: null
+ok 36 - poll without usable measurements does not manufacture liveness: null
+  ---
+  duration_ms: 0.416548
+  type: 'test'
+  ...
+# Subtest: poll without usable measurements does not manufacture liveness: NaN
+ok 37 - poll without usable measurements does not manufacture liveness: NaN
+  ---
+  duration_ms: 0.407413
+  type: 'test'
+  ...
+# Subtest: MQTT subscription diagnostic arriving during connect is not overwritten at startup
+ok 38 - MQTT subscription diagnostic arriving during connect is not overwritten at startup
+  ---
+  duration_ms: 0.626333
+  type: 'test'
+  ...
+# Subtest: MQTT diagnostic-only snapshots update aliases without clearing errors or fabricating liveness
+ok 39 - MQTT diagnostic-only snapshots update aliases without clearing errors or fabricating liveness
+  ---
+  duration_ms: 0.699583
+  type: 'test'
+  ...
+# Subtest: a valid zero measurement establishes liveness
+ok 40 - a valid zero measurement establishes liveness
+  ---
+  duration_ms: 1.492577
+  type: 'test'
+  ...
+# Subtest: mqtt startup preserves a connection failure diagnostic
+ok 41 - mqtt startup preserves a connection failure diagnostic
+  ---
+  duration_ms: 1.015529
+  type: 'test'
+  ...
+# Subtest: canbus startup preserves a connection failure diagnostic
+ok 42 - canbus startup preserves a connection failure diagnostic
+  ---
+  duration_ms: 0.535065
+  type: 'test'
+  ...
+# (node:60) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: TESVOLT real MQTT transport receives screenshot EMS topics with wildcard subscription and publishes nothing
+ok 43 - TESVOLT real MQTT transport receives screenshot EMS topics with wildcard subscription and publishes nothing
+  ---
+  duration_ms: 497.186908
+  type: 'test'
+  ...
+# Subtest: TESVOLT real MQTT transport receives screenshot EMS topics with exact-topic ACL fallback and publishes nothing
+ok 44 - TESVOLT real MQTT transport receives screenshot EMS topics with exact-topic ACL fallback and publishes nothing
+  ---
+  duration_ms: 120.069475
+  type: 'test'
+  ...
+# Subtest: TESVOLT real MQTT transport sends EMS power commands with limits and full payload after explicit control setup
+ok 45 - TESVOLT real MQTT transport sends EMS power commands with limits and full payload after explicit control setup
+  ---
+  duration_ms: 117.037566
+  type: 'test'
+  ...
+# Subtest: TESVOLT real MQTT automatic detection ignores stale V2 metadata before live EMS values
+ok 46 - TESVOLT real MQTT automatic detection ignores stale V2 metadata before live EMS values
+  ---
+  duration_ms: 53.980031
+  type: 'test'
+  ...
+# Subtest: TESVOLT reconnect to a different namespace clears previous optional values and never replays commands
+ok 47 - TESVOLT reconnect to a different namespace clears previous optional values and never replays commands
+  ---
+  duration_ms: 155.638885
+  type: 'test'
+  ...
+1..47
+# tests 47
+# suites 0
+# pass 46
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 12855.112587

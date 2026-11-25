@@ -1,0 +1,14 @@
+{
+  "name": "sbom-runtime",
+  "command": [
+    "npm",
+    "run",
+    "sbom"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+  "startedAt": "2026-11-24T22:03:58.097883+00:00",
+  "durationSeconds": 2.292,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-921/sbom-runtime.log",
+  "sha256": "c8870e26798f7f6a49fe0ef975efd48a86a4e106f42df8a9f7edeb483e8e66c6"
+}

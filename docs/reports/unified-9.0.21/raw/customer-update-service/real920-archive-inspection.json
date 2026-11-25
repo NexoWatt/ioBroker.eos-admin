@@ -1,0 +1,20 @@
+{
+  "checkedAt": "2026-11-24T22:04:09.070Z",
+  "artifact": "delivery-920/iobroker.eos-admin-9.0.20.tgz",
+  "files": 2554,
+  "required": [
+    {
+      "path": "build/main.js",
+      "sha256": "bf8bd0db1c4a65f8927719425c7620cf8beb0ed6db9d95f073451688e8748853"
+    },
+    {
+      "path": "io-package.json",
+      "sha256": "2fda556fd9e7120491130688d408f014a33f5bea2bc1a7ed50a950917c45f7f6"
+    },
+    {
+      "path": "package.json",
+      "sha256": "365b976a4e3457be6ef03193ec4da030580b7bf90ff157ca9c7dea0a732eefc2"
+    }
+  ],
+  "dependencyLockFiles": []
+}

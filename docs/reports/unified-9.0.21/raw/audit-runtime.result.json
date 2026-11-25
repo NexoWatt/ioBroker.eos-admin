@@ -1,0 +1,15 @@
+{
+  "name": "audit-runtime",
+  "command": [
+    "npm",
+    "audit",
+    "--omit=dev",
+    "--json"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+  "startedAt": "2026-11-24T21:50:15.942327+00:00",
+  "durationSeconds": 5.598,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-921/audit-runtime.log",
+  "sha256": "e3d83228798e4b10063dbb91f96a84906dc819e094ea794278835a1bf8509a17"
+}

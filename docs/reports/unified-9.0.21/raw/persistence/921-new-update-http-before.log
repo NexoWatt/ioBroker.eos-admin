@@ -1,0 +1,177 @@
+(node:12) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✖ actual UnifiedSessions permits the explicit customer update capability without general administrator rights (29.886851ms)
+✖ anonymous, cross-origin, CSRF, initial-password and unapproved roles never reach update actions (16.642138ms)
+✔ no update route accepts arbitrary URLs, paths, commands, alternate versions or extra fields (27.144818ms)
+SyntaxError: Unterminated string in JSON at position 16 (line 1 column 17)
+    at JSON.parse (<anonymous>)
+    at parse (/workspace/scratch/741f792566ea/source-918/iobroker.eos-admin/node_modules/body-parser/lib/types/json.js:93:21)
+    at /workspace/scratch/741f792566ea/source-918/iobroker.eos-admin/node_modules/body-parser/lib/read.js:194:18
+    at AsyncResource.runInAsyncScope (node:async_hooks:227:14)
+    at invokeCallback (/workspace/scratch/741f792566ea/source-918/iobroker.eos-admin/node_modules/raw-body/index.js:238:16)
+    at done (/workspace/scratch/741f792566ea/source-918/iobroker.eos-admin/node_modules/raw-body/index.js:227:7)
+    at IncomingMessage.onEnd (/workspace/scratch/741f792566ea/source-918/iobroker.eos-admin/node_modules/raw-body/index.js:287:7)
+    at IncomingMessage.emit (node:events:514:28)
+    at endReadableNT (node:internal/streams/readable:1783:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  expose: true,
+  statusCode: 400,
+  status: 400,
+  body: '{"SECRET_PRIVATE',
+  type: 'entity.parse.failed'
+}
+✖ malformed and oversized JSON have bounded JSON errors without stack paths or request secrets (6.687519ms)
+✖ fresh session revocation, role changes and mandatory password changes are checked at the final service fence (11.367146ms)
+✖ status is reauthorized after a slow service read and internal error details never enter responses (3.195662ms)
+✖ HTTP timeout revokes late prepare/start authority even when the service operation cannot be cancelled (204.940204ms)
+✖ client disconnect revokes the callback before any later prepare/start effect (25.672596ms)
+✖ pending auth database work retains bounded admission after HTTP timeout until it really settles (227.214334ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 1
+ℹ fail 8
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1341.143848
+
+✖ failing tests:
+
+test at test/eos-customer-update-http.test.cjs:58:1
+✖ actual UnifiedSessions permits the explicit customer update capability without general administrator rights (29.886851ms)
+  AssertionError [ERR_ASSERTION]: customer/status
+  
+  400 !== 200
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-customer-update-http.test.cjs:63:72)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 400,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-customer-update-http.test.cjs:71:1
+✖ anonymous, cross-origin, CSRF, initial-password and unapproved roles never reach update actions (16.642138ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  400 !== 403
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-customer-update-http.test.cjs:76:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 400,
+    expected: 403,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-customer-update-http.test.cjs:92:1
+✖ malformed and oversized JSON have bounded JSON errors without stack paths or request secrets (6.687519ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /application\/json/. Input:
+  
+  'text/html; charset=utf-8'
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-customer-update-http.test.cjs:96:16)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'text/html; charset=utf-8',
+    expected: /application\/json/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at test/eos-customer-update-http.test.cjs:103:1
+✖ fresh session revocation, role changes and mandatory password changes are checked at the final service fence (11.367146ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  200 !== 403
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-customer-update-http.test.cjs:109:74)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 200,
+    expected: 403,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-customer-update-http.test.cjs:114:1
+✖ status is reauthorized after a slow service read and internal error details never enter responses (3.195662ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  400 !== 403
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-customer-update-http.test.cjs:117:100)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 400,
+    expected: 403,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-customer-update-http.test.cjs:126:1
+✖ HTTP timeout revokes late prepare/start authority even when the service operation cannot be cancelled (204.940204ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 504
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-customer-update-http.test.cjs:134:16)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 504,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-customer-update-http.test.cjs:138:1
+✖ client disconnect revokes the callback before any later prepare/start effect (25.672596ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-customer-update-http.test.cjs:144:53)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-customer-update-http.test.cjs:148:1
+✖ pending auth database work retains bounded admission after HTTP timeout until it really settles (227.214334ms)
+  AssertionError [ERR_ASSERTION]: HTTP response must finish even when session storage does not
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-customer-update-http.test.cjs:155:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

@@ -1,0 +1,86 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: worker refuses unsafe scope, paths, versions, duplicate files and mutable manifests before commands
+ok 1 - worker refuses unsafe scope, paths, versions, duplicate files and mutable manifests before commands
+  ---
+  duration_ms: 157.639303
+  type: 'test'
+  ...
+# Subtest: confirmed stop precedes install; exact artifact and actual restart precede success
+ok 2 - confirmed stop precedes install; exact artifact and actual restart precede success
+  ---
+  duration_ms: 274.541038
+  type: 'test'
+  ...
+# Subtest: copied standalone worker uses only built-in dependencies and exits after its durable receipt
+ok 3 - copied standalone worker uses only built-in dependencies and exits after its durable receipt
+  ---
+  duration_ms: 256.663415
+  type: 'test'
+  ...
+# Subtest: changed staging content never reaches a stop or install command
+ok 4 - changed staging content never reaches a stop or install command
+  ---
+  duration_ms: 20.266125
+  type: 'test'
+  ...
+# Subtest: pre-install storage failure restores only the confirmed-stopped unchanged old code
+ok 5 - pre-install storage failure restores only the confirmed-stopped unchanged old code
+  ---
+  duration_ms: 427.778912
+  type: 'test'
+  ...
+# Subtest: bounded encrypted configuration larger than 2 MiB is supported
+ok 6 - bounded encrypted configuration larger than 2 MiB is supported
+  ---
+  duration_ms: 275.086489
+  type: 'test'
+  ...
+# Subtest: controller success without new package or with changed runtime never starts EOS
+ok 7 - controller success without new package or with changed runtime never starts EOS
+  ---
+  duration_ms: 339.492942
+  type: 'test'
+  ...
+# Subtest: missing controller state is not treated as a confirmed stop
+ok 8 - missing controller state is not treated as a confirmed stop
+  ---
+  duration_ms: 222.928057
+  type: 'test'
+  ...
+# Subtest: unconfirmed stop never installs and unconfirmed restart never reports success
+ok 9 - unconfirmed stop never installs and unconfirmed restart never reports success
+  ---
+  duration_ms: 2756.071957
+  type: 'test'
+  ...
+# Subtest: timed-out install kills its process group, leaves receipt uncertain and never retries
+ok 10 - timed-out install kills its process group, leaves receipt uncertain and never retries
+  ---
+  duration_ms: 1624.131609
+  type: 'test'
+  ...
+# Subtest: worker abort during install kills descendants and records uncertainty without restart
+ok 11 - worker abort during install kills descendants and records uncertainty without restart
+  ---
+  duration_ms: 157.292327
+  type: 'test'
+  ...
+# Subtest: nonprivate job directory and symlinked archive are refused
+ok 12 - nonprivate job directory and symlinked archive are refused
+  ---
+  duration_ms: 6.962473
+  type: 'test'
+  ...
+1..12
+# tests 12
+# suites 0
+# pass 12
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6753.951231

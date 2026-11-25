@@ -1,0 +1,83 @@
+{
+  "node": "v24.22.3",
+  "mode": "ESLint recommended syntax/control-flow checks; no type-information claim for legacy ts-nocheck modules",
+  "files": [
+    {
+      "file": "ui/src-ts/runtime-executables/ems/modules/tariff-provider.ts",
+      "baseline920": [
+        {
+          "ruleId": "no-empty",
+          "message": "Empty block statement.",
+          "line": 344,
+          "sourceLine": "try { this.adapter.log.debug(`[TariffProvider] settings coupling skipped: ${String(e && e.message || e)}`); } catch (_e) {}"
+        },
+        {
+          "ruleId": "no-empty",
+          "message": "Empty block statement.",
+          "line": 436,
+          "sourceLine": "try { this.adapter._tariffProviderSnapshot = snapshot; } catch (_e) {}"
+        },
+        {
+          "ruleId": "no-empty",
+          "message": "Empty block statement.",
+          "line": 472,
+          "sourceLine": "try { this.adapter.log.warn(`[TariffProvider] ${cfg.providerId}: ${this._lastError}`); } catch (_e) {}"
+        }
+      ],
+      "candidate921": [
+        {
+          "ruleId": "no-empty",
+          "message": "Empty block statement.",
+          "line": 346,
+          "sourceLine": "try { this.adapter.log.debug(`[TariffProvider] settings coupling skipped: ${String(e && e.message || e)}`); } catch (_e) {}"
+        },
+        {
+          "ruleId": "no-empty",
+          "message": "Empty block statement.",
+          "line": 439,
+          "sourceLine": "try { this.adapter._tariffProviderSnapshot = snapshot; } catch (_e) {}"
+        },
+        {
+          "ruleId": "no-empty",
+          "message": "Empty block statement.",
+          "line": 475,
+          "sourceLine": "try { this.adapter.log.warn(`[TariffProvider] ${cfg.providerId}: ${this._lastError}`); } catch (_e) {}"
+        }
+      ],
+      "newDiagnostics": []
+    },
+    {
+      "file": "ui/src-ts/runtime-executables/ems/services/tariff-provider-registry.ts",
+      "baseline920": [],
+      "candidate921": [],
+      "newDiagnostics": []
+    },
+    {
+      "file": "test/eos-tariff-initial-outage.test.cjs",
+      "candidate921": [],
+      "newDiagnostics": []
+    },
+    {
+      "file": "test/eos-tariff-cancel-transport.test.cjs",
+      "candidate921": [],
+      "newDiagnostics": []
+    },
+    {
+      "file": "test/eos-influx-sustained-outage.test.cjs",
+      "candidate921": [],
+      "newDiagnostics": []
+    },
+    {
+      "file": "test/eos-customer-tariff-runtime.test.cjs",
+      "baseline920": [],
+      "candidate921": [],
+      "newDiagnostics": []
+    },
+    {
+      "file": "test/eos-tariff-quarter-hour-runtime.test.cjs",
+      "baseline920": [],
+      "candidate921": [],
+      "newDiagnostics": []
+    }
+  ]
+}

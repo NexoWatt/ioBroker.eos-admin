@@ -1,0 +1,80 @@
+✔ snapshot preserves every configured module and false/zero/empty customer values without any write API (4.095777ms)
+✖ protected UI-store migration selects the real legacy installer and customer namespace (1.387629ms)
+✔ old native module envelope remains supported only in the absence of its authoritative store (0.890631ms)
+✖ legacy namespace and protected store identity are validated before reading unrelated data (0.947106ms)
+✖ configured legacy required states cannot silently disappear from the update snapshot (0.582577ms)
+✔ busy and changing customer configuration fail closed rather than returning a mixed snapshot (1.272697ms)
+✖ bounded decoder refuses nested v2 chains and malformed ciphertext without exposing plaintext errors (0.479011ms)
+✔ normalization bounds size/depth/node count and rejects dangerous keys or non-JSON values (16.893017ms)
+✔ settings scope and count are bounded without an all-state database scan (6.06369ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 5
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 356.589887
+
+✖ failing tests:
+
+test at test/eos-customer-update-snapshot.test.cjs:58:1
+✖ protected UI-store migration selects the real legacy installer and customer namespace (1.387629ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'eos-admin.0'
+  - 'nexowatt-ui.3'
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-customer-update-snapshot.test.cjs:65:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'eos-admin.0',
+    expected: 'nexowatt-ui.3',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-customer-update-snapshot.test.cjs:84:1
+✖ legacy namespace and protected store identity are validated before reading unrelated data (0.947106ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-customer-update-snapshot.test.cjs:92:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /(?:EOS_)?UPDATE_CONFIGURATION_INVALID/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at test/eos-customer-update-snapshot.test.cjs:97:1
+✖ configured legacy required states cannot silently disappear from the update snapshot (0.582577ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-customer-update-snapshot.test.cjs:99:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /(?:EOS_)?UPDATE_CONFIGURATION_INVALID/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at test/eos-customer-update-snapshot.test.cjs:117:1
+✖ bounded decoder refuses nested v2 chains and malformed ciphertext without exposing plaintext errors (0.479011ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-customer-update-snapshot.test.cjs:121:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /(?:EOS_)?UPDATE_CONFIGURATION_INVALID/,
+    operator: 'rejects',
+    diff: 'simple'
+  }

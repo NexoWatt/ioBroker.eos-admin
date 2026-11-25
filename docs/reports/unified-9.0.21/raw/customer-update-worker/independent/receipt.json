@@ -1,0 +1,89 @@
+{
+  "reviewId": "921-SEC-WORKER-REVIEW",
+  "recordedAt": "2026-11-24T22:03:19.031Z",
+  "node24": "v24.22.3",
+  "node22": "v22.23.4",
+  "platform": "linux",
+  "arch": "x64",
+  "uid": 1000,
+  "gid": 1000,
+  "groups": [
+    1000
+  ],
+  "processStatus": [
+    "Uid:\t1000\t1000\t1000\t1000",
+    "Gid:\t1000\t1000\t1000\t1000",
+    "Groups:\t ",
+    "CapEff:\t0000000000000000",
+    "NoNewPrivs:\t1",
+    "Seccomp:\t2"
+  ],
+  "sourceFiles": [
+    {
+      "path": "src/lib/eosCustomerUpdateWorker.ts",
+      "sha256": "c1b0df8a310449973290ea4fe2bff1d4babea6ae51aace59f4fb3f0657cb7b91"
+    },
+    {
+      "path": "test/eos-customer-update-worker.test.cjs",
+      "sha256": "4c40e877ecc33d0da95284da7b18a12ccf3c6b4e76b6be9f021b4e2aac6682e0"
+    }
+  ],
+  "fixtures": "Real filesystem and subprocesses; fake ioBroker CLI. No live/controller/hardware proof.",
+  "tests": [
+    {
+      "runtime": "node24",
+      "command": "node --test test/eos-customer-update-worker.test.cjs",
+      "exitCode": 0,
+      "passed": 12,
+      "failed": 0,
+      "skipped": 0,
+      "output": "node24.tap"
+    },
+    {
+      "runtime": "node22",
+      "command": "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node --test test/eos-customer-update-worker.test.cjs",
+      "exitCode": 0,
+      "passed": 12,
+      "failed": 0,
+      "skipped": 0,
+      "output": "node22.tap"
+    },
+    {
+      "runtime": "node24",
+      "command": "node --test /workspace/scratch/741f792566ea/audit-921/security/worker-independent/independent-worker-probes.cjs",
+      "exitCode": 0,
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0,
+      "output": "probes-node24.tap"
+    },
+    {
+      "runtime": "node22",
+      "command": "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node --test /workspace/scratch/741f792566ea/audit-921/security/worker-independent/independent-worker-probes.cjs",
+      "exitCode": 0,
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0,
+      "output": "probes-node22.tap"
+    }
+  ],
+  "probeSha256": "007047e7aa9327ce3f92beb411efa06d17a0411f640861eeeef6f686c710e329",
+  "rawFiles": [
+    {
+      "path": "node24.tap",
+      "sha256": "f4025f8927d41b960d2e8a55a2e77b800fcba9f8dbd2d9edd0d016e81269d33b"
+    },
+    {
+      "path": "node22.tap",
+      "sha256": "5cb8d2df123e94adab50985283a9721c1f7e7e40a613ce7d51b6446badf50050"
+    },
+    {
+      "path": "probes-node24.tap",
+      "sha256": "96b4b77ddbbd5c41ff3dad24109e27c05e50d06d08bc67fca7ecf8233765e94f"
+    },
+    {
+      "path": "probes-node22.tap",
+      "sha256": "e0813fdd55f9f4a2016b395f6a9f447eb58d73aaa11d7e1b2bea8593cb27640f"
+    }
+  ]
+}

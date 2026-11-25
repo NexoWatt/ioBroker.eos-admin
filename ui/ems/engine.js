@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/engine.ts
- * Quell-Hash: sha256:7acb8a93dc3b22b9b8371d598082cdca739ff685ebca32d04871f84a0379e394
+ * Quell-Hash: sha256:837933eeb666cfed0334fe6c8de0d54e98fb6fac0149e68a406e33b55aa8aac5
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -1415,7 +1415,15 @@ class EmsEngine {
                     }
                     catch (_error) { }
                 }
-                const netW = snapshot.usable && Number.isFinite(Number(snapshot.netW)) ? Number(snapshot.netW) : null;
+                const netW = snapshot.usable && typeof snapshot.netW === 'number' && Number.isFinite(snapshot.netW) ? snapshot.netW : null;
+                // Ein ausgefallener Messpfad unterbricht auch die Filterhistorie. Der
+                // erste neue Messwert darf nicht aus einem alten Bezug/Export anlaufen.
+                // Kein Ersatzwert wird geschrieben; die bestehende Frische-Sperre bleibt.
+                if (netW === null) {
+                    this._gridPowerAvgW = null;
+                    this._gridPowerLastTs = 0;
+                    this._gridPowerLastResolutionSource = '';
+                }
                 if (netW !== null && this._gridPowerId && this._gridPowerRawId) {
                     const nowTs = Date.now();
                     const netRawRounded = Math.round(netW);
@@ -1430,7 +1438,7 @@ class EmsEngine {
                     const sourceChanged = this._gridPowerLastResolutionSource && this._gridPowerLastResolutionSource !== snapshot.source;
                     this._gridPowerLastTs = nowTs;
                     this._gridPowerLastResolutionSource = snapshot.source;
-                    if (!Number.isFinite(Number(this._gridPowerAvgW)) || sourceChanged || !useAvg || tauSec <= 0) {
+                    if (typeof this._gridPowerAvgW !== 'number' || !Number.isFinite(this._gridPowerAvgW) || sourceChanged || !useAvg || tauSec <= 0) {
                         this._gridPowerAvgW = netRawRounded;
                     }
                     else {
@@ -1452,6 +1460,9 @@ class EmsEngine {
                 }
             }
             catch (error) {
+                this._gridPowerAvgW = null;
+                this._gridPowerLastTs = 0;
+                this._gridPowerLastResolutionSource = '';
                 try {
                     this.adapter._nvpFreshnessSnapshot = { ts: Date.now(), usable: false, fresh: false, coherent: false, degraded: false, connected: null, status: 'stale', source: 'resolver-error', reason: String(error?.message || error) };
                     await this.adapter.setStateAsync('ems.gridMeasurementFresh', { val: false, ack: true });

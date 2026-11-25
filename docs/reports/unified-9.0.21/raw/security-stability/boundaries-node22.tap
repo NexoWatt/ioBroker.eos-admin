@@ -1,0 +1,495 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: URL parser accepts ordinary files and strips real queries before decoding
+ok 1 - URL parser accepts ordinary files and strips real queries before decoding
+  ---
+  duration_ms: 7.537785
+  type: 'test'
+  ...
+# Subtest: URL parser rejects encoded routing delimiters, double encoding, traversal, malformed URLs and excessive depth
+ok 2 - URL parser rejects encoded routing delimiters, double encoding, traversal, malformed URLs and excessive depth
+  ---
+  duration_ms: 2.45205
+  type: 'test'
+  ...
+# Subtest: single file read propagates authenticated caller ACL to both operations and ignores attacker MIME
+ok 3 - single file read propagates authenticated caller ACL to both operations and ignores attacker MIME
+  ---
+  duration_ms: 3.219295
+  type: 'test'
+  ...
+# Subtest: missing or malformed identity and invalid direct-call path perform no database IO
+ok 4 - missing or malformed identity and invalid direct-call path perform no database IO
+  ---
+  duration_ms: 21.247891
+  type: 'test'
+  ...
+# Subtest: explicit authenticated user names containing @ retain their identity for ACL checks
+ok 5 - explicit authenticated user names containing @ retain their identity for ACL checks
+  ---
+  duration_ms: 10.86972
+  type: 'test'
+  ...
+# Subtest: directory exports are denied without recursive reads or archive allocation
+ok 6 - directory exports are denied without recursive reads or archive allocation
+  ---
+  duration_ms: 2.241624
+  type: 'test'
+  ...
+# Subtest: missing metadata, oversized declared files and excessive parent entries fail before reading file bytes
+ok 7 - missing metadata, oversized declared files and excessive parent entries fail before reading file bytes
+  ---
+  duration_ms: 7.4282
+  type: 'test'
+  ...
+# Subtest: actual oversized response is rejected even if metadata was small
+ok 8 - actual oversized response is rejected even if metadata was small
+  ---
+  duration_ms: 2.170807
+  type: 'test'
+  ...
+# Subtest: active file types are attachments with isolated restrictive response headers
+ok 9 - active file types are attachments with isolated restrictive response headers
+  ---
+  duration_ms: 10.219121
+  type: 'test'
+  ...
+# Subtest: database errors fail closed and do not expose internal details
+ok 10 - database errors fail closed and do not expose internal details
+  ---
+  duration_ms: 2.924412
+  type: 'test'
+  ...
+# Subtest: concurrent stalled requests reserve both slots even after the five-second deadline
+ok 11 - concurrent stalled requests reserve both slots even after the five-second deadline
+  ---
+  duration_ms: 29.420851
+  type: 'test'
+  ...
+# Subtest: aborted client cannot trigger a late file read and reservation is released after DB settles
+ok 12 - aborted client cannot trigger a late file read and reservation is released after DB settles
+  ---
+  duration_ms: 8.057818
+  type: 'test'
+  ...
+# Subtest: slow output keeps both reservations until deadline destroys unfinished responses
+ok 13 - slow output keeps both reservations until deadline destroys unfinished responses
+  ---
+  duration_ms: 3.848572
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: device save refreshes rotated session CSRF without discarding the edited device
+ok 14 - device save refreshes rotated session CSRF without discarding the edited device
+  ---
+  duration_ms: 22.021716
+  type: 'test'
+  ...
+# Subtest: expired session preserves the unsaved form and allows explicit retry after a separate login
+ok 15 - expired session preserves the unsaved form and allows explicit retry after a separate login
+  ---
+  duration_ms: 5.377764
+  type: 'test'
+  ...
+# Subtest: forbidden mutation is never replayed and preserves its draft for correction
+ok 16 - forbidden mutation is never replayed and preserves its draft for correction
+  ---
+  duration_ms: 7.847352
+  type: 'test'
+  ...
+# Subtest: enabled stored module exposes the exact import prerequisite and never posts a manual import
+ok 17 - enabled stored module exposes the exact import prerequisite and never posts a manual import
+  ---
+  duration_ms: 10.14586
+  type: 'test'
+  ...
+# Subtest: preserved automatic migration cannot be replaced by a manual import from the editor
+ok 18 - preserved automatic migration cannot be replaced by a manual import from the editor
+  ---
+  duration_ms: 19.987874
+  type: 'test'
+  ...
+# Subtest: manual import explains a newly blocked server state without losing the draft or replaying writes
+ok 19 - manual import explains a newly blocked server state without losing the draft or replaying writes
+  ---
+  duration_ms: 4.325701
+  type: 'test'
+  ...
+# Subtest: unconfirmed module stop blocks the editor import without instructing an unsafe retry
+ok 20 - unconfirmed module stop blocks the editor import without instructing an unsafe retry
+  ---
+  duration_ms: 12.237148
+  type: 'test'
+  ...
+# Subtest: uninitialized module configuration stays readable but cannot be saved or manually imported
+ok 21 - uninitialized module configuration stays readable but cannot be saved or manually imported
+  ---
+  duration_ms: 6.163196
+  type: 'test'
+  ...
+# Subtest: migration-blocked editor explains the prerequisite and unlocks after a fresh released configuration load
+ok 22 - migration-blocked editor explains the prerequisite and unlocks after a fresh released configuration load
+  ---
+  duration_ms: 8.320934
+  type: 'test'
+  ...
+# Subtest: reload does not silently discard the pending device draft
+ok 23 - reload does not silently discard the pending device draft
+  ---
+  duration_ms: 3.916675
+  type: 'test'
+  ...
+# (node:19) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: exact historical HTTP fallback groups remain stable for both transports
+ok 24 - exact historical HTTP fallback groups remain stable for both transports
+  ---
+  duration_ms: 6.221875
+  type: 'test'
+  ...
+# Subtest: all established configuration aliases preserve explicit customer role mappings
+ok 25 - all established configuration aliases preserve explicit customer role mappings
+  ---
+  duration_ms: 8.600574
+  type: 'test'
+  ...
+# Subtest: disabled custom rows are skipped while old canonical fallback behavior is retained
+ok 26 - disabled custom rows are skipped while old canonical fallback behavior is retained
+  ---
+  duration_ms: 0.273281
+  type: 'test'
+  ...
+# Subtest: administrator username and labels alone never grant administrator access
+ok 27 - administrator username and labels alone never grant administrator access
+  ---
+  duration_ms: 0.554475
+  type: 'test'
+  ...
+# Subtest: actual membership determines precedence and removal loses privilege on next resolution
+ok 28 - actual membership determines precedence and removal loses privilege on next resolution
+  ---
+  duration_ms: 20.966057
+  type: 'test'
+  ...
+# Subtest: normalization is exact, bounded and refuses wildcards or inherited configuration
+ok 29 - normalization is exact, bounded and refuses wildcards or inherited configuration
+  ---
+  duration_ms: 0.993255
+  type: 'test'
+  ...
+# (node:25) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:25) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# Subtest: pinned upstream password login, token pair and refresh work with security binding
+ok 30 - pinned upstream password login, token pair and refresh work with security binding
+  ---
+  duration_ms: 15.168111
+  type: 'test'
+  ...
+# Subtest: real controller group view accepts string and translated display keys using canonical object IDs
+ok 31 - real controller group view accepts string and translated display keys using canonical object IDs
+  ---
+  duration_ms: 14.668427
+  type: 'test'
+  ...
+# Subtest: group display names, metadata and row order do not change credential proofs
+ok 32 - group display names, metadata and row order do not change credential proofs
+  ---
+  duration_ms: 4.445591
+  type: 'test'
+  ...
+# Subtest: missing, foreign, empty and duplicate canonical group IDs fail closed despite valid view keys
+ok 33 - missing, foreign, empty and duplicate canonical group IDs fail closed despite valid view keys
+  ---
+  duration_ms: 25.427842
+  type: 'test'
+  ...
+# Subtest: canonical group identity and ACL mutations revoke established capabilities
+ok 34 - canonical group identity and ACL mutations revoke established capabilities
+  ---
+  duration_ms: 5.223652
+  type: 'test'
+  ...
+# Subtest: all devices access and refresh tokens reject changed password without waiting for object event
+ok 35 - all devices access and refresh tokens reject changed password without waiting for object event
+  ---
+  duration_ms: 3.523132
+  type: 'test'
+  ...
+# Subtest: disable, deletion and changed group ACL independently invalidate both token classes
+ok 36 - disable, deletion and changed group ACL independently invalidate both token classes
+  ---
+  duration_ms: 11.547511
+  type: 'test'
+  ...
+# Subtest: observed disable then re-enable cannot resurrect old token after snapshot returns to original
+ok 37 - observed disable then re-enable cannot resurrect old token after snapshot returns to original
+  ---
+  duration_ms: 6.205716
+  type: 'test'
+  ...
+# Subtest: legacy and unbound external tokens are rejected and direct internal minting is denied
+ok 38 - legacy and unbound external tokens are rejected and direct internal minting is denied
+  ---
+  duration_ms: 4.253521
+  type: 'test'
+  ...
+# Subtest: proof cannot be forged by passing a user-shaped object or copied authenticated identity
+ok 39 - proof cannot be forged by passing a user-shaped object or copied authenticated identity
+  ---
+  duration_ms: 3.892809
+  type: 'test'
+  ...
+# Subtest: password mutation during credential verification and before token save fails closed
+ok 40 - password mutation during credential verification and before token save fails closed
+  ---
+  duration_ms: 4.568165
+  type: 'test'
+  ...
+# Subtest: refresh credential cannot cross revocation between lookup and save
+ok 41 - refresh credential cannot cross revocation between lookup and save
+  ---
+  duration_ms: 5.94355
+  type: 'test'
+  ...
+# Subtest: restart generation does not accept previously saved capabilities
+ok 42 - restart generation does not accept previously saved capabilities
+  ---
+  duration_ms: 6.542398
+  type: 'test'
+  ...
+# Subtest: session database failures and bounded stalled reads fail closed without unbounded backlog
+ok 43 - session database failures and bounded stalled reads fail closed without unbounded backlog
+  ---
+  duration_ms: 84.511957
+  type: 'test'
+  ...
+# Subtest: socket revocation synchronously blocks commands, clears subscriptions and closes every connection
+ok 44 - socket revocation synchronously blocks commands, clears subscriptions and closes every connection
+  ---
+  duration_ms: 3.890568
+  type: 'test'
+  ...
+# Subtest: metadata-only account updates do not revoke established capabilities
+ok 45 - metadata-only account updates do not revoke established capabilities
+  ---
+  duration_ms: 1.30109
+  type: 'test'
+  ...
+# Subtest: expired access and refresh capabilities fail closed in the common session reader
+ok 46 - expired access and refresh capabilities fail closed in the common session reader
+  ---
+  duration_ms: 1.667522
+  type: 'test'
+  ...
+# Subtest: late socket authentication cannot reopen a connection after revocation
+ok 47 - late socket authentication cannot reopen a connection after revocation
+  ---
+  duration_ms: 1.265035
+  type: 'test'
+  ...
+# Subtest: real five-second watchdog closes a socket after a missed credential object event
+ok 48 - real five-second watchdog closes a socket after a missed credential object event
+  ---
+  duration_ms: 5254.516621
+  type: 'test'
+  ...
+# Subtest: idle deadline rejects access and refresh at ten minutes despite status reads and automatic token rotation
+ok 49 - idle deadline rejects access and refresh at ten minutes despite status reads and automatic token rotation
+  ---
+  duration_ms: 6.92145
+  type: 'test'
+  ...
+# Subtest: only explicit activity extends the same family; other independent logins remain isolated
+ok 50 - only explicit activity extends the same family; other independent logins remain isolated
+  ---
+  duration_ms: 6.13834
+  type: 'test'
+  ...
+# Subtest: idle read and token-save races recheck after asynchronous work
+ok 51 - idle read and token-save races recheck after asynchronous work
+  ---
+  duration_ms: 3.331846
+  type: 'test'
+  ...
+# Subtest: idle expiry uses a monotonic clock and is unchanged by a backwards wall clock
+ok 52 - idle expiry uses a monotonic clock and is unchanged by a backwards wall clock
+  ---
+  duration_ms: 2.731412
+  type: 'test'
+  ...
+# Subtest: bounded families prune expired entries and never evict another still-active login
+ok 53 - bounded families prune expired entries and never evict another still-active login
+  ---
+  duration_ms: 2.974287
+  type: 'test'
+  ...
+# Subtest: idle timer disposes silent SSE and sockets, rejects refreshed old sockets and preserves active other family
+ok 54 - idle timer disposes silent SSE and sockets, rejects refreshed old sockets and preserves active other family
+  ---
+  duration_ms: 1106.385995
+  type: 'test'
+  ...
+# Subtest: throwing authentication callbacks and upstream token rotation do not cause unhandled promise rejection
+ok 55 - throwing authentication callbacks and upstream token rotation do not cause unhandled promise rejection
+  ---
+  duration_ms: 4.96163
+  type: 'test'
+  ...
+# Subtest: TOTP account contract never falls back to password-only issuance or cached/refresh tokens
+ok 56 - TOTP account contract never falls back to password-only issuance or cached/refresh tokens
+  ---
+  duration_ms: 9.104676
+  type: 'test'
+  ...
+# (node:31) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: explicit external origin is HTTPS-only, canonical and rejects userinfo/path
+ok 57 - explicit external origin is HTTPS-only, canonical and rejects userinfo/path
+  ---
+  duration_ms: 1.586828
+  type: 'test'
+  ...
+# Subtest: transport rejects remote plaintext and spoofed Host/Origin regardless forwarding headers
+ok 58 - transport rejects remote plaintext and spoofed Host/Origin regardless forwarding headers
+  ---
+  duration_ms: 0.512752
+  type: 'test'
+  ...
+# Subtest: TLS Host authorities canonicalize default port and DNS case without trusting forwarding headers
+ok 59 - TLS Host authorities canonicalize default port and DNS case without trusting forwarding headers
+  ---
+  duration_ms: 0.487203
+  type: 'test'
+  ...
+# Subtest: TLS rejects missing, malformed and ambiguous Host authorities before serving any page
+ok 60 - TLS rejects missing, malformed and ambiguous Host authorities before serving any page
+  ---
+  duration_ms: 0.340773
+  type: 'test'
+  ...
+# Subtest: session token parsing rejects duplicate cookies and encoded/unsigned aliases
+ok 61 - session token parsing rejects duplicate cookies and encoded/unsigned aliases
+  ---
+  duration_ms: 0.252571
+  type: 'test'
+  ...
+# Subtest: status maps roles and persists activation only when core entitlement is granted
+ok 62 - status maps roles and persists activation only when core entitlement is granted
+  ---
+  duration_ms: 2.703409
+  type: 'test'
+  ...
+# Subtest: CSRF token is session- and epoch-bound; logout revokes its family without stopping other sessions
+ok 63 - CSRF token is session- and epoch-bound; logout revokes its family without stopping other sessions
+  ---
+  duration_ms: 1.610013
+  type: 'test'
+  ...
+# Subtest: bad CSRF does not revoke another login
+ok 64 - bad CSRF does not revoke another login
+  ---
+  duration_ms: 0.226531
+  type: 'test'
+  ...
+# Subtest: real HTTP login delegates to existing OAuth route and returns only opaque-cookie success
+ok 65 - real HTTP login delegates to existing OAuth route and returns only opaque-cookie success
+  ---
+  duration_ms: 67.152102
+  type: 'test'
+  ...
+# Subtest: login rate map is bounded and fails closed before issuer
+ok 66 - login rate map is bounded and fails closed before issuer
+  ---
+  duration_ms: 0.586743
+  type: 'test'
+  ...
+# Subtest: normal navigation GET/HEAD requires trusted transport but no Origin; writes still require Origin
+ok 67 - normal navigation GET/HEAD requires trusted transport but no Origin; writes still require Origin
+  ---
+  duration_ms: 0.477258
+  type: 'test'
+  ...
+# Subtest: cross-site top-level links reach only known entry pages, without granting an Origin write exemption
+ok 68 - cross-site top-level links reach only known entry pages, without granting an Origin write exemption
+  ---
+  duration_ms: 0.891712
+  type: 'test'
+  ...
+# Subtest: cross-site entry exception never accepts APIs, assets, writes, frames or WebSocket handshakes
+ok 69 - cross-site entry exception never accepts APIs, assets, writes, frames or WebSocket handshakes
+  ---
+  duration_ms: 0.514825
+  type: 'test'
+  ...
+# Subtest: independent machine transport cannot borrow browser cookie or Origin authority
+ok 70 - independent machine transport cannot borrow browser cookie or Origin authority
+  ---
+  duration_ms: 0.360773
+  type: 'test'
+  ...
+# (node:32) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: parallel HTTPS ports keep standard Admin login, refresh and session cookies through EOS login/logout
+ok 71 - parallel HTTPS ports keep standard Admin login, refresh and session cookies through EOS login/logout
+  ---
+  duration_ms: 248.729839
+  type: 'test'
+  ...
+# Subtest: EOS ignores generic and foreign-instance cookies; duplicate own credentials are rejected before OAuth
+ok 72 - EOS ignores generic and foreign-instance cookies; duplicate own credentials are rejected before OAuth
+  ---
+  duration_ms: 115.832674
+  type: 'test'
+  ...
+# Subtest: raw WebSocket upgrades normalize before later generic-cookie auth listeners and reject duplicates
+ok 73 - raw WebSocket upgrades normalize before later generic-cookie auth listeners and reject duplicates
+  ---
+  duration_ms: 83.132075
+  type: 'test'
+  ...
+# Subtest: direct writeHead Set-Cookie object and raw-array forms cannot overwrite Admin credentials
+ok 74 - direct writeHead Set-Cookie object and raw-array forms cannot overwrite Admin credentials
+  ---
+  duration_ms: 76.164123
+  type: 'test'
+  ...
+# (node:32) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual instance proxy strips EOS/Admin credentials in both directions while retaining adapter cookies
+ok 75 - actual instance proxy strips EOS/Admin credentials in both directions while retaining adapter cookies
+  ---
+  duration_ms: 264.991151
+  type: 'test'
+  ...
+# Subtest: production Web registration keeps cookie isolation outside the proxy upgrade interceptor
+ok 76 - production Web registration keeps cookie isolation outside the proxy upgrade interceptor
+  ---
+  duration_ms: 1.086475
+  type: 'test'
+  ...
+# Subtest: response cookie mapping is idempotent and preserves application cookies and security attributes
+ok 77 - response cookie mapping is idempotent and preserves application cookies and security attributes
+  ---
+  duration_ms: 0.324899
+  type: 'test'
+  ...
+# Subtest: cookie-name whitespace cannot smuggle Admin credentials past downstream tolerant cookie parsers
+ok 78 - cookie-name whitespace cannot smuggle Admin credentials past downstream tolerant cookie parsers
+  ---
+  duration_ms: 0.291539
+  type: 'test'
+  ...
+1..78
+# tests 78
+# suites 0
+# pass 78
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7181.046602

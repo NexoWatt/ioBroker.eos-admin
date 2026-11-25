@@ -18,6 +18,8 @@ async function fixture(settings = {}) {
     let onChange = () => {}; let confirmations = 0;
     let stored = { enabled: settings.enabled === true, devices: [{ id: 'ess1', name: 'Existing ESS', connection: { password: '__EOS_SECRET_UNCHANGED__' } }] };
     let edited = structuredClone(stored);
+    let revisionNumber = 1;
+    const revision = () => `00000000-0000-4000-8000-${String(revisionNumber).padStart(12, '0')}`;
     const node = id => {
         if (!nodes.has(id)) nodes.set(id, { textContent: '', dataset: {}, events: {}, children: [], checked: false,
             addEventListener(name, handler) { this.events[name] = handler; }, append(child) { this.children.push(child); } });
@@ -34,9 +36,12 @@ async function fixture(settings = {}) {
         if (method === 'PUT') {
             if (denyPut) return { status: 403, ok: false };
             assert.equal(options.headers['x-nw-csrf'], token);
+            if (JSON.parse(options.body).expectedConfigurationRevision !== revision()) return { status: 409, ok: false, json: async () => ({ error: 'EOS_MODULE_CONFIG_CONFLICT' }) };
             stored = JSON.parse(options.body).config;
+            revisionNumber++;
         }
         return { status: 200, ok: true, json: async () => ({ config: structuredClone(stored), configurationReady: settings.configurationReady !== false,
+            configurationRevision: revision(),
             configurationReason: settings.configurationReason,
             manualImport: settings.manualImport, csrfToken: token, migration: settings.migration || null, status: { active: false, reason: settings.reason || 'DISABLED' } }) };
     } };
@@ -50,6 +55,7 @@ async function fixture(settings = {}) {
         changed() { onChange(true); }, confirmations: () => confirmations,
         readiness(value, reason = '') { settings.configurationReady = value; settings.configurationReason = reason; },
         authenticate(value, nextToken = token) { authenticated = value; token = nextToken; }, denyPut(value) { denyPut = value; },
+        externalSave(name) { stored.devices[0].name = name; revisionNumber++; },
         async import() { node('eosLegacyInstance').value = 'nexowatt-devices.0'; node('eosModuleImport').events.click(); await flushUntil(() => node('eosModuleReload').disabled === false); },
         async save() { node('eosModuleSave').events.click(); await flushUntil(() => node('eosModuleReload').disabled === false); },
         async reload() { node('eosModuleReload').events.click(); await flushUntil(() => node('eosModuleReload').disabled === false); },
@@ -64,6 +70,21 @@ test('device save refreshes rotated session CSRF without discarding the edited d
     assert.equal(f.requests.filter(request => request.method === 'PUT').length, 1);
     assert.equal(f.loads(), 2, 'one initial load and one successful persisted reload');
     assert.equal(f.node('eosModuleStatus').dataset.error, 'false');
+});
+
+test('CSRF refresh does not replace the draft revision and a conflict preserves all unsaved device inputs', async () => {
+    const f = await fixture();
+    f.draft().devices[0].name = 'My unsaved device label'; f.changed();
+    f.externalSave('Confirmed in another browser'); f.authenticate(true, 'rotated-proof');
+    await f.save();
+    const put = f.requests.filter(request => request.method === 'PUT');
+    assert.equal(put.length, 1, 'a rejected mutation is never replayed');
+    assert.equal(put[0].headers['x-nw-csrf'], 'rotated-proof');
+    assert.equal(JSON.parse(put[0].body).expectedConfigurationRevision, '00000000-0000-4000-8000-000000000001');
+    assert.equal(f.stored().devices[0].name, 'Confirmed in another browser');
+    assert.equal(f.draft().devices[0].name, 'My unsaved device label');
+    assert.equal(f.loads(), 1, 'conflict does not reload over the dirty editor');
+    assert.match(f.node('eosModuleStatus').textContent, /inzwischen geändert/);
 });
 
 test('expired session preserves the unsaved form and allows explicit retry after a separate login', async () => {

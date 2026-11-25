@@ -1,0 +1,12 @@
+✔ 921-HIS-003 sustained outage bounds read/write load and accounts for every rejected or cancelled sample (5048.189679ms)
+✔ 921-HIS-003 repeated rate limits recover without retries, fake zeros or cleared independent read errors (59.535509ms)
+✔ 921-HIS-003 target replacement aborts old sockets and cannot forward pending history to the new bucket (19.081517ms)
+✔ 921-HIS-003 TLS stalled writer is cancelled by the bounded drain and later reconfiguration succeeds (312.19197ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5643.63672

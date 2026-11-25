@@ -2,10 +2,10 @@
   "$schema": "http://cyclonedx.org/schema/bom-1.5.schema.json",
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
-  "serialNumber": "urn:uuid:7c66325f-2d32-462c-b6d6-934fb94426b4",
+  "serialNumber": "urn:uuid:37bd1e0a-e1d1-4ac1-a3c4-206c24538ea7",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-11-24T21:06:27.093Z",
+    "timestamp": "2026-11-24T22:08:42.830Z",
     "lifecycles": [
       {
         "phase": "post-build"
@@ -20,10 +20,10 @@
     ],
     "component": {
       "type": "application",
-      "bom-ref": "product:nexowatt-eos-ui-internal@9.0.20",
+      "bom-ref": "product:nexowatt-eos-ui-internal@9.0.21",
       "name": "nexowatt-eos-ui-internal",
-      "version": "9.0.20",
-      "purl": "pkg:npm/nexowatt-eos-ui-internal@9.0.20",
+      "version": "9.0.21",
+      "purl": "pkg:npm/nexowatt-eos-ui-internal@9.0.21",
       "description": "Prepared npm product artifact, reference external runtime dependencies and observed bundled Admin JavaScript."
     },
     "properties": [
@@ -33,15 +33,15 @@
       },
       {
         "name": "nexowatt:package-files-sha256",
-        "value": "87464d333121506b033fe1bbdc7ed096da4e00d8388695a5c3a5ee9c8d758402"
+        "value": "07e64cc9a5f07309a0d889cae94a493262a6385a0ce730e8faa22a287e9caa9d"
       },
       {
         "name": "nexowatt:source-inputs-sha256",
-        "value": "dae549215fc0a8cff2d712fa1e674beb65c6bf2e7b383196e0360c8835692186"
+        "value": "ddab7df8633a63ac778b59cf9544afff6e60b5c16ff7831d8ff7c8ca6ee70f20"
       },
       {
         "name": "nexowatt:bundle-evidence-sha256",
-        "value": "e0719d20452e7252e6c0576f4f58c4c942e86d6f4dd9f2fe8614e2dc40b9b2c6"
+        "value": "e608c393a4cc2f2db20b5790c6fb74b3013388afb83ef7eaa516ca9c0b00b345"
       },
       {
         "name": "nexowatt:generator-version",
@@ -1879,12 +1879,12 @@
       ]
     },
     {
-      "bom-ref": "admin-bundle:nexowatt-ui-admin-tab@9.0.20",
+      "bom-ref": "admin-bundle:nexowatt-ui-admin-tab@9.0.21",
       "type": "library",
       "name": "nexowatt-ui-admin-tab",
-      "version": "9.0.20",
+      "version": "9.0.21",
       "scope": "required",
-      "purl": "pkg:npm/nexowatt-ui-admin-tab@9.0.20",
+      "purl": "pkg:npm/nexowatt-ui-admin-tab@9.0.21",
       "properties": [
         {
           "name": "cdx:npm:package:private",
@@ -2033,14 +2033,14 @@
   ],
   "dependencies": [
     {
-      "ref": "product:nexowatt-eos-ui-internal@9.0.20",
+      "ref": "product:nexowatt-eos-ui-internal@9.0.21",
       "dependsOn": [
         "runtime-reference:@iobroker/adapter-core@3.4.1",
         "runtime-reference:@iobroker/type-detector@6.2.0",
         "runtime-reference:express@4.22.3",
         "runtime-reference:nodemailer@10.1.4",
         "runtime-reference:ws@8.22.0",
-        "admin-bundle:nexowatt-ui-admin-tab@9.0.20"
+        "admin-bundle:nexowatt-ui-admin-tab@9.0.21"
       ]
     },
     {
@@ -2379,7 +2379,7 @@
       "dependsOn": []
     },
     {
-      "ref": "admin-bundle:nexowatt-ui-admin-tab@9.0.20",
+      "ref": "admin-bundle:nexowatt-ui-admin-tab@9.0.21",
       "dependsOn": [
         "admin-bundle:react@18.3.1",
         "admin-bundle:react-dom@18.3.1",

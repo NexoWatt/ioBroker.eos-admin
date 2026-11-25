@@ -1,0 +1,74 @@
+[
+  {
+    "current": {
+      "file": "src-ts/runtime-executables/main.ts",
+      "rule": "security/detect-unsafe-regex",
+      "fingerprint": "f4e38272c74a94fe601e4092e784a720242985b32e23435c6c0a1ef055ba1e52",
+      "line": 6496,
+      "column": 31,
+      "fatal": false,
+      "severity": 2
+    },
+    "origins": [
+      {
+        "file": "src-ts/runtime-executables/main.ts",
+        "rule": "security/detect-unsafe-regex",
+        "fingerprint": "da24e013a4176192bfdad434da72101043f0e92e5b2ba4175dfc5311d5760aed",
+        "line": 6466,
+        "column": 31,
+        "fatal": false,
+        "severity": 2
+      }
+    ],
+    "statementSha256": "88d1ef1db638bc90000215650196f80de6281f749cdd31f013a413455a35a9ee",
+    "statementUnchanged": true
+  },
+  {
+    "current": {
+      "file": "src-ts/runtime-executables/main.ts",
+      "rule": "security/detect-object-injection",
+      "fingerprint": "ca90f2911eb092b3d5ca4fb48e9119d9e6fb32fad46ef240074ea74efce811f6",
+      "line": 7357,
+      "column": 36,
+      "fatal": false,
+      "severity": 2
+    },
+    "origins": [
+      {
+        "file": "src-ts/runtime-executables/main.ts",
+        "rule": "security/detect-object-injection",
+        "fingerprint": "6a1be055101154e336ec4ae92aa00c7f1e317991dff899cea3c3431fa5f91241",
+        "line": 7326,
+        "column": 36,
+        "fatal": false,
+        "severity": 2
+      }
+    ],
+    "statementSha256": "7a2493630b74994282ce1a2d9b80938fed557ab24532a9bfdc05d9908a21cdd2",
+    "statementUnchanged": true
+  },
+  {
+    "current": {
+      "file": "src-ts/runtime-executables/main.ts",
+      "rule": "security/detect-object-injection",
+      "fingerprint": "1e2633deb0903a7c225e03dbc4e495168bde66fa166d70d7ef0489543d6989f3",
+      "line": 7358,
+      "column": 32,
+      "fatal": false,
+      "severity": 2
+    },
+    "origins": [
+      {
+        "file": "src-ts/runtime-executables/main.ts",
+        "rule": "security/detect-object-injection",
+        "fingerprint": "b23fbb0b5c668bd46752a2ca86c2d0fbf54fcf7071982ed8be6c57e63e3d7731",
+        "line": 7327,
+        "column": 32,
+        "fatal": false,
+        "severity": 2
+      }
+    ],
+    "statementSha256": "f29bbcf68b8ca6e5099b8db9c69d86522233a3569b5a3a426d9001d0bb08a60e",
+    "statementUnchanged": true
+  }
+]

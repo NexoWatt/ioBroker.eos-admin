@@ -1,0 +1,83 @@
+{
+  "recordedUtc": "2026-11-24T21:41:19.382599+00:00",
+  "uid": 1000,
+  "gid": 1000,
+  "source": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+  "baseline": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+  "files": [
+    {
+      "path": "ui/src-ts/runtime-executables/ems/modules/tariff-provider.ts",
+      "baseline920Sha256": "217202ce9ba4fde752c10636edc4f6020ecb9af79ce98d86fedde79c0738ce64",
+      "candidate921Sha256": "361637f67d401c2018f9440564391b01cf5df34f1fccd2377ba7b057adc38642"
+    },
+    {
+      "path": "ui/src-ts/runtime-executables/ems/services/tariff-provider-registry.ts",
+      "baseline920Sha256": "ccedb21357657cc4dd04ef45dba76592fe81aa5154366185d65b0dd524a4cb6b",
+      "candidate921Sha256": "ec084b73b68e40694711b32e56424a073f187912959dfca649d0962bebb19f5f"
+    },
+    {
+      "path": "ui/src-ts/runtime-executables/lib/influx-direct.ts",
+      "baseline920Sha256": "f9378b74a08776253a63ccca58ba50b6ec74c88f07ad934caf921f732537bfc8",
+      "candidate921Sha256": "f9378b74a08776253a63ccca58ba50b6ec74c88f07ad934caf921f732537bfc8"
+    },
+    {
+      "path": "ui/src-ts/runtime-executables/lib/influx-history-runtime.ts",
+      "baseline920Sha256": "69439306eafe8fca4aa96f13ffd0fc24db8c528ea4b9bdb495636509b041741d",
+      "candidate921Sha256": "69439306eafe8fca4aa96f13ffd0fc24db8c528ea4b9bdb495636509b041741d"
+    },
+    {
+      "path": "ui/src-ts/runtime-executables/lib/influx-config.ts",
+      "baseline920Sha256": "f729bc8db4b96d8a3174ada1e38f6d9efbe1c5dc32a79ce608873348027ffad5",
+      "candidate921Sha256": "f729bc8db4b96d8a3174ada1e38f6d9efbe1c5dc32a79ce608873348027ffad5"
+    },
+    {
+      "path": "ui/src-ts/runtime-executables/lib/influx-network-policy.ts",
+      "baseline920Sha256": "a367d4c267f8fe76642292e32f6383531e914c5f10222ff50b375bfe4aa43474",
+      "candidate921Sha256": "a367d4c267f8fe76642292e32f6383531e914c5f10222ff50b375bfe4aa43474"
+    },
+    {
+      "path": "test/eos-tariff-initial-outage.test.cjs",
+      "baseline920Sha256": null,
+      "candidate921Sha256": "ded6838b299242fd2462c81af31817b249cc8c9a1613774d0e2a0f37e17c6720"
+    },
+    {
+      "path": "test/eos-tariff-cancel-transport.test.cjs",
+      "baseline920Sha256": null,
+      "candidate921Sha256": "2d0d10bd66aad3149a6f7a11cf9a9c649abebf8ac63acaf030d9c8ac0a240545"
+    },
+    {
+      "path": "test/eos-influx-sustained-outage.test.cjs",
+      "baseline920Sha256": null,
+      "candidate921Sha256": "691b6de265344e4ea6d7959362cc17912f923f7c6bf53c40f1cbea1fa7810f12"
+    },
+    {
+      "path": "test/eos-customer-tariff-runtime.test.cjs",
+      "baseline920Sha256": "e3bb9191a7165bbf62e39d4ef4baf4c68249d7e729b1dcf31f4d5c2ddc3f72df",
+      "candidate921Sha256": "b820e330090edfd9782dcd8631689e156073eb37985fdddb1916e2fbcf56d02c"
+    },
+    {
+      "path": "test/eos-tariff-quarter-hour-runtime.test.cjs",
+      "baseline920Sha256": "f649d1b92845a9e52312628559e8a3f128d4a19fc7dda67daecc9ea2efbd07bc",
+      "candidate921Sha256": "f60130cafac9734e64c8a201a0a3c4fe1322bd726bb6e9be4d3880a1ba38257c"
+    }
+  ],
+  "additionalChecks": [
+    {
+      "command": "node --check ui/src-ts/runtime-executables/ems/modules/tariff-provider.ts",
+      "exitCode": 0
+    },
+    {
+      "command": "node --check ui/src-ts/runtime-executables/ems/services/tariff-provider-registry.ts",
+      "exitCode": 0
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p ui/tsconfig.influx-history-runtime.json",
+      "exitCode": 0
+    },
+    {
+      "command": "node /workspace/scratch/741f792566ea/audit-921/history/lint-scope.cjs",
+      "exitCode": 0,
+      "scope": "No new diagnostics compared to920;3 unchanged no-empty diagnostics in legacy tariff-provider remain"
+    }
+  ]
+}

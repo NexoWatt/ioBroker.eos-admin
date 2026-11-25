@@ -1,0 +1,148 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: upload admission has no unbounded queue behind a stalled filesystem
+ok 1 - upload admission has no unbounded queue behind a stalled filesystem
+  ---
+  duration_ms: 60.861965
+  type: 'test'
+  ...
+# Subtest: total upload deadline includes admission and late filesystem completion never starts a parser
+ok 2 - total upload deadline includes admission and late filesystem completion never starts a parser
+  ---
+  duration_ms: 154.707573
+  type: 'test'
+  ...
+# Subtest: client abort during admission retires its deadline and never parses later
+ok 3 - client abort during admission retires its deadline and never parses later
+  ---
+  duration_ms: 54.35735
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: HTTPS accepts bounded JSON with explicit TLS verification, identity encoding and no pooling
+ok 4 - HTTPS accepts bounded JSON with explicit TLS verification, identity encoding and no pooling
+  ---
+  duration_ms: 6.189981
+  type: 'test'
+  ...
+# Subtest: HTTPS rejects scheme, credentials, fragments, alternate port and non-allowlisted host before transport
+ok 5 - HTTPS rejects scheme, credentials, fragments, alternate port and non-allowlisted host before transport
+  ---
+  duration_ms: 2.19834
+  type: 'test'
+  ...
+# Subtest: HTTPS rejects redirects without contacting redirect targets
+ok 6 - HTTPS rejects redirects without contacting redirect targets
+  ---
+  duration_ms: 0.935729
+  type: 'test'
+  ...
+# Subtest: HTTPS rejects oversized declared and streamed responses and compressed bodies
+ok 7 - HTTPS rejects oversized declared and streamed responses and compressed bodies
+  ---
+  duration_ms: 3.138626
+  type: 'test'
+  ...
+# Subtest: HTTPS rejects malformed or primitive JSON without exposing body/error text
+ok 8 - HTTPS rejects malformed or primitive JSON without exposing body/error text
+  ---
+  duration_ms: 2.379984
+  type: 'test'
+  ...
+# Subtest: HTTPS hard deadline destroys a request before response including DNS/connect stalls
+ok 9 - HTTPS hard deadline destroys a request before response including DNS/connect stalls
+  ---
+  duration_ms: 21.203267
+  type: 'test'
+  ...
+# Subtest: HTTPS hard deadline also bounds slow response bodies
+ok 10 - HTTPS hard deadline also bounds slow response bodies
+  ---
+  duration_ms: 21.389647
+  type: 'test'
+  ...
+# Subtest: HTTP bind is literal loopback unless TLS enabled; nonloopback Host and peer are rejected
+ok 11 - HTTP bind is literal loopback unless TLS enabled; nonloopback Host and peer are rejected
+  ---
+  duration_ms: 1.326919
+  type: 'test'
+  ...
+# Subtest: gzip preview returns text but rejects bombs, oversized input, and invalid gzip
+ok 12 - gzip preview returns text but rejects bombs, oversized input, and invalid gzip
+  ---
+  duration_ms: 33.075804
+  type: 'test'
+  ...
+# Subtest: gzip preview concurrency is bounded independently of compressed size
+ok 13 - gzip preview concurrency is bounded independently of compressed size
+  ---
+  duration_ms: 43.215031
+  type: 'test'
+  ...
+# Subtest: system-info calls coalesce and cache npm version; no shell is used
+ok 14 - system-info calls coalesce and cache npm version; no shell is used
+  ---
+  duration_ms: 2.483179
+  type: 'test'
+  ...
+# Subtest: upload budget admits two across routes; third denied and aborted temporary files cleaned
+ok 15 - upload budget admits two across routes; third denied and aborted temporary files cleaned
+  ---
+  duration_ms: 72.307574
+  type: 'test'
+  ...
+# Subtest: upload parser receives actual total/file/part limits and private temporary directory
+ok 16 - upload parser receives actual total/file/part limits and private temporary directory
+  ---
+  duration_ms: 33.027672
+  type: 'test'
+  ...
+# Subtest: restore storage replaces an existing regular file without modifying unrelated data
+ok 17 - restore storage replaces an existing regular file without modifying unrelated data
+  ---
+  duration_ms: 36.102677
+  type: 'test'
+  ...
+# Subtest: POSIX restore storage replaces a destination symlink and persists restrictive permissions
+ok 18 - POSIX restore storage replaces a destination symlink and persists restrictive permissions
+  ---
+  duration_ms: 32.9799
+  type: 'test'
+  ...
+# Subtest: retained upload data counts against shared quota at the next admission
+ok 19 - retained upload data counts against shared quota at the next admission
+  ---
+  duration_ms: 33.818007
+  type: 'test'
+  ...
+# Subtest: upload total deadline aborts a still-active parser and removes its partial directory
+ok 20 - upload total deadline aborts a still-active parser and removes its partial directory
+  ---
+  duration_ms: 52.016955
+  type: 'test'
+  ...
+# Subtest: upload admission rejects low disk space before constructing parser
+ok 21 - upload admission rejects low disk space before constructing parser
+  ---
+  duration_ms: 1.802064
+  type: 'test'
+  ...
+# Subtest: synchronous parser initialization failure releases reserved capacity
+ok 22 - synchronous parser initialization failure releases reserved capacity
+  ---
+  duration_ms: 65.658736
+  type: 'test'
+  ...
+1..22
+# tests 22
+# suites 0
+# pass 22
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 544.71564

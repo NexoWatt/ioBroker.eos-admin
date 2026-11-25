@@ -176,6 +176,10 @@ async function pipeline(t, options = {}) {
     fs.rmSync(directory, { recursive: true, force: true });
   });
   const request = async (url, method = 'GET', body) => {
+    if (method === 'PUT' && /^\/api\/eos\/modules\/[^/]+$/.test(url) && body && !Object.hasOwn(body, 'expectedConfigurationRevision')) {
+      const loaded = await request(url);
+      body = { ...body, expectedConfigurationRevision: loaded.data.configurationRevision };
+    }
     const response = await fetch(origin + url, { method, headers: { Cookie: `fixture=${token}`, Origin: origin,
       'X-NW-CSRF': token, ...(body === undefined ? {} : { 'Content-Type': 'application/json' }) },
     ...(body === undefined ? {} : { body: JSON.stringify(body) }) });

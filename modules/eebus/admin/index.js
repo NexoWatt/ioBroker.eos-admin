@@ -9,12 +9,13 @@
     /** @typedef {[string, string, 'checkbox'|'number'|'text'|'password', boolean|number|string, number?, number?]} Field */
     /** @typedef {{id:string,name:string,ski:string,fingerprint:string,trusted:boolean,state:string}} Device */
     /** @typedef {{running:boolean,shipPort:number|undefined,commandDryRun:boolean,localSki:string,certificateFingerprint:string,devices:Device[]}} Details */
-    /** @typedef {{csrfToken?:string,config:Record<string,unknown>,status:{reason:string,state:string,details:Details}}} ApiData */
+    /** @typedef {{csrfToken?:string,configurationRevision?:string,config:Record<string,unknown>,status:{reason:string,state:string,details:Details}}} ApiData */
     /** @param {unknown} value @returns {value is Record<string,unknown>} */
     const record = value => !!value && typeof value === 'object' && !Array.isArray(value);
     /** @param {unknown} raw @returns {ApiData} */
     function parseData(raw) {
         if (!record(raw)) throw new Error('EEBUS_API_RESPONSE');
+        if (raw.error === 'EOS_MODULE_CONFIG_CONFLICT') throw new Error('Die EEBus-Einstellungen wurden inzwischen geändert. Deine Eingaben bleiben erhalten. Seite neu laden und Änderungen mit dem gespeicherten Stand abgleichen.');
         if (raw.error) throw new Error(typeof raw.error === 'string' ? raw.error : 'EEBUS_API_ERROR');
         const status = record(raw.status) ? raw.status : {};
         const data = record(status.details) ? status.details : status;
@@ -22,12 +23,14 @@
             id: String(device.id || ''), name: String(device.name || ''), ski: String(device.ski || ''),
             fingerprint: String(device.fingerprint || ''), trusted: device.trusted === true, state: String(device.state || '') }));
         return { csrfToken: typeof raw.csrfToken === 'string' ? raw.csrfToken : undefined,
+            configurationRevision: typeof raw.configurationRevision === 'string' ? raw.configurationRevision : undefined,
             config: record(raw.config) ? raw.config : {}, status: { reason: String(status.reason || ''), state: String(status.state || ''),
                 details: { running: data.running === true, shipPort: typeof data.shipPort === 'number' ? data.shipPort : undefined,
                     commandDryRun: data.commandDryRun !== false, localSki: String(data.localSki || ''),
                     certificateFingerprint: String(data.certificateFingerprint || ''), devices } } };
     }
     let token = '';
+    let configurationRevision = '';
     let busy = false;
     let initial = true;
     /** @type {Field[]} */
@@ -117,7 +120,7 @@
         row(status, 'Steuerbefehle', details.commandDryRun !== false ? 'Testmodus – keine Ausgabe' : 'Ausgabe freigegeben');
         row(status, 'Eigener SKI', details.localSki || 'Wird beim ersten Start angelegt');
         row(status, 'Zertifikat-Fingerabdruck', details.certificateFingerprint || '–');
-        if (initial || replaceConfig) { showConfig(data.config || {}); initial = false; }
+        if (initial || replaceConfig) { showConfig(data.config || {}); configurationRevision = data.configurationRevision || ''; initial = false; }
         const list = element('devices'); list.replaceChildren();
         if (!Array.isArray(details.devices) || !details.devices.length) list.textContent = 'Noch keine Geräte erkannt. Aktivierung, Netzwerk und EEBus an der Gegenstelle prüfen.';
         for (const device of (Array.isArray(details.devices) ? details.devices : [])) {
@@ -148,7 +151,7 @@
     element('refresh').addEventListener('click', () => operation(async () => { await render(); message('Status aktualisiert.'); }));
     element('save').addEventListener('click', () => operation(async () => {
         const config = readConfig();
-        await request('', 'PUT', { config }); await render(true); message('Konfiguration gespeichert.');
+        await request('', 'PUT', { config, expectedConfigurationRevision: configurationRevision }); await render(true); message('Konfiguration gespeichert.');
     }));
     element('import').addEventListener('click', () => operation(async () => {
         const instance = inputElement('legacy').value.trim();

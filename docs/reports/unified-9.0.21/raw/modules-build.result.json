@@ -1,0 +1,14 @@
+{
+  "name": "modules-build",
+  "command": [
+    "npm",
+    "run",
+    "build:modules"
+  ],
+  "cwd": "source-921/iobroker.eos-admin",
+  "startedAt": "2026-11-24T22:00:57.691894+00:00",
+  "durationSeconds": 3.986,
+  "exitCode": 0,
+  "log": "/workspace/scratch/741f792566ea/setup-921/modules-build.log",
+  "sha256": "6e37ea667ef68c17253def98294e0b1522da9399507b32686475393d89c3b834"
+}

@@ -1,0 +1,30 @@
+(node:37) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ actual UnifiedSessions permits the explicit customer update capability without general administrator rights (48.415169ms)
+✔ anonymous, cross-origin, CSRF, initial-password and unapproved roles never reach update actions (10.402637ms)
+✔ no update route accepts arbitrary URLs, paths, commands, alternate versions or extra fields (14.691501ms)
+✔ malformed and oversized JSON have bounded JSON errors without stack paths or request secrets (5.033186ms)
+✔ fresh session revocation, role changes and mandatory password changes are checked at the final service fence (22.095325ms)
+✔ status is reauthorized after a slow service read and internal error details never enter responses (8.318631ms)
+✔ HTTP timeout revokes late prepare/start authority even when the service operation cannot be cancelled (57.121247ms)
+✔ client disconnect revokes the callback before any later prepare/start effect (46.744355ms)
+✔ pending auth database work retains bounded admission after HTTP timeout until it really settles (53.297487ms)
+✔ incomplete JSON bodies are cancelled on timeout or disconnect and cannot retain every admission slot (83.712489ms)
+✔ snapshot preserves every configured module and false/zero/empty customer values without any write API (3.758096ms)
+✔ protected UI-store migration selects the real legacy installer and customer namespace (0.743329ms)
+✔ old native module envelope remains supported only in the absence of its authoritative store (0.672823ms)
+✔ legacy namespace and protected store identity are validated before reading unrelated data (1.160256ms)
+✔ configured legacy required states cannot silently disappear from the update snapshot (0.794255ms)
+✔ busy and changing customer configuration fail closed rather than returning a mixed snapshot (0.820785ms)
+✔ bounded decoder refuses nested v2 chains and malformed ciphertext without exposing plaintext errors (0.344449ms)
+✔ normalization bounds size/depth/node count and rejects dangerous keys or non-JSON values (7.477123ms)
+✔ settings scope and count are bounded without an all-state database scan (1.766649ms)
+✔ cumulative encoded JSON bytes are bounded before serialization or configuration JSON parsing (82.276153ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 820.627644

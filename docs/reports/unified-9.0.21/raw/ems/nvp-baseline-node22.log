@@ -1,0 +1,170 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: first valid 600W NVP initializes filter from the measurement
+not ok 1 - first valid 600W NVP initializes filter from the measurement
+  ---
+  duration_ms: 5.042784
+  type: 'test'
+  location: '/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-ems-nvp-recovery.test.cjs:40:37'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    55 !== 600
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 600
+  actual: 55
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-ems-nvp-recovery.test.cjs:43:12)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: first valid -600W NVP initializes filter from the measurement
+not ok 2 - first valid -600W NVP initializes filter from the measurement
+  ---
+  duration_ms: 0.933356
+  type: 'test'
+  location: '/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-ems-nvp-recovery.test.cjs:40:37'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    -55 !== -600
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: -600
+  actual: -55
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-ems-nvp-recovery.test.cjs:43:12)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: first valid 0W NVP initializes filter from the measurement
+ok 3 - first valid 0W NVP initializes filter from the measurement
+  ---
+  duration_ms: 0.641596
+  type: 'test'
+  ...
+# Subtest: a genuine previous0W remains a valid averaging baseline
+ok 4 - a genuine previous0W remains a valid averaging baseline
+  ---
+  duration_ms: 1.624807
+  type: 'test'
+  ...
+# Subtest: fresh recovery after disconnected discards obsolete opposite-sign smoothing
+not ok 5 - fresh recovery after disconnected discards obsolete opposite-sign smoothing
+  ---
+  duration_ms: 1.917628
+  type: 'test'
+  location: '/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-ems-nvp-recovery.test.cjs:55:79'
+  failureType: 'testCodeFailure'
+  error: |-
+    fresh import must not continue an obsolete export average
+    
+    -4972 !== 600
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 600
+  actual: -4972
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-ems-nvp-recovery.test.cjs:72:12)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: fresh recovery after stale discards obsolete opposite-sign smoothing
+not ok 6 - fresh recovery after stale discards obsolete opposite-sign smoothing
+  ---
+  duration_ms: 1.214198
+  type: 'test'
+  location: '/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-ems-nvp-recovery.test.cjs:55:79'
+  failureType: 'testCodeFailure'
+  error: |-
+    fresh import must not continue an obsolete export average
+    
+    -4972 !== 600
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 600
+  actual: -4972
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-ems-nvp-recovery.test.cjs:72:12)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: fresh recovery after missing discards obsolete opposite-sign smoothing
+not ok 7 - fresh recovery after missing discards obsolete opposite-sign smoothing
+  ---
+  duration_ms: 1.205275
+  type: 'test'
+  location: '/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-ems-nvp-recovery.test.cjs:55:79'
+  failureType: 'testCodeFailure'
+  error: |-
+    fresh import must not continue an obsolete export average
+    
+    -4972 !== 600
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 600
+  actual: -4972
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-ems-nvp-recovery.test.cjs:72:12)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: fresh recovery after resolver-error discards obsolete opposite-sign smoothing
+not ok 8 - fresh recovery after resolver-error discards obsolete opposite-sign smoothing
+  ---
+  duration_ms: 1.409102
+  type: 'test'
+  location: '/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-ems-nvp-recovery.test.cjs:55:79'
+  failureType: 'testCodeFailure'
+  error: |-
+    fresh import must not continue an obsolete export average
+    
+    -4972 !== 600
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 600
+  actual: -4972
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-ems-nvp-recovery.test.cjs:72:12)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: overlapping requests retain one actual control cycle and release after rejected work
+ok 9 - overlapping requests retain one actual control cycle and release after rejected work
+  ---
+  duration_ms: 3.249903
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 3
+# fail 6
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 660.233296

@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "recordedAt": "2026-11-24T22:05:19.947668+00:00",
+  "sourceRoot": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+  "checks": [
+    {
+      "command": "node --test test/eos-customer-updates.test.cjs",
+      "nodeVersion": "24.22.3",
+      "exitCode": 0,
+      "testsPassed": 16,
+      "log": "service-node24.log",
+      "logSha256": "053ea36bca5b110a9860d89ec82a01ce2ab3b01a08c7901ea4154792bc059554",
+      "logModifiedAt": "2026-11-24T22:03:08.130161+00:00"
+    },
+    {
+      "command": "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node --test test/eos-customer-updates.test.cjs",
+      "nodeVersion": "22.23.4",
+      "exitCode": 0,
+      "testsPassed": 16,
+      "log": "service-node22.log",
+      "logSha256": "9b76898e70dd04e8bd7cc95033025655b27367d0b2edeffd8ffa451e9b70bf65",
+      "logModifiedAt": "2026-11-24T22:03:08.246163+00:00"
+    },
+    {
+      "command": "node node_modules/typescript/bin/tsc -p tsconfig.eos-customer-updates.json",
+      "nodeVersion": "24.22.3",
+      "exitCode": 0,
+      "testsPassed": null,
+      "log": "typecheck.log",
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "logModifiedAt": "2026-11-24T22:03:22.782470+00:00"
+    },
+    {
+      "command": "node node_modules/eslint/bin/eslint.js src/lib/eosCustomerUpdateTransport.ts src/lib/eosCustomerUpdates.ts",
+      "nodeVersion": "24.22.3",
+      "exitCode": 0,
+      "testsPassed": null,
+      "log": "lint.log",
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "logModifiedAt": "2026-11-24T22:04:06.523391+00:00"
+    }
+  ],
+  "sourceHashes": {
+    "src/lib/eosCustomerUpdates.ts": "3ffe01fd10350497d25212e268c178390a18cfc4e379b5c585a535dc26eaa2ea",
+    "src/lib/eosCustomerUpdateTransport.ts": "6f0761fc8046fbfd96816686231aba3fd103f3c9726da84ae830d39069bb7d33",
+    "test/eos-customer-updates.test.cjs": "1e9e3ec6e23f091b8cd78f3d52d2ca710957d665c89ca7d7d1c7b817aa54df21",
+    "tsconfig.eos-customer-updates.json": "6693d33c58274363a59bfb250fd91b43d3737af8cbd61a4abe1d6035a67479cb",
+    "docs/reports/unified-9.0.21/CUSTOMER_UPDATE_BACKEND_REVIEW.md": "884a1e525928fe4f4412c7d9b3d20e541af5bcab3abc0d4a91033b2feb588de9"
+  },
+  "actualInstallPerformedByTheseTests": false,
+  "actualControllerProof": "separate isolated controller fixture owned by stability_history_921",
+  "evidencePackagedAt": "2026-11-24T22:07:29.938630+00:00",
+  "deliveredSourceRootRelativeToReceipt": "../../../../.."
+}

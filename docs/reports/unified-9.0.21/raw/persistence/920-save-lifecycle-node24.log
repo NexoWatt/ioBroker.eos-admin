@@ -1,0 +1,59 @@
+✖ timed-out save keeps one transaction until actual commit and exposes the saved customer configuration after late completion (5011.221049ms)
+✖ stop during the last database read prevents a new module configuration write (3.53991ms)
+✔ rejected persistent write preserves old settings and releases admission for a corrected retry (4.500957ms)
+✖ shutdown during an already-issued write retains the accepted durable settings without reopening the stopped runtime (2.067953ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 1
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5149.355767
+
+✖ failing tests:
+
+test at test/eos-module-save-lifecycle.test.cjs:44:1
+✖ timed-out save keeps one transaction until actual commit and exposes the saved customer configuration after late completion (5011.221049ms)
+  AssertionError [ERR_ASSERTION]: an HTTP deadline must not release an unfinished configuration transaction
+  
+  false !== true
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-module-save-lifecycle.test.cjs:53:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-module-save-lifecycle.test.cjs:66:1
+✖ stop during the last database read prevents a new module configuration write (3.53991ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-module-save-lifecycle.test.cjs:73:64)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /EOS_MODULE_(BUSY|STOPPED)/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at test/eos-module-save-lifecycle.test.cjs:90:1
+✖ shutdown during an already-issued write retains the accepted durable settings without reopening the stopped runtime (2.067953ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-module-save-lifecycle.test.cjs:97:64)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /EOS_MODULE_(BUSY|STOPPED)/,
+    operator: 'rejects',
+    diff: 'simple'
+  }

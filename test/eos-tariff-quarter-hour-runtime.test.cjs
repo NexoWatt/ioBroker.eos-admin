@@ -65,6 +65,8 @@ test('local calendar splitting retains 92/96/100 quarter-hours and the next day 
     assert.equal(registry.splitTodayTomorrow(intervals, tomorrow - 1800000, 'Europe/Berlin').tomorrow.length, 92);
 });
 
+async function settledTick(instance) { await instance.tick(); await instance._fetchPromise; }
+
 async function providerFixture(t) {
     const start = Date.parse('2026-11-24T00:00:00+01:00');
     const clock = { now: start + 14 * 60000 + 50000 };
@@ -91,33 +93,33 @@ async function providerFixture(t) {
 
 test('actual provider tick selects each cached quarter-hour without network calls and refreshes before customer freshness expires', async t => {
     const x = await providerFixture(t);
-    await x.instance.tick();
+    await settledTick(x.instance);
     const fetchedAt = x.clock.now;
     const next = x.instance._nextFetchMs;
     assert.equal(x.instance._configuration.resolutionMinutes, 15);
     assert.equal(x.adapter.config.tariffProvider.resolutionMinutes, 60, 'no persisted settings migration');
     assert.equal(x.adapter.config.tariffProvider.maxStaleMinutes, 180);
     assert.equal(x.states.get('tariffProvider.currentPriceEurPerKwh').val, 0.21);
-    x.clock.now += 20000; await x.instance.tick();
+    x.clock.now += 20000; await settledTick(x.instance);
     assert.equal(x.states.get('tariffProvider.currentPriceEurPerKwh').val, 0);
-    x.clock.now += 900000; await x.instance.tick();
+    x.clock.now += 900000; await settledTick(x.instance);
     assert.equal(x.states.get('tariffProvider.currentPriceEurPerKwh').val, -0.04);
     assert.equal(x.calls(), 1, 'changing the current slot reads the existing validated cache');
     assert(next <= fetchedAt + 175 * 60000, 'successful next fetch leaves at least 5 minutes of freshness reserve after jitter');
-    x.clock.now = next; await x.instance.tick();
+    x.clock.now = next; await settledTick(x.instance);
     assert.equal(x.calls(), 2);
     assert.equal(x.states.get('tariffProvider.fresh').val, true);
     assert.equal(x.instance._lastSuccessMs, next);
 });
 
 test('provider failures do not extend freshness, do not spin requests and clear expired prices instead of creating zero', async t => {
-    const x = await providerFixture(t); await x.instance.tick();
+    const x = await providerFixture(t); await settledTick(x.instance);
     const success = x.instance._lastSuccessMs;
     x.fail();
-    x.clock.now = x.instance._nextFetchMs; await x.instance.tick();
+    x.clock.now = x.instance._nextFetchMs; await settledTick(x.instance);
     assert.equal(x.instance._lastSuccessMs, success);
     assert(x.instance._nextFetchMs - x.clock.now >= 60000, 'failure near the deadline has a bounded retry cadence');
-    x.clock.now = success + 180 * 60000 + 1; await x.instance.tick();
+    x.clock.now = success + 180 * 60000 + 1; await settledTick(x.instance);
     assert.equal(x.states.get('tariffProvider.currentPriceEurPerKwh').val, null);
     assert.equal(x.states.get('tariffProvider.averagePriceEurPerKwh').val, null);
     assert.equal(x.states.get('tariffProvider.pricesTodayJson').val, '[]');
@@ -132,11 +134,11 @@ test('other providers retain their resolution and normal jittered cadence, while
     await x.instance.invalidateConfiguration();
     // The upper jitter boundary is deliberately exercised, not the remote API.
     x.instance._stableJitterFactor = () => 1.1;
-    await x.instance.tick();
+    await settledTick(x.instance);
     assert.equal(x.instance._configuration.resolutionMinutes, 60);
     assert.equal(x.instance._nextFetchMs, x.clock.now + 33 * 60000, 'the established 30-minute EnergyZero cadence plus jitter remains unchanged');
     x.adapter.config.tariffProvider = { ...x.adapter.config.tariffProvider, maxStaleMinutes: 30 };
-    await x.instance.invalidateConfiguration(); await x.instance.tick();
+    await x.instance.invalidateConfiguration(); await settledTick(x.instance);
     assert.equal(x.instance._nextFetchMs, x.clock.now + 27 * 60000);
     assert.equal(x.adapter.config.tariffProvider.maxStaleMinutes, 30);
     assert.equal(x.instance._configuration.resolutionMinutes, 60);

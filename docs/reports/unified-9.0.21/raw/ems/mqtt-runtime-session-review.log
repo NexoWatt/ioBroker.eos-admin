@@ -1,0 +1,119 @@
+{
+  "offlineWrites": 8,
+  "writesAfterOffline": [
+    {
+      "id": "devices.review.info.connection",
+      "val": true,
+      "ack": true,
+      "oldSessionAlreadyInvalid": true
+    },
+    {
+      "id": "devices.review.info.lastError",
+      "val": "",
+      "ack": true,
+      "oldSessionAlreadyInvalid": true
+    },
+    {
+      "id": "devices.review.aliases.comm.connected",
+      "val": true,
+      "ack": true,
+      "oldSessionAlreadyInvalid": true
+    },
+    {
+      "id": "devices.review.aliases.comm.lastError",
+      "val": "",
+      "ack": true,
+      "oldSessionAlreadyInvalid": true
+    },
+    {
+      "id": "devices.review.aliases.alarm.offline",
+      "val": false,
+      "ack": true,
+      "oldSessionAlreadyInvalid": true
+    },
+    {
+      "id": "devices.review.aliases.r.soc",
+      "val": 80,
+      "ack": true,
+      "oldSessionAlreadyInvalid": true
+    },
+    {
+      "id": "devices.review.aliases.r.power",
+      "val": 12,
+      "ack": true,
+      "oldSessionAlreadyInvalid": true
+    },
+    {
+      "id": "devices.review.aliases.r.powerCharge",
+      "val": 0,
+      "ack": true,
+      "oldSessionAlreadyInvalid": true
+    },
+    {
+      "id": "devices.review.aliases.r.powerDischarge",
+      "val": 12,
+      "ack": true,
+      "oldSessionAlreadyInvalid": true
+    },
+    {
+      "id": "devices.review.aliases.alarm.fault",
+      "val": false,
+      "ack": true,
+      "oldSessionAlreadyInvalid": true
+    },
+    {
+      "id": "devices.review.aliases.v1.comm.connected",
+      "val": true,
+      "ack": true,
+      "oldSessionAlreadyInvalid": true
+    },
+    {
+      "id": "devices.review.aliases.v1.comm.lastError",
+      "val": "",
+      "ack": true,
+      "oldSessionAlreadyInvalid": true
+    },
+    {
+      "id": "devices.review.aliases.v1.alarm.offline",
+      "val": false,
+      "ack": true,
+      "oldSessionAlreadyInvalid": true
+    },
+    {
+      "id": "devices.review.aliases.v1.r.soc",
+      "val": 80,
+      "ack": true,
+      "oldSessionAlreadyInvalid": true
+    },
+    {
+      "id": "devices.review.aliases.v1.r.power",
+      "val": 12,
+      "ack": true,
+      "oldSessionAlreadyInvalid": true
+    },
+    {
+      "id": "devices.review.aliases.v1.r.powerCharge",
+      "val": 0,
+      "ack": true,
+      "oldSessionAlreadyInvalid": true
+    },
+    {
+      "id": "devices.review.aliases.v1.r.powerDischarge",
+      "val": 12,
+      "ack": true,
+      "oldSessionAlreadyInvalid": true
+    },
+    {
+      "id": "devices.review.aliases.v1.alarm.fault",
+      "val": false,
+      "ack": true,
+      "oldSessionAlreadyInvalid": true
+    },
+    {
+      "id": "devices.review.aliases.v1.r.essActivePower",
+      "val": 12,
+      "ack": true,
+      "oldSessionAlreadyInvalid": true
+    }
+  ]
+}

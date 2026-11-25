@@ -1,0 +1,66 @@
+[
+  {
+    "command": [
+      "node",
+      "--test",
+      "test/eos-tariff-initial-outage.test.cjs",
+      "test/eos-tariff-cancel-transport.test.cjs",
+      "test/eos-customer-tariff-runtime.test.cjs",
+      "test/eos-tariff-quarter-hour-runtime.test.cjs",
+      "test/eos-influx-history-runtime.test.cjs",
+      "test/eos-influx-direct.test.cjs",
+      "test/eos-influx-security.test.cjs",
+      "test/eos-influx-sustained-outage.test.cjs"
+    ],
+    "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+    "sourceOverride": null,
+    "startedUtc": "2026-11-24T21:39:09.361506+00:00",
+    "durationSeconds": 10.822,
+    "exitCode": 0,
+    "log": "regression-node24.log",
+    "logSha256": "a830f32f969bc9dbd2cc1251e2cb89f958fde385fcab1d5dc367916f440778a4"
+  },
+  {
+    "command": [
+      "node",
+      "ui/scripts/verify-cra-tariff.cjs",
+      "--source"
+    ],
+    "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+    "sourceOverride": null,
+    "startedUtc": "2026-11-24T21:39:20.184225+00:00",
+    "durationSeconds": 5.45,
+    "exitCode": 0,
+    "log": "cra-tariff-source-node24.log",
+    "logSha256": "0ff717564380a58d5b96ee9a3485cadef58034b3dff629b44fe8afd1d365bd0b"
+  },
+  {
+    "command": [
+      "node",
+      "--test",
+      "--test-name-pattern=921-HIS-001|unresolved cloud",
+      "test/eos-tariff-initial-outage.test.cjs"
+    ],
+    "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+    "sourceOverride": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+    "startedUtc": "2026-11-24T21:39:25.635275+00:00",
+    "durationSeconds": 0.25,
+    "exitCode": 1,
+    "log": "baseline920-outage-node24.log",
+    "logSha256": "afca05c845ca6c384b220dcb94e839b6776965f2e32eb2ac4718a5b0239b4e9e"
+  },
+  {
+    "command": [
+      "node",
+      "--test",
+      "test/eos-influx-sustained-outage.test.cjs"
+    ],
+    "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+    "sourceOverride": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+    "startedUtc": "2026-11-24T21:39:25.885447+00:00",
+    "durationSeconds": 5.719,
+    "exitCode": 0,
+    "log": "baseline920-influx-sequence-node24.log",
+    "logSha256": "5bd791e83ec4808c5f2d26180aa7fd1deac6eb68cc886b2f0d0a43adb81d7824"
+  }
+]

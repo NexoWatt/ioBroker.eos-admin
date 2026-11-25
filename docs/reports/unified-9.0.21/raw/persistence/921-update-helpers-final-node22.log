@@ -1,0 +1,137 @@
+(node:6) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:13) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# Subtest: actual UnifiedSessions permits the explicit customer update capability without general administrator rights
+ok 1 - actual UnifiedSessions permits the explicit customer update capability without general administrator rights
+  ---
+  duration_ms: 78.24099
+  type: 'test'
+  ...
+# Subtest: anonymous, cross-origin, CSRF, initial-password and unapproved roles never reach update actions
+ok 2 - anonymous, cross-origin, CSRF, initial-password and unapproved roles never reach update actions
+  ---
+  duration_ms: 18.229747
+  type: 'test'
+  ...
+# Subtest: no update route accepts arbitrary URLs, paths, commands, alternate versions or extra fields
+ok 3 - no update route accepts arbitrary URLs, paths, commands, alternate versions or extra fields
+  ---
+  duration_ms: 20.859676
+  type: 'test'
+  ...
+# Subtest: malformed and oversized JSON have bounded JSON errors without stack paths or request secrets
+ok 4 - malformed and oversized JSON have bounded JSON errors without stack paths or request secrets
+  ---
+  duration_ms: 6.230497
+  type: 'test'
+  ...
+# Subtest: fresh session revocation, role changes and mandatory password changes are checked at the final service fence
+ok 5 - fresh session revocation, role changes and mandatory password changes are checked at the final service fence
+  ---
+  duration_ms: 30.669951
+  type: 'test'
+  ...
+# Subtest: status is reauthorized after a slow service read and internal error details never enter responses
+ok 6 - status is reauthorized after a slow service read and internal error details never enter responses
+  ---
+  duration_ms: 10.580614
+  type: 'test'
+  ...
+# Subtest: HTTP timeout revokes late prepare/start authority even when the service operation cannot be cancelled
+ok 7 - HTTP timeout revokes late prepare/start authority even when the service operation cannot be cancelled
+  ---
+  duration_ms: 58.235279
+  type: 'test'
+  ...
+# Subtest: client disconnect revokes the callback before any later prepare/start effect
+ok 8 - client disconnect revokes the callback before any later prepare/start effect
+  ---
+  duration_ms: 50.644568
+  type: 'test'
+  ...
+# Subtest: pending auth database work retains bounded admission after HTTP timeout until it really settles
+ok 9 - pending auth database work retains bounded admission after HTTP timeout until it really settles
+  ---
+  duration_ms: 57.646958
+  type: 'test'
+  ...
+# Subtest: incomplete JSON bodies are cancelled on timeout or disconnect and cannot retain every admission slot
+ok 10 - incomplete JSON bodies are cancelled on timeout or disconnect and cannot retain every admission slot
+  ---
+  duration_ms: 92.810278
+  type: 'test'
+  ...
+# (node:14) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: snapshot preserves every configured module and false/zero/empty customer values without any write API
+ok 11 - snapshot preserves every configured module and false/zero/empty customer values without any write API
+  ---
+  duration_ms: 3.888112
+  type: 'test'
+  ...
+# Subtest: protected UI-store migration selects the real legacy installer and customer namespace
+ok 12 - protected UI-store migration selects the real legacy installer and customer namespace
+  ---
+  duration_ms: 0.726123
+  type: 'test'
+  ...
+# Subtest: old native module envelope remains supported only in the absence of its authoritative store
+ok 13 - old native module envelope remains supported only in the absence of its authoritative store
+  ---
+  duration_ms: 0.767856
+  type: 'test'
+  ...
+# Subtest: legacy namespace and protected store identity are validated before reading unrelated data
+ok 14 - legacy namespace and protected store identity are validated before reading unrelated data
+  ---
+  duration_ms: 1.061188
+  type: 'test'
+  ...
+# Subtest: configured legacy required states cannot silently disappear from the update snapshot
+ok 15 - configured legacy required states cannot silently disappear from the update snapshot
+  ---
+  duration_ms: 1.057762
+  type: 'test'
+  ...
+# Subtest: busy and changing customer configuration fail closed rather than returning a mixed snapshot
+ok 16 - busy and changing customer configuration fail closed rather than returning a mixed snapshot
+  ---
+  duration_ms: 0.887726
+  type: 'test'
+  ...
+# Subtest: bounded decoder refuses nested v2 chains and malformed ciphertext without exposing plaintext errors
+ok 17 - bounded decoder refuses nested v2 chains and malformed ciphertext without exposing plaintext errors
+  ---
+  duration_ms: 0.505461
+  type: 'test'
+  ...
+# Subtest: normalization bounds size/depth/node count and rejects dangerous keys or non-JSON values
+ok 18 - normalization bounds size/depth/node count and rejects dangerous keys or non-JSON values
+  ---
+  duration_ms: 24.319102
+  type: 'test'
+  ...
+# Subtest: settings scope and count are bounded without an all-state database scan
+ok 19 - settings scope and count are bounded without an all-state database scan
+  ---
+  duration_ms: 110.82791
+  type: 'test'
+  ...
+# Subtest: cumulative encoded JSON bytes are bounded before serialization or configuration JSON parsing
+ok 20 - cumulative encoded JSON bytes are bounded before serialization or configuration JSON parsing
+  ---
+  duration_ms: 139.194876
+  type: 'test'
+  ...
+1..20
+# tests 20
+# suites 0
+# pass 20
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1180.657353

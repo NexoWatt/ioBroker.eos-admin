@@ -1,0 +1,118 @@
+{
+  "timestampUtc": "2026-11-24T21:36:33.861149+00:00",
+  "finding": "921-SEC-001",
+  "baseline": "9.0.20",
+  "candidate": "9.0.21 worktree",
+  "sourceHashes": {
+    "src/lib/eosUploadGuard.js": {
+      "candidate": "b2102205f323270e79c5449880f9f024c8b17a69deb672e0c3ef192c17d2cc93",
+      "baseline": "eaaf325ba8ed78128bb12eefc7539e875c4ce49e29c926852059dde919bcd48d"
+    },
+    "test/eos-upload-admission.test.cjs": {
+      "candidate": "bf4d57815d1f6fe12e78ab9bba263aeaab89b3ab48ebed7ba6c9f72c42735a17",
+      "baseline": null
+    },
+    "src/lib/eosSessionSecurity.js": {
+      "candidate": "0bd37a9435c621ae81cb5d94bf047aab7694d142a4b664ef12df8fe4ed917c43",
+      "baseline": "0bd37a9435c621ae81cb5d94bf047aab7694d142a4b664ef12df8fe4ed917c43"
+    },
+    "src/lib/eosUnifiedBoundary.js": {
+      "candidate": "e8f01c00e402c67288ca049f03df450aa5a3c7a42613a3899f9044b8791ff783",
+      "baseline": "e8f01c00e402c67288ca049f03df450aa5a3c7a42613a3899f9044b8791ff783"
+    },
+    "src/lib/eosCookieNamespace.js": {
+      "candidate": "344f3f0055816105ffca18326069b880f5a54fd3ff92ffd2805b4c4d48172922",
+      "baseline": "344f3f0055816105ffca18326069b880f5a54fd3ff92ffd2805b4c4d48172922"
+    },
+    "src/lib/eosFileTransferSecurity.js": {
+      "candidate": "52dff2da7943472645ed3e5732a2e89986f294460bed6ca145160dbb64782ade",
+      "baseline": "52dff2da7943472645ed3e5732a2e89986f294460bed6ca145160dbb64782ade"
+    },
+    "src/lib/eosRolePolicy.js": {
+      "candidate": "b13995ee5801e3fff9e9835a8adc26006e3416e0e89ad7eab81611315a55b931",
+      "baseline": "b13995ee5801e3fff9e9835a8adc26006e3416e0e89ad7eab81611315a55b931"
+    },
+    "src/lib/instanceProxy.ts": {
+      "candidate": "bad9306dfc916dc6ad97cd5fca8f543dd0a261f7330fdd8a889b501ee2b475a0",
+      "baseline": "bad9306dfc916dc6ad97cd5fca8f543dd0a261f7330fdd8a889b501ee2b475a0"
+    },
+    "src/lib/eosAutoUpdate.ts": {
+      "candidate": "f0efb9282d13afe8354ca706496abc32d7ebcaf7476879a67fcf79d913a5767a",
+      "baseline": "f0efb9282d13afe8354ca706496abc32d7ebcaf7476879a67fcf79d913a5767a"
+    }
+  },
+  "runs": [
+    {
+      "log": "upload-admission-before-node24.tap",
+      "sourceRoot": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+      "node": "24.22.3",
+      "expectedExitCode": 1,
+      "pass": 1,
+      "fail": 2
+    },
+    {
+      "log": "upload-admission-before-node22.tap",
+      "sourceRoot": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin",
+      "node": "22.23.4",
+      "exitCode": 1,
+      "pass": 1,
+      "fail": 2
+    },
+    {
+      "log": "upload-node24.tap",
+      "node": "24.22.3",
+      "exitCode": 0,
+      "pass": 22,
+      "fail": 0,
+      "skip": 0
+    },
+    {
+      "log": "upload-node22.tap",
+      "node": "22.23.4",
+      "exitCode": 0,
+      "pass": 22,
+      "fail": 0,
+      "skip": 0
+    },
+    {
+      "log": "boundaries-node24.tap",
+      "node": "24.22.3",
+      "exitCode": 0,
+      "pass": 78,
+      "fail": 0,
+      "skip": 0
+    },
+    {
+      "log": "boundaries-node22.tap",
+      "node": "22.23.4",
+      "exitCode": 0,
+      "pass": 78,
+      "fail": 0,
+      "skip": 0
+    },
+    {
+      "log": "coexistence-node24.tap",
+      "node": "24.22.3",
+      "exitCode": 0,
+      "pass": 26,
+      "fail": 0,
+      "skip": 0
+    },
+    {
+      "log": "coexistence-node22.tap",
+      "node": "22.23.4",
+      "exitCode": 0,
+      "pass": 26,
+      "fail": 0,
+      "skip": 0
+    },
+    {
+      "log": "upload-lint.log",
+      "exitCode": 0
+    },
+    {
+      "log": "backend-typecheck.log",
+      "exitCode": 0
+    }
+  ]
+}

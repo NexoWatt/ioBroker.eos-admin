@@ -5,7 +5,7 @@ import type { Express, Response, Request, NextFunction } from 'express';
 import type { Server } from 'node:http';
 import { Server as HttpsServer } from 'node:https';
 import { readFileSync, existsSync, createReadStream, readdirSync, lstatSync, realpathSync, chmodSync } from 'node:fs';
-import { join, normalize, parse, dirname, relative, isAbsolute } from 'node:path';
+import { join, normalize, parse, dirname, relative, isAbsolute, resolve } from 'node:path';
 import compression from 'compression';
 import { lookup as getMimeType } from 'mime-types';
 import { randomBytes } from 'node:crypto';
@@ -23,6 +23,9 @@ import type { InternalStorageToken } from '@iobroker/socket-classes';
 import type { AdminAdapterConfig } from '../types';
 import { hasEosUrlCredentials, isEosSameOriginRequest, safeEosLoginPrefix } from './eosRequestSecurity';
 import { NexoWattStableUpdateManager } from './eosAutoUpdate';
+import { EosCustomerUpdates } from './eosCustomerUpdates';
+import { registerEosCustomerUpdateRoutes } from './eosCustomerUpdateHttp';
+import { readEosUpdateConfiguration } from './eosUpdateSnapshot';
 import { registerLicenseRoutes } from './eosLicenseHttp';
 import type { EosLicenseService } from './eosLicenseService';
 import { requestHttpsJson } from './eosHttpsClient';
@@ -339,6 +342,7 @@ export async function createEosServer(
 /** Webserver class */
 export default class Web {
     private nexowattStableUpdateManager?: NexoWattStableUpdateManager;
+    private eosCustomerUpdates?: EosCustomerUpdates;
     server: {
         app: null | Express;
         server: null | (Server & { __server: { app: null | Express; server: null | Server } });
@@ -508,6 +512,7 @@ export default class Web {
         }
 
         this.nexowattStableUpdateManager?.stop();
+        this.eosCustomerUpdates?.stop();
         this.detachCookieNamespace?.();
         this.detachCookieNamespace = undefined;
         this.instanceProxy.close();
@@ -2020,6 +2025,85 @@ export default class Web {
             },
         );
         app.get('/license.html', (_req: Request, res: Response) => res.redirect('/nexowatt/license'));
+        try {
+            this.eosCustomerUpdates = new EosCustomerUpdates({
+                namespace: this.adapter.namespace,
+                currentVersion: this.adapter.version ?? '',
+                nodeVersion: process.versions.node,
+                packageDir: resolve(this.baseDir),
+                controllerDir: resolve(controllerDir),
+                dataDir: resolve(getAbsoluteInstanceDataDir(this.adapter)),
+                encryptSnapshot: value => this.adapter.encrypt(value),
+                decryptSnapshot: value => this.adapter.decrypt(value),
+                readConfigurationSnapshot: () =>
+                    readEosUpdateConfiguration({
+                        namespace: this.adapter.namespace,
+                        getForeignObjectAsync: id => this.adapter.getForeignObjectAsync(id),
+                        getForeignStateAsync: id => this.adapter.getForeignStateAsync(id),
+                        getForeignStatesAsync: pattern => this.adapter.getForeignStatesAsync(pattern),
+                        decrypt: value => this.adapter.decrypt(value),
+                        isBusy: () => {
+                            const phase = this.adapter.eosMigration?.status().phase;
+                            return (
+                                this.closed ||
+                                !this.moduleHost ||
+                                this.moduleHost.mutation ||
+                                !!this.moduleHost.configurationSavePromise ||
+                                (!!phase &&
+                                    ![
+                                        'DISABLED',
+                                        'NOT_NEEDED',
+                                        'COMMITTED',
+                                        'LICENSE_REQUIRED',
+                                        'BLOCKED',
+                                        'ROLLBACK_REQUIRED',
+                                    ].includes(phase))
+                            );
+                        },
+                    }),
+                readHostInstances: async () => {
+                    const own = await this.adapter.getForeignObjectAsync(`system.adapter.${this.adapter.namespace}`);
+                    if (own?.type !== 'instance' || typeof own.common.host !== 'string' || !own.common.host) {
+                        throw new Error('UPDATE_HOST_INVALID');
+                    }
+                    const view = await this.adapter.getObjectViewAsync('system', 'instance', {
+                        startkey: 'system.adapter.eos-admin.',
+                        endkey: 'system.adapter.eos-admin.\u9999',
+                    });
+                    if (view.rows.length > 128) {
+                        throw new Error('UPDATE_HOST_INVALID');
+                    }
+                    return view.rows
+                        .filter(row => row.value?.common?.host === own.common.host)
+                        .map(row => {
+                            if (
+                                !/^system\.adapter\.eos-admin\.\d{1,6}$/.test(row.id) ||
+                                typeof row.value.common.enabled !== 'boolean'
+                            ) {
+                                throw new Error('UPDATE_HOST_INVALID');
+                            }
+                            return {
+                                namespace: row.id.slice('system.adapter.'.length),
+                                enabled: row.value.common.enabled,
+                            };
+                        });
+                },
+            });
+        } catch {
+            this.adapter.log.warn('EOS_UPDATE_INITIALIZATION_FAILED: Update service unavailable; EOS continues.');
+        }
+        const unavailableUpdate = (): Promise<never> => Promise.reject(new Error('UPDATE_UNAVAILABLE'));
+        registerEosCustomerUpdateRoutes(app, {
+            service: this.eosCustomerUpdates ?? {
+                status: unavailableUpdate,
+                check: unavailableUpdate,
+                prepare: unavailableUpdate,
+                start: unavailableUpdate,
+            },
+            requestAllowed: req => this.unified.requestAllowed(req),
+            csrfAllowed: req => this.unified.csrfAllowed(req),
+            access: req => this.unified.status(req),
+        });
         app.get('/api/license/info', (req: Request, res: Response) => {
             void this.getEosRequestAccess(req).then(
                 access => {

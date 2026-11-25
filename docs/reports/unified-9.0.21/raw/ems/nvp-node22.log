@@ -1,0 +1,68 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: first valid 600W NVP initializes filter from the measurement
+ok 1 - first valid 600W NVP initializes filter from the measurement
+  ---
+  duration_ms: 4.056919
+  type: 'test'
+  ...
+# Subtest: first valid -600W NVP initializes filter from the measurement
+ok 2 - first valid -600W NVP initializes filter from the measurement
+  ---
+  duration_ms: 0.579853
+  type: 'test'
+  ...
+# Subtest: first valid 0W NVP initializes filter from the measurement
+ok 3 - first valid 0W NVP initializes filter from the measurement
+  ---
+  duration_ms: 0.80425
+  type: 'test'
+  ...
+# Subtest: a genuine previous0W remains a valid averaging baseline
+ok 4 - a genuine previous0W remains a valid averaging baseline
+  ---
+  duration_ms: 1.484034
+  type: 'test'
+  ...
+# Subtest: fresh recovery after disconnected discards obsolete opposite-sign smoothing
+ok 5 - fresh recovery after disconnected discards obsolete opposite-sign smoothing
+  ---
+  duration_ms: 2.043817
+  type: 'test'
+  ...
+# Subtest: fresh recovery after stale discards obsolete opposite-sign smoothing
+ok 6 - fresh recovery after stale discards obsolete opposite-sign smoothing
+  ---
+  duration_ms: 1.162351
+  type: 'test'
+  ...
+# Subtest: fresh recovery after missing discards obsolete opposite-sign smoothing
+ok 7 - fresh recovery after missing discards obsolete opposite-sign smoothing
+  ---
+  duration_ms: 0.881958
+  type: 'test'
+  ...
+# Subtest: fresh recovery after resolver-error discards obsolete opposite-sign smoothing
+ok 8 - fresh recovery after resolver-error discards obsolete opposite-sign smoothing
+  ---
+  duration_ms: 1.340508
+  type: 'test'
+  ...
+# Subtest: overlapping requests retain one actual control cycle and release after rejected work
+ok 9 - overlapping requests retain one actual control cycle and release after rejected work
+  ---
+  duration_ms: 3.379308
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 566.678064

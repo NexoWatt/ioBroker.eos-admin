@@ -1,0 +1,134 @@
+[
+  {
+    "name": "baseline-mqtt-command-replay-repro-node22",
+    "startedUtc": "2026-11-24T21:37:33.986897+00:00",
+    "durationSeconds": 0.639,
+    "command": [
+      "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node",
+      "/workspace/scratch/741f792566ea/audit-921/devices/mqtt-command-replay-repro.cjs"
+    ],
+    "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+    "environmentOverrides": {
+      "EOS_TEST_ROOT": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin"
+    },
+    "exitCode": 1,
+    "expectedBaselineFailure": true
+  },
+  {
+    "name": "baseline-mqtt-shutdown-repro-node22",
+    "startedUtc": "2026-11-24T21:37:34.626066+00:00",
+    "durationSeconds": 1.728,
+    "command": [
+      "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node",
+      "/workspace/scratch/741f792566ea/audit-921/devices/mqtt-shutdown-repro.cjs"
+    ],
+    "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+    "environmentOverrides": {
+      "EOS_TEST_ROOT": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin"
+    },
+    "exitCode": 1,
+    "expectedBaselineFailure": true
+  },
+  {
+    "name": "baseline-message-session-node22",
+    "startedUtc": "2026-11-24T21:37:36.355415+00:00",
+    "durationSeconds": 0.368,
+    "command": [
+      "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node",
+      "--test",
+      "--test-name-pattern=delayed old",
+      "modules/devices/test/mqttCommandLifecycle.test.js"
+    ],
+    "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+    "environmentOverrides": {
+      "EOS_TEST_ROOT": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin"
+    },
+    "exitCode": 1,
+    "expectedBaselineFailure": true
+  },
+  {
+    "name": "regression-node22",
+    "startedUtc": "2026-11-24T21:37:36.723445+00:00",
+    "durationSeconds": 12.913,
+    "command": [
+      "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node",
+      "--test",
+      "modules/devices/test/mqttCommandLifecycle.test.js",
+      "modules/devices/test/tesvoltMqttTransport.test.js",
+      "modules/devices/test/hostedModule.test.js",
+      "modules/devices/test/runtimeLiveness.test.js",
+      "modules/devices/test/deviceAliasFreshness.test.js",
+      "modules/devices/test/deviceAliasSemantics.test.js"
+    ],
+    "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+    "environmentOverrides": {},
+    "exitCode": 1,
+    "expectedBaselineFailure": false
+  },
+  {
+    "name": "baseline-mqtt-command-replay-repro-node24",
+    "startedUtc": "2026-11-24T21:37:49.636844+00:00",
+    "durationSeconds": 0.826,
+    "command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "/workspace/scratch/741f792566ea/audit-921/devices/mqtt-command-replay-repro.cjs"
+    ],
+    "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+    "environmentOverrides": {
+      "EOS_TEST_ROOT": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin"
+    },
+    "exitCode": 1,
+    "expectedBaselineFailure": true
+  },
+  {
+    "name": "baseline-mqtt-shutdown-repro-node24",
+    "startedUtc": "2026-11-24T21:37:50.463013+00:00",
+    "durationSeconds": 1.742,
+    "command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "/workspace/scratch/741f792566ea/audit-921/devices/mqtt-shutdown-repro.cjs"
+    ],
+    "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+    "environmentOverrides": {
+      "EOS_TEST_ROOT": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin"
+    },
+    "exitCode": 1,
+    "expectedBaselineFailure": true
+  },
+  {
+    "name": "baseline-message-session-node24",
+    "startedUtc": "2026-11-24T21:37:52.205910+00:00",
+    "durationSeconds": 0.436,
+    "command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "--test",
+      "--test-name-pattern=delayed old",
+      "modules/devices/test/mqttCommandLifecycle.test.js"
+    ],
+    "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+    "environmentOverrides": {
+      "EOS_TEST_ROOT": "/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin"
+    },
+    "exitCode": 1,
+    "expectedBaselineFailure": true
+  },
+  {
+    "name": "regression-node24",
+    "startedUtc": "2026-11-24T21:37:52.642547+00:00",
+    "durationSeconds": 12.794,
+    "command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "--test",
+      "modules/devices/test/mqttCommandLifecycle.test.js",
+      "modules/devices/test/tesvoltMqttTransport.test.js",
+      "modules/devices/test/hostedModule.test.js",
+      "modules/devices/test/runtimeLiveness.test.js",
+      "modules/devices/test/deviceAliasFreshness.test.js",
+      "modules/devices/test/deviceAliasSemantics.test.js"
+    ],
+    "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+    "environmentOverrides": {},
+    "exitCode": 0,
+    "expectedBaselineFailure": false
+  }
+]

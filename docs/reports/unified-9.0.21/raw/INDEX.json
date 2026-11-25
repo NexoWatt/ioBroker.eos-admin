@@ -1,0 +1,1307 @@
+{
+  "version": "9.0.21",
+  "date": "2026-11-24",
+  "results": {
+    "node22-tests-final": {
+      "tests": 2118,
+      "pass": 2116,
+      "fail": 0,
+      "skipped": 2,
+      "cancelled": 0
+    },
+    "node24-tests-final": {
+      "tests": 2118,
+      "pass": 2116,
+      "fail": 0,
+      "skipped": 2,
+      "cancelled": 0
+    }
+  },
+  "files": [
+    {
+      "file": "audit-full.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/audit-full.log",
+      "deliveredSha256": "5a9a06312d0f8d241b8f4e769d3b07d528e6b59489cf5fad1f52c0a2a27de180",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "audit-full.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/audit-full.result.json",
+      "deliveredSha256": "88ba9dc8d83b65050b32f13f4fffb23b8056336c75084a9bebc8c1604178ed8a",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "audit-runtime.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/audit-runtime.log",
+      "deliveredSha256": "e3d83228798e4b10063dbb91f96a84906dc819e094ea794278835a1bf8509a17",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "audit-runtime.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/audit-runtime.result.json",
+      "deliveredSha256": "9967e01fee14ce98f46b58bbb9cd8ac1f268c453b7d3872322616f9a0551b04d",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "backend-final.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/backend-final.log",
+      "deliveredSha256": "a6692df33c33fb49e6e70ce76fc44da37c27445804e21bba080932ccb95ab45d",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "backend-final.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/backend-final.result.json",
+      "deliveredSha256": "1055744efd970b93646e255fb4f8bdbb2077a5428b94487fc2a2e2012c3d00ee",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "cra/frontend-installer-sbom.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/cra/frontend-installer-sbom.json",
+      "deliveredSha256": "24e2c3d5513510ea31882e8f51e78d87f88abc21f31bce9f74e9249cec919cd4",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "customer-update-glue/root-glue-focused-node24.tap",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/customer-update-glue/root-glue-focused-node24.tap",
+      "deliveredSha256": "63a30b977f5ece507ba6870ee5c38bb9e72bda32452e27ddb2c8165a70ed3881",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "customer-update-service/lint.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/customer-update-service/lint.log",
+      "deliveredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "customer-update-service/real920-archive-inspection.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/customer-update-service/real920-archive-inspection.json",
+      "deliveredSha256": "cecf193ecb39fc13af8ca9fdd0b748c3c43af9f335854ce11faac11036d363f6",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "customer-update-service/service-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/customer-update-service/service-node22.log",
+      "deliveredSha256": "9b76898e70dd04e8bd7cc95033025655b27367d0b2edeffd8ffa451e9b70bf65",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "customer-update-service/service-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/customer-update-service/service-node24.log",
+      "deliveredSha256": "053ea36bca5b110a9860d89ec82a01ce2ab3b01a08c7901ea4154792bc059554",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "customer-update-service/service-verification.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/customer-update-service/service-verification.json",
+      "deliveredSha256": "1162230e44d09f81147c0172b3f0019a128fb681dc80ab8549ec8037055f7d46",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "customer-update-service/typecheck.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/customer-update-service/typecheck.log",
+      "deliveredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "customer-update-worker/customer-worker-lint.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/customer-update-worker/customer-worker-lint.log",
+      "deliveredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "customer-update-worker/customer-worker-node22.tap",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/customer-update-worker/customer-worker-node22.tap",
+      "deliveredSha256": "1afc2f9a5cddca2736eaf8568ece34cd9cb6c6edc9ae8aada3ab4cc94c1df5f9",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "customer-update-worker/customer-worker-node24.tap",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/customer-update-worker/customer-worker-node24.tap",
+      "deliveredSha256": "c9b53652188326769a77c1f4732b671ac3849bf4a8d50e7f2b69b63c92915fa5",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "customer-update-worker/customer-worker-strict-typecheck.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/customer-update-worker/customer-worker-strict-typecheck.log",
+      "deliveredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "customer-update-worker/customer-worker-typecheck.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/customer-update-worker/customer-worker-typecheck.log",
+      "deliveredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "customer-update-worker/independent/independent-worker-probes.cjs",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/customer-update-worker/independent/independent-worker-probes.cjs",
+      "deliveredSha256": "007047e7aa9327ce3f92beb411efa06d17a0411f640861eeeef6f686c710e329",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "customer-update-worker/independent/node22.tap",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/customer-update-worker/independent/node22.tap",
+      "deliveredSha256": "5cb8d2df123e94adab50985283a9721c1f7e7e40a613ce7d51b6446badf50050",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "customer-update-worker/independent/node24.tap",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/customer-update-worker/independent/node24.tap",
+      "deliveredSha256": "f4025f8927d41b960d2e8a55a2e77b800fcba9f8dbd2d9edd0d016e81269d33b",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "customer-update-worker/independent/probes-node22.tap",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/customer-update-worker/independent/probes-node22.tap",
+      "deliveredSha256": "e0813fdd55f9f4a2016b395f6a9f447eb58d73aaa11d7e1b2bea8593cb27640f",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "customer-update-worker/independent/probes-node24.tap",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/customer-update-worker/independent/probes-node24.tap",
+      "deliveredSha256": "96b4b77ddbbd5c41ff3dad24109e27c05e50d06d08bc67fca7ecf8233765e94f",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "customer-update-worker/independent/receipt.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/customer-update-worker/independent/receipt.json",
+      "deliveredSha256": "d1df74fc5e278d0915cb08d5ced513a298190c0f3d9bea478fd6dde0318e37d8",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "customer-update-worker/receipt.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/customer-update-worker/receipt.json",
+      "deliveredSha256": "90743ac3ae874a3ff3a28e6d8d4d2d5d3a1f61ff82adf9bdca0b79d761be6d72",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/all-devices-before-drain-catch-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/all-devices-before-drain-catch-node22.log",
+      "deliveredSha256": "525b83fefc72e1bf7548546a8a7db225a0abc0787c4d176c8c80ce0b1a0e74ba",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/all-devices-before-drain-test-update-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/all-devices-before-drain-test-update-node22.log",
+      "deliveredSha256": "06719ad4f836b2a394fbfa80037035c2092b87c7bd243bdc7b26d1c3d2b69ef4",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/all-devices-before-drain-test-update-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/all-devices-before-drain-test-update-node24.log",
+      "deliveredSha256": "5972cd517c050cbcece047eaf819d5b3ca5eb8ceb74b97db073d9f884b3f7d8b",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/all-devices-before-runtime-review-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/all-devices-before-runtime-review-node22.log",
+      "deliveredSha256": "9fec90d22cbe0761e6f25be98950c0893bd11455c03258ac57fa6809e1e8400f",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/all-devices-before-runtime-review-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/all-devices-before-runtime-review-node24.log",
+      "deliveredSha256": "1ca1e5439a9c5b16e1ceeab3faa37bebbab2cd869dff86d91f4211b868842084",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/all-devices-final-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/all-devices-final-node22.log",
+      "deliveredSha256": "f79f0d1b48f7f3c31919ed02f129e76a3135ed780a515d99f8e656e9d1743ae7",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/all-devices-final-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/all-devices-final-node24.log",
+      "deliveredSha256": "1fc8c2600e48fdbf6b514ed9ca65ce645652ce3d373403e559f0f2fd194746a1",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/baseline-final-message-test-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/baseline-final-message-test-node22.log",
+      "deliveredSha256": "07de6b4a598917eecc6ef39c2f380d81c1b625cbb82f877b3283b6a76e781e40",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/baseline-final-message-test-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/baseline-final-message-test-node24.log",
+      "deliveredSha256": "74a2092dabad7d8710a621ab86b280beae135e52717c64bc682b516ed5bdbcb2",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/baseline-message-session-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/baseline-message-session-node22.log",
+      "deliveredSha256": "8dad511a527929ad30ac1ec12c80c1c16243fc0083bd5d77208032a9329c17be",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/baseline-message-session-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/baseline-message-session-node24.log",
+      "deliveredSha256": "16713d30d59a47a56d833c30fdf398bd16821421160eafcefad5924251036734",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/baseline-mqtt-command-replay-repro-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/baseline-mqtt-command-replay-repro-node22.log",
+      "deliveredSha256": "1f2686342ad1e4a34af3922caddfea8d6f2f2d72c0ea836780212705ff2a0527",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/baseline-mqtt-command-replay-repro-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/baseline-mqtt-command-replay-repro-node24.log",
+      "deliveredSha256": "5b73f3b1c9ea64605501c4cce5e04c400678f9e439c9b6c35bbfeb9a34304ac6",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/baseline-mqtt-shutdown-repro-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/baseline-mqtt-shutdown-repro-node22.log",
+      "deliveredSha256": "7e506a5db3fe852969b7861b397ec60c4e2d4161de59fdff6ae5c68621b17829",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/baseline-mqtt-shutdown-repro-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/baseline-mqtt-shutdown-repro-node24.log",
+      "deliveredSha256": "4d25e21c295896f2b208b2415ff7985b397ad20474fa10445a0adadb259d1661",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/baseline-resources-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/baseline-resources-node22.log",
+      "deliveredSha256": "eea368ab13335d6c23f4f0b53edadebb28444364caeafa7efdf0932380276193",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/baseline-resources-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/baseline-resources-node24.log",
+      "deliveredSha256": "76e91fea9b43aa7b2a3413b1cf78e4af025c10be6ed29165f7bf995ea0d16f8b",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/commands-before-drain-test-update.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/commands-before-drain-test-update.json",
+      "deliveredSha256": "69c6f61549e5f66eb9445d94b91d500a317c7cfbfae8115facc7b980747059f6",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/commands-before-runtime-review.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/commands-before-runtime-review.json",
+      "deliveredSha256": "27e9535d9b4f7bcb6684623563be61d1cdbd45a46f155957c2d2671d19cdf8bf",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/commands-final.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/commands-final.json",
+      "deliveredSha256": "7e3bc556801f2e0c4c3d1adfd228d81571172c58ff372d034090fb6e7609baf7",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/commands.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/commands.json",
+      "deliveredSha256": "54f52c87366603dd059a9edf3bb9e64205071fdc3a26304f5629a5af45beee78",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/env-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/env-node22.log",
+      "deliveredSha256": "d7d9c11f3fd9ceab87f7295cfbeff958467d6b1d5d056c805b3fb2f399605a39",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/env-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/env-node24.log",
+      "deliveredSha256": "91ecde77c5270503151465619df5889868569aed568564b9d67d5edcc65f545b",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/lint-before-drain-test-update-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/lint-before-drain-test-update-node22.log",
+      "deliveredSha256": "c05ed1c9b931e83ebe0c860e1a2829216a6e2514a28252776655a7a61387057f",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/lint-before-drain-test-update-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/lint-before-drain-test-update-node24.log",
+      "deliveredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/lint-before-runtime-review-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/lint-before-runtime-review-node22.log",
+      "deliveredSha256": "4c5fa0d98513bc5978d754cc05e801eb2695165e3c14d0272ff3cb216ddd1176",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/lint-before-runtime-review-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/lint-before-runtime-review-node24.log",
+      "deliveredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/lint-final-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/lint-final-node22.log",
+      "deliveredSha256": "df406c20c5f6d37cc95256e61a27bfebb62c9d19b9bb58fec8f92e365a302b42",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/lint-final-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/lint-final-node24.log",
+      "deliveredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/mqtt-command-replay-repro.cjs",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/mqtt-command-replay-repro.cjs",
+      "deliveredSha256": "baada8adea0ec31b8e74106883af6353f06f083a28e1fab8f45909ec88d6daa2",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/mqtt-shutdown-repro.cjs",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/mqtt-shutdown-repro.cjs",
+      "deliveredSha256": "6d07f3683e553f770c5c9113e9b18522049dd2bebe2e5c10c8363a41de32ed86",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/regression-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/regression-node22.log",
+      "deliveredSha256": "0caa210df69d1c8a1c6d249257ab16eedd13748d092eca691e758750d71ee413",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/regression-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/regression-node24.log",
+      "deliveredSha256": "c7d7f3ee5b2cddea1d1d01d7dfcf86fec091176886c86dc299fe7751358dd3f0",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/run-evidence.py",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/run-evidence.py",
+      "deliveredSha256": "6dc7719203223d70ade62021baa05084dd7d2aed7d912df175e801684e90b17e",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/run-final-evidence.py",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/run-final-evidence.py",
+      "deliveredSha256": "41f5aafb8588ef557346a59e5dcf0e943238cc4d88866c51b83324130cd392ec",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/runtime-lint-920.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/runtime-lint-920.json",
+      "deliveredSha256": "8b851e3a697c9b581127c973777e87b6c8e3383ed21d049deb76de23bcb512d5",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/runtime-lint-921.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/runtime-lint-921.json",
+      "deliveredSha256": "4267eb739a179cbe4da18a39dc89bf4fd8e03d8ce77c58df2f927ecb7cc9d645",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/source-hashes.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/source-hashes.json",
+      "deliveredSha256": "a7d1d6f60f3114e862e299dd82d84680e40047b23afc7c5b4b916c7e0f87e18c",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/types-before-drain-test-update-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/types-before-drain-test-update-node22.log",
+      "deliveredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/types-before-drain-test-update-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/types-before-drain-test-update-node24.log",
+      "deliveredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/types-before-runtime-review-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/types-before-runtime-review-node22.log",
+      "deliveredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/types-before-runtime-review-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/types-before-runtime-review-node24.log",
+      "deliveredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/types-final-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/types-final-node22.log",
+      "deliveredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "device-mqtt/types-final-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/device-mqtt/types-final-node24.log",
+      "deliveredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/baseline-files-eslint.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/baseline-files-eslint.json",
+      "deliveredSha256": "2f9e8eee2da746ef2846d4b5dd7701c8988d65b6a0995ec8e753ff045a291f02",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/changed-files-eslint.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/changed-files-eslint.json",
+      "deliveredSha256": "efb0c096fecae23b5ab4320c0c517631fc090470c4655678ccf8f9c853993de3",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/engine.patch",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/engine.patch",
+      "deliveredSha256": "c8765a3470c472a5cc956766f63f08c11c388345e88c1e8014a3d3e53e0573f6",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/eslint-delta.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/eslint-delta.json",
+      "deliveredSha256": "5c7aa4941814dda1b1bd08cded56bd1bc2e9c9d417cb2d774ec984d5556440e0",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/evidence.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/evidence.json",
+      "deliveredSha256": "41ebbf8a1835e7500aab4bf9fdd02a0e79fce2f5c3d4de26064a0be5daea0e9d",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/farm-concurrency-baseline-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/farm-concurrency-baseline-node24.log",
+      "deliveredSha256": "f05098fb996c500ed99ed90f00834299015b377c1e97859b770c77075501839a",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/farm-concurrency-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/farm-concurrency-node22.log",
+      "deliveredSha256": "7b93920228f88a542cd92342b48e688377471700d0cf650ab7f61b2f3c3bcc51",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/farm-concurrency-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/farm-concurrency-node24.log",
+      "deliveredSha256": "01adfafb3e0f415a9f33dafbb6ee40fd94db2beb53af35f04b35463286006a6f",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/farm-owned-methods.patch",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/farm-owned-methods.patch",
+      "deliveredSha256": "e1721e725d56fa79be792eee7ff92709fe841c368f0d327740673330214ce28b",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/generated-regression-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/generated-regression-node22.log",
+      "deliveredSha256": "c6a8ef0ffff6e7fef9c71f8fc091bac08921ff2b11146f63199cbc2db1469876",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/generated-regression-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/generated-regression-node24.log",
+      "deliveredSha256": "970dc51bf9fa5b1505799ddedaf2a8954615888d6452b4b9c488124bbb47bece",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/mqtt-final-frozen-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/mqtt-final-frozen-node22.log",
+      "deliveredSha256": "5ba9f025d1c9ddaa41120c0b50cc0ff37cd9a38fafcf48ce34ca46ae5c776f20",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/mqtt-final-frozen-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/mqtt-final-frozen-node24.log",
+      "deliveredSha256": "72f354e23fcf9a869d14f3fd5f141e9b3100c4688228e2f2d23cb7dc63276b64",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/mqtt-final-review-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/mqtt-final-review-node22.log",
+      "deliveredSha256": "9f60776be88145e9479fc0ecf32deb58f8425ddbaa08c8b41786491a62b850f8",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/mqtt-final-review-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/mqtt-final-review-node24.log",
+      "deliveredSha256": "0b695cef5d88cf301a5440a07039c298f12db34aa02affbd523c216a3513a5d1",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/mqtt-final-reviewed-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/mqtt-final-reviewed-node22.log",
+      "deliveredSha256": "6d9f1e759c3d60bb1eb1de91048e2a1f9661f6f2ded552c3c27d87d59892f1f8",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/mqtt-final-reviewed-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/mqtt-final-reviewed-node24.log",
+      "deliveredSha256": "c7b926f101dffa39c815b954f322e4807c7d69b3fd8974d3a618dd6ca4b3f779",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/mqtt-queue-inheritance-before.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/mqtt-queue-inheritance-before.log",
+      "deliveredSha256": "7d3c79613432185e9f7f2532dcdfaabc24150739e4b302ff19907932b22b6565",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/mqtt-runtime-review-baseline-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/mqtt-runtime-review-baseline-node24.log",
+      "deliveredSha256": "07b955c5aeb54293f2df90dd415aa86ee43adcca0c2a80dbec17bf0284d65191",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/mqtt-runtime-review-initial-timing.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/mqtt-runtime-review-initial-timing.log",
+      "deliveredSha256": "128e1d163179da99bf4637fc22cef8068f274b5124c1ddafbb55115840216835",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/mqtt-runtime-review-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/mqtt-runtime-review-node22.log",
+      "deliveredSha256": "432d9203a0143aa1f825d294a5e9c92fafcfde67a97e38ebab696e7e67504650",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/mqtt-runtime-review-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/mqtt-runtime-review-node24.log",
+      "deliveredSha256": "b9d770f43943e598c1e72b96256f4ce66c50e94cccd6afc8157c08ca740cfe71",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/mqtt-runtime-session-review.cjs",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/mqtt-runtime-session-review.cjs",
+      "deliveredSha256": "8ef4abd417ee7e2212d6398ddc03e9dbcd543440e1ddc8d7603649e5db91558d",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/mqtt-runtime-session-review.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/mqtt-runtime-session-review.log",
+      "deliveredSha256": "80db9d196b53ca8a22804314fc8d1ab08ebc8c2c65c0fbef736c535091a5ec5e",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/nvp-baseline-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/nvp-baseline-node22.log",
+      "deliveredSha256": "445d2bede1b9c004f8d504ce91aade99462baeb1a6da68bb16ebb272f49edb9d",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/nvp-baseline-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/nvp-baseline-node24.log",
+      "deliveredSha256": "fd98b7711da47b7cf3858c3bf80bc5b150a0f53bffd9bc667b88c1394f50607c",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/nvp-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/nvp-node22.log",
+      "deliveredSha256": "dbdc6533df431550e3792aa60e81156121375b78e1924f15c7f2b0cc5373c012",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/nvp-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/nvp-node24.log",
+      "deliveredSha256": "c81580a2de0ed0e8900f1ec9a9d0e870b54b12f6cc9acce5f4d688b7beadf9a0",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/ui-code-delta-inventory.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/ui-code-delta-inventory.json",
+      "deliveredSha256": "51a46f123d0f2dd730fdf9c68aa27fb14cf744f1acdc359fdbcd92b9ba616b7e",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/ui-docs-check.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/ui-docs-check.log",
+      "deliveredSha256": "c5ca2544f0b9d55440c8d0806970c7f4fe635d49c0587f9db2f0213ced698293",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/ui-farm-fingerprint-moves.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/ui-farm-fingerprint-moves.json",
+      "deliveredSha256": "c7f25f1f00b0eb019b05bd4763b45b2018f96ddf7d0c1b38a4ba2c4f4a9cb23d",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/ui-lint-policy-tests.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/ui-lint-policy-tests.log",
+      "deliveredSha256": "a0bd9d7014568bec26a523b84fd45b5b3a1e024aefefb9277dddacb9d957474a",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/ui-lint-security-final-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/ui-lint-security-final-node22.log",
+      "deliveredSha256": "8e008ab5dc5d1ed1f21f79e11bc46f0177f66a46ff80ca602109cf5d047f1c48",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/ui-lint-security-final-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/ui-lint-security-final-node24.log",
+      "deliveredSha256": "8a59f4af1874d7ae584bd1ed54e204bf599f91300b59372725a47c0ecd00fe88",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/ui-lint-security-initial.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/ui-lint-security-initial.log",
+      "deliveredSha256": "46b4b454c04388708d4d495f61a840e8755a67032c15b5a15942ce1366f8479e",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/ui-main-full-delta.patch",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/ui-main-full-delta.patch",
+      "deliveredSha256": "44c59927af045bd2594559d5e13fc708e67fe0133b2fd811107cf43ecbe3821c",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/ui-reviewed-changes.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/ui-reviewed-changes.json",
+      "deliveredSha256": "4f4caf87ef34b7384c1eb549cd165b1d1f10ee350e6d3b9a13d9e3faf14c3e90",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/ui-reviewed-findings-before.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/ui-reviewed-findings-before.json",
+      "deliveredSha256": "0791aa6ad86ced6cd624ebf03281df92ba5ac62e1e3586f91525275fcb3c8193",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/ui-security-final-node22.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/ui-security-final-node22.json",
+      "deliveredSha256": "9f3417ac39e9905afdfd271d9e978f937cc9d08ad01e5e7014b837ffab9dcfca",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/ui-security-final-node24.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/ui-security-final-node24.json",
+      "deliveredSha256": "9f3417ac39e9905afdfd271d9e978f937cc9d08ad01e5e7014b837ffab9dcfca",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/ui-security-inventory-before.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/ui-security-inventory-before.json",
+      "deliveredSha256": "202d32a4f5fcb3e8b6572bf5522a5a0885ef4feda428abb4e30affbcabd1ca88",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ems/update-ui-reviewed-findings.cjs",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ems/update-ui-reviewed-findings.cjs",
+      "deliveredSha256": "5a85bf1c61a6cf1a2527a0e43f8b3f065cc4f34b7fd45ebb790c649da0ee1493",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "frontend-build.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/frontend-build.log",
+      "deliveredSha256": "2fa9e9a1cb78c08da82d865240d0e50b29fafa2e450be35b08179de959051c83",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "frontend-build.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/frontend-build.result.json",
+      "deliveredSha256": "513b439c0c44410ec5830dcad145c8ea257454804080c799e3c8e4099c4588fb",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "frontend-installer-sbom.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/frontend-installer-sbom.json",
+      "deliveredSha256": "24e2c3d5513510ea31882e8f51e78d87f88abc21f31bce9f74e9249cec919cd4",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "history/baseline920-influx-sequence-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/history/baseline920-influx-sequence-node24.log",
+      "deliveredSha256": "5bd791e83ec4808c5f2d26180aa7fd1deac6eb68cc886b2f0d0a43adb81d7824",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "history/baseline920-outage-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/history/baseline920-outage-node24.log",
+      "deliveredSha256": "afca05c845ca6c384b220dcb94e839b6776965f2e32eb2ac4718a5b0239b4e9e",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "history/cra-tariff-source-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/history/cra-tariff-source-node22.log",
+      "deliveredSha256": "8b03a164a138af132f4aef992091b78eadf70cc01d8c3eeb8d47da43f363aa05",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "history/cra-tariff-source-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/history/cra-tariff-source-node24.log",
+      "deliveredSha256": "0ff717564380a58d5b96ee9a3485cadef58034b3dff629b44fe8afd1d365bd0b",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "history/lint-baseline-comparison.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/history/lint-baseline-comparison.json",
+      "deliveredSha256": "c5163991821ecac31517245b7433f9515dd080d5f89fdd063ffaa5bd50be1b8c",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "history/lint-scope.cjs",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/history/lint-scope.cjs",
+      "deliveredSha256": "32dcd7d65043ca4b47bee8266716ef46329bc0fc5b9c09930fd6def7b2b48ffc",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "history/regression-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/history/regression-node22.log",
+      "deliveredSha256": "3b1d399b87e039350c83f9a24c0dacd45b87595e6a26b6d65809b226eea142b2",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "history/regression-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/history/regression-node24.log",
+      "deliveredSha256": "a830f32f969bc9dbd2cc1251e2cb89f958fde385fcab1d5dc367916f440778a4",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "history/results-node22.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/history/results-node22.json",
+      "deliveredSha256": "cfe288e6f4b7def0e4ab64326c10e31d447f4f606004c224be3d56958eaabdc7",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "history/results-node24.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/history/results-node24.json",
+      "deliveredSha256": "d0b2cfa4df0a44bab53ad2c42cedf420a72a8e994b37d48778f1d077c3230596",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "history/run-checks.py",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/history/run-checks.py",
+      "deliveredSha256": "cb25c42012b7772d2416afaf29197255f66ac3b6e18c8970d6a6c61226e040d5",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "history/source-evidence.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/history/source-evidence.json",
+      "deliveredSha256": "91d75e414ef1013296c4a5b1b5ac0cdf652818495d5825a6493bcc3815bafad3",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "installer-build.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/installer-build.log",
+      "deliveredSha256": "0da2282b0e958ab353d62569c87fb6f512b63a21aac5e385e87910319148b6f0",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "installer-build.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/installer-build.result.json",
+      "deliveredSha256": "f6463b4f2396b0a9e0a113771e5f04f10b73095f38871915261ab113a79beddc",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "keygen-source.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/keygen-source.json",
+      "deliveredSha256": "28ea297b87c9ed8e10a89bd96e187d51261b47a5d5abc4fda6e0fdaa5abc043f",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "lint-final.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/lint-final.log",
+      "deliveredSha256": "64aefd9c532c7d9192752af7ba606e2215d263f34de13bbf664281467052d459",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "lint-final.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/lint-final.result.json",
+      "deliveredSha256": "e4ef420bf66ff99c82e9fb1676d8e960ff565a609446d203e98470b545faf111",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "modules-build.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/modules-build.log",
+      "deliveredSha256": "6e37ea667ef68c17253def98294e0b1522da9399507b32686475393d89c3b834",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "modules-build.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/modules-build.result.json",
+      "deliveredSha256": "6088c665c84d49fc2fc39a6645ff75247c9343304a90159b37b5f1efcc416482",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "node22-tests-final.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/node22-tests-final.log",
+      "deliveredSha256": "f9c7bd9820166f653f5408c625976379d7c0e868b6cf2f9c9e9f0f9615573f2a",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "node22-tests-final.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/node22-tests-final.result.json",
+      "deliveredSha256": "1e07f6a49d6c51eb693f540fb97720a50a27ada3e39cf79d5cf809189e7cf531",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "node22-typecheck-final.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/node22-typecheck-final.log",
+      "deliveredSha256": "1d383a52f7a48a19d815f3cfa6b467a2f5d0b6bf70e953a4b83162471b712c03",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "node22-typecheck-final.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/node22-typecheck-final.result.json",
+      "deliveredSha256": "6269d088f16dd660062d9a4bce3975ca767fda1dea308a9cc5ce592e8d284e9d",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "node22-version.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/node22-version.log",
+      "deliveredSha256": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "node24-tests-final.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/node24-tests-final.log",
+      "deliveredSha256": "d34945a5dffca3e53df1a03b59432ed7962162e33cc01f9c0b9254c45db030f4",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "node24-tests-final.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/node24-tests-final.result.json",
+      "deliveredSha256": "0204594f87bc9d47247acaff2edcc4d62fc559f22e1b7bb8724885e45700f555",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "node24-typecheck-final.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/node24-typecheck-final.log",
+      "deliveredSha256": "2855a20d5c69a6a1e7c4416ff9dd22f8bbd8d1fc3d380abfda9b1fd8c87b57ce",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "node24-typecheck-final.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/node24-typecheck-final.result.json",
+      "deliveredSha256": "a346b6d98a60e63ffe7edd18ed82a1b00260df932619ae9d58b8f907202e4d00",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "node24-version.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/node24-version.log",
+      "deliveredSha256": "4409d3bfa08b82f385bd424eeda65fc63b756129f0e89e82df77f1fecafccc14",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "persistence/920-http-draft-revision-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/persistence/920-http-draft-revision-node24.log",
+      "deliveredSha256": "ce579e82bff51a2e158ad7c7c8df8aa4b8a14e6db0fc263dcfee4bd821f4b06c",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "persistence/920-late-commit-overwrite-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/persistence/920-late-commit-overwrite-node24.log",
+      "deliveredSha256": "5b39f799ceef58a4bb3c9b895cd5f3a9f39255038d35c6abb460c944a0663619",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "persistence/920-save-lifecycle-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/persistence/920-save-lifecycle-node24.log",
+      "deliveredSha256": "0a511edf61c55f534d8a1eff725edef64a51eef77b18cce550698b87728c5c7f",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "persistence/921-backend-types.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/persistence/921-backend-types.log",
+      "deliveredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "persistence/921-editor-lint.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/persistence/921-editor-lint.log",
+      "deliveredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "persistence/921-eebus-editor-typecheck.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/persistence/921-eebus-editor-typecheck.log",
+      "deliveredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "persistence/921-final-format-review.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/persistence/921-final-format-review.json",
+      "deliveredSha256": "27640f0c318d9a890f5f18b7b351a98a7a4330069483e02f9015b4384f6ed85f",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "persistence/921-lint.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/persistence/921-lint.log",
+      "deliveredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "persistence/921-new-update-http-before.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/persistence/921-new-update-http-before.log",
+      "deliveredSha256": "0d3a58b448ff306f4c573b92164ba1cba37a695389407df5f9c32f01c6bf1bfb",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "persistence/921-new-update-snapshot-before.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/persistence/921-new-update-snapshot-before.log",
+      "deliveredSha256": "c12e6b82ea2a14bf467b750d5b213732fab38232a7855ffe1efb6fc1a572963e",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "persistence/921-persistence-final-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/persistence/921-persistence-final-node22.log",
+      "deliveredSha256": "8eeeca0cfa7776af27cc89058d0c386504b12d32c8c2ea453623330edcf99fb6",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "persistence/921-persistence-final-node22.receipt.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/persistence/921-persistence-final-node22.receipt.json",
+      "deliveredSha256": "200d7aade601a34366cc7b9a114285526901bd1166d56c28c13686eb97ed3c73",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "persistence/921-persistence-final-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/persistence/921-persistence-final-node24.log",
+      "deliveredSha256": "c2dd46b6a35e35cace7890fb5718b394587bc0d419d7245e06feb2b87ec7ef5e",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "persistence/921-persistence-final-node24.receipt.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/persistence/921-persistence-final-node24.receipt.json",
+      "deliveredSha256": "8f428481147fe5a8167a982b5868c6a8e260d552062a7e45c86c6330299a0873",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "persistence/921-update-helpers-eslint-final.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/persistence/921-update-helpers-eslint-final.log",
+      "deliveredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "persistence/921-update-helpers-final-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/persistence/921-update-helpers-final-node22.log",
+      "deliveredSha256": "5e6b50dba557a5b8b04b876101d43510038bdc178b2e47af9b70e546f28e7c74",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "persistence/921-update-helpers-final-node22.receipt.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/persistence/921-update-helpers-final-node22.receipt.json",
+      "deliveredSha256": "775e094865434dec855d31ecd623795984297878d279dee6eab938172656cbc9",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "persistence/921-update-helpers-final-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/persistence/921-update-helpers-final-node24.log",
+      "deliveredSha256": "dbce377a227da3f94650035fcf36e48bba08cd8cdb8a2b22998399b5fba6620d",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "persistence/921-update-helpers-final-node24.receipt.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/persistence/921-update-helpers-final-node24.receipt.json",
+      "deliveredSha256": "d2810c276d318a37e634ccf14292c7332b05c4aea04816e64671f3568b386904",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "persistence/921-update-helpers-strict-typecheck.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/persistence/921-update-helpers-strict-typecheck.log",
+      "deliveredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "persistence/921-update-helpers-typecheck-final.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/persistence/921-update-helpers-typecheck-final.log",
+      "deliveredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "persistence/http-slowbody-after.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/persistence/http-slowbody-after.log",
+      "deliveredSha256": "8de723d2803303eed09de5c1f95c14d0914a1e535b7f6de7cb084d0e84745396",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "persistence/http-slowbody-before-observation.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/persistence/http-slowbody-before-observation.json",
+      "deliveredSha256": "44f961d451ac63f0d27523dbc2084c2a52181017580fb8b2daf363cd8066334b",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "persistence/http-slowbody-repro.cjs",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/persistence/http-slowbody-repro.cjs",
+      "deliveredSha256": "a19db5bde4a8cfda5a1adbe0e6de566f57ee49b0f3afb05dd78bdac3bb66b91f",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "persistence/source-files.pre-final-format.sha256",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/persistence/source-files.pre-final-format.sha256",
+      "deliveredSha256": "625a542a508a0e6176897da09f04b682549e65f7ab05b84b4bbb3155311a8c99",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "persistence/source-files.sha256",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/persistence/source-files.sha256",
+      "deliveredSha256": "7244a3127005798fd90ff122a50b0492d382d207eb653b13db3c9346fe673c0e",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "release-overlay/obsolete-assets-920-added.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/release-overlay/obsolete-assets-920-added.json",
+      "deliveredSha256": "f138e36a3a7938a70b6d26b24c64ea0e231ceb5301b435875065e837d82d4c3e",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "release-overlay/publish-catalog-regression.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/release-overlay/publish-catalog-regression.log",
+      "deliveredSha256": "9bf90c82fcea7aaf77a32fd9194d7a1d1bbef0ee95f94aa6207a9c6be7c10283",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "release-overlay/publish-catalog-regression.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/release-overlay/publish-catalog-regression.result.json",
+      "deliveredSha256": "9a3050c64a75f28e42b33a0a0cf762fa6e478450ee293154d530b72428b72263",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "sbom-runtime.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/sbom-runtime.log",
+      "deliveredSha256": "c8870e26798f7f6a49fe0ef975efd48a86a4e106f42df8a9f7edeb483e8e66c6",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "sbom-runtime.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/sbom-runtime.result.json",
+      "deliveredSha256": "99b1328194aed790c754b3ad232f6139c11eec86a7cbfa9bdd44ec2fb71fd435",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "sbom-vendor-check.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/sbom-vendor-check.log",
+      "deliveredSha256": "a12b53cc30a549c8f40d2fbd68317f364768652bad45529ac3cd8b04e28452ea",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "sbom-vendor-check.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/sbom-vendor-check.result.json",
+      "deliveredSha256": "8dd71393bcddf66a184476d95fa443b9a3b475754f245d1027177f4383de70e8",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "security-stability/backend-typecheck.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/security-stability/backend-typecheck.log",
+      "deliveredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "security-stability/boundaries-node22.tap",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/security-stability/boundaries-node22.tap",
+      "deliveredSha256": "ba2ed16ed789b4fa29ecb69195a62072e8a78e70b26034e4372e0ac6a1326a9e",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "security-stability/boundaries-node24.tap",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/security-stability/boundaries-node24.tap",
+      "deliveredSha256": "0bbb4b708b27f6edc794b93100fdde4c1d8142616758f6349ed4d146e2167bc1",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "security-stability/coexistence-node22.tap",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/security-stability/coexistence-node22.tap",
+      "deliveredSha256": "2ce54b6c6737d1b3bc4b35d370db7c8759ebb4915b74b1aa87546ec369dd85cf",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "security-stability/coexistence-node24.tap",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/security-stability/coexistence-node24.tap",
+      "deliveredSha256": "c84d1ce542b95cd146d677f60378a86c504a7697982c49edec01825520a750db",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "security-stability/results.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/security-stability/results.json",
+      "deliveredSha256": "82088d945d690fad33a2267abd821069991cee00e6a7ab6a3520a0e8b6e17ca5",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "security-stability/upload-admission-before-node22.tap",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/security-stability/upload-admission-before-node22.tap",
+      "deliveredSha256": "d360d44481a3431c2a6f2867f49cc8c6926a237cd01189dff26434a6bfa2ac5f",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "security-stability/upload-admission-before-node24.tap",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/security-stability/upload-admission-before-node24.tap",
+      "deliveredSha256": "4eebab7d7edf256b6ab3916ba3a6ac8f82af2c9e07235e98dccb1f6d57863e9f",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "security-stability/upload-lint.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/security-stability/upload-lint.log",
+      "deliveredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "security-stability/upload-node22.tap",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/security-stability/upload-node22.tap",
+      "deliveredSha256": "fd82b1dd8dc0a4be4db44c5f68da07024c928b8e19973d4f573a091902a17130",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "security-stability/upload-node24.tap",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/security-stability/upload-node24.tap",
+      "deliveredSha256": "9154d9045e363d1887ca16a14a2bd335867551f27df90ac0f9a17009df8251a6",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ui-docs-check.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ui-docs-check.log",
+      "deliveredSha256": "c5ca2544f0b9d55440c8d0806970c7f4fe635d49c0587f9db2f0213ced698293",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ui-docs-check.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ui-docs-check.result.json",
+      "deliveredSha256": "c9a40d86629a01d3131473e1f8de2cf161fbb2192722bdcc72b59af673cb0565",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ui-runtime-final.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ui-runtime-final.log",
+      "deliveredSha256": "0eb591b0e83a3558aec9a76c25279e38e26a6210e6f27e04a0463d1113d040f4",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ui-runtime-final.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ui-runtime-final.result.json",
+      "deliveredSha256": "61d0501394cc49a522edbaa0ebc93eb213539e079586b0a6705637e2d109215c",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ui-runtime-sync.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ui-runtime-sync.log",
+      "deliveredSha256": "e72e753cd490f188f609f8c1c6a533adbacf5b5c53bd0a0c5d3ef6a7ee4f5305",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ui-runtime-sync.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ui-runtime-sync.result.json",
+      "deliveredSha256": "8194164c5be9eb8c3a1c7ca0de44ee579dc5c7cc531a99b2fe67229c9d24491d",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ui-sbom-check.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ui-sbom-check.log",
+      "deliveredSha256": "a4c497394efcadfc5909c9f27ba11fc1f52ffb131d9f458a84b8a5c2d204f28e",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ui-sbom-check.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ui-sbom-check.result.json",
+      "deliveredSha256": "d9075400d5fb5f6cfef751aa1a32f13c08581c7e34558428747f14de1cb8cbe0",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ui-sbom-final.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ui-sbom-final.log",
+      "deliveredSha256": "4d1bacbf06f4210d5e8e6d58edaa21c5df17b4bad202fd126211f3e2ad418733",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ui-sbom-final.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ui-sbom-final.result.json",
+      "deliveredSha256": "19531d631a102e5094be3c0a5efc46b18eff00b942d97fa7a77a8f2281b5e8e1",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ui-secret-final.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ui-secret-final.log",
+      "deliveredSha256": "feac922cb4c7af7ff397ef527c62e4c2ca176c988a4ddd60bc25b4724ffea76d",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ui-secret-final.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ui-secret-final.result.json",
+      "deliveredSha256": "d9958d6bf8bd90611a93fde883623668f9dc968b8a8ae577e92df0039ebc08a1",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ui-security-final.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ui-security-final.log",
+      "deliveredSha256": "8a59f4af1874d7ae584bd1ed54e204bf599f91300b59372725a47c0ecd00fe88",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "ui-security-final.result.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/ui-security-final.result.json",
+      "deliveredSha256": "ae3db8c37118934ebd2b30fbd28ba56c65ff37c6c4fac809398aae2b0b469178",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "update-ui/baseline-ui.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/update-ui/baseline-ui.log",
+      "deliveredSha256": "8e6afc7947afa7b86e2e925163096eea5ae2b03156e17966849fb3eaa2d3892c",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "update-ui/browser-preview.test.cjs",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/update-ui/browser-preview.test.cjs",
+      "deliveredSha256": "ca80c7442a2b67463aab5733d924e910bcd99e50462aee33af07d54887519767",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "update-ui/draft-regression.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/update-ui/draft-regression.log",
+      "deliveredSha256": "198984e07f2a0dc5ca2e00baa5c1243aebb3f58367574b018faafaf31e57a35d",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "update-ui/eos-updates-before.ts",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/update-ui/eos-updates-before.ts",
+      "deliveredSha256": "268bae8ae5b417d00ec6aaea67b79a2b4c53db3e6df8ff098710f28b6d2bb6dd",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "update-ui/lint.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/update-ui/lint.log",
+      "deliveredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "update-ui/results.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/update-ui/results.json",
+      "deliveredSha256": "470573f67f456c9e1f79274f1653ae1fcd55524a838e841211105b2b653e3189",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "update-ui/source-evidence.json",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/update-ui/source-evidence.json",
+      "deliveredSha256": "a53e0371b43b37cdd9d9b46669a9de347602f15891117b61b39f4e361466073a",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "update-ui/type-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/update-ui/type-node22.log",
+      "deliveredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "update-ui/type-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/update-ui/type-node24.log",
+      "deliveredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "update-ui/ui-node22.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/update-ui/ui-node22.log",
+      "deliveredSha256": "5cf91ed825a0c4a1a6d4df1b047d4a4c7519eb1bd95f5098bf207a0f28735f97",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    },
+    {
+      "file": "update-ui/ui-node24.log",
+      "sourceFile": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/docs/reports/unified-9.0.21/raw/update-ui/ui-node24.log",
+      "deliveredSha256": "bf7dfa0165e74b7469c3f5e99f7969202d86b59c1697310f12d24e24969493bb",
+      "formatting": "actual captured bytes; baseline/reproduction failures interpreted by associated reports"
+    }
+  ],
+  "environment": {
+    "noLiveDevice": true,
+    "skips": [
+      "nginx unavailable",
+      "setfacl unavailable"
+    ]
+  }
+}

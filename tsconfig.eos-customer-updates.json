@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "noEmit": true,
+    "noEmitOnError": true,
+    "target": "ES2022",
+    "module": "node16",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "types": ["node"],
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "useUnknownInCatchVariables": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "files": [
+    "src/lib/eosCustomerUpdateTransport.ts",
+    "src/lib/eosCustomerUpdates.ts",
+    "src/lib/eosCustomerUpdateWorker.ts",
+    "src/lib/eosUpdateSnapshot.ts",
+    "src/lib/eosCustomerUpdateHttp.ts"
+  ],
+  "include": []
+}

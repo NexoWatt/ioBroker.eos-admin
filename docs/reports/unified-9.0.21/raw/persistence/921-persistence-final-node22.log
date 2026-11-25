@@ -1,0 +1,1019 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: module persistence never writes the controller restart-triggering instance object
+ok 1 - module persistence never writes the controller restart-triggering instance object
+  ---
+  duration_ms: 13.84051
+  type: 'test'
+  ...
+# Subtest: 9.0.6 native config is retained as fallback only until a dedicated saved config exists
+ok 2 - 9.0.6 native config is retained as fallback only until a dedicated saved config exists
+  ---
+  duration_ms: 1.16223
+  type: 'test'
+  ...
+# Subtest: malformed or permissive persisted objects cannot silently restore stale native configuration
+ok 3 - malformed or permissive persisted objects cannot silently restore stale native configuration
+  ---
+  duration_ms: 7.822989
+  type: 'test'
+  ...
+# Subtest: stale config writer detects changed revision and keeps the newer stored envelope
+ok 4 - stale config writer detects changed revision and keeps the newer stored envelope
+  ---
+  duration_ms: 0.700224
+  type: 'test'
+  ...
+# Subtest: concurrent writes through the same running owner are bounded and never interleave
+ok 5 - concurrent writes through the same running owner are bounded and never interleave
+  ---
+  duration_ms: 0.762438
+  type: 'test'
+  ...
+# Subtest: failed persistence and missing writeback never report successful save
+ok 6 - failed persistence and missing writeback never report successful save
+  ---
+  duration_ms: 5.024686
+  type: 'test'
+  ...
+# Subtest: module names, prototype keys and envelope sizes are validated before storage
+ok 7 - module names, prototype keys and envelope sizes are validated before storage
+  ---
+  duration_ms: 15.592348
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:13) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# Subtest: two browser drafts cannot silently overwrite a newer module configuration through real HTTP
+ok 8 - two browser drafts cannot silently overwrite a newer module configuration through real HTTP
+  ---
+  duration_ms: 190.70024
+  type: 'test'
+  ...
+# Subtest: missing or malformed HTTP draft revision cannot authorize a replacement
+ok 9 - missing or malformed HTTP draft revision cannot authorize a replacement
+  ---
+  duration_ms: 122.970999
+  type: 'test'
+  ...
+# Subtest: SMA device create/save/reload and enable toggle survive a new host with packaged defaults
+ok 10 - SMA device create/save/reload and enable toggle survive a new host with packaged defaults
+  ---
+  duration_ms: 43.498046
+  type: 'test'
+  ...
+# Subtest: blocked handover displays the saved devices and rejects replacement until explicit coordinator release
+ok 11 - blocked handover displays the saved devices and rejects replacement until explicit coordinator release
+  ---
+  duration_ms: 25.789721
+  type: 'test'
+  ...
+# Subtest: read failure on handover release cannot make a previously loaded stale configuration writable
+ok 12 - read failure on handover release cannot make a previously loaded stale configuration writable
+  ---
+  duration_ms: 29.967873
+  type: 'test'
+  ...
+# Subtest: operational start joins a concurrent editor read and stopping during that read never activates a module
+ok 13 - operational start joins a concurrent editor read and stopping during that read never activates a module
+  ---
+  duration_ms: 26.507322
+  type: 'test'
+  ...
+# Subtest: operational start joins an accepted pre-start save, preserving commit errors and shutdown fencing
+ok 14 - operational start joins an accepted pre-start save, preserving commit errors and shutdown fencing
+  ---
+  duration_ms: 42.512993
+  type: 'test'
+  ...
+# Subtest: actual Devices HTTP response drives the browser bridge through one global Save, CSRF and automatic per-device status
+ok 15 - actual Devices HTTP response drives the browser bridge through one global Save, CSRF and automatic per-device status
+  ---
+  duration_ms: 87.509599
+  type: 'test'
+  ...
+# Subtest: real module HTTP status advances READY to failure and recovery without replacing the dirty browser draft
+ok 16 - real module HTTP status advances READY to failure and recovery without replacing the dirty browser draft
+  ---
+  duration_ms: 32.974189
+  type: 'test'
+  ...
+# (node:14) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: eebus status refresh rotates CSRF without blessing a stale draft; conflict preserves input
+ok 17 - eebus status refresh rotates CSRF without blessing a stale draft; conflict preserves input
+  ---
+  duration_ms: 20.173225
+  type: 'test'
+  ...
+# Subtest: eebus a current draft saves with its loaded revision
+ok 18 - eebus a current draft saves with its loaded revision
+  ---
+  duration_ms: 7.768267
+  type: 'test'
+  ...
+# Subtest: backup status refresh rotates CSRF without blessing a stale draft; conflict preserves input
+ok 19 - backup status refresh rotates CSRF without blessing a stale draft; conflict preserves input
+  ---
+  duration_ms: 5.793904
+  type: 'test'
+  ...
+# Subtest: backup a current draft saves with its loaded revision
+ok 20 - backup a current draft saves with its loaded revision
+  ---
+  duration_ms: 2.259412
+  type: 'test'
+  ...
+# (node:15) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: device save refreshes rotated session CSRF without discarding the edited device
+ok 21 - device save refreshes rotated session CSRF without discarding the edited device
+  ---
+  duration_ms: 13.623573
+  type: 'test'
+  ...
+# Subtest: CSRF refresh does not replace the draft revision and a conflict preserves all unsaved device inputs
+ok 22 - CSRF refresh does not replace the draft revision and a conflict preserves all unsaved device inputs
+  ---
+  duration_ms: 4.332714
+  type: 'test'
+  ...
+# Subtest: expired session preserves the unsaved form and allows explicit retry after a separate login
+ok 23 - expired session preserves the unsaved form and allows explicit retry after a separate login
+  ---
+  duration_ms: 8.368571
+  type: 'test'
+  ...
+# Subtest: forbidden mutation is never replayed and preserves its draft for correction
+ok 24 - forbidden mutation is never replayed and preserves its draft for correction
+  ---
+  duration_ms: 1.933251
+  type: 'test'
+  ...
+# Subtest: enabled stored module exposes the exact import prerequisite and never posts a manual import
+ok 25 - enabled stored module exposes the exact import prerequisite and never posts a manual import
+  ---
+  duration_ms: 2.442427
+  type: 'test'
+  ...
+# Subtest: preserved automatic migration cannot be replaced by a manual import from the editor
+ok 26 - preserved automatic migration cannot be replaced by a manual import from the editor
+  ---
+  duration_ms: 4.292293
+  type: 'test'
+  ...
+# Subtest: manual import explains a newly blocked server state without losing the draft or replaying writes
+ok 27 - manual import explains a newly blocked server state without losing the draft or replaying writes
+  ---
+  duration_ms: 1.834021
+  type: 'test'
+  ...
+# Subtest: unconfirmed module stop blocks the editor import without instructing an unsafe retry
+ok 28 - unconfirmed module stop blocks the editor import without instructing an unsafe retry
+  ---
+  duration_ms: 1.613129
+  type: 'test'
+  ...
+# Subtest: uninitialized module configuration stays readable but cannot be saved or manually imported
+ok 29 - uninitialized module configuration stays readable but cannot be saved or manually imported
+  ---
+  duration_ms: 2.296888
+  type: 'test'
+  ...
+# Subtest: migration-blocked editor explains the prerequisite and unlocks after a fresh released configuration load
+ok 30 - migration-blocked editor explains the prerequisite and unlocks after a fresh released configuration load
+  ---
+  duration_ms: 2.360594
+  type: 'test'
+  ...
+# Subtest: reload does not silently discard the pending device draft
+ok 31 - reload does not silently discard the pending device draft
+  ---
+  duration_ms: 1.943707
+  type: 'test'
+  ...
+# (node:18) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: one central entitlement starts the integrated module without a second adapter or license
+ok 32 - one central entitlement starts the integrated module without a second adapter or license
+  ---
+  duration_ms: 39.13716
+  type: 'test'
+  ...
+# Subtest: disabled and unlicensed modules create no runtime; metadata remains available
+ok 33 - disabled and unlicensed modules create no runtime; metadata remains available
+  ---
+  duration_ms: 12.123144
+  type: 'test'
+  ...
+# Subtest: license loss denies existing operation closures synchronously and stops transports
+ok 34 - license loss denies existing operation closures synchronously and stops transports
+  ---
+  duration_ms: 13.937986
+  type: 'test'
+  ...
+# Subtest: normal host heartbeat preserves a running module and generation
+ok 35 - normal host heartbeat preserves a running module and generation
+  ---
+  duration_ms: 8.8261
+  type: 'test'
+  ...
+# Subtest: legacy enable revokes immediately; confirmed stop creates a new valid generation
+ok 36 - legacy enable revokes immediately; confirmed stop creates a new valid generation
+  ---
+  duration_ms: 3.308001
+  type: 'test'
+  ...
+# Subtest: a race during legacy inventory cannot renew an invalidated operation lease
+ok 37 - a race during legacy inventory cannot renew an invalidated operation lease
+  ---
+  duration_ms: 9.574125
+  type: 'test'
+  ...
+# Subtest: facade constrains namespaces and suppresses stale telemetry after lifecycle end
+ok 38 - facade constrains namespaces and suppresses stale telemetry after lifecycle end
+  ---
+  duration_ms: 2.29786
+  type: 'test'
+  ...
+# Subtest: secret masking and restoration follow device IDs when rows move
+ok 39 - secret masking and restoration follow device IDs when rows move
+  ---
+  duration_ms: 5.250195
+  type: 'test'
+  ...
+# Subtest: saved configurations are encrypted and API views never return device credentials
+ok 40 - saved configurations are encrypted and API views never return device credentials
+  ---
+  duration_ms: 8.584697
+  type: 'test'
+  ...
+# Subtest: configuration cannot reopen a runtime after failed transport shutdown
+ok 41 - configuration cannot reopen a runtime after failed transport shutdown
+  ---
+  duration_ms: 14.608176
+  type: 'test'
+  ...
+# Subtest: config rejects prototype keys and excessive depth before persistence
+ok 42 - config rejects prototype keys and excessive depth before persistence
+  ---
+  duration_ms: 0.303568
+  type: 'test'
+  ...
+# Subtest: integrated licenses preserve NWL2 adapter scope and fail closed on expired core entitlement
+ok 43 - integrated licenses preserve NWL2 adapter scope and fail closed on expired core entitlement
+  ---
+  duration_ms: 7.324869
+  type: 'test'
+  ...
+# Subtest: concurrent HTTP-close and adapter-unload share transport cleanup, and late startup never installs a timer
+ok 44 - concurrent HTTP-close and adapter-unload share transport cleanup, and late startup never installs a timer
+  ---
+  duration_ms: 23.485542
+  type: 'test'
+  ...
+# Subtest: preserved legacy EEBus namespace keeps state IDs while private bridge remains tied to EOS owner
+ok 45 - preserved legacy EEBus namespace keeps state IDs while private bridge remains tied to EOS owner
+  ---
+  duration_ms: 26.703789
+  type: 'test'
+  ...
+# Subtest: backup secret fields stay redacted and restored by unique endpoint rather than row index
+ok 46 - backup secret fields stay redacted and restored by unique endpoint rather than row index
+  ---
+  duration_ms: 0.410048
+  type: 'test'
+  ...
+# Subtest: backup notifications use only configured validated target and lose authority on revocation
+ok 47 - backup notifications use only configured validated target and lose authority on revocation
+  ---
+  duration_ms: 7.686354
+  type: 'test'
+  ...
+# Subtest: backup downloads clean late file streams after timeout or stop and bound concurrent opens
+ok 48 - backup downloads clean late file streams after timeout or stop and bound concurrent opens
+  ---
+  duration_ms: 23.913276
+  type: 'test'
+  ...
+# Subtest: backup data-folder inventory exposes only bounded paths and rejects revoked or malformed reads
+ok 49 - backup data-folder inventory exposes only bounded paths and rejects revoked or malformed reads
+  ---
+  duration_ms: 5.237866
+  type: 'test'
+  ...
+# Subtest: device view exposes an explicit commissioning bridge status before binding instead of an empty placeholder
+ok 50 - device view exposes an explicit commissioning bridge status before binding instead of an empty placeholder
+  ---
+  duration_ms: 7.041031
+  type: 'test'
+  ...
+# Subtest: active profile admission rejection occurs before persistent changes and preserves the existing runtime
+ok 51 - active profile admission rejection occurs before persistent changes and preserves the existing runtime
+  ---
+  duration_ms: 11.236809
+  type: 'test'
+  ...
+# Subtest: profile changes require the bridge, while a stopped controller can reserve and persist a replacement
+ok 52 - profile changes require the bridge, while a stopped controller can reserve and persist a replacement
+  ---
+  duration_ms: 17.32718
+  type: 'test'
+  ...
+# (node:34) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:34) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# Subtest: real module pages and vendor assets are available through the guarded same-origin routes
+ok 53 - real module pages and vendor assets are available through the guarded same-origin routes
+  ---
+  duration_ms: 423.787462
+  type: 'test'
+  ...
+# Subtest: backup download uses authenticated bounded binary streaming and refuses untrusted names
+ok 54 - backup download uses authenticated bounded binary streaming and refuses untrusted names
+  ---
+  duration_ms: 54.452759
+  type: 'test'
+  ...
+# Subtest: slow backup downloads have bounded admission and release their stream after client disconnect
+ok 55 - slow backup downloads have bounded admission and release their stream after client disconnect
+  ---
+  duration_ms: 25.826247
+  type: 'test'
+  ...
+# Subtest: backup byte-count mismatches abort the response without exposing an unbounded stream
+ok 56 - backup byte-count mismatches abort the response without exposing an unbounded stream
+  ---
+  duration_ms: 14.385911
+  type: 'test'
+  ...
+# Subtest: read-only migration page and status require fresh administrator authentication and expose no private journal fields
+ok 57 - read-only migration page and status require fresh administrator authentication and expose no private journal fields
+  ---
+  duration_ms: 35.428766
+  type: 'test'
+  ...
+# Subtest: fresh admin role, same origin and session-bound CSRF are required for every module mutation
+ok 58 - fresh admin role, same origin and session-bound CSRF are required for every module mutation
+  ---
+  duration_ms: 16.473444
+  type: 'test'
+  ...
+# Subtest: first-login password requirement and invalid expired sessions do not expose configuration
+ok 59 - first-login password requirement and invalid expired sessions do not expose configuration
+  ---
+  duration_ms: 7.211208
+  type: 'test'
+  ...
+# Subtest: invalid and oversized module JSON and internal exceptions are contained without leaking bodies
+ok 60 - invalid and oversized module JSON and internal exceptions are contained without leaking bodies
+  ---
+  duration_ms: 16.432703
+  type: 'test'
+  ...
+# (node:39) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: enabled target and unconfirmed target stop refuse manual import without mutation
+ok 61 - enabled target and unconfirmed target stop refuse manual import without mutation
+  ---
+  duration_ms: 26.029953
+  type: 'test'
+  ...
+# Subtest: manual reimport cannot remove an established legacy namespace binding
+ok 62 - manual reimport cannot remove an established legacy namespace binding
+  ---
+  duration_ms: 10.330516
+  type: 'test'
+  ...
+# Subtest: manual import reserves the full conversion: concurrent enable and imports cannot overwrite it
+ok 63 - manual import reserves the full conversion: concurrent enable and imports cannot overwrite it
+  ---
+  duration_ms: 41.284832
+  type: 'test'
+  ...
+# Subtest: source reactivation during conversion is rejected before persistence
+ok 64 - source reactivation during conversion is rejected before persistence
+  ---
+  duration_ms: 2.029736
+  type: 'test'
+  ...
+# Subtest: host shutdown during conversion prevents an import commit
+ok 65 - host shutdown during conversion prevents an import commit
+  ---
+  duration_ms: 1.628101
+  type: 'test'
+  ...
+# Subtest: real manual Devices import preserves old JSON-only devices and credentials without activating
+ok 66 - real manual Devices import preserves old JSON-only devices and credentials without activating
+  ---
+  duration_ms: 396.456604
+  type: 'test'
+  ...
+# Subtest: real manual Devices import rejects conflicting arrays before persisting
+ok 67 - real manual Devices import rejects conflicting arrays before persisting
+  ---
+  duration_ms: 21.255815
+  type: 'test'
+  ...
+# Subtest: unstarted migration-blocked host never treats a default empty entry as loaded target configuration
+ok 68 - unstarted migration-blocked host never treats a default empty entry as loaded target configuration
+  ---
+  duration_ms: 7.843029
+  type: 'test'
+  ...
+# Subtest: startup configuration load excludes import and save, and concurrent start waits for the same initialization
+ok 69 - startup configuration load excludes import and save, and concurrent start waits for the same initialization
+  ---
+  duration_ms: 13.333336
+  type: 'test'
+  ...
+# Subtest: unreadable persisted target is not replaceable through default config or manual import
+ok 70 - unreadable persisted target is not replaceable through default config or manual import
+  ---
+  duration_ms: 5.08082
+  type: 'test'
+  ...
+# Subtest: manual backup import reports its actual backup target prefix
+ok 71 - manual backup import reports its actual backup target prefix
+  ---
+  duration_ms: 43.152075
+  type: 'test'
+  ...
+# (node:44) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: late license activation cannot start defaults before a new complete legacy preflight
+ok 72 - late license activation cannot start defaults before a new complete legacy preflight
+  ---
+  duration_ms: 61.731951
+  type: 'test'
+  ...
+# Subtest: unlicensed fresh installation remains fenced until licensed startup checks an empty inventory
+ok 73 - unlicensed fresh installation remains fenced until licensed startup checks an empty inventory
+  ---
+  duration_ms: 1.679919
+  type: 'test'
+  ...
+# Subtest: standard Backitup instances are not legacy EOS backup migration sources
+ok 74 - standard Backitup instances are not legacy EOS backup migration sources
+  ---
+  duration_ms: 2.020943
+  type: 'test'
+  ...
+# Subtest: legacy Devices cutover preserves standard Backitup configuration, ACL, history and running state
+ok 75 - legacy Devices cutover preserves standard Backitup configuration, ACL, history and running state
+  ---
+  duration_ms: 31.617166
+  type: 'test'
+  ...
+# Subtest: automatic handover preserves namespace, custom/history objects and settings including credentials
+ok 76 - automatic handover preserves namespace, custom/history objects and settings including credentials
+  ---
+  duration_ms: 42.267343
+  type: 'test'
+  ...
+# Subtest: preflight ambiguity, unknown version, remote host, missing license and existing destination never stop a source
+ok 77 - preflight ambiguity, unknown version, remote host, missing license and existing destination never stop a source
+  ---
+  duration_ms: 9.745203
+  type: 'test'
+  ...
+# Subtest: failed target persistence restores confirmed legacy runtime; journal prevents repeated interruption
+ok 78 - failed target persistence restores confirmed legacy runtime; journal prevents repeated interruption
+  ---
+  duration_ms: 10.825019
+  type: 'test'
+  ...
+# Subtest: crash while stopping is rolled back before new runtime gains write ownership
+ok 79 - crash while stopping is rolled back before new runtime gains write ownership
+  ---
+  duration_ms: 13.711445
+  type: 'test'
+  ...
+# Subtest: failed new runtime with uncertain transport stop never re-enables legacy writer
+ok 80 - failed new runtime with uncertain transport stop never re-enables legacy writer
+  ---
+  duration_ms: 8.496944
+  type: 'test'
+  ...
+# Subtest: encrypted native credentials decrypt exactly once; missing protected fields block all source changes
+ok 81 - encrypted native credentials decrypt exactly once; missing protected fields block all source changes
+  ---
+  duration_ms: 10.682625
+  type: 'test'
+  ...
+# Subtest: UI native settings move to protected config; two successive saves read current values and preserve old source
+ok 82 - UI native settings move to protected config; two successive saves read current values and preserve old source
+  ---
+  duration_ms: 4.448137
+  type: 'test'
+  ...
+# Subtest: SmartHome migration preserves explicit enabled setting and existing customer configuration states
+ok 83 - SmartHome migration preserves explicit enabled setting and existing customer configuration states
+  ---
+  duration_ms: 20.95361
+  type: 'test'
+  ...
+# Subtest: SmartHome migration preserves explicit disabled setting and existing customer configuration states
+ok 84 - SmartHome migration preserves explicit disabled setting and existing customer configuration states
+  ---
+  duration_ms: 13.787219
+  type: 'test'
+  ...
+# Subtest: UI preflight blocks corrupt or unreadable existing customer states before stopping the old writer
+ok 85 - UI preflight blocks corrupt or unreadable existing customer states before stopping the old writer
+  ---
+  duration_ms: 37.319122
+  type: 'test'
+  ...
+# Subtest: UI state lost between preflight and stopped cutover causes rollback instead of default activation
+ok 86 - UI state lost between preflight and stopped cutover causes rollback instead of default activation
+  ---
+  duration_ms: 8.101839
+  type: 'test'
+  ...
+# Subtest: known old-instance RPC consumers block cutover while full datapoint references stay valid
+ok 87 - known old-instance RPC consumers block cutover while full datapoint references stay valid
+  ---
+  duration_ms: 2.622909
+  type: 'test'
+  ...
+# Subtest: changed source host/version during preflight never resumes an unreviewed original adapter
+ok 88 - changed source host/version during preflight never resumes an unreviewed original adapter
+  ---
+  duration_ms: 15.566138
+  type: 'test'
+  ...
+# Subtest: a bounded database read cannot hold startup or stop legacy writers indefinitely
+ok 89 - a bounded database read cannot hold startup or stop legacy writers indefinitely
+  ---
+  duration_ms: 83.01707
+  type: 'test'
+  ...
+# Subtest: another active EOS instance blocks automatic takeover before disabling old sources
+ok 90 - another active EOS instance blocks automatic takeover before disabling old sources
+  ---
+  duration_ms: 1.650355
+  type: 'test'
+  ...
+# Subtest: transferred module destination must persist with its original namespace binding on restart
+ok 91 - transferred module destination must persist with its original namespace binding on restart
+  ---
+  duration_ms: 61.65154
+  type: 'test'
+  ...
+# Subtest: committed UI accepts legitimate later configuration edits on a fresh process restart
+ok 92 - committed UI accepts legitimate later configuration edits on a fresh process restart
+  ---
+  duration_ms: 20.600599
+  type: 'test'
+  ...
+# Subtest: TLS or listener failure before any hosted runtime exists restores old sources and fences late startup
+ok 93 - TLS or listener failure before any hosted runtime exists restores old sources and fences late startup
+  ---
+  duration_ms: 7.402456
+  type: 'test'
+  ...
+# Subtest: early verification times out even when the web constructor is never reached
+ok 94 - early verification times out even when the web constructor is never reached
+  ---
+  duration_ms: 51.765213
+  type: 'test'
+  ...
+# Subtest: active module with a pending start cannot commit until RUNNING is confirmed
+ok 95 - active module with a pending start cannot commit until RUNNING is confirmed
+  ---
+  duration_ms: 255.580841
+  type: 'test'
+  ...
+# Subtest: concurrent startup failure has one recovery and never restores old writers before all stop promises settle
+ok 96 - concurrent startup failure has one recovery and never restores old writers before all stop promises settle
+  ---
+  duration_ms: 14.719483
+  type: 'test'
+  ...
+# Subtest: a pending stop timeout remains fenced even if that stop settles later
+ok 97 - a pending stop timeout remains fenced even if that stop settles later
+  ---
+  duration_ms: 17.008766
+  type: 'test'
+  ...
+# Subtest: rejected runtime stop and sticky module stop failure never reactivate old sources
+ok 98 - rejected runtime stop and sticky module stop failure never reactivate old sources
+  ---
+  duration_ms: 5.108472
+  type: 'test'
+  ...
+# Subtest: source identity is checked again immediately before rollback re-enable
+ok 99 - source identity is checked again immediately before rollback re-enable
+  ---
+  duration_ms: 7.056104
+  type: 'test'
+  ...
+# Subtest: rejected commit persistence recovers without leaving a false COMMITTED state
+ok 100 - rejected commit persistence recovers without leaving a false COMMITTED state
+  ---
+  duration_ms: 2.999016
+  type: 'test'
+  ...
+# Subtest: concurrent commit persistence cannot overwrite a later startup recovery decision
+ok 101 - concurrent commit persistence cannot overwrite a later startup recovery decision
+  ---
+  duration_ms: 2.510601
+  type: 'test'
+  ...
+# Subtest: intentional shutdown fences monitoring; the transferred journal is verified on next startup
+ok 102 - intentional shutdown fences monitoring; the transferred journal is verified on next startup
+  ---
+  duration_ms: 3.04839
+  type: 'test'
+  ...
+# Subtest: preflight BLOCKED prevents operational starts while the original disabled UI remains unchanged
+ok 103 - preflight BLOCKED prevents operational starts while the original disabled UI remains unchanged
+  ---
+  duration_ms: 0.612272
+  type: 'test'
+  ...
+# Subtest: uncertain stop remains ROLLBACK_REQUIRED across restart without automatically re-enabling sources
+ok 104 - uncertain stop remains ROLLBACK_REQUIRED across restart without automatically re-enabling sources
+  ---
+  duration_ms: 1.794802
+  type: 'test'
+  ...
+# Subtest: interrupted ROLLING_BACK needs persisted completed-stop proof; absent or false proof stays fenced
+ok 105 - interrupted ROLLING_BACK needs persisted completed-stop proof; absent or false proof stays fenced
+  ---
+  duration_ms: 10.105586
+  type: 'test'
+  ...
+# Subtest: revoked license, ownership or runtime readiness during source verification cannot commit
+ok 106 - revoked license, ownership or runtime readiness during source verification cannot commit
+  ---
+  duration_ms: 74.098976
+  type: 'test'
+  ...
+# Subtest: the early monitor deadline also covers an unresolved asynchronous readiness observation
+ok 107 - the early monitor deadline also covers an unresolved asynchronous readiness observation
+  ---
+  duration_ms: 12.871631
+  type: 'test'
+  ...
+# Subtest: a late readiness rejection after intentional shutdown does not begin rollback or re-enable old writers
+ok 108 - a late readiness rejection after intentional shutdown does not begin rollback or re-enable old writers
+  ---
+  duration_ms: 12.664719
+  type: 'test'
+  ...
+# (node:76) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: migration page explains blocked protected fields and shows existing instances without mutation requests
+ok 109 - migration page explains blocked protected fields and shows existing instances without mutation requests
+  ---
+  duration_ms: 140.321925
+  type: 'test'
+  ...
+# Subtest: migration page rejects markup-shaped data and renders authentication failure as text
+ok 110 - migration page rejects markup-shaped data and renders authentication failure as text
+  ---
+  duration_ms: 19.542996
+  type: 'test'
+  ...
+# Subtest: late license activation explains the pending restart without claiming a missing license or completed migration
+ok 111 - late license activation explains the pending restart without claiming a missing license or completed migration
+  ---
+  duration_ms: 6.267468
+  type: 'test'
+  ...
+# (node:82) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: protected fields hidden by getForeignObject block every source before any earlier adapter is disabled
+ok 112 - protected fields hidden by getForeignObject block every source before any earlier adapter is disabled
+  ---
+  duration_ms: 71.165284
+  type: 'test'
+  ...
+# Subtest: invalid encrypted migration journal fences ownership rather than continuing from IDLE
+ok 113 - invalid encrypted migration journal fences ownership rather than continuing from IDLE
+  ---
+  duration_ms: 6.810475
+  type: 'test'
+  ...
+# Subtest: unreadable UI destination before journal recovery keeps migration write authority fenced
+ok 114 - unreadable UI destination before journal recovery keeps migration write authority fenced
+  ---
+  duration_ms: 0.968007
+  type: 'test'
+  ...
+# Subtest: committed migration cannot resume with a missing or foreign-namespace UI destination
+ok 115 - committed migration cannot resume with a missing or foreign-namespace UI destination
+  ---
+  duration_ms: 37.400925
+  type: 'test'
+  ...
+# Subtest: ready UI with revoked ownership cannot commit the legacy handover
+ok 116 - ready UI with revoked ownership cannot commit the legacy handover
+  ---
+  duration_ms: 21.001942
+  type: 'test'
+  ...
+# Subtest: a deliberately disabled legacy UI is not automatically transferred into an enabled EMS
+ok 117 - a deliberately disabled legacy UI is not automatically transferred into an enabled EMS
+  ---
+  duration_ms: 0.668877
+  type: 'test'
+  ...
+# (node:94) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: slow Devices metadata progress commits at 60 seconds without the old 45-second rollback
+ok 118 - slow Devices metadata progress commits at 60 seconds without the old 45-second rollback
+  ---
+  duration_ms: 137.061896
+  type: 'test'
+  ...
+# Subtest: confirmed progress has a fixed 165-second migration ceiling even if a faulty host never completes
+ok 119 - confirmed progress has a fixed 165-second migration ceiling even if a faulty host never completes
+  ---
+  duration_ms: 84.931282
+  type: 'test'
+  ...
+# Subtest: no progress cannot extend the ordinary 45-second limit
+ok 120 - no progress cannot extend the ordinary 45-second limit
+  ---
+  duration_ms: 34.546427
+  type: 'test'
+  ...
+# Subtest: READY transport status cannot extend the ordinary 45-second limit
+ok 121 - READY transport status cannot extend the ordinary 45-second limit
+  ---
+  duration_ms: 13.477363
+  type: 'test'
+  ...
+# Subtest: unconfirmed metadata counter cannot extend the ordinary 45-second limit
+ok 122 - unconfirmed metadata counter cannot extend the ordinary 45-second limit
+  ---
+  duration_ms: 7.811562
+  type: 'test'
+  ...
+# Subtest: constant historical count cannot extend the ordinary 45-second limit
+ok 123 - constant historical count cannot extend the ordinary 45-second limit
+  ---
+  duration_ms: 31.774203
+  type: 'test'
+  ...
+# Subtest: invalid counter cannot extend the ordinary 45-second limit
+ok 124 - invalid counter cannot extend the ordinary 45-second limit
+  ---
+  duration_ms: 24.140119
+  type: 'test'
+  ...
+# Subtest: progress does not conceal a module failure or defer confirmed rollback
+ok 125 - progress does not conceal a module failure or defer confirmed rollback
+  ---
+  duration_ms: 9.660286
+  type: 'test'
+  ...
+# Subtest: intentional stop during extended startup does not resurrect old writers
+ok 126 - intentional stop during extended startup does not resurrect old writers
+  ---
+  duration_ms: 18.437652
+  type: 'test'
+  ...
+# (node:104) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual hosted EEBus runtime starts with scoped objects/subscriptions and preserves identity over module restart
+ok 127 - actual hosted EEBus runtime starts with scoped objects/subscriptions and preserves identity over module restart
+  ---
+  duration_ms: 242.225497
+  type: 'test'
+  ...
+# Subtest: actual Devices catalogue remains configurable while module is disabled and no device runtime is started
+ok 128 - actual Devices catalogue remains configurable while module is disabled and no device runtime is started
+  ---
+  duration_ms: 119.912249
+  type: 'test'
+  ...
+# Subtest: legacy EEBus settings import remains disabled, reports changed boundaries and retains the original instance
+ok 129 - legacy EEBus settings import remains disabled, reports changed boundaries and retains the original instance
+  ---
+  duration_ms: 36.943812
+  type: 'test'
+  ...
+# (node:112) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: timed-out save keeps one transaction until actual commit and exposes the saved customer configuration after late completion
+ok 130 - timed-out save keeps one transaction until actual commit and exposes the saved customer configuration after late completion
+  ---
+  duration_ms: 5011.11033
+  type: 'test'
+  ...
+# Subtest: a later edit cannot restore an old customer setting after a timed-out save eventually committed
+ok 131 - a later edit cannot restore an old customer setting after a timed-out save eventually committed
+  ---
+  duration_ms: 5011.507697
+  type: 'test'
+  ...
+# Subtest: stop during the last database read prevents a new module configuration write
+ok 132 - stop during the last database read prevents a new module configuration write
+  ---
+  duration_ms: 3.516205
+  type: 'test'
+  ...
+# Subtest: rejected persistent write preserves old settings and releases admission for a corrected retry
+ok 133 - rejected persistent write preserves old settings and releases admission for a corrected retry
+  ---
+  duration_ms: 4.597773
+  type: 'test'
+  ...
+# Subtest: shutdown during an already-issued write retains the accepted durable settings without reopening the stopped runtime
+ok 134 - shutdown during an already-issued write retains the accepted durable settings without reopening the stopped runtime
+  ---
+  duration_ms: 3.76583
+  type: 'test'
+  ...
+# Subtest: timed-out manual import retains its mutation and profile reservations until actual completion
+ok 135 - timed-out manual import retains its mutation and profile reservations until actual completion
+  ---
+  duration_ms: 5053.085406
+  type: 'test'
+  ...
+# Subtest: a delayed rejected commit releases the transaction only after rejection and preserves the old settings
+ok 136 - a delayed rejected commit releases the transaction only after rejection and preserves the old settings
+  ---
+  duration_ms: 5021.048691
+  type: 'test'
+  ...
+# Subtest: an unresolved issued configuration write makes shutdown explicitly unconfirmed within the stop deadline
+ok 137 - an unresolved issued configuration write makes shutdown explicitly unconfirmed within the stop deadline
+  ---
+  duration_ms: 5045.991055
+  type: 'test'
+  ...
+# Subtest: a failed readback after a durable write rejects success and prevents an older draft from overwriting it
+ok 138 - a failed readback after a durable write rejects success and prevents an older draft from overwriting it
+  ---
+  duration_ms: 13.779137
+  type: 'test'
+  ...
+# (node:127) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:127) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: stop during command subscription acquisition never opens hardware and drains coverage
+# (node:127) ExperimentalWarning: The MockTimers API is an experimental feature and might change at any time
+ok 139 - stop during command subscription acquisition never opens hardware and drains coverage
+  ---
+  duration_ms: 264.526541
+  type: 'test'
+  ...
+# Subtest: a later factory failure after a successful stop releases its new command subscription
+ok 140 - a later factory failure after a successful stop releases its new command subscription
+  ---
+  duration_ms: 7.588908
+  type: 'test'
+  ...
+# Subtest: failed command subscription prevents factory creation and device writes
+ok 141 - failed command subscription prevents factory creation and device writes
+  ---
+  duration_ms: 2.375657
+  type: 'test'
+  ...
+# Subtest: hung command subscription times out fail-closed and late completion is drained
+ok 142 - hung command subscription times out fail-closed and late completion is drained
+  ---
+  duration_ms: 6.307968
+  type: 'test'
+  ...
+# Subtest: module presence does not report active until its original start promise succeeds
+ok 143 - module presence does not report active until its original start promise succeeds
+  ---
+  duration_ms: 8.669003
+  type: 'test'
+  ...
+# Subtest: concurrent stop waits for late startup and closes newly opened transports before resolving
+ok 144 - concurrent stop waits for late startup and closes newly opened transports before resolving
+  ---
+  duration_ms: 7.661086
+  type: 'test'
+  ...
+# Subtest: a rejected pending startup still receives final cleanup before stop confirmation
+ok 145 - a rejected pending startup still receives final cleanup before stop confirmation
+  ---
+  duration_ms: 5.828346
+  type: 'test'
+  ...
+# Subtest: timeout is sticky unconfirmed shutdown; late startup cleanup cannot authorize a rollback
+ok 146 - timeout is sticky unconfirmed shutdown; late startup cleanup cannot authorize a rollback
+  ---
+  duration_ms: 22.901643
+  type: 'test'
+  ...
+# Subtest: a failing final cleanup remains unconfirmed even when the first cleanup succeeded
+ok 147 - a failing final cleanup remains unconfirmed even when the first cleanup succeeded
+  ---
+  duration_ms: 2.199491
+  type: 'test'
+  ...
+# Subtest: a failed running transport shutdown cannot be hidden by host stop or reconfiguration
+ok 148 - a failed running transport shutdown cannot be hidden by host stop or reconfiguration
+  ---
+  duration_ms: 1.961464
+  type: 'test'
+  ...
+# Subtest: shutdown during configuration read cannot create a delayed module or subscription
+ok 149 - shutdown during configuration read cannot create a delayed module or subscription
+  ---
+  duration_ms: 1.186076
+  type: 'test'
+  ...
+# Subtest: a late facade subscription is immediately removed after its generation was revoked
+ok 150 - a late facade subscription is immediately removed after its generation was revoked
+  ---
+  duration_ms: 1.128349
+  type: 'test'
+  ...
+# Subtest: confirmed stop waits for every accepted state/create/extend mutation to settle
+ok 151 - confirmed stop waits for every accepted state/create/extend mutation to settle
+  ---
+  duration_ms: 2.99565
+  type: 'test'
+  ...
+# Subtest: pending mutation timeout stays unconfirmed; bounded capacity and revoked calls never forward or retry
+ok 152 - pending mutation timeout stays unconfirmed; bounded capacity and revoked calls never forward or retry
+  ---
+  duration_ms: 59.479028
+  type: 'test'
+  ...
+# (node:134) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: restart/update preserves valid saved assignments including intentional empty values: {}
+ok 153 - restart/update preserves valid saved assignments including intentional empty values: {}
+  ---
+  duration_ms: 43.878779
+  type: 'test'
+  ...
+# Subtest: restart/update preserves valid saved assignments including intentional empty values: datapoints,settingsConfig,smartHomeConfig
+ok 154 - restart/update preserves valid saved assignments including intentional empty values: datapoints,settingsConfig,smartHomeConfig
+  ---
+  duration_ms: 11.779907
+  type: 'test'
+  ...
+# Subtest: restart/update preserves valid saved assignments including intentional empty values: datapoints,settingsConfig,storageFarm
+ok 155 - restart/update preserves valid saved assignments including intentional empty values: datapoints,settingsConfig,storageFarm
+  ---
+  duration_ms: 6.523542
+  type: 'test'
+  ...
+# Subtest: unavailable or invalid saved installer data cannot become defaults or overwrite a backup
+ok 156 - unavailable or invalid saved installer data cannot become defaults or overwrite a backup
+  ---
+  duration_ms: 4.208917
+  type: 'test'
+  ...
+# Subtest: only a confirmed missing installer state permits matching-instance recovery; failed writes do not update backups
+ok 157 - only a confirmed missing installer state permits matching-instance recovery; failed writes do not update backups
+  ---
+  duration_ms: 11.466225
+  type: 'test'
+  ...
+# Subtest: customer flow settings and disabled PV AI survive startup defaults; explicit settings saves still apply
+ok 158 - customer flow settings and disabled PV AI survive startup defaults; explicit settings saves still apply
+  ---
+  duration_ms: 9.888529
+  type: 'test'
+  ...
+# Subtest: unreadable StorageFarm assignments never get replaced by empty defaults
+ok 159 - unreadable StorageFarm assignments never get replaced by empty defaults
+  ---
+  duration_ms: 4.951736
+  type: 'test'
+  ...
+# Subtest: automatic missing-state recovery prefers current backup and rejects corrupt existing backups or unreadable storage
+ok 160 - automatic missing-state recovery prefers current backup and rejects corrupt existing backups or unreadable storage
+  ---
+  duration_ms: 7.315635
+  type: 'test'
+  ...
+# Subtest: configuration startup failures close the hosted runtime rather than leave writable default configuration
+ok 161 - configuration startup failures close the hosted runtime rather than leave writable default configuration
+  ---
+  duration_ms: 4.665675
+  type: 'test'
+  ...
+# Subtest: new flow states initialize from the saved installer settings after hydration, not earlier package defaults
+ok 162 - new flow states initialize from the saved installer settings after hydration, not earlier package defaults
+  ---
+  duration_ms: 9.308225
+  type: 'test'
+  ...
+1..162
+# tests 162
+# suites 0
+# pass 162
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 25951.320937

@@ -1,0 +1,46 @@
+✖ real MQTT backpressure bounds message count and reconnects only after the old DB write drains (2678.578787ms)
+✖ real MQTT backpressure bounds queued payload bytes and reconnects only after the old DB write drains (2895.55735ms)
+✖ MQTT single payload exceeding one MiB is rejected visibly before application state writes (2526.759405ms)
+✖ MQTT wildcard topic discovery is capped per session with an explicit transport error (2740.766718ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 0
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11006.909288
+
+✖ failing tests:
+
+test at modules/devices/test/mqttResourceBounds.test.js:56:3
+✖ real MQTT backpressure bounds message count and reconnects only after the old DB write drains (2678.578787ms)
+  Error: MQTT backlog was not bounded
+      at until (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/modules/devices/test/mqttResourceBounds.test.js:14:39)
+      at async TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/modules/devices/test/mqttResourceBounds.test.js:61:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+
+test at modules/devices/test/mqttResourceBounds.test.js:56:3
+✖ real MQTT backpressure bounds queued payload bytes and reconnects only after the old DB write drains (2895.55735ms)
+  Error: MQTT backlog was not bounded
+      at until (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/modules/devices/test/mqttResourceBounds.test.js:14:39)
+      at async TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/modules/devices/test/mqttResourceBounds.test.js:61:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at modules/devices/test/mqttResourceBounds.test.js:77:1
+✖ MQTT single payload exceeding one MiB is rejected visibly before application state writes (2526.759405ms)
+  Error: oversized payload was not rejected
+      at until (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/modules/devices/test/mqttResourceBounds.test.js:14:39)
+      at async TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/modules/devices/test/mqttResourceBounds.test.js:80:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+
+test at modules/devices/test/mqttResourceBounds.test.js:86:1
+✖ MQTT wildcard topic discovery is capped per session with an explicit transport error (2740.766718ms)
+  Error: wildcard discovery grows without bound
+      at until (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/modules/devices/test/mqttResourceBounds.test.js:14:39)
+      at async TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/modules/devices/test/mqttResourceBounds.test.js:94:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)

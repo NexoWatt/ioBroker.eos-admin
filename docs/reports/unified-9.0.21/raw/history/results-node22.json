@@ -1,0 +1,37 @@
+[
+  {
+    "command": [
+      "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node",
+      "--test",
+      "test/eos-tariff-initial-outage.test.cjs",
+      "test/eos-tariff-cancel-transport.test.cjs",
+      "test/eos-customer-tariff-runtime.test.cjs",
+      "test/eos-tariff-quarter-hour-runtime.test.cjs",
+      "test/eos-influx-history-runtime.test.cjs",
+      "test/eos-influx-direct.test.cjs",
+      "test/eos-influx-security.test.cjs",
+      "test/eos-influx-sustained-outage.test.cjs"
+    ],
+    "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+    "sourceOverride": null,
+    "startedUtc": "2026-11-24T21:39:17.581848+00:00",
+    "durationSeconds": 10.693,
+    "exitCode": 0,
+    "log": "regression-node22.log",
+    "logSha256": "3b1d399b87e039350c83f9a24c0dacd45b87595e6a26b6d65809b226eea142b2"
+  },
+  {
+    "command": [
+      "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node",
+      "ui/scripts/verify-cra-tariff.cjs",
+      "--source"
+    ],
+    "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+    "sourceOverride": null,
+    "startedUtc": "2026-11-24T21:39:28.274986+00:00",
+    "durationSeconds": 5.463,
+    "exitCode": 0,
+    "log": "cra-tariff-source-node22.log",
+    "logSha256": "8b03a164a138af132f4aef992091b78eadf70cc01d8c3eeb8d47da43f363aa05"
+  }
+]

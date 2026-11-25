@@ -1,0 +1,39 @@
+✔ unacknowledged MQTT power command is not replayed on reconnect (335.662357ms)
+✔ unacknowledged MQTT power command is not replayed on reconnect after authorization revocation (284.575871ms)
+✔ offline commands fail instead of being queued for a later MQTT session (317.824792ms)
+✔ missing PUBACK reaches deadline and closes actual transport before fresh reconnect (5094.221031ms)
+✔ missing SUBACK is bounded and does not block stop or next session (5069.996693ms)
+✔ controlled stop shares one deadline across three safe QoS1 shutdown groups (1202.941867ms)
+✔ parallel connect calls share one MQTT client (15.999761ms)
+✖ a delayed old MQTT sample cannot revive aliases or finish multi-value updates in a new session (2553.715303ms)
+✔ unconfirmed MQTT transport cleanup does not start a second client (207.392621ms)
+✔ safe shutdown never bypasses revoked device authority (11.515921ms)
+✔ old MQTT callback cannot publish aliases beyond offline (24.1405ms)
+✔ old MQTT callback cannot publish aliases beyond offline and a following connection (2.72321ms)
+✔ nested offline callback can publish diagnostic aliases without a FIFO deadlock (13.561741ms)
+✔ telemetry backlog is bounded while the final offline barrier remains ordered and observable (1.695343ms)
+✔ an inherited async context from a completed callback cannot bypass the current FIFO owner (1.908874ms)
+✔ runtime stop invalidates MQTT first and awaits the callback DB write before reporting stopped (1.715563ms)
+✔ TESVOLT real MQTT transport receives screenshot EMS topics with wildcard subscription and publishes nothing (228.505122ms)
+✔ TESVOLT real MQTT transport receives screenshot EMS topics with exact-topic ACL fallback and publishes nothing (119.210991ms)
+✔ TESVOLT real MQTT transport sends EMS power commands with limits and full payload after explicit control setup (136.641834ms)
+✔ TESVOLT real MQTT automatic detection ignores stale V2 metadata before live EMS values (59.717074ms)
+✔ TESVOLT reconnect to a different namespace clears previous optional values and never replays commands (152.236806ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 20
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 16446.33848
+
+✖ failing tests:
+
+test at modules/devices/test/mqttCommandLifecycle.test.js:183:1
+✖ a delayed old MQTT sample cannot revive aliases or finish multi-value updates in a new session (2553.715303ms)
+  Error: replacement session missing
+      at until (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/modules/devices/test/mqttCommandLifecycle.test.js:19:39)
+      at async TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/modules/devices/test/mqttCommandLifecycle.test.js:208:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)

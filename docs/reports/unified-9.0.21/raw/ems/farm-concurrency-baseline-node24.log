@@ -1,0 +1,124 @@
+✖ one hundred timer requests do not create overlapping farm aggregations or stale final publication (146.926295ms)
+✖ explicit refresh waits for an active aggregation and then reads the latest measurement (13.146194ms)
+✖ delayed old aggregation publishes nothing after shutdown (10.717887ms)
+✖ delayed old aggregation publishes nothing after configuration (8.196682ms)
+✔ failed publication releases the aggregation flight and a later refresh succeeds (6.409982ms)
+✖ publication stops after an in-flight database write during shutdown (6.173556ms)
+✖ publication stops after an in-flight database write during configuration (8.781863ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 1
+ℹ fail 6
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 689.597014
+
+✖ failing tests:
+
+test at test/eos-storagefarm-concurrency.test.cjs:46:1
+✖ one hundred timer requests do not create overlapping farm aggregations or stale final publication (146.926295ms)
+  AssertionError [ERR_ASSERTION]: busy timer must not begin another database snapshot
+  
+  101 !== 1
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-storagefarm-concurrency.test.cjs:60:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 101,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-storagefarm-concurrency.test.cjs:65:1
+✖ explicit refresh waits for an active aggregation and then reads the latest measurement (13.146194ms)
+  AssertionError [ERR_ASSERTION]: old snapshot must not win after explicit refresh
+  
+  100 !== 900
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-storagefarm-concurrency.test.cjs:80:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 100,
+    expected: 900,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-storagefarm-concurrency.test.cjs:84:59
+✖ delayed old aggregation publishes nothing after shutdown (10.717887ms)
+  AssertionError [ERR_ASSERTION]: obsolete snapshot must not stamp old farm measurements as current
+  
+  33 !== 0
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-storagefarm-concurrency.test.cjs:97:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 33,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-storagefarm-concurrency.test.cjs:84:59
+✖ delayed old aggregation publishes nothing after configuration (8.196682ms)
+  AssertionError [ERR_ASSERTION]: obsolete snapshot must not stamp old farm measurements as current
+  
+  33 !== 0
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-storagefarm-concurrency.test.cjs:97:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 33,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-storagefarm-concurrency.test.cjs:108:59
+✖ publication stops after an in-flight database write during shutdown (6.173556ms)
+  AssertionError [ERR_ASSERTION]: already-issued write may settle, but no remaining publications are admitted
+  
+  33 !== 1
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-storagefarm-concurrency.test.cjs:120:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 33,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-storagefarm-concurrency.test.cjs:108:59
+✖ publication stops after an in-flight database write during configuration (8.781863ms)
+  AssertionError [ERR_ASSERTION]: already-issued write may settle, but no remaining publications are admitted
+  
+  33 !== 1
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-storagefarm-concurrency.test.cjs:120:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 33,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

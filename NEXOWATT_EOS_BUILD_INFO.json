@@ -1,11 +1,11 @@
 {
-  "version": "9.0.20",
+  "version": "9.0.21",
   "channel": "next",
   "baseFrontend": "Rebuilt from official Admin 8.3.5 sources plus reviewed EOS integration using React 19 and Vite; see source-bound frontend manifest.",
   "runtimeEntry": "vite-manifest",
   "releaseType": "unified-device-ems-commissioning",
   "release": "unified-device-ems-commissioning",
-  "label": "v9-0-20",
+  "label": "v9-0-21",
   "notes": [
     "Preserves the existing ioBroker Admin and the combined EOS login/runtime.",
     "One central NWL3 activation, private persistence and authorized public-key recovery.",
@@ -38,5 +38,5 @@
     "eebus": "0.3.0; 1c0eb410d516b90d60f6e475e6822bf5836bfd66",
     "backup": "1.0.10"
   },
-  "repositoryEntry": "nexowatt-eos-admin-repository-entry-v9-0-20.json"
+  "repositoryEntry": "nexowatt-eos-admin-repository-entry-v9-0-21.json"
 }

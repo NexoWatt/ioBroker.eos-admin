@@ -1,0 +1,438 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: provider switch invalidates actual EMS numbers and curves before new provider metadata
+ok 1 - provider switch invalidates actual EMS numbers and curves before new provider metadata
+  ---
+  duration_ms: 29.342841
+  type: 'test'
+  ...
+# Subtest: late old-provider reply cannot repopulate price, success, retry timer or provider label
+ok 2 - late old-provider reply cannot repopulate price, success, retry timer or provider label
+  ---
+  duration_ms: 7.052899
+  type: 'test'
+  ...
+# Subtest: credential change fences failed old fetch and new provider failure never reuses prior forecast
+ok 3 - credential change fences failed old fetch and new provider failure never reuses prior forecast
+  ---
+  duration_ms: 3.016872
+  type: 'test'
+  ...
+# Subtest: configuration clearing waits behind an old in-flight state write and finishes with unavailable prices
+ok 4 - configuration clearing waits behind an old in-flight state write and finishes with unavailable prices
+  ---
+  duration_ms: 3.359408
+  type: 'test'
+  ...
+# Subtest: failed clearing rejects the save hook, retains pending fence, and retries before a new fetch
+ok 5 - failed clearing rejects the save hook, retains pending fence, and retries before a new fetch
+  ---
+  duration_ms: 5.182133
+  type: 'test'
+  ...
+# Subtest: equivalent config and unchanged ticks retain cache and fetch schedule without repeatedly hashing secrets
+ok 6 - equivalent config and unchanged ticks retain cache and fetch schedule without repeatedly hashing secrets
+  ---
+  duration_ms: 2.526424
+  type: 'test'
+  ...
+# Subtest: disable and stop prevent an outstanding provider response from publishing again
+ok 7 - disable and stop prevent an outstanding provider response from publishing again
+  ---
+  duration_ms: 1.732739
+  type: 'test'
+  ...
+# Subtest: live source rebind drops all six old readers before awaits, resets conversion and preserves shared sources
+ok 8 - live source rebind drops all six old readers before awaits, resets conversion and preserves shared sources
+  ---
+  duration_ms: 4.085422
+  type: 'test'
+  ...
+# Subtest: removing a tariff mapping fences a delayed old prime without affecting replacement mapping
+ok 9 - removing a tariff mapping fences a delayed old prime without affecting replacement mapping
+  ---
+  duration_ms: 1.173958
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: direct v2 check validates actual org/bucket authentication, query preserves negative and zero prices
+ok 10 - direct v2 check validates actual org/bucket authentication, query preserves negative and zero prices
+  ---
+  duration_ms: 29.685186
+  type: 'test'
+  ...
+# Subtest: reachable health port alone is insufficient and server error bodies never expose credentials
+ok 11 - reachable health port alone is insufficient and server error bodies never expose credentials
+  ---
+  duration_ms: 7.297057
+  type: 'test'
+  ...
+# Subtest: direct writes use v2 line protocol, explicit milliseconds and real204 success
+ok 12 - direct writes use v2 line protocol, explicit milliseconds and real204 success
+  ---
+  duration_ms: 4.239203
+  type: 'test'
+  ...
+# Subtest: redirects are never followed with the token and HTTP429 is bounded
+ok 13 - redirects are never followed with the token and HTTP429 is bounded
+  ---
+  duration_ms: 5.323345
+  type: 'test'
+  ...
+# Subtest: configuration rejects URL credentials, fragments, API paths and malformed trust without weakening TLS
+ok 14 - configuration rejects URL credentials, fragments, API paths and malformed trust without weakening TLS
+  ---
+  duration_ms: 0.8431
+  type: 'test'
+  ...
+# Subtest: Flux interpolation, names and line protocol cannot inject statements or rows
+ok 15 - Flux interpolation, names and line protocol cannot inject statements or rows
+  ---
+  duration_ms: 0.477739
+  type: 'test'
+  ...
+# Subtest: CSV parser preserves missing samples, string snapshots and repeated annotated tables
+ok 16 - CSV parser preserves missing samples, string snapshots and repeated annotated tables
+  ---
+  duration_ms: 0.955589
+  type: 'test'
+  ...
+# Subtest: server cannot exceed requested row limit or return an oversized body
+ok 17 - server cannot exceed requested row limit or return an oversized body
+  ---
+  duration_ms: 75.527325
+  type: 'test'
+  ...
+# Subtest: real unresponsive connection is aborted within the total5s check budget
+ok 18 - real unresponsive connection is aborted within the total5s check budget
+  ---
+  duration_ms: 5011.409275
+  type: 'test'
+  ...
+# Subtest: successful slow health and stalled query share one total5s connection-check deadline
+ok 19 - successful slow health and stalled query share one total5s connection-check deadline
+  ---
+  duration_ms: 5034.956941
+  type: 'test'
+  ...
+# Subtest: history rejects out-of-range rows while accepting the first partial aggregate window
+ok 20 - history rejects out-of-range rows while accepting the first partial aggregate window
+  ---
+  duration_ms: 19.245106
+  type: 'test'
+  ...
+# Subtest: SmartHome minmax keeps server-selected extrema and boolean values with original times
+ok 21 - SmartHome minmax keeps server-selected extrema and boolean values with original times
+  ---
+  duration_ms: 6.433507
+  type: 'test'
+  ...
+# Subtest: minmax requests complete time windows for dense histories and rejects excess response rows
+ok 22 - minmax requests complete time windows for dense histories and rejects excess response rows
+  ---
+  duration_ms: 3.058284
+  type: 'test'
+  ...
+# Subtest: query bounds reject unbounded history and invalid sampling options before IO
+ok 23 - query bounds reject unbounded history and invalid sampling options before IO
+  ---
+  duration_ms: 0.344879
+  type: 'test'
+  ...
+# Subtest: closing aborts outstanding queries and bounds concurrent requests
+ok 24 - closing aborts outstanding queries and bounds concurrent requests
+  ---
+  duration_ms: 3.926342
+  type: 'test'
+  ...
+# Subtest: each DNS connection uses vetted answers and rejects rebinding before credentials leave
+ok 25 - each DNS connection uses vetted answers and rejects rebinding before credentials leave
+  ---
+  duration_ms: 9.292602
+  type: 'test'
+  ...
+# Subtest: caller remaining budget includes unresolved DNS and still reserves all concurrency slots
+ok 26 - caller remaining budget includes unresolved DNS and still reserves all concurrency slots
+  ---
+  duration_ms: 32.848338
+  type: 'test'
+  ...
+# Subtest: HTTPS rejects untrusted certificates and accepts only explicitly supplied matching CA
+ok 27 - HTTPS rejects untrusted certificates and accepts only explicitly supplied matching CA
+  ---
+  duration_ms: 137.291854
+  type: 'test'
+  ...
+# (node:14) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: legacy remains default with retained direct connection; registration is an explicit writer allowlist
+ok 28 - legacy remains default with retained direct connection; registration is an explicit writer allowlist
+  ---
+  duration_ms: 2.117399
+  type: 'test'
+  ...
+# (node:14) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: invalid point cannot poison valid batch; zero, negative and original timestamps survive
+ok 29 - invalid point cannot poison valid batch; zero, negative and original timestamps survive
+  ---
+  duration_ms: 9.023872
+  type: 'test'
+  ...
+# Subtest: capture/commit fence rejects pre-reconfigure writes and old completions cannot certify the new database
+ok 30 - capture/commit fence rejects pre-reconfigure writes and old completions cannot certify the new database
+  ---
+  duration_ms: 20.270765
+  type: 'test'
+  ...
+# Subtest: queue includes in-flight points in its 2000-point bound and exposes discarded samples
+ok 31 - queue includes in-flight points in its 2000-point bound and exposes discarded samples
+  ---
+  duration_ms: 17.455972
+  type: 'test'
+  ...
+# Subtest: six active reads reserve transport capacity for writes and bounded queued reads retain their budget
+ok 32 - six active reads reserve transport capacity for writes and bounded queued reads retain their budget
+  ---
+  duration_ms: 32.341416
+  type: 'test'
+  ...
+# Subtest: read/write failures recover independently and changesOnly can retry a later real sample
+ok 33 - read/write failures recover independently and changesOnly can retry a later real sample
+  ---
+  duration_ms: 15.991448
+  type: 'test'
+  ...
+# Subtest: normal close drains valid queued writes, fences new captures and reports timeout loss without hanging
+ok 34 - normal close drains valid queued writes, fences new captures and reports timeout loss without hanging
+  ---
+  duration_ms: 27.247686
+  type: 'test'
+  ...
+# Subtest: quarantined credential disables only history and legacy duplicate recording is a warning, not a mutation
+ok 35 - quarantined credential disables only history and legacy duplicate recording is a warning, not a mutation
+  ---
+  duration_ms: 0.682958
+  type: 'test'
+  ...
+# (node:23) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: dedicated history change preserves unrelated settings and token on same origin
+ok 36 - dedicated history change preserves unrelated settings and token on same origin
+  ---
+  duration_ms: 5.120039
+  type: 'test'
+  ...
+# Subtest: stored token cannot travel to another origin without an explicit replacement
+ok 37 - stored token cannot travel to another origin without an explicit replacement
+  ---
+  duration_ms: 0.731081
+  type: 'test'
+  ...
+# Subtest: strict request rejects invalid provider, fields, instance, injected envelope and secret types
+ok 38 - strict request rejects invalid provider, fields, instance, injected envelope and secret types
+  ---
+  duration_ms: 0.476127
+  type: 'test'
+  ...
+# Subtest: custom HTTPS CA is validated and blank preserves it until explicit clear
+ok 39 - custom HTTPS CA is validated and blank preserves it until explicit clear
+  ---
+  duration_ms: 111.220452
+  type: 'test'
+  ...
+# Subtest: plaintext token is encrypted in installer state and backup, while exact customer data survives
+ok 40 - plaintext token is encrypted in installer state and backup, while exact customer data survives
+  ---
+  duration_ms: 2.190899
+  type: 'test'
+  ...
+# Subtest: regular GET never returns plaintext, encrypted token or CA and never mutates config
+ok 41 - regular GET never returns plaintext, encrypted token or CA and never mutates config
+  ---
+  duration_ms: 0.415947
+  type: 'test'
+  ...
+# Subtest: crypto absence, failure and identity output fail closed with no plaintext fallback
+ok 42 - crypto absence, failure and identity output fail closed with no plaintext fallback
+  ---
+  duration_ms: 0.502988
+  type: 'test'
+  ...
+# Subtest: foreign host key quarantines only history and keeps recoverable ciphertext and EMS/device configuration
+ok 43 - foreign host key quarantines only history and keeps recoverable ciphertext and EMS/device configuration
+  ---
+  duration_ms: 0.802708
+  type: 'test'
+  ...
+# Subtest: malformed or purpose-confused ciphertext is quarantined, never interpreted as a token
+ok 44 - malformed or purpose-confused ciphertext is quarantined, never interpreted as a token
+  ---
+  duration_ms: 0.456367
+  type: 'test'
+  ...
+# Subtest: encrypted backup envelope cannot be redirected to a different origin to reveal its token
+ok 45 - encrypted backup envelope cannot be redirected to a different origin to reveal its token
+  ---
+  duration_ms: 0.900506
+  type: 'test'
+  ...
+# Subtest: imported plaintext credentials with an invalid destination are isolated without losing EMS data
+ok 46 - imported plaintext credentials with an invalid destination are isolated without losing EMS data
+  ---
+  duration_ms: 0.314033
+  type: 'test'
+  ...
+# Subtest: network policy allows private LAN and loopback IPv4/IPv6, HTTPS public, rejects public plaintext
+ok 47 - network policy allows private LAN and loopback IPv4/IPv6, HTTPS public, rejects public plaintext
+  ---
+  duration_ms: 0.695257
+  type: 'test'
+  ...
+# Subtest: metadata, link-local, multicast, unspecified and IPv4 mapped bypasses reject before any request
+ok 48 - metadata, link-local, multicast, unspecified and IPv4 mapped bypasses reject before any request
+  ---
+  duration_ms: 1.079656
+  type: 'test'
+  ...
+# Subtest: URL validation forbids secret-bearing URL parts and unsafe schemes while preserving LAN discovery names
+ok 49 - URL validation forbids secret-bearing URL parts and unsafe schemes while preserving LAN discovery names
+  ---
+  duration_ms: 0.299661
+  type: 'test'
+  ...
+# Subtest: actual ioBroker standard-key AES-192-CBC roundtrip, wrong-key isolation and encrypted backup recovery
+ok 50 - actual ioBroker standard-key AES-192-CBC roundtrip, wrong-key isolation and encrypted backup recovery
+  ---
+  duration_ms: 127.381495
+  type: 'test'
+  ...
+# Subtest: quarantined history never overwrites recovery envelope with a token left by an old deep merge
+ok 51 - quarantined history never overwrites recovery envelope with a token left by an old deep merge
+  ---
+  duration_ms: 0.439622
+  type: 'test'
+  ...
+# (node:23) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:31) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:31) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: 921-HIS-003 sustained outage bounds read/write load and accounts for every rejected or cancelled sample
+ok 52 - 921-HIS-003 sustained outage bounds read/write load and accounts for every rejected or cancelled sample
+  ---
+  duration_ms: 5027.804513
+  type: 'test'
+  ...
+# Subtest: 921-HIS-003 repeated rate limits recover without retries, fake zeros or cleared independent read errors
+ok 53 - 921-HIS-003 repeated rate limits recover without retries, fake zeros or cleared independent read errors
+  ---
+  duration_ms: 134.793611
+  type: 'test'
+  ...
+# Subtest: 921-HIS-003 target replacement aborts old sockets and cannot forward pending history to the new bucket
+ok 54 - 921-HIS-003 target replacement aborts old sockets and cannot forward pending history to the new bucket
+  ---
+  duration_ms: 19.280036
+  type: 'test'
+  ...
+# Subtest: 921-HIS-003 TLS stalled writer is cancelled by the bounded drain and later reconfiguration succeeds
+ok 55 - 921-HIS-003 TLS stalled writer is cancelled by the bounded drain and later reconfiguration succeeds
+  ---
+  duration_ms: 227.72902
+  type: 'test'
+  ...
+# (node:32) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: 921-HIS-002 repeated lifecycle aborts cancel the actual response body and remove parent listeners
+ok 56 - 921-HIS-002 repeated lifecycle aborts cancel the actual response body and remove parent listeners
+  ---
+  duration_ms: 155.084631
+  type: 'test'
+  ...
+# Subtest: 921-HIS-002 an already revoked generation cannot start network access and does not retain its listener
+ok 57 - 921-HIS-002 an already revoked generation cannot start network access and does not retain its listener
+  ---
+  duration_ms: 3.239848
+  type: 'test'
+  ...
+# (node:33) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: 921-HIS-001 initial outage respects scheduled retry for 120 successive EMS ticks
+ok 58 - 921-HIS-001 initial outage respects scheduled retry for 120 successive EMS ticks
+  ---
+  duration_ms: 74.444929
+  type: 'test'
+  ...
+# Subtest: 921-HIS-001 recovery occurs at retry deadline and an explicit configuration change can retry immediately
+ok 59 - 921-HIS-001 recovery occurs at retry deadline and an explicit configuration change can retry immediately
+  ---
+  duration_ms: 5.742616
+  type: 'test'
+  ...
+# Subtest: 921-HIS-002 unresolved cloud fetch does not hold the local tick, permits no overlap and stops cleanly
+ok 60 - 921-HIS-002 unresolved cloud fetch does not hold the local tick, permits no overlap and stops cleanly
+  ---
+  duration_ms: 18.816531
+  type: 'test'
+  ...
+# Subtest: 921-HIS-002 source replacement revokes the old request before permitting another provider
+ok 61 - 921-HIS-002 source replacement revokes the old request before permitting another provider
+  ---
+  duration_ms: 3.508172
+  type: 'test'
+  ...
+# Subtest: 921-HIS-002 background publication failure retains its reader fence and recovers only after DB writes work
+ok 62 - 921-HIS-002 background publication failure retains its reader fence and recovers only after DB writes work
+  ---
+  duration_ms: 8.76681
+  type: 'test'
+  ...
+# (node:39) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Tibber requests and normalizes quarter-hours even with an older hourly setting; zero/negative remain valid and null is rejected
+ok 63 - Tibber requests and normalizes quarter-hours even with an older hourly setting; zero/negative remain valid and null is rejected
+  ---
+  duration_ms: 23.615968
+  type: 'test'
+  ...
+# Subtest: local calendar splitting retains 92/96/100 quarter-hours and the next day across DST boundaries
+ok 64 - local calendar splitting retains 92/96/100 quarter-hours and the next day across DST boundaries
+  ---
+  duration_ms: 212.128747
+  type: 'test'
+  ...
+# Subtest: actual provider tick selects each cached quarter-hour without network calls and refreshes before customer freshness expires
+ok 65 - actual provider tick selects each cached quarter-hour without network calls and refreshes before customer freshness expires
+  ---
+  duration_ms: 116.419258
+  type: 'test'
+  ...
+# Subtest: provider failures do not extend freshness, do not spin requests and clear expired prices instead of creating zero
+ok 66 - provider failures do not extend freshness, do not spin requests and clear expired prices instead of creating zero
+  ---
+  duration_ms: 65.12762
+  type: 'test'
+  ...
+# Subtest: other providers retain their resolution and normal jittered cadence, while a shorter customer deadline still bounds refresh
+ok 67 - other providers retain their resolution and normal jittered cadence, while a shorter customer deadline still bounds refresh
+  ---
+  duration_ms: 51.27227
+  type: 'test'
+  ...
+1..67
+# tests 67
+# suites 0
+# pass 67
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 10625.05646

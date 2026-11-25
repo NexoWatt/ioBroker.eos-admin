@@ -23,7 +23,7 @@ async function fixture(t) {
         firstLogin: async () => ({ required: first }), getLicense: () => ({ valid: true, coreEnabled: true }) });
     const app = express(); const host = {
         migrationStatus: () => migration,
-        view: async id => ({ id, config: { enabled: false }, status: { active: false } }),
+        view: async id => ({ id, config: { enabled: false }, configurationRevision: '00000000-0000-4000-8000-000000000001', status: { active: false } }),
         save: async () => { writes++; return { ok: true }; }, importLegacy: async () => { writes++; return { ok: true }; },
         command: async (_id, command) => { if (command === 'error') throw new Error('PRIVATE_CONFIGURATION'); writes++; return { ok: true }; },
         download: async (id, name) => {
@@ -151,7 +151,7 @@ test('read-only migration page and status require fresh administrator authentica
 
 test('fresh admin role, same origin and session-bound CSRF are required for every module mutation', async t => {
     const f = await fixture(t); const status = await (await f.request('/api/eos/modules/devices')).json();
-    const options = { method: 'PUT', headers: { 'content-type': 'application/json', origin: 'https://nexowatt', 'x-nw-csrf': status.csrfToken }, body: '{"config":{"enabled":false}}' };
+    const options = { method: 'PUT', headers: { 'content-type': 'application/json', origin: 'https://nexowatt', 'x-nw-csrf': status.csrfToken }, body: JSON.stringify({ config: { enabled: false }, expectedConfigurationRevision: status.configurationRevision }) };
     assert.equal((await f.request('/api/eos/modules/devices', options)).status, 200); assert.equal(f.writes(), 1);
     assert.equal((await f.request('/api/eos/modules/devices', { ...options, headers: { ...options.headers, origin: 'https://foreign.invalid' } })).status, 403);
     f.role('installer'); assert.equal((await f.request('/api/eos/modules/devices', options)).status, 403);

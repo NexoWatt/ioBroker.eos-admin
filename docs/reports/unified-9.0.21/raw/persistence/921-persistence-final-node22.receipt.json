@@ -1,0 +1,28 @@
+{
+  "startedAt": "2026-11-24T21:43:53.760420+00:00",
+  "durationSeconds": 26.02476432700132,
+  "command": [
+    "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node",
+    "--test",
+    "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-module-config-store.test.cjs",
+    "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-module-device-save.test.cjs",
+    "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-module-editor-revision.test.cjs",
+    "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-module-editor-session.test.cjs",
+    "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-module-host.test.cjs",
+    "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-module-http.test.cjs",
+    "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-module-import-recovery.test.cjs",
+    "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-module-legacy-migration.test.cjs",
+    "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-module-migration-page.test.cjs",
+    "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-module-migration-review.test.cjs",
+    "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-module-migration-start-budget.test.cjs",
+    "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-module-real-contract.test.cjs",
+    "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-module-save-lifecycle.test.cjs",
+    "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-module-stop-lifecycle.test.cjs",
+    "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/test/eos-unified-settings-preservation.test.cjs"
+  ],
+  "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin",
+  "node": "v22.23.4",
+  "exitCode": 0,
+  "log": "921-persistence-final-node22.log",
+  "sha256": "8eeeca0cfa7776af27cc89058d0c386504b12d32c8c2ea453623330edcf99fb6"
+}

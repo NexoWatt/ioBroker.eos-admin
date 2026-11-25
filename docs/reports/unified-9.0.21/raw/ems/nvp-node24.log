@@ -1,0 +1,17 @@
+✔ first valid 600W NVP initializes filter from the measurement (3.032316ms)
+✔ first valid -600W NVP initializes filter from the measurement (0.387183ms)
+✔ first valid 0W NVP initializes filter from the measurement (0.855648ms)
+✔ a genuine previous0W remains a valid averaging baseline (0.928928ms)
+✔ fresh recovery after disconnected discards obsolete opposite-sign smoothing (0.993406ms)
+✔ fresh recovery after stale discards obsolete opposite-sign smoothing (0.646374ms)
+✔ fresh recovery after missing discards obsolete opposite-sign smoothing (0.560303ms)
+✔ fresh recovery after resolver-error discards obsolete opposite-sign smoothing (0.731692ms)
+✔ overlapping requests retain one actual control cycle and release after rejected work (1.772649ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 473.810142

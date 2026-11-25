@@ -1,0 +1,1959 @@
+TAP version 13
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Alias Contract v1 files are synchronized and every template declares an explicit device class
+ok 1 - Alias Contract v1 files are synchronized and every template declares an explicit device class
+  ---
+  duration_ms: 2.58304
+  type: 'test'
+  ...
+# Subtest: all 195 templates satisfy the canonical path, type, role and unit contract
+ok 2 - all 195 templates satisfy the canonical path, type, role and unit contract
+  ---
+  duration_ms: 109.441861
+  type: 'test'
+  ...
+# Subtest: the v1 namespace converts vendor units to W, Wh, A, V, °C, seconds, percent and Hz
+ok 3 - the v1 namespace converts vendor units to W, Wh, A, V, °C, seconds, percent and Hz
+  ---
+  duration_ms: 1.661382
+  type: 'test'
+  ...
+# Subtest: manufacturer-specific EV control semantics remain intact behind canonical aliases
+ok 4 - manufacturer-specific EV control semantics remain intact behind canonical aliases
+  ---
+  duration_ms: 0.885813
+  type: 'test'
+  ...
+# Subtest: CHARGER and DC_CHARGER are solar chargers and can never appear as EV wallboxes
+ok 5 - CHARGER and DC_CHARGER are solar chargers and can never appear as EV wallboxes
+  ---
+  duration_ms: 0.739573
+  type: 'test'
+  ...
+# Subtest: dynamic TA CMI aliases are mirrored into canonical heat paths and refresh the manifest
+ok 6 - dynamic TA CMI aliases are mirrored into canonical heat paths and refresh the manifest
+  ---
+  duration_ms: 94.151617
+  type: 'test'
+  ...
+# Subtest: device initialization creates v1 objects, heartbeat states and machine-readable metadata
+ok 7 - device initialization creates v1 objects, heartbeat states and machine-readable metadata
+  ---
+  duration_ms: 13.10342
+  type: 'test'
+  ...
+# (node:14) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: constant SMA grid samples stay fresh for 30 minutes; cached telegrams, failed polls and counters do not
+ok 8 - constant SMA grid samples stay fresh for 30 minutes; cached telegrams, failed polls and counters do not
+  ---
+  duration_ms: 570.03169
+  type: 'test'
+  ...
+# Subtest: FENECON real battery, SOC, PV, converter and grid samples refresh within bound while commands remain change-only
+ok 9 - FENECON real battery, SOC, PV, converter and grid samples refresh within bound while commands remain change-only
+  ---
+  duration_ms: 6.03055
+  type: 'test'
+  ...
+# Subtest: SolaX applied-target readback refreshes only from actual poll, never write acknowledgement or unrelated packet
+ok 10 - SolaX applied-target readback refreshes only from actual poll, never write acknowledgement or unrelated packet
+  ---
+  duration_ms: 3.169272
+  type: 'test'
+  ...
+# Subtest: MQTT full caches and diagnostic packets cannot refresh an old source or a partially updated computed alias
+ok 11 - MQTT full caches and diagnostic packets cannot refresh an old source or a partially updated computed alias
+  ---
+  duration_ms: 1.844947
+  type: 'test'
+  ...
+# Subtest: FENECON 780 controller block / 882 target changes only controller route and retains all verified read aliases
+ok 12 - FENECON 780 controller block / 882 target changes only controller route and retains all verified read aliases
+  ---
+  duration_ms: 2.446304
+  type: 'test'
+  ...
+# (node:16) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: all 195 profiles retain existing aliases; new semantics are additive, source-bound and read-only
+ok 13 - all 195 profiles retain existing aliases; new semantics are additive, source-bound and read-only
+  ---
+  duration_ms: 184.016019
+  type: 'test'
+  ...
+# Subtest: FENECON keeps battery power separate from ESS converter/DC PV and does not fabricate 706 readback
+ok 14 - FENECON keeps battery power separate from ESS converter/DC PV and does not fabricate 706 readback
+  ---
+  duration_ms: 1.542092
+  type: 'test'
+  ...
+# Subtest: both SolaX profiles share W units and signed limits, with genuine readable target and no invented grid target
+ok 15 - both SolaX profiles share W units and signed limits, with genuine readable target and no invented grid target
+  ---
+  duration_ms: 1.079816
+  type: 'test'
+  ...
+# Subtest: readback is actual polling data and cannot acknowledge queued or failed commands
+ok 16 - readback is actual polling data and cannot acknowledge queued or failed commands
+  ---
+  duration_ms: 3.794574
+  type: 'test'
+  ...
+# Subtest: VARTA sign conversion and DEYE MPPT aggregation remain canonical without new control capability
+ok 17 - VARTA sign conversion and DEYE MPPT aggregation remain canonical without new control capability
+  ---
+  duration_ms: 0.862459
+  type: 'test'
+  ...
+# Subtest: unknown, write-only, missing, remapped and differently scaled sources remain unavailable
+ok 18 - unknown, write-only, missing, remapped and differently scaled sources remain unavailable
+  ---
+  duration_ms: 2.461446
+  type: 'test'
+  ...
+# (node:21) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: DEYE offers exactly three preliminary RTU families, safe serial defaults and identical catalogues
+ok 19 - DEYE offers exactly three preliminary RTU families, safe serial defaults and identical catalogues
+  ---
+  duration_ms: 111.769219
+  type: 'test'
+  ...
+# Subtest: singlePhase: fixed addresses, signed values, LV/HV units, Wh counters and zero startup writes
+ok 20 - singlePhase: fixed addresses, signed values, LV/HV units, Wh counters and zero startup writes
+  ---
+  duration_ms: 10.620161
+  type: 'test'
+  ...
+# Subtest: threePhaseLv: fixed addresses, signed values, LV/HV units, Wh counters and zero startup writes
+ok 21 - threePhaseLv: fixed addresses, signed values, LV/HV units, Wh counters and zero startup writes
+  ---
+  duration_ms: 2.379242
+  type: 'test'
+  ...
+# Subtest: threePhaseHv: fixed addresses, signed values, LV/HV units, Wh counters and zero startup writes
+ok 22 - threePhaseHv: fixed addresses, signed values, LV/HV units, Wh counters and zero startup writes
+  ---
+  duration_ms: 2.494326
+  type: 'test'
+  ...
+# Subtest: 32-bit boundary words, signed minimum and literal non-contiguous power registers
+ok 23 - 32-bit boundary words, signed minimum and literal non-contiguous power registers
+  ---
+  duration_ms: 0.431199
+  type: 'test'
+  ...
+# Subtest: family mismatch retires values and refuses configuration before any FC16
+ok 24 - family mismatch retires values and refuses configuration before any FC16
+  ---
+  duration_ms: 1.335601
+  type: 'test'
+  ...
+# Subtest: split-phase and PCS identifiers are not claimed as three-phase hybrid support
+ok 25 - split-phase and PCS identifiers are not claimed as three-phase hybrid support
+  ---
+  duration_ms: 9.436719
+  type: 'test'
+  ...
+# Subtest: confirmed units/signs enable single-input EOS power but never invent multiple-battery totals
+ok 26 - confirmed units/signs enable single-input EOS power but never invent multiple-battery totals
+  ---
+  duration_ms: 17.424557
+  type: 'test'
+  ...
+# Subtest: PV aggregate is unavailable for more than four MPPT inputs, not a partial total
+ok 27 - PV aggregate is unavailable for more than four MPPT inputs, not a partial total
+  ---
+  duration_ms: 1.388441
+  type: 'test'
+  ...
+# Subtest: missing high word becomes unknown without truncation, old cache or address fallback
+ok 28 - missing high word becomes unknown without truncation, old cache or address fallback
+  ---
+  duration_ms: 2.724002
+  type: 'test'
+  ...
+# Subtest: optional battery-2 exception cannot poison mandatory battery-1 SOC
+ok 29 - optional battery-2 exception cannot poison mandatory battery-1 SOC
+  ---
+  duration_ms: 1.305626
+  type: 'test'
+  ...
+# Subtest: core register errors, short frames and transport faults fail instead of pretending valid data
+ok 30 - core register errors, short frames and transport faults fail instead of pretending valid data
+  ---
+  duration_ms: 1.905189
+  type: 'test'
+  ...
+# Subtest: four exact configuration register addresses per family; FC16 and readback only
+ok 31 - four exact configuration register addresses per family; FC16 and readback only
+  ---
+  duration_ms: 3.249954
+  type: 'test'
+  ...
+# Subtest: writes default locked; forged addresses, remote writes and invalid numeric values cannot escape allowlist
+ok 32 - writes default locked; forged addresses, remote writes and invalid numeric values cannot escape allowlist
+  ---
+  duration_ms: 1.239316
+  type: 'test'
+  ...
+# Subtest: device-rejected or ignored writes are never acknowledged or retried
+ok 33 - device-rejected or ignored writes are never acknowledged or retried
+  ---
+  duration_ms: 1.274999
+  type: 'test'
+  ...
+# Subtest: invalid identity/serial/address prevents all writes
+ok 34 - invalid identity/serial/address prevents all writes
+  ---
+  duration_ms: 1.260949
+  type: 'test'
+  ...
+# Subtest: remote reads are opt-in, remain read-only and use signed 0.1 percent
+ok 35 - remote reads are opt-in, remain read-only and use signed 0.1 percent
+  ---
+  duration_ms: 2.05885
+  type: 'test'
+  ...
+# Subtest: reset cancels queued and active transactions before any configuration write; next poll reconnects
+ok 36 - reset cancels queued and active transactions before any configuration write; next poll reconnects
+  ---
+  duration_ms: 2.46376
+  type: 'test'
+  ...
+# Subtest: revoking opt-in while queued blocks configuration without a write
+ok 37 - revoking opt-in while queued blocks configuration without a write
+  ---
+  duration_ms: 0.316817
+  type: 'test'
+  ...
+# Subtest: runtime dispatches DEYE dedicated driver, keeps measured aliases read-only and full precision
+ok 38 - runtime dispatches DEYE dedicated driver, keeps measured aliases read-only and full precision
+  ---
+  duration_ms: 9.72262
+  type: 'test'
+  ...
+# Subtest: RTU defaults apply at runtime; an explicitly configured unit address and serial settings survive
+ok 39 - RTU defaults apply at runtime; an explicitly configured unit address and serial settings survive
+  ---
+  duration_ms: 1.404034
+  type: 'test'
+  ...
+# Subtest: Admin auto-fills RTU defaults on selection and preserves saved serial configuration
+ok 40 - Admin auto-fills RTU defaults on selection and preserves saved serial configuration
+  ---
+  duration_ms: 2.276528
+  type: 'test'
+  ...
+# (node:22) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: known charging profiles show automatic assignment while storage and meters offer explicit role selection
+ok 41 - known charging profiles show automatic assignment while storage and meters offer explicit role selection
+  ---
+  duration_ms: 4.886844
+  type: 'test'
+  ...
+# Subtest: energy flow choices are the six existing generation fields and ten consumers, without invented aggregation
+ok 42 - energy flow choices are the six existing generation fields and ten consumers, without invented aggregation
+  ---
+  duration_ms: 1.628171
+  type: 'test'
+  ...
+# Subtest: device config round-trip preserves EMS intent {"mode":"auto"}
+ok 43 - device config round-trip preserves EMS intent {"mode":"auto"}
+  ---
+  duration_ms: 0.876029
+  type: 'test'
+  ...
+# Subtest: device config round-trip preserves EMS intent {"mode":"monitor"}
+ok 44 - device config round-trip preserves EMS intent {"mode":"monitor"}
+  ---
+  duration_ms: 0.250157
+  type: 'test'
+  ...
+# Subtest: device config round-trip preserves EMS intent {"mode":"manual"}
+ok 45 - device config round-trip preserves EMS intent {"mode":"manual"}
+  ---
+  duration_ms: 0.216486
+  type: 'test'
+  ...
+# Subtest: device config round-trip preserves EMS intent {"mode":"singleStorage","scope":"M0"}
+ok 46 - device config round-trip preserves EMS intent {"mode":"singleStorage","scope":"M0"}
+  ---
+  duration_ms: 0.196165
+  type: 'test'
+  ...
+# Subtest: device config round-trip preserves EMS intent {"mode":"storageFarm","scope":"M1"}
+ok 47 - device config round-trip preserves EMS intent {"mode":"storageFarm","scope":"M1"}
+  ---
+  duration_ms: 0.617981
+  type: 'test'
+  ...
+# Subtest: device config round-trip preserves EMS intent {"mode":"gridMeter","scope":"M1"}
+ok 48 - device config round-trip preserves EMS intent {"mode":"gridMeter","scope":"M1"}
+  ---
+  duration_ms: 0.213091
+  type: 'test'
+  ...
+# Subtest: device config round-trip preserves EMS intent {"mode":"generationMeter","flowSlot":0}
+ok 49 - device config round-trip preserves EMS intent {"mode":"generationMeter","flowSlot":0}
+  ---
+  duration_ms: 0.4188
+  type: 'test'
+  ...
+# Subtest: device config round-trip preserves EMS intent {"mode":"pvInverter","flowSlot":5}
+ok 50 - device config round-trip preserves EMS intent {"mode":"pvInverter","flowSlot":5}
+  ---
+  duration_ms: 0.553673
+  type: 'test'
+  ...
+# Subtest: device config round-trip preserves EMS intent {"mode":"consumptionMeter","flowSlot":10}
+ok 51 - device config round-trip preserves EMS intent {"mode":"consumptionMeter","flowSlot":10}
+  ---
+  duration_ms: 0.25878
+  type: 'test'
+  ...
+# Subtest: malformed EMS intent is rejected before save: null
+ok 52 - malformed EMS intent is rejected before save: null
+  ---
+  duration_ms: 0.592743
+  type: 'test'
+  ...
+# Subtest: malformed EMS intent is rejected before save: []
+ok 53 - malformed EMS intent is rejected before save: []
+  ---
+  duration_ms: 0.194753
+  type: 'test'
+  ...
+# Subtest: malformed EMS intent is rejected before save: {"mode":"runHardware"}
+ok 54 - malformed EMS intent is rejected before save: {"mode":"runHardware"}
+  ---
+  duration_ms: 0.195013
+  type: 'test'
+  ...
+# Subtest: malformed EMS intent is rejected before save: {"mode":"auto","command":"run"}
+ok 55 - malformed EMS intent is rejected before save: {"mode":"auto","command":"run"}
+  ---
+  duration_ms: 0.16628
+  type: 'test'
+  ...
+# Subtest: malformed EMS intent is rejected before save: {"mode":"singleStorage"}
+ok 56 - malformed EMS intent is rejected before save: {"mode":"singleStorage"}
+  ---
+  duration_ms: 0.186351
+  type: 'test'
+  ...
+# Subtest: malformed EMS intent is rejected before save: {"mode":"gridMeter","scope":"M2"}
+ok 57 - malformed EMS intent is rejected before save: {"mode":"gridMeter","scope":"M2"}
+  ---
+  duration_ms: 0.15298
+  type: 'test'
+  ...
+# Subtest: malformed EMS intent is rejected before save: {"mode":"auto","scope":0}
+ok 58 - malformed EMS intent is rejected before save: {"mode":"auto","scope":0}
+  ---
+  duration_ms: 0.196956
+  type: 'test'
+  ...
+# Subtest: malformed EMS intent is rejected before save: {"mode":"auto","group":"../foreign"}
+ok 59 - malformed EMS intent is rejected before save: {"mode":"auto","group":"../foreign"}
+  ---
+  duration_ms: 0.221604
+  type: 'test'
+  ...
+# Subtest: malformed EMS intent is rejected before save: {"mode":"generationMeter","flowSlot":6}
+ok 60 - malformed EMS intent is rejected before save: {"mode":"generationMeter","flowSlot":6}
+  ---
+  duration_ms: 0.312621
+  type: 'test'
+  ...
+# Subtest: malformed EMS intent is rejected before save: {"mode":"pvInverter","flowSlot":"1"}
+ok 61 - malformed EMS intent is rejected before save: {"mode":"pvInverter","flowSlot":"1"}
+  ---
+  duration_ms: 0.180502
+  type: 'test'
+  ...
+# Subtest: malformed EMS intent is rejected before save: {"mode":"pvInverter","flowSlot":0.5}
+ok 62 - malformed EMS intent is rejected before save: {"mode":"pvInverter","flowSlot":0.5}
+  ---
+  duration_ms: 0.281695
+  type: 'test'
+  ...
+# Subtest: malformed EMS intent is rejected before save: {"mode":"consumptionMeter","flowSlot":0}
+ok 63 - malformed EMS intent is rejected before save: {"mode":"consumptionMeter","flowSlot":0}
+  ---
+  duration_ms: 0.16625
+  type: 'test'
+  ...
+# Subtest: malformed EMS intent is rejected before save: {"mode":"consumptionMeter","flowSlot":11}
+ok 64 - malformed EMS intent is rejected before save: {"mode":"consumptionMeter","flowSlot":11}
+  ---
+  duration_ms: 0.213982
+  type: 'test'
+  ...
+# Subtest: malformed EMS intent is rejected before save: {"mode":"consumptionMeter"}
+ok 65 - malformed EMS intent is rejected before save: {"mode":"consumptionMeter"}
+  ---
+  duration_ms: 0.16582
+  type: 'test'
+  ...
+# Subtest: updating an older device preserves existing fields and does not invent an EMS intent
+ok 66 - updating an older device preserves existing fields and does not invent an EMS intent
+  ---
+  duration_ms: 0.235044
+  type: 'test'
+  ...
+# Subtest: public mapping status is plain text, identifies commissioning and never claims hardware activation
+ok 67 - public mapping status is plain text, identifies commissioning and never claims hardware activation
+  ---
+  duration_ms: 1.86621
+  type: 'test'
+  ...
+# Subtest: pending and stopped status do not overwrite the device draft or masquerade as a failed save
+ok 68 - pending and stopped status do not overwrite the device draft or masquerade as a failed save
+  ---
+  duration_ms: 6.869443
+  type: 'test'
+  ...
+# Subtest: partial mappings remain visibly incomplete and occupied targets explain the preserved mapping
+ok 69 - partial mappings remain visibly incomplete and occupied targets explain the preserved mapping
+  ---
+  duration_ms: 2.276087
+  type: 'test'
+  ...
+# Subtest: optional manufacturer readback is distinguished from required missing data
+ok 70 - optional manufacturer readback is distinguished from required missing data
+  ---
+  duration_ms: 1.258375
+  type: 'test'
+  ...
+# Subtest: profile-independent optional aliases and numeric mapping errors remain clear for every manufacturer
+ok 71 - profile-independent optional aliases and numeric mapping errors remain clear for every manufacturer
+  ---
+  duration_ms: 1.37487
+  type: 'test'
+  ...
+# Subtest: bounded status polling and explicit refresh preserve unsaved device and EMS selections
+ok 72 - bounded status polling and explicit refresh preserve unsaved device and EMS selections
+  ---
+  duration_ms: 47.244658
+  type: 'test'
+  ...
+# Subtest: leaving the devices page cancels its pending EMS status poll
+ok 73 - leaving the devices page cancels its pending EMS status poll
+  ---
+  duration_ms: 2.026391
+  type: 'test'
+  ...
+# Subtest: missing service, empty READY, partial status and global errors never masquerade as completed commissioning
+ok 74 - missing service, empty READY, partial status and global errors never masquerade as completed commissioning
+  ---
+  duration_ms: 1.478085
+  type: 'test'
+  ...
+# Subtest: explicit global Save commissions legacy selections once and retains the token across ambiguous retries and unrelated saves
+ok 75 - explicit global Save commissions legacy selections once and retains the token across ambiguous retries and unrelated saves
+  ---
+  duration_ms: 5.893514
+  type: 'test'
+  ...
+# Subtest: activation requests survive strict Devices persistence and malformed or unlimited limits are rejected
+ok 76 - activation requests survive strict Devices persistence and malformed or unlimited limits are rejected
+  ---
+  duration_ms: 7.034522
+  type: 'test'
+  ...
+# Subtest: profile capability chips use explicit datapoint metadata, not category or manufacturer guesses
+ok 77 - profile capability chips use explicit datapoint metadata, not category or manufacturer guesses
+  ---
+  duration_ms: 96.497349
+  type: 'test'
+  ...
+# Subtest: a previous activation acknowledgement cannot confirm a newly saved request, while current errors stay visible
+ok 78 - a previous activation acknowledgement cannot confirm a newly saved request, while current errors stay visible
+  ---
+  duration_ms: 2.053162
+  type: 'test'
+  ...
+# Subtest: explicit profile or device-class change renews the binding-specific activation without renewing unrelated edits
+ok 79 - explicit profile or device-class change renews the binding-specific activation without renewing unrelated edits
+  ---
+  duration_ms: 7.997182
+  type: 'test'
+  ...
+# Subtest: module runtime READY is only startup permission and failure never claims working telemetry
+ok 80 - module runtime READY is only startup permission and failure never claims working telemetry
+  ---
+  duration_ms: 0.776809
+  type: 'test'
+  ...
+# (node:33) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: configuration rejects invalid identifiers, duplicate IDs, dangerous keys and CAN binary overrides
+ok 81 - configuration rejects invalid identifiers, duplicate IDs, dangerous keys and CAN binary overrides
+  ---
+  duration_ms: 2.319322
+  type: 'test'
+  ...
+# Subtest: legacy JSON config imports without changing per-device IDs/settings or activating
+ok 82 - legacy JSON config imports without changing per-device IDs/settings or activating
+  ---
+  duration_ms: 2.793486
+  type: 'test'
+  ...
+# Subtest: disabled module never creates objects, runtimes, transport, or root connection state
+ok 83 - disabled module never creates objects, runtimes, transport, or root connection state
+  ---
+  duration_ms: 0.693654
+  type: 'test'
+  ...
+# Subtest: one hosted runtime routes only its namespace and unacknowledged commands; stop is idempotent
+ok 84 - one hosted runtime routes only its namespace and unacknowledged commands; stop is idempotent
+  ---
+  duration_ms: 72.980788
+  type: 'test'
+  ...
+# Subtest: central license refusal prevents transport; revocation blocks all subsequent writes
+ok 85 - central license refusal prevents transport; revocation blocks all subsequent writes
+  ---
+  duration_ms: 1.020627
+  type: 'test'
+  ...
+# Subtest: unknown profile and incompatible protocol fail before any I/O
+ok 86 - unknown profile and incompatible protocol fail before any I/O
+  ---
+  duration_ms: 0.726213
+  type: 'test'
+  ...
+# Subtest: queued Modbus and periodic MQTT publish recheck ownership at the final dispatch
+ok 87 - queued Modbus and periodic MQTT publish recheck ownership at the final dispatch
+  ---
+  duration_ms: 0.698632
+  type: 'test'
+  ...
+# Subtest: metadata commands work while runtime is disabled and reject unknown commands
+ok 88 - metadata commands work while runtime is disabled and reject unknown commands
+  ---
+  duration_ms: 1.418246
+  type: 'test'
+  ...
+# Subtest: startup failure cleans a partially initialized runtime without exposing error secrets
+ok 89 - startup failure cleans a partially initialized runtime without exposing error secrets
+  ---
+  duration_ms: 0.981338
+  type: 'test'
+  ...
+# Subtest: state cleanup failure still closes the captured driver; a failed close remains visible to the host
+ok 90 - state cleanup failure still closes the captured driver; a failed close remains visible to the host
+  ---
+  duration_ms: 1.975395
+  type: 'test'
+  ...
+# Subtest: legacy preflight preserves 0.5.176 devicesJson when the native array is only its empty default
+ok 91 - legacy preflight preserves 0.5.176 devicesJson when the native array is only its empty default
+  ---
+  duration_ms: 0.761617
+  type: 'test'
+  ...
+# Subtest: two filled legacy sources must agree and neither conflicting source is silently selected
+ok 92 - two filled legacy sources must agree and neither conflicting source is silently selected
+  ---
+  duration_ms: 0.549488
+  type: 'test'
+  ...
+# Subtest: normal explicit empty-device save never resurrects a leftover legacy JSON list
+ok 93 - normal explicit empty-device save never resurrects a leftover legacy JSON list
+  ---
+  duration_ms: 0.177137
+  type: 'test'
+  ...
+# Subtest: legacy preflight rejects malformed, unsafe and unknown JSON devices before any hosted runtime
+ok 94 - legacy preflight rejects malformed, unsafe and unknown JSON devices before any hosted runtime
+  ---
+  duration_ms: 0.548055
+  type: 'test'
+  ...
+# (node:39) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: TLS verification cannot be disabled; public CA preserves chain and hostname verification
+ok 95 - TLS verification cannot be disabled; public CA preserves chain and hostname verification
+  ---
+  duration_ms: 4.454958
+  type: 'test'
+  ...
+# Subtest: real Axios transport reads a grouped response once and stays on configured origin
+ok 96 - real Axios transport reads a grouped response once and stays on configured origin
+  ---
+  duration_ms: 9.626315
+  type: 'test'
+  ...
+# Subtest: response cap applies to the decompressed body before parsing
+ok 97 - response cap applies to the decompressed body before parsing
+  ---
+  duration_ms: 68.161985
+  type: 'test'
+  ...
+# Subtest: oversized outbound writes are rejected before any request
+ok 98 - oversized outbound writes are rejected before any request
+  ---
+  duration_ms: 2.279702
+  type: 'test'
+  ...
+# Subtest: disconnect destroys the actual Axios request and no next group is dispatched
+ok 99 - disconnect destroys the actual Axios request and no next group is dispatched
+  ---
+  duration_ms: 11.560016
+  type: 'test'
+  ...
+# Subtest: wall deadline destroys a response-less request and is capped at five seconds
+ok 100 - wall deadline destroys a response-less request and is capped at five seconds
+  ---
+  duration_ms: 105.775298
+  type: 'test'
+  ...
+# Subtest: all poll groups share one deadline and late completions cannot survive disconnect/reconnect
+ok 101 - all poll groups share one deadline and late completions cannot survive disconnect/reconnect
+  ---
+  duration_ms: 9.463369
+  type: 'test'
+  ...
+# Subtest: revoked module permission blocks subsequent groups and taCmi bridge callbacks
+ok 102 - revoked module permission blocks subsequent groups and taCmi bridge callbacks
+  ---
+  duration_ms: 7.639514
+  type: 'test'
+  ...
+# Subtest: taCmi validates every row before creating node objects or exposing values
+ok 103 - taCmi validates every row before creating node objects or exposing values
+  ---
+  duration_ms: 34.245053
+  type: 'test'
+  ...
+# Subtest: taCmi disconnect interrupts HTTP and prevents a still-pending initialization from restarting
+ok 104 - taCmi disconnect interrupts HTTP and prevents a still-pending initialization from restarting
+  ---
+  duration_ms: 5.424448
+  type: 'test'
+  ...
+# Subtest: bounded pending requests reject runaway work
+ok 105 - bounded pending requests reject runaway work
+  ---
+  duration_ms: 0.876941
+  type: 'test'
+  ...
+# Subtest: parsed response structure and datapoint types are checked before values leave the driver
+ok 106 - parsed response structure and datapoint types are checked before values leave the driver
+  ---
+  duration_ms: 3.44038
+  type: 'test'
+  ...
+# Subtest: partial endpoint failures retain valid readings while diagnostics never include request secrets
+ok 107 - partial endpoint failures retain valid readings while diagnostics never include request secrets
+  ---
+  duration_ms: 0.836499
+  type: 'test'
+  ...
+# Subtest: a transport rejection after cancellation remains observed
+ok 108 - a transport rejection after cancellation remains observed
+  ---
+  duration_ms: 1.268891
+  type: 'test'
+  ...
+# Subtest: a deadline cancellation remains terminal even if the timer precedes the clock rounding boundary
+ok 109 - a deadline cancellation remains terminal even if the timer precedes the clock rounding boundary
+  ---
+  duration_ms: 0.74395
+  type: 'test'
+  ...
+# (node:45) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual hosted gate loss after one SolaX read aborts the snapshot without poisoning remaining optional groups
+ok 110 - actual hosted gate loss after one SolaX read aborts the snapshot without poisoning remaining optional groups
+  ---
+  duration_ms: 7.01992
+  type: 'test'
+  ...
+# Subtest: authorization and explicit stop errors bypass optional caching for registers, coils and discrete inputs
+ok 111 - authorization and explicit stop errors bypass optional caching for registers, coils and discrete inputs
+  ---
+  duration_ms: 8.306107
+  type: 'test'
+  ...
+# Subtest: a gate error inside an already split read cannot blacklist an optional item or continue the other items
+ok 112 - a gate error inside an already split read cannot blacklist an optional item or continue the other items
+  ---
+  duration_ms: 1.110052
+  type: 'test'
+  ...
+# Subtest: authorization failure at a documented fallback is not swallowed as the original illegal-register response
+ok 113 - authorization failure at a documented fallback is not swallowed as the original illegal-register response
+  ---
+  duration_ms: 1.182301
+  type: 'test'
+  ...
+# Subtest: genuine unsupported optional registers retain their existing cooldown while useful groups remain readable
+ok 114 - genuine unsupported optional registers retain their existing cooldown while useful groups remain readable
+  ---
+  duration_ms: 1.644576
+  type: 'test'
+  ...
+# Subtest: authorization loss during optional SunSpec scanning is propagated and cannot cache an incomplete model map
+ok 115 - authorization loss during optional SunSpec scanning is propagated and cannot cache an incomplete model map
+  ---
+  duration_ms: 0.983681
+  type: 'test'
+  ...
+# Subtest: the read entry point does not hide an authorization error from optional model discovery
+ok 116 - the read entry point does not hide an authorization error from optional model discovery
+  ---
+  duration_ms: 0.504009
+  type: 'test'
+  ...
+# (node:85) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: disconnect during reconnect backoff prevents an old hosted connect opening a socket after stop
+ok 117 - disconnect during reconnect backoff prevents an old hosted connect opening a socket after stop
+  ---
+  duration_ms: 260.514738
+  type: 'test'
+  ...
+# Subtest: lease loss during reconnect backoff blocks TCP dispatch and a subsequent authorized attempt still works
+ok 118 - lease loss during reconnect backoff blocks TCP dispatch and a subsequent authorized attempt still works
+  ---
+  duration_ms: 208.455514
+  type: 'test'
+  ...
+# Subtest: late old backoff cannot close or change a replacement connection, even after authorization returns
+ok 119 - late old backoff cannot close or change a replacement connection, even after authorization returns
+  ---
+  duration_ms: 251.419198
+  type: 'test'
+  ...
+# Subtest: a cancelled old ensureConnected caller cannot mark the replacement connection offline
+ok 120 - a cancelled old ensureConnected caller cannot mark the replacement connection offline
+  ---
+  duration_ms: 252.175116
+  type: 'test'
+  ...
+# Subtest: late real TCP connection completion cannot invalidate the replacement client
+ok 121 - late real TCP connection completion cannot invalidate the replacement client
+  ---
+  duration_ms: 9.486514
+  type: 'test'
+  ...
+# Subtest: concurrent callers still share one TCP connection while no disconnect occurs
+ok 122 - concurrent callers still share one TCP connection while no disconnect occurs
+  ---
+  duration_ms: 102.454514
+  type: 'test'
+  ...
+# Subtest: authorization loss inside optional SunSpec discovery is not reported as successful connection
+ok 123 - authorization loss inside optional SunSpec discovery is not reported as successful connection
+  ---
+  duration_ms: 1.812319
+  type: 'test'
+  ...
+# Subtest: actual interrupted SunSpec discovery stays retryable and does not cache an unverified unit
+ok 124 - actual interrupted SunSpec discovery stays retryable and does not cache an unverified unit
+  ---
+  duration_ms: 1.449603
+  type: 'test'
+  ...
+# Subtest: late actual SunSpec probe cannot mutate replacement metadata or timeout
+ok 125 - late actual SunSpec probe cannot mutate replacement metadata or timeout
+  ---
+  duration_ms: 5.902097
+  type: 'test'
+  ...
+# Subtest: concurrent SunSpec discovery shares a single current-generation probe
+ok 126 - concurrent SunSpec discovery shares a single current-generation probe
+  ---
+  duration_ms: 6.253486
+  type: 'test'
+  ...
+# Subtest: late model-map response cannot overwrite the replacement generation cache
+ok 127 - late model-map response cannot overwrite the replacement generation cache
+  ---
+  duration_ms: 5.134841
+  type: 'test'
+  ...
+# (node:92) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: complete FC3/FC4 words preserve signed values, genuine zero and configured sentinels
+ok 128 - complete FC3/FC4 words preserve signed values, genuine zero and configured sentinels
+  ---
+  duration_ms: 11.48895
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 missing response fails without fabricated power, fallback or skip caching
+ok 129 - required FC3/FC4 missing response fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 1.75326
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 missing data fails without fabricated power, fallback or skip caching
+ok 130 - required FC3/FC4 missing data fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 0.875989
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 non-array data fails without fabricated power, fallback or skip caching
+ok 131 - required FC3/FC4 non-array data fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 1.028398
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 empty data fails without fabricated power, fallback or skip caching
+ok 132 - required FC3/FC4 empty data fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 1.090061
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 short data fails without fabricated power, fallback or skip caching
+ok 133 - required FC3/FC4 short data fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 1.040427
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 overlong data fails without fabricated power, fallback or skip caching
+ok 134 - required FC3/FC4 overlong data fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 3.942876
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 short payload buffer fails without fabricated power, fallback or skip caching
+ok 135 - required FC3/FC4 short payload buffer fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 0.826615
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 overlong payload buffer fails without fabricated power, fallback or skip caching
+ok 136 - required FC3/FC4 overlong payload buffer fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 0.921718
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 sparse data fails without fabricated power, fallback or skip caching
+ok 137 - required FC3/FC4 sparse data fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 0.956481
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 null word fails without fabricated power, fallback or skip caching
+ok 138 - required FC3/FC4 null word fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 0.773815
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 undefined word fails without fabricated power, fallback or skip caching
+ok 139 - required FC3/FC4 undefined word fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 0.672322
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 NaN word fails without fabricated power, fallback or skip caching
+ok 140 - required FC3/FC4 NaN word fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 0.632803
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 infinite word fails without fabricated power, fallback or skip caching
+ok 141 - required FC3/FC4 infinite word fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 0.772302
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 fractional word fails without fabricated power, fallback or skip caching
+ok 142 - required FC3/FC4 fractional word fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 0.675387
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 negative word fails without fabricated power, fallback or skip caching
+ok 143 - required FC3/FC4 negative word fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 0.731602
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 overflowing word fails without fabricated power, fallback or skip caching
+ok 144 - required FC3/FC4 overflowing word fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 0.633864
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 string word fails without fabricated power, fallback or skip caching
+ok 145 - required FC3/FC4 string word fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 0.921928
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 boolean word fails without fabricated power, fallback or skip caching
+ok 146 - required FC3/FC4 boolean word fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 0.603819
+  type: 'test'
+  ...
+# Subtest: required short group fails the whole snapshot even when another live value was read
+ok 147 - required short group fails the whole snapshot even when another live value was read
+  ---
+  duration_ms: 0.742939
+  type: 'test'
+  ...
+# Subtest: slow split failure of required grid power cannot suppress the following recovered fast poll
+ok 148 - slow split failure of required grid power cannot suppress the following recovered fast poll
+  ---
+  duration_ms: 1.85913
+  type: 'test'
+  ...
+# Subtest: existing required skip entries cannot hide repeated errors or later recovery
+ok 149 - existing required skip entries cannot hide repeated errors or later recovery
+  ---
+  duration_ms: 1.220588
+  type: 'test'
+  ...
+# Subtest: required entries remain readable inside cached split mode while optional failure stays isolated
+ok 150 - required entries remain readable inside cached split mode while optional failure stays isolated
+  ---
+  duration_ms: 0.965534
+  type: 'test'
+  ...
+# Subtest: malformed required split response is not hidden by a valid optional neighbour
+ok 151 - malformed required split response is not hidden by a valid optional neighbour
+  ---
+  duration_ms: 0.679433
+  type: 'test'
+  ...
+# Subtest: optional malformed split response is cached without losing required grid or retrying the block
+ok 152 - optional malformed split response is cached without losing required grid or retrying the block
+  ---
+  duration_ms: 0.609819
+  type: 'test'
+  ...
+# Subtest: an optional standalone malformed group remains isolated and bounded; all-invalid reads still fail
+ok 153 - an optional standalone malformed group remains isolated and bounded; all-invalid reads still fail
+  ---
+  duration_ms: 0.698582
+  type: 'test'
+  ...
+# Subtest: required transport failures preserve their original code without retries or skip caching
+ok 154 - required transport failures preserve their original code without retries or skip caching
+  ---
+  duration_ms: 0.435776
+  type: 'test'
+  ...
+# (node:94) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: rtu: identical device settings share one bus and an intermediate release cannot close it
+ok 155 - rtu: identical device settings share one bus and an intermediate release cannot close it
+  ---
+  duration_ms: 7.288135
+  type: 'test'
+  ...
+# Subtest: rtu: final release waits for a pending open and close callback; replacement stays fenced
+ok 156 - rtu: final release waits for a pending open and close callback; replacement stays fenced
+  ---
+  duration_ms: 2.568137
+  type: 'test'
+  ...
+# Subtest: rtu: close failure cannot release the port or start a second bus
+ok 157 - rtu: close failure cannot release the port or start a second bus
+  ---
+  duration_ms: 2.505082
+  type: 'test'
+  ...
+# Subtest: rtu: stalled close times out but the lease remains until genuine late confirmation
+ok 158 - rtu: stalled close times out but the lease remains until genuine late confirmation
+  ---
+  duration_ms: 2502.6437
+  type: 'test'
+  ...
+# Subtest: ascii: identical device settings share one bus and an intermediate release cannot close it
+ok 159 - ascii: identical device settings share one bus and an intermediate release cannot close it
+  ---
+  duration_ms: 5.947475
+  type: 'test'
+  ...
+# Subtest: ascii: final release waits for a pending open and close callback; replacement stays fenced
+ok 160 - ascii: final release waits for a pending open and close callback; replacement stays fenced
+  ---
+  duration_ms: 2.016807
+  type: 'test'
+  ...
+# Subtest: ascii: close failure cannot release the port or start a second bus
+ok 161 - ascii: close failure cannot release the port or start a second bus
+  ---
+  duration_ms: 1.74668
+  type: 'test'
+  ...
+# Subtest: ascii: stalled close times out but the lease remains until genuine late confirmation
+ok 162 - ascii: stalled close times out but the lease remains until genuine late confirmation
+  ---
+  duration_ms: 2501.719055
+  type: 'test'
+  ...
+# Subtest: RTU and ASCII or different baud rates cannot own one configured path concurrently
+ok 163 - RTU and ASCII or different baud rates cannot own one configured path concurrently
+  ---
+  duration_ms: 5.072838
+  type: 'test'
+  ...
+# (node:109) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: unacknowledged MQTT power command is not replayed on reconnect
+ok 164 - unacknowledged MQTT power command is not replayed on reconnect
+  ---
+  duration_ms: 337.921733
+  type: 'test'
+  ...
+# Subtest: unacknowledged MQTT power command is not replayed on reconnect after authorization revocation
+ok 165 - unacknowledged MQTT power command is not replayed on reconnect after authorization revocation
+  ---
+  duration_ms: 287.259112
+  type: 'test'
+  ...
+# Subtest: offline commands fail instead of being queued for a later MQTT session
+ok 166 - offline commands fail instead of being queued for a later MQTT session
+  ---
+  duration_ms: 321.980466
+  type: 'test'
+  ...
+# Subtest: missing PUBACK reaches deadline and closes actual transport before fresh reconnect
+ok 167 - missing PUBACK reaches deadline and closes actual transport before fresh reconnect
+  ---
+  duration_ms: 5084.174711
+  type: 'test'
+  ...
+# Subtest: missing SUBACK is bounded and does not block stop or next session
+ok 168 - missing SUBACK is bounded and does not block stop or next session
+  ---
+  duration_ms: 5064.002803
+  type: 'test'
+  ...
+# Subtest: controlled stop shares one deadline across three safe QoS1 shutdown groups
+ok 169 - controlled stop shares one deadline across three safe QoS1 shutdown groups
+  ---
+  duration_ms: 1172.460383
+  type: 'test'
+  ...
+# Subtest: parallel connect calls share one MQTT client
+ok 170 - parallel connect calls share one MQTT client
+  ---
+  duration_ms: 11.953078
+  type: 'test'
+  ...
+# Subtest: a delayed old MQTT sample cannot revive aliases or finish multi-value updates in a new session
+ok 171 - a delayed old MQTT sample cannot revive aliases or finish multi-value updates in a new session
+  ---
+  duration_ms: 268.169634
+  type: 'test'
+  ...
+# Subtest: unconfirmed MQTT transport cleanup does not start a second client
+ok 172 - unconfirmed MQTT transport cleanup does not start a second client
+  ---
+  duration_ms: 203.158184
+  type: 'test'
+  ...
+# Subtest: safe shutdown never bypasses revoked device authority
+ok 173 - safe shutdown never bypasses revoked device authority
+  ---
+  duration_ms: 12.699151
+  type: 'test'
+  ...
+# (node:115) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: real MQTT backpressure bounds message count and reconnects only after the old DB write drains
+ok 174 - real MQTT backpressure bounds message count and reconnects only after the old DB write drains
+  ---
+  duration_ms: 333.901746
+  type: 'test'
+  ...
+# Subtest: real MQTT backpressure bounds queued payload bytes and reconnects only after the old DB write drains
+ok 175 - real MQTT backpressure bounds queued payload bytes and reconnects only after the old DB write drains
+  ---
+  duration_ms: 312.019103
+  type: 'test'
+  ...
+# Subtest: MQTT single payload exceeding one MiB is rejected visibly before application state writes
+ok 176 - MQTT single payload exceeding one MiB is rejected visibly before application state writes
+  ---
+  duration_ms: 69.808429
+  type: 'test'
+  ...
+# Subtest: MQTT wildcard topic discovery is capped per session with an explicit transport error
+ok 177 - MQTT wildcard topic discovery is capped per session with an explicit transport error
+  ---
+  duration_ms: 272.632869
+  type: 'test'
+  ...
+# (node:117) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: old MQTT callback cannot publish aliases beyond offline
+ok 178 - old MQTT callback cannot publish aliases beyond offline
+  ---
+  duration_ms: 17.991269
+  type: 'test'
+  ...
+# Subtest: old MQTT callback cannot publish aliases beyond offline and a following connection
+ok 179 - old MQTT callback cannot publish aliases beyond offline and a following connection
+  ---
+  duration_ms: 4.269698
+  type: 'test'
+  ...
+# Subtest: nested offline callback can publish diagnostic aliases without a FIFO deadlock
+ok 180 - nested offline callback can publish diagnostic aliases without a FIFO deadlock
+  ---
+  duration_ms: 1.655633
+  type: 'test'
+  ...
+# Subtest: telemetry backlog is bounded while the final offline barrier remains ordered and observable
+ok 181 - telemetry backlog is bounded while the final offline barrier remains ordered and observable
+  ---
+  duration_ms: 2.542929
+  type: 'test'
+  ...
+# Subtest: an inherited async context from a completed callback cannot bypass the current FIFO owner
+ok 182 - an inherited async context from a completed callback cannot bypass the current FIFO owner
+  ---
+  duration_ms: 3.630677
+  type: 'test'
+  ...
+# Subtest: runtime stop invalidates MQTT first and awaits the callback DB write before reporting stopped
+ok 183 - runtime stop invalidates MQTT first and awaits the callback DB write before reporting stopped
+  ---
+  duration_ms: 3.306529
+  type: 'test'
+  ...
+# (node:131) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: poll without usable measurements does not manufacture liveness: empty response
+ok 184 - poll without usable measurements does not manufacture liveness: empty response
+  ---
+  duration_ms: 9.667396
+  type: 'test'
+  ...
+# Subtest: poll without usable measurements does not manufacture liveness: undefined
+ok 185 - poll without usable measurements does not manufacture liveness: undefined
+  ---
+  duration_ms: 0.80991
+  type: 'test'
+  ...
+# Subtest: poll without usable measurements does not manufacture liveness: null
+ok 186 - poll without usable measurements does not manufacture liveness: null
+  ---
+  duration_ms: 0.904251
+  type: 'test'
+  ...
+# Subtest: poll without usable measurements does not manufacture liveness: NaN
+ok 187 - poll without usable measurements does not manufacture liveness: NaN
+  ---
+  duration_ms: 0.858914
+  type: 'test'
+  ...
+# Subtest: MQTT subscription diagnostic arriving during connect is not overwritten at startup
+ok 188 - MQTT subscription diagnostic arriving during connect is not overwritten at startup
+  ---
+  duration_ms: 1.790656
+  type: 'test'
+  ...
+# Subtest: MQTT diagnostic-only snapshots update aliases without clearing errors or fabricating liveness
+ok 189 - MQTT diagnostic-only snapshots update aliases without clearing errors or fabricating liveness
+  ---
+  duration_ms: 1.546048
+  type: 'test'
+  ...
+# Subtest: a valid zero measurement establishes liveness
+ok 190 - a valid zero measurement establishes liveness
+  ---
+  duration_ms: 2.562137
+  type: 'test'
+  ...
+# Subtest: mqtt startup preserves a connection failure diagnostic
+ok 191 - mqtt startup preserves a connection failure diagnostic
+  ---
+  duration_ms: 1.492657
+  type: 'test'
+  ...
+# Subtest: canbus startup preserves a connection failure diagnostic
+ok 192 - canbus startup preserves a connection failure diagnostic
+  ---
+  duration_ms: 1.25515
+  type: 'test'
+  ...
+# (node:140) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: disconnected RTU request reconnects without enqueueing behind itself
+ok 193 - disconnected RTU request reconnects without enqueueing behind itself
+  ---
+  duration_ms: 2.25167
+  type: 'test'
+  ...
+# Subtest: shared RTU bus retains each queued device capability and rejects revoked commands at dispatch
+ok 194 - shared RTU bus retains each queued device capability and rejects revoked commands at dispatch
+  ---
+  duration_ms: 6.974812
+  type: 'test'
+  ...
+# Subtest: ASCII transport rejects a queued frame after gate closure without touching serial port
+ok 195 - ASCII transport rejects a queued frame after gate closure without touching serial port
+  ---
+  duration_ms: 1.69359
+  type: 'test'
+  ...
+# (node:149) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# {"runtime":"v22.23.4","wireBlocks":[{"fc":16,"addr":160,"regs":[4,600,0,600,160]},{"fc":16,"addr":160,"regs":[4,64936,65535,600,160]},{"fc":16,"addr":160,"regs":[4,0,0,600,160]}],"deniedWritePackets":0}
+# Subtest: actual SolaX AliasV1 dispatch reaches real loopback Modbus TCP as complete Mode4 block with signed W
+ok 196 - actual SolaX AliasV1 dispatch reaches real loopback Modbus TCP as complete Mode4 block with signed W
+  ---
+  duration_ms: 40.584868
+  type: 'test'
+  ...
+# {"runtime":"v22.23.4","measured":{"sOC":98,"bATTERY_POWER":600,"aLLOWED_CHARGE_POWER":5000,"aLLOWED_DISCHARGE_POWER":0},"zeroCapabilityPreserved":true}
+# Subtest: actual read path preserves positive discharge, 98% SoC and valid zero BMS discharge capability
+ok 197 - actual read path preserves positive discharge, 98% SoC and valid zero BMS discharge capability
+  ---
+  duration_ms: 12.946373
+  type: 'test'
+  ...
+# {"runtime":"v22.23.4","rawCommandAck":700,"actualMode4Readback":600,"mode8Interpretation":null,"interpretationRequiresMode4":true}
+# Subtest: SolaX readback uses actual mode4 poll and becomes unknown after mode8 or missing current mode
+ok 198 - SolaX readback uses actual mode4 poll and becomes unknown after mode8 or missing current mode
+  ---
+  duration_ms: 8.695413
+  type: 'test'
+  ...
+# Subtest: unknown, invalid, disconnected and expired mode context never keeps a usable target or fabricates freshness
+ok 199 - unknown, invalid, disconnected and expired mode context never keeps a usable target or fabricates freshness
+  ---
+  duration_ms: 13.698957
+  type: 'test'
+  ...
+# Subtest: only the exact verified mode descriptor enables contextual readback; the existing slow poll includes both fields
+ok 200 - only the exact verified mode descriptor enables contextual readback; the existing slow poll includes both fields
+  ---
+  duration_ms: 1.76655
+  type: 'test'
+  ...
+# Subtest: separate isolated register replies cannot combine old mode4 with mode8 target words
+ok 201 - separate isolated register replies cannot combine old mode4 with mode8 target words
+  ---
+  duration_ms: 6.994892
+  type: 'test'
+  ...
+# Subtest: separate adaptive register replies cannot combine old mode4 with mode8 target words
+ok 202 - separate adaptive register replies cannot combine old mode4 with mode8 target words
+  ---
+  duration_ms: 4.96798
+  type: 'test'
+  ...
+# Subtest: separate maxReadRegs register replies cannot combine old mode4 with mode8 target words
+ok 203 - separate maxReadRegs register replies cannot combine old mode4 with mode8 target words
+  ---
+  duration_ms: 3.811789
+  type: 'test'
+  ...
+# Subtest: even a full cached copy cannot manufacture the actual response provenance
+ok 204 - even a full cached copy cannot manufacture the actual response provenance
+  ---
+  duration_ms: 5.3928
+  type: 'test'
+  ...
+# Subtest: stop drains earlier alias work without reviving an old sample
+ok 205 - stop drains earlier alias work without reviving an old sample
+  ---
+  duration_ms: 4.515208
+  type: 'test'
+  ...
+# Subtest: stop drains submitted readback work without reviving an old sample
+ok 206 - stop drains submitted readback work without reviving an old sample
+  ---
+  duration_ms: 2.963072
+  type: 'test'
+  ...
+# Subtest: real unchanged BMS caps stay fresh beyond 60s, while failed/skipped/unrelated polls do not renew them
+ok 207 - real unchanged BMS caps stay fresh beyond 60s, while failed/skipped/unrelated polls do not renew them
+  ---
+  duration_ms: 36.721291
+  type: 'test'
+  ...
+# Subtest: runtime fast scheduler includes only the two existing numeric cap sources without speeding up the full map
+ok 208 - runtime fast scheduler includes only the two existing numeric cap sources without speeding up the full map
+  ---
+  duration_ms: 6.883664
+  type: 'test'
+  ...
+# (node:155) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: real UDP listener recovers after an unexpected close instead of serving its old telegram forever
+ok 209 - real UDP listener recovers after an unexpected close instead of serving its old telegram forever
+  ---
+  duration_ms: 9.266613
+  type: 'test'
+  ...
+# Subtest: a failed initial UDP bind remains retryable after the occupied port is released
+ok 210 - a failed initial UDP bind remains retryable after the occupied port is released
+  ---
+  duration_ms: 1.830536
+  type: 'test'
+  ...
+# Subtest: socket error is followed by a new receiver and stale socket events cannot stop its replacement
+ok 211 - socket error is followed by a new receiver and stale socket events cannot stop its replacement
+  ---
+  duration_ms: 2.259462
+  type: 'test'
+  ...
+# Subtest: disconnect during bind and shared-listener handover leave no orphan receiver or lost active subscriber
+ok 212 - disconnect during bind and shared-listener handover leave no orphan receiver or lost active subscriber
+  ---
+  duration_ms: 5.08749
+  type: 'test'
+  ...
+# Subtest: one failed-bind subscriber leaving cannot evict the shared hub or split later users across two receivers
+ok 213 - one failed-bind subscriber leaving cannot evict the shared hub or split later users across two receivers
+  ---
+  duration_ms: 3.887062
+  type: 'test'
+  ...
+# Subtest: current validation and legacy import preserve all explicit SMA receiver and host-filter settings
+ok 214 - current validation and legacy import preserve all explicit SMA receiver and host-filter settings
+  ---
+  duration_ms: 42.144327
+  type: 'test'
+  ...
+# (node:169) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: detects only the Sungrow residential hybrid runtime
+ok 215 - detects only the Sungrow residential hybrid runtime
+  ---
+  duration_ms: 1.300988
+  type: 'test'
+  ...
+# Subtest: enforces Sungrow one-second polling and separates writes from full polls
+ok 216 - enforces Sungrow one-second polling and separates writes from full polls
+  ---
+  duration_ms: 0.22528
+  type: 'test'
+  ...
+# Subtest: priority feedback updates exact power without 500 W quantisation
+ok 217 - priority feedback updates exact power without 500 W quantisation
+  ---
+  duration_ms: 0.719453
+  type: 'test'
+  ...
+# Subtest: zero remains zero and is never replaced by a fallback
+ok 218 - zero remains zero and is never replaced by a fallback
+  ---
+  duration_ms: 0.177738
+  type: 'test'
+  ...
+# Subtest: negative charge feedback remains exact
+ok 219 - negative charge feedback remains exact
+  ---
+  duration_ms: 0.228985
+  type: 'test'
+  ...
+# Subtest: packaged Sungrow template keeps 0.5.133 direction mapping and one-second fast profile
+ok 220 - packaged Sungrow template keeps 0.5.133 direction mapping and one-second fast profile
+  ---
+  duration_ms: 83.082425
+  type: 'test'
+  ...
+# Subtest: Sungrow fast datapoints form four register groups for a one-second TCP snapshot
+ok 221 - Sungrow fast datapoints form four register groups for a one-second TCP snapshot
+  ---
+  duration_ms: 33.411888
+  type: 'test'
+  ...
+# (node:177) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: parses all CAN node and API group selection safely
+ok 222 - parses all CAN node and API group selection safely
+  ---
+  duration_ms: 2.799685
+  type: 'test'
+  ...
+# Subtest: signed bridge encoding and channel map preserve engineering values
+ok 223 - signed bridge encoding and channel map preserve engineering values
+  ---
+  duration_ms: 0.588526
+  type: 'test'
+  ...
+# Subtest: CMI JSON API dynamically exposes values, designations and node metadata
+ok 224 - CMI JSON API dynamically exposes values, designations and node metadata
+  ---
+  duration_ms: 6.444844
+  type: 'test'
+  ...
+# Subtest: bidirectional Modbus bridge reads NexoWatt setpoints and accepts CMI feedback
+ok 225 - bidirectional Modbus bridge reads NexoWatt setpoints and accepts CMI feedback
+  ---
+  duration_ms: 4.839897
+  type: 'test'
+  ...
+# Subtest: packaged TA CMI template is present and synchronized
+ok 226 - packaged TA CMI template is present and synchronized
+  ---
+  duration_ms: 65.732673
+  type: 'test'
+  ...
+# (node:185) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: TESVOLT real MQTT transport receives screenshot EMS topics with wildcard subscription and publishes nothing
+ok 227 - TESVOLT real MQTT transport receives screenshot EMS topics with wildcard subscription and publishes nothing
+  ---
+  duration_ms: 241.886666
+  type: 'test'
+  ...
+# Subtest: TESVOLT real MQTT transport receives screenshot EMS topics with exact-topic ACL fallback and publishes nothing
+ok 228 - TESVOLT real MQTT transport receives screenshot EMS topics with exact-topic ACL fallback and publishes nothing
+  ---
+  duration_ms: 135.195646
+  type: 'test'
+  ...
+# Subtest: TESVOLT real MQTT transport sends EMS power commands with limits and full payload after explicit control setup
+ok 229 - TESVOLT real MQTT transport sends EMS power commands with limits and full payload after explicit control setup
+  ---
+  duration_ms: 116.384218
+  type: 'test'
+  ...
+# Subtest: TESVOLT real MQTT automatic detection ignores stale V2 metadata before live EMS values
+ok 230 - TESVOLT real MQTT automatic detection ignores stale V2 metadata before live EMS values
+  ---
+  duration_ms: 52.850747
+  type: 'test'
+  ...
+# Subtest: TESVOLT reconnect to a different namespace clears previous optional values and never replays commands
+ok 231 - TESVOLT reconnect to a different namespace clears previous optional values and never replays commands
+  ---
+  duration_ms: 157.344601
+  type: 'test'
+  ...
+# (node:193) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: extended read defaults on; engineering units, encrypted raw counter and frequency opt-in are distinct
+ok 232 - extended read defaults on; engineering units, encrypted raw counter and frequency opt-in are distinct
+  ---
+  duration_ms: 5.06686
+  type: 'test'
+  ...
+# Subtest: optional extension exception cannot poison adjacent public energy, capacity or grid power
+ok 233 - optional extension exception cannot poison adjacent public energy, capacity or grid power
+  ---
+  duration_ms: 1.150111
+  type: 'test'
+  ...
+# Subtest: extension disable clears extension values and blocks writes without IO
+ok 234 - extension disable clears extension values and blocks writes without IO
+  ---
+  duration_ms: 1.316462
+  type: 'test'
+  ...
+# Subtest: measurement, token, wrong-model and missing opt-in writes cannot address arbitrary registers
+ok 235 - measurement, token, wrong-model and missing opt-in writes cannot address arbitrary registers
+  ---
+  duration_ms: 0.470909
+  type: 'test'
+  ...
+# Subtest: UG and OG use live SF, correct signed FC6 and active countdown confirmation
+ok 236 - UG and OG use live SF, correct signed FC6 and active countdown confirmation
+  ---
+  duration_ms: 10.730797
+  type: 'test'
+  ...
+# Subtest: limit register echo without active countdown is not acknowledged as effective control
+ok 237 - limit register echo without active countdown is not acknowledged as effective control
+  ---
+  duration_ms: 0.758782
+  type: 'test'
+  ...
+# Subtest: UG/OG deadbands require a confirmed limit class and reject reversed signs
+ok 238 - UG/OG deadbands require a confirmed limit class and reject reversed signs
+  ---
+  duration_ms: 1.541311
+  type: 'test'
+  ...
+# Subtest: inherited object keys cannot masquerade as confirmed UG/OG limit classes
+ok 239 - inherited object keys cannot masquerade as confirmed UG/OG limit classes
+  ---
+  duration_ms: 0.963821
+  type: 'test'
+  ...
+# Subtest: Pextra authenticates every fresh command using documented CRC and timer, then verifies scaled target
+ok 240 - Pextra authenticates every fresh command using documented CRC and timer, then verifies scaled target
+  ---
+  duration_ms: 2.220223
+  type: 'test'
+  ...
+# Subtest: Pextra wrong response cannot reuse an old running timer or write a target
+ok 241 - Pextra wrong response cannot reuse an old running timer or write a target
+  ---
+  duration_ms: 1.854773
+  type: 'test'
+  ...
+# Subtest: Pextra legacy leading-zero formatting is explicit and never tried automatically
+ok 242 - Pextra legacy leading-zero formatting is explicit and never tried automatically
+  ---
+  duration_ms: 1.031804
+  type: 'test'
+  ...
+# Subtest: missing timer or challenge fails Pextra before target write
+ok 243 - missing timer or challenge fails Pextra before target write
+  ---
+  duration_ms: 1.234369
+  type: 'test'
+  ...
+# Subtest: pulse PSP is percent with 0.1 percent precision; no absolute-power conversion or token write
+ok 244 - pulse PSP is percent with 0.1 percent precision; no absolute-power conversion or token write
+  ---
+  duration_ms: 1.245616
+  type: 'test'
+  ...
+# Subtest: external PV values are visualization inputs in W and Wh with live SF and 10 Wh base
+ok 245 - external PV values are visualization inputs in W and Wh with live SF and 10 Wh base
+  ---
+  duration_ms: 1.542503
+  type: 'test'
+  ...
+# Subtest: frequency control requires activation opt-in, ready gate, live SF and explicit activation only
+ok 246 - frequency control requires activation opt-in, ready gate, live SF and explicit activation only
+  ---
+  duration_ms: 1.48138
+  type: 'test'
+  ...
+# Subtest: frequency alive uses signed16 echo and independent mirror confirmation without retries
+ok 247 - frequency alive uses signed16 echo and independent mirror confirmation without retries
+  ---
+  duration_ms: 0.680154
+  type: 'test'
+  ...
+# Subtest: extended SF writes have their separate opt-in and signed16 FC6; frequency SF remains gated
+ok 248 - extended SF writes have their separate opt-in and signed16 FC6; frequency SF remains gated
+  ---
+  duration_ms: 0.475967
+  type: 'test'
+  ...
+# Subtest: unsupported identity, missing live SF and target rejection prevent physical commands
+ok 249 - unsupported identity, missing live SF and target rejection prevent physical commands
+  ---
+  duration_ms: 0.8968
+  type: 'test'
+  ...
+# Subtest: invalid, unrepresentable and overflowing values do not wrap or trigger a write
+ok 250 - invalid, unrepresentable and overflowing values do not wrap or trigger a write
+  ---
+  duration_ms: 0.998102
+  type: 'test'
+  ...
+# Subtest: extended physical write failure or readback mismatch is never retried or redirected
+ok 251 - extended physical write failure or readback mismatch is never retried or redirected
+  ---
+  duration_ms: 1.159596
+  type: 'test'
+  ...
+# Subtest: queued commands expire before any IO at the model-specific 30/60-second deadline
+ok 252 - queued commands expire before any IO at the model-specific 30/60-second deadline
+  ---
+  duration_ms: 0.642978
+  type: 'test'
+  ...
+# Subtest: command expiry and permission revocation during pacing block the actual FC6
+ok 253 - command expiry and permission revocation during pacing block the actual FC6
+  ---
+  duration_ms: 0.595837
+  type: 'test'
+  ...
+# Subtest: public scale-factor permission is also rechecked after pacing immediately before FC6
+ok 254 - public scale-factor permission is also rechecked after pacing immediately before FC6
+  ---
+  duration_ms: 0.554745
+  type: 'test'
+  ...
+# Subtest: bounded command queue rejects overload, stop and reset discard commands without replay
+ok 255 - bounded command queue rejects overload, stop and reset discard commands without replay
+  ---
+  duration_ms: 0.650419
+  type: 'test'
+  ...
+# Subtest: two limit requests per second during a full poll keep only the latest unsent UG/OG pair
+ok 256 - two limit requests per second during a full poll keep only the latest unsent UG/OG pair
+  ---
+  duration_ms: 2.299452
+  type: 'test'
+  ...
+# Subtest: an executing limit command is unchanged while only a later queued value is superseded
+ok 257 - an executing limit command is unchanged while only a later queued value is superseded
+  ---
+  duration_ms: 1.239897
+  type: 'test'
+  ...
+# Subtest: coalesced limit age is measured from the newest submission and still expires at thirty seconds
+ok 258 - coalesced limit age is measured from the newest submission and still expires at thirty seconds
+  ---
+  duration_ms: 0.809709
+  type: 'test'
+  ...
+# Subtest: invalid replacement cannot supersede a valid queued limit; scale-factor writes retain their own slots
+ok 259 - invalid replacement cannot supersede a valid queued limit; scale-factor writes retain their own slots
+  ---
+  duration_ms: 4.511062
+  type: 'test'
+  ...
+# Subtest: coalesced limit callers reject on reset, stop, permission revocation, version changes and transport faults without replay
+ok 260 - coalesced limit callers reject on reset, stop, permission revocation, version changes and transport faults without replay
+  ---
+  duration_ms: 1.442873
+  type: 'test'
+  ...
+# Subtest: runtime transport reset rejects the latest queued limit and permits monitoring without command replay
+ok 261 - runtime transport reset rejects the latest queued limit and permits monitoring without command replay
+  ---
+  duration_ms: 9.020622
+  type: 'test'
+  ...
+# Subtest: stop during Pextra authentication never replays the target and clears no register automatically
+ok 262 - stop during Pextra authentication never replays the target and clears no register automatically
+  ---
+  duration_ms: 0.507894
+  type: 'test'
+  ...
+# (node:199) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: VARTA catalogue contains eight independent model selections in runtime and both Admin UIs
+ok 263 - VARTA catalogue contains eight independent model selections in runtime and both Admin UIs
+  ---
+  duration_ms: 28.195884
+  type: 'test'
+  ...
+# Subtest: element: exact product matrix, full simulated read, rate limit and zero automatic writes
+ok 264 - element: exact product matrix, full simulated read, rate limit and zero automatic writes
+  ---
+  duration_ms: 3.45361
+  type: 'test'
+  ...
+# Subtest: oneL: exact product matrix, full simulated read, rate limit and zero automatic writes
+ok 265 - oneL: exact product matrix, full simulated read, rate limit and zero automatic writes
+  ---
+  duration_ms: 1.103732
+  type: 'test'
+  ...
+# Subtest: oneXL: exact product matrix, full simulated read, rate limit and zero automatic writes
+ok 266 - oneXL: exact product matrix, full simulated read, rate limit and zero automatic writes
+  ---
+  duration_ms: 0.713625
+  type: 'test'
+  ...
+# Subtest: elementBackup: exact product matrix, full simulated read, rate limit and zero automatic writes
+ok 267 - elementBackup: exact product matrix, full simulated read, rate limit and zero automatic writes
+  ---
+  duration_ms: 1.130382
+  type: 'test'
+  ...
+# Subtest: pulse: exact product matrix, full simulated read, rate limit and zero automatic writes
+ok 268 - pulse: exact product matrix, full simulated read, rate limit and zero automatic writes
+  ---
+  duration_ms: 1.113136
+  type: 'test'
+  ...
+# Subtest: pulseNeo: exact product matrix, full simulated read, rate limit and zero automatic writes
+ok 269 - pulseNeo: exact product matrix, full simulated read, rate limit and zero automatic writes
+  ---
+  duration_ms: 2.183267
+  type: 'test'
+  ...
+# Subtest: link: exact product matrix, full simulated read, rate limit and zero automatic writes
+ok 270 - link: exact product matrix, full simulated read, rate limit and zero automatic writes
+  ---
+  duration_ms: 0.693094
+  type: 'test'
+  ...
+# Subtest: flexStorage: exact product matrix, full simulated read, rate limit and zero automatic writes
+ok 271 - flexStorage: exact product matrix, full simulated read, rate limit and zero automatic writes
+  ---
+  duration_ms: 2.172351
+  type: 'test'
+  ...
+# Subtest: string16, signed 16-bit, unsigned low-word-first and maximum energy do not use global endian settings
+ok 272 - string16, signed 16-bit, unsigned low-word-first and maximum energy do not use global endian settings
+  ---
+  duration_ms: 0.738542
+  type: 'test'
+  ...
+# Subtest: all nine live SF mappings, base 10 Wh capacity and 0.01 Hz frequency are applied independently
+ok 273 - all nine live SF mappings, base 10 Wh capacity and 0.01 Hz frequency are applied independently
+  ---
+  duration_ms: 1.091423
+  type: 'test'
+  ...
+# Subtest: each SF dependency is read even when only its measurement datapoint is requested
+ok 274 - each SF dependency is read even when only its measurement datapoint is requested
+  ---
+  duration_ms: 0.593012
+  type: 'test'
+  ...
+# Subtest: missing SF does not fall back to zero or reuse a preceding successful value
+ok 275 - missing SF does not fall back to zero or reuse a preceding successful value
+  ---
+  duration_ms: 1.632958
+  type: 'test'
+  ...
+# Subtest: overflow, underflow and missing SF are null, never Infinity, NaN or fabricated zero
+ok 276 - overflow, underflow and missing SF are null, never Infinity, NaN or fabricated zero
+  ---
+  duration_ms: 0.607675
+  type: 'test'
+  ...
+# Subtest: unknown table version blocks interpretation and retires previously known measurements
+ok 277 - unknown table version blocks interpretation and retires previously known measurements
+  ---
+  duration_ms: 0.59153
+  type: 'test'
+  ...
+# Subtest: pulse neo table 13 has an independent immutable public read map with no write definitions
+ok 278 - pulse neo table 13 has an independent immutable public read map with no write definitions
+  ---
+  duration_ms: 0.474254
+  type: 'test'
+  ...
+# Subtest: pulse neo table 13 reads only public addresses with all nine real scale factors and exact pacing
+ok 279 - pulse neo table 13 reads only public addresses with all nine real scale factors and exact pacing
+  ---
+  duration_ms: 2.370209
+  type: 'test'
+  ...
+# Subtest: pulse neo table 13 never sends FC6 or FC16 even when all write opt-ins are enabled
+ok 280 - pulse neo table 13 never sends FC6 or FC16 even when all write opt-ins are enabled
+  ---
+  duration_ms: 4.147085
+  type: 'test'
+  ...
+# Subtest: observed table 13 rejects fifty commands before validation or queues, including zero and SF writes
+ok 281 - observed table 13 rejects fifty commands before validation or queues, including zero and SF writes
+  ---
+  duration_ms: 1.049119
+  type: 'test'
+  ...
+# Subtest: startup write bursts admit only one identity probe until the table version is known
+ok 282 - startup write bursts admit only one identity probe until the table version is known
+  ---
+  duration_ms: 2.418751
+  type: 'test'
+  ...
+# Subtest: writes admitted on table 14 recheck negative version evidence before queued connection or identity probes
+ok 283 - writes admitted on table 14 recheck negative version evidence before queued connection or identity probes
+  ---
+  duration_ms: 0.875488
+  type: 'test'
+  ...
+# Subtest: negative table evidence survives transport resets and only a fresh monitoring result reopens writes
+ok 284 - negative table evidence survives transport resets and only a fresh monitoring result reopens writes
+  ---
+  duration_ms: 1.116912
+  type: 'test'
+  ...
+# Subtest: short or malformed table/identity responses never convert unknown or negative evidence into write support
+ok 285 - short or malformed table/identity responses never convert unknown or negative evidence into write support
+  ---
+  duration_ms: 0.945394
+  type: 'test'
+  ...
+# Subtest: table 13 stays blocked for other models and unknown versions 12/15 stay blocked for every model
+ok 286 - table 13 stays blocked for other models and unknown versions 12/15 stay blocked for every model
+  ---
+  duration_ms: 2.483049
+  type: 'test'
+  ...
+# Subtest: table 14 to 13 transition nulls every extended/frequency value even in a public SOC-only poll
+ok 287 - table 14 to 13 transition nulls every extended/frequency value even in a public SOC-only poll
+  ---
+  duration_ms: 0.89653
+  type: 'test'
+  ...
+# Subtest: each absent table-13 SF invalidates only its own dependent measurement, never the core SOC
+ok 288 - each absent table-13 SF invalidates only its own dependent measurement, never the core SOC
+  ---
+  duration_ms: 5.150085
+  type: 'test'
+  ...
+# Subtest: older table-13 firmware without 2083..2086 retains SOC and known-scaled values without guessing zero exponents
+ok 289 - older table-13 firmware without 2083..2086 retains SOC and known-scaled values without guessing zero exponents
+  ---
+  duration_ms: 0.916209
+  type: 'test'
+  ...
+# Subtest: unknown optional table-13 register cannot poison neighbouring core SOC/status/power
+ok 290 - unknown optional table-13 register cannot poison neighbouring core SOC/status/power
+  ---
+  duration_ms: 0.700885
+  type: 'test'
+  ...
+# Subtest: table-13 optional block fallback preserves valid neighbours and retries only documented definitions once
+ok 291 - table-13 optional block fallback preserves valid neighbours and retries only documented definitions once
+  ---
+  duration_ms: 1.911919
+  type: 'test'
+  ...
+# Subtest: table-13 optional fallback never retries a transport failure or a short response
+ok 292 - table-13 optional fallback never retries a transport failure or a short response
+  ---
+  duration_ms: 1.827832
+  type: 'test'
+  ...
+# Subtest: invalid SOC is null rather than clamped, scaled as a fraction or advertised as valid percent
+ok 293 - invalid SOC is null rather than clamped, scaled as a fraction or advertised as valid percent
+  ---
+  duration_ms: 0.264138
+  type: 'test'
+  ...
+# Subtest: optional PV exception produces null; core errors, transport errors and short responses fail the poll
+ok 294 - optional PV exception produces null; core errors, transport errors and short responses fail the poll
+  ---
+  duration_ms: 1.090031
+  type: 'test'
+  ...
+# Subtest: all eight profiles have real monitoring aliases, correct signs and no fictitious power control or discharge counter
+ok 295 - all eight profiles have real monitoring aliases, correct signs and no fictitious power control or discharge counter
+  ---
+  duration_ms: 12.15338
+  type: 'test'
+  ...
+# Subtest: six read-only profiles cannot write; SF opt-in defaults to locked and measurement registers always remain read-only
+ok 296 - six read-only profiles cannot write; SF opt-in defaults to locked and measurement registers always remain read-only
+  ---
+  duration_ms: 0.908588
+  type: 'test'
+  ...
+# Subtest: each of the nine SFs uses an identity read, target probe, one exact FC6 write and matching readback
+ok 297 - each of the nine SFs uses an identity read, target probe, one exact FC6 write and matching readback
+  ---
+  duration_ms: 2.930903
+  type: 'test'
+  ...
+# Subtest: invalid SF inputs cannot cause any request or wrap around
+ok 298 - invalid SF inputs cannot cause any request or wrap around
+  ---
+  duration_ms: 0.848537
+  type: 'test'
+  ...
+# Subtest: wrong version, implausible serial or inaccessible target cannot lead to a write
+ok 299 - wrong version, implausible serial or inaccessible target cannot lead to a write
+  ---
+  duration_ms: 0.634585
+  type: 'test'
+  ...
+# Subtest: write rejection and readback mismatch are reported without retry, FC16 or address fallback
+ok 300 - write rejection and readback mismatch are reported without retry, FC16 or address fallback
+  ---
+  duration_ms: 0.812333
+  type: 'test'
+  ...
+# Subtest: successful SF write is used by the very next snapshot, never by a stale cache
+ok 301 - successful SF write is used by the very next snapshot, never by a stale cache
+  ---
+  duration_ms: 0.547424
+  type: 'test'
+  ...
+# Subtest: same host and different Unit-IDs share pacing and non-interleaving write transactions
+ok 302 - same host and different Unit-IDs share pacing and non-interleaving write transactions
+  ---
+  duration_ms: 0.521044
+  type: 'test'
+  ...
+# Subtest: overlapping reads are coalesced and the SF write queue is bounded
+ok 303 - overlapping reads are coalesced and the SF write queue is bounded
+  ---
+  duration_ms: 1.041318
+  type: 'test'
+  ...
+# Subtest: disconnect cancels pending operations and does not reconnect or replay queued SF changes
+ok 304 - disconnect cancels pending operations and does not reconnect or replay queued SF changes
+  ---
+  duration_ms: 0.207553
+  type: 'test'
+  ...
+# Subtest: custom Admin expert opt-in resets on model switch and is unavailable on read-only models
+ok 305 - custom Admin expert opt-in resets on model switch and is unavailable on read-only models
+  ---
+  duration_ms: 1.426989
+  type: 'test'
+  ...
+# Subtest: unit ID recommendation is 255, 1..255 stays configurable, invalid IDs are rejected
+ok 306 - unit ID recommendation is 255, 1..255 stays configurable, invalid IDs are rejected
+  ---
+  duration_ms: 0.693084
+  type: 'test'
+  ...
+# Subtest: runtime transport-error recovery retains VARTA driver and reconnects on the next poll
+ok 307 - runtime transport-error recovery retains VARTA driver and reconnects on the next poll
+  ---
+  duration_ms: 0.971583
+  type: 'test'
+  ...
+# Subtest: transport reset rejects old queued SF writes without replay, but permits a fresh poll
+ok 308 - transport reset rejects old queued SF writes without replay, but permits a fresh poll
+  ---
+  duration_ms: 0.713925
+  type: 'test'
+  ...
+# Subtest: capacity and its scale factor refresh together in the fast poll after an expert write
+ok 309 - capacity and its scale factor refresh together in the fast poll after an expert write
+  ---
+  duration_ms: 1.845609
+  type: 'test'
+  ...
+# Subtest: actual pacing timer separates physical client calls by at least one second
+ok 310 - actual pacing timer separates physical client calls by at least one second
+  ---
+  duration_ms: 1001.665528
+  type: 'test'
+  ...
+# Subtest: pacing includes delayed IO handoff before physical client dispatch
+ok 311 - pacing includes delayed IO handoff before physical client dispatch
+  ---
+  duration_ms: 0.739544
+  type: 'test'
+  ...
+# Subtest: successful and rejected responses anchor the shared endpoint interval at completion
+ok 312 - successful and rejected responses anchor the shared endpoint interval at completion
+  ---
+  duration_ms: 0.676328
+  type: 'test'
+  ...
+# Subtest: reset and stop of in-flight IO retain completion pacing for an endpoint peer
+ok 313 - reset and stop of in-flight IO retain completion pacing for an endpoint peer
+  ---
+  duration_ms: 0.758192
+  type: 'test'
+  ...
+# Subtest: runtime publishes SF precision without generic W rounding or guessed Hz correction
+ok 314 - runtime publishes SF precision without generic W rounding or guessed Hz correction
+  ---
+  duration_ms: 5.288203
+  type: 'test'
+  ...
+# (node:209) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: invalid Modbus writes are surfaced in info.lastError without rejecting the ioBroker state callback
+ok 315 - invalid Modbus writes are surfaced in info.lastError without rejecting the ioBroker state callback
+  ---
+  duration_ms: 16.087293
+  type: 'test'
+  ...
+# Subtest: legacy and v1 ABL current aliases still target the same PWM datapoint and conversion
+ok 316 - legacy and v1 ABL current aliases still target the same PWM datapoint and conversion
+  ---
+  duration_ms: 1.45443
+  type: 'test'
+  ...
+1..316
+# tests 316
+# suites 0
+# pass 316
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 13322.268905
+(node:6) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)

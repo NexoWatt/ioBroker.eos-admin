@@ -1,3 +1,5 @@
+> **9.0.21:** MQTT-Reconnects und Warteschlangen, EMS-Messwertwiederkehr sowie konkurrierendes Speichern abgesichert. Neue EOS-Updateanzeige und ausdrücklich gestartete Updates auch für angemeldete Kunden. [Anleitung](START_HIER_9.0.21.md) · [Prüfbericht](docs/reports/unified-9.0.21/PRUEFBERICHT.md).
+
 > **9.0.20:** Gerätebefehle unabhängig vom Browser, korrekte Farm-/Schreibdiagnose, dynamische Speichergrenzen und direkte InfluxDB-2-Historie; weitere Lebenszyklus- und Live-/History-Fehler korrigiert. NexoWatt-Symbol am Login und Apple-Home-Bildschirm-Verweise ergänzt. [Anleitung](START_HIER_9.0.20.md) · [Prüfbericht](docs/reports/unified-9.0.20/PRUEFBERICHT.md).
 
 > **9.0.19:** Geräteauswahl, EMS-Zuordnung und ausdrückliche Aktivierung in einem Ablauf; Messwertaktualität und Energiefluss korrigiert. [Anleitung](START_HIER_9.0.19.md) · [Prüfbericht](docs/reports/unified-9.0.19/PRUEFBERICHT.md).
@@ -28,16 +30,16 @@
 
 # NexoWatt EOS
 
-**Version 9.0.20 · technisches Paket: `iobroker.eos-admin` · Vertriebskanal: `next`**
+**Version 9.0.21 · technisches Paket: `iobroker.eos-admin` · Vertriebskanal: `next`**
 
 NexoWatt EOS verbindet die Systemverwaltung aus EOS-Admin 8.0.2 mit Dashboard,
 Installer und Energiemanagement aus NexoWatt UI 1.0.38. Eine ioBroker-Instanz betreibt
 die gemeinsamen Module. Die bisherige UI wird im Zielbetrieb nicht zusätzlich gestartet.
 Der technische Paketname bleibt für bestehende Integrationen erhalten.
 
-Version 9.0.20 bleibt ein Integrations-Teststand für `next`. Die Versionsnummer ist
+Version 9.0.21 bleibt ein Integrations-Teststand für `next`. Die Versionsnummer ist
 kein Nachweis einer allgemeinen Produktivfreigabe oder CRA-Konformität. Tatsächliche
-Ergebnisse und Artefakthashes stehen im [Prüfbericht 9.0.20](docs/reports/unified-9.0.20/PRUEFBERICHT.md).
+Ergebnisse und Artefakthashes stehen im [Prüfbericht 9.0.21](docs/reports/unified-9.0.21/PRUEFBERICHT.md).
 Die [Berichte zu 9.0.4](docs/reports/unified-9.0.4/PRUEFBERICHT.md),
 [9.0.3](docs/reports/unified-9.0.3/PRUEFBERICHT.md) und früheren Versionen bleiben
 historische Belege; ihre Ergebnisse bestätigen keine späteren Änderungen.

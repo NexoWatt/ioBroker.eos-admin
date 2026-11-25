@@ -1,0 +1,32 @@
+✔ old MQTT callback cannot publish aliases beyond offline (13.346286ms)
+✔ old MQTT callback cannot publish aliases beyond offline and a following connection (3.732ms)
+✖ nested offline callback can publish diagnostic aliases without a FIFO deadlock (3.151185ms)
+✔ telemetry backlog is bounded while the final offline barrier remains ordered and observable (2.613024ms)
+✔ runtime stop invalidates MQTT first and awaits the callback DB write before reporting stopped (8.840632ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 4
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 365.390668
+
+✖ failing tests:
+
+test at modules/devices/test/mqttRuntimeSession.test.js:52:1
+✖ nested offline callback can publish diagnostic aliases without a FIFO deadlock (3.151185ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/modules/devices/test/mqttRuntimeSession.test.js:57:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

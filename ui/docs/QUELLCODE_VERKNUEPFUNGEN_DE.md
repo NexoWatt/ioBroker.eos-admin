@@ -2,7 +2,7 @@
 
 Automatisch aus den Originalquellen erzeugter Wegweiser. Einstieg und fachliche Abläufe: [Quellcode verstehen](QUELLCODE_WEGWEISER_DE.md). Pflege: [Dokumentationsstandard](DOKUMENTATIONSSTANDARD_DE.md).
 
-Erfasst: 316 selbst gepflegte TS-/TSX-Dateien, 7308 benannte Funktionen/Methoden. Generierte Spiegel, Testdateien, externe Pakete und Build-Artefakte sind ausgeschlossen.
+Erfasst: 317 selbst gepflegte TS-/TSX-Dateien, 7325 benannte Funktionen/Methoden. Generierte Spiegel, Testdateien, externe Pakete und Build-Artefakte sind ausgeschlossen.
 
 Die Funktionslinks zeigen auf die Originalquelle. Statische Imports und dynamische Kommunikation sind verschieden; Backend-API, ioBroker-States und HTML-/Browser-Globals werden im fachlichen Wegweiser erklärt.
 
@@ -273,6 +273,7 @@ Die Funktionslinks zeigen auf die Originalquelle. Statische Imports und dynamisc
 | [src-ts/runtime-executables/www/energy-origin-appcenter.ts](../src-ts/runtime-executables/www/energy-origin-appcenter.ts) | Bindet die Einrichtung der Energieherkunfts-Bilanz an den App-Center-Bereich an. | [Verknüpfungen und Funktionen](quellcode/src-ts/runtime-executables/www/energy-origin-appcenter.md) |
 | [src-ts/runtime-executables/www/energy-origin-ledger-view.ts](../src-ts/runtime-executables/www/energy-origin-ledger-view.ts) | Stellt die Herkunftsbilanz und ihre Ledger-Einträge im Browser dar. | [Verknüpfungen und Funktionen](quellcode/src-ts/runtime-executables/www/energy-origin-ledger-view.md) |
 | [src-ts/runtime-executables/www/eos-session-idle.ts](../src-ts/runtime-executables/www/eos-session-idle.ts) | Meldet echte Bedienung an die gemeinsame EOS-Sitzungsgrenze und | [Verknüpfungen und Funktionen](quellcode/src-ts/runtime-executables/www/eos-session-idle.md) |
+| [src-ts/runtime-executables/www/eos-updates.ts](../src-ts/runtime-executables/www/eos-updates.ts) | Zeigt verfügbare EOS-Versionen und führt angemeldete Kunden durch Vorbereitung und bestätigten Update-Start. | [Verknüpfungen und Funktionen](quellcode/src-ts/runtime-executables/www/eos-updates.md) |
 | [src-ts/runtime-executables/www/evcs-report.ts](../src-ts/runtime-executables/www/evcs-report.ts) | Bereitet Ladehistorie und Ladeenergie für die EVCS-Berichtsanzeige auf. | [Verknüpfungen und Funktionen](quellcode/src-ts/runtime-executables/www/evcs-report.md) |
 | [src-ts/runtime-executables/www/evcs.ts](../src-ts/runtime-executables/www/evcs.ts) | Verbindet Ladepunkt-Anzeige, Moduswahl und Kundenvorgaben mit den freigegebenen Lade-APIs. | [Verknüpfungen und Funktionen](quellcode/src-ts/runtime-executables/www/evcs.md) |
 | [src-ts/runtime-executables/www/forecast-settings.ts](../src-ts/runtime-executables/www/forecast-settings.ts) | Verbindet die Kunden-Prognoseeinstellungen mit Standort, PV-Flächen und der zugehörigen Backend-Konfiguration. | [Verknüpfungen und Funktionen](quellcode/src-ts/runtime-executables/www/forecast-settings.md) |

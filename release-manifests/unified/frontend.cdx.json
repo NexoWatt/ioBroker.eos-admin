@@ -2,10 +2,10 @@
   "$schema": "http://cyclonedx.org/schema/bom-1.5.schema.json",
   "bomFormat": "CycloneDX",
   "specVersion": "1.5",
-  "serialNumber": "urn:uuid:627b3d1f-14e9-4856-8cb9-6575c1fca05e",
+  "serialNumber": "urn:uuid:44d6d36a-885a-46ba-a488-93043b2d3bc9",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-11-24T18:04:15.877Z",
+    "timestamp": "2026-11-24T22:04:36.677Z",
     "lifecycles": [
       {
         "phase": "pre-build"
@@ -19,12 +19,12 @@
       }
     ],
     "component": {
-      "bom-ref": "src-rx@9.0.19",
+      "bom-ref": "src-rx@9.0.21",
       "type": "library",
       "name": "src-admin",
-      "version": "9.0.19",
+      "version": "9.0.21",
       "scope": "required",
-      "purl": "pkg:npm/src-rx@9.0.19",
+      "purl": "pkg:npm/src-rx@9.0.21",
       "properties": [
         {
           "name": "cdx:npm:package:private",
@@ -17193,7 +17193,7 @@
   ],
   "dependencies": [
     {
-      "ref": "src-rx@9.0.19",
+      "ref": "src-rx@9.0.21",
       "dependsOn": [
         "@iobroker/ai-gui@0.0.4",
         "@iobroker/dm-gui-components@10.0.23",

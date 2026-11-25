@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/main.ts
- * Quell-Hash: sha256:11f2616a2f7f2e5066c180db4316c7f0b219b066790e7c4563dab3e1104d3d96
+ * Quell-Hash: sha256:f61d808e29a1884d6fe6d80783d784beef53f7053fedd14fd49a0b661e04dd52
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -6373,11 +6373,40 @@ class NexoWattVis extends HostedAdapter {
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
   async updateStorageFarmDerived(reason = 'timer') {
+    if (this._nwShuttingDown) return;
+    // Timerläufe werden bei laufendem Snapshot verworfen: kein wachsender
+    // Rückstau bei langsamer Datenbank. Explizite Übernahmen/Preflights lesen
+    // anschließend neu, damit sie keinen älteren Snapshot als Ergebnis erben.
+    while (this._nwStorageFarmDerivePromise) {
+      if (reason === 'timer') return;
+      await this._nwStorageFarmDerivePromise;
+      if (this._nwShuttingDown) return;
+    }
+    const pending = this._nwUpdateStorageFarmDerivedSnapshot(reason);
+    this._nwStorageFarmDerivePromise = pending;
+    try { await pending; }
+    finally {
+      if (this._nwStorageFarmDerivePromise === pending) this._nwStorageFarmDerivePromise = null;
+    }
+  }
+
+  /** Liest genau einen Farm-Snapshot. Nach Stop oder Konfigurationswechsel
+   * dürfen dessen verzögerte Antworten keine neuen aktuellen Summen erzeugen. */
+  async _nwUpdateStorageFarmDerivedSnapshot(reason) {
     try {
       // Die Farm-Aggregation folgt derselben autoritativen Aktivierung wie AppCenter,
       // Navigation, Dispatcher und Energiefluss. Ein reines Legacy-Flag darf weder eine
       // aktive App abschalten noch eine inaktive Farm heimlich wieder einschalten.
       const cfg = this.config || {};
+      const assertCurrent = () => {
+        if (this._nwShuttingDown || this.config !== cfg) throw new Error('EOS_FARM_SNAPSHOT_CANCELLED');
+      };
+      /** @param {string} id @param {{ val: string | number | boolean | null, ack: true }} state */
+      const writeDerived = async (id, state) => {
+        assertCurrent();
+        await this.setStateAsync(id, state);
+        assertCurrent();
+      };
       const runtimeInfo = (typeof this._nwGetStorageFarmRuntimeInfo === 'function')
         ? this._nwGetStorageFarmRuntimeInfo()
         : { active: !!cfg.enableStorageFarm };
@@ -6413,6 +6442,7 @@ class NexoWattVis extends HostedAdapter {
         if (!sid) return null;
         if (_stCache.has(sid)) return _stCache.get(sid);
         const st = await this.getForeignStateAsync(sid).catch(() => null);
+        assertCurrent();
         _stCache.set(sid, st);
         return st;
       };
@@ -6536,6 +6566,7 @@ class NexoWattVis extends HostedAdapter {
         } catch (_e) {
           unit = '';
         }
+        assertCurrent();
         _unitCache.set(sid, unit);
         return unit;
       };
@@ -7386,42 +7417,42 @@ class NexoWattVis extends HostedAdapter {
       const totalPvUnknownState = Math.round(totalPvUnknown);
       const pvSourcesJson = JSON.stringify(pvSourceRows);
 
-      await this.setStateAsync('storageFarm.totalSoc', { val: totalSocState, ack: true });
-      await this.setStateAsync('storageFarm.medianSoc', { val: Math.round(medianSoc * 10) / 10, ack: true });
-      await this.setStateAsync('storageFarm.totalSocOnline', { val: totalSocOnlineState, ack: true });
-      await this.setStateAsync('storageFarm.capacityWeightedSoc', { val: capacityWeightedSocState, ack: true });
-      await this.setStateAsync('storageFarm.capacityWeightedSocOnline', { val: capacityWeightedSocOnlineState, ack: true });
-      await this.setStateAsync('storageFarm.socSourcesTotal', { val: socSourcesTotal, ack: true });
-      await this.setStateAsync('storageFarm.socSourcesOnline', { val: socSourcesOnline, ack: true });
-      await this.setStateAsync('storageFarm.socDegraded', { val: !!socDegraded, ack: true });
-      await this.setStateAsync('storageFarm.totalPowerW', { val: totalPowerState, ack: true });
-      await this.setStateAsync('storageFarm.totalBatteryPowerW', { val: totalBatteryPowerState, ack: true });
-      await this.setStateAsync('storageFarm.totalBatteryChargePowerW', { val: farmOverview.battery.chargeW, ack: true });
-      await this.setStateAsync('storageFarm.totalBatteryDischargePowerW', { val: farmOverview.battery.dischargeW, ack: true });
-      await this.setStateAsync('storageFarm.displayMeanSoc', { val: farmOverview.soc.meanPct, ack: true });
-      await this.setStateAsync('storageFarm.totalCapacityKWh', { val: farmOverview.capacity.totalKWh, ack: true });
-      await this.setStateAsync('storageFarm.overviewJson', { val: farmOverviewJson, ack: true });
-      await this.setStateAsync('storageFarm.powerSourcesTotal', { val: seenPowerSourceKeys.size, ack: true });
-      await this.setStateAsync('storageFarm.powerSourcesOnline', { val: powerSourcesOnline, ack: true });
-      await this.setStateAsync('storageFarm.totalChargePowerW', { val: totalChargeState, ack: true });
-      await this.setStateAsync('storageFarm.totalDischargePowerW', { val: totalDischargeState, ack: true });
-      await this.setStateAsync('storageFarm.totalPvPowerW', { val: totalPvState, ack: true });
-      await this.setStateAsync('storageFarm.totalPvAcPowerW', { val: totalPvAcState, ack: true });
-      await this.setStateAsync('storageFarm.totalPvDcPowerW', { val: totalPvDcState, ack: true });
-      await this.setStateAsync('storageFarm.totalPvUnknownPowerW', { val: totalPvUnknownState, ack: true });
-      await this.setStateAsync('storageFarm.pvSourcesTotal', { val: pvSourceRows.length, ack: true });
-      await this.setStateAsync('storageFarm.pvSourcesOnline', { val: pvSourcesOnline, ack: true });
-      await this.setStateAsync('storageFarm.pvSourcesJson', { val: pvSourcesJson, ack: true });
-      await this.setStateAsync('storageFarm.storagesOnline', { val: available, ack: true });
-      await this.setStateAsync('storageFarm.storagesDegraded', { val: degraded, ack: true });
+      await writeDerived('storageFarm.totalSoc', { val: totalSocState, ack: true });
+      await writeDerived('storageFarm.medianSoc', { val: Math.round(medianSoc * 10) / 10, ack: true });
+      await writeDerived('storageFarm.totalSocOnline', { val: totalSocOnlineState, ack: true });
+      await writeDerived('storageFarm.capacityWeightedSoc', { val: capacityWeightedSocState, ack: true });
+      await writeDerived('storageFarm.capacityWeightedSocOnline', { val: capacityWeightedSocOnlineState, ack: true });
+      await writeDerived('storageFarm.socSourcesTotal', { val: socSourcesTotal, ack: true });
+      await writeDerived('storageFarm.socSourcesOnline', { val: socSourcesOnline, ack: true });
+      await writeDerived('storageFarm.socDegraded', { val: !!socDegraded, ack: true });
+      await writeDerived('storageFarm.totalPowerW', { val: totalPowerState, ack: true });
+      await writeDerived('storageFarm.totalBatteryPowerW', { val: totalBatteryPowerState, ack: true });
+      await writeDerived('storageFarm.totalBatteryChargePowerW', { val: farmOverview.battery.chargeW, ack: true });
+      await writeDerived('storageFarm.totalBatteryDischargePowerW', { val: farmOverview.battery.dischargeW, ack: true });
+      await writeDerived('storageFarm.displayMeanSoc', { val: farmOverview.soc.meanPct, ack: true });
+      await writeDerived('storageFarm.totalCapacityKWh', { val: farmOverview.capacity.totalKWh, ack: true });
+      await writeDerived('storageFarm.overviewJson', { val: farmOverviewJson, ack: true });
+      await writeDerived('storageFarm.powerSourcesTotal', { val: seenPowerSourceKeys.size, ack: true });
+      await writeDerived('storageFarm.powerSourcesOnline', { val: powerSourcesOnline, ack: true });
+      await writeDerived('storageFarm.totalChargePowerW', { val: totalChargeState, ack: true });
+      await writeDerived('storageFarm.totalDischargePowerW', { val: totalDischargeState, ack: true });
+      await writeDerived('storageFarm.totalPvPowerW', { val: totalPvState, ack: true });
+      await writeDerived('storageFarm.totalPvAcPowerW', { val: totalPvAcState, ack: true });
+      await writeDerived('storageFarm.totalPvDcPowerW', { val: totalPvDcState, ack: true });
+      await writeDerived('storageFarm.totalPvUnknownPowerW', { val: totalPvUnknownState, ack: true });
+      await writeDerived('storageFarm.pvSourcesTotal', { val: pvSourceRows.length, ack: true });
+      await writeDerived('storageFarm.pvSourcesOnline', { val: pvSourcesOnline, ack: true });
+      await writeDerived('storageFarm.pvSourcesJson', { val: pvSourcesJson, ack: true });
+      await writeDerived('storageFarm.storagesOnline', { val: available, ack: true });
+      await writeDerived('storageFarm.storagesDegraded', { val: degraded, ack: true });
       const availableChargePowerState = availableChargePowerUnbounded ? null : Math.round(availableChargePowerW);
       const availableDischargePowerState = availableDischargePowerUnbounded ? null : Math.round(availableDischargePowerW);
 
-      await this.setStateAsync('storageFarm.storagesDispatchAvailable', { val: dispatchAvailableCount, ack: true });
-      await this.setStateAsync('storageFarm.availableChargePowerW', { val: availableChargePowerState, ack: true });
-      await this.setStateAsync('storageFarm.availableDischargePowerW', { val: availableDischargePowerState, ack: true });
-      await this.setStateAsync('storageFarm.storagesTotal', { val: configured, ack: true });
-      await this.setStateAsync('storageFarm.storagesStatusJson', { val: JSON.stringify(statusRows), ack: true });
+      await writeDerived('storageFarm.storagesDispatchAvailable', { val: dispatchAvailableCount, ack: true });
+      await writeDerived('storageFarm.availableChargePowerW', { val: availableChargePowerState, ack: true });
+      await writeDerived('storageFarm.availableDischargePowerW', { val: availableDischargePowerState, ack: true });
+      await writeDerived('storageFarm.storagesTotal', { val: configured, ack: true });
+      await writeDerived('storageFarm.storagesStatusJson', { val: JSON.stringify(statusRows), ack: true });
 
       // keep stateCache fresh for the UI
       try {

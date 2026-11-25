@@ -1,0 +1,33 @@
+✔ unacknowledged MQTT power command is not replayed on reconnect (352.739422ms)
+✔ unacknowledged MQTT power command is not replayed on reconnect after authorization revocation (286.297038ms)
+✔ offline commands fail instead of being queued for a later MQTT session (318.892567ms)
+✔ missing PUBACK reaches deadline and closes actual transport before fresh reconnect (5093.238575ms)
+✔ missing SUBACK is bounded and does not block stop or next session (5063.271622ms)
+✔ controlled stop shares one deadline across three safe QoS1 shutdown groups (1193.811196ms)
+✔ parallel connect calls share one MQTT client (16.621172ms)
+✔ a delayed old MQTT sample cannot revive aliases or finish multi-value updates in a new session (267.893027ms)
+✔ unconfirmed MQTT transport cleanup does not start a second client (202.681756ms)
+✔ safe shutdown never bypasses revoked device authority (11.836253ms)
+✔ real MQTT backpressure bounds message count and reconnects only after the old DB write drains (328.792736ms)
+✔ real MQTT backpressure bounds queued payload bytes and reconnects only after the old DB write drains (274.058191ms)
+✔ MQTT single payload exceeding one MiB is rejected visibly before application state writes (69.760883ms)
+✔ MQTT wildcard topic discovery is capped per session with an explicit transport error (291.758547ms)
+✔ old MQTT callback cannot publish aliases beyond offline (18.298222ms)
+✔ old MQTT callback cannot publish aliases beyond offline and a following connection (3.089832ms)
+✔ nested offline callback can publish diagnostic aliases without a FIFO deadlock (1.251625ms)
+✔ telemetry backlog is bounded while the final offline barrier remains ordered and observable (1.632448ms)
+✔ an inherited async context from a completed callback cannot bypass the current FIFO owner (7.835694ms)
+✔ runtime stop invalidates MQTT first and awaits the callback DB write before reporting stopped (2.223798ms)
+✔ TESVOLT real MQTT transport receives screenshot EMS topics with wildcard subscription and publishes nothing (207.152699ms)
+✔ TESVOLT real MQTT transport receives screenshot EMS topics with exact-topic ACL fallback and publishes nothing (114.206535ms)
+✔ TESVOLT real MQTT transport sends EMS power commands with limits and full payload after explicit control setup (117.688497ms)
+✔ TESVOLT real MQTT automatic detection ignores stale V2 metadata before live EMS values (52.412479ms)
+✔ TESVOLT reconnect to a different namespace clears previous optional values and never replays commands (146.464365ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 15062.470449

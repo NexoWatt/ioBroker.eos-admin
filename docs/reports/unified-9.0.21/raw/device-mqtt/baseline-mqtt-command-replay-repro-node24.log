@@ -1,0 +1,13 @@
+{"connections":2,"publishes":[{"payload":"681","connection":1,"authorized":true},{"payload":"681","connection":2,"authorized":false}],"writeResult":"resolved"}
+AssertionError [ERR_ASSERTION]: previous power command must not replay after authorization loss
+
+1 !== 0
+
+    at /workspace/scratch/741f792566ea/audit-921/devices/mqtt-command-replay-repro.cjs:36:10 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}

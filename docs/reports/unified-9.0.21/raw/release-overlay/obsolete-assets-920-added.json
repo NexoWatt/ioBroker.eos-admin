@@ -1,0 +1,94 @@
+{
+  "sourceVersion": "9.0.20",
+  "sourceSealSha256": "e83e2778a7304e96bf6d4c9b34ec2757b11018d44817ad22e94a05d3a6c08277",
+  "added": [
+    {
+      "file": "adminWww/assets/AdapterUpdateDialog-CRD3XVom.js",
+      "sha256": "2e280e19b9bf1aa89a549308f46011950eed4aa6022e0418aae49eae40a9c4a0"
+    },
+    {
+      "file": "adminWww/assets/Adapters-Cuf0X0CU.js",
+      "sha256": "5635c79bced8962e655de3eaed035fa139da79a7131b1ff60d7d094e73b06048"
+    },
+    {
+      "file": "adminWww/assets/ConfigManager-B8ycQt1C.js",
+      "sha256": "a3736c1dd69e6b876b757f325ef6dde6d8784aa0868fcce76887342bbe56eebc"
+    },
+    {
+      "file": "adminWww/assets/Enums-CctVCgZX.js",
+      "sha256": "49be206b4481aae84055038c2281a7590cc5941253c06d3b12889889f975c586"
+    },
+    {
+      "file": "adminWww/assets/Fields-onm4DfoO.js",
+      "sha256": "56911c74d46eb6c144f065ff0a114682412618828f926f5c625a9c7ada738314"
+    },
+    {
+      "file": "adminWww/assets/Files-OLP3Rwc7.js",
+      "sha256": "a7ca7f3df73cebc629baea39ab0af798b0b1513552fb72e9aa45f5ca95174912"
+    },
+    {
+      "file": "adminWww/assets/Hosts-C31oqMcW.js",
+      "sha256": "c81e17ad07912468e6b8f7d883cdef8f3934c0f9956dac0b9fb2109fa5a5fe28"
+    },
+    {
+      "file": "adminWww/assets/Instances-DFdvJ9pa.js",
+      "sha256": "52ca89a836fcda7bb66035c7ce67abd0aa414b6dfb3665b61548017dfb6e3fa6"
+    },
+    {
+      "file": "adminWww/assets/Intro-DvsFJxU0.js",
+      "sha256": "645733a28f08f50601d278eb1fb53224f09961dafc2dea0bdb81ad94cb3e9cb1"
+    },
+    {
+      "file": "adminWww/assets/Logs-Zqg2Bqv6.js",
+      "sha256": "90749215da024c5746e71e9f6959f386e310b8babd354d4fee65ba696d8646cb"
+    },
+    {
+      "file": "adminWww/assets/Objects-CpWZp6yp.js",
+      "sha256": "8d32cb820b3ce050fd5c2700408fadb3a5d0cb329f3e090574d2cd11a2839d80"
+    },
+    {
+      "file": "adminWww/assets/Overview-BsKUo298.js",
+      "sha256": "e853593874833b99f6f9630d0e651d546cbba2579a2017811046882aab489d3b"
+    },
+    {
+      "file": "adminWww/assets/State-D_xwlhhb.js",
+      "sha256": "1cbd7cc73fc1b7b70da09856dcbc81de87eaaff239517ea12af450836d4d0835"
+    },
+    {
+      "file": "adminWww/assets/UsedResources-C79N6yZx.js",
+      "sha256": "e056566783f699f620b4206412fc97d656bd946c0c0d065e3fcef9c3b644a36e"
+    },
+    {
+      "file": "adminWww/assets/Users-WgC0O8P0.js",
+      "sha256": "2dbb61de01d263b3928012cf1c941f6438cb7a00a01d8261b56c8b9c54fa0e07"
+    },
+    {
+      "file": "adminWww/assets/bootstrap-BcfBoIoa.js",
+      "sha256": "3271f1140b3653cd60f0c39525eee3cd1c02387693d754c10618103a940059ac"
+    },
+    {
+      "file": "adminWww/assets/hostInit-B7bBV7cH.js",
+      "sha256": "31f4e64cac0ab94f0f42ab2f78816aeb0673c07d0325aef42ffc260ee93d7317"
+    },
+    {
+      "file": "adminWww/assets/icons-material-D1JYmRTj.js",
+      "sha256": "28a92ea872d0c6531aea4520dc07a2a02dced735c0710b403b130ba3fe777dfb"
+    },
+    {
+      "file": "adminWww/assets/index-DbiuoDjo.js",
+      "sha256": "a8e5f136accc0a38e38d8aa16622543fdd4999a90136d6e4d5d55bfc70afe45a"
+    },
+    {
+      "file": "adminWww/assets/installSVGRenderer-BAY-Pzp-.js",
+      "sha256": "58916347e72adc8e80411e05f1bc8b8834234193cb0d4f6a89cf78a6f338e31a"
+    },
+    {
+      "file": "adminWww/assets/mf-entry-bootstrap-0-33384c20.js",
+      "sha256": "33384c2067ab2c656a1b2d58975f0a052e883f951f8285f8714701880197100c"
+    },
+    {
+      "file": "adminWww/remoteEntry-eos-9.0.20.js",
+      "sha256": "3ed74aa14ea90cc5c39c644f1ceb2bb87e54b57e4e13ceed26ae6c3b2d246089"
+    }
+  ]
+}

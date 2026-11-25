@@ -1,0 +1,171 @@
+{
+  "baseline": {
+    "farmMethodSha256": "b50b4c9df35673c30179a32d9f6488cd3a7d3a251f5b3b16f2104e09ca58983a",
+    "engineSha256": "7acb8a93dc3b22b9b8371d598082cdca739ff685ebca32d04871f84a0379e394"
+  },
+  "candidate": {
+    "farmMethodsSha256": "dcf4085a1df46bb711f45cde87e33556fe09ee271b0fddae27f6666c62961101",
+    "engineSha256": "837933eeb666cfed0334fe6c8de0d54e98fb6fac0149e68a406e33b55aa8aac5",
+    "eos-ems-nvp-recovery.test.cjs": "6db157418f1efe2ac32db6f01245b9fde810ba26aeeac04114a58612ae7e7f71",
+    "eos-storagefarm-concurrency.test.cjs": "77038875ee51c31121eeac1effe96f2c12ec4b839d55b8a1934aec8dda2b50f0"
+  },
+  "scope": "Engine canonical TS transpiled in memory; main canonical source validates direct-JavaScript build contract; actual registry/hosted runtime, database fixture, no hardware",
+  "recordedAt": "2026-11-24T21:35:58.222887+00:00",
+  "logs": {
+    "farm-concurrency-baseline-node24.log": "f05098fb996c500ed99ed90f00834299015b377c1e97859b770c77075501839a",
+    "farm-concurrency-node22.log": "7b93920228f88a542cd92342b48e688377471700d0cf650ab7f61b2f3c3bcc51",
+    "farm-concurrency-node24.log": "01adfafb3e0f415a9f33dafbb6ee40fd94db2beb53af35f04b35463286006a6f",
+    "generated-regression-node22.log": "c6a8ef0ffff6e7fef9c71f8fc091bac08921ff2b11146f63199cbc2db1469876",
+    "generated-regression-node24.log": "970dc51bf9fa5b1505799ddedaf2a8954615888d6452b4b9c488124bbb47bece",
+    "mqtt-final-frozen-node22.log": "5ba9f025d1c9ddaa41120c0b50cc0ff37cd9a38fafcf48ce34ca46ae5c776f20",
+    "mqtt-final-frozen-node24.log": "72f354e23fcf9a869d14f3fd5f141e9b3100c4688228e2f2d23cb7dc63276b64",
+    "mqtt-final-review-node22.log": "9f60776be88145e9479fc0ecf32deb58f8425ddbaa08c8b41786491a62b850f8",
+    "mqtt-final-review-node24.log": "0b695cef5d88cf301a5440a07039c298f12db34aa02affbd523c216a3513a5d1",
+    "mqtt-final-reviewed-node22.log": "6d9f1e759c3d60bb1eb1de91048e2a1f9661f6f2ded552c3c27d87d59892f1f8",
+    "mqtt-final-reviewed-node24.log": "c7b926f101dffa39c815b954f322e4807c7d69b3fd8974d3a618dd6ca4b3f779",
+    "mqtt-queue-inheritance-before.log": "7d3c79613432185e9f7f2532dcdfaabc24150739e4b302ff19907932b22b6565",
+    "mqtt-runtime-review-baseline-node24.log": "07b955c5aeb54293f2df90dd415aa86ee43adcca0c2a80dbec17bf0284d65191",
+    "mqtt-runtime-review-initial-timing.log": "128e1d163179da99bf4637fc22cef8068f274b5124c1ddafbb55115840216835",
+    "mqtt-runtime-review-node22.log": "432d9203a0143aa1f825d294a5e9c92fafcfde67a97e38ebab696e7e67504650",
+    "mqtt-runtime-review-node24.log": "b9d770f43943e598c1e72b96256f4ce66c50e94cccd6afc8157c08ca740cfe71",
+    "mqtt-runtime-session-review.log": "80db9d196b53ca8a22804314fc8d1ab08ebc8c2c65c0fbef736c535091a5ec5e",
+    "nvp-baseline-node22.log": "445d2bede1b9c004f8d504ce91aade99462baeb1a6da68bb16ebb272f49edb9d",
+    "nvp-baseline-node24.log": "fd98b7711da47b7cf3858c3bf80bc5b150a0f53bffd9bc667b88c1394f50607c",
+    "nvp-node22.log": "dbdc6533df431550e3792aa60e81156121375b78e1924f15c7f2b0cc5373c012",
+    "nvp-node24.log": "c81580a2de0ed0e8900f1ec9a9d0e870b54b12f6cc9acce5f4d688b7beadf9a0",
+    "ui-docs-check.log": "c5ca2544f0b9d55440c8d0806970c7f4fe635d49c0587f9db2f0213ced698293",
+    "ui-lint-policy-tests.log": "a0bd9d7014568bec26a523b84fd45b5b3a1e024aefefb9277dddacb9d957474a",
+    "ui-lint-security-final-node22.log": "8e008ab5dc5d1ed1f21f79e11bc46f0177f66a46ff80ca602109cf5d047f1c48",
+    "ui-lint-security-final-node24.log": "8a59f4af1874d7ae584bd1ed54e204bf599f91300b59372725a47c0ecd00fe88",
+    "ui-lint-security-initial.log": "46b4b454c04388708d4d495f61a840e8755a67032c15b5a15942ce1366f8479e"
+  },
+  "commands": [
+    "EOS_TEST_SOURCE_ROOT=/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin node --test test/eos-ems-nvp-recovery.test.cjs",
+    "EOS_TEST_SOURCE_ROOT=/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin node --test --test-timeout=10000 test/eos-storagefarm-concurrency.test.cjs",
+    "node --test test/eos-ems-nvp-recovery.test.cjs",
+    "node --test --test-timeout=10000 test/eos-storagefarm-concurrency.test.cjs",
+    "Node22 variants use /workspace/scratch/741f792566ea/node22-runtime/package/bin/node",
+    "cd ui && node node_modules/eslint/bin/eslint.js src-ts/runtime-executables/ems/engine.ts src-ts/runtime-executables/main.ts --format json",
+    "node --test --test-concurrency=1 test/eos-storagefarm-controller-dispatch.test.cjs test/eos-storagefarm-dispatch-diagnostics.test.cjs test/eos-storage-command-ack.test.cjs test/eos-storagefarm-review.test.cjs test/eos-storage-farm-overview.test.cjs test/eos-ems-failed-init.test.cjs test/eos-ems-reconfiguration.test.cjs (Node24 and22)",
+    "EOS_MQTT_RUNTIME_ROOT=/workspace/scratch/741f792566ea/source-920/iobroker.eos-admin node --test --test-name-pattern=\"old MQTT callback|runtime stop\" modules/devices/test/mqttRuntimeSession.test.js",
+    "node --test --test-concurrency=1 modules/devices/test/mqttRuntimeSession.test.js modules/devices/test/mqttCommandLifecycle.test.js modules/devices/test/mqttResourceBounds.test.js modules/devices/test/tesvoltMqttTransport.test.js (Node24 and22; mqtt-final-frozen-node*.log)",
+    "cd ui && npm run lint:security (initial failure, then reviewed-source/finding updates only)",
+    "cd ui && NEXOWATT_LINT_REPORT=<raw>/ui-security-final-node24.json npm run lint:security",
+    "cd ui && NEXOWATT_LINT_REPORT=<raw>/ui-security-final-node22.json <Node22>/node scripts/verify-eslint-security.cjs",
+    "cd ui && npm run test:lint-security",
+    "cd ui && npm run docs:check"
+  ],
+  "generatedRegression": {
+    "ui/main.js": "6b5ccbf8c72b5895dba4e0dddecaf419c8d3f28e2a9663f348b3a9b2d2fe95b1",
+    "ui/ems/engine.js": "8154250d759f95ef5219f5ad913e794755ad246388dd7f52760cf50aef33dee5"
+  },
+  "mqttIndependentReview": {
+    "recordedAt": "2026-11-24T21:55:33.068080+00:00",
+    "candidateSha256": {
+      "modules/devices/lib/drivers/mqtt.js": "3906fbf6e393f35a13124383d70819c702e8fe439cc4e3141d75235148e96d91",
+      "modules/devices/lib/drivers/mqttPendingOperations.js": "62fd8fc683475fcd71604819f0f047134cc3d09275827a4a3f895dfc1e00fbf7",
+      "modules/devices/lib/deviceRuntime.js": "9c8373fe1918435a1f734fb19605e0e4e0f5d5f9602efc2b0e963ea9d884c8bb",
+      "modules/devices/test/mqttRuntimeSession.test.js": "cf34c8a6436b7bea9bc448232cc5dd58b8fe2f7b1942d3aeef050e4ab9821046",
+      "modules/devices/test/mqttCommandLifecycle.test.js": "ff7e387a8a291aa21751afd399d5450f9d0511be9acb6320db9bd260d866328e",
+      "modules/devices/test/mqttResourceBounds.test.js": "896eb67247a25be2845172d1ac3260a186dbdfec97ddbee5701837e3a7ddb6c4",
+      "modules/devices/test/tesvoltMqttTransport.test.js": "16713775e52f6c7162367e62efd94008a20d471019bd64664f59f80c76dbda89"
+    },
+    "baselineDeviceRuntimeSha256": "cde164a1f7bf2e37a8d03975aec827c2345d4afbaed69b8075d43675233e1a9b",
+    "runtimeBaseline": {
+      "node24": {
+        "failed": 3,
+        "scope": "old MQTT callback/offline/following-connect and stop; actual unchanged 9.0.20 runtime with candidate ALS context helper"
+      }
+    },
+    "final": {
+      "node22.23.4": {
+        "passed": 25,
+        "failed": 0,
+        "skipped": 0
+      },
+      "node24.22.3": {
+        "passed": 25,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    "scope": "6 actual DeviceRuntime/queue assertion tests with delayed DB fixtures; 10 lifecycle +4 resource +5 TESVOLT actual loopback TCP/MQTT tests; no physical actuator or CRA conformity claim",
+    "knownIntermediateFailures": {
+      "mqtt-final-review-node22.log": "20 pass/1 old test order failed; replacement-before-drain assertion corrected by test author",
+      "mqtt-final-review-node24.log": "20 pass/1 old test order failed; replacement-before-drain assertion corrected by test author",
+      "mqtt-queue-inheritance-before.log": "independently detected completed ALS token reentrancy bug before active-token fix",
+      "mqtt-runtime-review-initial-timing.log": "test checked internal queue counter before promise finalizer; changed assertion to await actual drain"
+    },
+    "limits": [
+      "1MiB individual payload limit runs after MQTT.js parsing, not a complete network-parser/RSS memory bound",
+      "already issued DB writes and network packets cannot be recalled",
+      "unresolved database drain remains unconfirmed stop under outer host deadline"
+    ]
+  },
+  "uiSecurityGate": {
+    "recordedAt": "2026-11-24T22:07:57.937316+00:00",
+    "runtimeVersions": [
+      "22.23.4",
+      "24.22.3"
+    ],
+    "summary": {
+      "files": 227,
+      "currentFindings": 3201,
+      "unresolvedCarriedFindings": 2926,
+      "individuallyReviewedFindings": 275,
+      "newlyBlockedFindings": 0,
+      "baselineFindingsAbsent": 134
+    },
+    "policyTestsPassed": 27,
+    "docsDescriptionsVerified": 317,
+    "policyBindings": {
+      "ui/docs/security/eslint-legacy-baseline.json": {
+        "baseline": "c7fd7ea7039fdfff2c3f7e00abcbc00b76f4984c1f612edcf73bddaf62d8a3b9",
+        "candidate": "c7fd7ea7039fdfff2c3f7e00abcbc00b76f4984c1f612edcf73bddaf62d8a3b9",
+        "unchanged": true
+      },
+      "ui/eslint.config.cjs": {
+        "baseline": "e26c551cf94d16544dd21426bd53f33ec666b084d751e1e0a3817998dbbcca14",
+        "candidate": "e26c551cf94d16544dd21426bd53f33ec666b084d751e1e0a3817998dbbcca14",
+        "unchanged": true
+      },
+      "ui/scripts/verify-eslint-security.cjs": {
+        "baseline": "306c733c9df7f4aee3acaa3a4848b857a8365f87f9411a43346344e88714cd87",
+        "candidate": "306c733c9df7f4aee3acaa3a4848b857a8365f87f9411a43346344e88714cd87",
+        "unchanged": true
+      },
+      "ui/scripts/verify-eslint-security-test.cjs": {
+        "baseline": "20fc880830c1bf83fde4d79538bdc3dffe21fd11e911a79f8c6086866853e186",
+        "candidate": "20fc880830c1bf83fde4d79538bdc3dffe21fd11e911a79f8c6086866853e186",
+        "unchanged": true
+      },
+      "ui/scripts/verify-code-documentation.cjs": {
+        "baseline": "4df8cbb7139cf3559972248059d93b20148a87e6c5b45f27ce881e220b14b255",
+        "candidate": "4df8cbb7139cf3559972248059d93b20148a87e6c5b45f27ce881e220b14b255",
+        "unchanged": true
+      }
+    },
+    "reviewedInventorySha256": "b6a69c80884a115a0bb14adf5f9186285ea391d145550200df0f0ca41ab6c60b",
+    "modifiedExistingFingerprints": [
+      "52846315efe5cb1fd687f2d6436c4999102da11954b430f4bfad65a823670f5c",
+      "284be3fe77000b1f5d8a5d7296f2772e4d14ee972e7415eab59412f88b64f8b8",
+      "48c91c7b19c3c39dd9f70b1244e95342cf66ab86a8ed71a4196272e0bbe5f2cc",
+      "012aeb1f3bb1907433fb0cc309a9c0a283544112b34658a997940c62b549cfbd",
+      "a0f055d4076a53efda1a6208fcda4930beaee6122331ab7c796c33238cc6c3e3",
+      "f966fa825d8a063b62bc5ba98284ecfc6143e5e505d236e32b0d64f8cef0cd74",
+      "3b107b890285ab2c4f9e903614d6d34763f4a729659d8e0524d65d18317319fe",
+      "27297a9d7c7c8eb7e9f5a89509e1698c9e57f876d603aa37ce4c6b296f00a41f",
+      "fcd35d67be3c6ad4dc2da331e649307c2e516ef1628a8daba7e789400a1eeda4"
+    ],
+    "addedFingerprints": [
+      "1e2633deb0903a7c225e03dbc4e495168bde66fa166d70d7ef0489543d6989f3",
+      "95d9eb9f5cac8fb9ea99f71d5e83496db3af5fa1f9139ef0ff214b4885e6fa23",
+      "ca90f2911eb092b3d5ca4fb48e9119d9e6fb32fad46ef240074ea74efce811f6",
+      "f4e38272c74a94fe601e4092e784a720242985b32e23435c6c0a1ef055ba1e52"
+    ],
+    "removedFingerprints": [],
+    "nodeReportsByteIdentical": true,
+    "sourceDeltaInventorySha256": "51a46f123d0f2dd730fdf9c68aa27fb14cf744f1acdc359fdbcd92b9ba616b7e",
+    "reviewReportSha256": "9de0bc8090247767bc478a80ff0d1633cba9347964a11d8489b4453d5e2c4fb4"
+  }
+}

@@ -1,0 +1,36 @@
+(node:23) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:30) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: a delayed old MQTT sample cannot revive aliases or finish multi-value updates in a new session
+not ok 1 - a delayed old MQTT sample cannot revive aliases or finish multi-value updates in a new session
+  ---
+  duration_ms: 161.362012
+  type: 'test'
+  location: '/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/modules/devices/test/mqttCommandLifecycle.test.js:183:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    obsolete second field crossed the reconnect boundary
+    
+    true !== false
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/modules/devices/test/mqttCommandLifecycle.test.js:211:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 293.13455

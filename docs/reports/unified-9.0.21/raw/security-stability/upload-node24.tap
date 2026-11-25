@@ -1,0 +1,30 @@
+✔ upload admission has no unbounded queue behind a stalled filesystem (58.887591ms)
+✔ total upload deadline includes admission and late filesystem completion never starts a parser (155.782001ms)
+✔ client abort during admission retires its deadline and never parses later (54.03854ms)
+✔ HTTPS accepts bounded JSON with explicit TLS verification, identity encoding and no pooling (4.84142ms)
+✔ HTTPS rejects scheme, credentials, fragments, alternate port and non-allowlisted host before transport (1.323623ms)
+✔ HTTPS rejects redirects without contacting redirect targets (0.970321ms)
+✔ HTTPS rejects oversized declared and streamed responses and compressed bodies (2.758864ms)
+✔ HTTPS rejects malformed or primitive JSON without exposing body/error text (3.573121ms)
+✔ HTTPS hard deadline destroys a request before response including DNS/connect stalls (21.460565ms)
+✔ HTTPS hard deadline also bounds slow response bodies (21.69658ms)
+✔ HTTP bind is literal loopback unless TLS enabled; nonloopback Host and peer are rejected (1.447439ms)
+✔ gzip preview returns text but rejects bombs, oversized input, and invalid gzip (54.339353ms)
+✔ gzip preview concurrency is bounded independently of compressed size (51.008547ms)
+✔ system-info calls coalesce and cache npm version; no shell is used (2.262657ms)
+✔ upload budget admits two across routes; third denied and aborted temporary files cleaned (69.609306ms)
+✔ upload parser receives actual total/file/part limits and private temporary directory (33.0502ms)
+✔ restore storage replaces an existing regular file without modifying unrelated data (36.004114ms)
+✔ POSIX restore storage replaces a destination symlink and persists restrictive permissions (35.231911ms)
+✔ retained upload data counts against shared quota at the next admission (36.716977ms)
+✔ upload total deadline aborts a still-active parser and removes its partial directory (52.806825ms)
+✔ upload admission rejects low disk space before constructing parser (3.396204ms)
+✔ synchronous parser initialization failure releases reserved capacity (66.47402ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 607.457484

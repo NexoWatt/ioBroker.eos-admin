@@ -1,0 +1,153 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: unacknowledged MQTT power command is not replayed on reconnect
+ok 1 - unacknowledged MQTT power command is not replayed on reconnect
+  ---
+  duration_ms: 334.951031
+  type: 'test'
+  ...
+# Subtest: unacknowledged MQTT power command is not replayed on reconnect after authorization revocation
+ok 2 - unacknowledged MQTT power command is not replayed on reconnect after authorization revocation
+  ---
+  duration_ms: 282.72229
+  type: 'test'
+  ...
+# Subtest: offline commands fail instead of being queued for a later MQTT session
+ok 3 - offline commands fail instead of being queued for a later MQTT session
+  ---
+  duration_ms: 318.65713
+  type: 'test'
+  ...
+# Subtest: missing PUBACK reaches deadline and closes actual transport before fresh reconnect
+ok 4 - missing PUBACK reaches deadline and closes actual transport before fresh reconnect
+  ---
+  duration_ms: 5097.973001
+  type: 'test'
+  ...
+# Subtest: missing SUBACK is bounded and does not block stop or next session
+ok 5 - missing SUBACK is bounded and does not block stop or next session
+  ---
+  duration_ms: 5071.447317
+  type: 'test'
+  ...
+# Subtest: controlled stop shares one deadline across three safe QoS1 shutdown groups
+ok 6 - controlled stop shares one deadline across three safe QoS1 shutdown groups
+  ---
+  duration_ms: 1206.254085
+  type: 'test'
+  ...
+# Subtest: parallel connect calls share one MQTT client
+ok 7 - parallel connect calls share one MQTT client
+  ---
+  duration_ms: 15.49455
+  type: 'test'
+  ...
+# Subtest: a delayed old MQTT sample cannot revive aliases or finish multi-value updates in a new session
+not ok 8 - a delayed old MQTT sample cannot revive aliases or finish multi-value updates in a new session
+  ---
+  duration_ms: 2561.569119
+  type: 'test'
+  location: '/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/modules/devices/test/mqttCommandLifecycle.test.js:183:1'
+  failureType: 'testCodeFailure'
+  error: 'replacement session missing'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    until (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/modules/devices/test/mqttCommandLifecycle.test.js:19:39)
+    async TestContext.<anonymous> (/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/modules/devices/test/mqttCommandLifecycle.test.js:208:3)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: unconfirmed MQTT transport cleanup does not start a second client
+ok 9 - unconfirmed MQTT transport cleanup does not start a second client
+  ---
+  duration_ms: 204.387096
+  type: 'test'
+  ...
+# Subtest: safe shutdown never bypasses revoked device authority
+ok 10 - safe shutdown never bypasses revoked device authority
+  ---
+  duration_ms: 12.610548
+  type: 'test'
+  ...
+# (node:20) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: old MQTT callback cannot publish aliases beyond offline
+ok 11 - old MQTT callback cannot publish aliases beyond offline
+  ---
+  duration_ms: 14.14571
+  type: 'test'
+  ...
+# Subtest: old MQTT callback cannot publish aliases beyond offline and a following connection
+ok 12 - old MQTT callback cannot publish aliases beyond offline and a following connection
+  ---
+  duration_ms: 3.249263
+  type: 'test'
+  ...
+# Subtest: nested offline callback can publish diagnostic aliases without a FIFO deadlock
+ok 13 - nested offline callback can publish diagnostic aliases without a FIFO deadlock
+  ---
+  duration_ms: 1.051653
+  type: 'test'
+  ...
+# Subtest: telemetry backlog is bounded while the final offline barrier remains ordered and observable
+ok 14 - telemetry backlog is bounded while the final offline barrier remains ordered and observable
+  ---
+  duration_ms: 1.549984
+  type: 'test'
+  ...
+# Subtest: an inherited async context from a completed callback cannot bypass the current FIFO owner
+ok 15 - an inherited async context from a completed callback cannot bypass the current FIFO owner
+  ---
+  duration_ms: 2.172491
+  type: 'test'
+  ...
+# Subtest: runtime stop invalidates MQTT first and awaits the callback DB write before reporting stopped
+ok 16 - runtime stop invalidates MQTT first and awaits the callback DB write before reporting stopped
+  ---
+  duration_ms: 2.255706
+  type: 'test'
+  ...
+# (node:28) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: TESVOLT real MQTT transport receives screenshot EMS topics with wildcard subscription and publishes nothing
+ok 17 - TESVOLT real MQTT transport receives screenshot EMS topics with wildcard subscription and publishes nothing
+  ---
+  duration_ms: 244.341678
+  type: 'test'
+  ...
+# Subtest: TESVOLT real MQTT transport receives screenshot EMS topics with exact-topic ACL fallback and publishes nothing
+ok 18 - TESVOLT real MQTT transport receives screenshot EMS topics with exact-topic ACL fallback and publishes nothing
+  ---
+  duration_ms: 122.878985
+  type: 'test'
+  ...
+# Subtest: TESVOLT real MQTT transport sends EMS power commands with limits and full payload after explicit control setup
+ok 19 - TESVOLT real MQTT transport sends EMS power commands with limits and full payload after explicit control setup
+  ---
+  duration_ms: 120.493172
+  type: 'test'
+  ...
+# Subtest: TESVOLT real MQTT automatic detection ignores stale V2 metadata before live EMS values
+ok 20 - TESVOLT real MQTT automatic detection ignores stale V2 metadata before live EMS values
+  ---
+  duration_ms: 53.102864
+  type: 'test'
+  ...
+# Subtest: TESVOLT reconnect to a different namespace clears previous optional values and never replays commands
+ok 21 - TESVOLT reconnect to a different namespace clears previous optional values and never replays commands
+  ---
+  duration_ms: 157.522315
+  type: 'test'
+  ...
+1..21
+# tests 21
+# suites 0
+# pass 20
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 16398.542501

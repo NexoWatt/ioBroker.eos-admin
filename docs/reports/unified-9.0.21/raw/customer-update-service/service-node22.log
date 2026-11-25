@@ -1,0 +1,110 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: metadata and registry signatures accept the exact stable package and reject tampering
+ok 1 - metadata and registry signatures accept the exact stable package and reject tampering
+  ---
+  duration_ms: 7.175996
+  type: 'test'
+  ...
+# Subtest: expired, wrong-curve, missing and malformed registry keys fail closed
+ok 2 - expired, wrong-curve, missing and malformed registry keys fail closed
+  ---
+  duration_ms: 0.785994
+  type: 'test'
+  ...
+# Subtest: archive identity, member hashes, path traversal, links, duplicate and incomplete streams
+ok 3 - archive identity, member hashes, path traversal, links, duplicate and incomplete streams
+  ---
+  duration_ms: 112.72525
+  type: 'test'
+  ...
+# Subtest: npm PAX long paths and matching sizes are supported, dangling or conflicting overrides rejected
+ok 4 - npm PAX long paths and matching sizes are supported, dangling or conflicting overrides rejected
+  ---
+  duration_ms: 40.229555
+  type: 'test'
+  ...
+# Subtest: archive read errors and cancellation reject without leaving source streams running
+ok 5 - archive read errors and cancellation reject without leaving source streams running
+  ---
+  duration_ms: 99.430907
+  type: 'test'
+  ...
+# Subtest: availability is cached, preparation verifies and encrypts without starting a process
+ok 6 - availability is cached, preparation verifies and encrypts without starting a process
+  ---
+  duration_ms: 44.133824
+  type: 'test'
+  ...
+# Subtest: signature and integrity failures cannot produce an installable plan
+ok 7 - signature and integrity failures cannot produce an installable plan
+  ---
+  duration_ms: 90.844859
+  type: 'test'
+  ...
+# Subtest: authorization, one host instance, controller contract and configuration changes are enforced before launch
+ok 8 - authorization, one host instance, controller contract and configuration changes are enforced before launch
+  ---
+  duration_ms: 295.339286
+  type: 'test'
+  ...
+# Subtest: one-use start launches only the fixed worker, survives loss of response and never replays after restart
+ok 9 - one-use start launches only the fixed worker, survives loss of response and never replays after restart
+  ---
+  duration_ms: 77.158166
+  type: 'test'
+  ...
+# Subtest: only known pre-install failures allow a new explicit preparation; uncertainty stays locked across restart
+ok 10 - only known pre-install failures allow a new explicit preparation; uncertainty stays locked across restart
+  ---
+  duration_ms: 160.701631
+  type: 'test'
+  ...
+# Subtest: revocation at final start fence does not spawn or leave an executable retry marker
+ok 11 - revocation at final start fence does not spawn or leave an executable retry marker
+  ---
+  duration_ms: 34.517134
+  type: 'test'
+  ...
+# Subtest: slow snapshot keeps a single admission slot; stop prevents a late preparation from becoming executable
+ok 12 - slow snapshot keeps a single admission slot; stop prevents a late preparation from becoming executable
+  ---
+  duration_ms: 25.986534
+  type: 'test'
+  ...
+# Subtest: configuration comparison preserves existing values while allowing added defaults only
+ok 13 - configuration comparison preserves existing values while allowing added defaults only
+  ---
+  duration_ms: 17.782816
+  type: 'test'
+  ...
+# Subtest: a verified worker result requires new running version and preserved configuration before success
+ok 14 - a verified worker result requires new running version and preserved configuration before success
+  ---
+  duration_ms: 75.014116
+  type: 'test'
+  ...
+# Subtest: failed private storage remains closed and does not turn into an apparently available update
+ok 15 - failed private storage remains closed and does not turn into an apparently available update
+  ---
+  duration_ms: 23.59561
+  type: 'test'
+  ...
+# Subtest: real HTTPS transport rejects redirects, invalid TLS and oversized bodies and aborts a stalled body
+ok 16 - real HTTPS transport rejects redirects, invalid TLS and oversized bodies and aborts a stalled body
+  ---
+  duration_ms: 313.24666
+  type: 'test'
+  ...
+1..16
+# tests 16
+# suites 0
+# pass 16
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1837.876619

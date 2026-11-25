@@ -1,0 +1,32 @@
+[
+  {
+    "name": "frontend",
+    "command": [
+      "npm",
+      "sbom",
+      "--sbom-format=cyclonedx"
+    ],
+    "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/src-admin",
+    "startedAt": "2026-11-24T22:04:36.293614+00:00",
+    "exitCode": 0,
+    "sha256": "9e303ea3c7b6621b3d7a825665095e37c794e3311bdcf8977ffb44d17c128885",
+    "version": "9.0.21",
+    "lockSha256": "fb33507691750c46eb375b8627197bb7dfba3a7b34071e007bc07d883b5aa2ed",
+    "components": 574
+  },
+  {
+    "name": "installer",
+    "command": [
+      "npm",
+      "sbom",
+      "--sbom-format=cyclonedx"
+    ],
+    "cwd": "/workspace/scratch/741f792566ea/source-921/iobroker.eos-admin/ui/src-admin-tab",
+    "startedAt": "2026-11-24T22:04:36.759286+00:00",
+    "exitCode": 0,
+    "sha256": "ce920e7b2d886142ba6d1b56d0b7918f215c5251c0eccc3491c0aaacf0606e76",
+    "version": "9.0.21",
+    "lockSha256": "efa444122831505886a89ed46e9ae8da1a3c5c5f34febce66efbee8dd11c91b6",
+    "components": 127
+  }
+]

@@ -1,0 +1,22 @@
+✔ update notice performs no automatic action and links directly to the update settings (19.052638ms)
+✔ failed check keeps its error and restores explicit retry controls (3.249723ms)
+✔ prepare and start need separate clicks, fresh CSRF and the exact version/plan; duplicate clicks cannot start twice (3.633822ms)
+✔ lost start response stays indeterminate, blocks repeats and recovers only from an authoritative status (5.349114ms)
+✔ expired authentication before sending the start issues no order and keeps an explicit sign-in notice (4.505765ms)
+✔ expired session after lost start never falsely declares the earlier order unissued (2.263659ms)
+✔ repeated visibility events cannot overlap status reads or actions (1.779169ms)
+✔ pagehide aborts outstanding work and pageshow resumes; stale responses cannot overwrite the new page state (1.767281ms)
+✔ malformed metadata and executable-looking versions never enter HTML or authorize starts (1.791898ms)
+✔ conflicting plans and expired plan timestamps cannot be submitted again (2.133263ms)
+✔ offline/current states do not advertise installation and modal cancellation never mutates the system (2.878514ms)
+✔ mobile markup and stylesheet retain explicit containment and live status semantics (0.541566ms)
+✔ password-change requirement and missing or malformed CSRF prevent every mutating request (5.164987ms)
+✔ hidden document stops polling until visibility returns and an in-flight action remains single (7.026821ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 488.0321
