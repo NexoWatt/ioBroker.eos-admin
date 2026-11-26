@@ -16,15 +16,29 @@ const root = path.resolve(__dirname, '..');
 
 (async () => {
   const testPassword = randomBytes(32).toString('hex');
-  let authorized = false, reads = 0, writes = [], failSave = false;
+  const csrf = randomBytes(32).toString('hex');
+  let authenticated = true, authorized = false, reads = 0, writes = [], failSave = false;
   let config = { enabled: false, host: '', port: 465, tlsMode: 'tls', user: 'info@nexowatt.com', from: 'info@nexowatt.com', siteName: '', passwordSet: false };
   const server = http.createServer(async (req, res) => {
     const url = new URL(req.url, 'http://localhost');
     const json = (status, body) => { res.writeHead(status, { 'Content-Type': 'application/json' }); res.end(JSON.stringify(body)); };
-    if (url.pathname === '/api/strict-auth/status') return json(200, { enabled: true, authed: authorized, user: 'admin', role: 'admin', capabilities: authorized ? ['*'] : [] });
+    // An authenticated customer can view the portal; the installer-only SMTP page remains protected.
+    if (['/api/auth/idle', '/api/auth/activity'].includes(url.pathname)) {
+      const now = Date.now();
+      if (!authenticated) return json(200, { authenticated:false, serverNow:now, idleTimeoutMs:600000, idleExpiresAt:null });
+      return json(200, { authenticated:true, serverNow:now, idleTimeoutMs:600000, idleExpiresAt:now+600000,
+        sessionKey:'fixtureSession0001', csrfToken:csrf });
+    }
+    if (['/api/auth/status', '/api/strict-auth/status'].includes(url.pathname)) {
+      if (!authenticated) return json(200, {enabled:true, configured:true, mode:'iobroker', authed:false, authenticated:false, user:null, role:'none', capabilities:[]});
+      return json(200, { enabled:true, configured:true, mode:'iobroker', authed:true, authenticated:true,
+        user:authorized?'admin':'customer', role:authorized?'admin':'customer', csrfToken:csrf,
+        capabilities:authorized?['*']:['frontend.open'] });
+    }
     if (url.pathname === '/api/installer/notification-mail') {
       if (!authorized) return json(403, { ok: false, error: 'forbidden' });
       if (req.method === 'GET') { reads++; return json(200, { ok: true, config }); }
+      if (req.headers['x-nw-csrf'] !== csrf) return json(403, {ok:false,error:'csrf_required'});
       let body = ''; for await (const chunk of req) body += chunk;
       const data = JSON.parse(body); writes.push(data);
       if (failSave) return json(400, { ok: false, error: 'SMTP-Server, Benutzer und Passwort sind erforderlich.' });
@@ -34,7 +48,7 @@ const root = path.resolve(__dirname, '..');
     }
     // Der echte Runtime-Server liefert /admin.png nicht aus; kein künstlicher Test-Fallback.
     if (url.pathname === '/admin.png') { res.writeHead(404); return res.end(); }
-    const relative = url.pathname.startsWith('/mail-setup/') ? 'admin/react/' + (url.pathname.slice('/mail-setup/'.length) || 'index.html') : 'www' + url.pathname;
+    const relative = url.pathname.startsWith('/mail-setup/') ? 'admin/react/' + (url.pathname.slice('/mail-setup/'.length) || 'index.html') : 'www' + url.pathname.replace(/^\/static\//, '/');
     const file = path.join(root, relative);
     if (!file.startsWith(root + path.sep) || !fs.existsSync(file) || !fs.statSync(file).isFile()) { res.writeHead(404); return res.end(); }
     res.setHeader('Content-Type', ({ '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.png': 'image/png' })[path.extname(file)] || 'application/octet-stream');
@@ -78,6 +92,10 @@ const root = path.resolve(__dirname, '..');
     authorized = false; await page.reload();
     await page.getByText('Zugriff geschützt', { exact: true }).waitFor();
     assert.equal(await page.locator('#mailPassword').count(), 0);
+    authenticated = false;
+    await page.reload();
+    await page.waitForURL(url => url.pathname === '/login.html');
+    assert.equal(await page.locator('#mailHost').count(), 0, 'an expired session returns to the public login');
     assert.deepEqual(errors, []);
     console.log('[1.0.7 browser] OK: protected entry, real bundle, SMTP fields/save/error, blank-password preservation, no secret in localStorage, mobile layout, lost session.');
   } finally { if (browser) await browser.close(); await new Promise(resolve => server.close(resolve)); }

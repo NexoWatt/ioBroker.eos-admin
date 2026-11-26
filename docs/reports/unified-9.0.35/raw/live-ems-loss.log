@@ -1,0 +1,10 @@
+{"before":{"observedAt":1795720864480,"state":"unknown","failed":[],"paused":[],"deviceHealth":{"state":"unknown","offline":[],"totalOffline":0}},"during":{"observedAt":1795720864507,"state":"fault","failed":["ems"],"paused":[],"deviceHealth":{"state":"unknown","offline":[],"totalOffline":0}},"emsRestarted":true,"guiPidUnchanged":true,"dashboardServingPage":true,"afterRestart":{"observedAt":1795720865646,"state":"unknown","failed":[],"paused":[],"deviceHealth":{"state":"unknown","offline":[],"totalOffline":0}}}
+✔ customer endpoint reports actual EMS process loss while dashboard GUI and HTTPS parent continue (1754.49378ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1761.048075

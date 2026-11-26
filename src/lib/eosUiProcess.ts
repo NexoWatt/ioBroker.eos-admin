@@ -506,6 +506,7 @@ export function createEosUiProcess(owner: UiOwner, bridge: UiBridge, options: Ui
             generation = randomBytes(24).toString('hex');
             const token = generation;
             health.generation++;
+            health.lastHeartbeatAt = 0;
             health.state = 'starting';
             health.nextRestartAt = 0;
             writeFenced = true;

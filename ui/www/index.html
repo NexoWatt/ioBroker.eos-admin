@@ -78,12 +78,16 @@
 <!-- Abschnitt: Hauptinhalt der Seite. DOM-IDs in diesem Bereich werden durch zugehörige JS-Dateien befüllt. -->
 <main class="content nw-dashboard">
 <aside class="nw-dashboard-rail nw-dashboard-left" aria-label="System- und Liveübersicht">
-  <section class="card nw-panel nw-panel-status">
+  <section class="card nw-panel nw-panel-status is-warn">
     <div class="nw-panel-title">
       <span class="nw-panel-icon">🛡️</span>
       <span>Systemstatus</span>
     </div>
-    <div class="nw-system-ok" id="sideStatusText">Alle Systeme normal</div>
+    <div class="nw-system-ok" id="sideStatusText" role="status" aria-atomic="true">Verbinde…</div>
+    <details id="sideStatusDevices" hidden>
+      <summary>Betroffene Geräte</summary>
+      <span id="sideStatusDeviceNames"></span>
+    </details>
     <div class="nw-status-list">
       <div class="nw-status-row">
         <span class="nw-status-icon">📶</span>
@@ -91,7 +95,7 @@
       </div>
       <div class="nw-status-row">
         <span class="nw-status-icon">⚙️</span>
-        <span><b>EMS</b><small id="sideEms">Aktiv</small></span>
+        <span><b>EMS</b><small id="sideEms">Status unbekannt</small></span>
       </div>
       <div class="nw-status-row">
         <span class="nw-status-icon">🔋</span>
@@ -99,7 +103,7 @@
       </div>
       <div class="nw-status-row">
         <span class="nw-status-icon">🗼</span>
-        <span><b>Netzstatus</b><small id="sideGridStatus">Stabil</small></span>
+        <span><b>Netzstatus</b><small id="sideGridStatus">Messstatus unbekannt</small></span>
       </div>
     </div>
     <div class="nw-evcs-system-block hidden" id="sideEvcsStatusBlock">
@@ -1004,6 +1008,7 @@
 <script src="/static/power-measurements.js"></script>
 <script src="/static/tariff-display.js"></script>
 <script src="/static/live-display.js"></script>
+<script src="/static/dashboard-process-status.js"></script>
 <script src="/static/app.js"></script>
 
 <!-- Kundeneinstellungen liegen ausschließlich in settings.html. -->

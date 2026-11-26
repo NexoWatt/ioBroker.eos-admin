@@ -1,4 +1,8 @@
 {
+  "9.0.15": {
+    "en": "Unified NexoWatt EOS smartphone app identity; clearly named legacy migration entry in administration and settings.",
+    "de": "Einheitliches NexoWatt EOS App-Symbol für Smartphones; sichtbarer Zugang zur Bestandsübernahme in Administration und Einstellungen."
+  },
   "9.0.14": {
     "en": "Fix late-license migration admission, retain legacy devicesJson configurations, serialize manual imports, and show precise EMS startup and restore blockers.",
     "de": "Bestandsübernahme nach später Lizenzaktivierung abgesichert; alte Geräte-JSON-Konfigurationen erhalten; manueller Import synchronisiert und EMS-Startblockaden klar angezeigt."

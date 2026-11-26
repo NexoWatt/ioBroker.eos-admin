@@ -31,8 +31,9 @@ async function endpoint(t) {
         const words = fc === 16 ? Array.from({ length: arg }, (_, i) => frame.readUInt16BE(13 + 2*i)) : [];
         trace.push({ uid, fc, addr, arg, words });
         const unit = state.get(uid);
+        if (unit?.resetAt === addr) { socket.resetAndDestroy(); return; }
         let reply;
-        if (!unit) reply = Buffer.from([fc | 128, 2]);
+        if (!unit || (fc === 3 && unit?.unsupported === addr)) reply = Buffer.from([fc | 128, 2]);
         else if (fc === 3) {
           const values = addr === 100 && arg === 1 ? [unit.open ? 1 : 0] :
             unit.open ? Array.from({length: arg}, (_, i) => unit.values.get(addr+i) ?? 0) : null;
@@ -85,6 +86,44 @@ test('MIRA sends unit-specific login using FC16, reads real WPM power and confir
   await assert.rejects(h.driver.writeDatapoint(h.dp('control.pvPowerTargetW'),-1), /Stellwert/);
   await assert.rejects(w.driver.writeDatapoint(meter, 0), /gesperrt/);
   assert.equal(ep.trace.length,before);
+});
+
+test('MIRA retries the meter after a TCP reset while keeping a genuine illegal optional register on cooldown', async t => {
+  const ep = await endpoint(t);
+  const wpm = ep.unit(111, true);
+  const { driver, dp } = device('wpm', { ...ep.connection, unitId: 111, timeoutMs: 250, writePassword: '' });
+  t.after(() => driver.disconnect());
+  const meter = dp('measurement.electricalPowerW');
+  const name = dp('info.unitName');
+  const snapshot = [name, meter];
+  const watts = Buffer.alloc(4);
+  watts.writeFloatBE(1.75);
+  wpm.values.set(56021, watts.readUInt16BE(0));
+  wpm.values.set(56022, watts.readUInt16BE(2));
+  wpm.unsupported = 56000;
+  const count = addr => ep.trace.filter(r => r.fc === 3 && r.addr === addr).length;
+
+  assert.deepEqual(await driver.readDatapoints(snapshot), { [meter.id]: 1750 });
+  assert.equal(count(56000), 1);
+
+  wpm.resetAt = 56021;
+  await assert.rejects(driver.readDatapoints(snapshot));
+  assert.equal(count(56021), 2, 'one read, no in-poll retry');
+  wpm.resetAt = undefined;
+  assert.deepEqual(await driver.readDatapoints(snapshot), { [meter.id]: 1750 });
+  assert.equal(count(56021), 3, 'first subsequent poll reads the meter again');
+  assert.equal(count(56000), 1, 'the device explicitly rejected the optional register');
+
+  const secured = device('wpm', { ...ep.connection, unitId: 111, timeoutMs: 250 });
+  t.after(() => secured.driver.disconnect());
+  wpm.resetAt = 101;
+  await assert.rejects(secured.driver.readDatapoints([meter]), error => {
+    assert.ok(['ETIMEDOUT', 'ERR_SOCKET_CLOSED', 'EPIPE', 'ECONNRESET'].includes(error.code));
+    assert.doesNotMatch(error.message, /abcd|1234/i);
+    return true;
+  });
+  wpm.resetAt = undefined;
+  assert.deepEqual(await secured.driver.readDatapoints([meter]), { [meter.id]: 1750 });
 });
 
 test('MIRA requires each login to be confirmed, rate-limits rejection and suppresses writes after authorization loss or mismatched readback', async t => {

@@ -1,0 +1,17 @@
+✔ parent sends distinct device and process incidents from a preserved namespace, survives restart and only reports confirmed recovery (37.25568ms)
+✔ system and communications switches independently control mail and a planned stop clears an old incident silently (17.13168ms)
+✔ 256 active devices and a new EMS process failure all retain their delivery records (30.321474ms)
+✔ an interrupted five-minute recovery window restarts with a fresh physical observation (17.801011ms)
+✔ an already reported legacy inverter and its monitored native device share delivery history across namespaces (22.896595ms)
+✔ a changed recipient or withdrawn communications consent discards a stale EMS collection before committing the ledger (13.038982ms)
+✔ rolling back a migrated UI namespace relinquishes its ledger and cannot send from its settings (7.354526ms)
+✔ a rollback during SMTP preserves the ledger written by the restored standalone owner (7.20295ms)
+✔ an independent process cannot block the local sender or bypass the shared SMTP test quota (96.480838ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 344.98938

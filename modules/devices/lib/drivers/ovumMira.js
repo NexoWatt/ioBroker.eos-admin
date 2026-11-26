@@ -1,6 +1,6 @@
 'use strict';
 
-const { ModbusDriver } = require('./modbus');
+const { ModbusDriver, isTransportError } = require('./modbus');
 const { assertOperationAllowed } = require('../operationContext');
 
 // OVUM MIRA 1.1.3 START, physical 0-based holding-register addresses.
@@ -33,6 +33,7 @@ class OvumMiraDriver extends ModbusDriver {
     this._disableAddressFallbackOffsets = true;
     this.wordOrder = this.byteOrder = 'be';
     this.strictContiguousReads = true;
+    this.abortPollOnTransportLoss = true;
     this.loginCode = code;
     this.needStatus = true;
     this.sessionClient = null;
@@ -78,8 +79,11 @@ class OvumMiraDriver extends ModbusDriver {
       await client.writeRegisters(101, this.loginCode.slice());
     } catch (error) {
       // Never propagate a library exception that may contain a request dump.
-      const safe = new Error('MIRA: Übertragung der Anmeldung fehlgeschlagen.');
-      if (['ETIMEDOUT', 'ECONNRESET', 'EPIPE', 'ERR_SOCKET_CLOSED'].includes(error?.code)) safe.code = error.code;
+      const safe = rejectLogin('MIRA: Übertragung der Anmeldung fehlgeschlagen.');
+      if (isTransportError(error)) {
+        safe.code = ['ETIMEDOUT', 'ECONNRESET', 'EPIPE', 'ERR_SOCKET_CLOSED'].includes(error?.code)
+          ? error.code : 'ERR_SOCKET_CLOSED';
+      }
       throw safe;
     }
     if (await status() !== 1) {

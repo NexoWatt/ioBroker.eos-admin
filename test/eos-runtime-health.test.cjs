@@ -4,7 +4,7 @@ const assert = require('node:assert/strict');
 const path = require('node:path');
 const http = require('node:http');
 const express = require('express');
-const { createRuntimeHealthReader, processRow, readExternalOcppStatus } = require('../src/lib/eosRuntimeHealth');
+const { createRuntimeHealthReader, processRow, readDashboardProcessStatus, readExternalOcppStatus } = require('../src/lib/eosRuntimeHealth');
 const { registerEosModuleRoutes } = require('../src/lib/eosModuleHttp');
 const { UnifiedSessions } = require('../src/lib/eosUnifiedBoundary');
 const { installIdleSession } = require('./fixtures/eos-idle-session.cjs');
@@ -213,4 +213,36 @@ test('runtime endpoint is read-only and never publishes raw configuration, excep
     f.crash(); const failed = await f.request('/api/eos/runtime'); assert.equal(failed.status, 200);
     assert.doesNotMatch(failed.text, /PRIVATE_PASSWORD/);
     assert.equal(JSON.parse(failed.text).processes.find(row => row.id === 'devices').state, 'unknown');
+});
+
+test('customer diagnostic endpoint resolves authority before inspecting the parent and exposes only read-only health', async t => {
+    const f = await fixture(t);
+    const endpoint = '/api/eos/dashboard/process-status';
+    assert.equal((await f.request(endpoint, { headers: { cookie: '' } })).status, 401);
+    f.role('enduser');
+    assert.equal((await f.request(endpoint, { headers: { origin: 'https://foreign.invalid' } })).status, 403);
+    const response = await f.request(endpoint);
+    assert.equal(response.status, 200, response.text);
+    assert.equal(response.headers['cache-control'], 'no-store');
+    assert.doesNotMatch(response.text,/PRIVATE_PASSWORD|csrf|pid|lastError|generation|modules\./);
+    assert.equal((await f.request('/api/eos/runtime')).status, 403);
+    assert.equal((await f.request(endpoint, { method:'PUT', headers: { origin: 'https://nexowatt' } })).status,405);
+    f.first(true); assert.equal((await f.request(endpoint)).status, 403);
+    assert.equal(f.reads(), 0, 'no external controller reads or child status RPCs on the customer endpoint');
+});
+
+test('a missing supervisor cannot hide a confirmed failure and an unreadable switch is never reported as intentionally paused', () => {
+    const now = Date.now();
+    const host = { supervisorState(id) {
+        if (id !== 'devices') throw new Error('temporary read failure');
+        return { configured: true, active: false, reason: 'START_FAILED', process: { state: 'error', lastHeartbeatAt: now } };
+    } };
+    const intent = { dashboardIntent(id) {
+        if (id === 'ems') throw new Error('unreadable runtime setting');
+        return { enabled: true, error: '' };
+    } };
+    const result = readDashboardProcessStatus(host, () => { throw new Error('split runtime unavailable'); }, intent, now);
+    assert.equal(result.state, 'fault');
+    assert.deepEqual(result.failed, ['devices']);
+    assert.deepEqual(result.paused, []);
 });

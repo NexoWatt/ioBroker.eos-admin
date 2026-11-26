@@ -1,3 +1,4 @@
+import { emptyReport } from './lib/partnerMonitor';
 import { EebusConfig, getConfig } from './lib/config';
 import { EebusRuntime } from './lib/eebusRuntime';
 import { IdentityManager } from './lib/identityManager';
@@ -130,17 +131,30 @@ export function createHostedModule(options: Options) {
         },
         async command(name: string, payload: unknown): Promise<{ accepted: boolean }> {
             if (!running || !runtime || stopping || !options.canOperate()) throw new Error('EEBUS_NOT_RUNNING');
-            if (!actions[name] || !payload || typeof payload !== 'object' || Array.isArray(payload)) throw new Error('EEBUS_COMMAND_INVALID');
+            if ((!Object.hasOwn(actions,name) && name !== 'device.monitor') || !payload || typeof payload !== 'object' || Array.isArray(payload)) throw new Error('EEBUS_COMMAND_INVALID');
             const deviceId = (payload as Record<string, unknown>).deviceId;
-            if (typeof deviceId !== 'string' || !/^[A-Fa-f0-9]{40}$/.test(deviceId) || !runtime.getNodes().some(node => node.safeId === deviceId)) throw new Error('EEBUS_DEVICE_UNKNOWN');
+            if (typeof deviceId !== 'string' || !/^[A-Fa-f0-9]{40}$/.test(deviceId)) throw new Error('EEBUS_DEVICE_UNKNOWN');
+            const observed = runtime.getNodes().some(node => node.safeId === deviceId);
+            if (!observed && !(name === 'device.monitor' && runtime.partnerMonitor.list().some(peer => peer.id === deviceId))) throw new Error('EEBUS_DEVICE_UNKNOWN');
             if (inFlight >= 16) throw new Error('EEBUS_COMMAND_BUSY');
             inFlight++;
             try {
+                if (name === 'device.monitor') {
+                    const data = payload as Record<string,unknown>;
+                    if (typeof data.enabled !== 'boolean') throw new Error('EEBUS_COMMAND_INVALID');
+                    await runtime.partnerMonitor.configure(deviceId, data.name, data.enabled);
+                    return { accepted: options.canOperate() && !stopping };
+                }
                 await runtime.handleStateChange(`${adapter.namespace}.devices.${deviceId}.${actions[name]}`, { val: true, ack: false, ts: Date.now(), lc: Date.now(), from: adapter.namespace });
                 return { accepted: options.canOperate() && !stopping };
             } finally { inFlight--; }
         },
+        getDashboardDeviceHealth() {
+            if (!running || stopping || !runtime || !options.canOperate()) return emptyReport(selected.enabled === false);
+            return runtime.partnerMonitor.report();
+        },
         async getStatus() {
+            const monitored = new Map((runtime?.partnerMonitor.list() || []).map(p=>[p.id,p]));
             const nodes = runtime?.getNodes() || [];
             const devices = [];
             for (const node of nodes.slice(0, 128)) {
@@ -149,9 +163,15 @@ export function createHostedModule(options: Options) {
                     adapter.getStateAsync(`devices.${node.safeId}.connection.shipState`),
                     adapter.getStateAsync(`devices.${node.safeId}.pairing.remoteFingerprint`),
                 ]);
-                devices.push({ id: node.safeId, name: node.name.slice(0, 128), ski: node.ski, fingerprint: String(fingerprint?.val || ''),
+                const entry=monitored.get(node.safeId); monitored.delete(node.safeId);
+                devices.push({ monitorName:entry?.name || '', monitorPaused:entry?.paused === true, canMonitor:runtime?.canMonitorPartner(node.safeId) === true,
+                    id: node.safeId, name: node.name.slice(0, 128), ski: node.ski, fingerprint: String(fingerprint?.val || ''),
                     trusted: trust?.val === true, connected: connection?.val === 'data-exchange', state: String(connection?.val || 'discovered') });
             }
+            // A monitored peer can be removed here even before it advertises after a restart.
+            for (const entry of monitored.values()) devices.push({ id:entry.id, name:entry.name, ski:entry.id, fingerprint:'',
+                trusted:false, connected:false, state:'Nicht verbunden', monitorName:entry.name, monitorPaused:entry.paused, canMonitor:false });
+            devices.sort((a,b)=>Number(!!b.monitorName)-Number(!!a.monitorName));
             return { running, localSki: identity?.localSki || '', certificateFingerprint: identity?.certificateFingerprint || '',
                 shipPort: config.shipPort, commandDryRun: config.commandDryRun, devices };
         },

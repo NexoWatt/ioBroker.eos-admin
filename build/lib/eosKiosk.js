@@ -23,6 +23,7 @@ const READ = new Set([
     '/smarthome.html',
     '/config',
     '/api/state',
+    '/api/eos/dashboard/process-status',
     '/events',
     '/api/locale',
     '/api/history',

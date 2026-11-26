@@ -1,6 +1,7 @@
 import type { EventEmitter } from 'node:events';
 export interface RuntimeEntry {
   client: unknown; socketConnected: boolean; proto: string; rawIdentity: string;
+  dashboardPreviouslyConfirmed: boolean; lastBootAt?: number; lastMeterAt?: number; lastStatusAt?: number;
   connectedAt: number; lastHeartbeatAt: number; heartbeatIntervalSec: number; lastMessageAt: number; lastPowerAt: number; safeZeroAt: number; chargingState: string;
   [key: string]: unknown;
 }

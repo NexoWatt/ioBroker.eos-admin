@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/lib/notification-policy.ts
- * Quell-Hash: sha256:e414fc723a472e180e17f1f5619f1badb49eb6cfac397eafd29ff0208cf502f9
+ * Quell-Hash: sha256:634f02161a4fe1bb8b9a01e4a31c0ea552f9e52a56b0c13348b63e033e5d09c9
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -32,6 +32,8 @@
 const HOUR = 3600000;
 const DAY = 24 * HOUR;
 const NORMAL_INTERVAL = 30 * 60000;
+const LEGACY_CAP = 256;
+const SUPERVISOR_CAP = 3 * 256 + 6;
 const clean = value => String(value || '').replace(/[\r\n]+/g, ' ').slice(0, 400);
 
 /** Bounded, durable incident transitions. Delivery is committed only after SMTP acceptance. */
@@ -40,7 +42,7 @@ class NotificationPolicy {
    * Ablauf und Zusammenhang: Stellt den persistenten Meldungszustand mit begrenzten Listen wieder her. Zeitangaben sind Millisekunden; die Instanz selbst stellt keine Netzwerkverbindung her.
    */
   constructor(saved = {}) {
-    this.records = new Map(Array.isArray(saved.records) ? saved.records.slice(0, 256) : []);
+    this.records = new Map(Array.isArray(saved.records) ? saved.records.slice(0, LEGACY_CAP + SUPERVISOR_CAP) : []);
     this.sent = Array.isArray(saved.sent) ? saved.sent.filter(Number.isFinite).slice(-24) : [];
     this.nextAttempt = Number(saved.nextAttempt) || 0;
     this.failures = Number(saved.failures) || 0;
@@ -48,6 +50,7 @@ class NotificationPolicy {
     this.lastDigest = Number(saved.lastDigest) || 0;
     this.lastNormal = Number(saved.lastNormal) || 0;
     this.recipientHash = String(saved.recipientHash || '');
+    this.supervisedNamespaces = saved.supervisedNamespaces || {};
   }
   /**
    * Ablauf und Zusammenhang: Vergleicht den Hash der Kundenadresse. Bei Empfängerwechsel wird die bisherige Ereigniszuordnung gelöscht, damit der neue Empfänger keinen fremden Störungsverlauf erbt.
@@ -58,15 +61,30 @@ class NotificationPolicy {
   /**
    * Ablauf und Zusammenhang: Gleicht aktuelle Ereignisse mit bereits bekannten Störungen ab. Kurzes Flattern behält den Wiederholschutz; eine Eskalation auf kritisch und eine nach stabiler Erholung neue Störung werden gesondert behandelt.
    */
-  observe(events, now, categories) {
+  observe(events, now, categories, owns = () => true) {
     if (!this.lastDigest) this.lastDigest = now;
     if (!this.lastNormal) this.lastNormal = now;
     const seen = new Set();
-    for (const event of events.slice(0, 256)) {
-      if (!event || !event.id || !categories.has(event.category)) continue;
+    let supervisedCount = 0, deviceCount = 0;
+    for (const id of this.records.keys()) {
+      if (id.startsWith('supervisor:')) supervisedCount++;
+      if (id.startsWith('supervisor:device:')) deviceCount++;
+    }
+    for (const event of events) {
+      if (!event || !event.id || !owns(event.id) || !categories.has(event.category)) continue;
       seen.add(event.id);
       let r = this.records.get(event.id);
-      if (!r && this.records.size >= 256) continue;
+      if (event.hold) {
+        if (r) { r.suppressed = true; if (!r.active) r.clearSince = 0; }
+        continue;
+      }
+      if (!r) {
+        if (event.id.startsWith('supervisor:')) {
+          if (supervisedCount >= SUPERVISOR_CAP) continue;
+          if (event.id.startsWith('supervisor:device:')) { if (deviceCount >= SUPERVISOR_CAP - 6) continue; deviceCount++; }
+          supervisedCount++;
+        } else if (this.records.size - supervisedCount >= LEGACY_CAP) continue;
+      }
       if (!r) r = { active: false, alertSent: false, lastSent: 0, since: now };
       // A stable recovery ends the incident; brief flapping keeps its delivery history.
       const newEpisode = !r.active && r.clearSince && now - r.clearSince >= 300000;
@@ -78,12 +96,15 @@ class NotificationPolicy {
       r.suppressed = event.suppressed === true;
       r.meta = { id: clean(event.id), category: event.category, title: clean(event.title).slice(0, 140), message: clean(event.message).slice(0, 300),
         severity: ['critical', 'warning', 'info'].includes(event.severity) ? event.severity : 'warning', persistMs: event.severity === 'critical' ? 0 : 60000 };
+      if (event.physicalId) r.meta.physicalId = clean(event.physicalId);
       this.records.set(event.id, r);
     }
     for (const [id, r] of this.records) {
+      if (!owns(id)) continue;
       if (!categories.has(r.meta?.category)) { this.records.delete(id); continue; }
       if (!seen.has(id)) {
-        if (r.active) { r.active = false; r.clearSince = now; }
+        r.suppressed = false;
+        if (r.active || !r.clearSince) { r.active = false; r.clearSince = now; }
         const pending = !r.lastSent && (r.meta.severity === 'critical' || r.meta.severity === 'info' || r.clearSince - r.since >= 60000);
         if ((!r.alertSent && !r.lastSent && !pending) || (now - (r.clearSince || now) > 2 * DAY)) this.records.delete(id);
       }
@@ -101,7 +122,7 @@ class NotificationPolicy {
   /**
    * Ablauf und Zusammenhang: Wählt fällige Meldungen: neue kritische Fehler sofort, normale Fehler gesammelt nach 30 Minuten, Hinweise/Erinnerungen/Entwarnungen täglich. Unterdrückte Folgefehler werden ausgelassen; auch während SMTP-Ausfall bereits behobene unversandte harte Fehler bleiben meldbar.
    */
-  batch(now, recovery = true) {
+  batch(now, recovery = true, allowed = () => true) {
     if (!this.quota(now)) return [];
     const immediate = [], daily = [];
     const digestDue = now - this.lastDigest >= DAY;
@@ -123,13 +144,19 @@ class NotificationPolicy {
         else if (digestDue) daily.push({ ...item, daily: true });
       } else if (!r.active && r.alertSent && now - r.clearSince >= 300000) {
         if (recovery && digestDue) daily.push({ ...r.meta, kind: 'recovery', since: r.since, daily: true });
-        else if (!recovery) r.alertSent = false;
+        else if (!recovery && allowed(r.meta)) r.alertSent = false;
       }
     }
     // Advance empty half-hour windows too; a new warning cannot bypass the collection interval.
     if (normalDue && !immediate.some(item => item.normal)) this.lastNormal = now;
-    immediate.sort((a, b) => Number(b.severity === 'critical') - Number(a.severity === 'critical'));
-    return immediate.concat(daily).slice(0, 64);
+    immediate.sort((a, b) => Number(b.severity === 'critical') - Number(a.severity === 'critical')
+      || Number(b.id.startsWith('supervisor:process:')) - Number(a.id.startsWith('supervisor:process:')));
+    // Leave another live collector its window; its own fresh observations decide delivery.
+    const selected = immediate.concat(daily).filter(allowed).slice(0,64);
+    const selectedIds = new Set(selected.map(item => item.id));
+    this.deferNormal = immediate.some(item => item.normal && !selectedIds.has(item.id));
+    this.deferDigest = daily.some(item => !selectedIds.has(item.id));
+    return selected;
   }
   /**
    * Ablauf und Zusammenhang: Setzt vor dem tatsächlichen Versand eine zweiminütige Versuchsreservierung. Bei Testmails wird zusätzlich deren letzter Versuch festgehalten.
@@ -150,8 +177,8 @@ class NotificationPolicy {
     this.failures = 0;
     this.nextAttempt = 0;
     if (!batch.length) this.sent.push(now);
-    if (batch.some(item => item.daily)) this.lastDigest = now;
-    if (batch.some(item => item.normal)) this.lastNormal = now;
+    if (!this.deferDigest && batch.some(item => item.daily)) this.lastDigest = now;
+    if (!this.deferNormal && batch.some(item => item.normal)) this.lastNormal = now;
     this.sent = this.sent.slice(-24);
     for (const item of batch) {
       const r = this.records.get(item.id);
@@ -165,7 +192,7 @@ class NotificationPolicy {
    */
   snapshot() {
     return { records: Array.from(this.records.entries()), sent: this.sent, nextAttempt: this.nextAttempt,
-      failures: this.failures, lastTest: this.lastTest, lastDigest: this.lastDigest, lastNormal: this.lastNormal, recipientHash: this.recipientHash };
+      failures: this.failures, lastTest: this.lastTest, lastDigest: this.lastDigest, lastNormal: this.lastNormal, recipientHash: this.recipientHash, supervisedNamespaces:this.supervisedNamespaces };
   }
 }
 module.exports = { NotificationPolicy };

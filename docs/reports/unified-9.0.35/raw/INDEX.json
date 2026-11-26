@@ -1,0 +1,282 @@
+{
+  "schema": 1,
+  "version": "9.0.35",
+  "results": {
+    "node22-tests-final": {
+      "tests": 2895,
+      "pass": 2893,
+      "fail": 0,
+      "skipped": 2,
+      "cancelled": 0
+    },
+    "node24-tests-final": {
+      "tests": 2895,
+      "pass": 2893,
+      "fail": 0,
+      "skipped": 2,
+      "cancelled": 0
+    }
+  },
+  "files": [
+    {
+      "file": "backend.log",
+      "deliveredSha256": "c9b94d98e9a019335ed57065ee9132a1efc647963eed7e628aad206cabc75594",
+      "bytes": 277
+    },
+    {
+      "file": "browser-lp-detail.log",
+      "deliveredSha256": "8ebebae902c268a4c829932cdd3cf39f41534e77a591a56e627d9a849caba54b",
+      "bytes": 118
+    },
+    {
+      "file": "browser-lp-feedback.log",
+      "deliveredSha256": "12c59ad1a8f7073626baf30ad3a3c3ccf822d862c2375b1c1575f8b2d3250ae8",
+      "bytes": 129
+    },
+    {
+      "file": "cold-ocpp-22.log",
+      "deliveredSha256": "cdd58696607eae61a606ba39150a01c6a55496d20065d7180e1010b5c8a6d8f8",
+      "bytes": 4588
+    },
+    {
+      "file": "cold-ocpp-24.log",
+      "deliveredSha256": "2644195c9d301cb71d427cc612b5955fca4d53e2294d84de6f6c2878d19ead50",
+      "bytes": 1985
+    },
+    {
+      "file": "core-final-node22.log",
+      "deliveredSha256": "b414bba97675727158b928b32bdcc1a3ea5dbeff2f1d675eff23302996d59b55",
+      "bytes": 63311
+    },
+    {
+      "file": "core-final-node24.log",
+      "deliveredSha256": "a9924ce7ee6d93f13d8a8011a1164fbf047e0a36c02f1a272e82d4939fb58001",
+      "bytes": 58076
+    },
+    {
+      "file": "dashboard-de-en-nl.json",
+      "deliveredSha256": "7bd9773e4f1e9440a9f848c0445ae1967f5630c467927a86ffa352f9d37c4207",
+      "bytes": 21600
+    },
+    {
+      "file": "device-chain-closed-fixed.json",
+      "deliveredSha256": "a92cf0390e3013887dbdc7f3c7343df00e08911383916258af98c798bdccbf75",
+      "bytes": 2311
+    },
+    {
+      "file": "device-chain-rst-fixed.json",
+      "deliveredSha256": "10932f11d474d5bf0d7a53f5d6a7ff896048e4a56493edbeda70716e1c27d165",
+      "bytes": 2313
+    },
+    {
+      "file": "device-chain.json",
+      "deliveredSha256": "014b6a1c97980664ef86245516ac25642c62c363fe1035db843df323c5dd1fa6",
+      "bytes": 2180
+    },
+    {
+      "file": "ee-fusion-final.log",
+      "deliveredSha256": "dc942f9d867020ec68c4ea0db43171305f67b289a7b3159d03c51d4ec9c3f5ca",
+      "bytes": 667
+    },
+    {
+      "file": "eebus-monitor-browser.json",
+      "deliveredSha256": "1111dd6553fb239a4ab76dbec6fa7662f7e3baef95b3214455fe88d544f89e33",
+      "bytes": 357
+    },
+    {
+      "file": "eebus-monitor-node22.log",
+      "deliveredSha256": "bd936cb4ebc305356edcabd0355048084426af9e00d47791af7be92365465fe5",
+      "bytes": 9251
+    },
+    {
+      "file": "eebus-monitor-node24.log",
+      "deliveredSha256": "331bfda0d6ec2bd806786db80a9a33799a6145b1643b267ed9799c676ec94a75",
+      "bytes": 3695
+    },
+    {
+      "file": "fixtures-verification.log",
+      "deliveredSha256": "fd04dbce6f99d400ef6339ba6499813537accfed7280bd86fb7817052a01ef88",
+      "bytes": 3818
+    },
+    {
+      "file": "frontend.log",
+      "deliveredSha256": "fb79c345bbc09516b0b968ea48ba2ad55f7b14dc5a84d6c3b15dcebcecdf3819",
+      "bytes": 17889
+    },
+    {
+      "file": "installer.log",
+      "deliveredSha256": "26e8f939d59916abfa608b1c1c6e3fe614408fe35e564e1aaf6136333f3fdf76",
+      "bytes": 1275
+    },
+    {
+      "file": "legacy-mail-setup-browser.log",
+      "deliveredSha256": "d5f50e906d2748d22a3941d7d6bd862aeec708647c40bb00558ea9134a1d185b",
+      "bytes": 159
+    },
+    {
+      "file": "lint.log",
+      "deliveredSha256": "b61a75a525a52212fe0897942fa11a55b067fb784cb462e4c66ac82041262d24",
+      "bytes": 9926
+    },
+    {
+      "file": "live-ems-loss.log",
+      "deliveredSha256": "a0870f7f8fbd06df572073fe292dcbb8251ddd4f4dc53e676b42e6a76771da04",
+      "bytes": 748
+    },
+    {
+      "file": "modules.log",
+      "deliveredSha256": "7bff68dc45dc52a14314d099c5d7120ece818ee43d8274089fa026cb9966f7b5",
+      "bytes": 307
+    },
+    {
+      "file": "node22-mira-reconnect-integrity.log",
+      "deliveredSha256": "7bc5fdf7cfe464e3a78a78ed4087b7981f8568685b844dcb0575dfa1b16c17a6",
+      "bytes": 19523
+    },
+    {
+      "file": "node22-mira.log",
+      "deliveredSha256": "7f00e023599f3314cc7897c041256226a463df79d7030676d00d4a56c7cf93c8",
+      "bytes": 10026
+    },
+    {
+      "file": "node22-system-status.log",
+      "deliveredSha256": "db971b5f2481952e64d676ead07c24967649d78636df9c1ab039560509ec15aa",
+      "bytes": 10248
+    },
+    {
+      "file": "node22-tests-final.log",
+      "deliveredSha256": "04df7ca8cb35db7f61c07383b087c16539efa6b4b43a6ca5b48a9cd7bf873f03",
+      "bytes": 782431
+    },
+    {
+      "file": "node22-version.log",
+      "deliveredSha256": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906",
+      "bytes": 9
+    },
+    {
+      "file": "node24-mira-reconnect-integrity.log",
+      "deliveredSha256": "b95d458917368def624d5cc6147e775204dccc9c25dfbd4c3345c85e65692afd",
+      "bytes": 7842
+    },
+    {
+      "file": "node24-mira.log",
+      "deliveredSha256": "b14d29998c719d51b35b906e849870adf49fc0c4f7687369557e0dea72e1cbe8",
+      "bytes": 3862
+    },
+    {
+      "file": "node24-system-status.log",
+      "deliveredSha256": "755c9374407c82012984965b288f07e6bfbebffc6f93d88a180e97efadcc27df",
+      "bytes": 4004
+    },
+    {
+      "file": "node24-tests-final.log",
+      "deliveredSha256": "874ed94e01a32b1be68ecceb45c3ce370e8cd98f2ae2ef7a6aefd5fcc300a64d",
+      "bytes": 314928
+    },
+    {
+      "file": "node24-version.log",
+      "deliveredSha256": "4409d3bfa08b82f385bd424eeda65fc63b756129f0e89e82df77f1fecafccc14",
+      "bytes": 9
+    },
+    {
+      "file": "notifications-legacy-node22.log",
+      "deliveredSha256": "d608063c95b08300955c01815f0cd475fcc579a75517774a3c234634fa3fa196",
+      "bytes": 193
+    },
+    {
+      "file": "notifications-legacy-node24.log",
+      "deliveredSha256": "d608063c95b08300955c01815f0cd475fcc579a75517774a3c234634fa3fa196",
+      "bytes": 193
+    },
+    {
+      "file": "notifications-node22.log",
+      "deliveredSha256": "bc529617ce88e9283ad15eb7f85b0f8b2e93086b15c8dccfb5d8bca2d5348d25",
+      "bytes": 2843
+    },
+    {
+      "file": "notifications-node24.log",
+      "deliveredSha256": "58f348917ab25950d3be4c65e0af673bfb611591b6e78fca34893170db66995a",
+      "bytes": 1181
+    },
+    {
+      "file": "npm-runtime-audit.json",
+      "deliveredSha256": "9a38535e223aa382d0eca300ff5e8f53897b15bf06adc1c92ea32fddcfa551b6",
+      "bytes": 1620
+    },
+    {
+      "file": "ocpp-dashboard-stations-node22.log",
+      "deliveredSha256": "a2b857cf478029fc281e02f385bab132ad5b318567c4147f8db5b8b8c0537124",
+      "bytes": 4766
+    },
+    {
+      "file": "ocpp-dashboard-stations-node24.log",
+      "deliveredSha256": "c477504a9f6e354340fe61a1b2692fd0f01cc4544620ae7ce0734877d0beab23",
+      "bytes": 4410
+    },
+    {
+      "file": "ocpp-history-node22.log",
+      "deliveredSha256": "e1501fb47bebc7e10d79b6c59077221d22ff362e95d30b8112204ccb729ce639",
+      "bytes": 21935
+    },
+    {
+      "file": "ocpp-history-node24.log",
+      "deliveredSha256": "a81609081dcfed496119dfe82beb5c6d7c9dc38a00b8464d82b47e2025b4b402",
+      "bytes": 8918
+    },
+    {
+      "file": "poll-life-node22.log",
+      "deliveredSha256": "af896084be75a1f7bb0e5b307f436420945eccbbc39d1d846128edfb874c2c54",
+      "bytes": 1761
+    },
+    {
+      "file": "poll-life-node24.log",
+      "deliveredSha256": "4df82f49a49883772ecdc490c6265e211bed8194b0999c1baf6e08462f910da4",
+      "bytes": 688
+    },
+    {
+      "file": "qa-source-check.log",
+      "deliveredSha256": "3d3e8b2e246fea90e7e2e4cc42e5edcc86aac1027eba3fd3955bc15555282a4a",
+      "bytes": 220
+    },
+    {
+      "file": "release-metadata.log",
+      "deliveredSha256": "dc71040004c74513b16c7331766e67ec1058bb0589827e3ce33e9120f0b526ef",
+      "bytes": 529
+    },
+    {
+      "file": "sbom.log",
+      "deliveredSha256": "5c89f68122d2044f4bf32873f733b3c194e27122c57a3b469257a8ae2fd36ee6",
+      "bytes": 830
+    },
+    {
+      "file": "typecheck.log",
+      "deliveredSha256": "64e04eedfe33bb4e463d715cc4636569c6ad0152b9f22dc689a01689fa832b70",
+      "bytes": 3049
+    },
+    {
+      "file": "ui-runtime.log",
+      "deliveredSha256": "e5feb4e85b763b14aa3643dbec836a2f6d6af0ab48de8068593d9ae01ded2538",
+      "bytes": 582
+    },
+    {
+      "file": "vergleich-9.0.33.json",
+      "deliveredSha256": "b882b8c129c3dfbac5cff7eb5bc38b3828d737909bc75c2043f16456e7ddbfdc",
+      "bytes": 902
+    },
+    {
+      "file": "vergleich-9.0.34.json",
+      "deliveredSha256": "877789883444db497aed22731550242303e07287cc088661dbd7c6284d5cfed2",
+      "bytes": 6998
+    },
+    {
+      "file": "vorher-9.0.33-chromium.json",
+      "deliveredSha256": "8dc98dc1dee41e0ae6a7bfe14746de8b3f1a02c68d75eed2efc0f39feb871726",
+      "bytes": 8004
+    },
+    {
+      "file": "vorher-9.0.34-chromium.json",
+      "deliveredSha256": "9c630281471f4a6b2f5479cda6eda90d8039a45850a74f6472ede4f9a2113beb",
+      "bytes": 8129
+    }
+  ]
+}

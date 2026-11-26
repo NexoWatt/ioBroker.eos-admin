@@ -1,6 +1,14 @@
 # Integriertes OCPP-Modul 0.4.4
 
-Dieses Modul gehört zur Installation von NexoWatt EOS 9.0.24. Es enthält den gelieferten und geprüften OCPP-Kern 0.4.3 unter MIT-Lizenz sowie eine neue typisierte Prozessgrenze. Eine zweite Installation von `iobroker.ocpp21` ist für neue Anlagen nicht erforderlich. Herkunft, Originalprüfsummen und Änderungen stehen in `provenance.json`.
+Dieses Modul ist seit NexoWatt EOS 9.0.24 Teil der gemeinsamen Installation. Es enthält den gelieferten und geprüften OCPP-Kern 0.4.3 unter MIT-Lizenz sowie eine neue typisierte Prozessgrenze. Eine zweite Installation von `iobroker.ocpp21` ist für neue Anlagen nicht erforderlich. Herkunft, Originalprüfsummen und Änderungen stehen in `provenance.json`.
+
+## Stationszustand im LIVE-Dashboard ab EOS 9.0.35
+
+Ein Boot, Heartbeat oder empfangener Status- bzw. Messwert bestätigt die OCPP-Sitzung. Nach einem Verbindungsabbruch oder nach Ablauf des vorhandenen OCPP-Aktivitätsfensters meldet der Worker eine bestätigte Station als offline. Beim Wiederverbinden wartet er auf die erste Stationsmeldung. Eine betriebsbereite Station ohne Fahrzeug gilt als online.
+
+Im Dashboard erscheinen fortlaufende Namen wie „Ladestation 1“. Ihre Reihenfolge richtet sich nach der Anmeldung im aktuellen Prozess. Die Anzahl ausgefallener Stationen umfasst auch Fälle über die ersten zwölf Namen hinaus. Für interne Benachrichtigungen liefert der Worker bis zu 256 pseudonyme Stationsschlüssel. Die OCPP-Zulassungsliste erlaubt Anmeldungen. Ein Eintrag allein macht eine Station noch nicht zu einem erwarteten Gerät. EOS merkt sich nach bestätigtem Boot, Heartbeat, Status oder Messwert einen pseudonymen Schlüssel im Stationskanal. Beim Neustart lädt es diese Nachweise aus dem verwendeten ioBroker-Namensraum. Bei älteren Ständen zählen ein durch Boot gesetztes Heartbeat-Intervall oder gespeicherte Boot-, Heartbeat- und Messwertzeiten zusammen mit der bestätigten Stationsidentität. Eine Socket-Anmeldung oder ein Eintrag in der Zulassungsliste genügt dafür nicht.
+
+Vorher bestätigte Stationen erscheinen bis zur Wiederanmeldung als unbekannt. Liegt vor dem Neustart ein bestätigter Verbindungsabbruch vor, bleibt die Station offline. Nach Ablauf des regulären OCPP-Aktivitätsfensters gilt auch eine weiterhin ausbleibende Anmeldung als Ausfall. Mit den Standardwerten beträgt das Fenster 750 Sekunden. Erst eine neue OCPP-Aktivität bestätigt die Rückkehr. Beim Start werden höchstens 1.024 Stationswurzeln ausgewertet. Fehlende oder unvollständige historische Auskunft ergibt einen unbekannten Status. Die Datenbankabfrage läuft unabhängig vom Serverstart. Die laufende Dashboard-Abfrage liest ausschließlich aus dem Arbeitsspeicher.
 
 ## Laufzeit und Zuständigkeit
 

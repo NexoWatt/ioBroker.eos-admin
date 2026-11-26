@@ -163,3 +163,164 @@ test('hosted status never labels an inactive open idle station as fresh', async 
     assert.equal(station.dataFresh, false);
   } finally { Date.now = originalNow; }
 });
+
+test('dashboard health follows proven OCPP sessions, preserves identity privately and clears after a confirmed reconnect', async t => {
+  const f = fixture(), listenerPort = await port();
+  const hosted = createHostedModule({...f, config:{enabled:true,port:listenerPort,activeRefresh:false}});
+  const disabled = createHostedModule({...f, config:{enabled:false}});
+  const empty = {state:'ok',offline:[],totalOffline:0,tracked:[],complete:false};
+  assert.deepEqual(disabled.getDashboardDeviceHealth(),{...empty,complete:true});
+  assert.deepEqual(hosted.getDashboardDeviceHealth(),{...empty,state:'unknown'});
+  const identity = 'secret-serial-888264902', clients = [];
+  const connect = async () => {
+    const client = new RPCClient({endpoint:'ws://127.0.0.1:'+listenerPort,identity,protocols:['ocpp1.6'],reconnect:false});
+    clients.push(client);
+    await client.connect();
+    return client;
+  };
+  t.after(async () => {
+    await Promise.all(clients.map(c => c.close({force:true}).catch(()=>{})));
+    await hosted.stop();
+  });
+  await hosted.start();
+  assert.deepEqual(hosted.getDashboardDeviceHealth(),empty);
+  const measure = () => hosted.getDashboardDeviceHealth();
+  const waitState = state => until(measure,result => result.tracked[0]?.state === state);
+  const first = await connect();
+  const pending = await waitState('unknown');
+  assert.equal(pending.state,'unknown');
+  assert.equal(pending.totalOffline,0);
+  await first.close({force:true});
+  await until(measure,result => !result.tracked.length);
+  assert.deepEqual(measure(),empty);
+
+  const station = await connect();
+  const boot = await station.call('BootNotification',{chargePointVendor:'Test',chargePointModel:'Local station'});
+  assert.equal(boot.status,'Accepted');
+  await station.call('StatusNotification',{connectorId:1,status:'Available',errorCode:'NoError'});
+  const online = await waitState('online');
+  const key = require('node:crypto').createHash('sha256').update(identity).digest('hex');
+  assert.deepEqual(online,{...empty,tracked:[{key,name:'Ladestation 1',state:'online'}]});
+  const systemNow = Date.now;
+  try {
+    const later = systemNow() + 751000;
+    Date.now = () => later;
+    assert.equal(measure().state,'fault','the native activity window also covers a silent open socket');
+  } finally { Date.now = systemNow; }
+  await station.close({force:true});
+  const offline = await waitState('offline');
+  assert.deepEqual(offline,{state:'fault',complete:false,offline:[{name:'Ladestation 1'}],totalOffline:1,tracked:[{key,name:'Ladestation 1',state:'offline'}]});
+  assert.doesNotMatch(JSON.stringify(offline),/secret-serial|888264902|127\.0\.0\.1/);
+  const reconnecting = await connect();
+  await waitState('unknown');
+  await reconnecting.close({force:true});
+  await waitState('offline');
+  const final = await connect();
+  await final.call('Heartbeat',{});
+  assert.deepEqual(await waitState('online'),online,'an accepted heartbeat confirms an existing station after reconnection');
+  f.revoke();
+  assert.deepEqual(measure(),{...empty,state:'unknown'});
+});
+
+test('dashboard reports the offline count and at most twelve synthetic station names',async t => {
+  const f = fixture(),listenerPort = await port();
+  const identityAllowlist = Array.from({length:13},(_,i) => 'private-address-'+i);
+  const hosted = createHostedModule({...f,config:{enabled:true,port:listenerPort,activeRefresh:false,identityAllowlist}});
+  t.after(()=>hosted.stop());
+  await hosted.start();
+  assert.equal(hosted.getDashboardDeviceHealth().complete,false);
+  for(let i=0;i<13;i++){
+    const client = new RPCClient({endpoint:'ws://127.0.0.1:'+listenerPort,identity:'private-address-'+i,protocols:['ocpp1.6'],reconnect:false});
+    try {
+      await client.connect();
+      await client.call('Heartbeat',{});
+    } finally { await client.close({force:true}); }
+  }
+  const summary=await until(()=>hosted.getDashboardDeviceHealth(),v=>v.totalOffline===13);
+  assert.equal(summary.state,'fault');
+  assert.equal(summary.complete,true,'every identity on the closed admission list has been confirmed');
+  assert.equal(summary.offline.length,12);
+  assert.equal(summary.tracked.length,13);
+  assert.deepEqual(summary.offline[11],{name:'Ladestation 12'});
+  assert.equal(new Set(summary.tracked.map(x=>x.key)).size,13);
+  assert.doesNotMatch(JSON.stringify(summary),/private-address/);
+});
+
+test('known stations survive worker replacement with the same native states; inactive admission entries and a bare socket are never promoted', async t => {
+  const f = fixture(), identity='Garage West', listenerPort=await port();
+  const config={enabled:true,port:listenerPort,activeRefresh:false,identityAllowlist:[identity,'Future Spare'],heartbeatIntervalSec:10,activityTimeoutSec:90};
+  const boot = async () => {
+    const hosted=createHostedModule({...f,config});
+    t.after(()=>hosted.stop()); await hosted.start(); return hosted;
+  };
+  const socket=async () => {
+    const client=new RPCClient({endpoint:'ws://127.0.0.1:'+listenerPort,identity,protocols:['ocpp1.6'],reconnect:false});
+    t.after(()=>client.close({force:true}).catch(()=>{}));
+    await client.connect();return client;
+  };
+  const original=await boot();
+  await until(()=>original.getDashboardDeviceHealth(),r=>r.state==='ok'&&!r.tracked.length);
+  const client=await socket();
+  await client.call('Heartbeat',{});
+  await until(()=>original.getDashboardDeviceHealth(),r=>r.tracked[0]?.state==='online');
+  await until(()=>[...f.states.keys()],ids=>ids.some(k=>k.endsWith('.health.dashboardConfirmedKey')&&
+    /^[a-f0-9]{64}$/.test(String(f.states.get(k).val))));
+  await client.close({force:true});
+  const firstLost=await until(()=>original.getDashboardDeviceHealth(),r=>r.totalOffline===1);
+  await original.stop();
+  const reloaded=await boot();
+  const waiting=await until(()=>reloaded.getDashboardDeviceHealth(),r=>r.tracked[0]?.key===firstLost.tracked[0].key);
+  assert.notEqual(waiting.state,'ok');assert.equal(waiting.tracked.length,1);
+  const dt=Date.now;
+  try {const afterWindow=dt()+91000;Date.now=()=>afterWindow;
+    assert.deepEqual(reloaded.getDashboardDeviceHealth().offline,[{name:'Ladestation 1'}]);
+  } finally {Date.now=dt;}
+  const replacement=await socket();
+  assert.equal((await until(()=>reloaded.getDashboardDeviceHealth(),r=>r.tracked[0]?.state==='unknown')).state,'unknown');
+  await replacement.call('BootNotification',{chargePointModel:'Local',chargePointVendor:'Fixture'});
+  const online=await until(()=>reloaded.getDashboardDeviceHealth(),r=>r.tracked[0]?.state==='online');
+  assert.equal(online.totalOffline,0);assert.equal(online.tracked[0].key,firstLost.tracked[0].key);
+});
+
+test('legacy ocpp21 namespace restores acknowledged Boot evidence and prior physical disconnect, rejects defaults, bad quality and handshakes', async t=>{
+  const ns='ocpp21.3',f=fixture(ns),listenerPort=await port();
+  const add=(id,val,q=0)=>f.states.set(ns+'.'+id,{val,ack:true,q,ts:Date.now()});
+  add('Primary.info.identity','Raw With Space');
+  add('Primary.info.heartbeatInterval',300);add('Primary.health.staleReason','socket-disconnected');add('Primary.health.online',false);
+  add('Never.info.identity','Whitelist Only');add('Never.info.heartbeatInterval',0);add('Never.health.online',false);
+  add('Bad.info.identity','Bad device');add('Bad.health.lastBoot',new Date().toISOString(),32);
+  add('Opening.info.identity','Websocket only');add('Opening.health.lastSeenMs',Date.now());
+  const hosted=createHostedModule({...f,config:{enabled:true,port:listenerPort,activeRefresh:false}});
+  t.after(()=>hosted.stop());await hosted.start();
+  const health=await until(()=>hosted.getDashboardDeviceHealth(),r=>r.totalOffline===1);
+  assert.equal(health.tracked.length,1);assert.equal(health.tracked[0].key,require('node:crypto').createHash('sha256').update('Raw With Space').digest('hex'));
+  assert.doesNotMatch(JSON.stringify(health),/With Space|Primary|ocpp21/);
+});
+
+test('an unavailable historical inventory does not prevent the port from accepting stations and cannot declare all devices healthy',async t=>{
+  const f=fixture(),listenerPort=await port();
+  f.adapter.getStatesAsync=async()=>{throw Error('controller unavailable')};
+  const hosted=createHostedModule({...f,config:{enabled:true,port:listenerPort}});
+  t.after(()=>hosted.stop());await hosted.start();
+  assert.equal(hosted.getStatus().started,true);assert.equal(hosted.getDashboardDeviceHealth().state,'unknown');
+  assert.equal(hosted.getDashboardDeviceHealth().complete,false);
+});
+
+test('deferred history does not delay the WebSocket listener and is neutral until loaded',async t=>{
+  const f=fixture(), read=f.adapter.getStatesAsync,listenerPort=await port();
+  let resume,waiting=true;const blocked=new Promise(resolve=>{resume=resolve;});
+  f.adapter.getStatesAsync=async pattern=>{
+    if(pattern==='*.health.dashboardConfirmedKey' && waiting) await blocked;
+    return read(pattern);
+  };
+  const hosted=createHostedModule({...f,config:{enabled:true,port:listenerPort,activeRefresh:false}});
+  t.after(async()=>{waiting=false;resume();await hosted.stop();});
+  await hosted.start();assert.equal(hosted.getDashboardDeviceHealth().state,'unknown');
+  const client=new RPCClient({endpoint:'ws://127.0.0.1:'+listenerPort,identity:'Live',protocols:['ocpp1.6'],reconnect:false});
+  try {
+    await client.connect();
+    await client.call('Heartbeat',{});
+    await until(()=>hosted.getDashboardDeviceHealth(),r=>r.tracked[0]?.state==='online');
+    waiting=false;resume();await until(()=>hosted.getDashboardDeviceHealth(),r=>r.state==='ok');
+  } finally {await client.close({force:true});}
+});

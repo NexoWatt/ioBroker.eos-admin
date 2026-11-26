@@ -1,12 +1,13 @@
 'use strict';
 // Actual 0.4.3 station runtime; explicit base injection.
 function createOcppRuntime(AdapterBase) {
-const { randomUUID } = require('node:crypto');
+const { randomUUID, createHash } = require('node:crypto');
 const { OcppRpcServer } = require('./ocpp/server');
 const { StationTelemetry, normalizeEosLimit, shouldSendLimit } = require('./ocpp/eos-contract');
 const {
   sanitizeStationIdentity,
   deriveConnectionHealth,
+  hasConfirmedSessionActivity,
   commandTimeoutMs,
   isTriggerAccepted,
   isTriggerUnsupported,
@@ -161,6 +162,8 @@ class NexoWattOcppAdapter extends AdapterBase {
     for (const key of [...this._phaseMetricCache.keys()]) if (key.startsWith(`${identity}|`)) this._phaseMetricCache.delete(key);
     this.runtimeIndex.set(identity, {
       sessionId: randomUUID(),
+      // Keep the identity known across socket replacements, while requiring fresh evidence for each session.
+      dashboardPreviouslyConfirmed: old?.dashboardPreviouslyConfirmed === true || hasConfirmedSessionActivity(old),
       proto,
       client,
       rawIdentity: rawIdentity || identity,
@@ -349,6 +352,19 @@ class NexoWattOcppAdapter extends AdapterBase {
     entry.lastAction = String(action || '');
   }
 
+  _rememberDashboardStation(identity, entry) {
+    if (entry.dashboardMarkerPending || entry.dashboardMarkerSaved) return;
+    entry.dashboardMarkerPending = true;
+    // This observation outlives a socket. Never restore a present-session online flag from it.
+    void this.ensureStructure(identity).then(async () => {
+      if (this.runtimeIndex.get(identity)?.rawIdentity !== entry.rawIdentity) return;
+      const key = createHash('sha256').update(entry.rawIdentity).digest('hex');
+      await this._setStateFreshAsync(`${identity}.health.dashboardConfirmedKey`, key, true, 'static');
+      entry.dashboardMarkerSaved = true;
+    }).catch(() => { /* Retry on the next confirmed packet. */ })
+      .finally(() => { entry.dashboardMarkerPending = false; });
+  }
+
   _noteBoot(identity, intervalSec) {
     const entry = this.runtimeIndex.get(identity);
     if (!entry) return;
@@ -359,6 +375,7 @@ class NexoWattOcppAdapter extends AdapterBase {
     entry.lastMessageAt = Math.max(entry.lastMessageAt || 0, now);
     entry.nextRefreshAt = now + Math.max(30, Number(this.config.activeRefreshIntervalSec) || 60) * 1000;
     entry.lastBootAt = now;
+    this._rememberDashboardStation(identity, entry);
     entry.configurationRebootRequired = false;
     entry.configurationAutoRefreshDone = false;
     entry.configurationAutoRefreshAt = now + Math.max(5, Number(this.config.configurationRefreshDelaySec) || 15) * 1000;
@@ -377,6 +394,7 @@ class NexoWattOcppAdapter extends AdapterBase {
     // retained only for display and must not make an old connection appear new.
     const now = Date.now();
     entry.lastHeartbeatAt = now;
+    this._rememberDashboardStation(identity, entry);
     entry.lastMessageAt = Math.max(entry.lastMessageAt || 0, now);
     entry.lastHeartbeatSourceTimestamp = timestamp || '';
   }
@@ -453,6 +471,7 @@ class NexoWattOcppAdapter extends AdapterBase {
     telemetry.meter(evseId, connectorId, values, at, sourceAt);
     if (evseId > 0 && connectorId > 0) entry.connectors.add(`${evseId}:${connectorId}`);
     entry.lastMeterAt = at;
+    this._rememberDashboardStation(identity, entry);
     await this._setStateFreshAsync(`${identity}.health.lastMeterValue`, new Date(at).toISOString(), true, 'health');
     await this._publishStationTelemetry(identity, entry);
   }
@@ -474,6 +493,7 @@ class NexoWattOcppAdapter extends AdapterBase {
     const entry = this.runtimeIndex.get(identity);
     if (!entry || !entry.client || !entry.socketConnected) return;
     entry.lastStatusAt = Date.now();
+    this._rememberDashboardStation(identity, entry);
     if (evseId > 0 && connectorId > 0) entry.connectors.add(`${evseId}:${connectorId}`);
     entry.statuses.set(`${evseId}:${connectorId}`, String(status || ''));
     this._getStationTelemetry(identity, entry).status(evseId, connectorId, status);
@@ -487,6 +507,7 @@ class NexoWattOcppAdapter extends AdapterBase {
     // in the future or far in the past and must not falsify EOS data quality.
     const now = Date.now();
     entry.lastMeterAt = Math.max(entry.lastMeterAt || 0, now);
+    this._rememberDashboardStation(identity, entry);
     if (flags.hasPower) entry.lastPowerAt = Math.max(entry.lastPowerAt || 0, now);
     if (flags.hasExportPower) entry.lastExportPowerAt = Math.max(entry.lastExportPowerAt || 0, now);
     if (flags.hasCurrent) entry.lastCurrentAt = Math.max(entry.lastCurrentAt || 0, now);
@@ -2538,6 +2559,7 @@ class NexoWattOcppAdapter extends AdapterBase {
         staleReason: ['string', 'text', ''],
         powerSource: ['string', 'text', 'unknown-or-incomplete'],
         heartbeat: ['string', 'value.time', ''],
+        dashboardConfirmedKey: ['string', 'text', ''],
         lastHeartbeatMs: ['number', 'value.time', 0],
         lastSeen: ['string', 'value.time', ''],
         lastSeenMs: ['number', 'value.time', 0],

@@ -41,6 +41,7 @@ export const discoveryStates: StateDefinition[] = [
 ];
 
 export const globalPairingStates: StateDefinition[] = [
+    { id: 'monitoredPartners', name: 'Installer-configured EEBus partner supervision', type: 'string', role: 'json', read: true, write: false, def: '[]' },
     {
         id: 'autoAcceptNewDevices',
         name: 'Auto accept new devices for field testing',

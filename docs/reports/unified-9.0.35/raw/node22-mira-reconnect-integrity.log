@@ -1,0 +1,452 @@
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: disconnect during reconnect backoff prevents an old hosted connect opening a socket after stop
+ok 1 - disconnect during reconnect backoff prevents an old hosted connect opening a socket after stop
+  ---
+  duration_ms: 266.732535
+  type: 'test'
+  ...
+# Subtest: lease loss during reconnect backoff blocks TCP dispatch and a subsequent authorized attempt still works
+ok 2 - lease loss during reconnect backoff blocks TCP dispatch and a subsequent authorized attempt still works
+  ---
+  duration_ms: 206.209945
+  type: 'test'
+  ...
+# Subtest: late old backoff cannot close or change a replacement connection, even after authorization returns
+ok 3 - late old backoff cannot close or change a replacement connection, even after authorization returns
+  ---
+  duration_ms: 255.250915
+  type: 'test'
+  ...
+# Subtest: a cancelled old ensureConnected caller cannot mark the replacement connection offline
+ok 4 - a cancelled old ensureConnected caller cannot mark the replacement connection offline
+  ---
+  duration_ms: 253.798652
+  type: 'test'
+  ...
+# Subtest: late real TCP connection completion cannot invalidate the replacement client
+ok 5 - late real TCP connection completion cannot invalidate the replacement client
+  ---
+  duration_ms: 12.33956
+  type: 'test'
+  ...
+# Subtest: concurrent callers still share one TCP connection while no disconnect occurs
+ok 6 - concurrent callers still share one TCP connection while no disconnect occurs
+  ---
+  duration_ms: 103.774947
+  type: 'test'
+  ...
+# Subtest: authorization loss inside optional SunSpec discovery is not reported as successful connection
+ok 7 - authorization loss inside optional SunSpec discovery is not reported as successful connection
+  ---
+  duration_ms: 2.529538
+  type: 'test'
+  ...
+# Subtest: actual interrupted SunSpec discovery stays retryable and does not cache an unverified unit
+ok 8 - actual interrupted SunSpec discovery stays retryable and does not cache an unverified unit
+  ---
+  duration_ms: 2.984878
+  type: 'test'
+  ...
+# Subtest: late actual SunSpec probe cannot mutate replacement metadata or timeout
+ok 9 - late actual SunSpec probe cannot mutate replacement metadata or timeout
+  ---
+  duration_ms: 14.063131
+  type: 'test'
+  ...
+# Subtest: concurrent SunSpec discovery shares a single current-generation probe
+ok 10 - concurrent SunSpec discovery shares a single current-generation probe
+  ---
+  duration_ms: 7.197753
+  type: 'test'
+  ...
+# Subtest: late model-map response cannot overwrite the replacement generation cache
+ok 11 - late model-map response cannot overwrite the replacement generation cache
+  ---
+  duration_ms: 7.290038
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: complete FC3/FC4 words preserve signed values, genuine zero and configured sentinels
+ok 12 - complete FC3/FC4 words preserve signed values, genuine zero and configured sentinels
+  ---
+  duration_ms: 20.603764
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 missing response fails without fabricated power, fallback or skip caching
+ok 13 - required FC3/FC4 missing response fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 2.453646
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 missing data fails without fabricated power, fallback or skip caching
+ok 14 - required FC3/FC4 missing data fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 1.216526
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 non-array data fails without fabricated power, fallback or skip caching
+ok 15 - required FC3/FC4 non-array data fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 2.864538
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 empty data fails without fabricated power, fallback or skip caching
+ok 16 - required FC3/FC4 empty data fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 1.594308
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 short data fails without fabricated power, fallback or skip caching
+ok 17 - required FC3/FC4 short data fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 1.235049
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 overlong data fails without fabricated power, fallback or skip caching
+ok 18 - required FC3/FC4 overlong data fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 8.911884
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 short payload buffer fails without fabricated power, fallback or skip caching
+ok 19 - required FC3/FC4 short payload buffer fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 0.735253
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 overlong payload buffer fails without fabricated power, fallback or skip caching
+ok 20 - required FC3/FC4 overlong payload buffer fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 0.74022
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 sparse data fails without fabricated power, fallback or skip caching
+ok 21 - required FC3/FC4 sparse data fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 0.789425
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 null word fails without fabricated power, fallback or skip caching
+ok 22 - required FC3/FC4 null word fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 1.260823
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 undefined word fails without fabricated power, fallback or skip caching
+ok 23 - required FC3/FC4 undefined word fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 0.901511
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 NaN word fails without fabricated power, fallback or skip caching
+ok 24 - required FC3/FC4 NaN word fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 0.898547
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 infinite word fails without fabricated power, fallback or skip caching
+ok 25 - required FC3/FC4 infinite word fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 0.871965
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 fractional word fails without fabricated power, fallback or skip caching
+ok 26 - required FC3/FC4 fractional word fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 1.089967
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 negative word fails without fabricated power, fallback or skip caching
+ok 27 - required FC3/FC4 negative word fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 0.914318
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 overflowing word fails without fabricated power, fallback or skip caching
+ok 28 - required FC3/FC4 overflowing word fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 0.842528
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 string word fails without fabricated power, fallback or skip caching
+ok 29 - required FC3/FC4 string word fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 1.01127
+  type: 'test'
+  ...
+# Subtest: required FC3/FC4 boolean word fails without fabricated power, fallback or skip caching
+ok 30 - required FC3/FC4 boolean word fails without fabricated power, fallback or skip caching
+  ---
+  duration_ms: 3.624389
+  type: 'test'
+  ...
+# Subtest: required short group fails the whole snapshot even when another live value was read
+ok 31 - required short group fails the whole snapshot even when another live value was read
+  ---
+  duration_ms: 1.090158
+  type: 'test'
+  ...
+# Subtest: slow split failure of required grid power cannot suppress the following recovered fast poll
+ok 32 - slow split failure of required grid power cannot suppress the following recovered fast poll
+  ---
+  duration_ms: 5.684681
+  type: 'test'
+  ...
+# Subtest: existing required skip entries cannot hide repeated errors or later recovery
+ok 33 - existing required skip entries cannot hide repeated errors or later recovery
+  ---
+  duration_ms: 1.837791
+  type: 'test'
+  ...
+# Subtest: required entries remain readable inside cached split mode while optional failure stays isolated
+ok 34 - required entries remain readable inside cached split mode while optional failure stays isolated
+  ---
+  duration_ms: 2.202025
+  type: 'test'
+  ...
+# Subtest: malformed required split response is not hidden by a valid optional neighbour
+ok 35 - malformed required split response is not hidden by a valid optional neighbour
+  ---
+  duration_ms: 0.674059
+  type: 'test'
+  ...
+# Subtest: optional malformed split response is cached without losing required grid or retrying the block
+ok 36 - optional malformed split response is cached without losing required grid or retrying the block
+  ---
+  duration_ms: 0.898273
+  type: 'test'
+  ...
+# Subtest: an optional standalone malformed group remains isolated and bounded; all-invalid reads still fail
+ok 37 - an optional standalone malformed group remains isolated and bounded; all-invalid reads still fail
+  ---
+  duration_ms: 1.086789
+  type: 'test'
+  ...
+# Subtest: required transport failures preserve their original code without retries or skip caching
+ok 38 - required transport failures preserve their original code without retries or skip caching
+  ---
+  duration_ms: 0.706605
+  type: 'test'
+  ...
+# (node:14) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: new MIRA setup creates one distinct WPM at its selected unit, with separate settings and collision-safe IDs
+ok 39 - new MIRA setup creates one distinct WPM at its selected unit, with separate settings and collision-safe IDs
+  ---
+  duration_ms: 1.950059
+  type: 'test'
+  ...
+# Subtest: existing matching WPM keeps its identity, settings, prior EMS intent and enabled state
+ok 40 - existing matching WPM keeps its identity, settings, prior EMS intent and enabled state
+  ---
+  duration_ms: 0.728077
+  type: 'test'
+  ...
+# Subtest: ambiguous units, another owner, unknown IDs and different TCP plants cannot be silently paired
+ok 41 - ambiguous units, another owner, unknown IDs and different TCP plants cannot be silently paired
+  ---
+  duration_ms: 0.692303
+  type: 'test'
+  ...
+# Subtest: two RTU lines link only by explicit selection, separate from a same-line new WPM
+ok 42 - two RTU lines link only by explicit selection, separate from a same-line new WPM
+  ---
+  duration_ms: 0.646501
+  type: 'test'
+  ...
+# (node:16) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: OVUM MIRA START uses distinct physical units, zero-based FC03 addresses and atomic writes only to five volatile HSM inputs
+ok 43 - OVUM MIRA START uses distinct physical units, zero-based FC03 addresses and atomic writes only to five volatile HSM inputs
+  ---
+  duration_ms: 20.837006
+  type: 'test'
+  ...
+# Subtest: remapped measurement or command never becomes the built-in MIRA energy-flow or control alias
+ok 44 - remapped measurement or command never becomes the built-in MIRA energy-flow or control alias
+  ---
+  duration_ms: 2.845366
+  type: 'test'
+  ...
+# Subtest: MIRA command acknowledgement never becomes physical FC03 readback; constant real samples refresh, unrelated polls do not
+ok 45 - MIRA command acknowledgement never becomes physical FC03 readback; constant real samples refresh, unrelated polls do not
+  ---
+  duration_ms: 9.621961
+  type: 'test'
+  ...
+# (node:26) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: MIRA sends unit-specific login using FC16, reads real WPM power and confirms volatile HSM writes on Modbus TCP
+ok 46 - MIRA sends unit-specific login using FC16, reads real WPM power and confirms volatile HSM writes on Modbus TCP
+  ---
+  duration_ms: 139.94679
+  type: 'test'
+  ...
+# Subtest: MIRA retries the meter after a TCP reset while keeping a genuine illegal optional register on cooldown
+ok 47 - MIRA retries the meter after a TCP reset while keeping a genuine illegal optional register on cooldown
+  ---
+  duration_ms: 516.497245
+  type: 'test'
+  ...
+# Subtest: MIRA requires each login to be confirmed, rate-limits rejection and suppresses writes after authorization loss or mismatched readback
+ok 48 - MIRA requires each login to be confirmed, rate-limits rejection and suppresses writes after authorization loss or mismatched readback
+  ---
+  duration_ms: 11.248434
+  type: 'test'
+  ...
+# Subtest: MIRA rejects unsupported units, protocol and malformed codes before any connection
+ok 49 - MIRA rejects unsupported units, protocol and malformed codes before any connection
+  ---
+  duration_ms: 2.075813
+  type: 'test'
+  ...
+# Subtest: two MIRA RTU units serialize login, write and echo on one shared serial bus
+ok 50 - two MIRA RTU units serialize login, write and echo on one shared serial bus
+  ---
+  duration_ms: 5.537184
+  type: 'test'
+  ...
+# Subtest: MIRA editor keeps unsaved and stored login codes out of JSON export and preview while protected save retains the field
+ok 51 - MIRA editor keeps unsaved and stored login codes out of JSON export and preview while protected save retains the field
+  ---
+  duration_ms: 9.254605
+  type: 'test'
+  ...
+# (node:32) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: commissioning both units maps one measured electrical flow and a prepared, inactive PV controller
+ok 52 - commissioning both units maps one measured electrical flow and a prepared, inactive PV controller
+  ---
+  duration_ms: 82.915327
+  type: 'test'
+  ...
+# Subtest: one explicit HSM confirmation activates the licensed thermal app, respecting later app/row disable and changed sources
+ok 53 - one explicit HSM confirmation activates the licensed thermal app, respecting later app/row disable and changed sources
+  ---
+  duration_ms: 21.94661
+  type: 'test'
+  ...
+# Subtest: license, grid, confirmed source and electrical limit are individually enforced before enabling the writer
+ok 54 - license, grid, confirmed source and electrical limit are individually enforced before enabling the writer
+  ---
+  duration_ms: 8.004664
+  type: 'test'
+  ...
+# Subtest: different buses, ambiguous cascades and removed pumps cannot retain or create an HSM writer
+ok 55 - different buses, ambiguous cascades and removed pumps cannot retain or create an HSM writer
+  ---
+  duration_ms: 17.399675
+  type: 'test'
+  ...
+# Subtest: deliberately selected separate RTU links are supported once and never shared by two managers
+ok 56 - deliberately selected separate RTU links are supported once and never shared by two managers
+  ---
+  duration_ms: 1.458596
+  type: 'test'
+  ...
+# Subtest: manual slots and control targets survive, repeated discovery cannot reinsert a deleted mapping
+ok 57 - manual slots and control targets survive, repeated discovery cannot reinsert a deleted mapping
+  ---
+  duration_ms: 9.220444
+  type: 'test'
+  ...
+# Subtest: restart inventory transports protocol+unit grouping without hostnames or login values
+ok 58 - restart inventory transports protocol+unit grouping without hostnames or login values
+  ---
+  duration_ms: 3.166566
+  type: 'test'
+  ...
+# (node:38) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: opening and saving the App Center retains both MIRA channels, commissioning and flow ownership, including slot ten
+ok 59 - opening and saving the App Center retains both MIRA channels, commissioning and flow ownership, including slot ten
+  ---
+  duration_ms: 483.70199
+  type: 'test'
+  ...
+# Subtest: MIRA can open EMS quick controls without exposing switch, SG Ready or direct power writes
+ok 60 - MIRA can open EMS quick controls without exposing switch, SG Ready or direct power writes
+  ---
+  duration_ms: 485.014885
+  type: 'test'
+  ...
+# Subtest: MIRA readout distinguishes measured zero from unknown after disconnect in the quick control
+ok 61 - MIRA readout distinguishes measured zero from unknown after disconnect in the quick control
+  ---
+  duration_ms: 74.037333
+  type: 'test'
+  ...
+# (node:49) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: MIRA uses commissioned watt ceiling, genuine register feedback, and neutral return under §14a
+ok 62 - MIRA uses commissioned watt ceiling, genuine register feedback, and neutral return under §14a
+  ---
+  duration_ms: 28.604405
+  type: 'test'
+  ...
+# Subtest: late watt echo and absent physical inputs cannot start MIRA; fresh data recovers
+ok 63 - late watt echo and absent physical inputs cannot start MIRA; fresh data recovers
+  ---
+  duration_ms: 14.180811
+  type: 'test'
+  ...
+# Subtest: no actuator writes until explicit commissioning and no generic switch fallback
+ok 64 - no actuator writes until explicit commissioning and no generic switch fallback
+  ---
+  duration_ms: 15.23231
+  type: 'test'
+  ...
+# Subtest: invalid or crossed HSM command/readback mapping is not controllable
+ok 65 - invalid or crossed HSM command/readback mapping is not controllable
+  ---
+  duration_ms: 2.738726
+  type: 'test'
+  ...
+# Subtest: MIRA manual handoff releases own boost once and preserves subsequent local operation
+ok 66 - MIRA manual handoff releases own boost once and preserves subsequent local operation
+  ---
+  duration_ms: 4.053657
+  type: 'test'
+  ...
+# Subtest: restart adopts active MIRA only from fresh measurements and neutralizes an unverified old boost
+ok 67 - restart adopts active MIRA only from fresh measurements and neutralizes an unverified old boost
+  ---
+  duration_ms: 6.738219
+  type: 'test'
+  ...
+# Subtest: turning MIRA off sends neutral even if a previous raise is queued and feedback is still zero
+ok 68 - turning MIRA off sends neutral even if a previous raise is queued and feedback is still zero
+  ---
+  duration_ms: 3.447925
+  type: 'test'
+  ...
+# Subtest: a different WPM slot or missing numerical commission cannot actuate a hydraulic module
+ok 69 - a different WPM slot or missing numerical commission cannot actuate a hydraulic module
+  ---
+  duration_ms: 1.172409
+  type: 'test'
+  ...
+# Subtest: falling grant neutralizes active boost before staging a smaller request
+ok 70 - falling grant neutralizes active boost before staging a smaller request
+  ---
+  duration_ms: 4.112013
+  type: 'test'
+  ...
+# Subtest: module deactivation waits for HSM neutral readback and reports autonomous heating separately
+ok 71 - module deactivation waits for HSM neutral readback and reports autonomous heating separately
+  ---
+  duration_ms: 3.792571
+  type: 'test'
+  ...
+1..71
+# tests 71
+# suites 0
+# pass 71
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1831.789712

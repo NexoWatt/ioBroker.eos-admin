@@ -7,7 +7,7 @@
     /** @param {string} id @returns {HTMLInputElement} */
     const inputElement = id => { const found = element(id); if (!(found instanceof HTMLInputElement)) throw new Error('EEBUS_UI_INPUT'); return found; };
     /** @typedef {[string, string, 'checkbox'|'number'|'text'|'password', boolean|number|string, number?, number?]} Field */
-    /** @typedef {{id:string,name:string,ski:string,fingerprint:string,trusted:boolean,state:string}} Device */
+    /** @typedef {{id:string,name:string,ski:string,fingerprint:string,trusted:boolean,state:string,canMonitor:boolean,monitorPaused:boolean,monitorName:string}} Device */
     /** @typedef {{running:boolean,shipPort:number|undefined,commandDryRun:boolean,localSki:string,certificateFingerprint:string,devices:Device[]}} Details */
     /** @typedef {{csrfToken?:string,configurationRevision?:string,config:Record<string,unknown>,status:{reason:string,state:string,details:Details}}} ApiData */
     /** @param {unknown} value @returns {value is Record<string,unknown>} */
@@ -21,7 +21,8 @@
         const data = record(status.details) ? status.details : status;
         const devices = (Array.isArray(data.devices) ? data.devices.slice(0, 128) : []).filter(record).map(device => ({
             id: String(device.id || ''), name: String(device.name || ''), ski: String(device.ski || ''),
-            fingerprint: String(device.fingerprint || ''), trusted: device.trusted === true, state: String(device.state || '') }));
+            fingerprint: String(device.fingerprint || ''), trusted: device.trusted === true, state: String(device.state || ''),
+            canMonitor: device.canMonitor === true, monitorPaused: device.monitorPaused === true, monitorName: String(device.monitorName || '') }));
         return { csrfToken: typeof raw.csrfToken === 'string' ? raw.csrfToken : undefined,
             configurationRevision: typeof raw.configurationRevision === 'string' ? raw.configurationRevision : undefined,
             config: record(raw.config) ? raw.config : {}, status: { reason: String(status.reason || ''), state: String(status.state || ''),
@@ -138,6 +139,32 @@
                     await render(); message('Geräteaktion verarbeitet.');
                 })); card.append(button);
             }
+            const monitor = document.createElement('fieldset');
+            const legend = document.createElement('legend'); legend.textContent = 'Dauerhafte Verbindungsüberwachung'; monitor.append(legend);
+            const monitorState = document.createElement('p');
+            monitorState.textContent = device.monitorName
+                ? (device.monitorPaused ? 'Überwachung pausiert. Nach dem Verbinden hier erneut aktivieren.' : 'Aktiv · ' + device.monitorName)
+                : 'Aus. Die Überwachung kann nach erfolgreichem, freigegebenem SHIP-Datenaustausch aktiviert werden.';
+            monitor.append(monitorState);
+            const label = document.createElement('label'); label.textContent = 'Anzeigename in Dashboard und Benachrichtigungen ';
+            const displayName = document.createElement('input'); displayName.type = 'text'; displayName.maxLength = 64;
+            displayName.value = device.monitorName; displayName.placeholder = 'z. B. Wärmepumpe West'; label.append(displayName); monitor.append(label);
+            const apply = document.createElement('button'); apply.type = 'button';
+            apply.disabled = !details.running || !device.canMonitor || !device.trusted;
+            apply.textContent = !device.monitorName || device.monitorPaused ? 'Überwachung aktivieren' : 'Anzeigenamen speichern';
+            apply.addEventListener('click', () => operation(async () => {
+                const name = displayName.value.trim(); if (!name) throw new Error('Bitte einen lokalen Anzeigenamen eingeben.');
+                await request('/command','POST',{command:'device.monitor',payload:{deviceId:device.id,enabled:true,name}});
+                await render(); message('Überwachung gespeichert.');
+            })); monitor.append(apply);
+            if (device.monitorName) {
+                const clear = document.createElement('button'); clear.type = 'button'; clear.textContent = 'Überwachung entfernen'; clear.disabled = !details.running;
+                clear.addEventListener('click', () => operation(async () => {
+                    await request('/command','POST',{command:'device.monitor',payload:{deviceId:device.id,enabled:false}});
+                    await render(); message('Überwachung entfernt.');
+                })); monitor.append(clear);
+            }
+            card.append(monitor);
             list.append(card);
         }
     }

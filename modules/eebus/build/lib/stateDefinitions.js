@@ -27,6 +27,7 @@ exports.discoveryStates = [
     { id: 'lastDiscovery', name: 'Last discovery event', type: 'string', role: 'json', read: true, write: false },
 ];
 exports.globalPairingStates = [
+    { id: 'monitoredPartners', name: 'Installer-configured EEBus partner supervision', type: 'string', role: 'json', read: true, write: false, def: '[]' },
     {
         id: 'autoAcceptNewDevices',
         name: 'Auto accept new devices for field testing',

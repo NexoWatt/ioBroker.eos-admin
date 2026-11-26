@@ -217,6 +217,8 @@ class DeviceRuntime {
     this._hbLastSeen = 0;
     this._hbOnline = false;
     this._hbTimeoutMs = 0;
+    this._dashboardMonitoringAt = 0;
+    this._dashboardTransportFailed = false;
     this._hbLastWriteAt = 0;
     this._hbCheckTimer = null;
     this._hbLastSourceStamp = 0;
@@ -956,6 +958,18 @@ class DeviceRuntime {
     }
   }
 
+  // Only a physical sample clears a transport failure. The initial false heartbeat
+  // denotes an unobserved device until its configured reporting window expires.
+  getDashboardReachability(now = Date.now()) {
+    if (!this.started || !this._dashboardMonitoringAt) return 'unknown';
+    if (this._dashboardTransportFailed) return 'offline';
+    const seen = Number(this._hbLastSeen) || 0;
+    const age = now - (seen || this._dashboardMonitoringAt);
+    if (age < 0 || this._hbTimeoutMs <= 0) return 'unknown';
+    if (age > this._hbTimeoutMs) return 'offline';
+    return this._hbOnline && seen > 0 ? 'online' : 'unknown';
+  }
+
   async _setHeartbeatOnline(nextOnline, offlineReason) {
     const b = !!nextOnline;
     if (!b) await this._resetAblEmh1LiveMeasurements();
@@ -999,6 +1013,7 @@ class DeviceRuntime {
       this._hbLastSeen = now;
     }
 
+    this._dashboardTransportFailed = false;
     // Flip online immediately when we see the device alive
     if (!this._hbOnline) {
       await this._setHeartbeatOnline(true);
@@ -6658,6 +6673,7 @@ class DeviceRuntime {
       return;
     }
 
+    this._dashboardTransportFailed = true;
     const message = String(errorMessage || 'MQTT disconnected');
     await this._setStateCached(`${this.baseId}.info.connection`, false, true);
     await this._setStateCached(`${this.baseId}.info.lastError`, message, true);
@@ -6782,6 +6798,8 @@ class DeviceRuntime {
     // (We still keep the counter monotonic across restarts.)
     await this._loadHeartbeatStateFromDb().catch(() => {});
     this._hbLastSeen = 0;
+    this._dashboardMonitoringAt = Date.now();
+    this._dashboardTransportFailed = false;
     this._hbLastSourceStamp = 0;
     this._hbLastWriteAt = 0;
     this._hbOnline = false;
@@ -7233,6 +7251,7 @@ class DeviceRuntime {
     // should not make a busy wallbox flap online/offline. Transport errors still mark the
     // device offline immediately, and repeated read failures go offline once the grace expires.
     if (!keepConnectionState) this._connOk = false;
+    if (isTransport && !keepConnectionState) this._dashboardTransportFailed = true;
 
     const host = this.cfg?.connection?.host;
     const port = Number(this.cfg?.connection?.port || 502);

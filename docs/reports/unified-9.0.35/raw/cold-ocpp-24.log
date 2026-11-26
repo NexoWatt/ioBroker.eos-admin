@@ -1,0 +1,24 @@
+✔ hosted config preserves native defaults and rejects unsafe or unsupported migration settings (2.079052ms)
+✔ actual hosted ocpp1.6 station keeps W profile, atomic feedback and separate child-alive contract (72.273544ms)
+✔ actual hosted ocpp2.0.1 station keeps W profile, atomic feedback and separate child-alive contract (27.095168ms)
+✔ actual hosted ocpp2.1 station keeps W profile, atomic feedback and separate child-alive contract (40.799705ms)
+✔ legacy namespace retains native station IDs and needs no separate adapter instance (11.882655ms)
+✔ hosted EOS lease expires independently and actual station confirms zero without automatic resume (2069.092903ms)
+✔ listener bind failure rejects module startup without crashing or affecting another listener (46.222069ms)
+✔ unavailable authority never starts a socket and revocation closes an existing station (114.786671ms)
+✔ immediate revoke and regrant cannot replay a positive command waiting for a configuration read (22.986358ms)
+✔ hosted status never labels an inactive open idle station as fresh (14.550855ms)
+✔ dashboard health follows proven OCPP sessions, preserves identity privately and clears after a confirmed reconnect (99.630294ms)
+✔ dashboard reports the offline count and at most twelve synthetic station names (334.393886ms)
+✔ known stations survive worker replacement with the same native states; inactive admission entries and a bare socket are never promoted (45.095766ms)
+✔ legacy ocpp21 namespace restores acknowledged Boot evidence and prior physical disconnect, rejects defaults, bad quality and handshakes (6.084653ms)
+✔ an unavailable historical inventory does not prevent the port from accepting stations and cannot declare all devices healthy (1.763137ms)
+✔ deferred history does not delay the WebSocket listener and is neutral until loaded (25.666633ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3405.073364

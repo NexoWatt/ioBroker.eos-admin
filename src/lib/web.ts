@@ -38,6 +38,7 @@ import type { OwnershipGuard } from './eosUnifiedOwnership';
 import type { EosHostedRuntime } from './eosUnifiedRuntime';
 import { createEosSplitRuntime } from './eosSplitRuntime';
 import { EosModuleHost } from './eosModuleHost';
+import { startSupervisorNotifications } from './eosSupervisorNotifications';
 import { EosRuntimeControl } from './eosRuntimeControl';
 import { getDeviceEmsReferences, planDeviceEms } from './eosDeviceEmsPlan';
 import { resolveDeviceEmsTargets, projectDeviceEmsConfig, type DeviceEmsInventory } from './eosDeviceEmsService';
@@ -410,6 +411,7 @@ export default class Web {
     private startupFailed = false;
     private closed = false;
     private moduleHost: EosModuleHost | undefined;
+    private supervisorNotifications?: { close(): void };
     private runtimeControl: EosRuntimeControl | undefined;
     private discovery: EosDiscovery | undefined;
     private tlsManager: EosTlsManager | undefined;
@@ -514,6 +516,7 @@ export default class Web {
     }
 
     close(): void {
+        this.supervisorNotifications?.close();
         void this.runtimeControl?.close();
         this.discovery?.stop();
         void this.moduleHost?.stop().catch(() => this.adapter.log.warn('EOS_MODULE_STOP_FAILED'));
@@ -2373,6 +2376,13 @@ export default class Web {
         this.runtimeControl = runtimeControl;
         this.adapter.eosRuntimeControl = runtimeControl;
         await runtimeControl.initialize();
+        this.supervisorNotifications?.close();
+        this.supervisorNotifications = startSupervisorNotifications(
+            this.adapter,
+            moduleHost,
+            () => this.adapter.eosHostedRuntime?.status?.(),
+            runtimeControl,
+        );
         registerEosModuleRoutes({
             app,
             host: moduleHost,

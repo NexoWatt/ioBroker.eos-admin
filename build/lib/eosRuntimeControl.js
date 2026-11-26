@@ -95,6 +95,12 @@ class EosRuntimeControl {
         return this.ready && !this.closed && IDS.some(value => value === id) &&
             this.enabled[ /** @type {ProcessId} */(id)] && !this.inhibited.has(/** @type {ProcessId} */ (id));
     }
+    /** Saved process switch, distinct from temporary write fences during a restart. @param {string} id */
+    dashboardIntent(id) {
+        const key = /** @type {ProcessId} */ (id);
+        const enabled = this.ready && !this.closed && this.target !== key && IDS.includes(key) ? this.enabled[key] : null;
+        return { enabled, error: this.stopFailures.has(key) ? 'EOS_RUNTIME_STOP_UNCONFIRMED' : this.errors[key] || '' };
+    }
     /** @param {ProcessId} id @param {boolean} configured */
     startReason(id, configured) {
         if (!this.ready || this.closed)

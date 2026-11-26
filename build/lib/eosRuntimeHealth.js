@@ -1,6 +1,7 @@
 /* Copyright (c) 2026 NexoWatt. Confidential and proprietary. */
 'use strict';
 const { pid: parentPid } = require('node:process');
+const { dashboardProcessStatus, notificationProcessStatus } = require('./eosDashboardProcessStatus');
 /** @typedef {Record<string, unknown>} RecordValue */
 /** @typedef {{id:string,label:string,kind:string,state:string,pid:number|null,active:boolean|null,emsReady:boolean|null,connected:boolean|null,generation:number|null,restarts:number|null,reason:string,lastHeartbeatAt:number|null,nextRestartAt:number|null}} ProcessRow */
 /** @typedef {{status:(id:string)=>unknown,owner?:{getObjectViewAsync?:(design:string,search:string,params:RecordValue)=>Promise<unknown>,getForeignStateAsync?:(id:string)=>Promise<unknown>}}} HealthHost */
@@ -169,5 +170,53 @@ function createRuntimeHealthReader({ host, runtimeStatus, timeoutMs = 2500, runt
         return request;
     };
 }
-module.exports = { createRuntimeHealthReader, processRow, readExternalOcppStatus };
+/** A supervisor being torn down can be unavailable while the others are still authoritative.
+ * @param {()=>unknown} read @returns {RecordValue}
+ */
+function supervisorRecord(read) {
+    try {
+        return record(read());
+    }
+    catch {
+        return {};
+    }
+}
+/** Same read for the Live dashboard and owner-side monitoring. Only use synchronously
+ * observed supervisor state. Never read full worker diagnostics or ioBroker objects on this path.
+ * @param {{supervisorState?:(id:string, includeDevices?:boolean)=>unknown}|undefined} host
+ * @param {(()=>unknown)|undefined} runtimeStatus
+ * @param {{dashboardIntent?:(id:string)=>unknown}|undefined} runtimeControl
+ */
+function dashboardSources(host, runtimeStatus, runtimeControl) {
+    const runtime = supervisorRecord(() => runtimeStatus?.());
+    /** @type {RecordValue} */ const sources = {};
+    for (const id of ['ui', 'ems', 'devices', 'eebus', 'backup', 'ocpp']) {
+        const direct = id === 'ui' || id === 'ems';
+        const child = direct ? record(runtime[id]) : supervisorRecord(() => host?.supervisorState?.(id, true));
+        const process = record(child.process);
+        const intent = supervisorRecord(() => runtimeControl?.dashboardIntent?.(id));
+        const controlFailed = !!intent.error && (child.active !== true || intent.error === 'EOS_RUNTIME_STOP_UNCONFIRMED');
+        sources[id] = {
+            configured: direct ? true : child.configured,
+            enabled: controlFailed ? true : intent.enabled,
+            active: child.active, emsReady: child.emsReady,
+            reason: controlFailed ? intent.error : direct ? child.error || child.state : child.reason,
+            process: controlFailed ? { state: 'failed', lastError: intent.error } : process,
+            deviceHealth: child.deviceHealth,
+        };
+    }
+    return sources;
+}
+/** @param {Parameters<typeof dashboardSources>[0]} host @param {Parameters<typeof dashboardSources>[1]} runtimeStatus
+ * @param {Parameters<typeof dashboardSources>[2]} runtimeControl @param {number} [now] */
+function readDashboardProcessStatus(host, runtimeStatus, runtimeControl, now = Date.now()) {
+    return dashboardProcessStatus(dashboardSources(host, runtimeStatus, runtimeControl), now);
+}
+/** Mail-only projection with stable device keys. It is never registered as an HTTP route.
+ * @param {Parameters<typeof dashboardSources>[0]} host @param {Parameters<typeof dashboardSources>[1]} runtimeStatus
+ * @param {Parameters<typeof dashboardSources>[2]} runtimeControl @param {number} [now] */
+function readDashboardNotificationStatus(host, runtimeStatus, runtimeControl, now = Date.now()) {
+    return notificationProcessStatus(dashboardSources(host, runtimeStatus, runtimeControl), now);
+}
+module.exports = { createRuntimeHealthReader, processRow, readDashboardProcessStatus, readDashboardNotificationStatus, readExternalOcppStatus };
 //# sourceMappingURL=eosRuntimeHealth.js.map

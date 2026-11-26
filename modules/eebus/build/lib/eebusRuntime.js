@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EebusRuntime = void 0;
+const partnerMonitor_1 = require("./partnerMonitor");
 const discoveryService_1 = require("./discoveryService");
 const shipEndpoint_1 = require("./shipEndpoint");
 const spineParser_1 = require("./spineParser");
@@ -14,6 +15,7 @@ class EebusRuntime {
     config;
     identity;
     objectFactory;
+    partnerMonitor;
     nodes = new Map();
     discovery;
     endpoint;
@@ -34,9 +36,11 @@ class EebusRuntime {
         this.identity = identity;
         this.objectFactory = objectFactory;
         this.autoAcceptNewDevices = config.autoAcceptNewDevices;
+        this.partnerMonitor = new partnerMonitor_1.PartnerMonitor(adapter, id => this.canMonitorPartner(id));
     }
     async start() {
         this.stopping = false;
+        await this.partnerMonitor.load();
         this.endpoint = new shipEndpoint_1.ShipEndpoint(this.adapter, { ...this.config, autoAcceptNewDevices: this.autoAcceptNewDevices }, this.identity, async (deviceId, message) => this.handleIncomingMessage(deviceId, message), async (node) => this.handleDiscoveredNode(node), async (deviceId, state, role, connected, error) => this.handleConnectionState(deviceId, state, role, connected, error), async (deviceId) => this.handleDataExchangeReady(deviceId), async (deviceId, request) => this.handlePairingRequest(deviceId, request), async (deviceId) => this.isTrusted(deviceId));
         const endpointStarted = await this.endpoint.start();
         if (this.config.shipServerEnabled && !endpointStarted)
@@ -108,11 +112,14 @@ class EebusRuntime {
     async handleStateChange(id, state) {
         if (id.endsWith('.pairing.trusted') || id.endsWith('.pairing.pinnedFingerprint')) {
             const match = id.match(/devices\.([^.]+)\.pairing\./);
-            if (match && id.endsWith('.pinnedFingerprint'))
+            if (match && id.endsWith('.pinnedFingerprint')) {
                 this.endpoint?.invalidateCertificate(match[1], state?.val);
+                await this.partnerMonitor.pinChanged(match[1], state?.val);
+            }
             if (match && (!state || (id.endsWith('.trusted') && state.val !== true))) {
                 this.trustCache.delete(match[1]);
                 this.endpoint?.disconnect(match[1]);
+                await this.partnerMonitor.pause(match[1]);
             }
         }
         if (!state || state.ack || this.stopping || this.adapter.canOperate?.() === false)
@@ -134,8 +141,11 @@ class EebusRuntime {
             return;
         }
         if (command.channel === 'control' && command.stateName === 'disconnect') {
-            if (Boolean(command.value))
+            if (Boolean(command.value)) {
+                const paused = this.partnerMonitor.pause(command.deviceId);
                 this.endpoint?.disconnect(command.deviceId);
+                await paused;
+            }
             await this.adapter.setStateAsync(`devices.${command.deviceId}.control.disconnect`, { val: false, ack: true });
             return;
         }
@@ -166,6 +176,7 @@ class EebusRuntime {
             }
             else {
                 this.endpoint?.rejectDevice(command.deviceId);
+                await this.partnerMonitor.pause(command.deviceId);
             }
             await this.adapter.setStateAsync(`devices.${command.deviceId}.pairing.approve`, { val: false, ack: true });
             await this.adapter.setStateAsync(`devices.${command.deviceId}.pairing.reject`, { val: false, ack: true });
@@ -238,6 +249,7 @@ class EebusRuntime {
         await this.objectFactory.publishGlobalPairingCounts(Array.from(this.nodes.keys()));
     }
     async handleDataExchangeReady(deviceId) {
+        this.partnerMonitor.observed(deviceId);
         // Prime the trust decision before the first time-critical CLS write arrives.
         // The control path can then use the in-memory cache without an object DB read.
         if (!this.trustCache.has(deviceId)) {
@@ -839,6 +851,9 @@ class EebusRuntime {
                 ...(overrides.rawSummary || {}),
             },
         };
+    }
+    canMonitorPartner(id) {
+        return !this.stopping && this.adapter.canOperate?.() !== false && this.endpoint?.hasAuthorizedExchange(id) === true;
     }
     getNodes() { return Array.from(this.nodes.values()).map(node => ({ ...node })); }
     periodic(key, work) {

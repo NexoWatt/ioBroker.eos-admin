@@ -426,6 +426,7 @@ function createEosUiProcess(owner, bridge, options) {
             generation = (0, node_crypto_1.randomBytes)(24).toString('hex');
             const token = generation;
             health.generation++;
+            health.lastHeartbeatAt = 0;
             health.state = 'starting';
             health.nextRestartAt = 0;
             writeFenced = true;

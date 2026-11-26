@@ -963,6 +963,19 @@ class EosModuleHost {
         }
     }
 
+    // Parent-owned lifecycle only. Reading this snapshot never requests device data from a child.
+    supervisorState(id, includeDevices = false) {
+        const entry = this.entries.get(id);
+        if (!entry) throw fail('EOS_MODULE_UNKNOWN');
+        const process = this.options.factories?.[id] ? null : entry.module?.health?.() || entry.processHealth || {
+            mode: 'process', state: 'stopped', pid: null, generation: entry.generation, lastError: '', lastHeartbeatAt: 0,
+        };
+        return { configured: entry.configLoaded ? entry.config.enabled === true : null,
+            active: !!entry.module && entry.started === true && entry.moduleGeneration === entry.generation && this.canOperate(id, entry.generation),
+            reason: !entry.configLoaded ? (entry.configurationError ? 'CONFIG_INVALID' : '') : entry.reason, process,
+            deviceHealth: includeDevices && (id === 'devices' || id === 'eebus' || id === 'ocpp') ? entry.module?.getDeviceHealth?.() : undefined };
+    }
+
     async status(id) {
         const entry = this.entries.get(id);
         if (!entry) throw fail('EOS_MODULE_UNKNOWN');
@@ -976,16 +989,14 @@ class EosModuleHost {
         }
         if (!entry.configLoaded) details = { ...details, configuration: { ready: false,
             error: entry.configurationError || 'EOS_MODULE_CONFIG_UNAVAILABLE' } };
-        if (!this.options.factories?.[id]) {
-            const processHealth = entry.module?.health?.() || entry.processHealth || {
-                mode: 'process', state: 'stopped', pid: null, generation: entry.generation, lastError: '', lastHeartbeatAt: 0,
-            };
-            details = { ...details, process: { ...processHealth,
+        const supervisor = this.supervisorState(id);
+        if (supervisor.process) {
+            details = { ...details, process: { ...supervisor.process,
                 ...(!entry.configLoaded ? { state: 'error', lastError: entry.configurationError || 'EOS_MODULE_CONFIG_UNAVAILABLE' } : {}),
                 restarts: entry.processRestarts,
                 nextRestartAt: entry.restartAt ? Date.now() + Math.max(0, entry.restartAt - performance.now()) : 0 } };
         }
-        return { id, enabled: entry.config.enabled === true, active: !!entry.module && entry.started === true && entry.moduleGeneration === entry.generation && this.canOperate(id, entry.generation),
+        return { id, enabled: entry.config.enabled === true, active: supervisor.active,
             reason: !entry.configLoaded ? 'CONFIG_INVALID' : !this.processEnabled(id) ? 'EOS_RUNTIME_DISABLED' : entry.reason,
             blockers: entry.blockers, details: redact(assertJson(details)),
             namespace: id === 'devices' ? `${this.namespace(id)}.devices` : this.namespace(id) };

@@ -1,3 +1,4 @@
+import { PartnerMonitor } from './partnerMonitor';
 import { EebusConfig } from './config';
 import { DiscoveryService } from './discoveryService';
 import { DeviceClass, DeviceCommand, DiscoveredShipNode, EebusIdentity, ShipConnectionState } from './eebusTypes';
@@ -30,6 +31,7 @@ interface ClsSourceRuntimeState {
 }
 
 export class EebusRuntime {
+    public readonly partnerMonitor: PartnerMonitor;
     private readonly nodes = new Map<string, DiscoveredShipNode>();
     private discovery?: DiscoveryService;
     private endpoint?: ShipEndpoint;
@@ -52,10 +54,12 @@ export class EebusRuntime {
         private readonly objectFactory: ObjectFactory,
     ) {
         this.autoAcceptNewDevices = config.autoAcceptNewDevices;
+        this.partnerMonitor = new PartnerMonitor(adapter, id => this.canMonitorPartner(id));
     }
 
     public async start(): Promise<void> {
         this.stopping = false;
+        await this.partnerMonitor.load();
         this.endpoint = new ShipEndpoint(
             this.adapter,
             { ...this.config, autoAcceptNewDevices: this.autoAcceptNewDevices },
@@ -144,10 +148,14 @@ export class EebusRuntime {
     public async handleStateChange(id: string, state: ioBroker.State | null | undefined): Promise<void> {
         if (id.endsWith('.pairing.trusted') || id.endsWith('.pairing.pinnedFingerprint')) {
             const match = id.match(/devices\.([^.]+)\.pairing\./);
-            if (match && id.endsWith('.pinnedFingerprint')) this.endpoint?.invalidateCertificate(match[1], state?.val);
+            if (match && id.endsWith('.pinnedFingerprint')) {
+                this.endpoint?.invalidateCertificate(match[1], state?.val);
+                await this.partnerMonitor.pinChanged(match[1], state?.val);
+            }
             if (match && (!state || (id.endsWith('.trusted') && state.val !== true))) {
                 this.trustCache.delete(match[1]);
                 this.endpoint?.disconnect(match[1]);
+                await this.partnerMonitor.pause(match[1]);
             }
         }
         if (!state || state.ack || this.stopping || this.adapter.canOperate?.() === false) return;
@@ -171,7 +179,11 @@ export class EebusRuntime {
         }
 
         if (command.channel === 'control' && command.stateName === 'disconnect') {
-            if (Boolean(command.value)) this.endpoint?.disconnect(command.deviceId);
+            if (Boolean(command.value)) {
+                const paused = this.partnerMonitor.pause(command.deviceId);
+                this.endpoint?.disconnect(command.deviceId);
+                await paused;
+            }
             await this.adapter.setStateAsync(`devices.${command.deviceId}.control.disconnect`, { val: false, ack: true });
             return;
         }
@@ -198,6 +210,7 @@ export class EebusRuntime {
                 }
             } else {
                 this.endpoint?.rejectDevice(command.deviceId);
+                await this.partnerMonitor.pause(command.deviceId);
             }
             await this.adapter.setStateAsync(`devices.${command.deviceId}.pairing.approve`, { val: false, ack: true });
             await this.adapter.setStateAsync(`devices.${command.deviceId}.pairing.reject`, { val: false, ack: true });
@@ -286,6 +299,7 @@ export class EebusRuntime {
     }
 
     private async handleDataExchangeReady(deviceId: string): Promise<void> {
+        this.partnerMonitor.observed(deviceId);
         // Prime the trust decision before the first time-critical CLS write arrives.
         // The control path can then use the in-memory cache without an object DB read.
         if (!this.trustCache.has(deviceId)) {
@@ -977,6 +991,10 @@ export class EebusRuntime {
                 ...(overrides.rawSummary || {}),
             },
         };
+    }
+
+    public canMonitorPartner(id:string): boolean {
+        return !this.stopping && this.adapter.canOperate?.() !== false && this.endpoint?.hasAuthorizedExchange(id) === true;
     }
 
     public getNodes(): DiscoveredShipNode[] { return Array.from(this.nodes.values()).map(node => ({ ...node })); }

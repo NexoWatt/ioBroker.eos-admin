@@ -70,6 +70,7 @@ const instanceProxy_1 = require("./instanceProxy");
 const eosUnifiedBoundary_1 = require("./eosUnifiedBoundary");
 const eosSplitRuntime_1 = require("./eosSplitRuntime");
 const eosModuleHost_1 = require("./eosModuleHost");
+const eosSupervisorNotifications_1 = require("./eosSupervisorNotifications");
 const eosRuntimeControl_1 = require("./eosRuntimeControl");
 const eosDeviceEmsPlan_1 = require("./eosDeviceEmsPlan");
 const eosDeviceEmsService_1 = require("./eosDeviceEmsService");
@@ -373,6 +374,7 @@ class Web {
     startupFailed = false;
     closed = false;
     moduleHost;
+    supervisorNotifications;
     runtimeControl;
     discovery;
     tlsManager;
@@ -460,6 +462,7 @@ class Web {
         return page404.replace(/%(LANGUAGE|TITLE|MESSAGE|DETAIL|HOME|BACK)%/g, (_match, name) => values[name]);
     }
     close() {
+        this.supervisorNotifications?.close();
         void this.runtimeControl?.close();
         this.discovery?.stop();
         void this.moduleHost?.stop().catch(() => this.adapter.log.warn('EOS_MODULE_STOP_FAILED'));
@@ -2093,6 +2096,8 @@ class Web {
         this.runtimeControl = runtimeControl;
         this.adapter.eosRuntimeControl = runtimeControl;
         await runtimeControl.initialize();
+        this.supervisorNotifications?.close();
+        this.supervisorNotifications = (0, eosSupervisorNotifications_1.startSupervisorNotifications)(this.adapter, moduleHost, () => this.adapter.eosHostedRuntime?.status?.(), runtimeControl);
         (0, eosModuleHttp_1.registerEosModuleRoutes)({
             app,
             host: moduleHost,

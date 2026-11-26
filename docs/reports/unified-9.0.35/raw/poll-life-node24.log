@@ -1,0 +1,12 @@
+✔ only an initialized visible LIVE dashboard polls, once per ten seconds across tabs/pageshow, on the same authenticated origin and proxy prefix (15.258432ms)
+✔ pagehide, hidden tab and timeout abort requests and discard late headers or bodies, also after BFCache resume (7.78511ms)
+✔ original observation age bounds health across repeated samples, bad replies and server/client clock differences (5.011003ms)
+✔ malformed device details do not discard a process fault; unchanged, invalid, reversed and unauthorized observations cannot falsely clear it (7.910424ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 248.411593

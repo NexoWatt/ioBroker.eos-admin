@@ -49,6 +49,7 @@ export class EosModuleHost {
     onStateChange(id: string, state?: ioBroker.State | null): void;
     view(id: string): Promise<ModuleView>;
     status(id: string): Promise<Record<string, unknown>>;
+    supervisorState(id: string, includeDevices?: boolean): Record<string, unknown>;
     namespace(id: string): string;
     save(
         id: string,

@@ -45,6 +45,7 @@ export interface Driver {
 export interface HostedRuntime {
     started: boolean;
     _hbOnline?: boolean;
+    getDashboardReachability?(now: number): 'online' | 'offline' | 'unknown';
     driver?: Driver | null;
     _writeQueue?: Map<unknown, unknown>;
     _stopWriteLoop?(): void;

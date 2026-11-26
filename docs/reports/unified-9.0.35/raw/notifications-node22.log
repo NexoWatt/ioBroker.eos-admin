@@ -1,0 +1,67 @@
+TAP version 13
+# (node:55) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:55) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# Subtest: parent sends distinct device and process incidents from a preserved namespace, survives restart and only reports confirmed recovery
+ok 1 - parent sends distinct device and process incidents from a preserved namespace, survives restart and only reports confirmed recovery
+  ---
+  duration_ms: 48.110155
+  type: 'test'
+  ...
+# Subtest: system and communications switches independently control mail and a planned stop clears an old incident silently
+ok 2 - system and communications switches independently control mail and a planned stop clears an old incident silently
+  ---
+  duration_ms: 35.105204
+  type: 'test'
+  ...
+# Subtest: 256 active devices and a new EMS process failure all retain their delivery records
+ok 3 - 256 active devices and a new EMS process failure all retain their delivery records
+  ---
+  duration_ms: 49.523552
+  type: 'test'
+  ...
+# Subtest: an interrupted five-minute recovery window restarts with a fresh physical observation
+ok 4 - an interrupted five-minute recovery window restarts with a fresh physical observation
+  ---
+  duration_ms: 18.723443
+  type: 'test'
+  ...
+# Subtest: an already reported legacy inverter and its monitored native device share delivery history across namespaces
+ok 5 - an already reported legacy inverter and its monitored native device share delivery history across namespaces
+  ---
+  duration_ms: 29.583301
+  type: 'test'
+  ...
+# Subtest: a changed recipient or withdrawn communications consent discards a stale EMS collection before committing the ledger
+ok 6 - a changed recipient or withdrawn communications consent discards a stale EMS collection before committing the ledger
+  ---
+  duration_ms: 19.868985
+  type: 'test'
+  ...
+# Subtest: rolling back a migrated UI namespace relinquishes its ledger and cannot send from its settings
+ok 7 - rolling back a migrated UI namespace relinquishes its ledger and cannot send from its settings
+  ---
+  duration_ms: 12.419194
+  type: 'test'
+  ...
+# Subtest: a rollback during SMTP preserves the ledger written by the restored standalone owner
+ok 8 - a rollback during SMTP preserves the ledger written by the restored standalone owner
+  ---
+  duration_ms: 7.095324
+  type: 'test'
+  ...
+# Subtest: an independent process cannot block the local sender or bypass the shared SMTP test quota
+ok 9 - an independent process cannot block the local sender or bypass the shared SMTP test quota
+  ---
+  duration_ms: 97.659039
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 411.927278

@@ -211,6 +211,10 @@ class ShipEndpoint {
         if (session && fingerprint !== session.remoteFingerprint)
             this.disconnect(deviceId);
     }
+    hasAuthorizedExchange(deviceId) {
+        const peer = this.sessions.get(deviceId);
+        return !!peer?.authorized && peer.dataExchangeReady && this.isSocketOpen(peer.socket) && !this.stopping;
+    }
     hasObservedPeer(deviceId) {
         const session = this.sessions.get(deviceId);
         return !!session?.remoteFingerprint && this.isSocketOpen(session.socket);

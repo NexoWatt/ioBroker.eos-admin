@@ -12,6 +12,7 @@
  */
 const fs = require('node:fs/promises');
 const path = require('node:path');
+const { createHash } = require('node:crypto');
 const { isDeepStrictEqual } = require('node:util');
 const { guardDriver } = require('./operation-guard');
 const SOURCE_VERSION = '0.5.176';
@@ -242,6 +243,24 @@ function createHostedModule({ adapter, canOperate, config = {}, runtimeFactory }
     let lastConnection;
     /** @type {Map<string, HostedRuntime>} */
     const runtimes = new Map();
+    // Keep stable customer labels and opaque notification keys outside the hot polling loop.
+    const dashboardDevices = settings.devices.map((device, index) => {
+        const label = typeof device.name === 'string' ? device.name.trim() : '';
+        const endpoints = Object.values(device.connection || {}).filter(value => typeof value === 'string' && value.length >= 4);
+        const safeLabel = label.length <= 64 && /^[\p{L}\p{M}\p{N} ()_–·-]+$/u.test(label) && !/\d{6,}|[a-f\d]{16,}|(?:[a-f\d]{2}-){5}[a-f\d]{2}/i.test(label)
+            && label !== device.id && !endpoints.some(value => label.includes(String(value)));
+        return {id:device.id, enabled:device.enabled !== false, name:safeLabel ? label : `Gerät ${index + 1}`,
+            key:createHash('sha256').update(device.id).digest('hex')};
+    });
+    function getDashboardDeviceHealth() {
+        if (state !== 'running' || !permitted()) return {state:'unknown',offline:[],totalOffline:0,tracked:[],complete:false};
+        const now = Date.now();
+        const tracked = dashboardDevices.map(({id,enabled,name,key}) => ({key, name,
+            state: enabled ? runtimes.get(id)?.getDashboardReachability?.(now) || 'unknown' : 'disabled'}));
+        const lost = tracked.filter(entry => entry.state === 'offline');
+        return {state:lost.length ? 'fault' : tracked.some(entry => entry.state === 'unknown') ? 'unknown' : 'ok',
+            offline:lost.slice(0,12).map(({name}) => ({name})),totalOffline:lost.length,tracked,complete:true};
+    }
     function permitted() { try { return active && !stopping && canOperate() === true; } catch { return false; } }
     /** @param {boolean} connected */
     async function writeConnection(connected) {
@@ -376,6 +395,6 @@ function createHostedModule({ adapter, canOperate, config = {}, runtimeFactory }
         }
     }
     function getStatus() { return { state, sourceVersion: SOURCE_VERSION, configured: settings.devices.length, running: runtimes.size, connected: lastConnection === true, lastError }; }
-    return { start, stop, onStateChange, getStatus, getCatalog, command };
+    return { start, stop, onStateChange, getStatus, getCatalog, command, getDashboardDeviceHealth };
 }
 module.exports = { createHostedModule, validateConfig, preflightLegacyConfig, migrateLegacyConfig: preflightLegacyConfig, normalizeConfig: validateConfig, DEFAULTS, SOURCE_VERSION, command, getCatalog };

@@ -3,7 +3,7 @@
 const { join } = require('node:path');
 const { Transform } = require('node:stream');
 const { bounded } = require('./eosModuleHost');
-const { createRuntimeHealthReader } = require('./eosRuntimeHealth');
+const { createRuntimeHealthReader, readDashboardProcessStatus } = require('./eosRuntimeHealth');
 const MIGRATION_PHASES = new Set(['IDLE', 'DISABLED', 'LICENSE_REQUIRED', 'NOT_NEEDED', 'BLOCKED', 'PREPARED',
     'STOPPING', 'TRANSFERRED', 'COMMITTED', 'ROLLING_BACK', 'ROLLED_BACK', 'ROLLBACK_REQUIRED', 'NOT_AVAILABLE']);
 const MIGRATION_SOURCES = Object.freeze({ ui: 'nexowatt-ui', devices: 'nexowatt-devices', eebus: 'eebus', backup: 'nexowatt-backup', ocpp: 'ocpp21' });
@@ -31,7 +31,7 @@ function publicMigrationStatus(value) {
 
 /** Fixed same-origin module routes; no arbitrary file or ioBroker-command proxy. */
 function registerEosModuleRoutes({ app, host, baseDir, jsonParser, authorize, csrfAllowed, requestAllowed, runtimeStatus, runtimeControl }) {
-    const guard = (write = false, page = false) => (req, res, next) => {
+    const guard = (write = false, page = false, dashboard = false) => (req, res, next) => {
         res.setHeader('Cache-Control', 'no-store');
         if (!requestAllowed(req)) { res.status(403).json({ error: 'AUTH_ORIGIN' }); return; }
         void bounded(Promise.resolve().then(() => authorize(req)), 5000).then(status => {
@@ -47,7 +47,12 @@ function registerEosModuleRoutes({ app, host, baseDir, jsonParser, authorize, cs
                 else res.status(403).json({ error: 'PASSWORD_CHANGE_REQUIRED' });
                 return;
             }
-            if (status.role !== 'admin') { res.status(403).json({ error: 'ADMIN_REQUIRED' }); return; }
+            if (dashboard) {
+                if (status.activationRequired) { res.status(402).json({ error: 'LICENSE_REQUIRED' }); return; }
+                if (!Array.isArray(status.capabilities) || !status.capabilities.some(capability => capability === '*' || capability === 'frontend.open')) {
+                    res.status(403).json({ error: 'FRONTEND_ACCESS_REQUIRED' }); return;
+                }
+            } else if (status.role !== 'admin') { res.status(403).json({ error: 'ADMIN_REQUIRED' }); return; }
             if (write && !csrfAllowed(req)) { res.status(403).json({ error: 'AUTH_CSRF' }); return; }
             res.locals.eosModuleCsrf = status.csrfToken;
             next();
@@ -69,6 +74,12 @@ function registerEosModuleRoutes({ app, host, baseDir, jsonParser, authorize, cs
         'materialize.css': 'lib/css/materialize.css', 'adapter.css': 'css/adapter.css',
     };
     const runtimeHealth = createRuntimeHealthReader({ host, runtimeStatus, runtimeControl });
+    // Served by the parent even when the EMS child is stopped. No worker RPC, controller
+    // inventory, persistent telemetry or background timer is required for a dashboard read.
+    const dashboardPath = '/api/eos/dashboard/process-status';
+    app.get(dashboardPath, guard(false, false, true), action(() => readDashboardProcessStatus(host, runtimeStatus, runtimeControl)));
+    app.all(dashboardPath, guard(false, false, true), (_req, res) => res.setHeader('Allow', 'GET, HEAD').status(405).json({ error: 'METHOD_NOT_ALLOWED' }));
+
     app.get('/api/eos/runtime', guard(), (_req, res) => {
         void runtimeHealth().then(value => {
             if (!res.destroyed && !res.headersSent) res.json({ ...value, csrfToken: res.locals.eosModuleCsrf });

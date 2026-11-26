@@ -274,9 +274,30 @@ function boot(received) {
         initializationError = errorCode(reportModuleLoadFailure(issue, message.baseDir, message.id, text => moduleLog.warn(text)) || issue);
         return;
     }
+    let nextDeviceReport = 0;
+    let lastReport = '';
     heartbeat = setInterval(() => {
+        /** @type {RecordValue} */
+        const data = {};
+        if ((message.id === 'devices' || message.id === 'eebus' || message.id === 'ocpp') && runtime?.getDashboardDeviceHealth &&
+            performance.now() >= nextDeviceReport) {
+            nextDeviceReport = performance.now() + 2000;
+            try {
+                const report = runtime.getDashboardDeviceHealth();
+                const serialized = JSON.stringify(report);
+                if (serialized && serialized === lastReport)
+                    data.deviceHealthConfirmed = true;
+                else
+                    data.deviceHealth = report ?? null;
+                lastReport = serialized || '';
+            }
+            catch {
+                data.deviceHealth = null;
+                lastReport = '';
+            }
+        }
         try {
-            getRpc().event('heartbeat');
+            getRpc().event('heartbeat', data);
         }
         catch {
             void shutdown();

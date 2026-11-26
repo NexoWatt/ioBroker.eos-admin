@@ -1,10 +1,16 @@
 /** NexoWatt EOS OCPP hosting boundary. MIT; original station runtime remains attributed in provenance.json. */
+import { readStationHistory, stationKey, type KnownStation } from './stationHistory';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { EventEmitter } from 'node:events';
 import { createRequire } from 'node:module';
-import type { OcppRuntime } from '../runtime';
+import type { OcppRuntime, RuntimeEntry } from '../runtime';
 import { createOcppRuntime } from '../runtime';
-import { deriveConnectionHealth, dataFreshForEos } from '../ocpp/freshness';
+import {
+    deriveConnectionHealth,
+    activityTimeoutMs,
+    dataFreshForEos,
+    hasConfirmedSessionActivity,
+} from '../ocpp/freshness';
 
 export type RecordValue = Record<string, unknown>;
 interface Adapter extends RecordValue {
@@ -192,7 +198,16 @@ export interface HostedStatus {
         leaseState: string;
     }>;
 }
+type StationHealthState = 'online' | 'offline' | 'unknown';
+interface DashboardDeviceHealth {
+    complete: boolean;
+    state: 'ok' | 'unknown' | 'fault';
+    offline: { name: string }[];
+    totalOffline: number;
+    tracked: { key: string; name: string; state: StationHealthState }[];
+}
 export interface HostedModule {
+    getDashboardDeviceHealth(): DashboardDeviceHealth;
     start(): Promise<void>;
     stop(): Promise<void>;
     getStatus(): HostedStatus;
@@ -311,6 +326,28 @@ export function createHostedModule(options: HostedOptions): HostedModule {
         })();
         return stopping;
     };
+    const dashboardKeys = new WeakMap<RuntimeEntry, string>();
+    const configuredIdentities = new Set(Array.isArray(settings.identityAllowlist) ? settings.identityAllowlist : []);
+    const allowedKeys = new Set([...configuredIdentities].map(id => stationKey(String(id))));
+    let knownStations = new Map<string, KnownStation>();
+    let historyComplete = false;
+    let observationStarted = 0;
+    let retryHistoryAfter = 0;
+    const restoreHistory = async (): Promise<void> => {
+        retryHistoryAfter = 0;
+        const token = generation;
+        const loaded = await readStationHistory(
+            adapter.namespace,
+            pattern => call('getStatesAsync', [pattern]),
+            allowedKeys,
+        );
+        if (!allowed() || token !== generation) {
+            return;
+        }
+        knownStations = loaded.complete ? loaded.known : new Map([...knownStations, ...loaded.known]);
+        historyComplete = loaded.complete;
+        retryHistoryAfter = loaded.readFailed ? Date.now() + 30000 : 0;
+    };
     const start = (): Promise<void> => {
         if (starting) {
             return starting;
@@ -360,7 +397,10 @@ export function createHostedModule(options: HostedOptions): HostedModule {
                     ]);
                 }
                 await call('setStateAsync', ['info.eosHostedRuntime', { val: true, ack: true }]);
+                // Inventory hydration cannot delay the WebSocket listener or physical control.
+                void restoreHistory();
                 await runtime.onReady();
+                observationStarted = Date.now();
                 assert();
                 started = true;
                 state = 'running';
@@ -369,6 +409,9 @@ export function createHostedModule(options: HostedOptions): HostedModule {
                 aliveTimer = setInterval(() => {
                     if (publishing || !allowed() || !runtime?.server) {
                         return;
+                    }
+                    if (retryHistoryAfter && Date.now() >= retryHistoryAfter) {
+                        void restoreHistory();
                     }
                     publishing = true;
                     void publishAlive(true)
@@ -388,6 +431,122 @@ export function createHostedModule(options: HostedOptions): HostedModule {
             }
         });
         return starting;
+    };
+    const connectionHealth = (entry: RuntimeEntry, now: number): ReturnType<typeof deriveConnectionHealth> =>
+        deriveConnectionHealth({
+            now,
+            socketConnected: entry.socketConnected,
+            connectedAt: entry.connectedAt,
+            lastMessageAt: entry.lastMessageAt,
+            lastHeartbeatAt: entry.lastHeartbeatAt,
+            heartbeatIntervalSec: entry.heartbeatIntervalSec,
+            heartbeatTimeoutFactor: settings.heartbeatTimeoutFactor,
+            activityTimeoutSec: settings.activityTimeoutSec,
+        });
+    const getDashboardDeviceHealth = (): DashboardDeviceHealth => {
+        const result: DashboardDeviceHealth = {
+            state: 'ok',
+            offline: [],
+            totalOffline: 0,
+            tracked: [],
+            complete: false,
+        };
+        if (!settings.enabled) {
+            result.complete = true;
+            return result;
+        }
+        if (
+            !started ||
+            !runtime ||
+            revoked ||
+            state !== 'running' ||
+            !options.canOperate() ||
+            (options.getAuthorityGeneration?.() ?? 0) !== authorityGeneration
+        ) {
+            result.state = 'unknown';
+            return result;
+        }
+        const now = Date.now();
+        if (!historyComplete) {
+            result.state = 'unknown';
+        }
+        const seen = new Set<string>();
+        let ordinal = 0,
+            eligible = 0,
+            confirmedConfigured = 0;
+        for (const entry of runtime.runtimeIndex.values()) {
+            ordinal++;
+            let key = dashboardKeys.get(entry);
+            if (!key) {
+                key = stationKey(entry.rawIdentity);
+                dashboardKeys.set(entry, key);
+            }
+            const historical = knownStations.get(key);
+            const confirmed = hasConfirmedSessionActivity(entry);
+            if (!confirmed && !entry.dashboardPreviouslyConfirmed && !historical && !entry.socketConnected) {
+                continue;
+            }
+            seen.add(key);
+            eligible++;
+            if ((confirmed || entry.dashboardPreviouslyConfirmed) && configuredIdentities.has(entry.rawIdentity)) {
+                confirmedConfigured++;
+            }
+            let current: StationHealthState = 'unknown';
+            if (confirmed) {
+                current = connectionHealth(entry, now).online ? 'online' : 'offline';
+            } else if ((entry.dashboardPreviouslyConfirmed || historical) && !entry.socketConnected) {
+                current = 'offline';
+            }
+            // The native station object has an OCPP identity and no separate public display name.
+            const name = `Ladestation ${ordinal}`;
+            if (current === 'offline') {
+                result.state = 'fault';
+                result.totalOffline++;
+                if (result.offline.length < 12) {
+                    result.offline.push({ name });
+                }
+            } else if (current === 'unknown' && result.state !== 'fault') {
+                result.state = 'unknown';
+            }
+            if (result.tracked.length < 256) {
+                result.tracked.push({ key, name, state: current });
+            }
+        }
+        const windowMs = activityTimeoutMs(
+            settings.heartbeatIntervalSec,
+            settings.heartbeatTimeoutFactor,
+            settings.activityTimeoutSec,
+        );
+        for (const old of knownStations.values()) {
+            if (seen.has(old.key)) {
+                continue;
+            }
+            const name = `Ladestation ${++ordinal}`;
+            const absent = old.offline || now - observationStarted > windowMs;
+            if (absent) {
+                result.state = 'fault';
+                result.totalOffline++;
+                if (result.offline.length < 12) {
+                    result.offline.push({ name });
+                }
+            } else if (result.state !== 'fault') {
+                result.state = 'unknown';
+            }
+            eligible++;
+            if (allowedKeys.has(old.key)) {
+                confirmedConfigured++;
+            }
+            if (result.tracked.length < 256) {
+                result.tracked.push({ key: old.key, name, state: absent ? 'offline' : 'unknown' });
+            }
+        }
+        // With open admission, earlier sessions may be missing after a worker restart.
+        result.complete =
+            historyComplete &&
+            configuredIdentities.size > 0 &&
+            confirmedConfigured === configuredIdentities.size &&
+            eligible === result.tracked.length;
+        return result;
     };
     const getStatus = (): HostedStatus => ({
         started: started && allowed(),
@@ -410,16 +569,7 @@ export function createHostedModule(options: HostedOptions): HostedModule {
             status: entry.chargingState || '',
             lastSeenMs: entry.lastMessageAt || 0,
             dataFresh: dataFreshForEos(
-                deriveConnectionHealth({
-                    now: Date.now(),
-                    socketConnected: entry.socketConnected,
-                    connectedAt: entry.connectedAt,
-                    lastMessageAt: entry.lastMessageAt,
-                    lastHeartbeatAt: entry.lastHeartbeatAt,
-                    heartbeatIntervalSec: entry.heartbeatIntervalSec,
-                    heartbeatTimeoutFactor: settings.heartbeatTimeoutFactor,
-                    activityTimeoutSec: settings.activityTimeoutSec,
-                }).online,
+                connectionHealth(entry, Date.now()).online,
                 entry.lastPowerAt > 0 && Date.now() - entry.lastPowerAt <= Number(settings.telemetryMaxAgeSec) * 1000,
                 entry.socketConnected && entry.safeZeroAt > 0,
             ),
@@ -451,6 +601,7 @@ export function createHostedModule(options: HostedOptions): HostedModule {
         start,
         stop,
         getStatus,
+        getDashboardDeviceHealth,
         onStateChange,
         command: (name: unknown): Promise<HostedStatus> => {
             assert();

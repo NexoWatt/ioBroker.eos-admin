@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/app.ts
- * Quell-Hash: sha256:8886479238d20c1219eec9882822102510e91d8ab11bd5ea4d1741bff6cec969
+ * Quell-Hash: sha256:e59de3872cd83630a187dcdaf065152929e4521d5958a4acc142dc5b79d4ea45
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -1881,6 +1881,82 @@ function nwLatestStateTimestamp(keys) {
   }
   return best;
 }
+// The shared headline has one owner. A repeated SSE snapshot can confirm the
+// existing connection without resetting an already established operating status.
+function nwRenderDashboardStatus(connection, health = null, chargeModel = null, safetyStop = false, fallback = false) {
+  const label = document.getElementById('sideStatusText');
+  if (!label) return;
+  const processHealth = window.NexoWattDashboardProcesses?.current();
+  const headline = window.NexoWattLiveDisplay?.dashboardStatus(health, connection, chargeModel, safetyStop, fallback, processHealth);
+  const translate = text => window.NexoWattI18n?.translateText(text) || text;
+  const source = headline ? headline.text : (connection === 'disconnected' ? 'Verbindung unterbrochen' : 'Betriebsstatus prüfen');
+  let message = translate(source);
+  if (headline?.processIds?.length) {
+    const labels = { ui: 'Oberfläche', ems: 'EMS', devices: 'Geräte', eebus: 'EEBus', backup: 'Sicherung', ocpp: 'OCPP' };
+    message = message.replace('{names}', () => headline.processIds.map(id => translate(labels[id])).join(', '));
+  }
+  let detail = '';
+  if (headline?.deviceNames?.length) {
+    const names = headline.deviceNames;
+    const line = translate('Geräte offline · {names}');
+    const format = shown => {
+      const count = headline.totalOffline - shown.length;
+      return line.replace('{names}', () => shown.join(', ') + (count > 0 ? ' (+' + count + ')' : ''));
+    };
+    detail = [message, format(names)].filter(Boolean).join(' · ');
+    message = [message, format(names.slice(0, 2))].filter(Boolean).join(' · ');
+  }
+  if (label.textContent !== message) label.textContent = message;
+  if (label.title !== detail) label.title = detail;
+  const details = document.getElementById('sideStatusDevices');
+  if (details) {
+    const show = headline?.totalOffline > 2;
+    if (details.hidden === show) details.hidden = !show;
+    if (!show && details.open) details.open = false;
+    const names = document.getElementById('sideStatusDeviceNames');
+    const text = show ? headline.deviceNames.join(', ') : '';
+    const remaining = show ? headline.totalOffline - headline.deviceNames.length : 0;
+    const list = remaining > 0 ? text + ' (+' + remaining + ')' : text;
+    if (names && names.textContent !== list) names.textContent = list;
+  }
+  const panel = label.closest?.('.nw-panel-status');
+  if (panel) {
+    const level = headline?.level || (connection === 'disconnected' ? 'error' : 'warn');
+    for (const name of ['error', 'warn', 'info']) {
+      const cls = 'is-' + name;
+      if (panel.classList.contains(cls) !== (level === name)) panel.classList.toggle(cls, level === name);
+    }
+  }
+}
+
+// Re-evaluate the banner independently of the ten-second power display. Normal
+// telemetry does not rebuild the list of charging points or repaint the diagram.
+function nwRefreshDashboardStatus() {
+  if (!document.getElementById('sideStatusText')) return;
+  const connection = window.__nwFlowConnection || 'connecting';
+  const connected = connection === 'snapshot' || connection === 'ready';
+  if (!connected) { nwRenderDashboardStatus(connection); return; }
+  const values = window.latestState || state || {};
+  const read = key => values[key]?.value;
+  const health = window.NexoWattLiveDisplay?.status(values, true, Date.now(), getFlowFreshMaxAgeMs());
+  const lp = nwEvcsFeatureFromConfig() ? window.NexoWattLpStatusPresenter?.read(read) : null;
+  nwRenderDashboardStatus(connection, health, lp, read('chargingManagement.audit.safetyStage') === 'EOS-SAFETY-STOP',
+    read('para14a.communicationFallbackActive') === true);
+}
+
+function nwDashboardAlarmChanged(patch, previous) {
+  for (const key in patch) {
+    if (key !== 'ems.core.schedulerAlive' && key !== 'ems.gridMeasurementFresh' &&
+        key !== 'chargingManagement.audit.safetyStage' && key !== 'para14a.communicationFallbackActive' &&
+        !/^chargingManagement\.wallboxes\.[^.]+\.(?:online|mappingOk|operationalBlocked|hardwareCommandConfirmed|applyStatus)$/.test(key)) continue;
+    const next = patch[key], before = previous[key];
+    if (next?.value !== before?.value || next?.q !== before?.q || next?.ack !== before?.ack) return true;
+  }
+  return false;
+}
+window.addEventListener('nexowatt:process-health', nwRefreshDashboardStatus);
+window.addEventListener('nexowatt:languagechange', nwRefreshDashboardStatus);
+
 /**
  * Code-Teil: nwSetLiveOnline
  * Zweck: Kapselt einen lokalen Verarbeitungsschritt, damit Aufrufer nicht direkt in Detaildaten eingreifen.
@@ -1893,7 +1969,7 @@ function nwSetLiveOnline(isOnline) {
   window.__nwTariffLiveOnline = online;
   if (tariffConnectionChanged) updateEmsControlUi();
   setText('sideConnection', online ? 'Online' : 'Offline');
-  setText('sideStatusText', online ? 'Verbindung hergestellt · Betriebsstatus wird geprüft' : 'Verbindung unterbrochen');
+  if (!online) nwRenderDashboardStatus('disconnected');
   const dot = document.getElementById('sideLiveDot');
   if (dot) dot.classList.toggle('is-offline', !online);
   if (!online) {
@@ -1921,8 +1997,8 @@ function updateDashboardShellUi(data) {
   const snap = data || {};
   const d = typeof snap.d === 'function' ? snap.d : ((k) => (window.latestState || state || {})[k]?.value);
 
-  const liveDot = document.getElementById('liveDot');
-  nwSetLiveOnline(!liveDot || liveDot.classList.contains('live'));
+  const connection = window.__nwFlowConnection || 'connecting';
+  const connected = connection === 'snapshot' || connection === 'ready';
 
   const { pv, buy, sell, load, charge, discharge, soc } = getLiveMeasurementView();
   const batterySigned = charge === null || discharge === null ? null : discharge - charge;
@@ -1936,11 +2012,13 @@ function updateDashboardShellUi(data) {
   setText('sideStorage', Number.isFinite(soc) ? `${Math.round(soc)} %` : '-- %');
   setText('sideBatterySoc', Number.isFinite(soc) ? `${Math.round(soc)} %` : '-- %');
   const p14 = !!d('ems.core.para14aActive') || !!d('para14a.active'), peak = String(d('peakShaving.control.status') || '').trim(), safety = String(d('chargingManagement.audit.safetyStage') || '').trim(), p14Fallback = d('para14a.communicationFallbackActive') === true;
-  const health = window.NexoWattLiveDisplay?.status(window.latestState || state || {}, window.__nwTariffLiveOnline !== false, window.__nwLiveFrameNow ?? Date.now(), getFlowFreshMaxAgeMs());
-  setText('sideEms', safety === 'EOS-SAFETY-STOP' ? 'Safety aktiv' : health?.ems || 'Status unbekannt');
-  setText('sideGridStatus', p14Fallback ? '§14a Fallback' : (p14 ? '§14a aktiv' : (peak === 'active' ? 'Peak aktiv' : health?.grid || 'Messstatus unbekannt')));
-  setText('sideStatusText', health?.summary || 'Betriebsstatus unbekannt');
-  try { window.NexoWattLpStatusPresenter?.render(d, evcsAvailable); } catch (_eChargingStatus) {}
+  const health = window.NexoWattLiveDisplay?.status(window.latestState || state || {}, connected, window.__nwLiveFrameNow ?? Date.now(), getFlowFreshMaxAgeMs());
+  const safetyStop = connected && safety === 'EOS-SAFETY-STOP';
+  setText('sideEms', connection === 'connecting' ? 'Status unbekannt' : safetyStop ? 'Safety aktiv' : health?.ems || 'Status unbekannt');
+  setText('sideGridStatus', connected && p14Fallback ? '§14a Fallback' : (connected && p14 ? '§14a aktiv' : (connected && peak === 'active' ? 'Peak aktiv' : health?.grid || 'Messstatus unbekannt')));
+  let chargeModel = null;
+  try { chargeModel = window.NexoWattLpStatusPresenter?.render(d, evcsAvailable); } catch (_eChargingStatus) {}
+  nwRenderDashboardStatus(connection, health, chargeModel, safetyStop, p14Fallback);
 
   setText('sideConsumptionTotal', load === null ? '--' : formatFlowPower(Math.max(0, load)));
   setText('sideSelfConsumption', Number.isFinite(selfc) ? `${Math.round(selfc)} %` : '-- %');
@@ -3888,6 +3966,8 @@ const refreshConfig = async () => {
         if (closed || !msg || !msg.payload || typeof msg.payload !== 'object' || Array.isArray(msg.payload)) return;
         const isInitMessage = msg.type === 'init';
         const isUpdateMessage = msg.type === 'update';
+        const firstSnapshot = isInitMessage && !initialized;
+        const statusChanged = isInitMessage || (isUpdateMessage && initialized && nwDashboardAlarmChanged(msg.payload, state));
         if (isInitMessage) {
           if (msg.degraded === true) { reconnect(); return; }
           state = msg.payload;
@@ -3920,8 +4000,8 @@ const refreshConfig = async () => {
           }
         } catch (_e) {}
 
-        if (isInitMessage) scheduleLiveTelemetryRender(true);
-        else if (isUpdateMessage) scheduleLiveTelemetryRender(false);
+        if (statusChanged) nwRefreshDashboardStatus();
+        scheduleLiveTelemetryRender(firstSnapshot);
       } catch (e) { console.warn(e); }
     };
   } catch (e) {

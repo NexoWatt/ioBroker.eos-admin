@@ -246,6 +246,11 @@ export class ShipEndpoint {
         if (session && fingerprint !== session.remoteFingerprint) this.disconnect(deviceId);
     }
 
+    public hasAuthorizedExchange(deviceId: string): boolean {
+        const peer = this.sessions.get(deviceId);
+        return !!peer?.authorized && peer.dataExchangeReady && this.isSocketOpen(peer.socket) && !this.stopping;
+    }
+
     public hasObservedPeer(deviceId: string): boolean {
         const session = this.sessions.get(deviceId);
         return !!session?.remoteFingerprint && this.isSocketOpen(session.socket);

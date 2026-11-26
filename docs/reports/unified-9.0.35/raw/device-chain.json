@@ -1,0 +1,93 @@
+{
+  "result": "passed",
+  "node": "v24.22.3",
+  "chromium": "HeadlessChrome/158.0.8127.0",
+  "scope": "Echter Devices-Kindprozess mit WPM und TCP-Bus, Worker-Heartbeat, Hostprojektion, HTTP und Chromium. Andere Supervisoren, Benutzerautorisierung, Telemetrie und ioBroker-Speicher im Labor simuliert.",
+  "trace": [
+    {
+      "phase": "online",
+      "report": {
+        "observedAt": 1795720923190,
+        "state": "ok",
+        "failed": [],
+        "paused": [
+          "eebus",
+          "backup",
+          "ocpp"
+        ],
+        "deviceHealth": {
+          "state": "ok",
+          "offline": [],
+          "totalOffline": 0
+        }
+      },
+      "headline": "Alle Systeme normal",
+      "physicalSampleReads": 22
+    },
+    {
+      "phase": "wire interruption",
+      "report": {
+        "observedAt": 1795720933194,
+        "state": "ok",
+        "failed": [],
+        "paused": [
+          "eebus",
+          "backup",
+          "ocpp"
+        ],
+        "deviceHealth": {
+          "state": "fault",
+          "offline": [
+            {
+              "name": "Pilot Wärmepumpe West"
+            }
+          ],
+          "totalOffline": 1
+        }
+      },
+      "headline": "Geräte offline · Pilot Wärmepumpe West",
+      "physicalSampleReads": 22
+    },
+    {
+      "phase": "poll and heartbeat restored",
+      "report": {
+        "observedAt": 1795720943274,
+        "state": "ok",
+        "failed": [],
+        "paused": [
+          "eebus",
+          "backup",
+          "ocpp"
+        ],
+        "deviceHealth": {
+          "state": "ok",
+          "offline": [],
+          "totalOffline": 0
+        }
+      },
+      "headline": "Alle Systeme normal",
+      "physicalSampleReads": 42
+    },
+    {
+      "phase": "manually disabled",
+      "report": {
+        "observedAt": 1795720952032,
+        "state": "ok",
+        "failed": [],
+        "paused": [
+          "devices",
+          "eebus",
+          "backup",
+          "ocpp"
+        ],
+        "deviceHealth": {
+          "state": "ok",
+          "offline": [],
+          "totalOffline": 0
+        }
+      },
+      "headline": "Alle Systeme normal",
+      "physicalSampleReads": 42
+    }
+  ]
+}

@@ -39,7 +39,7 @@ function fixture(now) {
         setText() {}, _fmtTimeHHmm: value => new Date(value).toISOString().slice(11, 16), fetch() { throw new Error('Price display must not activate or fetch'); },
     });
     vm.runInContext(helperSource, context);
-    for (const name of ['formatPricePerKwh', 'nwParsePriceCurve', 'nwNiceStep', 'nwClamp', 'nwMedian', 'nwAggregateCurve', 'nwQuantile', 'nwResolveTariffThresholds', 'nwFormatCt', 'nwTariffColorForPrice', 'nwDrawTariffForecastChart', 'initTariffForecastTooltip', 'updateEmsControlUi', 'nwSetLiveOnline']) {
+    for (const name of ['formatPricePerKwh', 'nwParsePriceCurve', 'nwNiceStep', 'nwClamp', 'nwMedian', 'nwAggregateCurve', 'nwQuantile', 'nwResolveTariffThresholds', 'nwFormatCt', 'nwTariffColorForPrice', 'nwDrawTariffForecastChart', 'initTariffForecastTooltip', 'updateEmsControlUi', 'nwRenderDashboardStatus','nwSetLiveOnline']) {
         if (functions.has(name)) vm.runInContext(functions.get(name), context);
     }
     const actualDraw = context.nwDrawTariffForecastChart;

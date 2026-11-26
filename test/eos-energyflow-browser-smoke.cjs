@@ -15,7 +15,7 @@ const puppeteer = require('puppeteer');
 const root = path.resolve(__dirname, '..');
 const www = path.join(root, 'ui/www');
 const sourceRoot = path.join(root, 'ui/src-ts/runtime-executables/www');
-const names = ['coerceNumber','isMappedDatapoint','getGridImportExport','getStateAgeMs','getFlowFreshMaxAgeMs','getFreshFlowNumber','getStableFlowNumber','getConfiguredDatapointId','getBalanceDerivedBatteryFlow','getNormalizedBatteryFlow','getCanonicalPvPowerW','getLiveMeasurementView','getEvcsPowerW','updateEnergyWebExtras','updateEnergyWeb','updateEmsControlUi','nwSetLiveOnline','formatPower','formatFlowPower','formatPricePerKwh','nxTryTsDashboardFormat','setText'];
+const names = ['coerceNumber','isMappedDatapoint','getGridImportExport','getStateAgeMs','getFlowFreshMaxAgeMs','getFreshFlowNumber','getStableFlowNumber','getConfiguredDatapointId','getBalanceDerivedBatteryFlow','getNormalizedBatteryFlow','getCanonicalPvPowerW','getLiveMeasurementView','getEvcsPowerW','updateEnergyWebExtras','updateEnergyWeb','updateEmsControlUi','nwRenderDashboardStatus','nwSetLiveOnline','formatPower','formatFlowPower','formatPricePerKwh','nxTryTsDashboardFormat','setText'];
 async function main() {
   const temp = await fs.mkdtemp(path.join(os.tmpdir(), 'eos-flow-browser-'));
   const shots = process.env.EOS_BROWSER_SCREENSHOTS ? path.resolve(process.env.EOS_BROWSER_SCREENSHOTS) : null;

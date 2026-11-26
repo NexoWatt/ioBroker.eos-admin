@@ -1,0 +1,206 @@
+TAP version 13
+# (node:93) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: configuration rejects trust bypasses, privileged/colliding ports, invalid types and private key import
+ok 1 - configuration rejects trust bypasses, privileged/colliding ports, invalid types and private key import
+  ---
+  duration_ms: 1.30616
+  type: 'test'
+  ...
+# Subtest: legacy import preserves supported settings, stays disabled and requires new certificate pairing
+ok 2 - legacy import preserves supported settings, stays disabled and requires new certificate pairing
+  ---
+  duration_ms: 1.10781
+  type: 'test'
+  ...
+# Subtest: central license denies startup before file/network work; no second license required
+ok 3 - central license denies startup before file/network work; no second license required
+  ---
+  duration_ms: 10.355579
+  type: 'test'
+  ...
+# Subtest: hosted lifecycle uses async scoped subscriptions and cleans all timers even if host rejects stop telemetry
+ok 4 - hosted lifecycle uses async scoped subscriptions and cleans all timers even if host rejects stop telemetry
+  ---
+  duration_ms: 27.398378
+  type: 'test'
+  ...
+# (node:94) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: eligible EEBus migration retains SHIP identity, PIN, dryrun/CLS settings and verified peer pins
+ok 5 - eligible EEBus migration retains SHIP identity, PIN, dryrun/CLS settings and verified peer pins
+  ---
+  duration_ms: 34.118191
+  type: 'test'
+  ...
+# Subtest: unverified legacy pairing, mismatching identity and unsafe settings fail before identity writes
+ok 6 - unverified legacy pairing, mismatching identity and unsafe settings fail before identity writes
+  ---
+  duration_ms: 16.020279
+  type: 'test'
+  ...
+# Subtest: existing identity is never replaced and a permissive target directory is rejected
+ok 7 - existing identity is never replaced and a permissive target directory is rejected
+  ---
+  duration_ms: 29.172956
+  type: 'test'
+  ...
+# (node:95) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: mDNS callback, transport and advertisement errors are contained by discovery and SHIP publisher
+ok 8 - mDNS callback, transport and advertisement errors are contained by discovery and SHIP publisher
+  ---
+  duration_ms: 2.226806
+  type: 'test'
+  ...
+# (node:101) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: EEBus requires local intent, a trusted and pinned live data-exchange and a local display name
+ok 9 - EEBus requires local intent, a trusted and pinned live data-exchange and a local display name
+  ---
+  duration_ms: 6.502448
+  type: 'test'
+  ...
+# Subtest: EEBus opted-in partner survives reboot, allows time to reconnect, and remains paused after deliberate disconnect
+ok 10 - EEBus opted-in partner survives reboot, allows time to reconnect, and remains paused after deliberate disconnect
+  ---
+  duration_ms: 1.181421
+  type: 'test'
+  ...
+# Subtest: EEBus revocation and pin change disable monitoring persistently; invalid storage cannot generate an offline declaration
+ok 11 - EEBus revocation and pin change disable monitoring persistently; invalid storage cannot generate an offline declaration
+  ---
+  duration_ms: 1.261277
+  type: 'test'
+  ...
+# Subtest: the normal EEBus disconnect and trust-revocation entry points pause an active monitored partner
+ok 12 - the normal EEBus disconnect and trust-revocation entry points pause an active monitored partner
+  ---
+  duration_ms: 2.3984
+  type: 'test'
+  ...
+# (node:107) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: EEBUS-CERT-001: certificate SKI matches actual OpenSSL SKI extension, not a hash of SPKI headers
+ok 13 - EEBUS-CERT-001: certificate SKI matches actual OpenSSL SKI extension, not a hash of SPKI headers
+  ---
+  duration_ms: 3.911859
+  type: 'test'
+  ...
+# Subtest: EEBUS-CERT-002: mismatched private keys, malformed certificates and oversized input fail closed
+ok 14 - EEBUS-CERT-002: mismatched private keys, malformed certificates and oversized input fail closed
+  ---
+  duration_ms: 1.797773
+  type: 'test'
+  ...
+# Subtest: EEBUS-CERT-003: unsupported curve and expired certificate are rejected
+ok 15 - EEBUS-CERT-003: unsupported curve and expired certificate are rejected
+  ---
+  duration_ms: 17.400251
+  type: 'test'
+  ...
+# Subtest: EEBUS-SHIP-001: TLS client without certificate cannot become an observed or trusted device
+ok 16 - EEBUS-SHIP-001: TLS client without certificate cannot become an observed or trusted device
+  ---
+  duration_ms: 34.45894
+  type: 'test'
+  ...
+# Subtest: EEBUS-SHIP-002: unpaired data and an early PIN-none cannot bypass SHIP hello/protocol pairing
+ok 17 - EEBUS-SHIP-002: unpaired data and an early PIN-none cannot bypass SHIP hello/protocol pairing
+  ---
+  duration_ms: 25.213248
+  type: 'test'
+  ...
+# Subtest: EEBUS-SHIP-003: matching paired certificate exchanges data and current central license blocks new sends
+ok 18 - EEBUS-SHIP-003: matching paired certificate exchanges data and current central license blocks new sends
+  ---
+  duration_ms: 24.17324
+  type: 'test'
+  ...
+# Subtest: EEBUS-SHIP-004: a trusted boolean with the wrong pinned certificate does not permit data exchange
+ok 19 - EEBUS-SHIP-004: a trusted boolean with the wrong pinned certificate does not permit data exchange
+  ---
+  duration_ms: 13.898898
+  type: 'test'
+  ...
+# Subtest: EEBUS-SHIP-005: approving an unknown identity fails and explicit approval pins only the observed live certificate
+ok 20 - EEBUS-SHIP-005: approving an unknown identity fails and explicit approval pins only the observed live certificate
+  ---
+  duration_ms: 14.818135
+  type: 'test'
+  ...
+# Subtest: EEBUS-SHIP-006: outbound TLS certificate must match the advertised peer SKI
+ok 21 - EEBUS-SHIP-006: outbound TLS certificate must match the advertised peer SKI
+  ---
+  duration_ms: 9.992723
+  type: 'test'
+  ...
+# Subtest: EEBUS-SHIP-007: replacing a peer connection does not let the old close event delete the new session
+ok 22 - EEBUS-SHIP-007: replacing a peer connection does not let the old close event delete the new session
+  ---
+  duration_ms: 25.211227
+  type: 'test'
+  ...
+# Subtest: EEBUS-SHIP-008: central license revocation while trust lookup is pending prevents late application delivery
+ok 23 - EEBUS-SHIP-008: central license revocation while trust lookup is pending prevents late application delivery
+  ---
+  duration_ms: 25.170289
+  type: 'test'
+  ...
+# Subtest: EEBUS-SHIP-009: configured local PIN cannot be bypassed by remote PIN-none
+ok 24 - EEBUS-SHIP-009: configured local PIN cannot be bypassed by remote PIN-none
+  ---
+  duration_ms: 12.833726
+  type: 'test'
+  ...
+# Subtest: EEBUS-SHIP-011: peer asserting PIN-ok does not prove knowledge of the configured local PIN
+ok 25 - EEBUS-SHIP-011: peer asserting PIN-ok does not prove knowledge of the configured local PIN
+  ---
+  duration_ms: 13.430462
+  type: 'test'
+  ...
+# Subtest: EEBUS-SHIP-010: slow discovery persistence does not lose an immediately sent handshake
+ok 26 - EEBUS-SHIP-010: slow discovery persistence does not lose an immediately sent handshake
+  ---
+  duration_ms: 31.876268
+  type: 'test'
+  ...
+# Subtest: EEBUS-SHIP-012: both endpoint roles complete paired mutual TLS and exchange application data
+ok 27 - EEBUS-SHIP-012: both endpoint roles complete paired mutual TLS and exchange application data
+  ---
+  duration_ms: 18.396768
+  type: 'test'
+  ...
+# Subtest: EEBUS-SHIP-013: stopping while discovery persistence is pending closes sockets promptly
+ok 28 - EEBUS-SHIP-013: stopping while discovery persistence is pending closes sockets promptly
+  ---
+  duration_ms: 8.682771
+  type: 'test'
+  ...
+# Subtest: EEBUS-IDENTITY-001: installation identity persists with private permissions and corrupt storage is not silently replaced
+ok 29 - EEBUS-IDENTITY-001: installation identity persists with private permissions and corrupt storage is not silently replaced
+  ---
+  duration_ms: 20.831944
+  type: 'test'
+  ...
+# Subtest: EEBUS-SHIP-014: concurrent requests for the same peer cannot bypass the connection reservation during slow diagnostics
+ok 30 - EEBUS-SHIP-014: concurrent requests for the same peer cannot bypass the connection reservation during slow diagnostics
+  ---
+  duration_ms: 7.608218
+  type: 'test'
+  ...
+# Subtest: opted-in partner health follows a real local TLS/SHIP session; discovery and pairing alone do not create a dashboard alarm
+ok 31 - opted-in partner health follows a real local TLS/SHIP session; discovery and pairing alone do not create a dashboard alarm
+  ---
+  duration_ms: 24.378824
+  type: 'test'
+  ...
+1..31
+# tests 31
+# suites 0
+# pass 31
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 528.491251

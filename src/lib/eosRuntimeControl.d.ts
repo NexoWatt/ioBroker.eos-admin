@@ -24,6 +24,7 @@ export class EosRuntimeControl {
     });
     initialize(): Promise<void>;
     isEnabled(id: string): boolean;
+    dashboardIntent(id: string): { enabled: boolean | null; error: string };
     view(id: string, configured?: boolean): RuntimeControlView | undefined;
     request(id: unknown, action: unknown, revision: unknown): { ok: boolean; accepted: boolean };
     whenIdle(): Promise<void>;

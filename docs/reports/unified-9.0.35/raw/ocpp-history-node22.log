@@ -1,0 +1,561 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: OCPP 1.6 configuration inventory stays flat and writable values use ChangeConfiguration
+ok 1 - OCPP 1.6 configuration inventory stays flat and writable values use ChangeConfiguration
+  ---
+  duration_ms: 25.681648
+  type: 'test'
+  ...
+# Subtest: OCPP 2.x configuration inventory completes through NotifyReport and writes with SetVariables
+ok 2 - OCPP 2.x configuration inventory completes through NotifyReport and writes with SetVariables
+  ---
+  duration_ms: 4.340036
+  type: 'test'
+  ...
+# Subtest: rejected configuration writes restore the last station-confirmed value
+ok 3 - rejected configuration writes restore the last station-confirmed value
+  ---
+  duration_ms: 2.74791
+  type: 'test'
+  ...
+# Subtest: values missing from a later complete inventory remain visible but become stale and read-only
+ok 4 - values missing from a later complete inventory remain visible but become stale and read-only
+  ---
+  duration_ms: 4.810886
+  type: 'test'
+  ...
+# Subtest: sensitive configuration values are write-only locally and never persisted in clear text
+ok 5 - sensitive configuration values are write-only locally and never persisted in clear text
+  ---
+  duration_ms: 2.791085
+  type: 'test'
+  ...
+# Subtest: RebootRequired stays latched until a later BootNotification and never sends Reset
+ok 6 - RebootRequired stays latched until a later BootNotification and never sends Reset
+  ---
+  duration_ms: 3.562031
+  type: 'test'
+  ...
+# Subtest: configuration refresh uses the shared outbound command slot
+ok 7 - configuration refresh uses the shared outbound command slot
+  ---
+  duration_ms: 13.801193
+  type: 'test'
+  ...
+# Subtest: configuration writes fail safely while a multipart inventory is still in progress
+ok 8 - configuration writes fail safely while a multipart inventory is still in progress
+  ---
+  duration_ms: 1.970497
+  type: 'test'
+  ...
+# Subtest: partial OCPP 2.x inventories stay read-only after timeout until a complete refresh succeeds
+ok 9 - partial OCPP 2.x inventories stay read-only after timeout until a complete refresh succeeds
+  ---
+  duration_ms: 7.299335
+  type: 'test'
+  ...
+# Subtest: configuration objects retained across an adapter restart are retired by the next complete inventory
+ok 10 - configuration objects retained across an adapter restart are retired by the next complete inventory
+  ---
+  duration_ms: 9.895917
+  type: 'test'
+  ...
+# Subtest: configuration operations are blocked during charging unless explicitly enabled
+ok 11 - configuration operations are blocked during charging unless explicitly enabled
+  ---
+  duration_ms: 1.764617
+  type: 'test'
+  ...
+# Subtest: EOS two-port runtime publishes sum, does not erase another charging connector
+ok 12 - EOS two-port runtime publishes sum, does not erase another charging connector
+  ---
+  duration_ms: 7.307413
+  type: 'test'
+  ...
+# Subtest: EOS wire command keeps stable profile ID and sends zero after positive limit
+ok 13 - EOS wire command keeps stable profile ID and sends zero after positive limit
+  ---
+  duration_ms: 4.29807
+  type: 'test'
+  ...
+# Subtest: EOS rejected charging profile cannot become confirmed
+ok 14 - EOS rejected charging profile cannot become confirmed
+  ---
+  duration_ms: 1.474934
+  type: 'test'
+  ...
+# Subtest: atomic profile status correlates requested/applied watts with current session and acceptance time
+ok 15 - atomic profile status correlates requested/applied watts with current session and acceptance time
+  ---
+  duration_ms: 5.168809
+  type: 'test'
+  ...
+# Subtest: pending command invalidates confirmation before its response and a reduction to zero remains zero
+ok 16 - pending command invalidates confirmation before its response and a reduction to zero remains zero
+  ---
+  duration_ms: 12.217667
+  type: 'test'
+  ...
+# Subtest: rejected and timed out profiles cannot be confirmed even when input writes are acknowledged
+ok 17 - rejected and timed out profiles cannot be confirmed even when input writes are acknowledged
+  ---
+  duration_ms: 10.980793
+  type: 'test'
+  ...
+# Subtest: reconnect during accepted profile persistence cannot resurrect confirmation from previous socket
+ok 18 - reconnect during accepted profile persistence cannot resurrect confirmation from previous socket
+  ---
+  duration_ms: 5.795493
+  type: 'test'
+  ...
+# Subtest: disconnect and adapter restart invalidate persisted profile status
+ok 19 - disconnect and adapter restart invalidate persisted profile status
+  ---
+  duration_ms: 1.480781
+  type: 'test'
+  ...
+# Subtest: session identifier timestamp is not renewed by telemetry or unchanged profiles
+ok 20 - session identifier timestamp is not renewed by telemetry or unchanged profiles
+  ---
+  duration_ms: 0.835107
+  type: 'test'
+  ...
+# Subtest: native device metadata preserves user attributes and identifies one station control scope
+ok 21 - native device metadata preserves user attributes and identifies one station control scope
+  ---
+  duration_ms: 22.904967
+  type: 'test'
+  ...
+# (node:12) ExperimentalWarning: The MockTimers API is an experimental feature and might change at any time
+# Subtest: actual command timeout remains invalid when the late station response arrives
+ok 22 - actual command timeout remains invalid when the late station response arrives
+  ---
+  duration_ms: 8.98886
+  type: 'test'
+  ...
+# Subtest: newest zero command supersedes an in-flight positive command without old confirmation
+ok 23 - newest zero command supersedes an in-flight positive command without old confirmation
+  ---
+  duration_ms: 1.778141
+  type: 'test'
+  ...
+# Subtest: an old disconnect task cannot clear the replacement session health or profile
+ok 24 - an old disconnect task cannot clear the replacement session health or profile
+  ---
+  duration_ms: 1.100819
+  type: 'test'
+  ...
+# Subtest: EOS lease is opt-in, persists armed state and stops positive power on expiry
+ok 25 - EOS lease is opt-in, persists armed state and stops positive power on expiry
+  ---
+  duration_ms: 4.500504
+  type: 'test'
+  ...
+# Subtest: persisted armed lease restarts expired even when stored deadline is still in the future
+ok 26 - persisted armed lease restarts expired even when stored deadline is still in the future
+  ---
+  duration_ms: 1.528561
+  type: 'test'
+  ...
+# Subtest: lease rejects far-future and stale events, without disarming a persisted lease
+ok 27 - lease rejects far-future and stale events, without disarming a persisted lease
+  ---
+  duration_ms: 0.621384
+  type: 'test'
+  ...
+# Subtest: lease expiry fences in-flight positive acceptance and serializes zero immediately afterwards
+ok 28 - lease expiry fences in-flight positive acceptance and serializes zero immediately afterwards
+  ---
+  duration_ms: 3.860193
+  type: 'test'
+  ...
+# Subtest: offline or rejected expiry zero stays unconfirmed and blocks positive even after renewal
+ok 29 - offline or rejected expiry zero stays unconfirmed and blocks positive even after renewal
+  ---
+  duration_ms: 3.424822
+  type: 'test'
+  ...
+# Subtest: monotonic lease deadline still stops power after a backwards wall-clock jump
+ok 30 - monotonic lease deadline still stops power after a backwards wall-clock jump
+  ---
+  duration_ms: 3.51445
+  type: 'test'
+  ...
+# Subtest: one failed lease restoration can retry and does not authorize positive power
+ok 31 - one failed lease restoration can retry and does not authorize positive power
+  ---
+  duration_ms: 1.159391
+  type: 'test'
+  ...
+# Subtest: queued configuration work cannot delay an expired lease zero with additional RPC timeouts
+ok 32 - queued configuration work cannot delay an expired lease zero with additional RPC timeouts
+  ---
+  duration_ms: 2.346733
+  type: 'test'
+  ...
+# Subtest: a station diagnostic write failure does not prevent another expired lease from stopping
+ok 33 - a station diagnostic write failure does not prevent another expired lease from stopping
+  ---
+  duration_ms: 27.374395
+  type: 'test'
+  ...
+# Subtest: expired lease sends physical zero even when status publication stalls
+ok 34 - expired lease sends physical zero even when status publication stalls
+  ---
+  duration_ms: 2.089271
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: station identities are deterministic and safe for ioBroker object IDs
+ok 35 - station identities are deterministic and safe for ioBroker object IDs
+  ---
+  duration_ms: 9.47538
+  type: 'test'
+  ...
+# Subtest: heartbeat timeout applies a bounded safety factor
+ok 36 - heartbeat timeout applies a bounded safety factor
+  ---
+  duration_ms: 0.26608
+  type: 'test'
+  ...
+# Subtest: socket, OCPP activity and heartbeat health remain independent
+ok 37 - socket, OCPP activity and heartbeat health remain independent
+  ---
+  duration_ms: 1.11436
+  type: 'test'
+  ...
+# Subtest: OCPP command timeout uses seconds and remains bounded
+ok 38 - OCPP command timeout uses seconds and remains bounded
+  ---
+  duration_ms: 0.251154
+  type: 'test'
+  ...
+# Subtest: TriggerMessage payloads are protocol-correct
+ok 39 - TriggerMessage payloads are protocol-correct
+  ---
+  duration_ms: 0.372073
+  type: 'test'
+  ...
+# Subtest: compact measurement names replace protocol-direction names and vendor typos
+ok 40 - compact measurement names replace protocol-direction names and vendor typos
+  ---
+  duration_ms: 0.871365
+  type: 'test'
+  ...
+# Subtest: zero and sub-minimum charging limits cannot accidentally interrupt charging
+ok 41 - zero and sub-minimum charging limits cannot accidentally interrupt charging
+  ---
+  duration_ms: 1.945472
+  type: 'test'
+  ...
+# Subtest: safe-zero rules only match states with no energy transfer
+ok 42 - safe-zero rules only match states with no energy transfer
+  ---
+  duration_ms: 0.924142
+  type: 'test'
+  ...
+# Subtest: EOS freshness requires canonical active-import power or a safe zero
+ok 43 - EOS freshness requires canonical active-import power or a safe zero
+  ---
+  duration_ms: 0.518714
+  type: 'test'
+  ...
+# Subtest: cached telemetry is republished per datapoint and never by unrelated freshness
+ok 44 - cached telemetry is republished per datapoint and never by unrelated freshness
+  ---
+  duration_ms: 3.293781
+  type: 'test'
+  ...
+# Subtest: republish and connector limits rotate fairly instead of starving later entries
+ok 45 - republish and connector limits rotate fairly instead of starving later entries
+  ---
+  duration_ms: 0.986909
+  type: 'test'
+  ...
+# Subtest: Device Model values are parsed strictly
+ok 46 - Device Model values are parsed strictly
+  ---
+  duration_ms: 0.363315
+  type: 'test'
+  ...
+# Subtest: configuration datapoint keys stay flat, deterministic and collision-safe
+ok 47 - configuration datapoint keys stay flat, deterministic and collision-safe
+  ---
+  duration_ms: 0.726695
+  type: 'test'
+  ...
+# Subtest: OCPP configuration refresh and write calls are protocol-correct
+ok 48 - OCPP configuration refresh and write calls are protocol-correct
+  ---
+  duration_ms: 1.206007
+  type: 'test'
+  ...
+# Subtest: configuration value validation and write permissions fail safely
+ok 49 - configuration value validation and write permissions fail safely
+  ---
+  duration_ms: 0.937413
+  type: 'test'
+  ...
+# Subtest: configuration credentials are treated as write-only and redacted from diagnostics
+ok 50 - configuration credentials are treated as write-only and redacted from diagnostics
+  ---
+  duration_ms: 2.019394
+  type: 'test'
+  ...
+# Subtest: configuration response status handling accepts only confirmed protocol success
+ok 51 - configuration response status handling accepts only confirmed protocol success
+  ---
+  duration_ms: 1.334814
+  type: 'test'
+  ...
+# Subtest: meter values stay fresh, aggregate phases across messages and mirror Wh to kWh
+ok 52 - meter values stay fresh, aggregate phases across messages and mirror Wh to kWh
+  ---
+  duration_ms: 6.699445
+  type: 'test'
+  ...
+# Subtest: empty or malformed MeterValues do not falsely mark telemetry as fresh
+ok 53 - empty or malformed MeterValues do not falsely mark telemetry as fresh
+  ---
+  duration_ms: 0.174303
+  type: 'test'
+  ...
+# Subtest: current or reactive power cannot falsely mark EOS active-import power as fresh
+ok 54 - current or reactive power cannot falsely mark EOS active-import power as fresh
+  ---
+  duration_ms: 0.286503
+  type: 'test'
+  ...
+# Subtest: OCPP SampledValue defaults are mapped to energyWh and energyKWh in all versions
+ok 55 - OCPP SampledValue defaults are mapped to energyWh and energyKWh in all versions
+  ---
+  duration_ms: 1.705524
+  type: 'test'
+  ...
+# Subtest: explicit power and current measurands infer the correct unit when the station omits it
+ok 56 - explicit power and current measurands infer the correct unit when the station omits it
+  ---
+  duration_ms: 1.99652
+  type: 'test'
+  ...
+# Subtest: phase current is the limiting phase value while phase power is summed
+ok 57 - phase current is the limiting phase value while phase power is summed
+  ---
+  duration_ms: 0.552683
+  type: 'test'
+  ...
+# Subtest: connector detail folders can be disabled without losing station measurements
+ok 58 - connector detail folders can be disabled without losing station measurements
+  ---
+  duration_ms: 1.282045
+  type: 'test'
+  ...
+# Subtest: schema fallback responses fail closed instead of reporting unsupported work as accepted
+ok 59 - schema fallback responses fail closed instead of reporting unsupported work as accepted
+  ---
+  duration_ms: 21.900437
+  type: 'test'
+  ...
+# Subtest: all supported protocol versions register critical telemetry handlers and a catch-all
+ok 60 - all supported protocol versions register critical telemetry handlers and a catch-all
+  ---
+  duration_ms: 3.159707
+  type: 'test'
+  ...
+# Subtest: OCPP acknowledgements are returned before datapoint processing runs
+ok 61 - OCPP acknowledgements are returned before datapoint processing runs
+  ---
+  duration_ms: 5.137444
+  type: 'test'
+  ...
+# Subtest: NotifyReport is acknowledged immediately but its configuration inventory is never marked droppable
+ok 62 - NotifyReport is acknowledged immediately but its configuration inventory is never marked droppable
+  ---
+  duration_ms: 0.932554
+  type: 'test'
+  ...
+# Subtest: OCPP 1.6 keeps concurrent transactions mapped to their original connector
+ok 63 - OCPP 1.6 keeps concurrent transactions mapped to their original connector
+  ---
+  duration_ms: 5.172143
+  type: 'test'
+  ...
+# Subtest: status side effects run in order and are awaited inside the deferred task
+ok 64 - status side effects run in order and are awaited inside the deferred task
+  ---
+  duration_ms: 40.943002
+  type: 'test'
+  ...
+# Subtest: NotifyEVChargingNeeds maps DC SoC into the compact vehicle and measurement tree
+ok 65 - NotifyEVChargingNeeds maps DC SoC into the compact vehicle and measurement tree
+  ---
+  duration_ms: 2.115326
+  type: 'test'
+  ...
+# (node:14) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: EOS cap never exceeds requested W; zero is a real limit; DC values not raised
+ok 66 - EOS cap never exceeds requested W; zero is a real limit; DC values not raised
+  ---
+  duration_ms: 3.83926
+  type: 'test'
+  ...
+# Subtest: declared two-connector station never treats a partial measurement as total
+ok 67 - declared two-connector station never treats a partial measurement as total
+  ---
+  duration_ms: 2.468266
+  type: 'test'
+  ...
+# Subtest: EVSE zero is station total; alternative connectors on one EVSE are not added
+ok 68 - EVSE zero is station total; alternative connectors on one EVSE are not added
+  ---
+  duration_ms: 0.473046
+  type: 'test'
+  ...
+# Subtest: per-outlet transaction stop does not stop another charging transaction
+ok 69 - per-outlet transaction stop does not stop another charging transaction
+  ---
+  duration_ms: 0.597644
+  type: 'test'
+  ...
+# Subtest: old and repeated source timestamps do not renew samples
+ok 70 - old and repeated source timestamps do not renew samples
+  ---
+  duration_ms: 0.497653
+  type: 'test'
+  ...
+# Subtest: vehicle SOC not assigned to wrong vehicle and clears on Available
+ok 71 - vehicle SOC not assigned to wrong vehicle and clears on Available
+  ---
+  duration_ms: 0.558485
+  type: 'test'
+  ...
+# Subtest: unknown EVSE invalidates commissioned topology, even with a station meter
+ok 72 - unknown EVSE invalidates commissioned topology, even with a station meter
+  ---
+  duration_ms: 0.218592
+  type: 'test'
+  ...
+# Subtest: SoC does not leak between different EVSEs
+ok 73 - SoC does not leak between different EVSEs
+  ---
+  duration_ms: 0.1588
+  type: 'test'
+  ...
+# Subtest: real MeterValues handler normalizes kW and multiplier and rejects old samples
+ok 74 - real MeterValues handler normalizes kW and multiplier and rejects old samples
+  ---
+  duration_ms: 6.930152
+  type: 'test'
+  ...
+# (node:16) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: hosted config preserves native defaults and rejects unsafe or unsupported migration settings
+ok 75 - hosted config preserves native defaults and rejects unsafe or unsupported migration settings
+  ---
+  duration_ms: 4.263942
+  type: 'test'
+  ...
+# Subtest: actual hosted ocpp1.6 station keeps W profile, atomic feedback and separate child-alive contract
+ok 76 - actual hosted ocpp1.6 station keeps W profile, atomic feedback and separate child-alive contract
+  ---
+  duration_ms: 150.882746
+  type: 'test'
+  ...
+# Subtest: actual hosted ocpp2.0.1 station keeps W profile, atomic feedback and separate child-alive contract
+ok 77 - actual hosted ocpp2.0.1 station keeps W profile, atomic feedback and separate child-alive contract
+  ---
+  duration_ms: 71.239837
+  type: 'test'
+  ...
+# Subtest: actual hosted ocpp2.1 station keeps W profile, atomic feedback and separate child-alive contract
+ok 78 - actual hosted ocpp2.1 station keeps W profile, atomic feedback and separate child-alive contract
+  ---
+  duration_ms: 61.741255
+  type: 'test'
+  ...
+# Subtest: legacy namespace retains native station IDs and needs no separate adapter instance
+ok 79 - legacy namespace retains native station IDs and needs no separate adapter instance
+  ---
+  duration_ms: 52.387435
+  type: 'test'
+  ...
+# Subtest: hosted EOS lease expires independently and actual station confirms zero without automatic resume
+ok 80 - hosted EOS lease expires independently and actual station confirms zero without automatic resume
+  ---
+  duration_ms: 2026.038573
+  type: 'test'
+  ...
+# Subtest: listener bind failure rejects module startup without crashing or affecting another listener
+ok 81 - listener bind failure rejects module startup without crashing or affecting another listener
+  ---
+  duration_ms: 34.178735
+  type: 'test'
+  ...
+# Subtest: unavailable authority never starts a socket and revocation closes an existing station
+ok 82 - unavailable authority never starts a socket and revocation closes an existing station
+  ---
+  duration_ms: 118.517999
+  type: 'test'
+  ...
+# Subtest: immediate revoke and regrant cannot replay a positive command waiting for a configuration read
+ok 83 - immediate revoke and regrant cannot replay a positive command waiting for a configuration read
+  ---
+  duration_ms: 28.233968
+  type: 'test'
+  ...
+# Subtest: hosted status never labels an inactive open idle station as fresh
+ok 84 - hosted status never labels an inactive open idle station as fresh
+  ---
+  duration_ms: 36.827718
+  type: 'test'
+  ...
+# Subtest: dashboard health follows proven OCPP sessions, preserves identity privately and clears after a confirmed reconnect
+ok 85 - dashboard health follows proven OCPP sessions, preserves identity privately and clears after a confirmed reconnect
+  ---
+  duration_ms: 73.703387
+  type: 'test'
+  ...
+# Subtest: dashboard reports the offline count and at most twelve synthetic station names
+ok 86 - dashboard reports the offline count and at most twelve synthetic station names
+  ---
+  duration_ms: 249.223419
+  type: 'test'
+  ...
+# Subtest: known stations survive worker replacement with the same native states; inactive admission entries and a bare socket are never promoted
+ok 87 - known stations survive worker replacement with the same native states; inactive admission entries and a bare socket are never promoted
+  ---
+  duration_ms: 165.594053
+  type: 'test'
+  ...
+# Subtest: legacy ocpp21 namespace restores acknowledged Boot evidence and prior physical disconnect, rejects defaults, bad quality and handshakes
+ok 88 - legacy ocpp21 namespace restores acknowledged Boot evidence and prior physical disconnect, rejects defaults, bad quality and handshakes
+  ---
+  duration_ms: 18.197506
+  type: 'test'
+  ...
+# Subtest: an unavailable historical inventory does not prevent the port from accepting stations and cannot declare all devices healthy
+ok 89 - an unavailable historical inventory does not prevent the port from accepting stations and cannot declare all devices healthy
+  ---
+  duration_ms: 2.872809
+  type: 'test'
+  ...
+# Subtest: deferred history does not delay the WebSocket listener and is neutral until loaded
+ok 90 - deferred history does not delay the WebSocket listener and is neutral until loaded
+  ---
+  duration_ms: 60.524491
+  type: 'test'
+  ...
+1..90
+# tests 90
+# suites 0
+# pass 90
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3666.740749

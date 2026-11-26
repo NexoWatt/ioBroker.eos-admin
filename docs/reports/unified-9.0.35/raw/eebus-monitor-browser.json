@@ -1,0 +1,1 @@
+{"passed":true,"scope":"Actual EEBus admin DOM + mock protected HTTP module API, real partner health tested separately via local SHIP.","checks":["discovery cannot activate","local name saved without transport command","explicit disconnect pauses monitoring","pause survives reload","offline roster can be removed"],"browser":"HeadlessChrome/158.0.8127.0"}

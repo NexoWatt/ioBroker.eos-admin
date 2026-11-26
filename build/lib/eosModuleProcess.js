@@ -5,6 +5,7 @@ const { join } = require('node:path');
 const { Readable } = require('node:stream');
 const { performance } = require('node:perf_hooks');
 const { randomUUID } = require('node:crypto');
+const { normalizedDeviceHealth } = require('./eosDashboardProcessStatus');
 const { channel, ADAPTER_METHODS, error, errorCode, isRecord, sanitizeLog, validate } = require('./eosModuleProcessProtocol');
 /** @typedef {import('./eosModuleProcessTypes').RecordValue} RecordValue */
 /** One runtime per OS process. No adapter-core or owner object crosses this boundary. */
@@ -27,11 +28,19 @@ class EosModuleProcess {
         this.state = 'stopped';
         this.lastHeartbeatAt = 0;
         this.lastHeartbeat = 0;
+        /** @type {import('./eosDashboardProcessStatus').InternalDeviceHealth | null} */
+        this.deviceHealth = null;
+        this.deviceHealthAt = 0;
         /** @type {Promise<{code:number|null,signal:NodeJS.Signals|null}>|null} */
         this.exitPromise = null;
         this.leaseSequence = 0;
         this.logWindow = 0;
         this.logCount = 0;
+    }
+    getDeviceHealth() {
+        const age = Date.now() - this.deviceHealthAt;
+        return this.state === 'running' && this.deviceHealth && age >= 0 && age <= 6000
+            ? { ...this.deviceHealth, observedAt: this.deviceHealthAt } : null;
     }
     health() {
         return { mode: 'process', state: this.state, pid: this.child?.pid || null,
@@ -132,6 +141,14 @@ class EosModuleProcess {
             if (message.type === 'heartbeat') {
                 this.lastHeartbeat = performance.now();
                 this.lastHeartbeatAt = Date.now();
+                if (this.options.id === 'devices' || this.options.id === 'eebus' || this.options.id === 'ocpp') {
+                    if (Object.prototype.hasOwnProperty.call(message, 'deviceHealth')) {
+                        this.deviceHealth = normalizedDeviceHealth(message.deviceHealth);
+                        this.deviceHealthAt = this.lastHeartbeatAt;
+                    }
+                    else if (message.deviceHealthConfirmed === true && this.deviceHealth)
+                        this.deviceHealthAt = this.lastHeartbeatAt;
+                }
             }
             else if (message.type === 'failure')
                 this.fail(errorCode({ code: message.code }));

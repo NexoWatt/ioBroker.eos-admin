@@ -2,6 +2,7 @@
 
 | Thema | Einstieg |
 | --- | --- |
+| Systemstatus, Prozess- und Geräteüberwachung, Benachrichtigungen | [Anleitung für 9.0.35](start/START_HIER_9.0.35.md) · [Prüfbericht](reports/unified-9.0.35/PRUEFBERICHT.md) |
 | Installation, Git/npm und Einrichtung der OVUM MIRA | [Anleitung für 9.0.34](start/START_HIER_9.0.34.md) |
 | Ergebnisse und offene Prüfungen | [Prüfbericht für 9.0.34](reports/unified-9.0.34/PRUEFBERICHT.md) |
 | iPhone-Symbol auf dem Home-Bildschirm | [Anleitung für 9.0.31](start/START_HIER_9.0.31.md) |

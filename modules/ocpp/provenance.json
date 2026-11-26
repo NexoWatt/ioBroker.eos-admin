@@ -1,6 +1,6 @@
 {
   "component": "NexoWatt EOS embedded OCPP",
-  "integrationVersion": "9.0.24",
+  "integrationVersion": "9.0.35",
   "moduleVersion": "0.4.4",
   "name": "iobroker.ocpp21",
   "version": "0.4.3",
@@ -19,7 +19,8 @@
     "StrictTypeScript hosted lifecycle/configuration/dispatch boundary under MIT",
     "Independent OCPP worker heartbeat and per-station EOS lease preserved",
     "Bounded network admission/frames, authorization and generation fences, scoped aliases",
-    "Native configurations, units and station controls preserved; hosted namespaces plus legacy handover"
+    "Native configurations, units and station controls preserved; hosted namespaces plus legacy handover",
+    "Read-only dashboard view of confirmed station sessions with bounded output, pseudonymous keys and restoration of confirmed stations from native state history"
   ],
   "excludedUpstreamFiles": [
     "node_modules",

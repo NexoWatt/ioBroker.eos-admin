@@ -339,3 +339,20 @@ test('EEBUS-SHIP-014: concurrent requests for the same peer cannot bypass the co
     assert.equal(server.observed.length, 1, 'one connecting socket per peer, despite awaited diagnostics');
 });
 
+
+test('opted-in partner health follows a real local TLS/SHIP session; discovery and pairing alone do not create a dashboard alarm', async t=>{
+    const {PartnerMonitor}=require('../build/lib/partnerMonitor');
+    const f=await fixture(t);
+    const m=new PartnerMonitor(f.adapter,id=>f.endpoint.hasAuthorizedExchange(id));
+    await m.load(); f.trust();
+    f.states.set('devices.'+peer.ski+'.pairing.trusted',{val:true,ack:true});
+    const client=await f.connect();
+    assert.equal(m.report().tracked.length,0);
+    await assert.rejects(m.configure(peer.ski,'WP West',true),/PAIRED_SESSION/);
+    await handshake(f,client); assert.equal(m.report().tracked.length,0);
+    await m.configure(peer.ski,'WP West',true);
+    assert.equal(m.report().tracked[0].state,'online');
+    client.close(); await until(()=>m.report().state==='fault','confirmed partner goes offline on socket close');
+    assert.deepEqual(m.report().offline,[{name:'WP West'}]);
+    assert.equal(f.delivered.length,0,'enabling supervision issues no SPINE actuation');
+});

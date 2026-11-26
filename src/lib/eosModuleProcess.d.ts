@@ -1,3 +1,4 @@
+import type { InternalDeviceHealth } from './eosDashboardProcessStatus';
 import type { Readable } from 'node:stream';
 
 export interface ModuleProcessHealth {
@@ -59,6 +60,7 @@ export interface ModuleProcessOptions {
 export class EosModuleProcess {
     constructor(options: ModuleProcessOptions);
     health(): ModuleProcessHealth;
+    getDeviceHealth(): (InternalDeviceHealth & { observedAt: number }) | null;
     revoke(): void;
     start(): Promise<void>;
     stop(): Promise<void>;

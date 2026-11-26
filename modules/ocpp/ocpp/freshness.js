@@ -42,6 +42,11 @@ function activityTimeoutMs(intervalSec, heartbeatFactor = 2.5, minimumSec = 90) 
  * disconnect. Any OCPP request/response can keep activityFresh true without
  * falsifying heartbeatAlive.
  */
+// Timestamps below are set by accepted OCPP activity. A WebSocket handshake alone has none.
+function hasConfirmedSessionActivity(entry) {
+  return Boolean(entry && (entry.lastBootAt > 0 || entry.lastHeartbeatAt > 0 || entry.lastStatusAt > 0 || entry.lastMeterAt > 0));
+}
+
 function deriveConnectionHealth(options = {}) {
   const now = Number.isFinite(Number(options.now)) ? Number(options.now) : Date.now();
   const socketConnected = options.socketConnected === true;
@@ -253,6 +258,7 @@ module.exports = {
   heartbeatTimeoutMs,
   activityTimeoutMs,
   deriveConnectionHealth,
+  hasConfirmedSessionActivity,
   commandTimeoutMs,
   isTriggerAccepted,
   isTriggerUnsupported,

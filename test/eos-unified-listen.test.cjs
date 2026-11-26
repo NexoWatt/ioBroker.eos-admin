@@ -883,5 +883,25 @@ for (const readTimeout of [false, true]) test(`parent login remains usable with 
         await h.owner.eosRuntimeControl.whenIdle();
         assert.ok(h.runtime.status().process.pid > 0, JSON.stringify({ state: h.runtime.status(), controls: h.owner.eosRuntimeControl.view('ui'), logs: h.logs }));
         assert.equal(h.runtime.status().ems.process.pid, null, 'enabling presentation does not enable a previously paused EMS');
+        const path = '/api/eos/dashboard/process-status';
+        const before = await h.browser(path);
+        assert.equal(before.status, 200, before.text);
+        assert.ok(before.json.paused.includes('ems'));
+        assert.ok(!before.json.failed.includes('ui') && !before.json.failed.includes('ems'));
+        const childPid = h.runtime.status().ui.process.pid;
+        assert.ok(Number.isInteger(childPid) && childPid > 1 && childPid !== process.pid);
+        process.kill(childPid, 'SIGKILL');
+        const deadline = Date.now() + 6000;
+        let after;
+        do {
+            await new Promise(resolve => setTimeout(resolve, 20));
+            after = await h.browser(path);
+        } while (!after.json?.failed?.includes('ui') && Date.now() < deadline);
+        assert.equal(after.status, 200, after.text);
+        assert.equal(after.json.state, 'fault');
+        assert.ok(after.json.failed.includes('ui'), after.text);
+        assert.ok(after.json.paused.includes('ems') && !after.json.failed.includes('ems'), after.text);
+        assert.doesNotMatch(after.text, /lastError|generation|pid|csrfToken|stack/i);
+
     }
 });

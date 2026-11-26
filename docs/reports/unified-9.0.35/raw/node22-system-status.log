@@ -1,0 +1,213 @@
+(node:199) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:212) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: parent redacts telemetry, rejects bad reports and never turns a lost owner into physical failures/recoveries
+ok 1 - parent redacts telemetry, rejects bad reports and never turns a lost owner into physical failures/recoveries
+  ---
+  duration_ms: 6.893263
+  type: 'test'
+  ...
+# Subtest: aggregates active owners without name-based deduplication, caps names and ignores vehicles/optional unavailable modules
+ok 2 - aggregates active owners without name-based deduplication, caps names and ignores vehicles/optional unavailable modules
+  ---
+  duration_ms: 0.767744
+  type: 'test'
+  ...
+# Subtest: before a device’s first packet, wait for the configured interval; transport failure and data return are independent of actuator state
+ok 3 - before a device’s first packet, wait for the configured interval; transport failure and data return are independent of actuator state
+  ---
+  duration_ms: 18.734787
+  type: 'test'
+  ...
+# Subtest: real Devices worker reports HTTP meter offline then online, skips a disabled transport and drops evidence on stop
+ok 4 - real Devices worker reports HTTP meter offline then online, skips a disabled transport and drops evidence on stop
+  ---
+  duration_ms: 4449.483336
+  type: 'test'
+  ...
+# (node:213) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: only an initialized visible LIVE dashboard polls, once per ten seconds across tabs/pageshow, on the same authenticated origin and proxy prefix
+ok 5 - only an initialized visible LIVE dashboard polls, once per ten seconds across tabs/pageshow, on the same authenticated origin and proxy prefix
+  ---
+  duration_ms: 8.232999
+  type: 'test'
+  ...
+# Subtest: pagehide, hidden tab and timeout abort requests and discard late headers or bodies, also after BFCache resume
+ok 6 - pagehide, hidden tab and timeout abort requests and discard late headers or bodies, also after BFCache resume
+  ---
+  duration_ms: 3.312239
+  type: 'test'
+  ...
+# Subtest: original observation age bounds health across repeated samples, bad replies and server/client clock differences
+ok 7 - original observation age bounds health across repeated samples, bad replies and server/client clock differences
+  ---
+  duration_ms: 2.352378
+  type: 'test'
+  ...
+# Subtest: malformed device details do not discard a process fault; unchanged, invalid, reversed and unauthorized observations cannot falsely clear it
+ok 8 - malformed device details do not discard a process fault; unchanged, invalid, reversed and unauthorized observations cannot falsely clear it
+  ---
+  duration_ms: 2.616902
+  type: 'test'
+  ...
+# (node:214) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: uses only live supervisor evidence and returns the six approved process IDs in stable order
+ok 9 - uses only live supervisor evidence and returns the six approved process IDs in stable order
+  ---
+  duration_ms: 3.122368
+  type: 'test'
+  ...
+# Subtest: manual pauses, optional disabled modules and unavailable optional licenses are distinct from faults
+ok 10 - manual pauses, optional disabled modules and unavailable optional licenses are distinct from faults
+  ---
+  duration_ms: 2.361136
+  type: 'test'
+  ...
+# Subtest: configured processes with expired heartbeats identify individual failures at the supervisor limits
+ok 11 - configured processes with expired heartbeats identify individual failures at the supervisor limits
+  ---
+  duration_ms: 0.288613
+  type: 'test'
+  ...
+# Subtest: a missing, impossible or provisional observation never marks all subsystems operational
+ok 12 - a missing, impossible or provisional observation never marks all subsystems operational
+  ---
+  duration_ms: 1.001706
+  type: 'test'
+  ...
+# Subtest: reads operational EMS readiness from its own worker and treats the initial shell separately
+ok 13 - reads operational EMS readiness from its own worker and treats the initial shell separately
+  ---
+  duration_ms: 0.433543
+  type: 'test'
+  ...
+# Subtest: confirmed configuration, ownership and authority failures remain visible before a PID exists
+ok 14 - confirmed configuration, ownership and authority failures remain visible before a PID exists
+  ---
+  duration_ms: 0.242399
+  type: 'test'
+  ...
+# (node:220) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: only current, confirmed engine and NVP data establish a normal status
+ok 15 - only current, confirmed engine and NVP data establish a normal status
+  ---
+  duration_ms: 4.053609
+  type: 'test'
+  ...
+# Subtest: legacy grid measurements can inform the grid row but cannot clear an EMS status
+ok 16 - legacy grid measurements can inform the grid row but cannot clear an EMS status
+  ---
+  duration_ms: 0.515018
+  type: 'test'
+  ...
+# Subtest: an offline or connecting dashboard cannot be marked healthy by old engine and charging data
+ok 17 - an offline or connecting dashboard cannot be marked healthy by old engine and charging data
+  ---
+  duration_ms: 0.272718
+  type: 'test'
+  ...
+# Subtest: emergency and stopped EMS take precedence over charging messages; localized point faults remain visible
+ok 18 - emergency and stopped EMS take precedence over charging messages; localized point faults remain visible
+  ---
+  duration_ms: 0.386621
+  type: 'test'
+  ...
+# Subtest: fresh supervisor fault identifies specific internal processes even when the SSE stream has stopped
+ok 19 - fresh supervisor fault identifies specific internal processes even when the SSE stream has stopped
+  ---
+  duration_ms: 1.70423
+  type: 'test'
+  ...
+# Subtest: an unverified, expired or inconsistent supervisor cannot clear the dashboard or hide a concrete alert
+ok 20 - an unverified, expired or inconsistent supervisor cannot clear the dashboard or hide a concrete alert
+  ---
+  duration_ms: 0.650428
+  type: 'test'
+  ...
+# Subtest: intentionally paused modules are distinguished from outages and allow other active faults to surface
+ok 21 - intentionally paused modules are distinguished from outages and allow other active faults to surface
+  ---
+  duration_ms: 0.414243
+  type: 'test'
+  ...
+# (node:226) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:226) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# Subtest: parent sends distinct device and process incidents from a preserved namespace, survives restart and only reports confirmed recovery
+ok 22 - parent sends distinct device and process incidents from a preserved namespace, survives restart and only reports confirmed recovery
+  ---
+  duration_ms: 68.791787
+  type: 'test'
+  ...
+# Subtest: system and communications switches independently control mail and a planned stop clears an old incident silently
+ok 23 - system and communications switches independently control mail and a planned stop clears an old incident silently
+  ---
+  duration_ms: 59.591634
+  type: 'test'
+  ...
+# Subtest: 256 active devices and a new EMS process failure all retain their delivery records
+ok 24 - 256 active devices and a new EMS process failure all retain their delivery records
+  ---
+  duration_ms: 67.36958
+  type: 'test'
+  ...
+# Subtest: an interrupted five-minute recovery window restarts with a fresh physical observation
+ok 25 - an interrupted five-minute recovery window restarts with a fresh physical observation
+  ---
+  duration_ms: 32.867805
+  type: 'test'
+  ...
+# Subtest: an already reported legacy inverter and its monitored native device share delivery history across namespaces
+ok 26 - an already reported legacy inverter and its monitored native device share delivery history across namespaces
+  ---
+  duration_ms: 45.027778
+  type: 'test'
+  ...
+# Subtest: a changed recipient or withdrawn communications consent discards a stale EMS collection before committing the ledger
+ok 27 - a changed recipient or withdrawn communications consent discards a stale EMS collection before committing the ledger
+  ---
+  duration_ms: 21.744189
+  type: 'test'
+  ...
+# Subtest: rolling back a migrated UI namespace relinquishes its ledger and cannot send from its settings
+ok 28 - rolling back a migrated UI namespace relinquishes its ledger and cannot send from its settings
+  ---
+  duration_ms: 11.2083
+  type: 'test'
+  ...
+# Subtest: a rollback during SMTP preserves the ledger written by the restored standalone owner
+ok 29 - a rollback during SMTP preserves the ledger written by the restored standalone owner
+  ---
+  duration_ms: 7.986807
+  type: 'test'
+  ...
+# Subtest: an independent process cannot block the local sender or bypass the shared SMTP test quota
+ok 30 - an independent process cannot block the local sender or bypass the shared SMTP test quota
+  ---
+  duration_ms: 104.33734
+  type: 'test'
+  ...
+# (node:227) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:227) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# [1.0.7 notifications] OK: immediate/30min/daily, escalation, durable dedup, recovery, categories, real loopback SMTP, rejection/backoff, encryption, TLS options, module/AC/DC fault monitoring.
+# Subtest: ui/scripts/verify-stable-1.0.7-notifications.cjs
+ok 6 - ui/scripts/verify-stable-1.0.7-notifications.cjs
+  ---
+  duration_ms: 279.526618
+  type: 'test'
+  ...
+1..31
+# tests 31
+# suites 0
+# pass 31
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4598.065753

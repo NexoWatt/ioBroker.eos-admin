@@ -118,7 +118,8 @@
 
   interface ChargingStatusPresenter {
     build(values: Record<string, unknown>): ChargingStatusModel;
-    render(getter: StateGetter, evcsAvailable: boolean): ChargingStatusModel | null;
+    read(getter: StateGetter): ChargingStatusModel;
+    render(getter: StateGetter, evcsAvailable: boolean): ChargingStatusModel;
   }
 
   type NexoWattDashboardWindow = Window & typeof globalThis & {
@@ -536,17 +537,16 @@
     return { items, total: items.length, chargingCount, errorCount, warningCount, waitingCount, globalSafety, paraFallbackActive, summary, systemText, overallLevel };
   }
 
-  function render(getter: StateGetter, evcsAvailable: boolean): ChargingStatusModel | null {
+  function render(getter: StateGetter, evcsAvailable: boolean): ChargingStatusModel {
     const block = document.getElementById('sideEvcsStatusBlock');
     const list = document.getElementById('sideEvcsStatusList');
     const summaryElement = document.getElementById('sideEvcsStatusSummary');
     const detailsLink = document.getElementById('sideEvcsStatusDetails') as HTMLAnchorElement | null;
-    const panel = document.querySelector<HTMLElement>('.nw-panel-status');
-    if (!block || !list || !summaryElement) return null;
     const model = evcsAvailable ? build(getter) : {
       items: [], total: 0, chargingCount: 0, errorCount: 0, warningCount: 0, waitingCount: 0,
       globalSafety: false, paraFallbackActive: false, summary: '', systemText: '', overallLevel: 'ok' as const,
     };
+    if (!block || !list || !summaryElement) return model;
     block.classList.toggle('hidden', !evcsAvailable || model.items.length === 0);
     const detailsAvailable = evcsAvailable && model.items.length > 1;
     if (detailsLink) {
@@ -586,17 +586,12 @@
     } else {
       summaryElement.textContent = text('noPoints');
     }
-    panel?.classList.toggle('is-error', model.overallLevel === 'error');
-    panel?.classList.toggle('is-warn', model.overallLevel === 'warn');
-    if (evcsAvailable && model.items.length > 0 && model.systemText) {
-      const statusText = document.getElementById('sideStatusText');
-      if (statusText) statusText.textContent = model.systemText;
-    }
     return model;
   }
 
   dashboardWindow.NexoWattLpStatusPresenter = Object.freeze({
     build: (values: Record<string, unknown>) => build((key) => values[key]),
+    read: build,
     render,
   });
 })();

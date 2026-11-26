@@ -1,6 +1,6 @@
 {
   "name": "nexowatt-eos-ui-internal",
-  "version": "9.0.34",
+  "version": "9.0.35",
   "description": "Internal UI and EMS module hosted by iobroker.eos-admin; not an ioBroker adapter entry point.",
   "author": "NexoWatt",
   "license": "UNLICENSED",
@@ -1129,6 +1129,7 @@
     "www/tariff-display.js",
     "lib/tariff-price.js",
     "www/live-display.js",
+    "www/dashboard-process-status.js",
     "www/storagefarm-dispatch.js",
     "lib/influx-direct.js",
     "lib/influx-config.js",

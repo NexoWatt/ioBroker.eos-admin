@@ -102,6 +102,14 @@ test('anonymous kiosk can read dashboard indefinitely but never obtains settings
     assert.equal(idle.kiosk, true);
     assert.equal(idle.idleTimeoutMs, 0);
     assert.equal((await x.request('/api/state', null, { headers })).response.status, 200);
+    const customerHealth = await x.request('/api/eos/dashboard/process-status', null, { headers });
+    assert.equal(customerHealth.response.status, 200, customerHealth.text);
+    assert.equal(customerHealth.response.headers.get('cache-control'), 'no-store');
+    assert.ok(Number.isSafeInteger(customerHealth.json.observedAt));
+    assert.doesNotMatch(customerHealth.text, /lastError|Heartbeat|pid|generation|csrf|command|PRIVATE/i);
+    assert.notEqual((await x.request('/api/eos/runtime', null, { headers })).response.status, 200);
+    assert.notEqual((await x.request('/api/eos/dashboard/process-status', null, { method:'POST', headers })).response.status, 200);
+
     const configuration = await x.request('/config', null, { headers });
     assert.equal(configuration.response.status, 200);
     for (const secret of ['PRIVATE_DP_GRID', 'PRIVATE_WEATHER_KEY', 'PRIVATE_EMAIL_ADDRESS', 'PRIVATE_DP_CHARGER', 'PRIVATE_INSTALLER_SECRET']) {

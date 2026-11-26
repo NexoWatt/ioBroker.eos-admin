@@ -2867,6 +2867,11 @@ async readDatapoints(datapoints) {
   this._busy = true;
   this._busySince = Date.now();
 
+  // A MIRA session loss affects every register. Only a device response can
+  // identify an unsupported register for the optional-group cooldown.
+  const mustAbortPoll = error => isReadOperationBoundaryError(error) ||
+    (this.abortPollOnTransportLoss === true && isTransportError(error));
+
   const out = {};
 
   // Keep numeric raw values separate so we can apply dynamic scale factors after all reads.
@@ -2938,7 +2943,7 @@ async readDatapoints(datapoints) {
   };
 
   const handleGroupReadError = async (fc, g, e, unitId) => {
-    if (isReadOperationBoundaryError(e)) throw e;
+    if (mustAbortPoll(e)) throw e;
     const isRequired = groupHasRequiredDp(g);
 
     if (isTransportError(e)) {
@@ -3077,7 +3082,7 @@ async readDatapoints(datapoints) {
           success += 1;
         }
       } catch (e) {
-        if (isReadOperationBoundaryError(e)) throw e;
+        if (mustAbortPoll(e)) throw e;
         lastErr = e;
         if (groupHasRequiredDp(ig)) {
           requiredFailure = e;
@@ -3109,7 +3114,7 @@ async readDatapoints(datapoints) {
       return s && s.sunspecModel !== undefined && s.sunspecModel !== null;
     });
     if (needsSunSpec) {
-      try { await this._maybeScanSunSpecModels(); } catch (error) { if (isReadOperationBoundaryError(error)) throw error; }
+      try { await this._maybeScanSunSpecModels(); } catch (error) { if (mustAbortPoll(error)) throw error; }
     }
 
     const readItems = (datapoints || []).map(dp => {
@@ -3209,7 +3214,7 @@ async readDatapoints(datapoints) {
         try {
           regs = await readRegisterGroupRaw(fc, g.start, len, unitId);
         } catch (e) {
-          if (isReadOperationBoundaryError(e)) throw e;
+          if (mustAbortPoll(e)) throw e;
           let fallbackReadOk = false;
           if (isModbusIllegalAddressOrValue(e)) {
             for (const off of groupFallbackOffsets(g)) {
@@ -3221,7 +3226,7 @@ async readDatapoints(datapoints) {
                 this._cacheAlfenReadVariantForGroup(g, unitId, off);
                 break;
               } catch (fallbackError) {
-                if (isReadOperationBoundaryError(fallbackError)) throw fallbackError;
+                if (mustAbortPoll(fallbackError)) throw fallbackError;
                 // Try the next explicitly configured fallback offset, if any.
               }
             }
@@ -4466,4 +4471,4 @@ async readDatapoints(datapoints) {
   }
 }
 
-module.exports = { ModbusDriver };
+module.exports = { ModbusDriver, isTransportError };

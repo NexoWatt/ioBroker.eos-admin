@@ -1,0 +1,29 @@
+{
+  "browser": "HeadlessChrome/158.0.8127.0",
+  "comparison": "9.0.33 from delivered ZIP; healthy simulated state, 60 deliberately repeated complete snapshots at ~47 ms, then stopped, then disconnected",
+  "baseline": {
+    "frames": [
+      "Alle Systeme normal",
+      "Verbindung hergestellt · Betriebsstatus wird geprüft",
+      "Alle Systeme normal",
+      "Verbindung hergestellt · Betriebsstatus wird geprüft",
+      "Alle Systeme normal"
+    ],
+    "mutationCounts": {
+      "Verbindung hergestellt · Betriebsstatus wird geprüft": 120,
+      "EMS aktiv · NVP-Messung aktuell": 60,
+      "Alle Systeme normal": 60
+    },
+    "summary": "Alle Systeme normal",
+    "ems": "Aktiv"
+  },
+  "stopped": {
+    "summary": "Alle Systeme normal",
+    "ems": "Gestoppt"
+  },
+  "offline": {
+    "summary": "Alle Systeme normal",
+    "ems": "Verbindung unterbrochen",
+    "connection": "Offline"
+  }
+}

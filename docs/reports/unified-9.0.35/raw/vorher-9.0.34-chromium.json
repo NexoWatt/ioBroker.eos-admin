@@ -1,0 +1,291 @@
+{
+  "ok": true,
+  "legacy": true,
+  "browser": "HeadlessChrome/158.0.8127.0",
+  "appSha256": "ce49c3e1c5f184a1d72dcbe1fd31f54b96a07e98625ab8e7e8df4eadbb0c88e2",
+  "scope": "Shipped dashboard, simulated HTTP/SSE backend and physical telemetry, real browser frames and DOM mutations.",
+  "results": [
+    {
+      "language": "de",
+      "steadyPollCount": 0,
+      "cases": {
+        "startup": {
+          "status": "Alle Systeme normal",
+          "panel": "card nw-panel nw-panel-status",
+          "ems": "Aktiv",
+          "grid": "Stabil",
+          "lp": "Ladepunkte bereit"
+        },
+        "stable": {
+          "status": "Alle Systeme normal",
+          "panel": "card nw-panel nw-panel-status",
+          "ems": "Aktiv",
+          "grid": "Messung aktuell",
+          "lp": "Ladepunkte bereit"
+        },
+        "disconnect": {
+          "status": "Alle Systeme normal",
+          "panel": "card nw-panel nw-panel-status",
+          "ems": "Verbindung unterbrochen",
+          "grid": "Messstatus unbekannt",
+          "lp": "Ladepunkte bereit"
+        },
+        "reconnectedWithoutSnapshot": {
+          "status": "Alle Systeme normal",
+          "panel": "card nw-panel nw-panel-status",
+          "ems": "Verbindung unterbrochen",
+          "grid": "Messstatus unbekannt",
+          "lp": "Ladepunkte bereit"
+        },
+        "staleInit": {
+          "status": "Alle Systeme normal",
+          "panel": "card nw-panel nw-panel-status",
+          "ems": "Status unbekannt",
+          "grid": "Messstatus unbekannt",
+          "lp": "Ladepunkte bereit"
+        },
+        "incomplete": {
+          "status": "Alle Systeme normal",
+          "panel": "card nw-panel nw-panel-status",
+          "ems": "Status unbekannt",
+          "grid": "Messstatus unbekannt",
+          "lp": "Ladepunkte bereit"
+        },
+        "stopped": {
+          "status": "Alle Systeme normal",
+          "panel": "card nw-panel nw-panel-status",
+          "ems": "Gestoppt",
+          "grid": "Messung aktuell",
+          "lp": "Ladepunkte bereit"
+        },
+        "lpFault": {
+          "status": "1 Ladepunkt mit Fehler",
+          "panel": "card nw-panel nw-panel-status is-error",
+          "ems": "Aktiv",
+          "grid": "Messung aktuell",
+          "lp": "1 Ladepunkt mit Fehler"
+        },
+        "lpWarning": {
+          "status": "1 Ladepunkt begrenzt oder wartend",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "Aktiv",
+          "grid": "Messung aktuell",
+          "lp": "1 Ladepunkt begrenzt oder wartend"
+        },
+        "recovery": {
+          "status": "Alle Systeme normal",
+          "panel": "card nw-panel nw-panel-status",
+          "ems": "Aktiv",
+          "grid": "Messung aktuell",
+          "lp": "Ladepunkte bereit"
+        }
+      },
+      "writes": [
+        {
+          "phase": "healthy",
+          "text": "Verbindung hergestellt · Betriebsstatus wird geprüft",
+          "timeMs": 10614
+        },
+        {
+          "phase": "healthy",
+          "text": "EMS aktiv · NVP-Messung aktuell",
+          "timeMs": 10614
+        },
+        {
+          "phase": "healthy",
+          "text": "Alle Systeme normal",
+          "timeMs": 10614
+        },
+        {
+          "phase": "repeatInit",
+          "text": "Verbindung hergestellt · Betriebsstatus wird geprüft",
+          "timeMs": 12114
+        },
+        {
+          "phase": "repeatInit",
+          "text": "EMS aktiv · NVP-Messung aktuell",
+          "timeMs": 12116
+        },
+        {
+          "phase": "repeatInit",
+          "text": "Alle Systeme normal",
+          "timeMs": 12116
+        },
+        {
+          "phase": "repeatInit",
+          "text": "Verbindung hergestellt · Betriebsstatus wird geprüft",
+          "timeMs": 12295
+        },
+        {
+          "phase": "repeatInit",
+          "text": "EMS aktiv · NVP-Messung aktuell",
+          "timeMs": 12298
+        },
+        {
+          "phase": "repeatInit",
+          "text": "Alle Systeme normal",
+          "timeMs": 12298
+        },
+        {
+          "phase": "disconnect",
+          "text": "Verbindung unterbrochen",
+          "timeMs": 12491
+        },
+        {
+          "phase": "disconnect",
+          "text": "Alle Systeme normal",
+          "timeMs": 12501
+        },
+        {
+          "phase": "staleInit",
+          "text": "Verbindung hergestellt · Betriebsstatus wird geprüft",
+          "timeMs": 15735
+        },
+        {
+          "phase": "staleInit",
+          "text": "Betriebsstatus prüfen",
+          "timeMs": 15737
+        },
+        {
+          "phase": "staleInit",
+          "text": "Alle Systeme normal",
+          "timeMs": 15737
+        },
+        {
+          "phase": "incomplete",
+          "text": "Verbindung hergestellt · Betriebsstatus wird geprüft",
+          "timeMs": 16096
+        },
+        {
+          "phase": "incomplete",
+          "text": "Betriebsstatus prüfen",
+          "timeMs": 16099
+        },
+        {
+          "phase": "incomplete",
+          "text": "Alle Systeme normal",
+          "timeMs": 16099
+        },
+        {
+          "phase": "stopped",
+          "text": "Verbindung hergestellt · Betriebsstatus wird geprüft",
+          "timeMs": 16454
+        },
+        {
+          "phase": "stopped",
+          "text": "EMS gestoppt",
+          "timeMs": 16456
+        },
+        {
+          "phase": "stopped",
+          "text": "Alle Systeme normal",
+          "timeMs": 16456
+        },
+        {
+          "phase": "lpFault",
+          "text": "Verbindung hergestellt · Betriebsstatus wird geprüft",
+          "timeMs": 26455
+        },
+        {
+          "phase": "lpFault",
+          "text": "EMS aktiv · NVP-Messung aktuell",
+          "timeMs": 26455
+        },
+        {
+          "phase": "lpFault",
+          "text": "1 Ladepunkt mit Fehler",
+          "timeMs": 26455
+        },
+        {
+          "phase": "lpWarning",
+          "text": "Verbindung hergestellt · Betriebsstatus wird geprüft",
+          "timeMs": 26495
+        },
+        {
+          "phase": "lpWarning",
+          "text": "EMS aktiv · NVP-Messung aktuell",
+          "timeMs": 26497
+        },
+        {
+          "phase": "lpWarning",
+          "text": "1 Ladepunkt begrenzt oder wartend",
+          "timeMs": 26497
+        },
+        {
+          "phase": "recovery",
+          "text": "Verbindung hergestellt · Betriebsstatus wird geprüft",
+          "timeMs": 26518
+        },
+        {
+          "phase": "recovery",
+          "text": "EMS aktiv · NVP-Messung aktuell",
+          "timeMs": 26519
+        },
+        {
+          "phase": "recovery",
+          "text": "Alle Systeme normal",
+          "timeMs": 26519
+        }
+      ],
+      "paints": [
+        {
+          "phase": "healthy",
+          "text": "Alle Systeme normal",
+          "timeMs": 666
+        },
+        {
+          "phase": "repeatInit",
+          "text": "Alle Systeme normal",
+          "timeMs": 12125
+        },
+        {
+          "phase": "disconnect",
+          "text": "Verbindung unterbrochen",
+          "timeMs": 12492
+        },
+        {
+          "phase": "disconnect",
+          "text": "Alle Systeme normal",
+          "timeMs": 12516
+        },
+        {
+          "phase": "staleInit",
+          "text": "Alle Systeme normal",
+          "timeMs": 15740
+        },
+        {
+          "phase": "incomplete",
+          "text": "Alle Systeme normal",
+          "timeMs": 16107
+        },
+        {
+          "phase": "stopped",
+          "text": "Alle Systeme normal",
+          "timeMs": 16457
+        },
+        {
+          "phase": "lpFault",
+          "text": "Alle Systeme normal",
+          "timeMs": 16826
+        },
+        {
+          "phase": "lpFault",
+          "text": "1 Ladepunkt mit Fehler",
+          "timeMs": 26457
+        },
+        {
+          "phase": "lpWarning",
+          "text": "1 Ladepunkt begrenzt oder wartend",
+          "timeMs": 26503
+        },
+        {
+          "phase": "recovery",
+          "text": "Alle Systeme normal",
+          "timeMs": 26526
+        }
+      ],
+      "phase": "recovery"
+    }
+  ],
+  "processResults": []
+}

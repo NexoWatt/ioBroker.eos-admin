@@ -33,6 +33,7 @@ export interface ModuleRuntime {
     start(): unknown;
     stop(): unknown;
     getStatus(): unknown;
+    getDashboardDeviceHealth?(): unknown;
     command(name: unknown, payload: unknown): unknown;
     onStateChange?(id: unknown, state: unknown): unknown;
     onMessage?(message: unknown): unknown;

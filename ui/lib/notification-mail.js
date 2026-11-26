@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/lib/notification-mail.ts
- * Quell-Hash: sha256:9ea24b5fe45355a52e14f43f3e53ee49fc627cfdba59d1a6ef54ee9375a614b5
+ * Quell-Hash: sha256:289e8a310154f01dcdada49e2e11b9a9ddfb27b89c9240af64afcb2eece56795
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -35,10 +35,67 @@ const crypto = require('node:crypto');
 const { NotificationPolicy } = require('./notification-policy');
 const FROM = 'info@nexowatt.com';
 const ADDRESS = /^[^\s<>@,;\r\n]+@[^\s<>@,;\r\n]+\.[^\s<>@,;\r\n]+$/;
+const CATEGORY_FLAGS = {system:'notifySystem', inverters:'notifyInverters', charging:'notifyCharging', communications:'notifyCommunication', grid:'notifyHardCurtailment'};
 const validAddress = v => typeof v === 'string' && v.length <= 254 && ADDRESS.test(v);
 const safeId = v => String(v || '').toLowerCase().replace(/[^a-z0-9_]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 64);
 const MODULES = new Set(['coreLimits', 'peakShaving', 'chargingManagement', 'storage', 'storageControl', 'storageFarm', 'gridConstraints', 'para14a', 'netOperatorInterface', 'heatingRod', 'heatingRodControl', 'consumerManagement', 'speicherMapping', 'speicherRegelung', 'multiUse', 'thermalControl', 'meshMicrogrid', 'nvpCoordinator', 'bhkwControl', 'generatorControl', 'thresholdControl', 'nexoLogicBudget']);
 
+// Match native datapoint roots (including migrated namespaces) to the same hash used by
+// the worker's confirmed reachability. Never merge records on a human-readable name.
+function supervisedId(namespaces, refs) {
+  const found = new Set();
+  for (const value of refs) {
+    const ref = typeof value === 'string' ? value : value?.root;
+    if (typeof ref !== 'string') continue;
+    for (const kind of ['devices','ocpp']) {
+      if (!namespaces?.[kind]) continue;
+      const prefix = namespaces[kind] + (kind === 'devices' ? '.devices.' : '.');
+      if (!ref.startsWith(prefix)) continue;
+      const suffix = ref.slice(prefix.length);
+      let unit;
+      if (kind === 'devices') {
+        // Device IDs may contain periods. An explicit root is exact. Only a known
+        // producer channel can delimit a device in a telemetry datapoint reference.
+        unit = typeof value === 'object' ? suffix : /^(.*?)\.(?:aliases|info|measurement)\./.exec(suffix)?.[1];
+      } else if (typeof value === 'object' && value.raw && /^[A-Za-z0-9_-]+$/.test(suffix)) {
+        // Raw OCPP identities can be sanitized or suffixed differently in the object tree.
+        unit = value.raw;
+      }
+      if (!unit || unit.length > 256) continue;
+      found.add('supervisor:device:' + kind + ':' + crypto.createHash('sha256').update(unit).digest('hex'));
+    }
+  }
+  return found.size === 1 ? [...found][0] : '';
+}
+function wallboxRefs(row) {
+  return [{root:row._eosDevice?.baseId},row.onlineId,row.statusId,row.powerId];
+}
+async function ocppRootRef(row, namespace, reader) {
+  const prefix = namespace ? namespace + '.' : '';
+  if (!prefix || !reader) return null;
+  const root = [row.ocppDiscovery?.stationRoot,row.onlineId,row.statusId,row.powerId].find(value =>
+    typeof value === 'string' && value.startsWith(prefix));
+  if (!root) return null;
+  const unit = root.slice(prefix.length).split('.')[0];
+  if (!/^[A-Za-z0-9_-]+$/.test(unit)) return null;
+  const station = prefix + unit;
+  const identity = await reader(station + '.info.identity');
+  return typeof identity?.val === 'string' && identity.ack !== false && (!identity.q || identity.q === 0)
+    ? {root:station,raw:identity.val} : null;
+}
+function migrateIncident(records, oldId, newId) {
+  const previous = records.get(oldId);
+  if (!previous || oldId === newId) return;
+  const existing = records.get(newId);
+  if (existing) {
+    existing.lastSent = Math.max(existing.lastSent || 0, previous.lastSent || 0);
+    existing.alertSent ||= previous.alertSent;
+    existing.criticalSent ||= previous.criticalSent || Boolean(previous.active && previous.alertSent);
+  } else {
+    records.set(newId, {...previous, criticalSent:previous.criticalSent || Boolean(previous.active && previous.alertSent), suppressed:true, meta:{...previous.meta, id:newId}});
+  }
+  records.delete(oldId);
+}
 /**
  * Ablauf und Zusammenhang: Prüft Server, Port, Benutzer und Passwort vor dem Speichern. Ein leeres Passwortfeld übernimmt das bisherige Passwort; nur clearPassword löscht es ausdrücklich. Aktivierung ohne vollständige Zugangsdaten wird abgewiesen.
  */
@@ -98,17 +155,61 @@ class NotificationMail {
     const secret = system?.native?.secret;
     if (!secret || typeof secret !== 'string') throw new Error('Systemschlüssel für geschützten Mailversand fehlt.');
     this.key = crypto.createHash('sha256').update(`${secret}:nexowatt-mail:${this.adapter.namespace}`).digest();
-    try {
-      const stored = JSON.parse(await fs.readFile(path.join(this.directory, 'notification-mail.json'), 'utf8'));
+    await this.reloadSmtp();
+    await this.reloadLedger();
+  }
+  async reloadSmtp() {
+    let encrypted;
+    try { encrypted = await fs.readFile(path.join(this.directory, 'notification-mail.json'), 'utf8'); }
+    catch (error) { if (error.code !== 'ENOENT') throw error; encrypted = ''; }
+    if (encrypted === this.lastEncrypted) return;
+    this.transport?.close(); this.transport = null;
+    this.config = normalizeConfig();
+    this.lastEncrypted = undefined;
+    if (encrypted) {
+      const stored = JSON.parse(encrypted);
       const decipher = crypto.createDecipheriv('aes-256-gcm', this.key, Buffer.from(stored.iv, 'hex'));
       decipher.setAuthTag(Buffer.from(stored.tag, 'hex'));
       const plain = Buffer.concat([decipher.update(Buffer.from(stored.data, 'hex')), decipher.final()]);
       this.config = normalizeConfig(JSON.parse(plain.toString('utf8')));
-    } catch (error) {
-      if (error.code !== 'ENOENT') throw new Error('Gespeicherte SMTP-Konfiguration ist nicht lesbar. Systemschlüssel oder Sicherung prüfen.');
     }
-    try { this.policy = new NotificationPolicy(JSON.parse(await fs.readFile(path.join(this.directory, 'notification-ledger.json'), 'utf8'))); }
-    catch (error) { if (error.code !== 'ENOENT') this.policy.nextAttempt = this.now() + 3600000; }
+    this.lastEncrypted = encrypted;
+  }
+  async reloadLedger() {
+    let saved = '';
+    try { saved = await fs.readFile(path.join(this.directory, 'notification-ledger.json'), 'utf8'); }
+    catch (error) { if (error.code !== 'ENOENT') throw error; }
+    if (saved === this.loadedLedger && this.loadedLedger !== undefined) return;
+    try { this.policy = new NotificationPolicy(saved ? JSON.parse(saved) : {}); }
+    catch { this.policy = new NotificationPolicy(); this.policy.nextAttempt = this.now() + 3600000; }
+    this.loadedLedger = saved; this.lastSnapshot = saved;
+  }
+  // SQLite provides only the kernel-managed, crash-released process lock. All persisted delivery
+  // history stays in the existing JSON ledger. Zero busy timeout keeps both event loops responsive.
+  async withDeliveryLock(operation) {
+    const { DatabaseSync } = require('node:sqlite');
+    const db = new DatabaseSync(path.join(this.directory, 'notification-gate.sqlite'));
+    try {
+      db.exec('PRAGMA busy_timeout=0');
+      try { db.exec('BEGIN IMMEDIATE'); }
+      catch (error) { if (error.errcode === 5 || error.errcode === 6) return { ok: false, error: 'Ein Mailversand läuft bereits.' }; throw error; }
+      await this.reloadLedger();
+      await this.reloadSmtp();
+      if (this.closed) return { ok: false, error: 'Adapter wird beendet.' };
+      this.deliveryReports = new Map();
+      return await operation();
+    } finally {
+      db.close();
+      const reports = this.deliveryReports;
+      this.deliveryReports = null;
+      if (reports && this.options.authorized?.() !== false) await Promise.all([...reports].map(([key,value]) =>
+        Promise.resolve().then(() => this.adapter._notifySetDebugState(key,value)).catch(() => {})));
+    }
+  }
+  async report(key, value) {
+    if (this.options.authorized?.() === false) return;
+    if (this.deliveryReports) { this.deliveryReports.set(key,value); return; }
+    try { await this.adapter._notifySetDebugState(key,value); } catch { /* Diagnostics are best effort. */ }
   }
   /**
    * Ablauf und Zusammenhang: Schreibt JSON in eine zufällige, exklusiv neu erstellte
@@ -125,6 +226,7 @@ class NotificationMail {
       const handle = await fs.open(temporary, 'wx', 0o600); created = true;
       try { await handle.writeFile(JSON.stringify(value)); await handle.sync(); }
       finally { await handle.close(); }
+      if (this.options.authorized?.() === false) throw new Error('Berechtigung für diesen Instanzdatenbestand wurde zurückgegeben.');
       await fs.rename(temporary, target); created = false;
       if (process.platform !== 'win32') {
         const directory = await fs.open(this.directory, 'r');
@@ -138,7 +240,7 @@ class NotificationMail {
   async saveLedger() {
     const data = this.policy.snapshot();
     const json = JSON.stringify(data);
-    if (json !== this.lastSnapshot) { await this.atomic('notification-ledger.json', data); this.lastSnapshot = json; }
+    if (json !== this.lastSnapshot) { await this.atomic('notification-ledger.json', data); this.lastSnapshot = this.loadedLedger = json; }
   }
   /**
    * Ablauf und Zusammenhang: Entfernt das Passwort aus der Konfigurationsantwort. Die Oberfläche bekommt nur passwordSet als Hinweis, ob ein Passwort vorhanden ist; der Passwortwert wird nicht zurückgegeben.
@@ -155,14 +257,20 @@ class NotificationMail {
     if (this.busy) throw new Error('Mailversand läuft. Bitte kurz warten.');
     this.busy = true;
     try {
-      const config = normalizeConfig(input, this.config);
-      const iv = crypto.randomBytes(12);
-      const cipher = crypto.createCipheriv('aes-256-gcm', this.key, iv);
-      const data = Buffer.concat([cipher.update(JSON.stringify(config), 'utf8'), cipher.final()]);
-      await this.atomic('notification-mail.json', { iv: iv.toString('hex'), tag: cipher.getAuthTag().toString('hex'), data: data.toString('hex') });
-      this.transport?.close(); this.transport = null;
-      this.config = config;
-      return this.publicConfig();
+      const result = await this.withDeliveryLock(async () => {
+        const config = normalizeConfig(input, this.config);
+        const iv = crypto.randomBytes(12);
+        const cipher = crypto.createCipheriv('aes-256-gcm', this.key, iv);
+        const data = Buffer.concat([cipher.update(JSON.stringify(config), 'utf8'), cipher.final()]);
+        const envelope = { iv: iv.toString('hex'), tag: cipher.getAuthTag().toString('hex'), data: data.toString('hex') };
+        await this.atomic('notification-mail.json', envelope);
+        this.lastEncrypted = JSON.stringify(envelope);
+        this.transport?.close(); this.transport = null;
+        this.config = config;
+        return this.publicConfig();
+      });
+      if (result?.ok === false) throw new Error(result.error);
+      return result;
     } finally { this.busy = false; }
   }
   /**
@@ -171,7 +279,7 @@ class NotificationMail {
   async status(message) {
     if (this.lastStatus === message) return;
     this.lastStatus = message;
-    await this.adapter._notifySetDebugState('lastMailResult', message);
+    await this.report('lastMailResult', message);
   }
   /**
    * Ablauf und Zusammenhang: Sendet genau eine Nachricht mit verpflichtendem TLS und Zertifikatsprüfung. Erfolg bedeutet Annahme durch den SMTP-Server, nicht nachgewiesene Zustellung im Kundenpostfach; ungültige Empfänger und ausgeschalteter Versand werden abgewiesen.
@@ -204,13 +312,17 @@ class NotificationMail {
     const now = this.now();
     this.policy.reserve(now, test);
     await this.saveLedger(); // A restart cannot turn repeated timeouts into an unbounded send loop.
+    if (this.options.authorized?.() === false || this.closed) return {ok:false,error:'Adapter wird beendet.'};
     const result = await this.send(to, subject, text);
+    // An old standalone adapter may already own the legacy namespace by the time
+    // SMTP returns. It does not participate in this version's SQLite delivery lock.
+    if (this.options.authorized?.() === false) return result;
     this.policy.complete(batch, this.now(), result.ok);
     await this.saveLedger();
     await this.status(result.ok ? 'smtp-accepted' : result.error);
     if (result.ok) {
-      await this.adapter._notifySetDebugState('lastMailTs', this.now());
-      await this.adapter._notifySetDebugState('lastMailSubject', subject);
+      await this.report('lastMailTs', this.now());
+      await this.report('lastMailSubject', subject);
     }
     return result;
   }
@@ -223,9 +335,11 @@ class NotificationMail {
     try {
       await this.init();
       if (!validAddress(to)) return { ok: false, error: 'Bitte eine gültige Empfängeradresse speichern.' };
-      if (!this.config.enabled) return { ok: false, error: 'Mailversand im Installerbereich einrichten und aktivieren.' };
-      if (!this.policy.quota(this.now(), true)) return { ok: false, error: 'Versandpause aktiv. Testmails frühestens nach fünf Minuten wiederholen.' };
-      return await this.deliver(to, 'NexoWatt EOS: Test-Benachrichtigung', `${this.config.siteName || 'NexoWatt EOS'}\nDer direkte E-Mail-Versand wurde getestet.\nAbsender: ${FROM}`, [], true);
+      return await this.withDeliveryLock(async () => {
+        if (!this.config.enabled) return { ok: false, error: 'Mailversand im Installerbereich einrichten und aktivieren.' };
+        if (!this.policy.quota(this.now(), true)) return { ok: false, error: 'Versandpause aktiv. Testmails frühestens nach fünf Minuten wiederholen.' };
+        return await this.deliver(to, 'NexoWatt EOS: Test-Benachrichtigung', `${this.config.siteName || 'NexoWatt EOS'}\nDer direkte E-Mail-Versand wurde getestet.\nAbsender: ${FROM}`, [], true);
+      });
     } catch (_error) { return { ok: false, error: 'Geschützte Versandkonfiguration oder Versandprotokoll nicht verfügbar.' }; }
     finally { this.busy = false; }
   }
@@ -240,26 +354,101 @@ class NotificationMail {
       const a = this.adapter;
       const enabled = a._notifyGetSettingBool('notifyEnabled', false);
       const to = a._notifyGetSettingString('email', '');
-      if (!enabled) { if (this.policy.records.size) { this.policy.records.clear(); await this.saveLedger(); } return; }
+      const owns = id => this.options.supervision === true ? id.startsWith('supervisor:') : !id.startsWith('supervisor:');
+      if (!enabled) {
+        if (!this.disabledCleared) await this.withDeliveryLock(async () => {
+          for (const id of this.policy.records.keys()) if (owns(id)) this.policy.records.delete(id);
+          await this.saveLedger(); this.disabledCleared = true;
+        });
+        return;
+      }
+      this.disabledCleared = false;
       if (!validAddress(to)) { await this.status('Gültige Kunden-E-Mail-Adresse fehlt.'); return; }
+      await this.reloadSmtp();
       if (!this.config.enabled) { await this.status('Mailversand im Installerbereich einrichten und aktivieren.'); return; }
       if (this.now() - this.startedAt < 30000) return;
-      this.policy.setRecipient(crypto.createHash('sha256').update(to.toLowerCase()).digest('hex'));
-      const categories = new Set(['system', 'inverters', 'charging', 'communications', 'grid'].filter(c => a._notifyGetSettingBool({ system: 'notifySystem', inverters: 'notifyInverters', charging: 'notifyCharging', communications: 'notifyCommunication', grid: 'notifyHardCurtailment' }[c], true)));
-      const events = await this.collect(categories);
-      this.policy.observe(events, this.now(), categories);
-      await this.saveLedger();
-      await a._notifySetDebugState('activeCount', events.length);
-      await a._notifySetDebugState('activeJson', JSON.stringify(events.map(e => ({ id: e.id, title: e.title, severity: e.severity }))));
-      const batch = this.policy.batch(this.now(), a._notifyGetSettingBool('notifyRecovery', true));
-      if (!batch.length) return;
-      const alarms = batch.filter(e => e.kind === 'alarm').length;
-      const subject = `NexoWatt EOS${this.config.siteName ? ' – ' + this.config.siteName : ''}: ${alarms} Störung(en), ${batch.length - alarms} Entwarnung(en)`;
-      const body = [`Anlage: ${this.config.siteName || a.namespace}`, `Zeit: ${new Date(this.now()).toISOString()}`, '',
-        ...batch.flatMap(e => [`${e.kind === 'recovery' ? 'WIEDER OK' : (e.severity === 'critical' ? 'STÖRUNG' : (e.severity === 'info' ? 'HINWEIS' : 'WARNUNG'))}: ${e.title}`, e.kind === 'recovery' ? 'Die Störung besteht seit mindestens fünf Minuten nicht mehr.' : (e.resolved ? `${e.message} (Zwischenzeitlich nicht mehr aktiv; Meldung nachgeholt.)` : e.message), '']),
-        'Normale Fehler werden alle 30 Minuten gebündelt, solange sie bestehen. Hinweise und Entwarnungen sowie Erinnerungen an harte Fehler werden täglich zusammengefasst.',
-        'Details finden Sie in Ihrem NexoWatt EOS.'];
-      await this.deliver(to, subject, body.join('\n'), batch);
+      const categories = new Set(Object.keys(CATEGORY_FLAGS).filter(c => a._notifyGetSettingBool(CATEGORY_FLAGS[c], true)));
+      const recoveries = a._notifyGetSettingBool('notifyRecovery', true);
+      // No device reads while holding the delivery lock; a stopped collector cannot monopolize delivery.
+      await this.reloadLedger();
+      const observed = this.options.supervision ? await this.options.observations() : await this.collect(categories);
+      const legacyRefs = new Map();
+      if (this.options.supervision) {
+        const rows = observed?.chargingManagement?.wallboxes;
+        for (const row of (Array.isArray(rows) ? rows : []).slice(0,128)) {
+          const id = 'lp:' + row?.key + ':offline';
+          if (!row?.key || !this.policy.records.has(id)) continue;
+          legacyRefs.set(id,[...wallboxRefs(row),await ocppRootRef(row, observed.namespaces?.ocpp, a.getForeignStateAsync?.bind(a))]);
+        }
+      }
+      const permission = () => !this.closed && this.options.authorized?.() !== false
+        && a._notifyGetSettingBool('notifyEnabled', false) && a._notifyGetSettingString('email', '') === to;
+      // Re-read actual consent after potentially slow polling. A stale worker must never
+      // roll back a recipient change or clear another sender's ledger under the old address.
+      if (!permission()) return;
+      if (typeof a.getForeignStatesAsync === 'function') {
+        const prefix = a.namespace + '.settings.';
+        const keys = ['notifyEnabled','email','notifyRecovery',...Object.values(CATEGORY_FLAGS)];
+        const states = await a.getForeignStatesAsync(keys.map(key => prefix + key));
+        const current = (key, fallback) => {
+          const state = states?.[prefix+key];
+          if (!state) return fallback;
+          if (state.ack === false || (state.q !== undefined && state.q !== 0)) return undefined;
+          return state.val;
+        };
+        if (current('notifyEnabled') !== true || String(current('email') || '').trim() !== to
+          || current('notifyRecovery',true) !== recoveries
+          || Object.entries(CATEGORY_FLAGS).some(([key,flag]) => current(flag,true) !== categories.has(key))) return;
+      }
+      await this.withDeliveryLock(async () => {
+        if (!permission()) return;
+        this.policy.setRecipient(crypto.createHash('sha256').update(to.toLowerCase()).digest('hex'));
+        let events;
+        if (this.options.supervision) {
+          if (observed?.namespaces) this.policy.supervisedNamespaces = observed.namespaces;
+          events = this.options.events(observed, categories, this.policy.records);
+          const confirmed = new Set(events.filter(event => !event.hold).map(event => event.id));
+          for (const [id,rec] of this.policy.records) {
+            if (owns(id) || !categories.has(rec.meta?.category)) continue;
+            const refs = legacyRefs.get(id) || (id.startsWith('inverter:') ? [{root:id.slice(9)}] : []);
+            const canonical = rec.meta?.physicalId || supervisedId(this.policy.supervisedNamespaces, refs);
+            if (confirmed.has(canonical)) migrateIncident(this.policy.records, id, canonical);
+          }
+        } else {
+          events = [];
+          for (const event of observed) {
+            const refs = this.overlapRefs?.get(event.id) || [];
+            const canonical = supervisedId(this.policy.supervisedNamespaces, refs);
+            const primary = this.policy.records.get(canonical);
+            if (categories.has('communications') && canonical && primary?.active && !primary.suppressed) {
+              migrateIncident(this.policy.records, event.id, canonical);
+            } else {
+              events.push(canonical ? {...event,physicalId:canonical} : event);
+            }
+          }
+        }
+        if (this.options.supervision && !this.hasObservation) {
+          for (const [id,record] of this.policy.records) if (owns(id) && !record.active) record.clearSince = 0;
+          this.hasObservation = true;
+        }
+        this.policy.observe(events, this.now(), categories, owns);
+        await this.saveLedger();
+        const active = [...this.policy.records.values()].filter(r => r.active && !r.suppressed);
+        await this.report('activeCount', active.length);
+        await this.report('activeJson', JSON.stringify(active.map(r => {
+          const id = r.meta.id.startsWith('supervisor:device:') ? r.meta.id.slice(0, r.meta.id.lastIndexOf(':')) : r.meta.id;
+          return {id,title:r.meta.title,severity:r.meta.severity};
+        })));
+        const batch = this.policy.batch(this.now(), recoveries, item => owns(item.id) && categories.has(item.category));
+        if (!batch.length) { await this.saveLedger(); return; }
+        const alarms = batch.filter(e => e.kind === 'alarm').length;
+        const subject = `NexoWatt EOS${this.config.siteName ? ' – ' + this.config.siteName : ''}: ${alarms} Störung(en), ${batch.length - alarms} Entwarnung(en)`;
+        const body = [`Anlage: ${this.config.siteName || a.namespace}`, `Zeit: ${new Date(this.now()).toISOString()}`, '',
+          ...batch.flatMap(e => [`${e.kind === 'recovery' ? 'WIEDER OK' : (e.severity === 'critical' ? 'STÖRUNG' : (e.severity === 'info' ? 'HINWEIS' : 'WARNUNG'))}: ${e.title}`, e.kind === 'recovery' ? 'Die Störung besteht seit mindestens fünf Minuten nicht mehr.' : (e.resolved ? `${e.message} (Zwischenzeitlich nicht mehr aktiv; Meldung nachgeholt.)` : e.message), '']),
+          'Normale Fehler werden alle 30 Minuten gebündelt, solange sie bestehen. Hinweise und Entwarnungen sowie Erinnerungen an harte Fehler werden täglich zusammengefasst.',
+          'Details finden Sie in Ihrem NexoWatt EOS.'];
+        await this.deliver(to, subject, body.join('\n'), batch);
+      });
     } catch (_error) { await this.status('Benachrichtigungsprüfung oder geschütztes Versandprotokoll nicht verfügbar.'); }
     finally { this.busy = false; }
   }
@@ -268,6 +457,7 @@ class NotificationMail {
    */
   async collect(categories) {
     const a = this.adapter, now = this.now(), events = [];
+    this.overlapRefs = new Map();
     const read = async id => { const s = await a.getStateAsync(id); return s?.val; };
     const add = (id, category, title, message, persistMs = 60000, severity = 'warning') => events.push({ id, category, title, message, persistMs, severity });
     const retain = prefix => { for (const [id, record] of this.policy.records) if (id.startsWith(prefix) && record.active) events.push({ ...record.meta, suppressed: true }); };
@@ -316,6 +506,7 @@ class NotificationMail {
       await a._notifyRefreshNwDevicesCache(false);
       for (const d of (a._notify.nwDevices?.pvInverters || []).slice(0, 128)) {
         if (!d.dp?.connected) continue;
+        this.overlapRefs.set('inverter:' + d.id, [{root:d.id},d.dp.connected]);
         if (sourceDown(d.dp.connected)) { retain(`inverter:${d.id}`); continue; }
         const state = await a.getForeignStateAsync(d.dp.connected);
         if (!state) { retain(`inverter:${d.id}`); continue; }
@@ -342,6 +533,7 @@ class NotificationMail {
           if (categories.has('system') && row.dispatchBlockedReasons?.includes('fault_active')) {
             add(id, 'system', `Speicher meldet eine Störung: ${row.name}`, 'Der konfigurierte Speicher meldet einen aktiven Gerätefehler.', 0, 'critical');
           } else if (categories.has('communications') && (row.state === 'offline' || row.degradedReason === 'stale')) {
+            this.overlapRefs.set(id, [row.signedPowerId, row.chargePowerId, row.socId]);
             add(id, 'communications', `Speicher nicht erreichbar: ${row.name}`, 'Der konfigurierte Speicher meldet einen Verbindungsverlust oder veraltete Betriebsdaten.');
           }
         }
@@ -351,6 +543,7 @@ class NotificationMail {
     if (!engineStalled && cm?.enabled !== false && (categories.has('charging') || categories.has('communications'))) {
       for (const w of (cm?.wallboxes || []).slice(0, 128)) {
         if (w.enabled === false || !w.key) continue;
+        this.overlapRefs.set('lp:' + w.key + ':offline', wallboxRefs(w));
         const base = `chargingManagement.wallboxes.${safeId(w.key)}`;
         const fields = ['online', 'faultActive', 'faultReason', 'userEnabled', 'userStationEnabled', 'vehiclePlugged', 'vehicleDemandConfirmed', 'targetPowerW', 'actualPowerW', 'meterStale', 'statusClass', 'reason', 'hardwareCommandState', 'applyStatus'];
         const values = await Promise.all(fields.map(f => read(`${base}.${f}`)));
@@ -358,6 +551,8 @@ class NotificationMail {
         const label = String(w.name || w.key);
         if ([w.onlineId, w.powerId, w.statusId].some(sourceDown) || s.online == null) { retain(`lp:${w.key}:`); continue; }
         if (categories.has('communications') && s.online === false) {
+          const station = await ocppRootRef(w,this.policy.supervisedNamespaces?.ocpp,a.getForeignStateAsync?.bind(a));
+          if (station) this.overlapRefs.get('lp:' + w.key + ':offline').push(station);
           add(`lp:${w.key}:offline`, 'communications', `Ladepunkt nicht erreichbar: ${label}`, 'Die Verbindung zur Ladestation ist unterbrochen.'); retain(`lp:${w.key}:fault`); retain(`lp:${w.key}:interrupted`); continue;
         }
         if (categories.has('charging') && s.online === true && s.faultActive === true) {
@@ -393,4 +588,4 @@ class NotificationMail {
    */
   close() { this.closed = true; this.transport?.close(); this.transport = null; }
 }
-module.exports = { NotificationMail, normalizeConfig, validAddress, smtpError, FROM };
+module.exports = { NotificationMail, normalizeConfig, validAddress, smtpError, FROM, supervisedId, migrateIncident };

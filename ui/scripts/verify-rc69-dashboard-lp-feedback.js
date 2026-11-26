@@ -208,17 +208,31 @@ function page() {
     };
     const safety = await cdp.eval(`(() => {
       const values=${JSON.stringify(safetyValues)};
-      const model=window.NexoWattLpStatusPresenter.build(values);
-      window.NexoWattLpStatusPresenter.render((key)=>values[key], true);
-      return {model, text:document.getElementById('sideStatusText').textContent, rows:[...document.querySelectorAll('.nw-evcs-system-item')].map((el)=>({className:el.className,text:el.textContent}))};
+      const systemText=document.getElementById('sideStatusText');
+      const panel=document.querySelector('.nw-panel-status');
+      systemText.textContent='Verbindung unterbrochen';
+      panel.classList.add('is-warn');
+      const model=window.NexoWattLpStatusPresenter.render((key)=>values[key], true);
+      return {model, text:systemText.textContent, panelClass:panel.className, summary:document.getElementById('sideEvcsStatusSummary').textContent, rows:[...document.querySelectorAll('.nw-evcs-system-item')].map((el)=>({className:el.className,text:el.textContent}))};
     })()`);
     assert.equal(safety.model.overallLevel, 'error');
     assert.match(safety.model.items[0].headline, /EOS Safety/);
     assert.match(safety.model.items[0].detail, /§14a/);
     assert.match(safety.model.items[0].detail, /4,2 kW/);
-    assert.match(safety.text, /EOS Safety/);
+    assert.match(safety.model.systemText, /EOS Safety/);
+    assert.equal(safety.summary, safety.model.systemText);
+    assert.equal(safety.text, 'Verbindung unterbrochen');
+    assert.match(safety.panelClass, /\bis-warn\b/);
+    assert.doesNotMatch(safety.panelClass, /\bis-error\b/);
     assert.equal(safety.rows.length, 1);
     assert.match(safety.rows[0].className, /is-error/);
+
+    const noList = await cdp.eval(`(() => {
+      const values=${JSON.stringify(safetyValues)};
+      document.getElementById('sideEvcsStatusList').remove();
+      return window.NexoWattLpStatusPresenter.render((key)=>values[key], true);
+    })()`);
+    assert.deepEqual(noList, safety.model, 'Ein fehlender Listencontainer darf eine Safety-Meldung nicht unterdrücken');
 
     const fallbackValues = {
       'chargingManagement.audit.snapshotJson': audit([

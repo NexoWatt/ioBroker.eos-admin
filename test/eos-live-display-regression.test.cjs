@@ -12,13 +12,13 @@ function fixture(){
  class Clock extends Date {static now(){return now}}
  const elements=new Map();
  const element=id=>{if(!elements.has(id)){const classes=new Set(id==='liveDot'?['live']:[]);elements.set(id,{textContent:'',style:{},classList:{toggle(k,on){if(on)classes.add(k);else classes.delete(k)},add:k=>classes.add(k),remove:k=>classes.delete(k),contains:k=>classes.has(k)}})}return elements.get(id)};
- const ctx=vm.createContext({Date:Clock,console,state:{},window:{latestState:{},__nwCfg:{datapoints:{gridPointPower:'meter.power',batteryPower:'ess.power'},settings:{deviceStaleTimeoutSec:30}}},document:{getElementById:element},
+ const ctx=vm.createContext({Date:Clock,console,state:{},window:{__nwFlowConnection:"ready",latestState:{},__nwCfg:{datapoints:{gridPointPower:'meter.power',batteryPower:'ess.power'},settings:{deviceStaleTimeoutSec:30}}},document:{getElementById:element},
   nwStorageFarmFeatureFromConfig:()=>false,getEvcsPowerW:()=>null,nwEvcsFeatureFromConfig:()=>false,flowExtras:{meta:{evcsAvailable:false}},updateEnergyWebExtras:()=>0,
   stabilizeFlowAbs:(_,n)=>n,stabilizeFlowSigned:(_,n)=>n,formatFlowPower:n=>`${n} W`,formatPower:n=>`${n} W`,
   setText:(id,v)=>element(id).textContent=v,nwApplyCustomerFeatureVisibility(){},nwLatestStateTimestamp:()=>now,nwFormatDashboardTimestamp:String,updateEmsControlUi(){}});
  vm.runInContext(helper,ctx);
  vm.runInContext(ts.transpileModule(fs.readFileSync(path.join(root,'ui/src-ts/runtime-executables/www/power-measurements.ts'),'utf8'),{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.None}}).outputText,ctx);
- for(const name of ['coerceNumber','isMappedDatapoint','getGridImportExport','getStateAgeMs','getFlowFreshMaxAgeMs','getFreshFlowNumber','getEvcsPowerW','getStableFlowNumber','getConfiguredDatapointId','getBalanceDerivedBatteryFlow','getNormalizedBatteryFlow','getCanonicalPvPowerW','getLiveMeasurementView','computeDerived','updateEnergyWeb','updateDashboardShellUi','nwSetLiveOnline'])vm.runInContext(functions.get(name),ctx);
+ for(const name of ['coerceNumber','isMappedDatapoint','getGridImportExport','getStateAgeMs','getFlowFreshMaxAgeMs','getFreshFlowNumber','getEvcsPowerW','getStableFlowNumber','getConfiguredDatapointId','getBalanceDerivedBatteryFlow','getNormalizedBatteryFlow','getCanonicalPvPowerW','getLiveMeasurementView','computeDerived','updateEnergyWeb','updateDashboardShellUi','nwDashboardAlarmChanged','nwRefreshDashboardStatus','nwRenderDashboardStatus','nwSetLiveOnline'])vm.runInContext(functions.get(name),ctx);
  function state(values){ctx.state=Object.fromEntries(Object.entries(values).map(([k,value])=>[k,{value,ts:now}]));ctx.window.latestState=ctx.state;}
  return {ctx,element,state,now:()=>now,advance:ms=>now+=ms,flow(){ctx.updateEnergyWeb()},side(){ctx.updateDashboardShellUi({})},text:id=>element(id).textContent};
 }

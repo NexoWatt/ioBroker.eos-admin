@@ -1,0 +1,39 @@
+✔ configuration rejects trust bypasses, privileged/colliding ports, invalid types and private key import (2.520594ms)
+✔ legacy import preserves supported settings, stays disabled and requires new certificate pairing (3.145396ms)
+✔ central license denies startup before file/network work; no second license required (25.958263ms)
+✔ hosted lifecycle uses async scoped subscriptions and cleans all timers even if host rejects stop telemetry (75.451299ms)
+✔ eligible EEBus migration retains SHIP identity, PIN, dryrun/CLS settings and verified peer pins (44.831382ms)
+✔ unverified legacy pairing, mismatching identity and unsafe settings fail before identity writes (24.244685ms)
+✔ existing identity is never replaced and a permissive target directory is rejected (32.804435ms)
+✔ mDNS callback, transport and advertisement errors are contained by discovery and SHIP publisher (4.647881ms)
+✔ EEBus requires local intent, a trusted and pinned live data-exchange and a local display name (13.82967ms)
+✔ EEBus opted-in partner survives reboot, allows time to reconnect, and remains paused after deliberate disconnect (2.346468ms)
+✔ EEBus revocation and pin change disable monitoring persistently; invalid storage cannot generate an offline declaration (14.402054ms)
+✔ the normal EEBus disconnect and trust-revocation entry points pause an active monitored partner (17.32711ms)
+✔ EEBUS-CERT-001: certificate SKI matches actual OpenSSL SKI extension, not a hash of SPKI headers (3.445231ms)
+✔ EEBUS-CERT-002: mismatched private keys, malformed certificates and oversized input fail closed (1.189624ms)
+✔ EEBUS-CERT-003: unsupported curve and expired certificate are rejected (18.689367ms)
+✔ EEBUS-SHIP-001: TLS client without certificate cannot become an observed or trusted device (37.409697ms)
+✔ EEBUS-SHIP-002: unpaired data and an early PIN-none cannot bypass SHIP hello/protocol pairing (31.357832ms)
+✔ EEBUS-SHIP-003: matching paired certificate exchanges data and current central license blocks new sends (24.487079ms)
+✔ EEBUS-SHIP-004: a trusted boolean with the wrong pinned certificate does not permit data exchange (20.479603ms)
+✔ EEBUS-SHIP-005: approving an unknown identity fails and explicit approval pins only the observed live certificate (14.194408ms)
+✔ EEBUS-SHIP-006: outbound TLS certificate must match the advertised peer SKI (9.716374ms)
+✔ EEBUS-SHIP-007: replacing a peer connection does not let the old close event delete the new session (31.213336ms)
+✔ EEBUS-SHIP-008: central license revocation while trust lookup is pending prevents late application delivery (26.638057ms)
+✔ EEBUS-SHIP-009: configured local PIN cannot be bypassed by remote PIN-none (13.090605ms)
+✔ EEBUS-SHIP-011: peer asserting PIN-ok does not prove knowledge of the configured local PIN (13.200814ms)
+✔ EEBUS-SHIP-010: slow discovery persistence does not lose an immediately sent handshake (33.900256ms)
+✔ EEBUS-SHIP-012: both endpoint roles complete paired mutual TLS and exchange application data (21.363653ms)
+✔ EEBUS-SHIP-013: stopping while discovery persistence is pending closes sockets promptly (12.771219ms)
+✔ EEBUS-IDENTITY-001: installation identity persists with private permissions and corrupt storage is not silently replaced (19.925701ms)
+✔ EEBUS-SHIP-014: concurrent requests for the same peer cannot bypass the connection reservation during slow diagnostics (10.552836ms)
+✔ opted-in partner health follows a real local TLS/SHIP session; discovery and pairing alone do not create a dashboard alarm (23.094459ms)
+ℹ tests 31
+ℹ suites 0
+ℹ pass 31
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 688.619486

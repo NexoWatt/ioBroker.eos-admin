@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/dashboard-lp-status.ts
- * Quell-Hash: sha256:0e130b0d3bcb3fadead101a383a1c59542f94131900508e54f2e0ff0195fa390
+ * Quell-Hash: sha256:e4cd09eb097095ed0748ba22534938a94f37e420ec22cf3f1b37f07bd4592fea
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -530,13 +530,12 @@
         const list = document.getElementById('sideEvcsStatusList');
         const summaryElement = document.getElementById('sideEvcsStatusSummary');
         const detailsLink = document.getElementById('sideEvcsStatusDetails');
-        const panel = document.querySelector('.nw-panel-status');
-        if (!block || !list || !summaryElement)
-            return null;
         const model = evcsAvailable ? build(getter) : {
             items: [], total: 0, chargingCount: 0, errorCount: 0, warningCount: 0, waitingCount: 0,
             globalSafety: false, paraFallbackActive: false, summary: '', systemText: '', overallLevel: 'ok',
         };
+        if (!block || !list || !summaryElement)
+            return model;
         block.classList.toggle('hidden', !evcsAvailable || model.items.length === 0);
         const detailsAvailable = evcsAvailable && model.items.length > 1;
         if (detailsLink) {
@@ -588,17 +587,11 @@
         else {
             summaryElement.textContent = text('noPoints');
         }
-        panel?.classList.toggle('is-error', model.overallLevel === 'error');
-        panel?.classList.toggle('is-warn', model.overallLevel === 'warn');
-        if (evcsAvailable && model.items.length > 0 && model.systemText) {
-            const statusText = document.getElementById('sideStatusText');
-            if (statusText)
-                statusText.textContent = model.systemText;
-        }
         return model;
     }
     dashboardWindow.NexoWattLpStatusPresenter = Object.freeze({
         build: (values) => build((key) => values[key]),
+        read: build,
         render,
     });
 })();

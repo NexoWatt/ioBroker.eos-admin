@@ -1,0 +1,12 @@
+✔ parent redacts telemetry, rejects bad reports and never turns a lost owner into physical failures/recoveries (5.380247ms)
+✔ aggregates active owners without name-based deduplication, caps names and ignores vehicles/optional unavailable modules (0.491732ms)
+✔ before a device’s first packet, wait for the configured interval; transport failure and data return are independent of actuator state (15.765027ms)
+✔ real Devices worker reports HTTP meter offline then online, skips a disabled transport and drops evidence on stop (4349.017886ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4475.838124
