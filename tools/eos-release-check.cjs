@@ -45,6 +45,8 @@ for (const rel of [p.main, 'ui/main.js', 'ui/lib/influx-history-runtime.js', 'ui
     'build/lib/eosKiosk.js', 'ui/www/eos-kiosk-settings.js',
     'build/lib/eosCookieNamespace.js', 'build/lib/eosNewsSecurity.js', 'build/lib/eosSocketSecret.js', 'build/lib/eosRolePolicy.js', 'build/lib/eosUnifiedBoundary.js', 'build/lib/eosLicenseService.js', 'build/lib/eosModuleConfigStore.js', 'build/lib/eosDeviceEmsPlan.js', 'build/lib/eosDeviceEmsService.js', 'modules/devices/admin/ems-assignment.js', 'ui/lib/installer-lifecycle.js', 'ui/www/live-display.js', 'ui/www/storagefarm-dispatch.js', 'modules/devices/lib/drivers/modbusSerialLease.js', 'ui/lib/customer-tariff.js', 'ui/www/customer-tariff.js', 'ui/www/customer-tariff.css',
     'build/lib/eosLegacyMigration.js', 'build/lib/eosTlsManager.js', 'build/lib/eosTlsHttp.js',
+    'build/lib/eosSplitRuntime.js', 'build/lib/eosUiProcessWorker.js', 'ui/lib/eos-presentation.js', 'ui/lib/eos-presentation-routes.js',
+    'ui/lib/datapoint-picker.js',
     'modules/backup/index.js', 'modules/backup/build/index.js', 'modules/backup/build/worker.js',
     'modules/backup/build/restore-cli.js', 'modules/backup/admin/index.html', 'modules/shared/eos-module.css',
     'public/eos-tls/index.html', 'public/eos-migration/index.html',

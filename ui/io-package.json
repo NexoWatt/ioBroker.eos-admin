@@ -1,9 +1,9 @@
 {
   "common": {
     "name": "nexowatt-ui",
-    "version": "9.0.29",
+    "version": "9.0.30",
     "news": {
-      "9.0.29": {
+      "9.0.30": {
         "de": "HTTPS-Gerätezertifikat und öffentliches Stammzertifikat in der EOS-Administration lokal erstellen. Beide PEM-Dateien und der SHA-256-Fingerabdruck stehen direkt bereit. Das erzeugte Zertifikat wird erst durch eine bestätigte Übernahme verwendet.",
         "en": "Generate an HTTPS device certificate and public root certificate in EOS Administration. Both PEM downloads and the SHA-256 fingerprint are available immediately, with a separate activation step."
       },

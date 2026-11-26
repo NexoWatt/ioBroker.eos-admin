@@ -1,0 +1,12 @@
+{"version":"tls929","node":"v24.22.3","elapsedSeconds":0,"roles":{"guiEms":{"RssKiB":113620,"PssKiB":99915,"Private_DirtyKiB":83284,"SwapKiB":0}},"childPssKiB":99915,"fixtureParent":{"RssKiB":84720,"PssKiB":71010,"Private_DirtyKiB":56228,"SwapKiB":0},"heartbeat":2}
+{"version":"tls929","node":"v24.22.3","elapsedSeconds":5,"roles":{"guiEms":{"RssKiB":118132,"PssKiB":94779,"Private_DirtyKiB":87608,"SwapKiB":0}},"childPssKiB":94779,"fixtureParent":{"RssKiB":95440,"PssKiB":71483,"Private_DirtyKiB":66856,"SwapKiB":0},"heartbeat":14}
+{"version":"tls929","node":"v24.22.3","elapsedSeconds":10,"roles":{"guiEms":{"RssKiB":122716,"PssKiB":97336,"Private_DirtyKiB":92140,"SwapKiB":0}},"childPssKiB":97336,"fixtureParent":{"RssKiB":102180,"PssKiB":76377,"Private_DirtyKiB":73572,"SwapKiB":0},"heartbeat":26}
+✔ Compare split presentation and EMS worker memory with the prior combined worker (13399.412983ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13403.581277

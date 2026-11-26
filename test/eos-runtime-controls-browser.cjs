@@ -30,7 +30,7 @@ async function main() {
     const objects = new Map(); const csrf = 'fixture-csrf-'.repeat(4);
     const processHealth = state => ({ mode: 'process', state, pid: state === 'running' ? 32123 : null,
         generation: state === 'running' ? 1 : 0, restarts: 0, lastError: '', lastHeartbeatAt: Date.now(), nextRestartAt: 0 });
-    const status = { ui: processHealth('running'), devices: processHealth('running'), eebus: processHealth('running'), backup: processHealth('stopped'), ocpp: processHealth('stopped') };
+    const status = { ui: processHealth('running'), ems: { ...processHealth('running'), pid: 32125 }, devices: processHealth('running'), eebus: processHealth('running'), backup: processHealth('stopped'), ocpp: processHealth('stopped') };
     status.ocpp.state = 'error'; status.ocpp.lastError = 'EOS_MODULE_DEPENDENCY_MISSING';
     const configured = { devices: true, eebus: false, backup: false, ocpp: false };
     const owner = { namespace: 'eos-admin.0', config: {}, log: { warn: () => undefined },
@@ -49,7 +49,7 @@ async function main() {
         if (holdLifecycle === `${id}:${action}`) await new Promise(resolve => { heldLifecycle = resolve; });
         if (failLifecycle === `${id}:${action}`) throw Object.assign(new Error('synthetic stop failure'), { code: 'EOS_RUNTIME_STOP_UNCONFIRMED' });
         status[id].state = action === 'stop' ? 'stopped' : 'running';
-        status[id].pid = action === 'stop' ? null : 32124;
+        status[id].pid = action === 'stop' ? null : id === 'ems' ? 32126 : 32124;
         if (action === 'start') status[id].generation++;
         status[id].lastHeartbeatAt = Date.now();
     };
@@ -63,8 +63,11 @@ async function main() {
         },
         status: async id => ({ enabled: configured[id], active: status[id].state === 'running', reason: configured[id] ? 'RUNNING' : 'DISABLED', details: { process: { ...status[id] } } }),
         controlProcess: (id, action) => change(id, action) };
-    const runtime = { status: () => ({ active: status.ui.state === 'running', emsReady: status.ui.state === 'running', process: { ...status.ui } }),
-        pause: () => change('ui', 'stop'), resume: () => change('ui', 'start') };
+    const runtime = { status: () => ({
+        ui: { active: status.ui.state === 'running', process: { ...status.ui } },
+        ems: { active: status.ems.state === 'running', emsReady: status.ems.state === 'running', process: { ...status.ems } },
+    }), pause: () => change('ui', 'stop'), resume: () => change('ui', 'start'),
+        pauseEms: () => change('ems', 'stop'), resumeEms: () => change('ems', 'start') };
     try {
         service = new EosRuntimeControl({ owner, host, runtime }); await service.initialize();
         service.request('eebus', 'disable', service.revision); await service.whenIdle();
@@ -92,7 +95,7 @@ async function main() {
         await page.setViewport({ width: 1440, height: 1050 });
         await page.goto(`${origin}/runtime/`); await page.waitForSelector(button('devices', 'restart'));
         await page.waitForFunction(selector => !document.querySelector(selector).disabled, {}, button('devices', 'restart'));
-        assert.equal(await page.$$eval('.runtime-controls button', nodes => nodes.length), 15);
+        assert.equal(await page.$$eval('.runtime-controls button', nodes => nodes.length), 18);
         assert.equal(await page.$$eval(`${card('admin')} button,${card('ocpp21.0')} button`, nodes => nodes.length), 0);
         assert.equal(await page.$eval(button('backup', 'enable'), node => node.disabled), false);
         assert.equal(await page.$eval(`${card('backup')} .runtime-badge`, node => node.textContent), 'Modul deaktiviert');
@@ -101,7 +104,7 @@ async function main() {
         assert.equal(await page.$eval(`${card('eebus')} .runtime-badge`, node => node.textContent), 'Deaktiviert');
         assert.equal(await page.$eval(`${card('backup')} .runtime-config-link`, node => node.getAttribute('href')), '/modules/backup/');
         assert.match(await page.$eval(card('ocpp'), node => node.textContent), /Eine benötigte Moduldatei oder Abhängigkeit fehlt/);
-        checks.push({ name: 'five hosted controls; parent/external OCPP read-only; module-off and both-off screenshot states both offer enable', result: 'passed' });
+        checks.push({ name: 'six hosted controls; parent/external OCPP read-only; module-off and both-off screenshot states both offer enable', result: 'passed' });
         for (const id of ['backup', 'eebus']) {
             const previous = calls.length;
             await page.click(button(id, 'enable'));
@@ -192,10 +195,19 @@ async function main() {
         await page.waitForFunction(selector => !document.querySelector(selector)?.disabled, {}, button('ui', 'enable'));
         assert.equal(await page.$eval(`${card('admin')} .runtime-badge`, node => node.textContent), 'Läuft');
         await page.reload(); await page.waitForFunction(selector => !document.querySelector(selector)?.disabled, {}, button('ui', 'enable'));
-        assert.match(await page.$eval(card('ui'), node => node.textContent), /EMS bereitNein/);
+        assert.doesNotMatch(await page.$eval(card('ui'), node => node.textContent), /EMS bereit/);
+        assert.match(await page.$eval(card('ems'), node => node.textContent), /EMS bereitJa/);
         await page.click(button('ui', 'enable')); await until(() => service.pending === null && status.ui.state === 'running');
-        await page.waitForFunction(selector => document.querySelector(selector)?.textContent?.includes('EMS bereitJa'), {}, card('ui'));
-        checks.push({ name: 'UI/EMS pause remains controllable from parent runtime page and can be reactivated', result: 'passed' });
+        await page.waitForFunction(selector => document.querySelector(selector)?.textContent?.includes('EMS bereitJa'), {}, card('ems'));
+        assert.equal(status.ems.pid, 32125);
+        checks.push({ name: 'UI pause remains controllable from parent runtime page while EMS readiness and PID stay stable', result: 'passed' });
+
+        const beforeEms = calls.length; await page.click(button('ems', 'disable'));
+        await until(() => service.pending === null && calls.length > beforeEms);
+        await page.waitForFunction(selector => document.querySelector(selector)?.textContent?.includes('EMS bereitNein'), {}, card('ems'));
+        assert.equal(await page.$eval(`${card('ui')} .runtime-badge`, node => node.textContent), 'Läuft');
+        assert.deepEqual(calls.slice(beforeEms), [{ id: 'ems', action: 'stop' }]);
+        checks.push({ name: 'EMS pause is separate from the UI lifecycle', result: 'passed' });
 
         // The response is deliberately lost before the request reaches the service.
         responseMode = 'drop'; const requestsBeforeDrop = requests.length; const callsBeforeDrop = calls.length;

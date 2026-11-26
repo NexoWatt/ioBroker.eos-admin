@@ -208,11 +208,11 @@ test('actual route classifies German and English labels on existing generic temp
     } finally { h.close(); }
 });
 
-test('guided catalog checks direction and type before limits and uses the same guarded tree metadata', async () => {
+test('guided catalog and folder tree share an expiring guarded index and preserve role priority', async t => {
     const routes = new Map();
     const registeredGuard = () => {};
-    const picker = main.slice(main.indexOf("    app.get('/api/smarthome/dpsearch'"), main.indexOf('    // --- SmartHomeConfig DP-Test'));
-    const tree = main.slice(main.indexOf("    app.get(['/api/object/tree'"), main.indexOf('// --- EMS Apps / Installer Page'));
+    assert.match(main, /const requireDpDiscovery = requireCapability\('mapping\.edit'\)/);
+    assert.match(main, /registerDatapointPicker\(app, this, requireDpDiscovery\)/);
     const objects = Object.fromEntries([
         ['openknx.0.a', { role: 'value.blind', type: 'number', read: false, write: true }],
         ['openknx.0.b', { role: 'value.blind', type: 'boolean', read: true, write: false }],
@@ -220,9 +220,24 @@ test('guided catalog checks direction and type before limits and uses the same g
         ['openknx.0.z', { role: 'value.blind', type: 'number', unit: '%', read: true, write: false }],
     ].map(([id, common]) => [id, { type: 'state', common: { name: id, ...common } }]));
     let reads = 0;
-    const adapter = { getForeignObjectsAsync: async () => { reads++; return objects; }, log: { warn: assert.fail } };
-    const app = { get(url, guard, handler) { assert.equal(guard, registeredGuard); routes.set([url].flat()[0], handler); } };
-    vm.runInNewContext(`(function () { ${picker} ${tree} }).call(adapter);`, { app, adapter, requireDpDiscovery: registeredGuard });
+    let now = 0;
+    const timers = new Map();
+    const warnings = [];
+    const time = {
+        now: () => now,
+        schedule(fn, ms) { const token = {}; timers.set(token, { fn, at: now + ms }); return token; },
+        cancel(token) { timers.delete(token); },
+    };
+    const adapter = { getForeignObjectsAsync: async (pattern, kind) => {
+        assert.equal(pattern, '*'); assert.equal(kind, 'state');
+        reads++; return objects;
+    }, log: { warn: message => warnings.push(message) } };
+    const app = { get(url, guard, handler) {
+        assert.equal(guard, registeredGuard);
+        for (const route of [url].flat()) routes.set(route, handler);
+    } };
+    const picker = load('datapoint-picker').registerDatapointPicker(app, adapter, registeredGuard, time);
+    t.after(() => picker.close());
     async function request(route, query) {
         const response = {
             statusCode: 200,
@@ -233,15 +248,42 @@ test('guided catalog checks direction and type before limits and uses the same g
         return response;
     }
     const query = { direction: 'read', types: 'number', roles: 'value.blind', limit: '1' };
-    const guided = await request('/api/smarthome/dpsearch', query);
+    const [guided, browse] = await Promise.all([
+        request('/api/smarthome/dpsearch', query),
+        request('/api/object/tree', { prefix: 'openknx.0' }),
+    ]);
     assert.equal(guided.statusCode, 200);
     assert.deepEqual(guided.payload.results.map(item => [item.id, item.read, item.write]), [['openknx.0.z', true, false]]);
     const searched = await request('/api/smarthome/dpsearch', { ...query, q: 'blind' });
     assert.deepEqual(searched.payload.results, guided.payload.results);
-    const browse = await request('/api/object/tree', { prefix: 'openknx.0' });
     assert.deepEqual(browse.payload.children.filter(item => item.write).map(item => item.id), ['openknx.0.a']);
     assert.equal(reads, 1);
     assert.equal((await request('/api/smarthome/dpsearch', { direction: ['read', 'write'] })).statusCode, 400);
     const unfiltered = await request('/api/smarthome/dpsearch', { q: 'openknx.0', limit: '1' });
     assert.deepEqual(unfiltered.payload.results.map(item => item.id), ['openknx.0.a']);
+
+    objects['openknx.0.z'].common.name = 'Changed';
+    now += 16000;
+    const freshTree = await request('/api/smarthome/object/tree', { prefix: 'openknx.0' });
+    assert.deepEqual(freshTree.payload, browse.payload, 'tree keeps the 30s snapshot');
+    const refreshed = await request('/api/smarthome/dpsearch', query);
+    assert.equal(refreshed.payload.results[0].name, 'Changed');
+    assert.equal(reads, 2, 'search rebuilds after 15s');
+    now += 30000;
+    assert.equal(timers.size, 1);
+    for (const [token, task] of timers) if (task.at <= now) { timers.delete(token); task.fn(); }
+    assert.equal(timers.size, 0, 'idle expiry releases the previous index and timer');
+    await request('/api/object/tree', { prefix: 'openknx.0' });
+    assert.equal(reads, 3);
+
+    let resolveRead;
+    adapter.getForeignObjectsAsync = () => new Promise(resolve => { resolveRead = resolve; });
+    now += 31000;
+    const pending = request('/api/smarthome/dpsearch', query);
+    await tick();
+    picker.close();
+    resolveRead(objects);
+    assert.equal((await pending).statusCode, 500);
+    assert.equal(timers.size, 0, 'shutdown prevents a late read from retaining another index');
+    assert.equal(warnings.length, 1);
 });

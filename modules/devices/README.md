@@ -24,7 +24,7 @@ Die zusätzlichen HTTP-Grenzen betragen höchstens 2 MiB Antwort, 256 KiB Anford
 
 ## Stabilität und Prüfung
 
-Das Modul lädt seinen Katalog einmal bei Bedarf und erzeugt Laufzeitinstanzen nur für konfigurierte aktive Geräte. Es verwendet keine pauschale Subscription auf alle ioBroker-Zustände. Ein erkannter Fehler beim Starten räumt auch bereits angelegte Teillaufzeiten auf. Die Quellfunktion zur globalen Änderung fremder Adapter-`adminUI`-Objekte wurde nicht übernommen.
+Das Modul lädt seinen Katalog einmal bei Bedarf und erzeugt Laufzeitinstanzen nur für konfigurierte aktive Geräte. Der Devices-Prozess lädt ein Treibermodul bei der ersten Verwendung des jeweiligen Protokolls. Weitere Starts verwenden das geladene Treibermodul und erzeugen pro Gerät eine eigene Treiberinstanz. Es verwendet keine pauschale Subscription auf alle ioBroker-Zustände. Ein erkannter Fehler beim Starten räumt auch bereits angelegte Teillaufzeiten auf. Die Quellfunktion zur globalen Änderung fremder Adapter-`adminUI`-Objekte wurde nicht übernommen.
 
 Die Integration behebt außerdem ein Warteschlangenproblem: Nach einer unterbrochenen seriellen Verbindung durfte ein bereits laufender Auftrag nicht erneut einen Verbindungsauftrag hinter sich selbst einreihen. Verbindungsaufbau erfolgt jetzt vor dem Auftragsblock; unmittelbar vor der Ausgabe werden Verbindung und Freigabe erneut geprüft.
 

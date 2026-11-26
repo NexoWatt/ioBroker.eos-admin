@@ -36,7 +36,7 @@ import { UnifiedSessions, transportAllowed, sameOrigin as unifiedSameOrigin } fr
 import type { EosSessionSecurity } from './eosSessionSecurity';
 import type { OwnershipGuard } from './eosUnifiedOwnership';
 import type { EosHostedRuntime } from './eosUnifiedRuntime';
-import { createEosUiProcess } from './eosUiProcess';
+import { createEosSplitRuntime } from './eosSplitRuntime';
 import { EosModuleHost } from './eosModuleHost';
 import { EosRuntimeControl } from './eosRuntimeControl';
 import { getDeviceEmsReferences, planDeviceEms } from './eosDeviceEmsPlan';
@@ -2287,7 +2287,7 @@ export default class Web {
         this.adapter.eosModuleHost = moduleHost;
         this.moduleHost = moduleHost;
 
-        const runtime = createEosUiProcess(
+        const runtime = createEosSplitRuntime(
             this.adapter,
             {
                 deviceEmsPlan: async (input: {
@@ -2338,7 +2338,7 @@ export default class Web {
                 originAllowed: (req: Request) => this.unified.requestAllowed(req),
                 machineRequestAllowed: (req: Request) => this.unified.machineRequestAllowed(req),
                 canWrite: () =>
-                    this.runtimeControl?.isEnabled('ui') === true && this.adapter.eosOwnership?.canWrite() === true,
+                    this.runtimeControl?.isEnabled('ems') === true && this.adapter.eosOwnership?.canWrite() === true,
                 isListening: () => !this.closed && !this.startupFailed && this.server.server?.listening === true,
                 hostedModuleFeedback: (message: { command: string; message?: unknown }) =>
                     moduleHost.receiveBridge(message),
@@ -2381,9 +2381,18 @@ export default class Web {
             runtimeStatus: () => this.adapter.eosHostedRuntime?.status?.(),
         });
         if (runtimeControl.isEnabled('ui')) {
-            await runtime.start();
+            void runtime.start().catch(() => {
+                this.adapter.log.warn('EOS_UI_PROCESS_START_FAILED: Inspect the process status.');
+            });
         } else {
             await runtime.pause();
+        }
+        if (runtimeControl.isEnabled('ems')) {
+            void runtime.startEms().catch(() => {
+                this.adapter.log.warn('EOS_EMS_PROCESS_START_FAILED: Inspect the process status.');
+            });
+        } else {
+            await runtime.pauseEms();
         }
         app.use((req: Request, res: Response, next: NextFunction): void => {
             if (!this.isUnifiedRequest(req)) {
@@ -3718,12 +3727,12 @@ export default class Web {
             void this.adapter.eosModuleHost?.start().catch(() => {
                 this.adapter.log.warn('EOS_MODULE_START_UNAVAILABLE: HTTPS remains available.');
             });
-            // The authenticated shell is now reachable. Device, history and EMS initialization
-            // must never hold the only HTTPS listener hostage or hide the recovery console.
+            // The EMS gets its own lease after the authenticated listener is up,
+            // without a dependency on successful startup of the presentation process.
             void this.adapter.eosHostedRuntime?.startOperational().catch(() => {
                 if (!this.closed) {
                     this.adapter.log.error(
-                        'EOS_UI_OPERATIONAL_START_FAILED: HTTPS remains available; inspect the runtime startup status.',
+                        'EOS_EMS_OPERATIONAL_START_FAILED: HTTPS remains available; inspect the runtime startup status.',
                     );
                 }
             });

@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "eos-admin",
-    "version": "9.0.29",
+    "version": "9.0.30",
     "titleLang": {
       "en": "NexoWatt EOS",
       "de": "NexoWatt EOS",
@@ -18,6 +18,10 @@
     "connectionType": "local",
     "dataSource": "push",
     "news": {
+      "9.0.30": {
+        "de": "Eigener EMS-Prozess mit bestätigter Schreibfreigabe und separater, lesender Oberfläche. Speicherbedarf der Datenpunktauswahl und der Gerätetreiber reduziert.",
+        "en": "Run the EMS and read-only presentation in separate processes. Improve memory use in the datapoint picker and device driver loading."
+      },
       "9.0.29": {
         "de": "HTTPS-Gerätezertifikat und öffentliches Stammzertifikat in der EOS-Administration lokal erstellen. Beide PEM-Dateien und der SHA-256-Fingerabdruck stehen direkt bereit. Das erzeugte Zertifikat wird erst durch eine bestätigte Übernahme verwendet.",
         "en": "Generate an HTTPS device certificate and public root certificate in EOS Administration. Both PEM downloads and the SHA-256 fingerprint are available immediately, with a separate activation step."
@@ -93,10 +97,6 @@
       "9.0.11": {
         "en": "Bounded startup recovery for legacy handover; confirmed shutdown before rollback and blocked late operational starts. Verified tarball publishing workflow for Windows.",
         "de": "Übernahme mit begrenzter Startüberwachung und bestätigtem Stopp vor dem Rückfall; verspätete Betriebsstarts gesperrt. Geprüfter TGZ-Veröffentlichungsweg für Windows."
-      },
-      "9.0.10": {
-        "en": "Device profiles, linked aliases and TypeDetector 6.2 with preserved mappings; full-width SmartHome configuration, sortable tiles and colorful category controls.",
-        "de": "Geräteprofile, verknüpfte Aliase und TypeDetector 6.2 mit Erhalt bestehender Zuordnungen; SmartHome-Konfiguration über die volle Breite, sortierbare Kacheln und farbige Kategoriebedienung."
       }
     },
     "desc": {
@@ -134,7 +134,7 @@
     "icon": "admin.svg",
     "messagebox": true,
     "enabled": true,
-    "extIcon": "https://unpkg.com/iobroker.eos-admin@9.0.29/admin/admin.svg",
+    "extIcon": "https://unpkg.com/iobroker.eos-admin@9.0.30/admin/admin.svg",
     "keywords": [
       "NexoWatt",
       "EOS",
@@ -145,7 +145,7 @@
       "licensed"
     ],
     "compact": false,
-    "readme": "https://unpkg.com/iobroker.eos-admin@9.0.29/README.md",
+    "readme": "https://unpkg.com/iobroker.eos-admin@9.0.30/README.md",
     "authors": [
       "NexoWatt"
     ],
@@ -157,7 +157,7 @@
     "type": "general",
     "licenseInformation": {
       "type": "paid",
-      "link": "https://unpkg.com/iobroker.eos-admin@9.0.29/LICENSE"
+      "link": "https://unpkg.com/iobroker.eos-admin@9.0.30/LICENSE"
     },
     "logTransporter": true,
     "stopBeforeUpdate": true,

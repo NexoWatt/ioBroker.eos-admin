@@ -34,6 +34,7 @@ let runtime: Runtime | null = null;
 let server: Server | null = null;
 let stopping = false;
 let initialized = false;
+let presentationOnly = false;
 let leaseAt = 0;
 let leaseSequence = 0;
 let authority: Record<string, unknown> = {};
@@ -54,7 +55,7 @@ function notify(method: string, args: unknown[] = []): void {
     }
 }
 function canWrite(): boolean {
-    return !stopping && performance.now() - leaseAt <= 3000 && authority.canWrite === true;
+    return !presentationOnly && !stopping && performance.now() - leaseAt <= 3000 && authority.canWrite === true;
 }
 function updateAuthority(value: Record<string, unknown>): void {
     if (
@@ -312,6 +313,7 @@ async function initialize(input: unknown): Promise<{ port: number }> {
         throw processError('EOS_UI_PROCESS_INITIALIZATION');
     }
     initialized = true;
+    presentationOnly = input.presentationOnly === true;
     updateAuthority(input.snapshot);
     const factory: unknown = runtimeRequire(input.runtimePath);
     if (!processRecord(factory) || typeof factory.createHostedRuntime !== 'function') {
@@ -328,13 +330,15 @@ async function initialize(input: unknown): Promise<{ port: number }> {
         notify('health', [runtime?.status() || {}]);
     }, 500);
     heartbeat.unref();
-    try {
-        const system = await call('owner.getForeignObjectAsync', ['system.config']);
-        if (processRecord(system) && processRecord(system.native)) {
-            input.secret = system.native.secret;
+    if (!presentationOnly) {
+        try {
+            const system = await call('owner.getForeignObjectAsync', ['system.config']);
+            if (processRecord(system) && processRecord(system.native)) {
+                input.secret = system.native.secret;
+            }
+        } catch {
+            /* Shell stays available; encrypted history configuration fails closed without its key. */
         }
-    } catch {
-        /* Shell stays available; encrypted history configuration fails closed without its key. */
     }
     if (stopping) {
         throw processError('EOS_UI_PROCESS_STOPPED');
@@ -426,6 +430,9 @@ async function dispatch(method: string, args: unknown[]): Promise<unknown> {
     }
     if (!runtime || stopping) {
         throw processError('EOS_UI_PROCESS_UNAVAILABLE');
+    }
+    if (presentationOnly) {
+        throw processError('EOS_UI_PROCESS_METHOD_DENIED');
     }
     if (method === 'startOperational') {
         return runtime.startOperational();

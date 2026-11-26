@@ -3,11 +3,10 @@
 ## Prozessaufteilung im aktuellen Adapter
 
 EOS wird als ein ioBroker-Adapter installiert. Der Hauptprozess verwaltet
-HTTPS, Konfiguration, Lizenz und die Verbindung zum ioBroker-Controller.
-UI und EMS teilen sich einen Kindprozess. Devices, EEBUS, OCPP und Backup
-laufen jeweils in einem weiteren Prozess. Der Hauptprozess überwacht die
-Kindprozesse und kann die einzelnen Module neu starten. Er und der Controller
-sind weiterhin gemeinsame Abhängigkeiten.
+HTTPS, Sitzungen, Lizenz, Prozesse und die Verbindung zum ioBroker-Controller.
+Seit 9.0.30 laufen Oberfläche und EMS in getrennten Kindprozessen. Devices,
+EEBUS, OCPP und Backup haben weiterhin je einen eigenen Prozess. Der Hauptprozess
+überwacht die Kindprozesse. Er und der Controller sind gemeinsame Abhängigkeiten.
 
 ## Entwicklungsrichtung zu Microservices
 
@@ -17,13 +16,20 @@ einen versionierten Schnittstellenvertrag und einen einzeln prüfbaren
 Lebenszyklus. Startbereitschaft, Healthcheck, begrenzte Auftragswarteschlange,
 Zeitlimits und Wiederanlauf gehören zu diesem Vertrag.
 
-Ein sinnvoller nächster Prüfschritt ist die Trennung von Bedienoberfläche und
-zeitkritischem EMS. Dabei muss die lokale Regelung auch bei einem Neustart der
-Oberfläche weiterarbeiten können. Das EMS bleibt alleiniger Eigentümer seiner
-Stellbefehle. Ein Dienstwechsel muss alte oder doppelte Befehle verwerfen und
-gespeicherte Konfigurationen übernehmen können. Für Kommunikation auf einem
-Gerät bevorzugen wir die vorhandene lokale IPC. Einen separaten Netzwerkdienst
-sehen wir vor, wenn ein konkreter Einsatz auf einem anderen Host ihn erfordert.
+Die lesende Oberfläche liefert die Dashboard-Startseite, freigegebene Programmdateien
+und die geschützte Datenpunktauswahl. Sie erhält nur die für diese Auswahl benötigten
+Objektmetadaten. Das EMS verwaltet seine Konfiguration, Datenabonnements, Regeltakte
+und Stellbefehle. Betriebsnahe HTTP-Funktionen, darunter Steuerungs-, Live- und
+Historien-APIs, liegen weiterhin in seiner Laufzeit. Damit isoliert diese Aufteilung
+insbesondere den Präsentationsprozess und die Datenpunktsuche. Eine Blockade einer
+verbliebenen HTTP-Funktion im EMS kann weiterhin dessen Eventloop betreffen.
+Sitzungen und Freigaben kommen zentral vom Hauptprozess. Der Übergang zwischen
+EMS-Generationen wartet auf den Abschluss bereits angenommener Mutationen.
+
+Die Prozesse verwenden lokale IPC und an den Parent-Aufruf gebundene Loopback-Anfragen.
+Die zusätzliche Prozessgrenze dient der Fehlerisolation. Die Betriebssystemrechte
+bleiben an dasselbe ioBroker-Dienstkonto gebunden. Sie schafft keine separat
+privilegierte Sandbox.
 
 Vor dem Herauslösen eines Moduls vergleichen wir auf dem Raspberry Pi
 Regellatenz, CPU, PSS-Speicher und Wiederanlauf. Ein eigener Node.js-Prozess

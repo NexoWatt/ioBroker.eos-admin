@@ -11,6 +11,7 @@ let runtime = null;
 let server = null;
 let stopping = false;
 let initialized = false;
+let presentationOnly = false;
 let leaseAt = 0;
 let leaseSequence = 0;
 let authority = {};
@@ -31,7 +32,7 @@ function notify(method, args = []) {
     }
 }
 function canWrite() {
-    return !stopping && node_perf_hooks_1.performance.now() - leaseAt <= 3000 && authority.canWrite === true;
+    return !presentationOnly && !stopping && node_perf_hooks_1.performance.now() - leaseAt <= 3000 && authority.canWrite === true;
 }
 function updateAuthority(value) {
     if (stopping ||
@@ -265,6 +266,7 @@ async function initialize(input) {
         throw (0, eosUiProcessRpc_1.processError)('EOS_UI_PROCESS_INITIALIZATION');
     }
     initialized = true;
+    presentationOnly = input.presentationOnly === true;
     updateAuthority(input.snapshot);
     const factory = runtimeRequire(input.runtimePath);
     if (!(0, eosUiProcessRpc_1.processRecord)(factory) || typeof factory.createHostedRuntime !== 'function') {
@@ -281,14 +283,16 @@ async function initialize(input) {
         notify('health', [runtime?.status() || {}]);
     }, 500);
     heartbeat.unref();
-    try {
-        const system = await call('owner.getForeignObjectAsync', ['system.config']);
-        if ((0, eosUiProcessRpc_1.processRecord)(system) && (0, eosUiProcessRpc_1.processRecord)(system.native)) {
-            input.secret = system.native.secret;
+    if (!presentationOnly) {
+        try {
+            const system = await call('owner.getForeignObjectAsync', ['system.config']);
+            if ((0, eosUiProcessRpc_1.processRecord)(system) && (0, eosUiProcessRpc_1.processRecord)(system.native)) {
+                input.secret = system.native.secret;
+            }
         }
-    }
-    catch {
-        /* Shell stays available; encrypted history configuration fails closed without its key. */
+        catch {
+            /* Shell stays available; encrypted history configuration fails closed without its key. */
+        }
     }
     if (stopping) {
         throw (0, eosUiProcessRpc_1.processError)('EOS_UI_PROCESS_STOPPED');
@@ -378,6 +382,9 @@ async function dispatch(method, args) {
     }
     if (!runtime || stopping) {
         throw (0, eosUiProcessRpc_1.processError)('EOS_UI_PROCESS_UNAVAILABLE');
+    }
+    if (presentationOnly) {
+        throw (0, eosUiProcessRpc_1.processError)('EOS_UI_PROCESS_METHOD_DENIED');
     }
     if (method === 'startOperational') {
         return runtime.startOperational();

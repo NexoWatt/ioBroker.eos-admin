@@ -22,11 +22,13 @@ test('process health projects bounded fields and distinguishes process, EMS and 
     assert.equal(row.pid, 21345); assert.equal(row.restarts, 0); assert.equal(row.generation, 3);
     assert.equal(row.active, true); assert.equal(row.emsReady, null); assert.equal(row.nextRestartAt, null);
     assert.doesNotMatch(JSON.stringify(row), /DO_NOT_EXPOSE|password|license|command/);
-    const ui = processRow('ui', 'Oberfläche und EMS', { active: true, emsReady: false, process: raw.details.process }, true);
-    assert.equal(ui.state, 'running'); assert.equal(ui.active, true); assert.equal(ui.emsReady, false);
+    const ui = processRow('ui', 'Oberfläche', { active: true, emsReady: false, process: raw.details.process }, true);
+    assert.equal(ui.state, 'running'); assert.equal(ui.active, true); assert.equal(ui.emsReady, null);
+    const ems = processRow('ems', 'Energiemanagement', { active: true, emsReady: false, process: raw.details.process }, true);
+    assert.equal(ems.state, 'running'); assert.equal(ems.active, true); assert.equal(ems.emsReady, false);
     assert.equal(processRow('devices', 'Geräte', null).state, 'unknown');
-    const unknownUi = processRow('ui', 'Oberfläche und EMS', { active: true, emsReady: true }, true);
-    assert.equal(unknownUi.active, null); assert.equal(unknownUi.emsReady, null);
+    const unknownEms = processRow('ems', 'Energiemanagement', { active: true, emsReady: true }, true);
+    assert.equal(unknownEms.active, null); assert.equal(unknownEms.emsReady, null);
     const disabled = processRow('devices', 'Geräte', { enabled: false, active: false });
     assert.equal(disabled.state, 'disabled'); assert.equal(disabled.pid, null); assert.equal(disabled.active, false);
     const invalid = processRow('devices', 'Geräte', { reason: `error ${secret}`, details: { process: {
@@ -40,6 +42,32 @@ test('process health projects bounded fields and distinguishes process, EMS and 
     assert.equal(backoff.pid, null); assert.equal(backoff.reason, 'EOS_MODULE_PROCESS_EXIT');
     const eebusError = processRow('eebus', 'EEBus', { details: { process: { state: 'error', lastError: 'EEBUS_CONNECTION_FAILED' } } });
     assert.equal(eebusError.reason, 'EEBUS_CONNECTION_FAILED');
+});
+
+test('GUI disabled or restarting does not change confirmed EMS process diagnosis', async () => {
+    const active = new Set(['ems', 'devices', 'eebus', 'backup', 'ocpp']);
+    const process = live().details.process;
+    const runtimeStatus = () => ({
+        active: true, emsReady: true, process,
+        ui: active.has('ui') ? { active: false, process: { ...process, state: 'starting', pid: 21347 } }
+            : { active: false, process: { ...process, state: 'stopped', pid: null } },
+        ems: { active: true, emsReady: true, process: { ...process, pid: 21346 } },
+    });
+    const read = createRuntimeHealthReader({ host: { status: () => live() }, runtimeStatus,
+        runtimeControl: { isEnabled: id => active.has(id), view: (_id, configured) => ({ configured }) } });
+    let { processes } = await read();
+    const ems = processes.find(row => row.id === 'ems');
+    assert.equal(ems.pid, 21346);
+    assert.equal(ems.emsReady, true);
+    assert.equal(ems.controls.configured, true);
+    assert.equal(processes.find(row => row.id === 'ui').state, 'disabled');
+    active.add('ui');
+    ({ processes } = await read());
+    assert.equal(processes.find(row => row.id === 'ui').state, 'starting');
+    assert.deepEqual(processes.find(row => row.id === 'ems'), ems);
+    active.delete('ems');
+    ({ processes } = await read());
+    assert.equal(processes.find(row => row.id === 'ems').emsReady, false);
 });
 
 test('OCPP only reads inventoried exact namespaces and shows a PID confirmed for the current run', async () => {
@@ -133,7 +161,10 @@ async function fixture(t) {
     const host = { status: async () => { reads++; if (crash) throw new Error('PRIVATE_PASSWORD'); return live({ config: { password: 'PRIVATE_PASSWORD' } }); } };
     registerEosModuleRoutes({ app, host, baseDir: path.resolve(__dirname, '..'), jsonParser: express.json(),
         authorize: req => authority.status(req), requestAllowed: req => authority.requestAllowed(req), csrfAllowed: req => authority.csrfAllowed(req),
-        runtimeStatus: () => ({ active: true, emsReady: false, process: live().details.process, config: { password: 'PRIVATE_PASSWORD' } }) });
+        runtimeStatus: () => ({
+            ui: { active: true, process: live().details.process },
+            ems: { active: true, emsReady: false, process: { ...live().details.process, pid: 21346 }, config: { password: 'PRIVATE_PASSWORD' } },
+        }) });
     app.use((_req, res) => res.status(404).end());
     const server = app.listen(0, '127.0.0.1'); await new Promise(resolve => server.once('listening', resolve));
     t.after(async () => { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); });
@@ -171,8 +202,9 @@ test('runtime endpoint is read-only and never publishes raw configuration, excep
     const f = await fixture(t);
     const result = await f.request('/api/eos/runtime'); assert.equal(result.status, 200); assert.equal(result.headers['cache-control'], 'no-store');
     assert.doesNotMatch(result.text, /PRIVATE_PASSWORD|password|config|license/);
-    const snapshot = JSON.parse(result.text); assert.equal(snapshot.processes.length, 6);
-    assert.equal(snapshot.processes.find(row => row.id === 'ui').emsReady, false);
+    const snapshot = JSON.parse(result.text); assert.equal(snapshot.processes.length, 7);
+    assert.equal(snapshot.processes.find(row => row.id === 'ui').emsReady, null);
+    assert.equal(snapshot.processes.find(row => row.id === 'ems').emsReady, false);
     const reads = f.reads();
     for (const method of ['POST', 'PUT', 'PATCH', 'DELETE']) {
         const denied = await f.request('/api/eos/runtime', { method, headers: { origin: 'https://nexowatt' } }); assert.equal(denied.status, 405); assert.equal(denied.headers.allow, 'GET');

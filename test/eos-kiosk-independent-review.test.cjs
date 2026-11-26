@@ -35,8 +35,12 @@ function loadWeb(dataDir) {
         exports: exportsValue, module: { exports: exportsValue }, __dirname: path.dirname(file), __filename: file,
         Buffer, URL, Error, console, process, setTimeout, clearTimeout,
         require(name) {
-            if (name === './eosUiProcess') return {
-                createEosUiProcess: (adapter, bridge) => localRequire(path.join(root, 'ui/main.js')).createHostedRuntime(adapter, bridge),
+            if (name === './eosSplitRuntime') return {
+                createEosSplitRuntime(adapter, bridge) {
+                    const runtime = localRequire(path.join(root, 'ui/main.js')).createHostedRuntime(adapter, bridge);
+                    // The real hosted shell deduplicates both in-process fixture starts.
+                    return Object.assign(runtime, { startEms: () => runtime.start() });
+                },
             };
             if (name === '@iobroker/adapter-core') return {
                 EXIT_CODES: { ADAPTER_REQUESTED_TERMINATION: 11 }, I18n: {},

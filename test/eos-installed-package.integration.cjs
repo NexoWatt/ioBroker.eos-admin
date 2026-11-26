@@ -25,6 +25,7 @@ for (const searchPath of requireInstalled.resolve.paths('eos-package-isolation-p
 }
 const { EosModuleHost } = requireInstalled('./build/lib/eosModuleHost');
 const { registerEosModuleRoutes } = requireInstalled('./build/lib/eosModuleHttp');
+const { createEosSplitRuntime } = requireInstalled('./build/lib/eosSplitRuntime');
 const express = requireInstalled('express');
 const { RPCClient } = requireInstalled('ocpp-rpc');
 const ids = ['devices', 'eebus', 'backup', 'ocpp'];
@@ -55,6 +56,56 @@ test('installed artifact has its own production dependency tree and all module v
         assert.equal(factory.validateConfig({ enabled: true }).enabled, true, `${id}: new installation`);
         assert.equal(typeof factory.createHostedModule, 'function');
     }
+});
+
+test('installed read-only presentation worker serves its files and picker independently of the EMS', { timeout: 30000 }, async t => {
+    let objectReads = 0;
+    const owner = {
+        namespace: 'eos-admin.0', instance: 0, config: {},
+        async getForeignObjectsAsync(pattern, type) {
+            assert.deepEqual([pattern, type], ['*', 'state']);
+            objectReads++;
+            return { 'alias.0.packageLight': { common: { role: 'switch', type: 'boolean', name: 'Paketlicht', read: true, write: true } } };
+        },
+    };
+    const access = {
+        authenticated: true, user: 'system.user.package-fixture', role: 'installer',
+        capabilities: ['frontend.open', 'mapping.edit'], csrfToken: 'p'.repeat(32), credentialKey: 'fixture',
+    };
+    const runtime = createEosSplitRuntime(owner, {
+        resolveAccess: req => req.headers['x-test-session'] === 'installer-fixture' ? access : { authenticated: false },
+        getLicense: () => ({ valid: true, coreEnabled: true, edition: 'home', limits: { chargePoints: 3, batteries: 2 }, features: ['smartHome'] }),
+        canWrite: () => true,
+        originAllowed: req => !req.headers.origin,
+    }, { baseDir: root });
+    t.after(() => runtime.stop());
+    await runtime.start();
+    const { ui, ems } = runtime.status();
+    assert.ok(ui.process.pid > 0 && ui.process.pid !== process.pid);
+    assert.equal(ui.canWrite, false);
+    assert.equal(ems.process.pid, null);
+    const app = express();
+    app.use((req, res, next) => runtime.handle(req, res, next));
+    const server = app.listen(0, '127.0.0.1');
+    await new Promise((done, fail) => { server.once('listening', done); server.once('error', fail); });
+    t.after(async () => { server.closeAllConnections(); await new Promise(done => server.close(done)); });
+    const endpoint = `http://127.0.0.1:${server.address().port}`;
+    const read = (path, options = {}) => fetch(`${endpoint}${path}`, { redirect: 'manual', ...options });
+    const headers = { 'x-test-session': 'installer-fixture' };
+    assert.equal((await read('/')).status, 303);
+    const dashboard = await read('/', { headers });
+    assert.equal(dashboard.status, 200);
+    assert.match(await dashboard.text(), /static\/dashboard-lp-status\.js/);
+    assert.equal((await read('/static/styles.css')).status, 200);
+    assert.equal((await read('/api/smarthome/dpsearch')).status, 401);
+    const search = await read('/api/smarthome/dpsearch?q=paketlicht', { headers });
+    assert.equal(search.status, 200);
+    assert.equal((await search.json()).results[0].id, 'alias.0.packageLight');
+    const tree = await read('/api/object/tree?prefix=alias.0', { headers });
+    assert.equal(tree.status, 200);
+    assert.equal((await tree.json()).children[0].id, 'alias.0.packageLight');
+    assert.equal(objectReads, 1);
+    assert.equal((await read('/api/set', { headers, method: 'POST' })).status, 503);
 });
 
 async function fixture(t) {

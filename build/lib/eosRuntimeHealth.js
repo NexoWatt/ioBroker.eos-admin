@@ -30,20 +30,20 @@ function unknownRow(id, label, kind) {
         generation: null, restarts: null, reason: '', lastHeartbeatAt: null, nextRestartAt: null };
 }
 /** Explicit projection: module config, IPC content, license and raw errors are never serialised.
- * @param {string} id @param {string} label @param {unknown} value @param {boolean} [ui]
+ * @param {string} id @param {string} label @param {unknown} value @param {boolean} [direct]
  * @returns {ProcessRow}
  */
-function processRow(id, label, value, ui = false) {
+function processRow(id, label, value, direct = false) {
     const raw = record(value);
     const details = record(raw.details);
-    const process = record(ui ? raw.process : details.process);
+    const process = record(direct ? raw.process : details.process);
     const result = unknownRow(id, label, 'child');
     result.state = typeof process.state === 'string' && STATES.has(process.state) ? process.state : 'unknown';
     if (raw.enabled === false && ['unknown', 'stopped'].includes(result.state))
         result.state = 'disabled';
     result.pid = ['running', 'starting', 'stopping'].includes(result.state) ? pid(process.pid) : null;
     result.active = raw.active === false ? false : raw.active === true && result.state === 'running' ? true : null;
-    if (ui)
+    if (id === 'ems')
         result.emsReady = raw.emsReady === false ? false : raw.emsReady === true && result.active === true ? true : null;
     result.generation = natural(process.generation);
     result.restarts = natural(process.restarts);
@@ -127,25 +127,28 @@ function createRuntimeHealthReader({ host, runtimeStatus, timeoutMs = 2500, runt
             return request;
         request = (async () => {
             const ids = /** @type {const} */ (['devices', 'eebus', 'backup', 'ocpp']);
-            const [values, ui, external] = await Promise.all([
+            const [values, runtime, external] = await Promise.all([
                 Promise.all(ids.map(id => source(id, () => host.status(id)))),
-                source('ui', () => runtimeStatus?.()), source('ocpp-external', () => readExternalOcppStatus(host.owner)),
+                source('runtime', () => runtimeStatus?.()), source('ocpp-external', () => readExternalOcppStatus(host.owner)),
             ]);
             const parent = unknownRow('admin', 'EOS Administration', 'parent');
             parent.state = 'running';
             parent.pid = parentPid;
             parent.active = true;
-            const processes = [parent, processRow('ui', 'Oberfläche und EMS', ui, true),
+            const status = record(runtime);
+            const processes = [parent, processRow('ui', 'Oberfläche', status.ui ?? status, true),
+                processRow('ems', 'Energiemanagement (EMS)', status.ems, true),
                 ...ids.map((id, index) => processRow(id, MODULE_LABELS[id], values[index]))];
             for (const row of processes) {
                 if (row.kind !== 'child' || !runtimeControl)
                     continue;
-                const configured = row.id === 'ui' || record(values[ids.indexOf(/** @type {'devices'|'eebus'|'backup'|'ocpp'} */ (row.id))]).enabled === true;
+                const configured = row.id === 'ui' || row.id === 'ems' ||
+                    record(values[ids.indexOf(/** @type {'devices'|'eebus'|'backup'|'ocpp'} */ (row.id))]).enabled === true;
                 const controls = runtimeControl.view(row.id, configured);
                 Object.assign(row, { controls });
                 if (!runtimeControl.isEnabled(row.id)) {
                     row.active = false;
-                    if (row.id === 'ui')
+                    if (row.id === 'ems')
                         row.emsReady = false;
                     if (['unknown', 'stopped'].includes(row.state))
                         row.state = 'disabled';

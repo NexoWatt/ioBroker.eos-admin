@@ -1,7 +1,7 @@
 'use strict';
 // Legacy business-pipeline cases intentionally retain an in-process UI seam so
 // their deep runtime assertions remain meaningful. A separate case below mounts
-// the production Web wiring with the real UI/EMS child and uses only public
+// the production Web wiring with the real UI and EMS children and uses only public
 // status, HTTP and controller-state observations. Controller/auth/device IO are fixtures.
 const test = require('node:test');
 const assert = require('node:assert/strict');
@@ -148,11 +148,11 @@ async function pipeline(t, options = {}) {
   const ready = uiModule.exports.TestRuntime.prototype.onReady;
   uiModule.exports.TestRuntime.prototype.onReady = function (...args) { actualRuntime = this; return ready.apply(this, args); };
   const webFile = path.join(root, 'build/lib/web.js'); const nativeRequire = Module.createRequire(webFile);
-  const processLibrary = nativeRequire('./eosUiProcess');
+  const processLibrary = nativeRequire('./eosSplitRuntime');
   const childRuntimeFile = path.join(directory, 'child-runtime.cjs');
   if (options.realProcess) {
     // The installed controller is absent in this executor. Replace only its
-    // filesystem locator inside the child; the real UI/EMS methods remain intact.
+    // filesystem locator inside EMS; both real process implementations remain intact.
     fs.writeFileSync(childRuntimeFile, `const id=require.resolve('@iobroker/adapter-core',{paths:[${JSON.stringify(root)}]});
 require.cache[id]={id,filename:id,loaded:true,exports:{getAbsoluteInstanceDataDir:()=>${JSON.stringify(directory)}}};
 module.exports=require(${JSON.stringify(uiFile)});\n`);
@@ -163,10 +163,10 @@ module.exports=require(${JSON.stringify(uiFile)});\n`);
     Buffer, URL, console, process, setTimeout, clearTimeout, setInterval, clearInterval,
     require: name => name === '@iobroker/adapter-core' ? controller
       : name === './eosModuleHost' ? { ...hostLibrary, EosModuleHost: HostWithTransportBoundary }
-        : name === './eosUiProcess' ? { ...processLibrary,
-          createEosUiProcess: (adapter, bridge, supplied) => options.realProcess
-            ? processLibrary.createEosUiProcess(adapter, bridge, { ...supplied, runtimePath: childRuntimeFile })
-            : uiModule.exports.createHostedRuntime(adapter, bridge) }
+        : name === './eosSplitRuntime' ? { ...processLibrary,
+          createEosSplitRuntime: (adapter, bridge, supplied) => options.realProcess
+            ? processLibrary.createEosSplitRuntime(adapter, bridge, { ...supplied, runtimePath: childRuntimeFile })
+            : { ...uiModule.exports.createHostedRuntime(adapter, bridge), async startEms() {} } }
         : name === 'node:module' ? { ...Module, createRequire: file => {
           const load = Module.createRequire(file); return id => id === uiFile ? uiModule.exports : load(id);
         } } : nativeRequire(name),
@@ -225,14 +225,27 @@ async function waitForView(x, predicate, attempts = 160) {
 const wallboxConfig = () => ({ enabled: true, devices: [{ id: 'wallbox', name: 'Wallbox', enabled: true,
   templateId: 'evcs.abl.emh1.evcc2_3.modbusAscii', protocol: 'modbusAscii', connection: {}, ems: { mode: 'auto' } }] });
 
-test('production Web mount reaches the real UI/EMS child and reconciles a device HTTP save through IPC', { timeout: 45000 }, async t => {
+test('production Web mount starts separate UI and EMS children and reconciles a device HTTP save through IPC', { timeout: 45000 }, async t => {
   const x = await pipeline(t, { realProcess: true });
   await x.startup;
-  for (let attempt = 0; attempt < 100 && !x.owner.eosHostedRuntime.status().emsReady; attempt++) await sleep(50);
+  for (let attempt = 0; attempt < 100; attempt++) {
+    const status = x.owner.eosHostedRuntime.status();
+    if (status.ui.active && status.emsReady) break;
+    await sleep(50);
+  }
   const status = x.owner.eosHostedRuntime.status();
-  assert.equal(status.process.mode, 'process'); assert.notEqual(status.process.pid, process.pid);
+  const ui = status.ui.process;
+  const ems = status.ems.process;
+  assert.equal(ui.mode, 'process'); assert.equal(ems.mode, 'process');
+  assert.equal(ui.state, 'running'); assert.equal(ems.state, 'running');
+  assert.ok(ui.pid > 0 && ems.pid > 0);
+  assert.equal(new Set([process.pid, ui.pid, ems.pid]).size, 3);
+  assert.equal(status.process.pid, ui.pid);
   assert.equal(status.emsReady, true, JSON.stringify({ status, logs: x.logs.slice(-20) }));
-  assert.equal(x.runtime(), undefined, 'the real child exposes no mutable parent runtime instance');
+  assert.equal(x.runtime(), undefined, 'the real children expose no mutable parent runtime instance');
+  const health = await x.request('/api/eos/runtime'); assert.equal(health.status, 200, health.text);
+  assert.equal(health.data.processes.find(row => row.id === 'ui')?.pid, ui.pid);
+  assert.equal(health.data.processes.find(row => row.id === 'ems')?.pid, ems.pid);
   const live = await x.request('/api/state'); assert.equal(live.status, 200, live.text);
   const answer = await x.request('/api/eos/modules/devices', 'PUT', { config: wallboxConfig() });
   assert.equal(answer.status, 200, answer.text);
@@ -250,7 +263,7 @@ test('production Web mount reaches the real UI/EMS child and reconciles a device
     'commissioning offline telemetry must not emit physical device commands');
 });
 
-test('real UI child preserves an explicit Devices chargepoint deletion through HTTP, discovery and restart', { timeout: 45000 }, async t => {
+test('real EMS child preserves an explicit Devices chargepoint deletion through HTTP, discovery and restart', { timeout: 45000 }, async t => {
   const x = await pipeline(t, { realProcess: true });
   await x.startup;
   await waitForView(x, view => view?.configurationReady && view?.status?.active

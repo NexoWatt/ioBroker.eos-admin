@@ -1,0 +1,611 @@
+{
+  "node": "v22.23.4",
+  "machine": "x64",
+  "runtimeFileHashes": {
+    "baseline": "9c8373fe1918435a1f734fb19605e0e4e0f5d5f9602efc2b0e963ea9d884c8bb",
+    "candidate": "dfa4208beb2789e4e4f5a858f27c6238f57ade2f0c2730a137adfff722806542"
+  },
+  "samplesPerMode": 7,
+  "rows": {
+    "modbus": {
+      "protocols": [
+        "modbusTcp"
+      ],
+      "mediansInBytes": {
+        "baseline": {
+          "rss": 23576576,
+          "heapTotal": 19693568,
+          "heapUsed": 6593080,
+          "external": 214858,
+          "arrayBuffers": 2
+        },
+        "candidate": {
+          "rss": 14573568,
+          "heapTotal": 7426048,
+          "heapUsed": 2918792,
+          "external": 168259,
+          "arrayBuffers": 0
+        }
+      },
+      "samples": {
+        "baseline": [
+          {
+            "drivers": [
+              "ModbusDriver"
+            ],
+            "delta": {
+              "rss": 23576576,
+              "heapTotal": 19693568,
+              "heapUsed": 6592888,
+              "external": 214858,
+              "arrayBuffers": 2
+            }
+          },
+          {
+            "drivers": [
+              "ModbusDriver"
+            ],
+            "delta": {
+              "rss": 23654400,
+              "heapTotal": 19955712,
+              "heapUsed": 6593080,
+              "external": 214858,
+              "arrayBuffers": 2
+            }
+          },
+          {
+            "drivers": [
+              "ModbusDriver"
+            ],
+            "delta": {
+              "rss": 23506944,
+              "heapTotal": 19693568,
+              "heapUsed": 6592960,
+              "external": 214858,
+              "arrayBuffers": 2
+            }
+          },
+          {
+            "drivers": [
+              "ModbusDriver"
+            ],
+            "delta": {
+              "rss": 22941696,
+              "heapTotal": 19431424,
+              "heapUsed": 6593464,
+              "external": 214858,
+              "arrayBuffers": 2
+            }
+          },
+          {
+            "drivers": [
+              "ModbusDriver"
+            ],
+            "delta": {
+              "rss": 23842816,
+              "heapTotal": 19693568,
+              "heapUsed": 6593368,
+              "external": 214858,
+              "arrayBuffers": 2
+            }
+          },
+          {
+            "drivers": [
+              "ModbusDriver"
+            ],
+            "delta": {
+              "rss": 23859200,
+              "heapTotal": 19955712,
+              "heapUsed": 6593368,
+              "external": 214858,
+              "arrayBuffers": 2
+            }
+          },
+          {
+            "drivers": [
+              "ModbusDriver"
+            ],
+            "delta": {
+              "rss": 23191552,
+              "heapTotal": 19431424,
+              "heapUsed": 6592984,
+              "external": 214858,
+              "arrayBuffers": 2
+            }
+          }
+        ],
+        "candidate": [
+          {
+            "drivers": [
+              "ModbusDriver"
+            ],
+            "delta": {
+              "rss": 14626816,
+              "heapTotal": 7163904,
+              "heapUsed": 2918952,
+              "external": 168259,
+              "arrayBuffers": 0
+            }
+          },
+          {
+            "drivers": [
+              "ModbusDriver"
+            ],
+            "delta": {
+              "rss": 14454784,
+              "heapTotal": 7426048,
+              "heapUsed": 2918880,
+              "external": 168259,
+              "arrayBuffers": 0
+            }
+          },
+          {
+            "drivers": [
+              "ModbusDriver"
+            ],
+            "delta": {
+              "rss": 14573568,
+              "heapTotal": 7426048,
+              "heapUsed": 2918792,
+              "external": 168259,
+              "arrayBuffers": 0
+            }
+          },
+          {
+            "drivers": [
+              "ModbusDriver"
+            ],
+            "delta": {
+              "rss": 14577664,
+              "heapTotal": 7163904,
+              "heapUsed": 2918792,
+              "external": 168259,
+              "arrayBuffers": 0
+            }
+          },
+          {
+            "drivers": [
+              "ModbusDriver"
+            ],
+            "delta": {
+              "rss": 14598144,
+              "heapTotal": 7163904,
+              "heapUsed": 2918792,
+              "external": 168259,
+              "arrayBuffers": 0
+            }
+          },
+          {
+            "drivers": [
+              "ModbusDriver"
+            ],
+            "delta": {
+              "rss": 14532608,
+              "heapTotal": 7426048,
+              "heapUsed": 2918752,
+              "external": 168259,
+              "arrayBuffers": 0
+            }
+          },
+          {
+            "drivers": [
+              "ModbusDriver"
+            ],
+            "delta": {
+              "rss": 14516224,
+              "heapTotal": 7426048,
+              "heapUsed": 2918792,
+              "external": 168259,
+              "arrayBuffers": 0
+            }
+          }
+        ]
+      }
+    },
+    "mixed": {
+      "protocols": [
+        "modbusTcp",
+        "mqtt"
+      ],
+      "mediansInBytes": {
+        "baseline": {
+          "rss": 23465984,
+          "heapTotal": 19955712,
+          "heapUsed": 6611928,
+          "external": 214858,
+          "arrayBuffers": 2
+        },
+        "candidate": {
+          "rss": 18436096,
+          "heapTotal": 8998912,
+          "heapUsed": 4480840,
+          "external": 171665,
+          "arrayBuffers": 0
+        }
+      },
+      "samples": {
+        "baseline": [
+          {
+            "drivers": [
+              "ModbusDriver",
+              "MqttDriver"
+            ],
+            "delta": {
+              "rss": 23678976,
+              "heapTotal": 20217856,
+              "heapUsed": 6612504,
+              "external": 214858,
+              "arrayBuffers": 2
+            }
+          },
+          {
+            "drivers": [
+              "ModbusDriver",
+              "MqttDriver"
+            ],
+            "delta": {
+              "rss": 23347200,
+              "heapTotal": 19431424,
+              "heapUsed": 6611928,
+              "external": 214858,
+              "arrayBuffers": 2
+            }
+          },
+          {
+            "drivers": [
+              "ModbusDriver",
+              "MqttDriver"
+            ],
+            "delta": {
+              "rss": 22818816,
+              "heapTotal": 19955712,
+              "heapUsed": 6612072,
+              "external": 214858,
+              "arrayBuffers": 2
+            }
+          },
+          {
+            "drivers": [
+              "ModbusDriver",
+              "MqttDriver"
+            ],
+            "delta": {
+              "rss": 23117824,
+              "heapTotal": 19955712,
+              "heapUsed": 6611960,
+              "external": 214858,
+              "arrayBuffers": 2
+            }
+          },
+          {
+            "drivers": [
+              "ModbusDriver",
+              "MqttDriver"
+            ],
+            "delta": {
+              "rss": 23744512,
+              "heapTotal": 19431424,
+              "heapUsed": 6611856,
+              "external": 214858,
+              "arrayBuffers": 2
+            }
+          },
+          {
+            "drivers": [
+              "ModbusDriver",
+              "MqttDriver"
+            ],
+            "delta": {
+              "rss": 23465984,
+              "heapTotal": 19955712,
+              "heapUsed": 6611856,
+              "external": 214858,
+              "arrayBuffers": 2
+            }
+          },
+          {
+            "drivers": [
+              "ModbusDriver",
+              "MqttDriver"
+            ],
+            "delta": {
+              "rss": 23629824,
+              "heapTotal": 19693568,
+              "heapUsed": 6611856,
+              "external": 214858,
+              "arrayBuffers": 2
+            }
+          }
+        ],
+        "candidate": [
+          {
+            "drivers": [
+              "ModbusDriver",
+              "MqttDriver"
+            ],
+            "delta": {
+              "rss": 18239488,
+              "heapTotal": 8998912,
+              "heapUsed": 4480840,
+              "external": 171665,
+              "arrayBuffers": 0
+            }
+          },
+          {
+            "drivers": [
+              "ModbusDriver",
+              "MqttDriver"
+            ],
+            "delta": {
+              "rss": 18587648,
+              "heapTotal": 8998912,
+              "heapUsed": 4481072,
+              "external": 171665,
+              "arrayBuffers": 0
+            }
+          },
+          {
+            "drivers": [
+              "ModbusDriver",
+              "MqttDriver"
+            ],
+            "delta": {
+              "rss": 18436096,
+              "heapTotal": 8998912,
+              "heapUsed": 4480776,
+              "external": 171665,
+              "arrayBuffers": 0
+            }
+          },
+          {
+            "drivers": [
+              "ModbusDriver",
+              "MqttDriver"
+            ],
+            "delta": {
+              "rss": 17989632,
+              "heapTotal": 9261056,
+              "heapUsed": 4481200,
+              "external": 171665,
+              "arrayBuffers": 0
+            }
+          },
+          {
+            "drivers": [
+              "ModbusDriver",
+              "MqttDriver"
+            ],
+            "delta": {
+              "rss": 18530304,
+              "heapTotal": 9261056,
+              "heapUsed": 4480912,
+              "external": 171665,
+              "arrayBuffers": 0
+            }
+          },
+          {
+            "drivers": [
+              "ModbusDriver",
+              "MqttDriver"
+            ],
+            "delta": {
+              "rss": 18182144,
+              "heapTotal": 8998912,
+              "heapUsed": 4480776,
+              "external": 171665,
+              "arrayBuffers": 0
+            }
+          },
+          {
+            "drivers": [
+              "ModbusDriver",
+              "MqttDriver"
+            ],
+            "delta": {
+              "rss": 18681856,
+              "heapTotal": 9261056,
+              "heapUsed": 4480824,
+              "external": 171665,
+              "arrayBuffers": 0
+            }
+          }
+        ]
+      }
+    },
+    "mqtt": {
+      "protocols": [
+        "mqtt"
+      ],
+      "mediansInBytes": {
+        "baseline": {
+          "rss": 23642112,
+          "heapTotal": 19693568,
+          "heapUsed": 6574344,
+          "external": 214858,
+          "arrayBuffers": 2
+        },
+        "candidate": {
+          "rss": 13512704,
+          "heapTotal": 6959104,
+          "heapUsed": 2757112,
+          "external": 77157,
+          "arrayBuffers": 0
+        }
+      },
+      "samples": {
+        "baseline": [
+          {
+            "drivers": [
+              "MqttDriver"
+            ],
+            "delta": {
+              "rss": 23429120,
+              "heapTotal": 19693568,
+              "heapUsed": 6574344,
+              "external": 214858,
+              "arrayBuffers": 2
+            }
+          },
+          {
+            "drivers": [
+              "MqttDriver"
+            ],
+            "delta": {
+              "rss": 23642112,
+              "heapTotal": 19955712,
+              "heapUsed": 6574560,
+              "external": 214858,
+              "arrayBuffers": 2
+            }
+          },
+          {
+            "drivers": [
+              "MqttDriver"
+            ],
+            "delta": {
+              "rss": 23306240,
+              "heapTotal": 19693568,
+              "heapUsed": 6574296,
+              "external": 214858,
+              "arrayBuffers": 2
+            }
+          },
+          {
+            "drivers": [
+              "MqttDriver"
+            ],
+            "delta": {
+              "rss": 24092672,
+              "heapTotal": 19693568,
+              "heapUsed": 6574632,
+              "external": 214858,
+              "arrayBuffers": 2
+            }
+          },
+          {
+            "drivers": [
+              "MqttDriver"
+            ],
+            "delta": {
+              "rss": 23867392,
+              "heapTotal": 19693568,
+              "heapUsed": 6574080,
+              "external": 214858,
+              "arrayBuffers": 2
+            }
+          },
+          {
+            "drivers": [
+              "MqttDriver"
+            ],
+            "delta": {
+              "rss": 23871488,
+              "heapTotal": 19693568,
+              "heapUsed": 6574760,
+              "external": 214858,
+              "arrayBuffers": 2
+            }
+          },
+          {
+            "drivers": [
+              "MqttDriver"
+            ],
+            "delta": {
+              "rss": 23388160,
+              "heapTotal": 19693568,
+              "heapUsed": 6574080,
+              "external": 214858,
+              "arrayBuffers": 2
+            }
+          }
+        ],
+        "candidate": [
+          {
+            "drivers": [
+              "MqttDriver"
+            ],
+            "delta": {
+              "rss": 13864960,
+              "heapTotal": 7221248,
+              "heapUsed": 2756776,
+              "external": 77157,
+              "arrayBuffers": 0
+            }
+          },
+          {
+            "drivers": [
+              "MqttDriver"
+            ],
+            "delta": {
+              "rss": 13512704,
+              "heapTotal": 6959104,
+              "heapUsed": 2757256,
+              "external": 77157,
+              "arrayBuffers": 0
+            }
+          },
+          {
+            "drivers": [
+              "MqttDriver"
+            ],
+            "delta": {
+              "rss": 13537280,
+              "heapTotal": 6959104,
+              "heapUsed": 2756776,
+              "external": 77157,
+              "arrayBuffers": 0
+            }
+          },
+          {
+            "drivers": [
+              "MqttDriver"
+            ],
+            "delta": {
+              "rss": 12951552,
+              "heapTotal": 6959104,
+              "heapUsed": 2757136,
+              "external": 77157,
+              "arrayBuffers": 0
+            }
+          },
+          {
+            "drivers": [
+              "MqttDriver"
+            ],
+            "delta": {
+              "rss": 12967936,
+              "heapTotal": 6959104,
+              "heapUsed": 2757352,
+              "external": 77157,
+              "arrayBuffers": 0
+            }
+          },
+          {
+            "drivers": [
+              "MqttDriver"
+            ],
+            "delta": {
+              "rss": 13889536,
+              "heapTotal": 7221248,
+              "heapUsed": 2757112,
+              "external": 77157,
+              "arrayBuffers": 0
+            }
+          },
+          {
+            "drivers": [
+              "MqttDriver"
+            ],
+            "delta": {
+              "rss": 12877824,
+              "heapTotal": 6959104,
+              "heapUsed": 2756936,
+              "external": 77157,
+              "arrayBuffers": 0
+            }
+          }
+        ]
+      }
+    }
+  }
+}

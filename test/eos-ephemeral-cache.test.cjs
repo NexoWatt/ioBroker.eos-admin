@@ -4,6 +4,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
+const ts = require('typescript');
 const { EphemeralMap, ExpiringSnapshot } = require('./fixtures/load-ephemeral-cache.cjs');
 const { createHostedCleanup } = require('../ui/lib/hosted-runtime-stop');
 const { detectionNow, DetectionError, DETECTION_LIMITS, detectionSnapshot } = require('../ui/lib/smarthome-device-detection');
@@ -94,7 +95,6 @@ test('idle eviction only removes cache ownership; an active discovery retains it
     assert.equal(active.objects['ess.0'].native.template, 'FENECON'); snapshot.close();
 });
 test('canonical unload drops idle caches and stops pending snapshot retention', async () => {
-    const ts = require('typescript');
     const filename = path.resolve(__dirname, '../ui/src-ts/runtime-executables/main.ts');
     const source = fs.readFileSync(filename, 'utf8');
     const parsed = ts.createSourceFile(filename, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
@@ -105,6 +105,9 @@ test('canonical unload drops idle caches and stops pending snapshot retention', 
     runtime._nwHistoryApiCache = new EphemeralMap(5000, 4, time); runtime._nwHistoryApiCache.set('a', { large: 'history' });
     runtime._nwShcfgDetectCache = new EphemeralMap(30000, 1, time); runtime._nwShcfgDetectCache.set('a', { large: 'result' });
     runtime._nwTypeDetectorObjectsCache = new ExpiringSnapshot(async () => ({ large: 'objects' }), 30000, time);
+    let completePickerRead;
+    runtime._nwDpPicker = new ExpiringSnapshot(async () => new Promise(resolve => { completePickerRead = resolve; }), 30000, time);
+    const pickerRead = runtime._nwDpPicker.get();
     await runtime._nwTypeDetectorObjectsCache.get();
     runtime._nwClearTimer = () => {}; runtime._nwCloseServer = done => done();
     runtime._nwStopConnectionHeartbeat = runtime.stopNotificationMonitor = runtime._nwStopLiveCoreRefresh = runtime._nwCloseSseClients = () => {};
@@ -112,6 +115,9 @@ test('canonical unload drops idle caches and stops pending snapshot retention', 
     let closed = 0;
     await new Promise((resolve, reject) => runtime.onUnload(error => { if (error) reject(error); else { closed++; resolve(); } }));
     assert.equal(closed, 1); assert.equal(time.timers, 0);
+    completePickerRead({ late: 'index' });
+    await assert.rejects(pickerRead, /EOS_UI_STOPPING/);
+    assert.equal(runtime._nwDpPicker.retained, false);
     const diagnostics = runtime._nwGetMemoryDiagnostics();
     assert.equal(diagnostics.historyCachedResponses, 0); assert.equal(diagnostics.discoveryCachedResponses, 0);
     assert.equal(diagnostics.discoverySnapshotRetained, false); assert.equal(diagnostics.shuttingDown, true);

@@ -109,8 +109,12 @@ function loadWeb(dataDir) {
         exports: exportsValue, module: { exports: exportsValue }, __dirname: path.dirname(file), __filename: file,
         Buffer, URL, Error, console, process, setTimeout, clearTimeout,
         require(name) {
-            if (name === './eosUiProcess') return {
-                createEosUiProcess: (adapter, bridge) => localRequire(path.join(root, 'ui/main.js')).createHostedRuntime(adapter, bridge),
+            if (name === './eosSplitRuntime') return {
+                createEosSplitRuntime(adapter, bridge) {
+                    const hosted = localRequire(path.join(root, 'ui/main.js')).createHostedRuntime(adapter, bridge);
+                    return Object.assign(hosted, { startEms: hosted.start, pause: hosted.stop, pauseEms: hosted.stop,
+                        resume: hosted.start, resumeEms: hosted.start });
+                },
             };
             if (name === '@iobroker/adapter-core') return {
                 EXIT_CODES: { ADAPTER_REQUESTED_TERMINATION: 11 }, I18n: {},

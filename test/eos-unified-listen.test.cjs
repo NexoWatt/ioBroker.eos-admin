@@ -36,13 +36,15 @@ vm.runInNewContext(compiled, {
             controllerDir: path.resolve(__dirname, '..', 'node_modules', 'iobroker.js-controller'),
             getAbsoluteInstanceDataDir: () => path.join(require('node:os').tmpdir(), 'eos-listen-module-fixture'),
         };
-        if (name === './eosUiProcess') return {
-            createEosUiProcess(owner, bridge, options) {
-                if (processOwners.has(owner)) return require('../build/lib/eosUiProcess').createEosUiProcess(owner, bridge,
+        if (name === './eosSplitRuntime') return {
+            createEosSplitRuntime(owner, bridge, options) {
+                if (processOwners.has(owner)) return require('../build/lib/eosSplitRuntime').createEosSplitRuntime(owner, bridge,
                     { ...options, ...(processRuntimePaths.has(owner) ? { runtimePath: processRuntimePaths.get(owner) } : {}) });
                 // Test-only preservation of the existing deep startup/failure assertions.
                 // The dynamically cached module is the fixture's original hosted runtime.
-                return webRequire(path.resolve(__dirname, '../ui/main.js')).createHostedRuntime(owner, bridge);
+                const hosted = webRequire(path.resolve(__dirname, '../ui/main.js')).createHostedRuntime(owner, bridge);
+                return Object.assign(hosted, { startEms: hosted.start, pause: hosted.stop, pauseEms: hosted.stop,
+                    resume: hosted.start, resumeEms: hosted.start });
             },
         };
         if (!emitted && name.startsWith('.') && fs.existsSync(path.resolve(path.dirname(webFile), `${name}.ts`))) {
@@ -427,6 +429,14 @@ async function hostedTlsFixture(t, migrate, options = {}) {
     await listenEosServer(server, { port: await freePort(), bind: '127.0.0.1' });
     const runtime = owner.eosHostedRuntime;
     t.after(async () => { try { await owner.eosRuntimeControl?.close(); await runtime?.stop(); } finally { await close(server); } });
+    if (options.realProcess) {
+        // Mount launches the children in the background. Join the initial launches
+        // in this fixture before asserting the first web responses.
+        await Promise.all([
+            owner.eosRuntimeControl.isEnabled('ui') && runtime.start(),
+            owner.eosRuntimeControl.isEnabled('ems') && runtime.startEms(),
+        ]);
+    }
     const host = `127.0.0.1:${server.address().port}`;
     const request = (url, { method = 'GET', auth = true, csrf = true, origin = `https://${host}` } = {}) =>
         tlsRequest(server, cert.cert, { host, origin, ...(auth ? { cookie: 'fixture=admin' } : {}),
@@ -439,12 +449,18 @@ async function hostedTlsFixture(t, migrate, options = {}) {
 }
 function deferred() { let resolve; const promise = new Promise(done => { resolve = done; }); return { promise, resolve }; }
 
-test('real UI child preserves HTTPS session/origin checks and leaves recovery outside its process', { timeout: 15000 }, async t => {
+test('separate UI and EMS children preserve HTTPS session/origin checks and leave recovery outside their processes', { timeout: 15000 }, async t => {
     const h = await hostedTlsFixture(t, async () => {}, { realProcess: true });
     assert.equal(h.runtime.status().process.mode, 'process');
-    assert.notEqual(h.runtime.status().process.pid, process.pid);
+    const { ui, ems } = h.runtime.status();
+    assert.ok(ui.process.pid > 0);
+    assert.ok(ems.process.pid > 0);
+    assert.equal(new Set([process.pid, ui.process.pid, ems.process.pid]).size, 3);
     assert.equal(h.instance(), undefined, 'child runtime internals are not exposed to the parent fixture');
     assert.equal(await h.request('/login.html', { auth: false }), 200);
+    assert.equal(await h.request('/'), 200);
+    assert.equal(await h.request('/', { auth: false }), 303);
+    assert.equal(await h.request('/', { origin: 'https://foreign.invalid' }), 403);
     assert.equal(await h.request('/api/state'), 200);
     assert.equal(await h.request('/api/state', { auth: false }), 401);
     assert.equal(await h.request('/api/state', { origin: 'https://foreign.invalid' }), 403);
@@ -454,6 +470,7 @@ test('real UI child preserves HTTPS session/origin checks and leaves recovery ou
     h.setSessionActive(true);
     await h.runtime.stop();
     assert.equal(h.runtime.status().process.pid, null);
+    assert.equal(h.runtime.status().ems.process.pid, null);
     assert.equal(await h.request('/system/recovery'), 200);
     assert.equal(h.server.listening, true);
 });
@@ -843,7 +860,8 @@ for (const readTimeout of [false, true]) test(`parent login remains usable with 
         assert.equal(cached.status, 304, asset); assert.equal(cached.bytes.length, 0, asset);
         assert.equal((await h.browser(asset, { headers: { origin: 'https://foreign.invalid' } })).status, 403, asset);
     }
-    assert.equal(h.runtime.status().process.pid, null, 'public image probes must not start the UI/EMS child');
+    assert.equal(h.runtime.status().process.pid, null, 'public image probes must not start the presentation process');
+    assert.equal(h.runtime.status().ems.process.pid, null, 'public image probes must not start the EMS process');
     assert.equal((await h.browser('/static/login.js', { headers: { origin: 'https://foreign.invalid' } })).status, 403);
     assert.equal((await h.browser('/api/eos/runtime')).status, 401);
     const signedIn = await h.browser('/api/auth/login', { method: 'POST', body: { user: 'operator', password: 'fixture-passphrase' } });
@@ -865,5 +883,6 @@ for (const readTimeout of [false, true]) test(`parent login remains usable with 
         assert.equal(action.status, 202, action.text);
         await h.owner.eosRuntimeControl.whenIdle();
         assert.ok(h.runtime.status().process.pid > 0, JSON.stringify({ state: h.runtime.status(), controls: h.owner.eosRuntimeControl.view('ui'), logs: h.logs }));
+        assert.equal(h.runtime.status().ems.process.pid, null, 'enabling presentation does not enable a previously paused EMS');
     }
 });

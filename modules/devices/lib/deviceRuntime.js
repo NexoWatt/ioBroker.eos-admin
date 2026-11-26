@@ -13,23 +13,10 @@ const {
   buildManifest: buildAliasManifest,
   mergeStandardDefinition,
 } = require('./aliasContract');
-const { ModbusDriver } = require('./drivers/modbus');
-const { VartaModbusDriver } = require('./drivers/vartaModbus');
-const { DeyeModbusDriver } = require('./drivers/deyeModbus');
 const { getDeyeProfile, buildDeyeAliases } = require('./deyeProtocol');
 const { getVartaProfile, registersForProfile, buildVartaAliases } = require('./vartaProtocol');
 const { extendedRegistersForProfile, buildVartaExtendedAliases } = require('./vartaExtendedProtocol');
-const { MqttDriver } = require('./drivers/mqtt');
 const { MqttCallbackQueue, assertMqttMessageSession } = require('./drivers/mqttPendingOperations');
-const { CanbusDriver } = require('./drivers/canbus');
-const { HttpDriver } = require('./drivers/http');
-const { UdpDriver } = require('./drivers/udp');
-const { SpeedwireDriver } = require('./drivers/speedwire');
-const { OneWireDriver } = require('./drivers/onewire');
-const { MbusDriver } = require('./drivers/mbus');
-const { KostalTcpDriver } = require('./drivers/kostalTcp');
-const { KostalRs485Driver } = require('./drivers/kostalRs485');
-const { TaCmiDriver } = require('./drivers/taCmi');
 const { isEnergyFreshnessClass, isEnergyFreshnessAlias, captureAliasSources, hasNewAliasSample } = require('./deviceAliasFreshness');
 const { hasSameReadResponse } = require('./modbusReadEvidence');
 
@@ -6675,23 +6662,34 @@ class DeviceRuntime {
 
   _createDriver() {
     const proto = this.cfg.protocol;
-    if (getDeyeProfile(this.template)) return new DeyeModbusDriver(this.adapter, this.cfg, this.template, this.global);
+    // Load a transport only when a configured device selects it. CommonJS reuses
+    // its module on later starts, while every device still gets its own driver.
+    if (getDeyeProfile(this.template)) {
+      const { DeyeModbusDriver } = require('./drivers/deyeModbus');
+      return new DeyeModbusDriver(this.adapter, this.cfg, this.template, this.global);
+    }
     if (getVartaProfile(this.template)) {
+      const { VartaModbusDriver } = require('./drivers/vartaModbus');
       return new VartaModbusDriver(this.adapter, this.cfg, this.template, this.global);
     }
     if (proto === 'modbusTcp' || proto === 'modbusRtu' || proto === 'modbusAscii') {
+      const { ModbusDriver } = require('./drivers/modbus');
       return new ModbusDriver(this.adapter, this.cfg, this.template, this.global);
     }
     if (proto === 'mbus') {
+      const { MbusDriver } = require('./drivers/mbus');
       return new MbusDriver(this.adapter, this.cfg, this.template, this.global);
     }
     if (proto === 'onewire') {
+      const { OneWireDriver } = require('./drivers/onewire');
       return new OneWireDriver(this.adapter, this.cfg, this.template, this.global);
     }
     if (proto === 'speedwire') {
+      const { SpeedwireDriver } = require('./drivers/speedwire');
       return new SpeedwireDriver(this.adapter, this.cfg, this.template, this.global);
     }
     if (proto === 'mqtt') {
+      const { MqttDriver } = require('./drivers/mqtt');
       // MQTT driver needs mapping dp -> state id
       return new MqttDriver(
         this.adapter,
@@ -6706,6 +6704,7 @@ class DeviceRuntime {
       );
     }
     if (proto === 'canbus') {
+      const { CanbusDriver } = require('./drivers/canbus');
       // CANbus driver needs mapping dp -> state id + baseId for info.* states
       return new CanbusDriver(
         this.adapter,
@@ -6719,18 +6718,23 @@ class DeviceRuntime {
       );
     }
     if (proto === 'kostalTcp') {
+      const { KostalTcpDriver } = require('./drivers/kostalTcp');
       return new KostalTcpDriver(this.adapter, this.cfg, this.template, this.global);
     }
     if (proto === 'kostalRs485') {
+      const { KostalRs485Driver } = require('./drivers/kostalRs485');
       return new KostalRs485Driver(this.adapter, this.cfg, this.template, this.global);
     }
     if (proto === 'http') {
+      const { HttpDriver } = require('./drivers/http');
       return new HttpDriver(this.adapter, this.cfg, this.template, this.global);
     }
     if (proto === 'taCmi') {
+      const { TaCmiDriver } = require('./drivers/taCmi');
       return new TaCmiDriver(this.adapter, this.cfg, this.template, this.global, this);
     }
     if (proto === 'udp') {
+      const { UdpDriver } = require('./drivers/udp');
       return new UdpDriver(this.adapter, this.cfg, this.template, this.global);
     }
     throw new Error(`Unsupported protocol: ${proto}`);

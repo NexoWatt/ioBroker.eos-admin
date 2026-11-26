@@ -32,7 +32,10 @@ async function main() {
         app.get('/system/img/eos/nexowatt-eos-brand-wide.png', (_req, res) => res.status(204).end());
         registerEosModuleRoutes({ app, host, baseDir: root, jsonParser: express.json(),
             authorize: async () => ({ authenticated: true, role: 'admin' }), requestAllowed: () => true, csrfAllowed: () => false,
-            runtimeStatus: () => ({ active: true, emsReady: false, process: processHealth('running') }) });
+            runtimeStatus: () => ({
+                ui: { active: true, process: processHealth('running') },
+                ems: { active: true, emsReady: false, process: { ...processHealth('running'), pid: 32124 } },
+            }) });
         server = app.listen(0, '127.0.0.1'); await new Promise(resolve => server.once('listening', resolve));
         browser = await puppeteer.launch({ executablePath: process.env.EOS_CHROMIUM_PATH || await puppeteer.executablePath(),
             headless: true, userDataDir: path.join(temp, 'profile'), args: ['--no-sandbox', '--disable-dev-shm-usage'] });
@@ -52,9 +55,11 @@ async function main() {
         await page.waitForSelector('[data-process="ocpp21.0"]');
         const initial = await page.evaluate(() => ({ text: document.getElementById('processes').textContent,
             cards: document.querySelectorAll('.runtime-card').length, overflow: document.documentElement.scrollWidth > window.innerWidth }));
-        assert.equal(initial.cards, 7); assert.equal(initial.overflow, false); assert.doesNotMatch(initial.text, /NEVER_EXPOSE_THIS/);
-        assert.match(initial.text, /EMS bereitNein/); assert.match(initial.text, /Neustart wartet/); assert.match(initial.text, /Deaktiviert/);
-        assert.match(initial.text, /23456/); checks.push({ name: 'desktop production markup, seven distinct processes including hosted and external OCPP, explicit EMS not ready', result: 'passed' });
+        assert.equal(initial.cards, 8); assert.equal(initial.overflow, false); assert.doesNotMatch(initial.text, /NEVER_EXPOSE_THIS/);
+        assert.match(await page.$eval('section[data-process="ems"]', node => node.textContent), /EMS bereitNein/);
+        assert.doesNotMatch(await page.$eval('section[data-process="ui"]', node => node.textContent), /EMS bereit/);
+        assert.match(initial.text, /Neustart wartet/); assert.match(initial.text, /Deaktiviert/);
+        assert.match(initial.text, /23456/); checks.push({ name: 'desktop markup separates the EMS and UI cards; eight distinct processes including hosted and external OCPP', result: 'passed' });
         if (process.env.EOS_BROWSER_SCREENSHOT_DIR) {
             await fs.mkdir(process.env.EOS_BROWSER_SCREENSHOT_DIR, { recursive: true });
             await page.screenshot({ path: path.join(process.env.EOS_BROWSER_SCREENSHOT_DIR, 'runtime-desktop.png'), fullPage: true });

@@ -1,21 +1,20 @@
 {
-  "version": "9.0.29",
+  "version": "9.0.30",
   "channel": "next",
   "baseFrontend": "Rebuilt from official Admin 8.3.5 sources plus reviewed EOS integration using React 19 and Vite; see source-bound frontend manifest.",
   "runtimeEntry": "vite-manifest",
-  "releaseType": "unified-local-device-tls",
-  "release": "unified-local-device-tls",
-  "label": "v9-0-29",
+  "releaseType": "unified-ems-process-isolation",
+  "release": "unified-ems-process-isolation",
+  "label": "v9-0-30",
   "notes": [
-    "Preserves the existing ioBroker Admin and the combined EOS login/runtime.",
-    "One central NWL3 activation, private persistence and authorized public-key recovery.",
-    "Manufacturer vault/private keys stay on the issuer computer; live-device acceptance remains required."
+    "One ioBroker adapter supervises separate presentation and EMS processes.",
+    "The operating configuration and EMS actuator authority remain centralized.",
+    "Software and hardware acceptance results are recorded separately."
   ],
   "changes": [
-    "Generate local HTTPS device certificates from the authenticated administration UI",
-    "Download the public device and root certificates and copy the SHA-256 fingerprint",
-    "Activate the generated certificate explicitly through the existing certificate validation and persistence path",
-    "Retain separate offline manufacturer-CA issuance"
+    "Separate the read-only presentation worker and EMS worker for independent runtime control",
+    "Expire the datapoint picker index and share concurrent reads",
+    "Load Devices drivers only when requested by a configured device"
   ],
   "brandingCacheVersion": 7110,
   "shellCacheVersion": 7110,
@@ -29,7 +28,7 @@
     "commit": "6f77eedf525813a7a61d79188d1ff05dffd05086"
   },
   "product": "NexoWatt EOS",
-  "status": "9.0.29 controlled integration test release; see docs/reports/unified-9.0.29 for software results and target-hardware checks",
+  "status": "9.0.30 controlled integration test release; see docs/reports/unified-9.0.30 for software results and target-hardware checks",
   "sourceComponents": {
     "admin": "8.0.2",
     "ui": "1.0.38",
@@ -39,5 +38,5 @@
     "backup": "1.0.10",
     "ocpp": "0.4.4 integrated hosted module, based on iobroker.ocpp21 0.4.3"
   },
-  "repositoryEntry": "nexowatt-eos-admin-repository-entry-v9-0-29.json"
+  "repositoryEntry": "nexowatt-eos-admin-repository-entry-v9-0-30.json"
 }

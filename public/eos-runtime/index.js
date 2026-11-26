@@ -5,7 +5,7 @@
     /** @type {Record<string,string>} */ const states = { running: 'Läuft', starting: 'Startet', stopping: 'Wird beendet',
         stopped: 'Beendet', disabled: 'Deaktiviert', moduleDisabled: 'Modul deaktiviert', blocked: 'Start blockiert', notStarted: 'Nicht gestartet',
         error: 'Fehler', failed: 'Fehler', backoff: 'Neustart wartet', unknown: 'Unbestätigt' };
-    /** @type {Record<string,string>} */ const labels = { admin: 'EOS Administration', ui: 'Oberfläche und EMS', devices: 'Geräte', eebus: 'EEBus', backup: 'Sicherung', ocpp: 'OCPP-Ladestationen' };
+    /** @type {Record<string,string>} */ const labels = { admin: 'EOS Administration', ui: 'Oberfläche', ems: 'Energiemanagement (EMS)', devices: 'Geräte', eebus: 'EEBus', backup: 'Sicherung', ocpp: 'OCPP-Ladestationen' };
     /** @type {Record<string,string>} */ const errors = {
         AUTHENTICATION_REQUIRED: 'Bitte erneut bei EOS anmelden.',
         ADMIN_REQUIRED: 'Für die Prozessbedienung ist eine Administratoranmeldung erforderlich.',
@@ -112,10 +112,11 @@
         if (!entry) note.textContent = 'Prozessbedienung derzeit nicht verfügbar. Status aktualisieren.';
         else if (entry.busy) note.textContent = 'Steuerauftrag läuft. Der bestätigte Prozessstatus wird automatisch aktualisiert.';
         else if (entry.reason) { note.textContent = explanation(entry.reason); note.classList.add('is-blocked'); }
-        else if (id === 'ui') note.textContent = 'Deaktivieren beendet Oberfläche und EMS-Regelung. Die Administration und diese Seite bleiben erreichbar.';
+        else if (id === 'ui') note.textContent = 'Deaktivieren beendet die Oberfläche. Die Administration und diese Seite bleiben erreichbar.';
+        else if (id === 'ems') note.textContent = 'Deaktivieren hält die EMS-Regelung an. Aktivieren startet sie mit der gespeicherten Konfiguration.';
         else note.textContent = 'Aktivieren schaltet Modul und Prozess gemeinsam ein. Deaktivieren beendet den Prozess; die Konfiguration bleibt gespeichert.';
         card.append(actions, note);
-        if (id !== 'ui') {
+        if (id !== 'ui' && id !== 'ems') {
             const link = document.createElement('a'); link.className = 'runtime-config-link'; link.href = `/modules/${id}/`;
             link.textContent = 'Moduleinstellungen öffnen'; card.append(link);
         }
@@ -127,7 +128,7 @@
     /** @param {unknown} input */
     function render(input) {
         const value = record(input); const now = Date.now();
-        if (!Array.isArray(value.processes) || value.processes.length > 38 || typeof value.observedAt !== 'number' ||
+        if (!Array.isArray(value.processes) || value.processes.length > 39 || typeof value.observedAt !== 'number' ||
             !Number.isSafeInteger(value.observedAt) || value.observedAt > now + 5000 || now - value.observedAt > 15000) throw new Error('EOS_RUNTIME_INVALID_STATUS');
         const fragment = document.createDocumentFragment(); const seen = new Set(); let external = false;
         controls.clear(); csrf = typeof value.csrfToken === 'string' && value.csrfToken.length >= 16 && value.csrfToken.length <= 512 ? value.csrfToken : '';
@@ -153,7 +154,7 @@
             const fields = document.createElement('dl');
             field(fields, 'Prozessnummer (PID)', ['running', 'starting', 'stopping'].includes(state) && typeof row.pid === 'number' && row.pid > 0 ? natural(row.pid) : 'Unbekannt');
             field(fields, isExternal ? 'Controller meldet aktiv' : id === 'ui' ? 'Oberfläche aktiv' : id === 'admin' ? 'Administration erreichbar' : 'Betrieb freigegeben', boolean(row.active, 'Ja', 'Nein'));
-            if (id === 'ui') field(fields, 'EMS bereit', boolean(row.emsReady, 'Ja', 'Nein'));
+            if (id === 'ems') field(fields, 'EMS bereit', boolean(row.emsReady, 'Ja', 'Nein'));
             if (isExternal) field(fields, 'OCPP-Verbindung', boolean(row.connected, 'Verbunden', 'Getrennt'));
             if (!isExternal && id !== 'admin') {
                 if (entry) field(fields, 'Prozessfreigabe', entry.enabled ? 'Aktiviert' : 'Deaktiviert');
@@ -179,7 +180,7 @@
             }
             fragment.append(card);
         }
-        if (!seen.has('admin') || !seen.has('ui')) throw new Error('EOS_RUNTIME_INVALID_STATUS');
+        if (!seen.has('admin') || !seen.has('ui') || !seen.has('ems')) throw new Error('EOS_RUNTIME_INVALID_STATUS');
         list.replaceChildren(fragment); element('observed-at').textContent = `Abfrage bestätigt: ${date(value.observedAt)}`;
         element('external-note').textContent = external ? 'Zusätzlich vorhandene OCPP-Adapter werden separat angezeigt. Ihre Prozessnummer stammt ausschließlich aus bestätigten Controller-Meldungen. Ein gleichzeitig laufender Altadapter muss vor der Übernahme vollständig beendet sein.' : 'Das integrierte OCPP-Modul läuft als eigener EOS-Prozess. Es ist keine zusätzliche aktive OCPP-Adapterinstanz erfasst.';
         message.textContent = 'Prozessstatus aktualisiert.'; message.className = '';

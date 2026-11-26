@@ -68,24 +68,27 @@ export class EphemeralMap<K, V> extends Map<K, V> {
 
 /** One full discovery snapshot at a time, including simultaneous forced refreshes. */
 export class ExpiringSnapshot<T> {
-  private readonly cache: EphemeralMap<string, { value: T }>;
+  private readonly cache: EphemeralMap<string, { value: T; startedAt: number }>;
   private pending: Promise<T> | null = null;
   private closed = false;
-  constructor(private readonly load: () => Promise<T>, ttlMs: number, time: CacheClock = clock) {
+  constructor(private readonly load: () => Promise<T>, ttlMs: number, private readonly time: CacheClock = clock) {
     this.cache = new EphemeralMap(ttlMs, 1, time);
   }
   get retained(): boolean { return this.cache.has('snapshot'); }
   get loading(): boolean { return this.pending !== null; }
-  get(force = false): Promise<T> {
+  get(force = false, maxAgeMs?: number): Promise<T> {
     if (this.closed) return Promise.reject(new Error('EOS_UI_STOPPING'));
     // A refresh already in progress is newer than the previously cached snapshot.
     if (this.pending) return this.pending;
     const cached = !force ? this.cache.get('snapshot') : undefined;
-    if (cached) return Promise.resolve(cached.value);
+    if (cached && (maxAgeMs === undefined || this.time.now() - cached.startedAt <= maxAgeMs)) {
+      return Promise.resolve(cached.value);
+    }
     this.cache.clear();
+    const startedAt = this.time.now();
     const request = Promise.resolve().then(this.load).then(value => {
       if (this.closed) throw new Error('EOS_UI_STOPPING');
-      this.cache.set('snapshot', { value });
+      this.cache.set('snapshot', { value, startedAt });
       return value;
     });
     this.pending = request;

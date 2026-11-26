@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/lib/ephemeral-cache.ts
- * Quell-Hash: sha256:8836aeca081c6bfc69ef5afb57d1f392c51881d50958a2718febef6122a0acac
+ * Quell-Hash: sha256:726b8b689a45fd0422ce656823bf117ea83097c7fb136cf955953f82d90e4887
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -88,26 +88,29 @@ exports.EphemeralMap = EphemeralMap;
 class ExpiringSnapshot {
     constructor(load, ttlMs, time = clock) {
         this.load = load;
+        this.time = time;
         this.pending = null;
         this.closed = false;
         this.cache = new EphemeralMap(ttlMs, 1, time);
     }
     get retained() { return this.cache.has('snapshot'); }
     get loading() { return this.pending !== null; }
-    get(force = false) {
+    get(force = false, maxAgeMs) {
         if (this.closed)
             return Promise.reject(new Error('EOS_UI_STOPPING'));
         // A refresh already in progress is newer than the previously cached snapshot.
         if (this.pending)
             return this.pending;
         const cached = !force ? this.cache.get('snapshot') : undefined;
-        if (cached)
+        if (cached && (maxAgeMs === undefined || this.time.now() - cached.startedAt <= maxAgeMs)) {
             return Promise.resolve(cached.value);
+        }
         this.cache.clear();
+        const startedAt = this.time.now();
         const request = Promise.resolve().then(this.load).then(value => {
             if (this.closed)
                 throw new Error('EOS_UI_STOPPING');
-            this.cache.set('snapshot', { value });
+            this.cache.set('snapshot', { value, startedAt });
             return value;
         });
         this.pending = request;

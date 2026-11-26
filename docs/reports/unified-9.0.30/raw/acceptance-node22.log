@@ -1,0 +1,30 @@
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: real EMS ticks and drives one simulated relay while the GUI is frozen, stopped, and crashed
+ok 1 - real EMS ticks and drives one simulated relay while the GUI is frozen, stopped, and crashed
+  ---
+  duration_ms: 7798.601568
+  type: 'test'
+  ...
+# Subtest: stopping only EMS drains an accepted write before restarting, while the authorized GUI picker stays available
+ok 2 - stopping only EMS drains an accepted write before restarting, while the authorized GUI picker stays available
+  ---
+  duration_ms: 8473.992215
+  type: 'test'
+  ...
+# Subtest: an explicit EMS start after a crash cannot bypass an outstanding accepted controller write
+ok 3 - an explicit EMS start after a crash cannot bypass an outstanding accepted controller write
+  ---
+  duration_ms: 6637.851783
+  type: 'test'
+  ...
+1..3
+# tests 3
+# suites 0
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 23114.137796

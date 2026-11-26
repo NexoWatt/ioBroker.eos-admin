@@ -25,12 +25,15 @@ interface UiBridge {
     resolveDeviceProfileReferences?(input: unknown): unknown;
     hostedModuleFeedback?(input: never): unknown;
 }
-interface ProcessOptions {
+export interface ProcessOptions {
     baseDir: string;
     workerPath?: string;
     runtimePath?: string;
     heartbeatMs?: number;
     restartDelayMs?: number;
+}
+interface UiProcessOptions extends ProcessOptions {
+    presentationOnly?: boolean;
 }
 interface RequestContext {
     request: Request;
@@ -49,7 +52,7 @@ interface ProcessHealth {
     lastHeartbeatAt: number;
     nextRestartAt: number;
 }
-interface UiProcessRuntime {
+export interface UiProcessRuntime {
     start(): Promise<void>;
     startOperational(): Promise<void>;
     stop(): Promise<void>;
@@ -95,8 +98,39 @@ function ownerMethod(owner: UiOwner, name: string, args: unknown[]): unknown {
     }
     return Reflect.apply(method, owner, args);
 }
-function configuration(owner: UiOwner): Record<string, unknown> {
+async function presentationDatapoints(owner: UiOwner): Promise<Record<string, unknown>> {
+    const objects = await ownerMethod(owner, 'getForeignObjectsAsync', ['*', 'state']);
+    const projected = Object.create(null) as Record<string, unknown>;
+    if (!processRecord(objects)) {
+        return projected;
+    }
+    for (const id in objects) {
+        if (!Object.prototype.hasOwnProperty.call(objects, id)) {
+            continue;
+        }
+        const item = objects[id];
+        if (!processRecord(item) || !processRecord(item.common)) {
+            continue;
+        }
+        const { name, role, type, unit, read, write } = item.common;
+        projected[id] = { common: { name, role, type, unit, read, write } };
+    }
+    return projected;
+}
+function configuration(owner: UiOwner, presentationOnly: boolean): Record<string, unknown> {
     const config = processRecord(owner.config) ? owner.config : {};
+    if (presentationOnly) {
+        const migration = processRecord(config.eosUiMigration) ? config.eosUiMigration : {};
+        const source =
+            typeof migration.source === 'string' && /^nexowatt-ui\.\d+$/.test(migration.source)
+                ? migration.source
+                : undefined;
+        return {
+            eosUiMigration: { preserveNamespace: migration.preserveNamespace === true && !!source, source },
+            port: config.port,
+            secure: config.secure,
+        };
+    }
     return {
         eosUi: config.eosUi || {},
         eosUiMigration: config.eosUiMigration,
@@ -105,8 +139,9 @@ function configuration(owner: UiOwner): Record<string, unknown> {
     };
 }
 
-/** One UI/EMS adapter process. Admin HTTPS, sessions, ownership and controller writes remain parent-owned. */
-export function createEosUiProcess(owner: UiOwner, bridge: UiBridge, options: ProcessOptions): UiProcessRuntime {
+/** One supervised worker with a generation-bound lease and parent-authenticated HTTP requests. */
+export function createEosUiProcess(owner: UiOwner, bridge: UiBridge, options: UiProcessOptions): UiProcessRuntime {
+    const presentationOnly = options.presentationOnly === true;
     let child: ChildProcess | null = null;
     let peer: UiProcessRpc | null = null;
     let generation = '';
@@ -117,6 +152,7 @@ export function createEosUiProcess(owner: UiOwner, bridge: UiBridge, options: Pr
     let starting: Promise<void> | null = null;
     let stopping: Promise<void> | null = null;
     let subscriptionCleanup: Promise<void> | null = null;
+    let presentationRead: Promise<Record<string, unknown>> | null = null;
     let heartbeat: NodeJS.Timeout | null = null;
     let retry: NodeJS.Timeout | null = null;
     let lastHealth = 0;
@@ -146,13 +182,17 @@ export function createEosUiProcess(owner: UiOwner, bridge: UiBridge, options: Pr
         child.exitCode === null &&
         child.signalCode === null;
     const writable = (token: string): boolean =>
-        current(token) && !writeFenced && bridge.canWrite() === true && performance.now() - lastHealth < 5000;
+        !presentationOnly &&
+        current(token) &&
+        !writeFenced &&
+        bridge.canWrite() === true &&
+        performance.now() - lastHealth < 5000;
     const snapshot = (): Record<string, unknown> => ({
         sequence: ++leaseSequence,
         expiresAt: Date.now() + 3000,
         license: bridge.getLicense(),
-        readiness: bridge.getRuntimeReadiness?.(),
-        canWrite: !stopped && !paused && !writeFenced && bridge.canWrite() === true,
+        readiness: presentationOnly ? undefined : bridge.getRuntimeReadiness?.(),
+        canWrite: !presentationOnly && !stopped && !paused && !writeFenced && bridge.canWrite() === true,
         listening: bridge.isListening?.() === true,
     });
     const closeRequests = (): void => {
@@ -240,6 +280,28 @@ export function createEosUiProcess(owner: UiOwner, bridge: UiBridge, options: Pr
     const callOwner = async (method: string, args: unknown[], token: string): Promise<unknown> => {
         if (!current(token)) {
             throw processError('EOS_UI_PROCESS_STOPPED');
+        }
+        if (presentationOnly) {
+            if (method !== 'getForeignObjectsAsync' || args.length !== 2 || args[0] !== '*' || args[1] !== 'state') {
+                throw processError('EOS_UI_PROCESS_METHOD_DENIED');
+            }
+            // A failed or restarted GUI cannot submit another whole-catalog
+            // read while the previous controller operation is still in flight.
+            if (!presentationRead) {
+                const reading = presentationDatapoints(owner);
+                presentationRead = reading;
+                const clear = (): void => {
+                    if (presentationRead === reading) {
+                        presentationRead = null;
+                    }
+                };
+                void reading.then(clear, clear);
+            }
+            const projected = await presentationRead;
+            if (!current(token)) {
+                throw processError('EOS_UI_PROCESS_STOPPED');
+            }
+            return projected;
         }
         if (!UI_OWNER_ASYNC.has(method) && !['sendTo', 'checkPassword', 'saveUi'].includes(method)) {
             throw processError('EOS_UI_PROCESS_METHOD_DENIED');
@@ -379,7 +441,7 @@ export function createEosUiProcess(owner: UiOwner, bridge: UiBridge, options: Pr
             lastHealth = performance.now();
             health.lastHeartbeatAt = Date.now();
             latestStatus = args[0];
-        } else if (method === 'bridge.deviceEmsConfigChanged') {
+        } else if (!presentationOnly && method === 'bridge.deviceEmsConfigChanged') {
             bridge.deviceEmsConfigChanged?.();
         } else if (
             method === 'log' &&
@@ -428,6 +490,11 @@ export function createEosUiProcess(owner: UiOwner, bridge: UiBridge, options: Pr
         if (starting) {
             return starting;
         }
+        if (!child && (pendingWrites.size || subscriptionCleanup)) {
+            // Explicit startup is subject to the same drain barrier as an
+            // automatic replacement after an unexpected process exit.
+            throw processError('EOS_UI_PROCESS_STOP_UNCONFIRMED');
+        }
         starting = (async () => {
             if (child) {
                 return;
@@ -447,10 +514,14 @@ export function createEosUiProcess(owner: UiOwner, bridge: UiBridge, options: Pr
                     LANG: process.env.LANG,
                     TZ: process.env.TZ,
                     NODE_ENV: process.env.NODE_ENV,
-                    IOBROKER_CONTROLLER_DIR: process.env.IOBROKER_CONTROLLER_DIR,
-                    NEXOWATT_OPEN_METEO_API_KEY: process.env.NEXOWATT_OPEN_METEO_API_KEY,
-                    NEXOWATT_ENERGYFLOW_TS_MODE: process.env.NEXOWATT_ENERGYFLOW_TS_MODE,
-                    NODE_EXTRA_CA_CERTS: process.env.NODE_EXTRA_CA_CERTS,
+                    ...(!presentationOnly
+                        ? {
+                              IOBROKER_CONTROLLER_DIR: process.env.IOBROKER_CONTROLLER_DIR,
+                              NEXOWATT_OPEN_METEO_API_KEY: process.env.NEXOWATT_OPEN_METEO_API_KEY,
+                              NEXOWATT_ENERGYFLOW_TS_MODE: process.env.NEXOWATT_ENERGYFLOW_TS_MODE,
+                              NODE_EXTRA_CA_CERTS: process.env.NODE_EXTRA_CA_CERTS,
+                          }
+                        : {}),
                 },
             });
             child = spawned;
@@ -508,8 +579,9 @@ export function createEosUiProcess(owner: UiOwner, bridge: UiBridge, options: Pr
             const init = {
                 namespace: owner.namespace,
                 instance: owner.instance,
-                config: configuration(owner),
+                config: configuration(owner, presentationOnly),
                 runtimePath: options.runtimePath ?? join(options.baseDir, 'ui', 'main.js'),
+                presentationOnly,
                 snapshot: snapshot(),
             };
             writeFenced = false;
@@ -622,10 +694,20 @@ export function createEosUiProcess(owner: UiOwner, bridge: UiBridge, options: Pr
             await launch();
         },
         async startOperational(): Promise<void> {
-            if (paused) {
+            if (paused || presentationOnly) {
                 return;
             }
             armed = true;
+            // Arm before awaiting initialization, so a transient launch failure does
+            // not leave an automatically restarted EMS in presentation-only standby.
+            if (starting) {
+                await starting;
+                return;
+            }
+            if (!child && !retry) {
+                await launch();
+                return;
+            }
             peer?.notify('lease', [snapshot()]);
             await remote('startOperational', [], 120_000);
         },
@@ -794,7 +876,7 @@ export function createEosUiProcess(owner: UiOwner, bridge: UiBridge, options: Pr
             }
             stopping = null;
             paused = false;
-            armed = true;
+            armed = !presentationOnly;
             health.restarts = 0;
             await launch();
         },

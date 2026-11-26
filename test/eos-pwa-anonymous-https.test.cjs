@@ -26,8 +26,12 @@ function loadWeb(dataDir) {
     vm.runInNewContext(code, { exports, module: { exports }, __dirname: path.dirname(file), __filename: file,
         Buffer, URL, Error, console, process, setTimeout, clearTimeout,
         require(name) {
-            if (name === './eosUiProcess') return {
-                createEosUiProcess: (adapter, bridge) => localRequire(path.join(root, 'ui/main.js')).createHostedRuntime(adapter, bridge),
+            if (name === './eosSplitRuntime') return {
+                createEosSplitRuntime(adapter, bridge) {
+                    const hosted = localRequire(path.join(root, 'ui/main.js')).createHostedRuntime(adapter, bridge);
+                    return Object.assign(hosted, { startEms: hosted.start, pause: hosted.stop, pauseEms: hosted.stop,
+                        resume: hosted.start, resumeEms: hosted.start });
+                },
             };
             if (name === '@iobroker/adapter-core') return { EXIT_CODES: { ADAPTER_REQUESTED_TERMINATION: 11 }, I18n: {}, controllerDir: path.join(root, 'node_modules/iobroker.js-controller'), getAbsoluteInstanceDataDir: () => dataDir };
             if (!emitted && name.startsWith('.') && fs.existsSync(path.resolve(path.dirname(file), `${name}.ts`))) return require('tsx/cjs/api').require(path.resolve(path.dirname(file), `${name}.ts`), file);

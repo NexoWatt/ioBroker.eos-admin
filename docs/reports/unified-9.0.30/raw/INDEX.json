@@ -1,0 +1,137 @@
+{
+  "schema": 1,
+  "version": "9.0.30",
+  "results": {
+    "node22-tests-final": {
+      "tests": 2740,
+      "pass": 2738,
+      "fail": 0,
+      "skipped": 2,
+      "cancelled": 0
+    },
+    "node24-tests-final": {
+      "tests": 2740,
+      "pass": 2738,
+      "fail": 0,
+      "skipped": 2,
+      "cancelled": 0
+    }
+  },
+  "files": [
+    {
+      "file": "acceptance-node22.log",
+      "deliveredSha256": "bb04b2e0f4652688c85be97ebfee13de7c60868be92b179c94ea0f535c4c2941",
+      "bytes": 1102
+    },
+    {
+      "file": "acceptance-node24.log",
+      "deliveredSha256": "573414a93440d26f9e44e645b774a7d51566ff7b46619224b89f4edfa91a26d8",
+      "bytes": 470
+    },
+    {
+      "file": "backend.log",
+      "deliveredSha256": "b65b206135bb63f0ebb0272232de93f6057cc3789eaba905edaba97e4e612191",
+      "bytes": 277
+    },
+    {
+      "file": "baseline-10000.json",
+      "deliveredSha256": "dafd8a463118d29974e2334b963789dcd40af90824966fa7a718f92bf6406be6",
+      "bytes": 342
+    },
+    {
+      "file": "baseline-50000.json",
+      "deliveredSha256": "d254736ce260ad156eed795ad37934766655dd107ac29810394d63697ddef803",
+      "bytes": 344
+    },
+    {
+      "file": "candidate-10000.json",
+      "deliveredSha256": "8c41567a1b53495ef639e9ce7c6566b292a1211febddf14087e4f16cbc616939",
+      "bytes": 346
+    },
+    {
+      "file": "candidate-50000.json",
+      "deliveredSha256": "9ddb78917b525f18896cb57d665dc9407c31e6fc699effcb0f2fa9beee1f839a",
+      "bytes": 348
+    },
+    {
+      "file": "frontend.log",
+      "deliveredSha256": "e5f183db17997729974c20953617b669f7af597cdce86df6fa262f4a0fd88efc",
+      "bytes": 17752
+    },
+    {
+      "file": "installer.log",
+      "deliveredSha256": "d3255545ff2fd086d655146aa26507f8ff37d0f389ad250f0cbd77cb1ee86ad3",
+      "bytes": 1275
+    },
+    {
+      "file": "lint.log",
+      "deliveredSha256": "56b1d9cdcbea8bd609ddd28c7c404653dabf9e60f0134208a77156de69f1aeae",
+      "bytes": 7641
+    },
+    {
+      "file": "modules.log",
+      "deliveredSha256": "ff8cca7e63ef5155162f71a2ca79e28050b0e705ce2f198981aa6b64fb9a3ec1",
+      "bytes": 307
+    },
+    {
+      "file": "node22-profile.json",
+      "deliveredSha256": "2e6185c43be37ed17838762ead20b2f728c40af3f5df8fbee7b690735a990d42",
+      "bytes": 14911
+    },
+    {
+      "file": "node22-tests-final.log",
+      "deliveredSha256": "cfcd7c5f37026c5c89128ca3794184d332ebfbe11924f97f964d4418591f6e97",
+      "bytes": 738504
+    },
+    {
+      "file": "node22-version.log",
+      "deliveredSha256": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906",
+      "bytes": 9
+    },
+    {
+      "file": "node24-profile.json",
+      "deliveredSha256": "dc8cef691904d4037a81e16f5bf528dec72e8f98819996ccbb1c84a13246e48d",
+      "bytes": 14911
+    },
+    {
+      "file": "node24-tests-final.log",
+      "deliveredSha256": "5b89a445ba75e5234c2b222201c63f87aef7551880d32343adf02139c0ea16dc",
+      "bytes": 297292
+    },
+    {
+      "file": "node24-version.log",
+      "deliveredSha256": "4409d3bfa08b82f385bd424eeda65fc63b756129f0e89e82df77f1fecafccc14",
+      "bytes": 9
+    },
+    {
+      "file": "npm-audit-runtime.json",
+      "deliveredSha256": "9a38535e223aa382d0eca300ff5e8f53897b15bf06adc1c92ea32fddcfa551b6",
+      "bytes": 1620
+    },
+    {
+      "file": "profile-combined-node24.log",
+      "deliveredSha256": "7de431ece40bede2ffd8eb66f77c16241ac0a4062858a415c60ab4e2daf0e603",
+      "bytes": 1020
+    },
+    {
+      "file": "profile-split-node24.log",
+      "deliveredSha256": "af1ba326fe5901b073007fefee79ce3400be66ca5775c75c4a1778401f9c9ec2",
+      "bytes": 1239
+    },
+    {
+      "file": "split-lint.log",
+      "deliveredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "file": "typecheck.log",
+      "deliveredSha256": "8f06dad6cb689c32258ed6951df2bcc135ceb001ba0865c19974434f6fd8a9da",
+      "bytes": 3049
+    },
+    {
+      "file": "ui-runtime.log",
+      "deliveredSha256": "2fccd5346044644e8e50c0b0fce88cac9aa4d946b99bfab11a370b61fb189517",
+      "bytes": 579
+    }
+  ]
+}

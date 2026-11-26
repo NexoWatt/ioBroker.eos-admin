@@ -1,0 +1,12 @@
+{"version":"eos930","node":"v24.22.3","elapsedSeconds":0,"roles":{"gui":{"RssKiB":47532,"PssKiB":24261,"Private_DirtyKiB":22168,"SwapKiB":0},"ems":{"RssKiB":114500,"PssKiB":89121,"Private_DirtyKiB":84160,"SwapKiB":0}},"childPssKiB":113382,"fixtureParent":{"RssKiB":86684,"PssKiB":60861,"Private_DirtyKiB":58172,"SwapKiB":0},"heartbeat":3}
+{"version":"eos930","node":"v24.22.3","elapsedSeconds":5,"roles":{"gui":{"RssKiB":47644,"PssKiB":24172,"Private_DirtyKiB":22276,"SwapKiB":0},"ems":{"RssKiB":118256,"PssKiB":92696,"Private_DirtyKiB":87724,"SwapKiB":0}},"childPssKiB":116868,"fixtureParent":{"RssKiB":93872,"PssKiB":67767,"Private_DirtyKiB":65268,"SwapKiB":0},"heartbeat":14}
+{"version":"eos930","node":"v24.22.3","elapsedSeconds":10,"roles":{"gui":{"RssKiB":47708,"PssKiB":24149,"Private_DirtyKiB":22340,"SwapKiB":0},"ems":{"RssKiB":122548,"PssKiB":95503,"Private_DirtyKiB":91968,"SwapKiB":0}},"childPssKiB":119652,"fixtureParent":{"RssKiB":103444,"PssKiB":77143,"Private_DirtyKiB":74824,"SwapKiB":0},"heartbeat":26}
+✔ Compare split presentation and EMS worker memory with the prior combined worker (13467.277496ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13471.824922

@@ -13,7 +13,13 @@ export class EosRuntimeControl {
     constructor(options: {
         owner: Adapter;
         host: EosModuleHost;
-        runtime: { pause(): Promise<void>; resume(): Promise<void>; status(): Record<string, unknown> };
+        runtime: {
+            pause(): Promise<void>;
+            resume(): Promise<void>;
+            pauseEms(): Promise<void>;
+            resumeEms(): Promise<void>;
+            status(): Record<string, unknown>;
+        };
         readTimeoutMs?: number;
     });
     initialize(): Promise<void>;

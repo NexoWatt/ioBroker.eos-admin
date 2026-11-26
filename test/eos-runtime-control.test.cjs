@@ -2,6 +2,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const { EosRuntimeControl } = require('../src/lib/eosRuntimeControl');
+const { EosModuleConfigStore } = require('../src/lib/eosModuleConfigStore');
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 async function settled(control) { await control.whenIdle(); }
@@ -19,7 +20,11 @@ function fixture(objects = new Map(), options = {}) {
   const host = { view: async () => ({ config: { enabled: configured } }),
     enableProcessModule: async id => { calls.push([id, 'configure']); configured = true; },
     controlProcess: async (...args) => { calls.push(args); }, ...options.host };
-  const runtime = { pause: async () => { calls.push(['ui', 'stop']); }, resume: async () => { calls.push(['ui', 'start']); }, status: () => ({}), ...options.runtime };
+  const runtime = {
+    pause: async () => { calls.push(['ui', 'stop']); }, resume: async () => { calls.push(['ui', 'start']); },
+    pauseEms: async () => { calls.push(['ems', 'stop']); }, resumeEms: async () => { calls.push(['ems', 'start']); },
+    status: () => ({}), ...options.runtime,
+  };
   const control = new EosRuntimeControl({ owner, host, runtime, readTimeoutMs: options.readTimeoutMs });
   return { control, owner, host, runtime, calls, writes, objects,
     migration: value => { migration = value; }, ownership: value => { ownership = value; },
@@ -29,7 +34,7 @@ const request = (f, id, action) => f.control.request(id, action, f.control.revis
 
 test('default permits existing startup without writes; pause survives a fresh service and preserves device configuration', async () => {
   const f = fixture(); await f.control.initialize();
-  for (const id of ['ui', 'devices', 'eebus', 'backup', 'ocpp']) assert.equal(f.control.isEnabled(id), true, id);
+  for (const id of ['ui', 'ems', 'devices', 'eebus', 'backup', 'ocpp']) assert.equal(f.control.isEnabled(id), true, id);
   assert.equal(f.writes.length, 0);
   const beforeConfig = structuredClone(f.owner.config);
   assert.deepEqual(request(f, 'devices', 'disable'), { ok: true, accepted: true });
@@ -45,6 +50,60 @@ test('default permits existing startup without writes; pause survives a fresh se
   request(next, 'devices', 'enable'); await settled(next.control);
   assert.deepEqual(next.calls, [['devices', 'stop'], ['devices', 'start']]);
   assert.equal(next.control.isEnabled('devices'), true);
+});
+
+test('legacy combined pause stays in force on upgrade and new selections persist separately', async () => {
+  const f = fixture();
+  const store = new EosModuleConfigStore(f.owner, { moduleIds: ['runtime'] });
+  const legacy = { v: 1, enabled: { ui: false, devices: true, eebus: true, backup: false, ocpp: true } };
+  await store.save('runtime', { v: 1, encrypted: f.owner.encrypt(JSON.stringify(legacy)) });
+  f.writes.length = 0;
+  await f.control.initialize();
+  assert.equal(f.control.isEnabled('ui'), false);
+  assert.equal(f.control.isEnabled('ems'), false);
+  assert.deepEqual(f.writes, [], 'upgrade does not rewrite the legacy record at initialization');
+  f.owner.eosLicenseService.allowsEmbeddedModule = () => false;
+  f.host.view = async () => assert.fail('EMS is not a module host operation');
+  request(f, 'ems', 'enable'); await settled(f.control);
+  assert.deepEqual(f.calls, [['ems', 'stop'], ['ems', 'start']]);
+  const persisted = fixture(f.objects);
+  await persisted.control.initialize();
+  assert.equal(persisted.control.isEnabled('ems'), true);
+  assert.equal(persisted.control.isEnabled('ui'), false);
+  assert.equal(persisted.control.isEnabled('backup'), false);
+  const stored = await new EosModuleConfigStore(f.owner, { moduleIds: ['runtime'] }).load('runtime');
+  assert.deepEqual(JSON.parse(f.owner.decrypt(stored.encrypted)), { v: 2, enabled: { ...legacy.enabled, ems: true } });
+  request(persisted, 'ui', 'enable'); await settled(persisted.control);
+  request(persisted, 'ems', 'disable'); await settled(persisted.control);
+  assert.deepEqual(persisted.calls, [['ui', 'stop'], ['ui', 'start'], ['ems', 'stop']]);
+  assert.equal(persisted.control.isEnabled('ui'), true);
+  assert.equal(persisted.control.isEnabled('ems'), false);
+});
+
+test('an unconfirmed EMS stop leaves the UI and other process permissions intact', async () => {
+  const f = fixture(new Map(), { runtime: {
+    pauseEms: async () => { throw Object.assign(new Error('fixture'), { code: 'EOS_RUNTIME_STOP_UNCONFIRMED' }); },
+  } });
+  await f.control.initialize(); request(f, 'ems', 'restart'); await settled(f.control);
+  assert.deepEqual(f.calls, []);
+  assert.equal(f.control.view('ems').reason, 'EOS_RUNTIME_STOP_UNCONFIRMED');
+  assert.equal(f.control.isEnabled('ems'), false);
+  assert.equal(f.control.isEnabled('ui'), true);
+  assert.equal(f.control.isEnabled('devices'), true);
+  const restored = fixture(f.objects); await restored.control.initialize();
+  assert.equal(restored.control.isEnabled('ems'), false);
+  assert.equal(restored.control.isEnabled('ui'), true);
+});
+
+test('an incomplete new-format process configuration never defaults the EMS to enabled', async () => {
+  const f = fixture();
+  const store = new EosModuleConfigStore(f.owner, { moduleIds: ['runtime'] });
+  const enabled = { ui: true, devices: true, eebus: true, backup: true, ocpp: true };
+  await store.save('runtime', { v: 1, encrypted: f.owner.encrypt(JSON.stringify({ v: 2, enabled })) });
+  await f.control.initialize();
+  assert.equal(f.control.isEnabled('ems'), false);
+  assert.equal(f.control.isEnabled('ui'), false);
+  assert.equal(f.control.view('ems').reason, 'EOS_RUNTIME_CONFIG_INVALID');
 });
 
 test('restart commits a durable pause before confirmed shutdown and only then persists enable', async () => {

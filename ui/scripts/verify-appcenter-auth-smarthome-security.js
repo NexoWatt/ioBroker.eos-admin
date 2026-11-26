@@ -11,6 +11,7 @@ const path = require('path');
 const root = path.join(__dirname, '..');
 const main = fs.readFileSync(path.join(root, 'src-ts/runtime-executables/main.ts'), 'utf8');
 const activation = fs.readFileSync(path.join(root, 'src-ts/runtime-executables/lib/smarthome-activation.ts'), 'utf8');
+const picker = fs.readFileSync(path.join(root, 'src-ts/runtime-executables/lib/datapoint-picker.ts'), 'utf8');
 const appsHtml = fs.readFileSync(path.join(root, 'www/ems-apps.html'), 'utf8');
 const sh = fs.readFileSync(path.join(root, 'src-ts/runtime-executables/www/smarthome-config.ts'), 'utf8');
 
@@ -22,7 +23,8 @@ assert(main.includes("app.post('/api/smarthome/config', requireSmartHomeConfig")
 assert(main.includes('registerSmartHomeActivationApi(app, this, requireSmartHomeConfig)'), 'SmartHome activation must receive the Installer/Admin capability guard');
 assert(activation.includes("app.get('/api/smarthome/activation', guard,"), 'Installer/Admin SmartHome activation read missing');
 assert(activation.includes("app.post('/api/smarthome/activation', guard,"), 'Installer/Admin SmartHome activation save missing');
-assert(main.includes("app.get(['/api/object/tree', '/api/smarthome/object/tree'], requireDpDiscovery"), 'Installer/Admin DP discovery gate missing');
+assert(main.includes('registerDatapointPicker(app, this, requireDpDiscovery)'), 'Installer/Admin DP discovery gate missing');
+assert(picker.includes("app.get(['/api/object/tree', '/api/smarthome/object/tree'], requireDpDiscovery"), 'Installer/Admin DP tree gate missing');
 assert(sh.includes("/api/object/tree?prefix="), 'SmartHome picker must use the protected object tree');
 assert(sh.includes("hasCapability('smarthome.configure')"), 'Arbitrary test writes must remain installer-only');
 

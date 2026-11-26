@@ -4,14 +4,15 @@
 const { randomUUID } = require('node:crypto');
 const { EosModuleConfigStore } = require('./eosModuleConfigStore');
 
-/** @typedef {'ui'|'devices'|'eebus'|'backup'|'ocpp'} ProcessId */
+/** @typedef {'ui'|'ems'|'devices'|'eebus'|'backup'|'ocpp'} ProcessId */
 /** @typedef {'enable'|'disable'|'restart'} Action */
 /** @typedef {Record<ProcessId, boolean>} Activation */
 /** @typedef {{enabled:boolean,canEnable:boolean,canDisable:boolean,canRestart:boolean,busy:boolean,reason:string,revision:string}} ControlView */
 /** @typedef {{namespace:string,config:Record<string,unknown>,encrypt:(text:string)=>string,decrypt:(text:string)=>string,getForeignObjectAsync:(id:string)=>Promise<unknown>,setForeignObjectAsync:(id:string,value:unknown)=>Promise<unknown>,eosMigration?:{allowsStartup:()=>boolean,status?:()=>unknown},eosOwnership?:{canWrite:()=>boolean},eosLicenseService?:{statusView:()=>unknown,allowsEmbeddedModule?:(id:string)=>boolean},log:{warn:(code:string)=>void}}} Owner */
 /** @typedef {{mutation?:boolean,configurationSavePromise?:Promise<unknown>|null,view:(id:string)=>Promise<unknown>,enableProcessModule:(id:string)=>Promise<void>,controlProcess:(id:string,action:'stop'|'start')=>Promise<void>}} Host */
-/** @typedef {{pause:()=>Promise<void>,resume:()=>Promise<void>,status:()=>Record<string,unknown>}} Runtime */
-const IDS = /** @type {const} */ (['ui', 'devices', 'eebus', 'backup', 'ocpp']);
+/** @typedef {{pause:()=>Promise<void>,resume:()=>Promise<void>,pauseEms:()=>Promise<void>,resumeEms:()=>Promise<void>,status:()=>Record<string,unknown>}} Runtime */
+const LEGACY_IDS = /** @type {const} */ (['ui', 'devices', 'eebus', 'backup', 'ocpp']);
+const IDS = /** @type {const} */ ([...LEGACY_IDS, 'ems']);
 /** @param {unknown} value @returns {Record<string,unknown>} */
 function record(value) { return value !== null && typeof value === 'object' && !Array.isArray(value) ? /** @type {Record<string,unknown>} */ (value) : {}; }
 /** @param {string} code */
@@ -19,7 +20,7 @@ const fail = code => Object.assign(new Error(code), { code });
 /** @param {unknown} error */
 function code(error) { const value = record(error).code; return typeof value === 'string' && /^(?:EOS|EEBUS)_[A-Z0-9_]{1,72}$/.test(value) ? value : 'EOS_RUNTIME_CONTROL_FAILED'; }
 /** @returns {Activation} */
-const defaults = () => ({ ui: true, devices: true, eebus: true, backup: true, ocpp: true });
+const defaults = () => ({ ui: true, ems: true, devices: true, eebus: true, backup: true, ocpp: true });
 /** @template T @param {Promise<T>} operation @param {number} timeout @returns {Promise<T>} */
 async function readWithin(operation, timeout) {
     /** @type {ReturnType<typeof setTimeout>|undefined} */ let timer;
@@ -60,11 +61,16 @@ class EosRuntimeControl {
                 if (envelope) {
                     const data = record(JSON.parse(this.owner.decrypt(envelope.encrypted)));
                     const enabled = record(data.enabled);
-                    if (data.v !== 1 || Object.keys(data).some(key => !['v', 'enabled'].includes(key)) ||
-                        Object.keys(enabled).length !== IDS.length || IDS.some(id => typeof enabled[id] !== 'boolean')) {
+                    const ids = data.v === 1 ? LEGACY_IDS : IDS;
+                    if ((data.v !== 1 && data.v !== 2) || Object.keys(data).some(key => !['v', 'enabled'].includes(key)) ||
+                        Object.keys(enabled).length !== ids.length ||
+                        ids.some(id => !Object.hasOwn(enabled, id) || typeof enabled[id] !== 'boolean')) {
                         throw fail('EOS_RUNTIME_CONFIG_INVALID');
                     }
-                    for (const id of IDS) this.enabled[id] = enabled[id] === true;
+                    for (const id of ids) this.enabled[id] = enabled[id] === true;
+                    // The old UI pause governed both processes. A stored opt-out
+                    // must still prevent regulation when first upgrading.
+                    if (data.v === 1) this.enabled.ems = this.enabled.ui;
                 }
                 this.revision = this.store.revisions.get('runtime') || this.revision;
                 this.ready = true;
@@ -89,7 +95,7 @@ class EosRuntimeControl {
         if (this.owner.eosMigration?.allowsStartup() === false) return 'EOS_RUNTIME_MIGRATION_BLOCKED';
         const license = record(this.owner.eosLicenseService?.statusView());
         if (license.valid !== true || license.coreEnabled !== true ||
-            (id !== 'ui' && this.owner.eosLicenseService?.allowsEmbeddedModule?.(id) !== true)) return 'EOS_RUNTIME_LICENSE_REQUIRED';
+            (id !== 'ui' && id !== 'ems' && this.owner.eosLicenseService?.allowsEmbeddedModule?.(id) !== true)) return 'EOS_RUNTIME_LICENSE_REQUIRED';
         if (this.owner.eosOwnership?.canWrite() !== true) return 'EOS_RUNTIME_OWNERSHIP_REQUIRED';
         if (!configured) return 'EOS_RUNTIME_MODULE_DISABLED';
         return '';
@@ -145,7 +151,7 @@ class EosRuntimeControl {
     async persist(id, enabled) {
         this.assertOpen();
         const next = { ...this.enabled, [id]: enabled };
-        const plaintext = JSON.stringify({ v: 1, enabled: next });
+        const plaintext = JSON.stringify({ v: 2, enabled: next });
         const encrypted = this.owner.encrypt(plaintext);
         if (!encrypted || encrypted === plaintext) throw fail('EOS_RUNTIME_ENCRYPTION');
         await this.store.save('runtime', { v: 1, encrypted }, () => !this.closed);
@@ -159,7 +165,7 @@ class EosRuntimeControl {
         // Yield once so the transaction owns its lock before any synchronous completion.
         await Promise.resolve(); this.assertOpen();
         let configure = false;
-        if (action !== 'disable' && id !== 'ui') {
+        if (action !== 'disable' && id !== 'ui' && id !== 'ems') {
             const view = record(await this.host.view(id)); this.assertOpen();
             configure = record(view.config).enabled !== true;
             const reason = this.startReason(id, action === 'enable' || !configure);
@@ -169,6 +175,7 @@ class EosRuntimeControl {
         this.inhibited.add(id);
         try {
             if (id === 'ui') await this.runtime.pause();
+            else if (id === 'ems') await this.runtime.pauseEms();
             else await this.host.controlProcess(id, 'stop');
         } catch (error) {
             // Stop implementations retain their failed drain fence for this owner
@@ -190,6 +197,7 @@ class EosRuntimeControl {
         await this.persist(id, true);
         this.inhibited.delete(id);
         if (id === 'ui') await this.runtime.resume();
+        else if (id === 'ems') await this.runtime.resumeEms();
         else await this.host.controlProcess(id, 'start');
         this.assertOpen();
     }
