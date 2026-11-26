@@ -1,0 +1,235 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:12) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# Subtest: fresh anonymous HTTPS launch exposes actual login branding and PWA icons while configuration remains protected
+ok 1 - fresh anonymous HTTPS launch exposes actual login branding and PWA icons while configuration remains protected
+  ---
+  duration_ms: 1525.790852
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: only a complete configured port is accepted, without a fallback or ephemeral port
+ok 2 - only a complete configured port is accepted, without a fallback or ephemeral port
+  ---
+  duration_ms: 2.03488
+  type: 'test'
+  ...
+# Subtest: configured port is used exactly once and readiness follows successful bind
+ok 3 - configured port is used exactly once and readiness follows successful bind
+  ---
+  duration_ms: 43.114945
+  type: 'test'
+  ...
+# Subtest: occupied port fails once with EADDRINUSE and leaves the existing service intact
+ok 4 - occupied port fails once with EADDRINUSE and leaves the existing service intact
+  ---
+  duration_ms: 16.832145
+  type: 'test'
+  ...
+# Subtest: unavailable local interface fails once with EADDRNOTAVAIL instead of searching ports
+ok 5 - unavailable local interface fails once with EADDRNOTAVAIL instead of searching ports
+  ---
+  duration_ms: 2.133085
+  type: 'test'
+  ...
+# Subtest: TLS configuration cannot silently become a cleartext listener when certificates are absent
+ok 6 - TLS configuration cannot silently become a cleartext listener when certificates are absent
+  ---
+  duration_ms: 1.750257
+  type: 'test'
+  ...
+# Subtest: controller certificate read failures remain diagnosed TLS startup failures
+ok 7 - controller certificate read failures remain diagnosed TLS startup failures
+  ---
+  duration_ms: 0.688642
+  type: 'test'
+  ...
+# Subtest: collection TLS uses configured default for IP without SNI and retains a distinct hostname collection
+ok 8 - collection TLS uses configured default for IP without SNI and retains a distinct hostname collection
+  ---
+  duration_ms: 386.80729
+  type: 'test'
+  ...
+# Subtest: collection IP context sends the configured intermediate chain and accepts only the explicit root CA
+ok 9 - collection IP context sends the configured intermediate chain and accepts only the explicit root CA
+  ---
+  duration_ms: 280.961604
+  type: 'test'
+  ...
+# Subtest: a valid named collection cannot hide the absence of a default certificate for IP access
+ok 10 - a valid named collection cannot hide the absence of a default certificate for IP access
+  ---
+  duration_ms: 107.142299
+  type: 'test'
+  ...
+# Subtest: native TLS without a fixed origin serves IP/8188 and HTTPS/443 alias Host contracts
+ok 11 - native TLS without a fixed origin serves IP/8188 and HTTPS/443 alias Host contracts
+  ---
+  duration_ms: 201.768166
+  type: 'test'
+  ...
+# Subtest: invalid external origin is caught by Web startup and terminates once without controller mutations
+ok 12 - invalid external origin is caught by Web startup and terminates once without controller mutations
+  ---
+  duration_ms: 1.747853
+  type: 'test'
+  ...
+# Subtest: password/setup write guard uses canonical browser Origin and preserves explicit bearer compatibility
+ok 13 - password/setup write guard uses canonical browser Origin and preserves explicit bearer compatibility
+  ---
+  duration_ms: 0.311242
+  type: 'test'
+  ...
+# Subtest: actual TLS activation accepts Host443 normalization and rejects malformed Host before its service
+ok 14 - actual TLS activation accepts Host443 normalization and rejects malformed Host before its service
+  ---
+  duration_ms: 187.849273
+  type: 'test'
+  ...
+# Subtest: startup abort closes a bound listener and never mutates another adapter
+ok 15 - startup abort closes a bound listener and never mutates another adapter
+  ---
+  duration_ms: 2.339371
+  type: 'test'
+  ...
+# Subtest: startup failure closes admission immediately and awaits migration recovery before terminating once
+ok 16 - startup failure closes admission immediately and awaits migration recovery before terminating once
+  ---
+  duration_ms: 2.759885
+  type: 'test'
+  ...
+# Subtest: startup recovery rejection fences migration before termination and does not leak its promise
+ok 17 - startup recovery rejection fences migration before termination and does not leak its promise
+  ---
+  duration_ms: 0.610897
+  type: 'test'
+  ...
+# Subtest: already closed Web cannot initiate another migration recovery or terminate again
+ok 18 - already closed Web cannot initiate another migration recovery or terminate again
+  ---
+  duration_ms: 0.194209
+  type: 'test'
+  ...
+# Subtest: separate UI and EMS children preserve HTTPS session/origin checks and leave recovery outside their processes
+ok 19 - separate UI and EMS children preserve HTTPS session/origin checks and leave recovery outside their processes
+  ---
+  duration_ms: 796.029248
+  type: 'test'
+  ...
+# Subtest: migration startup fence keeps login and authenticated recovery reachable without operational startup
+ok 20 - migration startup fence keeps login and authenticated recovery reachable without operational startup
+  ---
+  duration_ms: 137.017348
+  type: 'test'
+  ...
+# Subtest: verified nexowatt TLS authority opens login for anonymous/expired sessions and dashboard for an active session
+ok 21 - verified nexowatt TLS authority opens login for anonymous/expired sessions and dashboard for an active session
+  ---
+  duration_ms: 177.226686
+  type: 'test'
+  ...
+# Subtest: module host crosses the actual private hosted UI bridge and returns implementation feedback
+ok 22 - module host crosses the actual private hosted UI bridge and returns implementation feedback
+  ---
+  duration_ms: 581.60627
+  type: 'test'
+  ...
+# Subtest: valid license and stalled operational startup cannot hold the HTTPS login or recovery console hostage
+ok 23 - valid license and stalled operational startup cannot hold the HTTPS login or recovery console hostage
+  ---
+  duration_ms: 150.703111
+  type: 'test'
+  ...
+# Subtest: operational initialization failure leaves HTTPS recovery up and refuses real UI commands
+ok 24 - operational initialization failure leaves HTTPS recovery up and refuses real UI commands
+  ---
+  duration_ms: 122.134276
+  type: 'test'
+  ...
+# Subtest: hosted EMS readiness rejects retained failed, fenced or unscheduled engine references
+ok 25 - hosted EMS readiness rejects retained failed, fenced or unscheduled engine references
+  ---
+  duration_ms: 75.09956
+  type: 'test'
+  ...
+# Subtest: late startup completion after license loss cannot revive control
+ok 26 - late startup completion after license loss cannot revive control
+  ---
+  duration_ms: 206.624596
+  type: 'test'
+  ...
+# Subtest: late startup completion after ownership loss cannot revive control
+ok 27 - late startup completion after ownership loss cannot revive control
+  ---
+  duration_ms: 101.94756
+  type: 'test'
+  ...
+# Subtest: an unexpected operational promise rejection is contained without closing HTTPS
+ok 28 - an unexpected operational promise rejection is contained without closing HTTPS
+  ---
+  duration_ms: 124.902984
+  type: 'test'
+  ...
+# Subtest: optional startup catch cannot erase observed license loss after authority returns
+ok 29 - optional startup catch cannot erase observed license loss after authority returns
+  ---
+  duration_ms: 74.108049
+  type: 'test'
+  ...
+# Subtest: optional startup catch cannot erase observed ownership loss after authority returns
+ok 30 - optional startup catch cannot erase observed ownership loss after authority returns
+  ---
+  duration_ms: 127.706859
+  type: 'test'
+  ...
+# Subtest: optional startup catch cannot erase observed ownership loss after authority returns (rejected operation)
+ok 31 - optional startup catch cannot erase observed ownership loss after authority returns (rejected operation)
+  ---
+  duration_ms: 77.45179
+  type: 'test'
+  ...
+# Subtest: the explicit HTTPS-ready diagnostic requires a live listener and is suppressed after close
+ok 32 - the explicit HTTPS-ready diagnostic requires a live listener and is suppressed after close
+  ---
+  duration_ms: 87.416943
+  type: 'test'
+  ...
+# Subtest: parent login remains usable with persisted UI pause and a fresh admin session
+ok 33 - parent login remains usable with persisted UI pause and a fresh admin session
+  ---
+  duration_ms: 290.027497
+  type: 'test'
+  ...
+# Subtest: parent login remains usable with timed-out runtime configuration and a fresh admin session
+ok 34 - parent login remains usable with timed-out runtime configuration and a fresh admin session
+  ---
+  duration_ms: 5561.957428
+  type: 'test'
+  ...
+# (node:19) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: only canonical reads enter the presentation process
+ok 35 - only canonical reads enter the presentation process
+  ---
+  duration_ms: 2.265582
+  type: 'test'
+  ...
+# Subtest: presentation routes retain origin, session, license and picker role boundaries
+ok 36 - presentation routes retain origin, session, license and picker role boundaries
+  ---
+  duration_ms: 203.134439
+  type: 'test'
+  ...
+1..36
+# tests 36
+# suites 0
+# pass 36
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 10674.572276

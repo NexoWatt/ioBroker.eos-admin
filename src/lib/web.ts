@@ -56,6 +56,13 @@ let uuid: string;
 const page404 = readFileSync(`${__dirname}/../../public/404.html`).toString('utf8');
 const logTemplate = readFileSync(`${__dirname}/../../public/logTemplate.html`).toString('utf8');
 const EOS_UPLOAD_MAX_BYTES = 200 * 1024 * 1024;
+const EOS_TOUCH_ICON_ROUTES = [
+    '/apple-touch-icon-eos-v2.png',
+    '/apple-touch-icon.png',
+    '/apple-touch-icon-precomposed.png',
+    '/apple-touch-icon-180x180.png',
+    '/apple-touch-icon-180x180-precomposed.png',
+];
 const EOS_PASSWORD_SERVICE_USER = 'system.user.admin' as ioBroker.ObjectIDs.User;
 type EosAccessRole = 'admin' | 'installer' | 'enduser';
 const LEGACY_BACKUP_ADAPTER_NAME = 'backitup';
@@ -1993,10 +2000,7 @@ export default class Web {
             '/static/login.js': 'login.js',
             '/static/nexowatt-eos-logo.png': 'nexowatt-eos-logo.png',
             '/manifest.webmanifest': 'manifest.webmanifest',
-            '/apple-touch-icon.png': 'apple-touch-icon.png',
-            '/apple-touch-icon-precomposed.png': 'assets/icons/nexowatt-180.png',
-            '/apple-touch-icon-180x180.png': 'assets/icons/nexowatt-180.png',
-            '/apple-touch-icon-180x180-precomposed.png': 'assets/icons/nexowatt-180.png',
+            ...Object.fromEntries(EOS_TOUCH_ICON_ROUTES.map(route => [route, 'assets/icons/nexowatt-180.png'])),
             '/sw.js': 'sw.js',
         };
         for (const name of [
@@ -2434,10 +2438,7 @@ export default class Web {
                             '/runtime-base.js',
                             '/nexowatt-eos-logo.png',
                             '/manifest.webmanifest',
-                            '/apple-touch-icon.png',
-                            '/apple-touch-icon-precomposed.png',
-                            '/apple-touch-icon-180x180.png',
-                            '/apple-touch-icon-180x180-precomposed.png',
+                            ...EOS_TOUCH_ICON_ROUTES,
                             '/sw.js',
                         ].includes(path) ||
                         /^\/(?:fonts|icons|assets\/icons)\//.test(path) ||

@@ -843,7 +843,7 @@ for (const readTimeout of [false, true]) test(`parent login remains usable with 
     }
     // The OS icon downloader does not share a login session and must not need
     // a working UI child. Probe Apple's conventional paths while PID is null.
-    for (const asset of ['/apple-touch-icon.png', '/apple-touch-icon-precomposed.png',
+    for (const asset of ['/apple-touch-icon-eos-v2.png', '/apple-touch-icon.png', '/apple-touch-icon-precomposed.png',
         '/apple-touch-icon-180x180.png', '/apple-touch-icon-180x180-precomposed.png',
         '/assets/icons/nexowatt-180.png?v=083e11ab28ec']) {
         const response = await h.browser(asset, { headers: { cookie: '' } });
@@ -851,8 +851,7 @@ for (const readTimeout of [false, true]) test(`parent login remains usable with 
         assert.match(response.headers['content-type'], /^image\/png/, asset);
         assert.equal(response.headers.location, undefined, asset);
         assert.equal(response.bytes.subarray(0, 8).toString('hex'), '89504e470d0a1a0a', asset);
-        const file = asset === '/apple-touch-icon.png' ? 'nexowatt-1024.png' : 'nexowatt-180.png';
-        assert.deepEqual(response.bytes, fs.readFileSync(path.resolve(__dirname, '../ui/www/assets/icons', file)), asset);
+        assert.deepEqual(response.bytes, fs.readFileSync(path.resolve(__dirname, '../ui/www/assets/icons/nexowatt-180.png')), asset);
         const head = await h.browser(asset, { method: 'HEAD', headers: { cookie: '' } });
         assert.equal(head.status, 200, asset); assert.equal(head.bytes.length, 0, asset);
         assert.match(head.headers['content-type'], /^image\/png/, asset);

@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "nexowatt-ui",
-    "version": "9.0.30",
+    "version": "9.0.31",
     "news": {
+      "9.0.31": {
+        "de": "Safari erhält das NexoWatt-Symbol für die iPhone-Web-App über einen eigenen PNG-Pfad. Die üblichen Apple-Icon-Adressen liefern dieselbe 180×180-Datei.",
+        "en": "Safari receives the NexoWatt Home Screen icon from a dedicated PNG path. Standard Apple icon URLs serve the same 180×180 file."
+      },
       "9.0.30": {
         "de": "HTTPS-Gerätezertifikat und öffentliches Stammzertifikat in der EOS-Administration lokal erstellen. Beide PEM-Dateien und der SHA-256-Fingerabdruck stehen direkt bereit. Das erzeugte Zertifikat wird erst durch eine bestätigte Übernahme verwendet.",
         "en": "Generate an HTTPS device certificate and public root certificate in EOS Administration. Both PEM downloads and the SHA-256 fingerprint are available immediately, with a separate activation step."

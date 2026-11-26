@@ -82,8 +82,9 @@ test('fresh anonymous HTTPS launch exposes actual login branding and PWA icons w
     await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
     t.after(async () => { await owner.eosHostedRuntime.stop(); server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); });
     const origin = `https://127.0.0.1:${server.address().port}`;
-    const request = (pathname, method = 'GET', authenticated = false) => new Promise((resolve, reject) => {
-        const req = https.request(origin + pathname, { method, headers: authenticated ? { Cookie: `access_token=${token}` } : {}, ca: tls.cert, rejectUnauthorized: true, agent: false, timeout: 3000 }, res => {
+    const request = (pathname, method = 'GET', authenticated = false, opts = {}) => new Promise((resolve, reject) => {
+        const headers = { ...(authenticated ? { Cookie: `access_token=${token}` } : {}), ...opts.headers };
+        const req = https.request((opts.origin ?? origin) + pathname, { method, headers, ca: opts.ca ?? tls.cert, rejectUnauthorized: true, agent: false, timeout: 3000 }, res => {
             const chunks = []; res.on('data', chunk => chunks.push(chunk)); res.on('end', () => resolve({ status: res.statusCode, headers: res.headers, bytes: Buffer.concat(chunks) }));
         }); req.on('error', reject); req.on('timeout', () => req.destroy(new Error('PWA request timeout'))); req.end();
     });
@@ -97,16 +98,23 @@ test('fresh anonymous HTTPS launch exposes actual login branding and PWA icons w
         assert.equal(loaded.headers.location, undefined); assert.match(loaded.headers['content-type'], /^image\/png/); pngSize(loaded.bytes);
     }
     const links = attributes(html, 'link'); const apple = links.find(link => link.rel === 'apple-touch-icon'); assert.ok(apple);
-    const icon = await request(apple.href); assert.equal(icon.status, 200); assert.match(icon.headers['content-type'], /^image\/png/);
+    assert.equal(apple.href, '/apple-touch-icon-eos-v2.png');
+    const icon = await request(apple.href, 'GET', false, { headers: { 'Sec-Fetch-Site': 'none', 'Sec-Fetch-Dest': 'image' } });
+    assert.equal(icon.status, 200); assert.match(icon.headers['content-type'], /^image\/png/);
+    assert.equal(icon.headers.location, undefined);
     assert.equal(pngSize(icon.bytes), apple.sizes, 'declared touch dimensions match actual image');
     assert.equal(pngSize(icon.bytes), '180x180', 'iPhone receives the dedicated existing180px icon');
-    for (const alias of ['/apple-touch-icon-precomposed.png', '/apple-touch-icon-180x180.png', '/apple-touch-icon-180x180-precomposed.png']) {
+    for (const alias of ['/apple-touch-icon.png', '/apple-touch-icon-precomposed.png', '/apple-touch-icon-180x180.png', '/apple-touch-icon-180x180-precomposed.png', '/assets/icons/nexowatt-180.png?v=083e11ab28ec']) {
         const fallback = await request(alias); assert.equal(fallback.status, 200, alias); assert.match(fallback.headers['content-type'], /^image\/png/);
         assert.deepEqual(fallback.bytes, icon.bytes);
     }
-    const legacyIcon = await request('/apple-touch-icon.png'); assert.equal(legacyIcon.status, 200);
-    assert.equal(pngSize(legacyIcon.bytes), '1024x1024', 'uploaded root icon remains compatible and byte-for-byte unchanged');
-    assert.deepEqual(legacyIcon.bytes, fs.readFileSync(path.join(root, 'ui/www/assets/icons/nexowatt-1024.png')));
+    assert.deepEqual(icon.bytes, fs.readFileSync(path.join(root, 'ui/www/assets/icons/nexowatt-180.png')));
+    assert.ok(icon.headers.etag);
+    const conditional = await request(apple.href, 'GET', false, { headers: { 'If-None-Match': icon.headers.etag } });
+    assert.equal(conditional.status, 304);
+    assert.equal(conditional.bytes.length, 0);
+    const foreign = await request(apple.href, 'GET', false, { headers: { Origin: 'https://other.invalid', 'Sec-Fetch-Site': 'cross-site', 'Sec-Fetch-Dest': 'image' } });
+    assert.equal(foreign.status, 403);
     const manifestLink = links.find(link => link.rel === 'manifest'); assert.ok(manifestLink);
     const manifestResponse = await request(manifestLink.href); assert.equal(manifestResponse.status, 200); assert.match(manifestResponse.headers['content-type'], /^application\/manifest\+json/);
     const manifest = JSON.parse(manifestResponse.bytes); const manifestUrl = new URL(manifestLink.href, origin);
@@ -120,6 +128,7 @@ test('fresh anonymous HTTPS launch exposes actual login branding and PWA icons w
         assert.ok(!response.bytes.toString().includes('configPatch'));
     }
     assert.ok([401, 403].includes((await request('/apple-touch-icon-180x180.png', 'POST')).status));
+    assert.ok([401, 403].includes((await request(apple.href, 'POST')).status));
     const head = await request(apple.href, 'HEAD'); assert.equal(head.status, 200); assert.match(head.headers['content-type'], /^image\/png/); assert.equal(head.bytes.length, 0);
     const publicAssets = [apple.href, manifestLink.href, '/static/nexowatt-eos-logo.png', '/apple-touch-icon-precomposed.png', '/apple-touch-icon-180x180.png', '/apple-touch-icon-180x180-precomposed.png'];
     const activation = await request('/', 'GET', true); assert.equal(activation.status, 302); assert.equal(activation.headers.location, '/nexowatt/license');
@@ -129,5 +138,22 @@ test('fresh anonymous HTTPS launch exposes actual login branding and PWA icons w
     const password = await request('/', 'GET', true); assert.equal(password.status, 302); assert.equal(password.headers.location, '/system/?passwordSetup');
     assert.equal((await request('/api/installer/config', 'GET', true)).status, 403);
     for (const pathname of publicAssets) assert.equal((await request(pathname, 'GET', true)).status, 200, `password setup: ${pathname}`);
+
+    // Same owner routes over a device certificate signed by the EOS local CA.
+    // Use the IP default TLS context and fetch metadata before a session and
+    // after the operational runtime stops. Install UI behavior is iOS-owned.
+    const manager = web.tlsManager;
+    const { pending } = await manager.createLocalCertificate({ names: ['127.0.0.1'] });
+    const rootPem = manager.publicLocalCertificate('root', pending.requestId);
+    await manager.activateLocalCertificate({ requestId: pending.requestId, rootFingerprint: pending.rootFingerprint });
+    await owner.eosHostedRuntime.stop();
+    const managed = await createEosServer(app, owner, { secure: true, acmeChallenge: false }, manager);
+    await new Promise(resolve => managed.listen(0, '127.0.0.1', resolve));
+    t.after(() => { managed.closeAllConnections(); return new Promise(resolve => managed.close(resolve)); });
+    const managedOptions = { origin: `https://127.0.0.1:${managed.address().port}`, ca: rootPem };
+    const managedIcon = await request(apple.href, 'GET', false, managedOptions);
+    assert.equal(managedIcon.status, 200);
+    assert.deepEqual(managedIcon.bytes, icon.bytes);
+    assert.equal((await request('/login.html', 'GET', false, managedOptions)).status, 200);
 
 });

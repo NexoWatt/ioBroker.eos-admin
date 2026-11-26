@@ -1,0 +1,59 @@
+(node:45) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:52) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: standalone console touch-icon files reuse the original 180px branding without changing the 1024px master
+ok 1 - standalone console touch-icon files reuse the original 180px branding without changing the 1024px master
+  ---
+  duration_ms: 3.331294
+  type: 'test'
+  ...
+# Subtest: all actual shared page heads declare the same versioned root iPhone icon without a query string
+ok 2 - all actual shared page heads declare the same versioned root iPhone icon without a query string
+  ---
+  duration_ms: 3.465453
+  type: 'test'
+  ...
+# Subtest: login form has the supplied uncropped emblem before its heading, independent of the story wordmark
+ok 3 - login form has the supplied uncropped emblem before its heading, independent of the story wordmark
+  ---
+  duration_ms: 0.872495
+  type: 'test'
+  ...
+# Subtest: actual console build rebasing keeps the new touch icon at the public EOS root and leaves scripts untouched
+ok 4 - actual console build rebasing keeps the new touch icon at the public EOS root and leaves scripts untouched
+  ---
+  duration_ms: 3.815422
+  type: 'test'
+  ...
+# Subtest: existing validated hosted-prefix HTML projection keeps anonymous logo and installation links in that instance
+ok 5 - existing validated hosted-prefix HTML projection keeps anonymous logo and installation links in that instance
+  ---
+  duration_ms: 90.449071
+  type: 'test'
+  ...
+# (node:53) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:53) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# Subtest: one root app identity and the exact uploaded icon are shared by dashboard, login and system console
+ok 6 - one root app identity and the exact uploaded icon are shared by dashboard, login and system console
+  ---
+  duration_ms: 11.86722
+  type: 'test'
+  ...
+# Subtest: actual owner mount serves install metadata publicly while root launch retains session, password and license gates
+ok 7 - actual owner mount serves install metadata publicly while root launch retains session, password and license gates
+  ---
+  duration_ms: 435.146453
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 664.457086

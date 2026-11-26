@@ -30,7 +30,7 @@ const { cleanControls, extendSuggestion, collectKeywordDetectionCandidates, keyw
 const { smartHomeEnabled, registerSmartHomeActivationApi } = require('./lib/smarthome-activation');
 const { readPreservedUiStates, parseInstallerConfigState } = require('./lib/preserved-ui-config');
 const { createRuntimeFileSender, runtimeProxyPrefix, rewriteRuntimeProxyHtml, isHttpsRuntimeProxy } = require('./lib/runtime-proxy-html');
-const { parseUiCookies, isPublicUiRequest, isIndependentMachineRequest, uiRequestPath, constantTimeToken } = require('./lib/ui-access-policy');
+const { APPLE_TOUCH_ICON_PATHS, parseUiCookies, isPublicUiRequest, isIndependentMachineRequest, uiRequestPath, constantTimeToken } = require('./lib/ui-access-policy');
 const { resolveUiTlsOptions, UiTlsConfigurationError } = require('./lib/ui-server-transport');
 const { createMeshPeerClient, safeMeshPeerError } = require('./lib/mesh-peer-http');
 const path = require('path');
@@ -13221,13 +13221,8 @@ app.get('/sw.js', (_req, res) => {
   res.type('application/javascript');
   res.sendFile(path.join(__dirname, 'www', 'sw.js'));
 });
-// API-Kommentar: GET-Route. Zweck: stellt einen Web-/API-Endpunkt bereit. Zusammenhang: Frontend-Dateien in www/* können diesen Endpunkt direkt nutzen. Route/Handler: '/apple-touch-icon.png', (_req, res) => {
-app.get('/apple-touch-icon.png', (_req, res) => {
-  res.type('image/png');
-  res.sendFile(path.join(__dirname, 'www', 'apple-touch-icon.png'));
-});
-// Conventional iOS probes are fixed public image aliases, never a public directory.
-app.get(['/apple-touch-icon-precomposed.png', '/apple-touch-icon-180x180.png', '/apple-touch-icon-180x180-precomposed.png'], (_req, res) => {
+// The versioned path and conventional iOS probes serve the same dedicated icon.
+app.get(APPLE_TOUCH_ICON_PATHS, (_req, res) => {
   res.type('image/png');
   res.sendFile(path.join(__dirname, 'www', 'assets', 'icons', 'nexowatt-180.png'));
 });

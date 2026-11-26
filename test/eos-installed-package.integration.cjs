@@ -7,7 +7,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const { createRequire } = require('node:module');
-const { realpathSync, lstatSync, existsSync } = require('node:fs');
+const { realpathSync, lstatSync, existsSync, readFileSync } = require('node:fs');
 const { mkdtemp, rm } = require('node:fs/promises');
 const { tmpdir } = require('node:os');
 const { join, resolve, relative, isAbsolute, sep } = require('node:path');
@@ -95,7 +95,16 @@ test('installed read-only presentation worker serves its files and picker indepe
     assert.equal((await read('/')).status, 303);
     const dashboard = await read('/', { headers });
     assert.equal(dashboard.status, 200);
-    assert.match(await dashboard.text(), /static\/dashboard-lp-status\.js/);
+    const dashboardHtml = await dashboard.text();
+    assert.match(dashboardHtml, /static\/dashboard-lp-status\.js/);
+    const iconPath = '/apple-touch-icon-eos-v2.png';
+    assert.match(dashboardHtml, /rel="apple-touch-icon"[^>]*href="\/apple-touch-icon-eos-v2\.png"/);
+    const icon = await read(iconPath);
+    assert.equal(icon.status, 200);
+    assert.match(icon.headers.get('content-type'), /^image\/png/);
+    const expectedIcon = readFileSync(join(root, 'ui', 'www', 'assets', 'icons', 'nexowatt-180.png'));
+    assert.deepEqual(Buffer.from(await icon.arrayBuffer()), expectedIcon);
+    assert.deepEqual(readFileSync(join(root, 'adminWww', iconPath.slice(1))), expectedIcon);
     assert.equal((await read('/static/styles.css')).status, 200);
     assert.equal((await read('/api/smarthome/dpsearch')).status, 401);
     const search = await read('/api/smarthome/dpsearch?q=paketlicht', { headers });

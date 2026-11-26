@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "eos-admin",
-    "version": "9.0.30",
+    "version": "9.0.31",
     "titleLang": {
       "en": "NexoWatt EOS",
       "de": "NexoWatt EOS",
@@ -18,6 +18,10 @@
     "connectionType": "local",
     "dataSource": "push",
     "news": {
+      "9.0.31": {
+        "de": "Safari erhält das NexoWatt-Symbol für die iPhone-Web-App über einen eigenen PNG-Pfad. Die üblichen Apple-Icon-Adressen liefern dieselbe 180×180-Datei.",
+        "en": "Safari receives the NexoWatt Home Screen icon from a dedicated PNG path. Standard Apple icon URLs serve the same 180×180 file."
+      },
       "9.0.30": {
         "de": "Eigener EMS-Prozess mit bestätigter Schreibfreigabe und separater, lesender Oberfläche. Speicherbedarf der Datenpunktauswahl und der Gerätetreiber reduziert.",
         "en": "Run the EMS and read-only presentation in separate processes. Improve memory use in the datapoint picker and device driver loading."
@@ -93,10 +97,6 @@
       "9.0.12": {
         "en": "Simplified SmartHome setup with dropdowns, dialogs and compact assisted discovery; corrected detector ordering.",
         "de": "Vereinfachte SmartHome-Einrichtung mit Dropdowns, Dialogen und kompakter Geräteerkennung; korrigierte Sortierung für den Typdetektor."
-      },
-      "9.0.11": {
-        "en": "Bounded startup recovery for legacy handover; confirmed shutdown before rollback and blocked late operational starts. Verified tarball publishing workflow for Windows.",
-        "de": "Übernahme mit begrenzter Startüberwachung und bestätigtem Stopp vor dem Rückfall; verspätete Betriebsstarts gesperrt. Geprüfter TGZ-Veröffentlichungsweg für Windows."
       }
     },
     "desc": {
@@ -134,7 +134,7 @@
     "icon": "admin.svg",
     "messagebox": true,
     "enabled": true,
-    "extIcon": "https://unpkg.com/iobroker.eos-admin@9.0.30/admin/admin.svg",
+    "extIcon": "https://unpkg.com/iobroker.eos-admin@9.0.31/admin/admin.svg",
     "keywords": [
       "NexoWatt",
       "EOS",
@@ -145,7 +145,7 @@
       "licensed"
     ],
     "compact": false,
-    "readme": "https://unpkg.com/iobroker.eos-admin@9.0.30/README.md",
+    "readme": "https://unpkg.com/iobroker.eos-admin@9.0.31/README.md",
     "authors": [
       "NexoWatt"
     ],
@@ -157,7 +157,7 @@
     "type": "general",
     "licenseInformation": {
       "type": "paid",
-      "link": "https://unpkg.com/iobroker.eos-admin@9.0.30/LICENSE"
+      "link": "https://unpkg.com/iobroker.eos-admin@9.0.31/LICENSE"
     },
     "logTransporter": true,
     "stopBeforeUpdate": true,

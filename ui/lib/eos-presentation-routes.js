@@ -2,7 +2,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/lib/eos-presentation-routes.ts
- * Quell-Hash: sha256:ca555781f4f4e528219676909063058131cd7c6a90399408e5876e6e159b7020
+ * Quell-Hash: sha256:c7964864ce73d5ad00cae72592e580f871db3c886db149b9809ff18efd8f2b66
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -28,10 +28,7 @@ const DATAPOINT_PICKER_ROUTES = new Set([
 exports.PRESENTATION_FILES = new Map([
     ['/manifest.webmanifest', ['www/manifest.webmanifest', 'application/manifest+json']],
     ['/sw.js', ['www/sw.js', 'application/javascript']],
-    ['/apple-touch-icon.png', ['www/apple-touch-icon.png', 'image/png']],
-    ['/apple-touch-icon-precomposed.png', ['www/assets/icons/nexowatt-180.png', 'image/png']],
-    ['/apple-touch-icon-180x180.png', ['www/assets/icons/nexowatt-180.png', 'image/png']],
-    ['/apple-touch-icon-180x180-precomposed.png', ['www/assets/icons/nexowatt-180.png', 'image/png']],
+    ...ui_access_policy_1.APPLE_TOUCH_ICON_PATHS.map(path => [path, ['www/assets/icons/nexowatt-180.png', 'image/png']]),
     ['/favicon.ico', ['www/assets/icons/nexowatt-32.png', 'image/x-icon']],
 ]);
 /** A raw HTTP path must match this allowlist before crossing into the read-only process. */

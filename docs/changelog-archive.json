@@ -1,4 +1,8 @@
 {
+  "9.0.11": {
+    "en": "Bounded startup recovery for legacy handover; confirmed shutdown before rollback and blocked late operational starts. Verified tarball publishing workflow for Windows.",
+    "de": "Übernahme mit begrenzter Startüberwachung und bestätigtem Stopp vor dem Rückfall; verspätete Betriebsstarts gesperrt. Geprüfter TGZ-Veröffentlichungsweg für Windows."
+  },
   "9.0.8": {
     "en": "Explicit SmartHome activation, protected legacy configuration loading, same-tab administration and maintained backup scheduling. Node.js 22 and 24 supported; test channel with documented migration limits.",
     "de": "SmartHome direkt aktivieren, geschützte Bestandskonfiguration laden, Administration im selben Tab und gepflegte Backup-Zeitplanung. Node.js 22 und 24 unterstützt; Prüfkanal mit dokumentierten Migrationsgrenzen."

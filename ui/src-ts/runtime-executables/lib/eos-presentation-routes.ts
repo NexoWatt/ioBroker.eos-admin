@@ -1,18 +1,15 @@
 // @runtime-transpile
 /** Copyright (c) 2026 NexoWatt. Confidential and proprietary. */
-import { isPublicUiRequest, uiRequestPath } from './ui-access-policy';
+import { APPLE_TOUCH_ICON_PATHS, isPublicUiRequest, uiRequestPath } from './ui-access-policy';
 
 const DATAPOINT_PICKER_ROUTES = new Set([
   '/api/smarthome/dpsearch', '/api/smarthome/object/tree', '/api/object/tree',
 ]);
 
-export const PRESENTATION_FILES: ReadonlyMap<string, readonly [string, string]> = new Map([
+export const PRESENTATION_FILES: ReadonlyMap<string, readonly [string, string]> = new Map<string, readonly [string, string]>([
   ['/manifest.webmanifest', ['www/manifest.webmanifest', 'application/manifest+json']],
   ['/sw.js', ['www/sw.js', 'application/javascript']],
-  ['/apple-touch-icon.png', ['www/apple-touch-icon.png', 'image/png']],
-  ['/apple-touch-icon-precomposed.png', ['www/assets/icons/nexowatt-180.png', 'image/png']],
-  ['/apple-touch-icon-180x180.png', ['www/assets/icons/nexowatt-180.png', 'image/png']],
-  ['/apple-touch-icon-180x180-precomposed.png', ['www/assets/icons/nexowatt-180.png', 'image/png']],
+  ...APPLE_TOUCH_ICON_PATHS.map(path => [path, ['www/assets/icons/nexowatt-180.png', 'image/png']] as const),
   ['/favicon.ico', ['www/assets/icons/nexowatt-32.png', 'image/x-icon']],
 ]);
 

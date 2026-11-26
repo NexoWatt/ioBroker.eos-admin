@@ -1,0 +1,46 @@
+(node:12) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ fresh anonymous HTTPS launch exposes actual login branding and PWA icons while configuration remains protected (2264.07782ms)
+✔ only a complete configured port is accepted, without a fallback or ephemeral port (2.155038ms)
+✔ configured port is used exactly once and readiness follows successful bind (87.268245ms)
+✔ occupied port fails once with EADDRINUSE and leaves the existing service intact (18.27722ms)
+✔ unavailable local interface fails once with EADDRNOTAVAIL instead of searching ports (1.387639ms)
+✔ TLS configuration cannot silently become a cleartext listener when certificates are absent (1.262974ms)
+✔ controller certificate read failures remain diagnosed TLS startup failures (0.479942ms)
+✔ collection TLS uses configured default for IP without SNI and retains a distinct hostname collection (247.801001ms)
+✔ collection IP context sends the configured intermediate chain and accepts only the explicit root CA (386.044757ms)
+✔ a valid named collection cannot hide the absence of a default certificate for IP access (112.693917ms)
+✔ native TLS without a fixed origin serves IP/8188 and HTTPS/443 alias Host contracts (138.354953ms)
+✔ invalid external origin is caught by Web startup and terminates once without controller mutations (2.718063ms)
+✔ password/setup write guard uses canonical browser Origin and preserves explicit bearer compatibility (0.516006ms)
+✔ actual TLS activation accepts Host443 normalization and rejects malformed Host before its service (94.164733ms)
+✔ startup abort closes a bound listener and never mutates another adapter (1.360249ms)
+✔ startup failure closes admission immediately and awaits migration recovery before terminating once (1.165509ms)
+✔ startup recovery rejection fences migration before termination and does not leak its promise (0.412331ms)
+✔ already closed Web cannot initiate another migration recovery or terminate again (0.151605ms)
+✔ separate UI and EMS children preserve HTTPS session/origin checks and leave recovery outside their processes (720.507062ms)
+✔ migration startup fence keeps login and authenticated recovery reachable without operational startup (87.418653ms)
+✔ verified nexowatt TLS authority opens login for anonymous/expired sessions and dashboard for an active session (152.064113ms)
+✔ module host crosses the actual private hosted UI bridge and returns implementation feedback (500.899221ms)
+✔ valid license and stalled operational startup cannot hold the HTTPS login or recovery console hostage (159.207113ms)
+✔ operational initialization failure leaves HTTPS recovery up and refuses real UI commands (103.194686ms)
+✔ hosted EMS readiness rejects retained failed, fenced or unscheduled engine references (73.379313ms)
+✔ late startup completion after license loss cannot revive control (111.197827ms)
+✔ late startup completion after ownership loss cannot revive control (146.435571ms)
+✔ an unexpected operational promise rejection is contained without closing HTTPS (94.126344ms)
+✔ optional startup catch cannot erase observed license loss after authority returns (120.185433ms)
+✔ optional startup catch cannot erase observed ownership loss after authority returns (145.951633ms)
+✔ optional startup catch cannot erase observed ownership loss after authority returns (rejected operation) (83.989602ms)
+✔ the explicit HTTPS-ready diagnostic requires a live listener and is suppressed after close (63.496568ms)
+✔ parent login remains usable with persisted UI pause and a fresh admin session (302.699501ms)
+✔ parent login remains usable with timed-out runtime configuration and a fresh admin session (5212.950195ms)
+✔ only canonical reads enter the presentation process (2.551456ms)
+✔ presentation routes retain origin, session, license and picker role boundaries (104.344528ms)
+ℹ tests 36
+ℹ suites 0
+ℹ pass 36
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11062.994009

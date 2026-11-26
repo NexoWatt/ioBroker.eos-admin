@@ -1,0 +1,17 @@
+✔ standalone console touch-icon files reuse the original 180px branding without changing the 1024px master (3.059009ms)
+✔ all actual shared page heads declare the same versioned root iPhone icon without a query string (2.933042ms)
+✔ login form has the supplied uncropped emblem before its heading, independent of the story wordmark (0.794049ms)
+✔ actual console build rebasing keeps the new touch icon at the public EOS root and leaves scripts untouched (1.505043ms)
+✔ existing validated hosted-prefix HTML projection keeps anonymous logo and installation links in that instance (84.886287ms)
+(node:13) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ one root app identity and the exact uploaded icon are shared by dashboard, login and system console (11.279569ms)
+✔ actual owner mount serves install metadata publicly while root launch retains session, password and license gates (1203.19668ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1442.699088

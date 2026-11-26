@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/lib/ui-access-policy.ts
- * Quell-Hash: sha256:c3b68fac91389ad1502fd03a889fdeca278c5230f7441c80bd77b767f0f030de
+ * Quell-Hash: sha256:2a345524e918cf1fcb7d195cc41afd5957d02b51c762a1975054c7abe00ca248
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -55,7 +55,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.EosSessionClient = exports.UiLoginLimiter = void 0;
+exports.EosSessionClient = exports.UiLoginLimiter = exports.APPLE_TOUCH_ICON_PATHS = void 0;
 exports.parseUiCookies = parseUiCookies;
 exports.uiAuthMode = uiAuthMode;
 exports.uiSessionBinding = uiSessionBinding;
@@ -211,7 +211,16 @@ function uiRequestPath(req) {
 }
 const AUTH_READ = new Set(['/api/auth/status', '/api/strict-auth/status', '/api/session/me', '/api/locale']);
 const AUTH_WRITE = new Set(['/api/auth/login', '/api/strict-auth/login', '/api/installer/login', '/api/auth/logout', '/api/strict-auth/logout', '/api/installer/logout']);
-const PUBLIC_PAGES = new Set(['/login', '/login.html', '/static/login.html', '/favicon.ico', '/apple-touch-icon.png', '/apple-touch-icon-precomposed.png', '/apple-touch-icon-180x180.png', '/apple-touch-icon-180x180-precomposed.png', '/manifest.webmanifest', '/sw.js']);
+exports.APPLE_TOUCH_ICON_PATHS = [
+    '/apple-touch-icon-eos-v2.png',
+    '/apple-touch-icon.png',
+    '/apple-touch-icon-precomposed.png',
+    '/apple-touch-icon-180x180.png',
+    '/apple-touch-icon-180x180-precomposed.png',
+];
+const PUBLIC_PAGES = new Set([
+    '/login', '/login.html', '/static/login.html', '/favicon.ico', '/manifest.webmanifest', '/sw.js', ...exports.APPLE_TOUCH_ICON_PATHS,
+]);
 /** Nur öffentliche Programm-Assets; niemals HTML, API-Daten oder Konfiguration. */
 function isPublicUiRequest(req) {
     const pathname = uiRequestPath(req);

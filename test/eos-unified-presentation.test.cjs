@@ -8,16 +8,19 @@ const { isPresentationRequest } = require('../ui/lib/eos-presentation-routes');
 
 test('only canonical reads enter the presentation process', () => {
   for (const path of ['/', '/static/styles.css', '/assets/icons/nexowatt-180.png', '/manifest.webmanifest',
+      '/apple-touch-icon-eos-v2.png', '/apple-touch-icon.png',
       '/static/i18n/de.json', '/api/smarthome/dpsearch?q=licht', '/api/object/tree', '/api/OBJECT/tree/']) {
     assert.equal(isPresentationRequest('GET', path), true, path);
     assert.equal(isPresentationRequest('HEAD', path), true, path);
   }
   for (const path of ['/static/ems-apps.html', '/api/set', '/api/state', '/events', '/settings.html',
       '/api/object/tree//', '/api/%6fbject/tree', '/static/%61pp.js', '/assets/../static/app.js',
-      '//static/app.js', '/static/api/operator.js', '/static/config/secret.js', '/static/i18n/it.json']) {
+      '//static/app.js', '/static/api/operator.js', '/static/config/secret.js', '/static/i18n/it.json',
+      '/apple-touch-icon-eos-v3.png', '/%61pple-touch-icon-eos-v2.png']) {
     assert.equal(isPresentationRequest('GET', path), false, path);
   }
   assert.equal(isPresentationRequest('POST', '/api/smarthome/dpsearch'), false);
+  assert.equal(isPresentationRequest('POST', '/apple-touch-icon-eos-v2.png'), false);
   assert.equal(isPresentationRequest('OPTIONS', '/'), false);
 });
 
@@ -55,6 +58,13 @@ test('presentation routes retain origin, session, license and picker role bounda
   assert.equal(unauthenticated.headers.get('Location'), '/login.html?returnTo=%2F');
   assert.equal((await read('/static/styles.css')).status, 200);
   assert.equal((await read('/static/styles.css', { headers: { origin: 'https://elsewhere.invalid' } })).status, 403);
+  const icon = await read('/apple-touch-icon-eos-v2.png');
+  assert.equal(icon.status, 200);
+  assert.match(icon.headers.get('content-type'), /^image\/png/);
+  assert.equal((await read('/apple-touch-icon-eos-v2.png', { headers: { origin: 'https://elsewhere.invalid' } })).status, 403);
+  const fallback = await read('/apple-touch-icon.png');
+  assert.equal(fallback.status, 200);
+  assert.deepEqual(await fallback.arrayBuffer(), await icon.arrayBuffer());
   assert.equal((await read('/static/ems-apps.html')).status, 404);
   assert.equal((await read('/api/smarthome/dpsearch')).status, 401);
 
@@ -64,7 +74,9 @@ test('presentation routes retain origin, session, license and picker role bounda
   const dashboard = await read('/');
   assert.equal(dashboard.status, 200);
   assert.match(dashboard.headers.get('Cache-Control'), /no-store/);
-  assert.match(await dashboard.text(), /static\/dashboard-lp-status\.js/);
+  const html = await dashboard.text();
+  assert.match(html, /static\/dashboard-lp-status\.js/);
+  assert.match(html, /rel="apple-touch-icon"[^>]*href="\/apple-touch-icon-eos-v2\.png"/);
   assert.equal((await read('/api/smarthome/dpsearch')).status, 403);
   assert.equal((await read('/api/object/tree')).status, 403);
   assert.equal(foreignReads, 0);

@@ -1,7 +1,7 @@
 {
   "name": "iobroker.eos-admin",
   "description": "NexoWatt EOS: licensed local energy management, dashboard and ioBroker system administration in one adapter.",
-  "version": "9.0.30",
+  "version": "9.0.31",
   "contributors": [
     "bluefox <dogafox@gmail.com>",
     "apollon77",
@@ -233,7 +233,9 @@
     "docs/start/START_HIER_9.0.28.md",
     "docs/reports/unified-9.0.28/",
     "docs/start/START_HIER_9.0.30.md",
-    "docs/reports/unified-9.0.30/"
+    "docs/reports/unified-9.0.30/",
+    "docs/start/START_HIER_9.0.31.md",
+    "docs/reports/unified-9.0.31/"
   ],
   "scripts": {
     "start": "cd src-admin && npm run start",
@@ -272,7 +274,7 @@
   },
   "nexowattReleasePolicy": {
     "distTag": "next",
-    "purpose": "NexoWatt EOS 9.0.30: separate EMS and presentation processes, expiring datapoint picker index, and on-demand device driver loading; controlled integration test release."
+    "purpose": "NexoWatt EOS 9.0.31: consistent Apple touch icon delivery and a refreshed icon URL; controlled integration test release."
   },
   "publisher": "NexoWatt",
   "nexowattUpstream": {
