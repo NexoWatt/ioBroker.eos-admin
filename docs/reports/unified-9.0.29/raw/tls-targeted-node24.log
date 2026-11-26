@@ -1,0 +1,132 @@
+TAP version 13
+# Subtest: offline issuer limits the same file descriptor and rejects symlinks and insecure secrets
+ok 1 - offline issuer limits the same file descriptor and rejects symlinks and insecure secrets
+  ---
+  duration_ms: 10.379575
+  type: 'test'
+  ...
+# Subtest: offline issuer refuses public CSR growth after metadata validation without an unbounded read
+ok 2 - offline issuer refuses public CSR growth after metadata validation without an unbounded read
+  ---
+  duration_ms: 7.512279
+  type: 'test'
+  ...
+# Subtest: offline issuer detects a truncated CSR instead of signing partial input
+ok 3 - offline issuer detects a truncated CSR instead of signing partial input
+  ---
+  duration_ms: 3.007143
+  type: 'test'
+  ...
+# Subtest: issuer creates encrypted offline CA; device CSR and public downloads never reveal either private key
+ok 4 - issuer creates encrypted offline CA; device CSR and public downloads never reveal either private key
+  ---
+  duration_ms: 231.657885
+  type: 'test'
+  ...
+# Subtest: anonymous HTTPS trust setup exports only the configured public CA while TLS administration stays protected
+ok 5 - anonymous HTTPS trust setup exports only the configured public CA while TLS administration stays protected
+  ---
+  duration_ms: 1058.721012
+  type: 'test'
+  ...
+# Subtest: actual EOS HTTPS startup, SNI and IP use trusted identity; renewal preserves listener and survives restart
+ok 6 - actual EOS HTTPS startup, SNI and IP use trusted identity; renewal preserves listener and survives restart
+  ---
+  duration_ms: 645.158176
+  type: 'test'
+  ...
+# Subtest: wrong SAN, root fingerprint, request ID, key, expiry and CA are refused without changing active certificate
+ok 7 - wrong SAN, root fingerprint, request ID, key, expiry and CA are refused without changing active certificate
+  ---
+  duration_ms: 474.131192
+  type: 'test'
+  ...
+# Subtest: failed atomic activation and failed live context retain the previous identity and pending request
+ok 8 - failed atomic activation and failed live context retain the previous identity and pending request
+  ---
+  duration_ms: 323.637572
+  type: 'test'
+  ...
+# Subtest: concurrent requests are bounded; pending requests require explicit replacement and consumed requests cannot replay
+ok 9 - concurrent requests are bounded; pending requests require explicit replacement and consumed requests cannot replay
+  ---
+  duration_ms: 220.884622
+  type: 'test'
+  ...
+# Subtest: committed certificate reports cleanup and directory-sync warnings without claiming a failed activation
+ok 10 - committed certificate reports cleanup and directory-sync warnings without claiming a failed activation
+  ---
+  duration_ms: 201.902333
+  type: 'test'
+  ...
+# Subtest: chain status and renewal warning include an intermediate that expires before the leaf
+ok 11 - chain status and renewal warning include an intermediate that expires before the leaf
+  ---
+  duration_ms: 156.484865
+  type: 'test'
+  ...
+# Subtest: invalid names and unsafe storage are rejected, not used as command/config fragments
+ok 12 - invalid names and unsafe storage are rejected, not used as command/config fragments
+  ---
+  duration_ms: 82.589829
+  type: 'test'
+  ...
+# (node:13) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: HTTP routes enforce real unified session, role, CSRF and same-origin for certificate actions
+ok 13 - HTTP routes enforce real unified session, role, CSRF and same-origin for certificate actions
+  ---
+  duration_ms: 359.369636
+  type: 'test'
+  ...
+# Subtest: local HTTPS setup is admin-only and uses explicit activation plus two public downloads
+ok 14 - local HTTPS setup is admin-only and uses explicit activation plus two public downloads
+  ---
+  duration_ms: 326.866629
+  type: 'test'
+  ...
+# Subtest: local drafts survive restart without changing active TLS or storing a reusable issuing key
+ok 15 - local drafts survive restart without changing active TLS or storing a reusable issuing key
+  ---
+  duration_ms: 300.900368
+  type: 'test'
+  ...
+# Subtest: local names stay bound to this EOS and rotation or activation cannot silently overwrite a request
+ok 16 - local names stay bound to this EOS and rotation or activation cannot silently overwrite a request
+  ---
+  duration_ms: 371.599592
+  type: 'test'
+  ...
+# Subtest: certificate page creates a local draft and activates it without uploading files
+ok 17 - certificate page creates a local draft and activates it without uploading files
+  ---
+  duration_ms: 12.975577
+  type: 'test'
+  ...
+# Subtest: prepared root changes warn before activation and fingerprint copying falls back to selection
+ok 18 - prepared root changes warn before activation and fingerprint copying falls back to selection
+  ---
+  duration_ms: 3.476139
+  type: 'test'
+  ...
+# Subtest: manufacturer request remains available behind the optional panel
+ok 19 - manufacturer request remains available behind the optional panel
+  ---
+  duration_ms: 5.706639
+  type: 'test'
+  ...
+# Subtest: invalid drafts expose neither download links nor activation
+ok 20 - invalid drafts expose neither download links nor activation
+  ---
+  duration_ms: 2.939202
+  type: 'test'
+  ...
+1..20
+# tests 20
+# suites 0
+# pass 20
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5055.016183

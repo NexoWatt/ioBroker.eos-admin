@@ -6,7 +6,7 @@
     "isDynamicEntry": true
   },
   "../../work-restart-review/src-admin/node_modules/@mui/icons-material/index.mjs": {
-    "file": "assets/icons-material-DeF0gQyK.js",
+    "file": "assets/icons-material-ngdwOXrt.js",
     "name": "icons-material",
     "src": "../../work-restart-review/src-admin/node_modules/@mui/icons-material/index.mjs",
     "isDynamicEntry": true,
@@ -76,15 +76,15 @@
       "_loadShare-eager-dmdYQhAl.js"
     ]
   },
-  "_AdapterUpdateDialog-DBLX7GoO.js": {
-    "file": "assets/AdapterUpdateDialog-DBLX7GoO.js",
+  "_AdapterUpdateDialog-DXp4Dgkx.js": {
+    "file": "assets/AdapterUpdateDialog-DXp4Dgkx.js",
     "name": "AdapterUpdateDialog",
     "imports": [
       "_loadShare-eager-dmdYQhAl.js",
       "src/bootstrap.tsx",
       "_zh-cn-B6dBxOyw.js",
       "_Book-Cq8bkU2t.js",
-      "_State-vVobamei.js"
+      "_State-DHLL8gAc.js"
     ]
   },
   "_AddLink-0L0E-LsA.js": {
@@ -167,8 +167,8 @@
       "_loadShare-eager-dmdYQhAl.js"
     ]
   },
-  "_Fields-CNefAzNH.js": {
-    "file": "assets/Fields-CNefAzNH.js",
+  "_Fields-zSEjRWOB.js": {
+    "file": "assets/Fields-zSEjRWOB.js",
     "name": "Fields",
     "imports": [
       "_loadShare-eager-dmdYQhAl.js",
@@ -245,8 +245,8 @@
       "_loadShare-eager-dmdYQhAl.js"
     ]
   },
-  "_State-vVobamei.js": {
-    "file": "assets/State-vVobamei.js",
+  "_State-DHLL8gAc.js": {
+    "file": "assets/State-DHLL8gAc.js",
     "name": "State",
     "imports": [
       "_loadShare-eager-dmdYQhAl.js",
@@ -295,8 +295,8 @@
       "_loadShare-eager-dmdYQhAl.js"
     ]
   },
-  "_UsedResources-1fEUqiQ6.js": {
-    "file": "assets/UsedResources-1fEUqiQ6.js",
+  "_UsedResources-DlQ_XqoR.js": {
+    "file": "assets/UsedResources-DlQ_XqoR.js",
     "name": "UsedResources",
     "imports": [
       "_loadShare-eager-dmdYQhAl.js",
@@ -337,8 +337,8 @@
       "_loadShare-eager-dmdYQhAl.js"
     ]
   },
-  "_installSVGRenderer-1WdbDz-H.js": {
-    "file": "assets/installSVGRenderer-1WdbDz-H.js",
+  "_installSVGRenderer-COP6GC9p.js": {
+    "file": "assets/installSVGRenderer-COP6GC9p.js",
     "name": "installSVGRenderer",
     "imports": [
       "_rolldown-runtime-sJBDdmOt.js",
@@ -415,7 +415,7 @@
     ]
   },
   "index.html": {
-    "file": "assets/index-D4lV2S7J.js",
+    "file": "assets/index-B9Tfj1YG.js",
     "name": "index",
     "src": "index.html",
     "isEntry": true,
@@ -527,7 +527,7 @@
     "src": "src/assets/wizard-welcome.jpg"
   },
   "src/bootstrap.tsx": {
-    "file": "assets/bootstrap-st8VxLDc.js",
+    "file": "assets/bootstrap-CIDT4MeX.js",
     "name": "bootstrap",
     "src": "src/bootstrap.tsx",
     "isDynamicEntry": true,
@@ -580,7 +580,7 @@
     "src": "src/fonts/material.woff2"
   },
   "src/tabs/Adapters.tsx": {
-    "file": "assets/Adapters-c250DTTU.js",
+    "file": "assets/Adapters-1AOp__74.js",
     "name": "Adapters",
     "src": "src/tabs/Adapters.tsx",
     "isDynamicEntry": true,
@@ -592,14 +592,14 @@
       "_ViewList-DVj9ENkU.js",
       "_North-C2whbHM-.js",
       "_sentry-DwQQLI7N.js",
-      "_AdapterUpdateDialog-DBLX7GoO.js",
+      "_AdapterUpdateDialog-DXp4Dgkx.js",
       "_Remove-IN7ZNaCF.js",
       "_DeleteForever-CioJt3X3.js",
       "_CustomModal-Do2qVZr7.js"
     ]
   },
   "src/tabs/ConfigManager.tsx": {
-    "file": "assets/ConfigManager-BBUXk8hZ.js",
+    "file": "assets/ConfigManager-CGGXU4Jp.js",
     "name": "ConfigManager",
     "src": "src/tabs/ConfigManager.tsx",
     "isDynamicEntry": true,
@@ -632,7 +632,7 @@
     ]
   },
   "src/tabs/Enums.tsx": {
-    "file": "assets/Enums-CWJJ2zNF.js",
+    "file": "assets/Enums-Bl4EngJF.js",
     "name": "Enums",
     "src": "src/tabs/Enums.tsx",
     "isDynamicEntry": true,
@@ -641,7 +641,7 @@
       "_loadShare-eager-dmdYQhAl.js",
       "_AdminUtils-Dc1eHsx5.js",
       "src/bootstrap.tsx",
-      "_Fields-CNefAzNH.js",
+      "_Fields-zSEjRWOB.js",
       "_PlaylistAdd-O8k92YBd.js",
       "_UnfoldMore-DOHSVdRn.js",
       "_ColorLens-DA51K29x.js",
@@ -650,7 +650,7 @@
     ]
   },
   "src/tabs/Files.tsx": {
-    "file": "assets/Files-Bf8oZSk6.js",
+    "file": "assets/Files-CnYmjEbu.js",
     "name": "Files",
     "src": "src/tabs/Files.tsx",
     "isDynamicEntry": true,
@@ -663,7 +663,7 @@
     ]
   },
   "src/tabs/Hosts.tsx": {
-    "file": "assets/Hosts-8gg41ODb.js",
+    "file": "assets/Hosts-zFJyiuvd.js",
     "name": "Hosts",
     "src": "src/tabs/Hosts.tsx",
     "isDynamicEntry": true,
@@ -673,16 +673,16 @@
       "_AdminUtils-Dc1eHsx5.js",
       "src/bootstrap.tsx",
       "_ViewList-DVj9ENkU.js",
-      "_AdapterUpdateDialog-DBLX7GoO.js",
+      "_AdapterUpdateDialog-DXp4Dgkx.js",
       "_CustomModal-Do2qVZr7.js",
       "_Cached-DXXpEqUN.js",
       "_Usb-C8HitPqx.js",
       "_Computer-BBU3Cm9-.js",
-      "_UsedResources-1fEUqiQ6.js"
+      "_UsedResources-DlQ_XqoR.js"
     ]
   },
   "src/tabs/Instances.tsx": {
-    "file": "assets/Instances-PPTEPJQN.js",
+    "file": "assets/Instances-D10dnQY4.js",
     "name": "Instances",
     "src": "src/tabs/Instances.tsx",
     "isDynamicEntry": true,
@@ -695,18 +695,18 @@
       "_ViewList-DVj9ENkU.js",
       "_Storage-B44xXFFu.js",
       "_sentry-DwQQLI7N.js",
-      "_State-vVobamei.js",
+      "_State-DHLL8gAc.js",
       "_CustomModal-Do2qVZr7.js",
       "_Config-C4k51ggG.js",
       "_Usb-C8HitPqx.js",
-      "_UsedResources-1fEUqiQ6.js",
+      "_UsedResources-DlQ_XqoR.js",
       "_Lens-9lkeoWGk.js",
       "_classPrivateFieldGet2-DZ8s9-Td.js",
       "_Schedule-vdojlve9.js"
     ]
   },
   "src/tabs/Intro.tsx": {
-    "file": "assets/Intro-9c_ynpJu.js",
+    "file": "assets/Intro-DxLBfGZ8.js",
     "name": "Intro",
     "src": "src/tabs/Intro.tsx",
     "isDynamicEntry": true,
@@ -725,7 +725,7 @@
     ]
   },
   "src/tabs/Logs.tsx": {
-    "file": "assets/Logs-Brgb9kR_.js",
+    "file": "assets/Logs-CAc6o-d_.js",
     "name": "Logs",
     "src": "src/tabs/Logs.tsx",
     "isDynamicEntry": true,
@@ -738,7 +738,7 @@
     ]
   },
   "src/tabs/Objects.tsx": {
-    "file": "assets/Objects-DHVNfs_x.js",
+    "file": "assets/Objects-I64lF3ZS.js",
     "name": "Objects",
     "src": "src/tabs/Objects.tsx",
     "isDynamicEntry": true,
@@ -756,14 +756,14 @@
       "_FileCopy-B16lEuur.js",
       "_locale-hLcz_Xh2.js",
       "_AddLink-0L0E-LsA.js",
-      "_installSVGRenderer-1WdbDz-H.js"
+      "_installSVGRenderer-COP6GC9p.js"
     ],
     "assets": [
       "assets/echarts-BDq-rBJC.png"
     ]
   },
   "src/tabs/Overview.tsx": {
-    "file": "assets/Overview-CgnpH8e8.js",
+    "file": "assets/Overview-BQ7HBH-7.js",
     "name": "Overview",
     "src": "src/tabs/Overview.tsx",
     "isDynamicEntry": true,
@@ -774,12 +774,12 @@
       "_Storage-B44xXFFu.js",
       "_UnfoldMore-DOHSVdRn.js",
       "_Extension-DIV5Bi1u.js",
-      "_installSVGRenderer-1WdbDz-H.js",
+      "_installSVGRenderer-COP6GC9p.js",
       "_Timeline-BtOuO808.js"
     ]
   },
   "src/tabs/Users.tsx": {
-    "file": "assets/Users-oRpvFtQR.js",
+    "file": "assets/Users-CKHDvxG5.js",
     "name": "Users",
     "src": "src/tabs/Users.tsx",
     "isDynamicEntry": true,
@@ -788,7 +788,7 @@
       "_AdminUtils-Dc1eHsx5.js",
       "src/bootstrap.tsx",
       "_VpnKey-BbZdswcd.js",
-      "_Fields-CNefAzNH.js",
+      "_Fields-zSEjRWOB.js",
       "_ColorLens-DA51K29x.js",
       "_PersonOff-DqBq0Fho.js"
     ],
@@ -816,10 +816,10 @@
       "assets/group10-Dp9tRs6I.svg"
     ]
   },
-  "virtual:mf-REMOTE_ENTRY_ID:__mfe_internal__iobroker_admin__remoteEntry-eos-9_0_28_js": {
-    "file": "remoteEntry-eos-9.0.28.js",
+  "virtual:mf-REMOTE_ENTRY_ID:__mfe_internal__iobroker_admin__remoteEntry-eos-9_0_29_js": {
+    "file": "remoteEntry-eos-9.0.29.js",
     "name": "remoteEntry",
-    "src": "virtual:mf-REMOTE_ENTRY_ID:__mfe_internal__iobroker_admin__remoteEntry-eos-9_0_28_js",
+    "src": "virtual:mf-REMOTE_ENTRY_ID:__mfe_internal__iobroker_admin__remoteEntry-eos-9_0_29_js",
     "imports": [
       "_vite-preload-helper-BbbETgeG.js",
       "_loadShare-eager-dmdYQhAl.js",
@@ -840,7 +840,7 @@
     ]
   },
   "virtual:mf:__mfe_internal__iobroker_admin__mf_owner__1__H_A_I__hostAutoInit__H_A_I__.js": {
-    "file": "assets/hostInit-OQMl4yOT.js",
+    "file": "assets/hostInit-Cvl4lPGh.js",
     "name": "hostInit",
     "src": "virtual:mf:__mfe_internal__iobroker_admin__mf_owner__1__H_A_I__hostAutoInit__H_A_I__.js",
     "imports": [
@@ -848,7 +848,7 @@
       "_helpers-C0aN90O2.js"
     ],
     "dynamicImports": [
-      "virtual:mf-REMOTE_ENTRY_ID:__mfe_internal__iobroker_admin__remoteEntry-eos-9_0_28_js",
+      "virtual:mf-REMOTE_ENTRY_ID:__mfe_internal__iobroker_admin__remoteEntry-eos-9_0_29_js",
       "virtual:mf-localSharedImportMap:__mfe_internal__iobroker_admin__mf_owner__1"
     ]
   },

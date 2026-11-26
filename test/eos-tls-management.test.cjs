@@ -319,3 +319,185 @@ test('HTTP routes enforce real unified session, role, CSRF and same-origin for c
     assert.equal((await request('/api/eos/tls/request', { ...options, body: '{' })).status, 400);
     assert.equal((await request('/api/eos/tls/request', { ...options, body: JSON.stringify({ names, pad: 'x'.repeat(140000) }) })).status, 413);
 });
+
+test('local HTTPS setup is admin-only and uses explicit activation plus two public downloads', async t => {
+    const storage = await fs.mkdtemp(path.join(os.tmpdir(), 'eos-tls-local-http-'));
+    t.after(() => fs.rm(storage, { recursive: true, force: true }));
+    const manager = new EosTlsManager(storage);
+    await manager.initialize();
+    const app = express();
+    registerEosTlsRoutes({
+        app, manager, baseDir: path.resolve(__dirname, '..'),
+        authorize: async req => req.headers['x-test-role'] ? {
+            authenticated: true,
+            role: req.headers['x-test-role'],
+            mustChangePassword: req.headers['x-test-password-change'] === 'yes',
+            csrfToken: 'fixture-csrf',
+        } : { authenticated: false },
+        csrfAllowed: req => req.headers['x-nw-csrf'] === 'fixture-csrf',
+        requestAllowed: req => !req.headers.origin || req.headers.origin === 'http://eos.fixture.invalid',
+    });
+    const server = http.createServer(app);
+    const port = await listen(server);
+    t.after(() => close(server));
+    const base = `http://127.0.0.1:${port}`;
+    const admin = { 'x-test-role': 'admin', 'x-nw-csrf': 'fixture-csrf' };
+    const request = (endpoint, data, headers = admin) => fetch(base + endpoint, {
+        ...(data === undefined ? {} : { method: 'POST', body: JSON.stringify(data) }),
+        headers: { 'content-type': 'application/json', ...headers },
+    });
+    const generate = '/api/eos/tls/local';
+    const activate = '/api/eos/tls/local/activate';
+    const data = { names };
+    assert.equal((await request(generate, data, {})).status, 401);
+    assert.equal((await request(generate, data, { ...admin, 'x-test-role': 'user' })).status, 403);
+    assert.equal((await request(generate, data, { ...admin, 'x-test-password-change': 'yes' })).status, 403);
+    assert.equal((await request(generate, data, { ...admin, origin: 'https://outside.invalid' })).status, 403);
+    assert.equal((await request(generate, data, { 'x-test-role': 'admin' })).status, 403);
+    assert.equal(manager.status().pending, null);
+    const deniedName = await request(generate, { names: ['other.example'] });
+    assert.equal(deniedName.status, 400);
+    assert.equal((await deniedName.json()).error, 'EOS_TLS_LOCAL_NAME_NOT_ASSIGNED');
+
+    const result = await request(generate, data);
+    assert.equal(result.status, 200);
+    const body = await result.text();
+    assert.doesNotMatch(body, /PRIVATE KEY|BEGIN CERTIFICATE/);
+    const status = JSON.parse(body);
+    const { requestId, rootFingerprint, local } = status.pending;
+    assert.equal(local, true);
+    assert.equal(status.restartRequired, false);
+    assert.equal(manager.material(), null);
+    assert.equal((await request('/security/trust/root.cer', undefined, {})).status, 404);
+
+    const leafUrl = `${generate}/device.pem?requestId=${requestId}`;
+    const rootUrl = `${generate}/root.pem?requestId=${requestId}`;
+    assert.equal((await request(rootUrl, undefined, {})).status, 401);
+    assert.equal((await request(rootUrl, undefined, { ...admin, 'x-test-role': 'user' })).status, 403);
+    assert.equal((await request(`${generate}/root.pem?requestId=${'0'.repeat(32)}`)).status, 404);
+    assert.equal((await request(rootUrl + '&requestId=' + requestId)).status, 404);
+    assert.equal((await request('/api/eos/tls/request.pem')).status, 404);
+    const [leafResponse, rootResponse] = await Promise.all([request(leafUrl), request(rootUrl)]);
+    assert.equal(leafResponse.status, 200);
+    assert.equal(rootResponse.status, 200);
+    assert.match(rootResponse.headers.get('content-disposition'), /^attachment;/);
+    assert.equal(rootResponse.headers.get('cache-control'), 'no-store');
+    const leafPem = await leafResponse.text();
+    const rootPem = await rootResponse.text();
+    assert.doesNotMatch(leafPem + rootPem, /PRIVATE KEY|PASSPHRASE/);
+    const cert = new crypto.X509Certificate(leafPem);
+    const root = new crypto.X509Certificate(rootPem);
+    const derUrl = `${generate}/root.cer?requestId=${requestId}`;
+    assert.equal((await request(derUrl, undefined, {})).status, 401);
+    const derResponse = await request(derUrl);
+    assert.equal(derResponse.status, 200);
+    assert.match(derResponse.headers.get('content-type'), /^application\/pkix-cert/);
+    assert.deepEqual(Buffer.from(await derResponse.arrayBuffer()), root.raw);
+    assert.equal(root.fingerprint256.replace(/:/g, '').toLowerCase(), rootFingerprint);
+    assert.equal(root.ca, true);
+    assert.equal(cert.ca, false);
+    assert.equal(cert.verify(root.publicKey), true);
+    assert.equal(cert.checkIP('127.0.0.1'), '127.0.0.1');
+
+    const activation = { requestId, rootFingerprint };
+    assert.equal((await request(activate, activation, { 'x-test-role': 'admin' })).status, 403);
+    assert.equal((await request(activate, { ...activation, rootFingerprint: '0'.repeat(64) })).status, 400);
+    assert.equal(manager.material(), null);
+    const success = await request(activate, activation);
+    assert.equal(success.status, 200);
+    const activated = await success.json();
+    assert.equal(activated.restartRequired, true);
+    assert.equal(activated.rootFingerprint, rootFingerprint);
+    assert.equal(activated.pending, null);
+    assert.equal((await request(rootUrl)).status, 404);
+    assert.equal((await request(derUrl)).status, 404);
+    assert.equal((await request(activate, activation)).status, 400);
+    const publicRoot = await request('/security/trust/root.cer', undefined, {});
+    assert.equal(publicRoot.status, 200);
+    assert.deepEqual(Buffer.from(await publicRoot.arrayBuffer()), root.raw);
+
+    const reloaded = new EosTlsManager(storage);
+    await reloaded.initialize();
+    const { createEosServer } = webHelpers();
+    const tlsServer = await createEosServer((_req, res) => res.end('Local TLS active'), {}, { secure: true }, reloaded);
+    await listen(tlsServer);
+    t.after(() => close(tlsServer));
+    assert.deepEqual(await tlsRequest(tlsServer, rootPem), {
+        body: 'Local TLS active',
+        fingerprint: cert.fingerprint256,
+    });
+    assert.equal((await tlsRequest(tlsServer, rootPem, '')).fingerprint, cert.fingerprint256);
+});
+
+test('local drafts survive restart without changing active TLS or storing a reusable issuing key', async t => {
+    const f = await fixture(t);
+    await f.manager.importCertificate(await f.signed());
+    const activePath = path.join(f.storage, 'active.json');
+    const pendingPath = path.join(f.storage, 'pending.json');
+    const previous = await fs.readFile(activePath);
+    const localNames = ['nexowatt', '127.0.0.1', '::1'];
+    const creating = f.manager.createLocalCertificate({ names: localNames });
+    await assert.rejects(f.manager.createLocalCertificate({ names: localNames }), /EOS_TLS_BUSY/);
+    const draft = (await creating).pending;
+    assert.equal(draft.local, true);
+    assert.ok(previous.equals(await fs.readFile(activePath)), 'generating is separate from activating');
+    const pendingBytes = await fs.readFile(pendingPath);
+    const pending = JSON.parse(pendingBytes);
+    assert.equal(pending.version, 1);
+    assert.equal(pending.csr.includes('BEGIN CERTIFICATE REQUEST'), true, 'previous adapter versions can still load the version 1 draft');
+    assert.equal(pending.key.includes('BEGIN PRIVATE KEY'), true, 'only the matching leaf key persists');
+    assert.equal(pendingBytes.includes('ENCRYPTED PRIVATE KEY'), false);
+    assert.deepEqual(Object.keys(pending.local).sort(), ['cert', 'root']);
+    assert.deepEqual((await fs.readdir(f.storage)).sort(), ['active.json', 'pending.json']);
+    assert.equal((await fs.stat(pendingPath)).mode & 0o777, 0o600);
+    assert.equal((await f.manager.createLocalCertificate({ names: ['127.0.0.1', 'NEXOWATT', '0:0:0:0:0:0:0:1'] })).pending.requestId, draft.requestId);
+    assert.ok(pendingBytes.equals(await fs.readFile(pendingPath)), 'same names reuse the existing draft');
+    await assert.rejects(f.manager.createRequest({ names: localNames }), /EOS_TLS_PENDING_REQUEST_EXISTS/);
+    assert.throws(() => f.manager.publicRequest(), /EOS_TLS_REQUEST_NOT_FOUND/);
+    assert.throws(() => f.manager.publicLocalCertificate('root', '0'.repeat(32)), /EOS_TLS_REQUEST_MISMATCH/);
+
+    const restarted = new EosTlsManager(f.storage); await restarted.initialize();
+    const certificate = restarted.publicLocalCertificate('device', draft.requestId);
+    const rootCertificate = restarted.publicLocalCertificate('root', draft.requestId);
+    const root = new crypto.X509Certificate(rootCertificate);
+    const leaf = new crypto.X509Certificate(certificate);
+    assert.equal(leaf.checkIP('::1'), '::1');
+    assert.equal(leaf.verify(root.publicKey), true);
+    assert.equal(root.fingerprint256.replace(/:/g, '').toLowerCase(), draft.rootFingerprint);
+    const rootFile = path.join(f.directory, 'draft-root.pem');
+    await fs.writeFile(rootFile, rootCertificate);
+    const constraints = await run('/usr/bin/openssl', ['x509', '-in', rootFile, '-noout', '-ext', 'basicConstraints']);
+    assert.match(constraints.stdout, /CA:TRUE, pathlen:0/);
+    await assert.rejects(restarted.importCertificate({ requestId: draft.requestId, certificate, rootCertificate: f.root, rootFingerprint: f.rootFingerprint }), /EOS_TLS_LOCAL_CERTIFICATE_MISMATCH/);
+    const state = await restarted.importCertificate({ requestId: draft.requestId, certificate, rootCertificate, rootFingerprint: root.fingerprint256 });
+    assert.equal(state.pending, null);
+    assert.equal(state.rootFingerprint, draft.rootFingerprint);
+    assert.equal(state.valid, true);
+    assert.throws(() => restarted.publicLocalCertificate('root', draft.requestId), /EOS_TLS_REQUEST_MISMATCH/);
+});
+
+test('local names stay bound to this EOS and rotation or activation cannot silently overwrite a request', async t => {
+    const f = await fixture(t);
+    await f.manager.importCertificate(await f.signed());
+    const previous = await fs.readFile(path.join(f.storage, 'active.json'));
+    const external = (await f.manager.createRequest({ names: ['manufacturer-verified.example'] })).pending;
+    await assert.rejects(f.manager.createLocalCertificate({ names: ['manufacturer-verified.example'], replace: true }), /EOS_TLS_LOCAL_NAME_NOT_ASSIGNED/);
+    await assert.rejects(f.manager.createLocalCertificate({ names: ['nexowatt'] }), /EOS_TLS_PENDING_REQUEST_EXISTS/);
+    await assert.rejects(f.manager.activateLocalCertificate({ requestId: external.requestId, rootFingerprint: f.rootFingerprint }), /EOS_TLS_REQUEST_MISMATCH/);
+    assert.equal(f.manager.status().pending.requestId, external.requestId);
+
+    const first = (await f.manager.createLocalCertificate({ names, replace: true })).pending;
+    await assert.rejects(f.manager.createLocalCertificate({ names: ['nexowatt'] }), /EOS_TLS_PENDING_REQUEST_EXISTS/);
+    const second = (await f.manager.createLocalCertificate({ names, replace: true })).pending;
+    assert.notEqual(first.requestId, second.requestId);
+    assert.notEqual(first.rootFingerprint, second.rootFingerprint);
+    await assert.rejects(f.manager.activateLocalCertificate(first), /EOS_TLS_REQUEST_MISMATCH/);
+    await assert.rejects(f.manager.activateLocalCertificate({ ...second, rootFingerprint: first.rootFingerprint }), /EOS_TLS_ROOT_FINGERPRINT_MISMATCH/);
+    f.manager.attachManagedServer({ setSecureContext() { throw new Error('injected renewal failure'); } });
+    await assert.rejects(f.manager.activateLocalCertificate(second), /injected renewal failure/);
+    assert.ok(previous.equals(await fs.readFile(path.join(f.storage, 'active.json'))), 'previous certificate restored after failed listener swap');
+    assert.equal(f.manager.status().pending.requestId, second.requestId);
+    f.manager.detach();
+    assert.equal((await f.manager.activateLocalCertificate(second)).rootFingerprint, second.rootFingerprint);
+    await assert.rejects(f.manager.activateLocalCertificate(second), /EOS_TLS_REQUEST_MISMATCH/);
+});

@@ -1,8 +1,22 @@
 # NexoWatt-Zertifikate für lokale EOS-Geräte
 
-Stand: 25.11.2026, EOS 9.0.26. Die Zertifikatsverwaltung befindet sich unter **Administration → Zertifikate** beziehungsweise `/security/tls/`.
+Stand 26.11.2026, EOS 9.0.29. Die Zertifikatsverwaltung befindet sich unter **Administration → Zertifikate** beziehungsweise `/security/tls/`.
 
 Die neue Verwaltung stellt einen geschützten lokalen Ausstellungsablauf bereit. Sie liefert keine bereits eingerichtete Hersteller-Zertifizierungsstelle und enthält keine produktiven privaten Schlüssel. Die bestehende HTTPS-Konfiguration bleibt bis zur ausdrücklichen Übernahme eines signierten Gerätezertifikats wirksam. ioBroker Admin auf Port 8081 wird nicht verändert.
+
+## Direkt in EOS ausstellen
+
+1. Als Administrator **Administration → Zertifikate** öffnen. Die Namen und IP-Adressen auswählen, mit denen du EOS aufrufst. EOS bestätigt beim Erzeugen nur den eingerichteten Gerätenamen, die zugehörige `.local`-Adresse sowie eigene Adressen der Netzwerkschnittstellen und Loopback. Für weitere Namen oder Adressen steht die externe Ausstellung unten zur Verfügung.
+2. Das Zertifikat lokal erzeugen. EOS zeigt den SHA-256-Fingerabdruck des neuen öffentlichen Stammzertifikats an. Schon vor der Übernahme stehen das Gerätezertifikat und das Stammzertifikat jeweils als PEM zum Download bereit. Das öffentliche Stammzertifikat ist mit demselben Fingerabdruck auch als DER-Datei (`.cer`) für den Import auf iPhone, iPad und Windows verfügbar. Die bisherige HTTPS-Identität bleibt bis zur bestätigten Übernahme in Betrieb.
+3. Den Fingerabdruck des heruntergeladenen Stammzertifikats auf einem vertrauten Weg mit dem angezeigten Wert vergleichen. Das geprüfte öffentliche Stammzertifikat auf den Endgeräten in den vorgesehenen Vertrauensspeicher importieren. Bei einem späteren Wechsel von einem bereits vertrauten Zertifikat den neuen Stamm noch über die bisher vertrauenswürdige Verbindung herunterladen und auf den Endgeräten einrichten, bevor du den neuen Entwurf übernimmst.
+4. Den Entwurf mit **Für dieses EOS übernehmen** aktivieren. Du musst die PEM-Dateien auf demselben Gerät nicht erneut hochladen. EOS prüft die Entwurfskennung, den bestätigten Fingerabdruck, Geräteschlüssel, Namen, Gültigkeit und Zertifikatskette.
+5. Bei der ersten Umstellung wird das neue Zertifikat nach dem nächsten regulären Adapterneustart verwendet. Ist bereits ein verwaltetes EOS-Zertifikat aktiv, kann EOS das nächste Zertifikat für neue Verbindungen ohne Neustart übernehmen. Rufe EOS anschließend mit der geprüften Adresse auf. Der öffentliche Download auf `/security/trust/` zeigt den übernommenen Stamm.
+
+Der lokale Aussteller hat einen zufälligen Stamm pro ausgestelltem Gerätezertifikat. Der kurzzeitig erzeugte CA-Signierschlüssel wird außerhalb des laufenden Vorgangs nicht aufbewahrt. Bei einer neuen Ausstellung entsteht daher ein neuer Stamm. Für mehrere Geräte oder verwaltete Anlagen, die einen gemeinsamen, dauerhaft geführten Herstellerstamm brauchen, eignet sich die getrennte Hersteller-Ausstellung. Deren privater CA-Schlüssel verbleibt auf dem geschützten Herstellerrechner.
+
+Der SHA-256-Fingerabdruck identifiziert das **öffentliche Stammzertifikat**. Er ist ein Prüfwert, den du mit dem erwarteten Zertifikat vergleichst. Ein Fingerabdruck, der allein von einer bereits ungeprüften HTTPS-Seite kommt, bestätigt die Herkunft nicht.
+
+## Externe Hersteller-Ausstellung
 
 ## Was auf welchem Rechner liegt
 
@@ -16,7 +30,7 @@ Die neue Verwaltung stellt einen geschützten lokalen Ausstellungsablauf bereit.
 
 Jedes EOS erhält einen eigenen ECDSA-P-256-Geräteschlüssel. Es gibt keinen gemeinsamen TLS-Schlüssel aller Kundengeräte. Die Lizenz-Signierschlüssel und TLS-Schlüssel bleiben getrennt. Eine Lizenz wird durch diese Funktion weder ersetzt noch erneut verlangt.
 
-## Einmalige Hersteller-Einrichtung
+## Einmalige Einrichtung der Hersteller-CA
 
 Das Werkzeug `tools/eos-tls-issuer.cjs` wird auf dem **Herstellerrechner**, nicht auf einem Kunden-EOS, ausgeführt. Es benötigt eine gepflegte Node.js-Version und OpenSSL 3.x. Die Befehle laufen ohne Administrator-/Rootrechte. Vorhandene Herstellerordner werden nicht überschrieben.
 
@@ -32,7 +46,7 @@ CA-Ordner und Passphrase getrennt sichern; Sicherung und Wiederherstellung erpro
 
 Für eine kontrollierte automatisierte Herstellerumgebung gibt es `--passphrase-file /geschuetzter/pfad`. Die Datei benötigt genau eine Zeile mit mindestens 16 Zeichen, unter POSIX Modus 0600 und den ausführenden Benutzer als Eigentümer. Sie gehört nicht zusammen mit dem CA-Schlüssel in dieselbe Sicherung. Passphrasen sind keine Kommandozeilenargumente oder Protokollinhalte. Die automatisierten Tests verwenden ausschließlich kurzlebige, synthetische Testschlüssel und entfernen diese danach.
 
-## Ein Gerät ausstellen
+## Ein Gerät mit der Hersteller-CA ausstellen
 
 1. Als EOS-Administrator `/security/tls/` öffnen. Namen prüfen: normalerweise `nexowatt` und `nexowatt.local`, zusätzlich jede für den Browserzugriff vorgesehene feste IP-Adresse. Alle Einträge sind Subject Alternative Names (SAN). Eine andere IP nach DHCP-Wechsel erfordert bei IP-Zugriff ein erneuertes Zertifikat. Bei stabilem Namen kann das bestehende Zertifikat weiterpassen.
 2. **Anfrage erstellen** und die öffentliche CSR herunterladen. Ein vorhandener unbenutzter Antrag bleibt bestehen, solange er nicht ausdrücklich ersetzt wird. Das Ersetzen erzeugt einen neuen Geräteschlüssel; eine Antwort auf den alten Antrag wird anschließend nicht mehr akzeptiert.
@@ -71,7 +85,7 @@ Nach korrekter Zertifikatseinrichtung die warnungsfreie EOS-Seite in Safari öff
 
 ## Betrieb, Erneuerung und Wiederherstellung
 
-- Die Verwaltung zeigt Fingerabdrücke, Namen, Laufzeit, offene Anfrage und eine Warnung ab 30 Tagen vor Ablauf. Es gibt noch keine automatische CA-Signierung oder automatische CA-Erneuerung. Die Verantwortung für rechtzeitige Ausstellung und Kunden-Endgeräte liegt bei NexoWatt beziehungsweise der vereinbarten Administration.
+- Die Verwaltung zeigt Fingerabdrücke, Namen, Laufzeit, offene Anfrage und eine Warnung ab 30 Tagen vor Ablauf. Die lokale Ausstellung startet auf Anforderung. Eine zeitgesteuerte Ausstellung oder CA-Erneuerung ist nicht eingerichtet. Die Verantwortung für rechtzeitige Ausstellung und Kunden-Endgeräte liegt bei NexoWatt beziehungsweise der vereinbarten Administration.
 - Betrieb setzt `/usr/bin/openssl` voraus. Fehlt OpenSSL oder scheitert die Prüfung, wird kein ungeprüftes Zertifikat übernommen. Fehlerhafte private Ablagen werden als nicht verfügbar angezeigt; ein vorhandener gültiger ioBroker-HTTPS-Zugang bleibt als Ausgangskonfiguration erhalten. TLS 1.2 ist die Untergrenze; keine unverschlüsselte Ersatzfreigabe.
 - `tls/active.json` und `tls/pending.json` sind geheime Geräteunterlagen. Nur in verschlüsselte, zugriffsgeschützte Backups aufnehmen. Bei Wiederherstellung derselben Anlage Identität und Zugriff prüfen; eine Sicherung mit identischem Geräteschlüssel nicht parallel auf mehreren aktiven Kundengeräten betreiben. Bei Geräteersatz kann stattdessen eine neue CSR ausgestellt werden. Der Hersteller-CA-Schlüssel bleibt außerhalb jedes Gerätebackups.
 - Atomare Speicherung erhält bei fehlgeschlagener Aktivierung den vorherigen Stand. Eine nach Stromausfall übrig gebliebene, bereits verbrauchte Anfrage wird beim Laden verworfen. Der Adapter nimmt keine beliebigen privaten Schlüssel oder ausführbaren Dateien über die Weboberfläche an.

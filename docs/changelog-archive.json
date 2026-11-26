@@ -328,5 +328,9 @@
   "8.0.0": {
     "en": "Native migration to ioBroker Admin 8.3.5 with EOS security, roles, licensing and authenticated instance proxy.",
     "de": "Native Umstellung auf ioBroker Admin 8.3.5 mit EOS-Schutzmaßnahmen, Rollen, Lizenzen und authentifiziertem Instanzproxy."
+  },
+  "9.0.9": {
+    "en": "SmartHome controls redesigned in NexoWatt style with touch-safe sliders and visible command feedback. Existing device mappings and central licensing retained.",
+    "de": "SmartHome-Bedienkacheln im NexoWatt-Design, berührungssichere Regler und sichtbare Befehlsrückmeldung. Bestehende Gerätezuordnungen und zentrale Lizenz bleiben erhalten."
   }
 }

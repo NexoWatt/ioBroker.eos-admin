@@ -200,6 +200,39 @@ export function registerEosTlsRoutes(options: Options): void {
         json({ limit: '128kb', strict: true }),
         action(req => manager.importCertificate(req.body as unknown)),
     );
+    app.post(
+        '/api/eos/tls/local',
+        guard(true),
+        json({ limit: '16kb', strict: true }),
+        action(req => manager.createLocalCertificate(req.body as unknown)),
+    );
+    app.post(
+        '/api/eos/tls/local/activate',
+        guard(true),
+        json({ limit: '2kb', strict: true }),
+        action(req => manager.activateLocalCertificate(req.body as unknown)),
+    );
+    for (const [kind, filename] of [
+        ['device', 'NexoWatt-EOS-Gerätezertifikat.pem'],
+        ['root', 'NexoWatt-EOS-Stammzertifikat.pem'],
+    ] as const) {
+        app.get(`/api/eos/tls/local/${kind}.pem`, guard(), (req, res): void => {
+            try {
+                const certificate = manager.publicLocalCertificate(kind, req.query.requestId);
+                res.type('application/x-pem-file').attachment(filename).send(certificate);
+            } catch {
+                res.status(404).json({ error: 'EOS_TLS_LOCAL_CERTIFICATE_NOT_FOUND' });
+            }
+        });
+    }
+    app.get('/api/eos/tls/local/root.cer', guard(), (req, res): void => {
+        try {
+            const certificate = new X509Certificate(manager.publicLocalCertificate('root', req.query.requestId));
+            res.type('application/pkix-cert').attachment('NexoWatt-EOS-Stammzertifikat.cer').send(certificate.raw);
+        } catch {
+            res.status(404).json({ error: 'EOS_TLS_LOCAL_CERTIFICATE_NOT_FOUND' });
+        }
+    });
     app.get('/api/eos/tls/request.pem', guard(), (_req, res) => {
         try {
             res.type('application/pkcs10').attachment('NexoWatt-EOS-request.pem').send(manager.publicRequest());

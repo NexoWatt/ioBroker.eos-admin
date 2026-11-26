@@ -9,7 +9,7 @@ import { execFile } from 'node:child_process';
 import { createSecureContext, type SecureContext } from 'node:tls';
 import type { Server } from 'node:https';
 
-interface Pending {
+interface PendingIdentity {
     version: 1;
     requestId: string;
     names: string[];
@@ -17,6 +17,11 @@ interface Pending {
     csr: string;
     createdAt: string;
 }
+interface LocalCertificate {
+    cert: string;
+    root: string;
+}
+type Pending = PendingIdentity & { local?: LocalCertificate };
 interface Identity {
     version: 1;
     requestId: string;
@@ -52,7 +57,7 @@ export function tlsNames(value: unknown): string[] {
     }
     const names = value.map((entry: unknown) => {
         const name = text(entry, 253).toLowerCase();
-        if (isIP(name)) {
+        if (!name.includes('%') && isIP(name)) {
             return name;
         }
         if (
@@ -189,9 +194,10 @@ async function writePrivate(path: string, value: string): Promise<void> {
         await handle.close();
     }
 }
-function openssl(args: string[]): Promise<void> {
+function openssl(args: string[], input?: Buffer): Promise<void> {
     return new Promise((resolvePromise, reject) => {
-        execFile(
+        let inputFailed = false;
+        const child = execFile(
             '/usr/bin/openssl',
             args,
             {
@@ -201,10 +207,24 @@ function openssl(args: string[]): Promise<void> {
                 env: { PATH: '/usr/bin:/bin', LANG: 'C', OPENSSL_CONF: '/dev/null' },
             },
             error =>
-                error
+                error || inputFailed
                     ? reject(Object.assign(new Error('EOS_TLS_OPENSSL_FAILED'), { code: 'EOS_TLS_OPENSSL_FAILED' }))
                     : resolvePromise(),
         );
+        if (input) {
+            const stdin = child.stdin;
+            if (!stdin) {
+                inputFailed = true;
+                child.kill();
+                return;
+            }
+            // The child callback reports failure only after OpenSSL has exited.
+            stdin.once('error', () => {
+                inputFailed = true;
+                child.kill();
+            });
+            stdin.end(input);
+        }
     });
 }
 function ecKey(): Promise<string> {
@@ -219,6 +239,82 @@ function ecKey(): Promise<string> {
             (error, _publicKey, privateKey) => (error ? reject(error) : resolvePromise(privateKey)),
         );
     });
+}
+function localSigningKey(passphrase: Buffer): Promise<string> {
+    return new Promise((resolvePromise, reject) => {
+        generateKeyPair('ec', { namedCurve: 'secp384r1' }, (error, _publicKey, privateKey) => {
+            if (error) {
+                reject(error);
+                return;
+            }
+            try {
+                const pem = privateKey.export({ type: 'pkcs8', format: 'pem', cipher: 'aes-256-cbc', passphrase });
+                if (typeof pem !== 'string') {
+                    fail('EOS_TLS_OPENSSL_FAILED');
+                }
+                resolvePromise(pem);
+            } catch (exportError) {
+                reject(exportError instanceof Error ? exportError : new Error('EOS_TLS_OPENSSL_FAILED'));
+            }
+        });
+    });
+}
+function sanExtension(names: string[]): string {
+    return `subjectAltName=${names.map(name => `${isIP(name) ? 'IP' : 'DNS'}:${name}`).join(',')}`;
+}
+function createCsr(directory: string, names: string[]): Promise<void> {
+    return openssl([
+        'req',
+        '-new',
+        '-sha256',
+        '-key',
+        join(directory, 'key.pem'),
+        '-out',
+        join(directory, 'request.pem'),
+        '-subj',
+        '/O=NexoWatt/CN=nexowatt',
+        '-addext',
+        sanExtension(names),
+    ]);
+}
+async function readGeneratedPem(path: string): Promise<string> {
+    // OpenSSL inherits the process umask. Its public output lives in a private
+    // directory, but is also restricted before being read by the file guard.
+    const handle = await open(path, constants.O_RDONLY | constants.O_NOFOLLOW);
+    try {
+        const stat = await handle.stat();
+        if (!stat.isFile() || stat.nlink !== 1 || (process.getuid && stat.uid !== process.getuid())) {
+            fail('EOS_TLS_STORAGE_PERMISSIONS');
+        }
+        await handle.chmod(0o600);
+    } finally {
+        await handle.close();
+    }
+    const pem = await readPrivate(path);
+    if (!pem) {
+        fail('EOS_TLS_OPENSSL_FAILED');
+    }
+    return pem;
+}
+function localCertificate(value: unknown): LocalCertificate {
+    const data = record(value);
+    const cert = certificates(data.cert, 1)[0];
+    const root = certificates(data.root, 1)[0];
+    if (!cert || !root) {
+        fail('EOS_TLS_INVALID_CERTIFICATE');
+    }
+    return { cert, root };
+}
+function canonicalDeviceName(name: string): string {
+    const lowerName = name.toLowerCase();
+    return isIP(lowerName) === 6 ? new URL(`http://[${lowerName}]/`).hostname.slice(1, -1) : lowerName;
+}
+function deviceAddresses(): string[] {
+    return Object.values(networkInterfaces()).flatMap(entries =>
+        (entries || [])
+            .filter(entry => !entry.internal && !entry.address.includes('%') && isIP(entry.address))
+            .map(entry => entry.address),
+    );
 }
 function identity(value: unknown): Identity {
     const data = record(value);
@@ -275,7 +371,7 @@ export class EosTlsManager {
                 fail('EOS_TLS_STORAGE_INVALID');
             }
             if (requestId !== this.active?.requestId) {
-                this.pending = {
+                const draft: PendingIdentity = {
                     version: 1,
                     requestId,
                     names: tlsNames(data.names),
@@ -283,6 +379,13 @@ export class EosTlsManager {
                     csr: text(data.csr),
                     createdAt: text(data.createdAt, 50),
                 };
+                if (data.local !== undefined) {
+                    const local = localCertificate(data.local);
+                    await this.validate({ ...draft, ...local }, true);
+                    this.pending = { ...draft, local };
+                } else {
+                    this.pending = draft;
+                }
             }
         }
         this.initialized = true;
@@ -313,11 +416,7 @@ export class EosTlsManager {
         let addresses: string[] = [];
         let addressDiscoveryUnavailable = false;
         try {
-            addresses = Object.values(networkInterfaces()).flatMap(entries =>
-                (entries || [])
-                    .filter(entry => !entry.internal && !entry.address.includes('%'))
-                    .map(entry => entry.address),
-            );
+            addresses = deviceAddresses();
         } catch {
             // Interface enumeration is advisory; an OS failure must not invalidate a saved CSR or kill a route.
             addressDiscoveryUnavailable = true;
@@ -344,7 +443,14 @@ export class EosTlsManager {
             rootFingerprint: root ? fingerprint(root) : null,
             names: this.active?.names || [],
             pending: this.pending
-                ? { requestId: this.pending.requestId, names: this.pending.names, createdAt: this.pending.createdAt }
+                ? {
+                      requestId: this.pending.requestId,
+                      names: this.pending.names,
+                      createdAt: this.pending.createdAt,
+                      ...(this.pending.local
+                          ? { local: true, rootFingerprint: fingerprint(new X509Certificate(this.pending.local.root)) }
+                          : {}),
+                  }
                 : null,
             addressDiscoveryUnavailable,
             suggestedNames: [...new Set([this.hostname, `${this.hostname}.local`, ...addresses])].slice(0, 32),
@@ -357,7 +463,7 @@ export class EosTlsManager {
         return new X509Certificate(this.active.root).raw;
     }
     publicRequest(): string {
-        if (!this.pending) {
+        if (!this.pending || this.pending.local) {
             fail('EOS_TLS_REQUEST_NOT_FOUND');
         }
         return this.pending.csr;
@@ -367,7 +473,7 @@ export class EosTlsManager {
             const data = record(value);
             const names = tlsNames(data.names);
             if (this.pending && data.replace !== true) {
-                if (JSON.stringify(names) !== JSON.stringify(this.pending.names)) {
+                if (this.pending.local || JSON.stringify(names) !== JSON.stringify(this.pending.names)) {
                     fail('EOS_TLS_PENDING_REQUEST_EXISTS');
                 }
                 return this.status();
@@ -376,28 +482,8 @@ export class EosTlsManager {
             try {
                 const key = await ecKey();
                 await writePrivate(join(directory, 'key.pem'), key);
-                await openssl([
-                    'req',
-                    '-new',
-                    '-sha256',
-                    '-key',
-                    join(directory, 'key.pem'),
-                    '-out',
-                    join(directory, 'request.pem'),
-                    '-subj',
-                    '/O=NexoWatt/CN=nexowatt',
-                    '-addext',
-                    `subjectAltName=${names.map(name => `${isIP(name) ? 'IP' : 'DNS'}:${name}`).join(',')}`,
-                ]);
-                // OpenSSL inherits the process umask; restrict its public CSR before reading through the private file guard.
-                const csrHandle = await open(join(directory, 'request.pem'), constants.O_RDONLY | constants.O_NOFOLLOW);
-                let csr: string;
-                try {
-                    await csrHandle.chmod(0o600);
-                    csr = await csrHandle.readFile('utf8');
-                } finally {
-                    await csrHandle.close();
-                }
+                await createCsr(directory, names);
+                const csr = await readGeneratedPem(join(directory, 'request.pem'));
                 const pending: Pending = {
                     version: 1,
                     requestId: randomBytes(16).toString('hex'),
@@ -418,53 +504,228 @@ export class EosTlsManager {
     async importCertificate(value: unknown): Promise<Record<string, unknown>> {
         return this.exclusive(async () => {
             const data = record(value);
-            if (
-                !this.pending ||
-                data.requestId !== this.pending.requestId ||
-                data.requestId === this.active?.requestId
-            ) {
-                fail('EOS_TLS_REQUEST_MISMATCH');
-            }
+            const pending = this.matchingPending(data.requestId);
             const chain = certificates(data.certificate, 5);
             const roots = certificates(data.rootCertificate, 1);
             const root = roots[0];
             if (!root || fingerprint(new X509Certificate(root)) !== checkedFingerprint(data.rootFingerprint)) {
                 fail('EOS_TLS_ROOT_FINGERPRINT_MISMATCH');
             }
-            const candidate: Identity = {
-                version: 1,
-                requestId: this.pending.requestId,
-                names: this.pending.names,
-                key: this.pending.key,
-                cert: chain.join(''),
-                root,
-            };
-            await this.validate(candidate, false);
-            const context = createSecureContext({ key: candidate.key, cert: candidate.cert, minVersion: 'TLSv1.2' });
-            const previous = this.active;
-            this.storageSyncWarning = !(await atomicPrivate(this.directory, 'active.json', candidate));
-            try {
-                this.server?.setSecureContext({ key: candidate.key, cert: candidate.cert, minVersion: 'TLSv1.2' });
-            } catch (error) {
-                if (previous) {
-                    this.storageSyncWarning = !(await atomicPrivate(this.directory, 'active.json', previous));
-                } else {
-                    await rm(join(this.directory, 'active.json'), { force: true });
+            const cert = chain.join('');
+            if (pending.local) {
+                if (cert !== pending.local.cert || root !== pending.local.root) {
+                    fail('EOS_TLS_LOCAL_CERTIFICATE_MISMATCH');
                 }
-                throw error;
+                this.localNames(pending.names);
             }
-            this.active = candidate;
-            this.context = context;
-            this.pending = null;
-            // An interrupted cleanup cannot replay the request: active.requestId is checked on load and import.
-            try {
-                await rm(join(this.directory, 'pending.json'), { force: true });
-                this.pendingCleanupWarning = false;
-            } catch {
-                this.pendingCleanupWarning = true;
-            }
-            return this.status();
+            return this.commitCertificate(pending, { cert, root });
         });
+    }
+    async createLocalCertificate(value: unknown): Promise<Record<string, unknown>> {
+        return this.exclusive(async () => {
+            const data = record(value);
+            const names = this.localNames(data.names);
+            if (this.pending && data.replace !== true) {
+                if (!this.pending.local || JSON.stringify(names) !== JSON.stringify(this.pending.names)) {
+                    fail('EOS_TLS_PENDING_REQUEST_EXISTS');
+                }
+                if (Date.parse(new X509Certificate(this.pending.local.cert).validTo) <= Date.now() + DAY) {
+                    fail('EOS_TLS_LIFETIME_INVALID');
+                }
+                return this.status();
+            }
+            const requestId = randomBytes(16).toString('hex');
+            const directory = await mkdtemp(join(this.directory, '.local-'));
+            // The persisted file contains an encrypted, one-time signing key.
+            // Its independent passphrase is sent over stdin and never written.
+            const passphrase = Buffer.from(randomBytes(32).toString('hex'), 'ascii');
+            const stdin = Buffer.concat([passphrase, Buffer.from('\n')]);
+            try {
+                const key = await ecKey();
+                const caFile = join(directory, 'issuer.pem');
+                const rootFile = join(directory, 'root.pem');
+                const certFile = join(directory, 'certificate.pem');
+                const csrFile = join(directory, 'request.pem');
+                const extensions = join(directory, 'server.cnf');
+                await writePrivate(join(directory, 'key.pem'), key);
+                await createCsr(directory, names);
+                await writePrivate(caFile, await localSigningKey(passphrase));
+                await openssl(
+                    [
+                        'req',
+                        '-new',
+                        '-x509',
+                        '-sha384',
+                        '-days',
+                        '398',
+                        '-key',
+                        caFile,
+                        '-passin',
+                        'stdin',
+                        '-out',
+                        rootFile,
+                        '-subj',
+                        `/O=NexoWatt/CN=NexoWatt EOS Local Root ${requestId}`,
+                        '-addext',
+                        'basicConstraints=critical,CA:TRUE,pathlen:0',
+                        '-addext',
+                        'keyUsage=critical,keyCertSign,cRLSign',
+                        '-addext',
+                        'subjectKeyIdentifier=hash',
+                        '-addext',
+                        'authorityKeyIdentifier=keyid:always',
+                    ],
+                    stdin,
+                );
+                await writePrivate(
+                    extensions,
+                    [
+                        '[server]',
+                        'basicConstraints=critical,CA:FALSE',
+                        'keyUsage=critical,digitalSignature',
+                        'extendedKeyUsage=serverAuth',
+                        'subjectKeyIdentifier=hash',
+                        'authorityKeyIdentifier=keyid,issuer',
+                        sanExtension(names),
+                        '',
+                    ].join('\n'),
+                );
+                await openssl(
+                    [
+                        'x509',
+                        '-req',
+                        '-sha256',
+                        '-days',
+                        '397',
+                        '-in',
+                        csrFile,
+                        '-CA',
+                        rootFile,
+                        '-CAkey',
+                        caFile,
+                        '-passin',
+                        'stdin',
+                        '-set_serial',
+                        `0x${randomBytes(19).toString('hex')}`,
+                        '-extfile',
+                        extensions,
+                        '-extensions',
+                        'server',
+                        '-out',
+                        certFile,
+                    ],
+                    stdin,
+                );
+                await rm(caFile);
+                passphrase.fill(0);
+                stdin.fill(0);
+                const local = localCertificate({
+                    cert: await readGeneratedPem(certFile),
+                    root: await readGeneratedPem(rootFile),
+                });
+                // Keeping the public CSR in the version 1 format lets an
+                // earlier adapter load this pending request after a rollback.
+                const pending: Pending = {
+                    version: 1,
+                    requestId,
+                    names,
+                    key,
+                    csr: await readGeneratedPem(csrFile),
+                    createdAt: new Date().toISOString(),
+                    local,
+                };
+                await this.validate({ ...pending, ...local }, false);
+                this.storageSyncWarning = !(await atomicPrivate(this.directory, 'pending.json', pending));
+                this.pendingCleanupWarning = false;
+                this.pending = pending;
+                return this.status();
+            } finally {
+                passphrase.fill(0);
+                stdin.fill(0);
+                await rm(directory, { recursive: true, force: true });
+            }
+        });
+    }
+    publicLocalCertificate(kind: 'device' | 'root', requestId: unknown): string {
+        const pending = this.matchingPending(requestId);
+        if (!pending.local) {
+            fail('EOS_TLS_REQUEST_MISMATCH');
+        }
+        return kind === 'device' ? pending.local.cert : pending.local.root;
+    }
+    async activateLocalCertificate(value: unknown): Promise<Record<string, unknown>> {
+        return this.exclusive(async () => {
+            const data = record(value);
+            const pending = this.matchingPending(data.requestId);
+            if (!pending.local) {
+                fail('EOS_TLS_REQUEST_MISMATCH');
+            }
+            if (fingerprint(new X509Certificate(pending.local.root)) !== checkedFingerprint(data.rootFingerprint)) {
+                fail('EOS_TLS_ROOT_FINGERPRINT_MISMATCH');
+            }
+            this.localNames(pending.names);
+            return this.commitCertificate(pending, pending.local);
+        });
+    }
+    private matchingPending(requestId: unknown): Pending {
+        if (!this.pending || requestId !== this.pending.requestId || requestId === this.active?.requestId) {
+            fail('EOS_TLS_REQUEST_MISMATCH');
+        }
+        return this.pending;
+    }
+    private localNames(value: unknown): string[] {
+        const names = [...new Set(tlsNames(value).map(canonicalDeviceName))].sort();
+        const local = [this.hostname, `${this.hostname}.local`, 'localhost', '127.0.0.1', '::1'];
+        let addresses: string[] = [];
+        try {
+            addresses = deviceAddresses();
+        } catch {
+            // Interface discovery is advisory. Without it, issue only for the
+            // fixed local hostnames and loopback addresses.
+        }
+        const assigned = new Set([...local, ...addresses].map(canonicalDeviceName));
+        if (names.some(name => !assigned.has(name))) {
+            fail('EOS_TLS_LOCAL_NAME_NOT_ASSIGNED');
+        }
+        return names;
+    }
+    private async commitCertificate(
+        pending: Pending,
+        { cert, root }: LocalCertificate,
+    ): Promise<Record<string, unknown>> {
+        const candidate: Identity = {
+            version: 1,
+            requestId: pending.requestId,
+            names: pending.names,
+            key: pending.key,
+            cert,
+            root,
+        };
+        await this.validate(candidate, false);
+        const context = createSecureContext({ key: candidate.key, cert: candidate.cert, minVersion: 'TLSv1.2' });
+        const previous = this.active;
+        this.storageSyncWarning = !(await atomicPrivate(this.directory, 'active.json', candidate));
+        try {
+            this.server?.setSecureContext({ key: candidate.key, cert: candidate.cert, minVersion: 'TLSv1.2' });
+        } catch (error) {
+            if (previous) {
+                this.storageSyncWarning = !(await atomicPrivate(this.directory, 'active.json', previous));
+            } else {
+                await rm(join(this.directory, 'active.json'), { force: true });
+            }
+            throw error;
+        }
+        this.active = candidate;
+        this.context = context;
+        this.pending = null;
+        // An interrupted cleanup cannot replay the request: active.requestId is checked on load and import.
+        try {
+            await rm(join(this.directory, 'pending.json'), { force: true });
+            this.pendingCleanupWarning = false;
+        } catch {
+            this.pendingCleanupWarning = true;
+        }
+        return this.status();
     }
     private async exclusive<T>(task: () => Promise<T>): Promise<T> {
         if (!this.initialized || this.startupError) {

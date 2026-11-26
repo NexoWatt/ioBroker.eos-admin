@@ -1,0 +1,5 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> iobroker.eos-admin@9.0.29 build:modules
+> tsc -p modules/eebus/tsconfig.json && tsc -p modules/backup/tsconfig.json && tsc -p modules/ocpp/tsconfig.json
+
