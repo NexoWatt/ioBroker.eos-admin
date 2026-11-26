@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/main.ts
- * Quell-Hash: sha256:0929d163c13709fb7736ba4c35a32374a1524032791acc8fb6be5a51a94957c2
+ * Quell-Hash: sha256:2e8e4d4b14ec885e68c7127c75bee1f355db2521addbf8e46c94a91bfd462f27
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -42,7 +42,7 @@ const { executeLegacyDeviceWrite } = require('./lib/smarthome-device-legacy');
 const { normalizeCustomView } = require('./lib/smarthome-custom-contract');
 const { normalizeDeviceControls, getControlProfiles } = require('./lib/smarthome-device-controls');
 const { registerSmartHomeDeviceApi, createDeviceSnapshotReader, buildDeviceControls } = require('./lib/smarthome-device-api');
-const { cleanControls, extendSuggestion, DetectionError, DetectionScan, DETECTION_LIMITS, detectionNow, detectionSnapshot } = require('./lib/smarthome-device-detection');
+const { cleanControls, extendSuggestion, collectKeywordDetectionCandidates, keywordReviewSuggestion, DetectionError, DetectionScan, DETECTION_LIMITS, detectionNow, detectionSnapshot } = require('./lib/smarthome-device-detection');
 const { smartHomeEnabled, registerSmartHomeActivationApi } = require('./lib/smarthome-activation');
 const { readPreservedUiStates, parseInstallerConfigState } = require('./lib/preserved-ui-config');
 const { createRuntimeFileSender, runtimeProxyPrefix, rewriteRuntimeProxyHtml, isHttpsRuntimeProxy } = require('./lib/runtime-proxy-html');
@@ -14777,7 +14777,7 @@ const nwShcfgTdMergeSuggestion = (current, next) => {
  * Zusammenhang: Teil von Adapterkern: Lifecycle, Webserver, API, States, EMS-Engine; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
  * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
  */
-const nwShcfgTdBuildSuggestion = async ({ control, rootId, objects, configuredIds, config }) => {
+const nwShcfgTdBuildSuggestion = async ({ control, rootId, objects, configuredIds, config, keywordState = false }) => {
   if (!control || !control.type) return null;
   const detectorType = String(control.type || '').trim();
   const targetType = NW_SHCFG_TD_TYPE_MAP[detectorType];
@@ -14794,7 +14794,7 @@ const nwShcfgTdBuildSuggestion = async ({ control, rootId, objects, configuredId
   const states = Array.from(stateMap.values());
   if (!states.length) return null;
 
-  const sourceId = nwShcfgTdBestSourceId(objects, rootId, control) || String(rootId || '').trim();
+  const sourceId = (keywordState ? rootId : nwShcfgTdBestSourceId(objects, rootId, control)) || String(rootId || '').trim();
   const sourceObj = sourceId ? objects[sourceId] : null;
   const sourceType = String((sourceObj && sourceObj.type) || (objects[rootId] && objects[rootId].type) || 'state').trim() || 'state';
   const sourceName = nwShcfgTdNormName(sourceObj && sourceObj.common && sourceObj.common.name) || (sourceId ? sourceId.split('.').slice(-1)[0] : 'Gerät');
@@ -15062,6 +15062,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
     scan.check('roots', roots.length);
     const detector = new NwChannelDetector();
     const suggestionsBySignature = new Map();
+    const coveredStateIds = new Set(configuredIds);
     let matchedRoots = 0;
 
     let scanIndex = 0;
@@ -15091,6 +15092,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
       for (const control of controls) {
         const suggestion = await nwShcfgTdBuildSuggestion({ control, rootId, objects, configuredIds, config: cfg });
         if (!suggestion) continue;
+        for (const state of suggestion.states || []) coveredStateIds.add(state.id);
         const signature = suggestion.controlId || suggestion.signature || suggestion.id;
         const merged = nwShcfgTdMergeSuggestion(suggestionsBySignature.get(signature), suggestion);
         suggestionsBySignature.set(signature, merged);
@@ -15098,7 +15100,33 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
       }
     }
 
+    // Supplement the existing detector using the same snapshot and deadline.
+    // A keyword match cannot combine separate group addresses or create a device command.
+    const reviewSuggestions = [];
+    const keywordLimit = Math.min(512, DETECTION_LIMITS.suggestions - suggestionsBySignature.size);
+    let extraCount = 0;
+    let extraSuggestionsLimited = false;
+    for await (const candidate of collectKeywordDetectionCandidates(objects, keys, new Set(roots), coveredStateIds, scan)) {
+      if (extraCount >= keywordLimit) {
+        extraSuggestionsLimited = true;
+        break;
+      }
+      extraCount += 1;
+      if (candidate.control) {
+        const suggestion = await nwShcfgTdBuildSuggestion({
+          control: candidate.control, rootId: candidate.sourceId, objects, configuredIds, config: cfg, keywordState: true,
+        });
+        if (suggestion) {
+          const signature = suggestion.controlId || suggestion.signature || suggestion.id;
+          if (!suggestionsBySignature.has(signature)) suggestionsBySignature.set(signature, suggestion);
+          continue;
+        }
+      }
+      reviewSuggestions.push(keywordReviewSuggestion(candidate));
+    }
+
     const suggestions = reconcileSmartHomeImportSuggestions(Array.from(suggestionsBySignature.values()), objects, cfg)
+      .concat(reviewSuggestions)
       .map((entry) => {
         if (entry && entry.signature) delete entry.signature;
         return entry;
@@ -15129,6 +15157,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
         complete: true,
         objectCount: keys.length,
         elapsedMs: Math.round(scan.elapsedMs),
+        ...(extraSuggestionsLimited ? { extraSuggestionsLimited: true } : {}),
         ...(suggestions.length ? {} : { emptyReason: roots.length ? 'NO_MATCHES' : 'NO_CANDIDATES' }),
       },
       suggestions,
@@ -15433,6 +15462,19 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
         const qRaw = (req.query && req.query.q) || '';
         const q = (typeof qRaw === 'string' ? qRaw : String(qRaw || '')).trim();
         const qLower = (q || '').toLowerCase();
+        const direction = req.query?.direction;
+        const allowedTypes = new Set(['boolean', 'number', 'string']);
+        function csvFilter(value, maxItems, validator) {
+          if (value === undefined) return new Set();
+          if (typeof value !== 'string' || !value || value.length > 1024) return null;
+          const entries = value.split(',');
+          return entries.length <= maxItems && entries.every(validator) ? new Set(entries) : null;
+        }
+        const types = csvFilter(req.query?.types, 3, value => allowedTypes.has(value));
+        const roles = csvFilter(req.query?.roles, 16, value => /^[a-zA-Z][a-zA-Z0-9_.-]{0,63}$/.test(value));
+        if ((direction !== undefined && direction !== 'read' && direction !== 'write') || !types || !roles) {
+          return res.status(400).json({ ok: false, error: 'EOS_DP_FILTER_INVALID' });
+        }
 
         const limitRaw = (req.query && req.query.limit) || '';
         let limit = parseInt(limitRaw, 10);
@@ -15477,6 +15519,8 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
               type: obj.common.type || '',
 
               unit: obj.common.unit || '',
+              read: obj.common.read === true,
+              write: obj.common.write === true,
 
               idLower: String(id).toLowerCase(),
 
@@ -15551,6 +15595,8 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
          */
         function pushItem(it) {
           if (!it || !it.id || seen.has(it.id)) return;
+          if (direction && it[direction] !== true) return;
+          if (types.size && !types.has(it.type)) return;
           seen.add(it.id);
           results.push({
             id: it.id,
@@ -15558,7 +15604,22 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
             role: it.role,
             type: it.type,
             unit: it.unit,
+            read: it.read,
+            write: it.write,
           });
+        }
+
+        function matchesQuery(it) {
+          return !qLower || it.idLower.includes(qLower) || it.nameLower.includes(qLower)
+            || (direction && typeof it.role === 'string' && it.role.toLowerCase().includes(qLower));
+        }
+        // Reserve the first results for the requested function even with
+        // thousands of other devices in earlier branches of the object tree.
+        if (roles.size) {
+          for (const it of items) {
+            if (roles.has(it.role) && matchesQuery(it)) pushItem(it);
+            if (results.length >= limit) return res.json({ ok: true, results });
+          }
         }
 
         if (!qLower) {
@@ -15584,7 +15645,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
         }
 
         for (const it of items) {
-          if (it.idLower.indexOf(qLower) !== -1 || it.nameLower.indexOf(qLower) !== -1) {
+          if (matchesQuery(it)) {
             pushItem(it);
             if (results.length >= limit) break;
           }
@@ -18505,6 +18566,8 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
               role: obj.common.role || '',
               type: obj.common.type || '',
               unit: obj.common.unit || '',
+              read: obj.common.read === true,
+              write: obj.common.write === true,
               idLower: String(id).toLowerCase(),
               nameLower: String(name).toLowerCase(),
             });
@@ -18564,6 +18627,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
             role: it ? it.role : '',
             type: it ? it.type : '',
             unit: it ? it.unit : '',
+            ...(it ? { read: it.read, write: it.write } : {}),
           });
         }
 

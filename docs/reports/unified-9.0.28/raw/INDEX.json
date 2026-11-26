@@ -1,0 +1,87 @@
+{
+  "schema": 1,
+  "version": "9.0.28",
+  "results": {
+    "node22-tests-final": {
+      "tests": 2723,
+      "pass": 2721,
+      "fail": 0,
+      "skipped": 2,
+      "cancelled": 0
+    },
+    "node24-tests-final": {
+      "tests": 2723,
+      "pass": 2721,
+      "fail": 0,
+      "skipped": 2,
+      "cancelled": 0
+    }
+  },
+  "files": [
+    {
+      "file": "backend.log",
+      "deliveredSha256": "3adea1dd8f17c8a2d72dd9d06e75a7c98df27803520501ba1c3c3e2afb1fb9e5",
+      "bytes": 277
+    },
+    {
+      "file": "frontend.log",
+      "deliveredSha256": "e018b13b0388cc91e2853df3863bce5f76b71f571081ab6a9858766de6fe2d51",
+      "bytes": 17752
+    },
+    {
+      "file": "installer.log",
+      "deliveredSha256": "fcb02ca73122149140aa26009281fb5f5771bae8e75860285bcceede42dee1ac",
+      "bytes": 1275
+    },
+    {
+      "file": "lint.log",
+      "deliveredSha256": "5dfee5c11a52929197e1401cac128ae43c62f492f95fc2a8917f7f3c9f75c5cb",
+      "bytes": 7614
+    },
+    {
+      "file": "modules.log",
+      "deliveredSha256": "7fbc1dfdba1f6d1bcc34e8da0664d1f88e8b6e914fa39762a5e0d05409208434",
+      "bytes": 307
+    },
+    {
+      "file": "node22-tests-final.log",
+      "deliveredSha256": "56f096e20b058fa68c3ad11cd2b15dea9e19a3d2a444356a24b688ec7de05541",
+      "bytes": 733677
+    },
+    {
+      "file": "node22-version.log",
+      "deliveredSha256": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906",
+      "bytes": 9
+    },
+    {
+      "file": "node24-tests-final.log",
+      "deliveredSha256": "42db38534a4988ff699da5f7a27cabf8e091a589578e400a1ed768ba33dfba9e",
+      "bytes": 295336
+    },
+    {
+      "file": "node24-version.log",
+      "deliveredSha256": "4409d3bfa08b82f385bd424eeda65fc63b756129f0e89e82df77f1fecafccc14",
+      "bytes": 9
+    },
+    {
+      "file": "npm-audit-runtime.json",
+      "deliveredSha256": "9a38535e223aa382d0eca300ff5e8f53897b15bf06adc1c92ea32fddcfa551b6",
+      "bytes": 1620
+    },
+    {
+      "file": "runtime-mirror-check.log",
+      "deliveredSha256": "73ce9ce9d012680ac1bdcee42a53715a1b248962d37e50d9a52b6a4ed9dac5db",
+      "bytes": 108
+    },
+    {
+      "file": "typecheck.log",
+      "deliveredSha256": "6f82e0f6d02a36239ac9bf4e4a9e8ad1aa6d3f9242c5b49badf0159450dcd098",
+      "bytes": 3049
+    },
+    {
+      "file": "ui-runtime.log",
+      "deliveredSha256": "4d3377d7d83e5ea1890ad5175060bfe888a0229763ab3f5ccde7b439d9532d85",
+      "bytes": 471
+    }
+  ]
+}

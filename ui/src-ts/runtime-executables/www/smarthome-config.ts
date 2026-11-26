@@ -3485,7 +3485,9 @@ async function nwLoadTypeDetectorSuggestions(force = false) {
     det.loaded = true;
     det.loading = false;
     const total = (det.stats && Number.isFinite(Number(det.stats.total))) ? Number(det.stats.total) : det.results.length;
-    if (total > 0) {
+    if (data?.diagnostics?.extraSuggestionsLimited === true) {
+      nwSetDetectorStatus(`${total} Vorschläge geladen. Weitere Schlagworttreffer kannst du über die manuelle Datenpunktauswahl prüfen.`, 'warn');
+    } else if (total > 0) {
       nwSetDetectorStatus(`${total} Vorschläge geladen. Bitte prüfen und gezielt übernehmen.`, 'ok');
     } else {
       nwSetDetectorStatus('Keine passenden Vorschläge gefunden.', 'warn');
@@ -3815,87 +3817,12 @@ function nwRenderShcfgDetectorDetails(root, suggestionId) {
     const live = document.createElement('p'); live.className = currentStatus.className; live.setAttribute('role', 'status'); live.textContent = currentStatus.textContent; root.appendChild(live);
   }
 
-  const toolbar = document.createElement('div');
-  toolbar.className = 'nw-shcfg-detect__toolbar';
-
-  const filterInput = document.createElement('input');
-  filterInput.type = 'text';
-  filterInput.className = 'nw-config-input';
-  filterInput.placeholder = 'Nach Name, Pfad oder Datenpunkt suchen…';
-  filterInput.value = det.filterText || '';
-  // Ereignis-Kommentar: Bindet das UI-Ereignis 'input' an filterInput. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
-  filterInput.addEventListener('input', () => {
-    det.filterText = filterInput.value || '';
-    nwRenderShcfgDetector();
-  });
-  toolbar.appendChild(filterInput);
-
-  const showConfiguredLabel = document.createElement('label');
-  showConfiguredLabel.className = 'nw-shcfg-detect__toggle';
-  const showConfigured = document.createElement('input');
-  showConfigured.type = 'checkbox';
-  showConfigured.checked = !!det.showConfigured;
-  // Ereignis-Kommentar: Bindet das UI-Ereignis 'change' an showConfigured. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
-  showConfigured.addEventListener('change', () => {
-    det.showConfigured = !!showConfigured.checked;
-    nwRenderShcfgDetector();
-  });
-  const showConfiguredText = document.createElement('span');
-  showConfiguredText.textContent = 'Bereits zugeordnete Vorschläge anzeigen';
-  showConfiguredLabel.appendChild(showConfigured);
-  showConfiguredLabel.appendChild(showConfiguredText);
-  toolbar.appendChild(showConfiguredLabel);
-
-  const aliasHelper = window.NW_SH_ALIAS_CONFIG;
-  const canAlias = !!(aliasHelper && aliasHelper.canCreate());
-  if (det.useAliases === undefined) det.useAliases = canAlias;
-  const aliases = document.createElement('label'); aliases.className = 'nw-shcfg-detect__toggle';
-  const aliasCheck = document.createElement('input'); aliasCheck.type = 'checkbox';
-  aliasCheck.checked = canAlias && det.useAliases !== false; aliasCheck.disabled = !canAlias || !!det.importing;
-  aliasCheck.addEventListener('change', () => { det.useAliases = aliasCheck.checked; });
-  const aliasText = document.createElement('span');
-  aliasText.textContent = 'Alias-Datenpunkte verwenden/anlegen' + (canAlias ? ' (bestehende Aliase wiederverwenden)' : ' (Berechtigung mapping.edit erforderlich)');
-  aliases.appendChild(aliasCheck); aliases.appendChild(aliasText); toolbar.appendChild(aliases);
-  // Compact overview owns the shared filter and alias choice.
-
-  const summary = document.createElement('div');
-  summary.className = 'nw-shcfg-detect__summary';
-  const stats = det.stats || {};
-  const total = Number.isFinite(Number(stats.total)) ? Number(stats.total) : results.length;
-  const importable = Number.isFinite(Number(stats.importable)) ? Number(stats.importable) : results.filter((r) => r && r.importable).length;
-  const configured = Number.isFinite(Number(stats.configured)) ? Number(stats.configured) : results.filter((r) => r && r.alreadyConfigured).length;
-  const filteredResults = results.filter((r) => {
-    if (!r) return false;
-    return true;
-  });
-
-  /**
-   * Code-Teil: Arrow-Funktion `mkBadge`
-   * Zweck: stellt Objekte/States/Strukturen sicher, ohne bestehende Konfiguration unnötig zu überschreiben.
-   * Zusammenhang: Hängt an DOM-IDs, /api/state, /config und den vom Backend veröffentlichten States; Änderungen müssen mit main.js/ems/* abgestimmt bleiben.
-   * TypeScript-Hinweis: Beim TypeScript-Umbau Parameter, Rückgabewert und verwendete State-/Config-Struktur explizit typisieren.
-   */
-  /**
-   * Code-Teil: mkBadge
-   * Zweck: Kapselt einen lokalen Verarbeitungsschritt, damit Aufrufer nicht direkt in Detaildaten eingreifen.
-   * Zusammenhang: Teil von SmartHome: Räume, Geräte, Kacheln, Popover; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
-   * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
-   */
   const mkBadge = (cls, text) => {
     const span = document.createElement('span');
     span.className = 'nw-config-badge ' + cls;
     span.textContent = text;
     return span;
   };
-  summary.appendChild(mkBadge('nw-config-badge--auto', `${total} Vorschläge`));
-  summary.appendChild(mkBadge('nw-config-badge--ok', `${importable} direkt übernehmbar`));
-  if (configured > 0) summary.appendChild(mkBadge('nw-config-badge--warn', `${configured} bereits zugeordnet`));
-  if (det.scannedAt) {
-    const stamp = new Date(det.scannedAt);
-    summary.appendChild(mkBadge('nw-config-badge--idle', `Scan: ${stamp.toLocaleDateString('de-DE')} ${stamp.toLocaleTimeString('de-DE')}`));
-  }
-  root.appendChild(summary);
-
   if (det.loading && !results.length) {
     const loading = document.createElement('div');
     loading.className = 'nw-config-empty';
@@ -3904,12 +3831,10 @@ function nwRenderShcfgDetectorDetails(root, suggestionId) {
     return;
   }
 
-  if (!filteredResults.length) {
+  if (!results.length) {
     const empty = document.createElement('div');
     empty.className = 'nw-config-empty';
-    empty.textContent = results.length
-      ? 'Keine Vorschläge für den aktuellen Filter.'
-      : (det.error ? ('Fehler: ' + det.error) : 'Keine passenden Vorschläge gefunden.');
+    empty.textContent = det.error ? ('Fehler: ' + det.error) : 'Vorschlag nicht mehr vorhanden.';
     root.appendChild(empty);
     return;
   }
@@ -3917,20 +3842,7 @@ function nwRenderShcfgDetectorDetails(root, suggestionId) {
   const list = document.createElement('div');
   list.className = 'nw-shcfg-detect__list';
 
-  filteredResults
-    .sort((a, b) => {
-      const aConfigured = (a.alreadyConfigured || a.imported) ? 1 : 0;
-      const bConfigured = (b.alreadyConfigured || b.imported) ? 1 : 0;
-      if (aConfigured !== bConfigured) return aConfigured - bConfigured;
-      const aImportable = a.importable ? 1 : 0;
-      const bImportable = b.importable ? 1 : 0;
-      if (aImportable !== bImportable) return bImportable - aImportable;
-      const aCount = Number(a.matchCount || 0);
-      const bCount = Number(b.matchCount || 0);
-      if (aCount !== bCount) return bCount - aCount;
-      return String(a.displayName || '').localeCompare(String(b.displayName || ''), 'de', { sensitivity: 'base', numeric: true });
-    })
-    .forEach((suggestion) => {
+  results.forEach((suggestion) => {
       const card = document.createElement('div');
       card.className = 'nw-config-card nw-shcfg-detect-card';
 
@@ -3952,31 +3864,21 @@ function nwRenderShcfgDetectorDetails(root, suggestionId) {
 
       const headRight = document.createElement('div');
       headRight.className = 'nw-shcfg-detect-card__badges';
-      headRight.appendChild(mkBadge('nw-config-badge--auto', `${nwGetTypeLabel(suggestion.targetType || '')} · ${suggestion.detectorType || '?'}`));
+      if (!suggestion.discoveryReview) headRight.appendChild(mkBadge('nw-config-badge--auto', nwGetTypeLabel(suggestion.targetType || '')));
       if (suggestion.imported) headRight.appendChild(mkBadge('nw-config-badge--ok', 'übernommen'));
       else if (suggestion.update && suggestion.update.sourceChanged) headRight.appendChild(mkBadge('nw-config-badge--warn', 'Änderungen zur Prüfung'));
       else if (suggestion.alreadyConfigured) headRight.appendChild(mkBadge('nw-config-badge--warn', 'bereits im Projekt'));
       else if (!suggestion.importable) headRight.appendChild(mkBadge('nw-config-badge--warn', 'manuell prüfen'));
-      if (suggestion.confidence) {
-        const confText = suggestion.confidence === 'high' ? 'Passung hoch' : (suggestion.confidence === 'medium' ? 'Passung mittel' : 'Passung basis');
-        headRight.appendChild(mkBadge('nw-config-badge--idle', confText));
-      }
 
       head.appendChild(headLeft);
       head.appendChild(headRight);
       card.appendChild(head);
 
-      const meta = document.createElement('div');
-      meta.className = 'nw-shcfg-detect-card__meta';
-      meta.textContent = `Quelle: ${suggestion.sourceType || 'objekt'} • Gemappte Zustände: ${Number(suggestion.matchCount || 0)}`;
-      card.appendChild(meta);
       const hints = suggestion.metadata || {};
       const assignmentHints = [];
       if (Array.isArray(hints.rooms) && hints.rooms.length) assignmentHints.push('Räume: ' + hints.rooms.map(row => row.name).join(', '));
       if (Array.isArray(hints.functions) && hints.functions.length) assignmentHints.push('Funktionen: ' + hints.functions.map(row => row.name).join(', '));
       if (suggestion.usesAlias) assignmentHints.push('Alias-Zuordnung wird beibehalten');
-      if (hints.icon) assignmentHints.push('Quell-Icon: ' + String(hints.icon).slice(0, 160));
-      if (hints.color) assignmentHints.push('Akzent: ' + hints.color);
       if (assignmentHints.length) {
         const hint = document.createElement('div');
         hint.className = 'nw-shcfg-detect-card__meta';
@@ -3996,38 +3898,50 @@ function nwRenderShcfgDetectorDetails(root, suggestionId) {
         card.appendChild(notes);
       }
 
-      const stateGrid = document.createElement('div');
-      stateGrid.className = 'nw-shcfg-detect-card__states';
-      (Array.isArray(suggestion.states) ? suggestion.states : []).forEach((st) => {
-        if (!st || !st.id) return;
-        const cell = document.createElement('div');
-        cell.className = 'nw-shcfg-detect-state';
-
-        const k = document.createElement('div');
-        k.className = 'nw-shcfg-detect-state__key';
-        k.textContent = st.key || 'STATE';
-        cell.appendChild(k);
-
-        const sid = document.createElement('div');
-        sid.className = 'nw-shcfg-detect-state__id';
-        sid.textContent = st.id || '';
-        cell.appendChild(sid);
-
-        const smeta = document.createElement('div');
-        smeta.className = 'nw-shcfg-detect-state__meta';
-        const bits = [];
-        if (st.label) bits.push(String(st.label));
-        if (st.role) bits.push(String(st.role));
-        if (st.type) bits.push(String(st.type));
-        if (st.unit) bits.push('[' + String(st.unit) + ']');
-        bits.push(st.read === true ? 'Lesen' : st.read === false ? 'Nicht lesbar' : 'Leserichtung: siehe Profil');
-        bits.push(st.write === true ? 'Schreiben' : st.write === false ? 'Nicht schreibbar' : 'Schreibrichtung: siehe Profil');
-        smeta.textContent = bits.join(' • ');
-        cell.appendChild(smeta);
-
-        stateGrid.appendChild(cell);
-      });
-      if (stateGrid.childElementCount) card.appendChild(stateGrid);
+      const fields = Array.isArray(suggestion.states) ? suggestion.states : [];
+      const stateGroups = new Map();
+      const isBlind = ['blind', 'blindButtons'].includes(suggestion.detectorType);
+      for (const st of fields) {
+        if (!st || !st.id) continue;
+        const key = String(st.key || '');
+        const role = String(st.role || '');
+        let group = 'Rückmeldungen & Messwerte';
+        if (st.indicator || /^(indicator|sensor\.alarm)(\.|$)/.test(role)) group = 'Gerätestatus';
+        else if (isBlind && key.startsWith('TILT_')) group = 'Lamellen';
+        else if (isBlind && ['OPEN', 'CLOSE', 'STOP'].includes(key)) group = 'Fahrt';
+        else if (isBlind && ['SET', 'ACTUAL'].includes(key)) group = 'Position';
+        else if (suggestion.discoveryReview && !suggestion.importable) group = 'Datenpunkt prüfen';
+        else if (st.write && st.read) group = 'Befehle & Rückmeldungen';
+        else if (st.write) group = 'Befehle';
+        if (!stateGroups.has(group)) stateGroups.set(group, []);
+        stateGroups.get(group).push(st);
+      }
+      for (const [label, states] of stateGroups) {
+        const heading = document.createElement('h3');
+        heading.className = 'nw-shcfg-detect-state-group';
+        heading.textContent = label;
+        card.appendChild(heading);
+        const grid = document.createElement('div');
+        grid.className = 'nw-shcfg-detect-card__states';
+        for (const st of states) {
+          const cell = document.createElement('div');
+          cell.className = 'nw-shcfg-detect-state';
+          const title = document.createElement('div');
+          title.className = 'nw-shcfg-detect-state__key';
+          const stateLabel = st.label && typeof st.label === 'object' ? (st.label.de || st.label.en) : st.label;
+          title.textContent = stateLabel || st.key || 'Datenpunkt';
+          const id = document.createElement('div');
+          id.className = 'nw-shcfg-detect-state__id';
+          id.textContent = st.id;
+          const meta = document.createElement('div');
+          meta.className = 'nw-shcfg-detect-state__meta';
+          const direction = st.read && st.write ? 'Lesen & Schreiben' : st.write ? 'Schreiben' : st.read ? 'Lesen' : '';
+          meta.textContent = [direction, st.role, st.unit].filter(Boolean).join(' · ');
+          cell.append(title, id, meta);
+          grid.appendChild(cell);
+        }
+        card.appendChild(grid);
+      }
 
       // Aktualisierung ist immer eine ausdrückliche Feldwahl. Insbesondere
       // manuelle Namen/Zuordnungen werden niemals vorausgewählt oder ersetzt.
@@ -4130,7 +4044,7 @@ function nwRenderShcfgDetectorDetails(root, suggestionId) {
         });
         return options;
       };
-      if (!suggestion.alreadyConfigured && !suggestion.imported) {
+      if (suggestion.importable && !suggestion.alreadyConfigured && !suggestion.imported) {
         actions.appendChild(mkSelect('Raum', withSuggestions(rooms, hints.rooms), assignment.roomId || '', (next) => {
           assignment.roomId = next || '';
         }));
@@ -4149,8 +4063,12 @@ function nwRenderShcfgDetectorDetails(root, suggestionId) {
         importBtn.textContent = 'Bereits im Projekt';
         importBtn.disabled = true;
       } else if (!suggestion.importable) {
-        importBtn.textContent = 'Manuell prüfen';
-        importBtn.disabled = true;
+        importBtn.textContent = 'Manuell zuordnen';
+        importBtn.disabled = !!det.importing;
+        importBtn.addEventListener('click', () => {
+          nwShcState.ui.detectorDialog?.close();
+          nwOpenSetupEditor('device');
+        });
       } else {
         importBtn.textContent = det.importing ? 'Alias-Anlage läuft …' : 'Übernehmen';
         importBtn.disabled = !!det.importing;
@@ -8240,7 +8158,7 @@ function nwMountDeviceControlProfile(container, dev, expanded = false) {
   helper.mount(container, dev.io && dev.io.deviceControls, {
     expanded,
     fixedProfile: dev.customView && dev.customView.kind ? 'custom_' + dev.customView.kind : undefined,
-    createDpInput: (label, value, onChange) => nwCreateDpInput(label, value, onChange, { allowWriteTest: false }),
+    createDpInput: (label, value, onChange, profileHint) => nwCreateDpInput(label, value, onChange, { allowWriteTest: false, profileHint }),
     onChange: mapping => {
       if (!currentEditor()) return;
       dev.io = dev.io || {};
@@ -8281,8 +8199,10 @@ function nwCreateDpInput(labelText, value, onChange, options = {}) {
   btnPick.addEventListener('click', () => {
     if (!currentEditor()) return;
     nwOpenDatapointDialog({
-      title: labelText,
+      title: options.profileHint ? options.profileHint.label + ' · ' + labelText : labelText,
       initial: input.value,
+      profileHint: options.profileHint,
+      onManual: () => { if (currentEditor() && input.isConnected) input.focus(); },
       onSelect: (id) => {
         if (!currentEditor()) return;
         input.value = id || '';
@@ -10077,9 +9997,14 @@ async function nwDpFetchJson(url) {
  * Zusammenhang: Teil von SmartHome: Räume, Geräte, Kacheln, Popover; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
  * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
  */
-async function nwDpSearch(q) {
-  const qs = encodeURIComponent(nwDpSafeStr(q));
-  const json = await nwDpFetchJson('/api/smarthome/dpsearch?q=' + qs + '&limit=500');
+async function nwDpSearch(q, hint) {
+  const params = new URLSearchParams({ q: nwDpSafeStr(q), limit: '500' });
+  if (hint) {
+    params.set('direction', hint.direction);
+    params.set('types', hint.types.join(','));
+    if (hint.roles.length) params.set('roles', hint.roles.join(','));
+  }
+  const json = await nwDpFetchJson('/api/smarthome/dpsearch?' + params.toString());
   return Array.isArray(json.results) ? json.results : [];
 }
 /**
@@ -10117,6 +10042,7 @@ function nwDpMetaText(it) {
   if (it && it.role) parts.push(String(it.role));
   if (it && it.type) parts.push(String(it.type));
   if (it && it.unit) parts.push(String(it.unit));
+  if (it && (it.read === true || it.write === true)) parts.push(it.read && it.write ? 'Lesen/Schreiben' : it.read ? 'Lesen' : 'Schreiben');
   return parts.join(' • ');
 }
 /**
@@ -10278,7 +10204,11 @@ function nwEnsureDpDialog() {
 
   searchRow.appendChild(input);
   searchRow.appendChild(searchBtn);
-
+  const manualBtn = document.createElement('button');
+  manualBtn.type = 'button';
+  manualBtn.className = 'nw-config-btn nw-config-btn--ghost';
+  manualBtn.textContent = 'Datenpunkt-ID manuell eingeben';
+  manualBtn.hidden = true;
   const toolsRow = document.createElement('div');
   toolsRow.className = 'nw-dp-dialog__tools';
 
@@ -10294,6 +10224,7 @@ function nwEnsureDpDialog() {
 
   toolsRow.appendChild(rootBtn);
   toolsRow.appendChild(upBtn);
+  toolsRow.appendChild(manualBtn);
 
   const breadcrumb = document.createElement('div');
   breadcrumb.className = 'nw-dp-breadcrumb';
@@ -10345,14 +10276,22 @@ function nwEnsureDpDialog() {
     upBtn,
     breadcrumb,
     treeWrap,
+    resultsTitle,
     resultsWrap,
+    manualBtn,
     searchTimer: null,
+    searchSequence: 0,
     treePrefix: '',
     token: 0,
   };
 
   // Ereignis-Kommentar: Bindet das UI-Ereignis 'click' an btnClose. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
   btnClose.addEventListener('click', () => nwCloseDatapointDialog());
+  manualBtn.addEventListener('click', () => {
+    const onManual = nwDpDialogCurrent?.onManual;
+    nwCloseDatapointDialog();
+    if (typeof onManual === 'function') onManual();
+  });
   // Ereignis-Kommentar: Bindet das UI-Ereignis 'click' an searchBtn. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
   searchBtn.addEventListener('click', () => { nwRunDatapointDialogSearch().catch(() => {}); });
   // Ereignis-Kommentar: Bindet das UI-Ereignis 'click' an rootBtn. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
@@ -10470,7 +10409,14 @@ function nwRenderDpDialogTree(children) {
     }
 
     if (child.isState) {
-      wrap.appendChild(nwCreateDpResultRow(id, nwDpMetaText(child) || 'Datenpunkt', () => nwDpDialogPick(id)));
+      const hint = nwDpDialogCurrent?.profileHint;
+      if (hint) {
+        const candidate = window.NW_SH_DEVICE_CONFIG.profileCandidate(child, hint);
+        if (!candidate) return;
+        wrap.appendChild(nwCreateDpResultRow(id, nwDpProfileMetaText(candidate), () => nwDpDialogPick(id)));
+      } else {
+        wrap.appendChild(nwCreateDpResultRow(id, nwDpMetaText(child) || 'Datenpunkt', () => nwDpDialogPick(id)));
+      }
       return;
     }
 
@@ -10480,6 +10426,43 @@ function nwRenderDpDialogTree(children) {
   if (!wrap.children.length) {
     wrap.innerHTML = '<div class="nw-config-empty">Keine Einträge.</div>';
   }
+}
+
+/** Begründet einen Profilvorschlag anhand der sichtbaren Metadaten. */
+function nwDpProfileMetaText(candidate) {
+  const reason = candidate.match === 'role' ? 'Passende Rolle'
+    : candidate.match === 'name' ? 'Namenshinweis · Funktion prüfen' : 'Rolle prüfen';
+  return nwDpMetaText(candidate) + ' • ' + reason;
+}
+
+/** Zeigt zum Profil passende Rollen zuerst und klappt weitere Typ-Treffer ein. */
+function nwRenderDpProfileResults(list, hint, wrap) {
+  const candidates = list.slice(0, 500).map(item => window.NW_SH_DEVICE_CONFIG.profileCandidate(item, hint)).filter(Boolean);
+  const primary = candidates.filter(item => item.match !== 'type');
+  const other = candidates.filter(item => item.match === 'type');
+  const add = (parent, candidates) => {
+    for (const item of candidates) parent.appendChild(nwCreateDpResultRow(item.id, nwDpProfileMetaText(item), () => nwDpDialogPick(item.id)));
+  };
+  add(wrap, primary.filter(item => item.match === 'role'));
+  add(wrap, primary.filter(item => item.match === 'name'));
+  if (other.length && (hint.roles.length || hint.keywords.length)) {
+    const details = document.createElement('details');
+    const summary = document.createElement('summary');
+    summary.className = 'nw-dp-col-title';
+    summary.textContent = `Weitere Datenpunkte prüfen (${other.length})`;
+    details.appendChild(summary);
+    let shown = false;
+    details.addEventListener('toggle', () => {
+      if (!details.open || shown) return;
+      shown = true;
+      add(details, other);
+    });
+    if (!primary.length) nwSetDpDialogResultsMessage('Kein Treffer mit passender Rolle oder Namen. Weitere Datenpunkte prüfen oder die ID manuell eingeben.');
+    wrap.appendChild(details);
+  } else if (other.length) {
+    add(wrap, other);
+  }
+  if (!candidates.length) nwSetDpDialogResultsMessage('Keine Treffer mit passenden Datentypen und Zugriffsangaben.');
 }
 /**
  * Code-Teil: nwRenderDpDialogResults
@@ -10492,6 +10475,12 @@ function nwRenderDpDialogResults(list) {
   const wrap = state.resultsWrap;
   if (!wrap) return;
   wrap.innerHTML = '';
+
+  const hint = nwDpDialogCurrent?.profileHint;
+  if (hint) {
+    nwRenderDpProfileResults(Array.isArray(list) ? list : [], hint, wrap);
+    return;
+  }
 
   if (!Array.isArray(list) || !list.length) {
     wrap.innerHTML = '<div class="nw-config-empty">Keine Treffer.</div>';
@@ -10517,16 +10506,18 @@ function nwRenderDpDialogResults(list) {
 async function nwRefreshDpDialogTree() {
   const state = nwEnsureDpDialog();
   const token = state.token;
-  nwRenderDpBreadcrumb(state.treePrefix || '', state.breadcrumb, nwOpenDpDialogPrefix);
+  const prefix = state.treePrefix || '';
+  const current = () => nwDpDialogEl?.token === token && state.treePrefix === prefix && state.backdrop.style.display !== 'none';
+  nwRenderDpBreadcrumb(prefix, state.breadcrumb, nwOpenDpDialogPrefix);
   nwSetDpDialogTreeMessage('Ordner werden geladen…');
   try {
-    const children = await nwDpTree(state.treePrefix || '');
-    if (!nwDpDialogEl || nwDpDialogEl.token !== token || nwDpDialogEl.backdrop.style.display === 'none') return;
-    nwRenderDpBreadcrumb(state.treePrefix || '', state.breadcrumb, nwOpenDpDialogPrefix);
+    const children = await nwDpTree(prefix);
+    if (!current()) return;
+    nwRenderDpBreadcrumb(prefix, state.breadcrumb, nwOpenDpDialogPrefix);
     nwRenderDpDialogTree(children);
   } catch (e) {
-    if (!nwDpDialogEl || nwDpDialogEl.token !== token || nwDpDialogEl.backdrop.style.display === 'none') return;
-    nwRenderDpBreadcrumb(state.treePrefix || '', state.breadcrumb, nwOpenDpDialogPrefix);
+    if (!current()) return;
+    nwRenderDpBreadcrumb(prefix, state.breadcrumb, nwOpenDpDialogPrefix);
     nwSetDpDialogTreeMessage('Fehler: ' + (e && e.message ? e.message : e), 'error');
     state.upBtn.disabled = !state.treePrefix;
     state.rootBtn.disabled = !state.treePrefix;
@@ -10541,18 +10532,23 @@ async function nwRefreshDpDialogTree() {
 async function nwRunDatapointDialogSearch() {
   const state = nwEnsureDpDialog();
   const token = state.token;
+  const sequence = ++state.searchSequence;
   const q = nwDpSafeStr(state.input.value || '');
-  if (!q) {
+  const hint = nwDpDialogCurrent?.profileHint;
+  const current = () => nwDpDialogEl?.token === token && state.searchSequence === sequence
+    && nwDpSafeStr(state.input.value || '') === q && state.backdrop.style.display !== 'none';
+  if (!q && !hint) {
     nwSetDpDialogResultsMessage('Suchbegriff eingeben…');
     return;
   }
   nwSetDpDialogResultsMessage('Suche läuft…');
   try {
-    const list = await nwDpSearch(q);
-    if (!nwDpDialogEl || nwDpDialogEl.token !== token || nwDpDialogEl.backdrop.style.display === 'none') return;
+    const query = hint ? window.NW_SH_DEVICE_CONFIG.profileSearchQuery(q, hint) : q;
+    const list = await nwDpSearch(query, hint);
+    if (!current()) return;
     nwRenderDpDialogResults(list);
   } catch (e) {
-    if (!nwDpDialogEl || nwDpDialogEl.token !== token || nwDpDialogEl.backdrop.style.display === 'none') return;
+    if (!current()) return;
     nwSetDpDialogResultsMessage('Fehler: ' + (e && e.message ? e.message : e), 'error');
   }
 }
@@ -10576,22 +10572,40 @@ function nwOpenDpDialogPrefix(prefix) {
 function nwOpenDatapointDialog(options) {
   const state = nwEnsureDpDialog();
   state.token += 1;
+  if (state.searchTimer) { clearTimeout(state.searchTimer); state.searchTimer = null; }
+  const profileHint = typeof window.NW_SH_DEVICE_CONFIG?.profileCandidate === 'function' ? options?.profileHint : undefined;
   nwDpDialogCurrent = {
     onSelect: options && options.onSelect,
+    onManual: options?.onManual,
+    profileHint,
   };
 
   state.title.textContent = (options && options.title) ? options.title : 'Datenpunkt auswählen';
-  state.input.value = (options && options.initial) ? String(options.initial) : '';
-  state.treePrefix = nwDpParentPrefix(state.input.value || '');
+  const initial = (options && options.initial) ? String(options.initial) : '';
+  state.input.value = profileHint ? '' : initial;
+  state.input.placeholder = profileHint ? 'Nach Funktion, ID oder Name suchen…' : 'Nach ID oder Name suchen…';
+  state.treePrefix = nwDpParentPrefix(initial);
+  state.resultsTitle.textContent = profileHint ? 'Passende Datenpunkte' : 'Suche';
+  state.manualBtn.hidden = !profileHint;
   state.backdrop.style.display = 'flex';
 
   nwRenderDpBreadcrumb(state.treePrefix || '', state.breadcrumb, nwOpenDpDialogPrefix);
   nwSetDpDialogTreeMessage('Ordner werden geladen…');
-  if (state.input.value.trim()) nwSetDpDialogResultsMessage('Suche wird vorbereitet…');
+  if (profileHint || state.input.value.trim()) nwSetDpDialogResultsMessage('Suche wird vorbereitet…');
   else nwSetDpDialogResultsMessage('Suchbegriff eingeben…');
 
-  nwRefreshDpDialogTree().catch(() => {});
-  if (state.input.value.trim().length >= 2) {
+  const treeReady = nwRefreshDpDialogTree().catch(() => {});
+  if (profileHint) {
+    // Der Objektbaum und die Suche verwenden denselben Cache im Adapter.
+    // Beim Öffnen zuerst die Baumabfrage abwarten, um doppelte Cache-Aufbauten zu vermeiden.
+    const token = state.token;
+    const sequence = state.searchSequence;
+    void treeReady.then(() => {
+      if (state.token === token && state.searchSequence === sequence && !state.input.value.trim()) {
+        return nwRunDatapointDialogSearch().catch(() => {});
+      }
+    });
+  } else if (state.input.value.trim().length >= 2) {
     nwRunDatapointDialogSearch().catch(() => {});
   }
 
@@ -10611,6 +10625,7 @@ function nwOpenDatapointDialog(options) {
 function nwCloseDatapointDialog() {
   if (!nwDpDialogEl) return;
   nwDpDialogEl.token += 1;
+  if (nwDpDialogEl.searchTimer) { clearTimeout(nwDpDialogEl.searchTimer); nwDpDialogEl.searchTimer = null; }
   nwDpDialogEl.backdrop.style.display = 'none';
   nwDpDialogCurrent = null;
 }

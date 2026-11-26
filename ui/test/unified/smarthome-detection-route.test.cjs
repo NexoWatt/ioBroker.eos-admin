@@ -182,3 +182,66 @@ test('simultaneous discovery returns busy and a cancelled wait observes late rej
     await assert.rejects(new detection.DetectionScan({ signal: abort.signal }).read(Promise.reject(new Error('late io failure'))), /EOS_DETECTION_ABORTED/);
     await tick();
 });
+
+test('actual route classifies German and English labels on existing generic temperature points', async () => {
+    const objects = {
+        'openknx.0.room.RoomTemperature': { type: 'state', common: {
+            name: { en: 'Room temperature', de: 'Raumtemperatur' }, role: 'state',
+            type: 'number', unit: '°C', read: true, write: false,
+        } },
+        'hm-rpc.0.channel': { type: 'channel', common: { name: 'Wohnzimmer' } },
+        'hm-rpc.0.channel.ACTUAL_TEMPERATURE': { type: 'state', common: {
+            name: 'Ist-Temperatur', role: 'value.temperature', type: 'number', unit: '°C', read: true, write: false,
+        } },
+    };
+    const h = harness(objects);
+    try {
+        const request = h.request(); await request.done;
+        assert.equal(request.res.statusCode, 200);
+        const { suggestions } = request.res.payload;
+        for (const id of ['openknx.0.room.RoomTemperature', 'hm-rpc.0.channel.ACTUAL_TEMPERATURE']) {
+            const matches = suggestions.filter(s => s.states.some(st => st.id === id));
+            assert.equal(matches.length, 1, id);
+            assert.ok(matches[0].functionCategories.includes('climate'), id);
+            assert.equal(matches[0].states.find(st => st.id === id).write, false, id);
+        }
+    } finally { h.close(); }
+});
+
+test('guided catalog checks direction and type before limits and uses the same guarded tree metadata', async () => {
+    const routes = new Map();
+    const registeredGuard = () => {};
+    const picker = main.slice(main.indexOf("    app.get('/api/smarthome/dpsearch'"), main.indexOf('    // --- SmartHomeConfig DP-Test'));
+    const tree = main.slice(main.indexOf("    app.get(['/api/object/tree'"), main.indexOf('// --- EMS Apps / Installer Page'));
+    const objects = Object.fromEntries([
+        ['openknx.0.a', { role: 'value.blind', type: 'number', read: false, write: true }],
+        ['openknx.0.b', { role: 'value.blind', type: 'boolean', read: true, write: false }],
+        ['openknx.0.c', { role: 'value.dimmer', type: 'number', read: true, write: false }],
+        ['openknx.0.z', { role: 'value.blind', type: 'number', unit: '%', read: true, write: false }],
+    ].map(([id, common]) => [id, { type: 'state', common: { name: id, ...common } }]));
+    let reads = 0;
+    const adapter = { getForeignObjectsAsync: async () => { reads++; return objects; }, log: { warn: assert.fail } };
+    const app = { get(url, guard, handler) { assert.equal(guard, registeredGuard); routes.set([url].flat()[0], handler); } };
+    vm.runInNewContext(`(function () { ${picker} ${tree} }).call(adapter);`, { app, adapter, requireDpDiscovery: registeredGuard });
+    async function request(route, query) {
+        const response = {
+            statusCode: 200,
+            status(code) { this.statusCode = code; return this; },
+            json(value) { this.payload = JSON.parse(JSON.stringify(value)); return this; },
+        };
+        await routes.get(route)({ query }, response);
+        return response;
+    }
+    const query = { direction: 'read', types: 'number', roles: 'value.blind', limit: '1' };
+    const guided = await request('/api/smarthome/dpsearch', query);
+    assert.equal(guided.statusCode, 200);
+    assert.deepEqual(guided.payload.results.map(item => [item.id, item.read, item.write]), [['openknx.0.z', true, false]]);
+    const searched = await request('/api/smarthome/dpsearch', { ...query, q: 'blind' });
+    assert.deepEqual(searched.payload.results, guided.payload.results);
+    const browse = await request('/api/object/tree', { prefix: 'openknx.0' });
+    assert.deepEqual(browse.payload.children.filter(item => item.write).map(item => item.id), ['openknx.0.a']);
+    assert.equal(reads, 1);
+    assert.equal((await request('/api/smarthome/dpsearch', { direction: ['read', 'write'] })).statusCode, 400);
+    const unfiltered = await request('/api/smarthome/dpsearch', { q: 'openknx.0', limit: '1' });
+    assert.deepEqual(unfiltered.payload.results.map(item => item.id), ['openknx.0.a']);
+});

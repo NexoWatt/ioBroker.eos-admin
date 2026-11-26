@@ -1,23 +1,20 @@
 {
-  "version": "9.0.27",
+  "version": "9.0.28",
   "channel": "next",
   "baseFrontend": "Rebuilt from official Admin 8.3.5 sources plus reviewed EOS integration using React 19 and Vite; see source-bound frontend manifest.",
   "runtimeEntry": "vite-manifest",
-  "releaseType": "unified-ocpp-assignment-recovery",
-  "release": "unified-ocpp-assignment-recovery",
-  "label": "v9-0-27",
+  "releaseType": "unified-smarthome-discovery",
+  "release": "unified-smarthome-discovery",
+  "label": "v9-0-28",
   "notes": [
     "Preserves the existing ioBroker Admin and the combined EOS login/runtime.",
     "One central NWL3 activation, private persistence and authorized public-key recovery.",
     "Manufacturer vault/private keys stay on the issuer computer; live-device acceptance remains required."
   ],
   "changes": [
-    "Idempotent shared native OCPP inventory; deleted external adapters and inactive hosted namespaces excluded",
-    "New chargepoint mappings remain unassigned to station groups and public station displays",
-    "Persist explicit OCPP and Devices EMS removal across restarts; explicit reimport remains available",
-    "Preserve edited installer drafts and existing monitor-only control boundaries",
-    "Bounded recovery of initial controller subscriptions and consistent repository update metadata",
-    "Preserve saved Tibber credentials through AppCenter edits and owner restarts; enforce loaded configuration and destination-bound secret reuse"
+    "Organize SmartHome discovery into function folders with German and English terms",
+    "Suggest fitting datapoints for the selected device function, separately for commands and feedback",
+    "Keep ambiguous matches for manual review and reuse stable device identities across folders"
   ],
   "brandingCacheVersion": 7110,
   "shellCacheVersion": 7110,
@@ -31,7 +28,7 @@
     "commit": "6f77eedf525813a7a61d79188d1ff05dffd05086"
   },
   "product": "NexoWatt EOS",
-  "status": "9.0.27 controlled test release; exact software results in docs/reports/unified-9.0.27; target Pi/Dousida and full browser acceptance remain open",
+  "status": "9.0.28 controlled integration test release; see docs/reports/unified-9.0.28 for software results and open target-hardware checks",
   "sourceComponents": {
     "admin": "8.0.2",
     "ui": "1.0.38",
@@ -41,5 +38,5 @@
     "backup": "1.0.10",
     "ocpp": "0.4.4 integrated hosted module, based on iobroker.ocpp21 0.4.3"
   },
-  "repositoryEntry": "nexowatt-eos-admin-repository-entry-v9-0-27.json"
+  "repositoryEntry": "nexowatt-eos-admin-repository-entry-v9-0-28.json"
 }

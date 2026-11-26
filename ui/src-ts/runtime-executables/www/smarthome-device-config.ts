@@ -7,8 +7,9 @@
 /**
  * NexoWatt Quellcode-Erklärung (DE)
  * Aufgabe: Bearbeitet die vollständigen Bedienprofile samt manueller Datenpunktzuordnung.
- * Daten und Wirkung: Liest ausschließlich den geschützten lokalen Profilkatalog und
- * ändert nur den bestehenden Konfigurationsentwurf. Keine Geräteschreibbefehle.
+ * Daten und Wirkung: Liest den geschützten lokalen Profilkatalog, filtert die
+ * Metadaten der Datenpunktauswahl und ändert den bestehenden Konfigurationsentwurf.
+ * Die Auswahl prüft nur Metadaten und löst keine Geräteschreibbefehle aus.
  * Bei Änderungen: Profilwechsel, manuelle Zuordnungen, unbekannte Felder, getrennte
  * Lese-/Schreibrechte, begrenzte Antworten und fehlgeschlagene Katalogabfragen prüfen.
  * Zusammenhang: smarthome-config.ts speichert den Entwurf über seine bisherige Transaktion.
@@ -17,16 +18,37 @@ interface NwDeviceControlMapping {
   profile: string;
   fields: { key: string; readId?: string; writeId?: string }[];
 }
+type NwDpScalarType = 'boolean' | 'number' | 'string';
+interface NwDpProfileHint {
+  label: string;
+  direction: 'read' | 'write';
+  types: readonly NwDpScalarType[];
+  unit: string;
+  roles: readonly string[];
+  keywords: readonly string[];
+}
+interface NwDpProfileCandidate {
+  id: string;
+  name: string;
+  role: string;
+  type: NwDpScalarType;
+  unit: string;
+  read: boolean;
+  write: boolean;
+  match: 'role' | 'name' | 'type';
+}
 interface NwDeviceConfigOptions {
   expanded?: boolean;
   fixedProfile?: string;
-  createDpInput(label: string, value: string, onChange: (value: string) => void): HTMLElement;
+  createDpInput(label: string, value: string, onChange: (value: string) => void, hint?: NwDpProfileHint): HTMLElement;
   onChange(mapping: NwDeviceControlMapping | null): void;
 }
 interface NwDeviceConfigApi {
   mount(container: HTMLElement, mapping: unknown, options: NwDeviceConfigOptions): void;
   validationError(mapping: unknown, required: boolean): string | null;
   loadCustomViews(): Promise<unknown>;
+  profileCandidate(value: unknown, hint: NwDpProfileHint): NwDpProfileCandidate | null;
+  profileSearchQuery(query: string, hint: NwDpProfileHint): string;
 }
 
 (function () {
@@ -35,9 +57,58 @@ interface NwDeviceConfigApi {
   if (host.NW_SH_DEVICE_CONFIG) return;
   interface Field {
     key: string; label: string; type: string; read: boolean; write: boolean;
-    unit: string; required: boolean;
+    types: readonly NwDpScalarType[]; unit: string; required: boolean;
   }
   interface Profile { id: string; label: string; fields: Field[] }
+  interface Signal {
+    label: string;
+    read: readonly string[];
+    write: readonly string[];
+    keywords: readonly string[];
+  }
+  const scalarTypes = ['boolean', 'number', 'string'] as const;
+  const genericRoles = new Set(['', 'state', 'value', 'level', 'switch', 'sensor', 'indicator', 'button']);
+  const directionTerms = {
+    read: ['ruckmeldung', 'feedback', 'status', 'lesen', 'read'],
+    write: ['befehl', 'command', 'schreiben', 'write'],
+  };
+  const temperatureUnits = new Set(['°c', '°f', 'k']);
+  const switchSignal: Signal = {
+    label: 'Schalten', read: ['sensor.switch', 'state.switch', 'sensor.light', 'state.light'],
+    write: ['switch', 'switch.light', 'switch.power', 'switch.socket'],
+    keywords: ['schalten', 'switch', 'schaltstatus', 'switch status', 'on off', 'ein aus'],
+  };
+  const dimmerSignal: Signal = {
+    label: 'Dimmen', read: ['value.dimmer', 'value.brightness'], write: ['level.dimmer', 'level.brightness'],
+    keywords: ['dimmen', 'dimmer', 'dimming', 'helligkeit', 'brightness', 'dimmwert', 'dim value', 'dim level'],
+  };
+  const blindSignal: Signal = {
+    label: 'Jalousieposition', read: ['value.blind', 'value.position.blind'], write: ['level.blind', 'level.position.blind'],
+    keywords: ['jalousie', 'jalousieposition', 'rollladen', 'rolladen', 'rollladenposition', 'raffstore', 'blind', 'blind position', 'shutter', 'shutter position'],
+  };
+  const tiltSignal: Signal = {
+    label: 'Lamellenposition', read: ['value.tilt', 'value.open.tilt'], write: ['level.tilt', 'level.open.tilt'],
+    keywords: ['lamellen', 'lamellenposition', 'lamellenwinkel', 'slat', 'slat angle', 'tilt'],
+  };
+  const climateSignal: Signal = {
+    label: 'Temperatur', read: ['value.temperature'], write: ['level.temperature'],
+    keywords: ['temperatur', 'temperature', 'isttemperatur', 'actual temperature', 'solltemperatur', 'target temperature', 'setpoint'],
+  };
+  const humiditySignal: Signal = {
+    label: 'Luftfeuchte', read: ['value.humidity', 'value.humidity.relative'], write: [],
+    keywords: ['luftfeuchte', 'luftfeuchtigkeit', 'relative feuchte', 'humidity', 'relative humidity'],
+  };
+  const temperatureProfiles = new Set(['temperature', 'thermostat', 'airCondition', 'weatherCurrent']);
+  const lightProfiles = new Set(['dimmer', 'rgb', 'rgbSingle', 'rgbwSingle', 'cie', 'ct', 'hue']);
+  const blindProfiles = new Set(['blind', 'blindButtons']);
+  const statusSignals = new Map<string, Signal>([
+    ['UNREACH', { label: 'Erreichbarkeit', read: ['indicator.maintenance.unreach', 'indicator.unreach'], write: [], keywords: ['erreichbarkeit', 'nicht erreichbar', 'unreachable', 'offline'] }],
+    ['ERROR', { label: 'Störung', read: ['indicator.error'], write: [], keywords: ['störung', 'fehler', 'fault', 'error'] }],
+    ['WORKING', { label: 'Betriebsstatus', read: ['indicator.working'], write: [], keywords: ['betrieb', 'in betrieb', 'working', 'running'] }],
+    ['DIRECTION', { label: 'Fahrtrichtung', read: ['indicator.direction', 'value.direction'], write: [], keywords: ['fahrtrichtung', 'direction'] }],
+    ['LOWBAT', { label: 'Batteriestatus', read: ['indicator.maintenance.lowbat', 'indicator.maintenance.battery'], write: [], keywords: ['batterie schwach', 'low battery', 'lowbat'] }],
+    ['BATTERY', { label: 'Batteriestand', read: ['value.battery'], write: [], keywords: ['batteriestand', 'battery level', 'battery'] }],
+  ]);
   const forbidden = new Set(['__proto__', 'prototype', 'constructor']);
   const maxFields = 128;
   const maxResponseBytes = 1024 * 1024;
@@ -47,6 +118,74 @@ interface NwDeviceConfigApi {
 
   function record(value: unknown): value is Record<string, unknown> {
     return value !== null && typeof value === 'object' && !Array.isArray(value);
+  }
+  function scalarType(value: unknown): value is NwDpScalarType {
+    return value === 'boolean' || value === 'number' || value === 'string';
+  }
+  function normalizeWords(value: string): string {
+    return value.normalize('NFKD').replace(/\p{M}/gu, '').replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+      .toLowerCase().replace(/ß/g, 'ss').replace(/[^a-z0-9]+/g, ' ').trim();
+  }
+  /** Die Schlüssel SET und ACTUAL erhalten ihre Bedeutung erst im konkreten Bedienprofil. */
+  function signalFor(profile: string, field: string): Signal | undefined {
+    if (field === 'HUMIDITY' || (profile === 'humidity' && field === 'ACTUAL') || (profile === 'temperature' && field === 'SECOND')) return humiditySignal;
+    if (temperatureProfiles.has(profile) && (field === 'ACTUAL' || field === 'SET')) return climateSignal;
+    if (field === 'SET_HEATING' || field === 'SET_COOLING') {
+      const heating = field === 'SET_HEATING';
+      return { ...climateSignal, write: [heating ? 'level.temperature.heating' : 'level.temperature.cooling'] };
+    }
+    if (['ON_SET', 'ON_ACTUAL', 'ON', 'POWER'].includes(field) || (['light', 'socket'].includes(profile) && ['SET', 'ACTUAL'].includes(field))) return switchSignal;
+    if (lightProfiles.has(profile) && ['SET', 'ACTUAL', 'DIMMER', 'BRIGHTNESS'].includes(field)) return dimmerSignal;
+    if (blindProfiles.has(profile)) {
+      if (['SET', 'ACTUAL'].includes(field)) return blindSignal;
+      if (['TILT_SET', 'TILT_ACTUAL'].includes(field)) return tiltSignal;
+      if (['OPEN', 'CLOSE', 'STOP', 'TILT_OPEN', 'TILT_CLOSE', 'TILT_STOP'].includes(field)) {
+        const [action, target] = field.startsWith('TILT_') ? [field.slice(5).toLowerCase(), 'tilt'] : [field.toLowerCase(), 'blind'];
+        const keywords = action === 'open' ? ['auf', 'öffnen', 'open', 'up'] : action === 'close' ? ['ab', 'schließen', 'close', 'down'] : ['stopp', 'stop', 'halt'];
+        return { label: '', read: [], write: [`button.${action}.${target}`, `action.${action}.${target}`], keywords };
+      }
+      if (field === 'DIRECTION_ENUM') return statusSignals.get('DIRECTION');
+    }
+    if (field === 'ACTUAL') {
+      if (profile === 'contact' || profile === 'door' || profile === 'window') {
+        return { label: 'Kontaktstatus', read: [`sensor.${profile}`], write: [], keywords: ['kontakt', 'fensterkontakt', 'türkontakt', 'contact', 'window contact', 'door contact'] };
+      }
+      if (profile === 'motion') return { label: 'Bewegung', read: ['sensor.motion'], write: [], keywords: ['bewegung', 'bewegungsmelder', 'motion', 'motion sensor'] };
+    }
+    return statusSignals.get(field);
+  }
+  function pickerHint(profile: string, field: Field, direction: NwDpProfileHint['direction']): NwDpProfileHint | undefined {
+    if (!field.types.length) return undefined;
+    const signal = signalFor(profile, field.key);
+    const specific = signal?.label && field.label !== signal.label ? `${signal.label} · ${field.label}` : field.label;
+    return { label: specific, direction, types: field.types, unit: field.unit, roles: signal?.[direction] ?? [],
+      keywords: (signal?.keywords ?? []).map(normalizeWords) };
+  }
+  /** Filtert vom Server gelieferte Objektmetadaten. Ein Name ist nur ein Prüfhinweis. */
+  function profileCandidate(value: unknown, hint: NwDpProfileHint): NwDpProfileCandidate | null {
+    if (!record(value) || !dpId(value.id) || !scalarType(value.type) || !hint.types.includes(value.type) || value[hint.direction] !== true) return null;
+    const role = typeof value.role === 'string' ? value.role.trim().toLowerCase().slice(0, 128) : '';
+    const unit = typeof value.unit === 'string' ? value.unit.trim().slice(0, 40) : '';
+    const actualUnit = unit.normalize('NFKC').toLowerCase();
+    const profileUnit = hint.unit.normalize('NFKC').trim().toLowerCase();
+    // Messwerte zeigen ihre Quell-Einheit an. Befehle rechnen keine Einheiten um.
+    const temperatureReading = hint.direction === 'read' && profileUnit === '°c'
+      && hint.roles.includes('value.temperature') && temperatureUnits.has(actualUnit);
+    if (actualUnit && profileUnit && actualUnit !== profileUnit && !temperatureReading) return null;
+    const name = typeof value.name === 'string' ? value.name.slice(0, 300) : '';
+    const roleMatch = hint.roles.includes(role);
+    let nameMatch = false;
+    if (!roleMatch && genericRoles.has(role) && hint.keywords.length) {
+      const text = ` ${normalizeWords(`${value.id} ${name}`)} `;
+      nameMatch = hint.keywords.some(keyword => text.includes(` ${keyword} `));
+    }
+    return { id: value.id, name, role, type: value.type, unit, read: value.read === true, write: value.write === true,
+      match: roleMatch ? 'role' : nameMatch ? 'name' : 'type' };
+  }
+  /** Deutsche und englische Funktionsbegriffe führen zum selben Profilfilter. Ortsnamen und IDs bleiben echte Suchbegriffe. */
+  function profileSearchQuery(query: string, hint: NwDpProfileHint): string {
+    const normalized = normalizeWords(query);
+    return hint.keywords.includes(normalized) || directionTerms[hint.direction].includes(normalized) ? '' : query;
   }
   function key(value: unknown): value is string {
     return typeof value === 'string' && /^[A-Za-z][A-Za-z0-9_-]{0,79}$/.test(value) && !forbidden.has(value);
@@ -99,7 +238,10 @@ interface NwDeviceConfigApi {
       const fields: Field[] = profile.fields.map((field: unknown) => {
         if (!record(field) || !fieldKey(field.key) || seen.has(field.key) || typeof field.label !== 'string' || field.label.length > 240 || typeof field.type !== 'string' || field.type.length > 32 || typeof field.read !== 'boolean' || typeof field.write !== 'boolean') throw new Error('Der Bedienprofil-Katalog enthält ungültige Felder.');
         seen.add(field.key);
-        return { key: field.key, label: field.label, type: field.type, read: field.read, write: field.write,
+        const allowedTypes = field.types;
+        const types = Array.isArray(allowedTypes) ? scalarTypes.filter(type => allowedTypes.includes(type))
+          : scalarType(field.type) ? [field.type] : field.type === 'mixed' ? scalarTypes : [];
+        return { key: field.key, label: field.label, type: field.type, types, read: field.read, write: field.write,
           unit: typeof field.unit === 'string' ? field.unit.slice(0, 40) : '', required: field.required === true };
       });
       return { id: profile.id, label: profile.label, fields };
@@ -111,7 +253,7 @@ interface NwDeviceConfigApi {
     if (exact) return exact;
     const template = profile.fields.find(field => field.key.endsWith('%d') && name.startsWith(field.key.slice(0, -2)) && /^\d{1,3}$/.test(name.slice(field.key.length - 2)));
     if (template) return { ...template, key: name, label: `${template.label} · ${name.slice(template.key.length - 2)}` };
-    if (profile.id === 'universal' && fieldKey(name)) return { key: name, label: name, type: 'mixed', unit: '', read: true, write: true, required: false };
+    if (profile.id === 'universal' && fieldKey(name)) return { key: name, label: name, type: 'mixed', types: scalarTypes, unit: '', read: true, write: true, required: false };
     return undefined;
   }
   async function readCatalog(): Promise<Profile[]> {
@@ -241,7 +383,7 @@ interface NwDeviceConfigApi {
       if (!current) { content.appendChild(element('p', 'nw-sh-profile__warning', 'Das gespeicherte Profil ist im aktuellen Katalog nicht verfügbar. Seine Zuordnungen bleiben erhalten. Ein anderes Profil nur nach Prüfung übernehmen.')); }
       const known = new Set((current?.fields || []).map(field => field.key));
       const extra = mapping.fields.filter(field => !known.has(field.key));
-      const sourceFields: Field[] = [...(current?.fields || []), ...extra.map(row => fieldFor(current, row.key) || { key: row.key, label: row.key, type: 'unbekannt', unit: '', read: true, write: true, required: false })];
+      const sourceFields: Field[] = [...(current?.fields || []), ...extra.map(row => fieldFor(current, row.key) || { key: row.key, label: row.key, type: 'unbekannt', types: [], unit: '', read: true, write: true, required: false })];
       function addField(name: string): void {
         if (!mapping || !fieldKey(name) || !fieldFor(current, name)) return;
         if (mapping.fields.some(field => field.key === name)) { status.textContent = 'Diese Funktion ist bereits angelegt.'; return; }
@@ -323,7 +465,7 @@ interface NwDeviceConfigApi {
               next.fields = next.fields.filter(item => item.readId || item.writeId);
             }
             commit(next);
-          });
+          }, current && !unknown && enabled ? pickerHint(current.id, field, direction === 'readId' ? 'read' : 'write') : undefined);
           if (!enabled || unknown) picker.appendChild(element('p', 'nw-sh-profile__warning', 'Diese Zuordnung wird vom aktuellen Profil nicht unterstützt. Entfernen oder ein passendes Profil auswählen.'));
           row.appendChild(picker);
         }
@@ -363,5 +505,5 @@ interface NwDeviceConfigApi {
     ensureLoaded();
   }
   async function loadCustomViews(): Promise<unknown> { await load(); return customViews; }
-  host.NW_SH_DEVICE_CONFIG = Object.freeze({ mount, validationError, loadCustomViews });
+  host.NW_SH_DEVICE_CONFIG = Object.freeze({ mount, validationError, loadCustomViews, profileCandidate, profileSearchQuery });
 })();

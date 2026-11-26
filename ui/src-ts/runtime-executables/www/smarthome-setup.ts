@@ -16,7 +16,10 @@ interface NwSetupOptions {
   onEdit(kind: 'floor' | 'room' | 'device', id: string): void;
   onAdd(kind: 'floor' | 'room' | 'device'): void; onDetect(): void;
 }
-interface NwDetectionPreferences { selected?: string[]; query?: string; roomId?: string; showConfigured?: boolean; useAliases?: boolean }
+interface NwDetectionPreferences {
+  selected?: string[]; query?: string; roomId?: string; showConfigured?: boolean; useAliases?: boolean;
+  folder?: string; sourceFilter?: string; roomFilter?: string; filtersOpen?: boolean;
+}
 interface NwDetectionOptions {
   suggestions: unknown; rooms: unknown; preferences: NwDetectionPreferences; canAlias: boolean; busy?: boolean;
   onDetails(id: string): void; onImport(ids: string[], roomId: string): void;
@@ -103,6 +106,96 @@ interface NwSetupApi {
   const name = (row: Record<string, unknown>): string => text(row.alias) || text(row.name) || text(row.id, 'Unbenannt');
   const types: Record<string, string> = { device: 'Gerät', switch: 'Schalter', dimmer: 'Dimmer', color: 'Farblicht', blind: 'Beschattung', rtr: 'Raumklima', sensor: 'Sensor', player: 'Medien', camera: 'Kamera', scene: 'Szene', widget: 'Widget', logicStatus: 'Logikstatus' };
   const typeLabel = (value: unknown): string => typeof value === 'string' && Object.hasOwn(types, value) ? types[value] || 'Gerät' : text(value, 'Gerät');
+  const discoveryFolders = [
+    { id: 'all', label: 'Alle Geräte', keywords: '' },
+    { id: 'switch', label: 'Schalten', keywords: 'schalter licht lampe steckdose ein aus an switch on off relay light lamp socket outlet' },
+    { id: 'dimmer', label: 'Dimmen', keywords: 'dimmer dimmwert helligkeit lichtstärke dimming brightness light level' },
+    { id: 'blind', label: 'Jalousie & Rollladen', keywords: 'jalousien rollläden rolladen rollo rollos raffstore beschattung blind blinds shutter roller shade' },
+    { id: 'climate', label: 'Temperatur & Klima', keywords: 'heizung raumklima thermostat temperature climate heating' },
+    { id: 'status', label: 'Status & Sensoren', keywords: 'zustand rückmeldung rueckmeldung messwert feedback actual status sensor' },
+    { id: 'other', label: 'Weitere Funktionen', keywords: 'weitere sonstige other additional' },
+    { id: 'review', label: 'Manuell prüfen', keywords: 'mehrdeutig unklar pruefen review manual ambiguous' },
+  ] as const;
+  type DiscoveryFolder = typeof discoveryFolders[number]['id'];
+  type DetectionItem = {
+    row: Record<string, unknown>; id: string; folders: Set<DiscoveryFolder>;
+    sources: string[]; roomOptions: { value: string; label: string }[];
+  };
+  const searchMaxLength = 512;
+  // These words describe existing fields. Shared profile keys such as SET and
+  // ACTUAL need a specific device profile or an explicit ioBroker role.
+  const fieldKeywords = new Map<string, string>([
+    ['OPEN', 'auf öffnen auffahren open raise'], ['CLOSE', 'ab schließen abfahren close lower'], ['STOP', 'stopp anhalten stop'],
+    ['TILT_SET', 'lamellenwinkel lamellen tilt slats'], ['TILT_ACTUAL', 'lamellenstatus lamellen tilt slats feedback'],
+    ['TILT_OPEN', 'lamellen öffnen open slats'], ['TILT_CLOSE', 'lamellen schließen close slats'], ['TILT_STOP', 'lamellen stopp stop slats'],
+    ['ON_ACTUAL', 'schaltstatus schaltzustand switch state'], ['HUMIDITY', 'luftfeuchte humidity'], ['LOWBAT', 'batterie schwach low battery'],
+    ['BATTERY', 'batterie battery'], ['UNREACH', 'erreichbarkeit erreichbar reachability reachable offline'], ['ERROR', 'störung fehler fault error'],
+    ['blind:SET', 'sollposition rollladenposition position setzen target position'], ['blind:ACTUAL', 'istposition rollladenposition positionsstatus actual position'],
+    ['thermostat:SET', 'solltemperatur sollwert setpoint target temperature'], ['thermostat:ACTUAL', 'isttemperatur istwert actual temperature'],
+    ['temperature:ACTUAL', 'isttemperatur istwert actual temperature'], ['humidity:ACTUAL', 'luftfeuchte humidity'],
+    ['level.blind', 'sollposition rollladenposition position setzen target position'], ['value.blind', 'istposition rollladenposition positionsstatus actual position'],
+    ['level.temperature', 'solltemperatur sollwert setpoint target temperature'], ['value.temperature', 'isttemperatur istwert actual temperature'],
+    ['value.humidity', 'luftfeuchte humidity'], ['sensor.window', 'fensterkontakt fenster window contact'], ['sensor.door', 'türkontakt tür door contact'],
+    ['sensor.motion', 'bewegung bewegungsmelder motion occupancy'],
+  ]);
+  const filterText = (value: string): string => value.toLocaleLowerCase('de').replace(/ß/g, 'ss').normalize('NFKD').replace(/\p{M}/gu, '');
+  function discoveryMembership(row: Record<string, unknown>): Set<DiscoveryFolder> {
+    const supplied: unknown[] = Array.isArray(row.functionCategories) ? row.functionCategories : [];
+    const categories = new Set<DiscoveryFolder>(['all']);
+    for (const folder of discoveryFolders) {
+      if (supplied.includes(folder.id)) categories.add(folder.id);
+    }
+    if (categories.size === 1) {
+      // Older detection responses already carry a validated device profile.
+      // Profile names here affect presentation only, never a data point mapping.
+      const profile = text(row.detectorType).toLowerCase();
+      const kind = text(row.targetType);
+      if (['light', 'socket', 'switch'].includes(profile) || kind === 'switch') categories.add('switch');
+      if (profile === 'dimmer' || kind === 'dimmer') categories.add('dimmer');
+      if (['blind', 'blinds', 'blindbuttons'].includes(profile) || kind === 'blind') categories.add('blind');
+      if (['temperature', 'humidity', 'thermostat'].includes(profile) || kind === 'rtr') categories.add('climate');
+      if (kind === 'sensor' || rows(row.states).some(state => state.indicator === true || (state.read === true && state.write !== true))) categories.add('status');
+      if (categories.size === 1) categories.add('other');
+    }
+    if (row.importable !== true || row.discoveryReview === true) categories.add('review');
+    return categories;
+  }
+  function sourceInstance(value: unknown): string {
+    const match = /^([a-z0-9_-]+\.\d+)(?:\.|$)/i.exec(text(value));
+    return match?.[1] || '';
+  }
+  function discoveryItems(input: unknown): DetectionItem[] {
+    const result = new Map<string, DetectionItem>();
+    const candidates: unknown[] = Array.isArray(input) ? input.slice(0, 10000) : [];
+    for (const candidate of candidates) {
+      if (!record(candidate)) continue;
+      const key = id(candidate.id);
+      if (!key || result.has(key)) continue;
+      const sources = [...new Set([sourceInstance(candidate.sourceId), sourceInstance(candidate.displaySourceId)].filter(Boolean))];
+      const metadata = record(candidate.metadata) ? candidate.metadata : {};
+      const roomOptions = rows(metadata.rooms).slice(0, 32).flatMap(room => {
+        const value = id(room.enumId) || id(room.id);
+        return value && value !== '__none__' ? [{ value, label: text(room.name, value) }] : [];
+      });
+      result.set(key, { row: candidate, id: key, folders: discoveryMembership(candidate), sources, roomOptions });
+    }
+    return [...result.values()];
+  }
+  function discoverySearchText(item: DetectionItem): string {
+    const { row } = item;
+    const detectedType = text(row.detectorType).toLowerCase();
+    const profile = detectedType === 'blinds' || detectedType === 'blindbuttons' ? 'blind' : detectedType;
+    return filterText([
+      name(row), text(row.displayName), text(row.sourceName), id(row.sourceId).slice(0, searchMaxLength), id(row.displaySourceId).slice(0, searchMaxLength), detectedType, typeLabel(row.targetType),
+      ...item.roomOptions.map(room => room.label),
+      ...discoveryFolders.filter(folder => item.folders.has(folder.id)).map(folder => `${folder.label} ${folder.keywords}`),
+      ...rows(row.states).slice(0, 128).map(state => {
+        const key = text(state.key); const role = text(state.role);
+        const words = fieldKeywords.get(`${profile}:${key}`) || fieldKeywords.get(key) || fieldKeywords.get(role) || '';
+        return `${id(state.id).slice(0, searchMaxLength)} ${key} ${text(state.label)} ${role} ${words}`;
+      }),
+    ].join(' '));
+  }
   function mountSetup(container: HTMLElement, options: NwSetupOptions): void {
     container.replaceChildren(); const config = record(options.config) ? options.config : {};
     const floors = rows(config.floors); const rooms = rows(config.rooms); const devices = rows(config.devices); const p = options.preferences;
@@ -145,46 +238,190 @@ interface NwSetupApi {
     search.addEventListener('input', () => { p.query = search.value; render(); }); render();
   }
   function mountDetection(container: HTMLElement, options: NwDetectionOptions): void {
-    container.replaceChildren(); const p = options.preferences; const suggestions = rows(options.suggestions); const rooms = rows(options.rooms); const selected = new Set(p.selected || []);
+    container.replaceChildren();
+    const p = options.preferences;
+    const suggestions = discoveryItems(options.suggestions);
+    const rooms = rows(options.rooms);
     const eligible = (row: Record<string, unknown>): boolean => row.importable === true && row.imported !== true && row.alreadyConfigured !== true;
+    const eligibleIds = new Set(suggestions.filter(item => eligible(item.row)).map(item => item.id));
+    const selected = new Set((p.selected || []).filter(key => eligibleIds.has(key)).slice(0, 100));
+    p.selected = [...selected];
+    let folder = discoveryFolders.find(item => item.id === p.folder)?.id ?? 'all';
+    let page = 0;
+    const pageSize = 100;
+    const searchIndex = new Map<string, string>();
+    let visiblePage: DetectionItem[] = [];
+
     const toolbar = el('div', 'nw-setup-detection-toolbar');
-    const search = el('input', 'nw-config-input'); search.type = 'search'; search.value = p.query || ''; search.placeholder = 'Nach Gerät, Typ oder Datenpunkt suchen …'; search.setAttribute('aria-label', 'Erkannte Geräte suchen'); toolbar.appendChild(search);
-    toolbar.appendChild(selectField('Zielraum für die Auswahl', [{ value: '', label: 'Bitte Zielraum auswählen' }, { value: '__none__', label: 'Ohne Raum übernehmen' }, ...rooms.map(room => ({ value: id(room.id), label: name(room) }))], p.roomId || '', value => { p.roomId = value; refreshActions(); }));
-    if (options.busy) for (const select of Array.from(toolbar.querySelectorAll('select'))) select.disabled = true;
-    const aliases = el('label', 'nw-setup-check'); const alias = el('input'); alias.type = 'checkbox'; alias.checked = options.canAlias && p.useAliases !== false; alias.disabled = !options.canAlias || !!options.busy; p.useAliases = alias.checked;
-    alias.addEventListener('change', () => { p.useAliases = alias.checked; }); aliases.appendChild(alias); aliases.appendChild(el('span', '', 'Alias-Datenpunkte verwenden/anlegen' + (options.canAlias ? '' : ' (Berechtigung zur Gerätezuordnung erforderlich)'))); toolbar.appendChild(aliases);
-    const configured = el('label', 'nw-setup-check'); const show = el('input'); show.type = 'checkbox'; show.checked = !!p.showConfigured; configured.appendChild(show); configured.appendChild(el('span', '', 'Bereits zugeordnete Geräte zeigen')); toolbar.appendChild(configured); container.appendChild(toolbar);
-    const actions = el('div', 'nw-setup-batch-actions'); const count = el('span'); actions.appendChild(count);
-    const importButton = button('Auswahl übernehmen', () => options.onImport([...selected], p.roomId || ''), true); actions.appendChild(importButton);
-    const selectAll = button('Diese Seite auswählen', () => { const candidates = visible().slice(page * pageSize, (page + 1) * pageSize).filter(eligible); if (new Set([...selected, ...candidates.map(row => id(row.id))]).size > 100) { status.textContent = 'Maximal 100 Geräte je Übernahme auswählen.'; return; } candidates.forEach(row => selected.add(id(row.id))); p.selected = [...selected]; render(); }); actions.appendChild(selectAll);
-    const clear = button('Auswahl aufheben', () => { selected.clear(); p.selected = []; render(); }); clear.disabled = !!options.busy; actions.appendChild(clear); container.appendChild(actions);
-    const status = el('p', 'nw-setup-status'); status.setAttribute('role', 'status'); status.setAttribute('aria-live', 'polite'); container.appendChild(status);
+    const search = el('input', 'nw-config-input');
+    search.type = 'search';
+    search.maxLength = searchMaxLength;
+    search.value = p.query || '';
+    search.placeholder = 'Gerät, Funktion oder Datenpunkt suchen …';
+    search.setAttribute('aria-label', 'Erkannte Geräte suchen');
+    toolbar.appendChild(search);
+    const targetRooms = [{ value: '', label: 'Bitte Zielraum auswählen' }, { value: '__none__', label: 'Ohne Raum übernehmen' },
+      ...rooms.map(room => ({ value: id(room.id), label: name(room) }))];
+    if (!targetRooms.some(room => room.value === p.roomId)) p.roomId = '';
+    toolbar.appendChild(selectField('Zielraum für die Auswahl', targetRooms, p.roomId || '', value => { p.roomId = value; refreshActions(); }));
+    const aliases = el('label', 'nw-setup-check');
+    const alias = el('input');
+    alias.type = 'checkbox';
+    alias.checked = options.canAlias && p.useAliases !== false;
+    alias.disabled = !options.canAlias || !!options.busy;
+    p.useAliases = alias.checked;
+    alias.addEventListener('change', () => { p.useAliases = alias.checked; });
+    aliases.append(alias, el('span', '', 'Alias-Datenpunkte verwenden/anlegen' + (options.canAlias ? '' : ' (Berechtigung zur Gerätezuordnung erforderlich)')));
+    toolbar.appendChild(aliases);
+    const configured = el('label', 'nw-setup-check');
+    const show = el('input');
+    show.type = 'checkbox';
+    show.checked = !!p.showConfigured;
+    configured.append(show, el('span', '', 'Bereits zugeordnete Geräte zeigen'));
+    toolbar.appendChild(configured);
+    container.appendChild(toolbar);
+
+    const sources = new Set<string>();
+    const detectedRooms = new Map<string, string>();
+    for (const item of suggestions) {
+      for (const source of item.sources) sources.add(source);
+      for (const room of item.roomOptions) detectedRooms.set(room.value, room.label);
+    }
+    if (sources.size || detectedRooms.size) {
+      const filters = el('details', 'nw-setup-detection-filters');
+      filters.open = !!(p.filtersOpen || p.sourceFilter || p.roomFilter);
+      filters.addEventListener('toggle', () => { p.filtersOpen = filters.open; });
+      filters.appendChild(el('summary', '', 'Nach Raum oder Adapter filtern'));
+      const fields = el('div', 'nw-setup-detection-toolbar');
+      // Keep filter controls small even for very large object lists. Search can
+      // still reach every room name and source outside the first 100 options.
+      const sourceOptions = [...sources].sort((a, b) => a.localeCompare(b, 'de')).slice(0, 100).map(value => ({ value, label: value }));
+      const roomOptions = [...detectedRooms].sort((a, b) => a[1].localeCompare(b[1], 'de')).slice(0, 100).map(([value, label]) => ({ value, label }));
+      if (!sourceOptions.some(option => option.value === p.sourceFilter)) p.sourceFilter = '';
+      if (p.roomFilter !== '__none__' && !roomOptions.some(option => option.value === p.roomFilter)) p.roomFilter = '';
+      fields.appendChild(selectField('Adapter', [{ value: '', label: 'Alle Adapter' }, ...sourceOptions], p.sourceFilter || '', value => { p.sourceFilter = value; resetPage(); }));
+      fields.appendChild(selectField('Erkannter Raum', [{ value: '', label: 'Alle erkannten Räume' }, { value: '__none__', label: 'Ohne erkannten Raum' }, ...roomOptions], p.roomFilter || '', value => { p.roomFilter = value; resetPage(); }));
+      filters.appendChild(fields);
+      container.appendChild(filters);
+    } else {
+      p.sourceFilter = '';
+      p.roomFilter = '';
+    }
+    if (options.busy) for (const select of container.querySelectorAll('select')) select.disabled = true;
+
+    const folders = el('div', 'nw-setup-detection-folders');
+    folders.setAttribute('role', 'group');
+    folders.setAttribute('aria-label', 'Funktionsordner');
+    const folderControls = discoveryFolders.map(item => {
+      const control = button(item.label, () => { folder = item.id; p.folder = folder; resetPage(); });
+      control.classList.add('nw-setup-detection-folder');
+      control.dataset.detectionFolder = item.id;
+      const total = el('span', 'nw-setup-detection-folder-count');
+      control.appendChild(total);
+      folders.appendChild(control);
+      return { id: item.id, control, total };
+    });
+    container.appendChild(folders);
+
+    const actions = el('div', 'nw-setup-batch-actions');
+    const count = el('span');
+    const importButton = button('Auswahl übernehmen', () => options.onImport([...selected], p.roomId || ''), true);
+    const selectAll = button('Diese Seite auswählen', () => {
+      const candidates = visiblePage.filter(item => eligibleIds.has(item.id)).map(item => item.id);
+      const union = new Set([...selected, ...candidates]);
+      if (union.size > 100) { status.textContent = 'Maximal 100 Geräte je Übernahme auswählen.'; return; }
+      for (const key of candidates) selected.add(key);
+      p.selected = [...selected];
+      render();
+    });
+    const clear = button('Auswahl aufheben', () => { selected.clear(); p.selected = []; render(); });
+    actions.append(count, importButton, selectAll, clear);
+    container.appendChild(actions);
+    const status = el('p', 'nw-setup-status');
+    status.setAttribute('role', 'status');
+    status.setAttribute('aria-live', 'polite');
+    container.appendChild(status);
     const list = el('div', 'nw-setup-detection-list'); container.appendChild(list);
-    const pagination = el('div', 'nw-setup-pagination'); container.appendChild(pagination); let page = 0; const pageSize = 100;
-    function visible(): Record<string, unknown>[] {
-      const query = search.value.trim().toLocaleLowerCase('de');
-      return suggestions.filter(row => (p.showConfigured || (row.imported !== true && (row.alreadyConfigured !== true || (record(row.update) && row.update.sourceChanged === true)))) && (!query || `${name(row)} ${text(row.displayName)} ${text(row.sourceId)} ${text(row.detectorType)} ${rows(row.states).map(state => text(state.id)).join(' ')}`.toLocaleLowerCase('de').includes(query)));
+    const pagination = el('div', 'nw-setup-pagination');
+    const previous = button('Zurück', () => { page--; render(); });
+    const pageStatus = el('span');
+    const next = button('Weiter', () => { page++; render(); });
+    pagination.append(previous, pageStatus, next);
+    container.appendChild(pagination);
+
+    function matching(): DetectionItem[] {
+      const terms = filterText(search.value.slice(0, searchMaxLength)).trim().split(/\s+/).filter(Boolean);
+      return suggestions.filter(item => {
+        const row = item.row;
+        if (!p.showConfigured && (row.imported === true || (row.alreadyConfigured === true && !(record(row.update) && row.update.sourceChanged === true)))) return false;
+        if (p.sourceFilter && !item.sources.includes(p.sourceFilter)) return false;
+        if (p.roomFilter === '__none__' && item.roomOptions.length) return false;
+        if (p.roomFilter && p.roomFilter !== '__none__' && !item.roomOptions.some(room => room.value === p.roomFilter)) return false;
+        if (!terms.length) return true;
+        let index = searchIndex.get(item.id);
+        if (index === undefined) { index = discoverySearchText(item); searchIndex.set(item.id, index); }
+        return terms.every(term => index.includes(term));
+      });
     }
-    function refreshActions(): void { count.textContent = `${selected.size} ausgewählt`; importButton.disabled = !selected.size || !p.roomId || !!options.busy; selectAll.disabled = !!options.busy; }
+    function resetPage(): void { page = 0; status.textContent = ''; render(); }
+    function refreshActions(): void {
+      count.textContent = `${selected.size} ausgewählt`;
+      importButton.disabled = !selected.size || !p.roomId || !!options.busy;
+      selectAll.disabled = !!options.busy || !visiblePage.some(item => eligibleIds.has(item.id) && !selected.has(item.id));
+      clear.disabled = !selected.size || !!options.busy;
+    }
     function render(): void {
-      list.replaceChildren(); refreshActions(); const visibleRows = visible();
-      page = Math.min(page, Math.max(0, Math.ceil(visibleRows.length / pageSize) - 1));
-      pagination.replaceChildren();
-      const previous = button('Zurück', () => { page--; render(); }); previous.disabled = page === 0 || !!options.busy;
-      const next = button('Weiter', () => { page++; render(); }); next.disabled = (page + 1) * pageSize >= visibleRows.length || !!options.busy;
-      pagination.appendChild(previous); pagination.appendChild(el('span', '', `${visibleRows.length} Treffer · Seite ${page + 1} / ${Math.max(1, Math.ceil(visibleRows.length / pageSize))}`)); pagination.appendChild(next);
-      for (const item of visibleRows.slice(page * pageSize, (page + 1) * pageSize)) {
-        const row = el('article', 'nw-setup-detection-row'); row.dataset.detectId = id(item.id);
-        const check = el('input'); check.type = 'checkbox'; check.checked = selected.has(id(item.id)); check.disabled = !eligible(item) || !!options.busy; check.setAttribute('aria-label', `${text(item.displayName, name(item))} auswählen`);
-        check.addEventListener('change', () => { if (check.checked && selected.size >= 100) { check.checked = false; status.textContent = 'Maximal 100 Geräte je Übernahme auswählen.'; return; } if (check.checked) selected.add(id(item.id)); else selected.delete(id(item.id)); p.selected = [...selected]; refreshActions(); }); row.appendChild(check);
-        const info = el('div', 'nw-setup-device-info'); info.appendChild(el('strong', '', text(item.displayName, name(item)))); info.appendChild(el('span', '', `${typeLabel(item.targetType)} · ${text(item.detectorType)}`));
-        const sample = rows(item.states).slice(0, 2).map(state => `${text(state.key)} → ${text(state.id)}`).join(' · '); info.appendChild(el('small', '', sample || text(item.sourceId))); row.appendChild(info);
-        const state = item.imported === true ? 'Übernommen' : record(item.update) && item.update.sourceChanged === true ? 'Änderungen prüfen' : item.alreadyConfigured === true ? 'Bereits im Projekt' : item.importable === true ? 'Bereit zur Übernahme' : 'Manuell prüfen'; row.appendChild(el('span', 'nw-setup-detection-state', state));
-        const detail = button('Details prüfen', () => options.onDetails(id(item.id))); detail.disabled = !!options.busy; row.appendChild(detail); list.appendChild(row);
+      list.replaceChildren();
+      const matches = matching();
+      const totals = new Map<DiscoveryFolder, number>();
+      for (const item of matches) for (const key of item.folders) totals.set(key, (totals.get(key) || 0) + 1);
+      for (const entry of folderControls) {
+        entry.control.setAttribute('aria-pressed', String(entry.id === folder));
+        entry.total.textContent = ` ${totals.get(entry.id) || 0}`;
       }
-      if (!visibleRows.length) list.appendChild(el('p', 'nw-config-empty', 'Keine Vorschläge für diese Auswahl. Bei Bedarf neu scannen oder den Filter anpassen.'));
+      const activeItems = matches.filter(item => item.folders.has(folder));
+      const pageCount = Math.max(1, Math.ceil(activeItems.length / pageSize));
+      page = Math.min(Math.max(0, page), pageCount - 1);
+      visiblePage = activeItems.slice(page * pageSize, (page + 1) * pageSize);
+      refreshActions();
+      previous.disabled = page === 0 || !!options.busy;
+      next.disabled = page >= pageCount - 1 || !!options.busy;
+      pageStatus.textContent = `${activeItems.length} Treffer · Seite ${page + 1} / ${pageCount}`;
+      for (const item of visiblePage) {
+        const entry = item.row;
+        const row = el('article', 'nw-setup-detection-row');
+        row.dataset.detectId = item.id;
+        const displayName = text(entry.displayName, name(entry));
+        const check = el('input');
+        check.type = 'checkbox';
+        check.checked = selected.has(item.id);
+        check.disabled = !eligibleIds.has(item.id) || !!options.busy;
+        check.setAttribute('aria-label', `${displayName} auswählen`);
+        check.addEventListener('change', () => {
+          if (check.checked && selected.size >= 100) { check.checked = false; status.textContent = 'Maximal 100 Geräte je Übernahme auswählen.'; return; }
+          if (check.checked) selected.add(item.id); else selected.delete(item.id);
+          p.selected = [...selected];
+          refreshActions();
+        });
+        row.appendChild(check);
+        const info = el('div', 'nw-setup-device-info');
+        const location = [typeLabel(entry.targetType), item.roomOptions[0]?.label, item.sources[0]].filter(Boolean).join(' · ');
+        info.append(el('strong', '', displayName), el('span', '', location));
+        const sample = rows(entry.states).slice(0, 2).map(state => `${text(state.label) || text(state.key)} → ${text(state.id)}`).join(' · ');
+        info.appendChild(el('small', '', sample || text(entry.sourceId)));
+        row.appendChild(info);
+        const state = entry.imported === true ? 'Übernommen' : record(entry.update) && entry.update.sourceChanged === true ? 'Änderungen prüfen' : entry.alreadyConfigured === true ? 'Bereits im Projekt' : item.folders.has('review') ? 'Manuell prüfen' : 'Bereit zur Übernahme';
+        row.appendChild(el('span', 'nw-setup-detection-state', state));
+        const detail = button('Details prüfen', () => options.onDetails(item.id));
+        detail.disabled = !!options.busy;
+        row.appendChild(detail);
+        list.appendChild(row);
+      }
+      if (!activeItems.length) list.appendChild(el('p', 'nw-config-empty', 'Keine Vorschläge in diesem Ordner. Anderen Ordner wählen oder Filter anpassen.'));
     }
-    show.addEventListener('change', () => { p.showConfigured = show.checked; page = 0; render(); }); search.addEventListener('input', () => { p.query = search.value; page = 0; render(); }); render();
+    show.addEventListener('change', () => { p.showConfigured = show.checked; resetPage(); });
+    search.addEventListener('input', () => { p.query = search.value.slice(0, searchMaxLength); resetPage(); });
+    render();
   }
   let active: NwSetupDialogHandle | null = null;
   function openDialog(options: NwSetupDialogOptions): NwSetupDialogHandle | null {

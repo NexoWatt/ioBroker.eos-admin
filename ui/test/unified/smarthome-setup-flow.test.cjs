@@ -431,6 +431,98 @@ test('large detection lists render at most 100 rows and retain selection across 
   assert.equal(f.calls.length, 0);
 });
 
+test('multifunction detection opens the same device in both folders with one selection and one import', () => {
+  const f = environment();
+  const target = f.document.createElement('div');
+  const preferences = { roomId: 'office', selected: ['stale'] };
+  const dimmer = { ...suggestion('dimmer', 'dimmer'), detectorType: 'dimmer', functionCategories: ['switch', 'dimmer'] };
+  const switchDevice = suggestion('switch');
+  const imports = [];
+  const details = [];
+  f.window.NW_SH_SETUP.mountDetection(target, { suggestions: [dimmer, switchDevice, { ...dimmer }], rooms: f.state.config.rooms,
+    preferences, canAlias: false, onDetails: id => details.push(id), onImport: (...args) => imports.push(args) });
+  const switchFolder = target.querySelector('[data-detection-folder="switch"]');
+  const dimmerFolder = target.querySelector('[data-detection-folder="dimmer"]');
+  assert.equal(switchFolder.children[0].textContent.trim(), '2');
+  assert.equal(dimmerFolder.children[0].textContent.trim(), '1');
+  switchFolder.fire('click');
+  const check = target.querySelector('[data-detect-id="dimmer"]').querySelector('input');
+  check.checked = true;
+  check.fire('change');
+  dimmerFolder.fire('click');
+  assert.equal(dimmerFolder.getAttribute('aria-pressed'), 'true');
+  assert.equal(switchFolder.getAttribute('aria-pressed'), 'false');
+  assert.deepEqual(target.querySelectorAll('[data-detect-id]').map(node => node.dataset.detectId), ['dimmer']);
+  assert.equal(target.querySelector('[data-detect-id]').querySelector('input').checked, true);
+  nodeByText(target, 'button', 'Details prüfen').fire('click');
+  assert.deepEqual(details, ['dimmer']);
+  nodeByText(target, 'button', 'Auswahl übernehmen').fire('click');
+  assert.deepEqual(plain(imports), [[['dimmer'], 'office']]);
+  assert.equal(f.calls.length, 0);
+});
+
+test('detection search finds German and English function synonyms with safe manual review', () => {
+  const f = environment();
+  const target = f.document.createElement('div');
+  const blind = { ...suggestion('b', 'blind'), displayName: 'West', detectorType: 'blind', functionCategories: ['blind', 'status'],
+    states: [{ id: 'knx.0.west.actual', key: 'ACTUAL', read: true, write: false }] };
+  const tilting = { ...suggestion('b2', 'blind'), displayName: 'Ost', detectorType: 'blind', functionCategories: ['blind'],
+    states: [{ id: 'knx.0.ost.tilt', key: 'TILT_SET', read: false, write: true }] };
+  const longDataPoint = 'knx.0.' + 'a'.repeat(430) + '.level';
+  const dimmer = { ...suggestion('d', 'dimmer'), displayName: 'Decke', detectorType: 'dimmer', functionCategories: ['dimmer'],
+    states: [{ id: longDataPoint, key: 'ACTUAL', read: true, write: false }] };
+  const review = { ...suggestion('r'), displayName: 'Unklare Adresse', importable: false, functionCategories: ['blind', 'review'] };
+  f.window.NW_SH_SETUP.mountDetection(target, { suggestions: [blind, tilting, dimmer, review], rooms: f.state.config.rooms,
+    preferences: {}, canAlias: false, onDetails() {}, onImport() { throw new Error('Unexpected import'); } });
+  const search = target.querySelector('[aria-label="Erkannte Geräte suchen"]');
+  const searchIds = value => {
+    search.value = value;
+    search.fire('input');
+    return target.querySelectorAll('[data-detect-id]').map(node => node.dataset.detectId);
+  };
+  assert.deepEqual(searchIds('shutter West'), ['b']);
+  assert.deepEqual(searchIds('Jalousie West'), ['b']);
+  assert.deepEqual(searchIds('rückmeldung West'), ['b']);
+  assert.deepEqual(searchIds('Brightness Decke'), ['d']);
+  assert.deepEqual(searchIds('Helligkeit Decke'), ['d']);
+  assert.deepEqual(searchIds('Lamellen'), ['b2']);
+  assert.deepEqual(searchIds('Slats'), ['b2']);
+  assert.deepEqual(searchIds('Istposition'), ['b']);
+  assert.deepEqual(searchIds(longDataPoint), ['d']);
+  assert.deepEqual(searchIds(longDataPoint.replace(/level$/, 'unknown')), []);
+  assert.deepEqual(searchIds('manuell prufen'), ['r']);
+  target.querySelector('[data-detection-folder="review"]').fire('click');
+  const reviewCheck = target.querySelector('[data-detect-id="r"]').querySelector('input');
+  assert.equal(reviewCheck.disabled, true);
+  assert.equal(nodeByText(target, 'button', 'Auswahl übernehmen').disabled, true);
+});
+
+test('room and adapter filters describe the origin while the target room stays explicit', () => {
+  const f = environment();
+  const target = f.document.createElement('div');
+  const originalRoom = { enumId: 'enum.rooms.kitchen', id: 'kitchen', name: 'Küche' };
+  const knx = { ...suggestion('light'), sourceId: 'knx.0.light', metadata: { rooms: [originalRoom] } };
+  const hm = { ...suggestion('plug'), sourceId: 'hm-rpc.0.plug', metadata: { rooms: [] } };
+  const preferences = { roomId: 'office' };
+  const imports = [];
+  f.window.NW_SH_SETUP.mountDetection(target, { suggestions: [knx, hm], rooms: f.state.config.rooms,
+    preferences, canAlias: false, onDetails() {}, onImport: (...args) => imports.push(args) });
+  const selectFor = label => target.all(node => node.tagName === 'LABEL' && node.children[0]?.textContent === label)[0].querySelector('select');
+  const adapter = selectFor('Adapter');
+  const sourceRoom = selectFor('Erkannter Raum');
+  adapter.value = 'knx.0'; adapter.fire('change');
+  assert.deepEqual(target.querySelectorAll('[data-detect-id]').map(node => node.dataset.detectId), ['light']);
+  sourceRoom.value = originalRoom.enumId; sourceRoom.fire('change');
+  const select = target.querySelector('[data-detect-id]').querySelector('input');
+  select.checked = true; select.fire('change');
+  nodeByText(target, 'button', 'Auswahl übernehmen').fire('click');
+  assert.deepEqual(plain(imports), [[['light'], 'office']]);
+  adapter.value = ''; adapter.fire('change');
+  sourceRoom.value = '__none__'; sourceRoom.fire('change');
+  assert.deepEqual(target.querySelectorAll('[data-detect-id]').map(node => node.dataset.detectId), ['plug']);
+  assert.equal(preferences.roomId, 'office');
+});
+
 test('focus trap includes closed-details summary but ignores hidden ancestors and returns focus after close', () => {
   const f = environment(); const trigger = f.document.createElement('button'); f.document.body.appendChild(trigger); trigger.focus();
   let summary; let hiddenInput; const handle = f.window.NW_SH_SETUP.openDialog({ title: 'Zusatzoptionen', render(body) {
@@ -527,4 +619,24 @@ test('action menu CSS removes the clipping ancestor and provides desktop layers 
     assert.match(desktop['max-width'].value, /100vw/); assert.equal(desktop['overflow-y'].value, 'auto'); assert.match(desktop['max-height'].value, /dvh/);
     assert.equal(mobile.position.value, 'static'); assert.equal(mobile.width.value, '100%'); assert.equal(mobile['max-width'].value, '100%');
   }
+});
+
+test('the real discovery details shows blind commands, position, slats and diagnostic feedback', () => {
+  const { context, state, document } = environment();
+  const detected = suggestion('blind-kitchen', 'blind');
+  detected.detectorType = 'blind';
+  detected.states = [
+    { key: 'OPEN', id: 'openknx.0.kitchen.open', label: 'Auf fahren', role: 'button.open.blind', write: true },
+    { key: 'ACTUAL', id: 'openknx.0.kitchen.position', label: { en: 'Actual position', de: 'Istposition' }, role: 'value.blind', unit: '%', read: true },
+    { key: 'TILT_ACTUAL', id: 'openknx.0.kitchen.slat', label: 'Lamellenwinkel', role: 'value.tilt', read: true },
+    { key: 'WORKING', id: 'openknx.0.kitchen.moving', role: 'indicator.working', read: true, indicator: true },
+  ];
+  state.detector.results = [detected];
+  context.nwOpenDetectedDetails(detected.id);
+  const panel = document.querySelector('.nw-setup-dialog-body');
+  assert.ok(panel, 'Details dialog is visible');
+  assert.deepEqual(panel.querySelectorAll('.nw-shcfg-detect-state-group').map(row => row.textContent), ['Fahrt', 'Position', 'Lamellen', 'Gerätestatus']);
+  assert.ok(panel.querySelectorAll('.nw-shcfg-detect-state__key').some(row => row.textContent === 'Istposition'));
+  assert.ok(panel.querySelectorAll('.nw-shcfg-detect-state__meta').some(row => row.textContent === 'Lesen · value.blind · %'));
+  assert.ok(state.ui.detectorDialog.close());
 });

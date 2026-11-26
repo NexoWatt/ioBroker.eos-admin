@@ -16,38 +16,63 @@ const catalog = { ok: true, profiles: [
   { id: 'socket', label: 'Steckdose', fields: [
     { key: 'ON', label: 'Ein/Aus', type: 'boolean', read: true, write: true },
   ] },
+  { id: 'blind', label: 'Jalousie', fields: [
+    { key: 'SET', label: 'Sollwert', type: 'number', types: ['number'], read: true, write: true, unit: '%' },
+    { key: 'ACTUAL', label: 'Istwert', type: 'number', types: ['number'], read: true, write: false, unit: '%' },
+  ] },
+  { id: 'dimmer', label: 'Dimmer', fields: [
+    { key: 'ACTUAL', label: 'Istwert', type: 'number', types: ['number'], read: true, write: false, unit: '%' },
+  ] },
+  { id: 'thermostat', label: 'Thermostat', fields: [
+    { key: 'SET', label: 'Sollwert', type: 'number', types: ['number'], read: true, write: true, unit: '°C' },
+    { key: 'ACTUAL', label: 'Istwert', type: 'number', types: ['number'], read: true, write: false, unit: '°C' },
+  ] },
 ] };
 const plain = value => JSON.parse(JSON.stringify(value));
 async function settle() { for (let i = 0; i < 10; i++) await new Promise(resolve => setImmediate(resolve)); }
-function fixture(reply = catalog) {
+function fixture(reply = catalog, dpReply) {
   class Element {
-    constructor(tag) { this.tagName = tag.toUpperCase(); this.children = []; this.attrs = {}; this.dataset = {}; this.handlers = new Map(); this.className = ''; this.textContent = ''; this.value = ''; this.hidden = false; this.disabled = false; this.open = false; }
+    constructor(tag) { this.tagName = tag.toUpperCase(); this.children = []; this.attrs = {}; this.style = {}; this.dataset = {}; this.handlers = new Map(); this.className = ''; this.textContent = ''; this.value = ''; this.hidden = false; this.disabled = false; this.open = false; }
     get isConnected() { return this === body || !!this.parentElement?.isConnected; }
+    set innerHTML(value) { this.replaceChildren(); this.html = value; }
     appendChild(child) { this.children.push(child); child.parentElement = this; return child; }
     replaceChildren(...children) { for (const child of this.children) child.parentElement = null; this.children = []; children.forEach(child => this.appendChild(child)); }
     setAttribute(key, value) { this.attrs[key] = String(value); }
     addEventListener(name, callback) { this.handlers.set(name, callback); }
-    fire(name) { this.handlers.get(name)?.({ target: this }); }
+    fire(name) { this.handlers.get(name)?.({ target: this, preventDefault() {}, stopPropagation() {} }); }
     all(predicate) { return this.children.flatMap(child => [...(predicate(child) ? [child] : []), ...child.all(predicate)]); }
   }
   const body = new Element('body');
   const changes = []; const calls = []; const confirmations = []; let confirmed = false;
   const window = { confirm(message) { confirmations.push(message); return confirmed; } };
-  const document = { createElement: tag => new Element(tag) };
-  vm.runInNewContext(source, { window, document, AbortController, TextDecoder, setTimeout, clearTimeout,
-    fetch: async (url, options) => { calls.push({ url, options }); return typeof reply === 'function' ? reply() : new Response(JSON.stringify(reply)); },
+  const document = { body, createElement: tag => new Element(tag) };
+  const context = vm.createContext({ window, document, AbortController, TextDecoder, setTimeout, clearTimeout, URLSearchParams,
+    nwEscapeHtml: value => String(value).replaceAll('<', '&lt;').replaceAll('>', '&gt;'),
+    fetch: async (url, options) => {
+      calls.push({ url, options });
+      if (dpReply && url !== '/api/smarthome/control-profiles') return new Response(JSON.stringify(await dpReply(url)));
+      return typeof reply === 'function' ? reply() : new Response(JSON.stringify(reply));
+    },
   });
+  vm.runInContext(source, context);
   const api = window.NW_SH_DEVICE_CONFIG;
   function mount(mapping, expanded = true) {
     const container = new Element('div'); body.appendChild(container);
     api.mount(container, mapping, { expanded, onChange: value => changes.push(plain(value)),
-      createDpInput: (label, value, onChange) => { const row = new Element('div'); row.inputLabel = label; row.value = value; row.change = onChange; return row; },
+      createDpInput: (label, value, onChange, hint) => { const row = new Element('div'); row.inputLabel = label; row.value = value; row.change = onChange; row.hint = hint; return row; },
     });
     return container;
   }
   const find = (root, cls) => root.all(node => node.className.split(' ').includes(cls))[0];
   const button = (root, text) => root.all(node => node.tagName === 'BUTTON' && node.textContent === text)[0];
-  return { api, mount, body, calls, changes, confirmations, find, button, confirm: value => { confirmed = value; },
+  function dialog() {
+    const input = fs.readFileSync(path.resolve(__dirname, '../../src-ts/runtime-executables/www/smarthome-config.ts'), 'utf8');
+    const start = input.indexOf('/* --- Datapoint-Picker-Dialog --- */');
+    const end = input.indexOf('/* --- Toolbar-Buttons --- */', start);
+    vm.runInContext(input.slice(start, end), context);
+    return context;
+  }
+  return { api, mount, body, calls, changes, confirmations, dialog, find, button, confirm: value => { confirmed = value; },
     field: (root, key) => root.all(node => node.dataset.profileKey === key)[0] };
 }
 
@@ -66,6 +91,83 @@ test('full profile exposes optional and separate read/write mappings without wri
   assert.equal(f.calls.length, 1, 'editing invokes no API write');
   f.field(root, 'ON').all(node => node.change)[1].change('');
   assert.deepEqual(f.changes.at(-1).fields[0], { key: 'ON', readId: 'device.actual' }, 'clearing write preserves read');
+});
+
+test('the same ACTUAL field selects different directional role hints for blinds and dimmers', async () => {
+  const f = fixture();
+  const blind = f.mount({ profile: 'blind', fields: [] });
+  const dimmer = f.mount({ profile: 'dimmer', fields: [] });
+  await settle();
+  const blindActual = f.field(blind, 'ACTUAL').all(node => node.hint)[0].hint;
+  const dimActual = f.field(dimmer, 'ACTUAL').all(node => node.hint)[0].hint;
+  const blindSet = f.field(blind, 'SET').all(node => node.hint).find(node => node.hint.direction === 'write').hint;
+  assert.equal(blindActual.direction, 'read');
+  assert.ok(blindActual.roles.includes('value.blind'));
+  assert.ok(dimActual.roles.includes('value.dimmer'));
+  assert.ok(blindSet.roles.includes('level.blind'));
+  assert.equal(f.api.profileSearchQuery('Jalousieposition', blindActual), '');
+  assert.equal(f.api.profileSearchQuery('BLIND POSITION', blindActual), '');
+  assert.equal(f.api.profileSearchQuery('Küche West', blindActual), 'Küche West');
+  assert.equal(f.calls.length, 1, 'mounting only loads the shared profile catalog');
+});
+
+test('temperature feedback can use the actual source unit, but temperature commands retain their unit check', async () => {
+  const f = fixture();
+  const root = f.mount({ profile: 'thermostat', fields: [] });
+  await settle();
+  const read = f.field(root, 'ACTUAL').all(node => node.hint)[0].hint;
+  const write = f.field(root, 'SET').all(node => node.hint).find(node => node.hint.direction === 'write').hint;
+  const point = { id: 'knx.0.temperature', name: 'Temperature', read: true, write: true, type: 'number', role: 'value.temperature' };
+  assert.equal(f.api.profileCandidate({ ...point, unit: '°F' }, read).unit, '°F');
+  assert.equal(f.api.profileCandidate({ ...point, unit: 'K' }, read).match, 'role');
+  assert.equal(f.api.profileCandidate({ ...point, unit: 'lux' }, read), null);
+  assert.equal(f.api.profileCandidate({ ...point, role: 'level.temperature', unit: '°F' }, write), null);
+});
+
+test('profile picker ranks compatible roles, marks name-only matches and keeps manual input', async () => {
+  const point = (id, role, overrides) => ({ id, name: id, role, type: 'number', unit: '%', read: true, write: false, ...overrides });
+  const results = [
+    point('hm-rpc.0.dimmer.level', 'value.dimmer'),
+    point('knx.0.kitchen.JalousiePosition', 'value'),
+    point('knx.0.living.shutter.position', 'value.blind'),
+    point('knx.0.kitchen.blind.command', 'level.blind', { read: false, write: true }),
+    point('knx.0.kitchen.blind.direction', 'value.blind', { type: 'boolean' }),
+    point('knx.0.kitchen.blind.illuminance', 'value.blind', { unit: 'lux' }),
+    point('system.adapter.knx.0.blind', 'value.blind'),
+  ];
+  const f = fixture(catalog, url => url.startsWith('/api/object/tree') ? { ok: true, children: results.map(item => ({ ...item, isState: true })) } : { ok: true, results });
+  const c = f.dialog();
+  const editor = f.mount({ profile: 'blind', fields: [{ key: 'ACTUAL', readId: 'knx.0.old.level' }] });
+  await settle();
+  const input = f.field(editor, 'ACTUAL').all(node => node.hint)[0];
+  let manual = 0; const selected = [];
+  c.nwOpenDatapointDialog({ profileHint: input.hint, initial: input.value, onManual: () => { manual++; }, onSelect: id => selected.push(id) });
+  await settle();
+  const state = c.nwEnsureDpDialog();
+  assert.equal(state.treePrefix, 'knx.0.old');
+  assert.equal(state.input.value, '');
+  assert.equal(state.resultsTitle.textContent, 'Passende Datenpunkte');
+  const query = new URL(f.calls.find(call => call.url.startsWith('/api/smarthome/dpsearch')).url, 'https://eos.local').searchParams;
+  assert.equal(query.get('direction'), 'read');
+  assert.equal(query.get('types'), 'number');
+  assert.match(query.get('roles'), /value\.blind/);
+  const ids = wrapper => wrapper.all(node => node.className === 'nw-dp-result__id').map(node => node.textContent);
+  assert.deepEqual(ids(state.resultsWrap), ['knx.0.living.shutter.position', 'knx.0.kitchen.JalousiePosition']);
+  assert.match(state.resultsWrap.all(node => node.className === 'nw-dp-result__meta')[1].textContent, /Namenshinweis/);
+  const others = state.resultsWrap.all(node => node.tagName === 'DETAILS')[0];
+  assert.ok(others); others.open = true; others.fire('toggle');
+  assert.deepEqual(ids(others), ['hm-rpc.0.dimmer.level']);
+  assert.ok(!ids(state.treeWrap).some(id => /command|direction|illuminance|system\./.test(id)));
+  assert.equal(f.changes.length, 0);
+  state.manualBtn.fire('click');
+  assert.equal(manual, 1); assert.deepEqual(selected, []);
+  assert.equal(input.value, 'knx.0.old.level');
+  assert.equal(state.backdrop.style.display, 'none');
+
+  c.nwOpenDatapointDialog({ profileHint: input.hint, initial: input.value, onSelect: id => input.change(id) });
+  await settle();
+  state.resultsWrap.all(node => node.className === 'nw-dp-result')[0].fire('click');
+  assert.deepEqual(f.changes, [{ profile: 'blind', fields: [{ key: 'ACTUAL', readId: 'knx.0.living.shutter.position' }] }]);
 });
 
 test('profile selection is staged and removal requires confirmation; shared overrides survive', async () => {

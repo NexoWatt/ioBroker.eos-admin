@@ -1,9 +1,9 @@
 {
   "schema": "nexowatt.admin-bundle-components.v1",
-  "generatedAt": "2026-11-26T06:42:54.940Z",
+  "generatedAt": "2026-11-26T08:44:42.439Z",
   "provenance": "Rollup writeBundle module graph; npm modules with renderedLength > 0; hashes of final files",
   "limitations": "Lists npm packages contributing rendered JavaScript. Not a source code review, OS inventory or vulnerability clearance.",
-  "packageLockSha256": "c007aa3efeff79c6dcbbf6195dda65781cd7a312cce2276b50fc40ac9f531244",
+  "packageLockSha256": "f673b26bc53a665af8488984c85d56858d41afad550e5821c2244d69b8d4a22d",
   "viteConfigSha256": "f59d3db711ab3bff7de7b2b2e8cbc1066375df69ecbe5b5476ef1c54aabe0986",
   "entryHtmlSha256": "e4eafa219c5154ae588b73b6f8f5673b976e6da239e620a99b9dda7c83f1685a",
   "projectModules": [
@@ -107,22 +107,22 @@
       "packageJsonSha256": "d4e68a5c96babb20cad1daafea8b78822eae45b341552cf5418d06a5304fa64c",
       "modules": [
         {
-          "path": "src-admin-tab/node_modules/react/cjs/react-jsx-runtime.production.min.js",
+          "path": "../../work-restart-review/ui/src-admin-tab/node_modules/react/cjs/react-jsx-runtime.production.min.js",
           "sha256": "76e3364c46895ed2c4a8d5cc332e5e4ef31d6f732d35b1e56826dc5895245452",
           "renderedLength": 40
         },
         {
-          "path": "src-admin-tab/node_modules/react/cjs/react.production.min.js",
+          "path": "../../work-restart-review/ui/src-admin-tab/node_modules/react/cjs/react.production.min.js",
           "sha256": "4b35e378f469c4f492c7514bb106b5833746dbbae80496bd4aa9acc6e9ac4b42",
           "renderedLength": 30
         },
         {
-          "path": "src-admin-tab/node_modules/react/index.js",
+          "path": "../../work-restart-review/ui/src-admin-tab/node_modules/react/index.js",
           "sha256": "a216c390bf956cbb906c66d29fdb2e2ad6999464a5ca83e476533a6f25ad0ef3",
           "renderedLength": 26
         },
         {
-          "path": "src-admin-tab/node_modules/react/jsx-runtime.js",
+          "path": "../../work-restart-review/ui/src-admin-tab/node_modules/react/jsx-runtime.js",
           "sha256": "28170e60f2ff0bc045bc7d175f5849e86f68dd02d76d7255369420718b30295a",
           "renderedLength": 31
         }
@@ -134,17 +134,17 @@
       "packageJsonSha256": "d2f29e31bd48b833e48cd7bbf41f192e8ee4ff8da249fdbe10d4ac4114b8b12e",
       "modules": [
         {
-          "path": "src-admin-tab/node_modules/react-dom/cjs/react-dom.production.min.js",
+          "path": "../../work-restart-review/ui/src-admin-tab/node_modules/react-dom/cjs/react-dom.production.min.js",
           "sha256": "cbf7fe6b9726ee65f8bcd5715289cc5161c8dacf74d0b8aaa0d29412516f5f47",
           "renderedLength": 33
         },
         {
-          "path": "src-admin-tab/node_modules/react-dom/client.js",
+          "path": "../../work-restart-review/ui/src-admin-tab/node_modules/react-dom/client.js",
           "sha256": "a510041dfc40d69b3aa574e5e111864186c711fbeb3db41aa2f27196b27c429f",
           "renderedLength": 16
         },
         {
-          "path": "src-admin-tab/node_modules/react-dom/index.js",
+          "path": "../../work-restart-review/ui/src-admin-tab/node_modules/react-dom/index.js",
           "sha256": "f26fcb81b5d1dc32c6edea34645c75b60d259916293d3208c8be48ac33e882e4",
           "renderedLength": 29
         }
@@ -156,7 +156,7 @@
       "packageJsonSha256": "0323fe65d0b03a170d0ee0c880a28d3499528995ca50bc946a778c6450c275f0",
       "modules": [
         {
-          "path": "src-admin-tab/node_modules/react-router/dist/development/chunk-OB3PAWPO.mjs",
+          "path": "../../work-restart-review/ui/src-admin-tab/node_modules/react-router/dist/development/chunk-OB3PAWPO.mjs",
           "sha256": "f6e41335042afcbcb7bcda3c8b1545fa1fb4fe3f40fd1cc08d8a18167afab8ef",
           "renderedLength": 86341
         }
@@ -168,12 +168,12 @@
       "packageJsonSha256": "0893643a24576d727174e639586b8833a53f2a7b4a2199a719b9cfcebe9bae88",
       "modules": [
         {
-          "path": "src-admin-tab/node_modules/scheduler/cjs/scheduler.production.min.js",
+          "path": "../../work-restart-review/ui/src-admin-tab/node_modules/scheduler/cjs/scheduler.production.min.js",
           "sha256": "f6cb8cf42696980c702f6b879417ab8bd489660485eb012b46f67e92e18a78ee",
           "renderedLength": 34
         },
         {
-          "path": "src-admin-tab/node_modules/scheduler/index.js",
+          "path": "../../work-restart-review/ui/src-admin-tab/node_modules/scheduler/index.js",
           "sha256": "b413b3aac7bd209fd82cbe2241fda1467558daaef830744f45ed8396fac9185e",
           "renderedLength": 30
         }

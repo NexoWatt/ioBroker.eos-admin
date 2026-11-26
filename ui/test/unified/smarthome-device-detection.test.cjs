@@ -22,7 +22,7 @@ function load(name) {
     }).outputText, file);
     return mod.exports;
 }
-const { cleanControls, extendSuggestion, getControlIdentity } = load('smarthome-device-detection');
+const { cleanControls, extendSuggestion, getControlIdentity, collectKeywordDetectionCandidates, keywordReviewSuggestion, DetectionScan } = load('smarthome-device-detection');
 const { enrichSmartHomeImportSuggestion, reconcileSmartHomeImportSuggestions, normalizeSmartHomeImportProvenance,
     smartHomeImportFieldValue, isSmartHomeImportField, SMART_HOME_DETECTOR_VERSION } = load('smarthome-import');
 const { getControlProfiles } = load('smarthome-device-controls');
@@ -34,6 +34,122 @@ function suggestion(control, objects, config = { rooms: [], functions: [], devic
     return enrichSmartHomeImportSuggestion(extendSuggestion({ sourceId, sourceType: 'channel', proposal: { type, alias: 'Gerät', io: {}, behavior: {} }, notes: [] }, control, objects), objects, config);
 }
 function socket(id) { return { type: 'socket', states: [{ name: 'SET', id, required: true, type: 'boolean' }] }; }
+
+async function keywordCandidates(objects, covered = []) {
+    const keys = Object.keys(objects);
+    const values = [];
+    for await (const candidate of collectKeywordDetectionCandidates(objects, keys, new Set(keys), new Set(covered), new DetectionScan())) values.push(candidate);
+    return values;
+}
+
+test('real generic KNX detector proposes the same identity with German and English function folders', () => {
+    const id = 'knx.0.Buero.DimStatus';
+    const source = state(id, 'number', 'state', false, { name: { de: 'Dimmrückmeldung', en: 'Brightness feedback' }, unit: '%', min: 0, max: 100 });
+    source.native = { dpt: 'DPT5.001', address: '2/1/21' };
+    const objects = { [id]: source };
+    const detect = () => new ChannelDetector().detect({ id, objects, allowedTypes: ['info', 'dimmer'] });
+    const clean = cleanControls(detect(), objects)[0];
+    const current = suggestion(clean, objects, undefined, id, 'sensor');
+    assert.equal(clean.type, 'info');
+    assert.equal(current.importable, true);
+    assert.equal(current.discoveryReview, false);
+    assert.deepEqual(new Set(current.functionCategories), new Set(['status', 'dimmer']));
+    assert.deepEqual(current.proposal.io.deviceControls.fields, [{ key: 'ACTUAL', readId: id }]);
+    source.common.name = { de: 'Dimmrückmeldung' };
+    const german = suggestion(cleanControls(detect(), objects)[0], objects, undefined, id, 'sensor');
+    assert.equal(german.id, current.id);
+    assert.deepEqual(german.functionCategories, current.functionCategories);
+    source.common.name = { en: 'Brightness feedback' };
+    const english = suggestion(cleanControls(detect(), objects)[0], objects, undefined, id, 'sensor');
+    assert.equal(english.id, current.id);
+    assert.deepEqual(english.functionCategories, current.functionCategories);
+});
+
+test('Homematic LEVEL needs context and never becomes a keyword-generated command', async () => {
+    const blind = 'hm-rpc.0.001558A99A7B13.4';
+    const level = `${blind}.LEVEL`;
+    const dimmer = 'hm-rpc.0.001558A99A7B14.4';
+    const actual = `${dimmer}.STATUS_LEVEL`;
+    const unknown = 'hm-rpc.0.001558A99A7B15.4.LEVEL';
+    const objects = {
+        [blind]: channel(blind, 'Rollladen West'),
+        [level]: state(level, 'number', 'level', true, { name: 'LEVEL', unit: '%', min: 0, max: 100 }),
+        [dimmer]: channel(dimmer, 'Hall light'),
+        [actual]: state(actual, 'number', '', false, { name: 'Brightness feedback', unit: '%', min: 0, max: 100 }),
+        [unknown]: state(unknown, 'number', 'level', true, { name: 'LEVEL', unit: '%', min: 0, max: 100 }),
+    };
+    const matches = await keywordCandidates(objects);
+    assert.deepEqual(matches.map(match => match.stateId), [level, actual]);
+    const pending = keywordReviewSuggestion(matches[0]);
+    assert.equal(pending.importable, false);
+    assert.equal(pending.discoveryReview, true);
+    assert.equal(pending.proposal, undefined);
+    assert.deepEqual(pending.functionCategories, ['blind', 'review']);
+    assert.deepEqual(pending.states, [{ id: level, label: 'LEVEL', key: 'ACTUAL', type: 'number', role: 'level', unit: '%', read: true, write: true }]);
+    const found = matches[1];
+    const detected = suggestion(found.control, objects, undefined, found.sourceId, 'dimmer');
+    assert.equal(detected.importable, true);
+    assert.deepEqual(detected.proposal.io.deviceControls.fields, [{ key: 'ACTUAL', readId: actual }]);
+    assert.deepEqual(detected.functionCategories, ['dimmer', 'status']);
+});
+
+test('German and English temperature readings use their declared unit and separate flat KNX groups', async () => {
+    const first = 'knx.0.Kueche.GA_2_1_7'; const second = 'knx.0.Kueche.GA_2_1_8';
+    const target = 'knx.0.Kueche.GA_2_1_9'; const conflicting = 'knx.0.Kueche.GA_2_1_10';
+    const objects = {
+        [first]: state(first, 'number', '', false, { name: 'Isttemperatur', unit: '°C' }),
+        [second]: state(second, 'number', '', false, { name: 'Measured temperature', unit: '°C' }),
+        [target]: state(target, 'number', '', true, { name: 'Solltemperatur', unit: '°C' }),
+        [conflicting]: state(conflicting, 'number', '', false, { name: 'Temperatur', unit: '%' }),
+    };
+    const matches = await keywordCandidates(objects);
+    assert.deepEqual(matches.map(match => match.stateId), [first, second, target]);
+    assert.deepEqual(matches.slice(0, 2).map(match => match.control.states), [
+        [{ name: 'ACTUAL', id: first, required: true }], [{ name: 'ACTUAL', id: second, required: true }],
+    ]);
+    assert.equal(matches[2].control, undefined);
+    assert.deepEqual((await keywordCandidates(objects, [first, second, target])), []);
+});
+
+test('overlapping generic keywords are manual review, and blocked ID namespaces do not surface', async () => {
+    const ids = ['openknx.0.kitchen.group', 'openknx.0.kitchen.password', 'admin.0.temperature', 'alias.0.bedroom.temperature'];
+    const objects = {
+        [ids[0]]: state(ids[0], 'number', '', true, { name: 'Shutter brightness position', unit: '%' }),
+        ...Object.fromEntries(ids.slice(1).map(id => [id, state(id, 'number', '', false, { name: 'Measured temperature', unit: '°C' })])),
+    };
+    const found = await keywordCandidates(objects);
+    assert.equal(found.length, 1);
+    assert.equal(found[0].control, undefined);
+    assert.deepEqual(keywordReviewSuggestion(found[0]).functionCategories, ['dimmer', 'blind', 'review']);
+    const abort = new AbortController(); abort.abort();
+    await assert.rejects(async () => {
+        for await (const _match of collectKeywordDetectionCandidates(objects, ids, new Set(ids), new Set(), new DetectionScan({ signal: abort.signal }))) {
+            assert.fail('aborted scan must not yield a proposal');
+        }
+    }, error => error.code === 'EOS_DETECTION_ABORTED');
+});
+
+test('a generic TypeDetector switch or info conflict is visible for review and cannot be bulk imported', () => {
+    const stop = 'openknx.0.kitchen.GA_3_1_2';
+    const position = 'openknx.0.kitchen.GA_3_1_3';
+    const writableLevel = 'openknx.0.kitchen.GA_3_1_4';
+    const objects = {
+        [stop]: state(stop, 'boolean', 'state', true, { name: 'Jalousie Stopp' }),
+        [position]: state(position, 'number', 'state', false, { name: 'Shutter position feedback', unit: '%', min: 0, max: 100 }),
+        [writableLevel]: state(writableLevel, 'number', 'state', true, { name: 'Brightness target', unit: '%' }),
+    };
+    [stop, position, writableLevel].forEach(id => {
+        const controls = new ChannelDetector().detect({ objects, id, allowedTypes: ['socket', 'info'] });
+        assert.equal(controls.length, 1);
+        const result = suggestion(controls[0], objects, undefined, id);
+        assert.equal(result.importable, false);
+        assert.equal(result.discoveryReview, true);
+        assert.ok(result.functionCategories.includes('review'));
+    });
+    const conventional = 'openknx.0.kitchen.GA_3_1_5';
+    objects[conventional] = state(conventional, 'boolean', 'switch', true, { name: 'On/Off' });
+    assert.equal(suggestion(socket(conventional), objects, undefined, conventional).importable, true);
+});
 
 test('catalog follows installed 6.2 dependency and every builtin external pattern', () => {
     assert.equal(SMART_HOME_DETECTOR_VERSION, require('@iobroker/type-detector/package.json').version);

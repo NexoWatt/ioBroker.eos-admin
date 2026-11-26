@@ -1,4 +1,40 @@
-# Architektur der Zusammenführung
+# Architektur von NexoWatt EOS
+
+## Prozessaufteilung im aktuellen Adapter
+
+EOS wird als ein ioBroker-Adapter installiert. Der Hauptprozess verwaltet
+HTTPS, Konfiguration, Lizenz und die Verbindung zum ioBroker-Controller.
+UI und EMS teilen sich einen Kindprozess. Devices, EEBUS, OCPP und Backup
+laufen jeweils in einem weiteren Prozess. Der Hauptprozess überwacht die
+Kindprozesse und kann die einzelnen Module neu starten. Er und der Controller
+sind weiterhin gemeinsame Abhängigkeiten.
+
+## Entwicklungsrichtung zu Microservices
+
+EOS liefert seine Prozessmodule gemeinsam als ioBroker-Adapter aus. Für eine
+weitergehende Trennung braucht jedes neue Modul eine fachliche Zuständigkeit,
+einen versionierten Schnittstellenvertrag und einen einzeln prüfbaren
+Lebenszyklus. Startbereitschaft, Healthcheck, begrenzte Auftragswarteschlange,
+Zeitlimits und Wiederanlauf gehören zu diesem Vertrag.
+
+Ein sinnvoller nächster Prüfschritt ist die Trennung von Bedienoberfläche und
+zeitkritischem EMS. Dabei muss die lokale Regelung auch bei einem Neustart der
+Oberfläche weiterarbeiten können. Das EMS bleibt alleiniger Eigentümer seiner
+Stellbefehle. Ein Dienstwechsel muss alte oder doppelte Befehle verwerfen und
+gespeicherte Konfigurationen übernehmen können. Für Kommunikation auf einem
+Gerät bevorzugen wir die vorhandene lokale IPC. Einen separaten Netzwerkdienst
+sehen wir vor, wenn ein konkreter Einsatz auf einem anderen Host ihn erfordert.
+
+Vor dem Herauslösen eines Moduls vergleichen wir auf dem Raspberry Pi
+Regellatenz, CPU, PSS-Speicher und Wiederanlauf. Ein eigener Node.js-Prozess
+benötigt zusätzlichen Speicher. Entscheidend ist, ob die Trennung einen
+messbaren Vorteil bei Ausfällen, Wartung oder Last bringt. Die Softwaretests
+und der Geräteversuch prüfen auch Ausfall und Rückkehr der Abhängigkeiten.
+
+## Historischer Stand 9.0.5
+
+Die folgenden Abschnitte dokumentieren den damaligen Stand der Zusammenführung
+und die zugehörigen Befunde.
 
 **NexoWatt EOS · 9.0.5 · EOS-MERGE-001**
 

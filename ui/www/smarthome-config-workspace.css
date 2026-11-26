@@ -199,6 +199,13 @@ body.nw-page-smarthome-config .nw-setup-device-info > span { color: #a9c6ce; fon
 body.nw-page-smarthome-config .nw-setup-device-info > small { color: #90abb9; font-size: 12px; }
 body.nw-page-smarthome-config .nw-setup-count { margin: 4px 0 10px; color: #9fbfc8; font-size: 13px; }
 body.nw-page-smarthome-config .nw-setup-detection-toolbar { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 1fr); gap: 14px; align-items: end; }
+body.nw-page-smarthome-config .nw-setup-detection-folders { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+body.nw-page-smarthome-config .nw-setup-detection-folder { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; }
+body.nw-page-smarthome-config .nw-setup-detection-folder[aria-pressed="true"] { background: #123a3b; border-color: #57d8b4; color: #e4fff8; }
+body.nw-page-smarthome-config .nw-setup-detection-folder-count { font-size: 12px; color: #a9d7ce; }
+body.nw-page-smarthome-config .nw-setup-detection-filters { margin-top: 10px; }
+body.nw-page-smarthome-config .nw-setup-detection-filters > summary { width: fit-content; padding: 11px 6px; color: #b8d6db; cursor: pointer; }
+body.nw-page-smarthome-config .nw-shcfg-detect-state-group { margin: 14px 0 5px; color: #c3e4df; font-size: 14px; }
 body.nw-page-smarthome-config .nw-setup-check { display: flex; gap: 10px; align-items: center; min-height: 44px; min-width: 0; font-size: 13px; }
 body.nw-page-smarthome-config .nw-setup-check input { flex: 0 0 22px; width: 22px; height: 22px; }
 body.nw-page-smarthome-config .nw-setup-batch-actions,
