@@ -1,0 +1,26 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> iobroker.eos-admin@9.0.32 build:installer
+> npm --prefix ui/src-admin-tab run build
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> nexowatt-ui-admin-tab@9.0.32 build
+> npm run typecheck && vite build
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> nexowatt-ui-admin-tab@9.0.32 typecheck
+> tsc -p tsconfig.json && tsc -p tsconfig.build-tools.json
+
+vite v7.3.7 building client environment for production...
+<script src="/eos-session-idle.js"> in "/index.html" can't be bundled without type="module" attribute
+transforming...
+✓ 61 modules transformed.
+rendering chunks...
+computing gzip size...
+../admin/react/index.html                          4.48 kB │ gzip:   1.81 kB
+../admin/react/assets/nexowatt-192-43ZwQ44y.png   29.88 kB
+../admin/react/assets/index-ofLP_Y7y.css          11.10 kB │ gzip:   2.92 kB
+../admin/react/assets/index-wHWXfD_g.js          339.85 kB │ gzip: 104.90 kB
+✓ built in 1.12s

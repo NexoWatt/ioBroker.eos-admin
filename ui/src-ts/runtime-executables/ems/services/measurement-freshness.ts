@@ -148,6 +148,7 @@ type NvpDisplayResult = {
   gridSellW: number;
   hasGrid: boolean;
   src: string;
+  sampleSource: 'canonical' | 'signed' | 'import' | 'export' | 'split' | 'missing';
   gridBuyMapped: boolean;
   gridSellMapped: boolean;
   gridNetMapped: boolean;
@@ -359,31 +360,34 @@ function resolveNvpDisplay(input: NvpDisplayInput): NvpDisplayResult {
       gridSellW: Math.max(0, -canonicalNetW),
       hasGrid: true,
       src: String(input.canonicalSource || 'ems-canonical'),
+      sampleSource: 'canonical',
       ...mapped,
     };
   }
   if (input.canonicalKnown && input.canonicalFresh === false) {
-    return { gridBuyRaw: null, gridSellRaw: null, gridNetRaw: null, gridBuyW: 0, gridSellW: 0, hasGrid: false, src: `ems-${String(input.canonicalStatus || 'stale')}`, ...mapped };
+    return { gridBuyRaw: null, gridSellRaw: null, gridNetRaw: null, gridBuyW: 0, gridSellW: 0, hasGrid: false, src: `ems-${String(input.canonicalStatus || 'stale')}`, sampleSource: 'missing', ...mapped };
   }
 
   const gridNetRaw = finiteOrNull(input.gridNetRaw);
   let gridBuyRaw = finiteOrNull(input.gridBuyRaw);
   let gridSellRaw = finiteOrNull(input.gridSellRaw);
   let src = 'missing';
+  let sampleSource: NvpDisplayResult['sampleSource'] = 'missing';
   if (gridNetRaw !== null) {
     gridBuyRaw = Math.max(0, gridNetRaw);
     gridSellRaw = Math.max(0, -gridNetRaw);
     src = 'net-fresh';
+    sampleSource = 'signed';
   } else if (gridBuyRaw !== null || gridSellRaw !== null) {
     const buyTs = finiteOrNull(input.gridBuyTs);
     const sellTs = finiteOrNull(input.gridSellTs);
     const maxSkewMs = Math.max(250, Math.min(30000, finiteOrNull(input.maxSkewMs) ?? 5000));
     if (gridBuyRaw !== null && gridSellRaw !== null && buyTs !== null && sellTs !== null && Math.abs(buyTs - sellTs) > maxSkewMs) {
-      if (buyTs >= sellTs) { gridSellRaw = 0; src = 'split-newer-import'; }
-      else { gridBuyRaw = 0; src = 'split-newer-export'; }
-    } else if (gridBuyRaw !== null && gridSellRaw !== null) src = 'split-coherent';
-    else if (gridBuyRaw !== null) { gridSellRaw = 0; src = 'split-import-only'; }
-    else { gridBuyRaw = 0; src = 'split-export-only'; }
+      if (buyTs >= sellTs) { gridSellRaw = 0; src = 'split-newer-import'; sampleSource = 'import'; }
+      else { gridBuyRaw = 0; src = 'split-newer-export'; sampleSource = 'export'; }
+    } else if (gridBuyRaw !== null && gridSellRaw !== null) { src = 'split-coherent'; sampleSource = 'split'; }
+    else if (gridBuyRaw !== null) { gridSellRaw = 0; src = 'split-import-only'; sampleSource = 'import'; }
+    else { gridBuyRaw = 0; src = 'split-export-only'; sampleSource = 'export'; }
   }
   const rawBuyW = Math.max(0, Math.abs(gridBuyRaw ?? 0));
   const rawSellW = Math.max(0, Math.abs(gridSellRaw ?? 0));
@@ -400,6 +404,7 @@ function resolveNvpDisplay(input: NvpDisplayInput): NvpDisplayResult {
     gridSellW,
     hasGrid,
     src,
+    sampleSource,
     ...mapped,
   };
 }

@@ -1,4 +1,8 @@
 {
+  "9.0.12": {
+    "en": "Simplified SmartHome setup with dropdowns, dialogs and compact assisted discovery; corrected detector ordering.",
+    "de": "Vereinfachte SmartHome-Einrichtung mit Dropdowns, Dialogen und kompakter Geräteerkennung; korrigierte Sortierung für den Typdetektor."
+  },
   "9.0.11": {
     "en": "Bounded startup recovery for legacy handover; confirmed shutdown before rollback and blocked late operational starts. Verified tarball publishing workflow for Windows.",
     "de": "Übernahme mit begrenzter Startüberwachung und bestätigtem Stopp vor dem Rückfall; verspätete Betriebsstarts gesperrt. Geprüfter TGZ-Veröffentlichungsweg für Windows."

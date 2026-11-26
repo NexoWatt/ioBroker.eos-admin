@@ -1,0 +1,63 @@
+{
+  "scope": "Actual canonical scheduling code with real Chromium timers and render observer; simulated SSE bursts/visibility/BFcache events; no backend or physical device",
+  "browser": "HeadlessChrome/158.0.8127.0",
+  "node": "v24.22.3",
+  "runAt": "2026-11-26T11:48:42.206Z",
+  "result": "passed",
+  "timing": {
+    "elapsedMs": 10350.699999999255,
+    "sampleTs": 1795693711267,
+    "renders": [
+      {
+        "at": 177.19999999925494,
+        "value": 0,
+        "ts": 1795693711267
+      },
+      {
+        "at": 5181.699999999255,
+        "value": 195,
+        "ts": 1795693711267
+      },
+      {
+        "at": 10182.400000002235,
+        "value": 389,
+        "ts": 1795693711267
+      }
+    ],
+    "bursts": 403,
+    "clockOffsetMs": -3600000,
+    "gaps": [
+      5004.5,
+      5000.70000000298
+    ]
+  },
+  "lifecycle": {
+    "before": 3,
+    "whileHidden": 3,
+    "hiddenTimers": {
+      "telemetry": null,
+      "render": null,
+      "age": null
+    },
+    "afterVisible": [
+      {
+        "at": 10717.400000002235,
+        "value": 999,
+        "ts": 1795693711267
+      }
+    ],
+    "pagehideTimers": {
+      "telemetry": null,
+      "render": null,
+      "age": null
+    },
+    "afterPageshow": {
+      "at": 10897.800000000745,
+      "value": 1000,
+      "ts": 1795693711267
+    },
+    "total": 5
+  },
+  "pageErrors": [],
+  "sourceSha256": "6f7c6578bba0b6274f930757b2fa377fde413f7dde047ba298dfed130c30eb71"
+}

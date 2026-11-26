@@ -27171,6 +27171,9 @@ return res.json(out);
         const slice = plan.slice(i, i + concurrency);
         await Promise.all(slice.map((entry) => applyState(entry)));
       }
+      if (this._derivedFlow?.reviewAt && Date.now() >= this._derivedFlow.reviewAt) {
+        this.scheduleDerivedFlowUpdate('measurement-expiry');
+      }
     } finally {
       this._nwLiveCoreRefreshRunning = false;
     }
@@ -28654,9 +28657,10 @@ return res.json(out);
     // Nach einem Update kann der neu angelegte totalPowerW-State kurz 0 W enthalten,
     // während die bereits vorhandenen Brutto-States noch den echten Farmfluss zeigen.
     // Erst nach mindestens einer ausgewerteten Leistungsquelle ist totalPowerW führend.
-    const signedW = hasBatteryFlow ? batteryFlowState
-      : (signedState !== null && (powerSourcesTotal > 0 || (grossChargeW <= 0 && grossDischargeW <= 0)))
-        ? signedState : (grossDischargeW - grossChargeW);
+    const useLegacySigned = signedState !== null && (powerSourcesTotal > 0 || (grossChargeW <= 0 && grossDischargeW <= 0));
+    const signedW = hasBatteryFlow ? batteryFlowState : useLegacySigned ? signedState : grossDischargeW - grossChargeW;
+    const powerSourceKeys = hasBatteryFlow ? ['storageFarm.totalBatteryPowerW']
+      : useLegacySigned ? ['storageFarm.totalPowerW'] : ['storageFarm.totalChargePowerW', 'storageFarm.totalDischargePowerW'];
     const chargeW = signedW === null ? null : signedW < 0 ? Math.abs(signedW) : 0;
     const dischargeW = signedW === null ? null : signedW > 0 ? signedW : 0;
 
@@ -28687,6 +28691,7 @@ return res.json(out);
       totalPowerW: signedW === null ? null : Math.round(signedW),
       chargeW: chargeW === null ? null : Math.round(chargeW),
       dischargeW: dischargeW === null ? null : Math.round(dischargeW),
+      powerSourceKeys,
       grossChargeW: Math.round(grossChargeW),
       grossDischargeW: Math.round(grossDischargeW),
       pvTotalW: Math.round(pvTotalW),
@@ -28821,6 +28826,7 @@ return res.json(out);
     const maxAgeMs = opts.maxAgeMs === undefined ? this._nwLiveInputMaxAgeMs() : opts.maxAgeMs;
     const deadbandW = Number.isFinite(Number(opts.deadbandW)) ? Math.max(0, Number(opts.deadbandW)) : 25;
     const strictStale = opts.strictStale === true;
+    const observe = opts.observe === true;
 
     const dps = (this.config && this.config.datapoints && typeof this.config.datapoints === 'object') ? this.config.datapoints : {};
     /**
@@ -28852,11 +28858,10 @@ return res.json(out);
      * Zusammenhang: Teil von Adapterkern: Lifecycle, Webserver, API, States, EMS-Engine; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
      * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
      */
-    const readMapped = (key, onlyIfMapped, raw = false) => {
-      if (onlyIfMapped && !idOf(key)) return null;
-      return raw
-        ? this._nwGetRawNumberFromCache(key, strictStale ? maxAgeMs : null, null, now)
-        : this._nwGetNumberFromCacheFresh(key, strictStale ? maxAgeMs : null, null, now);
+    const readMapped = (key) => this._nwGetRawNumberFromCache(key, strictStale ? maxAgeMs : null, null, now);
+    const observeMapped = (key) => {
+      // A normalized display mirror cannot supply a physical observation.
+      return readFlowMeasurement(this._nwRawValueCache, key, now, maxAgeMs);
     };
     /**
      * Code-Teil: ageInfo
@@ -28892,6 +28897,7 @@ return res.json(out);
         fromSigned: true,
         mirror: opts2.mirror !== false,
         derived: false,
+        observedAt: opts2.observedAt ?? null,
         staleMs: ageInfo(),
       };
     };
@@ -28970,10 +28976,11 @@ return res.json(out);
     const sfEnabled = !!(farmMetrics && farmMetrics.active);
     if (farmSelectedForControl) {
       let signed = farmMetrics ? numericMeasurement(farmMetrics.totalPowerW) : null;
+      const observation = observe && farmMetrics
+        ? sumFlowMeasurements(this.stateCache, farmMetrics.powerSourceKeys, now, maxAgeMs) : null;
       if (signed !== null && Number.isFinite(signed)) {
-        // storageFarm.totalPowerW ist bereits pro Speicher normalisiert und besitzt
-        // eine feste Konvention (+ Entladen / - Laden). Das globale Einzel-Speicher-
-        // Anzeige-Invert darf diesen kanonischen Farmwert nicht ein zweites Mal drehen.
+        // Die Batterie-Nettoleistung der Farm ist bereits pro Speicher normalisiert
+        // (+ Entladen, - Laden) und darf nicht nochmals invertiert werden.
         if (Math.abs(signed) <= deadbandW) signed = 0;
         const c = signed < 0 ? Math.abs(signed) : 0;
         const d = signed > 0 ? signed : 0;
@@ -28986,6 +28993,7 @@ return res.json(out);
           fromSigned: true,
           derived: false,
           mirror: true,
+          observedAt: observation?.ts ?? null,
           grossChargeW: farmMetrics.grossChargeW,
           grossDischargeW: farmMetrics.grossDischargeW,
           staleMs: {
@@ -29015,15 +29023,23 @@ return res.json(out);
       };
     }
 
-    const batterySigned = batteryMapped ? readMapped('batteryPower', true, true) : null;
-    const chargeRaw = chargeMapped ? readMapped('storageChargePower', true, true) : null;
-    const dischargeRaw = dischargeMapped ? readMapped('storageDischargePower', true, true) : null;
+    const batterySample = observe && batteryMapped ? observeMapped('batteryPower') : null;
+    const chargeSample = observe && chargeMapped ? observeMapped('storageChargePower') : null;
+    const dischargeSample = observe && dischargeMapped ? observeMapped('storageDischargePower') : null;
+    const batterySigned = batteryMapped ? (observe ? batterySample?.value ?? null : readMapped('batteryPower')) : null;
+    const chargeRaw = chargeMapped ? (observe ? chargeSample?.value ?? null : readMapped('storageChargePower')) : null;
+    const dischargeRaw = dischargeMapped ? (observe ? dischargeSample?.value ?? null : readMapped('storageDischargePower')) : null;
 
     // Beide Split-Felder auf denselben DP gemappt = tatsächlich ein signed DP.
-    if (sameChargeDischargeId && chargeRaw !== null) {
-      return fromSigned(chargeRaw, 'sameChargeDischargeSigned', { mirror: true });
+    if (sameChargeDischargeId) {
+      if (chargeRaw !== null) return fromSigned(chargeRaw, 'sameChargeDischargeSigned', { observedAt: chargeSample?.ts });
+      if (observe && dischargeSample) return fromSigned(dischargeSample.value, 'sameChargeDischargeSigned', { observedAt: dischargeSample.ts });
     }
 
+    const completeSplit = (!chargeMapped || chargeSample !== null) && (!dischargeMapped || dischargeSample !== null);
+    if (observe && !completeSplit && batterySample) {
+      return fromSigned(batterySample.value, 'batterySigned', { observedAt: batterySample.ts });
+    }
     // Getrennte Lade-/Entlade-DPs sind autoritativ. Eine fehlende Seite wird als 0 W
     // behandelt; sie wird nicht durch Bilanzwerte ersetzt. Das schützt Historie und
     // Regelung vor verfälschten Speicherwerten bei konstantem/stalem 0-Wert.
@@ -29053,19 +29069,20 @@ return res.json(out);
         fromSigned: false,
         derived: false,
         mirror: false,
+        observedAt: observe && completeSplit ? Math.min(chargeSample?.ts ?? now, dischargeSample?.ts ?? now) : null,
         staleMs: ageInfo(),
       };
     }
 
     // Signed Batterie-DP ist der Fallback, wenn keine Split-DPs einen Wert liefern.
     if (batterySigned !== null) {
-      return fromSigned(batterySigned, 'batterySigned', { mirror: true });
+      return fromSigned(batterySigned, 'batterySigned', { observedAt: batterySample?.ts });
     }
 
     // Rechen-Fallback nur, wenn überhaupt kein Speicher-DP konfiguriert ist.
     // Wenn ein Speicher-DP konfiguriert, aber aktuell nicht lesbar ist, zeigen wir keinen
     // geratenen Wert, damit Historie/Regelung nicht verfälscht werden.
-    if (!anyStorageMapped) {
+    if (!anyStorageMapped && !observe) {
       const derived = fromBalance();
       if (derived) return derived;
     }
@@ -30787,33 +30804,59 @@ return res.json(out);
    * Zusammenhang: Teil von Adapterkern: Lifecycle, Webserver, API, States, EMS-Engine; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
-  _nwResolveGridImportExportFromCache() {
+  _nwResolveGridImportExportFromCache(opts = {}) {
     const gridBuyMapped = this._nwHasMappedDatapoint('gridBuyPower');
     const gridSellMapped = this._nwHasMappedDatapoint('gridSellPower');
     const gridNetMapped = this._nwHasMappedDatapoint('gridPointPower');
-    const now = Date.now();
-    const maxAgeMs = this._nwLiveInputMaxAgeMs();
+    const observe = opts.observe === true;
+    const now = opts.now ?? Date.now();
+    const maxAgeMs = opts.maxAgeMs ?? this._nwLiveInputMaxAgeMs();
     const canonicalRec = this.stateCache && this.stateCache['ems.gridMeasurementFresh'];
     const canonicalAge = canonicalRec ? this._nwGetCacheAgeMs('ems.gridMeasurementFresh', now) : null;
-    const canonicalKnown = !!(canonicalRec && canonicalAge !== null && canonicalAge <= Math.max(maxAgeMs, 15000));
+    const canonicalKnown = !observe && !!(canonicalRec && canonicalAge !== null && canonicalAge <= Math.max(maxAgeMs, 15000));
     const readFresh = (key, mapped) => mapped ? this._nwGetNumberFromCacheFresh(key, maxAgeMs, null, now) : null;
-    return resolveNvpDisplay({
+    const observeMapped = (key, mapped) => observe && mapped ? readFlowMeasurement(this._nwRawValueCache, key, now, maxAgeMs) : null;
+    const signed = observeMapped('gridPointPower', gridNetMapped);
+    const buy = observeMapped('gridBuyPower', gridBuyMapped);
+    const sell = observeMapped('gridSellPower', gridSellMapped);
+    const localNvp = observe ? this._nvpFreshnessSnapshot : null;
+    const latestPhysicalTs = Math.max(signed?.ts ?? 0, buy?.ts ?? 0, sell?.ts ?? 0);
+    const nvpUnavailable = localNvp?.usable === false && Number.isFinite(localNvp.ts)
+      && localNvp.ts <= now && now - localNvp.ts <= Math.min(maxAgeMs, 15000)
+      && (localNvp.connected === false || latestPhysicalTs <= localNvp.ts);
+    const invert = observe && this.config?.settings?.flowInvertGrid === true;
+    const measuredImport = invert ? sell : buy;
+    const measuredExport = invert ? buy : sell;
+    const resolved = resolveNvpDisplay({
       maxAgeMs,
-      canonicalKnown,
-      canonicalFresh: canonicalKnown && typeof canonicalRec.value === 'boolean' ? canonicalRec.value : null,
-      canonicalNetW: this._nwGetNumberFromCacheFresh('ems.gridPowerRawW', maxAgeMs, null, now),
+      canonicalKnown: canonicalKnown || nvpUnavailable,
+      canonicalFresh: nvpUnavailable ? false : canonicalKnown && typeof canonicalRec.value === 'boolean' ? canonicalRec.value : null,
+      // The EMS mirror carries its publication time, so it cannot establish
+      // the age of a physical sample for an observed building balance.
+      canonicalNetW: observe ? null : this._nwGetNumberFromCacheFresh('ems.gridPowerRawW', maxAgeMs, null, now),
       canonicalSource: this.stateCache?.['ems.gridPowerSource']?.value,
-      canonicalStatus: this.stateCache?.['ems.gridMeasurementStatus']?.value,
-      gridNetRaw: readFresh('gridPointPower', gridNetMapped),
-      gridBuyRaw: readFresh('gridBuyPower', gridBuyMapped),
-      gridSellRaw: readFresh('gridSellPower', gridSellMapped),
-      gridBuyTs: this.stateCache?.gridBuyPower?.ts,
-      gridSellTs: this.stateCache?.gridSellPower?.ts,
+      canonicalStatus: nvpUnavailable ? localNvp.status : this.stateCache?.['ems.gridMeasurementStatus']?.value,
+      gridNetRaw: observe ? (signed ? (invert ? -signed.value : signed.value) : null) : readFresh('gridPointPower', gridNetMapped),
+      gridBuyRaw: observe ? measuredImport?.value ?? null : readFresh('gridBuyPower', gridBuyMapped),
+      gridSellRaw: observe ? measuredExport?.value ?? null : readFresh('gridSellPower', gridSellMapped),
+      gridBuyTs: observe ? measuredImport?.ts : this.stateCache?.gridBuyPower?.ts,
+      gridSellTs: observe ? measuredExport?.ts : this.stateCache?.gridSellPower?.ts,
       maxSkewMs: this.config?.diagnostics?.nvpMaxSkewMs,
       gridBuyMapped,
       gridSellMapped,
       gridNetMapped,
     });
+    if (!observe) return resolved;
+
+    let observedAt = null;
+    const splitComplete = (!gridBuyMapped || buy !== null) && (!gridSellMapped || sell !== null);
+    if (resolved.sampleSource === 'signed') observedAt = signed.ts;
+    else if (splitComplete) {
+      if (resolved.sampleSource === 'split') observedAt = Math.min(measuredImport.ts, measuredExport.ts);
+      else if (resolved.sampleSource === 'import') observedAt = measuredImport.ts;
+      else if (resolved.sampleSource === 'export') observedAt = measuredExport.ts;
+    }
+    return { ...resolved, observedAt };
   }
 
   /**
@@ -32529,23 +32572,33 @@ return res.json(out);
   scheduleDerivedFlowUpdate(reason = '') {
     if (this._nwShuttingDown) return;
     // Throttle derived calculations to avoid excessive state writes on high-frequency meters.
+    const flow = this._derivedFlow;
+    flow.lastReason = reason;
+    if (flow.running) {
+      flow.rerun = true;
+      return;
+    }
+    if (flow.pending) return;
+
     const now = Date.now();
-    const minMs = this._derivedFlow?.minIntervalMs ?? 250;
+    const delay = Math.max(0, (flow.minIntervalMs ?? 250) - (now - (flow.lastRunMs ?? 0)));
 
-    // Remember latest reason (debug only)
-    if (this._derivedFlow) this._derivedFlow.lastReason = reason;
-
-    if (this._derivedFlow?.pending) return;
-
-    const since = now - (this._derivedFlow?.lastRunMs ?? 0);
-    const delay = since >= minMs ? 0 : (minMs - since);
-
-    this._derivedFlow.pending = true;
-    this._nwSetTimeout(() => {
-      this._derivedFlow.pending = false;
-      this._derivedFlow.lastRunMs = Date.now();
-      this.updateDerivedFlowStates(this._derivedFlow.lastReason || 'scheduled')
-        .catch((e) => this.log.debug(`[derivedFlow] ${e?.message || e}`));
+    flow.pending = true;
+    this._nwSetTimeout(async () => {
+      flow.pending = false;
+      flow.running = true;
+      flow.lastRunMs = Date.now();
+      try {
+        await this.updateDerivedFlowStates(flow.lastReason || 'scheduled');
+      } catch (e) {
+        this.log.debug(`[derivedFlow] ${e?.message || e}`);
+      } finally {
+        flow.running = false;
+        if (flow.rerun) {
+          flow.rerun = false;
+          this.scheduleDerivedFlowUpdate(flow.lastReason);
+        }
+      }
     }, delay);
   }
   /**
@@ -32559,6 +32612,8 @@ return res.json(out);
     // load = (PV + other production) + gridImport + batteryDischarge - gridExport - batteryCharge
     // If no direct house meter (consumptionTotal) is configured, we use this as fallback for the UI.
 
+    // State changes during the async PV refresh belong to this snapshot.
+    await this._derivedRefreshPvInvertersCache(false);
     const ts = Date.now();
     const configuredAgeSec = numericMeasurement(this.config?.settings?.deviceStaleTimeoutSec);
     const liveMaxAgeMs = Math.max(10000, (configuredAgeSec !== null && configuredAgeSec > 0 ? configuredAgeSec : 60) * 1000);
@@ -32574,23 +32629,19 @@ return res.json(out);
     };
     const oldestTime = (times) => times.length ? Math.min(...times) : ts;
 
-    // Keep PV-inverter auto-cache reasonably fresh (cheap no-op when not due)
-    await this._derivedRefreshPvInvertersCache(false);
-
     const pvPowerMapped = this._nwHasMappedDatapoint('pvPower');
     const prodTotalMapped = this._nwHasMappedDatapoint('productionTotal');
     const consumptionMapped = this._nwHasMappedDatapoint('consumptionTotal');
 
     // --- Grid ---
     const {
-      gridBuyRaw,
-      gridSellRaw,
       gridNetRaw,
       gridBuyW,
       gridSellW,
       hasGrid,
       src: gridSrc,
-    } = this._nwResolveGridImportExportFromCache();
+      observedAt: gridObservedAt,
+    } = this._nwResolveGridImportExportFromCache({ now: ts, maxAgeMs: liveMaxAgeMs, observe: true });
 
     // --- Storage ---
     // Normalize storage power centrally:
@@ -32598,7 +32649,7 @@ return res.json(out);
     //   settings.flowInvertBattery flips that signed value before splitting.
     // Separate charge/discharge datapoints remain supported, but stale/legacy mirrored
     // values must not make the UI or derived balance show both directions at once.
-    const storageFlow = this._nwResolveBatteryFlowFromCache({ now: ts, strictStale: true, maxAgeMs: liveMaxAgeMs });
+    const storageFlow = this._nwResolveBatteryFlowFromCache({ now: ts, strictStale: true, maxAgeMs: liveMaxAgeMs, observe: true });
     const chargeW = Math.max(0, Number(storageFlow.chargeW) || 0);
     const dischargeW = Math.max(0, Number(storageFlow.dischargeW) || 0);
     const storageSrc = storageFlow.src || 'missing';
@@ -32655,9 +32706,6 @@ return res.json(out);
     } else {
       // Auto: sum all PV_INVERTER devices from nexowatt-devices
       const pvAuto = this._derivedFlow?.auto?.pvInverters;
-      const staleSec = Number(this.config?.settings?.deviceStaleTimeoutSec);
-      const staleMs = Math.max(10 * 1000, (Number.isFinite(staleSec) ? staleSec : 60) * 1000);
-
       let sum = 0;
       let used = 0;
       let offline = 0;
@@ -32669,7 +32717,7 @@ return res.json(out);
 
         const connected = (cRec && cRec.val !== undefined) ? !!cRec.val : true;
         const isOffline = (oRec && oRec.val !== undefined) ? !!oRec.val : false;
-        const ageOk = (pRec && Number.isFinite(Number(pRec.ts))) ? ((ts - Number(pRec.ts)) <= staleMs) : false;
+        const ageOk = (pRec && Number.isFinite(Number(pRec.ts))) ? ((ts - Number(pRec.ts)) <= liveMaxAgeMs) : false;
 
         if (!connected || isOffline || !ageOk || (pRec?.q !== undefined && pRec.q !== 0)) {
           offline++;
@@ -32816,27 +32864,13 @@ return res.json(out);
 
     // A balance is usable only with all configured contributors observed.
     // Never refresh an old measurement through this periodic calculation.
-    let gridObserved = false;
-    if (hasGrid) {
-      if (gridSrc === 'net-fresh') gridObserved = readLive('gridPointPower', gridTimes) !== null;
-      else if (String(gridSrc).startsWith('split-')) {
-        const buyRequired = this._nwHasMappedDatapoint('gridBuyPower');
-        const sellRequired = this._nwHasMappedDatapoint('gridSellPower');
-        const buy = buyRequired ? readLive('gridBuyPower', gridTimes) : 0;
-        const sell = sellRequired ? readLive('gridSellPower', gridTimes) : 0;
-        gridObserved = (buyRequired || sellRequired) && buy !== null && sell !== null;
-      } else gridObserved = readLive('ems.gridPowerRawW', gridTimes) !== null;
-    }
+    const gridObserved = hasGrid && Number.isFinite(gridObservedAt);
+    if (gridObserved) gridTimes.push(gridObservedAt);
     const storageConfigured = selectedStorageTopologyLive !== 'none'
       || ['batteryPower', 'storageChargePower', 'storageDischargePower', 'storageSoc'].some(key => this._nwHasMappedDatapoint(key));
-    let storageObserved = !storageConfigured;
-    if (String(storageSrc).startsWith('storageFarm') && !String(storageSrc).includes('missing') && !String(storageSrc).includes('unavailable')) {
-      storageObserved = readLive('storageFarm.totalPowerW', storageTimes) !== null;
-    } else if (storageSrc === 'batterySigned') storageObserved = readLive('batteryPower', storageTimes) !== null;
-    else if (storageSrc === 'sameChargeDischargeSigned') storageObserved = readLive('storageChargePower', storageTimes) !== null;
-    else if (String(storageSrc).startsWith('chargeDischarge')) {
-      storageObserved = ['storageChargePower', 'storageDischargePower'].every(key => !this._nwHasMappedDatapoint(key) || readLive(key, storageTimes) !== null);
-    }
+    const measuredStorage = Number.isFinite(storageFlow.observedAt);
+    const storageObserved = measuredStorage || !storageConfigured;
+    if (measuredStorage) storageTimes.push(storageFlow.observedAt);
     const autoPvConfigured = (this._derivedFlow?.auto?.pvInverters?.list || []).length > 0;
     const pvConfigured = pvPowerMapped || prodTotalMapped || autoPvConfigured || sfEnabled || singleStorageDcEnabled;
     let pvObserved = !pvConfigured || (pvSource !== 'missing' && !pvSource.includes('incomplete'));
@@ -32877,6 +32911,9 @@ return res.json(out);
     const loadTotalRound = loadTotalW !== null ? Math.round(loadTotalW) : null;
     const loadRestRound = loadRestW !== null ? Math.round(loadRestW) : null;
     const restTimestamp = Math.min(loadTimestamp, oldestTime(restTimes));
+    this._derivedFlow.reviewAt = inputTimes.length || directTimes.length || restTimes.length
+      ? Math.min(oldestTime(inputTimes), oldestTime(directTimes), oldestTime(restTimes)) + liveMaxAgeMs + 1
+      : 0;
 
     const tsShadow = this._nwRunEnergyFlowTsShadowComparison({
       ts,
@@ -33041,6 +33078,8 @@ return res.json(out);
     this.updateValue('derived.core.building.loadTotalW', publishLoadTotalRound, loadTimestamp, { raw: false });
     this.updateValue('derived.core.building.loadRestW', publishLoadRestRound, restTimestamp, { raw: false });
     this.updateValue('derived.core.building.loadSource', loadTotalSource, ts, { raw: false });
+    this.updateValue('derived.core.grid.netW', gridObserved ? gridNetRaw : null, gridObservedAt ?? ts, { raw: false });
+    this.updateValue('derived.core.storage.netW', measuredStorage ? dischargeW - chargeW : null, storageFlow.observedAt ?? ts, { raw: false });
     this.updateValue('derived.core.pv.acW', pvObserved ? pvAcRound : null, oldestTime(pvTimes), { raw: false });
     this.updateValue('derived.core.pv.dcW', pvObserved ? pvDcRound : null, oldestTime(pvTimes), { raw: false });
     this.updateValue('derived.core.pv.totalW', pvObserved ? pvTotalRound : null, oldestTime(pvTimes), { raw: false });
@@ -33149,13 +33188,13 @@ return res.json(out);
     //    derive them from the signed NVP datapoint (Import + / Export -).
     const gridBuyMapped = this._nwHasMappedDatapoint('gridBuyPower');
     const gridSellMapped = this._nwHasMappedDatapoint('gridSellPower');
-    if (gridObserved && gridNetRaw !== null && (!gridBuyMapped || gridBuyRaw === null)) {
+    if (gridObserved && gridNetRaw !== null && !gridBuyMapped) {
       const cur = Number(this.stateCache?.gridBuyPower?.value);
       if (!Number.isFinite(cur) || cur !== gridBuyRound || this.stateCache?.gridBuyPower?.ts !== oldestTime(gridTimes)) {
         this.updateValue('gridBuyPower', publishGridBuyRound, oldestTime(gridTimes), { raw: false });
       }
     }
-    if (gridObserved && gridNetRaw !== null && (!gridSellMapped || gridSellRaw === null)) {
+    if (gridObserved && gridNetRaw !== null && !gridSellMapped) {
       const cur = Number(this.stateCache?.gridSellPower?.value);
       if (!Number.isFinite(cur) || cur !== gridSellRound || this.stateCache?.gridSellPower?.ts !== oldestTime(gridTimes)) {
         this.updateValue('gridSellPower', publishGridSellRound, oldestTime(gridTimes), { raw: false });
@@ -34245,14 +34284,15 @@ return res.json(out);
 
     // Derived / calculated live values (e.g. building consumption fallback for UI)
     try {
-      const isTrigger =
+      const isTrigger = key.startsWith('storageFarm.') || (opts.raw !== false && (
         key === 'gridBuyPower' || key === 'gridSellPower' || key === 'gridPointPower' ||
         key === 'pvPower' || key === 'productionTotal' ||
         key === 'storageChargePower' || key === 'storageDischargePower' || key === 'batteryPower' ||
-        key === 'settings.flowInvertBattery' || key === 'settings.deviceStaleTimeoutSec' ||
+        key === 'consumptionTotal' || key === 'consumptionEvcs' ||
+        key === 'settings.flowInvertBattery' || key === 'settings.flowInvertGrid' || key === 'settings.deviceStaleTimeoutSec' ||
         /^producer\d+Power$/.test(key) || /^consumer\d+Power$/.test(key) ||
-        /^evcs\.\d+\.powerW$/.test(key) || key === 'evcs.totalPowerW' ||
-        key.startsWith('storageFarm.');
+        /^evcs\.\d+\.powerW$/.test(key) || key === 'evcs.totalPowerW'
+      ));
       if (isTrigger) this.scheduleDerivedFlowUpdate(`key:${key}`);
     } catch (_e3) {}
 

@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/app.ts
- * Quell-Hash: sha256:18104cb2b08b3c23c36643230efeb9f8a940be31f60d25193001491594db06ea
+ * Quell-Hash: sha256:6f7c6578bba0b6274f930757b2fa377fde413f7dde047ba298dfed130c30eb71
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -1928,20 +1928,19 @@ function updateDashboardShellUi(data) {
   const liveDot = document.getElementById('liveDot');
   nwSetLiveOnline(!liveDot || liveDot.classList.contains('live'));
 
-  const { pv, buy, sell, load, charge, discharge } = getLiveMeasurementView();
+  const { pv, buy, sell, load, charge, discharge, soc } = getLiveMeasurementView();
   const batterySigned = charge === null || discharge === null ? null : discharge - charge;
   const evcsAvailable = nwEvcsFeatureFromConfig();
   const evcsPower = evcsAvailable ? getEvcsPowerW(d) : null;
   try { nwApplyCustomerFeatureVisibility(window.__nwCfg || {}, window.latestState || state || {}); } catch (_e) {}
 
-  const soc = getLiveMeasurementView().soc;
   const autarky = (snap.autarkyN !== undefined && snap.autarkyN !== null) ? Number(snap.autarkyN) : getFreshFlowNumber('autarky');
   const selfc = (snap.selfcN !== undefined && snap.selfcN !== null) ? Number(snap.selfcN) : getFreshFlowNumber('selfConsumption');
 
   setText('sideStorage', Number.isFinite(soc) ? `${Math.round(soc)} %` : '-- %');
   setText('sideBatterySoc', Number.isFinite(soc) ? `${Math.round(soc)} %` : '-- %');
   const p14 = !!d('ems.core.para14aActive') || !!d('para14a.active'), peak = String(d('peakShaving.control.status') || '').trim(), safety = String(d('chargingManagement.audit.safetyStage') || '').trim(), p14Fallback = d('para14a.communicationFallbackActive') === true;
-  const health = window.NexoWattLiveDisplay?.status(window.latestState || state || {}, window.__nwTariffLiveOnline !== false, Date.now());
+  const health = window.NexoWattLiveDisplay?.status(window.latestState || state || {}, window.__nwTariffLiveOnline !== false, Date.now(), getFlowFreshMaxAgeMs());
   setText('sideEms', safety === 'EOS-SAFETY-STOP' ? 'Safety aktiv' : health?.ems || 'Status unbekannt');
   setText('sideGridStatus', p14Fallback ? '§14a Fallback' : (p14 ? '§14a aktiv' : (peak === 'active' ? 'Peak aktiv' : health?.grid || 'Messstatus unbekannt')));
   setText('sideStatusText', health?.summary || 'Betriebsstatus unbekannt');
@@ -3254,25 +3253,54 @@ function getCanonicalPvPowerW(readValue) {
  * Keine Regelung, keine Ersatzmessung und keine Änderung der Kundenzuordnung. */
 function getLiveMeasurementView() {
   const fresh = key => getFreshFlowNumber(key);
-  const grid = getGridImportExport(fresh);
-  const nvp = state?.['ems.gridMeasurementFresh'];
-  const nvpUsable = !nvp || (nvp.value === true && getStateAgeMs('ems.gridMeasurementFresh') !== null && getStateAgeMs('ems.gridMeasurementFresh') <= getFlowFreshMaxAgeMs());
-  const gridAvailable = nvpUsable && grid.rawBuy !== null && grid.rawSell !== null;
-  const battery = getNormalizedBatteryFlow();
-  const batteryAvailable = !['missing', 'mapped-missing', 'storageFarm-missing-power', 'storageFarm-unavailable', 'stale-or-missing'].includes(String(battery.src)) && battery.incomplete !== true;
+  let buy = null, sell = null;
+  if (state && Object.hasOwn(state, 'derived.core.grid.netW')) {
+    // Der Netzpunkt stammt aus demselben Messsatz wie der berechnete Verbrauch.
+    const net = fresh('derived.core.grid.netW');
+    if (net !== null) {
+      buy = Math.max(0, net);
+      sell = Math.max(0, -net);
+    }
+  } else {
+    const nvp = state?.['ems.gridMeasurementFresh'];
+    const nvpAge = nvp ? getStateAgeMs('ems.gridMeasurementFresh') : null;
+    const nvpUsable = !nvp || (nvp.value === true && (nvp.q === undefined || nvp.q === 0) && nvpAge !== null && nvpAge <= getFlowFreshMaxAgeMs());
+    if (nvpUsable) {
+      const grid = getGridImportExport(fresh);
+      if (grid.rawBuy !== null && grid.rawSell !== null) {
+        const inverted = !!((window.latestState || state)?.['settings.flowInvertGrid']?.value);
+        [buy, sell] = inverted ? [grid.sell, grid.buy] : [grid.buy, grid.sell];
+      }
+    }
+  }
+  const hasStorageObservation = state && Object.hasOwn(state, 'derived.core.storage.netW');
   const farm = nwStorageFarmFeatureFromConfig(window.__nwCfg || {}, state || {});
   const farmView = farm ? window.NexoWattLiveDisplay?.farm(state, Date.now(), window.__nwTariffLiveOnline !== false) : null;
-  const directLoad = fresh('consumptionTotal');
-  const derivedLoad = fresh('derived.core.building.loadTotalW');
-  const load = directLoad !== null && directLoad >= 0 ? directLoad : derivedLoad !== null && derivedLoad >= 0 ? derivedLoad : null;
+  let charge = null, discharge = null, batteryDerived = false;
+  if (hasStorageObservation) {
+    const net = fresh('derived.core.storage.netW');
+    if (net !== null) {
+      charge = Math.max(0, -net);
+      discharge = Math.max(0, net);
+    }
+  } else if (farmView) {
+    ({ charge, discharge } = farmView);
+  } else {
+    const battery = getNormalizedBatteryFlow();
+    const missing = ['missing', 'mapped-missing', 'storageFarm-missing-power', 'storageFarm-unavailable', 'stale-or-missing'];
+    if (!missing.includes(String(battery.src)) && battery.incomplete !== true) {
+      ({ chargeW: charge, dischargeW: discharge } = battery);
+      batteryDerived = battery.derived === true;
+    }
+  }
+  const load = fresh(state && Object.hasOwn(state, 'derived.core.building.loadTotalW')
+    ? 'derived.core.building.loadTotalW' : 'consumptionTotal');
+  const pv = getCanonicalPvPowerW(fresh);
   const soc = farmView ? farmView.soc : farm ? fresh('storageFarm.totalSoc') ?? fresh('storageFarm.medianSoc') : fresh('storageSoc');
   return {
-    pv: getCanonicalPvPowerW(fresh), load,
-    buy: gridAvailable ? grid.buy : null, sell: gridAvailable ? grid.sell : null,
-    charge: farmView ? farmView.charge : batteryAvailable ? battery.chargeW : null,
-    discharge: farmView ? farmView.discharge : batteryAvailable ? battery.dischargeW : null,
+    pv: pv !== null && pv >= 0 ? pv : null, load: load !== null && load >= 0 ? load : null, buy, sell,
+    charge, discharge, batteryDerived,
     soc: soc !== null && soc >= 0 && soc <= 100 ? soc : null,
-    batteryDerived: !farmView && battery.derived === true,
   };
 }
 
@@ -8654,16 +8682,15 @@ function updateEnergyWeb() {
 
   const measurements = getLiveMeasurementView();
   let pv = measurements.pv ?? 0;
-  let buy = measurements.buy ?? 0, sell = measurements.sell ?? 0;
+  const buy = measurements.buy ?? 0, sell = measurements.sell ?? 0;
   const load = measurements.load ?? 0;
   const evcsPowerW = getEvcsPowerW(d);
   let c2 = evcsPowerW ?? 0; // Nur Geometrie, niemals Ersatzmessung.
   const batCharge = measurements.charge ?? 0, batDischarge = measurements.discharge ?? 0;
   const soc = measurements.soc;
 
-  // Invert toggles (Batterie ist bereits im Normalizer enthalten)
+  // Netz und Speicher wurden bereits bei der Messwertauswahl normalisiert.
   const invPv   = !!(s['settings.flowInvertPv']?.value);
-  const invGrid = !!(s['settings.flowInvertGrid']?.value);
   const invEv   = !!(s['settings.flowInvertEv']?.value);
   const subEvFromLoad = (s['settings.flowSubtractEvFromBuilding']?.value ?? true) ? true : false;
   const evAvail = nwEvcsFeatureFromConfig() && ((flowExtras && flowExtras.meta) ? !!flowExtras.meta.evcsAvailable : false);
@@ -8671,7 +8698,6 @@ function updateEnergyWeb() {
   if (invPv) pv = -pv;
   if (invEv) c2 = -c2;
   if (!evAvail) c2 = 0;
-  if (invGrid) { const t=buy; buy = sell; sell = t; } // swap semantics if inverted grid
 
   // Optionale Extra-Kreise aktualisieren (Rückgabe = Summe der optionalen Verbraucher)
   const extrasConsumersSum = updateEnergyWebExtras(key => getFreshFlowNumber(key));
@@ -8680,6 +8706,9 @@ function updateEnergyWeb() {
   // keine echte Null. Die vorhandene EV-/Verbraucher-Betragskonvention bleibt erhalten.
   const flowBalance = window.NexoWattPowerMeasurements?.resolveFlowBalance({
     load: measurements.load, ev: evcsPowerW === null ? null : c2,
+    buildingQuality: measurements.load === null
+      ? window.NexoWattLiveDisplay?.buildingQuality?.(state, Date.now(), getFlowFreshMaxAgeMs(), window.__nwTariffLiveOnline !== false)
+      : null,
     consumers: extrasConsumersSum, pv: measurements.pv,
     producers: state && Object.hasOwn(state, 'derived.core.production.extraW') ? getFreshFlowNumber('derived.core.production.extraW')
       : window.__nwFlowExtraProductionW ?? (flowExtras?.producers?.length || flowExtras?.special?.length ? null : 0),

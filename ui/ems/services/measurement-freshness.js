@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/services/measurement-freshness.ts
- * Quell-Hash: sha256:590430928acf161b2d47c16ed03f191400c392c9761775c3ddb835e714afb0d7
+ * Quell-Hash: sha256:9fc3db824695e4199e6f92694a049e452554488decbe472055429baf7a4fa178
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -211,20 +211,23 @@ function resolveNvpDisplay(input) {
             gridSellW: Math.max(0, -canonicalNetW),
             hasGrid: true,
             src: String(input.canonicalSource || 'ems-canonical'),
+            sampleSource: 'canonical',
             ...mapped,
         };
     }
     if (input.canonicalKnown && input.canonicalFresh === false) {
-        return { gridBuyRaw: null, gridSellRaw: null, gridNetRaw: null, gridBuyW: 0, gridSellW: 0, hasGrid: false, src: `ems-${String(input.canonicalStatus || 'stale')}`, ...mapped };
+        return { gridBuyRaw: null, gridSellRaw: null, gridNetRaw: null, gridBuyW: 0, gridSellW: 0, hasGrid: false, src: `ems-${String(input.canonicalStatus || 'stale')}`, sampleSource: 'missing', ...mapped };
     }
     const gridNetRaw = finiteOrNull(input.gridNetRaw);
     let gridBuyRaw = finiteOrNull(input.gridBuyRaw);
     let gridSellRaw = finiteOrNull(input.gridSellRaw);
     let src = 'missing';
+    let sampleSource = 'missing';
     if (gridNetRaw !== null) {
         gridBuyRaw = Math.max(0, gridNetRaw);
         gridSellRaw = Math.max(0, -gridNetRaw);
         src = 'net-fresh';
+        sampleSource = 'signed';
     }
     else if (gridBuyRaw !== null || gridSellRaw !== null) {
         const buyTs = finiteOrNull(input.gridBuyTs);
@@ -234,21 +237,27 @@ function resolveNvpDisplay(input) {
             if (buyTs >= sellTs) {
                 gridSellRaw = 0;
                 src = 'split-newer-import';
+                sampleSource = 'import';
             }
             else {
                 gridBuyRaw = 0;
                 src = 'split-newer-export';
+                sampleSource = 'export';
             }
         }
-        else if (gridBuyRaw !== null && gridSellRaw !== null)
+        else if (gridBuyRaw !== null && gridSellRaw !== null) {
             src = 'split-coherent';
+            sampleSource = 'split';
+        }
         else if (gridBuyRaw !== null) {
             gridSellRaw = 0;
             src = 'split-import-only';
+            sampleSource = 'import';
         }
         else {
             gridBuyRaw = 0;
             src = 'split-export-only';
+            sampleSource = 'export';
         }
     }
     const rawBuyW = Math.max(0, Math.abs(gridBuyRaw ?? 0));
@@ -267,6 +276,7 @@ function resolveNvpDisplay(input) {
         gridSellW,
         hasGrid,
         src,
+        sampleSource,
         ...mapped,
     };
 }

@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "nexowatt-ui",
-    "version": "9.0.31",
+    "version": "9.0.32",
     "news": {
+      "9.0.32": {
+        "de": "Gebäudeverbrauch im LIVE-Energiefluss wird aus gültigen Messwerten ermittelt. Die Anzeige unterscheidet unvollständige Messdaten und unplausible Bilanzen.",
+        "en": "Calculate live building consumption from valid power measurements. Distinguish incomplete measurements from inconsistent power balances."
+      },
       "9.0.31": {
         "de": "Safari erhält das NexoWatt-Symbol für die iPhone-Web-App über einen eigenen PNG-Pfad. Die üblichen Apple-Icon-Adressen liefern dieselbe 180×180-Datei.",
         "en": "Safari receives the NexoWatt Home Screen icon from a dedicated PNG path. Standard Apple icon URLs serve the same 180×180 file."

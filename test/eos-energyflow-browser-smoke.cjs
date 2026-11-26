@@ -100,6 +100,20 @@ window.__nwEmsCfg = {}; window.__nwTariffLiveOnline = true;
       await snapshot({...baseValues,'derived.core.pv.totalW':0,consumptionTotal:0,gridPointPower:0,batteryPower:0,storageSoc:0,'evcs.totalPowerW':0});
       values=await read();assert.equal(values.centerPower,'0.0 kW');assert.equal(values.batterySocIn,'0 %');assert.match(values.emsStatusText,/Warte|warten/i);
       results.push({scenario:`confirmed-zero-and-tariff-awaiting-status-${label}`,result:'passed',values});
+      const measuredFrame = {...baseValues, 'derived.core.pv.totalW':1500, 'derived.core.grid.netW':-1800,
+        'derived.core.storage.netW':2800, 'derived.core.building.loadTotalW':2500,
+        'settings.flowInvertGrid':true, 'evcs.totalPowerW':0, batteryPower:-2800};
+      await snapshot(measuredFrame);
+      values=await read();assert.equal(values.centerPower,'2.5 kW');assert.equal(values.gridVal,'-1.8 kW');assert.equal(values.restVal,'2.8 kW');assert.equal(values.energyFlowQuality,'');
+      results.push({scenario:`normalized-frame-overrides-opposite-legacy-signs-${label}`,result:'passed',values});
+      await snapshot({...measuredFrame, 'derived.core.storage.netW':-2800, 'derived.core.building.loadTotalW':null,
+        'derived.core.building.quality':'invalid-balance'});
+      values=await read();assert.equal(values.centerPower,'--');assert.equal(values.restVal,'-2.8 kW');assert.match(values.energyFlowQuality,/Energiebilanz.*negativ/i);
+      results.push({scenario:`negative-balance-keeps-load-unknown-${label}`,result:'passed',values});
+      await snapshot({...measuredFrame, 'derived.core.grid.netW':null, 'derived.core.building.loadTotalW':null,
+        'derived.core.building.quality':'missing-grid'});
+      values=await read();assert.equal(values.centerPower,'--');assert.equal(values.gridVal,'--');assert.match(values.energyFlowQuality,/Netzmessung/i);
+      results.push({scenario:`missing-net-identified-without-legacy-substitution-${label}`,result:'passed',values});
       await snapshot({...baseValues,'tarif.statusJson':tariffStatus()});
       await page.evaluate(()=>nwSetLiveOnline(false));values=await read();assert.doesNotMatch(values.emsStatusText,/Speicher lädt/);assert.match(values.emsStatusText,/Verbindung/i);assert.equal(values.centerPower,'--');
       results.push({scenario:`offline-removes-charging-claim-${label}`,result:'passed',values});

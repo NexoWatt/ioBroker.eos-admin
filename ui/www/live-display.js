@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/live-display.ts
- * Quell-Hash: sha256:076081f5b636a8be967f074d8dbe4360e6e762c520d640f373895335bbc58d9d
+ * Quell-Hash: sha256:db204a946c51c8383a065757a95327fc691a59e13bf8859eb2603bf1c711730f
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -72,6 +72,11 @@
         const row = entry(snapshot, key);
         return current(row, now, maxAge, online) ? number(row?.value) : null;
     }
+    function buildingQuality(snapshot, now, maxAge, online) {
+        const row = entry(snapshot, 'derived.core.building.quality');
+        const value = row?.value;
+        return current(row, now, maxAge, online) && typeof value === 'string' ? value : null;
+    }
     function farm(snapshot, now, online) {
         const row = entry(snapshot, 'storageFarm.overviewJson');
         if (!row)
@@ -98,7 +103,7 @@
             return missing;
         }
     }
-    function status(snapshot, online, now) {
+    function status(snapshot, online, now, gridMaxAge = 30000) {
         if (!online)
             return { ems: 'Verbindung unterbrochen', grid: 'Messstatus unbekannt', summary: 'Verbindung unterbrochen' };
         const alive = entry(snapshot, 'ems.core.schedulerAlive');
@@ -108,10 +113,11 @@
         const nvp = entry(snapshot, 'ems.gridMeasurementFresh');
         const gridKnown = current(nvp, now, 30000, true) && typeof nvp?.value === 'boolean';
         const gridFresh = gridKnown && nvp?.value === true;
+        const gridObserved = !nvp && read(snapshot, 'derived.core.grid.netW', now, gridMaxAge, true) !== null;
         return { ems: running ? 'Aktiv' : stopped ? 'Gestoppt' : 'Status unbekannt',
-            grid: gridFresh ? 'Messung aktuell' : gridKnown ? 'Messung fehlt / veraltet' : 'Messstatus unbekannt',
+            grid: gridFresh || gridObserved ? 'Messung aktuell' : gridKnown ? 'Messung fehlt / veraltet' : 'Messstatus unbekannt',
             summary: running && gridFresh ? 'EMS aktiv · NVP-Messung aktuell' : stopped ? 'EMS gestoppt' : 'Betriebsstatus prüfen' };
     }
     const host = window;
-    host.NexoWattLiveDisplay = Object.freeze({ read, farm, status });
+    host.NexoWattLiveDisplay = Object.freeze({ read, farm, status, buildingQuality });
 })();

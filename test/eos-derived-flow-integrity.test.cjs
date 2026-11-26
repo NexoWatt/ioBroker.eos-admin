@@ -7,10 +7,12 @@ const vm = require('node:vm');
 const ts = require('typescript');
 const { numericMeasurement } = require('../ui/lib/installer-lifecycle');
 const { readFlowMeasurement, sumFlowMeasurements } = require('../ui/lib/flow-measurement');
+const { resolveNvpDisplay } = require('../ui/ems/services/measurement-freshness');
 const { physicalPvSourceKey: nwPhysicalPvSourceKey, applyPvCapacityPlausibility: nwApplyPvCapacityPlausibility } = require('../ui/ems/services/pv-source-identity');
 const source = fs.readFileSync(path.join(__dirname, '../ui/main.js'), 'utf8');
 const parsed = ts.createSourceFile('main.js', source, ts.ScriptTarget.ES2022, true);
-const names = new Set(['updateDerivedFlowStates', 'updateValue', '_nwPublishEvcsInputBinding']);
+const names = new Set(['updateDerivedFlowStates', 'scheduleDerivedFlowUpdate', 'updateValue', '_nwPublishEvcsInputBinding',
+    '_nwResolveGridImportExportFromCache', '_nwResolveBatteryFlowFromCache', '_nwResolveStorageFarmMetricsFromCache']);
 const methods = [];
 function visit(node) {
     if (ts.isMethodDeclaration(node) && names.has(node.name?.getText(parsed))) methods.push(node.getText(parsed));
@@ -20,7 +22,7 @@ visit(parsed);
 assert.equal(methods.length, names.size);
 let now = 1795608000000;
 const Actual = vm.runInNewContext(`class Actual { ${methods.join('\n')} }; Actual`, {
-    numericMeasurement, readFlowMeasurement, sumFlowMeasurements, nwPhysicalPvSourceKey, nwApplyPvCapacityPlausibility,
+    numericMeasurement, readFlowMeasurement, sumFlowMeasurements, resolveNvpDisplay, nwPhysicalPvSourceKey, nwApplyPvCapacityPlausibility,
     Date: class extends Date { static now() { return now; } },
 });
 function fixture(values = {}, options = {}) {
@@ -37,12 +39,12 @@ function fixture(values = {}, options = {}) {
         const rec = readFlowMeasurement(a.stateCache, 'gridPointPower', now, 60000);
         const net = rec?.value;
         return { gridBuyRaw: net === undefined ? null : Math.max(0, net), gridSellRaw: net === undefined ? null : Math.max(0, -net), gridNetRaw: net ?? null,
-            gridBuyW: Math.max(0, net ?? 0), gridSellW: Math.max(0, -(net ?? 0)), hasGrid: rec !== null, src: 'net-fresh' };
+            gridBuyW: Math.max(0, net ?? 0), gridSellW: Math.max(0, -(net ?? 0)), hasGrid: rec !== null, src: 'net-fresh', observedAt: rec?.ts ?? null };
     };
     a._nwResolveBatteryFlowFromCache = opts => {
         assert.equal(opts.strictStale, true);
         const rec = readFlowMeasurement(a.stateCache, 'batteryPower', now, 60000);
-        return { chargeW: Math.max(0, -(rec?.value ?? 0)), dischargeW: Math.max(0, rec?.value ?? 0), src: rec ? 'batterySigned' : 'mapped-missing' };
+        return { chargeW: Math.max(0, -(rec?.value ?? 0)), dischargeW: Math.max(0, rec?.value ?? 0), src: rec ? 'batterySigned' : 'mapped-missing', observedAt: rec?.ts ?? null };
     };
     a._nwResolveStorageFarmMetricsFromCache = () => null;
     a._nwGetStorageControlAuthority = () => ({ selectedTopology: 'single', writerActive: false });
@@ -70,6 +72,125 @@ test('derived balance preserves observation age and valid zero during activity',
     now += 1000;
     await a.updateDerivedFlowStates();
     assert.equal(a.stateCache['derived.core.building.loadTotalW'].ts, stamp, 'recalculation is not a new observation');
+});
+
+test('a new meter sample received during PV discovery is eligible in the same balance', async () => {
+    const a = fixture({ pvPower: null, gridPointPower: -1800, batteryPower: 2800 });
+    const meterTimestamp = a.stateCache.gridPointPower.ts;
+    a._derivedRefreshPvInvertersCache = async () => {
+        await Promise.resolve();
+        now += 250;
+        a.stateCache.pvPower = { value: 1500, ts: now, q: 0 };
+    };
+    await a.updateDerivedFlowStates();
+    assert.equal(value(a, 'derived.core.building.loadTotalW'), 2500);
+    assert.equal(a.stateCache['derived.core.building.loadTotalW'].ts, meterTimestamp);
+});
+
+test('new balance requests coalesce while a previous frame is being published', async () => {
+    const a = fixture();
+    const schedule = Actual.prototype.scheduleDerivedFlowUpdate.bind(a);
+    a.scheduleDerivedFlowUpdate = schedule;
+    const callbacks = [];
+    a._nwSetTimeout = callback => { callbacks.push(callback); };
+    let release;
+    const firstWrite = new Promise(resolve => { release = resolve; });
+    const reasons = [];
+    a.updateDerivedFlowStates = async reason => {
+        reasons.push(reason);
+        if (reasons.length === 1) await firstWrite;
+    };
+    schedule('first');
+    assert.equal(callbacks.length, 1);
+    callbacks.shift()();
+    schedule('meter');
+    schedule('battery');
+    assert.equal(callbacks.length, 0, 'do not start a frame while the prior one is publishing');
+    release();
+    await new Promise(resolve => setImmediate(resolve));
+    assert.equal(callbacks.length, 1, 'process pending measurements once');
+    callbacks.shift()();
+    assert.deepEqual(reasons, ['first', 'battery']);
+});
+
+test('a direct meter update triggers a new frame and a derived mirror does not', () => {
+    const a = fixture();
+    const triggers = [];
+    a.scheduleDerivedFlowUpdate = reason => triggers.push(reason);
+    a.updateValue('consumptionTotal', 1000, now);
+    a.updateValue('consumptionTotal', 1500, now, { raw: false });
+    a.updateValue('settings.flowInvertGrid', true, now);
+    assert.deepEqual(triggers, ['key:consumptionTotal', 'key:settings.flowInvertGrid']);
+});
+
+function useMeterResolvers(a) {
+    a._nwRawValueCache = { ...a.stateCache };
+    a._nwResolveGridImportExportFromCache = Actual.prototype._nwResolveGridImportExportFromCache;
+    a._nwResolveBatteryFlowFromCache = Actual.prototype._nwResolveBatteryFlowFromCache;
+    a._nwIsBatterySignInverted = () => false;
+}
+
+test('building and dashboard NVP use the same normalized sign and physical observation time', async () => {
+    const a = fixture({ pvPower: 1500, gridPointPower: 1800, batteryPower: 2800 });
+    useMeterResolvers(a);
+    a.config.settings.flowInvertGrid = true;
+    a._nwRawValueCache.gridPointPower.ts = now - 12000;
+    await a.updateDerivedFlowStates();
+    assert.equal(value(a, 'derived.core.building.loadTotalW'), 2500);
+    assert.equal(value(a, 'derived.core.grid.netW'), -1800);
+    assert.equal(a.stateCache['derived.core.building.loadTotalW'].ts, now - 12000);
+    assert.equal(a.stateCache['derived.core.grid.netW'].ts, now - 12000);
+    a._nwRawValueCache.batteryPower = { value: -2800, ts: now, q: 0 };
+    await a.updateDerivedFlowStates();
+    assert.equal(value(a, 'derived.core.building.loadTotalW'), null);
+    assert.equal(value(a, 'derived.core.building.quality'), 'invalid-balance');
+});
+
+test('a signed grid mirror cannot replace a stale or bad-quality physical observation', async () => {
+    const a = fixture({ 'ems.gridPowerRawW': 3100, 'ems.gridMeasurementFresh': true });
+    useMeterResolvers(a);
+    a._nwRawValueCache.gridPointPower = { value: 3100, ts: now - 61000, q: 0 };
+    await a.updateDerivedFlowStates();
+    assert.equal(value(a, 'derived.core.grid.netW'), null);
+    assert.equal(value(a, 'derived.core.building.quality'), 'missing-grid');
+    a._nwRawValueCache.gridPointPower = { value: 3100, ts: now, q: 64 };
+    await a.updateDerivedFlowStates();
+    assert.equal(value(a, 'derived.core.building.loadTotalW'), null);
+    delete a._nwRawValueCache.gridPointPower;
+    await a.updateDerivedFlowStates();
+    assert.equal(value(a, 'derived.core.grid.netW'), null, 'public cache alone cannot establish provenance');
+});
+
+test('split grid power uses the selected direction timestamp and requires both configured meters', async () => {
+    const a = fixture({ gridBuyPower: 3500, gridSellPower: 1800 }, {
+        dps: { gridPointPower: '', gridBuyPower: 'meter.import', gridSellPower: 'meter.export' },
+    });
+    useMeterResolvers(a);
+    a._nwRawValueCache.gridBuyPower.ts = now - 12000;
+    await a.updateDerivedFlowStates();
+    assert.equal(value(a, 'derived.core.grid.netW'), -1800);
+    assert.equal(value(a, 'derived.core.building.loadTotalW'), 3500);
+    assert.equal(a.stateCache['derived.core.building.loadTotalW'].ts, now - 1000);
+    a._nwRawValueCache.gridBuyPower.q = 64;
+    await a.updateDerivedFlowStates();
+    assert.equal(value(a, 'derived.core.building.loadTotalW'), null);
+    assert.equal(value(a, 'derived.core.building.quality'), 'missing-grid');
+});
+
+test('farm balance validates battery-side power independently from converter power', async () => {
+    const a = fixture({ pvPower: 1500, gridPointPower: -1800, 'storageFarm.totalBatteryPowerW': 2800 });
+    useMeterResolvers(a);
+    a._nwGetStorageControlAuthority = () => ({ selectedTopology: 'farm' });
+    a._nwResolveStorageFarmMetricsFromCache = Actual.prototype._nwResolveStorageFarmMetricsFromCache;
+    a._nwStorageFarmIsActiveFromCache = () => true;
+    a._nwGetNumberFromCache = key => numericMeasurement(a.stateCache[key]?.value);
+    await a.updateDerivedFlowStates();
+    assert.equal(value(a, 'derived.core.building.loadTotalW'), 2500);
+    a.stateCache['storageFarm.totalPowerW'] = { value: 2800, ts: now, q: 0 };
+    a.stateCache['storageFarm.totalBatteryPowerW'].q = 64;
+    await a.updateDerivedFlowStates();
+    assert.equal(value(a, 'derived.core.building.loadTotalW'), null);
+    assert.equal(value(a, 'derived.core.building.quality'), 'missing-storage');
 });
 
 test('impossible negative balance is unknown, never fabricated 100W or retained load', async () => {

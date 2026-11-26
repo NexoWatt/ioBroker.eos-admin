@@ -44,14 +44,24 @@
 
     type FlowInput = {
         load: unknown; ev: unknown; consumers: unknown; pv: unknown; producers: unknown;
-        grid: unknown; battery: unknown; subtractEv: boolean; evAvailable: boolean;
+        grid: unknown; battery: unknown; subtractEv: boolean; evAvailable: boolean; buildingQuality?: unknown;
     };
     type FlowView = { buildingW: number | null; mismatchW: number | null; status: string };
+    function missingBuildingStatus(quality: unknown): string {
+        switch (quality) {
+            case 'invalid-balance': return 'Gebäudeverbrauch nicht berechenbar. Die Energiebilanz ist negativ. Messpunkte, Vorzeichen und Zeitstempel prüfen.';
+            case 'missing-grid': return 'Gebäudeverbrauch nicht berechenbar. Die Netzmessung fehlt oder ist veraltet.';
+            case 'missing-pv': return 'Gebäudeverbrauch nicht berechenbar. Die PV-Messung fehlt oder ist veraltet.';
+            case 'missing-storage': return 'Gebäudeverbrauch nicht berechenbar. Die Speicherleistungsmessung fehlt oder ist veraltet.';
+            case 'missing-producer': return 'Gebäudeverbrauch nicht berechenbar. Die Messung eines zusätzlichen Erzeugers fehlt oder ist veraltet.';
+            default: return 'Gebäudeverbrauch: Messung fehlt oder ist veraltet';
+        }
+    }
     /** Nur Anzeige/Diagnose: keine Stellwerte, keine erfundene Mindestlast. */
     function resolveFlowBalance(input: FlowInput): FlowView {
         const load = number(input.load), consumers = number(input.consumers);
         const ev = input.evAvailable ? number(input.ev) : 0;
-        if (load === null || load < 0) return { buildingW: null, mismatchW: null, status: 'Gebäudeverbrauch: Messung fehlt oder ist veraltet' };
+        if (load === null || load < 0) return { buildingW: null, mismatchW: null, status: missingBuildingStatus(input.buildingQuality) };
         if (consumers === null || (input.subtractEv && ev === null)) return { buildingW: null, mismatchW: null, status: 'Gebäudeaufteilung: Verbrauchermessung fehlt oder ist veraltet' };
         const residual = load - Math.abs(consumers) - (input.subtractEv ? Math.abs(ev ?? 0) : 0);
         if (residual < 0) return { buildingW: null, mismatchW: null, status: 'Gebäudeaufteilung unplausibel: Teilverbrauch größer als Gesamtverbrauch – Zuordnung und Zeitstempel prüfen' };

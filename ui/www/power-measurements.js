@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/power-measurements.ts
- * Quell-Hash: sha256:8871d05c6b55b6d10e7f9f65a1554d1b2ddc1d97cefe93096782149e721576a5
+ * Quell-Hash: sha256:ad26b95761a1b54c5f6f4fa6ced48c96485ddac50ee4242d6a34ce8efa923b4e
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -59,12 +59,22 @@
             return { kind: 'warn', text: 'Einheit fehlt: W/kW-Zuordnung prüfen' };
         return null;
     }
+    function missingBuildingStatus(quality) {
+        switch (quality) {
+            case 'invalid-balance': return 'Gebäudeverbrauch nicht berechenbar. Die Energiebilanz ist negativ. Messpunkte, Vorzeichen und Zeitstempel prüfen.';
+            case 'missing-grid': return 'Gebäudeverbrauch nicht berechenbar. Die Netzmessung fehlt oder ist veraltet.';
+            case 'missing-pv': return 'Gebäudeverbrauch nicht berechenbar. Die PV-Messung fehlt oder ist veraltet.';
+            case 'missing-storage': return 'Gebäudeverbrauch nicht berechenbar. Die Speicherleistungsmessung fehlt oder ist veraltet.';
+            case 'missing-producer': return 'Gebäudeverbrauch nicht berechenbar. Die Messung eines zusätzlichen Erzeugers fehlt oder ist veraltet.';
+            default: return 'Gebäudeverbrauch: Messung fehlt oder ist veraltet';
+        }
+    }
     /** Nur Anzeige/Diagnose: keine Stellwerte, keine erfundene Mindestlast. */
     function resolveFlowBalance(input) {
         const load = number(input.load), consumers = number(input.consumers);
         const ev = input.evAvailable ? number(input.ev) : 0;
         if (load === null || load < 0)
-            return { buildingW: null, mismatchW: null, status: 'Gebäudeverbrauch: Messung fehlt oder ist veraltet' };
+            return { buildingW: null, mismatchW: null, status: missingBuildingStatus(input.buildingQuality) };
         if (consumers === null || (input.subtractEv && ev === null))
             return { buildingW: null, mismatchW: null, status: 'Gebäudeaufteilung: Verbrauchermessung fehlt oder ist veraltet' };
         const residual = load - Math.abs(consumers) - (input.subtractEv ? Math.abs(ev ?? 0) : 0);

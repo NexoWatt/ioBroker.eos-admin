@@ -46,6 +46,11 @@
         const row = entry(snapshot, key);
         return current(row, now, maxAge, online) ? number(row?.value) : null;
     }
+    function buildingQuality(snapshot: unknown, now: number, maxAge: number, online: boolean): string | null {
+        const row = entry(snapshot, 'derived.core.building.quality');
+        const value = row?.value;
+        return current(row, now, maxAge, online) && typeof value === 'string' ? value : null;
+    }
     function farm(snapshot: unknown, now: number, online: boolean): FarmView | null {
         const row = entry(snapshot, 'storageFarm.overviewJson');
         if (!row) return null; // Legacy snapshots have no atomic overview.
@@ -65,7 +70,7 @@
                 soc: socComplete && mean !== null && mean >= 0 && mean <= 100 ? mean : null };
         } catch { return missing; }
     }
-    function status(snapshot: unknown, online: boolean, now: number): { ems: string; grid: string; summary: string } {
+    function status(snapshot: unknown, online: boolean, now: number, gridMaxAge = 30000): { ems: string; grid: string; summary: string } {
         if (!online) return { ems: 'Verbindung unterbrochen', grid: 'Messstatus unbekannt', summary: 'Verbindung unterbrochen' };
         const alive = entry(snapshot, 'ems.core.schedulerAlive');
         const heartbeat = read(snapshot, 'ems.core.schedulerHeartbeatAt', now, 30000, true);
@@ -74,10 +79,11 @@
         const nvp = entry(snapshot, 'ems.gridMeasurementFresh');
         const gridKnown = current(nvp, now, 30000, true) && typeof nvp?.value === 'boolean';
         const gridFresh = gridKnown && nvp?.value === true;
+        const gridObserved = !nvp && read(snapshot, 'derived.core.grid.netW', now, gridMaxAge, true) !== null;
         return { ems: running ? 'Aktiv' : stopped ? 'Gestoppt' : 'Status unbekannt',
-            grid: gridFresh ? 'Messung aktuell' : gridKnown ? 'Messung fehlt / veraltet' : 'Messstatus unbekannt',
+            grid: gridFresh || gridObserved ? 'Messung aktuell' : gridKnown ? 'Messung fehlt / veraltet' : 'Messstatus unbekannt',
             summary: running && gridFresh ? 'EMS aktiv · NVP-Messung aktuell' : stopped ? 'EMS gestoppt' : 'Betriebsstatus prüfen' };
     }
-    const host = window as Window & { NexoWattLiveDisplay?: { read: typeof read; farm: typeof farm; status: typeof status } };
-    host.NexoWattLiveDisplay = Object.freeze({ read, farm, status });
+    const host = window as Window & { NexoWattLiveDisplay?: { read: typeof read; farm: typeof farm; status: typeof status; buildingQuality: typeof buildingQuality } };
+    host.NexoWattLiveDisplay = Object.freeze({ read, farm, status, buildingQuality });
 })();
