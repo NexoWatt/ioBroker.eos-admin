@@ -9,7 +9,7 @@ const root = path.resolve(__dirname, '..');
 const io = JSON.parse(fs.readFileSync(path.join(root, 'io-package.json'), 'utf8'));
 const readme = fs.readFileSync(path.join(root, 'README.md'), 'utf8');
 const license = fs.readFileSync(path.join(root, 'LICENSE'), 'utf8');
-const standalone = fs.readFileSync(path.join(root, 'NEXOWATT_EOS_STANDALONE.md'), 'utf8');
+const standalone = fs.readFileSync(path.join(root, 'docs/archive/NEXOWATT_EOS_STANDALONE.md'), 'utf8');
 
 assert.equal(io.native?.port, 8081, 'fresh EOS Admin instances must default to port 8081');
 // Public README contains licensing only; technical documentation stays separate.

@@ -71,7 +71,7 @@ Die versionsgebundenen Rohbelege stehen in `raw/INDEX.json`. Nach Abschluss dies
 
 Die lokale Testumgebung kann native Windows-Prozesse, reale Smartphone-Browser, npm-Kontoberechtigungen und den tatsächlichen Anlagenzustand nicht ersetzen. Die Paketierung wird mit echten Node-/npm-Prozessen und aktiven Lifecycle-Prüfungen gegen eine lokale, nicht veröffentlichende Zieladresse geprüft. Ein Pfad mit Leerzeichen unter Linux ist kein Windows-Nachweis. Ein zusätzlicher Chromium-Startversuch war durch die Laufzeitumgebung blockiert (`process_singleton`-Socket, `EPERM`); daraus wird kein bestandener visueller Browsertest abgeleitet. Tatsächliche Zeitabläufe im Zielbrowser einschließlich Hintergrundbetrieb und Smartphone-Ruhemodus bleiben vor Ort abzunehmen.
 
-Die bestehende Kundenkonfiguration, Geräteanzahl, Regeltakte, frischen Messwerte und sichere Übergabe zwischen Alt- und Zielinstanzen müssen weiterhin vor Ort bestätigt werden. Es werden weder eine allgemeine Produktionsfreigabe noch eine CRA-Zertifizierung behauptet. Installation, Rückfall und konkrete Bedienprüfung stehen in [START_HIER_9.0.16.md](../../../START_HIER_9.0.16.md).
+Die bestehende Kundenkonfiguration, Geräteanzahl, Regeltakte, frischen Messwerte und sichere Übergabe zwischen Alt- und Zielinstanzen müssen weiterhin vor Ort bestätigt werden. Es werden weder eine allgemeine Produktionsfreigabe noch eine CRA-Zertifizierung behauptet. Installation, Rückfall und konkrete Bedienprüfung stehen in [START_HIER_9.0.16.md](../../start/START_HIER_9.0.16.md).
 
 ## Primärquellen
 

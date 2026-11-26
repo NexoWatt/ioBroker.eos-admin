@@ -67,7 +67,7 @@ Messwertvalidierung schützt die fachliche Berechnung und die sichere Fehlerbeha
 - Vollständiger getrennter Wiederaufbau von Controller, EOS, Datenbanken, Benutzern, Geräteidentitäten und Vertrauen auf Ersatzhardware.
 - Die dokumentierten älteren statischen Testskripte modernisieren, ohne deren fachliche Anforderungen abzusenken.
 
-**Status: vorbereiteter, technisch geprüfter Testlieferstand.** Keine pauschale Serien-/Kundenfreigabe und keine 100%-Zuverlässigkeitsgarantie. Update, Anlagenprüfung und Rückfall sind in [START_HIER_9.0.22.md](../../../START_HIER_9.0.22.md) beschrieben.
+**Status: vorbereiteter, technisch geprüfter Testlieferstand.** Keine pauschale Serien-/Kundenfreigabe und keine 100%-Zuverlässigkeitsgarantie. Update, Anlagenprüfung und Rückfall sind in [START_HIER_9.0.22.md](../../start/START_HIER_9.0.22.md) beschrieben.
 
 ## Aktuelle abschließende Ergebnisse
 

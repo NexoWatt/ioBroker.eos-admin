@@ -96,7 +96,7 @@ Größere Antworten werden abgebrochen. Bis zu 48 normale offene Anfragen plus
 
 ## Referenz und weitere Nachweise
 
-- [Update und Bedienung](../../../START_HIER_9.0.9.md)
+- [Update und Bedienung](../../start/START_HIER_9.0.9.md)
 - [Referenzabgleich und Lizenz](DEVICE_UI_REFERENCE.md)
 - [Sicherheitsdelta](SECURITY_DELTA_REVIEW.md)
 - [Prüfprotokolle](raw/INDEX.json)

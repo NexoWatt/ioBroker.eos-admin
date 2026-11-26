@@ -162,7 +162,7 @@ Abnahmen, die diese Reparatur nicht ersetzt.
 
 Nach einer Sicherung die vorhandene Instanz mit 9.0.4 aktualisieren; keine
 ioBroker-Neuinstallation und keine erneute Lizenzaktivierung sind vorgesehen.
-Anleitung: [START_HIER_9.0.4.md](../../../START_HIER_9.0.4.md).
+Anleitung: [START_HIER_9.0.4.md](../../start/START_HIER_9.0.4.md).
 Nach dem Start Version 9.0.4 und `EOS_HTTPS_READY` prüfen, anmelden und Dashboard
 sowie Systemverwaltung aufrufen. Mindestens zwei Minuten beobachten, danach
 einmal kontrolliert neu starten. Erwartet: kein `UNCAUGHT_EXCEPTION`, Lizenz

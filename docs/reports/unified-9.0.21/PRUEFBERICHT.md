@@ -61,4 +61,4 @@ Rohlogs, Befundreproduktionen, Befehle, Laufzeitversionen und Hashbindungen lieg
 - Öffentliche Zertifikatsausstellung ohne Domain-/Vertrauenskonzept und zusätzliche Tarifanbieter sind weiterhin offen beziehungsweise aufgeschoben. Weitergehende automatische PV-/Wärme-/IO-Spezialrollen sind nicht pauschal vollständig umgesetzt; [bestehende Abdeckungsmatrix](../unified-9.0.20/ANFORDERUNGEN_UND_INBETRIEBNAHME.md).
 - Normenausrichtung, technische Nachweise und rechtliche Konformität sind getrennt: [CRA-Nachweisstand und offene Herstelleraufgaben](CRA_NACHWEISSTAND.md). Kein Serienfreigabe- oder Zertifizierungsversprechen.
 
-Für Installation, npm-Veröffentlichung aus der ZIP und Sollverhalten der Hausanlagenprüfung gilt [START_HIER_9.0.21.md](../../../START_HIER_9.0.21.md). Bestehende Instanzen aktualisieren, nicht löschen oder vorsorglich neu migrieren.
+Für Installation, npm-Veröffentlichung aus der ZIP und Sollverhalten der Hausanlagenprüfung gilt [START_HIER_9.0.21.md](../../start/START_HIER_9.0.21.md). Bestehende Instanzen aktualisieren, nicht löschen oder vorsorglich neu migrieren.

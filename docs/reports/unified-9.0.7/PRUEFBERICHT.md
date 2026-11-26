@@ -125,7 +125,7 @@ oder npm und keine Änderung an einer laufenden Kundenanlage.
 
 ## Teilberichte und Anleitung
 
-[Update](../../../START_HIER_9.0.7.md), [Sitzungsfehler](MODULE_SESSION_FIX.md),
+[Update](../../start/START_HIER_9.0.7.md), [Sitzungsfehler](MODULE_SESSION_FIX.md),
 [Bestandsübernahme](MIGRATION_PRUEFVERMERK.md), [Migrationsreview](MIGRATION_CODE_REVIEW.md),
 [Backup](BACKUP_INTEGRATION_DE.md), [Backup-Speicherziele](BACKUP_STORAGE_PRUEFUNG.md),
 [TLS](TLS_PRUEFUNG.md), [TLS-Review](TLS_CODE_REVIEW.md),

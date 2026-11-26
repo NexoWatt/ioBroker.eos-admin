@@ -74,4 +74,4 @@ Die Altübernahme von Devices 0.5.176 berücksichtigt `devicesJson`, wenn `devic
 
 Im gemeldeten Livefall startete 9.0.12 ohne Vertrauensanker; die Lizenz wurde später aktiviert. Die Statusseite bestätigt `LICENSE_REQUIRED`, beide Altadapter sind noch eingeschaltet. Vor der korrigierten automatischen Übernahme bleiben die Quellen erhalten und aktiv. Die konkrete erfolgreiche Übergabe muss auf dem Zielgerät mit `COMMITTED`, unveränderten IDs, übernommenen Einstellungen und frischen Gerätewerten nachgewiesen werden. Ein lesbares App-Center-Backup ist kein Nachweis, dass die vollständige Übernahme schon stattgefunden hat.
 
-[9.0.14-Anleitung](../../START_HIER_9.0.14.md) und [Prüfbericht](../reports/unified-9.0.14/PRUEFBERICHT.md).
+[9.0.14-Anleitung](../start/START_HIER_9.0.14.md) und [Prüfbericht](../reports/unified-9.0.14/PRUEFBERICHT.md).

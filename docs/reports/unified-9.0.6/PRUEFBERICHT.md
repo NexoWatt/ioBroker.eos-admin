@@ -121,7 +121,7 @@ Release-Gates prüfen nur und verändern beim Packen/Publizieren keinen Quellsta
 
 ## Unterlagen
 
-[Update und Abnahme](../../../START_HIER_9.0.6.md),
+[Update und Abnahme](../../start/START_HIER_9.0.6.md),
 [Modularchitektur](../../unified/MODULES_9.0.6.md),
 [Geräteübernahme](../../../modules/devices/README.md),
 [EEBus-Integration](../../../modules/eebus/docs/INTEGRATION_9_0_6_DE.md),

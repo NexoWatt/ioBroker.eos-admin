@@ -74,7 +74,7 @@ Reale lokale HTTP-/TLS-/Socket-Tests und kontrollierte Controller-/Dateisystemmo
 
 Die vorherige Live-Wiederherstellung ist nicht Bestandteil des aktuellen Auftrags. Für die Neuinstallation steht die Prüfung des unabhängigen Parallelbetriebs im Vordergrund; falls später ein Fehler auftritt, sind Browser-Sitzung, Objekt-/Dateirechte und konkrete Adaptermeldungen getrennt zu beurteilen. Ein neues privates Browserfenster ist ein sinnvoller lesender Vergleich, keine Reparatur beschädigter Datenbankrechte. Unbekannte Vorzustände oder zwischenzeitlich vom Betreiber veränderte Rechte dürfen nicht automatisch zurückgeschrieben werden.
 
-Für die Hausanlagenabnahme sind Standard-Admin und Backitup parallel zu EOS, gegenseitiges An-/Abmelden, unveränderte vorhandene Objekte und Einstellungen, frische Gerätewerte, EMS-Regeltakte sowie ein eigener Backitup-Sicherungsdurchlauf zu prüfen. Die Wiederherstellbarkeit ist in einer getrennten Testumgebung nachzuweisen. Schritte und Rückfallgrenzen stehen in [START_HIER_9.0.17.md](../../../START_HIER_9.0.17.md).
+Für die Hausanlagenabnahme sind Standard-Admin und Backitup parallel zu EOS, gegenseitiges An-/Abmelden, unveränderte vorhandene Objekte und Einstellungen, frische Gerätewerte, EMS-Regeltakte sowie ein eigener Backitup-Sicherungsdurchlauf zu prüfen. Die Wiederherstellbarkeit ist in einer getrennten Testumgebung nachzuweisen. Schritte und Rückfallgrenzen stehen in [START_HIER_9.0.17.md](../../start/START_HIER_9.0.17.md).
 
 Die Änderungen und Softwareprüfungen sind keine allgemeine Produktionsfreigabe und keine CRA-Zertifizierung. Historische Berichte bleiben historische Belege und werden nicht als erneut durchgeführte Tests ausgegeben.
 

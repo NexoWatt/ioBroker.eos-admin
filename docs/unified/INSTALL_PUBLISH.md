@@ -173,7 +173,7 @@ reichen nicht. Die seit 9.0.3 enthaltene Korrektur entkoppelt
 die geschützte Weboberfläche vom operativen Start. Messwert-/Historyfehler bleiben
 gesondert zu prüfen; sie werden nicht durch Unterdrücken der Diagnose gelöst.
 
-Kurzer Ablauf: [START_HIER_9.0.5.md](../../START_HIER_9.0.5.md).
+Kurzer Ablauf: [START_HIER_9.0.5.md](../start/START_HIER_9.0.5.md).
 Die Zielabnahmen zu **EOS-SOCKET-001**, **HISTORY-001** und **MULTIUSE-001** stehen im
 [Prüfplan](COMMISSIONING.md). Neue Ergebnisse gehören in den 9.0.5-Abschlussbericht.
 
@@ -208,4 +208,4 @@ explizit auflösen; kein stilles Ausweichen auf einen anderen Port.
 
 ## Smartphone-Webapp ab 9.0.15
 
-Anmeldung, Dashboard und Systemverwaltung verweisen auf dieselbe Root-Webapp mit dem NexoWatt-Logo. Nach dem Update die EOS-Adresse im Smartphone-Browser zum Home-Bildschirm hinzufügen; die Installation benötigt Nutzerinteraktion und passend vertrauenswürdiges HTTPS. [Einrichtung und bestehende App-Symbole](../../START_HIER_9.0.15.md).
+Anmeldung, Dashboard und Systemverwaltung verweisen auf dieselbe Root-Webapp mit dem NexoWatt-Logo. Nach dem Update die EOS-Adresse im Smartphone-Browser zum Home-Bildschirm hinzufügen; die Installation benötigt Nutzerinteraktion und passend vertrauenswürdiges HTTPS. [Einrichtung und bestehende App-Symbole](../start/START_HIER_9.0.15.md).

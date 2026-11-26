@@ -62,4 +62,4 @@ Der vollständige ältere Parallel-Mirror-Sync bleibt offen: Der manuell typisie
 - [Sicherheitsdelta](SECURITY_DELTA_REVIEW.md)
 - [Optionale Online-Bewertungen und Testnetzwerkgrenze](RATINGS_DATENSCHUTZ.md)
 - [Bereinigte Prüfprotokolle](raw/INDEX.json)
-- [Update-Anleitung](../../../START_HIER_9.0.8.md)
+- [Update-Anleitung](../../start/START_HIER_9.0.8.md)
