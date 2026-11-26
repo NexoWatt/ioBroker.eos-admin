@@ -1,4 +1,8 @@
 {
+  "9.0.13": {
+    "en": "Restore direct repository publishing with verified test evidence and safe backup of known obsolete assets; fix SmartHome dropdown clipping.",
+    "de": "Direkte Repo-Veröffentlichung mit geprüften Testnachweisen und gesicherter Bereinigung bekannter alter Assets; SmartHome-Dropdowns korrigiert."
+  },
   "9.0.12": {
     "en": "Simplified SmartHome setup with dropdowns, dialogs and compact assisted discovery; corrected detector ordering.",
     "de": "Vereinfachte SmartHome-Einrichtung mit Dropdowns, Dialogen und kompakter Geräteerkennung; korrigierte Sortierung für den Typdetektor."

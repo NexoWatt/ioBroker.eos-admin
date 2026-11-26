@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/lib/datapoint-picker.ts
- * Quell-Hash: sha256:83c6734102e2a8d5ceb5c347e5e1077da84c74b1207f9a744abf3a8158feb51e
+ * Quell-Hash: sha256:2395476303e197eed42fa43f1a8524351343b5cdd576ed1384d388e517360177
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -24,6 +24,22 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.registerDatapointPicker = registerDatapointPicker;
 const ephemeral_cache_1 = require("./ephemeral-cache");
+function buildPickerTree(items) {
+    const root = { children: null, item: null };
+    for (const item of items) {
+        if (!item.id)
+            continue;
+        let node = root;
+        for (const segment of item.id.split('.')) {
+            if (!segment)
+                continue;
+            const children = node.children ?? (node.children = Object.create(null));
+            node = children[segment] ?? (children[segment] = { children: null, item: null });
+        }
+        node.item = item;
+    }
+    return root;
+}
 const SEARCH_MAX_AGE_MS = 15000;
 const TREE_MAX_AGE_MS = 30000;
 const ALLOWED_TYPES = new Set(['boolean', 'number', 'string']);
@@ -40,7 +56,6 @@ function csvFilter(value, maxItems, validator) {
 function registerDatapointPicker(app, owner, requireDpDiscovery, time) {
     let closed = false;
     const snapshot = new ephemeral_cache_1.ExpiringSnapshot(async () => {
-        var _a;
         if (closed)
             throw new Error('EOS_UI_STOPPING');
         const objects = (await owner.getForeignObjectsAsync?.('*', 'state')) || {};
@@ -66,18 +81,7 @@ function registerDatapointPicker(app, owner, requireDpDiscovery, time) {
             });
         }
         items.sort((a, b) => a.idLower.localeCompare(b.idLower));
-        const makeNode = () => ({ children: Object.create(null), item: null });
-        const trie = makeNode();
-        for (const item of items) {
-            if (!item.id)
-                continue;
-            let node = trie;
-            for (const segment of item.id.split('.').filter(Boolean)) {
-                node = (_a = node.children)[segment] ?? (_a[segment] = makeNode());
-            }
-            node.item = item;
-        }
-        return { items, trie };
+        return { items, trie: null };
     }, TREE_MAX_AGE_MS, time);
     app.get('/api/smarthome/dpsearch', requireDpDiscovery, async (req, res) => {
         try {
@@ -145,23 +149,26 @@ function registerDatapointPicker(app, owner, requireDpDiscovery, time) {
             if (typeof owner.getForeignObjectsAsync !== 'function') {
                 return void res.status(500).json({ ok: false, error: 'getForeignObjectsAsync not available' });
             }
-            const { trie } = await snapshot.get(false, TREE_MAX_AGE_MS);
+            const index = await snapshot.get(false, TREE_MAX_AGE_MS);
             const parts = prefix ? prefix.split('.').filter(Boolean) : [];
-            let node = trie;
+            let node = index.trie ?? (index.trie = buildPickerTree(index.items));
             for (const segment of parts) {
-                const child = node.children[segment];
+                const child = node.children?.[segment];
                 if (!child)
                     return void res.json({ ok: true, prefix, children: [] });
                 node = child;
             }
-            const labels = Object.keys(node.children).sort((a, b) => a.localeCompare(b));
+            const branches = node.children;
+            if (!branches)
+                return void res.json({ ok: true, prefix, children: [] });
+            const labels = Object.keys(branches).sort((a, b) => a.localeCompare(b));
             const children = labels.map(label => {
-                const child = node.children[label];
+                const child = branches[label];
                 const item = child?.item;
                 return {
                     id: prefix ? `${prefix}.${label}` : label,
                     label,
-                    hasChildren: !!(child && Object.keys(child.children).length),
+                    hasChildren: !!child.children,
                     isState: !!item,
                     name: item ? item.name : '',
                     role: item ? item.role : '',

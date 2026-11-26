@@ -24,7 +24,7 @@
  * - Der nächste Schritt ist pro Modul echte Typisierung statt pauschalem No-Check.
  * - Fachliche Kommentare markieren die Abschnitte, die später einzeln migriert werden.
  *
- * Original-Hash: 778c48e45b61971cb1a4d43cbf75b81ad9e990494932e408cc201741a7d6270b
+ * Original-Hash: 84ff4e20a446e660a59fdafbeb3968d904497aa20b86fe2d55d384f26e790029
  */
 
 /**
@@ -45,7 +45,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/modules/charging-management.ts
- * Quell-Hash: sha256:e3a3284d4a0001dec5511a7573ee7afddae55626c42e0c0508ca010cc163652c
+ * Quell-Hash: sha256:6fde5424e137c4eae12bfc45f923e895d0af4c17246642da3cc38a129afd0da3
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -73,6 +73,11 @@
 'use strict';
 
 const { BaseModule } = require('./base');
+const { tariffPriceNumber, verifiedTariffAgeMs } = require('../../lib/tariff-price');
+const { EMS_CONTROL_FIELDS, checkedEmsControlState } = require('../../lib/ems-control-values');
+const { readFlowMeasurement } = require('../../lib/flow-measurement');
+const { resolveOcppLimitFeedback, resolveOcppRuntimeAlive, ocppConnectionConfirmed, ocppLeaseCapability, OcppControlLeases } = require('../../lib/ocpp-limit-feedback');
+const { ocppStationRoot, ocppRootInScope, ocppNamespace } = require('../../lib/ocpp-auto-discovery');
 const { resolveCurrentNvpSnapshot } = require('../services/measurement-freshness');
 const { confirmedZeroExportPvW, measuredFlexibleLoadW, requestZeroExportProbe, requestZeroExportHold, zeroExportEvcsPauseUntil, noteZeroExportEvcsCommand, readZeroExportMode, isZeroExportGrantValid } = require('../services/zero-export-pv-coordinator');
 const { resolveZeroExportStorageCredit } = require('../services/zero-export-storage-credit');
@@ -1197,8 +1202,8 @@ function resolveChargingPvBudgetControl({
     const localRaw = Math.max(0, Number(localRawW) || 0);
     const localEffective = Math.max(0, Number(localEffectiveW) || 0);
     const rt = centralBudget && typeof centralBudget === 'object' ? centralBudget : null;
-    const ts = rt ? Number(rt.ts) : NaN;
-    const ageMs = Number.isFinite(ts) && ts > 0 ? Math.max(0, Number(now) - ts) : null;
+    const ts = rt?.ts;
+    const ageMs = Number.isFinite(ts) && ts > 0 && ts <= now ? now - ts : null;
     const fresh = ageMs !== null && ageMs <= Math.max(1000, Number(maxAgeMs) || 30000);
     const pvGate = rt && rt.gates && rt.gates.pv && typeof rt.gates.pv === 'object'
         ? rt.gates.pv
@@ -1207,10 +1212,11 @@ function resolveChargingPvBudgetControl({
         ? rt.gates.pvAllocation
         : null;
 
-    if (fresh && pvGate) {
+    const unverifiedStorage = rt?.raw?.pvBudgetPhysicalSource === 'storage-flow-unverified';
+    if (fresh && pvGate && !unverifiedStorage) {
         const gateEffectiveW = Math.max(0, Number(pvGate.effectiveW) || 0);
         const allocationTotalW = allocation && Number.isFinite(Number(allocation.totalW))
-            ? Math.max(0, Number(allocation.totalW))
+            ? Math.max(0, Math.min(gateEffectiveW, Number(allocation.totalW)))
             : gateEffectiveW;
         const allocationCapW = allocation && Number.isFinite(Number(allocation.evcsCapW))
             ? Math.max(0, Number(allocation.evcsCapW))
@@ -1270,44 +1276,23 @@ function resolveChargingPvBudgetControl({
         };
     }
 
-    // In der aktuellen Adaptergeneration ist Core-Limits immer vor dem
-    // Lademanagement aktiv. Existiert die zentrale Runtime, ist sie daher auch
-    // bei einem kurzzeitig fehlenden/stalen Snapshot die einzige Quelle. Ein
-    // Rueckfall auf die lokale EVCS-PV-Rekonstruktion wuerde genau das zweite
-    // Parallelbudget erzeugen, das Speicher und Wallbox gegeneinander regeln
-    // laesst. In diesem Fehlerfall wird PV-Laden sicher blockiert, bis der Core
-    // wieder einen frischen Grant liefert.
-    if (rt) {
-        return {
-            authoritative: true,
-            blocked: true,
-            source: fresh ? 'central-ems-budget-missing-pv-gate' : 'central-ems-budget-stale-blocked',
-            ageMs,
-            rawW: 0,
-            totalW: 0,
-            evcsCapW: 0,
-            allocation: allocation || null,
-            localRawW: localRaw,
-            localEffectiveW: localEffective,
-            mismatchW: -localEffective,
-            centralGrantW: 0,
-        };
-    }
-
-    // Nur fuer sehr alte Laufzeiten ohne Core-Limits bleibt der lokale Wert als
-    // Kompatibilitaetsfallback erhalten. Im regulaeren NexoWatt-EMS wird dieser
-    // Zweig wegen der festen Modulreihenfolge nicht verwendet.
+    // Only the current shared grant can reserve PV for a controllable load.
+    // A local house estimate cannot replace it during startup or recovery.
     return {
-        authoritative: false,
-        source: 'local-fallback-no-central-budget',
+        authoritative: true,
+        blocked: true,
+        source: !rt ? 'central-ems-budget-missing'
+            : !fresh ? 'central-ems-budget-stale-blocked'
+            : unverifiedStorage ? 'storage-flow-unverified' : 'central-ems-budget-missing-pv-gate',
         ageMs,
-        rawW: localRaw,
-        totalW: localEffective,
-        evcsCapW: localEffective,
-        allocation: null,
+        rawW: 0,
+        totalW: 0,
+        evcsCapW: 0,
+        allocation,
         localRawW: localRaw,
         localEffectiveW: localEffective,
-        mismatchW: 0,
+        mismatchW: -localEffective,
+        centralGrantW: 0,
     };
 }
 /** Code-Teil: toBool – Kapselt einen lokalen Verarbeitungsschritt, damit Aufrufer nicht direkt in Detaildaten eingreifen. */
@@ -1817,8 +1802,8 @@ function inferIoBrokerOcppConnectorContext(...objectIds) {
  * Die produktive Logik liegt aktuell noch in der JS-Datei. Dieser TS-Spiegel zeigt,
  * welcher konkrete Code-Abschnitt später typisiert, getestet und übernommen werden muss.
  */
-    const buildNexoWattContext = ({ objectId, instance, station, layout }) => {
-        const nativeDeviceRoot = `ocpp21.${instance}.${station}`;
+    const buildNexoWattContext = ({ objectId, instance, station, layout, namespace = `ocpp21.${instance}` }) => {
+        const nativeDeviceRoot = `${namespace}.${station}`;
         const parts = String(objectId || '').split('.');
         const lower = parts.map(part => String(part || '').toLowerCase());
         let evseNo = 1;
@@ -1847,7 +1832,10 @@ function inferIoBrokerOcppConnectorContext(...objectIds) {
             adapterKind: layout,
             contractVersion: 'nexowatt-ocpp21-0.4-native',
             sourceObjectId: objectId,
-            adapterInstance: `ocpp21.${instance}`,
+            adapterInstance: namespace,
+            hostedNamespace: /^eos-admin\.\d+\.ocpp$/.test(namespace),
+            hostedMarkerId: `${namespace}.info.eosHostedRuntime`,
+            runtimeAliveId: `${namespace}.info.runtimeAlive`,
             // The NexoWatt UI uses only the native OCPP21 datapoint contract.
             // Alias paths are accepted solely as a one-time migration input and
             // are immediately canonicalised back to this native station root.
@@ -1889,7 +1877,7 @@ function inferIoBrokerOcppConnectorContext(...objectIds) {
             appliedChargeLimitId: `${nativeDeviceRoot}.control.appliedChargeLimit`,
             chargeLimitReasonId: `${nativeDeviceRoot}.control.chargeLimitReason`,
             chargeLimitClampedId: `${nativeDeviceRoot}.control.chargeLimitClamped`,
-            adapterAliveId: `system.adapter.ocpp21.${instance}.alive`,
+            adapterAliveId: namespace.startsWith('eos-admin.') ? `${namespace}.info.runtimeAlive` : `system.adapter.ocpp21.${instance}.alive`,
         };
     };
 
@@ -1899,14 +1887,18 @@ function inferIoBrokerOcppConnectorContext(...objectIds) {
         const parts = objectId.split('.');
         const lower = parts.map(part => String(part || '').toLowerCase());
 
-        // NexoWatt OCPP native compact tree: ocpp21.<Instanz>.<Station>....
-        if (parts.length >= 3 && lower[0] === 'ocpp21' && /^\d+$/.test(String(parts[1] || '')) && parts[2]) {
+        const nativeRoot = ocppStationRoot(objectId);
+        if (nativeRoot && nativeRoot.startsWith('eos-admin.')) {
+            return buildNexoWattContext({ objectId, namespace: ocppNamespace(nativeRoot), station: nativeRoot.slice(nativeRoot.lastIndexOf('.') + 1), layout: 'nexowatt-ocpp21-hosted' });
+        }
+        // NexoWatt OCPP native compact tree, including preserved migration roots.
+        if (nativeRoot && parts.length >= 3 && lower[0] === 'ocpp21') {
             return buildNexoWattContext({ objectId, instance: parts[1], station: parts[2], layout: 'nexowatt-ocpp21-native-compact' });
         }
 
         // Stabiler öffentlicher Alias: alias.0.nexowatt.ocpp.<Instanz>.<Station>....
         if (
-            parts.length >= 6
+            nativeRoot && parts.length >= 6
             && lower[0] === 'alias'
             && lower[1] === '0'
             && lower[2] === 'nexowatt'
@@ -1924,7 +1916,7 @@ function inferIoBrokerOcppConnectorContext(...objectIds) {
 
         // Optionaler technischer Kompatibilitätsalias: alias.0.ocpp21.<Instanz>.<Station>....
         if (
-            parts.length >= 5
+            nativeRoot && parts.length >= 5
             && lower[0] === 'alias'
             && lower[1] === '0'
             && lower[2] === 'ocpp21'
@@ -2236,6 +2228,7 @@ function evaluateOcppCommandConfirmation({
     targetW = null,
     requestedW = null,
     appliedW = null,
+    appliedValid = undefined,
     lastSuccess = null,
     lastError = '',
     reason = '',
@@ -2251,12 +2244,15 @@ function evaluateOcppCommandConfirmation({
     const ageMs = commandAt > 0 ? Math.max(0, now - commandAt) : null;
     const toleranceW = target !== null && target <= 0 ? 1 : 150;
     const requestMatches = target !== null && requested !== null && Math.abs(target - requested) <= toleranceW;
-    const appliedMatches = target !== null && applied !== null && Math.abs(target - applied) <= toleranceW;
+    const appliedMatches = target !== null && applied !== null && (appliedValid === true
+        ? applied >= 0 && applied <= target + (target <= 0 ? 0 : 1)
+        : Math.abs(target - applied) <= toleranceW);
     const zeroHeld = target !== null && target <= 0 && reasonText === 'zero-held-to-prevent-unintended-interruption';
-    const confirmed = successKnown && lastSuccess === true && requestMatches && appliedMatches && !zeroHeld;
+    const confirmed = appliedValid !== false && commandAt <= now && successKnown && lastSuccess === true && requestMatches && appliedMatches && !zeroHeld;
     let state = 'unknown';
     if (zeroHeld) state = 'zero-held-not-applied';
     else if (successKnown && lastSuccess === false) state = errorText ? `failed:${errorText}` : 'failed';
+    else if (appliedValid === false) state = 'unconfirmed';
     else if (confirmed) state = 'confirmed';
     else if (target !== null && commandAt > 0 && ageMs !== null && ageMs <= 30000) state = 'pending';
     else if (target !== null && requestMatches && !appliedMatches) state = 'requested-not-applied';
@@ -4275,6 +4271,24 @@ class ChargingManagementModule extends BaseModule {
                 result.entries.push({ safe, status: 'missing-wallbox', applied: false });
                 continue;
             }
+            // A native OCPP station exposes one aggregate actuator. Only the
+            // first mapping may issue a conservative zero during a conflict.
+            // The remaining duplicate mappings never race that writer.
+            if (w.ocppControlConflict === true && w.ocppConflictStopOwner !== true) {
+                result.failedCount += 1; result.ok = false;
+                result.entries.push({ safe, status: 'ocpp-station-control-group-conflict', applied: false });
+                continue;
+            }
+            let ocppLeaseReady = true;
+            if (w.ocppControlLease?.required === true) {
+                if (!this._ocppControlLeases) this._ocppControlLeases = new OcppControlLeases();
+                ocppLeaseReady = await this._ocppControlLeases.renew({
+                    ...w.ocppControlLease, root: w.ocppNativeRoot, now: Date.now(),
+                    enabled: w.cfgEnabled && w.online && w.controlAvailable && !w.ocppControlConflict,
+                    write: untilMs => this.dp.writeNumber(`cm.wb.${safe}.ocppLeaseUntil`, untilMs, false),
+                });
+                await this._queueState(`${w.ch}.ocppControlLeaseReady`, ocppLeaseReady, true);
+            }
             const targetWNum = Number(entry.targetPowerW ?? entry.targetW ?? 0);
             const targetANum = Number(entry.targetCurrentA ?? entry.targetA ?? 0);
             const requestedTargetW = Number.isFinite(targetWNum) && targetWNum > 0 ? Math.round(targetWNum) : 0;
@@ -4287,7 +4301,7 @@ class ChargingManagementModule extends BaseModule {
                 && (!(Number(w.zeroExportProbeValidUntil) > Date.now())
                     || !isZeroExportGrantValid(this.adapter, `evcs:${safe}`, String(w.zeroExportProbeLeaseId || ''), Date.now()));
             const positiveCommandBlocked = (requestedTargetW > 0 || requestedTargetA > 0)
-                && (w.controlAvailable !== true || zeroProbeExpired
+                && (!ocppLeaseReady || w.ocppControlConflict === true || w.controlAvailable !== true || zeroProbeExpired
                     || ((normalizeWallboxModeOverride(w.effectiveMode) === 'pv' || w.zeroExportPvDependent === true)
                         && zeroExportEvcsPauseUntil(this.adapter, `evcs:${safe}`, Date.now()) > Date.now()));
             let targetW = positiveCommandBlocked ? 0 : requestedTargetW;
@@ -4550,7 +4564,7 @@ class ChargingManagementModule extends BaseModule {
                 || (safetyDecision && safetyDecision.clamped === true && requestedFlexibleW > 0)
             );
             const safeStopAllowed = !!(w.online && (!w.cfgEnabled || !w.userStationEnabled || !w.userEnabled || w.rfidLockActive || w.operationalBlocked || w.enabled || w.cfgEnabled));
-            const phaseSwitchSafetyReady = !isPhaseSwitchEntry || (!zeroProbeExpired
+            const phaseSwitchSafetyReady = !isPhaseSwitchEntry || (w.ocppControlConflict !== true && !zeroProbeExpired
                 && (!liveEnvelope || (liveEnvelope.valid === true && liveEnvelope.forceZero !== true && liveEnvelope.emergencyStop !== true)));
             const shouldWrite = !!(
                 baseWriteRequired
@@ -4713,6 +4727,7 @@ class ChargingManagementModule extends BaseModule {
                     targetW,
                     requestedW: w.ocppRequestedChargeLimitW,
                     appliedW: w.ocppAppliedChargeLimitW,
+                    appliedValid: w.ocppAppliedChargeLimitValid,
                     lastSuccess: w.ocppLastCommandSuccess,
                     lastError: w.ocppLastCommandError,
                     reason: w.ocppChargeLimitReason,
@@ -5033,25 +5048,10 @@ class ChargingManagementModule extends BaseModule {
     _getAdapterNumberFromCache(key, fallback = null) {
         const sid = String(key || '').trim();
         if (!sid) return fallback;
-
-        try {
-            if (this.adapter && typeof this.adapter._nwGetNumberFromCache === 'function') {
-                const n = this.adapter._nwGetNumberFromCache(sid);
-                if (typeof n === 'number' && Number.isFinite(n)) return n;
-            }
-        } catch {
-            // ignore
-        }
-
-        try {
-            const rec = this.adapter && this.adapter.stateCache ? this.adapter.stateCache[sid] : null;
-            const n = Number(rec && rec.value);
-            if (Number.isFinite(n)) return n;
-        } catch {
-            // ignore
-        }
-
-        return fallback;
+        const configuredSeconds = Number(this.adapter?.config?.settings?.deviceStaleTimeoutSec);
+        const maxAgeMs = Math.max(10000, (Number.isFinite(configuredSeconds) && configuredSeconds > 0 ? configuredSeconds : 60) * 1000);
+        const sample = readFlowMeasurement(this.adapter?.stateCache, sid, Date.now(), maxAgeMs);
+        return sample ? sample.value : fallback;
     }
 
     /**
@@ -5126,6 +5126,19 @@ class ChargingManagementModule extends BaseModule {
 
         const a = this.adapter;
         const now = Date.now();
+        const relative = typeof a?.namespace === 'string' && sid.startsWith(a.namespace + '.') ? sid.slice(a.namespace.length + 1) : sid;
+/**
+ * Code-Teil: checked
+ *
+ * Zweck:
+ * Automatisch markierter Arrow-Funktion-Abschnitt aus der ursprünglichen JavaScript-Datei.
+ * Dieser Kommentar dient als Orientierung für die schrittweise TypeScript-Migration.
+ *
+ * Zusammenhang:
+ * Die produktive Logik liegt aktuell noch in der JS-Datei. Dieser TS-Spiegel zeigt,
+ * welcher konkrete Code-Abschnitt später typisiert, getestet und übernommen werden muss.
+ */
+        const checked = value => checkedEmsControlState(relative, value, now);
 
         // Fast path: in-memory stateCache (maintained by main.js onStateChange)
         try {
@@ -5134,7 +5147,7 @@ class ChargingManagementModule extends BaseModule {
                 const e = sc[sid];
                 if (e && Object.prototype.hasOwnProperty.call(e, 'value')) {
                     const ts = (typeof e.ts === 'number' && Number.isFinite(e.ts)) ? e.ts : now;
-                    return { val: e.value, ts, lc: ts, ack: true };
+                    return checked({ val: e.value, ts, lc: ts, ack: true });
                 }
 
                 // If called with full id, attempt keyFromId mapping
@@ -5144,7 +5157,7 @@ class ChargingManagementModule extends BaseModule {
                         const k = a.keyFromId(sid);
                         if (k && sc[k] && Object.prototype.hasOwnProperty.call(sc[k], 'value')) {
                             const ts = (typeof sc[k].ts === 'number' && Number.isFinite(sc[k].ts)) ? sc[k].ts : now;
-                            return { val: sc[k].value, ts, lc: ts, ack: true };
+                            return checked({ val: sc[k].value, ts, lc: ts, ack: true });
                         }
                     }
                 }
@@ -5166,9 +5179,10 @@ class ChargingManagementModule extends BaseModule {
             } catch {
                 // ignore
             }
-            return st || null;
+            return checked(st || null);
         } catch {
-            return null;
+            const failed = checked({ val: null, ts: now, eosControlReadFailed: true });
+            return failed?.eosInvalidControl === true ? failed : null;
         }
     }
 
@@ -5675,6 +5689,8 @@ class ChargingManagementModule extends BaseModule {
         await mk('availabilityRequested', 'Angeforderte Stationsfreigabe', 'boolean', 'indicator');
         await mk('availabilityRequestReason', 'Grund der Stationsfreigabe', 'string', 'text');
         await mk('userEnabled', 'Regelung aktiv (User)', 'boolean', 'switch.enable', true, { def: true, states: { true: 'Aktiv', false: 'Aus' } });
+        await mk('controlInputsValid', 'Bedienwerte gültig', 'boolean', 'indicator');
+        await mk('controlInputError', 'Ungültige Bedienwerte (Felder)', 'string', 'text');
         await mk('enabled', 'Enabled (effective)', 'boolean', 'indicator');
         await mk('online', 'Online', 'boolean', 'indicator');
 
@@ -5989,6 +6005,10 @@ class ChargingManagementModule extends BaseModule {
         await mk('ocppLastCommandError', 'Letzter OCPP-Befehlsfehler', 'string', 'text');
         await mk('ocppRequestedChargeLimitW', 'OCPP angeforderte Ladegrenze (W)', 'number', 'value.power');
         await mk('ocppAppliedChargeLimitW', 'OCPP angewendete Ladegrenze (W)', 'number', 'value.power');
+        await mk('ocppAppliedChargeLimitValid', 'OCPP Ladegrenze in aktueller Verbindung bestätigt', 'boolean', 'indicator');
+        await mk('ocppFeedbackState', 'OCPP Rückmeldestatus', 'string', 'text');
+        await mk('ocppControlLeaseReady', 'EOS-Prozessfreigabe an OCPP geschrieben; keine physische Ladebestätigung', 'boolean', 'indicator');
+        await mk('ocppControlConflict', 'Mehrere EOS-Zuordnungen für dieselbe OCPP-Stationsregelung', 'boolean', 'indicator.alarm');
         await mk('ocppChargeLimitReason', 'OCPP Ladegrenzenentscheidung', 'string', 'text');
         await mk('ocppChargeLimitClamped', 'OCPP Ladegrenze abweichend/begrenzt', 'boolean', 'indicator');
         await mk('hardwareCommandConfirmed', 'Hardwarebefehl bestätigt', 'boolean', 'indicator');
@@ -6503,6 +6523,7 @@ class ChargingManagementModule extends BaseModule {
         // is treated as station/shared diagnostics only and must not fault or enable
         // any single connector.
         const statusConnectorUsage = new Map();
+        const nativeOcppControlGroups = new Map();
         for (let configIndex = 0; configIndex < wallboxes.length; configIndex++) {
             const configWallbox = wallboxes[configIndex] || {};
             const configOcppContext = inferIoBrokerOcppConnectorContext(
@@ -6518,6 +6539,10 @@ class ChargingManagementModule extends BaseModule {
                 configWallbox.setCurrentAId,
             );
             const configTelemetryProfile = resolveEvcsTelemetryProfile(configWallbox.telemetryProfile, configOcppContext);
+            if (String(configOcppContext.adapterKind || '').startsWith('nexowatt-ocpp21') && configOcppContext.nativeDeviceRoot) {
+                const members = nativeOcppControlGroups.get(configOcppContext.nativeDeviceRoot) || [];
+                members.push(configIndex); nativeOcppControlGroups.set(configOcppContext.nativeDeviceRoot, members);
+            }
             const configuredStatusObjectId = String(configWallbox.statusId || '').trim();
             const statusObjectId = String(
                 configTelemetryProfile === 'ocpp-1.6-event-driven'
@@ -6542,6 +6567,29 @@ class ChargingManagementModule extends BaseModule {
 
             const safe = toSafeIdPart(key);
             const ch = await this._ensureWallboxChannel(key);
+            const nativeMappingRoots = [...new Set(Object.entries(wb)
+                .filter(([field, id]) => field.endsWith('Id') && typeof id === 'string')
+                .map(([_field, id]) => ocppStationRoot(id)).filter(Boolean))];
+            const foreignHostedMapping = nativeMappingRoots.some(root => root.startsWith('eos-admin.')
+                && !ocppRootInScope(root, this.adapter?.hostNamespace || this.adapter?.namespace));
+            if (foreignHostedMapping || nativeMappingRoots.length > 1) {
+                await this._queueState(`${ch}.mappingOk`, false, true);
+                await this._queueState(`${ch}.mappingIssues`, JSON.stringify([foreignHostedMapping
+                    ? 'ocpp_host_namespace_mismatch' : 'ocpp_mixed_station_mapping']), true);
+                await this._queueState(`${ch}.controlAvailable`, false, true);
+                continue; // No reads, inferred commands, stop writes or leases into another EOS owner.
+            }
+            // Validate all ordinary wishes before deriving availability. This
+            // covers both live state events and persisted values after restart.
+            const invalidControlFields = [];
+            for (const field of EMS_CONTROL_FIELDS) {
+                const input = await this._getStateCached(`${ch}.${field}`);
+                if (input?.eosInvalidControl === true) invalidControlFields.push(field);
+            }
+            const controlInputsValid = invalidControlFields.length === 0;
+            await this._queueState(`${ch}.controlInputsValid`, controlInputsValid, true);
+            await this._queueState(`${ch}.controlInputError`, invalidControlFields.join(', '), true);
+
 
             // Serienreife/Robustheit: restore persisted runtime timers after adapter restart.
             // This keeps Boost timeouts + "first-started" charging order stable across restarts.
@@ -6689,7 +6737,24 @@ class ChargingManagementModule extends BaseModule {
                 wb.setPowerWId,
                 wb.setCurrentAId,
             );
-            const telemetryProfile = resolveEvcsTelemetryProfile(wb.telemetryProfile, ocppContext);
+            // The hosted native actuator contract is mandatory, even when an
+            // older manual row still explicitly says generic/Modbus telemetry.
+            if (ocppContext.hostedMarkerId && this.dp) await this.dp.upsert({ key: `cm.wb.${safe}.ocppHostedMarkerRaw`,
+                objectId: ocppContext.hostedMarkerId, dataType: 'mixed', direction: 'in' });
+            const hostedMarkerEntry = this.dp?.getEntry?.(`cm.wb.${safe}.ocppHostedMarkerRaw`);
+            const hostedContract = resolveOcppRuntimeAlive({ hostedNamespace: ocppContext.hostedNamespace === true,
+                marker: hostedMarkerEntry && this.dp?.cacheByObjectId?.get(hostedMarkerEntry.srcObjectId || hostedMarkerEntry.objectId),
+                runtimeAlive: null, now }).hosted;
+            const telemetryProfile = hostedContract ? 'ocpp-1.6-event-driven' : resolveEvcsTelemetryProfile(wb.telemetryProfile, ocppContext);
+            const controlGroupMembers = nativeOcppControlGroups.get(ocppContext.nativeDeviceRoot) || [];
+            const ocppControlConflict = controlGroupMembers.length > 1;
+            const ocppConflictStopOwner = ocppControlConflict && controlGroupMembers[0] === wbIndex;
+            const ocppContractIncomplete = !!(String(ocppContext.adapterKind || '').startsWith('nexowatt-ocpp21') && ocppContext.nativeDeviceRoot
+                && wb.ocppDiscovery?.stationRoot === ocppContext.nativeDeviceRoot
+                && wb.ocppDiscovery?.code === 'CONTRACT_INCOMPLETE');
+            const ocppManualMappingReviewRequired = !!(String(ocppContext.adapterKind || '').startsWith('nexowatt-ocpp21')
+                && wb.ocppDiscovery?.stationRoot === ocppContext.nativeDeviceRoot
+                && wb.ocppDiscovery?.code === 'MANUAL_MAPPING_REVIEW_REQUIRED');
             const telemetryAutoDetected = !String(wb.telemetryProfile || '').trim() && ocppContext.detected === true;
             const configuredConnectorNo = clamp(num(wb.connectorNo, 0), 0, 9999);
             const connectorNo = configuredConnectorNo > 0
@@ -6833,7 +6898,7 @@ class ChargingManagementModule extends BaseModule {
             ).trim();
             const setCurrentAId = String(wb.setCurrentAId || '').trim();
             const setPowerWId = String(
-                telemetryProfile === 'ocpp-1.6-event-driven'
+                telemetryProfile === 'ocpp-1.6-event-driven' && (!ocppManualMappingReviewRequired || configuredSetPowerWId)
                     ? resolveOcppCanonicalObjectId(configuredSetPowerWId, ocppContext, 'setPower')
                     : configuredSetPowerWId,
             ).trim();
@@ -6865,7 +6930,7 @@ class ChargingManagementModule extends BaseModule {
             const transactionActiveId = telemetryProfile === 'ocpp-1.6-event-driven'
                 ? resolveOcppCanonicalObjectId(configuredTransactionActiveId, ocppContext, 'transactionActive')
                 : configuredTransactionActiveId;
-            const ocppAdapterAliveId = telemetryProfile === 'ocpp-1.6-event-driven'
+            let ocppAdapterAliveId = telemetryProfile === 'ocpp-1.6-event-driven'
                 ? String(ocppContext.adapterAliveId || '').trim()
                 : '';
             const ocppLastCommandId = telemetryProfile === 'ocpp-1.6-event-driven'
@@ -6886,6 +6951,15 @@ class ChargingManagementModule extends BaseModule {
             const ocppAppliedChargeLimitId = telemetryProfile === 'ocpp-1.6-event-driven'
                 ? String(ocppContext.appliedChargeLimitId || '').trim()
                 : '';
+            const ocppFeedbackIds = telemetryProfile === 'ocpp-1.6-event-driven'
+                && String(ocppContext.adapterKind || '').startsWith('nexowatt-ocpp21') && ocppContext.nativeDeviceRoot ? {
+                atomic: `${ocppContext.nativeDeviceRoot}.control.chargeLimitStatus`,
+                session: `${ocppContext.nativeDeviceRoot}.info.sessionId`,
+                appliedW: `${ocppContext.nativeDeviceRoot}.control.appliedChargeLimitW`,
+                valid: `${ocppContext.nativeDeviceRoot}.control.appliedChargeLimitValid`,
+                legacyUnit: `${ocppContext.nativeDeviceRoot}.control.appliedChargeLimitUnit`,
+                leaseSupported: `${ocppContext.nativeDeviceRoot}.info.eosControlLeaseSupported`,
+            } : null;
             const ocppChargeLimitReasonId = telemetryProfile === 'ocpp-1.6-event-driven'
                 ? String(ocppContext.chargeLimitReasonId || '').trim()
                 : '';
@@ -6957,6 +7031,7 @@ class ChargingManagementModule extends BaseModule {
                 if (statusId) await this.dp.upsert({ key: `cm.wb.${safe}.st`, objectId: statusId, dataType: 'mixed', direction: 'in' });
                 if (chargingStateId) await this.dp.upsert({ key: `cm.wb.${safe}.chargingStateRaw`, objectId: chargingStateId, dataType: 'mixed', direction: 'in' });
                 if (transactionActiveId) await this.dp.upsert({ key: `cm.wb.${safe}.transactionActiveRaw`, objectId: transactionActiveId, dataType: 'mixed', direction: 'in' });
+                if (ocppContext.runtimeAliveId) await this.dp.upsert({ key: `cm.wb.${safe}.ocppRuntimeAliveRaw`, objectId: ocppContext.runtimeAliveId, dataType: 'mixed', direction: 'in' });
                 if (ocppAdapterAliveId) await this.dp.upsert({ key: `cm.wb.${safe}.ocppAdapterAliveRaw`, objectId: ocppAdapterAliveId, dataType: 'mixed', direction: 'in' });
                 if (ocppLastCommandId) await this.dp.upsert({ key: `cm.wb.${safe}.ocppLastCommandRaw`, objectId: ocppLastCommandId, dataType: 'mixed', direction: 'in' });
                 if (ocppLastCommandAtId) await this.dp.upsert({ key: `cm.wb.${safe}.ocppLastCommandAtRaw`, objectId: ocppLastCommandAtId, dataType: 'mixed', direction: 'in' });
@@ -6964,6 +7039,11 @@ class ChargingManagementModule extends BaseModule {
                 if (ocppLastCommandErrorId) await this.dp.upsert({ key: `cm.wb.${safe}.ocppLastCommandErrorRaw`, objectId: ocppLastCommandErrorId, dataType: 'mixed', direction: 'in' });
                 if (ocppRequestedChargeLimitId) await this.dp.upsert({ key: `cm.wb.${safe}.ocppRequestedChargeLimitRaw`, objectId: ocppRequestedChargeLimitId, dataType: 'mixed', direction: 'in' });
                 if (ocppAppliedChargeLimitId) await this.dp.upsert({ key: `cm.wb.${safe}.ocppAppliedChargeLimitRaw`, objectId: ocppAppliedChargeLimitId, dataType: 'mixed', direction: 'in' });
+                if (ocppFeedbackIds) for (const [field, objectId] of Object.entries(ocppFeedbackIds)) {
+                    await this.dp.upsert({ key: `cm.wb.${safe}.ocppFeedback.${field}`, objectId, dataType: 'mixed', direction: 'in' });
+                }
+                if (ocppFeedbackIds) await this.dp.upsert({ key: `cm.wb.${safe}.ocppLeaseUntil`,
+                    objectId: `${ocppContext.nativeDeviceRoot}.control.eosLeaseUntilMs`, dataType: 'number', direction: 'out', unit: 'ms', deadband: 0 });
                 if (ocppChargeLimitReasonId) await this.dp.upsert({ key: `cm.wb.${safe}.ocppChargeLimitReasonRaw`, objectId: ocppChargeLimitReasonId, dataType: 'mixed', direction: 'in' });
                 if (ocppChargeLimitClampedId) await this.dp.upsert({ key: `cm.wb.${safe}.ocppChargeLimitClampedRaw`, objectId: ocppChargeLimitClampedId, dataType: 'mixed', direction: 'in' });
                 if (vehicleConnectedId) await this.dp.upsert({ key: `cm.wb.${safe}.vehicleConnectedRaw`, objectId: vehicleConnectedId, dataType: 'mixed', direction: 'in' });
@@ -6985,7 +7065,7 @@ class ChargingManagementModule extends BaseModule {
             const statusRaw = (statusId && this.dp) ? this.dp.getRaw(`cm.wb.${safe}.st`) : null;
             const chargingStateRaw = (chargingStateId && this.dp) ? this.dp.getRaw(`cm.wb.${safe}.chargingStateRaw`) : null;
             const transactionActiveRaw = (transactionActiveId && this.dp) ? this.dp.getRaw(`cm.wb.${safe}.transactionActiveRaw`) : null;
-            const ocppAdapterAliveRaw = (ocppAdapterAliveId && this.dp) ? this.dp.getRaw(`cm.wb.${safe}.ocppAdapterAliveRaw`) : null;
+            let ocppAdapterAliveRaw = (ocppAdapterAliveId && this.dp) ? this.dp.getRaw(`cm.wb.${safe}.ocppAdapterAliveRaw`) : null;
             const ocppLastCommandRaw = (ocppLastCommandId && this.dp) ? this.dp.getRaw(`cm.wb.${safe}.ocppLastCommandRaw`) : null;
             const ocppLastCommandAtRaw = (ocppLastCommandAtId && this.dp) ? this.dp.getRaw(`cm.wb.${safe}.ocppLastCommandAtRaw`) : null;
             const ocppLastCommandSuccessRaw = (ocppLastCommandSuccessId && this.dp) ? this.dp.getRaw(`cm.wb.${safe}.ocppLastCommandSuccessRaw`) : null;
@@ -6998,11 +7078,47 @@ class ChargingManagementModule extends BaseModule {
             const chargeDemandRaw = (chargeDemandId && this.dp) ? this.dp.getRaw(`cm.wb.${safe}.chargeDemandRaw`) : null;
             const heartbeatRaw = (heartbeatId && this.dp) ? this.dp.getRaw(`cm.wb.${safe}.heartbeatRaw`) : null;
             const ocppLastCommand = ocppLastCommandRaw === null || ocppLastCommandRaw === undefined ? '' : String(ocppLastCommandRaw);
-            const ocppLastCommandAtMs = parseEvcsCommandTimestamp(ocppLastCommandAtRaw);
-            const ocppLastCommandSuccess = ocppLastCommandSuccessId ? toBool(ocppLastCommandSuccessRaw) : null;
+/**
+ * Code-Teil: feedbackState
+ *
+ * Zweck:
+ * Automatisch markierter Arrow-Funktion-Abschnitt aus der ursprünglichen JavaScript-Datei.
+ * Dieser Kommentar dient als Orientierung für die schrittweise TypeScript-Migration.
+ *
+ * Zusammenhang:
+ * Die produktive Logik liegt aktuell noch in der JS-Datei. Dieser TS-Spiegel zeigt,
+ * welcher konkrete Code-Abschnitt später typisiert, getestet und übernommen werden muss.
+ */
+            const feedbackState = key => {
+                const entry = this.dp?.getEntry?.(`cm.wb.${safe}.${key}`);
+                return entry && this.dp?.cacheByObjectId?.get(entry.srcObjectId || entry.objectId);
+            };
+            const hostedRuntime = resolveOcppRuntimeAlive({ hostedNamespace: ocppContext.hostedNamespace === true,
+                marker: feedbackState('ocppHostedMarkerRaw'), runtimeAlive: feedbackState('ocppRuntimeAliveRaw'), now });
+            const hostedProfilePending = hostedRuntime.hosted && telemetryProfile !== 'ocpp-1.6-event-driven';
+            if (hostedContract) hostedRuntime.hosted = true;
+            if (hostedRuntime.hosted) {
+                ocppAdapterAliveId = ocppContext.runtimeAliveId;
+                ocppAdapterAliveRaw = hostedRuntime.alive;
+            }
+            const ocppLimitFeedback = ocppFeedbackIds ? resolveOcppLimitFeedback({
+                ...Object.fromEntries(Object.keys(ocppFeedbackIds).map(field => [field, feedbackState(`ocppFeedback.${field}`)])),
+                requested: feedbackState('ocppRequestedChargeLimitRaw'), legacyApplied: feedbackState('ocppAppliedChargeLimitRaw'),
+                command: feedbackState('ocppLastCommandRaw'), commandAt: feedbackState('ocppLastCommandAtRaw'),
+                success: feedbackState('ocppLastCommandSuccessRaw'), error: feedbackState('ocppLastCommandErrorRaw'),
+                reason: feedbackState('ocppChargeLimitReasonRaw'), connected: feedbackState('onlineRaw'), alive: hostedRuntime.hosted ? hostedRuntime.state : feedbackState('ocppAdapterAliveRaw'), now,
+            }) : null;
+            const ocppAppliedChargeLimitValid = ocppLimitFeedback ? ocppLimitFeedback.valid : undefined;
+            const ocppControlLease = ocppFeedbackIds && !ocppManualMappingReviewRequired ? ocppLeaseCapability(feedbackState('ocppFeedback.leaseSupported'),
+                feedbackState('ocppFeedback.atomic'), feedbackState('ocppFeedback.session'), now) : null;
+            // Hosted OCPP always enforces the process lease. A partial initial cache
+            // cannot downgrade it to the pre-lease external 0.4.2 compatibility path.
+            if (ocppControlLease && hostedRuntime.hosted) ocppControlLease.required = true;
+            const ocppLastCommandAtMs = ocppLimitFeedback?.commandAtMs || parseEvcsCommandTimestamp(ocppLastCommandAtRaw);
+            const ocppLastCommandSuccess = ocppLimitFeedback?.valid === true ? true : ocppLastCommandSuccessId ? toBool(ocppLastCommandSuccessRaw) : null;
             const ocppLastCommandError = ocppLastCommandErrorRaw === null || ocppLastCommandErrorRaw === undefined ? '' : String(ocppLastCommandErrorRaw);
-            const ocppRequestedChargeLimitW = strictFiniteEvcsNumber(ocppRequestedChargeLimitRaw);
-            const ocppAppliedChargeLimitW = strictFiniteEvcsNumber(ocppAppliedChargeLimitRaw);
+            const ocppRequestedChargeLimitW = ocppLimitFeedback?.requestedW ?? strictFiniteEvcsNumber(ocppRequestedChargeLimitRaw);
+            const ocppAppliedChargeLimitW = ocppLimitFeedback ? ocppLimitFeedback.appliedW : strictFiniteEvcsNumber(ocppAppliedChargeLimitRaw);
             const ocppChargeLimitReason = ocppChargeLimitReasonRaw === null || ocppChargeLimitReasonRaw === undefined ? '' : String(ocppChargeLimitReasonRaw);
             const ocppChargeLimitClamped = ocppChargeLimitClampedId ? toBool(ocppChargeLimitClampedRaw) : null;
 
@@ -7039,6 +7155,10 @@ class ChargingManagementModule extends BaseModule {
             const hasSetpoint = !!(setCurrentAId || setPowerWId);
             const mappingIssues = [];
             if (!hasSetpoint) mappingIssues.push('no_setpoint');
+            if (ocppControlConflict) mappingIssues.push('ocpp_station_control_group_conflict');
+            if (ocppContractIncomplete) mappingIssues.push('ocpp_station_contract_incomplete');
+            if (hostedProfilePending) mappingIssues.push('ocpp_hosted_contract_pending');
+            if (ocppManualMappingReviewRequired) mappingIssues.push('ocpp_manual_mapping_review_required');
             if (!actualPowerWId) mappingIssues.push('no_power_meter');
             if (!statusId && !chargingStateId && !vehicleConnectedId && !chargeDemandId) mappingIssues.push('no_vehicle_state_mapping');
             if (chargeDemandObservationOnly) mappingIssues.push('observation_only_charge_demand_ignored');
@@ -7253,13 +7373,13 @@ class ChargingManagementModule extends BaseModule {
                 : (statusTimestampFresh || statusAgePolicy.persistentReady);
             const classifiedStatus = classifyEvcsConnectorStatus(statusRawText, safetyStatusFresh);
             const faultActive = !!classifiedStatus.faultActive;
-            const unavailableActive = !!classifiedStatus.unavailableActive;
-            let operationalBlocked = !!classifiedStatus.operationalBlocked;
+            const unavailableActive = !!classifiedStatus.unavailableActive || !controlInputsValid;
+            let operationalBlocked = !!classifiedStatus.operationalBlocked || !controlInputsValid || ocppControlConflict || ocppContractIncomplete || hostedProfilePending;
             const rawStatusClass = classifyEvcsConnectorStatus(statusRawText, true);
             const faultReason = faultActive
                 ? statusRawText
                 : (rawStatusClass.faultActive && statusIgnoredReason ? `${statusIgnoredReason}:${statusRawText}` : '');
-            const unavailableReason = unavailableActive
+            const unavailableReason = !controlInputsValid ? `invalid_control: ${invalidControlFields.join(', ')}` : unavailableActive
                 ? statusRawText
                 : (rawStatusClass.unavailableActive && statusIgnoredReason ? `${statusIgnoredReason}:${statusRawText}` : '');
 
@@ -7299,6 +7419,12 @@ class ChargingManagementModule extends BaseModule {
                 onlineSource = 'ocpp-adapter-not-alive';
             }
 
+            if (hostedRuntime.hosted && !hostedRuntime.alive) {
+                online = false; onlineSource = 'ocpp-worker-not-alive';
+            }
+            if (hostedRuntime.hosted && !ocppConnectionConfirmed(feedbackState('onlineRaw'), now)) {
+                online = false; onlineSource = 'ocpp-socket-unconfirmed';
+            }
             let controlAvailable = !!(enabled && online && !operationalBlocked);
             const previousCommandW = this._lastCmdTargetW.get(safe);
             const effectivePower = resolveEvcsEffectivePower({
@@ -7329,6 +7455,7 @@ class ChargingManagementModule extends BaseModule {
                     targetW: priorOcppTargetW,
                     requestedW: ocppRequestedChargeLimitW,
                     appliedW: ocppAppliedChargeLimitW,
+                    appliedValid: ocppAppliedChargeLimitValid,
                     lastSuccess: ocppLastCommandSuccess,
                     lastError: ocppLastCommandError,
                     reason: ocppChargeLimitReason,
@@ -7339,7 +7466,8 @@ class ChargingManagementModule extends BaseModule {
 
             // Publish diagnostics (UI)
             try {
-                await this._queueState(`${ch}.mappingOk`, hasSetpoint, true);
+                await this._queueState(`${ch}.mappingOk`, hasSetpoint && !ocppControlConflict && !ocppContractIncomplete, true);
+                await this._queueState(`${ch}.ocppControlConflict`, ocppControlConflict, true);
                 await this._queueState(`${ch}.hasSetpoint`, hasSetpoint, true);
                 await this._queueState(`${ch}.mappingIssues`, JSON.stringify(mappingIssues), true);
                 await this._queueState(`${ch}.telemetryProfile`, telemetryProfile, true);
@@ -7355,7 +7483,9 @@ class ChargingManagementModule extends BaseModule {
                 await this._queueState(`${ch}.ocppLastCommandSuccess`, telemetryProfile === 'ocpp-1.6-event-driven' ? ocppLastCommandSuccess === true : true, true);
                 await this._queueState(`${ch}.ocppLastCommandError`, telemetryProfile === 'ocpp-1.6-event-driven' ? ocppLastCommandError : '', true);
                 await this._queueState(`${ch}.ocppRequestedChargeLimitW`, telemetryProfile === 'ocpp-1.6-event-driven' && ocppRequestedChargeLimitW !== null ? ocppRequestedChargeLimitW : 0, true);
-                await this._queueState(`${ch}.ocppAppliedChargeLimitW`, telemetryProfile === 'ocpp-1.6-event-driven' && ocppAppliedChargeLimitW !== null ? ocppAppliedChargeLimitW : 0, true);
+                await this._queueState(`${ch}.ocppAppliedChargeLimitW`, telemetryProfile === 'ocpp-1.6-event-driven' ? ocppAppliedChargeLimitW : null, true);
+                await this._queueState(`${ch}.ocppAppliedChargeLimitValid`, ocppAppliedChargeLimitValid === true, true);
+                await this._queueState(`${ch}.ocppFeedbackState`, ocppLimitFeedback ? (ocppLimitFeedback.valid ? `confirmed:${ocppLimitFeedback.contract}` : ocppLimitFeedback.error) : 'legacy', true);
                 await this._queueState(`${ch}.ocppChargeLimitReason`, telemetryProfile === 'ocpp-1.6-event-driven' ? ocppChargeLimitReason : '', true);
                 await this._queueState(`${ch}.ocppChargeLimitClamped`, telemetryProfile === 'ocpp-1.6-event-driven' ? ocppChargeLimitClamped === true : false, true);
                 await this._queueState(`${ch}.hardwareCommandConfirmed`, telemetryProfile === 'ocpp-1.6-event-driven' ? ocppCommandConfirmation.confirmed === true : true, true);
@@ -8104,6 +8234,10 @@ class ChargingManagementModule extends BaseModule {
                 ch,
                 name: String(wb.name || key),
                 cfgEnabled,
+                ocppControlConflict,
+                ocppConflictStopOwner,
+                ocppControlLease,
+                ocppNativeRoot: ocppContext.nativeDeviceRoot,
                 userStationEnabled,
                 stationEnabled,
                 rfidAuthorized,
@@ -8132,6 +8266,7 @@ class ChargingManagementModule extends BaseModule {
                 ocppLastCommandError,
                 ocppRequestedChargeLimitW,
                 ocppAppliedChargeLimitW,
+                ocppAppliedChargeLimitValid,
                 ocppChargeLimitReason,
                 ocppChargeLimitClamped,
                 ocppCommandConfirmation,
@@ -8388,8 +8523,7 @@ class ChargingManagementModule extends BaseModule {
             tariffActive = stTariffActive ? !!stTariffActive.val : false;
             tariffDynamicStale = stTariffStale ? !!stTariffStale.val : false;
             tariffCurrentState = stTariffState ? String(stTariffState.val || 'unknown').trim().toLowerCase().replace(/ü/g, 'ue') : 'unknown';
-            const currentPrice = stTariffPrice ? Number(stTariffPrice.val) : NaN;
-            tariffCurrentPriceEurKwh = Number.isFinite(currentPrice) ? currentPrice : null;
+            tariffCurrentPriceEurKwh = tariffPriceNumber(stTariffPrice?.val);
             tariffCurrentPriceFresh = stTariffFresh ? !!stTariffFresh.val : (tariffCurrentPriceEurKwh !== null && !tariffDynamicStale);
             if (nfEnabled && nfMode === 'HT') gridChargeAllowedRaw = false;
             else if (nfEnabled && nfMode === 'NT') {
@@ -8535,13 +8669,25 @@ class ChargingManagementModule extends BaseModule {
                     const delta = (ref !== null && exp !== null) ? Math.max(0, exp - ref) : null;
                     const cheapManual = (ref !== null && delta !== null) ? (ref - delta) : null;
 
-                    // Price curves from provider mapping (via dp registry)
-                    let rawToday = null;
-                    let rawTomorrow = null;
-                    if (this.dp && typeof this.dp.getEntry === 'function') {
-                        if (this.dp.getEntry('tarif.pricesTodayJson')) rawToday = this.dp.getRaw('tarif.pricesTodayJson');
-                        if (this.dp.getEntry('tarif.pricesTomorrowJson')) rawTomorrow = this.dp.getRaw('tarif.pricesTomorrowJson');
-                    }
+                    // The deadline planner accepts the same priced inputs as the
+                    // active tariff policy, including each curve's source timestamp.
+                    const ageLimit = this.adapter._tarifVis?.curveMaxAgeMs;
+/**
+ * Code-Teil: readCurve
+ *
+ * Zweck:
+ * Automatisch markierter Arrow-Funktion-Abschnitt aus der ursprünglichen JavaScript-Datei.
+ * Dieser Kommentar dient als Orientierung für die schrittweise TypeScript-Migration.
+ *
+ * Zusammenhang:
+ * Die produktive Logik liegt aktuell noch in der JS-Datei. Dieser TS-Spiegel zeigt,
+ * welcher konkrete Code-Abschnitt später typisiert, getestet und übernommen werden muss.
+ */
+                    const readCurve = key => Number.isFinite(ageLimit) && verifiedTariffAgeMs(this.dp, key, now) <= ageLimit
+                        ? this.dp.getRaw(key) : null;
+                    const rawToday = readCurve('tarif.pricesTodayJson');
+                    const rawTomorrow = readCurve('tarif.pricesTomorrowJson');
+                    const hasCurrentPrice = active && tariffCurrentPriceFresh && !tariffDynamicStale && tariffCurrentPriceEurKwh !== null;
 
                     const curve = [
                         ...parsePriceCurve(rawToday),
@@ -8557,6 +8703,10 @@ class ChargingManagementModule extends BaseModule {
                         if (!Number.isFinite(startMs) || !Number.isFinite(endMs) || endMs <= now) continue;
                         if (startMs >= horizonEndMs) break;
 
+                        if (hasCurrentPrice && startMs <= now) {
+                            segs.push({ startMs, endMs, priceEurKwh: tariffCurrentPriceEurKwh, state: tariffCurrentState, allowGrid: gridChargeAllowedRaw });
+                            continue;
+                        }
                         const p = it.priceEurKwh;
 
                         // Approximate tariff state for planning (no hysteresis; conservative enough).
@@ -8579,8 +8729,9 @@ class ChargingManagementModule extends BaseModule {
                         segs.push({ startMs, endMs, priceEurKwh: p, state, allowGrid });
                     }
 
-                    if (active && tariffCurrentPriceFresh && tariffCurrentPriceEurKwh !== null && !segs.some((segment) => segment.startMs <= now && segment.endMs > now)) {
-                        segs.unshift({ startMs: now, endMs: Math.min(horizonEndMs, now + 15 * 60000), priceEurKwh: tariffCurrentPriceEurKwh, state: tariffCurrentState, allowGrid: gridChargeAllowedRaw });
+                    if (hasCurrentPrice && !segs.some(segment => segment.startMs <= now)) {
+                        const endMs = Math.min(horizonEndMs, now + 15 * 60000, segs[0]?.startMs ?? Infinity);
+                        segs.unshift({ startMs: now, endMs, priceEurKwh: tariffCurrentPriceEurKwh, state: tariffCurrentState, allowGrid: gridChargeAllowedRaw });
                     }
                     tariffForecast = {
                         active,
@@ -8809,15 +8960,14 @@ class ChargingManagementModule extends BaseModule {
                 // (Hard limits like §14a / Grid caps / Phase caps still apply later in the pipeline.)
                 eff = 'boost';
             } else if (override === 'pv') {
-                // Gate E: Bei negativem dynamischem Tarif wird Netzbezug bewusst bevorzugt.
-                // Dann heben wir auch den PV-Modus temporär auf, damit die Ladepunkte
-                // wirtschaftlich Netzstrom abnehmen können. Harte Netz-/Phasen-/§14a-
-                // Grenzen bleiben weiter aktiv.
-                eff = tariffGridImportPreferred ? 'normal' : 'pv';
+                // Explizit gewähltes reines PV-Laden bleibt auch bei Negativpreis
+                // an den PV-Überschuss gebunden. Die wirtschaftliche Netzfreigabe
+                // darf ausschließlich Auto/Global-Modi beeinflussen.
+                eff = 'pv';
             } else if (override === 'minpv') {
-                // "Min+PV" hält normalerweise die Mindestladung und begrenzt Mehrleistung auf PV.
-                // Bei Negativpreis wird daraus temporär ein normaler netzfreigegebener Modus.
-                eff = tariffGridImportPreferred ? 'normal' : 'minpv';
+                // Min+PV erlaubt den Netzanteil nur für die technische Mindestladung;
+                // zusätzliche Leistung bleibt auch bei Negativpreis PV-gebunden.
+                eff = 'minpv';
             } else {
                 // auto: follow global defaults. Nur wenn der Ladepunkt ausdrücklich
                 // "Auto → EOS Betriebsstrategie" gewählt hat und eine frische,
@@ -8983,6 +9133,7 @@ class ChargingManagementModule extends BaseModule {
         let pvBudgetLocalEstimateWState = 0;
         let pvBudgetMismatchWState = 0;
         let pvBudgetCentralAuthoritative = false;
+        let centralPvInputsUsable = false;
 
         if (needPvBudget || needPvDiagnostics) {
             // PV-Überschuss sauber ermitteln:
@@ -9106,7 +9257,7 @@ class ChargingManagementModule extends BaseModule {
             let centralStorageFlowUsed = false;
             try {
                 const flow = (this.adapter && typeof this.adapter._nwResolveBatteryFlowFromCache === 'function')
-                    ? this.adapter._nwResolveBatteryFlowFromCache({ maxAgeMs: storageFlowMaxAgeMs, deadbandW: 25 })
+                    ? this.adapter._nwResolveBatteryFlowFromCache({ now, maxAgeMs: storageFlowMaxAgeMs, deadbandW: 25, observe: true, strictStale: true })
                     : null;
                 if (flow && typeof flow === 'object') {
                     centralStorageFlowUsed = true;
@@ -9210,14 +9361,12 @@ class ChargingManagementModule extends BaseModule {
                     : pvEvcsActualW;
                 const baseLoadNoEvW = Math.max(0, loadTotalDirectW - evcsForLoadW);
                 pvSurplusNoEvW = Math.max(0, pvDirectW - baseLoadNoEvW);
-                gridImportNoEvW = Math.max(0, baseLoadNoEvW - pvDirectW);
             } else if (typeof gridW === 'number' && Number.isFinite(gridW)) {
                 // Fallback-Rekonstruktion ohne direkte PV-/Verbrauchs-DPs. Wir rechnen
                 // sowohl EVCS als auch die aktuelle Speicherladung zum sichtbaren Export
                 // zurueck. Batterie-Entladung wird abgezogen, weil sie kein PV-Ueberschuss
                 // ist und das Wallbox-Budget niemals kuenstlich vergroessern darf.
                 pvSurplusNoEvW = Math.max(0, (-gridW) + pvEvcsUsedW + storageChargeNowW - storageDischargeNowW);
-                gridImportNoEvW = Math.max(0, gridW - pvEvcsUsedW - storageChargeNowW + storageDischargeNowW);
             } else if (typeof pvSurplusCfgW === 'number' && Number.isFinite(pvSurplusCfgW)) {
                 // Fallback wenn kein Grid-DP verfügbar (z. B. nur PV-Surplus DP konfiguriert)
                 pvSurplusNoEvW = Math.max(0, pvSurplusCfgW);
@@ -9274,6 +9423,7 @@ class ChargingManagementModule extends BaseModule {
             });
             const allocationGate = pvBudgetControl.allocation;
             pvBudgetCentralAuthoritative = pvBudgetControl.authoritative === true;
+            centralPvInputsUsable = pvBudgetControl.blocked !== true;
             pvBudgetSourceState = String(pvBudgetControl.source || '');
             pvBudgetCentralAgeMsState = pvBudgetControl.ageMs;
             pvBudgetCentralTotalWState = Math.max(0, Number(pvBudgetControl.totalW) || 0);
@@ -9324,11 +9474,11 @@ class ChargingManagementModule extends BaseModule {
                     && Number.isFinite(Number(w.pvStartupHoldUntilMs)) && Number(w.pvStartupHoldUntilMs) > now);
 
             gridImportW = (typeof gridW === 'number' && Number.isFinite(gridW)) ? Math.max(0, gridW) : 0;
-            if (!(typeof gridImportNoEvW === 'number' && Number.isFinite(gridImportNoEvW))) {
-                gridImportNoEvW = (typeof gridW === 'number' && Number.isFinite(gridW))
-                    ? Math.max(0, gridW - pvEvcsUsedW - storageChargeNowW + storageDischargeNowW)
-                    : 0;
-            }
+            // The abort threshold describes import at the physical connection.
+            // A building estimate or an outstanding EV command is not a meter reading.
+            gridImportNoEvW = Number.isFinite(gridW)
+                ? Math.max(0, gridW - pvEvcsActualW - storageChargeNowW + storageDischargeNowW)
+                : 0;
 
             let pvAvail = purePvHysteresisActive ? !!this._pvAvailable : false;
             if (purePvHysteresisActive) {
@@ -9711,17 +9861,16 @@ if (components.length) {
                 ];
                 for (const [id, source] of candidates) {
                     const st = await this._getStateCached(id);
-                    const ts = st && Number(st.ts || st.lc || 0);
-                    const fresh = !Number.isFinite(ts) || ts <= 0 || (Date.now() - ts) <= Math.max(staleTimeoutMs, 120000);
-                    const v = st ? Number(st.val) : NaN;
-                    if (fresh && Number.isFinite(v) && v >= 0) {
-                        derivedBaseLoadW = Math.max(0, v);
+                    const sample = readFlowMeasurement({ candidate: st ? { value: st.val, ts: st.ts, q: st.q } : null },
+                        'candidate', Date.now(), Math.max(staleTimeoutMs, 120000));
+                    if (sample && sample.value >= 0) {
+                        derivedBaseLoadW = sample.value;
                         derivedBaseLoadSource = source;
                         break;
                     }
                 }
             } catch (_eBaseLoad) {}
-            gridBaseLoadW = Number.isFinite(Number(derivedBaseLoadW)) ? Math.max(0, Number(derivedBaseLoadW)) : Math.max(0, gridBaseLoadRawW);
+            gridBaseLoadW = typeof derivedBaseLoadW === 'number' && Number.isFinite(derivedBaseLoadW) ? Math.max(0, derivedBaseLoadW) : Math.max(0, gridBaseLoadRawW);
             gridLocalSupportW = Math.max(0, gridBaseLoadW - gridBaseLoadRawW);
 
             const gridEnvelope = rc85GridEnvelope({
@@ -11636,7 +11785,7 @@ if (components.length) {
             const probeActualFresh = !!(w.actualPowerWId && typeof probeMeasurementAgeMs === 'number'
                 && Number.isFinite(probeMeasurementAgeMs) && probeMeasurementAgeMs >= 0
                 && probeMeasurementAgeMs <= 5000 && !w.meterStale && !w.staleAny);
-            const probeEligible = !!(isPvOnly && zeroMode.active && w.enabled && w.online && w.controlAvailable
+            const probeEligible = !!(isPvOnly && centralPvInputsUsable && zeroMode.active && w.enabled && w.online && w.controlAvailable
                 && w.electricalLimitsValid !== false && w.vehiclePlugged === true
                 && (w.vehicleDemandConfirmed === true || w.vehicleStartEligible === true)
                 && !w.faultActive && !w.unavailableActive && !w.operationalBlocked && !w.rfidLockActive

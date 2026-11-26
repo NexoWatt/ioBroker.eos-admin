@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/modules/prime-mover-control.ts
- * Quell-Hash: sha256:62ff5e1f7133945ff897ba67fe3cecc23714e8debba9a2daff73f48b067df5c5
+ * Quell-Hash: sha256:3f1030aba5b5f1e62a544da0f09dcecd353268007757398e3c7fdda3064afd79
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -86,6 +86,8 @@ class PrimeMoverControlModule extends BaseModule {
         this.runtime = new Map();
         this.actuatorContract = new ActuatorCommandContract();
         this.stateCache = new Map();
+        this.pendingPulses = new Map();
+        this.loadedPulseState = new Set();
         this.maxDevices = 10;
         this.inited = false;
         this.adapter = adapter;
@@ -95,6 +97,8 @@ class PrimeMoverControlModule extends BaseModule {
     async init() {
         await this.ensureObjects();
         await this.loadConfig();
+        for (const device of this.devices)
+            await this.restorePulse(device);
         this.inited = true;
     }
     root() { return this.spec.kind; }
@@ -149,6 +153,7 @@ class PrimeMoverControlModule extends BaseModule {
             ['retryCount', 'Wiederholungen', 'number', 'value', 0, ''],
             ['faultLocked', 'Fehlerverriegelung', 'boolean', 'indicator', false, ''],
             ['faultUntil', 'Fehlerverriegelung bis', 'number', 'value.time', 0, ''],
+            ['pulseResetPending', 'Ausstehende Rücknahme eines Start-/Stoppimpulses', 'string', 'json', '', ''],
             ['writeContractStatus', 'Aktor Vertragsstatus', 'string', 'text', '', ''],
             ['minRunRemainingSec', 'Verbleibende Mindestlaufzeit', 'number', 'value.interval', 0, 's'],
             ['minOffRemainingSec', 'Verbleibender Mindeststillstand', 'number', 'value.interval', 0, 's'],
@@ -241,7 +246,7 @@ class PrimeMoverControlModule extends BaseModule {
         const existing = this.runtime.get(id);
         if (existing)
             return existing;
-        const created = { wasRunning: null, stateSinceTs: 0, lastOnMs: 0, lastOffMs: 0, lastCmdMs: 0, lastCmd: '', reconstructed: false };
+        const created = { wasRunning: null, stateSinceTs: 0, lastOnMs: 0, lastOffMs: 0, lastCmdMs: 0, lastCmd: '', restoredPulse: false, reconstructed: false };
         this.runtime.set(id, created);
         return created;
     }
@@ -430,6 +435,8 @@ class PrimeMoverControlModule extends BaseModule {
             if (isActuatorAuthorityBlockedResult(result)) {
                 return { accepted: false, blocked: true, error: text(result.reason || 'blocked-by-authority') };
             }
+            if (result === false || result?.accepted === false)
+                return { accepted: false, blocked: false, error: 'write-rejected' };
             return { accepted: true, blocked: false, error: '' };
         }
         catch (error) {
@@ -450,30 +457,123 @@ class PrimeMoverControlModule extends BaseModule {
             releaseAuthority,
         };
     }
-    async pulseWrite(device, objectId, owner, reason, manual) {
-        if (!objectId || this.adapter?._nwShuttingDown)
-            return { accepted: false, blocked: false, error: 'missing-target-or-shutdown' };
-        const attempt = await withActuatorShadowContext(this.adapter, this.writeContext(device, owner, reason, manual, false), () => this.rawWrite(objectId, true));
-        if (!attempt.accepted)
+    async restorePulse(device) {
+        if (this.loadedPulseState.has(device.id))
+            return true;
+        try {
+            const saved = await this.adapter.getStateAsync(`${this.deviceBase(device)}.pulseResetPending`);
+            if (saved?.val) {
+                const entry = JSON.parse(saved.val);
+                const expected = entry?.command === 'start' ? device.startWriteId : entry?.command === 'stop' ? device.stopWriteId : '';
+                if (device.commandProfile !== 'pulse' || !expected || entry.objectId !== expected
+                    || typeof entry.manual !== 'boolean' || !Number.isFinite(entry.issuedAt)) {
+                    await this.setIfChanged(`${this.deviceBase(device)}.writeContractStatus`, 'pulse-reset-mapping-changed');
+                    return false;
+                }
+                const pulse = { objectId: expected, command: entry.command, manual: entry.manual, issuedAt: entry.issuedAt, due: 0, busy: false, released: false, recovered: true };
+                const runtime = this.getRuntime(device.id);
+                runtime.lastCmd = pulse.command;
+                runtime.lastCmdMs = pulse.issuedAt;
+                runtime.restoredPulse = true;
+                this.pendingPulses.set(device.id, pulse);
+                await this.resetPulse(device, pulse);
+            }
+            else if (device.enabled && device.commandProfile === 'pulse') {
+                const base = this.deviceBase(device);
+                const [lastCommand, lastTimestamp] = await Promise.all([
+                    this.adapter.getStateAsync(`${base}.lastCommand`), this.adapter.getStateAsync(`${base}.lastCommandTs`),
+                ]);
+                if ((lastCommand?.val === 'start' || lastCommand?.val === 'stop') && Number.isFinite(lastTimestamp?.val)) {
+                    const runtime = this.getRuntime(device.id);
+                    runtime.lastCmd = lastCommand.val;
+                    runtime.lastCmdMs = lastTimestamp.val;
+                    runtime.restoredPulse = true;
+                }
+            }
+            this.loadedPulseState.add(device.id);
+            return true;
+        }
+        catch (_error) {
+            await this.setIfChanged(`${this.deviceBase(device)}.writeContractStatus`, 'pulse-reset-state-unavailable');
+            return false;
+        }
+    }
+    async resetPulse(device, pulse) {
+        if (this.adapter._nwShuttingDown || pulse.busy || this.pendingPulses.get(device.id) !== pulse)
+            return;
+        pulse.busy = true;
+        try {
+            if (!pulse.released) {
+                const owner = pulse.manual ? this.manualOwner(device) : this.automaticOwner(device);
+                const attempt = await withActuatorShadowContext(this.adapter, {
+                    ...this.writeContext(device, owner, 'pulse-reset', pulse.manual, true),
+                    kind: `${this.root()}-pulse-reset`,
+                }, () => this.rawWrite(pulse.objectId, false));
+                if (!attempt.accepted) {
+                    await this.setIfChanged(`${this.deviceBase(device)}.writeContractStatus`, 'pulse-reset-retry');
+                    return;
+                }
+                pulse.released = true;
+            }
+            // Only acknowledge a recovered manual request after the contact has been lowered.
+            // A failed database read/clear leaves the journal intact for the next attempt.
+            if (pulse.recovered && pulse.manual) {
+                const id = `${this.userBase(device)}.command`;
+                const command = await this.adapter.getStateAsync(id);
+                if (command?.val === pulse.command && Number.isFinite(command.ts) && command.ts <= pulse.issuedAt) {
+                    await this.adapter.setStateAsync(id, '', true);
+                }
+            }
+            await this.adapter.setStateAsync(`${this.deviceBase(device)}.pulseResetPending`, '', true);
+            this.pendingPulses.delete(device.id);
+            const status = `${this.deviceBase(device)}.writeContractStatus`;
+            if (pulse.recovered || this.stateCache.get(status) === 'pulse-reset-retry')
+                await this.setIfChanged(status, 'pulse-reset-complete');
+        }
+        catch (_error) {
+            await this.setIfChanged(`${this.deviceBase(device)}.writeContractStatus`, 'pulse-reset-retry');
+        }
+        finally {
+            pulse.due = Date.now() + Math.max(250, Math.min(5000, device.retryDelayMs));
+            pulse.busy = false;
+        }
+    }
+    async pulseWrite(device, objectId, owner, reason, manual, desiredRunning) {
+        if (!objectId || this.adapter._nwShuttingDown || this.pendingPulses.has(device.id)) {
+            return { accepted: false, blocked: false, error: 'pulse-reset-pending-or-unavailable' };
+        }
+        const entry = { objectId, command: desiredRunning ? 'start' : 'stop', manual, issuedAt: Date.now() };
+        const pulse = { ...entry, due: 0, busy: true, released: false, recovered: false };
+        this.pendingPulses.set(device.id, pulse);
+        try {
+            // Persist before energising: a process or controller restart cannot lose the OFF obligation.
+            await this.adapter.setStateAsync(`${this.deviceBase(device)}.pulseResetPending`, JSON.stringify(entry), true);
+        }
+        catch (_error) {
+            this.pendingPulses.delete(device.id);
+            this.loadedPulseState.delete(device.id);
+            return { accepted: false, blocked: false, error: 'pulse-reset-state-unavailable' };
+        }
+        try {
+            if (this.adapter._nwShuttingDown)
+                return { accepted: false, blocked: false, error: 'shutdown' };
+            const attempt = await withActuatorShadowContext(this.adapter, this.writeContext(device, owner, reason, manual, false), () => this.rawWrite(objectId, true));
+            if (!attempt.accepted) {
+                // A rejected authority request never reached the output. Transport errors may have.
+                pulse.released = attempt.blocked;
+                pulse.busy = false;
+                await this.resetPulse(device, pulse);
+                return attempt;
+            }
+            pulse.due = Date.now() + device.pulseMs;
+            const schedule = this.adapter._nwSetTimeout || this.adapter.setTimeout;
+            if (typeof schedule === 'function')
+                schedule.call(this.adapter, () => { void this.resetPulse(device, pulse); }, device.pulseMs);
             return attempt;
-        const reset = async () => {
-            if (this.adapter?._nwShuttingDown)
-                return;
-            // Der Puls-Reset gehoert zum selben Aktorvertrag wie der Start-/Stop-Puls.
-            // Ein kuenstlicher Safety-Owner wuerde mit einer laufenden manuellen Lease
-            // konkurrieren und koennte den Reset selbst blockieren.
-            await withActuatorShadowContext(this.adapter, {
-                ...this.writeContext(device, owner, `${reason}:pulse-reset`, manual, true),
-                kind: `${this.root()}-pulse-reset`,
-            }, () => this.rawWrite(objectId, false));
-        };
-        if (typeof this.adapter?._nwSetTimeout === 'function')
-            this.adapter._nwSetTimeout(() => { void reset(); }, device.pulseMs);
-        else if (typeof this.adapter?.setTimeout === 'function' && !this.adapter._nwShuttingDown)
-            this.adapter.setTimeout(() => { void reset(); }, device.pulseMs);
-        else
-            this.adapter?.log?.warn?.(`[${this.root()}] pulse reset for '${objectId}' could not be scheduled safely`);
-        return attempt;
+        }
+        finally {
+            pulse.busy = false;
+        }
     }
     async writeDesired(device, desiredRunning, owner, reason, manual) {
         if (device.commandProfile === 'run-level') {
@@ -495,7 +595,7 @@ class PrimeMoverControlModule extends BaseModule {
                 return neutral;
             return withActuatorShadowContext(this.adapter, this.writeContext(device, owner, reason, manual, !desiredRunning), () => this.rawWrite(active, true));
         }
-        return this.pulseWrite(device, desiredRunning ? device.startWriteId : device.stopWriteId, owner, reason, manual);
+        return this.pulseWrite(device, desiredRunning ? device.startWriteId : device.stopWriteId, owner, reason, manual, desiredRunning);
     }
     async requestState(device, desiredRunning, reason, manual, readback) {
         const owner = manual ? this.manualOwner(device) : this.automaticOwner(device);
@@ -509,7 +609,7 @@ class PrimeMoverControlModule extends BaseModule {
             return confirmed;
         }
         const runtime = this.getRuntime(device.id);
-        if (!manual && device.requireReadback !== true && runtime.lastCmd === command && runtime.lastCmdMs > 0) {
+        if (!manual && (device.requireReadback !== true || runtime.restoredPulse) && runtime.lastCmd === command && runtime.lastCmdMs > 0) {
             const settleRemainingMs = device.commandTimeoutMs - (now - runtime.lastCmdMs);
             if (settleRemainingMs > 0) {
                 const deferred = this.actuatorContract.defer(key, desiredRunning, now, settleRemainingMs, 'command-settle-wait');
@@ -547,6 +647,7 @@ class PrimeMoverControlModule extends BaseModule {
             });
             runtime.lastCmdMs = Date.now();
             runtime.lastCmd = command;
+            runtime.restoredPulse = false;
             await this.setIfChanged(`${this.deviceBase(device)}.lastCommand`, command);
             await this.setIfChanged(`${this.deviceBase(device)}.lastCommandTs`, runtime.lastCmdMs);
             await this.setIfChanged(`${this.deviceBase(device)}.reason`, reason);
@@ -595,6 +696,14 @@ class PrimeMoverControlModule extends BaseModule {
             return;
         const now = Date.now();
         for (const device of this.devices) {
+            if (!await this.restorePulse(device))
+                continue;
+            const pending = this.pendingPulses.get(device.id);
+            if (pending && pending.due <= now) {
+                await this.resetPulse(device, pending);
+                if (this.pendingPulses.has(device.id))
+                    continue;
+            }
             if (!device.enabled)
                 continue;
             const base = this.deviceBase(device);
@@ -637,12 +746,15 @@ class PrimeMoverControlModule extends BaseModule {
             const mode = this.normalizeMode(modeState?.val);
             const commandState = await this.adapter.getStateAsync(`${user}.command`).catch(() => null);
             const command = text(commandState?.val).toLowerCase();
-            if (command === 'start' || command === 'stop') {
+            if ((command === 'start' || command === 'stop') && !this.pendingPulses.has(device.id)) {
                 if (mode === 'manual')
                     await this.requestState(device, command === 'start', `manual:${command}`, true, running);
                 else
                     await this.setIfChanged(`${base}.reason`, 'manual:ignored_not_manual');
-                await this.setIfChanged(`${user}.command`, '');
+                // A new manual command can arrive during the device write; consume only the observed request.
+                const current = await this.adapter.getStateAsync(`${user}.command`);
+                if (current?.val === commandState?.val && current?.ts === commandState?.ts)
+                    await this.adapter.setStateAsync(`${user}.command`, '', true);
             }
             let status = '';
             let reason = '';

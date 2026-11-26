@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/lib/tariff-price.ts
- * Quell-Hash: sha256:f63d79cc09008466c3c249f46ded3d5bc5fbe5cde028b5cba255f8d0297af485
+ * Quell-Hash: sha256:78d64702103606065c5c63747c842fdb52616cd9fabfdac457d557e57296ce69
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -23,6 +23,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.tariffPriceNumber = tariffPriceNumber;
+exports.verifiedTariffAgeMs = verifiedTariffAgeMs;
 exports.tariffPriceUnit = tariffPriceUnit;
 exports.normalizeTariffPrice = normalizeTariffPrice;
 exports.readTariffPriceState = readTariffPriceState;
@@ -44,6 +45,11 @@ function tariffPriceNumber(value) {
         return null;
     const parsed = Number(value);
     return Number.isFinite(parsed) ? parsed : null;
+}
+/** Age of a confirmed source sample, independent of connection heartbeats. */
+function verifiedTariffAgeMs(dp, key, now) {
+    const stamp = dp?.getVerifiedMeasurementTimestampMs?.(key, now);
+    return typeof stamp === 'number' && Number.isFinite(stamp) && stamp > 0 && stamp <= now ? now - stamp : Infinity;
 }
 /** Nur explizite Preis-Einheiten; ohne Vertrag bleibt der bisherige Auto-Pfad. */
 function tariffPriceUnit(value) {

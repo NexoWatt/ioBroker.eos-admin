@@ -9,7 +9,7 @@
  * AUTO-GENERATED FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/ems/core-limits/core-runtime.ts
- * Quell-Hash: sha256:ac50f4d5d3adb9a88451d56a0b554447722d998325dd290996413fe5af53f1dc
+ * Quell-Hash: sha256:e8ca88d15ddd40116d6778bb155fe419c51e755e9eddc6ad1686f51bb1b0977d
  * Erzeugung: npm run sync:ts-ems-mirrors
  *
  * Zweck:
@@ -157,6 +157,7 @@ function prepareCoreRuntimeSnapshotInput(rawInput = {}) {
             importToleranceW: positive(pvRaw.importToleranceW ?? 250),
         },
         storage: {
+            flowUsable: storageRaw.flowUsable !== false,
             chargeW: storageChargeW,
             dischargeW: storageDischargeW,
             eligible: storageRaw.eligible !== false,
@@ -228,6 +229,8 @@ function computeCorePvBudgetFlowRawW(input = {}) {
  * produktiven 0.8.118-Runtime, sind hier aber vollständig typisiert und rein.
  */
 function resolveCorePvBudgetPhysicalCap(input = {}) {
+    if (input.storageFlowUsable === false)
+        return { capW: 0, source: 'storage-flow-unverified', trusted: false, held: false };
     const measuredW = positive(input.measuredPvW);
     const measuredFresh = bool(input.measuredPvFresh, false);
     const flowW = positive(input.flowRawW);
@@ -435,6 +438,7 @@ function buildCoreRuntimeBudgetSnapshot(rawInput = {}) {
         storageDischargeW,
     }) - positive(pv.unconfirmedProbeW));
     const pvPhysical = resolveCorePvBudgetPhysicalCap({
+        storageFlowUsable: storage.flowUsable !== false,
         measuredPvW: pvPowerW,
         measuredPvFresh: pv.measuredFresh,
         flowRawW: pvBudgetFlowRawW,

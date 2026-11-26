@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/power-measurements.ts
- * Quell-Hash: sha256:ad26b95761a1b54c5f6f4fa6ced48c96485ddac50ee4242d6a34ce8efa923b4e
+ * Quell-Hash: sha256:9b70bcef86c4b859ae49fef8f55d064207558cfd517d63b5fa3a4c0d8b2f1883
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -61,20 +61,35 @@
     }
     function missingBuildingStatus(quality) {
         switch (quality) {
+            case 'awaiting-snapshot': return 'Live-Verbindung wird aufgebaut. Der erste Messstand steht noch aus.';
+            case 'connection-lost': return 'Live-Verbindung unterbrochen. Der Gebäudeverbrauch ist derzeit unbekannt.';
+            case 'expired-load': return 'Gebäudeverbrauch veraltet. Das eingestellte Messalter ist überschritten.';
+            case 'future-load': return 'Der Zeitstempel der Verbrauchsmessung liegt in der Zukunft. Uhrzeiten von EOS und Anzeigegerät prüfen.';
             case 'invalid-balance': return 'Gebäudeverbrauch nicht berechenbar. Die Energiebilanz ist negativ. Messpunkte, Vorzeichen und Zeitstempel prüfen.';
-            case 'missing-grid': return 'Gebäudeverbrauch nicht berechenbar. Die Netzmessung fehlt oder ist veraltet.';
-            case 'missing-pv': return 'Gebäudeverbrauch nicht berechenbar. Die PV-Messung fehlt oder ist veraltet.';
-            case 'missing-storage': return 'Gebäudeverbrauch nicht berechenbar. Die Speicherleistungsmessung fehlt oder ist veraltet.';
-            case 'missing-producer': return 'Gebäudeverbrauch nicht berechenbar. Die Messung eines zusätzlichen Erzeugers fehlt oder ist veraltet.';
-            default: return 'Gebäudeverbrauch: Messung fehlt oder ist veraltet';
+            case 'expired-grid': return 'Gebäudeverbrauch nicht berechenbar. Die letzte gültige Netzmessung ist zu alt.';
+            case 'missing-grid': return 'Gebäudeverbrauch nicht berechenbar. Es liegt keine gültige Netzmessung vor.';
+            case 'expired-pv': return 'Gebäudeverbrauch nicht berechenbar. Die letzte gültige PV-Messung ist zu alt.';
+            case 'missing-pv': return 'Gebäudeverbrauch nicht berechenbar. Es liegt keine gültige PV-Messung vor.';
+            case 'expired-storage': return 'Gebäudeverbrauch nicht berechenbar. Die letzte gültige Speicherleistungsmessung ist zu alt.';
+            case 'missing-storage': return 'Gebäudeverbrauch nicht berechenbar. Es liegt keine gültige Speicherleistungsmessung vor.';
+            case 'expired-producer': return 'Gebäudeverbrauch nicht berechenbar. Der letzte gültige Messwert eines zusätzlichen Erzeugers ist zu alt.';
+            case 'missing-producer': return 'Gebäudeverbrauch nicht berechenbar. Der gültige Messwert eines zusätzlichen Erzeugers fehlt.';
+            default: return 'Für den Gebäudeverbrauch liegt kein gültiger Messwert vor.';
         }
     }
     /** Nur Anzeige/Diagnose: keine Stellwerte, keine erfundene Mindestlast. */
     function resolveFlowBalance(input) {
         const load = number(input.load), consumers = number(input.consumers);
         const ev = input.evAvailable ? number(input.ev) : 0;
-        if (load === null || load < 0)
-            return { buildingW: null, mismatchW: null, status: missingBuildingStatus(input.buildingQuality) };
+        if (load === null || load < 0) {
+            let reason = input.buildingQuality;
+            if (!reason || reason === 'ok') {
+                const pv = number(input.pv), producers = number(input.producers), grid = number(input.grid), battery = number(input.battery);
+                if (pv !== null && producers !== null && grid !== null && battery !== null && pv + producers + grid + battery < 0)
+                    reason = 'invalid-balance';
+            }
+            return { buildingW: null, mismatchW: null, status: missingBuildingStatus(reason) };
+        }
         if (consumers === null || (input.subtractEv && ev === null))
             return { buildingW: null, mismatchW: null, status: 'Gebäudeaufteilung: Verbrauchermessung fehlt oder ist veraltet' };
         const residual = load - Math.abs(consumers) - (input.subtractEv ? Math.abs(ev ?? 0) : 0);

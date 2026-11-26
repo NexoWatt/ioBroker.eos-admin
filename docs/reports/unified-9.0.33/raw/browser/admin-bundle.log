@@ -1,0 +1,136 @@
+{
+  "sourceHashes": {
+    "adminWww/remoteEntry-eos-9.0.33.js": "9b38987cf76edc5883260bd94332043ea9383885b79d7df711c0ad85ba767790",
+    "adminWww/assets/vite-preload-helper-BbbETgeG.js": "f1330cc1e2b110f566269452fec2e010d5820367779419a7592c063277740126",
+    "adminWww/assets/helpers-C0aN90O2.js": "f68d364bd914dea69831d1f2a0d4072ff35eb3bac5b74c16bd8f44f1097027c4",
+    "adminWww/assets/loadShare-eager-dmdYQhAl.js": "641913bbe1c557ac17c18c36462767b3973f623722f0ac32f8993123e8c4891e",
+    "adminWww/assets/rolldown-runtime-sJBDdmOt.js": "70042c850830e3be55f1ddd39d263ae2a8921f9b5583c1e5d9029f298dd9c326",
+    "adminWww/index.html": "a69021c81e5d36d30f4399b163d2abed1e3cd129359a055dfcc4e9e252a565d9",
+    "adminWww/assets/_virtual_mf-localSharedImportMap___mfe_internal__iobroker_admin__mf_owner__1-DMV_e2iP.js": "ab4644ea0aac16de9a8b7b904278a16276015142e3a1e7681790d7508507b9ec",
+    "adminWww/img/eos/nexowatt-eos-brand-wide.png": "16a27cae565245b9980a98fb73851e1f5d1219fb6bf84c50b794ae26c253a3b4",
+    "adminWww/js/eos-manual-write-policy.js": "3c93487146b4fd5f681aa45a6bb137d9a91c3fa145ebfa94ec5ccb6b15498e8b",
+    "ui/www/eos-session-idle.js": "be11eda9aac6c8a17b450bc87d97b8c2ba8c73eb295efdd104acfe50bcb6b6ea",
+    "adminWww/js/eos-role-bootstrap.js": "17c7f5b872d867082513b2bb1ef7b2173e33d796379920669404a364216cd2ce",
+    "adminWww/js/eos-branding-sanitizer.js": "fe90f07e4444c38e48d6bba454151558633ea73b4fa978edf4a9a811687023c0",
+    "adminWww/js/eos-policy-client.js": "671efeb4746221035787ccc6b630033b615f7c7df5237a92544f035a2c80165b",
+    "adminWww/js/nexowatt-native-shell.js": "a2e2f1b086f2fc67b2c5515337b0cdf75ebd1b83f1827fd6e6c338dbb65e36e1",
+    "adminWww/js/eos-native-security.js": "33098b98164623fc133314658bca2f622d19971795dd8bd3c90aca68598aab90",
+    "adminWww/js/eos-basic-settings.js": "40fdfc48ea59e8481c4666de7ded5f52a1f1b5e26fb166c2ba84cae38ac559cd",
+    "adminWww/js/eos-role-ui.js": "8805bd5fd416f2e96bc91453d4b3c19279a17bf771606ffc6b302674f4009b90",
+    "adminWww/js/eos-auto-update.js": "e5b5f18dc40ca08f5ca11e6013b68d12fa910c72dcd73364cb8dd81048c86388",
+    "adminWww/js/eos-account-management.js": "0403da49ba6c470259d7166e58ab53f2a9fdd428eaf8728a9a012cfff9cf12be",
+    "adminWww/js/eos-ems-overview.js": "cfe210f11b4c4db3bc396cde236e95c4740e23013a3ccf68f7e7b0d4faf1e45b",
+    "adminWww/js/eos-assistant.js": "be43f49fd5310d2962365035556c37109d4868856e874e1f964c4b2f05bb6beb",
+    "adminWww/static/js/nexowatt-stable-login.js": "ff0c6d4dc2086f3ab4be8ef455e5891a2ccb5f534bddfacbef2f5cd6ce65489e",
+    "adminWww/static/js/nexowatt-stable-v7109.js": "624cd530ad1915bda9eafa4b2e310d943271cedbab38abe656c4f08ecfbd8750",
+    "adminWww/js/eos-license-link.js": "037654d1f3e8653ed2759cf6c52dd7370b518e78aae4bc06cbbed4121f3775b6",
+    "adminWww/css/leaflet.css": "7a30116fa3852c0ff7e556bb2e80b0dc89c5bca8e725bbe3948af1746ca55103",
+    "adminWww/css/nexowatt-native-shell.css": "0cacaf7c286a2785a448a466f03f0a20b87896e66a6e57c7915bd56729dabdc2",
+    "adminWww/css/eos-boot-loader.css": "3cd3bd5fb6c798e9d7aae2d5d7abbcb08215151e092a911f6f6d0da553cef2af",
+    "adminWww/css/eos-ems-overview.css": "fe9278e76035b6b2b5cdde93668a0a720ca1276bd7ab54a077c8af6d0eede255",
+    "adminWww/css/eos-auto-update.css": "15e6e7da86be2b0eb1399fd91fdf6fe1ff902ec37ed2cb543460749b5bb5e750",
+    "adminWww/assets/mf-entry-bootstrap-0-d1f0f40f.js": "d1f0f40f41d6f7fb04fbe3643c16d9374cfa8b593638e9945369cef4326e5a04"
+  },
+  "result": "passed",
+  "testedVersion": "9.0.33",
+  "scope": "The actual versioned ES-module remote and dependencies are executed by Chromium, shipped Admin boot resources are fetched and the branded boot logo decodes. No ioBroker socket/controller.",
+  "browser": "HeadlessChrome/158.0.8127.0",
+  "exposes": [
+    "function",
+    "function"
+  ],
+  "logo": {
+    "width": 1200,
+    "height": 342
+  },
+  "loads": [
+    [
+      "/js/eos-manual-write-policy.js",
+      200
+    ],
+    [
+      "/eos-session-idle.js",
+      200
+    ],
+    [
+      "/js/eos-role-bootstrap.js",
+      200
+    ],
+    [
+      "/js/eos-policy-client.js",
+      200
+    ],
+    [
+      "/js/eos-branding-sanitizer.js",
+      200
+    ],
+    [
+      "/js/nexowatt-native-shell.js",
+      200
+    ],
+    [
+      "/js/eos-native-security.js",
+      200
+    ],
+    [
+      "/js/eos-basic-settings.js",
+      200
+    ],
+    [
+      "/js/eos-role-ui.js",
+      200
+    ],
+    [
+      "/js/eos-auto-update.js",
+      200
+    ],
+    [
+      "/js/eos-account-management.js",
+      200
+    ],
+    [
+      "/js/eos-ems-overview.js",
+      200
+    ],
+    [
+      "/js/eos-assistant.js",
+      200
+    ],
+    [
+      "/static/js/nexowatt-stable-login.js",
+      200
+    ],
+    [
+      "/static/js/nexowatt-stable-v7109.js",
+      200
+    ],
+    [
+      "/js/eos-license-link.js",
+      200
+    ],
+    [
+      "/css/leaflet.css",
+      200
+    ],
+    [
+      "/css/nexowatt-native-shell.css",
+      200
+    ],
+    [
+      "/css/eos-boot-loader.css",
+      200
+    ],
+    [
+      "/css/eos-ems-overview.css",
+      200
+    ],
+    [
+      "/css/eos-auto-update.css",
+      200
+    ],
+    [
+      "assets/mf-entry-bootstrap-0-d1f0f40f.js",
+      200
+    ]
+  ]
+}

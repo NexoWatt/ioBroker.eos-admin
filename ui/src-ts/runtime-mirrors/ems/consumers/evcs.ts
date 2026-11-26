@@ -24,7 +24,7 @@
  * - Der nächste Schritt ist pro Modul echte Typisierung statt pauschalem No-Check.
  * - Fachliche Kommentare markieren die Abschnitte, die später einzeln migriert werden.
  *
- * Original-Hash: 72ac6e653fdc3763515929ce7e5e0e5d552e66537a1badea690f4b1b262eab19
+ * Original-Hash: 1619ef383fbcce7c48fd9a6fe7ca6211052a94348aba3c8eea6f568523bd0c1c
  */
 
 /**
@@ -45,7 +45,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/consumers/evcs.ts
- * Quell-Hash: sha256:792814bd1c185fdc369afa66880cb63f0df696307495aeb14c01e9ec068d9708
+ * Quell-Hash: sha256:782eea149f40176838bb08eb39490b43a6ce9c45b3cfc13f849b2ba79673c804
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -200,16 +200,20 @@ async function applyEvcsSetpoint(ctx, consumer, target) {
     /** @type {true|false|null} */
     let wroteEnable = null;
 
+    // EVCS: 0 ist ein ausdrücklicher Ladestopp. Die Registry darf diesen weder
+    // auf ein Laufminimum anheben noch beim Wechsel durch Deadband unterdrücken.
+    // Freigabe und positive Leistungsgrenzen bleiben getrennt davon unverändert.
+    const writeOptions = { zeroIsStop: true };
     // Apply setpoint
     if (resolvedBasis === 'currentA') {
-        if (hasSetA) wroteA = await dp.writeNumber(setAKey, (targetA > 0 ? targetA : 0), false);
-        else if (hasSetW) wroteW = await dp.writeNumber(setWKey, Math.round(targetW > 0 ? targetW : 0), false);
+        if (hasSetA) wroteA = await dp.writeNumber(setAKey, (targetA > 0 ? targetA : 0), false, writeOptions);
+        else if (hasSetW) wroteW = await dp.writeNumber(setWKey, Math.round(targetW > 0 ? targetW : 0), false, writeOptions);
     } else if (resolvedBasis === 'powerW') {
-        if (hasSetW) wroteW = await dp.writeNumber(setWKey, Math.round(targetW > 0 ? targetW : 0), false);
-        else if (hasSetA) wroteA = await dp.writeNumber(setAKey, (targetA > 0 ? targetA : 0), false);
+        if (hasSetW) wroteW = await dp.writeNumber(setWKey, Math.round(targetW > 0 ? targetW : 0), false, writeOptions);
+        else if (hasSetA) wroteA = await dp.writeNumber(setAKey, (targetA > 0 ? targetA : 0), false, writeOptions);
     } else { // fallback
-        if (hasSetW) wroteW = await dp.writeNumber(setWKey, Math.round(targetW > 0 ? targetW : 0), false);
-        else if (hasSetA) wroteA = await dp.writeNumber(setAKey, (targetA > 0 ? targetA : 0), false);
+        if (hasSetW) wroteW = await dp.writeNumber(setWKey, Math.round(targetW > 0 ? targetW : 0), false, writeOptions);
+        else if (hasSetA) wroteA = await dp.writeNumber(setAKey, (targetA > 0 ? targetA : 0), false, writeOptions);
     }
 
     // Enable handling:

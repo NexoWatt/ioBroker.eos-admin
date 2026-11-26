@@ -317,7 +317,7 @@ test('stopping only EMS drains an accepted write before restarting, while the au
             f.states.get(`${namespace}.threshold.rules.r1.status`)?.val === 'stale-safe-stop', f.diagnosis);
     });
 
-test('an explicit EMS start after a crash cannot bypass an outstanding accepted controller write',
+test('an EMS crash blocks manual starts until its accepted write completes, then recovers automatically',
     { timeout: 45000 }, async t => {
         const f = await fixture(t, createSplitRuntime);
         await eventually(() => f.runtime.status().emsReady === true && heartbeat(f) > 0, f.diagnosis);
@@ -347,10 +347,52 @@ test('an explicit EMS start after a crash cannot bypass an outstanding accepted 
             release();
         }
 
-        await eventually(() => f.output.length === 1, f.diagnosis);
-        await f.runtime.startEms();
         await eventually(() => f.runtime.status().emsReady === true && f.output.at(-1)?.value === false, f.diagnosis);
         assert.equal(emsProcess(f).generation, oldEms.generation + 1);
+        assert.equal(emsProcess(f).restarts, 1);
+        assert.equal(inputLeases(f), 1);
         assert.equal(guiProcess(f).pid, guiPid);
         assert.deepEqual(f.output, [{ value: true, ack: false }, { value: false, ack: false }]);
     });
+
+for (const outcome of ['paused', 'rejected']) {
+    test(`automatic EMS recovery remains fenced when the outstanding write is ${outcome === 'paused' ? 'completed after an operator pause' : 'rejected by the controller'}`,
+        { timeout: 45000 }, async t => {
+            const f = await fixture(t, createSplitRuntime);
+            await eventually(() => f.runtime.status().emsReady && heartbeat(f) > 0, f.diagnosis);
+            const old = emsProcess(f);
+            const guiPid = guiProcess(f).pid;
+            let release;
+            let reject;
+            let admitted = 0;
+            const pending = new Promise((resolve, refuse) => { release = resolve; reject = refuse; });
+            f.pauseOutput(() => { admitted++; return pending; });
+            try {
+                f.injectInput(200);
+                await eventually(() => admitted === 1, f.diagnosis);
+                process.kill(old.pid, 'SIGKILL');
+                await eventually(() => emsProcess(f).pid === null &&
+                    emsProcess(f).lastError === 'EOS_UI_PROCESS_WRITE_COMPLETION_UNKNOWN', f.diagnosis);
+                f.injectInput(40);
+                if (outcome === 'paused') {
+                    const paused = f.runtime.pauseEms();
+                    release();
+                    await paused;
+                } else {
+                    reject(new Error('Controller write timed out'));
+                }
+                // The fixture uses a 25 ms first restart delay.
+                await delay(200);
+                assert.equal(emsProcess(f).pid, null);
+                assert.equal(emsProcess(f).generation, old.generation);
+                assert.equal(emsProcess(f).restarts, 0);
+                assert.equal(emsProcess(f).nextRestartAt, 0);
+                assert.equal(emsProcess(f).state, outcome === 'paused' ? 'stopped' : 'failed');
+                assert.equal(guiProcess(f).pid, guiPid);
+                assert.deepEqual(f.output, outcome === 'paused' ? [{ value: true, ack: false }] : []);
+            } finally {
+                release();
+                f.pauseOutput(undefined);
+            }
+        });
+}

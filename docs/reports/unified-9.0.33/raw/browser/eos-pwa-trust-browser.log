@@ -1,0 +1,35 @@
+(node:326) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{
+  "result": "passed",
+  "runAt": "2026-11-26T12:25:34.599Z",
+  "node": "v24.22.3",
+  "browser": "HeadlessChrome/158.0.8127.0",
+  "scope": "Real Chromium, production Web mount and login/trust/icon routes on loopback HTTP; synthetic controller and public CA, stopped in-process UI. No iOS installation, plant TLS trust or physical-device claim.",
+  "checks": [
+    {
+      "name": "anonymous login reaches mobile trust setup with UI stopped; missing CA shows administrator guidance and no download button",
+      "result": "passed"
+    },
+    {
+      "name": "configured public CA shows exact SHA-256 and manual download; 390px layout has no horizontal overflow",
+      "result": "passed"
+    },
+    {
+      "name": "desktop layout and actual anonymous download preserve only the public DER certificate bytes",
+      "result": "passed"
+    },
+    {
+      "name": "root icon probes work without UI; trust setup neither logs in nor writes device states and protected APIs stay denied",
+      "result": "passed"
+    }
+  ],
+  "pageErrors": [],
+  "sourceHashes": {
+    "src/lib/web.ts": "8c17c8bb054fbf7f5412ad9a409bb5b6795e02b8f8a3e8bf77bfd976041c8398",
+    "src/lib/eosTlsHttp.ts": "568a71cc741315a520af40559e66ea0b72a3d67995101d5904ba82d089579c3a",
+    "public/eos-tls/trust.html": "38d06e816f55b0935b90ca4ab2c65119e1c3a8c9163c110febbfdeb1c1d5cb25",
+    "public/eos-tls/trust.css": "6da8c9537ff339e8d88f423969d15f927d02fcd42389aa9e0de4269e352d6121",
+    "ui/www/login.html": "7662789b1bf8eb59219d968f696e50cad7fd8517eb406db5ccc7f6bd24c34c84"
+  }
+}

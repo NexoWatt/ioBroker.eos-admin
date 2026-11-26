@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "nexowatt-ui",
-    "version": "9.0.32",
+    "version": "9.0.33",
     "news": {
+      "9.0.33": {
+        "de": "EMS prüft Bestätigung, Qualität und Alter der Netzanschlussmessung vor der Leistungsfreigabe. Verbesserungen an Energiefluss und Regelung bei Mess- und Kommunikationsstörungen.",
+        "en": "The EMS checks acknowledgement, quality and age of grid measurements before granting power. Improves energy flow and control when measurements or communications fail."
+      },
       "9.0.32": {
         "de": "Gebäudeverbrauch im LIVE-Energiefluss wird aus gültigen Messwerten ermittelt. Die Anzeige unterscheidet unvollständige Messdaten und unplausible Bilanzen.",
         "en": "Calculate live building consumption from valid power measurements. Distinguish incomplete measurements from inconsistent power balances."

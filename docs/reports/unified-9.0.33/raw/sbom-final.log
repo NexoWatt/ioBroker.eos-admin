@@ -1,0 +1,8 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+build-environment 866
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+frontend 574
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+installer 127
+{"changed":true,"component":"nexowatt:vendored:webserver@3.4.0+nexowatt.9.0.33","fullComponents":866,"runtimeDirectDependencies":35,"components":433,"bomVersion":2}
+{"changed":false,"component":"nexowatt:vendored:webserver@3.4.0+nexowatt.9.0.33","fullComponents":866,"runtimeDirectDependencies":35,"components":433,"bomVersion":2}

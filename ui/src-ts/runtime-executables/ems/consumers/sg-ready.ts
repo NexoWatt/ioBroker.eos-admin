@@ -147,11 +147,31 @@ async function applySgReady(ctx, consumer, target) {
     /** @type {true|false|null} */
     let wroteEn = null;
 
-    if (has1) wrote1 = await dp.writeBoolean(sg1Key, !!sg1, false);
-    if (has2) wrote2 = await dp.writeBoolean(sg2Key, !!sg2, false);
-    if (enableKey) {
-        if (!hasEn) wroteEn = false;
-        else wroteEn = await dp.writeBoolean(enableKey, !!enable, false);
+    // null means the registry already holds the requested physical value.
+    const write = async (key, present, value) => {
+        if (!key) return null;
+        if (!present) return false;
+        try { return await dp.writeBoolean(key, value, false); }
+        catch (_error) { return false; }
+    };
+    const changingContacts = (sg1Key && dp.getBoolean?.(sg1Key, null) !== sg1)
+        || (sg2Key && dp.getBoolean?.(sg2Key, null) !== sg2);
+    if (enableKey && (!enable || changingContacts)) wroteEn = await write(enableKey, hasEn, false);
+
+    if (!enable || wroteEn !== false) {
+        wrote1 = await write(sg1Key, has1, sg1);
+        // For an energising request never advance to a second contact after an error.
+        if (!enable || wrote1 !== false) wrote2 = await write(sg2Key, has2, sg2);
+        if (enable && wrote1 !== false && wrote2 !== false && enableKey) {
+            wroteEn = await write(enableKey, hasEn, true);
+        }
+    }
+    if (enable && (wrote1 === false || wrote2 === false || wroteEn === false)) {
+        // Withdraw the release and the boost request, including the case without a separate release relay.
+        // Preserve the failed result even when the fallback writes succeeded.
+        await write(enableKey, hasEn, false);
+        await write(sg1Key, has1, inv1);
+        await write(sg2Key, has2, inv2);
     }
     const results = [wrote1, wrote2, wroteEn].filter(v => v !== null && v !== undefined);
     const anyFalse = results.some(v => v === false);

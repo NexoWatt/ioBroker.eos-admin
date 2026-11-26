@@ -1,0 +1,11 @@
+{
+  "ok": true,
+  "checks": [
+    "pristine tab adopts background-created LP despite stale count zero and preserves empty manual station assignment",
+    "both buttons merge duplicate inventory idempotently without replacing commissioned names/limits",
+    "dirty discovery retains its draft/CAS; concurrent background change causes real HTTP409",
+    "explicit reload resolves conflict; authoritative pair saves with no automatic station groups"
+  ],
+  "pageErrors": [],
+  "postCount": 2
+}

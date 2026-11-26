@@ -48,32 +48,59 @@ function fixture() {
     };
 }
 
-test('100 ms SSE bursts render latest buffered values once per 5000 ms; source timestamps remain unchanged', () => {
+test('100 ms SSE bursts render latest buffered values once per 10000 ms; source timestamps remain unchanged', () => {
     const f = fixture(); f.start();
-    for (let step = 1; step <= 150; step++) {
+    for (let step = 1; step <= 300; step++) {
         f.ctx.state.power.value = step;
-        f.ctx.scheduleLiveTelemetryRender(false); f.advance(100);
+        f.ctx.scheduleLiveTelemetryRender(false);
+        if (step % 13 === 0) f.ctx.scheduleRender(true);
+        f.advance(100);
     }
-    assert.deepEqual(f.rendered.map(row => row.at), [0, 5000, 10000, 15000]);
-    assert.deepEqual(f.rendered.map(row => row.value), [1000, 50, 100, 150]);
+    assert.deepEqual(f.rendered.map(row => row.at), [0, 10000, 20000, 30000]);
+    assert.deepEqual(f.rendered.map(row => row.value), [1000, 100, 200, 300]);
     assert.ok(f.rendered.every(row => row.sourceTs === 123456));
 });
 
-test('quiet connections still re-evaluate every 5 s and only a real upstream timestamp refresh changes source age', () => {
-    const f = fixture(); f.start(); f.advance(5000);
-    assert.deepEqual(f.rendered.map(row => row.at), [0, 5000]);
+test('quiet connections still re-evaluate every 10 s and only a real upstream timestamp refresh changes source age', () => {
+    const f = fixture(); f.start(); f.advance(10000);
+    assert.deepEqual(f.rendered.map(row => row.at), [0, 10000]);
     assert.equal(f.ctx.state.power.ts, 123456);
-    f.advance(2000); f.ctx.state.power.ts = 130456; f.ctx.scheduleLiveTelemetryRender(false); f.advance(3000);
-    assert.deepEqual(f.rendered.map(row => row.at), [0, 5000, 10000]);
+    f.advance(2000); f.ctx.state.power.ts = 130456; f.ctx.scheduleLiveTelemetryRender(false); f.advance(8000);
+    assert.deepEqual(f.rendered.map(row => row.at), [0, 10000, 20000]);
     assert.equal(f.rendered.at(-1).value, 1000);
     assert.equal(f.rendered.at(-1).sourceTs, 130456);
 });
 
-test('wall-clock jumps cannot postpone or burst the monotonic 5 s rendering cadence', () => {
+test('the complete display frame shares one time for freshness checks and releases it afterwards', () => {
+    const f = fixture();
+    const times = [];
+    f.ctx.render = () => {
+        times.push(f.ctx.window.__nwLiveFrameNow);
+        f.shiftWall(20);
+        times.push(f.ctx.window.__nwLiveFrameNow);
+    };
+    f.start();
+    assert.equal(times.length, 2);
+    assert.ok(Number.isFinite(times[0]));
+    assert.equal(times[0], times[1]);
+    assert.equal(f.ctx.window.__nwLiveFrameNow, undefined);
+});
+
+test('other pages keep their five-second update interval without an energy flow diagram', () => {
+    const f = fixture();
+    f.document.getElementById = () => null;
+    f.start();
+    f.advance(100);
+    f.ctx.scheduleLiveTelemetryRender(false);
+    f.advance(4900);
+    assert.deepEqual(f.rendered.map(row => row.at), [0, 5000]);
+});
+
+test('wall-clock jumps cannot postpone or burst the monotonic 10 s rendering cadence', () => {
     const f = fixture(); f.start(); f.advance(1000); f.shiftWall(-86400000);
-    f.ctx.scheduleLiveTelemetryRender(false); f.advance(4000);
-    f.shiftWall(2 * 86400000); f.ctx.scheduleLiveTelemetryRender(false); f.advance(5000);
-    assert.deepEqual(f.rendered.map(row => row.at), [0, 5000, 10000]);
+    f.ctx.scheduleLiveTelemetryRender(false); f.advance(9000);
+    f.shiftWall(2 * 86400000); f.ctx.scheduleLiveTelemetryRender(false); f.advance(10000);
+    assert.deepEqual(f.rendered.map(row => row.at), [0, 10000, 20000]);
 });
 
 test('hidden tabs buffer SSE values without rendering; return immediately projects latest data and resumes exactly one timer', () => {
@@ -83,14 +110,14 @@ test('hidden tabs buffer SSE values without rendering; return immediately projec
     assert.equal(f.rendered.length, 1);
     f.visibility('visible'); f.advance(0);
     assert.equal(f.rendered.at(-1).value, 19); assert.equal(f.rendered.at(-1).at, 21000);
-    f.advance(5000); assert.deepEqual(f.rendered.map(row => row.at), [0, 21000, 26000]);
+    f.advance(10000); assert.deepEqual(f.rendered.map(row => row.at), [0, 21000, 31000]);
 });
 
 test('pagehide clears pending UI work; repeated pageshow does not duplicate periodic timers or rendering', () => {
     const f = fixture(); f.start(); f.advance(1000); f.ctx.scheduleLiveTelemetryRender(false);
     f.event('pagehide'); assert.equal(f.tasks.size, 0); f.advance(10000); assert.equal(f.rendered.length, 1);
     f.event('pageshow'); f.event('pageshow'); f.advance(0); assert.equal(f.rendered.length, 2);
-    f.advance(10000); assert.deepEqual(f.rendered.map(row => row.at), [0, 11000, 16000, 21000]);
+    f.advance(10000); assert.deepEqual(f.rendered.map(row => row.at), [0, 11000, 21000]);
     assert.equal(f.tasks.size, 1, 'single periodic age refresh remains');
 });
 

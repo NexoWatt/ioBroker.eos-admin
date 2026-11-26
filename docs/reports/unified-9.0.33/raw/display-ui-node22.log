@@ -1,0 +1,162 @@
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual flow keeps measured zero during export and never invents 100 W or indefinitely holds a previous load
+ok 1 - actual flow keeps measured zero during export and never invents 100 W or indefinitely holds a previous load
+  ---
+  duration_ms: 23.895542
+  type: 'test'
+  ...
+# Subtest: actual flow differentiates null, missing, bool and zero SoC and does not suppress valid raw PV behind null derived PV
+ok 2 - actual flow differentiates null, missing, bool and zero SoC and does not suppress valid raw PV behind null derived PV
+  ---
+  duration_ms: 14.891187
+  type: 'test'
+  ...
+# Subtest: stale, future, absent or offline measurements stay unknown in the same flow and sidebar; fresh unchanged zero recovers
+ok 3 - stale, future, absent or offline measurements stay unknown in the same flow and sidebar; fresh unchanged zero recovers
+  ---
+  duration_ms: 10.98127
+  type: 'test'
+  ...
+# Subtest: no measurement/engine data never claims active engine, stable grid or healthy system
+ok 4 - no measurement/engine data never claims active engine, stable grid or healthy system
+  ---
+  duration_ms: 10.009688
+  type: 'test'
+  ...
+# Subtest: canonical NVP-invalid signal prevents a stale fallback from appearing as import/export or 100 percent self-sufficiency
+ok 5 - canonical NVP-invalid signal prevents a stale fallback from appearing as import/export or 100 percent self-sufficiency
+  ---
+  duration_ms: 8.130667
+  type: 'test'
+  ...
+# Subtest: farm flow uses complete atomic gross sums and arithmetic SoC; partial and stale overview do not revive old aggregate values
+ok 6 - farm flow uses complete atomic gross sums and arithmetic SoC; partial and stale overview do not revive old aggregate values
+  ---
+  duration_ms: 10.440696
+  type: 'test'
+  ...
+# Subtest: strict read rejects malformed values, absent timestamps and future samples but accepts newly confirmed constant zero
+ok 7 - strict read rejects malformed values, absent timestamps and future samples but accepts newly confirmed constant zero
+  ---
+  duration_ms: 7.701068
+  type: 'test'
+  ...
+# Subtest: both shipped entry pages load the strict live helper before the actual dashboard renderer
+ok 8 - both shipped entry pages load the strict live helper before the actual dashboard renderer
+  ---
+  duration_ms: 1.215185
+  type: 'test'
+  ...
+# Subtest: missing split-meter sides and missing NVP cannot manufacture a complete flow or a balance-derived battery
+ok 9 - missing split-meter sides and missing NVP cannot manufacture a complete flow or a balance-derived battery
+  ---
+  duration_ms: 13.545609
+  type: 'test'
+  ...
+# Subtest: extra producer and consumer nodes never display command power or missing measurements as measured zero
+ok 10 - extra producer and consumer nodes never display command power or missing measurements as measured zero
+  ---
+  duration_ms: 10.998336
+  type: 'test'
+  ...
+# Subtest: visible dashboard ages measurements even without a new SSE event; hidden and non-dashboard pages do not rerender
+ok 11 - visible dashboard ages measurements even without a new SSE event; hidden and non-dashboard pages do not rerender
+  ---
+  duration_ms: 8.428739
+  type: 'test'
+  ...
+# Subtest: real flow does not suppress 80 W or retain separately smoothed previous powers
+ok 12 - real flow does not suppress 80 W or retain separately smoothed previous powers
+  ---
+  duration_ms: 8.494946
+  type: 'test'
+  ...
+# Subtest: EV freshness, offline, bad-quality and future timestamp use the same measured-data contract as the rest of the flow
+ok 13 - EV freshness, offline, bad-quality and future timestamp use the same measured-data contract as the rest of the flow
+  ---
+  duration_ms: 15.608854
+  type: 'test'
+  ...
+# Subtest: consumer greater than total is reported as inconsistent, and fresh balance can recover stale total without fabricating zero
+ok 14 - consumer greater than total is reported as inconsistent, and fresh balance can recover stale total without fabricating zero
+  ---
+  duration_ms: 12.538023
+  type: 'test'
+  ...
+# Subtest: signed split flows retain conservation for simultaneous import/export and battery charge/discharge
+ok 15 - signed split flows retain conservation for simultaneous import/export and battery charge/discharge
+  ---
+  duration_ms: 14.127523
+  type: 'test'
+  ...
+# Subtest: second field screenshot rejects impossible negative building remainder instead of clamping it to 0 W
+ok 16 - second field screenshot rejects impossible negative building remainder instead of clamping it to 0 W
+  ---
+  duration_ms: 13.713519
+  type: 'test'
+  ...
+# Subtest: negative load and out-of-range state of charge cannot masquerade as measured zero or valid percent
+ok 17 - negative load and out-of-range state of charge cannot masquerade as measured zero or valid percent
+  ---
+  duration_ms: 12.77172
+  type: 'test'
+  ...
+# Subtest: backend deduplicated extra production is authoritative and invalid published totals cannot be revived by browser sums
+ok 18 - backend deduplicated extra production is authoritative and invalid published totals cannot be revived by browser sums
+  ---
+  duration_ms: 11.083483
+  type: 'test'
+  ...
+# Subtest: complete farm gross readings survive the presence of a canonical net observation
+ok 19 - complete farm gross readings survive the presence of a canonical net observation
+  ---
+  duration_ms: 10.000032
+  type: 'test'
+  ...
+# Subtest: canonical missing single-battery observation permits only an explicitly calculated display from fresh independent inputs
+ok 20 - canonical missing single-battery observation permits only an explicitly calculated display from fresh independent inputs
+  ---
+  duration_ms: 10.745029
+  type: 'test'
+  ...
+# Subtest: a new direct house meter sample between flow frames shows immediately, without reviving an unmapped mirror
+ok 21 - a new direct house meter sample between flow frames shows immediately, without reviving an unmapped mirror
+  ---
+  duration_ms: 16.056849
+  type: 'test'
+  ...
+# Subtest: newer bad-quality direct sample invalidates a preceding frame from that meter without discarding an independent balance
+ok 22 - newer bad-quality direct sample invalidates a preceding frame from that meter without discarding an independent balance
+  ---
+  duration_ms: 6.17417
+  type: 'test'
+  ...
+# Subtest: expired observations, loss of connection, and initial synchronization each show their own reason
+ok 23 - expired observations, loss of connection, and initial synchronization each show their own reason
+  ---
+  duration_ms: 6.043747
+  type: 'test'
+  ...
+# Subtest: the dashboard timestamp uses a confirmed measurement even when its value is constant and never uses UI activity or wall time
+ok 24 - the dashboard timestamp uses a confirmed measurement even when its value is constant and never uses UI activity or wall time
+  ---
+  duration_ms: 4.793459
+  type: 'test'
+  ...
+# Subtest: actual SSE reconnect waits for a full snapshot, rejects degraded/incomplete sessions and preserves source ordering
+ok 25 - actual SSE reconnect waits for a full snapshot, rejects degraded/incomplete sessions and preserves source ordering
+  ---
+  duration_ms: 15.025096
+  type: 'test'
+  ...
+1..25
+# tests 25
+# suites 0
+# pass 25
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 903.393934

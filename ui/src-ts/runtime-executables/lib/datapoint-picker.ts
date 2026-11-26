@@ -37,8 +37,23 @@ interface PickerItem extends PickerEntry {
 }
 
 interface PickerNode {
-  children: Record<string, PickerNode | undefined>;
+  children: Record<string, PickerNode> | null;
   item: PickerItem | null;
+}
+
+function buildPickerTree(items: PickerItem[]): PickerNode {
+  const root: PickerNode = { children: null, item: null };
+  for (const item of items) {
+    if (!item.id) continue;
+    let node = root;
+    for (const segment of item.id.split('.')) {
+      if (!segment) continue;
+      const children: Record<string, PickerNode> = node.children ??= Object.create(null);
+      node = children[segment] ??= { children: null, item: null };
+    }
+    node.item = item;
+  }
+  return root;
 }
 
 const SEARCH_MAX_AGE_MS = 15_000;
@@ -86,17 +101,7 @@ export function registerDatapointPicker(
     }
     items.sort((a, b) => a.idLower.localeCompare(b.idLower));
 
-    const makeNode = (): PickerNode => ({ children: Object.create(null), item: null });
-    const trie = makeNode();
-    for (const item of items) {
-      if (!item.id) continue;
-      let node = trie;
-      for (const segment of item.id.split('.').filter(Boolean)) {
-        node = node.children[segment] ??= makeNode();
-      }
-      node.item = item;
-    }
-    return { items, trie };
+    return { items, trie: null as PickerNode | null };
   }, TREE_MAX_AGE_MS, time);
 
   app.get('/api/smarthome/dpsearch', requireDpDiscovery, async (req, res) => {
@@ -162,23 +167,25 @@ export function registerDatapointPicker(
         return void res.status(500).json({ ok: false, error: 'getForeignObjectsAsync not available' });
       }
 
-      const { trie } = await snapshot.get(false, TREE_MAX_AGE_MS);
+      const index = await snapshot.get(false, TREE_MAX_AGE_MS);
       const parts = prefix ? prefix.split('.').filter(Boolean) : [];
-      let node = trie;
+      let node = index.trie ??= buildPickerTree(index.items);
       for (const segment of parts) {
-        const child = node.children[segment];
+        const child = node.children?.[segment];
         if (!child) return void res.json({ ok: true, prefix, children: [] });
         node = child;
       }
 
-      const labels = Object.keys(node.children).sort((a, b) => a.localeCompare(b));
+      const branches = node.children;
+      if (!branches) return void res.json({ ok: true, prefix, children: [] });
+      const labels = Object.keys(branches).sort((a, b) => a.localeCompare(b));
       const children = labels.map(label => {
-        const child = node.children[label];
+        const child = branches[label];
         const item = child?.item;
         return {
           id: prefix ? `${prefix}.${label}` : label,
           label,
-          hasChildren: !!(child && Object.keys(child.children).length),
+          hasChildren: !!child.children,
           isState: !!item,
           name: item ? item.name : '',
           role: item ? item.role : '',

@@ -1,0 +1,12 @@
+{"pointSeconds":0,"rows":{"testHarness":{"pid":81,"RssKiB":115616,"PssKiB":90701,"Private_DirtyKiB":86724,"SwapKiB":0},"gui":{"pid":89,"RssKiB":48224,"PssKiB":25400,"Private_DirtyKiB":22880,"SwapKiB":0},"ems":{"pid":97,"RssKiB":113284,"PssKiB":88751,"Private_DirtyKiB":82916,"SwapKiB":0},"devices":{"pid":113,"RssKiB":53336,"PssKiB":36208,"Private_DirtyKiB":34512,"SwapKiB":0},"eebus":{"pid":124,"RssKiB":39716,"PssKiB":19982,"Private_DirtyKiB":17740,"SwapKiB":0},"backup":{"pid":137,"RssKiB":40152,"PssKiB":20804,"Private_DirtyKiB":18828,"SwapKiB":0},"ocpp":{"pid":149,"RssKiB":68176,"PssKiB":44908,"Private_DirtyKiB":42076,"SwapKiB":0}},"heartbeat":3}
+{"pointSeconds":5,"rows":{"testHarness":{"pid":81,"RssKiB":126520,"PssKiB":101403,"Private_DirtyKiB":97596,"SwapKiB":0},"gui":{"pid":89,"RssKiB":48328,"PssKiB":25491,"Private_DirtyKiB":22984,"SwapKiB":0},"ems":{"pid":97,"RssKiB":115780,"PssKiB":91020,"Private_DirtyKiB":85292,"SwapKiB":0},"devices":{"pid":113,"RssKiB":53496,"PssKiB":36363,"Private_DirtyKiB":34672,"SwapKiB":0},"eebus":{"pid":124,"RssKiB":39852,"PssKiB":20046,"Private_DirtyKiB":17816,"SwapKiB":0},"backup":{"pid":137,"RssKiB":40476,"PssKiB":21112,"Private_DirtyKiB":19140,"SwapKiB":0},"ocpp":{"pid":149,"RssKiB":68196,"PssKiB":44832,"Private_DirtyKiB":42096,"SwapKiB":0}},"heartbeat":15}
+{"pointSeconds":10,"rows":{"testHarness":{"pid":81,"RssKiB":136352,"PssKiB":108858,"Private_DirtyKiB":107408,"SwapKiB":0},"gui":{"pid":89,"RssKiB":48392,"PssKiB":24072,"Private_DirtyKiB":23044,"SwapKiB":0},"ems":{"pid":97,"RssKiB":120268,"PssKiB":92265,"Private_DirtyKiB":89652,"SwapKiB":0},"devices":{"pid":113,"RssKiB":54492,"PssKiB":35963,"Private_DirtyKiB":35264,"SwapKiB":0},"eebus":{"pid":124,"RssKiB":39876,"PssKiB":18743,"Private_DirtyKiB":17832,"SwapKiB":0},"backup":{"pid":137,"RssKiB":40504,"PssKiB":19937,"Private_DirtyKiB":19140,"SwapKiB":0},"ocpp":{"pid":149,"RssKiB":68204,"PssKiB":43213,"Private_DirtyKiB":42104,"SwapKiB":0}},"heartbeat":25}
+✔ Sample delivered process code with isolated controller fixtures (13526.43728ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13530.75754

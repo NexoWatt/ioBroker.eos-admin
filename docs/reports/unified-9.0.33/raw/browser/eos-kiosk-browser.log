@@ -1,0 +1,59 @@
+(node:226) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{
+  "result": "passed",
+  "runAt": "2026-11-26T12:44:41.932Z",
+  "node": "v24.22.3",
+  "browser": "HeadlessChrome/158.0.8127.0",
+  "scope": "Real Chromium, canonical TS transpiled in memory, real Web/EosKiosk/UnifiedSessions/OAuth model/CSRF/persistence; controller lookup/storage mocked. Dashboard markup is a small fixture; settings/login markup is production. Unrelated settings scripts omitted. 11 minutes are Chromium virtual time, not elapsed wall time.",
+  "checks": [
+    {
+      "name": "settings initial persisted status, enabled admin button and obsolete migration entry absent",
+      "result": "passed"
+    },
+    {
+      "name": "settings toggle persists revision with CSRF, revokes admin and returns into restricted kiosk",
+      "result": "passed"
+    },
+    {
+      "name": "660001ms Chromium virtual time: kiosk stays open without user input or idle renewal",
+      "result": "passed"
+    },
+    {
+      "name": "mobile Admin öffnen opens real credential form with admin intent, no kiosk redirect loop",
+      "result": "passed"
+    },
+    {
+      "name": "normal customer remains at admin credential form and cannot read admin-only kiosk configuration",
+      "result": "passed"
+    },
+    {
+      "name": "settings disable persists false with next revision and displays confirmed disabled status",
+      "result": "passed"
+    },
+    {
+      "name": "already open independent kiosk tablet locks on the next server recheck after disable",
+      "result": "passed"
+    },
+    {
+      "name": "disabled kiosk cookie cannot reopen dashboard API and user is returned to login",
+      "result": "passed"
+    }
+  ],
+  "pageErrors": [],
+  "hashes": {
+    "ui/src-ts/runtime-executables/www/runtime-base.ts": "f514c7b6601b7eaa7522b3dd8316d2d05041cd2ddbfd553442baac5678d2f0a5",
+    "ui/src-ts/runtime-executables/www/auth.ts": "df79aa5b7344d9dace7a58ba8d696382aa3e6f11f33a9aa5be25b0868daff470",
+    "ui/src-ts/runtime-executables/www/login.ts": "62816adc56165924d31e7b98d1dc547d34f0e2f90505e8527fa21d8d29281a77",
+    "ui/src-ts/runtime-executables/www/eos-session-idle.ts": "25e7d4bad04012ffa632878fe496e36a878305dfb3486cf0d6462fda39cf721c",
+    "ui/src-ts/runtime-executables/www/eos-kiosk-settings.ts": "ccb00e5b8e5155c7d90be718dc4261c4911489d8f8f2686dfc8680f8d0b1deed",
+    "ui/www/settings.html": "026436739199ee18c0ae4bf5ad64d32fb4b33677ed32782a7af38248f790913a",
+    "ui/www/login.html": "7662789b1bf8eb59219d968f696e50cad7fd8517eb406db5ccc7f6bd24c34c84",
+    "src/lib/web.ts": "8c17c8bb054fbf7f5412ad9a409bb5b6795e02b8f8a3e8bf77bfd976041c8398",
+    "src/lib/eosKiosk.ts": "3510f1d6216e518dbab77e310cfccfa37640c947df3c0fddc7b77c44b2be9922",
+    "src/lib/eosUnifiedBoundary.js": "f2971a25015466ea2c1689a34657f0b3b982d70171ab5a876666fdc8287bbe65",
+    "src/lib/eosSessionSecurity.js": "0bd37a9435c621ae81cb5d94bf047aab7694d142a4b664ef12df8fe4ed917c43",
+    "ui/main.js": "481f3b6883513d765bf8f880b7d226bb7c0298cc94c9d2f5e98dca25f2b7cf02",
+    "ui/lib/hosted-adapter.js": "2bff2aac5525c724d0278e263ee473bac5405e3a28793002b851b42a71e74ed4"
+  }
+}

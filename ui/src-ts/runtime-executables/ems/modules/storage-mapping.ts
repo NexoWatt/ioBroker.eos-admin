@@ -76,19 +76,20 @@ class SpeicherMappingModule extends BaseModule {
             await this._setIfChanged('speicher.socAlterMs', Math.round(socAge));
         }
 
-        // Einzel-DC-/Hybrid-Speicher: PV-Erzeugungswert separat spiegeln, damit
-        // Diagnose und 0-Einspeise-/FENECON-Erkennung nicht den Batterie-Sollwert
-        // oder den gemischten AC-Ausgang als PV-Quelle missverstehen.
-        // Wichtig: Der Wert wird nur bei aktivem DC-/Hybrid-Typ und gemapptem DP genutzt;
-        // alte Mapping-Reste aus AC-Konfigurationen werden bewusst auf 0 gespiegelt.
+        // Repeated equal measurements keep their physical timestamp. An unmapped,
+        // invalid or missing source must not create a measured 0 W after restart.
         const cfg = this._getCfg();
-        const dcPvMapped = cfg.coupling === 'dc' && !!String(cfg.dp && cfg.dp.dcPvPowerObjectId || '').trim();
-        const dcPvW = dcPvMapped ? this.dp.getNumber('st.dcPvPowerW', null) : null;
-        if (typeof dcPvW === 'number' && Number.isFinite(dcPvW)) {
-            await this._setIfChanged('speicher.dcPvPowerW', Math.round(dcPvW));
-        } else {
-            await this._setIfChanged('speicher.dcPvPowerW', 0);
+        const mapped = cfg.coupling === 'dc' && !!String(cfg.dp?.dcPvPowerObjectId || '').trim();
+        const now = Date.now();
+        const ts = mapped ? this.dp.getVerifiedMeasurementTimestampMs?.('st.dcPvPowerW', now) : null;
+        const value = Number.isFinite(ts) ? this.dp.getNumber('st.dcPvPowerW', null) : null;
+        const observation = Number.isFinite(value) ? { val: Math.round(value), ts } : { val: null, ts: null };
+        const last = this._lastDcPvObservation;
+        if (!last || last.val !== observation.val || last.ts !== observation.ts) {
+            await this.adapter.setStateAsync('speicher.dcPvPowerW', { val: observation.val, ack: true, ts: observation.ts ?? now });
+            this._lastDcPvObservation = observation;
         }
+
     }
 
     async _ensureStates() {
@@ -134,7 +135,7 @@ class SpeicherMappingModule extends BaseModule {
             { id: `${base}.mapping.e3dcMaxDischargePowerId`, name: 'E3/DC EMS.MAX_DISCHARGE_POWER Datenpunkt-ID', type: 'string', role: 'text', def: '' },
 
             { id: `${base}.socPct`, name: 'Speicher Ladezustand (SoC)', type: 'number', role: 'value.battery', def: 0 },
-            { id: `${base}.dcPvPowerW`, name: 'DC-/Hybrid-PV Erzeugungsleistung', type: 'number', role: 'value.power', def: 0 },
+            { id: `${base}.dcPvPowerW`, name: 'DC-/Hybrid-PV Erzeugungsleistung', type: 'number', role: 'value.power', def: null },
             { id: `${base}.socAlterMs`, name: 'SoC Alter (ms)', type: 'number', role: 'value.interval', def: 0 },
         ];
 

@@ -1,0 +1,220 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: real EMS ticks and drives one simulated relay while the GUI is frozen, stopped, and crashed
+ok 1 - real EMS ticks and drives one simulated relay while the GUI is frozen, stopped, and crashed
+  ---
+  duration_ms: 9482.751811
+  type: 'test'
+  ...
+# Subtest: stopping only EMS drains an accepted write before restarting, while the authorized GUI picker stays available
+ok 2 - stopping only EMS drains an accepted write before restarting, while the authorized GUI picker stays available
+  ---
+  duration_ms: 9184.181366
+  type: 'test'
+  ...
+# Subtest: an EMS crash blocks manual starts until its accepted write completes, then recovers automatically
+ok 3 - an EMS crash blocks manual starts until its accepted write completes, then recovers automatically
+  ---
+  duration_ms: 6580.398513
+  type: 'test'
+  ...
+# Subtest: automatic EMS recovery remains fenced when the outstanding write is completed after an operator pause
+ok 4 - automatic EMS recovery remains fenced when the outstanding write is completed after an operator pause
+  ---
+  duration_ms: 3070.697273
+  type: 'test'
+  ...
+# Subtest: automatic EMS recovery remains fenced when the outstanding write is rejected by the controller
+ok 5 - automatic EMS recovery remains fenced when the outstanding write is rejected by the controller
+  ---
+  duration_ms: 4356.538472
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: only exact configuration IDs/methods and acknowledged string values receive the longer reply window
+ok 6 - only exact configuration IDs/methods and acknowledged string values receive the longer reply window
+  ---
+  duration_ms: 2498.70153
+  type: 'test'
+  ...
+# Subtest: preserved UI namespace grants the longer ACK only to its bound instance
+ok 7 - preserved UI namespace grants the longer ACK only to its bound instance
+  ---
+  duration_ms: 2434.331686
+  type: 'test'
+  ...
+# Subtest: unvalidated namespace text cannot widen the protected configuration ID set
+ok 8 - unvalidated namespace text cannot widen the protected configuration ID set
+  ---
+  duration_ms: 2404.790522
+  type: 'test'
+  ...
+# Subtest: configuration IPC delivered after two seconds is explicitly expired before any database mutation
+ok 9 - configuration IPC delivered after two seconds is explicitly expired before any database mutation
+  ---
+  duration_ms: 2211.647811
+  type: 'test'
+  ...
+# Subtest: late or foreign-generation RPC results cannot satisfy a newer pending call
+ok 10 - late or foreign-generation RPC results cannot satisfy a newer pending call
+  ---
+  duration_ms: 86.2327
+  type: 'test'
+  ...
+# (node:14) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: real child awaits 2.2s config ACK before runtime commit (preserved namespace=false)
+ok 11 - real child awaits 2.2s config ACK before runtime commit (preserved namespace=false)
+  ---
+  duration_ms: 2906.079106
+  type: 'test'
+  ...
+# Subtest: real child awaits 2.2s config ACK before runtime commit (preserved namespace=true)
+ok 12 - real child awaits 2.2s config ACK before runtime commit (preserved namespace=true)
+  ---
+  duration_ms: 2769.099852
+  type: 'test'
+  ...
+# Subtest: a definite controller rejection reports failure without restarting or changing saved config
+ok 13 - a definite controller rejection reports failure without restarting or changing saved config
+  ---
+  duration_ms: 298.937946
+  type: 'test'
+  ...
+# Subtest: pause drains a late accepted config ACK and resume reloads the committed state without replay
+ok 14 - pause drains a late accepted config ACK and resume reloads the committed state without replay
+  ---
+  duration_ms: 806.27908
+  type: 'test'
+  ...
+# Subtest: unknown config completion at the real 30s deadline fences the child until drain and explicit recovery
+ok 15 - unknown config completion at the real 30s deadline fences the child until drain and explicit recovery
+  ---
+  duration_ms: 30661.216309
+  type: 'test'
+  ...
+# (node:176) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: controller checkPassword callback preserves the canonical returned user
+ok 16 - controller checkPassword callback preserves the canonical returned user
+  ---
+  duration_ms: 104.759081
+  type: 'test'
+  ...
+# Subtest: history adapter responses beyond physical-command TTL retain their read-only callback
+ok 17 - history adapter responses beyond physical-command TTL retain their read-only callback
+  ---
+  duration_ms: 2355.259554
+  type: 'test'
+  ...
+# Subtest: an expired physical command is not replayed when the parent event loop recovers
+ok 18 - an expired physical command is not replayed when the parent event loop recovers
+  ---
+  duration_ms: 2607.933767
+  type: 'test'
+  ...
+# Subtest: completion from an old RPC generation cannot kill its replacement process
+ok 19 - completion from an old RPC generation cannot kill its replacement process
+  ---
+  duration_ms: 394.861673
+  type: 'test'
+  ...
+# Subtest: oversized controller response fails its read without killing the control process
+ok 20 - oversized controller response fails its read without killing the control process
+  ---
+  duration_ms: 279.77891
+  type: 'test'
+  ...
+# Subtest: SIGKILL of the supervising parent terminates the real runtime child
+ok 21 - SIGKILL of the supervising parent terminates the real runtime child
+  ---
+  duration_ms: 127.787414
+  type: 'test'
+  ...
+# (node:257) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual OS child preserves source timestamps/quality and HTTP identity is parent-bound
+ok 22 - actual OS child preserves source timestamps/quality and HTTP identity is parent-bound
+  ---
+  duration_ms: 126.577593
+  type: 'test'
+  ...
+# Subtest: each write rechecks live parent ownership; shutdown releases only owned subscriptions
+ok 23 - each write rechecks live parent ownership; shutdown releases only owned subscriptions
+  ---
+  duration_ms: 73.071954
+  type: 'test'
+  ...
+# Subtest: child exit is contained and restart uses new PID/generation without replaying measurements
+ok 24 - child exit is contained and restart uses new PID/generation without replaying measurements
+  ---
+  duration_ms: 158.899784
+  type: 'test'
+  ...
+# Subtest: blocked child event loop does not block parent and is killed before restart
+ok 25 - blocked child event loop does not block parent and is killed before restart
+  ---
+  duration_ms: 5583.846515
+  type: 'test'
+  ...
+# Subtest: real hosted UI shell retains login, origin and CSRF/role admission across private HTTP bridge
+ok 26 - real hosted UI shell retains login, origin and CSRF/role admission across private HTTP bridge
+  ---
+  duration_ms: 334.158034
+  type: 'test'
+  ...
+# Subtest: HTTP body streaming, fallthrough and SSE disconnect keep the public connection usable
+ok 27 - HTTP body streaming, fallthrough and SSE disconnect keep the public connection usable
+  ---
+  duration_ms: 75.144112
+  type: 'test'
+  ...
+# Subtest: private loopback rejects direct requests, spoofed capabilities and replay while a legitimate stream stays open
+ok 28 - private loopback rejects direct requests, spoofed capabilities and replay while a legitimate stream stays open
+  ---
+  duration_ms: 117.511608
+  type: 'test'
+  ...
+# Subtest: process diagnostics remove complete configured secrets before shortening
+ok 29 - process diagnostics remove complete configured secrets before shortening
+  ---
+  duration_ms: 2.642788
+  type: 'test'
+  ...
+# Subtest: explicit pause and resume use a new OS child while terminal stop cannot resurrect it
+ok 30 - explicit pause and resume use a new OS child while terminal stop cannot resurrect it
+  ---
+  duration_ms: 263.631728
+  type: 'test'
+  ...
+# Subtest: pause drains an accepted controller write before an explicit resume may create another child
+ok 31 - pause drains an accepted controller write before an explicit resume may create another child
+  ---
+  duration_ms: 237.031639
+  type: 'test'
+  ...
+# Subtest: after a crash every accepted write must finish before a single generation regains ownership
+ok 32 - after a crash every accepted write must finish before a single generation regains ownership
+  ---
+  duration_ms: 773.972748
+  type: 'test'
+  ...
+# Subtest: pause during initialization drains a late subscription acquisition before creating the next child
+ok 33 - pause during initialization drains a late subscription acquisition before creating the next child
+  ---
+  duration_ms: 229.763355
+  type: 'test'
+  ...
+1..33
+# tests 33
+# suites 0
+# pass 33
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 38412.483909

@@ -89,6 +89,10 @@ test('a fresh Git index retains every file required by the sealed publication in
     const tracked = new Set(git(['ls-files', '-z']).split('\0').filter(Boolean));
     const seal = JSON.parse(await readFile(join(source, 'release-manifests/unified/files.json'), 'utf8'));
     assert.ok(seal && seal.files && Object.keys(seal.files).length > 1000, 'real full release inventory required');
+    const packageFiles = JSON.parse(await readFile(join(source, 'package.json'), 'utf8')).files;
+    assert.equal(packageFiles.includes('ui/build-ts/'), false, 'npm must exclude the local TypeScript staging directory');
+    assert.ok(Object.hasOwn(seal.files, 'ui/lib/ts-mirrors/ems/core-limits/core-runtime.js'), 'the runtime copy must ship');
+    assert.equal(Object.keys(seal.files).some(name => name.startsWith('ui/build-ts/')), false);
     const missing = Object.keys(seal.files).filter(name => !tracked.has(name));
     assert.deepEqual(missing, [], 'ordinary Git upload must retain every sealed runtime, source and publication proof');
 });

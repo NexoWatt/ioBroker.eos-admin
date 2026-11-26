@@ -1,0 +1,116 @@
+{
+  "checked": 16,
+  "uncovered": [],
+  "files": [
+    {
+      "file": "test/eos-derived-flow-integrity.test.cjs",
+      "status": "modified",
+      "testPatterns": [
+        "test/eos-derived-flow-integrity.test.cjs"
+      ]
+    },
+    {
+      "file": "test/eos-ems-process-isolation.test.cjs",
+      "status": "modified",
+      "testPatterns": [
+        "test/eos-ems-process-isolation.test.cjs"
+      ]
+    },
+    {
+      "file": "test/eos-energyflow-cadence.test.cjs",
+      "status": "modified",
+      "testPatterns": [
+        "test/eos-energyflow-cadence.test.cjs"
+      ]
+    },
+    {
+      "file": "test/eos-history-measurement-integrity.test.cjs",
+      "status": "modified",
+      "testPatterns": [
+        "test/eos-history-measurement-integrity.test.cjs"
+      ]
+    },
+    {
+      "file": "test/eos-live-display-regression.test.cjs",
+      "status": "modified",
+      "testPatterns": [
+        "test/eos-live-display-regression.test.cjs"
+      ]
+    },
+    {
+      "file": "test/eos-nvp-933-safety.test.cjs",
+      "status": "new",
+      "testPatterns": [
+        "test/eos-nvp-933-safety.test.cjs"
+      ]
+    },
+    {
+      "file": "test/eos-ocpp-runtime-feedback.test.cjs",
+      "status": "modified",
+      "testPatterns": [
+        "test/eos-ocpp*.test.cjs"
+      ]
+    },
+    {
+      "file": "test/eos-prime-mover-pulse-recovery.test.cjs",
+      "status": "new",
+      "testPatterns": [
+        "test/eos-prime-mover-pulse-recovery.test.cjs"
+      ]
+    },
+    {
+      "file": "test/eos-sgready-interlock.test.cjs",
+      "status": "new",
+      "testPatterns": [
+        "test/eos-sgready-interlock.test.cjs"
+      ]
+    },
+    {
+      "file": "test/eos-storage-farm-overview.test.cjs",
+      "status": "modified",
+      "testPatterns": [
+        "test/eos-storage-farm-overview.test.cjs"
+      ]
+    },
+    {
+      "file": "test/eos-storage-nullable-flow.test.cjs",
+      "status": "modified",
+      "testPatterns": [
+        "test/eos-storage-nullable-flow.test.cjs"
+      ]
+    },
+    {
+      "file": "test/eos-tariff-runtime-namespace.test.cjs",
+      "status": "modified",
+      "testPatterns": [
+        "test/eos-tariff*.test.cjs"
+      ]
+    },
+    {
+      "file": "test/eos-ui-process.test.cjs",
+      "status": "modified",
+      "testPatterns": [
+        "test/eos-ui-process.test.cjs"
+      ]
+    },
+    {
+      "file": "test/eos-unified-git-runtime.test.cjs",
+      "status": "modified",
+      "testPatterns": [
+        "test/eos-unified*.test.cjs"
+      ]
+    },
+    {
+      "file": "test/eos-unified-repository-update-metadata.test.cjs",
+      "status": "modified",
+      "testPatterns": [
+        "test/eos-unified*.test.cjs"
+      ]
+    },
+    {
+      "file": "ui/test/license-compatibility-negative.test.cjs",
+      "status": "comment-only",
+      "testPatterns": []
+    }
+  ]
+}

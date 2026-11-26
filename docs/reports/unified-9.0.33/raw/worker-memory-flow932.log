@@ -1,0 +1,12 @@
+{"pointSeconds":0,"rows":{"testHarness":{"pid":5,"RssKiB":119272,"PssKiB":93712,"Private_DirtyKiB":90380,"SwapKiB":0},"gui":{"pid":13,"RssKiB":48124,"PssKiB":25030,"Private_DirtyKiB":22736,"SwapKiB":0},"ems":{"pid":21,"RssKiB":113480,"PssKiB":88416,"Private_DirtyKiB":83076,"SwapKiB":0},"devices":{"pid":37,"RssKiB":53276,"PssKiB":36006,"Private_DirtyKiB":34452,"SwapKiB":0},"eebus":{"pid":48,"RssKiB":39924,"PssKiB":19997,"Private_DirtyKiB":17940,"SwapKiB":0},"backup":{"pid":61,"RssKiB":39900,"PssKiB":20394,"Private_DirtyKiB":18592,"SwapKiB":0},"ocpp":{"pid":73,"RssKiB":68392,"PssKiB":44753,"Private_DirtyKiB":42272,"SwapKiB":0}},"heartbeat":4}
+{"pointSeconds":5,"rows":{"testHarness":{"pid":5,"RssKiB":130012,"PssKiB":105049,"Private_DirtyKiB":101084,"SwapKiB":0},"gui":{"pid":13,"RssKiB":48216,"PssKiB":25591,"Private_DirtyKiB":22824,"SwapKiB":0},"ems":{"pid":21,"RssKiB":117832,"PssKiB":93233,"Private_DirtyKiB":87260,"SwapKiB":0},"devices":{"pid":37,"RssKiB":53436,"PssKiB":36468,"Private_DirtyKiB":34612,"SwapKiB":0},"eebus":{"pid":48,"RssKiB":40056,"PssKiB":20450,"Private_DirtyKiB":18012,"SwapKiB":0},"backup":{"pid":61,"RssKiB":40244,"PssKiB":21064,"Private_DirtyKiB":18908,"SwapKiB":0},"ocpp":{"pid":73,"RssKiB":68424,"PssKiB":45288,"Private_DirtyKiB":42304,"SwapKiB":0}},"heartbeat":15}
+{"pointSeconds":10,"rows":{"testHarness":{"pid":5,"RssKiB":129988,"PssKiB":104802,"Private_DirtyKiB":101032,"SwapKiB":0},"gui":{"pid":13,"RssKiB":48280,"PssKiB":25395,"Private_DirtyKiB":22888,"SwapKiB":0},"ems":{"pid":21,"RssKiB":122004,"PssKiB":97148,"Private_DirtyKiB":91400,"SwapKiB":0},"devices":{"pid":37,"RssKiB":54452,"PssKiB":36952,"Private_DirtyKiB":35224,"SwapKiB":0},"eebus":{"pid":48,"RssKiB":40076,"PssKiB":20250,"Private_DirtyKiB":18024,"SwapKiB":0},"backup":{"pid":61,"RssKiB":40272,"PssKiB":20872,"Private_DirtyKiB":18908,"SwapKiB":0},"ocpp":{"pid":73,"RssKiB":68436,"PssKiB":45044,"Private_DirtyKiB":42316,"SwapKiB":0}},"heartbeat":27}
+✔ Sample delivered process code with isolated controller fixtures (13874.142565ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13880.271468

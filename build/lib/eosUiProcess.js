@@ -303,7 +303,8 @@ function createEosUiProcess(owner, bridge, options) {
         const result = Promise.resolve().then(operation);
         if (mutation) {
             pendingWrites.add(result);
-            void result.then(() => pendingWrites.delete(result), () => pendingWrites.delete(result));
+            const finished = () => pendingWrites.delete(result);
+            void result.then(finished, finished);
         }
         return result;
     };
@@ -381,13 +382,8 @@ function createEosUiProcess(owner, bridge, options) {
             }
         }
     };
-    const scheduleRestart = () => {
-        if (stopped || paused || retry) {
-            return;
-        }
-        if (pendingWrites.size) {
-            health.state = 'failed';
-            health.lastError = 'EOS_UI_PROCESS_WRITE_COMPLETION_UNKNOWN';
+    const scheduleRestart = (token) => {
+        if (token !== generation || child || stopped || paused || retry) {
             return;
         }
         if (health.restarts >= 5) {
@@ -422,6 +418,10 @@ function createEosUiProcess(owner, bridge, options) {
         starting = (async () => {
             if (child) {
                 return;
+            }
+            if (retry) {
+                clearTimeout(retry);
+                retry = null;
             }
             generation = (0, node_crypto_1.randomBytes)(24).toString('hex');
             const token = generation;
@@ -462,7 +462,7 @@ function createEosUiProcess(owner, bridge, options) {
                     fault('EOS_UI_PROCESS_SPAWN_FAILED');
                 }
             });
-            spawned.once('exit', () => {
+            spawned.once('exit', exitCode => {
                 rpc.close();
                 if (heartbeat) {
                     clearInterval(heartbeat);
@@ -480,13 +480,29 @@ function createEosUiProcess(owner, bridge, options) {
                     writeFenced = true;
                     closeRequests();
                 }
-                void cleanupSubscriptions().then(() => {
-                    if (!stopped && !paused) {
-                        scheduleRestart();
+                // Track the outstanding controller calls before subscription cleanup can yield.
+                // The worker's IPC deadline or exit does not confirm their outcome.
+                const configUnconfirmed = exitCode === eosUiProcessRpc_1.UI_CONFIG_COMMIT_UNCONFIRMED_EXIT;
+                const writesCompleted = !paused && !stopped && !configUnconfirmed && pendingWrites.size
+                    ? Promise.all(pendingWrites).then(() => true, () => false)
+                    : null;
+                void cleanupSubscriptions().then(async () => {
+                    if (configUnconfirmed && token === generation && !child && !paused && !stopped) {
+                        health.lastError = 'EOS_UI_PROCESS_WRITE_COMPLETION_UNKNOWN';
+                        return;
                     }
+                    if (writesCompleted && token === generation && !child && !paused && !stopped) {
+                        health.lastError = 'EOS_UI_PROCESS_WRITE_COMPLETION_UNKNOWN';
+                        if (!(await writesCompleted)) {
+                            return;
+                        }
+                    }
+                    scheduleRestart(token);
                 }, () => {
-                    health.state = 'failed';
-                    health.lastError = 'EOS_UI_PROCESS_CLEANUP_FAILED';
+                    if (token === generation && !child && !paused && !stopped) {
+                        health.state = 'failed';
+                        health.lastError = 'EOS_UI_PROCESS_CLEANUP_FAILED';
+                    }
                 });
             });
             // The first private IPC frame supplies the generation; no command-line secrets or public listener.
@@ -561,6 +577,7 @@ function createEosUiProcess(owner, bridge, options) {
             clearTimeout(retry);
         }
         retry = null;
+        health.nextRestartAt = 0;
         if (heartbeat) {
             clearInterval(heartbeat);
         }

@@ -42,6 +42,7 @@ const crypto = require('crypto');
 const { installerRevision, assertInstallerRevision, provisionInstallerObjects, assertDeviceAppActivations, numericMeasurement, activeDeviceProfileReferences, awaitEmsTransition } = require('./lib/installer-lifecycle');
 const { buildFarmOverview } = require('./lib/storage-farm-overview');
 const { readFlowMeasurement, sumFlowMeasurements } = require('./lib/flow-measurement');
+const nwDefaultFlowMappings = require('./io-package.json').native.datapoints;
 const { tariffDisplayConfig, tariffPriceNumber } = require('./lib/tariff-price');
 const { customerTariffView, prepareCustomerTariffChange, mergeInstallerTariffSecrets } = require('./lib/customer-tariff');
 const { InfluxDirectClient } = require('./lib/influx-direct');
@@ -278,7 +279,7 @@ class NexoWattVis extends HostedAdapter {
     });
     this.sseClients = this._nwSseGuard.clients;
     // Batch SSE updates to prevent UI freezes on frequent state updates
-    this._ssePendingPayload = {};
+    this._ssePendingPayload = null;
     this._sseFlushTimer = null;
     this.server = null;
     this._serverSockets = new Set();
@@ -541,7 +542,7 @@ class NexoWattVis extends HostedAdapter {
     } catch (_e) {}
     // A pending coalesced patch is disposable: every browser receives a full
     // current snapshot after reconnect/resync, while EMS control is untouched.
-    try { this._ssePendingPayload = {}; } catch (_e) {}
+    try { this._ssePendingPayload = null; } catch (_e) {}
     try {
       if (removed > 0) {
         this.log.warn(`[memory-guard] ${removed} unhealthy SSE client(s) closed to release buffered live data; heap=${Math.round(Number(sample?.ratio || 0) * 1000) / 10}%`);
@@ -553,7 +554,7 @@ class NexoWattVis extends HostedAdapter {
   /** Memory guard: final cleanup before the emergency restart safety net. */
   _nwPrepareControlledRestart(sample) {
     try { this._nwCloseSseClients(); } catch (_e) {}
-    try { this._ssePendingPayload = {}; } catch (_e) {}
+    try { this._ssePendingPayload = null; } catch (_e) {}
     try {
       this.log.error(`[memory-guard] preparing controlled restart at ${Math.round(Number(sample?.ratio || 0) * 1000) / 10}% heap usage`);
     } catch (_e) {}
@@ -6559,9 +6560,7 @@ class NexoWattVis extends HostedAdapter {
       //
       // The timeout is configurable in the end-user settings page (Einstellungen).
       const now = Date.now();
-      const staleSecRaw = Number(this.stateCache && this.stateCache['settings.deviceStaleTimeoutSec'] ? this.stateCache['settings.deviceStaleTimeoutSec'].value : NaN);
-      const staleSec = (Number.isFinite(staleSecRaw) && staleSecRaw > 0) ? staleSecRaw : 300;
-      const staleMs = Math.max(10_000, Math.round(staleSec * 1000));
+      const staleMs = this._nwLiveInputMaxAgeMs();
 
       // Local read cache (per tick) to avoid repeating getForeignStateAsync calls.
       const _stCache = new Map();
@@ -6737,7 +6736,7 @@ class NexoWattVis extends HostedAdapter {
 
         const st = await getState(sid);
         if (!st || st.val === undefined || st.val === null) return NaN;
-        if (opts.display === true && ((st.q !== undefined && st.q !== 0) || !Number.isFinite(st.ts) || st.ts > now + 1000)) return NaN;
+        if (opts.display === true && ((st.q !== undefined && st.q !== 0) || !Number.isFinite(st.ts) || st.ts <= 0 || st.ts > now)) return NaN;
 
         // IMPORTANT: We intentionally do NOT apply stale filtering here.
         // Some devices update SoC or power only sporadically; the UI should still show
@@ -6792,6 +6791,7 @@ class NexoWattVis extends HostedAdapter {
       let totalCharge = 0;
       let totalDischarge = 0;
       const batteryFlowSources = new Set();
+      const physicalBatteryTimes = [];
       let totalPvAc = 0;
       let totalPvDc = 0;
       let totalPvUnknown = 0;
@@ -7356,13 +7356,13 @@ class NexoWattVis extends HostedAdapter {
           const pvAgeMs = (stPv && typeof stPv.ts === 'number' && Number.isFinite(stPv.ts))
             ? Math.max(0, now - Number(stPv.ts))
             : null;
-          const pvFresh = !!(stPv && stPv.val !== undefined && stPv.val !== null && (pvAgeMs === null || pvAgeMs <= staleMs));
-          const pvValue = pvFresh ? await readNumber(pvSourceId, 'power', { allowStale: false }) : NaN;
+          const pvValue = !explicitOffline ? await readNumber(pvSourceId, 'power', { allowStale: false, display: true }) : NaN;
+          const pvFresh = Number.isFinite(pvValue);
           const pvAbs = Number.isFinite(pvValue) ? Math.max(0, Math.abs(pvValue)) : 0;
           status.pvSourceOnline = !!pvFresh;
           if (pvAgeMs !== null) status.pvSourceAgeSec = Math.floor(pvAgeMs / 1000);
           if (pvFresh && Number.isFinite(pvValue)) status.pvPowerW = pvAbs;
-          const displayPv = !explicitOffline ? await readNumber(pvSourceId, 'power', { allowStale: false, display: true }) : NaN;
+          const displayPv = pvValue;
           // Gepunktete Geräte-IDs enden erst vor `.aliases.`, nicht am ersten Punkt.
           // Unbekannte manuelle Pfade bleiben exakte Quellen statt geratenen Geräteklassen.
           const aliasDeviceBase = pvSourceId.match(/^(.*\.devices\..+?)\.aliases(?:\.|$)/)?.[1];
@@ -7484,6 +7484,8 @@ class NexoWattVis extends HostedAdapter {
               Math.max(0, invDchg ? -discharge : discharge) - Math.max(0, invChg ? -charge : charge);
           }
           if (Number.isFinite(physicalPower)) {
+            const observedIds = batteryFlowId ? [batteryFlowId] : signedFeedbackUsable ? [signedId] : [chgId, dchgId].filter(Boolean);
+            for (const id of observedIds) physicalBatteryTimes.push((await getState(id)).ts);
             status.batteryFlowPowerW = physicalPower;
             overviewMember.batteryPowerW = physicalPower;
             if (duplicateBatteryFlow) status.batteryFlowDuplicate = true;
@@ -7545,7 +7547,10 @@ class NexoWattVis extends HostedAdapter {
       const totalBatteryPowerState = farmOverview.battery.netW;
       const totalChargeState = Math.round(totalCharge);
       const totalDischargeState = Math.round(totalDischarge);
-      const totalPvState = Math.round(totalPv);
+      const pvComplete = pvSourcesOnline > 0 && pvSourcesOnline === pvSourceRows.length;
+      const totalPvState = pvComplete ? Math.round(totalPv) : null;
+      const pvPowerTs = pvComplete ? Math.min(...pvSourceRows.map(row => now - row.ageMs)) : now;
+      const batteryPowerTs = totalBatteryPowerState !== null && physicalBatteryTimes.length ? Math.min(...physicalBatteryTimes) : now;
       const totalPvAcState = Math.round(totalPvAc);
       const totalPvDcState = Math.round(totalPvDc);
       const totalPvUnknownState = Math.round(totalPvUnknown);
@@ -7560,9 +7565,9 @@ class NexoWattVis extends HostedAdapter {
       await writeDerived('storageFarm.socSourcesOnline', { val: socSourcesOnline, ack: true });
       await writeDerived('storageFarm.socDegraded', { val: !!socDegraded, ack: true });
       await writeDerived('storageFarm.totalPowerW', { val: totalPowerState, ack: true });
-      await writeDerived('storageFarm.totalBatteryPowerW', { val: totalBatteryPowerState, ack: true });
-      await writeDerived('storageFarm.totalBatteryChargePowerW', { val: farmOverview.battery.chargeW, ack: true });
-      await writeDerived('storageFarm.totalBatteryDischargePowerW', { val: farmOverview.battery.dischargeW, ack: true });
+      await writeDerived('storageFarm.totalBatteryPowerW', { val: totalBatteryPowerState, ack: true, ts: batteryPowerTs });
+      await writeDerived('storageFarm.totalBatteryChargePowerW', { val: farmOverview.battery.chargeW, ack: true, ts: batteryPowerTs });
+      await writeDerived('storageFarm.totalBatteryDischargePowerW', { val: farmOverview.battery.dischargeW, ack: true, ts: batteryPowerTs });
       await writeDerived('storageFarm.displayMeanSoc', { val: farmOverview.soc.meanPct, ack: true });
       await writeDerived('storageFarm.totalCapacityKWh', { val: farmOverview.capacity.totalKWh, ack: true });
       await writeDerived('storageFarm.overviewJson', { val: farmOverviewJson, ack: true });
@@ -7570,7 +7575,7 @@ class NexoWattVis extends HostedAdapter {
       await writeDerived('storageFarm.powerSourcesOnline', { val: powerSourcesOnline, ack: true });
       await writeDerived('storageFarm.totalChargePowerW', { val: totalChargeState, ack: true });
       await writeDerived('storageFarm.totalDischargePowerW', { val: totalDischargeState, ack: true });
-      await writeDerived('storageFarm.totalPvPowerW', { val: totalPvState, ack: true });
+      await writeDerived('storageFarm.totalPvPowerW', { val: totalPvState, ack: true, ts: pvPowerTs });
       await writeDerived('storageFarm.totalPvAcPowerW', { val: totalPvAcState, ack: true });
       await writeDerived('storageFarm.totalPvDcPowerW', { val: totalPvDcState, ack: true });
       await writeDerived('storageFarm.totalPvUnknownPowerW', { val: totalPvUnknownState, ack: true });
@@ -7600,9 +7605,9 @@ class NexoWattVis extends HostedAdapter {
         this.updateValue('storageFarm.socSourcesOnline', socSourcesOnline, now);
         this.updateValue('storageFarm.socDegraded', !!socDegraded, now);
         this.updateValue('storageFarm.totalPowerW', totalPowerState, now);
-        this.updateValue('storageFarm.totalBatteryPowerW', totalBatteryPowerState, now);
-        this.updateValue('storageFarm.totalBatteryChargePowerW', farmOverview.battery.chargeW, now);
-        this.updateValue('storageFarm.totalBatteryDischargePowerW', farmOverview.battery.dischargeW, now);
+        this.updateValue('storageFarm.totalBatteryPowerW', totalBatteryPowerState, batteryPowerTs);
+        this.updateValue('storageFarm.totalBatteryChargePowerW', farmOverview.battery.chargeW, batteryPowerTs);
+        this.updateValue('storageFarm.totalBatteryDischargePowerW', farmOverview.battery.dischargeW, batteryPowerTs);
         this.updateValue('storageFarm.displayMeanSoc', farmOverview.soc.meanPct, now);
         this.updateValue('storageFarm.totalCapacityKWh', farmOverview.capacity.totalKWh, now);
         this.updateValue('storageFarm.overviewJson', farmOverviewJson, now);
@@ -7610,7 +7615,7 @@ class NexoWattVis extends HostedAdapter {
         this.updateValue('storageFarm.powerSourcesOnline', powerSourcesOnline, now);
         this.updateValue('storageFarm.totalChargePowerW', totalChargeState, now);
         this.updateValue('storageFarm.totalDischargePowerW', totalDischargeState, now);
-        this.updateValue('storageFarm.totalPvPowerW', totalPvState, now);
+        this.updateValue('storageFarm.totalPvPowerW', totalPvState, pvPowerTs);
         this.updateValue('storageFarm.totalPvAcPowerW', totalPvAcState, now);
         this.updateValue('storageFarm.totalPvDcPowerW', totalPvDcState, now);
         this.updateValue('storageFarm.totalPvUnknownPowerW', totalPvUnknownState, now);
@@ -27372,6 +27377,7 @@ return res.json(out);
     // "Datenpunkte" gemappt wurden. Daher wird im Subscribe-Loop unten auf die lokalen
     // Adapter-States (namespace + key) zurückgefallen.
     const localUiKeys = [
+      'speicher.dcPvPowerW',
       'tarif.statusText', 'tarif.intentStatusText', 'tarif.intentSnapshotAgeMs', 'tarif.intentSnapshotFresh', 'tarif.statusJson',
       'tarif.speicherIntentW', 'tarif.speicherIntentStatus', 'tarif.speicherIntentGrund',
       'tarif.speicherRequestW', 'tarif.speicherRequestQuelle', 'tarif.speicherRequestGrund',
@@ -28976,8 +28982,10 @@ return res.json(out);
     const sfEnabled = !!(farmMetrics && farmMetrics.active);
     if (farmSelectedForControl) {
       let signed = farmMetrics ? numericMeasurement(farmMetrics.totalPowerW) : null;
+      // Converter/dispatch power is not a measurement of a hybrid battery.
       const observation = observe && farmMetrics
-        ? sumFlowMeasurements(this.stateCache, farmMetrics.powerSourceKeys, now, maxAgeMs) : null;
+        ? readFlowMeasurement(this.stateCache, 'storageFarm.totalBatteryPowerW', now, maxAgeMs) : null;
+      if (observe) signed = observation?.value ?? null;
       if (signed !== null && Number.isFinite(signed)) {
         // Die Batterie-Nettoleistung der Farm ist bereits pro Speicher normalisiert
         // (+ Entladen, - Laden) und darf nicht nochmals invertiert werden.
@@ -29036,7 +29044,7 @@ return res.json(out);
       if (observe && dischargeSample) return fromSigned(dischargeSample.value, 'sameChargeDischargeSigned', { observedAt: dischargeSample.ts });
     }
 
-    const completeSplit = (!chargeMapped || chargeSample !== null) && (!dischargeMapped || dischargeSample !== null);
+    const completeSplit = chargeSample !== null && dischargeSample !== null;
     if (observe && !completeSplit && batterySample) {
       return fromSigned(batterySample.value, 'batterySigned', { observedAt: batterySample.ts });
     }
@@ -31151,7 +31159,7 @@ return res.json(out);
       gridSellW,
       hasGrid,
     } = this._nwResolveGridImportExportFromCache();
-    const historyCoreMaxAgeMs = Math.max(30000, Number(this.config?.settings?.deviceStaleTimeoutSec || 60) * 1000);
+    const historyCoreMaxAgeMs = this._nwLiveInputMaxAgeMs();
     // History samples are observations, not a refresh of the last cached value.
     // Missing timestamps, stale values and missing measurements remain gaps.
     const readHistory = (key, maxAgeMs = historyCoreMaxAgeMs) => {
@@ -31179,8 +31187,9 @@ return res.json(out);
       ? this._nwGetStorageControlAuthority()
       : { selectedTopology: 'none', writerActive: false };
     const selectedStorageTopologyHist = String(storageAuthorityHist.selectedTopology || 'none');
-    const storageFlowHist = this._nwResolveBatteryFlowFromCache({ now, strictStale: true });
-    const storageMissing = ['missing', 'mapped-missing', 'storageFarm-missing-power', 'storageFarm-unavailable'].includes(storageFlowHist.src);
+    const storageFlowHist = this._nwResolveBatteryFlowFromCache({ now, strictStale: true, observe: true, maxAgeMs: historyCoreMaxAgeMs });
+    const storageMissing = !Number.isFinite(storageFlowHist.observedAt)
+      || ['missing', 'mapped-missing', 'storageFarm-missing-power', 'storageFarm-unavailable'].includes(storageFlowHist.src);
     const farmPowerAge = storageFlowHist.staleMs && numericMeasurement(storageFlowHist.staleMs.farmPower);
     const farmPowerStale = selectedStorageTopologyHist === 'farm'
       && (farmPowerAge === null || farmPowerAge === undefined || farmPowerAge > historyCoreMaxAgeMs);
@@ -31231,27 +31240,31 @@ return res.json(out);
       && this.config.storage
       && String(this.config.storage.coupling || '').trim().toLowerCase() === 'dc');
 
-    if (!pvTotalFromDerived && sfEnabled && readHistory('storageFarm.totalPvPowerW') !== null
-      && typeof this._nwMergeStorageFarmPvWithBase === 'function') {
-      const baseSourceId = String(historyDps.pvPower || historyDps.productionTotal || '').trim();
-      const merged = this._nwMergeStorageFarmPvWithBase(pvTotal || 0, {
-        now,
-        metrics: farmMetricsHist,
-        baseSourceId,
-      });
-      pvTotal = Math.max(0, Number(merged.totalW) || 0);
+    if (!pvTotalFromDerived && sfEnabled) {
+      const farmPv = readHistory('storageFarm.totalPvPowerW');
+      if (farmPv !== null && typeof this._nwMergeStorageFarmPvWithBase === 'function') {
+        const baseSourceId = String(historyDps.pvPower || historyDps.productionTotal || '').trim();
+        const merged = this._nwMergeStorageFarmPvWithBase(pvTotal ?? 0, { now, metrics: farmMetricsHist, baseSourceId });
+        pvTotal = baseSourceId && pvW === null ? null : Math.max(0, merged.totalW);
+      } else if ((readHistory('storageFarm.pvSourcesTotal') ?? 0) > 0 || farmMetricsHist.pvSources?.length) {
+        pvTotal = null;
+      }
     } else if (!pvTotalFromDerived && singleStorageDcEnabled) {
+      const dcId = String(nwNormalizeStorageDatapointsConfig(this.config.storage).dcPvPowerObjectId || historyDps.storagePvPower || '').trim();
+      const acId = String(historyDps.pvPower || historyDps.productionTotal || '').trim();
       const dcValueW = readHistory('speicher.dcPvPowerW');
-      if (Number.isFinite(dcValueW) && Number(dcValueW) !== 0) {
-        const dcAbs = Math.abs(Number(dcValueW));
-        if (pvTotal === null || pvTotal === 0) pvTotal = dcAbs;
-        else {
-          const pvAbs = Math.abs(pvTotal);
-          const relDiff = Math.abs(pvAbs - dcAbs) / Math.max(1, dcAbs);
-          pvTotal = relDiff < 0.05 ? Math.max(pvAbs, dcAbs) : (pvAbs + dcAbs);
-        }
+      if (dcId) {
+        const sameSource = !!acId && nwPhysicalPvSourceKey(acId) === nwPhysicalPvSourceKey(dcId);
+        if (sameSource) pvTotal = pvW ?? (dcValueW === null ? null : Math.abs(dcValueW));
+        else pvTotal = dcValueW === null || (acId && pvW === null) ? null : (pvTotal ?? 0) + Math.abs(dcValueW);
       }
     }
+
+    // The live balance explicitly rejected a partial source set. History must
+    // not reconstruct a plausible sum from only the remaining generation meters.
+    const canonicalPv = Object.getOwnPropertyDescriptor(this.stateCache || {}, 'derived.core.pv.totalW');
+    if (canonicalPv && 'value' in canonicalPv && canonicalPv.value && typeof canonicalPv.value === 'object'
+      && Object.getOwnPropertyDescriptor(canonicalPv.value, 'value')?.value === null) pvTotal = null;
 
     // Ohne expliziten Energiefluss-Override folgt die Historie weiterhin der
     // aktiven Speichertopologie. Ein vorhandener, gueltiger Override bleibt aber
@@ -31265,7 +31278,7 @@ return res.json(out);
       }
     }
 
-    let loadTotal = Number.isFinite(loadW) ? Math.max(0, loadW) : null;
+    let loadTotal = Number.isFinite(loadW) && loadW >= 0 ? loadW : null;
     const chg = Number.isFinite(chgW) ? Math.max(0, chgW) : null;
     const dchg = Number.isFinite(dchgW) ? Math.max(0, dchgW) : null;
     const evAbs = Number.isFinite(evW) ? Math.abs(evW) : null;
@@ -32590,8 +32603,18 @@ return res.json(out);
       flow.lastRunMs = Date.now();
       try {
         await this.updateDerivedFlowStates(flow.lastReason || 'scheduled');
+        if (flow.retryTimer) this._nwClearTimeout(flow.retryTimer);
+        flow.retryTimer = null;
+        flow.retryDelayMs = 0;
       } catch (e) {
         this.log.debug(`[derivedFlow] ${e?.message || e}`);
+        if (!this._nwShuttingDown && !flow.retryTimer) {
+          flow.retryDelayMs = Math.min(30000, (flow.retryDelayMs || 500) * 2);
+          flow.retryTimer = this._nwSetTimeout(() => {
+            flow.retryTimer = null;
+            this.scheduleDerivedFlowUpdate('publication-retry');
+          }, flow.retryDelayMs);
+        }
       } finally {
         flow.running = false;
         if (flow.rerun) {
@@ -32607,16 +32630,32 @@ return res.json(out);
    * Zusammenhang: Teil von Adapterkern: Lifecycle, Webserver, API, States, EMS-Engine; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
+  async _nwMissingTemplatePvSource(key, id, now) {
+    if (!id || id !== nwDefaultFlowMappings[key] || this.stateCache?.[key]) return false;
+    // An untouched example mapping may have no ioBroker object at all. A real
+    // meter, a previous observation, and a database error all keep it required.
+    const previous = this._nwTemplatePvCheck;
+    if (previous?.id === id && previous.until > now) return previous.absent;
+    try {
+      const object = await this.getForeignObjectAsync(id);
+      const absent = object === null || object === undefined;
+      this._nwTemplatePvCheck = { id, absent, until: now + 60000 };
+      return absent && !this.stateCache?.[key];
+    } catch { return false; }
+  }
+
   async updateDerivedFlowStates(reason = '') {
     // Building consumption can be derived from the power balance at NVP:
     // load = (PV + other production) + gridImport + batteryDischarge - gridExport - batteryCharge
     // If no direct house meter (consumptionTotal) is configured, we use this as fallback for the UI.
 
-    // State changes during the async PV refresh belong to this snapshot.
+    // Take the measurement snapshot after asynchronous inventory/metadata reads.
     await this._derivedRefreshPvInvertersCache(false);
+    const pvMeterKey = this._nwHasMappedDatapoint('pvPower') ? 'pvPower' : 'productionTotal';
+    const pvMeterId = String(this.config?.datapoints?.[pvMeterKey] || '').trim();
+    const missingTemplatePv = await this._nwMissingTemplatePvSource(pvMeterKey, pvMeterId, Date.now());
     const ts = Date.now();
-    const configuredAgeSec = numericMeasurement(this.config?.settings?.deviceStaleTimeoutSec);
-    const liveMaxAgeMs = Math.max(10000, (configuredAgeSec !== null && configuredAgeSec > 0 ? configuredAgeSec : 60) * 1000);
+    const liveMaxAgeMs = this._nwLiveInputMaxAgeMs();
     const inputTimes = [];
     const pvTimes = [];
     const producerTimes = [];
@@ -32706,6 +32745,7 @@ return res.json(out);
     } else {
       // Auto: sum all PV_INVERTER devices from nexowatt-devices
       const pvAuto = this._derivedFlow?.auto?.pvInverters;
+      pvBaseSourceIds = [];
       let sum = 0;
       let used = 0;
       let offline = 0;
@@ -32766,8 +32806,24 @@ return res.json(out);
     let pvDcIncluded = false;
     let pvFarmMerge = null;
     let pvTotalW = pvAcW;
+    const siteMeterExpected = (pvPowerMapped || prodTotalMapped) && (!missingTemplatePv || !!this.stateCache?.[pvMeterKey]);
+    const sitePvExpected = siteMeterExpected || !!this._derivedFlow?.auto?.pvInverters?.list?.length;
+    const siteKey = nwPhysicalPvSourceKey(pvMeterId) || pvMeterId.toLowerCase();
+    // A collection of other inverters cannot prove the output of a failed site meter.
+    const sitePvValid = pvSource !== 'missing' && !pvSource.includes('incomplete')
+      && (!siteMeterExpected || pvAcRaw !== null || pvBaseSourceIds.some(id => (nwPhysicalPvSourceKey(id) || id.toLowerCase()) === siteKey));
+    let pvObserved = sitePvValid || (!sitePvExpected && !missingTemplatePv);
 
     if (sfEnabled && typeof this._nwMergeStorageFarmPvWithBase === 'function') {
+      const farmPvExpected = (this._nwGetNumberFromCache('storageFarm.pvSourcesTotal') ?? 0) > 0 || !!farmMetrics.pvSources?.length;
+      const farmPvSample = farmPvExpected ? readLive('storageFarm.totalPvPowerW', pvTimes) : null;
+      const farmPvValid = farmPvSample !== null;
+      if (farmPvExpected) {
+        const farmCoversSite = siteMeterExpected && !this._derivedFlow?.auto?.pvInverters?.list?.length
+          && farmMetrics.pvSources?.some(row => row.online === true && (nwPhysicalPvSourceKey(row.id) || String(row.id).toLowerCase()) === siteKey);
+        pvObserved = (!sitePvExpected || sitePvValid || farmCoversSite) && farmPvValid;
+        if ((!sitePvExpected || farmCoversSite) && farmPvValid) pvSource = 'farm:pv-sources';
+      }
       pvFarmMerge = this._nwMergeStorageFarmPvWithBase(pvAcW, {
         now: ts,
         metrics: farmMetrics,
@@ -32782,24 +32838,30 @@ return res.json(out);
       if (pvFarmMerge.farmFallbackUsed && pvSource === 'missing') pvSource = 'farm:pv-sources';
       else if (pvFarmMerge.farmAddedW > 0) pvSource = pvSource === 'missing' ? 'farm:pv-sources' : `${pvSource}+farm`;
     } else if (singleStorageDcEnabled) {
-      const dc = readLive('speicher.dcPvPowerW', pvTimes);
-      if (dc !== null && Number.isFinite(Number(dc))) {
-        pvDcW = Math.max(0, Math.abs(Number(dc)));
-        pvDcSource = 'storage:dc';
-      }
-
-      if (pvDcW > 0) {
-        if (!pvTotalW || pvTotalW === 0) {
-          pvTotalW = pvDcW;
-          pvDcIncluded = true;
-          if (pvSource === 'missing') pvSource = pvDcSource;
+      const dcId = String(nwNormalizeStorageDatapointsConfig(this.config.storage).dcPvPowerObjectId
+        || this._nwStorageMeasurementFallback?.datapoints?.dcPvPowerObjectId
+        || this._nwStorageMeasurementFallback?.dcPvPowerObjectId || this.config.datapoints?.storagePvPower || '').trim();
+      if (dcId) {
+        const dcKey = nwPhysicalPvSourceKey(dcId) || dcId.toLowerCase();
+        const duplicate = pvBaseSourceIds.some(id => (nwPhysicalPvSourceKey(id) || id.toLowerCase()) === dcKey);
+        const dcCoversMissingSite = dcKey === siteKey && !this._derivedFlow?.auto?.pvInverters?.list?.length;
+        const dc = readLive('speicher.dcPvPowerW', pvTimes);
+        if (dc === null) {
+          if (!duplicate || !sitePvValid) pvObserved = false;
         } else {
-          const relDiff = Math.abs(Math.abs(pvTotalW) - pvDcW) / Math.max(1, pvDcW);
-          if (relDiff < 0.05) pvTotalW = Math.max(Math.abs(pvTotalW), pvDcW);
-          else {
-            pvTotalW = Math.abs(pvTotalW) + pvDcW;
+          pvDcW = Math.abs(dc);
+          pvDcSource = 'storage:dc';
+          if (duplicate && sitePvValid) {
+            pvTotalW = pvAcW;
+          } else {
             pvDcIncluded = true;
+            pvTotalW = pvAcW + pvDcW;
+            if (!sitePvValid && (!sitePvExpected || dcCoversMissingSite)) {
+              pvObserved = true;
+              pvSource = pvDcSource;
+            }
           }
+          pvBaseSourceIds.push(dcId);
         }
       }
     }
@@ -32871,12 +32933,6 @@ return res.json(out);
     const measuredStorage = Number.isFinite(storageFlow.observedAt);
     const storageObserved = measuredStorage || !storageConfigured;
     if (measuredStorage) storageTimes.push(storageFlow.observedAt);
-    const autoPvConfigured = (this._derivedFlow?.auto?.pvInverters?.list || []).length > 0;
-    const pvConfigured = pvPowerMapped || prodTotalMapped || autoPvConfigured || sfEnabled || singleStorageDcEnabled;
-    let pvObserved = !pvConfigured || (pvSource !== 'missing' && !pvSource.includes('incomplete'));
-    if (sfEnabled && (pvFarmMerge?.farmAddedW > 0 || pvFarmMerge?.farmFallbackUsed)) {
-      pvObserved = pvObserved && readLive('storageFarm.totalPvPowerW', pvTimes) !== null;
-    }
     inputTimes.push(...pvTimes, ...producerTimes, ...gridTimes, ...storageTimes);
     const balanceObserved = gridObserved && storageObserved && pvObserved && !missingProducer;
     const loadTotalW = directLoadTotalW !== null ? directLoadTotalW
@@ -32984,38 +33040,35 @@ return res.json(out);
       : 'js-runtime';
     const energyFlowProductiveTsActive = energyFlowSourceState === 'ts-candidate' || energyFlowSourceState === 'ts-normal';
     const energyFlowLiveTestState = this._nwEnergyFlowTsLiveTestStateFromSwitch(effectiveEnergyFlow.switchState || {});
-    const tsSwitchJsonText = JSON.stringify(effectiveEnergyFlow.switchState || {});
-    const tsCandidateJsonText = JSON.stringify(effectiveEnergyFlow.candidate || {});
-    const tsFixedSourceJsonText = JSON.stringify((effectiveEnergyFlow.switchState && effectiveEnergyFlow.switchState.fixedSourceState) || {});
     try {
       if (this._derivedFlow?.last?.energyFlowSource !== energyFlowSourceState) {
-        this._derivedFlow.last.energyFlowSource = energyFlowSourceState;
         await this.setStateAsync('derived.core.building.energyFlowSource', { val: energyFlowSourceState, ack: true });
+        this._derivedFlow.last.energyFlowSource = energyFlowSourceState;
       }
       if (this._derivedFlow?.last?.tsLiveTestState !== energyFlowLiveTestState) {
-        this._derivedFlow.last.tsLiveTestState = energyFlowLiveTestState;
         await this.setStateAsync('derived.core.building.tsLiveTestState', { val: energyFlowLiveTestState, ack: true });
+        this._derivedFlow.last.tsLiveTestState = energyFlowLiveTestState;
       }
       if (this._derivedFlow?.last?.tsProductiveActive !== energyFlowProductiveTsActive) {
-        this._derivedFlow.last.tsProductiveActive = energyFlowProductiveTsActive;
         await this.setStateAsync('derived.core.building.tsProductiveActive', { val: energyFlowProductiveTsActive, ack: true });
+        this._derivedFlow.last.tsProductiveActive = energyFlowProductiveTsActive;
       }
     } catch (_eTsLiveState) {}
 
     // --- Update adapter states (for App-Center mapping / debugging) ---
     if (this._derivedFlow?.last?.loadTotalW !== publishLoadTotalRound || this._derivedFlow?.last?.loadTimestamp !== loadTimestamp) {
+      await this.setStateAsync('derived.core.building.loadTotalW', { val: publishLoadTotalRound, ack: true, ts: loadTimestamp });
       this._derivedFlow.last.loadTimestamp = loadTimestamp;
       this._derivedFlow.last.loadTotalW = publishLoadTotalRound;
-      await this.setStateAsync('derived.core.building.loadTotalW', { val: publishLoadTotalRound, ack: true, ts: loadTimestamp });
     }
     if (this._derivedFlow?.last?.loadRestW !== publishLoadRestRound || this._derivedFlow?.last?.restTimestamp !== restTimestamp) {
+      await this.setStateAsync('derived.core.building.loadRestW', { val: publishLoadRestRound, ack: true, ts: restTimestamp });
       this._derivedFlow.last.restTimestamp = restTimestamp;
       this._derivedFlow.last.loadRestW = publishLoadRestRound;
-      await this.setStateAsync('derived.core.building.loadRestW', { val: publishLoadRestRound, ack: true, ts: restTimestamp });
     }
     if (this._derivedFlow?.last?.loadSource !== loadTotalSource) {
-      this._derivedFlow.last.loadSource = loadTotalSource;
       await this.setStateAsync('derived.core.building.loadSource', { val: loadTotalSource, ack: true });
+      this._derivedFlow.last.loadSource = loadTotalSource;
     }
 
     const pvAcRound = Math.round(pvAcW);
@@ -33024,27 +33077,27 @@ return res.json(out);
 
     const publishPvAcW = pvObserved ? pvAcRound : null;
     if (this._derivedFlow?.last?.pvAcW !== publishPvAcW || this._derivedFlow?.last?.pvTimestamp !== oldestTime(pvTimes)) {
-      this._derivedFlow.last.pvAcW = publishPvAcW;
       await this.setStateAsync('derived.core.pv.acW', { val: publishPvAcW, ack: true, ts: oldestTime(pvTimes) });
+      this._derivedFlow.last.pvAcW = publishPvAcW;
     }
     const publishPvDcW = pvObserved ? pvDcRound : null;
     if (this._derivedFlow?.last?.pvDcW !== publishPvDcW || this._derivedFlow?.last?.pvTimestamp !== oldestTime(pvTimes)) {
-      this._derivedFlow.last.pvDcW = publishPvDcW;
       await this.setStateAsync('derived.core.pv.dcW', { val: publishPvDcW, ack: true, ts: oldestTime(pvTimes) });
+      this._derivedFlow.last.pvDcW = publishPvDcW;
     }
     const publishPvTotalW = pvObserved ? pvTotalRound : null;
     if (this._derivedFlow?.last?.pvTotalW !== publishPvTotalW || this._derivedFlow?.last?.pvTimestamp !== oldestTime(pvTimes)) {
-      this._derivedFlow.last.pvTotalW = publishPvTotalW;
       await this.setStateAsync('derived.core.pv.totalW', { val: publishPvTotalW, ack: true, ts: oldestTime(pvTimes) });
+      this._derivedFlow.last.pvTotalW = publishPvTotalW;
     }
 
     this._derivedFlow.last.pvTimestamp = oldestTime(pvTimes);
     const publishExtraW = missingProducer ? null : Math.round(producerSumW);
     const producerTimestamp = oldestTime(producerTimes);
     if (this._derivedFlow.last.extraProductionW !== publishExtraW || this._derivedFlow.last.extraTimestamp !== producerTimestamp) {
+      await this.setStateAsync('derived.core.production.extraW', { val: publishExtraW, ack: true, ts: producerTimestamp });
       this._derivedFlow.last.extraProductionW = publishExtraW;
       this._derivedFlow.last.extraTimestamp = producerTimestamp;
-      await this.setStateAsync('derived.core.production.extraW', { val: publishExtraW, ack: true, ts: producerTimestamp });
     }
     this.updateValue('derived.core.production.extraW', publishExtraW, producerTimestamp, { raw: false });
 
@@ -33052,24 +33105,24 @@ return res.json(out);
     const pvCapacityLimitRound = Math.round(pvPlausibility.capacityLimitW);
     const pvDuplicateSuppressedRound = Math.round(pvDuplicateSuppressedW);
     if (this._derivedFlow?.last?.pvRawTotalW !== pvRawTotalRound) {
-      this._derivedFlow.last.pvRawTotalW = pvRawTotalRound;
       await this.setStateAsync('derived.core.pv.rawTotalW', { val: pvRawTotalRound, ack: true });
+      this._derivedFlow.last.pvRawTotalW = pvRawTotalRound;
     }
     if (this._derivedFlow?.last?.pvCapacityLimitW !== pvCapacityLimitRound) {
-      this._derivedFlow.last.pvCapacityLimitW = pvCapacityLimitRound;
       await this.setStateAsync('derived.core.pv.capacityLimitW', { val: pvCapacityLimitRound, ack: true });
+      this._derivedFlow.last.pvCapacityLimitW = pvCapacityLimitRound;
     }
     if (this._derivedFlow?.last?.pvDuplicateSuppressedW !== pvDuplicateSuppressedRound) {
-      this._derivedFlow.last.pvDuplicateSuppressedW = pvDuplicateSuppressedRound;
       await this.setStateAsync('derived.core.pv.duplicateSuppressedW', { val: pvDuplicateSuppressedRound, ack: true });
+      this._derivedFlow.last.pvDuplicateSuppressedW = pvDuplicateSuppressedRound;
     }
     if (this._derivedFlow?.last?.pvPlausibilityCapped !== pvPlausibility.capped) {
-      this._derivedFlow.last.pvPlausibilityCapped = pvPlausibility.capped;
       await this.setStateAsync('derived.core.pv.plausibilityCapped', { val: !!pvPlausibility.capped, ack: true });
+      this._derivedFlow.last.pvPlausibilityCapped = pvPlausibility.capped;
     }
     if (this._derivedFlow?.last?.pvSource !== pvSource) {
-      this._derivedFlow.last.pvSource = pvSource;
       await this.setStateAsync('derived.core.pv.source', { val: pvSource, ack: true });
+      this._derivedFlow.last.pvSource = pvSource;
     }
 
     // Die abgeleiteten Kernwerte werden zusätzlich in den API-/SSE-Cache gespiegelt.
@@ -33101,8 +33154,8 @@ return res.json(out);
     this.updateValue('derived.core.building.quality', quality, ts, { raw: false });
 
     if (this._derivedFlow?.last?.quality !== quality) {
-      this._derivedFlow.last.quality = quality;
       await this.setStateAsync('derived.core.building.quality', { val: quality, ack: true });
+      this._derivedFlow.last.quality = quality;
     }
 
     // Diagnostics payload (throttled)
@@ -33111,7 +33164,6 @@ return res.json(out);
       const lastDiag = Number(this._derivedFlow?.diagLastMs) || 0;
       if (!this._derivedFlow) this._derivedFlow = {};
       if ((ts - lastDiag) >= diagEveryMs) {
-        this._derivedFlow.diagLastMs = ts;
         const payload = {
           ts,
           reason,
@@ -33177,9 +33229,13 @@ return res.json(out);
         const json = JSON.stringify(payload);
         await this.setStateAsync('derived.core.building.inputsJson', { val: json, ack: true });
         this.updateValue('derived.core.building.inputsJson', json, ts, { raw: false });
+        const tsSwitchJsonText = JSON.stringify(effectiveEnergyFlow.switchState || {});
+        const tsCandidateJsonText = JSON.stringify(effectiveEnergyFlow.candidate || {});
+        const tsFixedSourceJsonText = JSON.stringify((effectiveEnergyFlow.switchState && effectiveEnergyFlow.switchState.fixedSourceState) || {});
         await this.setStateAsync('derived.core.building.tsSwitchJson', { val: tsSwitchJsonText, ack: true });
         await this.setStateAsync('derived.core.building.tsCandidateJson', { val: tsCandidateJsonText, ack: true });
         await this.setStateAsync('derived.core.building.tsFixedSourceJson', { val: tsFixedSourceJsonText, ack: true });
+        this._derivedFlow.diagLastMs = ts;
       }
     } catch (_e) {}
 
@@ -34237,18 +34293,20 @@ return res.json(out);
 
     this.stateCache[key] = { value, ts, ...(opts.q !== undefined ? { q: opts.q } : {}) };
 
-    const payload = { [key]: this.stateCache[key] };
+    // Allocate one patch per delivery batch, and none while no dashboard is listening.
+    const payload = this.sseClients?.size ? (this._ssePendingPayload ??= Object.create(null)) : null;
+    if (payload) payload[key] = this.stateCache[key];
 
     // derived EVCS aggregates
     try {
       if (/^evcs\.\d+\.powerW$/.test(key)) {
         const count = Math.max(0, Math.round(Number(this.evcsCount || 0) || 0));
-        const maxAgeMs = Math.max(10000, (numericMeasurement(this.config?.settings?.deviceStaleTimeoutSec) || 60) * 1000);
+        const maxAgeMs = this._nwLiveInputMaxAgeMs();
         const keys = Array.from({ length: Math.min(count, 1024) }, (_, index) => `evcs.${index + 1}.powerW`);
         const observation = sumFlowMeasurements(this.stateCache, keys, Date.now(), maxAgeMs);
         const aggregate = observation || { value: null, ts: Date.now() };
         this.stateCache['evcs.totalPowerW'] = aggregate;
-        payload['evcs.totalPowerW'] = aggregate;
+        if (payload) payload['evcs.totalPowerW'] = aggregate;
         this.setStateAsync('evcs.totalPowerW', { val: aggregate.value, ts: aggregate.ts, ack: true }).catch(() => {});
       }
     
@@ -34267,14 +34325,14 @@ return res.json(out);
           base = total;
           this.stateCache[baseD] = { value: baseDate, ts };
           this.stateCache[baseK] = { value: base, ts };
-          payload[baseD] = this.stateCache[baseD];
-          payload[baseK] = this.stateCache[baseK];
+          if (payload) payload[baseD] = this.stateCache[baseD];
+          if (payload) payload[baseK] = this.stateCache[baseK];
           this.setStateAsync(baseD, baseDate, true).catch(()=>{});
           this.setStateAsync(baseK, base, true).catch(()=>{});
         }
         const dayKwh = Math.max(0, total - base);
         this.stateCache[`evcs.${idx}.energyDayKwh`] = { value: dayKwh, ts };
-        payload[`evcs.${idx}.energyDayKwh`] = this.stateCache[`evcs.${idx}.energyDayKwh`];
+        if (payload) payload[`evcs.${idx}.energyDayKwh`] = this.stateCache[`evcs.${idx}.energyDayKwh`];
         this.setStateAsync(`evcs.${idx}.energyDayKwh`, dayKwh, true).catch(()=>{});
       }
 } catch(_e) {}
@@ -34284,7 +34342,7 @@ return res.json(out);
 
     // Derived / calculated live values (e.g. building consumption fallback for UI)
     try {
-      const isTrigger = key.startsWith('storageFarm.') || (opts.raw !== false && (
+      const isTrigger = key === 'speicher.dcPvPowerW' || key.startsWith('storageFarm.') || (opts.raw !== false && (
         key === 'gridBuyPower' || key === 'gridSellPower' || key === 'gridPointPower' ||
         key === 'pvPower' || key === 'productionTotal' ||
         key === 'storageChargePower' || key === 'storageDischargePower' || key === 'batteryPower' ||
@@ -34301,18 +34359,15 @@ return res.json(out);
       // RC88_SSE_IDLE_ZERO_ALLOCATION: without connected dashboards there is
       // nothing to batch or serialize. Avoid a permanent 120-ms timer/allocation
       // chain on headless customer systems.
-      if (!this.sseClients || !this.sseClients.size) {
-        this._ssePendingPayload = {};
+      if (!payload) {
+        this._ssePendingPayload = null;
         return;
       }
-      if (!this._ssePendingPayload) this._ssePendingPayload = {};
-      Object.assign(this._ssePendingPayload, payload);
-
       if (!this._sseFlushTimer) {
         const batchMs = (this.config && Number(this.config.sseBatchMs)) || 120;
         this._sseFlushTimer = this._nwSetTimeout(() => {
-          const p = this._ssePendingPayload || {};
-          this._ssePendingPayload = {};
+          const p = this._ssePendingPayload;
+          this._ssePendingPayload = null;
           this._sseFlushTimer = null;
           if (!p || !Object.keys(p).length) return;
 
@@ -34368,7 +34423,7 @@ return res.json(out);
         try { this.sseClients.clear(); } catch (_e2) {}
       }
     } catch (_e3) {}
-    try { this._ssePendingPayload = {}; } catch (_e4) {}
+    try { this._ssePendingPayload = null; } catch (_e4) {}
   }
   /**
    * Code-Teil: _nwCloseServer
@@ -34540,7 +34595,7 @@ return res.json(out);
       } catch (_eSmartHomePulse) {}
       try {
         if (this._derivedFlow) this._derivedFlow.pending = false;
-        this._ssePendingPayload = {};
+        this._ssePendingPayload = null;
       } catch (_ePending) {}
       cleanup.capture(() => this._nwCloseSseClients());
 

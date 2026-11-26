@@ -24,7 +24,7 @@
  * - Der nächste Schritt ist pro Modul echte Typisierung statt pauschalem No-Check.
  * - Fachliche Kommentare markieren die Abschnitte, die später einzeln migriert werden.
  *
- * Original-Hash: 34bbd44d777d52510baa23e4944383897f425e9da6b665c28a4f08ed8ff892bb
+ * Original-Hash: a0e0e84ccc99e407bd7bca70b3642b40a267136f42678ebf4f7b72a57c1552dc
  */
 
 /**
@@ -45,7 +45,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/datapoints.ts
- * Quell-Hash: sha256:f79b81c89eaf0e774cd1a5699994eb1a67bfabb631297a80ad8d55b749f4b17d
+ * Quell-Hash: sha256:7ef72a2e28ad92af2cebf854183d7a956e937d882398774352c3cc4a1101e742
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -774,10 +774,12 @@ class DatapointRegistry {
         const changeTs = Number(state.lc);
         this.cacheByObjectId.set(id, {
             val: state.val,
+            q: state.q,
+            sourceTs: Number.isFinite(state.ts) && state.ts > 0 ? state.ts : 0,
             ts: Number.isFinite(stateTs) && stateTs > 0 ? stateTs : receivedTs,
             lc: Number.isFinite(changeTs) && changeTs > 0 ? changeTs : (Number.isFinite(stateTs) && stateTs > 0 ? stateTs : receivedTs),
             receivedTs,
-            ack: !!state.ack,
+            ack: state.ack === true,
         });
     }
 
@@ -829,7 +831,15 @@ class DatapointRegistry {
         return c ? c.val : null;
     }
 
-    /** Liefert den originalen Messwert-Zeitstempel ohne Heartbeat-/Connected-Fallback. */
+    /** Nur bestätigte Gerätemessungen mit brauchbarer Qualität dürfen Stellleistung freigeben. */
+    getVerifiedMeasurementTimestampMs(key, now = Date.now()) {
+        const entry = this.getEntry(key);
+        const sample = entry && this.cacheByObjectId.get(entry.srcObjectId || entry.objectId);
+        if (!sample || sample.ack !== true || (sample.q !== undefined && sample.q !== 0)) return null;
+        return sample.sourceTs > 0 && sample.sourceTs <= now ? sample.sourceTs : null;
+    }
+
+    /** Allgemeiner Cache-Zeitstempel für bestehende Verbraucher. */
     getMeasurementTimestampMs(key) {
         const e = this.getEntry(key);
         if (!e) return null;
@@ -1148,19 +1158,23 @@ class DatapointRegistry {
      * @param {string} key
      * @param {number} value
      * @param {boolean} [ack=false]
+     * @param {{zeroIsStop?:boolean}} [options] Expliziter EVCS-Vertrag: 0 pausiert die Ladung auch bei konfiguriertem Laufminimum.
      */
     /**
      * Ablauf und Zusammenhang: Schreibt einen numerischen Sollwert auf den zugeordneten Datenpunkt und berücksichtigt die konfigurierte Einheit/Skalierung. Beim Alias zählt die Schreibseite; eine W/kW-Umrechnung darf nicht doppelt erfolgen.
      */
-    async writeNumber(key, value, ack = false) {
+    async writeNumber(key, value, ack = false, options = {}) {
         const e = this.getEntry(key);
         if (!e) return false;
 
         let v = Number(value);
         if (!Number.isFinite(v)) return false;
 
-        // clamp in physical space
-        if (typeof e.min === 'number' && Number.isFinite(e.min)) v = Math.max(e.min, v);
+        // Nur der EVCS-Writer kennzeichnet 0 ausdrücklich als Stopp. Ein
+        // technisches Laufminimum darf daraus keine weitere Ladung machen.
+        // Positive Sollwerte und alle anderen Zahlen-DPs behalten ihre Grenzen.
+        const zeroIsStop = options && options.zeroIsStop === true;
+        if (!(zeroIsStop && v === 0) && typeof e.min === 'number' && Number.isFinite(e.min)) v = Math.max(e.min, v);
         if (typeof e.max === 'number' && Number.isFinite(e.max)) v = Math.min(e.max, v);
 
         // Mesh wird NACH Geräte-Minimum/Maximum erneut geprüft. Ein Minimum darf
@@ -1178,7 +1192,10 @@ class DatapointRegistry {
 
         // deadband in physical space against last written value
         const last = this.lastWriteByObjectId.get(e.objectId);
-        if (last && Number.isFinite(last.val) && e.deadband > 0 && Math.abs(v - last.val) < e.deadband) {
+        // Stopp/Neustart sind Zustandswechsel, keine Messwertschwankung. Gleiche
+        // 0 bleibt hingegen bis zum bestehenden Keepalive-Intervall dedupliziert.
+        const zeroTransition = zeroIsStop && last && Number.isFinite(last.val) && ((v === 0) !== (last.val === 0));
+        if (!zeroTransition && last && Number.isFinite(last.val) && e.deadband > 0 && Math.abs(v - last.val) < e.deadband) {
             // No write needed (idempotent) unless a periodic refresh is configured.
             const maxAge = Number(e.maxWriteIntervalMs);
             const ageOk = Number.isFinite(maxAge) && maxAge > 0 && Number.isFinite(last.ts) && (Date.now() - last.ts) >= maxAge;

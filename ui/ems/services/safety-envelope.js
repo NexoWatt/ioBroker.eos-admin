@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/services/safety-envelope.ts
- * Quell-Hash: sha256:108b19c32a3282fe9e65264a48263ad8c7296a6ae86eb6d590ad15d481bcbba2
+ * Quell-Hash: sha256:ab0f2797afcb7da70ea18c777d1d26bc02ed126c0dc0f8da20e63409afecf021
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -253,10 +253,14 @@ function invalidateSafetyEnvelope(adapter, reason, options = {}) {
     adapter._nwSafetyEnvelope = envelope;
     return envelope;
 }
-function phaseAgeMs(dp, key) {
+function phaseAgeMs(dp, key, now) {
     if (!dp)
         return null;
     try {
+        if (typeof dp.getVerifiedMeasurementTimestampMs === 'function') {
+            const ts = dp.getVerifiedMeasurementTimestampMs(key, now);
+            return ts === null ? null : now - ts;
+        }
         const age = typeof dp.getMeasurementAgeMs === 'function'
             ? dp.getMeasurementAgeMs(key)
             : (typeof dp.getAgeMs === 'function' ? dp.getAgeMs(key) : null);
@@ -267,7 +271,7 @@ function phaseAgeMs(dp, key) {
         return null;
     }
 }
-function readPhase(dp, key, staleMs) {
+function readPhase(dp, key, staleMs, now) {
     if (!dp || typeof dp.getEntry !== 'function' || !dp.getEntry(key)) {
         return { mapped: false, fresh: false, valueA: null, ageMs: null, connected: null, reason: 'not-mapped' };
     }
@@ -277,7 +281,7 @@ function readPhase(dp, key, staleMs) {
     }
     catch (_e) { }
     const valueA = strictFiniteNumber(raw, null);
-    const ageMs = phaseAgeMs(dp, key);
+    const ageMs = phaseAgeMs(dp, key, now);
     let connected = null;
     try {
         connected = typeof dp.getConnectionStatus === 'function' ? dp.getConnectionStatus(key) : null;
@@ -371,9 +375,12 @@ function buildSafetyEnvelope({ adapter, dp, coreSnapshot, budgetSnapshot, now = 
     const headroomA = {};
     let minHeadroomA = null;
     let phaseValid = true;
+    let validForMs = Math.min(safetyCfg.staleMs, safetyCfg.envelopeMaxAgeMs);
     if (phaseRequired) {
         for (const key of phaseKeys) {
-            const sample = readPhase(dp, key, safetyCfg.staleMs);
+            const sample = readPhase(dp, key, safetyCfg.staleMs, now);
+            if (sample.fresh && sample.ageMs !== null)
+                validForMs = Math.min(validForMs, safetyCfg.staleMs - sample.ageMs);
             const label = key.replace(/^ps\./, '').replace(/A$/i, '').toUpperCase();
             currentsA[label] = sample.valueA;
             // Signed headroom is intentional. If a phase is already above its
@@ -466,7 +473,7 @@ function buildSafetyEnvelope({ adapter, dp, coreSnapshot, budgetSnapshot, now = 
         generation: cycle.generation,
         ts: now,
         timestamp: now,
-        expiresAt: now + Math.min(safetyCfg.staleMs, safetyCfg.envelopeMaxAgeMs),
+        expiresAt: now + validForMs,
         valid,
         commissioned,
         emergencyStop: forceZero,

@@ -1,0 +1,46 @@
+{
+  "result": "passed",
+  "browser": "HeadlessChrome/158.0.8127.0",
+  "scope": "Shipped mobile Smart Home HTML, JS and CSS, actual DOM events; isolated HTTP API and device data. No field device.",
+  "checks": [
+    "render both fixtures from the device API and a read-only 21.5 °C measurement",
+    "reading or rendering sends no device command",
+    "one mobile touchscreen tap sends the exact command with current session CSRF"
+  ],
+  "posts": [
+    {
+      "body": {
+        "id": "fixture-light",
+        "key": "SET",
+        "value": true
+      },
+      "csrf": true
+    }
+  ],
+  "unhandled": [],
+  "pageErrors": [],
+  "sourceHashes": {
+    "ui/www/smarthome.html": "b692744b20c43d40cf14c12b9389bb127efb35fb9961ca6d157b9a1d40ab1f24",
+    "ui/www/runtime-base.js": "bccddd72ec671e7b3ac9c10493a525fa9904dd470255ce4a7531387bee56715f",
+    "ui/www/styles.css": "3bf5d8a859eb8648ecb52834fe4f4f8ab3dfc08d342d8cf270df1d4d1ac410b1",
+    "ui/www/smarthome-controls.css": "56789b580d0824b110733793c12651a790bf6bc00eabc2590067cb393f7c5f97",
+    "ui/www/smarthome-custom-views.css": "892158370b560d9709d2d196ce78d2faca23a169969d4a9fba8d9f15852b8a49",
+    "ui/www/auth.js": "57b629c732525aa1e5a7f28bcb682a2962a3fb836ffc7f9592b160020c713c7b",
+    "ui/www/smarthome-device-categories.css": "eba29d15c81585a81ff850a9b5b42fec95ae306d83649cb6bee5f5c3286259d3",
+    "ui/www/smarthome-device-controls.css": "2eda19efbfc437c414682abfc4eee3d5d9abcde7b78138181453a9943649dfba",
+    "ui/www/nexowatt-logo.png": "e1620f78bd502b3837db2b3e351d68ab88198f16e06052618d62d6e33d1ae402",
+    "ui/www/smarthome-touch.js": "a03e18c40c560fdb0d080cd058d8b7e4d4c30e2d91f9225a0ad7bbff51f580c2",
+    "ui/www/smarthome-feedback.js": "1474868ec11e2e578d452e6e6386cda1d2da7549b9bffe0a44e015c2ff472623",
+    "ui/www/smarthome-presentation.js": "a0b7f321894e0d1b3a7a11f0bd71dd4c44b25ec884317b4264438430a470f639",
+    "ui/www/smarthome-markdown-parser.js": "2ae3b5b8f0bfc943e400d22508b9437c3904a28a70266db64d7f11831cb080ce",
+    "ui/www/smarthome-custom-views.js": "4fe0894727c2b24cfb05dc8b1f382d6717f44edd7f3846859bcdb05214e1b06c",
+    "ui/www/smarthome-device-categories.js": "ab3ba82456b3d9e1c116e55115c798f286a639359e534bfdbdaa061bb680a722",
+    "ui/www/smarthome-device-controls.js": "258fa42058c63c60eac932d79ef5d762d91ae84c129da349127185473c4c8fa7",
+    "ui/www/smarthome.js": "b510a652e70a0dad71ded829f5c285178935187de68e3ac2c735fa47669c5300",
+    "ui/www/cockpit-shell.js": "c52a2c90f1a81e5a9955ebd2333aa60a9555b9e56e46f86cdf76ad09b1e26863",
+    "ui/www/nw-shell.js": "3ca6efcac4749d158f1e9d02150956c5a57d2d7ce20d4da19fe08b4cbbe684bb",
+    "ui/www/nw-i18n.js": "5dc4c50933e23fdf8e1344758bc8501e0b17558e2538c430e1532b4d1d7e5b09",
+    "ui/www/eos-session-idle.js": "be11eda9aac6c8a17b450bc87d97b8c2ba8c73eb295efdd104acfe50bcb6b6ea",
+    "ui/www/i18n/de.json": "9fb548f4edb2c14f0eaf94803dc970e67d715059e7d7da80c0ad4523cb700331"
+  }
+}

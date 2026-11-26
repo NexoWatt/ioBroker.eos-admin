@@ -56,7 +56,11 @@ test('real farm state/API snapshot excludes stale SoC and power, preserves exist
     h.states.set(`alias.0.${id}`, { val, ts: now, ack: true });
     h.objects.set(`alias.0.${id}`, { type: 'state', common: { type: 'number', unit }, native: {} });
   }
+  h.states.get('alias.0.a.power').ts = now-2000;
+  h.states.get('alias.0.a.pv').ts = now-3000;
   await a.updateStorageFarmDerived('overview-fixture');
+  assert.equal(a.stateCache['storageFarm.totalBatteryPowerW'].ts,now-2000);
+  assert.equal(a.stateCache['storageFarm.totalPvPowerW'].ts,now-3000);
   const value = key => h.states.get(`eos-admin.0.storageFarm.${key}`).val;
   let overview = JSON.parse(value('overviewJson'));
   assert.equal(overview.battery.netW, 0); assert.equal(overview.battery.chargeW, 5000); assert.equal(overview.battery.dischargeW, 5000);
@@ -72,6 +76,7 @@ test('real farm state/API snapshot excludes stale SoC and power, preserves exist
   assert.equal(overview.soc.meanPct, 20); assert.equal(overview.soc.complete, false);
   assert.equal(overview.capacity.totalKWh, 40, 'configured capacity is independent of live sample freshness');
   assert.equal(overview.pv.powerW, null); assert.equal(value('totalSoc'), 50, 'existing retained controller SoC semantics are not redefined');
+  assert.equal(value('totalPvPowerW'),null, 'lost member PV prevents a usable partial sum');
   // An invalid status flag must not become 1 W or a fresh 0% sample.
   h.states.set('alias.0.a.soc', { val: false, ts: now, ack: true });
   h.states.set('alias.0.a.power', { val: 0, ts: now, q: 0x40, ack: true });

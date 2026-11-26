@@ -107,7 +107,7 @@ async function main() {
         checks.push({ name: 'six hosted controls; parent/external OCPP read-only; module-off and both-off screenshot states both offer enable', result: 'passed' });
         for (const id of ['backup', 'eebus']) {
             const previous = calls.length;
-            await page.click(button(id, 'enable'));
+            await page.locator(button(id, 'enable')).click();
             await until(() => service.pending === null && calls.length > previous);
             await page.waitForFunction(selector => document.querySelector(selector)?.textContent === 'Läuft', {}, `${card(id)} .runtime-badge`);
             assert.deepEqual(calls.slice(previous), [{ id, action: 'stop' }, { id, action: 'start' }]);
@@ -132,7 +132,7 @@ async function main() {
         checks.push({ name: 'production mutation route rejects missing CSRF without touching lifecycle', result: 'passed' });
 
         // The service persists desired state first, then waits for the actual lifecycle.
-        holdLifecycle = 'devices:stop'; await page.click(button('devices', 'disable'));
+        holdLifecycle = 'devices:stop'; await page.locator(button('devices', 'disable')).click();
         await until(() => typeof heldLifecycle === 'function');
         await page.waitForFunction(selector => document.querySelector(selector)?.textContent?.includes('Steuerauftrag läuft'), {}, card('devices'));
         assert.match(await page.$eval(`${card('devices')} .runtime-badge`, node => node.textContent), /Wird beendet/);
@@ -149,7 +149,7 @@ async function main() {
         assert.match(await page.$eval(card('devices'), node => node.textContent), /ProzessfreigabeDeaktiviert/);
         checks.push({ name: 'disabled choice survives page reload and a fresh production config-service read', result: 'passed' });
 
-        holdLifecycle = 'devices:start'; await page.click(button('devices', 'enable'));
+        holdLifecycle = 'devices:start'; await page.locator(button('devices', 'enable')).click();
         await until(() => typeof heldLifecycle === 'function');
         await page.waitForFunction(selector => document.querySelector(selector)?.textContent === 'Startet', {}, `${card('devices')} .runtime-badge`);
         assert.equal(await page.$eval(`${card('devices')} .runtime-badge`, node => node.classList.contains('is-running')), false);
@@ -158,7 +158,7 @@ async function main() {
         checks.push({ name: 'enable waits for lifecycle readiness and displays green only after confirmed running state', result: 'passed' });
 
         const beforeRestart = calls.length;
-        await page.click(button('devices', 'restart')); await until(() => service.pending === null && calls.length > beforeRestart);
+        await page.locator(button('devices', 'restart')).click(); await until(() => service.pending === null && calls.length > beforeRestart);
         assert.deepEqual(calls.slice(beforeRestart), [{ id: 'devices', action: 'stop' }, { id: 'devices', action: 'start' }]);
         await page.waitForFunction(selector => !document.querySelector(selector)?.disabled, {}, button('devices', 'restart'));
         checks.push({ name: 'restart uses confirmed stop before start through the production control service', result: 'passed' });
@@ -174,14 +174,14 @@ async function main() {
 
         // A separate admin tab changed the desired state after this page's snapshot.
         service.revision = crypto.randomUUID(); const beforeConflict = calls.length;
-        await page.click(button('devices', 'restart'));
+        await page.locator(button('devices', 'restart')).click();
         await page.waitForFunction(() => document.getElementById('control-message').textContent.includes('zwischenzeitlich geändert'));
         assert.equal(calls.length, beforeConflict);
         await page.waitForFunction(selector => !document.querySelector(selector)?.disabled, {}, button('devices', 'restart'));
         checks.push({ name: 'stale revision fails without lifecycle change and refreshes current controls', result: 'passed' });
 
         failLifecycle = 'eebus:stop'; const beforeFailedStop = calls.length;
-        await page.click(button('eebus', 'disable')); await until(() => service.pending === null && calls.length > beforeFailedStop);
+        await page.locator(button('eebus', 'disable')).click(); await until(() => service.pending === null && calls.length > beforeFailedStop);
         await page.waitForFunction(selector => document.querySelector(selector)?.textContent?.includes('Ende des bisherigen Prozesses ist nicht bestätigt'), {}, card('eebus'));
         assert.notEqual(await page.$eval(`${card('eebus')} .runtime-badge`, node => node.textContent), 'Deaktiviert');
         assert.equal(await page.$eval(button('eebus', 'enable'), node => node.disabled), true);
@@ -190,19 +190,19 @@ async function main() {
         checks.push({ name: 'unconfirmed stop remains visibly unconfirmed and never claims successful deactivation', result: 'passed' });
         failLifecycle = '';
 
-        const beforeUi = calls.length; await page.click(button('ui', 'disable'));
+        const beforeUi = calls.length; await page.locator(button('ui', 'disable')).click();
         await until(() => service.pending === null && calls.length > beforeUi);
         await page.waitForFunction(selector => !document.querySelector(selector)?.disabled, {}, button('ui', 'enable'));
         assert.equal(await page.$eval(`${card('admin')} .runtime-badge`, node => node.textContent), 'Läuft');
         await page.reload(); await page.waitForFunction(selector => !document.querySelector(selector)?.disabled, {}, button('ui', 'enable'));
         assert.doesNotMatch(await page.$eval(card('ui'), node => node.textContent), /EMS bereit/);
         assert.match(await page.$eval(card('ems'), node => node.textContent), /EMS bereitJa/);
-        await page.click(button('ui', 'enable')); await until(() => service.pending === null && status.ui.state === 'running');
+        await page.locator(button('ui', 'enable')).click(); await until(() => service.pending === null && status.ui.state === 'running');
         await page.waitForFunction(selector => document.querySelector(selector)?.textContent?.includes('EMS bereitJa'), {}, card('ems'));
         assert.equal(status.ems.pid, 32125);
         checks.push({ name: 'UI pause remains controllable from parent runtime page while EMS readiness and PID stay stable', result: 'passed' });
 
-        const beforeEms = calls.length; await page.click(button('ems', 'disable'));
+        const beforeEms = calls.length; await page.locator(button('ems', 'disable')).click();
         await until(() => service.pending === null && calls.length > beforeEms);
         await page.waitForFunction(selector => document.querySelector(selector)?.textContent?.includes('EMS bereitNein'), {}, card('ems'));
         assert.equal(await page.$eval(`${card('ui')} .runtime-badge`, node => node.textContent), 'Läuft');
@@ -211,7 +211,7 @@ async function main() {
 
         // The response is deliberately lost before the request reaches the service.
         responseMode = 'drop'; const requestsBeforeDrop = requests.length; const callsBeforeDrop = calls.length;
-        await page.click(button('devices', 'restart'));
+        await page.locator(button('devices', 'restart')).click();
         await page.waitForFunction(() => document.getElementById('control-message').textContent.includes('Bestätigung des Steuerauftrags fehlt'), { timeout: 10000 });
         assert.equal(requests.length, requestsBeforeDrop + 1); assert.equal(calls.length, callsBeforeDrop);
         responseMode = ''; if (heldResponse && !heldResponse.destroyed) heldResponse.end(); heldResponse = null;
@@ -229,7 +229,7 @@ async function main() {
             await page.screenshot({ path: path.join(process.env.EOS_BROWSER_SCREENSHOT_DIR, 'runtime-controls-desktop.png'), fullPage: true });
         }
         role = 'enduser'; const callsBeforeDenied = calls.length;
-        await page.click(button('devices', 'restart')); await page.waitForSelector('.runtime-empty');
+        await page.locator(button('devices', 'restart')).click(); await page.waitForSelector('.runtime-empty');
         assert.equal(calls.length, callsBeforeDenied);
         assert.equal(await page.$$eval('.runtime-controls button', nodes => nodes.length), 0);
         assert.match(await page.$eval('#control-message', node => node.textContent), /Administratoranmeldung/);

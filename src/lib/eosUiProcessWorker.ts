@@ -8,6 +8,7 @@ import {
     UiProcessRpc,
     processError,
     processRecord,
+    UI_CONFIG_COMMIT_UNCONFIRMED_EXIT,
     UI_OWNER_ASYNC,
     UI_OWNER_LOCAL,
     sanitizeUiProcessLog,
@@ -73,15 +74,17 @@ function updateAuthority(value: Record<string, unknown>): void {
     // A queued lease retains its original age instead of being renewed on delivery.
     leaseAt = performance.now() - Math.max(0, 3000 - (value.expiresAt - Date.now()));
 }
-function fail(): void {
+function terminate(exitCode: number): void {
     stopping = true;
     authority = {};
     for (const timer of timers) {
         clearTimeout(timer);
     }
     // Parent death leaves no orphan regulator, TCP listener or periodic hardware operation.
-    process.exitCode = 1;
-    process.exit(1);
+    process.exit(exitCode);
+}
+function fail(): void {
+    terminate(1);
 }
 function localId(namespace: string, id: unknown): string {
     if (typeof id !== 'string' || id.length > 512) {
@@ -153,7 +156,7 @@ function makeOwner(input: Record<string, unknown>): Record<string, unknown> {
                     // Completion is unknown: do not continue regulating with stale
                     // in-memory configuration. Parent pendingWrites blocks a new
                     // generation until the accepted controller work has settled.
-                    fail();
+                    terminate(UI_CONFIG_COMMIT_UNCONFIRMED_EXIT);
                 }
                 throw error;
             });

@@ -1,0 +1,35 @@
+✔ actual flow keeps measured zero during export and never invents 100 W or indefinitely holds a previous load (24.002362ms)
+✔ actual flow differentiates null, missing, bool and zero SoC and does not suppress valid raw PV behind null derived PV (10.175027ms)
+✔ stale, future, absent or offline measurements stay unknown in the same flow and sidebar; fresh unchanged zero recovers (11.070685ms)
+✔ no measurement/engine data never claims active engine, stable grid or healthy system (7.404756ms)
+✔ canonical NVP-invalid signal prevents a stale fallback from appearing as import/export or 100 percent self-sufficiency (6.813179ms)
+✔ farm flow uses complete atomic gross sums and arithmetic SoC; partial and stale overview do not revive old aggregate values (7.93995ms)
+✔ strict read rejects malformed values, absent timestamps and future samples but accepts newly confirmed constant zero (5.847165ms)
+✔ both shipped entry pages load the strict live helper before the actual dashboard renderer (0.909659ms)
+✔ missing split-meter sides and missing NVP cannot manufacture a complete flow or a balance-derived battery (8.878293ms)
+✔ extra producer and consumer nodes never display command power or missing measurements as measured zero (7.86555ms)
+✔ visible dashboard ages measurements even without a new SSE event; hidden and non-dashboard pages do not rerender (5.326683ms)
+✔ real flow does not suppress 80 W or retain separately smoothed previous powers (18.959379ms)
+✔ EV freshness, offline, bad-quality and future timestamp use the same measured-data contract as the rest of the flow (10.725553ms)
+✔ consumer greater than total is reported as inconsistent, and fresh balance can recover stale total without fabricating zero (8.981767ms)
+✔ signed split flows retain conservation for simultaneous import/export and battery charge/discharge (9.857335ms)
+✔ second field screenshot rejects impossible negative building remainder instead of clamping it to 0 W (9.822283ms)
+✔ negative load and out-of-range state of charge cannot masquerade as measured zero or valid percent (9.94921ms)
+✔ backend deduplicated extra production is authoritative and invalid published totals cannot be revived by browser sums (10.1293ms)
+✔ complete farm gross readings survive the presence of a canonical net observation (9.625921ms)
+✔ canonical missing single-battery observation permits only an explicitly calculated display from fresh independent inputs (8.959994ms)
+✔ a new direct house meter sample between flow frames shows immediately, without reviving an unmapped mirror (9.701604ms)
+✔ newer bad-quality direct sample invalidates a preceding frame from that meter without discarding an independent balance (10.102609ms)
+✔ expired observations, loss of connection, and initial synchronization each show their own reason (8.925622ms)
+✔ the dashboard timestamp uses a confirmed measurement even when its value is constant and never uses UI activity or wall time (6.969891ms)
+✔ actual SSE reconnect waits for a full snapshot, rejects degraded/incomplete sessions and preserves source ordering (23.717294ms)
+✔ the reported 1.2 kW PV case shows the battery direction and distinguishes a negative balance from a valid 2.5 kW load (10.240013ms)
+✔ the missing source diagnostic identifies absent, expired and invalid grid observations (10.40702ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 843.370589

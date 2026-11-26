@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/modules/storage-control.ts
- * Quell-Hash: sha256:3267de75713412a0052817f258d707f19195cd213c23c5e11ebfc8b2989eb816
+ * Quell-Hash: sha256:0e05be0f979975a11f1064b0a4eca4959906ecdd5ead8eab6afccd67d1a6965e
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -74,6 +74,7 @@
 'use strict';
 
 const { BaseModule } = require('./base');
+const { readFlowMeasurement } = require('../../lib/flow-measurement');
 const { dynamicGridHasControl } = require('../services/dynamic-grid-ownership');
 const { evaluateArbitrageRequest, selectConfiguredArbitrageRequest, configuredArbitrageFallbackProfile } = require('../services/arbitrage-control');
 const { withActuatorShadowContext } = require('../services/actuator-shadow-arbiter');
@@ -930,13 +931,17 @@ function resolveStorageAntiExportTarget(input = {}) {
     // einen zuvor akzeptierten Entladebefehl, darf kein neuer Entladevorgang
     // gestartet werden. Das ist kein Abbruch einer laufenden Regelung, sondern
     // verhindert einen neuen, physikalisch nicht begruendbaren Exportbefehl.
-    if (belowTarget && !physicalBaseKnown) {
+    // An old self-consumption command cannot prove current battery discharge
+    // once its configured meter is unavailable and the NVP is exporting.
+    const stopWithoutFeedback = input.dischargeFeedbackLost === true && nvpW < -deadbandW;
+    if (belowTarget && (!physicalBaseKnown || stopWithoutFeedback)) {
         return {
             active: true,
             requestedW,
             targetW: 0,
-            status: 'block-new-discharge-without-anchor',
-            reason: `NVP-Anti-Export: keine neue Entladung ohne Ist-/Kommandoanker bei NVP ${Math.round(nvpW)} W`,
+            status: stopWithoutFeedback ? 'stop-export-without-feedback' : 'block-new-discharge-without-anchor',
+            reason: stopWithoutFeedback ? 'NVP-Anti-Export: Entladung gestoppt, konfigurierte Batterie-Istmessung fehlt'
+                : `NVP-Anti-Export: keine neue Entladung ohne Ist-/Kommandoanker bei NVP ${Math.round(nvpW)} W`,
             nvpW,
             targetNvpW,
             nvpErrorW,
@@ -944,7 +949,7 @@ function resolveStorageAntiExportTarget(input = {}) {
             graceMs,
             exportActive,
             belowTarget: true,
-            explicitStop: false,
+            explicitStop: stopWithoutFeedback,
             capped: true,
             capW: 0,
             proportionalTargetW: 0,
@@ -2135,8 +2140,10 @@ class SpeicherRegelungModule extends BaseModule {
         // bleiben weiterhin hart am NVP und an den Speichergrenzen begrenzt.
         const storageCoupling = String(cfg.coupling || 'ac').trim().toLowerCase() === 'dc' ? 'dc' : 'ac';
         const dcPvMapped = storageCoupling === 'dc' && !!String(cfg.dcPvPowerObjectId || '').trim();
-        const dcPvPowerW = (dcPvMapped && this.dp) ? this.dp.getNumberFresh('st.dcPvPowerW', staleMs, null) : null;
-        const dcPvPowerAge = (dcPvMapped && this.dp && this.dp.getEntry('st.dcPvPowerW')) ? this.dp.getAgeMs('st.dcPvPowerW') : null;
+        const dcPvSampleTs = dcPvMapped ? this.dp?.getVerifiedMeasurementTimestampMs?.('st.dcPvPowerW', now) : null;
+        const dcPvPowerAge = Number.isFinite(dcPvSampleTs) ? now - dcPvSampleTs : null;
+        const dcPvPowerW = dcPvPowerAge !== null && dcPvPowerAge >= 0 && dcPvPowerAge <= staleMs
+            ? this.dp.getNumber('st.dcPvPowerW', null) : null;
         await this._setIfChanged('speicher.regelung.speicherKopplung', storageCoupling);
         await this._setIfChanged('speicher.regelung.dcPvPowerW', (typeof dcPvPowerW === 'number' && Number.isFinite(dcPvPowerW)) ? Math.round(dcPvPowerW) : 0);
         await this._setIfChanged('speicher.regelung.dcPvPowerAlterMs', (typeof dcPvPowerAge === 'number' && Number.isFinite(dcPvPowerAge)) ? Math.round(dcPvPowerAge) : null);
@@ -5667,7 +5674,15 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
             const antiExportCommandAnchorW = lastAcceptedDischargeW > 0
                 ? lastAcceptedDischargeW
                 : heldDischargeAnchorW;
+            const signedFeedbackConfigured = !farmEnabled && source === 'eigenverbrauch'
+                && this._getStorageVendorProfile(cfg) === 'generic' && !!this.dp?.getEntry?.('st.batteryPowerW');
+            const directTimestamp = signedFeedbackConfigured && battPowerFeedbackSource === 'single-storage'
+                && typeof this.dp?.getVerifiedMeasurementTimestampMs === 'function'
+                ? this.dp.getVerifiedMeasurementTimestampMs('st.batteryPowerW', now) : battPowerSampleTs;
+            const dischargeFeedbackLost = signedFeedbackConfigured && (!battPowerTrusted || !Number.isFinite(directTimestamp)
+                || directTimestamp <= 0 || directTimestamp > now || now - directTimestamp > staleMs);
             storageAntiExportDiag = resolveStorageAntiExportTarget({
+                dischargeFeedbackLost,
                 requestedTargetW: targetBeforeAntiExportW,
                 commandAnchorW: antiExportCommandAnchorW,
                 storageActualW: antiExportStorageActualW,
@@ -7298,35 +7313,12 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
                 return null;
             }
         };
+        const getCacheSample = (key) => readFlowMeasurement(adapter.stateCache, key, now, staleMs);
         const getCacheAgeMs = (key) => {
-            try {
-                if (adapter && typeof adapter._nwGetCacheAgeMs === 'function') {
-                    const age = adapter._nwGetCacheAgeMs(key, now);
-                    return finite(age) ? Math.max(0, Number(age)) : null;
-                }
-            } catch {
-                // Fallback auf den lokalen State-Cache.
-            }
-            const rec = getCacheRecord(key);
-            const ts = Number(rec && rec.ts);
-            return Number.isFinite(ts) && ts > 0 ? Math.max(0, now - ts) : null;
+            const sample = getCacheSample(key);
+            return sample ? now - sample.ts : null;
         };
-        const getCacheValue = (key, fallback = null) => {
-            try {
-                if (adapter && typeof adapter._nwGetNumberFromCacheFresh === 'function') {
-                    const value = adapter._nwGetNumberFromCacheFresh(key, staleMs, fallback, now);
-                    return finite(value) ? Number(value) : fallback;
-                }
-            } catch {
-                // Fallback auf den lokalen State-Cache.
-            }
-            const rec = getCacheRecord(key);
-            const value = strictFiniteNumber(rec && rec.value, null);
-            const age = getCacheAgeMs(key);
-            if (value === null) return fallback;
-            if (age !== null && age > staleMs) return fallback;
-            return value;
-        };
+        const getCacheValue = (key, fallback = null) => getCacheSample(key)?.value ?? fallback;
         const getCacheString = (key) => {
             const rec = getCacheRecord(key);
             if (!rec || rec.value === null || rec.value === undefined) return '';
@@ -7402,8 +7394,8 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
         const pvCandidates = [];
         const pushPv = (value, source, ageMs, priority = 0) => {
             if (!finite(value) || Number(value) < 0) return;
-            const age = finite(ageMs) ? Math.max(0, Number(ageMs)) : null;
-            if (age !== null && age > staleMs) return;
+            const age = strictFiniteNumber(ageMs, null);
+            if (age === null || age < 0 || age > staleMs) return;
             pvCandidates.push({ w: Math.max(0, Number(value)), source, ageMs: age, priority });
         };
 
@@ -7421,7 +7413,8 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
                 pushPv(
                     this.dp.getNumberFresh('ps.pvW', staleMs, null),
                     'ps.pvW',
-                    typeof this.dp.getAgeMs === 'function' ? this.dp.getAgeMs('ps.pvW') : null,
+                    typeof this.dp.getVerifiedMeasurementTimestampMs === 'function'
+                        ? now - (this.dp.getVerifiedMeasurementTimestampMs('ps.pvW', now) ?? -Infinity) : null,
                     70,
                 );
             }
@@ -7437,7 +7430,7 @@ const _prevRampW = (typeof this._lastTargetW === 'number' && Number.isFinite(thi
 
         const ages = [loadAgeMs, pvAgeMs, nvpAgeMs].filter((v) => finite(v)).map(Number);
         const measurementSkewMs = ages.length >= 2 ? Math.max(...ages) - Math.min(...ages) : 0;
-        const nvpFresh = rawNvpW !== null && (nvpAgeMs === null || nvpAgeMs <= staleMs);
+        const nvpFresh = rawNvpW !== null && nvpAgeMs !== null && nvpAgeMs >= 0 && nvpAgeMs <= staleMs;
         const loadFresh = loadW !== null && (loadAgeMs === null || loadAgeMs <= staleMs);
         const pvFresh = pvW !== null && (pvAgeMs === null || pvAgeMs <= staleMs);
         const aligned = measurementSkewMs <= maxSkewMs;

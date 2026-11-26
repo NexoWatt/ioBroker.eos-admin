@@ -409,3 +409,131 @@ test('generic telemetry selection cannot bypass the native hosted OCPP process a
         }
     }
 });
+
+test('PV-only uses verified storage and NVP through the central budget and the hosted OCPP writer', async t => {
+    const { CoreLimitsModule } = require('../ui/ems/modules/core-limits');
+    // Load the shipped class without starting a real adapter. Its meter methods
+    // run unchanged against the fixture's physical input cache.
+    const fs = require('node:fs');
+    const path = require('node:path');
+    const Module = require('node:module');
+    const adapterFile = require.resolve('../ui/main.js');
+    const implementation = new Module(adapterFile, module);
+    implementation.filename = adapterFile;
+    implementation.paths = Module._nodeModulePaths(path.dirname(adapterFile));
+    implementation._compile(fs.readFileSync(adapterFile, 'utf8') + '\nmodule.exports = NexoWattVis;', adapterFile);
+    const physical = implementation.exports.prototype;
+    const cases = [
+        { name: 'import despite wrong house zero', house: 0, watts: 0 },
+        { name: 'charging measurement with ioBroker error', battery: -5200, quality: 64, watts: 0 },
+        { name: 'charging measurement without source time', battery: -5200, age: null, watts: 0 },
+        { name: 'charging measurement in future', battery: -5200, age: -60000, watts: 0 },
+        { name: 'discharge 90 seconds old', pv: 6600, grid: 0, battery: 5200, age: 90000, watts: 0 },
+        { name: 'fresh discharge excluded', pv: 6600, grid: 0, battery: 5200, watts: 0 },
+        { name: 'live export despite erroneous house import', pv: 8500, grid: -7500, actual: 0, house: 10000, watts: 4200 },
+        { name: 'live export with no house meter', pv: 8500, grid: -7500, actual: 0, watts: 4200 },
+        { name: 'missing central budget', house: 0, budget: 'missing', watts: 0 },
+        { name: 'stale central budget', pv: 8500, grid: -7500, actual: 0, budget: 'stale', watts: 0 },
+        { name: 'invalid central budget power', pv: 8500, grid: -7500, actual: 0, budget: 'invalid', watts: 0 },
+        { name: 'future central budget', pv: 8500, grid: -7500, actual: 0, budget: 'future', watts: 0 },
+        { name: 'Boost respects connection limit', mode: 'boost', grid: 8500, limit: 6500, watts: 0 },
+        { name: 'Boost respects §14a', mode: 'boost', pv: 0, grid: 8000, actual: 0, para14a: 4200, watts: 4200 },
+        { name: 'Min+PV keeps grid minimum', mode: 'minpv', watts: 4200 },
+    ];
+    for (const row of cases) await t.test(row.name, async t => {
+        const station = 'eos-admin.0.ocpp.CP_TEST';
+        const ev = row.actual ?? 5700;
+        const h = fixture(t, { station, userMode: row.mode ?? 'pv', actualPowerW: ev, gridImportPreferred: true, negativeActive: true });
+        atomic(h);
+        const a = h.adapter;
+        const now = Date.now();
+        const sample = value => ({ value, q: 0, ts: now });
+        a.config.datapoints = { batteryPower: 'meter.battery.power' };
+        a.config.enableStorageControl = true;
+        a.config.installerConfig.gridConnectionPower = row.limit ?? 30000;
+        a.stateCache = {
+            'derived.core.pv.totalW': sample(row.pv ?? 6000),
+            'chargingManagement.control.actualW': sample(ev),
+            'chargingManagement.control.usedW': sample(ev),
+            'chargingManagement.control.pvEvcsPhysicalPvManagedW': sample(ev),
+            'settings.pvSurplusPriority': sample('emobility'),
+            batteryPower: { value: row.battery ?? 0, ts: row.age === null ? undefined : now - (row.age ?? 0), q: row.quality ?? 0 },
+        };
+        a._nwRawValueCache = { batteryPower: a.stateCache.batteryPower };
+        for (const key of ['_nwResolveBatteryFlowFromCache', '_nwGetRawNumberFromCache', '_nwIsBatterySignInverted', '_nwGetCacheAgeMs']) {
+            a[key] = physical[key];
+        }
+        a._nvpFreshnessSnapshot = { ...a._nvpFreshnessSnapshot, ts: now, netW: row.grid ?? 4500 };
+        if (row.house !== undefined) {
+            a.stateCache['derived.core.building.loadTotalW'] = sample(row.house);
+            h.setLocal('derived.core.building.loadTotalW', row.house, now);
+        }
+        if (row.para14a) a._para14a = { active: true, evcsTotalCapW: row.para14a, totalCapW: row.para14a };
+
+        const core = new CoreLimitsModule(a, h.dp);
+        await core.tick();
+        if (row.quality || row.age !== undefined) {
+            assert.equal(a._emsBudget.raw.pvBudgetPhysicalSource, 'storage-flow-unverified');
+            assert.equal(a._emsBudget.gates.pv.effectiveW, 0);
+        }
+        if (row.budget === 'missing') delete a._emsBudget;
+        if (row.budget === 'invalid') a._emsBudget.gates.pv.effectiveW = Infinity;
+        if (row.budget === 'stale') a._emsBudget.ts = now - 120000;
+        if (row.budget === 'future') a._emsBudget.ts = now + 120000;
+        const out = await h.tick();
+        assert.equal(out.targetPowerW, row.watts);
+        const issued = h.writes.filter(write => write.key === 'cm.wb.lp1.setW');
+        assert.equal(h.dp.getEntry('cm.wb.lp1.setW').objectId, station + '.control.chargeLimit');
+        assert.deepEqual(issued.map(write => write.value), [row.watts]);
+    });
+});
+
+test('running PV budget follows original EV meters through rising and falling load in consecutive core cycles', async t => {
+    const { CoreLimitsModule } = require('../ui/ems/modules/core-limits');
+    const { DatapointRegistry } = require('../ui/ems/datapoints');
+    let clock = Date.now();
+    t.mock.method(Date, 'now', () => clock);
+    const adapter = {
+        config: { chargingManagement: { pvChargeReserveW: 500 } }, stateCache: {},
+        async getForeignStateAsync() { return null; }, async getForeignObjectAsync() { return null; },
+        async subscribeForeignStatesAsync() {}, log: { warn() {}, error() {}, debug() {} },
+    };
+    const key = 'cm.wb.lp1.pW';
+    const evId = 'eos-admin.0.ocpp.cp.measurements.powerW';
+    const dp = new DatapointRegistry(adapter, []);
+    await dp.upsert({ key, objectId: evId, direction: 'in', unit: 'W' });
+    const core = new CoreLimitsModule(adapter, dp);
+    const base = new Map([[key, { id: evId, baseW: 0 }]]);
+    adapter._zeroExportEvcsMeters = { ts: clock, keys: [key], pvBaseByKey: base };
+    let lastEvW = 0;
+    for (const evW of [0, 4200, 6300, 0, 6300]) {
+        clock += 5000;
+        adapter._zeroExportEvcsMeters.ts = clock - 5000;
+        const sample = value => ({ value, ts: clock, q: 0 });
+        adapter.stateCache['derived.core.pv.totalW'] = sample(12000);
+        adapter.stateCache['chargingManagement.control.pvEvcsPhysicalPvManagedW'] = sample(lastEvW);
+        adapter._nvpFreshnessSnapshot = { ts: clock, usable: true, fresh: true, connected: true,
+            netW: 1000 + evW - 12000, status: 'ok', measurementAgeMs: 0, heartbeatAgeMs: 0 };
+        dp.handleStateChange(evId, { val: evW, ts: clock, ack: true, q: 0 });
+        const budget = core._makeBudgetSnapshot(clock, {});
+        assert.equal(budget.raw.evcsActualW, evW);
+        assert.equal(budget.raw.evcsPvUsedW, evW);
+        assert.equal(budget.gates.pv.effectiveW, 10500);
+        lastEvW = evW;
+    }
+    base.set(key, { id: evId, baseW: 4200 });
+    assert.equal(core._currentEvMeterPowers(clock, 15000).pvManagedW, 2100, 'Min+PV only contributes measured power above its minimum');
+    base.clear();
+    assert.equal(core._currentEvMeterPowers(clock, 15000).pvManagedW, 0, 'Boost does not become a PV source');
+    base.set(key, { id: 'replaced.meter', baseW: 0 });
+    assert.equal(core._currentEvMeterPowers(clock, 15000).pvManagedW, 0, 'a changed identity requires reclassification');
+    base.set(key, { id: evId, baseW: 0 });
+    const second = 'cm.wb.lp2.pW';
+    await dp.upsert({ key: second, objectId: evId, direction: 'in', unit: 'W' });
+    adapter._zeroExportEvcsMeters.keys.push(second);
+    assert.deepEqual(core._currentEvMeterPowers(clock, 15000), { actualW: 6300, pvManagedW: 0 });
+    for (const metadata of [{q: 64}, {ts: undefined}, {ts: clock - 90000}, {ack:false}]) {
+        dp.handleStateChange(evId, { val: 6300, ts: clock, ack: true, q: 0, ...metadata });
+        assert.deepEqual(core._currentEvMeterPowers(clock, 15000), { actualW: 0, pvManagedW: 0 });
+    }
+});

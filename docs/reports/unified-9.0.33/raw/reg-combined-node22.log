@@ -1,0 +1,622 @@
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: derived balance preserves observation age and valid zero during activity
+ok 1 - derived balance preserves observation age and valid zero during activity
+  ---
+  duration_ms: 4.474511
+  type: 'test'
+  ...
+# Subtest: a new meter sample received during PV discovery is eligible in the same balance
+ok 2 - a new meter sample received during PV discovery is eligible in the same balance
+  ---
+  duration_ms: 0.661131
+  type: 'test'
+  ...
+# Subtest: new balance requests coalesce while a previous frame is being published
+ok 3 - new balance requests coalesce while a previous frame is being published
+  ---
+  duration_ms: 7.305881
+  type: 'test'
+  ...
+# Subtest: a direct meter update triggers a new frame and a derived mirror does not
+ok 4 - a direct meter update triggers a new frame and a derived mirror does not
+  ---
+  duration_ms: 0.30988
+  type: 'test'
+  ...
+# Subtest: building and dashboard NVP use the same normalized sign and physical observation time
+ok 5 - building and dashboard NVP use the same normalized sign and physical observation time
+  ---
+  duration_ms: 10.689553
+  type: 'test'
+  ...
+# Subtest: a signed grid mirror cannot replace a stale or bad-quality physical observation
+ok 6 - a signed grid mirror cannot replace a stale or bad-quality physical observation
+  ---
+  duration_ms: 2.129411
+  type: 'test'
+  ...
+# Subtest: split grid power uses the selected direction timestamp and requires both configured meters
+ok 7 - split grid power uses the selected direction timestamp and requires both configured meters
+  ---
+  duration_ms: 1.289254
+  type: 'test'
+  ...
+# Subtest: farm balance validates battery-side power independently from converter power
+ok 8 - farm balance validates battery-side power independently from converter power
+  ---
+  duration_ms: 4.033806
+  type: 'test'
+  ...
+# Subtest: impossible negative balance is unknown, never fabricated 100W or retained load
+ok 9 - impossible negative balance is unknown, never fabricated 100W or retained load
+  ---
+  duration_ms: 1.132551
+  type: 'test'
+  ...
+# Subtest: fresh direct consumption is authoritative, including a measured zero
+ok 10 - fresh direct consumption is authoritative, including a measured zero
+  ---
+  duration_ms: 1.083909
+  type: 'test'
+  ...
+# Subtest: missing, stale, future, invalid and bad quality sources cannot produce fresh building demand
+ok 11 - missing, stale, future, invalid and bad quality sources cannot produce fresh building demand
+  ---
+  duration_ms: 14.050991
+  type: 'test'
+  ...
+# Subtest: negative remaining demand and missing consumers remain distinct from zero
+ok 12 - negative remaining demand and missing consumers remain distinct from zero
+  ---
+  duration_ms: 0.975578
+  type: 'test'
+  ...
+# Subtest: configured missing extra producers/consumers do not silently disappear
+ok 13 - configured missing extra producers/consumers do not silently disappear
+  ---
+  duration_ms: 0.857142
+  type: 'test'
+  ...
+# Subtest: duplicate physical PV aliases are counted once in the backend balance
+ok 14 - duplicate physical PV aliases are counted once in the backend balance
+  ---
+  duration_ms: 0.692959
+  type: 'test'
+  ...
+# Subtest: EV aggregate becomes unknown if a configured member is unavailable, and retains oldest source time
+ok 15 - EV aggregate becomes unknown if a configured member is unavailable, and retains oldest source time
+  ---
+  duration_ms: 0.563677
+  type: 'test'
+  ...
+# Subtest: measurement reader does not evaluate accessors or inherited cache records
+ok 16 - measurement reader does not evaluate accessors or inherited cache records
+  ---
+  duration_ms: 0.212665
+  type: 'test'
+  ...
+# Subtest: Auto PV rejects bad quality and missing timestamps; persistent PV agrees with API snapshot
+ok 17 - Auto PV rejects bad quality and missing timestamps; persistent PV agrees with API snapshot
+  ---
+  duration_ms: 5.394986
+  type: 'test'
+  ...
+# Subtest: TS candidate cannot resurrect an invalid balance or overwrite a fresh direct observation
+ok 18 - TS candidate cannot resurrect an invalid balance or overwrite a fresh direct observation
+  ---
+  duration_ms: 0.500643
+  type: 'test'
+  ...
+# Subtest: extra production adds distinct configured BHKW and generator sources once with shared snapshot contract
+ok 19 - extra production adds distinct configured BHKW and generator sources once with shared snapshot contract
+  ---
+  duration_ms: 7.867344
+  type: 'test'
+  ...
+# Subtest: source timestamps include only selected contributors and numeric text has bounded decimal syntax
+ok 20 - source timestamps include only selected contributors and numeric text has bounded decimal syntax
+  ---
+  duration_ms: 0.63367
+  type: 'test'
+  ...
+# Subtest: legacy flow-slot aliases remain part of the balance and duplicate consumer mappings subtract once
+ok 21 - legacy flow-slot aliases remain part of the balance and duplicate consumer mappings subtract once
+  ---
+  duration_ms: 0.595754
+  type: 'test'
+  ...
+# Subtest: EV mirror carries source quality and timestamp through actual updateValue aggregation
+ok 22 - EV mirror carries source quality and timestamp through actual updateValue aggregation
+  ---
+  duration_ms: 0.670866
+  type: 'test'
+  ...
+# Subtest: a failed building state write is retried for the same physical observation
+ok 23 - a failed building state write is retried for the same physical observation
+  ---
+  duration_ms: 2.359732
+  type: 'test'
+  ...
+# Subtest: independent AC and DC PV add at equal power, and a missing configured DC meter invalidates the balance
+ok 24 - independent AC and DC PV add at equal power, and a missing configured DC meter invalidates the balance
+  ---
+  duration_ms: 2.827657
+  type: 'test'
+  ...
+# Subtest: measured zero from DC-only and farm-only PV remains an observation, and farm missing is a gap
+ok 25 - measured zero from DC-only and farm-only PV remains an observation, and farm missing is a gap
+  ---
+  duration_ms: 1.586966
+  type: 'test'
+  ...
+# Subtest: persisted meter timeout applies to a direct building meter without refreshing the timestamp
+ok 26 - persisted meter timeout applies to a direct building meter without refreshing the timestamp
+  ---
+  duration_ms: 0.469337
+  type: 'test'
+  ...
+# Subtest: scheduled publication retries once after a transient error even without another meter event
+ok 27 - scheduled publication retries once after a transient error even without another meter event
+  ---
+  duration_ms: 0.586941
+  type: 'test'
+  ...
+# Subtest: headless measurement updates do not allocate SSE batches and connected clients share one patch
+ok 28 - headless measurement updates do not allocate SSE batches and connected clients share one patch
+  ---
+  duration_ms: 0.790293
+  type: 'test'
+  ...
+# Subtest: equal zero readings remain reliable through refresh, expire once at the actual timeout and recover with new physical timestamp
+ok 29 - equal zero readings remain reliable through refresh, expire once at the actual timeout and recover with new physical timestamp
+  ---
+  duration_ms: 1.841583
+  type: 'test'
+  ...
+# Subtest: DC mapping keeps real zero and source time, skips identical polls and clears invalid measurements
+ok 30 - DC mapping keeps real zero and source time, skips identical polls and clears invalid measurements
+  ---
+  duration_ms: 5.29687
+  type: 'test'
+  ...
+# Subtest: a complete farm may replace a confirmed absent template meter; an actual invalid meter is still required
+ok 31 - a complete farm may replace a confirmed absent template meter; an actual invalid meter is still required
+  ---
+  duration_ms: 1.594096
+  type: 'test'
+  ...
+# Subtest: unrelated automatic inverter cannot replace a failed configured AC meter
+ok 32 - unrelated automatic inverter cannot replace a failed configured AC meter
+  ---
+  duration_ms: 0.50553
+  type: 'test'
+  ...
+# Subtest: field readings of 1.2 kW PV, 0.5 kW export and a negative 1.8 kW battery distinguish raw direction, measured demand and incomplete telemetry
+ok 33 - field readings of 1.2 kW PV, 0.5 kW export and a negative 1.8 kW battery distinguish raw direction, measured demand and incomplete telemetry
+  ---
+  duration_ms: 1.464604
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: History reads only own data cache records and never invokes configured cache accessors
+ok 34 - History reads only own data cache records and never invokes configured cache accessors
+  ---
+  duration_ms: 39.608897
+  type: 'test'
+  ...
+# Subtest: History uses real PV/load fallbacks when derived states are absent or stale; fresh zero stays zero
+ok 35 - History uses real PV/load fallbacks when derived states are absent or stale; fresh zero stays zero
+  ---
+  duration_ms: 0.675022
+  type: 'test'
+  ...
+# Subtest: History never adds DC PV to the already merged canonical derived total
+ok 36 - History never adds DC PV to the already merged canonical derived total
+  ---
+  duration_ms: 1.3416
+  type: 'test'
+  ...
+# Subtest: Farm PV fallback merges once and missing/stale farm SoC is not recorded as zero
+ok 37 - Farm PV fallback merges once and missing/stale farm SoC is not recorded as zero
+  ---
+  duration_ms: 0.553942
+  type: 'test'
+  ...
+# Subtest: missing/null/boolean prices never create a free provider price; configured manual fallback is retained
+ok 38 - missing/null/boolean prices never create a free provider price; configured manual fallback is retained
+  ---
+  duration_ms: 0.679017
+  type: 'test'
+  ...
+# Subtest: provider price freshness flag, age, quality and timestamp are respected without changing manual tariff mode
+ok 39 - provider price freshness flag, age, quality and timestamp are respected without changing manual tariff mode
+  ---
+  duration_ms: 0.74786
+  type: 'test'
+  ...
+# Subtest: zero and negative canonical EUR prices and net-fee decomposition retain exact values
+ok 40 - zero and negative canonical EUR prices and net-fee decomposition retain exact values
+  ---
+  duration_ms: 0.581533
+  type: 'test'
+  ...
+# Subtest: missing grid/battery/PV measurements produce gaps, never fresh invented zeros
+ok 41 - missing grid/battery/PV measurements produce gaps, never fresh invented zeros
+  ---
+  duration_ms: 0.293135
+  type: 'test'
+  ...
+# Subtest: stale raw observations and farm aggregate are not re-stamped as new History samples
+ok 42 - stale raw observations and farm aggregate are not re-stamped as new History samples
+  ---
+  duration_ms: 0.647661
+  type: 'test'
+  ...
+# Subtest: the History sink rejects invalid data and retains real zero/negative measurements
+ok 43 - the History sink rejects invalid data and retains real zero/negative measurements
+  ---
+  duration_ms: 0.504439
+  type: 'test'
+  ...
+# Subtest: History requires the configured independent DC input, accepts real zero and counts equal distinct readings
+ok 44 - History requires the configured independent DC input, accepts real zero and counts equal distinct readings
+  ---
+  duration_ms: 1.6983
+  type: 'test'
+  ...
+# Subtest: History respects explicit unknown aggregate while a stale individual generator still reports a plausible partial value
+ok 45 - History respects explicit unknown aggregate while a stale individual generator still reports a plausible partial value
+  ---
+  duration_ms: 0.312574
+  type: 'test'
+  ...
+# (node:14) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: farm own ack:false echo stays pending and idempotent; later ack only confirms the driver
+ok 46 - farm own ack:false echo stays pending and idempotent; later ack only confirms the driver
+  ---
+  duration_ms: 49.149447
+  type: 'test'
+  ...
+# Subtest: farm delayed acknowledgment cannot confirm a newer request; invalid quality remains a failure
+ok 47 - farm delayed acknowledgment cannot confirm a newer request; invalid quality remains a failure
+  ---
+  duration_ms: 7.06188
+  type: 'test'
+  ...
+# Subtest: farm missing/null/blank/boolean values never confirm a zero command
+ok 48 - farm missing/null/blank/boolean values never confirm a zero command
+  ---
+  duration_ms: 6.133501
+  type: 'test'
+  ...
+# Subtest: farm real mismatch, write failure and authority revocation are not pending successes
+ok 49 - farm real mismatch, write failure and authority revocation are not pending successes
+  ---
+  duration_ms: 84.185784
+  type: 'test'
+  ...
+# Subtest: actual single-storage command path keeps run enabled while matching command acknowledgments are pending
+ok 50 - actual single-storage command path keeps run enabled while matching command acknowledgments are pending
+  ---
+  duration_ms: 10.903921
+  type: 'test'
+  ...
+# Subtest: single-storage real mismatch still clears run; pending cannot hide a rejected primary write
+ok 51 - single-storage real mismatch still clears run; pending cannot hide a rejected primary write
+  ---
+  duration_ms: 139.972075
+  type: 'test'
+  ...
+# Subtest: single-storage actual ack is driver-only and late/invalid acknowledgment is not confirmed
+ok 52 - single-storage actual ack is driver-only and late/invalid acknowledgment is not confirmed
+  ---
+  duration_ms: 0.811304
+  type: 'test'
+  ...
+# Subtest: farm keepalive renews a pending request without inventing confirmation or writing zero
+ok 53 - farm keepalive renews a pending request without inventing confirmation or writing zero
+  ---
+  duration_ms: 14.563632
+  type: 'test'
+  ...
+# Subtest: pending neutralization reports requested and retains the native FEMS watchdog handoff
+ok 54 - pending neutralization reports requested and retains the native FEMS watchdog handoff
+  ---
+  duration_ms: 5.794629
+  type: 'test'
+  ...
+# Subtest: actual farm diagnostic projection preserves missing command readback as null instead of zero
+ok 55 - actual farm diagnostic projection preserves missing command readback as null instead of zero
+  ---
+  duration_ms: 163.223097
+  type: 'test'
+  ...
+# (node:20) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: farm overview retains both physical gross directions, zero net and arithmetic rather than capacity-weighted SoC
+ok 56 - farm overview retains both physical gross directions, zero net and arithmetic rather than capacity-weighted SoC
+  ---
+  duration_ms: 1.965977
+  type: 'test'
+  ...
+# Subtest: partial measurements never masquerade as full sums, while fresh SoC subset and known configured capacity stay explicitly labelled
+ok 57 - partial measurements never masquerade as full sums, while fresh SoC subset and known configured capacity stay explicitly labelled
+  ---
+  duration_ms: 0.445321
+  type: 'test'
+  ...
+# Subtest: identical duplicate sources count once and conflicting duplicate readings are unavailable
+ok 58 - identical duplicate sources count once and conflicting duplicate readings are unavailable
+  ---
+  duration_ms: 0.359683
+  type: 'test'
+  ...
+# Subtest: real farm state/API snapshot excludes stale SoC and power, preserves existing controller semantics and never seeds display telemetry
+ok 59 - real farm state/API snapshot excludes stale SoC and power, preserves existing controller semantics and never seeds display telemetry
+  ---
+  duration_ms: 219.525169
+  type: 'test'
+  ...
+# Subtest: license normalization preserves absent optional limits and explicit zero/null without poisoning next device plan
+ok 60 - license normalization preserves absent optional limits and explicit zero/null without poisoning next device plan
+  ---
+  duration_ms: 12.7837
+  type: 'test'
+  ...
+# (node:22) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Fenecon AC load uses the next real measurement when derived load is unknown, preserving actual zero
+ok 61 - Fenecon AC load uses the next real measurement when derived load is unknown, preserving actual zero
+  ---
+  duration_ms: 7.615751
+  type: 'test'
+  ...
+# Subtest: Fenecon missing derived, mapped and rest demand reaches existing NVP/battery fallback instead of invented zero
+ok 62 - Fenecon missing derived, mapped and rest demand reaches existing NVP/battery fallback instead of invented zero
+  ---
+  duration_ms: 0.227768
+  type: 'test'
+  ...
+# Subtest: independent feed-forward rejects missing, empty and boolean load/PV through cache and fresh-helper paths
+ok 63 - independent feed-forward rejects missing, empty and boolean load/PV through cache and fresh-helper paths
+  ---
+  duration_ms: 2.578987
+  type: 'test'
+  ...
+# Subtest: independent derived mirror remains ineligible when source says mapped but measurement is unknown
+ok 64 - independent derived mirror remains ineligible when source says mapped but measurement is unknown
+  ---
+  duration_ms: 0.259865
+  type: 'test'
+  ...
+# Subtest: a bad PV sample cannot reverse the generic storage writer from discharge to charge
+ok 65 - a bad PV sample cannot reverse the generic storage writer from discharge to charge
+  ---
+  duration_ms: 129.488688
+  type: 'test'
+  ...
+# Subtest: self-consumption stops on verified export after loss of battery feedback, preserving measured ramp and the target band
+ok 66 - self-consumption stops on verified export after loss of battery feedback, preserving measured ramp and the target band
+  ---
+  duration_ms: 0.775831
+  type: 'test'
+  ...
+# (node:27) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual farm controller dispatches600W to eligible member at SoCs1/98
+ok 67 - actual farm controller dispatches600W to eligible member at SoCs1/98
+  ---
+  duration_ms: 246.72329
+  type: 'test'
+  ...
+# Subtest: actual farm controller dispatches600W to eligible member at SoCs98/1
+ok 68 - actual farm controller dispatches600W to eligible member at SoCs98/1
+  ---
+  duration_ms: 55.194306
+  type: 'test'
+  ...
+# Subtest: both members below configured minimum receive no discharge command
+ok 69 - both members below configured minimum receive no discharge command
+  ---
+  duration_ms: 48.985393
+  type: 'test'
+  ...
+# Subtest: eligible member's explicit0W limit remains binding
+ok 70 - eligible member's explicit0W limit remains binding
+  ---
+  duration_ms: 47.629181
+  type: 'test'
+  ...
+# Subtest: eligible member's explicit250W limit remains binding
+ok 71 - eligible member's explicit250W limit remains binding
+  ---
+  duration_ms: 39.095666
+  type: 'test'
+  ...
+# Subtest: eligible full member blocked bystaleMember cannot discharge
+ok 72 - eligible full member blocked bystaleMember cannot discharge
+  ---
+  duration_ms: 90.942305
+  type: 'test'
+  ...
+# Subtest: empty member'sstaleMember does not block healthy full member
+ok 73 - empty member'sstaleMember does not block healthy full member
+  ---
+  duration_ms: 30.946864
+  type: 'test'
+  ...
+# Subtest: eligible full member blocked byfaultMember cannot discharge
+ok 74 - eligible full member blocked byfaultMember cannot discharge
+  ---
+  duration_ms: 44.588107
+  type: 'test'
+  ...
+# Subtest: empty member'sfaultMember does not block healthy full member
+ok 75 - empty member'sfaultMember does not block healthy full member
+  ---
+  duration_ms: 47.455432
+  type: 'test'
+  ...
+# Subtest: eligible full member blocked bydeniedMember cannot discharge
+ok 76 - eligible full member blocked bydeniedMember cannot discharge
+  ---
+  duration_ms: 29.603501
+  type: 'test'
+  ...
+# Subtest: empty member'sdeniedMember does not block healthy full member
+ok 77 - empty member'sdeniedMember does not block healthy full member
+  ---
+  duration_ms: 42.196658
+  type: 'test'
+  ...
+# Subtest: global admission remains binding:{"staleGrid":true}
+ok 78 - global admission remains binding:{"staleGrid":true}
+  ---
+  duration_ms: 20.912374
+  type: 'test'
+  ...
+# Subtest: global admission remains binding:{"tariffBlock":true}
+ok 79 - global admission remains binding:{"tariffBlock":true}
+  ---
+  duration_ms: 52.851079
+  type: 'test'
+  ...
+# Subtest: global admission remains binding:{"enabled":false}
+ok 80 - global admission remains binding:{"enabled":false}
+  ---
+  duration_ms: 204.911782
+  type: 'test'
+  ...
+# Subtest: explicit global MultiUse50% reserve blocks49.5% mean without silently overriding operator policy
+ok 81 - explicit global MultiUse50% reserve blocks49.5% mean without silently overriding operator policy
+  ---
+  duration_ms: 75.121238
+  type: 'test'
+  ...
+# Subtest: farm write acceptance does not masquerade as measured response: 63W actual versus673W target times out
+ok 82 - farm write acceptance does not masquerade as measured response: 63W actual versus673W target times out
+  ---
+  duration_ms: 36.321875
+  type: 'test'
+  ...
+# Subtest: fresh device discharge capability 0W caps real controller allocation to 0W
+ok 83 - fresh device discharge capability 0W caps real controller allocation to 0W
+  ---
+  duration_ms: 10.234518
+  type: 'test'
+  ...
+# Subtest: fresh device discharge capability 250W caps real controller allocation to 250W
+ok 84 - fresh device discharge capability 250W caps real controller allocation to 250W
+  ---
+  duration_ms: 15.328683
+  type: 'test'
+  ...
+# Subtest: fresh device discharge capability 9566W caps real controller allocation to 600W
+ok 85 - fresh device discharge capability 9566W caps real controller allocation to 600W
+  ---
+  duration_ms: 22.017494
+  type: 'test'
+  ...
+# Subtest: numeric hardware capability cannot raise an installer limit
+ok 86 - numeric hardware capability cannot raise an installer limit
+  ---
+  duration_ms: 17.034289
+  type: 'test'
+  ...
+# Subtest: bound missing device capability blocks only its own direction without erasing mapping
+ok 87 - bound missing device capability blocks only its own direction without erasing mapping
+  ---
+  duration_ms: 16.942972
+  type: 'test'
+  ...
+# Subtest: bound stale device capability blocks only its own direction without erasing mapping
+ok 88 - bound stale device capability blocks only its own direction without erasing mapping
+  ---
+  duration_ms: 21.371885
+  type: 'test'
+  ...
+# Subtest: bound unacknowledged device capability blocks only its own direction without erasing mapping
+ok 89 - bound unacknowledged device capability blocks only its own direction without erasing mapping
+  ---
+  duration_ms: 11.316314
+  type: 'test'
+  ...
+# Subtest: bound bad quality device capability blocks only its own direction without erasing mapping
+ok 90 - bound bad quality device capability blocks only its own direction without erasing mapping
+  ---
+  duration_ms: 16.043327
+  type: 'test'
+  ...
+# Subtest: bound negative device capability blocks only its own direction without erasing mapping
+ok 91 - bound negative device capability blocks only its own direction without erasing mapping
+  ---
+  duration_ms: 10.138867
+  type: 'test'
+  ...
+# Subtest: bound string device capability blocks only its own direction without erasing mapping
+ok 92 - bound string device capability blocks only its own direction without erasing mapping
+  ---
+  duration_ms: 10.33083
+  type: 'test'
+  ...
+# Subtest: bound wrong unit device capability blocks only its own direction without erasing mapping
+ok 93 - bound wrong unit device capability blocks only its own direction without erasing mapping
+  ---
+  duration_ms: 17.799224
+  type: 'test'
+  ...
+# Subtest: capability block of empty member does not suppress eligible full member
+ok 94 - capability block of empty member does not suppress eligible full member
+  ---
+  duration_ms: 14.041146
+  type: 'test'
+  ...
+# Subtest: charge capability independently clamps charging while discharge admission remains intact
+ok 95 - charge capability independently clamps charging while discharge admission remains intact
+  ---
+  duration_ms: 14.467285
+  type: 'test'
+  ...
+# Subtest: exclusive native FEMS path honors bound capability: zero discharge
+ok 96 - exclusive native FEMS path honors bound capability: zero discharge
+  ---
+  duration_ms: 16.683573
+  type: 'test'
+  ...
+# Subtest: exclusive native FEMS path honors bound capability: 250W discharge
+ok 97 - exclusive native FEMS path honors bound capability: 250W discharge
+  ---
+  duration_ms: 9.8724
+  type: 'test'
+  ...
+# Subtest: exclusive native FEMS path honors bound capability: stale discharge
+ok 98 - exclusive native FEMS path honors bound capability: stale discharge
+  ---
+  duration_ms: 6.34802
+  type: 'test'
+  ...
+# Subtest: exclusive native FEMS path honors bound capability: 250W charge
+ok 99 - exclusive native FEMS path honors bound capability: 250W charge
+  ---
+  duration_ms: 12.835248
+  type: 'test'
+  ...
+# Subtest: exclusive native FEMS path honors bound capability: opposite direction stays available
+ok 100 - exclusive native FEMS path honors bound capability: opposite direction stays available
+  ---
+  duration_ms: 6.668165
+  type: 'test'
+  ...
+1..100
+# tests 100
+# suites 0
+# pass 100
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2328.881579

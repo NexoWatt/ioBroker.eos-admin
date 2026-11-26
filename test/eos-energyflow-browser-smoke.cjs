@@ -68,7 +68,7 @@ window.__nwEmsCfg = {}; window.__nwTariffLiveOnline = true;
     page.on('request',req=>{if(req.url().startsWith(base+'/')||req.url().startsWith('data:'))void req.continue();else{rejectedRequests.push(req.url());void req.abort();}});
     await page.goto(base+'/',{waitUntil:'networkidle0'});
     const snapshot=(values,age={},quality={})=>page.evaluate((v,a,q)=>window.fixtureSnapshot(v,a,q),values,age,quality);
-    const read=()=>page.evaluate(()=>Object.fromEntries(['centerPower','pvVal','gridVal','restVal','c2Val','batterySocIn','energyFlowQuality','emsStatusText'].map(id=>[id,document.getElementById(id).textContent])));
+    const read=()=>page.evaluate(()=>Object.fromEntries(['centerPower','pvVal','gridVal','restVal','c2Val','batterySocIn','batteryFlowDirection','energyFlowQuality','emsStatusText'].map(id=>[id,document.getElementById(id).textContent])));
     const baseValues={'derived.core.pv.totalW':2500,consumptionTotal:9100,gridPointPower:3800,batteryPower:2800,storageSoc:90,'evcs.totalPowerW':6800,'settings.dynamicTariff':true,'settings.tariffMode':2};
     function tariffStatus(){return JSON.stringify({ts:Date.now(),active:true,intent:{snapshotFresh:true},effective:{statusText:'Tarif Automatik günstig (0.200 €/kWh): Speicher lädt',detailStatusText:'Prüfbeispiel: Readback bestätigt'}});}
     for(const [label,width,height] of [['desktop',1440,1000],['mobile',390,844]]) {
@@ -100,6 +100,24 @@ window.__nwEmsCfg = {}; window.__nwTariffLiveOnline = true;
       await snapshot({...baseValues,'derived.core.pv.totalW':0,consumptionTotal:0,gridPointPower:0,batteryPower:0,storageSoc:0,'evcs.totalPowerW':0});
       values=await read();assert.equal(values.centerPower,'0.0 kW');assert.equal(values.batterySocIn,'0 %');assert.match(values.emsStatusText,/Warte|warten/i);
       results.push({scenario:`confirmed-zero-and-tariff-awaiting-status-${label}`,result:'passed',values});
+      const arrivingDirect = {...baseValues,consumptionTotal:1200,'derived.core.pv.totalW':1200,
+        gridPointPower:0,batteryPower:0,'evcs.totalPowerW':0,'derived.core.building.loadTotalW':null,
+        'derived.core.building.quality':'missing-grid'};
+      const previousFrameAge = {'derived.core.building.loadTotalW':3000,'derived.core.building.quality':3000};
+      await snapshot(arrivingDirect,previousFrameAge);
+      values=await read();assert.equal(values.centerPower,'1.2 kW');assert.equal(values.energyFlowQuality,'');
+      results.push({scenario:`fresh-direct-meter-before-derived-frame-${label}`,result:'passed',values});
+      await snapshot(arrivingDirect,previousFrameAge,{consumptionTotal:64});
+      values=await read();assert.equal(values.centerPower,'--');assert.match(values.energyFlowQuality,/Netzmessung/);
+      results.push({scenario:`invalid-direct-meter-cannot-hide-loss-${label}`,result:'passed',values});
+      const screenshot = {...baseValues, consumptionTotal:null, 'derived.core.pv.totalW':1200,'derived.core.grid.netW':-500,
+        'derived.core.storage.netW':-1800,'derived.core.building.loadTotalW':null,'derived.core.building.quality':'invalid-balance','evcs.totalPowerW':0};
+      await snapshot(screenshot);
+      values=await read();assert.equal(values.centerPower,'--');assert.equal(values.batteryFlowDirection,'Laden');assert.match(values.energyFlowQuality,/Energiebilanz ist negativ/);
+      await snapshot({...screenshot,'derived.core.storage.netW':1800,'derived.core.building.loadTotalW':2500,'derived.core.building.quality':'ok'});
+      values=await read();assert.equal(values.centerPower,'2.5 kW');assert.equal(values.batteryFlowDirection,'Entladen');assert.equal(values.energyFlowQuality,'');
+      assert.ok(await page.evaluate(()=>{const label=document.getElementById('batteryFlowDirection').getBoundingClientRect();const svg=document.getElementById('energyWebSvg').getBoundingClientRect();return label.height>0 && label.top>=svg.top && label.bottom<=svg.bottom && label.left>=svg.left && label.right<=svg.right;}));
+      results.push({scenario:`reported-signed-storage-and-visible-direction-${label}`,result:'passed',values});
       const measuredFrame = {...baseValues, 'derived.core.pv.totalW':1500, 'derived.core.grid.netW':-1800,
         'derived.core.storage.netW':2800, 'derived.core.building.loadTotalW':2500,
         'settings.flowInvertGrid':true, 'evcs.totalPowerW':0, batteryPower:-2800};

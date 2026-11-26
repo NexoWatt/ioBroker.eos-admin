@@ -1,0 +1,147 @@
+{
+  "version": "9.0.33",
+  "browser": "HeadlessChrome/158.0.8127.0",
+  "actualOS": "Linux x86_64",
+  "suites": [
+    {
+      "suite": "admin-bundle",
+      "testSha256": "d2d1770d5b405c3f7bfd2ea286e4920e2f30a36162bd977d4683c8a890b0c31b",
+      "documentedCases": 0,
+      "result": "passed",
+      "evidence": "admin-bundle.log",
+      "sha256": "61d58c445803886e9c110d7e5f1c50b1c1ca418ccdb3f7060f3b031d27843f76",
+      "checkedSourceHashes": 30
+    },
+    {
+      "suite": "eos-backup-settings-browser",
+      "testSha256": "d17fdfad892c027fdb6d2bb473d2051b8b4fc2d09a1f242f122d00fc39f195b0",
+      "documentedCases": 10,
+      "result": "passed",
+      "evidence": "eos-backup-settings-browser.log",
+      "sha256": "761382e90be48cfb10d78e19646aebb674f39b75b8d4841e67fc5597bbf71c82",
+      "checkedSourceHashes": 7
+    },
+    {
+      "suite": "eos-customer-tariff-startup-browser",
+      "testSha256": "26f4c2192132f9bea84924cd41e779f989211a51d78c1fe2be7754df8e509e6b",
+      "documentedCases": 6,
+      "result": "passed",
+      "evidence": "eos-customer-tariff-startup-browser.log",
+      "sha256": "23a7abfa42b89f9ebebdd6bbcbc752dd1618c4a54f251d7ab91079ba87b8eab8",
+      "checkedSourceHashes": 5
+    },
+    {
+      "suite": "eos-energyflow-browser-smoke",
+      "testSha256": "97c10f9ddeec71a1e0da856869954e506536164da62a74a6e1368cc01b4e13b3",
+      "documentedCases": 26,
+      "result": "passed",
+      "evidence": "eos-energyflow-browser-smoke.log",
+      "sha256": "6bfd39538181edde3578a6a0b2af19986ba10a152b53a6f5c781c64ccb4788b0",
+      "checkedSourceHashes": 6
+    },
+    {
+      "suite": "eos-evcs-delete-browser",
+      "testSha256": "13142829a7224f5590993e1c0632a8c6c5811b48883757ba4531039b2785c5c9",
+      "documentedCases": 6,
+      "result": "passed",
+      "evidence": "eos-evcs-delete-browser.log",
+      "sha256": "ed2185026b31b969da09fa7070975a905e90f3603448a6b456324425382539b4",
+      "checkedSourceHashes": 11
+    },
+    {
+      "suite": "eos-history-setup-browser-smoke",
+      "testSha256": "4e73017289824e78fb54a537f14545ddeaee4c5ec629a727d9211208a7260ba7",
+      "documentedCases": 6,
+      "result": "passed",
+      "evidence": "eos-history-setup-browser-smoke.log",
+      "sha256": "0341970cfeee4631af4164f79f9c1521b5e93268f26c7b1524316d55d4aa2850",
+      "checkedSourceHashes": 0
+    },
+    {
+      "suite": "eos-kiosk-browser",
+      "testSha256": "00f15856932a02e85207b6b6b5c5e978d87223ea7e7c109cf2bf6470d8e6b0e1",
+      "documentedCases": 8,
+      "result": "passed",
+      "evidence": "eos-kiosk-browser.log",
+      "sha256": "ad29238a3e162c22ac7f9795247769953aa34774690320341f7447f489f373e4",
+      "checkedSourceHashes": 13
+    },
+    {
+      "suite": "eos-ocpp-admin-browser",
+      "testSha256": "5880febdb3f712267851807f5f10b3920f1e4bd69dde71379dc728f929b08764",
+      "documentedCases": 12,
+      "result": "passed",
+      "evidence": "eos-ocpp-admin-browser.log",
+      "sha256": "c4dfae46942ce941996df17d6355e34b1f297ac37b3e1141532fa1a84d879de7",
+      "checkedSourceHashes": 5
+    },
+    {
+      "suite": "eos-ocpp-installer-discovery-browser",
+      "testSha256": "245b3e7662b10f10cac4b174c51fbf0ad26e58d5607b41f1371bcd32ab3e8c44",
+      "documentedCases": 4,
+      "result": "passed",
+      "evidence": "eos-ocpp-installer-discovery-browser.log",
+      "sha256": "d6558be9ccca5c250f2aa3468a887c1a7de762412f4860300f4f4d62978a98d1",
+      "checkedSourceHashes": 0
+    },
+    {
+      "suite": "eos-pwa-trust-browser",
+      "testSha256": "9db740b27889209ffb0e61fac35023b5c6925b82ed6303c2ca47bde1f43e1fdf",
+      "documentedCases": 4,
+      "result": "passed",
+      "evidence": "eos-pwa-trust-browser.log",
+      "sha256": "121953ad0fac7ee571a1dae8ef14b2403ed627653d753addd36c536a1a90df50",
+      "checkedSourceHashes": 5
+    },
+    {
+      "suite": "eos-runtime-controls-browser",
+      "testSha256": "d4fd13b2777c694085c727cde5a880cbbbf87df57135e1c1fe415400c23838fc",
+      "documentedCases": 15,
+      "result": "passed",
+      "evidence": "eos-runtime-controls-browser.log",
+      "sha256": "1dea3a952baaf8b906744e6932331a40d932fc1aca53cfbb3ebe9687d3aba702",
+      "checkedSourceHashes": 6
+    },
+    {
+      "suite": "eos-runtime-health-browser",
+      "testSha256": "affebfe7f7ae9757879de360be8a9fa5c9f6a9e601c7c5e8353e2b70855134e5",
+      "documentedCases": 7,
+      "result": "passed",
+      "evidence": "eos-runtime-health-browser.log",
+      "sha256": "1933de4385bef3f6e0e2985003ebe2157788af03a9a9b333703883b6f776f2ae",
+      "checkedSourceHashes": 5
+    },
+    {
+      "suite": "eos-runtime-login-browser",
+      "testSha256": "e5a65277218d1cc97093f59985d3ba35ee53aae2686dc511be00de85475c32b5",
+      "documentedCases": 4,
+      "result": "passed",
+      "evidence": "eos-runtime-login-browser.log",
+      "sha256": "2a98ed9f9d49b20f5c0d3628d0aa1fe6812b9da8f75034f5042356a23e1e800b",
+      "checkedSourceHashes": 4
+    },
+    {
+      "suite": "smarthome",
+      "testSha256": "68849413a804f63f17438e5b0ec5a20682957034dc9a5d1774a23207cd28e9f0",
+      "documentedCases": 3,
+      "result": "passed",
+      "evidence": "smarthome.log",
+      "sha256": "bd52d10774f649dd68b0fd56182bbaf96db0407b2f768ef94935517387cf7e16",
+      "checkedSourceHashes": 22
+    }
+  ],
+  "cadence": {
+    "result": "passed",
+    "source": "ui/www/app.js",
+    "appSha256": "f7e4022e98782981d88bc35ee528ba56968a1103c16be1d8ea3956fbf89b0567",
+    "evidence": "eos-energyflow-cadence-browser-10s.log",
+    "sha256": "ecb202d43d702873a2127a42b438e2bd5769fc0448ca9d390d68790aa5708f09",
+    "gapsMs": [
+      10010.199999999255,
+      9995.400000002235
+    ],
+    "eventConnections": 2
+  },
+  "limits": "local browser and synthetic controller/API fixtures; no installed customer equipment or physical iPhone; admin ES module and references loaded without live controller socket",
+  "totalNamedCases": 111
+}

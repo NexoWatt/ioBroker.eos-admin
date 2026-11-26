@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/modules/charging-management.ts
- * Quell-Hash: sha256:305c05010a6328ee034469a14398167a917e0732b3809828afc09e2090844af0
+ * Quell-Hash: sha256:52f80d763e27fa9547b52142ae16a79e63485d77d4f8b693a2f625c98966bd15
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -35,6 +35,7 @@
 'use strict';
 
 const { BaseModule } = require('./base');
+const { tariffPriceNumber, verifiedTariffAgeMs } = require('../../lib/tariff-price');
 const { EMS_CONTROL_FIELDS, checkedEmsControlState } = require('../../lib/ems-control-values');
 const { readFlowMeasurement } = require('../../lib/flow-measurement');
 const { resolveOcppLimitFeedback, resolveOcppRuntimeAlive, ocppConnectionConfirmed, ocppLeaseCapability, OcppControlLeases } = require('../../lib/ocpp-limit-feedback');
@@ -1119,8 +1120,8 @@ function resolveChargingPvBudgetControl({
     const localRaw = Math.max(0, Number(localRawW) || 0);
     const localEffective = Math.max(0, Number(localEffectiveW) || 0);
     const rt = centralBudget && typeof centralBudget === 'object' ? centralBudget : null;
-    const ts = rt ? Number(rt.ts) : NaN;
-    const ageMs = Number.isFinite(ts) && ts > 0 ? Math.max(0, Number(now) - ts) : null;
+    const ts = rt?.ts;
+    const ageMs = Number.isFinite(ts) && ts > 0 && ts <= now ? now - ts : null;
     const fresh = ageMs !== null && ageMs <= Math.max(1000, Number(maxAgeMs) || 30000);
     const pvGate = rt && rt.gates && rt.gates.pv && typeof rt.gates.pv === 'object'
         ? rt.gates.pv
@@ -1129,15 +1130,15 @@ function resolveChargingPvBudgetControl({
         ? rt.gates.pvAllocation
         : null;
 
-    if (fresh && pvGate) {
-        const gateEffectiveW = Math.max(0, Number(pvGate.effectiveW) || 0);
-        const allocationTotalW = allocation && Number.isFinite(Number(allocation.totalW))
-            ? Math.max(0, Number(allocation.totalW))
-            : gateEffectiveW;
-        const allocationCapW = allocation && Number.isFinite(Number(allocation.evcsCapW))
-            ? Math.max(0, Number(allocation.evcsCapW))
-            : allocationTotalW;
-        const allocationLimitedW = Math.max(0, Math.min(allocationTotalW, allocationCapW));
+    const unverifiedStorage = rt?.raw?.pvBudgetPhysicalSource === 'storage-flow-unverified';
+    const nonnegativeWatts = value => Number.isFinite(value) && value >= 0;
+    const validGrant = pvGate && nonnegativeWatts(pvGate.effectiveW)
+        && (pvGate.rawW === undefined || (nonnegativeWatts(pvGate.rawW) && pvGate.effectiveW <= pvGate.rawW))
+        && (!allocation || (nonnegativeWatts(allocation.totalW) && nonnegativeWatts(allocation.evcsCapW)));
+    if (fresh && validGrant && !unverifiedStorage) {
+        const gateEffectiveW = pvGate.effectiveW;
+        const allocationTotalW = allocation ? Math.min(gateEffectiveW, allocation.totalW) : gateEffectiveW;
+        const allocationLimitedW = allocation ? Math.min(allocationTotalW, allocation.evcsCapW) : allocationTotalW;
 
         // Zwei zentrale PV-Grants sind absichtlich getrennt:
         // - physicalGrantW: gesamtes aktuell physikalisch verfuegbares PV-Budget.
@@ -1192,44 +1193,24 @@ function resolveChargingPvBudgetControl({
         };
     }
 
-    // In der aktuellen Adaptergeneration ist Core-Limits immer vor dem
-    // Lademanagement aktiv. Existiert die zentrale Runtime, ist sie daher auch
-    // bei einem kurzzeitig fehlenden/stalen Snapshot die einzige Quelle. Ein
-    // Rueckfall auf die lokale EVCS-PV-Rekonstruktion wuerde genau das zweite
-    // Parallelbudget erzeugen, das Speicher und Wallbox gegeneinander regeln
-    // laesst. In diesem Fehlerfall wird PV-Laden sicher blockiert, bis der Core
-    // wieder einen frischen Grant liefert.
-    if (rt) {
-        return {
-            authoritative: true,
-            blocked: true,
-            source: fresh ? 'central-ems-budget-missing-pv-gate' : 'central-ems-budget-stale-blocked',
-            ageMs,
-            rawW: 0,
-            totalW: 0,
-            evcsCapW: 0,
-            allocation: allocation || null,
-            localRawW: localRaw,
-            localEffectiveW: localEffective,
-            mismatchW: -localEffective,
-            centralGrantW: 0,
-        };
-    }
-
-    // Nur fuer sehr alte Laufzeiten ohne Core-Limits bleibt der lokale Wert als
-    // Kompatibilitaetsfallback erhalten. Im regulaeren NexoWatt-EMS wird dieser
-    // Zweig wegen der festen Modulreihenfolge nicht verwendet.
+    // Only the current shared grant can reserve PV for a controllable load.
+    // A local house estimate cannot replace it during startup or recovery.
     return {
-        authoritative: false,
-        source: 'local-fallback-no-central-budget',
+        authoritative: true,
+        blocked: true,
+        source: !rt ? 'central-ems-budget-missing'
+            : !fresh ? 'central-ems-budget-stale-blocked'
+            : unverifiedStorage ? 'storage-flow-unverified'
+            : pvGate ? 'central-ems-budget-invalid-pv-grant' : 'central-ems-budget-missing-pv-gate',
         ageMs,
-        rawW: localRaw,
-        totalW: localEffective,
-        evcsCapW: localEffective,
-        allocation: null,
+        rawW: 0,
+        totalW: 0,
+        evcsCapW: 0,
+        allocation,
         localRawW: localRaw,
         localEffectiveW: localEffective,
-        mismatchW: 0,
+        mismatchW: -localEffective,
+        centralGrantW: 0,
     };
 }
 /** Code-Teil: toBool – Kapselt einen lokalen Verarbeitungsschritt, damit Aufrufer nicht direkt in Detaildaten eingreifen. */
@@ -8284,8 +8265,7 @@ class ChargingManagementModule extends BaseModule {
             tariffActive = stTariffActive ? !!stTariffActive.val : false;
             tariffDynamicStale = stTariffStale ? !!stTariffStale.val : false;
             tariffCurrentState = stTariffState ? String(stTariffState.val || 'unknown').trim().toLowerCase().replace(/ü/g, 'ue') : 'unknown';
-            const currentPrice = stTariffPrice ? Number(stTariffPrice.val) : NaN;
-            tariffCurrentPriceEurKwh = Number.isFinite(currentPrice) ? currentPrice : null;
+            tariffCurrentPriceEurKwh = tariffPriceNumber(stTariffPrice?.val);
             tariffCurrentPriceFresh = stTariffFresh ? !!stTariffFresh.val : (tariffCurrentPriceEurKwh !== null && !tariffDynamicStale);
             if (nfEnabled && nfMode === 'HT') gridChargeAllowedRaw = false;
             else if (nfEnabled && nfMode === 'NT') {
@@ -8431,13 +8411,14 @@ class ChargingManagementModule extends BaseModule {
                     const delta = (ref !== null && exp !== null) ? Math.max(0, exp - ref) : null;
                     const cheapManual = (ref !== null && delta !== null) ? (ref - delta) : null;
 
-                    // Price curves from provider mapping (via dp registry)
-                    let rawToday = null;
-                    let rawTomorrow = null;
-                    if (this.dp && typeof this.dp.getEntry === 'function') {
-                        if (this.dp.getEntry('tarif.pricesTodayJson')) rawToday = this.dp.getRaw('tarif.pricesTodayJson');
-                        if (this.dp.getEntry('tarif.pricesTomorrowJson')) rawTomorrow = this.dp.getRaw('tarif.pricesTomorrowJson');
-                    }
+                    // The deadline planner accepts the same priced inputs as the
+                    // active tariff policy, including each curve's source timestamp.
+                    const ageLimit = this.adapter._tarifVis?.curveMaxAgeMs;
+                    const readCurve = key => Number.isFinite(ageLimit) && verifiedTariffAgeMs(this.dp, key, now) <= ageLimit
+                        ? this.dp.getRaw(key) : null;
+                    const rawToday = readCurve('tarif.pricesTodayJson');
+                    const rawTomorrow = readCurve('tarif.pricesTomorrowJson');
+                    const hasCurrentPrice = active && tariffCurrentPriceFresh && !tariffDynamicStale && tariffCurrentPriceEurKwh !== null;
 
                     const curve = [
                         ...parsePriceCurve(rawToday),
@@ -8453,6 +8434,10 @@ class ChargingManagementModule extends BaseModule {
                         if (!Number.isFinite(startMs) || !Number.isFinite(endMs) || endMs <= now) continue;
                         if (startMs >= horizonEndMs) break;
 
+                        if (hasCurrentPrice && startMs <= now) {
+                            segs.push({ startMs, endMs, priceEurKwh: tariffCurrentPriceEurKwh, state: tariffCurrentState, allowGrid: gridChargeAllowedRaw });
+                            continue;
+                        }
                         const p = it.priceEurKwh;
 
                         // Approximate tariff state for planning (no hysteresis; conservative enough).
@@ -8475,8 +8460,9 @@ class ChargingManagementModule extends BaseModule {
                         segs.push({ startMs, endMs, priceEurKwh: p, state, allowGrid });
                     }
 
-                    if (active && tariffCurrentPriceFresh && tariffCurrentPriceEurKwh !== null && !segs.some((segment) => segment.startMs <= now && segment.endMs > now)) {
-                        segs.unshift({ startMs: now, endMs: Math.min(horizonEndMs, now + 15 * 60000), priceEurKwh: tariffCurrentPriceEurKwh, state: tariffCurrentState, allowGrid: gridChargeAllowedRaw });
+                    if (hasCurrentPrice && !segs.some(segment => segment.startMs <= now)) {
+                        const endMs = Math.min(horizonEndMs, now + 15 * 60000, segs[0]?.startMs ?? Infinity);
+                        segs.unshift({ startMs: now, endMs, priceEurKwh: tariffCurrentPriceEurKwh, state: tariffCurrentState, allowGrid: gridChargeAllowedRaw });
                     }
                     tariffForecast = {
                         active,
@@ -8600,7 +8586,7 @@ class ChargingManagementModule extends BaseModule {
         // Der nächste Core-Zyklus liest diese ORIGINALEN Leistungsmesswerte.
         // Für PV-Rekonstruktion braucht er die volle Aufnahme, auch im Boost:
         // Der Netzanteil wird bereits einmal über den signierten NVP abgezogen.
-        this.adapter._zeroExportEvcsMeters = { ts: now,
+        this.adapter._zeroExportEvcsMeters = { ts: now, pvBaseByKey: new Map(),
             keys: wbList.filter(w => w.controlAvailable === true && w.actualPowerWId).map(w => `cm.wb.${w.safe}.pW`) };
         for (const w of wbList) {
             let override = normalizeWallboxModeOverride(w.userMode);
@@ -8878,6 +8864,7 @@ class ChargingManagementModule extends BaseModule {
         let pvBudgetLocalEstimateWState = 0;
         let pvBudgetMismatchWState = 0;
         let pvBudgetCentralAuthoritative = false;
+        let centralPvInputsUsable = false;
 
         if (needPvBudget || needPvDiagnostics) {
             // PV-Überschuss sauber ermitteln:
@@ -8924,12 +8911,16 @@ class ChargingManagementModule extends BaseModule {
                     // Boost bleibt ausserhalb der Kundenaufteilung. Kommandowerte werden hier bewusst
                     // nicht verwendet; der NVP bildet den realen Leistungsfluss ab.
                     const effectiveMode = String(w.effectiveMode || '').trim().toLowerCase();
+                    const meterKey = `cm.wb.${w.safe}.pW`;
+                    const pvBases = this.adapter._zeroExportEvcsMeters.pvBaseByKey;
                     if ((effectiveMode === 'normal' || effectiveMode === 'auto')
                         && normalizeWallboxModeOverride(w.userMode) === 'auto' && w.meterStale !== true) {
                         pvEvcsPhysicalPvManagedW += a;
                         pvEvcsAutoPriorityMeasuredW += a;
+                        pvBases.set(meterKey, { id: w.actualPowerWId, baseW: 0 });
                     } else if (effectiveMode === 'pv') {
                         pvEvcsPhysicalPvManagedW += a;
+                        pvBases.set(meterKey, { id: w.actualPowerWId, baseW: 0 });
                     } else if (effectiveMode === 'minpv') {
                         // Min+PV-Grundlast kommt aus dem normalen Gesamt-/Netzbudget.
                         // Nur der Anteil oberhalb der technischen Mindestleistung darf
@@ -8943,6 +8934,7 @@ class ChargingManagementModule extends BaseModule {
                                     : 0,
                             );
                         pvEvcsPhysicalPvManagedW += Math.max(0, a - Math.min(a, minPvPhysicalBaseW));
+                        pvBases.set(meterKey, { id: w.actualPowerWId, baseW: minPvPhysicalBaseW });
                     }
 
                     const prevCmd = (this._lastCmdTargetW && typeof this._lastCmdTargetW.get === 'function')
@@ -9001,7 +8993,7 @@ class ChargingManagementModule extends BaseModule {
             let centralStorageFlowUsed = false;
             try {
                 const flow = (this.adapter && typeof this.adapter._nwResolveBatteryFlowFromCache === 'function')
-                    ? this.adapter._nwResolveBatteryFlowFromCache({ maxAgeMs: storageFlowMaxAgeMs, deadbandW: 25 })
+                    ? this.adapter._nwResolveBatteryFlowFromCache({ now, maxAgeMs: storageFlowMaxAgeMs, deadbandW: 25, observe: true, strictStale: true })
                     : null;
                 if (flow && typeof flow === 'object') {
                     centralStorageFlowUsed = true;
@@ -9105,14 +9097,12 @@ class ChargingManagementModule extends BaseModule {
                     : pvEvcsActualW;
                 const baseLoadNoEvW = Math.max(0, loadTotalDirectW - evcsForLoadW);
                 pvSurplusNoEvW = Math.max(0, pvDirectW - baseLoadNoEvW);
-                gridImportNoEvW = Math.max(0, baseLoadNoEvW - pvDirectW);
             } else if (typeof gridW === 'number' && Number.isFinite(gridW)) {
                 // Fallback-Rekonstruktion ohne direkte PV-/Verbrauchs-DPs. Wir rechnen
                 // sowohl EVCS als auch die aktuelle Speicherladung zum sichtbaren Export
                 // zurueck. Batterie-Entladung wird abgezogen, weil sie kein PV-Ueberschuss
                 // ist und das Wallbox-Budget niemals kuenstlich vergroessern darf.
                 pvSurplusNoEvW = Math.max(0, (-gridW) + pvEvcsUsedW + storageChargeNowW - storageDischargeNowW);
-                gridImportNoEvW = Math.max(0, gridW - pvEvcsUsedW - storageChargeNowW + storageDischargeNowW);
             } else if (typeof pvSurplusCfgW === 'number' && Number.isFinite(pvSurplusCfgW)) {
                 // Fallback wenn kein Grid-DP verfügbar (z. B. nur PV-Surplus DP konfiguriert)
                 pvSurplusNoEvW = Math.max(0, pvSurplusCfgW);
@@ -9169,6 +9159,7 @@ class ChargingManagementModule extends BaseModule {
             });
             const allocationGate = pvBudgetControl.allocation;
             pvBudgetCentralAuthoritative = pvBudgetControl.authoritative === true;
+            centralPvInputsUsable = pvBudgetControl.blocked !== true;
             pvBudgetSourceState = String(pvBudgetControl.source || '');
             pvBudgetCentralAgeMsState = pvBudgetControl.ageMs;
             pvBudgetCentralTotalWState = Math.max(0, Number(pvBudgetControl.totalW) || 0);
@@ -9219,11 +9210,11 @@ class ChargingManagementModule extends BaseModule {
                     && Number.isFinite(Number(w.pvStartupHoldUntilMs)) && Number(w.pvStartupHoldUntilMs) > now);
 
             gridImportW = (typeof gridW === 'number' && Number.isFinite(gridW)) ? Math.max(0, gridW) : 0;
-            if (!(typeof gridImportNoEvW === 'number' && Number.isFinite(gridImportNoEvW))) {
-                gridImportNoEvW = (typeof gridW === 'number' && Number.isFinite(gridW))
-                    ? Math.max(0, gridW - pvEvcsUsedW - storageChargeNowW + storageDischargeNowW)
-                    : 0;
-            }
+            // The abort threshold describes import at the physical connection.
+            // A building estimate or an outstanding EV command is not a meter reading.
+            gridImportNoEvW = Number.isFinite(gridW)
+                ? Math.max(0, gridW - pvEvcsActualW - storageChargeNowW + storageDischargeNowW)
+                : 0;
 
             let pvAvail = purePvHysteresisActive ? !!this._pvAvailable : false;
             if (purePvHysteresisActive) {
@@ -11530,7 +11521,7 @@ if (components.length) {
             const probeActualFresh = !!(w.actualPowerWId && typeof probeMeasurementAgeMs === 'number'
                 && Number.isFinite(probeMeasurementAgeMs) && probeMeasurementAgeMs >= 0
                 && probeMeasurementAgeMs <= 5000 && !w.meterStale && !w.staleAny);
-            const probeEligible = !!(isPvOnly && zeroMode.active && w.enabled && w.online && w.controlAvailable
+            const probeEligible = !!(isPvOnly && centralPvInputsUsable && zeroMode.active && w.enabled && w.online && w.controlAvailable
                 && w.electricalLimitsValid !== false && w.vehiclePlugged === true
                 && (w.vehicleDemandConfirmed === true || w.vehicleStartEligible === true)
                 && !w.faultActive && !w.unavailableActive && !w.operationalBlocked && !w.rfidLockActive

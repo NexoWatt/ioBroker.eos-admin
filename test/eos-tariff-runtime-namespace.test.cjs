@@ -90,3 +90,96 @@ test('tariff status preserves a constant PV reserve through fresh storage policy
   x.states.set(x.full('speicher.regelung.policyJson'), { val: JSON.stringify(policy), ts: now, q: 0 });
   await x.status.tick(); assert.equal(read().blocked, false); assert.equal(read().fresh, false);
 });
+
+test('persistent tariff settings still control storage and EVs after more than one year', async () => {
+  const x = await fixture('eos-admin.0');
+  const old = Date.now() - 366 * 86400000;
+  for (const key of ['dynamicTariff', 'tariffMode', 'price', 'priority', 'storagePower', 'evcsMaxPower']) {
+    const id = x.full('settings.' + key);
+    x.dp.handleStateChange(id, { ...x.states.get(id), ts: old }, true);
+  }
+  const read = key => x.states.get(x.full('tarif.' + key)).val;
+  await x.policy.tick();
+  assert.equal(read('aktiv'), true);
+  assert.equal(read('speicherSollW'), -2000);
+  x.dp.handleStateChange('provider.0.current', { val: 0.48, ack: true, ts: Date.now() });
+  // The same running policy uses a hysteresis transition when crossing its threshold.
+  await x.policy.tick();
+  await x.policy.tick();
+  assert.equal(read('state'), 'teuer');
+  assert.equal(read('netzLadenErlaubt'), false);
+  assert.equal(read('speicherSollW'), 0);
+});
+
+test('current verified price has priority over a conflicting negative curve; valid curves can replace an unavailable price', async () => {
+  const x = await fixture('eos-admin.0');
+  const now = Date.now();
+  await x.adapter.setStateAsync('settings.tariffMode', { val: 2, ack: true });
+  await x.dp.upsert({ key: 'tarif.pricesTodayJson', objectId: 'provider.0.today', dataType: 'string' });
+  await x.dp.upsert({ key: 'tarif.preisDurchschnittEurProKwh', objectId: 'provider.0.average' });
+  const row = { startsAt: new Date(now - 60000).toISOString(), endsAt: new Date(now + 840000).toISOString(), total: -0.10, currency: 'EUR' };
+  const curve = { val: JSON.stringify([row]), ts: now - 1000, ack: true };
+  const direct = { val: 0.48, ts: now, ack: true };
+  x.dp.handleStateChange('provider.0.average', { val: 0.30, ts: now, ack: true });
+  x.dp.handleStateChange('provider.0.today', curve);
+  x.dp.handleStateChange('provider.0.current', direct);
+  const read = key => x.states.get(x.full('tarif.' + key)).val;
+  await x.policy.tick();
+  assert.equal(read('preisAktuellEurProKwh'), 0.48);
+  assert.equal(read('negativpreisAktiv'), false);
+  assert.equal(read('state'), 'teuer');
+  assert.equal(read('speicherSollW'), 0);
+  assert.equal(read('netzLadenErlaubt'), false);
+  x.dp.handleStateChange('provider.0.current', { ...direct, q: 0x82 });
+  await x.policy.tick();
+  assert.equal(read('currentPriceSource'), 'curve-current');
+  assert.equal(read('preisAktuellEurProKwh'), -0.10);
+  assert.equal(read('negativpreisAktiv'), true);
+  assert.equal(read('speicherSollW'), -2000);
+  for (const invalid of [{ q: 0x82 }, { ack: false }, { ts: now + 86400000 }, { ts: 0 }]) {
+    x.dp.handleStateChange('provider.0.today', { ...curve, ...invalid });
+    x.dp.handleStateChange('provider.0.current', { ...direct, val: -0.10, ...invalid });
+    await x.policy.tick();
+    assert.equal(read('currentPriceFresh'), false, JSON.stringify(invalid));
+    assert.equal(read('negativpreisAktiv'), false);
+    assert.equal(read('speicherSollW'), 0);
+    assert.equal(read('netzLadenErlaubt'), false);
+  }
+});
+
+test('EV departure planner uses the verified live gate for the current slot and discards unverified forecast inputs', async t => {
+  const bridge = require('../ui/ems/services/forecast-target-runtime-bridge');
+  let forecast;
+  const plan = bridge.buildRuntimeGoalPlanMap;
+  t.mock.method(bridge, 'buildRuntimeGoalPlanMap', function (parameters) {
+    forecast = parameters.tariffForecast;
+    return plan(parameters);
+  });
+  const { makeHarness } = require('../ui/scripts/verify-rc60-universal-auto-wallbox.js');
+  const now = Date.now();
+  const h = makeHarness({ goalEnabled: true, goalTargetSocPct: 60, vehicleSoc: 50, deadlineHours: 4,
+    priceCurrent: 0.48, tariffState: 'teuer', gridAllowed: false, userMode: 'auto' });
+  t.after(() => h.stop());
+  h.adapter._tarifVis = { curveMaxAgeMs: 36 * 3600000 };
+  for (const [id, value] of Object.entries({ aktiv: true, modus: 2, prioritaet: 2, currentPriceFresh: true,
+    dynamicTariffStale: false, preisRefEurProKwh: 0.30, preisGrenzeEurProKwh: 0.32, preisSchwelleGuensigEurProKwh: 0.12 })) h.setLocal('tarif.' + id, value);
+  const curveKey = 'tarif.pricesTodayJson';
+  const rows = [[-60000, 600000], [600000, 1500000]].map(([start, end]) => ({
+    startsAt: new Date(now + start).toISOString(), endsAt: new Date(now + end).toISOString(), total: -0.10, currency: 'EUR',
+  }));
+  const raw = h.dp.getRaw.bind(h.dp);
+  h.dp.getRaw = (key, fallback) => key === curveKey ? rows : raw(key, fallback);
+  h.dp.getVerifiedMeasurementTimestampMs = key => key === curveKey ? now : null;
+  await h.tick();
+  assert.equal(forecast.segments.length, 2);
+  assert.equal(forecast.segments[0].priceEurKwh, 0.48);
+  assert.equal(forecast.segments[0].allowGrid, false);
+  assert.equal(forecast.segments[1].priceEurKwh, -0.10);
+  for (const invalid of [null, now - 37 * 3600000]) {
+    h.dp.getVerifiedMeasurementTimestampMs = () => invalid;
+    await h.tick();
+    assert.equal(forecast.segments.length, 1);
+    assert.equal(forecast.segments[0].priceEurKwh, 0.48);
+    assert.equal(forecast.segments[0].allowGrid, false);
+  }
+});

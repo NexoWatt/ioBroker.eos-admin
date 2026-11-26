@@ -1,0 +1,103 @@
+{
+  "version": "9.0.33",
+  "node": "v22.23.4",
+  "cycles": 42,
+  "stages": 9,
+  "ocppProtocol": "2.1",
+  "acceptedWsProfiles": 20,
+  "issuedStorageCommands": 36,
+  "connectionCapW": 11000,
+  "highestMeasuredBeforeControlW": 15500,
+  "highestCalculatedAfterControlW": 11000,
+  "endStates": [
+    {
+      "stage": "cheap-auto",
+      "cycles": 3,
+      "evW": 9000,
+      "batteryW": 0,
+      "predictedGridW": 11000,
+      "tariff": "guenstig",
+      "para14a": null
+    },
+    {
+      "stage": "PV-import",
+      "cycles": 2,
+      "evW": 0,
+      "batteryW": -4000,
+      "predictedGridW": 6000,
+      "tariff": "guenstig",
+      "para14a": null
+    },
+    {
+      "stage": "PV-share",
+      "cycles": 10,
+      "evW": 6300,
+      "batteryW": -4200,
+      "predictedGridW": -500,
+      "tariff": "teuer",
+      "para14a": null
+    },
+    {
+      "stage": "grid-cap",
+      "cycles": 5,
+      "evW": 4200,
+      "batteryW": 4950,
+      "predictedGridW": 4250,
+      "tariff": "teuer",
+      "para14a": {
+        "evcsW": 4200,
+        "storageW": null,
+        "totalW": 4200
+      }
+    },
+    {
+      "stage": "bad-battery",
+      "cycles": 3,
+      "evW": 0,
+      "batteryW": 0,
+      "predictedGridW": -7700,
+      "tariff": "teuer",
+      "para14a": null
+    },
+    {
+      "stage": "zero-recovered",
+      "cycles": 8,
+      "evW": 4320,
+      "batteryW": -2880,
+      "predictedGridW": -500,
+      "tariff": "teuer",
+      "para14a": null
+    },
+    {
+      "stage": "lost-grid",
+      "cycles": 2,
+      "evW": 0,
+      "batteryW": 0,
+      "predictedGridW": -7700,
+      "tariff": "teuer",
+      "para14a": null
+    },
+    {
+      "stage": "fresh-grid",
+      "cycles": 5,
+      "evW": 4320,
+      "batteryW": -2880,
+      "predictedGridW": -500,
+      "tariff": "teuer",
+      "para14a": null
+    },
+    {
+      "stage": "joint-14a",
+      "cycles": 4,
+      "evW": 4200,
+      "batteryW": 0,
+      "predictedGridW": 9200,
+      "tariff": "guenstig",
+      "para14a": {
+        "evcsW": 4200,
+        "storageW": 3360,
+        "totalW": 7560
+      }
+    }
+  ]
+}

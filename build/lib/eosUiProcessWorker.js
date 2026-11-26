@@ -48,15 +48,17 @@ function updateAuthority(value) {
     // A queued lease retains its original age instead of being renewed on delivery.
     leaseAt = node_perf_hooks_1.performance.now() - Math.max(0, 3000 - (value.expiresAt - Date.now()));
 }
-function fail() {
+function terminate(exitCode) {
     stopping = true;
     authority = {};
     for (const timer of timers) {
         clearTimeout(timer);
     }
     // Parent death leaves no orphan regulator, TCP listener or periodic hardware operation.
-    process.exitCode = 1;
-    process.exit(1);
+    process.exit(exitCode);
+}
+function fail() {
+    terminate(1);
 }
 function localId(namespace, id) {
     if (typeof id !== 'string' || id.length > 512) {
@@ -124,7 +126,7 @@ function makeOwner(input) {
                 // Completion is unknown: do not continue regulating with stale
                 // in-memory configuration. Parent pendingWrites blocks a new
                 // generation until the accepted controller work has settled.
-                fail();
+                terminate(eosUiProcessRpc_1.UI_CONFIG_COMMIT_UNCONFIRMED_EXIT);
             }
             throw error;
         });

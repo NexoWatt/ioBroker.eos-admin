@@ -315,6 +315,7 @@ function legacyComputeCentralBudgetGrant(runtime = {}, request = {}) {
  * - Ohne irgendeinen physikalischen Beleg bleibt die Obergrenze 0 W.
  */
 function legacyResolvePvBudgetPhysicalCapW({
+    storageFlowUsable = true,
     measuredPvW = 0,
     measuredPvFresh = false,
     flowRawW = 0,
@@ -327,6 +328,7 @@ function legacyResolvePvBudgetPhysicalCapW({
     exportEvidenceThresholdW = 250,
     importToleranceW = 250,
 } = {}) {
+    if (!storageFlowUsable) return { capW: 0, source: 'storage-flow-unverified', trusted: false, held: false };
     const measuredW = Math.max(0, Number(measuredPvW) || 0);
     const flowW = Math.max(0, Number(flowRawW) || 0);
     const exportW = Math.max(0, Number(gridExportW) || 0);
@@ -1398,6 +1400,40 @@ class CoreLimitsModule extends BaseModule {
         return fallback;
     }
 
+    // Core runs before charging management. Re-read the last classified meter
+    // mappings against the current cycle's source cache, after NVP and EV have
+    // changed. A previous cycle's aggregate cannot follow a real start or stop.
+    _currentEvMeterPowers(now, maxAgeMs) {
+        const meters = this.adapter?._zeroExportEvcsMeters;
+        if (!(meters?.pvBaseByKey instanceof Map) || typeof this.dp?.getVerifiedMeasurementTimestampMs !== 'function') return null;
+        let actualW = 0;
+        let pvManagedW = 0;
+        if (meters.ts > now || now - meters.ts > maxAgeMs) return { actualW, pvManagedW };
+        const seen = new Map();
+        for (const key of meters.keys) {
+            const entry = this.dp.getEntry(key);
+            const id = entry?.srcObjectId || entry?.objectId;
+            if (!id) continue;
+            // A shared meter identifies one physical load but no unique mode.
+            if (seen.has(id)) {
+                pvManagedW -= seen.get(id);
+                seen.set(id, 0);
+                continue;
+            }
+            const stamp = this.dp.getVerifiedMeasurementTimestampMs(key, now);
+            if (!Number.isFinite(stamp) || now - stamp > maxAgeMs) continue;
+            const watts = this.dp.getNumber(key, null);
+            if (!Number.isFinite(watts) || watts < 0) continue;
+            const row = meters.pvBaseByKey.get(key);
+            const eligibleW = row && (row.id === entry.objectId || row.id === id) && Number.isFinite(row.baseW)
+                ? Math.max(0, watts - row.baseW) : 0;
+            seen.set(id, eligibleW);
+            actualW += watts;
+            pvManagedW += eligibleW;
+        }
+        return { actualW, pvManagedW };
+    }
+
     /**
      * Code-Teil: _resolveDirectPvPower
      * Zweck: Vergleicht alle frischen direkten PV-Quellen und verwendet die
@@ -1905,41 +1941,25 @@ class CoreLimitsModule extends BaseModule {
         // - die nicht ausgewaehlte Topologie ist in jedem Fall ausgeschlossen
         let storageChargeW = 0;
         let storageDischargeW = 0;
-        let usedCentralStorageFlow = false;
+        const batteryMappings = cfg.datapoints || {};
+        const storageFlowExpected = storageTopology !== 'none'
+            || storageAuthority.farmAggregationActive === true
+            || ['batteryPower', 'storageChargePower', 'storageDischargePower', 'storageSoc']
+                .some(key => Boolean(String(batteryMappings[key] || '').trim()));
+        let storageFlowUsable = !storageFlowExpected;
         try {
-            const flow = (this.adapter && typeof this.adapter._nwResolveBatteryFlowFromCache === 'function')
-                ? this.adapter._nwResolveBatteryFlowFromCache({ now, maxAgeMs: staleMs, deadbandW: 25, strictStale: true })
-                : null;
-            if (flow && typeof flow === 'object') {
-                usedCentralStorageFlow = true;
-                storageChargeW = Math.max(0, Math.round(Number(flow.chargeW) || 0));
-                storageDischargeW = Math.max(0, Math.round(Number(flow.dischargeW) || 0));
+            const flow = this.adapter?._nwResolveBatteryFlowFromCache?.({
+                now, maxAgeMs: staleMs, deadbandW: 25, strictStale: true, observe: true,
+            });
+            const stamp = flow?.observedAt;
+            if (Number.isFinite(stamp) && stamp > 0 && stamp <= now && now - stamp <= staleMs
+                && Number.isFinite(flow.chargeW) && flow.chargeW >= 0
+                && Number.isFinite(flow.dischargeW) && flow.dischargeW >= 0) {
+                storageFlowUsable = true;
+                storageChargeW = Math.round(flow.chargeW);
+                storageDischargeW = Math.round(flow.dischargeW);
             }
-        } catch (_eFlow) {}
-
-        if (!usedCentralStorageFlow && storageTopology === 'farm') {
-            // Kompatibilitaets-Fallback fuer Laufzeiten ohne zentralen Resolver:
-            // bei ausgewaehlter Farm sind ausschliesslich Farmaggregate zulaessig.
-            storageChargeW = Math.max(0, this._readCacheNumberMax(['storageFarm.totalChargePowerW'], 0) || 0);
-            storageDischargeW = Math.max(0, this._readCacheNumberMax(['storageFarm.totalDischargePowerW'], 0) || 0);
-        } else if (!usedCentralStorageFlow && storageTopology === 'single') {
-            // Beim Einzelpfad duerfen keine alten Farmwerte in das Budget einfließen.
-            storageChargeW = Math.max(0, this._readCacheNumberMax(['storageChargePower'], 0) || 0);
-            storageDischargeW = Math.max(0, this._readCacheNumberMax(['storageDischargePower'], 0) || 0);
-            const batteryPowerW = this._readCacheNumber(['batteryPower'], null);
-            if (isFiniteNumber(batteryPowerW)) {
-                const flowBatteryMapped = !!(cfg.datapoints && String(cfg.datapoints.batteryPower || '').trim());
-                const invBattery = flowBatteryMapped && !!(cfg.settings && cfg.settings.flowInvertBattery);
-                const signed = Math.round(invBattery ? -batteryPowerW : batteryPowerW);
-                if (signed < -25) {
-                    storageChargeW = Math.max(storageChargeW, Math.abs(signed));
-                    storageDischargeW = 0;
-                } else if (signed > 25) {
-                    storageDischargeW = Math.max(storageDischargeW, signed);
-                    storageChargeW = 0;
-                }
-            }
-        }
+        } catch { /* A configured storage with no observation cannot establish PV surplus. */ }
 
         const evcsEnabled = cfg.enableChargingManagement !== false;
         const thermalEnabled = cfg.enableThermalControl === true;
@@ -1964,14 +1984,15 @@ class CoreLimitsModule extends BaseModule {
 
         // Nur aktive EMS-Apps dürfen alte Runtimewerte in Budget/Diagnose übernehmen.
         const evcsUsedW = evcsEnabled ? evcsUsedRawW : 0;
-        const evcsActualW = evcsEnabled ? evcsActualRawW : 0;
+        const currentEvMeters = evcsEnabled ? this._currentEvMeterPowers(now, staleMs) : null;
+        const evcsActualW = evcsEnabled ? (currentEvMeters?.actualW ?? evcsActualRawW) : 0;
         const zeroExportMode = readZeroExportMode(this.adapter);
         const zeroExportMeasurementIds = new Set();
         // Bei Nulleinspeisung die vollständige FRISCHE EV-Aufnahme rekonstruieren,
         // einschließlich Boost/Auto-Netzanteil. Der signierte NVP zieht Netzbezug
         // bereits ab; ein zweiter Abzug am LP würde PV bei jedem Tick verlieren.
         const evcsPvUsedW = evcsEnabled ? (zeroExportMode.active
-            ? measuredFlexibleLoadW(this.adapter, this.dp, 'evcs', zeroExportMeasurementIds, now) : evcsPvUsedRawW) : 0;
+            ? measuredFlexibleLoadW(this.adapter, this.dp, 'evcs', zeroExportMeasurementIds, now) : (currentEvMeters?.pvManagedW ?? evcsPvUsedRawW)) : 0;
         // Bei Nulleinspeisung zählt nur gemessene Aufnahme, kein letzter Sollwert.
         const thermalUsedW = thermalEnabled ? (zeroExportMode.active ? measuredFlexibleLoadW(this.adapter, this.dp, 'thermal', zeroExportMeasurementIds, now) : thermalUsedRawW) : 0, thermalActualW = thermalEnabled ? thermalActualRawW : 0;
         const heatingRodUsedW = heatingRodEnabled ? (zeroExportMode.active ? measuredFlexibleLoadW(this.adapter, this.dp, 'heatingRod', zeroExportMeasurementIds, now) : heatingRodUsedRawW) : 0, heatingRodActualW = heatingRodEnabled ? heatingRodActualRawW : 0;
@@ -1996,6 +2017,7 @@ class CoreLimitsModule extends BaseModule {
             ? Math.max(0, now - this._lastTrustedPvPhysicalCapTs)
             : null;
         const pvPhysicalResolution = resolvePvBudgetPhysicalCapW({
+            storageFlowUsable,
             measuredPvW: pvPowerW,
             measuredPvFresh: pvPowerInfo.fresh === true,
             flowRawW: pvBudgetFlowRawW,
@@ -2311,6 +2333,7 @@ class CoreLimitsModule extends BaseModule {
                 importToleranceW: 250,
             },
             storage: {
+                flowUsable: storageFlowUsable,
                 chargeW: storageChargeW,
                 dischargeW: storageDischargeW,
                 eligible: storageEligible,

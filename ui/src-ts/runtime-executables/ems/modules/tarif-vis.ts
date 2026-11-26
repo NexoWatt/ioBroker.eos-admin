@@ -58,7 +58,7 @@
 'use strict';
 
 const { BaseModule } = require('./base');
-const { tariffPriceUnit, normalizeTariffPrice } = require('../../lib/tariff-price');
+const { tariffPriceUnit, normalizeTariffPrice, verifiedTariffAgeMs } = require('../../lib/tariff-price');
 
 /**
  * Speicher-Netzladen ist strikt an einen frischen, aktiven und als „günstig“
@@ -965,10 +965,6 @@ class TarifVisModule extends BaseModule {
     }
 
     async tick() {
-        // VIS-Einstellungen sind Konfigurationswerte und müssen dauerhaft gültig bleiben.
-        // Wenn diese nach kurzer Zeit als "stale" gelten, fällt die Logik auf Fallbacks zurück
-        // (z.B. Manual-Preis = null) und die Tarifsteuerung wirkt "inaktiv".
-        const staleTimeoutMs = 365 * 24 * 60 * 60 * 1000; // 1 Jahr
         // Aktueller Preis und Day-Ahead-Kurve haben unterschiedliche Lebenszeiten:
         // - der aktuelle Stundenpreis darf standardmäßig höchstens 90 Minuten alt sein;
         // - Durchschnitt und Day-Ahead-Kurve dürfen bis zu 36 Stunden alt sein.
@@ -984,18 +980,16 @@ class TarifVisModule extends BaseModule {
 
         try {
             // --- VIS Settings ---
-            const aktiv = this.dp ? this.dp.getBoolean('vis.settings.dynamicTariff', false) : false;
-            const aktivAge = this.dp ? this.dp.getAgeMs('vis.settings.dynamicTariff') : null;
-            const aktivFresh = (aktivAge === null || aktivAge === undefined) ? true : (aktivAge <= staleTimeoutMs);
-            const aktivEff = !!(aktivFresh && aktiv);
+            // Persisted operator settings remain in force until changed.
+            const aktivEff = !!this.dp?.getBoolean('vis.settings.dynamicTariff', false);
 
-            const modusRaw = this.dp ? this.dp.getNumberFresh('vis.settings.tariffMode', staleTimeoutMs, null) : null;
+            const modusRaw = this.dp ? this.dp.getNumber('vis.settings.tariffMode', null) : null;
             const modusInt = (typeof modusRaw === 'number' && Number.isFinite(modusRaw)) ? Math.round(modusRaw) : 1;
 
-            const preisGrenzeVisRaw = this.dp ? this.dp.getNumberFresh('vis.settings.price', staleTimeoutMs, null) : null;
-            const priorRaw = this.dp ? this.dp.getNumberFresh('vis.settings.priority', staleTimeoutMs, null) : null;
-            const storageW = this.dp ? this.dp.getNumberFresh('vis.settings.storagePower', staleTimeoutMs, null) : null;
-            const evcsMaxW = this.dp ? this.dp.getNumberFresh('vis.settings.evcsMaxPower', staleTimeoutMs, null) : null;
+            const preisGrenzeVisRaw = this.dp ? this.dp.getNumber('vis.settings.price', null) : null;
+            const priorRaw = this.dp ? this.dp.getNumber('vis.settings.priority', null) : null;
+            const storageW = this.dp ? this.dp.getNumber('vis.settings.storagePower', null) : null;
+            const evcsMaxW = this.dp ? this.dp.getNumber('vis.settings.evcsMaxPower', null) : null;
 
             const prioritaet = this._normPrioritaet(priorRaw);
             const storagePowerAbsW = Math.max(0, Math.abs(this._num(storageW, 0)));
@@ -1005,17 +999,8 @@ class TarifVisModule extends BaseModule {
             // Unterstützt zwei Modelle:
             // 1) Einfach (HT/NT) – ganzjährig
             // 2) Quartale (NT/HT je Quartal, Rest = Standard)
-            const netFeeEnabledRaw = this.dp ? this.dp.getBoolean('vis.settings.netFeeEnabled', false) : false;
-            const netFeeAge = this.dp ? this.dp.getAgeMs('vis.settings.netFeeEnabled') : null;
-            const netFeeFresh = (netFeeAge === null || netFeeAge === undefined) ? true : (netFeeAge <= staleTimeoutMs);
-
-            // IMPORTANT (Robustness/UX):
-            // Das Zeitfenster muss auch ohne dynamischen Stromtarif funktionieren.
-            // Ist der dynamische Tarif aktiv, muss sein Preis zusätzlich frisch sein;
-            // teuer, stale oder unbekannt sperrt trotz NT die wirtschaftliche Netzladung.
-            const netFeeEff = !!(netFeeFresh && netFeeEnabledRaw);
-
-            const netFeeModelRaw = this.dp ? this.dp.getNumberFresh('vis.settings.netFeeModel', staleTimeoutMs, 1) : 1;
+            const netFeeEff = !!this.dp?.getBoolean('vis.settings.netFeeEnabled', false);
+            const netFeeModelRaw = this.dp ? this.dp.getNumber('vis.settings.netFeeModel', 1) : 1;
             const netFeeModel = (typeof netFeeModelRaw === 'number' && Number.isFinite(netFeeModelRaw)) ? Math.round(netFeeModelRaw) : 1;
             const netFeeModelEff = (netFeeModel === 2) ? 2 : 1;
 
@@ -1093,35 +1078,33 @@ class TarifVisModule extends BaseModule {
 
 			let preisAktuell = null;
             let preisAktuellSource = 'missing';
-            const currentPriceAgeMs = (this.dp && typeof this.dp.getAgeMs === 'function')
-                ? this.dp.getAgeMs('tarif.preisAktuellEurProKwh')
-                : null;
-            const currentPriceDirectFresh = currentPriceAgeMs === null || currentPriceAgeMs === undefined || currentPriceAgeMs <= currentPriceMaxAgeMs;
-			if (this.dp && typeof this.dp.getEntry === 'function' && this.dp.getEntry('tarif.preisAktuellEurProKwh')) {
-				const raw = this.dp.getNumberFresh('tarif.preisAktuellEurProKwh', currentPriceMaxAgeMs, null);
-				preisAktuell = this._normalizePriceEurPerKwh(raw, null, this._priceInputUnit('tarif.preisAktuellEurProKwh', 'priceCurrent', 'currentPriceEurPerKwh'));
-                if (typeof preisAktuell === 'number' && Number.isFinite(preisAktuell)) preisAktuellSource = 'provider-current';
-			}
+            // Use original, acknowledged samples for each price source. A heartbeat
+            // or an old cached command cannot grant permission to buy electricity.
+            const priceAge = key => verifiedTariffAgeMs(this.dp, key, nowMs);
+            const currentPriceAgeMs = priceAge('tarif.preisAktuellEurProKwh');
+            const currentPriceDirectFresh = currentPriceAgeMs <= currentPriceMaxAgeMs;
+            if (currentPriceDirectFresh) {
+                const raw = this.dp.getNumber('tarif.preisAktuellEurProKwh', null);
+                preisAktuell = this._normalizePriceEurPerKwh(raw, null, this._priceInputUnit('tarif.preisAktuellEurProKwh', 'priceCurrent', 'currentPriceEurPerKwh'));
+                if (Number.isFinite(preisAktuell)) preisAktuellSource = 'provider-current';
+            }
 
-			let preisDurchschnitt = null;
-            const averagePriceAgeMs = (this.dp && typeof this.dp.getAgeMs === 'function')
-                ? this.dp.getAgeMs('tarif.preisDurchschnittEurProKwh')
-                : null;
-			if (this.dp && typeof this.dp.getEntry === 'function' && this.dp.getEntry('tarif.preisDurchschnittEurProKwh')) {
-				const raw = this.dp.getNumberFresh('tarif.preisDurchschnittEurProKwh', averagePriceMaxAgeMs, null);
-				preisDurchschnitt = this._normalizePriceEurPerKwh(raw, null, this._priceInputUnit('tarif.preisDurchschnittEurProKwh', 'priceAverage', 'averagePriceEurPerKwh'));
-			}
+            let preisDurchschnitt = null;
+            if (priceAge('tarif.preisDurchschnittEurProKwh') <= averagePriceMaxAgeMs) {
+                const raw = this.dp.getNumber('tarif.preisDurchschnittEurProKwh', null);
+                preisDurchschnitt = this._normalizePriceEurPerKwh(raw, null, this._priceInputUnit('tarif.preisDurchschnittEurProKwh', 'priceAverage', 'averagePriceEurPerKwh'));
+            }
 
 			const preisVisOk = (typeof preisGrenzeVis === 'number' && Number.isFinite(preisGrenzeVis));
 			let preisAktuellOk = (typeof preisAktuell === 'number' && Number.isFinite(preisAktuell));
 			const preisDurchschnittOk = (typeof preisDurchschnitt === 'number' && Number.isFinite(preisDurchschnitt));
 
-            const todayCurveAgeMs = (this.dp && typeof this.dp.getAgeMs === 'function') ? this.dp.getAgeMs('tarif.pricesTodayJson') : null;
-            const tomorrowCurveAgeMs = (this.dp && typeof this.dp.getAgeMs === 'function') ? this.dp.getAgeMs('tarif.pricesTomorrowJson') : null;
-            const todayCurveFresh = todayCurveAgeMs === null || todayCurveAgeMs === undefined || todayCurveAgeMs <= curveMaxAgeMs;
-            const tomorrowCurveFresh = tomorrowCurveAgeMs === null || tomorrowCurveAgeMs === undefined || tomorrowCurveAgeMs <= curveMaxAgeMs;
-            const curveAgeCandidates = [todayCurveAgeMs, tomorrowCurveAgeMs].filter(value => Number.isFinite(Number(value))).map(Number);
-            const curveAgeMs = curveAgeCandidates.length ? Math.min(...curveAgeCandidates) : null;
+            const todayCurveAgeMs = priceAge('tarif.pricesTodayJson');
+            const tomorrowCurveAgeMs = priceAge('tarif.pricesTomorrowJson');
+            const todayCurveFresh = todayCurveAgeMs <= curveMaxAgeMs;
+            const tomorrowCurveFresh = tomorrowCurveAgeMs <= curveMaxAgeMs;
+            const curveAgeMs = Math.min(todayCurveAgeMs, tomorrowCurveAgeMs);
+            let effectiveCurrentPriceAgeMs = currentPriceAgeMs;
             let curveFresh = false;
             let priceDataStatus = preisAktuellOk ? 'current-price-fresh' : (currentPriceDirectFresh ? 'current-price-missing' : 'current-price-stale');
 
@@ -1189,6 +1172,7 @@ class TarifVisModule extends BaseModule {
                             preisAktuell = activeSegment.priceEurKwh;
                             preisAktuellOk = true;
                             preisAktuellSource = 'curve-current';
+                            effectiveCurrentPriceAgeMs = todayArr.includes(activeSegment) ? todayCurveAgeMs : tomorrowCurveAgeMs;
                             priceDataStatus = 'current-from-fresh-curve';
                         }
                     }
@@ -1220,11 +1204,9 @@ class TarifVisModule extends BaseModule {
                     if (negAll.length > 0) {
                         negativeMinPrice = Math.min(...negAll.map(x => x.priceEurKwh));
                         const activeSeg = negAll.find(x => x.startMs <= nowMs && x.endMs > nowMs);
-                        if (activeSeg) {
-                            negativeActive = true;
-                            negativeWindowNow = true;
-                            negativeCurrentPrice = activeSeg.priceEurKwh;
-                        }
+                        // The forecast describes its window. Only the selected current
+                        // price (direct, or the curve as fallback) grants grid import.
+                        negativeWindowNow = !!activeSeg;
 
                         const first = negAll[0];
                         let winStart = first.startMs;
@@ -1625,7 +1607,6 @@ class TarifVisModule extends BaseModule {
             await this._setIfChanged('tarif.speicherLeistungW', this._num(storageW, 0));
             await this._setIfChanged('tarif.ladeparkMaxW', this._num(evcsMaxW, 0));
 
-            const effectiveCurrentPriceAgeMs = preisAktuellSource === 'curve-current' ? curveAgeMs : currentPriceAgeMs;
             await this._setIfChanged('tarif.currentPriceFresh', !!preisAktuellOk);
             await this._setIfChanged('tarif.currentPriceAgeMs', Number.isFinite(Number(effectiveCurrentPriceAgeMs)) ? Math.round(Number(effectiveCurrentPriceAgeMs)) : null);
             await this._setIfChanged('tarif.currentPriceMaxAgeMs', Math.round(currentPriceMaxAgeMs));
@@ -1780,6 +1761,7 @@ await this._setIfChanged('tarif.speicherIntentGrund', storageIntentReason);
                 currentPriceFresh: !!preisAktuellOk,
                 currentPriceAgeMs: Number.isFinite(Number(effectiveCurrentPriceAgeMs)) ? Math.round(Number(effectiveCurrentPriceAgeMs)) : null,
                 currentPriceSource: preisAktuellSource,
+                curveMaxAgeMs,
                 curveFresh: !!curveFresh,
                 curveAgeMs: Number.isFinite(Number(curveAgeMs)) ? Math.round(Number(curveAgeMs)) : null,
                 priceDataStatus,

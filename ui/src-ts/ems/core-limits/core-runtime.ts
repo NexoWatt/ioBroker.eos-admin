@@ -38,6 +38,7 @@ export type CoreRuntimePvSource =
   | 'nvp-export-flow-fallback'
   | 'trusted-pv-hold-with-active-sink'
   | 'nvp-export-minimum-despite-zero-pv'
+  | 'storage-flow-unverified'
   | 'no-physical-pv-evidence';
 
 export type CorePvAllocationMode = 'storage' | 'emobility' | 'both' | 'dynamic';
@@ -50,6 +51,7 @@ export interface CorePvFlowInput {
 }
 
 export interface CorePvPhysicalCapInput {
+  storageFlowUsable?: boolean;
   measuredPvW?: unknown;
   measuredPvFresh?: unknown;
   flowRawW?: unknown;
@@ -175,6 +177,7 @@ export interface CoreRuntimePvInput {
 }
 
 export interface CoreRuntimeStorageInput {
+  flowUsable?: boolean;
   chargeW?: unknown;
   dischargeW?: unknown;
   eligible?: unknown;
@@ -571,6 +574,7 @@ export function prepareCoreRuntimeSnapshotInput(
       importToleranceW: positive(pvRaw.importToleranceW ?? 250),
     },
     storage: {
+      flowUsable: storageRaw.flowUsable !== false,
       chargeW: storageChargeW,
       dischargeW: storageDischargeW,
       eligible: storageRaw.eligible !== false,
@@ -648,6 +652,7 @@ export function computeCorePvBudgetFlowRawW(input: CorePvFlowInput = {}): number
  * produktiven 0.8.118-Runtime, sind hier aber vollständig typisiert und rein.
  */
 export function resolveCorePvBudgetPhysicalCap(input: CorePvPhysicalCapInput = {}): CorePvPhysicalCapResult {
+  if (input.storageFlowUsable === false) return { capW: 0, source: 'storage-flow-unverified', trusted: false, held: false };
   const measuredW = positive(input.measuredPvW);
   const measuredFresh = bool(input.measuredPvFresh, false);
   const flowW = positive(input.flowRawW);
@@ -867,6 +872,7 @@ export function buildCoreRuntimeBudgetSnapshot(rawInput: CoreRuntimeSnapshotInpu
     storageDischargeW,
   }) - positive(pv.unconfirmedProbeW));
   const pvPhysical = resolveCorePvBudgetPhysicalCap({
+    storageFlowUsable: storage.flowUsable !== false,
     measuredPvW: pvPowerW,
     measuredPvFresh: pv.measuredFresh,
     flowRawW: pvBudgetFlowRawW,

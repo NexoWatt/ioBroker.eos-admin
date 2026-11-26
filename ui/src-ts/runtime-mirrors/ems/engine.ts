@@ -24,7 +24,7 @@
  * - Der nächste Schritt ist pro Modul echte Typisierung statt pauschalem No-Check.
  * - Fachliche Kommentare markieren die Abschnitte, die später einzeln migriert werden.
  *
- * Original-Hash: 6a476992ab9da4eba93c7007c7cd4f2939ee55f1b550c30fd8a3f5bbca885241
+ * Original-Hash: 45175ad54c58be81567ab4dbc9d88c7aad1af48fbe08da4e3b93918c7a9584ca
  */
 
 /**
@@ -45,7 +45,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/engine.ts
- * Quell-Hash: sha256:7acb8a93dc3b22b9b8371d598082cdca739ff685ebca32d04871f84a0379e394
+ * Quell-Hash: sha256:1a9983af2ff463d394219d536ee86cb93ade18bcc06b2b11f7340df49e51dfa6
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -111,6 +111,8 @@
 const { DatapointRegistry } = require('./datapoints');
 const { ModuleManager } = require('./module-manager');
 const { awaitEmsTransition } = require('../lib/installer-lifecycle');
+const { normalizeOcppDiscovery } = require('../lib/ocpp-auto-discovery');
+const { synchronizeChargingPointIdentity } = require('../lib/charging-point-identity');
 const { applyStorageMeasurementOverrides } = require('./services/storage-override-bridge');
 const { buildNvpSnapshotFromRegistry } = require('./services/measurement-freshness');
 const { installActuatorShadowArbiter } = require('./services/actuator-shadow-arbiter');
@@ -815,6 +817,7 @@ class EmsEngine {
             const storageAssistCustomerAllowed = wb.storageAssistCustomerAllowed === true;
             // Aktivierung & Priorität (Installateur-Konfiguration)
             const enabled = (wb && typeof wb.enabled === 'boolean') ? !!wb.enabled : true;
+            const ocppDiscovery = normalizeOcppDiscovery(wb.ocppDiscovery);
             const prioRaw = Number(wb && wb.priority !== undefined ? wb.priority : NaN);
             const priority = (Number.isFinite(prioRaw) ? Math.max(1, Math.min(999, Math.round(prioRaw))) : 999);
             wallboxes.push({
@@ -822,6 +825,7 @@ class EmsEngine {
                 name: wb.name || key,
                 enabled,
                 priority,
+                ...(ocppDiscovery ? { ocppDiscovery } : {}),
                 // Stable mapping to EVCS index (lp1 -> 1, ...) regardless of safe key renaming
                 evcsIndex: idx,
                 chargerType,
@@ -1186,6 +1190,9 @@ class EmsEngine {
      */
     async init() {
         const adapter = this.adapter;
+        // A saved reordering may survive a process/power loss before its state
+        // transfer. Recover it before any module reads index-based wishes.
+        await synchronizeChargingPointIdentity(adapter, Array.isArray(adapter.evcsList) ? adapter.evcsList : []);
         await this._ensureInternalStates();
         this._startSchedulerHeartbeat();
         // Scheduler interval from config (Admin UI / jsonConfig)
@@ -1475,7 +1482,15 @@ class EmsEngine {
                     }
                     catch (_error) { }
                 }
-                const netW = snapshot.usable && Number.isFinite(Number(snapshot.netW)) ? Number(snapshot.netW) : null;
+                const netW = snapshot.usable && typeof snapshot.netW === 'number' && Number.isFinite(snapshot.netW) ? snapshot.netW : null;
+                // Ein ausgefallener Messpfad unterbricht auch die Filterhistorie. Der
+                // erste neue Messwert darf nicht aus einem alten Bezug/Export anlaufen.
+                // Kein Ersatzwert wird geschrieben; die bestehende Frische-Sperre bleibt.
+                if (netW === null) {
+                    this._gridPowerAvgW = null;
+                    this._gridPowerLastTs = 0;
+                    this._gridPowerLastResolutionSource = '';
+                }
                 if (netW !== null && this._gridPowerId && this._gridPowerRawId) {
                     const nowTs = Date.now();
                     const netRawRounded = Math.round(netW);
@@ -1490,7 +1505,7 @@ class EmsEngine {
                     const sourceChanged = this._gridPowerLastResolutionSource && this._gridPowerLastResolutionSource !== snapshot.source;
                     this._gridPowerLastTs = nowTs;
                     this._gridPowerLastResolutionSource = snapshot.source;
-                    if (!Number.isFinite(Number(this._gridPowerAvgW)) || sourceChanged || !useAvg || tauSec <= 0) {
+                    if (typeof this._gridPowerAvgW !== 'number' || !Number.isFinite(this._gridPowerAvgW) || sourceChanged || !useAvg || tauSec <= 0) {
                         this._gridPowerAvgW = netRawRounded;
                     }
                     else {
@@ -1512,6 +1527,9 @@ class EmsEngine {
                 }
             }
             catch (error) {
+                this._gridPowerAvgW = null;
+                this._gridPowerLastTs = 0;
+                this._gridPowerLastResolutionSource = '';
                 try {
                     this.adapter._nvpFreshnessSnapshot = { ts: Date.now(), usable: false, fresh: false, coherent: false, degraded: false, connected: null, status: 'stale', source: 'resolver-error', reason: String(error?.message || error) };
                     await this.adapter.setStateAsync('ems.gridMeasurementFresh', { val: false, ack: true });

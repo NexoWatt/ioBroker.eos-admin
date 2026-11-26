@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/ems-apps.ts
- * Quell-Hash: sha256:e9b2e1babf672181807086e69928c205e546ed8b47ba65fdbe64dc9193bb89e9
+ * Quell-Hash: sha256:088e92dabd6b0645c4860afd01899a0112e36951a07f1da3cb16c58c4fabdcb1
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -1733,7 +1733,8 @@ function _collectFlowPowerDpIsWFromUI() {
   }
   function appCenterDraftSnapshot() {
     try {
-      const inputs = Array.from(document.querySelectorAll('main input, main select, main textarea'))
+      // The language display is updated asynchronously from the system locale and cannot be edited.
+      const inputs = Array.from(document.querySelectorAll('main input:not(#countryProfileLanguageDisplay), main select, main textarea'))
         .map(input => [input.id, input.name, input.type, input.value, input.checked,
           input.multiple && input.selectedOptions ? Array.from(input.selectedOptions).map(option => option.value) : null]);
       return JSON.stringify([currentConfig, inputs]);

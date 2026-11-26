@@ -158,6 +158,34 @@ test('pause drains an accepted controller write before an explicit resume may cr
   assert.equal(f.leases.size, 1);
 });
 
+test('after a crash every accepted write must finish before a single generation regains ownership', async t => {
+  const releases = [];
+  const f = await fixture(t, false, { setForeignStateAsync() {
+    return new Promise(resolve => releases.push(resolve));
+  } });
+  await f.runtime.startOperational();
+  const old = f.runtime.status().process;
+  const requests = Array.from({ length: 2 }, () => fetch(f.base + '/write').catch(() => undefined));
+  try {
+    await eventually(() => releases.length === 2);
+    process.kill(old.pid, 'SIGKILL');
+    await eventually(() => f.runtime.status().process.lastError === 'EOS_UI_PROCESS_WRITE_COMPLETION_UNKNOWN');
+    releases[0]();
+    await delay(100);
+    assert.equal(f.runtime.status().process.pid, null);
+    await assert.rejects(f.runtime.start(), /EOS_UI_PROCESS_STOP_UNCONFIRMED/);
+    releases[1]();
+    await eventually(() => f.runtime.status().emsReady === true);
+    assert.equal(f.runtime.status().process.generation, old.generation + 1);
+    assert.equal(f.runtime.status().process.restarts, 1);
+    assert.equal(f.leases.size, 1);
+    assert.equal(releases.length, 2, 'the replacement must not replay either write');
+  } finally {
+    for (const release of releases) release();
+    await Promise.all(requests);
+  }
+});
+
 test('pause during initialization drains a late subscription acquisition before creating the next child', async t => {
   let release, entered = false, acquisitions = 0;
   const leases = new Set();

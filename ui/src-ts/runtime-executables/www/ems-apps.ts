@@ -1717,7 +1717,8 @@ function _collectFlowPowerDpIsWFromUI() {
   }
   function appCenterDraftSnapshot() {
     try {
-      const inputs = Array.from(document.querySelectorAll('main input, main select, main textarea'))
+      // The language display is updated asynchronously from the system locale and cannot be edited.
+      const inputs = Array.from(document.querySelectorAll('main input:not(#countryProfileLanguageDisplay), main select, main textarea'))
         .map(input => [input.id, input.name, input.type, input.value, input.checked,
           input.multiple && input.selectedOptions ? Array.from(input.selectedOptions).map(option => option.value) : null]);
       return JSON.stringify([currentConfig, inputs]);

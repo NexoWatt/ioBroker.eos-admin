@@ -10,7 +10,7 @@ const { numericMeasurement } = require('../ui/lib/installer-lifecycle');
 const root = path.resolve(__dirname, '..');
 const source = fs.readFileSync(path.join(root, 'ui/src-ts/runtime-executables/main.ts'), 'utf8');
 const parsed = ts.createSourceFile('main.ts', source, ts.ScriptTarget.ES2022, true);
-const wanted = new Set(['updateHistorieExportStates', '_nwGetNumberFromCache', '_nwGetNumberFromCacheFresh', '_nwGetCacheAgeMs', '_nwSetHistorieValue']);
+const wanted = new Set(['updateHistorieExportStates', '_nwLiveInputMaxAgeMs', '_nwGetNumberFromCache', '_nwGetNumberFromCacheFresh', '_nwGetCacheAgeMs', '_nwSetHistorieValue']);
 const methods = [];
 function visit(node) {
     if (ts.isMethodDeclaration(node) && wanted.has(node.name?.getText(parsed))) methods.push(node.getText(parsed));
@@ -19,19 +19,20 @@ function visit(node) {
 visit(parsed);
 assert.equal(methods.length, wanted.size);
 const now = 1795543200000;
-const ctx = vm.createContext({ numericMeasurement, Date: class extends Date { static now() { return now; } } });
+const ctx = vm.createContext({ numericMeasurement, nwNormalizeStorageDatapointsConfig: require('../ui/ems/services/storage-datapoint-config').normalizeStorageDatapointsConfig, nwPhysicalPvSourceKey: require('../ui/ems/services/pv-source-identity').physicalPvSourceKey, Date: class extends Date { static now() { return now; } } });
 const ActualMethods = vm.runInContext(`class ActualMethods {\n${methods.join('\n')}\n}; ActualMethods;`, ctx);
 function fixture(values = {}, opts = {}) {
     const a = new ActualMethods();
     a.stateCache = Object.fromEntries(Object.entries(values).map(([key, value]) => [key, { value, ts: now }]));
     a.config = { datapoints: {}, peakShaving: { atypical: { review: { influxLogEnabled: false } } }, ...opts.config };
+    a.config.settings = { deviceStaleTimeoutSec: 60, ...a.config.settings };
     a.writes = {};
     a.evcsCount = opts.evcsCount ?? 0;
     a.setLocalStateWithCache = (key, value, stamp) => { a.writes[key] = { value, stamp }; };
     a._nwResolveGridImportExportFromCache = () => ({ gridBuyW: 1000, gridSellW: 0, hasGrid: true, ...opts.grid });
     a._nwResolveBatteryFlowFromCache = options => {
         assert.equal(options.strictStale, true);
-        return { chargeW: 0, dischargeW: 0, ...opts.battery };
+        return { chargeW: 0, dischargeW: 0, observedAt: now, ...opts.battery };
     };
     a._nwGetStorageControlAuthority = () => ({ selectedTopology: opts.topology || 'none' });
     a._nwResolveStorageFarmMetricsFromCache = () => opts.farm || null;
@@ -75,7 +76,7 @@ test('History uses real PV/load fallbacks when derived states are absent or stal
 
 test('History never adds DC PV to the already merged canonical derived total', async () => {
     const a = fixture({ 'derived.core.pv.totalW': 5000, 'derived.core.building.loadTotalW': 6000, 'speicher.dcPvPowerW': 3000 },
-        { topology: 'single', config: { datapoints: {}, storage: { coupling: 'dc' }, peakShaving: { atypical: { review: { influxLogEnabled: false } } } } });
+        { topology: 'single', config: { datapoints: {}, storage: { coupling: 'dc', datapoints: { dcPvPowerObjectId: 'hybrid.pv' } }, peakShaving: { atypical: { review: { influxLogEnabled: false } } } } });
     await a.updateHistorieExportStates();
     assert.equal(value(a, 'historie.core.pv.totalW'), 5000);
     delete a.stateCache['derived.core.pv.totalW'];
@@ -162,4 +163,26 @@ test('the History sink rejects invalid data and retains real zero/negative measu
     for (const bad of [null, undefined, false, true, '', ' ', {}, [], NaN, Infinity]) a._nwSetHistorieValue('bad', bad, now);
     assert.equal(value(a, 'bad'), undefined);
     for (const good of [0, -200, 5000]) { a._nwSetHistorieValue('good', good, now, 0); assert.equal(value(a, 'good'), good); }
+});
+
+
+test('History requires the configured independent DC input, accepts real zero and counts equal distinct readings', async () => {
+    const settings = { topology:'single', config: {datapoints:{pvPower:'solar.site'},
+        storage:{coupling:'dc', datapoints:{dcPvPowerObjectId:'hybrid.dc'}}} };
+    for (const [dc, expected] of [[0,1000],[1000,2000],[null,undefined]]) {
+        const a = fixture({pvPower:1000,'speicher.dcPvPowerW':dc},settings);
+        await a.updateHistorieExportStates();
+        assert.equal(value(a,'historie.core.pv.totalW'),expected);
+    }
+    const night = fixture({'speicher.dcPvPowerW':0},{topology:'single',config:{datapoints:{},storage:settings.config.storage}});
+    await night.updateHistorieExportStates();
+    assert.equal(value(night,'historie.core.pv.totalW'),0);
+});
+
+
+test('History respects explicit unknown aggregate while a stale individual generator still reports a plausible partial value', async () => {
+    const a = fixture({pvPower:1000, 'derived.core.pv.totalW': null});
+    await a.updateHistorieExportStates();
+    assert.equal(value(a,'historie.core.pv.totalW'), undefined);
+    assert.equal(value(a,'historie.core.building.loadTotalW'), undefined);
 });

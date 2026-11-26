@@ -112,9 +112,16 @@ async function main() {
         };
         await page.goto(`${base}/ems-apps.html?nwAdmin=1`); await status('Konfiguration geladen');
         assert.equal(await count(), 0);
+        // Locale rendering can update its read-only label after config hydration.
+        await page.$eval('#countryProfileLanguageDisplay', input => {
+            if (!input.readOnly) throw Error('expected read-only system language');
+            input.value = 'Deutsch (de) – System';
+        });
         await backgroundSave([nativeRow]);
         undercountNextConfig = true;
-        await page.click('[data-tab="evcs"]'); await status('Konfiguration geladen');
+        const refreshed = page.waitForResponse(item => item.request().method() === 'GET'
+            && new URL(item.url()).pathname === '/api/installer/config');
+        await page.click('[data-tab="evcs"]'); await refreshed; await status('Konfiguration geladen');
         assert.equal(await count(), 1);
         assert.equal(await name(), nativeRow.name);
         assert.ok(await page.evaluate(() => document.getElementById('evcsList').textContent.includes('Unzugeordnet')));

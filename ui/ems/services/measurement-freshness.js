@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/services/measurement-freshness.ts
- * Quell-Hash: sha256:9fc3db824695e4199e6f92694a049e452554488decbe472055429baf7a4fa178
+ * Quell-Hash: sha256:e125e1d4d44561ea53e210281d0123c0abf217168ca0082e744434062d706920
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -110,6 +110,8 @@ function buildNvpSnapshotFromRegistry(input) {
     const invertGrid = input.invertGrid === true;
     const age = (key) => normalizedAge(typeof registry.getMeasurementAgeMs === 'function' ? registry.getMeasurementAgeMs(key) : registry.getAgeMs(key));
     const timestamp = (key) => {
+        if (typeof registry.getVerifiedMeasurementTimestampMs === 'function')
+            return registry.getVerifiedMeasurementTimestampMs(key, now);
         if (typeof registry.getMeasurementTimestampMs === 'function')
             return finiteOrNull(registry.getMeasurementTimestampMs(key));
         const valueAge = age(key);
@@ -136,8 +138,8 @@ function buildNvpSnapshotFromRegistry(input) {
         const watchdogId = String(watchdogEntry.srcObjectId || watchdogEntry.objectId || '');
         if (/lastSeenMs$/i.test(watchdogId)) {
             const lastSeenMs = registry.getNumber(watchdogKey, null);
-            if (finiteOrNull(lastSeenMs) !== null && Number(lastSeenMs) > 0)
-                heartbeatAgeMs = Math.max(0, now - Number(lastSeenMs));
+            if (finiteOrNull(lastSeenMs) !== null && Number(lastSeenMs) > 0 && Number(lastSeenMs) <= now)
+                heartbeatAgeMs = now - Number(lastSeenMs);
         }
         else {
             const candidates = [age(watchdogKey), aliveAge(watchdogKey)].filter((value) => value !== null);
@@ -155,14 +157,16 @@ function buildNvpSnapshotFromRegistry(input) {
     }
     const sample = (key, value) => {
         const mapped = !!registry.getEntry(key);
+        const sampleTs = mapped ? timestamp(key) : null;
+        const measurementAgeMs = sampleTs !== null && sampleTs > 0 && sampleTs <= now ? now - sampleTs : null;
         return {
             mapped,
             value,
-            sampleTs: mapped ? timestamp(key) : null,
+            sampleTs,
             freshness: evaluateMeasurementFreshness({
                 mapped,
                 present: mapped && finiteOrNull(value) !== null,
-                measurementAgeMs: mapped ? age(key) : null,
+                measurementAgeMs,
                 heartbeatAgeMs,
                 connected,
             }, { staleMs, heartbeatStaleMs: staleMs, maxHeartbeatHoldMs }),
@@ -176,12 +180,28 @@ function buildNvpSnapshotFromRegistry(input) {
     const exportKey = invertGrid ? buyKey : sellKey;
     const importValue = finiteOrNull(invertGrid ? rawSell : rawBuy);
     const exportValue = finiteOrNull(invertGrid ? rawBuy : rawSell);
+    const importSample = sample(importKey, importValue);
+    const exportSample = sample(exportKey, exportValue);
     const resolution = resolveNvpMeasurement({
         signed: sample(signedKey, signedValue),
-        import: sample(importKey, importValue),
-        export: sample(exportKey, exportValue),
+        import: importSample,
+        export: exportSample,
         maxSkewMs,
     });
+    // Bei fehlerhafter Telemetrie eines konfigurierten Richtungskanals darf
+    // der Gegenkanal allein keinen vollständigen NVP für Stellbefehle vortäuschen.
+    if (resolution.mode === 'split' && resolution.usable &&
+        ((importSample.mapped && (importSample.value === null || importSample.freshness?.measurementAgeMs == null)) ||
+            (exportSample.mapped && (exportSample.value === null || exportSample.freshness?.measurementAgeMs == null)))) {
+        resolution.usable = false;
+        resolution.coherent = false;
+        resolution.status = 'stale';
+        resolution.reason = 'split-measurement-invalid';
+        resolution.netW = null;
+        resolution.importW = 0;
+        resolution.exportW = 0;
+        resolution.measurementAgeMs = null;
+    }
     return {
         ...resolution,
         ts: now,
@@ -286,20 +306,27 @@ function resolveCurrentNvpSnapshot(snapshot, now, maxAgeMs) {
     if (!value)
         return { known: false, current: false, usable: false, ageMs: null, measurementAgeMs: null, heartbeatAgeMs: null, netW: null, status: 'missing', source: '', reason: '', connected: null };
     const ts = finiteOrNull(value.ts);
-    const ageMs = ts === null ? null : Math.max(0, now - ts);
-    const current = ageMs !== null && ageMs <= Math.max(1000, maxAgeMs);
+    const ageMs = ts !== null && ts > 0 && ts <= now ? now - ts : null;
+    const limitMs = Math.max(1000, maxAgeMs);
+    const current = ageMs !== null && ageMs <= limitMs;
+    // Ältere Einzelmessungs-Snapshots tragen nur ts. Die Engine führt das Messalter
+    // ausdrücklich mit, da ein neuer Rechenzyklus kein neues Zählersample ist.
+    const atCreation = 'measurementAgeMs' in value ? finiteOrNull(value.measurementAgeMs) : 0;
+    const measurementAgeMs = ageMs !== null && atCreation !== null && atCreation >= 0 ? atCreation + ageMs : null;
+    const physicalFresh = measurementAgeMs !== null && measurementAgeMs <= limitMs;
+    const expiredMeasurement = current && value.usable === true && !physicalFresh;
     const netW = finiteOrNull(value.netW);
     return {
         known: true,
         current,
-        usable: current && value.usable === true && netW !== null && value.connected !== false,
+        usable: current && physicalFresh && value.usable === true && netW !== null && value.connected !== false,
         ageMs,
-        measurementAgeMs: normalizedAge(value.measurementAgeMs),
+        measurementAgeMs,
         heartbeatAgeMs: normalizedAge(value.heartbeatAgeMs),
         netW,
-        status: String(value.status || (current ? 'stale' : 'snapshot-stale')),
+        status: expiredMeasurement ? 'stale' : String(value.status || (current ? 'stale' : 'snapshot-stale')),
         source: String(value.source || 'ems-canonical'),
-        reason: String(value.reason || ''),
+        reason: expiredMeasurement ? 'measurement-stale' : String(value.reason || ''),
         connected: typeof value.connected === 'boolean' ? value.connected : null,
     };
 }
@@ -356,8 +383,8 @@ function resolveNvpMeasurement(input) {
     const importTs = channelTs(imp);
     const exportTs = channelTs(exp);
     const skewMs = importTs !== null && exportTs !== null ? Math.abs(importTs - exportTs) : null;
-    const ages = [channelAge(imp), channelAge(exp)].filter((age) => age !== null);
-    const measurementAgeMs = ages.length ? Math.min(...ages) : null;
+    const importAge = channelAge(imp);
+    const exportAge = channelAge(exp);
     if (importFresh && exportFresh) {
         if (skewMs === null || skewMs <= maxSkewMs) {
             return {
@@ -371,11 +398,11 @@ function resolveNvpMeasurement(input) {
                 importW,
                 exportW,
                 skewMs,
-                measurementAgeMs,
+                measurementAgeMs: importAge !== null && exportAge !== null ? Math.max(importAge, exportAge) : null,
                 reason: 'split-coherent',
             };
         }
-        const useImport = importTs !== null && exportTs !== null ? importTs >= exportTs : (channelAge(imp) ?? Infinity) <= (channelAge(exp) ?? Infinity);
+        const useImport = importTs !== null && exportTs !== null ? importTs >= exportTs : (importAge ?? Infinity) <= (exportAge ?? Infinity);
         return {
             usable: true,
             coherent: false,
@@ -387,7 +414,7 @@ function resolveNvpMeasurement(input) {
             importW: useImport ? importW : 0,
             exportW: useImport ? 0 : exportW,
             skewMs,
-            measurementAgeMs,
+            measurementAgeMs: useImport ? importAge : exportAge,
             reason: `split-skew>${Math.round(maxSkewMs)}ms`,
         };
     }
@@ -434,7 +461,7 @@ function resolveNvpMeasurement(input) {
         importW: 0,
         exportW: 0,
         skewMs,
-        measurementAgeMs,
+        measurementAgeMs: importAge !== null && exportAge !== null ? Math.min(importAge, exportAge) : importAge ?? exportAge,
         reason: [imp?.freshness?.reason, exp?.freshness?.reason].filter(Boolean).join('+') || 'split-stale',
     };
 }

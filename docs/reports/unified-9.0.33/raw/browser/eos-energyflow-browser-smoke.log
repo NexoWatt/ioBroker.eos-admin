@@ -1,0 +1,438 @@
+{
+  "scope": "Chromium presentation smoke using shipped HTML/CSS and actual canonical renderer/helper sources; deterministic snapshots; no auth, transport, backend or physical devices",
+  "browser": "HeadlessChrome/158.0.8127.0",
+  "node": "v24.22.3",
+  "runAt": "2026-11-26T12:44:29.923Z",
+  "results": [
+    {
+      "scenario": "coherent-balance-and-visible-tariff-desktop",
+      "result": "passed",
+      "values": {
+        "centerPower": "2.3 kW",
+        "pvVal": "2.5 kW",
+        "gridVal": "3.8 kW",
+        "restVal": "2.8 kW",
+        "c2Val": "6.8 kW",
+        "batterySocIn": "90 %",
+        "batteryFlowDirection": "Entladen",
+        "energyFlowQuality": "",
+        "emsStatusText": "Tarif Automatik günstig (0.200 €/kWh): Speicher lädt"
+      },
+      "geometry": {
+        "viewport": 1440,
+        "documentWidth": 1440,
+        "cardWidth": 770,
+        "cardLeft": 330,
+        "cardRight": 1100,
+        "statusWidth": 577.171875,
+        "statusHeight": 17.546875,
+        "statusLeft": 362,
+        "statusRight": 939.171875,
+        "statusHidden": false,
+        "statusDisplay": "block",
+        "cardScrollWidth": 769,
+        "cardClientWidth": 768
+      }
+    },
+    {
+      "scenario": "reported-incoherent-values-diagnosed-desktop",
+      "result": "passed",
+      "values": {
+        "centerPower": "2.3 kW",
+        "pvVal": "2.5 kW",
+        "gridVal": "3.8 kW",
+        "restVal": "2.8 kW",
+        "c2Val": "10.7 kW",
+        "batterySocIn": "90 %",
+        "batteryFlowDirection": "Entladen",
+        "energyFlowQuality": "Bilanzabweichung 3.9 kW – Messpunkte, Vorzeichen und Zeitstempel prüfen",
+        "emsStatusText": "Tarif Automatik günstig (0.200 €/kWh): Speicher lädt"
+      }
+    },
+    {
+      "scenario": "stale-ev-stays-unknown-desktop",
+      "result": "passed",
+      "values": {
+        "centerPower": "--",
+        "pvVal": "2.5 kW",
+        "gridVal": "3.8 kW",
+        "restVal": "2.8 kW",
+        "c2Val": "--",
+        "batterySocIn": "90 %",
+        "batteryFlowDirection": "Entladen",
+        "energyFlowQuality": "Gebäudeaufteilung: Verbrauchermessung fehlt oder ist veraltet",
+        "emsStatusText": "Tarif Automatik günstig (0.200 €/kWh): Speicher lädt"
+      }
+    },
+    {
+      "scenario": "invalid-quality-ev-stays-unknown-desktop",
+      "result": "passed",
+      "values": {
+        "centerPower": "--",
+        "pvVal": "2.5 kW",
+        "gridVal": "3.8 kW",
+        "restVal": "2.8 kW",
+        "c2Val": "--",
+        "batterySocIn": "90 %",
+        "batteryFlowDirection": "Entladen",
+        "energyFlowQuality": "Gebäudeaufteilung: Verbrauchermessung fehlt oder ist veraltet",
+        "emsStatusText": "Tarif Automatik günstig (0.200 €/kWh): Speicher lädt"
+      }
+    },
+    {
+      "scenario": "real-small-load-not-suppressed-desktop",
+      "result": "passed",
+      "values": {
+        "centerPower": "0.1 kW",
+        "pvVal": "0.1 kW",
+        "gridVal": "0.0 kW",
+        "restVal": "0.0 kW",
+        "c2Val": "0.0 kW",
+        "batterySocIn": "90 %",
+        "batteryFlowDirection": "",
+        "energyFlowQuality": "",
+        "emsStatusText": "Tarif Automatik aktiv – warte auf aktuellen Regelungsstatus"
+      }
+    },
+    {
+      "scenario": "confirmed-zero-and-tariff-awaiting-status-desktop",
+      "result": "passed",
+      "values": {
+        "centerPower": "0.0 kW",
+        "pvVal": "0.0 kW",
+        "gridVal": "0.0 kW",
+        "restVal": "0.0 kW",
+        "c2Val": "0.0 kW",
+        "batterySocIn": "0 %",
+        "batteryFlowDirection": "",
+        "energyFlowQuality": "",
+        "emsStatusText": "Tarif Automatik aktiv – warte auf aktuellen Regelungsstatus"
+      }
+    },
+    {
+      "scenario": "fresh-direct-meter-before-derived-frame-desktop",
+      "result": "passed",
+      "values": {
+        "centerPower": "1.2 kW",
+        "pvVal": "1.2 kW",
+        "gridVal": "0.0 kW",
+        "restVal": "0.0 kW",
+        "c2Val": "0.0 kW",
+        "batterySocIn": "90 %",
+        "batteryFlowDirection": "",
+        "energyFlowQuality": "",
+        "emsStatusText": "Tarif Automatik aktiv – warte auf aktuellen Regelungsstatus"
+      }
+    },
+    {
+      "scenario": "invalid-direct-meter-cannot-hide-loss-desktop",
+      "result": "passed",
+      "values": {
+        "centerPower": "--",
+        "pvVal": "1.2 kW",
+        "gridVal": "0.0 kW",
+        "restVal": "0.0 kW",
+        "c2Val": "0.0 kW",
+        "batterySocIn": "90 %",
+        "batteryFlowDirection": "",
+        "energyFlowQuality": "Gebäudeverbrauch nicht berechenbar. Es liegt keine gültige Netzmessung vor.",
+        "emsStatusText": "Tarif Automatik aktiv – warte auf aktuellen Regelungsstatus"
+      }
+    },
+    {
+      "scenario": "reported-signed-storage-and-visible-direction-desktop",
+      "result": "passed",
+      "values": {
+        "centerPower": "2.5 kW",
+        "pvVal": "1.2 kW",
+        "gridVal": "-0.5 kW",
+        "restVal": "1.8 kW",
+        "c2Val": "0.0 kW",
+        "batterySocIn": "90 %",
+        "batteryFlowDirection": "Entladen",
+        "energyFlowQuality": "",
+        "emsStatusText": "Tarif Automatik aktiv – warte auf aktuellen Regelungsstatus"
+      }
+    },
+    {
+      "scenario": "normalized-frame-overrides-opposite-legacy-signs-desktop",
+      "result": "passed",
+      "values": {
+        "centerPower": "2.5 kW",
+        "pvVal": "1.5 kW",
+        "gridVal": "-1.8 kW",
+        "restVal": "2.8 kW",
+        "c2Val": "0.0 kW",
+        "batterySocIn": "90 %",
+        "batteryFlowDirection": "Entladen",
+        "energyFlowQuality": "",
+        "emsStatusText": "Tarif Automatik aktiv – warte auf aktuellen Regelungsstatus"
+      }
+    },
+    {
+      "scenario": "negative-balance-keeps-load-unknown-desktop",
+      "result": "passed",
+      "values": {
+        "centerPower": "--",
+        "pvVal": "1.5 kW",
+        "gridVal": "-1.8 kW",
+        "restVal": "-2.8 kW",
+        "c2Val": "0.0 kW",
+        "batterySocIn": "90 %",
+        "batteryFlowDirection": "Laden",
+        "energyFlowQuality": "Gebäudeverbrauch nicht berechenbar. Die Energiebilanz ist negativ. Messpunkte, Vorzeichen und Zeitstempel prüfen.",
+        "emsStatusText": "Tarif Automatik aktiv – warte auf aktuellen Regelungsstatus"
+      }
+    },
+    {
+      "scenario": "missing-net-identified-without-legacy-substitution-desktop",
+      "result": "passed",
+      "values": {
+        "centerPower": "--",
+        "pvVal": "1.5 kW",
+        "gridVal": "--",
+        "restVal": "2.8 kW",
+        "c2Val": "0.0 kW",
+        "batterySocIn": "90 %",
+        "batteryFlowDirection": "Entladen",
+        "energyFlowQuality": "Gebäudeverbrauch nicht berechenbar. Es liegt keine gültige Netzmessung vor.",
+        "emsStatusText": "Tarif Automatik aktiv – warte auf aktuellen Regelungsstatus"
+      }
+    },
+    {
+      "scenario": "offline-removes-charging-claim-desktop",
+      "result": "passed",
+      "values": {
+        "centerPower": "--",
+        "pvVal": "--",
+        "gridVal": "--",
+        "restVal": "--",
+        "c2Val": "6.8 kW",
+        "batterySocIn": "-- %",
+        "batteryFlowDirection": "",
+        "energyFlowQuality": "",
+        "emsStatusText": "Tarif Automatik aktiv – Verbindung unterbrochen; Regelungsstatus nicht bestätigt"
+      }
+    },
+    {
+      "scenario": "coherent-balance-and-visible-tariff-mobile",
+      "result": "passed",
+      "values": {
+        "centerPower": "2.3 kW",
+        "pvVal": "2.5 kW",
+        "gridVal": "3.8 kW",
+        "restVal": "2.8 kW",
+        "c2Val": "6.8 kW",
+        "batterySocIn": "90 %",
+        "batteryFlowDirection": "Entladen",
+        "energyFlowQuality": "",
+        "emsStatusText": "Tarif Automatik günstig (0.200 €/kWh): Speicher lädt"
+      },
+      "geometry": {
+        "viewport": 390,
+        "documentWidth": 390,
+        "cardWidth": 374,
+        "cardLeft": 8,
+        "cardRight": 382,
+        "statusWidth": 322,
+        "statusHeight": 35.09375,
+        "statusLeft": 34,
+        "statusRight": 356,
+        "statusHidden": false,
+        "statusDisplay": "block",
+        "cardScrollWidth": 373,
+        "cardClientWidth": 372
+      }
+    },
+    {
+      "scenario": "reported-incoherent-values-diagnosed-mobile",
+      "result": "passed",
+      "values": {
+        "centerPower": "2.3 kW",
+        "pvVal": "2.5 kW",
+        "gridVal": "3.8 kW",
+        "restVal": "2.8 kW",
+        "c2Val": "10.7 kW",
+        "batterySocIn": "90 %",
+        "batteryFlowDirection": "Entladen",
+        "energyFlowQuality": "Bilanzabweichung 3.9 kW – Messpunkte, Vorzeichen und Zeitstempel prüfen",
+        "emsStatusText": "Tarif Automatik günstig (0.200 €/kWh): Speicher lädt"
+      }
+    },
+    {
+      "scenario": "stale-ev-stays-unknown-mobile",
+      "result": "passed",
+      "values": {
+        "centerPower": "--",
+        "pvVal": "2.5 kW",
+        "gridVal": "3.8 kW",
+        "restVal": "2.8 kW",
+        "c2Val": "--",
+        "batterySocIn": "90 %",
+        "batteryFlowDirection": "Entladen",
+        "energyFlowQuality": "Gebäudeaufteilung: Verbrauchermessung fehlt oder ist veraltet",
+        "emsStatusText": "Tarif Automatik günstig (0.200 €/kWh): Speicher lädt"
+      }
+    },
+    {
+      "scenario": "invalid-quality-ev-stays-unknown-mobile",
+      "result": "passed",
+      "values": {
+        "centerPower": "--",
+        "pvVal": "2.5 kW",
+        "gridVal": "3.8 kW",
+        "restVal": "2.8 kW",
+        "c2Val": "--",
+        "batterySocIn": "90 %",
+        "batteryFlowDirection": "Entladen",
+        "energyFlowQuality": "Gebäudeaufteilung: Verbrauchermessung fehlt oder ist veraltet",
+        "emsStatusText": "Tarif Automatik günstig (0.200 €/kWh): Speicher lädt"
+      }
+    },
+    {
+      "scenario": "real-small-load-not-suppressed-mobile",
+      "result": "passed",
+      "values": {
+        "centerPower": "0.1 kW",
+        "pvVal": "0.1 kW",
+        "gridVal": "0.0 kW",
+        "restVal": "0.0 kW",
+        "c2Val": "0.0 kW",
+        "batterySocIn": "90 %",
+        "batteryFlowDirection": "",
+        "energyFlowQuality": "",
+        "emsStatusText": "Tarif Automatik aktiv – warte auf aktuellen Regelungsstatus"
+      }
+    },
+    {
+      "scenario": "confirmed-zero-and-tariff-awaiting-status-mobile",
+      "result": "passed",
+      "values": {
+        "centerPower": "0.0 kW",
+        "pvVal": "0.0 kW",
+        "gridVal": "0.0 kW",
+        "restVal": "0.0 kW",
+        "c2Val": "0.0 kW",
+        "batterySocIn": "0 %",
+        "batteryFlowDirection": "",
+        "energyFlowQuality": "",
+        "emsStatusText": "Tarif Automatik aktiv – warte auf aktuellen Regelungsstatus"
+      }
+    },
+    {
+      "scenario": "fresh-direct-meter-before-derived-frame-mobile",
+      "result": "passed",
+      "values": {
+        "centerPower": "1.2 kW",
+        "pvVal": "1.2 kW",
+        "gridVal": "0.0 kW",
+        "restVal": "0.0 kW",
+        "c2Val": "0.0 kW",
+        "batterySocIn": "90 %",
+        "batteryFlowDirection": "",
+        "energyFlowQuality": "",
+        "emsStatusText": "Tarif Automatik aktiv – warte auf aktuellen Regelungsstatus"
+      }
+    },
+    {
+      "scenario": "invalid-direct-meter-cannot-hide-loss-mobile",
+      "result": "passed",
+      "values": {
+        "centerPower": "--",
+        "pvVal": "1.2 kW",
+        "gridVal": "0.0 kW",
+        "restVal": "0.0 kW",
+        "c2Val": "0.0 kW",
+        "batterySocIn": "90 %",
+        "batteryFlowDirection": "",
+        "energyFlowQuality": "Gebäudeverbrauch nicht berechenbar. Es liegt keine gültige Netzmessung vor.",
+        "emsStatusText": "Tarif Automatik aktiv – warte auf aktuellen Regelungsstatus"
+      }
+    },
+    {
+      "scenario": "reported-signed-storage-and-visible-direction-mobile",
+      "result": "passed",
+      "values": {
+        "centerPower": "2.5 kW",
+        "pvVal": "1.2 kW",
+        "gridVal": "-0.5 kW",
+        "restVal": "1.8 kW",
+        "c2Val": "0.0 kW",
+        "batterySocIn": "90 %",
+        "batteryFlowDirection": "Entladen",
+        "energyFlowQuality": "",
+        "emsStatusText": "Tarif Automatik aktiv – warte auf aktuellen Regelungsstatus"
+      }
+    },
+    {
+      "scenario": "normalized-frame-overrides-opposite-legacy-signs-mobile",
+      "result": "passed",
+      "values": {
+        "centerPower": "2.5 kW",
+        "pvVal": "1.5 kW",
+        "gridVal": "-1.8 kW",
+        "restVal": "2.8 kW",
+        "c2Val": "0.0 kW",
+        "batterySocIn": "90 %",
+        "batteryFlowDirection": "Entladen",
+        "energyFlowQuality": "",
+        "emsStatusText": "Tarif Automatik aktiv – warte auf aktuellen Regelungsstatus"
+      }
+    },
+    {
+      "scenario": "negative-balance-keeps-load-unknown-mobile",
+      "result": "passed",
+      "values": {
+        "centerPower": "--",
+        "pvVal": "1.5 kW",
+        "gridVal": "-1.8 kW",
+        "restVal": "-2.8 kW",
+        "c2Val": "0.0 kW",
+        "batterySocIn": "90 %",
+        "batteryFlowDirection": "Laden",
+        "energyFlowQuality": "Gebäudeverbrauch nicht berechenbar. Die Energiebilanz ist negativ. Messpunkte, Vorzeichen und Zeitstempel prüfen.",
+        "emsStatusText": "Tarif Automatik aktiv – warte auf aktuellen Regelungsstatus"
+      }
+    },
+    {
+      "scenario": "missing-net-identified-without-legacy-substitution-mobile",
+      "result": "passed",
+      "values": {
+        "centerPower": "--",
+        "pvVal": "1.5 kW",
+        "gridVal": "--",
+        "restVal": "2.8 kW",
+        "c2Val": "0.0 kW",
+        "batterySocIn": "90 %",
+        "batteryFlowDirection": "Entladen",
+        "energyFlowQuality": "Gebäudeverbrauch nicht berechenbar. Es liegt keine gültige Netzmessung vor.",
+        "emsStatusText": "Tarif Automatik aktiv – warte auf aktuellen Regelungsstatus"
+      }
+    },
+    {
+      "scenario": "offline-removes-charging-claim-mobile",
+      "result": "passed",
+      "values": {
+        "centerPower": "--",
+        "pvVal": "--",
+        "gridVal": "--",
+        "restVal": "--",
+        "c2Val": "6.8 kW",
+        "batterySocIn": "-- %",
+        "batteryFlowDirection": "",
+        "energyFlowQuality": "",
+        "emsStatusText": "Tarif Automatik aktiv – Verbindung unterbrochen; Regelungsstatus nicht bestätigt"
+      }
+    }
+  ],
+  "pageErrors": [],
+  "rejectedRequests": [],
+  "sourceHashes": {
+    "ui/src-ts/runtime-executables/www/power-measurements.ts": "9b70bcef86c4b859ae49fef8f55d064207558cfd517d63b5fa3a4c0d8b2f1883",
+    "ui/src-ts/runtime-executables/www/live-display.ts": "91b95cc8d63fc9c2d8036e465b4c666cacc61482dce5cc7d803659fd89f202f3",
+    "ui/src-ts/runtime-executables/www/tariff-display.ts": "d22fceb5cc908b49ff5dcf842d87459cf0d094d12784694627cc19d759aa351f",
+    "ui/src-ts/runtime-executables/www/app.ts": "b13e9e0e7f43fd59983d78f50e86e3b7fdf8f41c942fc607fce76311572a0231",
+    "ui/www/index.html": "ca7244dd6734395589f83773dd82c5a5a93c62469b85630d4b1800cd74640ef8",
+    "ui/www/styles.css": "3bf5d8a859eb8648ecb52834fe4f4f8ab3dfc08d342d8cf270df1d4d1ac410b1"
+  }
+}

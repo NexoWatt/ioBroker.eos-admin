@@ -2,8 +2,8 @@
 
 | Thema | Einstieg |
 | --- | --- |
-| Installation, Git/npm und Prüfung des Energieflusses | [Anleitung für 9.0.32](start/START_HIER_9.0.32.md) |
-| Ergebnisse und offene Prüfungen | [Prüfbericht für 9.0.32](reports/unified-9.0.32/PRUEFBERICHT.md) |
+| Installation, Git/npm und Prüfung des Energieflusses | [Anleitung für 9.0.33](start/START_HIER_9.0.33.md) |
+| Ergebnisse und offene Prüfungen | [Prüfbericht für 9.0.33](reports/unified-9.0.33/PRUEFBERICHT.md) |
 | iPhone-Symbol auf dem Home-Bildschirm | [Anleitung für 9.0.31](start/START_HIER_9.0.31.md) |
 | Aufgeräumte ZIP | [Änderungsumfang](DOKUMENTATION_9.0.27.md) · [Verschobene Dateien](UMSORTIERTE_DATEIEN.tsv) |
 | Aufgaben und Prozesse der Module | [Architektur](unified/ARCHITECTURE.md) |

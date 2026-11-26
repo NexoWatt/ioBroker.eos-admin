@@ -1,0 +1,108 @@
+{
+  "scope": "Shipped dashboard scheduling code with real Chromium timers and render observer; simulated SSE bursts/visibility/BFcache events; no backend or physical device",
+  "browser": "HeadlessChrome/158.0.8127.0",
+  "node": "v24.22.3",
+  "runAt": "2026-11-26T12:43:11.775Z",
+  "result": "passed",
+  "timing": {
+    "elapsedMs": 20600.89999999851,
+    "sampleTs": 1795696957255,
+    "renders": [
+      {
+        "at": 49.19999999925494,
+        "value": 0,
+        "ts": 1795696957255
+      },
+      {
+        "at": 10059.39999999851,
+        "value": 396,
+        "ts": 1795696957255
+      },
+      {
+        "at": 20054.800000000745,
+        "value": 796,
+        "ts": 1795696957255
+      }
+    ],
+    "bursts": 820,
+    "clockOffsetMs": -3600000,
+    "gaps": [
+      10010.199999999255,
+      9995.400000002235
+    ]
+  },
+  "lifecycle": {
+    "before": 3,
+    "whileHidden": 3,
+    "hiddenTimers": {
+      "telemetry": null,
+      "render": null,
+      "age": null
+    },
+    "afterVisible": [
+      {
+        "at": 20856.800000000745,
+        "value": 999,
+        "ts": 1795696957255
+      }
+    ],
+    "pagehideTimers": {
+      "telemetry": null,
+      "render": null,
+      "age": null
+    },
+    "afterPageshow": {
+      "at": 21043.60000000149,
+      "value": 1000,
+      "ts": 1795696957255
+    },
+    "total": 5
+  },
+  "dashboard": {
+    "initialHttp": 503,
+    "snapshotRequests": 1,
+    "eventConnections": 2,
+    "observerStart": 250.30000000074506,
+    "initial": {
+      "centerPower": "1.0 kW",
+      "sideBuildingPower": "1.0 kW",
+      "sideConsumptionTotal": "1.0 kW",
+      "sideTimestamp": "26.11.2026 13:42:58"
+    },
+    "settled": {
+      "centerPower": "3.3 kW",
+      "sideBuildingPower": "3.3 kW",
+      "sideConsumptionTotal": "3.3 kW",
+      "sideTimestamp": "26.11.2026 13:43:01"
+    },
+    "frames": [
+      {
+        "elapsed": 1108.1000000014901,
+        "cells": [
+          "1.0 kW",
+          "1.0 kW",
+          "1.0 kW",
+          "26.11.2026 13:42:58"
+        ]
+      },
+      {
+        "elapsed": 9946.60000000149,
+        "cells": [
+          "3.3 kW",
+          "3.3 kW",
+          "3.3 kW",
+          "26.11.2026 13:43:01"
+        ]
+      }
+    ],
+    "reconnected": {
+      "centerPower": "4.4 kW",
+      "sideBuildingPower": "4.4 kW",
+      "sideConsumptionTotal": "4.4 kW",
+      "sideTimestamp": "26.11.2026 13:43:08"
+    },
+    "dashboardErrors": []
+  },
+  "pageErrors": [],
+  "sourceSha256": "f7e4022e98782981d88bc35ee528ba56968a1103c16be1d8ea3956fbf89b0567"
+}

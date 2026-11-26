@@ -89,7 +89,7 @@
     "npm run test:actuator-c3-thermal-heating",
     "npm run test:actuator-c3-nexologic",
     "npm run test:actuator-c3-prime-movers",
-    "npm run test:live-energy-flow-5s-cadence",
+    "npm run test:live-energy-flow-10s-cadence",
     "npm run test:energy-flow-measurement-authority",
     "npm run test:pv-surplus-dynamic-storage-remainder",
     "npm run test:measurement-freshness-stage-b",

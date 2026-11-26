@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/datapoints.ts
- * Quell-Hash: sha256:a7d76e01798e64eabbd9228a24fbf096ee890867918a91f9433c71b6540a47af
+ * Quell-Hash: sha256:7ef72a2e28ad92af2cebf854183d7a956e937d882398774352c3cc4a1101e742
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -726,11 +726,11 @@ class DatapointRegistry {
         this.cacheByObjectId.set(id, {
             val: state.val,
             q: state.q,
-            sourceTs: Number.isFinite(stateTs) && stateTs > 0 ? stateTs : 0,
+            sourceTs: Number.isFinite(state.ts) && state.ts > 0 ? state.ts : 0,
             ts: Number.isFinite(stateTs) && stateTs > 0 ? stateTs : receivedTs,
             lc: Number.isFinite(changeTs) && changeTs > 0 ? changeTs : (Number.isFinite(stateTs) && stateTs > 0 ? stateTs : receivedTs),
             receivedTs,
-            ack: !!state.ack,
+            ack: state.ack === true,
         });
     }
 
@@ -782,7 +782,15 @@ class DatapointRegistry {
         return c ? c.val : null;
     }
 
-    /** Liefert den originalen Messwert-Zeitstempel ohne Heartbeat-/Connected-Fallback. */
+    /** Nur bestätigte Gerätemessungen mit brauchbarer Qualität dürfen Stellleistung freigeben. */
+    getVerifiedMeasurementTimestampMs(key, now = Date.now()) {
+        const entry = this.getEntry(key);
+        const sample = entry && this.cacheByObjectId.get(entry.srcObjectId || entry.objectId);
+        if (!sample || sample.ack !== true || (sample.q !== undefined && sample.q !== 0)) return null;
+        return sample.sourceTs > 0 && sample.sourceTs <= now ? sample.sourceTs : null;
+    }
+
+    /** Allgemeiner Cache-Zeitstempel für bestehende Verbraucher. */
     getMeasurementTimestampMs(key) {
         const e = this.getEntry(key);
         if (!e) return null;

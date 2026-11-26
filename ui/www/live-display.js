@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/live-display.ts
- * Quell-Hash: sha256:db204a946c51c8383a065757a95327fc691a59e13bf8859eb2603bf1c711730f
+ * Quell-Hash: sha256:91b95cc8d63fc9c2d8036e465b4c666cacc61482dce5cc7d803659fd89f202f3
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -72,10 +72,38 @@
         const row = entry(snapshot, key);
         return current(row, now, maxAge, online) ? number(row?.value) : null;
     }
-    function buildingQuality(snapshot, now, maxAge, online) {
+    function buildingQuality(snapshot, now, maxAge, online, mapped) {
         const row = entry(snapshot, 'derived.core.building.quality');
         const value = row?.value;
-        return current(row, now, maxAge, online) && typeof value === 'string' ? value : null;
+        if (!online)
+            return 'connection-lost';
+        const freshQuality = current(row, now, maxAge, true) && typeof value === 'string' ? value : null;
+        if (freshQuality === 'invalid-balance')
+            return freshQuality;
+        if (freshQuality?.startsWith('missing-')) {
+            const channels = {
+                'missing-grid': ['gridPointPower', 'gridBuyPower', 'gridSellPower'],
+                'missing-pv': ['pvPower', 'productionTotal'],
+                'missing-storage': ['batteryPower', 'storageChargePower', 'storageDischargePower'],
+                'missing-producer': ['producer1Power', 'producer2Power', 'producer3Power', 'producer4Power', 'producer5Power'],
+            };
+            const expired = channels[freshQuality]?.some(key => {
+                if (!mapped?.(key))
+                    return false;
+                const sample = entry(snapshot, key);
+                const stamp = sample ? number(sample.ts) : null;
+                return stamp !== null && stamp > 0 && now - stamp > maxAge && number(sample?.value) !== null
+                    && (sample?.q === undefined || sample.q === 0);
+            });
+            return expired ? freshQuality.replace('missing-', 'expired-') : freshQuality;
+        }
+        const load = entry(snapshot, 'derived.core.building.loadTotalW') || entry(snapshot, 'consumptionTotal');
+        const ts = load ? number(load.ts) : null;
+        if (ts !== null && ts > now + 5000)
+            return 'future-load';
+        if (ts !== null && ts > 0 && now - ts > maxAge)
+            return 'expired-load';
+        return freshQuality;
     }
     function farm(snapshot, now, online) {
         const row = entry(snapshot, 'storageFarm.overviewJson');

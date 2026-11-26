@@ -46,10 +46,33 @@
         const row = entry(snapshot, key);
         return current(row, now, maxAge, online) ? number(row?.value) : null;
     }
-    function buildingQuality(snapshot: unknown, now: number, maxAge: number, online: boolean): string | null {
+    function buildingQuality(snapshot: unknown, now: number, maxAge: number, online: boolean, mapped?: (key: string) => boolean): string | null {
         const row = entry(snapshot, 'derived.core.building.quality');
         const value = row?.value;
-        return current(row, now, maxAge, online) && typeof value === 'string' ? value : null;
+        if (!online) return 'connection-lost';
+        const freshQuality = current(row, now, maxAge, true) && typeof value === 'string' ? value : null;
+        if (freshQuality === 'invalid-balance') return freshQuality;
+        if (freshQuality?.startsWith('missing-')) {
+            const channels: Record<string, string[]> = {
+                'missing-grid': ['gridPointPower','gridBuyPower','gridSellPower'],
+                'missing-pv': ['pvPower','productionTotal'],
+                'missing-storage': ['batteryPower','storageChargePower','storageDischargePower'],
+                'missing-producer': ['producer1Power','producer2Power','producer3Power','producer4Power','producer5Power'],
+            };
+            const expired = channels[freshQuality]?.some(key => {
+                if (!mapped?.(key)) return false;
+                const sample = entry(snapshot, key);
+                const stamp = sample ? number(sample.ts) : null;
+                return stamp !== null && stamp > 0 && now - stamp > maxAge && number(sample?.value) !== null
+                    && (sample?.q === undefined || sample.q === 0);
+            });
+            return expired ? freshQuality.replace('missing-', 'expired-') : freshQuality;
+        }
+        const load = entry(snapshot, 'derived.core.building.loadTotalW') || entry(snapshot, 'consumptionTotal');
+        const ts = load ? number(load.ts) : null;
+        if (ts !== null && ts > now + 5000) return 'future-load';
+        if (ts !== null && ts > 0 && now - ts > maxAge) return 'expired-load';
+        return freshQuality;
     }
     function farm(snapshot: unknown, now: number, online: boolean): FarmView | null {
         const row = entry(snapshot, 'storageFarm.overviewJson');

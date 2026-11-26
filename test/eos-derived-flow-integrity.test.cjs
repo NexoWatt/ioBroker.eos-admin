@@ -12,7 +12,7 @@ const { physicalPvSourceKey: nwPhysicalPvSourceKey, applyPvCapacityPlausibility:
 const source = fs.readFileSync(path.join(__dirname, '../ui/main.js'), 'utf8');
 const parsed = ts.createSourceFile('main.js', source, ts.ScriptTarget.ES2022, true);
 const names = new Set(['updateDerivedFlowStates', 'scheduleDerivedFlowUpdate', 'updateValue', '_nwPublishEvcsInputBinding',
-    '_nwResolveGridImportExportFromCache', '_nwResolveBatteryFlowFromCache', '_nwResolveStorageFarmMetricsFromCache']);
+    '_nwMissingTemplatePvSource', '_nwLiveInputMaxAgeMs', '_nwIsBatterySignInverted', '_nwResolveGridImportExportFromCache', '_nwResolveBatteryFlowFromCache', '_nwResolveStorageFarmMetricsFromCache', '_nwMergeStorageFarmPvWithBase']);
 const methods = [];
 function visit(node) {
     if (ts.isMethodDeclaration(node) && names.has(node.name?.getText(parsed))) methods.push(node.getText(parsed));
@@ -23,6 +23,9 @@ assert.equal(methods.length, names.size);
 let now = 1795608000000;
 const Actual = vm.runInNewContext(`class Actual { ${methods.join('\n')} }; Actual`, {
     numericMeasurement, readFlowMeasurement, sumFlowMeasurements, resolveNvpDisplay, nwPhysicalPvSourceKey, nwApplyPvCapacityPlausibility,
+    nwDefaultFlowMappings: require('../ui/io-package.json').native.datapoints,
+    nwNormalizeStorageDatapointsConfig: require('../ui/ems/services/storage-datapoint-config').normalizeStorageDatapointsConfig,
+    nwCombineStorageFarmPv: require('../ui/ems/services/storage-farm-aggregation').combineStorageFarmPv,
     Date: class extends Date { static now() { return now; } },
 });
 function fixture(values = {}, options = {}) {
@@ -362,4 +365,245 @@ test('EV mirror carries source quality and timestamp through actual updateValue 
     assert.equal(a.stateCache['evcs.1.powerW'].ts, null);
     assert.equal(value(a, 'evcs.totalPowerW'), null);
     assert.equal(a.writes['evcs.1.powerW'].q, 64);
+});
+
+test('a failed building state write is retried for the same physical observation', async () => {
+    const meter = 'derived.core.building.loadTotalW';
+    const a = fixture({consumptionTotal: 900}, {dps: {consumptionTotal: 'house.w'}});
+    await a.updateDerivedFlowStates();
+    const store = a.setStateAsync;
+    let attempts = 0;
+    a.setStateAsync = async (id, row) => {
+        if (id === meter && ++attempts === 1) throw Error('simulated write failure');
+        return store(id, row);
+    };
+    a.stateCache.consumptionTotal = {value: 1300, ts: now};
+    await assert.rejects(a.updateDerivedFlowStates(), /simulated write failure/);
+    await a.updateDerivedFlowStates();
+    assert.equal(a.writes[meter].val, 1300);
+    assert.equal(a.stateCache[meter].value, 1300);
+    assert.equal(a.writes[meter].ts, now);
+    await a.updateDerivedFlowStates();
+    assert.equal(attempts, 2);
+});
+
+
+test('independent AC and DC PV add at equal power, and a missing configured DC meter invalidates the balance', async () => {
+    const a = fixture({ pvPower: 1000, gridPointPower: 300, batteryPower: 0, 'speicher.dcPvPowerW': 1000 });
+    a.config.storage = { coupling: 'dc', datapoints: { dcPvPowerObjectId: 'hybrid.dc' } };
+    a._nwGetStorageControlAuthority = () => ({ selectedTopology: 'single' });
+    await a.updateDerivedFlowStates();
+    assert.equal(value(a, 'derived.core.building.loadTotalW'), 2300);
+    for (const sample of [{value: null, ts: now}, {value: 1000, ts: now, q: 64}, {value: 1000, ts: now - 61000}]) {
+        a.stateCache['speicher.dcPvPowerW'] = sample;
+        await a.updateDerivedFlowStates();
+        assert.equal(value(a, 'derived.core.building.quality'), 'missing-pv');
+        assert.equal(value(a, 'derived.core.building.loadTotalW'), null);
+    }
+    a.config.storage.datapoints.dcPvPowerObjectId = a.config.datapoints.pvPower;
+    await a.updateDerivedFlowStates();
+    assert.equal(value(a, 'derived.core.building.loadTotalW'), 1300);
+});
+
+test('measured zero from DC-only and farm-only PV remains an observation, and farm missing is a gap', async () => {
+    for (const selectedTopology of ['single', 'farm']) {
+        const a = fixture({pvPower: null, gridPointPower: 300, batteryPower: 0, 'speicher.dcPvPowerW': 0,
+            'storageFarm.totalBatteryPowerW': 0, 'storageFarm.totalPvPowerW': 0,
+            'storageFarm.pvSourcesTotal': 1, 'storageFarm.pvSourcesOnline': 1}, {dps:{pvPower:''}});
+        a._nwGetStorageControlAuthority = () => ({selectedTopology});
+        a.config.storage = {coupling:'dc', datapoints:{dcPvPowerObjectId:'hybrid.dc'}};
+        if (selectedTopology === 'farm') {
+            a._nwStorageFarmIsActiveFromCache = () => true;
+            a._nwGetNumberFromCache = key => numericMeasurement(a.stateCache[key]?.value);
+            a._nwResolveStorageFarmMetricsFromCache = Actual.prototype._nwResolveStorageFarmMetricsFromCache;
+        }
+        await a.updateDerivedFlowStates();
+        assert.equal(value(a,'derived.core.building.loadTotalW'), 300);
+        assert.equal(value(a,'derived.core.pv.totalW'), 0);
+        const pvKey = selectedTopology === 'farm' ? 'storageFarm.totalPvPowerW' : 'speicher.dcPvPowerW';
+        a.stateCache[pvKey] = {value:0, ts:now, q:64};
+        await a.updateDerivedFlowStates();
+        assert.equal(value(a,'derived.core.building.loadTotalW'), null);
+    }
+});
+
+test('persisted meter timeout applies to a direct building meter without refreshing the timestamp', async () => {
+    const a = fixture({ consumptionTotal:1200, pvPower:null }, {dps:{consumptionTotal:'house.power'}});
+    delete a.config.settings.deviceStaleTimeoutSec;
+    a.stateCache['settings.deviceStaleTimeoutSec'] = {value:300, ts:now-86400000};
+    a.stateCache.consumptionTotal.ts = now-90000;
+    await a.updateDerivedFlowStates();
+    assert.equal(value(a,'derived.core.building.loadTotalW'),1200);
+    assert.equal(a.stateCache['derived.core.building.loadTotalW'].ts,now-90000);
+});
+
+test('scheduled publication retries once after a transient error even without another meter event', async () => {
+    const a = fixture();
+    const timers = new Map();
+    a._nwSetTimeout = (cb, ms) => { const ref = Symbol(); timers.set(ref, { cb, ms }); return ref; };
+    a._nwClearTimeout = ref => timers.delete(ref);
+    a.scheduleDerivedFlowUpdate = Actual.prototype.scheduleDerivedFlowUpdate.bind(a);
+    let attempts = 0;
+    a.updateDerivedFlowStates = async () => { if (++attempts === 1) throw Error('unavailable'); };
+    async function next() {
+        const [ref, item] = timers.entries().next().value;
+        timers.delete(ref);
+        await item.cb();
+    }
+    a.scheduleDerivedFlowUpdate('meter');
+    await next();
+    assert.equal(timers.size, 1);
+    assert.equal([...timers.values()][0].ms, 1000);
+    await next();
+    await next();
+    assert.equal(attempts, 2);
+    assert.equal(timers.size, 0);
+});
+
+test('headless measurement updates do not allocate SSE batches and connected clients share one patch', () => {
+    const a = fixture();
+    a.sseClients = new Set();
+    a.updateValue('pvPower', 701, now);
+    assert.equal(a.stateCache.pvPower.value, 701);
+    assert.equal(a._ssePendingPayload, null);
+    const scheduled = [];
+    a._nwSetTimeout = callback => { scheduled.push(callback); return 1; };
+    const chunks = [];
+    a._nwSseGuard = { broadcast: payload => chunks.push(payload) };
+    a.sseClients.add({internal: true});
+    a.updateValue('pvPower', 800, now);
+    const patch = a._ssePendingPayload;
+    a.updateValue('gridPointPower', 300, now);
+    assert.equal(a._ssePendingPayload, patch);
+    assert.equal(scheduled.length, 1);
+    scheduled[0]();
+    assert.equal(chunks.length, 1);
+    const data = JSON.parse(chunks[0].internalChunk.slice('data: '.length)).payload;
+    assert.equal(data.pvPower.value, 800);
+    assert.equal(data.gridPointPower.value, 300);
+    assert.equal(a._ssePendingPayload, null);
+});
+
+test('equal zero readings remain reliable through refresh, expire once at the actual timeout and recover with new physical timestamp', async () => {
+    const a = fixture({pvPower:0, gridPointPower:300, batteryPower:0, consumptionTotal:0}, {dps:{consumptionTotal:'house.meter'}});
+    useMeterResolvers(a);
+    a.stateCache['settings.deviceStaleTimeoutSec'] = { value: 300, ts: now-900000 };
+    const sourceTime = now;
+    for (const key of ['pvPower','gridPointPower','batteryPower','consumptionTotal']) a.stateCache[key].ts = sourceTime;
+    try {
+        for (const age of [0, 90000, 299999, 300000]) {
+            now = sourceTime + age;
+            await a.updateDerivedFlowStates('poll');
+            assert.equal(value(a,'derived.core.building.loadTotalW'),0, String(age));
+            assert.equal(a.stateCache['derived.core.building.loadTotalW'].ts, sourceTime, String(age));
+        }
+        now++;
+        await a.updateDerivedFlowStates('poll');
+        assert.equal(value(a,'derived.core.building.loadTotalW'),null);
+        for (const key of ['pvPower','gridPointPower','batteryPower']) a.stateCache[key].ts = now;
+        await a.updateDerivedFlowStates('new physical telemetry');
+        assert.equal(value(a,'derived.core.building.loadTotalW'),300);
+        assert.match(value(a,'derived.core.building.loadSource'),/^balance/);
+        a.stateCache.consumptionTotal.ts = now;
+        await a.updateDerivedFlowStates('direct meter recovered');
+        assert.equal(value(a,'derived.core.building.loadTotalW'),0);
+    } finally { now = sourceTime; }
+});
+
+test('DC mapping keeps real zero and source time, skips identical polls and clears invalid measurements', async () => {
+    const { SpeicherMappingModule } = require('../ui/ems/modules/storage-mapping');
+    const { DatapointRegistry } = require('../ui/ems/datapoints');
+    const writes = [];
+    const adapter = {config:{storage:{coupling:'dc',datapoints:{dcPvPowerObjectId:'hybrid.dc'}}},
+        log:{debug(){}}, async getStateAsync(){ return null; }, async setStateAsync(key,state){ if(key==='speicher.dcPvPowerW') writes.push(state); }};
+    const registry = new DatapointRegistry(adapter);
+    registry.byKey.set('st.dcPvPowerW',{objectId:'hybrid.dc',scale:1,offset:0,unitScale:1});
+    const physical = (value, ts, q = 0) => registry.cacheByObjectId.set('hybrid.dc',{val:value,ts,sourceTs:ts,q,ack:true});
+    const t = Date.now()-1000;
+    const mapping = new SpeicherMappingModule(adapter,registry);
+    physical(0,t);
+    await mapping.tick();
+    assert.deepEqual(writes.at(-1), {val:0,ack:true,ts:t});
+    await mapping.tick();
+    assert.equal(writes.length,1);
+    physical(0,t+100);
+    await mapping.tick();
+    assert.equal(writes.at(-1).ts,t+100);
+    physical(2500,t+200,64);
+    await mapping.tick();
+    assert.equal(writes.at(-1).val,null);
+    registry.cacheByObjectId.clear();
+    await mapping.tick();
+    assert.equal(writes.length,3);
+});
+
+test('a complete farm may replace a confirmed absent template meter; an actual invalid meter is still required', async () => {
+    const template = require('../ui/io-package.json').native.datapoints.pvPower;
+    const a = fixture({gridPointPower:300,batteryPower:0,'storageFarm.totalPvPowerW':5000,
+        'storageFarm.totalPvDcPowerW':5000, 'storageFarm.pvSourcesTotal':1,
+        'storageFarm.pvSourcesJson':JSON.stringify([{id:'hybrid.farm',coupling:'dc',online:true,powerW:5000}])},
+        {dps:{pvPower:template}});
+    delete a.stateCache.pvPower;
+    a._nwGetStorageControlAuthority = () => ({selectedTopology:'farm'});
+    a._nwStorageFarmIsActiveFromCache = () => true;
+    a._nwGetNumberFromCache = key => numericMeasurement(a.stateCache[key]?.value);
+    a._nwResolveStorageFarmMetricsFromCache = Actual.prototype._nwResolveStorageFarmMetricsFromCache;
+    let exists = true;
+    a.getForeignObjectAsync = async () => exists ? {type:'state'} : null;
+    await a.updateDerivedFlowStates();
+    assert.equal(value(a,'derived.core.pv.totalW'),null);
+    exists = false;
+    a._nwTemplatePvCheck = null;
+    await a.updateDerivedFlowStates();
+    assert.equal(value(a,'derived.core.pv.totalW'),5000);
+    a.stateCache.pvPower = {value:1000,q:64,ts:now};
+    await a.updateDerivedFlowStates();
+    assert.equal(value(a,'derived.core.pv.totalW'),null);
+});
+
+test('unrelated automatic inverter cannot replace a failed configured AC meter', async () => {
+    const a = fixture({pvPower:null,gridPointPower:300,batteryPower:0});
+    a._derivedFlow.auto.pvInverters = {list:[{powerId:'other.inverter'}],cache:new Map([['other.inverter',{val:1000,ts:now}]])};
+    await a.updateDerivedFlowStates();
+    assert.equal(value(a,'derived.core.building.quality'),'missing-pv');
+    assert.equal(value(a,'derived.core.building.loadTotalW'),null);
+});
+
+test('field readings of 1.2 kW PV, 0.5 kW export and a negative 1.8 kW battery distinguish raw direction, measured demand and incomplete telemetry', async () => {
+    function field({ invert = true, direct = false } = {}) {
+        const mappedHouse = direct ? { consumptionTotal: 'house.activePower' } : {};
+        const values = { pvPower: 1200, gridPointPower: -500, batteryPower: -1800, 'evcs.totalPowerW': 0, storageSoc: 27 };
+        if (direct) values.consumptionTotal = 2500;
+        const a = fixture(values, { evcsCount: 1, dps: mappedHouse });
+        useMeterResolvers(a);
+        a._nwIsBatterySignInverted = Actual.prototype._nwIsBatterySignInverted;
+        a.config.settings.flowInvertBattery = invert;
+        return a;
+    }
+    for (const direct of [true, false]) {
+        const a = field({ direct });
+        await a.updateDerivedFlowStates();
+        assert.equal(value(a, 'evcs.totalPowerW'), 0);
+        assert.equal(value(a, 'storageSoc'), 27);
+        assert.equal(value(a, 'derived.core.pv.totalW'), 1200);
+        assert.equal(value(a, 'derived.core.grid.netW'), -500);
+        assert.equal(value(a, 'derived.core.storage.netW'), 1800, 'canonical battery direction is positive during discharge');
+        assert.equal(a.writes['derived.core.building.loadTotalW'].val, 2500);
+        assert.equal(a.writes['derived.core.building.loadRestW'].val, 2500);
+        assert.equal(a.writes['derived.core.building.loadSource'].val, direct ? 'mapped:consumptionTotal' : 'balance:pv+nvp+storage');
+        assert.equal(a.writes['derived.core.building.quality'].val, 'ok');
+    }
+
+    const charging = field({ invert: false });
+    await charging.updateDerivedFlowStates();
+    assert.equal(value(charging, 'derived.core.storage.netW'), -1800, 'a negative value already displayed by EOS is charging');
+    assert.equal(charging.writes['derived.core.building.loadTotalW'].val, null);
+    assert.equal(charging.writes['derived.core.building.loadSource'].val, 'invalid:negative-balance');
+    assert.equal(charging.writes['derived.core.building.quality'].val, 'invalid-balance');
+
+    const missing = field();
+    missing._nwRawValueCache.gridPointPower.q = 64;
+    await missing.updateDerivedFlowStates();
+    assert.equal(missing.writes['derived.core.building.loadTotalW'].val, null);
+    assert.equal(missing.writes['derived.core.building.quality'].val, 'missing-grid');
 });

@@ -18,6 +18,7 @@ class FakeDp {
   async upsert(entry) { this.entries.set(entry.key, { ...entry }); }
   getEntry(key) { return this.entries.get(key) || null; }
   set(key, value, ageMs = 0) { this.values.set(key, value); this.ages.set(key, ageMs); }
+  getVerifiedMeasurementTimestampMs(key, now) { return this.ages.has(key) ? now - this.ages.get(key) : null; }
   getAgeMs(key) { return this.ages.has(key) ? this.ages.get(key) : null; }
   getRaw(key) { return this.values.has(key) ? this.values.get(key) : null; }
   getNumber(key, fallback = null) { const value = this.values.get(key); const n = Number(value); return Number.isFinite(n) ? n : fallback; }

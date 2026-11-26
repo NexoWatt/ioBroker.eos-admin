@@ -143,3 +143,124 @@ test('backend deduplicated extra production is authoritative and invalid publish
  f.state({...valid,'derived.core.pv.totalW':5000,consumptionTotal:5000,gridPointPower:0,'derived.core.production.extraW':0});f.flow();assert.equal(f.text('energyFlowQuality'),'');
  f.ctx.state['derived.core.production.extraW'].value=null;f.flow();assert.match(f.text('energyFlowQuality'),/unvollständig/);
 });
+
+test('complete farm gross readings survive the presence of a canonical net observation', () => {
+ const f = fixture();
+ f.ctx.nwStorageFarmFeatureFromConfig = () => true;
+ const farm = {v:1, updatedAt:f.now(), members:{total:2}, battery:{complete:true,total:2,valid:2,chargeW:2000,dischargeW:3000}, soc:{complete:true,total:2,valid:2,meanPct:40}};
+ f.state({'derived.core.storage.netW':1000, 'storageFarm.overviewJson':JSON.stringify(farm)});
+ let view = f.ctx.getLiveMeasurementView();
+ assert.equal(view.charge, 2000);
+ assert.equal(view.discharge, 3000);
+ farm.battery.complete = false;
+ f.state({'derived.core.storage.netW':1000, 'storageFarm.overviewJson':JSON.stringify(farm)});
+ view = f.ctx.getLiveMeasurementView();
+ assert.equal(view.charge, null);
+ assert.equal(view.discharge, null);
+});
+
+test('canonical missing single-battery observation permits only an explicitly calculated display from fresh independent inputs', () => {
+ const f = fixture();
+ f.ctx.window.__nwCfg.datapoints = {consumptionTotal:'house.w',pvPower:'pv.w',gridPointPower:'grid.w',storageSoc:'bat.soc'};
+ const values = {consumptionTotal:3500,pvPower:1000,gridPointPower:500,storageSoc:50,
+  'derived.core.storage.netW':null,'derived.core.grid.netW':500,'derived.core.pv.totalW':1000};
+ f.state(values);
+ let view = f.ctx.getLiveMeasurementView();
+ assert.equal(view.discharge,2000);
+ assert.equal(view.batteryDerived,true);
+ f.state({...values,'derived.core.pv.totalW':null});
+ assert.equal(f.ctx.getLiveMeasurementView().discharge,null);
+ f.state(values);
+ f.ctx.window.__nwCfg.datapoints.batteryPower = 'bat.w';
+ assert.equal(f.ctx.getLiveMeasurementView().discharge,null);
+});
+
+test('a new direct house meter sample between flow frames shows immediately, without reviving an unmapped mirror', () => {
+ const f=fixture(); f.ctx.window.__nwCfg.datapoints.consumptionTotal='meter.house.power';
+ f.state({'derived.core.building.loadTotalW':null,'derived.core.building.quality':'missing-grid',consumptionTotal:1200});
+ f.ctx.state['derived.core.building.loadTotalW'].ts -= 3000;
+ f.ctx.state['derived.core.building.quality'].ts -= 3000;
+ f.ctx.state.consumptionTotal.lc = f.now()-86400000;
+ f.flow(); assert.equal(f.text('centerPower'),'1200 W');
+ f.ctx.state.consumptionTotal.value=0; f.flow(); assert.equal(f.text('centerPower'),'0 W');
+ f.ctx.state.consumptionTotal.q=32; f.flow(); assert.equal(f.text('centerPower'),'--');
+ delete f.ctx.state.consumptionTotal.q;
+ f.ctx.state.consumptionTotal.ts -= 4500;
+ f.ctx.window.__nwPendingDirectSample = f.ctx.state.consumptionTotal;
+ assert.equal(f.ctx.getLiveMeasurementView().load,0);
+ delete f.ctx.window.__nwCfg.datapoints.consumptionTotal;
+ assert.equal(f.ctx.getLiveMeasurementView().load,null);
+});
+
+test('newer bad-quality direct sample invalidates a preceding frame from that meter without discarding an independent balance', () => {
+ const f=fixture();f.ctx.window.__nwCfg.datapoints.consumptionTotal='meter.house.power';
+ f.state({'derived.core.building.loadTotalW':900, 'derived.core.building.loadSource':'mapped:consumptionTotal', consumptionTotal:1200});
+ f.ctx.state.consumptionTotal.q=32;
+ assert.equal(f.ctx.getLiveMeasurementView().load,null);
+ f.ctx.state['derived.core.building.loadSource'].value='balance:pv+nvp+storage';
+ assert.equal(f.ctx.getLiveMeasurementView().load,900);
+});
+
+test('expired observations, loss of connection, and initial synchronization each show their own reason', () => {
+ const f=fixture();f.state({'derived.core.building.loadTotalW':350,'derived.core.building.quality':'ok'});
+ f.ctx.state['derived.core.building.loadTotalW'].ts -= 31000;
+ f.flow();assert.equal(f.text('centerPower'),'--');assert.match(f.text('energyFlowQuality'),/Messalter/);
+ f.ctx.window.__nwTariffLiveOnline=false;
+ f.flow();assert.match(f.text('energyFlowQuality'),/Live-Verbindung unterbrochen/);
+ f.ctx.window.__nwFlowConnection='connecting';
+ f.flow();assert.match(f.text('energyFlowQuality'),/erste Messstand/);
+});
+
+test('the dashboard timestamp uses a confirmed measurement even when its value is constant and never uses UI activity or wall time', () => {
+ const f=fixture();vm.runInContext(functions.get('nwLatestStateTimestamp'), f.ctx);
+ f.state({'ui.lastAction':1});assert.equal(f.ctx.nwLatestStateTimestamp(['consumptionTotal']),null);
+ f.state({consumptionTotal:0,'ui.lastAction':1});f.ctx.state.consumptionTotal.lc=f.now()-60000;f.ctx.state.consumptionTotal.ts-=1000;
+ assert.equal(f.ctx.nwLatestStateTimestamp(['consumptionTotal']),f.now()-1000);
+ f.advance(31000);assert.equal(f.ctx.nwLatestStateTimestamp(['consumptionTotal']),null);
+});
+
+test('actual SSE reconnect waits for a full snapshot, rejects degraded/incomplete sessions and preserves source ordering', () => {
+ const f=fixture();f.ctx.window.__nwCfg.datapoints.consumptionTotal='house.w';
+ let start;
+ function visit(node){if(ts.isFunctionDeclaration(node) && node.name?.text === 'startEvents') start=node.getText(ast); else ts.forEachChild(node,visit);}
+ visit(ast);assert.ok(start);
+ const clients=[],timers=[];
+ Object.assign(f.ctx, {
+  EventSource:class {constructor(){clients.push(this)}close(){this.closed=true}},
+  setTimeout:cb=>{timers.push(cb)},scheduleLiveTelemetryRender(){},lastInstallerConfigJson:null,refreshConfig(){},
+ });
+ vm.runInContext(start+';startEvents();',f.ctx);
+ const send=(client,msg)=>client.onmessage({data:JSON.stringify(msg)});
+ const row=(value,age=0)=>({value,ts:f.now()-age});
+ send(clients[0],{type:'init',payload:{'derived.core.building.loadTotalW':row(null,3000),
+   'derived.core.building.quality':row('missing-grid'),consumptionTotal:row(null,3000)}});
+ send(clients[0],{type:'update',payload:{consumptionTotal:row(1200,1000)}});
+ assert.equal(f.ctx.getLiveMeasurementView().load,1200);
+ send(clients[0],{type:'update',payload:{consumptionTotal:row(300,2000)}});
+ assert.equal(f.ctx.getLiveMeasurementView().load,1200);
+ clients[0].onerror();assert.equal(f.ctx.window.__nwTariffLiveOnline,false);
+ timers.shift()();
+ send(clients[1],{type:'update',payload:{consumptionTotal:row(1500)}});
+ assert.equal(f.ctx.getLiveMeasurementView().load,null);
+ send(clients[1],{type:'init',payload:{},degraded:true});
+ assert.equal(clients[1].closed,true);assert.equal(f.ctx.window.__nwTariffLiveOnline,false);
+ timers.shift()();send(clients[2],{type:'init',payload:{consumptionTotal:row(1700)}});
+ assert.equal(f.ctx.getLiveMeasurementView().load,1700);
+});
+
+test('the reported 1.2 kW PV case shows the battery direction and distinguishes a negative balance from a valid 2.5 kW load', () => {
+ const f=fixture(); f.state({'derived.core.pv.totalW':1200,'derived.core.grid.netW':-500,'derived.core.storage.netW':-1800,
+  'derived.core.building.loadTotalW':null,'derived.core.building.quality':'invalid-balance','evcs.totalPowerW':0});
+ f.flow();assert.equal(f.text('centerPower'),'--');assert.equal(f.text('batteryFlowDirection'),'Laden');assert.match(f.text('energyFlowQuality'),/Energiebilanz ist negativ/);
+ delete f.ctx.state['derived.core.building.quality'];f.flow();assert.match(f.text('energyFlowQuality'),/Energiebilanz ist negativ/);
+ f.ctx.state['derived.core.storage.netW'].value=1800;f.ctx.state['derived.core.building.loadTotalW'].value=2500;
+ f.flow();assert.equal(f.text('centerPower'),'2500 W');assert.equal(f.text('batteryFlowDirection'),'Entladen');assert.equal(f.text('energyFlowQuality'),'');
+});
+
+test('the missing source diagnostic identifies absent, expired and invalid grid observations', () => {
+ const f=fixture();f.state({'derived.core.grid.netW':null,'derived.core.building.loadTotalW':null,'derived.core.building.quality':'missing-grid'});
+ f.flow();assert.match(f.text('energyFlowQuality'),/keine gültige Netzmessung/);
+ f.ctx.state.gridPointPower={value:0,ts:f.now()-31000,lc:f.now()-86400000,q:0};
+ f.flow();assert.match(f.text('energyFlowQuality'),/Netzmessung ist zu alt/);
+ f.ctx.state.gridPointPower.q=32;f.flow();assert.match(f.text('energyFlowQuality'),/keine gültige Netzmessung/);
+});

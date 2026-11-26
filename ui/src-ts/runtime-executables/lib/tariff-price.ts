@@ -21,6 +21,16 @@ export function tariffPriceNumber(value: unknown): number | null {
     return Number.isFinite(parsed) ? parsed : null;
 }
 
+type VerifiedPriceRegistry = {
+    getVerifiedMeasurementTimestampMs?(key: string, now: number): number | null;
+};
+
+/** Age of a confirmed source sample, independent of connection heartbeats. */
+export function verifiedTariffAgeMs(dp: VerifiedPriceRegistry | null, key: string, now: number): number {
+    const stamp = dp?.getVerifiedMeasurementTimestampMs?.(key, now);
+    return typeof stamp === 'number' && Number.isFinite(stamp) && stamp > 0 && stamp <= now ? now - stamp : Infinity;
+}
+
 export type TariffPriceUnit = 'auto' | 'EUR/kWh' | 'ct/kWh' | 'EUR/MWh';
 
 /** Nur explizite Preis-Einheiten; ohne Vertrag bleibt der bisherige Auto-Pfad. */

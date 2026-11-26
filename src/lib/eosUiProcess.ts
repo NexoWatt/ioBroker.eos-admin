@@ -5,7 +5,14 @@ import { request as httpRequest } from 'node:http';
 import { join } from 'node:path';
 import { performance } from 'node:perf_hooks';
 import type { Request, Response, NextFunction } from 'express';
-import { UiProcessRpc, processError, processRecord, UI_OWNER_ASYNC, sanitizeUiProcessLog } from './eosUiProcessRpc';
+import {
+    UiProcessRpc,
+    processError,
+    processRecord,
+    UI_CONFIG_COMMIT_UNCONFIRMED_EXIT,
+    UI_OWNER_ASYNC,
+    sanitizeUiProcessLog,
+} from './eosUiProcessRpc';
 
 interface UiOwner {
     namespace: string;
@@ -372,10 +379,8 @@ export function createEosUiProcess(owner: UiOwner, bridge: UiBridge, options: Ui
         const result = Promise.resolve().then(operation);
         if (mutation) {
             pendingWrites.add(result);
-            void result.then(
-                () => pendingWrites.delete(result),
-                () => pendingWrites.delete(result),
-            );
+            const finished = (): boolean => pendingWrites.delete(result);
+            void result.then(finished, finished);
         }
         return result;
     };
@@ -457,13 +462,8 @@ export function createEosUiProcess(owner: UiOwner, bridge: UiBridge, options: Ui
             }
         }
     };
-    const scheduleRestart = (): void => {
-        if (stopped || paused || retry) {
-            return;
-        }
-        if (pendingWrites.size) {
-            health.state = 'failed';
-            health.lastError = 'EOS_UI_PROCESS_WRITE_COMPLETION_UNKNOWN';
+    const scheduleRestart = (token: string): void => {
+        if (token !== generation || child || stopped || paused || retry) {
             return;
         }
         if (health.restarts >= 5) {
@@ -498,6 +498,10 @@ export function createEosUiProcess(owner: UiOwner, bridge: UiBridge, options: Ui
         starting = (async () => {
             if (child) {
                 return;
+            }
+            if (retry) {
+                clearTimeout(retry);
+                retry = null;
             }
             generation = randomBytes(24).toString('hex');
             const token = generation;
@@ -544,7 +548,7 @@ export function createEosUiProcess(owner: UiOwner, bridge: UiBridge, options: Ui
                     fault('EOS_UI_PROCESS_SPAWN_FAILED');
                 }
             });
-            spawned.once('exit', () => {
+            spawned.once('exit', exitCode => {
                 rpc.close();
                 if (heartbeat) {
                     clearInterval(heartbeat);
@@ -562,15 +566,35 @@ export function createEosUiProcess(owner: UiOwner, bridge: UiBridge, options: Ui
                     writeFenced = true;
                     closeRequests();
                 }
+                // Track the outstanding controller calls before subscription cleanup can yield.
+                // The worker's IPC deadline or exit does not confirm their outcome.
+                const configUnconfirmed = exitCode === UI_CONFIG_COMMIT_UNCONFIRMED_EXIT;
+                const writesCompleted =
+                    !paused && !stopped && !configUnconfirmed && pendingWrites.size
+                        ? Promise.all(pendingWrites).then(
+                              () => true,
+                              () => false,
+                          )
+                        : null;
                 void cleanupSubscriptions().then(
-                    () => {
-                        if (!stopped && !paused) {
-                            scheduleRestart();
+                    async () => {
+                        if (configUnconfirmed && token === generation && !child && !paused && !stopped) {
+                            health.lastError = 'EOS_UI_PROCESS_WRITE_COMPLETION_UNKNOWN';
+                            return;
                         }
+                        if (writesCompleted && token === generation && !child && !paused && !stopped) {
+                            health.lastError = 'EOS_UI_PROCESS_WRITE_COMPLETION_UNKNOWN';
+                            if (!(await writesCompleted)) {
+                                return;
+                            }
+                        }
+                        scheduleRestart(token);
                     },
                     () => {
-                        health.state = 'failed';
-                        health.lastError = 'EOS_UI_PROCESS_CLEANUP_FAILED';
+                        if (token === generation && !child && !paused && !stopped) {
+                            health.state = 'failed';
+                            health.lastError = 'EOS_UI_PROCESS_CLEANUP_FAILED';
+                        }
                     },
                 );
             });
@@ -648,6 +672,7 @@ export function createEosUiProcess(owner: UiOwner, bridge: UiBridge, options: Ui
             clearTimeout(retry);
         }
         retry = null;
+        health.nextRestartAt = 0;
         if (heartbeat) {
             clearInterval(heartbeat);
         }

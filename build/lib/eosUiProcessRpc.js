@@ -1,12 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UI_OWNER_LOCAL = exports.UI_OWNER_ASYNC = exports.UiProcessRpc = exports.UI_PROCESS_MAX_FRAME = void 0;
+exports.UI_OWNER_LOCAL = exports.UI_OWNER_ASYNC = exports.UiProcessRpc = exports.UI_CONFIG_COMMIT_UNCONFIRMED_EXIT = exports.UI_PROCESS_MAX_FRAME = void 0;
 exports.processError = processError;
 exports.processRecord = processRecord;
 exports.publicProcessError = publicProcessError;
 exports.sanitizeUiProcessLog = sanitizeUiProcessLog;
 /** Private IPC is a process boundary, not a sandbox against code running as the same OS user. */
 exports.UI_PROCESS_MAX_FRAME = 16 * 1024 * 1024;
+/** A protected configuration commit timed out; recovery requires an explicit start. */
+exports.UI_CONFIG_COMMIT_UNCONFIRMED_EXIT = 75;
 const MAX_PENDING = 256;
 const MAX_QUEUED_BYTES = 32 * 1024 * 1024;
 function processError(code) {

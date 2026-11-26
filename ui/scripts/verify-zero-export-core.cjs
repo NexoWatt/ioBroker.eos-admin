@@ -42,7 +42,7 @@ function fixture({ enabled = true, rodW = 0, storagePresent = false, evcsW = 0 }
     _thermalBudgetUsedW: 8000,
     _nwGetStorageControlAuthority() { return { selectedTopology: storagePresent ? 'single' : 'none', writerActive: storagePresent }; },
     _nwResolveBatteryFlowFromCache() {
-      return { chargeW: values.storageChargeW, dischargeW: values.storageDischargeW, signedW: values.storageDischargeW - values.storageChargeW, src: 'batteryPower', derived: false, staleMs: { batteryPower: 0 } };
+      return { chargeW: values.storageChargeW, dischargeW: values.storageDischargeW, signedW: values.storageDischargeW - values.storageChargeW, src: 'batteryPower', observedAt: storagePresent ? clock : null, derived: false, staleMs: { batteryPower: 0 } };
     },
     log: { debug() {}, info() {}, warn() {}, error() {} },
     async setStateAsync() {}, updateValue() {},

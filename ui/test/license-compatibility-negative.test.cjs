@@ -1,5 +1,8 @@
 'use strict';
-/** Zweiter technischer Review: echte Lizenzmethoden und enge Guard-Ausnahme;
+/** Historische Negativsuite des eigenständigen NexoWatt-UI-Adapters vor der EOS-Zusammenführung.
+ * Für dessen damaligen Quellstand gelten die lokalen HMAC- und Trialmethoden.
+ * Der integrierte EOS-Adapter prüft den zentralen Lizenzvertrag unter test/eos-license*.test.cjs.
+ * Zweiter technischer Review: echte Lizenzmethoden und enge Guard-Ausnahme;
  * keine Material-/Schlüsselliterale, erzeugte Schlüssel bleiben ausschließlich im Speicher. */
 const test = require('node:test');
 const assert = require('node:assert/strict');

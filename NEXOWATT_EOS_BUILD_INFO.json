@@ -1,19 +1,19 @@
 {
-  "version": "9.0.32",
+  "version": "9.0.33",
   "channel": "next",
   "baseFrontend": "Rebuilt from official Admin 8.3.5 sources plus reviewed EOS integration using React 19 and Vite; see source-bound frontend manifest.",
   "runtimeEntry": "vite-manifest",
-  "releaseType": "unified-live-building-power",
-  "release": "unified-live-building-power",
-  "label": "v9-0-32",
+  "releaseType": "unified-control-reliability",
+  "release": "unified-control-reliability",
+  "label": "v9-0-33",
   "notes": [
-    "The energy flow uses measured building power when valid and otherwise checks the power balance.",
-    "Invalid or missing inputs are reported without inventing a building load.",
-    "The target-plant acceptance check is separate from software verification."
+    "Grid control checks original measurement quality and time at the final power decision.",
+    "Separate service processes and local hardware require distinct verification.",
+    "See the version-specific report for release evidence and outstanding plant checks."
   ],
   "changes": [
-    "Resolve live building consumption from valid measured or balanced power",
-    "Distinguish missing readings from inconsistent power balances"
+    "Validate physical grid observations and control limits",
+    "Improve energy-flow measurement handling and recovery"
   ],
   "brandingCacheVersion": 7110,
   "shellCacheVersion": 7110,
@@ -27,7 +27,7 @@
     "commit": "6f77eedf525813a7a61d79188d1ff05dffd05086"
   },
   "product": "NexoWatt EOS",
-  "status": "9.0.32 controlled integration test release. See docs/reports/unified-9.0.32 for software results and pending target-plant acceptance.",
+  "status": "9.0.33 controlled integration test release. See docs/reports/unified-9.0.33 for results and pending plant acceptance.",
   "sourceComponents": {
     "admin": "8.0.2",
     "ui": "1.0.38",
@@ -37,5 +37,5 @@
     "backup": "1.0.10",
     "ocpp": "0.4.4 integrated hosted module, based on iobroker.ocpp21 0.4.3"
   },
-  "repositoryEntry": "nexowatt-eos-admin-repository-entry-v9-0-32.json"
+  "repositoryEntry": "nexowatt-eos-admin-repository-entry-v9-0-33.json"
 }

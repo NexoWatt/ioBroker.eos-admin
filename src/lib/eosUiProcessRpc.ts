@@ -3,6 +3,8 @@ import type { ChildProcess } from 'node:child_process';
 
 /** Private IPC is a process boundary, not a sandbox against code running as the same OS user. */
 export const UI_PROCESS_MAX_FRAME = 16 * 1024 * 1024;
+/** A protected configuration commit timed out; recovery requires an explicit start. */
+export const UI_CONFIG_COMMIT_UNCONFIRMED_EXIT = 75;
 const MAX_PENDING = 256;
 const MAX_QUEUED_BYTES = 32 * 1024 * 1024;
 type Endpoint = Pick<ChildProcess, 'on' | 'removeListener' | 'send' | 'connected'>;

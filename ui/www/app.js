@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/app.ts
- * Quell-Hash: sha256:6f7c6578bba0b6274f930757b2fa377fde413f7dde047ba298dfed130c30eb71
+ * Quell-Hash: sha256:b13e9e0e7f43fd59983d78f50e86e3b7fdf8f41c942fc607fce76311572a0231
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -470,7 +470,15 @@ const _RENDER_MIN_INTERVAL_MS = 120;
  * Zusammenhang: Teil von Kunden-LIVE-Frontend: Dashboard, Energiefluss, Schnellsteuerung; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
  * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
  */
-function scheduleRender(force = false){
+function scheduleRender(force = false, telemetryFrame = false){
+  // Settings changes and modal actions must not paint intermediate meter values.
+  // Keep immediate button feedback separate from the shared dashboard frame.
+  if (!telemetryFrame && document.getElementById('energyWebSvg')) {
+    try { window.__evcsApply?.(key => state[key]?.value, state); }
+    catch (error) { console.warn('EVCS controls', error); }
+    scheduleLiveTelemetryRender(false);
+    return;
+  }
   if (_renderScheduled && !force) return;
   _renderScheduled = true;
 
@@ -487,54 +495,57 @@ function scheduleRender(force = false){
     _renderScheduled = false;
     if (document.visibilityState !== 'visible' || _liveTelemetryPaused) return;
     _lastRenderTs = performance.now();
-    try{ render(); }catch(_e){}
+    window.__nwLiveFrameNow = Date.now();
+    try { render(); } catch (_e) {}
+    finally { delete window.__nwLiveFrameNow; }
   }, wait);
 }
 
-// Kundenanzeige: Messwerte des Energieflussmonitors werden bewusst nur alle 5 Sekunden
+// Kundenanzeige: Messwerte des Energieflussmonitors werden bewusst nur alle 10 Sekunden
 // neu gerendert. Die Backend-Messung und sämtliche EMS-Regelkreise bleiben unverändert
 // schnell; gedrosselt wird ausschließlich die sichtbare LIVE-Darstellung, damit kurze
 // NVP-/Speicher-Messversätze nicht als hektisches Springen erscheinen.
-const LIVE_TELEMETRY_RENDER_INTERVAL_MS = 5000;
+const LIVE_TELEMETRY_RENDER_INTERVAL_MS = 10000;
+const OTHER_PAGE_TELEMETRY_INTERVAL_MS = 5000;
 let _liveTelemetryRenderTimer = null;
 let _lastLiveTelemetryRenderTs = null;
 let _liveTelemetryPaused = false;
 
 /**
  * Code-Teil: scheduleLiveTelemetryRender
- * Zweck: Bündelt häufige SSE-Messwertupdates auf einen festen 5-Sekunden-Anzeigetakt.
+ * Zweck: Bündelt häufige SSE-Messwertupdates auf einen festen 10-Sekunden-Anzeigetakt.
  * Zusammenhang: Verändert keine Statewerte und keine Regelung; nur render() im LIVE-Frontend
- * wird verzögert. Initialdaten, Konfigurationsänderungen und bewusste UI-Aktionen dürfen
- * weiterhin sofort gerendert werden.
+ * wird verzögert. Erstansicht und Verbindungswechsel werden unmittelbar sichtbar.
  */
 function scheduleLiveTelemetryRender(force = false){
   // Eine monotone Zeitbasis verhindert Verzögerungen bei NTP-/Uhrzeitkorrekturen.
   // Eingehende SSE-Werte werden auch verborgen gepuffert, nur die Anzeige pausiert.
   if (_liveTelemetryPaused || document.visibilityState !== 'visible') return;
   const now = performance.now();
+  const interval = document.getElementById('energyWebSvg') ? LIVE_TELEMETRY_RENDER_INTERVAL_MS : OTHER_PAGE_TELEMETRY_INTERVAL_MS;
   const elapsed = _lastLiveTelemetryRenderTs === null ? Infinity : now - _lastLiveTelemetryRenderTs;
 
-  if (force || elapsed >= LIVE_TELEMETRY_RENDER_INTERVAL_MS) {
+  if (force || elapsed >= interval) {
     if (_liveTelemetryRenderTimer !== null) {
       clearTimeout(_liveTelemetryRenderTimer);
       _liveTelemetryRenderTimer = null;
     }
     _lastLiveTelemetryRenderTs = now;
-    scheduleRender(true);
+    scheduleRender(true, true);
     return;
   }
 
   if (_liveTelemetryRenderTimer !== null) return;
-  const wait = Math.max(0, LIVE_TELEMETRY_RENDER_INTERVAL_MS - elapsed);
+  const wait = Math.max(0, interval - elapsed);
   _liveTelemetryRenderTimer = setTimeout(() => {
     _liveTelemetryRenderTimer = null;
     if (_liveTelemetryPaused || document.visibilityState !== 'visible') return;
     _lastLiveTelemetryRenderTs = performance.now();
-    scheduleRender(true);
+    scheduleRender(true, true);
   }, wait);
 }
 
-// Auch ohne neue SSE-Werte alle 5 s den aktuellen Snapshot neu bewerten. Dadurch
+// Auch ohne neue SSE-Werte alle 10 s den aktuellen Snapshot neu bewerten. Dadurch
 // altern echte Messzeitstempel sichtbar; das Rendering erzeugt keine neue Messung.
 function refreshLiveMeasurementAge() {
   if (document.visibilityState === 'visible' && document.getElementById('energyWebSvg')) scheduleLiveTelemetryRender(false);
@@ -557,7 +568,7 @@ function resumeLiveTelemetryRendering() {
   scheduleLiveTelemetryRender(true);
 }
 // Nach Tab-Rückkehr / BFcache sofort den neuesten gepufferten Stand zeigen,
-// danach einen einzigen 5-s-Takt. Kein Hintergrundrender und keine Timer-Duplikate.
+// danach einen einzigen 10-s-Takt. Kein Hintergrundrender und keine Timer-Duplikate.
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible') resumeLiveTelemetryRendering();
   else pauseLiveTelemetryRendering();
@@ -1862,28 +1873,13 @@ function nwFormatDashboardTimestamp(ts) {
  */
 function nwLatestStateTimestamp(keys) {
   const st = window.latestState || state || {};
-  let best = 0;
-  /**
-   * Code-Teil: scanKey
-   * Zweck: Kapselt einen lokalen Verarbeitungsschritt, damit Aufrufer nicht direkt in Detaildaten eingreifen.
-   * Zusammenhang: Teil von Kunden-LIVE-Frontend: Dashboard, Energiefluss, Schnellsteuerung; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
-   * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
-   */
-  const scanKey = (k) => {
-    const rec = st && st[k];
-    const ts = rec && Number(rec.ts);
-    if (Number.isFinite(ts) && ts > best) best = ts;
-  };
-  if (Array.isArray(keys)) keys.forEach(scanKey);
-  if (!best) {
-    try {
-      Object.keys(st || {}).forEach((k) => {
-        const ts = Number(st[k] && st[k].ts);
-        if (Number.isFinite(ts) && ts > best) best = ts;
-      });
-    } catch (_e) {}
+  const now = window.__nwLiveFrameNow ?? Date.now(), age = getFlowFreshMaxAgeMs(), online = window.__nwTariffLiveOnline !== false;
+  let best = null;
+  for (const key of keys) {
+    if (window.NexoWattLiveDisplay.read(st, key, now, age, online) === null) continue;
+    best = Math.max(best ?? 0, Number(st[key].ts));
   }
-  return best || Date.now();
+  return best;
 }
 /**
  * Code-Teil: nwSetLiveOnline
@@ -1902,7 +1898,7 @@ function nwSetLiveOnline(isOnline) {
   if (dot) dot.classList.toggle('is-offline', !online);
   if (!online) {
     for (const id of ['pvPower', 'gridBuyPower', 'gridSellPower', 'storagePower', 'consumptionTotal', 'sidePvPower', 'sideBuildingPower', 'sideBatteryPower', 'sideGridBuyPower', 'sideGridSellPower', 'pvVal', 'gridVal', 'restVal', 'centerPower']) setText(id, '--');
-    setText('batterySocIn', '-- %'); setText('sideStorage', '-- %'); setText('sideBatterySoc', '-- %');
+    setText('batteryFlowDirection', ''); setText('batterySocIn', '-- %'); setText('sideStorage', '-- %'); setText('sideBatterySoc', '-- %');
     setText('sideEms', 'Verbindung unterbrochen'); setText('sideGridStatus', 'Messstatus unbekannt');
   }
 }
@@ -1940,7 +1936,7 @@ function updateDashboardShellUi(data) {
   setText('sideStorage', Number.isFinite(soc) ? `${Math.round(soc)} %` : '-- %');
   setText('sideBatterySoc', Number.isFinite(soc) ? `${Math.round(soc)} %` : '-- %');
   const p14 = !!d('ems.core.para14aActive') || !!d('para14a.active'), peak = String(d('peakShaving.control.status') || '').trim(), safety = String(d('chargingManagement.audit.safetyStage') || '').trim(), p14Fallback = d('para14a.communicationFallbackActive') === true;
-  const health = window.NexoWattLiveDisplay?.status(window.latestState || state || {}, window.__nwTariffLiveOnline !== false, Date.now(), getFlowFreshMaxAgeMs());
+  const health = window.NexoWattLiveDisplay?.status(window.latestState || state || {}, window.__nwTariffLiveOnline !== false, window.__nwLiveFrameNow ?? Date.now(), getFlowFreshMaxAgeMs());
   setText('sideEms', safety === 'EOS-SAFETY-STOP' ? 'Safety aktiv' : health?.ems || 'Status unbekannt');
   setText('sideGridStatus', p14Fallback ? '§14a Fallback' : (p14 ? '§14a aktiv' : (peak === 'active' ? 'Peak aktiv' : health?.grid || 'Messstatus unbekannt')));
   setText('sideStatusText', health?.summary || 'Betriebsstatus unbekannt');
@@ -1959,8 +1955,9 @@ function updateDashboardShellUi(data) {
   if (evcsAvailable) setText('sideEvcsPower', evcsPower === null ? '--' : formatFlowPower(Math.abs(evcsPower)));
 
   const ts = nwLatestStateTimestamp([
-    'pvPower', 'productionTotal', 'consumptionTotal', 'gridPower', 'gridBuyPower',
-    'gridSellPower', 'storageSoc', 'storagePower', 'consumptionEvcs'
+    'derived.core.pv.totalW', 'derived.core.grid.netW', 'derived.core.storage.netW', 'derived.core.building.loadTotalW',
+    'pvPower', 'productionTotal', 'consumptionTotal', 'gridPointPower', 'gridBuyPower', 'gridSellPower',
+    'batteryPower', 'storageChargePower', 'storageDischargePower', 'storageSoc', 'consumptionEvcs', 'evcs.totalPowerW'
   ]);
   setText('sideTimestamp', nwFormatDashboardTimestamp(ts));
 }
@@ -2956,8 +2953,9 @@ function getStateAgeMs(key) {
   try {
     const rec = state && state[key];
     const ts = Number(rec && rec.ts);
-    if (!Number.isFinite(ts) || ts <= 0 || ts > Date.now() + 5000) return null;
-    return Math.max(0, Date.now() - ts);
+    const now = window.__nwLiveFrameNow ?? Date.now();
+    if (!Number.isFinite(ts) || ts <= 0 || ts > now + 5000) return null;
+    return Math.max(0, now - ts);
   } catch (_e) {
     return null;
   }
@@ -2986,7 +2984,7 @@ function getFlowFreshMaxAgeMs() {
  */
 function getFreshFlowNumber(key, opts = {}) {
   if (opts.onlyIfMapped && !isMappedDatapoint(key)) return null;
-  return window.NexoWattLiveDisplay?.read(state, key, Date.now(), getFlowFreshMaxAgeMs(), window.__nwTariffLiveOnline !== false) ?? null;
+  return window.NexoWattLiveDisplay?.read(state, key, window.__nwLiveFrameNow ?? Date.now(), getFlowFreshMaxAgeMs(), window.__nwTariffLiveOnline !== false) ?? null;
 }
 /**
  * Code-Teil: getStableFlowNumber
@@ -3043,29 +3041,45 @@ function getBalanceDerivedBatteryFlow(opts = {}) {
     const hasDirectLoad = isMappedDatapoint('consumptionTotal') || isMappedDatapoint('housePower');
     if (!hasDirectLoad) return null;
 
-    const load = coerceNumber(read('consumptionTotal') ?? read('housePower'));
-    if (load === null) return null;
+    const load = (isMappedDatapoint('consumptionTotal') ? read('consumptionTotal') : null)
+      ?? (isMappedDatapoint('housePower') ? read('housePower') : null);
+    if (load === null || load < 0) return null;
 
-    const grid = getGridImportExport(read);
-    if (!grid || grid.rawBuy === null || grid.rawSell === null) return null;
     const nvp = st['ems.gridMeasurementFresh'];
-    if (nvp && (nvp.value !== true || getStateAgeMs('ems.gridMeasurementFresh') === null || getStateAgeMs('ems.gridMeasurementFresh') > getFlowFreshMaxAgeMs())) return null;
-
-    let pv = coerceNumber(read('pvPower'));
-    if (pv === null && isMappedDatapoint('productionTotal')) pv = coerceNumber(read('productionTotal'));
+    if (nvp && (nvp.value !== true || (nvp.q !== undefined && nvp.q !== 0) || getStateAgeMs('ems.gridMeasurementFresh') === null || getStateAgeMs('ems.gridMeasurementFresh') > getFlowFreshMaxAgeMs())) return null;
+    let net;
+    if (Object.hasOwn(st, 'derived.core.grid.netW')) {
+      net = read('derived.core.grid.netW');
+      if (net === null) return null;
+    } else {
+      const grid = getGridImportExport(read);
+      if (!grid || grid.rawBuy === null || grid.rawSell === null) return null;
+      net = grid.buy - grid.sell;
+      if (st['settings.flowInvertGrid']?.value) net = -net;
+    }
+    const pv = Object.hasOwn(st, 'derived.core.pv.totalW') ? read('derived.core.pv.totalW')
+      : read('pvPower') ?? (isMappedDatapoint('productionTotal') ? read('productionTotal') : null);
     if (pv === null) return null;
 
-    let production = Math.max(0, Math.abs(Number(pv) || 0));
-    for (let i = 1; i <= 5; i++) {
-      const p = coerceNumber(read(`producer${i}Power`));
-      if (p !== null) production += Math.max(0, Math.abs(p));
+    let production = Math.abs(pv);
+    if (Object.hasOwn(st, 'derived.core.production.extraW')) {
+      const extra = read('derived.core.production.extraW');
+      if (extra === null) return null;
+      production += extra;
+    } else {
+      for (let i = 1; i <= 5; i++) {
+        const key = `producer${i}Power`;
+        const power = read(key);
+        if (power === null && isMappedDatapoint(key)) return null;
+        if (power !== null) production += Math.abs(power);
+      }
     }
 
-    const signed = Math.round((Math.max(0, load) - production - Math.max(0, grid.buy || 0) + Math.max(0, grid.sell || 0)));
+    const signed = Math.round(load - production - net);
     if (!Number.isFinite(signed) || Math.abs(signed) <= deadbandW) return null;
 
     // Plausibilitätsbremsen gegen kurze Messversätze oder unbekannte Verbraucher.
-    const activity = production + Math.max(0, load) + Math.max(0, grid.buy || 0) + Math.max(0, grid.sell || 0);
+    const activity = production + load + Math.abs(net);
     if (activity < 500) return null;
     if (Math.abs(signed) > Math.max(3000, activity * 1.15)) return null;
     if (signed < 0 && soc >= 99.5) return null;
@@ -3275,16 +3289,22 @@ function getLiveMeasurementView() {
   }
   const hasStorageObservation = state && Object.hasOwn(state, 'derived.core.storage.netW');
   const farm = nwStorageFarmFeatureFromConfig(window.__nwCfg || {}, state || {});
-  const farmView = farm ? window.NexoWattLiveDisplay?.farm(state, Date.now(), window.__nwTariffLiveOnline !== false) : null;
+  const farmView = farm ? window.NexoWattLiveDisplay?.farm(state, window.__nwLiveFrameNow ?? Date.now(), window.__nwTariffLiveOnline !== false) : null;
   let charge = null, discharge = null, batteryDerived = false;
-  if (hasStorageObservation) {
+  if (farmView) {
+    ({ charge, discharge } = farmView);
+  } else if (hasStorageObservation) {
     const net = fresh('derived.core.storage.netW');
     if (net !== null) {
       charge = Math.max(0, -net);
       discharge = Math.max(0, net);
+    } else if (!farm && !isMappedDatapoint('batteryPower') && !isMappedDatapoint('storageChargePower') && !isMappedDatapoint('storageDischargePower')) {
+      const estimate = getBalanceDerivedBatteryFlow();
+      if (estimate) {
+        ({ chargeW: charge, dischargeW: discharge } = estimate);
+        batteryDerived = true;
+      }
     }
-  } else if (farmView) {
-    ({ charge, discharge } = farmView);
   } else {
     const battery = getNormalizedBatteryFlow();
     const missing = ['missing', 'mapped-missing', 'storageFarm-missing-power', 'storageFarm-unavailable', 'stale-or-missing'];
@@ -3293,8 +3313,23 @@ function getLiveMeasurementView() {
       batteryDerived = battery.derived === true;
     }
   }
-  const load = fresh(state && Object.hasOwn(state, 'derived.core.building.loadTotalW')
-    ? 'derived.core.building.loadTotalW' : 'consumptionTotal');
+  // A direct meter can arrive one SSE batch before the backend publishes the new balance.
+  // Unmapped consumptionTotal may be a mirror of the previous balance; never revive it here.
+  const directKey = isMappedDatapoint('consumptionTotal') ? 'consumptionTotal'
+    : isMappedDatapoint('housePower') ? 'housePower' : null;
+  const directLoad = directKey ? fresh(directKey) : null;
+  const canonicalKey = 'derived.core.building.loadTotalW';
+  const canonical = state?.[canonicalKey];
+  let load = canonical ? fresh(canonicalKey) : fresh('consumptionTotal');
+  const directRow = directKey ? state?.[directKey] : null;
+  const evaluatedAt = Math.max(canonical?.ts || 0, state?.['derived.core.building.loadSource']?.ts || 0, state?.['derived.core.building.quality']?.ts || 0);
+  if (directLoad !== null && directLoad >= 0 && (!canonical || directRow.ts > evaluatedAt || directRow === window.__nwPendingDirectSample)) {
+    load = directLoad;
+  } else if (directKey && state?.[directKey] && state?.['derived.core.building.loadSource']?.value === 'mapped:' + directKey
+    && (directRow === window.__nwPendingDirectSample || directRow.ts >= (canonical?.ts ?? 0))) {
+    // An invalidating sample for the same physical meter takes precedence immediately.
+    load = null;
+  }
   const pv = getCanonicalPvPowerW(fresh);
   const soc = farmView ? farmView.soc : farm ? fresh('storageFarm.totalSoc') ?? fresh('storageFarm.medianSoc') : fresh('storageSoc');
   return {
@@ -3596,6 +3631,7 @@ async function chargingControlFetch(url, options = {}) {
 }
 
 async function bootstrap() {
+  window.__nwFlowConnection = 'connecting';
   let cfg = {};
   try {
     const cfgRes = await fetch('/config');
@@ -3778,8 +3814,19 @@ const refreshConfig = async () => {
     }
   }
 };
-  const snap = await fetch('/api/state').then(r => r.json());
-  state = snap || {};
+  try {
+    const response = await fetch('/api/state', { cache: 'no-store' });
+    if (!response.ok) throw new Error('HTTP ' + response.status);
+    const snap = await response.json();
+    if (!snap || typeof snap !== 'object' || Array.isArray(snap)) throw new Error('invalid snapshot');
+    state = snap;
+    window.__nwFlowConnection = 'snapshot';
+    document.getElementById('liveDot')?.classList.add('live');
+    nwSetLiveOnline(true);
+  } catch (error) {
+    // The EventSource below still obtains a complete snapshot after an HTTP bootstrap error.
+    console.warn('[live-state]', error);
+  }
   try { lastInstallerConfigJson = (state && state['installer.configJson'] && state['installer.configJson'].value) || null; } catch (_e) {}
   // merge cfg.settings into state if missing (for initial checkbox values)
   try{
@@ -3819,16 +3866,47 @@ const refreshConfig = async () => {
   try{
     const es = new EventSource((window.NW_RUNTIME?.url('/events') ?? '/events'));
     const dot = document.getElementById('liveDot');
-    if (dot) dot.classList.remove('live');
-    es.onopen = () => { if (dot) dot.classList.add('live'); try{ nwSetLiveOnline(true); }catch(_e){} };
-    es.onerror = () => { if (dot) dot.classList.remove('live'); try{ nwSetLiveOnline(false); }catch(_e){} try{ es.close(); }catch(_){ } setTimeout(startEvents, 3000); };
+    let initialized = false;
+    let closed = false;
+    const reconnect = () => {
+      if (closed) return;
+      closed = true;
+      window.__nwFlowConnection = 'disconnected';
+      dot?.classList.remove('live');
+      nwSetLiveOnline(false);
+      es.close();
+      scheduleLiveTelemetryRender(true);
+      setTimeout(startEvents, 3000);
+    };
+    es.onerror = reconnect;
     es.onmessage = (ev) => {
       try {
         const msg = JSON.parse(ev.data);
-        const isInitMessage = msg.type === 'init' && msg.payload;
-        const isUpdateMessage = msg.type === 'update' && msg.payload;
-        if (isInitMessage) { state = msg.payload; window.latestState = state; }
-        else if (isUpdateMessage) { Object.assign(state, msg.payload); window.latestState = state; }
+        if (closed || !msg || !msg.payload || typeof msg.payload !== 'object' || Array.isArray(msg.payload)) return;
+        const isInitMessage = msg.type === 'init';
+        const isUpdateMessage = msg.type === 'update';
+        if (isInitMessage) {
+          if (msg.degraded === true) { reconnect(); return; }
+          state = msg.payload;
+          window.latestState = state;
+          initialized = true;
+          window.__nwPendingDirectSample = null;
+          window.__nwFlowConnection = 'ready';
+          dot?.classList.add('live');
+          nwSetLiveOnline(true);
+        } else if (isUpdateMessage && initialized) {
+          const hasBalance = Object.hasOwn(msg.payload, 'derived.core.building.loadTotalW');
+          if (hasBalance) window.__nwPendingDirectSample = null;
+          if (msg.payload.consumptionTotal || msg.payload.housePower) {
+            const key = isMappedDatapoint('consumptionTotal') ? 'consumptionTotal'
+              : isMappedDatapoint('housePower') ? 'housePower' : null;
+            const sample = key ? msg.payload[key] : null;
+            if (sample && sample.ts > 0 && state[key]?.ts > sample.ts) delete msg.payload[key];
+            else if (sample && !hasBalance) window.__nwPendingDirectSample = sample;
+          }
+          Object.assign(state, msg.payload);
+          window.latestState = state;
+        } else return;
 
         // App-Center config changed? Refresh /config so tiles + slot layout update without reload.
         try {
@@ -3843,7 +3921,14 @@ const refreshConfig = async () => {
         else if (isUpdateMessage) scheduleLiveTelemetryRender(false);
       } catch (e) { console.warn(e); }
     };
-  } catch(e){ console.warn('events', e); setTimeout(startEvents, 3000); }
+  } catch (e) {
+    console.warn('events', e);
+    window.__nwFlowConnection = 'disconnected';
+    document.getElementById('liveDot')?.classList.remove('live');
+    nwSetLiveOnline(false);
+    scheduleLiveTelemetryRender(true);
+    setTimeout(startEvents, 3000);
+  }
 }
 startEvents();
 
@@ -8707,7 +8792,8 @@ function updateEnergyWeb() {
   const flowBalance = window.NexoWattPowerMeasurements?.resolveFlowBalance({
     load: measurements.load, ev: evcsPowerW === null ? null : c2,
     buildingQuality: measurements.load === null
-      ? window.NexoWattLiveDisplay?.buildingQuality?.(state, Date.now(), getFlowFreshMaxAgeMs(), window.__nwTariffLiveOnline !== false)
+      ? (window.__nwFlowConnection === 'connecting' ? 'awaiting-snapshot'
+        : window.NexoWattLiveDisplay?.buildingQuality?.(state, window.__nwLiveFrameNow ?? Date.now(), getFlowFreshMaxAgeMs(), window.__nwTariffLiveOnline !== false, isMappedDatapoint))
       : null,
     consumers: extrasConsumersSum, pv: measurements.pv,
     producers: state && Object.hasOwn(state, 'derived.core.production.extraW') ? getFreshFlowNumber('derived.core.production.extraW')
@@ -8766,6 +8852,11 @@ function updateEnergyWeb() {
   // EV & Batterie Texte
   T('c2Val', evcsPowerW === null ? '--' : formatFlowPower(evShowVal));
   T('restVal', measurements.charge === null || measurements.discharge === null ? '--' : batShowVal ? (batRev ? ('-'+formatFlowPower(batShowVal)) : formatFlowPower(batShowVal)) : formatFlowPower(0));
+  const hasBatteryDirection = measurements.charge !== null && measurements.discharge !== null;
+  const grossBoth = batCharge > 0 && batDischarge > 0;
+  const direction = !hasBatteryDirection || !batShowVal ? (grossBoth ? 'Netto 0' : '')
+    : batRev ? (grossBoth ? 'Netto laden' : 'Laden') : (grossBoth ? 'Netto entladen' : 'Entladen');
+  T('batteryFlowDirection', direction);
   T('centerPower', loadDisplay === null ? '--' : formatFlowPower(loadDisplay));
   const balanceStatus = flowBalance.mismatchW === null ? (flowBalance.status || (measurements.batteryDerived ? 'Batterieleistung aus Energiebilanz berechnet' : ''))
     : `Bilanzabweichung ${formatFlowPower(Math.abs(flowBalance.mismatchW))} – Messpunkte, Vorzeichen und Zeitstempel prüfen`;
