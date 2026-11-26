@@ -126,12 +126,16 @@ test('backup byte-count mismatches abort the response without exposing an unboun
 test('read-only migration page and status require fresh administrator authentication and expose no private journal fields', async t => {
     const f = await fixture(t);
     f.migration({ phase: 'BLOCKED', code: 'EOS_MIGRATION_PROTECTED_FIELDS_UNAVAILABLE', updatedAt: Date.now(),
+        issues: [{ id: 'eebus', source: 'eebus.0', code: 'EOS_MIGRATION_PROTECTED_FIELDS_UNAVAILABLE', native: 'DO_NOT_EXPOSE' },
+            { id: 'ocpp', source: 'ocpp21.1', code: 'EOS_NOT_IN_INVENTORY' }, { id: 'eebus', source: 'eebus.0', code: 'DO_NOT_EXPOSE<script>' }],
         native: { privateKey: 'DO_NOT_EXPOSE' }, config: { password: 'DO_NOT_EXPOSE' },
         sources: [{ id: 'eebus', source: 'eebus.0', namespacePreserved: true, nativeHash: 'DO_NOT_EXPOSE', native: { privateKey: 'DO_NOT_EXPOSE' } },
             { id: 'devices', source: '<img src=x onerror=DO_NOT_EXPOSE>' }] });
     const response = await f.request('/api/eos/migration'); assert.equal(response.status, 200);
     const value = await response.json();
-    assert.deepEqual(Object.keys(value).sort(), ['code', 'existingAdaptersUnchanged', 'phase', 'sources', 'updatedAt']);
+    assert.deepEqual(Object.keys(value).sort(), ['blockedProcesses', 'code', 'existingAdaptersUnchanged', 'issues', 'phase', 'sources', 'updatedAt']);
+    assert.deepEqual(value.issues, [{ id: 'eebus', source: 'eebus.0', code: 'EOS_MIGRATION_PROTECTED_FIELDS_UNAVAILABLE' }]);
+    assert.equal(value.blockedProcesses, null);
     assert.deepEqual(value.sources, [{ id: 'eebus', source: 'eebus.0', namespacePreserved: false }]);
     assert.equal(value.existingAdaptersUnchanged, true); assert.doesNotMatch(JSON.stringify(value), /DO_NOT_EXPOSE|privateKey|nativeHash/);
     const redirect = await f.request('/migration'); assert.equal(redirect.status, 308); assert.equal(redirect.headers.get('location'), '/migration/');

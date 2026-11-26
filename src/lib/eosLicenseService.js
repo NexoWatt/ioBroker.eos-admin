@@ -420,6 +420,14 @@ class EosLicenseService {
             this.keys = null;
             this.code = safeCode(error);
         }
+        if (this.claims && this.options.onVerified) {
+            // Reporting successful local verification must never change the license decision.
+            try {
+                this.options.onVerified();
+            } catch {
+                this.adapter.log.warn('EOS_LICENSE_RUNTIME_NOTIFICATION_FAILED');
+            }
+        }
         return this.claims;
     }
 

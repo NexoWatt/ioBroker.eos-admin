@@ -210,20 +210,24 @@ for (const event of ['instance', 'alive']) {
     });
 }
 
-test('enabling integrated OCPP still rejects an active external owner without creating a worker or device command', async t => {
+test('integrated OCPP starts only a passive PID while the external owner retains its port and configuration', async t => {
     let permitted = false;
     const x = await createHost(t, { enabled: false }, { processEnabled: () => permitted });
     x.owner.getObjectViewAsync = async () => ({ rows: [{ value: {
         _id: 'system.adapter.ocpp21.0', type: 'instance', ts: Date.now(),
         common: { enabled: true, host: 'controller' },
     } }] });
-    await x.host.enableProcessModule('ocpp');
-    assert.equal(x.host.readConfig('ocpp').enabled, true);
+    await assert.rejects(x.host.enableProcessModule('ocpp'), {code:'EOS_MODULE_LEGACY_RUNNING'});
+    assert.equal(x.host.readConfig('ocpp').enabled, false);
     assert.equal(x.host.entries.get('ocpp').module, null);
     permitted = true;
-    await assert.rejects(x.host.controlProcess('ocpp', 'start'), { code: 'EOS_MODULE_LEGACY_RUNNING' });
+    x.host.options.standbyRequested=id=>id==='ocpp';
+    await x.host.controlProcess('ocpp', 'start');
+    const health=(await x.host.status('ocpp')).details.process;
+    assert.equal(health.standby,true);assert.equal(health.state,'running');assert.ok(health.pid>0);
+    assert.doesNotThrow(()=>process.kill(health.pid,0));
     assert.equal(x.host.entries.get('ocpp').module, null);
-    assert.equal((await x.host.status('ocpp')).reason, 'LEGACY_CONFLICT');
+    assert.equal((await x.host.status('ocpp')).reason, 'WAITING_FOR_OWNERSHIP');
     assert.equal((await x.host.status('ocpp')).active, false);
     await assert.rejects(readFile(join(x.baseDir, 'ocpp', 'attempts.txt')), { code: 'ENOENT' });
     assert.equal(x.writes.length, 0);

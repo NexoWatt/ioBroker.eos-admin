@@ -80,3 +80,25 @@ test('confirmed configuration, ownership and authority failures remain visible b
     src.backup = {enabled:true,configured:true,active:false,reason:'EOS_OWNERSHIP_REQUIRED'};
     assert.deepEqual(dashboardProcessStatus(src,now).failed,['devices','eebus','backup','ocpp']);
 });
+
+test('a fresh passive worker waits for handover; a missing heartbeat still identifies a process failure', () => {
+    const { notificationProcessStatus } = require('../src/lib/eosDashboardProcessStatus');
+    const src = operating();
+    Object.assign(src.devices, {active:false, reason:'WAITING_FOR_OWNERSHIP'});
+    src.devices.process.standby = true;
+    let diagnose = summarize(src,now);
+    assert.deepEqual(diagnose.waiting,['devices']);
+    assert.deepEqual(diagnose.failed,[]);
+    assert.equal(diagnose.state,'unknown');
+    assert.equal(diagnose.deviceHealth.state,'unknown');
+    let mail = notificationProcessStatus(src,now);
+    assert.equal(mail.processes.devices,'unknown');
+    assert.deepEqual(mail.devices.devices,{complete:false,tracked:[]});
+    src.devices.process.lastHeartbeatAt = now - 10000;
+    diagnose = summarize(src,now);
+    assert.deepEqual(diagnose.failed,['devices']);
+    assert.equal(diagnose.waiting,undefined);
+    mail = notificationProcessStatus(src,now);
+    assert.equal(mail.processes.devices,'offline');
+    assert.deepEqual(mail.devices.devices,{complete:false,tracked:[]});
+});

@@ -266,6 +266,8 @@ class Admin extends adapter_core_1.Adapter {
     eosSessionSecurity;
     /** Timer to update the repository */
     timerRepo;
+    waitingForMigrationLicense = false;
+    migrationRestartTimer;
     updaterTimeout;
     ratingTimeout;
     timerNews;
@@ -431,6 +433,7 @@ class Admin extends adapter_core_1.Adapter {
             this.eosSessionSecurity = new eosSessionSecurity_1.EosSessionSecurity(this);
             this.eosLicenseService = new eosLicenseService_1.EosLicenseService(this, {
                 resolveDirectory: () => (0, node_path_1.join)((0, adapter_core_1.getAbsoluteInstanceDataDir)(this), 'licensing'),
+                onVerified: () => this.resumeMigrationAfterActivation(),
                 // ioBroker's runtime group already administers code and data in this
                 // installation tree. The private license directory remains 0700.
                 trustedRuntimeRoot: (0, node_path_1.join)(adapter_core_1.controllerDir, '..', '..'),
@@ -443,6 +446,8 @@ class Admin extends adapter_core_1.Adapter {
             });
             try {
                 await this.eosMigration.start();
+                this.waitingForMigrationLicense = this.eosMigration.status().phase === 'LICENSE_REQUIRED';
+                this.resumeMigrationAfterActivation();
             }
             catch {
                 this.eosMigration.block();
@@ -481,6 +486,33 @@ class Admin extends adapter_core_1.Adapter {
             this.log.error('Cannot find object system.config');
         }
     };
+    /** Rebuild the workers once so they bind the verified legacy namespaces on first activation. */
+    resumeMigrationAfterActivation() {
+        if (!this.waitingForMigrationLicense ||
+            this.migrationRestartTimer ||
+            this.eosMigration?.status().code !== 'EOS_MIGRATION_RESTART_REQUIRED') {
+            return;
+        }
+        // Let the activation response return before ioBroker runs the ordinary unload path.
+        this.migrationRestartTimer = setTimeout(() => {
+            this.migrationRestartTimer = undefined;
+            if (!this.waitingForMigrationLicense ||
+                this.eosMigration?.status().code !== 'EOS_MIGRATION_RESTART_REQUIRED') {
+                return;
+            }
+            this.waitingForMigrationLicense = false;
+            if (!this.stop) {
+                this.log.warn('EOS_MIGRATION_RESTART_REQUIRED: Restart this instance in ioBroker.');
+                return;
+            }
+            this.log.info('EOS_MIGRATION_ACTIVATION_RESTART: Resuming the verified handover after license activation.');
+            void this.stop({
+                exitCode: adapter_core_1.EXIT_CODES.START_IMMEDIATELY_AFTER_STOP,
+                reason: 'EOS_MIGRATION_ACTIVATION_RESTART',
+            }).catch(() => this.log.warn('EOS_MIGRATION_RESTART_REQUIRED: Restart this instance in ioBroker.'));
+        }, 1500);
+        this.migrationRestartTimer.unref();
+    }
     /** Stop uncertain new runtimes before requesting restoration of the previous owners. */
     async recoverEosMigrationStartup(code) {
         try {
@@ -925,6 +957,9 @@ class Admin extends adapter_core_1.Adapter {
      * @param callback Callback after unloading
      */
     onUnload = (callback) => {
+        this.waitingForMigrationLicense = false;
+        clearTimeout(this.migrationRestartTimer);
+        this.migrationRestartTimer = undefined;
         let completed = false;
         let deadline = null;
         const finish = () => {

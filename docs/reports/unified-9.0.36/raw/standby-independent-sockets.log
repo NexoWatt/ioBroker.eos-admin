@@ -1,0 +1,3 @@
+(node:6) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{"samePid":true,"claimedHardware":0,"controllerWrites":0,"socketsByFamily":{"tcp":0,"tcp6":0,"udp":0,"udp6":0,"raw":0,"raw6":0}}

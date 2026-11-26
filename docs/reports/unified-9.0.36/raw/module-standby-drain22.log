@@ -1,0 +1,446 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: module persistence never writes the controller restart-triggering instance object
+ok 1 - module persistence never writes the controller restart-triggering instance object
+  ---
+  duration_ms: 9.718059
+  type: 'test'
+  ...
+# Subtest: 9.0.6 native config is retained as fallback only until a dedicated saved config exists
+ok 2 - 9.0.6 native config is retained as fallback only until a dedicated saved config exists
+  ---
+  duration_ms: 1.553207
+  type: 'test'
+  ...
+# Subtest: malformed or permissive persisted objects cannot silently restore stale native configuration
+ok 3 - malformed or permissive persisted objects cannot silently restore stale native configuration
+  ---
+  duration_ms: 4.14556
+  type: 'test'
+  ...
+# Subtest: stale config writer detects changed revision and keeps the newer stored envelope
+ok 4 - stale config writer detects changed revision and keeps the newer stored envelope
+  ---
+  duration_ms: 0.732819
+  type: 'test'
+  ...
+# Subtest: concurrent writes through the same running owner are bounded and never interleave
+ok 5 - concurrent writes through the same running owner are bounded and never interleave
+  ---
+  duration_ms: 1.165807
+  type: 'test'
+  ...
+# Subtest: failed persistence and missing writeback never report successful save
+ok 6 - failed persistence and missing writeback never report successful save
+  ---
+  duration_ms: 1.054981
+  type: 'test'
+  ...
+# Subtest: module names, prototype keys and envelope sizes are validated before storage
+ok 7 - module names, prototype keys and envelope sizes are validated before storage
+  ---
+  duration_ms: 14.151729
+  type: 'test'
+  ...
+# Subtest: a late legacy controller response cannot replace the newer verified save revision
+ok 8 - a late legacy controller response cannot replace the newer verified save revision
+  ---
+  duration_ms: 1.133561
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:13) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# Subtest: two browser drafts cannot silently overwrite a newer module configuration through real HTTP
+ok 9 - two browser drafts cannot silently overwrite a newer module configuration through real HTTP
+  ---
+  duration_ms: 111.838014
+  type: 'test'
+  ...
+# Subtest: missing or malformed HTTP draft revision cannot authorize a replacement
+ok 10 - missing or malformed HTTP draft revision cannot authorize a replacement
+  ---
+  duration_ms: 66.482535
+  type: 'test'
+  ...
+# Subtest: SMA device create/save/reload and enable toggle survive a new host with packaged defaults
+ok 11 - SMA device create/save/reload and enable toggle survive a new host with packaged defaults
+  ---
+  duration_ms: 424.874284
+  type: 'test'
+  ...
+# Subtest: blocked handover displays the saved devices and rejects replacement until explicit coordinator release
+ok 12 - blocked handover displays the saved devices and rejects replacement until explicit coordinator release
+  ---
+  duration_ms: 29.468422
+  type: 'test'
+  ...
+# Subtest: read failure on handover release cannot make a previously loaded stale configuration writable
+ok 13 - read failure on handover release cannot make a previously loaded stale configuration writable
+  ---
+  duration_ms: 27.408167
+  type: 'test'
+  ...
+# Subtest: operational start joins a concurrent editor read and stopping during that read never activates a module
+ok 14 - operational start joins a concurrent editor read and stopping during that read never activates a module
+  ---
+  duration_ms: 442.232538
+  type: 'test'
+  ...
+# Subtest: operational start joins an accepted pre-start save, preserving commit errors and shutdown fencing
+ok 15 - operational start joins an accepted pre-start save, preserving commit errors and shutdown fencing
+  ---
+  duration_ms: 680.008632
+  type: 'test'
+  ...
+# Subtest: actual Devices HTTP response drives the browser bridge through one global Save, CSRF and automatic per-device status
+ok 16 - actual Devices HTTP response drives the browser bridge through one global Save, CSRF and automatic per-device status
+  ---
+  duration_ms: 54.548691
+  type: 'test'
+  ...
+# Subtest: real module HTTP status advances READY to failure and recovery without replacing the dirty browser draft
+ok 17 - real module HTTP status advances READY to failure and recovery without replacing the dirty browser draft
+  ---
+  duration_ms: 333.961083
+  type: 'test'
+  ...
+# Subtest: the authenticated module endpoint reports initialization while the first authoritative controller read is outstanding
+ok 18 - the authenticated module endpoint reports initialization while the first authoritative controller read is outstanding
+  ---
+  duration_ms: 12.062851
+  type: 'test'
+  ...
+# Subtest: initial configuration is pending; a transient startup read recovers the original active device without a UI request or write
+ok 19 - initial configuration is pending; a transient startup read recovers the original active device without a UI request or write
+  ---
+  duration_ms: 3044.746421
+  type: 'test'
+  ...
+# Subtest: a damaged module configuration remains fenced and keeps all persisted bytes across background retries
+ok 20 - a damaged module configuration remains fenced and keeps all persisted bytes across background retries
+  ---
+  duration_ms: 21.130774
+  type: 'test'
+  ...
+# Subtest: partial migration runs a genuine hardware-passive child, fences commands and changes generation once on takeover and return
+ok 21 - partial migration runs a genuine hardware-passive child, fences commands and changes generation once on takeover and return
+  ---
+  duration_ms: 158.055813
+  type: 'test'
+  ...
+# Subtest: an explicit process-only choice under a live legacy owner leaves the disabled module configuration untouched
+ok 22 - an explicit process-only choice under a live legacy owner leaves the disabled module configuration untouched
+  ---
+  duration_ms: 88.075978
+  type: 'test'
+  ...
+# Subtest: a retry awaiting the controller does not block a validated configuration save for another module
+ok 23 - a retry awaiting the controller does not block a validated configuration save for another module
+  ---
+  duration_ms: 15.350925
+  type: 'test'
+  ...
+# Subtest: a saved configuration cannot start a second worker while the previous transport is draining
+ok 24 - a saved configuration cannot start a second worker while the previous transport is draining
+  ---
+  duration_ms: 12.88868
+  type: 'test'
+  ...
+# (node:14) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: one central entitlement starts the integrated module without a second adapter or license
+ok 25 - one central entitlement starts the integrated module without a second adapter or license
+  ---
+  duration_ms: 21.791946
+  type: 'test'
+  ...
+# Subtest: disabled and unlicensed modules create no runtime; metadata remains available
+ok 26 - disabled and unlicensed modules create no runtime; metadata remains available
+  ---
+  duration_ms: 4.668014
+  type: 'test'
+  ...
+# Subtest: license loss denies existing operation closures synchronously and stops transports
+ok 27 - license loss denies existing operation closures synchronously and stops transports
+  ---
+  duration_ms: 5.405521
+  type: 'test'
+  ...
+# Subtest: normal host heartbeat preserves a running module and generation
+ok 28 - normal host heartbeat preserves a running module and generation
+  ---
+  duration_ms: 3.233713
+  type: 'test'
+  ...
+# Subtest: legacy enable revokes immediately; confirmed stop creates a new valid generation
+ok 29 - legacy enable revokes immediately; confirmed stop creates a new valid generation
+  ---
+  duration_ms: 59.973385
+  type: 'test'
+  ...
+# Subtest: a race during legacy inventory cannot renew an invalidated operation lease
+ok 30 - a race during legacy inventory cannot renew an invalidated operation lease
+  ---
+  duration_ms: 2.380121
+  type: 'test'
+  ...
+# Subtest: facade constrains namespaces and suppresses stale telemetry after lifecycle end
+ok 31 - facade constrains namespaces and suppresses stale telemetry after lifecycle end
+  ---
+  duration_ms: 3.309438
+  type: 'test'
+  ...
+# Subtest: secret masking and restoration follow device IDs when rows move
+ok 32 - secret masking and restoration follow device IDs when rows move
+  ---
+  duration_ms: 1.100693
+  type: 'test'
+  ...
+# Subtest: saved configurations are encrypted and API views never return device credentials
+ok 33 - saved configurations are encrypted and API views never return device credentials
+  ---
+  duration_ms: 5.12352
+  type: 'test'
+  ...
+# Subtest: configuration cannot reopen a runtime after failed transport shutdown
+ok 34 - configuration cannot reopen a runtime after failed transport shutdown
+  ---
+  duration_ms: 11.809595
+  type: 'test'
+  ...
+# Subtest: config rejects prototype keys and excessive depth before persistence
+ok 35 - config rejects prototype keys and excessive depth before persistence
+  ---
+  duration_ms: 0.546583
+  type: 'test'
+  ...
+# Subtest: integrated licenses preserve NWL2 adapter scope and fail closed on expired core entitlement
+ok 36 - integrated licenses preserve NWL2 adapter scope and fail closed on expired core entitlement
+  ---
+  duration_ms: 7.140183
+  type: 'test'
+  ...
+# Subtest: concurrent HTTP-close and adapter-unload share transport cleanup, and late startup never installs a timer
+ok 37 - concurrent HTTP-close and adapter-unload share transport cleanup, and late startup never installs a timer
+  ---
+  duration_ms: 6.331641
+  type: 'test'
+  ...
+# Subtest: preserved legacy EEBus namespace keeps state IDs while private bridge remains tied to EOS owner
+ok 38 - preserved legacy EEBus namespace keeps state IDs while private bridge remains tied to EOS owner
+  ---
+  duration_ms: 3.4428
+  type: 'test'
+  ...
+# Subtest: backup secret fields stay redacted and restored by unique endpoint rather than row index
+ok 39 - backup secret fields stay redacted and restored by unique endpoint rather than row index
+  ---
+  duration_ms: 0.423442
+  type: 'test'
+  ...
+# Subtest: backup notifications use only configured validated target and lose authority on revocation
+ok 40 - backup notifications use only configured validated target and lose authority on revocation
+  ---
+  duration_ms: 2.89468
+  type: 'test'
+  ...
+# Subtest: backup downloads clean late file streams after timeout or stop and bound concurrent opens
+ok 41 - backup downloads clean late file streams after timeout or stop and bound concurrent opens
+  ---
+  duration_ms: 23.934378
+  type: 'test'
+  ...
+# Subtest: backup data-folder inventory exposes only bounded paths and rejects revoked or malformed reads
+ok 42 - backup data-folder inventory exposes only bounded paths and rejects revoked or malformed reads
+  ---
+  duration_ms: 6.062292
+  type: 'test'
+  ...
+# Subtest: device view exposes an explicit commissioning bridge status before binding instead of an empty placeholder
+ok 43 - device view exposes an explicit commissioning bridge status before binding instead of an empty placeholder
+  ---
+  duration_ms: 4.51957
+  type: 'test'
+  ...
+# Subtest: active profile admission rejection occurs before persistent changes and preserves the existing runtime
+ok 44 - active profile admission rejection occurs before persistent changes and preserves the existing runtime
+  ---
+  duration_ms: 4.398523
+  type: 'test'
+  ...
+# Subtest: profile changes require the bridge, while a stopped controller can reserve and persist a replacement
+ok 45 - profile changes require the bridge, while a stopped controller can reserve and persist a replacement
+  ---
+  duration_ms: 13.008229
+  type: 'test'
+  ...
+# (node:43) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: missing dependency during worker factory stays stopped until an explicit restart
+ok 46 - missing dependency during worker factory stays stopped until an explicit restart
+  ---
+  duration_ms: 1384.482135
+  type: 'test'
+  ...
+# Subtest: missing dependency during worker start stays stopped until an explicit restart
+ok 47 - missing dependency during worker start stays stopped until an explicit restart
+  ---
+  duration_ms: 1369.587712
+  type: 'test'
+  ...
+# Subtest: a validated configuration commit can recover a latched worker dependency failure
+ok 48 - a validated configuration commit can recover a latched worker dependency failure
+  ---
+  duration_ms: 109.0351
+  type: 'test'
+  ...
+# Subtest: configuration import failure is visible and cannot masquerade as a disabled module
+ok 49 - configuration import failure is visible and cannot masquerade as a disabled module
+  ---
+  duration_ms: 10.526111
+  type: 'test'
+  ...
+# Subtest: only an explicit start retries a repaired configuration factory import
+ok 50 - only an explicit start retries a repaired configuration factory import
+  ---
+  duration_ms: 74.890573
+  type: 'test'
+  ...
+# Subtest: only an explicit enable retries a repaired configuration factory import
+ok 51 - only an explicit enable retries a repaired configuration factory import
+  ---
+  duration_ms: 49.088993
+  type: 'test'
+  ...
+# Subtest: external heartbeat traffic does not advance an inactive OCPP generation or schedule irrelevant work
+ok 52 - external heartbeat traffic does not advance an inactive OCPP generation or schedule irrelevant work
+  ---
+  duration_ms: 12.556857
+  type: 'test'
+  ...
+# Subtest: an active real worker is fenced immediately when legacy instance ownership changes
+ok 53 - an active real worker is fenced immediately when legacy instance ownership changes
+  ---
+  duration_ms: 117.333465
+  type: 'test'
+  ...
+# Subtest: an active real worker is fenced immediately when legacy alive ownership changes
+ok 54 - an active real worker is fenced immediately when legacy alive ownership changes
+  ---
+  duration_ms: 106.646067
+  type: 'test'
+  ...
+# Subtest: integrated OCPP starts only a passive PID while the external owner retains its port and configuration
+ok 55 - integrated OCPP starts only a passive PID while the external owner retains its port and configuration
+  ---
+  duration_ms: 39.625996
+  type: 'test'
+  ...
+# Subtest: process activation waits for the actual slow configuration commit and preserves the complete saved configuration
+ok 56 - process activation waits for the actual slow configuration commit and preserves the complete saved configuration
+  ---
+  duration_ms: 5213.657945
+  type: 'test'
+  ...
+# (node:51) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:51) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: stop during command subscription acquisition never opens hardware and drains coverage
+ok 57 - stop during command subscription acquisition never opens hardware and drains coverage
+  ---
+  duration_ms: 220.98524
+  type: 'test'
+  ...
+# (node:51) ExperimentalWarning: The MockTimers API is an experimental feature and might change at any time
+# Subtest: a later factory failure after a successful stop releases its new command subscription
+ok 58 - a later factory failure after a successful stop releases its new command subscription
+  ---
+  duration_ms: 6.278754
+  type: 'test'
+  ...
+# Subtest: failed command subscription prevents factory creation and device writes
+ok 59 - failed command subscription prevents factory creation and device writes
+  ---
+  duration_ms: 5.219327
+  type: 'test'
+  ...
+# Subtest: hung command subscription times out fail-closed and late completion is drained
+ok 60 - hung command subscription times out fail-closed and late completion is drained
+  ---
+  duration_ms: 17.645236
+  type: 'test'
+  ...
+# Subtest: module presence does not report active until its original start promise succeeds
+ok 61 - module presence does not report active until its original start promise succeeds
+  ---
+  duration_ms: 5.153643
+  type: 'test'
+  ...
+# Subtest: concurrent stop waits for late startup and closes newly opened transports before resolving
+ok 62 - concurrent stop waits for late startup and closes newly opened transports before resolving
+  ---
+  duration_ms: 5.285684
+  type: 'test'
+  ...
+# Subtest: a rejected pending startup still receives final cleanup before stop confirmation
+ok 63 - a rejected pending startup still receives final cleanup before stop confirmation
+  ---
+  duration_ms: 6.788207
+  type: 'test'
+  ...
+# Subtest: timeout is sticky unconfirmed shutdown; late startup cleanup cannot authorize a rollback
+ok 64 - timeout is sticky unconfirmed shutdown; late startup cleanup cannot authorize a rollback
+  ---
+  duration_ms: 22.079534
+  type: 'test'
+  ...
+# Subtest: a failing final cleanup remains unconfirmed even when the first cleanup succeeded
+ok 65 - a failing final cleanup remains unconfirmed even when the first cleanup succeeded
+  ---
+  duration_ms: 2.859781
+  type: 'test'
+  ...
+# Subtest: a failed running transport shutdown cannot be hidden by host stop or reconfiguration
+ok 66 - a failed running transport shutdown cannot be hidden by host stop or reconfiguration
+  ---
+  duration_ms: 2.859119
+  type: 'test'
+  ...
+# Subtest: shutdown during configuration read cannot create a delayed module or subscription
+ok 67 - shutdown during configuration read cannot create a delayed module or subscription
+  ---
+  duration_ms: 1.337554
+  type: 'test'
+  ...
+# Subtest: a late facade subscription is immediately removed after its generation was revoked
+ok 68 - a late facade subscription is immediately removed after its generation was revoked
+  ---
+  duration_ms: 2.367434
+  type: 'test'
+  ...
+# Subtest: confirmed stop waits for every accepted state/create/extend mutation to settle
+ok 69 - confirmed stop waits for every accepted state/create/extend mutation to settle
+  ---
+  duration_ms: 3.862194
+  type: 'test'
+  ...
+# Subtest: pending mutation timeout stays unconfirmed; bounded capacity and revoked calls never forward or retry
+ok 70 - pending mutation timeout stays unconfirmed; bounded capacity and revoked calls never forward or retry
+  ---
+  duration_ms: 111.980811
+  type: 'test'
+  ...
+1..70
+# tests 70
+# suites 0
+# pass 70
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 8876.932854

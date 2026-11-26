@@ -3,6 +3,7 @@ import type { Readable } from 'node:stream';
 
 export interface ModuleProcessHealth {
     mode: 'process';
+    standby?: boolean;
     state: 'stopped' | 'starting' | 'running' | 'stopping' | 'error';
     pid: number | null;
     generation: number;
@@ -39,6 +40,7 @@ export interface ProcessModuleAdapter {
 export interface ModuleProcessOptions {
     id: 'devices' | 'eebus' | 'backup' | 'ocpp';
     baseDir: string;
+    standby?: boolean;
     generation: number;
     canOperate: () => boolean;
     onFailure?: (code: string) => void;

@@ -1,8 +1,12 @@
 {
   "common": {
     "name": "nexowatt-ui",
-    "version": "9.0.35",
+    "version": "9.0.36",
     "news": {
+      "9.0.36": {
+        "de": "EOS übernimmt eine bestätigte, bereits deaktivierte Alt-UI automatisch. Die Startdiagnose und der Wiederanlauf der Module wurden überarbeitet.",
+        "en": "EOS automatically migrates a verified legacy UI that was already disabled. Module startup diagnostics and recovery have been revised."
+      },
       "9.0.35": {
         "de": "Der Live-Systemstatus berücksichtigt Messwerte, Verbindung, aktive EOS-Prozesse und Geräte. Er nennt bestätigte Störungen und respektiert bewusst pausierte Module. Konfigurierbare Benachrichtigungen melden Prozess- und Geräteausfälle. Der MIRA-Treiber unterscheidet einen Modbus-Verbindungsabbruch von einem nicht unterstützten Register.",
         "en": "Live system status covers telemetry, connection, active EOS processes and devices. It identifies confirmed faults and respects intentionally paused modules. Configurable notifications report process and device outages. The MIRA driver distinguishes a Modbus connection reset from an unsupported register."

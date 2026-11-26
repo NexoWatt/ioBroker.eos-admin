@@ -1,0 +1,6 @@
+v24.22.3 x64 linux
+devices standby heartbeat true PSS KiB 12500
+eebus standby heartbeat true PSS KiB 12469
+backup standby heartbeat true PSS KiB 12469
+ocpp standby heartbeat true PSS KiB 12477
+4 standby processes total PSS KiB 49915

@@ -14,15 +14,15 @@
       "_loadShare-eager-dmdYQhAl.js"
     ]
   },
-  "_AdapterUpdateDialog-DH6S-kWX.js": {
-    "file": "assets/AdapterUpdateDialog-DH6S-kWX.js",
+  "_AdapterUpdateDialog-D2nDWE_N.js": {
+    "file": "assets/AdapterUpdateDialog-D2nDWE_N.js",
     "name": "AdapterUpdateDialog",
     "imports": [
       "_loadShare-eager-dmdYQhAl.js",
       "_Book-Cq8bkU2t.js",
       "src/bootstrap.tsx",
       "_zh-cn-B6dBxOyw.js",
-      "_State-0UzpgKYj.js"
+      "_State-DY6Nw0SB.js"
     ]
   },
   "_AdminUtils-Dc1eHsx5.js": {
@@ -91,8 +91,8 @@
       "_loadShare-eager-dmdYQhAl.js"
     ]
   },
-  "_Fields-vWLKiuvO.js": {
-    "file": "assets/Fields-vWLKiuvO.js",
+  "_Fields-A8J3u1yq.js": {
+    "file": "assets/Fields-A8J3u1yq.js",
     "name": "Fields",
     "imports": [
       "_loadShare-eager-dmdYQhAl.js",
@@ -162,8 +162,8 @@
       "_loadShare-eager-dmdYQhAl.js"
     ]
   },
-  "_State-0UzpgKYj.js": {
-    "file": "assets/State-0UzpgKYj.js",
+  "_State-DY6Nw0SB.js": {
+    "file": "assets/State-DY6Nw0SB.js",
     "name": "State",
     "imports": [
       "_loadShare-eager-dmdYQhAl.js",
@@ -212,8 +212,8 @@
       "_loadShare-eager-dmdYQhAl.js"
     ]
   },
-  "_UsedResources-Bcmo58YD.js": {
-    "file": "assets/UsedResources-Bcmo58YD.js",
+  "_UsedResources-CtUpdP2b.js": {
+    "file": "assets/UsedResources-CtUpdP2b.js",
     "name": "UsedResources",
     "imports": [
       "_loadShare-eager-dmdYQhAl.js",
@@ -279,8 +279,8 @@
       "_loadShare-eager-dmdYQhAl.js"
     ]
   },
-  "_installSVGRenderer-DujLjpXt.js": {
-    "file": "assets/installSVGRenderer-DujLjpXt.js",
+  "_installSVGRenderer-DZMZ3pJw.js": {
+    "file": "assets/installSVGRenderer-DZMZ3pJw.js",
     "name": "installSVGRenderer",
     "imports": [
       "_rolldown-runtime-sJBDdmOt.js",
@@ -353,7 +353,7 @@
     ]
   },
   "index.html": {
-    "file": "assets/index-BrtKq3UN.js",
+    "file": "assets/index-CpDo61Mz.js",
     "name": "index",
     "src": "index.html",
     "isEntry": true,
@@ -371,7 +371,7 @@
     "isDynamicEntry": true
   },
   "node_modules/@mui/icons-material/index.mjs": {
-    "file": "assets/icons-material-CUNq6tdT.js",
+    "file": "assets/icons-material-SqwOQW6y.js",
     "name": "icons-material",
     "src": "node_modules/@mui/icons-material/index.mjs",
     "isDynamicEntry": true,
@@ -535,7 +535,7 @@
     "src": "src/assets/wizard-welcome.jpg"
   },
   "src/bootstrap.tsx": {
-    "file": "assets/bootstrap-qkrk_CAn.js",
+    "file": "assets/bootstrap-Didkuj-F.js",
     "name": "bootstrap",
     "src": "src/bootstrap.tsx",
     "isDynamicEntry": true,
@@ -589,7 +589,7 @@
     "src": "src/fonts/material.woff2"
   },
   "src/tabs/Adapters.tsx": {
-    "file": "assets/Adapters-CIlqSF5B.js",
+    "file": "assets/Adapters-D0sVqNBU.js",
     "name": "Adapters",
     "src": "src/tabs/Adapters.tsx",
     "isDynamicEntry": true,
@@ -603,12 +603,12 @@
       "_AdminUtils-Dc1eHsx5.js",
       "src/bootstrap.tsx",
       "_sentry-CPzCHrwe.js",
-      "_AdapterUpdateDialog-DH6S-kWX.js",
+      "_AdapterUpdateDialog-D2nDWE_N.js",
       "_CustomModal-Do2qVZr7.js"
     ]
   },
   "src/tabs/ConfigManager.tsx": {
-    "file": "assets/ConfigManager-BhVBfM-q.js",
+    "file": "assets/ConfigManager-Zm7UoaaN.js",
     "name": "ConfigManager",
     "src": "src/tabs/ConfigManager.tsx",
     "isDynamicEntry": true,
@@ -641,7 +641,7 @@
     ]
   },
   "src/tabs/Enums.tsx": {
-    "file": "assets/Enums-3H97czGs.js",
+    "file": "assets/Enums-BGL7pR-O.js",
     "name": "Enums",
     "src": "src/tabs/Enums.tsx",
     "isDynamicEntry": true,
@@ -655,11 +655,11 @@
       "_UnfoldMore-DOHSVdRn.js",
       "_AdminUtils-Dc1eHsx5.js",
       "src/bootstrap.tsx",
-      "_Fields-vWLKiuvO.js"
+      "_Fields-A8J3u1yq.js"
     ]
   },
   "src/tabs/Files.tsx": {
-    "file": "assets/Files-wmjjMXYM.js",
+    "file": "assets/Files-CQPjCvW6.js",
     "name": "Files",
     "src": "src/tabs/Files.tsx",
     "isDynamicEntry": true,
@@ -672,7 +672,7 @@
     ]
   },
   "src/tabs/Hosts.tsx": {
-    "file": "assets/Hosts-Bk-xmI98.js",
+    "file": "assets/Hosts-CxzkkNBj.js",
     "name": "Hosts",
     "src": "src/tabs/Hosts.tsx",
     "isDynamicEntry": true,
@@ -685,13 +685,13 @@
       "_ViewList-DVj9ENkU.js",
       "_AdminUtils-Dc1eHsx5.js",
       "src/bootstrap.tsx",
-      "_AdapterUpdateDialog-DH6S-kWX.js",
+      "_AdapterUpdateDialog-D2nDWE_N.js",
       "_CustomModal-Do2qVZr7.js",
-      "_UsedResources-Bcmo58YD.js"
+      "_UsedResources-CtUpdP2b.js"
     ]
   },
   "src/tabs/Instances.tsx": {
-    "file": "assets/Instances-Db6Vgh62.js",
+    "file": "assets/Instances-eEbEukDh.js",
     "name": "Instances",
     "src": "src/tabs/Instances.tsx",
     "isDynamicEntry": true,
@@ -707,15 +707,15 @@
       "_AdminUtils-Dc1eHsx5.js",
       "src/bootstrap.tsx",
       "_sentry-CPzCHrwe.js",
-      "_State-0UzpgKYj.js",
+      "_State-DY6Nw0SB.js",
       "_CustomModal-Do2qVZr7.js",
       "_Config-C4k51ggG.js",
-      "_UsedResources-Bcmo58YD.js",
+      "_UsedResources-CtUpdP2b.js",
       "_classPrivateFieldGet2-DZ8s9-Td.js"
     ]
   },
   "src/tabs/Intro.tsx": {
-    "file": "assets/Intro-Dc3wAG9V.js",
+    "file": "assets/Intro-I_Tknp0E.js",
     "name": "Intro",
     "src": "src/tabs/Intro.tsx",
     "isDynamicEntry": true,
@@ -734,7 +734,7 @@
     ]
   },
   "src/tabs/Logs.tsx": {
-    "file": "assets/Logs-CPbEGWNq.js",
+    "file": "assets/Logs-C3GPz61Q.js",
     "name": "Logs",
     "src": "src/tabs/Logs.tsx",
     "isDynamicEntry": true,
@@ -747,7 +747,7 @@
     ]
   },
   "src/tabs/Objects.tsx": {
-    "file": "assets/Objects-DJB-2468.js",
+    "file": "assets/Objects-DDnisxNB.js",
     "name": "Objects",
     "src": "src/tabs/Objects.tsx",
     "isDynamicEntry": true,
@@ -765,14 +765,14 @@
       "src/bootstrap.tsx",
       "_zh-cn-B6dBxOyw.js",
       "_CustomModal-Do2qVZr7.js",
-      "_installSVGRenderer-DujLjpXt.js"
+      "_installSVGRenderer-DZMZ3pJw.js"
     ],
     "assets": [
       "assets/echarts-BDq-rBJC.png"
     ]
   },
   "src/tabs/Overview.tsx": {
-    "file": "assets/Overview-DdvghCLQ.js",
+    "file": "assets/Overview-BpZFdEmp.js",
     "name": "Overview",
     "src": "src/tabs/Overview.tsx",
     "isDynamicEntry": true,
@@ -784,11 +784,11 @@
       "_UnfoldMore-DOHSVdRn.js",
       "_AdminUtils-Dc1eHsx5.js",
       "src/bootstrap.tsx",
-      "_installSVGRenderer-DujLjpXt.js"
+      "_installSVGRenderer-DZMZ3pJw.js"
     ]
   },
   "src/tabs/Users.tsx": {
-    "file": "assets/Users-BGHf3Rox.js",
+    "file": "assets/Users-DcqlSfc5.js",
     "name": "Users",
     "src": "src/tabs/Users.tsx",
     "isDynamicEntry": true,
@@ -799,7 +799,7 @@
       "_VpnKey-BbZdswcd.js",
       "_AdminUtils-Dc1eHsx5.js",
       "src/bootstrap.tsx",
-      "_Fields-vWLKiuvO.js"
+      "_Fields-A8J3u1yq.js"
     ],
     "assets": [
       "assets/user1-D1GAYfim.svg",
@@ -825,10 +825,10 @@
       "assets/group10-Dp9tRs6I.svg"
     ]
   },
-  "virtual:mf-REMOTE_ENTRY_ID:__mfe_internal__iobroker_admin__remoteEntry-eos-9_0_35_js": {
-    "file": "remoteEntry-eos-9.0.35.js",
+  "virtual:mf-REMOTE_ENTRY_ID:__mfe_internal__iobroker_admin__remoteEntry-eos-9_0_36_js": {
+    "file": "remoteEntry-eos-9.0.36.js",
     "name": "remoteEntry",
-    "src": "virtual:mf-REMOTE_ENTRY_ID:__mfe_internal__iobroker_admin__remoteEntry-eos-9_0_35_js",
+    "src": "virtual:mf-REMOTE_ENTRY_ID:__mfe_internal__iobroker_admin__remoteEntry-eos-9_0_36_js",
     "imports": [
       "_vite-preload-helper-BbbETgeG.js",
       "_loadShare-eager-dmdYQhAl.js",
@@ -849,7 +849,7 @@
     ]
   },
   "virtual:mf:__mfe_internal__iobroker_admin__mf_owner__1__H_A_I__hostAutoInit__H_A_I__.js": {
-    "file": "assets/hostInit-DlGqatlv.js",
+    "file": "assets/hostInit-Chrs-wsg.js",
     "name": "hostInit",
     "src": "virtual:mf:__mfe_internal__iobroker_admin__mf_owner__1__H_A_I__hostAutoInit__H_A_I__.js",
     "imports": [
@@ -857,7 +857,7 @@
       "_helpers-C0aN90O2.js"
     ],
     "dynamicImports": [
-      "virtual:mf-REMOTE_ENTRY_ID:__mfe_internal__iobroker_admin__remoteEntry-eos-9_0_35_js",
+      "virtual:mf-REMOTE_ENTRY_ID:__mfe_internal__iobroker_admin__remoteEntry-eos-9_0_36_js",
       "virtual:mf-localSharedImportMap:__mfe_internal__iobroker_admin__mf_owner__1"
     ]
   },

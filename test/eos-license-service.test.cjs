@@ -513,3 +513,17 @@ test('directory resolver failure is contained and keeps authority denied', async
     assert.equal(status.code, 'SERVICE_UNAVAILABLE');
     assert.equal(f.logs.some(message => message.includes('private diagnostic')), false);
 });
+
+test('only a verified persisted license notifies the host to reconsider a pending first activation', async t => {
+    let notices = 0;
+    const f = await fixture(t, { onVerified() { notices++; } });
+    const cold = await f.service.start();
+    assert.equal(cold.valid, false);
+    await assert.rejects(f.service.activate('invalid-token'));
+    assert.equal(notices, 0);
+    const activated = await f.service.activate(f.token());
+    assert.equal(activated.valid, true);
+    assert.equal(notices, 1);
+    f.service.options.onVerified = () => { throw new Error('synthetic host shutdown'); };
+    assert.equal((await f.service.status()).valid, true);
+});

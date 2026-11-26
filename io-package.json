@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "eos-admin",
-    "version": "9.0.35",
+    "version": "9.0.36",
     "titleLang": {
       "en": "NexoWatt EOS",
       "de": "NexoWatt EOS",
@@ -18,6 +18,10 @@
     "connectionType": "local",
     "dataSource": "push",
     "news": {
+      "9.0.36": {
+        "de": "EOS übernimmt eine bestätigte, bereits deaktivierte Alt-UI automatisch. Die Startdiagnose und der Wiederanlauf der Module wurden überarbeitet.",
+        "en": "EOS automatically migrates a verified legacy UI that was already disabled. Module startup diagnostics and recovery have been revised."
+      },
       "9.0.35": {
         "de": "Der Live-Systemstatus berücksichtigt Messwerte, Verbindung, aktive EOS-Prozesse und Geräte. Er nennt bestätigte Störungen und respektiert bewusst pausierte Module. Konfigurierbare Benachrichtigungen melden Prozess- und Geräteausfälle. Der MIRA-Treiber unterscheidet einen Modbus-Verbindungsabbruch von einem nicht unterstützten Register.",
         "en": "Live system status covers telemetry, connection, active EOS processes and devices. It identifies confirmed faults and respects intentionally paused modules. Configurable notifications report process and device outages. The MIRA driver distinguishes a Modbus connection reset from an unsupported register."
@@ -93,10 +97,6 @@
       "9.0.17": {
         "de": "EOS-Sitzungen vom ioBroker Admin getrennt; automatische Änderungen fremder Rechte und Metadaten entfernt; Parallelbetrieb mit Standard-Backitup abgesichert.",
         "en": "Isolate EOS sessions from ioBroker Admin; remove automatic foreign permission and metadata changes; preserve standard Backitup coexistence."
-      },
-      "9.0.16": {
-        "de": "Geräte speichern und vorhandene Einstellungen beim Start erhalten; alte Installer-Dateien für npm-Publish sichern; Abmeldung nach zehn Minuten ohne Bedienung.",
-        "en": "Fix device saving and preserve settings during startup; quarantine old Installer files for npm publishing; log out after ten idle minutes."
       }
     },
     "desc": {
@@ -134,7 +134,7 @@
     "icon": "admin.svg",
     "messagebox": true,
     "enabled": true,
-    "extIcon": "https://unpkg.com/iobroker.eos-admin@9.0.35/admin/admin.svg",
+    "extIcon": "https://unpkg.com/iobroker.eos-admin@9.0.36/admin/admin.svg",
     "keywords": [
       "NexoWatt",
       "EOS",
@@ -145,7 +145,7 @@
       "licensed"
     ],
     "compact": false,
-    "readme": "https://unpkg.com/iobroker.eos-admin@9.0.35/README.md",
+    "readme": "https://unpkg.com/iobroker.eos-admin@9.0.36/README.md",
     "authors": [
       "NexoWatt"
     ],
@@ -157,7 +157,7 @@
     "type": "general",
     "licenseInformation": {
       "type": "paid",
-      "link": "https://unpkg.com/iobroker.eos-admin@9.0.35/LICENSE"
+      "link": "https://unpkg.com/iobroker.eos-admin@9.0.36/LICENSE"
     },
     "logTransporter": true,
     "stopBeforeUpdate": true,

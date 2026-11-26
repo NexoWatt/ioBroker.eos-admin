@@ -37,6 +37,33 @@ function copy(value) {
 }
 const fingerprint = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 const nativeHash = object => fingerprint(object.native);
+/**
+ * A later config/metadata edit can postdate a long-disabled UI. For a local
+ * noncompact daemon, js-controller resets sigKill before launch, records its PID,
+ * requests a stop with -1, and reports alive=false on exit. The latter must
+ * follow the same host's most recent lifecycle marker. Callers check host freshness.
+ */
+async function hasConfirmedLegacyStop(reader, object, alive) {
+    if (object?.common?.enabled !== false || alive?.val !== false || alive.ack !== true ||
+        !Number.isSafeInteger(object.ts) || !Number.isSafeInteger(alive.ts) || alive.ts <= 0 || object.ts <= 0)
+        return false;
+    const moment = Date.now();
+    if (alive.ts > moment + 5000 || object.ts > moment + 5000 || (alive.q ?? 0) !== 0)
+        return false;
+    if (alive.ts >= object.ts)
+        return true;
+    const host = object.common.host;
+    if (!/^system\.adapter\.nexowatt-ui\.\d+$/.test(object._id || '') ||
+        object.common.mode !== 'daemon' || object.common.runAsCompactMode === true ||
+        typeof host !== 'string' || !host || host !== reader.host || alive.from !== `system.host.${host}`)
+        return false;
+    const marker = await reader.getForeignStateAsync(`${object._id}.sigKill`);
+    if (!marker || marker.from !== alive.from || !Number.isSafeInteger(marker.ts) || marker.ts <= 0 ||
+        marker.ts >= alive.ts || (marker.q ?? 0) !== 0)
+        return false;
+    return (marker.ack === true && Number.isSafeInteger(marker.val) && marker.val > 0 && marker.val <= 2147483647) ||
+        (marker.ack === false && marker.val === -1);
+}
 function decryptNative(owner, object) {
     const native = copy(object.native);
     const protectedFields = object.protectedNative || object.common?.protectedNative || [];
@@ -87,6 +114,7 @@ class EosLegacyMigration {
         this.startupBlocked = false;
         this.recovery = null;
         this.commitPromise = null;
+        this.blockedSources = null;
     }
     read(operation) {
         let timer;
@@ -94,11 +122,20 @@ class EosLegacyMigration {
                 timer = setTimeout(() => reject(fail('EOS_MIGRATION_DATABASE_TIMEOUT')), Math.min(this.options.readTimeoutMs || 5000, 5000));
             })]).finally(() => clearTimeout(timer));
     }
-    allowsStartup() {
-        return !this.stopped && !this.startupBlocked &&
-            !['LICENSE_REQUIRED', 'PREPARED', 'STOPPING', 'BLOCKED', 'ROLLING_BACK', 'ROLLBACK_REQUIRED', 'ROLLED_BACK'].includes(this.phase);
+    allowsStartup(scope) {
+        if (this.stopped || this.startupBlocked)
+            return false;
+        const id = scope === 'ems' ? 'ui' : scope;
+        if (id !== undefined && !Object.hasOwn(SOURCES, id))
+            return false;
+        if (this.phase === 'BLOCKED' && this.blockedSources && id !== undefined)
+            return !this.blockedSources.has(id);
+        return ['DISABLED', 'NOT_NEEDED', 'TRANSFERRED', 'COMMITTED'].includes(this.phase);
     }
-    allowsWrites() { return this.allowsStartup(); }
+    allowsSupervisorStartup() {
+        return this.allowsStartup() || (!this.stopped && !this.startupBlocked && this.phase === 'BLOCKED' && this.blockedSources !== null);
+    }
+    allowsWrites(scope) { return this.allowsStartup(scope); }
     block(code) { this.phase = 'ROLLBACK_REQUIRED'; this.journal = { ...this.journal, code: code || this.journal?.code || 'EOS_MIGRATION_RECOVERY_REQUIRED' }; }
     envelope(value, migration) {
         const text = JSON.stringify(copy(value));
@@ -144,7 +181,8 @@ class EosLegacyMigration {
             }
             catch { /* Diagnostic reads never grant permission or expose license internals. */ }
         }
-        return { phase: this.phase, code, sources: (this.journal?.sources || []).map(row => ({ id: row.id, source: row.source, namespacePreserved: ['TRANSFERRED', 'COMMITTED'].includes(this.phase) })), updatedAt: this.journal?.updatedAt || null };
+        return { phase: this.phase, code, sources: (this.journal?.sources || []).map(row => ({ id: row.id, source: row.source, namespacePreserved: ['TRANSFERRED', 'COMMITTED'].includes(this.phase) })), updatedAt: this.journal?.updatedAt || null,
+            ...(this.phase === 'BLOCKED' && this.blockedSources && this.journal?.issues?.length ? { issues: this.journal.issues.map(row => ({ id: row.id, source: row.source, code: row.code })) } : {}) };
     }
     async loadDestinations() {
         for (const id of Object.keys(SOURCES)) {
@@ -194,22 +232,26 @@ class EosLegacyMigration {
     async stoppedSource(source) {
         const object = await this.reader.getForeignObjectAsync(`system.adapter.${source}`);
         const alive = await this.reader.getForeignStateAsync(`system.adapter.${source}.alive`);
-        return object?.common?.enabled === false && Number.isSafeInteger(object.ts) && alive?.val === false && alive.ack === true && alive.ts >= object.ts && await this.hostFresh(object.common.host);
+        return await hasConfirmedLegacyStop(this.reader, object, alive) && await this.hostFresh(object.common.host);
     }
     matchesSource(object, row) {
-        return !!object && nativeHash(object) === row.nativeHash && object.common?.host === row.host && object.common?.version === row.sourceVersion;
+        return object?.type === 'instance' && object._id === `system.adapter.${row.source}` && record(object.native) && nativeHash(object) === row.nativeHash && object.common?.host === row.host && object.common?.version === row.sourceVersion;
     }
     async candidate(id, object) {
-        if (!record(object.native) || !VERSIONS[id]?.includes(object.common?.version) || typeof object.common.enabled !== 'boolean')
+        if (!VERSIONS[id]?.includes(object.common?.version))
             throw fail('EOS_MIGRATION_SOURCE_VERSION');
-        if (id === 'ui' && object.common.enabled !== true)
-            throw fail('EOS_MIGRATION_DISABLED_UI_REVIEW');
+        if (!record(object.native) || typeof object.common.enabled !== 'boolean')
+            throw fail('EOS_MIGRATION_SOURCE_UNAVAILABLE');
         const source = object._id.slice('system.adapter.'.length);
         if (id !== 'ui' && this.owner.eosLicenseService?.allowsEmbeddedModule?.(id) !== true)
             throw fail('EOS_MIGRATION_MODULE_LICENSE_REQUIRED');
         const ownerObject = await this.reader.getForeignObjectAsync(`system.adapter.${this.owner.namespace}`);
         if (ownerObject?.common?.enabled !== true || !ownerObject.common.host || object.common.host !== ownerObject.common.host || !(await this.hostFresh(object.common.host)))
             throw fail('EOS_MIGRATION_SOURCE_HOST');
+        // An already stopped source can supply its configuration without reviving it.
+        // Prove its stop before any journal is created or another source is touched.
+        if (object.common.enabled === false && !(await this.stoppedSource(source)))
+            throw fail('EOS_MIGRATION_STOP_UNCONFIRMED');
         const existing = await this.read(this.store.load(id));
         if (existing)
             throw fail('EOS_MIGRATION_DESTINATION_CONFIGURED');
@@ -277,6 +319,10 @@ class EosLegacyMigration {
                 await this.persist('ROLLBACK_REQUIRED');
                 throw fail('EOS_MIGRATION_SOURCE_CHANGED');
             }
+            if (!row.enabled && !(await this.stoppedSource(row.source))) {
+                await this.persist('ROLLBACK_REQUIRED');
+                throw fail('EOS_MIGRATION_SOURCE_CHANGED');
+            }
             if (row.enabled && current.common.enabled !== true)
                 await this.owner.extendForeignObjectAsync(`system.adapter.${row.source}`, { common: { enabled: true } });
         }
@@ -322,10 +368,12 @@ class EosLegacyMigration {
         const inventory = await this.reader.getObjectViewAsync('system', 'instance', { startkey: 'system.adapter.', endkey: 'system.adapter.\u9999' });
         if (!Array.isArray(inventory?.rows) || inventory.rows.length > 512)
             throw fail('EOS_MIGRATION_RPC_INVENTORY');
-        const refers = value => {
-            if (typeof value === 'string')
-                return sources.has(value);
-            return !!value && typeof value === 'object' && Object.values(value).some(refers);
+        const referenced = new Set();
+        const checkReferences = value => {
+            if (typeof value === 'string' && sources.has(value))
+                referenced.add(value);
+            if (value && typeof value === 'object')
+                Object.values(value).forEach(checkReferences);
         };
         for (const row of inventory.rows) {
             const object = row.value;
@@ -335,8 +383,7 @@ class EosLegacyMigration {
             }
             if (!object?._id || object._id === `system.adapter.${this.owner.namespace}` || sources.has(object._id.slice('system.adapter.'.length)) || object.common?.enabled !== true)
                 continue;
-            if (refers(copy(object.native || {})))
-                throw fail('EOS_MIGRATION_EXTERNAL_RPC_REFERENCE');
+            checkReferences(copy(object.native || {}));
         }
         const scripts = await this.reader.getObjectViewAsync('system', 'script', { startkey: 'script.', endkey: 'script.\u9999' });
         if (!Array.isArray(scripts?.rows) || scripts.rows.length > 5000)
@@ -348,9 +395,12 @@ class EosLegacyMigration {
             const text = script.common.source;
             if (typeof text !== 'string' || Buffer.byteLength(text) > 2 * 1024 * 1024)
                 throw fail('EOS_MIGRATION_SCRIPT_REVIEW');
-            if (text.includes('sendTo') && [...sources].some(source => text.includes(source)))
-                throw fail('EOS_MIGRATION_EXTERNAL_RPC_REFERENCE');
+            if (text.includes('sendTo'))
+                for (const source of sources)
+                    if (text.includes(source))
+                        referenced.add(source);
         }
+        return referenced;
     }
     async prepare() {
         await this.loadDestinations();
@@ -397,46 +447,63 @@ class EosLegacyMigration {
         }
         const candidates = [];
         const observed = [];
+        const issues = [];
         try {
+            // Inventory every participating family before releasing any independent scope.
+            // OCPP has an explicit manual import and a separate live ownership check.
             for (const [id, name] of Object.entries(SOURCES)) {
-                // An existing OCPP adapter is independent unless the installer
-                // explicitly imports it through the OCPP module page. Merely
-                // discovering it must not gate already configured Devices/EMS.
-                // Keep OCPP in SOURCES for persisted handover journals, recovery
-                // and namespace validation from earlier releases.
                 if (id === 'ocpp')
                     continue;
                 const found = await this.reader.getObjectViewAsync('system', 'instance', { startkey: `system.adapter.${name}.`, endkey: `system.adapter.${name}.\u9999` });
                 if (!Array.isArray(found?.rows) || found.rows.length > 64)
                     throw fail('EOS_MIGRATION_INVENTORY');
-                if (!found.rows.length)
-                    continue;
+                const seen = new Set();
                 for (const row of found.rows) {
-                    if (row.value?.type !== 'instance' || !new RegExp(`^system\\.adapter\\.${name}\\.\\d+$`).test(row.value._id || ''))
+                    const sourceId = row.value?._id;
+                    if (row.value?.type !== 'instance' || !new RegExp(`^system\\.adapter\\.${name}\\.\\d+$`).test(sourceId || '') || seen.has(sourceId))
                         throw fail('EOS_MIGRATION_INVENTORY');
-                    observed.push({ id, source: row.value._id.slice('system.adapter.'.length) });
+                    seen.add(sourceId);
+                    const source = sourceId.slice('system.adapter.'.length);
+                    observed.push({ id, source });
+                    if (found.rows.length > 1)
+                        issues.push({ id, source, code: 'EOS_MIGRATION_AMBIGUOUS' });
                 }
-                if (found.rows.length !== 1)
-                    throw fail('EOS_MIGRATION_AMBIGUOUS');
-                const inventory = found.rows[0].value;
-                if (inventory?.type !== 'instance' || !new RegExp(`^system\\.adapter\\.${name}\\.\\d+$`).test(inventory._id || ''))
-                    throw fail('EOS_MIGRATION_INVENTORY');
-                // Use the same ACL/protectedNative-aware read before, during and
-                // after cutover. An unfiltered view must never supply a different
-                // secret-bearing hash than a later adapter-core object read.
-                const object = await this.reader.getForeignObjectAsync(inventory._id);
-                if (object?.type !== 'instance' || object._id !== inventory._id)
-                    throw fail('EOS_MIGRATION_SOURCE_UNAVAILABLE');
-                candidates.push(await this.candidate(id, object));
             }
-            if (!candidates.length) {
+            if (!observed.length) {
                 this.phase = 'NOT_NEEDED';
-                // Replace a previous diagnostic-only BLOCKED state after the
-                // next successful inventory; do not persist a cutover journal.
                 await this.publish();
                 return;
             }
-            await this.checkLegacyRpc(candidates);
+            // An incomplete/global inventory or another EOS affects every writer.
+            // A reference to a known source is attributable to that handover only.
+            const referenced = await this.checkLegacyRpc(observed);
+            for (const row of observed)
+                if (referenced.has(row.source))
+                    issues.push({ ...row, code: 'EOS_MIGRATION_EXTERNAL_RPC_REFERENCE' });
+            for (const row of observed) {
+                if (issues.some(issue => issue.id === row.id))
+                    continue;
+                try {
+                    const sourceId = `system.adapter.${row.source}`;
+                    const object = await this.reader.getForeignObjectAsync(sourceId);
+                    if (object?.type !== 'instance' || object._id !== sourceId)
+                        throw fail('EOS_MIGRATION_SOURCE_UNAVAILABLE');
+                    candidates.push(await this.candidate(row.id, object));
+                }
+                catch (error) {
+                    issues.push({ ...row, code: safeCode(error) });
+                }
+            }
+            if (issues.length) {
+                // The cutover remains atomic: no source from this group is stopped and
+                // none of their embedded counterparts may start on package defaults.
+                this.blockedSources = new Set(observed.map(row => row.id));
+                this.journal = { sources: observed, issues, code: issues[0].code };
+                this.phase = 'BLOCKED';
+                this.owner.log.warn(`EOS_MIGRATION_BLOCKED: ${issues[0].code}; existing adapters remain unchanged`);
+                await this.publish();
+                return;
+            }
         }
         catch (error) {
             this.phase = 'BLOCKED';
@@ -464,7 +531,7 @@ class EosLegacyMigration {
             }
             for (const row of candidates) {
                 const current = await this.reader.getForeignObjectAsync(`system.adapter.${row.source}`);
-                if (!this.matchesSource(current, row))
+                if (!this.matchesSource(current, row) || current.common.enabled !== false)
                     throw fail('EOS_MIGRATION_SOURCE_CHANGED');
                 if (row.id === 'ui') {
                     // Recheck after confirmed stop: an in-flight old save may have
@@ -475,6 +542,13 @@ class EosLegacyMigration {
                 }
                 await row.prepareFiles?.();
                 await this.store.save(row.id, row.envelope);
+            }
+            // Recheck after file and asynchronous state reads, before granting write
+            // authority to the new runtimes. No disabled source gets enabled here.
+            for (const row of candidates) {
+                const current = await this.reader.getForeignObjectAsync(`system.adapter.${row.source}`);
+                if (!this.matchesSource(current, row) || !(await this.stoppedSource(row.source)))
+                    throw fail('EOS_MIGRATION_SOURCE_CHANGED');
             }
             await this.persist('TRANSFERRED');
             await this.loadDestinations();
@@ -559,12 +633,31 @@ class EosLegacyMigration {
         const devicesProgress = devices?.reason === 'STARTING' && startup?.pending === true &&
             Number.isSafeInteger(startup.completedObjects) && startup.completedObjects > 0
             ? startup.completedObjects : 0;
+        const requiresUi = rows.some(row => row.id === 'ui');
+        const split = !!ui && (Object.hasOwn(ui, 'ems') || Object.hasOwn(ui, 'ui'));
+        const ems = split ? ui.ems : ui;
+        const intent = id => this.owner.eosRuntimeControl?.dashboardIntent?.(id);
+        const paused = id => {
+            const saved = intent(id);
+            return saved?.enabled === false && saved.error === '';
+        };
+        const stoppedChild = child => child?.process?.state === 'stopped' && child.process.pid === null && child.active === false;
+        // A disabled *source* is still a real handover. The target uses its own
+        // persisted process switches. An uninitialized runtime is never a user pause.
+        const emsReady = paused('ems') ? stoppedChild(ems) && ems.canWrite === false : ems?.emsReady === true && ems.canWrite === true;
+        const presentationReady = !split || (paused('ui') ? stoppedChild(ui.ui) : ui.ui?.active === true);
+        // During process construction the UI reports degraded even when the child
+        // is only starting. Only a terminal child error can end this wait early.
+        const childFailed = child => child?.process ? child.process.state === 'failed' : child?.state === 'degraded';
         return {
             devicesProgress,
-            ready: this.owner.eosOwnership?.canWrite() === true && license?.valid === true && license.coreEnabled === true &&
-                (!rows.some(row => row.id === 'ui' && row.enabled) || (ui?.emsReady === true && ui.canWrite === true)) &&
-                modules.every(row => row?.active === true && row.reason === 'RUNNING'),
-            failed: ui?.state === 'degraded' || modules.some(row => /FAILED|INVALID/.test(row?.reason || '')),
+            ready: rows.every(row => this.owner.eosOwnership?.canWrite(row.id === 'ui' ? 'ems' : row.id) === true) &&
+                license?.valid === true && license.coreEnabled === true && (!requiresUi || (emsReady && presentationReady)) &&
+                modules.every(row => (row?.active === true && row.reason === 'RUNNING') ||
+                    (row?.enabled === true && row.reason === 'EOS_RUNTIME_DISABLED' && row.active === false && paused(row.id))),
+            failed: (requiresUi && (childFailed(ems) || childFailed(ui?.ui))) ||
+                modules.some(row => /FAILED/.test(row?.reason || '') || (row?.reason === 'CONFIG_INVALID' &&
+                    !!row.details?.configuration?.error && row.details.configuration.error !== 'EOS_MODULE_CONFIG_UNAVAILABLE')),
         };
     }
     /** Start this monitor immediately after transfer, before any web startup. */
@@ -629,5 +722,5 @@ class EosLegacyMigration {
     stop() { this.stopped = true; }
 }
 function safeCode(error) { return typeof error?.code === 'string' && /^[A-Z0-9_]{1,80}$/.test(error.code) ? error.code : 'EOS_MIGRATION_FAILED'; }
-module.exports = { EosLegacyMigration, decryptNative };
+module.exports = { EosLegacyMigration, decryptNative, hasConfirmedLegacyStop };
 //# sourceMappingURL=eosLegacyMigration.js.map

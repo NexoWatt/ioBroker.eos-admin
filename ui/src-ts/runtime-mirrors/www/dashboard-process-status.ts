@@ -24,7 +24,7 @@
  * - Der nächste Schritt ist pro Modul echte Typisierung statt pauschalem No-Check.
  * - Fachliche Kommentare markieren die Abschnitte, die später einzeln migriert werden.
  *
- * Original-Hash: 11cef2f4b172594d4dab4217fe809be35e033f4c15f92f982b59062443bc28e0
+ * Original-Hash: ba0859cad7b3b67256e291409ce84cf88ba1de9e5cc882c7c05b3285efabcee2
  */
 
 /**
@@ -45,7 +45,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/dashboard-process-status.ts
- * Quell-Hash: sha256:ebabb70be8b30b9a7eba89e595e8c9ca6197dd6cb7f121c2db137f35025cbfae
+ * Quell-Hash: sha256:d4137ddc277ec4bccbcfe6425b8bda5593279372d96aff96d236b517859e30c4
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -143,9 +143,12 @@
             return null;
         const failed = identifiers(row.failed);
         const paused = identifiers(row.paused);
-        if (!failed || !paused || failed.some(id => paused.includes(id)) || (state === 'fault') !== (failed.length > 0))
+        const waiting = identifiers(row.waiting === undefined ? [] : row.waiting);
+        if (!failed || !paused || !waiting || failed.some(id => paused.includes(id)) ||
+            waiting.some(id => failed.includes(id) || paused.includes(id)) ||
+            (state === 'fault') !== (failed.length > 0) || (state === 'ok' && waiting.length))
             return null;
-        return { observedAt, state, failed, paused, deviceHealth: devices(row.deviceHealth) };
+        return { observedAt, state, failed, paused, ...(waiting.length ? { waiting } : {}), deviceHealth: devices(row.deviceHealth) };
     }
 /**
  * Code-Teil: visible
@@ -271,7 +274,7 @@
         sample = { value, receivedAt: now, receivedTick: tick, ageMs };
         setExpiry();
         if (!previous || previous.state !== value.state || previous.failed.join() !== value.failed.join() ||
-            previous.paused.join() !== value.paused.join() || JSON.stringify(previous.deviceHealth) !== JSON.stringify(value.deviceHealth))
+            previous.paused.join() !== value.paused.join() || previous.waiting?.join() !== value.waiting?.join() || JSON.stringify(previous.deviceHealth) !== JSON.stringify(value.deviceHealth))
             notify();
     }
 /**

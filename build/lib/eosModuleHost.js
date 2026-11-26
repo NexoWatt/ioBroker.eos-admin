@@ -158,13 +158,15 @@ class EosModuleHost {
                     ready: entry.configLoaded && this.initialized && (!entry.config.enabled ||
                         (entry.started === true && this.canOperate('devices', entry.generation))) };
             },
-            canRun: () => !this.stopped && !this.mutation && this.licensed('devices') && this.owner.eosOwnership?.canWrite() === true,
+            canRun: () => !this.stopped && !this.mutation && this.licensed('devices') && this.moduleAuthority('devices') && this.moduleAuthority('ems'),
             report: code => this.owner.log.warn(`[EOS EMS commissioning] ${code}; saved device configuration remains unchanged`),
             apply: async (devices) => {
                 // Keep the authoritative device revision stable until the hosted
                 // configuration write completes. Discovery itself holds no lock.
                 if (this.mutation || this.stopped)
                     throw fail('EOS_MODULE_BUSY');
+                if (!this.moduleAuthority('devices') || !this.moduleAuthority('ems'))
+                    throw fail('EOS_EMS_CONFIGURATION_CHANGED');
                 this.mutation = true;
                 try {
                     return await handler(devices);
@@ -201,59 +203,102 @@ class EosModuleHost {
         if (!isRecord(envelope) || envelope.v !== 1 || typeof envelope.encrypted !== 'string') {
             throw fail('EOS_MODULE_CONFIG_FORMAT');
         }
-        const config = assertJson(JSON.parse(this.owner.decrypt(envelope.encrypted)));
+        let plain;
+        try {
+            plain = JSON.parse(this.owner.decrypt(envelope.encrypted));
+        }
+        catch {
+            throw fail('EOS_MODULE_CONFIG_DECRYPTION');
+        }
+        if (!isRecord(plain))
+            throw fail('EOS_MODULE_CONFIG_FORMAT');
+        const config = assertJson(plain);
         return this.factory(id).validateConfig(config);
+    }
+    // A successful read is promoted as a unit. An unreadable or still fenced snapshot
+    // cannot become a writable default just because another module is already running.
+    async readEntryConfiguration(entry, startupAllowed) {
+        try {
+            const stored = await bounded(this.configStore.load(entry.id));
+            if (this.stopped)
+                return;
+            const envelope = stored === undefined ? this.owner.config.eosModules?.[entry.id] : stored;
+            let config;
+            try {
+                config = this.decodeConfig(entry.id, envelope);
+            }
+            catch (error) {
+                throw fail(this.failureCode(error, 'EOS_MODULE_CONFIG_INVALID'));
+            }
+            const recovering = !entry.configLoaded || !!entry.configurationError;
+            entry.config = config;
+            entry.loadedEnvelope = envelope;
+            entry.configurationRevision = this.configStore.revisions.get(entry.id) || randomUUID();
+            entry.configurationStartupAllowed = startupAllowed;
+            entry.configLoaded = true;
+            entry.configurationError = '';
+            entry.configurationRetryAt = 0;
+            entry.configurationFailures = 0;
+            if (this.running && envelope)
+                this.owner.config.eosModules = { ...this.owner.config.eosModules, [entry.id]: envelope };
+            if (recovering && !entry.stopFailed) {
+                entry.failed = false;
+                entry.reason = config.enabled ? 'READY' : 'DISABLED';
+                this.nextOwnershipCheck = 0;
+            }
+        }
+        catch (error) {
+            if (this.stopped)
+                return;
+            entry.configLoaded = false;
+            entry.failed = true;
+            entry.reason = 'CONFIG_INVALID';
+            entry.configurationError = this.failureCode(error, 'EOS_MODULE_CONFIG_UNAVAILABLE');
+            entry.configurationFailures = Math.min(6, (entry.configurationFailures || 0) + 1);
+            entry.configurationRetryAt = performance.now() + Math.min(60000, 2000 * 2 ** (entry.configurationFailures - 1));
+        }
     }
     // The authenticated configuration shell must read the real saved settings even
     // while operational startup is fenced. This does not subscribe, start modules,
     // claim ownership or write the instance/configuration objects.
-    async loadForEditing(id, retryConfiguration = false) {
-        if (this.configurationLoadPromise)
-            await this.configurationLoadPromise;
+    async loadForEditing(id, retryConfiguration = false, inBackground = false) {
         const entry = this.entries.get(id);
         if (!entry)
             throw fail('EOS_MODULE_UNKNOWN');
-        const startupAllowed = this.owner.eosMigration?.allowsStartup?.();
-        const retry = retryConfiguration && !entry.configLoaded;
+        if (entry.configLoaded && entry.configurationStartupAllowed === this.owner.eosMigration?.allowsStartup?.(id))
+            return;
+        if (this.configurationLoadPromise)
+            await this.configurationLoadPromise;
+        const startupAllowed = this.owner.eosMigration?.allowsStartup?.(id);
+        const authorityChanged = entry.configLoaded && entry.configurationStartupAllowed !== startupAllowed;
+        const retry = authorityChanged || (!entry.configLoaded && (retryConfiguration ||
+            (this.initialized && entry.configurationError && performance.now() >= entry.configurationRetryAt)));
         if ((!retry && ((entry.configLoaded && entry.configurationStartupAllowed === startupAllowed) ||
             this.initialized || this.startPromise)) || this.stopped || this.mutation)
             return;
-        this.mutation = true;
-        this.configurationLoadPromise = (async () => {
-            try {
-                const envelope = await bounded(this.configStore.load(id));
-                if (this.stopped)
-                    return;
-                const config = this.decodeConfig(id, envelope);
-                entry.config = config;
-                entry.loadedEnvelope = envelope;
-                entry.configurationRevision = this.configStore.revisions.get(id) || randomUUID();
-                entry.configLoaded = true;
-                entry.configurationStartupAllowed = startupAllowed;
-                entry.configurationError = '';
-                if (retry && !entry.stopFailed) {
-                    entry.failed = false;
-                    this.resetProcessFailure(entry);
-                    entry.reason = config.enabled ? 'READY' : 'DISABLED';
-                }
-            }
-            catch (error) {
+        // A background retry only owns this unavailable entry. Healthy modules may be
+        // edited while the controller is still answering a failed module's read.
+        if (!inBackground)
+            this.mutation = true;
+        const task = (async () => {
+            if (authorityChanged) {
                 entry.configLoaded = false;
-                entry.configurationError = this.failureCode(error, 'EOS_MODULE_CONFIG_UNAVAILABLE');
-                if (retry) {
-                    entry.failed = true;
-                    entry.reason = 'CONFIG_INVALID';
+                if (entry.module) {
+                    this.revoke(entry, 'OWNERSHIP_CHANGED');
+                    await this.stopEntry(entry);
                 }
             }
-            finally {
-                this.mutation = false;
-            }
-        })();
+            if (!this.stopped)
+                await this.readEntryConfiguration(entry, startupAllowed);
+        })().finally(() => { if (!inBackground)
+            this.mutation = false; });
+        this.configurationLoadPromise = task;
         try {
-            await this.configurationLoadPromise;
+            await task;
         }
         finally {
-            this.configurationLoadPromise = null;
+            if (this.configurationLoadPromise === task)
+                this.configurationLoadPromise = null;
         }
     }
     configurationReason(id) {
@@ -267,9 +312,9 @@ class EosModuleHost {
         const migration = this.owner.eosMigration;
         // An unfinished handover may still write its target. Never accept a draft
         // into that target before the coordinator has released startup.
-        if (migration?.allowsStartup?.() === false)
+        if (migration?.allowsStartup?.(id) === false)
             return 'EOS_MODULE_MIGRATION_BLOCKED';
-        if (!this.initialized && migration?.allowsStartup?.() !== true)
+        if ((entry.configurationStartupAllowed !== migration?.allowsStartup?.(id)) || (!this.initialized && migration?.allowsStartup?.(id) !== true))
             return 'EOS_MODULE_NOT_READY';
         return '';
     }
@@ -316,11 +361,14 @@ class EosModuleHost {
             state: permanent ? 'error' : 'backoff', lastError: code };
         this.nextOwnershipCheck = 0;
     }
+    moduleAuthority(id) {
+        return this.owner.eosMigration?.allowsStartup?.(id) !== false && this.owner.eosOwnership?.canWrite(id) === true;
+    }
     canOperate(id, generation) {
         const entry = this.entries.get(id);
-        return this.running && this.initialized && !this.stopped && !!entry && this.processEnabled(id) && entry.config.enabled === true && !entry.failed &&
+        return this.running && this.initialized && !this.stopped && !!entry && !entry.draining && !entry.installingSnapshot && entry.configLoaded && entry.configurationStartupAllowed === this.owner.eosMigration?.allowsStartup?.(id) && this.processEnabled(id) && entry.config.enabled === true && !entry.failed &&
             entry.generation === generation && entry.lease > performance.now() && this.licensed(id) &&
-            this.owner.eosOwnership?.canWrite() === true;
+            this.moduleAuthority(id);
     }
     async inspectOwnership(entry) {
         const name = MODULES[entry.id];
@@ -363,12 +411,14 @@ class EosModuleHost {
     async stopEntry(entry) {
         if (entry.stopEntryPromise)
             return entry.stopEntryPromise;
-        const module = entry.module;
+        entry.draining = true;
+        const module = entry.module || entry.standbyProcess;
         if (typeof module?.health === 'function')
             entry.processHealth = module.health();
+        entry.standbyProcess = null;
         const startup = entry.startup;
         const commandSubscription = entry.commandSubscriptionPending;
-        const wasStarting = startup?.module === module && startup.settled !== true;
+        const wasStarting = !!startup && !!module && startup.module === module && startup.settled !== true;
         entry.module = null;
         entry.started = false;
         entry.generation++;
@@ -423,7 +473,7 @@ class EosModuleHost {
             await Promise.all(subscriptions.map(pattern => bounded(Promise.resolve().then(() => this.owner.unsubscribeForeignStatesAsync(pattern)), 1000)));
             for (const pattern of subscriptions)
                 entry.subscriptions.delete(pattern);
-        });
+        }).finally(() => { entry.draining = false; });
         // Keep late cleanup alive after timeout, but never restore its authority
         // or turn an uncertain stop into permission to reactivate the old owner.
         const configured = this.options.stopTimeoutMs;
@@ -740,7 +790,7 @@ class EosModuleHost {
                 const uiNamespace = owner.config.eosUiMigration?.preserveNamespace ? owner.config.eosUiMigration.source : owner.namespace;
                 if (entry.id !== 'eebus' || target !== uiNamespace ||
                     !['nexowatt.para14a.hello.v1', 'nexowatt.para14a.command.v1'].includes(command) ||
-                    !this.canOperate(entry.id, generation) || !this.bridgeHandler) {
+                    !this.canOperate(entry.id, generation) || !this.moduleAuthority('ems') || !this.bridgeHandler) {
                     if (typeof callback === 'function')
                         queueMicrotask(() => callback({ accepted: false, error: 'EOS_MODULE_BRIDGE_UNAVAILABLE' }));
                     return;
@@ -765,21 +815,22 @@ class EosModuleHost {
         // Lease renewal cannot wait behind another module's initial connection or
         // shutdown. The fixed module inventory remains bounded and fenced.
         this.leasePending = Promise.all([...this.entries.values()].map(async (entry) => {
-            if (!entry.config.enabled || !this.processEnabled(entry.id) || entry.failed)
+            if (entry.draining || entry.installingSnapshot || !entry.configLoaded || (!entry.config.enabled && this.options.standbyRequested?.(entry.id) !== true) || !this.processEnabled(entry.id) || entry.failed)
                 return;
             const generation = entry.generation;
+            const ownershipRevision = entry.ownershipRevision || 0;
             try {
                 const allowed = await bounded(this.inspectOwnership(entry));
-                if (!this.running || this.stopped || generation !== entry.generation)
+                if (!this.running || this.stopped || entry.draining || entry.installingSnapshot || generation !== entry.generation || ownershipRevision !== (entry.ownershipRevision || 0))
                     return;
                 if (!this.licensed(entry.id))
                     this.revoke(entry, 'LICENSE_REQUIRED');
-                else if (this.owner.eosOwnership?.canWrite() !== true)
+                else if (!this.moduleAuthority(entry.id))
                     this.revoke(entry, 'EOS_OWNERSHIP_REQUIRED');
                 else if (!allowed)
                     this.revoke(entry, 'LEGACY_CONFLICT');
                 else {
-                    entry.lease = performance.now() + LEASE_MS;
+                    entry.lease = entry.config.enabled ? performance.now() + LEASE_MS : 0;
                     entry.reason = entry.module ? (entry.started ? 'RUNNING' : 'STARTING') : 'READY';
                 }
             }
@@ -790,6 +841,54 @@ class EosModuleHost {
         })).finally(() => { this.leasePending = null; });
         await this.leasePending;
     }
+    standbyReason(entry) {
+        if (entry.draining || entry.installingSnapshot || !entry.configLoaded || !this.processEnabled(entry.id) || !this.licensed(entry.id) || entry.stopFailed || this.stopped)
+            return '';
+        if (!entry.config.enabled && this.options.standbyRequested?.(entry.id) !== true)
+            return '';
+        if (this.owner.eosMigration?.allowsStartup?.(entry.id) === false)
+            return 'EOS_MODULE_MIGRATION_BLOCKED';
+        if (entry.blockers.length || entry.reason === 'LEGACY_CONFLICT')
+            return 'LEGACY_CONFLICT';
+        if (!this.moduleAuthority(entry.id))
+            return 'EOS_OWNERSHIP_REQUIRED';
+        if (entry.reason === 'OWNERSHIP_UNAVAILABLE')
+            return 'OWNERSHIP_UNAVAILABLE';
+        return entry.config.enabled ? '' : 'EOS_RUNTIME_MODULE_DISABLED';
+    }
+    async startStandby(entry) {
+        if (entry.standbyProcess || entry.module || entry.failed || entry.stopFailed ||
+            entry.restartAt > performance.now() || !this.standbyReason(entry))
+            return;
+        const generation = ++entry.generation;
+        entry.stopEntryPromise = null;
+        const worker = new EosModuleProcess({ id: entry.id, generation, standby: true,
+            baseDir: this.options.baseDir, moduleOptions: { adapter: { namespace: this.owner.namespace, log: this.owner.log }, config: {}, dataDir: '' },
+            canOperate: () => false, heartbeatMs: 1000, startTimeoutMs: 10000,
+            onFailure: code => {
+                if (this.stopped || entry.standbyProcess !== worker)
+                    return;
+                entry.processFailure = code;
+                entry.failed = true;
+            } });
+        entry.standbyProcess = worker;
+        if (entry.restartAt)
+            entry.processRestarts++;
+        try {
+            await worker.start();
+            if (!this.stopped && entry.standbyProcess === worker) {
+                entry.processRunningSince = performance.now();
+                entry.restartAt = 0;
+            }
+        }
+        catch (issue) {
+            if (entry.standbyProcess !== worker)
+                return;
+            const code = this.failureCode(issue, 'EOS_MODULE_START_FAILED');
+            await this.stopEntry(entry);
+            this.recordProcessFailure(entry, code);
+        }
+    }
     async reconcile() {
         if (!this.running || !this.initialized || this.stopped)
             return;
@@ -798,11 +897,24 @@ class EosModuleHost {
             return;
         if (this.pending)
             return this.pending;
+        // The next normal sweep renews healthy leases independently of a controller read.
+        // Only one bounded configuration read runs at a time, and retries back off per module.
+        if (!this.configurationLoadPromise && !this.mutation) {
+            const retry = [...this.entries.values()].find(entry => {
+                const allowed = this.owner.eosMigration?.allowsStartup?.(entry.id);
+                return (entry.configLoaded && entry.configurationStartupAllowed !== allowed) ||
+                    (!entry.configLoaded && entry.configurationError && performance.now() >= entry.configurationRetryAt);
+            });
+            if (retry)
+                void this.loadForEditing(retry.id, true, true).catch(() => { });
+        }
         this.pending = (async () => {
             for (const entry of this.entries.values()) {
                 if (!this.running || this.stopped)
                     break;
-                if (entry.started && entry.processRunningSince && performance.now() - entry.processRunningSince > 60000)
+                if (entry.draining || entry.installingSnapshot)
+                    continue;
+                if ((entry.started || entry.standbyProcess) && entry.processRunningSince && performance.now() - entry.processRunningSince > 60000)
                     entry.consecutiveFailures = 0;
                 if (entry.processFailure) {
                     const code = entry.processFailure;
@@ -810,8 +922,32 @@ class EosModuleHost {
                     this.recordProcessFailure(entry, code);
                 }
                 if (!entry.configLoaded) {
-                    this.revoke(entry, 'CONFIG_INVALID');
+                    this.revoke(entry, entry.configurationError ? 'CONFIG_INVALID' : 'STARTING');
+                    if (entry.module || entry.standbyProcess)
+                        await this.stopEntry(entry);
                     continue;
+                }
+                const waitReason = this.standbyReason(entry);
+                if (waitReason) {
+                    if (entry.module) {
+                        this.revoke(entry, waitReason);
+                        await this.stopEntry(entry);
+                    }
+                    await this.startStandby(entry);
+                    continue;
+                }
+                if (entry.standbyProcess) {
+                    const promote = this.canOperate(entry.id, entry.generation);
+                    if (!promote && this.processEnabled(entry.id) && entry.config.enabled && this.licensed(entry.id) && !entry.failed)
+                        continue;
+                    // Reap and fence the old PID, then revalidate the owner after the
+                    // asynchronous drain before admitting an operational generation.
+                    await this.stopEntry(entry);
+                    entry.lease = 0;
+                    this.nextOwnershipCheck = 0;
+                    if (!promote || this.stopped || entry.stopFailed)
+                        continue;
+                    await this.renewOwnershipLeases();
                 }
                 if (!this.processEnabled(entry.id))
                     this.revoke(entry, 'EOS_RUNTIME_DISABLED');
@@ -819,7 +955,7 @@ class EosModuleHost {
                     this.revoke(entry, 'DISABLED');
                 else if (!this.licensed(entry.id))
                     this.revoke(entry, 'LICENSE_REQUIRED');
-                else if (this.owner.eosOwnership?.canWrite() !== true)
+                else if (!this.moduleAuthority(entry.id))
                     this.revoke(entry, 'EOS_OWNERSHIP_REQUIRED');
                 if (entry.module && entry.moduleGeneration !== entry.generation)
                     await this.stopEntry(entry);
@@ -1031,24 +1167,9 @@ class EosModuleHost {
                 for (const entry of this.entries.values()) {
                     if (this.stopped)
                         return;
-                    try {
-                        const envelope = await bounded(this.configStore.load(entry.id));
-                        if (this.stopped)
-                            return;
-                        if (envelope)
-                            this.owner.config.eosModules = { ...this.owner.config.eosModules, [entry.id]: envelope };
-                        entry.config = this.readConfig(entry.id);
-                        entry.loadedEnvelope = envelope;
-                        entry.configurationRevision = this.configStore.revisions.get(entry.id) || randomUUID();
-                        entry.configLoaded = true;
-                        entry.configurationError = '';
-                    }
-                    catch (error) {
-                        entry.failed = true;
-                        entry.configLoaded = false;
-                        entry.reason = 'CONFIG_INVALID';
-                        entry.configurationError = this.failureCode(error, 'EOS_MODULE_CONFIG_UNAVAILABLE');
-                    }
+                    await this.readEntryConfiguration(entry, this.owner.eosMigration?.allowsStartup?.(entry.id));
+                    if (this.stopped)
+                        return;
                     const name = MODULES[entry.id];
                     await this.subscribeAtStartup('objects', `system.adapter.${name}.*`);
                     if (this.stopped)
@@ -1081,8 +1202,14 @@ class EosModuleHost {
     ownershipChanged(entry) {
         // A dormant module has no authority to revoke. External adapter
         // heartbeats must not look like hundreds of local process generations.
+        entry.ownershipRevision = (entry.ownershipRevision || 0) + 1;
         if (!entry.configLoaded || !entry.config.enabled || !this.processEnabled(entry.id) || entry.failed)
             return false;
+        if (entry.standbyProcess) {
+            entry.lease = 0;
+            this.nextOwnershipCheck = 0;
+            return true;
+        }
         const acquired = entry.module || entry.lease || entry.commandSubscriptionPending || this.leasePending;
         this.revoke(entry, 'OWNERSHIP_CHANGED');
         if (acquired)
@@ -1126,12 +1253,12 @@ class EosModuleHost {
         const entry = this.entries.get(id);
         if (!entry)
             throw fail('EOS_MODULE_UNKNOWN');
-        const process = this.options.factories?.[id] ? null : entry.module?.health?.() || entry.processHealth || {
+        const process = entry.standbyProcess?.health() || (this.options.factories?.[id] ? null : entry.module?.health?.() || entry.processHealth || {
             mode: 'process', state: 'stopped', pid: null, generation: entry.generation, lastError: '', lastHeartbeatAt: 0,
-        };
+        });
         return { configured: entry.configLoaded ? entry.config.enabled === true : null,
             active: !!entry.module && entry.started === true && entry.moduleGeneration === entry.generation && this.canOperate(id, entry.generation),
-            reason: !entry.configLoaded ? (entry.configurationError ? 'CONFIG_INVALID' : '') : entry.reason, process,
+            reason: entry.standbyProcess ? 'WAITING_FOR_OWNERSHIP' : !entry.configLoaded ? (entry.configurationError ? 'CONFIG_INVALID' : '') : entry.reason, process,
             deviceHealth: includeDevices && (id === 'devices' || id === 'eebus' || id === 'ocpp') ? entry.module?.getDeviceHealth?.() : undefined };
     }
     async status(id) {
@@ -1150,18 +1277,20 @@ class EosModuleHost {
                     pending: !!entry.module && !entry.started && !entry.startup.settled,
                     error: entry.startupError || '' } };
         }
+        if (entry.standbyProcess)
+            details = { ...details, waitingReason: this.standbyReason(entry) || 'OWNERSHIP_CHANGED' };
         if (!entry.configLoaded)
             details = { ...details, configuration: { ready: false,
-                    error: entry.configurationError || 'EOS_MODULE_CONFIG_UNAVAILABLE' } };
+                    error: entry.configurationError || '' } };
         const supervisor = this.supervisorState(id);
         if (supervisor.process) {
             details = { ...details, process: { ...supervisor.process,
-                    ...(!entry.configLoaded ? { state: 'error', lastError: entry.configurationError || 'EOS_MODULE_CONFIG_UNAVAILABLE' } : {}),
+                    ...(!entry.configLoaded && entry.configurationError ? { state: 'error', lastError: entry.configurationError } : {}),
                     restarts: entry.processRestarts,
                     nextRestartAt: entry.restartAt ? Date.now() + Math.max(0, entry.restartAt - performance.now()) : 0 } };
         }
-        return { id, enabled: entry.config.enabled === true, active: supervisor.active,
-            reason: !entry.configLoaded ? 'CONFIG_INVALID' : !this.processEnabled(id) ? 'EOS_RUNTIME_DISABLED' : entry.reason,
+        return { id, enabled: entry.configLoaded ? entry.config.enabled === true : null, active: supervisor.active,
+            reason: !entry.configLoaded ? (entry.configurationError ? 'CONFIG_INVALID' : 'STARTING') : !this.processEnabled(id) ? 'EOS_RUNTIME_DISABLED' : supervisor.reason,
             blockers: entry.blockers, details: redact(assertJson(details)),
             namespace: id === 'devices' ? `${this.namespace(id)}.devices` : this.namespace(id) };
     }
@@ -1182,8 +1311,6 @@ class EosModuleHost {
             this.deviceEms?.request('configuration');
             return;
         }
-        if (this.owner.eosMigration?.allowsStartup?.() === false)
-            throw fail('EOS_RUNTIME_MIGRATION_BLOCKED');
         if (!this.processEnabled(id))
             throw fail('EOS_RUNTIME_DISABLED');
         if (this.mutation || this.configurationSavePromise)
@@ -1198,12 +1325,16 @@ class EosModuleHost {
             await this.loadForEditing(id, true);
         if (!entry.configLoaded)
             throw fail(entry.configurationError || 'EOS_MODULE_CONFIG_UNAVAILABLE');
-        if (!entry.config.enabled)
+        if (!entry.config.enabled && !this.standbyReason(entry))
             throw fail('EOS_RUNTIME_MODULE_DISABLED');
         entry.failed = false;
         this.resetProcessFailure(entry);
         this.nextOwnershipCheck = 0;
         await this.reconcile();
+        if (!entry.module && !entry.standbyProcess && entry.config.enabled && !entry.failed && !this.standbyReason(entry))
+            await this.reconcile();
+        if (entry.standbyProcess?.health().state === 'running' && this.standbyReason(entry))
+            return;
         if (!entry.started || !this.canOperate(id, entry.generation)) {
             const reason = { LEGACY_CONFLICT: 'EOS_MODULE_LEGACY_RUNNING', LICENSE_REQUIRED: 'EOS_RUNTIME_LICENSE_REQUIRED',
                 EOS_OWNERSHIP_REQUIRED: 'EOS_RUNTIME_OWNERSHIP_REQUIRED', OWNERSHIP_UNAVAILABLE: 'EOS_MODULE_OWNERSHIP_UNAVAILABLE' }[entry.reason];
@@ -1228,7 +1359,28 @@ class EosModuleHost {
             throw fail('EOS_MODULE_BUSY');
         if (entry.config.enabled === true)
             return;
-        const saving = this.save(id, { ...entry.config, enabled: true }, undefined, entry.configurationRevision);
+        const scopeRevision = entry.ownershipRevision || 0;
+        const configurationRevision = entry.configurationRevision;
+        const guard = () => {
+            if (this.owner.eosMigration?.allowsStartup?.(id) === false)
+                throw fail('EOS_MODULE_MIGRATION_BLOCKED');
+            if (!this.moduleAuthority(id))
+                throw fail('EOS_RUNTIME_OWNERSHIP_REQUIRED');
+            if ((entry.ownershipRevision || 0) !== scopeRevision)
+                throw fail('EOS_MODULE_OWNERSHIP_UNAVAILABLE');
+        };
+        guard();
+        let available;
+        try {
+            available = await bounded(this.inspectOwnership(entry));
+        }
+        catch {
+            throw fail('EOS_MODULE_OWNERSHIP_UNAVAILABLE');
+        }
+        if (!available)
+            throw fail('EOS_MODULE_LEGACY_RUNNING');
+        guard();
+        const saving = this.save(id, { ...entry.config, enabled: true }, undefined, configurationRevision, guard);
         const committing = this.configurationSavePromise;
         // save() bounds its HTTP response; the accepted controller write may
         // still settle afterwards. Keep the runtime control transaction locked.
@@ -1265,12 +1417,13 @@ class EosModuleHost {
         const migration = entry.loadedEnvelope?.migration || this.owner.config.eosModules?.[id]?.migration;
         const reason = this.stopped ? 'EOS_MODULE_BUSY'
             : !this.initialized || !entry.configLoaded ? 'EOS_MODULE_NOT_READY'
-                : migration?.preserveNamespace === true ? 'EOS_MODULE_IMPORT_ALREADY_MIGRATED'
-                    : entry.stopFailed ? 'EOS_MODULE_STOP_UNCONFIRMED'
-                        : entry.config.enabled || entry.module ? 'EOS_MODULE_IMPORT_REQUIRES_DISABLED' : '';
+                : this.owner.eosMigration?.allowsStartup?.(id) === false ? 'EOS_MODULE_MIGRATION_BLOCKED'
+                    : migration?.preserveNamespace === true ? 'EOS_MODULE_IMPORT_ALREADY_MIGRATED'
+                        : entry.stopFailed ? 'EOS_MODULE_STOP_UNCONFIRMED'
+                            : entry.config.enabled || entry.module ? 'EOS_MODULE_IMPORT_REQUIRES_DISABLED' : '';
         return { allowed: !reason, reason };
     }
-    async save(id, config, migration, expectedConfigurationRevision) {
+    async save(id, config, migration, expectedConfigurationRevision, guard) {
         const reason = this.configurationReason(id);
         if (reason)
             throw fail(reason);
@@ -1289,7 +1442,7 @@ class EosModuleHost {
         if (id === 'devices')
             this.deviceEms?.request('configuration');
         this.mutation = true;
-        return this.waitConfigurationSave(this.persistConfig(id, config, migration));
+        return this.waitConfigurationSave(this.persistConfig(id, config, migration, guard));
     }
     /** Eine HTTP-Deadline beendet keinen Datenbankauftrag. Die tatsächliche
      * Transaktion hält die Speichersperre bis Commit und Laufzeitübernahme fest;
@@ -1305,7 +1458,7 @@ class EosModuleHost {
         return bounded(pending);
     }
     /** Internal commit shared by save/import; the entire caller operation owns the mutation lock. */
-    async persistConfig(id, config, migration) {
+    async persistConfig(id, config, migration, guard) {
         if (!this.mutation || this.stopped)
             throw fail('EOS_MODULE_BUSY');
         const entry = this.entries.get(id);
@@ -1341,25 +1494,39 @@ class EosModuleHost {
                 migration: migration || entry.loadedEnvelope?.migration || this.owner.config.eosModules?.[id]?.migration || null };
             // Commit before interrupting the old runtime. Failed/conflicting writes
             // leave its validated settings and transport generation untouched.
-            await this.configStore.save(id, envelope, () => !this.stopped);
+            await this.configStore.save(id, envelope, () => {
+                guard?.();
+                if (this.owner.eosMigration?.allowsStartup?.(id) === false)
+                    throw fail('EOS_MODULE_MIGRATION_BLOCKED');
+                return !this.stopped;
+            });
             if (this.stopped)
                 throw fail('EOS_MODULE_STOPPED');
-            this.revoke(entry, 'CONFIG_CHANGED');
-            await this.stopEntry(entry);
-            if (this.stopped)
-                throw fail('EOS_MODULE_STOPPED');
-            this.owner.config.eosModules = { ...this.owner.config.eosModules, [id]: envelope };
-            entry.config = normalized;
-            entry.loadedEnvelope = envelope;
-            entry.configurationRevision = this.configStore.revisions.get(id);
-            if (!entry.stopFailed) {
-                this.resetProcessFailure(entry);
-                entry.failed = false;
-                entry.reason = normalized.enabled ? 'STARTING' : 'DISABLED';
+            // A concurrent supervisor sweep may run while the old transport is
+            // draining. The new generation is admissible only after its committed
+            // configuration has replaced the old snapshot, including at await boundaries.
+            entry.installingSnapshot = true;
+            try {
+                this.revoke(entry, 'CONFIG_CHANGED');
+                await this.stopEntry(entry);
+                if (this.stopped)
+                    throw fail('EOS_MODULE_STOPPED');
+                this.owner.config.eosModules = { ...this.owner.config.eosModules, [id]: envelope };
+                entry.config = normalized;
+                entry.loadedEnvelope = envelope;
+                entry.configurationRevision = this.configStore.revisions.get(id);
+                if (!entry.stopFailed) {
+                    this.resetProcessFailure(entry);
+                    entry.failed = false;
+                    entry.reason = normalized.enabled ? 'STARTING' : 'DISABLED';
+                }
+                else {
+                    entry.failed = true;
+                    entry.reason = 'STOP_FAILED_RESTART_REQUIRED';
+                }
             }
-            else {
-                entry.failed = true;
-                entry.reason = 'STOP_FAILED_RESTART_REQUIRED';
+            finally {
+                entry.installingSnapshot = false;
             }
             this.nextOwnershipCheck = 0;
             if (id === 'devices')
@@ -1519,7 +1686,7 @@ class EosModuleHost {
     }
     receiveBridge(message) {
         const entry = this.entries.get('eebus');
-        if (!entry.module || !this.canOperate('eebus', entry.generation) || message?.command !== 'nexowatt.para14a.implementation.v1')
+        if (!entry.module || !this.canOperate('eebus', entry.generation) || !this.moduleAuthority('ems') || message?.command !== 'nexowatt.para14a.implementation.v1')
             return false;
         try {
             const payload = assertJson(message.message);

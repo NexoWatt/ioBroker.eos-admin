@@ -65,7 +65,7 @@ class EosSupervisorNotifications {
             const migration = this.owner.config?.eosUiMigration;
             const namespace = migration?.preserveNamespace === true && /^nexowatt-ui\.\d+$/.test(migration.source)
                 ? migration.source : this.owner.namespace;
-            const authorized = () => !this.closed && (namespace === this.owner.namespace || this.owner.eosMigration?.allowsStartup?.() !== false);
+            const authorized = () => !this.closed && (namespace === this.owner.namespace || this.owner.eosMigration?.allowsStartup?.('ui') !== false);
             if (!authorized()) {
                 this.mail?.close(); this.mail = null; this.disabledHandled = false;
                 return;

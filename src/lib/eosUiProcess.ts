@@ -738,15 +738,60 @@ export function createEosUiProcess(owner: UiOwner, bridge: UiBridge, options: Ui
             await remote('startOperational', [], 120_000);
         },
         status(): Record<string, unknown> {
+            const active = health.state === 'running' && current(generation);
+            const canWrite = writable(generation);
+            let waitingReason = '';
+            if (
+                !presentationOnly &&
+                active &&
+                !canWrite &&
+                health.lastHeartbeatAt > 0 &&
+                performance.now() - lastHealth < 5000 &&
+                !health.lastError &&
+                ['idle', 'blocked', 'ready'].includes(String(latestStatus.state))
+            ) {
+                const license = bridge.getLicense();
+                const readiness = bridge.getRuntimeReadiness?.();
+                if (
+                    processRecord(license) &&
+                    license.valid === true &&
+                    license.coreEnabled === true &&
+                    processRecord(readiness)
+                ) {
+                    const migration = readiness.migration;
+                    const guard = readiness.ownership;
+                    if (
+                        processRecord(migration) &&
+                        migration.allowsStartup === false &&
+                        [
+                            'BLOCKED',
+                            'PREPARED',
+                            'STOPPING',
+                            'ROLLING_BACK',
+                            'ROLLBACK_REQUIRED',
+                            'ROLLED_BACK',
+                        ].includes(String(migration.phase))
+                    ) {
+                        waitingReason = 'EOS_RUNTIME_MIGRATION_BLOCKED';
+                    } else if (
+                        processRecord(guard) &&
+                        guard.allowed === false &&
+                        guard.reason === 'LEGACY_OR_PARALLEL_WRITER'
+                    ) {
+                        waitingReason = 'EOS_RUNTIME_OWNERSHIP_REQUIRED';
+                    }
+                }
+            }
             return {
                 ...latestStatus,
                 ...(health.state !== 'running'
                     ? { state: stopped || paused ? health.state : 'degraded', error: health.lastError }
                     : {}),
-                active: health.state === 'running' && current(generation),
-                emsReady: health.state === 'running' && current(generation) && latestStatus.emsReady === true,
-                canWrite: writable(generation),
-                process: { ...health },
+                active,
+                emsReady: active && latestStatus.emsReady === true && !waitingReason,
+                canWrite,
+                ...(waitingReason ? { waitingReason } : {}),
+                process: { ...health, ...(waitingReason ? { standby: true } : {}) },
             };
         },
         getHistoryBackupRequirement(): Promise<unknown> {

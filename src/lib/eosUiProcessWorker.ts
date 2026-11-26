@@ -36,6 +36,7 @@ let server: Server | null = null;
 let stopping = false;
 let initialized = false;
 let presentationOnly = false;
+let operationRequested = false;
 let leaseAt = 0;
 let leaseSequence = 0;
 let authority: Record<string, unknown> = {};
@@ -58,6 +59,10 @@ function notify(method: string, args: unknown[] = []): void {
 function canWrite(): boolean {
     return !presentationOnly && !stopping && performance.now() - leaseAt <= 3000 && authority.canWrite === true;
 }
+function operationalGrant(): boolean {
+    const license = authority.license;
+    return canWrite() && processRecord(license) && license.valid === true && license.coreEnabled === true;
+}
 function updateAuthority(value: Record<string, unknown>): void {
     if (
         stopping ||
@@ -69,10 +74,27 @@ function updateAuthority(value: Record<string, unknown>): void {
     ) {
         return;
     }
+    const previousGrant = operationalGrant();
     authority = value;
     leaseSequence = Number(value.sequence);
     // A queued lease retains its original age instead of being renewed on delivery.
     leaseAt = performance.now() - Math.max(0, 3000 - (value.expiresAt - Date.now()));
+    if (operationRequested && runtime && !previousGrant && operationalGrant()) {
+        const current = runtime.status();
+        if (
+            processRecord(current) &&
+            current.emsReady !== true &&
+            ['idle', 'blocked', 'unlicensed'].includes(String(current.state))
+        ) {
+            // An already armed standby must resume when its controller lease is confirmed,
+            // even if no dashboard request arrives. The runtime deduplicates startup.
+            void Promise.resolve()
+                .then(() => runtime?.startOperational())
+                .catch(() => {
+                    notify('log', ['warn', 'EOS_EMS_OPERATIONAL_START_FAILED']);
+                });
+        }
+    }
 }
 function terminate(exitCode: number): void {
     stopping = true;
@@ -438,6 +460,7 @@ async function dispatch(method: string, args: unknown[]): Promise<unknown> {
         throw processError('EOS_UI_PROCESS_METHOD_DENIED');
     }
     if (method === 'startOperational') {
+        operationRequested = true;
         return runtime.startOperational();
     }
     if (method === 'getHistoryBackupRequirement') {

@@ -1,0 +1,66 @@
+{
+  "packageVersion": "9.0.34",
+  "scenario": "Synthetic uninitialized host with legacy UI preflight, real production config, supervisor status and protected HTTP/Chromium rendering; no device I/O",
+  "rows": [
+    {
+      "id": "admin",
+      "badge": "Läuft",
+      "fields": "Prozessnummer (PID)6Administration erreichbarJa",
+      "notes": [
+        "Bleibt als Zugang zur Prozessverwaltung aktiv. Einen vollständigen EOS-Neustart über die ioBroker-Instanzverwaltung ausführen."
+      ]
+    },
+    {
+      "id": "ui",
+      "badge": "Läuft",
+      "fields": "Prozessnummer (PID)2341Oberfläche aktivJaProzessfreigabeAktiviertNeustarts in diesem LaufUnbekanntGeneration1Letzter Heartbeat26.11.2026, 21:19:19",
+      "notes": [
+        "Der Start ist durch eine nicht abgeschlossene Geräteübernahme blockiert. Übernahmestatus prüfen."
+      ]
+    },
+    {
+      "id": "ems",
+      "badge": "Läuft",
+      "fields": "Prozessnummer (PID)2342Betrieb freigegebenJaEMS bereitNeinProzessfreigabeAktiviertNeustarts in diesem LaufUnbekanntGeneration1Letzter Heartbeat26.11.2026, 21:19:19",
+      "notes": [
+        "Der Start ist durch eine nicht abgeschlossene Geräteübernahme blockiert. Übernahmestatus prüfen."
+      ]
+    },
+    {
+      "id": "devices",
+      "badge": "Start blockiert",
+      "fields": "Prozessnummer (PID)UnbekanntBetrieb freigegebenNeinProzessfreigabeAktiviertNeustarts in diesem Lauf0Generation0Letzter HeartbeatUnbekanntMeldungEOS_MODULE_CONFIG_UNAVAILABLE",
+      "notes": [
+        "Die gespeicherte Modulkonfiguration ist nicht lesbar. Moduleinstellungen und Systemprotokoll prüfen.",
+        "Der Start ist durch eine nicht abgeschlossene Geräteübernahme blockiert. Übernahmestatus prüfen."
+      ]
+    },
+    {
+      "id": "eebus",
+      "badge": "Start blockiert",
+      "fields": "Prozessnummer (PID)UnbekanntBetrieb freigegebenNeinProzessfreigabeAktiviertNeustarts in diesem Lauf0Generation0Letzter HeartbeatUnbekanntMeldungEOS_MODULE_CONFIG_UNAVAILABLE",
+      "notes": [
+        "Die gespeicherte Modulkonfiguration ist nicht lesbar. Moduleinstellungen und Systemprotokoll prüfen.",
+        "Der Start ist durch eine nicht abgeschlossene Geräteübernahme blockiert. Übernahmestatus prüfen."
+      ]
+    },
+    {
+      "id": "backup",
+      "badge": "Start blockiert",
+      "fields": "Prozessnummer (PID)UnbekanntBetrieb freigegebenNeinProzessfreigabeAktiviertNeustarts in diesem Lauf0Generation0Letzter HeartbeatUnbekanntMeldungEOS_MODULE_CONFIG_UNAVAILABLE",
+      "notes": [
+        "Die gespeicherte Modulkonfiguration ist nicht lesbar. Moduleinstellungen und Systemprotokoll prüfen.",
+        "Der Start ist durch eine nicht abgeschlossene Geräteübernahme blockiert. Übernahmestatus prüfen."
+      ]
+    },
+    {
+      "id": "ocpp",
+      "badge": "Start blockiert",
+      "fields": "Prozessnummer (PID)UnbekanntBetrieb freigegebenNeinProzessfreigabeAktiviertNeustarts in diesem Lauf0Generation0Letzter HeartbeatUnbekanntMeldungEOS_MODULE_CONFIG_UNAVAILABLE",
+      "notes": [
+        "Die gespeicherte Modulkonfiguration ist nicht lesbar. Moduleinstellungen und Systemprotokoll prüfen.",
+        "Der Start ist durch eine nicht abgeschlossene Geräteübernahme blockiert. Übernahmestatus prüfen."
+      ]
+    }
+  ]
+}

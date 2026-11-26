@@ -82,3 +82,23 @@ test('module names, prototype keys and envelope sizes are validated before stora
     await assert.rejects(f.store.save('devices', f.envelope), /EOS_MODULE_ENCRYPTION/);
     assert.equal(f.writes.length, 0);
 });
+
+test('a late legacy controller response cannot replace the newer verified save revision', async () => {
+    const f=fixture();await f.store.save('devices',f.envelope);
+    const read=f.owner.getForeignObjectAsync.bind(f.owner);
+    let release,entered;
+    const started=new Promise(r=>{entered=r;});const paused=new Promise(r=>{release=r;});
+    let first=true;
+    f.owner.getForeignObjectAsync=async id=>{
+        const old=await read(id);
+        if(first){first=false;entered();await paused;}
+        return old;
+    };
+    const slow=f.store.load('devices');await started;
+    const changed={...f.envelope,migration:{source:'nexowatt-devices.4'}};
+    await f.store.save('devices',changed);const current=f.store.revisions.get('devices');
+    release();
+    await assert.rejects(slow,/EOS_MODULE_CONFIG_CONFLICT/);
+    assert.equal(f.store.revisions.get('devices'),current);
+    assert.deepEqual(await f.store.load('devices'),changed);
+});

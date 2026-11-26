@@ -24,7 +24,7 @@ const until = async predicate => {
 };
 async function main() {
     const temp = await fs.mkdtemp(path.join(os.tmpdir(), 'eos-runtime-controls-browser-'));
-    let browser; let server; let service; let origin = ''; let role = 'admin'; let migrationAllowed = true;
+    let browser; let server; let service; let origin = ''; let role = 'admin'; let migrationAllowed = true; let onlyBlocked = null; let configPending = false; let standbyEebus = false; let standbyHeartbeatAge = 0; let awaitingActivation = false;
     let responseMode = ''; let heldResponse; let heldLifecycle; let holdLifecycle = ''; let failLifecycle = '';
     const checks = []; const pageErrors = []; const calls = []; const writes = []; const requests = [];
     const objects = new Map(); const csrf = 'fixture-csrf-'.repeat(4);
@@ -40,7 +40,8 @@ async function main() {
         setForeignObjectAsync: async (id, value) => { writes.push(id); objects.set(id, structuredClone(value)); },
         getObjectViewAsync: async () => ({ rows: [{ id: 'system.adapter.ocpp21.0' }] }),
         getForeignStateAsync: async id => ({ val: id.endsWith('.pid') ? 23456 : true, ack: true, q: 0, ts: Date.now(), lc: Date.now() - 1000 }),
-        eosMigration: { allowsStartup: () => migrationAllowed }, eosOwnership: { canWrite: () => true },
+        eosMigration: { allowsStartup: id => migrationAllowed && !onlyBlocked?.includes(id),
+            allowsSupervisorStartup: () => migrationAllowed, status: () => migrationFixture() }, eosOwnership: { canWrite: id => !(standbyEebus && !awaitingActivation && id === 'eebus') },
         eosLicenseService: { statusView: () => ({ valid: true, coreEnabled: true }), allowsEmbeddedModule: () => true },
     };
     const change = async (id, action) => {
@@ -54,18 +55,26 @@ async function main() {
         status[id].lastHeartbeatAt = Date.now();
     };
     const moduleStore = new EosModuleConfigStore(owner);
-    const host = { owner, view: async id => ({ config: { enabled: configured[id] } }),
+    const migrationFixture = () => onlyBlocked ? { phase: 'BLOCKED', code: 'EOS_MIGRATION_STOP_UNCONFIRMED',
+        sources: [{ id: 'ui', source: 'nexowatt-ui.0' }],
+        issues: [{ id: 'ui', source: 'nexowatt-ui.0', code: 'EOS_MIGRATION_STOP_UNCONFIRMED', privateKey: 'redact-fixture' }] }
+        : { phase: migrationAllowed ? 'COMMITTED' : 'ROLLBACK_REQUIRED', code: migrationAllowed ? '' : 'EOS_MIGRATION_JOURNAL_INVALID', sources: [] };
+    const host = { owner, migrationStatus: migrationFixture, view: async id => ({ config: { enabled: configured[id] } }),
         enableProcessModule: async id => {
             const config = { enabled: true, retainedSetting: `fixture-${id}`, secret: 'fixture-private-setting' };
             await moduleStore.load(id);
             await moduleStore.save(id, { v: 1, encrypted: owner.encrypt(JSON.stringify(config)) });
             configured[id] = true;
         },
-        status: async id => ({ enabled: configured[id], active: status[id].state === 'running', reason: configured[id] ? 'RUNNING' : 'DISABLED', details: { process: { ...status[id] } } }),
+        status: async id => configPending && id === 'devices' ? { enabled: null, active: false, reason: 'STARTING',
+            details: { configuration: { ready: false, error: '' }, process: processHealth('stopped') } } :
+            standbyEebus && id === 'eebus' ? { enabled: !awaitingActivation, active: false, reason: 'WAITING_FOR_OWNERSHIP',
+                blockers: [{instance:'eebus.1',reason:'LEGACY_STOP_NOT_CONFIRMED'}, {instance:'private-data',reason:'UNKNOWN'}],
+                details:{ waitingReason:awaitingActivation ? 'EOS_RUNTIME_MODULE_DISABLED' : 'LEGACY_CONFLICT', process:{...status[id],standby:true,lastHeartbeatAt:Date.now()-standbyHeartbeatAge} } } : ({ enabled: configured[id], active: status[id].state === 'running', reason: configured[id] ? 'RUNNING' : 'DISABLED', details: { process: { ...status[id] } } }),
         controlProcess: (id, action) => change(id, action) };
     const runtime = { status: () => ({
-        ui: { active: status.ui.state === 'running', process: { ...status.ui } },
-        ems: { active: status.ems.state === 'running', emsReady: status.ems.state === 'running', process: { ...status.ems } },
+        ui: { active: status.ui.state === 'running', process: { ...status.ui, lastHeartbeatAt: Date.now() } },
+        ems: { active: status.ems.state === 'running', emsReady: status.ems.state === 'running' && !onlyBlocked?.includes('ems'), process: { ...status.ems, lastHeartbeatAt: Date.now() } },
     }), pause: () => change('ui', 'stop'), resume: () => change('ui', 'start'),
         pauseEms: () => change('ems', 'stop'), resumeEms: () => change('ems', 'start') };
     try {
@@ -163,12 +172,47 @@ async function main() {
         await page.waitForFunction(selector => !document.querySelector(selector)?.disabled, {}, button('devices', 'restart'));
         checks.push({ name: 'restart uses confirmed stop before start through the production control service', result: 'passed' });
 
-        migrationAllowed = false; await page.click('#refresh');
-        await page.waitForFunction(selector => document.querySelector(selector)?.textContent?.includes('nicht abgeschlossene Geräteübernahme'), {}, card('devices'));
-        assert.equal(await page.$eval(button('devices', 'restart'), node => node.disabled), true);
+        const beforeReview = requests.length;
+        onlyBlocked = ['ui', 'ems']; configPending = true;
+        await page.click('#refresh'); await page.waitForFunction(selector => document.querySelector(selector)?.textContent?.includes('EOS_MIGRATION_STOP_UNCONFIRMED'), {}, card('ui'));
+        assert.match(await page.$eval(card('ems'), node => node.textContent), /EMS bereitNein/);
+        assert.match(await page.$eval(card('ems'), node => node.textContent), /Läuft · wartet auf Freigabe/);
+        assert.match(await page.$eval(card('ui'), node => node.textContent), /Oberfläche ist erreichbar.*nexowatt-ui\.0/);
+        assert.equal(await page.$eval(button('ems','restart'), node=>node.disabled),false);
+        assert.match(await page.$eval(card('devices'), node => node.textContent), /ModulkonfigurationNoch nicht eingelesen/);
+        assert.doesNotMatch(await page.$eval(card('devices'), node => node.textContent), /nicht lesbar|EOS_MODULE_CONFIG_UNAVAILABLE|Übernahmestatus öffnen|Modul ist deaktiviert/);
+        assert.equal(await page.$eval(button('devices', 'enable'), node => node.disabled), true);
+        assert.equal(await page.$eval(button('eebus', 'restart'), node => node.disabled), false);
+        await page.click(`${card('ems')} a[href="/migration/"]`); await page.waitForFunction(() => document.querySelector('#status-code')?.textContent === 'EOS_MIGRATION_STOP_UNCONFIRMED');
+        assert.match(await page.$eval('#sources', node => node.textContent), /nexowatt-ui\.0.*EOS_MIGRATION_STOP_UNCONFIRMED/);
+        assert.match(await page.$eval('#scope-description', node => node.textContent), /Oberfläche, EMS/);
+        assert.doesNotMatch(await page.$eval('#scope-description', node => node.textContent), /EEBus|Sicherung|OCPP/);
+        assert.doesNotMatch(await page.content(), /redact-fixture/);
+        assert.equal(requests.length, beforeReview, 'opening diagnostics never submits a lifecycle action');
+        onlyBlocked = null; configPending = false; standbyEebus = true;
+        await page.goto(`${origin}/runtime/`); await page.waitForFunction(selector=>document.querySelector(selector)?.textContent?.includes('eebus.1'), {},card('eebus'));
+        const waiting = await page.$eval(card('eebus'),node=>node.textContent);
+        assert.match(waiting,/Läuft · wartet auf Freigabe/);
+        assert.match(waiting,/Prozessnummer \(PID\)32124/);
+        assert.match(waiting,/Betrieb freigegebenNein/);
+        assert.match(waiting,/Geräteverbindungen und Steuerbefehlen/);
+        assert.doesNotMatch(waiting,/private-data|Start blockiert/);
+        assert.equal(await page.$eval(button('eebus','restart'), node=>node.disabled),false);
+        standbyHeartbeatAge = 8000; await page.click('#refresh');
+        await page.waitForFunction(selector=>document.querySelector(selector)?.textContent === 'Heartbeat unbestätigt',{},`${card('eebus')} .runtime-badge`);
+        standbyHeartbeatAge = 0; awaitingActivation = true;
+        await page.click('#refresh');
+        await page.waitForFunction(selector=>document.querySelector(selector)?.textContent === 'Läuft · Modul deaktiviert',{},`${card('eebus')} .runtime-badge`);
+        assert.match(await page.$eval(card('eebus'),node=>node.textContent), /Wartet auf Modulaktivierung/);
+        assert.equal(await page.$eval(button('eebus','enable'),node=>node.disabled),false);
+        standbyEebus = false; awaitingActivation = false; migrationAllowed = false;
+        await page.goto(`${origin}/runtime/`);
+        await page.waitForFunction(selector => document.querySelector(selector)?.textContent?.includes('EOS_MIGRATION_JOURNAL_INVALID'), {}, card('devices'));
+        assert.match(await page.$eval(card('devices'), node => node.textContent), /Betriebsfreigabe wartet auf die Bestandsübernahme/);
+        assert.equal(await page.$eval(button('devices', 'restart'), node => node.disabled), false);
         assert.equal(await page.$eval(button('devices', 'disable'), node => node.disabled), false);
         assert.equal(await page.$eval(`${card('devices')} a[href="/migration/"]`, node => !!node), true);
-        checks.push({ name: 'migration blocks starts with explanation and status link while stop remains available', result: 'passed' });
+        checks.push({ name: 'scoped preflight, EMS and EEBus standby show real owner, PID and heartbeat, restrict operations, keep process controls and detect stale heartbeat; pending config distinct; read-only review', result: 'passed' });
         migrationAllowed = true; await page.click('#refresh');
         await page.waitForFunction(selector => !document.querySelector(selector)?.disabled, {}, button('devices', 'restart'));
 
@@ -236,7 +280,7 @@ async function main() {
         checks.push({ name: 'lost administrator role denies mutation and removes all actionable status', result: 'passed' });
         assert.deepEqual(pageErrors, []);
         const sourceHashes = {};
-        for (const file of ['src/lib/eosRuntimeControl.js', 'src/lib/eosModuleHttp.js', 'src/lib/eosRuntimeHealth.js', 'public/eos-runtime/index.js', 'public/eos-runtime/index.html', 'public/eos-runtime/style.css']) {
+        for (const file of ['src/lib/eosRuntimeControl.js', 'src/lib/eosModuleHttp.js', 'src/lib/eosRuntimeHealth.js', 'public/eos-runtime/index.js', 'public/eos-runtime/index.html', 'public/eos-runtime/style.css', 'public/eos-migration/index.js', 'public/eos-migration/index.html']) {
             sourceHashes[file] = crypto.createHash('sha256').update(await fs.readFile(path.join(root, file))).digest('hex');
         }
         console.log(JSON.stringify({ result: 'passed', runAt: new Date().toISOString(), node: process.version, browser: await browser.version(),

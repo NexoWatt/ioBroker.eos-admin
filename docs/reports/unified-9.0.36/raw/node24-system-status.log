@@ -1,0 +1,42 @@
+✔ parent redacts telemetry, rejects bad reports and never turns a lost owner into physical failures/recoveries (15.360138ms)
+✔ aggregates active owners without name-based deduplication, caps names and ignores vehicles/optional unavailable modules (0.694671ms)
+✔ before a device’s first packet, wait for the configured interval; transport failure and data return are independent of actuator state (40.166022ms)
+✔ real Devices worker reports HTTP meter offline then online, skips a disabled transport and drops evidence on stop (4437.201655ms)
+✔ only an initialized visible LIVE dashboard polls, once per ten seconds across tabs/pageshow, on the same authenticated origin and proxy prefix (12.243971ms)
+✔ pagehide, hidden tab and timeout abort requests and discard late headers or bodies, also after BFCache resume (5.375783ms)
+✔ original observation age bounds health across repeated samples, bad replies and server/client clock differences (4.137736ms)
+✔ malformed device details do not discard a process fault; unchanged, invalid, reversed and unauthorized observations cannot falsely clear it (3.671732ms)
+✔ uses only live supervisor evidence and returns the six approved process IDs in stable order (3.947934ms)
+✔ manual pauses, optional disabled modules and unavailable optional licenses are distinct from faults (0.670427ms)
+✔ configured processes with expired heartbeats identify individual failures at the supervisor limits (0.35091ms)
+✔ a missing, impossible or provisional observation never marks all subsystems operational (0.926464ms)
+✔ reads operational EMS readiness from its own worker and treats the initial shell separately (0.673346ms)
+✔ confirmed configuration, ownership and authority failures remain visible before a PID exists (0.29175ms)
+✔ a fresh passive worker waits for handover; a missing heartbeat still identifies a process failure (0.786791ms)
+✔ only current, confirmed engine and NVP data establish a normal status (3.243358ms)
+✔ legacy grid measurements can inform the grid row but cannot clear an EMS status (0.544272ms)
+✔ an offline or connecting dashboard cannot be marked healthy by old engine and charging data (0.290078ms)
+✔ emergency and stopped EMS take precedence over charging messages; localized point faults remain visible (0.401996ms)
+✔ fresh supervisor fault identifies specific internal processes even when the SSE stream has stopped (1.582397ms)
+✔ an unverified, expired or inconsistent supervisor cannot clear the dashboard or hide a concrete alert (0.767274ms)
+✔ intentionally paused modules are distinguished from outages and allow other active faults to surface (0.360123ms)
+✔ handover identifies a running standby worker without suppressing an unrelated active stop (0.311806ms)
+✔ parent sends distinct device and process incidents from a preserved namespace, survives restart and only reports confirmed recovery (117.286534ms)
+✔ system and communications switches independently control mail and a planned stop clears an old incident silently (25.362704ms)
+✔ 256 active devices and a new EMS process failure all retain their delivery records (51.083261ms)
+✔ an interrupted five-minute recovery window restarts with a fresh physical observation (25.259292ms)
+✔ an already reported legacy inverter and its monitored native device share delivery history across namespaces (64.134698ms)
+✔ a changed recipient or withdrawn communications consent discards a stale EMS collection before committing the ledger (26.923822ms)
+✔ rolling back a migrated UI namespace relinquishes its ledger and cannot send from its settings (20.493639ms)
+✔ a rollback during SMTP preserves the ledger written by the restored standalone owner (19.223469ms)
+✔ an independent process cannot block the local sender or bypass the shared SMTP test quota (145.034616ms)
+[1.0.7 notifications] OK: immediate/30min/daily, escalation, durable dedup, recovery, categories, real loopback SMTP, rejection/backoff, encryption, TLS options, module/AC/DC fault monitoring.
+✔ ui/scripts/verify-stable-1.0.7-notifications.cjs (369.308369ms)
+ℹ tests 33
+ℹ suites 0
+ℹ pass 33
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4625.035379

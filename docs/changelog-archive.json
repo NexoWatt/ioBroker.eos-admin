@@ -1,4 +1,8 @@
 {
+  "9.0.16": {
+    "de": "Geräte speichern und vorhandene Einstellungen beim Start erhalten; alte Installer-Dateien für npm-Publish sichern; Abmeldung nach zehn Minuten ohne Bedienung.",
+    "en": "Fix device saving and preserve settings during startup; quarantine old Installer files for npm publishing; log out after ten idle minutes."
+  },
   "9.0.15": {
     "en": "Unified NexoWatt EOS smartphone app identity; clearly named legacy migration entry in administration and settings.",
     "de": "Einheitliches NexoWatt EOS App-Symbol für Smartphones; sichtbarer Zugang zur Bestandsübernahme in Administration und Einstellungen."

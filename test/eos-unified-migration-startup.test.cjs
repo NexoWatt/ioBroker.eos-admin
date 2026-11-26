@@ -68,6 +68,7 @@ function fixture(options = {}, t) {
             };
         }
         on() {}
+        async stop(request) { events.push('controller-stop:' + request.exitCode); }
         async getForeignObjectAsync(id) {
             if (id === 'system.config') return systemConfig;
             if (id.startsWith('system.user.'))
@@ -85,6 +86,7 @@ function fixture(options = {}, t) {
         }
     }
     class Migration {
+        status() { return options.migrationStatus || { phase: 'NOT_NEEDED', code: '' }; }
         async start() {
             events.push('migration-start');
         }
@@ -104,6 +106,7 @@ function fixture(options = {}, t) {
     const imports = {
         '@iobroker/adapter-core': {
             Adapter,
+            EXIT_CODES: { START_IMMEDIATELY_AFTER_STOP: 156 },
             commonTools: {},
             controllerDir: path.resolve(__dirname, '../node_modules/iobroker.js-controller'),
             getAbsoluteInstanceDataDir: () => instanceDirectory,
@@ -121,6 +124,7 @@ function fixture(options = {}, t) {
         },
         './lib/eosLicenseService': {
             EosLicenseService: class {
+                constructor(owner, config) { this.verified = config.onVerified; }
                 async start() {
                     events.push('license-start');
                 }
@@ -291,4 +295,35 @@ test('actual onReady uses a stable own key and never changes absent or malformed
         );
         assert.ok(!h.events.some(value => value.startsWith('recover:')));
     }
+});
+
+test('first verified activation requests one normal controller restart and never starts writing inside the unlicensed shell', async t => {
+    const status = { phase: 'LICENSE_REQUIRED', code: 'EOS_MIGRATION_LICENSE_REQUIRED' };
+    const h = fixture({ migrationStatus: status }, t);
+    await startReady(h);
+    h.adapter.eosLicenseService.verified();
+    assert.equal(h.adapter.migrationRestartTimer, undefined);
+    status.code = 'EOS_MIGRATION_RESTART_REQUIRED';
+    h.adapter.eosLicenseService.verified();
+    const first = h.adapter.migrationRestartTimer;
+    assert.ok(first);
+    h.adapter.eosLicenseService.verified();
+    assert.equal(h.adapter.migrationRestartTimer, first);
+    await new Promise(resolve => setTimeout(resolve, 1650));
+    h.adapter.eosLicenseService.verified();
+    assert.equal(h.adapter.migrationRestartTimer, undefined);
+    assert.deepEqual(h.events.filter(event => event.startsWith('controller-stop:')), ['controller-stop:156']);
+});
+
+test('withdrawing the license before the controller restart preserves the waiting state', async t => {
+    const status = { phase: 'LICENSE_REQUIRED', code: 'EOS_MIGRATION_LICENSE_REQUIRED' };
+    const h = fixture({ migrationStatus: status }, t);
+    await startReady(h);
+    status.code = 'EOS_MIGRATION_RESTART_REQUIRED';
+    h.adapter.eosLicenseService.verified();
+    assert.ok(h.adapter.migrationRestartTimer);
+    status.code = 'EOS_MIGRATION_LICENSE_REQUIRED';
+    await new Promise(resolve => setTimeout(resolve, 1650));
+    assert.equal(h.adapter.migrationRestartTimer, undefined);
+    assert.ok(!h.events.some(event => event.startsWith('controller-stop:')));
 });

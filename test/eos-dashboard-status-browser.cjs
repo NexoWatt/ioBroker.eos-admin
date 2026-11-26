@@ -225,6 +225,8 @@ async function processCases(browser, language) {
         server.releaseBootstrap();
         await page.goto(server.url,{waitUntil:'domcontentloaded'});
         await expect('supervisorUnavailable',t=>unknown.test(t) && server.reads()>0);
+        server.diagnosis({state:'unknown',failed:[],paused:[],waiting:['devices']});
+        await expect('runningStandby', t => /Übernahme|handover|overname/i.test(t) && deviceName.test(t));
         server.diagnosis({state:'ok',failed:[],paused:[]});
         await expect('healthy', t=>t===healthy && server.reads()>0);
         server.diagnosis({state:'fault',failed:['devices'],paused:[]});

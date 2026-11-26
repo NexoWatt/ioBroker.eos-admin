@@ -37,6 +37,12 @@ benötigt zusätzlichen Speicher. Entscheidend ist, ob die Trennung einen
 messbaren Vorteil bei Ausfällen, Wartung oder Last bringt. Die Softwaretests
 und der Geräteversuch prüfen auch Ausfall und Rückkehr der Abhängigkeiten.
 
+## Übergabe von Altadaptern ab 9.0.36
+
+Der Prozesswächter trennt die Freigabe zum Start eines Prozesses von der Freigabe zum Zugriff auf Geräte. Wartet ein freigegebenes Modul auf einen früheren Besitzer, kann es bereits als Kindprozess mit PID und Heartbeat laufen. Beim Übergang in den Betriebsmodus des Moduls bestätigt der Wächter das Ende der passiven Prozessgeneration. Für den getrennten EMS-Prozess kann die bestehende PID nach erteilter Schreibfreigabe in den Regelbetrieb wechseln. Eigens gespeicherte Prozesspausen bleiben wirksam.
+
+[Übernahme, Startnachweise und Rückfall](../reports/unified-9.0.36/MIGRATION.md)
+
 ## Historischer Stand 9.0.5
 
 Die folgenden Abschnitte dokumentieren den damaligen Stand der Zusammenführung

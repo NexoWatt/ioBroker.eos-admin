@@ -139,3 +139,13 @@ test('intentionally paused modules are distinguished from outages and allow othe
     expectHeadline(stopped, 'ready', idle, false, false, 'Prozess gestört · {names}', 'error', processes('fault', ['devices'], ['ems']));
     expectHeadline(stopped, 'ready', points('error', 'Ladepunkt gestört'), false, false, 'Ladepunkt gestört', 'error', emsPause);
 });
+
+test('handover identifies a running standby worker without suppressing an unrelated active stop', () => {
+    const healthy = status(normal(), true, now);
+    const stopped = status({ ...normal(), [alive]: row(false) }, true, now);
+    const waiting = { ...processes('unknown', [], []), waiting:['devices'] };
+    expectHeadline(healthy, 'ready', idle, false, false, 'Wartet auf Übernahme · {names}', 'warn', waiting);
+    expectHeadline(stopped, 'ready', idle, false, false, 'EMS gestoppt', 'error', waiting);
+    expectHeadline(stopped, 'ready', idle, false, false, 'Wartet auf Übernahme · {names}', 'warn', { ...waiting, waiting:['ems'] });
+    expectHeadline(healthy, 'ready', idle, true, false, 'Sicherheitsstopp aktiv', 'error', waiting);
+});

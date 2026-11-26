@@ -52,6 +52,21 @@ test('default permits existing startup without writes; pause survives a fresh se
   assert.equal(next.control.isEnabled('devices'), true);
 });
 
+test('manual restart uses the requested owner scope and cannot override a conflicting domain', async () => {
+  const f = fixture(undefined, {owner:{
+    eosMigration:{allowsStartup: scope => !!scope && scope !== 'devices'},
+    eosOwnership:{canWrite: scope => !!scope && scope !== 'eebus'},
+  }});
+  await f.control.initialize();
+  for (const scope of ['ui','ems','backup','ocpp']) assert.equal(f.control.view(scope).canRestart,true,scope);
+  assert.equal(f.control.view('devices').operationReason,'EOS_RUNTIME_MIGRATION_BLOCKED');
+  assert.equal(f.control.view('eebus').operationReason,'EOS_RUNTIME_OWNERSHIP_REQUIRED');
+  assert.equal(f.control.view('devices').canRestart,true);
+  assert.equal(f.control.view('eebus').canRestart,true);
+  request(f,'ems','restart'); await settled(f.control);
+  assert.deepEqual(f.calls,[['ems','stop'],['ems','start']]);
+});
+
 test('legacy combined pause stays in force on upgrade and new selections persist separately', async () => {
   const f = fixture();
   const store = new EosModuleConfigStore(f.owner, { moduleIds: ['runtime'] });
@@ -137,16 +152,26 @@ test('an unconfirmed stop remains durably disabled and never starts a replacemen
   assert.equal(fresh.control.isEnabled('devices'), false);
 });
 
-test('disable remains available behind startup gates, while enable and restart cannot bypass them', async () => {
-  for (const gate of ['migration', 'ownership', 'licensed']) {
-    const f = fixture(); await f.control.initialize(); f[gate](false);
-    assert.equal(f.control.view('devices').canDisable, true);
-    assert.equal(f.control.view('devices').canRestart, false);
-    assert.throws(() => request(f, 'devices', 'restart'), /EOS_RUNTIME_(?:MIGRATION_BLOCKED|OWNERSHIP_REQUIRED|LICENSE_REQUIRED)/);
-    request(f, 'devices', 'disable'); await settled(f.control);
-    assert.deepEqual(f.calls, [['devices', 'stop']]);
-    assert.throws(() => request(f, 'devices', 'enable'), /EOS_RUNTIME_(?:MIGRATION_BLOCKED|OWNERSHIP_REQUIRED|LICENSE_REQUIRED)/);
+test('process activation behind a physical fence persists standby without changing disabled module settings', async () => {
+  for (const [gate,code] of [['migration','EOS_RUNTIME_MIGRATION_BLOCKED'], ['ownership','EOS_RUNTIME_OWNERSHIP_REQUIRED']]) {
+    const f = fixture(); await f.control.initialize(); f[gate](false); f.configured(false);
+    request(f,'devices','disable'); await settled(f.control);
+    assert.equal(f.control.isEnabled('devices'),false);
+    assert.equal(f.control.view('devices',false).operationReason,code);
+    assert.equal(f.control.view('devices',false).canEnable,true);
+    request(f,'devices','enable'); await settled(f.control);
+    assert.equal(f.control.isEnabled('devices'),true); assert.equal(f.control.standbyRequested('devices'),true);
+    assert.equal(f.control.view('devices',false).canRestart,true);
+    assert.deepEqual(f.calls,[['devices','stop'],['devices','stop'],['devices','start']]);
+    const next=fixture(f.objects); await next.control.initialize();
+    assert.equal(next.control.standbyRequested('devices'),true);
+    assert.equal(f.control.standbyRequested('ocpp'),false);
+    request(next,'devices','disable'); await settled(next.control);
+    assert.equal(next.control.standbyRequested('devices'),false); assert.equal(next.control.isEnabled('devices'),false);
   }
+  const f = fixture(); await f.control.initialize(); f.licensed(false);
+  assert.equal(f.control.view('devices').canDisable,true);
+  assert.throws(()=>request(f,'devices','restart'),/EOS_RUNTIME_LICENSE_REQUIRED/);
 });
 
 test('one enable action activates a disabled module even when process permission was already on', async () => {
@@ -172,17 +197,14 @@ test('a disabled module can be enabled after a saved process pause; restart cann
   assert.deepEqual(f.calls, [['eebus', 'stop'], ['eebus', 'stop'], ['eebus', 'configure'], ['eebus', 'start']]);
 });
 
-test('failed module activation remains durably paused and retains the concrete validation error', async () => {
-  const f = fixture(new Map(), { host: { enableProcessModule: async () => {
-    throw Object.assign(new Error('private detail'), { code: 'EOS_MODULE_LEGACY_RUNNING' });
-  } } });
-  await f.control.initialize(); f.configured(false);
-  request(f, 'ocpp', 'enable'); await settled(f.control);
-  assert.deepEqual(f.calls, [['ocpp', 'stop']]);
-  assert.equal(f.control.isEnabled('ocpp'), false);
-  assert.equal(f.control.view('ocpp', false).reason, 'EOS_MODULE_LEGACY_RUNNING');
-  const next = fixture(f.objects); await next.control.initialize();
-  assert.equal(next.control.isEnabled('ocpp'), false);
+test('an external OCPP owner permits a standalone process shell while preserving module settings', async () => {
+  const f=fixture(new Map(), {host:{enableProcessModule:async()=>{throw Object.assign(Error('protected'),{code:'EOS_MODULE_LEGACY_RUNNING'});}}});
+  await f.control.initialize();f.configured(false);
+  request(f,'ocpp','enable'); await settled(f.control);
+  assert.deepEqual(f.calls,[['ocpp','stop'],['ocpp','start']]);
+  assert.equal(f.control.standbyRequested('ocpp'),true);
+  const next=fixture(f.objects);await next.control.initialize();assert.equal(next.control.isEnabled('ocpp'),true);
+
 });
 
 test('slow module commit keeps activation locked and paused until settled, including shutdown', async () => {

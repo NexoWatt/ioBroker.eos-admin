@@ -26,6 +26,7 @@
     "Prozessstatus unbekannt": "Process status unknown",
     "Gerätestatus unbekannt": "Device status unknown",
     "Geräte offline · {names}": "Devices offline · {names}",
+    "Wartet auf Übernahme · {names}": "Awaiting handover · {names}",
     "Prozess gestört · {names}": "Process fault · {names}",
     "Live-Verbindung unterbrochen · Prozess gestört: {names}": "Live connection lost · Process fault: {names}",
     "Sicherheitsstopp aktiv · Prozess gestört: {names}": "Safety stop active · Process fault: {names}",

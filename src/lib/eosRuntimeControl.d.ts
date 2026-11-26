@@ -7,6 +7,7 @@ export interface RuntimeControlView {
     canRestart: boolean;
     busy: boolean;
     reason: string;
+    operationReason: string;
     revision: string;
 }
 export class EosRuntimeControl {
@@ -24,6 +25,7 @@ export class EosRuntimeControl {
     });
     initialize(): Promise<void>;
     isEnabled(id: string): boolean;
+    standbyRequested(id: string): boolean;
     dashboardIntent(id: string): { enabled: boolean | null; error: string };
     view(id: string, configured?: boolean): RuntimeControlView | undefined;
     request(id: unknown, action: unknown, revision: unknown): { ok: boolean; accepted: boolean };

@@ -7,7 +7,7 @@ const { dashboardProcessStatus, notificationProcessStatus } = require('./eosDash
 /** @typedef {{status:(id:string)=>unknown,owner?:{getObjectViewAsync?:(design:string,search:string,params:RecordValue)=>Promise<unknown>,getForeignStateAsync?:(id:string)=>Promise<unknown>}}} HealthHost */
 const STATES = new Set(['starting', 'running', 'stopping', 'stopped', 'error', 'failed', 'backoff']);
 const HOST_REASONS = new Set(['DISABLED', 'RUNNING', 'STARTING', 'READY', 'PROCESS_BACKOFF', 'CONFIG_INVALID',
-    'STOP_FAILED_RESTART_REQUIRED', 'OWNERSHIP_CHANGED', 'LICENSE_REQUIRED', 'LICENSE_INVALID',
+    'STOP_FAILED_RESTART_REQUIRED', 'WAITING_FOR_OWNERSHIP', 'OWNERSHIP_CHANGED', 'LICENSE_REQUIRED', 'LICENSE_INVALID',
     'LEGACY_ENABLED_OR_UNKNOWN', 'LEGACY_STOP_NOT_CONFIRMED', 'START_FAILED', 'STOPPED', 'MODULE_CALLBACK_FAILED',
     'LEGACY_CONFLICT', 'OWNERSHIP_UNAVAILABLE', 'START_FAILED_RESTART_REQUIRED', 'CONFIG_CHANGED']);
 const MODULE_LABELS = Object.freeze({ devices: 'Geräte', eebus: 'EEBus', backup: 'Sicherung', ocpp: 'OCPP-Ladestationen' });
@@ -51,6 +51,20 @@ function processRow(id, label, value, direct = false) {
     result.reason = reason(process.lastError) || reason(raw.reason);
     result.lastHeartbeatAt = timestamp(process.lastHeartbeatAt);
     result.nextRestartAt = timestamp(process.nextRestartAt);
+    if (process.standby === true) {
+        const names = { devices: 'nexowatt-devices', eebus: 'eebus', backup: 'nexowatt-backup', ocpp: 'ocpp21', ui: 'nexowatt-ui', ems: 'nexowatt-ui' };
+        const adapter = names[ /** @type {keyof typeof names} */(id)];
+        const blockers = (Array.isArray(raw.blockers) ? raw.blockers.slice(0, 32) : []).map(record);
+        const waitingFor = blockers.flatMap(row => adapter && typeof row.instance === 'string' &&
+            new RegExp(`^${adapter}\\.\\d{1,8}$`).test(row.instance) ? [row.instance] : []);
+        Object.assign(result, { standby: true, waitingReason: reason(details.waitingReason), waitingFor: [...new Set(waitingFor)] });
+    }
+    // A configuration which has not been read is distinct from an explicitly disabled module.
+    const configuration = record(details.configuration);
+    if (configuration.ready === false)
+        Object.assign(result, {
+            configurationPending: !configuration.error, configurationError: reason(configuration.error),
+        });
     if (details.statusUnavailable === true)
         result.active = null;
     return result;
@@ -143,17 +157,28 @@ function createRuntimeHealthReader({ host, runtimeStatus, timeoutMs = 2500, runt
             for (const row of processes) {
                 if (row.kind !== 'child' || !runtimeControl)
                     continue;
-                const configured = row.id === 'ui' || row.id === 'ems' ||
-                    record(values[ids.indexOf(/** @type {'devices'|'eebus'|'backup'|'ocpp'} */ (row.id))]).enabled === true;
-                const controls = runtimeControl.view(row.id, configured);
+                const direct = row.id === 'ui' || row.id === 'ems';
+                const moduleStatus = record(values[ids.indexOf(/** @type {'devices'|'eebus'|'backup'|'ocpp'} */ (row.id))]);
+                const controls = { ...record(runtimeControl.view(row.id, direct || moduleStatus.enabled === true)) };
+                if (!direct && typeof moduleStatus.enabled !== 'boolean') {
+                    // Absence of a confirmed value is not a saved module-off setting. Keep
+                    // a genuine migration/ownership blocker and allow an explicit stop.
+                    controls.canEnable = false;
+                    controls.canRestart = false;
+                    if (!controls.reason || controls.reason === 'EOS_RUNTIME_MODULE_DISABLED')
+                        controls.reason = reason(record(record(moduleStatus.details).configuration).error) || 'EOS_MODULE_NOT_READY';
+                }
                 Object.assign(row, { controls });
                 if (!runtimeControl.isEnabled(row.id)) {
                     row.active = false;
                     if (row.id === 'ems')
                         row.emsReady = false;
-                    if (['unknown', 'stopped'].includes(row.state))
+                    // An operator pause is a persisted intent; a transient lifecycle fence
+                    // must not turn a stopped/failed child into a deliberately disabled one.
+                    if (record(controls).enabled === false && !['running', 'starting', 'stopping', 'error', 'failed', 'backoff'].includes(row.state))
                         row.state = 'disabled';
-                    row.reason = reason(record(controls).reason) || 'EOS_RUNTIME_DISABLED';
+                    if (!row.reason || ['READY', 'DISABLED', 'STOPPED'].includes(row.reason))
+                        row.reason = reason(record(controls).reason) || 'EOS_RUNTIME_DISABLED';
                 }
             }
             const hostedNamespace = record(values[ids.indexOf('ocpp')]).namespace;
@@ -195,7 +220,10 @@ function dashboardSources(host, runtimeStatus, runtimeControl) {
         const child = direct ? record(runtime[id]) : supervisorRecord(() => host?.supervisorState?.(id, true));
         const process = record(child.process);
         const intent = supervisorRecord(() => runtimeControl?.dashboardIntent?.(id));
-        const controlFailed = !!intent.error && (child.active !== true || intent.error === 'EOS_RUNTIME_STOP_UNCONFIRMED');
+        const supervised = child.active === true || (process.standby === true && process.state === 'running');
+        // A rejected activation is historical once a live standby is supervised. Keep its
+        // real heartbeat (also when stale); only an unconfirmed stop retains its hard fence.
+        const controlFailed = !!intent.error && (!supervised || intent.error === 'EOS_RUNTIME_STOP_UNCONFIRMED');
         sources[id] = {
             configured: direct ? true : child.configured,
             enabled: controlFailed ? true : intent.enabled,

@@ -1,0 +1,24 @@
+TAP version 13
+# Subtest: new admin OS process retains six pauses then resumes all six, legacy conflict=false
+ok 1 - new admin OS process retains six pauses then resumes all six, legacy conflict=false
+  ---
+  duration_ms: 9310.10795
+  type: 'test'
+  ...
+# {"hostPidBefore":28,"hostPidAfter":111,"oldPids":[40,41,53,67,84,96],"newPids":[178,123,167,135,147,159],"standby":[],"conflict":false,"authorizedDisableRequests":6,"authorizedEnableRequests":6,"pausedAfterProcessRestart":6,"twoNewHeartbeats":6,"emsOperatesWithoutGui":true,"deviceConnections":2,"modbusReads":3,"modbusWrites":0}
+# Subtest: new admin OS process retains six pauses then resumes all six, legacy conflict=true
+ok 2 - new admin OS process retains six pauses then resumes all six, legacy conflict=true
+  ---
+  duration_ms: 9324.676082
+  type: 'test'
+  ...
+# {"hostPidBefore":193,"hostPidAfter":271,"oldPids":[205,206,220,227,241,253],"newPids":[333,283,326,295,307,319],"standby":["devices","ocpp"],"conflict":true,"authorizedDisableRequests":6,"authorizedEnableRequests":6,"pausedAfterProcessRestart":6,"twoNewHeartbeats":6,"emsOperatesWithoutGui":true,"deviceConnections":0,"modbusReads":0,"modbusWrites":0}
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 18768.042784

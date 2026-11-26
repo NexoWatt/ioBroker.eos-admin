@@ -43,7 +43,7 @@ class EosModuleProcess {
             ? { ...this.deviceHealth, observedAt: this.deviceHealthAt } : null;
     }
     health() {
-        return { mode: 'process', state: this.state, pid: this.child?.pid || null,
+        return { mode: 'process', ...(this.options.standby ? { standby: true } : {}), state: this.state, pid: this.child?.pid || null,
             generation: this.options.generation, lastError: this.failure, lastHeartbeatAt: this.lastHeartbeatAt };
     }
     /** @param {string} code */
@@ -70,7 +70,8 @@ class EosModuleProcess {
     async start() {
         if (this.child || this.stopping)
             throw error('EOS_MODULE_PROCESS_ALREADY_STARTED');
-        if (!this.options.canOperate())
+        const standby = this.options.standby === true;
+        if (!standby && !this.options.canOperate())
             throw error('EOS_MODULE_PROCESS_INACTIVE');
         this.state = 'starting';
         const child = fork(this.options.workerPath || join(__dirname, 'eosModuleProcessWorker.js'), [], {
@@ -118,6 +119,8 @@ class EosModuleProcess {
         child.on('disconnect', () => { if (!this.stopping)
             this.fail('EOS_MODULE_PROCESS_DISCONNECTED'); });
         this.rpc = channel(child, this.options.generation, async (method, args) => {
+            if (standby)
+                throw error('EOS_MODULE_PROCESS_INACTIVE');
             if (!ADAPTER_METHODS.includes(method) && method !== 'getHistoryBackupRequirement')
                 throw error('EOS_MODULE_PROCESS_METHOD');
             // A child lease is only a fast local fence. The authoritative owner
@@ -170,6 +173,8 @@ class EosModuleProcess {
                 this.fail('EOS_MODULE_PROCESS_HEARTBEAT_TIMEOUT');
                 return;
             }
+            if (standby)
+                return;
             try {
                 this.authority(!this.stopping && this.options.canOperate());
             }
@@ -180,7 +185,7 @@ class EosModuleProcess {
         this.timer.unref?.();
         const moduleOptions = this.options.moduleOptions;
         const adapter = moduleOptions.adapter;
-        const init = { id: this.options.id, baseDir: this.options.baseDir,
+        const init = standby ? { id: this.options.id } : { id: this.options.id, baseDir: this.options.baseDir,
             moduleOptions: { config: moduleOptions.config, dataDir: moduleOptions.dataDir,
                 installationDir: moduleOptions.installationDir, eosDataDir: moduleOptions.eosDataDir,
                 preservedUiNamespace: moduleOptions.preservedUiNamespace,
@@ -188,7 +193,7 @@ class EosModuleProcess {
                     eosTargetNamespace: adapter.eosTargetNamespace, instance: adapter.instance, config: adapter.config } },
             allowed: this.options.canOperate(), sequence: ++this.leaseSequence, expiresAt: Date.now() + 1000 };
         validate(init);
-        this.rpc.event('init', init);
+        this.rpc.event(standby ? 'standby' : 'init', init);
         const startDeadline = performance.now() + (this.options.startTimeoutMs || 125000);
         const remainingStartMs = () => {
             const remaining = startDeadline - performance.now();
@@ -202,7 +207,13 @@ class EosModuleProcess {
             // existing deadline, and readiness itself grants no write authority.
             if (await this.rpc.request('prepare', [], remainingStartMs()) !== true)
                 throw error('EOS_MODULE_PROCESS_INIT');
-            if (!this.options.canOperate() || this.stopping)
+            if (this.stopping)
+                throw error('EOS_MODULE_PROCESS_INACTIVE');
+            if (standby) {
+                this.state = 'running';
+                return;
+            }
+            if (!this.options.canOperate())
                 throw error('EOS_MODULE_PROCESS_INACTIVE');
             this.authority(true);
             await this.rpc.request('start', [], remainingStartMs());
@@ -217,7 +228,7 @@ class EosModuleProcess {
     }
     /** @param {string} method @param {unknown[]} args @returns {Promise<unknown>} */
     async request(method, args) {
-        if (!this.rpc || this.stopping || !this.options.canOperate())
+        if (!this.rpc || this.options.standby || this.stopping || !this.options.canOperate())
             throw error('EOS_MODULE_PROCESS_INACTIVE');
         return this.rpc.request(method, args);
     }

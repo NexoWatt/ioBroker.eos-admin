@@ -21,7 +21,7 @@ function record(value) {
  * Classify one local supervisor observation. Generation zero is valid for a hosted
  * module. Its first confirmed heartbeat may arrive after start() has completed.
  * @param {ProcessId} id @param {unknown} input @param {number} now
- * @returns {'ok'|'fault'|'unknown'|'paused'}
+ * @returns {'ok'|'fault'|'unknown'|'paused'|'waiting'}
  */
 function processStatus(id, input, now) {
     const source = record(input);
@@ -29,10 +29,11 @@ function processStatus(id, input, now) {
     const reason = typeof source.reason === 'string' ? source.reason : '';
     const state = typeof child.state === 'string' ? child.state : '';
     if (STOP_FAILURES.has(reason) || (typeof child.lastError === 'string' && STOP_FAILURES.has(child.lastError))) return 'fault';
-    if (source.enabled === false || source.configured === false) return 'paused';
+    const standby = child.standby === true;
+    if (source.enabled === false || (source.configured === false && !standby)) return 'paused';
     if (source.enabled !== true) return 'unknown';
     if (reason === 'CONFIG_INVALID') return 'fault';
-    if (source.configured !== true) return 'unknown';
+    if (source.configured !== true && !standby) return 'unknown';
 
     const splitWorker = id === 'ui' || id === 'ems';
     if (!splitWorker && reason === 'LICENSE_REQUIRED') return 'paused';
@@ -52,6 +53,8 @@ function processStatus(id, input, now) {
     if (now - heartbeat > (splitWorker ? 5000 : 4000)) return 'fault';
     if (typeof child.pid !== 'number' || !Number.isSafeInteger(child.pid) || child.pid < 1 ||
         typeof child.generation !== 'number' || !Number.isSafeInteger(child.generation) || child.generation < 0) return 'unknown';
+    // A fresh passive process is alive, but cannot attest to the devices still owned elsewhere.
+    if (standby) return 'waiting';
     if (source.active !== true) return source.active === false ? 'fault' : 'unknown';
     if (id === 'ems' && source.emsReady !== true) {
         if (source.emsReady !== false || ['starting', 'idle'].includes(reason)) return 'unknown';
@@ -161,7 +164,10 @@ function dashboardProcessStatus(sources, now = Date.now()) {
             }
         }
         if (state === 'paused') result.paused.push(id);
-        else if (state === 'fault') result.failed.push(id);
+        else if (state === 'waiting') {
+            (result.waiting ??= []).push(id);
+            result.state = 'unknown';
+        } else if (state === 'fault') result.failed.push(id);
         else if (state === 'unknown') result.state = 'unknown';
     }
     if (result.deviceHealth.totalOffline) result.deviceHealth.state = 'fault';

@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/live-display.ts
- * Quell-Hash: sha256:7adcf233b8ba012cd73ded0882f6519d330d7706c6366742654436483bf07a71
+ * Quell-Hash: sha256:8526f2adf4071d0d91a5962fbcf786d215ed1dc893783e5408a283e22bf96acc
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -171,10 +171,12 @@
             return null;
         if (state !== 'ok' && state !== 'fault' && state !== 'unknown')
             return null;
-        if (!validIds(failed) || !validIds(paused) || failed.some(id => paused.includes(id)) ||
+        const waiting = snapshot.waiting === undefined ? [] : snapshot.waiting;
+        if (!validIds(failed) || !validIds(paused) || !validIds(waiting) || failed.some(id => paused.includes(id)) ||
+            waiting.some(id => failed.includes(id) || paused.includes(id)) || (state === 'ok' && waiting.length) ||
             (state === 'fault') !== (failed.length > 0))
             return null;
-        return { state, failed: processIds.filter(id => failed.includes(id)), paused };
+        return { state, failed: processIds.filter(id => failed.includes(id)), paused, waiting };
     }
     // Only the dashboard renderer commits this decision. Charging details keep their own summary.
     function operatingStatus(health, connection, chargeModel, safetyStop, p14Fallback, processes) {
@@ -194,13 +196,16 @@
         if (safety)
             return { text: 'Sicherheitsstopp aktiv', level: 'error' };
         const emsPaused = processes?.paused.includes('ems') === true;
-        if (!emsPaused && health?.phase === 'stopped')
+        const emsWaiting = processes?.waiting.includes('ems') === true;
+        if (!emsPaused && !emsWaiting && health?.phase === 'stopped')
             return { text: 'EMS gestoppt', level: 'error' };
         if (chargeModel && chargeModel.total > 0 && chargeModel.overallLevel === 'error') {
             return { text: chargeModel.systemText, level: 'error' };
         }
-        if (!emsPaused && health?.phase === 'grid-unavailable')
+        if (!emsPaused && !emsWaiting && health?.phase === 'grid-unavailable')
             return { text: 'Netzmessung fehlt oder ist veraltet', level: 'warn' };
+        if (processes?.waiting.length)
+            return { text: 'Wartet auf Übernahme · {names}', level: 'warn', processIds: processes.waiting };
         if (!emsPaused && health?.phase !== 'healthy')
             return { text: 'Betriebsstatus prüfen', level: 'warn' };
         if (p14Fallback)

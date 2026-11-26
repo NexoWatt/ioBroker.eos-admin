@@ -1,0 +1,41 @@
+✔ new MIRA setup creates one distinct WPM at its selected unit, with separate settings and collision-safe IDs (4.325318ms)
+✔ existing matching WPM keeps its identity, settings, prior EMS intent and enabled state (0.38237ms)
+✔ ambiguous units, another owner, unknown IDs and different TCP plants cannot be silently paired (0.639076ms)
+✔ two RTU lines link only by explicit selection, separate from a same-line new WPM (0.995964ms)
+✔ OVUM MIRA START uses distinct physical units, zero-based FC03 addresses and atomic writes only to five volatile HSM inputs (14.650826ms)
+✔ remapped measurement or command never becomes the built-in MIRA energy-flow or control alias (1.538593ms)
+✔ MIRA command acknowledgement never becomes physical FC03 readback; constant real samples refresh, unrelated polls do not (7.459197ms)
+✔ MIRA sends unit-specific login using FC16, reads real WPM power and confirms volatile HSM writes on Modbus TCP (150.428156ms)
+✔ MIRA retries the meter after a TCP reset while keeping a genuine illegal optional register on cooldown (534.513209ms)
+✔ MIRA requires each login to be confirmed, rate-limits rejection and suppresses writes after authorization loss or mismatched readback (16.472027ms)
+✔ MIRA rejects unsupported units, protocol and malformed codes before any connection (13.086081ms)
+✔ two MIRA RTU units serialize login, write and echo on one shared serial bus (7.468583ms)
+✔ MIRA editor keeps unsaved and stored login codes out of JSON export and preview while protected save retains the field (7.753783ms)
+✔ commissioning both units maps one measured electrical flow and a prepared, inactive PV controller (30.036958ms)
+✔ one explicit HSM confirmation activates the licensed thermal app, respecting later app/row disable and changed sources (9.144409ms)
+✔ license, grid, confirmed source and electrical limit are individually enforced before enabling the writer (3.342062ms)
+✔ different buses, ambiguous cascades and removed pumps cannot retain or create an HSM writer (12.451328ms)
+✔ deliberately selected separate RTU links are supported once and never shared by two managers (1.883366ms)
+✔ manual slots and control targets survive, repeated discovery cannot reinsert a deleted mapping (9.162265ms)
+✔ restart inventory transports protocol+unit grouping without hostnames or login values (3.204232ms)
+✔ opening and saving the App Center retains both MIRA channels, commissioning and flow ownership, including slot ten (535.539668ms)
+✔ MIRA can open EMS quick controls without exposing switch, SG Ready or direct power writes (651.180687ms)
+✔ MIRA readout distinguishes measured zero from unknown after disconnect in the quick control (81.731767ms)
+✔ MIRA uses commissioned watt ceiling, genuine register feedback, and neutral return under §14a (50.081281ms)
+✔ late watt echo and absent physical inputs cannot start MIRA; fresh data recovers (9.890099ms)
+✔ no actuator writes until explicit commissioning and no generic switch fallback (3.634205ms)
+✔ invalid or crossed HSM command/readback mapping is not controllable (4.13644ms)
+✔ MIRA manual handoff releases own boost once and preserves subsequent local operation (10.728532ms)
+✔ restart adopts active MIRA only from fresh measurements and neutralizes an unverified old boost (4.551671ms)
+✔ turning MIRA off sends neutral even if a previous raise is queued and feedback is still zero (4.193038ms)
+✔ a different WPM slot or missing numerical commission cannot actuate a hydraulic module (2.643031ms)
+✔ falling grant neutralizes active boost before staging a smaller request (9.039094ms)
+✔ module deactivation waits for HSM neutral readback and reports autonomous heating separately (4.210091ms)
+ℹ tests 33
+ℹ suites 0
+ℹ pass 33
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1855.97748

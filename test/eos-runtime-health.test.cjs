@@ -54,7 +54,7 @@ test('GUI disabled or restarting does not change confirmed EMS process diagnosis
         ems: { active: true, emsReady: true, process: { ...process, pid: 21346 } },
     });
     const read = createRuntimeHealthReader({ host: { status: () => live() }, runtimeStatus,
-        runtimeControl: { isEnabled: id => active.has(id), view: (_id, configured) => ({ configured }) } });
+        runtimeControl: { isEnabled: id => active.has(id), view: (id, configured) => ({ enabled: active.has(id), configured }) } });
     let { processes } = await read();
     const ems = processes.find(row => row.id === 'ems');
     assert.equal(ems.pid, 21346);
@@ -245,4 +245,20 @@ test('a missing supervisor cannot hide a confirmed failure and an unreadable swi
     assert.equal(result.state, 'fault');
     assert.deepEqual(result.failed, ['devices']);
     assert.deepEqual(result.paused, []);
+});
+
+test('a confirmed standby supersedes an old rejected activation while heartbeat loss and unconfirmed stop remain visible', () => {
+    const now = Date.now();
+    let error = 'EOS_RUNTIME_MIGRATION_BLOCKED';
+    const intent = { dashboardIntent(id) { return { enabled: id === 'devices', error: id === 'devices' ? error : '' }; } };
+    const process = { standby: true, state: 'running', pid: 32123, generation: 1, lastHeartbeatAt: now };
+    const host = { supervisorState: () => ({ configured: true, active: false, reason: 'WAITING_FOR_OWNERSHIP', process }) };
+    const read = () => readDashboardProcessStatus(host, () => ({}), intent, now);
+    assert.deepEqual(read().waiting, ['devices']);
+    assert.deepEqual(read().failed, []);
+    process.lastHeartbeatAt = now - 5000;
+    assert.deepEqual(read().failed, ['devices']);
+    process.lastHeartbeatAt = now;
+    error = 'EOS_RUNTIME_STOP_UNCONFIRMED';
+    assert.deepEqual(read().failed, ['devices']);
 });

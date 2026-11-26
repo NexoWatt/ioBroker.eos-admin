@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/dashboard-process-status.ts
- * Quell-Hash: sha256:ebabb70be8b30b9a7eba89e595e8c9ca6197dd6cb7f121c2db137f35025cbfae
+ * Quell-Hash: sha256:d4137ddc277ec4bccbcfe6425b8bda5593279372d96aff96d236b517859e30c4
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -72,9 +72,12 @@
             return null;
         const failed = identifiers(row.failed);
         const paused = identifiers(row.paused);
-        if (!failed || !paused || failed.some(id => paused.includes(id)) || (state === 'fault') !== (failed.length > 0))
+        const waiting = identifiers(row.waiting === undefined ? [] : row.waiting);
+        if (!failed || !paused || !waiting || failed.some(id => paused.includes(id)) ||
+            waiting.some(id => failed.includes(id) || paused.includes(id)) ||
+            (state === 'fault') !== (failed.length > 0) || (state === 'ok' && waiting.length))
             return null;
-        return { observedAt, state, failed, paused, deviceHealth: devices(row.deviceHealth) };
+        return { observedAt, state, failed, paused, ...(waiting.length ? { waiting } : {}), deviceHealth: devices(row.deviceHealth) };
     }
     function visible() {
         return ready && pageActive && document.visibilityState === 'visible' && !dashboard.hidden && dashboard.style.display !== 'none';
@@ -123,7 +126,7 @@
         sample = { value, receivedAt: now, receivedTick: tick, ageMs };
         setExpiry();
         if (!previous || previous.state !== value.state || previous.failed.join() !== value.failed.join() ||
-            previous.paused.join() !== value.paused.join() || JSON.stringify(previous.deviceHealth) !== JSON.stringify(value.deviceHealth))
+            previous.paused.join() !== value.paused.join() || previous.waiting?.join() !== value.waiting?.join() || JSON.stringify(previous.deviceHealth) !== JSON.stringify(value.deviceHealth))
             notify();
     }
     function schedule() {

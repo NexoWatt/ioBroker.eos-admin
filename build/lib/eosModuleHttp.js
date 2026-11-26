@@ -8,7 +8,7 @@ const MIGRATION_PHASES = new Set(['IDLE', 'DISABLED', 'LICENSE_REQUIRED', 'NOT_N
     'STOPPING', 'TRANSFERRED', 'COMMITTED', 'ROLLING_BACK', 'ROLLED_BACK', 'ROLLBACK_REQUIRED', 'NOT_AVAILABLE']);
 const MIGRATION_SOURCES = Object.freeze({ ui: 'nexowatt-ui', devices: 'nexowatt-devices', eebus: 'eebus', backup: 'nexowatt-backup', ocpp: 'ocpp21' });
 /** Never expose a journal/config object through the public migration status API. */
-function publicMigrationStatus(value) {
+function publicMigrationStatus(value, migration) {
     const phase = MIGRATION_PHASES.has(value?.phase) ? value.phase : 'NOT_AVAILABLE';
     const sources = [];
     const seen = new Set();
@@ -20,8 +20,19 @@ function publicMigrationStatus(value) {
         sources.push({ id: row.id, source: row.source,
             namespacePreserved: row.namespacePreserved === true && ['TRANSFERRED', 'COMMITTED'].includes(phase) });
     }
+    const issues = [];
+    for (const issue of (Array.isArray(value?.issues) ? value.issues.slice(0, 256) : [])) {
+        if (sources.some(row => row.id === issue?.id && row.source === issue?.source) &&
+            typeof issue.code === 'string' && /^[A-Z][A-Z0-9_]{0,79}$/.test(issue.code)) {
+            issues.push({ id: issue.id, source: issue.source, code: issue.code });
+        }
+    }
+    // Read the same admission decision used by the supervisor. Source IDs alone cannot
+    // distinguish a local preflight conflict from a site-wide recovery fence.
+    const blockedProcesses = typeof migration?.allowsStartup === 'function'
+        ? ['ui', 'ems', 'devices', 'eebus', 'backup', 'ocpp'].filter(id => migration.allowsStartup(id) === false) : null;
     return {
-        phase,
+        phase, issues, blockedProcesses,
         code: typeof value?.code === 'string' && /^[A-Z][A-Z0-9_]{0,79}$/.test(value.code) ? value.code : '',
         sources,
         updatedAt: Number.isSafeInteger(value?.updatedAt) && value.updatedAt > 0 && value.updatedAt <= 8640000000000000 ? value.updatedAt : null,
@@ -94,6 +105,8 @@ function registerEosModuleRoutes({ app, host, baseDir, jsonParser, authorize, cs
         'jquery.js': 'lib/js/jquery-3.2.1.min.js', 'materialize.js': 'lib/js/materialize.js',
         'materialize.css': 'lib/css/materialize.css', 'adapter.css': 'css/adapter.css',
     };
+    const migrationReport = () => bounded(Promise.resolve().then(() => host.migrationStatus()))
+        .then(value => publicMigrationStatus(value, host.owner?.eosMigration));
     const runtimeHealth = createRuntimeHealthReader({ host, runtimeStatus, runtimeControl });
     // Served by the parent even when the EMS child is stopped. No worker RPC, controller
     // inventory, persistent telemetry or background timer is required for a dashboard read.
@@ -101,9 +114,14 @@ function registerEosModuleRoutes({ app, host, baseDir, jsonParser, authorize, cs
     app.get(dashboardPath, guard(false, false, true), action(() => readDashboardProcessStatus(host, runtimeStatus, runtimeControl)));
     app.all(dashboardPath, guard(false, false, true), (_req, res) => res.setHeader('Allow', 'GET, HEAD').status(405).json({ error: 'METHOD_NOT_ALLOWED' }));
     app.get('/api/eos/runtime', guard(), (_req, res) => {
-        void runtimeHealth().then(value => {
+        void runtimeHealth().then(async (value) => {
+            // Ask only when a card really reports a migration gate. Failure to read the
+            // optional explanation must not discard confirmed process and heartbeat data.
+            const gated = value.processes.some(row => row.controls?.reason === 'EOS_RUNTIME_MIGRATION_BLOCKED' ||
+                row.controls?.operationReason === 'EOS_RUNTIME_MIGRATION_BLOCKED');
+            const migration = gated ? await migrationReport().catch(() => null) : null;
             if (!res.destroyed && !res.headersSent)
-                res.json({ ...value, csrfToken: res.locals.eosModuleCsrf });
+                res.json({ ...value, migration, csrfToken: res.locals.eosModuleCsrf });
         }, () => {
             if (!res.destroyed && !res.headersSent)
                 res.status(503).json({ error: 'EOS_RUNTIME_STATUS_UNAVAILABLE' });
@@ -153,7 +171,7 @@ function registerEosModuleRoutes({ app, host, baseDir, jsonParser, authorize, cs
         app.get(`/runtime/${asset}`, guard(false, true), sendFile(join(baseDir, 'public', 'eos-runtime', asset)));
     }
     app.get('/api/eos/migration', guard(), (_req, res) => {
-        void bounded(Promise.resolve().then(() => host.migrationStatus())).then(value => res.json(publicMigrationStatus(value)), () => res.status(503).json({ error: 'EOS_MIGRATION_STATUS_UNAVAILABLE' }));
+        void migrationReport().then(value => res.json(value), () => res.status(503).json({ error: 'EOS_MIGRATION_STATUS_UNAVAILABLE' }));
     });
     app.all('/api/eos/migration', guard(), (_req, res) => res.setHeader('Allow', 'GET').status(405).json({ error: 'METHOD_NOT_ALLOWED' }));
     app.get('/migration', guard(false, true), (req, res, next) => {

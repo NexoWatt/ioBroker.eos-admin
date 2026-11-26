@@ -17,20 +17,20 @@
     };
     const reasons = {
         EOS_MIGRATION_LICENSE_REQUIRED: 'Die Bestandsübernahme wurde ohne gültige Systemfreigabe noch nicht geprüft. Zuerst die zentrale EOS-Lizenz aktivieren; anschließend EOS neu starten, damit die vollständige Übernahmeprüfung vor dem Betrieb ausgeführt wird.',
-        EOS_MIGRATION_RESTART_REQUIRED: 'Die Systemfreigabe ist jetzt gültig. Bitte die EOS-Adapterinstanz neu starten, damit die Bestandsübernahme vollständig geprüft wird. Bisherige Adapter nicht löschen und keine leeren Einstellungen über den Bestand speichern.',
+        EOS_MIGRATION_RESTART_REQUIRED: 'EOS fordert für die Bestandsprüfung einmalig einen automatischen Adapterneustart an. Bleibt dieser Status dauerhaft bestehen, die EOS-Adapterinstanz einmal in ioBroker neu starten.',
         EOS_MIGRATION_PROTECTED_FIELDS_UNAVAILABLE: 'ioBroker gibt geschützte Zugangsdaten oder Schlüssel eines Altadapters nicht frei. Für eine vollständige Übernahme ist eine freigegebene Übergabe dieser Daten erforderlich; leere Ersatzwerte werden nicht eingesetzt.',
-        EOS_MIGRATION_SOURCE_VERSION: 'Mindestens eine Altadapter-Version ist für die automatische Übernahme noch nicht geprüft.',
+        EOS_MIGRATION_SOURCE_VERSION: 'Die Version eines bisherigen Adapters ist für die automatische Übernahme noch nicht freigegeben. Die installierte Version im ioBroker mit den unterstützten Quellversionen von EOS abgleichen.',
         EOS_MIGRATION_DESTINATION_MISSING: 'Ein bereits übernommener Einstellungsbestand fehlt. Vor dem Start muss die vollständige Sicherung der gemeinsamen Konfiguration wiederhergestellt werden.',
         EOS_MIGRATION_DESTINATION_BINDING: 'Die gespeicherten Moduleinstellungen passen nicht zum bestätigten Übernahmestand. Bitte die Sicherung und Zuordnung der bisherigen Instanzen prüfen.',
-        EOS_MIGRATION_DISABLED_UI_REVIEW: 'Die bisherige EOS-Oberfläche ist deaktiviert. Ihr bisheriger Betriebszustand muss vor einer gemeinsamen Aktivierung geprüft werden.',
-        EOS_MIGRATION_DESTINATION_CONFIGURED: 'Im gemeinsamen EOS sind bereits Einstellungen für ein betroffenes Modul gespeichert. Diese werden nicht überschrieben.',
+        EOS_MIGRATION_DISABLED_UI_REVIEW: 'Die bisherige Oberfläche ist deaktiviert. In ioBroker den bestätigten Stillstand dieser Instanz und die Erreichbarkeit ihres Hosts prüfen. EOS prüft beim Adapterstart auch, ob die Zielkonfiguration frei ist.',
+        EOS_MIGRATION_DESTINATION_CONFIGURED: 'Für diesen Bereich bestehen bereits EOS-Einstellungen. Quell- und Zielkonfiguration anhand einer Sicherung vergleichen, bevor eine Übernahme geplant wird.',
         EOS_MIGRATION_DESTINATION_STATES: 'Im gemeinsamen EOS bestehen bereits Datenpunkte für diesen Bereich. Eine automatische Zusammenführung wird nicht vorgenommen.',
         EOS_MIGRATION_AMBIGUOUS: 'Es wurden mehrere Instanzen desselben Altadapters gefunden. Vor der Übernahme muss die gewünschte Zuordnung geklärt werden.',
         EOS_MIGRATION_SOURCE_HOST: 'Die Hostzuordnung oder Erreichbarkeit eines bisherigen Adapters konnte nicht bestätigt werden.',
         EOS_MIGRATION_MODULE_LICENSE_REQUIRED: 'Die zentrale Lizenz gibt mindestens ein zu übernehmendes Modul noch nicht frei.',
         EOS_MIGRATION_SOURCE_UNAVAILABLE: 'Eine bisherige Instanz konnte nicht vollständig gelesen werden.',
         EOS_MIGRATION_SOURCE_CHANGED: 'Ein bisheriger Adapter wurde während der Übergabe verändert. Bitte die aktuelle Konfiguration und Hostzuordnung prüfen.',
-        EOS_MIGRATION_STOP_UNCONFIRMED: 'Die vollständige Beendigung einer bisherigen Instanz wurde nicht bestätigt.',
+        EOS_MIGRATION_STOP_UNCONFIRMED: 'Im ioBroker prüfen, ob der Host erreichbar ist und die bisherige Instanz nach ihrer letzten Änderung als beendet gemeldet hat.',
         EOS_MIGRATION_ROLLBACK_UNCONFIRMED: 'Die Wiederaufnahme einer bisherigen Instanz konnte nicht bestätigt werden. Bitte deren Laufzustand prüfen.',
         EOS_MIGRATION_NEW_RUNTIME_FAILED: 'Der Start des gemeinsamen Betriebs wurde nicht bestätigt; die Rücknahme wurde eingeleitet.',
         EOS_MIGRATION_INTERRUPTED: 'Die vorherige Übergabe wurde unterbrochen. EOS hat die Wiederherstellung des bisherigen Betriebs eingeleitet.',
@@ -60,7 +60,7 @@
         const phase = typeof value?.phase === 'string' && Object.hasOwn(phases, value.phase) ? value.phase : 'NOT_AVAILABLE';
         const code = typeof value?.code === 'string' && /^[A-Z][A-Z0-9_]{0,79}$/.test(value.code) ? value.code : '';
         const [heading, description] = phase === 'LICENSE_REQUIRED' && code === 'EOS_MIGRATION_RESTART_REQUIRED'
-            ? ['Übernahmeprüfung nach Neustart erforderlich', 'Die zentrale Systemfreigabe ist gültig. Die Bestandsprüfung wurde in diesem Adapterlauf noch nicht ausgeführt.']
+            ? ['Automatischer Neustart zur Bestandsprüfung', 'Die zentrale Systemfreigabe ist gültig. EOS prüft den Bestand beim nächsten Adapterstart.']
             : phases[phase];
         element('status-heading').textContent = heading;
         element('phase-description').textContent = description;
@@ -71,6 +71,13 @@
         const unchanged = value?.existingAdaptersUnchanged === true && ['BLOCKED', 'DISABLED', 'LICENSE_REQUIRED', 'NOT_NEEDED'].includes(phase);
         element('unchanged-notice').hidden = !unchanged;
         element('unchanged-notice').textContent = unchanged ? 'Die automatische Übernahme hat keine bisherigen Adapter angehalten oder deren Einstellungen verändert.' : '';
+        const processLabels = { ui: 'Oberfläche', ems: 'EMS', devices: 'Geräte', eebus: 'EEBus', backup: 'Sicherung', ocpp: 'OCPP-Ladestationen' };
+        const blocked = Array.isArray(value?.blockedProcesses) ? Object.keys(processLabels).filter(id => value.blockedProcesses.includes(id)) : null;
+        const scope = element('scope-description');
+        scope.hidden = !blocked;
+        scope.textContent = blocked ? (blocked.length ? `Diese Bereiche warten auf die Betriebsfreigabe durch die Übernahme: ${blocked.map(id => processLabels[id]).join(', ')}.`
+            : 'Die Bestandsübernahme hält derzeit keine Betriebsfreigabe zurück.') : '';
+        const issues = Array.isArray(value?.issues) ? value.issues.slice(0, 256) : [];
         const list = element('sources'); list.replaceChildren();
         let count = 0;
         for (const source of (Array.isArray(value?.sources) ? value.sources.slice(0, 256) : [])) {
@@ -81,7 +88,15 @@
             const id = document.createElement('code'); id.textContent = source.source;
             const note = document.createElement('span');
             note.textContent = source.namespacePreserved === true ? ' · bisherige Datenpunktnamen beibehalten' : ' · bisherige Instanz erfasst';
-            row.append(name, id, note); list.append(row); count++;
+            row.append(name, id, note);
+            const issue = issues.find(item => item?.id === source.id && item.source === source.source &&
+                typeof item.code === 'string' && /^[A-Z][A-Z0-9_]{0,79}$/.test(item.code));
+            if (issue) {
+                const reason = document.createElement('p'); reason.className = 'notice';
+                reason.textContent = issue.code === code ? `Grund: ${issue.code}` : `${issue.code}. ${reasons[issue.code] || 'Diese Instanz muss vor der Übernahme geprüft werden.'}`;
+                list.append(row, reason);
+            } else list.append(row);
+            count++;
         }
         if (!count) { const empty = document.createElement('p'); empty.textContent = 'Für diesen Status sind keine Instanzen erfasst.'; list.append(empty); }
     }
@@ -96,6 +111,7 @@
             if (!response.ok) throw new Error('Der Übernahmestatus ist vorübergehend nicht verfügbar.');
             render(await response.json()); message.textContent = 'Status aktualisiert. Es wurden keine Einstellungen verändert.';
         } catch (error) {
+            render({ phase: 'NOT_AVAILABLE' });
             message.textContent = error instanceof Error ? error.message : 'Status konnte nicht geladen werden.';
             message.className = 'eos-message is-error';
         } finally { busy = false; element('refresh').disabled = false; }

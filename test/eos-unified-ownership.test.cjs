@@ -64,6 +64,24 @@ test('fresh controller evidence reports the actual migration fence without grant
     assert.equal(Object.hasOwn(x.guard.status(), 'migration'), false);
 });
 
+test('a module-local migration fence keeps other scopes operational only under confirmed single ownership', async t => {
+    const x = setup(); t.after(() => x.guard.stop());
+    x.addOld();
+    x.owner.eosMigration = { allowsWrites: scope => Boolean(scope) && scope !== 'devices' };
+    assert.equal(await x.guard.start(), true);
+    for (const scope of ['ui', 'ems', 'backup', 'eebus', 'ocpp']) {
+        assert.equal(x.guard.canWrite(scope), true, scope);
+    }
+    assert.equal(x.guard.status('devices').reason, 'MIGRATION_BLOCKED');
+    assert.equal(x.guard.canWrite('devices'), false);
+    x.objects.get(oldId).common.enabled = true;
+    x.guard.onObjectChange(oldId, x.objects.get(oldId));
+    assert.equal(await x.guard.refresh(), false);
+    for (const scope of ['ui', 'ems', 'backup', 'eebus', 'ocpp', 'devices']) {
+        assert.equal(x.guard.canWrite(scope), false, scope);
+    }
+});
+
 test('migration diagnostics reject untrusted fields and failed reads without changing ownership', async t => {
     const x = setup(); t.after(() => x.guard.stop());
     x.owner.eosMigration = { allowsWrites: () => false, status: () => ({ phase: '<private>', code: 'private detail / secret' }) };
@@ -121,6 +139,22 @@ test('another enabled EOS instance is also a competing writer', async t => {
     const x = setup(); t.after(() => x.guard.stop()); x.addOld('system.adapter.eos-admin.1');
     x.objects.get('system.adapter.eos-admin.1').common.enabled = true;
     assert.equal(await x.guard.start(), false);
+});
+
+test('local daemon lifecycle confirms an older stop after metadata edit and a new controller start signal revokes every lease', async t => {
+    const x=setup(); t.after(()=>x.guard.stop()); x.owner.host='host-a'; x.addOld(oldId,'host-a');
+    const old=x.objects.get(oldId);
+    Object.assign(old.common,{mode:'daemon',runAsCompactMode:false}); old.ts=x.now;
+    const by='system.host.host-a';
+    x.states.set(oldId+'.alive',{val:false,ack:true,ts:x.now-1000,q:0,from:by});
+    x.states.set(oldId+'.sigKill',{val:-1,ack:false,ts:x.now-5000,q:0,from:by});
+    assert.equal(await x.guard.start(),true);
+    assert.equal(x.guard.canWrite('ems'),true);
+    const marker={val:0,ack:false,ts:x.now,q:0,from:by};
+    x.states.set(oldId+'.sigKill',marker); x.guard.onStateChange(oldId+'.sigKill',marker);
+    assert.equal(x.guard.canWrite('ems'),false);assert.equal(x.guard.canWrite('devices'),false);
+    assert.equal(await x.guard.refresh(),false);
+    assert.equal(x.guard.status().blockers[0].reason,'STOP_NOT_CONFIRMED');
 });
 
 test('old instance enable event revokes synchronously before next database poll', async t => {

@@ -116,8 +116,13 @@ test('previously blocked optional OCPP inventory recovers on startup and actual 
     const ocpp = await host.status('ocpp');
     assert.equal(ocpp.enabled, true, 'missing configuration enables commissioning without taking over the external adapter');
     assert.equal(ocpp.active, false);
-    assert.equal(ocpp.reason, 'LEGACY_CONFLICT');
-    assert.equal(ocpp.details.process.pid, null);
+    assert.equal(ocpp.reason, 'WAITING_FOR_OWNERSHIP');
+    assert.equal(ocpp.details.waitingReason, 'LEGACY_CONFLICT');
+    assert.equal(ocpp.details.process.standby, true);
+    assert.equal(ocpp.details.process.state, 'running');
+    assert.ok(Number.isSafeInteger(ocpp.details.process.pid) && ocpp.details.process.pid > 0);
+    assert.notEqual(ocpp.details.process.pid, process.pid);
+    assert.notEqual(ocpp.details.process.pid, devices.details.process.pid);
     assert.deepEqual(ocpp.blockers, [{ instance: 'ocpp21.0', reason: 'LEGACY_ENABLED_OR_UNKNOWN' }]);
     assertExternalRetained(f);
 });

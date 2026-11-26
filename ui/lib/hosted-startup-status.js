@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/lib/hosted-startup-status.ts
- * Quell-Hash: sha256:ea2649805a3f45fe30bf1a5fd775039df588ff5626728d96fc932de76b337cc5
+ * Quell-Hash: sha256:cc0175396361f8bf2013ca3b37fc6da932c15d2419689617280aa2839811aaa8
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -87,7 +87,7 @@ function describeHostedStartup(startup, readiness, currentPhase = '') {
     else if (migrationPhase === 'LICENSE_REQUIRED' && migrationCode === 'EOS_MIGRATION_RESTART_REQUIRED') {
         current = 'blocked';
         error = 'EOS_MIGRATION_RESTART_REQUIRED';
-        message = 'Die Lizenz ist jetzt aktiv. Ein EOS-Administrator muss den EOS-Adapter einmal neu starten, damit die Bestandsübernahme vor dem Start der EMS-Regelung geprüft wird.';
+        message = 'Die Lizenz ist jetzt aktiv. EOS fordert einen Neustart an und prüft anschließend die Bestandsübernahme. Falls dieser Status bestehen bleibt, die EOS-Instanz in ioBroker einmal neu starten.';
         recoveryPath = '/migration/';
     }
     else if (current === 'unlicensed' || migrationPhase === 'LICENSE_REQUIRED') {

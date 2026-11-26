@@ -75,7 +75,7 @@ function describeHostedStartup(startup: unknown, readiness: unknown, currentPhas
     message = 'Die EOS-Laufzeit wurde angehalten.';
   } else if (migrationPhase === 'LICENSE_REQUIRED' && migrationCode === 'EOS_MIGRATION_RESTART_REQUIRED') {
     current = 'blocked'; error = 'EOS_MIGRATION_RESTART_REQUIRED';
-    message = 'Die Lizenz ist jetzt aktiv. Ein EOS-Administrator muss den EOS-Adapter einmal neu starten, damit die Bestandsübernahme vor dem Start der EMS-Regelung geprüft wird.';
+    message = 'Die Lizenz ist jetzt aktiv. EOS fordert einen Neustart an und prüft anschließend die Bestandsübernahme. Falls dieser Status bestehen bleibt, die EOS-Instanz in ioBroker einmal neu starten.';
     recoveryPath = '/migration/';
   } else if (current === 'unlicensed' || migrationPhase === 'LICENSE_REQUIRED') {
     current = 'unlicensed'; error = 'EOS_LICENSE_REQUIRED';

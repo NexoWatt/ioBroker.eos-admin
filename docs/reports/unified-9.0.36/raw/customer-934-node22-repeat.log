@@ -1,0 +1,78 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: a customer-confirmed stopped legacy UI and an active Devices instance cut over exactly once through the actual Web listener
+ok 1 - a customer-confirmed stopped legacy UI and an active Devices instance cut over exactly once through the actual Web listener
+  ---
+  duration_ms: 4530.804556
+  type: 'test'
+  ...
+# {"previous":"9.0.34","migration":{"phase":"BLOCKED","code":"EOS_MIGRATION_DISABLED_UI_REVIEW","sources":[{"id":"ui","source":"nexowatt-ui.0","namespacePreserved":false}],"updatedAt":null},"localObjects":["eos-admin.0.info.eosOwnership","eos-admin.0.info.legacyMigration"],"localStates":["eos-admin.0.info.connection","eos-admin.0.info.eosOwnership","eos-admin.0.info.legacyMigration","eos-admin.0.info.nexowattStableUpdatesEnabled","eos-admin.0.info.nexowattStableUpdatesState"],"destinationChannels":[]}
+# {"version":"9.0.36","phase":"COMMITTED","originalWriterRestarts":0,"reads":2,"postRestartWatts":1562,"distinctChildPids":3,"historyLink":"influxdb.0","provider":"tibber"}
+# Subtest: a fully active compatible legacy installation retains mappings when both writers hand over
+ok 2 - a fully active compatible legacy installation retains mappings when both writers hand over
+  ---
+  duration_ms: 2075.603215
+  type: 'test'
+  ...
+# Subtest: missing stop evidence and an independent target mapping leave both original configurations intact
+    # Subtest: unknownStop
+    ok 1 - unknownStop
+      ---
+      duration_ms: 386.860358
+      type: 'test'
+      ...
+    # Subtest: target
+    ok 2 - target
+      ---
+      duration_ms: 356.359693
+      type: 'test'
+      ...
+    # Subtest: destinationChannel
+    ok 3 - destinationChannel
+      ---
+      duration_ms: 394.203248
+      type: 'test'
+      ...
+    # Subtest: invalidConfig
+    ok 4 - invalidConfig
+      ---
+      duration_ms: 408.530402
+      type: 'test'
+      ...
+    1..4
+ok 3 - missing stop evidence and an independent target mapping leave both original configurations intact
+  ---
+  duration_ms: 1547.500205
+  type: 'test'
+  ...
+# Subtest: new installation remains reachable without license and starts from its saved process choices after activation and restart
+ok 4 - new installation remains reachable without license and starts from its saved process choices after activation and restart
+  ---
+  duration_ms: 1427.188332
+  type: 'test'
+  ...
+# Subtest: licensed workers stay alive during two external ownership conflicts while field I/O and the OCPP socket stay fenced
+ok 5 - licensed workers stay alive during two external ownership conflicts while field I/O and the OCPP socket stay fenced
+  ---
+  duration_ms: 2998.072821
+  type: 'test'
+  ...
+# {"workerPids":6,"heartbeatRounds":2,"conflictingOwners":["devices","ocpp"],"meterConnections":0,"meterWrites":0,"ocppPortClosedDuringConflict":true,"ocppConnectedAfterConfirmedRelease":true}
+# Subtest: occupied EOS listener rolls back only the previously active legacy writer
+ok 6 - occupied EOS listener rolls back only the previously active legacy writer
+  ---
+  duration_ms: 488.538837
+  type: 'test'
+  ...
+1..6
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 13193.532864

@@ -506,12 +506,131 @@ test('intentional shutdown fences monitoring; the transferred journal is verifie
     assert.equal(x.objects.get('system.adapter.nexowatt-devices.0').common.enabled, true);
 });
 
-test('preflight BLOCKED prevents operational starts while the original disabled UI remains unchanged', async () => {
-    const x = fixture([{ id: 'ui', source: 'nexowatt-ui.0', version: '1.0.38', native: {}, enabled: false }]);
+test('confirmed stopped UI transfers unchanged with no source enable write and waits for both split processes', async () => {
+    const x = fixture([{ id: 'ui', source: 'nexowatt-ui.0', version: '1.0.38', native: { siteName: 'Retained', installerConfig: { nvp: { stateId: 'meter.0.power' } } }, enabled: false }]);
+    const id = 'system.adapter.nexowatt-ui.0';
+    const before = structuredClone(x.objects.get(id));
+    const mapping = { val: '{"timers":[{"deviceId":"light","enabled":true}]}', ack: true };
+    x.states.set('nexowatt-ui.0.smarthome.timersJson', mapping);
+    await x.migration.start(); assert.equal(x.migration.phase, 'TRANSFERRED');
+    assert.equal(x.owner.config.eosUiMigration.source, 'nexowatt-ui.0');
+    assert.deepEqual(x.owner.config.eosUi, before.native);
+    assert.deepEqual(x.states.get('nexowatt-ui.0.smarthome.timersJson'), mapping);
+    assert.ok(x.owner.config.eosUiMigration.requiredStates.includes('smarthome.timersJson'));
+    x.migration.options.startTimeoutMs = 1500;
+    const ui = { active: false, process: { state: 'starting', pid: 14001 } };
+    const ems = { state: 'degraded', active: false, emsReady: false, canWrite: false, process: { state: 'starting', pid: 14002 } };
+    x.owner.eosHostedRuntime = { status: () => ({ ...ems, ui, ems }) };
+    const monitoring = x.migration.verifyRuntime();
+    await new Promise(resolve => setImmediate(resolve));
+    assert.equal(x.migration.phase, 'TRANSFERRED', 'starting children are pending');
+    Object.assign(ems, { emsReady: true, canWrite: true, active: true, state: 'ready', process: { state: 'running', pid: 14002 } });
+    assert.equal((await x.migration.readiness(x.migration.journal.sources, performance.now() + 1000)).ready, false, 'the GUI is still starting');
+    ui.active = true; ui.process.state = 'running';
+    await monitoring;
+    assert.equal(x.migration.phase, 'COMMITTED');
+    assert.deepEqual(x.objects.get(id), before);
+    assert.equal(x.mutations.some(row => row.id === id), false);
+});
+
+test('restoring after failed cutover never enables an originally disabled UI', async () => {
+    const x = fixture([{ id: 'ui', source: 'nexowatt-ui.0', version: '1.0.38', native: { siteName: 'Retained' }, enabled: false }]);
+    await x.migration.start();
+    x.owner.eosHostedRuntime = { status: () => ({ state: 'degraded', emsReady: false, canWrite: false, process: { state: 'failed' } }), async stop() {} };
+    await x.migration.verifyRuntime();
+    assert.equal(x.migration.phase, 'ROLLED_BACK');
+    assert.equal(x.objects.get('system.adapter.nexowatt-ui.0').common.enabled, false);
+    assert.equal(x.mutations.some(row => row.id.startsWith('system.adapter.')), false);
+});
+
+test('explicit target pause requires loaded saved intent and a stopped EMS', async () => {
+    const x = fixture([{ id: 'ui', source: 'nexowatt-ui.0', version: '1.0.37', native: { siteName: 'Retained' }, enabled: false }]);
+    await x.migration.start(); assert.equal(x.migration.phase, 'TRANSFERRED');
+    const ui = { active: true, process: { state: 'running', pid: 13000 } };
+    const ems = { active: false, canWrite: false, emsReady: false, process: { state: 'stopped', pid: null } };
+    x.owner.eosHostedRuntime = { status: () => ({ ui, ems }) };
+    let enabled = null;
+    x.owner.eosRuntimeControl = { dashboardIntent: id => ({ enabled: id === 'ems' ? enabled : true, error: '' }) };
+    const ready = async () => (await x.migration.readiness(x.migration.journal.sources, performance.now() + 500)).ready;
+    assert.equal(await ready(), false);
+    enabled = false; ems.process.pid = 13001;
+    assert.equal(await ready(), false);
+    ems.process.pid = null;
+    await x.migration.verifyRuntime();
+    assert.equal(x.migration.phase, 'COMMITTED');
+    assert.equal(x.mutations.some(row => row.id.startsWith('system.adapter.')), false);
+});
+
+test('unrelated failed EMS and initial module status never cause premature rollback of Devices', async () => {
+    const x = fixture();
+    await x.migration.start();
+    const state = { id: 'devices', enabled: null, active: false, reason: 'CONFIG_INVALID',
+        details: { configuration: { ready: false, error: 'EOS_MODULE_CONFIG_UNAVAILABLE' } } };
+    x.owner.eosHostedRuntime = { status: () => ({ state: 'degraded', process: { state: 'failed' } }) };
+    x.owner.eosModuleHost = { status: () => state };
+    const read = () => x.migration.readiness(x.migration.journal.sources, performance.now() + 1000);
+    assert.deepEqual(await read(), { ready: false, failed: false, devicesProgress: 0 });
+    state.details.configuration.error = 'EOS_MODULE_CONFIG_STORE_INVALID';
+    assert.equal((await read()).failed, true);
+    state.reason = 'WAITING_FOR_OWNERSHIP';
+    assert.deepEqual(await read(), { ready: false, failed: false, devicesProgress: 0 });
+    state.reason = 'RUNNING'; state.active = true; state.enabled = true;
+    await x.migration.verifyRuntime(); assert.equal(x.migration.phase, 'COMMITTED');
+});
+
+test('unconfirmed source stop only fences that process family and can retry after correction', async () => {
+    const x = fixture([{ id: 'ui', source: 'nexowatt-ui.0', version: '1.0.38', native: { siteName: 'Retained' }, enabled: false }]);
+    const aliveId = 'system.adapter.nexowatt-ui.0.alive';
+    x.states.set(aliveId, { val: true, ack: true, ts: Date.now() });
+    await x.migration.start(); assert.equal(x.migration.phase, 'BLOCKED');
+    assert.equal(x.migration.status().code, 'EOS_MIGRATION_STOP_UNCONFIRMED');
+    assert.deepEqual(x.migration.status().issues, [{ id: 'ui', source: 'nexowatt-ui.0', code: 'EOS_MIGRATION_STOP_UNCONFIRMED' }]);
+    for (const id of ['ui', 'ems']) assert.equal(x.migration.allowsWrites(id), false);
+    for (const id of ['devices', 'backup', 'ocpp', 'eebus']) assert.equal(x.migration.allowsWrites(id), true);
+    assert.equal(x.migration.allowsSupervisorStartup(), true);
+    assert.equal(x.mutations.some(row => row.id.startsWith('system.adapter.')), false);
+    x.states.set(aliveId, { val: false, ack: true, ts: Date.now() });
+    const again = new EosLegacyMigration(x.owner, x.migration.options); await again.start();
+    assert.equal(again.phase, 'TRANSFERRED');
+});
+
+test('older confirmed stop is accepted only with same local controller lifecycle order on a noncompact UI', async () => {
+    const { hasConfirmedLegacyStop } = require('../src/lib/eosLegacyMigration');
+    const t = Date.now(); const from = 'system.host.host';
+    const base = { _id: 'system.adapter.nexowatt-ui.0', ts: t, common: { enabled: false, mode: 'daemon', host: 'host' } };
+    const stopped = { val: false, ack: true, ts: t - 1000, from };
+    const started = { val: 14589, ack: true, ts: t - 4000, from };
+    for (const marker of [started, { ...started, val: -1, ack: false }]) {
+        assert.equal(await hasConfirmedLegacyStop({ host: 'host', getForeignStateAsync: async () => marker }, base, stopped), true);
+    }
+    for (const marker of [null, { ...started, val: 0, ack: false }, { ...started, ts: t - 500 }, { ...started, ts: stopped.ts },
+        { ...started, from: 'system.adapter.admin.0' }, { ...started, ack: false }, { ...started, q: 32 }]) {
+        assert.equal(await hasConfirmedLegacyStop({ host: 'host', getForeignStateAsync: async () => marker }, base, stopped), false);
+    }
+    const reader = { host: 'host', getForeignStateAsync: async () => started };
+    for (const common of [{ ...base.common, enabled: true }, { ...base.common, runAsCompactMode: true },
+        { ...base.common, mode: 'schedule' }, { ...base.common, host: 'remote' }]) {
+        assert.equal(await hasConfirmedLegacyStop(reader, { ...base, common }, stopped), false);
+    }
+    assert.equal(await hasConfirmedLegacyStop(reader, base, { ...stopped, from: 'system.adapter.admin.0' }), false);
+});
+
+test('atomic mixed group leaves retained legacy devices live and permits unrelated EOS modules', async () => {
+    const x = fixture([{ id: 'devices', source: 'nexowatt-devices.0', version: '0.5.176', native: { devices: [] } },
+        { id: 'backup', source: 'nexowatt-backup.0', version: '99.9.9', native: {} }]);
     await x.migration.start();
     assert.equal(x.migration.phase, 'BLOCKED');
-    assert.equal(x.migration.allowsStartup(), false); assert.equal(x.migration.allowsWrites(), false);
+    assert.deepEqual(x.migration.status().issues, [{ id: 'backup', source: 'nexowatt-backup.0', code: 'EOS_MIGRATION_SOURCE_VERSION' }]);
+    assert.equal(x.migration.allowsWrites(), false); assert.equal(x.migration.allowsSupervisorStartup(), true);
+    for (const id of ['backup', 'devices']) assert.equal(x.migration.allowsWrites(id), false);
+    for (const id of ['ui', 'ems', 'eebus', 'ocpp']) assert.equal(x.migration.allowsWrites(id), true);
+    for (const row of x.migration.status().sources) assert.equal(x.objects.get(`system.adapter.${row.source}`).common.enabled, true);
     assert.equal(x.mutations.some(row => row.id.startsWith('system.adapter.')), false);
+    x.objects.set('system.adapter.eos-admin.0', { _id: 'system.adapter.eos-admin.0', type: 'instance', common: { enabled: true }, native: {} });
+    const again = new EosLegacyMigration(x.owner, x.migration.options); await again.start();
+    assert.equal(again.status().code, 'EOS_MIGRATION_PARALLEL_EOS');
+    assert.equal(again.allowsSupervisorStartup(), false);
+    for (const id of ['backup', 'devices', 'ui', 'ems', 'eebus', 'ocpp']) assert.equal(again.allowsWrites(id), false);
 });
 
 test('uncertain stop remains ROLLBACK_REQUIRED across restart without automatically re-enabling sources', async () => {

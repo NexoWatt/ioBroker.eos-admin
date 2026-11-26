@@ -37,6 +37,7 @@
     "Prozessstatus unbekannt": "Processtatus onbekend",
     "Gerätestatus unbekannt": "Apparaatstatus onbekend",
     "Geräte offline · {names}": "Apparaten offline · {names}",
+    "Wartet auf Übernahme · {names}": "Wacht op overname · {names}",
     "Prozess gestört · {names}": "Processtoring · {names}",
     "Live-Verbindung unterbrochen · Prozess gestört: {names}": "Liveverbinding verbroken · Processtoring: {names}",
     "Sicherheitsstopp aktiv · Prozess gestört: {names}": "Veiligheidsstop actief · Processtoring: {names}",

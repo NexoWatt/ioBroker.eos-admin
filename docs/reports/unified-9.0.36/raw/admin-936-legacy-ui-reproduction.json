@@ -1,0 +1,64 @@
+{
+  "packageVersion": "9.0.36",
+  "scenario": "Synthetic uninitialized host with legacy UI preflight, real production config, supervisor status and protected HTTP/Chromium rendering; no device I/O",
+  "rows": [
+    {
+      "id": "admin",
+      "badge": "Läuft",
+      "fields": "Prozessnummer (PID)13Administration erreichbarJa",
+      "notes": [
+        "Bleibt als Zugang zur Prozessverwaltung aktiv. Einen vollständigen EOS-Neustart über die ioBroker-Instanzverwaltung ausführen."
+      ]
+    },
+    {
+      "id": "ui",
+      "badge": "Läuft · wartet auf Freigabe",
+      "fields": "Prozessnummer (PID)2341Oberfläche aktivJaBetriebWartet auf bestätigte ZuständigkeitProzessfreigabeAktiviertNeustarts in diesem LaufUnbekanntGeneration1Letzter Heartbeat26.11.2026, 21:21:45",
+      "notes": [
+        "Die Oberfläche ist erreichbar. Die Gerätebedienung wartet auf die Betriebsfreigabe. nexowatt-ui.0 · EOS_MIGRATION_STOP_UNCONFIRMED. Der Stillstand einer bisherigen Instanz ist noch nicht bestätigt. Im ioBroker die betreffende Instanz und den zugehörigen Host prüfen.",
+        "Deaktivieren beendet die Oberfläche. Die Administration und diese Seite bleiben erreichbar."
+      ]
+    },
+    {
+      "id": "ems",
+      "badge": "Läuft · wartet auf Freigabe",
+      "fields": "Prozessnummer (PID)2342Betrieb freigegebenJaBetriebWartet auf bestätigte ZuständigkeitEMS bereitNeinProzessfreigabeAktiviertNeustarts in diesem LaufUnbekanntGeneration1Letzter Heartbeat26.11.2026, 21:21:45",
+      "notes": [
+        "Der EMS-Prozess läuft im Wartezustand. Die Regelung wartet auf die Betriebsfreigabe. nexowatt-ui.0 · EOS_MIGRATION_STOP_UNCONFIRMED. Der Stillstand einer bisherigen Instanz ist noch nicht bestätigt. Im ioBroker die betreffende Instanz und den zugehörigen Host prüfen.",
+        "Deaktivieren hält die EMS-Regelung an. Aktivieren startet sie mit der gespeicherten Konfiguration."
+      ]
+    },
+    {
+      "id": "devices",
+      "badge": "Initialisierung ausstehend",
+      "fields": "Prozessnummer (PID)UnbekanntBetrieb freigegebenNeinProzessfreigabeAktiviertNeustarts in diesem Lauf0Generation0Letzter HeartbeatUnbekanntModulkonfigurationNoch nicht eingelesen",
+      "notes": [
+        "Die Modulkonfiguration konnte noch nicht geladen werden. Moduleinstellungen und Systemprotokoll prüfen."
+      ]
+    },
+    {
+      "id": "eebus",
+      "badge": "Initialisierung ausstehend",
+      "fields": "Prozessnummer (PID)UnbekanntBetrieb freigegebenNeinProzessfreigabeAktiviertNeustarts in diesem Lauf0Generation0Letzter HeartbeatUnbekanntModulkonfigurationNoch nicht eingelesen",
+      "notes": [
+        "Die Modulkonfiguration konnte noch nicht geladen werden. Moduleinstellungen und Systemprotokoll prüfen."
+      ]
+    },
+    {
+      "id": "backup",
+      "badge": "Initialisierung ausstehend",
+      "fields": "Prozessnummer (PID)UnbekanntBetrieb freigegebenNeinProzessfreigabeAktiviertNeustarts in diesem Lauf0Generation0Letzter HeartbeatUnbekanntModulkonfigurationNoch nicht eingelesen",
+      "notes": [
+        "Die Modulkonfiguration konnte noch nicht geladen werden. Moduleinstellungen und Systemprotokoll prüfen."
+      ]
+    },
+    {
+      "id": "ocpp",
+      "badge": "Initialisierung ausstehend",
+      "fields": "Prozessnummer (PID)UnbekanntBetrieb freigegebenNeinProzessfreigabeAktiviertNeustarts in diesem Lauf0Generation0Letzter HeartbeatUnbekanntModulkonfigurationNoch nicht eingelesen",
+      "notes": [
+        "Die Modulkonfiguration konnte noch nicht geladen werden. Moduleinstellungen und Systemprotokoll prüfen."
+      ]
+    }
+  ]
+}

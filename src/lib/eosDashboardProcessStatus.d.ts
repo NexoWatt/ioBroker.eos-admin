@@ -5,6 +5,7 @@ export interface DashboardProcessStatus {
     state: 'ok' | 'fault' | 'unknown';
     failed: DashboardProcessId[];
     paused: DashboardProcessId[];
+    waiting?: DashboardProcessId[];
 }
 export function dashboardProcessStatus(sources: unknown, now?: number): DashboardProcessStatus;
 export interface DashboardDeviceHealth {

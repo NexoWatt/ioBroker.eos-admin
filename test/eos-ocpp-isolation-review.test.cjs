@@ -14,14 +14,18 @@ function deferred() {
     return { promise, resolve };
 }
 
-function fixture(t, preserved = false) {
+async function fixture(t, preserved = false) {
     const calls = [];
     const owner = {
-        namespace: 'eos-admin.2', instance: 2, config: {}, log: { warn() {} },
+        namespace: 'eos-admin.2', instance: 2, log: { warn() {} },
+        config: {eosModules:{ocpp:{v:1, encrypted:'fixture-ocpp-configuration',
+            ...(preserved ? {migration:{preserveNamespace:true,source:'ocpp21.4'}} : {})}}},
+        decrypt(ciphertext) { assert.equal(ciphertext,'fixture-ocpp-configuration'); return JSON.stringify({enabled:true}); },
+        eosMigration: {allowsStartup:id=>id==='ocpp'},
         eosLicenseService: { allowsEmbeddedModule: () => true },
         eosOwnership: { canWrite: () => true },
         async getForeignStateAsync(id) { calls.push(['get', id]); return { val: 0, ack: true, ts: Date.now() }; },
-        async getForeignObjectAsync(id) { calls.push(['object', id]); return { _id: id, type: 'state', common: { read: true } }; },
+        async getForeignObjectAsync(id) { if (id === 'eos-admin.2.modules.ocpp.configuration') return null; calls.push(['object', id]); return { _id: id, type: 'state', common: { read: true } }; },
         async getForeignStatesAsync(pattern) { calls.push(['states', pattern]); return {}; },
         async getObjectViewAsync(design, kind, range) { calls.push(['view', design, kind, range]); return { rows: [] }; },
         async setForeignStateAsync(id, value) { calls.push(['set', id, value]); },
@@ -34,16 +38,23 @@ function fixture(t, preserved = false) {
     host.running = true; host.initialized = true;
     const entry = host.entries.get('ocpp');
     assert.ok(entry, 'integrated OCPP is a managed module');
-    entry.config = { enabled: true }; entry.generation = 7; entry.lease = performance.now() + 30000;
-    if (preserved) entry.loadedEnvelope = { migration: { preserveNamespace: true, source: 'ocpp21.4' } };
+    entry.generation = 7;
+    const api = host.facade(entry,7);
+    await assert.rejects(api.setStateAsync('station_01.control.chargeLimit',{val:0,ack:false}), /INACTIVE/);
+    assert.deepEqual(calls, [], 'unconfirmed configuration cannot write even inside its own namespace');
+    await host.loadForEditing('ocpp',true);
+    assert.equal(entry.configLoaded,true);
+    await host.renewOwnershipLeases();
+    assert.equal(host.canOperate('ocpp',7),true,'only the validated owner becomes operational');
+    calls.length=0; // The isolation assertions below cover requests through the facade.
     t.after(() => { host.stopped = true; entry.lease = 0; });
     const namespace = preserved ? 'ocpp21.4' : 'eos-admin.2.ocpp';
-    return { host, owner, entry, calls, namespace, api: host.facade(entry, 7) };
+    return { host, owner, entry, calls, namespace, api };
 }
 
 test('hosted OCPP facade writes local states in only its current or explicitly preserved namespace', async t => {
     for (const preserved of [false, true]) await t.test(preserved ? 'preserved standalone namespace' : 'embedded namespace', async child => {
-        const x = fixture(child, preserved);
+        const x = await fixture(child, preserved);
         await x.api.setStateAsync('station_01.control.chargeLimit', { val: 0, ack: false });
         await x.api.setStateChangedAsync(`${x.namespace}.station_01.info.status`, { val: 'SuspendedEVSE', ack: true });
         await x.api.getStateAsync('station_01.control.chargeLimit');
@@ -61,7 +72,7 @@ test('hosted OCPP facade writes local states in only its current or explicitly p
 });
 
 test('hosted OCPP scans reject foreign, oversized and malformed controller inventories without partial success', async t => {
-    const x = fixture(t);
+    const x = await fixture(t);
     await x.api.getStatesAsync('*.health.online');
     assert.deepEqual(x.calls.at(-1), ['states', `${x.namespace}.*.health.online`]);
     for (const inventory of [
@@ -77,7 +88,7 @@ test('hosted OCPP scans reject foreign, oversized and malformed controller inven
 });
 
 test('hosted OCPP configuration views accept only bounded own-station ranges and validate both value and doc identifiers', async t => {
-    const x = fixture(t);
+    const x = await fixture(t);
     const prefix = `${x.namespace}.station_01.configuration.`;
     const range = { startkey: prefix, endkey: `${prefix}\u9999` };
     await x.api.getObjectViewAsync('system', 'state', range);
@@ -101,7 +112,7 @@ test('hosted OCPP configuration views accept only bounded own-station ranges and
 });
 
 test('hosted OCPP cannot publish a late inventory or dispatch a queued write after its generation is revoked', async t => {
-    const x = fixture(t);
+    const x = await fixture(t);
     const held = deferred();
     x.owner.getForeignStatesAsync = async () => held.promise;
     const read = x.api.getStatesAsync('*.info.connection');

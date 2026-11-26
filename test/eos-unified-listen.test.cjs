@@ -475,6 +475,81 @@ test('separate UI and EMS children preserve HTTPS session/origin checks and leav
     assert.equal(h.server.listening, true);
 });
 
+test('listener starts supervision and arms the fenced EMS for every migration scope', () => {
+    const dispatched = [];
+    let supervisor = true;
+    let scopedEms = true;
+    const migration = {
+        allowsStartup: scope => scope === 'ems' && scopedEms,
+        allowsSupervisorStartup: () => supervisor,
+        async verifyRuntime() { dispatched.push('verify'); },
+    };
+    const web = Object.assign(Object.create(Web.prototype), { adapter: {
+        log: quiet, eosMigration: migration,
+        eosModuleHost: { async start() { dispatched.push('module-host'); } },
+        eosHostedRuntime: { async startOperational() { dispatched.push('ems'); } },
+    } });
+    web.startEosOperationalServices();
+    assert.deepEqual(dispatched.splice(0), ['module-host', 'ems', 'verify']);
+    scopedEms = false;
+    web.startEosOperationalServices();
+    assert.deepEqual(dispatched.splice(0), ['module-host', 'ems', 'verify']);
+    supervisor = false;
+    web.startEosOperationalServices();
+    assert.deepEqual(dispatched, ['module-host','ems','verify']);
+});
+
+test('an isolated Devices handover leaves the authenticated GUI and dedicated EMS process available', {timeout:15000}, async t => {
+    const migration = { allowsSupervisorStartup: () => true, allowsStartup: scope => Boolean(scope) && scope !== 'devices',
+        status: () => ({phase:'BLOCKED', code:'EOS_MIGRATION_SOURCE_VERSION'}), async verifyRuntime() {} };
+    const h = await hostedTlsFixture(t, async () => {}, { realProcess:true, migration,
+        configure: ({owner}) => {
+            processRuntimePaths.set(owner, path.join(__dirname,'fixtures','eos-ui-process-runtime.cjs'));
+            owner.eosOwnership.canWrite = scope => migration.allowsStartup(scope);
+            owner.unsubscribeForeignStatesAsync = async () => {};
+            owner.unsubscribeForeignObjectsAsync = async () => {};
+        },
+    });
+    t.after(() => h.owner.eosModuleHost.stop());
+    h.web.startEosOperationalServices();
+    const deadline = Date.now() + 4000;
+    while (!h.runtime.status().ems.emsReady && Date.now() < deadline) {
+        await new Promise(resolve => setTimeout(resolve, 20));
+    }
+    const {ui,ems} = h.runtime.status();
+    assert.ok(ui.active && ems.emsReady && ems.canWrite);
+    assert.notEqual(ui.process.pid,ems.process.pid);
+    assert.equal(await h.request('/'),200);
+    assert.equal(h.owner.eosRuntimeControl.view('devices').operationReason, 'EOS_RUNTIME_MIGRATION_BLOCKED');
+});
+
+test('a live EMS standby acquires a fresh confirmed release without a browser request', {timeout:15000}, async t => {
+    let released=false;
+    const m={allowsStartup:()=>released,status:()=>({phase:released?'NOT_NEEDED':'BLOCKED'}),async verifyRuntime() {}};
+    const h=await hostedTlsFixture(t,async()=>{}, {realProcess:true,migration:m,
+        configure:({owner})=>{
+            processRuntimePaths.set(owner,path.join(__dirname,'fixtures','eos-ui-process-runtime.cjs'));
+            owner.unsubscribeForeignStatesAsync=async()=>{};
+            owner.unsubscribeForeignObjectsAsync=async()=>{};
+            owner.eosOwnership={canWrite:()=>released,status:()=>({allowed:released,reason:released?'CONTROLLER_HANDOVER_CONFIRMED':'MIGRATION_BLOCKED'})};
+        }});
+    t.after(()=>h.owner.eosModuleHost.stop());
+    h.web.startEosOperationalServices();
+    const until=async predicate=>{
+        const end=Date.now()+4000;
+        while (!predicate() && Date.now()<end) await new Promise(resolve=>setTimeout(resolve,25));
+        assert.ok(predicate());
+    };
+    const view=()=>h.runtime.status().ems;
+    await until(()=>view().process.standby===true && view().process.lastHeartbeatAt>0);
+    assert.equal(view().emsReady,false);assert.equal(view().canWrite,false);
+    const pid=view().process.pid;
+    assert.equal(await h.request('/'),200);assert.equal(h.foreignWrites(),0);
+    released=true;
+    await until(()=>view().emsReady===true && view().canWrite===true);
+    assert.equal(view().process.pid,pid);assert.notEqual(view().process.standby,true);
+});
+
 test('migration startup fence keeps login and authenticated recovery reachable without operational startup', async t => {
     const h = await hostedTlsFixture(t, async () => assert.fail('blocked migration must not initialize devices'), {
         migration: { allowsStartup: () => false, allowsWrites: () => false }, writable: false,

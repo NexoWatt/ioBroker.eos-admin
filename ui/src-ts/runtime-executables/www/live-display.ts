@@ -100,7 +100,7 @@
     type ChargingStatus = { overallLevel: string; systemText: string; globalSafety: boolean; total: number };
     const processIds = ['ui', 'ems', 'devices', 'eebus', 'backup', 'ocpp'] as const;
     type ProcessId = typeof processIds[number];
-    type ProcessHealth = { state: 'ok' | 'fault' | 'unknown'; failed: ProcessId[]; paused: ProcessId[] };
+    type ProcessHealth = { state: 'ok' | 'fault' | 'unknown'; failed: ProcessId[]; paused: ProcessId[]; waiting: ProcessId[] };
     type Headline = { text: string; level: 'ok' | 'info' | 'warn' | 'error'; processIds?: ProcessId[]; deviceNames?: string[]; totalOffline?: number };
     // Older snapshots omit ack. An explicit unconfirmed value cannot establish operational health.
     function confirmed(row: RecordValue | null, now: number, maxAge: number): boolean {
@@ -138,9 +138,11 @@
         if (typeof observedAt !== 'number' || !Number.isSafeInteger(observedAt) || observedAt <= 0 ||
             !Number.isFinite(now) || observedAt > now + 5000 || now - observedAt > 30000) return null;
         if (state !== 'ok' && state !== 'fault' && state !== 'unknown') return null;
-        if (!validIds(failed) || !validIds(paused) || failed.some(id => paused.includes(id)) ||
+        const waiting = snapshot.waiting === undefined ? [] : snapshot.waiting;
+        if (!validIds(failed) || !validIds(paused) || !validIds(waiting) || failed.some(id => paused.includes(id)) ||
+            waiting.some(id => failed.includes(id) || paused.includes(id)) || (state === 'ok' && waiting.length) ||
             (state === 'fault') !== (failed.length > 0)) return null;
-        return { state, failed: processIds.filter(id => failed.includes(id)), paused };
+        return { state, failed: processIds.filter(id => failed.includes(id)), paused, waiting };
     }
 
     // Only the dashboard renderer commits this decision. Charging details keep their own summary.
@@ -159,11 +161,13 @@
         if (offline) return { text: 'Verbindung unterbrochen', level: 'error' };
         if (safety) return { text: 'Sicherheitsstopp aktiv', level: 'error' };
         const emsPaused = processes?.paused.includes('ems') === true;
-        if (!emsPaused && health?.phase === 'stopped') return { text: 'EMS gestoppt', level: 'error' };
+        const emsWaiting = processes?.waiting.includes('ems') === true;
+        if (!emsPaused && !emsWaiting && health?.phase === 'stopped') return { text: 'EMS gestoppt', level: 'error' };
         if (chargeModel && chargeModel.total > 0 && chargeModel.overallLevel === 'error') {
             return { text: chargeModel.systemText, level: 'error' };
         }
-        if (!emsPaused && health?.phase === 'grid-unavailable') return { text: 'Netzmessung fehlt oder ist veraltet', level: 'warn' };
+        if (!emsPaused && !emsWaiting && health?.phase === 'grid-unavailable') return { text: 'Netzmessung fehlt oder ist veraltet', level: 'warn' };
+        if (processes?.waiting.length) return { text: 'Wartet auf Übernahme · {names}', level: 'warn', processIds: processes.waiting };
         if (!emsPaused && health?.phase !== 'healthy') return { text: 'Betriebsstatus prüfen', level: 'warn' };
         if (p14Fallback) return { text: '§14a-Kommunikationsfallback aktiv', level: 'warn' };
         if (chargeModel && chargeModel.total > 0 && chargeModel.overallLevel === 'warn') {

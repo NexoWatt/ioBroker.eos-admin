@@ -2288,6 +2288,7 @@ export default class Web {
             baseDir: this.baseDir,
             dataDir: join(getAbsoluteInstanceDataDir(this.adapter), 'modules'),
             processEnabled: id => this.runtimeControl?.isEnabled(id) === true,
+            standbyRequested: id => this.runtimeControl?.standbyRequested(id) === true,
             eosDataDir: getAbsoluteInstanceDataDir(this.adapter),
             installationDir: join(controllerDir, '..', '..'),
         });
@@ -2307,7 +2308,9 @@ export default class Web {
                         owner: this.adapter,
                         references: getDeviceEmsReferences(config),
                         devices: input.devices,
-                        canRun: () => this.adapter.eosOwnership?.canWrite() === true,
+                        canRun: () =>
+                            this.adapter.eosOwnership?.canWrite('devices') === true &&
+                            this.adapter.eosOwnership.canWrite('ems'),
                     });
                     return planDeviceEms({
                         ...input,
@@ -2322,7 +2325,10 @@ export default class Web {
                         owner: this.adapter,
                         references: getDeviceEmsReferences(projectDeviceEmsConfig(config)),
                         devices: [],
-                        canRun: () => !this.closed && this.adapter.eosOwnership?.canWrite() === true,
+                        canRun: () =>
+                            !this.closed &&
+                            this.adapter.eosOwnership?.canWrite('devices') === true &&
+                            this.adapter.eosOwnership.canWrite('ems'),
                     }),
                 resolveAccess: (req: Request) => this.unified.status(req),
                 getLicense: () => this.adapter.eosLicenseService?.statusView(),
@@ -2337,15 +2343,16 @@ export default class Web {
                         migration: {
                             phase: migration?.phase || 'NOT_AVAILABLE',
                             code: migration?.code || '',
-                            allowsStartup: this.adapter.eosMigration?.allowsStartup() === true,
+                            allowsStartup: this.adapter.eosMigration?.allowsStartup('ems') === true,
                         },
-                        ownership: this.adapter.eosOwnership?.status(),
+                        ownership: this.adapter.eosOwnership?.status('ems'),
                     };
                 },
                 originAllowed: (req: Request) => this.unified.requestAllowed(req),
                 machineRequestAllowed: (req: Request) => this.unified.machineRequestAllowed(req),
                 canWrite: () =>
-                    this.runtimeControl?.isEnabled('ems') === true && this.adapter.eosOwnership?.canWrite() === true,
+                    this.runtimeControl?.isEnabled('ems') === true &&
+                    this.adapter.eosOwnership?.canWrite('ems') === true,
                 isListening: () => !this.closed && !this.startupFailed && this.server.server?.listening === true,
                 hostedModuleFeedback: (message: { command: string; message?: unknown }) =>
                     moduleHost.receiveBridge(message),
@@ -3731,29 +3738,29 @@ export default class Web {
             });
             this.discovery = this.adapter.eosDiscovery;
             this.adapter.eosDiscovery.start();
-            if (this.adapter.eosMigration?.allowsStartup() === false) {
-                this.adapter.log.warn('EOS_MIGRATION_OPERATIONAL_START_BLOCKED: Inspect migration status.');
-                return;
-            }
-            void this.adapter.eosModuleHost?.start().catch(() => {
-                this.adapter.log.warn('EOS_MODULE_START_UNAVAILABLE: HTTPS remains available.');
-            });
-            // The EMS gets its own lease after the authenticated listener is up,
-            // without a dependency on successful startup of the presentation process.
-            void this.adapter.eosHostedRuntime?.startOperational().catch(() => {
-                if (!this.closed) {
-                    this.adapter.log.error(
-                        'EOS_EMS_OPERATIONAL_START_FAILED: HTTPS remains available; inspect the runtime startup status.',
-                    );
-                }
-            });
-            // The coordinator observes readiness with its own bounded deadline;
-            // listener availability does not depend on background initialization.
-            void this.adapter.eosMigration?.verifyRuntime().catch(() => {
-                this.adapter.log.warn(
-                    'EOS_MIGRATION_VERIFY_UNAVAILABLE: Inspect migration status; HTTPS remains available.',
-                );
-            });
+            this.startEosOperationalServices();
         }
+    }
+
+    /** Called after authenticated listener readiness. Each physical owner keeps its own startup fence. */
+    private startEosOperationalServices(): void {
+        const migration = this.adapter.eosMigration;
+        void this.adapter.eosModuleHost?.start().catch(() => {
+            this.adapter.log.warn('EOS_MODULE_START_UNAVAILABLE: HTTPS remains available.');
+        });
+        // Arm the EMS even in standby. Its parent lease and the worker's fresh
+        // license/ownership check protect the actual controller initialization.
+        void this.adapter.eosHostedRuntime?.startOperational().catch(() => {
+            if (!this.closed) {
+                this.adapter.log.error(
+                    'EOS_EMS_OPERATIONAL_START_FAILED: HTTPS remains available; inspect the runtime startup status.',
+                );
+            }
+        });
+        void migration?.verifyRuntime().catch(() => {
+            this.adapter.log.warn(
+                'EOS_MIGRATION_VERIFY_UNAVAILABLE: Inspect migration status; HTTPS remains available.',
+            );
+        });
     }
 }

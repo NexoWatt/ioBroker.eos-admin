@@ -329,3 +329,201 @@ test('real module HTTP status advances READY to failure and recovery without rep
     const previousReads = reads; document.hidden = false; events.get('visibilitychange')(); await settle(() => timers.size === 1 && reads > previousReads);
     assert.equal(loads, 1); events.get('pagehide')(); assert.equal(timers.size, 0);
 });
+
+// These persistence tests exercise real module/store/HTTP paths with a synthetic
+// device driver. Separate protocol services have no part in the fixture.
+function isolateDevices(f) {
+    for (const id of ['eebus','backup','ocpp']) f.owner.config.eosModules[id] = {v:1,
+        encrypted:f.owner.encrypt(JSON.stringify({enabled:false}))};
+}
+
+test('the authenticated module endpoint reports initialization while the first authoritative controller read is outstanding', async t => {
+    const f = await fixture(t, {enabled:false,devices:[meter]});
+    isolateDevices(f);
+    const host = f.host(), load = host.configStore.load.bind(host.configStore);
+    let entered, release;
+    const observed = new Promise(resolve => { entered=resolve; });
+    const gate = new Promise(resolve => { release=resolve; });
+    host.configStore.load = async id => { if(id === 'devices'){ entered();await gate; } return load(id); };
+    const start = host.start();
+    try {
+        await observed;
+        const view = await f.get();
+        assert.equal(view.configurationLoaded,false);
+        assert.equal(view.status.reason,'STARTING');
+        assert.equal(view.status.enabled,null);
+        assert.deepEqual(view.status.details.configuration,{ready:false,error:''});
+        assert.notEqual(view.status.details.process?.state,'error');
+        assert.equal(host.supervisorState('devices').configured,null);
+    } finally { release();await start; }
+    const view = await f.get();
+    assert.equal(view.configurationLoaded,true);
+    assert.equal(view.status.enabled,false);
+    assert.equal(view.config.devices[0].name,meter.name);
+    assert.equal(f.writes.length,0);
+});
+
+test('initial configuration is pending; a transient startup read recovers the original active device without a UI request or write', async t => {
+    const f = await fixture(t, { enabled:true, devices:[meter], extension:17 });
+    isolateDevices(f);
+    const host = f.host();
+    const initial = await host.status('devices');
+    assert.equal(initial.reason,'STARTING');
+    assert.equal(initial.enabled,null);
+    assert.deepEqual(initial.details.configuration,{ready:false,error:''});
+    f.failRead(true);
+    await host.start();
+    const failed = await host.status('devices');
+    assert.equal(failed.reason,'CONFIG_INVALID');
+    assert.equal(failed.details.configuration.error,'EOS_MODULE_CONFIG_UNAVAILABLE');
+    assert.equal(f.runtimes.length,0);
+    f.failRead(false);
+    // Exercise the normal reconciliation timer including its initial two-second backoff.
+    const until = Date.now() + 12000;
+    while (!f.runtimes.length && Date.now() < until) await new Promise(resolve=>setTimeout(resolve,100));
+    assert.equal(f.runtimes.length,1);
+    assert.equal(f.runtimes[0].starts,1);
+    assert.deepEqual(f.runtimes[0].config.devices,[meter]);
+    assert.equal(f.runtimes[0].config.extension,17);
+    assert.equal((await host.status('devices')).active,true);
+    assert.equal(f.writes.length,0);
+});
+
+test('a damaged module configuration remains fenced and keeps all persisted bytes across background retries', async t => {
+    const f=await fixture(t,{enabled:true,devices:[meter]});
+    isolateDevices(f);
+    const bad={v:1,encrypted:f.owner.encrypt('invalid JSON')};
+    f.owner.config.eosModules.devices=bad;
+    const original=structuredClone(f.owner.config);
+    await f.host().start();
+    assert.equal((await f.host().status('devices')).details.configuration.error,'EOS_MODULE_CONFIG_DECRYPTION');
+    const entry=f.host().entries.get('devices'); entry.configurationRetryAt=0;
+    await f.host().reconcile(); await f.host().configurationLoadPromise;
+    const view=await f.get();
+    assert.equal(view.configurationLoaded,false);
+    assert.equal(view.configurationReason,'EOS_MODULE_CONFIG_DECRYPTION');
+    assert.equal((await f.put({enabled:true,devices:[]},view.csrfToken)).status,400);
+    assert.equal(f.runtimes.length,0);
+    assert.equal(f.owner.config.eosModules.devices.encrypted,original.eosModules.devices.encrypted);
+    assert.equal(f.writes.length,0);
+});
+
+test('partial migration runs a genuine hardware-passive child, fences commands and changes generation once on takeover and return',async t=>{
+    const f=await fixture(t,{enabled:true,devices:[meter]});
+    isolateDevices(f);
+    const host=f.host(); let devices=false;
+    f.owner.eosMigration.allowsStartup=id=>id==='devices'?devices:id==='backup';
+    f.owner.eosOwnership.canWrite=id=>id==='devices'?devices:id==='backup';
+    await host.start();
+    const waiting=await f.get();
+    assert.equal(waiting.configurationReason,'EOS_MODULE_MIGRATION_BLOCKED');
+    assert.equal(waiting.status.reason,'WAITING_FOR_OWNERSHIP');
+    assert.equal(waiting.status.details.waitingReason,'EOS_MODULE_MIGRATION_BLOCKED');
+    assert.equal(waiting.status.active,false);
+    const health=waiting.status.details.process;
+    assert.equal(health.state,'running');assert.equal(health.standby,true);assert.ok(health.pid>0);assert.ok(health.lastHeartbeatAt>0);
+    assert.doesNotThrow(()=>process.kill(health.pid,0));
+    const worker=host.entries.get('devices').standbyProcess;
+    for (const method of ['start','command','getStatus','onStateChange']) {
+        await assert.rejects(worker.rpc.request(method,[],1000),/EOS_MODULE_PROCESS_INACTIVE/);
+    }
+    for (let i=0;i<20;i++) host.onObjectChange('system.adapter.nexowatt-devices.0');
+    await host.reconcile();assert.equal((await f.get()).status.details.process.pid,health.pid);
+    assert.equal(f.runtimes.length,0);assert.equal(host.moduleAuthority('backup'),true);assert.equal(host.moduleAuthority('ems'),false);
+    const current=host.entries.get('devices');
+    f.owner.config.eosModules.devices={v:1,encrypted:f.owner.encrypt(JSON.stringify({enabled:true,devices:[{...meter,name:'Übernommen'}]}))};
+    devices=true;host.nextOwnershipCheck=0;
+    await host.reconcile();await host.configurationLoadPromise;
+    await host.reconcile();await host.reconcile();
+    assert.equal(f.runtimes.length,1);
+    assert.equal(f.runtimes[0].config.devices[0].name,'Übernommen');
+    assert.equal((await f.get()).configurationReady,true);
+    assert.equal(current.standbyProcess,null);
+    assert.throws(()=>process.kill(health.pid,0),e=>e.code==='ESRCH');
+    assert.equal(f.writes.length,0);
+    assert.equal(host.deviceEms.options.canRun(),false,'commissioning also requires actual EMS authority');
+    devices=false;
+    assert.equal(host.canOperate('devices',current.generation),false);
+    await host.reconcile();await host.configurationLoadPromise;await host.reconcile();
+    assert.equal(f.runtimes[0].stops,1);
+    const returned=await f.get();assert.equal(returned.configurationReady,false);
+    assert.equal(returned.status.details.process.standby,true);assert.ok(returned.status.details.process.pid>0);
+    const resumed=returned.status.details.process.pid;
+    host.options.processEnabled=id=>id!=='devices';
+    await host.reconcile();assert.equal(current.standbyProcess,null);
+    assert.throws(()=>process.kill(resumed,0),e=>e.code==='ESRCH');
+    assert.equal(f.writes.length,0);
+});
+
+test('an explicit process-only choice under a live legacy owner leaves the disabled module configuration untouched',async t=>{
+    const f=await fixture(t,{enabled:false,devices:[meter]});
+    isolateDevices(f);
+    const host=f.host();
+    const original=structuredClone(f.owner.config.eosModules.devices);
+    const existing={_id:'system.adapter.nexowatt-devices.0',type:'instance',common:{enabled:true,host:'pi'}};
+    const originalView=f.owner.getObjectViewAsync.bind(f.owner);
+    f.owner.getObjectViewAsync=async (design,view,range)=>existing._id.startsWith(range?.startkey || '!')
+        ? {rows:[{value:existing}]} : originalView(design,view,range);
+    await host.start();
+    await assert.rejects(host.enableProcessModule('devices'),/EOS_MODULE_LEGACY_RUNNING/);
+    assert.equal(host.entries.get('devices').standbyProcess,undefined);
+    host.options.standbyRequested=id=>id==='devices';
+    await host.controlProcess('devices','start');
+    const view=await f.get();
+    assert.equal(view.status.enabled,false);assert.equal(view.status.active,false);
+    assert.equal(view.status.details.process.standby,true);assert.ok(view.status.details.process.pid>0);
+    assert.deepEqual(f.owner.config.eosModules.devices,original);assert.equal(f.writes.length,0);assert.equal(f.runtimes.length,0);
+    f.owner.eosLicenseService.allowsEmbeddedModule=()=>false;
+    await host.reconcile();
+    assert.equal(host.entries.get('devices').standbyProcess,null);
+    assert.throws(()=>process.kill(view.status.details.process.pid,0),e=>e.code==='ESRCH');
+});
+
+test('a retry awaiting the controller does not block a validated configuration save for another module',async t=>{
+    const f=await fixture(t,{enabled:false,devices:[meter]});
+    isolateDevices(f);
+    f.failRead(true);
+    const host=f.host();
+    await host.start();
+    f.failRead(false);
+    const original=host.configStore.load.bind(host.configStore);
+    let entered,release;
+    const observed=new Promise(resolve=>{entered=resolve;});
+    const gate=new Promise(resolve=>{release=resolve;});
+    host.configStore.load=async id=>{if(id==='devices'){entered();await gate;}return original(id);};
+    const entry=host.entries.get('devices');entry.configurationRetryAt=0;
+    const sweep=host.reconcile();
+    try {
+        await observed;
+        const existing=await host.view('backup');
+        const saved=await host.save('backup',{...existing.config,enabled:false,fixtureMarker:'retained'},undefined,existing.configurationRevision);
+        assert.equal(saved.configurationReady,true);
+        assert.equal(saved.config.fixtureMarker,'retained');
+        assert.deepEqual(f.writes,['eos-admin.0.modules.backup.configuration']);
+    } finally { release();await sweep;await host.configurationLoadPromise; }
+    const devices=await f.get();
+    assert.equal(devices.config.devices[0].name,meter.name);
+    assert.equal(devices.status.active,false);
+});
+
+test('a saved configuration cannot start a second worker while the previous transport is draining',async t=>{
+    const f=await fixture(t,{enabled:true,devices:[meter]});isolateDevices(f);
+    const host=f.host();await host.start();
+    const entry=host.entries.get('devices'),old=f.runtimes[0];
+    let release,entered;
+    const begun=new Promise(resolve=>{entered=resolve;});
+    const gate=new Promise(resolve=>{release=resolve;});
+    old.stop=async()=>{entered();await gate;old.stops++;};
+    const changed=host.save('devices',{...entry.config,pollIntervalMs:3500});
+    try {
+        await begun;host.nextOwnershipCheck=0;await host.reconcile();
+        assert.equal(f.runtimes.length,1);assert.equal(old.stops,0);
+        assert.equal((await host.status('devices')).active,false);
+        assert.equal(host.canOperate('devices',entry.generation),false);
+    } finally {release();await changed;}
+    await host.reconcile();
+    assert.equal(old.stops,1);
+    assert.equal(f.runtimes.length,2);
+    assert.equal(f.runtimes[1].config.pollIntervalMs,3500);
+    assert.equal((await host.status('devices')).active,true);
+});

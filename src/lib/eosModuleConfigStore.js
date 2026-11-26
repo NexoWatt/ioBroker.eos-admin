@@ -58,6 +58,7 @@ class EosModuleConfigStore {
             throw fail('EOS_MODULE_UNKNOWN');
         }
         this.revisions = new Map();
+        this.currentReads = new Map();
         if (!locks.has(owner)) {
             locks.set(owner, new Set());
         }
@@ -95,17 +96,23 @@ class EosModuleConfigStore {
     }
 
     async load(id) {
-        const native = this.inspect(await this.owner.getForeignObjectAsync(this.objectId(id)), id);
-        this.revisions.set(id, native?.revision || null);
+        const objectId = this.objectId(id);
+        // A timed-out controller request can still settle after a newer read or save.
+        // Such an old result must never rebase a newer editor's compare-and-set revision.
+        const request = Symbol();
+        this.currentReads.set(id, request);
+        const native = this.inspect(await this.owner.getForeignObjectAsync(objectId), id);
+        let result;
         if (!native) {
             const legacy = this.owner.config.eosModules?.[id];
-            return legacy == null ? undefined : copyEnvelope(legacy);
+            result = legacy == null ? undefined : copyEnvelope(legacy);
+        } else {
+            try { result = copyEnvelope(JSON.parse(this.owner.decrypt(native.encrypted))); }
+            catch { throw fail('EOS_MODULE_CONFIG_DECRYPTION'); }
         }
-        try {
-            return copyEnvelope(JSON.parse(this.owner.decrypt(native.encrypted)));
-        } catch {
-            throw fail('EOS_MODULE_CONFIG_DECRYPTION');
-        }
+        if (this.currentReads.get(id) !== request) throw fail('EOS_MODULE_CONFIG_CONFLICT');
+        this.revisions.set(id, native?.revision || null);
+        return result;
     }
 
     async save(id, envelope, canSave) {
@@ -160,6 +167,7 @@ class EosModuleConfigStore {
             if (persisted?.revision !== revision || persisted.encrypted !== encrypted) {
                 throw fail('EOS_MODULE_CONFIG_CONFLICT');
             }
+            this.currentReads.delete(id);
             this.revisions.set(id, revision);
             return snapshot;
         } finally {

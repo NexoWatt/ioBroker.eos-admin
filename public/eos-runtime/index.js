@@ -4,7 +4,7 @@
     const POLL_MS = 5000;
     /** @type {Record<string,string>} */ const states = { running: 'Läuft', starting: 'Startet', stopping: 'Wird beendet',
         stopped: 'Beendet', disabled: 'Deaktiviert', moduleDisabled: 'Modul deaktiviert', blocked: 'Start blockiert', notStarted: 'Nicht gestartet',
-        error: 'Fehler', failed: 'Fehler', backoff: 'Neustart wartet', unknown: 'Unbestätigt' };
+        standby: 'Läuft · wartet auf Freigabe', moduleStandby: 'Läuft · Modul deaktiviert', standbyUnconfirmed: 'Heartbeat unbestätigt', configurationPending: 'Initialisierung ausstehend', emsWaiting: 'Läuft · EMS nicht bereit', error: 'Fehler', failed: 'Fehler', backoff: 'Neustart wartet', unknown: 'Unbestätigt' };
     /** @type {Record<string,string>} */ const labels = { admin: 'EOS Administration', ui: 'Oberfläche', ems: 'Energiemanagement (EMS)', devices: 'Geräte', eebus: 'EEBus', backup: 'Sicherung', ocpp: 'OCPP-Ladestationen' };
     /** @type {Record<string,string>} */ const errors = {
         AUTHENTICATION_REQUIRED: 'Bitte erneut bei EOS anmelden.',
@@ -19,7 +19,12 @@
         EOS_MODULE_CONFIG_UNAVAILABLE: 'Die gespeicherte Modulkonfiguration ist nicht lesbar. Moduleinstellungen und Systemprotokoll prüfen.',
         EOS_MODULE_DEPENDENCY_MISSING: 'Eine benötigte Moduldatei oder Abhängigkeit fehlt. Das vollständige EOS-Paket erneut installieren.',
         EOS_RUNTIME_START_FAILED: 'Der Prozessstart wurde nicht bestätigt. Die Meldung und die Moduleinstellungen prüfen.',
-        EOS_RUNTIME_MIGRATION_BLOCKED: 'Der Start ist durch eine nicht abgeschlossene Geräteübernahme blockiert. Übernahmestatus prüfen.',
+        EOS_RUNTIME_MIGRATION_BLOCKED: 'Die Bestandsübernahme sperrt den Start dieses Prozesses.',
+        EOS_MIGRATION_DISABLED_UI_REVIEW: 'Die bisherige EOS-Oberfläche war deaktiviert. Die Übernahme prüft ihren bestätigten Stillstand und die vorhandene Zielkonfiguration.',
+        EOS_MIGRATION_STOP_UNCONFIRMED: 'Der Stillstand einer bisherigen Instanz ist noch nicht bestätigt. Im ioBroker die betreffende Instanz und den zugehörigen Host prüfen.',
+        EOS_MIGRATION_DESTINATION_CONFIGURED: 'In EOS bestehen bereits Einstellungen für diesen Bereich. Vor einer Übernahme beide Konfigurationsstände vergleichen.',
+        EOS_MIGRATION_PROTECTED_FIELDS_UNAVAILABLE: 'ioBroker hat geschützte Einstellungen einer bisherigen Instanz nicht freigegeben. Den gesicherten Altbestand prüfen.',
+        EOS_MIGRATION_JOURNAL_INVALID: 'Der gespeicherte Übernahmestand konnte nicht bestätigt werden. Den Übernahmestatus mit der vorhandenen Sicherung prüfen.',
         EOS_RUNTIME_LICENSE_REQUIRED: 'Die erforderliche Lizenzfreigabe fehlt. Lizenzstatus prüfen.',
         EOS_RUNTIME_OWNERSHIP_REQUIRED: 'Die Zuständigkeit für die Geräte ist nicht bestätigt. Ein anderer Adapter kann noch aktiv sein.',
         EOS_RUNTIME_BUSY: 'Ein Steuerauftrag läuft bereits. Den bestätigten Abschluss abwarten.',
@@ -32,15 +37,17 @@
         EOS_MODULE_CONFIG_CONFLICT: 'Die Einstellung wurde zwischenzeitlich geändert. Status aktualisieren und die Auswahl erneut prüfen.',
         EOS_MIGRATION_SOURCE_VERSION: 'Die Version eines vorhandenen Adapters passt nicht zur Übernahme. Übernahmestatus prüfen.',
         EOS_MIGRATION_MODULE_LICENSE_REQUIRED: 'Für die angeforderte Übernahme fehlt eine Modulfreigabe. Übernahmestatus prüfen.',
-        EOS_MIGRATION_RESTART_REQUIRED: 'Die Freigabe wurde geändert. Der EOS-Adapter muss regulär neu gestartet werden.',
+        EOS_MIGRATION_RESTART_REQUIRED: 'Die Freigabe ist gültig. EOS fordert einmalig einen automatischen Adapterneustart für die Bestandsprüfung an. Bleibt dieser Status dauerhaft bestehen, die EOS-Instanz einmal in ioBroker neu starten.',
         EOS_MODULE_PROCESS_EXIT: 'Der Prozess wurde unerwartet beendet. EOS prüft den kontrollierten Wiederanlauf.',
+        LEGACY_CONFLICT: 'Eine bisherige Adapterinstanz hat die Gerätezuständigkeit noch nicht übergeben.',
+        OWNERSHIP_UNAVAILABLE: 'Die Gerätezuständigkeit ist noch nicht bestätigt. Host und Altinstanz in ioBroker prüfen.',
         LEGACY_ENABLED_OR_UNKNOWN: 'Der bisherige Adapter ist noch aktiv oder sein Zustand ist nicht bestätigt.',
         LEGACY_STOP_NOT_CONFIRMED: 'Das Ende des bisherigen Adapters ist nicht bestätigt.',
         LICENSE_REQUIRED: 'Die erforderliche Lizenzfreigabe fehlt. Lizenzstatus prüfen.',
         LICENSE_INVALID: 'Die erforderliche Lizenzfreigabe fehlt. Lizenzstatus prüfen.',
         OWNERSHIP_CHANGED: 'Die Zuständigkeit für die Geräte hat sich geändert. Den Übernahmestatus prüfen.',
     };
-    /** @typedef {{enabled:boolean,canEnable:boolean,canDisable:boolean,canRestart:boolean,busy:boolean,reason:string,revision:string}} Controls */
+    /** @typedef {{enabled:boolean,canEnable:boolean,canDisable:boolean,canRestart:boolean,busy:boolean,reason:string,operationReason:string,revision:string}} Controls */
     /** @param {string} id @returns {HTMLElement} */
     function element(id) { const node = document.getElementById(id); if (!node) throw new Error('EOS_RUNTIME_ELEMENT'); return node; }
     const refreshButton = /** @type {HTMLButtonElement} */ (element('refresh'));
@@ -70,8 +77,13 @@
         if (typeof raw.enabled !== 'boolean' || typeof raw.canEnable !== 'boolean' || typeof raw.canDisable !== 'boolean' ||
             typeof raw.canRestart !== 'boolean' || typeof raw.busy !== 'boolean' || typeof raw.revision !== 'string' ||
             !/^[a-f0-9-]{36}$/.test(raw.revision)) return null;
+        let reason = safeCode(raw.reason);
+        // These are operational fences in the current protocol. A previous rejected
+        // control attempt may retain its code after the supervisor allows startup.
+        if (typeof raw.operationReason === 'string' && (raw.canEnable || raw.canRestart) &&
+            ['EOS_RUNTIME_MIGRATION_BLOCKED', 'EOS_RUNTIME_OWNERSHIP_REQUIRED'].includes(reason)) reason = '';
         return { enabled: raw.enabled, canEnable: raw.canEnable, canDisable: raw.canDisable, canRestart: raw.canRestart,
-            busy: raw.busy, reason: safeCode(raw.reason), revision: raw.revision };
+            busy: raw.busy, reason, operationReason: safeCode(raw.operationReason), revision: raw.revision };
     }
     /** @param {string} text @param {boolean} [error] */
     function showControlMessage(text, error = false) { controlMessage.textContent = text; controlMessage.className = `runtime-control-message${error ? ' is-error' : ''}`; }
@@ -97,8 +109,19 @@
         const title = document.createElement('dt'); title.textContent = label;
         const content = document.createElement('dd'); content.textContent = value; node.append(title, content);
     }
-    /** @param {HTMLElement} card @param {string} id @param {Controls|null} entry */
-    function addControls(card, id, entry) {
+    /** @param {unknown} value @param {string} id */
+    function migrationNote(value, id) {
+        const report = record(value);
+        const sourceId = id === 'ems' ? 'ui' : id;
+        const issues = Array.isArray(report.issues) ? report.issues.map(record) : [];
+        const local = issues.find(row => row.id === sourceId);
+        const issue = local || (issues.length === 1 ? issues[0] : undefined);
+        const code = safeCode(issue?.code || report.code);
+        const source = typeof issue?.source === 'string' && /^(?:nexowatt-ui|nexowatt-devices|eebus|nexowatt-backup|ocpp21)\.\d{1,8}$/.test(issue.source) ? issue.source : '';
+        return code ? `${source ? `${source} · ` : ''}${code}. ${errors[code] || 'Die Einzelheiten stehen im Übernahmestatus.'}` : '';
+    }
+    /** @param {HTMLElement} card @param {string} id @param {Controls|null} entry @param {string} state @param {unknown} migration */
+    function addControls(card, id, entry, state, migration) {
         const actions = document.createElement('div'); actions.className = 'runtime-controls';
         actions.setAttribute('aria-label', `${labels[id]} bedienen`);
         for (const [action, text] of [['enable', 'Aktivieren'], ['disable', 'Deaktivieren'], ['restart', 'Neustarten']]) {
@@ -111,7 +134,14 @@
         const note = document.createElement('p'); note.className = 'runtime-control-note';
         if (!entry) note.textContent = 'Prozessbedienung derzeit nicht verfügbar. Status aktualisieren.';
         else if (entry.busy) note.textContent = 'Steuerauftrag läuft. Der bestätigte Prozessstatus wird automatisch aktualisiert.';
-        else if (entry.reason) { note.textContent = explanation(entry.reason); note.classList.add('is-blocked'); }
+        else if (entry.reason === 'EOS_RUNTIME_MIGRATION_BLOCKED') {
+            const admission = state === 'running' ? 'Der Prozess läuft. Die Bestandsübernahme sperrt seinen Neustart.'
+                : entry.enabled ? explanation(entry.reason) : 'Der Prozess ist deaktiviert. Die Bestandsübernahme sperrt das Aktivieren.';
+            note.textContent = [admission, migrationNote(migration, id)].filter(Boolean).join(' ');
+            note.classList.add('is-blocked');
+        } else if (entry.operationReason && (!entry.reason || entry.reason === 'EOS_RUNTIME_MODULE_DISABLED' || entry.reason === 'EOS_RUNTIME_DISABLED')) {
+            note.textContent = 'Die Schalter bedienen den Prozess. Gerätebefehle bleiben bis zur bestätigten Betriebsfreigabe gesperrt.';
+        } else if (entry.reason) { note.textContent = explanation(entry.reason); note.classList.add('is-blocked'); }
         else if (id === 'ui') note.textContent = 'Deaktivieren beendet die Oberfläche. Die Administration und diese Seite bleiben erreichbar.';
         else if (id === 'ems') note.textContent = 'Deaktivieren hält die EMS-Regelung an. Aktivieren startet sie mit der gespeicherten Konfiguration.';
         else note.textContent = 'Aktivieren schaltet Modul und Prozess gemeinsam ein. Deaktivieren beendet den Prozess; die Konfiguration bleibt gespeichert.';
@@ -120,7 +150,7 @@
             const link = document.createElement('a'); link.className = 'runtime-config-link'; link.href = `/modules/${id}/`;
             link.textContent = 'Moduleinstellungen öffnen'; card.append(link);
         }
-        if (entry?.reason.includes('MIGRATION')) {
+        if (entry?.reason.includes('MIGRATION') || entry?.operationReason.includes('MIGRATION')) {
             const link = document.createElement('a'); link.className = 'runtime-config-link'; link.href = '/migration/';
             link.textContent = 'Übernahmestatus öffnen'; card.append(link);
         }
@@ -140,20 +170,37 @@
             const entry = !isExternal && id !== 'admin' ? readControls(row.controls) : null;
             if (entry) controls.set(id, entry);
             const state = typeof row.state === 'string' && Object.hasOwn(states, row.state) ? row.state : 'unknown';
-            const displayState = entry?.enabled === false && ['stopped', 'unknown'].includes(state) ? 'disabled'
-                : entry?.reason === 'EOS_RUNTIME_MODULE_DISABLED' && ['stopped', 'disabled', 'unknown'].includes(state) ? 'moduleDisabled'
-                : entry?.reason && !entry.busy && !['running', 'stopping'].includes(state) && entry.enabled ? 'blocked'
+            const atRest = ['stopped', 'disabled', 'unknown'].includes(state);
+            const operationReason = entry?.operationReason || '';
+            const waiting = state === 'running' && ((row.standby === true && row.active === false) ||
+                (!!operationReason && (id === 'ems' && row.emsReady === false || id === 'ui' && row.active === true)));
+            const awaitingActivation = waiting && row.waitingReason === 'EOS_RUNTIME_MODULE_DISABLED' && !operationReason;
+            const fresh = typeof row.lastHeartbeatAt === 'number' && row.lastHeartbeatAt > 0 && typeof row.pid === 'number' &&
+                row.pid > 0 && row.lastHeartbeatAt <= value.observedAt && value.observedAt - row.lastHeartbeatAt <= (id === 'ui' || id === 'ems' ? 5000 : 4000);
+            const displayState = waiting ? (!fresh ? 'standbyUnconfirmed' : awaitingActivation ? 'moduleStandby' : 'standby')
+                : state === 'running' && id === 'ems' && row.emsReady === false ? 'emsWaiting'
+                : atRest && entry?.enabled === false ? 'disabled'
+                : atRest && entry?.reason === 'EOS_RUNTIME_MIGRATION_BLOCKED' ? 'blocked'
+                : atRest && row.configurationPending === true ? 'configurationPending'
+                : atRest && entry?.reason === 'EOS_RUNTIME_MODULE_DISABLED' ? 'moduleDisabled'
+                : atRest && entry?.reason && !entry.canRestart && !entry.canEnable && !entry.busy && entry.enabled ? 'blocked'
                 : state === 'stopped' && row.generation === 0 && entry?.enabled ? 'notStarted' : state;
             const card = document.createElement('section'); card.className = 'eos-panel runtime-card'; card.dataset.process = id;
             const header = document.createElement('header'); const heading = document.createElement('h2');
             heading.textContent = isExternal ? (id === 'ocpp-external' ? 'OCPP · externe Instanzprüfung' : `OCPP · ${id}`) : labels[id] || id;
-            const badge = document.createElement('span'); badge.className = `runtime-badge${displayState === 'running' ? ' is-running' : ['error', 'failed', 'backoff'].includes(displayState) ? ' is-error' : displayState === 'blocked' ? ' is-blocked' : ''}`;
+            const badge = document.createElement('span'); badge.className = `runtime-badge${displayState === 'running' ? ' is-running' : ['error', 'failed', 'backoff'].includes(displayState) ? ' is-error' : ['blocked', 'emsWaiting', 'standby', 'moduleStandby', 'standbyUnconfirmed'].includes(displayState) ? ' is-blocked' : ''}`;
             badge.textContent = states[displayState] || 'Unbestätigt'; header.append(heading, badge); card.append(header);
             const kind = document.createElement('p'); kind.className = 'runtime-kind';
             kind.textContent = isExternal ? 'Separater ioBroker-Adapter' : id === 'admin' ? 'Administrationsprozess' : 'Eigener EOS-Prozess'; card.append(kind);
             const fields = document.createElement('dl');
             field(fields, 'Prozessnummer (PID)', ['running', 'starting', 'stopping'].includes(state) && typeof row.pid === 'number' && row.pid > 0 ? natural(row.pid) : 'Unbekannt');
             field(fields, isExternal ? 'Controller meldet aktiv' : id === 'ui' ? 'Oberfläche aktiv' : id === 'admin' ? 'Administration erreichbar' : 'Betrieb freigegeben', boolean(row.active, 'Ja', 'Nein'));
+            if (waiting) {
+                const old = Array.isArray(row.waitingFor) ? row.waitingFor.filter(name => typeof name === 'string' &&
+                    /^(?:nexowatt-ui|nexowatt-devices|eebus|nexowatt-backup|ocpp21)\.\d{1,8}$/.test(name)) : [];
+                if (old.length) field(fields, 'Bisherige Zuständigkeit', old.join(', '));
+                field(fields, 'Betrieb', awaitingActivation ? 'Wartet auf Modulaktivierung' : 'Wartet auf bestätigte Zuständigkeit');
+            }
             if (id === 'ems') field(fields, 'EMS bereit', boolean(row.emsReady, 'Ja', 'Nein'));
             if (isExternal) field(fields, 'OCPP-Verbindung', boolean(row.connected, 'Verbunden', 'Getrennt'));
             if (!isExternal && id !== 'admin') {
@@ -163,14 +210,34 @@
                 if (row.nextRestartAt) field(fields, 'Neustart frühestens', date(row.nextRestartAt));
             }
             if (isExternal) field(fields, 'Letzte Alive-Meldung', date(row.lastHeartbeatAt));
+            if (row.configurationPending === true) field(fields, 'Modulkonfiguration', 'Noch nicht eingelesen');
             const code = safeCode(row.reason);
-            if (code && !['RUNNING', 'DISABLED'].includes(code)) field(fields, 'Meldung', code);
+            if (code && !['RUNNING', 'DISABLED', 'STARTING', 'READY', 'STOPPED', 'WAITING_FOR_OWNERSHIP'].includes(code)) field(fields, 'Meldung', code);
             card.append(fields);
+            if (waiting) {
+                const detail = document.createElement('p'); detail.className = 'runtime-control-note is-blocked';
+                const waitingReason = safeCode(row.waitingReason);
+                const action = awaitingActivation ? 'Der Prozess ist bereit. Mit „Aktivieren“ wird das Modul mit seiner gespeicherten Konfiguration eingeschaltet.'
+                    : id === 'ui' ? 'Die Oberfläche ist erreichbar. Die Gerätebedienung wartet auf die Betriebsfreigabe.'
+                    : id === 'ems' ? 'Der EMS-Prozess läuft im Wartezustand. Die Regelung wartet auf die Betriebsfreigabe.'
+                    : 'Der Prozess wartet mit Geräteverbindungen und Steuerbefehlen auf die Übergabe.';
+                detail.textContent = [action, waitingReason === 'EOS_RUNTIME_MODULE_DISABLED' ? '' : errors[waitingReason] || '',
+                    operationReason === 'EOS_RUNTIME_MIGRATION_BLOCKED' ? migrationNote(value.migration, id) : ''].filter(Boolean).join(' ');
+                card.append(detail);
+            }
+            if (!waiting && operationReason && operationReason !== entry?.reason) {
+                const note = document.createElement('p'); note.className = 'runtime-control-note is-blocked';
+                note.textContent = operationReason === 'EOS_RUNTIME_MIGRATION_BLOCKED'
+                    ? [entry?.enabled === false ? 'Nach dem Aktivieren wartet der Betrieb auf die Bestandsübernahme.' :
+                        'Die Betriebsfreigabe wartet auf die Bestandsübernahme.', migrationNote(value.migration, id)].filter(Boolean).join(' ')
+                    : explanation(operationReason);
+                card.append(note);
+            }
             if (code && errors[code] && entry?.reason !== code) {
                 const note = document.createElement('p'); note.className = 'runtime-control-note is-blocked';
                 note.textContent = errors[code]; card.append(note);
             }
-            if (!isExternal && id !== 'admin') addControls(card, id, entry);
+            if (!isExternal && id !== 'admin') addControls(card, id, entry, state, value.migration);
             else {
                 const note = document.createElement('p'); note.className = 'runtime-control-note';
                 note.textContent = isExternal ? 'Diese separate Instanz wird im ioBroker verwaltet. Die EOS-Schalter verändern sie nicht.'

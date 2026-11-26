@@ -8,7 +8,7 @@
 (() => {
     type ProcessState = 'ok' | 'fault' | 'unknown';
     type DeviceHealth = { state: ProcessState; offline: readonly Readonly<{name: string}>[]; totalOffline: number };
-    type Summary = { observedAt: number; state: ProcessState; failed: readonly string[]; paused: readonly string[]; deviceHealth: Readonly<DeviceHealth> };
+    type Summary = { observedAt: number; state: ProcessState; failed: readonly string[]; paused: readonly string[]; waiting?: readonly string[]; deviceHealth: Readonly<DeviceHealth> };
     type Sample = { value: Summary; receivedAt: number; receivedTick: number; ageMs: number };
     const win = window as Window & {
         NexoWattDashboardProcesses?: { current(): Summary | null };
@@ -56,8 +56,11 @@
             (state !== 'ok' && state !== 'fault' && state !== 'unknown')) return null;
         const failed = identifiers(row.failed);
         const paused = identifiers(row.paused);
-        if (!failed || !paused || failed.some(id => paused.includes(id)) || (state === 'fault') !== (failed.length > 0)) return null;
-        return { observedAt, state, failed, paused, deviceHealth: devices(row.deviceHealth) };
+        const waiting = identifiers(row.waiting === undefined ? [] : row.waiting);
+        if (!failed || !paused || !waiting || failed.some(id => paused.includes(id)) ||
+            waiting.some(id => failed.includes(id) || paused.includes(id)) ||
+            (state === 'fault') !== (failed.length > 0) || (state === 'ok' && waiting.length)) return null;
+        return { observedAt, state, failed, paused, ...(waiting.length ? {waiting} : {}), deviceHealth: devices(row.deviceHealth) };
     }
 
     function visible(): boolean {
@@ -98,7 +101,7 @@
         sample = { value, receivedAt: now, receivedTick: tick, ageMs };
         setExpiry();
         if (!previous || previous.state !== value.state || previous.failed.join() !== value.failed.join() ||
-            previous.paused.join() !== value.paused.join() || JSON.stringify(previous.deviceHealth) !== JSON.stringify(value.deviceHealth)) notify();
+            previous.paused.join() !== value.paused.join() || previous.waiting?.join() !== value.waiting?.join() || JSON.stringify(previous.deviceHealth) !== JSON.stringify(value.deviceHealth)) notify();
     }
     function schedule(): void {
         window.clearTimeout(pollTimer);

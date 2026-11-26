@@ -1,0 +1,109 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: UI/EMS crash, automatic restart and stop preserve Devices, EEBUS and OCPP PIDs plus the live OCPP session
+ok 1 - UI/EMS crash, automatic restart and stop preserve Devices, EEBUS and OCPP PIDs plus the live OCPP session
+  ---
+  duration_ms: 8001.681938
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: hosted OCPP facade writes local states in only its current or explicitly preserved namespace
+    # Subtest: embedded namespace
+    ok 1 - embedded namespace
+      ---
+      duration_ms: 38.812198
+      type: 'test'
+      ...
+    # Subtest: preserved standalone namespace
+    ok 2 - preserved standalone namespace
+      ---
+      duration_ms: 1.922039
+      type: 'test'
+      ...
+    1..2
+ok 2 - hosted OCPP facade writes local states in only its current or explicitly preserved namespace
+  ---
+  duration_ms: 42.215084
+  type: 'test'
+  ...
+# Subtest: hosted OCPP scans reject foreign, oversized and malformed controller inventories without partial success
+ok 3 - hosted OCPP scans reject foreign, oversized and malformed controller inventories without partial success
+  ---
+  duration_ms: 42.799241
+  type: 'test'
+  ...
+# Subtest: hosted OCPP configuration views accept only bounded own-station ranges and validate both value and doc identifiers
+ok 4 - hosted OCPP configuration views accept only bounded own-station ranges and validate both value and doc identifiers
+  ---
+  duration_ms: 5.836254
+  type: 'test'
+  ...
+# Subtest: hosted OCPP cannot publish a late inventory or dispatch a queued write after its generation is revoked
+ok 5 - hosted OCPP cannot publish a late inventory or dispatch a queued write after its generation is revoked
+  ---
+  duration_ms: 1.492982
+  type: 'test'
+  ...
+# Subtest: OCPP acknowledged telemetry bursts never re-enter IPC, while the original command event is preserved
+ok 6 - OCPP acknowledged telemetry bursts never re-enter IPC, while the original command event is preserved
+  ---
+  duration_ms: 5.287081
+  type: 'test'
+  ...
+# (node:19) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: configured Devices remain startable with unsupported external OCPP version and no prior migration journal
+ok 7 - configured Devices remain startable with unsupported external OCPP version and no prior migration journal
+  ---
+  duration_ms: 19.785804
+  type: 'test'
+  ...
+# Subtest: configured Devices remain startable with supported external OCPP version and no prior migration journal
+ok 8 - configured Devices remain startable with supported external OCPP version and no prior migration journal
+  ---
+  duration_ms: 4.645983
+  type: 'test'
+  ...
+# Subtest: configured Devices remain startable with multiple external OCPP instances and no prior migration journal
+ok 9 - configured Devices remain startable with multiple external OCPP instances and no prior migration journal
+  ---
+  duration_ms: 7.892493
+  type: 'test'
+  ...
+# Subtest: configured Devices remain startable with external OCPP outside embedded module grant and no prior migration journal
+ok 10 - configured Devices remain startable with external OCPP outside embedded module grant and no prior migration journal
+  ---
+  duration_ms: 4.739756
+  type: 'test'
+  ...
+# Subtest: previously blocked optional OCPP inventory recovers on startup and actual Devices child runs
+ok 11 - previously blocked optional OCPP inventory recovers on startup and actual Devices child runs
+  ---
+  duration_ms: 321.638238
+  type: 'test'
+  ...
+# Subtest: optional OCPP handling does not bypass the core license gate
+ok 12 - optional OCPP handling does not bypass the core license gate
+  ---
+  duration_ms: 4.751636
+  type: 'test'
+  ...
+# Subtest: invalid actual Devices migration candidate still blocks startup
+ok 13 - invalid actual Devices migration candidate still blocks startup
+  ---
+  duration_ms: 12.836256
+  type: 'test'
+  ...
+1..13
+# tests 15
+# suites 0
+# pass 15
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 8514.954375

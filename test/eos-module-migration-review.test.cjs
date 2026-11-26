@@ -125,15 +125,17 @@ test('ready UI with revoked ownership cannot commit the legacy handover', async 
     assert.equal(f.objects.get(ui._id).common.enabled, true);
 });
 
-test('a deliberately disabled legacy UI is not automatically transferred into an enabled EMS', async () => {
+test('a stopped source transfers configuration and retains its disabled state without reactivation', async () => {
     const f = fixture();
     const ui = { _id: 'system.adapter.nexowatt-ui.0', type: 'instance', ts: Date.now() - 1000,
         common: { enabled: false, host: 'fixture-host', version: '1.0.38' }, native: { siteName: 'Customer site' } };
     f.objects.set(ui._id, ui);
     await f.migration.start();
-    assert.equal(f.migration.phase, 'BLOCKED');
-    assert.equal(f.migration.status().code, 'EOS_MIGRATION_DISABLED_UI_REVIEW');
+    assert.equal(f.migration.phase, 'TRANSFERRED');
+    assert.equal(f.owner.config.eosUi.siteName, 'Customer site');
+    f.owner.eosHostedRuntime = { status: () => ({ emsReady: true, canWrite: true }) };
+    await f.migration.verifyRuntime();
+    assert.equal(f.migration.phase, 'COMMITTED');
     assert.deepEqual(f.enabledWrites, []);
-    assert.deepEqual(f.writes, []);
     assert.equal(f.objects.get(ui._id).common.enabled, false);
 });

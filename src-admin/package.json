@@ -102,7 +102,7 @@
       }
     ]
   ],
-  "version": "9.0.35",
+  "version": "9.0.36",
   "overrides": {
     "node-forge": "1.4.3",
     "axios": "1.20.0",

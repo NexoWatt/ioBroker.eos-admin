@@ -1,21 +1,18 @@
 {
-  "version": "9.0.35",
+  "version": "9.0.36",
   "channel": "next",
   "baseFrontend": "Rebuilt from official Admin 8.3.5 sources plus reviewed EOS integration using React 19 and Vite; see source-bound frontend manifest.",
   "runtimeEntry": "vite-manifest",
-  "releaseType": "unified-dashboard-status",
-  "release": "unified-dashboard-status",
-  "label": "v9-0-35",
+  "releaseType": "unified-migration-recovery",
+  "release": "unified-migration-recovery",
+  "label": "v9-0-36",
   "notes": [
-    "The live dashboard evaluates active faults across telemetry and connection changes.",
-    "See the release report for automated results and pending on-site observations."
+    "Confirmed disabled legacy UI configurations are migrated automatically.",
+    "The release report documents module startup diagnosis and recovery tests."
   ],
   "changes": [
-    "Stabilize live system status when telemetry and charger messages arrive",
-    "Keep active fault indications visible across reconnections",
-    "Report supervised process faults even when the EMS is unavailable and respect intentionally disabled processes",
-    "Report confirmed device and station communication failures and use configured notification delivery",
-    "Recover OVUM MIRA Modbus telemetry after a TCP reset without applying the unsupported-register cooldown to transport errors"
+    "Automatically migrate a verified disabled legacy UI",
+    "Improve module startup diagnostics and recovery"
   ],
   "brandingCacheVersion": 7110,
   "shellCacheVersion": 7110,
@@ -29,7 +26,7 @@
     "commit": "6f77eedf525813a7a61d79188d1ff05dffd05086"
   },
   "product": "NexoWatt EOS",
-  "status": "9.0.35 controlled test release. See docs/reports/unified-9.0.35 for test results and field validation scope.",
+  "status": "9.0.36 controlled test release. See docs/reports/unified-9.0.36 for test results and field validation scope.",
   "sourceComponents": {
     "admin": "8.0.2",
     "ui": "1.0.38",
@@ -39,5 +36,5 @@
     "backup": "1.0.10",
     "ocpp": "0.4.4 integrated hosted module, based on iobroker.ocpp21 0.4.3"
   },
-  "repositoryEntry": "nexowatt-eos-admin-repository-entry-v9-0-35.json"
+  "repositoryEntry": "nexowatt-eos-admin-repository-entry-v9-0-36.json"
 }

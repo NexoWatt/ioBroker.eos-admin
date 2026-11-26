@@ -1,6 +1,6 @@
 # NexoWatt EOS
 
-**Version 9.0.35 · ioBroker-Paket `iobroker.eos-admin` · Testkanal `next`**
+**Version 9.0.36 · ioBroker-Paket `iobroker.eos-admin` · Testkanal `next`**
 
 NexoWatt EOS bündelt lokales Energiemanagement, Dashboard und Systemverwaltung in einem ioBroker-Adapter. Oberfläche, EMS, Geräteanbindung, EEBUS, OCPP und Sicherung werden in eigenen Prozessen ausgeführt.
 
@@ -10,7 +10,13 @@ NexoWatt EOS bündelt lokales Energiemanagement, Dashboard und Systemverwaltung 
 2. Den Adapter `iobroker.eos-admin` in ioBroker installieren oder die vorhandene Instanz aktualisieren. Der direkte EOS-Zugang ist standardmäßig `https://<Geräte-IP>:8188/`. Bei bestehenden Instanzen gelten die gespeicherten Adresseinstellungen.
 3. Nach dem Start prüfen, ob `eos-admin.0`, Oberfläche, EMS und die eingerichteten Module betriebsbereit sind.
 
-Voraussetzungen sind ioBroker JS-Controller ab 7.2.5 und Node.js `>=22.23.4 <23` oder `>=24.22.1 <25`. Die Schritte für Update, Wiederanlauf und Prüfung der Live-Messwerte stehen in der [Anleitung zu 9.0.35](docs/start/START_HIER_9.0.35.md).
+Voraussetzungen sind ioBroker JS-Controller ab 7.2.5 und Node.js `>=22.23.4 <23` oder `>=24.22.1 <25`. Die Schritte für Update, Wiederanlauf und Prüfung der Live-Messwerte stehen in der [Anleitung zu 9.0.36](docs/start/START_HIER_9.0.36.md).
+
+## Änderungen in 9.0.36
+
+Eine bereits abgeschaltete, vom Controller als beendet bestätigte Alt-Oberfläche kann mit ihren Einstellungen in die aktivierte EOS-Instanz übernommen werden. Während der Übergabe zeigt der Prozessmonitor den Zustand jedes Prozesses und seine Freigabe für die Anlage getrennt an. Bestätigte Altadapter können ihre Arbeiten bis zur Übergabe abschließen. Nach vorübergehenden Lesefehlern lädt EOS die betroffene Modulkonfiguration erneut.
+
+[Upgrade von Altadaptern und Pilotabnahme](docs/start/START_HIER_9.0.36.md) · [Prüfbericht](docs/reports/unified-9.0.36/PRUEFBERICHT.md)
 
 ## Änderungen in 9.0.35
 
@@ -32,4 +38,4 @@ Mit `npm pack --dry-run` prüfst du den Paketinhalt lokal. Die [Anleitung](docs/
 
 [Dokumentation](docs/README.md) · [Architektur](docs/unified/ARCHITECTURE.md) · [Lizenz](LICENSE) · [Drittanbieterhinweise](THIRD-PARTY-NOTICES.md)
 
-**English** · NexoWatt EOS is a local energy management, dashboard and system administration adapter for ioBroker. Install or update `iobroker.eos-admin` from your configured repository. See the [release guide](docs/start/START_HIER_9.0.35.md) for requirements and post-update checks.
+**English** · NexoWatt EOS is a local energy management, dashboard and system administration adapter for ioBroker. Install or update `iobroker.eos-admin` from your configured repository. See the [release guide](docs/start/START_HIER_9.0.36.md) for requirements and post-update checks.

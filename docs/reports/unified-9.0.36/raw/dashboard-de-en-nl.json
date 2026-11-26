@@ -1,0 +1,728 @@
+{
+  "ok": true,
+  "legacy": false,
+  "browser": "HeadlessChrome/158.0.8127.0",
+  "appSha256": "c45006aff71056524f8f6feb5db46b03f27dad936b216b5a8f1bb26b5ebff233",
+  "scope": "Shipped dashboard, simulated HTTP/SSE backend and physical telemetry, real browser frames and DOM mutations.",
+  "results": [
+    {
+      "language": "de",
+      "steadyPollCount": 1,
+      "cases": {
+        "startup": {
+          "status": "Verbinde…",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "Status unbekannt",
+          "grid": "Messstatus unbekannt",
+          "lp": "Ladepunkte bereit"
+        },
+        "stable": {
+          "status": "Alle Systeme normal",
+          "panel": "card nw-panel nw-panel-status",
+          "ems": "Aktiv",
+          "grid": "Messung aktuell",
+          "lp": "Ladepunkte bereit"
+        },
+        "disconnect": {
+          "status": "Verbindung unterbrochen",
+          "panel": "card nw-panel nw-panel-status is-error",
+          "ems": "Verbindung unterbrochen",
+          "grid": "Messstatus unbekannt",
+          "lp": "Ladepunkte bereit"
+        },
+        "reconnectedWithoutSnapshot": {
+          "status": "Verbindung unterbrochen",
+          "panel": "card nw-panel nw-panel-status is-error",
+          "ems": "Verbindung unterbrochen",
+          "grid": "Messstatus unbekannt",
+          "lp": "Ladepunkte bereit"
+        },
+        "staleInit": {
+          "status": "Betriebsstatus prüfen",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "Status unbekannt",
+          "grid": "Messstatus unbekannt",
+          "lp": "Ladepunkte bereit"
+        },
+        "incomplete": {
+          "status": "Betriebsstatus prüfen",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "Status unbekannt",
+          "grid": "Messstatus unbekannt",
+          "lp": "Ladepunkte bereit"
+        },
+        "stopped": {
+          "status": "EMS gestoppt",
+          "panel": "card nw-panel nw-panel-status is-error",
+          "ems": "Status unbekannt",
+          "grid": "Messstatus unbekannt",
+          "lp": "Ladepunkte bereit"
+        },
+        "lpFault": {
+          "status": "1 Ladepunkt mit Fehler",
+          "panel": "card nw-panel nw-panel-status is-error",
+          "ems": "Aktiv",
+          "grid": "Messung aktuell",
+          "lp": "1 Ladepunkt mit Fehler"
+        },
+        "lpWarning": {
+          "status": "1 Ladepunkt begrenzt oder wartend",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "Aktiv",
+          "grid": "Messung aktuell",
+          "lp": "1 Ladepunkt begrenzt oder wartend"
+        },
+        "recovery": {
+          "status": "Alle Systeme normal",
+          "panel": "card nw-panel nw-panel-status",
+          "ems": "Aktiv",
+          "grid": "Messung aktuell",
+          "lp": "Ladepunkte bereit"
+        }
+      },
+      "writes": [
+        {
+          "phase": "disconnect",
+          "text": "Verbindung unterbrochen",
+          "timeMs": 12904
+        },
+        {
+          "phase": "staleInit",
+          "text": "Betriebsstatus prüfen",
+          "timeMs": 16073
+        },
+        {
+          "phase": "stopped",
+          "text": "EMS gestoppt",
+          "timeMs": 16888
+        },
+        {
+          "phase": "lpFault",
+          "text": "1 Ladepunkt mit Fehler",
+          "timeMs": 17255
+        },
+        {
+          "phase": "lpWarning",
+          "text": "1 Ladepunkt begrenzt oder wartend",
+          "timeMs": 26146
+        },
+        {
+          "phase": "recovery",
+          "text": "Alle Systeme normal",
+          "timeMs": 36133
+        }
+      ],
+      "paints": [
+        {
+          "phase": "healthy",
+          "text": "Alle Systeme normal",
+          "timeMs": 1075
+        },
+        {
+          "phase": "repeatInit",
+          "text": "Alle Systeme normal",
+          "timeMs": 12522
+        },
+        {
+          "phase": "disconnect",
+          "text": "Alle Systeme normal",
+          "timeMs": 12902
+        },
+        {
+          "phase": "disconnect",
+          "text": "Verbindung unterbrochen",
+          "timeMs": 12915
+        },
+        {
+          "phase": "staleInit",
+          "text": "Betriebsstatus prüfen",
+          "timeMs": 16085
+        },
+        {
+          "phase": "incomplete",
+          "text": "Betriebsstatus prüfen",
+          "timeMs": 16495
+        },
+        {
+          "phase": "stopped",
+          "text": "EMS gestoppt",
+          "timeMs": 16897
+        },
+        {
+          "phase": "lpFault",
+          "text": "1 Ladepunkt mit Fehler",
+          "timeMs": 17259
+        },
+        {
+          "phase": "lpWarning",
+          "text": "1 Ladepunkt begrenzt oder wartend",
+          "timeMs": 26168
+        },
+        {
+          "phase": "recovery",
+          "text": "Alle Systeme normal",
+          "timeMs": 36150
+        }
+      ],
+      "phase": "recovery"
+    },
+    {
+      "language": "en",
+      "steadyPollCount": 1,
+      "cases": {
+        "startup": {
+          "status": "Verbinde…",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "Status unbekannt",
+          "grid": "Messstatus unbekannt",
+          "lp": "Ladepunkte bereit"
+        },
+        "stable": {
+          "status": "All systems normal",
+          "panel": "card nw-panel nw-panel-status",
+          "ems": "Aktiv",
+          "grid": "Messung aktuell",
+          "lp": "Charging points ready"
+        },
+        "disconnect": {
+          "status": "Connection lost",
+          "panel": "card nw-panel nw-panel-status is-error",
+          "ems": "Connection lost",
+          "grid": "Measurement status unknown",
+          "lp": "Charging points ready"
+        },
+        "reconnectedWithoutSnapshot": {
+          "status": "Connection lost",
+          "panel": "card nw-panel nw-panel-status is-error",
+          "ems": "Connection lost",
+          "grid": "Measurement status unknown",
+          "lp": "Charging points ready"
+        },
+        "staleInit": {
+          "status": "Check operating status",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "Status unknown",
+          "grid": "Measurement status unknown",
+          "lp": "Charging points ready"
+        },
+        "incomplete": {
+          "status": "Check operating status",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "Status unknown",
+          "grid": "Measurement status unknown",
+          "lp": "Charging points ready"
+        },
+        "stopped": {
+          "status": "EMS stopped",
+          "panel": "card nw-panel nw-panel-status is-error",
+          "ems": "Status unknown",
+          "grid": "Measurement status unknown",
+          "lp": "Charging points ready"
+        },
+        "lpFault": {
+          "status": "1 charging point with error",
+          "panel": "card nw-panel nw-panel-status is-error",
+          "ems": "Aktiv",
+          "grid": "Messung aktuell",
+          "lp": "1 charging point with error"
+        },
+        "lpWarning": {
+          "status": "1 charging point limited or waiting",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "Aktiv",
+          "grid": "Messung aktuell",
+          "lp": "1 charging point limited or waiting"
+        },
+        "recovery": {
+          "status": "All systems normal",
+          "panel": "card nw-panel nw-panel-status",
+          "ems": "Aktiv",
+          "grid": "Messung aktuell",
+          "lp": "Charging points ready"
+        }
+      },
+      "writes": [
+        {
+          "phase": "disconnect",
+          "text": "Connection lost",
+          "timeMs": 12958
+        },
+        {
+          "phase": "staleInit",
+          "text": "Check operating status",
+          "timeMs": 16217
+        },
+        {
+          "phase": "stopped",
+          "text": "EMS stopped",
+          "timeMs": 17031
+        },
+        {
+          "phase": "lpFault",
+          "text": "1 charging point with error",
+          "timeMs": 17409
+        },
+        {
+          "phase": "lpWarning",
+          "text": "1 charging point limited or waiting",
+          "timeMs": 26262
+        },
+        {
+          "phase": "recovery",
+          "text": "All systems normal",
+          "timeMs": 36253
+        }
+      ],
+      "paints": [
+        {
+          "phase": "healthy",
+          "text": "All systems normal",
+          "timeMs": 1145
+        },
+        {
+          "phase": "repeatInit",
+          "text": "All systems normal",
+          "timeMs": 12565
+        },
+        {
+          "phase": "disconnect",
+          "text": "Connection lost",
+          "timeMs": 12965
+        },
+        {
+          "phase": "staleInit",
+          "text": "Check operating status",
+          "timeMs": 16218
+        },
+        {
+          "phase": "incomplete",
+          "text": "Check operating status",
+          "timeMs": 16637
+        },
+        {
+          "phase": "stopped",
+          "text": "EMS stopped",
+          "timeMs": 17037
+        },
+        {
+          "phase": "lpFault",
+          "text": "1 charging point with error",
+          "timeMs": 17416
+        },
+        {
+          "phase": "lpWarning",
+          "text": "1 charging point limited or waiting",
+          "timeMs": 26302
+        },
+        {
+          "phase": "recovery",
+          "text": "1 charging point limited or waiting",
+          "timeMs": 36247
+        },
+        {
+          "phase": "recovery",
+          "text": "All systems normal",
+          "timeMs": 36289
+        }
+      ],
+      "phase": "recovery"
+    },
+    {
+      "language": "nl",
+      "steadyPollCount": 1,
+      "cases": {
+        "startup": {
+          "status": "Verbinde…",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "Status unbekannt",
+          "grid": "Messstatus unbekannt",
+          "lp": "Ladepunkte bereit"
+        },
+        "stable": {
+          "status": "Alle systemen werken normaal",
+          "panel": "card nw-panel nw-panel-status",
+          "ems": "Actief",
+          "grid": "Messung aktuell",
+          "lp": "Laadpunten gereed"
+        },
+        "disconnect": {
+          "status": "Verbinding verbroken",
+          "panel": "card nw-panel nw-panel-status is-error",
+          "ems": "Verbinding verbroken",
+          "grid": "Meetstatus onbekend",
+          "lp": "Laadpunten gereed"
+        },
+        "reconnectedWithoutSnapshot": {
+          "status": "Verbinding verbroken",
+          "panel": "card nw-panel nw-panel-status is-error",
+          "ems": "Verbinding verbroken",
+          "grid": "Meetstatus onbekend",
+          "lp": "Laadpunten gereed"
+        },
+        "staleInit": {
+          "status": "Bedrijfsstatus controleren",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "Status onbekend",
+          "grid": "Meetstatus onbekend",
+          "lp": "Laadpunten gereed"
+        },
+        "incomplete": {
+          "status": "Bedrijfsstatus controleren",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "Status onbekend",
+          "grid": "Meetstatus onbekend",
+          "lp": "Laadpunten gereed"
+        },
+        "stopped": {
+          "status": "EMS gestopt",
+          "panel": "card nw-panel nw-panel-status is-error",
+          "ems": "Status onbekend",
+          "grid": "Meetstatus onbekend",
+          "lp": "Laadpunten gereed"
+        },
+        "lpFault": {
+          "status": "1 laadpunt met fout",
+          "panel": "card nw-panel nw-panel-status is-error",
+          "ems": "Actief",
+          "grid": "Messung aktuell",
+          "lp": "1 laadpunt met fout"
+        },
+        "lpWarning": {
+          "status": "1 laadpunt begrensd of wachtend",
+          "panel": "card nw-panel nw-panel-status is-warn",
+          "ems": "Actief",
+          "grid": "Messung aktuell",
+          "lp": "1 laadpunt begrensd of wachtend"
+        },
+        "recovery": {
+          "status": "Alle systemen werken normaal",
+          "panel": "card nw-panel nw-panel-status",
+          "ems": "Actief",
+          "grid": "Messung aktuell",
+          "lp": "Laadpunten gereed"
+        }
+      },
+      "writes": [
+        {
+          "phase": "disconnect",
+          "text": "Verbinding verbroken",
+          "timeMs": 13124
+        },
+        {
+          "phase": "staleInit",
+          "text": "Bedrijfsstatus controleren",
+          "timeMs": 16402
+        },
+        {
+          "phase": "stopped",
+          "text": "EMS gestopt",
+          "timeMs": 17193
+        },
+        {
+          "phase": "lpFault",
+          "text": "1 laadpunt met fout",
+          "timeMs": 17555
+        },
+        {
+          "phase": "lpWarning",
+          "text": "1 laadpunt begrensd of wachtend",
+          "timeMs": 26467
+        },
+        {
+          "phase": "recovery",
+          "text": "Alle systemen werken normaal",
+          "timeMs": 36471
+        }
+      ],
+      "paints": [
+        {
+          "phase": "healthy",
+          "text": "Alle systemen werken normaal",
+          "timeMs": 1221
+        },
+        {
+          "phase": "repeatInit",
+          "text": "Alle systemen werken normaal",
+          "timeMs": 12746
+        },
+        {
+          "phase": "disconnect",
+          "text": "Verbinding verbroken",
+          "timeMs": 13130
+        },
+        {
+          "phase": "staleInit",
+          "text": "Bedrijfsstatus controleren",
+          "timeMs": 16409
+        },
+        {
+          "phase": "incomplete",
+          "text": "Bedrijfsstatus controleren",
+          "timeMs": 16812
+        },
+        {
+          "phase": "stopped",
+          "text": "Bedrijfsstatus controleren",
+          "timeMs": 17190
+        },
+        {
+          "phase": "stopped",
+          "text": "EMS gestopt",
+          "timeMs": 17215
+        },
+        {
+          "phase": "lpFault",
+          "text": "1 laadpunt met fout",
+          "timeMs": 17562
+        },
+        {
+          "phase": "lpWarning",
+          "text": "1 laadpunt begrensd of wachtend",
+          "timeMs": 26473
+        },
+        {
+          "phase": "recovery",
+          "text": "Alle systemen werken normaal",
+          "timeMs": 36517
+        }
+      ],
+      "phase": "recovery"
+    }
+  ],
+  "processResults": [
+    {
+      "language": "de",
+      "results": {
+        "supervisorUnavailable": {
+          "text": "Prozessstatus unbekannt",
+          "discoveryPolls": 1
+        },
+        "runningStandby": {
+          "text": "Wartet auf Übernahme · Geräte",
+          "discoveryPolls": 2
+        },
+        "healthy": {
+          "text": "Alle Systeme normal",
+          "discoveryPolls": 3
+        },
+        "failedDevice": {
+          "text": "Prozess gestört · Geräte",
+          "discoveryPolls": 4
+        },
+        "multipleModules": {
+          "text": "Prozess gestört · Geräte, EEBus, OCPP",
+          "discoveryPolls": 5
+        },
+        "offlineWithModuleNames": {
+          "text": "Live-Verbindung unterbrochen · Prozess gestört: Geräte, EEBus, OCPP",
+          "discoveryPolls": 5
+        },
+        "newEmsFaultWhileStreamUnavailable": {
+          "text": "Live-Verbindung unterbrochen · Prozess gestört: EMS, EEBus, OCPP",
+          "discoveryPolls": 6
+        },
+        "streamRestoredButModulesStillDown": {
+          "text": "Prozess gestört · EMS, EEBus, OCPP",
+          "discoveryPolls": 6
+        },
+        "disabledModulesExpected": {
+          "text": "Alle Systeme normal",
+          "discoveryPolls": 7
+        },
+        "singlePhysicalDeviceDown": {
+          "text": "Geräte offline · Netzzähler Nord",
+          "discoveryPolls": 8
+        },
+        "twoPhysicalDevicesDown": {
+          "text": "Geräte offline · Netzzähler Nord, PV-Dach Süd",
+          "discoveryPolls": 9
+        },
+        "processAndDevicesDown": {
+          "text": "Prozess gestört · EEBus · Geräte offline · Netzzähler Nord, PV-Dach Süd",
+          "discoveryPolls": 10
+        },
+        "severalDevicesSummarized": {
+          "text": "Geräte offline · Netzzähler Nord, PV-Dach Süd (+4)",
+          "discoveryPolls": 11,
+          "title": "Geräte offline · Netzzähler Nord, PV-Dach Süd, Keller links, Halle Süd, Lüftung West, Pumpe Ost"
+        },
+        "deviceStateUnknown": {
+          "text": "Gerätestatus unbekannt",
+          "discoveryPolls": 12
+        },
+        "physicalDeviceRecovery": {
+          "text": "Alle Systeme normal",
+          "discoveryPolls": 13
+        },
+        "emsPaused": {
+          "text": "EMS pausiert",
+          "discoveryPolls": 14
+        },
+        "staleSupervisorObservation": {
+          "text": "Prozessstatus unbekannt",
+          "discoveryPolls": 16
+        },
+        "allRecovered": {
+          "text": "Alle Systeme normal",
+          "discoveryPolls": 17
+        }
+      }
+    },
+    {
+      "language": "en",
+      "results": {
+        "supervisorUnavailable": {
+          "text": "Process status unknown",
+          "discoveryPolls": 1
+        },
+        "runningStandby": {
+          "text": "Awaiting handover · Devices",
+          "discoveryPolls": 2
+        },
+        "healthy": {
+          "text": "All systems normal",
+          "discoveryPolls": 3
+        },
+        "failedDevice": {
+          "text": "Process fault · Devices",
+          "discoveryPolls": 4
+        },
+        "multipleModules": {
+          "text": "Process fault · Devices, EEBus, OCPP",
+          "discoveryPolls": 5
+        },
+        "offlineWithModuleNames": {
+          "text": "Live connection lost · Process fault: Devices, EEBus, OCPP",
+          "discoveryPolls": 5
+        },
+        "newEmsFaultWhileStreamUnavailable": {
+          "text": "Live connection lost · Process fault: EMS, EEBus, OCPP",
+          "discoveryPolls": 6
+        },
+        "streamRestoredButModulesStillDown": {
+          "text": "Process fault · EMS, EEBus, OCPP",
+          "discoveryPolls": 6
+        },
+        "disabledModulesExpected": {
+          "text": "All systems normal",
+          "discoveryPolls": 7
+        },
+        "singlePhysicalDeviceDown": {
+          "text": "Devices offline · Netzzähler Nord",
+          "discoveryPolls": 8
+        },
+        "twoPhysicalDevicesDown": {
+          "text": "Devices offline · Netzzähler Nord, PV-Dach Süd",
+          "discoveryPolls": 9
+        },
+        "processAndDevicesDown": {
+          "text": "Process fault · EEBus · Devices offline · Netzzähler Nord, PV-Dach Süd",
+          "discoveryPolls": 10
+        },
+        "severalDevicesSummarized": {
+          "text": "Devices offline · Netzzähler Nord, PV-Dach Süd (+4)",
+          "discoveryPolls": 11,
+          "title": "Devices offline · Netzzähler Nord, PV-Dach Süd, Keller links, Halle Süd, Lüftung West, Pumpe Ost"
+        },
+        "deviceStateUnknown": {
+          "text": "Device status unknown",
+          "discoveryPolls": 12
+        },
+        "physicalDeviceRecovery": {
+          "text": "All systems normal",
+          "discoveryPolls": 13
+        },
+        "emsPaused": {
+          "text": "EMS paused",
+          "discoveryPolls": 14
+        },
+        "staleSupervisorObservation": {
+          "text": "Process status unknown",
+          "discoveryPolls": 16
+        },
+        "allRecovered": {
+          "text": "All systems normal",
+          "discoveryPolls": 17
+        }
+      }
+    },
+    {
+      "language": "nl",
+      "results": {
+        "supervisorUnavailable": {
+          "text": "Processtatus onbekend",
+          "discoveryPolls": 1
+        },
+        "runningStandby": {
+          "text": "Wacht op overname · Apparaten",
+          "discoveryPolls": 2
+        },
+        "healthy": {
+          "text": "Alle systemen werken normaal",
+          "discoveryPolls": 3
+        },
+        "failedDevice": {
+          "text": "Processtoring · Apparaten",
+          "discoveryPolls": 4
+        },
+        "multipleModules": {
+          "text": "Processtoring · Apparaten, EEBus, OCPP",
+          "discoveryPolls": 5
+        },
+        "offlineWithModuleNames": {
+          "text": "Liveverbinding verbroken · Processtoring: Apparaten, EEBus, OCPP",
+          "discoveryPolls": 5
+        },
+        "newEmsFaultWhileStreamUnavailable": {
+          "text": "Liveverbinding verbroken · Processtoring: EMS, EEBus, OCPP",
+          "discoveryPolls": 6
+        },
+        "streamRestoredButModulesStillDown": {
+          "text": "Processtoring · EMS, EEBus, OCPP",
+          "discoveryPolls": 6
+        },
+        "disabledModulesExpected": {
+          "text": "Alle systemen werken normaal",
+          "discoveryPolls": 7
+        },
+        "singlePhysicalDeviceDown": {
+          "text": "Apparaten offline · Netzzähler Nord",
+          "discoveryPolls": 8
+        },
+        "twoPhysicalDevicesDown": {
+          "text": "Apparaten offline · Netzzähler Nord, PV-Dach Süd",
+          "discoveryPolls": 9
+        },
+        "processAndDevicesDown": {
+          "text": "Processtoring · EEBus · Apparaten offline · Netzzähler Nord, PV-Dach Süd",
+          "discoveryPolls": 10
+        },
+        "severalDevicesSummarized": {
+          "text": "Apparaten offline · Netzzähler Nord, PV-Dach Süd (+4)",
+          "discoveryPolls": 11,
+          "title": "Apparaten offline · Netzzähler Nord, PV-Dach Süd, Keller links, Halle Süd, Lüftung West, Pumpe Ost"
+        },
+        "deviceStateUnknown": {
+          "text": "Apparaatstatus onbekend",
+          "discoveryPolls": 12
+        },
+        "physicalDeviceRecovery": {
+          "text": "Alle systemen werken normaal",
+          "discoveryPolls": 13
+        },
+        "emsPaused": {
+          "text": "EMS gepauzeerd",
+          "discoveryPolls": 14
+        },
+        "staleSupervisorObservation": {
+          "text": "Processtatus onbekend",
+          "discoveryPolls": 16
+        },
+        "allRecovered": {
+          "text": "Alle systemen werken normaal",
+          "discoveryPolls": 17
+        }
+      }
+    }
+  ]
+}

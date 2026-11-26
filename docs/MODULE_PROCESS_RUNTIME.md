@@ -44,7 +44,7 @@ Seit 9.0.26 bestätigt ein vorgeschalteter `prepare`-Auftrag zunächst das Laden
 
 Jeder Worker sendet alle 250 ms ein Lebenszeichen. Bleibt es vier Sekunden aus, wird seine Generation gesperrt und der Prozess beendet. Der Stop versucht zunächst die modulspezifische Bereinigung; danach folgen gegebenenfalls SIGTERM nach 900 ms und SIGKILL nach 1.600 ms. Ohne bestätigtes Prozessende beziehungsweise bei unbestätigten Parent-Mutationen bleibt der Neustart gesperrt. Nach bestätigter Bereinigung startet nur das betroffene Modul erneut: Wartezeit 1, 2, 4, 8, 16, 32, maximal 60 Sekunden; nach 60 Sekunden stabilen Betriebs beginnt die Staffel wieder von vorne.
 
-Ab 9.0.26 werden dauerhafte Paketfehler, etwa fehlende Abhängigkeiten, ungültige Paketimporte oder Syntaxfehler, nach bestätigter Bereinigung nicht automatisch wiederholt. Der Prozessstatus zeigt den begrenzten technischen Fehlercode; fehlgeschlagenes Laden der Konfiguration erscheint als Fehler und nicht als ausgeschaltetes Modul. Ein bewusstes Aktivieren/Neustarten oder ein validierter Konfigurationswechsel ermöglicht einen neuen Versuch. Bei einem zuvor gescheiterten Konfigurationsimport liest ausschließlich diese bewusste Bedienaktion die gespeicherte Konfiguration erneut; gewöhnliche Statusabfragen lösen keine Importschleife aus.
+Ab 9.0.26 werden dauerhafte Paketfehler, etwa fehlende Abhängigkeiten, ungültige Paketimporte oder Syntaxfehler, nach bestätigter Bereinigung nicht automatisch wiederholt. Der Prozessstatus zeigt den begrenzten technischen Fehlercode; fehlgeschlagenes Laden der Konfiguration erscheint als Fehler und nicht als ausgeschaltetes Modul. Ein bewusstes Aktivieren/Neustarten oder ein validierter Konfigurationswechsel ermöglicht einen neuen Versuch. Bei einem zuvor gescheiterten Konfigurationsimport liest diese Bedienaktion die gespeicherte Konfiguration sofort erneut; gewöhnliche Statusabfragen lösen keine Importschleife aus.
 
 Alive-Ereignisse externer Adapter erhöhen bei einem ruhenden, deaktivierten internen Modul keine Prozessgeneration. Nur tatsächliche Instanzobjekte und Alive-Zustände lösen Eigentumsprüfungen aus; Änderungen an untergeordneten Objektdefinitionen sind keine Instanzänderung. Die sofortige Sperre eines aktiven oder startenden Moduls bei einem relevanten Eigentumswechsel bleibt erhalten. `tools/eos-lifecycle-benchmark.cjs` misst diese Ereignisarbeit gegen einen angegebenen Vergleichsstand, ohne daraus einen RAM-Verbrauch auf einer Anlage abzuleiten.
 
@@ -65,6 +65,18 @@ Backup behält seine bestehenden separaten Jobprozesse und deren Beendigung bei 
 | Diagnose | Maximal 20 Logmeldungen pro Sekunde, Länge begrenzt, bekannte Geheimnisse und URL-Anmeldedaten redigiert |
 
 Backup-Downloads übertragen keine Dateipfade zur freien Öffnung im Parent. Der Worker öffnet weiterhin über die bestehende geprüfte Archivfunktion. Ein vor dem ersten Lesen abgebrochener Download sowie ein verspätet abgeschlossenes Öffnen werden explizit geschlossen. EEBUS-Callbacks und bestätigte Vertrauenswiderrufe bleiben erhalten. Gewöhnliche Messwertbestätigungen werden entsprechend dem jeweiligen Modulvertrag nicht unnötig als Steuerereignisse übertragen.
+
+## Modulkonfiguration beim Start ab 9.0.36
+
+Während der erste Leseauftrag läuft, zeigt der Admin den Konfigurationsstand als ausstehend. Erst ein fehlgeschlagener Lese- oder Prüfvorgang setzt einen Fehlercode. Der Modulhost wiederholt diesen Vorgang in seinem bestehenden Überwachungstakt nach zwei Sekunden. Bei weiteren Fehlern verdoppelt er die Pause bis auf eine Minute. Ein erfolgreicher Versuch übernimmt die validierte gespeicherte Konfiguration. Die Startfreigabe, Lizenz und Eigentümerschaft des einzelnen Moduls bestimmen anschließend, ob dessen Prozess starten darf.
+
+Eine beschädigte oder mit dem aktuellen Schlüssel unlesbare Konfiguration bleibt für Start und Änderung gesperrt. Das Modul versucht den Lesevorgang weiterhin und kann einen fachgerecht wiederhergestellten Bestand übernehmen. Dabei schreibt der Modulhost weder leere Gerätelisten noch Standardeinstellungen in den Speicher. Ein echter Neuaufbau mit nachweislich fehlender Konfiguration verwendet die vorhandenen Einrichtungsstandards.
+
+### Bereitschaft bei bestehendem Hardware-Eigentümer
+
+Ab 9.0.36 kann ein freigegebener, lizenzierter Prozess für Devices, EEBus, OCPP oder Sicherung auf die Übernahme warten. Der Admin zeigt dafür eine eigene PID, den vom Kindprozess bestätigten Heartbeat, den Wartegrund und die getrennte Betriebsfreigabe. Das Kind erhält in dieser Generation nur Modulkennung und Generation. Es lädt keinen Gerätetreiber, öffnet keinen Protokollport und hat keinen ioBroker-Schreibzugang.
+
+Nach bestätigter Übernahme beendet der Modulhost die wartende PID, prüft die Eigentümerschaft erneut und startet die operative Generation mit der validierten Konfiguration. Übernimmt ein Altadapter die Hardware erneut, erlischt die operative Freigabe vor dem Wechsel zurück in Bereitschaft. Wiederholte Alive-Meldungen eines bereits aktiven Altadapters lassen die wartende PID bestehen. Ein bewusst ausgeschalteter Prozess bleibt aus. Ein während der Sperre ausdrücklich eingeschalteter Prozess kann als Bereitschaft laufen, während sein separat ausgeschaltetes Fachmodul und dessen Einstellungen erhalten bleiben.
 
 ## Status und Betriebsgrenzen
 

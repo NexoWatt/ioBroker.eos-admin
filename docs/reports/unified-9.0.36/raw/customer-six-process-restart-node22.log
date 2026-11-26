@@ -1,0 +1,28 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: new admin OS process retains six pauses then resumes all six, legacy conflict=false
+ok 1 - new admin OS process retains six pauses then resumes all six, legacy conflict=false
+  ---
+  duration_ms: 10797.934464
+  type: 'test'
+  ...
+# {"hostPidBefore":27,"hostPidAfter":110,"oldPids":[39,40,53,70,83,95],"newPids":[177,122,166,134,146,158],"standby":[],"conflict":false,"authorizedDisableRequests":6,"authorizedEnableRequests":6,"pausedAfterProcessRestart":6,"twoNewHeartbeats":6,"emsOperatesWithoutGui":true,"deviceConnections":2,"modbusReads":4,"modbusWrites":0}
+# Subtest: new admin OS process retains six pauses then resumes all six, legacy conflict=true
+ok 2 - new admin OS process retains six pauses then resumes all six, legacy conflict=true
+  ---
+  duration_ms: 11689.81415
+  type: 'test'
+  ...
+# {"hostPidBefore":192,"hostPidAfter":270,"oldPids":[204,205,218,226,239,252],"newPids":[332,282,325,294,306,318],"standby":["devices","ocpp"],"conflict":true,"authorizedDisableRequests":6,"authorizedEnableRequests":6,"pausedAfterProcessRestart":6,"twoNewHeartbeats":6,"emsOperatesWithoutGui":true,"deviceConnections":0,"modbusReads":0,"modbusWrites":0}
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 22626.662422

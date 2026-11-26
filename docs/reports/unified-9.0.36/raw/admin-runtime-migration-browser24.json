@@ -1,0 +1,80 @@
+{
+  "result": "passed",
+  "runAt": "2026-11-26T20:25:34.968Z",
+  "node": "v24.22.3",
+  "browser": "HeadlessChrome/158.0.8127.0",
+  "scope": "Real Chromium, production runtime UI, routes, control service and protected config-store logic. Synthetic DB, auth source and process lifecycle; no live ioBroker controller or physical devices.",
+  "checks": [
+    {
+      "name": "six hosted controls; parent/external OCPP read-only; module-off and both-off screenshot states both offer enable",
+      "result": "passed"
+    },
+    {
+      "name": "single browser action enables both gates with protected persistence; confirmed starts and page reload preserve activation",
+      "result": "passed"
+    },
+    {
+      "name": "production mutation route rejects missing CSRF without touching lifecycle",
+      "result": "passed"
+    },
+    {
+      "name": "disable persists desired state; accepted job stays busy until confirmed stop; no early stopped badge",
+      "result": "passed"
+    },
+    {
+      "name": "disabled choice survives page reload and a fresh production config-service read",
+      "result": "passed"
+    },
+    {
+      "name": "enable waits for lifecycle readiness and displays green only after confirmed running state",
+      "result": "passed"
+    },
+    {
+      "name": "restart uses confirmed stop before start through the production control service",
+      "result": "passed"
+    },
+    {
+      "name": "scoped preflight, EMS and EEBus standby show real owner, PID and heartbeat, restrict operations, keep process controls and detect stale heartbeat; pending config distinct; read-only review",
+      "result": "passed"
+    },
+    {
+      "name": "stale revision fails without lifecycle change and refreshes current controls",
+      "result": "passed"
+    },
+    {
+      "name": "unconfirmed stop remains visibly unconfirmed and never claims successful deactivation",
+      "result": "passed"
+    },
+    {
+      "name": "UI pause remains controllable from parent runtime page while EMS readiness and PID stay stable",
+      "result": "passed"
+    },
+    {
+      "name": "EMS pause is separate from the UI lifecycle",
+      "result": "passed"
+    },
+    {
+      "name": "missing command response is reported as unconfirmed; no automatic command replay",
+      "result": "passed"
+    },
+    {
+      "name": "mobile 390px has usable buttons without horizontal overflow",
+      "result": "passed"
+    },
+    {
+      "name": "lost administrator role denies mutation and removes all actionable status",
+      "result": "passed"
+    }
+  ],
+  "pageErrors": [],
+  "sourceHashes": {
+    "src/lib/eosRuntimeControl.js": "9696805b9454423ac84b7dbc440a50fb15f2d361fe967ddbdb34c63af9a48fe9",
+    "src/lib/eosModuleHttp.js": "8ab1cf89cb455b1eae1ddd49bb866f9225662c4e6f7ff6a8616dd5b2a75656ac",
+    "src/lib/eosRuntimeHealth.js": "d7e694074cbd238d2dc3804aa3cdf591d3be70ac80216e3991b0b9f1343f4e4d",
+    "public/eos-runtime/index.js": "1e8179f6d1cd96fa5dfe4a2d8d4236041a90133d2d33f0dfa9f1cdfedfd0d23e",
+    "public/eos-runtime/index.html": "ec1977198e774dbf5a360334028365bcb4b457b33ec1a9a303c3d848bdd8232d",
+    "public/eos-runtime/style.css": "55dd55b29ba0ef541b840b72f14f967a23049397ee51b100557952a0f87d7d9c",
+    "public/eos-migration/index.js": "0e7fa4cd885825dbb29826d8f77c8bdd9385a079ede828e60845131f1dbab94a",
+    "public/eos-migration/index.html": "7aacc681c5a4be80d6d2de68d82a392228e0602f6d70594d935b55f9afa97827"
+  }
+}

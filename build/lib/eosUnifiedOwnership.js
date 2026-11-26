@@ -12,8 +12,10 @@
  * einen manuell gestarteten Altprozess oder kompromittierte Fremdadapter.
  */
 const { performance } = require('node:perf_hooks');
+const { hasConfirmedLegacyStop } = require('./eosLegacyMigration');
 const INSTANCE_RE = /^system\.adapter\.(?:nexowatt-ui|eos-admin)\.\d+$/;
 const ALIVE_RE = /^system\.adapter\.(?:nexowatt-ui|eos-admin)\.\d+\.alive$/;
+const LOCAL_UI_LIFECYCLE = /^system\.adapter\.nexowatt-ui\.\d+\.sigKill$/;
 const MAX_INSTANCES = 128;
 const LEASE_MS = 15000;
 const REFRESH_MS = 5000;
@@ -40,12 +42,12 @@ function createOwnershipGuard(owner) {
     let eventTimer = null;
     let pending = null;
     let lastPublished = '';
-    function canWrite() {
-        return running && allowed && performance.now() < validUntil && owner.eosMigration?.allowsWrites() !== false;
+    function canWrite(scope = 'ui') {
+        return running && allowed && performance.now() < validUntil && owner.eosMigration?.allowsWrites(scope) !== false;
     }
-    function status() {
-        const currentAllowed = canWrite();
-        const migrationBlocked = running && owner.eosMigration?.allowsWrites() === false;
+    function status(scope = 'ui') {
+        const currentAllowed = canWrite(scope);
+        const migrationBlocked = running && owner.eosMigration?.allowsWrites(scope) === false;
         let migration;
         if (migrationBlocked) {
             // Only fixed diagnostic fields cross this boundary. Never forward
@@ -135,8 +137,7 @@ function createOwnershipGuard(owner) {
             ]);
             // Missing/unknown states do not prove a stopped process. An offline
             // remote host can still control its devices, so it also blocks handover.
-            if (!alive || alive.val !== false || alive.ack !== true ||
-                !Number.isSafeInteger(object.ts) || !Number.isSafeInteger(alive.ts) || alive.ts < object.ts) {
+            if (!(await hasConfirmedLegacyStop(owner, object, alive))) {
                 conflicts.push({ instance: id, host, reason: 'STOP_NOT_CONFIRMED' });
                 continue;
             }
@@ -208,7 +209,7 @@ function createOwnershipGuard(owner) {
             changed('INSTANCE_CHANGED');
     }
     function onStateChange(id, state) {
-        if (id !== `${ownId}.alive` && ALIVE_RE.test(id || ''))
+        if ((id !== `${ownId}.alive` && ALIVE_RE.test(id || '')) || LOCAL_UI_LIFECYCLE.test(id || ''))
             changed('WRITER_STATE_CHANGED');
         // An offline controller revokes immediately. A heartbeat update to true
         // is not a handover and cannot itself grant permission.
@@ -235,6 +236,7 @@ function createOwnershipGuard(owner) {
             await owner.subscribeForeignObjectsAsync('system.adapter.nexowatt-ui.*');
             await owner.subscribeForeignObjectsAsync('system.adapter.eos-admin.*');
             await owner.subscribeForeignStatesAsync('system.adapter.nexowatt-ui.*.alive');
+            await owner.subscribeForeignStatesAsync('system.adapter.nexowatt-ui.*.sigKill');
             await owner.subscribeForeignStatesAsync('system.adapter.eos-admin.*.alive');
             await owner.subscribeForeignStatesAsync('system.host.*.alive');
         }

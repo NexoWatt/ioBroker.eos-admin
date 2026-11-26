@@ -12,6 +12,7 @@ let server = null;
 let stopping = false;
 let initialized = false;
 let presentationOnly = false;
+let operationRequested = false;
 let leaseAt = 0;
 let leaseSequence = 0;
 let authority = {};
@@ -34,6 +35,10 @@ function notify(method, args = []) {
 function canWrite() {
     return !presentationOnly && !stopping && node_perf_hooks_1.performance.now() - leaseAt <= 3000 && authority.canWrite === true;
 }
+function operationalGrant() {
+    const license = authority.license;
+    return canWrite() && (0, eosUiProcessRpc_1.processRecord)(license) && license.valid === true && license.coreEnabled === true;
+}
 function updateAuthority(value) {
     if (stopping ||
         !Number.isSafeInteger(value.sequence) ||
@@ -43,10 +48,25 @@ function updateAuthority(value) {
         value.expiresAt > Date.now() + 3500) {
         return;
     }
+    const previousGrant = operationalGrant();
     authority = value;
     leaseSequence = Number(value.sequence);
     // A queued lease retains its original age instead of being renewed on delivery.
     leaseAt = node_perf_hooks_1.performance.now() - Math.max(0, 3000 - (value.expiresAt - Date.now()));
+    if (operationRequested && runtime && !previousGrant && operationalGrant()) {
+        const current = runtime.status();
+        if ((0, eosUiProcessRpc_1.processRecord)(current) &&
+            current.emsReady !== true &&
+            ['idle', 'blocked', 'unlicensed'].includes(String(current.state))) {
+            // An already armed standby must resume when its controller lease is confirmed,
+            // even if no dashboard request arrives. The runtime deduplicates startup.
+            void Promise.resolve()
+                .then(() => runtime?.startOperational())
+                .catch(() => {
+                notify('log', ['warn', 'EOS_EMS_OPERATIONAL_START_FAILED']);
+            });
+        }
+    }
 }
 function terminate(exitCode) {
     stopping = true;
@@ -389,6 +409,7 @@ async function dispatch(method, args) {
         throw (0, eosUiProcessRpc_1.processError)('EOS_UI_PROCESS_METHOD_DENIED');
     }
     if (method === 'startOperational') {
+        operationRequested = true;
         return runtime.startOperational();
     }
     if (method === 'getHistoryBackupRequirement') {

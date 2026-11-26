@@ -1,7 +1,7 @@
 {
   "name": "iobroker.eos-admin",
   "description": "NexoWatt EOS: licensed local energy management, dashboard and ioBroker system administration in one adapter.",
-  "version": "9.0.35",
+  "version": "9.0.36",
   "contributors": [
     "bluefox <dogafox@gmail.com>",
     "apollon77",
@@ -242,7 +242,9 @@
     "docs/start/START_HIER_9.0.34.md",
     "docs/reports/unified-9.0.34/",
     "docs/start/START_HIER_9.0.35.md",
-    "docs/reports/unified-9.0.35/"
+    "docs/reports/unified-9.0.35/",
+    "docs/start/START_HIER_9.0.36.md",
+    "docs/reports/unified-9.0.36/"
   ],
   "scripts": {
     "start": "cd src-admin && npm run start",
@@ -281,7 +283,7 @@
   },
   "nexowattReleasePolicy": {
     "distTag": "next",
-    "purpose": "NexoWatt EOS 9.0.35 controlled release for live dashboard telemetry, connection and supervised process status"
+    "purpose": "NexoWatt EOS 9.0.36 controlled release for verified disabled legacy UI migration, module startup diagnostics and recovery."
   },
   "publisher": "NexoWatt",
   "nexowattUpstream": {

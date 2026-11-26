@@ -100,7 +100,40 @@ function localTimer(repeat, callback, ms, ...args) {
 }
 /** @param {unknown} received */
 function boot(received) {
-    if (initialized || !isRecord(received) || received.type !== 'init')
+    if (initialized || !isRecord(received))
+        return;
+    if (received.type === 'standby') {
+        validate(received);
+        if (typeof received.id !== 'string' || !['devices', 'eebus', 'backup', 'ocpp'].includes(received.id) ||
+            typeof received.generation !== 'number' || !Number.isSafeInteger(received.generation) ||
+            Object.keys(received).some(key => !['type', 'id', 'generation'].includes(key)))
+            throw error('EOS_MODULE_PROCESS_INIT');
+        // This generation receives no credentials, adapter facade, storage paths or
+        // hardware runtime. It cannot be upgraded by an RPC or a stale lease message.
+        initialized = true;
+        process.off('message', boot);
+        rpc = channel(process, received.generation, async (method) => {
+            if (method === 'prepare' && !stopping)
+                return true;
+            if (method === 'stop') {
+                void shutdown();
+                return null;
+            }
+            throw error('EOS_MODULE_PROCESS_INACTIVE');
+        }, event => { if (event.type === 'invalid')
+            void shutdown(); });
+        const pulse = () => { try {
+            getRpc().event('heartbeat');
+        }
+        catch {
+            void shutdown();
+        } };
+        pulse();
+        heartbeat = setInterval(pulse, 1000);
+        heartbeat.unref?.();
+        return;
+    }
+    if (received.type !== 'init')
         return;
     validate(received);
     if (typeof received.id !== 'string' || !['devices', 'eebus', 'backup', 'ocpp'].includes(received.id) ||

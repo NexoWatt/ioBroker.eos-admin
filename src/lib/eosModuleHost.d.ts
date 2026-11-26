@@ -37,6 +37,7 @@ export class EosModuleHost {
             installationDir?: string;
             eosDataDir?: string;
             processEnabled?: (id: string) => boolean;
+            standbyRequested?: (id: string) => boolean;
         },
     );
     readonly mutation: boolean;
