@@ -1,0 +1,216 @@
+(node:18) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:25) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: new MIRA setup creates one distinct WPM at its selected unit, with separate settings and collision-safe IDs
+ok 1 - new MIRA setup creates one distinct WPM at its selected unit, with separate settings and collision-safe IDs
+  ---
+  duration_ms: 2.814733
+  type: 'test'
+  ...
+# Subtest: existing matching WPM keeps its identity, settings, prior EMS intent and enabled state
+ok 2 - existing matching WPM keeps its identity, settings, prior EMS intent and enabled state
+  ---
+  duration_ms: 2.60546
+  type: 'test'
+  ...
+# Subtest: ambiguous units, another owner, unknown IDs and different TCP plants cannot be silently paired
+ok 3 - ambiguous units, another owner, unknown IDs and different TCP plants cannot be silently paired
+  ---
+  duration_ms: 1.846636
+  type: 'test'
+  ...
+# Subtest: two RTU lines link only by explicit selection, separate from a same-line new WPM
+ok 4 - two RTU lines link only by explicit selection, separate from a same-line new WPM
+  ---
+  duration_ms: 0.860845
+  type: 'test'
+  ...
+# (node:26) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: OVUM MIRA START uses distinct physical units, zero-based FC03 addresses and atomic writes only to five volatile HSM inputs
+ok 5 - OVUM MIRA START uses distinct physical units, zero-based FC03 addresses and atomic writes only to five volatile HSM inputs
+  ---
+  duration_ms: 13.213415
+  type: 'test'
+  ...
+# Subtest: remapped measurement or command never becomes the built-in MIRA energy-flow or control alias
+ok 6 - remapped measurement or command never becomes the built-in MIRA energy-flow or control alias
+  ---
+  duration_ms: 1.967886
+  type: 'test'
+  ...
+# Subtest: MIRA command acknowledgement never becomes physical FC03 readback; constant real samples refresh, unrelated polls do not
+ok 7 - MIRA command acknowledgement never becomes physical FC03 readback; constant real samples refresh, unrelated polls do not
+  ---
+  duration_ms: 7.717459
+  type: 'test'
+  ...
+# (node:27) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: MIRA sends unit-specific login using FC16, reads real WPM power and confirms volatile HSM writes on Modbus TCP
+ok 8 - MIRA sends unit-specific login using FC16, reads real WPM power and confirms volatile HSM writes on Modbus TCP
+  ---
+  duration_ms: 97.076426
+  type: 'test'
+  ...
+# Subtest: MIRA requires each login to be confirmed, rate-limits rejection and suppresses writes after authorization loss or mismatched readback
+ok 9 - MIRA requires each login to be confirmed, rate-limits rejection and suppresses writes after authorization loss or mismatched readback
+  ---
+  duration_ms: 7.862573
+  type: 'test'
+  ...
+# Subtest: MIRA rejects unsupported units, protocol and malformed codes before any connection
+ok 10 - MIRA rejects unsupported units, protocol and malformed codes before any connection
+  ---
+  duration_ms: 1.406716
+  type: 'test'
+  ...
+# Subtest: two MIRA RTU units serialize login, write and echo on one shared serial bus
+ok 11 - two MIRA RTU units serialize login, write and echo on one shared serial bus
+  ---
+  duration_ms: 6.044313
+  type: 'test'
+  ...
+# Subtest: MIRA editor keeps unsaved and stored login codes out of JSON export and preview while protected save retains the field
+ok 12 - MIRA editor keeps unsaved and stored login codes out of JSON export and preview while protected save retains the field
+  ---
+  duration_ms: 3.86172
+  type: 'test'
+  ...
+# (node:33) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: commissioning both units maps one measured electrical flow and a prepared, inactive PV controller
+ok 13 - commissioning both units maps one measured electrical flow and a prepared, inactive PV controller
+  ---
+  duration_ms: 25.520768
+  type: 'test'
+  ...
+# Subtest: one explicit HSM confirmation activates the licensed thermal app, respecting later app/row disable and changed sources
+ok 14 - one explicit HSM confirmation activates the licensed thermal app, respecting later app/row disable and changed sources
+  ---
+  duration_ms: 9.635501
+  type: 'test'
+  ...
+# Subtest: license, grid, confirmed source and electrical limit are individually enforced before enabling the writer
+ok 15 - license, grid, confirmed source and electrical limit are individually enforced before enabling the writer
+  ---
+  duration_ms: 3.939902
+  type: 'test'
+  ...
+# Subtest: different buses, ambiguous cascades and removed pumps cannot retain or create an HSM writer
+ok 16 - different buses, ambiguous cascades and removed pumps cannot retain or create an HSM writer
+  ---
+  duration_ms: 6.164888
+  type: 'test'
+  ...
+# Subtest: deliberately selected separate RTU links are supported once and never shared by two managers
+ok 17 - deliberately selected separate RTU links are supported once and never shared by two managers
+  ---
+  duration_ms: 1.47433
+  type: 'test'
+  ...
+# Subtest: manual slots and control targets survive, repeated discovery cannot reinsert a deleted mapping
+ok 18 - manual slots and control targets survive, repeated discovery cannot reinsert a deleted mapping
+  ---
+  duration_ms: 4.322151
+  type: 'test'
+  ...
+# Subtest: restart inventory transports protocol+unit grouping without hostnames or login values
+ok 19 - restart inventory transports protocol+unit grouping without hostnames or login values
+  ---
+  duration_ms: 2.878302
+  type: 'test'
+  ...
+# (node:38) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: opening and saving the App Center retains both MIRA channels, commissioning and flow ownership, including slot ten
+ok 20 - opening and saving the App Center retains both MIRA channels, commissioning and flow ownership, including slot ten
+  ---
+  duration_ms: 481.022385
+  type: 'test'
+  ...
+# Subtest: MIRA can open EMS quick controls without exposing switch, SG Ready or direct power writes
+ok 21 - MIRA can open EMS quick controls without exposing switch, SG Ready or direct power writes
+  ---
+  duration_ms: 525.518973
+  type: 'test'
+  ...
+# Subtest: MIRA readout distinguishes measured zero from unknown after disconnect in the quick control
+ok 22 - MIRA readout distinguishes measured zero from unknown after disconnect in the quick control
+  ---
+  duration_ms: 96.076982
+  type: 'test'
+  ...
+# (node:41) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: MIRA uses commissioned watt ceiling, genuine register feedback, and neutral return under §14a
+ok 23 - MIRA uses commissioned watt ceiling, genuine register feedback, and neutral return under §14a
+  ---
+  duration_ms: 32.784206
+  type: 'test'
+  ...
+# Subtest: late watt echo and absent physical inputs cannot start MIRA; fresh data recovers
+ok 24 - late watt echo and absent physical inputs cannot start MIRA; fresh data recovers
+  ---
+  duration_ms: 10.719012
+  type: 'test'
+  ...
+# Subtest: no actuator writes until explicit commissioning and no generic switch fallback
+ok 25 - no actuator writes until explicit commissioning and no generic switch fallback
+  ---
+  duration_ms: 7.138507
+  type: 'test'
+  ...
+# Subtest: invalid or crossed HSM command/readback mapping is not controllable
+ok 26 - invalid or crossed HSM command/readback mapping is not controllable
+  ---
+  duration_ms: 2.671291
+  type: 'test'
+  ...
+# Subtest: MIRA manual handoff releases own boost once and preserves subsequent local operation
+ok 27 - MIRA manual handoff releases own boost once and preserves subsequent local operation
+  ---
+  duration_ms: 6.731707
+  type: 'test'
+  ...
+# Subtest: restart adopts active MIRA only from fresh measurements and neutralizes an unverified old boost
+ok 28 - restart adopts active MIRA only from fresh measurements and neutralizes an unverified old boost
+  ---
+  duration_ms: 4.381207
+  type: 'test'
+  ...
+# Subtest: turning MIRA off sends neutral even if a previous raise is queued and feedback is still zero
+ok 29 - turning MIRA off sends neutral even if a previous raise is queued and feedback is still zero
+  ---
+  duration_ms: 3.269813
+  type: 'test'
+  ...
+# Subtest: a different WPM slot or missing numerical commission cannot actuate a hydraulic module
+ok 30 - a different WPM slot or missing numerical commission cannot actuate a hydraulic module
+  ---
+  duration_ms: 1.976044
+  type: 'test'
+  ...
+# Subtest: falling grant neutralizes active boost before staging a smaller request
+ok 31 - falling grant neutralizes active boost before staging a smaller request
+  ---
+  duration_ms: 5.489968
+  type: 'test'
+  ...
+# Subtest: module deactivation waits for HSM neutral readback and reports autonomous heating separately
+ok 32 - module deactivation waits for HSM neutral readback and reports autonomous heating separately
+  ---
+  duration_ms: 7.69605
+  type: 'test'
+  ...
+1..32
+# tests 32
+# suites 0
+# pass 32
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1720.829573

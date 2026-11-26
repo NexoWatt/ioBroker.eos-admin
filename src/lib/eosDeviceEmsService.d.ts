@@ -26,6 +26,10 @@ export interface DeviceEmsInventory {
     ems: Record<string, unknown>;
     discoveryCode?: string;
     optionalPowerCapabilityPending?: boolean;
+    miraBus?: string;
+    miraFraming?: string;
+    miraUnit?: number;
+    miraWpmDeviceId?: string;
 }
 export interface DeviceEmsSnapshot {
     namespace: string;

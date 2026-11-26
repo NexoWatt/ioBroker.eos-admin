@@ -1304,6 +1304,28 @@
           "role": "level.power",
           "unit": "W",
           "capability": "write.externalPower"
+        },
+        "r.pvStatus": {
+          "type": "number",
+          "role": "value",
+          "capability": "read.pvStatus"
+        },
+        "ctrl.pvStatus": {
+          "type": "number",
+          "role": "level",
+          "capability": "write.pvStatus"
+        },
+        "r.pvPowerTargetW": {
+          "type": "number",
+          "role": "value.power",
+          "unit": "W",
+          "capability": "read.pvPowerTargetW"
+        },
+        "ctrl.pvPowerTargetW": {
+          "type": "number",
+          "role": "level.power",
+          "unit": "W",
+          "capability": "write.pvPowerTargetW"
         }
       }
     },

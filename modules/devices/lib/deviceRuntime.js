@@ -13,6 +13,7 @@ const {
   buildManifest: buildAliasManifest,
   mergeStandardDefinition,
 } = require('./aliasContract');
+const { miraUnit, buildMiraAliases, freshPaths: miraFreshnessPaths } = require('./ovumMiraAliases');
 const { getDeyeProfile, buildDeyeAliases } = require('./deyeProtocol');
 const { getVartaProfile, registersForProfile, buildVartaAliases } = require('./vartaProtocol');
 const { extendedRegistersForProfile, buildVartaExtendedAliases } = require('./vartaExtendedProtocol');
@@ -696,7 +697,7 @@ class DeviceRuntime {
   }
 
   _computeLiveAliasRefreshMs({ fastIntervalMs, isEventDriven } = {}) {
-    if (this.aliasDeviceClass !== 'evCharger' && !isEnergyFreshnessClass(this.aliasDeviceClass)) return 0;
+    if (this.aliasDeviceClass !== 'evCharger' && !isEnergyFreshnessClass(this.aliasDeviceClass) && !miraUnit(this.template)) return 0;
 
     const candidates = [
       this.cfg && this.cfg.liveStatusRefreshMs,
@@ -739,12 +740,13 @@ class DeviceRuntime {
 
   _liveAliasRefreshOptions(relId, values, ctx, sourceIds = []) {
     if (!(this._liveAliasRefreshMs > 0)) return undefined;
-    const energyAlias = isEnergyFreshnessAlias(this.aliasDeviceClass, legacyAliasPath(relId));
+    const path = legacyAliasPath(relId);
+    const energyAlias = isEnergyFreshnessAlias(this.aliasDeviceClass, path) ||
+      (miraUnit(this.template) && miraFreshnessPaths.has(path));
     if (!this._isEvChargerFreshnessAlias(relId) && !energyAlias) return undefined;
     if (ctx && (ctx.connected === false || ctx.diagnosticsOnly === true)) return undefined;
     if (!values || typeof values !== 'object' || Object.keys(values).length === 0) return undefined;
     if (energyAlias) {
-      const path = legacyAliasPath(relId);
       const connectionAlias = path === 'comm.connected' || path === 'alarm.offline';
       if (!hasNewAliasSample({
         protocol: String(this.cfg.protocol || '').toLowerCase(),
@@ -1164,7 +1166,8 @@ class DeviceRuntime {
     // --- Generic role-based aliases (best-effort) ---
     // Only use these for categories where roles are typically reliable and where "first match wins" is acceptable.
     // For meters, chargers, batteries and ESS we create dedicated alias mapping further below.
-    const allowGenericRoleAliases = !chargerCats.has(cat) && !['METER', 'BATTERY', 'ESS', 'BATTERY_INVERTER'].includes(cat);
+    const mira = miraUnit(this.template);
+    const allowGenericRoleAliases = !mira && !chargerCats.has(cat) && !['METER', 'BATTERY', 'ESS', 'BATTERY_INVERTER'].includes(cat);
 
     if (allowGenericRoleAliases) {
       const powerDp = getAnyById('W') || this._findFirstDatapoint(dp => dp.role === 'value.power' && dp.rw !== 'wo');
@@ -1214,7 +1217,9 @@ class DeviceRuntime {
     // --- HEAT aliases (heat pumps / heating systems) ---
     // Provide a stable API for heat pumps so that higher-level control adapters can link
     // against consistent alias names even if manufacturers label datapoints differently.
-    if (cat === 'HEAT') {
+    if (mira) {
+      for (const def of buildMiraAliases(this, mira)) addStandardSource(def);
+    } else if (cat === 'HEAT') {
       const asNumber = (v) => {
         if (typeof v === 'number' && Number.isFinite(v)) return v;
         if (typeof v === 'string') {
@@ -6664,6 +6669,10 @@ class DeviceRuntime {
     const proto = this.cfg.protocol;
     // Load a transport only when a configured device selects it. CommonJS reuses
     // its module on later starts, while every device still gets its own driver.
+    if (this.template?.driverHints?.ovumMira) {
+      const { OvumMiraDriver } = require('./drivers/ovumMira');
+      return new OvumMiraDriver(this.adapter, this.cfg, this.template, this.global);
+    }
     if (getDeyeProfile(this.template)) {
       const { DeyeModbusDriver } = require('./drivers/deyeModbus');
       return new DeyeModbusDriver(this.adapter, this.cfg, this.template, this.global);
@@ -7989,6 +7998,7 @@ class DeviceRuntime {
         // to appear dead for the cooldown window.
         const toDev = (typeof aliasDef.toDevice === 'function') ? aliasDef.toDevice(state.val) : state.val;
         if (toDev === undefined || toDev === null) {
+          if (miraUnit(this.template)) throw new Error('MIRA: Ungültiger EMS-Stellwert.');
           // Command-button aliases can intentionally ignore the inactive/false edge
           // (e.g. KEBA P40 fast charging can only be activated, not deactivated, via Modbus).
           await this._setStateCached(relId, state.val, true);
@@ -8020,7 +8030,7 @@ class DeviceRuntime {
         // For sensitive devices (e.g. SolaX), coalesce/throttle writes instead of sending them immediately.
         // VARTA and FENECON Home have no keepalive requiring an optimistic
         // command. Rejected writes must not later be acknowledged from polling.
-        if (!getVartaProfile(this.template) && !this._isFeneconHomeEssTemplate()) this._rememberCommandedValue(aliasTargetDp.id, toDev);
+        if (!miraUnit(this.template) && !getVartaProfile(this.template) && !this._isFeneconHomeEssTemplate()) this._rememberCommandedValue(aliasTargetDp.id, toDev);
 
         if (this._isWriteQueueEnabled()) {
           this._enqueueWrite(relId, aliasTargetDp, toDev, state.val, { bypassUnsupportedCooldown: true, isUserCommand: true });
@@ -8092,7 +8102,7 @@ class DeviceRuntime {
       if (getVartaProfile(this.template) && await this._rejectUnavailableVartaWrite()) return;
       // Direct user/script writes must not be suppressed by a previous automatic
       // keepalive rejection. Let the actual device response decide.
-      if (!getVartaProfile(this.template) && !this._isFeneconHomeEssTemplate()) this._rememberCommandedValue(dp.id, state.val);
+      if (!miraUnit(this.template) && !getVartaProfile(this.template) && !this._isFeneconHomeEssTemplate()) this._rememberCommandedValue(dp.id, state.val);
 
       // For sensitive devices (e.g. SolaX), coalesce/throttle writes instead of sending them immediately.
       if (this._isWriteQueueEnabled()) {

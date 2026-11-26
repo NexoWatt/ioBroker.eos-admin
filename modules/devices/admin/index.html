@@ -242,6 +242,18 @@
         </div>
       </div>
 
+      <section id="mira_pair_settings" class="nexo-ems-config" aria-labelledby="mira_pair_title" hidden>
+        <h6 id="mira_pair_title">MIRA-Wärmepumpenmodul</h6>
+        <p class="nexo-muted">Das HSM nimmt die PV-Vorgabe an. Das zugehörige WPM misst die elektrische Leistung der Wärmepumpe.</p>
+        <label for="mira_wpm_choice">Leistungsmessung zuordnen</label>
+        <select id="mira_wpm_choice" class="browser-default"></select>
+        <div id="mira_wpm_unit_field" hidden>
+          <label for="mira_wpm_unit">Wärmepumpenmodul am gleichen Anschluss</label>
+          <select id="mira_wpm_unit" class="browser-default"></select>
+        </div>
+        <p class="nexo-muted" id="mira_pair_hint" aria-live="polite"></p>
+      </section>
+
       <section class="nexo-ems-config" aria-labelledby="dev_ems_title">
         <h6 id="dev_ems_title">EMS-Zuordnung</h6>
         <div id="dev_profile_capabilities" class="nexo-profile-capabilities" aria-live="polite"></div>
@@ -257,6 +269,8 @@
           <p class="nexo-muted">Mit „Speichern und übernehmen“ werden Gerät, Zuordnung und die benötigten EMS-Apps gemeinsam eingerichtet. Messwertprüfung und Anlagenschutz bleiben wirksam.</p>
           <p class="nexo-ems-step" id="dev_ems_limits_title">Betriebsgrenzen</p>
           <div id="dev_ems_limits" class="nexo-ems-fields">
+            <div data-ems-limit="mira"><label for="dev_ems_miraMaxW">Maximale elektrische PV-Anforderung (W)</label><input id="dev_ems_miraMaxW" type="number" min="1" max="10000000" step="1" inputmode="numeric"></div>
+            <div data-ems-limit="mira"><label class="nexo-ems-check"><input type="checkbox" id="dev_ems_miraSources"><span>Einzel-Wärmepumpe ohne Kaskade. Am HSM sind die Statusquelle EMS und die Datenquelle SOC/NETZ/WR/SOLL eingestellt.</span></label></div>
             <div data-ems-limit="storage"><label for="dev_ems_coupling">Speicher-Anbindung</label><select id="dev_ems_coupling" class="browser-default"><option value="">Vorhandene Anbindung / Geräteprofil</option><option value="ac">AC-gekoppelt</option><option value="dc">DC-gekoppelt</option></select></div>
             <div data-ems-limit="storage"><label for="dev_ems_maxChargeW">Maximale Ladeleistung (W)</label><input id="dev_ems_maxChargeW" type="number" min="1" step="1" inputmode="decimal" placeholder="z. B. 10000"></div>
             <div data-ems-limit="storage"><label for="dev_ems_maxDischargeW">Maximale Entladeleistung (W)</label><input id="dev_ems_maxDischargeW" type="number" min="1" step="1" inputmode="decimal" placeholder="z. B. 10000"></div>
@@ -427,6 +441,7 @@
           <div class="input-field col s12 m4">
             <input id="mb_writePass" type="password" />
             <label for="mb_writePass" class="translate">Schreibpasswort (optional)</label>
+            <span class="helper-text mira-login-hint" style="display:none">MIRA-Modbus-Login-Code vom Gerät. EOS prüft die Freigabe für diese Unit. Ohne Code muss sie am Gerät bereits freigegeben sein.</span>
           </div>
         </div>
       </div>
@@ -531,6 +546,7 @@
           <div class="input-field col s12 m4">
             <input id="mb_writePass_rtu" type="password" />
             <label for="mb_writePass_rtu" class="translate">Schreibpasswort (optional)</label>
+            <span class="helper-text mira-login-hint" style="display:none">MIRA-Modbus-Login-Code dieser Unit. Den Wert am Gerät ablesen.</span>
           </div>
         </div>
       </div>

@@ -76,7 +76,11 @@ test('Devices EMS form: wallbox default, meter/PV targets, storage choice, durab
         }, id);
         await page.waitForSelector('#dev_ems_mode', { visible: true });
     }
-    async function keepDraft() { await page.click('#btnSaveDevice'); await page.waitForSelector('#modalDevice.open', { hidden: true }); }
+    async function keepDraft() {
+        await page.click('#btnSaveDevice');
+        await page.waitForSelector('#modalDevice', { hidden: true });
+        await page.waitForSelector('.modal-overlay', { hidden: true });
+    }
     await edit('evcs1');
     assert.equal(await page.$eval('#dev_ems_mode', e => e.value), 'auto');
     assert.match(await page.$eval('#dev_ems_help', e => e.textContent), /automatisch unter Ladepunkte/);
@@ -95,7 +99,9 @@ test('Devices EMS form: wallbox default, meter/PV targets, storage choice, durab
     if (screenshots) { await fs.mkdir(screenshots, { recursive: true }); await page.screenshot({ path: path.join(screenshots, 'devices-ems-desktop.png') }); }
     await keepDraft();
     await page.click('#eosModuleSave');
-    await page.waitForFunction(() => document.getElementById('eosEmsStatus').textContent.includes('4 Gerät(e) zugeordnet') && !document.getElementById('eosDeviceEditor').inert);
+    await page.waitForFunction(() => document.getElementById('eosEmsStatus').textContent.includes('4 Gerät(e) zugeordnet') && !document.getElementById('eosDeviceEditor').inert)
+        .catch(async error => { throw new Error(await page.$eval('#eosModuleStatus', e => e.textContent) + ' / ' +
+          await page.$eval('#eosEmsStatus', e => e.textContent) + ' / ' + errors.join(' '), { cause: error }); });
     assert.equal(received.filter(r => r.method === 'PUT').length, 1);
     const byId = Object.fromEntries(config.devices.map(d => [d.id, d]));
     assert.equal(byId.evcs1.ems.mode, 'auto'); assert.equal(byId.evcs1.ems.activation.limits.maxCurrentA, 16);
@@ -122,11 +128,55 @@ test('Devices EMS form: wallbox default, meter/PV targets, storage choice, durab
     await page.$eval('.modal-content', e => { e.scrollTop = 0; });
     if (screenshots) await page.screenshot({ path: path.join(screenshots, 'devices-ems-mobile.png') });
     await page.click('#btnCancelDevice');
+    await page.setViewport({ width: 1440, height: 1050 });
     await page.reload();
     await page.waitForFunction(() => !document.getElementById('eosDeviceEditor').inert);
     await page.click('a[href="#tabDevices"]'); await edit('meter1');
     assert.equal(await page.$eval('#dev_ems_mode', e => e.value), 'generationMeter');
     assert.equal(await page.$eval('#dev_ems_slot', e => e.value), '1');
     assert.equal(await page.$eval('#dev_name', e => e.value), 'meter1');
+    await page.click('#btnCancelDevice');
+    await page.waitForSelector('.modal-overlay', { hidden: true });
+    await page.click('#btnAddDevice');
+    await page.select('#dev_category', 'HEAT');
+    await page.select('#dev_manufacturer', 'OVUM');
+    await page.select('#dev_template', 'heat.ovum.mira.hsm');
+    await page.select('#dev_protocol', 'modbusTcp');
+    await page.waitForSelector('#mira_pair_settings', { visible: true });
+    assert.equal(await page.$eval('#mira_wpm_choice', e => e.value), 'same');
+    assert.equal(await page.$eval('#mira_wpm_unit', e => e.value), '111');
+    assert.equal(await page.$eval('#mb_unitId', e => e.value), '110');
+    assert.equal(await page.$eval('#dev_ems_requested', e => e.checked), false);
+    assert.equal(await page.$eval('#dev_ems_miraSources', e => e.checked), false);
+    const hsmId = await page.$eval('#dev_id', e => e.value);
+    await page.type('#mb_host', '192.0.2.77');
+    await keepDraft();
+    await page.click('#eosModuleSave');
+    await page.waitForFunction(() => !document.getElementById('eosDeviceEditor').inert &&
+      document.querySelectorAll('#devicesTable tbody tr').length === 6);
+    await page.waitForFunction(() => document.getElementById('eosModuleStatus').textContent.includes('Gerätekonfiguration geladen'));
+    const hsm = config.devices.find(d => d.id === hsmId);
+    const wpm = config.devices.find(d => d.id === hsm.connection.miraWpmDeviceId);
+    assert.equal(wpm.templateId, 'heat.ovum.mira.wpm');
+    assert.equal(wpm.connection.unitId, 111);
+    assert.equal(wpm.connection.host, hsm.connection.host);
+    await page.reload();
+    await page.waitForFunction(() => !document.getElementById('eosDeviceEditor').inert);
+    await page.click('a[href="#tabDevices"]'); await edit(hsmId);
+    assert.equal(await page.$eval('#mira_wpm_choice', e => e.value), 'id:' + wpm.id);
+    assert.equal(await page.$eval('#mira_wpm_unit_field', e => e.hidden), true);
+    assert.equal(hsm.ems.activation.requested, false);
+    await page.$eval('#dev_ems_requested', e => e.click());
+    await page.waitForSelector('#dev_ems_miraMaxW', { visible: true });
+    await page.$eval('#dev_ems_miraSources', e => e.click());
+    await page.type('#dev_ems_miraMaxW', '4500');
+    await keepDraft();
+    await page.click('#eosModuleSave');
+    await page.waitForFunction(() => document.getElementById('eosModuleStatus').textContent.includes('Gerätekonfiguration geladen'));
+    const consent = config.devices.find(d => d.id === hsmId).ems.activation;
+    assert.equal(consent.requested, true);
+    assert.equal(consent.limits.miraSources, 'confirmed');
+    assert.equal(consent.limits.maxPowerW, 4500);
+    assert.equal(config.devices.filter(d => d.id === wpm.id).length, 1);
     assert.deepEqual(errors, []);
 });

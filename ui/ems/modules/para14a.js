@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/modules/para14a.ts
- * Quell-Hash: sha256:331cc29ad5328e9145c5b6c73ba2951477ad95abfe360e9ce612d3329e32ae81
+ * Quell-Hash: sha256:9f7a9f836cb28da9b5419fc822da6b223f48f6c74421539f1448106af11998e1
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -1031,7 +1031,8 @@ class Para14aModule extends BaseModule {
             const thermalCfg = root.thermal && typeof root.thermal === 'object' ? root.thermal : {};
             const rows = Array.isArray(thermalCfg.devices) ? thermalCfg.devices : [];
             rows.forEach((row, index) => {
-                if (!row || row.enabled !== true) return;
+                // The MIRA PV request delegates control back to its local heat curve and cannot promise a hard cap.
+                if (!row || row.enabled !== true || row.ovumMira === true) return;
                 const slot = safeSlot(row.slot ?? row.consumerSlot, index + 1);
                 const slotCfg = flowConsumers[slot - 1] && typeof flowConsumers[slot - 1] === 'object'
                     ? flowConsumers[slot - 1]

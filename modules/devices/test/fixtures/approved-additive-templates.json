@@ -14,6 +14,8 @@
     "ess.varta.flexStorage.modbusTcpV14",
     "ess.deye.singlePhase.modbusRtu",
     "ess.deye.threePhaseLv.modbusRtu",
-    "ess.deye.threePhaseHv.modbusRtu"
+    "ess.deye.threePhaseHv.modbusRtu",
+    "heat.ovum.mira.hsm",
+    "heat.ovum.mira.wpm"
   ]
 }

@@ -96,7 +96,7 @@ function validateConfig(input = {}) {
                 if (activation.limits !== undefined) {
                     const limits = activation.limits;
                     const numbers = ['maxChargeW', 'maxDischargeW', 'capacityKWh', 'minCurrentA', 'maxCurrentA', 'minPowerW', 'maxPowerW'];
-                    if (!record(limits) || Object.keys(limits).some(key => ![...numbers, 'coupling', 'chargerType', 'phases'].includes(key))) throw failure('EOS_DEVICES_EMS_LIMITS');
+                    if (!record(limits) || Object.keys(limits).some(key => ![...numbers, 'coupling', 'chargerType', 'phases', 'miraSources'].includes(key))) throw failure('EOS_DEVICES_EMS_LIMITS');
                     for (const key of numbers) {
                         const value = Reflect.get(limits, key);
                         if (value !== undefined && (typeof value !== 'number' || !Number.isFinite(value) || value <= 0 || value > 10000000)) throw failure('EOS_DEVICES_EMS_LIMITS');
@@ -105,6 +105,7 @@ function validateConfig(input = {}) {
                         const value = Reflect.get(limits, key);
                         if (value !== undefined && (typeof value !== 'string' || !['ac', 'dc'].includes(value))) throw failure('EOS_DEVICES_EMS_LIMITS');
                     }
+                    if (limits.miraSources !== undefined && (device.templateId !== 'heat.ovum.mira.hsm' || limits.miraSources !== 'confirmed')) throw failure('EOS_DEVICES_EMS_LIMITS');
                     if (limits.phases !== undefined && (typeof limits.phases !== 'number' || ![1, 3].includes(limits.phases))) throw failure('EOS_DEVICES_EMS_LIMITS');
                     if (typeof limits.minCurrentA === 'number' && typeof limits.maxCurrentA === 'number' && limits.minCurrentA > limits.maxCurrentA
                         || typeof limits.minPowerW === 'number' && typeof limits.maxPowerW === 'number' && limits.minPowerW > limits.maxPowerW) throw failure('EOS_DEVICES_EMS_LIMITS');
@@ -113,6 +114,9 @@ function validateConfig(input = {}) {
         }
         if (device.connection !== undefined && !record(device.connection)) throw failure('EOS_DEVICES_CONFIG_CONNECTION');
         const connection = device.connection || {};
+        if (device.templateId === 'heat.ovum.mira.hsm' || device.templateId === 'heat.ovum.mira.wpm') {
+            require('./lib/ovumMiraConnection').miraConnection(device.templateId.endsWith('.hsm') ? 'hsm' : 'wpm', device.protocol, connection);
+        }
         if (connection.insecureTls === true || connection.insecureTLS === true || connection.allowInsecureTls === true || connection.rejectUnauthorized === false) throw failure('EOS_DEVICES_TLS_VERIFICATION_REQUIRED');
         if (device.pollIntervalMs !== undefined && device.pollIntervalMs !== 0) device.pollIntervalMs = integer(device.pollIntervalMs, 5000, 250, 600000);
         for (const field of ['port', 'tcpPort', 'mqttPort']) {

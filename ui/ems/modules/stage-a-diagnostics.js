@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/modules/stage-a-diagnostics.ts
- * Quell-Hash: sha256:09812af8c7c5edfbda6e5eff4e228be40351d19cf95efb39d2a4b7cc0e1c1ae0
+ * Quell-Hash: sha256:0ca3286ca23dbb9360f7cde905e26b38e36ddab99221175fffb4d6d9ad36e544
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -47,7 +47,7 @@ const ACTUATOR_FIELDS = new Set([
     'e3dcPowerLimitsUsedObjectId', 'e3dcMaxChargePowerObjectId',
     'e3dcMaxDischargePowerObjectId', 'setSignedPowerId',
     'setChargePowerId', 'setDischargePowerId', 'switchWriteId', 'setpointWriteId',
-    'sgReadyAWriteId', 'sgReadyBWriteId', 'sgReady1WriteId', 'sgReady2WriteId',
+    'sgReadyAWriteId', 'sgReadyBWriteId', 'sgReady1WriteId', 'sgReady2WriteId', 'miraPvStatusId', 'miraPowerTargetId',
     'writeId', 'writeObjectId', 'writeDp', 'dpWriteId',
     'stageWriteId', 'setpointId', 'outputObjectId', 'commandObjectId', 'commandStateId',
     'enableId', 'startWriteId', 'stopWriteId', 'runWriteId', 'startObjectId',
@@ -89,6 +89,8 @@ function ownerFromPath(path, row) {
         return `storageFarm.${rowId || raw}`;
     if (lower.includes('storage'))
         return `storage.${rowId || raw}`;
+    if (lower.includes('thermal') && row?.ovumMira === true && Number.isInteger(row.slot))
+        return `thermal.c${row.slot}`;
     if (lower.includes('thermal'))
         return `thermal.${rowId || raw}`;
     if (lower.includes('heatingrod'))

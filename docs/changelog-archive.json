@@ -1,4 +1,8 @@
 {
+  "9.0.14": {
+    "en": "Fix late-license migration admission, retain legacy devicesJson configurations, serialize manual imports, and show precise EMS startup and restore blockers.",
+    "de": "Bestandsübernahme nach später Lizenzaktivierung abgesichert; alte Geräte-JSON-Konfigurationen erhalten; manueller Import synchronisiert und EMS-Startblockaden klar angezeigt."
+  },
   "9.0.13": {
     "en": "Restore direct repository publishing with verified test evidence and safe backup of known obsolete assets; fix SmartHome dropdown clipping.",
     "de": "Direkte Repo-Veröffentlichung mit geprüften Testnachweisen und gesicherter Bereinigung bekannter alter Assets; SmartHome-Dropdowns korrigiert."

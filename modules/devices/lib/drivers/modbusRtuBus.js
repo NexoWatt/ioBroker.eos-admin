@@ -125,10 +125,16 @@ class ModbusRtuBus {
         return await fn(this.client);
       } catch (e) {
         // Mark as disconnected so next operation tries to reconnect
-        this.connected = false;
+        if (!['EOS_MIRA_LOGIN', 'EOS_MIRA_READBACK', 'EOS_DEVICES_NOT_AUTHORIZED', 'E_MODBUS_CONNECT_CANCELLED'].includes(e?.code)) this.connected = false;
         throw e;
       }
     });
+  }
+
+  // Keep dependent requests (login, command and readback) on the same Unit-ID
+  // and physical port reservation even when other units share this bus.
+  withUnitClient(unitId, timeoutMs, operation) {
+    return this._exec(unitId, timeoutMs, operation);
   }
 
   // Read helpers

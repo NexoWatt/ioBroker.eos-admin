@@ -1,0 +1,379 @@
+{
+  "node": "v24.22.3",
+  "platform": "linux",
+  "arch": "x64",
+  "scope": "Separate fresh processes after one discarded warm-up per case, explicit GC, median of 5 runs. Independent loopback Modbus process; physical heat pump and ioBroker DB not present. Real DeviceRuntime and production Modbus client; object/state acknowledgements discarded by controller double. Each pair has received one HSM and one WPM meter frame. Delta from process before requiring Devices to 150ms after both polls.",
+  "summary": {
+    "9.0.34 idle": {
+      "runs": 5,
+      "heapDeltaMiB": 4.08,
+      "rssDeltaMiB": 4.04,
+      "pssDeltaMiB": 3.92,
+      "MIRAtransportLoaded": false,
+      "confirmedSensors": 0
+    },
+    "9.0.34 pair": {
+      "runs": 5,
+      "heapDeltaMiB": 7.72,
+      "rssDeltaMiB": 18.51,
+      "pssDeltaMiB": 14.99,
+      "MIRAtransportLoaded": true,
+      "confirmedSensors": 2
+    },
+    "9.0.33 idle": {
+      "runs": 5,
+      "heapDeltaMiB": 4.05,
+      "rssDeltaMiB": 4.18,
+      "pssDeltaMiB": 3.76,
+      "MIRAtransportLoaded": false,
+      "confirmedSensors": 0
+    }
+  },
+  "results": [
+    {
+      "scenario": "idle",
+      "version": "9.0.34",
+      "initial": {
+        "heap": 7133640,
+        "rss": 41480192,
+        "pss": 23827456
+      },
+      "final": {
+        "heap": 11409440,
+        "rss": 45543424,
+        "pss": 27447296
+      },
+      "delta": {
+        "heap": 4275800,
+        "rss": 4063232,
+        "pss": 3619840
+      },
+      "loaded": false,
+      "physicalStatesRead": 0,
+      "objectWrites": 4,
+      "stateWrites": 1
+    },
+    {
+      "scenario": "pair",
+      "version": "9.0.34",
+      "initial": {
+        "heap": 7133664,
+        "rss": 41218048,
+        "pss": 23242752
+      },
+      "final": {
+        "heap": 15228952,
+        "rss": 64487424,
+        "pss": 43390976
+      },
+      "delta": {
+        "heap": 8095288,
+        "rss": 23269376,
+        "pss": 20148224
+      },
+      "loaded": true,
+      "physicalStatesRead": 2,
+      "objectWrites": 345,
+      "stateWrites": 108
+    },
+    {
+      "scenario": "idle",
+      "version": "9.0.33",
+      "initial": {
+        "heap": 7133768,
+        "rss": 41095168,
+        "pss": 23770112
+      },
+      "final": {
+        "heap": 11380960,
+        "rss": 45473792,
+        "pss": 27682816
+      },
+      "delta": {
+        "heap": 4247192,
+        "rss": 4378624,
+        "pss": 3912704
+      },
+      "loaded": false,
+      "physicalStatesRead": 0,
+      "objectWrites": 4,
+      "stateWrites": 1
+    },
+    {
+      "scenario": "pair",
+      "version": "9.0.34",
+      "initial": {
+        "heap": 7133712,
+        "rss": 41353216,
+        "pss": 23836672
+      },
+      "final": {
+        "heap": 15228096,
+        "rss": 60764160,
+        "pss": 39511040
+      },
+      "delta": {
+        "heap": 8094384,
+        "rss": 19410944,
+        "pss": 15674368
+      },
+      "loaded": true,
+      "physicalStatesRead": 2,
+      "objectWrites": 345,
+      "stateWrites": 108
+    },
+    {
+      "scenario": "idle",
+      "version": "9.0.33",
+      "initial": {
+        "heap": 7133864,
+        "rss": 41226240,
+        "pss": 23853056
+      },
+      "final": {
+        "heap": 11381248,
+        "rss": 45953024,
+        "pss": 28319744
+      },
+      "delta": {
+        "heap": 4247384,
+        "rss": 4726784,
+        "pss": 4466688
+      },
+      "loaded": false,
+      "physicalStatesRead": 0,
+      "objectWrites": 4,
+      "stateWrites": 1
+    },
+    {
+      "scenario": "idle",
+      "version": "9.0.34",
+      "initial": {
+        "heap": 7133712,
+        "rss": 41340928,
+        "pss": 23753728
+      },
+      "final": {
+        "heap": 11409688,
+        "rss": 45592576,
+        "pss": 27873280
+      },
+      "delta": {
+        "heap": 4275976,
+        "rss": 4251648,
+        "pss": 4119552
+      },
+      "loaded": false,
+      "physicalStatesRead": 0,
+      "objectWrites": 4,
+      "stateWrites": 1
+    },
+    {
+      "scenario": "idle",
+      "version": "9.0.33",
+      "initial": {
+        "heap": 7133696,
+        "rss": 41222144,
+        "pss": 23824384
+      },
+      "final": {
+        "heap": 11380888,
+        "rss": 45412352,
+        "pss": 27700224
+      },
+      "delta": {
+        "heap": 4247192,
+        "rss": 4190208,
+        "pss": 3875840
+      },
+      "loaded": false,
+      "physicalStatesRead": 0,
+      "objectWrites": 4,
+      "stateWrites": 1
+    },
+    {
+      "scenario": "idle",
+      "version": "9.0.34",
+      "initial": {
+        "heap": 7133640,
+        "rss": 41615360,
+        "pss": 23832576
+      },
+      "final": {
+        "heap": 11409248,
+        "rss": 45666304,
+        "pss": 27948032
+      },
+      "delta": {
+        "heap": 4275608,
+        "rss": 4050944,
+        "pss": 4115456
+      },
+      "loaded": false,
+      "physicalStatesRead": 0,
+      "objectWrites": 4,
+      "stateWrites": 1
+    },
+    {
+      "scenario": "pair",
+      "version": "9.0.34",
+      "initial": {
+        "heap": 7133616,
+        "rss": 41484288,
+        "pss": 23336960
+      },
+      "final": {
+        "heap": 15228888,
+        "rss": 64638976,
+        "pss": 42863616
+      },
+      "delta": {
+        "heap": 8095272,
+        "rss": 23154688,
+        "pss": 19526656
+      },
+      "loaded": true,
+      "physicalStatesRead": 2,
+      "objectWrites": 345,
+      "stateWrites": 108
+    },
+    {
+      "scenario": "idle",
+      "version": "9.0.34",
+      "initial": {
+        "heap": 7133664,
+        "rss": 41222144,
+        "pss": 23795712
+      },
+      "final": {
+        "heap": 11409272,
+        "rss": 45457408,
+        "pss": 27816960
+      },
+      "delta": {
+        "heap": 4275608,
+        "rss": 4235264,
+        "pss": 4021248
+      },
+      "loaded": false,
+      "physicalStatesRead": 0,
+      "objectWrites": 4,
+      "stateWrites": 1
+    },
+    {
+      "scenario": "pair",
+      "version": "9.0.34",
+      "initial": {
+        "heap": 7133640,
+        "rss": 41615360,
+        "pss": 23823360
+      },
+      "final": {
+        "heap": 15228376,
+        "rss": 60485632,
+        "pss": 39541760
+      },
+      "delta": {
+        "heap": 8094736,
+        "rss": 18870272,
+        "pss": 15718400
+      },
+      "loaded": true,
+      "physicalStatesRead": 2,
+      "objectWrites": 345,
+      "stateWrites": 108
+    },
+    {
+      "scenario": "idle",
+      "version": "9.0.33",
+      "initial": {
+        "heap": 7134584,
+        "rss": 41222144,
+        "pss": 23731200
+      },
+      "final": {
+        "heap": 11381776,
+        "rss": 45379584,
+        "pss": 27675648
+      },
+      "delta": {
+        "heap": 4247192,
+        "rss": 4157440,
+        "pss": 3944448
+      },
+      "loaded": false,
+      "physicalStatesRead": 0,
+      "objectWrites": 4,
+      "stateWrites": 1
+    },
+    {
+      "scenario": "pair",
+      "version": "9.0.34",
+      "initial": {
+        "heap": 7133760,
+        "rss": 41484288,
+        "pss": 23876608
+      },
+      "final": {
+        "heap": 15228208,
+        "rss": 60153856,
+        "pss": 38958080
+      },
+      "delta": {
+        "heap": 8094448,
+        "rss": 18669568,
+        "pss": 15081472
+      },
+      "loaded": true,
+      "physicalStatesRead": 2,
+      "objectWrites": 345,
+      "stateWrites": 108
+    },
+    {
+      "scenario": "idle",
+      "version": "9.0.33",
+      "initial": {
+        "heap": 7133768,
+        "rss": 41095168,
+        "pss": 23812096
+      },
+      "final": {
+        "heap": 11380960,
+        "rss": 46104576,
+        "pss": 28495872
+      },
+      "delta": {
+        "heap": 4247192,
+        "rss": 5009408,
+        "pss": 4683776
+      },
+      "loaded": false,
+      "physicalStatesRead": 0,
+      "objectWrites": 4,
+      "stateWrites": 1
+    },
+    {
+      "scenario": "idle",
+      "version": "9.0.34",
+      "initial": {
+        "heap": 7133616,
+        "rss": 41488384,
+        "pss": 23865344
+      },
+      "final": {
+        "heap": 11409224,
+        "rss": 45817856,
+        "pss": 28038144
+      },
+      "delta": {
+        "heap": 4275608,
+        "rss": 4329472,
+        "pss": 4172800
+      },
+      "loaded": false,
+      "physicalStatesRead": 0,
+      "objectWrites": 4,
+      "stateWrites": 1
+    }
+  ]
+}

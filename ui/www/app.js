@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/app.ts
- * Quell-Hash: sha256:b13e9e0e7f43fd59983d78f50e86e3b7fdf8f41c942fc607fce76311572a0231
+ * Quell-Hash: sha256:8886479238d20c1219eec9882822102510e91d8ab11bd5ea4d1741bff6cec969
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -1948,7 +1948,10 @@ function updateDashboardShellUi(data) {
   setText('sideCo2Savings', snap.co2Text || '--');
 
   setText('sidePvPower', pv === null ? '--' : formatFlowPower(Math.abs(pv)));
-  setText('sideBuildingPower', load === null ? '--' : formatFlowPower(Math.max(0, load)));
+  // With separate consumers the energy diagram publishes its reconciled building value below.
+  if (!flowExtras?.consumers?.length && !flowExtras?.meta?.evcsAvailable) {
+    setText('sideBuildingPower', load === null ? '--' : formatFlowPower(Math.max(0, load)));
+  }
   setText('sideGridBuyPower', buy === null ? '--' : formatFlowPower(Math.max(0, buy)));
   setText('sideGridSellPower', sell === null ? '--' : formatFlowPower(Math.max(0, sell)));
   setText('sideBatteryPower', batterySigned === null ? '--' : (batterySigned < 0 ? '-' : '') + formatFlowPower(Math.abs(batterySigned)));
@@ -1992,7 +1995,7 @@ function initEnergyWebExtras(flowSlots){
   // They are configured in the App-Center (Energiefluss-Monitor -> Verbraucher/Erzeuger).
   // Only mapped items (a datapoint is selected) will be rendered.
 
-  const maxConsumers = 9;
+  const maxConsumers = 10;
   const maxProducers = 5;
 
   // Backward compatible: older builds used flowOptionalConsumers/flowOptionalProducers
@@ -2148,7 +2151,7 @@ function initEnergyWebExtras(flowSlots){
 
     // value above
     const valEl = _svgEl('text', { id: valId, class: 'val', y: -(rNode + 8), 'text-anchor': 'middle' });
-    valEl.textContent = formatFlowPower(0);
+    valEl.textContent = '--';
     g.appendChild(valEl);
 
     // label below
@@ -2440,7 +2443,7 @@ const placeSpecialLowerLeftArc = (items) => {
     }
 
     // Keep a free corridor around the fixed EVCS node at 0° and avoid the very
-    // top/bottom zones close to PV/battery. The split keeps 1..9 consumers readable.
+    // top/bottom zones close to PV/battery. The split keeps 1..10 consumers readable.
     if (count === 1) return [-46];
     const upperCount = Math.ceil(count / 2);
     const lowerCount = count - upperCount;
@@ -8522,8 +8525,8 @@ function _ensureThermalConsumerTiles(){
   const grid = document.getElementById('liveQuickTiles');
   if (!grid) return;
 
-  // Wir erstellen feste Platzhalter für bis zu 9 Verbraucher-Slots.
-  for (let idx = 1; idx <= 9; idx++) {
+  // Wir erstellen feste Platzhalter für bis zu 10 Verbraucher-Slots.
+  for (let idx = 1; idx <= 10; idx++) {
     const id = `thermalConsumerCard${idx}`;
     if (document.getElementById(id)) continue;
 
@@ -8671,7 +8674,7 @@ function updateThermalConsumerUi(){
    */
   const sv = (k) => (st && st[k] && st[k].value !== undefined) ? st[k].value : undefined;
 
-  for (let idx = 1; idx <= 9; idx++) {
+  for (let idx = 1; idx <= 10; idx++) {
     const refs = _thermalConsTiles.get(idx);
     if (!refs) continue;
 
@@ -8685,11 +8688,12 @@ function updateThermalConsumerUi(){
     refs.tile.style.display = show ? '' : 'none';
     if (!show) continue;
 
-    const dev = isRod ? (rodDevices[idx - 1] || {}) : (thermalDevices[idx - 1] || {});
+    const dev = (isRod ? rodDevices : thermalDevices).find(row => Number(row?.slot ?? row?.consumerSlot) === idx)
+      || (isRod ? rodDevices[idx - 1] : thermalDevices[idx - 1]) || {};
     const name = (dev && dev.name) ? String(dev.name) : (slot && slot.name ? String(slot.name) : `Verbraucher ${idx}`);
 
     if (refs.title) refs.title.textContent = name;
-    if (refs.sub) refs.sub.textContent = isRod ? 'Heizstab' : 'Thermik';
+    if (refs.sub) refs.sub.textContent = isRod ? 'Heizstab' : (slot?.qc?.ovumMira ? 'OVUM MIRA · Wärmepumpe' : 'Thermik');
     const iconEl = document.getElementById(`thermalConsumerIcon${idx}`);
     if (iconEl) iconEl.textContent = isRod ? '🔥' : '♨';
 
@@ -8699,7 +8703,10 @@ function updateThermalConsumerUi(){
       pW = Number(sv(`heatingRod.devices.c${idx}.appliedW`) ?? sv(`heatingRod.devices.c${idx}.targetW`) ?? 0);
     }
     if (!Number.isFinite(pW)) pW = 0;
-    if (refs.power) refs.power.textContent = formatPower(Math.abs(pW));
+    if (refs.power) {
+      const measured = slot?.qc?.ovumMira ? getFreshFlowNumber(pKey) : pW;
+      refs.power.textContent = measured === null ? '—' : formatPower(Math.abs(measured));
+    }
 
     if (refs.metaM) refs.metaM.textContent = `Slot ${idx}`;
 
@@ -8857,7 +8864,9 @@ function updateEnergyWeb() {
   const direction = !hasBatteryDirection || !batShowVal ? (grossBoth ? 'Netto 0' : '')
     : batRev ? (grossBoth ? 'Netto laden' : 'Laden') : (grossBoth ? 'Netto entladen' : 'Entladen');
   T('batteryFlowDirection', direction);
-  T('centerPower', loadDisplay === null ? '--' : formatFlowPower(loadDisplay));
+  const buildingText = loadDisplay === null ? '--' : formatFlowPower(loadDisplay);
+  T('centerPower', buildingText);
+  T('sideBuildingPower', buildingText);
   const balanceStatus = flowBalance.mismatchW === null ? (flowBalance.status || (measurements.batteryDerived ? 'Batterieleistung aus Energiebilanz berechnet' : ''))
     : `Bilanzabweichung ${formatFlowPower(Math.abs(flowBalance.mismatchW))} – Messpunkte, Vorzeichen und Zeitstempel prüfen`;
   T('energyFlowQuality', balanceStatus);
@@ -10577,6 +10586,7 @@ function openFlowQc(kind, idx){
     const meta = getSlotMeta(ctx.kind, ctx.idx);
     const fallbackKey = (ctx.kind === 'producer') ? `producer${ctx.idx}Power` : `consumer${ctx.idx}Power`;
     const stateKey = (entry && entry.stateKey) || (meta && meta.stateKey) || fallbackKey;
+    if (ctx.qc?.ovumMira) return { valueW: getFreshFlowNumber(stateKey), maxW: ctx.qc.max };
     let n = readStateNumber(stateKey, NaN);
     let maxW = Number(ctx && ctx.qc && ctx.qc.max);
 
@@ -10613,6 +10623,12 @@ function openFlowQc(kind, idx){
   const updatePower = (readbackData = null) => {
     if (!ctx || !powerEl) return;
     const resolved = resolveFlowPower(readbackData);
+    if (resolved.valueW === null) {
+      powerEl.textContent = '—';
+      setFlowGaugeFill(0, resolved.maxW);
+      if (flowGauge) flowGauge.title = 'Keine aktuelle elektrische Leistungsmessung';
+      return;
+    }
     const rod = (readbackData && readbackData.heatingRod && readbackData.heatingRod.available) ? readbackData.heatingRod : null;
     const isRod = !!(ctx && ctx.kind === 'consumer' && ((ctx.qc && String(ctx.qc.controlKind || '').toLowerCase() === 'heatingrod') || rod));
     const modeRaw = rod ? String(rod.effectiveMode || rod.userMode || rod.mode || '').toLowerCase() : '';
@@ -10699,7 +10715,9 @@ function openFlowQc(kind, idx){
         const nightStatus = isRod ? nwHeatingRodNightStatus(ctl) : '';
         if (regStatus) regStatus.textContent = nightStatus ? 'Nachtpause' : (uEn ? 'Aktiv' : 'Aus');
         if (regHint) {
-          regHint.textContent = nightStatus
+          regHint.textContent = ctl.ovumMira
+            ? 'EOS steuert die PV-Anforderung. Heizung und Warmwasser regelt weiterhin die MIRA.'
+            : nightStatus
             ? `${nightStatus}. Stufen 1–3 und Boost bleiben manuell verfügbar.`
             : isRod
             ? (uEn
@@ -10923,7 +10941,7 @@ function openFlowQc(kind, idx){
     if (subtitle) {
       subtitle.textContent = (qc.controlKind === 'heatingRod')
         ? 'Heizstab'
-        : ((k === 'producer') ? 'Erzeuger' : 'Verbraucher');
+        : (qc.ovumMira ? 'OVUM MIRA · Elektrische Aufnahmeleistung' : ((k === 'producer') ? 'Erzeuger' : 'Verbraucher'));
     }
 
     if (swWrap) swWrap.style.display = qc.hasSwitch ? '' : 'none';

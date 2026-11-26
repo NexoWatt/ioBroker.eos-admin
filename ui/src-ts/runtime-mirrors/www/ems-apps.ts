@@ -26,7 +26,7 @@
  *
  * 1.0.32: Arbitrage-App und geschützte Partner-Iframes mit Versionskonflikten
  * wurden aus der kanonischen Quelle abgeglichen; bestehende Typblöcke bleiben erhalten.
- * Original-Hash: 0883c8b87a4c2627e8ea02f6552a82d00c5f04871de9094712c12936a77ebe04
+ * Original-Hash: 34e9bb430e9812aedf73390228faf60e44ce050afd9b99049d04afbe060e1a10
  * RC60-Prüfhinweis: Der universelle Auto-Orchestrator für NexoWatt Devices,
  * OCPP21 und freie EVCS-Zuordnungen wird in den kanonischen Runtime-Executables
  * sowie den RC60-Regressions- und Feldtests geprüft.
@@ -4146,6 +4146,7 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
         }
 
         const slot = {
+          ...(it._eosDevice ? { _eosDevice: it._eosDevice } : {}),
           name: (it.name !== undefined && it.name !== null) ? String(it.name) : '',
           icon: (it.icon !== undefined && it.icon !== null) ? String(it.icon) : '',
           ctrl,
@@ -4935,10 +4936,20 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
         enabled: (typeof prev.enabled === 'boolean') ? !!prev.enabled : false,
         mode,
         name: String(prev.name || '').trim(),
-        type,
+        ...(prev.ovumMira === true ? {
+          ovumMira: true,
+          miraSourcesConfirmed: prev.miraSourcesConfirmed === true,
+          miraTopologyId: prev.miraTopologyId,
+          miraPvStatusId: prev.miraPvStatusId,
+          miraPvStatusReadId: prev.miraPvStatusReadId,
+          miraPowerTargetId: prev.miraPowerTargetId,
+          miraPowerTargetReadId: prev.miraPowerTargetReadId,
+          ...(prev._eosDevice ? { _eosDevice: prev._eosDevice } : {}),
+        } : {}),
+        type: prev.ovumMira === true ? 'power' : type,
         profile,
         priority: _clampInt(prev.priority, 1, 999, 100 + slot),
-        maxPowerW: Math.max(0, Math.round(Number(prev.maxPowerW ?? 2500) || 2500)),
+        maxPowerW: prev.ovumMira === true ? Math.max(0, Number(prev.maxPowerW) || 0) : Math.max(0, Math.round(Number(prev.maxPowerW ?? 2500) || 2500)),
         estimatedPowerW: Math.max(0, Math.round(Number(prev.estimatedPowerW ?? 1500) || 1500)),
         startSurplusW: Math.max(0, Math.round(Number(prev.startSurplusW ?? 800) || 800)),
         stopSurplusW: Math.max(0, Math.round(Number(prev.stopSurplusW ?? 300) || 300)),
@@ -5536,7 +5547,9 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
       const info = document.createElement('div');
       info.className = 'nw-config-field-hint';
       info.style.margin = '0';
-      info.textContent = [
+      info.textContent = dev.ovumMira === true
+        ? (dev.miraSourcesConfirmed ? 'OVUM MIRA · Elektrische PV-Anforderung über das Hydraulikmodul.' : 'OVUM MIRA · Freigabe und Quellenwahl in der Geräteverwaltung prüfen.')
+        : [
         `Leistung: ${String((currentConfig.datapoints && currentConfig.datapoints[`consumer${slot}Power`]) || '').trim() ? '✓' : 'fehlt'}`,
         `Switch: ${String(ctrl.switchWriteId || '').trim() ? '✓' : '–'}`,
         `Setpoint: ${String(ctrl.setpointWriteId || '').trim() ? '✓' : '–'}`,
@@ -5556,9 +5569,13 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
       const grpBasic = _mkCfgGroup('Grunddaten');
       grpBasic.body.appendChild(_mkCfgField('PV-Auto aktiv', _mkCfgToggle(dev.enabled, (v) => { dev.enabled = !!v; setDirty(); }), 'Aktiviert die automatische Überschuss-Regelung für diesen Slot.'));
       grpBasic.body.appendChild(_mkCfgField('Name (optional)', _mkCfgInput('text', dev.name || '', (v) => { dev.name = String(v || '').trim(); setDirty(); }, { width: '220px', placeholder: 'Anzeige-Name' }), 'Leer lassen = Name aus Energiefluss-Slot verwenden.'));
-      grpBasic.body.appendChild(_mkCfgField('Modus', _mkCfgSelect(dev.mode || 'pvAuto', modeOptions, (v) => { dev.mode = v; setDirty(); }, { width: '160px' }), 'PV-Auto = EMS regelt, Manuell = nur Ist-Leistung bilanzieren, Aus = immer aus.'));
-      grpBasic.body.appendChild(_mkCfgField('Regelart', _mkCfgSelect(dev.type || 'setpoint', typeOptions, (v) => { dev.type = v; syncVisibility(); setDirty(); }, { width: '220px' }), 'Setpoint / SG-Ready / modulierende Leistungsansteuerung.'));
-      grpBasic.body.appendChild(_mkCfgField('Profil', _mkCfgSelect(dev.profile || 'heating', profileOptions, (v) => { dev.profile = v; const defs = _thermalDefaultSetpoints(v); if (!Number.isFinite(Number(dev.autoOnSetpoint))) dev.autoOnSetpoint = defs.on; if (!Number.isFinite(Number(dev.autoOffSetpoint))) dev.autoOffSetpoint = defs.off; if (!Number.isFinite(Number(dev.boostSetpoint))) dev.boostSetpoint = defs.boost; buildThermalUI(); setDirty(); }, { width: '150px' }), 'Bestimmt nur sinnvolle Default-Sollwerte für Setpoint-Geräte.'));
+      grpBasic.body.appendChild(_mkCfgField('Modus', _mkCfgSelect(dev.mode || 'pvAuto', dev.ovumMira === true ? [
+        { value: 'pvAuto', label: 'PV-Automatik' }, { value: 'manual', label: 'Geräteregelung' }, { value: 'off', label: 'PV-Anforderung aus' },
+      ] : modeOptions, (v) => { dev.mode = v; setDirty(); }, { width: '160px' }), dev.ovumMira === true ? 'Die lokale Wärmeregelung bleibt am Gerät aktiv.' : 'PV-Auto = EMS regelt, Manuell = nur Ist-Leistung bilanzieren, Aus = immer aus.'));
+      if (dev.ovumMira !== true) {
+        grpBasic.body.appendChild(_mkCfgField('Regelart', _mkCfgSelect(dev.type || 'setpoint', typeOptions, (v) => { dev.type = v; syncVisibility(); setDirty(); }, { width: '220px' }), 'Setpoint / SG-Ready / modulierende Leistungsansteuerung.'));
+        grpBasic.body.appendChild(_mkCfgField('Profil', _mkCfgSelect(dev.profile || 'heating', profileOptions, (v) => { dev.profile = v; const defs = _thermalDefaultSetpoints(v); if (!Number.isFinite(Number(dev.autoOnSetpoint))) dev.autoOnSetpoint = defs.on; if (!Number.isFinite(Number(dev.autoOffSetpoint))) dev.autoOffSetpoint = defs.off; if (!Number.isFinite(Number(dev.boostSetpoint))) dev.boostSetpoint = defs.boost; buildThermalUI(); setDirty(); }, { width: '150px' }), 'Bestimmt nur sinnvolle Default-Sollwerte für Setpoint-Geräte.'));
+      }
       grpBasic.body.appendChild(_mkCfgField('Priorität', _mkCfgInput('number', dev.priority, (v) => { dev.priority = _clampInt(v, 1, 999, 100 + slot); setDirty(); }, { min: 1, max: 999, step: 1, width: '110px' }), 'Kleinere Zahl = wird früher bedient.'));
       right.appendChild(grpBasic.wrap);
 
@@ -5577,7 +5594,7 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
       right.appendChild(grpSetpoint.wrap);
 
       const grpPower = _mkCfgGroup('Leistungsregelung');
-      grpPower.body.appendChild(_mkCfgField('Max. Leistung (W)', _mkCfgInput('number', dev.maxPowerW, (v) => { dev.maxPowerW = Math.max(0, Math.round(Number(v) || 0)); setDirty(); }, { min: 0, step: 10, width: '140px' }), 'Für modulierende Leistungsgeräte.'));
+      grpPower.body.appendChild(_mkCfgField('Max. Leistung (W)', _mkCfgInput('number', dev.maxPowerW, (v) => { dev.maxPowerW = Math.max(0, Math.round(Number(v) || 0)); setDirty(); }, { min: 0, step: 10, width: '140px', disabled: dev.ovumMira === true }), dev.ovumMira === true ? 'Die freigegebene elektrische Leistung wird in der Geräteverwaltung eingestellt.' : 'Für modulierende Leistungsgeräte.'));
       grpPower.body.appendChild(_mkCfgField('Boost Leistung (W)', _mkCfgInput('number', dev.boostPowerW, (v) => { dev.boostPowerW = Math.max(0, Math.round(Number(v) || 0)); setDirty(); }, { min: 0, step: 10, width: '140px' }), 'Wert für Schnellsteuerung/Boost.'));
       right.appendChild(grpPower.wrap);
 
@@ -13304,7 +13321,9 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
       }
       const evcsDevs = devices.filter(d => _isNwEvcsDevice(d));
       const pvDevs = devices.filter(d => _isNwPvDevice(d));
-      const heatDevs = devices.filter(d => _isNwHeatDevice(d));
+      // Native MIRA ownership, metering and HSM pairing are assigned by the Devices planner.
+      // Re-running the legacy wizard must not create a second consumer or a §14a actuator.
+      const heatDevs = devices.filter(d => _isNwHeatDevice(d) && !['heat.ovum.mira.hsm', 'heat.ovum.mira.wpm'].includes(d.templateId));
       const meterDevs = devices.filter(d => _isNwMeterDevice(d));
       const storageDevs = devices.filter(d => _isNwStorageDevice(d));
       const solarChargers = devices.filter(d => _nwDeviceClass(d) === 'solarCharger');

@@ -69,7 +69,7 @@ const ACTUATOR_FIELDS = new Set([
   'e3dcPowerLimitsUsedObjectId', 'e3dcMaxChargePowerObjectId',
   'e3dcMaxDischargePowerObjectId', 'setSignedPowerId',
   'setChargePowerId', 'setDischargePowerId', 'switchWriteId', 'setpointWriteId',
-  'sgReadyAWriteId', 'sgReadyBWriteId', 'sgReady1WriteId', 'sgReady2WriteId',
+  'sgReadyAWriteId', 'sgReadyBWriteId', 'sgReady1WriteId', 'sgReady2WriteId', 'miraPvStatusId', 'miraPowerTargetId',
   'writeId', 'writeObjectId', 'writeDp', 'dpWriteId',
   'stageWriteId', 'setpointId', 'outputObjectId', 'commandObjectId', 'commandStateId',
   'enableId', 'startWriteId', 'stopWriteId', 'runWriteId', 'startObjectId',
@@ -112,6 +112,7 @@ function ownerFromPath(path: string, row: AnyRecord | null): string {
   }
   if (lower.includes('storagefarm')) return `storageFarm.${rowId || raw}`;
   if (lower.includes('storage')) return `storage.${rowId || raw}`;
+  if (lower.includes('thermal') && row?.ovumMira === true && Number.isInteger(row.slot)) return `thermal.c${row.slot}`;
   if (lower.includes('thermal')) return `thermal.${rowId || raw}`;
   if (lower.includes('heatingrod')) return `heatingRod.${rowId || raw}`;
   if (lower.includes('threshold')) {

@@ -28,6 +28,10 @@
         MAPPED: 'Zuordnung gespeichert. Die bestehende Betriebsfreigabe bleibt erhalten.',
         MEASUREMENT_MAPPED: 'Messdatenpunkte zugeordnet; vorhandene App-Freigaben bleiben unverändert.',
         MAPPING_INCOMPLETE: 'Teilweise zugeordnet · die unten genannten Gerätefunktionen oder Einstellungen fehlen.',
+        MIRA_METER_PENDING: 'Für die Regelung ein eindeutiges Wärmepumpenmodul mit elektrischer Leistung zuordnen. Kaskaden können als einzelne Verbraucher angezeigt werden.',
+        MIRA_FLOW_FULL: 'Alle zehn sichtbaren Verbraucherplätze sind belegt. Eine bestehende Zuordnung im App-Center prüfen.',
+        MIRA_METER_ADDRESS: 'Busadresse des Wärmepumpenmoduls fehlt oder ist mehrfach eingerichtet.',
+        MIRA_MAPPING_REMOVED: 'Die frühere MIRA-Zuordnung wurde im App-Center geändert. Vorhandene Zuordnung prüfen.',
         NEEDS_SELECTION: 'Funktion und Ziel im Gerätefenster auswählen.',
         MANUAL_TOPOLOGY_REQUIRED: 'Zuordnung für diese Anlagentopologie im App-Center prüfen.',
         MISSING_ALIASES: 'Erforderliche Geräte-Datenpunkte fehlen noch.',
@@ -53,7 +57,7 @@
     });
     /** @type {Readonly<Record<string, string>>} */
     const missingLabels = Object.freeze({
-        powerId: 'Leistungsmesswert', 'r.power': 'Leistungsmesswert',
+        miraSources: 'Bestätigung der Quellenwahl am MIRA-Hydraulikmodul', powerId: 'Leistungsmesswert', 'r.power': 'Leistungsmesswert',
         'setCurrentAId|setPowerWId': 'Strom- oder Leistungssollwert',
         'onlineId|heartbeatId': 'Verbindungsstatus', socId: 'Ladezustand', socObjectId: 'Ladezustand',
         signedPowerId: 'Speicherleistung', batteryPowerObjectId: 'Speicherleistung',
@@ -157,6 +161,7 @@
             const value = intent(candidate.ems);
             if (!record(candidate.ems)) return device;
             const isRole = ['singleStorage', 'storageFarm', 'gridMeter', 'generationMeter', 'consumptionMeter', 'pvInverter'].includes(value.mode)
+                || (value.mode === 'auto' && candidate.templateId === 'heat.ovum.mira.hsm' && !!value.activation)
                 || (value.mode === 'auto' && ['EVCS', 'EVSE'].includes(String(candidate.category || '').toUpperCase()));
             if (!isRole || candidate.enabled === false) return device;
             const old = previous.get(candidate.id);

@@ -14,15 +14,16 @@
 /** @typedef {import('./eosDeviceEmsService').DeviceEmsSnapshot} DeviceEmsSnapshot */
 /** @typedef {import('./eosDeviceEmsService').DeviceEmsPublicView} DeviceEmsPublicView */
 /** @typedef {Record<string, unknown>} RecordValue */
+const { createHash } = require('node:crypto');
 const MAX_DEVICES = 128;
 const MAX_ALIASES = 512;
 const MAX_MANIFEST_BYTES = 65536;
 const CLASSES = new Set(['evCharger', 'meter', 'pvInverter', 'storageSystem', 'battery', 'batteryInverter', 'heat', 'io', 'solarCharger', 'generic']);
 const MODES = new Set(['auto', 'monitor', 'manual', 'singleStorage', 'storageFarm', 'gridMeter', 'generationMeter', 'consumptionMeter', 'pvInverter']);
 const RETRIES = [1000, 2000, 5000, 10000, 15000, 30000];
-const PLANNER_CONFIG_KEYS = Object.freeze(['settingsConfig', 'settings', 'storage', 'storageFarm', 'gridConstraints',
+const PLANNER_CONFIG_KEYS = Object.freeze(['enableThermalControl', 'settingsConfig', 'settings', 'storage', 'storageFarm', 'gridConstraints',
     'thermalControl', 'thermal', 'heatingRod', 'threshold', 'generator', 'bhkw',
-    'dynamicGridConnection', 'datapoints', 'vis', 'eosDeviceEms', 'emsApps']);
+    'dynamicGridConnection', 'datapoints', 'vis', 'flowSlots', 'eosDeviceEms', 'emsApps']);
 /** @param {unknown} value @returns {value is RecordValue} */
 function record(value) { return value !== null && typeof value === 'object' && !Array.isArray(value); }
 /** @param {string} code */
@@ -72,6 +73,10 @@ function publicIntent(value) {
                     if (limit !== 'ac' && limit !== 'dc') throw fail('EOS_EMS_ACTIVATION_INVALID');
                     limits[key] = limit;
                 }
+            }
+            if (activation.limits.miraSources !== undefined) {
+                if (activation.limits.miraSources !== 'confirmed') throw fail('EOS_EMS_ACTIVATION_INVALID');
+                limits.miraSources = 'confirmed';
             }
             if (activation.limits.phases !== undefined) {
                 if (activation.limits.phases !== 1 && activation.limits.phases !== 3) throw fail('EOS_EMS_ACTIVATION_INVALID');
@@ -300,6 +305,26 @@ class EosDeviceEmsService {
                     enabled: snapshot.moduleEnabled && device.enabled !== false, templateId: text(device.templateId), protocol: text(device.protocol, 32),
                     deviceClass: 'generic', category: '', aliases: {}, aliasMeta: {}, capabilities: [], missingRequired: [],
                     ems: publicIntent(device.ems) };
+                if (row.templateId === 'heat.ovum.mira.hsm' || row.templateId === 'heat.ovum.mira.wpm') {
+                    const connection = record(device.connection) ? device.connection : {};
+                    const hsm = row.templateId === 'heat.ovum.mira.hsm';
+                    const unit = Number(connection.unitId ?? (hsm ? 110 : 111));
+                    const tcp = row.protocol === 'modbusTcp';
+                    const endpoint = tcp ? text(connection.host, 253).trim().toLowerCase() : text(connection.path, 512).trim();
+                    const port = Number(connection.port ?? 502);
+                    if (endpoint && (tcp ? Number.isInteger(port) && port > 0 && port <= 65535 : row.protocol === 'modbusRtu')
+                        && Number.isInteger(unit) && (hsm ? unit === 110 : unit >= 111 && unit <= 118)) {
+                        // Never send hostnames, serial paths or login codes into the commissioning IPC.
+                        row.miraBus = createHash('sha256').update(JSON.stringify([row.protocol, endpoint, tcp ? port : null])).digest('hex');
+                        if (!tcp) {
+                            const framing = [Number(connection.baudRate || 9600), String(connection.parity || 'none'),
+                                Number(connection.dataBits || 8), Number(connection.stopBits || 1)];
+                            row.miraFraming = createHash('sha256').update(JSON.stringify(framing)).digest('hex');
+                        }
+                        row.miraUnit = unit;
+                    }
+                    if (hsm && Object.prototype.hasOwnProperty.call(connection, 'miraWpmDeviceId')) row.miraWpmDeviceId = safeId(connection.miraWpmDeviceId) ? connection.miraWpmDeviceId : '';
+                }
                 result[index] = row;
                 if (this.stopped || snapshot.generation !== this.options.getSnapshot().generation) throw fail('EOS_EMS_CONFIGURATION_CHANGED');
                 const budget = Math.min(3000, deadline - Date.now());

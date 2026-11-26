@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/lib/installer-lifecycle.ts
- * Quell-Hash: sha256:b6fb03d371839579e04a18d6a993414a41fdca9588fd143722c6174b39eae153
+ * Quell-Hash: sha256:b7631ce1e2cbbf152a346196d3f9f5e2a6cadcb731a71b99a1b91b8e9207bac8
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -145,7 +145,7 @@ function activeDeviceProfileReferences(value) {
     const singleActive = active('storage', 'enableStorageControl') && !(record(singleStorage._eosDevice).v === 1 && singleStorage.enabled === false);
     const read = new Set();
     const write = new Set();
-    const writeKey = /(?:write|^set|^target|^output(?:Object)?Id$|^(?:pv)?feedInLimit|^pvLimit|^runObjectId$|^maxChargeObjectId$|^maxDischargeObjectId$|^phaseSwitchId$|^chargeEnableObjectId$|^dischargeEnableObjectId$|^feneconGridSetpoint|^e3dcSetPower|^enableId$)/i;
+    const writeKey = /(?:^mira(?:PvStatus|PowerTarget)Id$|write|^set|^target|^output(?:Object)?Id$|^(?:pv)?feedInLimit|^pvLimit|^runObjectId$|^maxChargeObjectId$|^maxDischargeObjectId$|^phaseSwitchId$|^chargeEnableObjectId$|^dischargeEnableObjectId$|^feneconGridSetpoint|^e3dcSetPower|^enableId$)/i;
     let visited = 0;
     const walk = (item, depth = 0) => {
         if (depth > 12 || ++visited > 20000)
@@ -203,6 +203,15 @@ function activeDeviceProfileReferences(value) {
     // These global measurement keys are real runtime fallbacks for enabled
     // battery/charging controllers, not merely display references in that case.
     const controllerMeasurementKeys = [];
+    const thermalDevices = record(config.thermal).devices;
+    if (active('thermal', 'enableThermalControl') && Array.isArray(thermalDevices)) {
+        for (const item of thermalDevices) {
+            const row = record(item);
+            if (row.ovumMira === true && row.enabled === true && typeof row.slot === 'number' && Number.isInteger(row.slot) && row.slot >= 1 && row.slot <= 10) {
+                controllerMeasurementKeys.push(`consumer${row.slot}Power`);
+            }
+        }
+    }
     if (singleActive)
         controllerMeasurementKeys.push('batteryPower', 'storageChargePower', 'storageDischargePower', 'storageSoc', 'storageCapacityKwh');
     if (singleActive || active('storagefarm', 'enableStorageFarm') || active('charging', 'enableChargingManagement'))

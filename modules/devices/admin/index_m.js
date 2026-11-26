@@ -654,8 +654,17 @@ function downloadTextFile(filename, text, mime) {
   }, 0);
 }
 
+function printableDeviceConfiguration() {
+  const rows = (devices || []).map(device => {
+    if (!['heat.ovum.mira.hsm', 'heat.ovum.mira.wpm'].includes(device.templateId) || !device.connection?.writePassword) return device;
+    // Host-side secret placeholders survive importing into the same device.
+    return { ...device, connection: { ...device.connection, writePassword: '__EOS_SECRET_UNCHANGED__' } };
+  });
+  return JSON.stringify(rows, null, 2);
+}
+
 function exportDevicesJsonToFile() {
-  const text = JSON.stringify(devices || [], null, 2);
+  const text = printableDeviceConfiguration();
   downloadTextFile('nexowatt-devices.devices.json', text, 'application/json');
 }
 
@@ -829,6 +838,117 @@ function emsPresentation(device) {
   return window.EosDeviceEms.describe(device.id, device.ems, device.enabled);
 }
 
+const MIRA_HSM = 'heat.ovum.mira.hsm';
+const MIRA_WPM = 'heat.ovum.mira.wpm';
+
+function sameMiraEndpoint(a, b) {
+  if (a.protocol !== b.protocol) return false;
+  const x = a.connection || {}, y = b.connection || {};
+  if (a.protocol === 'modbusTcp') {
+    const host = String(x.host || '').trim().toLowerCase();
+    return !!host && host === String(y.host || '').trim().toLowerCase() && Number(x.port || 502) === Number(y.port || 502);
+  }
+  return a.protocol === 'modbusRtu' && !!normalizeSerialPath(x.path) && normalizeSerialPath(x.path) === normalizeSerialPath(y.path);
+}
+
+function miraCanLink(hsm, wpm) {
+  const unit = Number(wpm.connection?.unitId);
+  if (wpm.templateId !== MIRA_WPM || !Number.isInteger(unit) || unit < 111 || unit > 118) return false;
+  if (hsm.protocol === 'modbusTcp') return sameMiraEndpoint(hsm, wpm);
+  // Two separately wired RTU ports can belong to one plant. Linking across
+  // ports requires an explicit choice of an existing WPM.
+  return hsm.protocol === 'modbusRtu' && wpm.protocol === 'modbusRtu';
+}
+
+function miraPairingForm(reset) {
+  const area = document.getElementById('mira_pair_settings');
+  area.hidden = $('#dev_template').val() !== MIRA_HSM;
+  if (area.hidden) return;
+  const select = document.getElementById('mira_wpm_choice');
+  const unitSelect = document.getElementById('mira_wpm_unit');
+  const previous = editIndex < 0 ? null : devices[editIndex];
+  const stored = previous?.templateId === MIRA_HSM ? previous.connection?.miraWpmDeviceId : undefined;
+  const protocol = $('#dev_protocol').val();
+  const expected = { protocol, connection: protocol === 'modbusTcp'
+    ? { host: $('#mb_host').val(), port: $('#mb_port').val() } : { path: $('#mb_path').val() } };
+  let choice = reset ? '' : select.value;
+  if (!choice) choice = stored ? 'id:' + stored : stored === '' ? 'none' : editIndex < 0 ? 'same' : 'legacy';
+  const option = (value, title) => {
+    const el = document.createElement('option'); el.value = value; el.textContent = title; return el;
+  };
+  select.replaceChildren();
+  if (editIndex < 0) select.appendChild(option('same', 'Wärmepumpenmodul mit anlegen oder vorhandenes verwenden'));
+  if (editIndex >= 0 && stored === undefined) select.appendChild(option('legacy', 'Eindeutiges Modul am gleichen Anschluss erkennen'));
+  select.appendChild(option('none', 'Kein Modul zuordnen'));
+  for (const item of devices) {
+    if (miraCanLink(expected, item)) select.appendChild(option('id:' + item.id, item.id + ' · ' + summarizeConnection(item) + (item.enabled === false ? ' · deaktiviert' : '')));
+  }
+  if (choice.startsWith('id:') && !Array.from(select.options).some(x => x.value === choice)) {
+    select.appendChild(option(choice, choice.slice(3) + ' · Zuordnung prüfen'));
+  }
+  select.value = choice;
+  if (!unitSelect.options.length) {
+    for (let n = 1; n <= 8; n++) unitSelect.appendChild(option(String(110 + n), 'WPM ' + n + ' · Unit ' + (110 + n)));
+  }
+  if (reset) unitSelect.value = '111';
+  document.getElementById('mira_wpm_unit_field').hidden = choice !== 'same';
+  let hint = '';
+  if (choice === 'same') hint = 'EOS verwendet den Anschluss des HSM und übernimmt vorhandene Module mit passender Unit-ID.';
+  if (protocol === 'modbusRtu') hint += ' Bei getrennten RS485-Leitungen das WPM an seinem Port anlegen und hier auswählen.';
+  if (choice === 'none') hint = 'Das HSM kann separat eingerichtet werden. Für die automatische Leistungsregelung später das Messmodul zuordnen.';
+  document.getElementById('mira_pair_hint').textContent = hint.trim();
+}
+
+// Resolve the complete change before the device list is modified. An existing
+// WPM remains the same object, with its original login, settings and EMS mode.
+function planMiraPair(device, inventory, index, choice, unit) {
+  if (![MIRA_HSM, MIRA_WPM].includes(device.templateId)) return null;
+  const others = inventory.filter((_item, i) => i !== index);
+  const atUnit = (address) => others.filter(item => sameMiraEndpoint(device, item) && Number(item.connection?.unitId) === address);
+  if (atUnit(Number(device.connection.unitId)).length) throw new Error('Diese Modbus-Unit ist an diesem Anschluss bereits als Gerät angelegt.');
+  if (device.templateId !== MIRA_HSM || choice === 'legacy') return null;
+  if (choice === 'none') return { id: '' };
+  let match;
+  if (choice === 'same' && index < 0) {
+    if (!Number.isInteger(unit) || unit < 111 || unit > 118) throw new Error('Ein Wärmepumpenmodul von WPM 1 bis 8 auswählen.');
+    const found = atUnit(unit);
+    if (found.length > 1 || (found.length && !miraCanLink(device, found[0]))) {
+      throw new Error('Die ausgewählte WPM-Unit ist am Anschluss bereits einem anderen Gerät zugeordnet.');
+    }
+    match = found[0];
+    if (!match) {
+      // Keep the generated ID within the device host's 80-character limit.
+      const prefix = device.id.slice(0, 70) + '_wpm' + (unit - 110);
+      const ids = new Set(inventory.map(item => item.id));
+      ids.add(device.id);
+      let id = prefix;
+      for (let n = 2; ids.has(id); n++) id = prefix + '_' + n;
+      if (inventory.length + 2 > 128) throw new Error('Für HSM und WPM werden zwei freie Geräteplätze benötigt.');
+      const connection = { unitId: unit };
+      for (const key of ['host','port','path','baudRate','parity','dataBits','stopBits','addressOffset','wordOrder','byteOrder','timeoutMs','writePassword']) {
+        if (device.connection[key] !== undefined) connection[key] = device.connection[key];
+      }
+      if (connection.writePassword === '__EOS_SECRET_UNCHANGED__') throw new Error('Den lokalen MIRA-Login-Code für das neue WPM eingeben.');
+      return { id, companion: { id, name: (device.name || device.id) + ' · WPM ' + (unit - 110),
+        templateId: MIRA_WPM, manufacturer: device.manufacturer, category: device.category, protocol: device.protocol,
+        enabled: device.enabled !== false, pollIntervalMs: device.pollIntervalMs, heartbeatTimeoutMs: device.heartbeatTimeoutMs,
+        ems: { mode: 'auto' }, connection } };
+    }
+  } else if (choice && choice.startsWith('id:')) {
+    const found = others.filter(item => item.id === choice.slice(3));
+    if (found.length === 1 && miraCanLink(device, found[0])) match = found[0];
+  }
+  if (!match) throw new Error('Ein passendes MIRA-WPM auswählen oder das HSM separat einrichten.');
+  if (others.some(item => item !== match && sameMiraEndpoint(match, item) && Number(item.connection?.unitId) === Number(match.connection.unitId))) {
+    throw new Error('Die ausgewählte WPM-Unit ist am Anschluss mehrfach angelegt.');
+  }
+  if (others.some(item => item.templateId === MIRA_HSM && (item.connection?.miraWpmDeviceId === match.id ||
+    (!Object.hasOwn(item.connection || {}, 'miraWpmDeviceId') && sameMiraEndpoint(item, match))))) {
+    throw new Error('Dieses WPM ist bereits einem anderen HSM zugeordnet.');
+  }
+  return { id: match.id };
+}
+
 function updateEmsControls(settings) {
   const api = window.EosDeviceEms;
   const current = settings || {
@@ -848,8 +968,11 @@ function updateEmsControls(settings) {
   select.value = choices.some(choice => choice.value === desired.mode) ? desired.mode : 'auto';
   document.getElementById('dev_ems_scope').value = desired.scope || '';
   if (settings) {
-    document.getElementById('dev_ems_requested').checked = desired.activation?.requested !== false;
+    const mira = $('#dev_template').val() === 'heat.ovum.mira.hsm';
+    document.getElementById('dev_ems_requested').checked = mira ? desired.activation?.requested === true : desired.activation?.requested !== false;
     const limits = desired.activation?.limits || {};
+    document.getElementById('dev_ems_miraSources').checked = mira && limits.miraSources === 'confirmed';
+    document.getElementById('dev_ems_miraMaxW').value = mira ? limits.maxPowerW ?? '' : '';
     for (const key of ['coupling', 'maxChargeW', 'maxDischargeW', 'capacityKWh', 'chargerType', 'phases', 'minCurrentA', 'maxCurrentA', 'minPowerW', 'maxPowerW']) {
       const control = document.getElementById('dev_ems_' + key);
       control.value = Object.hasOwn(limits, key) ? String(Reflect.get(limits, key)) : '';
@@ -883,16 +1006,18 @@ function updateEmsActivation() {
   const category = String($('#dev_category').val() || '').toUpperCase();
   const storage = ['singleStorage', 'storageFarm'].includes(mode);
   const charger = mode === 'auto' && ['EVCS', 'EVSE'].includes(category);
-  const applicable = storage || charger || ['gridMeter', 'generationMeter', 'consumptionMeter', 'pvInverter'].includes(mode);
+  const mira = mode === 'auto' && $('#dev_template').val() === 'heat.ovum.mira.hsm';
+  if (mira) document.getElementById('dev_ems_help').textContent = 'Die elektrische Aufnahmeleistung des Wärmepumpenmoduls erscheint im Energiefluss. Für PV-Regelung Quellenwahl bestätigen und die elektrische Leistungsgrenze der Anlage eintragen.';
+  const applicable = storage || charger || mira || ['gridMeter', 'generationMeter', 'consumptionMeter', 'pvInverter'].includes(mode);
   document.getElementById('dev_ems_activation_field').hidden = !applicable;
   const requested = document.getElementById('dev_ems_requested').checked;
   const type = document.getElementById('dev_ems_chargerType').value;
   for (const field of document.querySelectorAll('[data-ems-limit]')) {
     const group = field.dataset.emsLimit;
-    field.hidden = !requested || !(group === 'storage' && storage || group === 'charger' && charger || group === type && charger);
+    field.hidden = !requested || !(group === 'storage' && storage || group === 'charger' && charger || group === type && charger || group === 'mira' && mira);
   }
-  document.getElementById('dev_ems_limits_help').hidden = !requested || !(storage || charger);
-  document.getElementById('dev_ems_limits_title').hidden = !requested || !(storage || charger);
+  document.getElementById('dev_ems_limits_help').hidden = !requested || !(storage || charger || mira);
+  document.getElementById('dev_ems_limits_title').hidden = !requested || !(storage || charger || mira);
 }
 
 function collectEmsActivation(value, previous) {
@@ -900,7 +1025,21 @@ function collectEmsActivation(value, previous) {
   const requested = document.getElementById('dev_ems_requested').checked;
   const limits = { ...(previous?.activation?.limits || {}) };
   const storage = ['singleStorage', 'storageFarm'].includes(value.mode);
-  const charger = value.mode === 'auto';
+  const charger = value.mode === 'auto' && ['EVCS','EVSE'].includes(String($('#dev_category').val()).toUpperCase());
+  const mira = value.mode === 'auto' && $('#dev_template').val() === 'heat.ovum.mira.hsm';
+  if (mira) {
+    const maxPowerW = Number(document.getElementById('dev_ems_miraMaxW').value);
+    const confirmed = document.getElementById('dev_ems_miraSources').checked;
+    if (requested && (!confirmed || !Number.isSafeInteger(maxPowerW) || maxPowerW < 1 || maxPowerW > 10000000)) {
+      throw new Error('Für die MIRA-Regelung die Quellenwahl am HSM bestätigen und eine gültige elektrische Leistungsgrenze in Watt eingeben.');
+    }
+    value.activation = { requested, limits: {
+      ...(confirmed ? { miraSources: 'confirmed' } : {}),
+      ...(Number.isSafeInteger(maxPowerW) && maxPowerW > 0 && maxPowerW <= 10000000 ? { maxPowerW } : {}),
+    } };
+    if (previous?.activation?.requestId) value.activation.requestId = previous.activation.requestId;
+    return;
+  }
   const kind = document.getElementById('dev_ems_chargerType').value;
   const fields = storage ? ['coupling', 'maxChargeW', 'maxDischargeW', 'capacityKWh']
     : charger ? ['chargerType', ...(kind === 'dc' ? ['minPowerW', 'maxPowerW'] : ['phases', 'minCurrentA', 'maxCurrentA'])] : [];
@@ -1197,7 +1336,18 @@ function renderProfileCapabilities(template) {
 }
 
 function renderDatapoints(templateId) {
+  const check = document.getElementById('dev_ems_requested');
+  if (check.dataset.emsTemplate !== templateId) {
+    if (templateId === 'heat.ovum.mira.hsm' && !(editIndex >= 0 && devices[editIndex]?.templateId === templateId)) {
+      check.checked = false;
+      document.getElementById('dev_ems_miraSources').checked = false;
+      document.getElementById('dev_ems_miraMaxW').value = '';
+    }
+    check.dataset.emsTemplate = templateId;
+  }
+  updateEmsActivation();
   const tpl = templatesById[templateId];
+  $('.mira-login-hint').toggle(!!tpl?.driverHints?.ovumMira);
   renderProfileCapabilities(tpl);
   renderVartaOptions(tpl);
   renderDeyeOptions(tpl);
@@ -1241,7 +1391,6 @@ function openDeviceModal(device, idx) {
   const cat = device.category || categories[0] || 'GENERIC';
   $('#dev_category').val(cat);
   refreshSelect($('#dev_category'));
-  updateEmsControls(device.ems || {});
 
   fillManufacturerSelect(cat);
   const manuList = manufacturersByCategory[cat] || [];
@@ -1254,6 +1403,7 @@ function openDeviceModal(device, idx) {
   const tpl = templatesById[tplId] || null;
   $('#dev_template').val(tplId);
   refreshSelect($('#dev_template'));
+  updateEmsControls(device.ems || {});
 
   fillProtocolSelect(tplId, device.protocol);
 
@@ -1442,6 +1592,7 @@ function openDeviceModal(device, idx) {
   // Populate serial port datalist from the host (supports hotplug).
   refreshSerialPorts(true);
 
+  miraPairingForm(true);
   updateTextFields();
   openModal();
 }
@@ -1699,7 +1850,7 @@ function collectDeviceFromModal() {
 }
 
 function updateJsonPreview() {
-  const jsonStr = JSON.stringify(devices || [], null, 2);
+  const jsonStr = printableDeviceConfiguration();
   $('#devicesJson').val(jsonStr);
   $('#jsonPreview').text(jsonStr);
 }
@@ -1949,6 +2100,9 @@ function initEventHandlers() {
     }
   });
 
+  $('#dev_category,#dev_manufacturer,#dev_template').on('change', () => miraPairingForm(true));
+  $('#dev_protocol,#mb_path,#mb_host,#mb_port,#mira_wpm_choice').on('change', () => miraPairingForm(false));
+
   // Save device
   $('#btnSaveDevice').on('click', () => {
     try {
@@ -1970,12 +2124,16 @@ function initEventHandlers() {
         );
       }
 
+      const pair = planMiraPair(d, devices, editIndex, $('#mira_wpm_choice').val(), Number($('#mira_wpm_unit').val()));
+      if (pair) d.connection.miraWpmDeviceId = pair.id;
       if (editIndex >= 0) {
         const previous = devices[editIndex];
         devices[editIndex] = { ...previous, ...d, connection: previous.protocol === d.protocol ? { ...previous.connection, ...d.connection } : d.connection };
         for (const key of ['insecureTls', 'insecureTLS', 'allowInsecureTls', 'rejectUnauthorized']) delete devices[editIndex].connection[key];
+        if (d.templateId !== MIRA_HSM) delete devices[editIndex].connection.miraWpmDeviceId;
       } else {
         devices.push(d);
+        if (pair?.companion) devices.push(pair.companion);
       }
 
       if (emsRenewalRequested) window.EosDeviceEms.requestRenewal(d.id);
@@ -1986,6 +2144,7 @@ function initEventHandlers() {
       setChanged(true);
 
       closeModal();
+      if (pair?.id) toast((pair.companion ? 'Wärmepumpenmodul hinzugefügt: ' : 'Vorhandenes Wärmepumpenmodul zugeordnet: ') + pair.id);
     } catch (e) {
       toast('Fehler: ' + (e.message || e.toString()));
     }

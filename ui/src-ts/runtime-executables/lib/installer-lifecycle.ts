@@ -115,7 +115,7 @@ export function activeDeviceProfileReferences(value: unknown): { read: string[];
     const singleStorage = record(config.storage);
     const singleActive = active('storage', 'enableStorageControl') && !(record(singleStorage._eosDevice).v === 1 && singleStorage.enabled === false);
     const read = new Set<string>(); const write = new Set<string>();
-    const writeKey = /(?:write|^set|^target|^output(?:Object)?Id$|^(?:pv)?feedInLimit|^pvLimit|^runObjectId$|^maxChargeObjectId$|^maxDischargeObjectId$|^phaseSwitchId$|^chargeEnableObjectId$|^dischargeEnableObjectId$|^feneconGridSetpoint|^e3dcSetPower|^enableId$)/i;
+    const writeKey = /(?:^mira(?:PvStatus|PowerTarget)Id$|write|^set|^target|^output(?:Object)?Id$|^(?:pv)?feedInLimit|^pvLimit|^runObjectId$|^maxChargeObjectId$|^maxDischargeObjectId$|^phaseSwitchId$|^chargeEnableObjectId$|^dischargeEnableObjectId$|^feneconGridSetpoint|^e3dcSetPower|^enableId$)/i;
     let visited = 0;
     const walk = (item: unknown, depth = 0): void => {
         if (depth > 12 || ++visited > 20000) throw new Error('EOS_DEVICES_PROFILE_CHECK_UNAVAILABLE');
@@ -155,6 +155,15 @@ export function activeDeviceProfileReferences(value: unknown): { read: string[];
     // These global measurement keys are real runtime fallbacks for enabled
     // battery/charging controllers, not merely display references in that case.
     const controllerMeasurementKeys: string[] = [];
+    const thermalDevices = record(config.thermal).devices;
+    if (active('thermal', 'enableThermalControl') && Array.isArray(thermalDevices)) {
+        for (const item of thermalDevices) {
+            const row = record(item);
+            if (row.ovumMira === true && row.enabled === true && typeof row.slot === 'number' && Number.isInteger(row.slot) && row.slot >= 1 && row.slot <= 10) {
+                controllerMeasurementKeys.push(`consumer${row.slot}Power`);
+            }
+        }
+    }
     if (singleActive) controllerMeasurementKeys.push('batteryPower', 'storageChargePower', 'storageDischargePower', 'storageSoc', 'storageCapacityKwh');
     if (singleActive || active('storagefarm', 'enableStorageFarm') || active('charging', 'enableChargingManagement')) controllerMeasurementKeys.push('pvPower');
     for (const key of controllerMeasurementKeys) {

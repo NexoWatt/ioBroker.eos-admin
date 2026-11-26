@@ -1,0 +1,112 @@
+{
+  "version": "9.0.34",
+  "command": "npm test",
+  "nodeVersions": {
+    "22": "v22.23.4",
+    "24": "v24.22.3"
+  },
+  "fullTests": {
+    "node22-tests-final": {
+      "tests": 2850,
+      "pass": 2848,
+      "fail": 0,
+      "skipped": 2,
+      "cancelled": 0
+    },
+    "node24-tests-final": {
+      "tests": 2850,
+      "pass": 2848,
+      "fail": 0,
+      "skipped": 2,
+      "cancelled": 0
+    }
+  },
+  "phaseTestResults": {
+    "22": [
+      {
+        "tests": 2044,
+        "pass": 2042,
+        "fail": 0,
+        "skipped": 2,
+        "cancelled": 0,
+        "todo": 0
+      },
+      {
+        "tests": 55,
+        "pass": 55,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      {
+        "tests": 655,
+        "pass": 655,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      {
+        "tests": 4,
+        "pass": 4,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      {
+        "tests": 92,
+        "pass": 92,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      }
+    ],
+    "24": [
+      {
+        "tests": 2044,
+        "pass": 2042,
+        "fail": 0,
+        "skipped": 2,
+        "cancelled": 0,
+        "todo": 0
+      },
+      {
+        "tests": 55,
+        "pass": 55,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      {
+        "tests": 655,
+        "pass": 655,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      {
+        "tests": 4,
+        "pass": 4,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      {
+        "tests": 92,
+        "pass": 92,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      }
+    ]
+  },
+  "typeLintBuild": "passed",
+  "targetHardwareAcceptance": "open"
+}

@@ -27,7 +27,7 @@
  * - Die produktive API-Antwort und Schreiblogik bleiben weiterhin JavaScript.
  * 1.0.32: Partner-Lifecycle, geschützte CAS-Freigaben und unabhängige Arbitrage-App
  * wurden aus der kanonischen Quelle abgeglichen; bestehende Typblöcke bleiben erhalten.
- * Original-Hash: 806d7ebb463de3f072f040e00d94089f01a2885da75b45a3793d03fdf4a61a89
+ * Original-Hash: a5561900a858251b61263beb10e43d140a8ee61c48248c3f6b564c256993ce99
  * RC75-Prüfhinweis: Open-Meteo übernimmt den zentralen EOS-Admin-/Systemstandort,
  * veröffentlicht nur nutzbare Prognosekurven als aktiv und stellt PV-Flächen unabhängig
  * von verzögerter Settings-Hydrierung über eine einfache Endkundentabelle bereit.
@@ -577,6 +577,16 @@ const {
 } = require('./lib/smarthome-contract');
 
 // Abschnitt: Kleine HTTP-/Auth-Helfer. Diese Funktionen werden von Login-, Lizenz- und Installer-Endpunkten genutzt.
+/** The MIRA controller accepts PV requests only after device commissioning.
+ * Quick controls change EMS intent. They never address MIRA registers directly.
+ */
+function miraFlowControlReady(device) {
+  return device?.ovumMira === true && device.enabled === true && device.miraSourcesConfirmed === true
+    && Number.isSafeInteger(device.maxPowerW) && device.maxPowerW > 0
+    && [device.miraPvStatusId, device.miraPvStatusReadId, device.miraPowerTargetId, device.miraPowerTargetReadId]
+      .every(id => typeof id === 'string' && id.trim().length > 0);
+}
+
 /**
  * Code-Teil: parseCookies
  * Zweck: Parst Rohdaten in ein sicheres internes Format.
@@ -23933,10 +23943,10 @@ app.get('/config', async (req, res) => {
         // Wir geben bewusst nur Metadaten (Name + Slot + gemappt?) zurück – keine Fremd-State-IDs.
 	        flowSlots: (() => {
 	          // Energy-flow: optional slots
-	          // Consumers: max 9
+	          // Consumers: max 10
 	          // Producers: reduced to max 5
 	          const SLOT_COUNT_BY_KIND = {
-	            consumers: 9,
+	            consumers: 10,
 	            producers: 5,
 	          };
           const dps = (cfg && cfg.datapoints && typeof cfg.datapoints === 'object') ? cfg.datapoints : {};
@@ -24132,6 +24142,18 @@ app.get('/config', async (req, res) => {
                 if (!dev) dev = tlist.find(r => r && Math.round(Number(r.slot ?? r.consumerSlot ?? 0)) === idx) || null;
                 const holdMin = Math.max(0, Math.round(Number(t.manualHoldMin ?? 20)));
                 meta.manualHoldMin = holdMin;
+                if (dev?.ovumMira === true) {
+                  meta.controlKind = 'thermal';
+                  meta.ovumMira = true;
+                  meta.enabled = miraFlowControlReady(dev) && slotType === 'heatPump';
+                  meta.hasSwitch = false;
+                  meta.hasSetpoint = false;
+                  meta.hasSgReady = false;
+                  meta.hasBoost = meta.enabled && dev.boostEnabled !== false;
+                  meta.boostMinutes = meta.hasBoost ? Math.max(0, Number(dev.boostDurationMin ?? 30)) : null;
+                  meta.max = dev.maxPowerW;
+                  return meta;
+                }
                 if (dev && dev.boostEnabled !== false && enabled) {
                   meta.hasBoost = true;
                   const mins = Math.max(0, Math.round(Number(dev.boostDurationMin ?? 30)));
@@ -26114,6 +26136,13 @@ settingsConfig: {
           };
 
           // Boost override – local runtime override, no direct foreign DP.
+          const miraDevice = kind === 'consumers' ? resolveThermalDev() : null;
+          if (miraDevice?.ovumMira === true) {
+            if (slotType !== 'heatPump' || !cfg.enableThermalControl || !miraFlowControlReady(miraDevice)) {
+              return res.status(409).json({ ok: false, error: 'not_ready' });
+            }
+            if (prop === 'setpoint' || prop === 'switch') return res.status(409).json({ ok: false, error: 'ems_owned' });
+          }
           if (prop === 'boost') {
             if (kind !== 'consumers') return res.status(400).json({ ok: false, error: 'bad request' });
             const idLocal = `c${idx}`;
@@ -26808,7 +26837,8 @@ settingsConfig: {
               const effectiveMode = (userMode !== 'inherit') ? userMode : cfgMode;
 
               out.thermal = {
-                available: true,
+                available: dev.ovumMira === true ? miraFlowControlReady(dev) && slotType === 'heatPump' : true,
+                ovumMira: dev.ovumMira === true,
                 cfgEnabled: !!cfgEnabled,
                 cfgMode,
                 userEnabled: !!userEnabled,
@@ -26818,8 +26848,8 @@ settingsConfig: {
                 modes: [
                   { value: 'inherit', label: 'System' },
                   { value: 'pvAuto', label: 'Auto (PV)' },
-                  { value: 'manual', label: 'Manuell' },
-                  { value: 'off', label: 'Aus' },
+                  { value: 'manual', label: dev.ovumMira === true ? 'Geräteregelung' : 'Manuell' },
+                  { value: 'off', label: dev.ovumMira === true ? 'PV-Anforderung aus' : 'Aus' },
                 ],
               };
             }

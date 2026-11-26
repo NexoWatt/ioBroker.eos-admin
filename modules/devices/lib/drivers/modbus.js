@@ -33,7 +33,7 @@ function _errMsg(err) {
 // They must abort the whole snapshot without marking valid optional registers
 // unsupported for the subsequent permitted poll.
 function isReadOperationBoundaryError(err) {
-  return ['EOS_DEVICES_NOT_AUTHORIZED', 'EOS_DEVICES_STOPPED', 'EOS_MODULE_STOPPED', 'EOS_OWNERSHIP_REQUIRED', 'E_MODBUS_CONNECT_CANCELLED']
+  return ['EOS_DEVICES_NOT_AUTHORIZED', 'EOS_DEVICES_STOPPED', 'EOS_MODULE_STOPPED', 'EOS_OWNERSHIP_REQUIRED', 'E_MODBUS_CONNECT_CANCELLED', 'EOS_MIRA_LOGIN']
     .includes(_errCode(err) || _errMsg(err));
 }
 

@@ -16,7 +16,7 @@
  * @typedef {import('./eosDeviceEmsPlan').Json} Json
  * @typedef {{[key: string]: Json}} Dict
  * @typedef {{id: string, type: string, unit: string, read: boolean, write: boolean, targetId: string, powerCapabilityValidated: boolean}} Alias
- * @typedef {{baseId: string, devId: string, name: string, templateId: string, protocol: string, deviceClass: string, enabled: boolean, aliases: Map<string, Alias>, ems: Dict, discoveryCode: string}} Device
+ * @typedef {{baseId: string, devId: string, name: string, templateId: string, protocol: string, deviceClass: string, enabled: boolean, aliases: Map<string, Alias>, ems: Dict, discoveryCode: string, miraBus:string, miraFraming:string, miraUnit:number, miraWpmDeviceId?:string}} Device
  * @typedef {{baseId: string, devId: string, status: string, code: string, target: string, mappedFields: string[], missing: string[], optionalMissing: string[], activationRequestId: string, activationApplied: boolean, corrections:string[]}} Status
  */
 const MODES = new Set(['auto', 'monitor', 'manual', 'singleStorage', 'storageFarm', 'gridMeter', 'generationMeter', 'consumptionMeter', 'pvInverter']);
@@ -117,6 +117,10 @@ function device(raw) {
                 if (typeof value !== 'number' || !Number.isFinite(value) || value <= 0 || value > 1000000000)
                     throw fail('EOS_EMS_PLAN_ACTIVATION_INVALID');
             }
+            else if (key === 'miraSources') {
+                if (value !== 'confirmed' || row.templateId !== 'heat.ovum.mira.hsm')
+                    throw fail('EOS_EMS_PLAN_ACTIVATION_INVALID');
+            }
             else if (key === 'coupling' || key === 'chargerType') {
                 if (value !== 'ac' && value !== 'dc')
                     throw fail('EOS_EMS_PLAN_ACTIVATION_INVALID');
@@ -147,7 +151,11 @@ function device(raw) {
             write: meta.write === true, targetId: target || id, powerCapabilityValidated: meta.powerCapabilityValidated === true });
     }
     return { baseId, devId, name: text(row.name).slice(0, 128) || devId, templateId: text(row.templateId), protocol: text(row.protocol), deviceClass: text(row.deviceClass),
-        enabled: row.enabled !== false, aliases, ems, discoveryCode: text(row.discoveryCode) };
+        enabled: row.enabled !== false, aliases, ems, discoveryCode: text(row.discoveryCode),
+        miraBus: /^[a-f0-9]{64}$/.test(text(row.miraBus)) ? text(row.miraBus) : '',
+        miraFraming: /^[a-f0-9]{64}$/.test(text(row.miraFraming)) ? text(row.miraFraming) : '',
+        miraUnit: Number.isInteger(row.miraUnit) ? Number(row.miraUnit) : 0,
+        ...(Object.prototype.hasOwnProperty.call(row, 'miraWpmDeviceId') ? { miraWpmDeviceId: text(row.miraWpmDeviceId) } : {}) };
 }
 /** @param {Device} dev @param {string[]} keys @param {boolean} [write] @param {string[]} [types] @param {string[]} [units] @returns {string} */
 function alias(dev, keys, write = false, types = ['number'], units = []) {
@@ -213,7 +221,7 @@ function getDeviceEmsReferences(value) {
     const config = copyConfig(value);
     const read = new Set();
     const write = new Set();
-    const writeKey = /(?:write|^set|^target|^output(?:Object)?Id$|^(?:pv)?feedInLimit|^pvLimit|^runObjectId$|^maxChargeObjectId$|^maxDischargeObjectId$|^phaseSwitchId$|^chargeEnableObjectId$|^dischargeEnableObjectId$|^feneconGridSetpoint|^e3dcSetPower|^enableId$)/i;
+    const writeKey = /(?:^mira(?:PvStatus|PowerTarget)Id$|write|^set|^target|^output(?:Object)?Id$|^(?:pv)?feedInLimit|^pvLimit|^runObjectId$|^maxChargeObjectId$|^maxDischargeObjectId$|^phaseSwitchId$|^chargeEnableObjectId$|^dischargeEnableObjectId$|^feneconGridSetpoint|^e3dcSetPower|^enableId$)/i;
     /** @param {unknown} item @param {number} depth */
     const walk = (item, depth) => {
         if (!item || typeof item !== 'object' || depth > 12)
@@ -229,7 +237,7 @@ function getDeviceEmsReferences(value) {
         }
     };
     for (const item of [record(config.settingsConfig).evcsList, config.storage, config.storageFarm,
-        config.gridConstraints, config.thermalControl, config.thermal, config.vis, config.heatingRod, config.threshold,
+        config.gridConstraints, config.thermalControl, config.thermal, config.vis, config.flowSlots, config.heatingRod, config.threshold,
         config.generator, config.bhkw, config.dynamicGridConnection])
         walk(item, 0);
     for (const [key, id] of Object.entries(record(config.datapoints))) {
@@ -385,7 +393,7 @@ function planDeviceEms(input) {
             fill(next, 'energyTotalInputIsWh', meta?.unit === 'Wh', result);
         }
         if (conflict(dev, next, [list.filter(item => item !== row), config.storage, config.storageFarm, config.gridConstraints,
-            config.thermalControl, config.thermal, config.vis, config.heatingRod, config.threshold, config.generator, config.bhkw])) {
+            config.thermalControl, config.thermal, config.vis, config.flowSlots, config.heatingRod, config.threshold, config.generator, config.bhkw])) {
             result.status = 'conflict';
             result.code = 'CONTROL_TARGET_ALREADY_ASSIGNED';
             result.mappedFields = [];
@@ -667,8 +675,8 @@ function planDeviceEms(input) {
         result.status = 'mapped';
         result.code = result.missing.length ? 'MAPPING_INCOMPLETE' : row.enabled === false ? 'COMMISSIONING_REQUIRED' : 'MAPPED';
     };
-    /** @param {Device} dev @param {Status} result @param {string} mode */
-    const measurement = (dev, result, mode) => {
+    /** @param {Device} dev @param {Status} result @param {string} mode @param {number} [suggestedSlot] */
+    const measurement = (dev, result, mode, suggestedSlot) => {
         const power = alias(dev, mode === 'pvInverter' ? ['r.pvPower', 'r.power'] : ['r.power'], false, ['number'], ['W']);
         if (!power) {
             result.code = 'ALIASES_PENDING';
@@ -726,7 +734,7 @@ function planDeviceEms(input) {
             return;
         }
         let key = '';
-        let slot = dev.ems.flowSlot;
+        let slot = suggestedSlot ?? dev.ems.flowSlot;
         let kind = '';
         if (mode === 'gridMeter') {
             if (dev.ems.scope !== 'M0') {
@@ -800,6 +808,114 @@ function planDeviceEms(input) {
         result.status = 'mapped';
         result.code = 'MEASUREMENT_MAPPED';
     };
+    const isWpm = (/** @type {Device} */ dev) => dev.templateId === 'heat.ovum.mira.wpm';
+    const isHsm = (/** @type {Device} */ dev) => dev.templateId === 'heat.ovum.mira.hsm';
+    const miraWpms = devices.filter(isWpm);
+    const miraHsms = devices.filter(isHsm);
+    const thermalRows = () => Array.isArray(record(config.thermal).devices) ? /** @type {Dict[]} */ (record(config.thermal).devices) : [];
+    const flowRows = () => {
+        const consumers = record(record(config.vis).flowSlots).consumers;
+        return Array.isArray(consumers) ? consumers.map(record) : [];
+    };
+    const usableWpm = (/** @type {Device} */ dev) => dev.enabled && ['auto', 'monitor'].includes(text(dev.ems.mode) || 'auto')
+        && !!dev.miraBus && dev.miraUnit >= 111 && dev.miraUnit <= 118;
+    /** Explicit pairing allows a dedicated RTU line. A cascade has no proven aggregate electrical meter. */
+    function meterFor(/** @type {Device} */ hsm) {
+        if (!hsm.miraBus || hsm.miraUnit !== 110 || miraHsms.filter(other => other.miraBus === hsm.miraBus).length !== 1)
+            return undefined;
+        const onBus = miraWpms.filter(wpm => wpm.miraBus === hsm.miraBus);
+        if (onBus.length > 1)
+            return undefined;
+        const wpm = hsm.miraWpmDeviceId === undefined ? onBus[0] : miraWpms.find(item => item.devId === hsm.miraWpmDeviceId);
+        if (!wpm || !usableWpm(wpm) || onBus.length && onBus[0] !== wpm)
+            return undefined;
+        if (wpm.miraBus === hsm.miraBus && wpm.miraFraming !== hsm.miraFraming)
+            return undefined;
+        if (wpm.miraBus !== hsm.miraBus && !(wpm.protocol === 'modbusRtu' && hsm.protocol === 'modbusRtu' && hsm.miraWpmDeviceId))
+            return undefined;
+        if (miraWpms.some(other => other !== wpm && other.miraBus === wpm.miraBus))
+            return undefined;
+        if (miraHsms.some(other => other !== hsm && (other.miraWpmDeviceId === wpm.devId ||
+            other.miraBus === wpm.miraBus && other.miraWpmDeviceId === undefined)))
+            return undefined;
+        return wpm;
+    }
+    const wiring = (/** @type {Device} */ hsm, /** @type {Device} */ wpm) => createHash('sha256').update(JSON.stringify([hsm.baseId, hsm.miraBus, hsm.miraFraming, hsm.miraUnit, wpm.baseId, wpm.miraBus, wpm.miraFraming, wpm.miraUnit])).digest('hex');
+    /** Read-only fields also used by older slot exports. */
+    const slotPowerIds = (/** @type {Dict} */ slot) => ['objectId', 'powerReadId', 'powerObjectId', 'powerId', 'powerWId', 'powerDpId', 'powerDp', 'datapointId', 'dataPointId', 'stateId', 'dpId', 'dp']
+        .map(key => text(slot[key])).filter(Boolean);
+    /** App-Center persists untouched rows for every slot. An installer-modified row remains reserved. */
+    function blankThermal(/** @type {Dict} */ row, /** @type {number} */ slot) {
+        /** @type {Dict} */
+        const defaults = { slot, enabled: false, mode: 'pvAuto', name: '', type: 'power', profile: 'heating', priority: 100 + slot,
+            maxPowerW: 2500, estimatedPowerW: 1500, startSurplusW: 800, stopSurplusW: 300, minOnSec: 300, minOffSec: 300,
+            autoOnSetpoint: 55, autoOffSetpoint: 45, boostSetpoint: 60, boostEnabled: true, boostDurationMin: 30, boostPowerW: 2500, maxSgStage: 4 };
+        return Object.entries(row).every(([key, value]) => Object.prototype.hasOwnProperty.call(defaults, key) && defaults[key] === value);
+    }
+    function miraMeter(/** @type {Device} */ dev, /** @type {Status} */ result) {
+        if (!usableWpm(dev) || miraWpms.some(other => other !== dev && other.miraBus === dev.miraBus && other.miraUnit === dev.miraUnit)) {
+            result.status = 'conflict';
+            result.code = 'MIRA_METER_ADDRESS';
+            return;
+        }
+        const power = alias(dev, ['r.power'], false, ['number'], ['W']);
+        if (!power) {
+            result.missing.push('r.power');
+            return;
+        }
+        const dp = record(config.datapoints);
+        const slots = flowRows();
+        const legacySlots = record(config.flowSlots).consumers;
+        const managed = slots.findIndex(slot => record(slot._eosDevice).baseId === dev.baseId);
+        const old = /^consumer([1-9]|10)Power$/.exec(text(binding(dev).target));
+        if (old && (managed !== Number(old[1]) - 1 || dp[old[0]] !== power && !(empty(dp[old[0]]) && binding(dev).miraDetached === true))) {
+            result.status = 'manual';
+            result.code = 'MIRA_MAPPING_REMOVED';
+            return;
+        }
+        // Limit selection to the ten consumers supported throughout the dashboard/API.
+        const keys = Array.from({ length: 10 }, (_, i) => `consumer${i + 1}Power`);
+        const explicitName = (/** @type {Dict} */ slot, /** @type {number} */ i) => {
+            const name = text(slot.name);
+            return !!name && name !== `Verbraucher ${i + 1}` && !(i === 0 && name === 'Heizung/Wärmepumpe');
+        };
+        const ownsSlot = (/** @type {Dict} */ slot, /** @type {number} */ i) => !!slot._eosDevice || explicitName(slot, i) || slotPowerIds(slot).length > 0 || mappedIds(slot.ctrl).length > 0
+            || record(slot.ctrl).enabled === true || !!text(slot.icon) || !['', 'generic', 'auto'].includes(text(slot.consumerType));
+        const slotIndex = managed >= 0 ? managed : keys.findIndex((key, i) => empty(dp[key]) && !ownsSlot(slots[i] || {}, i) && !(Array.isArray(legacySlots) && ownsSlot(record(legacySlots[i]), i))
+            && !thermalRows().some(row => Number(row.slot ?? row.consumerSlot) === i + 1 && !blankThermal(row, i + 1)));
+        if (slotIndex < 0 || slotIndex >= 10) {
+            result.status = 'conflict';
+            result.code = 'MIRA_FLOW_FULL';
+            return;
+        }
+        if (slots.some((row, i) => i !== slotIndex && slotPowerIds(row).some(id => readTargetOf(id) === readTargetOf(power)))
+            || Array.isArray(legacySlots) && legacySlots.some(row => slotPowerIds(record(row)).some(id => readTargetOf(id) === readTargetOf(power)))) {
+            result.status = 'conflict';
+            result.code = 'MEASUREMENT_ALREADY_ASSIGNED';
+            return;
+        }
+        measurement(dev, result, 'consumptionMeter', slotIndex + 1);
+        if (result.status === 'mapped') {
+            const slot = flowRows()[slotIndex];
+            if (managed < 0 || empty(slot.consumerType))
+                slot.consumerType = 'heatPump';
+            binding(dev).miraWpm = true;
+            delete binding(dev).miraDetached;
+        }
+    }
+    // Hold a managed writer inactive when its former physical pairing no longer exists.
+    // A normal restart with unchanged topology and an inventory still loading preserves its commissioning.
+    for (const row of thermalRows()) {
+        const owner = record(row._eosDevice);
+        if (owner.mode !== 'mira' || owner.v !== 1)
+            continue;
+        const hsm = miraHsms.find(dev => dev.baseId === owner.baseId);
+        const wpm = hsm && meterFor(hsm);
+        if (!hsm || !wpm || !hsm.enabled || (hsm.ems.mode || 'auto') !== 'auto' || wiring(hsm, wpm) !== row.miraTopologyId) {
+            row.enabled = false;
+            row.miraSourcesConfirmed = false;
+        }
+    }
     // Existing auto-created control rows survive missing/deactivated devices, but
     // are held inactive. Re-adding a device never grants activation by itself.
     const activeBases = new Set(devices.filter(dev => dev.enabled && dev.ems.mode !== 'monitor').map(dev => dev.baseId));
@@ -861,7 +977,7 @@ function planDeviceEms(input) {
             result.code = 'DEVICE_DISABLED';
             continue;
         }
-        if (mode === 'manual' || mode === 'monitor') {
+        if (mode === 'manual' || mode === 'monitor' && !isWpm(dev)) {
             result.status = 'manual';
             result.code = mode === 'manual' ? 'MANUAL_MAPPING' : 'MONITOR_ONLY';
             continue;
@@ -878,6 +994,14 @@ function planDeviceEms(input) {
         }
         const checkpoint = copyConfig(config);
         try {
+            if (dev.deviceClass === 'heat' && isWpm(dev) && (mode === 'auto' || mode === 'monitor')) {
+                miraMeter(dev, result);
+                continue;
+            }
+            if (dev.deviceClass === 'heat' && isHsm(dev) && mode === 'auto') {
+                result.code = 'MIRA_METER_PENDING';
+                continue;
+            }
             if (dev.deviceClass === 'evCharger' && mode === 'auto') {
                 ev(dev, result);
                 continue;
@@ -1171,6 +1295,158 @@ function planDeviceEms(input) {
             result.code = 'ACTIVATION_PENDING';
             result.missing.push('otherUncommissionedController');
         }
+    }
+    // Remove only our exact electrical meter when that module is deliberately removed or disabled.
+    for (const [base, saved] of Object.entries(record(record(config.eosDeviceEms).bindings))) {
+        const entry = record(saved);
+        if (entry.miraWpm !== true || miraWpms.some(wpm => wpm.baseId === base && wpm.enabled && wpm.ems.mode !== 'manual'))
+            continue;
+        const slot = flowRows().findIndex(row => record(row._eosDevice).baseId === base) + 1;
+        const key = `consumer${slot}Power`;
+        const dp = record(config.datapoints);
+        if (slot && entry.target === key && dp[key] === `${base}.aliases.v1.r.power`) {
+            dp[key] = '';
+            entry.miraDetached = true;
+        }
+    }
+    // Each hydraulic manager owns at most one PV-control row. It never contributes another flow meter.
+    for (const dev of miraHsms) {
+        const result = statuses[devices.indexOf(dev)];
+        if (!dev.enabled || (dev.ems.mode || 'auto') !== 'auto' || dev.discoveryCode || dev.deviceClass !== 'heat')
+            continue;
+        const oldBinding = binding(dev);
+        const activation = record(dev.ems.activation);
+        const requestId = text(activation.requestId);
+        const previous = thermalRows().find(row => record(row._eosDevice).mode === 'mira' && record(row._eosDevice).baseId === dev.baseId);
+        const hold = (/** @type {string} */ code) => {
+            if (previous) {
+                previous.enabled = false;
+                previous.miraSourcesConfirmed = false;
+            }
+            result.code = code;
+        };
+        const wpm = meterFor(dev);
+        if (!wpm) {
+            hold('MIRA_METER_PENDING');
+            continue;
+        }
+        const meterStatus = statuses[devices.indexOf(wpm)];
+        if (wpm.discoveryCode || dev.discoveryCode)
+            continue; // transient discovery is not new commissioning
+        if (meterStatus.status !== 'mapped') {
+            hold('MIRA_METER_PENDING');
+            continue;
+        }
+        const slot = flowRows().findIndex(row => record(row._eosDevice).baseId === wpm.baseId) + 1;
+        if (!slot || slot > 10) {
+            hold('MIRA_METER_PENDING');
+            continue;
+        }
+        const slotCfg = flowRows()[slot - 1];
+        if (mappedIds(slotCfg.ctrl).length || record(slotCfg.ctrl).enabled === true ||
+            text(slotCfg.consumerType) !== 'heatPump') {
+            hold('MANUAL_MAPPING_PRESERVED');
+            continue;
+        }
+        const slotRows = thermalRows().filter(row => Number(row.slot ?? row.consumerSlot) === slot);
+        const occupant = slotRows[0];
+        if (slotRows.length > 1 || occupant && occupant !== previous && !blankThermal(occupant, slot) || previous && previous !== occupant) {
+            hold('MANUAL_MAPPING_PRESERVED');
+            continue;
+        }
+        const isNew = !!requestId && requestId !== oldBinding.activationRequestId;
+        const signature = wiring(dev, wpm);
+        if (!previous && oldBinding.target === 'thermal' && !isNew) {
+            result.status = 'manual';
+            result.code = 'MIRA_MAPPING_REMOVED';
+            continue;
+        }
+        if (previous && signature !== previous.miraTopologyId && !isNew) {
+            hold('ACTIVATION_PROFILE_CHANGED');
+            continue;
+        }
+        const fields = {
+            miraPvStatusId: alias(dev, ['ctrl.pvStatus'], true),
+            miraPvStatusReadId: alias(dev, ['r.pvStatus']),
+            miraPowerTargetId: alias(dev, ['ctrl.pvPowerTargetW'], true, ['number'], ['W']),
+            miraPowerTargetReadId: alias(dev, ['r.pvPowerTargetW'], false, ['number'], ['W']),
+        };
+        if (Object.values(fields).some(id => !id)) {
+            hold('MISSING_ALIASES');
+            continue;
+        }
+        if (previous && Object.entries(fields).some(([key, id]) => previous[key] !== id)) {
+            hold('MANUAL_MAPPING_PRESERVED');
+            continue;
+        }
+        if (conflict(dev, fields, [thermalRows().filter(row => row !== previous), config.thermalControl, config.vis,
+            config.heatingRod, config.threshold, config.bhkw, config.generator, config.storage, config.storageFarm, config.settingsConfig, config.gridConstraints])) {
+            hold('CONTROL_TARGET_ALREADY_ASSIGNED');
+            continue;
+        }
+        const row = previous || { ...(occupant || {}), slot, name: dev.name, profile: 'heating', type: 'power', mode: 'pvAuto',
+            ovumMira: true, enabled: false, miraSourcesConfirmed: false, maxPowerW: 0, ...fields };
+        row.miraTopologyId = signature;
+        if (!previous) {
+            const list = rows(section(config, 'thermal'), 'devices');
+            if (occupant)
+                list[list.indexOf(occupant)] = row;
+            else
+                list.push(row);
+            result.mappedFields.push(...Object.keys(fields));
+        }
+        remember(row, dev, 'mira', 'thermal');
+        result.target = 'thermal.devices';
+        result.status = 'mapped';
+        result.code = row.enabled === true ? 'MAPPED' : 'COMMISSIONING_REQUIRED';
+        if (!requestId)
+            continue;
+        if (!isNew) {
+            if (oldBinding.activationFingerprint !== requestFingerprint(dev)) {
+                result.status = 'conflict';
+                hold('ACTIVATION_REQUEST_CHANGED');
+                continue;
+            }
+            result.activationApplied = true;
+            const app = record(record(record(config.emsApps).apps).thermal);
+            result.code = activation.requested !== true ? 'ACTIVATION_DISABLED' :
+                row.enabled === true && app.enabled === true && app.installed === true ? 'ACTIVATION_APPLIED' : 'APP_DISABLED';
+            continue;
+        }
+        const limits = record(activation.limits);
+        if (activation.requested === true) {
+            if (!grantedApps.has('thermal'))
+                result.missing.push('license:thermal');
+            if (limits.miraSources !== 'confirmed')
+                result.missing.push('miraSources');
+            if (typeof limits.maxPowerW !== 'number' || !Number.isSafeInteger(limits.maxPowerW) || limits.maxPowerW <= 0 || limits.maxPowerW > 10000000)
+                result.missing.push('limit:maxPowerW');
+            const grid = record(config.datapoints).gridPointPower;
+            const gridUnit = typeof grid === 'string' ? references.get(grid)?.unit : '';
+            if (!validReference(grid, false, 'number', ['W', 'kW']) || (gridUnit === 'kW') !== (record(record(config.settings).flowPowerDpIsW).gridPointPower === false))
+                result.missing.push('gridPointPower');
+            const oldApp = record(record(record(config.emsApps).apps).thermal);
+            const active = Object.keys(oldApp).length ? oldApp.installed === true && oldApp.enabled === true : config.enableThermalControl === true;
+            if (!active && thermalRows().some(other => other !== row && other.enabled === true))
+                result.missing.push('otherUncommissionedController');
+            if (result.missing.length) {
+                result.status = 'pending';
+                result.code = 'ACTIVATION_PENDING';
+                continue;
+            }
+            row.maxPowerW = limits.maxPowerW;
+            const registry = section(config, 'emsApps');
+            fill(registry, 'schemaVersion', 1, result);
+            const app = section(section(registry, 'apps'), 'thermal');
+            app.installed = true;
+            app.enabled = true;
+        }
+        row.enabled = activation.requested === true;
+        row.miraSourcesConfirmed = activation.requested === true;
+        Object.assign(binding(dev), { activationRequestId: requestId, activationFingerprint: requestFingerprint(dev),
+            activationRequested: row.enabled, miraCommissionedMaxW: row.enabled ? row.maxPowerW : 0, deviceTemplateId: dev.templateId, deviceProtocol: dev.protocol, deviceClass: dev.deviceClass });
+        result.activationApplied = true;
+        result.code = row.enabled ? 'ACTIVATION_APPLIED' : 'ACTIVATION_DISABLED';
     }
     /** @type {Dict} */
     const patch = {};

@@ -126,7 +126,7 @@ test('Alias Contract v1 files are synchronized and every template declares an ex
   assert.equal(contract.namespace, 'v1');
   assert.equal(contract.standardPath, 'aliases.v1');
   assert.equal(contract.legacyAliasesPreserved, true);
-  assert.equal(templatesDoc.templates.length, 195); // 192 existing profiles + 3 DEYE families
+  assert.equal(templatesDoc.templates.length, 197); // 195 existing profiles + OVUM MIRA HSM/WPM
 
   for (const template of templatesDoc.templates) {
     const expectedClass = contract.categoryToDeviceClass[String(template.category || '').toUpperCase()] || 'generic';
@@ -139,7 +139,7 @@ test('Alias Contract v1 files are synchronized and every template declares an ex
   }
 });
 
-test('all 195 templates satisfy the canonical path, type, role and unit contract', () => {
+test('all 197 templates satisfy the canonical path, type, role and unit contract', () => {
   let standardAliasCount = 0;
   const classCounts = new Map();
 
@@ -168,13 +168,13 @@ test('all 195 templates satisfy the canonical path, type, role and unit contract
     }
   }
 
-  assert.equal(standardAliasCount, 2552); // 2463 existing + 89 source-bound read-only semantic aliases
+  assert.equal(standardAliasCount, 2569); // 2552 existing + 17 OVUM MIRA aliases incl. communication
   assert.deepEqual(Object.fromEntries([...classCounts.entries()].sort()), {
     battery: 12,
     batteryInverter: 3,
     evCharger: 31,
     generic: 4,
-    heat: 6,
+    heat: 8,
     io: 14,
     meter: 55,
     pvInverter: 31,

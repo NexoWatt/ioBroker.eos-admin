@@ -29,6 +29,8 @@ function translateAll() {
     let runtimeStarting = false;
     /** @type {Readonly<Record<string, string>>} */
     const importMessages = Object.freeze({
+        EOS_MIRA_LOGIN: 'Der MIRA-Login-Code muss eine vorzeichenbehaftete 32-Bit-Ganzzahl oder ein 32-Bit-Hexwert mit 0x-Präfix sein.',
+        EOS_MIRA_CONNECTION: 'Für OVUM MIRA Modbus TCP oder RTU mit Unit 110 (HSM) beziehungsweise 111 bis 118 (WPM) einstellen.',
         EOS_MODULE_NOT_READY: 'Die gespeicherte Modulkonfiguration ist noch nicht freigegeben oder konnte nicht geladen werden. Bitte den Status der Bestandsübernahme und das ioBroker-Protokoll prüfen; nach einer Lizenzaktivierung kann ein kontrollierter EOS-Neustart nötig sein.',
         EOS_MODULE_MIGRATION_BLOCKED: 'Die Bestandsübernahme ist noch nicht freigegeben. Die vorhandenen Einstellungen bleiben geschützt. Bitte den Bestandsstatus öffnen, die dort genannte Ursache beheben und anschließend hier „Neu laden“ wählen.',
         EOS_MODULE_CONFIG_UNAVAILABLE: 'Die gespeicherten Geräteeinstellungen konnten nicht gelesen werden. Es wird kein leerer Ersatz gespeichert. Verbindung und ioBroker-Protokoll prüfen und anschließend „Neu laden“ wählen.',

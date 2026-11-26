@@ -1,0 +1,44 @@
+✔ real InfluxDB2: actual export, active bucket proof, isolated restore, empty and missing buckets (1760.64598ms)
+ℹ InfluxDB v2.7.12 (git: ec9dcde5d6) build_date: 2025-05-20T22:48:39Z
+ℹ Actual source/target services, real CLI, exact six typed field rows after isolated restore; existing empty bucket accepted, nonexistent rejected before backup; full-server inventory checked.
+✔ OCPP power commands go through the real consumer and registry: 5700W, stop, keepalive, resume (12.95739ms)
+✔ explicit EVCS stop bypasses a configured minimum in W and A, retaining positive minimum and maximum (2.021564ms)
+✔ EVCS zero transitions are not swallowed by deadband in either direction (1.919376ms)
+✔ a failed stop is retried, and W-to-kW conversion preserves zero (1.773832ms)
+▶ provided OCPP21 source receives zero unchanged; RPC acceptance remains separate from local ack
+  ✔ ocpp1.6: Accepted (21.968012ms)
+  ✔ ocpp1.6: Rejected (5.550723ms)
+  ✔ ocpp2.0.1: Accepted (4.68226ms)
+  ✔ ocpp2.0.1: Rejected (5.01401ms)
+  ✔ ocpp2.1: Accepted (5.81324ms)
+  ✔ ocpp2.1: Rejected (4.658529ms)
+✔ provided OCPP21 source receives zero unchanged; RPC acceptance remains separate from local ack (67.049949ms)
+✔ real HTTPS rejects unauthorized/cross-origin trust requests and applies separate body bounds (446.897102ms)
+✔ real public import rejects unknown, conflicting and private keys while preserving trusted files (334.243941ms)
+✔ invalid OS policy fails closed and explicit OS policy is the sole upload authority (303.616474ms)
+✔ unsafe imported-trust permissions produce a bounded storage error without overwriting the file (147.469492ms)
+✔ Keygen 1.0.4 → HTTPS import → activation → encrypted persistence → restart works under service-owned 2775 runtime (1490.802639ms)
+✔ registered stations persist complete native mappings; unknown electrical limits never enable a writer (133.780995ms)
+✔ partial contract registration is explicit and completes; invalid directions, units and metadata stay untrusted (1.290494ms)
+✔ an auto-created row explicitly retained as an active monitor never regains its first writer (0.745658ms)
+✔ real configuration pipeline retains validated contract failure metadata and never enables an uncommissioned row (42.455632ms)
+✔ existing aliases deduplicate to one station and manual limits/mappings survive; duplicate control groups are reported (1.073331ms)
+✔ multi EVSE topology remains one station aggregate writer; connector controls are never invented (7.142809ms)
+✔ an existing active manual monitor does not gain its first writer from discovery, including later rescans (0.541045ms)
+✔ existing manual monitor crosses real normalization, engine and CM tick without inferred hardware commands (144.86693ms)
+✔ license capacity exposes pending stations, retains existing mappings and fills a newly available slot (1.701425ms)
+✔ registration bursts, offline and restart are idempotent; concurrent manual saves share the mutation fence (95.090206ms)
+✔ persist failures keep prior configuration; failed runtime apply is retried without creating a second row (35.644072ms)
+✔ stop during discovery cannot commit a late scan (14.395698ms)
+✔ ownership loss after a database read prevents reconciliation and leaves existing configuration untouched (0.527968ms)
+✔ actual supplied OCPP adapter registration and station telemetry map through the real EOS persistence path (553.879302ms)
+✔ embedded OCPP station registration persists hosted mappings and retains them across bursts and runtime restart (873.787582ms)
+✔ discovery scopes hosted trees to the owning EOS and retains legacy migration identities (12.03089ms)
+ℹ tests 33
+ℹ suites 0
+ℹ pass 33
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3129.873655

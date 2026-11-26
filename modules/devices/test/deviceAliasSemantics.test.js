@@ -33,7 +33,7 @@ function runtimeFor(id) {
   return { runtime, template, defs, byPath: new Map(defs.map(def => [def.relId.replace('devices.audit.aliases.', ''), def])) };
 }
 
-test('all 195 profiles retain existing aliases; new semantics are additive, source-bound and read-only', () => {
+test('all catalog profiles retain existing aliases; new semantics are additive, source-bound and read-only', () => {
   let additions = 0;
   const coveredProfiles = new Set();
   for (const template of templates) {
@@ -70,7 +70,7 @@ test('all 195 profiles retain existing aliases; new semantics are additive, sour
     assert.deepEqual(manifest.semanticCoverage, expected.coverage);
     assert.deepEqual(runtime.aliasContractInfo.missingRequired, []);
   }
-  assert.equal(templates.length, 195);
+  assert.equal(templates.length, 197);
   assert.equal(additions, 89);
   assert.equal(coveredProfiles.size, 25);
 });

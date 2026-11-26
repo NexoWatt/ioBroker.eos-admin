@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/modules/thermal-control.ts
- * Quell-Hash: sha256:899d9d925a26038d8d956627ab100ebb4fc3b358992c1b4ccdb38ad00a37472a
+ * Quell-Hash: sha256:22a3be98230f58eece31013022c5f131d8e066abec396596b0ee8b2eaf687ff2
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -76,6 +76,7 @@
 const { BaseModule } = require('./base');
 const { resolveThermalStrategyOverlay } = require('../services/operating-strategy-runtime');
 const { applySetpoint } = require('../consumers');
+const { miraBinding, registerMiraDevice, regulateMira, miraSample } = require('../consumers/ovum-mira');
 const { withActuatorShadowContext, priorityForOwner } = require('../services/actuator-shadow-arbiter');
 const { ActuatorCommandContract } = require('../services/actuator-command-contract');
 const { recordAcceptedPowerTarget } = require('../services/accepted-power-effects');
@@ -291,10 +292,13 @@ class ThermalControlModule extends BaseModule {
             const modeRaw = String(r.mode || 'pvAuto').trim().toLowerCase();
             const mode = (modeRaw === 'manual' || modeRaw === 'off') ? modeRaw : 'pvAuto';
 
-            const type = normalizeType(r.type || r.deviceType || r.kind);
+            const ovumMira = r.ovumMira === true;
+            const type = ovumMira ? 'power' : normalizeType(r.type || r.deviceType || r.kind);
             const profile = normalizeProfile(r.profile, type);
 
-            const maxPowerW = clamp(num(r.maxPowerW, 2500), 0, 1e12);
+            const maxPowerW = ovumMira
+                ? (Number.isSafeInteger(r.maxPowerW) && r.maxPowerW > 0 && r.maxPowerW <= 2147483647 ? r.maxPowerW : 0)
+                : clamp(num(r.maxPowerW, 2500), 0, 1e12);
             const startSurplusW = clamp(num(r.startSurplusW, 800), 0, 1e12);
             const stopSurplusW = clamp(num(r.stopSurplusW, 300), 0, 1e12);
             const minOnSec = clamp(num(r.minOnSec, 300), 0, 86400);
@@ -306,7 +310,7 @@ class ThermalControlModule extends BaseModule {
             if (slotTypeRaw === 'heatingrod' || slotTypeRaw === 'heating_rod' || slotTypeRaw === 'heating-rod' || slotTypeRaw === 'heizstab' || slotTypeRaw === 'rod' || slotTypeRaw === 'immersion') {
                 continue;
             }
-            const ctrl = (slotCfg.ctrl && typeof slotCfg.ctrl === 'object') ? slotCfg.ctrl : {};
+            const ctrl = (!ovumMira && slotCfg.ctrl && typeof slotCfg.ctrl === 'object') ? slotCfg.ctrl : {};
 
             const name = String(r.name || slotCfg.name || '').trim() || `Thermal ${slot}`;
 
@@ -379,6 +383,9 @@ class ThermalControlModule extends BaseModule {
                 maxRetries,
                 faultLockSec,
 
+                ovumMira,
+                miraSourcesConfirmed: ovumMira && maxPowerW > 0 && r.miraSourcesConfirmed === true,
+                miraBinding: ovumMira ? miraBinding(r, powerId, this.adapter.config.eosDeviceEms?.bindings, slot) : null,
                 powerId,
                 switchWriteId,
                 setpointWriteId,
@@ -412,6 +419,14 @@ class ThermalControlModule extends BaseModule {
             return String(a.name || '').localeCompare(String(b.name || ''));
         });
 
+        // A hydraulic module represents one system. Ambiguous control assignments cannot write.
+        const miraOwners = new Map();
+        for (const d of out) {
+            if (!d.enabled || !d.miraSourcesConfirmed || !d.miraBinding) continue;
+            const previous = miraOwners.get(d.miraBinding.base);
+            if (previous) previous.miraConflict = d.miraConflict = true;
+            else miraOwners.set(d.miraBinding.base, d);
+        }
         this._devices = out;
     }
 
@@ -624,6 +639,8 @@ const mk = async (id, name, type, role, unit = undefined) => {
                 d.pWKey = k;
             }
 
+            if (d.ovumMira) await registerMiraDevice(this.dp, d);
+
             // DP mapping (actuation)
             if (this.dp && d.switchWriteId) {
                 const k = `th.${d.id}.en`;
@@ -667,9 +684,28 @@ const mk = async (id, name, type, role, unit = undefined) => {
         if (!Array.isArray(this._devices) || !this._devices.length) this._buildDevicesFromConfig();
         const failures = [];
         let attempted = 0;
+        let miraReleases = 0;
+        let miraMeasuredW = 0;
 
         for (const d of this._devices || []) {
             try {
+                if (d.ovumMira) {
+                    await registerMiraDevice(this.dp, d);
+                    if (!d.miraKeys) continue;
+                    const mode = String(this.dp.getRaw(d.userModeKey, '') || '').toLowerCase();
+                    const manual = ['manual', 'manuell'].includes(mode) || ((!mode || mode === 'inherit') && d.mode === 'manual')
+                        || this.dp.getBoolean(d.userEnabledKey, true) === false || this._readOverrideForDevice(d, Date.now()).manualActive;
+                    if (manual && !d.miraBoostIssued) continue;
+                    attempted++;
+                    miraReleases++;
+                    const release = await regulateMira(this, d, { requestedW: 0 });
+                    miraMeasuredW += release.usedW;
+                    if (!release.applied) failures.push(d.id + ':' + release.status);
+                    await this._setStateIfChanged(`thermal.devices.${d.id}.applied`, release.applied);
+                    await this._setStateIfChanged(`thermal.devices.${d.id}.targetW`, 0);
+                    await this._setStateIfChanged(`thermal.devices.${d.id}.status`, release.status);
+                    continue;
+                }
                 if (this.dp && typeof this.dp.upsert === 'function') {
                     if (d.switchWriteId && !d.enableKey) {
                         d.enableKey = `th.${d.id}.en`;
@@ -731,12 +767,15 @@ const mk = async (id, name, type, role, unit = undefined) => {
             }
         }
         try {
-            await this._setStateIfChanged('thermal.summary.appliedTotalW', 0);
+            await this._setStateIfChanged('thermal.summary.appliedTotalW', Math.round(miraMeasuredW));
             await this._setStateIfChanged('thermal.summary.budgetUsedW', 0);
-            await this._setStateIfChanged('thermal.summary.status', attempted ? 'module-disabled-safe-stop' : 'module-disabled-no-actuators');
+            const status = miraReleases ? (failures.length ? 'module-disabled-release-pending' : 'module-disabled-mira-local-control')
+                : (attempted ? 'module-disabled-safe-stop' : 'module-disabled-no-actuators');
+            await this._setStateIfChanged('thermal.summary.status', status);
         } catch (_diagnosticError) {}
         if (failures.length) throw new Error(`thermal-safe-stop-failed:${failures.join(',')}`);
-        return { ok: true, attempted, stopped: attempted };
+        return miraReleases ? { ok: true, attempted, stopped: attempted - miraReleases, miraNeutral: miraReleases }
+            : { ok: true, attempted, stopped: attempted };
     }
 
     /**
@@ -1495,6 +1534,7 @@ const mk = async (id, name, type, role, unit = undefined) => {
 
         let appliedTotalW = 0;
         let budgetUsedW = 0;
+        let miraPvReserveW = 0;
         const ctx = { dp: this.dp, adapter: this.adapter };
         // Der Core darf nur aktuelle PV-Automatiklast in sein PV-Budget
         // zurückrechnen. Dieser Modusnachweis ist getrennt von der direkten
@@ -1579,7 +1619,11 @@ const mk = async (id, name, type, role, unit = undefined) => {
             // Read measured power if mapped
             let measuredW = null;
             if (this.dp && d.pWKey && this.dp.getEntry && this.dp.getEntry(d.pWKey)) {
-                measuredW = this.dp.getNumber(d.pWKey, null);
+                measuredW = d.ovumMira ? (miraSample(this.dp, d.pWKey, now)?.value ?? null) : this.dp.getNumber(d.pWKey, null);
+                if (d.ovumMira && (measuredW === null || measuredW < 0)) {
+                    measuredW = null;
+                    await this._setStateIfChanged(`thermal.devices.${d.id}.measuredW`, null);
+                }
                 if (typeof measuredW === 'number' && Number.isFinite(measuredW)) {
                     await this._setStateIfChanged(`thermal.devices.${d.id}.measuredW`, Math.round(measuredW));
                 }
@@ -1590,12 +1634,49 @@ const mk = async (id, name, type, role, unit = undefined) => {
             // Manuell, Aus und Boost bleiben Hauslast. Der Core prüft zusätzlich
             // die Frische dieses Nachweises und des gemappten Leistungszählers.
             this.adapter._zeroExportPvOwnedThermal[d.id] = {
-                owned: effectiveEnabled && effectiveMode === 'pvAuto' && !ov.boostActive && !ov.manualActive,
+                owned: !d.ovumMira && effectiveEnabled && effectiveMode === 'pvAuto' && !ov.boostActive && !ov.manualActive,
                 ts: now,
             };
             await this._setStateIfChanged(`thermal.devices.${d.id}.boostActive`, !!ov.boostActive);
             await this._setStateIfChanged(`thermal.devices.${d.id}.boostUntil`, ov.boostUntil ? Math.round(ov.boostUntil) : 0);
             await this._setStateIfChanged(`thermal.devices.${d.id}.manualUntil`, ov.manualUntil ? Math.round(ov.manualUntil) : 0);
+
+            if (d.ovumMira) {
+                const boost = effectiveEnabled && ov.boostActive && d.boostEnabled;
+                const manual = !effectiveEnabled || (!boost && (ov.manualActive || effectiveMode === 'manual'));
+                let requestedW = 0;
+                if (effectiveEnabled && !manual && !para14aActive) {
+                    if (boost) {
+                        requestedW = Math.min(d.boostPowerW, d.maxPowerW);
+                    } else if (effectiveMode === 'pvAuto') {
+                        let availableW = availableForAutomationW();
+                        if (pv.source === 'ems.budget.tariffNegative') {
+                            // A cheap-import grant alone is not a MIRA surplus request.
+                            const pvGrant = this.adapter._emsBudget?.getPvGrant?.({key: 'thermal', requestedW: availableW});
+                            availableW = Math.min(availableW, Math.max(0, num(pvGrant?.grantW, 0) - miraPvReserveW));
+                        }
+                        const band = this._computeBandDesiredOn(d.id, availableW, d.startSurplusW, d.stopSurplusW);
+                        const action = String(strategyOverlay.action || 'standard').toLowerCase();
+                        const pause = strategyOverlay.fallbackPause === true || (strategyOverlay.active && ['pause', 'off', 'disable', 'block'].includes(action));
+                        const on = this._hysteresisOnOff(d.id, !pause && band, d.minOnSec, d.minOffSec);
+                        requestedW = !pause && on ? Math.min(availableW, d.maxPowerW) : 0;
+                        if (strategyOverlay.active && typeof strategyOverlay.requestedPowerW === 'number') {
+                            requestedW = Math.min(requestedW, Math.max(0, strategyOverlay.requestedPowerW));
+                        }
+                    }
+                }
+                const mira = await regulateMira(this, d, { requestedW, manual, boost });
+                this.adapter._zeroExportPvOwnedThermal[d.id].owned = mira.owned;
+                const usedW = consumeControlledW(mira.usedW);
+                appliedTotalW += measuredW === null ? 0 : Math.max(0, Math.round(measuredW));
+                budgetUsedW += usedW;
+                if (!boost && !manual && mira.targetW > 0) miraPvReserveW += usedW;
+                await this._setStateIfChanged(`thermal.devices.${d.id}.targetW`, mira.targetW);
+                await this._setStateIfChanged(`thermal.devices.${d.id}.applied`, mira.applied);
+                await this._setStateIfChanged(`thermal.devices.${d.id}.status`, mira.status);
+                await this._setStateIfChanged(`thermal.devices.${d.id}.override`, manual ? 'manual' : (boost ? 'boost' : ''));
+                continue;
+            }
 
             const heldManualContext = !effectiveEnabled
                 || (ov.manualActive && !ov.boostActive)
@@ -2021,7 +2102,7 @@ const mk = async (id, name, type, role, unit = undefined) => {
                     priority: 200,
                     requestedW: used,
                     reserveW: used,
-                    pvReserveW: tariffImportPreferred ? 0 : used,
+                    pvReserveW: tariffImportPreferred ? Math.min(used, miraPvReserveW) : used,
                     pvOnly: !tariffImportPreferred,
                     mode: tariffImportPreferred ? 'tariffNegative' : 'pvAuto',
                 });

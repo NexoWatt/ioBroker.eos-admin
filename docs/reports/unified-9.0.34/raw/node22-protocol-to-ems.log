@@ -1,0 +1,8 @@
+EOS 9.0.34 – Node v22.23.4 – simulated OVUM MIRA HSM and WPM on localhost.
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS electrical register 56021 (1.73 kW) → actual WPM alias → commissioned consumer1Power (W) → flow reader: 1730 W. Thermal register is 5.9 kW.
+PASS commissioned EMS thermal controller sent FC16 55076=2300 W, then FC06 55070=1 with real FC03 echo. Three unchanged cycles added zero commands.
+PASS simulated §14a release sent only FC06 55070=0. Post-release electrical measurement persists at 1730 W.
+PASS disconnected WPM with rejected bus access was marked offline; stale 1730 W could not trigger boost. New login and polling restored 860 W on the same slot.
+Control trace [[110,16,55076,2300],[110,6,55070,1],[110,6,55070,0],[110,6,55070,0]]. A neutral retry followed the simulated six-minute outage. No nonvolatile parameter was written.

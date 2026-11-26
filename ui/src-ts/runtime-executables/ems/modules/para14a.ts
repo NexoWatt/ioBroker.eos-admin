@@ -1015,7 +1015,8 @@ class Para14aModule extends BaseModule {
             const thermalCfg = root.thermal && typeof root.thermal === 'object' ? root.thermal : {};
             const rows = Array.isArray(thermalCfg.devices) ? thermalCfg.devices : [];
             rows.forEach((row, index) => {
-                if (!row || row.enabled !== true) return;
+                // The MIRA PV request delegates control back to its local heat curve and cannot promise a hard cap.
+                if (!row || row.enabled !== true || row.ovumMira === true) return;
                 const slot = safeSlot(row.slot ?? row.consumerSlot, index + 1);
                 const slotCfg = flowConsumers[slot - 1] && typeof flowConsumers[slot - 1] === 'object'
                     ? flowConsumers[slot - 1]
