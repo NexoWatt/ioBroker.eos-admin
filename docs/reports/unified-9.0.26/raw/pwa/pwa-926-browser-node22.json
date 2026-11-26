@@ -1,0 +1,33 @@
+{
+  "result": "passed",
+  "runAt": "2026-11-25T19:53:11.137Z",
+  "node": "v22.23.4",
+  "browser": "HeadlessChrome/158.0.8127.0",
+  "scope": "Real Chromium, production Web mount and login/trust/icon routes on loopback HTTP; synthetic controller and public CA, stopped in-process UI. No iOS installation, plant TLS trust or physical-device claim.",
+  "checks": [
+    {
+      "name": "anonymous login reaches mobile trust setup with UI stopped; missing CA shows administrator guidance and no download button",
+      "result": "passed"
+    },
+    {
+      "name": "configured public CA shows exact SHA-256 and manual download; 390px layout has no horizontal overflow",
+      "result": "passed"
+    },
+    {
+      "name": "desktop layout and actual anonymous download preserve only the public DER certificate bytes",
+      "result": "passed"
+    },
+    {
+      "name": "root icon probes work without UI; trust setup neither logs in nor writes device states and protected APIs stay denied",
+      "result": "passed"
+    }
+  ],
+  "pageErrors": [],
+  "sourceHashes": {
+    "src/lib/web.ts": "6acb5c208b6d99726b20481ed01b818854dc071daec86ccad5fd978703dc38cc",
+    "src/lib/eosTlsHttp.ts": "c1e22a68fdbedf66e0ba1b99bf808de02a99cda04668bfd4785656385388ac90",
+    "public/eos-tls/trust.html": "3221f32c7cb284fa019c787fee942fdb78f466acb9854fb7095cc970c1c75f3c",
+    "public/eos-tls/trust.css": "6da8c9537ff339e8d88f423969d15f927d02fcd42389aa9e0de4269e352d6121",
+    "ui/www/login.html": "122ba1db067792f71ddc95bc8af181ab15469e3a6179c4c01bf9ae54479335b3"
+  }
+}

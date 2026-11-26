@@ -1,0 +1,32 @@
+✔ existing 180px branding is reused byte-for-byte; uploaded 1024px logo and root fallback remain unchanged (7.779073ms)
+✔ all actual shared page heads declare the same public iPhone icon with a content-specific cache key (6.676205ms)
+✔ login form has the supplied uncropped emblem before its heading, independent of the story wordmark (0.922984ms)
+✔ actual console build rebasing keeps the new touch icon at the public EOS root and leaves scripts untouched (2.238648ms)
+✔ existing validated hosted-prefix HTML projection keeps anonymous logo and installation links in that instance (282.081107ms)
+(node:14) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ fresh anonymous HTTPS launch exposes actual login branding and PWA icons while configuration remains protected (3461.490671ms)
+✔ issuer creates encrypted offline CA; device CSR and public downloads never reveal either private key (1079.575606ms)
+✔ anonymous HTTPS trust setup exports only the configured public CA while TLS administration stays protected (3186.071528ms)
+✔ actual EOS HTTPS startup, SNI and IP use trusted identity; renewal preserves listener and survives restart (2024.239271ms)
+✔ wrong SAN, root fingerprint, request ID, key, expiry and CA are refused without changing active certificate (1329.197575ms)
+✔ failed atomic activation and failed live context retain the previous identity and pending request (1328.604368ms)
+✔ concurrent requests are bounded; pending requests require explicit replacement and consumed requests cannot replay (798.300183ms)
+✔ committed certificate reports cleanup and directory-sync warnings without claiming a failed activation (738.907248ms)
+✔ chain status and renewal warning include an intermediate that expires before the leaf (337.521108ms)
+✔ invalid names and unsafe storage are rejected, not used as command/config fragments (190.318042ms)
+(node:15) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ HTTP routes enforce real unified session, role, CSRF and same-origin for certificate actions (778.667263ms)
+(node:21) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ one root app identity and the exact uploaded icon are shared by dashboard, login and system console (93.196063ms)
+✔ actual owner mount serves install metadata publicly while root launch retains session, password and license gates (3310.40771ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12425.784103

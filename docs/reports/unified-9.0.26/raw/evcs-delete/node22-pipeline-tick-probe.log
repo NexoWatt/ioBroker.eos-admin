@@ -1,0 +1,36 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: legacy in-process business pipeline: one device HTTP save adopts the manual farm row, adds SolaX and SMA M0, and activates the corresponding app atomically
+not ok 1 - legacy in-process business pipeline: one device HTTP save adopts the manual farm row, adds SolaX and SMA M0, and activates the corresponding app atomically
+  ---
+  duration_ms: 5022.790035
+  type: 'test'
+  location: '/workspace/scratch/b0b00b64c39c/work-926/iobroker.eos-admin/test/eos-device-ems-web-pipeline.test.cjs:414:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    declaring an app active must not dispatch against missing/offline telemetry: {"writes":[{"id":"eos-admin.0.devices.storage.home.aliases.v1.ctrl.powerSetpointW","state":{"val":0,"ack":false,"ts":1795640534135,"lc":1795640534135},"index":2496},{"id":"eos-admin.0.devices.storage.solax.aliases.v1.ctrl.powerSetpointW","state":{"val":0,"ack":false,"ts":1795640534136,"lc":1795640534136},"index":2497},{"id":"eos-admin.0.devices.storage.home.aliases.v1.ctrl.powerSetpointW","state":{"val":0,"ack":false,"ts":1795640535036,"lc":1795640535036},"index":3333},{"id":"eos-admin.0.devices.storage.solax.aliases.v1.ctrl.powerSetpointW","state":{"val":0,"ack":false,"ts":1795640535036,"lc":1795640535036},"index":3334}],"beforeWrites":1466,"logs":[{"level":"debug","message":"SmartHome logic clocks: refreshed (load)"},{"level":"info","message":"NexoWatt EOS ist bereit."},{"level":"warn","message":"[EOS EMS commissioning] EOS_EMS_RUNTIME_PENDING; saved device configuration remains unchanged"},{"level":"info","message":"[EOS eebus] Local EOS/HEMS SHIP endpoint listening on port 4712/ship/"},{"level":"info","message":"[EOS eebus] Local EOS/HEMS SHIP service announced as \"NexoWatt EOS\" via _ship._tcp (brand=NexoWatt, model=EOS, type=EnergyManagementSystem, ski=EE8FBF2D64D10DF1694A7B44710CBA7C3445F65B)."},{"level":"warn","message":"EOS_MODULE_START_FAILED: eebus; EOS_MODULE_PROCESS_DISCONNECTED; HTTPS remains available"},{"level":"info","message":"[EOS ocpp] NexoWatt OCPP listening on 0.0.0.0:9220 for ocpp1.6, ocpp2.0.1, ocpp2.1"},{"level":"info","message":"[EOS ocpp] NexoWatt OCPP adapter ready for NexoWatt EOS"},{"level":"info","message":"[NexoWatt EOS] Ladepunkte konfiguriert: 0"},{"level":"warn","message":"[Stufe A] WARN · NVP stale/split · 0 Aktorkonflikt(e) · Speicher appcenter-override"},{"level":"info","message":"[EMS] Embedded engine started (interval 1000ms) — CM=ON PS=OFF"},{"level":"info","message":"[NexoWatt EOS] Ladepunkte konfiguriert: 0"},{"level":"warn","message":"[Stufe A] ERROR · NVP stale/signed · 0 Aktorkonflikt(e) · Speicher appcenter-override"},{"level":"info","message":"[EMS] Embedded engine started (interval 1000ms) — CM=ON PS=OFF"},{"level":"info","message":"[EOS eebus] Local EOS/HEMS SHIP endpoint listening on port 4712/ship/"},{"level":"info","message":"[EOS eebus] Local EOS/HEMS SHIP service announced as \"NexoWatt EOS\" via _ship._tcp (brand=NexoWatt, model=EOS, type=EnergyManagementSystem, ski=EE8FBF2D64D10DF1694A7B44710CBA7C3445F65B)."},{"level":"warn","message":"EOS_MODULE_START_FAILED: eebus; EOS_MODULE_PROCESS_DISCONNECTED; HTTPS remains available"},{"level":"info","message":"[PvForecast] Keine nutzbare PV-Prognosequelle verfügbar."},{"level":"debug","message":"[storageFarm] apply targetW=0 dir=idle planned=0W accepted=0W failed=0W unserved=0W status=farm-stop storages=2 src=aus"},{"level":"debug","message":"[storageFarm] apply targetW=0 dir=idle planned=0W accepted=0W failed=0W unserved=0W status=farm-stop storages=2 src=aus"}]}
+    
+    4 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 4
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-926/iobroker.eos-admin/test/eos-device-ems-web-pipeline.test.cjs:466:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6443.947329

@@ -45,10 +45,10 @@ function fixture(initial = base()) {
         'customerTariffMultiplier', 'customerTariffMarkup', 'customerTariffGrid', 'customerTariffTax', 'customerTariffOther', 'customerTariffVat']);
     const nodes = new Map(ids.map(id => [id, new (selects.has(id) ? Select : inputs.has(id) ? Input : id === 'customerTariffForm' ? Form : id === 'customerTariffFields' ? Fieldset
         : ['customerTariffSave', 'customerTariffReload'].includes(id) ? Button : ['customerTariffPanel', 'customerTariffFormula'].includes(id) ? Details : Element)(id)]));
-    const events = {}; const requests = []; let saved = structuredClone(initial); let getStatus = 200; let putStatus = 200; let confirms = 0; let allowDiscard = false;
-    const context = { console, AbortSignal, Error, HTMLElement: Element, HTMLInputElement: Input, HTMLSelectElement: Select, HTMLButtonElement: Button, HTMLFieldSetElement: Fieldset, HTMLDetailsElement: Details, HTMLFormElement: Form,
+    const events = {}; const requests = []; let saved = structuredClone(initial); let getStatus = 200; let getErrorCode = ''; let timerSequence = 0; const timers = new Map(); let putStatus = 200; let confirms = 0; let allowDiscard = false;
+    const context = { console, AbortSignal, AbortController, Error, HTMLElement: Element, HTMLInputElement: Input, HTMLSelectElement: Select, HTMLButtonElement: Button, HTMLFieldSetElement: Fieldset, HTMLDetailsElement: Details, HTMLFormElement: Form,
         document: { readyState: 'complete', getElementById: id => nodes.get(id), createElement: () => new Element() },
-        window: { addEventListener(name, callback) { events[name] = callback; }, confirm() { confirms++; return allowDiscard; } },
+        window: { setTimeout(callback) { const id = ++timerSequence; timers.set(id, callback); return id; }, clearTimeout(id) { timers.delete(id); }, addEventListener(name, callback) { events[name] = callback; }, confirm() { confirms++; return allowDiscard; } },
         async fetch(url, options) {
             const method = options.method || 'GET'; requests.push({ url, options, method }); const responseStatus = method === 'PUT' ? putStatus : getStatus;
             if (method === 'PUT' && responseStatus === 200) {
@@ -58,14 +58,15 @@ function fixture(initial = base()) {
                 if (credentials?.accessToken) saved.credentialsPresent.accessToken = true;
                 if (credentials?.securityToken) saved.credentialsPresent.securityToken = true;
             }
-            return { status: responseStatus, ok: responseStatus === 200, json: async () => structuredClone(saved) };
+            return { status: responseStatus, ok: responseStatus === 200, json: async () => getErrorCode && method === 'GET' && responseStatus !== 200 ? { ok: false, error: getErrorCode } : structuredClone(saved) };
         },
     };
     vm.runInNewContext(compiled, context);
     const node = id => { assert.ok(nodes.has(id), id); return nodes.get(id); };
     const settle = async () => { for (let index = 0; index < 8; index++) await new Promise(resolve => setImmediate(resolve)); };
-    return { node, requests, events, saved: () => saved, confirms: () => confirms,
-        errors(status) { putStatus = status; }, getErrors(status) { getStatus = status; }, confirmDiscard(value) { allowDiscard = value; },
+    return { node, requests, events, timers, async tick() { const entries = [...timers]; timers.clear(); for (const [, run] of entries) run(); await settle(); },
+        async close() { node('customerTariffPanel').open = false; node('customerTariffPanel').events.toggle(); await settle(); }, saved: () => saved, confirms: () => confirms,
+        errors(status) { putStatus = status; }, getErrors(status, code = '') { getStatus = status; getErrorCode = code; }, confirmDiscard(value) { allowDiscard = value; },
         async open() { node('customerTariffPanel').open = true; node('customerTariffPanel').events.toggle(); await settle(); },
         change(id, value, change = false) { const target = node(id); if (typeof value === 'boolean') target.checked = value; else target.value = value;
             node('customerTariffForm').events[change ? 'change' : 'input']({ target }); },
@@ -206,4 +207,36 @@ test('provider labels are rendered as plain text and unrelated server fields nev
     assert.equal(f.node('customerTariffProvider').children.find(item => item.value === 'tibber').textContent, '<img src=x onerror=alert(1)>');
     f.change('customerTariffHome', 'changed'); await f.save();
     assert.deepEqual(JSON.parse(f.requests.find(item => item.method === 'PUT').options.body).config, { homeId: 'changed' });
+});
+
+
+test('startup loading retries initial GET only, confirms Tibber and stops its single timer', async () => {
+    const f = fixture(); f.getErrors(503, 'EOS_TARIFF_CONFIG_LOADING'); await f.open();
+    assert.equal(f.node('customerTariffFields').disabled, true); assert.equal(f.node('customerTariffSave').disabled, true);
+    assert.match(f.node('customerTariffStatus').textContent, /EOS startet/); assert.equal(f.requests.length, 1); assert.equal(f.timers.size, 1);
+    f.getErrors(200); await f.tick();
+    assert.equal(f.requests.length, 2); assert.equal(f.node('customerTariffProvider').value, 'tibber'); assert.equal(f.node('customerTariffEnabled').checked, true);
+    assert.match(f.node('customerTariffStatus').textContent, /gespeicherte Tarifanbindung geladen/i); assert.equal(f.timers.size, 0);
+});
+
+test('startup retries are bounded and closing or leaving the panel cancels the single pending timer', async () => {
+    const f = fixture(); f.getErrors(503, 'EOS_TARIFF_CONFIG_LOADING'); await f.open();
+    await f.close(); assert.equal(f.timers.size, 0); await f.tick(); assert.equal(f.requests.length, 1);
+    await f.open(); assert.equal(f.requests.length, 2); assert.equal(f.timers.size, 1);
+    f.events.pagehide(); assert.equal(f.timers.size, 0);
+    const bounded = fixture(); bounded.getErrors(503, 'EOS_TARIFF_CONFIG_LOADING'); await bounded.open();
+    for (let index = 0; index < 8; index++) await bounded.tick();
+    assert.equal(bounded.requests.length, 6); assert.equal(bounded.timers.size, 0);
+    assert.equal(bounded.node('customerTariffFields').disabled, true); assert.equal(bounded.node('customerTariffReload').disabled, false);
+    assert.match(bounded.node('customerTariffStatus').textContent, /erneut laden/);
+});
+
+test('hydration failure has no retry and an existing draft is never replaced by startup reads', async () => {
+    const unavailable = fixture(); unavailable.getErrors(503, 'EOS_TARIFF_CONFIG_UNAVAILABLE'); await unavailable.open();
+    assert.equal(unavailable.requests.length, 1); assert.equal(unavailable.timers.size, 0);
+    assert.match(unavailable.node('customerTariffStatus').textContent, /Systemstatus/);
+    const f = fixture(); await f.open(); f.change('customerTariffHome', 'draft-home'); f.change('customerTariffCredential', 'synthetic-draft');
+    f.confirmDiscard(true); f.getErrors(503, 'EOS_TARIFF_CONFIG_LOADING'); await f.reload();
+    assert.equal(f.timers.size, 0); assert.equal(f.node('customerTariffHome').value, 'draft-home'); assert.equal(f.node('customerTariffCredential').value, 'synthetic-draft');
+    f.errors(503); await f.save(); assert.equal(f.requests.filter(item => item.method === 'PUT').length, 1); assert.equal(f.timers.size, 0);
 });

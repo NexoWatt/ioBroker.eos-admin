@@ -1,0 +1,137 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: existing 180px branding is reused byte-for-byte; uploaded 1024px logo and root fallback remain unchanged
+ok 1 - existing 180px branding is reused byte-for-byte; uploaded 1024px logo and root fallback remain unchanged
+  ---
+  duration_ms: 5.554688
+  type: 'test'
+  ...
+# Subtest: all actual shared page heads declare the same public iPhone icon with a content-specific cache key
+ok 2 - all actual shared page heads declare the same public iPhone icon with a content-specific cache key
+  ---
+  duration_ms: 4.715648
+  type: 'test'
+  ...
+# Subtest: login form has the supplied uncropped emblem before its heading, independent of the story wordmark
+ok 3 - login form has the supplied uncropped emblem before its heading, independent of the story wordmark
+  ---
+  duration_ms: 0.681197
+  type: 'test'
+  ...
+# Subtest: actual console build rebasing keeps the new touch icon at the public EOS root and leaves scripts untouched
+ok 4 - actual console build rebasing keeps the new touch icon at the public EOS root and leaves scripts untouched
+  ---
+  duration_ms: 4.018668
+  type: 'test'
+  ...
+# Subtest: existing validated hosted-prefix HTML projection keeps anonymous logo and installation links in that instance
+ok 5 - existing validated hosted-prefix HTML projection keeps anonymous logo and installation links in that instance
+  ---
+  duration_ms: 121.828925
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:13) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: fresh anonymous HTTPS launch exposes actual login branding and PWA icons while configuration remains protected
+ok 6 - fresh anonymous HTTPS launch exposes actual login branding and PWA icons while configuration remains protected
+  ---
+  duration_ms: 4620.586403
+  type: 'test'
+  ...
+# (node:15) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:15) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: issuer creates encrypted offline CA; device CSR and public downloads never reveal either private key
+ok 7 - issuer creates encrypted offline CA; device CSR and public downloads never reveal either private key
+  ---
+  duration_ms: 1327.781341
+  type: 'test'
+  ...
+# Subtest: anonymous HTTPS trust setup exports only the configured public CA while TLS administration stays protected
+ok 8 - anonymous HTTPS trust setup exports only the configured public CA while TLS administration stays protected
+  ---
+  duration_ms: 3092.65716
+  type: 'test'
+  ...
+# Subtest: actual EOS HTTPS startup, SNI and IP use trusted identity; renewal preserves listener and survives restart
+ok 9 - actual EOS HTTPS startup, SNI and IP use trusted identity; renewal preserves listener and survives restart
+  ---
+  duration_ms: 1627.442519
+  type: 'test'
+  ...
+# Subtest: wrong SAN, root fingerprint, request ID, key, expiry and CA are refused without changing active certificate
+ok 10 - wrong SAN, root fingerprint, request ID, key, expiry and CA are refused without changing active certificate
+  ---
+  duration_ms: 1888.043156
+  type: 'test'
+  ...
+# Subtest: failed atomic activation and failed live context retain the previous identity and pending request
+ok 11 - failed atomic activation and failed live context retain the previous identity and pending request
+  ---
+  duration_ms: 1165.280597
+  type: 'test'
+  ...
+# Subtest: concurrent requests are bounded; pending requests require explicit replacement and consumed requests cannot replay
+ok 12 - concurrent requests are bounded; pending requests require explicit replacement and consumed requests cannot replay
+  ---
+  duration_ms: 540.780479
+  type: 'test'
+  ...
+# Subtest: committed certificate reports cleanup and directory-sync warnings without claiming a failed activation
+ok 13 - committed certificate reports cleanup and directory-sync warnings without claiming a failed activation
+  ---
+  duration_ms: 412.163228
+  type: 'test'
+  ...
+# Subtest: chain status and renewal warning include an intermediate that expires before the leaf
+ok 14 - chain status and renewal warning include an intermediate that expires before the leaf
+  ---
+  duration_ms: 650.81642
+  type: 'test'
+  ...
+# Subtest: invalid names and unsafe storage are rejected, not used as command/config fragments
+ok 15 - invalid names and unsafe storage are rejected, not used as command/config fragments
+  ---
+  duration_ms: 127.51332
+  type: 'test'
+  ...
+# (node:15) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# Subtest: HTTP routes enforce real unified session, role, CSRF and same-origin for certificate actions
+ok 16 - HTTP routes enforce real unified session, role, CSRF and same-origin for certificate actions
+  ---
+  duration_ms: 529.452752
+  type: 'test'
+  ...
+# (node:20) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:20) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# Subtest: one root app identity and the exact uploaded icon are shared by dashboard, login and system console
+ok 17 - one root app identity and the exact uploaded icon are shared by dashboard, login and system console
+  ---
+  duration_ms: 25.432487
+  type: 'test'
+  ...
+# (node:20) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual owner mount serves install metadata publicly while root launch retains session, password and license gates
+ok 18 - actual owner mount serves install metadata publicly while root launch retains session, password and license gates
+  ---
+  duration_ms: 3662.145805
+  type: 'test'
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 18
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 12223.400359

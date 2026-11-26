@@ -1,0 +1,26 @@
+(node:8) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:28) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Tibber save reaches parent state and survives UI plus whole owner restart (native namespace)
+ok 1 - Tibber save reaches parent state and survives UI plus whole owner restart (native namespace)
+  ---
+  duration_ms: 7121.061214
+  type: 'test'
+  ...
+# Subtest: Tibber save reaches parent state and survives UI plus whole owner restart (preserved namespace)
+ok 2 - Tibber save reaches parent state and survives UI plus whole owner restart (preserved namespace)
+  ---
+  duration_ms: 6197.032954
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 14046.828352

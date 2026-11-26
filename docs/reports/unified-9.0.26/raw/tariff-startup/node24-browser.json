@@ -1,0 +1,43 @@
+{
+  "result": "passed",
+  "runAt": "2026-11-25T20:36:26.635Z",
+  "node": "v24.22.3",
+  "browser": "HeadlessChrome/158.0.8127.0",
+  "scope": "Real Chromium, production customer-tariff JS and unmodified tariff fragment from settings.html. Startup/error API fixture. No provider network, controller DB, real secrets or hardware.",
+  "checks": [
+    {
+      "name": "startup keeps unconfirmed form disabled and empty; next bounded GET confirms Tibber automatically",
+      "result": "passed",
+      "retryDelayMs": 2018
+    },
+    {
+      "name": "confirmed view stops startup retries; unsaved settings and secret draft remain intact",
+      "result": "passed"
+    },
+    {
+      "name": "503 on PUT sends exactly once, retains CAS revision and preserves all input including secret draft",
+      "result": "passed"
+    },
+    {
+      "name": "panel close and pagehide cancel retries; unavailable, 401 and 403 fail once with locked form",
+      "result": "passed"
+    },
+    {
+      "name": "reopening after canceled startup loads the confirmed tariff",
+      "result": "passed"
+    },
+    {
+      "name": "loading stops after six attempts; manual reload remains available and succeeds",
+      "result": "passed",
+      "maximumAutomaticAttempts": 6
+    }
+  ],
+  "pageErrors": [],
+  "sourceHashes": {
+    "ui/www/customer-tariff.js": "9c467b299e1bbac37d0ac258e60b7b3cd0e9e630d7a8a5c1c60aaf2a7cb1618f",
+    "ui/src-ts/runtime-executables/www/customer-tariff.ts": "59173edf76cb8213a391c69d6d1fae03a1c43f0b2c41f2c71be55372bb6d6847",
+    "ui/www/settings.html": "956ff01aa3c0817740e998401f861c381a0e9faac0991d0ca9650d6a31511048",
+    "ui/www/customer-tariff.css": "648d297429fe6a2a91ce749590021fc47a9dc7b653417e30db4013cf593da466",
+    "test/eos-customer-tariff-startup-browser.cjs": "26f4c2192132f9bea84924cd41e779f989211a51d78c1fe2be7754df8e509e6b"
+  }
+}

@@ -792,9 +792,10 @@ async function pausedRecoveryFixture(t, readTimeout = false) {
                     const pair = cookie.split(';')[0]; const index = pair.indexOf('=');
                     jar.set(pair.slice(0, index), pair.slice(index + 1));
                 }
-                const text = Buffer.concat(chunks).toString(); let json;
+                const bytes = Buffer.concat(chunks);
+                const text = bytes.toString(); let json;
                 try { json = JSON.parse(text); } catch {}
-                resolve({ status: res.statusCode, headers: res.headers, text, json });
+                resolve({ status: res.statusCode, headers: res.headers, bytes, text, json });
             });
         });
         req.setTimeout(5000, () => req.destroy(new Error('recovery request timeout')));
@@ -812,13 +813,37 @@ for (const readTimeout of [false, true]) test(`parent login remains usable with 
     const login = await h.browser(redirect.headers.location);
     assert.equal(login.status, 200, login.text);
     assert.match(login.text, /id="loginForm"/);
+    assert.match(login.text, /href="\/security\/trust\/"/);
+    const trust = await h.browser('/security/trust/');
+    assert.equal(trust.status, 200); assert.match(trust.text, /Zertifikat noch nicht bereitgestellt/);
+    assert.equal((await h.browser('/security/trust/root.cer')).status, 404, 'never substitute an unvalidated controller certificate');
     for (const asset of ['/static/login.css', '/static/runtime-base.js', '/static/pwa.js', '/static/login.js',
         '/static/nexowatt-eos-logo.png', '/manifest.webmanifest', '/assets/icons/nexowatt-192.png', '/sw.js']) {
         const response = await h.browser(asset);
         assert.equal(response.status, 200, asset);
         assert.equal(response.headers['x-content-type-options'], 'nosniff', asset);
-        assert.match(response.headers['cache-control'], /no-store/, asset);
+        assert.match(response.headers['cache-control'], asset.endsWith('.png') ? /public, max-age=0, must-revalidate/ : /no-store/, asset);
     }
+    // The OS icon downloader does not share a login session and must not need
+    // a working UI child. Probe Apple's conventional paths while PID is null.
+    for (const asset of ['/apple-touch-icon.png', '/apple-touch-icon-precomposed.png',
+        '/apple-touch-icon-180x180.png', '/apple-touch-icon-180x180-precomposed.png',
+        '/assets/icons/nexowatt-180.png?v=083e11ab28ec']) {
+        const response = await h.browser(asset, { headers: { cookie: '' } });
+        assert.equal(response.status, 200, asset);
+        assert.match(response.headers['content-type'], /^image\/png/, asset);
+        assert.equal(response.headers.location, undefined, asset);
+        assert.equal(response.bytes.subarray(0, 8).toString('hex'), '89504e470d0a1a0a', asset);
+        const file = asset === '/apple-touch-icon.png' ? 'nexowatt-1024.png' : 'nexowatt-180.png';
+        assert.deepEqual(response.bytes, fs.readFileSync(path.resolve(__dirname, '../ui/www/assets/icons', file)), asset);
+        const head = await h.browser(asset, { method: 'HEAD', headers: { cookie: '' } });
+        assert.equal(head.status, 200, asset); assert.equal(head.bytes.length, 0, asset);
+        assert.match(head.headers['content-type'], /^image\/png/, asset);
+        const cached = await h.browser(asset, { headers: { cookie: '', 'if-none-match': response.headers.etag } });
+        assert.equal(cached.status, 304, asset); assert.equal(cached.bytes.length, 0, asset);
+        assert.equal((await h.browser(asset, { headers: { origin: 'https://foreign.invalid' } })).status, 403, asset);
+    }
+    assert.equal(h.runtime.status().process.pid, null, 'public image probes must not start the UI/EMS child');
     assert.equal((await h.browser('/static/login.js', { headers: { origin: 'https://foreign.invalid' } })).status, 403);
     assert.equal((await h.browser('/api/eos/runtime')).status, 401);
     const signedIn = await h.browser('/api/auth/login', { method: 'POST', body: { user: 'operator', password: 'fixture-passphrase' } });

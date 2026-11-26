@@ -1,0 +1,1 @@
+Die ergänzenden Browserbilder wurden intern zur Layoutkontrolle verwendet und werden nicht mit ausgeliefert. Die JSON- und Textprotokolle dokumentieren die ausgeführten automatisierten Prüfungen und Quellhashes.

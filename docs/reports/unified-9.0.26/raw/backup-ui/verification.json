@@ -1,0 +1,32 @@
+{
+  "observedAt": "2026-11-25T20:25:02.638513+00:00",
+  "browser": {
+    "node22": {
+      "node": "v22.23.4",
+      "runAt": "2026-11-25T20:23:52.575Z",
+      "checks": 10,
+      "result": "passed"
+    },
+    "node24": {
+      "node": "v24.22.3",
+      "runAt": "2026-11-25T20:24:04.417Z",
+      "checks": 10,
+      "result": "passed"
+    }
+  },
+  "typecheckExitCode": 0,
+  "eslintExitCode": 0,
+  "revisionTests": {
+    "passed": 4,
+    "failed": 0
+  },
+  "sourceHashes": {
+    "modules/backup/admin/index.js": "227e23e47f838b80141fad6a4cfa89f363b139767de3fba1e45d932029f67ee4",
+    "modules/backup/admin/index.html": "0e938d4aa3516c491fde1a8a6e53a86e30f3e82e22caad4c422d38cf50f0ff1b",
+    "modules/backup/admin/style.css": "b88d50030adcc9cdfe3c4bab0267604f00c5f48b227a2c2cba3bc6d2ec3a7a75",
+    "tsconfig.eos-backup-admin.json": "d894c55183fb0bcfea9d94f5288fca3a721433d084fbdc692967f58ed2ed99d8",
+    "eslint.backup-admin.config.mjs": "3f89d047120f8a1c5a40bec64bf45216dcc6d0f950c2bbd387133e58058c32fc",
+    "test/eos-module-editor-revision.test.cjs": "6328be39a802578bd186ffaf1c61a006641f53b5fdf7d62849a085cd6257f474",
+    "test/eos-backup-settings-browser.cjs": "d17fdfad892c027fdb6d2bb473d2051b8b4fc2d09a1f242f122d00fc39f195b0"
+  }
+}

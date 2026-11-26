@@ -1,0 +1,27 @@
+(node:6) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: legacy in-process business pipeline: one device HTTP save adopts the manual farm row, adds SolaX and SMA M0, and activates the corresponding app atomically
+    # Subtest: legacy in-process business pipeline: fresh hosted instance rehydrates the persisted device and EMS configuration without another setup call
+    ok 1 - legacy in-process business pipeline: fresh hosted instance rehydrates the persisted device and EMS configuration without another setup call
+      ---
+      duration_ms: 750.114186
+      type: 'test'
+      ...
+    1..1
+ok 1 - legacy in-process business pipeline: one device HTTP save adopts the manual farm row, adds SolaX and SMA M0, and activates the corresponding app atomically
+  ---
+  duration_ms: 4263.861976
+  type: 'test'
+  ...
+1..1
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 8833.942228

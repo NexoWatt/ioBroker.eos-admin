@@ -1,0 +1,94 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: production Web mount reaches the real UI/EMS child and reconciles a device HTTP save through IPC
+ok 1 - production Web mount reaches the real UI/EMS child and reconciles a device HTTP save through IPC
+  ---
+  duration_ms: 7150.474362
+  type: 'test'
+  ...
+# Subtest: legacy in-process business pipeline: actual module HTTP rejects a live profile replacement before persistence and allows it after AppCenter deactivation
+    # Subtest: direct Devices alias
+    ok 1 - direct Devices alias
+      ---
+      duration_ms: 1606.564035
+      type: 'test'
+      ...
+    # Subtest: external split ioBroker alias
+    ok 2 - external split ioBroker alias
+      ---
+      duration_ms: 946.113356
+      type: 'test'
+      ...
+    1..2
+ok 2 - legacy in-process business pipeline: actual module HTTP rejects a live profile replacement before persistence and allows it after AppCenter deactivation
+  ---
+  duration_ms: 2553.757978
+  type: 'test'
+  ...
+# Subtest: legacy in-process business pipeline: actual profile HTTP reservation blocks concurrent AppCenter activation and releases after a failed controller commit
+ok 3 - legacy in-process business pipeline: actual profile HTTP reservation blocks concurrent AppCenter activation and releases after a failed controller commit
+  ---
+  duration_ms: 1286.669971
+  type: 'test'
+  ...
+# Subtest: legacy in-process business pipeline: removing and reintroducing a device ID cannot reuse its still-active EMS references with another profile
+ok 4 - legacy in-process business pipeline: removing and reintroducing a device ID cannot reuse its still-active EMS references with another profile
+  ---
+  duration_ms: 1078.489172
+  type: 'test'
+  ...
+# Subtest: legacy in-process business pipeline: production Web bridge and actual hosted startup process device-save HTTP without manual reconciliation
+ok 5 - legacy in-process business pipeline: production Web bridge and actual hosted startup process device-save HTTP without manual reconciliation
+  ---
+  duration_ms: 4384.653936
+  type: 'test'
+  ...
+# Subtest: legacy in-process business pipeline: one device HTTP save adopts the manual farm row, adds SolaX and SMA M0, and activates the corresponding app atomically
+    # Subtest: legacy in-process business pipeline: fresh hosted instance rehydrates the persisted device and EMS configuration without another setup call
+    ok 1 - legacy in-process business pipeline: fresh hosted instance rehydrates the persisted device and EMS configuration without another setup call
+      ---
+      duration_ms: 895.705216
+      type: 'test'
+      ...
+    1..1
+ok 6 - legacy in-process business pipeline: one device HTTP save adopts the manual farm row, adds SolaX and SMA M0, and activates the corresponding app atomically
+  ---
+  duration_ms: 3396.579604
+  type: 'test'
+  ...
+# Subtest: legacy in-process business pipeline: HTTP rejects a new device ID during unknown hosted configuration hydration, then accepts the retained draft after readiness
+ok 7 - legacy in-process business pipeline: HTTP rejects a new device ID during unknown hosted configuration hydration, then accepts the retained draft after readiness
+  ---
+  duration_ms: 1063.180184
+  type: 'test'
+  ...
+# Subtest: legacy in-process business pipeline: late actual manifest event completes commissioning; telemetry bursts do not restart inventory scans
+ok 8 - legacy in-process business pipeline: late actual manifest event completes commissioning; telemetry bursts do not restart inventory scans
+  ---
+  duration_ms: 1485.928173
+  type: 'test'
+  ...
+# Subtest: legacy in-process business pipeline: running Devices retain an ownership lease while other modules initialize slowly
+ok 9 - legacy in-process business pipeline: running Devices retain an ownership lease while other modules initialize slowly
+  ---
+  duration_ms: 15397.004564
+  type: 'test'
+  ...
+# Subtest: legacy in-process business pipeline: real device polling keeps FENECON PV, converter feedback and battery flow distinct in an activated mixed farm
+ok 10 - legacy in-process business pipeline: real device polling keeps FENECON PV, converter feedback and battery flow distinct in an activated mixed farm
+  ---
+  duration_ms: 6992.083098
+  type: 'test'
+  ...
+1..10
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 45003.896796

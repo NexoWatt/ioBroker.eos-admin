@@ -1,0 +1,38 @@
+✔ EMS and legacy EVCS writes are rejected before diagnostics during save, identity migration and shutdown (128.873736ms)
+✔ accepted asynchronous EMS write finishes before identity snapshot and cannot target the replacement slot (21.794733ms)
+✔ accepted asynchronous station write finishes before identity snapshot and cannot target the replacement slot (21.189568ms)
+✔ accepted asynchronous legacy EVCS write finishes before identity snapshot and cannot target the replacement slot (12.282869ms)
+✔ validation and failed writes release the accepted control so subsequent identity changes do not remain blocked (16.096254ms)
+✔ valid unauthenticated station command is fenced before both station diagnostics and control writes (17.57642ms)
+✔ failed station bridge releases its control admission before the next identity transition (20.121169ms)
+✔ configuration tokens reject stale and missing browser identity after deleting a preceding charging point (49.943554ms)
+✔ unchanged charging slots retain tokenless compatibility while reused slots require the current identity (31.721049ms)
+✔ global EMS and EVCS settings reject stale or missing layout revision after a layout change (32.903215ms)
+✔ persisted charging registry keeps reused slots protected across a fresh runtime (26.824429ms)
+✔ station payload exposes only assigned identities and rejects stale commands before station diagnostics (25.820331ms)
+✔ returning a previously removed charger to the same slot cannot revive its old browser token (24.742759ms)
+✔ deleting first point preserves every B wish and timer (boost / pv) across restart (7.263472ms)
+✔ deleting first point preserves every B wish and timer (pv / boost) across restart (1.412927ms)
+✔ delete-last leaves A untouched; reorder uses a complete snapshot before any copy (2.114334ms)
+✔ empty configuration and reused indices cannot inherit old boost or regain an old incarnation token (1.563831ms)
+✔ metadata and measurement edits preserve tokens; a changed secondary actuator rotates the token without erasing wishes (0.949974ms)
+✔ a crash after configuration commit but before copying recovers from the durable previous layout (0.803197ms)
+✔ partial copy failure keeps the fence and recovers the exact original snapshot after restart (1.470653ms)
+✔ another desired layout is rejected before config commit while an interrupted transfer remains recoverable (1.506375ms)
+✔ a malformed or incomplete journal never skips its mandatory transfer writes (2.878944ms)
+✔ Engine.init cannot initialize modules after a failed identity transfer (1.733701ms)
+✔ real settings normalization -> Engine charging config -> actual charging tick retains B PV after deleting boosted A (78.229377ms)
+✔ registry is bounded and administrator-only; ambiguous physical identities fail before binding (0.661347ms)
+✔ raw and normalized legacy connector/default mirror forms describe the same point (0.272823ms)
+✔ own default mirror travels with a verified point while deliberate cross-slot and external mappings remain unchanged (0.422584ms)
+✔ cross-slot and foreign-instance mode targets rotate tokens; only the exact own default mirror is implicit (1.285209ms)
+✔ an explicitly bound custom command bridge is compatible while missing or changed destinations fail closed (1.674804ms)
+✔ failed config persistence after a confirmed drain keeps controls fenced and permits a safe retry (21.875421ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 30
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 899.488482

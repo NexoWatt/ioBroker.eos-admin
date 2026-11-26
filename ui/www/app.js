@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/app.ts
- * Quell-Hash: sha256:3fc11e0830a6c08b4799db2b12aa3f331e0a42c4953aa0de55975e252d033a92
+ * Quell-Hash: sha256:18104cb2b08b3c23c36643230efeb9f8a940be31f60d25193001491594db06ea
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -3525,11 +3525,54 @@ function render() {
  * Zusammenhang: Teil von Kunden-LIVE-Frontend: Dashboard, Energiefluss, Schnellsteuerung; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
  * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
  */
+
+// Bind command ownership to the document's initial configuration. Automatic
+// telemetry/config refresh must never upgrade an already open control to another LP.
+let chargingControlSnapshot = null;
+function rememberChargingControlIdentity(config) {
+  if (chargingControlSnapshot !== null) return;
+  const value = config && config.chargingControlIdentity;
+  chargingControlSnapshot = JSON.parse(JSON.stringify(value && typeof value === 'object' ? value : {}));
+}
+async function chargingControlFetch(url, options = {}) {
+  let request = options;
+  if (url === '/api/set' && typeof options.body === 'string') {
+    const body = JSON.parse(options.body);
+    if (body.scope === 'ems' || body.scope === 'evcs' || (body.scope === 'settings' && /^evcs/.test(String(body.key || '')))) {
+      const key = String(body.key || '');
+      const match = key.match(/^(?:evcs\.|chargingManagement\.wallboxes\.lp)([1-9]\d*)\./)
+        || (body.scope === 'evcs' && key.match(/^([1-9]\d*)\./));
+      const metadata = chargingControlSnapshot;
+      if (match && typeof metadata?.slots?.['lp' + match[1]] === 'string') body.expectedChargingIdentity = metadata.slots['lp' + match[1]];
+      else if (!match && typeof metadata?.revision === 'string') body.expectedChargingLayoutRevision = metadata.revision;
+      request = { ...options, body: JSON.stringify(body) };
+    }
+  }
+  const response = await fetch(url, request);
+  if (url === '/api/set' && response.status === 409) {
+    const data = await response.clone().json().catch(() => null);
+    if (String(data?.error || '').startsWith('EOS_EVCS_IDENTITY_')) {
+      let notice = document.getElementById('nw-charging-identity-notice');
+      if (!notice) {
+        notice = document.createElement('div'); notice.id = 'nw-charging-identity-notice';
+        notice.setAttribute('role', 'alert'); notice.className = 'nw-help';
+        notice.textContent = 'Die Ladepunktzuordnung wurde geändert oder wird aktualisiert. Der Befehl wurde nicht ausgeführt. Bitte die Seite neu laden. ';
+        const reload = document.createElement('button'); reload.type = 'button'; reload.textContent = 'Seite neu laden';
+        reload.addEventListener('click', () => window.location.reload()); notice.appendChild(reload);
+        (document.querySelector('main') || document.body).prepend(notice);
+      }
+      throw new Error('EOS_EVCS_IDENTITY_CHANGED');
+    }
+  }
+  return response;
+}
+
 async function bootstrap() {
   let cfg = {};
   try {
     const cfgRes = await fetch('/config');
     cfg = await cfgRes.json();
+    rememberChargingControlIdentity(cfg);
     units = cfg.units || units;
 
     // ioBroker-Systemsprache übernehmen: Backend liefert /config.locale aus system.config.common.language.
@@ -3591,6 +3634,7 @@ async function bootstrap() {
     }catch(_e){}
   } catch (e) {
     console.warn('[config]', e);
+    rememberChargingControlIdentity({});
   }
 // --- Config hot-reload ----------------------------------------------------
 // If the App-Center changes "installed" flags, the backend updates installer.configJson.
@@ -3613,6 +3657,7 @@ let cfgReloadPending = false;
  */
 const applyConfigSnapshot = (nextCfg) => {
   cfg = nextCfg || {};
+  rememberChargingControlIdentity(cfg);
   try { window.__nwCfg = cfg || {}; } catch (_e) { window.__nwCfg = {}; }
   try { units = cfg.units || units; } catch (_e) {}
 
@@ -4707,7 +4752,7 @@ function bindInputValue(el, stateKey) {
     } catch (_e) {}
 
     try {
-      await fetch('/api/set', {
+      await chargingControlFetch('/api/set', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ scope, key, value: val })
@@ -5384,7 +5429,7 @@ function setupRfidWhitelistUi(){
     }
     const json = JSON.stringify(cleaned);
     try {
-      await fetch('/api/set', {
+      await chargingControlFetch('/api/set', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ scope: 'rfid', key: 'whitelistJson', value: json })
@@ -5501,7 +5546,7 @@ function setupRfidLearningUi(){
    */
   async function setLearningActive(active){
     try{
-      await fetch('/api/set', {
+      await chargingControlFetch('/api/set', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ scope: 'rfid', key: 'learning.active', value: !!active })
@@ -6596,7 +6641,7 @@ function initEmsControlModal() {
    */
   const setSetting = async (key, value) => {
     try {
-      await fetch('/api/set', {
+      await chargingControlFetch('/api/set', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'same-origin',
@@ -6718,7 +6763,7 @@ function initThresholdModal() {
    */
   const apiSet = async (key, value) => {
     try {
-      const resp = await fetch('/api/set', {
+      const resp = await chargingControlFetch('/api/set', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'same-origin',
@@ -7154,7 +7199,7 @@ function initRelayModal() {
    */
   const apiSet = async (idx, prop, value) => {
     try {
-      const resp = await fetch('/api/set', {
+      const resp = await chargingControlFetch('/api/set', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'same-origin',
@@ -7496,7 +7541,7 @@ function initBhkwModal() {
    */
   const apiSet = async (idx, prop, value) => {
     try {
-      const resp = await fetch('/api/set', {
+      const resp = await chargingControlFetch('/api/set', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'same-origin',
@@ -7840,7 +7885,7 @@ function initGeneratorModal() {
    */
   const apiSet = async (idx, prop, value) => {
     try {
-      const resp = await fetch('/api/set', {
+      const resp = await chargingControlFetch('/api/set', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'same-origin',
@@ -9213,7 +9258,7 @@ render = function(){ try{ _renderOld(); }catch(e){ console.warn('render', e); } 
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
   const apiSet = async (scope, key, value) => {
-    const r = await fetch('/api/set', {
+    const r = await chargingControlFetch('/api/set', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ scope, key, value })
@@ -9330,7 +9375,7 @@ render = function(){ try{ _renderOld(); }catch(e){ console.warn('render', e); } 
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 5000);
     try{
-      const response = await fetch(url, { ...options, credentials: 'same-origin', signal: controller.signal });
+      const response = await chargingControlFetch(url, { ...options, credentials: 'same-origin', signal: controller.signal });
       if (!response || !response.ok){
         throw new Error(response && (response.status === 401 || response.status === 403) ? 'mode_auth_required' : 'mode_http_failed');
       }
@@ -9641,7 +9686,7 @@ render = function(){ try{ _renderOld(); }catch(e){ console.warn('render', e); } 
       const scope = modalHasEms ? 'ems' : 'settings';
       const key = modalHasEms ? 'evcs.1.stationEnabled' : 'evcsActive';
       try{
-        await fetch('/api/set', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({scope, key, value: desired})});
+        await chargingControlFetch('/api/set', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({scope, key, value: desired})});
       }catch(e){}
     });
   }
@@ -9655,7 +9700,7 @@ render = function(){ try{ _renderOld(); }catch(e){ console.warn('render', e); } 
       pendingRegUntil = Date.now() + 2500;
       try { scheduleRender(); } catch(_e) {}
       try{
-        await fetch('/api/set', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({scope:'ems', key:'evcs.1.regEnabled', value: desired})});
+        await chargingControlFetch('/api/set', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({scope:'ems', key:'evcs.1.regEnabled', value: desired})});
       }catch(e){}
     });
   }
@@ -10623,7 +10668,7 @@ function openFlowQc(kind, idx){
     pendingSwitch = !!v;
     showMsg('Sende…', '');
     try {
-      await fetch('/api/set', {
+      await chargingControlFetch('/api/set', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ scope: 'flow', key: `${ctx.kind}.${ctx.idx}.switch`, value: !!v })
@@ -10649,7 +10694,7 @@ function openFlowQc(kind, idx){
     pendingSetpoint = n;
     showMsg('Sende…', '');
     try {
-      await fetch('/api/set', {
+      await chargingControlFetch('/api/set', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ scope: 'flow', key: `${ctx.kind}.${ctx.idx}.setpoint`, value: n })
@@ -10673,7 +10718,7 @@ function openFlowQc(kind, idx){
     pendingReg = !!enable;
     showMsg('Sende…', '');
     try {
-      await fetch('/api/set', {
+      await chargingControlFetch('/api/set', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ scope: 'flow', key: `${ctx.kind}.${ctx.idx}.regEnabled`, value: !!enable })
@@ -10700,7 +10745,7 @@ function openFlowQc(kind, idx){
     pendingMode = m;
     showMsg('Sende…', '');
     try {
-      await fetch('/api/set', {
+      await chargingControlFetch('/api/set', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ scope: 'flow', key: `${ctx.kind}.${ctx.idx}.mode`, value: m })
@@ -10725,7 +10770,7 @@ function openFlowQc(kind, idx){
     pendingBoost = !!enable;
     showMsg(enable ? 'Boost starte…' : 'Boost stoppe…', '');
     try {
-      await fetch('/api/set', {
+      await chargingControlFetch('/api/set', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ scope: 'flow', key: `${ctx.kind}.${ctx.idx}.boost`, value: !!enable })

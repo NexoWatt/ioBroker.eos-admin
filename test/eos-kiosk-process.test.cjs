@@ -92,6 +92,25 @@ test('current dashboard payloads remain usable without granting installer limits
     }
 });
 
+test('kiosk admits bounded identity guards on permitted charging commands without broadening control authority', () => {
+    const identity = '10000000-0000-4000-8000-000000000001';
+    for (const body of [
+        { scope: 'ems', key: 'evcs.1.userMode', value: 'pv', expectedChargingIdentity: identity },
+        { scope: 'evcs', key: '1.mode', value: 3, expectedChargingIdentity: identity },
+        { scope: 'settings', key: 'evcsActive', value: false, expectedChargingLayoutRevision: identity },
+        { scope: 'ems', key: 'evcs.global.storageAssistEnabled', value: false, expectedChargingLayoutRevision: identity },
+    ]) assert.equal(kioskSetAllowed(body), true);
+    for (const expectedChargingIdentity of [null, true, {}, [], '', 'x'.repeat(4096), 'not-an-identity']) {
+        assert.equal(kioskSetAllowed({ scope: 'ems', key: 'evcs.1.userMode', value: 'pv', expectedChargingIdentity }), false);
+    }
+    for (const body of [
+        { scope: 'ems', key: 'evcs.1.maxCurrentA', value: 100, expectedChargingIdentity: identity },
+        { scope: 'settings', key: 'installerEnabled', value: true, expectedChargingLayoutRevision: identity },
+        { scope: 'flow', key: 'producer.1.switch', value: true, expectedChargingIdentity: identity },
+        { scope: 'ems', key: 'evcs.1.userMode', value: 'pv', expectedChargingIdentity: identity, id: 'arbitrary.0.target' },
+    ]) assert.equal(kioskSetAllowed(body), false);
+});
+
 test('real UI child receives only parent kiosk identity; forged role/context headers and disabled cookies never unlock admin', async t => {
     const x = service(); await x.kiosk.initialize();
     await x.kiosk.save({ enabled: true, revision: 0 }, 'system.user.admin', async () => true);

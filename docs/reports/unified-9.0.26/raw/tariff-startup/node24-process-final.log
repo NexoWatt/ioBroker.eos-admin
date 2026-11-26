@@ -1,0 +1,10 @@
+✔ Tibber save reaches parent state and survives UI plus whole owner restart (native namespace) (6953.036753ms)
+✔ Tibber save reaches parent state and survives UI plus whole owner restart (preserved namespace) (6146.275622ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13846.971601

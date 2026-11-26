@@ -1,0 +1,16 @@
+{
+  "checkedAt": "2026-11-25T19:59:35.110456+00:00",
+  "baselineCompiledFiles": 47,
+  "fullRepositoryZip": {
+    "name": "NexoWatt_EOS_9.0.25_FULL_REPOSITORY.zip",
+    "sha256": "9e6a1ead6735c004df339b09a030ad92d525867d5c30b1da045945bedb9963f8",
+    "compiledByteIdentical": 47,
+    "ignoreMatchesBaseline": true
+  },
+  "npmTgz": {
+    "name": "iobroker.eos-admin-9.0.25.tgz",
+    "sha256": "4629bd42a87f8aca652a092889b2382a57649d2da7b398e00524d61b3ec7128b",
+    "compiledByteIdentical": 47
+  },
+  "conclusion": "The delivered ZIP and TGZ contain every compiled module file. Loss occurs when ordinary git add applies the 925 ignore policy to untracked compiled module directories."
+}

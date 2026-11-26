@@ -77,105 +77,34 @@
                 </p>
                 <button id="key">Wiederherstellungsschlüssel herunterladen</button>
             </section>
-            <section class="eos-panel">
-                <h2>Zeitplan & Speicherziel</h2>
+            <section class="eos-panel backup-settings-panel" aria-labelledby="settings-title">
+                <h2 id="settings-title">Sicherungen einrichten</h2>
+                <p>Wähle die Sicherungsteile und zusätzlichen Speicherziele einzeln aus. Über „Einstellungen“ öffnest du nur die Optionen dieses Bereichs.</p>
                 <form id="settings">
-                    <div class="fields">
-                        <label
-                            ><input
-                                id="enabled"
-                                type="checkbox"
-                            />
-                            Backupmodul aktivieren</label
-                        ><label
-                            ><input
-                                id="minimalEnabled"
-                                type="checkbox"
-                            />
-                            Automatische Systemsicherung</label
-                        ><label
-                            >Uhrzeit<input
-                                id="minimalTime"
-                                type="time" /></label
-                        ><label
-                            >Alle … Tage<input
-                                id="minimalEveryXDays"
-                                type="number"
-                                min="1"
-                                max="365" /></label
-                        ><label
-                            >Aufbewahrung je Sicherungstyp (Anzahl, 0 = unbegrenzt)<input
-                                id="minimalDeleteAfter"
-                                type="number"
-                                min="0"
-                                max="3650" /></label
-                        ><label
-                            >Maximale Laufzeit (Minuten)<input
-                                id="jobTimeoutMinutes"
-                                type="number"
-                                min="1"
-                                max="120" /></label
-                        ><label
-                            ><input
-                                id="cifsEnabled"
-                                type="checkbox"
-                            />
-                            Zusätzliches lokales Ziel / SD-Karte</label
-                        ><label
-                            >Art des Ziels<select id="connectType">
-                                <option value="Copy">Eingebundener Ordner / NAS</option>
-                                <option value="SDCard">Eingebundene SD-Karte</option>
-                                <option value="CIFS">Vorab eingebundenes CIFS</option>
-                                <option value="NFS">Vorab eingebundenes NFS</option>
-                            </select></label
-                        ><label
-                            >Zielordner<input
-                                id="mountedBackupPath"
-                                type="text"
-                                placeholder="/mnt/eos-backup" /></label
-                        ><label
-                            >SD-Karte: Einhängepunkt<input
-                                id="sdCardMountPath"
-                                type="text"
-                                list="sdTargets"
-                                placeholder="/media/eos-backup"
-                            /><datalist id="sdTargets"></datalist
-                            ><button
-                                id="scanSd"
-                                type="button"
-                            >
-                                SD-Karten suchen
-                            </button></label
-                        ><label
-                            >SD-Karte: Unterordner<input
-                                id="sdCardBackupSubDir"
-                                type="text"
-                        /></label>
+                    <label class="backup-module-switch"><input id="enabled" type="checkbox" /> Backupmodul aktivieren</label>
+                    <p class="backup-setting-help">Die Modulfreigabe und die einzelnen Sicherungsteile sind getrennt. Änderungen gelten erst nach „Alle Einstellungen speichern“.</p>
+                    <div id="backup-sections"></div>
+                    <div class="backup-save-bar">
+                        <p id="draft-status" role="status" aria-live="polite">Einstellungen werden geladen …</p>
+                        <button id="saveSettings" class="eos-primary" type="submit" disabled>Alle Einstellungen speichern</button>
                     </div>
-                    <button
-                        class="eos-primary"
-                        type="submit"
-                    >
-                        Speichern und übernehmen
-                    </button>
                 </form>
-                <p>
-                    EOS nutzt bereits eingebundene Datenträger. Einbinden und Rechtevergabe erfolgen bei der
-                    Geräteeinrichtung.
-                </p>
-                <details>
-                    <summary>Weitere übernommene Einstellungen</summary>
-                    <p>
-                        Die vollständige Konfiguration bleibt erhalten. Nicht freigegebene Betriebsarten werden vor der
-                        Übernahme mit einer konkreten Meldung angehalten.
-                    </p>
-                    <div
-                        id="advanced"
-                        class="fields"
-                    ></div>
-                    <button id="saveAdvanced">Alle Einstellungen speichern</button>
-                </details>
             </section>
+            <dialog id="settingsDialog" class="backup-dialog" aria-labelledby="dialog-title" aria-describedby="dialog-description">
+                <form id="dialog-form">
+                    <header class="backup-dialog-header">
+                        <h2 id="dialog-title">Einstellungen</h2>
+                        <button id="dialog-close" type="button" aria-label="Dialog schließen">×</button>
+                    </header>
+                    <p id="dialog-description"></p>
+                    <div id="dialog-fields" class="fields"></div>
+                    <p id="dialog-message" class="error" role="alert"></p>
+                    <footer class="backup-dialog-actions">
+                        <button id="dialog-cancel" type="button">Abbrechen</button>
+                        <button class="eos-primary" type="submit">In Entwurf übernehmen</button>
+                    </footer>
+                </form>
+            </dialog>
             <section class="eos-panel">
                 <h2>Vorhandene Sicherungen</h2>
                 <p>

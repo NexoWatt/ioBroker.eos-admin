@@ -23,7 +23,10 @@ async function setup(t) {
     const encrypt = text => `fixture:${Buffer.from(text).toString('base64')}`;
     const owner = {
         namespace: 'eos-admin.0', instance: 0,
-        config: { eosModules: { eebus: { v: 1, encrypted: encrypt(JSON.stringify(config)) } } },
+        // This contract runs EEBus and explicitly keeps the other modules off.
+        // An absent envelope now means enabled for initial commissioning.
+        config: { eosModules: Object.fromEntries(['devices', 'eebus', 'backup', 'ocpp']
+            .map(id => [id, { v: 1, encrypted: encrypt(JSON.stringify(id === 'eebus' ? config : { enabled: false })) }])) },
         log: Object.fromEntries(['info', 'warn', 'debug', 'error'].map(level => [level, text => logs.push({ level, text })])),
         licensed: true, owned: true,
         eosLicenseService: { allowsEmbeddedModule: () => owner.licensed },
@@ -80,7 +83,10 @@ test('actual hosted EEBus runtime starts with scoped objects/subscriptions and p
 test('actual Devices catalogue remains configurable while module is disabled and no device runtime is started', { timeout: 15000 }, async t => {
     const f = await setup(t);
     const state = await f.host.status('devices');
+    assert.equal(state.enabled, false);
     assert.equal(state.active, false);
+    assert.equal(state.reason, 'DISABLED');
+    assert.equal(state.details.process.pid, null);
     const categories = await f.host.command('devices', 'getCategories', {});
     assert.ok(Array.isArray(categories) && categories.length > 0, 'actual local template categories are available before enabling');
     assert.equal(f.host.entries.get('devices').module, null);

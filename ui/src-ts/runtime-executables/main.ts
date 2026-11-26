@@ -66,6 +66,8 @@ const tariffProviderRegistry = require('./ems/services/tariff-provider-registry'
 const { normalizeEvcsEnergyTotalKwh } = require('./ems/services/evcs-unit-conversion');
 const { validateEvcsElectricalConfig } = require('./lib/evcs-electrical-limits');
 const { OcppAutoDiscovery, planOcppDiscovery, normalizeOcppDiscovery, ocppDiscoveryPatterns, ocppStationRoot, ocppRootInScope, ocppNamespace } = require('./lib/ocpp-auto-discovery');
+const { beginChargingControlWrite, bindChargingPointIdentityBaseline, chargingPointLayoutChanged, remapChargingPointDefaultModes, publicChargingControlIdentity, assertChargingControlIdentity } = require('./lib/charging-point-identity');
+const { remapChargingStationAssignments } = require('./lib/charging-station-identity');
 const { NotificationMail, validAddress } = require('./lib/notification-mail');
 const { startOpenMeteoPvForecastRuntime, requestOpenMeteoJson, validateOpenMeteoWeather, safeOpenMeteoError, configuredOpenMeteoApiKey } = require('./ems/services/open-meteo-pv-forecast'), { AdminOverviewPublisher } = require('./ems/services/admin-overview-publisher');
 /**
@@ -4739,6 +4741,7 @@ class NexoWattVis extends HostedAdapter {
   }
 
   async loadInstallerConfigFromState() {
+    this._nwInstallerConfigHydrated = false;
     const preservedMode = this.namespace !== this.hostNamespace && /^nexowatt-ui\.\d+$/.test(this.namespace);
     const previous = { config: this.config, native: this._nwNativeConfigBase, patch: this._nwInstallerConfigPatch, rawPatch: this._nwInstallerConfigRawPatch };
     try {
@@ -4806,6 +4809,9 @@ class NexoWattVis extends HostedAdapter {
           await this.nwWriteUserdataBackup(patch, source === 'userdata' ? 'restore-userdata' : 'normalize');
         } catch (_e5) {}
       }
+      // Read APIs may only confirm the persisted tariff after the entire load
+      // (including a required first commit) succeeded, never native defaults.
+      this._nwInstallerConfigHydrated = true;
 
     } catch (e) {
       this.config = previous.config;
@@ -4874,6 +4880,42 @@ class NexoWattVis extends HostedAdapter {
     });
   }
 
+  /** Keep old index ownership durable before committing a changed point order.
+   * The old engine and accepted customer writes are drained before snapshots;
+   * Engine.init recovers/copies the journal before new controllers can start. */
+  async _nwPrepareChargingPointReconfigure(nextConfig, restartEms) {
+    const configuredRows = config => {
+      const settings = config?.settingsConfig || {};
+      const list = Array.isArray(settings.evcsList) ? settings.evcsList : [];
+      const configuredCount = settings.evcsCount === undefined ? list.length : Number(settings.evcsCount);
+      const count = Number.isFinite(configuredCount) ? Math.max(0, Math.min(50, Math.round(configuredCount))) : list.length;
+      return Array.from({ length: count }, (_, index) => list[index] && typeof list[index] === 'object' ? list[index] : {});
+    };
+    const previous = Array.isArray(this.evcsList) ? this.evcsList : configuredRows(this.config);
+    const desired = remapChargingPointDefaultModes(previous, configuredRows(nextConfig), this.namespace);
+    const changed = chargingPointLayoutChanged(previous, desired, this.config?.chargeKiosk, nextConfig?.chargeKiosk, this.namespace);
+    let stopped = false;
+    const stopPrevious = async () => {
+      this._nwEvcsIdentityTransitionPending = true;
+      const previousEngine = this.emsEngine;
+      if (previousEngine) {
+        if (typeof previousEngine.stopForReconfigure !== 'function') throw new Error('EOS_EMS_STOP_UNCONFIRMED');
+        await previousEngine.stopForReconfigure();
+        if (this.emsEngine === previousEngine) this.emsEngine = null;
+      }
+      stopped = true;
+    };
+    if (changed || this._nwEvcsIdentityTransitionPending) await stopPrevious();
+    await bindChargingPointIdentityBaseline(this, previous, desired, nextConfig?.chargeKiosk);
+    const recovery = this._nwEvcsIdentityTransitionPending === true;
+    if (recovery && !stopped) await stopPrevious();
+    if (changed || recovery || stopped) {
+      this._nwEvcsIdentityTransitionPending = true;
+      return true;
+    }
+    return !!restartEms;
+  }
+
   async _nwApplyInstallerRuntime(restartEms, reason) {
     this._nwConfigureHistory();
     const currentTariffModule = this.emsEngine?.mm?.modules?.find(entry => entry.key === 'tariffProvider')?.instance;
@@ -4938,6 +4980,7 @@ class NexoWattVis extends HostedAdapter {
       const storageLicense = this._nwValidateStorageFarmLicense(next);
       if (!storageLicense.ok) throw new Error(String(storageLicense.error || 'EOS_EMS_STORAGE_LICENSE_REQUIRED'));
       await this._nwProvisionInstallerObjects(next);
+      await this._nwPrepareChargingPointReconfigure(next, true);
       assertReady();
       if (plan.changed) {
         if (await this.persistInstallerConfigToState(patch) === false) throw new Error('EOS_DEVICE_EMS_PERSIST_FAILED');
@@ -4949,7 +4992,7 @@ class NexoWattVis extends HostedAdapter {
       assertReady();
       if (this.emsEngine?.stopForReconfigure) await this.emsEngine.stopForReconfigure();
       assertReady();
-      this.config = next;
+      this.config = this.nwApplyInstallerPatchToRuntimeConfig(this.config || {}, patch);
       await this._nwApplyInstallerRuntime(true, 'device-commissioning');
       this._nwDeviceEmsApplyPending = false;
       try { await this.nwWriteUserdataBackup(patch, 'device-commissioning'); }
@@ -4976,6 +5019,7 @@ class NexoWattVis extends HostedAdapter {
       const patch = this.nwDeepMerge(this._nwDeepClone(this._nwInstallerConfigPatch || {}), plan.patch);
       const next = this.nwApplyInstallerPatchToRuntimeConfig(this.config || {}, patch);
       await this._nwProvisionInstallerObjects(next);
+      await this._nwPrepareChargingPointReconfigure(next, true);
       assertReady();
       if (plan.changed) {
         if (await this.persistInstallerConfigToState(patch) === false) throw new Error('EOS_OCPP_DISCOVERY_PERSIST_FAILED');
@@ -4987,7 +5031,7 @@ class NexoWattVis extends HostedAdapter {
       assertReady();
       if (this.emsEngine?.stopForReconfigure) await awaitEmsTransition(this.emsEngine.stopForReconfigure());
       assertReady();
-      this.config = next;
+      this.config = this.nwApplyInstallerPatchToRuntimeConfig(this.config || {}, patch);
       await this._nwApplyInstallerRuntime(true, 'ocpp-discovery');
       this._nwOcppApplyPending = false;
       try { await this.nwWriteUserdataBackup(patch, 'ocpp-discovery'); }
@@ -5002,6 +5046,12 @@ class NexoWattVis extends HostedAdapter {
       hostNamespace: this.hostNamespace,
       readObjects: async () => Object.assign({}, ...await Promise.all(ocppDiscoveryPatterns(this.hostNamespace).map(pattern => this.getForeignObjectsAsync(pattern, 'state')))),
       readMetadata: async () => Object.assign({}, ...await Promise.all(ocppDiscoveryPatterns(this.hostNamespace).map(pattern => this.getForeignStatesAsync(`${pattern}.info.*`)))),
+      readSources: async () => ({
+        instances: await this.getObjectViewAsync('system', 'instance', {
+          startkey: 'system.adapter.ocpp21.', endkey: 'system.adapter.ocpp21.\u9999', limit: 129,
+        }),
+        hostedNamespace: this._bridge.getRuntimeReadiness?.()?.hostedOcppNamespace,
+      }),
       subscribe: () => Promise.all(ocppDiscoveryPatterns(this.hostNamespace).map(pattern => this.subscribeForeignStatesAsync(`${pattern}.info.*`))),
       reconcile: stations => this.reconcileOcppDiscovery(stations),
       canRun: () => !this._nwShuttingDown && this._bridge.canWrite() === true
@@ -5059,7 +5109,30 @@ class NexoWattVis extends HostedAdapter {
 
   async persistInstallerConfigToState(patchObj) {
     // Auch interne Save-/Importpfade dürfen verbindliche Mesh-Grenzen nicht lösen.
-    const nextRuntime = this.nwApplyInstallerPatchToRuntimeConfig(this.config, patchObj);
+    let nextRuntime = this.nwApplyInstallerPatchToRuntimeConfig(this.config, patchObj);
+    const previousEvcsRows = this.config?.settingsConfig?.evcsList || [];
+    const nextEvcsRows = nextRuntime?.settingsConfig?.evcsList || [];
+    const persistedEvcsRows = this._nwInstallerConfigPatch?.settingsConfig?.evcsList;
+    const submittedEvcsRows = patchObj?.settingsConfig?.evcsList;
+    // Unrelated tariff/history saves must neither remap nor revalidate an
+    // unchanged persisted point layout. Runtime-only normalization is not an
+    // operator reassignment. A real persisted row change takes every guard.
+    if (JSON.stringify(persistedEvcsRows === undefined ? previousEvcsRows : persistedEvcsRows)
+      !== JSON.stringify(submittedEvcsRows === undefined ? nextEvcsRows : submittedEvcsRows)) {
+      const remappedModes = remapChargingPointDefaultModes(previousEvcsRows, nextEvcsRows, this.namespace);
+      if (remappedModes !== nextEvcsRows && patchObj && typeof patchObj === 'object') {
+        patchObj.settingsConfig = { ...nextRuntime.settingsConfig, evcsList: remappedModes };
+        nextRuntime = this.nwApplyInstallerPatchToRuntimeConfig(this.config, patchObj);
+      }
+      // A public station URL stays bound to its physical points when lpN indices
+      // move. Persist its remapped manual/fallback list in this same config commit.
+      const nextKiosk = remapChargingStationAssignments(previousEvcsRows, nextRuntime?.settingsConfig?.evcsList || [],
+        this.config?.chargeKiosk, nextRuntime?.chargeKiosk, this.namespace);
+      if (nextKiosk !== nextRuntime?.chargeKiosk && patchObj && typeof patchObj === 'object') {
+        patchObj.chargeKiosk = nextKiosk;
+        nextRuntime = this.nwApplyInstallerPatchToRuntimeConfig(this.config, patchObj);
+      }
+    }
     this._meshCoordinator?.assertAppChange(nextRuntime);
     assertPartnerPersistence(this.config || {}, nextRuntime);
     if (!this._nwPartnerCommitInFlight && JSON.stringify(currentPartnerConfig(this.config)) !== JSON.stringify(currentPartnerConfig(nextRuntime))) {
@@ -12007,6 +12080,7 @@ async onReady() {
       assertStartupAuthority();
       return result;
     };
+    this._nwInstallerConfigHydrated = false;
     this._hostedStartup = { state: 'starting', error: '' };
     try {
       if (!centralLicenseSnapshot(this._bridge).ok) {
@@ -16219,7 +16293,6 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
     app.get('/api/installer/config', requireInstaller, async (_req, res) => {
       try {
         sendNoStore(res);
-        const configurationRevision = this._nwInstallerConfigRevision();
         // A license can be saved through the Admin tab while the App-Center is already open.
         // Refresh the runtime license cache here before filtering apps. This also covers the
         // startup edge case where the HTTP gate is open but _nwLicenseInfo has not yet been
@@ -16232,7 +16305,12 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
         // system.adapter.<instance>.native. Persisting to native triggers an ioBroker instance restart
         // and breaks the UI with "Failed to fetch" + SSE disconnects.
         const nativeObj = (this.config && typeof this.config === 'object') ? this.config : {};
-        let cfgOut = await _nwHydrateStorageFarmConfigFromRuntimeStates(_nwPickPersistedInstallerConfig());
+        // Take the token and its configuration snapshot without an await between
+        // them. Discovery may commit while license refresh/hydration is pending;
+        // it must never pair newer rows with an older form revision.
+        const configurationRevision = this._nwInstallerConfigRevision();
+        const installerSnapshot = this._nwDeepClone(_nwPickPersistedInstallerConfig());
+        let cfgOut = await _nwHydrateStorageFarmConfigFromRuntimeStates(installerSnapshot);
         cfgOut = _nwMaskTariffProviderForUi(cfgOut);
         // 1.0.3: Nur die an die UI gelieferte Kopie wird auf die aktuelle Edition
         // begrenzt. Alte Pro-Konfigurationen bleiben intern erhalten, dürfen bei einer
@@ -16263,7 +16341,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
         const body = req.body || {};
         this._nwAssertInstallerConfigRevision(body.expectedConfigurationRevision);
         const patch = body.patch && typeof body.patch === 'object' ? body.patch : {};
-        const restartEms = body.restartEms !== false; // default true
+        let restartEms = body.restartEms !== false; // identity changes always restart safely
         const tokenError = nwValidateStationTokenChanges(patch);
         if (tokenError) return res.status(400).json({ ok: false, error: 'invalid_station_token', message: tokenError });
 
@@ -16314,6 +16392,12 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
         const gateResult = await _nwApplyInstallerRegressionSafetyGate(safePatch, basePatch);
         const guardedPatch = gateResult && gateResult.patch ? gateResult.patch : safePatch;
         let mergedPatch = this.nwDeepMerge(this.nwDeepMerge({}, basePatch), guardedPatch);
+        // The explicit empty-list permission belongs to this accepted edit,
+        // never to subsequent forms or background configuration changes.
+        if (mergedPatch.settingsConfig && typeof mergedPatch.settingsConfig === 'object') {
+          delete mergedPatch.settingsConfig.__allowEmptyEvcsList;
+          delete mergedPatch.settingsConfig.__explicitDeleteAll;
+        }
         // Die Topologie ist ein atomarer Vertrag; kein partieller Deep-Merge mit
         // alten Messpunkten, Stellhoheiten oder Schutzgrenzen.
         if (Object.prototype.hasOwnProperty.call(safePatch, 'nvpTopology')) mergedPatch.nvpTopology = this._nwDeepClone(safePatch.nvpTopology);
@@ -16409,6 +16493,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
         catch (error) { const failure = safeConfigurationFailure(error); return res.status(failure.status).json(failure.body); }
         // Persist patch to states (no ioBroker restart)
         await this._nwProvisionInstallerObjects(this.nwApplyInstallerPatchToRuntimeConfig(this.config, mergedPatch));
+        restartEms = await this._nwPrepareChargingPointReconfigure(this.nwApplyInstallerPatchToRuntimeConfig(this.config, mergedPatch), restartEms);
         if (await this.persistInstallerConfigToState(mergedPatch) === false) throw new Error('Installer-Konfiguration konnte nicht gespeichert werden.');
         this._nwInstallerConfigPatch = mergedPatch;
 
@@ -16507,7 +16592,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
       try {
         const body = req.body || {};
         this._nwAssertInstallerConfigRevision(body.expectedConfigurationRevision);
-        const restartEms = body.restartEms !== false; // default true
+        let restartEms = body.restartEms !== false; // identity changes always restart safely
         const mode = String(body.mode || 'replace').toLowerCase(); // replace | merge
 
         // Accept both a wrapped backup object or a raw patch.
@@ -16617,6 +16702,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
         try { this._meshCoordinator?.assertAppChange(this.nwApplyInstallerPatchToRuntimeConfig(baseNative, finalPatch)); }
         catch (error) { const failure = safeConfigurationFailure(error); return res.status(failure.status).json(failure.body); }
         await this._nwProvisionInstallerObjects(this.nwApplyInstallerPatchToRuntimeConfig(baseNative, finalPatch));
+        restartEms = await this._nwPrepareChargingPointReconfigure(this.nwApplyInstallerPatchToRuntimeConfig(baseNative, finalPatch), restartEms);
         if (await this.persistInstallerConfigToState(finalPatch) === false) throw new Error('Installer-Import konnte nicht gespeichert werden.');
         this._nwInstallerConfigPatch = finalPatch;
 
@@ -17340,6 +17426,13 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
     const requireCustomerTariff = async (req, res, next) => {
       if (!['customer', 'installer', 'admin'].includes(req.nwSession?.role)) return res.status(403).json({ ok: false, error: 'forbidden' });
       if (!this._nwIsFeatureLicensed('dynamicTariffs')) return res.status(403).json({ ok: false, error: 'EOS_TARIFF_LICENSE_REQUIRED' });
+      // Both reads and writes require a positively confirmed stored configuration.
+      // HTTP/shell availability alone must never expose or overwrite native defaults.
+      if (this._nwInstallerConfigHydrated !== true) {
+        sendNoStore(res);
+        const loading = ['idle', 'starting'].includes(this._hostedStartup?.state);
+        return res.status(503).json({ ok: false, error: loading ? 'EOS_TARIFF_CONFIG_LOADING' : 'EOS_TARIFF_CONFIG_UNAVAILABLE' });
+      }
       return next();
     };
     const customerTariffSnapshot = () => {
@@ -21648,6 +21741,10 @@ const _nwDisplayBuildPayload = (station) => {
   return {
     ok: true,
     generatedAt: now,
+    chargingControlIdentity: (() => {
+      const snapshot = publicChargingControlIdentity(this, list);
+      return { revision: snapshot.revision, slots: Object.fromEntries(Object.entries(snapshot.slots).filter(([slot]) => assignedSet.has(slot))) };
+    })(),
     station: {
       id: station.id,
       name: station.name,
@@ -23189,6 +23286,7 @@ app.post('/api/display/station/:token/heartbeat', async (req, res) => {
 });
 
 app.post('/api/display/station/:token/command', async (req, res) => {
+  let releaseChargingControl;
   try {
     sendNoStore(res);
     if (!_nwDisplayIsLicensed()) return res.status(403).json({ ok: false, error: 'eos_required', message: 'DC Station Display ist nur in EOS verfügbar.' });
@@ -23227,6 +23325,8 @@ app.post('/api/display/station/:token/command', async (req, res) => {
       return res.status(409).json({ ok: false, error: 'global_storage_control_required', message: 'Der Speicherschutz wird zentral auf der EVCS-Seite gesteuert.' });
     }
 
+    releaseChargingControl = beginChargingControlWrite(this);
+    assertChargingControlIdentity(this, lp, body);
     const commandTs = Date.now();
     await _nwDisplayWriteStationState(station.id, 'lastTouch', commandTs, true);
     await _nwDisplayWriteStationState(station.id, 'lastCommand', `${action}:${lp}:${mode}`, true);
@@ -23242,6 +23342,11 @@ app.post('/api/display/station/:token/command', async (req, res) => {
     await _nwDisplayPersistSessionOperatorStates(station, payload);
     return res.json({ ok: true, accepted: true, action, lp, mode, bridge: bridgeResult.bridge, controlProfile: bridgeResult.controlProfile, manufacturerOpen: true, payload });
   } catch (e) {
+    if (e && ['EOS_EVCS_IDENTITY_BUSY', 'EOS_EVCS_IDENTITY_CHANGED'].includes(e.code)) {
+      return res.status(409).json({ ok: false, error: e.code, message: e.code === 'EOS_EVCS_IDENTITY_CHANGED'
+        ? 'Die Ladepunktzuordnung wurde geändert. Bitte die Seite neu laden und den Ladepunkt erneut auswählen.'
+        : 'Die Ladepunktzuordnung wird gerade aktualisiert. Bitte anschließend erneut bedienen.' });
+    }
     try {
       const station = _nwDisplayFindStation(req.params && req.params.token);
       if (station) {
@@ -23252,12 +23357,16 @@ app.post('/api/display/station/:token/command', async (req, res) => {
       }
     } catch (_e) {}
     return res.status(500).json({ ok: false, error: 'internal_error', message: 'Anfrage konnte intern nicht verarbeitet werden.' });
+  } finally {
+    if (releaseChargingControl) releaseChargingControl();
   }
 });
 app.get('/api/locale', nwLocaleApiService.createLocaleHandler(this, sendNoStore));
 
 // API-Kommentar: GET-Route. Zweck: stellt einen Web-/API-Endpunkt bereit. Zusammenhang: Frontend-Dateien in www/* können diesen Endpunkt direkt nutzen. Route/Handler: '/config', (req, res) => {
 app.get('/config', async (req, res) => {
+      // Resolve access before taking the synchronous rows/identity snapshot.
+      const sess = authEnabled ? await resolveAccess(req) : null;
       // UI flags: treat missing (undefined) EMS module flags as sensible defaults.
       // This avoids "legacy" fallbacks in the EVCS UI on upgrades where config flags
       // were not persisted yet.
@@ -23482,9 +23591,8 @@ app.get('/config', async (req, res) => {
         return evcsAvailableEffective;
       };
 
-      const sess = authEnabled ? await resolveAccess(req) : null;
-
       const nwConfigPayload = {
+        chargingControlIdentity: publicChargingControlIdentity(this, evcsListForConfig),
         tariffDisplay: tariffDisplayConfig(cfg, this.namespace),
         locale: this._nwBuildLocaleInfo(),
         countryProfile: this._nwBuildCountryProfileInfo(),
@@ -24686,11 +24794,23 @@ settingsConfig: {
     // generic setter for customer-facing settings and commands
     // API-Kommentar: POST-Route. Zweck: stellt einen Web-/API-Endpunkt bereit. Zusammenhang: Frontend-Dateien in www/* können diesen Endpunkt direkt nutzen. Route/Handler: '/api/set', requireAuth, async (req, res) => {
     app.post('/api/set', requireAuth, async (req, res) => {
+      let releaseChargingControl;
       try {
         const scope = req.body && req.body.scope;
         const key = req.body && req.body.key;
         const value = req.body && req.body.value;
         if (!['settings', 'installer', 'ems', 'bhkw', 'generator', 'threshold', 'relay', 'evcs', 'rfid', 'flow', 'storageFarm'].includes(scope) || typeof key !== 'string' || !key || key.length > 256) return res.status(400).json({ ok: false, error: 'bad request' });
+        if (scope === 'ems' || scope === 'evcs' || (scope === 'settings' && /^evcs/i.test(key))) {
+          releaseChargingControl = beginChargingControlWrite(this);
+          // Bind to the identity rendered by the caller, before any asynchronous
+          // plan/read can let a configuration change replace this index.
+          const point = scope === 'ems'
+            ? key.match(/^(?:evcs\.)?(\d+)\./i) || key.match(/^(?:chargingManagement\.(?:wallboxes\.)?)?lp(\d+)\./i)
+            : scope === 'evcs' ? key.match(/^(?:evcs\.)?(\d+)\./i) : null;
+          const global = scope === 'settings' || /^(?:evcs\.)?(?:global|all)\./i.test(key);
+          if (point) assertChargingControlIdentity(this, `lp${Number(point[1])}`, req.body);
+          else if (global) assertChargingControlIdentity(this, null, req.body);
+        }
 
         if (scope === 'settings' && key === 'email' && String(value || '').trim() && !validAddress(String(value).trim())) return res.status(400).json({ ok: false, error: 'Bitte eine einzelne gültige E-Mail-Adresse eingeben.' });
 
@@ -24836,6 +24956,10 @@ settingsConfig: {
             }
           }
           if (!safe || !prop) return res.status(400).json({ ok: false, error: 'bad request' });
+          // The compatibility spelling must still address a configured lpN,
+          // never create an unbound named control that bypasses identity checks.
+          if (/^lp\d+$/i.test(safe)) safe = `lp${Number(safe.slice(2))}`;
+          else assertChargingControlIdentity(this, safe, req.body);
 
           // Kundenseitige Freigabe der physischen Ladestation. Dieser State ist
           // bewusst vom Connector-/Fahrzeugstatus (`activeId`) und von der
@@ -26012,8 +26136,15 @@ settingsConfig: {
         }
         res.json({ ok: true });
       } catch (e) {
+        if (e && ['EOS_EVCS_IDENTITY_BUSY', 'EOS_EVCS_IDENTITY_CHANGED'].includes(e.code)) {
+          return res.status(409).json({ ok: false, error: e.code, message: e.code === 'EOS_EVCS_IDENTITY_CHANGED'
+            ? 'Die Ladepunktzuordnung wurde geändert. Bitte die Seite neu laden und den Ladepunkt erneut auswählen.'
+            : 'Die Ladepunktzuordnung wird gerade aktualisiert. Bitte anschließend erneut bedienen.' });
+        }
         this.log.warn('set error: ' + e.message);
         res.status(500).json({ ok: false, error: 'internal error' });
+      } finally {
+        if (releaseChargingControl) releaseChargingControl();
       }
     });
 
@@ -27647,7 +27778,7 @@ return res.json(out);
   /**
    * Ablauf und Zusammenhang: Übernimmt ioBroker-Ereignisse in die Adapter-Laufzeit und verteilt relevante Änderungen an Anzeige, Einstellungen und Regelung. Bestätigte Messwerte und Bedien-Schreibwünsche dürfen dabei nicht verwechselt werden.
    */
-  onStateChange(id, state) {
+  async onStateChange(id, state) {
     if (this._nwShuttingDown) return;
     this._ocppAutoDiscovery?.onStateChange(id, state);
     if (state && state.ack === false && String(id).startsWith(this.namespace + '.')
@@ -27742,33 +27873,38 @@ return res.json(out);
         }
       } catch (_e) {}
 
-      // Sync: EVCS numerischer Modus (evcs.<i>.mode) <-> EMS User-Mode (chargingManagement.wallboxes.lp<i>.userMode)
+      // Compatibility mirrors participate in the same drain as HTTP commands.
+      // Copying a journal uses ack:true and writes both representations itself.
+      let releaseModeMirror;
       try {
-        if (key) {
-          // 1) Wenn ein externer oder interner Modus-DP geschrieben wird (ack=false), übersetze in userMode.
-          const m = key.match(/^evcs\.(\d+)\.mode$/);
-          if (m && state && state.ack === false) {
-            const idx = Number(m[1]);
+        const legacyMode = key && key.match(/^evcs\.(\d+)\.mode$/);
+        const userModeState = key && key.match(/^chargingManagement\.wallboxes\.lp(\d+)\.userMode$/);
+        if ((legacyMode && (state.ack === false || !this._nwIsOwnStateId(id))) || userModeState) {
+          releaseModeMirror = beginChargingControlWrite(this);
+          if (legacyMode && state.ack === false) {
+            const idx = Number(legacyMode[1]);
             const mv = Number(state.val);
             const userMode = (mv === 1) ? 'boost' : (mv === 2) ? 'minpv' : (mv === 3) ? 'pv' : 'auto';
             const userModeKey = `chargingManagement.wallboxes.lp${idx}.userMode`;
-            this.setStateAsync(userModeKey, userMode, false).catch(()=>{});
-            try { this.updateValue(userModeKey, userMode, Number(state.ts) || Date.now()); } catch (_e3) {}
+            await this.setStateAsync(userModeKey, userMode, false);
+            this.updateValue(userModeKey, userMode, Number(state.ts) || Date.now());
             this._nwRequestImmediateEmsTick(`state:${userModeKey}`);
           }
-
-          // 2) Wenn userMode geändert wird, spiegle in evcs.<i>.mode (ack=true), damit UI/Kompatibilität stimmt.
-          const um = key.match(/^chargingManagement\.wallboxes\.lp(\d+)\.userMode$/);
-          if (um) {
-            const idx = Number(um[1]);
-            const v = String(state.val ?? '').toLowerCase();
-            const numMode = (v === 'boost') ? 1 : (v === 'minpv') ? 2 : (v === 'pv') ? 3 : 0;
-            this.setStateAsync(`evcs.${idx}.mode`, numMode, true).catch(()=>{});
+          if (legacyMode && ((!this._nwIsOwnStateId(id) && !evcsMappedAlreadyHandled) || state.ack === false)) {
+            await this.setStateAsync(key, normalizedMappedValue, true);
+          }
+          if (userModeState) {
+            const idx = Number(userModeState[1]);
+            const value = String(state.val ?? '').toLowerCase();
+            const numeric = value === 'boost' ? 1 : value === 'minpv' ? 2 : value === 'pv' ? 3 : 0;
+            await this.setStateAsync(`evcs.${idx}.mode`, numeric, true);
           }
         }
-      } catch (_e) {}
+      } catch (error) {
+        if (error?.code !== 'EOS_EVCS_IDENTITY_BUSY') this.log.warn('EOS_EVCS_MODE_MIRROR_FAILED');
+      } finally { releaseModeMirror?.(); }
 
-      if (key && key.startsWith('evcs.')) {
+      if (key && key.startsWith('evcs.') && !/^evcs\.\d+\.mode$/.test(key)) {
         const ownState = this._nwIsOwnStateId(id);
         // Externe Quellen werden durch den robusten EVCS-Publisher gespiegelt.
         // Eigene writeable EVCS-States werden nur bei ack=false quittiert; ack=true-

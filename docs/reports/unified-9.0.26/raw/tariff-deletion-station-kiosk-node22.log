@@ -1,0 +1,250 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: an unrelated tariff save preserves unchanged ambiguous legacy points while real point changes retain identity guards
+ok 1 - an unrelated tariff save preserves unchanged ambiguous legacy points while real point changes retain identity guards
+  ---
+  duration_ms: 395.620083
+  type: 'test'
+  ...
+# Subtest: customer tariff GET is authenticated, exposes only supported choices and no current or retained secrets
+ok 2 - customer tariff GET is authenticated, exposes only supported choices and no current or retained secrets
+  ---
+  duration_ms: 224.747262
+  type: 'test'
+  ...
+# Subtest: CSRF, origin and unsupported endpoint or actuator fields cannot change customer tariff settings
+ok 3 - CSRF, origin and unsupported endpoint or actuator fields cannot change customer tariff settings
+  ---
+  duration_ms: 141.605292
+  type: 'test'
+  ...
+# Subtest: partial customer tariff edit preserves blank credentials, manual mappings, EMS apps and customer device values
+ok 4 - partial customer tariff edit preserves blank credentials, manual mappings, EMS apps and customer device values
+  ---
+  duration_ms: 34.681153
+  type: 'test'
+  ...
+# Subtest: explicit tariff mapping consent changes only four tariff inputs and never enables an app or dispatch
+ok 5 - explicit tariff mapping consent changes only four tariff inputs and never enables an app or dispatch
+  ---
+  duration_ms: 55.108125
+  type: 'test'
+  ...
+# Subtest: provider switch requires fresh source credentials and preserves old credentials without reusing them
+ok 6 - provider switch requires fresh source credentials and preserves old credentials without reusing them
+  ---
+  duration_ms: 66.57009
+  type: 'test'
+  ...
+# Subtest: stale customer editor and failed persistence leave confirmed settings unchanged
+ok 7 - stale customer editor and failed persistence leave confirmed settings unchanged
+  ---
+  duration_ms: 41.336105
+  type: 'test'
+  ...
+# Subtest: editing or reconnecting a disabled provider preserves its explicit coupling settings; a fresh provider gets no grant
+ok 8 - editing or reconnecting a disabled provider preserves its explicit coupling settings; a fresh provider gets no grant
+  ---
+  duration_ms: 86.091418
+  type: 'test'
+  ...
+# Subtest: retained source credentials remain in protected recovery data and are omitted from every installer HTTP view
+ok 9 - retained source credentials remain in protected recovery data and are omitted from every installer HTTP view
+  ---
+  duration_ms: 40.381325
+  type: 'test'
+  ...
+# Subtest: unhydrated tariff reads never confirm native defaults; loaded tariffs remain available when unrelated EMS readiness degrades
+ok 10 - unhydrated tariff reads never confirm native defaults; loaded tariffs remain available when unrelated EMS readiness degrades
+  ---
+  duration_ms: 33.221943
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: one installer deletion atomically retires the A URL and moves the B URL by physical identity, including restart
+ok 11 - one installer deletion atomically retires the A URL and moves the B URL by physical identity, including restart
+  ---
+  duration_ms: 597.243709
+  type: 'test'
+  ...
+# (node:17) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: generation rotation invalidates freshly bootstrapped request references and open kiosk streams
+ok 12 - generation rotation invalidates freshly bootstrapped request references and open kiosk streams
+  ---
+  duration_ms: 13.033317
+  type: 'test'
+  ...
+# Subtest: storage, path, body and cookie parsing stay closed for malformed, foreign and stale input
+ok 13 - storage, path, body and cookie parsing stay closed for malformed, foreign and stale input
+  ---
+  duration_ms: 4.242628
+  type: 'test'
+  ...
+# Subtest: current dashboard payloads remain usable without granting installer limits or arbitrary settings
+ok 14 - current dashboard payloads remain usable without granting installer limits or arbitrary settings
+  ---
+  duration_ms: 1.913227
+  type: 'test'
+  ...
+# Subtest: kiosk admits bounded identity guards on permitted charging commands without broadening control authority
+ok 15 - kiosk admits bounded identity guards on permitted charging commands without broadening control authority
+  ---
+  duration_ms: 0.464397
+  type: 'test'
+  ...
+# Subtest: real UI child receives only parent kiosk identity; forged role/context headers and disabled cookies never unlock admin
+ok 16 - real UI child receives only parent kiosk identity; forged role/context headers and disabled cookies never unlock admin
+  ---
+  duration_ms: 612.695986
+  type: 'test'
+  ...
+# (node:20) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: registered stations persist complete native mappings; unknown electrical limits never enable a writer
+ok 17 - registered stations persist complete native mappings; unknown electrical limits never enable a writer
+  ---
+  duration_ms: 125.896868
+  type: 'test'
+  ...
+# Subtest: partial contract registration is explicit and completes; invalid directions, units and metadata stay untrusted
+ok 18 - partial contract registration is explicit and completes; invalid directions, units and metadata stay untrusted
+  ---
+  duration_ms: 0.595349
+  type: 'test'
+  ...
+# Subtest: real configuration pipeline retains validated contract failure metadata and never enables an uncommissioned row
+ok 19 - real configuration pipeline retains validated contract failure metadata and never enables an uncommissioned row
+  ---
+  duration_ms: 53.309136
+  type: 'test'
+  ...
+# Subtest: existing aliases deduplicate to one station and manual limits/mappings survive; duplicate control groups are reported
+ok 20 - existing aliases deduplicate to one station and manual limits/mappings survive; duplicate control groups are reported
+  ---
+  duration_ms: 1.358367
+  type: 'test'
+  ...
+# Subtest: multi EVSE topology remains one station aggregate writer; connector controls are never invented
+ok 21 - multi EVSE topology remains one station aggregate writer; connector controls are never invented
+  ---
+  duration_ms: 0.81889
+  type: 'test'
+  ...
+# Subtest: an existing active manual monitor does not gain its first writer from discovery, including later rescans
+ok 22 - an existing active manual monitor does not gain its first writer from discovery, including later rescans
+  ---
+  duration_ms: 1.108728
+  type: 'test'
+  ...
+# Subtest: existing manual monitor crosses real normalization, engine and CM tick without inferred hardware commands
+ok 23 - existing manual monitor crosses real normalization, engine and CM tick without inferred hardware commands
+  ---
+  duration_ms: 120.546712
+  type: 'test'
+  ...
+# Subtest: license capacity exposes pending stations, retains existing mappings and fills a newly available slot
+ok 24 - license capacity exposes pending stations, retains existing mappings and fills a newly available slot
+  ---
+  duration_ms: 1.209968
+  type: 'test'
+  ...
+# Subtest: registration bursts, offline and restart are idempotent; concurrent manual saves share the mutation fence
+ok 25 - registration bursts, offline and restart are idempotent; concurrent manual saves share the mutation fence
+  ---
+  duration_ms: 69.665343
+  type: 'test'
+  ...
+# Subtest: persist failures keep prior configuration; failed runtime apply is retried without creating a second row
+ok 26 - persist failures keep prior configuration; failed runtime apply is retried without creating a second row
+  ---
+  duration_ms: 139.239617
+  type: 'test'
+  ...
+# Subtest: stop during discovery cannot commit a late scan
+ok 27 - stop during discovery cannot commit a late scan
+  ---
+  duration_ms: 29.480098
+  type: 'test'
+  ...
+# Subtest: ownership loss after a database read prevents reconciliation and leaves existing configuration untouched
+ok 28 - ownership loss after a database read prevents reconciliation and leaves existing configuration untouched
+  ---
+  duration_ms: 0.781565
+  type: 'test'
+  ...
+# Subtest: actual supplied OCPP adapter registration and station telemetry map through the real EOS persistence path
+ok 29 - actual supplied OCPP adapter registration and station telemetry map through the real EOS persistence path
+  ---
+  duration_ms: 642.878808
+  type: 'test'
+  ...
+# Subtest: embedded OCPP station registration persists hosted mappings and retains them across bursts and runtime restart
+ok 30 - embedded OCPP station registration persists hosted mappings and retains them across bursts and runtime restart
+  ---
+  duration_ms: 867.639624
+  type: 'test'
+  ...
+# Subtest: discovery scopes hosted trees to the owning EOS and retains legacy migration identities
+ok 31 - discovery scopes hosted trees to the owning EOS and retains legacy migration identities
+  ---
+  duration_ms: 11.365793
+  type: 'test'
+  ...
+# (node:26) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: installer GET pairs a discovery-updated row snapshot with its own revision before a subsequent delete
+ok 32 - installer GET pairs a discovery-updated row snapshot with its own revision before a subsequent delete
+  ---
+  duration_ms: 254.97847
+  type: 'test'
+  ...
+# Subtest: a real discovery commit after GET still rejects the stale form without discarding its newer station
+ok 33 - a real discovery commit after GET still rejects the stale form without discarding its newer station
+  ---
+  duration_ms: 46.700572
+  type: 'test'
+  ...
+# Subtest: installer hydration changes only its response snapshot and leaves the revision base and runtime objects intact
+ok 34 - installer hydration changes only its response snapshot and leaves the revision base and runtime objects intact
+  ---
+  duration_ms: 56.606468
+  type: 'test'
+  ...
+# Subtest: discovery requires a configured source, preserves offline instances and admits only the authoritative hosted legacy namespace
+ok 35 - discovery requires a configured source, preserves offline instances and admits only the authoritative hosted legacy namespace
+  ---
+  duration_ms: 1.473207
+  type: 'test'
+  ...
+# Subtest: deleted legacy rows stay removed after rescans and installer reload while the integrated source continues discovery
+ok 36 - deleted legacy rows stay removed after rescans and installer reload while the integrated source continues discovery
+  ---
+  duration_ms: 243.793519
+  type: 'test'
+  ...
+# Subtest: production discovery admits a preserved namespace from its parent even after the old adapter object is gone
+ok 37 - production discovery admits a preserved namespace from its parent even after the old adapter object is gone
+  ---
+  duration_ms: 11.797652
+  type: 'test'
+  ...
+# Subtest: failed source inventory never treats orphaned contract states as an existing adapter
+ok 38 - failed source inventory never treats orphaned contract states as an existing adapter
+  ---
+  duration_ms: 3.551057
+  type: 'test'
+  ...
+1..38
+# tests 38
+# suites 0
+# pass 38
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2689.922229

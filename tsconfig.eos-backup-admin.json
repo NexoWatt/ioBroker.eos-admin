@@ -1,0 +1,4 @@
+{
+  "extends": "./tsconfig.eos-runtime-health.json",
+  "include": ["modules/backup/admin/index.js"]
+}

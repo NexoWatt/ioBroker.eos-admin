@@ -35,6 +35,7 @@ async function fixture(t) {
   h.adapter._nwInstallerConfigPatch = structuredClone(config);
   h.adapter._nwInstallerConfigRawPatch = structuredClone(config);
   h.adapter._hostedStartup = { state: 'ready' };
+  h.adapter._nwInstallerConfigHydrated = true;
   h.adapter.persistInstallerConfigToState = Object.getPrototypeOf(h.adapter).persistInstallerConfigToState;
   await h.adapter.persistInstallerConfigToState(config);
   const invalidations = [];
@@ -70,6 +71,30 @@ function noSecrets(response) {
   for (const secret of [tokenCanary, archiveCanary, oldEntsoeCanary]) assert.equal(response.text.includes(secret), false);
   assert.equal(response.text.includes('retainedProviderCredentials'), false);
 }
+
+test('an unrelated tariff save preserves unchanged ambiguous legacy points while real point changes retain identity guards', async t => {
+  const x = await fixture(t);
+  const rows = [
+    { enabled: false, name: 'Legacy A', powerId: 'fixture.shared.power', setPowerWId: 'fixture.shared.target' },
+    { enabled: false, name: 'Legacy B', powerId: 'fixture.shared.power', setPowerWId: 'fixture.shared.target' },
+  ];
+  x.adapter.config.settingsConfig = { evcsCount: 2, evcsList: structuredClone(rows) };
+  x.adapter._nwInstallerConfigPatch.settingsConfig = structuredClone(x.adapter.config.settingsConfig);
+  x.adapter.config.settingsConfig.evcsList[0].controlMappingAutoResolved = true;
+  const view = await x.get();
+  assert.equal(view.status, 200, view.text);
+  const saved = await x.put({ homeId: 'updated-customer-home' }, view.data.revision);
+  assert.equal(saved.status, 200, saved.text);
+  assert.equal(x.stored().tariffProvider.homeId, 'updated-customer-home');
+  assert.equal(x.stored().tariffProvider.credentials.accessToken, tokenCanary);
+  assert.deepEqual(x.stored().settingsConfig.evcsList, rows);
+  noSecrets(saved);
+  const durableBefore = structuredClone(x.stored());
+  const changed = structuredClone(x.adapter._nwInstallerConfigPatch);
+  changed.settingsConfig.evcsList[1].powerId = 'fixture.changed.power';
+  await assert.rejects(x.adapter.persistInstallerConfigToState(changed), { code: 'EOS_EVCS_IDENTITY_AMBIGUOUS' });
+  assert.deepEqual(x.stored(), durableBefore, 'a genuine layout mutation remains fenced before persistence');
+});
 
 test('customer tariff GET is authenticated, exposes only supported choices and no current or retained secrets', async t => {
   const x = await fixture(t);
@@ -241,4 +266,20 @@ test('retained source credentials remain in protected recovery data and are omit
     assert.equal(answer.text.includes(archiveCanary), false, endpoint);
   }
   assert.ok(JSON.stringify(x.stored()).includes(archiveCanary));
+});
+
+
+test('unhydrated tariff reads never confirm native defaults; loaded tariffs remain available when unrelated EMS readiness degrades', async t => {
+  const x = await fixture(t);
+  x.adapter._nwInstallerConfigHydrated = false; x.adapter._hostedStartup = { state: 'starting' };
+  const loading = await x.get(); assert.equal(loading.status, 503); assert.equal(loading.data.error, 'EOS_TARIFF_CONFIG_LOADING');
+  x.adapter._hostedStartup = { state: 'ready' };
+  const unhydratedSave = await x.put({ providerId: 'manual-dp', enabled: false }, x.adapter._nwInstallerConfigRevision());
+  assert.equal(unhydratedSave.status, 503); assert.equal(unhydratedSave.data.error, 'EOS_TARIFF_CONFIG_UNAVAILABLE');
+  assert.equal(loading.data.config, undefined); assert.match(loading.headers.get('cache-control') || '', /no-store/); noSecrets(loading);
+  x.adapter._hostedStartup = { state: 'degraded', error: 'EOS_UI_CONFIG_LOAD_FAILED' };
+  const failed = await x.get(); assert.equal(failed.status, 503); assert.equal(failed.data.error, 'EOS_TARIFF_CONFIG_UNAVAILABLE'); assert.equal(failed.data.config, undefined);
+  x.adapter._nwInstallerConfigHydrated = true; x.adapter._hostedStartup = { state: 'degraded', error: 'EOS_EMS_INIT_FAILED' };
+  const loaded = await x.get(); assert.equal(loaded.status, 200); assert.equal(loaded.data.config.providerId, 'tibber'); noSecrets(loaded);
+  assert.equal(x.stored().tariffProvider.providerId, 'tibber');
 });

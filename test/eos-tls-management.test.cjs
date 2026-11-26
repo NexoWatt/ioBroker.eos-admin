@@ -87,6 +87,62 @@ test('issuer creates encrypted offline CA; device CSR and public downloads never
     assert.equal(activated.pending, null);
 });
 
+test('anonymous HTTPS trust setup exports only the configured public CA while TLS administration stays protected', async t => {
+    const f = await fixture(t);
+    await f.manager.importCertificate(await f.signed());
+    const manager = new EosTlsManager(path.join(f.directory, 'public-setup-device')); await manager.initialize();
+    const app = express();
+    let authorizations = 0;
+    const boundary = new UnifiedSessions({}, { secure: true, externalOrigin: '' });
+    registerEosTlsRoutes({ app, manager, baseDir: path.resolve(__dirname, '..'),
+        authorize: async () => { authorizations++; return { authenticated: false }; },
+        csrfAllowed: () => false, requestAllowed: request => boundary.requestAllowed(request) });
+    app.use((_req, res) => res.status(404).end());
+    const { createEosServer } = webHelpers();
+    const server = await createEosServer(app, {}, { secure: true }, f.manager);
+    await listen(server); t.after(() => close(server));
+    const origin = `https://127.0.0.1:${server.address().port}`;
+    const request = (pathname, method = 'GET', headers = {}) => new Promise((resolve, reject) => {
+        const req = https.request(origin + pathname, { method, ca: f.root, rejectUnauthorized: true, agent: false, headers }, response => {
+            const chunks = []; response.on('data', chunk => chunks.push(chunk));
+            response.on('end', () => resolve({ status: response.statusCode, headers: response.headers, bytes: Buffer.concat(chunks) }));
+        }); req.on('error', reject); req.end();
+    });
+    const redirect = await request('/security/trust');
+    assert.equal(redirect.status, 308); assert.equal(redirect.headers.location, '/security/trust/');
+    const unavailable = await request('/security/trust/'); assert.equal(unavailable.status, 200);
+    assert.match(unavailable.bytes.toString(), /<section >\s*<h2>Zertifikat noch nicht bereitgestellt/);
+    assert.match(unavailable.bytes.toString(), /<section hidden>\s*<h2>1\. Zertifikat/);
+    const absentRoot = await request('/security/trust/root.cer');
+    assert.equal(absentRoot.status, 404); assert.equal(absentRoot.headers['content-disposition'], undefined);
+    await manager.importCertificate(await f.signed(manager));
+    const page = await request('/security/trust/'); assert.equal(page.status, 200);
+    const html = page.bytes.toString(); assert.match(html, /<section >\s*<h2>1\. Zertifikat/);
+    assert.ok(html.includes(f.rootFingerprint)); assert.match(html, /Zertifikatsvertrauenseinstellungen/);
+    assert.doesNotMatch(html, /PRIVATE KEY|requestId|suggestedNames|\{\{/);
+    assert.match(page.headers['content-security-policy'], /default-src 'none'/);
+    const root = await request('/security/trust/root.cer'); assert.equal(root.status, 200);
+    assert.match(root.headers['content-type'], /^application\/pkix-cert/);
+    assert.match(root.headers['content-disposition'], /NexoWatt-Root-CA\.cer/);
+    assert.deepEqual(root.bytes, manager.publicRoot());
+    assert.equal(new crypto.X509Certificate(root.bytes).fingerprint256, f.rootFingerprint);
+    for (const pathname of ['/security/trust/', '/security/trust/root.cer', '/security/trust/trust.css']) {
+        const head = await request(pathname, 'HEAD'); assert.equal(head.status, 200, pathname); assert.equal(head.bytes.length, 0);
+        assert.match(head.headers['cache-control'], /no-store/);
+        assert.equal((await request(pathname, 'POST', { origin })).status, 405);
+        assert.equal((await request(pathname, 'GET', { origin: 'https://outside.invalid' })).status, 403);
+    }
+    assert.equal(authorizations, 0, 'public certificate setup must not read user/session state');
+    for (const pathname of ['/api/eos/tls', '/api/eos/tls/root.cer', '/api/eos/tls/request.pem']) {
+        assert.equal((await request(pathname)).status, 401, pathname);
+    }
+    for (const pathname of ['/security/trust/private.key', '/security/trust/active.json',
+        '/security/trust/%2e%2e%2factive.json', '/security/trust/root.cer/../active.json']) {
+        const response = await request(pathname); assert.equal(response.status, 404, pathname);
+        assert.doesNotMatch(response.bytes.toString(), /PRIVATE KEY|requestId|BEGIN CERTIFICATE/);
+    }
+});
+
 test('actual EOS HTTPS startup, SNI and IP use trusted identity; renewal preserves listener and survives restart', async t => {
     const f = await fixture(t);
     await f.manager.importCertificate(await f.signed());

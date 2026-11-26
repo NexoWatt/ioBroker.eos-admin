@@ -135,14 +135,14 @@ test('bounded initialization returns a visible blocker and a late read cannot re
     control.close();
 });
 
-for (const revoked of ['session', 'role', 'csrf']) {
-    test(`slow HTTP body cannot retain control authority after ${revoked} revocation`, async t => {
+for (const target of ['runtime', 'module-save', 'module-import']) for (const revoked of ['session', 'role', 'csrf']) {
+    test(`slow HTTP ${target} body cannot retain authority after ${revoked} revocation`, async t => {
         const firstBodyAdmission = deferred();
         let revokedNow = false, calls = 0, checks = 0;
         const app = express();
         const parser = express.json({ limit: '512kb' });
         registerEosModuleRoutes({
-            app, host: { status: async () => ({}) }, baseDir: process.cwd(),
+            app, host: { status: async () => ({}), save: async () => { calls++; }, importLegacy: async () => { calls++; } }, baseDir: process.cwd(),
             jsonParser: (req, res, next) => { firstBodyAdmission.resolve(); parser(req, res, next); },
             authorize: async () => {
                 checks++;
@@ -161,7 +161,8 @@ for (const revoked of ['session', 'role', 'csrf']) {
         let outgoing;
         const response = new Promise((resolve, reject) => {
             outgoing = http.request({ host: '127.0.0.1', port: server.address().port,
-                path: '/api/eos/runtime/devices/control', method: 'POST',
+                path: target === 'runtime' ? '/api/eos/runtime/devices/control' : `/api/eos/modules/devices${target === 'module-import' ? '/import' : ''}`,
+                method: target === 'module-save' ? 'PUT' : 'POST',
                 headers: { 'content-type': 'application/json', 'content-length': Buffer.byteLength(body) } }, incoming => {
                 const chunks = [];
                 incoming.on('data', chunk => chunks.push(chunk));
@@ -180,3 +181,34 @@ for (const revoked of ['session', 'role', 'csrf']) {
         assert.equal(calls, 0, 'no lifecycle job is accepted from the old authority');
     });
 }
+
+test('module save and import cannot race a still-committing combined process activation', async t => {
+    const f = fixture(), entered = deferred(), commit = deferred();
+    let saves = 0, imports = 0;
+    f.host.view = async () => ({ config: { enabled: false } });
+    f.host.enableProcessModule = async () => { entered.resolve(); await commit.promise; };
+    f.host.save = async () => { saves++; return {}; };
+    f.host.importLegacy = async () => { imports++; return {}; };
+    const control = f.create(); await control.initialize();
+    const app = express();
+    registerEosModuleRoutes({ app, host: f.host, baseDir: process.cwd(), jsonParser: express.json(),
+        runtimeControl: control, authorize: async () => ({ authenticated: true, role: 'admin', csrfToken: 'fixture-csrf' }),
+        requestAllowed: () => true, csrfAllowed: () => true });
+    const server = http.createServer(app); await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+    t.after(async () => { commit.resolve(); await control.close(); server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); });
+    control.request('devices', 'enable', control.revision); await entered.promise;
+    const origin = `http://127.0.0.1:${server.address().port}`;
+    for (const target of ['save', 'import']) {
+        const response = await fetch(`${origin}/api/eos/modules/devices${target === 'import' ? '/import' : ''}`, {
+            method: target === 'save' ? 'PUT' : 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ expectedConfigurationRevision: '00000000-0000-4000-8000-000000000000', config: { enabled: false }, instance: 'eos-devices.0' }),
+        });
+        assert.equal(response.status, 409); assert.deepEqual(await response.json(), { error: 'EOS_RUNTIME_BUSY' });
+    }
+    assert.equal(saves, 0); assert.equal(imports, 0);
+    assert.equal(control.isEnabled('devices'), false);
+    assert.deepEqual(f.events, ['devices:stop']);
+    commit.resolve(); await control.whenIdle();
+    assert.equal(control.isEnabled('devices'), true);
+    assert.deepEqual(f.events, ['devices:stop', 'devices:start']);
+});

@@ -1,6 +1,8 @@
-> **9.0.25:** Die optionale Übernahme eines separaten OCPP-Adapters blockiert den bestehenden Geräte-/EMS-Start nicht mehr. Die Prozessseite bietet gespeichertes Aktivieren, Deaktivieren und Neustarten für die EOS-Kindprozesse. Gemeinsames Paket und getrennte Prozesse bleiben erhalten. [Anleitung](START_HIER_9.0.25.md) · [Prüfbericht](docs/reports/unified-9.0.25/PRUEFBERICHT.md).
+> **EOS 9.0.26:** Korrekturen für Git-Auslieferung und Modulaktivierung, Ladepunkt-Löschung und Tibber-Anzeige beim Neustart. Übersichtliche Sicherungsdialoge und HTTPS-/Web-App-Einrichtung. [Installation und Bedienung](START_HIER_9.0.26.md) · [Prüfbericht](docs/reports/unified-9.0.26/PRUEFBERICHT.md).
 
 Die folgenden Versionshinweise beschreiben frühere Lieferstände.
+
+> **9.0.25:** Die optionale Übernahme eines separaten OCPP-Adapters blockiert den bestehenden Geräte-/EMS-Start nicht mehr. Die Prozessseite bietet gespeichertes Aktivieren, Deaktivieren und Neustarten für die EOS-Kindprozesse. Gemeinsames Paket und getrennte Prozesse bleiben erhalten. [Anleitung](START_HIER_9.0.25.md) · [Prüfbericht](docs/reports/unified-9.0.25/PRUEFBERICHT.md).
 
 > **9.0.24:** OCPP ist zusammen mit Devices, EEBUS, UI/EMS und Backup Bestandteil eines EOS-Adapters und läuft als eigener Prozess. Kiosk-Dashboard und geschützte Administration. Die nach Auslieferung gemeldete globale OCPP-Startsperre wird in 9.0.25 korrigiert. [Historischer Prüfbericht](docs/reports/unified-9.0.24/PRUEFBERICHT.md).
 
@@ -38,7 +40,7 @@ Die folgenden Versionshinweise beschreiben frühere Lieferstände.
 
 # NexoWatt EOS
 
-**Version 9.0.25 · technisches Paket: `iobroker.eos-admin` · Vertriebskanal: `next`**
+**Version 9.0.26 · technisches Paket: `iobroker.eos-admin` · Vertriebskanal: `next`**
 
 NexoWatt EOS verbindet die Systemverwaltung aus EOS-Admin 8.0.2 mit Dashboard,
 Installer und Energiemanagement aus NexoWatt UI 1.0.38. Eine ioBroker-Instanz betreibt
@@ -51,9 +53,9 @@ Kindprozesses. Kontrollierte Bestandsübernahmen erhalten vorhandene OCPP-Datenp
 Ein separat betriebener OCPP-Adapter wird ausschließlich nach ausdrücklicher Auswahl
 übernommen. Seine bloße Existenz löst keine automatische Übernahme mehr aus.
 
-Version 9.0.25 bleibt ein Integrations-Teststand für `next`. Die Versionsnummer ist
+Version 9.0.26 bleibt ein Integrations-Teststand für `next`. Die Versionsnummer ist
 kein Nachweis einer allgemeinen Produktivfreigabe oder CRA-Konformität. Tatsächliche
-Ergebnisse und Artefakthashes stehen im [Prüfbericht 9.0.25](docs/reports/unified-9.0.25/PRUEFBERICHT.md).
+Ergebnisse und Artefakthashes stehen im [Prüfbericht 9.0.26](docs/reports/unified-9.0.26/PRUEFBERICHT.md).
 Die [Berichte zu 9.0.4](docs/reports/unified-9.0.4/PRUEFBERICHT.md),
 [9.0.3](docs/reports/unified-9.0.3/PRUEFBERICHT.md) und früheren Versionen bleiben
 historische Belege; ihre Ergebnisse bestätigen keine späteren Änderungen.

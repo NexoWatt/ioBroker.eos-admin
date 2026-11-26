@@ -1,0 +1,24 @@
+✔ app: snapshot is immutable; automatic refresh never upgrades old controls to B (228.861702ms)
+✔ app: a page loaded without identity metadata cannot adopt a later token automatically (136.05769ms)
+✔ app: failed initial configuration read freezes the unconfirmed document identity (171.820729ms)
+✔ app: identity rejection is visible and is not retried with a new token (72.419355ms)
+✔ app: all direct API-set call sites use the identity wrapper (96.842493ms)
+✔ evcs: snapshot is immutable; automatic refresh never upgrades old controls to B (40.369619ms)
+✔ evcs: a page loaded without identity metadata cannot adopt a later token automatically (33.380192ms)
+✔ evcs: failed initial configuration read freezes the unconfirmed document identity (45.004112ms)
+✔ evcs: identity rejection is visible and is not retried with a new token (12.599046ms)
+✔ evcs: all direct API-set call sites use the identity wrapper (12.950315ms)
+✔ station commands carry the rendered station snapshot identity (73.917009ms)
+✔ station retained A-button callback cannot acquire B identity after another render (48.211576ms)
+✔ real worker starts after a synchronous 1200ms factory using a fresh lease and unchanged watchdog (1296.777114ms)
+✔ readiness after authority loss cannot start a module or restore its permission (1252.404614ms)
+✔ stop during worker construction drains the process and never queues start after readiness (1254.478106ms)
+✔ factory preparation and start consume one unchanged startup deadline (1513.040617ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5437.217602

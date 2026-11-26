@@ -9,15 +9,21 @@ const { EosModuleConfigStore } = require('./eosModuleConfigStore');
 const { EosDeviceEmsService } = require('./eosDeviceEmsService');
 const { resolveHistoryBackupRequirement } = require('./eosHistoryBackupScope');
 const { EosModuleProcess } = require('./eosModuleProcess');
+const { errorCode } = require('./eosModuleProcessProtocol');
+const { loadModuleFactory } = require('./eosModuleLoad');
 
 const SECRET_MARKER = '__EOS_SECRET_UNCHANGED__';
 const MODULES = Object.freeze({ devices: 'nexowatt-devices', eebus: 'eebus', backup: 'nexowatt-backup', ocpp: 'ocpp21' });
+const LEGACY_INSTANCE_OBJECT = /^system\.adapter\.([a-z0-9-]+)\.\d+$/;
+const LEGACY_INSTANCE_ALIVE = /^system\.adapter\.([a-z0-9-]+)\.\d+\.alive$/;
 const SECRET_KEY = /password|passwd|^pass$|accessjson|expertmount|secret|token|privatekey|pairingpin|apikey|credential|authorization|cookie/i;
 const MAX_CONFIG_BYTES = 512 * 1024;
 const MAX_LEGACY_INSTANCES = 64;
 const LEASE_MS = 12000;
 const DEVICES_START_IDLE_MS = 10000;
 const DEVICES_START_TOTAL_MS = 120000;
+const PERMANENT_PROCESS_ERRORS = new Set(['EOS_MODULE_DEPENDENCY_MISSING', 'EOS_MODULE_DEPENDENCY_INVALID',
+    'EOS_MODULE_SYNTAX_ERROR', 'EOS_MODULE_PROCESS_INIT']);
 const isRecord = value => !!value && typeof value === 'object' && !Array.isArray(value);
 const fail = code => Object.assign(new Error(code), { code });
 
@@ -127,7 +133,7 @@ class EosModuleHost {
 
     factory(id) {
         if (!Object.hasOwn(MODULES, id)) throw fail('EOS_MODULE_UNKNOWN');
-        return this.options.factories?.[id] || require(join(this.options.baseDir, 'modules', id, 'index.js'));
+        return this.options.factories?.[id] || loadModuleFactory(this.options.baseDir, id, message => this.owner.log.warn(message));
     }
 
     /** Bind only the internal hosted runtime, never a URL or browser callback. */
@@ -176,7 +182,10 @@ class EosModuleHost {
     }
 
     decodeConfig(id, envelope) {
-        if (envelope == null) return this.factory(id).validateConfig({ enabled: false });
+        // A new module is available for setup. Starting the backup service must
+        // not opt a new installation into a scheduled job without configuration.
+        if (envelope == null) return this.factory(id).validateConfig({ enabled: true,
+            ...(id === 'backup' ? { minimalEnabled: false, ccuEnabled: false } : {}) });
         if (!isRecord(envelope) || envelope.v !== 1 || typeof envelope.encrypted !== 'string') {
             throw fail('EOS_MODULE_CONFIG_FORMAT');
         }
@@ -187,13 +196,14 @@ class EosModuleHost {
     // The authenticated configuration shell must read the real saved settings even
     // while operational startup is fenced. This does not subscribe, start modules,
     // claim ownership or write the instance/configuration objects.
-    async loadForEditing(id) {
+    async loadForEditing(id, retryConfiguration = false) {
         if (this.configurationLoadPromise) await this.configurationLoadPromise;
         const entry = this.entries.get(id);
         if (!entry) throw fail('EOS_MODULE_UNKNOWN');
         const startupAllowed = this.owner.eosMigration?.allowsStartup?.();
-        if ((entry.configLoaded && entry.configurationStartupAllowed === startupAllowed) ||
-            this.initialized || this.stopped || this.mutation || this.startPromise) return;
+        const retry = retryConfiguration && !entry.configLoaded;
+        if ((!retry && ((entry.configLoaded && entry.configurationStartupAllowed === startupAllowed) ||
+            this.initialized || this.startPromise)) || this.stopped || this.mutation) return;
         this.mutation = true;
         this.configurationLoadPromise = (async () => {
             try {
@@ -206,9 +216,15 @@ class EosModuleHost {
                 entry.configLoaded = true;
                 entry.configurationStartupAllowed = startupAllowed;
                 entry.configurationError = '';
+                if (retry && !entry.stopFailed) {
+                    entry.failed = false;
+                    this.resetProcessFailure(entry);
+                    entry.reason = config.enabled ? 'READY' : 'DISABLED';
+                }
             } catch (error) {
                 entry.configLoaded = false;
-                entry.configurationError = typeof error?.code === 'string' ? error.code : 'EOS_MODULE_CONFIG_UNAVAILABLE';
+                entry.configurationError = this.failureCode(error, 'EOS_MODULE_CONFIG_UNAVAILABLE');
+                if (retry) { entry.failed = true; entry.reason = 'CONFIG_INVALID'; }
             } finally { this.mutation = false; }
         })();
         try { await this.configurationLoadPromise; }
@@ -245,6 +261,34 @@ class EosModuleHost {
     }
 
     processEnabled(id) { return this.options.processEnabled?.(id) !== false; }
+
+    failureCode(error, fallback) {
+        const code = errorCode(error);
+        return code === 'EOS_MODULE_PROCESS_OPERATION_FAILED' ? fallback : code;
+    }
+
+    resetProcessFailure(entry) {
+        entry.processFailure = '';
+        entry.restartAt = 0;
+        entry.consecutiveFailures = 0;
+        entry.startupError = '';
+    }
+
+    /** Called only after the previous PID, subscriptions and accepted writes drained. */
+    recordProcessFailure(entry, code) {
+        entry.processFailure = '';
+        if (entry.stopFailed || this.stopped) return;
+        const permanent = PERMANENT_PROCESS_ERRORS.has(code);
+        entry.failed = permanent;
+        entry.consecutiveFailures++;
+        entry.restartAt = permanent ? 0 : performance.now() + Math.min(60000,
+            1000 * 2 ** Math.min(entry.consecutiveFailures - 1, 6));
+        entry.reason = permanent ? 'START_FAILED_RESTART_REQUIRED' : 'PROCESS_BACKOFF';
+        entry.processHealth = { ...entry.processHealth, mode: 'process', pid: null,
+            generation: entry.generation, lastHeartbeatAt: entry.processHealth?.lastHeartbeatAt || 0,
+            state: permanent ? 'error' : 'backoff', lastError: code };
+        this.nextOwnershipCheck = 0;
+    }
 
     canOperate(id, generation) {
         const entry = this.entries.get(id);
@@ -660,18 +704,9 @@ class EosModuleHost {
                 if (entry.processFailure) {
                     const code = entry.processFailure;
                     await this.stopEntry(entry);
-                    entry.processFailure = '';
-                    if (!entry.stopFailed) {
-                        entry.failed = false;
-                        entry.consecutiveFailures++;
-                        // A crash loop remains isolated and retries at most once
-                        // per minute after the initial bounded exponential ramp.
-                        entry.restartAt = performance.now() + Math.min(60000, 1000 * 2 ** Math.min(entry.consecutiveFailures - 1, 6));
-                        entry.reason = 'PROCESS_BACKOFF';
-                        entry.processHealth = { ...entry.processHealth, state: 'backoff', lastError: code };
-                        this.nextOwnershipCheck = 0;
-                    }
+                    this.recordProcessFailure(entry, code);
                 }
+                if (!entry.configLoaded) { this.revoke(entry, 'CONFIG_INVALID'); continue; }
                 if (!this.processEnabled(entry.id)) this.revoke(entry, 'EOS_RUNTIME_DISABLED');
                 else if (!entry.config.enabled) this.revoke(entry, 'DISABLED');
                 else if (!this.licensed(entry.id)) this.revoke(entry, 'LICENSE_REQUIRED');
@@ -761,8 +796,7 @@ class EosModuleHost {
                         if (entry.id === 'devices') this.deviceEms?.request('started');
                     }
                 } catch (error) {
-                    entry.startupError = ['EOS_MODULE_START_IDLE_TIMEOUT', 'EOS_MODULE_START_TOTAL_TIMEOUT',
-                        'EOS_MODULE_START_CANCELLED'].includes(error?.code) ? error.code : 'EOS_MODULE_START_FAILED';
+                    entry.startupError = this.failureCode(error, 'EOS_MODULE_START_FAILED');
                     if (!entry.stopFailed) this.revoke(entry, 'START_FAILED_RESTART_REQUIRED');
                     entry.failed = true;
                     await this.stopEntry(entry);
@@ -770,7 +804,7 @@ class EosModuleHost {
                     // old PID and accepted parent mutations have been drained.
                     // Injected legacy tests retain their original failure policy.
                     if (!this.options.factories?.[entry.id] && !entry.stopFailed && !this.stopped) {
-                        entry.processFailure ||= error?.code || 'EOS_MODULE_PROCESS_START_FAILED';
+                        this.recordProcessFailure(entry, entry.processFailure || entry.startupError);
                     }
                     this.owner.log.warn(`EOS_MODULE_START_FAILED: ${entry.id}; ${entry.startupError}; HTTPS remains available`);
                 }
@@ -822,7 +856,7 @@ class EosModuleHost {
                         entry.configurationError = '';
                     }
                     catch (error) { entry.failed = true; entry.configLoaded = false; entry.reason = 'CONFIG_INVALID';
-                        entry.configurationError = typeof error?.code === 'string' ? error.code : 'EOS_MODULE_CONFIG_UNAVAILABLE'; }
+                        entry.configurationError = this.failureCode(error, 'EOS_MODULE_CONFIG_UNAVAILABLE'); }
                     const name = MODULES[entry.id];
                     await bounded(this.owner.subscribeForeignObjectsAsync(`system.adapter.${name}.*`));
                     if (this.stopped) return;
@@ -839,23 +873,36 @@ class EosModuleHost {
         return this.startPromise;
     }
 
+    ownershipChanged(entry) {
+        // A dormant module has no authority to revoke. External adapter
+        // heartbeats must not look like hundreds of local process generations.
+        if (!entry.configLoaded || !entry.config.enabled || !this.processEnabled(entry.id) || entry.failed) return false;
+        const acquired = entry.module || entry.lease || entry.commandSubscriptionPending || this.leasePending;
+        this.revoke(entry, 'OWNERSHIP_CHANGED');
+        if (acquired) entry.generation++;
+        this.nextOwnershipCheck = 0;
+        return true;
+    }
+
     onObjectChange(id) {
         this.deviceEms?.event(id);
+        let relevant = false;
+        const legacy = LEGACY_INSTANCE_OBJECT.exec(id)?.[1];
         for (const entry of this.entries.values()) {
-            if (id.startsWith(`system.adapter.${MODULES[entry.id]}.`)) {
-                this.revoke(entry, 'OWNERSHIP_CHANGED'); entry.generation++;
-                this.nextOwnershipCheck = 0;
+            if (legacy === MODULES[entry.id]) {
+                relevant = this.ownershipChanged(entry) || relevant;
             }
         }
-        void this.reconcile();
+        if (relevant) void this.reconcile();
     }
 
     onStateChange(id, state) {
         this.deviceEms?.event(id, true);
+        const legacy = LEGACY_INSTANCE_ALIVE.exec(id)?.[1];
+        const hostLost = /^system\.host\..*\.alive$/.test(id) && state?.val !== true;
         for (const entry of this.entries.values()) {
-            if (id.startsWith(`system.adapter.${MODULES[entry.id]}.`) ||
-                (/^system\.host\..*\.alive$/.test(id) && state?.val !== true)) {
-                this.revoke(entry, 'OWNERSHIP_CHANGED'); entry.generation++; this.nextOwnershipCheck = 0;
+            if (legacy === MODULES[entry.id] || hostLost) {
+                this.ownershipChanged(entry);
             }
             const prefix = entry.id === 'devices' ? `${this.namespace(entry.id)}.devices.` : `${this.namespace(entry.id)}.`;
             if (entry.module && id.startsWith(prefix)) {
@@ -877,15 +924,20 @@ class EosModuleHost {
                 pending: !!entry.module && !entry.started && !entry.startup.settled,
                 error: entry.startupError || '' } };
         }
+        if (!entry.configLoaded) details = { ...details, configuration: { ready: false,
+            error: entry.configurationError || 'EOS_MODULE_CONFIG_UNAVAILABLE' } };
         if (!this.options.factories?.[id]) {
             const processHealth = entry.module?.health?.() || entry.processHealth || {
                 mode: 'process', state: 'stopped', pid: null, generation: entry.generation, lastError: '', lastHeartbeatAt: 0,
             };
-            details = { ...details, process: { ...processHealth, restarts: entry.processRestarts,
+            details = { ...details, process: { ...processHealth,
+                ...(!entry.configLoaded ? { state: 'error', lastError: entry.configurationError || 'EOS_MODULE_CONFIG_UNAVAILABLE' } : {}),
+                restarts: entry.processRestarts,
                 nextRestartAt: entry.restartAt ? Date.now() + Math.max(0, entry.restartAt - performance.now()) : 0 } };
         }
         return { id, enabled: entry.config.enabled === true, active: !!entry.module && entry.started === true && entry.moduleGeneration === entry.generation && this.canOperate(id, entry.generation),
-            reason: !this.processEnabled(id) ? 'EOS_RUNTIME_DISABLED' : entry.reason, blockers: entry.blockers, details: redact(assertJson(details)),
+            reason: !entry.configLoaded ? 'CONFIG_INVALID' : !this.processEnabled(id) ? 'EOS_RUNTIME_DISABLED' : entry.reason,
+            blockers: entry.blockers, details: redact(assertJson(details)),
             namespace: id === 'devices' ? `${this.namespace(id)}.devices` : this.namespace(id) };
     }
 
@@ -908,15 +960,41 @@ class EosModuleHost {
         if (!this.initialized) await this.start();
         if (this.pending) await this.pending;
         if (entry.stopFailed) throw fail('EOS_RUNTIME_STOP_UNCONFIRMED');
+        if (!entry.configLoaded) await this.loadForEditing(id, true);
+        if (!entry.configLoaded) throw fail(entry.configurationError || 'EOS_MODULE_CONFIG_UNAVAILABLE');
         if (!entry.config.enabled) throw fail('EOS_RUNTIME_MODULE_DISABLED');
         entry.failed = false;
-        entry.processFailure = '';
-        entry.restartAt = 0;
-        entry.consecutiveFailures = 0;
+        this.resetProcessFailure(entry);
         this.nextOwnershipCheck = 0;
         await this.reconcile();
-        if (!entry.started || !this.canOperate(id, entry.generation)) throw fail('EOS_RUNTIME_START_FAILED');
+        if (!entry.started || !this.canOperate(id, entry.generation)) {
+            const reason = { LEGACY_CONFLICT: 'EOS_MODULE_LEGACY_RUNNING', LICENSE_REQUIRED: 'EOS_RUNTIME_LICENSE_REQUIRED',
+                EOS_OWNERSHIP_REQUIRED: 'EOS_RUNTIME_OWNERSHIP_REQUIRED', OWNERSHIP_UNAVAILABLE: 'EOS_MODULE_OWNERSHIP_UNAVAILABLE' }[entry.reason];
+            throw fail(reason || entry.startupError || entry.processHealth?.lastError || 'EOS_RUNTIME_START_FAILED');
+        }
         this.deviceEms?.request('configuration');
+    }
+
+    /** The caller keeps process permission inhibited until this real commit settles. */
+    async enableProcessModule(id) {
+        const entry = this.entries.get(id);
+        if (!entry) throw fail('EOS_MODULE_UNKNOWN');
+        if (entry.stopFailed) throw fail('EOS_RUNTIME_STOP_UNCONFIRMED');
+        await this.loadForEditing(id, true);
+        const reason = this.configurationReason(id);
+        if (reason) throw fail(reason);
+        if (entry.stopFailed) throw fail('EOS_RUNTIME_STOP_UNCONFIRMED');
+        if (this.mutation || this.configurationSavePromise) throw fail('EOS_MODULE_BUSY');
+        if (entry.config.enabled === true) return;
+        const saving = this.save(id, { ...entry.config, enabled: true }, undefined, entry.configurationRevision);
+        const committing = this.configurationSavePromise;
+        // save() bounds its HTTP response; the accepted controller write may
+        // still settle afterwards. Keep the runtime control transaction locked.
+        let responseError;
+        try { await saving; } catch (error) { responseError = error; }
+        if (committing) await committing;
+        else if (responseError) throw responseError;
+        if (!entry.config.enabled) throw fail('EOS_RUNTIME_MODULE_DISABLED');
     }
 
     async view(id) {
@@ -1015,6 +1093,7 @@ class EosModuleHost {
             entry.loadedEnvelope = envelope;
             entry.configurationRevision = this.configStore.revisions.get(id);
             if (!entry.stopFailed) {
+                this.resetProcessFailure(entry);
                 entry.failed = false; entry.reason = normalized.enabled ? 'STARTING' : 'DISABLED';
             } else {
                 entry.failed = true; entry.reason = 'STOP_FAILED_RESTART_REQUIRED';

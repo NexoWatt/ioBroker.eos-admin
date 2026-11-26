@@ -1,0 +1,196 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: default permits existing startup without writes; pause survives a fresh service and preserves device configuration
+ok 1 - default permits existing startup without writes; pause survives a fresh service and preserves device configuration
+  ---
+  duration_ms: 5.979084
+  type: 'test'
+  ...
+# Subtest: restart commits a durable pause before confirmed shutdown and only then persists enable
+ok 2 - restart commits a durable pause before confirmed shutdown and only then persists enable
+  ---
+  duration_ms: 6.871793
+  type: 'test'
+  ...
+# Subtest: an unconfirmed stop remains durably disabled and never starts a replacement
+ok 3 - an unconfirmed stop remains durably disabled and never starts a replacement
+  ---
+  duration_ms: 1.158932
+  type: 'test'
+  ...
+# Subtest: disable remains available behind startup gates, while enable and restart cannot bypass them
+ok 4 - disable remains available behind startup gates, while enable and restart cannot bypass them
+  ---
+  duration_ms: 1.986205
+  type: 'test'
+  ...
+# Subtest: one enable action activates a disabled module even when process permission was already on
+ok 5 - one enable action activates a disabled module even when process permission was already on
+  ---
+  duration_ms: 0.681247
+  type: 'test'
+  ...
+# Subtest: a disabled module can be enabled after a saved process pause; restart cannot activate it implicitly
+ok 6 - a disabled module can be enabled after a saved process pause; restart cannot activate it implicitly
+  ---
+  duration_ms: 0.861022
+  type: 'test'
+  ...
+# Subtest: failed module activation remains durably paused and retains the concrete validation error
+ok 7 - failed module activation remains durably paused and retains the concrete validation error
+  ---
+  duration_ms: 1.296486
+  type: 'test'
+  ...
+# Subtest: slow module commit keeps activation locked and paused until settled, including shutdown
+ok 8 - slow module commit keeps activation locked and paused until settled, including shutdown
+  ---
+  duration_ms: 4.939278
+  type: 'test'
+  ...
+# Subtest: persistence failure does not stop a live process or falsely claim its activation changed
+ok 9 - persistence failure does not stop a live process or falsely claim its activation changed
+  ---
+  duration_ms: 0.81906
+  type: 'test'
+  ...
+# Subtest: invalid IDs, arbitrary commands, stale revision and replay do not change process state
+ok 10 - invalid IDs, arbitrary commands, stale revision and replay do not change process state
+  ---
+  duration_ms: 0.924116
+  type: 'test'
+  ...
+# Subtest: a hanging startup configuration read is bounded and its late completion cannot activate processes
+ok 11 - a hanging startup configuration read is bounded and its late completion cannot activate processes
+  ---
+  duration_ms: 44.396452
+  type: 'test'
+  ...
+# Subtest: invalid stored configuration never silently falls back to all enabled
+ok 12 - invalid stored configuration never silently falls back to all enabled
+  ---
+  duration_ms: 0.915653
+  type: 'test'
+  ...
+# Subtest: shutdown during an accepted restart never starts a replacement even if stop settles later
+ok 13 - shutdown during an accepted restart never starts a replacement even if stop settles later
+  ---
+  duration_ms: 4.089232
+  type: 'test'
+  ...
+# Subtest: close immediately revokes authority but drains an already-issued configuration write
+ok 14 - close immediately revokes authority but drains an already-issued configuration write
+  ---
+  duration_ms: 11.746215
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: unconfirmed stop cannot become enabled again by reconstructing the control service
+ok 15 - unconfirmed stop cannot become enabled again by reconstructing the control service
+  ---
+  duration_ms: 5.029631
+  type: 'test'
+  ...
+# Subtest: accepted restart stays busy until stop really settles and does not resume after close
+ok 16 - accepted restart stays busy until stop really settles and does not resume after close
+  ---
+  duration_ms: 1.263957
+  type: 'test'
+  ...
+# Subtest: late database write after close cannot dispatch stop or start into a replacement lifecycle
+ok 17 - late database write after close cannot dispatch stop or start into a replacement lifecycle
+  ---
+  duration_ms: 0.650261
+  type: 'test'
+  ...
+# Subtest: persisted UI pause survives initialization while other process flags remain separate
+ok 18 - persisted UI pause survives initialization while other process flags remain separate
+  ---
+  duration_ms: 0.620777
+  type: 'test'
+  ...
+# Subtest: closing initialization before a late database response cannot grant process authority
+ok 19 - closing initialization before a late database response cannot grant process authority
+  ---
+  duration_ms: 0.337659
+  type: 'test'
+  ...
+# Subtest: bounded initialization returns a visible blocker and a late read cannot reopen process gates
+ok 20 - bounded initialization returns a visible blocker and a late read cannot reopen process gates
+  ---
+  duration_ms: 21.907258
+  type: 'test'
+  ...
+# Subtest: slow HTTP runtime body cannot retain authority after session revocation
+ok 21 - slow HTTP runtime body cannot retain authority after session revocation
+  ---
+  duration_ms: 236.51654
+  type: 'test'
+  ...
+# Subtest: slow HTTP runtime body cannot retain authority after role revocation
+ok 22 - slow HTTP runtime body cannot retain authority after role revocation
+  ---
+  duration_ms: 23.642903
+  type: 'test'
+  ...
+# Subtest: slow HTTP runtime body cannot retain authority after csrf revocation
+ok 23 - slow HTTP runtime body cannot retain authority after csrf revocation
+  ---
+  duration_ms: 16.984995
+  type: 'test'
+  ...
+# Subtest: slow HTTP module-save body cannot retain authority after session revocation
+ok 24 - slow HTTP module-save body cannot retain authority after session revocation
+  ---
+  duration_ms: 66.392276
+  type: 'test'
+  ...
+# Subtest: slow HTTP module-save body cannot retain authority after role revocation
+ok 25 - slow HTTP module-save body cannot retain authority after role revocation
+  ---
+  duration_ms: 76.649252
+  type: 'test'
+  ...
+# Subtest: slow HTTP module-save body cannot retain authority after csrf revocation
+ok 26 - slow HTTP module-save body cannot retain authority after csrf revocation
+  ---
+  duration_ms: 22.033755
+  type: 'test'
+  ...
+# Subtest: slow HTTP module-import body cannot retain authority after session revocation
+ok 27 - slow HTTP module-import body cannot retain authority after session revocation
+  ---
+  duration_ms: 5.701954
+  type: 'test'
+  ...
+# Subtest: slow HTTP module-import body cannot retain authority after role revocation
+ok 28 - slow HTTP module-import body cannot retain authority after role revocation
+  ---
+  duration_ms: 6.760069
+  type: 'test'
+  ...
+# Subtest: slow HTTP module-import body cannot retain authority after csrf revocation
+ok 29 - slow HTTP module-import body cannot retain authority after csrf revocation
+  ---
+  duration_ms: 12.58173
+  type: 'test'
+  ...
+# Subtest: module save and import cannot race a still-committing combined process activation
+ok 30 - module save and import cannot race a still-committing combined process activation
+  ---
+  duration_ms: 26.276444
+  type: 'test'
+  ...
+1..30
+# tests 30
+# suites 0
+# pass 30
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 749.663289

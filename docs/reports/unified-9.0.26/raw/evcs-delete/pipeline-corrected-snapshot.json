@@ -1,0 +1,23 @@
+{
+  "at": "2026-11-25T21:11:13.553Z",
+  "result": "PASS",
+  "test": "test/eos-device-ems-web-pipeline.test.cjs",
+  "hash": "e5ad240b83326a70b7c2e5edce1ee134920e745487ed51b84751f653b2198a22",
+  "mainHash": "f284f6f3d83653dd52fd0f2d5d3d121cf29a5c9678f7c2c2724f087eef42a577",
+  "runs": [
+    {
+      "node": "v22.23.4",
+      "tests": 13,
+      "passed": 13,
+      "failed": 0,
+      "log": "node22-pipeline-corrected.log"
+    },
+    {
+      "node": "v24.22.3",
+      "tests": 13,
+      "passed": 13,
+      "failed": 0,
+      "log": "node24-pipeline-corrected.log"
+    }
+  ]
+}

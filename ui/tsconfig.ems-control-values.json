@@ -1,5 +1,5 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": { "strict": true, "noEmit": true, "target": "ES2022", "skipLibCheck": true, "types": ["node"] },
-  "files": ["src-ts/runtime-executables/lib/ems-control-values.ts"], "include": []
+  "files": ["src-ts/runtime-executables/lib/ems-control-values.ts", "src-ts/runtime-executables/lib/charging-point-identity.ts", "src-ts/runtime-executables/lib/charging-station-identity.ts"], "include": []
 }

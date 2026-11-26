@@ -1,5 +1,7 @@
 /** Copyright (c) 2026 NexoWatt. Confidential and proprietary. */
 import { join } from 'node:path';
+import { readFile } from 'node:fs/promises';
+import { X509Certificate } from 'node:crypto';
 import { json, type Express, type Request, type Response, type NextFunction, type RequestHandler } from 'express';
 import type { EosTlsManager } from './eosTlsManager';
 
@@ -13,6 +15,99 @@ interface Options {
 }
 export function registerEosTlsRoutes(options: Options): void {
     const { app, manager } = options;
+    // Certificate trust must be set up before a first login. This separate,
+    // read-only surface exposes only the already validated public root, never
+    // controller certificates, private keys, a CSR or administrator state.
+    const publicTrustRequest = (req: Request, res: Response): boolean => {
+        res.setHeader('Cache-Control', 'no-store');
+        res.setHeader('X-Content-Type-Options', 'nosniff');
+        res.setHeader('X-Frame-Options', 'DENY');
+        res.setHeader('Referrer-Policy', 'no-referrer');
+        res.setHeader(
+            'Content-Security-Policy',
+            "default-src 'none'; img-src 'self'; style-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
+        );
+        if (!options.requestAllowed(req)) {
+            res.status(403).json({ error: 'AUTH_ORIGIN' });
+            return false;
+        }
+        return true;
+    };
+    let trustTemplate: Promise<string> | null = null;
+    const loadTrustTemplate = (): Promise<string> => {
+        trustTemplate ??= readFile(join(options.baseDir, 'public', 'eos-tls', 'trust.html'), 'utf8').catch(
+            (error: unknown) => {
+                trustTemplate = null;
+                throw error;
+            },
+        );
+        return trustTemplate;
+    };
+    app.get('/security/trust', (req, res, next) => {
+        if (!publicTrustRequest(req, res)) {
+            return;
+        }
+        if (req.path.endsWith('/')) {
+            next();
+            return;
+        }
+        res.redirect(308, '/security/trust/');
+    });
+    app.get('/security/trust/', (req, res): void => {
+        if (!publicTrustRequest(req, res)) {
+            return;
+        }
+        void loadTrustTemplate().then(
+            template => {
+                let fingerprint = '';
+                try {
+                    fingerprint = new X509Certificate(manager.publicRoot()).fingerprint256;
+                } catch {
+                    /* Existing ioBroker TLS does not imply an exportable NexoWatt root. */
+                }
+                // X509Certificate supplies fixed hexadecimal bytes, not user HTML.
+                const available = /^(?:[A-F0-9]{2}:){31}[A-F0-9]{2}$/.test(fingerprint);
+                res.type('html').send(
+                    template
+                        .replace('{{DOWNLOAD_HIDDEN}}', available ? '' : 'hidden')
+                        .replace('{{UNAVAILABLE_HIDDEN}}', available ? 'hidden' : '')
+                        .replace('{{ROOT_FINGERPRINT}}', available ? fingerprint : '—'),
+                );
+            },
+            () => res.status(404).json({ error: 'EOS_TLS_TRUST_PAGE_UNAVAILABLE' }),
+        );
+    });
+    app.get('/security/trust/root.cer', (req, res): void => {
+        if (!publicTrustRequest(req, res)) {
+            return;
+        }
+        try {
+            const certificate = manager.publicRoot();
+            res.type('application/pkix-cert').attachment('NexoWatt-Root-CA.cer').send(certificate);
+        } catch {
+            res.status(404).json({ error: 'EOS_TLS_ROOT_NOT_CONFIGURED', help: '/security/trust/' });
+        }
+    });
+    app.get('/security/trust/trust.css', (req, res): void => {
+        if (!publicTrustRequest(req, res)) {
+            return;
+        }
+        res.sendFile(join(options.baseDir, 'public', 'eos-tls', 'trust.css'), { cacheControl: false }, error => {
+            if (error && !res.headersSent) {
+                res.status(404).json({ error: 'EOS_TLS_TRUST_PAGE_UNAVAILABLE' });
+            }
+        });
+    });
+    app.all(
+        ['/security/trust', '/security/trust/', '/security/trust/root.cer', '/security/trust/trust.css'],
+        (req, res): void => {
+            if (!publicTrustRequest(req, res)) {
+                return;
+            }
+            res.setHeader('Allow', 'GET, HEAD');
+            res.status(405).json({ error: 'EOS_TLS_READ_ONLY' });
+        },
+    );
     const guard =
         (write = false, page = false): RequestHandler =>
         (req, res, next): void => {

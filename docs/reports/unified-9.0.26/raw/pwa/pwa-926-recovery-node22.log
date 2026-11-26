@@ -1,0 +1,28 @@
+(node:481) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:488) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:488) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: parent login remains usable with persisted UI pause and a fresh admin session
+ok 1 - parent login remains usable with persisted UI pause and a fresh admin session
+  ---
+  duration_ms: 3585.018908
+  type: 'test'
+  ...
+# Subtest: parent login remains usable with timed-out runtime configuration and a fresh admin session
+ok 2 - parent login remains usable with timed-out runtime configuration and a fresh admin session
+  ---
+  duration_ms: 5293.336826
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 10295.853576

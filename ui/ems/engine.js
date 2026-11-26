@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/ems/engine.ts
- * Quell-Hash: sha256:b6498fc2692e094223cfecef303b18660faf85442c82fb364ce38a5db8ccc119
+ * Quell-Hash: sha256:1a9983af2ff463d394219d536ee86cb93ade18bcc06b2b11f7340df49e51dfa6
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -74,6 +74,7 @@ const { DatapointRegistry } = require('./datapoints');
 const { ModuleManager } = require('./module-manager');
 const { awaitEmsTransition } = require('../lib/installer-lifecycle');
 const { normalizeOcppDiscovery } = require('../lib/ocpp-auto-discovery');
+const { synchronizeChargingPointIdentity } = require('../lib/charging-point-identity');
 const { applyStorageMeasurementOverrides } = require('./services/storage-override-bridge');
 const { buildNvpSnapshotFromRegistry } = require('./services/measurement-freshness');
 const { installActuatorShadowArbiter } = require('./services/actuator-shadow-arbiter');
@@ -1129,6 +1130,9 @@ class EmsEngine {
      */
     async init() {
         const adapter = this.adapter;
+        // A saved reordering may survive a process/power loss before its state
+        // transfer. Recover it before any module reads index-based wishes.
+        await synchronizeChargingPointIdentity(adapter, Array.isArray(adapter.evcsList) ? adapter.evcsList : []);
         await this._ensureInternalStates();
         this._startSchedulerHeartbeat();
         // Scheduler interval from config (Admin UI / jsonConfig)

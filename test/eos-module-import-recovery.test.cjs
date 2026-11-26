@@ -18,7 +18,13 @@ async function setup(t, factory = { validateConfig: input => ({ ...input, enable
     states.set(`${sourceId}.alive`, { val: false, ack: true, ts: now });
     states.set('system.host.controller.alive', { val: true, ack: true, ts: now });
     const encrypt = value => `encrypted:${Buffer.from(value).toString('base64')}`;
-    const owner = { namespace: 'eos-admin.0', instance: 0, config: {}, log: { warn() {} }, encrypt,
+    // Manual import requires a deliberately disabled target. An absent module
+    // configuration represents a new installation and now defaults to enabled.
+    // Keep unrelated modules explicitly disabled to isolate import side effects.
+    const owner = { namespace: 'eos-admin.0', instance: 0,
+        config: { eosModules: Object.fromEntries(['devices', 'eebus', 'backup', 'ocpp'].map(id =>
+            [id, { v: 1, encrypted: encrypt('{"enabled":false}') }])) },
+        log: { warn() {} }, encrypt,
         decrypt: value => Buffer.from(value.slice(10), 'base64').toString(),
         eosLicenseService: { allowsEmbeddedModule: () => true }, eosOwnership: { canWrite: () => true },
         async getObjectViewAsync(_design, _type, range) { return { rows: [...objects.values()].filter(item => item._id >= range.startkey && item._id <= range.endkey).map(value => ({ value })) }; },

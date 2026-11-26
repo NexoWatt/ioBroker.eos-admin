@@ -85,7 +85,9 @@ export function kioskRouteAllowed(req: Pick<Request, 'url' | 'method'>): boolean
 export function kioskSetAllowed(body: unknown): boolean {
     if (
         !record(body) ||
-        Object.keys(body).some(k => !['scope', 'key', 'value'].includes(k)) ||
+        Object.keys(body).some(
+            k => !['scope', 'key', 'value', 'expectedChargingIdentity', 'expectedChargingLayoutRevision'].includes(k),
+        ) ||
         typeof body.scope !== 'string' ||
         typeof body.key !== 'string' ||
         body.key.length > 128 ||
@@ -94,6 +96,18 @@ export function kioskSetAllowed(body: unknown): boolean {
         return false;
     }
     const { scope, key, value } = body;
+    for (const field of ['expectedChargingIdentity', 'expectedChargingLayoutRevision']) {
+        if (!Object.prototype.hasOwnProperty.call(body, field)) {
+            continue;
+        }
+        if (
+            !(scope === 'ems' || scope === 'evcs' || (scope === 'settings' && /^evcs/.test(key))) ||
+            typeof body[field] !== 'string' ||
+            !/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/.test(body[field])
+        ) {
+            return false;
+        }
+    }
     const boolean = typeof value === 'boolean';
     const number = typeof value === 'number' && Number.isFinite(value);
     if (scope === 'ems') {

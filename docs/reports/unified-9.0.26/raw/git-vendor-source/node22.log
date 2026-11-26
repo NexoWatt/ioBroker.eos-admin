@@ -1,0 +1,28 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:34) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: ordinary git add and Git archive retain every compiled module runtime including the backup SD-card driver
+ok 1 - ordinary git add and Git archive retain every compiled module runtime including the backup SD-card driver
+  ---
+  duration_ms: 254.796722
+  type: 'test'
+  ...
+# Subtest: a fresh Git index retains every file required by the sealed publication inventory
+ok 2 - a fresh Git index retains every file required by the sealed publication inventory
+  ---
+  duration_ms: 5213.394249
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5604.344704

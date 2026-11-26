@@ -46,6 +46,12 @@ async function setup(t, { version = '0.2.2', count = 1, ocppLicensed = true, cor
         async subscribeForeignStatesAsync(pattern) { events.push(`subscribeStates:${pattern}`); },
         async unsubscribeForeignObjectsAsync() {}, async unsubscribeForeignStatesAsync() {},
     };
+    // This integration case exercises the real Devices child and optional
+    // external OCPP ownership. Unrelated services are explicitly disabled;
+    // OCPP intentionally retains an absent envelope to exercise new defaults.
+    for (const id of ['eebus', 'backup']) owner.config.eosModules[id] = {
+        v: 1, encrypted: owner.encrypt(JSON.stringify({ enabled: false })),
+    };
     objects.set('system.adapter.eos-admin.0', { _id: 'system.adapter.eos-admin.0', type: 'instance', common: { enabled: true, host: 'fixture' }, native: owner.config });
     states.set('system.host.fixture.alive', { val: true, ack: true, ts: Date.now() });
     for (let i = 0; i < count; i++) {
@@ -107,7 +113,12 @@ test('previously blocked optional OCPP inventory recovers on startup and actual 
     assert.equal(devices.details.process.state, 'running');
     assert.ok(Number.isSafeInteger(devices.details.process.pid));
     assert.notEqual(devices.details.process.pid, process.pid);
-    assert.equal((await host.status('ocpp')).enabled, false);
+    const ocpp = await host.status('ocpp');
+    assert.equal(ocpp.enabled, true, 'missing configuration enables commissioning without taking over the external adapter');
+    assert.equal(ocpp.active, false);
+    assert.equal(ocpp.reason, 'LEGACY_CONFLICT');
+    assert.equal(ocpp.details.process.pid, null);
+    assert.deepEqual(ocpp.blockers, [{ instance: 'ocpp21.0', reason: 'LEGACY_ENABLED_OR_UNKNOWN' }]);
     assertExternalRetained(f);
 });
 

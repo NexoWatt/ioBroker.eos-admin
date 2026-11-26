@@ -19,7 +19,10 @@ function fixture({ pendingStart = true, stopTimeoutMs = 1000, stopFailure = 0 } 
     const encrypt = value => `encrypted:${Buffer.from(value).toString('base64')}`;
     const owner = {
         namespace: 'eos-admin.0', instance: 0,
-        config: { eosModules: { devices: { v: 1, encrypted: encrypt(JSON.stringify({ enabled: true })) } } },
+        // This fixture isolates Devices; absent module configuration now means
+        // enabled for commissioning, so unrelated runtimes are explicitly off.
+        config: { eosModules: Object.fromEntries(['devices', 'eebus', 'backup', 'ocpp']
+            .map(id => [id, { v: 1, encrypted: encrypt(JSON.stringify({ enabled: id === 'devices' })) }])) },
         log: { warn() {} }, eosLicenseService: { allowsEmbeddedModule: () => true }, eosOwnership: { canWrite: () => true },
         encrypt, decrypt: value => Buffer.from(value.slice(10), 'base64').toString(),
         async getForeignObjectAsync(id) { return id === 'system.adapter.eos-admin.0' ? { native: owner.config } : objects.get(id); },

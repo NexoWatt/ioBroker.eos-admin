@@ -1,0 +1,74 @@
+{
+  "result": "passed",
+  "runAt": "2026-11-25T19:50:14.764Z",
+  "node": "v24.22.3",
+  "browser": "HeadlessChrome/158.0.8127.0",
+  "scope": "Real Chromium, production runtime UI, routes, control service and protected config-store logic. Synthetic DB, auth source and process lifecycle; no live ioBroker controller or physical devices.",
+  "checks": [
+    {
+      "name": "five hosted controls; parent/external OCPP read-only; module-off and both-off screenshot states both offer enable",
+      "result": "passed"
+    },
+    {
+      "name": "single browser action enables both gates with protected persistence; confirmed starts and page reload preserve activation",
+      "result": "passed"
+    },
+    {
+      "name": "production mutation route rejects missing CSRF without touching lifecycle",
+      "result": "passed"
+    },
+    {
+      "name": "disable persists desired state; accepted job stays busy until confirmed stop; no early stopped badge",
+      "result": "passed"
+    },
+    {
+      "name": "disabled choice survives page reload and a fresh production config-service read",
+      "result": "passed"
+    },
+    {
+      "name": "enable waits for lifecycle readiness and displays green only after confirmed running state",
+      "result": "passed"
+    },
+    {
+      "name": "restart uses confirmed stop before start through the production control service",
+      "result": "passed"
+    },
+    {
+      "name": "migration blocks starts with explanation and status link while stop remains available",
+      "result": "passed"
+    },
+    {
+      "name": "stale revision fails without lifecycle change and refreshes current controls",
+      "result": "passed"
+    },
+    {
+      "name": "unconfirmed stop remains visibly unconfirmed and never claims successful deactivation",
+      "result": "passed"
+    },
+    {
+      "name": "UI/EMS pause remains controllable from parent runtime page and can be reactivated",
+      "result": "passed"
+    },
+    {
+      "name": "missing command response is reported as unconfirmed; no automatic command replay",
+      "result": "passed"
+    },
+    {
+      "name": "mobile 390px has usable buttons without horizontal overflow",
+      "result": "passed"
+    },
+    {
+      "name": "lost administrator role denies mutation and removes all actionable status",
+      "result": "passed"
+    }
+  ],
+  "pageErrors": [],
+  "sourceHashes": {
+    "src/lib/eosRuntimeControl.js": "3f706fb02d3b705a37e157c70dabbc01c2882f40e51a2c3d57f5abff2c04d40c",
+    "src/lib/eosModuleHttp.js": "abbd1c7fe2c82f97845007c1d7c299ee45c9eb692c97bb9a1890b72e2691147f",
+    "src/lib/eosRuntimeHealth.js": "7b7724eacac3a7c913eb2ee40dceb37329f0d960ffc7b4c0728c85a55e35ab5d",
+    "public/eos-runtime/index.js": "0034751485647b738a642e5e8205199f939ed10bfe95d0f913cc04bc71d893b2",
+    "public/eos-runtime/index.html": "ec1977198e774dbf5a360334028365bcb4b457b33ec1a9a303c3d848bdd8232d",
+    "public/eos-runtime/style.css": "55dd55b29ba0ef541b840b72f14f967a23049397ee51b100557952a0f87d7d9c"
+  }
+}

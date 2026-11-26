@@ -1,0 +1,10 @@
+{
+  "recordedAt": "2026-11-25T20:50:07.109656+00:00",
+  "scope": "Source snapshot following independent code review and Node22/24 client function tests; final built browser is separately verified.",
+  "sourceHashes": {
+    "ui/src-ts/runtime-executables/www/app.ts": "18104cb2b08b3c23c36643230efeb9f8a940be31f60d25193001491594db06ea",
+    "ui/src-ts/runtime-executables/www/evcs.ts": "e0b1f16597d3ea2467f77c0a06773299c36e35238bff59b028a2be38297752ac",
+    "ui/src-ts/runtime-executables/www/dc-station-display.ts": "8e648c0ccac008de03407a0e2134c5e3cbb33f2a03a99a4002f659da32bca018",
+    "test/eos-charging-control-client.test.cjs": "3a97a49891e20c71b99af32bfe946630853fbf86188d545ad5b142d4042ddad7"
+  }
+}

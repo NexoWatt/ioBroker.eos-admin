@@ -1,0 +1,30 @@
+{
+  "node": "v24.22.3",
+  "synthetic": true,
+  "results": [
+    {
+      "workload": "external-alive",
+      "events": 459,
+      "elapsedMs": 3.307,
+      "counts": {
+        "generation": 0,
+        "ownershipReads": 0,
+        "reconciliations": 0,
+        "revocations": 0,
+        "moduleCreates": 0
+      }
+    },
+    {
+      "workload": "irrelevant-state-object",
+      "events": 459,
+      "elapsedMs": 0.577,
+      "counts": {
+        "generation": 0,
+        "ownershipReads": 0,
+        "reconciliations": 0,
+        "revocations": 0,
+        "moduleCreates": 0
+      }
+    }
+  ]
+}

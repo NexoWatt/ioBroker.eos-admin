@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
-  "productVersion": "9.0.25",
+  "productVersion": "9.0.26",
   "upstream": {
     "version": "8.3.5",
     "commit": "6f77eedf525813a7a61d79188d1ff05dffd05086"
   },
-  "entry": "assets/mf-entry-bootstrap-0-2a856bb6.js",
+  "entry": "assets/mf-entry-bootstrap-0-96d40e57.js",
   "roleBootstrap": "js/eos-role-bootstrap.js",
-  "sourceHash": "c4a1f9eb452abd899f75345500ce9e16f3f15dc7172f2a1982f55898b0a0f7ad",
+  "sourceHash": "690e6f275b963a367b3e73020a09e64c6097a27e96edef85c7dc6b732c9859cf",
   "sources": {
     "src/App.tsx": "ccffc86cdb6b6854a6f3f556d8e65c390504c14f92080fe043ca158bd1d3da94",
     "src/assets/administrator.svg": "b63ed70664b07efbe04231cc17f7c7719b4d570e983e01fbe21c6e6c8ded99d2",
@@ -287,7 +287,7 @@
     "src/vendor/acorn/acorn.mjs": "1cbcbf252a5800e496dc505c706f309a9dd4e1789392e12963c77ae9497ff6f7",
     "src/vendor/acorn/LICENSE": "76a876cf886ff9be2a8b5e2e86514fed06223c8c9f0c1e9ee9606e93841e00b7",
     "src/vendor/acorn/PROVENANCE.json": "1b2826aab7230a406674c13ba0ab4213e791038d2204e292ee5bcb283869ad36",
-    "src/version.json": "cb700204ef6779b2cd1e503bfb53e0a46829247f08c263f9cc9362301032a668",
+    "src/version.json": "8ac648a168e59282a559db6e9d6bb745d1e4b43cfa97093e00ff63982787b1d0",
     "src/Workers/AdaptersWorker.tsx": "b58ed18758874cfb9c7aa7f19712d1e5c0920ef6d3f7f0b1036adb366c3cda45",
     "src/Workers/GenericWorker.tsx": "c12e531250122c6db78e7b5818d67884ae023b2db56412a1c8b8ee570b6abb6e",
     "src/Workers/HostAdapterWorker.tsx": "293722955fb91b531ebbd0db3bc5ec5c044027da6b932e464c71fb2caee259ef",
@@ -485,32 +485,32 @@
     "build-tools/eos-object-browser-patches.json": "76b14fd11483bb82192ed764e1306ecaa423003cad6e0adfd0bb3137f75c78b8",
     "build-tools/eos-object-browser-transform.mjs": "f77cbcc30cb16be98eb67a5aaee580df120e34cd354133ddc9a74f265fd06eb4",
     "build-tools/eos-public-assets.mjs": "20214ee4b94e13930e078d2338a4c061c54fd11dab97ba24738a1bf7dcc5d59b",
-    "package.json": "097e59d56ca9f969bcdfe4a52f4c99800b4580268c79326e716a71810f0d93ac",
-    "package-lock.json": "3cd85936399ea68be1cc395ac166db6dd6b476c74af49da78617402f9f62e22d",
+    "package.json": "dbddc1347e8923f938820bcf8e8cbe81c76449472fc80b987b7a07d747fc674c",
+    "package-lock.json": "c808c69df256257d6e557dad9f1c58300436de15a2aac3aea8ce834db55c8baa",
     "vite.config.ts": "fa73b15bb0ded8a8223af18cf3183863aa8fe6203e321e42926f3ef9687fd1b4",
     "tsconfig.json": "feb429c06900f61a731c6f677b974b077a672c9a9653784225bea69493b8203d",
     "index.html": "051ee6b9b735df4293e2a1fe2c8807297a1362494e367fbb2a2677360ff0c83d"
   },
   "chunks": {
-    "assets/hostInit-keGjwsZR.js": {
+    "assets/hostInit-Cgee6juw.js": {
       "imports": [
         "assets/vite-preload-helper-BbbETgeG.js",
         "assets/helpers-C0aN90O2.js"
       ],
       "dynamicImports": [
-        "remoteEntry-eos-9.0.25.js",
+        "remoteEntry-eos-9.0.26.js",
         "assets/_virtual_mf-localSharedImportMap___mfe_internal__iobroker_admin__mf_owner__1-DMV_e2iP.js"
       ],
       "modules": [
         "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__1__H_A_I__hostAutoInit__H_A_I__.js"
       ]
     },
-    "assets/index-DqPrQK7T.js": {
+    "assets/index-BUZf1ftI.js": {
       "imports": [
         "assets/vite-preload-helper-BbbETgeG.js"
       ],
       "dynamicImports": [
-        "assets/bootstrap-a7POLSDr.js"
+        "assets/bootstrap-BU7j1Fe_.js"
       ],
       "modules": [
         "\u0000vite/modulepreload-polyfill.js",
@@ -529,7 +529,7 @@
         "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__1__P_S__pendingShares__P_S__.js"
       ]
     },
-    "remoteEntry-eos-9.0.25.js": {
+    "remoteEntry-eos-9.0.26.js": {
       "imports": [
         "assets/vite-preload-helper-BbbETgeG.js",
         "assets/loadShare-eager-dmdYQhAl.js",
@@ -539,8 +539,8 @@
         "assets/_virtual_mf-localSharedImportMap___mfe_internal__iobroker_admin__mf_owner__1-DMV_e2iP.js"
       ],
       "modules": [
-        "virtual:mf-exposes:__mfe_internal__iobroker_admin__remoteEntry-eos-9_0_25_js",
-        "virtual:mf-REMOTE_ENTRY_ID:__mfe_internal__iobroker_admin__remoteEntry-eos-9_0_25_js"
+        "virtual:mf-exposes:__mfe_internal__iobroker_admin__remoteEntry-eos-9_0_26_js",
+        "virtual:mf-REMOTE_ENTRY_ID:__mfe_internal__iobroker_admin__remoteEntry-eos-9_0_26_js"
       ]
     },
     "assets/AccessTime-CuR73YC3.js": {
@@ -570,13 +570,13 @@
         "src/components/AceEditor.tsx"
       ]
     },
-    "assets/AdapterUpdateDialog-CLDpmxDx.js": {
+    "assets/AdapterUpdateDialog-DIjnNZ5k.js": {
       "imports": [
         "assets/loadShare-eager-dmdYQhAl.js",
         "assets/Book-Cq8bkU2t.js",
-        "assets/bootstrap-a7POLSDr.js",
+        "assets/bootstrap-BU7j1Fe_.js",
         "assets/zh-cn-B6dBxOyw.js",
-        "assets/State-BV14HSwZ.js"
+        "assets/State-CJ1mKH_U.js"
       ],
       "dynamicImports": [],
       "modules": [
@@ -641,7 +641,7 @@
         "src/components/Adapters/AdapterUpdateDialog.tsx"
       ]
     },
-    "assets/Adapters-BCGeX2v7.js": {
+    "assets/Adapters-D8UOQg1q.js": {
       "imports": [
         "assets/loadShare-eager-dmdYQhAl.js",
         "assets/Star-D8VNXawT.js",
@@ -650,9 +650,9 @@
         "assets/Remove-IN7ZNaCF.js",
         "assets/ViewList-DVj9ENkU.js",
         "assets/AdminUtils-Dc1eHsx5.js",
-        "assets/bootstrap-a7POLSDr.js",
+        "assets/bootstrap-BU7j1Fe_.js",
         "assets/sentry-CPzCHrwe.js",
-        "assets/AdapterUpdateDialog-CLDpmxDx.js",
+        "assets/AdapterUpdateDialog-DIjnNZ5k.js",
         "assets/CustomModal-Do2qVZr7.js"
       ],
       "dynamicImports": [],
@@ -735,11 +735,11 @@
         "src/tabs/Config.tsx"
       ]
     },
-    "assets/ConfigManager-B_sJf5_w.js": {
+    "assets/ConfigManager-CAvT_4-g.js": {
       "imports": [
         "assets/loadShare-eager-dmdYQhAl.js",
         "assets/PushPinOutlined-BCUm5DLR.js",
-        "assets/bootstrap-a7POLSDr.js"
+        "assets/bootstrap-BU7j1Fe_.js"
       ],
       "dynamicImports": [],
       "modules": [
@@ -788,7 +788,7 @@
         "src/tabs/EasyMode.tsx"
       ]
     },
-    "assets/Enums-D3n1pOtc.js": {
+    "assets/Enums-CrNUOX0d.js": {
       "imports": [
         "assets/rolldown-runtime-sJBDdmOt.js",
         "assets/loadShare-eager-dmdYQhAl.js",
@@ -798,8 +798,8 @@
         "assets/InfoOutlined-Bggo2-pX.js",
         "assets/UnfoldMore-DOHSVdRn.js",
         "assets/AdminUtils-Dc1eHsx5.js",
-        "assets/bootstrap-a7POLSDr.js",
-        "assets/Fields-Bdx5gPoT.js"
+        "assets/bootstrap-BU7j1Fe_.js",
+        "assets/Fields-D-0qFiqr.js"
       ],
       "dynamicImports": [],
       "modules": [
@@ -830,10 +830,10 @@
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/icons-material/Extension.mjs"
       ]
     },
-    "assets/Fields-Bdx5gPoT.js": {
+    "assets/Fields-D-0qFiqr.js": {
       "imports": [
         "assets/loadShare-eager-dmdYQhAl.js",
-        "assets/bootstrap-a7POLSDr.js"
+        "assets/bootstrap-BU7j1Fe_.js"
       ],
       "dynamicImports": [],
       "modules": [
@@ -841,12 +841,12 @@
         "src/components/IOFields/Fields.tsx"
       ]
     },
-    "assets/Files-BPK84lYU.js": {
+    "assets/Files-BL8kvaeC.js": {
       "imports": [
         "assets/rolldown-runtime-sJBDdmOt.js",
         "assets/loadShare-eager-dmdYQhAl.js",
         "assets/AdminUtils-Dc1eHsx5.js",
-        "assets/bootstrap-a7POLSDr.js",
+        "assets/bootstrap-BU7j1Fe_.js",
         "assets/CustomModal-Do2qVZr7.js"
       ],
       "dynamicImports": [],
@@ -860,7 +860,7 @@
         "src/tabs/Files.tsx"
       ]
     },
-    "assets/Hosts--Jr6oLf2.js": {
+    "assets/Hosts-BToJLy61.js": {
       "imports": [
         "assets/rolldown-runtime-sJBDdmOt.js",
         "assets/loadShare-eager-dmdYQhAl.js",
@@ -869,10 +869,10 @@
         "assets/Computer-BBU3Cm9-.js",
         "assets/ViewList-DVj9ENkU.js",
         "assets/AdminUtils-Dc1eHsx5.js",
-        "assets/bootstrap-a7POLSDr.js",
-        "assets/AdapterUpdateDialog-CLDpmxDx.js",
+        "assets/bootstrap-BU7j1Fe_.js",
+        "assets/AdapterUpdateDialog-DIjnNZ5k.js",
         "assets/CustomModal-Do2qVZr7.js",
-        "assets/UsedResources-Dz48WzEF.js"
+        "assets/UsedResources-BMiCxqWH.js"
       ],
       "dynamicImports": [],
       "modules": [
@@ -903,7 +903,7 @@
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/icons-material/InfoOutlined.mjs"
       ]
     },
-    "assets/Instances-DxTOzFus.js": {
+    "assets/Instances-Dlrp1KGP.js": {
       "imports": [
         "assets/rolldown-runtime-sJBDdmOt.js",
         "assets/loadShare-eager-dmdYQhAl.js",
@@ -914,12 +914,12 @@
         "assets/Storage-B44xXFFu.js",
         "assets/ViewList-DVj9ENkU.js",
         "assets/AdminUtils-Dc1eHsx5.js",
-        "assets/bootstrap-a7POLSDr.js",
+        "assets/bootstrap-BU7j1Fe_.js",
         "assets/sentry-CPzCHrwe.js",
-        "assets/State-BV14HSwZ.js",
+        "assets/State-CJ1mKH_U.js",
         "assets/CustomModal-Do2qVZr7.js",
         "assets/Config-C4k51ggG.js",
-        "assets/UsedResources-Dz48WzEF.js",
+        "assets/UsedResources-BMiCxqWH.js",
         "assets/classPrivateFieldGet2-DZ8s9-Td.js"
       ],
       "dynamicImports": [],
@@ -957,7 +957,7 @@
         "src/tabs/Instances.tsx"
       ]
     },
-    "assets/Intro-CYBGeZtu.js": {
+    "assets/Intro-5EbxvP4X.js": {
       "imports": [
         "assets/loadShare-eager-dmdYQhAl.js",
         "assets/Apps-BZHXIYjq.js",
@@ -968,7 +968,7 @@
         "assets/Schedule-vdojlve9.js",
         "assets/Storage-B44xXFFu.js",
         "assets/AdminUtils-Dc1eHsx5.js",
-        "assets/bootstrap-a7POLSDr.js",
+        "assets/bootstrap-BU7j1Fe_.js",
         "assets/classPrivateFieldGet2-DZ8s9-Td.js"
       ],
       "dynamicImports": [],
@@ -992,13 +992,13 @@
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/icons-material/KeyboardArrowRight.mjs"
       ]
     },
-    "assets/Logs-CVNC-4S8.js": {
+    "assets/Logs-xdFVJ6fZ.js": {
       "imports": [
         "assets/loadShare-eager-dmdYQhAl.js",
         "assets/DeleteForever-CioJt3X3.js",
         "assets/TextSnippet-C9R3EbZy.js",
         "assets/AdminUtils-Dc1eHsx5.js",
-        "assets/bootstrap-a7POLSDr.js"
+        "assets/bootstrap-BU7j1Fe_.js"
       ],
       "dynamicImports": [],
       "modules": [
@@ -1020,7 +1020,7 @@
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/icons-material/MoreHoriz.mjs"
       ]
     },
-    "assets/Objects-Cqm9Rvym.js": {
+    "assets/Objects-DhyJ5eAY.js": {
       "imports": [
         "assets/rolldown-runtime-sJBDdmOt.js",
         "assets/loadShare-eager-dmdYQhAl.js",
@@ -1032,10 +1032,10 @@
         "assets/AdminUtils-Dc1eHsx5.js",
         "assets/AceEditor-BgLZBrSD.js",
         "assets/ctrlEnter-CruFIPb_.js",
-        "assets/bootstrap-a7POLSDr.js",
+        "assets/bootstrap-BU7j1Fe_.js",
         "assets/zh-cn-B6dBxOyw.js",
         "assets/CustomModal-Do2qVZr7.js",
-        "assets/installSVGRenderer-iWfLFoQU.js"
+        "assets/installSVGRenderer-CcjgaxiA.js"
       ],
       "dynamicImports": [],
       "modules": [
@@ -1098,7 +1098,7 @@
         "src/tabs/Objects.tsx"
       ]
     },
-    "assets/Overview-JgjcHwlz.js": {
+    "assets/Overview-BspgcFB7.js": {
       "imports": [
         "assets/loadShare-eager-dmdYQhAl.js",
         "assets/Extension-DIV5Bi1u.js",
@@ -1106,8 +1106,8 @@
         "assets/Storage-B44xXFFu.js",
         "assets/UnfoldMore-DOHSVdRn.js",
         "assets/AdminUtils-Dc1eHsx5.js",
-        "assets/bootstrap-a7POLSDr.js",
-        "assets/installSVGRenderer-iWfLFoQU.js"
+        "assets/bootstrap-BU7j1Fe_.js",
+        "assets/installSVGRenderer-CcjgaxiA.js"
       ],
       "dynamicImports": [],
       "modules": [
@@ -1197,10 +1197,10 @@
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/icons-material/Star.mjs"
       ]
     },
-    "assets/State-BV14HSwZ.js": {
+    "assets/State-CJ1mKH_U.js": {
       "imports": [
         "assets/loadShare-eager-dmdYQhAl.js",
-        "assets/bootstrap-a7POLSDr.js"
+        "assets/bootstrap-BU7j1Fe_.js"
       ],
       "dynamicImports": [],
       "modules": [
@@ -1270,12 +1270,12 @@
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/icons-material/Usb.mjs"
       ]
     },
-    "assets/UsedResources-Dz48WzEF.js": {
+    "assets/UsedResources-BMiCxqWH.js": {
       "imports": [
         "assets/loadShare-eager-dmdYQhAl.js",
         "assets/Usb-C8HitPqx.js",
         "assets/AdminUtils-Dc1eHsx5.js",
-        "assets/bootstrap-a7POLSDr.js"
+        "assets/bootstrap-BU7j1Fe_.js"
       ],
       "dynamicImports": [],
       "modules": [
@@ -1283,15 +1283,15 @@
         "src/components/UsedResources.tsx"
       ]
     },
-    "assets/Users-D19YlRCD.js": {
+    "assets/Users-DrlJHRa5.js": {
       "imports": [
         "assets/loadShare-eager-dmdYQhAl.js",
         "assets/Pageview-wzrLQZ-j.js",
         "assets/PersonOff-YtHcY0sV.js",
         "assets/VpnKey-BbZdswcd.js",
         "assets/AdminUtils-Dc1eHsx5.js",
-        "assets/bootstrap-a7POLSDr.js",
-        "assets/Fields-Bdx5gPoT.js"
+        "assets/bootstrap-BU7j1Fe_.js",
+        "assets/Fields-D-0qFiqr.js"
       ],
       "dynamicImports": [],
       "modules": [
@@ -1409,11 +1409,11 @@
       ],
       "dynamicImports": [],
       "modules": [
-        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__81295460953671__prebuild__leaflet__prebuild__.js",
+        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__202792413926757__prebuild__leaflet__prebuild__.js",
         "\u0000virtual:mf-localSharedImportMap:__mfe_internal__iobroker_admin__mf_owner__1"
       ]
     },
-    "assets/bootstrap-a7POLSDr.js": {
+    "assets/bootstrap-BU7j1Fe_.js": {
       "imports": [
         "assets/rolldown-runtime-sJBDdmOt.js",
         "assets/vite-preload-helper-BbbETgeG.js",
@@ -1427,21 +1427,21 @@
         "assets/ctrlEnter-CruFIPb_.js"
       ],
       "dynamicImports": [
-        "assets/icons-material-Omb_HCfb.js",
+        "assets/icons-material-C0U9EKON.js",
         "assets/date-fns-BtR4dG_j.js",
         "assets/locale-DN6Bdkdt.js",
-        "assets/Overview-JgjcHwlz.js",
-        "assets/Adapters-BCGeX2v7.js",
-        "assets/Instances-DxTOzFus.js",
-        "assets/Intro-CYBGeZtu.js",
-        "assets/Logs-CVNC-4S8.js",
-        "assets/Files-BPK84lYU.js",
-        "assets/Objects-Cqm9Rvym.js",
-        "assets/Users-D19YlRCD.js",
-        "assets/Enums-D3n1pOtc.js",
+        "assets/Overview-BspgcFB7.js",
+        "assets/Adapters-D8UOQg1q.js",
+        "assets/Instances-Dlrp1KGP.js",
+        "assets/Intro-5EbxvP4X.js",
+        "assets/Logs-xdFVJ6fZ.js",
+        "assets/Files-BL8kvaeC.js",
+        "assets/Objects-DhyJ5eAY.js",
+        "assets/Users-DrlJHRa5.js",
+        "assets/Enums-CrNUOX0d.js",
         "assets/CustomTab-B4ywHrnT.js",
-        "assets/ConfigManager-B_sJf5_w.js",
-        "assets/Hosts--Jr6oLf2.js",
+        "assets/ConfigManager-CAvT_4-g.js",
+        "assets/Hosts-BToJLy61.js",
         "assets/EasyMode-A2E3hSMo.js"
       ],
       "modules": [
@@ -2084,7 +2084,7 @@
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/gui-components/build/Components/IconLibrary/iconLibraryData.js"
       ]
     },
-    "assets/icons-material-Omb_HCfb.js": {
+    "assets/icons-material-C0U9EKON.js": {
       "imports": [
         "assets/loadShare-eager-dmdYQhAl.js",
         "assets/AccessTime-CuR73YC3.js",
@@ -2114,7 +2114,7 @@
         "assets/UnfoldMore-DOHSVdRn.js",
         "assets/ViewList-DVj9ENkU.js",
         "assets/VpnKey-BbZdswcd.js",
-        "assets/bootstrap-a7POLSDr.js"
+        "assets/bootstrap-BU7j1Fe_.js"
       ],
       "dynamicImports": [],
       "modules": [
@@ -12607,11 +12607,11 @@
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/icons-material/index.mjs"
       ]
     },
-    "assets/installSVGRenderer-iWfLFoQU.js": {
+    "assets/installSVGRenderer-CcjgaxiA.js": {
       "imports": [
         "assets/rolldown-runtime-sJBDdmOt.js",
         "assets/loadShare-eager-dmdYQhAl.js",
-        "assets/bootstrap-a7POLSDr.js"
+        "assets/bootstrap-BU7j1Fe_.js"
       ],
       "dynamicImports": [],
       "modules": [
@@ -12957,19 +12957,19 @@
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@module-federation/runtime/dist/index.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/react/cjs/react.production.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/react/index.js",
-        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__81295460953671__prebuild__react__prebuild__.js",
+        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__202792413926757__prebuild__react__prebuild__.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/react/cjs/react-jsx-runtime.production.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/react/jsx-runtime.js",
-        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__81295460953671__prebuild__react_mf_1_jsx_mf_2_runtime__prebuild__.js",
+        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__202792413926757__prebuild__react_mf_1_jsx_mf_2_runtime__prebuild__.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/react-dom/cjs/react-dom.production.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/react-dom/index.js",
-        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__81295460953671__prebuild__react_mf_2_dom__prebuild__.js",
+        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__202792413926757__prebuild__react_mf_2_dom__prebuild__.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/scheduler/cjs/scheduler.production.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/scheduler/index.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/react-dom/cjs/react-dom-client.production.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/react-dom/client.js",
-        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__81295460953671__prebuild__react_mf_2_dom_mf_1_client__prebuild__.js",
-        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__81295460953671__loadShare__react__loadShare__.js",
+        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__202792413926757__prebuild__react_mf_2_dom_mf_1_client__prebuild__.js",
+        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__202792413926757__loadShare__react__loadShare__.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@emotion/sheet/dist/emotion-sheet.esm.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/stylis/src/Enum.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/stylis/src/Utility.js",
@@ -12992,18 +12992,18 @@
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@emotion/use-insertion-effect-with-fallbacks/dist/emotion-use-insertion-effect-with-fallbacks.browser.esm.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@emotion/react/dist/emotion-element-f0de968e.browser.esm.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@emotion/react/dist/emotion-react.browser.esm.js",
-        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__81295460953671__prebuild___mf_0_emotion_mf_1_react__prebuild__.js",
-        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__81295460953671__loadShare___mf_0_emotion_mf_1_react__loadShare__.js",
+        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__202792413926757__prebuild___mf_0_emotion_mf_1_react__prebuild__.js",
+        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__202792413926757__loadShare___mf_0_emotion_mf_1_react__loadShare__.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@emotion/is-prop-valid/dist/emotion-is-prop-valid.esm.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@emotion/styled/base/dist/emotion-styled-base.browser.esm.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@emotion/styled/dist/emotion-styled.browser.esm.js",
-        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__81295460953671__prebuild___mf_0_emotion_mf_1_styled__prebuild__.js",
+        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__202792413926757__prebuild___mf_0_emotion_mf_1_styled__prebuild__.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/file-selector/dist/mime-default.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/file-selector/dist/index.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/attr-accept/dist/index.js",
-        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__81295460953671__loadShare__react_mf_1_jsx_mf_2_runtime__loadShare__.js",
+        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__202792413926757__loadShare__react_mf_1_jsx_mf_2_runtime__loadShare__.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/react-dropzone/dist/index.js",
-        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__81295460953671__prebuild__react_mf_2_dropzone__prebuild__.js",
+        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__202792413926757__prebuild__react_mf_2_dropzone__prebuild__.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/material/colors/common.mjs",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/material/colors/red.mjs",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/material/colors/pink.mjs",
@@ -13027,7 +13027,7 @@
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/material/colors/index.mjs",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/utils/formatMuiErrorMessage/formatMuiErrorMessage.mjs",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/material/styles/identifier.mjs",
-        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__81295460953671__loadShare___mf_0_emotion_mf_1_styled__loadShare__.js",
+        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__202792413926757__loadShare___mf_0_emotion_mf_1_styled__loadShare__.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/prop-types/lib/ReactPropTypesSecret.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/prop-types/factoryWithThrowingShims.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/prop-types/index.js",
@@ -13316,7 +13316,7 @@
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@popperjs/core/lib/createPopper.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@popperjs/core/lib/popper.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/utils/useSlotProps/useSlotProps.mjs",
-        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__81295460953671__loadShare__react_mf_2_dom__loadShare__.js",
+        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__202792413926757__loadShare__react_mf_2_dom__loadShare__.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/utils/getReactElementRef/getReactElementRef.mjs",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/material/Portal/Portal.mjs",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/material/Popper/popperClasses.mjs",
@@ -13595,7 +13595,7 @@
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/material/useScrollTrigger/useScrollTrigger.mjs",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/material/version/index.mjs",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/material/index.mjs",
-        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__81295460953671__prebuild___mf_0_mui_mf_1_material__prebuild__.js",
+        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__202792413926757__prebuild___mf_0_mui_mf_1_material__prebuild__.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/gui-components/build/ThemeModern.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/gui-components/build/Theme.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/socket-client/build/esm/DeferredPromise.js",
@@ -13603,7 +13603,7 @@
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/socket-client/build/esm/Connection.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/socket-client/build/esm/AdminConnection.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/socket-client/build/esm/index.js",
-        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__81295460953671__loadShare___mf_0_mui_mf_1_material__loadShare__.js",
+        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__202792413926757__loadShare___mf_0_mui_mf_1_material__loadShare__.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/icons-material/Close.mjs",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/gui-components/build/Prompt.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/gui-components/build/Components/Loaders/MV.js",
@@ -13654,7 +13654,7 @@
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/gui-components/build/Components/ComplexCron.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/icons-material/Language.mjs",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/gui-components/build/Components/CustomModal.js",
-        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__81295460953671__loadShare__react_mf_2_dropzone__loadShare__.js",
+        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__202792413926757__loadShare__react_mf_2_dropzone__loadShare__.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/icons-material/ArrowBack.mjs",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/icons-material/AudioFile.mjs",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/icons-material/Bookmark.mjs",
@@ -13859,7 +13859,7 @@
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/gui-components/build/Components/IobUri.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/gui-components/build/modulefederation.admin.config.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/gui-components/build/index.js",
-        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__81295460953671__prebuild___mf_0_iobroker_mf_1_gui_mf_2_components__prebuild__.js",
+        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__202792413926757__prebuild___mf_0_iobroker_mf_1_gui_mf_2_components__prebuild__.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@base-ui/utils/formatErrorMessage.mjs",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/x-internals/formatErrorMessage/index.mjs",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js",
@@ -14037,12 +14037,12 @@
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/x-date-pickers/DateTimePicker/DateTimePicker.mjs",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/x-date-pickers/StaticDateTimePicker/StaticDateTimePicker.mjs",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/x-date-pickers/index.mjs",
-        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__81295460953671__prebuild___mf_0_mui_mf_1_x_mf_2_date_mf_2_pickers__prebuild__.js",
+        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__202792413926757__prebuild___mf_0_mui_mf_1_x_mf_2_date_mf_2_pickers__prebuild__.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/json5/dist/index.js",
         "__vite-browser-external",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/crypto-js/core.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/crypto-js/md5.js",
-        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__81295460953671__loadShare___mf_0_iobroker_mf_1_gui_mf_2_components__loadShare__.js",
+        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__202792413926757__loadShare___mf_0_iobroker_mf_1_gui_mf_2_components__loadShare__.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/json-config/build/encryptedNative.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/json-config/build/fileContent.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/icons-material/Key.mjs",
@@ -14096,7 +14096,7 @@
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/json-config/build/JsonConfigComponent/ConfigCustomErrorBoundary.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/json-config/build/JsonConfigComponent/guiApiGate.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/json-config/build/JsonConfigComponent/ConfigCustom.js",
-        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__81295460953671__loadShare___mf_0_mui_mf_1_x_mf_2_date_mf_2_pickers__loadShare__.js",
+        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__202792413926757__loadShare___mf_0_mui_mf_1_x_mf_2_date_mf_2_pickers__loadShare__.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/json-config/build/JsonConfigComponent/ConfigDatePicker.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/json-config/build/JsonConfigComponent/ConfigDeviceManager.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/icons-material/Article.mjs",
@@ -14245,7 +14245,7 @@
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/json-config/build/JsonConfigComponent/index.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/json-config/build/JsonConfig.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/json-config/build/index.js",
-        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__81295460953671__prebuild___mf_0_iobroker_mf_1_json_mf_2_config__prebuild__.js",
+        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__202792413926757__prebuild___mf_0_iobroker_mf_1_json_mf_2_config__prebuild__.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/icons-material/QuestionMark.mjs",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/icons-material/SystemUpdateAlt.mjs",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@mui/icons-material/BatteryAlert.mjs",
@@ -14275,7 +14275,7 @@
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/dm-gui-components/build/hooks.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/dm-gui-components/build/Switch.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/dm-gui-components/build/DeviceStatus.js",
-        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__81295460953671__loadShare___mf_0_iobroker_mf_1_json_mf_2_config__loadShare__.js",
+        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__202792413926757__loadShare___mf_0_iobroker_mf_1_json_mf_2_config__loadShare__.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/dm-gui-components/build/JsonConfig.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/dm-gui-components/build/StatusIndicator.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/dm-gui-components/build/DeviceCard.js",
@@ -14303,9 +14303,9 @@
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/dm-gui-components/build/DeviceList.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/@iobroker/dm-gui-components/build/index.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/leaflet/dist/leaflet-src.esm.js",
-        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__81295460953671__loadShare__leaflet__loadShare__.js",
+        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__202792413926757__loadShare__leaflet__loadShare__.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/leaflet-geosearch/dist/geosearch.module.js",
-        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__81295460953671__prebuild__leaflet_mf_2_geosearch__prebuild__.js",
+        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__202792413926757__prebuild__leaflet_mf_2_geosearch__prebuild__.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/ace-builds/src-noconflict/ace.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/react-ace/lib/editorOptions.mjs",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/fast-equals/dist/es/index.mjs",
@@ -14315,7 +14315,7 @@
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/diff-match-patch/index.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/react-ace/lib/diff.mjs",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/react-ace/lib/index.mjs",
-        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__81295460953671__prebuild__react_mf_2_ace__prebuild__.js",
+        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__202792413926757__prebuild__react_mf_2_ace__prebuild__.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/semver/internal/constants.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/semver/internal/debug.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/semver/internal/re.js",
@@ -14362,12 +14362,12 @@
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/semver/ranges/simplify.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/semver/ranges/subset.js",
         "/workspace/scratch/741f792566ea/iobroker.eos-admin/src-admin/node_modules/semver/index.js",
-        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__81295460953671__prebuild__semver__prebuild__.js",
-        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__81295460953671__loadShare__leaflet_mf_2_geosearch__loadShare__.js",
-        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__81295460953671__loadShare__react_mf_2_ace__loadShare__.js",
-        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__81295460953671__loadShare__semver__loadShare__.js",
-        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__81295460953671__loadShare__react_mf_2_dom_mf_1_client__loadShare__.js",
-        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__81295460953671__loadShare___mf_0_iobroker_mf_1_dm_mf_2_gui_mf_2_components__loadShare__.js"
+        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__202792413926757__prebuild__semver__prebuild__.js",
+        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__202792413926757__loadShare__leaflet_mf_2_geosearch__loadShare__.js",
+        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__202792413926757__loadShare__react_mf_2_ace__loadShare__.js",
+        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__202792413926757__loadShare__semver__loadShare__.js",
+        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__202792413926757__loadShare__react_mf_2_dom_mf_1_client__loadShare__.js",
+        "\u0000virtual:mf:__mfe_internal__iobroker_admin__mf_owner__202792413926757__loadShare___mf_0_iobroker_mf_1_dm_mf_2_gui_mf_2_components__loadShare__.js"
       ]
     },
     "assets/locale-DN6Bdkdt.js": {
@@ -15201,17 +15201,17 @@
   },
   "assets": {
     "remoteEntry.js": {
-      "sha256": "d3c59350976c0e83e9784ac7b34878bd3bb62061feb69d7babee16ee4db569aa",
+      "sha256": "f02cd5e980bce690e3e7677335a2f63e7be0baa5508ec8266f782ca4a2b4736e",
       "imports": [
-        "remoteEntry-eos-9.0.25.js"
+        "remoteEntry-eos-9.0.26.js"
       ]
     },
-    "assets/mf-entry-bootstrap-0-2a856bb6.js": {
-      "sha256": "2a856bb6dd4cb3469f311337ce838980c7737ab35448e6748ecababf1818268c",
+    "assets/mf-entry-bootstrap-0-96d40e57.js": {
+      "sha256": "96d40e57577b7d39b094bb25977c86efe736b2e48614469bbd4d55cf20a3c26b",
       "imports": [
-        "assets/hostInit-keGjwsZR.js",
+        "assets/hostInit-Cgee6juw.js",
         "assets/pendingShares-QmYNLpPy.js",
-        "assets/index-DqPrQK7T.js"
+        "assets/index-BUZf1ftI.js"
       ]
     }
   }

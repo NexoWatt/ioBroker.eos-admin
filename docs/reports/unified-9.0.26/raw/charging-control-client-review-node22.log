@@ -1,0 +1,86 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: app: snapshot is immutable; automatic refresh never upgrades old controls to B
+ok 1 - app: snapshot is immutable; automatic refresh never upgrades old controls to B
+  ---
+  duration_ms: 352.460314
+  type: 'test'
+  ...
+# Subtest: app: a page loaded without identity metadata cannot adopt a later token automatically
+ok 2 - app: a page loaded without identity metadata cannot adopt a later token automatically
+  ---
+  duration_ms: 126.44823
+  type: 'test'
+  ...
+# Subtest: app: failed initial configuration read freezes the unconfirmed document identity
+ok 3 - app: failed initial configuration read freezes the unconfirmed document identity
+  ---
+  duration_ms: 177.747116
+  type: 'test'
+  ...
+# Subtest: app: identity rejection is visible and is not retried with a new token
+ok 4 - app: identity rejection is visible and is not retried with a new token
+  ---
+  duration_ms: 74.888531
+  type: 'test'
+  ...
+# Subtest: app: all direct API-set call sites use the identity wrapper
+ok 5 - app: all direct API-set call sites use the identity wrapper
+  ---
+  duration_ms: 90.17734
+  type: 'test'
+  ...
+# Subtest: evcs: snapshot is immutable; automatic refresh never upgrades old controls to B
+ok 6 - evcs: snapshot is immutable; automatic refresh never upgrades old controls to B
+  ---
+  duration_ms: 21.985565
+  type: 'test'
+  ...
+# Subtest: evcs: a page loaded without identity metadata cannot adopt a later token automatically
+ok 7 - evcs: a page loaded without identity metadata cannot adopt a later token automatically
+  ---
+  duration_ms: 16.059178
+  type: 'test'
+  ...
+# Subtest: evcs: failed initial configuration read freezes the unconfirmed document identity
+ok 8 - evcs: failed initial configuration read freezes the unconfirmed document identity
+  ---
+  duration_ms: 36.481472
+  type: 'test'
+  ...
+# Subtest: evcs: identity rejection is visible and is not retried with a new token
+ok 9 - evcs: identity rejection is visible and is not retried with a new token
+  ---
+  duration_ms: 22.144498
+  type: 'test'
+  ...
+# Subtest: evcs: all direct API-set call sites use the identity wrapper
+ok 10 - evcs: all direct API-set call sites use the identity wrapper
+  ---
+  duration_ms: 18.21231
+  type: 'test'
+  ...
+# Subtest: station commands carry the rendered station snapshot identity
+ok 11 - station commands carry the rendered station snapshot identity
+  ---
+  duration_ms: 63.889728
+  type: 'test'
+  ...
+# Subtest: station retained A-button callback cannot acquire B identity after another render
+ok 12 - station retained A-button callback cannot acquire B identity after another render
+  ---
+  duration_ms: 43.340888
+  type: 'test'
+  ...
+1..12
+# tests 12
+# suites 0
+# pass 12
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1598.333466

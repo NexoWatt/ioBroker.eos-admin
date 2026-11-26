@@ -1993,6 +1993,10 @@ export default class Web {
             '/static/login.js': 'login.js',
             '/static/nexowatt-eos-logo.png': 'nexowatt-eos-logo.png',
             '/manifest.webmanifest': 'manifest.webmanifest',
+            '/apple-touch-icon.png': 'apple-touch-icon.png',
+            '/apple-touch-icon-precomposed.png': 'assets/icons/nexowatt-180.png',
+            '/apple-touch-icon-180x180.png': 'assets/icons/nexowatt-180.png',
+            '/apple-touch-icon-180x180-precomposed.png': 'assets/icons/nexowatt-180.png',
             '/sw.js': 'sw.js',
         };
         for (const name of [
@@ -2010,18 +2014,28 @@ export default class Web {
         }
         for (const [route, filename] of Object.entries(loginAssets)) {
             app.get(route, (req: Request, res: Response): void => {
-                res.setHeader('Cache-Control', 'no-store');
+                // iOS may fetch conventional touch-icon paths outside the page
+                // session. Keep these fixed public images in the parent host,
+                // including while the UI child is paused. Conditional image
+                // requests may reuse their bytes; HTML and scripts stay fresh.
+                const publicImage = filename.endsWith('.png');
+                res.setHeader('Cache-Control', publicImage ? 'public, max-age=0, must-revalidate' : 'no-store');
                 res.setHeader('X-Content-Type-Options', 'nosniff');
                 res.setHeader('X-Frame-Options', 'SAMEORIGIN');
                 res.setHeader('Referrer-Policy', 'no-referrer');
                 res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=(), usb=()');
                 res.setHeader('Content-Security-Policy', "base-uri 'self'; object-src 'none'; frame-ancestors 'self'");
                 if (!this.unified.requestAllowed(req)) {
+                    res.setHeader('Cache-Control', 'no-store');
                     res.status(403).json({ error: 'AUTH_ORIGIN' });
                     return;
                 }
+                if (publicImage) {
+                    res.type('image/png');
+                }
                 res.sendFile(join(this.baseDir, 'ui', 'www', filename), { cacheControl: false }, error => {
                     if (error && !res.headersSent) {
+                        res.setHeader('Cache-Control', 'no-store');
                         res.status(404).json({ error: 'EOS_LOGIN_ASSET_UNAVAILABLE' });
                     }
                 });
@@ -2310,6 +2324,9 @@ export default class Web {
                 getRuntimeReadiness: () => {
                     const migration = this.adapter.eosMigration?.status();
                     return {
+                        // Source existence for UI discovery is configuration,
+                        // not the last published alive state of a deleted adapter.
+                        hostedOcppNamespace: moduleHost.namespace('ocpp'),
                         migration: {
                             phase: migration?.phase || 'NOT_AVAILABLE',
                             code: migration?.code || '',

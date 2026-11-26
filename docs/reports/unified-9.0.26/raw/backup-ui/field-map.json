@@ -1,0 +1,497 @@
+{
+  "global": [
+    "enabled"
+  ],
+  "groups": [
+    {
+      "id": "system",
+      "title": "Automatische Systemsicherung",
+      "section": "system",
+      "enabledField": "minimalEnabled",
+      "defaults": [
+        "iobrokerCron",
+        "iobrokerCronJob",
+        "minimalDeleteAfter",
+        "minimalEnabled",
+        "minimalEveryXDays",
+        "minimalNameSuffix",
+        "minimalTime"
+      ],
+      "additional": []
+    },
+    {
+      "id": "eos",
+      "title": "EOS-Profil",
+      "section": "system",
+      "enabledField": "eosProfileEnabled",
+      "defaults": [
+        "eosProfileEnabled",
+        "eosIncludeVendorFile",
+        "eosIncludeVendorSecret"
+      ],
+      "additional": []
+    },
+    {
+      "id": "ccu",
+      "title": "Automatische CCU-Sicherung",
+      "section": "system",
+      "enabledField": "ccuEnabled",
+      "defaults": [
+        "ccuCron",
+        "ccuCronJob",
+        "ccuDeleteAfter",
+        "ccuEnabled",
+        "ccuEvents",
+        "ccuEveryXDays",
+        "ccuHost",
+        "ccuMulti",
+        "ccuNameSuffix",
+        "ccuPassword",
+        "ccuSignedCertificates",
+        "ccuTime",
+        "ccuUsehttps",
+        "ccuUser"
+      ],
+      "additional": []
+    },
+    {
+      "id": "influx",
+      "title": "InfluxDB",
+      "section": "databases",
+      "enabledField": "influxDBEnabled",
+      "defaults": [
+        "influxDBDeleteAfter",
+        "influxDBDumpExe",
+        "influxDBEnabled",
+        "influxDBEvents",
+        "influxDBHost",
+        "influxDBMulti",
+        "influxDBName",
+        "influxDBPort",
+        "influxDBProtocol",
+        "influxDBToken",
+        "influxDBType",
+        "influxDBVersion"
+      ],
+      "additional": [
+        "influxDBBucketId",
+        "influxDBOrganization",
+        "influxDBOrganizationId"
+      ]
+    },
+    {
+      "id": "mysql",
+      "title": "MySQL / MariaDB",
+      "section": "databases",
+      "enabledField": "mySqlEnabled",
+      "defaults": [
+        "mySqlDeleteAfter",
+        "mySqlDumpExe",
+        "mySqlEnabled",
+        "mySqlEvents",
+        "mySqlHost",
+        "mysqlMinimalEnabled",
+        "mySqlMulti",
+        "mySqlName",
+        "mySqlPassword",
+        "mySqlPort",
+        "mysqlQuick",
+        "mysqlSingleTransaction",
+        "mysqlSkipSSL",
+        "mySqlUser"
+      ],
+      "additional": []
+    },
+    {
+      "id": "postgres",
+      "title": "Zusätzliche PostgreSQL-Datenbank",
+      "section": "databases",
+      "enabledField": "pgSqlEnabled",
+      "defaults": [
+        "pgSqlDeleteAfter",
+        "pgSqlDumpExe",
+        "pgSqlEnabled",
+        "pgSqlEvents",
+        "pgSqlHost",
+        "pgSqlMulti",
+        "pgSqlName",
+        "pgSqlPassword",
+        "pgSqlPort",
+        "pgSqlUser"
+      ],
+      "additional": []
+    },
+    {
+      "id": "sqlite",
+      "title": "SQLite",
+      "section": "databases",
+      "enabledField": "sqliteEnabled",
+      "defaults": [
+        "sqliteDumpExe",
+        "sqliteEnabled",
+        "sqlitePath"
+      ],
+      "additional": [
+        "sqliteMulti",
+        "sqliteEvents"
+      ]
+    },
+    {
+      "id": "redis",
+      "title": "Redis",
+      "section": "databases",
+      "enabledField": "redisEnabled",
+      "defaults": [
+        "redisAOFactive",
+        "redisEnabled",
+        "redisHost",
+        "redisMinimalEnabled",
+        "redisPassword",
+        "redisPath",
+        "redisPort",
+        "redisType",
+        "redisUser"
+      ],
+      "additional": [
+        "redisMulti",
+        "redisEvents"
+      ]
+    },
+    {
+      "id": "history",
+      "title": "Dateihistorie",
+      "section": "applications",
+      "enabledField": "historyEnabled",
+      "defaults": [
+        "historyEnabled",
+        "historyEntriesNumber",
+        "historyPath"
+      ],
+      "additional": []
+    },
+    {
+      "id": "zigbee",
+      "title": "Zigbee",
+      "section": "applications",
+      "enabledField": "zigbeeEnabled",
+      "defaults": [
+        "zigbeeEnabled"
+      ],
+      "additional": []
+    },
+    {
+      "id": "zigbee2mqtt",
+      "title": "Zigbee2MQTT",
+      "section": "applications",
+      "enabledField": "zigbee2mqttEnabled",
+      "defaults": [
+        "zigbee2mqttAuth",
+        "zigbee2mqttBaseTopic",
+        "zigbee2mqttEnabled",
+        "zigbee2mqttHost",
+        "zigbee2mqttPath",
+        "zigbee2mqttPassword",
+        "zigbee2mqttPort",
+        "zigbee2mqttType",
+        "zigbee2mqttUser"
+      ],
+      "additional": [
+        "zigbee2mqttProtocol"
+      ]
+    },
+    {
+      "id": "nodered",
+      "title": "Node-RED",
+      "section": "applications",
+      "enabledField": "noderedEnabled",
+      "defaults": [
+        "noderedEnabled"
+      ],
+      "additional": []
+    },
+    {
+      "id": "yahka",
+      "title": "Yahka",
+      "section": "applications",
+      "enabledField": "yahkaEnabled",
+      "defaults": [
+        "yahkaEnabled"
+      ],
+      "additional": []
+    },
+    {
+      "id": "jarvis",
+      "title": "Jarvis",
+      "section": "applications",
+      "enabledField": "jarvisEnabled",
+      "defaults": [
+        "jarvisEnabled"
+      ],
+      "additional": []
+    },
+    {
+      "id": "esphome",
+      "title": "ESPHome",
+      "section": "applications",
+      "enabledField": "esphomeEnabled",
+      "defaults": [
+        "esphomeEnabled"
+      ],
+      "additional": []
+    },
+    {
+      "id": "grafana",
+      "title": "Grafana",
+      "section": "applications",
+      "enabledField": "grafanaEnabled",
+      "defaults": [
+        "grafanaApiKey",
+        "grafanaEnabled",
+        "grafanaHost",
+        "grafanaPort",
+        "grafanaProtocol",
+        "grafanaSignedCertificates"
+      ],
+      "additional": []
+    },
+    {
+      "id": "local",
+      "title": "Lokaler Ordner / NAS / SD-Karte",
+      "section": "destinations",
+      "enabledField": "cifsEnabled",
+      "defaults": [
+        "cacheLoose",
+        "cifsCcuDir",
+        "cifsDeleteOldBackup",
+        "cifsDir",
+        "cifsDomain",
+        "cifsEnabled",
+        "cifsMinimalDir",
+        "cifsMount",
+        "cifsOwnDir",
+        "cifsPassword",
+        "cifsUser",
+        "connectType",
+        "sdCardMountPath",
+        "sdCardBackupSubDir",
+        "sdCardInfluxRetention",
+        "expertMount",
+        "noserverino",
+        "smbType",
+        "sudoMount"
+      ],
+      "additional": [
+        "mountedBackupPath"
+      ]
+    },
+    {
+      "id": "ftp",
+      "title": "FTPS",
+      "section": "destinations",
+      "enabledField": "ftpEnabled",
+      "defaults": [
+        "ftpCcuDir",
+        "ftpDeleteAfter",
+        "ftpDeleteOldBackup",
+        "ftpDir",
+        "ftpEnabled",
+        "ftpHost",
+        "ftpMinimalDir",
+        "ftpOwnDir",
+        "ftpPassword",
+        "ftpPort",
+        "ftpSecure",
+        "ftpSignedCertificates",
+        "ftpUser"
+      ],
+      "additional": []
+    },
+    {
+      "id": "webdav",
+      "title": "WebDAV",
+      "section": "destinations",
+      "enabledField": "webdavEnabled",
+      "defaults": [
+        "webdavCcuDir",
+        "webdavDeleteAfter",
+        "webdavDeleteOldBackup",
+        "webdavDir",
+        "webdavEnabled",
+        "webdavMinimalDir",
+        "webdavOwnDir",
+        "webdavPassword",
+        "webdavSignedCertificates",
+        "webdavURL",
+        "webdavUsername"
+      ],
+      "additional": []
+    },
+    {
+      "id": "dropbox",
+      "title": "Dropbox",
+      "section": "destinations",
+      "enabledField": "dropboxEnabled",
+      "defaults": [
+        "dropboxAccessJson",
+        "dropboxAccessToken",
+        "dropboxCcuDir",
+        "dropboxCodeChallenge",
+        "dropboxDeleteAfter",
+        "dropboxDeleteOldBackup",
+        "dropboxDir",
+        "dropboxEnabled",
+        "dropboxMinimalDir",
+        "dropboxOwnDir",
+        "dropboxTokenType"
+      ],
+      "additional": [
+        "dropboxAccessTokens"
+      ]
+    },
+    {
+      "id": "googledrive",
+      "title": "Google Drive",
+      "section": "destinations",
+      "enabledField": "googledriveEnabled",
+      "defaults": [
+        "googledriveAccessTokens",
+        "googledriveCcuDir",
+        "googledriveDeleteAfter",
+        "googledriveDeleteOldBackup",
+        "googledriveDir",
+        "googledriveEnabled",
+        "googledriveMinimalDir",
+        "googledriveOwnDir"
+      ],
+      "additional": [
+        "googledriveAccessJson"
+      ]
+    },
+    {
+      "id": "onedrive",
+      "title": "OneDrive",
+      "section": "destinations",
+      "enabledField": "onedriveEnabled",
+      "defaults": [
+        "onedriveAccessJson",
+        "onedriveCcuDir",
+        "onedriveDeleteAfter",
+        "onedriveDeleteOldBackup",
+        "onedriveDir",
+        "onedriveEnabled",
+        "onedriveLastTokenRenew",
+        "onedriveMinimalDir",
+        "onedriveOwnDir"
+      ],
+      "additional": []
+    },
+    {
+      "id": "wake",
+      "title": "Speicherziel aufwecken",
+      "section": "destinations",
+      "enabledField": "wakeOnLAN",
+      "defaults": [
+        "macAd",
+        "wakeOnLAN",
+        "wolExtra",
+        "wolPort",
+        "wolWait"
+      ],
+      "additional": []
+    },
+    {
+      "id": "notifications",
+      "title": "Benachrichtigungen",
+      "section": "service",
+      "enabledField": "notificationEnabled",
+      "defaults": [
+        "discordInstance",
+        "discordNoticeType",
+        "discordOnlyError",
+        "discordTarget",
+        "discordWaitToSend",
+        "emailInstance",
+        "emailNoticeType",
+        "emailOnlyError",
+        "emailReceiver",
+        "emailSender",
+        "emailWaitToSend",
+        "gotifyInstance",
+        "gotifyNoticeType",
+        "gotifyOnlyError",
+        "gotifyWaitToSend",
+        "matrixInstance",
+        "matrixNoticeType",
+        "matrixOnlyError",
+        "matrixWaitToSend",
+        "notificationEnabled",
+        "notificationsType",
+        "pushoverDeviceID",
+        "pushoverInstance",
+        "pushoverNoticeType",
+        "pushoverOnlyError",
+        "pushoverSilentNotice",
+        "pushoverWaitToSend",
+        "signalInstance",
+        "signalNoticeType",
+        "signalOnlyError",
+        "signalWaitToSend",
+        "telegramInstance",
+        "telegramNoticeType",
+        "telegramOnlyError",
+        "telegramSilentNotice",
+        "telegramUser",
+        "telegramWaitToSend",
+        "whatsappInstance",
+        "whatsappNoticeType",
+        "whatsappOnlyError",
+        "whatsappWaitToSend"
+      ],
+      "additional": []
+    },
+    {
+      "id": "limits",
+      "title": "Aufbewahrung und Laufzeit",
+      "section": "service",
+      "enabledField": null,
+      "defaults": [
+        "advancedDelete",
+        "debugLevel",
+        "deleteOldDataBase",
+        "fileSizeError",
+        "fileSizeWarning",
+        "ignoreErrors"
+      ],
+      "additional": [
+        "jobTimeoutMinutes",
+        "maxArchiveGiB"
+      ]
+    },
+    {
+      "id": "compatibility",
+      "title": "Übernommene Betriebsoptionen",
+      "section": "service",
+      "enabledField": null,
+      "defaults": [
+        "hostType",
+        "javascriptsEnabled",
+        "restoreSource",
+        "restoreTab",
+        "slaveInstance",
+        "slaveNameSuffix",
+        "startAllRestore",
+        "stopSlaveAfter"
+      ],
+      "additional": []
+    },
+    {
+      "id": "other",
+      "title": "Weitere Bestandsoptionen",
+      "section": "service",
+      "enabledField": null,
+      "defaults": [],
+      "additional": []
+    }
+  ],
+  "defaultsCount": 226
+}

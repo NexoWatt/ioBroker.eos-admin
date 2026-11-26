@@ -76,6 +76,7 @@ function makeOwner(input) {
     // window. In particular, ack:true alone is never sufficient for a state.
     const configStateIds = new Set([
         `${uiNamespace}.installer.configJson`,
+        `${uiNamespace}.chargingManagement.controlIdentityRegistry`,
         `${uiNamespace}.simulation.backupConfigJson`,
         '0_userdata.0.nexowattVis.backupJson',
         '0_userdata.0.nexowattVis.backupJsonPrev',

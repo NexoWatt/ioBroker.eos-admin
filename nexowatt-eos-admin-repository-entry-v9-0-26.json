@@ -1,0 +1,131 @@
+{
+  "eos-admin": {
+    "name": "eos-admin",
+    "version": "9.0.26",
+    "titleLang": {
+      "en": "NexoWatt EOS",
+      "de": "NexoWatt EOS",
+      "ru": "NexoWatt EOS",
+      "pt": "NexoWatt EOS",
+      "pl": "NexoWatt EOS",
+      "fr": "NexoWatt EOS",
+      "nl": "NexoWatt EOS",
+      "it": "NexoWatt EOS",
+      "es": "NexoWatt EOS",
+      "uk": "NexoWatt EOS",
+      "zh-cn": "NexoWatt EOS"
+    },
+    "connectionType": "local",
+    "dataSource": "push",
+    "news": {
+      "9.0.24": {
+        "en": "Integrated OCPP, EEBUS and Devices in independent processes within one EOS adapter; dashboard kiosk with protected Admin login; verified cleanup of obsolete npm publish assets.",
+        "de": "OCPP, EEBUS und Devices in eigenen Prozessen innerhalb eines EOS-Adapters; Dashboard-Kioskmodus mit geschütztem Admin-Zugang; geprüfte Bereinigung alter Dateien vor npm-Publish."
+      },
+      "9.0.23": {
+        "en": "Separate supervised module and UI/EMS processes; automatic native OCPP station assignment, connection-bound profile feedback and process diagnostics.",
+        "de": "Getrennte überwachte Modul- und UI/EMS-Prozesse; automatische native OCPP-Stationszuordnung, verbindungsgebundene Sollwertrückmeldung und Prozessdiagnose."
+      },
+      "9.0.22": {
+        "de": "Energiefluss-Bilanz und Messwertalter korrigiert, Tarifstatus wiederhergestellt und Tarif-Namespace für gemeinsamen EOS-Adapter korrigiert. PostgreSQL für ausdrücklich eingerichtete Neuanlagen, geprüfte Sicherungsabdeckung und normale EMS-Bediendatenpunkte. InfluxDB-Bestand bleibt erhalten. Kontrollierter Teststand.",
+        "en": "Correct energy-flow balance and measurement freshness; restore tariff status and fix tariff namespace in unified EOS. PostgreSQL for explicitly commissioned new sites, checked backup coverage and normal EMS operating datapoints. Existing InfluxDB retained. Controlled test release."
+      },
+      "9.0.21": {
+        "de": "Stabilität bei Wiederverbindungen, verspäteten Schreibaufträgen, Speicherfarm und Tarifausfällen verbessert; konkurrierende Geräteänderungen abgesichert. EOS-Updates in den Kundeneinstellungen ergänzt.",
+        "en": "Improve reconnect, delayed-write, storage-farm and tariff-outage stability; protect concurrent device edits. Add EOS updates to customer settings."
+      },
+      "9.0.20": {
+        "en": "Fix browser-independent device commands, storage-farm feedback and dynamic limits; add direct InfluxDB 2 history with protected credentials and improve login/home-screen icons. Preserve customer configuration.",
+        "de": "Gerätebefehle unabhängig vom Browser, Farm-Rückmeldungen und dynamische Grenzen korrigiert; direkte InfluxDB-2-Historie sowie Login- und Home-Bildschirm-Symbole ergänzt. Kundeneinstellungen bleiben erhalten."
+      },
+      "9.0.19": {
+        "en": "Fix device-to-EMS commissioning, fresh unchanged measurements and energy flow; preserve existing customer settings.",
+        "de": "Geräteübergabe ins EMS, Aktualität unveränderter Messwerte und Energiefluss korrigiert; bestehende Kundeneinstellungen erhalten."
+      },
+      "9.0.18": {
+        "en": "Automatic supported-device assignment through shared Alias V1 roles; customer tariff connection; preserved mappings and data points. New control targets require commissioning.",
+        "de": "Automatische Gerätezuordnung über gemeinsame Alias-V1-Rollen und Tarifanbindung in Kundeneinstellungen. Vorhandene Zuordnungen und Datenpunkte bleiben erhalten; neue Regelziele benötigen eine Inbetriebnahme."
+      },
+      "9.0.17": {
+        "de": "EOS-Sitzungen vom ioBroker Admin getrennt; automatische Änderungen fremder Rechte und Metadaten entfernt; Parallelbetrieb mit Standard-Backitup abgesichert.",
+        "en": "Isolate EOS sessions from ioBroker Admin; remove automatic foreign permission and metadata changes; preserve standard Backitup coexistence."
+      },
+      "9.0.16": {
+        "de": "Geräte speichern und vorhandene Einstellungen beim Start erhalten; alte Installer-Dateien für npm-Publish sichern; Abmeldung nach zehn Minuten ohne Bedienung.",
+        "en": "Fix device saving and preserve settings during startup; quarantine old Installer files for npm publishing; log out after ten idle minutes."
+      },
+      "9.0.15": {
+        "en": "Unified NexoWatt EOS smartphone app identity; clearly named legacy migration entry in administration and settings.",
+        "de": "Einheitliches NexoWatt EOS App-Symbol für Smartphones; sichtbarer Zugang zur Bestandsübernahme in Administration und Einstellungen."
+      },
+      "9.0.14": {
+        "en": "Fix late-license migration admission, retain legacy devicesJson configurations, serialize manual imports, and show precise EMS startup and restore blockers.",
+        "de": "Bestandsübernahme nach später Lizenzaktivierung abgesichert; alte Geräte-JSON-Konfigurationen erhalten; manueller Import synchronisiert und EMS-Startblockaden klar angezeigt."
+      },
+      "9.0.13": {
+        "en": "Restore direct repository publishing with verified test evidence and safe backup of known obsolete assets; fix SmartHome dropdown clipping.",
+        "de": "Direkte Repo-Veröffentlichung mit geprüften Testnachweisen und gesicherter Bereinigung bekannter alter Assets; SmartHome-Dropdowns korrigiert."
+      },
+      "9.0.12": {
+        "en": "Simplified SmartHome setup with dropdowns, dialogs and compact assisted discovery; corrected detector ordering.",
+        "de": "Vereinfachte SmartHome-Einrichtung mit Dropdowns, Dialogen und kompakter Geräteerkennung; korrigierte Sortierung für den Typdetektor."
+      },
+      "9.0.11": {
+        "en": "Bounded startup recovery for legacy handover; confirmed shutdown before rollback and blocked late operational starts. Verified tarball publishing workflow for Windows.",
+        "de": "Übernahme mit begrenzter Startüberwachung und bestätigtem Stopp vor dem Rückfall; verspätete Betriebsstarts gesperrt. Geprüfter TGZ-Veröffentlichungsweg für Windows."
+      },
+      "9.0.10": {
+        "en": "Device profiles, linked aliases and TypeDetector 6.2 with preserved mappings; full-width SmartHome configuration, sortable tiles and colorful category controls.",
+        "de": "Geräteprofile, verknüpfte Aliase und TypeDetector 6.2 mit Erhalt bestehender Zuordnungen; SmartHome-Konfiguration über die volle Breite, sortierbare Kacheln und farbige Kategoriebedienung."
+      },
+      "9.0.9": {
+        "en": "SmartHome controls redesigned in NexoWatt style with touch-safe sliders and visible command feedback. Existing device mappings and central licensing retained.",
+        "de": "SmartHome-Bedienkacheln im NexoWatt-Design, berührungssichere Regler und sichtbare Befehlsrückmeldung. Bestehende Gerätezuordnungen und zentrale Lizenz bleiben erhalten."
+      },
+      "9.0.8": {
+        "en": "Explicit SmartHome activation, protected legacy configuration loading, same-tab administration and maintained backup scheduling. Node.js 22 and 24 supported; test channel with documented migration limits.",
+        "de": "SmartHome direkt aktivieren, geschützte Bestandskonfiguration laden, Administration im selben Tab und gepflegte Backup-Zeitplanung. Node.js 22 und 24 unterstützt; Prüfkanal mit dokumentierten Migrationsgrenzen."
+      },
+      "9.0.7": {
+        "de": "Gerätekonfiguration ohne Sitzungsabbruch, geprüfte Bestandsübernahme, integrierte Sicherung und lokale Zertifikatsverwaltung. Einheitliche Moduloberflächen und begrenzte Caches. Umfang und Abnahmegrenzen siehe Prüfbericht.",
+        "en": "Device configuration without session interruption, guarded legacy migration, integrated backup and local certificate management. Consistent module interfaces and bounded caches. See the report for scope and acceptance limitations."
+      },
+      "9.0.6": {
+        "de": "Integrierte Geräte- und EEBus-Module mit zentraler EOS-Lizenz, geschützter Übergabe bestehender Instanzen, Installer-Rückweg und mehrzeiliger Admin-Navigation. Lokale Geräteankündigung und vorbereiteter HTTPS-Zugang ohne Port. Prüfumfang und offene Hardware-Abnahme siehe Prüfbericht.",
+        "en": "Integrated Devices and EEBus modules with the central EOS license, guarded legacy handover, installer return navigation and wrapping admin navigation. Local discovery and prepared portless HTTPS access. See the report for validation scope and remaining hardware acceptance.",
+        "nl": "Geïntegreerde Devices- en EEBus-modules met centrale EOS-licentie, beveiligde overdracht, terugkeer vanuit de installer en navigatie op meerdere regels. Lokale detectie en voorbereide HTTPS-toegang zonder poort. Zie het testrapport voor de resterende hardwarecontrole."
+      },
+      "9.0.5": {
+        "de": "9.0.5 korrigiert den History-Absturz an der Übergabe zwischen Verwaltungsserver und eingebetteter UI. History-Anfragen erhalten begrenzte Ressourcen und kontrollierte Fehlerantworten; die EOS-Systemverwaltung verwendet das NexoWatt-Startlogo. Zentrale Lizenz, HTTPS auf 8188 und vorhandener Adminzugang bleiben erhalten. Teststand für next; tatsächliche Nachweise und offene Zielgeräteprüfung siehe Prüfbericht.",
+        "en": "9.0.5 fixes the History crash at the boundary between the administration server and embedded UI. History requests have bounded resources and controlled error responses; EOS system administration uses the NexoWatt startup logo. The central license, HTTPS on 8188 and existing admin access are preserved. Test release for next; see the report for actual evidence and outstanding target-device acceptance.",
+        "nl": "9.0.5 corrigeert de History-crash bij de overdracht tussen beheerserver en ingebedde UI. History-aanvragen krijgen begrensde bronnen en gecontroleerde foutantwoorden; EOS-systeembeheer gebruikt het NexoWatt-startlogo. Centrale licentie, HTTPS op 8188 en bestaande admintoegang blijven behouden. Testversie voor next; zie het rapport voor bewijs en openstaande apparaatcontrole."
+      }
+    },
+    "desc": {
+      "en": "NexoWatt EOS: licensed local energy management, dashboard and ioBroker system administration in one adapter.",
+      "de": "NexoWatt EOS: lizenzierte lokale Energieverwaltung, Dashboard und ioBroker-Systemverwaltung in einem Adapter."
+    },
+    "mode": "daemon",
+    "platform": "Javascript/Node.js",
+    "dependencies": [
+      {
+        "js-controller": ">=7.2.5"
+      }
+    ],
+    "type": "general",
+    "licenseInformation": {
+      "type": "paid",
+      "link": "https://unpkg.com/iobroker.eos-admin@9.0.24/LICENSE"
+    },
+    "adminUI": {
+      "config": "json"
+    },
+    "title": "NexoWatt EOS",
+    "meta": "https://unpkg.com/iobroker.eos-admin@9.0.26/io-package.json",
+    "icon": "https://unpkg.com/iobroker.eos-admin@9.0.26/admin/admin.png",
+    "extIcon": "https://unpkg.com/iobroker.eos-admin@9.0.26/admin/admin.svg",
+    "readme": "https://unpkg.com/iobroker.eos-admin@9.0.26/README.md",
+    "npmPackage": "iobroker.eos-admin",
+    "allowAdapterUpdate": true
+  }
+}

@@ -1,8 +1,9 @@
 /* Copyright (c) 2026 NexoWatt. Confidential and proprietary. */
 'use strict';
-const { join, isAbsolute } = require('node:path');
+const { isAbsolute } = require('node:path');
 const { performance } = require('node:perf_hooks');
-const { channel, ADAPTER_METHODS, MODULE_METHODS, error, isRecord, sanitizeLog, validate } = require('./eosModuleProcessProtocol');
+const { channel, ADAPTER_METHODS, MODULE_METHODS, error, errorCode, isRecord, sanitizeLog, validate } = require('./eosModuleProcessProtocol');
+const { loadModuleFactory, reportModuleLoadFailure } = require('./eosModuleLoad');
 /** @typedef {import('./eosModuleProcessTypes').RecordValue} RecordValue */
 /** @typedef {import('./eosModuleProcessTypes').Call} Call */
 /** @type {import('./eosModuleProcessTypes').Channel|undefined} */
@@ -10,6 +11,7 @@ let rpc;
 /** @type {import('./eosModuleProcessTypes').ModuleRuntime|undefined} */
 let runtime;
 let initialized = false;
+let initializationError = '';
 let stopping = false;
 let leaseUntil = 0;
 let authorityGeneration = 0;
@@ -119,6 +121,16 @@ function boot(received) {
             void shutdown();
             return null;
         }
+        if (method === 'prepare') {
+            // Factory imports may take longer than the short operation lease.
+            // This reply only acknowledges construction, never hardware authority.
+            // The parent must renew authority before sending the actual start.
+            if (stopping)
+                throw error('EOS_MODULE_PROCESS_INACTIVE');
+            if (!runtime)
+                throw error(initializationError || 'EOS_MODULE_PROCESS_INIT');
+            return true;
+        }
         if (method === 'download.close') {
             if (typeof args[0] !== 'string')
                 throw error('EOS_MODULE_PROCESS_DOWNLOAD');
@@ -135,7 +147,7 @@ function boot(received) {
             throw error('EOS_MODULE_PROCESS_INACTIVE');
         const current = runtime;
         if (!current)
-            throw error('EOS_MODULE_PROCESS_INIT');
+            throw error(initializationError || 'EOS_MODULE_PROCESS_INIT');
         if (method === 'download.open') {
             if (message.id !== 'backup' || downloads.size >= 4 || typeof current.getDownload !== 'function')
                 throw error('EOS_MODULE_PROCESS_DOWNLOAD');
@@ -193,7 +205,12 @@ function boot(received) {
                 return null;
             throw error('EOS_MODULE_PROCESS_METHOD');
         }
-        return /** @type {Call} */ (callable).apply(current, args);
+        try {
+            return await /** @type {Call} */ (callable).apply(current, args);
+        }
+        catch (issue) {
+            throw reportModuleLoadFailure(issue, message.baseDir, message.id, text => getRpc().event('log', { level: 'warn', text })) || issue;
+        }
     }, event => {
         if (event.type === 'lease')
             updateLease(event);
@@ -217,36 +234,46 @@ function boot(received) {
             return getRpc().request(method, args);
         };
     }
-    adapter.log = Object.fromEntries(['warn', 'error', 'info', 'debug'].map(level => [level, /** @param {unknown} value */ /** @param {unknown} value */ value => {
+    const moduleLog = Object.fromEntries(['warn', 'error', 'info', 'debug'].map(level => [level, /** @param {unknown} value */ /** @param {unknown} value */ value => {
             try {
                 getRpc().event('log', { level, text: sanitizeLog(value, options.config) });
             }
             catch { /* logging never expands the bounded queue */ }
         }]));
+    adapter.log = moduleLog;
     /** @param {Call} fn @param {number} ms @param {...unknown} args */
     adapter.setTimeout = (fn, ms, ...args) => localTimer(false, fn, ms, ...args);
     /** @param {Call} fn @param {number} ms @param {...unknown} args */
     adapter.setInterval = (fn, ms, ...args) => localTimer(true, fn, ms, ...args);
     /** @param {NodeJS.Timeout} timer */
     adapter.clearTimeout = adapter.clearInterval = timer => { clearTimeout(timer); clearInterval(timer); timers.delete(timer); };
-    const factory = /** @type {unknown} */ (require(join(message.baseDir, 'modules', message.id, 'index.js')));
-    if (!isRecord(factory) || typeof factory.createHostedModule !== 'function')
-        throw error('EOS_MODULE_PROCESS_INIT');
-    const created = /** @type {Call} */ (factory.createHostedModule)({ ...options,
-        adapter, canOperate, ...(message.id === 'ocpp' ? {
-            getAuthorityGeneration: () => { canOperate(); return authorityGeneration; },
-            onAuthorityLost: () => {
-                if (stopping || authorityFailureReported)
-                    return;
-                authorityFailureReported = true;
-                getRpc().event('failure', { code: 'EOS_MODULE_PROCESS_AUTHORITY_EXPIRED' });
-            },
-        } : {}),
-        ...(message.id === 'backup' ? { getHistoryBackupRequirement: () => getRpc().request('getHistoryBackupRequirement') } : {}) });
-    if (!isRecord(created) || typeof created.start !== 'function' || typeof created.stop !== 'function' ||
-        typeof created.getStatus !== 'function')
-        throw error('EOS_MODULE_PROCESS_INIT');
-    runtime = /** @type {import('./eosModuleProcessTypes').ModuleRuntime} */ ( /** @type {unknown} */(created));
+    try {
+        const factory = loadModuleFactory(message.baseDir, message.id, text => moduleLog.warn(text));
+        if (!isRecord(factory) || typeof factory.createHostedModule !== 'function')
+            throw error('EOS_MODULE_PROCESS_INIT');
+        const created = /** @type {Call} */ (factory.createHostedModule)({ ...options,
+            adapter, canOperate, ...(message.id === 'ocpp' ? {
+                getAuthorityGeneration: () => { canOperate(); return authorityGeneration; },
+                onAuthorityLost: () => {
+                    if (stopping || authorityFailureReported)
+                        return;
+                    authorityFailureReported = true;
+                    getRpc().event('failure', { code: 'EOS_MODULE_PROCESS_AUTHORITY_EXPIRED' });
+                },
+            } : {}),
+            ...(message.id === 'backup' ? { getHistoryBackupRequirement: () => getRpc().request('getHistoryBackupRequirement') } : {}) });
+        if (!isRecord(created) || typeof created.start !== 'function' || typeof created.stop !== 'function' ||
+            typeof created.getStatus !== 'function')
+            throw error('EOS_MODULE_PROCESS_INIT');
+        runtime = /** @type {import('./eosModuleProcessTypes').ModuleRuntime} */ ( /** @type {unknown} */(created));
+    }
+    catch (issue) {
+        // Reply to the parent's pending start request with a bounded error code.
+        // An uncaught exception would otherwise turn a missing dependency into
+        // a generic exit and trigger pointless automatic process replacements.
+        initializationError = errorCode(reportModuleLoadFailure(issue, message.baseDir, message.id, text => moduleLog.warn(text)) || issue);
+        return;
+    }
     heartbeat = setInterval(() => {
         try {
             getRpc().event('heartbeat');

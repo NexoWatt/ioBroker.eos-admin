@@ -1,0 +1,33 @@
+{
+  "checkedAt": "2026-11-25T19:58:49.467585+00:00",
+  "scope": "Isolated Git transport; identical current runtime bytes, only ignore policy changes",
+  "runtimeFiles": 47,
+  "runs": [
+    {
+      "policy": "925-ignore-policy",
+      "ignoreSha256": "838f268aa7495e22f31b3c791373724810f5262c5d5a53b6253779f0b0c096b5",
+      "gitTree": "7fbec0e326ccecc0f9b64eecbf69c8771fff7773",
+      "compiledPresent": 0,
+      "compiledByteIdentical": 0,
+      "compiledMissing": 47,
+      "missingEntryPoints": [
+        "modules/eebus/build/index.js",
+        "modules/backup/build/index.js",
+        "modules/ocpp/build/index.js"
+      ]
+    },
+    {
+      "policy": "926-ignore-policy",
+      "ignoreSha256": "285c0803c6c7c23a459fa3e772caa9570fb1e4c854a1b80d1c73b886f598dab2",
+      "gitTree": "b796f9d82c8f8c078aca98d0ef2c144824851759",
+      "compiledPresent": 47,
+      "compiledByteIdentical": 47,
+      "compiledMissing": 0,
+      "missingEntryPoints": []
+    }
+  ],
+  "sourceHashes": {
+    ".gitignore": "285c0803c6c7c23a459fa3e772caa9570fb1e4c854a1b80d1c73b886f598dab2",
+    "test/eos-unified-git-runtime.test.cjs": "6f628893563702bf829642d86ed854ce018d03b1fe348f9fe13b04118a85d016"
+  }
+}

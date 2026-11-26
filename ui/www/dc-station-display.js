@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/dc-station-display.ts
- * Quell-Hash: sha256:7c9feea8a86d4c9167be68f560a9744027db05c57797a573bafd3db68f4af73a
+ * Quell-Hash: sha256:8e648c0ccac008de03407a0e2134c5e3cbb33f2a03a99a4002f659da32bca018
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -453,7 +453,7 @@
         }
         catch (_e) { }
     }
-    async function sendCommand(lp, action, mode, extra = {}) {
+    async function sendCommand(lp, action, mode, extra = {}, expectedChargingIdentity) {
         if (!token || busyKey || !lastPayload)
             return;
         const station = lastPayload.station || {};
@@ -470,7 +470,7 @@
         try {
             const data = await fetchJson('/api/display/station/' + encodeURIComponent(token) + '/command', {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(Object.assign({ lp, action, mode }, (extra && typeof extra === 'object') ? extra : {})),
+                body: JSON.stringify(Object.assign({ lp, action, mode }, (extra && typeof extra === 'object') ? extra : {}, typeof expectedChargingIdentity === 'string' ? { expectedChargingIdentity } : {})),
             });
             toast(t('commandAccepted'));
             if (data && data.payload) {
@@ -664,14 +664,18 @@
     <section class="nw-lp-section"><header><strong>${escapeHtml(t('connectors'))} (${connectors.length})</strong><div class="nw-status-legend"><span data-tone="charging">● ${escapeHtml(t('charging'))}</span><span data-tone="ready">● ${escapeHtml(t('ready'))}</span><span data-tone="inactive">● ${escapeHtml(t('inactive'))}</span><span data-tone="waiting">● ${escapeHtml(t('waiting'))}</span></div></header><div class="nw-connector-grid ${countClass} ${layoutClass}">${connectors.map((c) => renderConnector(c, station)).join('') || `<section class="nw-display-status"><h1>${escapeHtml(t('unavailable'))}</h1><p>${escapeHtml(t('noConnectors'))}</p></section>`}</div></section>
     <section class="nw-insights-grid">${renderDecisionPanel(viewPayload)}${renderWarningsPanel(viewPayload, opts)}</section>
     <footer class="nw-display-footer"><span>NexoWatt EOS · Energy Operation System</span><span>${escapeHtml(display.apiVersion || '0.8.201')}</span><span>${escapeHtml(t('directHardwareWrite'))}</span></footer>`;
-        app.querySelectorAll('[data-command]').forEach((btn) => btn.addEventListener('click', () => {
-            const extra = {};
-            if (btn.hasAttribute('data-value'))
-                extra.value = btn.getAttribute('data-value') === 'true';
-            if (btn.hasAttribute('data-enabled'))
-                extra.enabled = btn.getAttribute('data-enabled') === 'true';
-            sendCommand(btn.getAttribute('data-lp'), btn.getAttribute('data-action'), btn.getAttribute('data-mode'), extra);
-        }));
+        app.querySelectorAll('[data-command]').forEach((btn) => {
+            // Capture the token rendered with this exact button, not a newer poll.
+            const expectedChargingIdentity = payload.chargingControlIdentity?.slots?.[String(btn.getAttribute('data-lp'))];
+            btn.addEventListener('click', () => {
+                const extra = {};
+                if (btn.hasAttribute('data-value'))
+                    extra.value = btn.getAttribute('data-value') === 'true';
+                if (btn.hasAttribute('data-enabled'))
+                    extra.enabled = btn.getAttribute('data-enabled') === 'true';
+                sendCommand(btn.getAttribute('data-lp'), btn.getAttribute('data-action'), btn.getAttribute('data-mode'), extra, expectedChargingIdentity);
+            });
+        });
         app.querySelectorAll('[data-lang]').forEach((btn) => btn.addEventListener('click', () => { manualLanguage = String(btn.getAttribute('data-lang') || '').toLowerCase(); document.documentElement.lang = manualLanguage || 'de'; render(lastPayload || payload, opts); }));
     }
     token = getToken();

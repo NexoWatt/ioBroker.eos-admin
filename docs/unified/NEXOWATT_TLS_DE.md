@@ -1,6 +1,6 @@
 # NexoWatt-Zertifikate für lokale EOS-Geräte
 
-Stand: 23.11.2026, EOS 9.0.7. Die Zertifikatsverwaltung befindet sich unter **Administration → Zertifikate** beziehungsweise `/security/tls/`.
+Stand: 25.11.2026, EOS 9.0.26. Die Zertifikatsverwaltung befindet sich unter **Administration → Zertifikate** beziehungsweise `/security/tls/`.
 
 Die neue Verwaltung stellt einen geschützten lokalen Ausstellungsablauf bereit. Sie liefert keine bereits eingerichtete Hersteller-Zertifizierungsstelle und enthält keine produktiven privaten Schlüssel. Die bestehende HTTPS-Konfiguration bleibt bis zur ausdrücklichen Übernahme eines signierten Gerätezertifikats wirksam. ioBroker Admin auf Port 8081 wird nicht verändert.
 
@@ -49,7 +49,9 @@ node tools/eos-tls-issuer.cjs issue --directory /sicherer/pfad/nexowatt-ca --req
 
 ## Einmaliges Vertrauen auf Endgeräten
 
-Ein privat ausgestelltes Zertifikat wird durch seinen Namen allein nicht automatisch vertrauenswürdig. Das Stammzertifikat muss kontrolliert auf den Endgeräten installiert werden. Der öffentliche Download steht dem angemeldeten Administrator in der Zertifikatsverwaltung bereit. Kein CA-Schlüssel wird exportiert.
+Ein privat ausgestelltes Zertifikat wird durch seinen Namen allein nicht automatisch vertrauenswürdig. Das Stammzertifikat muss kontrolliert auf den Endgeräten installiert werden. Ab 9.0.26 führt bereits die Anmeldeseite über **HTTPS auf diesem Gerät einrichten** auf `/security/trust/`. Dort stehen das bereits geprüfte öffentliche Stammzertifikat und dessen SHA-256-Fingerabdruck ohne Anmeldung bereit. Der direkte Download `/security/trust/root.cer` enthält ausschließlich dieses öffentliche DER-Zertifikat. Die Zertifikatsverwaltung, CSR und sämtliche Schreibaktionen bleiben administratorgeschützt; kein CA- oder Geräteschlüssel wird exportiert.
+
+Wenn noch kein NexoWatt-Zertifikat übernommen wurde, zeigt die Hilfeseite einen Einrichtungshinweis statt des Downloadbuttons. Ein vorhandenes ioBroker-Standardzertifikat wird nicht ungeprüft als vertrauenswürdige Stamm-CA angeboten. Die Einrichtung erzeugt keine neue CA, signiert keine Anfrage und verändert keine HTTPS-Identität. Die Seite und der öffentliche Download funktionieren auch bei gestopptem UI-/EMS-Prozess.
 
 - **Windows / Edge / Chrome:** Das öffentliche Stammzertifikat in den vorgesehenen Speicher „Vertrauenswürdige Stammzertifizierungsstellen“ importieren; in verwalteten Umgebungen über die IT-Verwaltung verteilen. Den korrekten Benutzer-/Computerspeicher wählen.
 - **iPhone / iPad:** Nach der Zertifikatsinstallation zusätzlich unter Einstellungen → Allgemein → Info → Zertifikatsvertrauenseinstellungen das volle Vertrauen für das geprüfte Stammzertifikat aktivieren. Apple Configurator beziehungsweise MDM kann die geregelte Verteilung übernehmen.
@@ -58,6 +60,14 @@ Ein privat ausgestelltes Zertifikat wird durch seinen Namen allein nicht automat
 Die Vertrauenseinrichtung ist ein sicherheitsrelevanter Administrationsschritt: Eine vertraute CA kann weitere Zertifikate ausstellen. Fingerabdruck deshalb über einen unabhängig bestätigten Weg vergleichen; das bloße Herunterladen von einer zunächst noch ungeprüften Webseite reicht nicht als Herkunftsnachweis. Hersteller-CA und Gerätezertifikate nach den Kundenrichtlinien inventarisieren und bei Kompromittierung ersetzen beziehungsweise Vertrauen entziehen.
 
 `https://nexowatt` benötigt zusätzlich passende Namensauflösung und Port 443. Das Zertifikat richtet weder DNS noch Portweiterleitung ein. mDNS unterstützt im lokalen Netz `nexowatt.local`; Browserzugriff über die bloße IP benötigt ebenfalls deren SAN. Die vorhandene Einrichtung in `deploy/NEXOWATT_LOCAL_HTTPS.md` gilt weiter. Weder Zertifikatsimport noch Download deaktivieren Browserprüfungen oder wechseln auf unverschlüsseltes HTTP.
+
+### Web-App-Symbol auf iPhone und iPad
+
+EOS liefert das vorhandene NexoWatt-PNG über die explizite `apple-touch-icon`-Verknüpfung und die konventionellen Apple-Rootpfade aus. Diese festen öffentlichen Bilder liegen ab 9.0.26 im Administrationsprozess und benötigen weder eine Sitzung noch einen laufenden UI-/EMS-Prozess. Wiederholte Bildanfragen können mit ETag und HTTP 304 beantwortet werden; Anmelde- und Einrichtungsseiten bleiben `no-store`.
+
+Die vom Benutzer gemeldete Zertifikatswarnung muss auf dem Endgerät separat beseitigt werden. Eine Bestätigung der Browserwarnung ersetzt weder die Installation und ausdrückliche Vertrauensfreigabe der geprüften CA noch einen passenden SAN. Bei lokalem IP-Zugriff und einer anderen VPN-IP muss das Zertifikat beide tatsächlich verwendeten Adressen enthalten. Ein Serverupdate allein kann das Vertrauen auf dem iPhone nicht einschalten.
+
+Nach korrekter Zertifikatseinrichtung die warnungsfreie EOS-Seite in Safari öffnen und **Teilen → Zum Home-Bildschirm** wählen. In der Vorschau das NexoWatt-Symbol prüfen; eine alte Verknüpfung mit „N“ gegebenenfalls entfernen und erneut anlegen. Der Screenshot mit dem Monogramm belegt einen Symbol-Fallback, aber ohne Prüfung des iPhones nicht dessen vollständige Ursache. Die automatisierten Prüfungen decken die Bild- und Zertifikatsauslieferung ab, nicht die tatsächliche iOS-Installation.
 
 ## Betrieb, Erneuerung und Wiederherstellung
 

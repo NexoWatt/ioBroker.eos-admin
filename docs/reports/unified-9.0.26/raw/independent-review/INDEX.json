@@ -1,0 +1,76 @@
+{
+  "version": "9.0.26",
+  "reviewedAt": "2026-11-25T19:51:39.179822+00:00",
+  "scope": "Independent source review and targeted tests; no customer hardware or iOS device",
+  "node": "v24.22.3",
+  "sourceBefore": {
+    "src/lib/eosRuntimeControl.js": "3f706fb02d3b705a37e157c70dabbc01c2882f40e51a2c3d57f5abff2c04d40c",
+    "src/lib/eosModuleHost.js": "f620a88ebc047c85619ac4251bc5df9f52ee309262a066a2ffbbebee22ee86fe",
+    "src/lib/eosModuleHttp.js": "abbd1c7fe2c82f97845007c1d7c299ee45c9eb692c97bb9a1890b72e2691147f",
+    "src/lib/eosModuleProcess.js": "81eae62debc4b9083527a8b98da3c9a9b8b70a823e248cfaae0229d470e1fd0b",
+    "src/lib/eosModuleProcessProtocol.js": "f7c866ef884985dcb205a8ea9ec2c14d8793453d46246bd15aab110c60bba196",
+    "src/lib/eosModuleProcessWorker.js": "43c016ef620ef002a2f760f92fcb1f2d1c0fbf09592a01402b4ad97f4514075d",
+    "src/lib/eosModuleLoad.js": "123812a80aa10f8b3372a50ec03007a54e244c3ad835bf3eb7daf889fc7da3dd",
+    "src/lib/eosRuntimeHealth.js": "7b7724eacac3a7c913eb2ee40dceb37329f0d960ffc7b4c0728c85a55e35ab5d",
+    "public/eos-runtime/index.js": "0034751485647b738a642e5e8205199f939ed10bfe95d0f913cc04bc71d893b2",
+    "src/lib/web.ts": "6acb5c208b6d99726b20481ed01b818854dc071daec86ccad5fd978703dc38cc",
+    "src/lib/eosTlsHttp.ts": "85fc7f48cba39536b3438e962cea2a789cb5f8c62ca95961326237cfe361deea",
+    "src/lib/eosTlsManager.ts": "de6c27e746b3094532a16faa61c0fbe083ccca58d65840b2525faf55f4273038",
+    "public/eos-tls/trust.html": "3221f32c7cb284fa019c787fee942fdb78f466acb9854fb7095cc970c1c75f3c",
+    "public/eos-tls/trust.css": "6da8c9537ff339e8d88f423969d15f927d02fcd42389aa9e0de4269e352d6121",
+    "ui/www/login.html": "122ba1db067792f71ddc95bc8af181ab15469e3a6179c4c01bf9ae54479335b3",
+    "test/eos-runtime-control.test.cjs": "44167c45c53c9d2427539d5101781524e847b3836799a5df67f584fb699c0acf",
+    "test/eos-module-startup-retry.test.cjs": "ee4dc1ed46d815ebe1354e6d7dde800eb383e6d5ada3ef3d933b6b475d2cd48d",
+    "test/eos-module-load-diagnostic.test.cjs": "d6aa84a2518e39668aca1b9f48b11364b08399c826f19a10d6456b4164393c7a",
+    "test/eos-tls-management.test.cjs": "b015627b0b08e20b819cf899733ca0601e2c4e494e0edbb93e9046f2797fba54"
+  },
+  "runs": [
+    {
+      "log": "runtime-lifecycle-import-node24.log",
+      "command": [
+        "node",
+        "--test",
+        "--test-timeout=180000",
+        "test/eos-runtime-control.test.cjs",
+        "test/eos-module-startup-retry.test.cjs",
+        "test/eos-module-load-diagnostic.test.cjs"
+      ],
+      "exitCode": 0,
+      "sha256": "662a2fd9ffa3b82633905a7c754fce6c033c613ba702aa5dc25f5db0192b5e30"
+    },
+    {
+      "log": "public-trust-node24.log",
+      "command": [
+        "node",
+        "--test",
+        "--test-timeout=180000",
+        "--test-name-pattern=anonymous HTTPS trust setup",
+        "test/eos-tls-management.test.cjs"
+      ],
+      "exitCode": 0,
+      "sha256": "cc4a4231d5141ed679db64ba5f7989d0ace1402fc733e12d3c891544b8f8c133"
+    }
+  ],
+  "sourceAfter": {
+    "src/lib/eosRuntimeControl.js": "3f706fb02d3b705a37e157c70dabbc01c2882f40e51a2c3d57f5abff2c04d40c",
+    "src/lib/eosModuleHost.js": "f620a88ebc047c85619ac4251bc5df9f52ee309262a066a2ffbbebee22ee86fe",
+    "src/lib/eosModuleHttp.js": "abbd1c7fe2c82f97845007c1d7c299ee45c9eb692c97bb9a1890b72e2691147f",
+    "src/lib/eosModuleProcess.js": "81eae62debc4b9083527a8b98da3c9a9b8b70a823e248cfaae0229d470e1fd0b",
+    "src/lib/eosModuleProcessProtocol.js": "f7c866ef884985dcb205a8ea9ec2c14d8793453d46246bd15aab110c60bba196",
+    "src/lib/eosModuleProcessWorker.js": "43c016ef620ef002a2f760f92fcb1f2d1c0fbf09592a01402b4ad97f4514075d",
+    "src/lib/eosModuleLoad.js": "123812a80aa10f8b3372a50ec03007a54e244c3ad835bf3eb7daf889fc7da3dd",
+    "src/lib/eosRuntimeHealth.js": "7b7724eacac3a7c913eb2ee40dceb37329f0d960ffc7b4c0728c85a55e35ab5d",
+    "public/eos-runtime/index.js": "0034751485647b738a642e5e8205199f939ed10bfe95d0f913cc04bc71d893b2",
+    "src/lib/web.ts": "6acb5c208b6d99726b20481ed01b818854dc071daec86ccad5fd978703dc38cc",
+    "src/lib/eosTlsHttp.ts": "85fc7f48cba39536b3438e962cea2a789cb5f8c62ca95961326237cfe361deea",
+    "src/lib/eosTlsManager.ts": "de6c27e746b3094532a16faa61c0fbe083ccca58d65840b2525faf55f4273038",
+    "public/eos-tls/trust.html": "3221f32c7cb284fa019c787fee942fdb78f466acb9854fb7095cc970c1c75f3c",
+    "public/eos-tls/trust.css": "6da8c9537ff339e8d88f423969d15f927d02fcd42389aa9e0de4269e352d6121",
+    "ui/www/login.html": "122ba1db067792f71ddc95bc8af181ab15469e3a6179c4c01bf9ae54479335b3",
+    "test/eos-runtime-control.test.cjs": "44167c45c53c9d2427539d5101781524e847b3836799a5df67f584fb699c0acf",
+    "test/eos-module-startup-retry.test.cjs": "ee4dc1ed46d815ebe1354e6d7dde800eb383e6d5ada3ef3d933b6b475d2cd48d",
+    "test/eos-module-load-diagnostic.test.cjs": "d6aa84a2518e39668aca1b9f48b11364b08399c826f19a10d6456b4164393c7a",
+    "test/eos-tls-management.test.cjs": "b015627b0b08e20b819cf899733ca0601e2c4e494e0edbb93e9046f2797fba54"
+  },
+  "sourceUnchangedDuringTests": true
+}

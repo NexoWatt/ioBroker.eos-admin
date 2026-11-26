@@ -9,7 +9,7 @@ const ADAPTER_METHODS = Object.freeze(['getObjectAsync', 'getStateAsync', 'setOb
     'getStatesAsync', 'getObjectViewAsync', 'setStateChangedAsync', 'delObjectAsync',
     'setForeignObjectNotExistsAsync', 'extendForeignObjectAsync', 'delForeignObjectAsync',
     'getBackupDataFolders', 'sendBackupNotification', 'sendTo']);
-const MODULE_METHODS = Object.freeze(['start', 'stop', 'getStatus', 'command', 'onStateChange', 'onMessage',
+const MODULE_METHODS = Object.freeze(['prepare', 'start', 'stop', 'getStatus', 'command', 'onStateChange', 'onMessage',
     'download.open', 'download.read', 'download.close']);
 /** @param {string} code */
 const error = code => Object.assign(new Error(code), { code });
@@ -18,6 +18,18 @@ const isRecord = value => !!value && typeof value === 'object' && !Array.isArray
 /** @param {unknown} value @returns {string} */
 const errorCode = value => {
     const code = isRecord(value) ? value.code || value.message : '';
+    // Preserve useful dependency/bind diagnostics across IPC without exposing
+    // Node's require stack, installation paths or a module's arbitrary message.
+    if (['MODULE_NOT_FOUND', 'ERR_MODULE_NOT_FOUND'].includes(String(code)))
+        return 'EOS_MODULE_DEPENDENCY_MISSING';
+    if (['ERR_PACKAGE_PATH_NOT_EXPORTED', 'ERR_PACKAGE_IMPORT_NOT_DEFINED', 'ERR_REQUIRE_ESM'].includes(String(code)))
+        return 'EOS_MODULE_DEPENDENCY_INVALID';
+    if (code === 'EADDRINUSE')
+        return 'EOS_MODULE_ADDRESS_IN_USE';
+    if (code === 'EACCES')
+        return 'EOS_MODULE_ACCESS_DENIED';
+    if (isRecord(value) && value.name === 'SyntaxError')
+        return 'EOS_MODULE_SYNTAX_ERROR';
     return typeof code === 'string' && /^(?:EOS|EEBUS)_[A-Z0-9_]{1,100}$/.test(code) ? code : 'EOS_MODULE_PROCESS_OPERATION_FAILED';
 };
 /** @param {unknown} value @param {unknown} config */

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0c0f12">
+  <title>HTTPS einrichten · NexoWatt EOS</title>
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/icons/nexowatt-192.png">
+  <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="/assets/icons/nexowatt-180.png?v=083e11ab28ec">
+  <link rel="stylesheet" href="/security/trust/trust.css">
+</head>
+<body>
+<main>
+  <header><img src="/assets/icons/nexowatt-192.png" width="64" height="64" alt="NexoWatt EOS"><a href="/login.html">Zur Anmeldung</a></header>
+  <p class="eyebrow">NEXOWATT EOS</p>
+  <h1>HTTPS auf diesem Gerät einrichten</h1>
+  <p>Dein EOS kann das öffentliche Stammzertifikat bereitstellen. Die Installation und das Vertrauen bestätigst du anschließend in den Einstellungen deines Geräts.</p>
+  <section {{DOWNLOAD_HIDDEN}}>
+    <h2>1. Zertifikat prüfen und herunterladen</h2>
+    <p>Vergleiche diesen SHA-256-Fingerabdruck mit der Angabe deines Installateurs über einen unabhängig bestätigten Weg. Eine noch nicht vertrauenswürdige Webseite allein bestätigt die Herkunft nicht.</p>
+    <code>{{ROOT_FINGERPRINT}}</code>
+    <p><a class="button" href="/security/trust/root.cer">Stammzertifikat herunterladen</a></p>
+    <p class="hint">Enthalten ist ausschließlich das öffentliche NexoWatt-Stammzertifikat. Ein Download installiert nichts automatisch und gibt keine Anmeldung oder Bedienrechte frei.</p>
+  </section>
+  <section {{UNAVAILABLE_HIDDEN}}>
+    <h2>Zertifikat noch nicht bereitgestellt</h2>
+    <p>Für dieses EOS ist noch kein geprüftes NexoWatt-Stammzertifikat hinterlegt. Dein Administrator richtet es unter <strong>Administration → Zertifikate</strong> ein. Das vorhandene HTTPS-Zertifikat bleibt dabei erhalten.</p>
+    <p>Es wird hier keine neue Zertifizierungsstelle erzeugt und kein unbekanntes Zertifikat zum Vertrauen angeboten.</p>
+  </section>
+  <section>
+    <h2>2. Auf iPhone oder iPad installieren</h2>
+    <ol>
+      <li>Nach dem Download das geladene Profil in den Einstellungen öffnen und die Installation bestätigen. Falls nötig: <strong>Allgemein → VPN und Geräteverwaltung</strong>.</li>
+      <li>Unter <strong>Einstellungen → Allgemein → Info → Zertifikatsvertrauenseinstellungen</strong> das volle Vertrauen ausschließlich für das geprüfte NexoWatt-Stammzertifikat aktivieren.</li>
+      <li>EOS in Safari erneut öffnen. Die aufgerufene IP-Adresse oder der Gerätename muss im Gerätezertifikat enthalten sein. Das gilt auch für eine andere Adresse im VPN.</li>
+    </ol>
+    <p>Die Zertifikatswarnung muss verschwunden sein. Falls sie bleibt, prüft der Administrator Namen beziehungsweise IP-Adresse, Gültigkeit und Zertifikatskette. Das bloße Bestätigen einer Browserwarnung richtet kein dauerhaftes Vertrauen ein.</p>
+  </section>
+  <section>
+    <h2>3. EOS zum Home-Bildschirm hinzufügen</h2>
+    <p>Öffne die warnungsfreie EOS-Seite in Safari und wähle <strong>Teilen → Zum Home-Bildschirm</strong>. Prüfe das NexoWatt-Symbol in der Vorschau. Eine bereits angelegte Verknüpfung mit dem Buchstaben „N“ kannst du danach entfernen und neu anlegen.</p>
+    <p class="hint">Die Webseite kann die iOS-Bestätigungen nicht übernehmen. Für zentral verwaltete Geräte kann die Administration das Zertifikat über MDM bereitstellen.</p>
+  </section>
+  <section>
+    <h2>Andere Geräte</h2>
+    <p>Unter Windows wird das geprüfte Stammzertifikat im vorgesehenen Speicher „Vertrauenswürdige Stammzertifizierungsstellen“ installiert. macOS, Android und Firefox verwenden ihren jeweiligen System- oder Browser-Zertifikatsspeicher. Bei verwalteten Geräten übernimmt das deine Administration.</p>
+  </section>
+  <footer><a href="/login.html">Zurück zur EOS-Anmeldung</a></footer>
+</main>
+</body>
+</html>

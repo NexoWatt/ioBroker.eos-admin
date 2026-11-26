@@ -1,0 +1,28 @@
+✖ legacy in-process business pipeline: one device HTTP save adopts the manual farm row, adds SolaX and SMA M0, and activates the corresponding app atomically (5702.204852ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6465.505932
+
+✖ failing tests:
+
+test at test/eos-device-ems-web-pipeline.test.cjs:414:1
+✖ legacy in-process business pipeline: one device HTTP save adopts the manual farm row, adds SolaX and SMA M0, and activates the corresponding app atomically (5702.204852ms)
+  AssertionError [ERR_ASSERTION]: declaring an app active must not dispatch against missing/offline telemetry: {"writes":[{"id":"eos-admin.0.devices.storage.home.aliases.v1.ctrl.powerSetpointW","state":{"val":0,"ack":false,"ts":1795640532903,"lc":1795640532903},"index":1450},{"id":"eos-admin.0.devices.storage.home.aliases.v1.ctrl.powerSetpointW","state":{"val":0,"ack":false,"ts":1795640534764,"lc":1795640534764},"index":3321},{"id":"eos-admin.0.devices.storage.solax.aliases.v1.ctrl.powerSetpointW","state":{"val":0,"ack":false,"ts":1795640534765,"lc":1795640534765},"index":3322},{"id":"eos-admin.0.devices.storage.home.aliases.v1.ctrl.powerSetpointW","state":{"val":0,"ack":false,"ts":1795640535757,"lc":1795640535757},"index":4043},{"id":"eos-admin.0.devices.storage.solax.aliases.v1.ctrl.powerSetpointW","state":{"val":0,"ack":false,"ts":1795640535758,"lc":1795640535758},"index":4044}],"beforeWrites":2353,"logs":[{"level":"warn","message":"[EOS EMS commissioning] EOS_EMS_RUNTIME_PENDING; saved device configuration remains unchanged"},{"level":"info","message":"[EOS eebus] Local EOS/HEMS SHIP endpoint listening on port 4712/ship/"},{"level":"info","message":"[EOS eebus] Local EOS/HEMS SHIP service announced as \"NexoWatt EOS\" via _ship._tcp (brand=NexoWatt, model=EOS, type=EnergyManagementSystem, ski=EA120DD1F5EC8FF3CA701E13235E0BB03816543D)."},{"level":"warn","message":"EOS_MODULE_START_FAILED: eebus; EOS_MODULE_PROCESS_DISCONNECTED; HTTPS remains available"},{"level":"info","message":"[EOS ocpp] NexoWatt OCPP listening on 0.0.0.0:9220 for ocpp1.6, ocpp2.0.1, ocpp2.1"},{"level":"info","message":"[EOS ocpp] NexoWatt OCPP adapter ready for NexoWatt EOS"},{"level":"info","message":"[PvForecast] Keine nutzbare PV-Prognosequelle verfügbar."},{"level":"debug","message":"[storageFarm] apply targetW=0 dir=idle planned=0W accepted=0W failed=0W unserved=0W status=farm-stop storages=1 src=aus"},{"level":"info","message":"[NexoWatt EOS] Ladepunkte konfiguriert: 0"},{"level":"warn","message":"[Stufe A] ERROR · NVP stale/split-stale · 0 Aktorkonflikt(e) · Speicher appcenter-override"},{"level":"info","message":"[EMS] Embedded engine started (interval 1000ms) — CM=ON PS=OFF"},{"level":"info","message":"[NexoWatt EOS] Ladepunkte konfiguriert: 0"},{"level":"warn","message":"[Stufe A] ERROR · NVP stale/split-stale · 0 Aktorkonflikt(e) · Speicher appcenter-override"},{"level":"info","message":"[EMS] Embedded engine started (interval 1000ms) — CM=ON PS=OFF"},{"level":"info","message":"[EOS eebus] Local EOS/HEMS SHIP endpoint listening on port 4712/ship/"},{"level":"info","message":"[EOS eebus] Local EOS/HEMS SHIP service announced as \"NexoWatt EOS\" via _ship._tcp (brand=NexoWatt, model=EOS, type=EnergyManagementSystem, ski=EA120DD1F5EC8FF3CA701E13235E0BB03816543D)."},{"level":"warn","message":"EOS_MODULE_START_FAILED: eebus; EOS_MODULE_PROCESS_DISCONNECTED; HTTPS remains available"},{"level":"info","message":"[PvForecast] Keine nutzbare PV-Prognosequelle verfügbar."},{"level":"debug","message":"[storageFarm] apply targetW=0 dir=idle planned=0W accepted=0W failed=0W unserved=0W status=farm-stop storages=2 src=aus"},{"level":"debug","message":"[storageFarm] apply targetW=0 dir=idle planned=0W accepted=0W failed=0W unserved=0W status=farm-stop storages=2 src=aus"}]}
+  
+  5 !== 0
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-926/iobroker.eos-admin/test/eos-device-ems-web-pipeline.test.cjs:466:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 5,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

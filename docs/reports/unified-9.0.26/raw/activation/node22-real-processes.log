@@ -1,0 +1,40 @@
+# Subtest: actual Devices disable, enable and restart replace only its PID/generation and preserve the OCPP socket
+ok 1 - actual Devices disable, enable and restart replace only its PID/generation and preserve the OCPP socket
+  ---
+  duration_ms: 972.59281
+  type: 'test'
+  ...
+# Subtest: actual OCPP process controls preserve native namespace and never replay a command from the old child
+ok 2 - actual OCPP process controls preserve native namespace and never replay a command from the old child
+  ---
+  duration_ms: 1417.521885
+  type: 'test'
+  ...
+# Subtest: actual OCPP process controls preserve imported namespace and never replay a command from the old child
+ok 3 - actual OCPP process controls preserve imported namespace and never replay a command from the old child
+  ---
+  duration_ms: 1551.148793
+  type: 'test'
+  ...
+# Subtest: persisted Devices process disable survives a fresh Host and RuntimeControl without altering module configuration
+ok 4 - persisted Devices process disable survives a fresh Host and RuntimeControl without altering module configuration
+  ---
+  duration_ms: 1309.794416
+  type: 'test'
+  ...
+# Subtest: one process enable activates a saved disabled Devices module, preserves settings and survives a fresh host
+ok 5 - one process enable activates a saved disabled Devices module, preserves settings and survives a fresh host
+  ---
+  duration_ms: 1228.294639
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6713.885303
+

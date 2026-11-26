@@ -1,11 +1,11 @@
 {
-  "version": "9.0.25",
+  "version": "9.0.26",
   "channel": "next",
   "baseFrontend": "Rebuilt from official Admin 8.3.5 sources plus reviewed EOS integration using React 19 and Vite; see source-bound frontend manifest.",
   "runtimeEntry": "vite-manifest",
   "releaseType": "unified-embedded-ocpp-kiosk",
   "release": "unified-embedded-ocpp-kiosk",
-  "label": "v9-0-25",
+  "label": "v9-0-26",
   "notes": [
     "Preserves the existing ioBroker Admin and the combined EOS login/runtime.",
     "One central NWL3 activation, private persistence and authorized public-key recovery.",
@@ -44,5 +44,5 @@
     "backup": "1.0.10",
     "ocpp": "0.4.4 integrated hosted module, based on iobroker.ocpp21 0.4.3"
   },
-  "repositoryEntry": "nexowatt-eos-admin-repository-entry-v9-0-25.json"
+  "repositoryEntry": "nexowatt-eos-admin-repository-entry-v9-0-26.json"
 }

@@ -30,6 +30,16 @@ build-backend
 # NexoWatt EOS direct GitHub install needs these compiled runtime assets committed.
 !/build/
 !/build/**
+!/src/lib/vendor/webserver/build/
+!/src/lib/vendor/webserver/build/**
+!/modules/eebus/build/
+!/modules/eebus/build/**
+!/modules/backup/build/
+!/modules/backup/build/**
+!/modules/backup/upstream/build/
+!/modules/backup/upstream/build/**
+!/modules/ocpp/build/
+!/modules/ocpp/build/**
 !/adminWww/
 !/adminWww/**
 !/admin/custom/

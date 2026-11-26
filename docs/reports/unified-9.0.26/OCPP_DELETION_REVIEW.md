@@ -1,0 +1,49 @@
+# Ladepunkte löschen und automatische OCPP-Erkennung – 9.0.26
+
+## Bestätigter Ausgangsbefund
+
+Der Installateur-GET ermittelte die Konfigurationsrevision vor einer asynchronen Lizenzaktualisierung, den zugehörigen Konfigurationsinhalt jedoch danach. Eine dazwischen ausgeführte echte Discovery-Persistierung konnte neue Ladepunkte zusammen mit einer alten Revision liefern. Ein unmittelbar anschließendes Speichern, auch das Löschen eines Ladepunkts, scheiterte dadurch mit `EOS_INSTALLER_CONFIG_CHANGED`, obwohl der geladene Formularinhalt aktuell war. Der Fehler wurde über den tatsächlichen HTTP-Handler und die echte Konfigurationspersistenz deterministisch reproduziert.
+
+Die leere letzte Ladepunktliste benötigte außerdem den bereits bestehenden expliziten Löschmarker. Die Oberfläche übermittelte diesen bei der bewussten letzten Löschung bisher nicht. Die bestehende Schutzprüfung stellte daraufhin die frühere Liste wieder her. Der getrennte Oberflächenreview deckt die explizite Löschabsicht und den Formularzustand ab.
+
+## Änderung und Grenzen
+
+- GET erfasst Revision und unveränderlichen Konfigurations-Snapshot unmittelbar zusammen, ohne asynchronen Schritt dazwischen. Eine echte spätere Änderung bleibt weiterhin ein HTTP-409-Konflikt; es gibt kein automatisches Überschreiben neuerer Änderungen.
+- Nach einmaliger Auswertung entfernt der Backend-Speicherpfad `__allowEmptyEvcsList` und `__explicitDeleteAll` aus dem zu persistierenden Stand. Eine alte Löschfreigabe kann spätere Änderungen nicht unbeabsichtigt autorisieren.
+- Die automatische Erkennung prüft zusätzlich zum vollständigen Stationsvertrag, ob die externe `system.adapter.ocpp21.N`-Instanz noch existiert. Ein ausgeschalteter oder offline befindlicher, aber vorhandener Adapter bleibt zulässig. Ein fehlgeschlagener Inventarabruf erzeugt keine neue Zuordnung.
+- Integrierte Stationen im eigenen EOS-OCPP-Namensraum bleiben zulässig. Einen bewusst übernommenen früheren `ocpp21.N`-Namensraum bestätigt ausschließlich die aktuelle Parent-Laufzeit über den bestehenden begrenzten Freigabe-Snapshot. Zurückgelassene Datenpunkte oder alte Statusmarker ersetzen diesen Nachweis nicht.
+- Keine Quelldatenpunkte oder Adapterobjekte werden gelöscht. Andere Ladepunkte, manuelle Grenzwerte und Tarifkonfiguration bleiben erhalten. Ein weiterhin vorhandener und gültiger Quelladapter kann seine gültigen Stationen weiterhin automatisch erkennen lassen; es wurde keine allgemeine Sperrliste für jede manuell entfernte Station eingeführt.
+
+Die Zusatzprüfung verwendet einen begrenzten Instanzabruf im bestehenden Discovery-Zyklus, keine zusätzliche periodische Schleife. Die Gesamtlaufzeit des Lesevorgangs bleibt begrenzt. Daraus wird keine RAM-Einsparung auf dem Raspberry Pi abgeleitet.
+
+## Bedienung und öffentliche Stationsseiten während einer Neuzuordnung
+
+`/api/set` für EMS und Legacy-EVCS sowie die öffentliche Stationsbefehlsroute reservieren angenommene Bedienaufträge synchron. Eine laufende Zuordnungsänderung nimmt keine neuen Aufträge an; bereits angenommene Schreibvorgänge müssen vor der Identitätsübernahme abgeschlossen sein. Auch Validierungs- und Schreibfehler geben ihre Reservierung im `finally` frei. Diese Grenze arbeitet mit höchstens 64 ausstehenden Bedienungen und ohne zusätzlichen periodischen Timer.
+
+Damit ein alter Browser-Tab nach einer abgeschlossenen Löschung nicht den neuen Inhaber von `lp1` bedient, enthält `/config` zusätzlich `chargingControlIdentity` mit einer Layoutrevision und opaken Tokens je aktuellem Slot. Die Stationsantwort enthält ausschließlich Tokens ihrer zugewiesenen Slots. Zeilen und Tokens stammen aus demselben synchronen Snapshot; die Authentifizierungsabfrage erfolgt davor. Während einer unbestätigten oder nicht passenden Zuordnung wird kein verwendbarer Snapshot ausgegeben.
+
+Einzelbefehle übermitteln `expectedChargingIdentity`, globale Ladepunktbefehle `expectedChargingLayoutRevision`. Die Prüfung erfolgt vor dem ersten asynchronen Schritt und vor Diagnose- oder Geräteschreibzugriffen. Veraltete Tokens erhalten HTTP 409 mit `EOS_EVCS_IDENTITY_CHANGED`. Tokenlose bisherige Clients bleiben nur an nachweislich unverändert gebliebenen Slots kompatibel. Wiederverwendete und entfernte Slots sowie ein geändertes Gesamtlayout bleiben über Neustarts hinweg geschützt. Die genaue persistente Registry- und Journalimplementierung gehört zum gesonderten Identitätsreview.
+
+Auch eine öffentliche Stations-URL darf durch Indexverschiebung keine andere Ladestation erhalten. Der gemeinsame Installer-Persistenzpfad übernimmt unverändert weitergereichte Stationslisten anhand der bisherigen physischen Zuordnung: Ein weiter vorhandener Ladepunkt bekommt seinen neuen Index, ein entfernter Ladepunkt entfällt aus der Berechtigung. Das gilt auch für alte `chargepoints`-/`lps`-Felder und manuelle Rückfälle einer Stationsgruppen-Zuordnung. Neue oder bewusst geänderte Listen sind neue Zielzuordnungen. Die bereinigte Zuordnung und die Ladepunktliste landen in demselben Konfigurationscommit; Discovery und Geräteübernahme verwenden anschließend genau diesen finalen Patch.
+
+Diese Übernahme läuft ausschließlich bei tatsächlich veränderten persistierten Ladepunktzeilen. Reine Tarif-, Historien- oder andere Einstellungen prüfen kein unverändertes altes Ladepunktlayout erneut. Damit blockiert eine isolierte Tarifänderung nicht wegen bereits vorhandener mehrdeutiger Ladepunkte; reine Runtime-Normalisierung gilt ebenfalls nicht als Neuzuordnung. Die bestehenden Identitätsprüfungen für tatsächliche Ladepunktänderungen und den EMS-Start bleiben unverändert.
+
+Die gezielten HTTP- und Stationsrechte-Prüfungen sind unter Node 22 und Node 24 bestanden; die folgenden Belege beschreiben den genauen Umfang. Browser-, Registry- und vollständige Lieferstandsprüfung bleiben zusätzlich getrennte Nachweise.
+
+## Durchgeführte Prüfungen
+
+Am 25.11.2026 mit Node 22.23.4 und Node 24.22.3:
+
+`EOS_TEST_OCPP21_MAIN=<bereitgestellter Adapter>/main.js node --test test/eos-ocpp-deletion.test.cjs test/eos-ocpp-auto-discovery.test.cjs`
+
+Je Lauf: **22 Tests bestanden, keine Fehler, keine übersprungenen Fälle**. Enthalten sind sieben neue Fälle: Revision/Snapshot-Rennen mit erfolgreicher anschließender Löschung; Hydration ausschließlich in einer Antwortkopie ohne Änderung der Runtime-Objekte; weiterhin wirksamer echter Revisionskonflikt; offline/vorhandene versus entfernte Quellen; persistierte Löschung mit drei Rescans und erneutem Laden; bewusster erhaltener Namensraum ohne altes Instanzobjekt; fehlerhafter Inventarabruf ohne Persistierung. Die übrigen Tests prüfen unter anderem tatsächliche Registrierung im bereitgestellten externen Adapter und integrierte Stationen, vollständige Zuordnungen, unbekannte Leistungsgrenzen, fehlende Schreibfreigabe, Lizenzkapazität und idempotente Wiederholung.
+
+ESLint für die betroffenen Tests sowie die strikte TypeScript-Prüfung `ui/tsconfig.ocpp-auto-discovery.json` bestanden. Rohprotokolle des fokussierten Laufs liegen in `raw/ocpp-deletion-node22.log` und `raw/ocpp-deletion-node24.log`.
+
+Nach Integration von Identitätstokens, Stationsberechtigungen und Kiosk-Kompatibilität wurde derselbe Testaufruf um `test/eos-evcs-station-reindex.test.cjs` und `test/eos-kiosk-process.test.cjs` erweitert. Unter Node 22.23.4 und Node 24.22.3 bestanden jeweils **28/28 Tests ohne übersprungene Fälle**. Der neue Stationsfall löscht A über den tatsächlichen Installer-HTTP-Endpunkt, prüft die im selben Commit gespeicherten Listen und lädt den Stand in einer neuen Runtime. Die bisherige A-URL darf B auch mit einem gültigen B-Identitätstoken nicht bedienen; die B-URL bleibt für B verwendbar. Die Kiosk-Prüfung akzeptiert ausschließlich die beiden bekannten optionalen UUID-Felder für weiterhin ausdrücklich zugelassene Ladebefehle und verweigert zusätzliche Ziele, ungültige Tokenwerte sowie nicht erlaubte Einstellwerte. Rohprotokolle: `raw/deletion-station-kiosk-node22.log` und `raw/deletion-station-kiosk-node24.log`.
+
+`test/eos-evcs-control-fence.test.cjs` und `test/eos-charging-station-identity.test.cjs` ergänzen **13 HTTP- und 9 reine Helperfälle**, ebenfalls auf beiden Node-Linien bestanden. Sie prüfen ausstehende Schreibaufträge an allen drei Bedienwegen, alte oder fehlende Tokens nach Reindex, gültige neue Tokens, unveränderte Slots, globale Layoutrevisionen, erneut geladene Register und A→B→A. Eine bloße Umsortierung derselben Stationsberechtigungsmenge erteilt keine neuen Rechte. Die isolierten Backends verwenden synthetische ioBroker-Zustände; sie steuern keine Geräte. Rohprotokolle: `raw/evcs-control-fence-node22.log` und `raw/evcs-control-fence-node24.log`.
+
+Der abschließende fokussierte Lauf erweiterte die 28 Fälle um `test/eos-customer-tariff-api.test.cjs`: **38/38 bestanden unter Node 22.23.4 und Node 24.22.3**, ohne übersprungene Fälle. Der neue HTTP-Fall reproduzierte vor der Korrektur einen Status 500 bei einer isolierten Tarifänderung und unveränderten mehrdeutigen Ladepunkten. Nach der Korrektur bleiben Tarifgeheimnisse und Ladepunktzeilen erhalten; eine echte Änderung dieser mehrdeutigen Zeilen wird weiterhin vor dem Commit verweigert. Dieser Lauf enthält auch den tatsächlichen Stations-Reindex mit erneutem Laden, OCPP-Erkennung, CAS und Kiosk-Regressionsschutz. Belege: `raw/tariff-deletion-station-kiosk-node22.log` und `raw/tariff-deletion-station-kiosk-node24.log`.
+
+Die HTTP- und Prozessprüfungen verwenden isolierte ioBroker-Fixtures und synthetische Gegenstellen. Ein vollständiger Controller-Neustart, die tatsächliche Dousida-Wallbox und der Speicherverbrauch auf der Kundenanlage wurden damit nicht geprüft. Die separate Identitätsprüfung beim Verschieben von Ladepunktindizes und ihre Bedienwertübernahme sind zusätzliche Abnahmekriterien dieses Lieferstands; diese Datei bescheinigt deren Ergebnis nicht.

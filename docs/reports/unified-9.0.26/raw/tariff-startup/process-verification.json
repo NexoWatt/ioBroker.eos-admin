@@ -1,0 +1,41 @@
+{
+  "result": "passed",
+  "startedAt": "2026-11-25T20:42:26.690900+00:00",
+  "completedAt": "2026-11-25T20:42:40.891305+00:00",
+  "scope": "Actual UI subprocess + parent IPC + HTTP; synthetic controller/session/storage; confirmed save, UI and owner restart, early GET+PUT and failed read in native/preserved namespaces; provider network blocked. No real controller daemon, hardware or live cloud account.",
+  "runs": [
+    {
+      "node": "v22.23.4",
+      "command": [
+        "/workspace/scratch/741f792566ea/node22-runtime/package/bin/node",
+        "--test",
+        "test/eos-customer-tariff-process-persistence.test.cjs"
+      ],
+      "exitCode": 0,
+      "log": "node22-process-final.log"
+    },
+    {
+      "node": "v24.22.3",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "--test",
+        "test/eos-customer-tariff-process-persistence.test.cjs"
+      ],
+      "exitCode": 0,
+      "log": "node24-process-final.log"
+    }
+  ],
+  "sourceHashes": {
+    "ui/main.js": "674d4a9782346639ac8db2627706dc01a850e73461fdf746437ad0eaa30fdadd",
+    "ui/www/customer-tariff.js": "9c467b299e1bbac37d0ac258e60b7b3cd0e9e630d7a8a5c1c60aaf2a7cb1618f",
+    "ui/lib/hosted-adapter.js": "2bff2aac5525c724d0278e263ee473bac5405e3a28793002b851b42a71e74ed4",
+    "ui/lib/preserved-ui-config.js": "86d3d15ac6b30d33a9952c1ecbfee0ca5692d6d30bf34e6e6dc8bcd224406800",
+    "ui/lib/customer-tariff.js": "e28ffd934f1dce659cf8737d2ab96e9a5f1cc57ffc76db49cabe8994edf99652",
+    "src/lib/eosUiProcess.ts": "370ed2b2f6bd9957ed94844f5dad396de67c13979695627256221964d0e4285b",
+    "src/lib/eosUiProcessWorker.ts": "9faa5f72c33b8736b16c4059d9cf30cf9b98e81aa5891c674b767ad1f4030075",
+    "src/lib/eosUiProcessRpc.ts": "fa200c3b486eb36ec227d51924a8a404096b2b11be6a3f23b2d03268538d6b7e",
+    "src/lib/eosUiSecretCodec.ts": "557df10af74144f920e918afbe423a240c7f2d3182580f9ae47e22934817ae89",
+    "test/eos-customer-tariff-process-persistence.test.cjs": "069fdcae41e18e28504c86b97687197dded9249e9ff35d2734dd4a5c8e542c06"
+  },
+  "sourceUnchanged": true
+}

@@ -1,0 +1,27 @@
+✔ deleting first point preserves every B wish and timer (boost / pv) across restart (12.368265ms)
+✔ deleting first point preserves every B wish and timer (pv / boost) across restart (2.816992ms)
+✔ delete-last leaves A untouched; reorder uses a complete snapshot before any copy (3.4451ms)
+✔ empty configuration and reused indices cannot inherit old boost or regain an old incarnation token (2.700781ms)
+✔ metadata and measurement edits preserve tokens; a changed secondary actuator rotates the token without erasing wishes (1.736205ms)
+✔ a crash after configuration commit but before copying recovers from the durable previous layout (1.474278ms)
+✔ partial copy failure keeps the fence and recovers the exact original snapshot after restart (2.854097ms)
+✔ another desired layout is rejected before config commit while an interrupted transfer remains recoverable (2.659289ms)
+✔ a malformed or incomplete journal never skips its mandatory transfer writes (5.260192ms)
+✔ Engine.init cannot initialize modules after a failed identity transfer (3.265916ms)
+✔ real settings normalization -> Engine charging config -> actual charging tick retains B PV after deleting boosted A (113.659608ms)
+✔ registry is bounded and administrator-only; ambiguous physical identities fail before binding (0.797909ms)
+✔ raw and normalized legacy connector/default mirror forms describe the same point (0.363737ms)
+✔ own default mirror travels with a verified point while deliberate cross-slot and external mappings remain unchanged (0.330578ms)
+✔ cross-slot and foreign-instance mode targets rotate tokens; only the exact own default mirror is implicit (1.796224ms)
+✔ an explicitly bound custom command bridge is compatible while missing or changed destinations fail closed (7.934483ms)
+✔ failed config persistence after a confirmed drain keeps controls fenced and permits a safe retry (15.208019ms)
+✔ registry write waits for durable owner ACK beyond regular RPC timeout (eos-admin.0) (2336.966283ms)
+✔ registry write waits for durable owner ACK beyond regular RPC timeout (nexowatt-ui.3) (2292.535232ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5974.810001

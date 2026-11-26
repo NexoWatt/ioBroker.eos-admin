@@ -1,0 +1,112 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: app: snapshot is immutable; automatic refresh never upgrades old controls to B
+ok 1 - app: snapshot is immutable; automatic refresh never upgrades old controls to B
+  ---
+  duration_ms: 372.168754
+  type: 'test'
+  ...
+# Subtest: app: a page loaded without identity metadata cannot adopt a later token automatically
+ok 2 - app: a page loaded without identity metadata cannot adopt a later token automatically
+  ---
+  duration_ms: 158.087737
+  type: 'test'
+  ...
+# Subtest: app: failed initial configuration read freezes the unconfirmed document identity
+ok 3 - app: failed initial configuration read freezes the unconfirmed document identity
+  ---
+  duration_ms: 181.573149
+  type: 'test'
+  ...
+# Subtest: app: identity rejection is visible and is not retried with a new token
+ok 4 - app: identity rejection is visible and is not retried with a new token
+  ---
+  duration_ms: 77.632739
+  type: 'test'
+  ...
+# Subtest: app: all direct API-set call sites use the identity wrapper
+ok 5 - app: all direct API-set call sites use the identity wrapper
+  ---
+  duration_ms: 81.433283
+  type: 'test'
+  ...
+# Subtest: evcs: snapshot is immutable; automatic refresh never upgrades old controls to B
+ok 6 - evcs: snapshot is immutable; automatic refresh never upgrades old controls to B
+  ---
+  duration_ms: 20.00583
+  type: 'test'
+  ...
+# Subtest: evcs: a page loaded without identity metadata cannot adopt a later token automatically
+ok 7 - evcs: a page loaded without identity metadata cannot adopt a later token automatically
+  ---
+  duration_ms: 18.61142
+  type: 'test'
+  ...
+# Subtest: evcs: failed initial configuration read freezes the unconfirmed document identity
+ok 8 - evcs: failed initial configuration read freezes the unconfirmed document identity
+  ---
+  duration_ms: 36.053843
+  type: 'test'
+  ...
+# Subtest: evcs: identity rejection is visible and is not retried with a new token
+ok 9 - evcs: identity rejection is visible and is not retried with a new token
+  ---
+  duration_ms: 12.6694
+  type: 'test'
+  ...
+# Subtest: evcs: all direct API-set call sites use the identity wrapper
+ok 10 - evcs: all direct API-set call sites use the identity wrapper
+  ---
+  duration_ms: 18.946084
+  type: 'test'
+  ...
+# Subtest: station commands carry the rendered station snapshot identity
+ok 11 - station commands carry the rendered station snapshot identity
+  ---
+  duration_ms: 59.118743
+  type: 'test'
+  ...
+# Subtest: station retained A-button callback cannot acquire B identity after another render
+ok 12 - station retained A-button callback cannot acquire B identity after another render
+  ---
+  duration_ms: 37.680606
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: real worker starts after a synchronous 1200ms factory using a fresh lease and unchanged watchdog
+ok 13 - real worker starts after a synchronous 1200ms factory using a fresh lease and unchanged watchdog
+  ---
+  duration_ms: 1286.241707
+  type: 'test'
+  ...
+# Subtest: readiness after authority loss cannot start a module or restore its permission
+ok 14 - readiness after authority loss cannot start a module or restore its permission
+  ---
+  duration_ms: 1287.93515
+  type: 'test'
+  ...
+# Subtest: stop during worker construction drains the process and never queues start after readiness
+ok 15 - stop during worker construction drains the process and never queues start after readiness
+  ---
+  duration_ms: 1265.593158
+  type: 'test'
+  ...
+# Subtest: factory preparation and start consume one unchanged startup deadline
+ok 16 - factory preparation and start consume one unchanged startup deadline
+  ---
+  duration_ms: 1525.414304
+  type: 'test'
+  ...
+1..16
+# tests 16
+# suites 0
+# pass 16
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5503.238293

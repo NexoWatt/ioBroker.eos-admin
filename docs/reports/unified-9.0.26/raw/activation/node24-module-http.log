@@ -1,0 +1,18 @@
+(node:12) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ real module pages and vendor assets are available through the guarded same-origin routes (102.186856ms)
+✔ backup download uses authenticated bounded binary streaming and refuses untrusted names (15.052939ms)
+✔ slow backup downloads have bounded admission and release their stream after client disconnect (21.620364ms)
+✔ backup byte-count mismatches abort the response without exposing an unbounded stream (17.151155ms)
+✔ read-only migration page and status require fresh administrator authentication and expose no private journal fields (21.864124ms)
+✔ fresh admin role, same origin and session-bound CSRF are required for every module mutation (17.756764ms)
+✔ first-login password requirement and invalid expired sessions do not expose configuration (10.104989ms)
+✔ invalid and oversized module JSON and internal exceptions are contained without leaking bodies (12.27123ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 484.273071

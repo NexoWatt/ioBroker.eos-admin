@@ -44,10 +44,12 @@ export class EosModuleHost {
     start(): Promise<void>;
     stop(): Promise<void>;
     controlProcess(id: string, action: 'stop' | 'start'): Promise<void>;
+    enableProcessModule(id: string): Promise<void>;
     onObjectChange(id: string, object?: unknown): void;
     onStateChange(id: string, state?: ioBroker.State | null): void;
     view(id: string): Promise<ModuleView>;
     status(id: string): Promise<Record<string, unknown>>;
+    namespace(id: string): string;
     save(
         id: string,
         config: unknown,

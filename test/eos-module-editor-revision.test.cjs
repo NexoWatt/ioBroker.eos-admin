@@ -23,16 +23,24 @@ async function fixture(moduleId) {
         append(...children) { this.children.push(...children); }
         replaceChildren(...children) { this.children = children; }
         addEventListener(name, fn) { this.events[name] = fn; }
+        setAttribute(name, value) { this[name] = value; }
+        focus() {}
+        showModal() { this.open = true; }
+        close() { this.open = false; this.events.close?.(); }
+        querySelectorAll(selector) {
+            const descendants = this.children.flatMap(node => [node, ...(node.querySelectorAll?.('*') || [])]);
+            return selector === '*' ? descendants : selector === 'button' ? descendants.filter(node => node.tagName === 'BUTTON')
+                : descendants.filter(node => node.dataset?.config);
+        }
         checkValidity() { return true; }
         get valueAsNumber() { return Number(this.value); }
     }
     class Input extends Element { constructor() { super('input'); } }
     const source = fs.readFileSync(path.join(__dirname, `../modules/${moduleId}/admin/index.js`), 'utf8');
-    for (const match of source.matchAll(/(?:byId|element|inputElement)\('([^']+)'\)/g)) {
+    for (const match of source.matchAll(/(?:byId|inputById|buttonById|element|inputElement)\('([^']+)'\)/g)) {
         if (!nodes.has(match[1])) { const node = new Element(); node.id = match[1]; }
     }
     const key = moduleId === 'eebus' ? 'serviceName' : 'path';
-    if (moduleId === 'backup') { const input = new Input(); input.id = key; input.type = 'text'; inputs.push(input); }
     let revision = before; let token = 'csrf-old'; let config = { enabled: false, [key]: 'Stored initial value' };
     const context = { Error, Promise, console, AbortController, setTimeout, clearTimeout, structuredClone,
         HTMLInputElement: Input, window: { confirm: () => true, addEventListener() {} },
@@ -49,13 +57,23 @@ async function fixture(moduleId) {
             return { ok: true, status: 200, json: async () => ({ csrfToken: token, configurationRevision: revision, config: structuredClone(config), status: { reason: 'DISABLED', details: { history: [], devices: [] } } }) };
         } };
     vm.runInNewContext(source, context, { filename: `${moduleId}/admin/index.js` });
-    const field = () => nodes.get(moduleId === 'eebus' ? `field-${key}` : key);
+    const field = () => nodes.get(`field-${key}`);
+    if (moduleId === 'backup') {
+        await settled(() => nodes.has('backup-open-other'));
+        await new Promise(resolve => setImmediate(resolve));
+        nodes.get('backup-open-other').events.click();
+    }
     await settled(() => field()?.value === 'Stored initial value');
     await new Promise(resolve => setImmediate(resolve));
     return { nodes, field, requests, config: () => config,
         externalSave() { config = { ...config, [key]: 'Saved in another browser' }; revision = after; token = 'csrf-current'; },
         async refresh() { nodes.get('refresh').events.click(); await settled(() => nodes.get('message').textContent === 'Status aktualisiert.'); },
-        async save() { nodes.get(moduleId === 'eebus' ? 'save' : 'saveAdvanced').events.click(); await settled(() => /inzwischen geändert|gespeichert/.test(nodes.get('message').textContent)); },
+        async save() {
+            if (moduleId === 'eebus') nodes.get('save').events.click();
+            else { nodes.get('dialog-form').events.submit({ preventDefault() {} }); nodes.get('settings').events.submit({ preventDefault() {} }); }
+            await settled(() => /inzwischen geändert|gespeichert/.test(nodes.get('message').textContent));
+            if (moduleId === 'backup') nodes.get('backup-open-other').events.click();
+        },
     };
 }
 

@@ -1,0 +1,35 @@
+✔ missing packaged runtime dependency names the import and relative source without exposing installation paths (15.473383ms)
+✔ load diagnostic accepts package names but suppresses arbitrary error text and foreign paths (0.976703ms)
+✔ missing dependency during worker factory stays stopped until an explicit restart (1442.374314ms)
+✔ missing dependency during worker start stays stopped until an explicit restart (1352.153592ms)
+✔ a validated configuration commit can recover a latched worker dependency failure (200.262099ms)
+✔ configuration import failure is visible and cannot masquerade as a disabled module (19.34996ms)
+✔ only an explicit start retries a repaired configuration factory import (74.431238ms)
+✔ only an explicit enable retries a repaired configuration factory import (92.706534ms)
+✔ external heartbeat traffic does not advance an inactive OCPP generation or schedule irrelevant work (11.276421ms)
+✔ an active real worker is fenced immediately when legacy instance ownership changes (85.693963ms)
+✔ an active real worker is fenced immediately when legacy alive ownership changes (86.861329ms)
+✔ enabling integrated OCPP still rejects an active external owner without creating a worker or device command (27.003979ms)
+✔ process activation waits for the actual slow configuration commit and preserves the complete saved configuration (5210.615536ms)
+✔ default permits existing startup without writes; pause survives a fresh service and preserves device configuration (6.154593ms)
+✔ restart commits a durable pause before confirmed shutdown and only then persists enable (12.482944ms)
+✔ an unconfirmed stop remains durably disabled and never starts a replacement (4.780264ms)
+✔ disable remains available behind startup gates, while enable and restart cannot bypass them (1.446287ms)
+✔ one enable action activates a disabled module even when process permission was already on (0.634067ms)
+✔ a disabled module can be enabled after a saved process pause; restart cannot activate it implicitly (2.234475ms)
+✔ failed module activation remains durably paused and retains the concrete validation error (0.625965ms)
+✔ slow module commit keeps activation locked and paused until settled, including shutdown (2.358484ms)
+✔ persistence failure does not stop a live process or falsely claim its activation changed (0.668118ms)
+✔ invalid IDs, arbitrary commands, stale revision and replay do not change process state (0.662349ms)
+✔ a hanging startup configuration read is bounded and its late completion cannot activate processes (41.949472ms)
+✔ invalid stored configuration never silently falls back to all enabled (0.652274ms)
+✔ shutdown during an accepted restart never starts a replacement even if stop settles later (4.652854ms)
+✔ close immediately revokes authority but drains an already-issued configuration write (11.391211ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8757.238834

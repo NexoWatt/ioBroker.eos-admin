@@ -462,8 +462,21 @@ test('legacy in-process business pipeline: one device HTTP save adopts the manua
   assert.equal(saved.settings.customerPreference, 'preserve');
   const commits = x.writes.slice(beforeWrites).filter(row => row.id === 'eos-admin.0.installer.configJson');
   assert.equal(commits.length, 1, 'one device action commits one coherent EMS snapshot');
-  assert.equal(x.writes.filter(row => row.id.includes('.devices.') && row.state.ack === false).length, 0,
-    'declaring an app active must not dispatch against missing/offline telemetry');
+  // A completed scheduler cycle deliberately sends zero safety setpoints to
+  // stale/unavailable stores. Checking before its first tick made this test
+  // scheduling-dependent; a keepalive/heartbeat alone is not a completed tick.
+  const completedTick = Number(x.runtime()._nwEmsSchedulerHealth?.lastTickEndMs || 0);
+  for (let attempt = 0; attempt < 100
+    && !(Number(x.runtime()._nwEmsSchedulerHealth?.lastTickEndMs || 0) > completedTick); attempt++) await sleep(50);
+  assert.ok(Number(x.runtime()._nwEmsSchedulerHealth?.lastTickEndMs || 0) > completedTick,
+    'the actual EMS scheduler must complete a new cycle before its offline dispatch is checked');
+  const safetyTargets = new Set([`${home}.aliases.v1.ctrl.powerSetpointW`,
+    'eos-admin.0.devices.storage.solax.aliases.v1.ctrl.powerSetpointW']);
+  const unsafeCommands = x.writes.filter(row => row.id.includes('.devices.') && row.state.ack === false)
+    .filter(row => !safetyTargets.has(row.id) || typeof row.state.val !== 'number'
+      || !Number.isFinite(row.state.val) || row.state.val !== 0);
+  assert.deepEqual(unsafeCommands, [],
+    'missing/offline telemetry permits only numeric zero safety setpoints at the two configured signed-power endpoints');
   const installer = await x.request('/api/installer/config');
   assert.equal(installer.status, 200, installer.text);
   const stopped = await x.request('/api/installer/config', 'POST', {

@@ -16,7 +16,9 @@ function fixture(objects = new Map(), options = {}) {
     eosMigration: { allowsStartup: () => migration }, eosOwnership: { canWrite: () => ownership },
     eosLicenseService: { statusView: () => ({ valid: licensed, coreEnabled: licensed }), allowsEmbeddedModule: () => licensed },
     log: { warn() {} }, ...options.owner };
-  const host = { view: async () => ({ config: { enabled: configured } }), controlProcess: async (...args) => { calls.push(args); }, ...options.host };
+  const host = { view: async () => ({ config: { enabled: configured } }),
+    enableProcessModule: async id => { calls.push([id, 'configure']); configured = true; },
+    controlProcess: async (...args) => { calls.push(args); }, ...options.host };
   const runtime = { pause: async () => { calls.push(['ui', 'stop']); }, resume: async () => { calls.push(['ui', 'start']); }, status: () => ({}), ...options.runtime };
   const control = new EosRuntimeControl({ owner, host, runtime, readTimeoutMs: options.readTimeoutMs });
   return { control, owner, host, runtime, calls, writes, objects,
@@ -88,12 +90,56 @@ test('disable remains available behind startup gates, while enable and restart c
   }
 });
 
-test('paused process cannot be enabled while its module configuration is disabled', async () => {
+test('one enable action activates a disabled module even when process permission was already on', async () => {
   const f = fixture(); await f.control.initialize(); f.configured(false);
+  assert.equal(f.control.view('ocpp', false).canEnable, true);
+  assert.equal(f.control.view('ocpp', false).canRestart, false);
   request(f, 'ocpp', 'enable'); await settled(f.control);
-  assert.equal(f.writes.length, 0); assert.deepEqual(f.calls, []);
-  assert.equal(f.control.view('ocpp', false).canEnable, false);
-  assert.equal(f.control.view('ocpp', false).reason, 'EOS_RUNTIME_MODULE_DISABLED');
+  assert.equal(f.writes.length, 2);
+  assert.deepEqual(f.calls, [['ocpp', 'stop'], ['ocpp', 'configure'], ['ocpp', 'start']]);
+  assert.equal(f.control.isEnabled('ocpp'), true);
+  assert.equal(f.control.view('ocpp', true).reason, '');
+});
+
+test('a disabled module can be enabled after a saved process pause; restart cannot activate it implicitly', async () => {
+  const f = fixture(); await f.control.initialize(); f.configured(false);
+  request(f, 'eebus', 'restart'); await settled(f.control);
+  assert.equal(f.control.view('eebus', false).reason, 'EOS_RUNTIME_MODULE_DISABLED');
+  assert.deepEqual(f.calls, []);
+  request(f, 'eebus', 'disable'); await settled(f.control);
+  assert.equal(f.control.view('eebus', false).canEnable, true);
+  request(f, 'eebus', 'enable'); await settled(f.control);
+  assert.equal(f.control.isEnabled('eebus'), true);
+  assert.deepEqual(f.calls, [['eebus', 'stop'], ['eebus', 'stop'], ['eebus', 'configure'], ['eebus', 'start']]);
+});
+
+test('failed module activation remains durably paused and retains the concrete validation error', async () => {
+  const f = fixture(new Map(), { host: { enableProcessModule: async () => {
+    throw Object.assign(new Error('private detail'), { code: 'EOS_MODULE_LEGACY_RUNNING' });
+  } } });
+  await f.control.initialize(); f.configured(false);
+  request(f, 'ocpp', 'enable'); await settled(f.control);
+  assert.deepEqual(f.calls, [['ocpp', 'stop']]);
+  assert.equal(f.control.isEnabled('ocpp'), false);
+  assert.equal(f.control.view('ocpp', false).reason, 'EOS_MODULE_LEGACY_RUNNING');
+  const next = fixture(f.objects); await next.control.initialize();
+  assert.equal(next.control.isEnabled('ocpp'), false);
+});
+
+test('slow module commit keeps activation locked and paused until settled, including shutdown', async () => {
+  let entered = false, release;
+  const pending = new Promise(resolve => { release = resolve; });
+  const f = fixture(new Map(), { host: { enableProcessModule: async () => { entered = true; await pending; } } });
+  await f.control.initialize(); f.configured(false);
+  request(f, 'backup', 'enable');
+  while (!entered) await delay(1);
+  assert.equal(f.control.isEnabled('backup'), false);
+  assert.equal(f.control.view('backup', false).busy, true);
+  assert.throws(() => request(f, 'ui', 'disable'), /EOS_RUNTIME_BUSY/);
+  const shutdown = f.control.close(); release(); await shutdown;
+  assert.deepEqual(f.calls, [['backup', 'stop']]);
+  const next = fixture(f.objects); await next.control.initialize();
+  assert.equal(next.control.isEnabled('backup'), false);
 });
 
 test('persistence failure does not stop a live process or falsely claim its activation changed', async () => {

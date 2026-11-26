@@ -1,0 +1,148 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: deleting A removes A station rights and moves B station rights to B’s new slot without mutating input
+ok 1 - deleting A removes A station rights and moves B station rights to B’s new slot without mutating input
+  ---
+  duration_ms: 3.873714
+  type: 'test'
+  ...
+# Subtest: automatic station mode also removes stale manual fallbacks and preserves device-key assignment
+ok 2 - automatic station mode also removes stale manual fallbacks and preserves device-key assignment
+  ---
+  duration_ms: 0.696479
+  type: 'test'
+  ...
+# Subtest: explicitly changed and newly added station lists remain assigned to the requested new layout
+ok 3 - explicitly changed and newly added station lists remain assigned to the requested new layout
+  ---
+  duration_ms: 0.48772
+  type: 'test'
+  ...
+# Subtest: sorting an unchanged permission set cannot grant the next unassigned charger after deletion
+ok 4 - sorting an unchanged permission set cannot grant the next unassigned charger after deletion
+  ---
+  duration_ms: 0.317469
+  type: 'test'
+  ...
+# Subtest: station identifiers use the same canonical aliases as the display when station order changes
+ok 5 - station identifiers use the same canonical aliases as the display when station order changes
+  ---
+  duration_ms: 0.606536
+  type: 'test'
+  ...
+# Subtest: unchanged layouts and unchanged assignment slots retain the original object and do not generate saves
+ok 6 - unchanged layouts and unchanged assignment slots retain the original object and do not generate saves
+  ---
+  duration_ms: 0.344219
+  type: 'test'
+  ...
+# Subtest: reordering two devices transfers each existing station and does not revive permissions when a removed device returns
+ok 7 - reordering two devices transfers each existing station and does not revive permissions when a removed device returns
+  ---
+  duration_ms: 0.570052
+  type: 'test'
+  ...
+# Subtest: unknown old device identity cannot grant control over a replacement
+ok 8 - unknown old device identity cannot grant control over a replacement
+  ---
+  duration_ms: 0.337498
+  type: 'test'
+  ...
+# Subtest: ambiguous or unbounded station configuration fails closed before remapping
+ok 9 - ambiguous or unbounded station configuration fails closed before remapping
+  ---
+  duration_ms: 1.897323
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: EMS and legacy EVCS writes are rejected before diagnostics during save, identity migration and shutdown
+ok 10 - EMS and legacy EVCS writes are rejected before diagnostics during save, identity migration and shutdown
+  ---
+  duration_ms: 123.972434
+  type: 'test'
+  ...
+# Subtest: accepted asynchronous EMS write finishes before identity snapshot and cannot target the replacement slot
+ok 11 - accepted asynchronous EMS write finishes before identity snapshot and cannot target the replacement slot
+  ---
+  duration_ms: 27.144427
+  type: 'test'
+  ...
+# Subtest: accepted asynchronous station write finishes before identity snapshot and cannot target the replacement slot
+ok 12 - accepted asynchronous station write finishes before identity snapshot and cannot target the replacement slot
+  ---
+  duration_ms: 32.683111
+  type: 'test'
+  ...
+# Subtest: accepted asynchronous legacy EVCS write finishes before identity snapshot and cannot target the replacement slot
+ok 13 - accepted asynchronous legacy EVCS write finishes before identity snapshot and cannot target the replacement slot
+  ---
+  duration_ms: 21.924494
+  type: 'test'
+  ...
+# Subtest: validation and failed writes release the accepted control so subsequent identity changes do not remain blocked
+ok 14 - validation and failed writes release the accepted control so subsequent identity changes do not remain blocked
+  ---
+  duration_ms: 22.411714
+  type: 'test'
+  ...
+# Subtest: valid unauthenticated station command is fenced before both station diagnostics and control writes
+ok 15 - valid unauthenticated station command is fenced before both station diagnostics and control writes
+  ---
+  duration_ms: 25.304484
+  type: 'test'
+  ...
+# Subtest: failed station bridge releases its control admission before the next identity transition
+ok 16 - failed station bridge releases its control admission before the next identity transition
+  ---
+  duration_ms: 11.384941
+  type: 'test'
+  ...
+# Subtest: configuration tokens reject stale and missing browser identity after deleting a preceding charging point
+ok 17 - configuration tokens reject stale and missing browser identity after deleting a preceding charging point
+  ---
+  duration_ms: 35.765936
+  type: 'test'
+  ...
+# Subtest: unchanged charging slots retain tokenless compatibility while reused slots require the current identity
+ok 18 - unchanged charging slots retain tokenless compatibility while reused slots require the current identity
+  ---
+  duration_ms: 19.383469
+  type: 'test'
+  ...
+# Subtest: global EMS and EVCS settings reject stale or missing layout revision after a layout change
+ok 19 - global EMS and EVCS settings reject stale or missing layout revision after a layout change
+  ---
+  duration_ms: 33.665683
+  type: 'test'
+  ...
+# Subtest: persisted charging registry keeps reused slots protected across a fresh runtime
+ok 20 - persisted charging registry keeps reused slots protected across a fresh runtime
+  ---
+  duration_ms: 24.332242
+  type: 'test'
+  ...
+# Subtest: station payload exposes only assigned identities and rejects stale commands before station diagnostics
+ok 21 - station payload exposes only assigned identities and rejects stale commands before station diagnostics
+  ---
+  duration_ms: 26.93023
+  type: 'test'
+  ...
+# Subtest: returning a previously removed charger to the same slot cannot revive its old browser token
+ok 22 - returning a previously removed charger to the same slot cannot revive its old browser token
+  ---
+  duration_ms: 15.290842
+  type: 'test'
+  ...
+1..22
+# tests 22
+# suites 0
+# pass 22
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 901.060221

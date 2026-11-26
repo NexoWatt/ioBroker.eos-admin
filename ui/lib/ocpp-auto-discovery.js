@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/lib/ocpp-auto-discovery.ts
- * Quell-Hash: sha256:e68a9d3f1cd8d5f1d5096f12d1de05ac217fe507cb921343d695cfb6f8c462bb
+ * Quell-Hash: sha256:1fcb9a8e0a1874f7872def460ff56cc6930da725a7a1292a7a38009dc94eff90
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -28,6 +28,7 @@ exports.ocppRootInScope = ocppRootInScope;
 exports.ocppNamespace = ocppNamespace;
 exports.ocppDiscoveryPatterns = ocppDiscoveryPatterns;
 exports.collectOcppStations = collectOcppStations;
+exports.filterOcppDiscoverySources = filterOcppDiscoverySources;
 exports.normalizeOcppDiscovery = normalizeOcppDiscovery;
 exports.planOcppDiscovery = planOcppDiscovery;
 exports.OCPP_NATIVE_CONTRACT = 'nexowatt-ocpp21-0.4-native';
@@ -162,6 +163,32 @@ function collectOcppStations(objectInput, stateInput, hostNamespace) {
             connectors: [...connectors.values()].sort((a, b) => a.evseId - b.evseId || a.connectorId - b.connectorId) });
     }
     return stations;
+}
+/** Retained state objects do not prove that their standalone adapter still exists.
+ * A hosted legacy namespace is admitted only from the owning parent's current
+ * configuration, never from stale alive/hosted marker states. Offline configured
+ * adapters remain discoverable; source lifecycle is separate from station health. */
+function filterOcppDiscoverySources(stations, sourceInput, hostNamespace) {
+    const source = record(sourceInput);
+    const rows = record(source.instances).rows;
+    if (!Array.isArray(rows) || rows.length > MAX_STATIONS)
+        throw fail('EOS_OCPP_DISCOVERY_SOURCE_INVENTORY');
+    const namespaces = new Set();
+    for (const row of rows) {
+        const instance = record(record(row).value);
+        const id = text(instance._id, 120);
+        if (instance.type !== 'instance' || !/^system\.adapter\.ocpp21\.\d{1,8}$/.test(id)) {
+            throw fail('EOS_OCPP_DISCOVERY_SOURCE_INVENTORY');
+        }
+        namespaces.add(id.slice('system.adapter.'.length));
+    }
+    if (typeof hostNamespace === 'string' && /^eos-admin\.\d+$/.test(hostNamespace)) {
+        namespaces.add(`${hostNamespace}.ocpp`);
+        const hosted = text(source.hostedNamespace, 120);
+        if (/^ocpp21\.\d{1,8}$/.test(hosted))
+            namespaces.add(hosted);
+    }
+    return stations.filter(station => namespaces.has(station.adapterInstance));
 }
 function rootsOf(row) {
     return [...new Set([...ID_FIELDS.map(key => ocppStationRoot(row[key])), ocppStationRoot(record(row.ocppDiscovery).stationRoot)].filter(Boolean))];
@@ -357,10 +384,14 @@ class OcppAutoDiscovery {
                 return;
             }
             try {
-                const [objects, states] = await Promise.all([this.readBounded(this.options.readObjects()), this.readBounded(this.options.readMetadata())]);
+                const [objects, states, sources] = await Promise.all([this.readBounded(this.options.readObjects()),
+                    this.readBounded(this.options.readMetadata()),
+                    this.options.readSources ? this.readBounded(this.options.readSources()) : Promise.resolve(undefined)]);
                 if (this.stopped || !this.options.canRun())
                     return;
-                const stations = collectOcppStations(objects, states, this.options.hostNamespace);
+                const collected = collectOcppStations(objects, states, this.options.hostNamespace);
+                const stations = this.options.readSources
+                    ? filterOcppDiscoverySources(collected, sources, this.options.hostNamespace) : collected;
                 const plan = await this.options.reconcile(stations);
                 if (this.stopped)
                     return;

@@ -1,0 +1,30 @@
+✔ deleting A removes A station rights and moves B station rights to B’s new slot without mutating input (4.450455ms)
+✔ automatic station mode also removes stale manual fallbacks and preserves device-key assignment (0.484686ms)
+✔ explicitly changed and newly added station lists remain assigned to the requested new layout (0.364438ms)
+✔ sorting an unchanged permission set cannot grant the next unassigned charger after deletion (0.290059ms)
+✔ station identifiers use the same canonical aliases as the display when station order changes (0.66994ms)
+✔ unchanged layouts and unchanged assignment slots retain the original object and do not generate saves (0.542932ms)
+✔ reordering two devices transfers each existing station and does not revive permissions when a removed device returns (0.600247ms)
+✔ unknown old device identity cannot grant control over a replacement (0.35173ms)
+✔ ambiguous or unbounded station configuration fails closed before remapping (1.364085ms)
+✔ EMS and legacy EVCS writes are rejected before diagnostics during save, identity migration and shutdown (116.170587ms)
+✔ accepted asynchronous EMS write finishes before identity snapshot and cannot target the replacement slot (25.780452ms)
+✔ accepted asynchronous station write finishes before identity snapshot and cannot target the replacement slot (27.107563ms)
+✔ accepted asynchronous legacy EVCS write finishes before identity snapshot and cannot target the replacement slot (16.827794ms)
+✔ validation and failed writes release the accepted control so subsequent identity changes do not remain blocked (18.637728ms)
+✔ valid unauthenticated station command is fenced before both station diagnostics and control writes (14.075677ms)
+✔ failed station bridge releases its control admission before the next identity transition (13.49547ms)
+✔ configuration tokens reject stale and missing browser identity after deleting a preceding charging point (34.588085ms)
+✔ unchanged charging slots retain tokenless compatibility while reused slots require the current identity (18.356061ms)
+✔ global EMS and EVCS settings reject stale or missing layout revision after a layout change (31.116265ms)
+✔ persisted charging registry keeps reused slots protected across a fresh runtime (20.102272ms)
+✔ station payload exposes only assigned identities and rejects stale commands before station diagnostics (17.293581ms)
+✔ returning a previously removed charger to the same slot cannot revive its old browser token (18.10413ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 831.381366

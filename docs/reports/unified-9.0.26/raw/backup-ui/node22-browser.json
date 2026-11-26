@@ -1,0 +1,67 @@
+{
+  "result": "passed",
+  "runAt": "2026-11-25T20:23:52.575Z",
+  "node": "v22.23.4",
+  "browser": "HeadlessChrome/158.0.8127.0",
+  "scope": "Real Chromium, production backup UI, HTTP routes, protected config store and secret restoration. Synthetic DB/auth/module status and commands. Strict self-only script/style CSP imposed by fixture. No backup worker or hardware.",
+  "checks": [
+    {
+      "name": "source and destination cards are separate; automatic EOS PostgreSQL history explained; no advanced editor DOM until opened",
+      "result": "passed"
+    },
+    {
+      "name": "all 228 existing config properties and 9 optional fields remain reachable; closed dialogs release their fields",
+      "result": "passed"
+    },
+    {
+      "name": "independent card switches and dialog Apply edit only the draft; Cancel, close and Escape discard only dialog edits and restore focus",
+      "result": "passed"
+    },
+    {
+      "name": "single full save uses production CSRF route and encrypted revision store; untouched secrets, nested markers, unknown fields and unselected notification channels are preserved",
+      "result": "passed"
+    },
+    {
+      "name": "saved-secret marker is blank and preserved; explicit replacement and explicit clear work, while Cancel discards a clear",
+      "result": "passed"
+    },
+    {
+      "name": "invalid JSON stays inside its dialog without applying or losing the existing unknown customer object",
+      "result": "passed"
+    },
+    {
+      "name": "background status refresh preserves a live dialog and draft revision; concurrent committed change causes CAS conflict without overwriting draft",
+      "result": "passed"
+    },
+    {
+      "name": "validation, session expiry, role loss and CSRF rejection leave unsaved switches intact; retry after restored authority saves the same draft",
+      "result": "passed"
+    },
+    {
+      "name": "SD-card discovery still uses the guarded production command route and populates only the local-target dialog",
+      "result": "passed"
+    },
+    {
+      "name": "390px mobile and 1024px tablet keep modal within viewport, focus inside, Escape restores opener and controls meet 44px target height",
+      "result": "passed"
+    }
+  ],
+  "pageErrors": [],
+  "editorDom": {
+    "existingConfigurationProperties": 228,
+    "previousEagerEditorRule": "One form editor for every configuration property, including all advanced values",
+    "initialSettingEditors": 1,
+    "maximumSingleDialogEditors": 20,
+    "closedDialogEditors": 0,
+    "scope": "DOM field count only; no process RAM benchmark."
+  },
+  "sourceHashes": {
+    "modules/backup/admin/index.js": "227e23e47f838b80141fad6a4cfa89f363b139767de3fba1e45d932029f67ee4",
+    "modules/backup/admin/index.html": "0e938d4aa3516c491fde1a8a6e53a86e30f3e82e22caad4c422d38cf50f0ff1b",
+    "modules/backup/admin/style.css": "b88d50030adcc9cdfe3c4bab0267604f00c5f48b227a2c2cba3bc6d2ec3a7a75",
+    "src/lib/eosModuleHttp.js": "abbd1c7fe2c82f97845007c1d7c299ee45c9eb692c97bb9a1890b72e2691147f",
+    "src/lib/eosModuleConfigStore.js": "455854fb7e4c2891fb1b9c1ce03362b1115fdc569f57c617b01cf556e39e68eb",
+    "src/lib/eosModuleHost.js": "f620a88ebc047c85619ac4251bc5df9f52ee309262a066a2ffbbebee22ee86fe",
+    "test/eos-backup-settings-browser.cjs": "d17fdfad892c027fdb6d2bb473d2051b8b4fc2d09a1f242f122d00fc39f195b0"
+  }
+}

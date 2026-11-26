@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/evcs.ts
- * Quell-Hash: sha256:6c458526ce5d327ec5ea0832f7f8c617b23884997157120a71febe1335ff6b00
+ * Quell-Hash: sha256:e0b1f16597d3ea2467f77c0a06773299c36e35238bff59b028a2be38297752ac
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -103,7 +103,7 @@ async function _fetchEvcsModeJson(url, options = {}) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 10000);
   try {
-    const response = await fetch(url, { ...options, signal: controller.signal });
+    const response = await chargingControlFetch(url, { ...options, signal: controller.signal });
     if (!response.ok) throw new Error('evcs_mode_http_failed');
     return await response.json();
   } finally {
@@ -1543,7 +1543,7 @@ function bindControls() {
         }
         renderEvcsGlobalStorageAssistControl();
         scheduleRender();
-        const response = await fetch('/api/set', {
+        const response = await chargingControlFetch('/api/set', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ scope: 'ems', key: 'evcs.global.storageAssistEnabled', value: enabled })
@@ -1748,7 +1748,7 @@ function bindControls() {
       scheduleRender();
 
       try {
-        await fetch('/api/set', {
+        await chargingControlFetch('/api/set', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(hasEms
@@ -1772,7 +1772,7 @@ function bindControls() {
       } catch (_e) {}
 
       try {
-        await fetch('/api/set', {
+        await chargingControlFetch('/api/set', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ scope: 'ems', key: `evcs.${idx}.regEnabled`, value: b })
@@ -1792,7 +1792,7 @@ function bindControls() {
       state[k] = { value: b, ts: Date.now() };
       scheduleRender();
 
-      fetch('/api/set', {
+      chargingControlFetch('/api/set', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ scope: 'ems', key: `evcs.${idx}.goalEnabled`, value: b })
@@ -1820,7 +1820,7 @@ function bindControls() {
       state[k] = { value: v, ts: Date.now() };
       scheduleRender();
 
-      fetch('/api/set', {
+      chargingControlFetch('/api/set', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ scope: 'ems', key: `evcs.${idx}.goalTargetSocPct`, value: v })
@@ -1850,7 +1850,7 @@ function bindControls() {
       state[k] = { value: ts, ts: Date.now() };
       scheduleRender();
 
-      fetch('/api/set', {
+      chargingControlFetch('/api/set', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ scope: 'ems', key: `evcs.${idx}.goalFinishTs`, value: ts })
@@ -1877,7 +1877,7 @@ function bindControls() {
       state[k] = { value: v, ts: Date.now() };
       scheduleRender();
 
-      fetch('/api/set', {
+      chargingControlFetch('/api/set', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ scope: 'ems', key: `evcs.${idx}.goalBatteryKwh`, value: v })
@@ -2053,7 +2053,7 @@ function bindControls() {
       } catch (_e) {}
 
       try {
-        await fetch('/api/set', {
+        await chargingControlFetch('/api/set', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ scope: 'ems', key: `evcs.${idx}.phaseMode`, value: mode })
@@ -2077,7 +2077,7 @@ function bindControls() {
       } catch (_e) {}
 
       try {
-        await fetch('/api/set', {
+        await chargingControlFetch('/api/set', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ scope: 'ems', key: `evcs.${idx}.storageAssistEnabled`, value: enabled })
@@ -2131,12 +2131,55 @@ function bindControls() {
  * Zusammenhang: Teil von Adapter-/Frontend-Code; Aufrufstellen und abhängige States/APIs beim Ändern mitprüfen.
  * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
  */
+
+// Bind command ownership to the document's initial configuration. Automatic
+// telemetry/config refresh must never upgrade an already open control to another LP.
+let chargingControlSnapshot = null;
+function rememberChargingControlIdentity(config) {
+  if (chargingControlSnapshot !== null) return;
+  const value = config && config.chargingControlIdentity;
+  chargingControlSnapshot = JSON.parse(JSON.stringify(value && typeof value === 'object' ? value : {}));
+}
+async function chargingControlFetch(url, options = {}) {
+  let request = options;
+  if (url === '/api/set' && typeof options.body === 'string') {
+    const body = JSON.parse(options.body);
+    if (body.scope === 'ems' || body.scope === 'evcs' || (body.scope === 'settings' && /^evcs/.test(String(body.key || '')))) {
+      const key = String(body.key || '');
+      const match = key.match(/^(?:evcs\.|chargingManagement\.wallboxes\.lp)([1-9]\d*)\./)
+        || (body.scope === 'evcs' && key.match(/^([1-9]\d*)\./));
+      const metadata = chargingControlSnapshot;
+      if (match && typeof metadata?.slots?.['lp' + match[1]] === 'string') body.expectedChargingIdentity = metadata.slots['lp' + match[1]];
+      else if (!match && typeof metadata?.revision === 'string') body.expectedChargingLayoutRevision = metadata.revision;
+      request = { ...options, body: JSON.stringify(body) };
+    }
+  }
+  const response = await fetch(url, request);
+  if (url === '/api/set' && response.status === 409) {
+    const data = await response.clone().json().catch(() => null);
+    if (String(data?.error || '').startsWith('EOS_EVCS_IDENTITY_')) {
+      let notice = document.getElementById('nw-charging-identity-notice');
+      if (!notice) {
+        notice = document.createElement('div'); notice.id = 'nw-charging-identity-notice';
+        notice.setAttribute('role', 'alert'); notice.className = 'nw-help';
+        notice.textContent = 'Die Ladepunktzuordnung wurde geändert oder wird aktualisiert. Der Befehl wurde nicht ausgeführt. Bitte die Seite neu laden. ';
+        const reload = document.createElement('button'); reload.type = 'button'; reload.textContent = 'Seite neu laden';
+        reload.addEventListener('click', () => window.location.reload()); notice.appendChild(reload);
+        (document.querySelector('main') || document.body).prepend(notice);
+      }
+      throw new Error('EOS_EVCS_IDENTITY_CHANGED');
+    }
+  }
+  return response;
+}
+
 async function bootstrap() {
   initMenu();
   bindControls();
 
   try {
     cfg = await fetch('/config', { cache: 'no-store' }).then(r => r.json());
+    rememberChargingControlIdentity(cfg);
     const sc = (cfg && cfg.settingsConfig) || {};
     const evcsAvailable = ((Number(sc.evcsConfiguredCount || 0) || (Array.isArray(sc.evcsList) ? sc.evcsList.filter(function(r){ if(!r || r.enabled === false) return false; return ['powerId','energyTotalId','energySessionId','statusId','activeId','onlineId','setCurrentAId','setPowerWId','enableWriteId','lockWriteId','phaseSwitchId','rfidReadId','vehicleSocId'].some(function(k){ return String(r[k] || '').trim(); }); }).length : 0)) > 0);
     const c = evcsAvailable ? Math.max(0, Math.round(Number(sc.evcsCount) || 0)) : 0;
@@ -2161,7 +2204,7 @@ async function bootstrap() {
     if (sfMenu) sfMenu.classList.toggle('hidden', !sf);
     const sfTab = document.getElementById('tabStorageFarm');
     if (sfTab) sfTab.classList.toggle('hidden', !sf);
-  } catch (_e) {}
+  } catch (_e) { rememberChargingControlIdentity({}); }
 
   try {
     _replaceStateSnapshot(await fetch('/api/state').then(r => r.json()));

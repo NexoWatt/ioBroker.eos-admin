@@ -1,0 +1,43 @@
+✔ actual Devices disable, enable and restart replace only its PID/generation and preserve the OCPP socket (1218.956779ms)
+✔ actual OCPP process controls preserve native namespace and never replay a command from the old child (1590.591752ms)
+✔ actual OCPP process controls preserve imported namespace and never replay a command from the old child (1204.38807ms)
+✔ persisted Devices process disable survives a fresh Host and RuntimeControl without altering module configuration (1025.398077ms)
+✔ one process enable activates a saved disabled Devices module, preserves settings and survives a fresh host (900.103553ms)
+✔ default permits existing startup without writes; pause survives a fresh service and preserves device configuration (7.836378ms)
+✔ restart commits a durable pause before confirmed shutdown and only then persists enable (9.90107ms)
+✔ an unconfirmed stop remains durably disabled and never starts a replacement (1.380309ms)
+✔ disable remains available behind startup gates, while enable and restart cannot bypass them (2.0513ms)
+✔ one enable action activates a disabled module even when process permission was already on (1.508659ms)
+✔ a disabled module can be enabled after a saved process pause; restart cannot activate it implicitly (1.171741ms)
+✔ failed module activation remains durably paused and retains the concrete validation error (0.931887ms)
+✔ slow module commit keeps activation locked and paused until settled, including shutdown (3.599308ms)
+✔ persistence failure does not stop a live process or falsely claim its activation changed (0.897126ms)
+✔ invalid IDs, arbitrary commands, stale revision and replay do not change process state (0.882674ms)
+✔ a hanging startup configuration read is bounded and its late completion cannot activate processes (41.425968ms)
+✔ invalid stored configuration never silently falls back to all enabled (0.973168ms)
+✔ shutdown during an accepted restart never starts a replacement even if stop settles later (1.56403ms)
+✔ close immediately revokes authority but drains an already-issued configuration write (12.968621ms)
+✔ unconfirmed stop cannot become enabled again by reconstructing the control service (4.289137ms)
+✔ accepted restart stays busy until stop really settles and does not resume after close (1.302003ms)
+✔ late database write after close cannot dispatch stop or start into a replacement lifecycle (0.655228ms)
+✔ persisted UI pause survives initialization while other process flags remain separate (0.599306ms)
+✔ closing initialization before a late database response cannot grant process authority (1.460909ms)
+✔ bounded initialization returns a visible blocker and a late read cannot reopen process gates (20.95431ms)
+✔ slow HTTP runtime body cannot retain authority after session revocation (199.244369ms)
+✔ slow HTTP runtime body cannot retain authority after role revocation (28.148961ms)
+✔ slow HTTP runtime body cannot retain authority after csrf revocation (53.306281ms)
+✔ slow HTTP module-save body cannot retain authority after session revocation (13.664941ms)
+✔ slow HTTP module-save body cannot retain authority after role revocation (65.715326ms)
+✔ slow HTTP module-save body cannot retain authority after csrf revocation (45.131879ms)
+✔ slow HTTP module-import body cannot retain authority after session revocation (32.154769ms)
+✔ slow HTTP module-import body cannot retain authority after role revocation (6.775561ms)
+✔ slow HTTP module-import body cannot retain authority after csrf revocation (9.311739ms)
+✔ module save and import cannot race a still-committing combined process activation (28.012059ms)
+ℹ tests 35
+ℹ suites 0
+ℹ pass 35
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6169.255578

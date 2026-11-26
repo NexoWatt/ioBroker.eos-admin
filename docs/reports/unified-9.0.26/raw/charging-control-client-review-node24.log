@@ -1,0 +1,20 @@
+✔ app: snapshot is immutable; automatic refresh never upgrades old controls to B (334.309627ms)
+✔ app: a page loaded without identity metadata cannot adopt a later token automatically (187.399484ms)
+✔ app: failed initial configuration read freezes the unconfirmed document identity (294.320487ms)
+✔ app: identity rejection is visible and is not retried with a new token (93.024636ms)
+✔ app: all direct API-set call sites use the identity wrapper (147.477361ms)
+✔ evcs: snapshot is immutable; automatic refresh never upgrades old controls to B (41.626053ms)
+✔ evcs: a page loaded without identity metadata cannot adopt a later token automatically (39.073803ms)
+✔ evcs: failed initial configuration read freezes the unconfirmed document identity (60.808966ms)
+✔ evcs: identity rejection is visible and is not retried with a new token (25.683738ms)
+✔ evcs: all direct API-set call sites use the identity wrapper (22.019014ms)
+✔ station commands carry the rendered station snapshot identity (93.77753ms)
+✔ station retained A-button callback cannot acquire B identity after another render (54.611014ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2009.947516

@@ -1,0 +1,10 @@
+✔ parent login remains usable with persisted UI pause and a fresh admin session (6146.144139ms)
+✔ parent login remains usable with timed-out runtime configuration and a fresh admin session (5321.085197ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13801.856552

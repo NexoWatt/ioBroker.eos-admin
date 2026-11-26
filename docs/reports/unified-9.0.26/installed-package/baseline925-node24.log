@@ -1,0 +1,10 @@
+✔ installed artifact has its own production dependency tree and all module validators load (79.690846ms)
+✔ installed host starts all four real workers, serves configuration/status APIs and accepts all OCPP protocols (856.474202ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1346.48172

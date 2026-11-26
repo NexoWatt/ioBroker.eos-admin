@@ -9,7 +9,7 @@ const { EosModuleConfigStore } = require('./eosModuleConfigStore');
 /** @typedef {Record<ProcessId, boolean>} Activation */
 /** @typedef {{enabled:boolean,canEnable:boolean,canDisable:boolean,canRestart:boolean,busy:boolean,reason:string,revision:string}} ControlView */
 /** @typedef {{namespace:string,config:Record<string,unknown>,encrypt:(text:string)=>string,decrypt:(text:string)=>string,getForeignObjectAsync:(id:string)=>Promise<unknown>,setForeignObjectAsync:(id:string,value:unknown)=>Promise<unknown>,eosMigration?:{allowsStartup:()=>boolean,status?:()=>unknown},eosOwnership?:{canWrite:()=>boolean},eosLicenseService?:{statusView:()=>unknown,allowsEmbeddedModule?:(id:string)=>boolean},log:{warn:(code:string)=>void}}} Owner */
-/** @typedef {{mutation?:boolean,configurationSavePromise?:Promise<unknown>|null,view:(id:string)=>Promise<unknown>,controlProcess:(id:string,action:'stop'|'start')=>Promise<void>}} Host */
+/** @typedef {{mutation?:boolean,configurationSavePromise?:Promise<unknown>|null,view:(id:string)=>Promise<unknown>,enableProcessModule:(id:string)=>Promise<void>,controlProcess:(id:string,action:'stop'|'start')=>Promise<void>}} Host */
 /** @typedef {{pause:()=>Promise<void>,resume:()=>Promise<void>,status:()=>Record<string,unknown>}} Runtime */
 const IDS = /** @type {const} */ (['ui', 'devices', 'eebus', 'backup', 'ocpp']);
 /** @param {unknown} value @returns {Record<string,unknown>} */
@@ -102,12 +102,14 @@ class EosRuntimeControl {
         const ready = this.ready && !this.closed;
         const busy = this.pending !== null;
         const enabled = this.enabled[key];
-        const blocker = this.startReason(key, configured);
+        // Enabling a module is one operation, even when its process permission
+        // was already on. A saved module-off flag is not an admission failure.
+        const blocker = this.startReason(key, true);
         return { enabled, revision: this.revision, busy,
-            canEnable: ready && !busy && !enabled && !blocker,
+            canEnable: ready && !busy && (!enabled || !configured) && !blocker,
             canDisable: ready && !busy && enabled,
-            canRestart: ready && !busy && enabled && !blocker,
-            reason: this.errors[key] || blocker || (!enabled ? 'EOS_RUNTIME_DISABLED' : '') };
+            canRestart: ready && !busy && enabled && configured && !blocker,
+            reason: this.errors[key] || blocker || (!enabled ? 'EOS_RUNTIME_DISABLED' : !configured ? 'EOS_RUNTIME_MODULE_DISABLED' : '') };
     }
 
     /** Exact actions only; no arbitrary process IDs, commands or configuration are accepted.
@@ -156,9 +158,11 @@ class EosRuntimeControl {
     async apply(id, action) {
         // Yield once so the transaction owns its lock before any synchronous completion.
         await Promise.resolve(); this.assertOpen();
+        let configure = false;
         if (action !== 'disable' && id !== 'ui') {
             const view = record(await this.host.view(id)); this.assertOpen();
-            const reason = this.startReason(id, record(view.config).enabled === true);
+            configure = record(view.config).enabled !== true;
+            const reason = this.startReason(id, action === 'enable' || !configure);
             if (reason) throw fail(reason);
         }
         await this.persist(id, false);
@@ -174,6 +178,13 @@ class EosRuntimeControl {
         }
         this.assertOpen();
         if (action === 'disable') { this.inhibited.delete(id); return; }
+        if (configure) {
+            // The host commits only enabled:true against its complete current
+            // configuration. Keep the durable process pause until that actual
+            // commit (including a slow database write) has settled.
+            await this.host.enableProcessModule(id);
+            this.assertOpen();
+        }
         const reason = this.startReason(id, true);
         if (reason) throw fail(reason);
         await this.persist(id, true);

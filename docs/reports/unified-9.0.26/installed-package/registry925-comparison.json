@@ -1,0 +1,18 @@
+{
+  "version": "9.0.25",
+  "registryUrl": "https://registry.npmjs.org/iobroker.eos-admin/-/iobroker.eos-admin-9.0.25.tgz",
+  "deliveredSha256": "4629bd42a87f8aca652a092889b2382a57649d2da7b398e00524d61b3ec7128b",
+  "registrySha256": "36c60c30326be406d698c4b5afd74cfb39d909482a383113b65519a3d2c2263a",
+  "registrySha1": "7944b461f61785316e4bfcff1992cde55282281b",
+  "registryFileCount": 3186,
+  "differenceCount": 0,
+  "differences": [],
+  "ocppEntryFiles": [
+    "package/modules/ocpp/build/index.js",
+    "package/modules/ocpp/index.js",
+    "package/modules/ocpp/build/operationGuard.js",
+    "package/modules/ocpp/runtime.js",
+    "package/modules/ocpp/build/server.js",
+    "package/modules/ocpp/native-defaults.json"
+  ]
+}

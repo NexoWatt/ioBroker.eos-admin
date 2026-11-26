@@ -1,0 +1,16 @@
+{
+  "version": "9.0.26",
+  "files": {
+    "package.json": "fa752fecb7580229d2660638d0054c524c7bc902d5083a15c0d7782d04d94a95",
+    "io-package.json": "31d9ad3c190abbab520548a707e59612aac050dc7e97dd89b3fd5e3968494f9e",
+    "src/lib/eosKiosk.ts": "3510f1d6216e518dbab77e310cfccfa37640c947df3c0fddc7b77c44b2be9922",
+    "src/lib/eosUiProcessWorker.ts": "9faa5f72c33b8736b16c4059d9cf30cf9b98e81aa5891c674b767ad1f4030075",
+    "ui/src-ts/runtime-executables/main.ts": "bac2f47a42f00f3f4642fdf9764ffdfd2eb4f957049d3e27c49d3157e5acda58",
+    "ui/main.js": "f284f6f3d83653dd52fd0f2d5d3d121cf29a5c9678f7c2c2724f087eef42a577",
+    "ui/src-ts/runtime-executables/lib/charging-point-identity.ts": "6db008926f84201dda3c8ef6f3391e56fcda0f771eb61fda7b14bf210b6c3f93",
+    "ui/lib/charging-point-identity.js": "0f63461df57c131083d5b72a5697fc496fc33d4744e80cfab1a790223d4daf6c",
+    "ui/src-ts/runtime-executables/lib/charging-station-identity.ts": "1487f615a02c5e53230267c8b13d06347a3459eda54814bb23cbb8a4f46ba1b6",
+    "ui/lib/charging-station-identity.js": "c14043e4b6e6d6bbdbc4aa7ade3733b17288ca77552462ea9e622fa5f547189d",
+    "test/eos-device-ems-web-pipeline.test.cjs": "e5ad240b83326a70b7c2e5edce1ee134920e745487ed51b84751f653b2198a22"
+  }
+}

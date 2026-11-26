@@ -1,0 +1,17 @@
+469 info run @serialport/bindings-cpp@12.0.1 install node_modules/@serialport/bindings-cpp node-gyp-build
+470 info run cpu-features@0.0.10 install node_modules/cpu-features node buildcheck.js > buildcheck.gypi && node-gyp rebuild
+471 info run diskusage@1.2.0 install node_modules/diskusage node-gyp rebuild
+472 info run ssh2@1.17.0 install node_modules/ssh2 node install.js
+473 info run unix-dgram@2.0.6 install node_modules/unix-dgram node-gyp rebuild
+474 info run @serialport/bindings-cpp@13.0.0 install node_modules/modbus-serial/node_modules/@serialport/bindings-cpp node-gyp-build
+475 info run @serialport/bindings-cpp@12.0.1 install { code: 0, signal: null }
+476 info run @serialport/bindings-cpp@13.0.0 install { code: 0, signal: null }
+477 info run unix-dgram@2.0.6 install { code: 0, signal: null }
+478 info run diskusage@1.2.0 install { code: 0, signal: null }
+479 info run cpu-features@0.0.10 install { code: 0, signal: null }
+480 info run ssh2@1.17.0 install { code: 0, signal: null }
+481 info run protobufjs@7.6.5 postinstall node_modules/protobufjs node scripts/postinstall
+482 info run protobufjs@7.6.5 postinstall { code: 0, signal: null }
+937 verbose node v24.22.3
+938 verbose npm  v11.19.1
+939 verbose exit 0

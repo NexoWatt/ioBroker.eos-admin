@@ -1,0 +1,30 @@
+✔ registered stations persist complete native mappings; unknown electrical limits never enable a writer (58.834439ms)
+✔ partial contract registration is explicit and completes; invalid directions, units and metadata stay untrusted (0.612414ms)
+✔ real configuration pipeline retains validated contract failure metadata and never enables an uncommissioned row (16.863093ms)
+✔ existing aliases deduplicate to one station and manual limits/mappings survive; duplicate control groups are reported (0.634368ms)
+✔ multi EVSE topology remains one station aggregate writer; connector controls are never invented (0.501501ms)
+✔ an existing active manual monitor does not gain its first writer from discovery, including later rescans (0.651192ms)
+✔ existing manual monitor crosses real normalization, engine and CM tick without inferred hardware commands (75.792102ms)
+✔ license capacity exposes pending stations, retains existing mappings and fills a newly available slot (0.638814ms)
+✔ registration bursts, offline and restart are idempotent; concurrent manual saves share the mutation fence (46.78593ms)
+✔ persist failures keep prior configuration; failed runtime apply is retried without creating a second row (14.39074ms)
+✔ stop during discovery cannot commit a late scan (6.548685ms)
+✔ ownership loss after a database read prevents reconciliation and leaves existing configuration untouched (0.389736ms)
+✔ actual supplied OCPP adapter registration and station telemetry map through the real EOS persistence path (528.365015ms)
+✔ embedded OCPP station registration persists hosted mappings and retains them across bursts and runtime restart (867.390623ms)
+✔ discovery scopes hosted trees to the owning EOS and retains legacy migration identities (12.566956ms)
+✔ installer GET pairs a discovery-updated row snapshot with its own revision before a subsequent delete (158.546891ms)
+✔ a real discovery commit after GET still rejects the stale form without discarding its newer station (42.773712ms)
+✔ installer hydration changes only its response snapshot and leaves the revision base and runtime objects intact (10.23412ms)
+✔ discovery requires a configured source, preserves offline instances and admits only the authoritative hosted legacy namespace (1.19134ms)
+✔ deleted legacy rows stay removed after rescans and installer reload while the integrated source continues discovery (86.66824ms)
+✔ production discovery admits a preserved namespace from its parent even after the old adapter object is gone (13.408489ms)
+✔ failed source inventory never treats orphaned contract states as an existing adapter (3.568261ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2003.807683

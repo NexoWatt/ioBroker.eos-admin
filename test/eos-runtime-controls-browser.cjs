@@ -10,6 +10,7 @@ const crypto = require('node:crypto');
 const express = require('express');
 const puppeteer = require('puppeteer');
 const { EosRuntimeControl } = require('../src/lib/eosRuntimeControl');
+const { EosModuleConfigStore } = require('../src/lib/eosModuleConfigStore');
 const { registerEosModuleRoutes } = require('../src/lib/eosModuleHttp');
 const root = path.resolve(__dirname, '..');
 const card = id => `section[data-process="${id}"]`;
@@ -30,7 +31,8 @@ async function main() {
     const processHealth = state => ({ mode: 'process', state, pid: state === 'running' ? 32123 : null,
         generation: state === 'running' ? 1 : 0, restarts: 0, lastError: '', lastHeartbeatAt: Date.now(), nextRestartAt: 0 });
     const status = { ui: processHealth('running'), devices: processHealth('running'), eebus: processHealth('running'), backup: processHealth('stopped'), ocpp: processHealth('stopped') };
-    const configured = { devices: true, eebus: true, backup: false, ocpp: false };
+    status.ocpp.state = 'error'; status.ocpp.lastError = 'EOS_MODULE_DEPENDENCY_MISSING';
+    const configured = { devices: true, eebus: false, backup: false, ocpp: false };
     const owner = { namespace: 'eos-admin.0', config: {}, log: { warn: () => undefined },
         encrypt: text => `fixture:${Buffer.from(text).toString('base64')}`,
         decrypt: text => { if (!text.startsWith('fixture:')) throw new Error('fixture ciphertext'); return Buffer.from(text.slice(8), 'base64').toString(); },
@@ -51,13 +53,22 @@ async function main() {
         if (action === 'start') status[id].generation++;
         status[id].lastHeartbeatAt = Date.now();
     };
+    const moduleStore = new EosModuleConfigStore(owner);
     const host = { owner, view: async id => ({ config: { enabled: configured[id] } }),
+        enableProcessModule: async id => {
+            const config = { enabled: true, retainedSetting: `fixture-${id}`, secret: 'fixture-private-setting' };
+            await moduleStore.load(id);
+            await moduleStore.save(id, { v: 1, encrypted: owner.encrypt(JSON.stringify(config)) });
+            configured[id] = true;
+        },
         status: async id => ({ enabled: configured[id], active: status[id].state === 'running', reason: configured[id] ? 'RUNNING' : 'DISABLED', details: { process: { ...status[id] } } }),
         controlProcess: (id, action) => change(id, action) };
     const runtime = { status: () => ({ active: status.ui.state === 'running', emsReady: status.ui.state === 'running', process: { ...status.ui } }),
         pause: () => change('ui', 'stop'), resume: () => change('ui', 'start') };
     try {
         service = new EosRuntimeControl({ owner, host, runtime }); await service.initialize();
+        service.request('eebus', 'disable', service.revision); await service.whenIdle();
+        calls.length = 0; writes.length = 0;
         const app = express();
         app.use('/api/eos/runtime', (req, res, next) => {
             if (req.method === 'POST') {
@@ -83,11 +94,29 @@ async function main() {
         await page.waitForFunction(selector => !document.querySelector(selector).disabled, {}, button('devices', 'restart'));
         assert.equal(await page.$$eval('.runtime-controls button', nodes => nodes.length), 15);
         assert.equal(await page.$$eval(`${card('admin')} button,${card('ocpp21.0')} button`, nodes => nodes.length), 0);
-        assert.equal(await page.$eval(button('backup', 'enable'), node => node.disabled), true);
+        assert.equal(await page.$eval(button('backup', 'enable'), node => node.disabled), false);
         assert.equal(await page.$eval(`${card('backup')} .runtime-badge`, node => node.textContent), 'Modul deaktiviert');
-        assert.match(await page.$eval(card('backup'), node => node.textContent), /in seinen Einstellungen deaktiviert/);
+        assert.match(await page.$eval(card('backup'), node => node.textContent), /Modul und Prozess gemeinsam/);
+        assert.equal(await page.$eval(button('eebus', 'enable'), node => node.disabled), false);
+        assert.equal(await page.$eval(`${card('eebus')} .runtime-badge`, node => node.textContent), 'Deaktiviert');
         assert.equal(await page.$eval(`${card('backup')} .runtime-config-link`, node => node.getAttribute('href')), '/modules/backup/');
-        checks.push({ name: 'five hosted controls; parent and external OCPP remain read-only; unconfigured modules link to setup', result: 'passed' });
+        assert.match(await page.$eval(card('ocpp'), node => node.textContent), /Eine benötigte Moduldatei oder Abhängigkeit fehlt/);
+        checks.push({ name: 'five hosted controls; parent/external OCPP read-only; module-off and both-off screenshot states both offer enable', result: 'passed' });
+        for (const id of ['backup', 'eebus']) {
+            const previous = calls.length;
+            await page.click(button(id, 'enable'));
+            await until(() => service.pending === null && calls.length > previous);
+            await page.waitForFunction(selector => document.querySelector(selector)?.textContent === 'Läuft', {}, `${card(id)} .runtime-badge`);
+            assert.deepEqual(calls.slice(previous), [{ id, action: 'stop' }, { id, action: 'start' }]);
+            const saved = await moduleStore.load(id);
+            assert.deepEqual(JSON.parse(owner.decrypt(saved.encrypted)), { enabled: true, retainedSetting: `fixture-${id}`, secret: 'fixture-private-setting' });
+        }
+        const restoredActivation = new EosRuntimeControl({ owner, host, runtime }); await restoredActivation.initialize();
+        assert.equal(restoredActivation.isEnabled('backup'), true); assert.equal(restoredActivation.isEnabled('eebus'), true);
+        await restoredActivation.close();
+        await page.reload(); await page.waitForFunction(selector => document.querySelector(selector)?.textContent === 'Läuft', {}, `${card('eebus')} .runtime-badge`);
+        checks.push({ name: 'single browser action enables both gates with protected persistence; confirmed starts and page reload preserve activation', result: 'passed' });
+        calls.length = 0; writes.length = 0; requests.length = 0;
         const beforeCsrf = calls.length;
         const csrfDenied = await page.evaluate(async () => {
             const state = await (await fetch('/api/eos/runtime')).json();

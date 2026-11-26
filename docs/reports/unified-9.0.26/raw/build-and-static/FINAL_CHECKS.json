@@ -1,0 +1,45 @@
+{
+  "version": "9.0.26",
+  "checks": [
+    {
+      "file": "eos926-build-frontend.log",
+      "exitCode": 0,
+      "sha256": "68477236caaa98b37ae2460ee87749aee2523a6268b3117ba1b414616ff00a3b"
+    },
+    {
+      "file": "eos926-build-installer.log",
+      "exitCode": 0,
+      "sha256": "07bd650375b1e2de36ac467cbc8435918fc1ec3954d490e5baf15f2e9071f6d1"
+    },
+    {
+      "file": "eos926-build-backend-delivery.log",
+      "exitCode": 0,
+      "sha256": "e5f09045a4c5695b6dc16814f705a5808479bc7bdb911fd530c162d2841c340e"
+    },
+    {
+      "file": "eos926-build-ui-runtime-delivery.log",
+      "exitCode": 0,
+      "sha256": "98898a52f7f6306cbdece4555957f4ab409f1790b9b86da2aa795ae21c044e68"
+    },
+    {
+      "file": "eos926-build-modules.log",
+      "exitCode": 0,
+      "sha256": "4b38b70a27e7dad04b896600dd4b78c04b518854132bfe9b8537a71be89dabb2"
+    },
+    {
+      "file": "eos926-typecheck-delivery.log",
+      "exitCode": 0,
+      "sha256": "fda5194011e98f65e22edf0e9dc2d43fe4194cc0b6575902dcf21d486bc0e874"
+    },
+    {
+      "file": "eos926-lint-delivery.log",
+      "exitCode": 0,
+      "sha256": "ca45af47f588f26f8b580b45f4de26528a05275940396833952ac1ae7bfd6efa"
+    }
+  ],
+  "notes": [
+    "Backend and UI runtime rebuilt after functional fixes.",
+    "Typecheck and lint completed after final product source changes.",
+    "One retained JSDoc warning; no new lint errors."
+  ]
+}

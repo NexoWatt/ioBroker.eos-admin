@@ -9,7 +9,9 @@ const os = require('node:os');
 const net = require('node:net');
 const { once } = require('node:events');
 const WebSocket = require('ws');
+const express = require('express');
 const { EosModuleHost } = require('../src/lib/eosModuleHost');
+const { registerEosModuleRoutes } = require('../src/lib/eosModuleHttp');
 const { EosRuntimeControl } = require('../src/lib/eosRuntimeControl');
 const { EosModuleConfigStore } = require('../src/lib/eosModuleConfigStore');
 const baseDir = path.resolve(__dirname, '..');
@@ -235,14 +237,43 @@ test('persisted Devices process disable survives a fresh Host and RuntimeControl
     assert.deepEqual(f.owner.config.eosModules, f.untouchedModuleConfig);
 });
 
-test('process enable cannot activate a Devices module whose own configuration is disabled', { timeout: 30000 }, async t => {
+test('one process enable activates a saved disabled Devices module, preserves settings and survives a fresh host', { timeout: 45000 }, async t => {
     const f = await fixture(t, { devicesEnabled: false }), client = await f.connect();
     const ocpp = f.health('ocpp'); assert.equal(f.health('devices'), null);
+    const previous = clone(f.host.entries.get('devices').config);
+    f.owner.config.dynamicTariff = { provider: 'preserved-fixture-provider', token: 'fixture-secret-not-logged' };
+    assert.equal(f.control.view('devices', false).canEnable, true, 'module-off must offer enable even with process permission on');
     await f.action('devices', 'disable');
-    const result = await f.action('devices', 'enable');
-    assert.equal(result.enabled, false); assert.equal(result.reason, 'EOS_RUNTIME_MODULE_DISABLED'); assert.equal(result.canEnable, false);
-    assert.equal(f.health('devices'), null); assert.equal(f.host.entries.get('devices').config.enabled, false);
+    assert.equal(f.control.view('devices', false).canEnable, true, 'both switches off must remain actionable');
+    const app = express();
+    registerEosModuleRoutes({ app, host: f.host, baseDir, runtimeControl: f.control, jsonParser: express.json(),
+        authorize: async () => ({ authenticated: true, role: 'admin', csrfToken: 'fixture-csrf' }),
+        requestAllowed: () => true, csrfAllowed: () => true });
+    const server = app.listen(0, '127.0.0.1'); await once(server, 'listening');
+    t.after(async () => { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); });
+    const origin = `http://127.0.0.1:${server.address().port}`;
+    const snapshot = await (await fetch(`${origin}/api/eos/runtime`)).json();
+    const controls = snapshot.processes.find(row => row.id === 'devices').controls;
+    assert.equal(controls.canEnable, true);
+    const response = await fetch(`${origin}/api/eos/runtime/devices/control`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'enable', expectedRevision: controls.revision }) });
+    assert.equal(response.status, 202); assert.deepEqual(await response.json(), { ok: true, accepted: true });
+    await f.control.whenIdle();
+    const result = f.control.view('devices', f.host.entries.get('devices').config.enabled);
+    assert.equal(result.enabled, true); assert.equal(result.reason, ''); assert.equal(result.canEnable, false);
+    const devices = f.health('devices'); assert.ok(devices.pid > 0);
+    assert.deepEqual(f.host.entries.get('devices').config, { ...previous, enabled: true });
     assert.equal(f.health('ocpp').pid, ocpp.pid); assert.equal(client.closed, false);
     assert.equal(typeof (await client.call('Heartbeat', {})).currentTime, 'string');
-    assert.deepEqual(f.owner.config.eosModules, f.untouchedModuleConfig);
+    for (const id of ['eebus', 'backup', 'ocpp']) assert.deepEqual(f.owner.config.eosModules[id], f.untouchedModuleConfig[id]);
+    const store = new EosModuleConfigStore(f.owner);
+    const stored = await store.load('devices');
+    assert.deepEqual(JSON.parse(f.owner.decrypt(stored.encrypted)), { ...previous, enabled: true });
+    assert.deepEqual(f.owner.config.dynamicTariff, { provider: 'preserved-fixture-provider', token: 'fixture-secret-not-logged' });
+    await f.control.close(); await f.host.stop(); assertExited(devices.pid);
+    await f.newGeneration();
+    assert.equal(f.control.isEnabled('devices'), true);
+    assert.ok(f.health('devices').pid > 0); assert.notEqual(f.health('devices').pid, devices.pid);
+    assert.deepEqual(f.host.entries.get('devices').config, { ...previous, enabled: true });
+    assert.deepEqual(f.owner.config.dynamicTariff, { provider: 'preserved-fixture-provider', token: 'fixture-secret-not-logged' });
 });

@@ -1,0 +1,31 @@
+{
+  "version": "9.0.25",
+  "source": "actual delivered npm TGZ plus .gitignore from matching FULL_REPOSITORY.zip",
+  "tree": "ecd1147f8eba96a7ce06758370108f93da1afbad",
+  "normalGitAdd": true,
+  "results": [
+    {
+      "id": "devices",
+      "status": "loaded",
+      "factory": "function"
+    },
+    {
+      "id": "eebus",
+      "status": "failed",
+      "code": "MODULE_NOT_FOUND",
+      "firstLine": "Cannot find module './build/index.js'"
+    },
+    {
+      "id": "backup",
+      "status": "failed",
+      "code": "MODULE_NOT_FOUND",
+      "firstLine": "Cannot find module './build/index.js'"
+    },
+    {
+      "id": "ocpp",
+      "status": "failed",
+      "code": "MODULE_NOT_FOUND",
+      "firstLine": "Cannot find module './build/index.js'"
+    }
+  ]
+}

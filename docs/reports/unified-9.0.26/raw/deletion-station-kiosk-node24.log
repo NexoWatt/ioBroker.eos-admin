@@ -1,0 +1,36 @@
+✔ one installer deletion atomically retires the A URL and moves the B URL by physical identity, including restart (590.808436ms)
+✔ generation rotation invalidates freshly bootstrapped request references and open kiosk streams (4.170822ms)
+✔ storage, path, body and cookie parsing stay closed for malformed, foreign and stale input (3.706306ms)
+✔ current dashboard payloads remain usable without granting installer limits or arbitrary settings (0.998295ms)
+✔ kiosk admits bounded identity guards on permitted charging commands without broadening control authority (0.380973ms)
+✔ real UI child receives only parent kiosk identity; forged role/context headers and disabled cookies never unlock admin (454.16834ms)
+✔ registered stations persist complete native mappings; unknown electrical limits never enable a writer (212.821687ms)
+✔ partial contract registration is explicit and completes; invalid directions, units and metadata stay untrusted (1.602228ms)
+✔ real configuration pipeline retains validated contract failure metadata and never enables an uncommissioned row (76.751401ms)
+✔ existing aliases deduplicate to one station and manual limits/mappings survive; duplicate control groups are reported (0.721596ms)
+✔ multi EVSE topology remains one station aggregate writer; connector controls are never invented (0.662779ms)
+✔ an existing active manual monitor does not gain its first writer from discovery, including later rescans (6.664917ms)
+✔ existing manual monitor crosses real normalization, engine and CM tick without inferred hardware commands (170.474118ms)
+✔ license capacity exposes pending stations, retains existing mappings and fills a newly available slot (0.675788ms)
+✔ registration bursts, offline and restart are idempotent; concurrent manual saves share the mutation fence (57.307913ms)
+✔ persist failures keep prior configuration; failed runtime apply is retried without creating a second row (24.049903ms)
+✔ stop during discovery cannot commit a late scan (7.509766ms)
+✔ ownership loss after a database read prevents reconciliation and leaves existing configuration untouched (0.442284ms)
+✔ actual supplied OCPP adapter registration and station telemetry map through the real EOS persistence path (531.23317ms)
+✔ embedded OCPP station registration persists hosted mappings and retains them across bursts and runtime restart (716.864501ms)
+✔ discovery scopes hosted trees to the owning EOS and retains legacy migration identities (12.093548ms)
+✔ installer GET pairs a discovery-updated row snapshot with its own revision before a subsequent delete (273.360523ms)
+✔ a real discovery commit after GET still rejects the stale form without discarding its newer station (56.481112ms)
+✔ installer hydration changes only its response snapshot and leaves the revision base and runtime objects intact (30.526263ms)
+✔ discovery requires a configured source, preserves offline instances and admits only the authoritative hosted legacy namespace (1.520546ms)
+✔ deleted legacy rows stay removed after rescans and installer reload while the integrated source continues discovery (126.97019ms)
+✔ production discovery admits a preserved namespace from its parent even after the old adapter object is gone (31.734388ms)
+✔ failed source inventory never treats orphaned contract states as an existing adapter (4.117113ms)
+ℹ tests 28
+ℹ suites 0
+ℹ pass 28
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2587.380751

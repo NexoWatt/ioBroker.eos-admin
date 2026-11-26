@@ -80,7 +80,7 @@ test('explicit customer Tibber save replaces legacy hourly resolution and retain
     refreshMinutes: 45, maxStaleMinutes: 120, formula: { supplierMarkupEurPerKwh: 0.04 } },
     settingsConfig: { evcsList: [{ name: 'Existing', enabled: false, maxCurrentA: 13 }] }, settings: { dynamicTariff: false, price: 0.35 } };
   a.config = { ...a.config, ...structuredClone(original) }; a._nwInstallerConfigPatch = structuredClone(original); a._nwInstallerConfigRawPatch = structuredClone(original);
-  a._hostedStartup = { state: 'ready' }; a.persistInstallerConfigToState = Object.getPrototypeOf(a).persistInstallerConfigToState;
+  a._hostedStartup = { state: 'ready' }; a._nwInstallerConfigHydrated = true; a.persistInstallerConfigToState = Object.getPrototypeOf(a).persistInstallerConfigToState;
   await a.persistInstallerConfigToState(original); a.subscribeConfiguredStates = async () => {};
   const token = await h.login('customer'); const view = await h.request('/api/customer/tariff-provider', { token });
   const res = await h.request('/api/customer/tariff-provider', { token, method: 'PUT', body: { expectedRevision: view.data.revision, config: { homeId: 'changed-home', credentials: { accessToken: '' } } } });

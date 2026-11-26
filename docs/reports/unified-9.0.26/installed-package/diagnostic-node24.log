@@ -1,0 +1,10 @@
+✔ missing packaged runtime dependency names the import and relative source without exposing installation paths (11.021885ms)
+✔ load diagnostic accepts package names but suppresses arbitrary error text and foreign paths (0.688217ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 190.050676

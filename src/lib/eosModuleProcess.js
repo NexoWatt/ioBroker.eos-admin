@@ -134,8 +134,20 @@ class EosModuleProcess {
             allowed: this.options.canOperate(), sequence: ++this.leaseSequence, expiresAt: Date.now() + 1000 };
         validate(init);
         this.rpc.event('init', init);
+        const startDeadline = performance.now() + (this.options.startTimeoutMs || 125000);
+        const remainingStartMs = () => {
+            const remaining = startDeadline - performance.now();
+            if (remaining <= 0) throw error('EOS_MODULE_PROCESS_TIMEOUT');
+            return remaining;
+        };
         try {
-            await this.rpc.request('start', [], this.options.startTimeoutMs || 125000);
+            // Do not queue start ahead of lease updates while synchronous imports
+            // occupy the child event loop. Construction and start share the same
+            // existing deadline, and readiness itself grants no write authority.
+            if (await this.rpc.request('prepare', [], remainingStartMs()) !== true) throw error('EOS_MODULE_PROCESS_INIT');
+            if (!this.options.canOperate() || this.stopping) throw error('EOS_MODULE_PROCESS_INACTIVE');
+            this.authority(true);
+            await this.rpc.request('start', [], remainingStartMs());
             if (!this.options.canOperate() || this.stopping) throw error('EOS_MODULE_PROCESS_INACTIVE');
             this.state = 'running';
         } catch (issue) { this.fail(errorCode(issue)); throw issue; }

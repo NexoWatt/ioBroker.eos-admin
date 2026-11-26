@@ -145,6 +145,31 @@ export function collectOcppStations(objectInput: unknown, stateInput: unknown, h
     return stations;
 }
 
+/** Retained state objects do not prove that their standalone adapter still exists.
+ * A hosted legacy namespace is admitted only from the owning parent's current
+ * configuration, never from stale alive/hosted marker states. Offline configured
+ * adapters remain discoverable; source lifecycle is separate from station health. */
+export function filterOcppDiscoverySources(stations: readonly OcppStation[], sourceInput: unknown, hostNamespace?: string): OcppStation[] {
+    const source = record(sourceInput);
+    const rows = record(source.instances).rows;
+    if (!Array.isArray(rows) || rows.length > MAX_STATIONS) throw fail('EOS_OCPP_DISCOVERY_SOURCE_INVENTORY');
+    const namespaces = new Set<string>();
+    for (const row of rows) {
+        const instance = record(record(row).value);
+        const id = text(instance._id, 120);
+        if (instance.type !== 'instance' || !/^system\.adapter\.ocpp21\.\d{1,8}$/.test(id)) {
+            throw fail('EOS_OCPP_DISCOVERY_SOURCE_INVENTORY');
+        }
+        namespaces.add(id.slice('system.adapter.'.length));
+    }
+    if (typeof hostNamespace === 'string' && /^eos-admin\.\d+$/.test(hostNamespace)) {
+        namespaces.add(`${hostNamespace}.ocpp`);
+        const hosted = text(source.hostedNamespace, 120);
+        if (/^ocpp21\.\d{1,8}$/.test(hosted)) namespaces.add(hosted);
+    }
+    return stations.filter(station => namespaces.has(station.adapterInstance));
+}
+
 function rootsOf(row: Dict): string[] {
     return [...new Set([...ID_FIELDS.map(key => ocppStationRoot(row[key])), ocppStationRoot(record(row.ocppDiscovery).stationRoot)].filter(Boolean))];
 }
@@ -234,6 +259,7 @@ export function planOcppDiscovery(configInput: unknown, stations: readonly OcppS
 
 type DiscoveryOptions = Readonly<{
     readObjects(): Promise<unknown>; readMetadata(): Promise<unknown>; subscribe(): Promise<unknown>;
+    readSources?(): Promise<unknown>;
     reconcile(stations: readonly OcppStation[]): Promise<OcppDiscoveryPlan>;
     canRun(): boolean; warn(code: string): void;
     pollMs?: number; debounceMs?: number; hostNamespace?: string;
@@ -297,9 +323,13 @@ export class OcppAutoDiscovery {
             this.dirty = false;
             if (!this.options.canRun()) { this.view = { ...this.view, state: 'blocked', error: 'EOS_OCPP_RUNTIME_NOT_READY' }; return; }
             try {
-                const [objects, states] = await Promise.all([this.readBounded(this.options.readObjects()), this.readBounded(this.options.readMetadata())]);
+                const [objects, states, sources] = await Promise.all([this.readBounded(this.options.readObjects()),
+                    this.readBounded(this.options.readMetadata()),
+                    this.options.readSources ? this.readBounded(this.options.readSources()) : Promise.resolve(undefined)]);
                 if (this.stopped || !this.options.canRun()) return;
-                const stations = collectOcppStations(objects, states, this.options.hostNamespace);
+                const collected = collectOcppStations(objects, states, this.options.hostNamespace);
+                const stations = this.options.readSources
+                    ? filterOcppDiscoverySources(collected, sources, this.options.hostNamespace) : collected;
                 const plan = await this.options.reconcile(stations);
                 if (this.stopped) return;
                 this.view = { state: 'ready', error: '', ts: Date.now(), stations: plan.statuses };

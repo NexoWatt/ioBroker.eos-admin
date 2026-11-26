@@ -1,0 +1,48 @@
+✖ parent login remains usable with persisted UI pause and a fresh admin session (499.513104ms)
+✖ parent login remains usable with timed-out runtime configuration and a fresh admin session (5199.371599ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6888.513837
+
+✖ failing tests:
+
+test at test/eos-pwa-baseline-temporary.cjs:807:42
+✖ parent login remains usable with persisted UI pause and a fresh admin session (499.513104ms)
+  AssertionError [ERR_ASSERTION]: /apple-touch-icon.png
+  
+  503 !== 200
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-926/iobroker.eos-admin/test/eos-pwa-baseline-temporary.cjs:829:16)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 503,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-pwa-baseline-temporary.cjs:807:42
+✖ parent login remains usable with timed-out runtime configuration and a fresh admin session (5199.371599ms)
+  AssertionError [ERR_ASSERTION]: /apple-touch-icon.png
+  
+  503 !== 200
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-926/iobroker.eos-admin/test/eos-pwa-baseline-temporary.cjs:829:16)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 503,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

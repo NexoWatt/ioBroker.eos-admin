@@ -1,0 +1,24 @@
+{
+  "result": "passed",
+  "node": "v24.22.3",
+  "runAt": "2026-11-25T21:00:37.936Z",
+  "scope": "Actual UI child process and owner IPC; synthetic delayed registry writes in current and retained namespaces; no hardware",
+  "checks": [
+    {
+      "namespace": "eos-admin.0",
+      "result": "passed",
+      "ackDelayMs": 2303
+    },
+    {
+      "namespace": "nexowatt-ui.3",
+      "result": "passed",
+      "ackDelayMs": 2302
+    }
+  ],
+  "sourceHashes": {
+    "src/lib/eosUiProcess.ts": "370ed2b2f6bd9957ed94844f5dad396de67c13979695627256221964d0e4285b",
+    "src/lib/eosUiProcessWorker.ts": "9faa5f72c33b8736b16c4059d9cf30cf9b98e81aa5891c674b767ad1f4030075",
+    "src/lib/eosUiProcessRpc.ts": "fa200c3b486eb36ec227d51924a8a404096b2b11be6a3f23b2d03268538d6b7e",
+    "src/lib/eosUiSecretCodec.ts": "557df10af74144f920e918afbe423a240c7f2d3182580f9ae47e22934817ae89"
+  }
+}

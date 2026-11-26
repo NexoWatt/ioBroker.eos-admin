@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/ems-apps.ts
- * Quell-Hash: sha256:1cf0f87852c1fc5d3e72528f777843f626a4fc561c3a41719ed8cc0609f83103
+ * Quell-Hash: sha256:be3391975625831775bbcb6a9f49c7ec980cfc1aa8bc534389b9d6977eea48a0
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -1027,6 +1027,9 @@
 
   let currentConfig = null;
   let configurationRevision = null;
+  // Nur eine bewusste Löschaktion darf den Schutz vor leerem EVCS-Payload öffnen.
+  // Die Freigabe gehört zum aktuellen Entwurf, niemals zur gespeicherten Konfiguration.
+  let evcsExplicitEmpty = false;
   // CAS stammt ausschließlich aus einem vollständig geladenen Gesamtstand.
   // Eine Änderungsmeldung erhöht nur die beobachtete Version, niemals den Save-Token.
   let dynamicGridLoadedVersion = null;
@@ -1676,10 +1679,10 @@ function _collectFlowPowerDpIsWFromUI() {
 
   let appCenterConfigDirty = false;
   let appCenterMutationBusy = false;
-  /** Ein Gesamt-Save/Import ersetzt danach die sichtbaren Eingaben. Während
+  /** Laden, Gesamt-Save und Import ersetzen die sichtbaren Eingaben. Während
    * dieses Requests verhindert inert neue Eingaben, auch im eingebetteten Formular. */
   function beginAppCenterMutation() {
-    if (appCenterMutationBusy) throw new Error('Speichern oder Import läuft bereits. Bitte den Abschluss abwarten.');
+    if (appCenterMutationBusy) throw new Error('Laden, Speichern oder Import läuft bereits. Bitte den Abschluss abwarten.');
     appCenterMutationBusy = true;
     closeDpModal();
     const main = document.querySelector('main');
@@ -10919,6 +10922,25 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
       actions.appendChild(btnUp);
       actions.appendChild(btnDown);
 
+      const btnRemove = document.createElement('button');
+      btnRemove.type = 'button';
+      btnRemove.className = 'nw-config-btn nw-config-btn--ghost';
+      btnRemove.textContent = 'Ladepunkt entfernen';
+      btnRemove.dataset.evcsRemove = String(i);
+      btnRemove.title = 'Diesen Ladepunkt beim Speichern aus der EMS-Zuordnung entfernen';
+      btnRemove.addEventListener('click', () => {
+        if (appCenterMutationBusy) return;
+        const rows = _ensureSettingsConfig().evcsList;
+        if (!Array.isArray(rows) || rows[i - 1] !== rowCfg) return;
+        rows.splice(i - 1, 1);
+        sc.evcsCount = rows.length;
+        evcsExplicitEmpty = rows.length === 0;
+        buildEvcsUI();
+        setDirty();
+        setStatus('Ladepunkt im Entwurf entfernt. Mit „Speichern“ wird die EMS-Zuordnung gelöscht; „Neu laden“ verwirft die Änderung.', 'warn');
+      });
+      actions.appendChild(btnRemove);
+
       top.appendChild(title);
       top.appendChild(actions);
       header.appendChild(top);
@@ -11670,6 +11692,8 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
    */
   function collectSettingsConfigFromUI() {
     const out = deepMerge({}, (currentConfig && currentConfig.settingsConfig) ? currentConfig.settingsConfig : {});
+    delete out.__allowEmptyEvcsList;
+    delete out.__explicitDeleteAll;
     const count = _clampInt(els.evcsCount ? els.evcsCount.value : out.evcsCount, 0, _maxEvcsCount(), 0);
     out.evcsCount = count;
 
@@ -11679,6 +11703,7 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
     }
     // evcsList is maintained live via _updateEvcsField. Still ensure correct length.
     out.evcsList = _ensureEvcsList(count);
+    if (evcsExplicitEmpty && count === 0) out.__allowEmptyEvcsList = true;
     if (els.evcsGlobalStorageAssistCustomerAllowed) {
       const activeCount = out.evcsList.filter((row) => row && row.enabled !== false).length;
       out.evcsGlobalStorageAssistCustomerAllowed = activeCount >= 2 && !!els.evcsGlobalStorageAssistCustomerAllowed.checked;
@@ -11701,6 +11726,7 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
     const incomingPartnerVersion = dynamicGridVersion(cfg?.partnerIntegrations?.configVersion);
     if (incomingPartnerVersion && incomingPartnerVersion < partnerObservedVersion) throw new Error(partnerReloadNotice);
     currentConfig = cfg || {};
+    evcsExplicitEmpty = false;
     partnerLoadedVersion = incomingPartnerVersion;
     partnerObservedVersion = Math.max(partnerObservedVersion, partnerLoadedVersion || 0);
     for (const frame of partnerFrames()) {
@@ -13398,9 +13424,10 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
   async function loadConfig() {
+    const endMutation = beginAppCenterMutation();
+    try {
     setStatus('Lade Konfiguration…');
     const data = await fetchJson('/api/installer/config?t=' + Date.now(), { cache: 'no-store' });
-    configurationRevision = typeof data.configurationRevision === 'string' ? data.configurationRevision : null;
     const cfg = (data && data.config && typeof data.config === 'object') ? data.config : {};
 
     // Runtime-Fallback: Die Lizenzseite nutzt /api/license/info und kann eine Lizenz sofort
@@ -13421,9 +13448,11 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
 
     await hydrateStorageFarmConfigFromRuntimeState(cfg);
     applyConfigToUI(cfg);
+    configurationRevision = typeof data.configurationRevision === 'string' ? data.configurationRevision : null;
     clearDirty();
     scheduleValidation(300);
     setStatus('Konfiguration geladen.', 'ok');
+    } finally { endMutation(); }
   }
   /**
    * Code-Teil: collectPatchFromUI
@@ -14403,8 +14432,8 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
     }
     const payload = { patch, restartEms: true, expectedDynamicGridConfigVersion, expectedConfigurationRevision: configurationRevision };
     const data = await fetchJson('/api/installer/config', { method: 'POST', body: JSON.stringify(payload) });
-    configurationRevision = data.configurationRevision;
     applyConfigToUI(data.config || {});
+    configurationRevision = data.configurationRevision;
     clearDirty();
     setStatus('Gespeichert. EMS wurde neu gestartet.', 'ok');
     } finally { endMutation(); }
@@ -16939,9 +16968,14 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
   if (els.evcsCount) {
     // Ereignis-Kommentar: Bindet das UI-Ereignis 'change' an els.evcsCount. Beim Umbau prüfen, welche DOM-Elemente/States dadurch geändert werden.
     els.evcsCount.addEventListener('change', () => {
+      if (appCenterMutationBusy) return;
       const sc = _ensureSettingsConfig();
-      sc.evcsCount = _clampInt(els.evcsCount.value, 0, _maxEvcsCount(), 0);
+      const nextCount = _clampInt(els.evcsCount.value, 0, _maxEvcsCount(), 0);
+      if (nextCount === 0 && Array.isArray(sc.evcsList) && sc.evcsList.length > 0) evcsExplicitEmpty = true;
+      if (nextCount > 0) evcsExplicitEmpty = false;
+      sc.evcsCount = nextCount;
       buildEvcsUI();
+      setDirty();
     });
   }
   if (els.evcsMaxPowerKw) {

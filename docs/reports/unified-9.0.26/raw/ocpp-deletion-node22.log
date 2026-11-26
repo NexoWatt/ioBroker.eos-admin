@@ -1,0 +1,148 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: registered stations persist complete native mappings; unknown electrical limits never enable a writer
+ok 1 - registered stations persist complete native mappings; unknown electrical limits never enable a writer
+  ---
+  duration_ms: 67.382788
+  type: 'test'
+  ...
+# Subtest: partial contract registration is explicit and completes; invalid directions, units and metadata stay untrusted
+ok 2 - partial contract registration is explicit and completes; invalid directions, units and metadata stay untrusted
+  ---
+  duration_ms: 0.610101
+  type: 'test'
+  ...
+# Subtest: real configuration pipeline retains validated contract failure metadata and never enables an uncommissioned row
+ok 3 - real configuration pipeline retains validated contract failure metadata and never enables an uncommissioned row
+  ---
+  duration_ms: 19.348585
+  type: 'test'
+  ...
+# Subtest: existing aliases deduplicate to one station and manual limits/mappings survive; duplicate control groups are reported
+ok 4 - existing aliases deduplicate to one station and manual limits/mappings survive; duplicate control groups are reported
+  ---
+  duration_ms: 1.132212
+  type: 'test'
+  ...
+# Subtest: multi EVSE topology remains one station aggregate writer; connector controls are never invented
+ok 5 - multi EVSE topology remains one station aggregate writer; connector controls are never invented
+  ---
+  duration_ms: 0.794744
+  type: 'test'
+  ...
+# Subtest: an existing active manual monitor does not gain its first writer from discovery, including later rescans
+ok 6 - an existing active manual monitor does not gain its first writer from discovery, including later rescans
+  ---
+  duration_ms: 0.912428
+  type: 'test'
+  ...
+# Subtest: existing manual monitor crosses real normalization, engine and CM tick without inferred hardware commands
+ok 7 - existing manual monitor crosses real normalization, engine and CM tick without inferred hardware commands
+  ---
+  duration_ms: 117.37129
+  type: 'test'
+  ...
+# Subtest: license capacity exposes pending stations, retains existing mappings and fills a newly available slot
+ok 8 - license capacity exposes pending stations, retains existing mappings and fills a newly available slot
+  ---
+  duration_ms: 0.977475
+  type: 'test'
+  ...
+# Subtest: registration bursts, offline and restart are idempotent; concurrent manual saves share the mutation fence
+ok 9 - registration bursts, offline and restart are idempotent; concurrent manual saves share the mutation fence
+  ---
+  duration_ms: 62.109027
+  type: 'test'
+  ...
+# Subtest: persist failures keep prior configuration; failed runtime apply is retried without creating a second row
+ok 10 - persist failures keep prior configuration; failed runtime apply is retried without creating a second row
+  ---
+  duration_ms: 65.996561
+  type: 'test'
+  ...
+# Subtest: stop during discovery cannot commit a late scan
+ok 11 - stop during discovery cannot commit a late scan
+  ---
+  duration_ms: 7.683201
+  type: 'test'
+  ...
+# Subtest: ownership loss after a database read prevents reconciliation and leaves existing configuration untouched
+ok 12 - ownership loss after a database read prevents reconciliation and leaves existing configuration untouched
+  ---
+  duration_ms: 0.336968
+  type: 'test'
+  ...
+# Subtest: actual supplied OCPP adapter registration and station telemetry map through the real EOS persistence path
+ok 13 - actual supplied OCPP adapter registration and station telemetry map through the real EOS persistence path
+  ---
+  duration_ms: 531.38006
+  type: 'test'
+  ...
+# Subtest: embedded OCPP station registration persists hosted mappings and retains them across bursts and runtime restart
+ok 14 - embedded OCPP station registration persists hosted mappings and retains them across bursts and runtime restart
+  ---
+  duration_ms: 836.501648
+  type: 'test'
+  ...
+# Subtest: discovery scopes hosted trees to the owning EOS and retains legacy migration identities
+ok 15 - discovery scopes hosted trees to the owning EOS and retains legacy migration identities
+  ---
+  duration_ms: 11.354355
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: installer GET pairs a discovery-updated row snapshot with its own revision before a subsequent delete
+ok 16 - installer GET pairs a discovery-updated row snapshot with its own revision before a subsequent delete
+  ---
+  duration_ms: 170.229941
+  type: 'test'
+  ...
+# Subtest: a real discovery commit after GET still rejects the stale form without discarding its newer station
+ok 17 - a real discovery commit after GET still rejects the stale form without discarding its newer station
+  ---
+  duration_ms: 44.070539
+  type: 'test'
+  ...
+# Subtest: installer hydration changes only its response snapshot and leaves the revision base and runtime objects intact
+ok 18 - installer hydration changes only its response snapshot and leaves the revision base and runtime objects intact
+  ---
+  duration_ms: 22.363479
+  type: 'test'
+  ...
+# Subtest: discovery requires a configured source, preserves offline instances and admits only the authoritative hosted legacy namespace
+ok 19 - discovery requires a configured source, preserves offline instances and admits only the authoritative hosted legacy namespace
+  ---
+  duration_ms: 1.737998
+  type: 'test'
+  ...
+# Subtest: deleted legacy rows stay removed after rescans and installer reload while the integrated source continues discovery
+ok 20 - deleted legacy rows stay removed after rescans and installer reload while the integrated source continues discovery
+  ---
+  duration_ms: 94.713716
+  type: 'test'
+  ...
+# Subtest: production discovery admits a preserved namespace from its parent even after the old adapter object is gone
+ok 21 - production discovery admits a preserved namespace from its parent even after the old adapter object is gone
+  ---
+  duration_ms: 9.567094
+  type: 'test'
+  ...
+# Subtest: failed source inventory never treats orphaned contract states as an existing adapter
+ok 22 - failed source inventory never treats orphaned contract states as an existing adapter
+  ---
+  duration_ms: 3.986549
+  type: 'test'
+  ...
+1..22
+# tests 22
+# suites 0
+# pass 22
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2147.498887

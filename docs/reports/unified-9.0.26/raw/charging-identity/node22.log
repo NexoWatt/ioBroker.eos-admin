@@ -1,0 +1,130 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: deleting first point preserves every B wish and timer (boost / pv) across restart
+ok 1 - deleting first point preserves every B wish and timer (boost / pv) across restart
+  ---
+  duration_ms: 7.231815
+  type: 'test'
+  ...
+# Subtest: deleting first point preserves every B wish and timer (pv / boost) across restart
+ok 2 - deleting first point preserves every B wish and timer (pv / boost) across restart
+  ---
+  duration_ms: 1.991252
+  type: 'test'
+  ...
+# Subtest: delete-last leaves A untouched; reorder uses a complete snapshot before any copy
+ok 3 - delete-last leaves A untouched; reorder uses a complete snapshot before any copy
+  ---
+  duration_ms: 9.48872
+  type: 'test'
+  ...
+# Subtest: empty configuration and reused indices cannot inherit old boost or regain an old incarnation token
+ok 4 - empty configuration and reused indices cannot inherit old boost or regain an old incarnation token
+  ---
+  duration_ms: 2.157789
+  type: 'test'
+  ...
+# Subtest: metadata and measurement edits preserve tokens; a changed secondary actuator rotates the token without erasing wishes
+ok 5 - metadata and measurement edits preserve tokens; a changed secondary actuator rotates the token without erasing wishes
+  ---
+  duration_ms: 1.135628
+  type: 'test'
+  ...
+# Subtest: a crash after configuration commit but before copying recovers from the durable previous layout
+ok 6 - a crash after configuration commit but before copying recovers from the durable previous layout
+  ---
+  duration_ms: 1.100776
+  type: 'test'
+  ...
+# Subtest: partial copy failure keeps the fence and recovers the exact original snapshot after restart
+ok 7 - partial copy failure keeps the fence and recovers the exact original snapshot after restart
+  ---
+  duration_ms: 2.031802
+  type: 'test'
+  ...
+# Subtest: another desired layout is rejected before config commit while an interrupted transfer remains recoverable
+ok 8 - another desired layout is rejected before config commit while an interrupted transfer remains recoverable
+  ---
+  duration_ms: 1.56309
+  type: 'test'
+  ...
+# Subtest: a malformed or incomplete journal never skips its mandatory transfer writes
+ok 9 - a malformed or incomplete journal never skips its mandatory transfer writes
+  ---
+  duration_ms: 3.417991
+  type: 'test'
+  ...
+# Subtest: Engine.init cannot initialize modules after a failed identity transfer
+ok 10 - Engine.init cannot initialize modules after a failed identity transfer
+  ---
+  duration_ms: 2.443471
+  type: 'test'
+  ...
+# Subtest: real settings normalization -> Engine charging config -> actual charging tick retains B PV after deleting boosted A
+ok 11 - real settings normalization -> Engine charging config -> actual charging tick retains B PV after deleting boosted A
+  ---
+  duration_ms: 94.183901
+  type: 'test'
+  ...
+# Subtest: registry is bounded and administrator-only; ambiguous physical identities fail before binding
+ok 12 - registry is bounded and administrator-only; ambiguous physical identities fail before binding
+  ---
+  duration_ms: 0.938667
+  type: 'test'
+  ...
+# Subtest: raw and normalized legacy connector/default mirror forms describe the same point
+ok 13 - raw and normalized legacy connector/default mirror forms describe the same point
+  ---
+  duration_ms: 0.499328
+  type: 'test'
+  ...
+# Subtest: own default mirror travels with a verified point while deliberate cross-slot and external mappings remain unchanged
+ok 14 - own default mirror travels with a verified point while deliberate cross-slot and external mappings remain unchanged
+  ---
+  duration_ms: 0.89334
+  type: 'test'
+  ...
+# Subtest: cross-slot and foreign-instance mode targets rotate tokens; only the exact own default mirror is implicit
+ok 15 - cross-slot and foreign-instance mode targets rotate tokens; only the exact own default mirror is implicit
+  ---
+  duration_ms: 2.195144
+  type: 'test'
+  ...
+# Subtest: an explicitly bound custom command bridge is compatible while missing or changed destinations fail closed
+ok 16 - an explicitly bound custom command bridge is compatible while missing or changed destinations fail closed
+  ---
+  duration_ms: 3.363219
+  type: 'test'
+  ...
+# Subtest: failed config persistence after a confirmed drain keeps controls fenced and permits a safe retry
+ok 17 - failed config persistence after a confirmed drain keeps controls fenced and permits a safe retry
+  ---
+  duration_ms: 25.86777
+  type: 'test'
+  ...
+# (node:20) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: registry write waits for durable owner ACK beyond regular RPC timeout (eos-admin.0)
+ok 18 - registry write waits for durable owner ACK beyond regular RPC timeout (eos-admin.0)
+  ---
+  duration_ms: 2290.274783
+  type: 'test'
+  ...
+# Subtest: registry write waits for durable owner ACK beyond regular RPC timeout (nexowatt-ui.3)
+ok 19 - registry write waits for durable owner ACK beyond regular RPC timeout (nexowatt-ui.3)
+  ---
+  duration_ms: 2264.60925
+  type: 'test'
+  ...
+1..19
+# tests 19
+# suites 0
+# pass 19
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5968.03247

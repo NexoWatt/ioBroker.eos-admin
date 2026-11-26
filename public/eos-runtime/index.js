@@ -12,7 +12,13 @@
         PASSWORD_CHANGE_REQUIRED: 'Bitte zuerst das Kennwort ändern und erneut anmelden.',
         AUTH_CSRF: 'Die Sitzungsfreigabe ist nicht mehr aktuell. Status aktualisieren und erneut versuchen.',
         AUTH_ORIGIN: 'Der Aufruf wurde nicht über den freigegebenen EOS-Zugang gesendet.',
-        EOS_RUNTIME_MODULE_DISABLED: 'Das Modul ist in seinen Einstellungen deaktiviert. Dort zuerst konfigurieren und aktivieren.',
+        EOS_RUNTIME_MODULE_DISABLED: 'Das Modul ist deaktiviert. Aktivieren schaltet Modul und Prozess gemeinsam mit den gespeicherten Einstellungen ein.',
+        EOS_MODULE_LEGACY_RUNNING: 'Ein separater Adapter ist noch aktiv oder sein Ende ist nicht bestätigt. Erst die Zuständigkeit in den Moduleinstellungen klären.',
+        EOS_MODULE_OWNERSHIP_UNAVAILABLE: 'Der Zustand eines anderen Adapters konnte nicht bestätigt werden. Der Modulstart bleibt bis zur geklärten Zuständigkeit gesperrt.',
+        EOS_MODULE_NOT_READY: 'Die Modulkonfiguration konnte noch nicht geladen werden. Moduleinstellungen und Systemprotokoll prüfen.',
+        EOS_MODULE_CONFIG_UNAVAILABLE: 'Die gespeicherte Modulkonfiguration ist nicht lesbar. Moduleinstellungen und Systemprotokoll prüfen.',
+        EOS_MODULE_DEPENDENCY_MISSING: 'Eine benötigte Moduldatei oder Abhängigkeit fehlt. Das vollständige EOS-Paket erneut installieren.',
+        EOS_RUNTIME_START_FAILED: 'Der Prozessstart wurde nicht bestätigt. Die Meldung und die Moduleinstellungen prüfen.',
         EOS_RUNTIME_MIGRATION_BLOCKED: 'Der Start ist durch eine nicht abgeschlossene Geräteübernahme blockiert. Übernahmestatus prüfen.',
         EOS_RUNTIME_LICENSE_REQUIRED: 'Die erforderliche Lizenzfreigabe fehlt. Lizenzstatus prüfen.',
         EOS_RUNTIME_OWNERSHIP_REQUIRED: 'Die Zuständigkeit für die Geräte ist nicht bestätigt. Ein anderer Adapter kann noch aktiv sein.',
@@ -107,7 +113,7 @@
         else if (entry.busy) note.textContent = 'Steuerauftrag läuft. Der bestätigte Prozessstatus wird automatisch aktualisiert.';
         else if (entry.reason) { note.textContent = explanation(entry.reason); note.classList.add('is-blocked'); }
         else if (id === 'ui') note.textContent = 'Deaktivieren beendet Oberfläche und EMS-Regelung. Die Administration und diese Seite bleiben erreichbar.';
-        else note.textContent = 'Deaktivieren beendet diesen Prozess. Die Gerätekonfiguration bleibt gespeichert.';
+        else note.textContent = 'Aktivieren schaltet Modul und Prozess gemeinsam ein. Deaktivieren beendet den Prozess; die Konfiguration bleibt gespeichert.';
         card.append(actions, note);
         if (id !== 'ui') {
             const link = document.createElement('a'); link.className = 'runtime-config-link'; link.href = `/modules/${id}/`;
@@ -159,6 +165,10 @@
             const code = safeCode(row.reason);
             if (code && !['RUNNING', 'DISABLED'].includes(code)) field(fields, 'Meldung', code);
             card.append(fields);
+            if (code && errors[code] && entry?.reason !== code) {
+                const note = document.createElement('p'); note.className = 'runtime-control-note is-blocked';
+                note.textContent = errors[code]; card.append(note);
+            }
             if (!isExternal && id !== 'admin') addControls(card, id, entry);
             else {
                 const note = document.createElement('p'); note.className = 'runtime-control-note';

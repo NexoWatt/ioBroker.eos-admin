@@ -1,0 +1,28 @@
+{
+  "result": "PASS",
+  "node": "v24.22.3",
+  "browser": "HeadlessChrome/158.0.8127.0",
+  "checks": [
+    "real-old-EVCS-browser-A-boost-after-B-reindex-409-without-B-mode-write",
+    "missing-adapter-first-row-delete-real-persist-restart-reload-retains-active-second-row",
+    "real-second-writer-409-preserves-persisted-config-and-unsaved-delete-draft",
+    "last-row-explicit-empty-real-persist-restart-reload-intent-consumed",
+    "explicit-count-zero-persists-empty-without-stored-permission-marker",
+    "pending-real-config-read-blocks-save-and-restores-editing-after-complete-snapshot"
+  ],
+  "at": "2026-11-25T21:05:04.893Z",
+  "hashes": {
+    "ui/src-ts/runtime-executables/www/ems-apps.ts": "be3391975625831775bbcb6a9f49c7ec980cfc1aa8bc534389b9d6977eea48a0",
+    "ui/www/ems-apps.js": "e3f70e9d035a3ac5c3fbeba1b31fdadb4a42058ac3d4294da50a41167c05f8e2",
+    "ui/src-ts/runtime-executables/main.ts": "bac2f47a42f00f3f4642fdf9764ffdfd2eb4f957049d3e27c49d3157e5acda58",
+    "ui/main.js": "f284f6f3d83653dd52fd0f2d5d3d121cf29a5c9678f7c2c2724f087eef42a577",
+    "ui/src-ts/runtime-executables/lib/installer-lifecycle.ts": "d663f11e31c885760fe9a0d4e9be7b8d2b41c83f47ecf281ec37e450cafd3ef2",
+    "ui/lib/installer-lifecycle.js": "0e86f50ddc953f2d5e5100f1e9a17d72ea07daf72330c42b8324a5a370284241",
+    "ui/src-ts/runtime-executables/lib/charging-point-identity.ts": "6db008926f84201dda3c8ef6f3391e56fcda0f771eb61fda7b14bf210b6c3f93",
+    "ui/lib/charging-point-identity.js": "0f63461df57c131083d5b72a5697fc496fc33d4744e80cfab1a790223d4daf6c",
+    "ui/src-ts/runtime-executables/www/evcs.ts": "e0b1f16597d3ea2467f77c0a06773299c36e35238bff59b028a2be38297752ac",
+    "ui/www/evcs.js": "e3aff712c105bcc44503ced479b1e881a05827aa967c37b22ab278466605ada4",
+    "test/eos-evcs-delete-browser.cjs": "13142829a7224f5590993e1c0632a8c6c5811b48883757ba4531039b2785c5c9"
+  },
+  "scope": "Production AppCenter/HTTP/CAS/persistence/runtime apply; in-memory ioBroker and engine/session fixtures; no hardware."
+}

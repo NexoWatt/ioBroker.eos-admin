@@ -1,0 +1,40 @@
+{
+  "checkedAt": "2026-11-25T20:04:07.100794+00:00",
+  "scope": "Actual npm dry-run file inventory versus all applicable Git ignore rules; metadata inspection only, not release-hook approval",
+  "inventoryCommand": [
+    "npm",
+    "pack",
+    "--dry-run",
+    "--ignore-scripts",
+    "--json"
+  ],
+  "npmVersion": "9.0.26",
+  "npmFilesChecked": 3251,
+  "ignoredFiles": [],
+  "inventorySha256": "9466c19e10442567dcaae8a123e540388a494202f34a965748d4d92d7c31b173",
+  "gitignoreSha256": "6f993ba77a953b96007fb1acdb9d342cefe376ab8b2732405d6ec46ec59745a2",
+  "uiGitignoreSha256": "cb1adbee6b5ee7428f3f462b4c83515020d7f86572f2ec8581395ab0ee665fcd",
+  "uiBuildTsPresent": false,
+  "uiBuildTsRuntimeReferences": 0,
+  "additionalRequiredRuntime": "modules/backup/upstream/build/lib/sdCard.js",
+  "additionalRequiredBy": [
+    "modules/backup/build/preflight.js",
+    "modules/backup/build/storage.js",
+    "modules/backup/build/worker.js"
+  ],
+  "runs": [
+    {
+      "log": "git-runtime-complete-node24.log",
+      "exitCode": 0,
+      "node": "v24.22.3",
+      "sha256": "4e7b3ff31694de4ae9219c4a32750d90fd167347c1d89b9de645b9f86b6911b4"
+    },
+    {
+      "log": "git-runtime-complete-node22.log",
+      "exitCode": 0,
+      "node": "v22.23.4",
+      "sha256": "d26b67ea39e1e3892820a5d534c827dbe94c471b8b10b8f10642499216e29cef"
+    }
+  ],
+  "testSha256": "4350ef244b91bd9ae6eb234cb5d1687aa30d1e00bfec2e18e653547cd4668fc9"
+}

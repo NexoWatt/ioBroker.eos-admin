@@ -1,0 +1,29 @@
+{
+  "version": "9.0.26",
+  "scope": "Final Git packaging-only change after complete runtime suite. No runtime code changed.",
+  "change": "Retain 36 sealed src/lib/vendor/webserver/build files through exact Git ignore exceptions.",
+  "tests": [
+    {
+      "nodeMajor": 22,
+      "tests": 2,
+      "pass": 2,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "nodeMajor": 24,
+      "tests": 2,
+      "pass": 2,
+      "fail": 0,
+      "skipped": 0
+    }
+  ],
+  "checks": [
+    "Fresh Git index and archive include compiled module runtimes.",
+    "Fresh isolated Git index retains every file in the existing complete release seal."
+  ],
+  "sourceHashes": {
+    ".gitignore": "7ac8a67818fc740f1a5b3e79895fd998c4c59706a33579249cc96984a40d71db",
+    "test/eos-unified-git-runtime.test.cjs": "7ff8b24ac96027d8da0be864f8c61f04626dfc29f4ab0f929c0715b3bc31d245"
+  }
+}

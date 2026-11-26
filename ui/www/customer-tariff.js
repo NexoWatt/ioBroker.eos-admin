@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/customer-tariff.ts
- * Quell-Hash: sha256:dab28ef2897dc9e0b884e797fc84e74fce129aabd578c09a08e4e1b461b68d59
+ * Quell-Hash: sha256:59173edf76cb8213a391c69d6d1fae03a1c43f0b2c41f2c71be55372bb6d6847
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -63,8 +63,20 @@
         return { revision: value.revision, config: value.config, credentialsPresent: { accessToken: flags.accessToken === true, securityToken: flags.securityToken === true },
             providers: choices(value.providers).filter(provider => supported.has(provider.id)), profiles: choices(value.profiles), status: isRecord(value.status) ? value.status : {}, configuredExternally: value.configuredExternally === true };
     }
-    async function request(body) {
-        const options = { cache: 'no-store', credentials: 'same-origin', signal: AbortSignal.timeout(15000) };
+    class ConfigurationLoading extends Error {
+        constructor() { super('EOS lädt die gespeicherte Tarifanbindung noch. Bitte kurz warten und anschließend erneut laden.'); }
+    }
+    function retryDelay(signal) {
+        return new Promise((resolve, reject) => {
+            const abort = () => { window.clearTimeout(timer); signal.removeEventListener('abort', abort); reject(new Error('Laden abgebrochen')); };
+            const timer = window.setTimeout(() => { signal.removeEventListener('abort', abort); resolve(); }, 2000);
+            signal.addEventListener('abort', abort, { once: true });
+            if (signal.aborted)
+                abort();
+        });
+    }
+    async function request(body, signal) {
+        const options = { cache: 'no-store', credentials: 'same-origin', signal: signal ? AbortSignal.any([signal, AbortSignal.timeout(15000)]) : AbortSignal.timeout(15000) };
         if (body) {
             options.method = 'PUT';
             options.headers = { 'Content-Type': 'application/json' };
@@ -77,6 +89,13 @@
             throw new Error('Tarifanbindung nicht freigegeben. Bitte Anmeldung und Systemfreigabe prüfen.');
         if (response.status === 409)
             throw new Error('Der Tarif wurde inzwischen geändert. Deine Eingaben bleiben erhalten. Gespeicherten Tarif laden und Änderungen abgleichen.');
+        if (response.status === 503) {
+            const failure = await response.json();
+            if (!body && isRecord(failure) && failure.error === 'EOS_TARIFF_CONFIG_LOADING')
+                throw new ConfigurationLoading();
+            if (isRecord(failure) && failure.error === 'EOS_TARIFF_CONFIG_UNAVAILABLE')
+                throw new Error('Die gespeicherte Tarifanbindung konnte beim Systemstart nicht geladen werden. Bitte den Systemstatus prüfen und erneut laden. Bestehende Einstellungen bleiben gespeichert.');
+        }
         if (!response.ok)
             throw new Error('Die Tarifanbindung konnte nicht bestätigt werden. Anbieter, Pflichtfelder und Verbindung prüfen. Es wird nichts automatisch erneut gesendet.');
         return decode(await response.json());
@@ -115,6 +134,7 @@
         let baseline = {};
         let busy = false;
         let dirty = false;
+        let loadController = null;
         function show(message, error = false) { status.textContent = message; status.dataset.error = String(error); }
         function setOptions(target, items, selected, allowCurrent = false) {
             target.replaceChildren();
@@ -280,19 +300,42 @@
                 }
                 body = { expectedRevision: view.revision, config: changes };
             }
+            const controller = saving ? null : new AbortController();
+            if (controller)
+                loadController = controller;
             busy = true;
             controls();
             show(saving ? 'Tarifanbindung wird gespeichert …' : 'Gespeicherte Tarifanbindung wird geladen …');
             try {
-                render(await request(body));
-                show(saving ? 'Tarifanbindung gespeichert. Der Preisabruf wird separat geprüft; Anlagenfreigaben bleiben unverändert.' : 'Gespeicherte Tarifanbindung geladen.');
+                for (let attempt = 0; attempt < 6; attempt++) {
+                    try {
+                        const next = await request(body, controller?.signal);
+                        if (controller?.signal.aborted)
+                            return;
+                        render(next);
+                        show(saving ? 'Tarifanbindung gespeichert. Der Preisabruf wird separat geprüft; Anlagenfreigaben bleiben unverändert.' : 'Gespeicherte Tarifanbindung geladen.');
+                        break;
+                    }
+                    catch (error) {
+                        // Only the initial read waits for hydration. Never repeat a write
+                        // or replace an existing view/draft with a delayed response.
+                        if (!(error instanceof ConfigurationLoading) || !controller || controller.signal.aborted || view || dirty || !panel.open || attempt >= 5)
+                            throw error;
+                        show('EOS startet. Die gespeicherte Tarifanbindung wird geladen …');
+                        await retryDelay(controller.signal);
+                    }
+                }
             }
             catch (error) {
-                show(error instanceof Error ? error.message : 'Tarifanbindung nicht verfügbar.', true);
+                if (!controller?.signal.aborted)
+                    show(error instanceof Error ? error.message : 'Tarifanbindung nicht verfügbar.', true);
             }
             finally {
-                busy = false;
-                controls();
+                if (!controller || loadController === controller) {
+                    loadController = null;
+                    busy = false;
+                    controls();
+                }
             }
         }
         form.addEventListener('input', () => { if (view && !busy) {
@@ -321,9 +364,22 @@
         form.addEventListener('submit', event => { event.preventDefault(); void synchronize(true); });
         reload.addEventListener('click', () => { if (dirty && !window.confirm('Ungespeicherte Tarifänderungen verwerfen und gespeicherten Tarif laden?'))
             return; void synchronize(false); });
-        panel.addEventListener('toggle', () => { if (panel.open && !view && !busy)
-            void synchronize(false); });
-        window.addEventListener('pagehide', () => { credential.value = ''; });
+        function cancelRead() {
+            if (!loadController)
+                return;
+            const controller = loadController;
+            loadController = null;
+            controller.abort();
+            busy = false;
+            controls();
+        }
+        panel.addEventListener('toggle', () => {
+            if (!panel.open)
+                cancelRead();
+            else if (!view && !busy)
+                void synchronize(false);
+        });
+        window.addEventListener('pagehide', () => { cancelRead(); credential.value = ''; });
         if (panel.open)
             void synchronize(false);
     }

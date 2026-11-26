@@ -10,13 +10,17 @@ const defaults = require('../io-package.json').native.eosUi;
 
 // Real Host/Migration/ConfigStore, synthetic controller DB and runtime factory.
 // Actual OCPP TCP/WS child behavior has a separate integration suite.
-function setup(t, { enabled = false, source = false, sourceEnabled = false } = {}) {
+function setup(t, { enabled = false, source = false, sourceEnabled = false, absentOcpp = false } = {}) {
     const objects = new Map(); const states = new Map(); const events = []; const runtimes = [];
     const encrypt = text => `fixture-encrypted:${Buffer.from(text).toString('base64')}`;
     const clone = value => value == null ? value : structuredClone(value);
     const owner = {
         namespace: 'eos-admin.2', instance: 2, owned: true, licensed: true,
-        config: { eosUi: clone(defaults), eosModules: {} }, log: { warn() {}, info() {}, error() {} },
+        // These ownership/import tests isolate OCPP. A missing module envelope
+        // now enables commissioning, so unrelated modules are explicitly off.
+        config: { eosUi: clone(defaults), eosModules: Object.fromEntries(['devices', 'eebus', 'backup']
+            .map(id => [id, { v: 1, encrypted: encrypt(JSON.stringify({ enabled: false })) }])) },
+        log: { warn() {}, info() {}, error() {} },
         encrypt, decrypt: text => Buffer.from(text.slice('fixture-encrypted:'.length), 'base64').toString(),
         eosLicenseService: { allowsEmbeddedModule: () => owner.licensed, statusView: () => ({ valid: owner.licensed, coreEnabled: owner.licensed }) },
         eosOwnership: { canWrite: () => owner.owned },
@@ -56,7 +60,8 @@ function setup(t, { enabled = false, source = false, sourceEnabled = false } = {
         },
     };
     const factories = Object.fromEntries(['devices', 'eebus', 'backup', 'ocpp'].map(id => [id, factory]));
-    if (enabled) owner.config.eosModules.ocpp = { v: 1, encrypted: encrypt(JSON.stringify({ enabled: true, port: 9220 })) };
+    // Manual import deliberately requires a configured, disabled destination.
+    if (!absentOcpp) owner.config.eosModules.ocpp = { v: 1, encrypted: encrypt(JSON.stringify({ enabled, port: 9220 })) };
     if (source) {
         const id = 'system.adapter.ocpp21.3'; const ts = Date.now() - 100;
         objects.set(id, { _id: id, type: 'instance', ts, common: { enabled: sourceEnabled, host: 'fixture', version: '0.4.3' }, native: { port: 9220, enable16: true, identityAllowlist: ['DOUSIDA'], createPublicAliases: true } });
@@ -133,7 +138,7 @@ async function priorOcppHandover(f, phase = 'TRANSFERRED') {
 }
 
 test('persisted earlier OCPP handover still loads and rollback retains source data', async t => {
-    const f = setup(t, { source: true, sourceEnabled: true }); f.owner.eosMigration = f.migration;
+    const f = setup(t, { source: true, sourceEnabled: true, absentOcpp: true }); f.owner.eosMigration = f.migration;
     const retained = structuredClone(f.states.get('ocpp21.3.DOUSIDA.connector1.power'));
     await priorOcppHandover(f);
     await f.migration.start(); assert.equal(f.migration.phase, 'TRANSFERRED');
@@ -152,7 +157,7 @@ test('persisted earlier OCPP handover still loads and rollback retains source da
 });
 
 test('committed earlier OCPP journal retains preserved ownership and validated destination', async t => {
-    const f = setup(t, { source: true, sourceEnabled: true });
+    const f = setup(t, { source: true, sourceEnabled: true, absentOcpp: true });
     await priorOcppHandover(f, 'COMMITTED');
     await f.migration.start();
     assert.equal(f.migration.phase, 'COMMITTED');
@@ -164,7 +169,7 @@ test('committed earlier OCPP journal retains preserved ownership and validated d
 });
 
 test('missing destination in an earlier OCPP journal still blocks unsafe startup', async t => {
-    const f = setup(t, { source: true, sourceEnabled: true });
+    const f = setup(t, { source: true, sourceEnabled: true, absentOcpp: true });
     await priorOcppHandover(f, 'COMMITTED');
     f.objects.delete(f.migration.store.objectId('ocpp'));
     await assert.rejects(f.migration.start(), { code: 'EOS_MIGRATION_DESTINATION_MISSING' });
@@ -173,7 +178,7 @@ test('missing destination in an earlier OCPP journal still blocks unsafe startup
 });
 
 test('existing committed migration never silently stops a newly discovered OCPP source', async t => {
-    const f = setup(t, { source: true, sourceEnabled: true });
+    const f = setup(t, { source: true, sourceEnabled: true, absentOcpp: true });
     await f.migration.store.save('migration', f.migration.envelope({ v: 1, owner: f.owner.namespace, phase: 'COMMITTED', sources: [] }));
     await f.migration.start(); assert.equal(f.migration.phase, 'COMMITTED');
     assert.equal(f.objects.get('system.adapter.ocpp21.3').common.enabled, true);

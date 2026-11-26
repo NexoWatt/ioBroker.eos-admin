@@ -1,0 +1,23 @@
+✔ production Web mount reaches the real UI/EMS child and reconciles a device HTTP save through IPC (6580.75858ms)
+▶ legacy in-process business pipeline: actual module HTTP rejects a live profile replacement before persistence and allows it after AppCenter deactivation
+  ✔ direct Devices alias (1517.299465ms)
+  ✔ external split ioBroker alias (922.487222ms)
+✔ legacy in-process business pipeline: actual module HTTP rejects a live profile replacement before persistence and allows it after AppCenter deactivation (2440.982823ms)
+✔ legacy in-process business pipeline: actual profile HTTP reservation blocks concurrent AppCenter activation and releases after a failed controller commit (847.70732ms)
+✔ legacy in-process business pipeline: removing and reintroducing a device ID cannot reuse its still-active EMS references with another profile (1546.145248ms)
+✔ legacy in-process business pipeline: production Web bridge and actual hosted startup process device-save HTTP without manual reconciliation (4363.908895ms)
+▶ legacy in-process business pipeline: one device HTTP save adopts the manual farm row, adds SolaX and SMA M0, and activates the corresponding app atomically
+  ✔ legacy in-process business pipeline: fresh hosted instance rehydrates the persisted device and EMS configuration without another setup call (670.615135ms)
+✔ legacy in-process business pipeline: one device HTTP save adopts the manual farm row, adds SolaX and SMA M0, and activates the corresponding app atomically (2900.790828ms)
+✔ legacy in-process business pipeline: HTTP rejects a new device ID during unknown hosted configuration hydration, then accepts the retained draft after readiness (1358.969727ms)
+✔ legacy in-process business pipeline: late actual manifest event completes commissioning; telemetry bursts do not restart inventory scans (1447.833487ms)
+✔ legacy in-process business pipeline: running Devices retain an ownership lease while other modules initialize slowly (15444.751285ms)
+✔ legacy in-process business pipeline: real device polling keeps FENECON PV, converter feedback and battery flow distinct in an activated mixed farm (6712.110862ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 43868.99592

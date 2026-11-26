@@ -1,0 +1,35 @@
+✔ customer tariff GET is authenticated, exposes only supported choices and no current or retained secrets (141.255874ms)
+✔ CSRF, origin and unsupported endpoint or actuator fields cannot change customer tariff settings (60.799649ms)
+✔ partial customer tariff edit preserves blank credentials, manual mappings, EMS apps and customer device values (52.760582ms)
+✔ explicit tariff mapping consent changes only four tariff inputs and never enables an app or dispatch (27.186016ms)
+✔ provider switch requires fresh source credentials and preserves old credentials without reusing them (42.208272ms)
+✔ stale customer editor and failed persistence leave confirmed settings unchanged (26.229423ms)
+✔ editing or reconnecting a disabled provider preserves its explicit coupling settings; a fresh provider gets no grant (52.547918ms)
+✔ retained source credentials remain in protected recovery data and are omitted from every installer HTTP view (20.984203ms)
+✔ unhydrated tariff reads never confirm native defaults; loaded tariffs remain available when unrelated EMS readiness degrades (11.558738ms)
+✔ Tibber save reaches parent state and survives UI plus whole owner restart (native namespace) (5590.747997ms)
+✔ Tibber save reaches parent state and survives UI plus whole owner restart (preserved namespace) (5099.164868ms)
+✔ tariff editor loads lazily and renders secret presence without copying secret values (30.742881ms)
+✔ single setting sends only its revisioned tariff delta, never full AppCenter data or blank secret (5.873427ms)
+✔ source switch requires its own token and clears typed token from the previous source (9.647444ms)
+✔ actual frontend and backend require a fresh token on provider change even with the same ENTSO-E source (5.456052ms)
+✔ revision conflict preserves edited values and token and never automatically retries (3.511738ms)
+✔ source/provider options contain no custom endpoint choice and preserve installer provider until deliberate switch (3.164996ms)
+✔ a known provider name with an external endpoint remains installer-managed until deliberately selected again (3.55974ms)
+✔ country change cannot post a hidden stale sourceId for a direct provider (4.192023ms)
+✔ formula and use-for-tariff consent are targeted explicit changes (4.97435ms)
+✔ failed initial load remains locked; untrusted error text is never displayed (3.54675ms)
+✔ authentication failure on save preserves form without replaying writes (3.785843ms)
+✔ reload asks before discarding an edit and pagehide clears a typed secret (4.414802ms)
+✔ provider labels are rendered as plain text and unrelated server fields never enter a save (4.154959ms)
+✔ startup loading retries initial GET only, confirms Tibber and stops its single timer (3.558277ms)
+✔ startup retries are bounded and closing or leaving the panel cancels the single pending timer (7.32314ms)
+✔ hydration failure has no retry and an existing draft is never replaced by startup reads (5.895781ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11319.702459

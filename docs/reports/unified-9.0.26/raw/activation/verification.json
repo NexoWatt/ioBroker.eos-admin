@@ -1,0 +1,38 @@
+{
+  "observedAt": "2026-11-25T19:50:44.644657+00:00",
+  "sourceHashes": {
+    "src/lib/eosRuntimeControl.js": "3f706fb02d3b705a37e157c70dabbc01c2882f40e51a2c3d57f5abff2c04d40c",
+    "src/lib/eosModuleHttp.js": "abbd1c7fe2c82f97845007c1d7c299ee45c9eb692c97bb9a1890b72e2691147f",
+    "public/eos-runtime/index.js": "0034751485647b738a642e5e8205199f939ed10bfe95d0f913cc04bc71d893b2",
+    "test/eos-runtime-control.test.cjs": "44167c45c53c9d2427539d5101781524e847b3836799a5df67f584fb699c0acf",
+    "test/eos-runtime-controls-review.test.cjs": "601634b0c5c8a399ae4d2c91e998d965aa0abe4fdf83fa541ae30f1de943ddc2",
+    "test/eos-runtime-control-processes.test.cjs": "12c7db95f8995740e98b331d974506e13648e3d632cf6dbd7872de526871a2c0",
+    "test/eos-runtime-controls-browser.cjs": "4dfd0293c672477f49a5748d0e534144b7a059c4e9e8e2f3ecfd78f968c450af"
+  },
+  "checks": {
+    "node24UnitHttpRealProcesses": 35,
+    "node22UnitHttp": 30,
+    "node22RealProcesses": 5,
+    "node24ExistingModuleHttp": 8,
+    "typecheckExitCode": 0,
+    "eslintExitCode": 0
+  },
+  "browser": {
+    "node22": {
+      "result": "passed",
+      "runAt": "2026-11-25T19:50:13.306Z",
+      "node": "v22.23.4",
+      "browser": "HeadlessChrome/158.0.8127.0",
+      "checks": 14,
+      "pageErrors": []
+    },
+    "node24": {
+      "result": "passed",
+      "runAt": "2026-11-25T19:50:14.764Z",
+      "node": "v24.22.3",
+      "browser": "HeadlessChrome/158.0.8127.0",
+      "checks": 14,
+      "pageErrors": []
+    }
+  }
+}

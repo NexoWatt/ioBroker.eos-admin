@@ -1,0 +1,18 @@
+{
+  "result": "passed",
+  "node": "v24.22.3",
+  "runAt": "2026-11-25T21:01:42.315Z",
+  "checks": [
+    "Default mirror exclusion is limited to exact own namespace and slot; another slot or instance rotates the token and rejects stale commands",
+    "Unmapped manual point with an explicit custom Command-State remains operable; a changed bridge destination rejects the old token before any new target write",
+    "After a failed precommit transition, retrying the unchanged saved layout requests an engine restart even with restartEms:false"
+  ],
+  "sourceHashes": {
+    "ui/lib/charging-point-identity.js": "0f63461df57c131083d5b72a5697fc496fc33d4744e80cfab1a790223d4daf6c",
+    "ui/src-ts/runtime-executables/lib/charging-point-identity.ts": "6db008926f84201dda3c8ef6f3391e56fcda0f771eb61fda7b14bf210b6c3f93",
+    "ui/main.js": "f284f6f3d83653dd52fd0f2d5d3d121cf29a5c9678f7c2c2724f087eef42a577",
+    "ui/src-ts/runtime-executables/main.ts": "bac2f47a42f00f3f4642fdf9764ffdfd2eb4f957049d3e27c49d3157e5acda58",
+    "src/lib/eosUiProcessWorker.ts": "9faa5f72c33b8736b16c4059d9cf30cf9b98e81aa5891c674b767ad1f4030075"
+  },
+  "scope": "Independent real helper, station HTTP route and configuration-preparation probes; synthetic controller states, bridge and engine stop; no hardware or customer secrets."
+}

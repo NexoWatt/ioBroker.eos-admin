@@ -380,7 +380,7 @@
     } catch (_e) {}
   }
 
-  async function sendCommand(lp: string | null, action: string | null, mode: string | null, extra: AnyRecord = {}): Promise<void> {
+  async function sendCommand(lp: string | null, action: string | null, mode: string | null, extra: AnyRecord = {}, expectedChargingIdentity?: string): Promise<void> {
     if (!token || busyKey || !lastPayload) return;
     const station = lastPayload.station || {};
     if (station.maintenanceMode) { toast(t('blockedMaintenance')); return; }
@@ -389,7 +389,8 @@
     try {
       const data = await fetchJson('/api/display/station/' + encodeURIComponent(token) + '/command', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(Object.assign({ lp, action, mode }, (extra && typeof extra === 'object') ? extra : {})),
+        body: JSON.stringify(Object.assign({ lp, action, mode }, (extra && typeof extra === 'object') ? extra : {},
+          typeof expectedChargingIdentity === 'string' ? { expectedChargingIdentity } : {})),
       });
       toast(t('commandAccepted'));
       if (data && data.payload) { lastPayload = data.payload; lastOkTs = Date.now(); connectionLost = false; render(data.payload); }
@@ -544,10 +545,14 @@
     <section class="nw-insights-grid">${renderDecisionPanel(viewPayload)}${renderWarningsPanel(viewPayload, opts)}</section>
     <footer class="nw-display-footer"><span>NexoWatt EOS · Energy Operation System</span><span>${escapeHtml(display.apiVersion || '0.8.201')}</span><span>${escapeHtml(t('directHardwareWrite'))}</span></footer>`;
 
-    app.querySelectorAll<HTMLElement>('[data-command]').forEach((btn) => btn.addEventListener('click', () => {
+    app.querySelectorAll<HTMLElement>('[data-command]').forEach((btn) => {
+      // Capture the token rendered with this exact button, not a newer poll.
+      const expectedChargingIdentity = payload.chargingControlIdentity?.slots?.[String(btn.getAttribute('data-lp'))];
+      btn.addEventListener('click', () => {
       const extra: AnyRecord = {}; if (btn.hasAttribute('data-value')) extra.value = btn.getAttribute('data-value') === 'true'; if (btn.hasAttribute('data-enabled')) extra.enabled = btn.getAttribute('data-enabled') === 'true';
-      sendCommand(btn.getAttribute('data-lp'), btn.getAttribute('data-action'), btn.getAttribute('data-mode'), extra);
-    }));
+      sendCommand(btn.getAttribute('data-lp'), btn.getAttribute('data-action'), btn.getAttribute('data-mode'), extra, expectedChargingIdentity);
+      });
+    });
     app.querySelectorAll<HTMLElement>('[data-lang]').forEach((btn) => btn.addEventListener('click', () => { manualLanguage = String(btn.getAttribute('data-lang') || '').toLowerCase(); document.documentElement.lang = manualLanguage || 'de'; render(lastPayload || payload, opts); }));
   }
 

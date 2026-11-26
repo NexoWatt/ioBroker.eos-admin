@@ -1,0 +1,10 @@
+{
+  "archive": "NexoWatt_EOS_9.0.25_FULL_REPOSITORY.zip",
+  "version": "9.0.25",
+  "archiveSha256": "9e6a1ead6735c004df339b09a030ad92d525867d5c30b1da045945bedb9963f8",
+  "adminFiles": 359,
+  "installerAssetFiles": 3,
+  "matchedSealedFiles": 359,
+  "matchedSealedInstallerAssetFiles": 3,
+  "provenance": "Previously delivered user-owned repository/package; SHA-256 hashes derived from archive bytes and checked against its sealed files manifest."
+}

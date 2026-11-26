@@ -1,0 +1,20 @@
+{
+  "checkedAt": "2026-11-25T20:00:19.862916+00:00",
+  "node": "v24.22.3",
+  "additionalTests": {
+    "tests": 1,
+    "pass": 1,
+    "fail": 0,
+    "skipped": 0
+  },
+  "combinedIndependentTests": 29,
+  "sourceHashes": {
+    ".gitignore": "285c0803c6c7c23a459fa3e772caa9570fb1e4c854a1b80d1c73b886f598dab2",
+    "test/eos-unified-git-runtime.test.cjs": "6f628893563702bf829642d86ed854ce018d03b1fe348f9fe13b04118a85d016"
+  },
+  "files": {
+    "git-runtime-node24.log": "8718985fc5eea47cbac97a235b31b99d2519dfec46c63acd2b993a8b4700db54",
+    "git-transport-independent.json": "bcc7be3fa90a5d191cd42d8f2f4e2c79f05a142b455604f2b063c95882de6e48",
+    "baseline925-artifacts-independent.json": "89cd8df64134a4f08bc4d5d08031120f58f6c447fd51c84b7e6c4a6b2d91bbfa"
+  }
+}

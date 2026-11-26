@@ -1,0 +1,18 @@
+{
+  "scope": "PWA/TLS focused evidence; source/build and actual device limits are documented in PWA_TLS.md",
+  "files": {
+    "pwa-926-typecheck.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pwa-926-tls-final.log": "3823c496ee1efad8bde9d0e50f13890d078e0df6423b86031a6dbc539a6ccab3",
+    "pwa-926-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pwa-926-browser-node22.json": "7cb30bd369cca81603cfc7ab6525f9e19c6d0131e163591939720524f99a9f3a",
+    "pwa-926-recovery-node24.log": "ddd5a5e96f21d9236570efde5189c5763bbf20ad9e9c8cbd99d8435d5cde5ebf",
+    "pwa-926-browser.json": "2f099c82d576705555a1d32529f23217493461c962724e3ee75febe758238cf8",
+    "pwa-926-focused-node24.log": "758e474d6002062dd1dba325b9ae11294ebea9683a6cb5eba219a652a42125ea",
+    "pwa-926-baseline.log": "761dc10b13e333d6ab3f83493c879ca4188de2cd38527be26b7953ef49e3e7ad",
+    "pwa-926-browser-node22.stderr": "15517285c8b206c92f7a1125650f9a9381b411270109050e1b79df8f8c85f6e7",
+    "pwa-926-recovery-node22.log": "0650b4355157d6ed15ab40ca11c189cc8a955234be54dcf223d1343ee36a7fb0",
+    "pwa-926-browser.stderr": "58b48f972129947fff715a80102df723ff4398934ef2760944f855bf71a9fe3a",
+    "pwa-926-focused-node22.log": "683bca5b4b676f99e569fc2ee7f450f84da7ee4115a750b947052ee4cf7bd93b"
+  },
+  "visualChecks": "Screenshots inspected internally; image files not included in delivery."
+}

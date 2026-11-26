@@ -256,6 +256,11 @@ test('actual supplied OCPP adapter registration and station telemetry map throug
         const adapter = subject.exports({}); const objects = {}, states = {};
         const h = await runtimeFixture(t);
         const subscriptions = [];
+        h.owner.getObjectViewAsync = async (design, search, options) => {
+            assert.equal(design, 'system'); assert.equal(search, 'instance');
+            assert.equal(options.startkey, 'system.adapter.ocpp21.');
+            return { rows: [{ value: { _id: 'system.adapter.ocpp21.0', type: 'instance', common: { enabled: true }, native: {} } }] };
+        };
         h.owner.getForeignObjectsAsync = async (pattern, type) => {
             assert.ok(['ocpp21.*', 'eos-admin.0.ocpp.*'].includes(pattern)); assert.equal(type, 'state');
             if (pattern !== 'ocpp21.*') return {};
