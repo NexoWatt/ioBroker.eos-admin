@@ -48,6 +48,9 @@ async function createHarness(options = {}) {
   const adapter = new Runtime({ owner, bridge });
   adapter.config = { auth: {}, accessControl: {}, smartHomeConfig: { version: 3, floors: [], rooms: [], functions: [], devices: [], pages: [], scenes: [], meta: {} } };
   adapter._nwLicenseOk = true;
+  // This route fixture represents an already loaded runtime; lifecycle tests
+  // use createHostedRuntime/the real child and exercise hydration separately.
+  adapter._nwInstallerConfigHydrated = true;
   adapter._nwRefreshLicenseFromConfiguredKey = async () => {};
   adapter.scheduleDerivedFlowUpdate = () => {};
   adapter.persistInstallerConfigToState = async patch => saved.push(structuredClone(patch));

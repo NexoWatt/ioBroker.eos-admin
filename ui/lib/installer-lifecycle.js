@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/lib/installer-lifecycle.ts
- * Quell-Hash: sha256:d663f11e31c885760fe9a0d4e9be7b8d2b41c83f47ecf281ec37e450cafd3ef2
+ * Quell-Hash: sha256:b6fb03d371839579e04a18d6a993414a41fdca9588fd143722c6174b39eae153
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -64,9 +64,11 @@ function installerRevision(patch) {
  * Once present, a missing or stale token must never replace a newer nonempty row list. */
 function assertInstallerRevision(expected, patch) {
     const bindings = record(record(record(patch).eosDeviceEms).bindings);
-    const ocppRows = record(record(patch).settingsConfig).evcsList;
+    const settings = record(record(patch).settingsConfig);
+    const ocppRows = settings.evcsList;
     const required = Object.keys(bindings).length > 0 || (Array.isArray(ocppRows)
-        && ocppRows.some(row => record(record(row).ocppDiscovery).source === 'nexowatt-ocpp21'));
+        && ocppRows.some(row => record(record(row).ocppDiscovery).source === 'nexowatt-ocpp21'))
+        || (Array.isArray(settings.ocppExcludedStationRoots) && settings.ocppExcludedStationRoots.length > 0);
     if ((expected === undefined || expected === null) && !required)
         return;
     if (typeof expected !== 'string' || !/^[a-f0-9]{64}$/.test(expected) || expected !== installerRevision(patch)) {

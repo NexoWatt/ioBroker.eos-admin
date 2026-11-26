@@ -1,0 +1,361 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: snapshot preserves every configured module and false/zero/empty customer values without any write API
+ok 1 - snapshot preserves every configured module and false/zero/empty customer values without any write API
+  ---
+  duration_ms: 6.644296
+  type: 'test'
+  ...
+# Subtest: OCPP update snapshot retains protected station config and original namespace without replaying live control states
+ok 2 - OCPP update snapshot retains protected station config and original namespace without replaying live control states
+  ---
+  duration_ms: 1.677338
+  type: 'test'
+  ...
+# Subtest: changing or damaged OCPP config blocks update capture and never falls back to an old native envelope
+ok 3 - changing or damaged OCPP config blocks update capture and never falls back to an old native envelope
+  ---
+  duration_ms: 1.536279
+  type: 'test'
+  ...
+# Subtest: protected kiosk activation, enabling account and revision survive the update snapshot
+ok 4 - protected kiosk activation, enabling account and revision survive the update snapshot
+  ---
+  duration_ms: 1.675525
+  type: 'test'
+  ...
+# Subtest: invalid or concurrently changed kiosk authority blocks the update snapshot
+ok 5 - invalid or concurrently changed kiosk authority blocks the update snapshot
+  ---
+  duration_ms: 2.680647
+  type: 'test'
+  ...
+# Subtest: protected UI-store migration selects the real legacy installer and customer namespace
+ok 6 - protected UI-store migration selects the real legacy installer and customer namespace
+  ---
+  duration_ms: 1.02486
+  type: 'test'
+  ...
+# Subtest: old native module envelope remains supported only in the absence of its authoritative store
+ok 7 - old native module envelope remains supported only in the absence of its authoritative store
+  ---
+  duration_ms: 5.439159
+  type: 'test'
+  ...
+# Subtest: legacy namespace and protected store identity are validated before reading unrelated data
+ok 8 - legacy namespace and protected store identity are validated before reading unrelated data
+  ---
+  duration_ms: 1.239969
+  type: 'test'
+  ...
+# Subtest: configured legacy required states cannot silently disappear from the update snapshot
+ok 9 - configured legacy required states cannot silently disappear from the update snapshot
+  ---
+  duration_ms: 1.622507
+  type: 'test'
+  ...
+# Subtest: busy and changing customer configuration fail closed rather than returning a mixed snapshot
+ok 10 - busy and changing customer configuration fail closed rather than returning a mixed snapshot
+  ---
+  duration_ms: 1.427527
+  type: 'test'
+  ...
+# Subtest: bounded decoder refuses nested v2 chains and malformed ciphertext without exposing plaintext errors
+ok 11 - bounded decoder refuses nested v2 chains and malformed ciphertext without exposing plaintext errors
+  ---
+  duration_ms: 0.563676
+  type: 'test'
+  ...
+# Subtest: normalization bounds size/depth/node count and rejects dangerous keys or non-JSON values
+ok 12 - normalization bounds size/depth/node count and rejects dangerous keys or non-JSON values
+  ---
+  duration_ms: 29.558017
+  type: 'test'
+  ...
+# Subtest: settings scope and count are bounded without an all-state database scan
+ok 13 - settings scope and count are bounded without an all-state database scan
+  ---
+  duration_ms: 2.11014
+  type: 'test'
+  ...
+# Subtest: cumulative encoded JSON bytes are bounded before serialization or configuration JSON parsing
+ok 14 - cumulative encoded JSON bytes are bounded before serialization or configuration JSON parsing
+  ---
+  duration_ms: 128.225655
+  type: 'test'
+  ...
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: worker refuses unsafe scope, paths, versions, duplicate files and mutable manifests before commands
+ok 15 - worker refuses unsafe scope, paths, versions, duplicate files and mutable manifests before commands
+  ---
+  duration_ms: 178.566338
+  type: 'test'
+  ...
+# Subtest: confirmed stop precedes install; exact artifact and actual restart precede success
+ok 16 - confirmed stop precedes install; exact artifact and actual restart precede success
+  ---
+  duration_ms: 376.543409
+  type: 'test'
+  ...
+# Subtest: copied standalone worker uses only built-in dependencies and exits after its durable receipt
+ok 17 - copied standalone worker uses only built-in dependencies and exits after its durable receipt
+  ---
+  duration_ms: 340.505838
+  type: 'test'
+  ...
+# Subtest: changed staging content never reaches a stop or install command
+ok 18 - changed staging content never reaches a stop or install command
+  ---
+  duration_ms: 44.749093
+  type: 'test'
+  ...
+# Subtest: pre-install storage failure restores only the confirmed-stopped unchanged old code
+ok 19 - pre-install storage failure restores only the confirmed-stopped unchanged old code
+  ---
+  duration_ms: 458.704496
+  type: 'test'
+  ...
+# Subtest: bounded encrypted configuration larger than 2 MiB is supported
+ok 20 - bounded encrypted configuration larger than 2 MiB is supported
+  ---
+  duration_ms: 270.74878
+  type: 'test'
+  ...
+# Subtest: controller success without new package or with changed runtime never starts EOS
+ok 21 - controller success without new package or with changed runtime never starts EOS
+  ---
+  duration_ms: 308.297246
+  type: 'test'
+  ...
+# Subtest: missing controller state is not treated as a confirmed stop
+ok 22 - missing controller state is not treated as a confirmed stop
+  ---
+  duration_ms: 188.034168
+  type: 'test'
+  ...
+# Subtest: unconfirmed stop never installs and unconfirmed restart never reports success
+ok 23 - unconfirmed stop never installs and unconfirmed restart never reports success
+  ---
+  duration_ms: 2792.066391
+  type: 'test'
+  ...
+# Subtest: timed-out install kills its process group, leaves receipt uncertain and never retries
+ok 24 - timed-out install kills its process group, leaves receipt uncertain and never retries
+  ---
+  duration_ms: 1632.425932
+  type: 'test'
+  ...
+# Subtest: worker abort during install kills descendants and records uncertainty without restart
+ok 25 - worker abort during install kills descendants and records uncertainty without restart
+  ---
+  duration_ms: 160.290639
+  type: 'test'
+  ...
+# Subtest: nonprivate job directory and symlinked archive are refused
+ok 26 - nonprivate job directory and symlinked archive are refused
+  ---
+  duration_ms: 7.986377
+  type: 'test'
+  ...
+# (node:14) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: metadata and registry signatures accept the exact stable package and reject tampering
+ok 27 - metadata and registry signatures accept the exact stable package and reject tampering
+  ---
+  duration_ms: 7.722136
+  type: 'test'
+  ...
+# Subtest: expired, wrong-curve, missing and malformed registry keys fail closed
+ok 28 - expired, wrong-curve, missing and malformed registry keys fail closed
+  ---
+  duration_ms: 0.856931
+  type: 'test'
+  ...
+# Subtest: archive identity, member hashes, path traversal, links, duplicate and incomplete streams
+ok 29 - archive identity, member hashes, path traversal, links, duplicate and incomplete streams
+  ---
+  duration_ms: 127.135968
+  type: 'test'
+  ...
+# Subtest: npm PAX long paths and matching sizes are supported, dangling or conflicting overrides rejected
+ok 30 - npm PAX long paths and matching sizes are supported, dangling or conflicting overrides rejected
+  ---
+  duration_ms: 82.599767
+  type: 'test'
+  ...
+# Subtest: archive read errors and cancellation reject without leaving source streams running
+ok 31 - archive read errors and cancellation reject without leaving source streams running
+  ---
+  duration_ms: 122.136867
+  type: 'test'
+  ...
+# Subtest: availability is cached, preparation verifies and encrypts without starting a process
+ok 32 - availability is cached, preparation verifies and encrypts without starting a process
+  ---
+  duration_ms: 79.388878
+  type: 'test'
+  ...
+# Subtest: signature and integrity failures cannot produce an installable plan
+ok 33 - signature and integrity failures cannot produce an installable plan
+  ---
+  duration_ms: 108.48738
+  type: 'test'
+  ...
+# Subtest: published metadata with a missing npm tarball cannot stop EOS; a later download needs an explicit start
+ok 34 - published metadata with a missing npm tarball cannot stop EOS; a later download needs an explicit start
+  ---
+  duration_ms: 68.685099
+  type: 'test'
+  ...
+# Subtest: authorization, one host instance, controller contract and configuration changes are enforced before launch
+ok 35 - authorization, one host instance, controller contract and configuration changes are enforced before launch
+  ---
+  duration_ms: 161.263133
+  type: 'test'
+  ...
+# Subtest: one-use start launches only the fixed worker, survives loss of response and never replays after restart
+ok 36 - one-use start launches only the fixed worker, survives loss of response and never replays after restart
+  ---
+  duration_ms: 62.671119
+  type: 'test'
+  ...
+# Subtest: only known pre-install failures allow a new explicit preparation; uncertainty stays locked across restart
+ok 37 - only known pre-install failures allow a new explicit preparation; uncertainty stays locked across restart
+  ---
+  duration_ms: 156.6966
+  type: 'test'
+  ...
+# Subtest: revocation at final start fence does not spawn or leave an executable retry marker
+ok 38 - revocation at final start fence does not spawn or leave an executable retry marker
+  ---
+  duration_ms: 58.515584
+  type: 'test'
+  ...
+# Subtest: slow snapshot keeps a single admission slot; stop prevents a late preparation from becoming executable
+ok 39 - slow snapshot keeps a single admission slot; stop prevents a late preparation from becoming executable
+  ---
+  duration_ms: 29.488374
+  type: 'test'
+  ...
+# Subtest: configuration comparison preserves existing values while allowing added defaults only
+ok 40 - configuration comparison preserves existing values while allowing added defaults only
+  ---
+  duration_ms: 18.157686
+  type: 'test'
+  ...
+# Subtest: a verified worker result requires new running version and preserved configuration before success
+ok 41 - a verified worker result requires new running version and preserved configuration before success
+  ---
+  duration_ms: 75.886303
+  type: 'test'
+  ...
+# Subtest: failed private storage remains closed and does not turn into an apparently available update
+ok 42 - failed private storage remains closed and does not turn into an apparently available update
+  ---
+  duration_ms: 25.20413
+  type: 'test'
+  ...
+# Subtest: real HTTPS transport rejects redirects, invalid TLS and oversized bodies and aborts a stalled body
+ok 43 - real HTTPS transport rejects redirects, invalid TLS and oversized bodies and aborts a stalled body
+  ---
+  duration_ms: 260.787903
+  type: 'test'
+  ...
+# (node:17) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: one startup automatically recovers a transient controller subscription failure
+ok 44 - one startup automatically recovers a transient controller subscription failure
+  ---
+  duration_ms: 1011.247432
+  type: 'test'
+  ...
+# Subtest: parallel initial starts share subscriptions, one runtime and one reconcile timer
+ok 45 - parallel initial starts share subscriptions, one runtime and one reconcile timer
+  ---
+  duration_ms: 2.379099
+  type: 'test'
+  ...
+# Subtest: exhausted startup retries are bounded and a later explicit start can recover
+ok 46 - exhausted startup retries are bounded and a later explicit start can recover
+  ---
+  duration_ms: 3005.788294
+  type: 'test'
+  ...
+# (node:17) ExperimentalWarning: The MockTimers API is an experimental feature and might change at any time
+# Subtest: stop during retry delay cancels further attempts and never starts a module
+ok 47 - stop during retry delay cancels further attempts and never starts a module
+  ---
+  duration_ms: 1.859989
+  type: 'test'
+  ...
+# Subtest: a timeout waits again for the same pending subscription instead of issuing a duplicate
+ok 48 - a timeout waits again for the same pending subscription instead of issuing a duplicate
+  ---
+  duration_ms: 3.150935
+  type: 'test'
+  ...
+# Subtest: stop during a pending initial subscription fences its late completion
+ok 49 - stop during a pending initial subscription fences its late completion
+  ---
+  duration_ms: 1.2674
+  type: 'test'
+  ...
+# Subtest: subscription recovery preserves explicit module/process disables and invalid configuration fences
+ok 50 - subscription recovery preserves explicit module/process disables and invalid configuration fences
+  ---
+  duration_ms: 1001.894163
+  type: 'test'
+  ...
+# (node:76) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: repository generator uses installed release profile and explicit base URL
+ok 51 - repository generator uses installed release profile and explicit base URL
+  ---
+  duration_ms: 115.172772
+  type: 'test'
+  ...
+# Subtest: repository patcher replaces stale profile but preserves unrelated entries and custom fields
+ok 52 - repository patcher replaces stale profile but preserves unrelated entries and custom fields
+  ---
+  duration_ms: 102.962178
+  type: 'test'
+  ...
+# Subtest: invalid release metadata fails before a repository can be rewritten
+ok 53 - invalid release metadata fails before a repository can be rewritten
+  ---
+  duration_ms: 215.965036
+  type: 'test'
+  ...
+# Subtest: explicit metadata repair uses fixed controller arguments without enabling or restarting instances
+ok 54 - explicit metadata repair uses fixed controller arguments without enabling or restarting instances
+  ---
+  duration_ms: 344.852932
+  type: 'test'
+  ...
+# Subtest: metadata repair aborts on controller failure and never reports successful completion
+ok 55 - metadata repair aborts on controller failure and never reports successful completion
+  ---
+  duration_ms: 200.768909
+  type: 'test'
+  ...
+# (node:344) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: EOS update manager leaves shared policies and recovery evidence intact through start, enable, refresh and stop
+ok 56 - EOS update manager leaves shared policies and recovery evidence intact through start, enable, refresh and stop
+  ---
+  duration_ms: 94.281807
+  type: 'test'
+  ...
+1..56
+# tests 56
+# suites 0
+# pass 56
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 7089.286716

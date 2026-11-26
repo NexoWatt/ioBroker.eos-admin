@@ -8,7 +8,7 @@ const vm = require('node:vm');
 const ts = require('typescript');
 const filename = path.resolve(__dirname, '../ui/src-ts/runtime-executables/www/ems-apps.ts');
 const source = ts.createSourceFile(filename, fs.readFileSync(filename, 'utf8'), ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
-const names = ['_ocppStationIdentityFromDp', '_ocppStationIdentityFromRow', '_ocppStationIdentityFromConnector',
+const names = ['_ocppStationIdentityFromDp', '_ocppStationIdentitiesFromRow', '_isEmptyEvcsMappingRow', '_ocppStationIdentityFromRow', '_ocppStationIdentityFromConnector',
     '_isKnownLegacyNexoWattOcppMapping', '_applyOcppConnectorToRow'];
 const selected = new Map();
 function visit(node) {
@@ -46,7 +46,7 @@ test('manual hosted/native OCPP detection cannot pre-enable a new station or ass
 test('mapping a known native station preserves the installer-approved activation and electrical settings', () => {
     for (const root of ['eos-admin.0.ocpp.CP_DC', 'ocpp21.0.CP_DC']) for (const enabled of [true, false]) {
         const existing = { enabled, chargerType: 'dc', minCurrentA: 0, maxCurrentA: 125, minPowerW: 1200,
-            maxPowerW: 50000, phases: 3, voltageV: 400, note: 'Geprüfte Grenzen', powerId: `${root}.measurements.powerW` };
+            maxPowerW: 50000, phases: 3, voltageV: 400, note: 'Geprüfte Grenzen', powerId: `${root}.measurements.powerW`, setPowerWId: `${root}.control.chargeLimit` };
         const before = structuredClone(existing);
         for (const options of [{ onlyEmpty: true }, { overwrite: true }]) {
             const result = clone(api._applyOcppConnectorToRow(existing, connector(root), options));

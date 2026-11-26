@@ -1,0 +1,15 @@
+DIAG_CHILD_EXIT {"pid":26,"file":"/workspace/scratch/b0b00b64c39c/work-restart-review/build/lib/eosUiProcessWorker.js","code":null,"signal":"SIGKILL"}
+✔ production Web mount reaches the real UI/EMS child and reconciles a device HTTP save through IPC (4462.295142ms)
+DIAG_CHILD_EXIT {"pid":39,"file":"/workspace/scratch/b0b00b64c39c/work-restart-review/build/lib/eosUiProcessWorker.js","code":null,"signal":"SIGKILL"}
+DIAG_CHILD_EXIT {"pid":52,"file":"/workspace/scratch/b0b00b64c39c/work-restart-review/build/lib/eosUiProcessWorker.js","code":null,"signal":"SIGKILL"}
+▶ real UI child preserves an explicit Devices chargepoint deletion through HTTP, discovery and restart
+  ✔ fresh owner and real child retain removal; a new explicit request recreates exactly one inactive row (2316.489472ms)
+✔ real UI child preserves an explicit Devices chargepoint deletion through HTTP, discovery and restart (6519.592897ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11243.461156

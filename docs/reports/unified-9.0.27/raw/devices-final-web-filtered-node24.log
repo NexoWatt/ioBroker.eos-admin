@@ -1,0 +1,26 @@
+✔ production Web mount reaches the real UI/EMS child and reconciles a device HTTP save through IPC (4616.646993ms)
+▶ real UI child preserves an explicit Devices chargepoint deletion through HTTP, discovery and restart
+  ✔ fresh owner and real child retain removal; a new explicit request recreates exactly one inactive row (2357.305503ms)
+✔ real UI child preserves an explicit Devices chargepoint deletion through HTTP, discovery and restart (5311.599701ms)
+▶ legacy in-process business pipeline: actual module HTTP rejects a live profile replacement before persistence and allows it after AppCenter deactivation
+  ✔ direct Devices alias (697.004069ms)
+  ✔ external split ioBroker alias (531.336063ms)
+✔ legacy in-process business pipeline: actual module HTTP rejects a live profile replacement before persistence and allows it after AppCenter deactivation (1228.917898ms)
+✔ legacy in-process business pipeline: actual profile HTTP reservation blocks concurrent AppCenter activation and releases after a failed controller commit (563.539127ms)
+✔ legacy in-process business pipeline: removing and reintroducing a device ID cannot reuse its still-active EMS references with another profile (867.505382ms)
+✔ legacy in-process business pipeline: production Web bridge and actual hosted startup process device-save HTTP without manual reconciliation (3987.609366ms)
+▶ legacy in-process business pipeline: one device HTTP save adopts the manual farm row, adds SolaX and SMA M0, and activates the corresponding app atomically
+  ✔ legacy in-process business pipeline: fresh hosted instance rehydrates the persisted device and EMS configuration without another setup call (307.680158ms)
+✔ legacy in-process business pipeline: one device HTTP save adopts the manual farm row, adds SolaX and SMA M0, and activates the corresponding app atomically (4747.500479ms)
+✔ legacy in-process business pipeline: HTTP rejects a new device ID during unknown hosted configuration hydration, then accepts the retained draft after readiness (728.962585ms)
+✔ legacy in-process business pipeline: late actual manifest event completes commissioning; telemetry bursts do not restart inventory scans (2232.450177ms)
+✔ legacy in-process business pipeline: running Devices retain an ownership lease while other modules initialize slowly (15032.89798ms)
+✔ legacy in-process business pipeline: real device polling keeps FENECON PV, converter feedback and battery flow distinct in an activated mixed farm (6952.64828ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 46472.746259

@@ -1,0 +1,58 @@
+CHILD_DIAG DIAG_RPC_FAULT EOS_UI_PROCESS_RATE_LIMIT
+✖ Tibber masks survive unrelated Installer edits and a disk-backed owner restart (native namespace) (5830.159435ms)
+DIAG_RPC_FAULT EOS_UI_PROCESS_RATE_LIMIT
+DIAG_RPC_FAULT EOS_UI_PROCESS_RATE_LIMIT
+✖ Tibber masks survive unrelated Installer edits and a disk-backed owner restart (preserved namespace) (5936.08335ms)
+✔ Installer token context: partial edit (0.705317ms)
+✔ Installer token context: home and country selection (0.129181ms)
+✔ Installer token context: disabled provider (0.130453ms)
+✔ Installer token context: equivalent default endpoint (0.119838ms)
+✔ Installer token context: different endpoint (0.114199ms)
+✔ Installer token context: different provider (0.135071ms)
+✔ Installer token context: fresh credential on changed provider (0.115241ms)
+✔ Installer token context: intentional empty field (0.142702ms)
+✔ market source and configurable OAuth recipients/identity fence retained credentials (0.395187ms)
+✔ private request masks preserve same-recipient headers/body but never revive an explicit request clear (0.170763ms)
+✔ an early real startup failure cannot let Devices or OCPP overwrite an unread tariff (172.406976ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 11
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12705.475919
+
+✖ failing tests:
+
+test at ../ocpp-review-evidence/tibber-restart/roundtrip-built-diagnostic.test.cjs:44:40
+✖ Tibber masks survive unrelated Installer edits and a disk-backed owner restart (native namespace) (5830.159435ms)
+  AssertionError [ERR_ASSERTION]: {"status":503,"code":"EOS_UI_UNAVAILABLE"}
+  
+  503 !== 200
+  
+      at changeInstaller (/workspace/scratch/b0b00b64c39c/ocpp-review-evidence/tibber-restart/roundtrip-built-diagnostic.test.cjs:199:16)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/ocpp-review-evidence/tibber-restart/roundtrip-built-diagnostic.test.cjs:210:28)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 503,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at ../ocpp-review-evidence/tibber-restart/roundtrip-built-diagnostic.test.cjs:44:40
+✖ Tibber masks survive unrelated Installer edits and a disk-backed owner restart (preserved namespace) (5936.08335ms)
+  [TypeError [Error]: fetch failed] {
+    [cause]: Error [SocketError]: other side closed
+        at Socket.onHttpSocketEnd (node:internal/deps/undici/undici:7894:26)
+        at Socket.emit (node:events:526:24)
+        at endReadableNT (node:internal/streams/readable:1783:12)
+        at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+      code: 'UND_ERR_SOCKET',
+      socket: { localAddress: '127.0.0.1', localPort: 49240, remoteAddress: '127.0.0.1', remotePort: 34329, remoteFamily: 'IPv4', timeout: undefined, bytesWritten: 5824, bytesRead: 215732 }
+    }
+  }

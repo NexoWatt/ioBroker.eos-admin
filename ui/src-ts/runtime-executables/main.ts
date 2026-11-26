@@ -43,7 +43,7 @@ const { installerRevision, assertInstallerRevision, provisionInstallerObjects, a
 const { buildFarmOverview } = require('./lib/storage-farm-overview');
 const { readFlowMeasurement, sumFlowMeasurements } = require('./lib/flow-measurement');
 const { tariffDisplayConfig, tariffPriceNumber } = require('./lib/tariff-price');
-const { customerTariffView, prepareCustomerTariffChange } = require('./lib/customer-tariff');
+const { customerTariffView, prepareCustomerTariffChange, mergeInstallerTariffSecrets } = require('./lib/customer-tariff');
 const { InfluxDirectClient } = require('./lib/influx-direct');
 const { InfluxHistoryRuntime } = require('./lib/influx-history-runtime');
 const { PostgresHistoryClient, loadPostgresProfile } = require('./lib/postgres-history');
@@ -65,7 +65,7 @@ const { buildStationDisplayPresentation } = require('./lib/station-display-prese
 const tariffProviderRegistry = require('./ems/services/tariff-provider-registry');
 const { normalizeEvcsEnergyTotalKwh } = require('./ems/services/evcs-unit-conversion');
 const { validateEvcsElectricalConfig } = require('./lib/evcs-electrical-limits');
-const { OcppAutoDiscovery, planOcppDiscovery, normalizeOcppDiscovery, ocppDiscoveryPatterns, ocppStationRoot, ocppRootInScope, ocppNamespace } = require('./lib/ocpp-auto-discovery');
+const { OcppAutoDiscovery, collectOcppStations, filterOcppDiscoverySources, planOcppDiscovery, prepareOcppDiscoveryExclusions, normalizeOcppDiscovery, ocppDiscoveryPatterns } = require('./lib/ocpp-auto-discovery');
 const { beginChargingControlWrite, bindChargingPointIdentityBaseline, chargingPointLayoutChanged, remapChargingPointDefaultModes, publicChargingControlIdentity, assertChargingControlIdentity } = require('./lib/charging-point-identity');
 const { remapChargingStationAssignments } = require('./lib/charging-station-identity');
 const { NotificationMail, validAddress } = require('./lib/notification-mail');
@@ -4958,6 +4958,7 @@ class NexoWattVis extends HostedAdapter {
     const assertReady = () => {
       if (this._nwShuttingDown || this._bridge.canWrite() !== true) throw new Error('EOS_UI_OWNERSHIP_REQUIRED');
       if (!['ready', 'degraded'].includes(this._hostedStartup?.state)) throw new Error('EOS_UI_STARTING');
+      if (this._nwInstallerConfigHydrated !== true) throw new Error('EOS_UI_CONFIG_NOT_READY');
       if (!centralLicenseSnapshot(this._bridge).ok) throw new Error('EOS_LICENSE_REQUIRED');
     };
     assertReady();
@@ -5006,6 +5007,7 @@ class NexoWattVis extends HostedAdapter {
     const assertReady = () => {
       if (this._nwShuttingDown || this._bridge.canWrite() !== true) throw new Error('EOS_UI_OWNERSHIP_REQUIRED');
       if (!['ready', 'degraded'].includes(this._hostedStartup?.state)) throw new Error('EOS_UI_STARTING');
+      if (this._nwInstallerConfigHydrated !== true) throw new Error('EOS_UI_CONFIG_NOT_READY');
       if (!centralLicenseSnapshot(this._bridge).ok) throw new Error('EOS_LICENSE_REQUIRED');
     };
     assertReady();
@@ -5040,18 +5042,32 @@ class NexoWattVis extends HostedAdapter {
     } finally { this._nwEndInstallerConfigMutation(token); }
   }
 
+  async _nwReadOcppDiscoveryObjects() {
+    return Object.assign({}, ...await Promise.all(ocppDiscoveryPatterns(this.hostNamespace)
+      .map(pattern => this.getForeignObjectsAsync(pattern, 'state'))));
+  }
+
+  async _nwReadOcppDiscoveryMetadata() {
+    return Object.assign({}, ...await Promise.all(ocppDiscoveryPatterns(this.hostNamespace)
+      .map(pattern => this.getForeignStatesAsync(`${pattern}.info.*`))));
+  }
+
+  async _nwReadOcppDiscoverySources() {
+    return {
+      instances: await this.getObjectViewAsync('system', 'instance', {
+        startkey: 'system.adapter.ocpp21.', endkey: 'system.adapter.ocpp21.\u9999', limit: 129,
+      }),
+      hostedNamespace: this._bridge.getRuntimeReadiness?.()?.hostedOcppNamespace,
+    };
+  }
+
   _nwStartOcppAutoDiscovery() {
     if (this._nwShuttingDown || this._ocppAutoDiscovery) return;
     this._ocppAutoDiscovery = new OcppAutoDiscovery({
       hostNamespace: this.hostNamespace,
-      readObjects: async () => Object.assign({}, ...await Promise.all(ocppDiscoveryPatterns(this.hostNamespace).map(pattern => this.getForeignObjectsAsync(pattern, 'state')))),
-      readMetadata: async () => Object.assign({}, ...await Promise.all(ocppDiscoveryPatterns(this.hostNamespace).map(pattern => this.getForeignStatesAsync(`${pattern}.info.*`)))),
-      readSources: async () => ({
-        instances: await this.getObjectViewAsync('system', 'instance', {
-          startkey: 'system.adapter.ocpp21.', endkey: 'system.adapter.ocpp21.\u9999', limit: 129,
-        }),
-        hostedNamespace: this._bridge.getRuntimeReadiness?.()?.hostedOcppNamespace,
-      }),
+      readObjects: () => this._nwReadOcppDiscoveryObjects(),
+      readMetadata: () => this._nwReadOcppDiscoveryMetadata(),
+      readSources: () => this._nwReadOcppDiscoverySources(),
       subscribe: () => Promise.all(ocppDiscoveryPatterns(this.hostNamespace).map(pattern => this.subscribeForeignStatesAsync(`${pattern}.info.*`))),
       reconcile: stations => this.reconcileOcppDiscovery(stations),
       canRun: () => !this._nwShuttingDown && this._bridge.canWrite() === true
@@ -15836,6 +15852,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
         // KI‑Energieberater
         aiAdvisor: (n.aiAdvisor && typeof n.aiAdvisor === 'object') ? n.aiAdvisor : undefined,
         energyWallet: (n.energyWallet && typeof n.energyWallet === 'object') ? n.energyWallet : {},
+        tariffProvider: (n.tariffProvider && typeof n.tariffProvider === 'object') ? this._nwDeepClone(n.tariffProvider) : {},
         energyLedger: (n.energyLedger && typeof n.energyLedger === 'object') ? n.energyLedger : { enabled: false },
         chargeKiosk: (n.chargeKiosk && typeof n.chargeKiosk === 'object') ? n.chargeKiosk : { enabled: false, displayBasePath: '/display/station/', stations: [] },
         meshMicrogrid: (n.meshMicrogrid && typeof n.meshMicrogrid === 'object') ? n.meshMicrogrid : { enabled: false, mode: 'diagnostic', clusterId: 'cluster_01', clusterName: 'Lokaler Energieverbund', gridLimitW: 0, nodes: [] },
@@ -16184,6 +16201,14 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
           if (_nwTariffSecretKeys.has(String(key)) && String(creds[key] || '').trim()) creds[key] = '__KEEP__';
         }
       }
+      // Request headers/bodies may embed arbitrary authentication values.
+      // Keep the entire configured value server-side instead of guessing keys.
+      const custom = clone?.tariffProvider?.customRest;
+      if (custom && typeof custom === 'object') {
+        for (const key of ['headersJson', 'body']) {
+          if (custom[key] !== undefined && custom[key] !== null && custom[key] !== '') custom[key] = '__KEEP__';
+        }
+      }
       return clone;
     };
     const stripRetainedTariffCredentials = (patch) => {
@@ -16191,20 +16216,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
       if (clean.tariffProvider) delete clean.tariffProvider.retainedProviderCredentials;
       return clean;
     };
-    const _nwMergeTariffProviderSecrets = (incoming, existing) => {
-      const next = this._nwDeepClone(incoming || {}) || {};
-      const prev = existing && typeof existing === 'object' ? existing : {};
-      next.credentials = next.credentials && typeof next.credentials === 'object' ? next.credentials : {};
-      const prevCreds = prev.credentials && typeof prev.credentials === 'object' ? prev.credentials : {};
-      for (const key of _nwTariffSecretKeys) {
-        const raw = next.credentials[key];
-        if (raw === '__KEEP__' || raw === undefined || raw === null) {
-          if (prevCreds[key] !== undefined) next.credentials[key] = prevCreds[key];
-          else delete next.credentials[key];
-        }
-      }
-      return next;
-    };
+    const _nwMergeTariffProviderSecrets = mergeInstallerTariffSecrets;
 
     /** Neue/geänderte Stations-Bearer verlangen ein langes URL-sicheres Format.
      * Unveränderte Alt-Tokens bleiben bis zur bewussten Neuverknüpfung verwendbar;
@@ -16289,8 +16301,16 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
       } catch (error) { return historyFailure(res, error); }
       finally { endMeshAppSave(mutation); }
     });
+    // A reachable shell is not evidence that the stored Installer configuration
+    // has loaded. Never publish a default snapshot/revision or accept its edit.
+    const requireInstallerConfigLoaded = (_req, res, next) => {
+      if (this._nwInstallerConfigHydrated === true) return next();
+      sendNoStore(res);
+      const loading = ['idle', 'starting'].includes(this._hostedStartup?.state);
+      return res.status(503).json({ ok: false, error: loading ? 'EOS_INSTALLER_CONFIG_LOADING' : 'EOS_INSTALLER_CONFIG_UNAVAILABLE' });
+    };
     // API-Kommentar: GET-Route. Zweck: stellt einen Web-/API-Endpunkt bereit. Zusammenhang: Frontend-Dateien in www/* können diesen Endpunkt direkt nutzen. Route/Handler: '/api/installer/config', requireInstaller, async (_req, res) => {
-    app.get('/api/installer/config', requireInstaller, async (_req, res) => {
+    app.get('/api/installer/config', requireInstaller, requireInstallerConfigLoaded, async (_req, res) => {
       try {
         sendNoStore(res);
         // A license can be saved through the Admin tab while the App-Center is already open.
@@ -16333,7 +16353,7 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
     });
 
     // API-Kommentar: POST-Route. Zweck: stellt einen Web-/API-Endpunkt bereit. Zusammenhang: Frontend-Dateien in www/* können diesen Endpunkt direkt nutzen. Route/Handler: '/api/installer/config', requireInstaller, async (req, res) => {
-    app.post('/api/installer/config', requireInstaller, async (req, res) => {
+    app.post('/api/installer/config', requireInstaller, requireInstallerConfigLoaded, async (req, res) => {
       const meshSaveToken = beginMeshAppSave();
       if (!meshSaveToken) return res.status(409).json({ error: 'Konfiguration wird bereits gespeichert.' });
       try {
@@ -16414,6 +16434,22 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
           const norm = this.nwNormalizeInstallerPatch(mergedPatch, this.config || {});
           mergedPatch = (norm && norm.patch) ? norm.patch : mergedPatch;
         } catch (_e) {}
+
+        // An explicit EMS deletion must survive the next background OCPP scan.
+        // Compute this from the authoritative before/after rows under the same
+        // revision lock; never trust a form's copied exclusion metadata.
+        const beforeOcppEdit = this.nwApplyInstallerPatchToRuntimeConfig(this.config || {}, basePatch);
+        const explicitOcppRows = safePatch.settingsConfig && typeof safePatch.settingsConfig === 'object'
+          && Object.prototype.hasOwnProperty.call(safePatch.settingsConfig, 'evcsList');
+        const beforeHasOcppExclusions = Object.prototype.hasOwnProperty.call(beforeOcppEdit.settingsConfig || {}, 'ocppExcludedStationRoots');
+        const ocppExclusions = explicitOcppRows
+          ? prepareOcppDiscoveryExclusions(beforeOcppEdit, this.nwApplyInstallerPatchToRuntimeConfig(this.config || {}, mergedPatch))
+          : (beforeHasOcppExclusions ? this._nwDeepClone(beforeOcppEdit.settingsConfig.ocppExcludedStationRoots) : []);
+        if ((Array.isArray(ocppExclusions) && ocppExclusions.length) || beforeHasOcppExclusions) {
+          mergedPatch.settingsConfig = { ...mergedPatch.settingsConfig, ocppExcludedStationRoots: ocppExclusions };
+        } else if (mergedPatch.settingsConfig && typeof mergedPatch.settingsConfig === 'object') {
+          delete mergedPatch.settingsConfig.ocppExcludedStationRoots;
+        }
 
         if (Object.prototype.hasOwnProperty.call(safePatch, 'nvpTopology')) {
           const desired = safePatch.nvpTopology;
@@ -16679,6 +16715,15 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
           const norm = this.nwNormalizeInstallerPatch(finalPatch, baseNative);
           finalPatch = (norm && norm.patch) ? norm.patch : finalPatch;
         } catch (_e) {}
+
+        // An explicit backup restore retains its saved removal choices. Validate
+        // their shape/size before provisioning or stopping writers; rows restored
+        // by that same backup are an explicit re-import of those identities.
+        const restoredOcppConfig = this.nwApplyInstallerPatchToRuntimeConfig(baseNative, finalPatch);
+        const restoredOcppExclusions = prepareOcppDiscoveryExclusions(restoredOcppConfig, restoredOcppConfig);
+        if (Object.prototype.hasOwnProperty.call(restoredOcppConfig.settingsConfig || {}, 'ocppExcludedStationRoots')) {
+          finalPatch.settingsConfig = { ...finalPatch.settingsConfig, ocppExcludedStationRoots: restoredOcppExclusions };
+        }
 
         if (Object.prototype.hasOwnProperty.call(safePatch, 'nvpTopology')) {
           const desired = safePatch.nvpTopology;
@@ -16950,70 +16995,37 @@ app.get('/api/smarthome/type-detect', requireDpDiscovery, async (req, res) => {
           ? Math.max(1, Math.min(50, Math.round(Number(q.max))))
           : 50;
 
-        // NexoWatt EOS uses the native compact datapoint contract of its own
-        // OCPP21 adapter directly. Aliases are deliberately not part of automatic
-        // discovery, because they can be missing, stale or resolve through a
-        // different ioBroker write path. Existing alias configurations are migrated
-        // by ChargingManagement/UI to these native IDs.
-        let compactObjects = {};
-        try {
-          compactObjects = Object.assign({}, ...await Promise.all(ocppDiscoveryPatterns(this.hostNamespace).map(pattern => this.getForeignObjectsAsync(pattern, 'state'))));
-        } catch (_compactScanError) {
-          compactObjects = {};
-        }
-
-        const compactGroups = new Map();
-        for (const id of Object.keys(compactObjects)) {
-          const root = ocppStationRoot(id);
-          if (!ocppRootInScope(root, this.hostNamespace)) continue;
-          if (!compactGroups.has(root)) compactGroups.set(root, { root, station: root.slice(root.lastIndexOf('.') + 1) });
-        }
-
-        const compactHas = (id) => !!(id && compactObjects[id]);
-        const compactPick = (...ids) => ids.flat().map(id => String(id || '').trim()).find(compactHas) || '';
-        const compactConnectors = [];
-        for (const group of compactGroups.values()) {
-          const nativeRoot = group.root;
-          const nativeId = (suffix) => `${nativeRoot}.${suffix}`;
-          const powerId = compactPick(nativeId('measurements.powerW'));
-          const energyKWhId = compactPick(nativeId('measurements.energyKWh'));
-          const energyWhId = compactPick(nativeId('measurements.energyWh'));
-          const energyTotalId = energyKWhId || energyWhId;
-          const ids = {
-            powerId,
-            energyTotalId,
-            statusId: compactPick(nativeId('info.status')),
-            chargingStateId: compactPick(nativeId('transactions.chargingState')),
-            activeId: compactPick(nativeId('transactions.transactionActive')),
-            vehicleConnectedId: '',
-            chargeDemandId: '',
-            heartbeatId: compactPick(nativeId('health.lastSeenMs')),
-            onlineId: compactPick(nativeId('info.socketConnected')),
-            dataFreshId: compactPick(nativeId('health.dataFresh')),
-            setCurrentAId: '',
-            setPowerWId: compactPick(nativeId('control.chargeLimit')),
-            enableWriteId: compactPick(nativeId('control.availability')),
-            vehicleSocId: compactPick(nativeId('measurements.socPercent'), nativeId('vehicle.socPercent')),
-            rfidReadId: compactPick(nativeId('info.rfid')),
-            currentId: compactPick(nativeId('measurements.currentA')),
-          };
-          if (!Object.values(ids).some(value => String(value || '').trim())) continue;
-          compactConnectors.push({
-            stationKey: nativeRoot,
-            adapterInstance: ocppNamespace(nativeRoot),
-            connectorNo: 1,
-            base: nativeRoot,
-            name: group.station,
-            ids,
-            energyTotalInputIsWh: !!energyWhId && !energyKWhId,
-            energyUnit: energyKWhId ? 'kWh' : (energyWhId ? 'Wh' : ''),
-            telemetryProfile: 'nexowattocpp',
-            controlPreference: 'powerW',
-            contractVersion: 'nexowatt-ocpp21-0.4-native',
-            adapterKind: 'nexowatt-ocpp21-native-compact',
-          });
-        }
-        compactConnectors.sort((a, b) => String(a.stationKey).localeCompare(String(b.stationKey)));
+        // Use the exact same validated contract and source lifecycle as the
+        // background registration. Retained objects from a deleted standalone
+        // adapter are not another charger and must not be offered again here.
+        const [compactObjects, compactMetadata, compactSources] = await Promise.all([
+          this._nwReadOcppDiscoveryObjects(), this._nwReadOcppDiscoveryMetadata(), this._nwReadOcppDiscoverySources(),
+        ]);
+        const compactStations = filterOcppDiscoverySources(
+          collectOcppStations(compactObjects, compactMetadata, this.hostNamespace), compactSources, this.hostNamespace);
+        const compactConnectors = compactStations.map(station => ({
+          // Legacy response field denotes physical identity only; clients must
+          // not use it as an automatic station/group assignment.
+          stationKey: station.root,
+          adapterInstance: station.adapterInstance,
+          connectorNo: 1,
+          base: station.root,
+          name: station.name,
+          ids: { ...station.ids },
+          energyTotalInputIsWh: false,
+          energyUnit: station.ids.energyTotalId ? 'kWh' : '',
+          telemetryProfile: 'nexowattocpp',
+          controlPreference: 'powerW',
+          contractVersion: 'nexowatt-ocpp21-0.4-native',
+          adapterKind: 'nexowatt-ocpp21-native-compact',
+          missing: [...station.missing],
+          ocppDiscovery: {
+            source: 'nexowatt-ocpp21', stationRoot: station.root, contract: 'nexowatt-ocpp21-0.4-native',
+            controlScope: 'station', connectorCount: station.connectorCount, evseCount: station.evseCount,
+            topologySource: station.topologySource, connectors: station.connectors,
+            code: station.missing.length ? 'CONTRACT_INCOMPLETE' : 'COMMISSIONING_REQUIRED', autoCreated: true,
+          },
+        }));
         if (compactConnectors.length > 0) {
           return res.json({
             ok: true,

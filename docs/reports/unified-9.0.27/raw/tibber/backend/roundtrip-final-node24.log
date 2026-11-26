@@ -1,0 +1,28 @@
+✔ Tibber masks survive unrelated Installer edits and a disk-backed owner restart (native namespace) (5717.920213ms)
+✔ Tibber masks survive unrelated Installer edits and a disk-backed owner restart (preserved namespace) (4903.524868ms)
+✔ Installer HTTP credential persistence: home/country selection and disable (308.585522ms)
+✔ Installer HTTP credential persistence: explicit credential deletion (32.89347ms)
+✔ Installer HTTP credential persistence: changed token recipient (48.845158ms)
+✔ Installer HTTP private string headers/body: same recipient preserves masks (32.2601ms)
+✔ Installer HTTP private string headers/body: changed recipient clears masks (33.812348ms)
+✔ Installer HTTP private object headers/body: same recipient preserves masks (44.958092ms)
+✔ Installer HTTP private object headers/body: changed recipient clears masks (29.125356ms)
+✔ Installer token context: partial edit (0.408526ms)
+✔ Installer token context: home and country selection (0.1013ms)
+✔ Installer token context: disabled provider (0.130534ms)
+✔ Installer token context: equivalent default endpoint (0.220868ms)
+✔ Installer token context: different endpoint (0.057906ms)
+✔ Installer token context: different provider (0.065407ms)
+✔ Installer token context: fresh credential on changed provider (0.047831ms)
+✔ Installer token context: intentional empty field (0.040891ms)
+✔ market source and configurable OAuth recipients/identity fence retained credentials (0.264292ms)
+✔ private request masks preserve same-recipient headers/body but never revive an explicit request clear (0.232394ms)
+✔ an early real startup failure cannot let Devices or OCPP overwrite an unread tariff (5.350397ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11768.710553

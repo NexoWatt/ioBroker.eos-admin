@@ -1,0 +1,7 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+> iobroker.eos-admin@9.0.27 build:ui-runtime
+> node ui/scripts/build-smarthome-markdown.cjs && node ui/scripts/build-ts-runtime-executables.js
+
+SmartHome GFM parser: 48 existing dependency licenses retained.
+[ts-runtime-executables] OK: 212 produktive Runtime-Dateien bereits aktuell; TS ist die kanonische Runtime-Quelle.

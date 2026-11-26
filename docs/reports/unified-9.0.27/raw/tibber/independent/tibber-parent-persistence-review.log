@@ -1,0 +1,20 @@
+✔ 9.0.21 tibber provider selection, credentials and tariff settings survive upgrade and two restarts (96.712957ms)
+✔ 9.0.21 entsoe provider selection, credentials and tariff settings survive upgrade and two restarts (55.551166ms)
+✔ 9.0.21 energyzero provider selection, credentials and tariff settings survive upgrade and two restarts (33.368605ms)
+✔ 9.0.21 market-profile provider selection, credentials and tariff settings survive upgrade and two restarts (18.314593ms)
+✔ 9.0.21 custom-rest provider selection, credentials and tariff settings survive upgrade and two restarts (20.577846ms)
+✔ 9.0.21 manual-dp provider selection, credentials and tariff settings survive upgrade and two restarts (20.814617ms)
+✔ UI handover and persisted migration restart retain the original tariff namespace, secret state and protected native configuration (23.439701ms)
+✔ existing EOS update without a handover journal reloads protected UI config and preserves tariffs while external OCPP remains separate (7.620084ms)
+✔ unreadable or corrupt existing provider storage never becomes fresh defaults or an older backup (6.955638ms)
+✔ AES and legacy envelopes round-trip in both directions against the actual controller SDK (42.026688ms)
+✔ missing system secret and malformed ciphertext fail without plaintext fallback (0.297982ms)
+✔ existing encrypted Influx config works through the actual child owner codec; absent secret quarantines credentials (199.506277ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 986.812778

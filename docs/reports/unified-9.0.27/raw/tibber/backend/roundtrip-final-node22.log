@@ -1,0 +1,134 @@
+(node:5) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:12) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: Tibber masks survive unrelated Installer edits and a disk-backed owner restart (native namespace)
+ok 1 - Tibber masks survive unrelated Installer edits and a disk-backed owner restart (native namespace)
+  ---
+  duration_ms: 5690.409348
+  type: 'test'
+  ...
+# Subtest: Tibber masks survive unrelated Installer edits and a disk-backed owner restart (preserved namespace)
+ok 2 - Tibber masks survive unrelated Installer edits and a disk-backed owner restart (preserved namespace)
+  ---
+  duration_ms: 5855.685105
+  type: 'test'
+  ...
+# Subtest: Installer HTTP credential persistence: home/country selection and disable
+ok 3 - Installer HTTP credential persistence: home/country selection and disable
+  ---
+  duration_ms: 314.315918
+  type: 'test'
+  ...
+# Subtest: Installer HTTP credential persistence: explicit credential deletion
+ok 4 - Installer HTTP credential persistence: explicit credential deletion
+  ---
+  duration_ms: 32.157244
+  type: 'test'
+  ...
+# Subtest: Installer HTTP credential persistence: changed token recipient
+ok 5 - Installer HTTP credential persistence: changed token recipient
+  ---
+  duration_ms: 29.579579
+  type: 'test'
+  ...
+# Subtest: Installer HTTP private string headers/body: same recipient preserves masks
+ok 6 - Installer HTTP private string headers/body: same recipient preserves masks
+  ---
+  duration_ms: 29.661401
+  type: 'test'
+  ...
+# Subtest: Installer HTTP private string headers/body: changed recipient clears masks
+ok 7 - Installer HTTP private string headers/body: changed recipient clears masks
+  ---
+  duration_ms: 32.704054
+  type: 'test'
+  ...
+# Subtest: Installer HTTP private object headers/body: same recipient preserves masks
+ok 8 - Installer HTTP private object headers/body: same recipient preserves masks
+  ---
+  duration_ms: 31.00943
+  type: 'test'
+  ...
+# Subtest: Installer HTTP private object headers/body: changed recipient clears masks
+ok 9 - Installer HTTP private object headers/body: changed recipient clears masks
+  ---
+  duration_ms: 30.304465
+  type: 'test'
+  ...
+# Subtest: Installer token context: partial edit
+ok 10 - Installer token context: partial edit
+  ---
+  duration_ms: 0.544318
+  type: 'test'
+  ...
+# Subtest: Installer token context: home and country selection
+ok 11 - Installer token context: home and country selection
+  ---
+  duration_ms: 0.114129
+  type: 'test'
+  ...
+# Subtest: Installer token context: disabled provider
+ok 12 - Installer token context: disabled provider
+  ---
+  duration_ms: 0.083133
+  type: 'test'
+  ...
+# Subtest: Installer token context: equivalent default endpoint
+ok 13 - Installer token context: equivalent default endpoint
+  ---
+  duration_ms: 0.068091
+  type: 'test'
+  ...
+# Subtest: Installer token context: different endpoint
+ok 14 - Installer token context: different endpoint
+  ---
+  duration_ms: 0.057365
+  type: 'test'
+  ...
+# Subtest: Installer token context: different provider
+ok 15 - Installer token context: different provider
+  ---
+  duration_ms: 0.086498
+  type: 'test'
+  ...
+# Subtest: Installer token context: fresh credential on changed provider
+ok 16 - Installer token context: fresh credential on changed provider
+  ---
+  duration_ms: 0.062733
+  type: 'test'
+  ...
+# Subtest: Installer token context: intentional empty field
+ok 17 - Installer token context: intentional empty field
+  ---
+  duration_ms: 0.130864
+  type: 'test'
+  ...
+# Subtest: market source and configurable OAuth recipients/identity fence retained credentials
+ok 18 - market source and configurable OAuth recipients/identity fence retained credentials
+  ---
+  duration_ms: 0.423458
+  type: 'test'
+  ...
+# Subtest: private request masks preserve same-recipient headers/body but never revive an explicit request clear
+ok 19 - private request masks preserve same-recipient headers/body but never revive an explicit request clear
+  ---
+  duration_ms: 0.258704
+  type: 'test'
+  ...
+# Subtest: an early real startup failure cannot let Devices or OCPP overwrite an unread tariff
+ok 20 - an early real startup failure cannot let Devices or OCPP overwrite an unread tariff
+  ---
+  duration_ms: 6.925343
+  type: 'test'
+  ...
+1..20
+# tests 20
+# suites 0
+# pass 20
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 12598.145099

@@ -1,0 +1,220 @@
+(node:6) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+(Use `node --trace-warnings ...` to show where the warning was created)
+TAP version 13
+# (node:13) [UNDICI-EHPA] Warning: EnvHttpProxyAgent is experimental, expect them to change at any time.
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# REQUEST_START false 1 GET /api/installer/config
+# REQUEST_END false 1 503 EOS_INSTALLER_CONFIG_LOADING
+# REQUEST_START false 2 POST /api/installer/config
+# REQUEST_END false 2 503 EOS_UI_NOT_STARTED
+# REQUEST_START false 3 GET /api/customer/tariff-provider
+# REQUEST_END false 3 200 
+# REQUEST_START false 4 PUT /api/customer/tariff-provider
+# REQUEST_END false 4 200 
+# REQUEST_START false 5 GET /api/customer/tariff-provider
+# REQUEST_END false 5 200 
+# REQUEST_START false 6 GET /api/installer/config
+# REQUEST_END false 6 200 
+# REQUEST_START false 7 POST /api/installer/config
+# REQUEST_END false 7 200 
+# REQUEST_START false 8 GET /api/customer/tariff-provider
+# REQUEST_END false 8 200 
+# REQUEST_START false 9 GET /api/installer/config
+# REQUEST_END false 9 503 EOS_INSTALLER_CONFIG_LOADING
+# REQUEST_START false 10 POST /api/installer/config
+# REQUEST_END false 10 503 EOS_UI_NOT_STARTED
+# REQUEST_START false 11 GET /api/customer/tariff-provider
+# REQUEST_END false 11 503 EOS_TARIFF_CONFIG_LOADING
+# REQUEST_START false 12 GET /api/installer/config
+# REQUEST_END false 12 503 EOS_INSTALLER_CONFIG_LOADING
+# REQUEST_START false 13 POST /api/installer/config
+# REQUEST_END false 13 503 EOS_UI_STARTING
+# REQUEST_START false 14 PUT /api/customer/tariff-provider
+# REQUEST_END false 14 503 EOS_UI_STARTING
+# REQUEST_START false 15 GET /api/customer/tariff-provider
+# REQUEST_END false 15 200 
+# REQUEST_START false 16 GET /api/installer/config
+# REQUEST_END false 16 200 
+# REQUEST_START false 17 POST /api/installer/config
+# REQUEST_END false 17 200 
+# REQUEST_START false 18 GET /api/installer/config
+# REQUEST_END false 18 200 
+# REQUEST_START false 19 POST /api/installer/config
+# REQUEST_END false 19 200 
+# REQUEST_START false 20 GET /api/installer/config
+# REQUEST_END false 20 200 
+# REQUEST_START false 21 POST /api/installer/config
+# REQUEST_END false 21 200 
+# REQUEST_START false 22 GET /api/installer/config
+# REQUEST_END false 22 200 
+# REQUEST_START false 23 POST /api/installer/config
+# REQUEST_END false 23 200 
+# REQUEST_START false 24 GET /api/installer/config
+# REQUEST_END false 24 200 
+# REQUEST_START false 25 POST /api/installer/config
+# REQUEST_END false 25 200 
+# REQUEST_START false 26 GET /api/installer/config
+# REQUEST_END false 26 200 
+# REQUEST_START false 27 POST /api/installer/config
+# REQUEST_END false 27 200 
+# REQUEST_START false 28 GET /api/installer/config
+# REQUEST_END false 28 200 
+# REQUEST_START false 29 POST /api/installer/config
+# REQUEST_END false 29 200 
+# REQUEST_START false 30 GET /api/customer/tariff-provider
+# REQUEST_END false 30 503 EOS_TARIFF_CONFIG_UNAVAILABLE
+# REQUEST_START false 31 GET /api/installer/config
+# REQUEST_END false 31 503 EOS_INSTALLER_CONFIG_UNAVAILABLE
+# REQUEST_START false 32 POST /api/installer/config
+# REQUEST_END false 32 503 EOS_UI_CONFIG_LOAD_FAILED
+# Subtest: Tibber masks survive unrelated Installer edits and a disk-backed owner restart (native namespace)
+ok 1 - Tibber masks survive unrelated Installer edits and a disk-backed owner restart (native namespace)
+  ---
+  duration_ms: 13072.150319
+  type: 'test'
+  ...
+# REQUEST_START true 1 GET /api/installer/config
+# REQUEST_END true 1 503 EOS_INSTALLER_CONFIG_LOADING
+# REQUEST_START true 2 POST /api/installer/config
+# REQUEST_END true 2 503 EOS_UI_NOT_STARTED
+# REQUEST_START true 3 GET /api/customer/tariff-provider
+# REQUEST_END true 3 200 
+# REQUEST_START true 4 PUT /api/customer/tariff-provider
+# REQUEST_END true 4 200 
+# REQUEST_START true 5 GET /api/customer/tariff-provider
+# REQUEST_END true 5 200 
+# REQUEST_START true 6 GET /api/installer/config
+# REQUEST_END true 6 200 
+# REQUEST_START true 7 POST /api/installer/config
+# REQUEST_END true 7 200 
+# REQUEST_START true 8 GET /api/customer/tariff-provider
+# REQUEST_END true 8 200 
+# REQUEST_START true 9 GET /api/installer/config
+# REQUEST_END true 9 503 EOS_INSTALLER_CONFIG_LOADING
+# REQUEST_START true 10 POST /api/installer/config
+# REQUEST_END true 10 503 EOS_UI_NOT_STARTED
+# REQUEST_START true 11 GET /api/customer/tariff-provider
+# REQUEST_END true 11 503 EOS_TARIFF_CONFIG_LOADING
+# REQUEST_START true 12 GET /api/installer/config
+# REQUEST_END true 12 503 EOS_INSTALLER_CONFIG_LOADING
+# REQUEST_START true 13 POST /api/installer/config
+# REQUEST_END true 13 503 EOS_UI_STARTING
+# REQUEST_START true 14 PUT /api/customer/tariff-provider
+# REQUEST_END true 14 503 EOS_UI_STARTING
+# REQUEST_START true 15 GET /api/customer/tariff-provider
+# REQUEST_END true 15 200 
+# REQUEST_START true 16 GET /api/installer/config
+# REQUEST_END true 16 200 
+# REQUEST_START true 17 POST /api/installer/config
+# REQUEST_END true 17 200 
+# REQUEST_START true 18 GET /api/installer/config
+# REQUEST_END true 18 200 
+# REQUEST_START true 19 POST /api/installer/config
+# REQUEST_END true 19 200 
+# REQUEST_START true 20 GET /api/installer/config
+# REQUEST_END true 20 200 
+# REQUEST_START true 21 POST /api/installer/config
+# REQUEST_END true 21 200 
+# REQUEST_START true 22 GET /api/installer/config
+# REQUEST_END true 22 200 
+# REQUEST_START true 23 POST /api/installer/config
+# REQUEST_END true 23 200 
+# REQUEST_START true 24 GET /api/installer/config
+# REQUEST_END true 24 200 
+# REQUEST_START true 25 POST /api/installer/config
+# REQUEST_END true 25 200 
+# REQUEST_START true 26 GET /api/installer/config
+# REQUEST_END true 26 200 
+# REQUEST_START true 27 POST /api/installer/config
+# REQUEST_END true 27 200 
+# REQUEST_START true 28 GET /api/installer/config
+# REQUEST_END true 28 200 
+# REQUEST_START true 29 POST /api/installer/config
+# REQUEST_END true 29 200 
+# REQUEST_START true 30 GET /api/customer/tariff-provider
+# REQUEST_END true 30 503 EOS_TARIFF_CONFIG_UNAVAILABLE
+# REQUEST_START true 31 GET /api/installer/config
+# REQUEST_END true 31 503 EOS_INSTALLER_CONFIG_UNAVAILABLE
+# REQUEST_START true 32 POST /api/installer/config
+# REQUEST_END true 32 503 EOS_MIGRATION_UI_STATE_UNAVAILABLE
+# Subtest: Tibber masks survive unrelated Installer edits and a disk-backed owner restart (preserved namespace)
+ok 2 - Tibber masks survive unrelated Installer edits and a disk-backed owner restart (preserved namespace)
+  ---
+  duration_ms: 14936.606739
+  type: 'test'
+  ...
+# Subtest: Installer token context: partial edit
+ok 3 - Installer token context: partial edit
+  ---
+  duration_ms: 0.726839
+  type: 'test'
+  ...
+# Subtest: Installer token context: home and country selection
+ok 4 - Installer token context: home and country selection
+  ---
+  duration_ms: 0.116884
+  type: 'test'
+  ...
+# Subtest: Installer token context: disabled provider
+ok 5 - Installer token context: disabled provider
+  ---
+  duration_ms: 0.081371
+  type: 'test'
+  ...
+# Subtest: Installer token context: equivalent default endpoint
+ok 6 - Installer token context: equivalent default endpoint
+  ---
+  duration_ms: 0.271753
+  type: 'test'
+  ...
+# Subtest: Installer token context: different endpoint
+ok 7 - Installer token context: different endpoint
+  ---
+  duration_ms: 0.327105
+  type: 'test'
+  ...
+# Subtest: Installer token context: different provider
+ok 8 - Installer token context: different provider
+  ---
+  duration_ms: 0.246646
+  type: 'test'
+  ...
+# Subtest: Installer token context: fresh credential on changed provider
+ok 9 - Installer token context: fresh credential on changed provider
+  ---
+  duration_ms: 0.216491
+  type: 'test'
+  ...
+# Subtest: Installer token context: intentional empty field
+ok 10 - Installer token context: intentional empty field
+  ---
+  duration_ms: 0.365973
+  type: 'test'
+  ...
+# Subtest: market source and configurable OAuth recipients/identity fence retained credentials
+ok 11 - market source and configurable OAuth recipients/identity fence retained credentials
+  ---
+  duration_ms: 0.35738
+  type: 'test'
+  ...
+# Subtest: private request masks preserve same-recipient headers/body but never revive an explicit request clear
+ok 12 - private request masks preserve same-recipient headers/body but never revive an explicit request clear
+  ---
+  duration_ms: 0.254998
+  type: 'test'
+  ...
+# Subtest: an early real startup failure cannot let Devices or OCPP overwrite an unread tariff
+ok 13 - an early real startup failure cannot let Devices or OCPP overwrite an unread tariff
+  ---
+  duration_ms: 200.491611
+  type: 'test'
+  ...
+1..13
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 29823.876339

@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "eos-admin",
-    "version": "9.0.26",
+    "version": "9.0.27",
     "titleLang": {
       "en": "NexoWatt EOS",
       "de": "NexoWatt EOS",
@@ -18,6 +18,10 @@
     "connectionType": "local",
     "dataSource": "push",
     "news": {
+      "9.0.27": {
+        "de": "OCPP-/Devices-Zuordnung ohne doppelte Ladepunkte; manuelle Stationsgruppen und dauerhafte Löschung. Tibber bleibt bei anderen EMS-Änderungen und Neustarts erhalten; Konfigurationszugriffe warten auf das Laden gespeicherter Werte. Begrenzte Modulstart-Wiederholung und konsistente Update-Metadaten.",
+        "en": "Idempotent OCPP/Devices mappings, manual station groups and persistent removal. Preserve Tibber across unrelated EMS edits and restarts; configuration access waits for stored data. Bounded module startup retry and consistent update metadata."
+      },
       "9.0.26": {
         "en": "Preserve module runtimes in Git exports; fix activation and startup recovery, charging-point deletion and tariff loading after restart; organize backup settings; provide HTTPS setup and independent app icons.",
         "de": "Modullaufzeiten im Git-Export erhalten; Aktivierung und Wiederanlauf, Ladepunkt-Löschung und Tarifladen nach Neustart korrigiert; Sicherungseinstellungen geordnet; HTTPS-Einrichtung und unabhängige App-Symbole ergänzt."
@@ -93,10 +97,6 @@
       "9.0.8": {
         "en": "Explicit SmartHome activation, protected legacy configuration loading, same-tab administration and maintained backup scheduling. Node.js 22 and 24 supported; test channel with documented migration limits.",
         "de": "SmartHome direkt aktivieren, geschützte Bestandskonfiguration laden, Administration im selben Tab und gepflegte Backup-Zeitplanung. Node.js 22 und 24 unterstützt; Prüfkanal mit dokumentierten Migrationsgrenzen."
-      },
-      "9.0.7": {
-        "de": "Gerätekonfiguration ohne Sitzungsabbruch, geprüfte Bestandsübernahme, integrierte Sicherung und lokale Zertifikatsverwaltung. Einheitliche Moduloberflächen und begrenzte Caches. Umfang und Abnahmegrenzen siehe Prüfbericht.",
-        "en": "Device configuration without session interruption, guarded legacy migration, integrated backup and local certificate management. Consistent module interfaces and bounded caches. See the report for scope and acceptance limitations."
       }
     },
     "desc": {
@@ -134,7 +134,7 @@
     "icon": "admin.svg",
     "messagebox": true,
     "enabled": true,
-    "extIcon": "https://unpkg.com/iobroker.eos-admin@9.0.26/admin/admin.svg",
+    "extIcon": "https://unpkg.com/iobroker.eos-admin@9.0.27/admin/admin.svg",
     "keywords": [
       "NexoWatt",
       "EOS",
@@ -145,7 +145,7 @@
       "licensed"
     ],
     "compact": false,
-    "readme": "https://unpkg.com/iobroker.eos-admin@9.0.26/README.md",
+    "readme": "https://unpkg.com/iobroker.eos-admin@9.0.27/README.md",
     "authors": [
       "NexoWatt"
     ],
@@ -157,7 +157,7 @@
     "type": "general",
     "licenseInformation": {
       "type": "paid",
-      "link": "https://unpkg.com/iobroker.eos-admin@9.0.26/LICENSE"
+      "link": "https://unpkg.com/iobroker.eos-admin@9.0.27/LICENSE"
     },
     "logTransporter": true,
     "stopBeforeUpdate": true,

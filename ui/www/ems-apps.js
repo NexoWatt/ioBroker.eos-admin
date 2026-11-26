@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/www/ems-apps.ts
- * Quell-Hash: sha256:be3391975625831775bbcb6a9f49c7ec980cfc1aa8bc534389b9d6977eea48a0
+ * Quell-Hash: sha256:e9b2e1babf672181807086e69928c205e546ed8b47ba65fdbe64dc9193bb89e9
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -782,6 +782,8 @@
   // Direkte dynamische Tarifprovider
   // ------------------------------
   let tariffProviderRegistryCache = null;
+  let tariffProviderFormConfig = null;
+  let tariffProviderFormBaseline = null;
   const _tpEl = (id) => document.getElementById(id);
   const _tpStr = (id, fallback = '') => {
     const el = _tpEl(id);
@@ -792,6 +794,7 @@
     return el ? !!el.checked : fallback;
   };
   const _tpNum = (id, fallback = 0) => {
+    if (!_tpEl(id)) return fallback;
     const n = Number(_tpStr(id, ''));
     return Number.isFinite(n) ? n : fallback;
   };
@@ -849,63 +852,93 @@
   }
   function collectTariffProviderConfig() {
     const existing = currentConfig && currentConfig.tariffProvider && typeof currentConfig.tariffProvider === 'object' ? currentConfig.tariffProvider : {};
+    const credentials = existing.credentials && typeof existing.credentials === 'object' ? existing.credentials : {};
+    const formula = existing.formula && typeof existing.formula === 'object' ? existing.formula : {};
+    const custom = existing.customRest && typeof existing.customRest === 'object' ? existing.customRest : {};
     const country = _tpStr('tariffProviderCountry', String(existing.country || 'DE')).toUpperCase() === 'NL' ? 'NL' : 'DE';
+    const providerId = _tpStr('tariffProviderId', existing.providerId || 'manual-dp');
     return {
       ...existing,
       enabled: _tpStr('tariffProviderEnabled', existing.enabled ? 'true' : 'false') === 'true',
-      providerId: _tpStr('tariffProviderId', existing.providerId || 'manual-dp'),
+      providerId,
       sourceId: _tpStr('tariffProviderSourceId', existing.sourceId || 'entsoe'),
       providerProfileId: _tpStr('tariffProviderProfileId', existing.providerProfileId || 'local-provider'),
-      activateTariffLogic: _tpBool('tariffProviderActivateLogic', true),
-      automaticMode: _tpBool('tariffProviderAutomaticMode', true),
-      autoCoupleDatapoints: _tpBool('tariffProviderAutoCouple', true),
+      activateTariffLogic: _tpBool('tariffProviderActivateLogic', existing.activateTariffLogic !== false),
+      automaticMode: _tpBool('tariffProviderAutomaticMode', existing.automaticMode !== false),
+      autoCoupleDatapoints: _tpBool('tariffProviderAutoCouple', existing.autoCoupleDatapoints !== false),
       country,
-      timeZone: _tpStr('tariffProviderTimeZone', country === 'NL' ? 'Europe/Amsterdam' : 'Europe/Berlin'),
-      resolutionMinutes: [15,30,60].includes(_tpNum('tariffProviderResolution', 15)) ? _tpNum('tariffProviderResolution', 15) : 15,
-      refreshMinutes: Math.max(5, Math.min(360, Math.round(_tpNum('tariffProviderRefresh', 15)))),
-      priceComponent: _tpStr('tariffProviderPriceComponent', 'total'),
-      homeId: _tpStr('tariffProviderHomeId', ''),
-      postalCode: _tpStr('tariffProviderPostalCode', ''),
-      tokenUrl: _tpStr('tariffProviderTokenUrl', ''),
-      pricesUrl: _tpStr('tariffProviderPricesUrl', ''),
+      timeZone: _tpStr('tariffProviderTimeZone', existing.timeZone ?? (country === 'NL' ? 'Europe/Amsterdam' : 'Europe/Berlin')),
+      resolutionMinutes: _tpEl('tariffProviderResolution')
+        ? ([15,30,60].includes(_tpNum('tariffProviderResolution', 15)) ? _tpNum('tariffProviderResolution', 15) : 15)
+        : (existing.resolutionMinutes ?? 15),
+      refreshMinutes: _tpEl('tariffProviderRefresh')
+        ? Math.max(5, Math.min(360, Math.round(_tpNum('tariffProviderRefresh', 15)))) : (existing.refreshMinutes ?? 15),
+      priceComponent: _tpStr('tariffProviderPriceComponent', existing.priceComponent ?? 'total'),
+      homeId: _tpStr('tariffProviderHomeId', existing.homeId || ''),
+      postalCode: _tpStr('tariffProviderPostalCode', existing.postalCode || ''),
+      tokenUrl: _tpStr('tariffProviderTokenUrl', existing.tokenUrl || ''),
+      pricesUrl: _tpStr('tariffProviderPricesUrl', existing.pricesUrl || ''),
       credentials: {
-        ...(existing.credentials && typeof existing.credentials === 'object' ? existing.credentials : {}),
-        accessToken: _tpStr('tariffProviderAccessToken', ''),
-        securityToken: _tpStr('tariffProviderSecurityToken', ''),
-        clientId: _tpStr('tariffProviderClientId', ''),
-        clientSecret: _tpStr('tariffProviderClientSecret', ''),
-        tokenUrl: _tpStr('tariffProviderTokenUrl', ''),
-        bearerToken: _tpStr('tariffProviderBearerToken', ''),
-        apiKey: _tpStr('tariffProviderApiKey', ''),
-        username: _tpStr('tariffProviderUsername', ''),
-        password: _tpStr('tariffProviderPassword', ''),
+        ...credentials,
+        accessToken: _tpStr('tariffProviderAccessToken', credentials.accessToken || ''),
+        securityToken: _tpStr('tariffProviderSecurityToken', credentials.securityToken || ''),
+        clientId: _tpStr('tariffProviderClientId', credentials.clientId || ''),
+        clientSecret: _tpStr('tariffProviderClientSecret', credentials.clientSecret || ''),
+        tokenUrl: _tpStr('tariffProviderTokenUrl', credentials.tokenUrl ?? existing.tokenUrl ?? ''),
+        bearerToken: _tpStr('tariffProviderBearerToken', credentials.bearerToken || ''),
+        apiKey: _tpStr('tariffProviderApiKey', credentials.apiKey || ''),
+        username: _tpStr('tariffProviderUsername', credentials.username || ''),
+        password: _tpStr('tariffProviderPassword', credentials.password || ''),
       },
       formula: {
-        marketMultiplier: _tpNum('tariffProviderMarketMultiplier', 1),
-        supplierMarkupEurPerKwh: _tpNum('tariffProviderSupplierMarkup', 0),
-        gridVariableEurPerKwh: _tpNum('tariffProviderGridVariable', 0),
-        taxEurPerKwh: _tpNum('tariffProviderTax', 0),
-        otherVariableEurPerKwh: _tpNum('tariffProviderOtherVariable', 0),
-        vatPct: _tpNum('tariffProviderVatPct', 0),
-        priceIncludesVat: _tpStr('tariffProviderId', '') === 'tibber' || _tpStr('tariffProviderId', '') === 'energyzero',
+        ...formula,
+        marketMultiplier: _tpNum('tariffProviderMarketMultiplier', formula.marketMultiplier ?? 1),
+        supplierMarkupEurPerKwh: _tpNum('tariffProviderSupplierMarkup', formula.supplierMarkupEurPerKwh ?? 0),
+        gridVariableEurPerKwh: _tpNum('tariffProviderGridVariable', formula.gridVariableEurPerKwh ?? 0),
+        taxEurPerKwh: _tpNum('tariffProviderTax', formula.taxEurPerKwh ?? 0),
+        otherVariableEurPerKwh: _tpNum('tariffProviderOtherVariable', formula.otherVariableEurPerKwh ?? 0),
+        vatPct: _tpNum('tariffProviderVatPct', formula.vatPct ?? 0),
+        priceIncludesVat: providerId === existing.providerId && typeof formula.priceIncludesVat === 'boolean'
+          ? formula.priceIncludesVat : providerId === 'tibber' || providerId === 'energyzero',
       },
-      feedInEurPerKwh: _tpNum('tariffProviderFeedIn', 0),
+      feedInEurPerKwh: _tpNum('tariffProviderFeedIn', existing.feedInEurPerKwh ?? 0),
       customRest: {
-        ...(existing.customRest && typeof existing.customRest === 'object' ? existing.customRest : {}),
-        url: _tpStr('tariffProviderRestUrl', ''),
-        method: _tpStr('tariffProviderRestMethod', 'GET'),
-        authMode: _tpStr('tariffProviderRestAuthMode', 'none'),
-        apiKeyHeader: _tpStr('tariffProviderApiKeyHeader', 'x-api-key'),
-        arrayPath: _tpStr('tariffProviderArrayPath', ''),
-        startPath: _tpStr('tariffProviderStartPath', 'startsAt'),
-        endPath: _tpStr('tariffProviderEndPath', 'endsAt'),
-        pricePath: _tpStr('tariffProviderPricePath', 'total'),
-        unit: _tpStr('tariffProviderUnit', 'EUR/kWh'),
-        headersJson: _tpStr('tariffProviderHeadersJson', ''),
+        ...custom,
+        url: _tpStr('tariffProviderRestUrl', custom.url || ''),
+        method: _tpStr('tariffProviderRestMethod', custom.method ?? 'GET'),
+        authMode: _tpStr('tariffProviderRestAuthMode', custom.authMode ?? 'none'),
+        apiKeyHeader: _tpStr('tariffProviderApiKeyHeader', custom.apiKeyHeader ?? 'x-api-key'),
+        arrayPath: _tpStr('tariffProviderArrayPath', custom.arrayPath || ''),
+        startPath: _tpStr('tariffProviderStartPath', custom.startPath ?? 'startsAt'),
+        endPath: _tpStr('tariffProviderEndPath', custom.endPath ?? 'endsAt'),
+        pricePath: _tpStr('tariffProviderPricePath', custom.pricePath ?? 'total'),
+        unit: _tpStr('tariffProviderUnit', custom.unit ?? 'EUR/kWh'),
+        headersJson: _tpStr('tariffProviderHeadersJson', custom.headersJson || ''),
       },
     };
   }
+  function collectTariffProviderPatch() {
+    // An unrelated EMS save must not create a tariff from unconfirmed/default
+    // controls. Keep the loaded provider untouched unless its own form changed.
+    if (!tariffProviderFormConfig || tariffProviderFormConfig !== currentConfig?.tariffProvider || tariffProviderFormBaseline === null) return undefined;
+    const collected = collectTariffProviderConfig();
+    if (JSON.stringify(collected) === tariffProviderFormBaseline) return undefined;
+    // Rendering may display defaults for optional legacy fields. Only actual
+    // changes to that rendered baseline belong in this save, never those defaults.
+    const mergeChangedFields = (before, after, stored) => {
+      const out = { ...(stored && typeof stored === 'object' ? stored : {}) };
+      for (const [key, value] of Object.entries(after)) {
+        if (JSON.stringify(before?.[key]) === JSON.stringify(value)) continue;
+        out[key] = value && typeof value === 'object' && !Array.isArray(value)
+          ? mergeChangedFields(before?.[key], value, out[key]) : value;
+      }
+      return out;
+    };
+    return mergeChangedFields(JSON.parse(tariffProviderFormBaseline), collected, tariffProviderFormConfig);
+  }
   function applyTariffProviderUI(config) {
+    tariffProviderFormConfig = null;
+    tariffProviderFormBaseline = null;
     const cfg = config && typeof config === 'object' ? config : {};
     const credentials = cfg.credentials && typeof cfg.credentials === 'object' ? cfg.credentials : {};
     const formula = cfg.formula && typeof cfg.formula === 'object' ? cfg.formula : {};
@@ -951,6 +984,10 @@
     _tpSet('tariffProviderPricePath', custom.pricePath || 'total');
     _tpSet('tariffProviderUnit', custom.unit || 'EUR/kWh');
     _tpSet('tariffProviderHeadersJson', custom.headersJson || '');
+    if (config && typeof config === 'object' && !Array.isArray(config)) {
+      tariffProviderFormConfig = config;
+      tariffProviderFormBaseline = JSON.stringify(collectTariffProviderConfig());
+    }
     loadTariffProviderRegistry().then(() => {
       if (cfg.enabled && cfg.providerId !== 'manual-dp' && cfg.autoCoupleDatapoints !== false) _coupleTariffProviderDatapointsSync();
     }).catch(() => {});
@@ -1678,6 +1715,7 @@ function _collectFlowPowerDpIsWFromUI() {
   }
 
   let appCenterConfigDirty = false;
+  let appCenterLoadedDraftSnapshot = null;
   let appCenterMutationBusy = false;
   /** Laden, Gesamt-Save und Import ersetzen die sichtbaren Eingaben. Während
    * dieses Requests verhindert inert neue Eingaben, auch im eingebetteten Formular. */
@@ -1693,6 +1731,19 @@ function _collectFlowPowerDpIsWFromUI() {
       if (main) { main.inert = wasInert; main.removeAttribute('aria-busy'); }
     };
   }
+  function appCenterDraftSnapshot() {
+    try {
+      const inputs = Array.from(document.querySelectorAll('main input, main select, main textarea'))
+        .map(input => [input.id, input.name, input.type, input.value, input.checked,
+          input.multiple && input.selectedOptions ? Array.from(input.selectedOptions).map(option => option.value) : null]);
+      return JSON.stringify([currentConfig, inputs]);
+    } catch (_error) { return null; }
+  }
+  function hasAppCenterDraftChanges() {
+    if (appCenterConfigDirty || appCenterLoadedDraftSnapshot === null) return true;
+    const current = appCenterDraftSnapshot();
+    return current === null || current !== appCenterLoadedDraftSnapshot;
+  }
   function setDirty() {
     appCenterConfigDirty = true;
     if (els.save) {
@@ -1703,6 +1754,7 @@ function _collectFlowPowerDpIsWFromUI() {
   }
   function clearDirty() {
     appCenterConfigDirty = false;
+    appCenterLoadedDraftSnapshot = appCenterDraftSnapshot();
     if (els.save) {
       delete els.save.dataset.dirty;
       els.save.title = '';
@@ -10508,6 +10560,7 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
     row[field] = value;
     list[idx - 1] = row;
     sc.evcsList = list;
+    setDirty();
   }
   /**
    * Code-Teil: buildEvcsUI
@@ -10563,13 +10616,14 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
 
     const ocppStatus = currentConfig && currentConfig.ocppAutoDiscovery;
     const ocppPending = ocppStatus && Array.isArray(ocppStatus.stations)
-      ? ocppStatus.stations.filter(row => ['LICENSE_LIMIT', 'ROW_LIMIT', 'CONTROL_GROUP_CONFLICT', 'MIXED_MANUAL_MAPPING'].includes(row.code)) : [];
+      ? ocppStatus.stations.filter(row => ['LICENSE_LIMIT', 'ROW_LIMIT', 'CONTROL_GROUP_CONFLICT', 'MIXED_MANUAL_MAPPING', 'USER_EXCLUDED'].includes(row.code)) : [];
     if (ocppPending.length || (ocppStatus && ocppStatus.error)) {
       const notice = document.createElement('div');
       notice.className = 'nw-help';
       notice.dataset.ocppDiscoveryPending = '1';
       notice.textContent = ocppPending.map(row => `${row.root}: ${row.code === 'LICENSE_LIMIT'
         ? 'Erkannt; für die automatische Zuordnung ist ein freier lizenzierter Ladepunkt erforderlich.'
+        : row.code === 'USER_EXCLUDED' ? 'Aus der EMS-Zuordnung entfernt. Über die OCPP-Erkennung bei Bedarf erneut hinzufügen.'
         : row.code === 'ROW_LIMIT' ? 'Erkannt; das Ladepunktlimit ist erreicht.'
           : 'Erkannt; vorhandene Datenpunktzuordnungen widersprechen sich. Die Stationszuordnung prüfen.'}`).join(' ')
         || 'Die automatische OCPP-Zuordnung ist noch nicht abgeschlossen und wird erneut geprüft.';
@@ -11726,6 +11780,13 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
     const incomingPartnerVersion = dynamicGridVersion(cfg?.partnerIntegrations?.configVersion);
     if (incomingPartnerVersion && incomingPartnerVersion < partnerObservedVersion) throw new Error(partnerReloadNotice);
     currentConfig = cfg || {};
+    // A loaded list is authoritative over an older display counter. Explicit
+    // removal still sends both an empty list and count zero through its own UI.
+    const loadedEvcs = currentConfig.settingsConfig;
+    if (loadedEvcs && Array.isArray(loadedEvcs.evcsList)) {
+      loadedEvcs.evcsCount = Math.max(_clampInt(loadedEvcs.evcsCount, 0, _maxEvcsCount(), 0),
+        Math.min(_maxEvcsCount(), loadedEvcs.evcsList.length));
+    }
     evcsExplicitEmpty = false;
     partnerLoadedVersion = incomingPartnerVersion;
     partnerObservedVersion = Math.max(partnerObservedVersion, partnerLoadedVersion || 0);
@@ -12106,41 +12167,48 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
     return '';
   }
 
-  function _ocppStationIdentityFromRow(row) {
+  function _ocppStationIdentitiesFromRow(row) {
     const r = row && typeof row === 'object' ? row : {};
+    const identities = new Set();
     for (const field of [
       'powerId', 'energyTotalId', 'statusId', 'chargingStateId', 'activeId', 'heartbeatId',
-      'onlineId', 'dataFreshId', 'setPowerWId', 'enableWriteId',
+      'onlineId', 'dataFreshId', 'setCurrentAId', 'setPowerWId', 'enableWriteId',
+      'vehicleConnectedId', 'chargeDemandId', 'currentId', 'appliedChargeLimitWId', 'appliedChargeLimitValidId',
       'vehicleSocId', 'rfidReadId',
     ]) {
       const identity = _ocppStationIdentityFromDp(r[field]);
-      if (identity) return identity;
+      if (identity) identities.add(identity);
     }
-    const stationKey = String(r.stationKey || '').trim();
-    if (stationKey) {
+    const discoveredIdentity = r.ocppDiscovery && r.ocppDiscovery.source === 'nexowatt-ocpp21'
+      ? _ocppStationIdentityFromDp(r.ocppDiscovery.stationRoot) : '';
+    if (discoveredIdentity) identities.add(discoveredIdentity);
+    // A legacy row may identify its physical station without datapoints yet.
+    // Once native IDs exist, a manual display group must not override them.
+    if (identities.size === 0) {
+      const stationKey = String(r.stationKey || '').trim();
       const nativeIdentity = _ocppStationIdentityFromDp(stationKey);
-      if (nativeIdentity) return nativeIdentity;
-      const hostedInstance = String(r.ocppAdapterInstance || r.adapterInstance || '').match(/^eos-admin\.\d+\.ocpp$/);
-      if (hostedInstance && /^[A-Za-z0-9_-]+$/.test(stationKey)) return `${hostedInstance[0]}|${stationKey}`;
-      const instanceMatch = String(r.ocppAdapterInstance || r.adapterInstance || '').match(/(?:^|\.)ocpp21\.(\d+)(?:\.|$)/i);
-      if (instanceMatch) return `${instanceMatch[1]}|${stationKey}`;
+      if (nativeIdentity) identities.add(nativeIdentity);
+      else if (stationKey) {
+        const hostedInstance = String(r.ocppAdapterInstance || r.adapterInstance || '').match(/^eos-admin\.\d+\.ocpp$/);
+        const instanceMatch = String(r.ocppAdapterInstance || r.adapterInstance || '').match(/(?:^|\.)ocpp21\.(\d+)(?:\.|$)/i);
+        if (hostedInstance && /^[A-Za-z0-9_-]+$/.test(stationKey)) identities.add(`${hostedInstance[0]}|${stationKey}`);
+        else if (instanceMatch) identities.add(`${instanceMatch[1]}|${stationKey}`);
+      }
     }
-    return '';
+    return [...identities];
+  }
+
+  function _ocppStationIdentityFromRow(row) {
+    const identities = _ocppStationIdentitiesFromRow(row);
+    return identities.length === 1 ? identities[0] : '';
   }
 
   function _ocppStationIdentityFromConnector(connector) {
     const c = connector && typeof connector === 'object' ? connector : {};
-    const ids = c.ids && typeof c.ids === 'object' ? c.ids : {};
-    for (const field of [
-      'powerId', 'energyTotalId', 'statusId', 'chargingStateId', 'activeId', 'heartbeatId',
-      'onlineId', 'dataFreshId', 'setPowerWId', 'enableWriteId',
-      'vehicleSocId', 'rfidReadId',
-    ]) {
-      const identity = _ocppStationIdentityFromDp(ids[field]);
-      if (identity) return identity;
-    }
+    const identities = new Set(_ocppStationIdentitiesFromRow(c.ids));
     const baseIdentity = _ocppStationIdentityFromDp(c.base);
-    return baseIdentity || '';
+    if (baseIdentity) identities.add(baseIdentity);
+    return identities.size === 1 ? [...identities][0] : '';
   }
 
   function _isEmptyEvcsMappingRow(row) {
@@ -12218,10 +12286,9 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
       }
     };
 
-    // Meta
-    if (c && typeof c.stationKey === 'string') {
-      if (overwrite || onlyEmpty) setField('stationKey', c.stationKey);
-    }
+    // Physical OCPP identity comes from the native datapoints. stationKey is
+    // the installer's display/group assignment and must never be auto-filled.
+    // Existing assignments remain untouched, including an explicitly empty one.
     if (c && c.connectorNo !== undefined && c.connectorNo !== null) {
       const n = Number(c.connectorNo);
       if (Number.isFinite(n)) {
@@ -12238,7 +12305,10 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
 
     // Mappings (fill)
     const previousEnergyId = String(out.energyTotalId || '').trim();
-    for (const k of ['powerId','energyTotalId','statusId','chargingStateId','activeId','vehicleConnectedId','chargeDemandId','heartbeatId','onlineId','dataFreshId','setCurrentAId','setPowerWId','enableWriteId','vehicleSocId','rfidReadId']) {
+    const monitorOnly = !_isEmptyEvcsMappingRow(r)
+      && !String(r.setCurrentAId || '').trim() && !String(r.setPowerWId || '').trim();
+    for (const k of ['powerId','energyTotalId','statusId','chargingStateId','activeId','vehicleConnectedId','chargeDemandId','heartbeatId','onlineId','dataFreshId','setCurrentAId','setPowerWId','enableWriteId','vehicleSocId','rfidReadId','appliedChargeLimitWId','appliedChargeLimitValidId']) {
+      if (monitorOnly && ['setCurrentAId', 'setPowerWId', 'enableWriteId'].includes(k)) continue;
       if (ids[k]) setField(k, ids[k]);
     }
     const energyMappingWasApplied = !!ids.energyTotalId && (
@@ -12260,6 +12330,17 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
       }
     }
     if (c && c.contractVersion) out.ocppDatapointContract = String(c.contractVersion);
+    const discovery = c && c.ocppDiscovery;
+    if (discovery && discovery.source === 'nexowatt-ocpp21' && discovery.controlScope === 'station'
+      && _ocppStationIdentityFromDp(discovery.stationRoot) === _ocppStationIdentityFromConnector(c)) {
+      // New rows keep the physical contract; manual rows without this metadata
+      // must not silently become auto-managed command targets.
+      if (Object.keys(r).length === 0) out.ocppDiscovery = Object.assign({}, discovery);
+      else if (r.ocppDiscovery && r.ocppDiscovery.source === 'nexowatt-ocpp21'
+        && r.ocppDiscovery.stationRoot === discovery.stationRoot) {
+        out.ocppDiscovery = Object.assign({}, discovery, { autoCreated: r.ocppDiscovery.autoCreated === true });
+      }
+    }
 
     // Discovery identifies data points, not commissioned electrical limits.
     // The native contract does not attest AC/DC type, phases or minimum current.
@@ -12276,51 +12357,9 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
   async function ocppAutoDetect() {
-    try {
-      setStatus('OCPP21: Suche nach nativen Ladepunkten…');
-      const { connectors } = await fetchOcppDiscovery();
-
-      if (!connectors.length) {
-        setStatus('OCPP21: Keine Ladepunkte gefunden (prüfe, ob der NexoWatt-OCPP21-Adapter läuft und die Station verbunden ist).', 'error');
-        return;
-      }
-
-      const sc = _ensureSettingsConfig();
-      const existingList = Array.isArray(sc.evcsList) ? sc.evcsList : [];
-      const hasExisting = existingList.some(r => r && (
-        String(r.powerId || '').trim() ||
-        String(r.setCurrentAId || '').trim() ||
-        String(r.setPowerWId || '').trim() ||
-        String(r.statusId || '').trim()
-      ));
-
-      if (hasExisting) {
-        const ok = window.confirm('Es sind bereits Ladepunkte konfiguriert.\n\nSoll die OCPP-Erkennung die aktuelle Konfiguration überschreiben?');
-        if (!ok) {
-          setStatus('OCPP21: Abgebrochen.', 'ok');
-          return;
-        }
-      }
-
-      const count = Math.max(1, Math.min(50, connectors.length));
-      sc.evcsCount = count;
-      sc.evcsList = [];
-
-      for (let i = 0; i < count; i++) {
-        const c = connectors[i];
-        sc.evcsList[i] = _applyOcppConnectorToRow({}, c, { overwrite: true });
-      }
-
-      // Rebuild UI
-      if (els.evcsCount) els.evcsCount.value = String(count);
-      buildEvcsUI();
-      try { buildStationGroupsUI(); } catch (_e) {}
-      scheduleValidation(300);
-
-      setStatus(`OCPP21: ${count} Ladepunkte direkt erkannt und vorbelegt. Bitte „Speichern & EMS neu starten“ klicken.`, 'ok');
-    } catch (e) {
-      setStatus('OCPP21: Erkennung fehlgeschlagen: ' + (e && e.message ? e.message : e), 'error');
-    }
+    // Both buttons share one identity-preserving merge. Repeating discovery
+    // cannot replace commissioned limits, names, activation or manual groups.
+    return ocppMapExisting();
   }
   /**
    * Code-Teil: ocppMapExisting
@@ -12329,6 +12368,11 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
    * TypeScript: Parameter, Rückgabewert und verwendete Config-/State-Objekte später explizit typisieren.
    */
   async function ocppMapExisting() {
+    if (appCenterMutationBusy) throw new Error('Laden, Speichern oder Erkennung läuft bereits. Bitte den Abschluss abwarten.');
+    // Background commissioning may have saved new rows since this page opened.
+    // Refresh only a pristine form; never rebase a dirty draft's CAS token.
+    if (!hasAppCenterDraftChanges()) await loadConfig();
+    const endMutation = beginAppCenterMutation();
     try {
       setStatus('OCPP21: Suche direkte native Datenpunkte…');
       const { connectors } = await fetchOcppDiscovery();
@@ -12339,28 +12383,33 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
       }
 
       const sc = _ensureSettingsConfig();
-      const currentCount = _clampInt(sc.evcsCount, 0, 50, 0);
+      const currentCount = Math.max(_clampInt(sc.evcsCount, 0, 50, 0),
+        Array.isArray(sc.evcsList) ? sc.evcsList.length : 0);
       const list = _ensureEvcsList(currentCount).slice();
       const usedRows = new Set();
+      const seenStations = new Set();
       let migratedCount = 0;
       let appendedCount = 0;
       let skippedCount = 0;
+      let conflictCount = 0;
 
       for (const connector of connectors) {
         const connectorIdentity = _ocppStationIdentityFromConnector(connector);
+        // A station-scoped native limit is one writer even when the inventory
+        // repeats it through multiple connectors or equivalent aliases.
+        if (!connectorIdentity || seenStations.has(connectorIdentity)) continue;
+        seenStations.add(connectorIdentity);
         let rowIndex = -1;
 
-        // 1. A previously configured OCPP21/alias row of the same station wins.
-        if (connectorIdentity) {
-          rowIndex = list.findIndex((row, index) => !usedRows.has(index) && _ocppStationIdentityFromRow(row) === connectorIdentity);
+        // Ambiguous/mixed existing mappings need installer review. Never add
+        // another writer merely because no unambiguous row can be selected.
+        const matches = list.map((row, index) => ({ index, identities: _ocppStationIdentitiesFromRow(row) }))
+          .filter(match => match.identities.includes(connectorIdentity));
+        if (matches.length > 1 || matches.some(match => match.identities.length > 1)) {
+          conflictCount += 1;
+          continue;
         }
-
-        // 2. An explicitly stored stationKey may identify a still-empty OCPP row.
-        if (rowIndex < 0 && connector && connector.stationKey) {
-          rowIndex = list.findIndex((row, index) => !usedRows.has(index)
-            && String(row && row.stationKey || '').trim() === String(connector.stationKey || '').trim()
-            && (_isEmptyEvcsMappingRow(row) || String(row && row.telemetryProfile || '').toLowerCase().includes('ocpp')));
-        }
+        if (matches.length === 1 && !usedRows.has(matches[0].index)) rowIndex = matches[0].index;
 
         // 3. Reuse only a genuinely empty row. Never overwrite a Modbus/MQTT or
         // nexowatt-devices chargepoint merely because it occupies the same index.
@@ -12393,13 +12442,15 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
       buildEvcsUI();
       try { buildStationGroupsUI(); } catch (_e) {}
       scheduleValidation(300);
+      if (migratedCount || appendedCount) setDirty();
       const parts = [`${migratedCount} OCPP21-Zuordnung(en) aktualisiert`];
       if (appendedCount) parts.push(`${appendedCount} neuer Ladepunkt angelegt`);
       if (skippedCount) parts.push(`${skippedCount} Station(en) wegen Maximalzahl nicht übernommen`);
-      setStatus(`OCPP21: ${parts.join(', ')}. Fremde Ladepunkte wurden nicht überschrieben. Bitte speichern.`, skippedCount ? 'error' : 'ok');
+      if (conflictCount) parts.push(`${conflictCount} widersprüchliche Zuordnung(en) unverändert – bitte prüfen`);
+      setStatus(`OCPP21: ${parts.join(', ')}. Fremde Ladepunkte wurden nicht überschrieben. Bitte speichern.`, skippedCount || conflictCount ? 'error' : 'ok');
     } catch (e) {
       setStatus('OCPP21: Zuordnung fehlgeschlagen: ' + (e && e.message ? e.message : e), 'error');
-    }
+    } finally { endMutation(); }
   }
 
   // ------------------------------
@@ -13847,8 +13898,9 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
     }
 
     // Datapoints (inkl. Energiefluss-Monitor)
-    patch.tariffProvider = collectTariffProviderConfig();
-    if (patch.tariffProvider.enabled && patch.tariffProvider.providerId !== 'manual-dp' && patch.tariffProvider.autoCoupleDatapoints) {
+    const tariffPatch = collectTariffProviderPatch();
+    if (tariffPatch) patch.tariffProvider = tariffPatch;
+    if (tariffPatch && tariffPatch.enabled && tariffPatch.providerId !== 'manual-dp' && tariffPatch.autoCoupleDatapoints) {
       _coupleTariffProviderDatapointsSync();
     }
     patch.datapoints = Object.assign({}, currentConfig.datapoints || {});
@@ -14463,6 +14515,12 @@ http://mesh-peer.local:8188" ${isEos ? '' : 'disabled'}>${_meshHtmlEscape(Array.
       p.style.display = (id === _activeTab) ? '' : 'none';
     });
 
+    // Background discovery persists independently of this page. Refresh a
+    // pristine mapping screen on entry, but preserve every unsaved draft.
+    if (_activeTab === 'evcs' && configurationRevision && !hasAppCenterDraftChanges() && !appCenterMutationBusy) {
+      void loadConfig().catch(error => setStatus('Ladepunkte konnten nicht aktualisiert werden: '
+        + (error && error.message ? error.message : error), 'error'));
+    }
     // immediate status refresh when entering the tab
     if (_activeTab === 'status') {
       refreshEmsStatus().catch(() => {});

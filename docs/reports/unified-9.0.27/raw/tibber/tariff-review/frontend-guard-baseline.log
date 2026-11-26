@@ -1,0 +1,303 @@
+✖ absent tariff controls must not clear a loaded masked credential or home during an unrelated save (5.007728ms)
+✖ unconfirmed or unrendered tariff data never injects defaults into generic EMS saves (3.012118ms)
+✖ missing numeric, flag and formula controls preserve stored values without granting tariff activation (1.655926ms)
+✖ explicit rendered field clearing and source changes remain intentional tariff edits (1.744908ms)
+✖ unrendered custom request fields retain masked headers, body and deliberately empty JSON paths (1.602847ms)
+✖ editing one tariff field does not persist rendered defaults for other untouched fields (1.983222ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 0
+ℹ fail 6
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 835.442873
+
+✖ failing tests:
+
+test at test/eos-customer-tariff-appcenter-roundtrip.test.cjs:99:1
+✖ absent tariff controls must not clear a loaded masked credential or home during an unrelated save (5.007728ms)
+  AssertionError [ERR_ASSERTION]: absent secret field is not an explicit clear request
+  
+  '' !== '__KEEP__'
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-customer-tariff-appcenter-roundtrip.test.cjs:104:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: '__KEEP__',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-customer-tariff-appcenter-roundtrip.test.cjs:109:1
+✖ unconfirmed or unrendered tariff data never injects defaults into generic EMS saves (3.012118ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + {
+  +   tariffProvider: {
+  +     activateTariffLogic: true,
+  +     autoCoupleDatapoints: true,
+  +     automaticMode: true,
+  +     country: 'DE',
+  +     credentials: {
+  +       accessToken: '',
+  +       apiKey: '',
+  +       bearerToken: '',
+  +       clientId: '',
+  +       clientSecret: '',
+  +       password: '',
+  +       securityToken: '',
+  +       tokenUrl: '',
+  +       username: ''
+  +     },
+  +     customRest: {
+  +       apiKeyHeader: 'x-api-key',
+  +       arrayPath: '',
+  +       authMode: 'none',
+  +       endPath: 'endsAt',
+  +       headersJson: '',
+  +       method: 'GET',
+  +       pricePath: 'total',
+  +       startPath: 'startsAt',
+  +       unit: 'EUR/kWh',
+  +       url: ''
+  +     },
+  +     enabled: false,
+  +     feedInEurPerKwh: 0,
+  +     formula: {
+  +       gridVariableEurPerKwh: 0,
+  +       marketMultiplier: 1,
+  +       otherVariableEurPerKwh: 0,
+  +       priceIncludesVat: false,
+  +       supplierMarkupEurPerKwh: 0,
+  +       taxEurPerKwh: 0,
+  +       vatPct: 0
+  +     },
+  +     homeId: '',
+  +     postalCode: '',
+  +     priceComponent: 'total',
+  +     pricesUrl: '',
+  +     providerId: 'manual-dp',
+  +     providerProfileId: 'local-provider',
+  +     refreshMinutes: 15,
+  +     resolutionMinutes: 15,
+  +     sourceId: 'entsoe',
+  +     timeZone: 'Europe/Berlin',
+  +     tokenUrl: ''
+  +   }
+  + }
+  - {}
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-customer-tariff-appcenter-roundtrip.test.cjs:111:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { tariffProvider: { enabled: false, providerId: 'manual-dp', sourceId: 'entsoe', providerProfileId: 'local-provider', activateTariffLogic: true, automaticMode: true, autoCoupleDatapoints: true, country: 'DE', timeZone: 'Europe/Berlin', resolutionMinutes: 15, refreshMinutes: 15, priceComponent: 'total', homeId: '', postalCode: '', tokenUrl: '', pricesUrl: '', credentials: [Object], formula: [Object], feedInEurPerKwh: 0, customRest: [Object] } },
+    expected: {},
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-customer-tariff-appcenter-roundtrip.test.cjs:117:1
+✖ missing numeric, flag and formula controls preserve stored values without granting tariff activation (1.655926ms)
+  AssertionError [ERR_ASSERTION]: activateTariffLogic
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-customer-tariff-appcenter-roundtrip.test.cjs:132:166)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-customer-tariff-appcenter-roundtrip.test.cjs:137:1
+✖ explicit rendered field clearing and source changes remain intentional tariff edits (1.744908ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + {
+  +   tariffProvider: {
+  +     activateTariffLogic: true,
+  +     autoCoupleDatapoints: true,
+  +     automaticMode: true,
+  +     country: 'DE',
+  +     credentials: {
+  +       accessToken: '__KEEP__',
+  +       apiKey: '',
+  +       bearerToken: '',
+  +       clientId: '',
+  +       clientSecret: '',
+  +       password: '',
+  +       securityToken: '',
+  +       tokenUrl: '',
+  +       username: ''
+  +     },
+  +     customRest: {
+  +       apiKeyHeader: 'x-api-key',
+  +       arrayPath: '',
+  +       authMode: 'none',
+  +       endPath: 'endsAt',
+  +       headersJson: '',
+  +       method: 'GET',
+  +       pricePath: 'total',
+  +       startPath: 'startsAt',
+  +       unit: 'EUR/kWh',
+  +       url: ''
+  +     },
+  +     enabled: true,
+  +     feedInEurPerKwh: 0,
+  +     formula: {
+  +       gridVariableEurPerKwh: 0,
+  +       marketMultiplier: 1,
+  +       otherVariableEurPerKwh: 0,
+  +       priceIncludesVat: true,
+  +       supplierMarkupEurPerKwh: 0,
+  +       taxEurPerKwh: 0,
+  +       vatPct: 0
+  +     },
+  +     homeId: 'home',
+  +     postalCode: '',
+  +     priceComponent: 'total',
+  +     pricesUrl: '',
+  +     providerId: 'tibber',
+  +     providerProfileId: 'local-provider',
+  +     refreshMinutes: 15,
+  +     resolutionMinutes: 15,
+  +     sourceId: '',
+  +     timeZone: 'Europe/Berlin',
+  +     tokenUrl: ''
+  +   }
+  + }
+  - {}
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-customer-tariff-appcenter-roundtrip.test.cjs:140:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { tariffProvider: { enabled: true, providerId: 'tibber', sourceId: '', country: 'DE', homeId: 'home', credentials: [Object], providerProfileId: 'local-provider', activateTariffLogic: true, automaticMode: true, autoCoupleDatapoints: true, timeZone: 'Europe/Berlin', resolutionMinutes: 15, refreshMinutes: 15, priceComponent: 'total', postalCode: '', tokenUrl: '', pricesUrl: '', formula: [Object], feedInEurPerKwh: 0, customRest: [Object] } },
+    expected: {},
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-customer-tariff-appcenter-roundtrip.test.cjs:155:1
+✖ unrendered custom request fields retain masked headers, body and deliberately empty JSON paths (1.602847ms)
+  AssertionError [ERR_ASSERTION]: headersJson
+  
+  '' !== '__KEEP__'
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-customer-tariff-appcenter-roundtrip.test.cjs:163:76)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: '__KEEP__',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-customer-tariff-appcenter-roundtrip.test.cjs:169:1
+✖ editing one tariff field does not persist rendered defaults for other untouched fields (1.983222ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+  +   activateTariffLogic: true,
+  +   autoCoupleDatapoints: true,
+  +   automaticMode: true,
+  +   country: 'DE',
+      credentials: {
+  +     accessToken: '',
+  +     apiKey: '',
+        bearerToken: '__KEEP__',
+  +     clientId: '',
+  +     clientSecret: '',
+  +     password: '',
+  +     securityToken: '',
+  +     tokenUrl: '',
+  +     username: ''
+      },
+      customRest: {
+  +     apiKeyHeader: 'x-api-key',
+  +     arrayPath: '',
+  +     authMode: 'none',
+        body: '__KEEP__',
+  +     endPath: 'endsAt',
+  -     endPath: '',
+        headersJson: '__KEEP__',
+  +     method: 'GET',
+  +     pricePath: 'total',
+  +     startPath: 'startsAt',
+  +     unit: 'EUR/kWh',
+  +     url: ''
+  -     pricePath: '',
+  -     startPath: ''
+      },
+      enabled: true,
+  +   feedInEurPerKwh: 0,
+  +   formula: {
+  +     gridVariableEurPerKwh: 0,
+  +     marketMultiplier: 1,
+  +     otherVariableEurPerKwh: 0,
+  +     priceIncludesVat: false,
+  +     supplierMarkupEurPerKwh: 0,
+  +     taxEurPerKwh: 0,
+  +     vatPct: 0
+  +   },
+  +   homeId: '',
+  +   postalCode: '',
+  +   priceComponent: 'total',
+  +   pricesUrl: '',
+      providerId: 'custom-rest',
+  +   providerProfileId: 'local-provider',
+      refreshMinutes: 60,
+  +   resolutionMinutes: 15,
+      sourceId: 'custom-rest',
+  +   timeZone: 'Europe/Berlin',
+  +   tokenUrl: ''
+    }
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-customer-tariff-appcenter-roundtrip.test.cjs:176:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { enabled: true, providerId: 'custom-rest', sourceId: 'custom-rest', credentials: { bearerToken: '__KEEP__', accessToken: '', securityToken: '', clientId: '', clientSecret: '', tokenUrl: '', apiKey: '', username: '', password: '' }, customRest: { headersJson: '__KEEP__', body: '__KEEP__', startPath: 'startsAt', endPath: 'endsAt', pricePath: 'total', url: '', method: 'GET', authMode: 'none', apiKeyHeader: 'x-api-key', arrayPath: '', unit: 'EUR/kWh' }, providerProfileId: 'local-provider', activateTariffLogic: true, automaticMode: true, autoCoupleDatapoints: true, country: 'DE', timeZone: 'Europe/Berlin', resolutionMinutes: 15, refreshMinutes: 60, priceComponent: 'total', homeId: '', postalCode: '', tokenUrl: '', pricesUrl: '', formula: { marketMultiplier: 1, supplierMarkupEurPerKwh: 0, gridVariableEurPerKwh: 0, taxEurPerKwh: 0, otherVariableEurPerKwh: 0, vatPct: 0, priceIncludesVat: false }, feedInEurPerKwh: 0 },
+    expected: { enabled: true, providerId: 'custom-rest', sourceId: 'custom-rest', credentials: { bearerToken: '__KEEP__' }, customRest: { headersJson: '__KEEP__', body: '__KEEP__', startPath: '', endPath: '', pricePath: '' }, refreshMinutes: 60 },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

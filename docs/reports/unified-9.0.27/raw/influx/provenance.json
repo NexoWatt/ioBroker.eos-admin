@@ -1,0 +1,42 @@
+{
+  "retrievedAt": "2026-11-26T05:29:43.034103+00:00",
+  "platform": "linux-amd64",
+  "distribution": "Docker Official Image library/influxdb:2.10.1",
+  "indexDigest": "sha256:94e98bf5a07587c91bac4f6059aa2ddc172cd246bbd296852a30654192a38a03",
+  "imageManifestDigest": "sha256:b6bc9e4fbf97118cc513c35d50532e4a72da99c30e0ab3a19fd590f884d8439d",
+  "imageSource": "https://github.com/influxdata/influxdata-docker/tree/62c7df53396a5f094d0fb2dae84a3fbf1fd74064/influxdb/2.10",
+  "artifacts": [
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+      "digest": "sha256:434c5a7852e3af3a1253372a404dcb626e0b392ad70581c83628db3881c232f6",
+      "size": 57465454,
+      "executable": "influxd",
+      "downloadUrl": "https://registry-1.docker.io/v2/library/influxdb/blobs/sha256:434c5a7852e3af3a1253372a404dcb626e0b392ad70581c83628db3881c232f6",
+      "verifiedArchiveSha256": "434c5a7852e3af3a1253372a404dcb626e0b392ad70581c83628db3881c232f6",
+      "archivePath": "/workspace/scratch/b0b00b64c39c/test-fixtures-927/influx/influxd-oci-layer.tar.gz",
+      "binaryPath": "/workspace/scratch/b0b00b64c39c/test-fixtures-927/influx/influxd",
+      "binarySha256": "75d9e216204e51b81bc1aa5edfe16254fa43926b8ac4bd035ab65eb64f15c942",
+      "versionExitCode": 0,
+      "versionOutput": "InfluxDB v2.10.1 (git: db5102ec64) build_date: 2026-11-17T20:47:46Z"
+    },
+    {
+      "mediaType": "application/vnd.oci.image.layer.v1.tar+gzip",
+      "digest": "sha256:4367b12ae05bf5f914e2bfdbe3080b940ba1c271d766b57ff87376cb7db67d6e",
+      "size": 13476865,
+      "executable": "influx",
+      "downloadUrl": "https://registry-1.docker.io/v2/library/influxdb/blobs/sha256:4367b12ae05bf5f914e2bfdbe3080b940ba1c271d766b57ff87376cb7db67d6e",
+      "verifiedArchiveSha256": "4367b12ae05bf5f914e2bfdbe3080b940ba1c271d766b57ff87376cb7db67d6e",
+      "archivePath": "/workspace/scratch/b0b00b64c39c/test-fixtures-927/influx/influx-oci-layer.tar.gz",
+      "binaryPath": "/workspace/scratch/b0b00b64c39c/test-fixtures-927/influx/influx",
+      "binarySha256": "6e004adfa33940dcd233a18593257737a180149165fa42f25415041cc77f8432",
+      "versionExitCode": 0,
+      "versionOutput": "Influx CLI dev (git: 54431c54aa7cd7fb486740908f60cdbe3831e7d3) build_date: 2026-10-29T16:03:24Z"
+    }
+  ],
+  "limits": [
+    "Official direct tarball and apt downloads were blocked by HTTP403; only official-image executable layers were extracted",
+    "Manifest, config and layer digests verified; original tarball SHA256 was not checked because direct archives unavailable",
+    "Version commands only; no server/container started, no product files changed, no full suite executed",
+    "Historical926 logs record server2.10.1 but not exact CLIversion"
+  ]
+}

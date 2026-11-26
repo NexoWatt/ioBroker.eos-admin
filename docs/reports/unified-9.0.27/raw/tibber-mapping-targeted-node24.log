@@ -1,0 +1,2184 @@
+TAP version 13
+# Subtest: an unrelated tariff save preserves unchanged ambiguous legacy points while real point changes retain identity guards
+ok 1 - an unrelated tariff save preserves unchanged ambiguous legacy points while real point changes retain identity guards
+  ---
+  duration_ms: 161.172278
+  type: 'test'
+  ...
+# Subtest: customer tariff GET is authenticated, exposes only supported choices and no current or retained secrets
+ok 2 - customer tariff GET is authenticated, exposes only supported choices and no current or retained secrets
+  ---
+  duration_ms: 43.874416
+  type: 'test'
+  ...
+# Subtest: CSRF, origin and unsupported endpoint or actuator fields cannot change customer tariff settings
+ok 3 - CSRF, origin and unsupported endpoint or actuator fields cannot change customer tariff settings
+  ---
+  duration_ms: 109.752721
+  type: 'test'
+  ...
+# Subtest: partial customer tariff edit preserves blank credentials, manual mappings, EMS apps and customer device values
+ok 4 - partial customer tariff edit preserves blank credentials, manual mappings, EMS apps and customer device values
+  ---
+  duration_ms: 37.543643
+  type: 'test'
+  ...
+# Subtest: explicit tariff mapping consent changes only four tariff inputs and never enables an app or dispatch
+ok 5 - explicit tariff mapping consent changes only four tariff inputs and never enables an app or dispatch
+  ---
+  duration_ms: 37.668268
+  type: 'test'
+  ...
+# Subtest: provider switch requires fresh source credentials and preserves old credentials without reusing them
+ok 6 - provider switch requires fresh source credentials and preserves old credentials without reusing them
+  ---
+  duration_ms: 50.140311
+  type: 'test'
+  ...
+# Subtest: stale customer editor and failed persistence leave confirmed settings unchanged
+ok 7 - stale customer editor and failed persistence leave confirmed settings unchanged
+  ---
+  duration_ms: 38.252325
+  type: 'test'
+  ...
+# Subtest: editing or reconnecting a disabled provider preserves its explicit coupling settings; a fresh provider gets no grant
+ok 8 - editing or reconnecting a disabled provider preserves its explicit coupling settings; a fresh provider gets no grant
+  ---
+  duration_ms: 71.643599
+  type: 'test'
+  ...
+# Subtest: retained source credentials remain in protected recovery data and are omitted from every installer HTTP view
+ok 9 - retained source credentials remain in protected recovery data and are omitted from every installer HTTP view
+  ---
+  duration_ms: 26.018897
+  type: 'test'
+  ...
+# Subtest: unhydrated tariff reads never confirm native defaults; loaded tariffs remain available when unrelated EMS readiness degrades
+ok 10 - unhydrated tariff reads never confirm native defaults; loaded tariffs remain available when unrelated EMS readiness degrades
+  ---
+  duration_ms: 15.20069
+  type: 'test'
+  ...
+# Subtest: unrelated App-Center save must preserve a previously saved Tibber provider and secret
+ok 11 - unrelated App-Center save must preserve a previously saved Tibber provider and secret
+  ---
+  duration_ms: 187.4503
+  type: 'test'
+  ...
+# Subtest: absent tariff controls must not clear a loaded masked credential or home during an unrelated save
+ok 12 - absent tariff controls must not clear a loaded masked credential or home during an unrelated save
+  ---
+  duration_ms: 3.922629
+  type: 'test'
+  ...
+# Subtest: unconfirmed or unrendered tariff data never injects defaults into generic EMS saves
+ok 13 - unconfirmed or unrendered tariff data never injects defaults into generic EMS saves
+  ---
+  duration_ms: 6.668182
+  type: 'test'
+  ...
+# Subtest: missing numeric, flag and formula controls preserve stored values without granting tariff activation
+ok 14 - missing numeric, flag and formula controls preserve stored values without granting tariff activation
+  ---
+  duration_ms: 4.029577
+  type: 'test'
+  ...
+# Subtest: explicit rendered field clearing and source changes remain intentional tariff edits
+ok 15 - explicit rendered field clearing and source changes remain intentional tariff edits
+  ---
+  duration_ms: 7.539944
+  type: 'test'
+  ...
+# Subtest: unrendered custom request fields retain masked headers, body and deliberately empty JSON paths
+ok 16 - unrendered custom request fields retain masked headers, body and deliberately empty JSON paths
+  ---
+  duration_ms: 3.874268
+  type: 'test'
+  ...
+# Subtest: editing one tariff field does not persist rendered defaults for other untouched fields
+ok 17 - editing one tariff field does not persist rendered defaults for other untouched fields
+  ---
+  duration_ms: 3.927005
+  type: 'test'
+  ...
+# Subtest: changing tariff provider invalidates old direct and curve inputs before delayed database writes finish
+ok 18 - changing tariff provider invalidates old direct and curve inputs before delayed database writes finish
+  ---
+  duration_ms: 45.020676
+  type: 'test'
+  ...
+# Subtest: late old-provider database write cannot revive tariff control while replacement clearing is pending
+ok 19 - late old-provider database write cannot revive tariff control while replacement clearing is pending
+  ---
+  duration_ms: 4.116126
+  type: 'test'
+  ...
+# Subtest: actual provider publication → TarifVis → CoreLimits → Wallet keeps EUR/kWh including high, zero and negative prices
+ok 20 - actual provider publication → TarifVis → CoreLimits → Wallet keeps EUR/kWh including high, zero and negative prices
+  ---
+  duration_ms: 83.240533
+  type: 'test'
+  ...
+# Subtest: structured EUR curves keep their prices while untyped legacy cents and explicit units retain their conversions
+ok 21 - structured EUR curves keep their prices while untyped legacy cents and explicit units retain their conversions
+  ---
+  duration_ms: 0.546591
+  type: 'test'
+  ...
+# Subtest: actual manual mapping preserves cent conversion and supports explicit EUR unit without changing freshness
+ok 22 - actual manual mapping preserves cent conversion and supports explicit EUR unit without changing freshness
+  ---
+  duration_ms: 5.905901
+  type: 'test'
+  ...
+# Subtest: strict price reader rejects missing/status data and preserves genuine zero and negative prices
+ok 23 - strict price reader rejects missing/status data and preserves genuine zero and negative prices
+  ---
+  duration_ms: 2.148017
+  type: 'test'
+  ...
+# Subtest: wallet skips null, status and stale budget candidates in favour of the real fresh canonical price
+ok 24 - wallet skips null, status and stale budget candidates in favour of the real fresh canonical price
+  ---
+  duration_ms: 2.119224
+  type: 'test'
+  ...
+# Subtest: wallet missing, invalid timestamp and stale-only tariffs use the configured fixed fallback; real zero remains dynamic
+ok 25 - wallet missing, invalid timestamp and stale-only tariffs use the configured fixed fallback; real zero remains dynamic
+  ---
+  duration_ms: 0.764954
+  type: 'test'
+  ...
+# Subtest: real CoreLimits tick keeps missing tariff prices null and respects explicit stale flag without changing physical limits
+ok 26 - real CoreLimits tick keeps missing tariff prices null and respects explicit stale flag without changing physical limits
+  ---
+  duration_ms: 169.558579
+  type: 'test'
+  ...
+# Subtest: customer /config only exposes source kinds and safe price units, with no object IDs or credentials
+ok 27 - customer /config only exposes source kinds and safe price units, with no object IDs or credentials
+  ---
+  duration_ms: 94.663147
+  type: 'test'
+  ...
+# Subtest: explicit customer Tibber save replaces legacy hourly resolution and retains credentials and unrelated settings
+ok 28 - explicit customer Tibber save replaces legacy hourly resolution and retains credentials and unrelated settings
+  ---
+  duration_ms: 67.447724
+  type: 'test'
+  ...
+# Subtest: Tibber save reaches parent state and survives UI plus whole owner restart (native namespace)
+ok 29 - Tibber save reaches parent state and survives UI plus whole owner restart (native namespace)
+  ---
+  duration_ms: 6672.477611
+  type: 'test'
+  ...
+# Subtest: Tibber save reaches parent state and survives UI plus whole owner restart (preserved namespace)
+ok 30 - Tibber save reaches parent state and survives UI plus whole owner restart (preserved namespace)
+  ---
+  duration_ms: 5986.846601
+  type: 'test'
+  ...
+# Subtest: provider switch invalidates actual EMS numbers and curves before new provider metadata
+ok 31 - provider switch invalidates actual EMS numbers and curves before new provider metadata
+  ---
+  duration_ms: 31.134186
+  type: 'test'
+  ...
+# Subtest: late old-provider reply cannot repopulate price, success, retry timer or provider label
+ok 32 - late old-provider reply cannot repopulate price, success, retry timer or provider label
+  ---
+  duration_ms: 4.571241
+  type: 'test'
+  ...
+# Subtest: credential change fences failed old fetch and new provider failure never reuses prior forecast
+ok 33 - credential change fences failed old fetch and new provider failure never reuses prior forecast
+  ---
+  duration_ms: 6.223773
+  type: 'test'
+  ...
+# Subtest: configuration clearing waits behind an old in-flight state write and finishes with unavailable prices
+ok 34 - configuration clearing waits behind an old in-flight state write and finishes with unavailable prices
+  ---
+  duration_ms: 4.57651
+  type: 'test'
+  ...
+# Subtest: failed clearing rejects the save hook, retains pending fence, and retries before a new fetch
+ok 35 - failed clearing rejects the save hook, retains pending fence, and retries before a new fetch
+  ---
+  duration_ms: 5.87157
+  type: 'test'
+  ...
+# Subtest: equivalent config and unchanged ticks retain cache and fetch schedule without repeatedly hashing secrets
+ok 36 - equivalent config and unchanged ticks retain cache and fetch schedule without repeatedly hashing secrets
+  ---
+  duration_ms: 3.587181
+  type: 'test'
+  ...
+# Subtest: disable and stop prevent an outstanding provider response from publishing again
+ok 37 - disable and stop prevent an outstanding provider response from publishing again
+  ---
+  duration_ms: 2.278189
+  type: 'test'
+  ...
+# Subtest: live source rebind drops all six old readers before awaits, resets conversion and preserves shared sources
+ok 38 - live source rebind drops all six old readers before awaits, resets conversion and preserves shared sources
+  ---
+  duration_ms: 4.593945
+  type: 'test'
+  ...
+# Subtest: removing a tariff mapping fences a delayed old prime without affecting replacement mapping
+ok 39 - removing a tariff mapping fences a delayed old prime without affecting replacement mapping
+  ---
+  duration_ms: 1.531572
+  type: 'test'
+  ...
+# Subtest: tariff editor loads lazily and renders secret presence without copying secret values
+ok 40 - tariff editor loads lazily and renders secret presence without copying secret values
+  ---
+  duration_ms: 24.394318
+  type: 'test'
+  ...
+# Subtest: single setting sends only its revisioned tariff delta, never full AppCenter data or blank secret
+ok 41 - single setting sends only its revisioned tariff delta, never full AppCenter data or blank secret
+  ---
+  duration_ms: 6.189712
+  type: 'test'
+  ...
+# Subtest: source switch requires its own token and clears typed token from the previous source
+ok 42 - source switch requires its own token and clears typed token from the previous source
+  ---
+  duration_ms: 12.060511
+  type: 'test'
+  ...
+# Subtest: actual frontend and backend require a fresh token on provider change even with the same ENTSO-E source
+ok 43 - actual frontend and backend require a fresh token on provider change even with the same ENTSO-E source
+  ---
+  duration_ms: 4.618121
+  type: 'test'
+  ...
+# Subtest: revision conflict preserves edited values and token and never automatically retries
+ok 44 - revision conflict preserves edited values and token and never automatically retries
+  ---
+  duration_ms: 2.09697
+  type: 'test'
+  ...
+# Subtest: source/provider options contain no custom endpoint choice and preserve installer provider until deliberate switch
+ok 45 - source/provider options contain no custom endpoint choice and preserve installer provider until deliberate switch
+  ---
+  duration_ms: 1.566363
+  type: 'test'
+  ...
+# Subtest: a known provider name with an external endpoint remains installer-managed until deliberately selected again
+ok 46 - a known provider name with an external endpoint remains installer-managed until deliberately selected again
+  ---
+  duration_ms: 1.86751
+  type: 'test'
+  ...
+# Subtest: country change cannot post a hidden stale sourceId for a direct provider
+ok 47 - country change cannot post a hidden stale sourceId for a direct provider
+  ---
+  duration_ms: 1.956932
+  type: 'test'
+  ...
+# Subtest: formula and use-for-tariff consent are targeted explicit changes
+ok 48 - formula and use-for-tariff consent are targeted explicit changes
+  ---
+  duration_ms: 2.108508
+  type: 'test'
+  ...
+# Subtest: failed initial load remains locked; untrusted error text is never displayed
+ok 49 - failed initial load remains locked; untrusted error text is never displayed
+  ---
+  duration_ms: 1.609137
+  type: 'test'
+  ...
+# Subtest: authentication failure on save preserves form without replaying writes
+ok 50 - authentication failure on save preserves form without replaying writes
+  ---
+  duration_ms: 1.734012
+  type: 'test'
+  ...
+# Subtest: reload asks before discarding an edit and pagehide clears a typed secret
+ok 51 - reload asks before discarding an edit and pagehide clears a typed secret
+  ---
+  duration_ms: 1.977914
+  type: 'test'
+  ...
+# Subtest: provider labels are rendered as plain text and unrelated server fields never enter a save
+ok 52 - provider labels are rendered as plain text and unrelated server fields never enter a save
+  ---
+  duration_ms: 1.93455
+  type: 'test'
+  ...
+# Subtest: startup loading retries initial GET only, confirms Tibber and stops its single timer
+ok 53 - startup loading retries initial GET only, confirms Tibber and stops its single timer
+  ---
+  duration_ms: 1.801643
+  type: 'test'
+  ...
+# Subtest: startup retries are bounded and closing or leaving the panel cancels the single pending timer
+ok 54 - startup retries are bounded and closing or leaving the panel cancels the single pending timer
+  ---
+  duration_ms: 3.195611
+  type: 'test'
+  ...
+# Subtest: hydration failure has no retry and an existing draft is never replaced by startup reads
+ok 55 - hydration failure has no retry and an existing draft is never replaced by startup reads
+  ---
+  duration_ms: 2.927913
+  type: 'test'
+  ...
+# Subtest: 9.0.21 tibber provider selection, credentials and tariff settings survive upgrade and two restarts
+ok 56 - 9.0.21 tibber provider selection, credentials and tariff settings survive upgrade and two restarts
+  ---
+  duration_ms: 76.777714
+  type: 'test'
+  ...
+# Subtest: 9.0.21 entsoe provider selection, credentials and tariff settings survive upgrade and two restarts
+ok 57 - 9.0.21 entsoe provider selection, credentials and tariff settings survive upgrade and two restarts
+  ---
+  duration_ms: 35.012062
+  type: 'test'
+  ...
+# Subtest: 9.0.21 energyzero provider selection, credentials and tariff settings survive upgrade and two restarts
+ok 58 - 9.0.21 energyzero provider selection, credentials and tariff settings survive upgrade and two restarts
+  ---
+  duration_ms: 27.601535
+  type: 'test'
+  ...
+# Subtest: 9.0.21 market-profile provider selection, credentials and tariff settings survive upgrade and two restarts
+ok 59 - 9.0.21 market-profile provider selection, credentials and tariff settings survive upgrade and two restarts
+  ---
+  duration_ms: 33.637298
+  type: 'test'
+  ...
+# Subtest: 9.0.21 custom-rest provider selection, credentials and tariff settings survive upgrade and two restarts
+ok 60 - 9.0.21 custom-rest provider selection, credentials and tariff settings survive upgrade and two restarts
+  ---
+  duration_ms: 21.461788
+  type: 'test'
+  ...
+# Subtest: 9.0.21 manual-dp provider selection, credentials and tariff settings survive upgrade and two restarts
+ok 61 - 9.0.21 manual-dp provider selection, credentials and tariff settings survive upgrade and two restarts
+  ---
+  duration_ms: 24.636557
+  type: 'test'
+  ...
+# Subtest: UI handover and persisted migration restart retain the original tariff namespace, secret state and protected native configuration
+ok 62 - UI handover and persisted migration restart retain the original tariff namespace, secret state and protected native configuration
+  ---
+  duration_ms: 29.625527
+  type: 'test'
+  ...
+# Subtest: existing EOS update without a handover journal reloads protected UI config and preserves tariffs while external OCPP remains separate
+ok 63 - existing EOS update without a handover journal reloads protected UI config and preserves tariffs while external OCPP remains separate
+  ---
+  duration_ms: 10.911417
+  type: 'test'
+  ...
+# Subtest: unreadable or corrupt existing provider storage never becomes fresh defaults or an older backup
+ok 64 - unreadable or corrupt existing provider storage never becomes fresh defaults or an older backup
+  ---
+  duration_ms: 16.624521
+  type: 'test'
+  ...
+# Subtest: wallet cannot revive an explicitly invalid tariff through fresh budget, direct, history or legacy caches
+ok 65 - wallet cannot revive an explicitly invalid tariff through fresh budget, direct, history or legacy caches
+  ---
+  duration_ms: 3.36366
+  type: 'test'
+  ...
+# Subtest: wallet retains true zero, negative prices and legacy sources without a freshness flag
+ok 66 - wallet retains true zero, negative prices and legacy sources without a freshness flag
+  ---
+  duration_ms: 0.322449
+  type: 'test'
+  ...
+# Subtest: one explicit save adopts the legacy Home row, adds SolaX, binds SMA and activates exactly the farm app
+ok 67 - one explicit save adopts the legacy Home row, adds SolaX, binds SMA and activates exactly the farm app
+  ---
+  duration_ms: 14.922647
+  type: 'test'
+  ...
+# Subtest: consumed commissioning cannot re-enable an AppCenter disable after restart, updates or an unrelated save
+ok 68 - consumed commissioning cannot re-enable an AppCenter disable after restart, updates or an unrelated save
+  ---
+  duration_ms: 4.182404
+  type: 'test'
+  ...
+# Subtest: missing bounds, an unavailable app grant or an invalid NVP keep the request pending and rows inactive
+ok 69 - missing bounds, an unavailable app grant or an invalid NVP keep the request pending and rows inactive
+  ---
+  duration_ms: 1.308301
+  type: 'test'
+  ...
+# Subtest: reusing a consumed request for changed topology or limits is rejected without changing the operating configuration
+ok 70 - reusing a consumed request for changed topology or limits is rejected without changing the operating configuration
+  ---
+  duration_ms: 1.151979
+  type: 'test'
+  ...
+# Subtest: canonical alias resolution adopts exactly one manual row only with explicit commissioning and keeps unrelated devices
+ok 71 - canonical alias resolution adopts exactly one manual row only with explicit commissioning and keeps unrelated devices
+  ---
+  duration_ms: 1.048675
+  type: 'test'
+  ...
+# Subtest: an unsuccessful commissioning leaves an already operating legacy row and its command family untouched
+ok 72 - an unsuccessful commissioning leaves an already operating legacy row and its command family untouched
+  ---
+  duration_ms: 1.03172
+  type: 'test'
+  ...
+# Subtest: explicit wallbox commissioning repairs a boolean EV total override but preserves a numeric manual total
+ok 73 - explicit wallbox commissioning repairs a boolean EV total override but preserves a numeric manual total
+  ---
+  duration_ms: 1.898777
+  type: 'test'
+  ...
+# Subtest: a new explicit off request disables only its own row, retaining another member and the shared app
+ok 74 - a new explicit off request disables only its own row, retaining another member and the shared app
+  ---
+  duration_ms: 0.987906
+  type: 'test'
+  ...
+# Subtest: M0 prefers immediate transport connection and corrects its own slower online source only on explicit save
+ok 75 - M0 prefers immediate transport connection and corrects its own slower online source only on explicit save
+  ---
+  duration_ms: 0.497198
+  type: 'test'
+  ...
+# Subtest: known thermal control and flow-slot writers prevent a second physical command owner
+ok 76 - known thermal control and flow-slot writers prevent a second physical command owner
+  ---
+  duration_ms: 0.94432
+  type: 'test'
+  ...
+# Subtest: activation rejects malformed intent tokens and unknown or unbounded input limits
+ok 77 - activation rejects malformed intent tokens and unknown or unbounded input limits
+  ---
+  duration_ms: 0.827727
+  type: 'test'
+  ...
+# Subtest: explicit off and authoritative removal also disable the sole single-storage app, retaining its configuration
+ok 78 - explicit off and authoritative removal also disable the sole single-storage app, retaining its configuration
+  ---
+  duration_ms: 1.784808
+  type: 'test'
+  ...
+# Subtest: enabling a previously disabled shared app never starts an uncommissioned dormant manual controller
+ok 79 - enabling a previously disabled shared app never starts an uncommissioned dormant manual controller
+  ---
+  duration_ms: 0.962969
+  type: 'test'
+  ...
+# Subtest: one pending member prevents accidental start of a dormant shared farm while validated mapping is retained
+ok 80 - one pending member prevents accidental start of a dormant shared farm while validated mapping is retained
+  ---
+  duration_ms: 1.006974
+  type: 'test'
+  ...
+# Subtest: replacement commissioning never restores the active old profile on failure or inherits a vendor-specific controller
+ok 81 - replacement commissioning never restores the active old profile on failure or inherits a vendor-specific controller
+  ---
+  duration_ms: 2.408873
+  type: 'test'
+  ...
+# Subtest: temporary manifest failure with the service generic-class fallback preserves the previous safe configuration
+ok 82 - temporary manifest failure with the service generic-class fallback preserves the previous safe configuration
+  ---
+  duration_ms: 0.636815
+  type: 'test'
+  ...
+# Subtest: consumed activation is bound to the saved protocol, without binding mutable controller offsets
+ok 83 - consumed activation is bound to the saved protocol, without binding mutable controller offsets
+  ---
+  duration_ms: 0.711446
+  type: 'test'
+  ...
+# Subtest: known post-commit EOS_EMS_APPLY_FAILED retries once without replaying the persisted activation
+ok 84 - known post-commit EOS_EMS_APPLY_FAILED retries once without replaying the persisted activation
+  ---
+  duration_ms: 1284.5475
+  type: 'test'
+  ...
+# Subtest: known post-commit EOS_EMS_CONFIG_WAIT_TIMEOUT retries once without replaying the persisted activation
+ok 85 - known post-commit EOS_EMS_CONFIG_WAIT_TIMEOUT retries once without replaying the persisted activation
+  ---
+  duration_ms: 1115.26642
+  type: 'test'
+  ...
+# Subtest: post-commit recovery remains bounded and never retries uncertain persistence or arbitrary failures
+ok 86 - post-commit recovery remains bounded and never retries uncertain persistence or arbitrary failures
+  ---
+  duration_ms: 3.467734
+  type: 'test'
+  ...
+# Subtest: saved device chargepoint removal survives events and serialized restart in eos-admin.0
+ok 87 - saved device chargepoint removal survives events and serialized restart in eos-admin.0
+  ---
+  duration_ms: 6.849681
+  type: 'test'
+  ...
+# Subtest: saved device chargepoint removal survives events and serialized restart in nexowatt-devices.3
+ok 88 - saved device chargepoint removal survives events and serialized restart in nexowatt-devices.3
+  ---
+  duration_ms: 1.622697
+  type: 'test'
+  ...
+# Subtest: an incomplete original activation request cannot recreate a removed chargepoint
+ok 89 - an incomplete original activation request cannot recreate a removed chargepoint
+  ---
+  duration_ms: 1.972226
+  type: 'test'
+  ...
+# Subtest: legacy missing-row bindings without a mapping checkpoint conservatively record the current request once
+ok 90 - legacy missing-row bindings without a mapping checkpoint conservatively record the current request once
+  ---
+  duration_ms: 0.821999
+  type: 'test'
+  ...
+# Subtest: legacy removal checkpoints a pending request even when an older activation was already consumed
+ok 91 - legacy removal checkpoints a pending request even when an older activation was already consumed
+  ---
+  duration_ms: 0.810493
+  type: 'test'
+  ...
+# Subtest: discovery never assigns a station and preserves manually configured groups
+ok 92 - discovery never assigns a station and preserves manually configured groups
+  ---
+  duration_ms: 0.839265
+  type: 'test'
+  ...
+# Subtest: Devices does not add another controller when its alias resolves to an already mapped native OCPP command
+ok 93 - Devices does not add another controller when its alias resolves to an already mapped native OCPP command
+  ---
+  duration_ms: 0.597857
+  type: 'test'
+  ...
+# Subtest: auto: profile safety survives an earlier manual-generic checkpoint rollback
+ok 94 - auto: profile safety survives an earlier manual-generic checkpoint rollback
+  ---
+  duration_ms: 17.575332
+  type: 'test'
+  ...
+# Subtest: auto: profile safety survives an earlier pending-role checkpoint rollback
+ok 95 - auto: profile safety survives an earlier pending-role checkpoint rollback
+  ---
+  duration_ms: 2.390877
+  type: 'test'
+  ...
+# Subtest: auto: profile safety survives an earlier conflicting-grid checkpoint rollback
+ok 96 - auto: profile safety survives an earlier conflicting-grid checkpoint rollback
+  ---
+  duration_ms: 1.688204
+  type: 'test'
+  ...
+# Subtest: singleStorage: profile safety survives an earlier manual-generic checkpoint rollback
+ok 97 - singleStorage: profile safety survives an earlier manual-generic checkpoint rollback
+  ---
+  duration_ms: 2.181226
+  type: 'test'
+  ...
+# Subtest: singleStorage: profile safety survives an earlier pending-role checkpoint rollback
+ok 98 - singleStorage: profile safety survives an earlier pending-role checkpoint rollback
+  ---
+  duration_ms: 1.809995
+  type: 'test'
+  ...
+# Subtest: singleStorage: profile safety survives an earlier conflicting-grid checkpoint rollback
+ok 99 - singleStorage: profile safety survives an earlier conflicting-grid checkpoint rollback
+  ---
+  duration_ms: 0.942338
+  type: 'test'
+  ...
+# Subtest: storageFarm: profile safety survives an earlier manual-generic checkpoint rollback
+ok 100 - storageFarm: profile safety survives an earlier manual-generic checkpoint rollback
+  ---
+  duration_ms: 0.804012
+  type: 'test'
+  ...
+# Subtest: storageFarm: profile safety survives an earlier pending-role checkpoint rollback
+ok 101 - storageFarm: profile safety survives an earlier pending-role checkpoint rollback
+  ---
+  duration_ms: 0.900626
+  type: 'test'
+  ...
+# Subtest: storageFarm: profile safety survives an earlier conflicting-grid checkpoint rollback
+ok 102 - storageFarm: profile safety survives an earlier conflicting-grid checkpoint rollback
+  ---
+  duration_ms: 0.893505
+  type: 'test'
+  ...
+# Subtest: saving a real supported wallbox creates a persisted disabled charging point and retains manual configuration
+ok 103 - saving a real supported wallbox creates a persisted disabled charging point and retains manual configuration
+  ---
+  duration_ms: 506.495653
+  type: 'test'
+  ...
+# Subtest: repeat save, disable, re-enable and host restart keep one charging point, IDs and customer edits
+ok 104 - repeat save, disable, re-enable and host restart keep one charging point, IDs and customer edits
+  ---
+  duration_ms: 733.475819
+  type: 'test'
+  ...
+# Subtest: preserved legacy namespace keeps the real dotted alias IDs through automatic commissioning
+ok 105 - preserved legacy namespace keeps the real dotted alias IDs through automatic commissioning
+  ---
+  duration_ms: 320.831262
+  type: 'test'
+  ...
+# Subtest: device edits cannot race an in-flight AppCenter commit or replace the saved configuration
+ok 106 - device edits cannot race an in-flight AppCenter commit or replace the saved configuration
+  ---
+  duration_ms: 359.400513
+  type: 'test'
+  ...
+# Subtest: existing manual alias command resolves through the actual bridge and prevents a duplicate automatic controller
+ok 107 - existing manual alias command resolves through the actual bridge and prevents a duplicate automatic controller
+  ---
+  duration_ms: 265.467122
+  type: 'test'
+  ...
+# Subtest: real FENECON Home profile fills actual farm feedback, native grid and optional measurements without dispatch
+ok 108 - real FENECON Home profile fills actual farm feedback, native grid and optional measurements without dispatch
+  ---
+  duration_ms: 297.053109
+  type: 'test'
+  ...
+# Subtest: real SolaX Hybrid profile uses common storage aliases and exposes only genuine optional telemetry
+ok 109 - real SolaX Hybrid profile uses common storage aliases and exposes only genuine optional telemetry
+  ---
+  duration_ms: 352.079016
+  type: 'test'
+  ...
+# Subtest: new multi-connector EVCS creates every mapped mirror before its first real subscription read
+ok 110 - new multi-connector EVCS creates every mapped mirror before its first real subscription read
+  ---
+  duration_ms: 61.428075
+  type: 'test'
+  ...
+# Subtest: upgrade repairs missing metadata without resetting saved values and restart remains idempotent
+ok 111 - upgrade repairs missing metadata without resetting saved values and restart remains idempotent
+  ---
+  duration_ms: 10.350375
+  type: 'test'
+  ...
+# Subtest: later installer row provisioning precedes new connector mirroring and own ack events never freshen old false data
+ok 112 - later installer row provisioning precedes new connector mirroring and own ack events never freshen old false data
+  ---
+  duration_ms: 25.449744
+  type: 'test'
+  ...
+# Subtest: new wallbox is immediately registered with canonical aliases, held inactive, and does not enable an app
+ok 113 - new wallbox is immediately registered with canonical aliases, held inactive, and does not enable an app
+  ---
+  duration_ms: 6.702843
+  type: 'test'
+  ...
+# Subtest: retry and reordered inventory preserve stable identities without duplicated or renamed rows
+ok 114 - retry and reordered inventory preserve stable identities without duplicated or renamed rows
+  ---
+  duration_ms: 18.591831
+  type: 'test'
+  ...
+# Subtest: same display name never merges different physical chargers
+ok 115 - same display name never merges different physical chargers
+  ---
+  duration_ms: 0.536466
+  type: 'test'
+  ...
+# Subtest: preserved legacy namespace and dotted device IDs remain stable
+ok 116 - preserved legacy namespace and dotted device IDs remain stable
+  ---
+  duration_ms: 0.365833
+  type: 'test'
+  ...
+# Subtest: missing or foreign aliases do not invent a mapping or overwrite active settings
+ok 117 - missing or foreign aliases do not invent a mapping or overwrite active settings
+  ---
+  duration_ms: 0.57962
+  type: 'test'
+  ...
+# Subtest: read-only command or wrong canonical unit is never treated as a writable actuator
+ok 118 - read-only command or wrong canonical unit is never treated as a writable actuator
+  ---
+  duration_ms: 0.640771
+  type: 'test'
+  ...
+# Subtest: mixed manually mapped rows remain untouched instead of joining measurements and writes from different devices
+ok 119 - mixed manually mapped rows remain untouched instead of joining measurements and writes from different devices
+  ---
+  duration_ms: 0.410789
+  type: 'test'
+  ...
+# Subtest: central license bounds refuse only new rows and retain existing customers
+ok 120 - central license bounds refuse only new rows and retain existing customers
+  ---
+  duration_ms: 0.915508
+  type: 'test'
+  ...
+# Subtest: own alias variants and resolved manual aliases sharing a command target are rejected
+ok 121 - own alias variants and resolved manual aliases sharing a command target are rejected
+  ---
+  duration_ms: 0.857282
+  type: 'test'
+  ...
+# Subtest: device disable/removal/monitor keeps mappings and limits, holds owned row inactive, and does not auto-reactivate
+ok 122 - device disable/removal/monitor keeps mappings and limits, holds owned row inactive, and does not auto-reactivate
+  ---
+  duration_ms: 1.397934
+  type: 'test'
+  ...
+# Subtest: solar/DC charger is not registered as an EV charging point
+ok 123 - solar/DC charger is not registered as an EV charging point
+  ---
+  duration_ms: 1.040724
+  type: 'test'
+  ...
+# Subtest: single storage and farm use their actual configuration fields and exactly one command family
+ok 124 - single storage and farm use their actual configuration fields and exactly one command family
+  ---
+  duration_ms: 1.175834
+  type: 'test'
+  ...
+# Subtest: initial single-storage mapping retains previously configured customer limits and vendor settings
+ok 125 - initial single-storage mapping retains previously configured customer limits and vendor settings
+  ---
+  duration_ms: 0.273936
+  type: 'test'
+  ...
+# Subtest: a physical command target cannot be shared by storage and an existing charging controller
+ok 126 - a physical command target cannot be shared by storage and an existing charging controller
+  ---
+  duration_ms: 0.322188
+  type: 'test'
+  ...
+# Subtest: storage assigned to single regulator cannot also become a farm controller implicitly
+ok 127 - storage assigned to single regulator cannot also become a farm controller implicitly
+  ---
+  duration_ms: 0.423338
+  type: 'test'
+  ...
+# Subtest: storage control never maps hybrid powerBalance or guesses M1 dispatch
+ok 128 - storage control never maps hybrid powerBalance or guesses M1 dispatch
+  ---
+  duration_ms: 0.286926
+  type: 'test'
+  ...
+# Subtest: verified FENECON Home maps all real farm and single inputs while direct ESS and native FEMS targets stay distinct
+ok 129 - verified FENECON Home maps all real farm and single inputs while direct ESS and native FEMS targets stay distinct
+  ---
+  duration_ms: 1.937529
+  type: 'test'
+  ...
+# Subtest: Home native target and ESS feedback need the actual verified source; familiar alias names never promote 706 or 415
+ok 130 - Home native target and ESS feedback need the actual verified source; familiar alias names never promote 706 or 415
+  ---
+  duration_ms: 0.479341
+  type: 'test'
+  ...
+# Subtest: existing Auto direct ESS stays running with its command family; new native target requires explicit review
+ok 131 - existing Auto direct ESS stays running with its command family; new native target requires explicit review
+  ---
+  duration_ms: 0.726808
+  type: 'test'
+  ...
+# Subtest: FENECON numeric manual DP entry is retained for correction while available read fields are filled
+ok 132 - FENECON numeric manual DP entry is retained for correction while available read fields are filled
+  ---
+  duration_ms: 1.297876
+  type: 'test'
+  ...
+# Subtest: generic storage uses shared semantic PV and enable aliases without assuming FENECON-only algorithms
+ok 133 - generic storage uses shared semantic PV and enable aliases without assuming FENECON-only algorithms
+  ---
+  duration_ms: 0.201218
+  type: 'test'
+  ...
+# Subtest: explicit M0 meter maps signed W and freshness sources without replacing manual NVP
+ok 134 - explicit M0 meter maps signed W and freshness sources without replacing manual NVP
+  ---
+  duration_ms: 0.711916
+  type: 'test'
+  ...
+# Subtest: explicit M1 meter creates an inactive dynamic-grid measurement draft only
+ok 135 - explicit M1 meter creates an inactive dynamic-grid measurement draft only
+  ---
+  duration_ms: 0.374476
+  type: 'test'
+  ...
+# Subtest: one physical measurement is never duplicated between M1 and M0 or an energy-flow slot
+ok 136 - one physical measurement is never duplicated between M1 and M0 or an energy-flow slot
+  ---
+  duration_ms: 0.490017
+  type: 'test'
+  ...
+# Subtest: only bounded relevant references are requested and native alias read/write directions stay separate
+ok 137 - only bounded relevant references are requested and native alias read/write directions stay separate
+  ---
+  duration_ms: 0.827527
+  type: 'test'
+  ...
+# Subtest: explicit PV slot maps energy flow; a generation meter in same slot is conflict, never counted twice
+ok 138 - explicit PV slot maps energy flow; a generation meter in same slot is conflict, never counted twice
+  ---
+  duration_ms: 0.446923
+  type: 'test'
+  ...
+# Subtest: consumer meter and explicit heat monitoring use chosen existing slot
+ok 139 - consumer meter and explicit heat monitoring use chosen existing slot
+  ---
+  duration_ms: 0.261989
+  type: 'test'
+  ...
+# Subtest: no topology or source grouping is guessed from device names
+ok 140 - no topology or source grouping is guessed from device names
+  ---
+  duration_ms: 0.122302
+  type: 'test'
+  ...
+# Subtest: malformed config, dangerous keys, duplicate inventories, bad intent and excessive size are rejected
+ok 141 - malformed config, dangerous keys, duplicate inventories, bad intent and excessive size are rejected
+  ---
+  duration_ms: 7.086332
+  type: 'test'
+  ...
+# Subtest: optional unsupported register objects alone do not bind or disable an existing device
+ok 142 - optional unsupported register objects alone do not bind or disable an existing device
+  ---
+  duration_ms: 13.716928
+  type: 'test'
+  ...
+# Subtest: later valid capability measurement including zero fills binding once; stale later data never removes it
+ok 143 - later valid capability measurement including zero fills binding once; stale later data never removes it
+  ---
+  duration_ms: 1.96133
+  type: 'test'
+  ...
+# Subtest: automatic power capability binding rejects null
+ok 144 - automatic power capability binding rejects null
+  ---
+  duration_ms: 1.401679
+  type: 'test'
+  ...
+# Subtest: automatic power capability binding rejects numeric string
+ok 145 - automatic power capability binding rejects numeric string
+  ---
+  duration_ms: 0.610496
+  type: 'test'
+  ...
+# Subtest: automatic power capability binding rejects negative
+ok 146 - automatic power capability binding rejects negative
+  ---
+  duration_ms: 0.774459
+  type: 'test'
+  ...
+# Subtest: automatic power capability binding rejects not acknowledged
+ok 147 - automatic power capability binding rejects not acknowledged
+  ---
+  duration_ms: 0.437369
+  type: 'test'
+  ...
+# Subtest: automatic power capability binding rejects bad quality
+ok 148 - automatic power capability binding rejects bad quality
+  ---
+  duration_ms: 0.428436
+  type: 'test'
+  ...
+# Subtest: automatic power capability binding rejects stale
+ok 149 - automatic power capability binding rejects stale
+  ---
+  duration_ms: 0.37742
+  type: 'test'
+  ...
+# Subtest: automatic power capability binding rejects future
+ok 150 - automatic power capability binding rejects future
+  ---
+  duration_ms: 0.498539
+  type: 'test'
+  ...
+# Subtest: manual capability references and existing fixed limits survive subsequent inventory reconciliation
+ok 151 - manual capability references and existing fixed limits survive subsequent inventory reconciliation
+  ---
+  duration_ms: 1.205728
+  type: 'test'
+  ...
+# Subtest: automatic numeric capability requires canonical W metadata, not guessed kW conversion
+ok 152 - automatic numeric capability requires canonical W metadata, not guessed kW conversion
+  ---
+  duration_ms: 0.310621
+  type: 'test'
+  ...
+# Subtest: two actual slow source samples do not install a shorter capability freshness gate
+ok 153 - two actual slow source samples do not install a shorter capability freshness gate
+  ---
+  duration_ms: 1.161303
+  type: 'test'
+  ...
+# Subtest: repeated cached sample does not prove source cadence; a later fresh sample does
+ok 154 - repeated cached sample does not prove source cadence; a later fresh sample does
+  ---
+  duration_ms: 1.663788
+  type: 'test'
+  ...
+# Subtest: generation or explicit configuration change discards preceding cadence evidence
+ok 155 - generation or explicit configuration change discards preceding cadence evidence
+  ---
+  duration_ms: 0.753517
+  type: 'test'
+  ...
+# Subtest: profile admission sees enabled controllers but excludes disabled rows and pure display mappings
+ok 156 - profile admission sees enabled controllers but excludes disabled rows and pure display mappings
+  ---
+  duration_ms: 2.317518
+  type: 'test'
+  ...
+# Subtest: profile guard shares installer reservation and rejects active dotted-device readers/writers before any profile commit
+ok 157 - profile guard shares installer reservation and rejects active dotted-device readers/writers before any profile commit
+  ---
+  duration_ms: 36.067943
+  type: 'test'
+  ...
+# Subtest: profile guard resolves manual alias chains under the same reservation and fails closed on unavailable checks or lost ownership
+ok 158 - profile guard resolves manual alias chains under the same reservation and fails closed on unavailable checks or lost ownership
+  ---
+  duration_ms: 10.615868
+  type: 'test'
+  ...
+# Subtest: profile admission includes actual split NVP and legacy peak/atypical actuator references
+ok 159 - profile admission includes actual split NVP and legacy peak/atypical actuator references
+  ---
+  duration_ms: 0.488505
+  type: 'test'
+  ...
+# Subtest: consumed activation never grants control to a replacement profile or device class under the same alias base
+ok 160 - consumed activation never grants control to a replacement profile or device class under the same alias base
+  ---
+  duration_ms: 17.54648
+  type: 'test'
+  ...
+# Subtest: unchanged profile and semantic aliases retain their consumed activation across controller-address adjustment
+ok 161 - unchanged profile and semantic aliases retain their consumed activation across controller-address adjustment
+  ---
+  duration_ms: 1.652872
+  type: 'test'
+  ...
+# Subtest: a consumed token cannot turn an unavailable current alias inventory into a successful commissioning status
+ok 162 - a consumed token cannot turn an unavailable current alias inventory into a successful commissioning status
+  ---
+  duration_ms: 1.650869
+  type: 'test'
+  ...
+# Subtest: installing a shared app cannot silently start its previously dormant enabled manual controller
+ok 163 - installing a shared app cannot silently start its previously dormant enabled manual controller
+  ---
+  duration_ms: 1.02507
+  type: 'test'
+  ...
+# Subtest: profile replacement guard includes real split-NVP readers and both peak-shaving activation paths
+ok 164 - profile replacement guard includes real split-NVP readers and both peak-shaving activation paths
+  ---
+  duration_ms: 0.989718
+  type: 'test'
+  ...
+# Subtest: a persisted activation is not returned as successful until a failed runtime apply is retried
+ok 165 - a persisted activation is not returned as successful until a failed runtime apply is retried
+  ---
+  duration_ms: 249.487118
+  type: 'test'
+  ...
+# Subtest: discovers real V1 aliases in eos-admin.0, including dotted ids and command identity
+ok 166 - discovers real V1 aliases in eos-admin.0, including dotted ids and command identity
+  ---
+  duration_ms: 3.922879
+  type: 'test'
+  ...
+# Subtest: discovers real V1 aliases in nexowatt-devices.4, including dotted ids and command identity
+ok 167 - discovers real V1 aliases in nexowatt-devices.4, including dotted ids and command identity
+  ---
+  duration_ms: 0.665217
+  type: 'test'
+  ...
+# Subtest: missing metadata remains pending, then a later real manifest produces a mapping
+ok 168 - missing metadata remains pending, then a later real manifest produces a mapping
+  ---
+  duration_ms: 1.459535
+  type: 'test'
+  ...
+# Subtest: stale template aliases, unoffered capabilities and foreign objects never become assignable
+ok 169 - stale template aliases, unoffered capabilities and foreign objects never become assignable
+  ---
+  duration_ms: 4.784067
+  type: 'test'
+  ...
+# Subtest: manifest from a previous template and unacknowledged metadata are never trusted
+ok 170 - manifest from a previous template and unacknowledged metadata are never trusted
+  ---
+  duration_ms: 0.963159
+  type: 'test'
+  ...
+# Subtest: telemetry events do not schedule discovery; only metadata and alias object changes do
+ok 171 - telemetry events do not schedule discovery; only metadata and alias object changes do
+  ---
+  duration_ms: 0.811784
+  type: 'test'
+  ...
+# Subtest: configuration generation changes during reads discard the obsolete inventory
+ok 172 - configuration generation changes during reads discard the obsolete inventory
+  ---
+  duration_ms: 0.895939
+  type: 'test'
+  ...
+# Subtest: stop blocks a delayed discovery from writing configuration and cancels retry timers
+ok 173 - stop blocks a delayed discovery from writing configuration and cancels retry timers
+  ---
+  duration_ms: 0.707951
+  type: 'test'
+  ...
+# Subtest: unready runtime never discovers or applies; error messages cannot leak credentials
+ok 174 - unready runtime never discovers or applies; error messages cannot leak credentials
+  ---
+  duration_ms: 0.956179
+  type: 'test'
+  ...
+# Subtest: inventory size and namespace are bounded; no foreign adapter scan occurs
+ok 175 - inventory size and namespace are bounded; no foreign adapter scan occurs
+  ---
+  duration_ms: 1.074084
+  type: 'test'
+  ...
+# Subtest: assignment conflicts remain visible and cannot be reported as ready
+ok 176 - assignment conflicts remain visible and cannot be reported as ready
+  ---
+  duration_ms: 0.590786
+  type: 'test'
+  ...
+# Subtest: actual manual ioBroker alias chain resolves to a known V1 command and prevents duplicate commissioning
+ok 177 - actual manual ioBroker alias chain resolves to a known V1 command and prevents duplicate commissioning
+  ---
+  duration_ms: 5.630833
+  type: 'test'
+  ...
+# Subtest: split read and write aliases resolve independently with cached exact lookups
+ok 178 - split read and write aliases resolve independently with cached exact lookups
+  ---
+  duration_ms: 0.495605
+  type: 'test'
+  ...
+# Subtest: older non-V1 own aliases retain their verified physical command identity
+ok 179 - older non-V1 own aliases retain their verified physical command identity
+  ---
+  duration_ms: 0.875418
+  type: 'test'
+  ...
+# Subtest: generated V1 heartbeat and computed readings remain resolvable on repeated commissioning
+ok 180 - generated V1 heartbeat and computed readings remain resolvable on repeated commissioning
+  ---
+  duration_ms: 3.409688
+  type: 'test'
+  ...
+# Subtest: legacy computed and heartbeat leaves are accepted only as read-only sources
+ok 181 - legacy computed and heartbeat leaves are accepted only as read-only sources
+  ---
+  duration_ms: 1.053433
+  type: 'test'
+  ...
+# Subtest: alias cycles, uncertain reads and revoked authority cannot authorize a plan or leak errors
+ok 182 - alias cycles, uncertain reads and revoked authority cannot authorize a plan or leak errors
+  ---
+  duration_ms: 0.642984
+  type: 'test'
+  ...
+# Subtest: actual packaged UI configuration tolerates unrelated optional adapter fields without weakening installer validation
+ok 183 - actual packaged UI configuration tolerates unrelated optional adapter fields without weakening installer validation
+  ---
+  duration_ms: 284.018804
+  type: 'test'
+  ...
+# Subtest: saved device activation intent and validated limits reach the planner unchanged
+ok 184 - saved device activation intent and validated limits reach the planner unchanged
+  ---
+  duration_ms: 1.332587
+  type: 'test'
+  ...
+# Subtest: global runtime failures replace stale success with an explicit saved-device status and sanitized log
+ok 185 - global runtime failures replace stale success with an explicit saved-device status and sanitized log
+  ---
+  duration_ms: 1.108435
+  type: 'test'
+  ...
+# Subtest: reference metadata retains root units and does not authorize writing through read-only leaf aliases
+ok 186 - reference metadata retains root units and does not authorize writing through read-only leaf aliases
+  ---
+  duration_ms: 5.071954
+  type: 'test'
+  ...
+# Subtest: activation result correlation and exact correction codes are returned without arbitrary planner data
+ok 187 - activation result correlation and exact correction codes are returned without arbitrary planner data
+  ---
+  duration_ms: 0.729251
+  type: 'test'
+  ...
+# Subtest: real Speedwire UDP keeps raw values changing after device save and hosted driver replacement
+ok 188 - real Speedwire UDP keeps raw values changing after device save and hosted driver replacement
+  ---
+  duration_ms: 1117.807778
+  type: 'test'
+  ...
+# Subtest: ownership query timeout closes and then restarts the real UDP runtime after verified ownership recovers
+ok 189 - ownership query timeout closes and then restarts the real UDP runtime after verified ownership recovers
+  ---
+  duration_ms: 10005.810101
+  type: 'test'
+  ...
+# Subtest: real UDP polling resumes after actual temporary lease expiry without a misleading active but stopped module
+ok 190 - real UDP polling resumes after actual temporary lease expiry without a misleading active but stopped module
+  ---
+  duration_ms: 13253.013242
+  type: 'test'
+  ...
+# Subtest: actual entitlement revocation stops the UDP runtime and prevents old-generation publication until a confirmed restart
+ok 191 - actual entitlement revocation stops the UDP runtime and prevents old-generation publication until a confirmed restart
+  ---
+  duration_ms: 5562.855982
+  type: 'test'
+  ...
+# Subtest: production Web mount reaches the real UI/EMS child and reconciles a device HTTP save through IPC
+ok 192 - production Web mount reaches the real UI/EMS child and reconciles a device HTTP save through IPC
+  ---
+  duration_ms: 4646.639128
+  type: 'test'
+  ...
+# Subtest: real UI child preserves an explicit Devices chargepoint deletion through HTTP, discovery and restart
+    # Subtest: fresh owner and real child retain removal; a new explicit request recreates exactly one inactive row
+    ok 1 - fresh owner and real child retain removal; a new explicit request recreates exactly one inactive row
+      ---
+      duration_ms: 3658.843335
+      type: 'test'
+      ...
+    1..1
+ok 193 - real UI child preserves an explicit Devices chargepoint deletion through HTTP, discovery and restart
+  ---
+  duration_ms: 8750.885375
+  type: 'test'
+  ...
+# Subtest: legacy in-process business pipeline: actual module HTTP rejects a live profile replacement before persistence and allows it after AppCenter deactivation
+    # Subtest: direct Devices alias
+    ok 1 - direct Devices alias
+      ---
+      duration_ms: 898.109793
+      type: 'test'
+      ...
+    # Subtest: external split ioBroker alias
+    ok 2 - external split ioBroker alias
+      ---
+      duration_ms: 653.100933
+      type: 'test'
+      ...
+    1..2
+ok 194 - legacy in-process business pipeline: actual module HTTP rejects a live profile replacement before persistence and allows it after AppCenter deactivation
+  ---
+  duration_ms: 1551.813971
+  type: 'test'
+  ...
+# Subtest: legacy in-process business pipeline: actual profile HTTP reservation blocks concurrent AppCenter activation and releases after a failed controller commit
+ok 195 - legacy in-process business pipeline: actual profile HTTP reservation blocks concurrent AppCenter activation and releases after a failed controller commit
+  ---
+  duration_ms: 644.455379
+  type: 'test'
+  ...
+# Subtest: legacy in-process business pipeline: removing and reintroducing a device ID cannot reuse its still-active EMS references with another profile
+ok 196 - legacy in-process business pipeline: removing and reintroducing a device ID cannot reuse its still-active EMS references with another profile
+  ---
+  duration_ms: 981.889356
+  type: 'test'
+  ...
+# Subtest: legacy in-process business pipeline: production Web bridge and actual hosted startup process device-save HTTP without manual reconciliation
+ok 197 - legacy in-process business pipeline: production Web bridge and actual hosted startup process device-save HTTP without manual reconciliation
+  ---
+  duration_ms: 4076.579503
+  type: 'test'
+  ...
+# Subtest: legacy in-process business pipeline: one device HTTP save adopts the manual farm row, adds SolaX and SMA M0, and activates the corresponding app atomically
+    # Subtest: legacy in-process business pipeline: fresh hosted instance rehydrates the persisted device and EMS configuration without another setup call
+    ok 1 - legacy in-process business pipeline: fresh hosted instance rehydrates the persisted device and EMS configuration without another setup call
+      ---
+      duration_ms: 319.800856
+      type: 'test'
+      ...
+    1..1
+ok 198 - legacy in-process business pipeline: one device HTTP save adopts the manual farm row, adds SolaX and SMA M0, and activates the corresponding app atomically
+  ---
+  duration_ms: 4810.020563
+  type: 'test'
+  ...
+# Subtest: legacy in-process business pipeline: HTTP rejects a new device ID during unknown hosted configuration hydration, then accepts the retained draft after readiness
+ok 199 - legacy in-process business pipeline: HTTP rejects a new device ID during unknown hosted configuration hydration, then accepts the retained draft after readiness
+  ---
+  duration_ms: 879.597492
+  type: 'test'
+  ...
+# Subtest: legacy in-process business pipeline: late actual manifest event completes commissioning; telemetry bursts do not restart inventory scans
+ok 200 - legacy in-process business pipeline: late actual manifest event completes commissioning; telemetry bursts do not restart inventory scans
+  ---
+  duration_ms: 1344.495965
+  type: 'test'
+  ...
+# Subtest: legacy in-process business pipeline: running Devices retain an ownership lease while other modules initialize slowly
+ok 201 - legacy in-process business pipeline: running Devices retain an ownership lease while other modules initialize slowly
+  ---
+  duration_ms: 15021.076676
+  type: 'test'
+  ...
+# Subtest: legacy in-process business pipeline: real device polling keeps FENECON PV, converter feedback and battery flow distinct in an activated mixed farm
+ok 202 - legacy in-process business pipeline: real device polling keeps FENECON PV, converter feedback and battery flow distinct in an activated mixed farm
+  ---
+  duration_ms: 6198.868193
+  type: 'test'
+  ...
+# (node:349) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: OCPP production page and assets require fresh administrator access and expose only fixed paths
+ok 203 - OCPP production page and assets require fresh administrator access and expose only fixed paths
+  ---
+  duration_ms: 222.567587
+  type: 'test'
+  ...
+# Subtest: OCPP saves use same-origin session CSRF and expected revision; conflicts preserve saved configuration
+ok 204 - OCPP saves use same-origin session CSRF and expected revision; conflicts preserve saved configuration
+  ---
+  duration_ms: 41.050692
+  type: 'test'
+  ...
+# Subtest: OCPP import forwards only guarded legacy instance and exposes safe migration namespace result
+ok 205 - OCPP import forwards only guarded legacy instance and exposes safe migration namespace result
+  ---
+  duration_ms: 21.32157
+  type: 'test'
+  ...
+# Subtest: registered stations persist complete native mappings; unknown electrical limits never enable a writer
+ok 206 - registered stations persist complete native mappings; unknown electrical limits never enable a writer
+  ---
+  duration_ms: 71.186812
+  type: 'test'
+  ...
+# Subtest: partial contract registration is explicit and completes; invalid directions, units and metadata stay untrusted
+ok 207 - partial contract registration is explicit and completes; invalid directions, units and metadata stay untrusted
+  ---
+  duration_ms: 0.854437
+  type: 'test'
+  ...
+# Subtest: an auto-created row explicitly retained as an active monitor never regains its first writer
+ok 208 - an auto-created row explicitly retained as an active monitor never regains its first writer
+  ---
+  duration_ms: 0.617075
+  type: 'test'
+  ...
+# Subtest: real configuration pipeline retains validated contract failure metadata and never enables an uncommissioned row
+ok 209 - real configuration pipeline retains validated contract failure metadata and never enables an uncommissioned row
+  ---
+  duration_ms: 19.364557
+  type: 'test'
+  ...
+# Subtest: existing aliases deduplicate to one station and manual limits/mappings survive; duplicate control groups are reported
+ok 210 - existing aliases deduplicate to one station and manual limits/mappings survive; duplicate control groups are reported
+  ---
+  duration_ms: 0.918542
+  type: 'test'
+  ...
+# Subtest: multi EVSE topology remains one station aggregate writer; connector controls are never invented
+ok 211 - multi EVSE topology remains one station aggregate writer; connector controls are never invented
+  ---
+  duration_ms: 0.652408
+  type: 'test'
+  ...
+# Subtest: an existing active manual monitor does not gain its first writer from discovery, including later rescans
+ok 212 - an existing active manual monitor does not gain its first writer from discovery, including later rescans
+  ---
+  duration_ms: 0.724635
+  type: 'test'
+  ...
+# Subtest: existing manual monitor crosses real normalization, engine and CM tick without inferred hardware commands
+ok 213 - existing manual monitor crosses real normalization, engine and CM tick without inferred hardware commands
+  ---
+  duration_ms: 63.296947
+  type: 'test'
+  ...
+# Subtest: license capacity exposes pending stations, retains existing mappings and fills a newly available slot
+ok 214 - license capacity exposes pending stations, retains existing mappings and fills a newly available slot
+  ---
+  duration_ms: 0.739147
+  type: 'test'
+  ...
+# Subtest: registration bursts, offline and restart are idempotent; concurrent manual saves share the mutation fence
+ok 215 - registration bursts, offline and restart are idempotent; concurrent manual saves share the mutation fence
+  ---
+  duration_ms: 41.648183
+  type: 'test'
+  ...
+# Subtest: persist failures keep prior configuration; failed runtime apply is retried without creating a second row
+ok 216 - persist failures keep prior configuration; failed runtime apply is retried without creating a second row
+  ---
+  duration_ms: 20.886545
+  type: 'test'
+  ...
+# Subtest: stop during discovery cannot commit a late scan
+ok 217 - stop during discovery cannot commit a late scan
+  ---
+  duration_ms: 8.055049
+  type: 'test'
+  ...
+# Subtest: ownership loss after a database read prevents reconciliation and leaves existing configuration untouched
+ok 218 - ownership loss after a database read prevents reconciliation and leaves existing configuration untouched
+  ---
+  duration_ms: 0.510757
+  type: 'test'
+  ...
+# Subtest: actual supplied OCPP adapter registration and station telemetry map through the real EOS persistence path
+ok 219 - actual supplied OCPP adapter registration and station telemetry map through the real EOS persistence path
+  ---
+  duration_ms: 533.204741
+  type: 'test'
+  ...
+# Subtest: embedded OCPP station registration persists hosted mappings and retains them across bursts and runtime restart
+ok 220 - embedded OCPP station registration persists hosted mappings and retains them across bursts and runtime restart
+  ---
+  duration_ms: 731.159589
+  type: 'test'
+  ...
+# Subtest: discovery scopes hosted trees to the owning EOS and retains legacy migration identities
+ok 221 - discovery scopes hosted trees to the owning EOS and retains legacy migration identities
+  ---
+  duration_ms: 11.066222
+  type: 'test'
+  ...
+# Subtest: installer GET pairs a discovery-updated row snapshot with its own revision before a subsequent delete
+ok 222 - installer GET pairs a discovery-updated row snapshot with its own revision before a subsequent delete
+  ---
+  duration_ms: 173.509813
+  type: 'test'
+  ...
+# Subtest: a real discovery commit after GET still rejects the stale form without discarding its newer station
+ok 223 - a real discovery commit after GET still rejects the stale form without discarding its newer station
+  ---
+  duration_ms: 24.666711
+  type: 'test'
+  ...
+# Subtest: installer hydration changes only its response snapshot and leaves the revision base and runtime objects intact
+ok 224 - installer hydration changes only its response snapshot and leaves the revision base and runtime objects intact
+  ---
+  duration_ms: 8.819584
+  type: 'test'
+  ...
+# Subtest: discovery requires a configured source, preserves offline instances and admits only the authoritative hosted legacy namespace
+ok 225 - discovery requires a configured source, preserves offline instances and admits only the authoritative hosted legacy namespace
+  ---
+  duration_ms: 0.962809
+  type: 'test'
+  ...
+# Subtest: deleted legacy rows stay removed after rescans and installer reload while the integrated source continues discovery
+ok 226 - deleted legacy rows stay removed after rescans and installer reload while the integrated source continues discovery
+  ---
+  duration_ms: 53.45911
+  type: 'test'
+  ...
+# Subtest: production discovery admits a preserved namespace from its parent even after the old adapter object is gone
+ok 227 - production discovery admits a preserved namespace from its parent even after the old adapter object is gone
+  ---
+  duration_ms: 10.990944
+  type: 'test'
+  ...
+# Subtest: failed source inventory never treats orphaned contract states as an existing adapter
+ok 228 - failed source inventory never treats orphaned contract states as an existing adapter
+  ---
+  duration_ms: 3.258333
+  type: 'test'
+  ...
+# Subtest: explicit removal of an active hosted source survives scans and restart; manual re-import restores exactly one row
+ok 229 - explicit removal of an active hosted source survives scans and restart; manual re-import restores exactly one row
+  ---
+  duration_ms: 76.496929
+  type: 'test'
+  ...
+# Subtest: removal exclusion overflow fails before writer stop or persisted configuration changes
+ok 230 - removal exclusion overflow fails before writer stop or persisted configuration changes
+  ---
+  duration_ms: 24.450821
+  type: 'test'
+  ...
+# Subtest: manual discovery and automatic registration both ignore retained states of a deleted standalone source
+ok 231 - manual discovery and automatic registration both ignore retained states of a deleted standalone source
+  ---
+  duration_ms: 95.663632
+  type: 'test'
+  ...
+# Subtest: automatic discovery leaves station and group assignment manual while remaining idempotent
+ok 232 - automatic discovery leaves station and group assignment manual while remaining idempotent
+  ---
+  duration_ms: 1.254251
+  type: 'test'
+  ...
+# Subtest: manual discovery validates units and contract values just like the automatic collector
+ok 233 - manual discovery validates units and contract values just like the automatic collector
+  ---
+  duration_ms: 13.142977
+  type: 'test'
+  ...
+# Subtest: still configured standalone sources remain distinct even when offline or using the same device name
+ok 234 - still configured standalone sources remain distinct even when offline or using the same device name
+  ---
+  duration_ms: 7.594446
+  type: 'test'
+  ...
+# Subtest: a hosted preserved namespace does not rediscover retained objects in the unused default tree
+ok 235 - a hosted preserved namespace does not rediscover retained objects in the unused default tree
+  ---
+  duration_ms: 7.755595
+  type: 'test'
+  ...
+# Subtest: OCPP uses the existing central grant and preserves explicit legacy adapter scope
+ok 236 - OCPP uses the existing central grant and preserves explicit legacy adapter scope
+  ---
+  duration_ms: 1.198958
+  type: 'test'
+  ...
+# Subtest: native OCPP root command lease precedes startup and is released exactly once
+ok 237 - native OCPP root command lease precedes startup and is released exactly once
+  ---
+  duration_ms: 6.9502
+  type: 'test'
+  ...
+# Subtest: active or unconfirmed standalone OCPP blocks the new listener
+ok 238 - active or unconfirmed standalone OCPP blocks the new listener
+  ---
+  duration_ms: 3.59327
+  type: 'test'
+  ...
+# Subtest: manual OCPP import retains original IDs and stays disabled until reviewed enable
+ok 239 - manual OCPP import retains original IDs and stays disabled until reviewed enable
+  ---
+  duration_ms: 4.870424
+  type: 'test'
+  ...
+# Subtest: manual preserved import refuses a source changed during asynchronous conversion
+ok 240 - manual preserved import refuses a source changed during asynchronous conversion
+  ---
+  duration_ms: 1.899067
+  type: 'test'
+  ...
+# Subtest: persisted earlier OCPP handover still loads and rollback retains source data
+ok 241 - persisted earlier OCPP handover still loads and rollback retains source data
+  ---
+  duration_ms: 4.500822
+  type: 'test'
+  ...
+# Subtest: committed earlier OCPP journal retains preserved ownership and validated destination
+ok 242 - committed earlier OCPP journal retains preserved ownership and validated destination
+  ---
+  duration_ms: 1.924144
+  type: 'test'
+  ...
+# Subtest: missing destination in an earlier OCPP journal still blocks unsafe startup
+ok 243 - missing destination in an earlier OCPP journal still blocks unsafe startup
+  ---
+  duration_ms: 1.383593
+  type: 'test'
+  ...
+# Subtest: existing committed migration never silently stops a newly discovered OCPP source
+ok 244 - existing committed migration never silently stops a newly discovered OCPP source
+  ---
+  duration_ms: 0.759877
+  type: 'test'
+  ...
+# Subtest: real OCPP worker retains lease revocation history across immediate regrant and expiry
+ok 245 - real OCPP worker retains lease revocation history across immediate regrant and expiry
+  ---
+  duration_ms: 1554.198623
+  type: 'test'
+  ...
+# Subtest: new OCPP mappings leave manual station/group assignment empty
+ok 246 - new OCPP mappings leave manual station/group assignment empty
+  ---
+  duration_ms: 9.703094
+  type: 'test'
+  ...
+# Subtest: repeated discovery preserves commissioned values and does not replace the list
+ok 247 - repeated discovery preserves commissioned values and does not replace the list
+  ---
+  duration_ms: 4.92123
+  type: 'test'
+  ...
+# Subtest: duplicate discovery entries and equivalent aliases yield one physical station row
+ok 248 - duplicate discovery entries and equivalent aliases yield one physical station row
+  ---
+  duration_ms: 7.861933
+  type: 'test'
+  ...
+# Subtest: physical station metadata identifies incomplete mappings without assigning display groups
+ok 249 - physical station metadata identifies incomplete mappings without assigning display groups
+  ---
+  duration_ms: 1.963603
+  type: 'test'
+  ...
+# Subtest: existing mapped rows survive a stale lower EVCS count during explicit discovery
+ok 250 - existing mapped rows survive a stale lower EVCS count during explicit discovery
+  ---
+  duration_ms: 1.746901
+  type: 'test'
+  ...
+# Subtest: pending discovery excludes simultaneous load/save/discovery and keeps the original CAS token
+ok 251 - pending discovery excludes simultaneous load/save/discovery and keeps the original CAS token
+  ---
+  duration_ms: 2.364878
+  type: 'test'
+  ...
+# Subtest: pristine detection adopts the authoritative saved rows and their exact CAS revision first
+ok 252 - pristine detection adopts the authoritative saved rows and their exact CAS revision first
+  ---
+  duration_ms: 2.187575
+  type: 'test'
+  ...
+# Subtest: dirty discovery preserves the draft and its CAS token while the server may have newer mappings
+ok 253 - dirty discovery preserves the draft and its CAS token while the server may have newer mappings
+  ---
+  duration_ms: 1.671239
+  type: 'test'
+  ...
+# Subtest: native applied-limit feedback and physical metadata are retained without converting manual rows to auto-managed writers
+ok 254 - native applied-limit feedback and physical metadata are retained without converting manual rows to auto-managed writers
+  ---
+  duration_ms: 3.374656
+  type: 'test'
+  ...
+# Subtest: a configured read-only monitor never gains a command target from either discovery action
+ok 255 - a configured read-only monitor never gains a command target from either discovery action
+  ---
+  duration_ms: 2.860169
+  type: 'test'
+  ...
+# Subtest: mixed or duplicated physical mappings are left unchanged and never get another row appended
+ok 256 - mixed or duplicated physical mappings are left unchanged and never get another row appended
+  ---
+  duration_ms: 2.600718
+  type: 'test'
+  ...
+# Subtest: actual EVCS input mutation prevents automatic reload without a test-forced dirty flag
+ok 257 - actual EVCS input mutation prevents automatic reload without a test-forced dirty flag
+  ---
+  duration_ms: 1.455639
+  type: 'test'
+  ...
+# Subtest: direct station-group edits and uncommitted DOM values prevent automatic reload even without a dirty flag
+ok 258 - direct station-group edits and uncommitted DOM values prevent automatic reload even without a dirty flag
+  ---
+  duration_ms: 2.795176
+  type: 'test'
+  ...
+# Subtest: current-only native aliases deduplicate and mixed current writers remain fenced
+ok 259 - current-only native aliases deduplicate and mixed current writers remain fenced
+  ---
+  duration_ms: 2.292901
+  type: 'test'
+  ...
+# Subtest: background OCPP mapping refreshes a pristine form; dirty CAS conflicts preserve both drafts and saved mappings
+ok 260 - background OCPP mapping refreshes a pristine form; dirty CAS conflicts preserve both drafts and saved mappings
+  ---
+  duration_ms: 204.03614
+  type: 'test'
+  ...
+# Subtest: manual hosted/native OCPP detection cannot pre-enable a new station or assume AC electrical settings
+ok 261 - manual hosted/native OCPP detection cannot pre-enable a new station or assume AC electrical settings
+  ---
+  duration_ms: 1.336423
+  type: 'test'
+  ...
+# Subtest: mapping a known native station preserves the installer-approved activation and electrical settings
+ok 262 - mapping a known native station preserves the installer-approved activation and electrical settings
+  ---
+  duration_ms: 2.112154
+  type: 'test'
+  ...
+# Subtest: station identities retain exact hosted namespace and legacy aliases without conflating equal station names
+ok 263 - station identities retain exact hosted namespace and legacy aliases without conflating equal station names
+  ---
+  duration_ms: 0.720779
+  type: 'test'
+  ...
+# Subtest: hosted OCPP facade writes local states in only its current or explicitly preserved namespace
+    # Subtest: embedded namespace
+    ok 1 - embedded namespace
+      ---
+      duration_ms: 4.032772
+      type: 'test'
+      ...
+    # Subtest: preserved standalone namespace
+    ok 2 - preserved standalone namespace
+      ---
+      duration_ms: 0.955588
+      type: 'test'
+      ...
+    1..2
+ok 264 - hosted OCPP facade writes local states in only its current or explicitly preserved namespace
+  ---
+  duration_ms: 6.027381
+  type: 'test'
+  ...
+# Subtest: hosted OCPP scans reject foreign, oversized and malformed controller inventories without partial success
+ok 265 - hosted OCPP scans reject foreign, oversized and malformed controller inventories without partial success
+  ---
+  duration_ms: 19.675618
+  type: 'test'
+  ...
+# Subtest: hosted OCPP configuration views accept only bounded own-station ranges and validate both value and doc identifiers
+ok 266 - hosted OCPP configuration views accept only bounded own-station ranges and validate both value and doc identifiers
+  ---
+  duration_ms: 1.371955
+  type: 'test'
+  ...
+# Subtest: hosted OCPP cannot publish a late inventory or dispatch a queued write after its generation is revoked
+ok 267 - hosted OCPP cannot publish a late inventory or dispatch a queued write after its generation is revoked
+  ---
+  duration_ms: 0.66052
+  type: 'test'
+  ...
+# Subtest: OCPP acknowledged telemetry bursts never re-enter IPC, while the original command event is preserved
+ok 268 - OCPP acknowledged telemetry bursts never re-enter IPC, while the original command event is preserved
+  ---
+  duration_ms: 3.457189
+  type: 'test'
+  ...
+# Subtest: atomic profile uses confirmed watts, not raw wire amperes or unrelated command success
+ok 269 - atomic profile uses confirmed watts, not raw wire amperes or unrelated command success
+  ---
+  duration_ms: 2.252121
+  type: 'test'
+  ...
+# Subtest: current atomic response confirms zero and a conservative lower ceiling without inventing physical power
+ok 270 - current atomic response confirms zero and a conservative lower ceiling without inventing physical power
+  ---
+  duration_ms: 0.430368
+  type: 'test'
+  ...
+# Subtest: reconnect, pending/rejected, source quality and missing timestamps cannot fall back to old successful fields
+ok 271 - reconnect, pending/rejected, source quality and missing timestamps cannot fall back to old successful fields
+  ---
+  duration_ms: 0.681441
+  type: 'test'
+  ...
+# Subtest: 0.4.2 watt tuple requires last validity publication and does not confuse amperes with watts
+ok 272 - 0.4.2 watt tuple requires last validity publication and does not confuse amperes with watts
+  ---
+  duration_ms: 0.243441
+  type: 'test'
+  ...
+# Subtest: legacy result requires an actual successful profile response in watts
+ok 273 - legacy result requires an actual successful profile response in watts
+  ---
+  duration_ms: 0.776892
+  type: 'test'
+  ...
+# Subtest: invalid session and future response never become confirmed merely through matching old numeric values
+ok 274 - invalid session and future response never become confirmed merely through matching old numeric values
+  ---
+  duration_ms: 0.184383
+  type: 'test'
+  ...
+# Subtest: configured Devices remain startable with unsupported external OCPP version and no prior migration journal
+ok 275 - configured Devices remain startable with unsupported external OCPP version and no prior migration journal
+  ---
+  duration_ms: 9.103124
+  type: 'test'
+  ...
+# Subtest: configured Devices remain startable with supported external OCPP version and no prior migration journal
+ok 276 - configured Devices remain startable with supported external OCPP version and no prior migration journal
+  ---
+  duration_ms: 1.956522
+  type: 'test'
+  ...
+# Subtest: configured Devices remain startable with multiple external OCPP instances and no prior migration journal
+ok 277 - configured Devices remain startable with multiple external OCPP instances and no prior migration journal
+  ---
+  duration_ms: 1.763065
+  type: 'test'
+  ...
+# Subtest: configured Devices remain startable with external OCPP outside embedded module grant and no prior migration journal
+ok 278 - configured Devices remain startable with external OCPP outside embedded module grant and no prior migration journal
+  ---
+  duration_ms: 2.473719
+  type: 'test'
+  ...
+# Subtest: previously blocked optional OCPP inventory recovers on startup and actual Devices child runs
+ok 279 - previously blocked optional OCPP inventory recovers on startup and actual Devices child runs
+  ---
+  duration_ms: 117.847518
+  type: 'test'
+  ...
+# Subtest: optional OCPP handling does not bypass the core license gate
+ok 280 - optional OCPP handling does not bypass the core license gate
+  ---
+  duration_ms: 2.181947
+  type: 'test'
+  ...
+# Subtest: invalid actual Devices migration candidate still blocks startup
+ok 281 - invalid actual Devices migration candidate still blocks startup
+  ---
+  duration_ms: 1.881261
+  type: 'test'
+  ...
+# Subtest: real CM reads atomic 0.4.3 feedback through source-metadata cache and writes native watts only
+ok 282 - real CM reads atomic 0.4.3 feedback through source-metadata cache and writes native watts only
+  ---
+  duration_ms: 54.679825
+  type: 'test'
+  ...
+# Subtest: real CM atomic pending/rejected feedback cannot be confirmed by old command-success fields
+ok 283 - real CM atomic pending/rejected feedback cannot be confirmed by old command-success fields
+  ---
+  duration_ms: 22.303306
+  type: 'test'
+  ...
+# Subtest: real CM rejects old-session, stale, bad quality and missing-source-timestamp feedback
+ok 284 - real CM rejects old-session, stale, bad quality and missing-source-timestamp feedback
+  ---
+  duration_ms: 49.624821
+  type: 'test'
+  ...
+# Subtest: real CM treats valid zero as a confirmed requested profile and keeps measured charging power separate
+ok 285 - real CM treats valid zero as a confirmed requested profile and keeps measured charging power separate
+  ---
+  duration_ms: 7.500867
+  type: 'test'
+  ...
+# Subtest: duplicate native station rows cannot send positive limits or race the single conservative zero writer
+ok 286 - duplicate native station rows cannot send positive limits or race the single conservative zero writer
+  ---
+  duration_ms: 11.414043
+  type: 'test'
+  ...
+# Subtest: incomplete native commissioning contract blocks positive power at the actual CM writer
+ok 287 - incomplete native commissioning contract blocks positive power at the actual CM writer
+  ---
+  duration_ms: 7.001115
+  type: 'test'
+  ...
+# Subtest: two independently controlled legacy OCPP connectors are not mistaken for a native station aggregate
+ok 288 - two independently controlled legacy OCPP connectors are not mistaken for a native station aggregate
+  ---
+  duration_ms: 11.928415
+  type: 'test'
+  ...
+# Subtest: native lease write failure or rejection blocks positive power in the real CM final writer
+ok 289 - native lease write failure or rejection blocks positive power in the real CM final writer
+  ---
+  duration_ms: 9.986484
+  type: 'test'
+  ...
+# Subtest: native positive command awaits the lease transport promise, not just an attempted write
+ok 290 - native positive command awaits the lease transport promise, not just an attempted write
+  ---
+  duration_ms: 20.314395
+  type: 'test'
+  ...
+# Subtest: atomic native contract cannot bypass its lease using missing, false or invalid support metadata
+ok 291 - atomic native contract cannot bypass its lease using missing, false or invalid support metadata
+  ---
+  duration_ms: 26.776652
+  type: 'test'
+  ...
+# Subtest: real CM renews its station lease after five seconds and immediately after an OCPP session change
+ok 292 - real CM renews its station lease after five seconds and immediately after an OCPP session change
+  ---
+  duration_ms: 21.32148
+  type: 'test'
+  ...
+# Subtest: hosted runtime eos-admin.0.ocpp.CP_01 retains native watts, atomic feedback, zero and ordered leases
+ok 293 - hosted runtime eos-admin.0.ocpp.CP_01 retains native watts, atomic feedback, zero and ordered leases
+  ---
+  duration_ms: 9.474385
+  type: 'test'
+  ...
+# Subtest: hosted runtime ocpp21.0.CP_01 retains native watts, atomic feedback, zero and ordered leases
+ok 294 - hosted runtime ocpp21.0.CP_01 retains native watts, atomic feedback, zero and ordered leases
+  ---
+  duration_ms: 8.998899
+  type: 'test'
+  ...
+# Subtest: live Admin parent never replaces missing, stale, future, bad-quality or unacknowledged OCPP worker heartbeat
+ok 295 - live Admin parent never replaces missing, stale, future, bad-quality or unacknowledged OCPP worker heartbeat
+  ---
+  duration_ms: 37.300083
+  type: 'test'
+  ...
+# Subtest: invalid migrated hosted marker cannot fall back to live legacy adapter
+ok 296 - invalid migrated hosted marker cannot fall back to live legacy adapter
+  ---
+  duration_ms: 4.606223
+  type: 'test'
+  ...
+# Subtest: another EOS owner cannot become a reader or writer through manual native mapping
+ok 297 - another EOS owner cannot become a reader or writer through manual native mapping
+  ---
+  duration_ms: 3.061543
+  type: 'test'
+  ...
+# Subtest: hosted aggregate duplicates still have only one conservative zero writer and no lease
+ok 298 - hosted aggregate duplicates still have only one conservative zero writer and no lease
+  ---
+  duration_ms: 9.088873
+  type: 'test'
+  ...
+# Subtest: hosted connection flags with invalid source metadata cannot authorize loading via fresh status or meter fallback
+ok 299 - hosted connection flags with invalid source metadata cannot authorize loading via fresh status or meter fallback
+  ---
+  duration_ms: 17.5332
+  type: 'test'
+  ...
+# Subtest: manual mixed native stations cannot pair one station lease with another station actuator
+ok 300 - manual mixed native stations cannot pair one station lease with another station actuator
+  ---
+  duration_ms: 3.557707
+  type: 'test'
+  ...
+# Subtest: only an explicitly valid false migration marker restores external adapter liveness after confirmed rollback
+ok 301 - only an explicitly valid false migration marker restores external adapter liveness after confirmed rollback
+  ---
+  duration_ms: 38.59184
+  type: 'test'
+  ...
+# Subtest: hosted OCPP never sends a first positive profile before lease capability arrives in the source cache
+ok 302 - hosted OCPP never sends a first positive profile before lease capability arrives in the source cache
+  ---
+  duration_ms: 12.309099
+  type: 'test'
+  ...
+# Subtest: external pre-lease OCPP retains its confirmed adapter path without inventing a hosted capability
+ok 303 - external pre-lease OCPP retains its confirmed adapter path without inventing a hosted capability
+  ---
+  duration_ms: 6.302289
+  type: 'test'
+  ...
+# Subtest: generic telemetry selection cannot bypass the native hosted OCPP process and lease contract
+ok 304 - generic telemetry selection cannot bypass the native hosted OCPP process and lease contract
+  ---
+  duration_ms: 219.396151
+  type: 'test'
+  ...
+# Subtest: 921-HIS-002 repeated lifecycle aborts cancel the actual response body and remove parent listeners
+ok 305 - 921-HIS-002 repeated lifecycle aborts cancel the actual response body and remove parent listeners
+  ---
+  duration_ms: 123.9186
+  type: 'test'
+  ...
+# Subtest: 921-HIS-002 an already revoked generation cannot start network access and does not retain its listener
+ok 306 - 921-HIS-002 an already revoked generation cannot start network access and does not retain its listener
+  ---
+  duration_ms: 3.100529
+  type: 'test'
+  ...
+# (node:619) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: actual dashboard tooltip draws all 96 supplied quarter-hours, including zero and negative intervals, without hourly averaging
+ok 307 - actual dashboard tooltip draws all 96 supplied quarter-hours, including zero and negative intervals, without hourly averaging
+  ---
+  duration_ms: 18.109405
+  type: 'test'
+  ...
+# Subtest: actual dashboard retains all 92/100 quarter-hours on European daylight-saving days and places local clock labels correctly
+ok 308 - actual dashboard retains all 92/100 quarter-hours on European daylight-saving days and places local clock labels correctly
+  ---
+  duration_ms: 10.582513
+  type: 'test'
+  ...
+# Subtest: price card and modal show confirmed Tibber prices while optimization remains off and an unrelated budget price is null
+ok 309 - price card and modal show confirmed Tibber prices while optimization remains off and an unrelated budget price is null
+  ---
+  duration_ms: 1.906548
+  type: 'test'
+  ...
+# Subtest: expired, absent, false or null source values clear the visible price rather than turning into zero or reusing budget values
+ok 310 - expired, absent, false or null source values clear the visible price rather than turning into zero or reusing budget values
+  ---
+  duration_ms: 1.351345
+  type: 'test'
+  ...
+# Subtest: legacy manual mappings remain authoritative, with explicit cent conversion and no connected-provider override
+ok 311 - legacy manual mappings remain authoritative, with explicit cent conversion and no connected-provider override
+  ---
+  duration_ms: 1.093041
+  type: 'test'
+  ...
+# Subtest: hourly source data stays hourly; missing tomorrow does not remove today or invent quarter-hours
+ok 312 - hourly source data stays hourly; missing tomorrow does not remove today or invent quarter-hours
+  ---
+  duration_ms: 2.382294
+  type: 'test'
+  ...
+# Subtest: real provider publication feeds the dashboard without enabling a control or fabricating absent values
+ok 313 - real provider publication feeds the dashboard without enabling a control or fabricating absent values
+  ---
+  duration_ms: 29.511059
+  type: 'test'
+  ...
+# Subtest: both shipped dashboard entry pages load the typed price helper before app.js
+ok 314 - both shipped dashboard entry pages load the typed price helper before app.js
+  ---
+  duration_ms: 0.784083
+  type: 'test'
+  ...
+# Subtest: energy flow always exposes enabled tariff or grid-fee control when its backend status is missing
+ok 315 - energy flow always exposes enabled tariff or grid-fee control when its backend status is missing
+  ---
+  duration_ms: 1.348721
+  type: 'test'
+  ...
+# Subtest: live flow status uses current policy snapshot, keeps unchanged text, and exposes inactive or stale runtime
+ok 316 - live flow status uses current policy snapshot, keeps unchanged text, and exposes inactive or stale runtime
+  ---
+  duration_ms: 1.668565
+  type: 'test'
+  ...
+# Subtest: SSE disconnect clears stale actuator claims in the energy flow immediately and reconnect restores confirmed status
+ok 317 - SSE disconnect clears stale actuator claims in the energy flow immediately and reconnect restores confirmed status
+  ---
+  duration_ms: 1.259779
+  type: 'test'
+  ...
+# Subtest: invalid quality and expired source states cannot confirm charging or append a stale PV block
+ok 318 - invalid quality and expired source states cannot confirm charging or append a stale PV block
+  ---
+  duration_ms: 1.372866
+  type: 'test'
+  ...
+# Subtest: atomic storage reserve snapshot keeps a constant block visible without recycling old standalone flags
+ok 319 - atomic storage reserve snapshot keeps a constant block visible without recycling old standalone flags
+  ---
+  duration_ms: 1.331956
+  type: 'test'
+  ...
+# Subtest: 921-HIS-001 initial outage respects scheduled retry for 120 successive EMS ticks
+ok 320 - 921-HIS-001 initial outage respects scheduled retry for 120 successive EMS ticks
+  ---
+  duration_ms: 59.37454
+  type: 'test'
+  ...
+# Subtest: 921-HIS-001 recovery occurs at retry deadline and an explicit configuration change can retry immediately
+ok 321 - 921-HIS-001 recovery occurs at retry deadline and an explicit configuration change can retry immediately
+  ---
+  duration_ms: 6.947276
+  type: 'test'
+  ...
+# Subtest: 921-HIS-002 unresolved cloud fetch does not hold the local tick, permits no overlap and stops cleanly
+ok 322 - 921-HIS-002 unresolved cloud fetch does not hold the local tick, permits no overlap and stops cleanly
+  ---
+  duration_ms: 14.352982
+  type: 'test'
+  ...
+# Subtest: 921-HIS-002 source replacement revokes the old request before permitting another provider
+ok 323 - 921-HIS-002 source replacement revokes the old request before permitting another provider
+  ---
+  duration_ms: 5.115028
+  type: 'test'
+  ...
+# Subtest: 921-HIS-002 background publication failure retains its reader fence and recovers only after DB writes work
+ok 324 - 921-HIS-002 background publication failure retains its reader fence and recovers only after DB writes work
+  ---
+  duration_ms: 4.468508
+  type: 'test'
+  ...
+# Subtest: Tibber masks survive unrelated Installer edits and a disk-backed owner restart (native namespace)
+ok 325 - Tibber masks survive unrelated Installer edits and a disk-backed owner restart (native namespace)
+  ---
+  duration_ms: 7243.465054
+  type: 'test'
+  ...
+# Subtest: Tibber masks survive unrelated Installer edits and a disk-backed owner restart (preserved namespace)
+ok 326 - Tibber masks survive unrelated Installer edits and a disk-backed owner restart (preserved namespace)
+  ---
+  duration_ms: 7023.253734
+  type: 'test'
+  ...
+# Subtest: Installer token context: partial edit
+ok 327 - Installer token context: partial edit
+  ---
+  duration_ms: 1.384694
+  type: 'test'
+  ...
+# Subtest: Installer token context: home and country selection
+ok 328 - Installer token context: home and country selection
+  ---
+  duration_ms: 0.225254
+  type: 'test'
+  ...
+# Subtest: Installer token context: disabled provider
+ok 329 - Installer token context: disabled provider
+  ---
+  duration_ms: 0.17566
+  type: 'test'
+  ...
+# Subtest: Installer token context: equivalent default endpoint
+ok 330 - Installer token context: equivalent default endpoint
+  ---
+  duration_ms: 0.244453
+  type: 'test'
+  ...
+# Subtest: Installer token context: different endpoint
+ok 331 - Installer token context: different endpoint
+  ---
+  duration_ms: 0.920706
+  type: 'test'
+  ...
+# Subtest: Installer token context: different provider
+ok 332 - Installer token context: different provider
+  ---
+  duration_ms: 0.230853
+  type: 'test'
+  ...
+# Subtest: Installer token context: fresh credential on changed provider
+ok 333 - Installer token context: fresh credential on changed provider
+  ---
+  duration_ms: 0.676163
+  type: 'test'
+  ...
+# Subtest: Installer token context: intentional empty field
+ok 334 - Installer token context: intentional empty field
+  ---
+  duration_ms: 0.230802
+  type: 'test'
+  ...
+# Subtest: market source and configurable OAuth recipients/identity fence retained credentials
+ok 335 - market source and configurable OAuth recipients/identity fence retained credentials
+  ---
+  duration_ms: 0.524939
+  type: 'test'
+  ...
+# Subtest: private request masks preserve same-recipient headers/body but never revive an explicit request clear
+ok 336 - private request masks preserve same-recipient headers/body but never revive an explicit request clear
+  ---
+  duration_ms: 0.292464
+  type: 'test'
+  ...
+# Subtest: an early real startup failure cannot let Devices or OCPP overwrite an unread tariff
+ok 337 - an early real startup failure cannot let Devices or OCPP overwrite an unread tariff
+  ---
+  duration_ms: 280.801708
+  type: 'test'
+  ...
+# Subtest: Tibber requests and normalizes quarter-hours even with an older hourly setting; zero/negative remain valid and null is rejected
+ok 338 - Tibber requests and normalizes quarter-hours even with an older hourly setting; zero/negative remain valid and null is rejected
+  ---
+  duration_ms: 13.689498
+  type: 'test'
+  ...
+# Subtest: local calendar splitting retains 92/96/100 quarter-hours and the next day across DST boundaries
+ok 339 - local calendar splitting retains 92/96/100 quarter-hours and the next day across DST boundaries
+  ---
+  duration_ms: 103.722879
+  type: 'test'
+  ...
+# Subtest: actual provider tick selects each cached quarter-hour without network calls and refreshes before customer freshness expires
+ok 340 - actual provider tick selects each cached quarter-hour without network calls and refreshes before customer freshness expires
+  ---
+  duration_ms: 113.050496
+  type: 'test'
+  ...
+# Subtest: provider failures do not extend freshness, do not spin requests and clear expired prices instead of creating zero
+ok 341 - provider failures do not extend freshness, do not spin requests and clear expired prices instead of creating zero
+  ---
+  duration_ms: 85.110779
+  type: 'test'
+  ...
+# Subtest: other providers retain their resolution and normal jittered cadence, while a shorter customer deadline still bounds refresh
+ok 342 - other providers retain their resolution and normal jittered cadence, while a shorter customer deadline still bounds refresh
+  ---
+  duration_ms: 63.39894
+  type: 'test'
+  ...
+# Subtest: missing tariff and import values remain unknown through interval and whole-period totals
+ok 343 - missing tariff and import values remain unknown through interval and whole-period totals
+  ---
+  duration_ms: 54.266302
+  type: 'test'
+  ...
+# Subtest: real zero and canonical negative EUR prices retain their value and calculated costs
+ok 344 - real zero and canonical negative EUR prices retain their value and calculated costs
+  ---
+  duration_ms: 10.892589
+  type: 'test'
+  ...
+# Subtest: missing quarters and pre-range samples are not indefinitely carried into report costs
+ok 345 - missing quarters and pre-range samples are not indefinitely carried into report costs
+  ---
+  duration_ms: 5.274915
+  type: 'test'
+  ...
+# Subtest: enabled missing network fee keeps its breakdown unknown while recorded total cost remains usable
+ok 346 - enabled missing network fee keeps its breakdown unknown while recorded total cost remains usable
+  ---
+  duration_ms: 4.672632
+  type: 'test'
+  ...
+# Subtest: static zero fallback is explicit and genuine network fees preserve the existing split
+ok 347 - static zero fallback is explicit and genuine network fees preserve the existing split
+  ---
+  duration_ms: 4.842483
+  type: 'test'
+  ...
+# Subtest: an open current quarter is not reported as a complete quarter of imported energy
+ok 348 - an open current quarter is not reported as a complete quarter of imported energy
+  ---
+  duration_ms: 4.404634
+  type: 'test'
+  ...
+# Subtest: malformed, reversed and over-730-day report ranges fail before history IO or allocation
+ok 349 - malformed, reversed and over-730-day report ranges fail before history IO or allocation
+  ---
+  duration_ms: 12.623928
+  type: 'test'
+  ...
+# Subtest: 730-day inclusive date ranges remain accepted without using a smaller chart limit
+ok 350 - 730-day inclusive date ranges remain accepted without using a smaller chart limit
+  ---
+  duration_ms: 5.04931
+  type: 'test'
+  ...
+# Subtest: report formatting and CSV leave missing values empty while keeping zero and negative costs
+ok 351 - report formatting and CSV leave missing values empty while keeping zero and negative costs
+  ---
+  duration_ms: 7.843961
+  type: 'test'
+  ...
+# Subtest: new EOS installations read active tariff settings from their actual runtime and produce a live status
+ok 352 - new EOS installations read active tariff settings from their actual runtime and produce a live status
+  ---
+  duration_ms: 15.549538
+  type: 'test'
+  ...
+# Subtest: explicit legacy VIS namespace remains authoritative and cannot be overridden by local settings
+ok 353 - explicit legacy VIS namespace remains authoritative and cannot be overridden by local settings
+  ---
+  duration_ms: 1.605451
+  type: 'test'
+  ...
+# Subtest: runtime namespace default preserves tariff freshness and AppCenter blocking
+ok 354 - runtime namespace default preserves tariff freshness and AppCenter blocking
+  ---
+  duration_ms: 2.308775
+  type: 'test'
+  ...
+# Subtest: tariff status preserves a constant PV reserve through fresh storage policy and invalidates a stopped writer
+ok 355 - tariff status preserves a constant PV reserve through fresh storage policy and invalidates a stopped writer
+  ---
+  duration_ms: 8.405269
+  type: 'test'
+  ...
+1..355
+# tests 361
+# suites 0
+# pass 361
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 53661.038763

@@ -1,0 +1,14 @@
+✔ absent tariff controls must not clear a loaded masked credential or home during an unrelated save (7.014796ms)
+✔ unconfirmed or unrendered tariff data never injects defaults into generic EMS saves (7.052501ms)
+✔ missing numeric, flag and formula controls preserve stored values without granting tariff activation (3.400345ms)
+✔ explicit rendered field clearing and source changes remain intentional tariff edits (6.917011ms)
+✔ unrendered custom request fields retain masked headers, body and deliberately empty JSON paths (6.632299ms)
+✔ editing one tariff field does not persist rendered defaults for other untouched fields (59.467181ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1304.93627

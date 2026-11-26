@@ -171,6 +171,37 @@ test('signature and integrity failures cannot produce an installable plan', asyn
     }
 });
 
+test('published metadata with a missing npm tarball cannot stop EOS; a later download needs an explicit start', async t => {
+    const item = release('9.0.26');
+    let unavailable = true;
+    const f = await fixture(t, { release: item, options: {
+        fetchResource: async url => {
+            if (url === UPDATE_METADATA_URL) return item.encoded;
+            if (url === UPDATE_KEYS_URL) return keys;
+            assert.equal(url, item.metadata.dist.tarball);
+            if (unavailable) throw new Error('EOS_UPDATE_HTTP_404');
+            return item.archive;
+        },
+    } });
+    const originalConfiguration = structuredClone(f.snapshot());
+    assert.equal((await f.service.status()).state, 'available');
+    await assert.rejects(f.service.prepare('9.0.26', async () => true), /EOS_UPDATE_HTTP_404/);
+    const failed = await f.service.status();
+    assert.equal(failed.state, 'failed');
+    assert.equal(failed.canStart, false);
+    assert.equal(f.spawned.length, 0, 'no maintenance worker can stop or install the adapter');
+    assert.deepEqual(f.snapshot(), originalConfiguration);
+    assert.ok(!fs.existsSync(path.join(f.directory, 'customer-updates/active.json')));
+    await assert.rejects(f.service.start(crypto.randomUUID(), async () => true), /PLAN_EXPIRED/);
+    unavailable = false;
+    const prepared = await f.service.prepare('9.0.26', async () => true);
+    assert.equal(prepared.state, 'prepared');
+    assert.equal(f.spawned.length, 0, 'a successful retry still does not authorize a stop');
+    await f.service.start(prepared.planId, async () => true);
+    assert.equal(f.spawned.length, 1);
+    assert.deepEqual(f.snapshot(), originalConfiguration);
+});
+
 test('authorization, one host instance, controller contract and configuration changes are enforced before launch', async t => {
     const f = await fixture(t); await f.service.status();
     await assert.rejects(f.service.prepare('9.0.22', async () => false), /AUTHORIZATION/);

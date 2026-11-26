@@ -1,26 +1,23 @@
 {
-  "version": "9.0.26",
+  "version": "9.0.27",
   "channel": "next",
   "baseFrontend": "Rebuilt from official Admin 8.3.5 sources plus reviewed EOS integration using React 19 and Vite; see source-bound frontend manifest.",
   "runtimeEntry": "vite-manifest",
-  "releaseType": "unified-embedded-ocpp-kiosk",
-  "release": "unified-embedded-ocpp-kiosk",
-  "label": "v9-0-26",
+  "releaseType": "unified-ocpp-assignment-recovery",
+  "release": "unified-ocpp-assignment-recovery",
+  "label": "v9-0-27",
   "notes": [
     "Preserves the existing ioBroker Admin and the combined EOS login/runtime.",
     "One central NWL3 activation, private persistence and authorized public-key recovery.",
     "Manufacturer vault/private keys stay on the issuer computer; live-device acceptance remains required."
   ],
   "changes": [
-    "One EOS adapter includes independently supervised UI/EMS, Devices, EEBUS, OCPP and Backup operating-system child processes",
-    "Embedded OCPP 0.4.4 preserves the original 0.4.3 protocol behavior and retains legacy ocpp21.N data IDs through controlled handover",
-    "Native OCPP discovery creates linked charge points disabled for review of electrical limits before activation",
-    "Bounded namespace and alias RPC, ownership and authority-generation fences, confirmed child stop before supervised replacement",
-    "Explicit kiosk dashboard without automatic session expiry; fresh administrator username/password required for administration and protected settings",
-    "Existing separate station display links remain available without login or inactivity lock; no new OCPP protocol authentication is implied",
-    "General dashboard migration button removed; controlled legacy OCPP handover remains in protected module configuration",
-    "Verified historical 9.0.21, 9.0.22 and 9.0.23 frontend hashes repair publish-overcopy cleanup while unknown or changed files remain blocked",
-    "Preserves energy-flow, tariff status, pure-PV stop, station-level single-writer and atomic OCPP-feedback corrections"
+    "Idempotent shared native OCPP inventory; deleted external adapters and inactive hosted namespaces excluded",
+    "New chargepoint mappings remain unassigned to station groups and public station displays",
+    "Persist explicit OCPP and Devices EMS removal across restarts; explicit reimport remains available",
+    "Preserve edited installer drafts and existing monitor-only control boundaries",
+    "Bounded recovery of initial controller subscriptions and consistent repository update metadata",
+    "Preserve saved Tibber credentials through AppCenter edits and owner restarts; enforce loaded configuration and destination-bound secret reuse"
   ],
   "brandingCacheVersion": 7110,
   "shellCacheVersion": 7110,
@@ -34,7 +31,7 @@
     "commit": "6f77eedf525813a7a61d79188d1ff05dffd05086"
   },
   "product": "NexoWatt EOS",
-  "status": "9.0.24 controlled integration test release; physical Dousida Energyline and target-system acceptance remain required; see final release evidence for actual test totals and two existing platform skips",
+  "status": "9.0.27 controlled test release; exact software results in docs/reports/unified-9.0.27; target Pi/Dousida and full browser acceptance remain open",
   "sourceComponents": {
     "admin": "8.0.2",
     "ui": "1.0.38",
@@ -44,5 +41,5 @@
     "backup": "1.0.10",
     "ocpp": "0.4.4 integrated hosted module, based on iobroker.ocpp21 0.4.3"
   },
-  "repositoryEntry": "nexowatt-eos-admin-repository-entry-v9-0-26.json"
+  "repositoryEntry": "nexowatt-eos-admin-repository-entry-v9-0-27.json"
 }

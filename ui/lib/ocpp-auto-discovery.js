@@ -7,7 +7,7 @@
  * AUTO-GENERATED RUNTIME FILE - NICHT MANUELL BEARBEITEN.
  *
  * Quelle: src-ts/runtime-executables/lib/ocpp-auto-discovery.ts
- * Quell-Hash: sha256:1fcb9a8e0a1874f7872def460ff56cc6930da725a7a1292a7a38009dc94eff90
+ * Quell-Hash: sha256:1636f107ac3883c9b85c81d8d7420a18a269a588cc6fb986a3ea433a901720a9
  * Erzeugung: npm run sync:ts-runtime-executables
  *
  * Zweck:
@@ -29,6 +29,7 @@ exports.ocppNamespace = ocppNamespace;
 exports.ocppDiscoveryPatterns = ocppDiscoveryPatterns;
 exports.collectOcppStations = collectOcppStations;
 exports.filterOcppDiscoverySources = filterOcppDiscoverySources;
+exports.prepareOcppDiscoveryExclusions = prepareOcppDiscoveryExclusions;
 exports.normalizeOcppDiscovery = normalizeOcppDiscovery;
 exports.planOcppDiscovery = planOcppDiscovery;
 exports.OCPP_NATIVE_CONTRACT = 'nexowatt-ocpp21-0.4-native';
@@ -183,15 +184,51 @@ function filterOcppDiscoverySources(stations, sourceInput, hostNamespace) {
         namespaces.add(id.slice('system.adapter.'.length));
     }
     if (typeof hostNamespace === 'string' && /^eos-admin\.\d+$/.test(hostNamespace)) {
-        namespaces.add(`${hostNamespace}.ocpp`);
         const hosted = text(source.hostedNamespace, 120);
-        if (/^ocpp21\.\d{1,8}$/.test(hosted))
-            namespaces.add(hosted);
+        // A migrated hosted module owns its preserved namespace, not both the
+        // preserved and default trees. Old native objects may still be retained.
+        namespaces.add(/^ocpp21\.\d{1,8}$/.test(hosted) ? hosted : `${hostNamespace}.ocpp`);
     }
     return stations.filter(station => namespaces.has(station.adapterInstance));
 }
 function rootsOf(row) {
     return [...new Set([...ID_FIELDS.map(key => ocppStationRoot(row[key])), ocppStationRoot(record(row.ocppDiscovery).stationRoot)].filter(Boolean))];
+}
+/** An explicit EMS removal suppresses registration, never the OCPP connection.
+ * This small persisted list survives restart. Only an explicit row re-import
+ * removes its entry; automatic scans do not modify the user's removal choice. */
+function excludedRoots(configInput) {
+    const input = record(record(configInput).settingsConfig).ocppExcludedStationRoots;
+    if (input === undefined)
+        return new Set();
+    if (!Array.isArray(input) || input.length > MAX_STATIONS || input.some(root => typeof root !== 'string' || root.length > 200 || !root || ocppStationRoot(root) !== root)) {
+        throw fail('EOS_OCPP_EXCLUSIONS_INVALID');
+    }
+    return new Set(input);
+}
+/** Server-side only, inside the installer revision/mutation lock. Client-supplied
+ * exclusion metadata is ignored; previous saved rows and the explicit new rows
+ * establish deletion/re-import intent without trusting names or UI station groups. */
+function prepareOcppDiscoveryExclusions(previousInput, nextInput) {
+    const rowsOf = (value) => {
+        const rows = record(record(value).settingsConfig).evcsList;
+        if (rows === undefined)
+            return [];
+        if (!Array.isArray(rows) || rows.length > MAX_ROWS || rows.some(row => row === null || typeof row !== 'object' || Array.isArray(row)))
+            throw fail('EOS_OCPP_CONFIG_INVALID');
+        return rows.map(record);
+    };
+    const exclusions = excludedRoots(previousInput);
+    const previous = new Set(rowsOf(previousInput).flatMap(rootsOf));
+    const next = new Set(rowsOf(nextInput).flatMap(rootsOf));
+    for (const root of previous)
+        if (!next.has(root))
+            exclusions.add(root);
+    for (const root of next)
+        exclusions.delete(root);
+    if (exclusions.size > MAX_STATIONS)
+        throw fail('EOS_OCPP_EXCLUSIONS_LIMIT');
+    return [...exclusions].sort();
 }
 /** Only bounded discovery metadata crosses the normalized runtime configuration. */
 function normalizeOcppDiscovery(value) {
@@ -230,6 +267,7 @@ function knownAliasEquivalent(field, current, canonical, root) {
 function planOcppDiscovery(configInput, stations, options = {}) {
     const config = record(configInput);
     const settings = record(config.settingsConfig);
+    const exclusions = excludedRoots(config);
     const limit = options.maxRows ?? MAX_ROWS;
     if (!Number.isInteger(limit) || limit < 0)
         throw fail('EOS_OCPP_LICENSE_LIMIT_INVALID');
@@ -244,6 +282,12 @@ function planOcppDiscovery(configInput, stations, options = {}) {
     if (stations.length > MAX_STATIONS)
         throw fail('EOS_OCPP_DISCOVERY_STATION_LIMIT');
     for (const station of stations) {
+        if (exclusions.has(station.root)) {
+            statuses.push({ root: station.root, adapterInstance: station.adapterInstance, rowIndex: null,
+                code: 'USER_EXCLUDED', connectorCount: station.connectorCount, evseCount: station.evseCount,
+                topologySource: station.topologySource, missing: station.missing });
+            continue;
+        }
         const found = rows.map((row, index) => ({ row, index })).filter(item => rootsOf(item.row).includes(station.root));
         const existing = found[0];
         let code = station.missing.length ? 'CONTRACT_INCOMPLETE' : 'MAPPED';
@@ -257,9 +301,12 @@ function planOcppDiscovery(configInput, stations, options = {}) {
         const index = existing ? existing.index : rows.length;
         // Partial registration is visible, with every verified field filled now; retry completes it later.
         if (!blocked) {
-            const next = existing ? { ...existing.row } : { enabled: false, name: station.name, stationKey: station.root, connectorNo: 1 };
+            // stationKey belongs to the installer's station/group allocation.
+            // Physical discovery identity lives in ocppDiscovery.stationRoot;
+            // registration must not allocate a station page or electrical group.
+            const next = existing ? { ...existing.row } : { enabled: false, name: station.name, connectorNo: 1 };
             const autoCreated = !existing || record(next.ocppDiscovery).autoCreated === true;
-            const manualMonitor = !!existing && !autoCreated && next.enabled !== false
+            const manualMonitor = !!existing && next.enabled !== false
                 && empty(next.setCurrentAId) && empty(next.setPowerWId);
             for (const [key, id] of Object.entries(station.ids)) {
                 // Discovering an existing monitor must not authorize a first command writer.

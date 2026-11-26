@@ -2,6 +2,9 @@
 'use strict';
 const pkg = require('../package.json');
 const io = require('../io-package.json');
+if (io.common?.stopBeforeUpdate !== true || !Array.isArray(io.common.dependencies) || !io.common.dependencies.length) {
+  throw new Error('EOS_REPOSITORY_METADATA_INVALID');
+}
 const version = io.common.version || pkg.version;
 const base = (process.argv[2] || `https://unpkg.com/iobroker.eos-admin@${version}`).replace(/\/$/, '');
 const entry = {
@@ -21,10 +24,10 @@ const entry = {
     connectionType: io.common.connectionType || 'local',
     dataSource: io.common.dataSource || 'push',
     adminUI: io.common.adminUI || { config: 'json' },
-    license: io.common.license || 'NexoWatt Proprietary',
+    license: pkg.license,
     licenseInformation: io.common.licenseInformation,
-    dependencies: io.common.dependencies || [{ 'js-controller': '>=6.0.11' }],
-    stopBeforeUpdate: false,
+    dependencies: io.common.dependencies,
+    stopBeforeUpdate: io.common.stopBeforeUpdate,
     dontDelete: false,
     nondeletable: false,
     readme: `${base}/README.md`,

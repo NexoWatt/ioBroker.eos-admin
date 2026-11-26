@@ -1,0 +1,255 @@
+✖ new OCPP mappings leave manual station/group assignment empty (4.088823ms)
+✖ repeated discovery preserves commissioned values and does not replace the list (1.334489ms)
+✖ duplicate discovery entries and equivalent aliases yield one physical station row (1.030919ms)
+✖ physical station metadata identifies incomplete mappings without assigning display groups (1.938144ms)
+✖ existing mapped rows survive a stale lower EVCS count during explicit discovery (1.646121ms)
+✖ pending discovery excludes simultaneous load/save/discovery and keeps the original CAS token (1.674753ms)
+✖ pristine detection adopts the authoritative saved rows and their exact CAS revision first (1.937142ms)
+✖ dirty discovery preserves the draft and its CAS token while the server may have newer mappings (1.61923ms)
+✖ native applied-limit feedback and physical metadata are retained without converting manual rows to auto-managed writers (1.843083ms)
+✖ a configured read-only monitor never gains a command target from either discovery action (1.716516ms)
+✖ mixed or duplicated physical mappings are left unchanged and never get another row appended (3.063813ms)
+✔ actual EVCS input mutation prevents automatic reload without a test-forced dirty flag (1.799428ms)
+✔ direct station-group edits and uncommitted DOM values prevent automatic reload even without a dirty flag (2.676549ms)
+✖ current-only native aliases deduplicate and mixed current writers remain fenced (2.025954ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 2
+ℹ fail 12
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 626.414664
+
+✖ failing tests:
+
+test at test/eos-ocpp-installer-discovery-actions.test.cjs:6:1
+✖ new OCPP mappings leave manual station/group assignment empty (4.088823ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'eos-admin.0.ocpp.ENERGYLINE'
+  - ''
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-ocpp-installer-discovery-actions.test.cjs:11:16)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'eos-admin.0.ocpp.ENERGYLINE',
+    expected: '',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-ocpp-installer-discovery-actions.test.cjs:19:1
+✖ repeated discovery preserves commissioned values and does not replace the list (1.334489ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 2
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-ocpp-installer-discovery-actions.test.cjs:28:16)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-ocpp-installer-discovery-actions.test.cjs:34:1
+✖ duplicate discovery entries and equivalent aliases yield one physical station row (1.030919ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  2 !== 1
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-ocpp-installer-discovery-actions.test.cjs:39:16)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-ocpp-installer-discovery-actions.test.cjs:49:1
+✖ physical station metadata identifies incomplete mappings without assigning display groups (1.938144ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  2 !== 1
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-ocpp-installer-discovery-actions.test.cjs:54:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-ocpp-installer-discovery-actions.test.cjs:59:1
+✖ existing mapped rows survive a stale lower EVCS count during explicit discovery (1.646121ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'Energyline'
+  - 'Behalten'
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-ocpp-installer-discovery-actions.test.cjs:64:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'Energyline',
+    expected: 'Behalten',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-ocpp-installer-discovery-actions.test.cjs:70:1
+✖ pending discovery excludes simultaneous load/save/discovery and keeps the original CAS token (1.674753ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-ocpp-installer-discovery-actions.test.cjs:74:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-ocpp-installer-discovery-actions.test.cjs:82:1
+✖ pristine detection adopts the authoritative saved rows and their exact CAS revision first (1.937142ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 1
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-ocpp-installer-discovery-actions.test.cjs:94:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-ocpp-installer-discovery-actions.test.cjs:100:1
+✖ dirty discovery preserves the draft and its CAS token while the server may have newer mappings (1.61923ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'Energyline'
+  - 'Lokaler Entwurf'
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-ocpp-installer-discovery-actions.test.cjs:104:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'Energyline',
+    expected: 'Lokaler Entwurf',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-ocpp-installer-discovery-actions.test.cjs:108:1
+✖ native applied-limit feedback and physical metadata are retained without converting manual rows to auto-managed writers (1.843083ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - 'eos-admin.0.ocpp.ENERGYLINE.control.appliedChargeLimitW'
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-ocpp-installer-discovery-actions.test.cjs:115:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 'eos-admin.0.ocpp.ENERGYLINE.control.appliedChargeLimitW',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-ocpp-installer-discovery-actions.test.cjs:126:1
+✖ a configured read-only monitor never gains a command target from either discovery action (1.716516ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-ocpp-installer-discovery-actions.test.cjs:132:16)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-ocpp-installer-discovery-actions.test.cjs:137:1
+✖ mixed or duplicated physical mappings are left unchanged and never get another row appended (3.063813ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+      {
+  +     connectorNo: 1,
+  +     controlPreference: 'powerW',
+  +     enableWriteId: 'eos-admin.0.ocpp.ENERGYLINE.control.availability',
+  +     enabled: false,
+  +     name: 'Energyline',
+  +     ocppDatapointContract: 'nexowatt-ocpp21-0.4-native',
+  +     onlineId: 'eos-admin.0.ocpp.ENERGYLINE.info.socketConnected',
+        powerId: 'eos-admin.0.ocpp.ENERGYLINE.measurements.powerW',
+        setPowerWId: 'eos-admin.0.ocpp.OTHER.control.chargeLimit',
+  +     stationKey: 'eos-admin.0.ocpp.ENERGYLINE',
+  +     telemetryProfile: 'nexowattocpp'
+      }
+    ]
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-ocpp-installer-discovery-actions.test.cjs:144:16)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ { powerId: 'eos-admin.0.ocpp.ENERGYLINE.measurements.powerW', setPowerWId: 'eos-admin.0.ocpp.OTHER.control.chargeLimit', stationKey: 'eos-admin.0.ocpp.ENERGYLINE', connectorNo: 1, name: 'Energyline', onlineId: 'eos-admin.0.ocpp.ENERGYLINE.info.socketConnected', enableWriteId: 'eos-admin.0.ocpp.ENERGYLINE.control.availability', telemetryProfile: 'nexowattocpp', controlPreference: 'powerW', ocppDatapointContract: 'nexowatt-ocpp21-0.4-native', enabled: false } ],
+    expected: [ { powerId: 'eos-admin.0.ocpp.ENERGYLINE.measurements.powerW', setPowerWId: 'eos-admin.0.ocpp.OTHER.control.chargeLimit' } ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-ocpp-installer-discovery-actions.test.cjs:177:1
+✖ current-only native aliases deduplicate and mixed current writers remain fenced (2.025954ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  2 !== 1
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-ocpp-installer-discovery-actions.test.cjs:183:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

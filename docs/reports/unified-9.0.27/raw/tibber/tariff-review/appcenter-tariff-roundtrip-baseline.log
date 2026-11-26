@@ -1,0 +1,57 @@
+{"before":"tibber","installerContainsProvider":false,"submittedProvider":"manual-dp","submittedEnabled":false,"submittedSecretEmpty":true}
+{"persistedProvider":"manual-dp","persistedEnabled":false,"persistedSecretEmpty":true}
+{"case":"absent-controls","provider":"tibber","submittedSecretEmpty":true,"submittedHomeEmpty":true}
+✖ unrelated App-Center save must preserve a previously saved Tibber provider and secret (115.659182ms)
+✖ absent tariff controls must not clear a loaded masked credential or home during an unrelated save (2.849126ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 0
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1099.006706
+
+✖ failing tests:
+
+test at ../tariff-review/appcenter-tariff-roundtrip.test.cjs:40:1
+✖ unrelated App-Center save must preserve a previously saved Tibber provider and secret (115.659182ms)
+  AssertionError [ERR_ASSERTION]: unrelated settings save must not replace tariff with UI defaults
+  + actual - expected
+  
+  + 'manual-dp'
+  - 'tibber'
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/tariff-review/appcenter-tariff-roundtrip.test.cjs:74:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'manual-dp',
+    expected: 'tibber',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at ../tariff-review/appcenter-tariff-roundtrip.test.cjs:81:1
+✖ absent tariff controls must not clear a loaded masked credential or home during an unrelated save (2.849126ms)
+  AssertionError [ERR_ASSERTION]: absent secret field is not an explicit clear request
+  
+  '' !== '__KEEP__'
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/tariff-review/appcenter-tariff-roundtrip.test.cjs:88:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: '__KEEP__',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

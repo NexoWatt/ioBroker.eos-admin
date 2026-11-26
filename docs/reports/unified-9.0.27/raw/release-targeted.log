@@ -1,0 +1,118 @@
+TAP version 13
+# Subtest: one startup automatically recovers a transient controller subscription failure
+ok 1 - one startup automatically recovers a transient controller subscription failure
+  ---
+  duration_ms: 1008.340966
+  type: 'test'
+  ...
+# Subtest: parallel initial starts share subscriptions, one runtime and one reconcile timer
+ok 2 - parallel initial starts share subscriptions, one runtime and one reconcile timer
+  ---
+  duration_ms: 1.641745
+  type: 'test'
+  ...
+# Subtest: exhausted startup retries are bounded and a later explicit start can recover
+ok 3 - exhausted startup retries are bounded and a later explicit start can recover
+  ---
+  duration_ms: 3031.01767
+  type: 'test'
+  ...
+# Subtest: stop during retry delay cancels further attempts and never starts a module
+ok 4 - stop during retry delay cancels further attempts and never starts a module
+  ---
+  duration_ms: 1.707012
+  type: 'test'
+  ...
+# Subtest: a timeout waits again for the same pending subscription instead of issuing a duplicate
+ok 5 - a timeout waits again for the same pending subscription instead of issuing a duplicate
+  ---
+  duration_ms: 2.444637
+  type: 'test'
+  ...
+# Subtest: stop during a pending initial subscription fences its late completion
+ok 6 - stop during a pending initial subscription fences its late completion
+  ---
+  duration_ms: 0.718796
+  type: 'test'
+  ...
+# Subtest: subscription recovery preserves explicit module/process disables and invalid configuration fences
+ok 7 - subscription recovery preserves explicit module/process disables and invalid configuration fences
+  ---
+  duration_ms: 1002.410893
+  type: 'test'
+  ...
+# Subtest: enrichment preserves original metadata/components/dependency edges and records real ancestry
+ok 8 - enrichment preserves original metadata/components/dependency edges and records real ancestry
+  ---
+  duration_ms: 2.602952
+  type: 'test'
+  ...
+# Subtest: second enrichment is identical and does not increment the BOM version again
+ok 9 - second enrichment is identical and does not increment the BOM version again
+  ---
+  duration_ms: 0.719998
+  type: 'test'
+  ...
+# Subtest: wrong BOM scope, missing dependencies and conflicting owned records are rejected
+ok 10 - wrong BOM scope, missing dependencies and conflicting owned records are rejected
+  ---
+  duration_ms: 0.924972
+  type: 'test'
+  ...
+# Subtest: runtime graph closure retains dual-use production/development nodes and removes dev-only roots
+ok 11 - runtime graph closure retains dual-use production/development nodes and removes dev-only roots
+  ---
+  duration_ms: 0.727739
+  type: 'test'
+  ...
+# Subtest: missing locked roots or missing transitive graph nodes fail closed
+ok 12 - missing locked roots or missing transitive graph nodes fail closed
+  ---
+  duration_ms: 0.458079
+  type: 'test'
+  ...
+# Subtest: npm alias components are linked through their upstream identity without inventing a registry release
+ok 13 - npm alias components are linked through their upstream identity without inventing a registry release
+  ---
+  duration_ms: 0.389448
+  type: 'test'
+  ...
+# Subtest: repository generator uses installed release profile and explicit base URL
+ok 14 - repository generator uses installed release profile and explicit base URL
+  ---
+  duration_ms: 162.001185
+  type: 'test'
+  ...
+# Subtest: repository patcher replaces stale profile but preserves unrelated entries and custom fields
+ok 15 - repository patcher replaces stale profile but preserves unrelated entries and custom fields
+  ---
+  duration_ms: 131.960296
+  type: 'test'
+  ...
+# Subtest: invalid release metadata fails before a repository can be rewritten
+ok 16 - invalid release metadata fails before a repository can be rewritten
+  ---
+  duration_ms: 251.680273
+  type: 'test'
+  ...
+# Subtest: explicit metadata repair uses fixed controller arguments without enabling or restarting instances
+ok 17 - explicit metadata repair uses fixed controller arguments without enabling or restarting instances
+  ---
+  duration_ms: 331.110003
+  type: 'test'
+  ...
+# Subtest: metadata repair aborts on controller failure and never reports successful completion
+ok 18 - metadata repair aborts on controller failure and never reports successful completion
+  ---
+  duration_ms: 202.856331
+  type: 'test'
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 18
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5140.306012

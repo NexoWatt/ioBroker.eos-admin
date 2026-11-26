@@ -1,0 +1,34 @@
+DIAG_CHILD_EXIT {"pid":26,"file":"/workspace/scratch/b0b00b64c39c/work-restart-review/build/lib/eosUiProcessWorker.js","code":null,"signal":"SIGKILL"}
+✔ production Web mount reaches the real UI/EMS child and reconciles a device HTTP save through IPC (4408.818236ms)
+DIAG_CHILD_STDERR 39 DIAG_RPC_FAULT EOS_UI_PROCESS_RATE_LIMIT
+DIAG_PROXY_ERROR {"path":"/api/installer/config","method":"POST","code":"ECONNRESET","message":"socket hang up","stack":"Error: socket hang up\n    at Socket.socketOnEnd (node:_http_client:798:25)\n    at Socket.emit (node:events:526:24)\n    at endReadableNT (node:internal/streams/readable:1783:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)","destroyed":false,"writableEnded":true}
+DIAG_CHILD_EXIT {"pid":39,"file":"/workspace/scratch/b0b00b64c39c/work-restart-review/build/lib/eosUiProcessWorker.js","code":1,"signal":null}
+DIAG_CHILD_EXIT {"pid":51,"file":"/workspace/scratch/b0b00b64c39c/work-restart-review/build/lib/eosUiProcessWorker.js","code":null,"signal":"SIGKILL"}
+✖ real UI child preserves an explicit Devices chargepoint deletion through HTTP, discovery and restart (3577.647159ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 1
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8232.981134
+
+✖ failing tests:
+
+test at ../restart-evidence/devices-proxy-diagnostic.cjs:265:1
+✖ real UI child preserves an explicit Devices chargepoint deletion through HTTP, discovery and restart (3577.647159ms)
+  AssertionError [ERR_ASSERTION]: {"response":"{\"error\":\"EOS_UI_UNAVAILABLE\"}","runtime":{"state":"blocked","error":"EOS_UI_OWNERSHIP_REQUIRED","active":true,"emsReady":false,"canWrite":true,"ocppDiscovery":{"state":"idle","error":"","ts":0,"stations":[]},"process":{"mode":"process","state":"running","pid":51,"generation":2,"restarts":1,"lastError":"","lastHeartbeatAt":1795672458811,"nextRestartAt":0}},"logs":[{"level":"warn","message":"EOS_UPDATE_INITIALIZATION_FAILED: Update service unavailable; EOS continues."},{"level":"warn","message":"[EOS EMS commissioning] EOS_EMS_RUNTIME_PENDING; saved device configuration remains unchanged"},{"level":"info","message":"[ui-process] Config normalized for runtime (numeric/boolean native values)."},{"level":"info","message":"[ui-process] [NexoWatt EOS] Ladepunkte konfiguriert: 0"},{"level":"warn","message":"[ui-process] [Stufe A] WARN · NVP stale/split · 0 Aktorkonflikt(e) · Speicher appcenter-override"},{"level":"info","message":"[ui-process] [EMS] Embedded engine started (interval 1000ms) — CM=ON PS=OFF"},{"level":"debug","message":"[ui-process] SmartHome logic clocks: refreshed (load)"},{"level":"info","message":"[ui-process] NexoWatt EOS ist bereit."},{"level":"info","message":"[ui-process] [NexoWatt EOS] Ladepunkte konfiguriert: 1"},{"level":"warn","message":"[ui-process] [Stufe A] WARN · NVP stale/split · 0 Aktorkonflikt(e) · Speicher appcenter-override"},{"level":"info","message":"[ui-process] [EMS] Embedded engine started (interval 1000ms) — CM=ON PS=OFF"},{"level":"info","message":"[ui-process] [NexoWatt EOS] Ladepunkte konfiguriert: 0"},{"level":"warn","message":"[EOS EMS commissioning] EOS_UI_PROCESS_UNAVAILABLE; saved device configuration remains unchanged"},{"level":"info","message":"[ui-process] Config normalized for runtime (numeric/boolean native values)."},{"level":"info","message":"[ui-process] [NexoWatt EOS] Ladepunkte konfiguriert: 0"}]}
+  
+  503 !== 200
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/restart-evidence/devices-proxy-diagnostic.cjs:285:29)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 503,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

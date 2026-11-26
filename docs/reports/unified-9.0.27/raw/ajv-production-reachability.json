@@ -1,0 +1,35 @@
+{
+  "checkedAt": "2026-11-26T05:50:46.547Z",
+  "node": "v24.22.3",
+  "eos": "9.0.27",
+  "ocppRpc": "2.2.1",
+  "ajvNested": "8.14.0",
+  "ajvRoot": "8.20.0",
+  "standardValidatorOptions": [
+    {
+      "protocol": "ocpp1.6",
+      "dataOption": "disabled"
+    },
+    {
+      "protocol": "ocpp2.0.1",
+      "dataOption": "disabled"
+    },
+    {
+      "protocol": "ocpp2.1",
+      "dataOption": "disabled"
+    }
+  ],
+  "dynamicDataSchemaAccepted": false,
+  "rejection": "schema is invalid: data/properties/value/pattern must be string",
+  "fileHashes": {
+    "node_modules/ocpp-rpc/package.json": "4f460d2cbf7d4a72af25d2b151a5cd582cf6715f62bdd7c62be572d84132e9bf",
+    "node_modules/ocpp-rpc/lib/validator.js": "70206398cc7cac726cbae1ec22f2a594a05f1fa05f7cea3f01767c9a9e20c293",
+    "node_modules/ocpp-rpc/lib/standard-validators.js": "57d04ee9af23755ebfe0e8d45cc25e26ee952ac17f2d7f2ee2c9ae9184eebf9e",
+    "node_modules/ocpp-rpc/node_modules/ajv/package.json": "d709d5b644116edb33f086f770bb3432f4705518b8a22b6769dc852566912dc1",
+    "modules/ocpp/src/server.ts": "f94b97ae23385dbc7af972713c615a2ca51c0a9ba902949eb498f5a608534e49",
+    "modules/ocpp/runtime.js": "c0a091b0d6f8cc0e265981852ffd1329c89d95ff12b9dc822939e8cd4f5f586c",
+    "src/lib/web.ts": "9a5f035e2374772920edac8b1e110b445651bc4bb4ebb1df7c20a13997886b28",
+    "package-lock.json": "21d96ae67bb58108f35133d5384755ae7ce8781b725b67ab2b746204171e5d5c"
+  },
+  "limits": "Actual installed validator options and harmless dynamic-pattern schema rejection only. No malicious ReDoS payload, live server, hardware, dependency edits or install/update executed. This checks GHSA-2g4f-4pwh-qvx6 prerequisite; not overall vulnerability freedom."
+}

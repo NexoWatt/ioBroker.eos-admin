@@ -1,0 +1,347 @@
+{
+  "schema": 1,
+  "version": "9.0.27",
+  "results": {
+    "node22-tests-final": {
+      "tests": 2709,
+      "pass": 2707,
+      "fail": 0,
+      "skipped": 2,
+      "cancelled": 0
+    },
+    "node24-tests-final": {
+      "tests": 2709,
+      "pass": 2707,
+      "fail": 0,
+      "skipped": 2,
+      "cancelled": 0
+    }
+  },
+  "files": [
+    {
+      "file": "admin-build-mirror-review.json",
+      "deliveredSha256": "b60219b0dfe1d739148b8b08d4dbe2726fd1d63e5d90fde2810ae8103e5af5ab",
+      "bytes": 2639
+    },
+    {
+      "file": "ajv-production-reachability.json",
+      "deliveredSha256": "4aa6ca1f77b3d168326beab98f7d3db7771490c393f90a346b9ad633947e7fa7",
+      "bytes": 1694
+    },
+    {
+      "file": "backend-build.log",
+      "deliveredSha256": "b70efad3d4326025167ca6392aa36c2da043a796c237e40c0e368799cb66ebdb",
+      "bytes": 277
+    },
+    {
+      "file": "baseline-devices.log",
+      "deliveredSha256": "1ea9cdd3348afda7aafb0ef86a1f6dfa9c718bd8a608b449e941fb8b08339269",
+      "bytes": 6364
+    },
+    {
+      "file": "baseline-module-startup.log",
+      "deliveredSha256": "3b6041553000c20ce29bf17dc9e84e352edf775695c0dcddbf7dfe6316a34fa8",
+      "bytes": 4670
+    },
+    {
+      "file": "baseline-ocpp-contract.log",
+      "deliveredSha256": "9c5ad4837c4e491b16b0fd2e4ce1de6563260eb3789e809dec55038c85d2c4d3",
+      "bytes": 4118
+    },
+    {
+      "file": "baseline-ocpp-frontend.log",
+      "deliveredSha256": "057588619a9bbff457fe3ba0ba9b8f45dc8477957f9f53ae7ce7eda5049d74db",
+      "bytes": 11728
+    },
+    {
+      "file": "baseline-repository-tools.log",
+      "deliveredSha256": "11ca650dcec254cb789d62a4b578c7db10d7ee083e29fa064c74369fe6c992d9",
+      "bytes": 3353
+    },
+    {
+      "file": "browser-blocked.log",
+      "deliveredSha256": "1d52d2972409052be67ce908a90d846a7152b7c9496121f250e0773c55e5d3fb",
+      "bytes": 3038
+    },
+    {
+      "file": "controller-725-reproduction-node24.log",
+      "deliveredSha256": "e4240e354689f72ea2f85ed7c9f831ba7203f74cff2c216844ad03bac47fee18",
+      "bytes": 296
+    },
+    {
+      "file": "devices-child-rpc-diagnostic.log",
+      "deliveredSha256": "cbeeef1bfaa61b825c308c98354a3a6a7b68bac6be543eb73d800704e56eed23",
+      "bytes": 3868
+    },
+    {
+      "file": "devices-filter-without-readiness.log",
+      "deliveredSha256": "8df7303c9d9e9f20c23ab1788f4e03f852e17a2ed14b0c0d11b80fcff58933ac",
+      "bytes": 1036
+    },
+    {
+      "file": "devices-final-web-filtered-node22.log",
+      "deliveredSha256": "34f2ac0232d4b9dd8f8993ba1736a090b3e44e1836d8893b120e803efb4fbb91",
+      "bytes": 5269
+    },
+    {
+      "file": "devices-final-web-filtered-node24.log",
+      "deliveredSha256": "c6ff56ee01ce45d25bb14ef925a3c9f80efde45e54da24e0bb8fc123dba7bae4",
+      "bytes": 2639
+    },
+    {
+      "file": "eos-update-path-node24.log",
+      "deliveredSha256": "d16076df3ae1b0dc28f9ec323510cb6340598e019596c1e0d582967fe037db35",
+      "bytes": 4789
+    },
+    {
+      "file": "frontend-build.log",
+      "deliveredSha256": "f01b88bebd684c23f9d5625ec16635641bfa199a2f1bf70d86d3e90932947993",
+      "bytes": 17889
+    },
+    {
+      "file": "influx/provenance.json",
+      "deliveredSha256": "fa16e73bbbc835396447cd4ba7c7a9cea581bc6e04febb9e419165f926bd4aea",
+      "bytes": 2730
+    },
+    {
+      "file": "installer-build.log",
+      "deliveredSha256": "b392c7e728d70ceb526b7b89322abb50642d0f9716d4727c3b87b8877130dabf",
+      "bytes": 1275
+    },
+    {
+      "file": "lint.log",
+      "deliveredSha256": "1a3cb346940e0a228d453df0365673dd1bd8cf8144c77c8a5e4cf6a18eadd02e",
+      "bytes": 7614
+    },
+    {
+      "file": "modules-build.log",
+      "deliveredSha256": "a47d1d1f553b297baf927f8b3f1f7b52f33092ab8b73671dfbe4c740bf9f39d6",
+      "bytes": 307
+    },
+    {
+      "file": "node22-tests-final.log",
+      "deliveredSha256": "420a3548d3c14b1c10eef8f7c654b4d6119dcb34e8de7a3e7383fdf92c2330e0",
+      "bytes": 729900
+    },
+    {
+      "file": "node22-version.log",
+      "deliveredSha256": "2266957ed9a639bd7264d714bfa798a961510bf2e50695c668ab8fc0c3f4e906",
+      "bytes": 9
+    },
+    {
+      "file": "node24-tests-final.log",
+      "deliveredSha256": "1f6f5d9b29cb477d4167c1aeeac833911315ec992a776e896648be283483317b",
+      "bytes": 293860
+    },
+    {
+      "file": "node24-version.log",
+      "deliveredSha256": "4409d3bfa08b82f385bd424eeda65fc63b756129f0e89e82df77f1fecafccc14",
+      "bytes": 9
+    },
+    {
+      "file": "npm-audit-development.json",
+      "deliveredSha256": "46263b7bc951bb7481dce6526a3b69b9046f560c45d181f9ea9800790ee63be4",
+      "bytes": 10677
+    },
+    {
+      "file": "npm-audit-production.json",
+      "deliveredSha256": "9a38535e223aa382d0eca300ff5e8f53897b15bf06adc1c92ea32fddcfa551b6",
+      "bytes": 1620
+    },
+    {
+      "file": "npm-production-ajv-tree.json",
+      "deliveredSha256": "951973b6a7a7a5427797106ba2618ce8fa8f50aeda524f2eefbc17c0670ea494",
+      "bytes": 867
+    },
+    {
+      "file": "npm-production-ajv-tree.stderr",
+      "deliveredSha256": "9aac3da9a7039a99c345545c32f286aa65c358d571bfce7e00d94625d095c829",
+      "bytes": 150
+    },
+    {
+      "file": "npm926-dateivergleich.json",
+      "deliveredSha256": "68e8791959ff035d99b10e699f24fe08c7aa1d1c6b0a71b149b92753e6b948ea",
+      "bytes": 113
+    },
+    {
+      "file": "production-audit-review.json",
+      "deliveredSha256": "636ddb3c806d22243b40e44a0177f6539d628d6dcd5e90b5fa32249d5b4be7a8",
+      "bytes": 1222
+    },
+    {
+      "file": "release-targeted.log",
+      "deliveredSha256": "b87c1ddd37a6b73b9c3fc8fcf10e44f00542c1a2ce67f63d4ab0eaf4b20c4b47",
+      "bytes": 4386
+    },
+    {
+      "file": "restart-regressions-node22.log",
+      "deliveredSha256": "0e9bb69f6e4f960734694059be909076ca04b97db0251ec907a8001519549376",
+      "bytes": 15181
+    },
+    {
+      "file": "sbom-generation.json",
+      "deliveredSha256": "e2c2a958ff60d6295b62f05319210bdbe31b602f4cf543b4befb36531894c325",
+      "bytes": 734
+    },
+    {
+      "file": "source-fixtures.json",
+      "deliveredSha256": "2a396fc5fb8e08b13217535ee1db2f0da6f7dd0368bed6397f58a47445da97a1",
+      "bytes": 1432
+    },
+    {
+      "file": "targeted-ocpp-frontend.log",
+      "deliveredSha256": "93a6273eff4c271a288cb1c0773660b0b7b3f8bc2427582d7e96750787cfe3c2",
+      "bytes": 2087
+    },
+    {
+      "file": "test-environment.json",
+      "deliveredSha256": "df810f33ae7295856b1b2bafa871b767c5e8e81e10cd474337ebefcd6e153f93",
+      "bytes": 807
+    },
+    {
+      "file": "tibber/backend/REVIEW.md",
+      "deliveredSha256": "5a044cecec34bce3df43855a91dad1ef01a82b6b4e83c9356b80f66fc460a58d",
+      "bytes": 5967
+    },
+    {
+      "file": "tibber/backend/appcenter-overwrite-patched-scratch.log",
+      "deliveredSha256": "76be87748e76e3d453d7373d968ad4fdb989aed4a4f36987e6727697d1951918",
+      "bytes": 415
+    },
+    {
+      "file": "tibber/backend/appcenter-overwrite-repro.log",
+      "deliveredSha256": "214be3a6957c51ca17c78884b670d8b0f71d9ef102f6e01fdc0096758cbdb49e",
+      "bytes": 1352
+    },
+    {
+      "file": "tibber/backend/customer-tariff-lint.log",
+      "deliveredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "file": "tibber/backend/customer-tariff-typecheck.log",
+      "deliveredSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "file": "tibber/backend/process-disk-restart-node24.log",
+      "deliveredSha256": "7d1ae03bf3c797e6a63452307b09eaa9b27fc3c84efb5371ba08a534ebe9aead",
+      "bytes": 346
+    },
+    {
+      "file": "tibber/backend/roundtrip-built-diagnostic.log",
+      "deliveredSha256": "1d8c5c7191ef208aa43883db3fc979c7f1ea5d47e8697e5a478b8a00ca7f3de0",
+      "bytes": 3135
+    },
+    {
+      "file": "tibber/backend/roundtrip-built-ipc-counts.log",
+      "deliveredSha256": "fa957764f3d2c4e9876b306e9a88b198fe5ae3b629ce1f9ad59806ce99eb4828",
+      "bytes": 15984
+    },
+    {
+      "file": "tibber/backend/roundtrip-built-node24.log",
+      "deliveredSha256": "c492e6562e1acfbd08a4f3a86ee4b7af6eb4e30a4fff979cee804521a644e3d1",
+      "bytes": 2152
+    },
+    {
+      "file": "tibber/backend/roundtrip-final-node22.log",
+      "deliveredSha256": "4e998c1d6a16c337bc4821afdb6e38ea33c3b22407194c32db6922d69753abce",
+      "bytes": 4599
+    },
+    {
+      "file": "tibber/backend/roundtrip-final-node24.log",
+      "deliveredSha256": "d85efcd6a4e08503ef830ff16c58398c5b8b3fd2833edf17d466ec7b964f228f",
+      "bytes": 1827
+    },
+    {
+      "file": "tibber/backend/roundtrip-source-node22-diagnostic.log",
+      "deliveredSha256": "a1bdc796fe4f61da5adac86fa6be1bbd30ea41907055152bddb4fb8338fc2b5f",
+      "bytes": 8734
+    },
+    {
+      "file": "tibber/independent/tariff-background-hydration-review.log",
+      "deliveredSha256": "18fdd0b85e11cc95717234fbe77024d513c5115aca2521a1af9db56a7bd82497",
+      "bytes": 161
+    },
+    {
+      "file": "tibber/independent/tibber-header-object-mask-review.log",
+      "deliveredSha256": "c22f53e702c3f7843c2ab97bcbc734e06ff1b7df399c0d9e428c652b6b801915",
+      "bytes": 54
+    },
+    {
+      "file": "tibber/independent/tibber-independent-frontend-review.log",
+      "deliveredSha256": "acdc0525624cc7a56e1eb5a8186e38fb8157d0d52205a576f22f6d3b9ce01396",
+      "bytes": 767
+    },
+    {
+      "file": "tibber/independent/tibber-independent-scope-review.log",
+      "deliveredSha256": "e7611f597699ccae4f1b04de72e541c0ad0659ec4f4ca9121426b6bd275a64c5",
+      "bytes": 71
+    },
+    {
+      "file": "tibber/independent/tibber-mapping-targeted-node24.log",
+      "deliveredSha256": "498e3c10aad4b0ea4bfdc0c17e89be776a805aaa1a1d2b42bfa00c77ebe0a177",
+      "bytes": 94394
+    },
+    {
+      "file": "tibber/independent/tibber-parent-persistence-review.log",
+      "deliveredSha256": "5c7d4b9e7a67c535118e31488b11d123c095a67b395f3d6951c832d4f4757ed3",
+      "bytes": 1588
+    },
+    {
+      "file": "tibber/tariff-review/appcenter-tariff-roundtrip-baseline.log",
+      "deliveredSha256": "2a5ec492d4975ae1aabeebd7f5b04d8ea05c795cec9d5fc22627b6d21812162f",
+      "bytes": 2579
+    },
+    {
+      "file": "tibber/tariff-review/customer-editor-final.log",
+      "deliveredSha256": "a301f85e3d4b7fa906b19ba29fd3695018670ae8a61059382af9a1ec539a9b24",
+      "bytes": 1777
+    },
+    {
+      "file": "tibber/tariff-review/frontend-guard-baseline.log",
+      "deliveredSha256": "2468725435f608fd78ca4e412d7f011ec9969d7eb10832c7ba7d3cf8a2d5782b",
+      "bytes": 12586
+    },
+    {
+      "file": "tibber/tariff-review/frontend-guard-final.log",
+      "deliveredSha256": "03168f7eb8e2cec7600aef382356972cac4ed8d8c13773fe58aa6f857beee7e9",
+      "bytes": 767
+    },
+    {
+      "file": "tibber-appcenter-baseline.log",
+      "deliveredSha256": "214be3a6957c51ca17c78884b670d8b0f71d9ef102f6e01fdc0096758cbdb49e",
+      "bytes": 1352
+    },
+    {
+      "file": "tibber-background-hydration-baseline.log",
+      "deliveredSha256": "18fdd0b85e11cc95717234fbe77024d513c5115aca2521a1af9db56a7bd82497",
+      "bytes": 161
+    },
+    {
+      "file": "tibber-form-baseline.log",
+      "deliveredSha256": "2a5ec492d4975ae1aabeebd7f5b04d8ea05c795cec9d5fc22627b6d21812162f",
+      "bytes": 2579
+    },
+    {
+      "file": "tibber-mapping-targeted-node24.log",
+      "deliveredSha256": "498e3c10aad4b0ea4bfdc0c17e89be776a805aaa1a1d2b42bfa00c77ebe0a177",
+      "bytes": 94394
+    },
+    {
+      "file": "tibber-minimal-fix-isolation.log",
+      "deliveredSha256": "76be87748e76e3d453d7373d968ad4fdb989aed4a4f36987e6727697d1951918",
+      "bytes": 415
+    },
+    {
+      "file": "typecheck.log",
+      "deliveredSha256": "4a6decb053d376f53d0b7660a52fa461bf883ae56211112512ecd7ae0ec8bf5b",
+      "bytes": 3049
+    },
+    {
+      "file": "ui-build.log",
+      "deliveredSha256": "cde9fe433c58a87ca18d3191ed311d54eaafcadb9ed2a7271778259e0786982f",
+      "bytes": 474
+    }
+  ]
+}

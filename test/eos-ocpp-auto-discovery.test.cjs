@@ -97,6 +97,19 @@ test('partial contract registration is explicit and completes; invalid direction
     inv.states[`${root}.info.deviceType`].val = 'generic'; assert.deepEqual(inv.stations(), []);
 });
 
+test('an auto-created row explicitly retained as an active monitor never regains its first writer', () => {
+    const inv = inventory();
+    const initial = planOcppDiscovery({}, inv.stations());
+    const monitor = { ...initial.patch.settingsConfig.evcsList[0], enabled: true, setPowerWId: '', setCurrentAId: '', enableWriteId: '' };
+    assert.equal(monitor.ocppDiscovery.autoCreated, true);
+    const config = { settingsConfig: { evcsCount: 1, evcsList: [monitor] } };
+    const refreshed = planOcppDiscovery(config, inv.stations());
+    const row = refreshed.patch.settingsConfig.evcsList[0];
+    assert.equal(row.setPowerWId, ''); assert.equal(row.setCurrentAId, ''); assert.equal(row.enableWriteId, '');
+    assert.equal(row.ocppDiscovery.code, 'MANUAL_MAPPING_REVIEW_REQUIRED');
+    assert.equal(planOcppDiscovery(refreshed.patch, inv.stations()).changed, false);
+});
+
 test('real configuration pipeline retains validated contract failure metadata and never enables an uncommissioned row', async t => {
     const h = await runtimeFixture(t); const inv = inventory(); delete inv.objects[`${root}.control.chargeLimit`];
     await h.a.reconcileOcppDiscovery(inv.stations());

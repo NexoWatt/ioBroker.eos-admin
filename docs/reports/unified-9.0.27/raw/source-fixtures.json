@@ -1,0 +1,30 @@
+{
+  "scope": "isolated regression fixtures only; not product dependencies or a delivery",
+  "keygen": {
+    "version": "1.0.4",
+    "sourceLibraryFileId": "libfile_f3ea10a986f08191bf08c085be60fa7a",
+    "archiveSha256": "c5a4435895092be11116cbc5b2bcfd96f3362ed84a2ff5737b9b904d29c3cf8f",
+    "issuerSha256": "6f7711e2995e5e7167776a20fb0c9250386923ddabc6177e81cd1d1f27d82c7f",
+    "matches926RecordedArchive": true,
+    "matchesTestExpectedIssuer": true,
+    "source": "/workspace/scratch/b0b00b64c39c/test-fixtures-927/keygen-source/NexoWatt_EOS_Keygen_1.0.4",
+    "importChecks": [
+      "Node22.23.4",
+      "Node24.22.3"
+    ],
+    "notes": "Source only. Tests generate ephemeral keys; no production keys or licences generated in fixture preparation."
+  },
+  "ocpp": {
+    "name": "iobroker.ocpp21",
+    "version": "0.4.3",
+    "sourceLibraryFileId": "libfile_fde3_f-670a456f80308191b5a3371281572a36_1a24c6a913a881919f1901a216fe8c20",
+    "archiveSha256": "0fa79f872c29ac7ae80cd3395cdff6dc288e5528541280a6819075f2e7b8a54d",
+    "mainSha256": "a1de59833166b8c38b83048e4c109694ec763cfeedf9edae8903b6c1170bf8cf",
+    "main": "/workspace/scratch/b0b00b64c39c/test-fixtures-927/ocpp-source/package/main.js",
+    "importChecks": [
+      "Node22.23.4",
+      "Node24.22.3"
+    ],
+    "notes": "Actual archived standalone package. Import uses the existing test stubs for adapter-core and server construction; no listener started."
+  }
+}

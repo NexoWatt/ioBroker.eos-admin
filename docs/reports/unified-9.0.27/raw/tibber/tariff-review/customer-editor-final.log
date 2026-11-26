@@ -1,0 +1,24 @@
+✔ tariff editor loads lazily and renders secret presence without copying secret values (20.41195ms)
+✔ single setting sends only its revisioned tariff delta, never full AppCenter data or blank secret (5.074377ms)
+✔ source switch requires its own token and clears typed token from the previous source (6.4719ms)
+✔ actual frontend and backend require a fresh token on provider change even with the same ENTSO-E source (3.675001ms)
+✔ revision conflict preserves edited values and token and never automatically retries (2.118212ms)
+✔ source/provider options contain no custom endpoint choice and preserve installer provider until deliberate switch (1.433156ms)
+✔ a known provider name with an external endpoint remains installer-managed until deliberately selected again (2.081788ms)
+✔ country change cannot post a hidden stale sourceId for a direct provider (2.020888ms)
+✔ formula and use-for-tariff consent are targeted explicit changes (2.314413ms)
+✔ failed initial load remains locked; untrusted error text is never displayed (1.632051ms)
+✔ authentication failure on save preserves form without replaying writes (1.847331ms)
+✔ reload asks before discarding an edit and pagehide clears a typed secret (1.953137ms)
+✔ provider labels are rendered as plain text and unrelated server fields never enter a save (1.73959ms)
+✔ startup loading retries initial GET only, confirms Tibber and stops its single timer (1.837486ms)
+✔ startup retries are bounded and closing or leaving the panel cancels the single pending timer (3.462141ms)
+✔ hydration failure has no retry and an existing draft is never replaced by startup reads (2.980231ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 432.694421

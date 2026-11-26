@@ -1,0 +1,26 @@
+✔ new OCPP mappings leave manual station/group assignment empty (8.253533ms)
+✔ repeated discovery preserves commissioned values and does not replace the list (4.605021ms)
+✔ duplicate discovery entries and equivalent aliases yield one physical station row (6.885855ms)
+✔ physical station metadata identifies incomplete mappings without assigning display groups (1.873709ms)
+✔ existing mapped rows survive a stale lower EVCS count during explicit discovery (12.368338ms)
+✔ pending discovery excludes simultaneous load/save/discovery and keeps the original CAS token (2.266772ms)
+✔ pristine detection adopts the authoritative saved rows and their exact CAS revision first (2.355113ms)
+✔ dirty discovery preserves the draft and its CAS token while the server may have newer mappings (1.804687ms)
+✔ native applied-limit feedback and physical metadata are retained without converting manual rows to auto-managed writers (4.804397ms)
+✔ a configured read-only monitor never gains a command target from either discovery action (3.300667ms)
+✔ mixed or duplicated physical mappings are left unchanged and never get another row appended (2.880282ms)
+✔ actual EVCS input mutation prevents automatic reload without a test-forced dirty flag (2.028019ms)
+✔ direct station-group edits and uncommitted DOM values prevent automatic reload even without a dirty flag (3.348858ms)
+✔ current-only native aliases deduplicate and mixed current writers remain fenced (2.93908ms)
+✔ background OCPP mapping refreshes a pristine form; dirty CAS conflicts preserve both drafts and saved mappings (116.242689ms)
+✔ manual hosted/native OCPP detection cannot pre-enable a new station or assume AC electrical settings (2.039014ms)
+✔ mapping a known native station preserves the installer-approved activation and electrical settings (2.694427ms)
+✔ station identities retain exact hosted namespace and legacy aliases without conflating equal station names (0.729462ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1131.254806

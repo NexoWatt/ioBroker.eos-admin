@@ -1,0 +1,93 @@
+✖ manual discovery and automatic registration both ignore retained states of a deleted standalone source (63.414458ms)
+✖ automatic discovery leaves station and group assignment manual while remaining idempotent (0.981195ms)
+✖ manual discovery validates units and contract values just like the automatic collector (12.424848ms)
+✔ still configured standalone sources remain distinct even when offline or using the same device name (7.700131ms)
+✖ a hosted preserved namespace does not rediscover retained objects in the unused default tree (7.712609ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 1
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 386.392788
+
+✖ failing tests:
+
+test at test/eos-ocpp-discovery-consistency.test.cjs:45:1
+✖ manual discovery and automatic registration both ignore retained states of a deleted standalone source (63.414458ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  2 !== 1
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-ocpp-discovery-consistency.test.cjs:54:16)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-ocpp-discovery-consistency.test.cjs:66:1
+✖ automatic discovery leaves station and group assignment manual while remaining idempotent (0.981195ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'eos-admin.0.ocpp.ENERGYLINE'
+  - undefined
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-ocpp-discovery-consistency.test.cjs:73:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'eos-admin.0.ocpp.ENERGYLINE',
+    expected: undefined,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-ocpp-discovery-consistency.test.cjs:85:1
+✖ manual discovery validates units and contract values just like the automatic collector (12.424848ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  2 !== 1
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-ocpp-discovery-consistency.test.cjs:92:48)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-ocpp-discovery-consistency.test.cjs:109:1
+✖ a hosted preserved namespace does not rediscover retained objects in the unused default tree (7.712609ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  2 !== 1
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-ocpp-discovery-consistency.test.cjs:115:48)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

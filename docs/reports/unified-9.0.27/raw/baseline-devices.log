@@ -1,0 +1,138 @@
+✖ saved device chargepoint removal survives events and serialized restart in eos-admin.0 (5.616051ms)
+✖ saved device chargepoint removal survives events and serialized restart in nexowatt-devices.3 (1.207812ms)
+✖ an incomplete original activation request cannot recreate a removed chargepoint (0.980725ms)
+✖ legacy missing-row bindings without a mapping checkpoint conservatively record the current request once (5.799753ms)
+✖ legacy removal checkpoints a pending request even when an older activation was already consumed (0.605959ms)
+✔ discovery never assigns a station and preserves manually configured groups (0.859545ms)
+✔ Devices does not add another controller when its alias resolves to an already mapped native OCPP command (0.676804ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 2
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 154.22737
+
+✖ failing tests:
+
+test at ../restart-evidence/devices-chargepoint-baseline.test.cjs:27:5
+✖ saved device chargepoint removal survives events and serialized restart in eos-admin.0 (5.616051ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/restart-evidence/devices-chargepoint-baseline.test.cjs:35:20)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at ../restart-evidence/devices-chargepoint-baseline.test.cjs:27:5
+✖ saved device chargepoint removal survives events and serialized restart in nexowatt-devices.3 (1.207812ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/restart-evidence/devices-chargepoint-baseline.test.cjs:35:20)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at ../restart-evidence/devices-chargepoint-baseline.test.cjs:45:1
+✖ an incomplete original activation request cannot recreate a removed chargepoint (0.980725ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/restart-evidence/devices-chargepoint-baseline.test.cjs:52:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at ../restart-evidence/devices-chargepoint-baseline.test.cjs:64:1
+✖ legacy missing-row bindings without a mapping checkpoint conservatively record the current request once (5.799753ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + [
+  +   {
+  +     _eosDevice: {
+  +       baseId: 'eos-admin.0.devices.building.wallbox',
+  +       devId: 'building.wallbox',
+  +       mode: 'auto',
+  +       v: 1
+  +     },
+  +     enabled: false,
+  +     name: 'Wallbox',
+  +     onlineId: 'eos-admin.0.devices.building.wallbox.aliases.v1.r.online',
+  +     powerId: 'eos-admin.0.devices.building.wallbox.aliases.v1.r.power',
+  +     setCurrentAId: 'eos-admin.0.devices.building.wallbox.aliases.v1.ctrl.currentLimitA'
+  +   }
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/restart-evidence/devices-chargepoint-baseline.test.cjs:69:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ { enabled: false, name: 'Wallbox', powerId: 'eos-admin.0.devices.building.wallbox.aliases.v1.r.power', onlineId: 'eos-admin.0.devices.building.wallbox.aliases.v1.r.online', setCurrentAId: 'eos-admin.0.devices.building.wallbox.aliases.v1.ctrl.currentLimitA', _eosDevice: [Object] } ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at ../restart-evidence/devices-chargepoint-baseline.test.cjs:78:1
+✖ legacy removal checkpoints a pending request even when an older activation was already consumed (0.605959ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'ACTIVATION_PENDING'
+  - 'MAPPING_REMOVED'
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/restart-evidence/devices-chargepoint-baseline.test.cjs:85:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'ACTIVATION_PENDING',
+    expected: 'MAPPING_REMOVED',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

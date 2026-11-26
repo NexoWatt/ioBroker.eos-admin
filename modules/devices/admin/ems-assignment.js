@@ -36,6 +36,7 @@
         DEVICE_DISABLED: 'Gerät deaktiviert · automatisch verwaltete Steuereinträge deaktiviert; Zuordnungen und Grenzen bleiben erhalten.',
         DEVICE_REMOVED: 'Gerät entfernt · automatisch verwaltete Steuereinträge deaktiviert; manuelle Einträge im App-Center prüfen.',
         MANUAL_MAPPING_PRESERVED: 'Ziel bereits belegt · vorhandene Zuordnung bleibt erhalten. Im App-Center abgleichen.',
+        MAPPING_REMOVED: 'Ladepunkt wurde im App-Center entfernt. Für eine erneute Zuordnung im Gerätefenster die EMS-Einrichtung ausdrücklich neu übernehmen.',
         MAPPING_CONFLICT: 'Ziel bereits belegt · Zuordnung im App-Center prüfen.',
         DUPLICATE_CONTROL_TARGET: 'Steuerziel bereits zugeordnet · Konflikt prüfen.',
         CONTROL_TARGET_ALREADY_ASSIGNED: 'Steuerziel bereits zugeordnet · vorhandene Regelzuständigkeit prüfen.',

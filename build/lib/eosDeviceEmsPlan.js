@@ -310,7 +310,8 @@ function planDeviceEms(input) {
         registry.v = 1;
         const bindings = section(registry, 'bindings');
         const next = { target, mode, ...(dev.ems.scope ? { scope: dev.ems.scope } : {}),
-            ...(dev.ems.flowSlot !== undefined ? { flowSlot: dev.ems.flowSlot } : {}) };
+            ...(dev.ems.flowSlot !== undefined ? { flowSlot: dev.ems.flowSlot } : {}),
+            ...(target === 'evcs' ? { mappingRequestId: text(record(dev.ems.activation).requestId) } : {}) };
         bindings[dev.baseId] = { ...record(bindings[dev.baseId]), ...next };
     };
     /** @param {Device} dev @param {Dict} candidate @param {unknown[]} competing @returns {boolean} */
@@ -328,6 +329,23 @@ function planDeviceEms(input) {
             result.status = 'conflict';
             result.code = 'DUPLICATE_DEVICE_MAPPING';
             return;
+        }
+        const previous = binding(dev);
+        if (!found.length && previous.target === 'evcs') {
+            // Removing a managed chargepoint is an explicit installer decision.
+            // Alias events and restarts must not recreate it. Keep the last
+            // mapping request separate from activation: an incomplete request
+            // has not been consumed, but replaying it still is not a new choice.
+            if (typeof previous.mappingRequestId !== 'string') {
+                // Old bindings have no request-at-mapping checkpoint. Remember
+                // the currently observed request instead of guessing permission.
+                previous.mappingRequestId = text(record(dev.ems.activation).requestId) || text(previous.activationRequestId);
+            }
+            if (!explicitApply(dev) || text(record(dev.ems.activation).requestId) === previous.mappingRequestId) {
+                result.status = 'manual';
+                result.code = 'MAPPING_REMOVED';
+                return;
+            }
         }
         if (found.length && mixedIdentity(found[0], dev)) {
             result.status = 'conflict';
@@ -891,9 +909,14 @@ function planDeviceEms(input) {
             // Conflicts and unavailable metadata must not leave empty sections,
             // partially added rows or binding records in the committed config.
             if (result.status !== 'mapped') {
+                const removedRequest = result.code === 'MAPPING_REMOVED' ? binding(dev).mappingRequestId : undefined;
                 for (const key of Object.keys(config))
                     delete config[key];
                 Object.assign(config, checkpoint);
+                // The one compatibility checkpoint records a removal decision,
+                // not a partial mapping or an activation. Retain only that field.
+                if (typeof removedRequest === 'string')
+                    binding(dev).mappingRequestId = removedRequest;
                 result.mappedFields = [];
             }
         }

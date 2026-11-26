@@ -1,0 +1,4 @@
+PASS: npm E404 without stopBeforeUpdate leaves enabled=true (no controller write).
+PASS: npm E404 with stopBeforeUpdate disables; successful retry leaves disabled.
+PASS: successful first upgrade with stopBeforeUpdate re-enables.
+PASS: deliberately disabled instance stays disabled after upgrade.

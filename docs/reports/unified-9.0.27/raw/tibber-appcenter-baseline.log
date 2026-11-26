@@ -1,0 +1,33 @@
+ROUNDTRIP_VIEW {"tariffPresent":false,"submittedProvider":"manual-dp","submittedEnabled":false,"tokenPresent":false}
+ROUNDTRIP_RESTART {"provider":"manual-dp","enabled":false,"tokenPresent":false}
+✖ Tibber save reaches parent state and survives UI plus whole owner restart (native namespace) (2920.420572ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3499.549712
+
+✖ failing tests:
+
+test at ../ocpp-review-evidence/tibber-restart/appcenter-overwrite-repro.test.cjs:41:34
+✖ Tibber save reaches parent state and survives UI plus whole owner restart (native namespace) (2920.420572ms)
+  AssertionError [ERR_ASSERTION]: an unrelated AppCenter edit must retain customer Tibber after owner restart
+  + actual - expected
+  
+  + 'manual-dp'
+  - 'tibber'
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/ocpp-review-evidence/tibber-restart/appcenter-overwrite-repro.test.cjs:164:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'manual-dp',
+    expected: 'tibber',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

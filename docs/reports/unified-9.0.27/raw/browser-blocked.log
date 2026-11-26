@@ -1,0 +1,38 @@
+Error: Failed to launch the browser process:  Code: null
+
+stderr:
+[18:18:1126/063257.929083:FATAL:chrome/browser/process_singleton_posix.cc:297] Check failed: . socket() failed: Operation not permitted (1)
+[1126/063257.929264:ERROR:third_party/crashpad/crashpad/util/linux/scoped_ptrace_attach.cc:27] ptrace: Operation not permitted (1)
+Received signal 6
+#0 0x55c4e80f3db3 (/workspace/scratch/b0b00b64c39c/browser-runtime/chrome-linux64/chrome+0x6ec4db2)
+#1 0x55c4ed0a2d44 (/workspace/scratch/b0b00b64c39c/browser-runtime/chrome-linux64/chrome+0xbe73d43)
+#2 0x7fd4cb176d70 (/usr/lib/x86_64-linux-gnu/libc.so.6+0x3fd6f)
+#3 0x55c4ed058b8d (/workspace/scratch/b0b00b64c39c/browser-runtime/chrome-linux64/chrome+0xbe29b8c)
+#4 0x55c4ed058add (/workspace/scratch/b0b00b64c39c/browser-runtime/chrome-linux64/chrome+0xbe29adc)
+#5 0x55c4e6bd3b72 (/workspace/scratch/b0b00b64c39c/browser-runtime/chrome-linux64/chrome+0x59a4b71)
+#6 0x55c4e4c78459 (/workspace/scratch/b0b00b64c39c/browser-runtime/chrome-linux64/chrome+0x3a49458)
+#7 0x55c4ed058d00 (/workspace/scratch/b0b00b64c39c/browser-runtime/chrome-linux64/chrome+0xbe29cff)
+#8 0x55c4e59fee39 (/workspace/scratch/b0b00b64c39c/browser-runtime/chrome-linux64/chrome+0x47cfe38)
+#9 0x55c4e79b1bea (/workspace/scratch/b0b00b64c39c/browser-runtime/chrome-linux64/chrome+0x6782be9)
+#10 0x55c4e79b2e77 (/workspace/scratch/b0b00b64c39c/browser-runtime/chrome-linux64/chrome+0x6783e76)
+#11 0x55c4e79b2c81 (/workspace/scratch/b0b00b64c39c/browser-runtime/chrome-linux64/chrome+0x6783c80)
+#12 0x55c4e79b2c24 (/workspace/scratch/b0b00b64c39c/browser-runtime/chrome-linux64/chrome+0x6783c23)
+#13 0x55c4e7f8ddd9 (/workspace/scratch/b0b00b64c39c/browser-runtime/chrome-linux64/chrome+0x6d5edd8)
+#14 0x55c4e7f8cdf3 (/workspace/scratch/b0b00b64c39c/browser-runtime/chrome-linux64/chrome+0x6d5ddf2)
+#15 0x55c4e704e16c (/workspace/scratch/b0b00b64c39c/browser-runtime/chrome-linux64/chrome+0x5e1f16b)
+#16 0x55c4e7046b7e (/workspace/scratch/b0b00b64c39c/browser-runtime/chrome-linux64/chrome+0x5e17b7d)
+#17 0x55c4e70475af (/workspace/scratch/b0b00b64c39c/browser-runtime/chrome-linux64/chrome+0x5e185ae)
+#18 0x7fd4cb160ca8 (/usr/lib/x86_64-linux-gnu/libc.so.6+0x29ca7)
+  r8: 000024400007050b  r9: 0000000000000001 r10: 000024400007050b r11: 0000000000000246
+ r12: 00007ffc494d9ec8 r13: 0000000000000006 r14: 000000000000008b r15: 00002440000bc500
+  di: 0000000000000012  si: 0000000000000012  bp: 00007ffc494d9e60  bx: 0000000000000012
+  dx: 0000000000000006  ax: 0000000000000000  cx: 00007fd4cb1cb69c  sp: 00007ffc494d9d50
+  ip: 00007fd4cb1cb69c efl: 0000000000000246 cgf: 002b000000000033 erf: 0000000000000000
+ trp: 0000000000000000 msk: 0000000000000000 cr2: 0000000000000000
+[end of stack trace]
+
+TROUBLESHOOTING: https://pptr.dev/troubleshooting
+
+    at ChildProcess.onClose (file:///workspace/scratch/b0b00b64c39c/work-restart-review/node_modules/@puppeteer/browsers/lib/launch.js:346:24)
+    at ChildProcess.emit (node:events:526:24)
+    at ChildProcess._handle.onexit (node:internal/child_process:324:12)

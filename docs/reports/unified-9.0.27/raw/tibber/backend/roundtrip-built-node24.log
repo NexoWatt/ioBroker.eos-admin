@@ -1,0 +1,42 @@
+✔ Tibber masks survive unrelated Installer edits and a disk-backed owner restart (native namespace) (7893.457486ms)
+✖ Tibber masks survive unrelated Installer edits and a disk-backed owner restart (preserved namespace) (6068.038167ms)
+✔ Installer token context: partial edit (0.840728ms)
+✔ Installer token context: home and country selection (0.173357ms)
+✔ Installer token context: disabled provider (0.126978ms)
+✔ Installer token context: equivalent default endpoint (0.171024ms)
+✔ Installer token context: different endpoint (0.186286ms)
+✔ Installer token context: different provider (0.248219ms)
+✔ Installer token context: fresh credential on changed provider (0.151134ms)
+✔ Installer token context: intentional empty field (0.145145ms)
+✔ market source and configurable OAuth recipients/identity fence retained credentials (0.392752ms)
+✔ private request masks preserve same-recipient headers/body but never revive an explicit request clear (0.178235ms)
+✔ an early real startup failure cannot let Devices or OCPP overwrite an unread tariff (171.016006ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 12
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 14956.685239
+
+✖ failing tests:
+
+test at test/eos-tariff-installer-roundtrip.test.cjs:42:40
+✖ Tibber masks survive unrelated Installer edits and a disk-backed owner restart (preserved namespace) (6068.038167ms)
+  AssertionError [ERR_ASSERTION]: {"status":503,"code":"EOS_UI_UNAVAILABLE"}
+  
+  503 !== 200
+  
+      at changeInstaller (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-tariff-installer-roundtrip.test.cjs:197:16)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-tariff-installer-roundtrip.test.cjs:225:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 503,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

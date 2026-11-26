@@ -1,0 +1,11 @@
+ROUNDTRIP_VIEW {"tariffPresent":true,"submittedProvider":"tibber","submittedEnabled":true,"tokenPresent":true}
+ROUNDTRIP_RESTART {"provider":"tibber","enabled":true,"tokenPresent":true}
+✔ Tibber save reaches parent state and survives UI plus whole owner restart (native namespace) (3163.289173ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3813.144269

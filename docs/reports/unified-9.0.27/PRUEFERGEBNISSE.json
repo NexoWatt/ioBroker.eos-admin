@@ -1,0 +1,292 @@
+{
+  "version": "9.0.27",
+  "status": "controlled-integration-test-release",
+  "nodeVersions": {
+    "22": "v22.23.4",
+    "24": "v24.22.3"
+  },
+  "fullTests": {
+    "node22-tests-final": {
+      "tests": 2709,
+      "pass": 2707,
+      "fail": 0,
+      "skipped": 2,
+      "cancelled": 0
+    },
+    "node24-tests-final": {
+      "tests": 2709,
+      "pass": 2707,
+      "fail": 0,
+      "skipped": 2,
+      "cancelled": 0
+    }
+  },
+  "phaseTestCounts": {
+    "22": [
+      1916,
+      55,
+      642,
+      4,
+      92
+    ],
+    "24": [
+      1916,
+      55,
+      642,
+      4,
+      92
+    ]
+  },
+  "fullTestsExitCodes": {
+    "22": 0,
+    "24": 0
+  },
+  "builds": {
+    "unified-backend": 0,
+    "ui-runtime": 0,
+    "frontend": 0,
+    "installer": 0,
+    "modules": 0
+  },
+  "typecheckExitCode": 0,
+  "lintExitCode": 0,
+  "devicesRealHttpIpcPipeline": {
+    "22": {
+      "tests": 15,
+      "pass": 15,
+      "fail": 0,
+      "skip": 0
+    },
+    "24": {
+      "tests": 15,
+      "pass": 15,
+      "fail": 0,
+      "skip": 0
+    }
+  },
+  "intentionalPlatformSkips": [
+    "nginx binary unavailable: nginx syntax/TLS deployment not claimed",
+    "setfacl unavailable: inherited POSIX ACL test not run"
+  ],
+  "browser": "blocked by operating system before page load: process-singleton socket Operation not permitted",
+  "productionAudit": {
+    "moderate": 2,
+    "high": 0,
+    "critical": 0,
+    "status": "existing advisory retained; concrete $data option absent in loaded OCPP validators; see ABHAENGIGKEITEN.md"
+  },
+  "publication": false,
+  "livePiChanges": false,
+  "targetAcceptance": "open: Raspberry Pi, Dousida hardware, actual ioBroker upgrade and long-term resource measurements",
+  "postSealDeliveryProof": "Separate Liefernachweise outside canonical source contain actual TGZ/Git installations and publish dry-runs; this record does not pre-claim their result",
+  "execution": {
+    "uid": 1000,
+    "gid": 1000,
+    "groups": [],
+    "platform": "Linux",
+    "architecture": "x86_64"
+  },
+  "releaseMetadata": "root, internal UI and installer metadata aligned to 9.0.27; full Node 22/24 suites repeated after the Tibber persistence correction",
+  "phaseTestResults": {
+    "22": [
+      {
+        "tests": 1916,
+        "pass": 1914,
+        "fail": 0,
+        "skipped": 2,
+        "cancelled": 0,
+        "todo": 0
+      },
+      {
+        "tests": 55,
+        "pass": 55,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      {
+        "tests": 642,
+        "pass": 642,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      {
+        "tests": 4,
+        "pass": 4,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      {
+        "tests": 92,
+        "pass": 92,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      }
+    ],
+    "24": [
+      {
+        "tests": 1916,
+        "pass": 1914,
+        "fail": 0,
+        "skipped": 2,
+        "cancelled": 0,
+        "todo": 0
+      },
+      {
+        "tests": 55,
+        "pass": 55,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      {
+        "tests": 642,
+        "pass": 642,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      {
+        "tests": 4,
+        "pass": 4,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      },
+      {
+        "tests": 92,
+        "pass": 92,
+        "fail": 0,
+        "skipped": 0,
+        "cancelled": 0,
+        "todo": 0
+      }
+    ]
+  },
+  "tibberEvidence": {
+    "files": [
+      {
+        "source": "ocpp-review-evidence/tibber-restart/REVIEW.md",
+        "file": "tibber/backend/REVIEW.md",
+        "sha256": "5a044cecec34bce3df43855a91dad1ef01a82b6b4e83c9356b80f66fc460a58d"
+      },
+      {
+        "source": "ocpp-review-evidence/tibber-restart/appcenter-overwrite-repro.log",
+        "file": "tibber/backend/appcenter-overwrite-repro.log",
+        "sha256": "214be3a6957c51ca17c78884b670d8b0f71d9ef102f6e01fdc0096758cbdb49e"
+      },
+      {
+        "source": "ocpp-review-evidence/tibber-restart/appcenter-overwrite-patched-scratch.log",
+        "file": "tibber/backend/appcenter-overwrite-patched-scratch.log",
+        "sha256": "76be87748e76e3d453d7373d968ad4fdb989aed4a4f36987e6727697d1951918"
+      },
+      {
+        "source": "ocpp-review-evidence/tibber-restart/process-disk-restart-node24.log",
+        "file": "tibber/backend/process-disk-restart-node24.log",
+        "sha256": "7d1ae03bf3c797e6a63452307b09eaa9b27fc3c84efb5371ba08a534ebe9aead"
+      },
+      {
+        "source": "ocpp-review-evidence/tibber-restart/roundtrip-final-node22.log",
+        "file": "tibber/backend/roundtrip-final-node22.log",
+        "sha256": "4e998c1d6a16c337bc4821afdb6e38ea33c3b22407194c32db6922d69753abce"
+      },
+      {
+        "source": "ocpp-review-evidence/tibber-restart/roundtrip-final-node24.log",
+        "file": "tibber/backend/roundtrip-final-node24.log",
+        "sha256": "d85efcd6a4e08503ef830ff16c58398c5b8b3fd2833edf17d466ec7b964f228f"
+      },
+      {
+        "source": "ocpp-review-evidence/tibber-restart/customer-tariff-typecheck.log",
+        "file": "tibber/backend/customer-tariff-typecheck.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "source": "ocpp-review-evidence/tibber-restart/customer-tariff-lint.log",
+        "file": "tibber/backend/customer-tariff-lint.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "source": "ocpp-review-evidence/tibber-restart/roundtrip-built-diagnostic.log",
+        "file": "tibber/backend/roundtrip-built-diagnostic.log",
+        "sha256": "1d8c5c7191ef208aa43883db3fc979c7f1ea5d47e8697e5a478b8a00ca7f3de0"
+      },
+      {
+        "source": "ocpp-review-evidence/tibber-restart/roundtrip-built-ipc-counts.log",
+        "file": "tibber/backend/roundtrip-built-ipc-counts.log",
+        "sha256": "fa957764f3d2c4e9876b306e9a88b198fe5ae3b629ce1f9ad59806ce99eb4828"
+      },
+      {
+        "source": "ocpp-review-evidence/tibber-restart/roundtrip-built-node24.log",
+        "file": "tibber/backend/roundtrip-built-node24.log",
+        "sha256": "c492e6562e1acfbd08a4f3a86ee4b7af6eb4e30a4fff979cee804521a644e3d1"
+      },
+      {
+        "source": "ocpp-review-evidence/tibber-restart/roundtrip-source-node22-diagnostic.log",
+        "file": "tibber/backend/roundtrip-source-node22-diagnostic.log",
+        "sha256": "a1bdc796fe4f61da5adac86fa6be1bbd30ea41907055152bddb4fb8338fc2b5f"
+      },
+      {
+        "source": "tariff-review/appcenter-tariff-roundtrip-baseline.log",
+        "file": "tibber/tariff-review/appcenter-tariff-roundtrip-baseline.log",
+        "sha256": "2a5ec492d4975ae1aabeebd7f5b04d8ea05c795cec9d5fc22627b6d21812162f"
+      },
+      {
+        "source": "tariff-review/frontend-guard-baseline.log",
+        "file": "tibber/tariff-review/frontend-guard-baseline.log",
+        "sha256": "2468725435f608fd78ca4e412d7f011ec9969d7eb10832c7ba7d3cf8a2d5782b"
+      },
+      {
+        "source": "tariff-review/frontend-guard-final.log",
+        "file": "tibber/tariff-review/frontend-guard-final.log",
+        "sha256": "03168f7eb8e2cec7600aef382356972cac4ed8d8c13773fe58aa6f857beee7e9"
+      },
+      {
+        "source": "tariff-review/customer-editor-final.log",
+        "file": "tibber/tariff-review/customer-editor-final.log",
+        "sha256": "a301f85e3d4b7fa906b19ba29fd3695018670ae8a61059382af9a1ec539a9b24"
+      },
+      {
+        "source": "restart-evidence/tibber-parent-persistence-review.log",
+        "file": "tibber/independent/tibber-parent-persistence-review.log",
+        "sha256": "5c7d4b9e7a67c535118e31488b11d123c095a67b395f3d6951c832d4f4757ed3"
+      },
+      {
+        "source": "restart-evidence/tibber-header-object-mask-review.log",
+        "file": "tibber/independent/tibber-header-object-mask-review.log",
+        "sha256": "c22f53e702c3f7843c2ab97bcbc734e06ff1b7df399c0d9e428c652b6b801915"
+      },
+      {
+        "source": "restart-evidence/tibber-independent-scope-review.log",
+        "file": "tibber/independent/tibber-independent-scope-review.log",
+        "sha256": "e7611f597699ccae4f1b04de72e541c0ad0659ec4f4ca9121426b6bd275a64c5"
+      },
+      {
+        "source": "restart-evidence/tibber-independent-frontend-review.log",
+        "file": "tibber/independent/tibber-independent-frontend-review.log",
+        "sha256": "acdc0525624cc7a56e1eb5a8186e38fb8157d0d52205a576f22f6d3b9ce01396"
+      },
+      {
+        "source": "restart-evidence/tibber-mapping-targeted-node24.log",
+        "file": "tibber/independent/tibber-mapping-targeted-node24.log",
+        "sha256": "498e3c10aad4b0ea4bfdc0c17e89be776a805aaa1a1d2b42bfa00c77ebe0a177"
+      },
+      {
+        "source": "restart-evidence/tariff-background-hydration-review.log",
+        "file": "tibber/independent/tariff-background-hydration-review.log",
+        "sha256": "18fdd0b85e11cc95717234fbe77024d513c5115aca2521a1af9db56a7bd82497"
+      }
+    ],
+    "baselineAndSupersededFailures": "Retained as reproduction/diagnostic evidence, not final test successes; see tibber/backend/REVIEW.md",
+    "secrets": "Selected log/review files only; no scratch test source or real credentials"
+  }
+}

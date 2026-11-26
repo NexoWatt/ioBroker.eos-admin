@@ -1,0 +1,11 @@
+{
+  "status": "passed",
+  "npmVersion": "11.19.1",
+  "version": "9.0.27",
+  "method": "npm sbom --package-lock-only --sbom-format=cyclonedx in a canonical iobroker.eos-admin directory containing the exact current package.json/package-lock.json; then node tools/eos-sbom-vendored.cjs in source",
+  "reason": "npm sbom names its root component after the directory; running directly in work-restart-review was correctly rejected by SBOM_FULL_INPUT_INVALID; no assertion weakened",
+  "rootDependenciesInstalledBy": "npm ci --ignore-scripts --no-audit --no-fund (development verification); actual production install proof separate",
+  "fullComponents": 866,
+  "runtimeComponentsIncludingVendored": 433,
+  "directRuntimeDependencies": 35
+}

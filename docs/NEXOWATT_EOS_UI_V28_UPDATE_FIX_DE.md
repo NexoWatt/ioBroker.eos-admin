@@ -1,43 +1,48 @@
-# NexoWatt EOS Admin v29 Update-Fix
+# Historischer v29-Updatehinweis – ersetzt für den gemeinsamen EOS-Adapter
 
-Diese Version behebt den Update-Stopp des eigenständigen `eos-admin` Adapters.
+Überarbeitet am 26.11.2026 nach Prüfung des ausgelieferten 9.0.26-Quellstands.
+Diese Datei enthielt Anweisungen für die frühere eigenständige
+Administrationsoberfläche. Sie ist keine aktuelle Installationsfreigabe.
 
-## Ursachen
+## Heute gültige Vorgabe
 
-Es gab zwei technische Ursachen:
+Beim gemeinsamen EOS-Adapter muss `common.stopBeforeUpdate` den Wert `true`
+aus `io-package.json` übernehmen. Dadurch kann der normale ioBroker-Upgradepfad
+die laufenden Prozesse vor dem Austausch der Programmdateien beenden. Die
+frühere Empfehlung, diesen Wert auf `false` zu setzen, gilt nicht mehr.
+Repository-Generator und Repository-Patcher übernehmen auch die
+Controllerabhängigkeiten aus derselben Paketmetadatei.
 
-1. Der gebaute Adapter-Frontend-Bundle enthielt noch den alten Self-Update-Check `adapterName === "admin"`. Dadurch nutzte `eos-admin` beim Klick auf Update nicht den Webserver-Updatepfad, sondern den normalen Terminal-Befehl. Beim Update der gerade laufenden Oberfläche kann das hängen bleiben.
-2. Frühere Builds konnten `common.dontDelete=true` auf `system.adapter.eos-admin` setzen. Das schützt zwar gegen Löschen, kann aber den ioBroker-Upgrade-Ablauf stören, weil Updates Adapterobjekte ersetzen oder neu schreiben müssen.
+Der aktuelle Administrationsdialog verwendet den normalen ioBroker-Befehl
+`upgrade <Adapter>@<Version>`. Der Kunden-Updateweg besitzt einen eigenen
+begrenzten Worker mit bestätigtem Stoppen, Inhaltsprüfung und Starten. Die alten
+Aussagen über einen einheitlichen Webserver-Selbstupdatepfad beschreiben den
+heutigen Lieferstand nicht.
 
-## Lösung
+## Begrenzte Metadatenwartung
 
-- Der gebaute Adapter-Bundle nutzt jetzt `adapterName === "eos-admin"`.
-- Der Webserver-Updater sendet jetzt `adapterName: "eos-admin"` an den js-controller.
-- `eos-admin` wird aus „Update alle“ herausgefiltert, damit die laufende Oberfläche nicht über den normalen Terminal-Befehl aktualisiert wird.
-- `common.stopBeforeUpdate=false` im Repository und im Adapter-Metadata.
-- `common.dontDelete=false` und `common.nondeletable=false`.
-- Löschschutz erfolgt über ACLs, EOS UI-Regeln und Security Guard, nicht über objektbasierte Update-Blocker.
+`tools/nexowatt-repair-eos-admin-update.cjs` bleibt ein ausdrücklich gestartetes
+Linux-Wartungswerkzeug. Es setzt für das Paket `stopBeforeUpdate=true` und
+entfernt die alten Löschsperrflags `dontDelete` und `nondeletable` am Paket sowie
+an `eos-admin.0`. Es ändert weder `common.enabled` noch die Kundeneinstellungen,
+installiert kein Update und startet keinen Prozess.
 
-## Reparatur bestehender Installationen
+Ein fehlgeschlagener Controllerbefehl beendet das Werkzeug mit Fehler. Bereits
+erfolgreiche Metadatenänderungen bleiben angewendet; ein Gesamterfolg wird dann
+nicht gemeldet. Das Werkzeug ist kein allgemeines Mittel gegen eine gestoppte
+Instanz und kein Nachweis eines erfolgreichen Wiederanlaufs.
 
-Vor dem Update von älteren v24–v27 Installationen einmalig die alten Sperrflags entfernen:
+## Einordnung des gemeldeten Ausfalls
 
-```bash
-cd /opt/iobroker
+Die widersprüchlichen Repository-Werkzeuge sind im 9.0.26-Ausgangsstand
+reproduziert. Ohne den konkreten Updatepfad, den Instanzstatus und das
+Controllerprotokoll ist damit die Ursache des auf der Anlage ausgebliebenen
+Starts noch nicht nachgewiesen. Ein npm-404-Abbruch und ein anschließend
+erfolgreicher Wiederholungsversuch müssen getrennt untersucht werden.
 
-iobroker object set system.adapter.eos-admin common.dontDelete=false || true
-iobroker object set system.adapter.eos-admin common.nondeletable=false || true
-iobroker object set system.adapter.eos-admin common.stopBeforeUpdate=false || true
-
-iobroker object set system.adapter.eos-admin.0 common.dontDelete=false || true
-iobroker object set system.adapter.eos-admin.0 common.nondeletable=false || true
-
-iobroker update https://iobroker.live/repo/repo-nexowatt.json
-iobroker upgrade eos-admin https://iobroker.live/repo/repo-nexowatt.json
-iobroker upload eos-admin
-iobroker restart eos-admin.0
-```
-
-## Löschschutz
-
-Der harte Objekt-Flag `dontDelete` wird in v29 bewusst entfernt, weil er den Updatepfad blockieren kann. Der Schutz gegen Löschen erfolgt über EOS-Admin-Rechte, ACL/Guard und ausgeblendete Löschaktionen für Nicht-Administratoren. `nondeletable` bleibt `false`, damit Updates immer möglich bleiben.
+Ein bereits laufendes EOS kann eine absichtlich deaktivierte oder vom
+Controller nicht gestartete eigene Instanz nicht selbst überwachen. Automatische
+Wiederanlaufentscheidungen dürfen bestehende Deaktivierungen und einen unklaren
+Installationszustand nicht übergehen. Die Prüfung eines erfolgreichen Updates
+umfasst deshalb sowohl die installierte Version als auch den tatsächlichen
+Hauptprozess und die Bereitschaft der freigegebenen Module.

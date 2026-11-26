@@ -113,6 +113,10 @@ class EosModuleHost {
         this.running = false;
         this.initialized = false;
         this.startPromise = null;
+        /** @type {Map<string, Promise<void>>} */
+        this.startupSubscriptions = new Map();
+        /** @type {Set<() => void>} */
+        this.startupWaits = new Set();
         this.configurationLoadPromise = null;
         this.configurationSavePromise = null;
         this.entries = new Map();
@@ -959,6 +963,53 @@ class EosModuleHost {
             startup.cancel = null;
         }
     }
+    /**
+     * Controller subscriptions are idempotent, but keep each pending/confirmed
+     * request so a timeout or a later startup retry cannot duplicate it.
+     * @param {'objects'|'states'} kind
+     * @param {string} pattern
+     * @returns {Promise<void>}
+     */
+    async subscribeAtStartup(kind, pattern) {
+        const key = `${kind}:${pattern}`;
+        for (let attempt = 0; attempt < 3; attempt++) {
+            if (this.stopped)
+                return;
+            let request = this.startupSubscriptions.get(key);
+            if (!request) {
+                request = Promise.resolve().then(async () => {
+                    if (this.stopped)
+                        return;
+                    if (kind === 'objects')
+                        await this.owner.subscribeForeignObjectsAsync(pattern);
+                    else
+                        await this.owner.subscribeForeignStatesAsync(pattern);
+                });
+                const current = request;
+                this.startupSubscriptions.set(key, current);
+                void current.catch(() => {
+                    if (this.startupSubscriptions.get(key) === current)
+                        this.startupSubscriptions.delete(key);
+                });
+            }
+            try {
+                await bounded(request);
+                return;
+            }
+            catch (error) {
+                if (this.stopped)
+                    return;
+                if (attempt === 2)
+                    throw error;
+                this.owner.log.warn(`EOS_MODULE_SUBSCRIPTION_RETRY: ${kind}; attempt ${attempt + 2}/3`);
+                await new Promise(resolve => {
+                    const finish = () => { clearTimeout(timer); this.startupWaits.delete(finish); resolve(); };
+                    const timer = setTimeout(finish, 1000 * (attempt + 1));
+                    this.startupWaits.add(finish);
+                });
+            }
+        }
+    }
     async start() {
         if (this.startPromise)
             return this.startPromise;
@@ -999,10 +1050,10 @@ class EosModuleHost {
                         entry.configurationError = this.failureCode(error, 'EOS_MODULE_CONFIG_UNAVAILABLE');
                     }
                     const name = MODULES[entry.id];
-                    await bounded(this.owner.subscribeForeignObjectsAsync(`system.adapter.${name}.*`));
+                    await this.subscribeAtStartup('objects', `system.adapter.${name}.*`);
                     if (this.stopped)
                         return;
-                    await bounded(this.owner.subscribeForeignStatesAsync(`system.adapter.${name}.*.alive`));
+                    await this.subscribeAtStartup('states', `system.adapter.${name}.*.alive`);
                 }
                 if (this.stopped)
                     return;
@@ -1016,7 +1067,15 @@ class EosModuleHost {
             this.timer = setInterval(() => { void this.reconcile(); }, 1000);
             this.timer.unref?.();
             await this.reconcile();
-        })();
+        })().catch(error => {
+            // Keep the successful start shared, but do not latch a transient
+            // initial controller failure forever. A later explicit start may retry.
+            if (!this.initialized) {
+                this.startPromise = null;
+                this.running = false;
+            }
+            throw error;
+        });
         return this.startPromise;
     }
     ownershipChanged(entry) {
@@ -1469,6 +1528,10 @@ class EosModuleHost {
         this.stopped = true;
         this.running = false;
         this.bridgeHandler = null;
+        for (const finish of this.startupWaits)
+            finish();
+        this.startupWaits.clear();
+        this.startupSubscriptions.clear();
         clearInterval(this.timer);
         this.timer = null;
         for (const entry of this.entries.values())

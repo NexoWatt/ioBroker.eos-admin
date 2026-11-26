@@ -1,0 +1,30 @@
+{
+  "checkedAt": "2026-11-26T05:51:25.947009+00:00",
+  "command": "npm audit --omit=dev --json",
+  "exitCode": 1,
+  "auditFetchCompleted": true,
+  "counts": {
+    "info": 0,
+    "low": 0,
+    "moderate": 2,
+    "high": 0,
+    "critical": 0,
+    "total": 2
+  },
+  "directFindings": [
+    "ocpp-rpc"
+  ],
+  "sameVulnerabilitiesAs926": true,
+  "stderrObserved": [
+    "npm warn Unknown env config \"http-proxy\". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options."
+  ],
+  "priorAssessment": "docs/reports/unified-9.0.25/PRUEFBERICHT.md:59; docs/reports/unified-9.0.26/PRUEFBERICHT.md:69",
+  "advisory": "https://github.com/advisories/GHSA-2g4f-4pwh-qvx6",
+  "blockerIdentified": false,
+  "assessment": "Existing moderate dependency advisory remains reported. Exact advisory requires AJV $data=true; installed ocpp-rpc standard validators do not enable it and reject a harmless $data pattern schema. No newly reachable affected path identified in this targeted review. No blanket production security approval.",
+  "unchangedRelevantProductSourcesSince926": {
+    "modules/ocpp/src/server.ts": true,
+    "modules/ocpp/runtime.js": true,
+    "src/lib/web.ts": true
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "environment": {
+    "NEXOWATT_KEYGEN_SOURCE": "/workspace/scratch/b0b00b64c39c/test-fixtures-927/keygen-source/NexoWatt_EOS_Keygen_1.0.4",
+    "EOS_TEST_OCPP21_MAIN": "/workspace/scratch/b0b00b64c39c/test-fixtures-927/ocpp-source/package/main.js",
+    "EOS_TEST_INFLUXD": "/workspace/scratch/b0b00b64c39c/test-fixtures-927/influx/influxd",
+    "EOS_TEST_INFLUX": "/workspace/scratch/b0b00b64c39c/test-fixtures-927/influx/influx"
+  },
+  "sourceFixtures": "source-fixtures.json",
+  "influxProvenance": "influx/provenance.json",
+  "unavailable": [],
+  "fullSuiteStarted": true,
+  "fullSuiteCompleted": true,
+  "nodeVersions": {
+    "22": "v22.23.4",
+    "24": "v24.22.3"
+  },
+  "execution": {
+    "uid": 1000,
+    "gid": 1000,
+    "groups": [],
+    "platform": "Linux",
+    "architecture": "x86_64"
+  }
+}

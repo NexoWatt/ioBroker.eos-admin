@@ -28,6 +28,8 @@ const PRICE_KEYS = ['priceCurrent', 'priceAverage', 'priceTodayJson', 'priceTomo
 const PRICE_SUFFIXES = new Map([['priceCurrent', 'currentPriceEurPerKwh'], ['priceAverage', 'averagePriceEurPerKwh'], ['priceTodayJson', 'pricesTodayJson'], ['priceTomorrowJson', 'pricesTomorrowJson']]);
 const FORMULA_DEFAULTS: Dict = { marketMultiplier: 1, supplierMarkupEurPerKwh: 0, gridVariableEurPerKwh: 0, taxEurPerKwh: 0, otherVariableEurPerKwh: 0, vatPct: 0, priceIncludesVat: true };
 const RESERVED_CREDENTIAL_INPUTS = new Set(['__KEEP__']);
+const INSTALLER_SECRET_KEYS = ['accessToken', 'securityToken', 'clientSecret', 'bearerToken', 'apiKey', 'password', 'refreshToken'] as const;
+const INSTALLER_PRIVATE_REQUEST_KEYS = ['headersJson', 'body'] as const;
 const FIELDS = new Set(['enabled', 'providerId', 'sourceId', 'providerProfileId', 'country', 'homeId', 'priceComponent', 'formula', 'credentials', 'useForTariff']);
 function rec(value: unknown): Dict { return value !== null && typeof value === 'object' && !Array.isArray(value) ? value as Dict : {}; }
 function copy(value: Dict): Dict { return JSON.parse(JSON.stringify(value)) as Dict; }
@@ -54,6 +56,65 @@ function formulaView(value: unknown): Dict {
 function useForTariff(root: Dict, namespace: string): boolean {
     const points = rec(root.datapoints); const expected = managedPoints(namespace);
     return PRICE_KEYS.every(key => Reflect.get(points, key) === Reflect.get(expected, key));
+}
+
+/** Credentials are bound to their recipient, not to a selected home or price formula. */
+function installerCredentialScope(config: Dict): string | null {
+    const provider = storedText(config.providerId, 'manual-dp').trim().toLowerCase();
+    const resolved = provider === 'market-profile'
+        ? storedText(config.sourceId, config.country === 'NL' ? 'energyzero' : 'entsoe').trim().toLowerCase() : provider;
+    const credentials = rec(config.credentials); const custom = rec(config.customRest);
+    const endpoint = (value: unknown, fallback = ''): string | null => {
+        try {
+            const url = new URL(typeof value === 'string' && value.trim() ? value.trim() : fallback);
+            return url.protocol === 'https:' || url.protocol === 'http:' ? url.href : null;
+        } catch { return null; }
+    };
+    const official: unknown = Reflect.get(ENDPOINTS, resolved);
+    if (typeof official === 'string') {
+        const target = endpoint(config.endpoint, official);
+        return target ? JSON.stringify([provider, resolved, target]) : null;
+    }
+    if (resolved === 'custom-rest') {
+        const target = endpoint(custom.url || config.pricesUrl);
+        return target ? JSON.stringify([provider, resolved, target, custom.authMode || 'none',
+            credentials.username || '', custom.apiKeyHeader || 'x-api-key']) : null;
+    }
+    if (resolved === 'ostrom') {
+        const tokenTarget = endpoint(credentials.tokenUrl || config.tokenUrl);
+        const priceTarget = endpoint(config.pricesUrl || custom.url);
+        return tokenTarget && priceTarget
+            ? JSON.stringify([provider, resolved, tokenTarget, priceTarget, credentials.clientId || '']) : null;
+    }
+    return null;
+}
+
+/** Installer masks preserve only same-source secrets. Empty input remains an explicit deletion. */
+export function mergeInstallerTariffSecrets(incoming: unknown, existing: unknown): Dict {
+    const next = copy(rec(incoming)); const previous = rec(existing);
+    const credentials = copy(rec(next.credentials)); const previousCredentials = rec(previous.credentials);
+    const clearedRequest = own(next, 'customRest') && (next.customRest === null || typeof next.customRest !== 'object' || Array.isArray(next.customRest));
+    const effective = { ...previous, ...next, credentials: { ...previousCredentials, ...credentials },
+        customRest: clearedRequest ? {} : { ...rec(previous.customRest), ...rec(next.customRest) } };
+    const previousScope = installerCredentialScope(previous);
+    const sameScope = previousScope !== null && previousScope === installerCredentialScope(effective);
+    for (const key of INSTALLER_SECRET_KEYS) {
+        const raw = Reflect.get(credentials, key);
+        if (raw !== '__KEEP__' && raw !== undefined && raw !== null) continue;
+        // A plain deletion would be undone by the enclosing Installer deep merge.
+        Reflect.set(credentials, key, sameScope && Reflect.get(previousCredentials, key) !== undefined
+            ? Reflect.get(previousCredentials, key) : '');
+    }
+    next.credentials = credentials;
+    const custom = copy(rec(next.customRest)); const previousCustom = rec(previous.customRest);
+    for (const key of INSTALLER_PRIVATE_REQUEST_KEYS) {
+        const raw = Reflect.get(custom, key);
+        if (raw !== '__KEEP__' && raw !== undefined && raw !== null) continue;
+        if (!clearedRequest && sameScope && Reflect.get(previousCustom, key) !== undefined) Reflect.set(custom, key, Reflect.get(previousCustom, key));
+        else if (Reflect.get(previousCustom, key) !== undefined || raw === '__KEEP__') Reflect.set(custom, key, '');
+    }
+    if (Object.keys(custom).length || own(next, 'customRest')) next.customRest = custom;
+    return next;
 }
 
 /** Ausschließlich freigegebene Anzeige-Daten; keine internen URLs oder Geheimnisse. */

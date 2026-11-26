@@ -28,6 +28,9 @@ async function pipeline(t, options = {}) {
   const namespace = 'eos-admin.0';
   const qualify = id => id.startsWith(`${namespace}.`) ? id : `${namespace}.${id}`;
   const emitState = (id, state) => queueMicrotask(() => {
+    // A controller reports only subscribed states. Broadcasting every fixture
+    // write fabricates an IPC flood during object provisioning/reconfiguration.
+    if (![...subscriptions].some(pattern => glob(pattern).test(id))) return;
     owner.eosModuleHost?.onStateChange(id, clone(state));
     owner.eosHostedRuntime?.onStateChange(id, clone(state));
   });
@@ -102,7 +105,10 @@ async function pipeline(t, options = {}) {
     };
   }
   objects.set('system.config', { _id: 'system.config', type: 'config', common: { language: 'de' }, native: {} });
-  for (const [id, config] of Object.entries(options.initialModules || {})) {
+  // These cases exercise Devices, not live SHIP/OCPP servers or system backups.
+  // Explicit test overrides retain the cross-module startup/lease case below.
+  const fixtureModules = { eebus: { enabled: false }, ocpp: { enabled: false }, backup: { enabled: false }, ...options.initialModules };
+  for (const [id, config] of Object.entries(fixtureModules)) {
     owner.config.eosModules[id] = { v: 1, encrypted: owner.encrypt(JSON.stringify(config)) };
   }
   objects.set(`system.adapter.${namespace}`, { _id: `system.adapter.${namespace}`, type: 'instance', common: { enabled: true, host: 'qa-host' }, native: clone(owner.config) });
@@ -198,7 +204,8 @@ module.exports=require(${JSON.stringify(uiFile)});\n`);
     const response = await fetch(origin + url, { method, headers: { Cookie: `fixture=${token}`, Origin: origin,
       'X-NW-CSRF': token, ...(body === undefined ? {} : { 'Content-Type': 'application/json' }) },
     ...(body === undefined ? {} : { body: JSON.stringify(body) }) });
-    const text = await response.text(); let data; try { data = JSON.parse(text); } catch {}
+    const text = await response.text(); let data;
+    try { data = JSON.parse(text); } catch { /* Preserve raw text for non-JSON response assertions. */ }
     return { status: response.status, text, data };
   };
   return { request, startup, owner, web, states, objects, writes, logs, runtimes, subscriptions, aliasReads,
@@ -241,6 +248,56 @@ test('production Web mount reaches the real UI/EMS child and reconciles a device
   assert.ok(x.states.get('eos-admin.0.ems.core.schedulerHeartbeatSequence')?.val > heartbeat, 'the actual EMS scheduler continues across IPC after reconciliation');
   assert.equal(x.writes.some(row => row.id.includes('.devices.') && row.state.ack === false), false,
     'commissioning offline telemetry must not emit physical device commands');
+});
+
+test('real UI child preserves an explicit Devices chargepoint deletion through HTTP, discovery and restart', { timeout: 45000 }, async t => {
+  const x = await pipeline(t, { realProcess: true });
+  await x.startup;
+  await waitForView(x, view => view?.configurationReady && view?.status?.active
+    && view?.emsCommissioning?.state === 'ready');
+  const config = wallboxConfig();
+  const requestId = '0213c502-4674-4eaa-95c2-9c84668c9218';
+  config.devices[0].ems.activation = { requested: true, requestId, limits: {} };
+  const created = await x.request('/api/eos/modules/devices', 'PUT', { config });
+  assert.equal(created.status, 200, created.text);
+  await waitForView(x, view => view?.emsCommissioning?.statuses?.[0]?.code === 'ACTIVATION_PENDING');
+  const bindingKey = 'eos-admin.0.devices.wallbox';
+  const saved = () => JSON.parse(x.states.get('eos-admin.0.installer.configJson').val);
+  assert.equal(saved().settingsConfig.evcsList.length, 1);
+  assert.equal(saved().eosDeviceEms.bindings[bindingKey].mappingRequestId, requestId);
+  const loaded = await x.request('/api/installer/config');
+  assert.equal(loaded.status, 200, loaded.text);
+  const removed = await x.request('/api/installer/config', 'POST', {
+    expectedConfigurationRevision: loaded.data.configurationRevision,
+    patch: { settingsConfig: { evcsList: [], evcsCount: 0, __allowEmptyEvcsList: true } },
+    restartEms: false,
+  });
+  assert.equal(removed.status, 200, JSON.stringify({ response: removed.text,
+    runtime: x.owner.eosHostedRuntime.status(), logs: x.logs.slice(-30) }));
+  await x.owner.eosModuleHost.flushDeviceEms();
+  await waitForView(x, view => view?.emsCommissioning?.statuses?.[0]?.code === 'MAPPING_REMOVED');
+  assert.deepEqual(saved().settingsConfig.evcsList, []);
+  assert.equal(saved().settingsConfig.evcsCount, 0);
+  assert.equal(saved().eosDeviceEms.bindings[bindingKey].mappingRequestId, requestId);
+  await x.owner.eosModuleHost.stop(); await x.owner.eosHostedRuntime.stop();
+  await t.test('fresh owner and real child retain removal; a new explicit request recreates exactly one inactive row', async child => {
+    const restarted = await pipeline(child, { realProcess: true, persistedObjects: [...x.objects], persistedStates: [...x.states] });
+    await restarted.startup;
+    await waitForView(restarted, view => view?.emsCommissioning?.statuses?.[0]?.code === 'MAPPING_REMOVED');
+    const current = () => JSON.parse(restarted.states.get('eos-admin.0.installer.configJson').val);
+    assert.deepEqual(current().settingsConfig.evcsList, []);
+    assert.equal(current().eosDeviceEms.bindings[bindingKey].mappingRequestId, requestId);
+    const renewed = clone(config);
+    renewed.devices[0].ems.activation.requestId = '97ba81a7-9acd-4732-8c08-aac463cbb9de';
+    const recreated = await restarted.request('/api/eos/modules/devices', 'PUT', { config: renewed });
+    assert.equal(recreated.status, 200, recreated.text);
+    await waitForView(restarted, view => view?.emsCommissioning?.statuses?.[0]?.code === 'ACTIVATION_PENDING');
+    assert.equal(current().settingsConfig.evcsList.length, 1);
+    assert.equal(current().settingsConfig.evcsList[0].enabled, false);
+    assert.equal(current().settingsConfig.evcsList[0].stationKey || '', '');
+    await restarted.owner.eosModuleHost.flushDeviceEms();
+    assert.equal(current().settingsConfig.evcsList.length, 1);
+  });
 });
 
 function profileGuardSetup(enabled = true, manualAlias = false) {

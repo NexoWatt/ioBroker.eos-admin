@@ -108,8 +108,8 @@ test('discovery requires a configured source, preserves offline instances and ad
     assert.deepEqual(filterOcppDiscoverySources(stations, noInstances, 'eos-admin.0').map(item => item.root), ['eos-admin.0.ocpp.NEW']);
     const offline = { instances: { rows: [{ value: { _id: 'system.adapter.ocpp21.0', type: 'instance', common: { enabled: false } } }] } };
     assert.deepEqual(filterOcppDiscoverySources(stations, offline, 'eos-admin.0'), stations);
-    assert.deepEqual(filterOcppDiscoverySources(stations, { ...noInstances, hostedNamespace: 'ocpp21.0' }, 'eos-admin.0'), stations);
-    assert.deepEqual(filterOcppDiscoverySources(stations, { ...noInstances, hostedNamespace: 'ocpp21.1' }, 'eos-admin.0').map(item => item.root), ['eos-admin.0.ocpp.NEW']);
+    assert.deepEqual(filterOcppDiscoverySources(stations, { ...noInstances, hostedNamespace: 'ocpp21.0' }, 'eos-admin.0').map(item => item.root), ['ocpp21.0.RETIRED']);
+    assert.deepEqual(filterOcppDiscoverySources(stations, { ...noInstances, hostedNamespace: 'ocpp21.1' }, 'eos-admin.0').map(item => item.root), []);
     assert.throws(() => filterOcppDiscoverySources(stations, { instances: { rows: [{ value: { _id: 'system.adapter.ocpp21.0', type: 'state' } }] } }, 'eos-admin.0'), /SOURCE_INVENTORY/);
 });
 
@@ -170,4 +170,57 @@ test('failed source inventory never treats orphaned contract states as an existi
     assert.deepEqual(h.a._nwInstallerConfigPatch.settingsConfig.evcsList, []);
     assert.equal(h.states.has('eos-admin.0.installer.configJson'), false);
     assert.equal(h.writes.length, 0);
+});
+
+test('explicit removal of an active hosted source survives scans and restart; manual re-import restores exactly one row', async t => {
+    const root = 'eos-admin.0.ocpp.ACTIVE'; const input = inventory(root);
+    const h = await fixture(t); h.a._nwLicenseInfo = { ok: true };
+    await h.a.reconcileOcppDiscovery(input.stations());
+    const row = structuredClone(h.saved().settingsConfig.evcsList[0]);
+    const first = await h.get();
+    const deleted = await h.save(first.data.configurationRevision,
+        { settingsConfig: { evcsCount: 0, evcsList: [], __allowEmptyEvcsList: true } });
+    assert.equal(deleted.status, 200, JSON.stringify(deleted.data));
+    assert.deepEqual(h.saved().settingsConfig.ocppExcludedStationRoots, [root]);
+    for (let scan = 0; scan < 3; scan++) {
+        const result = await h.a.reconcileOcppDiscovery(input.stations());
+        assert.equal(result.changed, false); assert.equal(result.statuses[0].code, 'USER_EXCLUDED');
+        assert.deepEqual(h.saved().settingsConfig.evcsList, []);
+    }
+    const noRevision = await h.request('/api/installer/config', { token: h.token, method: 'POST',
+        body: { patch: { settingsConfig: { ocppExcludedStationRoots: [] } } } });
+    assert.equal(noRevision.status, 409, 'last-row removal keeps revision protection active');
+    const loaded = await h.get();
+    const forged = await h.save(loaded.data.configurationRevision, { settingsConfig: { ocppExcludedStationRoots: [] } });
+    assert.equal(forged.status, 200); assert.deepEqual(h.saved().settingsConfig.ocppExcludedStationRoots, [root]);
+    h.a._nwInstallerConfigPatch = {}; h.a._nwInstallerConfigRawPatch = {};
+    await h.a.loadInstallerConfigFromState();
+    assert.equal((await h.a.reconcileOcppDiscovery(input.stations())).statuses[0].code, 'USER_EXCLUDED');
+    h.owner.getForeignObjectsAsync = async pattern => pattern.startsWith('eos-admin.0.ocpp.') ? input.objects : {};
+    h.owner.getForeignStatesAsync = async pattern => pattern.startsWith('eos-admin.0.ocpp.') ? input.states : {};
+    h.owner.getObjectViewAsync = async () => ({ rows: [] });
+    const discovered = await h.request('/api/ocpp/discover', { token: h.token });
+    assert.equal(discovered.status, 200); assert.equal(discovered.data.connectorCount, 1, 'explicit import can still find the excluded source');
+    const reloaded = await h.get();
+    const restored = await h.save(reloaded.data.configurationRevision, { settingsConfig: { evcsCount: 1, evcsList: [row] } });
+    assert.equal(restored.status, 200, JSON.stringify(restored.data));
+    assert.deepEqual(h.saved().settingsConfig.ocppExcludedStationRoots, []);
+    assert.equal(h.saved().settingsConfig.evcsList.length, 1);
+    assert.equal((await h.a.reconcileOcppDiscovery(input.stations())).changed, false);
+    assert.ok(h.writes.every(id => !id.startsWith(`${root}.`)), 'removal/re-import sends no OCPP commands');
+});
+
+test('removal exclusion overflow fails before writer stop or persisted configuration changes', async t => {
+    const root = 'eos-admin.0.ocpp.NEW'; const input = inventory(root);
+    const exclusions = Array.from({ length: 128 }, (_, index) => `eos-admin.0.ocpp.REMOVED_${index}`);
+    const h = await fixture(t, { evcsCount: 0, evcsList: [], ocppExcludedStationRoots: exclusions });
+    h.a._nwLicenseInfo = { ok: true };
+    await h.a.reconcileOcppDiscovery(input.stations());
+    const before = structuredClone(h.saved()); const stops = h.stops.length;
+    const loaded = await h.get();
+    const rejected = await h.save(loaded.data.configurationRevision,
+        { settingsConfig: { evcsCount: 0, evcsList: [], __allowEmptyEvcsList: true } });
+    assert.notEqual(rejected.status, 200);
+    assert.equal(h.stops.length, stops);
+    assert.deepEqual(h.saved(), before);
 });

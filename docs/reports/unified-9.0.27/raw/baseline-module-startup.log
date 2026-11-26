@@ -1,0 +1,82 @@
+✖ one startup automatically recovers a transient controller subscription failure (4.464152ms)
+✔ parallel initial starts share subscriptions, one runtime and one reconcile timer (5.582341ms)
+✖ exhausted startup retries are bounded and a later explicit start can recover (1.797847ms)
+✖ stop during retry delay cancels further attempts and never starts a module (6.520433ms)
+✖ a timeout waits again for the same pending subscription instead of issuing a duplicate (2.261145ms)
+✔ stop during a pending initial subscription fences its late completion (1.237395ms)
+✖ subscription recovery preserves explicit module/process disables and invalid configuration fences (0.87638ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 2
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 149.120621
+
+✖ failing tests:
+
+test at test/eos-module-initial-subscription-retry.test.cjs:49:1
+✖ one startup automatically recovers a transient controller subscription failure (4.464152ms)
+  Error: SYNTHETIC_DB_UNAVAILABLE
+      at x.owner.subscribeForeignStatesAsync (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-module-initial-subscription-retry.test.cjs:55:19)
+      at /workspace/scratch/b0b00b64c39c/review926/NexoWatt_EOS_9.0.26/iobroker.eos-admin/src/lib/eosModuleHost.js:863:46
+      at async TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-module-initial-subscription-retry.test.cjs:59:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+
+test at test/eos-module-initial-subscription-retry.test.cjs:84:1
+✖ exhausted startup retries are bounded and a later explicit start can recover (1.797847ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 3
+  
+      at TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-module-initial-subscription-retry.test.cjs:95:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 3,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/eos-module-initial-subscription-retry.test.cjs:107:1
+✖ stop during retry delay cancels further attempts and never starts a module (6.520433ms)
+  AssertionError [ERR_ASSERTION]: expected asynchronous startup boundary
+      at until (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-module-initial-subscription-retry.test.cjs:11:12)
+      at async TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-module-initial-subscription-retry.test.cjs:111:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at test/eos-module-initial-subscription-retry.test.cjs:120:1
+✖ a timeout waits again for the same pending subscription instead of issuing a duplicate (2.261145ms)
+  AssertionError [ERR_ASSERTION]: expected asynchronous startup boundary
+      at until (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-module-initial-subscription-retry.test.cjs:11:12)
+      at async TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-module-initial-subscription-retry.test.cjs:132:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at test/eos-module-initial-subscription-retry.test.cjs:151:1
+✖ subscription recovery preserves explicit module/process disables and invalid configuration fences (0.87638ms)
+  Error: SYNTHETIC_DB_UNAVAILABLE
+      at x.owner.subscribeForeignObjectsAsync (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-module-initial-subscription-retry.test.cjs:158:37)
+      at /workspace/scratch/b0b00b64c39c/review926/NexoWatt_EOS_9.0.26/iobroker.eos-admin/src/lib/eosModuleHost.js:861:46
+      at async TestContext.<anonymous> (/workspace/scratch/b0b00b64c39c/work-restart-review/test/eos-module-initial-subscription-retry.test.cjs:161:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
